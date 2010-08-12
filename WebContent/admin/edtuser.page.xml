@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
+
+	<restrict>#{s:hasRole('USERS')}</restrict>
+	<param name="id" value="#{userHome.idWithLog}" converterId="javax.faces.Integer" />
+	<begin-conversation join="true" />
+	<navigation from-action="#{userHome.persist}">
+		<end-conversation />
+		<redirect view-id="/admin/users.xhtml" />
+	</navigation>
+	<navigation>
+		<rule if-outcome="cancel">
+			<end-conversation before-redirect="true" />
+			<redirect view-id="/admin/users.xhtml" />
+		</rule>
+		<rule if-outcome="mail.success">
+			<end-conversation />
+			<redirect view-id="/admin/users.xhtml">
+			</redirect>
+		</rule>
+		<rule if-outcome="mail.fail">
+			<end-conversation />
+			<redirect view-id="/admin/users.xhtml">
+			</redirect>
+		</rule>
+	</navigation>
+</page>

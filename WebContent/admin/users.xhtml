@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['admin.users']}" />
+<ui:param name="topmenu" value="3" />
+
+<ui:define name="menu_lateral">
+	<ui:include src="/layout/adminmenu.xhtml" />
+</ui:define>
+
+<ui:define name="body">
+<h:form id="main">
+<s:button view="/admin/edtuser.xhtml" value="#{messages['form.new']}" styleClass="button"  rendered="#{s:hasRole('USERS_EDT')}">
+	<f:param name="id" value="#{null}" />
+</s:button>
+
+<p/>
+<s:decorate template="/layout/listresult.xhtml">
+	<ui:param name="list" value="#{users}" />
+</s:decorate>
+
+<h:dataTable id="tbl" value="#{users.resultList}" var="it" 
+  styleClass="tabela" rowClasses="lin1,lin2" width="100%"  columnClasses="coll,coll,coll,colc,coll,coll,coll,colc"
+  rendered="#{not empty users.resultList}">
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['User.name']}" styleClass="collh">
+  			<f:param name="order" value="#{users.order=='uw.user.name'?'uw.user.name desc':'uw.user.name'}" />
+  		</s:link>
+  	</f:facet>
+  	<h:outputText value="#{it.user.name}" rendered="#{not s:hasRole('LABS_EDT')}" />
+	<s:link view="/admin/edtuser.xhtml" value="#{it.user.name}" rendered="#{s:hasRole('LABS_EDT')}" > 
+		<f:param name="id" value="#{it.user.id}" />
+	</s:link>
+    <h:outputText value="#{it.user.comments}" rendered="#{not empty it.user.comments}" style="display:block;clear:both;"/>
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['User.login']}" style="padding-left:10px;" styleClass="collh">
+  			<f:param name="order" value="#{users.order=='uw.user.login'?'uw.user.login desc':'uw.user.login'}" />
+  		</s:link>
+  	</f:facet>
+    #{it.user.login}
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['User.email']}" styleClass="collh">
+  			<f:param name="order" value="#{users.order=='uw.user.email'?'uw.user.email desc':'uw.user.email'}" />
+  		</s:link>
+  	</f:facet>
+        #{it.user.email}
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['User.state']}" >
+  			<f:param name="order" value="#{users.order=='uw.user.state'?'uw.user.state desc':'uw.user.state'}" />
+  		</s:link>
+  	</f:facet>
+  	<h:outputText value="#{messages[it.user.state.key]}" style="#{it.user.state=='ACTIVE'?'': 'color:red;font-weight:bold;'}" />
+  </h:column>
+  
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['TbUnit']}" styleClass="collh">
+  			<f:param name="order" value="#{users.order=='uw.tbunit.name'?'uw.tbunit.name desc':'uw.tbunit.name'}" />
+  		</s:link>
+  	</f:facet>
+	<h:outputText value="#{it.tbunit.name}"  />
+  </h:column>
+  
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['UserView']}" styleClass="collh">
+  			<f:param name="order" value="uw.view#{users.order=='uw.view'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+	<h:outputText value="#{it.displayView}"  />
+  </h:column>
+  
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['UserProfile']}" styleClass="collh">
+  			<f:param name="order" value="uw.profile.name#{users.order=='uw.profile.name'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+	<h:outputText value="#{it.profile.name}"  />
+  </h:column>
+  <h:column rendered="#{s:hasRole('USERS_EDT')}">
+  	<f:facet name="header">#{messages['form.action']}</f:facet>
+        <s:link action="#{userHome.remove}" value="#{messages['form.remove']}" onclick="return confirm('#{messages['form.confirm_remove']}');" >
+			<f:param name="id" value="#{it.user.id}" />
+        </s:link>
+  </h:column>
+</h:dataTable>
+</h:form>
+
+<ui:include src="/layout/tablerow.xhtml" />
+
+</ui:define>
+
+</ui:composition>  

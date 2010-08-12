@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+	
+	<s:fragment rendered="#{not caseHome.inTreatment}" >
+		<h:outputText value="#{messages['cases.details.notreatment']}" styleClass="warn" style="display:block;padding:30px;"/>
+
+		<s:button value="#{messages['cases.details.starttreatment']}" onclick="showSelRegimenDlg();return false;" 
+			rendered="#{tbCase.state == 'WAITING_TREATMENT'}"
+			style="display:block;margin-left:30px;marign-bottom:30px;width:160px;" styleClass="button">
+			<f:param name="id" value="#{caseHome.id}" />
+		</s:button>
+		
+		<rich:jQuery timing="onJScall" name="showSelRegimenDlg" selector="#seltttype" query="show(500)" />
+		<div id="seltttype" style="display:none;padding:20px;width:500px;">
+			
+			<s:decorate template="/layout/roundrect.xhtml">
+				<ui:param name="showfooter" value="0" />
+				<ui:define name="header">
+					<b>#{messages['cases.treat.selreg']}:</b><br/>
+				</ui:define>
+				
+				<div style="padding:20px">
+
+				<div style="display:block;padding:4px;">
+					<div class="linknaveg">
+					<s:link value="#{messages['regimens.standard']}" style="font-size:12px" view="/custom/ph/cases/starttreatment.xhtml">
+						<f:param name="id" value="#{caseHome.id}"/>
+					</s:link>
+					</div>
+				</div>
+				<br/>
+				<div style="display:block;padding:4px;">
+					<div class="linknaveg">
+					<s:link value="#{messages['regimens.individualized']}" style="font-size:12px" view="/cases/treatmentedt.xhtml">
+						<f:param name="id" value="#{caseHome.id}"/>
+					</s:link>
+					</div>
+				</div>
+				</div>
+			</s:decorate>
+		</div>
+	</s:fragment>
+
+	<s:fragment rendered="#{caseHome.inTreatment}">
+	<ui:repeat value="#{caseHome.treatmentHealthUnits}" var="hu">
+	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;padding-top:10px;padding-bottom:10px;">
+		<ui:define name="header">
+			<div style="height:24px;display:table;width:100%;">
+			<div style="float:right;text-align:right;margin-right:3px;">
+				<s:link value="#{messages['form.edit']}" view="/cases/treatmentedt.xhtml" style="display:block;">
+					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="huid" value="#{hu.id}"/>
+				</s:link>
+				<h:outputText value="#{hu.iniDate}" converter="periodConverter" style="font-size:9px;">
+					<f:param name="endDate" value="#{hu.endDate}"/>
+				</h:outputText>
+			</div>
+			<div class="hu-icon">
+			<b>#{hu.tbunit.name}</b>
+			<div style="display:block;font-size:9px;color:#808080;">
+			#{hu.tbunit.adminUnit.name} - #{hu.tbunit.adminUnit.parent.name}
+			</div>
+			</div>
+			</div>
+		</ui:define>
+		<ui:param name="showfooter" value="0" />
+		<ui:repeat value="#{hu.sortedRegimens}" var="r">
+		<table width="98%" cellpadding="0" cellspacing="0" style="margin-top:10px">
+		<tr><td>
+			<img src="../img/#{r.phase=='INTENSIVE'? 'intphase': 'contphase'}.gif" style="float:left;"/>
+			<b><h:outputText value="#{r.regimen.name}" rendered="#{r.regimen != null}" />
+			<h:outputText value="#{messages['regimens.individualized']}" rendered="#{r.regimen == null}" /></b><br/>
+			<h:outputText value="(#{messages[r.phase.key]})" style="color:#a0a0a0;font-size:9px" />
+		</td>
+		<td align="right">
+			<h:outputText value="#{r.iniDate}" converter="periodConverter" style="font-size:9px;">
+				<f:param name="endDate" value="#{r.endDate}"/>
+			</h:outputText>
+		</td></tr></table>
+		
+		<h:outputText value="#{messages['edtrec.nomedicine']}" rendered="#{empty r.medicines}" styleClass="warn"/>
+		<h:dataTable value="#{r.medicines}" var="m" width="98%" styleClass="tabela" columnClasses="coll,colc,colc,colc"  
+		   rowClasses="lin1,lin2" style="clear:left;" rendered="#{not empty r.medicines}">
+		<h:column>
+			<f:facet name="header">#{messages['Medicine']}</f:facet>
+			#{m.medicine}
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">#{messages['PrescribedMedicine.doseUnit']}</f:facet>
+			#{m.doseUnit}
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">#{messages['PrescribedMedicine.frequency']}</f:facet>
+			#{m.frequency}/7
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">#{messages['Source']}</f:facet>
+			<h:outputText value="#{m.source.abbrevName}" title="#{m.source.name}" />
+		</h:column>		
+		</h:dataTable>
+		</ui:repeat>
+	</s:decorate>
+	</ui:repeat>
+
+	<h3>#{messages['cases.treat.intphase']}</h3>
+	<ui:decorate template="/cases/calendartreat.xhtml">
+		<ui:param name="list" value="#{treatmentCalendarHome.monthsIntPhase}" />
+	</ui:decorate>
+    
+
+	<h3>#{messages['cases.treat.contphase']}</h3>
+	<ui:decorate template="/cases/calendartreat.xhtml">
+		<ui:param name="list" value="#{treatmentCalendarHome.monthsContPhase}" />
+	</ui:decorate>
+	</s:fragment>
+    
+</ui:composition>

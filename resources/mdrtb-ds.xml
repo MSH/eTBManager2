@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE datasources
+    PUBLIC "-//JBoss//DTD JBOSS JCA Config 1.5//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-ds_1_5.dtd">
+
+<datasources>
+
+	<local-tx-datasource>
+		<jndi-name>mdrtbDatasource</jndi-name>
+		<connection-url>jdbc:mysql://localhost:3306/etbmanager</connection-url>
+		<driver-class>com.mysql.jdbc.Driver</driver-class>
+		<user-name>root</user-name>
+		<password>admin</password>
+		<exception-sorter-class-name>org.jboss.resource.adapter.jdbc.vendor.MySQLExceptionSorter</exception-sorter-class-name>
+
+		<metadata>
+			<type-mapping>mySQL</type-mapping>
+		</metadata>
+
+		<!--
+		<connection-url>jdbc:firebirdsql:localhost:C:\Projetos\MSH\MDR\database\MDRTB.gdb?lc_ctype=UNICODE_FSS</connection-url>
+			<driver-class>org.firebirdsql.jdbc.FBDriver</driver-class>
+			<user-name>sysdba</user-name> <password>masterkey</password>
+		-->
+
+		<!--
+			<exception-sorter-class-name>
+			org.jboss.resource.adapter.jdbc.vendor.MySQLExceptionSorter
+			</exception-sorter-class-name> <metadata>
+			<type-mapping>mySQL</type-mapping> </metadata>
+		-->
+	</local-tx-datasource>
+
+</datasources>
+

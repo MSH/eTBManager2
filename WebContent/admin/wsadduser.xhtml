@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      template="#{workspaceViewService.templatePage}"
+                >
+        
+<ui:param name="title" value="#{messages['Workspace']}: #{messages['admin.workspaces.addremuser']}" />
+<ui:param name="topmenu" value="3" />
+
+<ui:param name="labelstyle" value="width:120px;" />
+
+<ui:define name="left">
+	<td></td>
+</ui:define>
+
+<ui:define name="body">
+<h:form id="main" prependId="true">
+	<table class="tab1" style="background-color:#F7F5EF;" cellspacing="10">
+	<tr><td colspan="3" class="header2">#{messages['Workspace']}: #{workspace.name}
+	</td></tr>
+	<tr><td width="330" style="background-color:#FFFFFF; border:1px solid #E4DCC7;" valign="top">
+		<b style="padding-left:10px;padding-bottom:5px;">#{messages['admin.workspaces.users']}</b>
+		<div style="padding:10px">
+
+		<h:dataTable value="#{workspace.users}" var="it" width="100%" styleClass="tabela">
+			<h:column>
+				<f:facet name="header">#{messages['User.name']}</f:facet>
+				#{it.user.login} - #{it.user.name}
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">#{messages['form.action']}</f:facet>
+				<a:commandLink value="Excluir" action="#{workspaceHome.remUser(it)}" ajaxSingle="true" reRender="main"/>
+			</h:column>
+		</h:dataTable>
+
+		</div>
+	</td>
+	<td width="350" valign="top" style="border:1px solid #E4DCC7;">
+		<b style="padding-left:10px;padding-bottom:5px;">#{messages['admin.users']}</b>
+		<div style="padding:10px">
+		<a:region immediate="true">
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['User']}:</ui:define>
+    		<h:selectOneMenu value="#{workspaceHome.userWorkspace.user}">
+    	        <s:selectItems value="#{allusers}" var="it" label="#{it.login} - #{it.name}" noSelectionLabel="-" />
+    	     	<s:convertEntity />
+    		</h:selectOneMenu>
+    	</s:decorate>
+    	</a:region>
+
+   		<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['TbUnit']}:</ui:define>
+    	    <h:selectOneMenu value="#{workspaceHome.userWorkspace.tbunit}" required="true">
+    	        <s:selectItems value="#{workspaceHome.units}" var="it" label="#{it.name}" noSelectionLabel="-" />
+    	     	<s:convertEntity />
+    	    </h:selectOneMenu>  
+    	</s:decorate>
+
+   		<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['UserView']}:</ui:define>
+    	    <h:selectOneMenu value="#{workspaceHome.userWorkspace.view}" required="true">
+    	        <s:selectItems value="#{userViews}" var="it" label="#{messages[it.key]}" noSelectionLabel="-" />
+    	     	<s:convertEnum />
+    	    </h:selectOneMenu>  
+    	</s:decorate>
+    
+ 	    <s:decorate template="/layout/edit.xhtml">
+ 	   		<ui:define name="label">#{messages['Profile']}:</ui:define>
+ 	       	<h:selectOneMenu value="#{workspaceHome.userWorkspace.profile}" required="true">
+	            <s:selectItems value="#{workspaceHome.profiles}" var="it" label="#{it.name}" noSelectionLabel="-" />
+	         	<s:convertEntity />
+        	</h:selectOneMenu>  
+	    </s:decorate>
+		
+		<h:commandButton action="#{workspaceHome.addUser}" value="#{messages['form.add']}"></h:commandButton>
+		
+		</div>
+
+	</td></tr>
+	<tr><td align="right" colspan="3">
+		<h:commandButton action="#{workspaceHome.saveUsers}" value="#{messages['form.ok']}" styleClass="button" immediate="true" />
+		<h:commandButton action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" immediate="true" />
+	</td></tr></table>
+</h:form>
+</ui:define>
+        
+</ui:composition> 

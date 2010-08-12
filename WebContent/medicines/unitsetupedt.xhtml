@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+ 	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="..#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['medicines.unitsetup']}" />
+<ui:param name="topmenu" value="1" />
+<ui:param name="pagestyle" value="width:650px" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:define name="left">
+</ui:define>
+
+<ui:define name="body">
+
+<s:decorate template="/layout/unit.xhtml">
+<h:form id="main">
+
+<s:decorate template="/layout/roundrect.xhtml" rendered="#{unitSetup.unit.orderMedicines}">
+	<ui:define name="header">
+		<b>#{messages['medicines.unitsetup.regs']}</b>
+	</ui:define>
+	<ui:param name="showfooter" value="0" />
+
+	<br/>	
+	<h:dataTable value="#{regimenUnitHome.items}" var="it" width="400px" styleClass="tabela" rowClasses="lin1,lin2" columnClasses="coll,colc">
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Medicine']}" styleClass="collh"/>				
+			</f:facet>
+			#{it.regimen.name}
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['RegimenUnit.numTreatments']}" />				
+			</f:facet>
+			<s:validateAll>
+			<h:inputText id="numTreats" value="#{it.numTreatments}"  />
+			<s:message />
+			</s:validateAll>
+		</h:column>
+	</h:dataTable>
+
+</s:decorate>
+<p/>
+<s:decorate template="/layout/roundrect.xhtml">
+	<ui:define name="header">
+		<b>#{messages['medicines.unitsetup.meds']}</b>
+	</ui:define>
+	<ui:param name="showfooter" value="0" />
+
+	<br/>
+	<div style="width:100%">
+	<table width="100%" id="tblmeds">
+	<a:repeat value="#{medicineUnitHome.sources}" var="s">
+		<tr><td class="colheader">
+			<b>#{s.source.name}</b>
+		</td></tr>
+		<tr><td>
+		<h:dataTable value="#{s.items}" var="it" width="100%" styleClass="tabela4" rowClasses="lin1,lin2" columnClasses="col,colc,col">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['Medicine']}" styleClass="collh"/>
+				</f:facet>
+				#{it.medicine}
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['MedicineUnit.minBufferStock']}" styleClass="colch"/>
+				</f:facet>
+				<s:validateAll>
+					<h:inputText value="#{it.minBufferStock}" style="width:90px;"/>
+					<s:message />
+				</s:validateAll>
+			</h:column>
+
+			<h:column rendered="#{userSession.canCreateOrder}">
+				<f:facet name="header">
+					<h:outputText value="#{messages['TbUnit.numDaysOrder']} (#{messages['Order']})" styleClass="collh"/>
+				</f:facet>
+				<div style="margin-left:20px">
+				<s:validateAll>
+					<h:selectBooleanCheckbox value="#{it.overrideUnitOrder}" onclick="overwriteClick(this);"/>
+					<span>#{userSession.tbunit.numDaysOrder} #{messages['global.days']}
+					</span>
+					<h:inputText value="#{it.numDaysOrder}" />
+					<s:message />
+				</s:validateAll>
+				</div>
+			</h:column>
+		</h:dataTable>
+		<p/>
+		</td></tr>
+	</a:repeat>	
+	</table>
+	</div>
+</s:decorate>
+
+<table width="100%">
+	<tr><td>
+		<h:commandButton action="#{unitSetup.persist}" value="#{messages['form.ok']}" styleClass="button"/>
+		<s:button value="#{messages['form.cancel']}" view="/medicines/unitsetup.xhtml" styleClass="button-cancel" propagation="end"/>
+	</td></tr>
+</table>
+
+</h:form>
+</s:decorate>
+
+<rich:jQuery selector="#tblmeds :input:not(:checked) ~ input" query="hide()" />
+<rich:jQuery selector="#tblmeds :input:not(:checked) ~ span" query="show()" />
+<script type="text/javascript">
+function overwriteClick(chk) {
+   if (chk.checked) {
+   	 jQuery('~ span',chk).hide();
+   	 jQuery('~ input',chk).show();
+   }
+   else {
+   	jQuery('~ span',chk).show();
+   	jQuery('~ input',chk).hide();
+   }
+}
+function getNextSibling(elem) {
+  do {
+   	elem = elem.nextSibling;
+  } while (elem.noteType == 1);
+  return elem;
+}
+</script>
+</ui:define>
+
+</ui:composition>  

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="..#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['cases.regimens.edt']}" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="labelstyle" value="width:180px" />
+
+<ui:define name="body">
+<p/>
+<h:form id="main">
+
+<rich:panel style="width:660px">
+
+	<s:decorate template="../layout/display.xhtml">
+    	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
+    	#{tbCase.patient.name}
+	</s:decorate>
+	
+	<s:decorate template="../layout/display.xhtml">
+    	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
+		#{tbCase.patient.securityNumber}
+	</s:decorate>
+	
+	<s:decorate id="dt" template="../layout/display.xhtml">
+    	<ui:define name="label">#{messages['TbCase.beginningTreatmentDate']}:</ui:define>
+    	<h:outputText id="dt" value="#{tbCase.beginningTreatmentDate}">
+        	<f:convertDateTime timeZone="#{timezones.default}" />
+    	</h:outputText>
+	</s:decorate>
+	<p/>
+	
+	<h3>#{messages['Regimen']}</h3>
+
+	<s:decorate template="../layout/edit.xhtml" rendered="#{caseHome.managed}">
+    	<ui:define name="label">#{messages['cases.healthUnit']}:</ui:define>
+    	<h:selectOneMenu value="#{caseRegimen.treatmentHealthUnit}" required="true">
+    		<s:selectItems value="#{tbCase.healthUnits}" var="it" label="#{it.tbunit.name}" noSelectionLabel="-"/>
+    		<s:convertEntity />
+    	</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate template="../layout/edit.xhtml" rendered="#{not caseHome.managed}">
+    	<ui:define name="label">#{messages['cases.healthUnit']}:</ui:define>
+    	#{caseRegimen.treatmentHealthUnit.tbunit.name}
+	</s:decorate>
+
+	<s:decorate id="phase" template="../layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['RegimenPhase']}:</ui:define>
+    	<h:selectOneMenu id="phase" value="#{caseRegimen.phase}">
+    		<s:selectItems value="#{caseRegimenHome.phases}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
+    		<s:convertEnum />
+        	<a:support event="onchange" reRender="regname" ajaxSingle="true" />
+    	</h:selectOneMenu>
+	</s:decorate>
+		
+	<s:decorate template="../layout/display.xhtml">
+    	<ui:define name="label">#{messages['Regimen']}:</ui:define>
+    	<table style="border-collapse: collapse;width:100%;">
+    	<tr><td>
+			<h:panelGroup id="regname">
+			<s:decorate template="../layout/regimen.xhtml">
+				<ui:param name="caseregimen" value="#{caseRegimen}" />
+			</s:decorate>
+			</h:panelGroup>
+    	</td><td>
+			<a:commandLink reRender="regpnl" style="float:right;" styleClass="button2" value="#{messages['cases.regimens.change']}" ajaxSingle="true"
+				onclick="if (!checkphase()) return false;" 
+				oncomplete="init1();init2();Richfaces.showModalPanel('regdlg');" />
+		</td></tr>
+		</table>
+	</s:decorate>
+		
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['PrescribedMedicine.beginningDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="true" /> 
+    	<ui:param name="datefield" value="#{caseRegimen.beginningDate}" /> 
+    </s:decorate>
+		
+		
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['PrescribedMedicine.endingDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="true" /> 
+    	<ui:param name="datefield" value="#{caseRegimen.endingDate}" /> 
+    </s:decorate>
+	<a:commandLink action="#{caseRegimenHome.filterMedicines}" ajaxSingle="true" value="#{messages['Regimen.add']}" styleClass="button2" reRender="medpnl" oncomplete="showMedicinesDlg()" style="width:180px;display:block;"/>
+
+	<p/>
+
+	<h:panelGroup id="pnlmeds">
+	<h:dataTable value="#{caseRegimen.medicines}" var="m" width="99%" styleClass="tabela" columnClasses="coll,colc,colc,colc" rowClasses="lin1,lin2" rendered="#{not empty caseRegimen.medicines}">
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Medicine']}" styleClass="collh" style="padding-left:10px;"/>
+			</f:facet>
+			<img src="../img/medicine.gif" style="float:left;"/>
+			#{m.medicine}
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">#{messages['form.action']}</f:facet>
+			<a:commandLink value="#{messages['form.remove']}" action="#{caseRegimenHome.remMedicine(m)}" reRender="pnlmeds" immediate="true"/>
+		</h:column>
+		
+	</h:dataTable>	
+	</h:panelGroup>
+	<p/>
+
+	<div style="display:block;text-align:right;">
+   		<h:commandButton action="#{caseRegimenHome.update}" value="#{messages['form.ok']}" styleClass="button" />
+   		<s:button value="#{messages['form.cancel']}" view="/cases/caseedt.xhtml" styleClass="button-cancel" rendered="#{caseHome.managed}"/>
+   		<s:button value="#{messages['form.cancel']}" view="/cases/casenew.xhtml" styleClass="button-cancel" rendered="#{not caseHome.managed}"/>
+	</div>
+
+</rich:panel>
+	<p/>
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+</h:form>
+
+<script type="text/javascript">
+<!--
+function checkphase() {
+cb = document.getElementById('main:phase:phase');
+if (cb.options[cb.selectedIndex].text == '-') {
+	alert("#{messages['cases.regimens.phasereq']}");
+	return false;
+}
+return true;
+}
+-->
+</script>  
+
+
+<rich:jQuery selector="#dlg\\:tbl tr" name="init1" timing="onJScall" query="mouseover(function(){jQuery(this).css('background-color','#E4F6E8')})"/>
+<rich:jQuery selector="#dlg\\:tbl tr" name="init2" timing="onJScall" query="mouseout(function(){jQuery(this).css('background-color', '')})"/>
+<rich:modalPanel id="regdlg" height="290" width="300" zindex="2000">
+	<f:facet name="header">
+		<h:outputText id="title1" value="#{messages['cases.regimens.change']}" />
+	</f:facet>
+	<h:panelGroup id="regpnl">
+	
+	<h:form id="dlg" >
+	<b>#{messages['admin.regimens']}</b><br/>
+	<div id="tblsel" style="overflow: auto; width: 280px; height: 160px;border: 1px gray solid; padding:0px; margin: 0px">	
+    <a:region>
+    <h:dataTable id="tbl" value="#{caseRegienHome.regimens}" var="it" width="100%" >
+	<h:column>
+		<a:commandLink value="#{it.name}" onclick="if (!checkphase()) return false" action="#{caseRegimenHome.changeRegimen(it)}" reRender="pnlmeds,regname" style="height:20px;display:block;" oncomplete="Richfaces.hideModalPanel('regdlg')"/>
+	</h:column>
+	</h:dataTable>
+	</a:region>
+	</div>
+   	<br/>
+   	<s:button value="#{messages['form.cancel']}" onclick="javascript:Richfaces.hideModalPanel('regdlg'); return false;" styleClass="button-cancel" style="float:right;"/>
+	</h:form>
+	</h:panelGroup>
+</rich:modalPanel>
+
+
+<s:decorate id="dlg2" template="/layout/medicineselection.xhtml" >
+	<ui:param name="for" value="dlg2" />
+	<ui:param name="title" value="#{messages['Regimen.add']}" />
+	<a:commandButton id="btnOk" value="#{messages['form.ok']}" styleClass="button" action="#{caseRegimenHome.addMedicines}" reRender="pnlmeds,regname" oncomplete="hideMedicinesDlg();" onclick="this.disabled=true"/>
+</s:decorate>
+
+</ui:define>
+
+</ui:composition>  

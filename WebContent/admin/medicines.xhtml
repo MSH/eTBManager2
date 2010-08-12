@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['admin.medicines']}" />
+<ui:param name="topmenu" value="3" />
+<ui:param name="waitdlg" value="1" />
+
+
+<ui:define name="menu_lateral">
+	<ui:include src="/layout/adminmenu.xhtml" />
+</ui:define>
+
+
+<ui:define name="body">
+<h:form id="main">
+<s:button view="/admin/edtmedicine.xhtml" value="#{messages['form.new']}" styleClass="button"  rendered="#{s:hasRole('MEDICINES_EDT')}">
+	<f:param name="id" value="#{null}" />
+</s:button>
+<p/>
+<s:decorate template="/layout/listresult.xhtml">
+	<ui:param name="list" value="#{medicines}" />
+</s:decorate>
+<h:panelGroup id="meds">
+<h:outputText value="#{messages['form.norecordfound']}" rendered="#{medicines.resultCount == 0}" styleClass="warn" />
+<h:dataTable id="tbl" value="#{medicines.resultList}" var="r" border="0" columnClasses="coll,coll,#{defaultWorkspace.alternateDisplayLocale?'coll,':''}coll,coll,coll,coll,coll,colc"
+  styleClass="tabela" rowClasses="lin1,lin2" width="100%" rendered="#{medicines.resultCount > 0}">
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['Medicine.genericName']}" style="padding-left:10px;" styleClass="collh">
+  			<f:param name="order" value="m.genericName.name1#{medicines.order=='m.genericName.name1'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+  	<span class="medicine-icon">
+  		<h:outputText value="#{r.genericName.name1}"  rendered="#{not s:hasRole('MEDICINES_EDT')}"/>
+		<s:link view="/admin/edtmedicine.xhtml" value="#{r.genericName.name1}" rendered="#{s:hasRole('MEDICINES_EDT')}">
+			<f:param name="id" value="#{r.id}" />
+		</s:link>
+	</span>
+  </h:column>
+
+  <h:column rendered="#{defaultWorkspace.hasAlternateLocale}">
+  	<f:facet name="header">
+  		<s:link value="#{messages['Medicine.genericName']} (#{defaultWorkspace.alternateDisplayLocale})" style="padding-left:10px;" styleClass="collh">
+  			<f:param name="order" value="m.genericName.name2#{medicines.order=='m.genericName.name2'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+  	<img src="../img/medicine.gif" style="float:left" />
+	#{r.genericName.name2}
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['Medicine.strength']}" styleClass="collh">
+  			<f:param name="order" value="m.strength#{medicines.order=='m.strength'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+  	#{r.strength}
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['Medicine.strengthUnit']}" styleClass="collh">
+  			<f:param name="order" value="m.strengthUnit#{medicines.order=='m.strengthUnit'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+  	#{r.strengthUnit}
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['Medicine.dosageForm']}" styleClass="collh">
+  			<f:param name="order" value="m.dosageForm#{medicines.order=='m.dosageForm'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+  	#{r.dosageForm}
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['form.abbrevName']}" styleClass="collh">
+  			<f:param name="order" value="m.abbrevName#{medicines.order=='m.abbrevName'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+  	#{r.abbrevName}
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['MedicineCategory']}" styleClass="collh">
+  			<f:param name="order" value="m.category#{medicines.order=='m.category'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+  	#{messages[r.category.key]}
+  	<br/>
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['MedicineCategory']}" styleClass="collh">
+  			<f:param name="order" value="m.line#{medicines.order=='m.line'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+  	#{messages[r.line.key]}
+  </h:column>
+
+  <h:column  rendered="#{s:hasRole('MEDICINES_EDT') and (not workspaceViewService.printing)}">
+  	<f:facet name="header">#{messages['form.action']}</f:facet>
+        <s:link action="#{medicineHome.remove}" value="#{messages['form.remove']}" onclick="return confirm('#{messages['form.confirm_remove']}');" >
+        	<f:param name="id" value="#{r.id}" />
+        </s:link>
+  </h:column>
+</h:dataTable>
+</h:panelGroup>
+
+<ui:include src="/layout/tablerow.xhtml" />
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+                 
+<rich:jQuery name="selectall" timing="onJScall" selector=".tbl :checkbox" query="attr('checked', true)" />
+<rich:jQuery name="unselectall" timing="onJScall" selector=".tbl :checkbox" query="attr('checked', false)" />
+<script type="text/javascript">
+function showMonthYearSelectionDlg() {
+	Richfaces.showModalPanel('monthyeardlg');
+}
+</script>
+
+<rich:modalPanel id="monthyeardlg" resizeable="true"
+            height="160" width="450" zindex="2000">
+	<f:facet name="header">
+		<h:outputText id="title1" value="#{title}" />
+	</f:facet>
+	<h:panelGroup id="medpnl">
+
+	<a:region renderRegionOnly="false">
+	<a:form id="selmyform" style="margin:0px;">
+	<table width="100%" cellspacing="4px">
+	<tr><td colspan="2">
+
+	<s:decorate id="datesel" template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['global.month']}-#{messages['global.year']}:	</ui:define>
+		<h:selectOneMenu id="cbmonth" value="#{month}" style="margin-right:4px;">
+			<f:selectItems value="#{months}"/>
+		</h:selectOneMenu>
+		<h:selectOneMenu id="cbyear" value="#{year}">
+			<f:selectItems value="#{years}"/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+   	</td></tr>
+   	<tr><td height="30px">
+   		</td>
+   		<td align="right">
+   			<ui:insert />
+   			<s:button value="#{messages['form.cancel']}" onclick="javascript:Richfaces.hideModalPanel('monthyeardlg'); return false;" styleClass="button-cancel" />
+   		</td>
+   	</tr></table>
+	</a:form>
+	</a:region>
+
+	</h:panelGroup>
+</rich:modalPanel>
+
+    
+</ui:composition>

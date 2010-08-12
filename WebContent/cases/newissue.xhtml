@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="..#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['cases.pending.notify']}" />
+
+<ui:param name="waitdlg" value="1" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:160px" />
+<ui:param name="pagewidth" value="700px" />
+
+<ui:define name="body">
+<p/>
+<h:form id="main">
+
+<s:decorate template="/layout/casebody.xhtml">
+
+<table width="100%" class="tabela">
+<tr><th>
+	#{messages['cases.pending.pendingmsg']}
+</th></tr>
+<tr><td class="highlight">
+	<h:inputTextarea value="#{caseValidationHome.issue.description}" style="width:690px;height:200px;"/>
+</td></tr>
+</table>
+<table width="100%">
+<tr><td align="right">
+	<a:commandButton action="#{caseValidationHome.registerPending}" value="#{messages['form.ok']}" styleClass="button" /> 
+    <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel">
+       	<f:param name="id" value="#{caseHome.id}"/>
+    </s:button>
+</td></tr>
+</table>
+</s:decorate>
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

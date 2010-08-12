@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['cases.examxray']}" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:param name="topmenu" value="0" />
+
+
+<ui:define name="body">
+<p/>
+
+<s:decorate template="/layout/casebody.xhtml">
+	<a:form id="formexam">
+    <table width="100%">
+    <tr><td>
+
+    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="true" /> 
+    	<ui:param name="datefield" value="#{examXRay.date}" /> 
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['XRayResult']}:</ui:define>
+    	<h:selectOneMenu value="#{examXRay.result}">
+    		<s:selectItems value="#{xrayResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['uk_UA.pulmonaryDestruction']}:</ui:define>
+    	<h:selectOneMenu value="#{examXRay.destruction}" required="true">
+   			<f:selectItem itemLabel="-" itemValue="#{null}"/>
+   			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
+   			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputText value="#{examXRay.comments}" maxlength="200" style="width:350px;"/>
+    </s:decorate>
+
+	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
+
+	</td></tr>
+    <tr><td align="right">
+		<div style="float:left;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+            <a:commandButton action="#{examXRayHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam" 
+            	oncomplete="this.disabled=false;"
+            	onclick="this.disabled=true;" />
+            <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel">
+            	<f:param name="id" value="#{caseHome.id}"/>
+            </s:button>
+    </td></tr>
+    
+    </table>
+    
+	</a:form>
+</s:decorate>
+
+
+<p/>
+
+
+</ui:define>
+
+</ui:composition>  

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+                 
+<h:form >
+	<s:div rendered="#{empty batchReservingHome.sources}" style="margin-top:10px;margin-bottom:10px;width:50%">
+	<s:decorate template="/layout/roundeds.xhtml">
+		<ui:param name="color" value="#EE5C34" />
+		<ui:param name="bgcolor" value="#fff" />
+		<div style="padding:3px;">
+			<h:outputText value="#{messages['medicines.dispensing.nobatches']}" style="color:white;font-weight:bold;"/>
+		</div>
+	</s:decorate>
+	</s:div>
+	
+	<h:panelGroup id="pnlres">
+	<a:region>
+	<a:status onstart="openWaitDlg();" onstop="closeWaitDlg();"/>
+	<table width="100%" class="tabela">
+	<ui:repeat value="#{batchReservingHome.sources}" var="s">
+		<tr style="background-color:#EDF7EF;"><td colspan="6" style="border:1px solid #B4E8BB;padding:5px;">
+			<b>#{s.source.name}</b>
+		</td></tr>
+		
+		<tr><th align="left">#{messages['Medicine']}
+		</th><th align="right">#{messages['medicines.movs.stockqtty']}
+		</th><th align="center">#{messages['Batch.expiryDate']}
+		</th><th align="right">#{messages['global.unitPrice']}
+		</th><th align="right">#{messages['Batch.reservedQuantity']}
+		</th><th>
+		</th></tr>
+		<ui:repeat value="#{s.medicines}" var="m">
+		<tr bgcolor="#f3f3f0"><td>
+			<img src="../img/medicine.gif" style="float:left;"/>
+			#{m.medicine}
+		</td>
+		<td align="right">
+			<b><h:outputText value="#{m.quantity}">
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+			</b>
+		</td>
+		<td>
+		</td>
+		<td align="right">
+			<b><h:outputText value="#{m.unitPrice}" rendered="#{m.unitPrice > 0}">
+				<f:convertNumber pattern="#,###,##0.0000"/>
+			</h:outputText>
+			</b>
+		</td>
+		<td align="right">
+			<s:fragment rendered="#{m.reservedQuantity == 0}">
+				<img src="../img/central.gif" style="float:right;" />
+				<h:outputText value="#{messages['medicines.dispensing.noreserv']}" style="color:silver;"/>
+			</s:fragment>
+			<b><h:outputText value="#{m.reservedQuantity}" rendered="#{m.reservedQuantity > 0}">
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+			</b>
+		</td>
+		<td align="center">
+			<a:commandLink value="#{messages['medicines.orders.selbatches']}" action="#{batchReservingHome.setReservedMedicine(m)}" 
+				reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" />
+		</td></tr>
+		
+		<ui:repeat value="#{m.batches}" var="b">
+			<tr style="font-size:9px;">
+				<td class="colb" >
+					<img src="../img/batch.gif" style="margin-left:28px;float:left;"/>
+					#{b.batch.batchNumber}<br/>
+					#{b.batch.manufacturer}
+				</td>
+				<td class="colb" align="right">
+					<h:outputText value="#{b.quantity}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</td>
+				<td align="center" class="colb">
+					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+				</td>
+				<td align="right" class="colb">
+					<h:outputText value="#{b.batch.unitPrice}">
+						<f:convertNumber pattern="#,###,##0.0000"/>
+					</h:outputText>
+				</td>
+				<td align="right" class="colb">
+					<h:outputText value="#{b.quantityDispensing}">
+						<f:convertNumber pattern="#,###,###,##0"/>
+					</h:outputText>
+				</td>
+				<td class="colb"></td>
+			</tr>
+		</ui:repeat>
+		</ui:repeat>
+	</ui:repeat>
+	</table>
+	</a:region>
+	</h:panelGroup>
+</h:form>
+
+
+<s:decorate template="/layout/batchselection.xhtml" >
+	<a:commandButton value="#{messages['form.ok']}" action="#{batchReservingHome.reserveBatches}"
+	    onclick="if (!validateBatchSelection(self)) return false;"
+		oncomplete="this.disabled=false;if (batchValOk) hideBatchesSelectionDlg();" 
+		styleClass="button" reRender="pnlres"/>
+	<ui:define name="cancel">
+		<a:commandButton value="#{messages['form.cancel']}" action="#{conversation.end}" 
+			oncomplete="hideBatchesSelectionDlg();" styleClass="button-cancel" ajaxSingle="true"/>
+	</ui:define>
+</s:decorate>
+
+</ui:composition>

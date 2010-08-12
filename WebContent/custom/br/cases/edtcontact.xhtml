@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['cases.contacts']}" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:200px;" />
+
+
+<ui:define name="body">
+<p/>
+
+<s:decorate template="/layout/casebody.xhtml" >
+	<a:form id="formexam">
+    <table width="100%">
+    <tr><td>
+
+    <s:decorate id="dt" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbContact.name']}:</ui:define>
+    	<h:inputText value="#{tbContactBR.name}" required="true" style="width:320px;"/>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Gender']}:</ui:define>
+    	<h:selectOneMenu value="#{tbContactBR.gender}" required="false">
+    		<s:selectItems value="#{genders}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
+    	<h:inputText value="#{tbContactBR.age}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbContact.contactType']}:</ui:define>
+    	<h:selectOneMenu value="#{tbContactBR.contactType}" required="false">
+    		<s:selectItems value="#{fieldsQuery.contactTypes}" var="s" noSelectionLabel="-" label="#{s.name}" />
+    		<s:convertEntity />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbContact.examined']}:</ui:define>
+    	<h:selectOneMenu id="cbexamined" value="#{tbContactBR.examinated}" required="false">
+			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
+			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
+    	</h:selectOneMenu>
+    </s:decorate>
+	<rich:jQuery selector="#cbexamined" query="change(function(){ updateExaminedField(this, 500); })" />
+	<rich:jQuery selector="#cbexamined" timing="onload" query="each(function(){ updateExaminedField(this); })" />
+
+	<div style="width:590px">
+	<div id="divexamined">
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['pt_BR.contact.tbsymptoms']}:</ui:define>
+    	<h:selectOneMenu value="#{tbContactBR.tbSymptoms}" required="false">
+    		<s:selectItems value="#{yesNoList}" var="it" noSelectionLabel="-" label="#{messages[it.key]}"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['pt_BR.contact.scarBCG']}:</ui:define>
+    	<h:selectOneMenu value="#{tbContactBR.scarBCG}" required="false">
+    		<s:selectItems value="#{yesNoList}" var="it" noSelectionLabel="-" label="#{messages[it.key]}"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['pt_BR.contact.tuberculinTest']}:</ui:define>
+    	<h:selectOneMenu value="#{tbContactBR.tuberculinTest}" required="false">
+    		<s:selectItems value="#{yesNoList}" var="it" noSelectionLabel="-" label="#{messages[it.key]}"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbContact.conduct']}:</ui:define>
+    	<h:selectOneMenu value="#{tbContactBR.conduct}" required="false">
+    		<s:selectItems value="#{fieldsQuery.contactConducts}" var="s" noSelectionLabel="-" label="#{s.name}" />
+    		<s:convertEntity />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['SputumSmearResult']}:</ui:define>
+    	<h:selectOneMenu value="#{tbContactBR.microscopyResult}" required="false" style="margin-left:4px;">
+    		<s:selectItems value="#{tbContactBRHome.microscopyResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['CultureResult']}:</ui:define>
+    	<h:selectOneMenu value="#{tbContactBR.cultureResult}" required="false" style="margin-left:4px;">
+    		<s:selectItems value="#{tbContactBRHome.cultureResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['pt_BR.contact.dateIniTreat']}:</ui:define>
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="datefield" value="#{tbContactBR.dateIniTreat}" /> 
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['pt_BR.contact.dateEndTreat']}:</ui:define>
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="datefield" value="#{tbContactBR.dateEndTreat}" /> 
+    </s:decorate>
+    </div>
+    </div>
+
+	</td></tr>
+    <tr><td align="right">
+		<div style="float:left;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+            <a:commandButton action="#{tbContactBRHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam" 
+            	oncomplete="this.disabled=false;"
+            	onclick="this.disabled=true;" />
+            <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel">
+            	<f:param name="id" value="#{caseHome.id}"/>
+            </s:button>
+    </td></tr>
+    
+    </table>
+    
+	</a:form>
+</s:decorate>
+
+<script type="text/javascript">
+<!--
+function updateExaminedField(cb, interval) {
+	if (cb.selectedIndex == 0)
+		 jQuery('#divexamined').show(interval)
+	else jQuery('#divexamined').hide(interval);
+}
+-->
+</script>
+
+</ui:define>
+
+</ui:composition>  

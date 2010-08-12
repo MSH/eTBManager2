@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+ 	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="..#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['medicines.movs.newadjust']}" />
+<ui:param name="topmenu" value="1" />
+<ui:param name="pagestyle" value="width:750px" />
+
+<ui:define name="left">
+</ui:define>
+
+<ui:define name="body">
+<s:decorate template="/layout/unit.xhtml">
+<h:form id="main">
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Source']}:</ui:define>
+    	#{stockAdjustmentHome.source.name}
+    </s:decorate>
+
+<h:panelGroup id="pnlitems">
+<table id="medlist" width="100%" class="tabela">
+	<tr><th>
+			#{messages['Medicine']}
+		</th>
+		<th><h:outputText value="#{messages['Batch.expiryDate']}" styleClass="colch" /></th>	
+		<th><h:outputText value="#{messages['medicines.movs.regqtty']}" styleClass="colrh" /></th>	
+		<th></th>
+		<th><h:outputText value="#{messages['medicines.movs.newqtty']}" styleClass="collh" /></th>
+		<th><h:outputText value="#{messages['form.action']}" styleClass="colch" /></th>
+	</tr>
+<a:repeat value="#{stockAdjustmentHome.items}" var="it">
+	<tr><td colspan="2">
+			<h:outputText value="#{it.stockPosition.medicine}" style="#{it.quantity>0?'font-weight:bold;':''}"/>
+			<s:fragment rendered="#{it.quantity > 0}">
+			<br/>
+			#{messages['global.comments']}:<br/>
+			<h:inputText id="com" value="#{it.comment}" style="width:320px;" required="true"/>
+			<s:message for="com" styleClass="erro"/>
+			</s:fragment>
+		</td>
+		<td align="right">
+			<h:outputText value="#{it.stockPosition.quantity}" style="#{it.quantity>0?'font-weight:bold;':''}">
+				<f:convertNumber pattern="#,###,###,##0"/>
+			</h:outputText>
+		</td>
+		<td>
+			<h:graphicImage value="/img/arrow.gif" rendered="#{it.quantity>0}"/>
+		</td>
+		<td align="left">
+			<b>
+			<h:outputText value="#{it.quantity}" >
+				<f:convertNumber pattern="#,###,###,##0"/>
+			</h:outputText>
+			</b>
+		</td>
+		<td align="center" width="150px">
+			<a:commandLink value="#{messages['medicines.movs.adjchange']}" action="#{stockAdjustmentHome.initializeBatchSelection(it)}" reRender="batchselpnl,messages" oncomplete="showBatchesSelectionDlg();" ajaxSingle="true"/>
+		</td>
+	</tr>
+		<a:repeat value="#{it.batches}" var="b">
+			<tr style="font-size:9px;">
+				<td>
+					<img src="../img/batch.gif" style="margin-left:28px;float:left;"/>
+					#{b.batchQtd.batch.batchNumber}<br/>
+					#{b.batchQtd.batch.manufacturer}
+				</td>
+				<td align="center">
+					<h:outputText value="#{b.batchQtd.batch.expiryDate}" converter="localeDateConverter" />
+				</td>
+				<td align="right">
+					<h:outputText value="#{b.batchQtd.quantity}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</td>
+				<td>
+					<img src="../img/arrow.gif" />
+				</td>
+				<td align="left">
+					<h:outputText value="#{b.quantity}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</td>
+				<td></td>
+			</tr>
+		</a:repeat>
+</a:repeat>
+</table>
+
+<rich:jQuery selector="#medlist tr:odd" query="addClass('lin1')" />
+<rich:jQuery selector="#medlist tr:even" query="addClass('lin2')" />
+</h:panelGroup>
+
+
+<table width="100%">
+<tr><td align="right">
+    <a:commandButton action="#{stockAdjustmentHome.execute}" value="#{messages['form.ok']}" styleClass="button" reRender="pnlitems,messages"/>
+	<s:button view="/medicines/stockpos.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" />
+</td></tr></table>
+
+</h:form>
+</s:decorate>
+
+<s:decorate template="/layout/batchselection.xhtml">
+	<ui:param name="quantitytitle" value="#{messages['medicines.movs.newqtty']}" />
+	<a:commandButton value="#{messages['form.ok']}" action="#{stockAdjustmentHome.selectBatches}" 
+		onclick="if (!validateBatchSelection(this)) return false;" 
+		oncomplete="hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button"/>
+</s:decorate>
+
+          
+</ui:define>
+
+</ui:composition>  

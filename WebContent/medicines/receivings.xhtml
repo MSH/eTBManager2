@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="..#{workspaceViewService.templateMedPage}">
+
+<ui:param name="title" value="#{messages['medicines.medicinerecs']}" />
+<ui:param name="topmenu" value="1" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
+</ui:define>
+
+<ui:define name="body">
+<h:form>
+	<s:link view="/medicines/edtrec.xhtml" value="#{messages['medicines.medicinerecs.new']}" rendered="#{s:hasRole('RECEIV_EDT')}" style="float:right;width:150px;" >
+		<f:param name="id" value="#{null}" />
+	</s:link>
+
+	<b>#{messages['Source']}: </b>
+	<h:selectOneMenu value="#{medicineReceivings.source}">
+		<s:selectItems value="#{sources.resultList}" var="r" label="#{r.name}" noSelectionLabel="-" />
+		<s:convertEntity />
+		<a:support event="onchange" reRender="pnlrecs" />
+	</h:selectOneMenu>
+<p/>
+<h:panelGroup id="pnlrecs">
+
+<s:decorate template="/layout/naveg.xhtml">
+	<ui:param name="list" value="#{medicineReceivings}" />
+	<ui:param name="page" value="/medicines/medicinerecs.xhtml" />
+</s:decorate>
+
+<h:dataTable value="#{medicineReceivings.resultList}" var="r" styleClass="tabela" width="100%" 
+	rowClasses="lin1,lin2" columnClasses="colc,colc,coll,coll" rendered="#{medicineReceivings.resultCount > 0}">
+<h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['form.id']}" >
+  			<f:param name="order" value="#{medicineReceivings.order=='dr.id'?'dr.id desc':'dr.id'}" />
+  		</s:link>
+  	</f:facet>
+	<s:link view="/medicines/receiving.xhtml" value="#{r.id}" propagation="none">
+		<f:param name="id" value="#{r.id}" />
+	</s:link>
+</h:column>
+
+<h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['MedicineReceiving.receivingDate']}">
+  			<f:param name="order" value="#{medicineReceivings.order=='dr.receivingDate'?'dr.receivingDate desc':'dr.receivingDate'}" />
+  		</s:link>
+  	</f:facet>
+	<h:outputText value="#{r.receivingDate}" converter="localeDateConverter" />
+</h:column>
+
+<h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['Source']}" styleClass="collh" >
+  			<f:param name="order" value="#{medicineReceivings.order=='dr.source.name'?'dr.source.name desc':'dr.source.name'}" />
+  		</s:link>
+  	</f:facet>
+	#{r.source.name}
+</h:column>
+</h:dataTable>
+
+</h:panelGroup>
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

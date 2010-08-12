@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      template="..#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['medicines.transfer.new']}" />
+
+<ui:param name="topmenu" value="1" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:define name="left">
+</ui:define>
+
+<ui:define name="body">
+<s:decorate template="/layout/unit.xhtml">
+<h:form id="main">
+
+	<div class="paragraph">#{messages['medicines.movs.destunit']}</div>
+	<s:decorate template="/layout/tbselection.xhtml">
+		<ui:param name="tbunitselection" value="#{transferHome.tbunitSelection}" />
+		<ui:param name="required" value="true" />
+	</s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" style="margin-top:20px">
+    	<ui:define name="label">#{messages['form.refdate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{transfer.shippingDate}" /> 
+	</s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" style="clear:left;height:70px;">
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputTextarea value="#{transfer.commentsFrom}" style="width:430px;height:60px;"/>
+    </s:decorate>
+
+	<p/>
+	<a:commandLink ajaxSingle="true" value="#{messages['form.selmeds']}" styleClass="button2" reRender="medstkpnl" 
+		action="#{transferHome.filterMedicines}" oncomplete="showMedicinesStockDlg()" style="width:180px;float:right;"/>
+	<b>#{messages['medicines.movs.itensmov']}</b><br/>
+
+	<h:panelGroup id="pnlitems">
+	<table width="100%" class="tabela" style="clear:right;">
+	<a:repeat value="#{transferHome.sources}" var="s">
+		<tr style="background-color:#EDF7EF;"><td colspan="6" style="border:1px solid #B4E8BB;padding:5px;">
+			<b>#{s.source.name}</b>
+		</td></tr>
+		
+		<tr><th align="left">#{messages['Medicine']}
+		</th><th align="center">#{messages['Batch.expiryDate']}
+		</th><th align="right">#{messages['Movement.quantity']}
+		</th><th align="right">#{messages['global.unitPrice']}
+		</th><th align="right">#{messages['global.totalPrice']}
+		</th><th>
+		</th></tr>
+		<a:repeat value="#{s.items}" var="it">
+		<tr bgcolor="#f3f3f0"><td>
+			<img src="../img/medicine.gif" style="float:left;"/>
+			#{it.medicine}
+		</td>
+		<td>
+		</td>
+		<td align="right">
+			<b><h:outputText value="#{it.quantity}">
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+			</b>
+		</td>
+		<td align="right">
+			<b><h:outputText value="#{it.unitPrice}">
+				<f:convertNumber pattern="#,###,##0.0000"/>
+			</h:outputText>
+			</b>
+		</td>
+		<td align="right">
+			<b><h:outputText value="#{it.totalPrice}">
+				<f:convertNumber pattern="#,###,##0.00"/>
+			</h:outputText>
+			</b>
+		</td>
+		<td align="center">
+			<a:commandLink value="#{messages['medicines.orders.selbatches']}" ajaxSingle="true" action="#{transferHome.initBatchSelection(it)}"
+				reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" style="width:120px;display:block;"/>
+			<a:commandLink value="#{messages['form.remove']}" ajaxSingle="true" action="#{transferHome.removeItem(it)}" reRender="pnlitems" />
+		</td></tr>
+		<s:fragment rendered="#{it.data==true}">
+		<tr><td colspan="6">
+ 				   <h:outputText value="#{messages['medicines.movs.invalidqtd']}" styleClass="erro"/>
+ 		</td></tr> 
+		</s:fragment>
+		
+		
+		<a:repeat value="#{it.batches}" var="b">
+			<tr style="font-size:9px;">
+				<td class="colb" >
+					<img src="../img/batch.gif" style="margin-left:28px;float:left;"/>
+					#{b.batch.batchNumber}<br/>
+					#{b.batch.manufacturer}
+				</td>
+				<td align="center" class="colb">
+					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+				</td>
+				<td class="colb" align="right">
+					<h:outputText value="#{b.quantity}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</td>
+				<td align="right" class="colb">
+					<h:outputText value="#{b.batch.unitPrice}">
+						<f:convertNumber pattern="#,###,##0.0000"/>
+					</h:outputText>
+				</td>
+				<td align="right" class="colb">
+					<h:outputText value="#{b.totalPrice}">
+						<f:convertNumber pattern="#,###,###,##0.00"/>
+					</h:outputText>
+				</td>
+				<td class="colb"></td>
+			</tr>
+		</a:repeat>
+		</a:repeat>
+	</a:repeat>
+	</table>
+	</h:panelGroup>		
+
+	<table width="100%"><tr><td align="right">
+        <a:commandButton action="#{transferHome.saveNewTransfer}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>
+		<s:button view="/medicines/transfer.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" />
+	</td></tr></table>
+</h:form>
+</s:decorate>
+
+<div style="margin-top:10px;margin-left:10px;">
+<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+</div>   
+
+<s:decorate template="/layout/medicinestockselection.xhtml" >
+	<a:commandButton value="#{messages['form.ok']}" action="#{transferHome.selectMedicines}" oncomplete="hideMedicinesStockDlg();" reRender="pnlitems" styleClass="button"/>
+</s:decorate>
+
+<s:decorate template="/layout/batchselection.xhtml" >
+	<a:commandButton value="#{messages['form.ok']}" action="#{transferHome.selectBatches}" 
+		onclick="if (!validateBatchSelection(this)) return false;" 
+		oncomplete="hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button"/>
+</s:decorate>
+
+</ui:define>
+
+
+</ui:composition>  

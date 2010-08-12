@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="..#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['Order']} - #{messages['medicines.orders.cancel']}" />
+<ui:param name="topmenu" value="1" />
+
+<ui:param name="labelstyle" value="width:150px;" />
+
+<ui:define name="body">
+<p/>
+<h:form>
+<rich:panel style="width:600px;">
+    
+    <table width="100%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse">
+    <tr><td><b>#{messages['Order.tbunitFrom']}: </b>#{order.tbunitFrom.name}
+    </td><td><b>#{messages['Order.tbunitTo']}: </b>#{order.tbunitTo.name}
+    </td></tr>
+    </table>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Order.status']}:</ui:define>
+    	#{messages[order.status.key]}
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Order.orderDate']}:</ui:define>
+    	<h:outputText value="#{order.orderDate}" converter="localeDateConverter" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" rendered="#{order.approvingDate != null}">
+    	<ui:define name="label">#{messages['Order.approvingDate']}:</ui:define>
+    	<h:outputText value="#{order.approvingDate}" converter="localeDateConverter" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" rendered="#{order.shippingDate != null}">
+    	<ui:define name="label">#{messages['Order.shippingDate']}:</ui:define>
+    	<h:outputText value="#{order.shippingDate}" converter="localeDateConverter" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" rendered="#{order.receivingDate != null}">
+    	<ui:define name="label">#{messages['Order.receivingDate']}:</ui:define>
+    	<h:outputText value="#{order.receivingDate}" converter="localeDateConverter" />
+    </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Order.cancelReason']}:</ui:define>
+    	<h:inputTextarea value="#{order.cancelReason}" style="width : 385px; height : 63px;" required="true"/>
+    </s:decorate>
+    
+	<div style="display:block;margin-top:60px;float:right;margin-bottom:5px;">
+    	<h:commandButton action="#{orderHome.cancelOrder}" value="#{messages['form.ok']}" styleClass="button" />
+    	<s:button action="/medicines/orderdata.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" >
+    		<f:facet name="id" value="#{order.id}" />
+    	</s:button>
+	</div>
+
+</rich:panel>
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

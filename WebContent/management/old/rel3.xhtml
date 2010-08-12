@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['manag.rel3']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:define name="naveg" >
+	<s:link value="#{messages['management']}" view="/management/index.html" propagation="none" />
+</ui:define>
+
+
+<ui:define name="body">
+<p/>
+<h:form id="main">
+<table class="tabela" width="500px">
+<tr><td>
+	<s:decorate id="ds" template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['TbUnit']}:</ui:define>
+		<h:selectOneMenu id="ds" required="true">
+            <f:selectItems value="#{reportSelection.units}" />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate id="source" template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['Source']}:</ui:define>
+		<h:selectOneMenu id="source" required="true">
+            <f:selectItems value="#{reportSelection.sources}" />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate id="ini" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.inimonthyear']}:</ui:define>
+		<h:selectOneMenu id="inimonth" value="#{reportSelection.iniMonth}">
+		<f:selectItems value="#{months}"/>
+		</h:selectOneMenu>
+		<h:inputText id="iniyear" value="#{reportSelection.iniYear}" style="margin-left:5px; width : 70px;"/>
+	</s:decorate>
+
+	<s:decorate id="end" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.endmonthyear']}:</ui:define>
+		<h:selectOneMenu id="endmonth" value="#{reportSelection.endMonth}">
+		<f:selectItems value="#{months}"/>
+		</h:selectOneMenu>
+		<h:inputText id="endyear" value="#{reportSelection.endYear}" style="margin-left:5px; width : 70px;"/>
+	</s:decorate>
+	<p/>
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+</td></tr>
+<tr><td align="right">
+	<h:commandButton value="#{messages['form.generate']}" styleClass="button" onclick="genreport(); return false" />
+</td></tr>
+</table>
+<h:graphicImage value="/img/acrobat.gif" />Acrobat Reader required.
+
+</h:form>
+
+<script type="text/javascript">
+<!--
+function genreport() {
+cb = document.getElementById('main:ds:ds');
+if (cb.options[cb.selectedIndex].text == '-') {
+	alert("#{messages['DrugStorage']}: #{messages['javax.faces.component.UIInput.REQUIRED']}");
+	return false;
+}
+s = "ds=" + cb.options[cb.selectedIndex].value;
+
+cb = document.getElementById('main:source:source');
+if (cb.options[cb.selectedIndex].text == '-') {
+	alert("#{messages['Source']}: #{messages['javax.faces.component.UIInput.REQUIRED']}");
+	return false;
+}
+source = cb.options[cb.selectedIndex].value;
+s = s + '&source=' + source;
+
+cb = document.getElementById('main:ini:inimonth');
+edt = document.getElementById('main:ini:iniyear');
+if ((cb.options[cb.selectedIndex].text == '-') || (edt.value == '')) {
+	alert("#{messages['global.inimonthyear']}: #{messages['javax.faces.component.UIInput.REQUIRED']}");
+   return false;
+}
+s = s + "&inimonth=" + cb.options[cb.selectedIndex].value + "&iniyear=" + edt.value;
+
+cb = document.getElementById('main:end:endmonth');
+edt = document.getElementById('main:end:endyear');
+if ((cb.options[cb.selectedIndex].text == '-') || (edt.value == '')) {
+	alert("#{messages['global.inimonthyear']}: #{messages['javax.faces.component.UIInput.REQUIRED']}");
+   return false;
+}
+s = s + "&endmonth=" + cb.options[cb.selectedIndex].value + "&endyear=" + edt.value;
+url = '#{facesContext.externalContext.request.contextPath}/reports/rel3.seam?' + s;
+window.open(url);
+}
+-->
+</script> 
+</ui:define>
+
+</ui:composition>  

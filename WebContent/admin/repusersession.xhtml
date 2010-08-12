@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['admin.reports.usersession']}" />
+<ui:param name="topmenu" value="3" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:define name="menu_lateral">
+	<ui:include src="/layout/adminmenu.xhtml" />
+</ui:define>
+
+<ui:define name="body">
+<h:form id="main">
+
+<s:decorate template="/layout/roundrect.xhtml" style="width:780px;">
+	<ui:param name="showfooter" value="0" />
+	<ui:define name="header">
+		<b>#{messages['global.filters']}</b>
+	</ui:define>
+
+	<div style="display:table">	
+	<div style="float:left;margin-right:10px;">
+	<a:jsFunction name="updateReport" reRender="reportPanel" />
+	<rich:calendar value="#{userSessionReport.date}" popup="false" timezone="#{timezones.default}" 
+		onchanged="if (event.rich.date) {updateReport();}">
+	</rich:calendar>
+	</div>
+	
+	<div style="float:right;">
+	<s:decorate template="/layout/display.xhtml" rendered="#{userSettings.multipleUserWorkspaces}">
+		<ui:define name="label">#{messages['Workspace']}:</ui:define>
+		<h:selectOneMenu value="#{reportSelection.userWorkspace}" >
+    		<s:selectItems value="#{userSettings.userWorkspaces}" var="c" label="#{c.workspace.name}" noSelectionLabel="-" />
+        	<s:convertEntity/>
+        	<a:support event="onchange" reRender="reportPanel"/>
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	</div>
+	</div>
+	
+</s:decorate>
+
+<p/>
+
+<h:panelGroup id="reportPanel">
+<table style="width:780px" ><tr><td style="background-color:#f0f0f0;padding:4px;border:1px solid #d0d0d0;">
+<b>#{messages['form.date']}: </b>
+<h:outputText value="#{userSessionReport.date}" converter="localeDateConverter" />
+</td></tr>
+<tr><td>
+<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty userSessionReport.items}" styleClass="warn"/>
+<h:dataTable value="#{userSessionReport.items}" var="it" styleClass="tabela" width="100%" 
+	rowClasses="lin1,lin2" columnClasses="colc,coll,colc,colc,coll,coll" rendered="#{not empty userSessionReport.items}">
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['admin.websessions.id']}" />
+		</f:facet>
+		#{it.loginId}
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['User']}" styleClass="collh"/>
+		</f:facet>
+		#{it.userName}
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['UserLogin.loginDate']}" />
+		</f:facet>
+		<h:outputText value="#{it.dateLogin}" >
+			<f:convertDateTime timeZone="#{timezones.default}" type="time"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['UserLogin.logoutDate']}" />
+		</f:facet>
+		<h:outputText value="#{it.dateLogout}" >
+			<f:convertDateTime timeZone="#{timezones.default}" type="time"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Workspace']}" styleClass="collh"/>
+		</f:facet>
+		<h:outputText value="#{it.workspace}" />
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">#{messages['admin.websessions.sessiontime']}</f:facet>
+		<h:outputText value="#{it.dateLogin}" converter="periodConverter" > 
+			<f:param name="endDate" value="#{it.dateLogout}" />
+			<f:param name="type" value="time-length" />
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<a:commandLink value="#{messages['form.details']}" onclick="initUserSessionDlg(#{it.loginId});return false;" styleClass="right-icon"/>
+	</h:column>
+</h:dataTable>
+</td></tr></table>
+<ui:include src="/layout/tablerow.xhtml" />
+</h:panelGroup>
+
+<a:jsFunction name="initUserSessionDlg" reRender="userSessionInfo" ajaxSingle="true" oncomplete="showUserSessionDlg();">
+	<a:actionparam name="param1" assignTo="#{userSessionReport.userLoginId}" converter="javax.faces.Integer"/>
+</a:jsFunction>
+
+</h:form>
+
+<rich:modalPanel id="usersessiondlg" width="600" height="370" zindex="2000" trimOverlayedElements="false">
+	<f:facet name="header">#{messages['admin.reports.usersession.info']}</f:facet>
+	
+	<h:panelGroup id="userSessionInfo">
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['User']}:</ui:define>
+		#{userSessionReport.userLogin.user.name}
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['User.login']}:</ui:define>
+		#{userSessionReport.userLogin.user.login}
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['Workspace']}:</ui:define>
+		<h:outputText value="#{userSessionReport.userLogin.workspace.name}" />
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['UserLogin.loginDate']}:</ui:define>
+		<h:outputText value="#{userSessionReport.userLogin.loginDate}" >
+			<f:convertDateTime timeZone="#{timezones.default}" timeStyle="long" type="both"/>
+		</h:outputText>
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['UserLogin.logoutDate']}:</ui:define>
+		<h:outputText value="#{userSessionReport.userLogin.logoutDate}" >
+			<f:convertDateTime timeZone="#{timezones.default}" timeStyle="long" type="both"/>
+		</h:outputText>
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['admin.websessions.sessiontime']}:</ui:define>
+		<h:outputText value="#{userSessionReport.userLogin.loginDate}" converter="periodConverter" > 
+			<f:param name="endDate" value="#{userSessionReport.userLogin.logoutDate}" />
+			<f:param name="type" value="time-length" />
+		</h:outputText>
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['UserLogin.ipAddress']}:</ui:define>
+		<h:outputText value="#{userSessionReport.userLogin.ipAddress}" />
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label"><div style="display:block;height:40px;">#{messages['UserLogin.application']}:</div></ui:define>
+		<div style="width:370px;display:block;">
+		#{userSessionReport.userLogin.application}
+		</div>
+	</s:decorate>
+	
+	</h:panelGroup>
+	<a:commandButton value="#{messages['form.return']}"
+		styleClass="button" 
+		onclick="Richfaces.hideModalPanel('usersessiondlg');return false;"/>
+</rich:modalPanel>
+
+<script type="text/javascript"><!--
+function showUserSessionDlg() {	Richfaces.showModalPanel('usersessiondlg'); }
+--></script>
+
+</ui:define>
+
+</ui:composition>  

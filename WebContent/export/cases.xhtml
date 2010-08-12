@@ -1,0 +1,142 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:e="http://jboss.com/products/seam/excel"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<e:workbook>
+	<e:worksheet name="Cases" value="#{caseExport.cases}" var="c">
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['Patient.name']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.patient.fullName}" forceType="text" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['Patient.birthDate']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.patient.birthDate}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['TbCase.age']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.patientAge}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['TbCase.diagnosisDate']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.diagnosisDate}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['TbCase.notificationUnit']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.notificationUnit.name}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{levelInfo.infoLevel2}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.notificationUnit.adminUnit.name}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{levelInfo.infoLevel1}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.notificationUnit.adminUnit.parent.name}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['PatientType']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{messages[c.patientType.key]}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['CaseState']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{messages[c.state.key]}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['TbCase.iniTreatmentDate']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.treatmentPeriod.iniDate}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['InfectionSite']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{messages[c.infectionSite.key]}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['Address']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.notifAddress.address}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['Address.complement']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.notifAddress.complement}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['Address.zipCode']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.notifAddress.zipCode}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{levelInfo.infoLevel1}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.notifAddress.adminUnit.parent.name}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{levelInfo.infoLevel2}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.notifAddress.adminUnit.name}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{levelInfo.infoLevel2}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.notifAddress.adminUnit.name}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['TbCase.phoneNumber']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.phoneNumber}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['TbCase.mobileNumber']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.mobileNumber}" />
+		</e:column>
+	</e:worksheet>
+</e:workbook>
+</html>

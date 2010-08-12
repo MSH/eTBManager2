@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:c="http://java.sun.com/jstl/core"
+      template="..#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['medicines.orders.shipment']}" />
+
+<ui:param name="topmenu" value="1" />
+
+<ui:param name="labelstyle" value="width:160px;" />
+
+<ui:define name="body">
+<p/>
+<h:form>
+<rich:panel style="width:700px;">
+    
+    <table width="100%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse">
+    <tr><td><b>#{messages['Order.tbunitFrom']}: </b>#{order.tbunitFrom.name}
+    </td><td><b>#{messages['Order.tbunitTo']}: </b>#{order.tbunitTo.name}
+    </td></tr>
+    </table>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Order.orderDate']}:</ui:define>
+    	<h:outputText value="#{order.orderDate}" converter="localeDateConverter" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Order.approvingDate']}:</ui:define>
+    	<h:outputText value="#{order.approvingDate}" converter="localeDateConverter" />
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['Order.shippingDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{order.shippingDate}" /> 
+    </s:decorate>
+
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+<p/>
+
+<b>#{messages['Order.items']}:</b>
+<table width="100%">
+	<c:forEach items="#{orderSources}" var="s">
+	<tr><td class="colheader">
+		<b>#{s.source.name}</b>
+	</td></tr>
+	<tr><td>
+		<table width="100%" class="tabela" style="margin-bottom:15px;">
+			<tr><th><h:outputText value="#{messages['Medicine']}" styleClass="collh" /></th>
+				<th><h:outputText value="#{messages['OrderItem.approvedQuantity']}" /></th>
+				<th><h:outputText value="#{messages['OrderItem.shippedQuantity']}" /></th>
+				<th>#{messages['form.action']}</th>
+			</tr>
+			<c:forEach var="it" items="#{s.items}">
+				<tr class="highlight"><td class="col" style="height:25px;">
+					<img src="../img/medicine.gif" style="float:left;"/>
+					<div style="font-size:11px;">#{it.item.medicine}
+					</div> 
+				</td>
+				<s:fragment rendered="#{it.item.data==true}">
+				<tr><td colspan="6">
+ 				   <h:outputText value="#{messages['medicines.movs.invalidqtd']}" styleClass="erro"/>
+ 				</td></tr> 
+				</s:fragment>
+				<td class="colc">
+						<h:outputText value="#{it.item.approvedQuantity}"><f:convertNumber pattern="#,###,###"/></h:outputText>
+				</td>
+				<td class="colc">
+					<h:outputText value="#{messages['medicines.orders.unavailable']}" rendered="#{it.unavailable}" style="font-weight:bold;color:#F5AA0A;font-size:12px;" />
+					<h:outputText value="#{it.item.shippedQuantity}" rendered="#{not it.unavailable}"><f:convertNumber pattern="#,###,###"/></h:outputText>
+				</td>
+				<td class="colc">
+					<h:commandLink value="#{messages['medicines.orders.selbatches']}" action="#{orderBatchHome.selectOrderItem(it.item)}" rendered="#{not it.unavailable}" immediate="true"/>
+				</td>
+				</tr>
+				
+				<tr><td colspan="4">
+					<table width="450px">
+					<c:forEach var="b" items="#{it.item.batches}">
+						<tr>
+						<td><h:graphicImage value="/img/batch.gif" /></td>
+						<td class="col">
+							#{messages['Batch.manufacturer']} : #{b.batch.manufacturer}<br/> 
+							#{messages['Batch.batchNumber']} : #{b.batch.batchNumber}<br/>
+							#{messages['Batch.expiryDate']} : 
+								<h:outputText value="#{b.batch.expiryDate}"  converter="localeDateConverter" />
+								<br/>
+						</td>
+						<td class="col">
+							#{messages['Movement.quantity']} : 
+								<h:outputText value="#{b.quantity}"><f:convertNumber pattern="#,###,###"/></h:outputText><br/>
+							#{messages['global.unitPrice']} : 
+								<h:outputText value="#{b.batch.unitPrice}"><f:convertNumber pattern="#,###,##0.0000"/></h:outputText><br/>
+							#{messages['global.totalPrice']} : 
+								<h:outputText value="#{b.quantity * b.batch.unitPrice}"><f:convertNumber pattern="#,###,##0.00"/></h:outputText>
+						</td></tr>
+					</c:forEach>
+					</table>
+					<br/>
+				</td></tr>
+			</c:forEach>
+		</table>
+	</td></tr>
+	</c:forEach>
+</table>
+
+<div >
+    <h:commandButton action="#{orderShippingHome.registerShipping}" value="#{messages['form.ok']}" styleClass="button" />
+    <s:button action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" />
+</div>
+</rich:panel>
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

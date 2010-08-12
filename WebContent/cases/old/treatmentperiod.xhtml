@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition>
+
+<script type="text/javascript">
+
+function showDatesDlg() {
+	Richfaces.showModalPanel('datesdlg');
+}
+
+function hideDatesDlg() {
+	Richfaces.hideModalPanel('datesdlg');
+}
+function datesValidate() {
+fld = document.getElementById("datesform:maximunSeverity");
+if (fld != null)
+	return fld.value == "2";
+else return false;
+}
+function datesValidateAndClose() {
+if (!datesValidate())
+   hideDatesDlg();
+}
+</script>
+
+<rich:modalPanel id="datesdlg" height="300" width="550" zindex="2000">
+	<f:facet name="header">
+		#{messages['cases.treat.dates']}
+	</f:facet>
+	<h:panelGroup id="datesdata">
+	<a:region>	
+	<h:form id="datesform">
+	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
+
+		<h:messages styleClass="erro" globalOnly="true"/>	
+		
+	    <s:decorate template="/layout/dateedit.xhtml" >
+    		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+    		<ui:param name="required" value="true" /> 
+    		<ui:param name="future" value="false" />
+    		<ui:param name="datefield" value="#{caseRegimen.iniDate}" /> 
+    	</s:decorate>
+		
+	    <s:decorate template="/layout/dateedit.xhtml" >
+    		<ui:define name="label">#{messages['global.endDate']}:</ui:define>
+    		<ui:param name="required" value="true" /> 
+    		<ui:param name="future" value="false" />
+    		<ui:param name="datefield" value="#{caseRegimen.endDate}" /> 
+    	</s:decorate>
+    	<span style="color:red;padding-top:20px;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+   	<table width="100%"><tr>
+   		<td>
+   		</td>
+   		<td align="right">
+   		<a:commandButton value="#{messages['form.ok']}" action="#{caseRegimenHome.changePeriod}" 
+   			styleClass="button"
+   			onclick="this.disabled=true;" 
+   			oncomplete="this.disabled=false;datesValidateAndClose();" reRender="datesform,formtreat"/>
+   		<s:button value="#{messages['form.cancel']}" onclick="hideDatesDlg(); return false;" styleClass="button-cancel" />
+   	</td></tr>
+   	</table>
+	</h:form>
+	</a:region>
+	</h:panelGroup>
+</rich:modalPanel>
+
+</ui:composition>
+
+</html>

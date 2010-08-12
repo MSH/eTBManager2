@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+ 	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="..#{workspaceViewService.templateMedPage}">
+
+<ui:param name="title" value="#{messages['medicines.transfer']}" />
+<ui:param name="topmenu" value="1" />
+
+<ui:param name="waitdlg" value="1" />
+<ui:param name="labelstyle" value="width:210px;" />
+<ui:param name="pagestyle" value="width:650px;" />
+
+
+<ui:define name="naveg">
+	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none"/>
+</ui:define>
+
+<ui:define name="body">
+<h:form id="main">
+
+	<s:link view="/medicines/transfedt.xhtml" value="#{messages['medicines.transfer.new']}" style="float:right;width:150px;text-align:right;" rendered="#{s:hasRole('TRANSFER_EDT')}"/>
+
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
+		<h:selectOneMenu value="#{transfers.month}">
+			<f:selectItems value="#{months}"/>
+			<a:support event="onchange" reRender="pnltab" />
+		</h:selectOneMenu>
+		<h:selectOneMenu value="#{transfers.year}" style="margin-left:5px; width : 70px;">
+			<f:selectItems value="#{years}"/>
+			<a:support event="onchange" reRender="pnltab" />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TransferStatus']}:</ui:define>
+		<h:selectOneMenu value="#{transfers.status}">
+  			<s:selectItems value="#{transferStatus}" var="r" label="#{messages[r.key]}" noSelectionLabel="#{messages['medicines.transfer.all']}" />
+  			<s:convertEnum />
+			<a:support event="onchange" reRender="pnltab"/>
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	<p/>
+
+<h:panelGroup id="pnltab" >
+<h:inputHidden value="#{transfers.folder}"/>
+<table width="100%"><tr><td>
+<div class="pgtab">
+<ul>
+	<li class="#{transfers.folder=='0'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['medicines.transfer.received']}" style="margin-right:15px;" reRender="pnltab">
+			<a:actionparam name="fld" value="#{0}" assignTo="#{transfers.folder}" />
+		</a:commandLink>
+	</li>
+	<li class="#{transfers.folder=='1'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['medicines.transfer.sent']}" style="margin-right:15px;" reRender="pnltab">
+			<a:actionparam name="fld" value="#{1}" assignTo="#{transfers.folder}" />
+		</a:commandLink>
+	</li>
+</ul>
+</div>
+<div class="pgbody" style="height:200px;">
+	<s:fragment rendered="#{transfers.executing}">
+		<h:outputText value="#{messages['medicines.transfer.nofound']}" 
+			style="width:100%;font-weight:bold;text-align:center;height:100%;padding-top:20px;display:table;color:red;" 
+			rendered="#{empty transfers.resultList}"/>
+		
+		<h:dataTable value="#{transfers.resultList}" var="it" width="100%" styleClass="tabela" rendered="#{not empty transfers.resultList}" 
+		  columnClasses="colc,coll,colc" rowClasses="lin1,lin2">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['Transfer.shippingDate']}" />
+				</f:facet>
+				<s:link view="/medicines/transfdata.xhtml">
+					<h:outputText value="#{it.shippingDate}" converter="localeDateConverter" />
+					<f:param name="id" value="#{it.id}" />
+				</s:link>
+			</h:column>
+			
+			<h:column rendered="#{transfers.folder=='0'}">
+				<f:facet name="header">
+					<h:outputText value="#{messages['Transfer.unitFrom']}" styleClass="collh"/> 
+				</f:facet>
+				#{it.unitFrom.name}
+			</h:column>
+			
+			<h:column rendered="#{transfers.folder=='1'}">
+				<f:facet name="header">
+					<h:outputText value="#{messages['Transfer.unitTo']}" styleClass="collh"/> 
+				</f:facet>
+				#{it.unitTo.name}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['TransferStatus']}</f:facet>
+				#{messages[it.status.key]}
+			</h:column>
+		</h:dataTable>
+	</s:fragment>
+</div>
+</td></tr></table>
+</h:panelGroup>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+ 	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/report.xhtml">
+
+<ui:param name="title" value="#{messages['medicines.movs']}" />
+<ui:param name="labelstyle" value="width:200px;" />
+<ui:param name="pagestyle" value="width:800px;" />
+<ui:param name="showunit" value="1" />
+
+<ui:define name="body">
+<p/>
+<h:form id="main">
+	<s:decorate template="/layout/display.xhtml" rendered="#{medicine.id != null}">
+    	<ui:define name="label">#{messages['Medicine']}:</ui:define>
+		#{medicineHome.instance}
+	</s:decorate>
+
+	<s:decorate template="/layout/display.xhtml" rendered="#{source.id != null}">
+    	<ui:define name="label">#{messages['Source']}:</ui:define>
+		#{sourceHome.instance.name}
+	</s:decorate>
+
+	<s:decorate template="/layout/display.xhtml" rendered="#{movementFilters.type != null}">
+    	<ui:define name="label">#{messages['MovementType']}:</ui:define>
+		#{messages[movementFilters.type.key]}
+	</s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" rendered="#{movementFilters.date != null}">
+    	<ui:define name="label">#{messages['medicines.movs.refdate']}:</ui:define>
+    	<h:outputText value="#{movementFilters.date}" converter="localeDateConverter" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" rendered="#{movementFilters.batchesOutput}">
+    	<ui:define name="label">#{messages['medicines.movs.showbatches']}:</ui:define>
+    	#{messages['form.yes']}
+    </s:decorate>
+
+<p/>
+
+<h:outputText value="#{messages['medicines.movs.selectfilter']}" style="font-weight:bold;" rendered="#{movementFilters.date==null}"/>
+<h:panelGroup rendered="#{movementFilters.date != null}">
+
+<s:fragment rendered="#{not movementFilters.batchesOutput}">
+
+<s:decorate template="/layout/naveg.xhtml">
+	<ui:param name="list" value="#{movements}" />
+	<ui:param name="page" value="/medicines/movements.xhtml" />
+</s:decorate>
+
+<p/>
+<h:dataTable value="#{movements.resultList}" var="m" rendered="#{movements.resultCount > 0}" 
+	styleClass="tabela" width="100%" rowClasses="lin1,lin2" 
+	columnClasses="colc,#{medicine.id!=null?'':'coll,'}#{source.id!=null?'':'coll,'}coll,colr,colr,colr,colr">
+	<h:column>
+		<f:facet name="header">#{messages['Movement.date']}</f:facet>
+		<h:outputText value="#{m.date}" style="width:80px" converter="localeDateConverter" />
+	</h:column>
+
+	<h:column rendered="#{medicine.id == null}">
+		<f:facet name="header"><h:outputText value="#{messages['Medicine']}" styleClass="collh" /></f:facet>
+		#{m.medicine}
+	</h:column>
+
+	<h:column rendered="#{source.id == null}">
+		<f:facet name="header"><h:outputText value="#{messages['Source']}" styleClass="collh" /></f:facet>
+		#{m.source.name}
+	</h:column>
+
+	<h:column>
+		<f:facet name="header"><h:outputText value="#{messages['MovementType']}" styleClass="collh" /></f:facet>
+		#{messages[m.type.key]}
+		<s:fragment rendered="#{not empty m.comment}">
+			: #{m.comment}
+		</s:fragment>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header"><h:outputText value="#{messages['medicines.movs.movqtd']}" styleClass="colrh" /></f:facet>
+		<h:outputText value="#{m.qtdOperation}" style="#{m.qtdOperation > 0? '': 'font-weight:bold;color:red;'}">
+			<f:convertNumber pattern="#,###,###"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header"><h:outputText value="#{messages['global.unitPrice']}" styleClass="colrh" /></f:facet>
+		<h:outputText value="#{m.unitPrice}">
+			<f:convertNumber pattern="#,###,##0.0000"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header"><h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh" /></f:facet>
+		<h:outputText value="#{m.totalPrice}">
+			<f:convertNumber pattern="#,###,##0.00"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header"><h:outputText value="#{messages['medicines.movs.stockqtty']}" styleClass="colrh" /></f:facet>
+		<b><h:outputText value="#{m.stockQuantity}">
+			<f:convertNumber pattern="#,###,###"/>
+		</h:outputText>
+		</b>
+	</h:column>
+
+</h:dataTable>
+
+</s:fragment>
+
+<s:fragment rendered="#{movementFilters.batchesOutput}">
+
+<s:decorate template="/layout/naveg.xhtml">
+	<ui:param name="list" value="#{batchMovements}" />
+	<ui:param name="page" value="/medicines/movements.xhtml" />
+</s:decorate>
+
+<p/>
+
+<table class="tabela" width="100%">
+	<tr><th>#{messages['Movement.date']}
+		</th>
+		<s:fragment rendered="#{!medicineHome.managed}">
+		<th class="coll">#{messages['Medicine']}
+		</th>
+		</s:fragment>
+		<s:fragment rendered="#{!sourceHome.managed}">
+		<th class="coll">#{messages['Source']}
+		</th>
+		</s:fragment>
+		<th class="coll">#{messages['MovementType']}
+		</th>
+		<th class="coll">#{messages['Batch.batchNumber']}
+		</th>
+		<th>#{messages['Batch.expiryDate']}
+		</th>
+		<th>#{messages['Batch.manufacturer']}
+		</th>
+		<th class="colr">#{messages['medicines.movs.movqtd']}
+		</th>
+		<th class="colr">#{messages['global.unitPrice']}
+		</th>
+		<th class="colr">#{messages['global.totalPrice']}
+		</th>
+		<th class="colr">#{messages['medicines.movs.stockqtty']}
+		</th>
+	</tr>
+<a:repeat value="#{batchMovements.rows}" var="m">
+	<tr><s:fragment rendered="#{m.spaned}">
+		<td class="colcb" rowspan="#{m.rowSpan}"><h:outputText value="#{m.item.movement.date}" converter="localeDateConverter" />
+		</td>
+		</s:fragment>
+		<s:fragment rendered="#{m.spaned}">
+		<s:fragment rendered="#{!medicineHome.managed}">
+		<td class="colb" rowspan="#{m.rowSpan}">#{m.item.movement.medicine}
+		</td>
+		</s:fragment>
+		<s:fragment rendered="#{!sourceHome.managed}">
+		<td class="colb" rowspan="#{m.rowSpan}">#{m.item.movement.source.name}
+		</td>
+		</s:fragment>
+		<td class="colb" rowspan="#{m.rowSpan}">
+			#{messages[m.item.movement.type.key]}
+			<s:fragment rendered="#{not empty m.item.movement.comment}">: #{m.item.movement.comment}
+			</s:fragment>
+		</td>
+		</s:fragment>
+		<td class="colb">#{m.item.batch.batchNumber}
+		</td>
+		<td class="colcb"><h:outputText value="#{m.item.batch.expiryDate}" converter="localeDateConverter" />
+		</td>
+		<td class="colb">#{m.item.batch.manufacturer}
+		</td>
+		<td class="colrb">
+			<h:outputText value="#{m.item.qtdOperation}" style="#{m.item.movement.qtdOperation > 0? '': 'font-weight:bold;color:red;'}">
+				<f:convertNumber pattern="#,###,###"/>
+			</h:outputText>
+		</td>
+		<td class="colrb"><h:outputText value="#{m.item.batch.unitPrice}">
+				<f:convertNumber pattern="#,###,##0.0000"/>
+			</h:outputText>
+		</td>
+		<td class="colrb"><h:outputText value="#{m.item.totalPrice}">
+				<f:convertNumber pattern="#,###,##0.00"/>
+			</h:outputText>
+		</td>
+		<s:fragment rendered="#{m.spaned}">
+		<td class="colrb" rowspan="#{m.rowSpan}"><b><h:outputText value="#{m.item.movement.stockQuantity}">
+			<f:convertNumber pattern="#,###,###"/>
+		</h:outputText>
+		</b>
+		</td>
+		</s:fragment>
+	</tr>
+</a:repeat>
+</table>
+</s:fragment>
+
+</h:panelGroup>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

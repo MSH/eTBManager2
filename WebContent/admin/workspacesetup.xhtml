@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+        
+<ui:param name="title" value="#{messages['admin.setup']} #{defaultWorkspace.name}" />
+<ui:param name="topmenu" value="3" />
+
+<ui:param name="labelstyle" value="width:170px" />
+
+<ui:define name="body">
+<h:form id="main" enctype="multipart/form-data">
+	<table width="750px" style="border:2px solid #f0f0f0" ><tr><td>
+	
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['form.name']}:</ui:define>
+    	<h:inputText value="#{workspaceHome.defaultWorkspace.name.name1}" size="100" style=" width : 130px;" required="true"></h:inputText>
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml" rendered="#{workspaceHome.defaultWorkspace.hasAlternateLocale}">
+    	<ui:define name="label">#{messages['form.name']}:
+    		<br/><span style="font-weight:normal;">(#{workspaceHome.defaultWorkspace.alternateDisplayLocale}):</span>
+    	</ui:define>
+    	<h:inputText value="#{workspaceHome.defaultWorkspace.name.name2}" size="100" style=" width : 130px;"></h:inputText>
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.description']}:</ui:define>
+    	<h:inputText value="#{workspaceHome.defaultWorkspace.description}" size="150" style=" width : 300px;" required="true"></h:inputText>
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.defaultLocale']}:</ui:define>
+		<h:selectOneMenu value="#{workspaceHome.defaultWorkspace.defaultLocale}" required="true">
+			<f:selectItem value="#{null}" itemLabel="-"/>
+           	<f:selectItems value="#{localeSelector.supportedLocales}" />
+       	</h:selectOneMenu>
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.alternateLocale']}:</ui:define>
+		<h:selectOneMenu value="#{workspaceHome.defaultWorkspace.alternateLocale}">
+			<f:selectItem value="#{null}" itemLabel="-"/>
+           	<f:selectItems value="#{localeSelector.supportedLocales}" />
+       	</h:selectOneMenu>
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.defaultTimeZone']}:</ui:define>
+		<h:selectOneMenu value="#{workspace.defaultTimeZone}" required="true">
+           	<f:selectItems value="#{timezones.selectItems}" />
+      	</h:selectOneMenu>
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['NameComposition']}:</ui:define>
+		<h:selectOneMenu value="#{workspaceHome.nameComposition}" required="true">
+           	<s:selectItems value="#{namesComposition}" var="it" noSelectionLabel="-" label="#{messages[it.key]}"/>
+           	<s:convertEnum />
+      	</h:selectOneMenu>
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml" >
+    	<h:selectBooleanCheckbox value="#{workspace.startTBTreatBeforeValidation}" /> #{messages['Workspace.startTBTreatBeforeValidation']}
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml" >
+    	<h:selectBooleanCheckbox value="#{workspace.startDRTBTreatBeforeValidation}" /> #{messages['Workspace.startDRTBTreatBeforeValidation']}
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['DisplayCaseNumber']}:</ui:define>
+		<h:selectOneMenu value="#{workspace.displayCaseNumber}" required="true">
+           	<s:selectItems value="#{globalLists.displayCaseNumbers}" var="it" noSelectionLabel="-" label="#{messages[it.key]}"/>
+           	<s:convertEnum />
+      	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.patientAddrRequiredLevels']}:</ui:define>
+		<h:selectOneMenu value="#{workspace.patientAddrRequiredLevels}" required="true">
+			<f:selectItems value="#{workspaceHome.countryLevels}"/>
+      	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:param name="labelstyle" value="height:40px;width:170px;" />
+    	<ui:define name="label">#{messages['Workspace.picture']}:</ui:define>
+    	<s:graphicImage value="#{workspaceHome.view.picture}" rendered="#{workspaceHome.view.picture != null}" style="border:1px solid #d0d0d0;padding:4px;"/>
+    	<h:outputText value="#{messages['admin.workspaces.noimage']}" rendered="#{workspaceHome.view.picture == null}" />
+    	<s:fragment rendered="#{workspaceHome.view.picture != null}">
+    		<br/>
+    		<h:selectBooleanCheckbox value="#{workspaceHome.clearPicture}" />#{messages['admin.workspaces.clearimg']}
+    	</s:fragment>
+    </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['admin.workspaces.newimage']}</ui:define>
+    	<s:fileUpload data="#{workspaceHome.picture}" 
+    		contentType="#{workspaceHome.pictureContentType}"
+    		fileName="#{workspaceHome.pictureFileName}"
+    		fileSize="#{workspaceHome.pictureSize}" />
+    </s:decorate>
+	
+	</td></tr><tr><td align="right">
+		<h:commandButton action="#{workspaceHome.saveDefaultworkspace}" value="#{messages['form.ok']}" styleClass="button" />
+		<s:button view="/admin/index.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" />
+	</td></tr></table>
+</h:form>
+</ui:define>
+        
+</ui:composition> 

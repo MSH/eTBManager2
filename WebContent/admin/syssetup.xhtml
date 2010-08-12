@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+  	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+        
+<ui:param name="title" value="#{messages['admin.syssetup']}" />
+<ui:param name="topmenu" value="3" />
+
+<ui:param name="waitdlg" value="1" />
+<ui:param name="labelstyle" value="width:170px" />
+
+<ui:define name="body">
+<h:form id="main" >
+	<table width="600px" style="border:2px solid #f0f0f0" ><tr><td>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['SystemConfig.systemURL']}: 	</ui:define>
+    	<h:inputText value="#{systemConfig.systemURL}" size="100" style=" width : 230px;" required="true" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['SystemConfig.systemMail']}: 	</ui:define>
+    	<h:inputText value="#{systemConfig.systemMail}" size="100" style=" width : 230px;" required="true" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['SystemConfig.adminMail']}: 	</ui:define>
+    	<h:inputText value="#{systemConfig.adminMail}" size="100" style=" width : 230px;" />
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['SystemConfig.allowRegPage']}:</ui:define>
+    	<h:selectBooleanCheckbox value="#{systemConfig.allowRegPage}" />
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Workspace']}:</ui:define>
+		<h:selectOneMenu value="#{systemConfigHome.workspace}" required="true">
+           	<s:selectItems value="#{workspaces}" var="it" label="#{it.name}" noSelectionLabel="-"/>
+			<s:convertEntity />
+			<a:support event="onchange" reRender="pnlws" ajaxSingle="true"/>
+       	</h:selectOneMenu>
+    </s:decorate>
+	
+	<h:panelGroup id="pnlws">
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbUnit']}:</ui:define>
+		<h:selectOneMenu value="#{systemConfig.tbunit}" required="true">
+           	<s:selectItems value="#{systemConfigHome.units}" var="it" label="#{it.name}" noSelectionLabel="-"/>
+			<s:convertEntity />
+       	</h:selectOneMenu>
+    </s:decorate>
+		
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['UserProfile']}:</ui:define>
+		<h:selectOneMenu value="#{systemConfig.userProfile}" required="true">
+           	<s:selectItems value="#{systemConfigHome.profiles}" var="it" label="#{it.name}" noSelectionLabel="-"/>
+			<s:convertEntity />
+       	</h:selectOneMenu>
+    </s:decorate>
+    </h:panelGroup>
+	
+	</td></tr><tr><td align="right">
+		<h:commandButton action="#{systemConfigHome.saveSettings}" value="#{messages['form.ok']}" styleClass="button" />
+		<s:button view="/admin/index.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" />
+	</td></tr></table>
+</h:form>
+</ui:define>
+        
+</ui:composition> 

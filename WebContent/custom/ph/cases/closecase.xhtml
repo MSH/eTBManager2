@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['cases.close']}" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="topmenu" value="0" />
+
+<ui:param name="labelstyle" value="width:160px" />
+
+<ui:define name="body">
+<p/>
+<h:form id="main">
+
+<s:decorate template="/layout/casebody.xhtml">
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+		<ui:define name="label">#{messages['TbCase.outcomeDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="false" /> 
+    	<ui:param name="datefield" value="#{caseCloseHome.date}" /> 
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['cases.outcome']}:</ui:define>
+		<h:selectOneRadio id="selstate" value="#{caseCloseHome.state}" required="true" layout="pageDirection">
+			<s:selectItems value="#{caseCloseHome.outcomes}" var="v" label="#{messages[v.key]}"/>
+			<s:convertEnum />
+		</h:selectOneRadio>
+    </s:decorate>
+
+	<div id="comments" style="display:block;clear:both;" >
+    <s:decorate template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['TbCase.otherOutcome']}:</ui:define>
+		<h:inputText value="#{caseCloseHome.comment}" maxlength="100" style="width:300px;"/>
+    </s:decorate>
+    </div>
+
+<table width="100%">
+<tr><td align="right">
+	<h:commandButton action="#{caseCloseHome.closeCase}" value="#{messages['form.ok']}" styleClass="button" onclick="openWaitDlg();"/> 
+    <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel">
+       	<f:param name="id" value="#{caseHome.id}"/>
+    </s:button>
+</td></tr>
+</table>
+</s:decorate>
+
+<p/>
+
+<rich:jQuery selector="#selstate input[type=\'radio\']" query="click(function(){statecheckClick(this);})" />
+<rich:jQuery selector="#comments" query="hide()" />
+<script type="text/javascript">
+function statecheckClick(elem) {
+   if (elem.value=='OTHER')
+      jQuery('#comments').show(500);
+   else jQuery('#comments').hide(500);
+}
+</script>
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

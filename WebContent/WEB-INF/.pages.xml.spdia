@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram model-entity="SeamPagesDiagram">
+ <item ID="#home.xhtml" NAME="#xhome.xhtml" PATH="/home.xhtml"
+  SHAPE="440,17,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#admin#*" NAME="#xadmin#x*" PATH="/admin/*"
+  SHAPE="664,273,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#medicines#*" NAME="#xmedicines#x*" PATH="/medicines/*"
+  SHAPE="1176,377,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#cases#*" NAME="#xcases#x*" PATH="/cases/*"
+  SHAPE="24,5265,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#management#*" NAME="#xmanagement#x*" PATH="/management/*"
+  SHAPE="664,1145,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#reports#*" NAME="#xreports#x*" PATH="/reports/*"
+  SHAPE="344,5265,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#custom#*" NAME="#xcustom#x*" PATH="/custom/*"
+  SHAPE="664,5265,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="*" NAME="*" PATH="*" SHAPE="24,17,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/home.xhtml" NAME="output" PATH="/home.xhtml"
+   TARGET="#xhome.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#admin#groups.xhtml" NAME="#xadmin#xgroups.xhtml"
+  PATH="/admin/groups.xhtml" SHAPE="344,2633,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#admin#edtgroup.xhtml" NAME="#xadmin#xedtgroup.xhtml"
+  PATH="/admin/edtgroup.xhtml" SHAPE="24,2633,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/admin/groups.xhtml" NAME="output"
+   PATH="/admin/groups.xhtml" TARGET="#xadmin#xgroups.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#medicines#orders.xhtml" NAME="#xmedicines#xorders.xhtml"
+  PATH="/medicines/orders.xhtml" SHAPE="472,505,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#medicines#orderdata.xhtml"
+  NAME="#xmedicines#xorderdata.xhtml" PATH="/medicines/orderdata.xhtml"
+  SHAPE="472,377,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/orders.seam" NAME="output"
+   PATH="/medicines/orders.seam" TARGET="#xmedicines#xorders.seam" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#reports#orderdata.xhtml" NAME="#xreports#xorderdata.xhtml"
+  PATH="/reports/orderdata.xhtml" SHAPE="1304,5265,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#medicines#orderaut.xhtml" NAME="#xmedicines#xorderaut.xhtml"
+  PATH="/medicines/orderaut.xhtml" SHAPE="24,505,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/orderdata.xhtml" NAME="output"
+   PATH="/medicines/orderdata.xhtml"
+   TARGET="#xmedicines#xorderdata.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/medicines/orderdata.xhtml" NAME="output1"
+   PATH="/medicines/orderdata.xhtml"
+   TARGET="#xmedicines#xorderdata.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#medicines#ordersent.xhtml"
+  NAME="#xmedicines#xordersent.xhtml" PATH="/medicines/ordersent.xhtml"
+  SHAPE="24,633,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/orderdata.xhtml" NAME="output"
+   PATH="/medicines/orderdata.xhtml"
+   TARGET="#xmedicines#xorderdata.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/medicines/selbatch.xhtml" NAME="output1"
+   PATH="/medicines/selbatch.xhtml" TARGET="#xmedicines#xselbatch.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/medicines/orderdata.xhtml" NAME="output2"
+   PATH="/medicines/orderdata.xhtml"
+   TARGET="#xmedicines#xorderdata.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#medicines#selbatch.xhtml" NAME="#xmedicines#xselbatch.xhtml"
+  PATH="/medicines/selbatch.xhtml" SHAPE="472,633,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/ordersent.xhtml" NAME="output"
+   PATH="/medicines/ordersent.xhtml"
+   TARGET="#xmedicines#xordersent.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#medicines#orderrec.xhtml" NAME="#xmedicines#xorderrec.xhtml"
+  PATH="/medicines/orderrec.xhtml" SHAPE="24,785,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/orderdata.xhtml" NAME="output"
+   PATH="/medicines/orderdata.xhtml"
+   TARGET="#xmedicines#xorderdata.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/medicines/orderdata.xhtml" NAME="output1"
+   PATH="/medicines/orderdata.xhtml"
+   TARGET="#xmedicines#xorderdata.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#medicines#orderrecbatch.xhtml"
+  NAME="#xmedicines#xorderrecbatch.xhtml"
+  PATH="/medicines/orderrecbatch.xhtml" SHAPE="24,913,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/orderdata.xhtml" NAME="output"
+   PATH="/medicines/orderdata.xhtml"
+   TARGET="#xmedicines#xorderdata.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/medicines/orderdata.xhtml" NAME="output1"
+   PATH="/medicines/orderdata.xhtml"
+   TARGET="#xmedicines#xorderdata.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#medicines#ordercancel.xhtml"
+  NAME="#xmedicines#xordercancel.xhtml"
+  PATH="/medicines/ordercancel.xhtml" SHAPE="24,1041,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/orderdata.xhtml" NAME="output"
+   PATH="/medicines/orderdata.xhtml"
+   TARGET="#xmedicines#xorderdata.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#medicines#dispensing.xhtml"
+  NAME="#xmedicines#xdispensing.xhtml"
+  PATH="/medicines/dispensing.xhtml" SHAPE="408,4073,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/*" NAME="output" PATH="/medicines/*"
+   TARGET="#xmedicines#x*" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#medicines#dispnew.xhtml" NAME="#xmedicines#xdispnew.xhtml"
+  PATH="/medicines/dispnew.xhtml" SHAPE="24,4073,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/dispensing.xhtml" NAME="output"
+   PATH="/medicines/dispensing.xhtml"
+   TARGET="#xmedicines#xdispensing.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#medicines#disppacdata.xhtml"
+  NAME="#xmedicines#xdisppacdata.xhtml"
+  PATH="/medicines/disppacdata.xhtml" SHAPE="472,913,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/disppac.xhtml" NAME="output"
+   PATH="/medicines/disppac.xhtml" TARGET="#xmedicines#xdisppac.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#reports#movements.xhtml" NAME="#xreports#xmovements.xhtml"
+  PATH="/reports/movements.xhtml" SHAPE="24,5369,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#medicines#transfer.xhtml" NAME="#xmedicines#xtransfer.xhtml"
+  PATH="/medicines/transfer.xhtml" SHAPE="1048,4201,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#medicines#transfedt.xhtml"
+  NAME="#xmedicines#xtransfedt.xhtml" PATH="/medicines/transfedt.xhtml"
+  SHAPE="728,4201,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/transfer.xhtml" NAME="output"
+   PATH="/medicines/transfer.xhtml" TARGET="#xmedicines#xtransfer.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#medicines#transfcancel.xhtml"
+  NAME="#xmedicines#xtransfcancel.xhtml"
+  PATH="/medicines/transfcancel.xhtml" SHAPE="24,4201,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/transfdata.xhtml" NAME="output"
+   PATH="/medicines/transfdata.xhtml"
+   TARGET="#xmedicines#xtransfdata.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#medicines#transfdata.xhtml"
+  NAME="#xmedicines#xtransfdata.xhtml"
+  PATH="/medicines/transfdata.xhtml" SHAPE="408,4201,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/transfedt.xhtml" NAME="output"
+   PATH="/medicines/transfedt.xhtml"
+   TARGET="#xmedicines#xtransfedt.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#reports#transfdata.xhtml" NAME="#xreports#xtransfdata.xhtml"
+  PATH="/reports/transfdata.xhtml" SHAPE="344,5369,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#medicines#transfrec.xhtml"
+  NAME="#xmedicines#xtransfrec.xhtml" PATH="/medicines/transfrec.xhtml"
+  SHAPE="24,4305,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/transfdata.xhtml" NAME="output"
+   PATH="/medicines/transfdata.xhtml"
+   TARGET="#xmedicines#xtransfdata.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/medicines/transfdata.xhtml" NAME="output1"
+   PATH="/medicines/transfdata.xhtml"
+   TARGET="#xmedicines#xtransfdata.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#medicines#stockpos.xhtml" NAME="#xmedicines#xstockpos.xhtml"
+  PATH="/medicines/stockpos.xhtml" SHAPE="344,4433,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#reports#stockpos.xhtml" NAME="#xreports#xstockpos.xhtml"
+  PATH="/reports/stockpos.xhtml" SHAPE="664,5369,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#medicines#stockadj.xhtml" NAME="#xmedicines#xstockadj.xhtml"
+  PATH="/medicines/stockadj.xhtml" SHAPE="24,4433,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/stockpos.xhtml" NAME="output"
+   PATH="/medicines/stockpos.xhtml" TARGET="#xmedicines#xstockpos.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#medicines#unitsetupedt.xhtml"
+  NAME="#xmedicines#xunitsetupedt.xhtml"
+  PATH="/medicines/unitsetupedt.xhtml" SHAPE="472,785,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/unitsetup.xhtml" NAME="output"
+   PATH="/medicines/unitsetup.xhtml"
+   TARGET="#xmedicines#xunitsetup.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#reports#rel2.xhtml" NAME="#xreports#xrel2.xhtml"
+  PATH="/reports/rel2.xhtml" SHAPE="1624,5369,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#reports#rel3.xhtml" NAME="#xreports#xrel3.xhtml"
+  PATH="/reports/rel3.xhtml" SHAPE="344,5473,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#admin#websessions.xhtml" NAME="#xadmin#xwebsessions.xhtml"
+  PATH="/admin/websessions.xhtml" SHAPE="24,5577,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="org.jboss.seam.framework.EntityNotFoundException"
+  NAME="exception:org.jboss.seam.framework.EntityNotFoundException"
+  PATH="org.jboss.seam.framework.EntityNotFoundException"
+  SHAPE="24,4537,0,0" TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
+   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="javax.persistence.EntityNotFoundException"
+  NAME="exception:javax.persistence.EntityNotFoundException"
+  PATH="javax.persistence.EntityNotFoundException" SHAPE="24,4641,0,0"
+  TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
+   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="javax.persistence.OptimisticLockException"
+  NAME="exception:javax.persistence.OptimisticLockException"
+  PATH="javax.persistence.OptimisticLockException" SHAPE="24,4745,0,0"
+  TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
+   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="org.jboss.seam.security.AuthorizationException"
+  NAME="exception:org.jboss.seam.security.AuthorizationException"
+  PATH="org.jboss.seam.security.AuthorizationException"
+  SHAPE="24,4849,0,0" TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
+   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="javax.faces.application.ViewExpiredException"
+  NAME="exception:javax.faces.application.ViewExpiredException"
+  PATH="javax.faces.application.ViewExpiredException"
+  SHAPE="24,4953,0,0" TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/login.xhtml" NAME="output" PATH="/login.xhtml"
+   TARGET="#xlogin.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="org.jboss.seam.security.NotLoggedInException"
+  NAME="exception:org.jboss.seam.security.NotLoggedInException"
+  PATH="org.jboss.seam.security.NotLoggedInException"
+  SHAPE="24,5161,0,0" TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/login.xhtml" NAME="output" PATH="/login.xhtml"
+   TARGET="#xlogin.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item NAME="exception:" SHAPE="24,5057,0,0" TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/errorall.xhtml" NAME="output" PATH="/errorall.xhtml"
+   TARGET="#xerrorall.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item NAME="#xmedicines#xorders.seam" PATH="/medicines/orders.seam"
+  SHAPE="792,377,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/*" NAME="output" PATH="/medicines/*"
+   TARGET="#xmedicines#x*" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item NAME="#xmedicines#xunitsetup.xhtml"
+  PATH="/medicines/unitsetup.xhtml" SHAPE="792,505,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/*" NAME="output" PATH="/medicines/*"
+   TARGET="#xmedicines#x*" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item NAME="#xlogin.xhtml" PATH="/login.xhtml" SHAPE="344,5161,0,0"
+  TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item NAME="#xmedicines#xdisppac.xhtml" PATH="/medicines/disppac.xhtml"
+  SHAPE="792,633,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/*" NAME="output" PATH="/medicines/*"
+   TARGET="#xmedicines#x*" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item NAME="#xerror.xhtml" PATH="/error.xhtml" SHAPE="472,4537,0,0"
+  TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#others#*" NAME="#xothers#x*" PATH="/others/*"
+  SHAPE="1624,5817,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="javax.faces.validator.ValidatorException"
+  NAME="exception:javax.faces.validator.ValidatorException"
+  PATH="javax.faces.validator.ValidatorException" SHAPE="24,121,0,0"
+  TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/home.xhtml" NAME="output" PATH="/home.xhtml"
+   TARGET="#xhome.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="org.msh.tb.movs.MovementException"
+  NAME="exception:org.msh.tb.movs.MovementException"
+  PATH="org.msh.tb.movs.MovementException" SHAPE="24,5881,0,0"
+  TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
+   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#restricted#*" NAME="#xrestricted#x*" PATH="/restricted/*"
+  SHAPE="984,5433,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item NAME="#xerrorall.xhtml" PATH="/errorall.xhtml"
+  SHAPE="344,5673,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#workspaceimg.xhtml" NAME="#xworkspaceimg.xhtml"
+  PATH="/workspaceimg.xhtml" SHAPE="24,5881,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+</diagram>

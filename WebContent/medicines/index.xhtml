@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="..#{workspaceViewService.templateMedPage}">
+
+<ui:param name="title" value="#{messages.medicines}" />
+
+<ui:param name="topmenu" value="1" />
+
+<ui:define name="body">
+<div>
+
+    <s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">#{messages['HealthSystem']}:</ui:define>
+    	#{userSession.tbunit.healthSystem.name}
+    </s:decorate>
+    
+    <s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">#{messages['TbUnit.address']}:</ui:define>
+    	#{userSession.tbunit.address}
+    </s:decorate>
+    
+	<s:decorate template="/layout/audisplay.xhtml">
+		<ui:param name="adminunit" value="#{userSession.tbunit.adminUnit}" />
+	</s:decorate>
+
+	<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
+    <s:decorate template="/layout/display.xhtml">
+		<div class="star-icon" >
+			#{messages['TbUnit.treatmentHealthUnit']}
+		</div>
+	</s:decorate>
+    <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.notifHealthUnit}">
+		<div class="star-icon" >
+			#{messages['cases.details.notifhu']}
+		</div>
+	</s:decorate>
+    <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.tbHealthUnit}">
+		<div class="star-icon" >
+		#{messages['TbUnit.tbHealthUnit']}
+		</div>
+	</s:decorate>
+    <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.mdrHealthUnit}">
+		<div class="star-icon" >
+			#{messages['TbUnit.mdrHealthUnit']}
+		</div>
+	</s:decorate>
+	</s:fragment>
+	
+    <span class="paragraph">#{messages['admin.tbunits.medmanagement']}</span>
+    <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.medicineStorage}">
+		<div class="star-icon" >
+			#{messages['TbUnit.medicineStorage']}
+		</div>
+	</s:decorate>
+    <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.receivingFromSource}">
+		<div class="star-icon" >
+		#{messages['TbUnit.receivingFromSource']}
+		</div>
+	</s:decorate>
+
+<p/>
+
+</div>
+</ui:define>
+
+</ui:composition>  

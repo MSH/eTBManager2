@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition>
+
+<script type="text/javascript">
+
+function showSelRegimenDlg() {
+	Richfaces.showModalPanel('selregdlg');
+}
+
+function hideSelRegimenDlg() {
+	Richfaces.hideModalPanel('selregdlg');
+}
+function selRegimenDlg_OkClick() {
+if (!newRegValidate())
+   hideNewRegimenDlg();
+}
+</script>
+
+<rich:modalPanel id="selregdlg" height="300" width="550" >
+	<f:facet name="header">
+		#{messages['cases.details.starttreatment']}
+	</f:facet>
+	<h:panelGroup>
+	<a:region>	
+	<h:form id="selregform">
+
+	#{messages['cases.treat.selreg']}<br/>
+	<h:selectOneRadio value="#{startTreatmentHome.phase}">
+		<s:selectItems var="v" value="#{regimenPhases}" label="#{messages[v.key]}"/>
+	</h:selectOneRadio>
+
+   	<table width="100%"><tr>
+   		<td><span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+   			<ui:include src="/layout/waitstatus.xhtml" />
+   		</td>
+   		<td align="right">
+   		<a:commandButton value="#{messages['form.ok']}" action="#{treatmentHealthUnitHome.addNewRegimen}" 
+   			styleClass="button"
+   			onclick="this.disabled=true;" 
+   			oncomplete="this.disabled=false;selRegimenDlg_OkClick();" reRender="newregform,formtreat"/>
+   		<s:button value="#{messages['form.cancel']}" onclick="hideSelRegimenDlg(); return false;" styleClass="button-cancel" />
+   	</td></tr>
+   	</table>
+	</h:form>
+	</a:region>
+	</h:panelGroup>
+</rich:modalPanel>
+
+</ui:composition>
+
+</html>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['admin.adminunits']}" />
+<ui:param name="topmenu" value="3" />
+<ui:param name="waitdlg" value="1" />
+
+
+<ui:define name="menu_lateral">
+	<ui:include src="/layout/adminmenu.xhtml" />
+</ui:define>
+
+
+<ui:define name="body">
+<h:form id="main">
+<h:panelGroup id="pnltable">
+<s:button view="/admin/edtadminunit.xhtml" value="#{messages['form.newf']}" styleClass="button" rendered="#{(adminUnitHome.auselection.selectedUnit.level!=5)and(s:hasRole('ADMINUNITS_EDT'))}" >
+	<f:param name="id" value="#{null}" />
+	<f:param name="parentid" value="#{adminUnitHome.parentId}" />
+</s:button>
+<p/>
+
+<h:commandLink action="#{adminUnitHome.updateCode}" value="Update code"  rendered="#{userLogin.user.login=='RICARDO'}"/>
+
+<s:decorate template="/layout/naveg.xhtml">
+	<ui:param name="list" value="#{adminunits}" />
+	<ui:param name="page" value="/admin/adminunits.xhtml" />
+</s:decorate>
+
+<div class="linknaveg" style="margin-bottom:10px;">
+<s:link value="#{defaultWorkspace.name}" view="/admin/adminunits.xhtml" style="font-size:12px;">
+	<f:param name="parentid" value="#{null}"/>
+</s:link>
+<a:repeat value="#{adminUnitHome.auselection.parentUnits}" var="it">
+	<s:link value="#{it.name}" view="/admin/adminunits.xhtml" style="font-size:12px;">
+		<f:param name="parentid" value="#{it.id}"/>
+	</s:link>
+</a:repeat>
+</div>
+
+<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty adminUnits.resultList}" styleClass="warn" />
+
+<s:fragment rendered="#{not empty adminUnits.resultList}">
+
+<table width="100%">
+<tr><td>
+<s:link value="#{messages['admin.auorg']}" view="/admin/countrystructure.xhtml" style="float:right;" rendered="#{s:hasRole('ADMSTR')}"/>
+<b>#{adminUnits.resultCount}</b> #{messages['form.resultlist']}.<br/>
+</td></tr>
+<tr><td>
+
+<h:dataTable id="tbl" value="#{adminUnits.resultList}" var="r" border="0" columnClasses="colc,coll#{defaultWorkspace.hasAlternateLocale?',coll':''},coll,colc" 
+	width="100%"  styleClass="tabela" rowClasses="lin1,lin2" rendered="#{not empty adminUnits.resultList}" style="margin-top:4px;">
+  <h:column>
+  	<s:link view="/admin/adminunits.xhtml" styleClass="plus-icon" style="margin-left:4px;margin-top:4px;" rendered="#{r.level!=5}"> 
+  		<f:param name="parentid" value="#{r.id}"/>
+  	</s:link>
+  </h:column>
+  
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['form.name']}" styleClass="collh">
+  			<f:param name="order" value="a.name.name1#{adminUnits.order=='a.name.name1'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+  	<h:outputText value="#{r.name.name1}" rendered="#{not s:hasRole('ADMINUNITS_EDT')}"/>
+  	<s:link value="#{r.name.name1}" view="/admin/edtadminunit.xhtml" rendered="#{s:hasRole('ADMINUNITS_EDT')}">
+		<f:param name="id" value="#{r.id}" />
+  	</s:link>
+  </h:column>
+
+  <h:column rendered="#{defaultWorkspace.hasAlternateLocale}">
+  	<f:facet name="header">
+  		<s:link value="#{messages['form.name']} (#{defaultWorkspace.alternateDisplayLocale})" styleClass="collh">
+  			<f:param name="order" value="a.name.name2#{adminUnits.order=='a.name.name2'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+  	#{r.name.name2}
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['admin.adminunits.countrystructure']}" styleClass="collh">
+  			<f:param name="order" value="a.countryStructure.name.name1#{adminUnits.order=='a.countryStructure.name.name1'?' desc':''}" />
+  		</s:link>  		
+  	</f:facet>
+	#{r.countryStructure.name}
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['admin.adminunits.subunits']}" styleClass="colch">
+  			<f:param name="order" value="a.unitsCount#{adminUnits.order=='a.unitsCount'?' desc':''}" />
+  		</s:link>  		
+  	</f:facet>
+	#{r.unitsCount}
+  </h:column>
+
+  <h:column rendered="#{s:hasRole('ADMINUNITS_EDT') and (not workspaceViewService.printing)}">
+  	<f:facet name="header">#{messages['form.action']}</f:facet>
+	<a:commandLink action="#{adminUnitHome.remove}" value="#{messages['form.remove']}" onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" reRender="main,messages">
+		<a:actionparam assignTo="#{adminUnitHome.id}" value="#{r.id}" name="id" converter="javax.faces.Integer"/>
+	</a:commandLink>
+  </h:column>
+</h:dataTable>
+
+</td></tr></table>
+
+</s:fragment>
+
+<ui:include src="/layout/tablerow.xhtml" />
+
+</h:panelGroup>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

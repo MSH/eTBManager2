@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
+		<ui:define name="header">
+			<s:link value="#{messages['form.edit']}" view="/cases/comorbedt.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+				<f:param name="id" value="#{caseHome.id}" />
+			</s:link>
+    		<b>#{messages['cases.comorbidities']}</b>
+    	</ui:define>
+		<ui:param name="showfooter" value="0" />
+    	<ul>
+    	<ui:repeat value="#{tbCase.comorbidities}" var="it">
+    		<li>#{it.name}
+    		</li>
+    	</ui:repeat>
+    	</ul>
+    	<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">#{messages['TbCase.tbContact']}:</ui:define>
+    		<h:outputText value="#{tbCase.tbContact?messages['global.yes']:messages['global.no']}" /> 
+    		<s:fragment rendered="#{not empty tbCase.patientContactName}">
+    		<b style="margin-left:30px;">#{messages['TbCase.patientContactName']}:</b> #{tbCase.patientContactName}
+    		</s:fragment>
+    	</s:decorate>
+    </s:decorate>
+                 
+	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
+		<ui:define name="header">
+			<s:link value="#{messages['form.new']}" view="/custom/br/cases/edtcontact.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+				<f:param name="id" value="#{caseHome.id}" />
+				<f:param name="conid" value="#{null}" />
+			</s:link>
+			<b>#{messages['cases.contacts']}</b>
+		</ui:define>
+		<ui:param name="showfooter" value="0" />
+	
+	<h:panelGroup id="pnlcontact">
+	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty tbCase.contacts}" />
+	
+	<s:fragment rendered="#{not empty tbCase.contacts}">
+	<a:repeat value="#{tbCase.contacts}" var="it">
+	<table width="99%" class="tabela2" style="margin-top:10px;margin-left:2px;border:1px solid #d0d0d0" cellpadding="0" cellspacing="0">
+	<tr>
+		<th colspan="2" align="left">
+			<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remContact(#{it.id});return false;" 
+				style="font-size:9px;float:right;">
+			</h:commandLink>
+			<s:link value="#{it.name}" view="/custom/br/cases/edtcontact.xhtml">
+				<f:param name="conid" value="#{it.id}"/>
+			</s:link>
+		</th>
+	</tr>
+	<tr>
+		<td>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['Gender']}:</ui:define>
+				#{messages[it.gender.key]}
+			</s:decorate>
+		</td>
+		<td>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
+				#{it.age}
+			</s:decorate>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['TbContact.contactType']}:</ui:define>
+				#{it.contactType.name}
+			</s:decorate>
+		</td>
+		<td>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['TbContact.examined']}:</ui:define>
+				#{it.examinated?messages['global.yes']: messages['global.no']}
+			</s:decorate>
+		</td>
+	</tr>
+	<s:fragment rendered="#{it.examinated}">
+	<tr>
+		<td>
+    		<s:decorate template="/layout/display.xhtml" >
+    			<ui:define name="label">#{messages['pt_BR.contact.tbsymptoms']}:</ui:define>
+    			#{messages[it.tbSymptoms.key]}
+    		</s:decorate>
+		</td>
+		<td>
+    		<s:decorate template="/layout/display.xhtml" >
+    			<ui:define name="label">#{messages['pt_BR.contact.scarBCG']}:</ui:define>
+    			#{messages[it.scarBCG.key]}
+    		</s:decorate>
+		</td>
+	</tr>
+	<tr>
+		<td>
+    		<s:decorate template="/layout/display.xhtml" >
+    			<ui:define name="label">#{messages['pt_BR.contact.tuberculinTest']}:</ui:define>
+    			#{messages[it.tuberculinTest.key]}
+    		</s:decorate>
+    	</td>
+		<td>
+    		<s:decorate template="/layout/display.xhtml" >
+    			<ui:define name="label">#{messages['TbContact.conduct']}:</ui:define>
+    			#{it.conduct}
+    		</s:decorate>
+    	</td>
+	</tr>
+	<tr><td>
+    		<s:decorate template="/layout/display.xhtml" >
+    			<ui:define name="label">#{messages['SputumSmearResult']}:</ui:define>
+    			#{messages[it.microscopyResult.key]}
+    		</s:decorate>
+		</td>
+		<td>
+    		<s:decorate template="/layout/display.xhtml" >
+    			<ui:define name="label">#{messages['CultureResult']}:</ui:define>
+    			#{messages[it.cultureResult.key]}
+    		</s:decorate>
+	</td></tr>
+	<tr><td>
+    		<s:decorate template="/layout/display.xhtml" >
+    			<ui:define name="label">#{messages['pt_BR.contact.dateIniTreat']}:</ui:define>
+    			<h:outputText value="#{it.dateIniTreat}" converter="localeDateConverter"/>
+    		</s:decorate>
+		</td>
+		<td>
+    		<s:decorate template="/layout/display.xhtml" >
+    			<ui:define name="label">#{messages['pt_BR.contact.dateEndTreat']}:</ui:define>
+    			<h:outputText value="#{it.dateEndTreat}" converter="localeDateConverter"/>
+    		</s:decorate>
+	</td></tr>
+	</s:fragment>
+	</table>
+	</a:repeat>
+	</s:fragment>
+	<a:jsFunction name="remContact" action="#{tbContactHome.remove}" reRender="pnlcontact"  rendered="#{caseHome.canEdit}">
+		<a:actionparam name="param1" assignTo="#{tbContactHome.id}" converter="javax.faces.Integer"/>
+	</a:jsFunction>
+	</h:panelGroup>
+	</s:decorate>
+
+                 
+	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
+		<ui:define name="header">
+			<s:link value="#{messages['form.edit']}" view="/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+				<f:param name="id" value="#{caseHome.id}" />
+			</s:link>
+			<b>#{messages['cases.sideeffects']}</b>
+		</ui:define>
+		<ui:param name="showfooter" value="0" />
+	<div>
+	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty tbCase.sideEffects}" />
+	<h:dataTable value="#{tbCase.sideEffects}" var="it" width="100%" styleClass="tabela4" rowClasses="lin1,lin2" rendered="#{not empty tbCase.sideEffects}">
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
+			</f:facet>
+			#{it.sideEffect.name}
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['cases.sideeffects.medicine']}" styleClass="collh" />
+			</f:facet>
+			#{it.medicines}
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['cases.sideeffects.month']}" styleClass="collh" />
+			</f:facet>
+			#{it.month}
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['cases.sideeffects.resolved']}" styleClass="collh"/>
+			</f:facet>
+			#{messages[it.resolved.key]}
+		</h:column>
+	</h:dataTable>
+	</div>
+	</s:decorate>
+    
+</ui:composition>

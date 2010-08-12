@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+                 
+<rich:jQuery name="selectall" timing="onJScall" selector=".tbl :checkbox" query="attr('checked', true)" />
+<rich:jQuery name="unselectall" timing="onJScall" selector=".tbl :checkbox" query="attr('checked', false)" />
+<script type="text/javascript">
+function checkClick(obj) {
+  if (obj.checked)
+	  selectall()
+  else unselectall();
+  updateRows();
+}
+function updateRows() {
+jQuery(".tbl tr").removeClass("activerow");
+jQuery(".tbl tr:has(:checked)").addClass("activerow");
+}
+
+function showMedicinesDlg() {
+	Richfaces.showModalPanel('meddlg');
+}
+
+function hideMedicinesDlg() {
+	Richfaces.hideModalPanel('meddlg');
+} 
+</script>
+
+<rich:modalPanel id="meddlg" minHeight="350" minWidth="370" 
+            height="400" width="450" zindex="2000">
+	<f:facet name="header">
+		<h:outputText id="title1" value="#{title}" />
+	</f:facet>
+	<h:panelGroup id="medpnl">
+
+	<a:region renderRegionOnly="false">
+	<a:form id="selmedform" style="margin:0px;">
+	<table width="100%" cellspacing="4px">
+	<tr><td colspan="2">
+	
+	<h:selectBooleanCheckbox id="todos" style="margin-left:4px;margin-right:10px;" onclick="checkClick(this);"/>
+	<b>#{messages['Medicine']}</b>
+
+	<div id="tblsel" style="overflow: auto; width: 100%; height:300px;border: 1px gray solid; padding:0px; margin: 0px;">	
+	<a:repeat value="#{medicineSelection.categories}" var="cat">
+	<table width="100%" style="border-collapse:collapse;">
+	<tr><td style="width:100%;background-color:#F0F0F0;font-weight:bold;padding:4px;">
+		#{messages[cat.category.key]}
+	</td></tr>
+	<tr><td>
+    	<h:dataTable id="tbl" value="#{cat.medicines}" var="it" styleClass="tabela tbl" width="100%">
+		<h:column>
+			<div style="float:left;vertical-align:top;" class="medicine-icon">
+				<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" />
+			</div>
+			#{it.item}
+			<br/>
+			<div style="color:#b0b0b0;">#{messages[it.item.tbInfoKey]}</div>
+		</h:column>
+		</h:dataTable>
+	</td></tr></table>
+	</a:repeat>
+	</div>
+
+   	</td></tr>
+   	<tr><td height="30px">
+   			<ui:include src="/layout/waitstatus.xhtml" />
+   		</td>
+   		<td align="right">
+   			<div id="selmedbtns">
+   			<ui:insert />
+   			<s:button value="#{messages['form.cancel']}" onclick="javascript:Richfaces.hideModalPanel('meddlg'); return false;" styleClass="button-cancel" />
+   			</div>
+   		</td>
+   	</tr></table>
+	</a:form>
+	</a:region>
+
+	</h:panelGroup>
+	<rich:jQuery selector="#selmedbtns" query="click(function(){this.disabled=true;})" />
+</rich:modalPanel>
+
+    
+</ui:composition>

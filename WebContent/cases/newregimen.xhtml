@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition>
+
+<script type="text/javascript">
+
+function showNewRegimenDlg() {
+	Richfaces.showModalPanel('newregdlg');
+}
+
+function hideNewRegimenDlg() {
+	Richfaces.hideModalPanel('newregdlg');
+}
+function newRegValidate() {
+fld = document.getElementById("newregform:maximunSeverity");
+return (fld != null);
+}
+function newRegValidateAndClose() {
+if (!newRegValidate())
+   hideNewRegimenDlg();
+}
+</script>
+
+<rich:modalPanel id="newregdlg" height="300" width="550" >
+	<f:facet name="header">
+		#{messages['cases.newregimen']}
+	</f:facet>
+	<h:panelGroup >
+	<a:region>	
+	<h:form id="newregform">
+	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
+
+	<div id="tblsel" style="width: 530px; height: 230px;border: 2px #d0d0d0 solid; padding:0px; margin: 0px">
+		<h:messages styleClass="erro" globalOnly="true"/>
+		<ui:param name="labelstyle" value="width:180px;" />
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">
+    			#{messages['Regimen']}:
+    		</ui:define>
+    		<h:selectOneMenu value="#{caseRegimen.regimen}">
+    			<s:selectItems var="v" value="#{regimens.resultList}" noSelectionLabel="-" label="#{v.name}"/>
+    			<s:convertEntity />
+    		</h:selectOneMenu>
+    	</s:decorate>
+		
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">
+    			#{messages['Regimen.phase']}:
+    		</ui:define>
+    		<h:selectOneMenu value="#{caseRegimen.phase}" required="true">
+    			<s:selectItems var="v" value="#{regimenPhases}" noSelectionLabel="-" label="#{messages[v.key]}"/>
+    			<s:convertEnum />
+    		</h:selectOneMenu>
+    	</s:decorate>
+		
+	    <s:decorate template="/layout/dateedit.xhtml" >
+    		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+    		<ui:param name="required" value="true" /> 
+    		<ui:param name="future" value="true" />
+    		<ui:param name="datefield" value="#{caseRegimen.iniDate}" /> 
+    	</s:decorate>
+		
+	    <s:decorate template="/layout/dateedit.xhtml" >
+    		<ui:define name="label">#{messages['global.endDate']}:</ui:define>
+    		<ui:param name="required" value="true" /> 
+    		<ui:param name="future" value="true" />
+    		<ui:param name="datefield" value="#{caseRegimen.endDate}" /> 
+    	</s:decorate>
+	</div>
+   	<table width="100%"><tr>
+   		<td><span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+   			<ui:include src="/layout/waitstatus.xhtml" />
+   		</td>
+   		<td align="right">
+   		<a:commandButton value="#{messages['form.ok']}" action="#{caseRegimenHome.addNewRegimen}" 
+   			styleClass="button"
+   			onclick="this.disabled=true;" 
+   			oncomplete="this.disabled=false;newRegValidateAndClose();" reRender="newregform,formtreat"/>
+   		<s:button value="#{messages['form.cancel']}" onclick="hideNewRegimenDlg(); return false;" styleClass="button-cancel" />
+   	</td></tr>
+   	</table>
+	</h:form>
+	</a:region>
+	</h:panelGroup>
+</rich:modalPanel>
+
+</ui:composition>
+
+</html>

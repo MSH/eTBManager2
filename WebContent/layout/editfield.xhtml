@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:s="http://jboss.com/products/seam/taglib"
+                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+<div id="fieldedt" style="display:table;">
+    <div class="prop">
+        <s:label styleClass="name" style="#{empty labelstyle? '': labelstyle}">
+            <ui:insert name="label"/>
+            <s:span style="color:red;" rendered="#{required}">*</s:span>
+        </s:label>
+        
+        <span class="value #{invalid?'fielderror':''}">
+            <s:validateAll>
+			<h:selectOneMenu id="#{id}fldoptions" value="#{field.value}" style="margin-bottom:3px;display:block;" rendered="#{field!=null}">
+				<s:selectItems var="it" value="#{list}" noSelectionLabel="-" label="#{it}" />
+				<s:convertEntity />
+			</h:selectOneMenu>
+			<rich:jQuery selector="##{id}fldoptions" query="change(function(){ #{id}checkFieldOthers(this,false); })" />
+			<rich:jQuery selector="##{id}fldoptions" timing="onload" query="each(function(){ #{id}checkFieldOthers(this,true); })" />
+            </s:validateAll>
+        </span>
+        
+        <s:message styleClass="erro"/>        
+    </div>
+
+    <div id="divothers" class="prop">
+        <s:label styleClass="name" style="#{empty labelstyle? '': labelstyle}">
+        	<span id="labelothers">
+        	</span>:
+        </s:label>
+        <span class="value">
+			<h:inputText value="#{field.complement}" style="width:250px;"  rendered="#{field!=null}"/>
+		</span>
+    </div>
+	<h:outputText value="#{list}" converter="fieldListScriptConverter" escape="false">
+		<f:param name="id" value="#{id}"/>
+	</h:outputText>
+</div>
+
+</ui:composition>

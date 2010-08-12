@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:s="http://jboss.com/products/seam/taglib">
+                 
+	<img src="../img/#{caseregimen.phase=='INTENSIVE'? 'intphase': 'contphase'}.gif" style="float:left;"/>
+	<b><h:outputText value="#{caseregimen.regimen.name}" rendered="#{caseregimen.regimen != null}" />
+	<h:outputText value="#{messages['regimens.individualized']}" rendered="#{caseregimen.regimen == null}" /></b>
+	<h:outputText value="(#{messages[caseRegimen.phase.key]})" style="color:#a0a0a0;font-size:9px;margin-left:10px;" />
+
+</ui:composition>

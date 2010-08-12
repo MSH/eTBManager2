@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+ 	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="..#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['manag.forecast.med']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="labelstyle" value="width:210px;" />
+<ui:param name="left" value="0" />
+
+<ui:define name="body">
+<h:form id="main">
+
+<table width="98%" style="border:2px solid #e0e0e0;border-collapse:collapse;">
+<tr><td class="header">
+	<ui:param name="color" value="#DDEEE0" />
+	<s:button value="#{messages['form.return']}" view="/management/medforecast.xhtml" styleClass="button" style="float:right;" />
+	<div style="padding:6px;">
+	<img src="../img/forecast2.gif" style="float:left;padding-right:4px;" />
+	<b>#{forecasting.name}</b>
+	<br/>
+	<h:outputText value="#{forecasting.recordingDate}" style="font-size:9px;">
+		<f:convertDateTime timeZone="#{timezones.default}" type="both"/>
+	</h:outputText>
+	</div>
+
+</td></tr>
+<tr><td>
+
+<table width="100%" style="border-collapse: collapse;">
+<tr><td valign="top" >
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.length']}:</ui:define>
+		#{forecasting.length} #{messages['global.months']}
+	</s:decorate>
+
+	</td><td>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.bufferStock']}:</ui:define>
+		#{forecasting.bufferStock} #{messages['global.months']}
+	</s:decorate>
+
+	</td></tr>
+	<tr><td>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.leadtime']}:</ui:define>
+		<h:outputText value="#{forecasting.leadTime}" >
+			<f:convertNumber pattern="#,###,##0"/>
+		</h:outputText>
+		(#{messages['global.months']})
+	</s:decorate>
+	
+	</td><td>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.context']}:</ui:define>
+		<h:outputText value="#{messages[forecasting.view.key]}" >
+		</h:outputText>
+		<h:outputText value="- #{forecasting.administrativeUnit.name}" rendered="#{forecasting.view=='ADMINUNIT'}" />
+		<h:outputText value="- #{forecasting.tbunit.name}" rendered="#{forecasting.view=='TBUNIT'}"/>
+	</s:decorate>
+	
+	</td></tr>
+	<tr><td>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.numcases']}:</ui:define>
+		<h:outputText value="#{forecasting.numCases}" >
+			<f:convertNumber pattern="#,###,##0"/>
+		</h:outputText>
+	</s:decorate>
+
+	</td><td>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.numnewcases']}:</ui:define>
+		<h:outputText value="#{forecasting.numNewCases}" >
+			<f:convertNumber pattern="#,###,##0"/>
+		</h:outputText>
+		<h:outputText value=" #{messages[forecasting.newCasesFreq.key]}" />
+	</s:decorate>
+
+
+</td></tr>
+<tr><td valign="top" style="padding-right:20px;" colspan="2">
+
+	<h:dataTable value="#{forecastingHome.forecastingMedicines}" var="m" styleClass="tabela" rowClasses="lin1,lin2" 
+		columnClasses="colb,colrb,colrb,colrb,colrb,colrb hlcolor,colrb hlcolor,colrb hlcolor,colrb hlcolor,colrb,colrb">
+		<h:column>
+			<f:facet name="header">
+				#{messages['Medicine']}
+			</f:facet>
+			#{m.medicine}
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.stockonhand']}
+			</f:facet>
+			<h:outputText value="#{m.stockOnHand}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.stockonorder']}
+			</f:facet>
+			<h:outputText value="#{m.stockOnOrder}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.dispensingLeadTime']}
+			</f:facet>
+			<h:outputText value="#{m.dispensingLeadTime}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.stockafterleadtime']}
+			</f:facet>
+			<h:outputText value="#{m.stockOnHandAfterLeadTime}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.estcases']}
+			</f:facet>
+			<h:outputText value="#{m.estimatedQtyCases}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column rendered="#{forecasting.defPrevCohort}">
+			<f:facet name="header">
+				#{messages['manag.forecast.ongoingcohorts']}
+			</f:facet>
+			<h:outputText value="#{m.estimatedQtyCohort}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.estnewcases']}
+			</f:facet>
+			<h:outputText value="#{m.estimatedQtyNewCases}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.estqty']}
+			</f:facet>
+			<b>
+			<h:outputText value="#{m.estimatedQty}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+			</b>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['global.unitPrice']}
+			</f:facet>
+			<h:outputText value="#{m.unitPrice}" >
+				<f:convertNumber pattern="#,###,##0.0000"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['global.totalPrice']}
+			</f:facet>
+			<h:outputText value="#{m.totalPrice}" >
+				<f:convertNumber pattern="#,###,##0.00"/>
+			</h:outputText>
+		</h:column>
+	</h:dataTable>
+</td></tr>
+</table>
+
+</td></tr></table>
+</h:form>
+</ui:define>
+
+</ui:composition>  
+

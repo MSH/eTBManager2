@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+                 
+	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
+		<ui:param name="labelstyle" value="width:310px;" /> 
+		<ui:define name="header">
+			<s:link value="#{messages['form.edit']}" view="/custom/ua/cases/annexedt.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+				<f:param name="id" value="#{caseHome.id}" />
+			</s:link>
+			<b>#{messages['uk_UA.annex.title1']}</b>
+		</ui:define>
+		<ui:param name="showfooter" value="0" />
+	
+	<div>	
+	<table style="border-collapse:collapse;width:98%;" cellpadding="1" ><tr><td colspan="2">
+	
+	</td></tr>
+	<tr><td valign="top" height="100px;">
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:param name="labelstyle" value="width:120px;" />
+   		<ui:define name="label">
+   			<h:graphicImage value="/img/#{caseDataUA.VCTstarted?'':'un'}checked.gif" style="float:left;"/>
+   			#{messages['cases.examhiv.vct']}
+   		</ui:define>
+   		<s:fragment rendered="#{caseDataUA.VCTstarted}">
+   			#{messages['global.date']}:
+   			<h:outputText value="#{caseDataUA.startedVCTdate}" converter="localeDateConverter" />		
+   		</s:fragment>
+	</s:decorate>
+
+	<s:decorate template="/layout/display.xhtml">
+   		<ui:define name="label">
+    		<h:graphicImage value="/img/#{caseDataUA.alcoholAbuse?'':'un'}checked.gif" style="float:left;"/>
+   			#{messages['uk_UA.alcoholAbuse']}
+   		</ui:define>
+	</s:decorate>
+	
+		<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">
+	    		<h:graphicImage value="/img/#{caseDataUA.injectableDrugUse?'':'un'}checked.gif" style="float:left;"/>
+    			#{messages['uk_UA.injectableDrugUse']}
+    		</ui:define>
+		</s:decorate>
+
+		<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">
+	    		<h:graphicImage value="/img/#{caseDataUA.tbContact?'':'un'}checked.gif" style="float:left;"/>
+    			#{messages['TbCase.tbContact']}
+    		</ui:define>
+		</s:decorate>
+
+		<s:decorate template="/layout/display.xhtml">
+			<ui:param name="labelstyle" value="width:120px;" />
+    		<ui:define name="label">#{messages['uk_UA.otherFeature']}:</ui:define>
+    		#{caseDataUA.otherFeature}
+		</s:decorate>    	
+
+	</td><td valign="top">
+	
+	<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">
+	    		<h:graphicImage value="/img/#{caseDataUA.homeless?'':'un'}checked.gif" style="float:left;"/>
+    			#{messages['uk_UA.homeless']}
+    		</ui:define>
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">
+	    		<h:graphicImage value="/img/#{caseDataUA.unemployed?'':'un'}checked.gif" style="float:left;"/>
+    			#{messages['uk_UA.unemployed']}
+    		</ui:define>
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">
+	    		<h:graphicImage value="/img/#{caseDataUA.healthWorker?'':'un'}checked.gif" style="float:left;"/>
+    			#{messages['uk_UA.healthWorker']}:
+    		</ui:define>
+	</s:decorate>
+	<div style="display:block;clear:both;">
+   		<h:graphicImage value="/img/#{caseDataUA.healthWorkerTB?'':'un'}checked.gif" style="float:left;margin-left:30px;" /> #{messages['uk_UA.healthWorker.TB']}
+   	</div>
+	<div style="display:block;clear:both;">
+   		<h:graphicImage value="/img/#{caseDataUA.healthWorkerGMC?'':'un'}checked.gif" style="float:left;margin-left:30px;" /> #{messages['uk_UA.healthWorker.GMC']}
+   	</div>
+	
+	</td></tr>
+	<tr><td valign="top">
+	
+	</td><td valign="top">
+	
+	<s:decorate template="/layout/display.xhtml">
+   		<ui:define name="label">
+    		<h:graphicImage value="/img/#{caseDataUA.migrant?'':'un'}checked.gif" style="float:left;"/>
+   			#{messages['uk_UA.migrant']}
+   		</ui:define>
+	</s:decorate>
+
+    </td></tr>
+
+	<tr><td valign="top">
+	</td><td valign="top">
+		<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">
+	    		<h:graphicImage value="/img/#{caseDataUA.refugee?'':'un'}checked.gif" style="float:left;"/>
+    			#{messages['uk_UA.refugee']}
+    		</ui:define>
+		</s:decorate>
+    </td></tr>
+
+	<tr><td valign="top">
+	</td><td valign="top">
+		<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">
+	    		<h:graphicImage value="/img/#{caseDataUA.prisioner?'':'un'}checked.gif" style="float:left;"/>
+    			#{messages['uk_UA.prisioner']}
+    		</ui:define>
+		</s:decorate>
+    </td></tr>
+    
+    <tr><td colspan="2">
+		
+    </td></tr>
+    <tr><td colspan="2">
+    	<div class="paragraph">
+    		#{messages['cases.comorbidities']}
+    	</div>
+    	<ul>
+    	<ui:repeat value="#{tbCase.comorbidities}" var="it">
+    		<li>#{it.name}
+    		</li>
+    	</ui:repeat>
+    	</ul>
+    </td></tr>
+
+	</table></div>
+	</s:decorate>
+    
+</ui:composition>

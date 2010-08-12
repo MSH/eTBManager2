@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      template="#{workspaceViewService.templatePage}">
+        
+<ui:param name="title" value="#{messages['form.data_edit']} - #{messages['UserProfile']}" />
+<ui:param name="topmenu" value="3" />
+
+
+<ui:define name="body">
+<s:fragment rendered="#{empty profileHome.roles}">
+<div class="warn">No permission available to edit/create profile</div>
+<s:button view="/admin/profiles.seam" value="#{messages['form.return']}" styleClass="button" />
+</s:fragment>
+<h:form id="main" rendered="#{not empty profileHome.roles}">
+    <table class="tabela" width="750px">
+    <tr><td>
+    <s:decorate template="/layout/edit.xhtml" rendered="#{profile.id != null}">
+    	<ui:define name="label">#{messages['form.id']}:</ui:define>
+    	<h:outputText value="#{profile.id}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['form.name']}:</ui:define>
+        <h:inputText id="conta" value="#{profile.name}" maxlength="100" required="true" style="width:250px;"
+        	validator="#{profileHome.validateUniqueValue}">
+        	<f:param id="field" value="name"/>
+        </h:inputText>
+    </s:decorate>
+    </td></tr>
+	<tr><td>
+
+    <h:dataTable value="#{profileHome.items}" var="r" width="100%" 
+    	styleClass="tabela" rowClasses="lin1,lin2" columnClasses="colb,colcb,colcb,colcb,colc">
+    	<h:column>
+    		<f:facet name="header">
+    			<h:outputText value="#{messages['UserPermission']}" styleClass="collh" />
+    		</f:facet>
+    		<span style="font-weight:#{r.userRole.level==1?'bold':'normal'};margin-left:#{(r.userRole.level-1) * 32}px;">
+    			#{r.userRole.displayName}
+    		</span>
+    	</h:column>
+
+    	<h:column>
+    		<f:facet name="header">
+    			<s:div>
+    			<input type="checkbox" onclick="changeChecks(this.checked, 'chk-open');"/>
+    			<br/>
+    			<h:outputText value="#{messages['UserPermission.canOpen']}"/>
+    			</s:div>
+    		</f:facet>
+    		<h:selectBooleanCheckbox value="#{r.canOpen}" rendered="#{not r.userRole.executable}"  styleClass="chk-open"/>
+    	</h:column>
+
+    	<h:column>
+    		<f:facet name="header">
+    			<s:div>
+    			<input type="checkbox"  onclick="changeChecks(this.checked, 'chk-change');"/>
+    			<br/>
+    			<h:outputText value="#{messages['UserPermission.canChange']}"/>
+    			</s:div>
+    		</f:facet>
+    		<h:selectBooleanCheckbox value="#{r.canChange}"  rendered="#{r.userRole.changeable}"  styleClass="chk-change"/>
+    	</h:column>
+
+    	<h:column>
+    		<f:facet name="header">
+    			<s:div>
+    			<input type="checkbox"  onclick="changeChecks(this.checked, 'chk-exec');"/>
+    			<br/>
+    			<h:outputText value="#{messages['UserPermission.canExecute']}" />
+    			</s:div>
+    		</f:facet>
+    		<h:selectBooleanCheckbox value="#{r.canExecute}"  rendered="#{r.userRole.executable}" styleClass="chk-exec"/>
+    	</h:column>
+    	
+    	<h:column>
+    		<f:facet name="header">
+    			<s:div>
+    			<input type="checkbox"  onclick="changeChecks(this.checked, 'chk-grant');"/>
+    			<br/>
+    			<h:outputText value="#{messages['UserPermission.grantPermission']}" />
+    			</s:div>
+    		</f:facet>
+    		<h:selectBooleanCheckbox value="#{r.grantPermission}" styleClass="chk-grant"/>
+    	</h:column>
+    </h:dataTable>
+
+	</td></tr>
+	<tr><td colspan="2" align="right">
+            <h:commandButton action="#{profileHome.persist}" value="#{messages['form.ok']}" styleClass="button"/>  
+            <s:button view="/admin/profiles.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" >
+            	<f:param name="id" value="#{null}" />
+            </s:button>
+    </td></tr>
+    </table>
+
+	<p/>
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+
+	<ui:include src="/layout/tablerow.xhtml" />
+
+<script type="text/javascript">
+function changeChecks(checked, elemclass) {
+	elemclass = '.' + elemclass;
+	try {
+	elemclass = eval(elemclass);
+	} catch (e) {}
+	jQuery(elemclass).attr("checked", checked);
+}
+</script>
+
+</h:form>
+</ui:define>
+        
+</ui:composition> 

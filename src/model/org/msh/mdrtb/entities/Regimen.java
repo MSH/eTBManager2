@@ -1,0 +1,302 @@
+package org.msh.mdrtb.entities;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+
+import org.msh.mdrtb.entities.enums.RegimenPhase;
+
+
+
+@Entity
+public class Regimen extends WSObject implements Serializable {
+	private static final long serialVersionUID = -8612534215100619569L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Integer id;
+	
+	@Column(length=100, name="regimen_name")
+	private String name;
+	
+	private boolean mdrTreatment;
+	private boolean tbTreatment;
+
+	@OneToMany(cascade={CascadeType.ALL})
+	@JoinColumn(name="REGIMEN_ID")
+	private List<MedicineRegimen> medicines = new ArrayList<MedicineRegimen>();
+	
+	@Transient
+	private List<MedicineRegimen> intensivePhaseMedicines = null;
+	@Transient
+	private List<MedicineRegimen> continuousPhaseMedicines = null;
+
+	@Column(length=50)
+	private String legacyId;
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
+		
+		if (!(obj instanceof Regimen))
+			return false;
+	
+		return ((Regimen)obj).getId().equals(getId());
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return (name != null? name: super.toString());
+	}
+
+	
+	/**
+	 * Include a medicine regimen to the regimen and also update the intensive and continuous list
+	 * @param mr
+	 */
+	public void addMedicine(MedicineRegimen mr) {
+		getMedicines().add(mr);
+		if (intensivePhaseMedicines != null) {
+			if (mr.getPhase() == RegimenPhase.INTENSIVE)
+				 intensivePhaseMedicines.add(mr);
+			else continuousPhaseMedicines.add(mr);
+		}
+	}
+	
+	/**
+	 * Remove a medicine in the regimen and also update the intensive and continuous phase list
+	 * @param mr
+	 */
+	public void remMedicine(MedicineRegimen mr) {
+		getMedicines().remove(mr);
+		if (intensivePhaseMedicines != null) {
+			if (mr.getPhase() == RegimenPhase.INTENSIVE)
+				 intensivePhaseMedicines.remove(mr);
+			else continuousPhaseMedicines.remove(mr);
+		}
+	}
+	
+	/**
+	 * get medicines used in the intensive phase
+	 * @return
+	 */
+	public List<MedicineRegimen> getIntensivePhaseMedicines() {
+		if (intensivePhaseMedicines == null)
+			createPhaseLists();
+		return intensivePhaseMedicines;
+	}
+	
+
+	/**
+	 * Check if medicines are the same as medicines in an specific phase
+	 * @param phase phase to check
+	 * @param meds medicines to compare if they are in the regimen (or are compatible)
+	 * @return true if medicines are the same as in the regimen phase, otherwise false
+	 */
+	public boolean compareMedicinesInPhase(RegimenPhase phase, List<Medicine> meds) {
+		List<MedicineRegimen> lst;
+		if (RegimenPhase.INTENSIVE.equals(phase))
+			 lst = getIntensivePhaseMedicines();
+		else lst = getContinuousPhaseMedicines();
+		
+		if (lst.size() != meds.size())
+			return false;
+		
+		for (MedicineRegimen mr: lst) {
+			if (!meds.contains(mr.getMedicine()))
+				return false;
+		}
+		
+		return true;
+	}
+
+
+	/**
+	 * get medicines used in the continuous phase
+	 * @return
+	 */
+	public List<MedicineRegimen> getContinuousPhaseMedicines() {
+		if (continuousPhaseMedicines == null)
+			createPhaseLists();
+		return continuousPhaseMedicines;		
+	}
+	
+	private void createPhaseLists() {
+		continuousPhaseMedicines = new ArrayList<MedicineRegimen>();
+		intensivePhaseMedicines = new ArrayList<MedicineRegimen>();
+		for (MedicineRegimen mr: getMedicines()) {
+			if (mr.getPhase() == RegimenPhase.INTENSIVE)
+				 intensivePhaseMedicines.add(mr);
+			else continuousPhaseMedicines.add(mr);
+		}
+	}
+	
+
+	/**
+	 * Create a list with different months of treatment for the medicines in a regimen phase
+	 * @param phase
+	 * @return
+	 */
+	public List<Integer> groupMonthsTreatment(RegimenPhase phase) {
+		List<Integer> months = new ArrayList<Integer>();
+		for (MedicineRegimen medreg: getMedicines()) {
+			if (medreg.getPhase() == phase) {
+				Integer num = medreg.getMonthsTreatment();
+				if ((num != null) && (!months.contains(num)))
+					months.add(num);
+			}
+			
+			Collections.sort(months, new Comparator<Integer>() {
+				public int compare(Integer o1, Integer o2) {
+					if (o1 < o2)
+						return -1;
+					else if (o1 > o2)
+						return 1;
+					return 0;
+				}
+			});
+		}
+		return months;
+	}
+
+
+	/**
+	 * Create a list of {@link MedicineRegimen} from an specific phase with a number of months of treatment
+	 * @param phase
+	 * @param months
+	 * @return
+	 */
+	public List<MedicineRegimen> groupMedicinesByMonthTreatment(RegimenPhase phase, int months) {
+		List<MedicineRegimen> lst = new ArrayList<MedicineRegimen>();
+		for (MedicineRegimen medreg: getMedicines()) {
+			if (medreg.getPhase() == phase) {
+				if ( medreg.getMonthsTreatment() >= months ) {
+					lst.add(medreg);
+				}
+			}
+		}
+		return lst;
+	}
+	
+	
+	/**
+	 * Return number of months of the phase
+	 * @param phase
+	 * @return
+	 */
+	public Integer getMonthsPhase(RegimenPhase phase) {
+		int num=0;
+		for (MedicineRegimen medreg: getMedicines()) {
+			if ((medreg.getMonthsTreatment() > num) && (medreg.getPhase().equals(phase))) {
+				if (medreg.getMonthsTreatment() > num)
+					num = medreg.getMonthsTreatment();
+			}
+		}
+		return num;
+	}
+
+	
+	/**
+	 * Check if medicine is part of the regimen
+	 * @param med
+	 * @return
+	 */
+	public boolean isMedicineInRegimen(Medicine med) {
+		for (MedicineRegimen aux: getMedicines()) {
+			if (aux.getMedicine().equals(med)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<MedicineRegimen> getMedicines() {
+		return medicines;
+	}
+
+	public void setMedicines(List<MedicineRegimen> medicines) {
+		this.medicines = medicines;
+	}
+
+
+	/**
+	 * @return the mdrTreatment
+	 */
+	public boolean isMdrTreatment() {
+		return mdrTreatment;
+	}
+
+
+	/**
+	 * @param mdrTreatment the mdrTreatment to set
+	 */
+	public void setMdrTreatment(boolean mdrTreatment) {
+		this.mdrTreatment = mdrTreatment;
+	}
+
+
+	/**
+	 * @return the tbTreatment
+	 */
+	public boolean isTbTreatment() {
+		return tbTreatment;
+	}
+
+
+	/**
+	 * @param tbTreatment the tbTreatment to set
+	 */
+	public void setTbTreatment(boolean tbTreatment) {
+		this.tbTreatment = tbTreatment;
+	}
+
+
+	/**
+	 * @return the legacyId
+	 */
+	public String getLegacyId() {
+		return legacyId;
+	}
+
+
+	/**
+	 * @param legacyId the legacyId to set
+	 */
+	public void setLegacyId(String legacyId) {
+		this.legacyId = legacyId;
+	}
+}

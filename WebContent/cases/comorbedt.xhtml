@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['cases.comorbidities']} - #{messages[tbCase.classification.key]}" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:define name="left">
+</ui:define>
+
+<ui:define name="body">
+<h:form id="main">
+<p/>
+<s:decorate template="/layout/casebody.xhtml">
+	<table width="100%">
+	<tr><td colspan="2" style="padding:6px;">
+		<div class="paragraph">
+			#{messages['cases.comorbidities']}
+		</div>
+		<h:dataTable value="#{comorbidityHome.comorbidities}" var="it" styleClass="tabela" rowClasses="lin1,lin2" width="100%">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['form.name']}" styleClass="collh"/>
+				</f:facet>
+				<h:selectBooleanCheckbox value="#{it.selected}" />
+				#{it.item.name}
+			</h:column>
+		</h:dataTable>		
+
+	</td></tr>
+	<tr><td>
+    	<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">#{messages['TbCase.tbContact']}:</ui:define>
+    		<h:selectBooleanCheckbox id="chkcont" value="#{tbCase.tbContact}" />
+    	</s:decorate>
+    </td><td>
+    	<div id="divpatname">
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['TbCase.patientContactName']}:</ui:define>
+    		<h:inputText value="#{tbCase.patientContactName}" style="width:300px" maxlength="100"/>
+    	</s:decorate>
+    	</div>
+    </td></tr>
+	<rich:jQuery selector="#chkcont" query="click(function(){toggleDivPanel(this, '#divpatname');})" />
+	<rich:jQuery selector="#chkcont:not(:checked)" query="each(function(){jQuery('#divpatname').hide();})" />
+
+	<tr><td align="right" colspan="2">
+	<a:commandButton value="#{messages['form.ok']}" action="#{comorbidityHome.save}" styleClass="button" reRender="main"/>
+	<s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel" propagation="end">
+		<f:param name="id" value="#{caseHome.id}" />
+	</s:button>
+	</td></tr></table>
+</s:decorate>
+	
+
+</h:form>
+<script type="text/javascript">
+function toggleDivPanel(chk, divname) {
+if (chk.checked)
+	 jQuery(divname).show();
+else jQuery(divname).hide();
+}
+</script>
+
+</ui:define>
+
+</ui:composition>  

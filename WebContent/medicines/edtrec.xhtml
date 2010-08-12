@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:c="http://java.sun.com/jstl/core"
+      template="..#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{medicineReceiving.id==null? messages['medicines.medicinerecs.new'] :messages['medicines.medicinerecs.edt']}"/>
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:param name="waitdlg" value="1" />
+
+<ui:define name="left">
+</ui:define>
+
+<ui:define name="body">
+
+<s:decorate template="/layout/unit.xhtml">
+<ui:param name="pagestyle" value="width:780px;" />
+<p/>
+<h:form id="main">
+    <table width="100%">
+    <tr><td>
+    <s:decorate template="/layout/edit.xhtml" rendered="#{medicineReceiving.id != null}">
+    	<ui:define name="label">#{messages['form.id']}:</ui:define>
+    	<h:outputText value="#{medicineReceiving.id}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Source']}:</ui:define>
+		<h:selectOneMenu value="#{medicineReceiving.source}" required="true">
+            <s:selectItems value="#{sources.resultList}" var="c" label="#{c.name}" noSelectionLabel="-" />
+            <s:convertEntity/>
+		</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['MedicineReceiving.receivingDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{medicineReceiving.receivingDate}" /> 
+    </s:decorate>
+	<p/>
+
+	</td></tr>
+	<tr><td>
+		<a:commandLink action="#{medicineReceivingHome.filterMedicines}" ajaxSingle="true" value="#{messages['edtrec.addmed']}" styleClass="button2" reRender="medpnl" oncomplete="showMedicinesDlg()" style="width:180px;float:right;"/>
+		<b>#{messages['MedicineReceiving.medicines']}</b>
+	</td></tr>
+	<tr><td>
+		<h:panelGroup id="medicines">
+
+		<h:outputText value="#{messages['edtrec.nomedicine']}" rendered="#{empty medicineReceiving.medicines}" style="color:#b0b0b0;padding:5px;"/>
+		<s:fragment rendered="#{not empty medicineReceiving.medicines}">
+		<table width="100%" class="tabela">
+			<tr><th>#{messages['Medicine']}</th>
+				<th>#{messages['Batch.expiryDate']}</th>
+				<th align="right">#{messages['Batch.numContainers']}</th>
+				<th align="right">#{messages['Movement.quantity']}</th>
+				<th align="right">#{messages['global.unitPrice']}</th>
+				<th align="right">#{messages['global.totalPrice']}</th>
+				<th>#{messages['form.action']}</th>
+			</tr>
+			<c:forEach items="#{medicineReceiving.medicines}" var="it">
+				<tr class="lin1">
+				<td class="colb" colspan="3">
+					<img src="../img/medicine.gif" style="float:left;"/>
+					#{it.movement.medicine}</td>
+					<td class="colrb"><b> 
+						<h:outputText value="#{it.totalQtdBatches}" >
+							<f:convertNumber pattern="#,###,###,##0"/>
+						</h:outputText>
+						</b></td>
+					<td class="colrb"><b>
+							<h:outputText value="#{it.unitPrice}" >
+								<f:convertNumber pattern="#,###,##0.0000"/>
+							</h:outputText>
+						</b></td>
+					<td class="colrb"><b> 
+						<h:outputText value="#{it.totalPrice}" >
+							<f:convertNumber pattern="#,###,##0.00"/>							
+						</h:outputText></b></td>
+					<td class="colcb">
+    					<a:commandLink value="#{messages['medicines.medicinerecs.newbatch']}" action="#{medicineReceivingHome.newBatch(it)}" reRender="batchpnl" oncomplete="showBatchDlg();" immediate="true"/>
+    					<br/>
+						<a:commandLink value="#{messages['form.remove']}" action="#{medicineReceivingHome.removeItem(it)}" reRender="medicines" enableManualInput="true" onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" immediate="true"/>
+    				</td>
+				</tr>
+				
+				<a:repeat value="#{it.batches}" var="b">
+					<tr>
+						<td class="colb">
+							<h:graphicImage value="/img/batch.gif" style="float:left;margin-bottom:10px;" />
+							<span style="width:120px;" >#{messages['Batch.batchNumber']}: </span> #{b.batchNumber}<br/>
+							<span style="width:120px;" >#{messages['Batch.manufacturer']}: </span> #{b.manufacturer}<br/>
+							<span style="width:120px;" >#{messages['Batch.brandName']}: </span>  #{b.brandName}<br/>
+						</td>
+						<td class="colcb">
+							<h:outputText value="#{b.expiryDate}" converter="localeDateConverter" />
+						</td>
+						<td class="colrb">
+							<h:outputText value="#{b.numContainers}" >
+								<f:convertNumber pattern="#,###,##0"/>
+							</h:outputText>
+							<h:outputText value="(#{b.quantityContainer})" style="margin-left:5px;">
+								<f:convertNumber pattern="#,###,##0"/>
+							</h:outputText>
+						</td>
+						<td class="colrb">
+							<h:outputText value="#{b.quantityReceived}"><f:convertNumber pattern="#,###,##0" /></h:outputText></td>
+						<td class="colrb">
+							<h:outputText value="#{b.unitPrice}"><f:convertNumber pattern="#,###,##0.0000" /></h:outputText></td>
+						<td class="colrb">
+							<h:outputText value="#{b.totalPrice}"><f:convertNumber pattern="#,###,##0.00" /></h:outputText></td>
+						<td class="colcb">
+							<a:commandLink action="#{medicineReceivingHome.editBatch(b)}" value="#{messages['form.edit']}" reRender="batchpnl" oncomplete="showBatchDlg();" immediate="true"/> <br/>
+							<a:commandLink action="#{medicineReceivingHome.removeBatch(b)}" value="#{messages['form.remove']}" reRender="medicines" immediate="true" 
+								enableManualInput="true" onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;"/>
+						</td>
+					</tr>
+				</a:repeat>
+			</c:forEach>
+		</table>
+		</s:fragment>
+    	</h:panelGroup>
+    </td></tr>
+    <tr><td align="right">
+            <a:commandButton action="#{medicineReceivingHome.persist}" value="#{messages['form.ok']}" styleClass="button" onclick="openWaitDlg();" oncomplete="closeWaitDlg();" reRender="main"/>
+            <s:button action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" />
+    </td></tr>
+	</table>
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+	
+	<h:commandLink value="Generate for testing" action="#{medicineReceivingTest.createReceiving}" rendered="#{userLogin.user.login=='RICARDO'}"/>
+</h:form>
+</s:decorate>
+
+<script type="text/javascript">
+<!--
+function checkprod() {
+cb = document.getElementById('main:prod:prod');
+if (cb.options[cb.selectedIndex].text == '-') {
+	alert("#{messages['drugs.movs.medicinereq']}");
+	return false;
+}
+return true;
+}
+-->
+</script>  
+
+<s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
+	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
+	<a:commandButton value="#{messages['form.ok']}" styleClass="button" action="#{medicineReceivingHome.addMedicines}" 
+		oncomplete="hideMedicinesDlg();" 
+		reRender="medicines"/>
+</s:decorate>
+
+<ui:include src="edtbatch.xhtml" />
+
+</ui:define>
+
+</ui:composition>  

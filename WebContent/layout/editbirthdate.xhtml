@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:s="http://jboss.com/products/seam/taglib"
+                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	<tr><td>
+
+	<input type="hidden" id="formatodata" value="#{timezones.dateFormat}"/>
+	<script src="#{facesContext.externalContext.request.contextPath}/js/patientage.js" type="text/javascript" />
+	<div id="divbirthdate">
+    <s:decorate id="edtbirthdate" template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="datefield" value="#{tbCase.patient.birthDate}" /> 
+    </s:decorate>
+    <rich:jQuery selector="#divbirthdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
+    </div>
+
+	</td><td>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
+    	<div id="divage">
+    	<h:inputText id="edtage" value="#{tbCase.age}" style="width:80px;" required="true">
+    		<f:validateLongRange minimum="0" maximum="150"/>
+    	</h:inputText>
+    	</div>
+    </s:decorate>
+
+	</td></tr>
+    
+</ui:composition>

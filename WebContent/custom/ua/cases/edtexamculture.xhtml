@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['cases.examculture']}" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:param name="topmenu" value="0" />
+
+
+<ui:define name="body">
+<p/>
+
+<s:decorate template="/layout/casebody.xhtml">
+	<a:form id="formexam">
+    <table width="100%">
+    <tr><td>
+
+	<s:decorate template="/layout/edtsample.xhtml">
+		<ui:param name="examHome" value="#{examCultureHome}" />
+	</s:decorate>
+
+	<div class="paragraph">#{messages['cases.exams.results']}</div>
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="future" value="true" /> 
+    	<ui:param name="datefield" value="#{examCulture.dateRelease}" /> 
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
+    	<h:selectOneMenu value="#{examCulture.result}" required="true">
+    		<s:selectItems value="#{cultureResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['cases.exams.numcolonies']}:</ui:define>
+    	<h:selectOneMenu value="#{examCulture.numberOfColonies}" >
+    		<f:selectItems value="#{examCultureHome.numColonies}"/>
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
+    	<h:selectOneMenu value="#{examCulture.method}" required="false">
+    		<s:selectItems value="#{fieldsQuery.cultureMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
+    		<s:convertEntity />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputText value="#{examCulture.comments}" maxlength="200" style="width:350px;"/>
+    </s:decorate>
+
+	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
+
+	</td></tr>
+    <tr><td align="right">
+		<div style="float:left;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+            <a:commandButton action="#{examCultureHome.persist}" value="#{messages['form.ok']}" styleClass="button" 
+            	reRender="formexam,messages" 
+            	oncomplete="this.disabled=false;"
+            	onclick="this.disabled=true;" />
+            <a:commandButton action="canceled" value="#{messages['form.cancel']}" styleClass="button-cancel" ajaxSingle="true"/>
+    </td></tr>
+    
+    </table>
+    
+	</a:form>
+</s:decorate>
+
+<ui:include src="/layout/sampledlg.xhtml" />
+
+</ui:define>
+
+</ui:composition>  

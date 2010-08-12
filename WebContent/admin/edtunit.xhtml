@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+        
+<ui:param name="title" value="#{messages['form.data_edit']} - #{messages['TbUnit']}" />
+<ui:param name="topmenu" value="3" />
+
+<ui:param name="waitdlg" value="1" />
+<ui:param name="labelstyle" value="width:160px;" />
+
+<ui:define name="body">
+<h:form id="main">
+    <table width="650px" style="border:2px solid #e0e0e0;" cellpadding="4">
+    <tr><td >
+    <s:decorate template="/layout/edit.xhtml" rendered="#{tbunit.id != null}" >
+    	<ui:define name="label">#{messages['form.id']}:</ui:define>
+    	<h:outputText value="#{tbunit.id}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['form.name']}:</ui:define>
+        <h:inputText value="#{tbunit.name.name1}" maxlength="100" style="width : 320px;" required="true" validator="#{tbunitHome.validateUniqueValue}">
+        	<f:param id="field" value="name.name1"/>
+        </h:inputText>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" rendered="#{defaultWorkspace.hasAlternateLocale}">
+    	<ui:define name="label">#{messages['form.name']}:
+    		<br/><span style="font-weight:normal;">(#{defaultWorkspace.alternateDisplayLocale}):</span>
+    	</ui:define>
+        <h:inputText value="#{tbunit.name.name2}" maxlength="100" style="width : 320px;" required="true" validator="#{tbunitHome.validateUniqueValue}">
+        	<f:param id="field" value="name.name2"/>
+        </h:inputText>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['global.legacyId']}:</ui:define>
+        <h:inputText value="#{tbunit.legacyId}" maxlength="50" style="width : 120px;" validator="#{tbunitHome.validateUniqueValue}">
+        	<f:param id="field" value="legacyId"/>
+        </h:inputText>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['EntityState']}:</ui:define>
+        <h:selectOneMenu value="#{tbunit.active}" >
+        	<f:selectItem itemLabel="#{messages['EntityState.ACTIVE']}" itemValue="true"/>
+        	<f:selectItem itemLabel="#{messages['EntityState.INACTIVE']}" itemValue="false"/>
+        </h:selectOneMenu>  
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['HealthSystem']}:</ui:define>
+        <h:selectOneMenu value="#{tbunit.healthSystem}" >
+             <s:selectItems value="#{healthSystems}" var="r" label="#{r.name}" noSelectionLabel="-" />
+             <s:convertEntity />
+        </h:selectOneMenu>  
+    </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['TbUnit.address']}:</ui:define>
+        <h:inputText maxlength="100" value="#{tbunit.address}" style="width : 320px;" />
+    </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['TbUnit.district']}:</ui:define>
+        <h:inputText maxlength="50" value="#{tbunit.district}" style=" width : 178px;" />
+    </s:decorate>
+
+	<s:decorate template="/layout/auselection.xhtml">
+		<ui:param name="auselection" value="#{tbunitHome.ausel}" />
+	</s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<h:selectBooleanCheckbox id="chkhu" value="#{tbunit.treatmentHealthUnit}" /> #{messages['TbUnit.treatmentHealthUnit']}
+    </s:decorate>
+
+	<div id="pnlhealthunit" style="clear:both;">
+    <s:decorate template="/layout/edit.xhtml">
+    	<h:selectBooleanCheckbox value="#{tbunit.notifHealthUnit}" style="margin-left:32px;"/>#{messages['cases.details.notifhu']}
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<h:selectBooleanCheckbox value="#{tbunit.tbHealthUnit}" style="margin-left:32px;"/>#{messages['TbUnit.tbHealthUnit']}
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<h:selectBooleanCheckbox value="#{tbunit.mdrHealthUnit}" style="margin-left:32px;"/>#{messages['TbUnit.mdrHealthUnit']}
+    </s:decorate>
+    </div>
+    
+    <p/>
+    <span class="paragraph">#{messages['admin.tbunits.medmanagement']}</span>
+    <s:decorate template="/layout/edit.xhtml">
+    	<h:selectBooleanCheckbox id="chkmed" value="#{tbunit.medicineStorage}" /> #{messages['TbUnit.medicineStorage']}
+    </s:decorate>
+    <div id="medform" style="clear:left;">
+    <s:decorate template="/layout/edit.xhtml" style="min-height:20px;">
+    	<h:selectBooleanCheckbox value="#{tbunit.receivingFromSource}" /> #{messages['TbUnit.receivingFromSource']}
+    </s:decorate>
+
+    <s:decorate template="/layout/roundrect.xhtml" style="padding-top:10px;clear:both;">
+    	<ui:define name="header">
+    		<b>#{messages['medicines.orders']}</b>
+    	</ui:define>
+    	<ui:param name="showfooter" value="0" />
+
+	<div class="paragraph">
+		#{messages['TbUnit.secondLineSupplier']}
+	</div>
+	<s:decorate template="/layout/tbselection.xhtml">
+		<ui:param name="tbunitselection" value="#{tbunitHome.slmSupplier}" />
+	</s:decorate>
+
+	<div class="paragraph">
+		#{messages['TbUnit.firstLineSupplier']}
+	</div>
+	<s:decorate template="/layout/tbselection.xhtml">
+		<ui:param name="tbunitselection" value="#{tbunitHome.flmSupplier}" />
+	</s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['TbUnit.numDaysOrder']}:</ui:define>
+    	<h:inputText value="#{tbunit.numDaysOrder}" /> 
+    </s:decorate>
+    <s:decorate template="/layout/edit.xhtml" >
+    	<h:selectBooleanCheckbox value="#{tbunit.changeEstimatedQuantity}" /> #{messages['TbUnit.changeEstimatedQuantity']}
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<h:selectBooleanCheckbox value="#{tbunit.orderOverMinimum}" /> #{messages['TbUnit.orderOverMinimum']}
+    </s:decorate>
+    <br/>
+    
+    </s:decorate>
+
+	<p/>
+	<span class="paragraph">
+		#{messages['admin.tbunits.ordershipping']}
+	</span>    
+    <s:decorate template="/layout/edit.xhtml">
+    	<h:selectBooleanCheckbox id="chkaut" value="#{tbunit.medicineSupplier}" /> #{messages['TbUnit.medicineSupplier']}
+    </s:decorate>
+    <div id="autform" style="clear:left;">
+	<div class="paragraph">
+		#{messages['TbUnit.authorizerUnit']}
+	</div>
+	<s:decorate id="cbautor" template="/layout/tbselection.xhtml">
+		<ui:param name="tbunitselection" value="#{tbunitHome.orderAuthorizer}" />
+	</s:decorate>
+    </div>
+    
+    </div>
+	<rich:jQuery selector="#chkmed" query="click(function(){medcheckClick(this, '#medform');})" />
+	<rich:jQuery selector="#chkmed:not(:checked)" query="each(function(){jQuery('#medform').hide();})" />
+	<rich:jQuery selector="#chkaut" query="click(function(){medcheckClick(this, '#autform');})" />
+	<rich:jQuery selector="#chkaut:not(:checked)" query="each(function(){jQuery('#autform').hide();})" />
+	<rich:jQuery selector="#chkhu" query="click(function(){medcheckClick(this, '#pnlhealthunit');})" />
+	<rich:jQuery selector="#chkhu:not(:checked)" query="each(function(){jQuery('#pnlhealthunit').hide();})" />
+
+    </td></tr>
+    <tr><td align="right" colspan="2">
+            <a:commandButton action="#{tbunitHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main"/>  
+            <s:button view="/admin/units.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end">
+            	<f:param name="id" value="#{null}" />
+            </s:button>
+    </td></tr>
+    </table>
+
+	<p/>
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+</h:form>
+
+<script type="text/javascript">
+function medcheckClick(chk, divname) {
+if (chk.checked)
+	 jQuery(divname).show(500);
+else jQuery(divname).hide(500);
+}
+</script>
+</ui:define>
+        
+</ui:composition> 

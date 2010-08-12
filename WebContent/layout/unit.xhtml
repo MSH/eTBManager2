@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+<table class="tabela3" style="width:100%">
+<tr><td class="header">
+<div>
+  	<img src="../img/#{userSession.tbunit.treatmentHealthUnit?'hu.gif':'storage.gif'}" style="float:left;margin-right:4px;margin-bottom:15px;"/>
+	<h:form style="margin:0px">
+	<div style="float:right;">
+		<a:region>
+		<a:commandLink value="#{messages['medicines.selunit']}" action="#{unitSelection.startSelecting}" reRender="units,unitCount" 
+			onclick="showUnitSelDlg();" rendered="#{selunit=='1'}" ajaxSingle="true" focus="unitname"/>
+		</a:region>
+	</div>
+	</h:form>
+	<div style="font-size:14px;">
+	#{userSession.tbunit.name}
+	</div>
+	<div style="font-size:9px">
+		#{userSession.tbunit.adminUnit.name} - #{userSession.tbunit.adminUnit.parent.name}
+	</div>
+</div>
+</td></tr>
+<tr><td style="padding:4px;">
+
+  <ui:insert />
+</td></tr>
+</table>
+
+<s:fragment id="sf" rendered="#{selunit=='1'}">
+<rich:modalPanel id="unitSelDlg" autosized="true" top="200" height="400" width="490" zindex="2000" style="background-color:#F2F5F0">
+	<f:facet name="header">
+		<h:outputText value="#{messages['medicines.selunit']}" />
+	</f:facet>
+	<div id="unitform"><h:form id="frmunit" style="margin:0px">
+	<a:region>
+	<h:inputText id="unitname" value="#{unitSelection.name}" style="width:98%;margin-bottom:5px;" autocomplete="off">
+		<a:support event="onkeyup" reRender="units,unitCount" requestDelay="500" ajaxSingle="true" 
+			action="#{unitSelection.startSelecting}" />
+	</h:inputText>
+	</a:region>
+	<div id="unitid">
+		<h:inputHidden value="#{unitSelection.unitId}" />
+	</div>
+	<h:outputText id="unitCount" value="#{unitSelection.unitCountText}" style="display:block;clear:both;font-weight:bold;" />
+
+	<div style="overflow: auto; width: 98%; height: 280px;border: 1px gray solid; padding:0px; margin: 0px;background-color:white;">
+	<h:panelGroup id="units">
+		<s:fragment rendered="#{not unitSelection.selecting}">
+			<div style="padding: 10px; margin-top: 40px; margin-left: 120px; margin-right: 120px;margin-bottom:60px;border:4px double #b0b0b0;">
+			<h:graphicImage value="/img/spinner.gif" rendered="#{not unitSelection.selecting}"/>
+			<span style="color:#d0d0d0">#{messages['global.wait']}</span>
+			</div>
+		</s:fragment>
+		<s:fragment rendered="#{unitSelection.selecting}">
+		<a:repeat value="#{unitSelection.items}" var="it">
+			<div class="paragraph" style="padding:4px;margin-top:10px;width:98%">
+				#{it.name}
+			</div>
+			<h:dataTable value="#{it.units}" var="u" >
+			<h:column>
+  				<h:commandLink value="#{u.name}" onclick="selectUnit(#{u.id}); return false;" 
+  					styleClass="#{u.treatmentHealthUnit?'hu-icon':'ds-icon'}" style="width:100%;"/>
+			</h:column>
+			</h:dataTable>
+		</a:repeat>
+		</s:fragment>
+	</h:panelGroup>
+	</div>
+	</h:form>
+	</div>
+	<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" onclick="hideUnitSelDlg(); return false;"/>
+</rich:modalPanel>
+
+<script type="text/javascript">
+function showUnitSelDlg() {
+	Richfaces.showModalPanel('unitSelDlg');
+	document.getElementById("medroot:frmunit:unitname").value = "";
+}
+function hideUnitSelDlg() {
+	Richfaces.hideModalPanel('unitSelDlg');
+}
+function selectUnit(id) {
+var elem = document.getElementById("unitid");
+elem = elem.firstChild;
+elem.value = id;
+var form = document.getElementById("unitform").firstChild;
+while (form.nodeType != 1) form = form.nextSibling;
+form.submit();
+}
+</script>
+</s:fragment>
+</ui:composition>

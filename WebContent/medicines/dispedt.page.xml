@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
+
+	<restrict>#{s:hasRole('DISP_PAC_EDT')}</restrict>
+	<begin-conversation join="true"/>
+	<action execute="#{medicineDispensingHome.initializeDispensing}"/>
+	<param name="month" value="#{medicineDispensingHome.month}" converterId="javax.faces.Integer"/>
+	<param name="year" value="#{medicineDispensingHome.year}" converterId="javax.faces.Integer"/>
+	<param name="id" value="#{medicineDispensingHome.id}" converterId="javax.faces.Integer"/>
+	<navigation>
+		<rule if-outcome="persisted">
+			<end-conversation/>
+			<redirect view-id="/medicines/dispensing.xhtml">
+			</redirect>
+		</rule>
+		<rule if-outcome="cancel">
+			<end-conversation before-redirect="true"/>
+			<redirect view-id="/medicines/dispensing.xhtml">
+			</redirect>
+		</rule>
+	</navigation>
+
+</page>

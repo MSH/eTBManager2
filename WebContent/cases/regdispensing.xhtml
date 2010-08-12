@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['cases.mantreatment']}" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="waitdlg" value="1" />
+
+
+
+<ui:define name="body">
+<h:form id="main">
+
+<s:decorate template="/layout/roundrect.xhtml" style="width:750px;margin-top:10px;">
+	<ui:param name="showfooter" value="0" />
+	<ui:param name="showheader" value="0" />
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['TbUnit']}:</ui:define>
+		#{registerDispensingHome.tbunit.name}
+	</s:decorate>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['global.month']} - #{messages['global.year']}:</ui:define>
+		<h:outputText value="#{registerDispensingHome.month}" converter="monthYearConverter" >
+			<f:param name="year" value="#{registerDispensingHome.year}"/>
+		</h:outputText>
+	</s:decorate>
+	
+	<a:commandLink reRender="pnldata" value="testing">
+	</a:commandLink>	
+	
+	<h:panelGroup id="pnldata">
+	<table width="100%" class="table1" id="#tbldays">
+	<tr>
+		<th rowspan="2" align="left">#{messages['Patient']}
+		</th>
+		<th colspan="7">
+		<table width="100%" style="border:none;">
+		<tr>
+		<a:repeat value="#{registerDispensingHome.weeks}" var="it">
+			<s:fragment rendered="#{registerDispensingHome.selectedWeek==it}">
+			<th>
+				#{messages['global.week']} #{it.week} <br/> #{it.iniDay} .. #{it.endDay}
+			</th>
+			</s:fragment>
+			<s:fragment rendered="#{registerDispensingHome.selectedWeek!=it}">
+			<td>
+				<a:commandLink reRender="pnldata">
+					<a:actionparam name="xpto" assignTo="#{registerDispensingHome.weekIndex}" value="#{it.week-1}" />
+					 #{messages['global.week']} #{it.week} <br/> #{it.iniDay} .. #{it.endDay}
+				</a:commandLink>
+			</td>
+			</s:fragment>
+		</a:repeat>
+		</tr>
+		</table>
+		</th>
+	</tr>
+	<tr>
+		<a:repeat value="#{registerDispensingHome.selectedWeek.days}" var="it">
+			<th width="65px">
+				<s:fragment rendered="#{it.dayOfMonth}">
+				#{it.day}
+				<br/>
+				<span style="font-weight:normal"> #{it.shortWeekname}</span>
+				<br/>
+				<input id="chkall" type="checkbox" onclick="selectAllDays(this, #{it.weekDay})" />
+				</s:fragment>
+			</th>
+		</a:repeat>
+	</tr>
+	<a:repeat value="#{registerDispensingHome.cases}" var="it">
+	<tr>
+		<th align="left">
+			#{it.caseDispensing.tbcase.patient.fullName}
+		</th>
+		<a:repeat value="#{it.selectedWeek.days}" var="d">
+		<td align="center">
+			<h:selectBooleanCheckbox value="#{d.checked}" rendered="#{d.available}" styleClass="chkday chksel#{d.weekDay}"/>
+		</td>
+		</a:repeat>
+	</tr>
+	</a:repeat>
+	</table>
+	
+	<table width="100%"><tr><td align="right">
+	<a:commandButton value="#{messages['form.save']}" styleClass="button" action="#{registerDispensingHome.save}"/>
+	<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" view="/cases/treatments.xhtml">
+		<f:param name="huid" value="#{registerDispensingHome.tbunitId}"/>
+	</s:button>
+	</td></tr></table>
+	</h:panelGroup>
+
+	<rich:jQuery selector="#chkall" query="each(function(){this.checked=false;})"/>
+	<script type="text/javascript">
+	<!--
+	function selectAllDays(chk, weekday) {
+		var sel = ".chksel" + weekday;
+		try {
+			sel = eval(sel);
+		} catch(e) {}
+		jQuery(sel).each(function() {this.checked=chk.checked;});
+	}
+	-->
+	</script>
+</s:decorate>
+
+</h:form>
+ 
+</ui:define>
+
+</ui:composition>  

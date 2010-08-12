@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      template="#{workspaceViewService.templatePage}">
+        
+<ui:param name="title" value="#{user.id==null? messages['form.new']: messages['form.edit']} - #{messages['User']}" />
+<ui:param name="topmenu" value="3" />
+
+<ui:param name="waitdlg" value="1" />
+
+<ui:define name="body">
+<h:form id="main">
+    <table class="tabela" width="550px">
+    <tr><td colspan="2">
+    <s:decorate template="/layout/edit.xhtml" rendered="#{user.id != null}">
+    	<ui:define name="label">#{messages['form.id']}:</ui:define>
+    	<h:outputText value="#{user.id}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['User.login']}:</ui:define>
+        <h:inputText id="conta" value="#{user.login}" maxlength="32" style="text-transform: uppercase" required="true"  validator="#{userHome.validaConta}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['User.name']}:</ui:define>
+        <h:inputText maxlength="50" value="#{user.name}" style="width : 315px;" required="true" /> 
+    </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['User.email']}:</ui:define>
+        <h:inputText maxlength="50" value="#{user.email}" style="width : 315px;" required="true" />
+    </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['User.state']}:</ui:define>
+        <h:selectOneMenu value="#{user.state}" required="true">
+            <s:selectItems value="#{userStates}" var="sit" label="#{messages[sit.key]}" noSelectionLabel="-" />
+         	<s:convertEnum/>
+        </h:selectOneMenu>  
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+        <h:inputText maxlength="50" value="#{user.comments}" style="width : 315px;"/> 
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" rendered="#{userWorkspace.healthSystem==null}">
+    	<ui:define name="label">#{messages['HealthSystem']}:</ui:define>
+        <h:selectOneMenu value="#{userHome.userWorkspace.healthSystem}">
+            <s:selectItems value="#{healthSystems}" var="it" label="#{it.name}" noSelectionLabel="#{messages['form.noselection']}" />
+         	<s:convertEntity/>
+         	<a:support event="onchange" reRender="pnlunitsel,pnlviews" ajaxSingle="true" action="#{userHome.refreshHealthSystem}" />
+        </h:selectOneMenu>  
+    </s:decorate>
+
+	<div class="paragraph">
+		#{messages['TbUnit']}
+	</div>
+	<h:panelGroup id="pnlunitsel">
+	<s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{userHome.tbunitselection.labelAdminUnit}:</ui:define>
+    	<h:selectOneMenu value="#{userHome.tbunitselection.adminUnit}">
+            <s:selectItems value="#{userHome.tbunitselection.adminUnits}" var="it" label="#{it.name}" noSelectionLabel="-" />
+         	<s:convertEntity/>
+         	<a:support event="onchange" reRender="pnlunits,pnlviews" ajaxSingle="true" />
+    	</h:selectOneMenu>
+	</s:decorate>    
+
+	<h:panelGroup id="pnlunits">
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['form.name']}:</ui:define>
+        <h:selectOneMenu value="#{userHome.tbunitselection.tbunit}" required="true">
+            <s:selectItems value="#{userHome.tbunitselection.options}" var="it" label="#{it.name}" noSelectionLabel="-" />
+         	<s:convertEntity/>
+         	<a:support event="onchange" reRender="pnlviews" ajaxSingle="true" action="#{userHome.refreshViews}" />
+        </h:selectOneMenu>  
+    </s:decorate>
+    </h:panelGroup>
+    </h:panelGroup>
+    
+    <s:decorate template="/layout/edit.xhtml">
+        <h:selectBooleanCheckbox value="#{userHome.userWorkspace.playOtherUnits}" /> #{messages['User.playOtherUnits']}  
+    </s:decorate>
+
+	<hr/>
+	
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['UserProfile']}:</ui:define>
+        <h:selectOneMenu value="#{userHome.userWorkspace.profile}" required="true">
+            <s:selectItems value="#{profiles}" var="it" label="#{it.name}" noSelectionLabel="-" />
+         	<s:convertEntity />
+        </h:selectOneMenu>  
+    </s:decorate>
+
+	<h:panelGroup id="pnlviews">
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['UserView']}:</ui:define>
+        <h:selectOneMenu id="cbview" value="#{userHome.selectedView}" required="true">
+            <f:selectItems value="#{userHome.views}" />
+        </h:selectOneMenu>
+    </s:decorate>
+    </h:panelGroup>
+    
+    </td></tr>
+    <tr>
+    	<td>
+			<a:commandButton value="#{messages['admin.users.newpasswd']}" action="#{userHome.sendNewPassword}" styleClass="button" style="width:150px"
+				onclick="if (!confirm('#{messages['admin.users.confirmnewpass']}')) return false;" 
+				reRender="main,messages"
+				rendered="#{userHome.managed}"
+				/>
+    	</td>
+    	<td align="right">
+            <a:commandButton action="#{userHome.persist}" value="Ok" styleClass="button" reRender="main" />
+            <s:button action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel">
+            	<f:param name="id" value="#{null}" />
+            </s:button>
+    </td></tr>
+    </table>
+
+	<p/>
+	<span style="color:red;">*</span>  #{messages['javax.faces.component.UIInput.REQUIRED']}
+	
+</h:form>
+
+</ui:define>
+        
+</ui:composition> 

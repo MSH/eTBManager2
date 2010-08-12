@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['cases.edit']} - #{messages[tbCase.classification.key]}" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="labelstyle" value="width:300px" />
+
+
+<ui:define name="left">
+</ui:define>
+
+<ui:define name="body">
+<h:form id="main">
+<p/>
+<s:decorate template="/layout/casebody.xhtml">
+	<table width="100%">
+	<tr><td>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:param name="labelstyle" value="width:110px" />
+		<ui:define name="label">#{messages['cases.examhiv.vct']}</ui:define>
+		<h:selectOneMenu value="#{caseDataUA.VCTstarted}" onchange="toggleYesNo(this.selectedIndex, '#vctdiv');">
+			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
+			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
+		</h:selectOneMenu>
+		<span id="vctdiv" style="#{caseDataUA.VCTstarted?'':'display:none'}">
+		<span style="clear:left;display:block;">#{messages['global.date']}:</span>
+				<h:panelGroup id="edtdatep">
+				<rich:calendar id="date2" enableManualInput="true" value="#{caseDataUA.startedVCTdate}" 
+					locale="#{locale}" datePattern="#{messages['locale.datePattern']}" 
+					timeZone="#{timezones.default}" validator="futureDateValidator" inputStyle="width:80px;">
+				</rich:calendar>
+				<f:param name="validatefuture" value="true"/>
+    			(#{messages['locale.displayDatePattern']})
+    			<rich:jQuery selector="#edtdatep .rich-calendar-input" query="mask('#{messages['locale.dateMask']}')" />
+    			</h:panelGroup>
+    	</span>
+	</s:decorate>
+<script type="text/javascript">
+<!--
+function toggleYesNo(option, divname) {
+	try {
+		divname = eval(divname);
+	} catch (e) {}
+	if (option == '1')
+		jQuery(divname).hide();
+	else jQuery(divname).show();
+}
+-->
+</script>
+	<s:decorate template="/layout/display.xhtml">
+   		<ui:define name="label">
+			<h:selectBooleanCheckbox value="#{caseDataUA.alcoholAbuse}" />
+   			#{messages['uk_UA.alcoholAbuse']}:
+   		</ui:define>
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+   		<ui:define name="label">
+			<h:selectBooleanCheckbox value="#{caseDataUA.migrant}" />
+   			#{messages['uk_UA.migrant']}:
+   		</ui:define>
+	</s:decorate>
+
+	</td>
+	<td valign="top">
+	
+	<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">
+				<h:selectBooleanCheckbox value="#{caseDataUA.homeless}" />
+    			#{messages['uk_UA.homeless']}:
+    		</ui:define>
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">
+				<h:selectBooleanCheckbox value="#{caseDataUA.unemployed}" />
+    			#{messages['uk_UA.unemployed']}:
+    		</ui:define>
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">
+				<h:selectBooleanCheckbox value="#{caseDataUA.healthWorker}" />
+    			#{messages['uk_UA.healthWorker']}:
+    		</ui:define>
+	</s:decorate>
+	<div style="display:block;clear:both;">
+		<h:selectBooleanCheckbox value="#{caseDataUA.healthWorkerTB}" style="margin-left:20px;"/>
+		#{messages['uk_UA.healthWorker.TB']}
+   	</div>
+	<div style="display:block;clear:both;">
+		<h:selectBooleanCheckbox value="#{caseDataUA.healthWorkerGMC}" style="margin-left:20px;"/>
+		#{messages['uk_UA.healthWorker.GMC']}
+   	</div>
+	
+	</td></tr>
+	<tr><td valign="top">
+
+    </td></tr>
+
+	<tr><td valign="top">
+		<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">
+				<h:selectBooleanCheckbox value="#{caseDataUA.injectableDrugUse}" />
+    			#{messages['uk_UA.injectableDrugUse']}:
+    		</ui:define>
+		</s:decorate>
+	</td><td valign="top">
+		<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">
+				<h:selectBooleanCheckbox value="#{caseDataUA.refugee}" />
+    			#{messages['uk_UA.refugee']}:
+    		</ui:define>
+		</s:decorate>
+    </td></tr>
+
+	<tr><td valign="top">
+		<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">
+				<h:selectBooleanCheckbox value="#{caseDataUA.tbContact}" />
+    			#{messages['TbCase.tbContact']}:
+    		</ui:define>
+		</s:decorate>
+	</td><td valign="top">
+		<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">
+				<h:selectBooleanCheckbox value="#{caseDataUA.prisioner}" />
+    			#{messages['uk_UA.prisioner']}:
+    		</ui:define>
+		</s:decorate>
+    </td></tr>
+    
+    <tr><td colspan="2">
+		<s:decorate template="/layout/display.xhtml">
+			<ui:param name="labelstyle" value="width:100px;" />
+    		<ui:define name="label">#{messages['uk_UA.otherFeature']}:</ui:define>
+    		<h:inputText value="#{caseDataUA.otherFeature}" style="width:350px;"/>
+		</s:decorate>
+	</td>
+	</tr>
+	<tr><td colspan="2" style="padding:6px;">
+		<div class="paragraph">
+			#{messages['cases.comorbidities']}
+		</div>
+		<h:dataTable value="#{comorbidityHome.comorbidities}" var="it" styleClass="tabela" rowClasses="lin1,lin2" width="100%">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['form.name']}" styleClass="collh"/>
+				</f:facet>
+				<h:selectBooleanCheckbox value="#{it.selected}" />
+				#{it.item.name}
+			</h:column>
+		</h:dataTable>		
+    </td></tr>
+	
+	<tr><td align="right" colspan="2">
+	<a:commandButton value="#{messages['form.ok']}" action="#{caseDataUAHome.saveAnnex}" styleClass="button" reRender="main"/>
+	<s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel" propagation="end">
+		<f:param name="id" value="#{caseHome.id}" />
+	</s:button>
+	</td></tr></table>
+</s:decorate>
+	
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

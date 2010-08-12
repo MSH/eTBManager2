@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      template="#{workspaceViewService.templatePage}">
+        
+<ui:param name="title" value="#{adminUnitHome.managed? messages['admin.adminunits.edt']: messages['admin.adminunits.new']}" />
+<ui:param name="topmenu" value="3" />
+
+<ui:param name="labelstyle" value="width:150px" />
+
+<ui:define name="body">
+<h:form id="main">
+    <table class="tabela" width="600px">
+    <tr><td>
+
+    <s:decorate template="/layout/edit.xhtml" rendered="#{adminUnit.id != null}">
+    	<ui:define name="label">#{messages['form.id']}:</ui:define>
+    	<h:outputText value="#{adminUnit.id}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" rendered="#{adminUnit.id != null}">
+    	<ui:define name="label">#{messages['global.level']}:</ui:define>
+    	<h:outputText value="#{adminUnit.code}" />
+    </s:decorate>
+
+	<s:decorate template="/layout/audisplay.xhtml">
+		<ui:param name="auselection" value="#{adminUnitHome.auselection}" />
+	</s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" rendered="#{not defaultWorkspace.hasAlternateLocale}">
+    	<ui:define name="label">#{messages['form.name']}:</ui:define>
+        <h:inputText value="#{adminUnit.name.name1}" maxlength="100" style="width : 320px;" required="true" 
+        	validator="#{adminUnitHome.validateUniqueValue}">
+        	<f:param id="field" value="name.name1"/>
+        	<f:param id="where" value="it.parent.id = #{adminUnit.parent.id==null?'null':adminUnit.parent.id}" />
+        </h:inputText>
+    </s:decorate>
+
+    <s:fragment template="/layout/edit.xhtml" rendered="#{defaultWorkspace.hasAlternateLocale}">
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label"><b>#{messages['form.name']}:</b><br/><span style="font-weight:normal;">(#{defaultWorkspace.defaultDisplayLocale})</span></ui:define>
+        <h:inputText value="#{adminUnit.name.name1}" maxlength="100" style="width : 320px;" required="true" validator="#{adminUnitHome.validateUniqueValue}">
+        	<f:param id="field" value="name.name1"/>
+        	<f:param id="where" value="it.parent.id = #{adminUnit.parent.id==null?'null':adminUnit.parent.id}" />
+        </h:inputText>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label"><b>#{messages['form.name']}:</b><br/><span style="font-weight:normal;">(#{defaultWorkspace.alternateDisplayLocale}):</span></ui:define>
+        <h:inputText value="#{adminUnit.name.name2}" maxlength="100" style="width : 320px;" required="true" validator="#{adminUnitHome.validateUniqueValue}">
+        	<f:param id="field" value="name.name2"/>
+        	<f:param id="where" value="it.parent.id = #{adminUnit.parent.id==null?'null':adminUnit.parent.id}" />
+        </h:inputText>
+    </s:decorate>
+
+    </s:fragment>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['admin.adminunits.countrystructure']}:</ui:define>
+    	<h:selectOneMenu value="#{adminUnit.countryStructure}" required="true">
+    		<s:selectItems var="it" value="#{adminUnitHome.structures}" label="#{it.name}" noSelectionLabel="-" />
+    		<s:convertEntity />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['global.legacyId']}:</ui:define>
+        <h:inputText value="#{adminUnit.legacyId}" maxlength="50" style="width : 120px;" validator="#{adminUnitHome.validateUniqueValue}">
+        	<f:param id="field" value="legacyId"/>
+        </h:inputText>
+    </s:decorate>
+
+    </td></tr>
+    <tr><td align="right" colspan="2">
+            <h:commandButton action="#{adminUnitHome.persist}" value="#{messages['form.ok']}" styleClass="button"/>  
+            <s:button view="/admin/adminunits.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" >
+            	<f:param name="id" value="#{null}" />
+            	<f:param name="parentid" value="#{adminUnitHome.parentId}" />
+            </s:button>
+    </td></tr>
+    </table>
+
+	<p/>
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+</h:form>
+</ui:define>
+        
+</ui:composition> 

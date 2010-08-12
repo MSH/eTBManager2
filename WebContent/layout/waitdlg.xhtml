@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+<script type="text/javascript">
+<!--
+function openWaitDlg() {
+javascript:Richfaces.showModalPanel('waitmsgpanel');
+}
+function closeWaitDlg() {
+javascript:Richfaces.hideModalPanel('waitmsgpanel');
+}
+-->
+</script>
+<rich:modalPanel id="waitmsgpanel" width="250" height="80" top="350">
+
+	<div style="padding-top:15px;padding-left:30px;">
+	<h:graphicImage value="/img/spinner.gif" />
+	<span style="font-size: 16px;font-weight:bold;">
+		#{messages['global.wait']}
+	</span>
+	<br/><span style="color:#d0d0d0">#{messages['global.waitmsg']}</span>
+	</div>
+</rich:modalPanel>
+    
+</ui:composition>

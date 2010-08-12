@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	<h:form>                 
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
+		<h:selectOneMenu value="#{dispensingView.month}">
+			<f:selectItems value="#{months}"/>
+			<a:support event="onchange" reRender="pnlcases" />
+		</h:selectOneMenu>
+		<h:selectOneMenu value="#{dispensingView.year}" style="margin-left:5px;">
+			<f:selectItems value="#{years}"/>
+			<a:support event="onchange" reRender="pnlcases" />
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml" >
+		<ui:define name="label">#{messages['medicines.dispensing.displaymode']}</ui:define>
+		<h:selectOneRadio value="#{dispensingView.displayMode}">
+			<f:selectItem itemLabel="#{messages['medicines.dispensing.showsources']}" itemValue="#{0}" />
+			<f:selectItem itemLabel="#{messages['medicines.dispensing.showcases']}" itemValue="#{1}" />
+			<a:support event="onchange" reRender="pnlcases" action="#{dispensingView.initializeDisplayMode}"/>
+		</h:selectOneRadio>
+	</s:decorate>
+	
+	<h:panelGroup id="pnlcases">
+	
+	<s:decorate template="/layout/edit.xhtml" rendered="#{(dispensingView.displayMode==1)and(medicineDispensingHome.frequency=='DAILY')}">
+    	<ui:define name="label">#{messages['global.day']}:</ui:define>
+    	<a:repeat value="#{monthDispensing.days}" var="it">
+    		<div style="background-color:#f0f0f0;display:inline;padding:3px;margin:2px">
+    			<h:commandLink value="#{it.label}" reRender="pnlcases" onclick="updateCases(#{it.value}); return false;" />
+    		</div>
+    	</a:repeat>
+	</s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml" rendered="#{(dispensingView.displayMode==1)and(medicineDispensingHome.frequency=='WEEKLY')}">
+    	<ui:define name="label">#{messages['global.week']}:</ui:define>
+    	<a:repeat value="#{monthDispensing.weeks}" var="it">
+    		<div style="background-color:#f0f0f0;display:inline;padding:3px;margin:2px">
+    			<h:commandLink value="#{it.label}" reRender="pnlcases" onclick="updateCases(#{it.value}); return false;" />
+    		</div>
+    	</a:repeat>
+	</s:decorate>
+	
+	<a:jsFunction name="updateCases" reRender="pnlcases" action="#{dispensingView.initializeDisplayMode}">
+		<a:actionparam name="param1" assignTo="#{medicineDispensingHome.day}" />
+	</a:jsFunction>
+	
+	
+	<h:commandButton value="#{messages['medicines.dispensing.edit']}" action="#{medicineDispensingHome.initializeEditing}" styleClass="button" style="width:200px;" />
+
+	<s:fragment rendered="#{dispensingView.displayMode == 0}">	
+	<s:div rendered="#{empty monthDispensing.sources}" styleClass="celheader">
+		<h:outputText value="#{messages['medicines.dispensing.nodisp']}" style="color:orange;font-weight:bold;"/>
+	</s:div>	
+	
+	<table width="100%">
+	<ui:repeat value="#{monthDispensing.sources}" var="s">
+	<tr style="background-color:#EDF7EF;"><td style="border:1px solid #B4E8BB;padding:5px;">
+		<b>#{s.source.name}</b>
+	</td></tr>
+
+	<tr><td>
+	<h:dataTable value="#{s.items}" var="it" width="100%" styleClass="tabela" rowClasses="lin1,lin2" columnClasses="coll,colr,colr,colr">
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Medicine']}" styleClass="collh"/>
+			</f:facet>
+			#{it.medicine}
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['OrderItem.numPatients']}" styleClass="colrh"/>
+			</f:facet>
+			<h:outputText value="#{it.numCases}">
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Movement.quantity']}" styleClass="colrh"/>
+			</f:facet>
+			<h:outputText value="#{it.quantity}">
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh"/>
+			</f:facet>
+			<h:outputText value="#{it.totalPrice}">
+				<f:convertNumber pattern="#,###,##0.00"/>
+			</h:outputText>
+		</h:column>
+	</h:dataTable>	
+	
+	</td></tr>
+	</ui:repeat>
+	</table>
+	</s:fragment>
+
+
+
+	<s:fragment rendered="#{dispensingView.displayMode == 1}">
+
+	<table width="100%" >
+	<a:repeat value="#{medicineDispensingHome.cases}" var="s">
+	<tr><td class="colheader">
+		<b>#{s.tbcase.patient.name}</b>
+	</td></tr>
+	<tr><td>
+		<h:dataTable value="#{s.medicines}" var="it" style="width:100%" styleClass="tabela" columnClasses="coll,colc,colc,colr,colr,col" rowClasses="lin1,lin2">
+			<h:column>
+				<f:facet name="header">#{messages['Medicine']}</f:facet>
+				<h:graphicImage value="/img/greenstar.gif" rendered="#{it.estimated}" alt="#{messages['OrderItem.estimatedQuantity']}"/>
+				<span style="#{it.estimated?'font-weight:bold;':''}">
+				#{it.medicineDispensing.medicine}
+				</span>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['MedicineDispensing.days']}</f:facet>
+				<h:outputText value="#{it.medicineDispensing.days}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['MedicineDispensing.quantity']}</f:facet>
+				<h:outputText value="#{it.medicineDispensing.quantity}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['global.unitPrice']}</f:facet>
+				<h:outputText value="#{it.medicineDispensing.unitPrice}" >
+					<f:convertNumber pattern="#,###,##0.0000"/>
+				</h:outputText>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['global.totalPrice']}</f:facet>
+				<h:outputText value="#{it.medicineDispensing.totalPrice}" >
+					<f:convertNumber pattern="#,###,##0.0000"/>
+				</h:outputText>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['Source']}</f:facet>
+				#{it.medicineDispensing.source.name}
+			</h:column>
+		</h:dataTable>
+	</td></tr>
+	</a:repeat>
+	</table>
+
+	</s:fragment>
+	
+	</h:panelGroup>
+	</h:form>
+	
+    
+</ui:composition>

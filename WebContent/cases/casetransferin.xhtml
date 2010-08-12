@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="..#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['cases.move.regtransferin']}" />
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+
+<ui:define name="body">
+<h:form id="main" rendered="#{caseHome.canTransferIn}">
+
+
+<s:decorate template="/layout/casebody.xhtml">
+    <table width="100%">
+	<tr><td>
+	
+	<p/>
+	<div class="paragraph">
+		<b>#{messages['TbCase.healthUnits']}</b>
+	</div>
+
+	<h:dataTable value="#{caseHome.treatmentHealthUnits}" var="hu" styleClass="tabela" width="100%">
+		<h:column>
+			<f:facet name="header"><h:outputText value="#{messages['cases.healthUnit']}" styleClass="collh" /></f:facet>
+			#{hu.tbunit.name}
+		</h:column>
+
+		<h:column>
+			<f:facet name="header"><h:outputText value="#{messages['TreatmentHealthUnit.iniDate']}" styleClass="collh" /></f:facet>
+			<h:outputText value="#{hu.period.iniDate}" converter="localeDateConverter"/>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header"><h:outputText value="#{messages['TreatmentHealthUnit.endDate']}" styleClass="collh" /></f:facet>
+			<h:outputText value="#{hu.period.endDate}" converter="localeDateConverter"/>
+		</h:column>
+	</h:dataTable>
+	
+	<p/>
+	<div class="paragraph">
+		<b>#{messages['patients.transfinfo']}</b>
+	</div>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">
+			<div style="height:20px">
+				#{messages['medicines.movs.destunit']}:
+			</div>
+		</ui:define>
+		<span class="hu-icon" >
+		<h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
+		</span>
+	</s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['cases.move.transferin-date']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{caseMoveHome.moveDate}" /> 
+    </s:decorate>
+	<span style="color:red;">*</span> #{messages['form.required']}<p/>
+    
+    </td></tr>
+    <tr><td align="right">
+    	<h:commandButton action="#{caseMoveHome.transferIn}" value="#{messages['form.ok']}" styleClass="button" />
+    	<s:button view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" >
+    		<f:param name="id" value="#{caseHome.id}" />
+    	</s:button>
+    </td></tr>
+	</table>
+</s:decorate>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

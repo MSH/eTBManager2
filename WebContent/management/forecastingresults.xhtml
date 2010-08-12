@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+ 	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      >
+
+
+<rich:tab id="tabresult" label="#{messages['manag.forecast.tabres1']}" rendered="#{forecasting.hasResult}">
+	<h:dataTable value="#{forecasting.medicines}" var="m" styleClass="tabela" rowClasses="lin1,lin2" 
+		columnClasses="colb,colrb,colrb,colrb,colrb,colrb hlcolor,colrb hlcolor,colrb hlcolor,colrb hlcolor,colrb,colrb">
+		<h:column>
+			<f:facet name="header">
+				#{messages['Medicine']}
+			</f:facet>
+			#{m.medicine}
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.stockonhand']}
+			</f:facet>
+			<h:outputText value="#{m.stockOnHand}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.stockonorder']}
+			</f:facet>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.dispensingLeadTime']}
+			</f:facet>
+			<h:outputText value="#{m.dispensingLeadTime}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.stockafterleadtime']}
+			</f:facet>
+			<h:outputText value="#{m.stockOnHandAfterLeadTime}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.estcases']}
+			</f:facet>
+			<h:outputText value="#{m.estimatedQtyCases}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.estnewcases']}
+			</f:facet>
+			<h:outputText value="#{m.estimatedQtyNewCases}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.estqty']}
+			</f:facet>
+			<b>
+			<h:outputText value="#{m.estimatedQty}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+			</b>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['global.unitPrice']}
+			</f:facet>
+			<h:outputText value="#{m.unitPrice}" >
+				<f:convertNumber pattern="#,###,##0.0000"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['global.totalPrice']}
+			</f:facet>
+			<h:outputText value="#{m.totalPrice}" >
+				<f:convertNumber pattern="#,###,##0.00"/>
+			</h:outputText>
+		</h:column>
+	</h:dataTable>
+</rich:tab>
+
+<rich:tab label="#{messages['manag.forecast.tabres2']}" rendered="#{forecasting.hasResult}">
+<table width="100%" class="tabela">
+<tr>
+	<th colspan="2">#{messages['Medicine']}
+	</th>
+	<a:repeat value="#{forecastingView.resultTable.columns}" var="it">
+	<th>
+		#{it}
+	</th>
+	</a:repeat>
+</tr>
+<a:repeat value="#{forecastingView.resultTable.rows}" var="r">
+<tr class="highlight">
+	<td rowspan="3" class="colb">
+		#{r.medicine.medicine}
+	</td>
+	<td class="colb">
+		#{messages['manag.forecast.stockonhand']}
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.stockOnHand}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="colb">
+		#{messages['manag.forecast.tabres2.cell1']}
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.quantityCasesOnTreatment}" rendered="#{s.quantityCasesOnTreatment!=0}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="colb">
+		#{messages['manag.forecast.tabres2.cell2']}
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.quantityNewCases}" rendered="#{s.quantityNewCases!=0}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+</a:repeat>
+</table>
+</rich:tab>
+
+<rich:tab label="#{messages['manag.forecast.tabres3']}" rendered="#{forecasting.hasResult}">
+<table width="100%" class="tabela">
+<tr>
+	<th colspan="2">#{messages['Medicine']}
+	</th>
+	<a:repeat value="#{forecastingView.resultTable.columns}" var="it">
+	<th>
+		#{it}
+	</th>
+	</a:repeat>
+</tr>
+<a:repeat value="#{forecastingView.resultTable.rows}" var="r">
+<tr>
+	<td rowspan="3" class="colb highlight">
+		#{r.medicine.medicine}
+	</td>
+	<td class="colb">
+		#{messages['manag.forecast.tabres3.cell1']}
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.numCasesOnTreatment}" rendered="#{s.numCasesOnTreatment!=0}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="colb">
+		#{messages['manag.forecast.tabres3.cell2']}
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.numNewCases}" rendered="#{s.numNewCases!=0}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr class="highlight">
+	<td class="colb">
+		#{messages['global.total']}
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.totalCases}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+</a:repeat>
+</table>
+</rich:tab>
+
+
+</ui:composition>  
+

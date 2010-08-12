@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<s:link value="#{messages['medicines.medicinerecs']}" view="/medicines/receivings.xhtml" propagation="none" rendered="#{userSession.canCheckReceiving}"/>
+	<s:link value="#{messages['medicines.orders']}" view="/medicines/orders.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}"/>
+	<s:link value="#{messages['medicines.dispensing']}" view="/medicines/dispensing.xhtml" propagation="none" rendered="#{userSession.canCheckDispensing}"/>
+	<s:link value="#{messages['medicines.transfer']}" view="/medicines/transfer.xhtml" propagation="none" rendered="#{userSession.canCheckTransfers}">
+		<f:param name="sit" value="#{'WAITING_RECEIVING'}"/>
+	</s:link>
+	
+	<div class="paragraph" style="margin-top:10px;">#{messages['manag.reports']}</div>
+	<s:link value="#{messages['medicines.stockpos']}" view="/medicines/stockpos.xhtml"  propagation="none" rendered="#{userSession.canCheckStockPos}"/>
+	<s:link value="#{messages['medicines.movs']}" view="/medicines/movements.xhtml" propagation="none" rendered="#{userSession.canCheckMovements}"/>
+	<s:link value="#{messages['manag.rel2']}" view="/medicines/releststockpos.xhtml" rendered="#{s:hasRole('REP2')}"/>
+	<s:link value="#{messages['manag.rel3']}" view="/medicines/relstockevol.xhtml" rendered="#{s:hasRole('REP3')}"/>
+	<s:link value="#{messages['manag.rel5']}" view="/medicines/reltreatcost.xhtml" rendered="#{s:hasRole('REP5')}"/>
+	
+
+	<s:fragment rendered="false">
+	<s:fragment rendered="#{userSession.canSetupUnit}">
+	<hr/>
+	<s:link value="#{messages['medicines.unitsetup']}" view="/medicines/unitsetup.xhtml" propagation="none" />
+	</s:fragment>
+	</s:fragment>
+</ui:composition>

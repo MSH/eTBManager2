@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+ 	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/report.xhtml">
+
+<ui:param name="title" value="#{messages['medicines.medicinerecs']}" />
+<ui:param name="labelstyle" value="width:200px;" />
+<ui:param name="showunit" value="1" />
+
+<ui:define name="body">
+    <table width="100%" style="margin-bottom:10px" cellpadding="8">
+    <tr><td class="header">
+    	<b style="float:left;margin-right:4px;">#{messages['Transfer.unitFrom']}: </b>
+    	#{transfer.unitFrom.name}
+    </td>
+    <td class="header">
+    	<b style="float:left;margin-right:4px;">#{messages['Transfer.unitTo']}: </b>
+    	#{transfer.unitTo.name}
+    </td></tr>
+
+    <tr><td style="font-size:11px;padding-top:5px" class="header">
+    #{messages['Transfer.shippingDate']}:
+	<span style="color:black;font-weight:bold;"> 
+	<h:outputText value="#{transfer.shippingDate}" converter="localeDateConverter" />
+	</span> 
+    <br/>
+    #{messages['form.by']} 
+    <span style="color:black;font-weight:bold;">
+    	#{transfer.userFrom.name}
+    </span>
+    </td>
+    <td class="header" style="font-size:11px;">
+    	<s:fragment rendered="#{transfer.status=='DONE'}">
+      		#{messages['Transfer.receivingDate']}:
+	  		<span style="color:black;font-weight:bold;"> 
+	  		<h:outputText value="#{transfer.shippingDate}" converter="localeDateConverter" />
+    		</span> 
+      		<br/>
+      		#{messages['form.by']} 
+      		<span style="color:black;font-weight:bold;">
+     			#{transfer.userFrom.name}
+     		</span>
+     	</s:fragment>
+    </td>
+    </tr>
+    <tr><td colspan="2">
+
+    <s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">#{messages['TransferStatus']}:</ui:define>
+    	<h:outputText value="#{messages[transfer.status.key]}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" rendered="#{not empty transfer.commentsFrom}">
+    	<ui:define name="label">#{messages['Transfer.commentsFrom']}:</ui:define>
+    	<h:outputText value="#{transfer.commentsFrom}" />
+    </s:decorate>
+
+	<div  style="margin-top:30px;clear:left;">
+	<b>#{messages['medicines.movs.itensmov']}</b><br/>
+	</div>
+	
+	<h:panelGroup id="pnlitems">
+	<table width="100%" class="tabela">
+	<ui:repeat value="#{transferHome.sources}" var="s">
+		<tr class="cellheader"><td colspan="7">
+			<b>#{s.source.name}</b>
+		</td></tr>
+		
+		<tr><th align="left">#{messages['Medicine']}
+		</th><th align="center">#{messages['Batch.manufacturer']}
+		</th><th align="center">#{messages['Batch.expiryDate']}
+		</th><th align="right">#{messages['OrderItem.shippedQuantity']}
+		</th><th align="right">#{messages['global.unitPrice']}
+		</th><th align="right">#{messages['global.totalPrice']}
+		</th>
+		<th align="right">#{messages['OrderItem.receivedQuantity']}
+		</th>
+		</tr>
+		<ui:repeat value="#{s.items}" var="it">
+		<tr bgcolor="#f3f3f0"><td colspan="3">
+			<b>#{it.medicine}</b>
+		</td>
+		<td align="right">
+			<b><h:outputText value="#{it.quantity}">
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+			</b>
+		</td>
+		<td align="right">
+			<b><h:outputText value="#{it.unitPrice}">
+				<f:convertNumber pattern="#,###,##0.0000"/>
+			</h:outputText>
+			</b>
+		</td>
+		<td align="right">
+			<b><h:outputText value="#{it.totalPrice}">
+				<f:convertNumber pattern="#,###,##0.00"/>
+			</h:outputText>
+			</b>
+		</td>
+		<td align="right">
+			<b><h:outputText value="#{it.quantityReceived}">
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+			</b>
+		</td>
+		</tr>
+		
+		<ui:repeat value="#{it.batches}" var="b">
+			<tr style="font-size:9px;">
+				<td class="colb" >
+					#{b.batch.batchNumber}
+				</td>
+				<td class="colb" >
+					#{b.batch.manufacturer}
+				</td>
+				<td align="center" class="colb">
+					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+				</td>
+				<td class="colb" align="right">
+					<h:outputText value="#{b.quantity}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</td>
+				<td align="right" class="colb">
+					<h:outputText value="#{b.batch.unitPrice}">
+						<f:convertNumber pattern="#,###,##0.0000"/>
+					</h:outputText>
+				</td>
+				<td align="right" class="colb">
+					<h:outputText value="#{b.totalPrice}">
+						<f:convertNumber pattern="#,###,###,##0.00"/>
+					</h:outputText>
+				</td>
+				<td class="colb" align="right">
+					<h:outputText value="#{b.quantityReceived}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</td>
+			</tr>
+		</ui:repeat>
+		</ui:repeat>
+	</ui:repeat>
+	</table>
+	</h:panelGroup>		
+
+    </td></tr>
+    </table>
+</ui:define>
+
+</ui:composition>  

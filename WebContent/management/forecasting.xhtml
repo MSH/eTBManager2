@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+ 	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['manag.forecast.med']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="pagewidth" value="850px" />
+<ui:param name="left" value="0" />
+
+
+<ui:define name="body">
+<h:form id="main">
+
+<table width="100%" style="border:2px solid #e0e0e0;border-collapse: collapse;">
+<tr><td class="header">
+	<img src="../img/forecast2.gif" style="float:left;padding-right:4px;" />
+	<div style="float:right;">
+		<a:commandLink value="#{messages['manag.forecast.new']}" style="margin-right:15px;" 
+			action="#{forecastingView.startNew}" reRender="main"
+			onclick="if (!confirm('#{messages['form.confirmnew']}')) {return false;}" />
+		<a:region>
+		<a:commandLink value="#{messages['manag.forecast.load']}" style="margin-right:15px;" ajaxSingle="true"
+			onclick="showLoadForecastingDlg()" reRender="fclist" action="#{forecastings.initLoading}" />
+		</a:region>
+	</div>
+	#{forecastingHome.instance.name}
+	<br/>
+	<h:outputText value="#{forecasting.recordingDate}" style="font-size:9px;" converter="localeDateConverter" />
+</td></tr>
+<tr><td>
+
+	<div style="float:right" >
+	<a:commandButton value="#{messages['manag.forecast.execute']}" styleClass="button" title="Execute the forecasting (re)calculating the results" 
+		action="#{forecastingCalculation.execute}" reRender="main,messages"
+		oncomplete="RichFaces.switchTab('#{rich:clientId('tabPanelForecasting')}','#{rich:clientId('tabresult')}','#{rich:clientId('tabOptions')}')" />
+	<a:commandButton value="#{messages['form.save']}" styleClass="button" action="#{forecastingHome.persist}" 
+	    reRender="messages" rendered="#{forecastingHome.managed}"/>
+	<a:commandButton value="#{messages['form.save']}" styleClass="button" onclick="showForecastDlg();return false;"  
+	    rendered="#{not forecastingHome.managed}"/>
+	<s:button value="#{messages['form.cancel']}" view="/management/index.xhtml" styleClass="button-cancel" propagation="end"/>
+	</div>
+</td></tr>
+</table>
+
+
+
+<rich:tabPanel id="tabPanelForecasting" width="100%" switchType="client">
+<rich:tab id="tabOptions" label="#{messages['form.options']}">
+
+<table width="100%" style="border-collapse:collapse;">
+<tr><td>
+
+	<s:decorate template="/layout/roundrect.xhtml" style="padding:4px;">
+		<ui:define name="header">
+			<b>#{messages['form.options']}</b>
+		</ui:define>
+		<ui:param name="showfooter" value="0" />
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['admin.medicines']}:</ui:define>
+		<h:selectOneMenu value="#{forecasting.medicineLine}">
+			<s:selectItems value="#{forecastingView.medicineLines}" var="it" label="#{messages[it.key]}"  noSelectionLabel="#{messages['form.noselection']}" />
+			<s:convertEnum />
+			<a:support event="onchange" reRender="main" ajaxSingle="true" action="#{forecastingView.medicineLineChangeListener}"/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<h:panelGroup id="pnlcontext">	
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.context']}:</ui:define>
+		<h:selectOneMenu value="#{forecasting.view}">
+            <s:selectItems value="#{userViews}" var="it" label="#{messages[it.key]}" hideNoSelectionLabel="true"/>
+         	<s:convertEnum />
+         	<a:support event="onchange" reRender="pnlcontext" ajaxSingle="true" />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:fragment rendered="#{forecasting.view == 'TBUNIT'}">
+    <span class="paragraph">#{messages['TbUnit']}</span>
+	<s:decorate template="/layout/tbselection.xhtml">
+		<ui:param name="tbunitselection" value="#{forecastingHome.tbunitSelection}" />
+	</s:decorate>
+	</s:fragment>
+
+	<s:fragment rendered="#{forecasting.view == 'ADMINUNIT'}">
+	<s:decorate template="/layout/auselection.xhtml">
+		<ui:param name="auselection" value="#{forecastingHome.adminUnitSelection}" />
+	</s:decorate>
+	</s:fragment>
+
+	</h:panelGroup>
+
+	<div class="paragraph">#{messages['form.otheroptions']}</div>
+	<a:commandButton value="#{messages['form.edit']}" style="float:right;" 
+		styleClass="button" reRender="datespnl" 
+		oncomplete="showDatesDlg(); return false;"/>
+
+	<s:decorate template="/layout/display.xhtml" >
+		<ui:define name="label">#{messages['manag.forecast.refdate']}:</ui:define>
+		<h:outputText value="#{forecasting.referenceDate}" converter="localeDateConverter" />
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.leadtime']}:</ui:define>
+		<h:outputText value="#{forecasting.referenceDate}" converter="periodConverter" >
+			<f:param name="endDate" value="#{forecasting.iniDate}"/>
+			<f:param name="type" value="length" />
+		</h:outputText>
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.reviewperiod']}:</ui:define>
+		<h:outputText value="#{forecasting.iniDate}" converter="localeDateConverter" /> ...
+		<h:outputText value="#{forecasting.endDate}" converter="localeDateConverter" />
+		(<h:outputText value="#{forecasting.iniDate}" converter="periodConverter" >
+			<f:param name="endDate" value="#{forecasting.endDate}"/>
+			<f:param name="type" value="length" />
+		</h:outputText>)
+	</s:decorate>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.bufferStock']}:</ui:define>
+		<h:outputText value="#{forecasting.bufferStock}" /> (#{messages['global.months']})
+	</s:decorate>
+
+	</s:decorate>
+
+
+<s:decorate template="/layout/roundrect.xhtml" style="padding:4px;">
+	<ui:define name="header">
+		<b>#{messages['manag.forecast.cases']}</b>
+	</ui:define>
+	<ui:param name="showfooter" value="0" />
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.casessource']}:</ui:define>
+		<h:selectOneMenu value="#{forecasting.casesFromDatabase}" >
+			<f:selectItem itemLabel="#{messages['manag.forecast.casessource.opt1']}" itemValue="true" />
+			<f:selectItem itemLabel="#{messages['manag.forecast.casessource.opt2']}" itemValue="false" />
+			<a:support event="onchange" reRender="pnlcasesontreat"/>
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	<h:panelGroup id="pnlcasesontreat">
+	<s:decorate template="/layout/display.xhtml" rendered="#{forecasting.casesFromDatabase}">
+		<ui:define name="label">#{messages['manag.forecast.numcases']}:</ui:define>
+		<h:outputText value="#{forecasting.numCasesOnTreatment}" >
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</s:decorate>
+	
+	<s:fragment rendered="#{not forecasting.casesFromDatabase}">
+	<a:commandLink value="#{messages['form.navprevious']}" 
+		action="#{forecastingView.casesRegimenTable.movePreviousPeriod}"
+		reRender="pnlcasesontreat" styleClass="naveg-prev" ajaxSingle="true" process="pnl2"/>
+
+	<a:commandLink value="#{messages['form.navnext']}" 
+		action="#{forecastingView.casesRegimenTable.moveNextPeriod}" ajaxSingle="true" process="pnl2"
+		reRender="pnlcasesontreat" styleClass="naveg-next" rendered="#{forecastingView.casesRegimenTable.monthIndexIni != 0}"/>
+
+	<h:panelGroup id="pnl2">
+	<table width="100%" class="tabela4">
+	<tr>
+		<th>#{messages['Regimen']}</th>
+		<a:repeat value="#{forecastingView.casesRegimenTable.months}" var="it">
+			<th>
+				#{it}
+			</th>
+		</a:repeat>
+	</tr>
+	<a:repeat value="#{forecastingView.casesRegimenTable.rows}" var="it">
+	<tr>
+		<td>
+			#{it.regimen.regimen}
+		</td>
+		<a:repeat value="#{it.months}" var="m">
+			<td>
+            <s:validateAll>
+			<h:inputText value="#{m.numCases}" style="width:35px;" />
+			</s:validateAll>
+			<s:message styleClass="erro"/>
+			</td>
+		</a:repeat>
+	</tr>
+	</a:repeat>
+	</table>
+	</h:panelGroup>
+	</s:fragment>
+	</h:panelGroup>
+
+</s:decorate>
+
+<s:decorate template="/layout/roundrect.xhtml" style="padding:4px;">
+	<ui:define name="header">
+		<b>#{messages['manag.forecast.newcases']}</b>
+	</ui:define>
+	<ui:param name="showfooter" value="0" />
+
+
+	<table width="100%" cellspacing="5">
+	<tr><td>
+	<rich:panel>
+		<f:facet name="header">
+			#{messages['manag.forecast.newcasestitle2']}
+		</f:facet>
+	<h:dataTable value="#{forecasting.regimens}" var="r" styleClass="tabela4" 
+		rowClasses="lin1,lin2" columnClasses="col,colr,colr">
+		<h:column>
+			<f:facet name="header">
+				#{messages['Regimen']}
+			</f:facet>
+			#{r.regimen.name}
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.percreg']}
+			</f:facet>
+			<h:inputText value="#{r.percNewCases}" style="width:70px;">
+			</h:inputText>
+		</h:column>
+
+		<h:column rendered="false">
+			<f:facet name="header">
+				#{messages['manag.forecast.numcasesreg']}
+			</f:facet>
+			<h:outputText value="#{r.percNewCases}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText> 
+		</h:column>
+	</h:dataTable>
+	</rich:panel>
+
+	</td><td>
+
+	<rich:dataGrid value="#{forecasting.newCases}" var="it" columns="12" width="100%">
+		<f:facet name="header">
+			#{messages['manag.forecast.newcasestitle']}
+		</f:facet>
+		<div>
+			<h:outputText value="#{it.iniDate}" >
+				<f:convertDateTime pattern="MMM-yyyy" />
+			</h:outputText>
+			<br/>
+			<h:inputText value="#{it.numNewCases}" style="width:50px;"/>
+		</div>
+	</rich:dataGrid>
+	
+	</td></tr>
+	</table>
+
+</s:decorate>
+
+	<s:decorate template="/layout/roundrect.xhtml" style="padding:4px;">
+		<ui:define name="header">
+			<a:commandLink value="#{messages['form.update']}" action="#{forecastingView.initializeStockOnHand}" 
+			   reRender="meds" style="float:right;"/>
+			<b>#{messages['admin.medicines']}</b>
+		</ui:define>
+		<ui:param name="showfooter" value="0" />
+		
+		<h:panelGroup id="meds">
+		<h:dataTable value="#{forecasting.medicines}" var="r" styleClass="tabela4"  
+			rowClasses="lin1,lin2" columnClasses="colb,colrb,colrb,colcb,colcb" width="100%">
+			<h:column>
+				<f:facet name="header">
+					#{messages['Medicine']}
+				</f:facet>
+				<h:outputText value="#{r.medicine}" styleClass="medicine-icon" />
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">
+					#{messages['manag.forecast.stockonhand']}
+				</f:facet>
+				<h:inputText value="#{r.stockOnHand}" style="width:60px;" />
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">
+					#{messages['global.unitPrice']}
+				</f:facet>
+				<h:inputText value="#{r.unitPrice}" style="width:60px;" converter="currencyConverter" />
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					#{messages['manag.forecast.stockonorder']}
+				</f:facet>
+				<a:commandLink value="#{messages['manag.forecast.neworder']}" styleClass="right-icon"
+					action="#{forecastingView.newOrder(r)}" style="padding-right:10px;" 
+					reRender="orderpnl" oncomplete="showOrderDlg(); return false;"/>
+					
+				<h:dataTable value="#{r.orders}" var="b" styleClass="tabela4" width="150px" 
+					style="font-size:10px;" rendered="#{not empty r.orders}" columnClasses="colc,colr">
+					<h:column >
+						<f:facet name="header" >
+							#{messages['Order.receivingDate']}
+						</f:facet>
+						<a:commandLink action="#{forecastingView.editOrder(b)}" reRender="batchpnl" oncomplete="showBatchDlg();">
+						<h:outputText value="#{b.arrivalDate}">
+							<f:convertDateTime pattern="MMM-yyyy" />
+						</h:outputText>
+						</a:commandLink>
+					</h:column>
+
+					<h:column >
+						<f:facet name="header" >
+							#{messages['Movement.quantity']}
+						</f:facet>
+						<h:outputText value="#{b.quantity}">
+							<f:convertNumber pattern="#,###,##0"/>
+						</h:outputText>
+					</h:column>
+				</h:dataTable>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					#{messages['manag.forecast.batchtoexpire']}
+				</f:facet>
+				<a:commandLink value="#{messages['medicines.medicinerecs.newbatch']}" styleClass="right-icon"
+					action="#{forecastingView.newBatch(r)}" 
+					reRender="batchpnl" oncomplete="showBatchDlg();"/>
+					
+				<h:dataTable value="#{r.batchesToExpire}" var="b" styleClass="tabela4" width="150px" 
+					style="font-size:10px;" rendered="#{not empty r.batchesToExpire}" columnClasses="colc,colr">
+					<h:column >
+						<f:facet name="header" >
+							#{messages['Batch.expiryDate']}
+						</f:facet>
+						<a:commandLink action="#{forecastingView.editBatch(b)}" reRender="batchpnl" oncomplete="showBatchDlg();">
+						<h:outputText value="#{b.expiryDate}">
+							<f:convertDateTime pattern="MMM-yyyy" />
+						</h:outputText>
+						</a:commandLink>
+					</h:column>
+
+					<h:column >
+						<f:facet name="header" >
+							#{messages['Movement.quantity']}
+						</f:facet>
+						<h:outputText value="#{b.quantity}">
+							<f:convertNumber pattern="#,###,##0"/>
+						</h:outputText>
+					</h:column>
+				</h:dataTable>
+			</h:column>
+		</h:dataTable>
+		</h:panelGroup>
+		
+	</s:decorate>
+	
+
+</td></tr>
+</table>
+
+</rich:tab>
+
+<ui:include src="/management/forecastingresults.xhtml" />
+
+</rich:tabPanel>
+
+
+
+
+
+<s:fragment rendered="#{not forecastingHome.managed}">
+<script type="text/javascript">
+function showForecastDlg() {
+	Richfaces.showModalPanel('saveforecastdlg');
+	document.getElementById("main:newfor:edtname").focus();
+}
+function hideForecastDlg() {
+	Richfaces.hideModalPanel('saveforecastdlg');
+}
+function validateNewForecasting() {
+	edt = document.getElementById("main:newfor:edtname");
+	if (edt == null)
+		return false;
+	if (edt.value == '')
+		return false;
+	return true;
+}
+</script>
+<rich:modalPanel id="saveforecastdlg" height="150" width="450" >
+	<f:facet name="header">
+		#{messages['manag.forecast.new']}: #{messages['form.save']}
+	</f:facet>
+	<h:panelGroup id="pnlfordlg" >
+	<ui:param name="labelstyle" value="width:80px;" />
+	<s:decorate template="/layout/edit.xhtml" id="newfor">
+		<ui:define name="label">#{messages['form.name']}:</ui:define>
+		<h:inputText id="edtname" value="#{forecastingHome.instance.name}" style="width:300px;"/>
+	</s:decorate>
+	<div style="float:right;margin-top:20px;">
+	<a:commandButton value="#{messages['form.ok']}" styleClass="button" 
+		action="#{forecastingHome.persist}" reRender="messages"
+		onclick="if (!validateNewForecasting()) {alert('#{messages['form.name']}: #{messages['javax.faces.component.UIInput.REQUIRED']}'); return false;} " 
+		oncomplete="this.disabled=false;hideForecastDlg();" ignoreDupResponses="true">
+		<a:actionparam noEscape="true" assignTo="#{forecastingHome.instance.name}" value="document.getElementById('main:newfor:edtname').value" />
+	</a:commandButton>
+
+	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel" 
+	    onclick="hideForecastDlg(); return false;" />
+	</div>
+	</h:panelGroup> 
+</rich:modalPanel>
+</s:fragment>
+
+</h:form>
+
+
+</ui:define>
+
+
+
+
+
+<ui:define name="dialogs">
+
+<script type="text/javascript">
+function showOrderDlg() {
+	Richfaces.showModalPanel('orderdlg');
+}
+function showBatchDlg() {
+	Richfaces.showModalPanel('batchdlg');
+}
+function showDatesDlg() {
+	Richfaces.showModalPanel('datesdlg');
+}
+</script>
+
+
+<rich:modalPanel id="datesdlg" height="250" width="490" zindex="2000" style="background-color:#F2F5F0" trimOverlayedElements="false">
+	<f:facet name="header">#{messages['form.otheroptions']}</f:facet>
+	<ui:param name="labelstyle" value="width:160px;" />
+	<h:panelGroup id="datespnl">
+	<h:form style="padding:20px;">
+
+	<s:decorate template="/layout/dateedit.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.refdate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{forecasting.referenceDate}"/> 
+	</s:decorate>
+
+	<div class="paragraph">#{messages['manag.forecast.reviewperiod']}</div>
+	<s:decorate template="/layout/dateedit.xhtml">
+		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{forecasting.iniDate}"/> 
+	</s:decorate>
+
+	<s:decorate template="/layout/dateedit.xhtml">
+		<ui:define name="label">#{messages['global.endDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{forecasting.endDate}"/> 
+	</s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.bufferStock']}:</ui:define>
+		<h:selectOneMenu value="#{forecasting.bufferStock}" required="true">
+			<f:selectItems value="#{forecastingView.bufferStockOptions}" />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<a:commandButton value="#{messages['form.ok']}" action="#{forecastingView.datesChangeListener}"
+		styleClass="button" reRender="datespnl,main" oncomplete="Richfaces.hideModalPanel('datesdlg');"/>
+	<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" onclick="Richfaces.hideModalPanel('datesdlg'); return false;"/>
+
+	</h:form>
+	</h:panelGroup>
+</rich:modalPanel>
+
+
+
+<rich:modalPanel id="orderdlg" height="200" width="490" zindex="2000" style="background-color:#F2F5F0" trimOverlayedElements="false">
+	<f:facet name="header">#{messages['Order']}</f:facet>
+	<ui:param name="labelstyle" value="width:160px;" />
+	<h:panelGroup id="orderpnl">
+	<h:form style="padding:20px;">
+	<s:decorate template="/layout/dateedit.xhtml">
+		<ui:define name="label">#{messages['Order.receivingDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{forecastingView.order.arrivalDate}"/> 
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['Movement.quantity']}:</ui:define>
+		<h:inputText value="#{forecastingView.order.quantity}" required="true" style="width:80px;"/>
+	</s:decorate>
+	
+	<a:commandButton value="#{messages['form.ok']}" action="#{forecastingView.confirmOrderChanges}"
+		styleClass="button" reRender="orderpnl,meds" oncomplete="Richfaces.hideModalPanel('orderdlg');"/>
+	<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" onclick="Richfaces.hideModalPanel('orderdlg'); return false;"/>
+	</h:form>
+	</h:panelGroup>
+</rich:modalPanel>
+
+
+
+<rich:modalPanel id="batchdlg" height="200" width="490" zindex="2000" trimOverlayedElements="false">
+	<f:facet name="header">#{messages['Batch']}</f:facet>
+	<ui:param name="labelstyle" value="width:160px;" />
+	<h:panelGroup id="batchpnl">
+	<h:form style="padding:20px;">
+	<s:decorate template="/layout/dateedit.xhtml">
+		<ui:define name="label">#{messages['Batch.expiryDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{forecastingView.batch.expiryDate}"/> 
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['Movement.quantity']}:</ui:define>
+		<h:inputText value="#{forecastingView.batch.quantity}" required="true" style="width:80px;"/>
+	</s:decorate>
+	
+	<a:commandButton value="#{messages['form.ok']}" action="#{forecastingView.confirmBatchChanges}"
+		styleClass="button" reRender="batchpnl,meds" oncomplete="Richfaces.hideModalPanel('batchdlg');"/>
+	<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" onclick="Richfaces.hideModalPanel('batchdlg'); return false;"/>
+	</h:form>
+	</h:panelGroup>
+</rich:modalPanel>
+
+
+
+<rich:modalPanel id="loadfordlg" height="400" width="490" zindex="2000" style="background-color:#F2F5F0">
+	<f:facet name="header">#{messages['manag.forecast.load']}</f:facet>
+	<h:form id="frmunit" style="margin:0px">
+	<div style="overflow: auto; width: 98%; height: 280px;border: 1px gray solid; padding:0px; margin: 0px;background-color:white;">
+	<h:panelGroup id="fclist">
+		<s:fragment rendered="#{not forecastings.loading}">
+			<div style="padding: 10px; margin-top: 40px; margin-left: 120px; margin-right: 120px;margin-bottom:60px;border:4px double #b0b0b0;">
+			<h:graphicImage value="/img/spinner.gif" />
+			<span style="color:#d0d0d0">#{messages['global.wait']}</span>
+			</div>
+		</s:fragment>
+		<s:fragment rendered="#{forecastings.loading}">
+		<h:dataTable value="#{forecastings.resultList}" var="it" width="100%" >
+			<h:column>
+				<img src="../img/forecast2.gif" style="float:left;padding:4px;"/>
+				<s:link view="/management/medforecast.xhtml" value="#{it.name}">
+					<f:param name="id" value="#{it.id}"/>
+				</s:link>
+  				<br/>
+  				<h:outputText value="#{it.recordingDate}" >
+  					<f:convertDateTime timeZone="#{timezones.default}" type="both"/>
+  				</h:outputText>
+			</h:column>
+		</h:dataTable>
+		</s:fragment>
+	</h:panelGroup>
+	</div>
+	</h:form>
+	<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" onclick="hideLoadForecastingDlg(); return false;"/>
+</rich:modalPanel>
+
+</ui:define>
+
+</ui:composition>  
+

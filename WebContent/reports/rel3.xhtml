@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<p:document xmlns:ui="http://java.sun.com/jsf/facelets" 
+          xmlns:f="http://java.sun.com/jsf/core"
+		  xmlns:s="http://jboss.com/products/seam/taglib"
+          xmlns:c="http://java.sun.com/jstl/core"
+          xmlns:p="http://jboss.com/products/seam/pdf">
+
+    <f:facet name="header">
+        <p:font size="6">
+            <p:footer borderWidthTop="1" alignment="left">Drug Management System [<p:pageNumber />]</p:footer>
+        </p:font>
+    </f:facet>
+
+
+    
+<p:table widthPercentage="100" columns="1">
+	<p:cell borderWidthTop="1" borderWidthLeft="0" borderWidthRight="0" borderWidthBottom="1" paddingBottom="5" horizontalAlignment="center">
+  		<p:paragraph>#{messages['manag.rel3']}</p:paragraph>
+  	</p:cell>
+</p:table>
+
+<p:font size="7">
+<p:paragraph alignment="left">
+<p:table columns="2" widths="2 5" horizontalAlignment="left">
+    <f:facet name="defaultCell">
+        <p:cell horizontalAlignment="center" verticalAlignment="middle" />
+    </f:facet>
+
+	<p:cell borderWidth="0">
+		<p:font size="7" style="bold">#{messages['TbUnit']}: 
+	</p:font></p:cell>
+	<p:cell borderWidth="0">#{reportSelection.tbunit.name}</p:cell>
+
+	<p:cell borderWidth="0">
+		<p:font size="7" style="bold">#{messages['Source']}: 
+	</p:font></p:cell>
+	<p:cell borderWidth="0">#{reportSelection.source.name}</p:cell>
+
+	<p:cell borderWidth="0">
+		<p:font size="7" style="bold">#{messages['global.inimonthyear']}: 
+	</p:font></p:cell>
+	<p:cell borderWidth="0"><p:text value="#{reportSelection.iniDate}"><f:convertDateTime pattern="dd-MMM-yyyy HH:mm:ss"/></p:text></p:cell>
+
+	<p:cell borderWidth="0">
+		<p:font size="7" style="bold">#{messages['global.endmonthyear']}: 
+	</p:font></p:cell>
+	<p:cell borderWidth="0"><p:text value="#{reportSelection.endDate}"><f:convertDateTime pattern="dd-MMM-yyyy"/></p:text></p:cell>
+</p:table>
+
+</p:paragraph>
+
+<p:paragraph  spacingBefore="6" alignment="left">
+	<p:table columns="5" horizontalAlignment="center" columnWidths="4 2 2 2 2">
+    <f:facet name="defaultCell">
+        <p:cell horizontalAlignment="right" verticalAlignment="middle" />
+    </f:facet>
+
+	<p:cell horizontalAlignment="left" backgroundColor="black"><p:paragraph><p:font color="white">
+	    <p:text value="#{messages['Medicine']}"></p:text>
+	</p:font></p:paragraph></p:cell>
+	<p:cell horizontalAlignment="right" backgroundColor="black"><p:paragraph><p:font color="white">
+	    <p:text value="#{messages['reports.iniqtd']}"></p:text>
+	</p:font></p:paragraph></p:cell>
+	<p:cell horizontalAlignment="right" backgroundColor="black"><p:paragraph><p:font color="white">
+	    <p:text value="#{messages['reports.inqtd']}"></p:text>
+	</p:font></p:paragraph></p:cell>
+	<p:cell horizontalAlignment="right" backgroundColor="black"><p:paragraph><p:font color="white">
+	    <p:text value="#{messages['reports.outqtd']}"></p:text>
+	</p:font></p:paragraph></p:cell>
+	<p:cell horizontalAlignment="right" backgroundColor="black"><p:paragraph><p:font color="white">
+	    <p:text value="#{messages['reports.finalqtd']}"></p:text>
+	</p:font></p:paragraph></p:cell>
+	
+	<ui:repeat value="#{stockEvolutionReport.itens}" var="it">
+		<p:cell horizontalAlignment="left"><p:paragraph>#{it.medicine}</p:paragraph></p:cell>
+
+		<p:cell><p:paragraph><p:text value="#{it.initialQuantity}"><f:convertNumber pattern="#,###,##0" /></p:text></p:paragraph></p:cell>
+
+		<p:cell><p:paragraph><p:text value="#{it.inQuantity}"><f:convertNumber pattern="#,###,##0" /></p:text></p:paragraph></p:cell>
+
+		<p:cell><p:paragraph><p:text value="#{it.outQuantity}"><f:convertNumber pattern="#,###,##0" /></p:text></p:paragraph></p:cell>
+
+		<p:cell><p:paragraph><p:text value="#{it.finalQuantity}"><f:convertNumber pattern="#,###,##0" /></p:text></p:paragraph></p:cell>
+		
+	</ui:repeat>
+
+	<p:cell backgroundColor="black" horizontalAlignment="left">
+		<p:font color="white" size="8">
+		<p:paragraph>TOTAL</p:paragraph>
+		</p:font>
+	</p:cell>
+
+	</p:table>
+</p:paragraph>
+
+</p:font>
+
+
+</p:document>

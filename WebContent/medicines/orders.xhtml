@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templateMedPage}">
+
+<ui:param name="title" value="#{messages['medicines.orders']}" />
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="pagestyle" value="width:750px;" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none"/>
+</ui:define>
+
+
+<ui:define name="body">
+<p/>
+<h:form id="main"> 
+	<s:link view="/medicines/edtorder.xhtml" value="#{messages['medicines.orders.new']}" rendered="#{userSession.canCreateOrder}" style="float:right;width:150px;text-align:right;"/>
+
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
+		<h:selectOneMenu value="#{orders.month}">
+			<f:selectItems value="#{months}"/>
+		</h:selectOneMenu>
+		<h:selectOneMenu value="#{orders.year}" style="margin-left:5px; width : 70px;">
+			<f:selectItems value="#{years}"/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['OrderStatus']}:</ui:define>
+		<h:selectOneMenu value="#{orders.status}">
+  			<s:selectItems value="#{orderStatus}" var="r" label="#{messages[r.key]}" noSelectionLabel="-" />
+  			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<span style="width:100%;text-align:right;display:block;">
+		<h:commandButton action="#{orders.refresh}" value="#{messages['form.update']}"  styleClass="button" />
+	</span>
+	
+<p/>
+
+<h:panelGroup id="orders" >
+
+<s:decorate template="/layout/naveg.xhtml">
+	<ui:param name="list" value="#{orders}" />
+	<ui:param name="page" value="/medicines/medicineorders.xhtml" />
+</s:decorate>
+
+<h:dataTable value="#{orders.resultList}" var="r" styleClass="tabela" rendered="#{orders.resultCount > 0}" 
+	width="100%" rowClasses="lin1,lin2" columnClasses="colc,colc,coll,coll,coll">
+	<h:column>
+  		<f:facet name="header">
+  			<s:link value="#{messages['form.id']}" >
+  				<f:param name="order" value="#{orders.order=='o.id'?'o.id desc':'o.id'}" />
+  			</s:link>
+  		</f:facet>
+		<s:link value="#{r.id}" view="/medicines/orderdata.xhtml">
+			<f:param value="#{r.id}" name="id" />
+		</s:link>
+	</h:column>
+	
+	<h:column>
+  		<f:facet name="header">
+  			<s:link value="#{messages['Order.orderDate']}" >
+  				<f:param name="order" value="#{orders.order=='o.orderDate'?'o.orderDate desc':'o.orderDate'}" />
+  			</s:link>
+  		</f:facet>
+		<h:outputText value="#{r.orderDate}" converter="localeDateConverter" />
+	</h:column>
+		
+	<h:column>
+  		<f:facet name="header">
+  			<s:link value="#{messages['Order.tbunitFrom']}" styleClass="collh">
+  				<f:param name="order" value="#{orders.order=='o.tbunitFrom.name'?'o.tbunitFrom.name desc':'o.tbunitFrom.name'}" />
+  			</s:link>
+  		</f:facet>
+		#{r.tbunitFrom.name}
+	</h:column>
+		
+	<h:column>
+  		<f:facet name="header">
+  			<s:link value="#{messages['Order.tbunitTo']}" styleClass="collh">
+  				<f:param name="order" value="#{orders.order=='o.tbunitTo.name'?'o.tbunitTo.name desc':'o.tbunitTo.name'}" />
+  			</s:link>
+  		</f:facet>
+		#{r.tbunitTo.name}
+	</h:column>
+		
+	<h:column>
+  		<f:facet name="header">
+  			<s:link value="#{messages['Order.status']}" styleClass="collh">
+  				<f:param name="order" value="#{orders.order=='o.status'?'o.status desc':'o.status'}" />
+  			</s:link>
+  		</f:facet>
+    	<h:outputText value="#{messages[r.status.key]}"
+    		styleClass="#{r.status=='CANCELLED'?'status-cancel':'status-label'}"
+    		style="font-size:11px;" />
+	</h:column>
+	
+</h:dataTable>
+</h:panelGroup>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

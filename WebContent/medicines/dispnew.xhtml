@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:c="http://java.sun.com/jstl/core"
+      template="..#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['dispensing.new']}" />
+
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:220px;" />
+
+<ui:define name="left">
+</ui:define>
+
+<ui:define name="body">
+<p/>
+<h:form id="main"> 
+
+<rich:panel style="width:600px;">
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['TbUnit']}:</ui:define>
+    	#{unitDispensing.tbunit.name}
+    </s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
+    	#{unitDispensing.month} - #{unitDispensing.year}
+	</s:decorate>
+
+    <h:panelGroup id="pnlcases">
+	<table width="100%">
+	<a:repeat value="#{dispensingHome.items}" var="s">
+	<tr style="background-color:#EDF7EF;"><td style="border:1px solid #B4E8BB;padding:5px;">
+		<b>#{s.tbCase.patient.name}</b>
+	</td></tr>
+	<tr><td>
+		<h:dataTable value="#{s.medicines}" var="it" style="width:100%" styleClass="tabela" columnClasses="coll,colc,colc,colc">
+			<h:column>
+				<f:facet name="header">#{messages['Medicine']}</f:facet>
+				#{it.medicine}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['Movement.quantity']}</f:facet>
+				<h:inputText value="#{it.quantity}" style="width:100px;"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['global.unitPrice']}</f:facet>
+				<h:inputText value="#{it.unitPrice}" style="width:100px;"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['global.totalPrice']}</f:facet>
+				<h:outputText value="#{it.totalPrice}">
+					<f:convertNumber pattern="#,###,##0.00"/>
+				</h:outputText>
+			</h:column>
+		</h:dataTable>
+	</td></tr>
+	</a:repeat>
+	</table>
+
+	</h:panelGroup>
+	
+    <br/>
+    <span style="float:right;width:100%;text-align:right;">
+        <h:commandButton action="#{dispensingHome.saveDispensing}" value="#{messages['form.ok']}" styleClass="button"  />  
+        <s:button view="/medicines/dispensing.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" />
+    </span>
+</rich:panel>
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

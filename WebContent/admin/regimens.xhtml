@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['admin.regimens']}" />
+<ui:param name="topmenu" value="3" />
+
+<ui:define name="menu_lateral">
+	<ui:include src="/layout/adminmenu.xhtml" />
+</ui:define>
+
+<ui:define name="body">
+<h:form id="main">
+<s:button view="/admin/edtregimen.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{s:hasRole('REGIMENS_EDT')}">
+	<f:param name="id" value="#{null}" />
+</s:button>
+<p/>
+<h:outputText value="#{messages['form.norecordfound']}" rendered="#{regimens.resultCount == 0}" styleClass="warn" />
+<h:dataTable id="tbl" value="#{regimens.resultList}" var="r" border="0" columnClasses="coll,colc,colc,colc"
+  styleClass="tabela" rowClasses="lin1,lin2" width="600" rendered="#{regimens.resultCount > 0}">
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['form.name']}" styleClass="collh">
+  			<f:param name="order" value="#{regimens.order=='name'?'name desc':'name'}" />
+  		</s:link>
+  	</f:facet>
+  	<h:outputText value="#{r.name}"  rendered="#{not s:hasRole('REGIMENS_EDT')}"/>
+	<s:link view="/admin/edtregimen.xhtml" value="#{r.name}"  rendered="#{s:hasRole('REGIMENS_EDT')}">
+		<f:param name="id" value="#{r.id}" />
+	</s:link>
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['cases.treat.tb']}">
+  			<f:param name="order" value="#{regimens.order=='tbTreatment'?'tbTreatment desc':'name'}" />
+  		</s:link>
+  	</f:facet>
+  	<h:graphicImage value="/img/checked.gif" rendered="#{r.tbTreatment}"/>
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['cases.treat.mdr']}">
+  			<f:param name="order" value="#{regimens.order=='mdrTreatment'?'mdrTreatment desc':'name'}" />
+  		</s:link>
+  	</f:facet>
+  	<h:graphicImage value="/img/checked.gif" rendered="#{r.mdrTreatment}"/>
+  </h:column>
+
+  <h:column  rendered="#{s:hasRole('REGIMENS_EDT')}">
+  	<f:facet name="header">#{messages['form.action']}</f:facet>
+        <s:link action="#{regimenHome.remove}" value="#{messages['form.remove']}" onclick="return confirm('#{messages['form.confirm_remove']}');" >
+        	<f:param name="id" value="#{r.id}" />
+        </s:link>
+  </h:column>
+</h:dataTable>
+
+<ui:include src="/layout/tablerow.xhtml" />
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

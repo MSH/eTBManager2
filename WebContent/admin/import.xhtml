@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['admin.import']}" />
+<ui:param name="topmenu" value="3" />
+
+<ui:define name="menu_lateral">
+	<ui:include src="/layout/adminmenu.xhtml" />
+</ui:define>
+
+<ui:define name="body">
+
+<s:decorate template="/layout/roundrect.xhtml" style="margin-top:20px;">
+	<ui:param name="showheader" value="0" />
+	<ui:param name="showfooter" value="0" />
+
+<h:form id="main" enctype="multipart/form-data" style="padding:10px;">
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['admin.import.desttable']}:</ui:define>
+    	<h:selectOneMenu value="#{importDataHome.table}" required="true">
+    		<s:selectItems value="#{importDataHome.tables}" var="it" label="#{messages[it.messageKey]}" noSelectionLabel="-"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['admin.import.file']}:</ui:define>
+		<s:fileUpload data="#{importDataHome.file}" required="true">
+		</s:fileUpload>
+    </s:decorate>
+	
+	<p/>
+	<h:commandButton action="#{importDataHome.execute}" value="#{messages['form.import']}" styleClass="button" />
+	
+</h:form>
+
+</s:decorate>
+
+</ui:define>
+</ui:composition>

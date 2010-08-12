@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+<rich:jQuery name="selectall" timing="onJScall" selector="#battblsel :checkbox" query="attr('checked', true)" />
+<rich:jQuery name="unselectall" timing="onJScall" selector="#battblsel :checkbox" query="attr('checked', false)" />
+<script src="../js/util.js" type="text/javascript" />
+
+<script type="text/javascript">
+function checkClick(obj) {
+  if (obj.checked)
+	  selectall()
+  else unselectall();
+  updateRows();
+}
+function updateRows() {
+jQuery("#battblsel tr").removeClass("activerow");
+jQuery("#battblsel tr input[type='text']").hide();
+sel = jQuery("#battblsel tr:has(input:checked)"); 
+sel.addClass("activerow");
+sel.find("input[type='text']").show();
+}
+
+function showBatchesSelectionDlg() {
+	updateRows();
+	Richfaces.showModalPanel('batchseldlg');
+}
+
+function hideBatchesSelectionDlg() {
+	Richfaces.hideModalPanel('batchseldlg');
+}
+function validateBatchSelection(btn) {
+	batchValOk = true;
+	jQuery("#battblsel tr:has(:checked)")
+		.find("input[type='text']")
+		.css("background-color", "white")
+		.each(function() { return validateInput(this); });
+	if (batchValOk)
+		btn.disabled = true;
+	return batchValOk;
+}
+function validateInput(edt) {
+	if ((edt.value == null)||(edt.value.length==0)) {
+		alert("#{messages['javax.faces.component.UIInput.REQUIRED']}");
+		jQuery(edt).css("background-color", "#FFD2B4");
+		edt.focus();
+		batchValOk = false;
+		return false;
+	}
+	elem = edt.parentNode;
+	val = jQuery("input[type='hidden']", elem).get(0);
+	qtdOver = window.document.getElementById("qtdover").value;
+	if (qtdOver == "0") {
+	if (Number(edt.value) > Number(val.value)) {
+		alert("#{messages['medicines.transfer.batchqtty']}");
+		jQuery(edt).css("background-color", "#FFD2B4");
+		edt.focus();
+		batchValOk = false;
+		return false;
+	}
+	}
+	return true;
+}
+</script>
+
+<rich:modalPanel id="batchseldlg" minHeight="350" minWidth="370" 
+            height="400" width="550" zindex="2000">
+	<f:facet name="header">
+		<h:outputText id="title1" value="#{messages['medicines.dispensing.batches']}" />
+	</f:facet>
+	<h:panelGroup id="batchselpnl">
+	<div style="clear:both;display:table;margin-bottom:10px;width:100%;">
+		<img src="../img/medicine.gif" style="float:left;margin-right:4px;"/>
+		<div style="font-size:14px;font-weight:bold;">
+			#{batchSelection.medicine}
+		</div>
+		#{batchSelection.source.name}
+	</div>
+	<a:region renderRegionOnly="false">
+	<a:form id="dlg" rendered="#{batchSelection.tbunit != null}">
+	<input id="qtdover" type="hidden" value="#{batchSelection.qtdOverStockValue}" />
+	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
+
+	<div id="battblsel" style="overflow: auto; width: 525px; height: 270px;border: 1px gray solid; padding:0px; margin: 0px">	
+	<h:dataTable value="#{batchSelection.items}" var="it" width="100%" styleClass="tabela" columnClasses="colc,coll,colc,colr,colr,colr">
+		<h:column>
+			<f:facet name="header">
+				<h:selectBooleanCheckbox id="todos" onclick="checkClick(this);"/>				
+			</f:facet>
+			<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Batch']}" styleClass="collh"/>
+			</f:facet>
+			<div style="width:160px">
+			<img src="../img/batch.gif" style="float:left;"/>
+			#{it.item.batch.batchNumber}<br/>
+			#{it.item.batch.manufacturer}<br/>
+			</div>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">#{messages['Batch.expiryDate']}</f:facet>
+			<h:outputText value="#{it.item.batch.expiryDate}" converter="localeDateConverter" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['global.unitPrice']}" styleClass="colrh"/>
+			</f:facet>
+			<h:outputText value="#{it.item.batch.unitPrice}">
+				<f:convertNumber pattern="#,###,###,##0.0000" />
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Movement.quantity']}" styleClass="colrh"/>
+			</f:facet>
+			<h:outputText value="#{it.item.batchQuantity.quantity}">
+				<f:convertNumber pattern="#,###,###,##0" />
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{quantitytitle}" styleClass="colrh"/>
+			</f:facet>
+			<h:inputText id="qtd" value="#{it.item.quantity}" style="width:80px;" onkeypress="return numbersOnly(this,event);" />
+			<input type="hidden" value="#{it.item.batchQuantity.quantity}" />
+		</h:column>
+	</h:dataTable>
+
+	</div>
+	<table width="100%">
+	<tr>
+		<td>
+			<ui:include src="/layout/waitstatus.xhtml" />
+		</td>
+		<td align="right">
+			<div id="batchseldlgs">
+				<span id="div_buttonok"> 
+   					<ui:insert />
+   				</span>
+   				<ui:insert name="cancel">
+   					<s:button value="#{messages['form.cancel']}" onclick="hideBatchesSelectionDlg();return false;" styleClass="button-cancel" />
+   				</ui:insert>
+   			</div>
+		</td>
+	</tr></table>
+	<rich:jQuery selector="#div_buttonok input" query="bind('click', function(event) { var ret = validateBatchSelection(this); event.preventDefault(); return ret;})" />
+	</a:form>
+	</a:region>
+	</h:panelGroup>
+</rich:modalPanel>
+    
+</ui:composition>

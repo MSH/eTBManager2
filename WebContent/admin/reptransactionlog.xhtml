@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['userrole.LOGREP']}" />
+<ui:param name="topmenu" value="3" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:define name="menu_lateral">
+	<ui:include src="/layout/adminmenu.xhtml" />
+</ui:define>
+
+<ui:define name="body">
+<h:form id="main">
+
+<s:decorate template="/layout/roundrect.xhtml" style="width:800px">
+	<ui:param name="showfooter" value="0" />
+	<ui:define name="header">
+		<b>#{messages['global.filters']}</b>
+	</ui:define>
+	
+	<s:decorate template="/layout/display.xhtml" rendered="#{userSettings.multipleUserWorkspaces}">
+		<ui:define name="label">#{messages['Workspace']}:</ui:define>
+		<h:selectOneMenu value="#{reportSelection.userWorkspace}" >
+    		<s:selectItems value="#{userSettings.userWorkspaces}" var="c" label="#{c.workspace.name}" noSelectionLabel="-" />
+        	<s:convertEntity/>
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['UserRole']}</ui:define>
+		<h:selectOneMenu value="#{userRoleHome.instance}" >
+			<s:selectItems var="it" value="#{userRoles}" noSelectionLabel="-" label="#{it.displayName}"/>
+			<s:convertEntity /> 
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['form.action']}:</ui:define>
+		<h:selectOneMenu value="#{transactionLogReport.action}" >
+			<s:selectItems var="it" value="#{transactionLogReport.roleActions}" noSelectionLabel="-" label="#{messages[it.key]}"/>
+			<s:convertEnum /> 
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	<a:commandButton value="#{messages['form.refresh']}" reRender="reportPanel" action="#{transactionLogReport.refresh}" styleClass="button" />
+	
+</s:decorate>
+
+<p/>
+
+<h:panelGroup id="reportPanel">
+<table style="width:800px" >
+<tr><td>
+
+<s:decorate template="/layout/naveg.xhtml">
+	<ui:param name="list" value="#{transactionLogReport}" />
+	<ui:param name="page" value="/admin/reptransactionlog.xhtml" />
+</s:decorate>
+
+<h:dataTable value="#{transactionLogReport.resultList}" var="it" styleClass="tabela" width="100%" 
+	rowClasses="lin1,lin2" columnClasses="coll,coll,coll,coll,coll" rendered="#{not empty transactionLogReport.resultList}">
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['User']}" />
+		</f:facet>
+		#{it.user.name}
+		<br/>
+		<h:outputText value="#{it.transactionDate}" styleClass="small-text">
+			<f:convertDateTime type="both" timeZone="#{timezones.default}"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['UserRole']}" styleClass="collh"/>
+		</f:facet>
+		<div class="log-#{it.action}">
+		<b>#{it.role.displayName}</b><br/>
+		<div class="small-text">
+			#{messages[it.action.key]}
+		</div>
+		</div>
+	</h:column>
+	
+	<h:column>
+		<f:facet name="header">#{messages['Workspace.description']}</f:facet>
+		#{it.entityDescription}
+		<div>
+		<a:commandLink value="Details" rendered="#{it.numValues > 0}" >
+		</a:commandLink>
+		</div>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Workspace']}" styleClass="collh"/>
+		</f:facet>
+		<h:outputText value="#{it.workspace.name}" />
+	</h:column>
+</h:dataTable>
+</td></tr></table>
+<ui:include src="/layout/tablerow.xhtml" />
+</h:panelGroup>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

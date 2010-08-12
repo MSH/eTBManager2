@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<p:document xmlns:ui="http://java.sun.com/jsf/facelets" 
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jstl/core"
+      	  xmlns:s="http://jboss.com/products/seam/taglib"
+          xmlns:p="http://jboss.com/products/seam/pdf">
+
+     <f:facet name="header">
+        <p:font size="6">
+            <p:footer borderWidthTop="1" alignment="left">#{messages['drugman']} [<p:pageNumber />]</p:footer>
+        </p:font>
+    </f:facet>
+
+
+    
+<p:table widthPercentage="100" columns="2">
+    <f:facet name="defaultCell">
+        <p:cell borderWidthTop="1" borderWidthLeft="0" borderWidthRight="0" borderWidthBottom="1" paddingBottom="5" verticalAlignment="middle" />
+    </f:facet>
+	<p:cell horizontalAlignment="left">
+  		<p:paragraph>#{messages['manag.rel2']}</p:paragraph>
+  	</p:cell>
+	<p:cell horizontalAlignment="right"><p:paragraph><p:font size="6">#{messages['reports.released']} : <p:text value="#{reportDate}">
+		<s:convertDateTime pattern="dd-MMM-yyyy  '#{messages['reports.at']}' hh:mm:ss" /></p:text></p:font> </p:paragraph></p:cell>
+</p:table>
+
+<p:font size="7">
+<p:paragraph alignment="left">
+<p:table columns="2" widths="2 4" horizontalAlignment="left">
+    <f:facet name="defaultCell">
+        <p:cell horizontalAlignment="center" verticalAlignment="middle" />
+    </f:facet>
+
+	<p:cell borderWidth="0">
+		<p:font size="7" style="bold"> #{messages['TbUnit']}: 
+	</p:font></p:cell>
+	<p:cell borderWidth="0">#{reportSelection.tbunit.name}</p:cell>
+
+	<c:if test="#{reportSelection.source != null}">
+	<p:cell borderWidth="0">
+		<p:font size="7" style="bold"> #{messages['Source']}: 
+	</p:font></p:cell>
+	<p:cell borderWidth="0">#{reportSelection.source.name}</p:cell>
+	</c:if>
+</p:table>
+
+</p:paragraph>
+
+<p:paragraph  spacingBefore="6" alignment="left">
+	<p:table columns="7" widths="2 1 1 1 1 1 1" horizontalAlignment="center">
+    <f:facet name="defaultCell">
+        <p:cell horizontalAlignment="right" verticalAlignment="middle" />
+    </f:facet>
+
+	<p:cell backgroundColor="black" horizontalAlignment="left"><p:paragraph><p:font color="white">#{messages['Medicine']}</p:font></p:paragraph></p:cell>
+	<p:cell backgroundColor="black" horizontalAlignment="right"><p:paragraph><p:font color="white">#{messages['medicines.movs.stockqtty']}</p:font></p:paragraph></p:cell>
+	<p:cell backgroundColor="black" horizontalAlignment="center"><p:paragraph><p:font color="white">#{messages['StoragePosReport.lastMovement']}</p:font></p:paragraph></p:cell>
+	<p:cell backgroundColor="black" horizontalAlignment="center"><p:paragraph><p:font color="white">#{messages['reports.numDays']}</p:font></p:paragraph></p:cell>
+	<p:cell backgroundColor="black" horizontalAlignment="center"><p:paragraph><p:font color="white">#{messages['reports.numpatients']}</p:font></p:paragraph></p:cell>
+	<p:cell backgroundColor="black" horizontalAlignment="center"><p:paragraph><p:font color="white">#{messages['reports.estimatedcons']}</p:font></p:paragraph></p:cell>
+	<p:cell backgroundColor="black" horizontalAlignment="right"><p:paragraph><p:font color="white">#{messages['reports.estimatedqtdnow']}</p:font> </p:paragraph></p:cell>
+
+	<ui:repeat value="#{estimatedStockReport.itens}" var="it">
+		<p:cell horizontalAlignment="left"><p:paragraph>#{it.medicine}</p:paragraph></p:cell>
+		<p:cell><p:paragraph>
+			<p:text value="#{it.quantity}"><f:convertNumber pattern="#,###,##0" /></p:text>
+		</p:paragraph></p:cell>
+		<p:cell horizontalAlignment="center"><p:paragraph>
+			<p:text value="#{it.lastUpdate}"><s:convertDateTime pattern="dd-MMM-yyyy" /></p:text>
+		</p:paragraph></p:cell>
+		<p:cell horizontalAlignment="center"><p:paragraph>#{it.numDays}</p:paragraph></p:cell>
+		<p:cell><p:paragraph>
+			<p:text value="#{it.numPatients}"><f:convertNumber pattern="#,###,##0" /></p:text>
+		</p:paragraph></p:cell>
+		<p:cell><p:paragraph>
+			<p:text value="#{it.consumption}"><f:convertNumber pattern="#,###,##0" /></p:text>
+		</p:paragraph></p:cell>
+		<p:cell><p:paragraph>
+			<p:text value="#{it.estimatedQuantity}"><f:convertNumber pattern="#,###,##0" /></p:text>
+		</p:paragraph></p:cell>
+	</ui:repeat>
+
+	</p:table>
+</p:paragraph>
+
+</p:font>
+
+
+</p:document>

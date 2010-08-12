@@ -1,0 +1,125 @@
+<?xml version="1.0" ?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+         version="2.5">
+
+	<!-- Sistema -->
+   
+   	<session-config>
+   		<session-timeout>45</session-timeout>
+   	</session-config>
+
+    <filter>
+        <display-name>nocache</display-name>
+        <filter-name>nocache</filter-name>
+        <filter-class>org.msh.utils.NoCacheFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>nocache</filter-name>
+        <url-pattern>*.seam</url-pattern>
+    </filter-mapping>
+
+
+    <!-- Ajax4jsf -->
+    
+    <context-param>
+        <param-name>org.richfaces.SKIN</param-name>
+        <param-value>DEFAULT</param-value>
+    </context-param>
+ 
+   <!-- Seam -->
+    
+   <listener>
+      <listener-class>org.jboss.seam.servlet.SeamListener</listener-class>
+   </listener>
+    
+    <filter>
+        <filter-name>Seam Filter</filter-name>
+        <filter-class>org.jboss.seam.servlet.SeamFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>Seam Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+        
+   <servlet>
+      <servlet-name>Seam Resource Servlet</servlet-name>
+      <servlet-class>org.jboss.seam.servlet.SeamResourceServlet</servlet-class>
+   </servlet>
+    
+   <servlet-mapping>
+      <servlet-name>Seam Resource Servlet</servlet-name>
+      <url-pattern>/seam/resource/*</url-pattern>
+   </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Document Store Servlet</servlet-name>
+        <servlet-class>org.jboss.seam.document.DocumentStoreServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Document Store Servlet</servlet-name>
+        <url-pattern>*.pdf</url-pattern>
+    </servlet-mapping>
+   
+	<servlet-mapping>
+		<servlet-name>Document Store Servlet</servlet-name>
+		<url-pattern>*.csv</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>Document Store Servlet</servlet-name>
+		<url-pattern>*.xls</url-pattern>
+	</servlet-mapping>
+
+
+   <!-- Facelets development mode (disable in production) -->
+   
+   <context-param>
+      <param-name>facelets.DEVELOPMENT</param-name>
+      <param-value>false</param-value>
+   </context-param>
+    
+   <!-- JSF -->
+	<context-param>
+		<param-name>facelets.BUFFER_SIZE</param-name>
+		<param-value>100000</param-value>
+	</context-param>
+	   
+   <context-param>
+      <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+      <param-value>.xhtml</param-value>
+   </context-param>
+
+	<context-param>
+		<param-name>com.sun.faces.validateXml</param-name>
+		<param-value>false</param-value>
+	</context-param>
+
+
+   <servlet>
+      <servlet-name>Faces Servlet</servlet-name>
+      <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+      <load-on-startup>1</load-on-startup>
+   </servlet>
+    
+   <servlet-mapping>
+      <servlet-name>Faces Servlet</servlet-name>
+      <url-pattern>*.seam</url-pattern>
+   </servlet-mapping>
+                  
+   <security-constraint> 
+       <display-name>Restrict raw XHTML Documents</display-name>
+       <web-resource-collection>
+           <web-resource-name>XHTML</web-resource-name>
+           <url-pattern>*.xhtml</url-pattern>
+       </web-resource-collection>
+       <auth-constraint/>
+   </security-constraint>
+   
+   
+   
+</web-app>

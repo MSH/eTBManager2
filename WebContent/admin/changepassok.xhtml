@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:si="http://jboss.com/products/seam/selectitems/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition template="..#{workspaceViewService.templatePage}">
+        
+<ui:param name="title" value="#{messages['changepwd']}" />
+
+        
+<ui:define name="body">
+<h:form id="main">
+<table class="tabela" width="500px" cellpadding="10">
+   <tr><td style="padding-left:20px;"><b>#{messages['changepwd.success1']}</b>
+   <p/>#{messages['changepwd.success2']}
+   </td></tr>
+   <tr><td align="right"><h:commandButton action="home" value="#{messages['form.ok']}"  styleClass="button" ></h:commandButton> </td></tr>
+</table>
+</h:form>
+</ui:define>
+        
+</ui:composition> 
+</html>

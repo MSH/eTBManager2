@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="#{workspaceViewService.templatePage}">
+
+<ui:param name="topmenu" value="0" />
+
+<ui:param name="title" value="#{messages['form.profile']}" />
+<ui:param name="activeroundcorners" value="1" />
+
+<ui:define name="roundcorners">
+	RoundedTop("div.roundborder","#fff","#77ABD8");
+</ui:define>
+
+<ui:define name="body">
+
+	<table border="0" width="800px" style="table-layout: fixed;">
+	<tr><td style="padding-right:30px; vertical-align:top;">
+	
+	<div >
+		<h3>
+			#{messages['usersettings.preferences']}
+		</h3>
+		<p>
+			<h:form>
+			<table border="0" class="tabela" width="350px">
+			<tr><td valign="top">
+				#{messages['User.name']}:
+			</td><td>
+				<h:inputText value="#{userLogin.user.name}" style="width:200px;" required="true"/>
+			</td></tr>
+			<tr><td valign="top">
+				#{messages['User.email']}:
+			</td><td>
+				<h:inputText value="#{userLogin.user.email}" style="width:200px;" required="true"/>
+			</td></tr>
+			<tr><td valign="top">
+				#{messages['User.language']}:
+			</td><td>
+				<h:selectBooleanCheckbox value="#{userSession.displayMessagesKeys}" />#{messages['usersettings.messageskeys']}<br/>
+				<h:selectOneMenu value="#{localeSelector.localeString}">
+                	<f:selectItems value="#{localeSelector.supportedLocales}" />
+            	</h:selectOneMenu>
+			</td></tr>
+			<tr><td valign="top">
+				#{messages['User.timeZone']}:
+			</td><td>
+				<h:selectOneMenu value="#{timeZoneSelector.timeZoneId}">
+                	<f:selectItems value="#{timezones.selectItems}" />
+            	</h:selectOneMenu>
+			</td></tr>
+			<tr><td colspan="2">
+				<h:commandButton action="#{userSettings.savePreferences}" value="Ok" style="width:80px;" styleClass="button" />
+			</td></tr>
+			</table>
+			
+			</h:form>
+		</p>
+	</div>
+
+	</td><td valign="top">
+
+	<div class="roundborder">
+		<h3>
+			#{messages['changepwd']}
+		</h3>
+		<p>
+			<h:form>
+			<table border="0" cellpadding="2" class="tabela" width="300px">
+			<tr><td valign="top">
+				#{messages['changepwd.passinuse']}:
+			</td><td>
+				<h:inputSecret id="pwd1" value="#{changePwd.password}" style="width:100px;" required="true"/>
+				<h:message for="pwd1" styleClass="error"/>
+			</td></tr>
+			<tr><td valign="top">
+				#{messages['changepwd.newpass']}:
+			</td><td>
+				<h:inputSecret id="pwd2" value="#{changePwd.newPassword1}" style="width:100px;" required="true"/>
+				<h:message for="pwd2" styleClass="error"/>
+			</td></tr>
+			<tr><td valign="top">
+				#{messages['changepwd.newpass2']}:
+			</td><td>
+				<h:inputSecret id="pwd3" value="#{changePwd.newPassword2}" style="width:100px;" required="true"/>
+				<h:message for="pwd3" styleClass="error"/>
+			</td></tr>
+			<tr><td colspan="2">
+				<h:commandButton action="#{changePwd.execute}" value="Ok" style="width:80px;" styleClass="button" />
+			</td></tr>
+			</table>
+			</h:form>
+		</p>
+	</div>
+	
+	</td></tr>
+	
+	<tr><td>
+	<div class="roundborder" style="margin-top:20px">
+		<h3>
+			#{messages['Workspace']}
+		</h3>
+		<p>
+			<h:form>
+			<table border="0" cellpadding="2" class="tabela" width="300px">
+			<tr><td valign="top">
+				#{messages['usersettings.workspace']}:
+			</td><td>
+				<h:selectOneMenu id="ws" value="#{userSession.userWorkspace}" required="true">
+            		<s:selectItems value="#{userSettings.userWorkspaces}" var="c" label="#{c.workspace.name}" noSelectionLabel="-" />
+            		<s:convertEntity/>
+				</h:selectOneMenu>
+				<h:message for="ws"></h:message>
+			</td></tr>
+			<tr><td colspan="2">
+				<h:commandButton action="#{userSession.changeUserWorkspace}" value="#{messages['form.ok']}" style="width:80px;" styleClass="button" />
+			</td></tr>
+			</table>
+			</h:form>
+		</p>
+	</div>
+	
+	</td><td>
+	</td></tr>
+	
+	<tr><td style="margin-top:20px">
+		<s:button value="#{messages['form.cancel']}" view="/home.xhtml" styleClass="button-cancel" propagation="none" />
+	</td></tr>
+	</table>
+</ui:define>
+
+</ui:composition>            

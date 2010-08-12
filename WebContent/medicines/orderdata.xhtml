@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['Order']} # #{order.id}" />
+<ui:param name="topmenu" value="1" />
+<ui:param name="show_menu" value="#{order.status!='CANCELLED' ? '1': '0'}" />
+<ui:param name="labelstyle" value="width:200px;" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
+	<s:link view="/medicines/orders.xhtml" value="#{messages['medicines.orders']}" propagation="none"/>
+</ui:define>
+
+
+<ui:define name="print-link">
+	<s:link view="/reports/orderdata.xhtml" value="#{messages['global.print']}" target="_blank" rendered="#{s:hasRole('ORDER_PRINT')}">
+		<f:param name="id" value="#{order.id}" />
+	</s:link>
+</ui:define>
+
+
+<ui:define name="menu_lateral">
+	<h:form>
+	<h:commandLink action="#{orderHome.remove}" value="#{messages['medicines.orders.remove']}" rendered="#{orderHome.canRemove}" 
+		onclick="return confirm('#{messages['form.confirm_remove']}');" />
+	<s:link view="/medicines/orderaut.xhtml" value="#{messages['medicines.orders.autorize']}" rendered="#{orderHome.canAuthorize}" 
+		action="#{orderAuthorizingHome.initialize}">
+		<f:param name="id" value="#{order.id}" />
+	</s:link>
+	<s:link view="/medicines/ordercancel.xhtml" value="#{messages['medicines.orders.cancel']}" rendered="#{orderHome.canCancel}" >
+		<f:param name="id" value="#{order.id}" />
+	</s:link>
+	<s:link view="/medicines/ordersent.xhtml" value="#{messages['medicines.orders.shipment']}" rendered="#{(orderHome.canShip)}" 
+	  propagation="begin" action="#{orderShippingHome.initialize}">
+		<f:param name="id" value="#{order.id}" />
+	</s:link>
+	<s:link view="/medicines/orderrec.xhtml" value="#{messages['medicines.orders.receive']}" 
+		rendered="#{(!order.tbunitFrom.batchControl) and (orderHome.canReceive)}" 
+		propagation="begin"  action="#{orderReceivingHome.beginReceiving}">
+		<f:param name="id" value="#{order.id}" />
+	</s:link>
+	<s:link view="/medicines/orderrecbatch.xhtml" value="#{messages['medicines.orders.receive']}" 
+		rendered="#{(orderHome.canReceive) and (order.tbunitFrom.batchControl)}" 
+		propagation="begin" action="#{orderReceivingHome.beginReceiving}">
+		<f:param name="id" value="#{order.id}" />
+	</s:link>
+	</h:form>
+</ui:define>
+
+
+<ui:define name="body">
+<p/>
+<table width="100%">
+<tr><td></td>
+	<td style="">
+		<div style="float:right;display:block">
+		<h:outputText value="#{messages[order.status.key]}"
+			styleClass="#{order.status=='CANCELLED'?'status-cancel':'status-label'}" /> 
+		<s:div rendered="#{order.status=='WAITINGAUT'}" >
+    		<b>#{messages['TbUnit.authorizerUnit']}: </b>
+    		#{order.tbunitTo.authorizerUnit.name}<br/>
+    	</s:div>
+    	</div>
+</td></tr>
+</table>
+<table width="100%" style="border:2px solid #f0f0f0">
+<tr><td>
+    <table width="100%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse" bgcolor="#f0f0f0" cellpadding="8">
+    <tr><td>
+    	<b style="float:left;margin-right:4px;">#{messages['Order.tbunitFrom']}: </b>
+    	<img src="../img/#{order.tbunitFrom.treatmentHealthUnit?'hu.gif':'storage.gif'}" style="float:left;"/>
+    	#{order.tbunitFrom.name}
+    </td>
+    <td>
+    	<b style="float:left;margin-right:4px;">#{messages['Order.tbunitTo']}: </b>
+    	<img src="../img/#{order.tbunitTo.treatmentHealthUnit?'hu.gif':'storage.gif'}" style="float:left;"/>
+    	#{order.tbunitTo.name}
+    </td></tr>
+
+    <tr><td colspan="2" style="font-size:11px;padding-top:5px;color:#808080">
+    #{messages['medicines.orders.createdin']}     	
+	<span style="color:black;font-weight:bold;"> 
+	<h:outputText value="#{order.orderDate}" converter="localeDateConverter" />
+	</span> 
+    <br/>
+    #{messages['form.by']} 
+    <span style="color:black;font-weight:bold;">
+    	#{order.userCreator.name}
+    </span>
+    </td></tr>
+    </table>
+
+		 
+    <s:decorate template="/layout/display.xhtml" rendered="#{order.authorizer != null}">
+    	<ui:define name="label">#{messages['Order.approvingDate']}:</ui:define>
+    	<h:outputText value="#{order.approvingDate}" converter="localeDateConverter" />
+    	<b style="margin-left:20px"> #{messages['form.by']}: </b>
+    	#{order.authorizer.name}
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" rendered="#{order.shippingDate != null}">
+    	<ui:define name="label">#{messages['Order.shippingDate']}:</ui:define>
+    	<h:outputText value="#{order.shippingDate}" converter="localeDateConverter" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" rendered="#{order.receivingDate != null}">
+    	<ui:define name="label">#{messages['Order.receivingDate']}:</ui:define>
+    	<h:outputText value="#{order.receivingDate}" converter="localeDateConverter" />
+    </s:decorate>
+    
+    <s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">#{messages['TbUnit.numDaysOrder']}:</ui:define>
+    	#{order.numDays}
+    </s:decorate>
+    
+    <s:decorate template="/layout/display.xhtml" rendered="#{(order.status == 'RECEIVED') or (order.status == 'SHIPPED')}">
+    	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
+    	<h:outputText value="#{order.totalPrice}"><f:convertNumber pattern="#,###,###,##0.00"/> </h:outputText>
+    </s:decorate>
+    
+    <s:decorate template="/layout/display.xhtml" rendered="#{order.status=='CANCELLED'}">
+    	<ui:define name="label">#{messages['Order.cancelReason']}:</ui:define>
+    	#{order.cancelReason}
+    </s:decorate>
+    
+    <h:panelGroup rendered="#{order.tbunitFrom.treatmentHealthUnit}">
+
+    <s:decorate template="/layout/display.xhtml" rendered="#{not empty order.comments}">
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	#{order.comments}
+    </s:decorate>
+
+    </h:panelGroup>
+
+	<br/>   
+
+<br/>
+
+<rich:tabPanel switchType="ajax">
+
+<rich:tab label="#{messages['Order.items']}">
+<table width="100%">
+	<ui:repeat value="#{orderSources}" var="s">
+	<tr><td class="colheader">
+		#{s.source.name}
+	</td></tr>
+	<tr><td>
+		<h:dataTable value="#{s.items}" var="it" class="tabela" width="100%" columnClasses="coll,colc,colr,colr,colr,colr,colr,colr" rowClasses="lin1,lin2">
+			<h:column>
+				<f:facet name="header"><h:outputText value="#{messages['Medicine']}" styleClass="collh"/></f:facet>
+				<img src="../img/medicine.gif" style="float:left;"/>
+				#{it.item.medicine}
+			</h:column>
+
+			<h:column>
+				<f:facet name="header"><h:outputText value="#{messages['OrderItem.numPatients']}" /></f:facet>
+				#{it.item.numPatients}
+			</h:column>						
+
+			<h:column>
+			<f:facet name="header"><h:outputText value="#{messages['OrderItem.estimatedQuantity']}" styleClass="colrh" /></f:facet>
+				<h:outputText value="#{it.item.estimatedQuantity}">
+					<f:convertNumber pattern="###,###,###"/>
+				</h:outputText>
+			</h:column>
+			
+			<h:column rendered="#{order.tbunitFrom.changeEstimatedQuantity}">
+			<f:facet name="header"><h:outputText value="#{messages['OrderItem.requestedQuantity']}" styleClass="colrh" /></f:facet>
+				<h:outputText value="#{it.item.requestedQuantity}">
+					<f:convertNumber pattern="###,###,###"/>
+				</h:outputText>
+			</h:column>
+			
+			<h:column rendered="#{order.status != 'WAITINGAUT'}">
+			<f:facet name="header"><h:outputText value="#{messages['OrderItem.approvedQuantity']}" styleClass="colrh" /></f:facet>
+				<h:outputText value="#{it.item.approvedQuantity}">
+					<f:convertNumber pattern="###,###,###"/>
+				</h:outputText>
+			</h:column>
+			
+			<h:column rendered="#{(order.status=='SHIPPED')or(order.status=='RECEIVED')}">
+			<f:facet name="header"><h:outputText value="#{messages['OrderItem.shippedQuantity']}" styleClass="colrh" /></f:facet>
+				<h:outputText value="#{it.item.shippedQuantity}">
+					<f:convertNumber pattern="###,###,###"/>
+				</h:outputText>
+			</h:column>
+			
+			<h:column rendered="#{order.status == 'RECEIVED'}">
+			<f:facet name="header"><h:outputText value="#{messages['OrderItem.receivedQuantity']}" styleClass="colrh" /></f:facet>
+				<h:outputText value="#{it.item.receivedQuantity}">
+					<f:convertNumber pattern="###,###,###"/>
+				</h:outputText>
+			</h:column>
+			
+			<h:column rendered="#{(order.status=='SHIPPED')or(order.status=='RECEIVED')}">
+			<f:facet name="header"><h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh" /></f:facet>
+				<h:outputText value="#{it.item.totalPrice}">
+					<f:convertNumber pattern="###,###,##0.00"/>
+				</h:outputText>
+			</h:column>
+		</h:dataTable>
+		<p/>
+	</td></tr>
+	</ui:repeat>
+</table>
+</rich:tab>
+
+<rich:tab label="#{messages['medicines.orders.mdrcases']}">
+<ui:repeat value="#{orderSources}" var="s">
+<table width="100%">
+	<tr><td class="colheader">
+		#{s.source.name}
+	</td></tr>
+<tr><td>
+<table width="100%" class="tabela">
+	<tr><th colspan="2">#{messages['Medicine']}
+		</th>
+		<th style="text-align:right;">
+			#{messages['OrderItem.numPatients']}
+		</th>
+		<th style="text-align:right;">
+			#{messages['OrderItem.estimatedQuantity']}
+		</th>
+	</tr>
+	<ui:repeat value="#{s.items}" var="it">
+	<tr class="highlight">
+		<td class="colb" colspan="2">
+		<img src="../img/medicine.gif" style="float:left;"/>
+		#{it.item.medicine}
+		</td>
+		<td class="colrb">
+			<h:outputText value="#{it.item.numPatients}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>		
+		</td>
+		<td class="colrb">
+			<b>
+			<h:outputText value="#{it.item.estimatedQuantity}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+			</b>		
+		</td>
+	</tr>
+		<ui:repeat value="#{it.item.cases}" var="c">
+			<tr>
+				<td class="colb">
+					<s:link value="#{c.tbCase.displayCaseNumber}" view="/cases/casedata.xhtml">
+						<f:param name="id" value="#{c.tbCase.id}"/>
+					</s:link>
+				</td>
+				<td class="colb">
+					#{c.tbCase.patient.fullName}
+				</td>
+				<td class="colb"></td>
+				<td class="colrb">
+					<h:outputText value="#{c.estimatedQuantity}" >
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</td>
+			</tr>
+		</ui:repeat>
+	
+	</ui:repeat>
+</table>
+</td></tr></table>
+</ui:repeat>
+
+</rich:tab>
+
+
+<rich:tab label="#{messages['medicines.orders.batches']}" rendered="#{(order.status=='SHIPPED') or (order.status=='RECEIVED')}">
+<table width="100%">
+	<a:repeat value="#{orderSources}" var="s">
+	<tr><th class="colheader">#{s.source.name}  </th></tr>
+	<tr><td>
+		<table width="100%" class="tabela">
+			<tr><th><h:outputText value="#{messages['Medicine']}" styleClass="collh" /></th>
+				<th align="center">#{messages['Batch.expiryDate']}</th>
+				<th align="right">#{messages['Batch.numContainers']}</th>
+				<th align="right"><h:outputText value="#{messages['OrderItem.shippedQuantity']}" /></th>
+				<th align="right"><h:outputText value="#{messages['OrderItem.receivedQuantity']}" /></th>
+				<th align="right"><h:outputText value="#{messages['global.unitPrice']}" /></th>
+				<th align="right"><h:outputText value="#{messages['global.totalPrice']}" /></th>
+			</tr>
+			<a:repeat var="it" value="#{s.items}">
+				<tr class="highlight"><td class="col" style="height:25px;" colspan="3"><b>#{it.item.medicine}</b> <br/>
+					</td>
+					<td class="colr">
+						<h:outputText value="#{it.item.shippedQuantity}"><f:convertNumber pattern="#,###,###"/></h:outputText>
+					</td>
+					<td class="colr">
+						<h:outputText value="#{it.item.receivedQuantity}"><f:convertNumber pattern="#,###,###"/></h:outputText>
+					</td>
+					<td class="colr">
+						<h:outputText value="#{it.item.unitPrice}"><f:convertNumber pattern="#,###,##0.00"/></h:outputText>
+					</td>
+					<td class="colr">
+						<h:outputText value="#{it.item.totalPrice}"><f:convertNumber pattern="#,###,##0.00"/></h:outputText>
+					</td>
+				</tr>
+				<a:repeat value="#{it.item.batches}" var="b">
+					<tr class="lin2">
+						<td class="colb">
+							<h:graphicImage value="/img/batch.gif" style="float:left;margin-bottom:10px;margin-right:2px;" />
+							#{b.batch.batchNumber}<br/>
+							#{b.batch.manufacturer}<br/>
+							#{b.batch.brandName}
+						</td>
+						<td class="colcb">
+							<h:outputText value="#{b.batch.expiryDate}"  converter="localeDateConverter" />
+						</td>
+						<td class="colrb">
+							<h:outputText value="#{b.batch.numContainers}" >
+								<f:convertNumber pattern="#,###,##0"/>
+							</h:outputText>
+							<h:outputText value="(#{b.batch.quantityContainer})" style="margin-left:5px;">
+								<f:convertNumber pattern="#,###,##0"/>
+							</h:outputText>
+						</td>
+						<td class="colrb">
+							<h:outputText value="#{b.quantity}" >
+								<f:convertNumber pattern="#,###,##0"/>
+							</h:outputText>
+						</td>
+						<td class="colrb">
+							<h:outputText value="#{b.receivedQuantity}" >
+								<f:convertNumber pattern="#,###,##0"/>
+							</h:outputText>
+						</td>
+						<td class="colrb">
+							<h:outputText value="#{b.batch.unitPrice}" >
+								<f:convertNumber pattern="#,###,##0.00"/>
+							</h:outputText>
+						</td>
+						<td class="colrb">
+							<h:outputText value="#{b.totalPrice}" >
+								<f:convertNumber pattern="#,###,##0.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+				</a:repeat>
+				
+			</a:repeat>
+		</table>
+		<p/>
+	</td></tr>
+	</a:repeat>
+</table>
+</rich:tab>
+
+</rich:tabPanel>
+
+</td></tr></table>
+
+</ui:define>
+
+</ui:composition>  

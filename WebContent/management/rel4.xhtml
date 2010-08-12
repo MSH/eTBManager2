@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['manag.rel4']}" />
+
+<ui:param name="waitdlg" value="1" />
+<ui:param name="topmenu" value="2" />
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="left" value="0" />
+
+<ui:define name="naveg" >
+	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
+</ui:define>
+
+
+<ui:define name="print-link">
+	<h:panelGroup id="pnlPrintLink">
+	<s:link value="#{messages['global.print']}" rendered="#{not orderLeadTimeReport.executing}" target="_blank">
+		<f:param name="print" value="1"/>
+	</s:link>
+
+	<s:link view="/reports/rel4.xhtml" value="#{messages['global.print']}" rendered="#{orderLeadTimeReport.executing}" target="_blank" />
+	</h:panelGroup>
+</ui:define>
+
+
+<ui:define name="body">
+<p/>
+<h:form id="main">
+<table class="tabela" width="700px">
+<tr><td>
+	<s:decorate id="ds" template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['admin.tbunits.medsuppliers']}:</ui:define>
+		<h:selectOneMenu id="ds" value="#{reportSelection.tbunit}">
+            <s:selectItems value="#{medicineSuppliers}" var="it" label="#{it.name}"  noSelectionLabel="-"/>
+            <s:convertEntity />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate id="ini" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.inimonthyear']}:</ui:define>
+		<h:selectOneMenu id="inimonth" value="#{reportSelection.iniMonth}" required="true">
+		<f:selectItems value="#{months}" required="true"/>
+		</h:selectOneMenu>
+		<h:inputText id="iniyear" value="#{reportSelection.iniYear}" style="margin-left:5px; width : 70px;"/>
+	</s:decorate>
+
+	<s:decorate id="end" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.endmonthyear']}:</ui:define>
+		<h:selectOneMenu id="endmonth" value="#{reportSelection.endMonth}" required="true">
+		<f:selectItems value="#{months}"/>
+		</h:selectOneMenu>
+		<h:inputText id="endyear" value="#{reportSelection.endYear}" style="margin-left:5px; width : 70px;" required="true" />
+	</s:decorate>
+	<p/>
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+</td></tr>
+<tr>
+	<td align="right">
+	<a:commandButton value="#{messages['form.generate']}" styleClass="button" 
+		action="#{orderLeadTimeReport.generate}" 
+		reRender="main,pnlPrintLink"/>
+</td></tr>
+</table>
+
+<div style="margin-top:10px;">
+<s:fragment rendered="#{orderLeadTimeReport.executing}">
+<table class="tabela" style="margin-top:10px;" width="400px">
+<tr>
+	<th>#{messages['reports.orderEvent']}</th>
+	<th>#{messages['reports.averageDays']}</th>
+	<th>#{messages['reports.orderCount']}</th>
+</tr>
+<tr><td class="highlight colc">#{messages['reports.authorizing']}</td>
+	<td class="colc">
+		#{orderLeadTimeReport.authorizing.averageDays==0?'-':orderLeadTimeReport.authorizing.averageDays}
+	</td>
+	<td class="colc">
+		#{orderLeadTimeReport.authorizing.numOrders}
+	</td>
+</tr>
+<tr><td class="highlight colc">#{messages['reports.shipping']}</td>
+	<td class="colc">
+		#{orderLeadTimeReport.shipping.averageDays==0?'-':orderLeadTimeReport.authorizing.averageDays}
+	</td>
+	<td class="colc">
+		#{orderLeadTimeReport.shipping.numOrders}
+	</td>
+</tr>
+<tr><td class="highlight colc">#{messages['reports.receiving']}</td>
+	<td class="colc">
+		#{orderLeadTimeReport.receiving.averageDays==0?'-':orderLeadTimeReport.authorizing.averageDays}
+	</td>
+	<td class="colc">
+		#{orderLeadTimeReport.receiving.numOrders}
+	</td>
+</tr>
+</table>
+</s:fragment>
+</div>
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

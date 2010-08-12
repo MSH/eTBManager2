@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="..#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['drugs.patients']}" />
+<ui:param name="topmenu" value="1" />
+<ui:param name="show_menu" value="#{s:hasRole('PAC_EDT')?'1':'0'}" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:define name="naveg" >
+	<s:link value="#{messages['drugs']}" view="/drugs/index.html" propagation="none" />
+</ui:define>
+
+<ui:define name="menu_lateral">
+	<s:link value="#{messages['drugs.patients.new']}" view="/drugs/mdrcasenew.xhtml" propagation="begin" rendered="#{s:hasRole('PAC_EDT')}">
+		<f:param name="id" value="#{null}" />
+	</s:link>
+</ui:define>
+
+<ui:define name="body">
+<h:form id="main">
+<rich:panel style="width:600px;">
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['MdrCase.medicineStorage']}:</ui:define>
+		<h:selectOneMenu value="#{userSelection.medicineStorage}" required="true">
+            <s:selectItems value="#{dispensaries.resultList}" var="c" label="#{c.name}" noSelectionLabel="-" />
+            <s:convertEntity/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['Source']}:</ui:define>
+		<h:selectOneMenu value="#{userSelection.source}">
+            <s:selectItems value="#{sources.resultList}" var="c" label="#{c.name}" noSelectionLabel="-" />
+            <s:convertEntity/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['patients.allcases']}:</ui:define>
+		<h:selectBooleanCheckbox value="#{mdrCases.allCases}"></h:selectBooleanCheckbox>
+	</s:decorate>
+	
+	<div style="width:100%;text-align: right;">
+		<h:commandButton action="#{mdrCases.refresh}" value="#{messages['form.search']}" styleClass="button" />
+	</div>
+</rich:panel>
+<p/>
+
+<h:panelGroup rendered="#{userSelection.medicineStorage != null}">
+
+<s:decorate template="/layout/naveg.xhtml" >
+	<ui:param name="list" value="#{mdrCases}" />
+	<ui:param name="page" value="/drugs/patients.xhtml" />
+</s:decorate>
+
+<h:dataTable value="#{mdrCases.resultList}" var="c" styleClass="tabela" width="600px" rowClasses="lin1,lin2" 
+	columnClasses="coll,coll,colc,colc,colc,colc" rendered="#{mdrCases.resultCount > 0}">
+	<h:column>
+  		<f:facet name="header">
+  			<s:link value="#{messages['MdrCase.patient']}" style="padding-left:10px;" styleClass="collh">
+  				<f:param name="order" value="#{mdrCases.order=='upper(c.name)'?'upper(c.name) desc':'upper(c.name)'}" />
+  			</s:link>
+  		</f:facet>
+		<s:link view="/drugs/casedata.xhtml" value="#{c.name}" style="padding-left:10px;">
+			<f:param name="id" value="#{c.id}" />
+		</s:link>
+	</h:column>
+
+	<h:column>
+  		<f:facet name="header">
+  			<s:link value="#{messages['MdrCase.securityNumber']}" styleClass="collh">
+  				<f:param name="order" value="#{mdrCases.order=='c.securityNumber'?'c.securityNumber desc':'c.securityNumber'}" />
+  			</s:link>
+  		</f:facet>
+		#{c.securityNumber}
+	</h:column>
+
+	<h:column>
+  		<f:facet name="header">
+  			<s:link value="#{messages['MdrCase.beginningTreatmentDate']}" >
+  				<f:param name="order" value="#{mdrCases.order=='c.beginningTreatmentDate'?'c.beginningTreatmentDate desc':'c.beginningTreatmentDate'}" />
+  			</s:link>
+  		</f:facet>
+		<h:outputText value="#{c.beginningTreatmentDate}">
+			<s:convertDateTime timeZone="#{timezones.default}"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+  		<f:facet name="header">
+  			<s:link value="#{messages['MdrCase.endingTreatmentDate']}" >
+  				<f:param name="order" value="#{mdrCases.order=='c.endingTreatmentDate'?'c.endingTreatmentDate desc':'c.endingTreatmentDate'}" />
+  			</s:link>
+  		</f:facet>
+		<h:outputText value="#{c.endingTreatmentDate}">
+			<s:convertDateTime timeZone="#{timezones.default}"/>
+		</h:outputText>
+	</h:column>
+</h:dataTable>
+</h:panelGroup>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

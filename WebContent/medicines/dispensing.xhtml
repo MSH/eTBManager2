@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templateMedPage}">
+
+<ui:param name="title" value="#{messages['medicines.dispensing']}" />
+
+<ui:param name="waitdlg" value="1" />
+<ui:param name="topmenu" value="1" />
+<ui:param name="pagestyle" value="width:750px;" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
+</ui:define>
+
+<ui:define name="body">
+<p/>
+
+<h:form>
+	<s:link id="lnknew" value="#{messages['medicines.dispensing.new']}" view="/medicines/dispedt.xhtml" 
+		style="float:right;" rendered="#{s:hasRole('DISP_PAC_EDT')}">
+		<f:param name="month" value="#{dispensingView.month}"/>
+		<f:param name="year" value="#{dispensingView.year}"/>
+	</s:link>
+	
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
+		<h:selectOneMenu value="#{dispensingView.month}">
+			<f:selectItems value="#{months}"/>
+			<a:support event="onchange" reRender="pnldisp,lnknew" action="#{monthDispensingReport.refresh}"/>
+		</h:selectOneMenu>
+		<h:selectOneMenu value="#{dispensingView.year}" style="margin-left:5px;">
+			<f:selectItems value="#{years}"/>
+			<a:support event="onchange" reRender="pnldisp,lnknew" action="#{monthDispensingReport.refresh}"/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<h:panelGroup id="pnldisp"> 
+	<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty monthDispensingReport.sources}" styleClass="warn" />
+	<s:fragment rendered="#{not empty monthDispensingReport.sources}">
+	<table width="100%" >
+	<a:repeat value="#{monthDispensingReport.sources}" var="s">
+		<tr><td colspan="#{monthDispensingReport.dispensings.size + 2}" class="colheader">
+				<b>#{s.source.name}</b>
+			</td>
+		</tr>
+		<tr><td>
+		<table width="100%" class="tabela">
+		<tr><th rowspan="2">
+				#{messages['Medicine']}
+			</th>
+			<th colspan="#{monthDispensingReport.dispensings.size + 1}">
+				#{messages['MedicineDispensing.quantity']}
+			</th>
+		</tr>
+		<tr>
+			<a:repeat value="#{monthDispensingReport.dispensings}" var="it">
+			<th>
+				<h:outputText value="#{it.iniDate}" converter="periodConverter" >
+					<f:param name="endDate" value="#{it.date}" />
+				</h:outputText>
+				<br/>
+				<s:link value="#{messages['form.details']}" view="/medicines/dispdata.xhtml" style="font-weight:normal;">
+					<f:param name="id" value="#{it.dispensingId}"/>
+				</s:link>
+			</th>
+			</a:repeat>
+			<th>
+				#{messages['global.total']}
+			</th>
+		</tr>
+			<a:repeat value="#{s.items}" var="it">
+			<tr>
+				<td class="colb" width="30%">
+					#{it.medicine}
+				</td>
+				<a:repeat value="#{it.quantities}" var="val">
+				<td align="right" class="colrb">
+					<h:outputText value="#{val}" >
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</td>
+				</a:repeat>
+				<td align="right">
+					#{it.total}
+				</td>
+			</tr>
+			</a:repeat>
+			</table>
+			</td></tr>
+	</a:repeat>
+	</table> 
+	</s:fragment>
+	</h:panelGroup>
+</h:form>
+
+<h:panelGroup id="pnlunit">
+</h:panelGroup>
+
+</ui:define>
+
+</ui:composition>  

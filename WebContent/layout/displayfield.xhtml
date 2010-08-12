@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:s="http://jboss.com/products/seam/taglib"
+                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+<table style="border-collapse: collapse;" cellpadding="0" cellspacing="0">
+	<tr><td width="400px">
+    <span class="prop">
+        <span class="name" style="#{empty labelstyle? '': labelstyle}">
+            <ui:insert name="label"/>
+        </span>
+       	#{field.value}
+    </span>
+
+	</td>
+	<s:fragment rendered="#{not empty field.complement}">
+	<td>
+    <span >
+        <s:label styleClass="name" style="pading-left:20px;#{empty labelstyle? '': labelstyle}" >
+    		<span class="right-icon">
+        	#{field.value.otherDescription}:
+        	</span>
+        </s:label>
+        <h:outputText value="#{field.complement}" />
+    </span>
+    </td>
+    </s:fragment>
+    </tr>
+</table>
+
+</ui:composition>
