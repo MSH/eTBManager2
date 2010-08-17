@@ -164,7 +164,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		persist();
 		
 		if (caseEditingHome.getRegimenType() == 2)
-			 return "/custom/br/cases/treatmentedt.xhtml";
+			 return "individualized";
 		else return ret;
 	}
 

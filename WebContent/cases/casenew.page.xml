@@ -23,17 +23,8 @@
 			</rule>
 
 			<rule if-outcome="individualized">
-				<redirect view-id="/cases/treatmentedt.xhtml">
+				<redirect view-id="/cases/starttreatmentind.xhtml">
 					<param name="id" value="#{caseHome.id}"/>
-				</redirect>
-			</rule>
-
-			<rule if-outcome="regimen-new">
-				<redirect view-id="/cases/regimenedt.xhtml">
-				</redirect>
-			</rule>
-			<rule if-outcome="regimenedit">
-				<redirect view-id="/cases/regimenedt.xhtml">
 				</redirect>
 			</rule>
 		</navigation>

@@ -35,11 +35,9 @@
 		<ui:param name="required" value="true" />
 	</s:decorate>
 
-    <s:decorate template="/layout/dateedit.xhtml" >
+    <s:decorate template="/layout/display.xhtml" >
    		<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
-   		<ui:param name="required" value="true" /> 
-   		<ui:param name="future" value="true" />
-   		<ui:param name="datefield" value="#{startTreatmentHome.iniTreatmentDate}" /> 
+   		<h:outputText value="#{tbCase.registrationDate}" />
    	</s:decorate>
 
 
@@ -55,7 +53,7 @@
 		/>
 
 	<s:fragment rendered="#{not empty prescriptionTable.medicines}">
-	<s:decorate template="treattable.xhtml">
+	<s:decorate template="/cases/treattable.xhtml">
 		<ui:param name="editing" value="true" />
 	</s:decorate>
 	<table class="tabela" width="100%" style="padding:8px;">

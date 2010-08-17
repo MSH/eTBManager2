@@ -53,7 +53,7 @@
 		<h:dataTable id="taboc" value="#{caseHome.otherCases}" var="it" style="font-size:10px;" 
 			columnClasses="coll" width="100%">
 			<h:column>
-				<div onclick="openWaitDlg();location.href='#{facesContext.externalContext.request.contextPath}/cases/casedata.seam?id=#{it.id}';" style="cursor:pointer;">
+				<div onclick="openWaitDlg();location.href='#{request.contextPath}/cases/casedata.seam?id=#{it.id}';" style="cursor:pointer;">
 				<b style="color:green;font-size:12px;width:100%;text-decoration: underline;">#{messages[it.classification.key]}
 				</b>
 				<br/>
@@ -141,7 +141,7 @@
 	</s:fragment>
 
 	<s:fragment rendered="#{caseFilters.tabIndex==1}">
-		<ui:include src="/cases/treatment.xhtml" />
+		<ui:include src="/custom/br/cases/treatment.xhtml" />
 	</s:fragment>
 
 	<s:fragment rendered="#{caseFilters.tabIndex==2}">
@@ -149,15 +149,11 @@
 	</s:fragment>
 
 	<s:fragment rendered="#{caseFilters.tabIndex==3}">
-		<ui:include src="/custom/br/cases/medexamination.xhtml" />
+		<ui:include src="medexamination.xhtml" />
 	</s:fragment>
 
 	<s:fragment rendered="#{caseFilters.tabIndex==4}">
-		<ui:include src="/custom/br/cases/drugogram.xhtml" />
-	</s:fragment>
-
-	<s:fragment rendered="#{caseFilters.tabIndex==5}">
-		<ui:include src="/cases/agenda.xhtml" />
+		<ui:include src="drugogram.xhtml" />
 	</s:fragment>
 
 	<s:fragment rendered="#{caseFilters.tabIndex==6}">
