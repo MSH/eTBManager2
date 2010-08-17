@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['cases.details.medexam']}" />
+<ui:param name="show_menu" value="1" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="maskedit" value="1" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+
+<ui:define name="body">
+<p/>
+
+<s:decorate template="/layout/casebody.xhtml">
+	<a:form id="formexam" >
+    <table width="100%">
+    <tr><td>
+
+    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="true" /> 
+    	<ui:param name="datefield" value="#{medicalExamination.date}" /> 
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['MedAppointmentType']}:</ui:define>
+    	<h:selectOneMenu value="#{medicalExamination.appointmentType}" required="true">
+    		<s:selectItems value="#{medAppointmentTypes}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
+    	<h:inputText value="#{medicalExamination.weight}" />
+    	#{messages['MedicalExamination.weight.unit']}
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
+    	<h:inputText value="#{medicalExamination.height}" />
+    	#{messages['MedicalExamination.height.unit']}
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['MedicalExamination.usingPrescMedicines']}</ui:define>
+    	<h:selectOneMenu id="cbpresc" value="#{medicalExamination.usingPrescMedicines}" required="true" style="display:block;" >
+    		<s:selectItems value="#{yesNoList}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    	<div id="edtreason">#{messages['Order.cancelReason']}:<br/>
+    	<h:inputText value="#{medicalExamination.reasonNotUsingPrescMedicines}" style=" width : 340px;" maxlength="100"/>
+    	</div>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
+    	<h:inputText value="#{medicalExamination.responsible}" style=" width : 340px;" maxlength="100"/>
+    </s:decorate>
+    
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['MedicalExamination.dotduringintphase']}:</ui:define>
+		<h:selectOneMenu id="dotby" value="#{medicalExamination.dotDurinIntPhase}">
+			<s:selectItems var="s" value="#{globalLists_ke.dotByTypes}" label="#{messages[s.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>    
+	
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['MedicalExamination.nutrition']}</ui:define>
+    	<h:selectOneMenu id="cbnutrition" value="#{medicalExamination.nutrtnSupport}" required="false" style="display:block;" >
+    		<s:selectItems value="#{yesNoList}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+    
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['MedicalExamination.ReferredBy']}:</ui:define>
+		<h:selectOneMenu id="cbrefby" value="#{medicalExamination.patientRefBy}">
+			<s:selectItems var="s" value="#{globalLists_ke.refByTypes}" label="#{messages[s.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+    	<div id="refByUnit">
+		    <s:decorate template="/layout/edit.xhtml" >
+		    	<ui:define name="label">#{messages['MedicalExamination.RefByUnit']}:</ui:define>
+		    	<h:inputText value="#{medicalExamination.referredByUnitName}" style=" width : 340px;" maxlength="100"/>
+		    </s:decorate>   
+		    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['MedicalExamination.RefByDate']}:</ui:define>
+		    	<ui:param name="required" value="false" /> 
+		    	<ui:param name="future" value="false" /> 
+		    	<ui:param name="datefield" value="#{medicalExamination.refByDate}" /> 
+		    </s:decorate>		     	
+  		</div>
+		
+	</s:decorate>    
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['MedicalExamination.ReferredTo']}:</ui:define>
+		<h:selectOneMenu id="cbrefto" value="#{medicalExamination.patientRefTo}">
+			<s:selectItems var="s" value="#{globalLists_ke.refToTypes}" label="#{messages[s.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+    	<div id="refToUnit">
+		    <s:decorate template="/layout/edit.xhtml" >
+		    	<ui:define name="label">#{messages['MedicalExamination.RefToUnit']}:</ui:define>
+		    	<h:inputText value="#{medicalExamination.referredToUnitName}" style=" width : 340px;" maxlength="100"/>
+		    </s:decorate>    	
+		    
+		    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['MedicalExamination.RefToDate']}:</ui:define>
+		    	<ui:param name="required" value="false" /> 
+		    	<ui:param name="future" value="true" /> 
+		    	<ui:param name="datefield" value="#{medicalExamination.refToDate}" /> 
+		    </s:decorate>			    
+  		</div>
+		
+	</s:decorate>    
+
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputText value="#{medicalExamination.comments}" style=" width : 340px;" maxlength="100"/>
+    </s:decorate>
+
+	</td></tr>
+    <tr><td align="right">
+		<div style="float:left;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+            <a:commandButton action="#{medicalExaminationHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam" 
+            	oncomplete="this.disabled=false;"
+            	onclick="this.disabled=true;" />
+            <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel" propagation="end">
+            	<f:param name="id" value="#{caseHome.id}"/>
+            </s:button>
+    </td></tr>
+    
+    </table>
+    
+	</a:form>
+</s:decorate>
+
+<p/>
+
+<rich:jQuery selector="#chkaddr" query="click(function(){checkClick(this.checked, '#pacaddress');})" />
+<rich:jQuery selector="#chkaddr:not(:checked)" query="each(function(){jQuery('#pacaddress').hide();})" />
+
+<rich:jQuery selector="#cbpresc" query="change(function(){checkClick(this.selectedIndex==2, '#edtreason');})" />
+<rich:jQuery selector="#cbpresc[selectedIndex!=2]" query="each(function(){jQuery('#edtreason').hide();})" />
+
+<rich:jQuery selector="#cbrefby" query="change(function(){checkClick(8>this.selectedIndex, '#refByUnit');})" />
+<rich:jQuery selector="#cbrefby[selectedIndex==0||selectedIndex==8||selectedIndex==9||selectedIndex==10]" query="each(function(){jQuery('#refByUnit').hide();})" />
+
+<rich:jQuery selector="#cbrefto" query="change(function(){checkClick(this.selectedIndex!=8, '#refToUnit');})" />
+<rich:jQuery selector="#cbrefto[selectedIndex==8]" query="each(function(){jQuery('#refToUnit').hide();})" />
+
+
+<script type="text/javascript">
+function checkClick(ashow, divname) {
+if (ashow)
+	 jQuery(divname).show(500);
+else jQuery(divname).hide(500);
+}
+</script>
+
+</ui:define>
+
+</ui:composition>  

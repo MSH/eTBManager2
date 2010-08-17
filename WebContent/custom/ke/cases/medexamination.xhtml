@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	<s:link value="#{messages['cases.details.newresult']}" view="/custom/ke/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+		<f:param name="id" value="#{tbCase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+	</s:link>
+
+	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="erro" rendered="#{empty medicalExaminationHome.allResults}" />
+
+	<h:dataTable id="medexamtbl" value="#{medicalExaminationHome.allResults}" var="r" rendered="#{not empty medicalExaminationHome.allResults}" width="100%">
+		<h:column>
+	
+		<s:decorate template="/layout/roundrect.xhtml" style="margin-right:10px;">
+		<ui:define name="header">
+			<div style="float:right;">
+				<s:link value="#{messages['form.edit']}" view="/custom/ke/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEdit}">
+					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="examid" value="#{r.id}"/>
+				</s:link>
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remMedExam(#{r.id}, #{medicalExaminationHome.lastResult});return false;" 
+				      rendered="#{caseHome.canEdit}">
+				</h:commandLink>
+			</div>
+			<div class="name2">#{messages['cases.details.date']}: </div> 
+			<h:outputText value="#{r.date}" converter="localeDateConverter" />
+		</ui:define>
+		<ui:param name="showfooter" value="0" />
+
+		<a:jsFunction name="remMedExam" action="#{medicalExaminationHome.remove}" reRender="medexamtbl" ajaxSingle="true" rendered="#{caseHome.canEdit}">
+			<a:actionparam name="param1" assignTo="#{medicalExaminationHome.id}" converter="javax.faces.Integer"/>
+		</a:jsFunction>
+
+
+		<table width="100%" style="border-collapse:collapse;">
+		<tr><td>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
+				<h:outputText value="#{r.weight}" >
+					<f:convertNumber pattern="#,###,##0.00"/>
+				</h:outputText>#{messages['MedicalExamination.weight.unit']}
+			</s:decorate>
+		</td><td>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
+				<h:outputText value="#{r.height}" >
+					<f:convertNumber pattern="#,###,##0.00"/>
+				</h:outputText>#{messages['MedicalExamination.height.unit']}
+			</s:decorate>		
+		</td></tr>
+		<tr><td>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['MedicalExamination.BMI']}:</ui:define>
+				<h:outputText value="#{r.BMI}" >
+					<f:convertNumber pattern="#,###,##0.000"/>
+				</h:outputText>
+			</s:decorate>		
+		</td></tr>
+		<tr><td>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['MedAppointmentType']}:</ui:define>
+				#{messages[r.appointmentType.key]}
+			</s:decorate>		
+		</td></tr>
+		<s:fragment rendered="#{not empty r.comments}">
+		<tr><td>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['global.comments']}:</ui:define>
+				#{r.comments}
+			</s:decorate>
+		</td></tr>
+		</s:fragment>
+		<tr><td>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['MedicalExamination.ReferredBy']}:</ui:define>
+				#{messages[r.patientRefBy.key]}
+			</s:decorate>		
+		</td>
+		<td>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['MedicalExamination.ReferredTo']}:</ui:define>
+				#{messages[r.patientRefTo.key]}
+			</s:decorate>		
+		</td></tr>
+		</table>
+		
+		
+		</s:decorate>
+
+		</h:column>
+	</h:dataTable>
+
+    
+</ui:composition>
