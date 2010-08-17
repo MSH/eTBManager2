@@ -20,6 +20,7 @@
    <supported-locale>in</supported-locale>
    <supported-locale>uk_UA</supported-locale>
    <supported-locale>az_AZ</supported-locale>
+   <supported-locale>en_KE</supported-locale>   
   </locale-config>
  </application>
 </faces-config>
