@@ -1,12 +1,18 @@
 package org.msh.mdrtb.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.msh.entities.enums.ClinicalEvolution;
+import org.msh.mdrtb.entities.enums.DotBy;
 import org.msh.mdrtb.entities.enums.MedAppointmentType;
+import org.msh.mdrtb.entities.enums.ReferredBy;
+import org.msh.mdrtb.entities.enums.ReferredTo;
 import org.msh.mdrtb.entities.enums.YesNoType;
 
 /**
@@ -54,7 +60,34 @@ public class MedicalExamination extends CaseData implements Serializable {
 	@Column(length=100)
 	private String surgicalProcedureDesc;
 
+	//Used for Kenya Workspace
+	//usrivastava
+	private ReferredBy patientRefBy;
+	
+	private YesNoType nutrtnSupport;
+	
+	@Column(length=100)
+	private String referredByUnitName;	
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name="REF_BY_DATE")
+	private Date refByDate;	
 
+	private ReferredTo patientRefTo;
+	
+	@Column(length=100)
+	private String referredToUnitName;	
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name="REF_TO_DATE")
+	private Date refToDate;	
+	
+	private DotBy dotDurinIntPhase;	
+	
+	
+	//end used for kenya workspace
+
+	
 	public String getSurgicalProcedureDesc() {
 		return surgicalProcedureDesc;
 	}
@@ -239,4 +272,68 @@ public class MedicalExamination extends CaseData implements Serializable {
 	public void setPositionResponsible(String positionResponsible) {
 		this.positionResponsible = positionResponsible;
 	}
+	
+	public ReferredBy getPatientRefBy() {
+		return patientRefBy;
+	}
+
+	public void setPatientRefBy(ReferredBy patientRefBy) {
+		this.patientRefBy = patientRefBy;
+	}
+
+	public String getReferredByUnitName() {
+		return referredByUnitName;
+	}
+
+	public void setReferredByUnitName(String referredByUnitName) {
+		this.referredByUnitName = referredByUnitName;
+	}
+
+	public Date getRefByDate() {
+		return refByDate;
+	}
+
+	public void setRefByDate(Date refByDate) {
+		this.refByDate = refByDate;
+	}
+
+	public ReferredTo getPatientRefTo() {
+		return patientRefTo;
+	}
+
+	public void setPatientRefTo(ReferredTo patientRefTo) {
+		this.patientRefTo = patientRefTo;
+	}
+
+	public String getReferredToUnitName() {
+		return referredToUnitName;
+	}
+
+	public void setReferredToUnitName(String referredToUnitName) {
+		this.referredToUnitName = referredToUnitName;
+	}
+
+	public Date getRefToDate() {
+		return refToDate;
+	}
+
+	public void setRefToDate(Date refToDate) {
+		this.refToDate = refToDate;
+	}
+
+	public DotBy getDotDurinIntPhase() {
+		return dotDurinIntPhase;
+	}
+
+	public void setDotDurinIntPhase(DotBy dotDurinIntPhase) {
+		this.dotDurinIntPhase = dotDurinIntPhase;
+	}
+
+	public YesNoType getNutrtnSupport() {
+		return nutrtnSupport;
+	}
+
+	public void setNutrtnSupport(YesNoType nutrtnSupport) {
+		this.nutrtnSupport = nutrtnSupport;
+	}		
 }
