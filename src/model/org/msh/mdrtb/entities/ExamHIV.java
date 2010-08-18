@@ -9,6 +9,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.msh.mdrtb.entities.enums.HIVResult;
+import org.msh.mdrtb.entities.enums.HIVResultKe;
 
 /**
  * @author Ricardo Memória
@@ -33,6 +34,28 @@ public class ExamHIV extends CaseData implements Serializable {
 	@Column(length=100)
 	private String laboratory;
 
+	//usrivast
+	//addition for kenya workspace
+	private Integer cd4Count;	
+	
+	@Temporal(TemporalType.DATE)
+	private Date cd4StDate;
+
+	private HIVResultKe partnerResult;
+	
+	@Temporal(TemporalType.DATE)
+	private Date partnerResultDate;
+	
+	public boolean isPartnerPresent() {
+		return partnerResultDate != null;
+	}
+	
+	public void setPartnerPresent(boolean value) {
+		if (!value)
+			partnerResultDate = null;
+	}
+	
+	
 	public boolean isARTstarted() {
 		return startedARTdate != null;
 	}
@@ -90,4 +113,36 @@ public class ExamHIV extends CaseData implements Serializable {
 	public void setStartedCPTdate(Date startedCPTdate) {
 		this.startedCPTdate = startedCPTdate;
 	}
+	
+	public Integer getCd4Count() {
+		return cd4Count;
+	}
+
+	public void setCd4Count(Integer cd4Count) {
+		this.cd4Count = cd4Count;
+	}
+
+	public Date getCd4StDate() {
+		return cd4StDate;
+	}
+
+	public void setCd4StDate(Date cd4StDate) {
+		this.cd4StDate = cd4StDate;
+	}
+
+	public HIVResultKe getPartnerResult() {
+		return partnerResult;
+	}
+
+	public void setPartnerResult(HIVResultKe partnerResult) {
+		this.partnerResult = partnerResult;
+	}
+
+	public Date getPartnerResultDate() {
+		return partnerResultDate;
+	}
+
+	public void setPartnerResultDate(Date partnerResultDate) {
+		this.partnerResultDate = partnerResultDate;
+	}		
 }
