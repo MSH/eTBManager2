@@ -228,6 +228,7 @@ public class ImportTBMR_DB {
 		caseDataBRHome.setDisplayMessage(false);
 		caseDataBRHome.persist();
 		
+		importQuarterlyData();
 		importExams();
 		importPrevTBTreatment();
 	}
@@ -970,6 +971,25 @@ public class ImportTBMR_DB {
 		connection = getConnection();
 		Statement stm = connection.createStatement();
 		rsCases = stm.executeQuery(sql);
+	}
+
+	
+	/**
+	 * Import information from quarterly forms 
+	 * @throws SQLException 
+	 */
+	protected void importQuarterlyData() throws SQLException {
+		Integer codCaso = rsCases.getInt("COD_CASO");
+		String sql = "select * from ficha f " +
+				"inner join ficha_trimestral ft on ft.num_ficha = f.num_ficha " +
+				"where f.cod_caso = " + codCaso.toString();
+		
+		Connection conn = getConnection();
+		ResultSet rs = conn.createStatement().executeQuery(sql);
+		while (rs.next()) {
+			System.out.println(rs.getString("DATA"));
+		}
+		rs.close();
 	}
 
 
