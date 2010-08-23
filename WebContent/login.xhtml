@@ -96,7 +96,7 @@
         </tr>
         <tr>
           <td align="right">
-          	<s:fragment rendered="#{systemConfig.allowRegPage}">
+          	<s:fragment rendered="#{etbmanagerApp.configuration.allowRegPage}">
           	<span style="font-size:12px"> <img src="img/user.gif"/> #{messages['login.newuser']}
           	</span>
           	<br/>
@@ -108,7 +108,11 @@
     </td>
   </tr>
   <tr>
-    <td height="20" colspan="3" valign="top"><div align="center">#{messages['login.copyright']}</div>
+    <td height="20" colspan="3" valign="top" style="border-top:8px solid #e0e0e0">
+    <div align="center" style="color:#909090">
+    e-TB Manager version <s:link value=" #{etbmanagerApp.implementationVersion}" view="/about.xhtml" style="color:#909090;font-weight:normal;"/>
+    <br/>
+    #{messages['login.copyright']}</div>
     </td>
   </tr>
 </table>

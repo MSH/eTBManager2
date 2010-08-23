@@ -308,33 +308,43 @@ public class ImportTBMR_DB {
 			examSputumHome.setDisplayMessage(false);
 			examSputumHome.persist();
 		}
-		
+		importDSTExam(rsCases);
+	}
+
+	
+	private void importDSTExam(ResultSet rs) throws Exception {
+		Date dtColeta = rsCases.getDate("DATA_CULTURA_ESCARRO");
+		if (dtColeta == null)
+			return;
+
+		Laboratory lab = loadLaboratory(rs.getInt("COD_LABORATORIO"));
+
 		examSusceptHome.setId(null);
 		examSusceptHome.setInstance(null);
 		for (ExamSusceptibilityResult resTest: examSusceptHome.getItems())
 			resTest.setResult(SusceptibilityResultTest.NOTDONE);
-		checkResultDST("COD_PADRAO_RES_RIFAMPICINA", "R");
-		checkResultDST("COD_PADRAO_RES_PIRAZINAMIDA", "Z");
-		checkResultDST("COD_PADRAO_RES_ETIONAMIDA", "Et");
-		checkResultDST("COD_PADRAO_RES_AMICACINA", "Am");
-		checkResultDST("COD_PADRAO_RES_CAPREOMICINA", "Cp");
-		checkResultDST("COD_PADRAO_RES_OFLOXACINO", "Ofx");
-		checkResultDST("COD_PADRAO_RES_MOXIFLOXACINO", "Mfx");
-		checkResultDST("COD_PADRAO_RES_ISONIAZIDA", "H");
-		checkResultDST("COD_PADRAO_RES_ETAMBUTOL", "E");
-		checkResultDST("COD_PADRAO_RES_ESTREPTOMICINA", "S");
-		checkResultDST("COD_PADRAO_RES_KANAMICINA", "Km");
-		checkResultDST("COD_PADRAO_RES_CIPROFLOXACINO", "Cfx");
-		checkResultDST("COD_PADRAO_RES_LEVOFLOXACINO", "Lfx");
-		checkResultDST("COD_PADRAO_RES_TERIZIDONA", "Tzd");
-		
+		checkResultDST(rs, "COD_PADRAO_RES_RIFAMPICINA", "R");
+		checkResultDST(rs, "COD_PADRAO_RES_PIRAZINAMIDA", "Z");
+		checkResultDST(rs, "COD_PADRAO_RES_ETIONAMIDA", "Et");
+		checkResultDST(rs, "COD_PADRAO_RES_AMICACINA", "Am");
+		checkResultDST(rs, "COD_PADRAO_RES_CAPREOMICINA", "Cp");
+		checkResultDST(rs, "COD_PADRAO_RES_OFLOXACINO", "Ofx");
+		checkResultDST(rs, "COD_PADRAO_RES_MOXIFLOXACINO", "Mfx");
+		checkResultDST(rs, "COD_PADRAO_RES_ISONIAZIDA", "H");
+		checkResultDST(rs, "COD_PADRAO_RES_ETAMBUTOL", "E");
+		checkResultDST(rs, "COD_PADRAO_RES_ESTREPTOMICINA", "S");
+		checkResultDST(rs, "COD_PADRAO_RES_KANAMICINA", "Km");
+		checkResultDST(rs, "COD_PADRAO_RES_CIPROFLOXACINO", "Cfx");
+		checkResultDST(rs, "COD_PADRAO_RES_LEVOFLOXACINO", "Lfx");
+		checkResultDST(rs, "COD_PADRAO_RES_TERIZIDONA", "Tzd");
+
 		ExamSusceptibilityTest dst = examSusceptHome.getExamSusceptibilityTest();
 		dst.setLaboratory(lab);
 		examSusceptHome.getSample().setDateCollected(dtColeta);
 		examSusceptHome.setDisplayMessage(false);
-		examSusceptHome.persist();
+		examSusceptHome.persist();		
 	}
-
+	
 	
 	/**
 	 * Check the result of a substance in the DST exam
@@ -342,8 +352,8 @@ public class ImportTBMR_DB {
 	 * @param subAbbrevName
 	 * @throws Exception
 	 */
-	private void checkResultDST(String field, String subAbbrevName) throws Exception {
-		int resDst = rsCases.getInt(field);
+	private void checkResultDST(ResultSet rs, String field, String subAbbrevName) throws Exception {
+		int resDst = rs.getInt(field);
 
 		if (resDst == 2)
 			return;

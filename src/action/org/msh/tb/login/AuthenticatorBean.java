@@ -18,6 +18,8 @@ import org.msh.mdrtb.entities.UserWorkspace;
 import org.msh.mdrtb.entities.enums.UserState;
 import org.msh.utils.Passwords;
 
+import sun.text.normalizer.ICUBinary.Authenticate;
+
 
 
 @Name("authenticator")
@@ -48,6 +50,10 @@ public class AuthenticatorBean {
 	 */
     public boolean authenticate()
     {
+    	System.out.println(Authenticate.class.getPackage().getImplementationVersion());
+    	System.out.println(Authenticate.class.getPackage().getImplementationVendor());
+    	System.out.println(Authenticate.class.getPackage().getSpecificationVersion());
+    	
     	String pwd = Passwords.hashPassword(credentials.getPassword());
 
         try {
