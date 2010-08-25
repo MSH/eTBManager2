@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?> 
 
 <project basedir="." default="build" name="etbmanager">
-    <property environment="env"/>
+    <property environment="env" />
+	<property file="build.properties" />
+	<property name="war-file-name" value="etbmanager.war" />
+	<property name="implementation-title" value="e-TB Manager" />
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.6"/>
     <property name="source" value="1.6"/>
-
-	<property name="implementation-title" value="e-TB Manager"/>
-	<property name="implementation-vendor" value=" Management Sciences for Health, Inc." />
-    <property name="version-number" value="1.5"/>
-	<property name="war-file-name" value="etbmanager.war" />
-	<property name="country-code" value="" />
-    
-	<path id="EAR Libraries.libraryclasspath"/>
-    
+  
 	<path id="Web App Libraries.libraryclasspath">
         <pathelement location="WebContent/WEB-INF/lib/commons-beanutils.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/commons-digester.jar"/>
@@ -32,17 +27,25 @@
         <pathelement location="WebContent/WEB-INF/lib/richfaces-api.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/richfaces-impl.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/richfaces-ui.jar"/>
+        <pathelement location="C:/Java/jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/"/>
         <pathelement location="WebContent/WEB-INF/classes"/>
     </path>
 
 	<path id="mdrtb.classpath">
         <pathelement location="build/classes"/>
-        <path refid="All JBoss Libraries [JBoss 4.2].libraryclasspath"/>
-        <path refid="EAR Libraries.libraryclasspath"/>
+<!--        <path refid="All JBoss Libraries [JBoss 4.2].libraryclasspath"/> 
+        <path refid="EAR Libraries.libraryclasspath"/> -->
         <path refid="Web App Libraries.libraryclasspath"/>
+
     </path>
 
-    <target name="init">
+
+	<target name="init">
+		<echo message="Implementation title  :  ${implementation-title}" />
+		<echo message="Implementation version:  ${implementation-version}" />
+		<echo message="Implementation vendor :  ${implementation-vendor}" />
+		<echo message="war file              :  ${war-file-name}" />
+		
         <mkdir dir="build/classes"/>
         <copy includeemptydirs="false" todir="build/classes">
             <fileset dir="src/action" excludes="**/*.launch, **/*.java"/>
@@ -68,31 +71,27 @@
 	<target depends="clean" name="cleanall"/>
 	
 	
-    <target depends="build-subprojects,build-project,war" name="build" />
+    <target depends="build-project,war" name="build" />
 	
-	
-    <target name="build-subprojects"/>
-	
-    
 	<target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}">
+        <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/action"/>
             <classpath refid="mdrtb.classpath"/>
         </javac>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}">
+        <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/model"/>
             <classpath refid="mdrtb.classpath"/>
         </javac>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}">
+        <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/ph"/>
             <classpath refid="mdrtb.classpath"/>
         </javac>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}">
+        <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/ua"/>
             <classpath refid="mdrtb.classpath"/>
         </javac>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}">
+        <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/in"/>
             <classpath refid="mdrtb.classpath"/>
         </javac>
@@ -112,12 +111,11 @@
 		
 		<manifest file="WebContent/META-INF/MANIFEST.MF">
 			<attribute name="Built-By" value="${user.name}"/>
-			<attribute name="Implementation-Version" value="${version-number}-b${build.number}"/>
+			<attribute name="Implementation-Version" value="${implementation-version}-b${build.number}"/>
 			<attribute name="Implementation-Title" value="${implementation-title}"/>
 			<attribute name="Implementation-Vendor" value="${implementation-vendor}"/>
 			<attribute name="Built-Date" value="${TODAY}"/>
 			<attribute name="Build-Jdk" value="${java.version}" />
-			<attribute name="Country-Code" value="${country-code}" />
 		</manifest>
 
 		<war destfile="build/${war-file-name}" webxml="production/web.xml" manifest="WebContent/META-INF/MANIFEST.MF">
