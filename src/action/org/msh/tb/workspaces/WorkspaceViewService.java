@@ -131,9 +131,11 @@ public class WorkspaceViewService {
 	protected String getPageName() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		HttpServletRequest request = (HttpServletRequest)facesContext.getExternalContext().getRequest();
+		
+		String path = request.getContextPath();
 
 		String s = request.getRequestURI();
-		s = s.replaceFirst("/mdrtb", "");
+		s = s.replaceFirst(path, "");
 		s = s.replaceFirst(".seam", ".xhtml");
 		return s;
 	}
