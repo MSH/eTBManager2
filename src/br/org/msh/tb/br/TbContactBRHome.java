@@ -4,11 +4,11 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.entities.TbContactBR;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.enums.CultureResult;
 import org.msh.mdrtb.entities.enums.SputumSmearResult;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.br.entities.TbContactBR;
 import org.msh.tb.cases.CaseHome;
 
 @Name("tbContactBRHome")

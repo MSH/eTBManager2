@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?> 
+
+<project basedir="." default="build" name="etbmanager">
+    <property environment="env" />
+	<property file="build.properties" />
+	<property name="war-file-prefix" value="etbmanager" />
+	<property name="implementation-title" value="e-TB Manager for Philippines" />
+	<property name="country-code" value="PH" />
+	<property name="country" value="Philippines" />
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+  
+	<path id="Web App Libraries.libraryclasspath">
+        <pathelement location="WebContent/WEB-INF/lib/commons-beanutils.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-digester.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-lang-2.3.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/drools-compiler.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/drools-core.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/itext-2.0.4.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-el.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-ioc.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-mail.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-pdf.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-remoting.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-ui.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jsf-facelets.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/richfaces-api.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/richfaces-impl.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/richfaces-ui.jar"/>
+        <pathelement location="C:/Java/jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/"/>
+        <pathelement location="WebContent/WEB-INF/classes"/>
+    </path>
+
+	<path id="mdrtb.classpath">
+        <pathelement location="build/classes"/>
+<!--        <path refid="All JBoss Libraries [JBoss 4.2].libraryclasspath"/> 
+        <path refid="EAR Libraries.libraryclasspath"/> -->
+        <path refid="Web App Libraries.libraryclasspath"/>
+
+    </path>
+
+
+	<target name="init">
+		<echo message="Implementation title  :  ${implementation-title}" />
+		<echo message="Implementation version:  ${implementation-version}" />
+		<echo message="Implementation vendor :  ${implementation-vendor}" />
+		
+        <mkdir dir="build/classes"/>
+		<delete file="build/classes/*.*" />
+        <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src/action" excludes="**/*.launch, **/*.java"/>
+        </copy>
+        <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src/model" excludes="**/*.launch, **/*.java"/>
+        </copy>
+        <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src/ph" excludes="**/*.launch, **/*.java"/>
+        </copy>
+        <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src/ua" excludes="**/*.launch, **/*.java"/>
+        </copy>
+        <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src/in" excludes="**/*.launch, **/*.java"/>
+        </copy>
+    </target>
+    
+	<target name="clean">
+        <delete dir="build/classes"/>
+    </target>
+    
+	<target depends="clean" name="cleanall"/>
+	
+	
+    <target depends="build-project,war" name="build" />
+	
+	<target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
+            <src path="src/action"/>
+            <classpath refid="mdrtb.classpath"/>
+        </javac>
+        <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
+            <src path="src/model"/>
+            <classpath refid="mdrtb.classpath"/>
+        </javac>
+        <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
+            <src path="src/ph"/>
+            <classpath refid="mdrtb.classpath"/>
+        </javac>
+    </target>
+
+	
+	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+	
+	
+	<target description="Build the .war file" depends="init" name="war">
+		<property name="war-file-name" value="${war-file-prefix}-${implementation-version}-${country-code}.war" />
+		<echo message="war file              :  ${war-file-name}" />
+		<delete file="build/${war-file-name}" />
+		<buildnumber file="build/build.num"/>
+		
+		<tstamp>
+			<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+		</tstamp>
+		
+		<manifest file="WebContent/META-INF/MANIFEST.MF">
+			<attribute name="Built-By" value="${user.name}"/>
+			<attribute name="Implementation-Version" value="${implementation-version}-b${build.number}"/>
+			<attribute name="Implementation-Title" value="${implementation-title}"/>
+			<attribute name="Implementation-Vendor" value="${implementation-vendor}"/>
+			<attribute name="Built-Date" value="${TODAY}"/>
+			<attribute name="Build-Jdk" value="${java.version}" />
+			<attribute name="Country-Code" value="${country-code}" />
+			<attribute name="Country" value="${country}" />
+		</manifest>
+
+		<war destfile="build/${war-file-name}" webxml="production/web.xml" manifest="WebContent/META-INF/MANIFEST.MF">
+			<fileset dir="WebContent" >
+				<exclude name="WEB-INF/web.xml"/>
+				<exclude name="WEB-INF/components.xml" />
+				<exclude name="WEB-INF/faces-config.xml" />
+			</fileset>
+			
+			<classes dir="build/classes">
+				<exclude name="META-INF/persistence.xml"/>
+				<exclude name="/org/msh/tb/ke/**" />
+				<exclude name="/org/msh/tb/br/**"/>
+				<exclude name="/org/msh/tb/ua/**"/>
+				<exclude name="/org/msh/tb/in/**"/>
+			</classes>
+			
+			<zipfileset file="production/persistence.xml" prefix="WEB-INF/classes/META-INF" />
+			<zipfileset file="production/components.xml" prefix="WEB-INF" />
+			<zipfileset file="production/faces-config-ph.xml" fullpath="WEB-INF/faces-config.xml" />
+		</war>
+	</target>
+</project>

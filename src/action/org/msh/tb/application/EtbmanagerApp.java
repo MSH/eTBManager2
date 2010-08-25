@@ -16,7 +16,7 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.mdrtb.entities.SystemConfig;
 
 /**
- * Store application specific information
+ * Store application specific information like version number, build number and implementation title
  * @author Ricardo Memoria
  *
  */

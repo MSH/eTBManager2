@@ -77,7 +77,7 @@ public class StockPosReport {
 		root = new StockPosReportItem();
 		root.redimArray(medicines.size());
 		
-		// monta relatório
+		// monta relatorio
 		for (StockPosition sp: lst) {
 			Tbunit ds = sp.getTbunit();
 			AdministrativeUnit adm = ds.getAdminUnit().getParent();

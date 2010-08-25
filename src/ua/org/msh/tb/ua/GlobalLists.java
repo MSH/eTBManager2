@@ -3,11 +3,11 @@ package org.msh.tb.ua;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.DiagnosisSource;
 import org.msh.mdrtb.entities.enums.ExtraOutcomeInfo;
-import org.msh.mdrtb.entities.enums.HistologyResult;
-import org.msh.mdrtb.entities.enums.MBTResult;
 import org.msh.mdrtb.entities.enums.TbField;
+import org.msh.tb.ua.entities.enums.DiagnosisSource;
+import org.msh.tb.ua.entities.enums.HistologyResult;
+import org.msh.tb.ua.entities.enums.MBTResult;
 
 @Name("globalLists_ua")
 public class GlobalLists {

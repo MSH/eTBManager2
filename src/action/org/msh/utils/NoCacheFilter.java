@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Impede que uma página fique no cache do browser
- * @author Ricardo
+ * Prevent that a page keeps stored in the browser cache
+ * @author Ricardo Memoria
  *
  */
 public class NoCacheFilter implements Filter {
@@ -29,7 +29,7 @@ public class NoCacheFilter implements Filter {
 		HttpServletRequest r = (HttpServletRequest)request; 
 		String path = r.getServletPath();
 
-		// indica que a página não deve ser armazenada em cache
+		// Inform the browser that page should not be stored in cache
 		if (path.endsWith(".seam")) 
 		{
 			((HttpServletResponse)response).setHeader("Cache-Control","no-store");

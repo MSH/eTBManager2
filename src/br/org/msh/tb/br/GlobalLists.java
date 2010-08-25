@@ -2,12 +2,12 @@ package org.msh.tb.br;
 
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.entities.enums.ClinicalEvolution;
-import org.msh.entities.enums.FailureType;
-import org.msh.entities.enums.TipoResistencia;
+import org.msh.mdrtb.entities.enums.ClinicalEvolution;
 import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.mdrtb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.mdrtb.entities.enums.TbField;
+import org.msh.tb.br.entities.enums.FailureType;
+import org.msh.tb.br.entities.enums.TipoResistencia;
 
 @Name("globalLists_br")
 @BypassInterceptors

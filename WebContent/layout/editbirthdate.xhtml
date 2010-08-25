@@ -9,7 +9,7 @@
 	<tr><td>
 
 	<input type="hidden" id="formatodata" value="#{timezones.dateFormat}"/>
-	<script src="#{facesContext.externalContext.request.contextPath}/js/patientage.js" type="text/javascript" />
+	<script src="#{request.contextPath}/js/patientage.js" type="text/javascript" />
 	<div id="divbirthdate">
     <s:decorate id="edtbirthdate" template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>

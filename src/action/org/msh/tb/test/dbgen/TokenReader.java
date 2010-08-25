@@ -74,7 +74,7 @@ public class TokenReader {
 
 		token = "";
 
-		// se não tem próxima linha é porque chegou ao final do arquivo
+		// if there is not a next line, that's because it's at the end of the file
 		if (textLine == null) {
 			tokenType = TokenType.EOF;
 			return;

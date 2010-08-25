@@ -4,8 +4,8 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.entities.MolecularBiology;
-import org.msh.entities.enums.MolecularBiologyResult;
+import org.msh.tb.br.entities.MolecularBiology;
+import org.msh.tb.br.entities.enums.MolecularBiologyResult;
 import org.msh.tb.cases.ExamHome;
 import org.msh.tb.laboratories.LaboratorySelection;
 

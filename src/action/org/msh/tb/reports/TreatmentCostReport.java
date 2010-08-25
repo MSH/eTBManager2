@@ -39,7 +39,7 @@ public class TreatmentCostReport {
 	private boolean executing;
 
 	/**
-	 * Cria relatório
+	 * Cria relatorio
 	 */
 	public void createReport() {
 		executing = true;
@@ -68,7 +68,7 @@ public class TreatmentCostReport {
 		for (int i=0; i<medicines.size(); i++)
 			total.prices.add(new Double(0));
 		
-		// monta relatório
+		// monta relatorio
 		for (CaseInfo caseInfo: medicineEstimation.getCases()) {
 			/*Integer patientId = (Integer)obj[0];
 			String patientName = (String)obj[1];

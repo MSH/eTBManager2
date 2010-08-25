@@ -75,7 +75,7 @@
 			#{etbmanagerApp.javaBuildVersion}
 		</s:decorate>
 
-		<s:decorate template="/layout/display.xhtml">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty etbmanagerApp.countryCode}">
 			<ui:define name="label">
 				Target country version:
 			</ui:define>

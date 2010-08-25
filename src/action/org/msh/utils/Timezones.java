@@ -35,7 +35,7 @@ public class Timezones {
 		DateFormat sp = DateFormat.getDateInstance(DateFormat.SHORT, localeSelector.getLocale());
 		String s = sp.format(c.getTime());
 	
-		// verifica a posição de cada elemento da data na formatação
+		// check the position of each element in the formating
 		int dp = s.indexOf("3");
 		int mp = s.indexOf("1");
 		int yp = s.indexOf("5");
@@ -101,7 +101,7 @@ public class Timezones {
 	}
 	
 	/**
-	 * Retorna o nome de exibição do GMT
+	 * Return the display name of the GMT
 	 * @param tm
 	 * @return
 	 */
@@ -116,7 +116,7 @@ public class Timezones {
 	}
 	
 	/**
-	 * Verifica se a descrição já está na lista
+	 * Check if description is in the list
 	 * @param name
 	 * @return
 	 */

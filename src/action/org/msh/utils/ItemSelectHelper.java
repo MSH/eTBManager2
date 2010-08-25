@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Classe usada para manter uma lista de objetos ItemSelect.
  * Inicialmente foi criada para ser usada em componentes JSF DataTable, mas
- * pode ser utilizada em qualquer outra situação.
+ * pode ser utilizada em qualquer outra situacao.
  * @author Ricardo
  */
 public class ItemSelectHelper {
@@ -47,8 +47,8 @@ public class ItemSelectHelper {
     
     /**
      * cria uma lista de objetos a partir de uma lista de objetos ItemSelect.
-     * <I>List</I> é uma lista de objetos ItemSelect, e <I>selected</I> indica se a 
-     * lista será montada com objetos selecionados ou não.
+     * <I>List</I> eh uma lista de objetos ItemSelect, e <I>selected</I> indica se a 
+     * lista sera montada com objetos selecionados ou nao.
      * 
      * <b>Retorno</b>
      *    Lista de objetos referenciados por ItemSelect
@@ -67,7 +67,7 @@ public class ItemSelectHelper {
     
     /**
      * Filtra uma lista de objetos ItemSelect deixando apenas objetos selecionados ou 
-     * objetos não selecionados, de acordo com o parâmetro selected.
+     * objetos nao selecionados, de acordo com o parametro selected.
      */
     public static <E> void filter(List<ItemSelect<E>> lst, boolean selected) {
         Iterator<ItemSelect<E>> i = lst.iterator();
@@ -107,8 +107,7 @@ public class ItemSelectHelper {
     }
     
     /**
-     * Marca todos os itens de uma lista de objetos ItemSelect como selecionados ou não,
-     * dependendo do parâmetro Selected.
+     * Check or uncheck all items of a list of {@link ItemSelect} objects according to the argument select
      */
     public static <E> void selectAll(List<E> items, boolean select) {
         for (int i=0; i < items.size(); i++) {

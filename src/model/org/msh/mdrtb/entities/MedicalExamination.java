@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.msh.entities.enums.ClinicalEvolution;
+import org.msh.mdrtb.entities.enums.ClinicalEvolution;
 import org.msh.mdrtb.entities.enums.DotBy;
 import org.msh.mdrtb.entities.enums.MedAppointmentType;
 import org.msh.mdrtb.entities.enums.ReferredBy;

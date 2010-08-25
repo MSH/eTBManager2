@@ -9,17 +9,17 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-import org.msh.mdrtb.entities.CaseDataPH;
-import org.msh.mdrtb.entities.CaseSymptom;
 import org.msh.mdrtb.entities.FieldValue;
-import org.msh.mdrtb.entities.PhysicalExam;
 import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.enums.PhysicalExamResult;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.misc.FieldsQuery;
+import org.msh.tb.ph.entities.CaseDataPH;
+import org.msh.tb.ph.entities.CaseSymptom;
+import org.msh.tb.ph.entities.PhysicalExam;
+import org.msh.tb.ph.entities.enums.PhysicalExamResult;
 
 
 /**

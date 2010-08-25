@@ -3,8 +3,8 @@ package org.msh.tb.ke;
 
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.ExamHIV_Ke;
 import org.msh.tb.cases.ExamHome;
+import org.msh.tb.ke.entities.ExamHIV_Ke;
 import org.msh.tb.log.LogInfo;
 
 @Name("examHIVHomeKe")

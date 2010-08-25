@@ -3,7 +3,7 @@ package org.msh.tb.ke;
 import java.text.DateFormatSymbols;
 
 import org.jboss.seam.core.Locale;
-import org.msh.mdrtb.entities.enums.Dot;
+import org.msh.tb.ke.entities.enums.Dot;
 
 /**
  * Stores information about an specific treatment day

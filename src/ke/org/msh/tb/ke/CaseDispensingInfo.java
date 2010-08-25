@@ -5,8 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.msh.mdrtb.entities.CaseDispensingDays_Ke;
-import org.msh.mdrtb.entities.CaseDispensing_Ke;
+import org.msh.tb.ke.entities.CaseDispensingDays_Ke;
+import org.msh.tb.ke.entities.CaseDispensing_Ke;
 import org.msh.utils.date.DateUtils;
 
 

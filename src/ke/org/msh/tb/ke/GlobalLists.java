@@ -3,11 +3,11 @@ package org.msh.tb.ke;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.mdrtb.entities.enums.Dot;
 import org.msh.mdrtb.entities.enums.DotBy;
 import org.msh.mdrtb.entities.enums.HIVResultKe;
 import org.msh.mdrtb.entities.enums.ReferredBy;
 import org.msh.mdrtb.entities.enums.ReferredTo;
+import org.msh.tb.ke.entities.enums.Dot;
 
 
 @Name("globalLists_ke")

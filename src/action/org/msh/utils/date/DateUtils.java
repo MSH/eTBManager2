@@ -7,10 +7,10 @@ import java.util.Date;
 public class DateUtils {
 
 	/**
-	 * Conta o número de dias entre duas datas
-	 * @param a
-	 * @param b
-	 * @return número de dias
+	 * Return the number of days between two dates
+	 * @param a initial date
+	 * @param b ending date
+	 * @return number of days
 	 */
 	public static int daysBetween(Date a, Date b)
 	{

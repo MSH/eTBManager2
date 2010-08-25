@@ -111,7 +111,7 @@ public class StockPosHome implements Comparator<StockPosItem>{
 			ss.getItems().add(it);
 		}
 		
-		// retorna informações sobre lote
+		// retorna informacoes sobre lote
 		if (userSession.getTbunit().isBatchControl()) {
 			hql = "select b.source.id, b.batch.medicine.id, min(b.batch.expiryDate) " +
 				"from BatchQuantity b " +
