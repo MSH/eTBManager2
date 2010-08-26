@@ -12,8 +12,6 @@
   SHAPE="664,1145,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
  <item ID="#reports#*" NAME="#xreports#x*" PATH="/reports/*"
   SHAPE="344,5265,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
- <item ID="#custom#*" NAME="#xcustom#x*" PATH="/custom/*"
-  SHAPE="664,5265,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
  <item ID="*" NAME="*" PATH="*" SHAPE="24,17,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
   <output ID="/home.xhtml" NAME="output" PATH="/home.xhtml"
    TARGET="#xhome.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
@@ -251,4 +249,6 @@
   SHAPE="344,5673,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
  <item ID="#workspaceimg.xhtml" NAME="#xworkspaceimg.xhtml"
   PATH="/workspaceimg.xhtml" SHAPE="24,5881,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#custom#br#login.xhtml" NAME="#xcustom#xbr#xlogin.xhtml"
+  PATH="/custom/br/login.xhtml" SHAPE="24,5881,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
 </diagram>

@@ -1,12 +1,10 @@
 Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.7.1
-Created-By: 11.0-b16 (Sun Microsystems Inc.)
-Built-By: Ricardo
-Implementation-Version: 1.5-b65
-Implementation-Title: e-TB Manager for Philippines
+Created-By: 17.0-b17 (Sun Microsystems Inc.)
+Built-By: rmemoria
+Implementation-Version: 1.5-b69
+Implementation-Title: e-TB Manager
 Implementation-Vendor: Management Sciences for Health, Inc.
-Built-Date: 2010-08-24 23:23:08
-Build-Jdk: 1.6.0_11
-Country-Code: PH
-Country: Philippines
+Built-Date: 2010-08-25 18:07:39
+Build-Jdk: 1.6.0_21
 

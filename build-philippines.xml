@@ -128,6 +128,7 @@
 				<exclude name="/org/msh/tb/ke/**" />
 				<exclude name="/org/msh/tb/br/**"/>
 				<exclude name="/org/msh/tb/ua/**"/>
+				<exclude name="/org/msh/tb/md/**"/>
 				<exclude name="/org/msh/tb/in/**"/>
 			</classes>
 			

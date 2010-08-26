@@ -26,7 +26,12 @@
 	<page view-id="/reports/*" login-required="true" >
 		<restrict>#{s:hasRole('MANAGEMENT')}</restrict>
 	</page>
-	<page view-id="/custom/*" login-required="true" >
+
+<!-- 	<page view-id="/custom/*" login-required="true" >
+	</page>
+ -->
+
+	<page view-id="/custom/br/login.xhtml" login-required="false" >
 	</page>
 
 

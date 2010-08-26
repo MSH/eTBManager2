@@ -32,7 +32,7 @@
                  
 	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
 		<ui:define name="header">
-			<s:link value="#{messages['form.new']}" view="/custom/br/cases/edtcontact.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+			<s:link value="#{messages['form.new']}" view="/cases/edtcontact.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
 				<f:param name="id" value="#{caseHome.id}" />
 				<f:param name="conid" value="#{null}" />
 			</s:link>
@@ -51,7 +51,7 @@
 			<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remContact(#{it.id});return false;" 
 				style="font-size:9px;float:right;">
 			</h:commandLink>
-			<s:link value="#{it.name}" view="/custom/br/cases/edtcontact.xhtml">
+			<s:link value="#{it.name}" view="/cases/edtcontact.xhtml">
 				<f:param name="conid" value="#{it.id}"/>
 			</s:link>
 		</th>
