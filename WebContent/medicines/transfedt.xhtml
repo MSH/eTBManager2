@@ -61,8 +61,9 @@
 		</th></tr>
 		<a:repeat value="#{s.items}" var="it">
 		<tr bgcolor="#f3f3f0"><td>
-			<img src="../img/medicine.gif" style="float:left;"/>
+			<div class="medicine-icon">
 			#{it.medicine}
+			</div>
 		</td>
 		<td>
 		</td>
@@ -99,9 +100,10 @@
 		<a:repeat value="#{it.batches}" var="b">
 			<tr style="font-size:9px;">
 				<td class="colb" >
-					<img src="../img/batch.gif" style="margin-left:28px;float:left;"/>
+					<div class="batch-icon">
 					#{b.batch.batchNumber}<br/>
 					#{b.batch.manufacturer}
+					</div>
 				</td>
 				<td align="center" class="colb">
 					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />

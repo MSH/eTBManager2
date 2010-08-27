@@ -9,8 +9,7 @@
 
 <table class="tabela3" style="width:100%">
 <tr><td class="header">
-<div>
-  	<img src="../img/#{userSession.tbunit.treatmentHealthUnit?'hu.gif':'storage.gif'}" style="float:left;margin-right:4px;margin-bottom:15px;"/>
+<div class="#{userSession.tbunit.treatmentHealthUnit?'hu-icon':'ds-icon'}">
 	<h:form style="margin:0px">
 	<div style="float:right;">
 		<a:region>
@@ -54,8 +53,9 @@
 	<h:panelGroup id="units">
 		<s:fragment rendered="#{not unitSelection.selecting}">
 			<div style="padding: 10px; margin-top: 40px; margin-left: 120px; margin-right: 120px;margin-bottom:60px;border:4px double #b0b0b0;">
-			<h:graphicImage value="/img/spinner.gif" rendered="#{not unitSelection.selecting}"/>
-			<span style="color:#d0d0d0">#{messages['global.wait']}</span>
+			<s:span style="color:#d0d0d0" styleClass="wait-icon" rendered="#{not unitSelection.selecting}">
+				#{messages['global.wait']}
+			</s:span>
 			</div>
 		</s:fragment>
 		<s:fragment rendered="#{unitSelection.selecting}">

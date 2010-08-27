@@ -77,14 +77,17 @@
 <tr><td>
     <table width="100%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse" bgcolor="#f0f0f0" cellpadding="8">
     <tr><td>
-    	<b style="float:left;margin-right:4px;">#{messages['Order.tbunitFrom']}: </b>
-    	<img src="../img/#{order.tbunitFrom.treatmentHealthUnit?'hu.gif':'storage.gif'}" style="float:left;"/>
-    	#{order.tbunitFrom.name}
+    	<div class="#{order.tbunitFrom.treatmentHealthUnit?'hu-icon':'ds-icon'}">
+    		<b style="float:left;margin-right:4px;">#{messages['Order.tbunitFrom']}: </b>
+    		#{order.tbunitFrom.name}
+    	</div>
     </td>
     <td>
-    	<b style="float:left;margin-right:4px;">#{messages['Order.tbunitTo']}: </b>
-    	<img src="../img/#{order.tbunitTo.treatmentHealthUnit?'hu.gif':'storage.gif'}" style="float:left;"/>
-    	#{order.tbunitTo.name}
+    	<div class="#{order.tbunitTo.treatmentHealthUnit?'hu-icon':'ds-icon'}">
+    		<b style="float:left;margin-right:4px;">#{messages['Order.tbunitTo']}: </b>
+    		#{order.tbunitFrom.name}
+    		#{order.tbunitTo.name}
+    	</div>
     </td></tr>
 
     <tr><td colspan="2" style="font-size:11px;padding-top:5px;color:#808080">
@@ -158,8 +161,7 @@
 		<h:dataTable value="#{s.items}" var="it" class="tabela" width="100%" columnClasses="coll,colc,colr,colr,colr,colr,colr,colr" rowClasses="lin1,lin2">
 			<h:column>
 				<f:facet name="header"><h:outputText value="#{messages['Medicine']}" styleClass="collh"/></f:facet>
-				<img src="../img/medicine.gif" style="float:left;"/>
-				#{it.item.medicine}
+				<h:outputText value="#{it.item.medicine}" styleClass="medicine-icon" />
 			</h:column>
 
 			<h:column>
@@ -235,8 +237,7 @@
 	<ui:repeat value="#{s.items}" var="it">
 	<tr class="highlight">
 		<td class="colb" colspan="2">
-		<img src="../img/medicine.gif" style="float:left;"/>
-		#{it.item.medicine}
+		<h:outputText value="#{it.item.medicine}" styleClass="medicine-icon" />
 		</td>
 		<td class="colrb">
 			<h:outputText value="#{it.item.numPatients}">
@@ -311,10 +312,11 @@
 				<a:repeat value="#{it.item.batches}" var="b">
 					<tr class="lin2">
 						<td class="colb">
-							<h:graphicImage value="/img/batch.gif" style="float:left;margin-bottom:10px;margin-right:2px;" />
+							<div class="batch-icon">
 							#{b.batch.batchNumber}<br/>
 							#{b.batch.manufacturer}<br/>
 							#{b.batch.brandName}
+							</div>
 						</td>
 						<td class="colcb">
 							<h:outputText value="#{b.batch.expiryDate}"  converter="localeDateConverter" />

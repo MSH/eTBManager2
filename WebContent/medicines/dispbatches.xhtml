@@ -36,8 +36,7 @@
 		</th></tr>
 		<ui:repeat value="#{s.medicines}" var="m">
 		<tr bgcolor="#f3f3f0"><td>
-			<img src="../img/medicine.gif" style="float:left;"/>
-			#{m.medicine}
+			<h:outputText value="#{m.medicine}" styleClass="medicine-icon" />
 		</td>
 		<td align="right">
 			<b><h:outputText value="#{m.quantity}">
@@ -55,7 +54,7 @@
 		</td>
 		<td align="right">
 			<s:fragment rendered="#{m.reservedQuantity == 0}">
-				<img src="../img/central.gif" style="float:right;" />
+				<img src="#{request.contextPath}/public/themes/default/images/central.gif" style="float:right;" />
 				<h:outputText value="#{messages['medicines.dispensing.noreserv']}" style="color:silver;"/>
 			</s:fragment>
 			<b><h:outputText value="#{m.reservedQuantity}" rendered="#{m.reservedQuantity > 0}">
@@ -71,9 +70,10 @@
 		<ui:repeat value="#{m.batches}" var="b">
 			<tr style="font-size:9px;">
 				<td class="colb" >
-					<img src="../img/batch.gif" style="margin-left:28px;float:left;"/>
+					<div class="batch-icon">
 					#{b.batch.batchNumber}<br/>
 					#{b.batch.manufacturer}
+					</div>
 				</td>
 				<td class="colb" align="right">
 					<h:outputText value="#{b.quantity}">

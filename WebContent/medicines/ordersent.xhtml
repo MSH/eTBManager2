@@ -60,8 +60,7 @@
 			</tr>
 			<c:forEach var="it" items="#{s.items}">
 				<tr class="highlight"><td class="col" style="height:25px;">
-					<img src="../img/medicine.gif" style="float:left;"/>
-					<div style="font-size:11px;">#{it.item.medicine}
+					<div style="font-size:11px;" class="medicine-icon">#{it.item.medicine}
 					</div> 
 				</td>
 				<s:fragment rendered="#{it.item.data==true}">
@@ -85,7 +84,9 @@
 					<table width="450px">
 					<c:forEach var="b" items="#{it.item.batches}">
 						<tr>
-						<td><h:graphicImage value="/img/batch.gif" /></td>
+						<td>
+							<div class="batch-icon" />
+						</td>
 						<td class="col">
 							#{messages['Batch.manufacturer']} : #{b.batch.manufacturer}<br/> 
 							#{messages['Batch.batchNumber']} : #{b.batch.batchNumber}<br/>

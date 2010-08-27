@@ -27,13 +27,8 @@
 		<restrict>#{s:hasRole('MANAGEMENT')}</restrict>
 	</page>
 
-<!-- 	<page view-id="/custom/*" login-required="true" >
+ 	<page view-id="/custom/*" login-required="true" >
 	</page>
- -->
-
-	<page view-id="/custom/br/login.xhtml" login-required="false" >
-	</page>
-
 
     <page view-id="*" action="#{onlineUsers.update}">
         <navigation>

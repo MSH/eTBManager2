@@ -29,7 +29,7 @@
 
 <div style="display:block;float:right;height:22px;min-height:22px;margin-right:16px;">
 	<s:fragment rendered="#{workspaceViewService.view.picture != null}">
-		<img src="#{facesContext.externalContext.request.contextPath}#{workspaceViewService.view.pictureURI}" style="float:left;margin-right:4px;" />
+		<img src="#{request.contextPath}#{workspaceViewService.view.pictureURI}" style="float:left;margin-right:4px;" />
 	</s:fragment>
 	<h:outputText value="#{defaultWorkspace.name}" rendered="#{userLogin != null}" style="font-weight:bold;color:white;"/> 
 </div>

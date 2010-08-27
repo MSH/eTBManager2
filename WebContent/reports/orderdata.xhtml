@@ -109,8 +109,9 @@
 		<h:dataTable value="#{s.items}" var="it" class="tabela" width="100%" columnClasses="coll,colc,colr,colr,colr,colr,colr,colr" rowClasses="lin1,lin2">
 			<h:column>
 				<f:facet name="header"><h:outputText value="#{messages['Medicine']}" styleClass="collh"/></f:facet>
-				<img src="../img/medicine.gif" style="float:left;"/>
+				<div class="medicine-icon">
 				#{it.item.medicine}
+				</div>
 			</h:column>
 
 			<h:column>

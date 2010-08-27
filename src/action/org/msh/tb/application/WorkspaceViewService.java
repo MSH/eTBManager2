@@ -1,17 +1,13 @@
-package org.msh.tb.workspaces;
+package org.msh.tb.application;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,10 +27,7 @@ import org.msh.mdrtb.entities.WorkspaceView;
 @BypassInterceptors
 public class WorkspaceViewService {
 
-	private Map<String, Boolean> pages = new HashMap<String, Boolean>();
 	private List<WorkspaceView> views;
-	
-	private static final String genericPath = "/custom/generic";
 	
 	private String pictureFile;
 	
@@ -67,61 +60,7 @@ public class WorkspaceViewService {
 	public String getTemplateMedPage() {
 		return (!isPrinting()? "/layout/templatemed.xhtml": "/layout/report.xhtml");
 	}
-	
-	/**
-	 * Return the absolute path of a page
-	 * @return
-	 */
-	public String getPagePath() {
-		Workspace workspace = getWorkspace();
-		if (workspace == null)
-			return genericPath;
 
-		String ext = workspace.getExtension();
-		if (ext == null)
-			return genericPath;
-		
-		String pageName = getPageName();
-		String extensionPage = "custom/" +  workspace.getExtension();
-
-		return (extensionPageExists(extensionPage + pageName) ? "/" + extensionPage: genericPath);
-	}
-
-	
-	/**
-	 * Return the full page name, including path
-	 * @return
-	 */
-	public String getFullPageName() {
-		String pageName = getPageName();
-
-		Workspace workspace = getWorkspace();
-		if (workspace == null)
-			return genericPath + pageName;
-
-		String extensionPage = "custom/" +  workspace.getExtension();
-		return (extensionPageExists(extensionPage + pageName)? "/" + extensionPage + pageName: genericPath + pageName);
-	}
-
-	/**
-	 * Check if a extension page exists
-	 * @param extensionPage
-	 * @return
-	 */
-	protected boolean extensionPageExists(String extensionPage) {
-		if (pages.containsKey(extensionPage)) {
-			return pages.get(extensionPage);
-		}
-
-		String pg = ((ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext()).getRealPath(extensionPage);
-
-		File pageFile = new File(pg);
-
-		boolean exists = pageFile.exists();
-		pages.put(extensionPage, exists);
-		
-		return exists;
-	}
 	
 
 	/**
@@ -200,8 +139,8 @@ public class WorkspaceViewService {
 		String path = ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getContextPath();
 		
 		if ((view == null) || (view.getLogoImage() == null))
-			 return path + "/img/logo.gif";
-		else return path + "/img/" + view.getLogoImage();
+			 return path + "/public/themes/default/images/logo.gif";
+		else return path + "/public/themes/default/images/" + view.getLogoImage();
 	}
 	
 	

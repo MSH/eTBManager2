@@ -311,9 +311,9 @@
 			</td>
 			<ui:repeat value="#{r.results}" var="rs">
 			<td class="colcb" rowspan="#{empty r.examResult.comments?'1':'2'}">
-				<h:graphicImage value="/img/resistant.gif" rendered="#{rs=='RESISTANT'}" title="#{messages[rs.key]}"/>
-				<h:graphicImage value="/img/suscept.gif" rendered="#{rs=='SUSCEPTIBLE'}" title="#{messages[rs.key]}"/>
-				<h:graphicImage value="/img/contaminated.gif" rendered="#{rs=='CONTAMINATED'}" title="#{messages[rs.key]}"/>
+				<s:fragment  rendered="#{rs=='RESISTANT'}"><div class="dst-resistant" title="#{messages[rs.key]}" /></s:fragment>
+				<s:fragment  rendered="#{rs=='SUSCEPTIBLE'}"><div class="dst-susceptible" title="#{messages[rs.key]}" /></s:fragment>
+				<s:fragment  rendered="#{rs=='CONTAMINATED'}"><div class="dst-contaminated" title="#{messages[rs.key]}" /></s:fragment>
 				<h:outputText value="x" rendered="#{rs=='NOTDONE'}" title="#{messages[rs.key]}"/>
 			</td>
 			</ui:repeat>

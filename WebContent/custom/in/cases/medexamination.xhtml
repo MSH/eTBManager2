@@ -7,7 +7,7 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<s:link value="#{messages['cases.details.newresult']}" view="/custom/in/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+	<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
 		<f:param name="id" value="#{tbCase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 	</s:link>
@@ -20,7 +20,7 @@
 		<s:decorate template="/layout/roundrect.xhtml" style="margin-right:10px;">
 		<ui:define name="header">
 			<div style="float:right;">
-				<s:link value="#{messages['form.edit']}" view="/custom/in/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;">
+				<s:link value="#{messages['form.edit']}" view="/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;">
 					<f:param name="id" value="#{tbCase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 				</s:link>

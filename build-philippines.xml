@@ -121,6 +121,13 @@
 				<exclude name="WEB-INF/web.xml"/>
 				<exclude name="WEB-INF/components.xml" />
 				<exclude name="WEB-INF/faces-config.xml" />
+				<exclude name="custom/br/**"/>
+				<exclude name="custom/in/**"/>
+				<exclude name="custom/ke/**"/>
+				<exclude name="custom/ua/**"/>
+				<exclude name="custom/md/**"/>
+				<exclude name="login.xhtml"/>
+				<exclude name="login.page.xml"/>
 			</fileset>
 			
 			<classes dir="build/classes">
@@ -132,6 +139,9 @@
 				<exclude name="/org/msh/tb/in/**"/>
 			</classes>
 			
+			<zipfileset file="WebContent/public/loginph.xhtml" fullpath="login.xhtml" />
+			<zipfileset file="WebContent/public/loginph.page.xml" fullpath="login.page.xml" />
+
 			<zipfileset file="production/persistence.xml" prefix="WEB-INF/classes/META-INF" />
 			<zipfileset file="production/components.xml" prefix="WEB-INF" />
 			<zipfileset file="production/faces-config-ph.xml" fullpath="WEB-INF/faces-config.xml" />

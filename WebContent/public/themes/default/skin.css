@@ -104,7 +104,7 @@ td {
 }
 
 .erro {
-	background: transparent url("../img/error.gif") no-repeat;
+	background: transparent url("images/error.gif") no-repeat;
 	padding-left:16px;
 	padding-bottom:2px;
 	color:red;
@@ -177,7 +177,7 @@ td {
 	font-weight: bold;
 }
 .activerow {
-	background:transparent url('../img/degrad4.gif') repeat-x;
+	background:transparent url('images/degrad4.gif') repeat-x;
 }
 .sel-row {
 	background-color: #ABE78D; /*#E6E8D8; */
@@ -255,7 +255,7 @@ td {
 	color: white;
 	text-decoration: underline;
 	background-color: #80909B;
-/*	background: transparent url(../img/degrad5.gif) repeat-x; */
+/*	background: transparent url(images/degrad5.gif) repeat-x; */
 }
 
 
@@ -267,10 +267,10 @@ td {
 .ct, .ct .cl, .cb, .cb .cl{display:block;font-size:0;line-height:0;margin:0;height:4px;position:relative}
 .ct, .cb{width:100%;right:-1px}
 .ct .cl, .cb .cl{width:4px;left:-2px}
-.ct{background:transparent url(../img/cr_gg_ne.gif) no-repeat top right;top:-1px}
-.ct .cl{background:transparent url(../img/cr_gg_nw.gif) no-repeat top left}
-.cb{background:transparent url(../img/cr_gg_se.gif) no-repeat bottom right;bottom:-1px;}
-.cb .cl{background:transparent url(../img/cr_gg_sw.gif) no-repeat bottom left;}
+.ct{background:transparent url(images/cr_gg_ne.gif) no-repeat top right;top:-1px}
+.ct .cl{background:transparent url(images/cr_gg_nw.gif) no-repeat top left}
+.cb{background:transparent url(images/cr_gg_se.gif) no-repeat bottom right;bottom:-1px;}
+.cb .cl{background:transparent url(images/cr_gg_sw.gif) no-repeat bottom left;}
 
 
 .linknaveg {
@@ -278,7 +278,7 @@ td {
 }
 .linknaveg a {
 	position: relative;
-	background: transparent url(../img/right.gif) no-repeat left top;
+	background: transparent url(images/right.gif) no-repeat left top;
 	height:20px;
 	padding-left:10px;
 	margin-right:10px;
@@ -326,7 +326,7 @@ td {
 	margin-left:20px;
 	margin-top:15px;
 	min-height:20px;
-	background: transparent url(../img/quadrado.jpg) no-repeat left top;
+	background: transparent url(images/quadrado.jpg) no-repeat left top;
 	clear: both;
 	display: block;
 	padding-left:20px;
@@ -417,7 +417,7 @@ td {
 	background-color: #F1F1F1;
 }
 .tabela1 th {
-	background: transparent url(../img/degr1.gif) repeat-x;
+	background: transparent url(images/degr1.gif) repeat-x;
 	color:#000000;
 	font-weight:bold;
 	height:20px;
@@ -525,34 +525,26 @@ td {
 	border-bottom:1px solid #e0e0e0;
 }
 
-.b1lt {background: transparent url(../img/b1lt.gif) no-repeat left top; position:relative; left:-1px; top:-1px;}
-.b1rt {background: transparent url(../img/b1rt.gif) no-repeat right top; position:relative; left:2px; }
-.b1lb {background: transparent url(../img/b1lb.gif) no-repeat left bottom; position:relative; left:-1px; top:1px;}
-.b1rb {background: transparent url(../img/b1rb.gif) no-repeat right bottom; position:relative; left:2px;}
+.b1lt {background: transparent url(images/b1lt.gif) no-repeat left top; position:relative; left:-1px; top:-1px;}
+.b1rt {background: transparent url(images/b1rt.gif) no-repeat right top; position:relative; left:2px; }
+.b1lb {background: transparent url(images/b1lb.gif) no-repeat left bottom; position:relative; left:-1px; top:1px;}
+.b1rb {background: transparent url(images/b1rb.gif) no-repeat right bottom; position:relative; left:2px;}
 
-.b2lt {background: transparent url(../img/b2lt.gif) no-repeat left top; position:relative; left:-1px; top:-1px;}
-.b2rt {background: transparent url(../img/b2rt.gif) no-repeat right top; position:relative; left:2px; }
-.b2lb {background: transparent url(../img/b2lb.gif) no-repeat left bottom; position:relative; left:-1px; top:1px;}
-.b2rb {background: transparent url(../img/b2rb.gif) no-repeat right bottom; position:relative; left:2px;}
-
-.wait {
-	background: transparent url(../img/spinner.gif) no-repeat left top;
-	font-weight:bold;
-	padding-left:20px;
-	padding-bottom:2px;
-	display:block;
-}
+.b2lt {background: transparent url(images/b2lt.gif) no-repeat left top; position:relative; left:-1px; top:-1px;}
+.b2rt {background: transparent url(images/b2rt.gif) no-repeat right top; position:relative; left:2px; }
+.b2lb {background: transparent url(images/b2lb.gif) no-repeat left bottom; position:relative; left:-1px; top:1px;}
+.b2rb {background: transparent url(images/b2rb.gif) no-repeat right bottom; position:relative; left:2px;}
 
 
 .hu-icon {
-	background: transparent url(../img/hu.gif) no-repeat left top;
+	background: transparent url(images/hu.gif) no-repeat left top;
 	padding-left:32px;
 	min-height:28px;
 	display:block;
 }
 
 .ds-icon {
-	background: transparent url(../img/storage.gif) no-repeat left top;
+	background: transparent url(images/storage.gif) no-repeat left top;
 	padding-left:32px;
 	min-height:28px;
 	display:block;
@@ -560,14 +552,14 @@ td {
 }
 
 .folder-icon {
-	background: transparent url(../img/folder.gif) no-repeat left top;
+	background: transparent url(images/folder.gif) no-repeat left top;
 	padding-left:16px;
 	min-height:16px;
 	display:block;
 }
 
 .plus-icon {
-	background: transparent url(../img/plus.gif) no-repeat left top;
+	background: transparent url(images/plus.gif) no-repeat left top;
 	padding-left:10px;
 	min-height:10px;
 	display:block;
@@ -575,7 +567,7 @@ td {
 }
 
 .warn-icon {
-	background: transparent url(../img/Lampada.gif) no-repeat left top;
+	background: transparent url(images/Lampada.gif) no-repeat left top;
 	padding-left:20px;
 	min-height:20px;
 	display:block;
@@ -583,7 +575,7 @@ td {
 }
 
 .male-icon {
-	background: transparent url(../img/male.gif) no-repeat left top;
+	background: transparent url(images/male.gif) no-repeat left top;
 	padding-left:38px;
 	min-height:38px;
 	display:block;
@@ -591,7 +583,7 @@ td {
 }
 
 .female-icon {
-	background: transparent url(../img/female.gif) no-repeat left top;
+	background: transparent url(images/female.gif) no-repeat left top;
 	padding-left:38px;
 	min-height:38px;
 	height:38px;
@@ -599,35 +591,49 @@ td {
 }
 
 .right-icon {
-	background: transparent url(../img/right.gif) no-repeat left 2px;
+	background: transparent url(images/right.gif) no-repeat left 2px;
 	padding-left:9px;
 	min-height:12px;
 	height:12px;
 	margin-right:4px;
 }
 
-.medicine-icon {
-	background: transparent url(../img/medicine.gif) no-repeat left top;
+.medicine-icon, .batch-icon {
 	padding-left:28px;
-	min-height:26px;
-	height:26px;
-	display:block;
+	display:table-cell;
+}
+.medicine-icon {
+	background: transparent url(images/medicine.gif) no-repeat left top;
+	min-height:27px;
+	height:27px;
+}
+.batch-icon {
+	background: transparent url(images/batch.gif) no-repeat left top;
+	min-height:32px;
+	height:32px;
+}
+
+.forecast-icon {
+	background: transparent url(images/forecast2.gif) no-repeat left top;
+	padding-left:28px;
+	min-height:27px;
+	height:27px;
 }
 
 .mod-cases-icon {
-	background: transparent url(../img/mod-cases.png) no-repeat left top;
+	background: transparent url(images/mod-cases.png) no-repeat left top;
 }
 
 .mod-medicines-icon {
-	background: transparent url(../img/mod-medicines.png) no-repeat left top;
+	background: transparent url(images/mod-medicines.png) no-repeat left top;
 }
 
 .mod-admin-icon {
-	background: transparent url(../img/mod-admin.png) no-repeat left top;
+	background: transparent url(images/mod-admin.png) no-repeat left top;
 }
 
 .mod-manag-icon {
-	background: transparent url(../img/mod-manag.png) no-repeat left top;
+	background: transparent url(images/mod-manag.png) no-repeat left top;
 }
 
 .mod-manag-icon,.mod-cases-icon,.mod-medicines-icon,.mod-admin-icon {
@@ -636,27 +642,28 @@ td {
 	height:56px;
 }
 
-.checked-icon, .unchecked-icon, .result-positive, .result-negative {
+.checked-icon, .unchecked-icon, .wait-icon, .result-positive, .result-negative, .dst-resistant, .dst-susceptible, .dst-contaminated {
 	padding-left:16px;
 	min-height:16px;
 	display:block;
 	clear: both;
 }
-.checked-icon {
-	background: transparent url(../img/checked.gif) no-repeat left top;
-}
-.unchecked-icon {
-	background: transparent url(../img/unchecked.gif) no-repeat left top;
-}
+.checked-icon {	background: transparent url(images/checked.gif) no-repeat left top; }
+.unchecked-icon {	background: transparent url(images/unchecked.gif) no-repeat left top; }
+.dst-resistant {	background: transparent url(images/resistant.gif) no-repeat left top; }
+.dst-susceptible {	background: transparent url(images/suscept.gif) no-repeat left top; }
+.dst-contaminated {	background: transparent url(images/contaminated.gif) no-repeat left top; }
+.wait-icon { background: transparent url(images/spinner.gif) no-repeat left top; font-weight: bold;}
 
 .progress-icon {
-	background: transparent url(../img/progress.gif) no-repeat left top;
+	background: transparent url(images/progress.gif) no-repeat left top;
 }
 
-.log-NEW {	background: transparent url(../img/log-new.gif) no-repeat left top; }
-.log-EDIT {	background: transparent url(../img/log-edit.gif) no-repeat left top; }
-.log-DELETE {	background: transparent url(../img/log-delete.gif) no-repeat left top; }
-.log-EXEC {	background: transparent url(../img/log-exec.gif) no-repeat left top; }
+
+.log-NEW {	background: transparent url(images/log-new.gif) no-repeat left top; }
+.log-EDIT {	background: transparent url(images/log-edit.gif) no-repeat left top; }
+.log-DELETE {	background: transparent url(images/log-delete.gif) no-repeat left top; }
+.log-EXEC {	background: transparent url(images/log-exec.gif) no-repeat left top; }
 .log-NEW,.log-EDIT, .log-DELETE, .log-EXEC {
 	padding-left:38px;
 	min-height:32px;
@@ -672,10 +679,10 @@ td {
 	margin-right:20px;
 }
 
-.naveg-first {	background: transparent url(../img/first.gif) no-repeat left top; }
-.naveg-next {	background: transparent url(../img/next.gif) no-repeat left top; }
-.naveg-prev {	background: transparent url(../img/prev.gif) no-repeat left top; }
-.naveg-last {	background: transparent url(../img/last.gif) no-repeat left top; }
+.naveg-first {	background: transparent url(images/first.gif) no-repeat left top; }
+.naveg-next {	background: transparent url(images/next.gif) no-repeat left top; }
+.naveg-prev {	background: transparent url(images/prev.gif) no-repeat left top; }
+.naveg-last {	background: transparent url(images/last.gif) no-repeat left top; }
 
 
 
@@ -690,7 +697,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 }
 
 .logo-icon {
-	background: transparent url(../img/mdrtb.gif) no-repeat left top; }
+	background: transparent url(images/mdrtb.gif) no-repeat left top; }
 }
 
 .header-table {
@@ -725,10 +732,10 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 }
 
 .postissue-icon {
-	background: transparent url(../img/leftred.png) no-repeat left top;
+	background: transparent url(images/leftred.png) no-repeat left top;
 }
 .replyissue-icon {
-	background: transparent url(../img/rightgreen.png) no-repeat left top;
+	background: transparent url(images/rightgreen.png) no-repeat left top;
 }
 .postissue-icon, .replyissue-icon {
 	padding-left:38px;
@@ -737,7 +744,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 }
 
 .star-icon {
-	background: transparent url(../img/greenstar.gif) no-repeat left top;
+	background: transparent url(images/greenstar.gif) no-repeat left top;
 	padding-left:18px;
 	min-height:18px;
 	height:18px;
@@ -750,7 +757,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	color:#C60;
 }
 .status-cancel {
-	background: transparent url(../img/error.png) no-repeat left top;
+	background: transparent url(images/error.png) no-repeat left top;
 	font-family:verdana;
 	font-size:16px;
 	font-weight: bold;
@@ -772,7 +779,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	margin-top:16px;
 }
 .print-link a {
-	background: transparent url(../img/print.gif) no-repeat left top;
+	background: transparent url(images/print.gif) no-repeat left top;
 	padding-left:20px;
 	min-height:18px;
 	height:18px;
@@ -783,10 +790,10 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 }
 
 .result-positive {
-	background: transparent url(../img/red.png) no-repeat left top;
+	background: transparent url(images/red.png) no-repeat left top;
 }
 .result-negative {
-	background: transparent url(../img/blue.png) no-repeat left top;
+	background: transparent url(images/blue.png) no-repeat left top;
 }
 
 .footer {
@@ -802,13 +809,13 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	cursor:pointer;
 	display:inline;
 }
-.bar 		{	font-weight: bold; background:transparent url(../img/bar-body.png) repeat-x top; }
-.bar-active {	font-weight: bold; background:transparent url(../img/bar-body.png) repeat-x bottom; }
+.bar 		{	font-weight: bold; background:transparent url(images/bar-body.png) repeat-x top; }
+.bar-active {	font-weight: bold; background:transparent url(images/bar-body.png) repeat-x bottom; }
 .bar-left, .bar-left-active, .bar-right, .bar-right-active { height:25px;	cursor:pointer; }
-.bar-left 		{	background:transparent url(../img/bar-left.png) no-repeat left top;}
-.bar-left-active{	background:transparent url(../img/bar-left.png) no-repeat left bottom; }
-.bar-right {	background:transparent url(../img/bar-right.png) no-repeat right top;}
-.bar-right-active {	background:transparent url(../img/bar-right.png) no-repeat right bottom;}
+.bar-left 		{	background:transparent url(images/bar-left.png) no-repeat left top;}
+.bar-left-active{	background:transparent url(images/bar-left.png) no-repeat left bottom; }
+.bar-right {	background:transparent url(images/bar-right.png) no-repeat right top;}
+.bar-right-active {	background:transparent url(images/bar-right.png) no-repeat right bottom;}
 .bar-header {	background-color:#f0f0f0; }
 .bar-header-active {	background-color:#d0d0d0; }
 
@@ -823,7 +830,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 }
 
 .popup,.popup-long {
-	background:transparent url(../img/popuphint.png) no-repeat left top;
+	background:transparent url(images/popuphint.png) no-repeat left top;
 	position:absolute;
 	width:284px;
 	z-index:2;
@@ -833,7 +840,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	text-align: left;
 }
 .popup #bottom,.popup-long #bottom {
-	background:transparent url(../img/popuphint.png) no-repeat left bottom;
+	background:transparent url(images/popuphint.png) no-repeat left bottom;
 	position:absolute;
 	width:284px;
 	height:20px;
@@ -852,7 +859,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .popup-long #content {top:-170px; }
 
 #closewin {
-	background: transparent url(../img/close2.png) no-repeat left top;
+	background: transparent url(images/close2.png) no-repeat left top;
 	margin:4px;
 	width:16px;
 	height:16px;
@@ -862,7 +869,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 }
 
 .bar-comments {
-	background: transparent url(../img/comment.png) no-repeat left top;
+	background: transparent url(images/comment.png) no-repeat left top;
 	width: 16px;
 	height: 16px;
 	position: relative;

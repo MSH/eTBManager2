@@ -56,9 +56,9 @@
 	</a:repeat>
 	<a:repeat value="#{it.substancesDisplay}" var="sub">
 		<td class="colcb#{sub.prescribed?' highlight':''}" style="width:30px;">
-			<h:graphicImage value="/img/resistant.gif" rendered="#{sub.dstResult=='RESISTANT'}" />
-			<h:graphicImage value="/img/suscept.gif" rendered="#{sub.dstResult=='SUSCEPTIBLE'}" />
-			<h:graphicImage value="/img/contaminated.gif" rendered="#{sub.dstResult=='CONTAMINATED'}" />
+			<s:fragment rendered="#{sub.dstResult=='RESISTANT'}"><div class="dst-resistant" title="#{messages[sub.dstResult.key]}" /></s:fragment>
+			<s:fragment rendered="#{sub.dstResult=='SUSCEPTIBLE'}"><div class="dst-susceptible" title="#{messages[sub.dstResult.key]}" /></s:fragment>
+			<s:fragment rendered="#{sub.dstResult=='CONTAMINATED'}"><div class="dst-contaminated" title="#{messages[sub.dstResult.key]}" /></s:fragment>
 		</td>
 	</a:repeat>
 	</tr>

@@ -52,8 +52,7 @@
   			<f:param name="order" value="m.genericName.name2#{medicines.order=='m.genericName.name2'?' desc':''}" />
   		</s:link>
   	</f:facet>
-  	<img src="../img/medicine.gif" style="float:left" />
-	#{r.genericName.name2}
+  	<h:outputText value="#{r.genericName.name2}" styleClass="medicine-icon" />
   </h:column>
 
   <h:column>

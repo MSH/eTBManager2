@@ -40,7 +40,7 @@
 		</td>
 	<ui:repeat value="#{defaultWorkspace.weeklyFrequencies[n].weekMask}" var="m">
 		<td style="padding:3px;border:2px solid #f0f0f0">
-			<h:graphicImage value="/img/checked.gif" rendered="#{m}"/>
+			<s:div styleClass="checked-icon" rendered="#{m}"/>
 		</td>
 	</ui:repeat>
 	</tr>

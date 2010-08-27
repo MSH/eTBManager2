@@ -3,9 +3,12 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
 
-	<restrict>#{s:hasRole('CLIFORMS')}</restrict>
-		<param name="order" value="#{clinicalForms.order}" converterId="javax.faces.Integer"/>
-		<param name="cf" value="#{clinicalForms.infectionSite}" />
-	<navigation>
-	</navigation>
+   <action execute="#{localeSelector.selectLanguage('pt_BR')}" />
+
+   <navigation from-action="#{identity.login}">
+      <rule if="#{identity.loggedIn}">
+		<redirect view-id="/home.xhtml"/>
+      </rule>
+   </navigation>
+
 </page>

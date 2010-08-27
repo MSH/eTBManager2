@@ -75,8 +75,7 @@ function validateInput(edt) {
 	</f:facet>
 	<h:panelGroup id="batchselpnl">
 	<div style="clear:both;display:table;margin-bottom:10px;width:100%;">
-		<img src="../img/medicine.gif" style="float:left;margin-right:4px;"/>
-		<div style="font-size:14px;font-weight:bold;">
+		<div style="font-size:14px;font-weight:bold;" class="medicine-icon">
 			#{batchSelection.medicine}
 		</div>
 		#{batchSelection.source.name}
@@ -99,10 +98,9 @@ function validateInput(edt) {
 			<f:facet name="header">
 				<h:outputText value="#{messages['Batch']}" styleClass="collh"/>
 			</f:facet>
-			<div style="width:160px">
-			<img src="../img/batch.gif" style="float:left;"/>
+			<div style="width:160px" class="batch-icon">
 			#{it.item.batch.batchNumber}<br/>
-			#{it.item.batch.manufacturer}<br/>
+			#{it.item.batch.manufacturer}
 			</div>
 		</h:column>
 

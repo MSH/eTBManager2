@@ -14,6 +14,7 @@ import org.msh.mdrtb.entities.TbCase;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.cases.CaseValidationHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.misc.FieldsQuery;
 import org.msh.tb.ph.entities.CaseDataPH;
@@ -38,6 +39,7 @@ public class CaseDataPHHome extends EntityHomeEx<CaseDataPH> {
 	@In(create=true) StartTreatmentHome startTreatmentHome;
 //	@In(create=true) TreatmentHealthUnitHome treatmentHealthUnitHome;
 	@In(create=true) CaseSymptomsHome caseSymptomsHome;
+	@In(create=true) CaseValidationHome caseValidationHome;
 	
 
 	private List<PhysicalExam> physicalExams;
@@ -183,5 +185,19 @@ public class CaseDataPHHome extends EntityHomeEx<CaseDataPH> {
 			}
 			physicalExams.add(pe);
 		}
+	}
+
+
+	/**
+	 * Validate a case and save the data specific for Philippines
+	 * @return "validated" if successfully validated
+	 */
+	protected String validate() {
+		String ret = caseValidationHome.validate();
+		if (!("validated".equals(ret)))
+			return ret;
+		
+		persist();
+		return ret;
 	}
 }

@@ -51,7 +51,7 @@
 			</h:outputText>
 		</td>
 		<td>
-			<h:graphicImage value="/img/arrow.gif" rendered="#{it.quantity>0}"/>
+			<h:graphicImage value="#{request.contextPath}/public/themes/default/images/arrow.gif" rendered="#{it.quantity>0}"/>
 		</td>
 		<td align="left">
 			<b>
@@ -67,9 +67,10 @@
 		<a:repeat value="#{it.batches}" var="b">
 			<tr style="font-size:9px;">
 				<td>
-					<img src="../img/batch.gif" style="margin-left:28px;float:left;"/>
+					<div class="batch-icon">
 					#{b.batchQtd.batch.batchNumber}<br/>
 					#{b.batchQtd.batch.manufacturer}
+					</div>
 				</td>
 				<td align="center">
 					<h:outputText value="#{b.batchQtd.batch.expiryDate}" converter="localeDateConverter" />
@@ -80,7 +81,7 @@
 					</h:outputText>
 				</td>
 				<td>
-					<img src="../img/arrow.gif" />
+					<img src="#{request.contextPath}/public/themes/default/images/arrow.gif" />
 				</td>
 				<td align="left">
 					<h:outputText value="#{b.quantity}">

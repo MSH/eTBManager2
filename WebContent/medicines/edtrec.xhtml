@@ -69,8 +69,8 @@
 			<c:forEach items="#{medicineReceiving.medicines}" var="it">
 				<tr class="lin1">
 				<td class="colb" colspan="3">
-					<img src="../img/medicine.gif" style="float:left;"/>
-					#{it.movement.medicine}</td>
+					<h:outputText value="#{it.movement.medicine}" styleClass="medicine-icon" />
+					</td>
 					<td class="colrb"><b> 
 						<h:outputText value="#{it.totalQtdBatches}" >
 							<f:convertNumber pattern="#,###,###,##0"/>
@@ -95,10 +95,11 @@
 				<a:repeat value="#{it.batches}" var="b">
 					<tr>
 						<td class="colb">
-							<h:graphicImage value="/img/batch.gif" style="float:left;margin-bottom:10px;" />
+							<div class="batch-icon">
 							<span style="width:120px;" >#{messages['Batch.batchNumber']}: </span> #{b.batchNumber}<br/>
 							<span style="width:120px;" >#{messages['Batch.manufacturer']}: </span> #{b.manufacturer}<br/>
-							<span style="width:120px;" >#{messages['Batch.brandName']}: </span>  #{b.brandName}<br/>
+							<span style="width:120px;" >#{messages['Batch.brandName']}: </span>  #{b.brandName}
+							</div>
 						</td>
 						<td class="colcb">
 							<h:outputText value="#{b.expiryDate}" converter="localeDateConverter" />

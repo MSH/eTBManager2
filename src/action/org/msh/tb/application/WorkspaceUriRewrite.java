@@ -52,6 +52,10 @@ public class WorkspaceUriRewrite {
 	 * @return
 	 */
 	public String convertViewToUri(FacesContext facesContext, String view) {
+		Workspace ws = getWorkspace();
+		if (ws == null)
+			return view;
+		
 		if (view.startsWith(customPath)) {
 			// get the index of 3rd slash
 			int pos = view.indexOf('/', customPath.length() + 1);

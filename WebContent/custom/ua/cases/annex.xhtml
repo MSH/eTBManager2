@@ -26,8 +26,9 @@
 	<s:decorate template="/layout/display.xhtml">
 		<ui:param name="labelstyle" value="width:120px;" />
    		<ui:define name="label">
-   			<h:graphicImage value="/img/#{caseDataUA.VCTstarted?'':'un'}checked.gif" style="float:left;"/>
+   			<div class="#{caseDataUA.VCTstarted?'checked-icon':'unchecked-icon'}">
    			#{messages['cases.examhiv.vct']}
+   			</div>
    		</ui:define>
    		<s:fragment rendered="#{caseDataUA.VCTstarted}">
    			#{messages['global.date']}:
@@ -37,22 +38,25 @@
 
 	<s:decorate template="/layout/display.xhtml">
    		<ui:define name="label">
-    		<h:graphicImage value="/img/#{caseDataUA.alcoholAbuse?'':'un'}checked.gif" style="float:left;"/>
+   			<div class="#{caseDataUA.alcoholAbuse?'checked-icon':'unchecked-icon'}">
    			#{messages['uk_UA.alcoholAbuse']}
+   			</div>
    		</ui:define>
 	</s:decorate>
 	
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">
-	    		<h:graphicImage value="/img/#{caseDataUA.injectableDrugUse?'':'un'}checked.gif" style="float:left;"/>
+   				<div class="#{caseDataUA.injectableDrugUse?'checked-icon':'unchecked-icon'}">
     			#{messages['uk_UA.injectableDrugUse']}
+    			</div>
     		</ui:define>
 		</s:decorate>
 
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">
-	    		<h:graphicImage value="/img/#{caseDataUA.tbContact?'':'un'}checked.gif" style="float:left;"/>
+   				<div class="#{caseDataUA.tbContact?'checked-icon':'unchecked-icon'}">
     			#{messages['TbCase.tbContact']}
+    			</div>
     		</ui:define>
 		</s:decorate>
 
@@ -66,29 +70,36 @@
 	
 	<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">
-	    		<h:graphicImage value="/img/#{caseDataUA.homeless?'':'un'}checked.gif" style="float:left;"/>
+   				<div class="#{caseDataUA.homeless?'checked-icon':'unchecked-icon'}">
     			#{messages['uk_UA.homeless']}
+    			</div>
     		</ui:define>
 	</s:decorate>
 	
 	<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">
-	    		<h:graphicImage value="/img/#{caseDataUA.unemployed?'':'un'}checked.gif" style="float:left;"/>
+   				<div class="#{caseDataUA.unemployed?'checked-icon':'unchecked-icon'}">
     			#{messages['uk_UA.unemployed']}
+    			</div>
     		</ui:define>
 	</s:decorate>
 	
 	<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">
-	    		<h:graphicImage value="/img/#{caseDataUA.healthWorker?'':'un'}checked.gif" style="float:left;"/>
+   				<div class="#{caseDataUA.healthWorker?'checked-icon':'unchecked-icon'}">
     			#{messages['uk_UA.healthWorker']}:
+    			</div>
     		</ui:define>
 	</s:decorate>
 	<div style="display:block;clear:both;">
-   		<h:graphicImage value="/img/#{caseDataUA.healthWorkerTB?'':'un'}checked.gif" style="float:left;margin-left:30px;" /> #{messages['uk_UA.healthWorker.TB']}
+		<div class="#{caseDataUA.healthWorkerTB?'checked-icon':'unchecked-icon'}" >
+			#{messages['uk_UA.healthWorker.TB']}
+		</div>
    	</div>
 	<div style="display:block;clear:both;">
-   		<h:graphicImage value="/img/#{caseDataUA.healthWorkerGMC?'':'un'}checked.gif" style="float:left;margin-left:30px;" /> #{messages['uk_UA.healthWorker.GMC']}
+		<div class="#{caseDataUA.healthWorkerGMC?'checked-icon':'unchecked-icon'}" >
+   			#{messages['uk_UA.healthWorker.GMC']}
+   		</div>
    	</div>
 	
 	</td></tr>
@@ -98,8 +109,9 @@
 	
 	<s:decorate template="/layout/display.xhtml">
    		<ui:define name="label">
-    		<h:graphicImage value="/img/#{caseDataUA.migrant?'':'un'}checked.gif" style="float:left;"/>
-   			#{messages['uk_UA.migrant']}
+			<div class="#{caseDataUA.migrant?'checked-icon':'unchecked-icon'}" >
+   				#{messages['uk_UA.migrant']}
+   			</div>
    		</ui:define>
 	</s:decorate>
 
@@ -109,8 +121,9 @@
 	</td><td valign="top">
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">
-	    		<h:graphicImage value="/img/#{caseDataUA.refugee?'':'un'}checked.gif" style="float:left;"/>
+				<div class="#{caseDataUA.refugee?'checked-icon':'unchecked-icon'}" >
     			#{messages['uk_UA.refugee']}
+    			</div>
     		</ui:define>
 		</s:decorate>
     </td></tr>
@@ -119,8 +132,9 @@
 	</td><td valign="top">
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">
-	    		<h:graphicImage value="/img/#{caseDataUA.prisioner?'':'un'}checked.gif" style="float:left;"/>
+				<div class="#{caseDataUA.prisioner?'checked-icon':'unchecked-icon'}" >
     			#{messages['uk_UA.prisioner']}
+    			</div>
     		</ui:define>
 		</s:decorate>
     </td></tr>

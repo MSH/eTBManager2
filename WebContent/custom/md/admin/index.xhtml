@@ -5,6 +5,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
+   	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="#{workspaceViewService.templatePage}">
 
@@ -12,11 +13,10 @@
 <ui:param name="topmenu" value="3" />
 
 <ui:define name="menu_lateral">
-	<ui:include src="/layout/adminmenu.xhtml" />
+	<ui:include src="/custom/md/admin/adminmenu.xhtml" />
 </ui:define>
 
 <ui:define name="body">
-<h1>MOLDOVA SPECIFIC PAGE</h1>
 </ui:define>
 
 </ui:composition>  

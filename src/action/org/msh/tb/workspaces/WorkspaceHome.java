@@ -28,6 +28,7 @@ import org.msh.mdrtb.entities.enums.DisplayCaseNumber;
 import org.msh.mdrtb.entities.enums.NameComposition;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.CountryStructuresQuery;
+import org.msh.tb.application.WorkspaceViewService;
 import org.msh.tb.log.LogInfo;
 import org.msh.tb.log.LogService;
 

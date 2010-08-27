@@ -62,8 +62,7 @@
 
 		<tr style="font-size:12px;font-weight:bold;">
 			<td>
-				<img src="../img/medicine.gif" style="float:left;"/>
-				#{it.item.medicine}
+				<div class="medicine-batch">#{it.item.medicine}</div>
 			</td>
 			<td style="text-align:center;">#{it.item.shippedQuantity}</td>
 			<td style="text-align:center;"><h:outputText value="#{it.item.totalPrice}"><f:convertNumber pattern="#,###,###,##0.00"/> </h:outputText></td>
@@ -82,7 +81,7 @@
 			<td colspan="5">
 			<h:dataTable value="#{it.item.batches}" var="b" width="100%" columnClasses="col,col" >
 			  <h:column>
-			  	<h:graphicImage value="/img/batch.gif" />
+			  	<div class="batch-icon" />
 			  </h:column>
 			  <h:column>
 			  	<span style="height:100%;vertical-align:middle;">

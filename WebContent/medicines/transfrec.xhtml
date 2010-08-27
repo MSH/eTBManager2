@@ -27,13 +27,15 @@
     <table width="750px" class="tabela3" style="margin-bottom:10px" cellpadding="8">
     <tr><td class="header">
     	<b style="float:left;margin-right:4px;">#{messages['Transfer.unitFrom']}: </b>
-    	<img src="../img/#{transfer.unitFrom.treatmentHealthUnit?'hu.gif':'storage.gif'}" style="float:left;"/>
+    	<div class="#{transfer.unitFrom.treatmentHealthUnit?'hu-icon':'ds-icon'}">
     	#{transfer.unitFrom.name}
+    	</div>
     </td>
     <td class="header">
     	<b style="float:left;margin-right:4px;">#{messages['Transfer.unitTo']}: </b>
-    	<img src="../img/#{transfer.unitTo.treatmentHealthUnit?'hu.gif':'storage.gif'}" style="float:left;"/>
+    	<div class="#{transfer.unitTo.treatmentHealthUnit?'hu-icon':'ds-icon'}">
     	#{transfer.unitTo.name}
+    	</div>
     </td></tr>
 
     <tr><td colspan="2" style="font-size:11px;padding-top:5px" class="header">
@@ -90,8 +92,9 @@
 		</th></tr>
 		<ui:repeat value="#{s.items}" var="it">
 		<tr bgcolor="#f3f3f0"><td colspan="2">
-			<img src="../img/medicine.gif" style="float:left;"/>
+			<div class="medicine-icon">
 			#{it.medicine}
+			</div>
 		</td>
 		<td align="right">
 			<b><h:outputText value="#{it.quantity}">
@@ -118,9 +121,10 @@
 		<ui:repeat value="#{it.batches}" var="b">
 			<tr style="font-size:9px;">
 				<td class="colb" >
-					<img src="../img/batch.gif" style="margin-left:28px;float:left;"/>
+					<div class="batch-icon">
 					#{b.batch.batchNumber}<br/>
 					#{b.batch.manufacturer}
+					</div>
 				</td>
 				<td align="center" class="colb">
 					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />

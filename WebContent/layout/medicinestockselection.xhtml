@@ -53,11 +53,10 @@ function hideMedicinesStockDlg() {
 		<f:facet name="header">
 			<h:outputText value="#{messages['Medicine']}" styleClass="collh" />
 		</f:facet>
-		<div style="float:left;vertical-align:top;">
+		<div style="float:left;vertical-align:top;" class="medicine-icon">
 			<h:selectBooleanCheckbox value="#{it.selected}" onclick="msupdateRows()" />
-			<img src="../img/medicine.gif" />
 		</div>
-		#{it.item.medicine}
+		<h:outputText value="#{it.item.medicine}" />
 		<br/>
 		<div style="color:#b0b0b0;">#{messages[it.item.medicine.tbInfoKey]}</div>
 	</h:column>

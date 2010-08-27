@@ -255,7 +255,7 @@
 	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:20px;">
 		<ui:param name="showfooter" value="0" />
 		<ui:define name="header">
-			<s:link value="#{messages['cases.details.newresult']}" view="/custom/in/cases/edtexamsuscept.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
+			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexamsuscept.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
 				<f:param name="id" value="#{tbCase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 			</s:link>
@@ -295,7 +295,7 @@
 		<a:repeat value="#{examSusceptTable.allResults}" var="r">
 		<tr>
 			<td class="colcb">
-				<s:link value="#{messages[r.examResult.sample.monthDisplay]}" view="/custom/in/cases/edtexamsuscept.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
+				<s:link value="#{messages[r.examResult.sample.monthDisplay]}" view="/cases/edtexamsuscept.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbCase.id}"/>
 					<f:param name="examid" value="#{r.examResult.id}"/>
 				</s:link>
@@ -314,9 +314,9 @@
 			</td>
 			<ui:repeat value="#{r.results}" var="rs">
 			<td class="colcb" rowspan="#{empty r.examResult.comments?'1':'2'}">
-				<h:graphicImage value="/img/resistant.gif" rendered="#{rs=='RESISTANT'}" title="#{messages[rs.key]}"/>
-				<h:graphicImage value="/img/suscept.gif" rendered="#{rs=='SUSCEPTIBLE'}" title="#{messages[rs.key]}"/>
-				<h:graphicImage value="/img/contaminated.gif" rendered="#{rs=='CONTAMINATED'}" title="#{messages[rs.key]}"/>
+				<s:fragment  rendered="#{rs=='RESISTANT'}"><div class="dst-resistant" title="#{messages[rs.key]}" /></s:fragment>
+				<s:fragment  rendered="#{rs=='SUSCEPTIBLE'}"><div class="dst-susceptible" title="#{messages[rs.key]}" /></s:fragment>
+				<s:fragment  rendered="#{rs=='CONTAMINATED'}"><div class="dst-contaminated" title="#{messages[rs.key]}" /></s:fragment>
 				<h:outputText value="x" rendered="#{rs=='NOTDONE'}" title="#{messages[rs.key]}"/>
 			</td>
 			</ui:repeat>
@@ -348,7 +348,7 @@
 	<s:decorate template="/layout/roundrect.xhtml" style="padding-top:20px;">
 		<ui:param name="showfooter" value="0" />
 		<ui:define name="header">
-			<s:link value="#{messages['cases.details.newresult']}" view="/custom/in/cases/edtexamxray.xhtml" style="float:right;">
+			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexamxray.xhtml" style="float:right;">
 				<f:param name="id" value="#{tbCase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 			</s:link>
@@ -360,7 +360,7 @@
 		<h:dataTable value="#{examXRayHome.allResults}" var="r" rendered="#{not empty examXRayHome.allResults}" width="100%" styleClass="tabela4" columnClasses="colcb,colcb,colb,colb,colb,colcb">
 			<h:column>
 				<f:facet name="header">#{messages['global.month']}</f:facet>
-				<s:link value="#{messages[r.monthDisplay]}" view="/custom/in/cases/edtexamxray.xhtml" propagation="none" >
+				<s:link value="#{messages[r.monthDisplay]}" view="/cases/edtexamxray.xhtml" propagation="none" >
 					<f:param name="id" value="#{tbCase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 				</s:link>

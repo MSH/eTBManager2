@@ -23,7 +23,6 @@
 
 <table width="100%" style="border:2px solid #e0e0e0;border-collapse: collapse;">
 <tr><td class="header">
-	<img src="../img/forecast2.gif" style="float:left;padding-right:4px;" />
 	<div style="float:right;">
 		<a:commandLink value="#{messages['manag.forecast.new']}" style="margin-right:15px;" 
 			action="#{forecastingView.startNew}" reRender="main"
@@ -33,7 +32,7 @@
 			onclick="showLoadForecastingDlg()" reRender="fclist" action="#{forecastings.initLoading}" />
 		</a:region>
 	</div>
-	#{forecastingHome.instance.name}
+	<h:outputText value="#{forecastingHome.instance.name}" styleClass="forecast-icon" />
 	<br/>
 	<h:outputText value="#{forecasting.recordingDate}" style="font-size:9px;" converter="localeDateConverter" />
 </td></tr>
@@ -541,15 +540,13 @@ function showDatesDlg() {
 	<h:panelGroup id="fclist">
 		<s:fragment rendered="#{not forecastings.loading}">
 			<div style="padding: 10px; margin-top: 40px; margin-left: 120px; margin-right: 120px;margin-bottom:60px;border:4px double #b0b0b0;">
-			<h:graphicImage value="/img/spinner.gif" />
-			<span style="color:#d0d0d0">#{messages['global.wait']}</span>
+			<span style="color:#d0d0d0" class="wait-icon">#{messages['global.wait']}</span>
 			</div>
 		</s:fragment>
 		<s:fragment rendered="#{forecastings.loading}">
 		<h:dataTable value="#{forecastings.resultList}" var="it" width="100%" >
 			<h:column>
-				<img src="../img/forecast2.gif" style="float:left;padding:4px;"/>
-				<s:link view="/management/medforecast.xhtml" value="#{it.name}">
+				<s:link view="/management/medforecast.xhtml" value="#{it.name}" styleClass="forecast-icon">
 					<f:param name="id" value="#{it.id}"/>
 				</s:link>
   				<br/>

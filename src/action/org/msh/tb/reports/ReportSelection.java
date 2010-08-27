@@ -20,7 +20,7 @@ import org.msh.mdrtb.entities.Source;
 import org.msh.mdrtb.entities.UserLogin;
 import org.msh.mdrtb.entities.UserWorkspace;
 import org.msh.tb.adminunits.AdminUnitSelection;
-import org.msh.tb.workspaces.WorkspaceViewService;
+import org.msh.tb.application.WorkspaceViewService;
 import org.msh.utils.date.DateUtils;
 
 

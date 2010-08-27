@@ -9,12 +9,13 @@ import javax.persistence.EntityManager;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.axis.message.MessageElement;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.annotations.async.Asynchronous;
 import org.msh.mdrtb.entities.AdministrativeUnit;
 import org.msh.mdrtb.entities.HealthSystem;
 import org.msh.mdrtb.entities.Patient;
-import org.msh.mdrtb.entities.SystemParam;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.Workspace;
@@ -41,7 +42,7 @@ import org.w3c.dom.NodeList;
 @Name("symetaIntegration")
 public class SymetaIntegration {
 
-	public EntityManager entityManager;
+	@In EntityManager entityManager;
 
 	private MoldovaServiceConfig config;
 	
@@ -50,8 +51,9 @@ public class SymetaIntegration {
 	 * Execute the integration between Symeta and e-Tb manager
 	 * @throws Exception
 	 */
-	public void execute() throws Exception {
-		readConfig();
+	@Asynchronous
+	public void execute(MoldovaServiceConfig config) throws Exception {
+		this.config = config;
 		readUnits();
 		readCases();
 	}
@@ -422,53 +424,6 @@ public class SymetaIntegration {
 
 	public void setConfig(MoldovaServiceConfig config) {
 		this.config = config;
-	}
-
-	
-	/**
-	 * Read configuration information from the database
-	 */
-	@Transactional
-	public void readConfig() {
-		config = new MoldovaServiceConfig();
-		Workspace ws = entityManager.find(Workspace.class, 22564);
-		config.setWorkspace(ws);	
-
-		String val = readParameter("symeta_url_webservice");
-		config.setWebServiceURL(val);
-		
-		Integer num = readIntegerParameter("executing_interval");
-		config.setInterval(num);
-		
-		config.setDefaultAdminUnit( entityManager.find(AdministrativeUnit.class, readIntegerParameter("default_adminunit") ));
-		config.setDefaultTbunit( entityManager.find(Tbunit.class, readIntegerParameter("default_tbunit") ));
-		config.setDefaultHealthSystem( entityManager.find(HealthSystem.class, readIntegerParameter("default_healthsystem") ));
-	}
-
-
-	/**
-	 * Read a parameter and convert it to an integer value
-	 * @param param parameter
-	 * @return integer value of the parameter
-	 */
-	protected Integer readIntegerParameter(String param) {
-		String val = readParameter(param);
-		return Integer.parseInt(val);
-	}
-	
-	
-	/**
-	 * Read a string parameter from the database
-	 * @param param name of the parameter
-	 * @return parameter value
-	 */
-	protected String readParameter(String param) {
-		SystemParam sysparam = (SystemParam)entityManager
-			.createQuery("from SystemParam sp where sp.workspace.id = :id and sp.key = :param")
-			.setParameter("id", config.getWorkspace().getId())
-			.setParameter("param", param)
-			.getSingleResult();
-		return sysparam.getValue();
 	}
 
 

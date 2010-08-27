@@ -74,8 +74,7 @@
 		<ui:repeat value="#{medicineReceiving.medicines}" var="it">
 				<tr style="background-color:#F3F8F4;">
 					<td colspan="3">
-						<img src="../img/medicine.gif" style="float:left;"/>
-						#{it.movement.medicine}
+						<div class="medicine-icon">#{it.movement.medicine}</div>
 					</td>
 					<td class="colr">
 						<b>
@@ -102,10 +101,11 @@
 				<ui:repeat value="#{it.batches}" var="b">
 				<tr class="lin2b">
 				<td class="colb">
-					<h:graphicImage value="/img/batch.gif" style="float:left;"/>
+					<div class="batch-icon">
 					<span style="width:100px;" >#{messages['Batch.batchNumber']}:</span> #{b.batchNumber}<br/>
 					<span style="width:100px;" >#{messages['Batch.manufacturer']}: </span> #{b.manufacturer}<br/>
-					<span style="width:100px;" >#{messages['Batch.brandName']}: </span>  #{b.brandName}<br/>
+					<span style="width:100px;" >#{messages['Batch.brandName']}: </span>  #{b.brandName}
+					</div>
 				</td>
 				<td class="colcb">
 					<h:outputText value="#{b.expiryDate}" converter="localeDateConverter" />
