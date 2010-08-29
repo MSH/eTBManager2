@@ -631,6 +631,9 @@ public class AdminUnitSelection {
 		
 		UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
 		
+		if (userWorkspace == null)
+			return;
+		
 		UserView view = userWorkspace.getView();
 		if (view == UserView.COUNTRY)
 			return;

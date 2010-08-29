@@ -22,8 +22,7 @@ public enum PatientType {
 	SCHEMA_CHANGED,
 	FAILURE,
 	RESISTANT,
-	NEW_SPECIAL,
-	MICROBACTERIOSE
+	NEW_SPECIAL
 	;
 
 	public String getKey() {

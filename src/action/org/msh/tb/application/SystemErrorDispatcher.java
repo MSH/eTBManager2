@@ -21,7 +21,7 @@ import org.msh.tb.misc.DmSystemHome;
 public class SystemErrorDispatcher {
 
 	@In(create=true) DmSystemHome dmsystem;
-	@In(create=true) SystemConfig systemConfig;
+	@In(create=true) EtbmanagerApp etbmanagerApp;
 	
 	private ErrorLog errorLog; 
 	
@@ -54,7 +54,8 @@ public class SystemErrorDispatcher {
 		
 		entityManager.persist(errorLog);
 		entityManager.flush();
-		
+
+		SystemConfig systemConfig = etbmanagerApp.getConfiguration();
 		if (systemConfig.getAdminMail() != null)
 			dmsystem.enviarEmail("systemerror.xhtml");
 	}

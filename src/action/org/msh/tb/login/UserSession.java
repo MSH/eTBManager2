@@ -29,6 +29,7 @@ import org.msh.mdrtb.entities.UserLogin;
 import org.msh.mdrtb.entities.UserProfile;
 import org.msh.mdrtb.entities.UserWorkspace;
 import org.msh.mdrtb.entities.Workspace;
+import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.UserView;
 
 
@@ -377,11 +378,17 @@ public class UserSession {
 
 
 	/**
-	 * Check if user can notify both MDR and TB cases
+	 * Check if user can change data of more than one case classification
 	 * @return true if so
 	 */
-	public boolean isCanNotifyTBMDRTB() {
-		return Identity.instance().hasRole("MDRCASES_EDT") && Identity.instance().hasRole("TBCASES_EDT");
+	public boolean isCanEditSeveralClassifs() {
+		Identity id = Identity.instance();
+		int count = 0;
+		for (CaseClassification classif: CaseClassification.values()) {
+			if (id.hasRole(classif.getUserroleChange()))
+				count++;
+		}
+		return count > 1;
 	}
 
 	
@@ -395,22 +402,45 @@ public class UserSession {
 
 
 	/**
+	 * Check if user can notify more than one case classification, for instance, TB and DR-TB
+	 * @param classif
+	 * @return true if user can notify more than one classification
+	 */
+	public boolean isCanNotifyOnlyOneClassif(CaseClassification classif) {
+		Identity id = Identity.instance();
+		for (CaseClassification c: CaseClassification.values()) {
+			if ((c != classif) && (id.hasRole(c.getUserroleChange())))
+				return false;
+		}
+		return true;
+	}
+	
+
+	/**
 	 * Check if user can notify only TB cases
 	 * @return true if so
 	 */
 	public boolean isCanNotifyOnlyTB() {
-		return Identity.instance().hasRole("TBCASES_EDT") && (!Identity.instance().hasRole("MDRCASES_EDT"));
+		return isCanNotifyOnlyOneClassif(CaseClassification.TB_DOCUMENTED);
 	}
 
-
+	
 	/**
 	 * Check if user can notify only MDR cases
 	 * @return true if so
 	 */
 	public boolean isCanNotifyOnlyMDR() {
-		return Identity.instance().hasRole("MDRCASES_EDT") && (!Identity.instance().hasRole("TBCASES_EDT"));
+		return isCanNotifyOnlyOneClassif(CaseClassification.MDRTB_DOCUMENTED);
 	}
 
+	
+	/**
+	 * Check if user can notify only NMT cases
+	 * @return
+	 */
+	public boolean isCanNotifyOnlyNMT() {
+		return isCanNotifyOnlyOneClassif(CaseClassification.NMT);
+	}
 
 	/**
 	 * Check if can open both TB and MDRTB cases

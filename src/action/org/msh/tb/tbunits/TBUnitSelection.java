@@ -129,7 +129,7 @@ public class TBUnitSelection {
 	
 	protected void applyUserTBUnitRestriction() {
 		UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
-		if (userWorkspace.getView() == UserView.TBUNIT)
+		if ((userWorkspace != null) && (userWorkspace.getView() == UserView.TBUNIT))
 			setTbunit(userWorkspace.getTbunit());
 	}
 

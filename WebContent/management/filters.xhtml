@@ -13,7 +13,7 @@
 	<s:decorate template="/layout/edit.xhtml" rendered="#{indicator.classification==null}">
 		<ui:define name="label">#{messages['CaseClassification']}:	</ui:define>
 		<h:selectOneMenu value="#{indicator.classification}">
-			<s:selectItems value="#{caseClassifications}" var="r" label="#{messages[r.key]}" noSelectionLabel="#{messages['form.noselection']}" />
+			<s:selectItems value="#{globalLists.caseClassifications}" var="r" label="#{messages[r.key]}" noSelectionLabel="#{messages['form.noselection']}" />
 		</h:selectOneMenu>
 	</s:decorate>
 

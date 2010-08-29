@@ -535,21 +535,24 @@ td {
 .b2lb {background: transparent url(images/b2lb.gif) no-repeat left bottom; position:relative; left:-1px; top:1px;}
 .b2rb {background: transparent url(images/b2rb.gif) no-repeat right bottom; position:relative; left:2px;}
 
-
-.hu-icon {
-	background: transparent url(images/hu.gif) no-repeat left top;
-	padding-left:32px;
-	min-height:28px;
+.wait-icon {
+	background: transparent url(images/spinner.gif) no-repeat left top;
+	padding-left:20px;
 	display:block;
+	height: 20px;
+	min-height: 20px;
 }
 
-.ds-icon {
-	background: transparent url(images/storage.gif) no-repeat left top;
+.hu-icon, .ds-icon {
 	padding-left:32px;
 	min-height:28px;
 	display:block;
 	height:28px;
 }
+
+.hu-icon {	background: transparent url(images/hu.gif) no-repeat left top; }
+
+.ds-icon {	background: transparent url(images/storage.gif) no-repeat left top; }
 
 .folder-icon {
 	background: transparent url(images/folder.gif) no-repeat left top;

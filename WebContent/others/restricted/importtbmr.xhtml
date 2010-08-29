@@ -16,15 +16,15 @@
 
 <ui:define name="body">
 
-	<h:form>
+	<h:form id="main">
 	<s:decorate template="/layout/roundrect.xhtml" style="width:300px;">
 		<ui:define name="header"><b>Importacao dos casos TBMR - Sistema BRASIL</b></ui:define>
 		<ui:param name="showfooter" value="0" />
 		
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">UF:</ui:define>
-			<h:selectOneMenu value="#{importTBMRDB.uf}" required="true">
-				<f:selectItems value="#{importTBMRDB.ufList}" />
+			<h:selectOneMenu value="#{importTBMRHome.uf}" required="true">
+				<f:selectItems value="#{importTBMRHome.ufList}" />
 			</h:selectOneMenu>
 		</s:decorate>
 		
@@ -33,7 +33,7 @@
 			#{defaultWorkspace.name}
 		</s:decorate>
 		
-		<a:commandButton action="#{importTBMRDB.execute}" value="Execute" reRender="messages"/>
+		<a:commandButton action="#{importTBMRHome.execute}" value="Execute" reRender="messages,main"/>
 	</s:decorate>
 	</h:form>
 </ui:define>

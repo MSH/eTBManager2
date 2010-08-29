@@ -18,7 +18,6 @@ public class GlobalLists {
 		PatientType.FAILURE,
 		PatientType.RESISTANT,
 		PatientType.NEW_SPECIAL,
-		PatientType.MICROBACTERIOSE,
 		PatientType.OTHER
 	};
 
@@ -51,7 +50,7 @@ public class GlobalLists {
 		PrevTBTreatmentOutcome.SCHEME_CHANGED
 	};
 	
-	
+
 	public TipoResistencia[] getTiposResistencia() {
 		return TipoResistencia.values();
 	}

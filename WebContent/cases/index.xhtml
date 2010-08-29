@@ -18,7 +18,8 @@
 	<h:form>
 	<div >
 	<div class="menubv">
-	<h:commandLink value="#{messages['cases.newnotif']}" onclick="Richfaces.showModalPanel('selclassificationdlg');return false;" rendered="#{userSession.canNotifyTBMDRTB}"/>
+	<h:commandLink value="#{messages['cases.newnotif']}" onclick="Richfaces.showModalPanel('selclassificationdlg');return false;" 
+		rendered="#{userSession.canEditSeveralClassifs}"/>
 
 	<s:link value="#{messages['cases.newnotif']}" view="/cases/newnotif.xhtml" rendered="#{userSession.canNotifyOnlyMDR}">
 		<f:param name="classif" value="MDRTB_DOCUMENTED"/>
@@ -26,6 +27,10 @@
 
 	<s:link value="#{messages['cases.newnotif']}" view="/cases/newnotif.xhtml" rendered="#{userSession.canNotifyOnlyTB}">
 		<f:param name="classif" value="TB_DOCUMENTED"/>
+	</s:link>
+
+	<s:link value="#{messages['cases.newnotif']}" view="/cases/newnotif.xhtml" rendered="#{userSession.canNotifyOnlyNMT}">
+		<f:param name="classif" value="NMT"/>
 	</s:link>
 	</div></div>
 
@@ -111,7 +116,7 @@
 
 	<h:outputText value="#{messages['Patient']}:" style="margin-right:20px;margin-left:4px;font-weight:bold;"/>
 	
-	<h:inputText id="patname" value="#{caseFilters.patient}" style="width:150px"/>
+	<h:inputText id="patname" value="#{caseFilters.patient}" style="width:150px" />
 	<a:commandButton id="btnsearchpat" value="#{messages['form.search']}" action="search" styleClass="button" >
 		<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
 	</a:commandButton>
@@ -147,13 +152,14 @@
 
 <ui:define name="dialogs">
 <s:fragment rendered="#{(s:hasRole('TBCASES_EDT'))and(s:hasRole('MDRCASES_EDT'))}">
-<rich:modalPanel id="selclassificationdlg" height="160" width="300" top="200" zindex="2000">
+<rich:modalPanel id="selclassificationdlg" height="160" width="300" top="200" zindex="2000" autosized="true">
 	<a:form id="formclassifcation">
 
+	#{messages['cases.newnotif.title']}
 	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
-	<c:forEach items="#{caseClassifications}" var="it">
+	<c:forEach items="#{globalLists.caseClassifications}" var="it">
 		<tr><td class="menubv">
-			<s:link value="#{messages[it.key]}" view="/cases/newnotif.xhtml">
+			<s:link value="#{messages[it.key]}" view="/cases/newnotif.xhtml" rendered="#{s:hasRole(it.userroleChange)}">
 				<f:param name="classif" value="#{it}"/>
 			</s:link>
 		</td></tr>

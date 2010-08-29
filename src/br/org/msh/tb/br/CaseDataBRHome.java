@@ -255,8 +255,6 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		PatientType tp = tbcase.getPatientType();
 		if (tp != PatientType.SCHEMA_CHANGED)
 			data.setSchemaChangeType(null);
-		if (tp != PatientType.MICROBACTERIOSE)
-			data.setMicrobacteriose(null);
 		if (tp != PatientType.RESISTANT)
 			data.setResistanceType(null);
 		if (tp != PatientType.FAILURE)

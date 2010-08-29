@@ -42,7 +42,7 @@
 	<s:decorate template="/layout/display.xhtml" rendered="#{userSession.canOpenTBMDRTB}">
 		<ui:define name="label">#{messages['CaseClassification']}:</ui:define>
 		<h:selectOneMenu value="#{caseFilters.classification}" >
-			<s:selectItems value="#{caseClassifications}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+			<s:selectItems value="#{globalLists.caseClassifications}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
 			<s:convertEnum />
 		</h:selectOneMenu>
 	</s:decorate>

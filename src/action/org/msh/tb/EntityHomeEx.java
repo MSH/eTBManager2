@@ -9,7 +9,6 @@ import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 
 import org.jboss.seam.Component;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.core.Expressions;
 import org.jboss.seam.core.Expressions.ValueExpression;
 import org.jboss.seam.framework.EntityHome;
@@ -34,8 +33,9 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	private LogService logService;
 	private boolean transactionLogActive = true;
 	private boolean displayMessage = true;
+	private boolean checkSecurityOnOpen = true;
 	
-	@In(required=true) UserLogin userLogin;
+	private UserLogin userLogin;
 
 	
 	/**
@@ -89,6 +89,8 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	 * @return {@link UserLogin} instance
 	 */
 	public UserLogin getUserLogin() {
+		if (userLogin == null)
+			userLogin = (UserLogin)Component.getInstance("userLogin");
 		return userLogin;
 	}
 
@@ -252,6 +254,9 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	}
 	
 	protected void checkCanOpen() {
+		if (!checkSecurityOnOpen)
+			return;
+		
 		// check if is the same workspace
 		bNew = !isManaged();
 		if (!bNew) {
@@ -341,5 +346,15 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	 */
 	public void setDisplayMessage(boolean displayMessage) {
 		this.displayMessage = displayMessage;
+	}
+
+
+	public boolean isCheckSecurityOnOpen() {
+		return checkSecurityOnOpen;
+	}
+
+
+	public void setCheckSecurityOnOpen(boolean checkSecurityOnOpen) {
+		this.checkSecurityOnOpen = checkSecurityOnOpen;
 	}
 }

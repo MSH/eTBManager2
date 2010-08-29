@@ -131,8 +131,8 @@ public class GlobalLists {
 		SputumSmearResult.PLUS2,
 		SputumSmearResult.PLUS3
 	};
-
-
+	
+	
 	/**
 	 * Get component according to the workspace in use
 	 * @param <E>
@@ -305,11 +305,11 @@ public class GlobalLists {
 		return InfectionSite.values();
 	}
 	
-	@Factory("caseClassifications")
+//	@Factory("caseClassifications")
 	public CaseClassification[] getCaseClassifications() {
 		return CaseClassification.values();
 	}
-	
+
 //	@Factory("prevTBTreatmentOutcomes")
 	public PrevTBTreatmentOutcome[] getPrevTBTreatmentOutcomes() {
 		return getExtensionComponent("prevTBTreatmentOutcomes", PrevTBTreatmentOutcome[].class, prevTBTreatmentOutcomes);

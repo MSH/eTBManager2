@@ -54,9 +54,9 @@ public class CaseEditingHome {
 	@In(required=false) ExamSputumHome examSputumHome;
 	@In(required=false) ExamCultureHome examCultureHome;
 
-	private TBUnitSelection tbunitselection = null;
-	private AdminUnitSelection notifAdminUnit = new AdminUnitSelection(false);
-	private AdminUnitSelection currentAdminUnit = new AdminUnitSelection(false);
+	private TBUnitSelection tbunitselection;
+	private AdminUnitSelection notifAdminUnit;
+	private AdminUnitSelection currentAdminUnit;
 	private boolean initialized;
 
 	/**
@@ -339,6 +339,8 @@ public class CaseEditingHome {
 	 * @return the currentAdminUnit
 	 */
 	public AdminUnitSelection getCurrentAdminUnit() {
+		if (currentAdminUnit == null)
+			currentAdminUnit = new AdminUnitSelection(false);
 		return currentAdminUnit;
 	}
 
@@ -347,6 +349,8 @@ public class CaseEditingHome {
 	 * @return the notifAdminUnit
 	 */
 	public AdminUnitSelection getNotifAdminUnit() {
+		if (notifAdminUnit == null)
+			notifAdminUnit = new AdminUnitSelection(false);
 		return notifAdminUnit;
 	}
 

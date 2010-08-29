@@ -4,11 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.faces.model.SelectItem;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -16,6 +14,8 @@ import javax.sql.DataSource;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.async.Asynchronous;
+import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.mdrtb.entities.Address;
 import org.msh.mdrtb.entities.AdministrativeUnit;
@@ -36,6 +36,7 @@ import org.msh.mdrtb.entities.Regimen;
 import org.msh.mdrtb.entities.Substance;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.Tbunit;
+import org.msh.mdrtb.entities.UserLogin;
 import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
@@ -52,6 +53,7 @@ import org.msh.mdrtb.entities.enums.SputumSmearResult;
 import org.msh.mdrtb.entities.enums.SusceptibilityResultTest;
 import org.msh.mdrtb.entities.enums.TbField;
 import org.msh.mdrtb.entities.enums.ValidationState;
+import org.msh.mdrtb.entities.enums.XRayEvolution;
 import org.msh.mdrtb.entities.enums.YesNoType;
 import org.msh.tb.adminunits.AdminUnitHome;
 import org.msh.tb.br.entities.CaseDataBR;
@@ -63,6 +65,7 @@ import org.msh.tb.cases.ExamSputumHome;
 import org.msh.tb.cases.ExamSusceptHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.misc.FieldsQuery;
+import org.msh.utils.TransactionalBatchComponent;
 import org.msh.utils.date.DateUtils;
 
 
@@ -75,16 +78,14 @@ import org.msh.utils.date.DateUtils;
  *
  */
 @Name("importTBMRDB")
-public class ImportTBMR_DB {
+public class ImportTBMR_DB extends TransactionalBatchComponent {
 
 	/**
 	 * Standard regimen used during importing
 	 */
 	private static final int regimenId = 940665;
 	
-	@In(create=true) EntityManager entityManager;
 	@In(create=true) FacesMessages facesMessages;
-	@In(required=true) Workspace defaultWorkspace;
 	@In(create=true) CaseDataBRHome caseDataBRHome;
 	@In(create=true) CaseHome caseHome;
 	@In(create=true) AdminUnitHome adminUnitHome;
@@ -95,39 +96,84 @@ public class ImportTBMR_DB {
 	@In(create=true) StartTreatmentHome startTreatmentHome;
 //	@In(create=true) TreatmentHealthUnitHome treatmentHealthUnitHome;
 
+	private Workspace defaultWorkspace;
+	private EntityManager entityManager;
 	private DataSource tbmrDataSource;
 	private Connection connection;
 	private ResultSet rsCases;
 	private String uf;
-	private List<SelectItem> ufList;
 	private List<CountryStructure> structures;
 	private TbCase tbcase;
 	private CaseDataBR caseData;
 	private HealthSystem healthSystem;
 	private Regimen regimen;
 	private List<Substance> substances;
+	private Integer ultimaFicha;
+	private Date refDate;
 	
-	public String execute() throws Exception {
+	/**
+	 * Number of cases imported
+	 */
+	private int counter;
+
+	
+	@Asynchronous
+	public boolean importCases(String uf, Workspace workspace, UserLogin userLogin) {
+		defaultWorkspace = workspace;
+		this.uf = uf;
+		Contexts.getEventContext().set("userLogin", userLogin);
+		Contexts.getEventContext().set("defaultWorkspace", defaultWorkspace);
+		return execute();
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.utils.TransactionalBatchComponent#executeIteration()
+	 */
+	@Override
+	public boolean executeIteration() throws Exception {
+		entityManager = getEntityManager();
 		loadCasesToImport();
 
+		// initialize variables for the next loop
+		structures = null;
+		healthSystem = null;
+		regimen = null;
+		substances = null;
+		fieldsQuery.refreshLists();
+
 		try {
-			int counter = 0;
 			while (rsCases.next()) {
 				importCase();
 				counter++;
 				
-				// refresh entity manager each 40 cases imported
-				if (counter % 40 == 19) {
-					refreshEntityManager();
-				}
+				if (counter % 10 == 9)
+					return true;
 			}
-			facesMessages.add(Integer.toString(counter) + " casos importados.");
-		} finally {
-			rsCases.getStatement().close();
-			connection.close();
+			return false;
 		}
+		finally {
+			rsCases.close();
+		}
+	}
 
-		return "success";
+
+	/* (non-Javadoc)
+	 * @see org.msh.utils.TransactionalBatchComponent#startExecution()
+	 */
+	@Override
+	protected void startExecution() throws Exception {
+		counter = 0;
+	}
+
+	
+	/* (non-Javadoc)
+	 * @see org.msh.utils.TransactionalBatchComponent#finishExecution()
+	 */
+	@Override
+	protected void finishExecution() throws Exception {
+		if (connection != null)
+			connection.close();
 	}
 
 	
@@ -143,18 +189,28 @@ public class ImportTBMR_DB {
 		List<Integer> lst = entityManager.createQuery(sql)
 			.setParameter("id", numFicha)
 			.getResultList();
+
+		caseHome.setTransactionLogActive(false);
+		caseHome.setDisplayMessage(false);
+		caseHome.setCheckSecurityOnOpen(false);
+
 		if (lst.size() > 0) {
 			caseHome.setId(lst.get(0));
+			caseHome.remove();
 		}
-		else caseHome.setId(null);
+
+		// initialize object
+		caseHome.setId(null);
 
 		tbcase = caseHome.getInstance();
 		caseData = caseDataBRHome.getCaseDataBR();
 		
 		tbcase.setPatient(p);
 		tbcase.setLegacyId(rsCases.getString("COD_CASO"));
-		tbcase.setRegistrationDate(rsCases.getDate("DATA_NOTIFICACAO"));
-		tbcase.setDiagnosisDate(rsCases.getDate("DATA_NOTIFICACAO"));
+
+		refDate = rsCases.getDate("DATA_NOTIFICACAO");
+		tbcase.setRegistrationDate(refDate);
+		tbcase.setDiagnosisDate(refDate);
 		tbcase.setAge(DateUtils.yearsBetween(tbcase.getRegistrationDate(), p.getBirthDate()));
 		tbcase.setCaseNumber(rsCases.getInt("NUM_CASO"));
 		if (tbcase.getCaseNumber() == 0)
@@ -216,11 +272,9 @@ public class ImportTBMR_DB {
 		caseData.setNumSinan(rsCases.getString("NUM_SINAN"));
 		
 		updateCaseOutcome();
-		updateCaseTreatment();
 		importMedicalExamination();
+		updateCaseTreatment();
 		
-		caseHome.setTransactionLogActive(false);
-		caseHome.setDisplayMessage(false);
 		caseHome.persist();
 		
 		caseData.setTbcase(tbcase);
@@ -228,9 +282,13 @@ public class ImportTBMR_DB {
 		caseDataBRHome.setDisplayMessage(false);
 		caseDataBRHome.persist();
 		
-		importQuarterlyData();
-		importExams();
+		importExams(rsCases);
+		importDSTExam(rsCases);
 		importPrevTBTreatment();
+
+		importQuarterlyData();
+
+		ultimaFicha = rsCases.getInt("NUM_FICHA");
 	}
 
 
@@ -238,12 +296,17 @@ public class ImportTBMR_DB {
 	 * Import exams results from notification form
 	 * @throws Exception
 	 */
-	protected void importExams() throws Exception {
-		Laboratory lab = loadLaboratory(rsCases.getInt("COD_LABORATORIO"));
-
-		Date dtColeta = rsCases.getDate("DATA_CULTURA_ESCARRO");
+	protected void importExams(ResultSet rs) throws Exception {
+		int res = rs.getInt("RES_CULTURA_ESCARRO");
+		int res2 = rs.getInt("RES_BACILOSCOPIA_ESCARRO");
 		
-		int res = rsCases.getInt("RES_CULTURA_ESCARRO");
+		if ((res == 5) && (res2 == 4))
+			return;
+		
+		Laboratory lab = loadLaboratory(rs.getInt("COD_LABORATORIO"));
+
+		Date dtColeta = rs.getDate("DATA_CULTURA_ESCARRO");
+		
 		CultureResult resCulture = null;
 		switch (res) {
 		case 0:
@@ -271,7 +334,7 @@ public class ImportTBMR_DB {
 			culture.setLaboratory(lab);
 			
 			// get method
-			String cod = rsCases.getString("COD_METODO");
+			String cod = rs.getString("COD_METODO");
 			if ("5".equals(cod)) {
 				cod = "6";
 			}
@@ -280,10 +343,10 @@ public class ImportTBMR_DB {
 
 			examCultureHome.getSample().setDateCollected(dtColeta);
 			examCultureHome.setDisplayMessage(false);
+			examCultureHome.setTransactionLogActive(false);
 			examCultureHome.persist();
 		}
 		
-		res = rsCases.getInt("RES_BACILOSCOPIA_ESCARRO");
 		SputumSmearResult resSputum = null;
 		switch (res) {
 		case 0:
@@ -306,9 +369,9 @@ public class ImportTBMR_DB {
 			sputum.setLaboratory(lab);
 			examSputumHome.getSample().setDateCollected(dtColeta);
 			examSputumHome.setDisplayMessage(false);
+			examSputumHome.setTransactionLogActive(false);
 			examSputumHome.persist();
 		}
-		importDSTExam(rsCases);
 	}
 
 	
@@ -342,6 +405,7 @@ public class ImportTBMR_DB {
 		dst.setLaboratory(lab);
 		examSusceptHome.getSample().setDateCollected(dtColeta);
 		examSusceptHome.setDisplayMessage(false);
+		examSusceptHome.setTransactionLogActive(false);
 		examSusceptHome.persist();		
 	}
 	
@@ -355,7 +419,7 @@ public class ImportTBMR_DB {
 	private void checkResultDST(ResultSet rs, String field, String subAbbrevName) throws Exception {
 		int resDst = rs.getInt(field);
 
-		if (resDst == 2)
+		if ((resDst == 2) || (resDst == 0))
 			return;
 		
 		SusceptibilityResultTest resTest;
@@ -476,11 +540,14 @@ public class ImportTBMR_DB {
 		tbcase.getExaminations().add(medExam);
 	}
 
+
 	/**
 	 * Update treatment of the current case
 	 */
 	protected void updateCaseTreatment() {
 		CaseState st = tbcase.getState();
+		
+		tbcase.setState(CaseState.WAITING_TREATMENT);
 		tbcase.getHealthUnits().clear();
 		
 		Date dtIni = tbcase.getRegistrationDate();
@@ -497,8 +564,10 @@ public class ImportTBMR_DB {
 		startTreatmentHome.setRegimen(getRegimen());
 		startTreatmentHome.updatePhases();
 		
+		startTreatmentHome.startStandardRegimen();
 		
-		tbcase.setState(st);
+		if ((st != null) && (st.ordinal() > CaseState.ONTREATMENT.ordinal()))
+			tbcase.setState(st);
 	}
 
 
@@ -521,7 +590,8 @@ public class ImportTBMR_DB {
 		exam.setTbcase(tbcase);
 		tbcase.getResHIV().add(exam);
 	}
-	
+
+
 	/**
 	 * Import comorbidities
 	 * @throws Exception 
@@ -539,7 +609,8 @@ public class ImportTBMR_DB {
 		checkComorbidity("DOENCA_MENTAL", "10");
 		checkComorbidity("OUTRA_COMORBIDADE", "11");
 	}
-	
+
+
 	protected void checkComorbidity(String fieldName, String id) throws Exception {
 		int res = rsCases.getInt(fieldName);
 		if (res == 2)
@@ -569,36 +640,23 @@ public class ImportTBMR_DB {
 		// get pulmonary type
 		int val = rsCases.getInt("COD_RAIOX_TORAX");
 		FieldValue fieldValue = null;
-		FieldValue resXRay = null;
+//		FieldValue resXRay = null;
 		if (tbcase.isPulmonary()) {
-			String code = null;
-			if (val == 1) // unilateral cavitária
-				code = "UC";
-			else
-			if (val == 2) // unilateral não cavitária
-				code = "UNC";
-			else
-			if (val == 3) // bilateral cavitária
-				code = "BC";
-			else
-			if (val == 4) // bilateral não cavitária
-				code = "BNC";
-			else
-			if (val == 5) // normal
-				code = "N";
+			String code = fieldCodePulmonaryForm(val);
 			fieldValue = getFieldValue(TbField.PULMONARY_TYPES, code);
-			resXRay = getFieldValue(TbField.XRAYPRESENTATION, code);
+//			resXRay = getFieldValue(TbField.XRAYPRESENTATION, code);
 		}
 		tbcase.setPulmonaryType(fieldValue);
-		
-		if (resXRay != null) {
+
+		importXRay(rsCases, true);
+/*		if (resXRay != null) {
 			ExamXRay xray = new ExamXRay();
 			xray.setDate(tbcase.getRegistrationDate());
 			xray.setPresentation(resXRay);
 			xray.setTbcase(tbcase);
 			tbcase.getResXRay().add(xray);
 		}
-
+*/
 		// get extrapulmonary types
 		if (tbcase.isExtrapulmonary()) {
 			fieldValue = getFieldValue(TbField.EXTRAPULMONARY_TYPES, Integer.toString( rsCases.getInt("TIPO_EXTRAPULMONAR1") ));
@@ -608,6 +666,65 @@ public class ImportTBMR_DB {
 			tbcase.setExtrapulmonaryType2(fieldValue);
 		}
 	}
+
+	
+	protected String fieldCodePulmonaryForm(int val) {
+		if (val == 1) // unilateral cavitária
+			return "UC";
+		else
+		if (val == 2) // unilateral não cavitária
+			return "UNC";
+		else
+		if (val == 3) // bilateral cavitária
+			return "BC";
+		else
+		if (val == 4) // bilateral não cavitária
+			return "BNC";
+		else
+		if (val == 5) // normal
+			return "N";
+		return null; 
+	}
+
+	
+	/**
+	 * Import X-Ray exam
+	 * @throws SQLException
+	 */
+	protected void importXRay(ResultSet rs, boolean primeiro) throws SQLException {
+		if (!tbcase.isPulmonary())
+			return;
+		
+		int val = 0;
+		
+		XRayEvolution evolution = null;
+		
+		if (primeiro)
+			 val = rs.getInt("COD_RAIOX_TORAX");
+		else {
+			if (rs.getInt("EXAME_RADIOLOGICO") == 2)
+				return;
+			val = rs.getInt("COD_APRESENTACAO_RADIOLOGICA");
+			switch (rs.getInt("COD_EVOLUCAO_RADIOLOGICA")) {
+			case 1: evolution = XRayEvolution.IMPROVED; break;
+			case 2: evolution = XRayEvolution.PROGRESSED; break;
+			case 3: evolution = XRayEvolution.STABLE; break;
+			}
+		}
+		
+		String code = fieldCodePulmonaryForm(val);
+		FieldValue resXRay = getFieldValue(TbField.XRAYPRESENTATION, code);
+		
+		if (resXRay != null) {
+			ExamXRay xray = new ExamXRay();
+			xray.setDate(refDate);
+			xray.setPresentation(resXRay);
+			xray.setTbcase(tbcase);
+			xray.setEvolution(evolution);
+			tbcase.getResXRay().add(xray);
+		}
+	}
+
 
 	/**
 	 * Import patient address
@@ -802,6 +919,8 @@ public class ImportTBMR_DB {
 				adm.setCountryStructure(getMunicipioStructure());
 				adm.getName().setName1(rs.getString("NOME"));
 				adm.setLegacyId(legacyId);
+				adminUnitHome.setDisplayMessage(false);
+				adminUnitHome.setTransactionLogActive(false);
 				adminUnitHome.persist();
 				
 				System.out.println("NOVO MUNICIPIO: " + adm.getName().toString());
@@ -851,6 +970,8 @@ public class ImportTBMR_DB {
 				adm.setCountryStructure(getUFStructure());
 				adm.getName().setName1(rs.getString("NOME"));
 				adm.setLegacyId(legacyId);
+				adminUnitHome.setDisplayMessage(false);
+				adminUnitHome.setTransactionLogActive(false);
 				adminUnitHome.persist();
 				
 				System.out.println("NOVA UF: " + adm.getName());
@@ -978,6 +1099,12 @@ public class ImportTBMR_DB {
         	"inner join ficha_notificacao fn on fn.num_ficha = f.num_ficha " +
         	"inner join paciente p on p.cod_paciente = f.cod_paciente " +
         	"where exists(select * from unidade_saude u where u.cod_us = f.cod_us_tratamento and u.sigla_uf = '" + uf + "')";
+
+		if (ultimaFicha != null)
+			sql += " and f.num_ficha > " + ultimaFicha.toString();
+		
+		sql += " order by f.num_ficha";
+		
 		connection = getConnection();
 		Statement stm = connection.createStatement();
 		rsCases = stm.executeQuery(sql);
@@ -986,20 +1113,31 @@ public class ImportTBMR_DB {
 	
 	/**
 	 * Import information from quarterly forms 
-	 * @throws SQLException 
+	 * @throws Exception 
 	 */
-	protected void importQuarterlyData() throws SQLException {
+	protected void importQuarterlyData() throws Exception {
 		Integer codCaso = rsCases.getInt("COD_CASO");
 		String sql = "select * from ficha f " +
 				"inner join ficha_trimestral ft on ft.num_ficha = f.num_ficha " +
 				"where f.cod_caso = " + codCaso.toString();
 		
 		Connection conn = getConnection();
-		ResultSet rs = conn.createStatement().executeQuery(sql);
-		while (rs.next()) {
-			System.out.println(rs.getString("DATA"));
+		try {
+			ResultSet rs = conn.createStatement().executeQuery(sql);
+			while (rs.next()) {
+				refDate = rs.getDate("DATA");
+				
+				int novodst = rs.getInt("COD_EXAME_CONFIRMATORIO");
+
+				if (novodst == 1)
+					importDSTExam(rs);
+				importExams(rs);
+				importXRay(rs, false);
+			}
+			rs.close();
+		} finally {
+			conn.close();
 		}
-		rs.close();
 	}
 
 
@@ -1025,34 +1163,6 @@ public class ImportTBMR_DB {
 		}			
 	}
 
-
-	public String getUf() {
-		return uf;
-	}
-
-
-	public void setUf(String uf) {
-		this.uf = uf;
-	}
-
-
-	public List<SelectItem> getUfList() {
-		if (ufList == null) {
-			ufList = new ArrayList<SelectItem>();
-			
-			List<Object[]> lst = entityManager.createQuery("select a.legacyId, a.name.name1 " +
-					"from AdministrativeUnit a where a.parent is null " +
-					"and a.workspace.id = #{defaultWorkspace.id}")
-					.getResultList();
-
-			ufList.add(new SelectItem(null, "-"));
-			for (Object[] vals: lst) {
-				ufList.add(new SelectItem(vals[0].toString(), vals[1].toString()));
-			}
-		}
-		return ufList;
-	}
-	
 	
 	/**
 	 * Return country structure of level 2 from Brazil
@@ -1140,19 +1250,6 @@ public class ImportTBMR_DB {
 		return regimen;
 	}
 	
-	/**
-	 * Refresh entity manager and force entities to be reloaded
-	 */
-	private void refreshEntityManager() {
-		entityManager.flush();
-		entityManager.clear();
-		structures = null;
-		healthSystem = null;
-		regimen = null;
-		substances = null;
-		fieldsQuery.refreshLists();
-	}
-	
 	
 	/**
 	 * Return list of substances
@@ -1166,4 +1263,9 @@ public class ImportTBMR_DB {
 		}
 		return substances;
 	}
+
+	public int getCounter() {
+		return counter;
+	}
+
 }

@@ -39,8 +39,10 @@ public class StartTreatmentHome {
 	@In EntityManager entityManager;
 	
 	private Regimen regimen;
-	private TBUnitSelection tbunitselection = new TBUnitSelection(true, TBUnitFilter.HEALTH_UNITS);
+	private TBUnitSelection tbunitselection;
 	private Date iniTreatmentDate;
+	
+	private boolean saveChages = true;
 	
 	/**
 	 * End of the treatment. This field is not required and is used if the case has already an outcome date
@@ -61,7 +63,7 @@ public class StartTreatmentHome {
 	 * @return "treatment-started" if successfully started, otherwise return "error"
 	 */
 	public String startStandardRegimen() { 
-		if ((regimen == null) || (tbunitselection.getTbunit() == null) || (iniTreatmentDate == null))
+		if ((regimen == null) || (getTbunitselection().getTbunit() == null) || (iniTreatmentDate == null))
 			return "error";
 
 		if (phases == null)
@@ -118,8 +120,9 @@ public class StartTreatmentHome {
 			}
 			dt = DateUtils.incMonths(dt, phase.getMonths());
 		}
-		
-		caseHome.persist();
+
+		if (saveChages)
+			caseHome.persist();
 		
 		return "treatment-started";
 	}
@@ -161,7 +164,9 @@ public class StartTreatmentHome {
 		tbcase.setTreatmentPeriod(new Period(treatPeriod));
 		tbcase.setState(CaseState.ONTREATMENT);
 
-		caseHome.persist();
+		if (saveChages)
+			caseHome.persist();
+
 		return "treatment-started";
 	}
 
@@ -228,6 +233,8 @@ public class StartTreatmentHome {
 	}
 
 	public TBUnitSelection getTbunitselection() {
+		if (tbunitselection == null)
+			tbunitselection = new TBUnitSelection(true, TBUnitFilter.HEALTH_UNITS);
 		return tbunitselection;
 	}
 
@@ -327,6 +334,16 @@ public class StartTreatmentHome {
 
 	public void setEndTreatmentDate(Date endTreatmentDate) {
 		this.endTreatmentDate = endTreatmentDate;
+	}
+
+
+	public boolean isSaveChages() {
+		return saveChages;
+	}
+
+
+	public void setSaveChages(boolean saveChages) {
+		this.saveChages = saveChages;
 	}
 
 }
