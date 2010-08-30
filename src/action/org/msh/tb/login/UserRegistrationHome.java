@@ -18,6 +18,7 @@ import org.msh.mdrtb.entities.User;
 import org.msh.mdrtb.entities.UserWorkspace;
 import org.msh.mdrtb.entities.enums.UserState;
 import org.msh.mdrtb.entities.enums.UserView;
+import org.msh.tb.application.EtbmanagerApp;
 import org.msh.tb.misc.DmSystemHome;
 import org.msh.utils.Passwords;
 
@@ -26,7 +27,7 @@ import org.msh.utils.Passwords;
 public class UserRegistrationHome {
 
 	@In EntityManager entityManager;
-	@In(create=true) SystemConfig systemConfig;
+	@In(create=true) EtbmanagerApp etbmanagerApp;
 	@In(create=true) Map<String, String> messages;
 	@In(create=true) DmSystemHome dmsystem;
 	
@@ -39,6 +40,8 @@ public class UserRegistrationHome {
 	}
 	
 	public String register() {
+		SystemConfig systemConfig = etbmanagerApp.getConfiguration();
+		
 		UserWorkspace userWs = new UserWorkspace();
 		userWs.setPlayOtherUnits(false);
 		userWs.setProfile(systemConfig.getUserProfile());

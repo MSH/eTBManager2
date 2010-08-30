@@ -29,8 +29,19 @@ public class MessagesWrap extends Messages {
 		return new AbstractMap<String, String>() {
             @Override
             public String get(Object key) {
+            	if (key == null)
+            		return null;
+            	if ("locale.dateMask".equals(key))
+            		return "99/99/9999";
+            	else
+            	if ("locale.datePattern".equals(key))
+            		return "dd-MMM-yyyy";
+            	else
+            	if ("locale.outputDatePattern".equals(key))
+            		return "dd-MMM-yyyy";
             	return key.toString();
             }
+
 
             @Override
             public Set<Map.Entry<String, String>> entrySet() {
