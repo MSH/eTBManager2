@@ -56,8 +56,9 @@ public class SystemErrorDispatcher {
 		entityManager.flush();
 
 		SystemConfig systemConfig = etbmanagerApp.getConfiguration();
-		if (systemConfig.getAdminMail() != null)
+		if ((systemConfig.getAdminMail() != null) && (!systemConfig.getAdminMail().isEmpty())) {
 			dmsystem.enviarEmail("systemerror.xhtml");
+		}
 	}
 
 	

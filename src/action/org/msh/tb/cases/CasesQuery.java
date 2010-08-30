@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.core.Expressions;
 import org.msh.mdrtb.entities.AdministrativeUnit;
 import org.msh.mdrtb.entities.Patient;
 import org.msh.mdrtb.entities.Workspace;
@@ -36,11 +37,11 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	private String hqlCondition;
 	
 	private static final String[] orderValues = {"p.recordNumber, c.caseNumber", "p.gender,p.name", 
-			"c.classification", "upper(p.name), upper(p.middleName), upper(p.lastName)", "c.age", "upper(nu.name.name1)", "c.notifAddress.adminUnit.parent.name.name1", 
+			"c.classification", "#{cases.namesOrderBy}", "c.age", "upper(nu.name.name1)", "c.notifAddress.adminUnit.parent.name.name1", 
 			"c.notifAddress.adminUnit.name.name1", "c.state", "c.registrationDate", "c.treatmentPeriod.iniDate", "c.validationState"};
 
 	private static final String[] inverseOrderValues = {"p.recordNumber desc, c.caseNumber", "p.gender desc, upper(p.name) desc, upper(p.middleName) desc, upper(p.lastName) desc", 
-		"c.classification desc", "upper(p.name) desc", "c.age desc", "upper(nu.name.name1) desc", "c.notifAddress.adminUnit.parent.name.name1 desc", 
+		"c.classification desc", "#{cases.namesOrderBy}", "c.age desc", "upper(nu.name.name1) desc", "c.notifAddress.adminUnit.parent.name.name1 desc", 
 		"c.notifAddress.adminUnit.name.name1 desc", "c.state desc", "c.registrationDate desc", "c.treatmentPeriod.iniDate desc", "c.validationState desc"};
 
 	private static final String[] restrictions = {/*"nu.id = #{caseFilters.tbunit.id}",*/
@@ -282,7 +283,9 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 
 	@Override
 	public String getOrder() {
-		return caseFilters.isInverseOrder()? inverseOrderValues[caseFilters.getOrder()] : orderValues[caseFilters.getOrder()];
+		String s = caseFilters.isInverseOrder()? inverseOrderValues[caseFilters.getOrder()] : orderValues[caseFilters.getOrder()];
+		s = Expressions.instance().createValueExpression(s).getValue().toString();
+		return s;
 	}
 
 	
@@ -379,4 +382,20 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		super.refresh();
 	}
 
+	public String getNamesOrderBy() {
+		boolean descOrder = caseFilters.isInverseOrder();
+		switch (defaultWorkspace.getPatientNameComposition()) {
+		case FULLNAME: 
+			return "upper(p.name)" + (descOrder? " desc": "");
+		case FIRSTSURNAME: 
+			return (descOrder? "upper(p.name) desc, upper(p.middleName) desc": "upper(p.name), upper(p.middleName)");
+		case LAST_FIRST_MIDDLENAME: 
+			return (descOrder? "upper(p.lastName) desc, upper(p.name) desc, upper(p.middleName) desc": "upper(p.lastName), upper(p.name), upper(p.middleName)");
+		case SURNAME_FIRSTNAME: 
+			return "upper(p.middleName) desc, upper(p.name) desc";
+		}
+		// default if FIRST_MIDDLE_LASTNAME
+		
+		return descOrder? "upper(p.name) desc, upper(p.middleName) desc, upper(p.lastName) desc": "upper(p.name), upper(p.middleName), upper(p.lastName)";
+	}
 }

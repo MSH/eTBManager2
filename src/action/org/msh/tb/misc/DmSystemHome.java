@@ -5,7 +5,7 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.Renderer;
-import org.msh.mdrtb.entities.SystemConfig;
+import org.msh.tb.application.EtbmanagerApp;
 
 /**
  * Handle system configuration issues and centralized operations, like e-mail shippment
@@ -17,15 +17,15 @@ public class DmSystemHome {
 	
 	@In EntityManager entityManager;
 	@In(create=true) Renderer renderer;
-	@In(create=true) SystemConfig systemConfig;
+	@In(create=true) EtbmanagerApp etbmanagerApp;
 	
 
 	public String getSystemMail()  {
-		return systemConfig.getSystemMail();
+		return etbmanagerApp.getConfiguration().getSystemMail();
 	}
 	
 	public String getSystemURL() {
-		return systemConfig.getSystemURL();
+		return etbmanagerApp.getConfiguration().getSystemURL();
 	}
 	
 

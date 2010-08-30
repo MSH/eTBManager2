@@ -6,8 +6,8 @@
                 xmlns:m="http://jboss.com/products/seam/mail"
                 xmlns:f="http://java.sun.com/jsf/core">
  <m:message>
-    <m:from name="e-TB Manager" address="#{systemConfig.systemMail}" />
-    <m:to name="System Administrator" >#{systemConfig.adminMail} </m:to>
+    <m:from name="e-TB Manager" address="#{etbmanagerApp.configuration.systemMail}" />
+    <m:to name="System Administrator" >#{etbmanagerApp.configuration.adminMail} </m:to>
     <m:subject>e-TB Manager - #{messages['error.title']}</m:subject>
 
     <m:body>

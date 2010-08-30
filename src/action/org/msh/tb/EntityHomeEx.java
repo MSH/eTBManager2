@@ -62,7 +62,7 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	 * @return
 	 */
 	public Workspace getWorkspace() {
-		return getEntityManager().find(Workspace.class, userLogin.getDefaultWorkspace().getId());
+		return getEntityManager().find(Workspace.class, getUserLogin().getDefaultWorkspace().getId());
 	}
 
 	
@@ -80,7 +80,7 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	 * @return
 	 */
 	public User getUser() {
-		return getEntityManager().find(User.class, userLogin.getUser().getId());
+		return getEntityManager().find(User.class, getUserLogin().getUser().getId());
 	}
 	
 

@@ -70,13 +70,13 @@ public class Patient extends WSObject implements Serializable {
 			return name;
 		
 		case FIRSTSURNAME:
-			return name + (middleName != null? " " + middleName: "");
+			return name + (middleName != null? ", " + middleName: "");
 			
 		case LAST_FIRST_MIDDLENAME:
-			return (lastName != null? lastName + " ": "") + name + (middleName != null? " " + middleName: "");
+			return (lastName != null? lastName + ", ": "") + name + ((middleName != null) && (!middleName.isEmpty())? ", " + middleName: "");
 			
 		case SURNAME_FIRSTNAME:
-			return (middleName != null? middleName + " ":"") + name;
+			return (middleName != null? middleName + ", ":"") + name;
 		default:
 		   return name + (middleName != null? " " + middleName: "") + (lastName != null? " " + lastName: "");
 		}		

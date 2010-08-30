@@ -21,22 +21,22 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['SystemConfig.systemURL']}: 	</ui:define>
-    	<h:inputText value="#{systemConfig.systemURL}" size="100" style=" width : 230px;" required="true" />
+    	<h:inputText value="#{systemConfigHome.systemConfig.systemURL}" size="100" style=" width : 230px;" required="true" />
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['SystemConfig.systemMail']}: 	</ui:define>
-    	<h:inputText value="#{systemConfig.systemMail}" size="100" style=" width : 230px;" required="true" />
+    	<h:inputText value="#{systemConfigHome.systemConfig.systemMail}" size="100" style=" width : 230px;" required="true" />
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['SystemConfig.adminMail']}: 	</ui:define>
-    	<h:inputText value="#{systemConfig.adminMail}" size="100" style=" width : 230px;" />
+    	<h:inputText value="#{systemConfigHome.systemConfig.adminMail}" size="100" style=" width : 230px;" />
     </s:decorate>
 	
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['SystemConfig.allowRegPage']}:</ui:define>
-    	<h:selectBooleanCheckbox value="#{systemConfig.allowRegPage}" />
+    	<h:selectBooleanCheckbox value="#{systemConfigHome.systemConfig.allowRegPage}" />
     </s:decorate>
 	
     <s:decorate template="/layout/edit.xhtml" >
@@ -51,7 +51,7 @@
 	<h:panelGroup id="pnlws">
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbUnit']}:</ui:define>
-		<h:selectOneMenu value="#{systemConfig.tbunit}" required="true">
+		<h:selectOneMenu value="#{systemConfigHome.systemConfig.tbunit}" required="true">
            	<s:selectItems value="#{systemConfigHome.units}" var="it" label="#{it.name}" noSelectionLabel="-"/>
 			<s:convertEntity />
        	</h:selectOneMenu>
@@ -59,7 +59,7 @@
 		
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['UserProfile']}:</ui:define>
-		<h:selectOneMenu value="#{systemConfig.userProfile}" required="true">
+		<h:selectOneMenu value="#{systemConfigHome.systemConfig.userProfile}" required="true">
            	<s:selectItems value="#{systemConfigHome.profiles}" var="it" label="#{it.name}" noSelectionLabel="-"/>
 			<s:convertEntity />
        	</h:selectOneMenu>
@@ -67,7 +67,7 @@
     </h:panelGroup>
 	
 	</td></tr><tr><td align="right">
-		<h:commandButton action="#{systemConfigHome.saveSettings}" value="#{messages['form.ok']}" styleClass="button" />
+		<h:commandButton action="#{systemConfigHome.saveCofiguration}" value="#{messages['form.ok']}" styleClass="button" />
 		<s:button view="/admin/index.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" />
 	</td></tr></table>
 </h:form>

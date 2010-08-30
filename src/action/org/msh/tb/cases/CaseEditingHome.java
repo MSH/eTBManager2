@@ -166,9 +166,9 @@ public class CaseEditingHome {
 		if (getTbunitselection().getTbunit() == null)
 			tbunitselection.setTbunit(tbcase.getNotificationUnit());
 		
-		if (notifAdminUnit.getSelectedUnit() == null)
+		if (getNotifAdminUnit().getSelectedUnit() == null)
 			notifAdminUnit.setSelectedUnit(tbcase.getNotifAddress().getAdminUnit());
-		if (currentAdminUnit.getSelectedUnit() == null)
+		if (getCurrentAdminUnit().getSelectedUnit() == null)
 			currentAdminUnit.setSelectedUnit(tbcase.getCurrentAddress().getAdminUnit());
 
 		updatePatientAge();

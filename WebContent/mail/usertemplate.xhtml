@@ -6,7 +6,7 @@
                 xmlns:f="http://java.sun.com/jsf/core">
       
  <m:message>
-    <m:from name="e-TB Manager" address="#{systemConfig.systemMail}" />
+    <m:from name="e-TB Manager" address="#{etbmanagerApp.configuration.systemMail}" />
     <m:to name="#{user.name}">#{user.email}</m:to>
     <m:subject>e-TB Manager - #{subject}</m:subject>
 
