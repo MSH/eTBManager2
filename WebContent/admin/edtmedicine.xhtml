@@ -79,6 +79,11 @@
         </h:selectOneMenu>  
     </s:decorate>
 
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.legacyId']}:</ui:define>
+        <h:inputText value="#{medicine.legacyId}" maxlength="50" style="width : 300px;" />
+    </s:decorate>
+
 	<div id="tblcomponents">
 	<h:dataTable value="#{medicineHome.components}" var="it" styleClass="tabela4" width="450px" 
 		style="margin:10px" columnClasses="col,colr">

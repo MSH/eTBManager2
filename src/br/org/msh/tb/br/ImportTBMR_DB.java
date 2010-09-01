@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.mdrtb.entities.Address;
 import org.msh.mdrtb.entities.AdministrativeUnit;
+import org.msh.mdrtb.entities.CaseRegimen;
 import org.msh.mdrtb.entities.CountryStructure;
 import org.msh.mdrtb.entities.ExamCulture;
 import org.msh.mdrtb.entities.ExamHIV;
@@ -30,12 +32,16 @@ import org.msh.mdrtb.entities.FieldValue;
 import org.msh.mdrtb.entities.HealthSystem;
 import org.msh.mdrtb.entities.Laboratory;
 import org.msh.mdrtb.entities.MedicalExamination;
+import org.msh.mdrtb.entities.Medicine;
 import org.msh.mdrtb.entities.Patient;
+import org.msh.mdrtb.entities.PrescribedMedicine;
 import org.msh.mdrtb.entities.PrevTBTreatment;
 import org.msh.mdrtb.entities.Regimen;
+import org.msh.mdrtb.entities.Source;
 import org.msh.mdrtb.entities.Substance;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.Tbunit;
+import org.msh.mdrtb.entities.TreatmentHealthUnit;
 import org.msh.mdrtb.entities.UserLogin;
 import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.enums.CaseClassification;
@@ -67,6 +73,7 @@ import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.misc.FieldsQuery;
 import org.msh.utils.TransactionalBatchComponent;
 import org.msh.utils.date.DateUtils;
+import org.msh.utils.date.Period;
 
 
 /**
@@ -84,6 +91,8 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	 * Standard regimen used during importing
 	 */
 	private static final int regimenId = 940665;
+	
+	private static final int sourceId = 22107;
 	
 	@In(create=true) FacesMessages facesMessages;
 	@In(create=true) CaseDataBRHome caseDataBRHome;
@@ -107,7 +116,9 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	private CaseDataBR caseData;
 	private HealthSystem healthSystem;
 	private Regimen regimen;
+	private Source source;
 	private List<Substance> substances;
+	private List<Medicine> medicines;
 	private Integer ultimaFicha;
 	private Date refDate;
 	
@@ -140,6 +151,8 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		healthSystem = null;
 		regimen = null;
 		substances = null;
+		source = null;
+		medicines = null;
 		fieldsQuery.refreshLists();
 
 		try {
@@ -272,7 +285,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		caseData.setNumSinan(rsCases.getString("NUM_SINAN"));
 		
 		updateCaseOutcome();
-		importMedicalExamination();
+		importMedicalExamination(rsCases);
 		updateCaseTreatment();
 		
 		caseHome.persist();
@@ -419,7 +432,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	private void checkResultDST(ResultSet rs, String field, String subAbbrevName) throws Exception {
 		int resDst = rs.getInt(field);
 
-		if ((resDst == 2) || (resDst == 0))
+		if ((resDst == 3) || (resDst == 0))
 			return;
 		
 		SusceptibilityResultTest resTest;
@@ -520,22 +533,22 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	 * Import medical examination
 	 * @throws Exception
 	 */
-	protected void importMedicalExamination() throws Exception {
+	protected void importMedicalExamination(ResultSet rs) throws Exception {
 		MedicalExamination medExam = new MedicalExamination();
 		
 		medExam.setTbcase(tbcase);
-		medExam.setWeight(rsCases.getDouble("PESO_ATUAL"));
-		medExam.setDate(tbcase.getRegistrationDate());
-		medExam.setResponsible(rsCases.getString("NOME_RESP_PREENCHIMENTO"));
-		medExam.setPositionResponsible(rsCases.getString("PROF_RESP_PREENCHIMENTO"));
-		medExam.setComments(rsCases.getString("OUTRAS_INFORMACOES"));
-		int val = rsCases.getInt("TRATAMENTO_SUPERVISIONADO");
+		medExam.setWeight(rs.getDouble("PESO_ATUAL"));
+		medExam.setDate(refDate);
+		medExam.setResponsible(rs.getString("NOME_RESP_PREENCHIMENTO"));
+		medExam.setPositionResponsible(rs.getString("PROF_RESP_PREENCHIMENTO"));
+		medExam.setComments(rs.getString("OUTRAS_INFORMACOES"));
+		int val = rs.getInt("TRATAMENTO_SUPERVISIONADO");
 		YesNoType resp = null;
 		if (val == 1) 
 			 resp = YesNoType.YES;
 		else resp = YesNoType.NO;
 		medExam.setSupervisedTreatment(resp);
-		medExam.setSupervisionUnitName(rsCases.getString("UNIDADE_SUPERVISAO"));
+		medExam.setSupervisionUnitName(rs.getString("UNIDADE_SUPERVISAO"));
 		
 		tbcase.getExaminations().add(medExam);
 	}
@@ -543,19 +556,46 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 
 	/**
 	 * Update treatment of the current case
+	 * @throws Exception 
+	 * @throws SQLException 
 	 */
-	protected void updateCaseTreatment() {
-		CaseState st = tbcase.getState();
-		
-		tbcase.setState(CaseState.WAITING_TREATMENT);
+	protected void updateCaseTreatment() throws Exception {
 		tbcase.getHealthUnits().clear();
 		
 		Date dtIni = tbcase.getRegistrationDate();
 		Date dtEnd = tbcase.getOutcomeDate();
-		if (dtEnd != null)
-			System.out.println("Outcome");
+		if (dtEnd == null)
+			dtEnd = DateUtils.incMonths(dtIni, 18);			
 
-		startTreatmentHome.setIniTreatmentDate(dtIni);
+		Period p = new Period();
+		p.setIniDate(dtIni);
+		p.setEndDate(dtEnd);
+		tbcase.setTreatmentPeriod(p);
+		
+		tbcase.getPrescribedMedicines().clear();
+		List<PrescribedMedicine> lst = getMedicinesPrescribed(rsCases.getInt("NUM_FICHA"));
+		for (PrescribedMedicine pm: lst) {
+			pm.setPeriod(new Period(p));
+			pm.setTbcase(tbcase);
+			pm.setSource(getSource());
+			tbcase.getPrescribedMedicines().add(pm);
+		}
+		
+		CaseRegimen reg = new CaseRegimen();
+		reg.setRegimen(getRegimen());
+		reg.setPeriod(new Period(p));
+		reg.setTbCase(tbcase);
+		reg.setIniContPhase(DateUtils.incMonths(p.getIniDate(), 6));
+		tbcase.getRegimens().add(reg);
+		
+		TreatmentHealthUnit hu = new TreatmentHealthUnit();
+		hu.setPeriod(new Period(p));
+		hu.setTbCase(tbcase);
+		hu.setTbunit(tbcase.getNotificationUnit());
+		hu.setTransferring(false);
+		tbcase.getHealthUnits().add(hu);
+		
+/*		startTreatmentHome.setIniTreatmentDate(dtIni);
 		startTreatmentHome.setEndTreatmentDate(dtEnd);
 
 		startTreatmentHome.getTbunitselection().setTbunit(tbcase.getNotificationUnit());
@@ -565,12 +605,49 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		startTreatmentHome.updatePhases();
 		
 		startTreatmentHome.startStandardRegimen();
-		
-		if ((st != null) && (st.ordinal() > CaseState.ONTREATMENT.ordinal()))
-			tbcase.setState(st);
+*/		
+
+		CaseState st = tbcase.getState();
+		if ((st == null) || (st.ordinal() <= CaseState.ONTREATMENT.ordinal()))
+			tbcase.setState(CaseState.ONTREATMENT);
 	}
 
+	
+	/**
+	 * Return a ResultSet containing the medicines prescribed in a specific form
+	 * @param numFicha
+	 * @return
+	 * @throws Exception 
+	 */
+	protected List<PrescribedMedicine> getMedicinesPrescribed(Integer numFicha) throws Exception {
+		String sql = "select p.cod_produto, am.cod_medicamento, am.cod_apresentacao, quantidade, fator_multiplicativo " +
+			"from MEDICAMENTOS_FICHA mf " +
+			"inner join apresentacao_medicamento am on am.cod_medicamento=mf.cod_medicamento and am.cod_apresentacao=mf.cod_apresentacao " +
+			"inner join produto_medicamento p on p.cod_produto=am.cod_produto " +
+			"where mf.num_ficha = " + numFicha.toString();
 
+		List<PrescribedMedicine> lst = new ArrayList<PrescribedMedicine>();
+		
+		Connection conn = getConnection();
+		try {
+			ResultSet rs = conn.createStatement().executeQuery(sql);
+			while (rs.next()) {
+				String codProd = rs.getString("COD_PRODUTO");
+				Medicine med = findMedicineByLegacyId(codProd);
+				if (med != null) {
+					PrescribedMedicine pm = new PrescribedMedicine();
+					pm.setMedicine(med);
+					pm.setDoseUnit(rs.getInt("FATOR_MULTIPLICATIVO"));
+					pm.setFrequency(7);
+					lst.add(pm);
+				}
+			}
+		} finally {
+			conn.close();
+		}
+		return lst;
+	}
+	
 	/**
 	 * Import results from HIV exam
 	 * @throws Exception
@@ -1133,6 +1210,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 					importDSTExam(rs);
 				importExams(rs);
 				importXRay(rs, false);
+				importMedicalExamination(rs);
 			}
 			rs.close();
 		} finally {
@@ -1250,6 +1328,12 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		return regimen;
 	}
 	
+	protected Source getSource() {
+		if (source == null)
+			source = entityManager.find(Source.class, sourceId);
+		return source;
+	}
+	
 	
 	/**
 	 * Return list of substances
@@ -1268,4 +1352,26 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		return counter;
 	}
 
+	
+	/**
+	 * Return list of medicines to be used during importing
+	 * @return
+	 */
+	public List<Medicine> getMedicines() {
+		if (medicines == null) {
+			medicines = entityManager
+				.createQuery("from Medicine m where m.workspace.id = #{defaultWorkspace.id}")
+				.getResultList();
+		}
+		return medicines;
+	}
+
+
+	public Medicine findMedicineByLegacyId(String legacyId) {
+		for (Medicine m: getMedicines()) {
+			if ((m.getLegacyId() != null) && (m.getLegacyId().equals(legacyId)))
+				return m;
+		}
+		return null;
+	}
 }
