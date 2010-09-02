@@ -12,6 +12,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
+import javax.sql.rowset.CachedRowSet;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -75,6 +76,8 @@ import org.msh.utils.TransactionalBatchComponent;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
+import com.sun.rowset.CachedRowSetImpl;
+
 
 /**
  * Import case data from the Brazilian MDR-TB system "Sistema TBMR" to the e-TB Manager database.
@@ -109,7 +112,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	private EntityManager entityManager;
 	private DataSource tbmrDataSource;
 	private Connection connection;
-	private ResultSet rsCases;
+	private CachedRowSet rsCases;
 	private String uf;
 	private List<CountryStructure> structures;
 	private TbCase tbcase;
@@ -119,8 +122,8 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	private Source source;
 	private List<Substance> substances;
 	private List<Medicine> medicines;
-	private Integer ultimaFicha;
 	private Date refDate;
+	private List<Integer> fichas;
 	
 	/**
 	 * Number of cases imported
@@ -129,12 +132,19 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 
 	
 	@Asynchronous
-	public boolean importCases(String uf, Workspace workspace, UserLogin userLogin) {
+	public boolean importCases(String uf, Workspace workspace, UserLogin userLogin) throws SQLException {
 		defaultWorkspace = workspace;
 		this.uf = uf;
 		Contexts.getEventContext().set("userLogin", userLogin);
 		Contexts.getEventContext().set("defaultWorkspace", defaultWorkspace);
-		return execute();
+
+		connection = getConnection();
+		try {
+			return execute();
+		}
+		finally {
+			connection.close();
+		}
 	}
 
 
@@ -144,7 +154,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	@Override
 	public boolean executeIteration() throws Exception {
 		entityManager = getEntityManager();
-		loadCasesToImport();
+		Integer numFicha = fichas.get(counter);
 
 		// initialize variables for the next loop
 		structures = null;
@@ -154,20 +164,18 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		source = null;
 		medicines = null;
 		fieldsQuery.refreshLists();
-
+		
+		loadCaseToImport(numFicha);
 		try {
-			while (rsCases.next()) {
+			if (rsCases.next())
 				importCase();
-				counter++;
-				
-				if (counter % 10 == 9)
-					return true;
-			}
-			return false;
 		}
 		finally {
 			rsCases.close();
 		}
+
+		counter++;
+		return (counter < fichas.size());
 	}
 
 
@@ -177,6 +185,24 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	@Override
 	protected void startExecution() throws Exception {
 		counter = 0;
+
+		// carrega o numero das fichas
+		String sql = "select num_ficha from ficha f " +
+        	"where f.tipo_ficha=1 and exists(select * from unidade_saude u where u.cod_us = f.cod_us_tratamento and u.sigla_uf = '" + uf + "')";
+
+		Statement stm = connection.createStatement();
+		ResultSet rs = stm.executeQuery(sql);
+
+		try {
+			fichas = new ArrayList<Integer>();
+			while (rs.next()) {
+				fichas.add(rs.getInt("NUM_FICHA"));
+			}
+			System.out.println( Integer.toString(fichas.size()) + " casos para importar...");
+		}
+		finally {
+			rs.getStatement().close();
+		}
 	}
 
 	
@@ -187,6 +213,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	protected void finishExecution() throws Exception {
 		if (connection != null)
 			connection.close();
+		System.out.println(Integer.toString(counter - 1) + " casos importados.");
 	}
 
 	
@@ -197,6 +224,8 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	protected void importCase() throws Exception {
 		Patient p = importPatient();
 
+		System.out.println("FICHA = " + rsCases.getString("NUM_FICHA"));
+		
 		String numFicha = rsCases.getString("COD_CASO");
 		String sql = "select c.id from TbCase c where c.legacyId = :id and c.patient.workspace.id = #{defaultWorkspace.id}";
 		List<Integer> lst = entityManager.createQuery(sql)
@@ -300,8 +329,6 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		importPrevTBTreatment();
 
 		importQuarterlyData();
-
-		ultimaFicha = rsCases.getInt("NUM_FICHA");
 	}
 
 
@@ -457,47 +484,43 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	 * @throws Exception
 	 */
 	protected void importPrevTBTreatment() throws Exception {
-		Connection conn = getConnection();
-		try {
-			String sql = "select * from TRATAMENTOS_ANTERIORES where num_ficha = " + rsCases.getString("NUM_FICHA");
+		String sql = "select * from TRATAMENTOS_ANTERIORES where num_ficha = " + rsCases.getString("NUM_FICHA");
+		
+		ResultSet rs = connection.createStatement().executeQuery(sql);
+		
+		while (rs.next()) {
+			PrevTBTreatment aux = new PrevTBTreatment();
+			checkMedicinePrevTreatment(rs, aux, "DROGA_R", "R");
+			checkMedicinePrevTreatment(rs, aux, "DROGA_Z", "Z");
+			checkMedicinePrevTreatment(rs, aux, "DROGA_H", "H");
+			checkMedicinePrevTreatment(rs, aux, "DROGA_E", "E");
+			checkMedicinePrevTreatment(rs, aux, "DROGA_S", "S");
+			checkMedicinePrevTreatment(rs, aux, "DROGA_ET", "Et");
+			checkMedicinePrevTreatment(rs, aux, "DROGA_OFX", "Ofx");
+			checkMedicinePrevTreatment(rs, aux, "DROGA_CS", "Cs");
+			checkMedicinePrevTreatment(rs, aux, "DROGA_CLZ", "Cfz");
+			checkMedicinePrevTreatment(rs, aux, "DROGA_AM", "Am");
 			
-			ResultSet rs = conn.createStatement().executeQuery(sql);
-			
-			while (rs.next()) {
-				PrevTBTreatment aux = new PrevTBTreatment();
-				checkMedicinePrevTreatment(rs, aux, "DROGA_R", "R");
-				checkMedicinePrevTreatment(rs, aux, "DROGA_Z", "Z");
-				checkMedicinePrevTreatment(rs, aux, "DROGA_H", "H");
-				checkMedicinePrevTreatment(rs, aux, "DROGA_E", "E");
-				checkMedicinePrevTreatment(rs, aux, "DROGA_S", "S");
-				checkMedicinePrevTreatment(rs, aux, "DROGA_ET", "Et");
-				checkMedicinePrevTreatment(rs, aux, "DROGA_OFX", "Ofx");
-				checkMedicinePrevTreatment(rs, aux, "DROGA_CS", "Cs");
-				checkMedicinePrevTreatment(rs, aux, "DROGA_CLZ", "Cfz");
-				checkMedicinePrevTreatment(rs, aux, "DROGA_AM", "Am");
-				
-				aux.setYear(rs.getInt("ANO_INICIO"));
-				int val = rs.getInt("RES_TRATAMENTO");
-				PrevTBTreatmentOutcome res = null;
-				switch (val) {
-				case 1: res = PrevTBTreatmentOutcome.CURED;
-					break;
-				case 2: res = PrevTBTreatmentOutcome.DEFAULTED;
-					break;
-				case 3: res = PrevTBTreatmentOutcome.FAILURE;
-					break;
-				case 4: res = PrevTBTreatmentOutcome.SCHEME_CHANGED;
-					break;
-				}
-				aux.setOutcome(res);
-				aux.setTbCase(tbcase);
-				
-				entityManager.persist(aux);
-				entityManager.flush();
+			aux.setYear(rs.getInt("ANO_INICIO"));
+			int val = rs.getInt("RES_TRATAMENTO");
+			PrevTBTreatmentOutcome res = null;
+			switch (val) {
+			case 1: res = PrevTBTreatmentOutcome.CURED;
+				break;
+			case 2: res = PrevTBTreatmentOutcome.DEFAULTED;
+				break;
+			case 3: res = PrevTBTreatmentOutcome.FAILURE;
+				break;
+			case 4: res = PrevTBTreatmentOutcome.SCHEME_CHANGED;
+				break;
 			}
-		} finally {
-			conn.close();
+			aux.setOutcome(res);
+			aux.setTbCase(tbcase);
+			
+			entityManager.persist(aux);
+			entityManager.flush();
 		}
+		rs.getStatement().close();
 	}
 	
 	
@@ -628,23 +651,20 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 
 		List<PrescribedMedicine> lst = new ArrayList<PrescribedMedicine>();
 		
-		Connection conn = getConnection();
-		try {
-			ResultSet rs = conn.createStatement().executeQuery(sql);
-			while (rs.next()) {
-				String codProd = rs.getString("COD_PRODUTO");
-				Medicine med = findMedicineByLegacyId(codProd);
-				if (med != null) {
-					PrescribedMedicine pm = new PrescribedMedicine();
-					pm.setMedicine(med);
-					pm.setDoseUnit(rs.getInt("FATOR_MULTIPLICATIVO"));
-					pm.setFrequency(7);
-					lst.add(pm);
-				}
+		ResultSet rs = connection.createStatement().executeQuery(sql);
+		while (rs.next()) {
+			String codProd = rs.getString("COD_PRODUTO");
+			Medicine med = findMedicineByLegacyId(codProd);
+			if (med != null) {
+				PrescribedMedicine pm = new PrescribedMedicine();
+				pm.setMedicine(med);
+				pm.setDoseUnit(rs.getInt("FATOR_MULTIPLICATIVO"));
+				pm.setFrequency(7);
+				lst.add(pm);
 			}
-		} finally {
-			conn.close();
 		}
+		rs.getStatement().close();
+
 		return lst;
 	}
 	
@@ -806,51 +826,41 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	/**
 	 * Import patient address
 	 * @param tbcase
+	 * @throws Exception 
 	 */
-	protected void importPatientAddress() {
-		try {
-			Integer codEnder = rsCases.getInt("COD_ENDERECO");
-			
-			if (codEnder == null)
-				return;
-			
-			String sql = "select * from ENDERECO_PACIENTE where COD_ENDERECO = " + codEnder.toString();
-
-			Connection conn = getConnection();
-			try {
-				ResultSet rs = conn.createStatement().executeQuery(sql);
-				
-				if (!rs.next()) {
-					rs.getStatement().close();
-					return;
-				}
-				
-				Address aux = tbcase.getNotifAddress();
-				aux.setAddress(rs.getString("ENDERECO"));
-
-				String codMunicipio = rs.getString("COD_MUNICIPIO");
-				String codUf = rs.getString("SIGLA_UF");
-				AdministrativeUnit adm;
-				if ((codMunicipio == null) || (codMunicipio.isEmpty()))
-					 adm = loadUF(codUf);
-				else adm = loadMunicipio(codMunicipio);
-				aux.setAdminUnit(adm);
-
-				aux.setComplement(rs.getString("COMPLEMENTO"));
-				aux.setZipCode(rs.getString("CEP"));
-				caseData.setNotifAddressNumber(rs.getString("NUMERO_ENDERECO"));
-				caseData.setNotifDistrict(rs.getString("BAIRRO"));
-				tbcase.setPhoneNumber(rs.getString("TELEFONE"));
-				tbcase.setMobileNumber(rs.getString("CELULAR"));
-				
-				rs.getStatement().close();
-			}
-			finally {
-				conn.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+	protected void importPatientAddress() throws Exception {
+		Integer codEnder = rsCases.getInt("COD_ENDERECO");
+		
+		if (codEnder == null)
+			return;
+		
+		String sql = "select * from ENDERECO_PACIENTE where COD_ENDERECO = " + codEnder.toString();
+		ResultSet rs = connection.createStatement().executeQuery(sql);
+		
+		if (!rs.next()) {
+			rs.getStatement().close();
+			return;
 		}
+		
+		Address aux = tbcase.getNotifAddress();
+		aux.setAddress(rs.getString("ENDERECO"));
+
+		String codMunicipio = rs.getString("COD_MUNICIPIO");
+		String codUf = rs.getString("SIGLA_UF");
+		AdministrativeUnit adm;
+		if ((codMunicipio == null) || (codMunicipio.isEmpty()))
+			 adm = loadUF(codUf);
+		else adm = loadMunicipio(codMunicipio);
+		aux.setAdminUnit(adm);
+
+		aux.setComplement(rs.getString("COMPLEMENTO"));
+		aux.setZipCode(rs.getString("CEP"));
+		caseData.setNotifAddressNumber(rs.getString("NUMERO_ENDERECO"));
+		caseData.setNotifDistrict(rs.getString("BAIRRO"));
+		tbcase.setPhoneNumber(rs.getString("TELEFONE"));
+		tbcase.setMobileNumber(rs.getString("CELULAR"));
+		
+		rs.getStatement().close();
 	}
 
 	
@@ -868,43 +878,39 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		if (lst.size() > 0)
 			return lst.get(0);
 		try {
-			Connection conn = getConnection();
-			try {
-				ResultSet rs = conn.createStatement().executeQuery("select * from UNIDADE_SAUDE where COD_US = " + legacyID.toString());
+			ResultSet rs = connection.createStatement().executeQuery("select * from UNIDADE_SAUDE where COD_US = " + legacyID.toString());
 
-				if (!rs.next()) {
-					rs.getStatement().close();
-					return null;
-				}
-				
-				Tbunit unit = new Tbunit();
-				
-				unit.getName().setName1(rs.getString("NOME"));
-				unit.setHealthSystem(getHealthSystem());
-				unit.setAddress(rs.getString("ENDERECO"));
-				unit.setBatchControl(true);
-				unit.setChangeEstimatedQuantity(true);
-				unit.setDistrict(rs.getString("COMPLEMENTO"));
-				unit.setLegacyId(legacyID.toString());
-				unit.setMdrHealthUnit(true);
-				unit.setTbHealthUnit(false);
-				unit.setNotifHealthUnit(true);
-				unit.setNumDaysOrder(90);
-				unit.setMedicineStorage(true);
-				AdministrativeUnit adm = loadMunicipio(rs.getString("COD_MUNICIPIO"));
-				unit.setAdminUnit(adm);
-				unit.setWorkspace(defaultWorkspace);
-				
-				entityManager.persist(unit);
-				entityManager.flush();
+			if (!rs.next()) {
 				rs.getStatement().close();
-				System.out.println("NOVA UNIDADE: " + unit.getName().toString());
+				return null;
+			}
+			
+			Tbunit unit = new Tbunit();
+			
+			unit.getName().setName1(rs.getString("NOME"));
+			unit.setHealthSystem(getHealthSystem());
+			unit.setAddress(rs.getString("ENDERECO"));
+			unit.setBatchControl(true);
+			unit.setChangeEstimatedQuantity(true);
+			unit.setDistrict(rs.getString("COMPLEMENTO"));
+			unit.setLegacyId(legacyID.toString());
+			unit.setMdrHealthUnit(true);
+			unit.setTbHealthUnit(false);
+			unit.setNotifHealthUnit(true);
+			unit.setNumDaysOrder(90);
+			unit.setMedicineStorage(true);
+			AdministrativeUnit adm = loadMunicipio(rs.getString("COD_MUNICIPIO"));
+			unit.setAdminUnit(adm);
+			unit.setWorkspace(defaultWorkspace);
+			
+			entityManager.persist(unit);
+			entityManager.flush();
+			rs.getStatement().close();
+			System.out.println("NOVA UNIDADE: " + unit.getName().toString());
+			
+			rs.getStatement().close();
 
-				return unit;
-			}
-			finally {
-				conn.close();
-			}
+			return unit;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -925,35 +931,28 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		if (lst.size() > 0)
 			return lst.get(0);
 		try {
-			Connection conn = getConnection();
-			try {
-				ResultSet rs = conn.createStatement().executeQuery("select * from LABORATORIO where COD_LABORATORIO = " + legacyID.toString());
+			ResultSet rs = connection.createStatement().executeQuery("select * from LABORATORIO where COD_LABORATORIO = " + legacyID.toString());
 
-				if (!rs.next()) {
-					rs.getStatement().close();
-					return null;
-				}
-				
-				Laboratory lab = new Laboratory();
-				
-				lab.setName(rs.getString("NOME"));
-				lab.setAbbrevName(lab.getName());
-				AdministrativeUnit adm = loadUF(rs.getString("SIGLA_UF"));
-				lab.setAdminUnit(adm);
-				lab.setLegacyId(legacyID.toString());
-				lab.setWorkspace(defaultWorkspace);
-				
-				entityManager.persist(lab);
-				entityManager.flush();
+			if (!rs.next()) {
 				rs.getStatement().close();
-				System.out.println("NOVO LAB: " + lab.getName());
-
-				return lab;
-			}
-			finally {
-				conn.close();
+				return null;
 			}
 			
+			Laboratory lab = new Laboratory();
+			
+			lab.setName(rs.getString("NOME"));
+			lab.setAbbrevName(lab.getName());
+			AdministrativeUnit adm = loadUF(rs.getString("SIGLA_UF"));
+			lab.setAdminUnit(adm);
+			lab.setLegacyId(legacyID.toString());
+			lab.setWorkspace(defaultWorkspace);
+			
+			entityManager.persist(lab);
+			entityManager.flush();
+			rs.getStatement().close();
+			System.out.println("NOVO LAB: " + lab.getName());
+
+			return lab;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -977,37 +976,31 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 			return lst.get(0);
 		
 		try {
-			Connection conn = getConnection();
-			try {
-				ResultSet rs = conn.createStatement().executeQuery("select * from MUNICIPIO where COD_MUNICIPIO = '" + legacyId + "'");
+			ResultSet rs = connection.createStatement().executeQuery("select * from MUNICIPIO where COD_MUNICIPIO = '" + legacyId + "'");
 
-				if (!rs.next()) {
-					rs.getStatement().close();
-					return null;
-				}
-				
-				AdministrativeUnit adm = loadUF(rs.getString("SIGLA_UF"));
-				Integer parentId = adm.getId();
-				
-				adminUnitHome.setId(null);
-				adminUnitHome.setParentId(parentId);
-
-				adm = adminUnitHome.getInstance();
-				adm.setCountryStructure(getMunicipioStructure());
-				adm.getName().setName1(rs.getString("NOME"));
-				adm.setLegacyId(legacyId);
-				adminUnitHome.setDisplayMessage(false);
-				adminUnitHome.setTransactionLogActive(false);
-				adminUnitHome.persist();
-				
-				System.out.println("NOVO MUNICIPIO: " + adm.getName().toString());
+			if (!rs.next()) {
 				rs.getStatement().close();
-				
-				return adm;
+				return null;
 			}
-			finally {
-				conn.close();
-			}
+			
+			AdministrativeUnit adm = loadUF(rs.getString("SIGLA_UF"));
+			Integer parentId = adm.getId();
+			
+			adminUnitHome.setId(null);
+			adminUnitHome.setParentId(parentId);
+
+			adm = adminUnitHome.getInstance();
+			adm.setCountryStructure(getMunicipioStructure());
+			adm.getName().setName1(rs.getString("NOME"));
+			adm.setLegacyId(legacyId);
+			adminUnitHome.setDisplayMessage(false);
+			adminUnitHome.setTransactionLogActive(false);
+			adminUnitHome.persist();
+			
+			System.out.println("NOVO MUNICIPIO: " + adm.getName().toString());
+			rs.getStatement().close();
+			
+			return adm;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1033,32 +1026,26 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 			return lst.get(0);
 		
 		try {
-			Connection conn = getConnection();
-			try {
-				ResultSet rs = conn.createStatement().executeQuery("select * from UF where sigla_uf = '" + legacyId + "'");
+			ResultSet rs = connection.createStatement().executeQuery("select * from UF where sigla_uf = '" + legacyId + "'");
 
-				if (!rs.next()) {
-					rs.getStatement().close();
-					return null;
-				}
-				
-				adminUnitHome.setId(null);
-				AdministrativeUnit adm = adminUnitHome.getInstance();
-				adm.setCountryStructure(getUFStructure());
-				adm.getName().setName1(rs.getString("NOME"));
-				adm.setLegacyId(legacyId);
-				adminUnitHome.setDisplayMessage(false);
-				adminUnitHome.setTransactionLogActive(false);
-				adminUnitHome.persist();
-				
-				System.out.println("NOVA UF: " + adm.getName());
+			if (!rs.next()) {
 				rs.getStatement().close();
-				
-				return adm;
+				return null;
 			}
-			finally {
-				conn.close();
-			}
+			
+			adminUnitHome.setId(null);
+			AdministrativeUnit adm = adminUnitHome.getInstance();
+			adm.setCountryStructure(getUFStructure());
+			adm.getName().setName1(rs.getString("NOME"));
+			adm.setLegacyId(legacyId);
+			adminUnitHome.setDisplayMessage(false);
+			adminUnitHome.setTransactionLogActive(false);
+			adminUnitHome.persist();
+			
+			System.out.println("NOVA UF: " + adm.getName());
+			rs.getStatement().close();
+			
+			return adm;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1126,10 +1113,9 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 				" and f.data = (select max(f2.data) from ficha f2 " +
 				"where f2.cod_caso = f.cod_caso)";
 		
-		Connection conn = getConnection();
-		try {
-			ResultSet rs = conn.createStatement().executeQuery(sql);
-			
+		ResultSet rs = connection.createStatement().executeQuery(sql);
+		
+		if (rs.next()) {
 			CaseState st = CaseState.ONTREATMENT;
 			if (rs.next()) {
 				int val = rs.getInt("COD_RESULTADO_TRATAMENTO");
@@ -1152,22 +1138,22 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 				case 8:
 					st = CaseState.OTHER;
 				}
-			}
-			tbcase.setState(st);
-			if (st != CaseState.ONTREATMENT) {
-				tbcase.setOutcomeDate(rs.getDate("DATA"));
+
+				tbcase.setState(st);
+				if (CaseState.ONTREATMENT.equals(st)) {
+					tbcase.setOutcomeDate(rs.getDate("DATA"));
+				}
 			}
 		}
-		finally {
-			conn.close();
-		}
+		
+		rs.getStatement().close();
 	}
 	
 	/**
 	 * Load cases to import
 	 * @throws SQLException 
 	 */
-	protected void loadCasesToImport() throws SQLException {
+	protected void loadCaseToImport(Integer numFicha) throws SQLException {
 		if (uf == null)
 			return;
 		
@@ -1175,17 +1161,17 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 			"inner join caso_tbmr c on c.cod_caso = f.cod_caso " +
         	"inner join ficha_notificacao fn on fn.num_ficha = f.num_ficha " +
         	"inner join paciente p on p.cod_paciente = f.cod_paciente " +
-        	"where exists(select * from unidade_saude u where u.cod_us = f.cod_us_tratamento and u.sigla_uf = '" + uf + "')";
+        	"where exists(select * from unidade_saude u where u.cod_us = f.cod_us_tratamento and u.sigla_uf = '" + uf + "') " +
+        	"and f.num_ficha = " + numFicha.toString();
 
-		if (ultimaFicha != null)
-			sql += " and f.num_ficha > " + ultimaFicha.toString();
-		
-		sql += " order by f.num_ficha";
-		
-		connection = getConnection();
-		Statement stm = connection.createStatement();
-		rsCases = stm.executeQuery(sql);
-	}
+		rsCases = new CachedRowSetImpl();
+		rsCases.setDataSourceName("java:tbmrDatasource");
+		rsCases.setCommand(sql);
+		rsCases.execute(connection);
+/*		casesConnection = getConnection();
+		Statement stm = casesConnection.createStatement();
+		rsCases = stm.executeQuery(sql);		
+*/	}
 
 	
 	/**
@@ -1198,24 +1184,22 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 				"inner join ficha_trimestral ft on ft.num_ficha = f.num_ficha " +
 				"where f.cod_caso = " + codCaso.toString();
 		
-		Connection conn = getConnection();
-		try {
-			ResultSet rs = conn.createStatement().executeQuery(sql);
-			while (rs.next()) {
-				refDate = rs.getDate("DATA");
-				
-				int novodst = rs.getInt("COD_EXAME_CONFIRMATORIO");
+		CachedRowSet rs = new CachedRowSetImpl();
+		rs.setCommand(sql);
+		rs.execute(connection);
+//		ResultSet rs = connection.createStatement().executeQuery(sql);
+		while (rs.next()) {
+			refDate = rs.getDate("DATA");
+			
+			int novodst = rs.getInt("COD_EXAME_CONFIRMATORIO");
 
-				if (novodst == 1)
-					importDSTExam(rs);
-				importExams(rs);
-				importXRay(rs, false);
-				importMedicalExamination(rs);
-			}
-			rs.close();
-		} finally {
-			conn.close();
+			if (novodst == 1)
+				importDSTExam(rs);
+			importExams(rs);
+			importXRay(rs, false);
+			importMedicalExamination(rs);
 		}
+		rs.close();
 	}
 
 

@@ -23,14 +23,19 @@ public abstract class TransactionalBatchComponent {
 	 */
 	public boolean execute() {
 		try {
+			boolean bFirst = true;
+
+			startTransaction();
 			startExecution();
 			while (true) {
-				startTransaction();
+				if (!bFirst)
+					startTransaction();
 				boolean cont = executeIteration();
 				commit();
 
 				if (!cont)
 					break;
+				bFirst = false;
 			}
 			
 		} catch (Exception e) {
