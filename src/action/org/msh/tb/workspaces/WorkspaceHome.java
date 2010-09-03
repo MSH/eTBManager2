@@ -124,7 +124,11 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		UserProfile prof = new UserProfile();
 		prof.setName("Administrator");
 		prof.setWorkspace(workspace);
-		List<UserRole> roles = getEntityManager().createQuery("from UserRole").getResultList();
+		List<UserRole> roles = getEntityManager().createQuery("from UserRole " +
+				"where id in (select a.userRole.id from UserPermission a " +
+				"where a.userProfile.id in (select b.profile.id from UserWorkspace b where b.user.id = #{userLogin.user.id}))")
+				.getResultList();
+
 		for (UserRole role: roles) {
 			if (!role.isInternalUse()) {
 				UserPermission p = new UserPermission();
@@ -140,20 +144,34 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 			}
 		}
 		getEntityManager().persist(prof);
-
+		
 		// create temporary region
+		CountryStructure cs = new CountryStructure();
+		cs.setLevel(1);
+		cs.getName().setName1("Region");
+		cs.setWorkspace(workspace);
+		getEntityManager().persist(cs);
+
 		AdministrativeUnit reg = new AdministrativeUnit();
 		reg.getName().setName1("REGION 1");
 		reg.setCode("001");
 		reg.setWorkspace(workspace);
 		reg.setUnitsCount(1);
+		reg.setCountryStructure(cs);
 		getEntityManager().persist(reg);
 		
 		// create temporaty locality
+		CountryStructure cs2 = new CountryStructure();
+		cs2.setLevel(2);
+		cs2.getName().setName1("Locality");
+		cs2.setWorkspace(workspace);
+		getEntityManager().persist(cs2);
+
 		AdministrativeUnit loc = new AdministrativeUnit();
 		loc.getName().setName1("LOCALITY 1");
 		loc.setCode("001001");
 		loc.setParent(reg);
+		loc.setCountryStructure(cs2);
 		loc.setWorkspace(workspace);
 		getEntityManager().persist(loc);
 		
@@ -169,6 +187,7 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		unit.setAdminUnit(loc);
 		unit.setWorkspace(workspace);
 		unit.setHealthSystem(healthSystem);
+		unit.setActive(true);
 		getEntityManager().persist(unit);
 	}
 

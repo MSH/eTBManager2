@@ -457,9 +457,12 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	 * @throws Exception
 	 */
 	private void checkResultDST(ResultSet rs, String field, String subAbbrevName) throws Exception {
+		if (rs.getString(field).isEmpty()) 
+			return;
+		
 		int resDst = rs.getInt(field);
 
-		if ((resDst == 3) || (resDst == 0))
+		if ((resDst != 0) && (resDst != 1))
 			return;
 		
 		SusceptibilityResultTest resTest;
