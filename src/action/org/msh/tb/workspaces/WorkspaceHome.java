@@ -1,5 +1,6 @@
 package org.msh.tb.workspaces;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,9 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 	private int pictureSize;
 	private boolean clearPicture;
 	private boolean viewChanged;
+
+	private String userName;
+	private Integer userId;
 
 
 
@@ -250,17 +254,36 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		viewChanged = (view != null) && ((bHasPicture) || (clearPicture)); 
 		return true;
 	}
+
 	
+	/**
+	 * Check if user is into workspace
+	 * @param user
+	 * @return true if user is into workspace
+	 */
+	protected boolean isUserIntoWorkspace(User user) {
+		for (UserWorkspace userWorkspace: getWorkspace().getUsers()) {
+			if (userWorkspace.getUser().equals(user))
+				return true;
+		}
+		return false;
+	}
+
 
 	/**
 	 * Include a new user in the workspace
 	 * @param usu
 	 */
 	public void addUser() {
-		UserWorkspace ws = getUserWorkspace();
-		User usu = ws.getUser();
+		if (userId == null)
+			return;
+
+		User usu = getEntityManager().find(User.class, userId);
 		
-		if (getInstance().getUsers().contains(usu)) {
+		UserWorkspace ws = getUserWorkspace();
+		ws.setUser(usu);
+		
+		if (isUserIntoWorkspace(usu)) {
 			facesMessages.addFromResourceBundle("admin.workspaces.userexists", usu.getName());
 			return;
 		}
@@ -274,6 +297,7 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		getInstance().getUsers().add(ws);
 		usu.getWorkspaces().add(ws);
 		userWorkspace = null;
+		userName = null;
 	}
 
 
@@ -552,5 +576,91 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 	 */
 	public void setClearPicture(boolean clearPicture) {
 		this.clearPicture = clearPicture;
+	}
+
+
+	/**
+	 * Process the auto complete list for the user name
+	 * @param suggestion partial name of the user
+	 * @return
+	 */
+	public List<UserInfo> autocompleteList(Object suggestion) {
+		if (suggestion == null)
+			return null;
+		
+		String param = '%' + suggestion.toString().toUpperCase() + '%';
+		List<User> lst = getEntityManager().createQuery("from User u where upper(u.name) like :p1" +
+					" or upper(u.login) like :p2 order by u.name")
+					.setParameter("p1", param)
+					.setParameter("p2", param)
+					.getResultList();
+		
+		List<UserInfo> results = new ArrayList<UserInfo>();
+
+		for (User user: lst) {
+			if (!isUserIntoWorkspace(user)) {
+				UserInfo info = new UserInfo();
+				info.setId(user.getId());
+				info.setName(user.getName());
+				info.setLogin(user.getLogin());
+				results.add(info);
+			}
+		}
+		
+		return results;
+	}
+
+
+	public String getUserName() {
+		return userName;
+	}
+
+
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+
+	/**
+	 * Provide information about a user to be serialized to the client side
+	 * @author Ricardo Memoria
+	 *
+	 */
+	public class UserInfo implements Serializable {
+		private static final long serialVersionUID = -2422851080153786077L;
+		
+		private Integer id;
+		private String name;
+		private String login;
+
+		public Integer getId() {
+			return id;
+		}
+		public void setId(Integer id) {
+			this.id = id;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getLogin() {
+			return login;
+		}
+		public void setLogin(String login) {
+			this.login = login;
+		}
+	}
+
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 }

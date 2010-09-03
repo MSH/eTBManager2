@@ -457,7 +457,8 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	 * @throws Exception
 	 */
 	private void checkResultDST(ResultSet rs, String field, String subAbbrevName) throws Exception {
-		if (rs.getString(field).isEmpty()) 
+		String resdst = rs.getString(field);
+		if ((resdst == null) || (resdst.isEmpty())) 
 			return;
 		
 		int resDst = rs.getInt(field);

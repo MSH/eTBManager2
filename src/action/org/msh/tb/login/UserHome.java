@@ -302,6 +302,7 @@ public class UserHome extends EntityHomeEx<User> {
 	}
 	
 	
+
 	/**
 	 * Refresh the view list
 	 */
@@ -350,4 +351,5 @@ public class UserHome extends EntityHomeEx<User> {
 	public void refreshHealthSystem() {
 		tbunitselection = null;
 	}
+
 }

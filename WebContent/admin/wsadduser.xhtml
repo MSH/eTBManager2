@@ -12,6 +12,7 @@
         
 <ui:param name="title" value="#{messages['Workspace']}: #{messages['admin.workspaces.addremuser']}" />
 <ui:param name="topmenu" value="3" />
+<ui:param name="waitdlg" value="1" />
 
 <ui:param name="labelstyle" value="width:120px;" />
 
@@ -22,7 +23,7 @@
 <ui:define name="body">
 <h:form id="main" prependId="true">
 	<table class="tab1" style="background-color:#F7F5EF;" cellspacing="10">
-	<tr><td colspan="3" class="header2">#{messages['Workspace']}: #{workspace.name}
+	<tr><td colspan="3" class="header2"><h1>#{workspace.name}</h1>
 	</td></tr>
 	<tr><td width="330" style="background-color:#FFFFFF; border:1px solid #E4DCC7;" valign="top">
 		<b style="padding-left:10px;padding-bottom:5px;">#{messages['admin.workspaces.users']}</b>
@@ -42,18 +43,40 @@
 
 		</div>
 	</td>
-	<td width="350" valign="top" style="border:1px solid #E4DCC7;">
+	<td valign="top" style="border:1px solid #E4DCC7;">
 		<b style="padding-left:10px;padding-bottom:5px;">#{messages['admin.users']}</b>
 		<div style="padding:10px">
 		<a:region immediate="true">
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['User']}:</ui:define>
-    		<h:selectOneMenu value="#{workspaceHome.userWorkspace.user}">
-    	        <s:selectItems value="#{allusers}" var="it" label="#{it.login} - #{it.name}" noSelectionLabel="-" />
-    	     	<s:convertEntity />
-    		</h:selectOneMenu>
+    		<h:inputText id="username" value="#{workspaceHome.userName}" style="width:200px;" />
+    		<rich:suggestionbox suggestionAction="#{workspaceHome.autocompleteList}" var="it"
+    			 for="username" width="350" minchars="3" 
+    			 usingSuggestObjects="true" onobjectchange="processSelectedUser(suggestion);">
+    			<h:column>
+    				<h:outputText value="#{it.name}"/>
+    			</h:column>
+
+    			<h:column>
+    				<h:outputText value="#{it.login}"/>
+    			</h:column>
+    		</rich:suggestionbox>
+    		<h:inputHidden id="userId" value="#{workspaceHome.userId}"/>
     	</s:decorate>
     	</a:region>
+
+<script type="text/javascript">
+<!--
+function processSelectedUser(suggestion) {
+	var item = suggestion.getSelectedItems();
+	if (item && item.length > 0) {
+		var userid = item[0].id;
+		var elem = #{rich:element('userId')};
+		elem.value = userid;
+	}
+}
+-->
+</script>
 
    		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbUnit']}:</ui:define>
@@ -79,7 +102,8 @@
         	</h:selectOneMenu>  
 	    </s:decorate>
 		
-		<h:commandButton action="#{workspaceHome.addUser}" value="#{messages['form.add']}"></h:commandButton>
+		<a:commandButton action="#{workspaceHome.addUser}" value="#{messages['form.add']}" styleClass="button" 
+			reRender="main" />
 		
 		</div>
 
