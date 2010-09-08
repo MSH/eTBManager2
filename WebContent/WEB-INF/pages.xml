@@ -10,7 +10,6 @@
 	<page view-id="/home.xhtml" login-required="true" />
 	<page view-id="/others/*" login-required="true" />
 	<page view-id="/restricted/*" login-required="true" />
-	<page view-id="/reports/*" login-required="true" />
 	<page view-id="/admin/*" login-required="true" >
 		<restrict>#{s:hasRole('ADMIN')}</restrict>
 	</page>
@@ -217,7 +216,7 @@
 	<page view-id="/reports/movements.xhtml" action="#{movementFilters.initialize}">
 		<restrict>#{s:hasRole('MOVS')}</restrict>
 		<param name="firstResult" value="#{movements.firstResult}" />
-		<param name="firstResult" value="#{batchMovements.firstResult}" />
+<!-- 		<param name="firstResult" value="#{batchMovements.firstResult}" />  -->
 		<param name="bt" value="#{movementFilters.batchesOutput}" converterId="javax.faces.Boolean"/>
 		<param name="dt" value="#{movementFilters.date}" converterId="dateURLConverter" />
 		<param name="mt" value="#{movementFilters.type}" />
