@@ -37,6 +37,20 @@
 		</s:fileUpload>
     </s:decorate>
 	
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['admin.import.delimiter']}:</ui:define>
+    	<h:selectOneMenu value="#{importDataHome.delimiter}" required="true">
+    		<f:selectItems value="#{importDataHome.delimiters}" />
+    	</h:selectOneMenu>
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['admin.import.charset']}:</ui:define>
+    	<h:selectOneMenu value="#{importDataHome.charset}" required="true">
+    		<f:selectItems value="#{importDataHome.charsets}" />
+    	</h:selectOneMenu>
+    </s:decorate>
+
 	<p/>
 	<h:commandButton action="#{importDataHome.execute}" value="#{messages['form.import']}" styleClass="button" />
 	

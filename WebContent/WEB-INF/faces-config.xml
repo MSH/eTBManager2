@@ -21,6 +21,7 @@
    <supported-locale>in</supported-locale>
    <supported-locale>uk_UA</supported-locale>
    <supported-locale>az_AZ</supported-locale>
+   <supported-locale>uz</supported-locale>
   </locale-config>
  </application>
 </faces-config>

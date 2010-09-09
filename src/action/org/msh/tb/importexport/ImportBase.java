@@ -39,6 +39,8 @@ public abstract class ImportBase {
 	private Workspace workspace;
 	
 	private String charSet = "UTF-8";
+	
+	private char delimiter = ';';
 
 
 	/**
@@ -97,7 +99,7 @@ public abstract class ImportBase {
 	 */
 	public boolean initialize() {
 		try {
-			csvReader.setDelimiter(';');
+			csvReader.setDelimiter(delimiter);
 
 			if (!csvReader.readHeaders())
 				return false;
@@ -149,7 +151,7 @@ public abstract class ImportBase {
 			index++;
 		}
 		return -1;
-	}
+}
 
 	
 	/**
@@ -214,5 +216,15 @@ public abstract class ImportBase {
 
 	public void setCharSet(String charSet) {
 		this.charSet = charSet;
+	}
+
+
+	public char getDelimiter() {
+		return delimiter;
+	}
+
+
+	public void setDelimiter(char delimiter) {
+		this.delimiter = delimiter;
 	}
 }

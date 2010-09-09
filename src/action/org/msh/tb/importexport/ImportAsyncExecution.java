@@ -29,13 +29,15 @@ public class ImportAsyncExecution {
 	private String error;
 	
 	@Asynchronous
-	public void execute(ImportTable table, InputStream data, Workspace workspace, UserLogin userLogin) {
+	public void execute(ImportTable table, InputStream data, String charset, char delimiter, Workspace workspace, UserLogin userLogin) {
 		error = null;
 		this.table = table;
 		
 		importBase = null;
 		try {
 			importBase = (ImportBase)table.getImportClass().newInstance();
+			importBase.setDelimiter(delimiter);
+			importBase.setCharSet(charset);
 			
 			if (importBase != null) {
 				Contexts.getEventContext().set("userLogin", userLogin);
