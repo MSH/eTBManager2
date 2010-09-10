@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -15,6 +16,7 @@ import org.msh.mdrtb.entities.Medicine;
 import org.msh.mdrtb.entities.PrescribedMedicine;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.SourcesQuery;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.treatment.TreatmentHome.FormEditing;
 import org.msh.utils.date.DateUtils;
@@ -105,6 +107,14 @@ public class PrescribedMedicineHome extends EntityHomeEx<PrescribedMedicine> {
 		TbCase tbcase = getTbCase();
 		
 		PrescribedMedicine pm = getInstance();
+		
+		if (pm.getSource() == null) {
+			SourcesQuery sources = (SourcesQuery)Component.getInstance("sources");
+			if (sources.isSingleResult())
+				pm.setSource(sources.getResultList().get(0));
+			else return;
+		}
+		
 		if (!tbcase.getPrescribedMedicines().contains(pm)) {
 			pm.setTbcase(tbcase);
 			tbcase.getPrescribedMedicines().add(pm);

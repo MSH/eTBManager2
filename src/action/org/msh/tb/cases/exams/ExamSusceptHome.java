@@ -1,4 +1,4 @@
-package org.msh.tb.cases;
+package org.msh.tb.cases.exams;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,16 +47,17 @@ public class ExamSusceptHome extends SampleExamHome<ExamSusceptibilityTest> {
 	
 	protected void createItems() {
 		items = new ArrayList<ExamSusceptibilityResult>();
-		boolean bEdt = isManaged();
+//		boolean bEdt = isManaged();
 		
 		for (Substance s: substances.getDstSubstances()) {
 			ExamSusceptibilityResult res = findResult(s);
 			if (res == null) {
 				res = new ExamSusceptibilityResult();
-				if (bEdt)
-					res.setResult(SusceptibilityResultTest.NOTDONE);
 				res.setSubstance(s);
 			}
+
+			if (res.getResult() == null)
+				res.setResult(SusceptibilityResultTest.NOTDONE);
 			
 			items.add(res);
 			res.setExam(getInstance());

@@ -62,13 +62,35 @@
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.details.result']}" />
 			</f:facet>
-			<h:selectOneMenu id="res" value="#{it.result}" required="true">
+			<span id="divicon" style="float:right">
+			<h:selectOneMenu id="res" value="#{it.result}" required="true" onchange="dstResultChange(this);">
     			<s:selectItems value="#{susceptResults}" var="ss" noSelectionLabel="-" label="#{messages[ss.key]}" />
     			<s:convertEnum />
 			</h:selectOneMenu>
+			</span>
 			<h:message for="res" styleClass="erro" />
 		</h:column>
 	</h:dataTable>
+
+<rich:jQuery selector="#divicon select" query="each(function(){dstResultChange(this);})" />
+<script type="text/javascript">
+<!--
+function dstResultChange(cb) {
+	var val=cb.options[cb.selectedIndex].value;
+	var elem = jQuery(cb).parent('#divicon');
+	var s = '';
+	if (val == 'RESISTANT')
+		s = 'dst-resistant';
+	else
+	if (val == 'SUSCEPTIBLE')
+		s = 'dst-susceptible';
+	else
+	if (val == 'CONTAMINATED')
+		s = 'dst-contaminated';
+	elem.removeClass('dst-resistant dst-resistant dst-contaminated').addClass(s);	
+}
+-->
+</script>
 
 	</td></tr>
     <tr><td align="right">

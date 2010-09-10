@@ -1,4 +1,4 @@
-package org.msh.tb.cases;
+package org.msh.tb.cases.exams;
 
 import java.util.ArrayList;
 import java.util.List;

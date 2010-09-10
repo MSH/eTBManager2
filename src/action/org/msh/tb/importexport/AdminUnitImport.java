@@ -86,7 +86,7 @@ public class AdminUnitImport extends ImportBase {
 			 parentName = parentNames[nameLevel - 1];
 		else parentName = null;
 		
-		saveAdminUnit(parentName, typeName, name, customId, nameLevel);
+		saveAdminUnit(parentName, typeName, name, customId, nameLevel + 1);
 	}
 
 	
@@ -104,7 +104,7 @@ public class AdminUnitImport extends ImportBase {
 		AdministrativeUnit adminUnit = getAdminUnit(name, nameLevel);
 
 		AdministrativeUnit parent;
-		if (nameLevel > 0) {
+		if (nameLevel > 1) {
 			 parent = getParentUnit(parentName, nameLevel - 1);
 			 if (parent == null)
 				 throw new RuntimeException("The administrative unit " + parentName + " at level " + Integer.toString(nameLevel - 1) + " was not found in the system");

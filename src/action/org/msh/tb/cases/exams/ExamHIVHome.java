@@ -1,4 +1,4 @@
-package org.msh.tb.cases;
+package org.msh.tb.cases.exams;
 
 
 import org.jboss.seam.annotations.Factory;

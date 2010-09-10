@@ -6,7 +6,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.br.entities.MolecularBiology;
 import org.msh.tb.br.entities.enums.MolecularBiologyResult;
-import org.msh.tb.cases.ExamHome;
+import org.msh.tb.cases.exams.ExamHome;
 import org.msh.tb.laboratories.LaboratorySelection;
 
 @Name("molecularBiologyHome")

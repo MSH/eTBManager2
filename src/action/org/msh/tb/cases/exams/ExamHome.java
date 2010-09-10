@@ -1,4 +1,4 @@
-package org.msh.tb.cases;
+package org.msh.tb.cases.exams;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import org.jboss.seam.annotations.In;
 import org.msh.mdrtb.entities.CaseData;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.cases.CaseHome;
 
 
 public class ExamHome<E> extends EntityHomeEx<E> {

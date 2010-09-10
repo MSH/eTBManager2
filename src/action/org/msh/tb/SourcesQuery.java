@@ -5,6 +5,11 @@ import org.msh.mdrtb.entities.Source;
 import org.msh.utils.EntityQuery;
 
 
+/**
+ * Return the list of medicine sources of the workspace the user is logged to  
+ * @author Ricardo Memoria
+ *
+ */
 @Name("sources")
 public class SourcesQuery extends EntityQuery<Source>{
 	private static final long serialVersionUID = 7087727728001563620L;
@@ -27,4 +32,12 @@ public class SourcesQuery extends EntityQuery<Source>{
 		else return s;
 	}
 
+	
+	/**
+	 * Check if there is just a single source
+	 * @return true if there is just one source, otherwise return false
+	 */
+	public boolean isSingleResult() {
+		return (getResultList().size() == 1);
+	}
 }

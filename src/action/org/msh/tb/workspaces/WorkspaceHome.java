@@ -262,7 +262,7 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 	 * @return true if user is into workspace
 	 */
 	protected boolean isUserIntoWorkspace(User user) {
-		for (UserWorkspace userWorkspace: getWorkspace().getUsers()) {
+		for (UserWorkspace userWorkspace: getInstance().getUsers()) {
 			if (userWorkspace.getUser().equals(user))
 				return true;
 		}
