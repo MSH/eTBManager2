@@ -45,7 +45,7 @@ import org.msh.tb.cases.exams.ExamSputumHome;
 import org.msh.tb.cases.exams.ExamSusceptHome;
 import org.msh.tb.cases.exams.ExamXRayHome;
 import org.msh.tb.cases.exams.MedicalExaminationHome;
-import org.msh.tb.cases.treatment.StartTreatmentHome;
+import org.msh.tb.cases.treatment.StartTreatmentIndivHome;
 import org.msh.tb.misc.FieldsOptions;
 import org.msh.tb.tbunits.TBUnitSelection;
 
@@ -58,7 +58,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	@In(create=true) CaseEditingHome caseEditingHome;
 	@In(required=false) ExamSputumHome examSputumHome;
 	@In(required=false) ExamCultureHome examCultureHome;
-	@In(create=true) StartTreatmentHome startTreatmentHome;
+	@In(create=true) StartTreatmentIndivHome startTreatmentIndivHome;
 //	@In(required=false) TreatmentHealthUnitHome treatmentHealthUnitHome;
 	@In(required=false) ExamSusceptHome examSusceptHome;
 	@In(required=false) ExamHIVHome examHIVHome;
@@ -132,7 +132,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 //			return "error";
 
 		TbCase tbcase = caseEditingHome.getTbcase();
-		tbcase.setDiagnosisDate(startTreatmentHome.getIniTreatmentDate());
+		tbcase.setDiagnosisDate(startTreatmentIndivHome.getIniTreatmentDate());
 		tbcase.setState(CaseState.WAITING_TREATMENT);
 
 		adjustFields();
@@ -479,7 +479,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	 * Initialize individualized regimen editing
 	 */
 	public void initializeIndividualizedRegimen() {
-		TBUnitSelection tbsel = startTreatmentHome.getTbunitselection();
+		TBUnitSelection tbsel = startTreatmentIndivHome.getTbunitselection();
 		if (tbsel.getTbunit() == null) {
 			tbsel.setTbunit(caseHome.getInstance().getNotificationUnit());
 		}
@@ -491,7 +491,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	 * @return
 	 */
 	public String saveTreatmentEditing() {
-		String ret = startTreatmentHome.startIndividualizedRegimen(); 
+		String ret = startTreatmentIndivHome.startIndividualizedRegimen(); 
 		if (ret.equals("persisted")) {
 			TbCase tbcase = caseHome.getInstance();
 			if (tbcase.getHealthUnits().size() > 0) {

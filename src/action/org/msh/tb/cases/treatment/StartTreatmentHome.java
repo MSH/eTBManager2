@@ -129,48 +129,6 @@ public class StartTreatmentHome {
 
 
 	/**
-	 * Start an individualized treatment
-	 * @return "treatment-started" if successfully started
-	 */
-	public String startIndividualizedRegimen() {
-		TbCase tbcase = caseHome.getInstance();
-		
-		Period treatPeriod = new Period();
-		for (CaseRegimen cr: tbcase.getRegimens()) {
-			cr.getPeriod().movePeriod(iniTreatmentDate);
-			
-			// initialize the treatment period
-			if ((treatPeriod.getIniDate() == null) || (treatPeriod.getIniDate().before(cr.getPeriod().getIniDate())))
-				treatPeriod.setIniDate(cr.getPeriod().getIniDate());
-			
-			if ((treatPeriod.getEndDate() == null) || (treatPeriod.getEndDate().after(cr.getPeriod().getEndDate())))
-				treatPeriod.setEndDate(cr.getPeriod().getEndDate());
-		}
-		treatPeriod.movePeriod(iniTreatmentDate);
-
-		for (PrescribedMedicine pm: tbcase.getPrescribedMedicines()) {
-			Date dt = DateUtils.incMonths(iniTreatmentDate, pm.getIniMonth());
-			pm.getPeriod().movePeriod(dt);
-		}
-		
-		TreatmentHealthUnit hu = new TreatmentHealthUnit();
-		Period p = new Period(treatPeriod);
-		hu.setPeriod(p);
-		hu.setTbCase(tbcase);
-		hu.setTbunit(tbunitselection.getTbunit());
-		hu.setTransferring(false);
-		tbcase.getHealthUnits().add(hu);
-
-		tbcase.setTreatmentPeriod(new Period(treatPeriod));
-		tbcase.setState(CaseState.ONTREATMENT);
-
-		if (saveChages)
-			caseHome.persist();
-
-		return "treatment-started";
-	}
-
-	/**
 	 * Create list of prescribed medicines for the phases of treatment 
 	 * according to the regimen selected
 	 */

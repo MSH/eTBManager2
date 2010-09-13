@@ -174,19 +174,16 @@ public class PrescribedMedicine implements Serializable {
 	 * @param month
 	 */
 	public void setIniMonth(Integer month) {
-		if (tbcase == null)
-			return;
-		Period p = tbcase.getTreatmentPeriod();
-		if ((p == null) || (p.isEmpty()))
-			return;
-		
-		Date dt = DateUtils.incMonths(tbcase.getTreatmentPeriod().getIniDate(), month);
-		if (period == null)
-			period = new Period(dt, DateUtils.incDays(dt, 1));
-		else {
-			int num = period.getDays();
-			period.set(dt, DateUtils.incDays(dt, num));
+		if (period.isEmpty()) {
+			if (tbcase != null)
+				period = new Period(tbcase.getTreatmentPeriod());
+			
+			if (period.getIniDate() == null)
+				period.set(new Date(), new Date());
 		}
+		
+		Date dt = DateUtils.incMonths(period.getIniDate(), month-1);
+		period.movePeriod(dt);
 	}
 
 
@@ -197,8 +194,11 @@ public class PrescribedMedicine implements Serializable {
 	public void setMonths(Integer months) {
 		if (period == null)
 			return;
-		if (period.getIniDate() == null)
-			period.setIniDate(tbcase.getTreatmentPeriod().getIniDate());
+		if (period.getIniDate() == null) {
+			if (tbcase != null)
+				 period.setIniDate(tbcase.getTreatmentPeriod().getIniDate());
+			else period.setIniDate(new Date());
+		}
 		Date dt = DateUtils.incMonths(period.getIniDate(), months);
 		dt = DateUtils.incDays(dt, -1);
 		period.setEndDate(dt);

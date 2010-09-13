@@ -90,7 +90,7 @@ public class Period {
 	 * @return
 	 */
 	public int getMonths() {
-		return ((iniDate != null) && (endDate != null) ? DateUtils.monthsBetween(iniDate, endDate): 0);
+		return ((iniDate != null) && (endDate != null) ? DateUtils.monthsBetween(iniDate, DateUtils.incDays(endDate, 1)): 0);
 	}
 
 
@@ -99,7 +99,7 @@ public class Period {
 	 * @return
 	 */
 	public int getYears() {
-		return ((iniDate != null) && (endDate != null) ? DateUtils.monthsBetween(iniDate, endDate): 0);
+		return ((iniDate != null) && (endDate != null) ? DateUtils.monthsBetween(iniDate, DateUtils.incDays(endDate, 1)): 0);
 	}
 
 	
