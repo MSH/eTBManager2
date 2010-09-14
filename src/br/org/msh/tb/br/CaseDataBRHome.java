@@ -45,6 +45,7 @@ import org.msh.tb.cases.exams.ExamSputumHome;
 import org.msh.tb.cases.exams.ExamSusceptHome;
 import org.msh.tb.cases.exams.ExamXRayHome;
 import org.msh.tb.cases.exams.MedicalExaminationHome;
+import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.cases.treatment.StartTreatmentIndivHome;
 import org.msh.tb.misc.FieldsOptions;
 import org.msh.tb.tbunits.TBUnitSelection;
@@ -58,6 +59,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	@In(create=true) CaseEditingHome caseEditingHome;
 	@In(required=false) ExamSputumHome examSputumHome;
 	@In(required=false) ExamCultureHome examCultureHome;
+	@In(create=true) StartTreatmentHome startTreatmentHome;
 	@In(create=true) StartTreatmentIndivHome startTreatmentIndivHome;
 //	@In(required=false) TreatmentHealthUnitHome treatmentHealthUnitHome;
 	@In(required=false) ExamSusceptHome examSusceptHome;
@@ -132,7 +134,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 //			return "error";
 
 		TbCase tbcase = caseEditingHome.getTbcase();
-		tbcase.setDiagnosisDate(startTreatmentIndivHome.getIniTreatmentDate());
+		tbcase.setDiagnosisDate(startTreatmentHome.getIniTreatmentDate());
 		tbcase.setState(CaseState.WAITING_TREATMENT);
 
 		adjustFields();

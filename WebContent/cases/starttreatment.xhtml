@@ -74,9 +74,9 @@
 		
 		<h:column>
 			<f:facet name="header">#{messages['PrescribedMedicine.doseUnit']}</f:facet>
-			<h:inputText value="#{m.prescribedMedicine.doseUnit}" id="dose" style="width:60px">
-				<f:validateLongRange minimum="1" maximum="10"/>
-			</h:inputText>
+			<h:selectOneMenu id="dose" value="#{m.prescribedMedicine.doseUnit}" required="true">
+				<f:selectItems value="#{prescribedMedicineHome.doses}" />
+			</h:selectOneMenu>
 			<h:message for="dose" styleClass="erro" />
 		</h:column>
 		

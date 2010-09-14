@@ -50,7 +50,7 @@ public class CaseRegimenHome {
 			// for sibling periods, the end date is 1 day before the initial date of the next period
 			// so the system checks if there is more than 1 day between dates to consider it a period
 			if (DateUtils.daysBetween(dtIni, dtEnd) > 1) {
-				RegimenInfo  ri = findRegimenByMedicinesInPeriod(new Period(dtIni, dtEnd));
+				RegimenInfo  ri = findRegimenByMedicinesInPeriod( new Period(dtIni, DateUtils.incDays(dtEnd, -1)) );
 				
 				if (ri == null)
 					ri = new RegimenInfo(null, null, dtIni, dtEnd);
@@ -142,11 +142,13 @@ public class CaseRegimenHome {
 		// separate drugs in the period 
 		for (PrescribedMedicine pm: tbcase.getPrescribedMedicines()) {
 			if (pm.getPeriod().contains(period)) {
-//			if (DateUtils.isPeriodInside(pm.getIniDate(), pm.getEndDate(), dtIni, dtEnd)) {
 				if (!meds.contains(pm.getMedicine()))
 					meds.add(pm.getMedicine());
 			}
 		}
+		
+		if (meds.size() == 0)
+			return null;
 
 		RegimenPhase p = null;
 		List<RegimenInfo> lst = new ArrayList<RegimenInfo>();

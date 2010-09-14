@@ -3,6 +3,7 @@ package org.msh.tb.cases.treatment;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.annotations.In;
@@ -192,18 +193,27 @@ public class PrescriptionTable {
 		sortPeriodList(lst);
 		float numDaysTreat = getNumDaysTreatment();
 
+		Date dtAnt = null;
+
 		for (TreatmentPeriod p: lst) {
 			float daysPeriod = p.getPeriod().getDays();
-//			float daysPeriod = DateUtils.daysBetween(p.getIniDate(), p.getEndDate());
 			int width = Math.round(daysPeriod / numDaysTreat * 100);
 
 			int daysLeft = DateUtils.daysBetween(p.getIniDate(), period.getIniDate());
 			int left = Math.round(daysLeft / numDaysTreat * 100);
 			
 			p.setWidth(width);
-			p.setLeft(left - prevLeft);
+			
+			if ((dtAnt != null) && (DateUtils.daysBetween(dtAnt, p.getPeriod().getIniDate()) == 1)) {
+				// make small adjustment in the round operation 
+				p.setLeft(0);
+				if (left - prevLeft > 0)
+					p.setWidth(width + 1);
+			}
+			else p.setLeft(left - prevLeft);
 			
 			prevLeft = left + width;
+			dtAnt = p.getPeriod().getEndDate();
 		}
 	}
 

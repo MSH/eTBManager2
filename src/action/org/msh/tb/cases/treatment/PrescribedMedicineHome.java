@@ -114,11 +114,6 @@ public class PrescribedMedicineHome extends EntityHomeEx<PrescribedMedicine> {
 				pm.setSource(sources.getResultList().get(0));
 			else return;
 		}
-		
-		if (!tbcase.getPrescribedMedicines().contains(pm)) {
-			pm.setTbcase(tbcase);
-			tbcase.getPrescribedMedicines().add(pm);
-		}
 
 		if (!treatmentHome.checkDateBasicRules(pm.getPeriod().getIniDate(), pm.getPeriod().getEndDate()))
 			return;
@@ -128,7 +123,11 @@ public class PrescribedMedicineHome extends EntityHomeEx<PrescribedMedicine> {
 			return;
 		}
 
-		updateDates(pm);
+		removePeriod(pm.getPeriod(), pm.getMedicine());
+		if (!tbcase.getPrescribedMedicines().contains(pm)) {
+			pm.setTbcase(tbcase);
+			tbcase.getPrescribedMedicines().add(pm);
+		}
 		
 		validated = true;
 		treatmentHome.setFormEditing(FormEditing.NONE);
@@ -161,39 +160,32 @@ public class PrescribedMedicineHome extends EntityHomeEx<PrescribedMedicine> {
 	 * Update dates of the medicine prescribed to prevent that the prescription doesn't overlap other periods with the same medicine
 	 * @param pm
 	 */
-	protected void updateDates(PrescribedMedicine pm) {
+	protected void removePeriod(Period period, Medicine medicine) {
 		TbCase tbcase = caseHome.getInstance();
-		Period period = pm.getPeriod();
 		
-		List<PrescribedMedicine> lst = createPrescribedMedicineList(pm.getMedicine());
+		List<PrescribedMedicine> lst = createPrescribedMedicineList(medicine);
 		for (PrescribedMedicine aux: lst) {
-			if (aux != pm) {
-				// prescription is inside new/edited one?
-				if (period.contains(aux.getPeriod())) {
-//				if (DateUtils.isPeriodInside(dtIni, dtEnd, aux.getIniDate(), aux.getEndDate())) {
-					tbcase.getPrescribedMedicines().remove(aux);
-					if (getEntityManager().contains(aux))
-						getEntityManager().remove(aux);
-				}
-				else
-				// prescription is containing the whole new/edit prescription
-				if (aux.getPeriod().contains(period)) {	
-//				if ((aux.getIniDate().before(dtIni)) && (aux.getEndDate().after(dtEnd))) {
-					PrescribedMedicine aux2 = clonePrescribedMedicine(aux);
-					aux.getPeriod().setIniDate(DateUtils.incDays(period.getIniDate(), -1));
-					aux2.getPeriod().setEndDate(DateUtils.incDays(period.getEndDate(), 1));
-					tbcase.getPrescribedMedicines().add(aux2);
-				}
-				else 
-				if (period.isDateInside(aux.getPeriod().getIniDate())) {
-//				if ((!aux.getIniDate().before(dtIni)) && (!aux.getIniDate().after(dtEnd))) {
-					aux.getPeriod().cutIni( DateUtils.incDays(period.getEndDate(), 1) );
-				}
-				else
-				if (period.isDateInside(aux.getPeriod().getEndDate())) {
-//				if ((!aux.getEndDate().before(dtIni)) && (!aux.getEndDate().after(dtEnd))) {
-					aux.getPeriod().cutEnd( DateUtils.incDays(period.getIniDate(), -1) );
-				}
+			// prescription is inside new/edited one?
+			if (period.contains(aux.getPeriod())) {
+				tbcase.getPrescribedMedicines().remove(aux);
+				if (getEntityManager().contains(aux))
+					getEntityManager().remove(aux);
+			}
+			else
+			// prescription is containing the whole new/edit prescription
+			if (aux.getPeriod().contains(period)) {	
+				PrescribedMedicine aux2 = clonePrescribedMedicine(aux);
+				aux.getPeriod().setEndDate( DateUtils.incDays(period.getIniDate(), -1) );
+				aux2.getPeriod().setIniDate( DateUtils.incDays(period.getEndDate(), 1) );
+				tbcase.getPrescribedMedicines().add(aux2);
+			}
+			else 
+			if (period.isDateInside(aux.getPeriod().getIniDate())) {
+				aux.getPeriod().cutIni( DateUtils.incDays(period.getEndDate(), 1) );
+			}
+			else
+			if (period.isDateInside(aux.getPeriod().getEndDate())) {
+				aux.getPeriod().cutEnd( DateUtils.incDays(period.getIniDate(), -1) );
 			}
 		}
 		

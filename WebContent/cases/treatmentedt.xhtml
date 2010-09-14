@@ -98,6 +98,8 @@ function showHuDlg() {	Richfaces.showModalPanel('hudlg'); }
 </rich:modalPanel>
 
 
+
+
 <rich:modalPanel id="medicinedlg" width="700" height="350" zindex="2000" 
 	trimOverlayedElements="false" style="overflow:auto" >
 	<f:facet name="header">#{messages['PrescribedMedicine']}</f:facet>
@@ -157,7 +159,7 @@ function showHuDlg() {	Richfaces.showModalPanel('hudlg'); }
 	<a:commandButton value="#{messages['form.ok']}" action="#{prescribedMedicineHome.updateChanges}"
 		data="#{prescribedMedicineHome.validated}"
 		styleClass="button" reRender="pnltreatment,medicinepnl" 
-		oncomplete="initializeTreatmentView(); if (!data) return false;Richfaces.hideModalPanel('medicinedlg');"/>
+		oncomplete="if (!data) return false;Richfaces.hideModalPanel('medicinedlg');"/>
 		
 	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
 		onclick="Richfaces.hideModalPanel('medicinedlg'); return false;"/>
