@@ -75,6 +75,12 @@ function handleContextClick(comp) {
 	
 	</td></tr>
 	<tr><td>
+		<h:selectOneRadio value="#{indicator.indicatorDate}" >
+			<s:selectItems var="v" value="#{indicatorDates}" label="#{messages[v.key]}" />
+			<s:convertEnum />
+		</h:selectOneRadio>
+	</td></tr>
+	<tr><td>
 	
 	<s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['global.inimonthyear']}:	</ui:define>
