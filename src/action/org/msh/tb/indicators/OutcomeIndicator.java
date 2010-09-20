@@ -63,15 +63,6 @@ public class OutcomeIndicator extends Indicator {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.msh.tb.indicators.CaseHQLBase#getIndicatorDate()
-	 */
-	@Override
-	public IndicatorDate getIndicatorDate() {
-		return IndicatorDate.INITREATMENT_DATE;
-	}
-
-
 	/**
 	 * Return the success rate of the report
 	 * @return
@@ -83,4 +74,5 @@ public class OutcomeIndicator extends Indicator {
 		
 		return successRate;
 	}
+
 }
