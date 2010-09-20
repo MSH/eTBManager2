@@ -2,6 +2,7 @@ package org.msh.tb.indicators;
 
 import java.util.List;
 
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
@@ -17,10 +18,13 @@ public class TreatResultIndicator extends Indicator2D {
 	private static final long serialVersionUID = 1488382939742056446L;
 	private static final String successRateID = "SRID";  
 
+	@In(create=true)
+	OutcomeIndicator outcomeIndicator;
+	
 	@Override
 	protected void createIndicators() {
 		setNewCasesOnly(true);
-		setClassification(CaseClassification.MDRTB_DOCUMENTED);
+		setClassification(outcomeIndicator.getClassification()!=null?outcomeIndicator.getClassification():CaseClassification.MDRTB_DOCUMENTED);
 
 		List<Object[]> lst = generateValuesByField("c.state, c.patientType", "c.state >= " + CaseState.WAITING_TREATMENT.ordinal());
 		createItems(lst);
