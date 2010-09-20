@@ -163,29 +163,33 @@ public class PrescribedMedicineHome extends EntityHomeEx<PrescribedMedicine> {
 	protected void removePeriod(Period period, Medicine medicine) {
 		TbCase tbcase = caseHome.getInstance();
 		
+		PrescribedMedicine pm = getInstance();
+		
 		List<PrescribedMedicine> lst = createPrescribedMedicineList(medicine);
 		for (PrescribedMedicine aux: lst) {
-			// prescription is inside new/edited one?
-			if (period.contains(aux.getPeriod())) {
-				tbcase.getPrescribedMedicines().remove(aux);
-				if (getEntityManager().contains(aux))
-					getEntityManager().remove(aux);
-			}
-			else
-			// prescription is containing the whole new/edit prescription
-			if (aux.getPeriod().contains(period)) {	
-				PrescribedMedicine aux2 = clonePrescribedMedicine(aux);
-				aux.getPeriod().setEndDate( DateUtils.incDays(period.getIniDate(), -1) );
-				aux2.getPeriod().setIniDate( DateUtils.incDays(period.getEndDate(), 1) );
-				tbcase.getPrescribedMedicines().add(aux2);
-			}
-			else 
-			if (period.isDateInside(aux.getPeriod().getIniDate())) {
-				aux.getPeriod().cutIni( DateUtils.incDays(period.getEndDate(), 1) );
-			}
-			else
-			if (period.isDateInside(aux.getPeriod().getEndDate())) {
-				aux.getPeriod().cutEnd( DateUtils.incDays(period.getIniDate(), -1) );
+			if (aux != pm) {
+				// prescription is inside new/edited one?
+				if (period.contains(aux.getPeriod())) {
+					tbcase.getPrescribedMedicines().remove(aux);
+					if (getEntityManager().contains(aux))
+						getEntityManager().remove(aux);
+				}
+				else
+				// prescription is containing the whole new/edit prescription
+				if (aux.getPeriod().contains(period)) {	
+					PrescribedMedicine aux2 = clonePrescribedMedicine(aux);
+					aux.getPeriod().setEndDate( DateUtils.incDays(period.getIniDate(), -1) );
+					aux2.getPeriod().setIniDate( DateUtils.incDays(period.getEndDate(), 1) );
+					tbcase.getPrescribedMedicines().add(aux2);
+				}
+				else 
+				if (period.isDateInside(aux.getPeriod().getIniDate())) {
+					aux.getPeriod().cutIni( DateUtils.incDays(period.getEndDate(), 1) );
+				}
+				else
+				if (period.isDateInside(aux.getPeriod().getEndDate())) {
+					aux.getPeriod().cutEnd( DateUtils.incDays(period.getIniDate(), -1) );
+				}
 			}
 		}
 		

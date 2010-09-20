@@ -92,12 +92,6 @@ public class ForecastingCalculation {
 			finishCalculation();
 		}
 		
-		// calculate number of cases and medicine consumption
-//		calculateNewCases();
-//		calculateCasesOnTreatment();
-
-//		calculateCasesCohort();
-		
 		return "executed";
 	}
 
@@ -136,7 +130,7 @@ public class ForecastingCalculation {
 			forecasting.setNumCasesOnTreatment(count.intValue());
 
 			// load information about cases on treatment
-			String hql = "select pm.period.iniDate, pm.period.endDate, pm.doseUnit, pm.medicine.id, pm.frequency " +
+			String hql = "select pm.period.iniDate, pm.period.endDate, pm.doseUnit, pm.medicine.id, pm.frequency, tb.id " +
 					"from PrescribedMedicine pm " +
 					"join pm.tbcase tb " +
 					"where pm.medicine.workspace.id = #{defaultWorkspace.id} " +
@@ -147,7 +141,8 @@ public class ForecastingCalculation {
 			else
 			if (MedicineLine.SECOND_LINE.equals(forecasting.getMedicineLine()))
 				hql += " and pm.medicine.line = " + MedicineLine.SECOND_LINE.ordinal();
-			
+
+			hql += " order by tb.id, pm.medicine.id";
 			casesOnTreatment = entityManager.createQuery(hql)
 					.setParameter("val", CaseState.ONTREATMENT)
 					.setParameter("dtIni", forecasting.getReferenceDate())
@@ -284,9 +279,15 @@ public class ForecastingCalculation {
 		for (int i = 0; i < numMonths; i++) {
 			Date dtIni = forecasting.getIniDateMonthIndex(i);
 			Date dtEnd = forecasting.getEndDateMonthIndex(i);
+			
+			Integer prevCaseId = null;
+			Integer prevMedId = null;
+			
 			for (Object[] prescDrug: casesOnTreatment) {
 				// calculate consumption for a prescribed medicine
 				int qtd = calcConsumptionCaseOnTreatment(prescDrug, new Period(dtIni, dtEnd));
+				Integer caseId = (Integer)prescDrug[5];
+				Integer medId = (Integer)prescDrug[3];
 
 				if (qtd > 0) {
 					// update results
@@ -294,7 +295,12 @@ public class ForecastingCalculation {
 					ForecastingResult res = forecasting.findResult(fm.getMedicine(), i);
 					if (res == null)
 						RaiseResultException(fm.getMedicine(), i);
-					res.increaseCasesOnTreatment(1, qtd);
+					
+					int numcases = ((caseId.equals(prevCaseId) && (medId.equals(prevMedId)))? 0: 1);
+					res.increaseCasesOnTreatment(numcases, qtd);
+
+					prevCaseId = caseId;
+					prevMedId = medId;
 					
 					// update consumption up to end of lead time
 					// during lead time ?
@@ -331,11 +337,9 @@ public class ForecastingCalculation {
 	private int calcConsumptionCaseOnTreatment(Object[] caseInfo, Period period) {
 		pm.getPeriod().setIniDate((Date)caseInfo[0]);
 		pm.getPeriod().setEndDate((Date)caseInfo[1]);
-		
-		if (!pm.getPeriod().contains(period))
+
+		if (!pm.getPeriod().isIntersected(period))
 			return 0;
-//		if ( (dtEnd.before(pm.getIniDate())) || (dtIni.after(pm.getEndDate())) )
-//			return 0;
 
 		pm.setDoseUnit((Integer)caseInfo[2]);
 		pm.setFrequency((Integer)caseInfo[4]);
@@ -343,7 +347,10 @@ public class ForecastingCalculation {
 		ForecastingMedicine fm = forecasting.findMedicineById(medId);
 		pm.setMedicine(fm.getMedicine());
 
-		return pm.calcEstimatedDispensing(period);
+		Period p = new Period(period);
+		p.intersect(pm.getPeriod());
+		
+		return pm.calcEstimatedDispensing(p);
 	}
 
 	

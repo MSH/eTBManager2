@@ -391,6 +391,9 @@ function validateNewForecasting() {
 		return false;
 	return true;
 }
+function showLoadForecastingDlg() {
+	Richfaces.showModalPanel('loadfordlg');	
+}
 </script>
 <rich:modalPanel id="saveforecastdlg" height="150" width="450" >
 	<f:facet name="header">
@@ -546,7 +549,7 @@ function showDatesDlg() {
 		<s:fragment rendered="#{forecastings.loading}">
 		<h:dataTable value="#{forecastings.resultList}" var="it" width="100%" >
 			<h:column>
-				<s:link view="/management/medforecast.xhtml" value="#{it.name}" styleClass="forecast-icon">
+				<s:link view="/management/forecasting.xhtml" value="#{it.name}" styleClass="forecast-icon">
 					<f:param name="id" value="#{it.id}"/>
 				</s:link>
   				<br/>
