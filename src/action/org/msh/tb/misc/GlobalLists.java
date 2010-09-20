@@ -46,6 +46,7 @@ import org.msh.mdrtb.entities.enums.XRayEvolution;
 import org.msh.mdrtb.entities.enums.XRayResult;
 import org.msh.mdrtb.entities.enums.YesNoType;
 import org.msh.tb.cases.FilterHealthUnit;
+import org.msh.tb.indicators.core.IndicatorDate;
 import org.msh.tb.indicators.core.IndicatorSite;
 
 /**
@@ -456,4 +457,9 @@ public class GlobalLists {
 	public SputumSmearResult[] getSputumSmearNotifOptions() {
 		return smearOptionsNotif;
 	}
+	
+	@Factory("indicatorDates")
+	public IndicatorDate[] getIndicatorDate() {
+		return IndicatorDate.values();
+	}	
 }
