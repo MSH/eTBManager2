@@ -57,20 +57,13 @@
 	</s:decorate>
 
 	<a:repeat value="#{treatmentCalendarHome.phases}" var="phase">
-		#{phase.caseRegimen.regimen.name}
-		<s:fragment rendered="#{phase.hasIntensivePhase}" >
-		<h3><h:outputText value="#{messages['cases.treat.intphase']}"/></h3>
+		<h3>
+			<h:outputText value="#{messages['cases.treat.intphase']}" rendered="#{phase.intensivePhase}"/>
+			<h:outputText value="#{messages['cases.treat.contphase']}" rendered="#{phase.continuousPhase}"/>
+		</h3>
 		<ui:decorate template="/cases/calendartreat.xhtml" >
-			<ui:param name="list" value="#{phase.monthsIntensivePhase}" />
+			<ui:param name="list" value="#{phase.months}" />
 		</ui:decorate>
-		</s:fragment>
-		
-		<s:fragment rendered="#{phase.hasContinuousPhase}" >
-		<h3>#{messages['cases.treat.contphase']}</h3>
-		<ui:decorate template="/cases/calendartreat.xhtml" >
-			<ui:param name="list" value="#{phase.monthsContinuousPhase}" />
-		</ui:decorate>
-		</s:fragment>
 	</a:repeat>
 
 	</h:panelGroup>

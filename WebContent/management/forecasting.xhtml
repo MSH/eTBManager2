@@ -27,10 +27,9 @@
 		<a:commandLink value="#{messages['manag.forecast.new']}" style="margin-right:15px;" 
 			action="#{forecastingView.startNew}" reRender="main"
 			onclick="if (!confirm('#{messages['form.confirmnew']}')) {return false;}" />
-		<a:region>
-		<a:commandLink value="#{messages['manag.forecast.load']}" style="margin-right:15px;" ajaxSingle="true"
-			onclick="showLoadForecastingDlg()" reRender="fclist" action="#{forecastings.initLoading}" />
-		</a:region>
+		<a:commandLink value="#{messages['manag.forecast.load']}" 
+			style="margin-right:15px;" ajaxSingle="true"
+			oncomplete="showLoadForecastingDlg()" reRender="fclist" action="#{forecastings.initLoading}" />
 	</div>
 	<h:outputText value="#{forecastingHome.instance.name}" styleClass="forecast-icon" />
 	<br/>
@@ -441,6 +440,9 @@ function showBatchDlg() {
 function showDatesDlg() {
 	Richfaces.showModalPanel('datesdlg');
 }
+function showLoadForecastingDlg() {
+	Richfaces.showModalPanel('loadfordlg');
+}
 </script>
 
 
@@ -536,7 +538,8 @@ function showDatesDlg() {
 
 
 
-<rich:modalPanel id="loadfordlg" height="400" width="490" zindex="2000" style="background-color:#F2F5F0">
+<rich:modalPanel id="loadfordlg" width="400" zindex="2000" 
+	style="background-color:#F2F5F0" autosized="true">
 	<f:facet name="header">#{messages['manag.forecast.load']}</f:facet>
 	<h:form id="frmunit" style="margin:0px">
 	<div style="overflow: auto; width: 98%; height: 280px;border: 1px gray solid; padding:0px; margin: 0px;background-color:white;">
@@ -562,7 +565,7 @@ function showDatesDlg() {
 	</h:panelGroup>
 	</div>
 	</h:form>
-	<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" onclick="hideLoadForecastingDlg(); return false;"/>
+	<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" onclick="Richfaces.hideModalPanel('loadfordlg'); return false;"/>
 </rich:modalPanel>
 
 </ui:define>
