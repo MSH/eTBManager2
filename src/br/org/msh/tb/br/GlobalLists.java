@@ -2,6 +2,7 @@ package org.msh.tb.br;
 
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.ClinicalEvolution;
 import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.mdrtb.entities.enums.PrevTBTreatmentOutcome;
@@ -14,10 +15,12 @@ import org.msh.tb.br.entities.enums.TipoResistencia;
 public class GlobalLists {
 
 	private final static PatientType[] patientTypes = {
+		PatientType.NEW,
+		PatientType.AFTER_DEFAULT,
+		PatientType.RELAPSE,
+		PatientType.FAILURE_FT,
+		PatientType.FAILURE_RT,
 		PatientType.SCHEMA_CHANGED,
-		PatientType.FAILURE,
-		PatientType.RESISTANT,
-		PatientType.NEW_SPECIAL,
 		PatientType.OTHER
 	};
 
@@ -48,6 +51,25 @@ public class GlobalLists {
 		PrevTBTreatmentOutcome.DEFAULTED,
 		PrevTBTreatmentOutcome.FAILURE,
 		PrevTBTreatmentOutcome.SCHEME_CHANGED
+	};
+	
+	private static final CaseState caseStates[] = {
+		CaseState.WAITING_TREATMENT,
+		CaseState.ONTREATMENT,
+		CaseState.TRANSFERRING,
+		CaseState.CURED,
+		CaseState.TREATMENT_COMPLETED,
+		CaseState.FAILED,
+		CaseState.DEFAULTED,
+		CaseState.DIED,
+		CaseState.TRANSFERRED_OUT,
+		CaseState.DIAGNOSTIC_CHANGED,
+		CaseState.OTHER,
+		CaseState.MDR_CASE,
+		CaseState.TREATMENT_INTERRUPTION,
+		CaseState.NOT_CONFIRMED, 
+		CaseState.DIED_NOTTB,
+		CaseState.DIAGNOSTIC_CHANGED
 	};
 	
 

@@ -14,7 +14,8 @@ import org.jboss.seam.annotations.Scope;
 import org.msh.mdrtb.entities.Workspace;
 
 /**
- * Keep information about the administrative unit levels of a workspace
+ * Keep information about the administrative unit levels of a workspace. It's in application scope, meaning that
+ * all country structures of all workspaces are kept in memory in instances of {@link InfoCountryLevels}  
  * @author Ricardo Memoria
  *
  */

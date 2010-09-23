@@ -24,6 +24,7 @@ import org.msh.mdrtb.entities.MedicalExamination;
 import org.msh.mdrtb.entities.Patient;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.UserWorkspace;
+import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.CultureResult;
 import org.msh.mdrtb.entities.enums.Gender;
@@ -257,11 +258,10 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		PatientType tp = tbcase.getPatientType();
 		if (tp != PatientType.SCHEMA_CHANGED)
 			data.setSchemaChangeType(null);
-		if (tp != PatientType.RESISTANT)
+		if (!CaseClassification.MDRTB_DOCUMENTED.equals( tbcase.getClassification() ))
 			data.setResistanceType(null);
-		if (tp != PatientType.FAILURE)
-			data.setFailureType(null);
-		if ((tp != PatientType.NEW_SPECIAL) && (tp != PatientType.OTHER))
+
+		if (tp != PatientType.OTHER)
 			tbcase.setPatientTypeOther(null);
 		
 		if (p.getGender() == Gender.MALE)

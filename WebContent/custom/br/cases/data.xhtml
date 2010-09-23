@@ -207,11 +207,8 @@
     		<s:fragment rendered="#{tbCase.patientType=='SCHEMA_CHANGED'}">
     			<h:outputText value="#{caseDataBR.schemaChangeType}" styleClass="right-icon" style="margin-left:16px;"/>
     		</s:fragment>
-    		<s:fragment rendered="#{tbCase.patientType=='RESISTANT'}">
+    		<s:fragment rendered="#{tbCase.classification=='MDRTB_DOCUMENTED'}">
     			<h:outputText value="#{caseDataBR.resistanceType}" styleClass="right-icon" style="margin-left:16px;"/>
-    		</s:fragment>
-    		<s:fragment rendered="#{tbCase.patientType=='FAILURE'}">
-    			<h:outputText value="#{messages[caseDataBR.failureType.key]}" styleClass="right-icon" style="margin-left:16px;"/>
     		</s:fragment>
 		</s:decorate>
 		

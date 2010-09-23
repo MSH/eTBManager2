@@ -152,7 +152,11 @@
 
 <ui:define name="dialogs">
 <s:fragment rendered="#{(s:hasRole('TBCASES_EDT'))and(s:hasRole('MDRCASES_EDT'))}">
-<rich:modalPanel id="selclassificationdlg" height="160" width="300" top="200" zindex="2000" autosized="true">
+<rich:modalPanel id="selclassificationdlg" width="300" zindex="2000" autosized="true">
+	<f:facet name="header" >
+		#{messages['cases.newnotif']}
+	</f:facet>
+
 	<a:form id="formclassifcation">
 
 	#{messages['cases.newnotif.title']}

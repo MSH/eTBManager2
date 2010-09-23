@@ -19,11 +19,7 @@ public enum PatientType {
 	OTHERPOS,
 	OTHERNEG,
 // new types used by Brazil
-	SCHEMA_CHANGED,
-	FAILURE,
-	RESISTANT,
-	NEW_SPECIAL
-	;
+	SCHEMA_CHANGED;
 
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

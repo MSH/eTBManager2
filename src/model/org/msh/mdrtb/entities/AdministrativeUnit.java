@@ -94,6 +94,70 @@ public class AdministrativeUnit extends WSObject {
 		return (this.code.equals(code.substring(0, this.code.length())));
 	}
 	
+	
+	/**
+	 * Return the parent administrative unit based on its level. If level is the same of this unit, it returns itself.
+	 * If level is bigger than the level of this unit, it returns null
+	 * @param level
+	 * @return {@link AdministrativeUnit} instance, which is itself or a parent admin unit
+	 */
+	public AdministrativeUnit getAdminUnitByLevel(int level) {
+		if (level == countryStructure.getLevel())
+			return this;
+		List<AdministrativeUnit> lst = getParents();
+		for (AdministrativeUnit adm: lst) {
+			if (adm.getLevel()== level)
+				return adm;
+		}
+		return null;
+	}
+
+	
+	/**
+	 * Return parent administrative unit of level 1
+	 * @return {@link AdministrativeUnit} instance
+	 */
+	public AdministrativeUnit getParentLevel1() {
+		return getAdminUnitByLevel(1);
+	}
+
+	
+	/**
+	 * Return parent administrative unit of level 2
+	 * @return {@link AdministrativeUnit} instance
+	 */
+	public AdministrativeUnit getParentLevel2() {
+		return getAdminUnitByLevel(2);
+	}
+
+	
+	/**
+	 * Return parent administrative unit of level 3
+	 * @return {@link AdministrativeUnit} instance
+	 */
+	public AdministrativeUnit getParentLevel3() {
+		return getAdminUnitByLevel(3);
+	}
+
+	
+	/**
+	 * Return parent administrative unit of level 4
+	 * @return {@link AdministrativeUnit} instance
+	 */
+	public AdministrativeUnit getParentLevel4() {
+		return getAdminUnitByLevel(4);
+	}
+
+
+	/**
+	 * Return parent administrative unit of level 5
+	 * @return {@link AdministrativeUnit} instance
+	 */
+	public AdministrativeUnit getParentLevel5() {
+		return getAdminUnitByLevel(5);
+	}
+
+	
 	/**
 	 * @return the id
 	 */

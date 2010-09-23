@@ -15,7 +15,8 @@ public enum CaseState {
 	MDR_CASE,
 	TREATMENT_INTERRUPTION,
 	NOT_CONFIRMED, 
-	DIED_NOTTB;
+	DIED_NOTTB,
+	REGIMEN_CHANGED;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

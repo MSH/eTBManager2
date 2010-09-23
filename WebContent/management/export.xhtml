@@ -42,20 +42,22 @@
 	</ui:define>
 	<ui:param name="showfooter" value="0" />
 
-	<div style="height:20px;">
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['DestinationFormat']}:</ui:define>
 		#{messages['DestinationFormat.EXCEL']}
 	</s:decorate>
-	<s:decorate template="/layout/edit.xhtml" rendered="false">
+	
+	<s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['ExportContent']}:</ui:define>
+		<h:selectOneRadio value="#{caseExport.exportContent}" layout="pageDirection" >
+			<s:selectItems value="#{caseExport.contents}" var="it" label="#{messages[it.key]}" />
+		</h:selectOneRadio>
 	</s:decorate>
+	<div class="button-bar">
+	<h:commandButton action="#{caseExport.download}" value="#{messages['global.export']}" styleClass="button" />
 	</div>
 </s:decorate>
 
-</td></tr>
-<tr><td align="right">
-	<h:commandButton action="#{caseExport.download}" value="#{messages['global.export']}" styleClass="button" />
 </td></tr></table>
 </h:form>
 
