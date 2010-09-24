@@ -334,4 +334,11 @@ public class Period {
 			return false;
 		return true;
 	}
+
+
+	@Override
+	public String toString() {
+		return (iniDate != null? iniDate.toString(): "null") + "..." +
+				(endDate != null? endDate.toString(): "null");
+	}
 }

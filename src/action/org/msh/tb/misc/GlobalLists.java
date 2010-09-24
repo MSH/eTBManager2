@@ -69,6 +69,25 @@ public class GlobalLists {
 		PatientType.OTHER
 	};
 
+	private static final CaseState caseStates[] = {
+		CaseState.WAITING_TREATMENT,
+		CaseState.ONTREATMENT,
+		CaseState.TRANSFERRING,
+		CaseState.CURED,
+		CaseState.TREATMENT_COMPLETED,
+		CaseState.FAILED,
+		CaseState.DEFAULTED,
+		CaseState.DIED,
+		CaseState.TRANSFERRED_OUT,
+		CaseState.DIAGNOSTIC_CHANGED,
+		CaseState.OTHER,
+		CaseState.MDR_CASE,
+		CaseState.TREATMENT_INTERRUPTION,
+		CaseState.NOT_CONFIRMED, 
+		CaseState.DIED_NOTTB
+	};
+	
+
 	private static final PrevTBTreatmentOutcome prevTBTreatmentOutcomes[] = {
 		PrevTBTreatmentOutcome.CURED,
 		PrevTBTreatmentOutcome.COMPLETED,
@@ -215,7 +234,7 @@ public class GlobalLists {
 
 	@Factory("caseStates")
 	public CaseState[] getCaseStates() {
-		return CaseState.values();
+		return (CaseState[])getComponentValueWorkspace("caseStates", CaseState[].class, caseStates);
 	}
 
 

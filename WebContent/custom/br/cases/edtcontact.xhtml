@@ -80,11 +80,20 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['pt_BR.contact.tuberculinTest']}:</ui:define>
-    	<h:selectOneMenu value="#{tbContactBR.tuberculinTest}" required="false">
+    	<h:selectOneMenu id="tuberculinTest" value="#{tbContactBR.tuberculinTest}" required="false">
     		<s:selectItems value="#{yesNoList}" var="it" noSelectionLabel="-" label="#{messages[it.key]}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
     </s:decorate>
+	<rich:jQuery selector="#tuberculinTest" query="change(function(){ tuberculinTestChange(this, 500); })" />
+	<rich:jQuery selector="#tuberculinTest" timing="onload" query="each(function(){ tuberculinTestChange(this, 0); })"/>
+    
+    <div id="divtestresult">
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['pt_BR.contact.tuberculinTestResult']}:</ui:define>
+    	<h:inputText value="#{tbContactBR.tuberculinTestResult}" style="width:100px" /> ml
+    </s:decorate>
+    </div>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.conduct']}:</ui:define>
@@ -148,6 +157,12 @@ function updateExaminedField(cb, interval) {
 	if (cb.selectedIndex == 0)
 		 jQuery('#divexamined').show(interval)
 	else jQuery('#divexamined').hide(interval);
+}
+
+function tuberculinTestChange(cb, interval) {
+	if (cb.selectedIndex == 1) 
+		 jQuery('#divtestresult').show(interval)
+	else jQuery('#divtestresult').hide(interval);
 }
 -->
 </script>

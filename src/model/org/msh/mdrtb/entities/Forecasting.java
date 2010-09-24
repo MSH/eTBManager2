@@ -2,6 +2,7 @@ package org.msh.mdrtb.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -24,10 +25,15 @@ import org.msh.mdrtb.entities.enums.UserView;
 import org.msh.utils.date.DateUtils;
 
 
+/**
+ * Entity class to store the main information about a medicine forecasting 
+ * @author Ricardo Memoria
+ *
+ */
 @Entity
 public class Forecasting extends WSObject implements Serializable {
 	private static final long serialVersionUID = -4515050920327650318L;
-
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
@@ -43,12 +49,14 @@ public class Forecasting extends WSObject implements Serializable {
 	/**
 	 * Initial date of the forecasting
 	 */
+	@Temporal(TemporalType.DATE)
 	private Date iniDate;
 
 	
 	/**
 	 * Final date of the forecasting
 	 */
+	@Temporal(TemporalType.DATE)
 	private Date endDate;
 	
 	/**
@@ -70,6 +78,11 @@ public class Forecasting extends WSObject implements Serializable {
 	 * Register the number of cases on treatment at the reference date 
 	 */
 	private int numCasesOnTreatment;
+	
+	
+	private int leadTime;
+	
+	private LeadTimeMeasuring leadTimeMeasuring;
 
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="forecasting")
@@ -152,7 +165,15 @@ public class Forecasting extends WSObject implements Serializable {
 	 */
 	public int getNumMonths() {
 		Date endForecasting = DateUtils.incMonths(endDate, bufferStock);
-		return DateUtils.monthsBetween(referenceDate, endForecasting);
+		Calendar cini = Calendar.getInstance();
+		cini.setTime(referenceDate);
+		cini.set(Calendar.DAY_OF_MONTH, 1);
+		
+		Calendar cend = Calendar.getInstance();
+		cend.setTime(endForecasting);
+		cend.set(Calendar.DAY_OF_MONTH, 2);
+		
+		return DateUtils.monthsBetween(cini.getTime(), cend.getTime());
 	}
 
 
@@ -449,13 +470,19 @@ public class Forecasting extends WSObject implements Serializable {
 	 * @return
 	 */
 	public Date getIniDateMonthIndex(int monthIndex) {
-		if (referenceDate == null)
+		if ((referenceDate == null) || (endDate == null))
 			return null;
 
+		if (monthIndex == 0)
+			return referenceDate;
+		
 		Date dt = DateUtils.incMonths(referenceDate, monthIndex);
 		int month = DateUtils.monthOf(dt);
 		int year = DateUtils.yearOf(dt);
-		return DateUtils.newDate(year, month, 1);
+		
+		dt = DateUtils.newDate(year, month, 1);
+		Date dtend = DateUtils.incMonths(endDate, bufferStock);
+		return (dt.after(dtend)? null: dt);
 	}
 
 
@@ -480,5 +507,40 @@ public class Forecasting extends WSObject implements Serializable {
 
 	public Date getEndDate() {
 		return endDate;
+	}
+
+	/**
+	 * Lead time measure options
+	 * @author Ricardo Memoria
+	 *
+	 */
+	public enum LeadTimeMeasuring {
+		DAYS,
+		MONTHS;
+		
+		public String getKey() {
+			if (DAYS.equals(this))
+				 return "global.days";
+			else return "global.months";
+		}
+	}
+
+	public int getLeadTime() {
+		return leadTime;
+	}
+
+
+	public void setLeadTime(int leadTime) {
+		this.leadTime = leadTime;
+	}
+
+
+	public LeadTimeMeasuring getLeadTimeMeasuring() {
+		return leadTimeMeasuring;
+	}
+
+
+	public void setLeadTimeMeasuring(LeadTimeMeasuring leadTimeMeasuring) {
+		this.leadTimeMeasuring = leadTimeMeasuring;
 	}
 }

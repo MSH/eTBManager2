@@ -69,7 +69,7 @@ public class GlobalLists {
 		CaseState.TREATMENT_INTERRUPTION,
 		CaseState.NOT_CONFIRMED, 
 		CaseState.DIED_NOTTB,
-		CaseState.DIAGNOSTIC_CHANGED
+		CaseState.REGIMEN_CHANGED
 	};
 	
 
@@ -95,5 +95,9 @@ public class GlobalLists {
 	
 	public ClinicalEvolution[] getClinicalEvolutions() {
 		return ClinicalEvolution.values();
+	}
+	
+	public CaseState[] getCaseStates() {
+		return caseStates;
 	}
 }

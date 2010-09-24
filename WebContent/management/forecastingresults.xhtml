@@ -115,7 +115,7 @@
 </tr>
 <a:repeat value="#{forecastingView.resultTable.rows}" var="r">
 <tr class="highlight">
-	<td rowspan="3" class="colb">
+	<td rowspan="4" class="colb">
 		#{r.medicine.medicine}
 	</td>
 	<td class="colb">
@@ -148,6 +148,18 @@
 	<a:repeat value="#{r.results}" var="s">
 	<td class="colrb">
 		<h:outputText value="#{s.quantityNewCases}" rendered="#{s.quantityNewCases!=0}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="colb">
+		#{messages['manag.forecast.tabres2.cell3']}
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.quantityExpired}" rendered="#{s.quantityExpired!=0}">
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
 	</td>

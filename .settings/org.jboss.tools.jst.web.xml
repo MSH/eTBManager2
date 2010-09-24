@@ -313,8 +313,8 @@
   location="C:\RMEMORIA\Projetos\java\eclipse\mdrtb\WebContent\WEB-INF\lib\richfaces-ui-3.3.2.SR1.jar" model-entity="FileSystemJar"/>
  <file-system NAME="src-6" location="%workspace.home%/../../src/ke" model-entity="FileSystemFolder"/>
  <file-system NAME="src-7" location="%workspace.home%/../../src/md" model-entity="FileSystemFolder"/>
- <file-system NAME="lib-jtds-1.1.jar"
-  location="C:\java\jboss-4.2.3.GA\server\default\lib\jtds-1.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jtds-1.2.2.jar"
+  location="C:\Java\jboss-4.2.3.GA\server\default\lib\jtds-1.2.2.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>

@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -110,6 +111,14 @@ public class CaseDataBR {
 	
 	@Column(length=100)
 	private String currDistrict;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="OUTCOME_REGIMENCHANGED")
+	private FieldValue outcomeRegimenChanged;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="OUTCOME_RESISTANCETYPE")
+	private FieldValue outcomeResistanceType;
 
 	/**
 	 * @return the id
@@ -428,6 +437,22 @@ public class CaseDataBR {
 	 */
 	public void setPosition(FieldValueComponent position) {
 		this.position = position;
+	}
+
+	public FieldValue getOutcomeRegimenChanged() {
+		return outcomeRegimenChanged;
+	}
+
+	public void setOutcomeRegimenChanged(FieldValue outcomeRegimenChanged) {
+		this.outcomeRegimenChanged = outcomeRegimenChanged;
+	}
+
+	public FieldValue getOutcomeResistanceType() {
+		return outcomeResistanceType;
+	}
+
+	public void setOutcomeResistanceType(FieldValue outcomeResistanceType) {
+		this.outcomeResistanceType = outcomeResistanceType;
 	}
 
 }

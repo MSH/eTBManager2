@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -48,14 +49,14 @@ public class ForecastingMedicine implements Serializable {
 	/**
 	 * Batches to expire during the forecasting period
 	 */
-	@OneToMany(mappedBy="forecastingMedicine")
+	@OneToMany(mappedBy="forecastingMedicine", cascade={CascadeType.ALL})
 	private List<ForecastingBatch> batchesToExpire = new ArrayList<ForecastingBatch>();
 
 
 	/**
 	 * Orders to arrive during forecasting period
 	 */
-	@OneToMany(mappedBy="forecastingMedicine")
+	@OneToMany(mappedBy="forecastingMedicine", cascade={CascadeType.ALL})
 	private List<ForecastingOrder> orders = new ArrayList<ForecastingOrder>();
 	
 	/**

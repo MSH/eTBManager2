@@ -222,9 +222,11 @@ public class ForecastingCalculation {
 	 */
 	protected int quantityToExpire(ForecastingResult result) {
 		int res = 0;
+		Medicine med = result.getMedicine();
 		
 		for (ForecastingBatch b: result.getBatchesToExpire())
-			res += b.getQuantity();
+			if ((b.getForecastingMedicine().getMedicine().equals(med)) && (forecasting.getMonthIndex(b.getExpiryDate()) == result.getMonthIndex()))
+				res += b.getQuantity();
 	
 		return res;
 	}
@@ -276,9 +278,15 @@ public class ForecastingCalculation {
 	 * Calculate the consumption of medicine for each one of the cases registered in the database
 	 */
 	private void calculateCasesOnTreatmentFromDB() {
-		for (int i = 0; i < numMonths; i++) {
+		for (int i = 0; i <= numMonths; i++) {
 			Date dtIni = forecasting.getIniDateMonthIndex(i);
 			Date dtEnd = forecasting.getEndDateMonthIndex(i);
+
+			if (dtIni == null)
+				break;
+			
+			if ((i == numMonths) || (dtEnd == null))
+				dtEnd = endForecasting;
 			
 			Integer prevCaseId = null;
 			Integer prevMedId = null;
@@ -458,7 +466,12 @@ public class ForecastingCalculation {
 			if (reg.isMedicineInRegimen(fm.getMedicine())) {
 				for (int i = 0; i < len; i++) {
 					Date dtIni = forecasting.getIniDateMonthIndex(monthIndex + i);
+					if (dtIni == null)
+						break;
+					
 					Date dtEnd = forecasting.getEndDateMonthIndex(monthIndex + i);
+					if (dtEnd == null)
+						dtEnd = endForecasting;
 					float qty = calcQuantityRegimen(reg, dtIni, dtEnd, i, fm.getMedicine());
 					qty = qty * newCases;
 					
