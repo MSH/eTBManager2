@@ -327,7 +327,8 @@ public class ForecastingCalculation {
 					for (ForecastingBatch bt: lst) {
 						Date end = bt.getExpiryDate();
 						int qtdBatch = calcConsumptionCaseOnTreatment(prescDrug, new Period(ini, end));
-						bt.setConsumptionInMonth(bt.getConsumptionInMonth() + qtdBatch);
+//						bt.setConsumptionInMonth(bt.getConsumptionInMonth() + qtdBatch);
+						bt.setQuantityToExpire(bt.getQuantityToExpire() + qtdBatch);
 					}
 				}
 			}
