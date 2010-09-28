@@ -4,222 +4,279 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 
 <e:workbook>
-	<e:worksheet name="Cases" value="#{caseExport.cases}" var="c">
+	<e:worksheet name="Cases">
+		<e:cell value="#{messages['cases.patientdata']}" row="1" column="0" style="xls-font: red bold 10 Verdana"/>
+		<e:cell value="#{messages['cases.generaldata']}" row="1" column="15" style="xls-font: red bold 10 Verdana"/>
+	</e:worksheet>
+
+	<e:worksheet name="Cases" rendered="#{caseExport.exportContent=='EXAMS'}">
+		<e:cell value="#{messages['cases.examhiv']}" row="1" column="28" style="xls-font: red bold 10 Verdana"/>
+		<e:cell value="#{messages['cases.examsputum']}" row="1" column="32" style="xls-font: red bold 10 Verdana"/>
+		<e:cell value="#{messages['cases.examculture']}" row="1" column="30" style="xls-font: red bold 10 Verdana"/>
+	</e:worksheet>
+
+	<e:worksheet name="Cases" value="#{caseExport.table.groups}" var="c" startRow="2">
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['Patient.name']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.patient.fullName}" forceType="text" />
+			<e:cell value="#{c.tbcase.patient.fullName}" forceType="text" row="#{c.iniRow}" />
 		</e:column>
 
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['Patient.caseNumber']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.displayCaseNumber}" forceType="text" />
+			<e:cell value="#{c.tbcase.displayCaseNumber}" forceType="text" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['CaseState']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{messages[c.state.key]}" />
+			<e:cell value="#{messages[c.tbcase.state.key]}" row="#{c.iniRow}" />
 		</e:column>
 
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['TbCase.registrationCode']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.registrationCode}" forceType="text" />
+			<e:cell value="#{c.tbcase.registrationCode}" forceType="text" row="#{c.iniRow}" />
 		</e:column>
 
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['Gender']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{messages[c.patient.gender.key]}" forceType="text" />
+			<e:cell value="#{messages[c.tbcase.patient.gender.key]}" forceType="text" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['Patient.birthDate']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.patient.birthDate}" />
+			<e:cell value="#{c.tbcase.patient.birthDate}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['TbCase.age']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.patientAge}" />
+			<e:cell value="#{c.tbcase.patientAge}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['Nationality']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{messages[c.nationality.key]}" />
+			<e:cell value="#{messages[c.tbcase.nationality.key]}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['Address']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.notifAddress.address} #{c.notifAddress.complement}" />
+			<e:cell value="#{c.tbcase.notifAddress.address} #{c.tbcase.notifAddress.complement}" row="#{c.iniRow}" />
 		</e:column>
 
 		<e:column style="xls-column-autosize: true" rendered="#{levelInfo.hasLevel1}">
 			<f:facet name="header">
 				<e:cell value="#{levelInfo.nameLevel1}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.notifAddress.adminUnit.parentLevel1}" />
+			<e:cell value="#{c.tbcase.notifAddress.adminUnit.parentLevel1}" row="#{c.iniRow}" />
 		</e:column>
 
 		<e:column style="xls-column-autosize: true" rendered="#{levelInfo.hasLevel2}">
 			<f:facet name="header">
 				<e:cell value="#{levelInfo.nameLevel2}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.notifAddress.adminUnit.parentLevel2}" />
+			<e:cell value="#{c.tbcase.notifAddress.adminUnit.parentLevel2}" row="#{c.iniRow}" />
 		</e:column>
 
 		<e:column style="xls-column-autosize: true" rendered="#{levelInfo.hasLevel3}">
 			<f:facet name="header">
 				<e:cell value="#{levelInfo.nameLevel3}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.notifAddress.adminUnit.parentLevel3}" />
+			<e:cell value="#{c.tbcase.notifAddress.adminUnit.parentLevel3}" row="#{c.iniRow}" />
 		</e:column>
 
 		<e:column style="xls-column-autosize: true" rendered="#{levelInfo.hasLevel4}">
 			<f:facet name="header">
 				<e:cell value="#{levelInfo.nameLevel4}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.notifAddress.adminUnit.parentLevel4}" />
+			<e:cell value="#{c.tbcase.notifAddress.adminUnit.parentLevel4}" row="#{c.iniRow}" />
 		</e:column>
 
 		<e:column style="xls-column-autosize: true" rendered="#{levelInfo.hasLevel5}">
 			<f:facet name="header">
 				<e:cell value="#{levelInfo.nameLevel5}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.notifAddress.adminUnit.parentLevel5}" />
+			<e:cell value="#{c.tbcase.notifAddress.adminUnit.parentLevel5}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['Address.zipCode']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.notifAddress.zipCode}" />
+			<e:cell value="#{c.tbcase.notifAddress.zipCode}" row="#{c.iniRow}" />
 		</e:column>
 
 		<e:column style="xls-column-autosize: true" >
 			<f:facet name="header">
 				<e:cell value="#{TbCase.phoneNumber}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.phoneNumber}" style="xls-border-left-linestyle:DOUBLE"/>
+			<e:cell value="#{c.tbcase.phoneNumber}" row="#{c.iniRow}" />
 		</e:column>
 
 		<e:column style="xls-column-autosize: true" >
 			<f:facet name="header">
 				<e:cell value="#{TbCase.mobileNumber}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.mobileNumber}" />
+			<e:cell value="#{c.tbcase.mobileNumber}" row="#{c.iniRow}" />
 		</e:column>
 
 		<e:column style="xls-column-autosize: true" rendered="#{levelInfo.hasLevel1}">
 			<f:facet name="header">
 				<e:cell value="#{messages['cases.details.notifhu']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.notificationUnit.name}" />
+			<e:cell value="#{c.tbcase.notificationUnit.name}" row="#{c.iniRow}" />
 		</e:column>
 
 		<e:column style="xls-column-autosize: true" rendered="#{levelInfo.hasLevel1}">
 			<f:facet name="header">
 				<e:cell value="#{levelInfo.nameLevel1} - #{messages['cases.details.notifhu']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.notificationUnit.adminUnit.parentLevel1}" />
+			<e:cell value="#{c.tbcase.notificationUnit.adminUnit.parentLevel1}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['TbCase.registrationDate']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.registrationDate}" />
+			<e:cell value="#{c.tbcase.registrationDate}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['TbCase.diagnosisDate']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.diagnosisDate}" />
+			<e:cell value="#{c.tbcase.diagnosisDate}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['DiagnosisType']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{messages[c.diagnosisType.key]}" />
+			<e:cell value="#{messages[c.tbcase.diagnosisType.key]}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['TbCase.iniTreatmentDate']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.treatmentPeriod.iniDate}" />
+			<e:cell value="#{c.tbcase.treatmentPeriod.iniDate}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['TbCase.endTreatmentDate']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.treatmentPeriod.endDate}" />
+			<e:cell value="#{c.tbcase.treatmentPeriod.endDate}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['Regimen']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.regimens[0]}" />
+			<e:cell value="#{c.tbcase.regimens[0]}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['DrugResistanceType']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{messages[c.drugResistanceType.key]}" />
+			<e:cell value="#{messages[c.tbcase.drugResistanceType.key]}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['InfectionSite']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{messages[c.infectionSite.key]}" />
+			<e:cell value="#{messages[c.tbcase.infectionSite.key]}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['TbField.PULMONARY_TYPES']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{messages[c.pulmonaryType]}" />
+			<e:cell value="#{messages[c.tbcase.pulmonaryType]}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['TbField.EXTRAPULMONARY_TYPES']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.extrapulmonaryType}" />
+			<e:cell value="#{c.tbcase.extrapulmonaryType}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['TbField.EXTRAPULMONARY_TYPES']} 2" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.extrapulmonaryType2}" />
+			<e:cell value="#{c.tbcase.extrapulmonaryType2}" row="#{c.iniRow}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['PatientType']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{messages[c.patientType.key]}" />
+			<e:cell value="#{messages[c.tbcase.patientType.key]}" row="#{c.iniRow}" />
+		</e:column>
+	</e:worksheet>
+
+
+
+	<e:worksheet name="Cases" value="#{caseExport.table.rows}" var="c" startRow="2" startColumn="28" rendered="#{caseExport.exportContent=='EXAMS'}">
+		<e:column style="xls-column-autosize: true" >
+			<f:facet name="header">
+				<e:cell value="#{messages['cases.exams.dateRelease']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.examHIV.date}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true" >
+			<f:facet name="header">
+				<e:cell value="#{messages['cases.details.result']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{messages[c.examHIV.result.key]}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true" >
+			<f:facet name="header">
+				<e:cell value="#{messages['PatientSample.dateCollected']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.examCulture.sample.dateCollected}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true" >
+			<f:facet name="header">
+				<e:cell value="#{messages['cases.details.result']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{messages[c.examCulture.result.key]}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true" >
+			<f:facet name="header">
+				<e:cell value="#{messages['PatientSample.dateCollected']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{c.examSputumSmear.sample.dateCollected}" />
+		</e:column>
+		
+		<e:column style="xls-column-autosize: true">
+			<f:facet name="header">
+				<e:cell value="#{messages['cases.details.result']}" style="xls-font: red bold 10 Verdana"/>
+			</f:facet>
+			<e:cell value="#{messages[c.examSputumSmear.result.key]}" />
 		</e:column>
 	</e:worksheet>
 </e:workbook>

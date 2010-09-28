@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.persistence.Column;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,14 +30,14 @@ public abstract class LaboratoryExam implements Serializable {
 	@Column(length=250)
 	private String comments;
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="LABORATORY_ID")
 	private Laboratory laboratory;
 
 	@Temporal(TemporalType.DATE)
 	private Date dateRelease;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="METHOD_ID")
 	private FieldValue method;
 
