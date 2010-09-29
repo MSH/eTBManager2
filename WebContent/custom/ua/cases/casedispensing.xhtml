@@ -32,15 +32,28 @@
 		<h:outputText value="#{tbCase.treatmentPeriod.iniDate}" converter="localeDateConverter" />
 	</s:decorate>
 
-    <s:decorate id="dt" template="/layout/edit.xhtml" >
+    <s:decorate id="dt" template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['global.month']}/#{messages['global.year']}:</ui:define>
-    	<h:selectOneMenu value="#{caseDispensingHome.monthYear}" required="true">
-    		<f:selectItems value="#{caseDispensingHome.months}"/>
-   			<a:support event="onchange" ajaxSingle="true" reRender="pnlcalend"/>
-    	</h:selectOneMenu>
+    	<h:outputText value="#{caseDispensingHome.month}" converter="monthYearConverter">
+    		<f:param name="year" value="#{caseDispensingHome.year}"/>
+    	</h:outputText>
     </s:decorate>
     
     
+    <input id="chkselall" type="checkbox"/>#{messages['form.selectall']}
+    <rich:jQuery selector="#chkselall" query="click(function() {toggleSelectAll(this);})" />
+	<script type="text/javascript">
+	<!--
+	function toggleSelectAll(chk) {
+		jQuery('#tbldays input').each(function() {
+			this.checked = chk.checked;
+			updateChecks1();
+			updateChecks2();
+		});
+	}
+	-->
+	</script>
+
     <h:panelGroup id="pnlcalend">
     <table id="tbldays" width="450px" class="tabela4">
     <tr>
@@ -50,9 +63,9 @@
     		</th>
     	</ui:repeat>
     </tr>
-    <a:repeat value="#{caseDispensingHome.days}" var="it">
+    <a:repeat value="#{caseDispensingHome.weeks}" var="it">
     	<tr>
-    	<a:repeat value="#{it}" var="item">
+    	<a:repeat value="#{it.days}" var="item">
     		<td class="colcb#{item.checked?' activerow':''}">
     			<s:fragment rendered="#{item.available}">
     			   #{item.day}<br/>

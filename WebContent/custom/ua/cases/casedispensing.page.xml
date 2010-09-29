@@ -6,8 +6,10 @@
 		<restrict>#{userSession.canEditCases}</restrict>
 		<begin-conversation join="true"/>
 		<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
+		<param name="month" value="#{caseDispensingHome.month}" converterId="javax.faces.Integer"/>
+		<param name="year" value="#{caseDispensingHome.year}" converterId="javax.faces.Integer"/>
 		<navigation>
-			<rule if-outcome="persisted">
+			<rule if-outcome="dispensing-saved">
 				<end-conversation/>
 				<redirect view-id="/cases/casedata.xhtml">
 					<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
