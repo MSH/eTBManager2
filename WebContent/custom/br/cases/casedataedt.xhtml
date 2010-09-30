@@ -266,15 +266,6 @@
 			</h:selectOneMenu>
 		</s:decorate>
 	</div>
-	<div id="divResistant" >
-		<s:decorate template="/layout/edit.xhtml">
-			<ui:define name="label">#{messages['PatientType.RESISTANT']}:</ui:define>
-			<h:selectOneMenu value="#{caseDataBR.resistanceType}">
-				<s:selectItems var="fld" value="#{fieldsQuery.resistanceTypes}" label="#{fld.name}" noSelectionLabel="-" />
-				<s:convertEntity />
-			</h:selectOneMenu>
-		</s:decorate>
-	</div>
 	<div id="divFailure" >
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['PatientType.FAILURE']}:</ui:define>
@@ -284,16 +275,20 @@
 			</h:selectOneMenu>
 		</s:decorate>
 	</div>
-	<div id="divMicrobac" >
-		<s:decorate template="/layout/edit.xhtml">
-			<ui:define name="label">#{messages['PatientType.MICROBACTERIOSE']}:</ui:define>
-			<h:selectOneMenu value="#{caseDataBR.microbacteriose}">
-				<s:selectItems var="s" value="#{fieldsQuery.microbacterioses}" label="#{fld.name}" noSelectionLabel="-" />
-				<s:convertEntity />
-			</h:selectOneMenu>
-		</s:decorate>
-	</div>
 
+    <s:decorate template="/layout/editfield.xhtml" rendered="#{tbCase.classification=='NMT'}">
+    	<ui:define name="label">#{messages['pt_BR.tipo_mnt']}:</ui:define>
+    	<ui:param name="id" value="mnt" />
+    	<ui:param name="field" value="#{caseDataBR.microbacteriose}" />
+    	<ui:param name="list" value="#{fieldsQuery.microbacterioses}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/editfield.xhtml"  rendered="#{tbCase.classification=='MDRTB_DOCUMENTED'}">
+    	<ui:define name="label">#{messages['pt_BR.tipo_mnt']}:</ui:define>
+    	<ui:param name="id" value="mnt" />
+    	<ui:param name="field" value="#{caseDataBR.resistanceType}" />
+    	<ui:param name="list" value="#{fieldsQuery.resistanceTypes}" />
+    </s:decorate>
 
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
@@ -344,21 +339,16 @@ function patientTypeChange(cb, immediate) {
 	var ldelay = (immediate?0:500);
 	var s = cb.options[cb.selectedIndex].value;
   	bOther=((s=='OTHER') || (s=='NEW_SPECIAL'));
-  	bResistant=(s=='RESISTANT');
   	bFailure=(s=='FAILURE');
   	bSchemaChanged=(s=='SCHEMA_CHANGED');
-  	bMicrobac=(s=='MICROBACTERIOSE');
 
 	var val=jQuery('#patientTypeOther');
 	if (bOther) val.show(ldelay); else val.hide(ldelay);
 	val=jQuery('#divSchemaChanged');
 	if (bSchemaChanged) val.show(ldelay); else val.hide(ldelay);
 	val=jQuery('#divResistant');
-	if (bResistant) val.show(ldelay); else val.hide(ldelay);
 	val=jQuery('#divFailure');
 	if (bFailure) val.show(ldelay); else val.hide(ldelay);
-	val=jQuery('#divMicrobac');
-	if (bMicrobac) val.show(ldelay); else val.hide(ldelay);
 }
 function showExtrapulmonary(cb, immediate) {
   var ldelay = (immediate?0: 500);

@@ -43,50 +43,45 @@ public class CaseDataBR {
 	@JoinColumn(name="ADMINUNIT_USORIGEM_ID")
 	private AdministrativeUnit adminUnitUsOrigem;	
 	
-	@ManyToOne
-	@JoinColumn(name="SCHEMACHANGETYPE")
-	private FieldValue schemaChangeType;
+	@Embedded
+	@AssociationOverrides({	@AssociationOverride(name="value", joinColumns=@JoinColumn(name="SCHEMACHANGETYPE"))})
+	@AttributeOverrides({	@AttributeOverride(name="complement", column=@Column(name="SCHEMACHANGETYPE_Complement"))})
+	private FieldValueComponent schemaChangeType = new FieldValueComponent();
 	
-	@ManyToOne
-	@JoinColumn(name="RESISTANCETYPE")
-	private FieldValue resistanceType;
+	@Embedded
+	@AssociationOverrides({	@AssociationOverride(name="value", joinColumns=@JoinColumn(name="RESISTANCETYPE"))})
+	@AttributeOverrides({ 	@AttributeOverride(name="complement", column=@Column(name="RESISTANCETYPE_Complement"))})
+	private FieldValueComponent resistanceType;
 	
 	private FailureType failureType;
 	
 	@Embedded
-	@AssociationOverrides({
-		@AssociationOverride(name="value", joinColumns=@JoinColumn(name="SKINCOLOR"))})
-	@AttributeOverrides({
-		@AttributeOverride(name="complement", column=@Column(name="skinColor_Complement"))})
+	@AssociationOverrides({	@AssociationOverride(name="value", joinColumns=@JoinColumn(name="SKINCOLOR"))})
+	@AttributeOverrides({	@AttributeOverride(name="complement", column=@Column(name="skinColor_Complement"))})
 	private FieldValueComponent skinColor;
 	
 	@Embedded
-	@AssociationOverrides({
-		@AssociationOverride(name="value", joinColumns=@JoinColumn(name="CONTAGPLACE"))})
-	@AttributeOverrides({
-		@AttributeOverride(name="complement", column=@Column(name="contagPlace_Complement"))})
+	@AssociationOverrides({	@AssociationOverride(name="value", joinColumns=@JoinColumn(name="CONTAGPLACE"))})
+	@AttributeOverrides({	@AttributeOverride(name="complement", column=@Column(name="contagPlace_Complement"))})
 	private FieldValueComponent contagPlace;
 	
 	@Embedded
-	@AssociationOverrides({
-		@AssociationOverride(name="value", joinColumns=@JoinColumn(name="EDUCATIONALDEGREE"))})
-	@AttributeOverrides({
-		@AttributeOverride(name="complement", column=@Column(name="educationalDegree_Complement"))})
+	@AssociationOverrides({	@AssociationOverride(name="value", joinColumns=@JoinColumn(name="EDUCATIONALDEGREE"))})
+	@AttributeOverrides({	@AttributeOverride(name="complement", column=@Column(name="educationalDegree_Complement"))})
 	private FieldValueComponent educationalDegree;
 	
 	@ManyToOne
 	@JoinColumn(name="PREGNANCEPERIOD")
 	private FieldValue pregnancePeriod;
 	
-	@ManyToOne
-	@JoinColumn(name="MICROBACTERIOSE")
-	private FieldValue microbacteriose;
+	@Embedded
+	@AssociationOverrides({	@AssociationOverride(name="value", joinColumns=@JoinColumn(name="MICROBACTERIOSE"))})
+	@AttributeOverrides({	@AttributeOverride(name="complement", column=@Column(name="MICROBACTERIOSE_Complement"))})
+	private FieldValueComponent microbacteriose;
 	
 	@Embedded
-	@AssociationOverrides({
-		@AssociationOverride(name="value", joinColumns=@JoinColumn(name="POSITION"))})
-	@AttributeOverrides({
-		@AttributeOverride(name="complement", column=@Column(name="positionOther"))})
+	@AssociationOverrides({	@AssociationOverride(name="value", joinColumns=@JoinColumn(name="POSITION"))})
+	@AttributeOverrides({	@AttributeOverride(name="complement", column=@Column(name="positionOther"))})
 	private FieldValueComponent position;
 	
 	@Column(length=10)
@@ -119,6 +114,7 @@ public class CaseDataBR {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="OUTCOME_RESISTANCETYPE")
 	private FieldValue outcomeResistanceType;
+
 
 	/**
 	 * @return the id
@@ -166,28 +162,32 @@ public class CaseDataBR {
 	/**
 	 * @return the schemaChangeType
 	 */
-	public FieldValue getSchemaChangeType() {
+	public FieldValueComponent getSchemaChangeType() {
+		if (schemaChangeType == null)
+			schemaChangeType = new FieldValueComponent();
 		return schemaChangeType;
 	}
 
 	/**
 	 * @param schemaChangeType the schemaChangeType to set
 	 */
-	public void setSchemaChangeType(FieldValue schemaChangeType) {
+	public void setSchemaChangeType(FieldValueComponent schemaChangeType) {
 		this.schemaChangeType = schemaChangeType;
 	}
 
 	/**
 	 * @return the resistanceType
 	 */
-	public FieldValue getResistanceType() {
+	public FieldValueComponent getResistanceType() {
+		if (resistanceType == null)
+			resistanceType = new FieldValueComponent();
 		return resistanceType;
 	}
 
 	/**
 	 * @param resistanceType the resistanceType to set
 	 */
-	public void setResistanceType(FieldValue resistanceType) {
+	public void setResistanceType(FieldValueComponent resistanceType) {
 		this.resistanceType = resistanceType;
 	}
 
@@ -396,14 +396,16 @@ public class CaseDataBR {
 	/**
 	 * @return the microbacteriose
 	 */
-	public FieldValue getMicrobacteriose() {
+	public FieldValueComponent getMicrobacteriose() {
+		if (microbacteriose == null)
+			microbacteriose = new FieldValueComponent();
 		return microbacteriose;
 	}
 
 	/**
 	 * @param microbacteriose the microbacteriose to set
 	 */
-	public void setMicrobacteriose(FieldValue microbacteriose) {
+	public void setMicrobacteriose(FieldValueComponent microbacteriose) {
 		this.microbacteriose = microbacteriose;
 	}
 
