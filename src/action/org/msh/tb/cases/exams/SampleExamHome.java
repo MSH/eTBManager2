@@ -198,8 +198,8 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 	@Override
 	public String getResultsHQL() {
 		String hql = "from " + getEntityClass().getSimpleName() + " exam " +
-				"join fetch exam.sample s " +
-				"where s.tbcase.id = #{tbCase.id}";
+				getJoinFetchHQL() +
+				" where s.tbcase.id = #{tbCase.id}";
 	
 		if (isLastResult())
 			hql = hql.concat(" and s.dateCollected = (select max(aux.dateCollected) " +
@@ -208,6 +208,10 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 		return hql.concat(" order by s.dateCollected");
 	}
 
+	
+	public String getJoinFetchHQL() {
+		return "join fetch exam.sample s join fetch exam.laboratory lab ";
+	}
 
 	/**
 	 * Get list of available samples

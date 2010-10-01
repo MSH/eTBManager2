@@ -49,4 +49,9 @@ public class ExamSputumHome extends SampleExamHome<ExamSputumSmear> {
 		return "examSputumSmear";
 	}
 	
+
+	@Override
+	public String getJoinFetchHQL() {
+		return super.getJoinFetchHQL() + " left join fetch exam.method met ";
+	}
 }

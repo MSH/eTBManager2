@@ -45,4 +45,8 @@ public class ExamCultureHome extends SampleExamHome<ExamCulture> {
 		return "examCulture";
 	}
 
+	@Override
+	public String getJoinFetchHQL() {
+		return super.getJoinFetchHQL() + " left join fetch exam.method met ";
+	}
 }
