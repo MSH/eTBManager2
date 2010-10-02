@@ -2,7 +2,7 @@ package org.msh.tb.importexport;
 
 import org.msh.mdrtb.entities.ExamCulture;
 import org.msh.mdrtb.entities.ExamHIV;
-import org.msh.mdrtb.entities.ExamSputumSmear;
+import org.msh.mdrtb.entities.ExamMicroscopy;
 import org.msh.mdrtb.entities.ExamXRay;
 import org.msh.mdrtb.entities.TbCase;
 
@@ -12,7 +12,7 @@ public class CaseRow {
 	
 	private Object data;
 	
-	private ExamSputumSmear examSputumSmear;
+	private ExamMicroscopy examMicroscopy;
 	
 	private ExamCulture examCulture;
 	
@@ -51,12 +51,12 @@ public class CaseRow {
 		this.tbcase = tbcase;
 	}
 
-	public ExamSputumSmear getExamSputumSmear() {
-		return examSputumSmear;
+	public ExamMicroscopy getExamMicroscopy() {
+		return examMicroscopy;
 	}
 
-	public void setExamSputumSmear(ExamSputumSmear examSputumSmear) {
-		this.examSputumSmear = examSputumSmear;
+	public void setExamMicroscopy(ExamMicroscopy examMicroscopy) {
+		this.examMicroscopy = examMicroscopy;
 	}
 
 	public ExamCulture getExamCulture() {

@@ -25,9 +25,9 @@ public class DrugogramItem {
 	private List<SubstanceItem> substancesDisplay; 
 	
 
-	public ExamResult getFreeResultSputum() {
+	public ExamResult getFreeResultMicroscopy() {
 		for (ExamResult res: results) {
-			if (res.getExamSputum() == null)
+			if (res.getExamMicroscopy() == null)
 				return res;
 		}
 		ExamResult res = new ExamResult();

@@ -7,7 +7,7 @@ import org.jboss.seam.annotations.Name;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.CultureResult;
-import org.msh.mdrtb.entities.enums.SputumSmearResult;
+import org.msh.mdrtb.entities.enums.MicroscopyResult;
 import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorDate;
 import org.msh.utils.date.DateUtils;
@@ -17,10 +17,10 @@ import org.msh.utils.date.DateUtils;
 public class InterimOutcomeIndicator extends Indicator2D {
 	private static final long serialVersionUID = 3070089202436585662L;
 
-	private static final String culture = "(select min(e.dateCollected) from PatientSample e " +
-			"where e.tbcase.id = c.id and e.examCulture.result = :res1)";
-	private static final String microscopy = "(select min(e.dateCollected) from PatientSample e " +
-	"where e.tbcase.id = c.id and e.examSputumSmear.result = :res2)";
+	private static final String culture = "(select min(e.dateCollected) from ExamCulture e " +
+			"where e.tbcase.id = c.id and e.result = :res1)";
+	private static final String microscopy = "(select min(e.dateCollected) from ExamMicroscopy e " +
+			"where e.tbcase.id = c.id and e.result = :res2)";
 
 	private int numcases;
 	private String negCol;
@@ -64,7 +64,7 @@ public class InterimOutcomeIndicator extends Indicator2D {
 		
 		List<Object[]> lst = createQuery()
 			.setParameter("res1", CultureResult.NEGATIVE)
-			.setParameter("res2", SputumSmearResult.NEGATIVE)
+			.setParameter("res2", MicroscopyResult.NEGATIVE)
 			.getResultList();
 		
 		for (Object[] vals: lst) {

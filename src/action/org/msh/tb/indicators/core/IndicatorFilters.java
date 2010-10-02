@@ -16,7 +16,7 @@ import org.msh.mdrtb.entities.enums.DrugResistanceType;
 import org.msh.mdrtb.entities.enums.Gender;
 import org.msh.mdrtb.entities.enums.InfectionSite;
 import org.msh.mdrtb.entities.enums.PatientType;
-import org.msh.tb.indicators.MicroscopyResult;
+import org.msh.tb.indicators.IndicatorMicroscopyResult;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
 
@@ -41,7 +41,7 @@ public class IndicatorFilters {
 	private int chartType = 1;
 	private IndicatorSite indicatorSite = IndicatorSite.TREATMENTSITE;
 	private AgeRange ageRange;
-	private MicroscopyResult microscopyResult;
+	private IndicatorMicroscopyResult microscopyResult;
 	private DrugResistanceType drugResistanceType;
 	private DiagnosisType diagnosisType;
 
@@ -301,19 +301,19 @@ public class IndicatorFilters {
 	/**
 	 * @param microscopyResult the microscopyResult to set
 	 */
-	public void setMicroscopyResult(MicroscopyResult microscopyResult) {
+	public void setMicroscopyResult(IndicatorMicroscopyResult microscopyResult) {
 		this.microscopyResult = microscopyResult;
 	}
 
 	/**
 	 * @return the microscopyResult
 	 */
-	public MicroscopyResult getMicroscopyResult() {
+	public IndicatorMicroscopyResult getMicroscopyResult() {
 		return microscopyResult;
 	}
 	
-	public MicroscopyResult[] getMicroscopyResults() {
-		return MicroscopyResult.values();
+	public IndicatorMicroscopyResult[] getMicroscopyResults() {
+		return IndicatorMicroscopyResult.values();
 	}
 
 	/**

@@ -6,7 +6,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.enums.CultureResult;
-import org.msh.mdrtb.entities.enums.SputumSmearResult;
+import org.msh.mdrtb.entities.enums.MicroscopyResult;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.br.entities.TbContactBR;
 import org.msh.tb.cases.CaseHome;
@@ -15,12 +15,12 @@ import org.msh.tb.cases.CaseHome;
 public class TbContactBRHome extends EntityHomeEx<TbContactBR> {
 	private static final long serialVersionUID = 1515193100467041594L;
 
-	private static final SputumSmearResult[] microscopyResults = {
-		SputumSmearResult.NOTDONE,
-		SputumSmearResult.NEGATIVE,
-		SputumSmearResult.PLUS,
-		SputumSmearResult.PLUS2,
-		SputumSmearResult.PLUS3
+	private static final MicroscopyResult[] microscopyResults = {
+		MicroscopyResult.NOTDONE,
+		MicroscopyResult.NEGATIVE,
+		MicroscopyResult.PLUS,
+		MicroscopyResult.PLUS2,
+		MicroscopyResult.PLUS3
 	};
 	
 	private static final CultureResult[] cultureResult = {
@@ -74,7 +74,7 @@ public class TbContactBRHome extends EntityHomeEx<TbContactBR> {
 	 * Return options to the Brazilian version of the contact form
 	 * @return
 	 */
-	public SputumSmearResult[] getMicroscopyResults() {
+	public MicroscopyResult[] getMicroscopyResults() {
 		return microscopyResults;
 	}
 

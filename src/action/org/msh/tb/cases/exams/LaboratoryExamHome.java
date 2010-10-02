@@ -1,17 +1,14 @@
 package org.msh.tb.cases.exams;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Query;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.mdrtb.entities.Laboratory;
-import org.msh.mdrtb.entities.LaboratoryExam;
-import org.msh.mdrtb.entities.PatientSample;
+import org.msh.mdrtb.entities.LaboratoryExamResult;
+import org.msh.tb.cases.CaseHome;
 import org.msh.tb.laboratories.LaboratorySelection;
 
 /**
@@ -20,17 +17,17 @@ import org.msh.tb.laboratories.LaboratorySelection;
  *
  * @param <E>
  */
-public abstract class SampleExamHome<E> extends ExamHome<E>{
+public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 	private static final long serialVersionUID = 3707328854678910174L;
 
 	@In(create=true) FacesMessages facesMessages;
+	@In(required=true) CaseHome caseHome;
 	
-	private List<PatientSample> patientSamples;
-	private PatientSample sample;
 	private LaboratorySelection labselection;
 	
-	private static final String[] extraNestedProperties = {"sample.dateCollected", "sample.sampleNumber"};
-
+	public LaboratoryExamResult getExamResult() {
+		return (LaboratoryExamResult)getInstance();
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.msh.tb.cases.ExamHome#persist()
@@ -41,27 +38,23 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 			facesMessages.addToControlFromResourceBundle("dtrelease", "cases.exams.datereleasebeforecol");
 			return "error";
 		}
+
+		LaboratoryExamResult exam = getLaboratoryExam();
+		if (exam.getTbcase() == null) {
+			exam.setTbcase(caseHome.getInstance());
+		}
 		
 		// set laboratory
 		try {
 			if (labselection != null) {
-				PropertyUtils.setProperty(getInstance(), "laboratory", labselection.getLaboratory());
+				getLaboratoryExam().setLaboratory(labselection.getLaboratory());
 			}
 		} catch (Exception e) {
 			e.fillInStackTrace();
 		}
 		
-		// setup sample
-		if (!setupSample()) 
-			return "error";
-		
 		// save data
-		getEntityManager().persist(getLaboratoryExam().getSample());
-		String ret = super.persist();
-		
-		
-		deleteOrphamSamples();
-		return ret;
+		return super.persist();
 	}
 	
 
@@ -70,8 +63,9 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 	 * @return
 	 */
 	public boolean validateDates() {
-		Date dtRelease = getDateRelease();
-		Date dtCollected = getSample().getDateCollected();
+		LaboratoryExamResult res = getLaboratoryExam();
+		Date dtRelease = res.getDateRelease();
+		Date dtCollected = res.getDateCollected();
 		
 		if ((dtRelease == null) || (dtCollected == null))
 			return true;
@@ -81,9 +75,9 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 		else return true;
 	}
 	
-	/**
+/*	*//**
 	 * Adjust the sample associated to the exam
-	 */
+	 *//*
 	protected boolean setupSample() {
 		if (sample == null)
 			return false;
@@ -96,11 +90,11 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 		// search for a compatible sample already registered for the patient
 		PatientSample aux = findCompactibleSample();
 		
-		LaboratoryExam exam = (LaboratoryExam)getInstance();
+		LaboratoryExamResult exam = (LaboratoryExamResult)getInstance();
 
 		try {
 			if (aux != null) {
-				LaboratoryExam exam2 = (LaboratoryExam)PropertyUtils.getProperty(aux, propName);
+				LaboratoryExamResult exam2 = (LaboratoryExamResult)PropertyUtils.getProperty(aux, propName);
 				// is the sample being used by another exam of the same type?
 				if ((exam2 != null) && (exam2 != exam)) {
 					facesMessages.addFromResourceBundle("cases.exams.datesampleexists");
@@ -135,13 +129,13 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 
 		return true;
 	}
+*/
 
-
-	/**
+/*	*//**
 	 * Search for a patient sample by its id number
 	 * @param sampleNumber
 	 * @return
-	 */
+	 *//*
 	protected PatientSample findSampleByNumber(String sampleNumber) {
 		List<PatientSample> lst = getEntityManager().createQuery("from PatientSample s where s.sampleNumber = :sample " +
 				"and s.tbcase.id = #{caseHome.id}")
@@ -152,12 +146,12 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 			 return null;
 		else return lst.get(0);
 	}
+*/
 
-
-	/**
+/*	*//**
 	 * Find a compatible sample based on information of the sample given by the user
 	 * @return {@link PatientSample} instance of another sample for the case
-	 */
+	 *//*
 	protected PatientSample findCompactibleSample() {
 		if (sample == null)
 			return null;
@@ -179,44 +173,35 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 			 return null;
 		else return lst.get(0);
 	}
+*/
 
-
-	/**
-	 * Return date of release of the exam
-	 * @return date 
-	 */
-	protected Date getDateRelease() {
-		Object exam = getInstance();
-		if (exam instanceof LaboratoryExam)
-			return ((LaboratoryExam)exam).getDateRelease();
-		else return null;
-	}
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.cases.ExamHome#getResultsHQL()
 	 */
 	@Override
 	public String getResultsHQL() {
-		String hql = "from " + getEntityClass().getSimpleName() + " exam " +
+		String entityClass = getEntityClass().getSimpleName();
+		String hql = "from " + entityClass + " exam " +
 				getJoinFetchHQL() +
-				" where s.tbcase.id = #{tbCase.id}";
+				" where exam.tbcase.id = #{tbCase.id}";
 	
 		if (isLastResult())
 			hql = hql.concat(" and s.dateCollected = (select max(aux.dateCollected) " +
-			"from PatientSample aux where aux.tbcase = s.tbcase) ");
+			"from " + entityClass + " aux where aux.tbcase = s.tbcase) ");
 		
-		return hql.concat(" order by s.dateCollected");
+		return hql.concat(" order by exam.dateCollected");
 	}
 
 	
 	public String getJoinFetchHQL() {
-		return "join fetch exam.sample s join fetch exam.laboratory lab ";
+		return "left join fetch exam.laboratory lab ";
 	}
 
-	/**
+/*	*//**
 	 * Get list of available samples
 	 * @return
-	 */
+	 *//*
 	public List<PatientSample> getPatientSamples() {
 		if (patientSamples == null) {
 			String prop = getExamPropertyName();
@@ -231,12 +216,12 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 		}
 		return patientSamples;
 	}
+*/
 
-
-	/**
+/*	*//**
 	 * Return the current sample to be edited
 	 * @return
-	 */
+	 *//*
 	public PatientSample getSample() {
 		if (sample == null) {
 			sample = new PatientSample();
@@ -248,32 +233,26 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 		}
 		return sample;
 	}
+*/
 
 
-	/**
-	 * Return the property name in the {@link PatientSample} class that is linked to the exam
-	 * @return name of the property in the {@link PatientSample} class
-	 */
-	public abstract String getExamPropertyName();	
-
-
-	/**
+/*	*//**
 	 * delete all patient samples that are not related to any exam
-	 */
+	 *//*
 	public void deleteOrphamSamples() {
 		getEntityManager().createQuery("delete from PatientSample s " +
 				"where s.examCulture.id is null and s.examSputumSmear.id is null and s.examSusceptibilityTest.id is null")
 				.executeUpdate();
 	}
-	
-	public LaboratoryExam getLaboratoryExam() {
-		return (LaboratoryExam)getInstance();
+*/	
+	public LaboratoryExamResult getLaboratoryExam() {
+		return (LaboratoryExamResult)getInstance();
 	}
 
 
 	@Override
 	public String remove() {
-		PatientSample patientSample;
+/*		PatientSample patientSample;
 		Object obj = getInstance();
 		try {
 			patientSample = (PatientSample)PropertyUtils.getProperty(obj, "sample");
@@ -295,9 +274,10 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 			.executeUpdate();
 		clearResults();
 		setId(null);
-
+*/
 //		saveTransactionLog(RoleAction.DELETE);
 
+		super.remove();
 		return "exam-removed";
 	}
 
@@ -309,8 +289,6 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 		super.setId(id);
 
 		initializeLabselection();
-		sample = null;
-		patientSamples = null;
 	}
 	
 	
@@ -320,8 +298,7 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 	protected void initializeLabselection() {
 		if (labselection != null) {
 			try {
-				Object obj = getInstance();
-				Laboratory lab = (Laboratory)PropertyUtils.getProperty(obj, "laboratory");
+				Laboratory lab = getLaboratoryExam().getLaboratory();
 				labselection.setLaboratory(lab);
 			} catch (Exception e) {
 				labselection.setLaboratory(null);
@@ -329,12 +306,6 @@ public abstract class SampleExamHome<E> extends ExamHome<E>{
 		}
 	}
 
-
-
-	@Override
-	public List<String> getExtraNestedProperties() {
-		return Arrays.asList(extraNestedProperties);
-	}
 
 
 	/**

@@ -10,7 +10,6 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
-import org.jboss.seam.transaction.UserTransaction;
 import org.msh.mdrtb.entities.AdministrativeUnit;
 
 @Name("adjustAdminUnits")
@@ -91,7 +90,7 @@ public class AdjustAdminUnits {
 	}
 
 	
-	private void save(AdministrativeUnit adm) throws Exception {
+/*	private void save(AdministrativeUnit adm) throws Exception {
 		UserTransaction tx = (UserTransaction)Component.getInstance("org.jboss.seam.transaction.transaction");
 		tx.begin();
 		EntityManager em = getEntityManager();
@@ -104,4 +103,4 @@ public class AdjustAdminUnits {
 			tx.rollback();
 		}
 	}
-}
+*/}

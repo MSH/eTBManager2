@@ -19,17 +19,16 @@ import org.msh.mdrtb.entities.AdministrativeUnit;
 import org.msh.mdrtb.entities.CaseRegimen;
 import org.msh.mdrtb.entities.CaseSideEffect;
 import org.msh.mdrtb.entities.ExamCulture;
+import org.msh.mdrtb.entities.ExamDST;
+import org.msh.mdrtb.entities.ExamDSTResult;
 import org.msh.mdrtb.entities.ExamHIV;
-import org.msh.mdrtb.entities.ExamSputumSmear;
-import org.msh.mdrtb.entities.ExamSusceptibilityResult;
-import org.msh.mdrtb.entities.ExamSusceptibilityTest;
+import org.msh.mdrtb.entities.ExamMicroscopy;
 import org.msh.mdrtb.entities.ExamXRay;
 import org.msh.mdrtb.entities.FieldValue;
 import org.msh.mdrtb.entities.Laboratory;
 import org.msh.mdrtb.entities.MedicalExamination;
 import org.msh.mdrtb.entities.MedicineRegimen;
 import org.msh.mdrtb.entities.Patient;
-import org.msh.mdrtb.entities.PatientSample;
 import org.msh.mdrtb.entities.PrescribedMedicine;
 import org.msh.mdrtb.entities.Regimen;
 import org.msh.mdrtb.entities.Substance;
@@ -43,6 +42,7 @@ import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.CultureResult;
 import org.msh.mdrtb.entities.enums.DiagnosisType;
 import org.msh.mdrtb.entities.enums.DrugResistanceType;
+import org.msh.mdrtb.entities.enums.DstResult;
 import org.msh.mdrtb.entities.enums.Gender;
 import org.msh.mdrtb.entities.enums.HIVResult;
 import org.msh.mdrtb.entities.enums.InfectionSite;
@@ -51,8 +51,7 @@ import org.msh.mdrtb.entities.enums.MedAppointmentType;
 import org.msh.mdrtb.entities.enums.Nationality;
 import org.msh.mdrtb.entities.enums.NumTreatments;
 import org.msh.mdrtb.entities.enums.RegimenPhase;
-import org.msh.mdrtb.entities.enums.SputumSmearResult;
-import org.msh.mdrtb.entities.enums.SusceptibilityResultTest;
+import org.msh.mdrtb.entities.enums.MicroscopyResult;
 import org.msh.mdrtb.entities.enums.ValidationState;
 import org.msh.mdrtb.entities.enums.XRayEvolution;
 import org.msh.mdrtb.entities.enums.YesNoType;
@@ -333,9 +332,9 @@ public class CaseGenerator {
 			applyStandardRegimen(reg);
 
 		createMedicalExamination();
-		createSputumExams();
+		createMicroscopyExams();
 		createCultureExams();
-		createSusceptExams();
+		createDSTExams();
 		createHIVExams();
 		createXRays();
 		createSideEffects();
@@ -359,10 +358,10 @@ public class CaseGenerator {
 
 
 	/**
-	 * Create susceptibility exams
+	 * Create DST exams
 	 */
-	private void createSusceptExams() {
-		Date dt = newExamFirstDate(preferences.getSusceptFirst());
+	private void createDSTExams() {
+		Date dt = newExamFirstDate(preferences.getDstFirst());
 		Laboratory laboratory = selectLaboratory();		
 		FieldValue method = selectMethod();
 
@@ -370,31 +369,28 @@ public class CaseGenerator {
 		int freq;
 		if (tbcase.getClassification() == CaseClassification.TB_DOCUMENTED) {
 			 resPattern = newValue(preferences.getResPatternsTB());
-			 freq = preferences.getSusceptFreqTB();
+			 freq = preferences.getDstFreqTB();
 		}
 		else {
 			resPattern = newValue(preferences.getResPatternsMDR());
-			freq = preferences.getSusceptFreqMDR();
+			freq = preferences.getDstFreqMDR();
 		}
 
 		boolean bFirst = true;
 		
 		while ((dt.before(new Date())) && (dt.before(endDate))) {
-			ExamSusceptibilityTest exam = new ExamSusceptibilityTest();
+			ExamDST exam = new ExamDST();
 			exam.setMethod(method);
 			exam.setLaboratory(laboratory);
 			
-			PatientSample sample = new PatientSample();
-			sample.setTbcase(tbcase);
-			sample.setDateCollected(dt);
-			sample.setExamSusceptibilityTest(exam);
-			exam.setSample(sample);
-			tbcase.getSamples().add(sample);
+			exam.setTbcase(tbcase);
+			exam.setDateCollected(dt);
+			tbcase.getExamsDST().add(exam);
 
 			// set resistance pattern
 			for (Substance sub: resPattern) {
-				ExamSusceptibilityResult res = new ExamSusceptibilityResult();
-				SusceptibilityResultTest test = SusceptibilityResultTest.values()[random.nextInt(3)+1];
+				ExamDSTResult res = new ExamDSTResult();
+				DstResult test = DstResult.values()[random.nextInt(3)+1];
 				res.setResult(test);
 //				res.setResult(SusceptibilityResultTest.RESISTANT);
 				res.setSubstance(sub);
@@ -404,12 +400,12 @@ public class CaseGenerator {
 
 			// complete the test with other substances
 			for (Substance sub: preferences.getSubstances()) {
-				ExamSusceptibilityResult res = exam.findResultBySubstance(sub);
+				ExamDSTResult res = exam.findResultBySubstance(sub);
 				if (res == null) {
-					res = new ExamSusceptibilityResult();
+					res = new ExamDSTResult();
 					if (tbcase.getClassification() == CaseClassification.MDRTB_DOCUMENTED)
-						 res.setResult(newValue(preferences.getSusceptResultsMDR()));
-					else res.setResult(newValue(preferences.getSusceptResultsTB()));
+						 res.setResult(newValue(preferences.getDstResultsMDR()));
+					else res.setResult(newValue(preferences.getDstResultsTB()));
 					res.setSubstance(sub);
 					
 					res.setExam(exam);
@@ -418,16 +414,16 @@ public class CaseGenerator {
 			}
 			
 			// remove results that are resistant to medicines prescribed 
-			for (ExamSusceptibilityResult res: exam.getResults()) {
-				if ((SusceptibilityResultTest.RESISTANT.equals(res.getResult())) && (isSubstancePrescribed(res.getSubstance())))
-					res.setResult(SusceptibilityResultTest.SUSCEPTIBLE);
+			for (ExamDSTResult res: exam.getResults()) {
+				if ((DstResult.RESISTANT.equals(res.getResult())) && (isSubstancePrescribed(res.getSubstance())))
+					res.setResult(DstResult.SUSCEPTIBLE);
 			}
 
 			// remove results that are not done
 			int i = 0;
 			while (i < exam.getResults().size()) {
-				ExamSusceptibilityResult res = exam.getResults().get(i);
-				if (SusceptibilityResultTest.NOTDONE.equals(res.getResult())) {
+				ExamDSTResult res = exam.getResults().get(i);
+				if (DstResult.NOTDONE.equals(res.getResult())) {
 					exam.getResults().remove(i);
 				}
 				else {
@@ -469,15 +465,15 @@ public class CaseGenerator {
 		return false;
 	}
 	
-	private void checkDrugResistanceType(ExamSusceptibilityTest dstTest) {
+	private void checkDrugResistanceType(ExamDST dstTest) {
 		int resCount = 0;
 		boolean resH = false;
 		boolean resR = false;
 		boolean resFluoq = false;
 		boolean resInjec = false;
 		
-		for (ExamSusceptibilityResult res: dstTest.getResults()) {
-			if (res.getResult() == SusceptibilityResultTest.RESISTANT) {
+		for (ExamDSTResult res: dstTest.getResults()) {
+			if (res.getResult() == DstResult.RESISTANT) {
 				resCount++;
 				String subname = res.getSubstance().getAbbrevName().toString();
 				if (subname.equals("H"))
@@ -542,14 +538,10 @@ public class CaseGenerator {
 			ExamCulture exam = new ExamCulture();
 			exam.setLaboratory(laboratory);
 			exam.setResult(res);
-
-			PatientSample sample = new PatientSample();
-			exam.setSample(sample);
-			sample.setDateCollected(dt);
-			sample.setExamCulture(exam);
-			sample.setTbcase(tbcase);
+			exam.setDateCollected(dt);
+			exam.setTbcase(tbcase);
 			
-			tbcase.getSamples().add(sample);
+			tbcase.getExamsCulture().add(exam);
 			
 			if (freq == 0)
 				break;
@@ -590,41 +582,38 @@ public class CaseGenerator {
 
 
 	/**
-	 * Create sputum exams
+	 * Create microscopy exams
 	 */
-	private void createSputumExams() {
+	private void createMicroscopyExams() {
 		int freq = 0;
 		if (tbcase.getClassification() == CaseClassification.TB_DOCUMENTED)
-			freq = preferences.getSputumFreqTB();
-		else freq = preferences.getSputumFreqMDR();
+			freq = preferences.getMicroscopyFreqTB();
+		else freq = preferences.getMicroscopyFreqMDR();
 		
-		Date dt = newExamFirstDate(preferences.getSputumFirst());
+		Date dt = newExamFirstDate(preferences.getMicroscopyFirst());
 		Laboratory laboratory = selectLaboratory();
 		
 		// months to negativate
 		int negmonths = random.nextInt(12);
 		Date dtneg = DateUtils.incMonths(dt, negmonths);
 
-		SputumSmearResult res = SputumSmearResult.NEGATIVE;
+		MicroscopyResult res = MicroscopyResult.NEGATIVE;
 		while ((dt.before(new Date())) && (dt.before(endDate))) {
 			// generates exam result
 			if (dt.after(dtneg))
-				res = SputumSmearResult.NEGATIVE;
+				res = MicroscopyResult.NEGATIVE;
 			else {
-				while (res == SputumSmearResult.NEGATIVE)
-					res = newValue(preferences.getSputumResults());
+				while (res == MicroscopyResult.NEGATIVE)
+					res = newValue(preferences.getMicroscopyResults());
 			}
 			
-			ExamSputumSmear exam = new ExamSputumSmear();
+			ExamMicroscopy exam = new ExamMicroscopy();
 			exam.setLaboratory(laboratory);
 			exam.setResult(res);
 
-			PatientSample sample = new PatientSample();
-			exam.setSample(sample);
-			sample.setDateCollected(dt);
-			sample.setExamSputumSmear(exam);
-			sample.setTbcase(tbcase);
-			tbcase.getSamples().add(sample);
+			exam.setDateCollected(dt);
+			exam.setTbcase(tbcase);
+			tbcase.getExamsMicroscopy().add(exam);
 
 			if (freq == 0)
 				break;

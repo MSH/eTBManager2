@@ -1,6 +1,6 @@
 package org.msh.mdrtb.entities.enums;
 
-public enum SputumSmearResult {
+public enum MicroscopyResult {
 
 	NEGATIVE,
 	POSITIVE,

@@ -1,11 +1,11 @@
 package org.msh.tb.cases.drugogram;
 
-import org.msh.mdrtb.entities.enums.SusceptibilityResultTest;
+import org.msh.mdrtb.entities.enums.DstResult;
 
 public class SubstanceItem {
 
 	private String medicine;
-	private SusceptibilityResultTest dstResult;
+	private DstResult dstResult;
 	private boolean prescribed;
 
 
@@ -24,13 +24,13 @@ public class SubstanceItem {
 	/**
 	 * @return the dstResult
 	 */
-	public SusceptibilityResultTest getDstResult() {
+	public DstResult getDstResult() {
 		return dstResult;
 	}
 	/**
 	 * @param dstResult the dstResult to set
 	 */
-	public void setDstResult(SusceptibilityResultTest dstResult) {
+	public void setDstResult(DstResult dstResult) {
 		this.dstResult = dstResult;
 	}
 	/**

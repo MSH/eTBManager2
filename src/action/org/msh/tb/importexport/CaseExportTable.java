@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.msh.mdrtb.entities.ExamCulture;
 import org.msh.mdrtb.entities.ExamHIV;
-import org.msh.mdrtb.entities.ExamSputumSmear;
+import org.msh.mdrtb.entities.ExamMicroscopy;
 import org.msh.mdrtb.entities.TbCase;
 
 
@@ -85,12 +85,12 @@ public class CaseExportTable {
 	 * @param examSputumSmear
 	 * @return
 	 */
-	public CaseRow addExamSputumSmear(Integer caseId, ExamSputumSmear examSputumSmear) {
+	public CaseRow addExamMicroscopy(Integer caseId, ExamMicroscopy examMicroscopy) {
 		CaseRowGroup rowGroup = findCaseRowGroup(caseId);
 		if (rowGroup == null)
 			return null;
 		
-		return rowGroup.addExamSputumSmear(examSputumSmear);
+		return rowGroup.addExamMicroscopy(examMicroscopy);
 	}
 	
 	/**

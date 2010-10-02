@@ -10,20 +10,19 @@
 
 	<div class="paragraph">#{messages['PatientSample.identification']}
 	</div>
-		<h:commandLink value="#{messages['cases.exams.selsample']}" onclick="Richfaces.showModalPanel('samplesdlg');return false;" style="float:right;"/>
     <div id="divdtcollected">
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="future" value="true" /> 
-    	<ui:param name="datefield" value="#{examHome.sample.dateCollected}" /> 
+    	<ui:param name="datefield" value="#{examHome.instance.dateCollected}" /> 
     </s:decorate>
     </div>
 
 	<div id="divsample">
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['PatientSample.sampleNumber']}:</ui:define>
-    	<h:inputText id="labid" value="#{examHome.sample.sampleNumber}" maxlength="50" style="width:120px;"/>
+    	<h:inputText id="labid" value="#{examHome.sampleNumber}" maxlength="50" style="width:120px;"/>
 		(TC-C-YY-NNNN-N)
 		<rich:jQuery selector="#labid" query="mask('99-a-99-9999-9')" />
     </s:decorate>

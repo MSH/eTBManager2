@@ -5,7 +5,7 @@ import org.jboss.seam.annotations.Name;
 import org.msh.mdrtb.entities.ResistancePattern;
 import org.msh.mdrtb.entities.Substance;
 import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.SusceptibilityResultTest;
+import org.msh.mdrtb.entities.enums.DstResult;
 import org.msh.tb.indicators.core.Indicator;
 
 /**
@@ -54,13 +54,13 @@ public class ResistancePatternIndicator extends Indicator {
 		}
 		
 		// rule: check if the first DST exam of the case and check if it's according to the resistance pattern 
-		String cond = "(select count(*) from ExamSusceptibilityResult res " +
+		String cond = "(select count(*) from ExamDSTResult res " +
 				"join res.exam exam " +
-				"where exam.sample.tbcase.id = c.id and res.substance.id in (" + s +
-				") and res.result = " + SusceptibilityResultTest.RESISTANT.ordinal() + 
+				"where exam.tbcase.id = c.id and res.substance.id in (" + s +
+				") and res.result = " + DstResult.RESISTANT.ordinal() + 
 				" and exam.numResistant = " + pattern.getSubstances().size() + 
-				" and exam.sample.dateCollected = (select min(aux.sample.dateCollected) from ExamSusceptibilityTest aux " +
-				"where aux.sample.tbcase.id = c.id)) = " + pattern.getSubstances().size();
+				" and exam.dateCollected = (select min(aux.dateCollected) from ExamDST aux " +
+				"where aux.tbcase.id = c.id)) = " + pattern.getSubstances().size();
 		
 		setCondition(cond);
 		Long val = (Long)createQuery().getSingleResult();
@@ -71,10 +71,10 @@ public class ResistancePatternIndicator extends Indicator {
 
 
 	/**
-	 * Calculates total quantity of cases with susceptibility exam
+	 * Calculates total quantity of cases with DST exam
 	 */
 	protected void calcTotal() {
-		String cond = "exists(select exam.id from ExamSusceptibilityTest exam where exam.sample.tbcase.id = c.id)";
+		String cond = "exists(select exam.id from ExamDST exam where exam.tbcase.id = c.id)";
 		setCondition(cond);
 		total = ((Long) createQuery().getSingleResult()).intValue();
 	}

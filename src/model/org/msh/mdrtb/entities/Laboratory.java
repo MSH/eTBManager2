@@ -57,13 +57,14 @@ public class Laboratory extends WSObject implements Serializable {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Laboratory))
 			return false;
 		Laboratory other = (Laboratory) obj;
+		Integer otherId = other.getId();
 		if (id == null) {
-			if (other.id != null)
+			if (otherId != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!id.equals(otherId)) 
 			return false;
 		return true;
 	}

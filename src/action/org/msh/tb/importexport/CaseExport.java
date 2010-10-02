@@ -8,7 +8,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.msh.mdrtb.entities.ExamCulture;
 import org.msh.mdrtb.entities.ExamHIV;
-import org.msh.mdrtb.entities.ExamSputumSmear;
+import org.msh.mdrtb.entities.ExamMicroscopy;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.tb.indicators.core.CaseHQLBase;
 import org.msh.tb.indicators.core.IndicatorFilters;
@@ -163,16 +163,16 @@ public class CaseExport extends CaseHQLBase {
 			table.addExamHIV(examHIV.getTbcase().getId(), examHIV);
 		}
 
-		hqlFrom = "from ExamCulture exam join fetch exam.sample s join fetch s.tbcase c";
+		hqlFrom = "from ExamCulture exam join fetch exam.tbcase c";
 		List<ExamCulture> examsCulture = createQuery().getResultList();
 		for (ExamCulture examCulture: examsCulture) {
-			table.addExamCulture(examCulture.getSample().getTbcase().getId(), examCulture);
+			table.addExamCulture(examCulture.getTbcase().getId(), examCulture);
 		}
 
-		hqlFrom = "from ExamSputumSmear exam join fetch exam.sample s join fetch s.tbcase c";
-		List<ExamSputumSmear> examsSputumSmear = createQuery().getResultList();
-		for (ExamSputumSmear examSputumSmear: examsSputumSmear) {
-			table.addExamSputumSmear(examSputumSmear.getSample().getTbcase().getId(), examSputumSmear);
+		hqlFrom = "from ExamMicroscopy exam join fetch exam.tbcase c";
+		List<ExamMicroscopy> examsMicroscopy = createQuery().getResultList();
+		for (ExamMicroscopy examMicroscopy: examsMicroscopy) {
+			table.addExamMicroscopy(examMicroscopy.getTbcase().getId(), examMicroscopy);
 		}
 	}
 

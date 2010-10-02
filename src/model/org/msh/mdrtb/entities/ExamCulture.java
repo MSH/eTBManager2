@@ -3,22 +3,18 @@ package org.msh.mdrtb.entities;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 
 import org.msh.mdrtb.entities.enums.CultureResult;
 import org.msh.mdrtb.entities.enums.SampleType;
 
 @Entity
-public class ExamCulture extends LaboratoryExam implements Serializable {
+public class ExamCulture extends LaboratoryExamResult implements Serializable {
 	private static final long serialVersionUID = 1470269499087718301L;
 
 	private CultureResult result;
 
 	private Integer numberOfColonies;
 
-	@OneToOne(mappedBy="examCulture")
-	private PatientSample sample;
-	
 	private SampleType sampleType;
 
 
@@ -44,21 +40,6 @@ public class ExamCulture extends LaboratoryExam implements Serializable {
 		this.numberOfColonies = numberOfColonies;
 	}
 
-	/**
-	 * @return the sample
-	 */
-	@Override
-	public PatientSample getSample() {
-		return sample;
-	}
-
-	/**
-	 * @param sample the sample to set
-	 */
-	@Override
-	public void setSample(PatientSample sample) {
-		this.sample = sample;
-	}
 
 	/**
 	 * @return the sampleType

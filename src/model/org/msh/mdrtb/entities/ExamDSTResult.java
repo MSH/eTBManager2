@@ -9,10 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.msh.mdrtb.entities.enums.SusceptibilityResultTest;
+import org.msh.mdrtb.entities.enums.DstResult;
 
 @Entity
-public class ExamSusceptibilityResult implements Serializable {
+public class ExamDSTResult implements Serializable {
 	private static final long serialVersionUID = -5594762900664251756L;
 
 	@Id
@@ -25,9 +25,9 @@ public class ExamSusceptibilityResult implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name="EXAM_ID")
-	private ExamSusceptibilityTest exam;
+	private ExamDST exam;
 	
-	private SusceptibilityResultTest result;
+	private DstResult result;
 	
 
 	public Substance getSubstance() {
@@ -46,25 +46,25 @@ public class ExamSusceptibilityResult implements Serializable {
 		this.id = id;
 	}
 
-	public SusceptibilityResultTest getResult() {
+	public DstResult getResult() {
 		return result;
 	}
 
-	public void setResult(SusceptibilityResultTest result) {
+	public void setResult(DstResult result) {
 		this.result = result;
 	}
 
 	/**
 	 * @return the exam
 	 */
-	public ExamSusceptibilityTest getExam() {
+	public ExamDST getExam() {
 		return exam;
 	}
 
 	/**
 	 * @param exam the exam to set
 	 */
-	public void setExam(ExamSusceptibilityTest exam) {
+	public void setExam(ExamDST exam) {
 		this.exam = exam;
 	}
 }

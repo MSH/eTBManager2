@@ -11,7 +11,7 @@
 
 	<e:worksheet name="Cases" rendered="#{caseExportUA.exportContent=='EXAMS'}">
 		<e:cell value="#{messages['cases.examhiv']}" row="1" column="55" style="xls-font: red bold 10 Verdana"/>
-		<e:cell value="#{messages['cases.examsputum']}" row="1" column="57" style="xls-font: red bold 10 Verdana"/>
+		<e:cell value="#{messages['cases.exammicroscopy']}" row="1" column="57" style="xls-font: red bold 10 Verdana"/>
 		<e:cell value="#{messages['cases.examculture']}" row="1" column="59" style="xls-font: red bold 10 Verdana"/>
 	</e:worksheet>
 
@@ -437,7 +437,7 @@
 			<f:facet name="header">
 				<e:cell value="#{messages['PatientSample.dateCollected']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.examCulture.sample.dateCollected}" />
+			<e:cell value="#{c.examCulture.dateCollected}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true" >
@@ -451,14 +451,14 @@
 			<f:facet name="header">
 				<e:cell value="#{messages['PatientSample.dateCollected']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{c.examSputumSmear.sample.dateCollected}" />
+			<e:cell value="#{c.examMicroscopy.dateCollected}" />
 		</e:column>
 		
 		<e:column style="xls-column-autosize: true">
 			<f:facet name="header">
 				<e:cell value="#{messages['cases.details.result']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
-			<e:cell value="#{messages[c.examSputumSmear.result.key]}" />
+			<e:cell value="#{messages[c.examMicroscopySmear.result.key]}" />
 		</e:column>
 	</e:worksheet>
 </e:workbook>

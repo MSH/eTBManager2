@@ -7,34 +7,34 @@ import java.util.List;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.ExamSusceptibilityResult;
-import org.msh.mdrtb.entities.ExamSusceptibilityTest;
+import org.msh.mdrtb.entities.ExamDSTResult;
+import org.msh.mdrtb.entities.ExamDST;
 import org.msh.mdrtb.entities.Substance;
-import org.msh.mdrtb.entities.enums.SusceptibilityResultTest;
+import org.msh.mdrtb.entities.enums.DstResult;
 
-@Name("examSusceptTable")
-public class ExamSusceptTable {
+@Name("examDSTTable")
+public class ExamDSTTable {
 	
-	@In(create=true) ExamSusceptHome examSusceptHome;
+	@In(create=true) ExamDSTHome examDSTHome;
 	
 	/**
 	 * @author Ricardo
 	 * Keeps a list of exam results
 	 */
 	public class ResultItem {
-		private ExamSusceptibilityTest exam;
-		private ExamSusceptTable home;
-		public ResultItem(ExamSusceptTable home, ExamSusceptibilityTest exam) {
+		private ExamDST exam;
+		private ExamDSTTable home;
+		public ResultItem(ExamDSTTable home, ExamDST exam) {
 			this.exam = exam;
 			this.home = home;
 		}
-		public ExamSusceptibilityTest getExamResult() {
+		public ExamDST getExamResult() {
 			return exam;
 		}
-		public ExamSusceptTable getHome() {
+		public ExamDSTTable getHome() {
 			return home;
 		}
-		public List<SusceptibilityResultTest> getResults() {
+		public List<DstResult> getResults() {
 			return home.getResults(exam);
 		}
 	}
@@ -57,11 +57,11 @@ public class ExamSusceptTable {
 
 	/**
 	 * Return all results
-	 * @return List of objects of class ResultItem carrying information about the susceptibility test
+	 * @return List of objects of class ResultItem carrying information about the DST
 	 */
 	public List<ResultItem> getAllResults() {
-		if (examSusceptHome.isLastResult()) {
-			examSusceptHome.setLastResult(false);
+		if (examDSTHome.isLastResult()) {
+			examDSTHome.setLastResult(false);
 			results = null;
 		}
 
@@ -69,15 +69,15 @@ public class ExamSusceptTable {
 	}
 	
 	protected List<ResultItem> createResultTable() {
-		List<ExamSusceptibilityTest> res;
+		List<ExamDST> res;
 
-		examSusceptHome.setLastResult(false);
-		res = examSusceptHome.getResults();
+		examDSTHome.setLastResult(false);
+		res = examDSTHome.getResults();
 
 		substances = new ArrayList<Substance>();
 		
 		List<ResultItem> lst = new ArrayList<ResultItem>();
-		for(ExamSusceptibilityTest exam: res) {
+		for(ExamDST exam: res) {
 			lst.add(new ResultItem(this, exam));
 			addSubstances(exam);
 		}
@@ -95,37 +95,37 @@ public class ExamSusceptTable {
 	 * Add the medicines from a result into the list of medicines (duplicates are not included)  
 	 * @param exam
 	 */
-	protected void addSubstances(ExamSusceptibilityTest exam) {
-		for (ExamSusceptibilityResult medres: exam.getResults()) {
+	protected void addSubstances(ExamDST exam) {
+		for (ExamDSTResult medres: exam.getResults()) {
 			Substance m = medres.getSubstance();
 			if (!substances.contains(m))
 				substances.add(m);
 		}
 	}
 
-	protected List<SusceptibilityResultTest> getResults(ExamSusceptibilityTest exam) {
-		List<SusceptibilityResultTest> res = new ArrayList<SusceptibilityResultTest>();
+	protected List<DstResult> getResults(ExamDST exam) {
+		List<DstResult> res = new ArrayList<DstResult>();
 		for (Substance m: substances) {
 			res.add(getResult(exam, m));
 		}
 		return res;
 	}
 	
-	protected SusceptibilityResultTest getResult(ExamSusceptibilityTest exam, Substance m) {
-		for (ExamSusceptibilityResult mr: exam.getResults()) {
+	protected DstResult getResult(ExamDST exam, Substance m) {
+		for (ExamDSTResult mr: exam.getResults()) {
 			if (mr.getSubstance().equals(m)) {
 				return mr.getResult();
 			}
 		}
-		return SusceptibilityResultTest.NOTDONE;
+		return DstResult.NOTDONE;
 	}
 	
 	public void setLastResult(boolean lastres) {
-		examSusceptHome.setLastResult(lastres);
+		examDSTHome.setLastResult(lastres);
 		results = null;
 	}
 	
 	public boolean isLastResult() {
-		return examSusceptHome.isLastResult();
+		return examDSTHome.isLastResult();
 	}
 }

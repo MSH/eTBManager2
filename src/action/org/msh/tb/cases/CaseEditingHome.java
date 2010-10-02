@@ -29,7 +29,7 @@ import org.msh.mdrtb.entities.enums.ValidationState;
 import org.msh.mdrtb.entities.enums.YesNoType;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.cases.exams.ExamCultureHome;
-import org.msh.tb.cases.exams.ExamSputumHome;
+import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.tb.cases.exams.MedicalExaminationHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.tbunits.TBUnitFilter;
@@ -54,7 +54,7 @@ public class CaseEditingHome {
 	@In(create=true) FacesMessages facesMessages;
 	
 	@In(required=false) StartTreatmentHome startTreatmentHome;
-	@In(required=false) ExamSputumHome examSputumHome;
+	@In(required=false) ExamMicroscopyHome examMicroscopyHome;
 	@In(required=false) ExamCultureHome examCultureHome;
 
 	private TBUnitSelection tbunitselection;

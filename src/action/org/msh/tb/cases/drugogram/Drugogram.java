@@ -14,17 +14,19 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
 import org.msh.mdrtb.entities.ExamCulture;
-import org.msh.mdrtb.entities.ExamSputumSmear;
+import org.msh.mdrtb.entities.ExamMicroscopy;
 import org.msh.mdrtb.entities.ExamXRay;
 import org.msh.mdrtb.entities.LocalizedNameComp;
 import org.msh.mdrtb.entities.MedicalExamination;
 import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.PatientSample;
 import org.msh.mdrtb.entities.PrescribedMedicine;
 import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.enums.SusceptibilityResultTest;
+import org.msh.mdrtb.entities.enums.DstResult;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.MedicineComponent;
+import org.msh.tb.cases.exams.ExamCultureHome;
+import org.msh.tb.cases.exams.ExamDSTHome;
+import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.utils.date.DateUtils;
 
 
@@ -33,6 +35,10 @@ public class Drugogram {
 
 	@In(required=true) CaseHome caseHome;
 	@In EntityManager entityManager;
+	@In(create=true) ExamCultureHome examCultureHome;
+	@In(create=true) ExamMicroscopyHome examMicroscopyHome;
+	@In(create=true) ExamDSTHome examDSTHome;
+	
 	private TbCase tbcase;
 
 	private List<DrugogramItem> items;
@@ -102,10 +108,9 @@ public class Drugogram {
 		
 		numExams = 0;
 		
-		for (PatientSample sample: tbcase.getSamples()) {
-			ExamCulture examCulture = sample.getExamCulture();
+		for (ExamCulture examCulture: examCultureHome.getAllResults()) {
 			if (examCulture != null) {
-				Date dt = examCulture.getSample().getDateCollected();
+				Date dt = examCulture.getDateCollected();
 				item = findItemByDate(dt);
 				item.getFreeResultCulture().setExamCulture(examCulture);
 				
@@ -114,22 +119,21 @@ public class Drugogram {
 					numExams = item.getResults().size();
 				item.checkDateCollected(dt);
 				if (item.getSpecimenId() == null)
-					item.setSpecimenId(examCulture.getSample().getSampleNumber());
+					item.setSpecimenId(examCulture.getSampleNumber());
 			}
 		}
 		
-		for (PatientSample sample: tbcase.getSamples()) {
-			ExamSputumSmear examSputum = sample.getExamSputumSmear();
-			if (examSputum != null) {
-				Date dt = examSputum.getSample().getDateCollected();
+		for (ExamMicroscopy examMicroscopy: examMicroscopyHome.getAllResults()) {
+			if (examMicroscopy != null) {
+				Date dt = examMicroscopy.getDateCollected();
 				item = findItemByDate(dt);
-				item.getFreeResultSputum().setExamSputum(examSputum);
+				item.getFreeResultMicroscopy().setExamMicroscopy(examMicroscopy);
 
 				if (item.getResults().size() > numExams)
 					numExams = item.getResults().size();
 				item.checkDateCollected(dt);
 				if (item.getSpecimenId() == null)
-					item.setSpecimenId(examSputum.getSample().getSampleNumber());
+					item.setSpecimenId(examMicroscopy.getSampleNumber());
 			}
 		}
 	}
@@ -139,16 +143,16 @@ public class Drugogram {
 	 * Fill the drugogram with DST results
 	 */
 	protected void createDSTResults() {
-		List<Object[]> lst = entityManager.createQuery("select res.result, res.substance.abbrevName, exam.sample.dateCollected " +
-				"from ExamSusceptibilityResult res " +
+		List<Object[]> lst = entityManager.createQuery("select res.result, res.substance.abbrevName, exam.dateCollected " +
+				"from ExamDSTResult res " +
 				"join res.exam exam " +
-				"where exam.sample.tbcase.id = :id")
+				"where exam.tbcase.id = :id")
 				.setParameter("id", tbcase.getId())
 				.getResultList();
 		
 		for (Object[] vals: lst) {
 			Date dt = (Date)vals[2];
-			SusceptibilityResultTest res = (SusceptibilityResultTest)vals[0];
+			DstResult res = (DstResult)vals[0];
 			String subname = ((LocalizedNameComp)vals[1]).toString();
 			
 			DrugogramItem item = findItemByDate(dt);

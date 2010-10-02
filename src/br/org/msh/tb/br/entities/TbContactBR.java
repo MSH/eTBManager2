@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 
 import org.msh.mdrtb.entities.TbContact;
 import org.msh.mdrtb.entities.enums.YesNoType;
-import org.msh.mdrtb.entities.enums.SputumSmearResult;
+import org.msh.mdrtb.entities.enums.MicroscopyResult;
 import org.msh.mdrtb.entities.enums.CultureResult;
 import org.msh.tb.br.entities.enums.XRayContactBR;
 
@@ -24,7 +24,7 @@ public class TbContactBR extends TbContact {
 
 	private XRayContactBR xray;
 	
-	private SputumSmearResult microscopyResult;
+	private MicroscopyResult microscopyResult;
 	
 	private CultureResult cultureResult;
 	
@@ -66,11 +66,11 @@ public class TbContactBR extends TbContact {
 		this.xray = xray;
 	}
 
-	public SputumSmearResult getMicroscopyResult() {
+	public MicroscopyResult getMicroscopyResult() {
 		return microscopyResult;
 	}
 
-	public void setMicroscopyResult(SputumSmearResult microscopyResult) {
+	public void setMicroscopyResult(MicroscopyResult microscopyResult) {
 		this.microscopyResult = microscopyResult;
 	}
 

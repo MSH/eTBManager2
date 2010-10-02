@@ -16,8 +16,8 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.mdrtb.entities.AdministrativeUnit;
 import org.msh.mdrtb.entities.ExamCulture;
 import org.msh.mdrtb.entities.ExamHIV;
-import org.msh.mdrtb.entities.ExamSputumSmear;
-import org.msh.mdrtb.entities.ExamSusceptibilityResult;
+import org.msh.mdrtb.entities.ExamMicroscopy;
+import org.msh.mdrtb.entities.ExamDSTResult;
 import org.msh.mdrtb.entities.ExamXRay;
 import org.msh.mdrtb.entities.FieldValue;
 import org.msh.mdrtb.entities.MedicalExamination;
@@ -29,8 +29,8 @@ import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.CultureResult;
 import org.msh.mdrtb.entities.enums.Gender;
 import org.msh.mdrtb.entities.enums.PatientType;
-import org.msh.mdrtb.entities.enums.SputumSmearResult;
-import org.msh.mdrtb.entities.enums.SusceptibilityResultTest;
+import org.msh.mdrtb.entities.enums.MicroscopyResult;
+import org.msh.mdrtb.entities.enums.DstResult;
 import org.msh.mdrtb.entities.enums.YesNoType;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.AdminUnitSelection;
@@ -42,8 +42,8 @@ import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.ComorbidityHome;
 import org.msh.tb.cases.exams.ExamCultureHome;
 import org.msh.tb.cases.exams.ExamHIVHome;
-import org.msh.tb.cases.exams.ExamSputumHome;
-import org.msh.tb.cases.exams.ExamSusceptHome;
+import org.msh.tb.cases.exams.ExamMicroscopyHome;
+import org.msh.tb.cases.exams.ExamDSTHome;
 import org.msh.tb.cases.exams.ExamXRayHome;
 import org.msh.tb.cases.exams.MedicalExaminationHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
@@ -58,12 +58,12 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	@In EntityManager entityManager;
 	@In(create=true) CaseHome caseHome;
 	@In(create=true) CaseEditingHome caseEditingHome;
-	@In(required=false) ExamSputumHome examSputumHome;
+	@In(required=false) ExamMicroscopyHome examMicroscopyHome;
 	@In(required=false) ExamCultureHome examCultureHome;
 	@In(create=true) StartTreatmentHome startTreatmentHome;
 	@In(create=true) StartTreatmentIndivHome startTreatmentIndivHome;
 //	@In(required=false) TreatmentHealthUnitHome treatmentHealthUnitHome;
-	@In(required=false) ExamSusceptHome examSusceptHome;
+	@In(required=false) ExamDSTHome examDSTHome;
 	@In(required=false) ExamHIVHome examHIVHome;
 	@In(required=false) ComorbidityHome comorbidityHome;
 	@In(required=false) MedicalExaminationHome medicalExaminationHome;
@@ -109,13 +109,13 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 				
 			if (examCultureHome == null)
 				examCultureHome = (ExamCultureHome)Component.getInstance("examCultureHome", true);
-			if (examSusceptHome == null)
-				examSusceptHome = (ExamSusceptHome)Component.getInstance("examSusceptHome", true);
+			if (examDSTHome == null)
+				examDSTHome = (ExamDSTHome)Component.getInstance("examDSTHome", true);
 			if (molecularBiologyHome == null)
 				molecularBiologyHome = (MolecularBiologyHome)Component.getInstance("molecularBiologyHome", true);
 			
 			examCultureHome.getLabselection().setAdminUnit(au);
-			examSusceptHome.getLabselection().setAdminUnit(au);
+			examDSTHome.getLabselection().setAdminUnit(au);
 			molecularBiologyHome.getLabselection().setAdminUnit(au);
 		}
 		
@@ -324,11 +324,11 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		}
 		
 		// check exams
-		if ((examCultureHome != null) && (examSputumHome != null)) {
+		if ((examCultureHome != null) && (examMicroscopyHome != null)) {
 			if ((!examCultureHome.getInstance().getResult().equals(CultureResult.NOTDONE)) || 
-				(!examSputumHome.getInstance().getResult().equals(SputumSmearResult.NOTDONE))) 
+				(!examMicroscopyHome.getInstance().getResult().equals(MicroscopyResult.NOTDONE))) 
 			{
-				if (examCultureHome.getSample().getDateCollected() == null) {
+				if (examCultureHome.getInstance().getDateCollected() == null) {
 					facesMessages.addToControlFromResourceBundle("edtdatecollected", "javax.faces.component.UIInput.REQUIRED");
 					res = false;
 				}
@@ -361,34 +361,34 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	 * Save exams results for DST, Culture and microscopy
 	 */
 	protected boolean saveExams() {
-		if ((examCultureHome == null) || (examSputumHome == null))
+		if ((examCultureHome == null) || (examMicroscopyHome == null))
 			return true;
 
 		ExamCulture examCulture = examCultureHome.getInstance();
-		ExamSputumSmear examSputum = examSputumHome.getInstance();
+		ExamMicroscopy examMicroscopy = examMicroscopyHome.getInstance();
 		MolecularBiology molecularBiology = molecularBiologyHome.getInstance();
 
 		// turn off message displaying
-		examSputumHome.setDisplayMessage(false);
+		examMicroscopyHome.setDisplayMessage(false);
 		examCultureHome.setDisplayMessage(false);
 		molecularBiologyHome.setDisplayMessage(false);
-		examSusceptHome.setDisplayMessage(false);
+		examDSTHome.setDisplayMessage(false);
 		examHIVHome.setDisplayMessage(false);
 
-		Date dtCollected = examCultureHome.getSample().getDateCollected();
+		Date dtCollected = examCultureHome.getInstance().getDateCollected();
 		
-//		examSputum.setMethod(examCulture.getMethod());
+//		examMicroscopy.setMethod(examCulture.getMethod());
 
 		// save microscopy exam
-		if (!SputumSmearResult.NOTDONE.equals(examSputum.getResult())) {
-			if (!examSputumHome.validateDates()) {
+		if (!MicroscopyResult.NOTDONE.equals(examMicroscopy.getResult())) {
+			if (!examMicroscopyHome.validateDates()) {
 				facesMessages.addToControlFromResourceBundle("dtrelease", "cases.exams.datereleasebeforecol");
 				return false;			
 			}
-			examSputumHome.getSample().setDateCollected(dtCollected);
-			examSputum.setDateRelease(examCulture.getDateRelease());
-			examSputum.setLaboratory(examCulture.getLaboratory());
-			examSputumHome.persist();
+			examMicroscopyHome.getInstance().setDateCollected(dtCollected);
+			examMicroscopy.setDateRelease(examCulture.getDateRelease());
+			examMicroscopy.setLaboratory(examCulture.getLaboratory());
+			examMicroscopyHome.persist();
 		}
 		
 		// save culture exam
@@ -414,16 +414,16 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		
 		// check DST
 		boolean hasResult = false;
-		for (ExamSusceptibilityResult res: examSusceptHome.getItems()) {
-			if ((res.getResult() != null) && (res.getResult().equals(SusceptibilityResultTest.NOTDONE))) {
+		for (ExamDSTResult res: examDSTHome.getItems()) {
+			if ((res.getResult() != null) && (res.getResult().equals(DstResult.NOTDONE))) {
 				hasResult = true;
 				break;
 			}
 		}
 		
 		if (hasResult) {
-			examSusceptHome.getSample().setDateCollected(dtCollected);
-			examSusceptHome.persist();
+			examDSTHome.getInstance().setDateCollected(dtCollected);
+			examDSTHome.persist();
 		}
 		
 		// check HIV

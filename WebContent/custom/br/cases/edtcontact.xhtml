@@ -104,7 +104,7 @@
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['SputumSmearResult']}:</ui:define>
+    	<ui:define name="label">#{messages['MicroscopyResult']}:</ui:define>
     	<h:selectOneMenu value="#{tbContactBR.microscopyResult}" required="false" style="margin-left:4px;">
     		<s:selectItems value="#{tbContactBRHome.microscopyResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}"/>
     		<s:convertEnum />

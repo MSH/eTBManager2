@@ -10,13 +10,12 @@
 
 	<div class="paragraph">#{messages['PatientSample.identification']}
 	</div>
-		<h:commandLink value="#{messages['cases.exams.selsample']}" onclick="Richfaces.showModalPanel('samplesdlg');return false;" style="float:right;"/>
     <div id="divdtcollected">
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="future" value="true" /> 
-    	<ui:param name="datefield" value="#{examHome.sample.dateCollected}" /> 
+    	<ui:param name="datefield" value="#{examHome.dateCollected}" /> 
     </s:decorate>
     </div>
 
@@ -31,7 +30,7 @@
 	
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['PatientSample.sampleNumber']}:</ui:define>
-    	<h:inputText value="#{examHome.sample.sampleNumber}" maxlength="50" style="width:200px;"/>
+    	<h:inputText value="#{examHome.sampleNumber}" maxlength="50" style="width:200px;"/>
     </s:decorate>
     </div>
 

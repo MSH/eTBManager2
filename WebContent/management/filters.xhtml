@@ -186,7 +186,7 @@ function handleContextClick(comp) {
 	
 	<tr><td>
 	<s:decorate template="/layout/edit.xhtml">
-		<ui:define name="label">#{messages['SputumSmearResult']}:</ui:define>
+		<ui:define name="label">#{messages['MicroscopyResult']}:</ui:define>
 		<h:selectOneMenu value="#{indicatorFilters.microscopyResult}">
 			<s:selectItems var="it" value="#{indicatorFilters.microscopyResults}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
 			<s:convertEnum />

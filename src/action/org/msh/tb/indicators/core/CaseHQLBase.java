@@ -17,9 +17,9 @@ import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.InfectionSite;
-import org.msh.mdrtb.entities.enums.SputumSmearResult;
+import org.msh.mdrtb.entities.enums.MicroscopyResult;
 import org.msh.tb.adminunits.AdminUnitSelection;
-import org.msh.tb.indicators.MicroscopyResult;
+import org.msh.tb.indicators.IndicatorMicroscopyResult;
 
 /**
  * Base class to generate HQL queries in the TB Cases database based on the filters in the {@link IndicatorFilters} component
@@ -159,11 +159,11 @@ public class CaseHQLBase extends Controller {
 		
 		if (filters.getMicroscopyResult() != null) {
 			String s;
-			if (filters.getMicroscopyResult() == MicroscopyResult.NEGATIVE)
-				 s = Integer.toString(SputumSmearResult.NEGATIVE.ordinal());
-			else s = Integer.toString(SputumSmearResult.POSITIVE.ordinal());
-			hql += " and exists(select ex.id from ExamSputumSmear ex where ex.result = " + s + " and ex.sample.tbcase.id = c.id" +
-				" and ex.sample.dateCollected = (select min(sp.dateCollected) from PatientSample sp where sp.tbcase.id = c.id))";
+			if (filters.getMicroscopyResult() == IndicatorMicroscopyResult.NEGATIVE)
+				 s = Integer.toString(MicroscopyResult.NEGATIVE.ordinal());
+			else s = Integer.toString(MicroscopyResult.POSITIVE.ordinal());
+			hql += " and exists(select ex.id from ExamMicroscopy ex where ex.result = " + s + " and ex.tbcase.id = c.id" +
+				" and ex.dateCollected = (select min(sp.dateCollected) from ExamMicroscopy sp where sp.tbcase.id = c.id))";
 		}
 		
 		// include filter by unit

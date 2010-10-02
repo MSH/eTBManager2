@@ -6,7 +6,7 @@
 		<restrict>#{userSession.canEditCases}</restrict>
 		<begin-conversation join="true"/>
 		<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
-		<param name="examid" value="#{examMicroscopyHome.idWithLog}" converterId="javax.faces.Integer"/>
+		<param name="examid" value="#{examCultureHome.idWithLog}" converterId="javax.faces.Integer"/>
 		<navigation>
 			<rule if-outcome="canceled">
 				<end-conversation before-redirect="true"/>
@@ -15,8 +15,9 @@
 				</redirect>
 			</rule>
 			<rule if-outcome="persisted">
+				<end-conversation/>
 				<redirect view-id="/cases/casedata.xhtml">
-					<param name="id" value="#{caseHome.id}"/>
+					<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
 				</redirect>
 			</rule>
 		</navigation>

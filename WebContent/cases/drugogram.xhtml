@@ -22,7 +22,7 @@
 		
 		<a:repeat value="#{drugogram.examLabels}" var="it">
 		<th>
-			#{messages['cases.examsputum']}
+			#{messages['cases.exammicroscopy']}
 		</th>
 		<th>
 			#{messages['cases.examculture']}
@@ -46,7 +46,7 @@
 		</td>
 	<a:repeat value="#{it.results}" var="res">
 		<td class="colcb">
-			#{messages[res.examSputum.result.key]}
+			#{messages[res.examMicroscopy.result.key]}
 		</td>
 		<td class="colcb">
 			#{messages[res.examCulture.result.key]}

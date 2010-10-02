@@ -3,30 +3,26 @@ package org.msh.mdrtb.entities;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 
 import org.msh.mdrtb.entities.enums.SampleType;
-import org.msh.mdrtb.entities.enums.SputumSmearResult;
+import org.msh.mdrtb.entities.enums.MicroscopyResult;
 
 @Entity
-public class ExamSputumSmear extends LaboratoryExam implements Serializable {
+public class ExamMicroscopy extends LaboratoryExamResult implements Serializable {
 	private static final long serialVersionUID = 1514632458011926044L;
 
-	private SputumSmearResult result;
+	private MicroscopyResult result;
 	
 	private Integer numberOfAFB;
-
-	@OneToOne(mappedBy="examSputumSmear")
-	private PatientSample sample;
 
 
 	private SampleType sampleType;
 	
-	public SputumSmearResult getResult() {
+	public MicroscopyResult getResult() {
 		return result;
 	}
 
-	public void setResult(SputumSmearResult result) {
+	public void setResult(MicroscopyResult result) {
 		this.result = result;
 	}
 
@@ -42,22 +38,6 @@ public class ExamSputumSmear extends LaboratoryExam implements Serializable {
 	 */
 	public Integer getNumberOfAFB() {
 		return numberOfAFB;
-	}
-
-	/**
-	 * @return the sample
-	 */
-	@Override
-	public PatientSample getSample() {
-		return sample;
-	}
-
-	/**
-	 * @param sample the sample to set
-	 */
-	@Override
-	public void setSample(PatientSample sample) {
-		this.sample = sample;
 	}
 
 	/**

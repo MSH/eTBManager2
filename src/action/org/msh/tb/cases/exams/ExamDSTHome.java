@@ -7,37 +7,37 @@ import org.jboss.seam.annotations.End;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.ExamSusceptibilityResult;
-import org.msh.mdrtb.entities.ExamSusceptibilityTest;
+import org.msh.mdrtb.entities.ExamDSTResult;
+import org.msh.mdrtb.entities.ExamDST;
 import org.msh.mdrtb.entities.Substance;
-import org.msh.mdrtb.entities.enums.SusceptibilityResultTest;
+import org.msh.mdrtb.entities.enums.DstResult;
 import org.msh.tb.SubstancesQuery;
 import org.msh.tb.log.LogInfo;
 
-@Name("examSusceptHome")
+@Name("examDSTHome")
 @LogInfo(roleName="EXAM_DST")
-public class ExamSusceptHome extends SampleExamHome<ExamSusceptibilityTest> {
+public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 	private static final long serialVersionUID = 270035993717644991L;
 
-	private List<ExamSusceptibilityResult> items;
+	private List<ExamDSTResult> items;
 
 	@In(create=true) SubstancesQuery substances;
 	
-	@Factory("examSuscept")
-	public ExamSusceptibilityTest getExamSusceptibilityTest() {
+	@Factory("examDST")
+	public ExamDST getExamDST() {
 		return getInstance();
 	}
 	
 
-	public List<ExamSusceptibilityResult> getItems() {
+	public List<ExamDSTResult> getItems() {
 		if (items == null)
 			createItems();
 		
 		return items;
 	}
 	
-	protected ExamSusceptibilityResult findResult(Substance s) {
-		for (ExamSusceptibilityResult mr: getInstance().getResults()) {
+	protected ExamDSTResult findResult(Substance s) {
+		for (ExamDSTResult mr: getInstance().getResults()) {
 			if (mr.getSubstance().equals(s)) {
 				return mr;
 			}
@@ -46,18 +46,18 @@ public class ExamSusceptHome extends SampleExamHome<ExamSusceptibilityTest> {
 	}
 	
 	protected void createItems() {
-		items = new ArrayList<ExamSusceptibilityResult>();
+		items = new ArrayList<ExamDSTResult>();
 //		boolean bEdt = isManaged();
 		
 		for (Substance s: substances.getDstSubstances()) {
-			ExamSusceptibilityResult res = findResult(s);
+			ExamDSTResult res = findResult(s);
 			if (res == null) {
-				res = new ExamSusceptibilityResult();
+				res = new ExamDSTResult();
 				res.setSubstance(s);
 			}
 
 			if (res.getResult() == null)
-				res.setResult(SusceptibilityResultTest.NOTDONE);
+				res.setResult(DstResult.NOTDONE);
 			
 			items.add(res);
 			res.setExam(getInstance());
@@ -69,14 +69,14 @@ public class ExamSusceptHome extends SampleExamHome<ExamSusceptibilityTest> {
 	public String persist() {
 		// update exams
 		if (items != null) {
-			ExamSusceptibilityTest exam = getInstance();
+			ExamDST exam = getInstance();
 			exam.setNumContaminated(0);
 			exam.setNumResistant(0);
 			exam.setNumSusceptible(0);
 			
-			for (ExamSusceptibilityResult ms: items) {
+			for (ExamDSTResult ms: items) {
 				// add new results
-				if (ms.getResult() != SusceptibilityResultTest.NOTDONE) {
+				if (ms.getResult() != DstResult.NOTDONE) {
 					if (!exam.getResults().contains(ms))
 						exam.getResults().add(ms);
 					switch (ms.getResult()) {
@@ -112,11 +112,6 @@ public class ExamSusceptHome extends SampleExamHome<ExamSusceptibilityTest> {
 	public void setId(Object id) {
 		super.setId(id);
 		items = null;
-	}
-	
-	@Override
-	public String getExamPropertyName() {
-		return "examSusceptibilityTest";
 	}
 	
 	public void refreshSubstances() {

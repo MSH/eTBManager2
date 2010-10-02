@@ -34,8 +34,8 @@ import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.mdrtb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.mdrtb.entities.enums.RegimenPhase;
 import org.msh.mdrtb.entities.enums.SampleType;
-import org.msh.mdrtb.entities.enums.SputumSmearResult;
-import org.msh.mdrtb.entities.enums.SusceptibilityResultTest;
+import org.msh.mdrtb.entities.enums.MicroscopyResult;
+import org.msh.mdrtb.entities.enums.DstResult;
 import org.msh.mdrtb.entities.enums.TbCategory;
 import org.msh.mdrtb.entities.enums.TbField;
 import org.msh.mdrtb.entities.enums.UserState;
@@ -125,12 +125,12 @@ public class GlobalLists {
 		CultureResult.CONTAMINATED
 	};
 	
-	private static final SputumSmearResult smearResults[] = {
-		SputumSmearResult.NEGATIVE,
-		SputumSmearResult.POSITIVE,
-		SputumSmearResult.PLUS,
-		SputumSmearResult.PLUS2,
-		SputumSmearResult.PLUS3
+	private static final MicroscopyResult microscopyResults[] = {
+		MicroscopyResult.NEGATIVE,
+		MicroscopyResult.POSITIVE,
+		MicroscopyResult.PLUS,
+		MicroscopyResult.PLUS2,
+		MicroscopyResult.PLUS3
 	};
 	
 	private static final CultureResult cultureOptionsNotif[] = {
@@ -143,13 +143,13 @@ public class GlobalLists {
 		CultureResult.CONTAMINATED
 	};
 
-	private static final SputumSmearResult smearOptionsNotif[] = {
-		SputumSmearResult.NOTDONE,
-		SputumSmearResult.NEGATIVE,
-		SputumSmearResult.POSITIVE,
-		SputumSmearResult.PLUS,
-		SputumSmearResult.PLUS2,
-		SputumSmearResult.PLUS3
+	private static final MicroscopyResult microscopyNotifOptions[] = {
+		MicroscopyResult.NOTDONE,
+		MicroscopyResult.NEGATIVE,
+		MicroscopyResult.POSITIVE,
+		MicroscopyResult.PLUS,
+		MicroscopyResult.PLUS2,
+		MicroscopyResult.PLUS3
 	};
 	
 	
@@ -340,9 +340,9 @@ public class GlobalLists {
 		return ExtraOutcomeInfo.values();
 	}
 	
-	@Factory("sputumSmearResults")
-	public SputumSmearResult[] getSputumSmearResults() {
-		return smearResults;
+	@Factory("microscopyResults")
+	public MicroscopyResult[] getMicroscopyResults() {
+		return microscopyResults;
 	}
 	
 	@Factory("caseState")
@@ -370,9 +370,9 @@ public class GlobalLists {
 		return BufferStockMeasure.values();
 	}
 	
-	@Factory("susceptResults")
-	public SusceptibilityResultTest[] getSusceptibilityResultTests() {
-		return SusceptibilityResultTest.values();
+	@Factory("dstResults")
+	public DstResult[] getDstResults() {
+		return DstResult.values();
 	}
 	
 	@Factory("medAppointmentTypes")
@@ -473,8 +473,8 @@ public class GlobalLists {
 		return cultureOptionsNotif;
 	}
 	
-	public SputumSmearResult[] getSputumSmearNotifOptions() {
-		return smearOptionsNotif;
+	public MicroscopyResult[] getMicroscopyNotifOptions() {
+		return microscopyNotifOptions;
 	}
 	
 	@Factory("indicatorDates")

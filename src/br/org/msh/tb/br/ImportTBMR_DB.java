@@ -25,9 +25,9 @@ import org.msh.mdrtb.entities.CaseRegimen;
 import org.msh.mdrtb.entities.CountryStructure;
 import org.msh.mdrtb.entities.ExamCulture;
 import org.msh.mdrtb.entities.ExamHIV;
-import org.msh.mdrtb.entities.ExamSputumSmear;
-import org.msh.mdrtb.entities.ExamSusceptibilityResult;
-import org.msh.mdrtb.entities.ExamSusceptibilityTest;
+import org.msh.mdrtb.entities.ExamMicroscopy;
+import org.msh.mdrtb.entities.ExamDSTResult;
+import org.msh.mdrtb.entities.ExamDST;
 import org.msh.mdrtb.entities.ExamXRay;
 import org.msh.mdrtb.entities.FieldValue;
 import org.msh.mdrtb.entities.HealthSystem;
@@ -56,8 +56,8 @@ import org.msh.mdrtb.entities.enums.InfectionSite;
 import org.msh.mdrtb.entities.enums.Nationality;
 import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.mdrtb.entities.enums.PrevTBTreatmentOutcome;
-import org.msh.mdrtb.entities.enums.SputumSmearResult;
-import org.msh.mdrtb.entities.enums.SusceptibilityResultTest;
+import org.msh.mdrtb.entities.enums.MicroscopyResult;
+import org.msh.mdrtb.entities.enums.DstResult;
 import org.msh.mdrtb.entities.enums.TbField;
 import org.msh.mdrtb.entities.enums.ValidationState;
 import org.msh.mdrtb.entities.enums.XRayEvolution;
@@ -68,8 +68,8 @@ import org.msh.tb.br.entities.enums.FailureType;
 import org.msh.tb.br.entities.enums.TipoResistencia;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.exams.ExamCultureHome;
-import org.msh.tb.cases.exams.ExamSputumHome;
-import org.msh.tb.cases.exams.ExamSusceptHome;
+import org.msh.tb.cases.exams.ExamMicroscopyHome;
+import org.msh.tb.cases.exams.ExamDSTHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.misc.FieldsQuery;
 import org.msh.utils.TransactionalBatchComponent;
@@ -102,8 +102,8 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	@In(create=true) CaseHome caseHome;
 	@In(create=true) AdminUnitHome adminUnitHome;
 	@In(create=true) ExamCultureHome examCultureHome;
-	@In(create=true) ExamSputumHome examSputumHome;
-	@In(create=true) ExamSusceptHome examSusceptHome;
+	@In(create=true) ExamMicroscopyHome examMicroscopyHome;
+	@In(create=true) ExamDSTHome examDSTHome;
 	@In(create=true) FieldsQuery fieldsQuery;
 	@In(create=true) StartTreatmentHome startTreatmentHome;
 //	@In(create=true) TreatmentHealthUnitHome treatmentHealthUnitHome;
@@ -381,36 +381,36 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 			FieldValue method = getFieldValue(TbField.CULTURE_METHOD, cod);
 			culture.setMethod(method);
 
-			examCultureHome.getSample().setDateCollected(dtColeta);
+			examCultureHome.getInstance().setDateCollected(dtColeta);
 			examCultureHome.setDisplayMessage(false);
 			examCultureHome.setTransactionLogActive(false);
 			examCultureHome.persist();
 		}
 		
-		SputumSmearResult resSputum = null;
+		MicroscopyResult resMicroscopy = null;
 		switch (res) {
 		case 0:
-			resSputum = SputumSmearResult.NEGATIVE;
+			resMicroscopy = MicroscopyResult.NEGATIVE;
 			break;
 		case 1:
-			resSputum = SputumSmearResult.PLUS;
+			resMicroscopy = MicroscopyResult.PLUS;
 			break;
 		case 2:
-			resSputum = SputumSmearResult.PLUS2;
+			resMicroscopy = MicroscopyResult.PLUS2;
 			break;
 		case 3:
-			resSputum = SputumSmearResult.PLUS3;
+			resMicroscopy = MicroscopyResult.PLUS3;
 		}
 		
-		if (resSputum != null) {
-			examSputumHome.setId(null);
-			ExamSputumSmear sputum = examSputumHome.getInstance();
-			sputum.setResult(resSputum);
+		if (resMicroscopy != null) {
+			examMicroscopyHome.setId(null);
+			ExamMicroscopy sputum = examMicroscopyHome.getInstance();
+			sputum.setResult(resMicroscopy);
 			sputum.setLaboratory(lab);
-			examSputumHome.getSample().setDateCollected(dtColeta);
-			examSputumHome.setDisplayMessage(false);
-			examSputumHome.setTransactionLogActive(false);
-			examSputumHome.persist();
+			examMicroscopyHome.getInstance().setDateCollected(dtColeta);
+			examMicroscopyHome.setDisplayMessage(false);
+			examMicroscopyHome.setTransactionLogActive(false);
+			examMicroscopyHome.persist();
 		}
 	}
 
@@ -422,10 +422,10 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 
 		Laboratory lab = loadLaboratory(rs.getInt("COD_LABORATORIO"));
 
-		examSusceptHome.setId(null);
-		examSusceptHome.setInstance(null);
-		for (ExamSusceptibilityResult resTest: examSusceptHome.getItems())
-			resTest.setResult(SusceptibilityResultTest.NOTDONE);
+		examDSTHome.setId(null);
+		examDSTHome.setInstance(null);
+		for (ExamDSTResult resTest: examDSTHome.getItems())
+			resTest.setResult(DstResult.NOTDONE);
 		checkResultDST(rs, "COD_PADRAO_RES_RIFAMPICINA", "R");
 		checkResultDST(rs, "COD_PADRAO_RES_PIRAZINAMIDA", "Z");
 		checkResultDST(rs, "COD_PADRAO_RES_ETIONAMIDA", "Et");
@@ -441,12 +441,12 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		checkResultDST(rs, "COD_PADRAO_RES_LEVOFLOXACINO", "Lfx");
 		checkResultDST(rs, "COD_PADRAO_RES_TERIZIDONA", "Tzd");
 
-		ExamSusceptibilityTest dst = examSusceptHome.getExamSusceptibilityTest();
+		ExamDST dst = examDSTHome.getInstance();
 		dst.setLaboratory(lab);
-		examSusceptHome.getSample().setDateCollected(dtColeta);
-		examSusceptHome.setDisplayMessage(false);
-		examSusceptHome.setTransactionLogActive(false);
-		examSusceptHome.persist();		
+		examDSTHome.getInstance().setDateCollected(dtColeta);
+		examDSTHome.setDisplayMessage(false);
+		examDSTHome.setTransactionLogActive(false);
+		examDSTHome.persist();		
 	}
 	
 	
@@ -466,13 +466,13 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		if ((resDst != 0) && (resDst != 1))
 			return;
 		
-		SusceptibilityResultTest resTest;
+		DstResult resTest;
 		if (resDst == 1)
-			 resTest = SusceptibilityResultTest.RESISTANT;
-		else resTest = SusceptibilityResultTest.SUSCEPTIBLE;
+			 resTest = DstResult.RESISTANT;
+		else resTest = DstResult.SUSCEPTIBLE;
 		
-		ExamSusceptibilityResult res = null;
-		for (ExamSusceptibilityResult aux: examSusceptHome.getItems()) {
+		ExamDSTResult res = null;
+		for (ExamDSTResult aux: examDSTHome.getItems()) {
 			if (aux.getSubstance().getAbbrevName().toString().equals(subAbbrevName)) {
 				res = aux;
 			}

@@ -186,12 +186,6 @@ public class TbCase implements Serializable{
 	private List<TreatmentHealthUnit> healthUnits = new ArrayList<TreatmentHealthUnit>();
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
-	private List<ExamHIV> resHIV = new ArrayList<ExamHIV>();
-	
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
-	private List<PatientSample> samples = new ArrayList<PatientSample>();
-		
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
 	private List<MedicalExamination> examinations = new ArrayList<MedicalExamination>();
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
@@ -205,6 +199,19 @@ public class TbCase implements Serializable{
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
 	private List<PrescribedMedicine> prescribedMedicines = new ArrayList<PrescribedMedicine>();
+
+	/* EXAMS */
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	private List<ExamHIV> resHIV = new ArrayList<ExamHIV>();
+
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	private List<ExamCulture> examsCulture = new ArrayList<ExamCulture>();
+
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	private List<ExamMicroscopy> examsMicroscopy = new ArrayList<ExamMicroscopy>();
+
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	private List<ExamDST> examsDST = new ArrayList<ExamDST>();
 	
 	private int issueCounter;
 
@@ -903,22 +910,6 @@ public class TbCase implements Serializable{
 
 
 	/**
-	 * @return the samples
-	 */
-	public List<PatientSample> getSamples() {
-		return samples;
-	}
-
-
-	/**
-	 * @param samples the samples to set
-	 */
-	public void setSamples(List<PatientSample> samples) {
-		this.samples = samples;
-	}
-
-
-	/**
 	 * @return the daysTreatPlanned
 	 */
 	public Integer getDaysTreatPlanned() {
@@ -1045,5 +1036,35 @@ public class TbCase implements Serializable{
 
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+
+
+	public List<ExamCulture> getExamsCulture() {
+		return examsCulture;
+	}
+
+
+	public void setExamsCulture(List<ExamCulture> examsCulture) {
+		this.examsCulture = examsCulture;
+	}
+
+
+	public List<ExamMicroscopy> getExamsMicroscopy() {
+		return examsMicroscopy;
+	}
+
+
+	public void setExamsMicroscopy(List<ExamMicroscopy> examsMicroscopy) {
+		this.examsMicroscopy = examsMicroscopy;
+	}
+
+
+	public List<ExamDST> getExamsDST() {
+		return examsDST;
+	}
+
+
+	public void setExamsDST(List<ExamDST> examsDST) {
+		this.examsDST = examsDST;
 	}
 }

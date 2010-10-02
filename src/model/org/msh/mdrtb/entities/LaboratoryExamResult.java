@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,19 +17,31 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.validator.NotNull;
 import org.jboss.seam.international.LocaleSelector;
 
 
 @MappedSuperclass
-public abstract class LaboratoryExam implements Serializable {
+public abstract class LaboratoryExamResult implements Serializable {
 	private static final long serialVersionUID = 3229952267481224824L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
+	@Temporal(TemporalType.DATE)
+	@NotNull
+	private Date dateCollected;
+	
+	@Column(length=50)
+	private String sampleNumber;
+	
 	@Column(length=250)
 	private String comments;
+
+	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.ALL})
+	@JoinColumn(name="CASE_ID")
+	private TbCase tbcase;
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="LABORATORY_ID")
@@ -40,6 +53,38 @@ public abstract class LaboratoryExam implements Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="METHOD_ID")
 	private FieldValue method;
+
+	/**
+	 * Return month of treatment based on the start treatment date and the collected date
+	 * @return
+	 */
+	public Integer getMonthTreatment() {
+		Date dt = getDateCollected();
+		
+		if (getTbcase() == null)
+			return null;
+
+		return tbcase.getMonthTreatment(dt);
+	}
+	
+	/**
+	 * Returns a key related to the system messages to display the month
+	 * @return
+	 */
+	public String getMonthDisplay() {
+		Integer num = getMonthTreatment();
+		
+		if (num > 0) {
+			return "global.monthth";  //Integer.toString(num);
+		}
+		
+		Date dt = getDateCollected();
+		Date dtReg = tbcase.getRegistrationDate();
+		
+		if ((dtReg == null) || (!dt.before(dtReg)))
+			return "cases.exams.zero";
+		else return "cases.exams.prevdt";
+	}
 
 
 	/**
@@ -111,14 +156,7 @@ public abstract class LaboratoryExam implements Serializable {
 	public void setMethod(FieldValue method) {
 		this.method = method;
 	}
-	
-	public PatientSample getSample() {
-		return null;
-	}
-	
-	public void setSample(PatientSample sample) {
-		// do nothing
-	}
+
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -127,6 +165,30 @@ public abstract class LaboratoryExam implements Serializable {
 	public String toString() {
 		Locale locale = LocaleSelector.instance().getLocale();
 		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-		return dateFormat.format(getSample().getDateCollected()) + " - " + getSample().getTbcase().getPatient().getFullName();
+		return dateFormat.format(getDateCollected()) + " - " + getTbcase().getPatient().getFullName();
+	}
+
+	public TbCase getTbcase() {
+		return tbcase;
+	}
+
+	public void setTbcase(TbCase tbcase) {
+		this.tbcase = tbcase;
+	}
+
+	public Date getDateCollected() {
+		return dateCollected;
+	}
+
+	public void setDateCollected(Date dateCollected) {
+		this.dateCollected = dateCollected;
+	}
+
+	public String getSampleNumber() {
+		return sampleNumber;
+	}
+
+	public void setSampleNumber(String sampleNumber) {
+		this.sampleNumber = sampleNumber;
 	}
 }

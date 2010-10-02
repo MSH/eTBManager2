@@ -7,29 +7,25 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 @Entity
-public class ExamSusceptibilityTest extends LaboratoryExam implements Serializable {
+public class ExamDST extends LaboratoryExamResult implements Serializable {
 	private static final long serialVersionUID = -1911463378908689952L;
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="exam")
-	private List<ExamSusceptibilityResult> results = new ArrayList<ExamSusceptibilityResult>();
+	private List<ExamDSTResult> results = new ArrayList<ExamDSTResult>();
 
 	private int numResistant;
 	private int numSusceptible;
 	private int numContaminated;
-
-	@OneToOne(mappedBy="examSusceptibilityTest")
-	private PatientSample sample;
 
 	/**
 	 * Search for a result by the substance 
 	 * @param sub - Substance to be used to search result
 	 * @return - Susceptibility result
 	 */
-	public ExamSusceptibilityResult findResultBySubstance(Substance sub) {
-		for (ExamSusceptibilityResult res: results) {
+	public ExamDSTResult findResultBySubstance(Substance sub) {
+		for (ExamDSTResult res: results) {
 			if (res.getSubstance().equals(sub)) {
 				return res;
 			}
@@ -37,11 +33,11 @@ public class ExamSusceptibilityTest extends LaboratoryExam implements Serializab
 		return null;
 	}
 
-	public List<ExamSusceptibilityResult> getResults() {
+	public List<ExamDSTResult> getResults() {
 		return results;
 	}
 
-	public void setResults(List<ExamSusceptibilityResult> results) {
+	public void setResults(List<ExamDSTResult> results) {
 		this.results = results;
 	}
 
@@ -85,21 +81,5 @@ public class ExamSusceptibilityTest extends LaboratoryExam implements Serializab
 	 */
 	public void setNumContaminated(int numContaminated) {
 		this.numContaminated = numContaminated;
-	}
-
-	/**
-	 * @return the sample
-	 */
-	@Override
-	public PatientSample getSample() {
-		return sample;
-	}
-
-	/**
-	 * @param sample the sample to set
-	 */
-	@Override
-	public void setSample(PatientSample sample) {
-		this.sample = sample;
 	}
 }

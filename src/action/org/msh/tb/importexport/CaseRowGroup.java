@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.msh.mdrtb.entities.ExamCulture;
 import org.msh.mdrtb.entities.ExamHIV;
-import org.msh.mdrtb.entities.ExamSputumSmear;
+import org.msh.mdrtb.entities.ExamMicroscopy;
 import org.msh.mdrtb.entities.TbCase;
 
 /**
@@ -88,19 +88,19 @@ public class CaseRowGroup {
 
 
 	/**
-	 * @param examSputumSmear
+	 * @param examMicroscopy
 	 * @return
 	 */
-	public CaseRow addExamSputumSmear(ExamSputumSmear examSputumSmear) {
+	public CaseRow addExamMicroscopy(ExamMicroscopy examMicroscopy) {
 		for (CaseRow row: rows) {
-			if (row.getExamSputumSmear() == null) {
-				row.setExamSputumSmear(examSputumSmear);
+			if (row.getExamMicroscopy() == null) {
+				row.setExamMicroscopy(examMicroscopy);
 				return row;
 			}
 		}
 		
 		CaseRow row = new CaseRow(this);
-		row.setExamSputumSmear(examSputumSmear);
+		row.setExamMicroscopy(examMicroscopy);
 		row.setTbcase(tbcase);
 		rows.add(row);
 		table.getRows().add(row);

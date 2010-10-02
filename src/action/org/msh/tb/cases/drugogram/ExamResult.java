@@ -1,12 +1,12 @@
 package org.msh.tb.cases.drugogram;
 
 import org.msh.mdrtb.entities.ExamCulture;
-import org.msh.mdrtb.entities.ExamSputumSmear;
+import org.msh.mdrtb.entities.ExamMicroscopy;
 
 public class ExamResult {
 
 	private ExamCulture examCulture;
-	private ExamSputumSmear examSputum;
+	private ExamMicroscopy examMicroscopy;
 
 
 	/**
@@ -14,7 +14,7 @@ public class ExamResult {
 	 * @return true if there is any result, otherwise return false
 	 */
 	public boolean isHasResults() {
-		return ((examCulture != null) || (examSputum != null));
+		return ((examCulture != null) || (examMicroscopy != null));
 	}
 	/**
 	 * @return the examCulture
@@ -29,15 +29,15 @@ public class ExamResult {
 		this.examCulture = examCulture;
 	}
 	/**
-	 * @return the examSputum
+	 * @return the examMicroscopy
 	 */
-	public ExamSputumSmear getExamSputum() {
-		return examSputum;
+	public ExamMicroscopy getExamMicroscopy() {
+		return examMicroscopy;
 	}
 	/**
-	 * @param examSputum the examSputum to set
+	 * @param examMicroscopy the examMicroscopy to set
 	 */
-	public void setExamSputum(ExamSputumSmear examSputum) {
-		this.examSputum = examSputum;
+	public void setExamMicroscopy(ExamMicroscopy examMicroscopy) {
+		this.examMicroscopy = examMicroscopy;
 	}
 }

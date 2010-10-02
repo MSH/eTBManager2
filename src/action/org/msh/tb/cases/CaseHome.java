@@ -48,22 +48,6 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	 **/
 	@Override
 	public String remove() {
-		// exclui registros de dispensação relacionados ao paciente
-		getEntityManager().createQuery("delete from ExamSputumSmear e " +
-				"where id in (select s.examSputumSmear.id from PatientSample s where s.tbcase.id = :id)")
-				.setParameter("id", getInstance().getId())
-				.executeUpdate();
-
-		getEntityManager().createQuery("delete from ExamSusceptibilityTest e " +
-				"where id in (select s.examSusceptibilityTest.id from PatientSample s where s.tbcase.id = :id)")
-				.setParameter("id", getInstance().getId())
-				.executeUpdate();
-
-		getEntityManager().createQuery("delete from ExamCulture e " +
-				"where id in (select s.examCulture.id from PatientSample s where s.tbcase.id = :id)")
-				.setParameter("id", getInstance().getId())
-				.executeUpdate();
-
 		String ret = super.remove();
 		if (!ret.equals("removed"))
 			return ret;

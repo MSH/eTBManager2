@@ -1,6 +1,6 @@
 package org.msh.mdrtb.entities.enums;
 
-public enum SusceptibilityResultTest {
+public enum DstResult {
 	NOTDONE,
 	RESISTANT,
 	SUSCEPTIBLE,

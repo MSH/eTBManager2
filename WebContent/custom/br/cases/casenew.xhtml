@@ -33,7 +33,7 @@
 		<table width="100%" style="border-collapse: collapse;" cellpadding="0" cellspacing="0">
 		<tr><td>
 			<s:decorate template="/layout/display.xhtml">
-				<ui:define name="label">#{messages['cases.examsputum']}:
+				<ui:define name="label">#{messages['cases.exammicroscopy']}:
 				</ui:define>
 				<div class="sample-sputum-label">
 					#{messages['SampleType.SPUTUM']}
@@ -42,7 +42,7 @@
 					#{messages['SampleType.OTHER']}
 				</div>
 				<div class="sample-sel">
-					<h:selectOneMenu value="#{examSputum.sampleType}">
+					<h:selectOneMenu value="#{examMicroscopy.sampleType}">
 						<s:selectItems var="v" value="#{globalLists.sampleTypes}" label="#{messages[v.key]}" />
 						<s:convertEnum />
 					</h:selectOneMenu>
@@ -54,7 +54,7 @@
 				<ui:define name="label">#{messages['cases.details.result']}:
 				</ui:define>
 				<div id="cbressputum">
-    			<h:selectOneMenu value="#{examSputum.result}" required="true">
+    			<h:selectOneMenu value="#{examMicroscopy.result}" required="true">
     				<s:selectItems value="#{globalLists.sputumSmearNotifOptions}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
     				<s:convertEnum />
     			</h:selectOneMenu>
@@ -190,16 +190,16 @@
 			</div>
 
 			<div id="divdst">		
-			<div class="paragraph">#{messages['cases.examsus']}
+			<div class="paragraph">#{messages['cases.examdst']}
 			</div>
 			<h:panelGroup id="pnlDSTResults">
 			<div id="divdstresults">
-			<rich:dataGrid value="#{examSusceptHome.items}" var="it" columns="4" style="width:100%">
+			<rich:dataGrid value="#{examDSTHome.items}" var="it" columns="4" style="width:100%">
 				<s:decorate template="/layout/edit.xhtml">
 					<ui:param name="labelstyle" value="width:40px" />
 					<ui:define name="label">#{it.substance.abbrevName}</ui:define>
 					<h:selectOneMenu id="res" value="#{it.result}"  required="#{caseDataBRHome.dstRequired==1}" onchange="updateDSTResultsView(false);">
-    					<s:selectItems value="#{susceptResults}" var="ss" noSelectionLabel="-" label="#{messages[ss.key]}" />
+    					<s:selectItems value="#{dstResults}" var="ss" noSelectionLabel="-" label="#{messages[ss.key]}" />
     					<s:convertEnum />
 					</h:selectOneMenu>
 				</s:decorate>
@@ -214,13 +214,13 @@
     				<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
     				<ui:param name="required" value="false" /> 
     				<ui:param name="future" value="true" /> 
-    				<ui:param name="datefield" value="#{examSuscept.dateRelease}" /> 
+    				<ui:param name="datefield" value="#{examDST.dateRelease}" /> 
     			</s:decorate>
     		</td><td>
     			<s:decorate template="/layout/edit.xhtml" >
     				<ui:param name="labelstyle" value="width:80px;" />
     				<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
-    				<h:selectOneMenu value="#{examSuscept.method}" required="false">
+    				<h:selectOneMenu value="#{examDST.method}" required="false">
     					<s:selectItems value="#{fieldsQuery.DSTMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
     					<s:convertEntity />
     				</h:selectOneMenu>
@@ -230,7 +230,7 @@
 				<s:decorate template="/layout/labselection.xhtml">
 					<ui:param name="required" value="false" />
 					<ui:param name="redasterisk" value="true" />
-					<ui:param name="labselection" value="#{examSusceptHome.labselection}" />
+					<ui:param name="labselection" value="#{examDSTHome.labselection}" />
 				</s:decorate>
 			</td></tr>
 			</table>

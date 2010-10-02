@@ -10,20 +10,20 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.msh.mdrtb.entities.ExamSputumSmear;
+import org.msh.mdrtb.entities.ExamMicroscopy;
 import org.msh.tb.log.LogInfo;
 
-@Name("examSputumHome")
+@Name("examMicroscopyHome")
 @LogInfo(roleName="EXAM_MICROSC")
 @Scope(ScopeType.CONVERSATION)
-public class ExamSputumHome extends SampleExamHome<ExamSputumSmear> {
+public class ExamMicroscopyHome extends LaboratoryExamHome<ExamMicroscopy> {
 	private static final long serialVersionUID = -7854784222737606292L;
 
 	private List<SelectItem> afbs;
 	
-	@Factory("examSputum")
-	public ExamSputumSmear getExamSputum() {
-		return (ExamSputumSmear)getInstance();
+	@Factory("examMicroscopy")
+	public ExamMicroscopy getExamMicroscopy() {
+		return (ExamMicroscopy)getInstance();
 	}
 	
 	public List<SelectItem> getAFBs() {
@@ -42,11 +42,6 @@ public class ExamSputumHome extends SampleExamHome<ExamSputumSmear> {
 			}
 		}
 		return afbs;
-	}
-
-	@Override
-	public String getExamPropertyName() {
-		return "examSputumSmear";
 	}
 	
 

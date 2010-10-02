@@ -12,7 +12,7 @@ import org.msh.tb.log.LogInfo;
 
 @Name("examCultureHome")
 @LogInfo(roleName="EXAM_CULTURE")
-public class ExamCultureHome extends SampleExamHome<ExamCulture> {
+public class ExamCultureHome extends LaboratoryExamHome<ExamCulture> {
 	private static final long serialVersionUID = -5720233346817646475L;
 
 	private List<SelectItem> numColonies;
@@ -38,11 +38,6 @@ public class ExamCultureHome extends SampleExamHome<ExamCulture> {
 			}
 		}
 		return numColonies;
-	}
-
-	@Override
-	public String getExamPropertyName() {
-		return "examCulture";
 	}
 
 	@Override

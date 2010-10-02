@@ -5,7 +5,7 @@
 
 		<restrict>#{userSession.canEditCases}</restrict>
 		<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
-		<param name="examid" value="#{examSusceptHome.id}" converterId="javax.faces.Integer"/>
+		<param name="examid" value="#{examDSTHome.id}" converterId="javax.faces.Integer"/>
 		<navigation>
 			<rule if-outcome="persisted">
 				<redirect view-id="/cases/casedata.xhtml">

@@ -19,8 +19,8 @@ import org.msh.mdrtb.entities.enums.LocalityType;
 import org.msh.mdrtb.entities.enums.Nationality;
 import org.msh.mdrtb.entities.enums.NumTreatments;
 import org.msh.mdrtb.entities.enums.PatientType;
-import org.msh.mdrtb.entities.enums.SputumSmearResult;
-import org.msh.mdrtb.entities.enums.SusceptibilityResultTest;
+import org.msh.mdrtb.entities.enums.MicroscopyResult;
+import org.msh.mdrtb.entities.enums.DstResult;
 
 /**
  * Store preferences about the cases to be generated in the database 
@@ -57,7 +57,7 @@ public class GeneratorPreferences {
 	private RangeValue startTreatmentTB = new RangeValue();
 	private RangeValue startTreatmentMDR = new RangeValue();
 
-	// list of substances to use in the susceptibility test
+	// list of substances to use in the DST exam
 	private List<Substance> substances = new ArrayList<Substance>();
 	// number of TB cases with resistance to some medicine (0 to 100) among 100 cases
 	private int resTB; 
@@ -66,23 +66,23 @@ public class GeneratorPreferences {
 	private Map<List<Substance>, Integer> resPatternsTB = new HashMap<List<Substance>, Integer>(); 
 	private Map<List<Substance>, Integer> resPatternsMDR = new HashMap<List<Substance>, Integer>(); 
 
-	private RangeValue sputumFirst = new RangeValue();
+	private RangeValue microscopyFirst = new RangeValue();
 	private RangeValue cultureFirst = new RangeValue();
-	private RangeValue susceptFirst = new RangeValue();
+	private RangeValue dstFirst = new RangeValue();
 	private RangeValue hivFirst = new RangeValue();
-	private int sputumFreqTB;
-	private int sputumFreqMDR;
+	private int microscopyFreqTB;
+	private int microscopyFreqMDR;
 	private int cultureFreqTB;
 	private int cultureFreqMDR;
-	private int susceptFreqTB;
-	private int susceptFreqMDR;
+	private int dstFreqTB;
+	private int dstFreqMDR;
 	private int varDateExam;
 	private int hivFreqTB;
 	private int hivFreqMDR;
-	private Map<SputumSmearResult, Integer> sputumResults = new HashMap<SputumSmearResult, Integer>();
+	private Map<MicroscopyResult, Integer> microscopyResults = new HashMap<MicroscopyResult, Integer>();
 	private Map<CultureResult, Integer> cultureResults = new HashMap<CultureResult, Integer>();
-	private Map<SusceptibilityResultTest, Integer> susceptResultsTB = new HashMap<SusceptibilityResultTest, Integer>();
-	private Map<SusceptibilityResultTest, Integer> susceptResultsMDR = new HashMap<SusceptibilityResultTest, Integer>();
+	private Map<DstResult, Integer> dstResultsTB = new HashMap<DstResult, Integer>();
+	private Map<DstResult, Integer> dstResultsMDR = new HashMap<DstResult, Integer>();
 	private Map<HIVResult, Integer> hivResults = new HashMap<HIVResult, Integer>();
 
 	// number of days of variation between registration and diagnosis
@@ -221,16 +221,16 @@ public class GeneratorPreferences {
 		this.resPatternsMDR = resPatternsMDR;
 	}
 	/**
-	 * @return the sputumFirst
+	 * @return the microscopyFirst
 	 */
-	public RangeValue getSputumFirst() {
-		return sputumFirst;
+	public RangeValue getMicroscopyFirst() {
+		return microscopyFirst;
 	}
 	/**
-	 * @param sputumFirst the sputumFirst to set
+	 * @param microscopyFirst the microscopyFirst to set
 	 */
-	public void setSputumFirst(RangeValue sputumFirst) {
-		this.sputumFirst = sputumFirst;
+	public void setMicroscopyFirst(RangeValue microscopyFirst) {
+		this.microscopyFirst = microscopyFirst;
 	}
 	/**
 	 * @return the cultureFirst
@@ -245,16 +245,16 @@ public class GeneratorPreferences {
 		this.cultureFirst = cultureFirst;
 	}
 	/**
-	 * @return the susceptFirst
+	 * @return the dstFirst
 	 */
-	public RangeValue getSusceptFirst() {
-		return susceptFirst;
+	public RangeValue getDstFirst() {
+		return dstFirst;
 	}
 	/**
-	 * @param susceptFirst the susceptFirst to set
+	 * @param dstFirst the dstFirst to set
 	 */
-	public void setSusceptFirst(RangeValue susceptFirst) {
-		this.susceptFirst = susceptFirst;
+	public void setDstFirst(RangeValue dstFirst) {
+		this.dstFirst = dstFirst;
 	}
 	/**
 	 * @return the varDateExam
@@ -269,16 +269,16 @@ public class GeneratorPreferences {
 		this.varDateExam = varDateExam;
 	}
 	/**
-	 * @return the sputumResults
+	 * @return the microscopyResults
 	 */
-	public Map<SputumSmearResult, Integer> getSputumResults() {
-		return sputumResults;
+	public Map<MicroscopyResult, Integer> getMicroscopyResults() {
+		return microscopyResults;
 	}
 	/**
-	 * @param sputumResults the sputumResults to set
+	 * @param microscopyResults the microscopyResults to set
 	 */
-	public void setSputumResults(Map<SputumSmearResult, Integer> sputumResults) {
-		this.sputumResults = sputumResults;
+	public void setMicroscopyResults(Map<MicroscopyResult, Integer> microscopyResults) {
+		this.microscopyResults = microscopyResults;
 	}
 	/**
 	 * @return the cultureResults
@@ -485,28 +485,28 @@ public class GeneratorPreferences {
 		this.localityTypes = localityTypes;
 	}
 	/**
-	 * @return the sputumFreqTB
+	 * @return the microscopyFreqTB
 	 */
-	public int getSputumFreqTB() {
-		return sputumFreqTB;
+	public int getMicroscopyFreqTB() {
+		return microscopyFreqTB;
 	}
 	/**
-	 * @param sputumFreqTB the sputumFreqTB to set
+	 * @param microscopyFreqTB the microscopyFreqTB to set
 	 */
-	public void setSputumFreqTB(int sputumFreqTB) {
-		this.sputumFreqTB = sputumFreqTB;
+	public void setMicroscopyFreqTB(int microscopyFreqTB) {
+		this.microscopyFreqTB = microscopyFreqTB;
 	}
 	/**
-	 * @return the sputumFreqMDR
+	 * @return the microscopyFreqMDR
 	 */
-	public int getSputumFreqMDR() {
-		return sputumFreqMDR;
+	public int getMicroscopyFreqMDR() {
+		return microscopyFreqMDR;
 	}
 	/**
-	 * @param sputumFreqMDR the sputumFreqMDR to set
+	 * @param microscopyFreqMDR the microscopyFreqMDR to set
 	 */
-	public void setSputumFreqMDR(int sputumFreqMDR) {
-		this.sputumFreqMDR = sputumFreqMDR;
+	public void setMicroscopyFreqMDR(int microscopyFreqMDR) {
+		this.microscopyFreqMDR = microscopyFreqMDR;
 	}
 	/**
 	 * @return the cultureFreqTB
@@ -533,28 +533,28 @@ public class GeneratorPreferences {
 		this.cultureFreqMDR = cultureFreqMDR;
 	}
 	/**
-	 * @return the susceptFreqTB
+	 * @return the dstFreqTB
 	 */
-	public int getSusceptFreqTB() {
-		return susceptFreqTB;
+	public int getDstFreqTB() {
+		return dstFreqTB;
 	}
 	/**
-	 * @param susceptFreqTB the susceptFreqTB to set
+	 * @param dstFreqTB the dstFreqTB to set
 	 */
-	public void setSusceptFreqTB(int susceptFreqTB) {
-		this.susceptFreqTB = susceptFreqTB;
+	public void setDstFreqTB(int dstFreqTB) {
+		this.dstFreqTB = dstFreqTB;
 	}
 	/**
-	 * @return the susceptFreqMDR
+	 * @return the dstFreqMDR
 	 */
-	public int getSusceptFreqMDR() {
-		return susceptFreqMDR;
+	public int getDstFreqMDR() {
+		return dstFreqMDR;
 	}
 	/**
-	 * @param susceptFreqMDR the susceptFreqMDR to set
+	 * @param dstFreqMDR the dstFreqMDR to set
 	 */
-	public void setSusceptFreqMDR(int susceptFreqMDR) {
-		this.susceptFreqMDR = susceptFreqMDR;
+	public void setDstFreqMDR(int dstFreqMDR) {
+		this.dstFreqMDR = dstFreqMDR;
 	}
 	/**
 	 * @return the startTreatmentTB
@@ -678,30 +678,30 @@ public class GeneratorPreferences {
 		this.hivFirst = hivFirst;
 	}
 	/**
-	 * @return the susceptResultsTB
+	 * @return the dstResultsTB
 	 */
-	public Map<SusceptibilityResultTest, Integer> getSusceptResultsTB() {
-		return susceptResultsTB;
+	public Map<DstResult, Integer> getDstResultsTB() {
+		return dstResultsTB;
 	}
 	/**
-	 * @param susceptResultsTB the susceptResultsTB to set
+	 * @param dstResultsTB the dstResultsTB to set
 	 */
-	public void setSusceptResultsTB(
-			Map<SusceptibilityResultTest, Integer> susceptResultsTB) {
-		this.susceptResultsTB = susceptResultsTB;
+	public void setDstResultsTB(
+			Map<DstResult, Integer> dstResultsTB) {
+		this.dstResultsTB = dstResultsTB;
 	}
 	/**
-	 * @return the susceptResultsMDR
+	 * @return the dstResultsMDR
 	 */
-	public Map<SusceptibilityResultTest, Integer> getSusceptResultsMDR() {
-		return susceptResultsMDR;
+	public Map<DstResult, Integer> getDstResultsMDR() {
+		return dstResultsMDR;
 	}
 	/**
-	 * @param susceptResultsMDR the susceptResultsMDR to set
+	 * @param dstResultsMDR the dstResultsMDR to set
 	 */
-	public void setSusceptResultsMDR(
-			Map<SusceptibilityResultTest, Integer> susceptResultsMDR) {
-		this.susceptResultsMDR = susceptResultsMDR;
+	public void setDstResultsMDR(
+			Map<DstResult, Integer> dstResultsMDR) {
+		this.dstResultsMDR = dstResultsMDR;
 	}
 	public Map<FieldValue, Integer> getXrayPresentation() {
 		return xrayPresentation;

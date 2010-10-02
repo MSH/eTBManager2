@@ -93,37 +93,37 @@
 </a:jsFunction>
     
 
-	<h:panelGroup id="pnlsputum">	
+	<h:panelGroup id="pnlmicroscopy">	
 	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:20px;">
 		<ui:param name="showfooter" value="0" />
 		<ui:define name="header">
-			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexamsputum.xhtml" 
+			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexammicroscopy.xhtml" 
 				style="float:right;" rendered="#{caseHome.canEditExams}" propagation="none">
 				<f:param name="id" value="#{tbCase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 			</s:link>
-			<b>#{messages['cases.examsputum']}</b>
+			<b>#{messages['cases.exammicroscopy']}</b>
 		</ui:define>
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examSputumHome.allResults}" />
+		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examMicroscopyHome.allResults}" />
 		<div>
-		<h:dataTable value="#{examSputumHome.allResults}" var="r" rendered="#{not empty examSputumHome.allResults}" 
+		<h:dataTable value="#{examMicroscopyHome.allResults}" var="r" rendered="#{not empty examMicroscopyHome.allResults}" 
 			width="100%" styleClass="tabela4" columnClasses="colb,colb,colb,colb,colb">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
-				<s:link view="/cases/edtexamsputum.xhtml" propagation="none" enabled="#{caseHome.canEditExams}" >
+				<s:link view="/cases/edtexammicroscopy.xhtml" propagation="none" enabled="#{caseHome.canEditExams}" >
 					<f:param name="id" value="#{tbCase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
-					<h:outputFormat value="#{messages[r.sample.monthDisplay]}" >
-						<f:param value="#{r.sample.monthTreatment}"/>
+					<h:outputFormat value="#{messages[r.monthDisplay]}" >
+						<f:param value="#{r.monthTreatment}"/>
 					</h:outputFormat>
 				</s:link>
 				<div style="display:block;">
-				<h:outputText value="#{r.sample.dateCollected}" converter="localeDateConverter" />
+				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
 				<br/>
-				<h:outputText value="#{r.sample.sampleNumber}" title="#{messages['PatientSample.sampleNumber']}" />
+				<h:outputText value="#{r.sampleNumber}" title="#{messages['PatientSample.sampleNumber']}" />
 				</div>
 			</h:column>
 			
@@ -155,15 +155,15 @@
 			</h:column>
 
 			<h:column rendered="#{caseHome.canEditExams}">
-				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamSputum(#{r.id});return false;" style="font-size:9px;">
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remexamMicroscopy(#{r.id});return false;" style="font-size:9px;">
 				</h:commandLink>
 			</h:column>			
 		</h:dataTable>
 		</div>
 	</s:decorate>
 	</h:panelGroup>
-<a:jsFunction name="remExamSputum" action="#{examSputumHome.remove}" reRender="pnlsputum"  rendered="#{caseHome.canEditExams}">
-	<a:actionparam name="param1" assignTo="#{examSputumHome.id}" converter="javax.faces.Integer"/>
+<a:jsFunction name="remexamMicroscopy" action="#{examMicroscopyHome.remove}" reRender="pnlmicroscopy"  rendered="#{caseHome.canEditExams}">
+	<a:actionparam name="param1" assignTo="#{examMicroscopyHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
 
@@ -191,14 +191,14 @@
 				<s:link view="/cases/edtexamculture.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbCase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
-					<h:outputFormat value="#{messages[r.sample.monthDisplay]}" >
-						<f:param value="#{r.sample.monthTreatment}"/>
+					<h:outputFormat value="#{messages[r.monthDisplay]}" >
+						<f:param value="#{r.monthTreatment}"/>
 					</h:outputFormat>
 				</s:link>
 				<div style="margin-left:20px;display:block;">
-				<h:outputText value="#{r.sample.dateCollected}" converter="localeDateConverter" />
+				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
 				<br/>
-				<h:outputText value="#{r.sample.sampleNumber}" title="#{messages['PatientSample.sampleNumber']}" />
+				<h:outputText value="#{r.sampleNumber}" title="#{messages['PatientSample.sampleNumber']}" />
 				</div>
 			</h:column>
 			
@@ -247,26 +247,23 @@
 	<a:actionparam name="param1" assignTo="#{examCultureHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
-	<h:panelGroup id="pnlsuscept">	
+	<h:panelGroup id="pnldst">	
 	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:20px;">
 		<ui:param name="showfooter" value="0" />
 		<ui:define name="header">
-			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexamsuscept.xhtml" 
+			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexamdst.xhtml" 
 				style="float:right;" rendered="#{caseHome.canEditExams}" propagation="none">
 				<f:param name="id" value="#{tbCase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 			</s:link>
-			<b>#{messages['cases.examsus']}</b>
+			<b>#{messages['cases.examdst']}</b>
 		</ui:define>
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examSusceptTable.allResults}" />
-		<s:fragment rendered="#{not empty examSusceptTable.allResults}">
+		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examDSTTable.allResults}" />
+		<s:fragment rendered="#{not empty examDSTTable.allResults}">
 		<div>
 		<table class="tabela4" width="100%">
 		<tr>
-		<th>
-			#{messages['global.month']}
-		</th>
 		<th>
 			#{messages['PatientSample.dateCollected']}
 		</th>
@@ -279,7 +276,7 @@
 		<th align="left">
 			#{messages['Laboratory']}
 		</th>
-		<ui:repeat value="#{examSusceptTable.substances}" var="m">
+		<ui:repeat value="#{examDSTTable.substances}" var="m">
 		<th>
 			#{m.abbrevName}
 		</th>
@@ -289,25 +286,29 @@
 		</th>
 		</s:fragment>
 		</tr>
-		<a:repeat value="#{examSusceptTable.allResults}" var="r">
+		<a:repeat value="#{examDSTTable.allResults}" var="r">
 		<tr>
-			<td class="colcb">
-				<s:link value="#{messages[r.examResult.sample.monthDisplay]}" view="/cases/edtexamsuscept.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
+			<td class="colb">
+				<s:link view="/cases/edtexamdst.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbCase.id}"/>
 					<f:param name="examid" value="#{r.examResult.id}"/>
+					<h:outputFormat value="#{messages[r.examResult.monthDisplay]}" >
+						<f:param value="#{r.examResult.monthTreatment}"/>
+					</h:outputFormat>
 				</s:link>
-			</td>
-			<td class="colcb">
-			<h:outputText value="#{r.examResult.sample.dateCollected}" converter="localeDateConverter"/>
+				<br/>
+				<h:outputText value="#{r.examResult.dateCollected}" converter="localeDateConverter"/>
 			</td>
 			<td>
-				#{r.examResult.sample.sampleNumber}
+				#{r.examResult.sampleNumber}
 			</td>
 			<td class="colb">
 				#{r.examResult.method.name}
 			</td>
 			<td class="colb">
 				#{r.examResult.laboratory.abbrevName}
+				<br/>
+				#{r.examResult.laboratory.adminUnit.name}
 			</td>
 			<ui:repeat value="#{r.results}" var="rs">
 			<td class="colcb" rowspan="#{empty r.examResult.comments?'1':'2'}">
@@ -319,7 +320,7 @@
 			</ui:repeat>
 			<s:fragment rendered="#{caseHome.canEditExams}">
 			<td class="colcb" rowspan="#{empty r.examResult.comments?'1':'2'}"  >
-				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamSuscept(#{r.examResult.id});return false;" style="font-size:9px">
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamDST(#{r.examResult.id});return false;" style="font-size:9px">
 				</h:commandLink>
 			</td>
 			</s:fragment>
@@ -337,8 +338,8 @@
 	</s:decorate>
 	</h:panelGroup>
 	
-<a:jsFunction name="remExamSuscept" action="#{examSusceptHome.remove}" reRender="pnlsuscept" ajaxSingle="true"  rendered="#{caseHome.canEditExams}">
-	<a:actionparam name="param1" assignTo="#{examSusceptHome.id}" converter="javax.faces.Integer"/>
+<a:jsFunction name="remExamDST" action="#{examDSTHome.remove}" reRender="pnldst" ajaxSingle="true"  rendered="#{caseHome.canEditExams}">
+	<a:actionparam name="param1" assignTo="#{examDSTHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
 	<h:panelGroup id="pnlXRay">	

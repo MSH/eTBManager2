@@ -9,13 +9,13 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="#{workspaceViewService.templatePage}">
 
-<ui:param name="title" value="#{messages['cases.examsputum']}" />
+<ui:param name="title" value="#{messages['cases.exammicroscopy']}" />
 <ui:param name="show_menu" value="1" />
 <ui:param name="waitdlg" value="1" />
 <ui:param name="maskedit" value="1" />
 <ui:param name="topmenu" value="0" />
-<ui:param name="examHome" value="#{examSputumHome}" />
-<ui:param name="examType" value="#{examSputumHome.examSputum}" />
+<ui:param name="examHome" value="#{examMicroscopyHome}" />
+<ui:param name="examType" value="#{examMicroscopyHome.examMicroscopy}" />
 
 
 <ui:define name="body">
@@ -39,13 +39,13 @@
     	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
     	<ui:param name="required" value="false" /> 
     	<ui:param name="future" value="true" /> 
-    	<ui:param name="datefield" value="#{examSputum.dateRelease}" /> 
+    	<ui:param name="datefield" value="#{examMicroscopy.dateRelease}" /> 
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
-    	<h:selectOneMenu id="cbres" value="#{examSputum.result}" required="true">
-    		<s:selectItems value="#{sputumSmearResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+    	<h:selectOneMenu id="cbres" value="#{examMicroscopy.result}" required="true">
+    		<s:selectItems value="#{microscopyResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
     		<s:convertEnum />
     	</h:selectOneMenu>
     </s:decorate>
@@ -57,8 +57,8 @@
 	<div id="pnlrespositive">
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['cases.exams.afb']}:</ui:define>
-    	<h:selectOneMenu value="#{examSputum.numberOfAFB}" >
-    		<f:selectItems value="#{examSputumHome.AFBs}" />
+    	<h:selectOneMenu value="#{examMicroscopy.numberOfAFB}" >
+    		<f:selectItems value="#{examMicroscopyHome.AFBs}" />
     	</h:selectOneMenu>
     </s:decorate>
 	</div>
@@ -66,7 +66,7 @@
 	
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	<h:inputText value="#{examSputum.comments}" maxlength="200" style="width:350px;"/>
+    	<h:inputText value="#{examMicroscopy.comments}" maxlength="200" style="width:350px;"/>
     </s:decorate>
 
 	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
@@ -76,7 +76,7 @@
 		<div style="float:left;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandButton action="#{examSputumHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam,messages" 
+            <a:commandButton action="#{examMicroscopyHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam,messages" 
             	oncomplete="this.disabled=false;"
             	onclick="this.disabled=true;" 
             	/>
@@ -98,8 +98,6 @@ function examResultChanged(cb, immediate) {
 }
 -->
 </script>
-
-<ui:include src="/layout/sampledlg.xhtml" />
 
 </ui:define>
 
