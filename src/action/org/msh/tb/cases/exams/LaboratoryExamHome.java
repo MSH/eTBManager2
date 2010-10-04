@@ -2,8 +2,6 @@ package org.msh.tb.cases.exams;
 
 import java.util.Date;
 
-import org.apache.commons.beanutils.PropertyUtils;
-import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.mdrtb.entities.Laboratory;

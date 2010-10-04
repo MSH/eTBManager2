@@ -1,6 +1,7 @@
 package org.msh.mdrtb.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -11,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
 import org.msh.mdrtb.entities.enums.DispensingFrequency;
@@ -79,6 +82,13 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
     
     private Integer numDaysOrder;
 
+    /**
+     * Date when this TB unit started the medicine management 
+     */
+    @Temporal(TemporalType.DATE)
+    private Date medManStartDate;
+
+    
     @Override
     public String toString() {
     	return getName().toString();
@@ -310,5 +320,13 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 
 	public void setActive(boolean newState) {
 		active = newState;
+	}
+
+	public Date getMedManStartDate() {
+		return medManStartDate;
+	}
+
+	public void setMedManStartDate(Date medManStartDate) {
+		this.medManStartDate = medManStartDate;
 	}
 }

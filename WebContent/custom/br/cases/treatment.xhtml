@@ -50,7 +50,9 @@
 	<s:fragment rendered="#{caseHome.inTreatment}">
 
 	<h:panelGroup id="pnltreatment">
-	<s:link value="#{messages['form.edit']}" view="/cases/treatmentedt.xhtml" style="float:right;"/>
+	<s:div styleClass="link-bar">
+		<s:link value="#{messages['form.edit']}" view="/cases/treatmentedt.xhtml" style="float:right;"/>
+	</s:div>
 
 	<s:decorate template="/cases/treattable.xhtml">
 		<ui:param name="editing" value="false" />

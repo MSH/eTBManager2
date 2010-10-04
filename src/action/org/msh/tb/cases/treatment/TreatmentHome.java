@@ -177,33 +177,42 @@ public class TreatmentHome {
 	 */
 	public void cropTreatmentPeriod(Period p) {
 		TbCase tbcase = caseHome.getInstance();
+		int index = 0;
 	
 		// crop treatment health units
-		for (TreatmentHealthUnit hu: tbcase.getHealthUnits()) {
+		while (index < tbcase.getHealthUnits().size()) {
+			TreatmentHealthUnit hu = tbcase.getHealthUnits().get(index);
 			// if doesn't intersect, so it's out of the period
 			if (!hu.getPeriod().intersect(p)) {
 				tbcase.getHealthUnits().remove(hu);
 				if (entityManager.contains(hu))
 					entityManager.remove(hu);
 			}
+			else index++;
 		}
 		
 		// crop case regimens
-		for (CaseRegimen cr: tbcase.getRegimens()) {
+		index = 0;
+		while (index < tbcase.getRegimens().size()) {
+			CaseRegimen cr = tbcase.getRegimens().get(index);
 			if (!cr.getPeriod().intersect(p)) {
 				tbcase.getRegimens().remove(cr);
 				if (entityManager.contains(cr))
 					entityManager.remove(cr);
 			}
+			else index++;
 		}
 		
 		// crop prescribed medicines
-		for (PrescribedMedicine pm: tbcase.getPrescribedMedicines()) {
+		index = 0;
+		while (index < tbcase.getPrescribedMedicines().size()) {
+			PrescribedMedicine pm = tbcase.getPrescribedMedicines().get(index);
 			if (!pm.getPeriod().intersect(p)) {
-				tbcase.getPrescribedMedicines().remove(p);
+				tbcase.getPrescribedMedicines().remove(pm);
 				if (entityManager.contains(pm))
 					entityManager.remove(pm);
 			}
+			else index++;
 		}
 		
 		// set the new treatment period

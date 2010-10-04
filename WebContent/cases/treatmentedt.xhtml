@@ -23,6 +23,8 @@
 <s:decorate template="/layout/casebody.xhtml">
 	<a:form id="formtreat">
 	<h:panelGroup id="pnltreatment">
+	
+	<div class="button-bar">
 	<a:commandButton value="#{messages['Regimen.add']}..."
 		action="#{prescribedMedicineHome.startNew}" 
 		style="float:right;width:200px;"
@@ -30,6 +32,7 @@
 		reRender="medicinepnl"
 		oncomplete="showMedicineDlg();" 
 		/>
+	</div>
 
 	<s:decorate template="treattable.xhtml">
 		<ui:param name="editing" value="true" />
@@ -45,7 +48,7 @@ function showHuDlg() {	Richfaces.showModalPanel('hudlg'); }
 
 --></script>
 
-	<div style="clear:both;float:right;">
+	<div class="button-bar">
 	<a:commandButton action="#{treatmentHome.saveChanges}" value="#{messages['form.ok']}" styleClass="button" 
             	reRender="formtreat,messages" 
             	oncomplete="this.disabled=false;"
