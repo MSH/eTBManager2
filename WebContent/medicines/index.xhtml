@@ -5,8 +5,9 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templateMedPage}">
+      template="#{workspaceViewService.templateMedPage}">
 
 <ui:param name="title" value="#{messages.medicines}" />
 
@@ -28,6 +29,8 @@
 	<s:decorate template="/layout/audisplay.xhtml">
 		<ui:param name="adminunit" value="#{userSession.tbunit.adminUnit}" />
 	</s:decorate>
+
+	<s:fragment rendered="#{userSession.medicineManagementStarted}">
 
 	<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
     <s:decorate template="/layout/display.xhtml">
@@ -63,6 +66,25 @@
 		#{messages['TbUnit.receivingFromSource']}
 		</div>
 	</s:decorate>
+	
+	<div class="link-bar">
+		<a:commandLink value="#{messages['medicines.start.remove']}" 
+			action="#{medicineManStartHome.cancelMedicineManagement}" 
+			reRender="main"
+			styleClass="right-icon"
+			rendered="#{s:hasRole('MED_INIT')}"
+			onclick="if (!confirm('#{messages['medicines.start.removeconfirm']}')) return false;" />
+	</div>
+	
+	</s:fragment>
+
+	<s:fragment rendered="#{not userSession.medicineManagementStarted}">
+		<h:outputText value="#{messages['medicines.start.notstarted']}" styleClass="warn warn-icon"/>
+		<p/>
+		<s:link value="#{messages['medicines.start']}" view="/medicines/start.xhtml" 
+			styleClass="right-icon" 
+			rendered="#{s:hasRole('MED_INIT')}"/>
+	</s:fragment>
 
 <p/>
 

@@ -48,7 +48,6 @@ public class UserSession {
 	private boolean displayMessagesKeys;
 	
 	@In(create=true) EntityManager entityManager;
-	@In(create=true) OnlineUsersHome onlineUsers;
 
 
     /**
@@ -270,6 +269,14 @@ public class UserSession {
 		this.tbunit = tbunit;
 	}
 
+	
+	/**
+	 * Check if TB unit has started medicine management 
+	 * @return
+	 */
+	public boolean isMedicineManagementStarted() {
+		return (getTbunit().isMedicineManagementStarted());
+	}
 
 	public boolean isCanCheckReceiving() {
 		return (Identity.instance().hasRole("RECEIV") && (getTbunit().isReceivingFromSource()));

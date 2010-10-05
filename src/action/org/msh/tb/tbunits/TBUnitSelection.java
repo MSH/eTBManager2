@@ -102,7 +102,7 @@ public class TBUnitSelection {
 			case TBHEALTH_UNITS: return "u.tbHealthUnit = true";
 			case MEDICINE_ORDER_UNITS: return "u.treatmentHealthUnit = true and (u.firstLineSupplier != null or u.secondLineSupplier != null)";
 			case MEDICINE_SUPPLIERS: return "u.medicineSupplier = true";
-			case MEDICINE_WAREHOUSES: return "u.medicineStorage = true";
+			case MEDICINE_WAREHOUSES: return "u.medicineStorage = true and (u.medManStartDate is not null)";
 		}
 		return null;
 	}

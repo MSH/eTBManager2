@@ -7,7 +7,8 @@ public enum MovementType {
 	DISPENSING,
 	ADJUSTMENT,
 	TRANSFERIN,
-	TRANSFEROUT;
+	TRANSFEROUT,
+	INITIALIZE;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
@@ -26,6 +27,7 @@ public enum MovementType {
 		case ADJUSTMENT: return 1;
 		case TRANSFERIN: return 1;
 		case TRANSFEROUT: return -1;
+		case INITIALIZE: return 1;
 		}
 		
 		return 0;

@@ -48,6 +48,12 @@ public class MovementHome {
 	public Movement newMovement(Date date, Tbunit unit, Source source, Medicine medicine, MovementType type, Map<Batch, Integer> batches, String comment) {
 		int oper = type.getOper();
 		date = DateUtils.getDatePart(date);
+		
+		if (!unit.isMedicineManagementStarted())
+			throw new MovementException("Error creating movement. Unit not in medicine management control");
+		
+		if (date.before(unit.getMedManStartDate()))
+			throw new MovementException("Date cannot be before unit start date of medicine management on " + unit.getMedManStartDate().toString());
 
 		Movement mov = new Movement();
 		mov.setDate(date);

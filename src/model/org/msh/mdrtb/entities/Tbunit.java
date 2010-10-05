@@ -89,6 +89,15 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
     private Date medManStartDate;
 
     
+    /**
+     * Check if medicine management was already started for this TB Unit
+     * @return
+     */
+    public boolean isMedicineManagementStarted() {
+    	return medManStartDate != null;
+    }
+
+ 
     @Override
     public String toString() {
     	return getName().toString();

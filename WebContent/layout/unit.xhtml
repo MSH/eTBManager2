@@ -33,7 +33,7 @@
 </table>
 
 <s:fragment id="sf" rendered="#{selunit=='1'}">
-<rich:modalPanel id="unitSelDlg" autosized="true" top="200" height="400" width="490" zindex="2000" style="background-color:#F2F5F0">
+<rich:modalPanel id="unitSelDlg" autosized="true" top="200" width="490" zindex="2000" style="background-color:#F2F5F0">
 	<f:facet name="header">
 		<h:outputText value="#{messages['medicines.selunit']}" />
 	</f:facet>
@@ -65,8 +65,12 @@
 			</div>
 			<h:dataTable value="#{it.units}" var="u" >
 			<h:column>
-  				<h:commandLink value="#{u.name}" onclick="selectUnit(#{u.id}); return false;" 
-  					styleClass="#{u.treatmentHealthUnit?'hu-icon':'ds-icon'}" style="width:100%;"/>
+  				<h:commandLink onclick="selectUnit(#{u.id}); return false;" 
+  					styleClass="#{u.treatmentHealthUnit?'hu-icon':'ds-icon'}" style="width:100%;">
+  					<span class="#{u.medicineManagementStarted?'':'warn-icon'}" title="#{u.medicineManagementStarted?'':messages['medicines.start.alert']}">
+  						#{u.name}
+  					</span>
+  				</h:commandLink>
 			</h:column>
 			</h:dataTable>
 		</a:repeat>
@@ -75,7 +79,9 @@
 	</div>
 	</h:form>
 	</div>
-	<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" onclick="hideUnitSelDlg(); return false;"/>
+	<div class="button-bar">
+		<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" onclick="hideUnitSelDlg(); return false;"/>
+	</div>
 </rich:modalPanel>
 
 <script type="text/javascript">
