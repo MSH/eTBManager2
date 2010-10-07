@@ -2,12 +2,15 @@ package org.msh.tb.application;
 
 import java.util.Calendar;
 
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 
 @Name("sysStartup")
 public class SysStartup {
-//	@In(create=true) StockChecking stockChecking;
+	@In(create=true) SystemTimer systemTimer; 
+	
+	static final long halfDayDelay = 12*60*60*1000L;
 	
 	@Observer("org.jboss.seam.postInitialization")
 	public void initTimerChecking() {
@@ -16,7 +19,7 @@ public class SysStartup {
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, 2100);
 		
-//		stockChecking.asyncCheckUnits(new Date(), 60*60*1000L, c.getTime());
+		systemTimer.trigger(0, halfDayDelay);
 	}
 
 }

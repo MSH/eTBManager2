@@ -6,6 +6,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Conversation;
 import org.jboss.seam.faces.FacesMessages;
@@ -27,13 +28,13 @@ import org.msh.tb.tbunits.TBUnitSelection;
 public class SymetaIntHome {
 
 	private final static String SYMETA_URL_WEBSERVICE = "symeta_url_webservice";
-	private final static String EXEC_INTERVAL = "executing_interval";
+	private final static String DEFAULT_WORKSPACE = "default_workspace";
 	private final static String DEFAULT_ADMINUNIT = "default_adminunit";
 	private final static String DEFAULT_TBUNIT = "default_tbunit";
 	private final static String DEFAULT_HEALTHSYSTEM = "default_healthsystem";
 	
 	@In EntityManager entityManager;
-	@In(create=true) Workspace defaultWorkspace;
+	@In(required=false) Workspace defaultWorkspace;
 	@In(create=true) SymetaIntegration symetaIntegration;
 	@In(create=true) FacesMessages facesMessages;
 
@@ -58,6 +59,13 @@ public class SymetaIntHome {
 		
 		facesMessages.addFromResourceBundle("ro.admin.symeta.success");
 		return "success";
+	}
+
+	
+	@Observer("system-timer-event")
+	public void systemTimerListener() {
+		System.out.println("Executing automatic SYMETA integration...");
+		execute();
 	}
 
 
@@ -99,10 +107,10 @@ public class SymetaIntHome {
 		config.setDefaultTbunit(unit);
 		
 		saveParameter(SYMETA_URL_WEBSERVICE, config.getWebServiceURL());
-		saveParameter(EXEC_INTERVAL, Integer.toString(config.getInterval()));
 		saveParameter(DEFAULT_ADMINUNIT, Integer.toString( config.getDefaultAdminUnit().getId() ));
 		saveParameter(DEFAULT_TBUNIT, Integer.toString( config.getDefaultTbunit().getId() ));
 		saveParameter(DEFAULT_HEALTHSYSTEM, Integer.toString( config.getDefaultHealthSystem().getId() ));
+		saveParameter(DEFAULT_WORKSPACE, Integer.toString( config.getWorkspace().getId() ));
 
 		configSaved = true;
 		entityManager.flush();
@@ -118,17 +126,15 @@ public class SymetaIntHome {
 	 */
 	private void createConfig() {
 		config = new MoldovaServiceConfig();
-		config.setWorkspace(defaultWorkspace);	
+		config.setWorkspace(getDefaultWorkspace());	
 
 		String val = readParameter("symeta_url_webservice");
 		config.setWebServiceURL(val);
 		
-		Integer num = readIntegerParameter("executing_interval");
-		config.setInterval(num);
-		
 		config.setDefaultAdminUnit( entityManager.find(AdministrativeUnit.class, readIntegerParameter("default_adminunit") ));
 		config.setDefaultTbunit( entityManager.find(Tbunit.class, readIntegerParameter("default_tbunit") ));
 		config.setDefaultHealthSystem( entityManager.find(HealthSystem.class, readIntegerParameter("default_healthsystem") ));
+		config.setWorkspace( entityManager.find(Workspace.class, readIntegerParameter("default_workspace") ));
 	}
 
 	
@@ -179,6 +185,13 @@ public class SymetaIntHome {
 		}
 	}
 
+	
+	protected Workspace getDefaultWorkspace() {
+		if (defaultWorkspace == null) {
+			defaultWorkspace = entityManager.find(Workspace.class, 22564);
+		}
+		return defaultWorkspace;
+	}
 
 	public MoldovaServiceConfig getConfig() {
 		if (config == null)

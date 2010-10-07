@@ -8,11 +8,11 @@ import org.msh.mdrtb.entities.Workspace;
 public class MoldovaServiceConfig {
 
 	private String webServiceURL;
-	private int interval;
 	private Workspace workspace;
 	private AdministrativeUnit defaultAdminUnit;
 	private HealthSystem defaultHealthSystem;
 	private Tbunit defaultTbunit;
+	private String emailReport;
 
 
 	/**
@@ -27,18 +27,7 @@ public class MoldovaServiceConfig {
 	public void setWebServiceURL(String webServiceURL) {
 		this.webServiceURL = webServiceURL;
 	}
-	/**
-	 * @return the interval
-	 */
-	public int getInterval() {
-		return interval;
-	}
-	/**
-	 * @param interval the interval to set
-	 */
-	public void setInterval(int interval) {
-		this.interval = interval;
-	}
+
 	/**
 	 * @return the workspace
 	 */
@@ -86,5 +75,11 @@ public class MoldovaServiceConfig {
 	 */
 	public void setDefaultTbunit(Tbunit defaultTbunit) {
 		this.defaultTbunit = defaultTbunit;
+	}
+	public String getEmailReport() {
+		return emailReport;
+	}
+	public void setEmailReport(String emailReport) {
+		this.emailReport = emailReport;
 	}
 }

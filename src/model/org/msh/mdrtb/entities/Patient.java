@@ -55,31 +55,42 @@ public class Patient extends WSObject implements Serializable {
 
 
 	public String getFullName() {
-		Workspace ws = (Workspace)Component.getInstance("defaultWorkspace", true);
+		Workspace ws;
+		if (getWorkspace() != null)
+			 ws = getWorkspace();
+		else ws = (Workspace)Component.getInstance("defaultWorkspace", true);
 		return compoundName(ws);
 	}
 	
 	public String compoundName(Workspace ws) {
 		NameComposition comp = ws.getPatientNameComposition();
 
+		String result;
 		switch (comp) {
 		case FIRST_MIDDLE_LASTNAME:
-			   return name + (middleName != null? " " + middleName: "") + (lastName != null? " " + lastName: "");
+			   result = (name != null? name: "") + (middleName != null? " " + middleName: "") + (lastName != null? " " + lastName: "");
+			   break;
 
 		case FULLNAME:
-			return name;
+			result = name;
+			break;
 		
 		case FIRSTSURNAME:
-			return name + (middleName != null? ", " + middleName: "");
+			result = (name != null? name: "") + (middleName != null? ", " + middleName: "");
+			break;
 			
 		case LAST_FIRST_MIDDLENAME:
-			return (lastName != null? lastName + ", ": "") + name + ((middleName != null) && (!middleName.isEmpty())? ", " + middleName: "");
+			result = (lastName != null? lastName + ", ": "") + (name != null? name: "") + ((middleName != null) && (!middleName.isEmpty())? ", " + middleName: "");
+			break;
 			
 		case SURNAME_FIRSTNAME:
-			return (middleName != null? middleName + ", ":"") + name;
+			result = (middleName != null? middleName + ", ":"") + (name != null? name: "");
+			break;
 		default:
-		   return name + (middleName != null? " " + middleName: "") + (lastName != null? " " + lastName: "");
-		}		
+		   result = (name != null? name: "") + (middleName != null? " " + middleName: "") + (lastName != null? " " + lastName: "");
+		}
+		
+		return result.trim();
 	}
 
 	public Gender getGender() {

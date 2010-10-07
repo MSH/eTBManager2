@@ -295,7 +295,7 @@
     	<ui:param name="field" value="#{caseDataBR.position}" />
     </s:decorate>
 
-    <s:decorate template="/layout/display.xhtml" >
+    <s:decorate template="/layout/display.xhtml" rendered="#{not empty caseDataBR.pregnancePeriod}">
     	<ui:define name="label">#{messages['TbField.PREGNANCE_PERIOD']}:</ui:define>
     	<h:outputText value="#{caseDataBR.pregnancePeriod.name}" />
     </s:decorate>

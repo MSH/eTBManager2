@@ -1,33 +1,22 @@
 package org.msh.tb.md;
 
-import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.axis.message.MessageElement;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.HealthSystem;
-import org.msh.mdrtb.entities.Patient;
+import org.jboss.seam.contexts.Contexts;
+import org.jboss.seam.faces.Renderer;
 import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.DispensingFrequency;
-import org.msh.mdrtb.entities.enums.Gender;
+import org.msh.mdrtb.entities.User;
+import org.msh.tb.md.ImportingBase.WarnMessage;
 import org.msh.tb.md.symeta.Get_casesResponseGet_casesResult;
 import org.msh.tb.md.symeta.Get_institutionsResponseGet_institutionsResult;
 import org.msh.tb.md.symeta.MDR_TBMISSSoapProxy;
-import org.msh.utils.date.DateUtils;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -45,17 +34,25 @@ public class SymetaIntegration {
 	@In EntityManager entityManager;
 
 	private MoldovaServiceConfig config;
-	
-	
+	private List<String> newCases;
+	private List<WarnMessage> warnings;
+	private int countNewCases;
+	private int countCases;
+	private int countNewUnits;
+	private int countUnits;
+
+
 	/**
 	 * Execute the integration between Symeta and e-Tb manager
 	 * @throws Exception
 	 */
 	@Asynchronous
+	@Transactional
 	public void execute(MoldovaServiceConfig config) throws Exception {
 		this.config = config;
 		readUnits();
 		readCases();
+		sendReportMessage();
 	}
 	
 	
@@ -98,7 +95,7 @@ public class SymetaIntegration {
 	 * @throws Exception 
 	 */
 	@Transactional
-	public void readCases() throws Exception {
+	protected void readCases() throws Exception {
 		int errorCount = 0;
 		Element elem = null;
 		while (true) {
@@ -133,114 +130,28 @@ public class SymetaIntegration {
 	protected void importCases(Element rootElemen) throws Exception {
 		NodeList nodes = rootElemen.getElementsByTagName("NewDataSet").item(0).getChildNodes();
 
-		int countNew = 0;
-		int countCases = 0;
+		countNewCases = 0;
+		countCases = 0;
 
-// salva em arquivo texto
-/*		FileOutputStream fo = new FileOutputStream("c:\\cases.txt");
-		OutputStreamWriter writer = new OutputStreamWriter(fo, "UTF-8");
-		writer.write("id,first name,last name,father name,gender,birth date,unit ID\n");
-*/		
+		CaseImporting caseImporting = new CaseImporting();
+		
+		warnings = caseImporting.getWarning();
+
 		for (int i = 0; i < nodes.getLength(); i++) {
 			Node n = nodes.item(i);
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
-				boolean bNew = true;
-				
 				Element el = (Element)n;
-				String id = getValue(el, "ID");
-				String firstName = getValue(el, "FIRSTNAME");
-				String lastName = getValue(el, "LASTNAME");
-				String fatherName = getValue(el, "FATHERNAME");
-//				String securityId = getValue(el, "PATIENTIDNP");
-				Integer gender = getValueAsInteger(el, "GENDER");
-				Date birthDate = getValueAsDate(el, "BIRTHDATE_string");
-				Date notifDate = getValueAsDate(el, "MDRNOTIFICATIONDATE_string");
-//				Date treatDate = getValueAsDate(el, "BEGINTREATMENTDATE_string");
-				String unitId = getValue(el, "NOTIFICATIONUNIT");
-//				String unitId = getValue(el, "TREATMENTUNIT");
-
-/*				writer.write(id + "," + firstName + "," + lastName + "," + fatherName + "," + gender + "," + birthDate + "," + notifDate + "," + unitId + "\n");
-				writer.flush();
-*/				
-			
-				if ((unitId != null) || (notifDate != null)) {
-					TbCase tbcase;
-					try {
-						List<TbCase> lstcases = entityManager.createQuery("from TbCase c " +
-								"join fetch c.patient p " +
-								"where c.legacyId = :id " +
-								"and p.workspace.id = " + getWorkspace().getId().toString())
-								.setParameter("id", id)
-								.getResultList();
-						if (lstcases.size() == 0) {
-							tbcase = new TbCase();
-							tbcase.setClassification(CaseClassification.MDRTB_DOCUMENTED);
-							tbcase.setState(CaseState.WAITING_TREATMENT);
-						}
-						else {
-							tbcase = lstcases.get(0);
-							bNew = false;
-						}
-					} catch (Exception e) {
-						tbcase = new TbCase();
-						tbcase.setClassification(CaseClassification.MDRTB_DOCUMENTED);
-						tbcase.setState(CaseState.WAITING_TREATMENT);
-					}
-					
-					Tbunit unit = loadTBUnit(unitId, null);
-					if (unit == null) {
-						System.out.println("Importing Case: NO TBUNIT FOUND FOR ID " + unitId + ": case ID=" + id + " (" + firstName + " " + lastName + ")");
-						unit = entityManager.merge(config.getDefaultTbunit());
-					}
-					
-					tbcase.setNotificationUnit(unit);
-					tbcase.setLegacyId(id);
-					tbcase.setDiagnosisDate(notifDate);
-					tbcase.setRegistrationDate(notifDate);
-//					tbcase.setIniTreatmentDate(treatDate);
-					
-					Patient p = tbcase.getPatient();
-					if (p == null) {
-						p = new Patient();
-						tbcase.setPatient(p);					
-					}
-					p.setName(firstName);
-					p.setLastName(lastName);
-					
-					Gender g = null;
-					if (gender != null) {
-						if (gender == 1)
-							 g = Gender.MALE;
-						else g = Gender.FEMALE;
-					}
-					else {
-						g = Gender.MALE;
-						p.setRecordNumber(123456789);
-					}
-					
-					p.setGender(g);
-					p.setBirthDate(birthDate);
-//					p.setSecurityNumber(securityId);
-					p.setWorkspace(getWorkspace());
-					p.setMiddleName(fatherName);
-
-					if (p.getBirthDate() != null)
-						tbcase.setAge(DateUtils.yearsBetween(p.getBirthDate(), tbcase.getRegistrationDate()));
-					else tbcase.setAge(200);
-					
-					entityManager.persist(p);
-					entityManager.persist(tbcase);
-					entityManager.flush();
-					
+				if (caseImporting.importCase(el, config.getWorkspace())) {
 					countCases++;
-					if (bNew) 
-						countNew++;
+					
+					if (caseImporting.isNewCase()) {
+						countNewCases++;
+						TbCase tbcase = caseImporting.getTbcase();
+						newCases.add("(" + tbcase.getRegistrationCode() + ") " + tbcase.getPatient().getFullName());
+					}
 				}
-				else System.out.println("NOT IMPORTED: " + id + "," + firstName + "," + lastName + "," + fatherName + "," + gender + "," + birthDate + "," + notifDate + "," + unitId + "\n");
 			}
 		}
-
-		System.out.println("Cases imported: " + countCases + " ... New cases: " + countNew);
 	}
 
 	
@@ -256,7 +167,7 @@ public class SymetaIntegration {
 //		OutputStreamWriter writer = new OutputStreamWriter(fo, "UTF-8");
 //		writer.write("ID,second ID,unit name,unit name RU,region ID\n");
 
-		for (int i = 0; i < nodes.getLength(); i++) {
+/*		for (int i = 0; i < nodes.getLength(); i++) {
 			Node n = nodes.item(i);
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
 				elem = (Element)n; 
@@ -289,155 +200,76 @@ public class SymetaIntegration {
 				entityManager.flush();
 			}
 		}
+*/
 //		writer.flush();
 //		writer.close();
 	}
 
-	
+
 	/**
-	 * Load the administrative unit with the corresponding legacy ID. If the record is not found,
-	 * the default administrative unit is loaded
-	 * @param legacyId
+	 * Check if there is something to report
 	 * @return
 	 */
-	protected AdministrativeUnit loadAdminUnit(String legacyId) {
-		try {
-			return (AdministrativeUnit)entityManager
-			.createQuery("from AdministrativeUnit adm where adm.legacyId = :id and adm.workspace.id = :wsid")
-			.setParameter("id", legacyId)
-			.setParameter("wsid", getWorkspace().getId())
-			.getSingleResult();
-			
-		} catch (Exception e) {
-//			System.out.println("Administrative Unit not found. ID = " + legacyId);
-		}
+	public boolean isHasReportContent() {
+		return (countCases > 0) || (countNewCases > 0) || (countUnits > 0) || (countNewUnits > 0) || (getWarnings().size() > 0);
+	}
+
+	/**
+	 * Send a new report message to the report e-mail
+	 */
+	public void sendReportMessage() {
+		String email = config.getEmailReport();
+		if ((email == null) || (email.isEmpty()))
+			return;
 		
-		return entityManager.merge(config.getDefaultAdminUnit());
-	}
-
-	
-	/**
-	 * Load the health system with the corresponding legacy ID. If the record is not found,
-	 * the default health system is loaded
-	 * @param legacyId
-	 * @return
-	 */
-	protected HealthSystem loadHealthSystem(String legacyId) {
-		try {
-			return (HealthSystem)entityManager
-			.createQuery("from HealthSystem hs where hs.legacyId = :id and hs.workspace.id=" + getWorkspace().getId().toString())
-			.setParameter("id", legacyId)
-			.getSingleResult();
-			
-		} catch (Exception e) {
-//			System.out.println("Health System not found. ID = " + legacyId);
-		}
+		User user = new User();
+		user.setEmail(email);
 		
-		return entityManager.merge(config.getDefaultHealthSystem());		
-	}
-
-
-	
-	/**
-	 * Load the TB Unit with the corresponding legacy ID. If the record is not found,
-	 * the default health system is loaded
-	 * @param legacyId
-	 * @return
-	 */
-	protected Tbunit loadTBUnit(String legacyId, String name) {
-		String hql = "from Tbunit unit where unit.workspace.id = " + getWorkspace().getId().toString(); 
-
-		String restriction = "unit.legacyId = :id";
-		if (name != null)
-			restriction = "(" + restriction + " or unit.name.name1 = '" + name + "')";
+		Contexts.getEventContext().set("user", user);
 		
-		hql += " and " + restriction;
-		
-		List<Tbunit> lst = entityManager
-			.createQuery(hql)
-			.setParameter("id", legacyId)
-			.getResultList();
-			
-		return (lst.size() > 0? lst.get(0): null);		
+		Renderer.instance().render("/custom/md/mail/importreport.xhtml");
 	}
-	
-
-	/**
-	 * Return the Health System in use in Moldova
-	 * @return {@link HealthSystem} instance
-	 */
-	protected HealthSystem getHealthSystem() {
-		return (HealthSystem)entityManager.merge(config.getDefaultHealthSystem());
-	}
-	
-
-	/**
-	 * Returns Moldova workspace
-	 * @return
-	 */
-	protected Workspace getWorkspace() {
-		return (Workspace)entityManager.merge(config.getWorkspace());
-//		return (Workspace)entityManager.find(Workspace.class, MOLDOVA_WORKSPACEID);
-	}
-
-	protected String getValue(Element el, String tag) {
-		if (el == null)
-			return null;
-		NodeList nodeList = el.getElementsByTagName(tag);
-		if (nodeList == null)
-			return null;
-		Node node = nodeList.item(0);
-		if (node == null)
-			return null;
-		if (node.getChildNodes().item(0) == null)
-			return null;
-		return el.getElementsByTagName(tag).item(0).getChildNodes().item(0).getNodeValue();
-	}
-	
-	protected Integer getValueAsInteger(Element el, String tag) {
-		String s = getValue(el, tag);
-		if (s == null)
-			return null;
-		return Integer.valueOf(s);
-	}
-
-	
-	/**
-	 * Return tag value as a Date object. The value must be in the format YYYY-MM-DD
-	 * @param el
-	 * @param tag
-	 * @return
-	 */
-	protected Date getValueAsDate(Element el, String tag) {
-		String s = getValue(el, tag);
-		if (s == null)
-			return null;
-		String vals[] = s.split("-");
-		Calendar c = Calendar.getInstance();
-		c.clear();
-		c.set(Calendar.YEAR, Integer.valueOf(vals[0]));
-		c.set(Calendar.MONTH, Integer.valueOf(vals[1]) - 1);
-		c.set(Calendar.DAY_OF_MONTH, Integer.valueOf(vals[2]));
-		return c.getTime();
-	}
-
-
-	public void setConfig(MoldovaServiceConfig config) {
-		this.config = config;
-	}
-
 
 
 	public MoldovaServiceConfig getConfig() {
 		return config;
 	}
 	
-	public void readXML() throws Exception {
+/*	public void readXML() throws Exception {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		Document doc = docFactory.newDocumentBuilder().parse(new File("C:\\Projetos\\MSH\\Moldova\\Database\\units.xml"));
 		Element elem = doc.getDocumentElement();
 		importUnits(elem);
 	}
+*/
 
+	public List<String> getNewCases() {
+		return newCases;
+	}
+
+
+	public List<WarnMessage> getWarnings() {
+		return warnings;
+	}
+
+
+	public int getCountNewCases() {
+		return countNewCases;
+	}
+
+
+	public int getCountCases() {
+		return countCases;
+	}
+
+
+	public int getCountNewUnits() {
+		return countNewUnits;
+	}
+
+
+	public int getCountUnits() {
+		return countUnits;
+	}
 
 }

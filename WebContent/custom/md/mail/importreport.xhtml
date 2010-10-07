@@ -1,0 +1,28 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="/mail/usertemplate.xhtml">
+      
+      <ui:param name="subject" value="Importing report" />
+      
+      <ui:define name="body">
+          
+        <h3>e-TB Manager Importing report</h3><p/>
+        This is an automatic message sent by the e-TB Manager and it shall not be answered.<br/>
+        A new importing was done from SYME-TB to e-TB Manager. Bellow is a resume of the importing:<p/>
+        
+        <div style="font-size:12px;font-weight:bold;color:#a0a0a0;">
+        	New cases imported
+        </div>
+        <h:dataTable value="#{symetaIntegration.newCases}" var="c">
+        	<h:column>
+        		<f:facet name="header">Case</f:facet>
+        		#{c}
+        	</h:column>
+        </h:dataTable>
+      </ui:define>
+      
+</ui:composition>

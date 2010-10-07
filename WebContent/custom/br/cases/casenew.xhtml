@@ -55,7 +55,7 @@
 				</ui:define>
 				<div id="cbressputum">
     			<h:selectOneMenu value="#{examMicroscopy.result}" required="true">
-    				<s:selectItems value="#{globalLists.sputumSmearNotifOptions}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+    				<s:selectItems value="#{globalLists.microscopyNotifOptions}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
     				<s:convertEnum />
     			</h:selectOneMenu>
     			</div>
@@ -104,7 +104,7 @@
 			<ui:param name="redasterisk" value="true" />
     		<ui:param name="required" value="false" /> 
     		<ui:param name="future" value="true" /> 
-    		<ui:param name="datefield" value="#{examCultureHome.sample.dateCollected}" /> 
+    		<ui:param name="datefield" value="#{examCultureHome.instance.dateCollected}" /> 
     		<ui:param name="edtid" value="edtdatecollected" /> 
     	</s:decorate>
     	</div>
