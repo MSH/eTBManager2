@@ -16,6 +16,13 @@ public class MoldovaServiceConfig {
 
 
 	/**
+	 * Check if the Web Service URL was entered
+	 * @return
+	 */
+	public boolean isWebServiceURLEmpty() {
+		return (webServiceURL == null) || (webServiceURL.isEmpty());
+	}
+	/**
 	 * @return the webServiceURL
 	 */
 	public String getWebServiceURL() {

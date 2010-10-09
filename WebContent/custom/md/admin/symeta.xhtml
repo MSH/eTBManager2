@@ -19,6 +19,7 @@
 
 <ui:define name="body">
 	<h:form >
+	<div id="pnldata">
 	<s:decorate template="/layout/roundrect.xhtml" style="width:540px;">
 		<ui:param name="showheader" value="0" />
 		<ui:param name="showfooter" value="0" />
@@ -27,11 +28,13 @@
 		<p/>
 		<a:commandButton value="#{messages['ro.admin.symeta.run']}" styleClass="button" style="width:190px" 
 			action="#{symetaIntHome.execute}"
+			oncomplete="jQuery('#pnldata').hide();"
 			reRender="messages"/>
 		
 		<p/>
 		<a:commandLink value="#{messages['ro.admin.symeta.erase']}" style="display:block;margin-bottom:20px;margin-top:20px;"
 			action="#{symetaIntHome.eraseCases}"
+			onclick="if (!confirm('#{messages['ro.admin.symeta.removecases']}')) {return false;}"
 			reRender="messages"/>
 		<br/>
 
@@ -40,10 +43,11 @@
 			oncomplete="showConfigDlg();"/>
 		</div>
 	</s:decorate>
+	</div>
 	</h:form>		
 
 
-<rich:modalPanel id="symetaConfigdlg" width="580" height="310" zindex="2000" trimOverlayedElements="false">
+<rich:modalPanel id="symetaConfigdlg" width="580" zindex="2000" autosized="true" trimOverlayedElements="false">
 	<f:facet name="header">#{messages['ro.admin.symeta.config']}</f:facet>
 	<ui:param name="labelstyle" value="width:180px" />
 	<h:panelGroup id="cfgpnl" >
@@ -55,8 +59,16 @@
 	</s:decorate>
 
 	<s:decorate template="/layout/edit.xhtml" >
-		<ui:define name="label">#{messages['ro.admin.symeta.exec_interval']}:</ui:define>
-		<h:inputText value="#{symetaIntHome.config.interval}"/>
+		<ui:define name="label">#{messages['ro.admin.symeta.emailReport']}:</ui:define>
+		<h:inputText value="#{symetaIntHome.config.emailReport}" style="width:340px"/>
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['ro.admin.symeta.workspace']}:</ui:define>
+		<h:selectOneMenu id="ws" value="#{symetaIntHome.config.workspace}" required="true">
+       		<s:selectItems value="#{workspacesUser}" var="c" label="#{c.name}" noSelectionLabel="-" />
+       		<s:convertEntity/>
+		</h:selectOneMenu>
 	</s:decorate>
 
 	<div class="paragraph">
@@ -82,6 +94,7 @@
 		
 	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
 		oncomplete="Richfaces.hideModalPanel('symetaConfigdlg'); return false;"
+		ajaxSingle="true"
 		action="#{conversation.end}" />
 	</h:form>
 	</h:panelGroup>

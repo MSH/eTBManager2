@@ -28,9 +28,12 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['global.month']}" styleClass="colch"/>
 				</f:facet>
-				<s:link value="#{messages[r.monthDisplay]}" view="/custom/ua/cases/edtexamhiv.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
+				<s:link view="/custom/ua/cases/edtexamhiv.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbCase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
+					<h:outputFormat value="#{messages[r.monthDisplay]}" >
+						<f:param value="#{r.monthTreatment}"/>
+					</h:outputFormat>
 				</s:link>
 			</h:column>
 			

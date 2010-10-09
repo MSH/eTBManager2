@@ -2,6 +2,7 @@ package org.msh.tb.md;
 
 import javax.persistence.EntityManager;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.In;
@@ -14,6 +15,7 @@ import org.msh.mdrtb.entities.AdministrativeUnit;
 import org.msh.mdrtb.entities.HealthSystem;
 import org.msh.mdrtb.entities.SystemParam;
 import org.msh.mdrtb.entities.Tbunit;
+import org.msh.mdrtb.entities.UserLogin;
 import org.msh.mdrtb.entities.Workspace;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.tbunits.TBUnitSelection;
@@ -32,6 +34,7 @@ public class SymetaIntHome {
 	private final static String DEFAULT_ADMINUNIT = "default_adminunit";
 	private final static String DEFAULT_TBUNIT = "default_tbunit";
 	private final static String DEFAULT_HEALTHSYSTEM = "default_healthsystem";
+	private final static String EMAIL_REPORTS = "email_reports";
 	
 	@In EntityManager entityManager;
 	@In(required=false) Workspace defaultWorkspace;
@@ -44,13 +47,13 @@ public class SymetaIntHome {
 	private TBUnitSelection tbunitSelection;
 	private AdminUnitSelection auselection;
 
-
 	/**
 	 * Execute the integration with SYMETA system 
 	 */
 	public String execute() {
 		try {
-			symetaIntegration.execute( getConfig() );
+			UserLogin userLogin = (UserLogin)Component.getInstance("userLogin", false);
+			symetaIntegration.execute( getConfig(), (userLogin != null? userLogin.getUser(): null) );
 			
 		} catch (Exception e) {
 			facesMessages.add(e.getMessage());
@@ -73,7 +76,9 @@ public class SymetaIntHome {
 	 * Erase all cases imported
 	 */
 	public void eraseCases() {
-		
+		entityManager.createQuery("delete from TbCase " +
+			 "where patient.id in (select aux.id from Patient aux where aux.workspace.id=#{defaultWorkspace.id})")
+			 .executeUpdate();
 	}
 
 
@@ -111,6 +116,7 @@ public class SymetaIntHome {
 		saveParameter(DEFAULT_TBUNIT, Integer.toString( config.getDefaultTbunit().getId() ));
 		saveParameter(DEFAULT_HEALTHSYSTEM, Integer.toString( config.getDefaultHealthSystem().getId() ));
 		saveParameter(DEFAULT_WORKSPACE, Integer.toString( config.getWorkspace().getId() ));
+		saveParameter(EMAIL_REPORTS, config.getEmailReport() );
 
 		configSaved = true;
 		entityManager.flush();
@@ -128,15 +134,23 @@ public class SymetaIntHome {
 		config = new MoldovaServiceConfig();
 		config.setWorkspace(getDefaultWorkspace());	
 
-		String val = readParameter("symeta_url_webservice");
-		config.setWebServiceURL(val);
+		config.setWebServiceURL( readParameter(SYMETA_URL_WEBSERVICE) );
+		config.setEmailReport( readParameter(EMAIL_REPORTS) );
 		
-		config.setDefaultAdminUnit( entityManager.find(AdministrativeUnit.class, readIntegerParameter("default_adminunit") ));
-		config.setDefaultTbunit( entityManager.find(Tbunit.class, readIntegerParameter("default_tbunit") ));
-		config.setDefaultHealthSystem( entityManager.find(HealthSystem.class, readIntegerParameter("default_healthsystem") ));
-		config.setWorkspace( entityManager.find(Workspace.class, readIntegerParameter("default_workspace") ));
+		config.setDefaultAdminUnit( getEntityFromSystemParameter(AdministrativeUnit.class, DEFAULT_ADMINUNIT) );
+		config.setDefaultTbunit( getEntityFromSystemParameter(Tbunit.class, DEFAULT_TBUNIT) );
+		config.setDefaultHealthSystem( getEntityFromSystemParameter(HealthSystem.class, DEFAULT_HEALTHSYSTEM) );
+		config.setWorkspace( getEntityFromSystemParameter(Workspace.class, DEFAULT_WORKSPACE));
 	}
 
+
+	protected <E> E getEntityFromSystemParameter(Class<E> entityClass, String paramKey) {
+		Integer id = readIntegerParameter(paramKey);
+		if (id == null)
+			return null;
+		
+		return (E)entityManager.find(entityClass, id);
+	}
 	
 	protected void saveParameter(String key, String value) {
 		SystemParam p;
@@ -149,6 +163,8 @@ public class SymetaIntHome {
 		if (p == null) {
 			p = new SystemParam();
 			p.setKey(key);
+			defaultWorkspace = entityManager.merge(defaultWorkspace);
+			p.setWorkspace(defaultWorkspace);
 		}
 		
 		p.setValue(value);
@@ -163,6 +179,9 @@ public class SymetaIntHome {
 	 */
 	protected Integer readIntegerParameter(String param) {
 		String val = readParameter(param);
+		if ((val == null) || (val.isEmpty()))
+			return null;
+		
 		return Integer.parseInt(val);
 	}
 	

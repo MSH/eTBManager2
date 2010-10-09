@@ -1,5 +1,6 @@
 package org.msh.tb.md;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,7 +14,6 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.Renderer;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.User;
-import org.msh.tb.md.ImportingBase.WarnMessage;
 import org.msh.tb.md.symeta.Get_casesResponseGet_casesResult;
 import org.msh.tb.md.symeta.Get_institutionsResponseGet_institutionsResult;
 import org.msh.tb.md.symeta.MDR_TBMISSSoapProxy;
@@ -35,11 +35,13 @@ public class SymetaIntegration {
 
 	private MoldovaServiceConfig config;
 	private List<String> newCases;
-	private List<WarnMessage> warnings;
+	private List<WarnMessage> warnings = new ArrayList<WarnMessage>();
+	private int countCasesRead;
 	private int countNewCases;
 	private int countCases;
 	private int countNewUnits;
 	private int countUnits;
+	private List<String> emails = new ArrayList<String>();
 
 
 	/**
@@ -48,10 +50,29 @@ public class SymetaIntegration {
 	 */
 	@Asynchronous
 	@Transactional
-	public void execute(MoldovaServiceConfig config) throws Exception {
+	public void execute(MoldovaServiceConfig config, User user) throws Exception {
 		this.config = config;
-		readUnits();
-		readCases();
+		
+		Contexts.getEventContext().set("defaultWorkspace", config.getWorkspace());
+		
+		if (config.isWebServiceURLEmpty())
+			addWarning("WEB Service URL not found. Please go to e-TB Manager | Administration | SYMETA setup");
+		
+		if (config.getWorkspace() == null)
+			addWarning("Workspace to import was not setup. Please go to e-TB Manager | Administration | SYMETA setup");
+
+		try {
+			if (warnings.size() == 0) {
+				readUnits();
+				readCases();
+			}
+		} catch (Exception e) {
+			addWarning("FATAL ERROR: " + e.getClass().toString() + ": " + e.getMessage());
+		}
+		
+		if (user != null)
+			emails.add(user.getEmail());
+
 		sendReportMessage();
 	}
 	
@@ -132,11 +153,12 @@ public class SymetaIntegration {
 
 		countNewCases = 0;
 		countCases = 0;
+		
+		newCases = new ArrayList<String>();
 
 		CaseImporting caseImporting = new CaseImporting();
+		caseImporting.setWarning(warnings);
 		
-		warnings = caseImporting.getWarning();
-
 		for (int i = 0; i < nodes.getLength(); i++) {
 			Node n = nodes.item(i);
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -147,9 +169,10 @@ public class SymetaIntegration {
 					if (caseImporting.isNewCase()) {
 						countNewCases++;
 						TbCase tbcase = caseImporting.getTbcase();
-						newCases.add("(" + tbcase.getRegistrationCode() + ") " + tbcase.getPatient().getFullName());
+						newCases.add("(" + tbcase.getLegacyId() + ") " + tbcase.getPatient().getFullName());
 					}
 				}
+				countCasesRead++;
 			}
 		}
 	}
@@ -214,20 +237,31 @@ public class SymetaIntegration {
 		return (countCases > 0) || (countNewCases > 0) || (countUnits > 0) || (countNewUnits > 0) || (getWarnings().size() > 0);
 	}
 
+
 	/**
 	 * Send a new report message to the report e-mail
 	 */
 	public void sendReportMessage() {
-		String email = config.getEmailReport();
-		if ((email == null) || (email.isEmpty()))
+		if (!isHasReportContent())
 			return;
 		
-		User user = new User();
-		user.setEmail(email);
+		String emailReport = config.getEmailReport();
+		if ((emailReport != null) && (!emailReport.isEmpty())) {
+			String[] msgs = emailReport.split(",");
+			for (String s: msgs) {
+				if (!emails.contains(s))
+					emails.add(s);
+			}
+		}
 		
-		Contexts.getEventContext().set("user", user);
-		
-		Renderer.instance().render("/custom/md/mail/importreport.xhtml");
+		for (String email: emails) {
+			User user = new User();
+			user.setEmail(email);
+			
+			Contexts.getEventContext().set("user", user);
+			
+			Renderer.instance().render("/custom/md/mail/importreport.xhtml");
+		}
 	}
 
 
@@ -272,4 +306,19 @@ public class SymetaIntegration {
 		return countUnits;
 	}
 
+	public void addWarning(String description) {
+		WarnMessage msg = new WarnMessage();
+		msg.setDescription(description);
+		warnings.add(msg);
+	}
+
+
+	public List<String> getEmails() {
+		return emails;
+	}
+
+
+	public int getCountCasesRead() {
+		return countCasesRead;
+	}
 }

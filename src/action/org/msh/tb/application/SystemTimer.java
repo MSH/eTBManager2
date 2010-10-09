@@ -21,6 +21,6 @@ public class SystemTimer {
 	 */
 	@Asynchronous
 	public void trigger(@Duration long initDelay, @IntervalDuration long interval) {
-		Events.instance().raiseEvent("system-timer-event");
+		//Events.instance().raiseEvent("system-timer-event");
 	}
 }

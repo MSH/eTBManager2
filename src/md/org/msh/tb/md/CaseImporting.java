@@ -5,13 +5,21 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.jboss.seam.Component;
+import org.msh.mdrtb.entities.Address;
+import org.msh.mdrtb.entities.AdministrativeUnit;
+import org.msh.mdrtb.entities.FieldValue;
 import org.msh.mdrtb.entities.Patient;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
+import org.msh.mdrtb.entities.enums.DrugResistanceType;
 import org.msh.mdrtb.entities.enums.Gender;
+import org.msh.mdrtb.entities.enums.InfectionSite;
+import org.msh.mdrtb.entities.enums.ValidationState;
+import org.msh.tb.misc.FieldsOptions;
 import org.msh.utils.date.DateUtils;
 import org.w3c.dom.Element;
 
@@ -30,6 +38,7 @@ public class CaseImporting extends ImportingBase{
 	
 	public boolean importCase(Element xmlCaseData, Workspace workspace) {
 		EntityManager entityManager = getEntityManager();
+		setWorkspace(workspace);
 
 		// default is new case, and not an existing one
 		newCase = true;
@@ -40,9 +49,6 @@ public class CaseImporting extends ImportingBase{
 		String firstName = getValue(xmlCaseData, "FIRSTNAME", false);
 		String lastName = getValue(xmlCaseData, "LASTNAME", false);
 		String fatherName = getValue(xmlCaseData, "FATHERNAME", false);
-		
-		if (caseId == null) 
-			addWarning("ID of the case was not specified");
 
 		Patient p = new Patient();
 		p.setLastName(lastName);
@@ -51,18 +57,36 @@ public class CaseImporting extends ImportingBase{
 		p.setWorkspace(workspace);
 		patientName = p.getFullName();
 		
-		if ((patientName == null) || (patientName.isEmpty()))
-			addWarning("Patient name must be specified");
+		if (caseId == null) { 
+			addMessage("ERROR: ID of the case was not specified");
+			return false;
+		}
+		
+		if ((patientName == null) || (patientName.isEmpty())) {
+			addMessage("ERROR: Patient name must be specified");
+			return false;
+		}
 
 		Integer gender = getValueAsInteger(xmlCaseData, "GENDER", false);
 		Date birthDate = getValueAsDate(xmlCaseData, "BIRTHDATE_string", false);
-		String unitId = getValue(xmlCaseData, "NOTIFICATIONUNIT", true);
 		Date beginTreatmentDate = getValueAsDate(xmlCaseData, "BEGINTREATMENTDATE_string", true);
-		
+		String unitId = getValue(xmlCaseData, "NOTIFICATIONUNIT", true);
+		String personalNumber = getValue(xmlCaseData, "PERSONALNUMBER", false);
+		String treatmentUnitId = getValue(xmlCaseData, "TREATMENTUNIT", false);
+		Integer mainLocalization = getValueAsInteger(xmlCaseData, "MAINLOCALIZATION", false);
+		String siteOfDisease = getValue(xmlCaseData, "SITEOFDISEASE", false);
+		String addressLocality = getValue(xmlCaseData, "ADDRESS_LOCALITY", false);
+		String addressSector = getValue(xmlCaseData, "ADDRESS_SECTOR", false);
+		String addressRayon = getValue(xmlCaseData, "ADDRESS_RAYON", false);
+		String addressHome = getValue(xmlCaseData, "ADDRESS_HOME", false);
+		String typeOfResistance = getValue(xmlCaseData, "TYPEOFRESISTANCE", false);
+
+		AdministrativeUnit admAddress = getAdressAdminUnit(addressRayon, addressSector, addressLocality);
+				
 		if (getWarning().size() > numWarnings)
 			return false;
-		
-		TbCase tbcase;
+
+		tbcase = null;
 		try {
 			List<TbCase> lstcases = entityManager.createQuery("from TbCase c " +
 					"join fetch c.patient p " +
@@ -88,7 +112,7 @@ public class CaseImporting extends ImportingBase{
 		
 		Tbunit unit = loadTBUnit(unitId);
 		if (unit == null) {
-			addWarning("No TB Unit found with ID = " + unitId);
+			addMessage("No TB Unit found with ID = " + unitId);
 			unit = entityManager.merge(getConfig().getDefaultTbunit());
 		}
 		
@@ -96,6 +120,15 @@ public class CaseImporting extends ImportingBase{
 		tbcase.setLegacyId(caseId);
 		tbcase.setDiagnosisDate(beginTreatmentDate);
 		tbcase.setRegistrationDate(beginTreatmentDate);
+		tbcase.setValidationState(ValidationState.VALIDATED);
+		tbcase.setRegistrationCode(personalNumber);
+		if (tbcase.getNotifAddress() == null)
+			tbcase.setNotifAddress(new Address());
+		tbcase.getNotifAddress().setAddress(addressHome);
+		tbcase.getNotifAddress().setAdminUnit( admAddress );
+		tbcase.setInfectionSite( getInfectionSite(mainLocalization) );
+		tbcase.setPulmonaryType( getPulmonaryType(siteOfDisease) );
+		tbcase.setDrugResistanceType( getDrugResistanceType(typeOfResistance) );
 		
 		p = tbcase.getPatient();
 		if (p == null) {
@@ -136,13 +169,98 @@ public class CaseImporting extends ImportingBase{
 		return true;
 	}
 
+
+	/**
+	 * get infection site based on main localization from symetb
+	 * @param mainLocalization
+	 * @return
+	 */
+	protected InfectionSite getInfectionSite(Integer mainLocalization) {
+		if (mainLocalization != null) {
+			switch (mainLocalization) {
+			case 1: return InfectionSite.PULMONARY;
+			case 2: return InfectionSite.EXTRAPULMONARY;
+			default:
+				addMessage("Unknown infection site = " + mainLocalization);
+			}
+		}
+		return null;
+	}
+
 	
+	/**
+	 * Return pulmonary type based on legacy id
+	 * @param legacyId
+	 * @return
+	 */
+	protected FieldValue getPulmonaryType(String legacyId) {
+		if ((legacyId == null) || (legacyId.isEmpty()))
+			return null;
+		
+		FieldsOptions options = (FieldsOptions)Component.getInstance("fieldOptions", true);
+		List<FieldValue> lst = options.getPulmonaryTypes();
+		
+		for (FieldValue fld: lst) {
+			if (fld.getCustomId().equals(legacyId))
+				return fld;
+		}
+		
+		addMessage("Site of disease not found = " + legacyId);
+		return null;
+	}
+
+	
+	/**
+	 * Return the drug resistance type according to symetb type of resistance
+	 * @param typeOfResistance
+	 * @return
+	 */
+	protected DrugResistanceType getDrugResistanceType(String typeOfResistance) {
+		if ((typeOfResistance == null) || (typeOfResistance.isEmpty()))
+			return null;
+		
+		if (typeOfResistance.equals("1"))
+			return DrugResistanceType.MULTIDRUG_RESISTANCE;
+		if (typeOfResistance.equals("2"))
+			return DrugResistanceType.POLY_RESISTANCE;
+		
+		addMessage("Unkown type of resistance = " + typeOfResistance);
+		return null;
+	}
+
+	
+	/**
+	 * Load the administrative unit of the patient address
+	 * @param rayon
+	 * @param sector
+	 * @param locality
+	 * @return
+	 */
+	protected AdministrativeUnit getAdressAdminUnit(String rayon, String sector, String locality) {
+		String legacyId = sector;
+	
+		if (sector == null)
+			legacyId = rayon;
+
+		if (legacyId == null) {
+			addMessage("Rayon/Sector address not specified");
+			return null;
+		}
+
+		AdministrativeUnit adm = loadAdminUnit(legacyId);
+		if (adm == null) {
+			addMessage("Rayon/Sector address number " + rayon + "/" + sector + "/" + locality + " not found");
+		}
+		return adm;
+	}
+
 	/**
 	 * Add a new warning message during import a case
 	 * @param message
 	 */
-	public void addWarning(String message) {
-		addWarnMessage(caseId, patientName, message);
+	@Override
+	public WarnMessage addMessage(String message) {
+		return addWarnMessage(caseId, patientName, message);
 	}
 	
 	public boolean isNewCase() {
