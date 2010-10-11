@@ -453,6 +453,13 @@ function showLoadForecastingDlg() {
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{forecasting.referenceDate}"/> 
 	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.leadtime']}:</ui:define>
+		<h:selectOneMenu value="#{forecasting.leadTime}" required="true">
+			<f:selectItems value="#{forecastingView.bufferStockOptions}" />
+		</h:selectOneMenu>
+	</s:decorate>
 
 	<div class="paragraph">#{messages['manag.forecast.reviewperiod']}</div>
 	<s:decorate template="/layout/dateedit.xhtml">

@@ -98,8 +98,11 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	@Override
 	public String persist() {
 		Object obj = getInstance();
-		if (obj instanceof WSObject)
-			((WSObject)obj).setWorkspace(getWorkspace());
+		if (obj instanceof WSObject) {
+			WSObject wsobj = (WSObject)getInstance();
+			if (wsobj.getWorkspace() == null)
+				wsobj.setWorkspace(getWorkspace());
+		}
 
 		String ret = super.persist();
 		

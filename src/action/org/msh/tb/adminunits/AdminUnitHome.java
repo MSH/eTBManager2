@@ -73,8 +73,8 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 
 	
 	/**
-	 * Return available structures for the selected country
-	 * @return
+	 * Return available structures for the selected country based on its parent level
+	 * @return List of {@link CountryStructure} instances
 	 */
 	public List<CountryStructure> getStructures() {
 		if (structures == null) {

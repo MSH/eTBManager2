@@ -8,14 +8,16 @@ import javax.persistence.EntityManager;
 import org.apache.axis.message.MessageElement;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.Renderer;
+import org.jboss.seam.transaction.UserTransaction;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.User;
 import org.msh.tb.md.symeta.Get_casesResponseGet_casesResult;
 import org.msh.tb.md.symeta.Get_institutionsResponseGet_institutionsResult;
+import org.msh.tb.md.symeta.Get_localitiesResponseGet_localitiesResult;
+import org.msh.tb.md.symeta.Get_regionsResponseGet_regionsResult;
 import org.msh.tb.md.symeta.MDR_TBMISSSoapProxy;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -42,6 +44,7 @@ public class SymetaIntegration {
 	private int countNewUnits;
 	private int countUnits;
 	private List<String> emails = new ArrayList<String>();
+	private UserTransaction userTx;
 
 
 	/**
@@ -49,7 +52,6 @@ public class SymetaIntegration {
 	 * @throws Exception
 	 */
 	@Asynchronous
-	@Transactional
 	public void execute(MoldovaServiceConfig config, User user) throws Exception {
 		this.config = config;
 		
@@ -61,13 +63,31 @@ public class SymetaIntegration {
 		if (config.getWorkspace() == null)
 			addWarning("Workspace to import was not setup. Please go to e-TB Manager | Administration | SYMETA setup");
 
+		userTx = (UserTransaction) org.jboss.seam.Component.getInstance("org.jboss.seam.transaction.transaction");
+		userTx.setTransactionTimeout(10 * 60);  //set timeout to 60 * 10 = 600 secs = 10 mins
+		userTx.begin();
+		entityManager.joinTransaction();
 		try {
 			if (warnings.size() == 0) {
-				readUnits();
+				readRegions();
+				
+				userTx.commit();
+				userTx.begin();
+				
+				readLocalities();
+				
+				userTx.commit();
+				userTx.begin();
+				
+//				readUnits();
 				readCases();
+				
+				userTx.commit();
 			}
 		} catch (Exception e) {
 			addWarning("FATAL ERROR: " + e.getClass().toString() + ": " + e.getMessage());
+			e.printStackTrace();
+			userTx.rollback();
 		}
 		
 		if (user != null)
@@ -75,13 +95,18 @@ public class SymetaIntegration {
 
 		sendReportMessage();
 	}
+
 	
+	protected void commitAndRestart() throws Exception {
+		userTx.commit();
+		entityManager.clear();
+		userTx.begin();
+	}
 	
 	/**
 	 * Read units from the SYMETA server
 	 * @throws Exception 
 	 */
-	@Transactional
 	public void readUnits() throws Exception  {
 		int errorCount = 0;
 		Element elem = null;
@@ -110,12 +135,61 @@ public class SymetaIntegration {
 	}
 
 
+	protected void readLocalities() throws Exception {
+		int errorCount = 0;
+		Element elem = null;
+		while (true) {
+			try {
+				MDR_TBMISSSoapProxy tbmis = new MDR_TBMISSSoapProxy(config.getWebServiceURL());
+				
+				Get_localitiesResponseGet_localitiesResult res = tbmis.get_localities(null);
+				MessageElement[] msgs = res.get_any();
+				elem = msgs[1].getAsDOM();
+				break;
+			} catch (Exception e) {
+				errorCount++;
+				if (errorCount > 3) {
+					System.out.println("error trying to connect to SYMETA server: " + e.getMessage());
+					break;
+				}
+				else System.out.println("Locality import: TRY #" + errorCount + ": " + e.getMessage());
+			}
+		}
+
+		if (elem != null)
+			importLocalities(elem);		
+	}
+	
+
+	protected void readRegions() throws Exception {
+		int errorCount = 0;
+		Element elem = null;
+		while (true) {
+			try {
+				MDR_TBMISSSoapProxy tbmis = new MDR_TBMISSSoapProxy(config.getWebServiceURL());
+				
+				Get_regionsResponseGet_regionsResult res = tbmis.get_regions(null);
+				MessageElement[] msgs = res.get_any();
+				elem = msgs[1].getAsDOM();
+				break;
+			} catch (Exception e) {
+				errorCount++;
+				if (errorCount > 3) {
+					System.out.println("error trying to connect to SYMETA server: " + e.getMessage());
+					break;
+				}
+				else System.out.println("Locality import: TRY #" + errorCount + ": " + e.getMessage());
+			}
+		}
+
+		if (elem != null)
+			importRegions(elem);		
+	}
 	
 	/**
 	 * Read units from the SYMETA server
 	 * @throws Exception 
 	 */
-	@Transactional
 	protected void readCases() throws Exception {
 		int errorCount = 0;
 		Element elem = null;
@@ -142,6 +216,45 @@ public class SymetaIntegration {
 	}
 
 
+	/**
+	 * Import localities from SYMETB
+	 * @param rootElemen
+	 * @throws Exception
+	 */
+	protected void importLocalities(Element rootElemen) throws Exception {
+		NodeList nodes = rootElemen.getElementsByTagName("NewDataSet").item(0).getChildNodes();
+		
+		AdminUnitImporting adminUnitImporting = new AdminUnitImporting();
+		adminUnitImporting.setWarning(warnings);
+		
+		for (int i = 0; i < nodes.getLength(); i++) {
+			Node n = nodes.item(i);
+			if (n.getNodeType() == Node.ELEMENT_NODE) {
+				adminUnitImporting.importLocality((Element)n, config.getWorkspace());
+			}
+		}
+	}
+
+	
+	/**
+	 * Import localities from SYMETB
+	 * @param rootElemen
+	 * @throws Exception
+	 */
+	protected void importRegions(Element rootElemen) throws Exception {
+		NodeList nodes = rootElemen.getElementsByTagName("NewDataSet").item(0).getChildNodes();
+		
+		AdminUnitImporting adminUnitImporting = new AdminUnitImporting();
+		adminUnitImporting.setWarning(warnings);
+		
+		for (int i = 0; i < nodes.getLength(); i++) {
+			Node n = nodes.item(i);
+			if (n.getNodeType() == Node.ELEMENT_NODE) {
+				adminUnitImporting.importRegion((Element)n, config.getWorkspace());
+			}
+		}
+	}
+	
 
 	/**
 	 * Import the MDR cases from the root element of the XML

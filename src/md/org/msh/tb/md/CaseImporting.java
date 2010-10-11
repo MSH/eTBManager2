@@ -18,6 +18,7 @@ import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.DrugResistanceType;
 import org.msh.mdrtb.entities.enums.Gender;
 import org.msh.mdrtb.entities.enums.InfectionSite;
+import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.mdrtb.entities.enums.ValidationState;
 import org.msh.tb.misc.FieldsOptions;
 import org.msh.utils.date.DateUtils;
@@ -80,6 +81,7 @@ public class CaseImporting extends ImportingBase{
 		String addressRayon = getValue(xmlCaseData, "ADDRESS_RAYON", false);
 		String addressHome = getValue(xmlCaseData, "ADDRESS_HOME", false);
 		String typeOfResistance = getValue(xmlCaseData, "TYPEOFRESISTANCE", false);
+		String typeOfPatient = getValue(xmlCaseData, "TYPEOFPATIENT", false);
 
 		AdministrativeUnit admAddress = getAdressAdminUnit(addressRayon, addressSector, addressLocality);
 				
@@ -129,6 +131,7 @@ public class CaseImporting extends ImportingBase{
 		tbcase.setInfectionSite( getInfectionSite(mainLocalization) );
 		tbcase.setPulmonaryType( getPulmonaryType(siteOfDisease) );
 		tbcase.setDrugResistanceType( getDrugResistanceType(typeOfResistance) );
+		tbcase.setPatientType( getPatientType(typeOfPatient) );
 		
 		p = tbcase.getPatient();
 		if (p == null) {
@@ -167,6 +170,40 @@ public class CaseImporting extends ImportingBase{
 		entityManager.flush();
 
 		return true;
+	}
+
+	
+	/**
+	 * Return the patient type from symetb
+	 * @param typeOfPatient
+	 * @return
+	 */
+	protected PatientType getPatientType(String typeOfPatient) {
+		if ("1".equals(typeOfPatient))
+			return PatientType.NEW;
+		else
+		if ("2".equals(typeOfPatient))
+			return PatientType.RELAPSE;
+		else
+		if ("3".equals(typeOfPatient))
+			return PatientType.AFTER_DEFAULT;
+		else
+		if ("41".equals(typeOfPatient))
+			return PatientType.FAILURE_FT;
+		else
+		if ("42".equals(typeOfPatient))
+			return PatientType.FAILURE_RT;
+		else
+		if ("5".equals(typeOfPatient))
+			return PatientType.OTHER;
+		else
+		if ("6".equals(typeOfPatient))
+			return PatientType.OTHER;
+		
+		if (typeOfPatient != null)
+			addMessage("Ukwown type of patient = " + typeOfPatient);
+
+		return null;
 	}
 
 
@@ -237,13 +274,16 @@ public class CaseImporting extends ImportingBase{
 	 * @return
 	 */
 	protected AdministrativeUnit getAdressAdminUnit(String rayon, String sector, String locality) {
-		String legacyId = sector;
+		String legacyId = locality;
+		
+		if (legacyId == null)
+			legacyId = sector;
 	
-		if (sector == null)
+		if (legacyId == null)
 			legacyId = rayon;
 
 		if (legacyId == null) {
-			addMessage("Rayon/Sector address not specified");
+			addMessage("Rayon/Sector/Locality address not specified");
 			return null;
 		}
 
