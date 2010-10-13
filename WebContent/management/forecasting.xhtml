@@ -110,10 +110,7 @@
 	
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['manag.forecast.leadtime']}:</ui:define>
-		<h:outputText value="#{forecasting.referenceDate}" converter="periodConverter" >
-			<f:param name="endDate" value="#{forecasting.iniDate}"/>
-			<f:param name="type" value="length" />
-		</h:outputText>
+		<h:outputText value="#{forecasting.leadTime}"/> (#{messages['global.months']})
 	</s:decorate>
 	
 	<s:decorate template="/layout/display.xhtml">
@@ -442,7 +439,7 @@ function showLoadForecastingDlg() {
 </script>
 
 
-<rich:modalPanel id="datesdlg" height="250" width="490" zindex="2000" style="background-color:#F2F5F0" trimOverlayedElements="false">
+<rich:modalPanel id="datesdlg" width="490" autosized="true" zindex="2000" style="background-color:#F2F5F0" trimOverlayedElements="false">
 	<f:facet name="header">#{messages['form.otheroptions']}</f:facet>
 	<ui:param name="labelstyle" value="width:160px;" />
 	<h:panelGroup id="datespnl">
@@ -458,7 +455,7 @@ function showLoadForecastingDlg() {
 		<ui:define name="label">#{messages['manag.forecast.leadtime']}:</ui:define>
 		<h:selectOneMenu value="#{forecasting.leadTime}" required="true">
 			<f:selectItems value="#{forecastingView.bufferStockOptions}" />
-		</h:selectOneMenu>
+		</h:selectOneMenu> (#{messages['global.months']})
 	</s:decorate>
 
 	<div class="paragraph">#{messages['manag.forecast.reviewperiod']}</div>
