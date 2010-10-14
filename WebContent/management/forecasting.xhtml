@@ -454,7 +454,7 @@ function showLoadForecastingDlg() {
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['manag.forecast.leadtime']}:</ui:define>
 		<h:selectOneMenu value="#{forecasting.leadTime}" required="true">
-			<f:selectItems value="#{forecastingView.bufferStockOptions}" />
+			<f:selectItems value="#{forecastingView.monthsOptions}" />
 		</h:selectOneMenu> (#{messages['global.months']})
 	</s:decorate>
 
@@ -474,7 +474,7 @@ function showLoadForecastingDlg() {
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['manag.forecast.bufferStock']}:</ui:define>
 		<h:selectOneMenu value="#{forecasting.bufferStock}" required="true">
-			<f:selectItems value="#{forecastingView.bufferStockOptions}" />
+			<f:selectItems value="#{forecastingView.monthsOptions}" />
 		</h:selectOneMenu>
 	</s:decorate>
 

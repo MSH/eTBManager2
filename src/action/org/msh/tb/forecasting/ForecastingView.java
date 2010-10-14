@@ -383,10 +383,10 @@ public class ForecastingView {
 	 * Return buffer stock options
 	 * @return
 	 */
-	public List<SelectItem> getBufferStockOptions() {
+	public List<SelectItem> getMonthsOptions() {
 		if (bufferStockOptions == null) {
 			bufferStockOptions = new ArrayList<SelectItem>();
-			for (int i = 0; i < 12; i++) {
+			for (int i = 0; i < 25; i++) {
 				bufferStockOptions.add(new SelectItem(i, Integer.toString(i)));
 			}
 		}
