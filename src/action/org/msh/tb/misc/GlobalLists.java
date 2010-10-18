@@ -11,6 +11,7 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.security.Identity;
 import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.enums.BufferStockMeasure;
 import org.msh.mdrtb.entities.enums.CaseClassification;
@@ -151,6 +152,8 @@ public class GlobalLists {
 		MicroscopyResult.PLUS2,
 		MicroscopyResult.PLUS3
 	};
+
+	private CaseClassification caseClassifications[];
 	
 	
 	/**
@@ -327,9 +330,26 @@ public class GlobalLists {
 	
 //	@Factory("caseClassifications")
 	public CaseClassification[] getCaseClassifications() {
-		return CaseClassification.values();
+		if (caseClassifications == null) {
+			List lst = getUserCaseClassifications();
+			caseClassifications = (CaseClassification[])lst.toArray(new CaseClassification[lst.size()]);
+		}
+		return caseClassifications;
+	}
+	
+	public List<CaseClassification> getUserCaseClassifications() {
+		ArrayList<CaseClassification> lst = new ArrayList<CaseClassification>();
+		Identity identity = Identity.instance();
+		if (identity.hasRole("TBCASES"))
+			lst.add(CaseClassification.TB_DOCUMENTED);
+		if (identity.hasRole("MDRCASES"))
+			lst.add(CaseClassification.MDRTB_DOCUMENTED);
+		if (identity.hasRole("NMTCASES"))
+			lst.add(CaseClassification.NMT);
+		return lst;
 	}
 
+	
 //	@Factory("prevTBTreatmentOutcomes")
 	public PrevTBTreatmentOutcome[] getPrevTBTreatmentOutcomes() {
 		return getExtensionComponent("prevTBTreatmentOutcomes", PrevTBTreatmentOutcome[].class, prevTBTreatmentOutcomes);
@@ -480,5 +500,5 @@ public class GlobalLists {
 	@Factory("indicatorDates")
 	public IndicatorDate[] getIndicatorDate() {
 		return IndicatorDate.values();
-	}	
+	}
 }

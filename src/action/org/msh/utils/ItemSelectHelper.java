@@ -64,7 +64,8 @@ public class ItemSelectHelper {
         }
         return lst;
     }
-    
+
+
     /**
      * Filtra uma lista de objetos ItemSelect deixando apenas objetos selecionados ou 
      * objetos nao selecionados, de acordo com o parametro selected.

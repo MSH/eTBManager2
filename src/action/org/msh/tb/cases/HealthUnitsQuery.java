@@ -94,27 +94,19 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 	 * @return SQL condition to be used in a where clause
 	 */
 	protected String generateSQLConditionByCase() {
-		boolean tbcases = userSession.isCanOpenTBCases();
-		boolean mdrcases = userSession.isCanOpenMDRTBCases();
-		
-		if (tbcases && mdrcases) {
-			tbcases = caseFilters.isTbcases();
-			mdrcases = caseFilters.isMdrtbcases();
-		}
-		
-		if (tbcases && mdrcases) {
+		List<CaseClassification> classifs = caseFilters.getClassifications().getSelectedItems();
+
+		if (classifs.size() == 0)
 			return "";
-		}
 		
 		String caseCondition = "";
-		
-		if (tbcases)
-			 caseCondition = " and (c.classification = " + CaseClassification.TB_DOCUMENTED.ordinal() + ")";
-		else
-		if (mdrcases)
-			caseCondition = " and (c.classification = " + CaseClassification.MDRTB_DOCUMENTED.ordinal() + ")";
-		
-		return caseCondition;
+		for (CaseClassification cla: classifs) {
+			if (!caseCondition.isEmpty())
+				caseCondition += ", ";
+			caseCondition += cla.ordinal();
+		}
+
+		return " and (c.classification in (" + caseCondition + "))";
 	}
 
 	

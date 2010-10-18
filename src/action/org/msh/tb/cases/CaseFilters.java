@@ -4,6 +4,7 @@ package org.msh.tb.cases;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -19,8 +20,10 @@ import org.msh.mdrtb.entities.enums.InfectionSite;
 import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.mdrtb.entities.enums.ValidationState;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.misc.GlobalLists;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.utils.ItemSelectList;
 import org.msh.utils.date.DateUtils;
 
 
@@ -69,9 +72,7 @@ public class CaseFilters {
 	 */
 	private Integer stateIndex;
 	
-	// used by HealthUnitsQuery
-	private boolean tbcases;
-	private boolean mdrtbcases;
+	private ItemSelectList<CaseClassification> classifications;
 	
 	/**
 	 * Used by {@link CasesQuery} to check which search mode to use 
@@ -562,34 +563,6 @@ public class CaseFilters {
 */
 
 	/**
-	 * @return the tbcases
-	 */
-	public boolean isTbcases() {
-		return tbcases;
-	}
-
-	/**
-	 * @param tbcases the tbcases to set
-	 */
-	public void setTbcases(boolean tbcases) {
-		this.tbcases = tbcases;
-	}
-
-	/**
-	 * @return the mdrtbcases
-	 */
-	public boolean isMdrtbcases() {
-		return mdrtbcases;
-	}
-
-	/**
-	 * @param mdrtbcases the mdrtbcases to set
-	 */
-	public void setMdrtbcases(boolean mdrtbcases) {
-		this.mdrtbcases = mdrtbcases;
-	}
-
-	/**
 	 * @return the stateIndex
 	 */
 	public Integer getStateIndex() {
@@ -671,5 +644,14 @@ public class CaseFilters {
 		if (vals.length > index)
 			 return Integer.parseInt(vals[index]);
 		else return null;		
+	}
+
+	public ItemSelectList<CaseClassification> getClassifications() {
+		if (classifications == null) {
+			GlobalLists globalLists = (GlobalLists)Component.getInstance("globalLists");
+			classifications = new ItemSelectList<CaseClassification>(globalLists.getUserCaseClassifications());
+			classifications.selectAll();
+		}
+		return classifications;
 	}
 }

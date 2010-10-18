@@ -16,7 +16,9 @@ public enum CaseState {
 	TREATMENT_INTERRUPTION,
 	NOT_CONFIRMED, 
 	DIED_NOTTB,
-	REGIMEN_CHANGED;
+	REGIMEN_CHANGED,
+	// Brazil
+	MONORESISTANT, POLIRESISTANT, MULTIRESISTANT, EXTRESISTANT;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

@@ -454,7 +454,7 @@ public class UserSession {
 	 * @return
 	 */
 	public boolean isCanOpenTBMDRTB() { 
-		return Identity.instance().hasRole("MDRCASES") && Identity.instance().hasRole("TBCASES");
+		return Identity.instance().hasRole("MDRCASES") && Identity.instance().hasRole("TBCASES") && Identity.instance().hasRole("NMTCASES");
 	}
 
 	

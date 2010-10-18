@@ -22,7 +22,22 @@ public class ItemSelect<E> implements Serializable {
 	 */
 	private static final long serialVersionUID = 8988824156454330368L;
 	private E item;
-    private boolean selected;
+	private boolean selected;
+
+	public ItemSelect() {
+		super();
+	}
+	
+    public ItemSelect(E item) {
+		super();
+		this.item = item;
+	}
+
+	public ItemSelect(E item, boolean selected) {
+		super();
+		this.item = item;
+		this.selected = selected;
+	}
 
     
     public E getItem() {

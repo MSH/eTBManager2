@@ -7,16 +7,14 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<s:fragment rendered="#{userSession.canOpenTBMDRTB}">
-		<h:selectBooleanCheckbox value="#{caseFilters.tbcases}" >
-			<a:support event="onclick" ajaxSingle="true" reRender="pnlhealthunits"/>
-		</h:selectBooleanCheckbox>
-		 #{messages['CaseClassification.TB_DOCUMENTED']}
-		<h:selectBooleanCheckbox value="#{caseFilters.mdrtbcases}" style="margin-left:20px;">
-			<a:support event="onclick" ajaxSingle="true" reRender="pnlhealthunits"/>
-		</h:selectBooleanCheckbox>
-		#{messages['CaseClassification.MDRTB_DOCUMENTED']}
-	</s:fragment>
+	<a:repeat value="#{caseFilters.classifications}" var="it">
+		<span style="margin-right:20px;">
+			<h:selectBooleanCheckbox value="#{it.selected}">
+				<a:support event="onclick" ajaxSingle="true" reRender="pnlhealthunits"/>
+			</h:selectBooleanCheckbox>
+			#{messages[it.item.key]}
+		</span>
+	</a:repeat>
 
 	<table class="table1" width="100%">
 	<a:repeat value="#{healthUnitsQuery.adminUnits}" var="adm">

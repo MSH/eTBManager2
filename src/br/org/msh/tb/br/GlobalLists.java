@@ -54,7 +54,6 @@ public class GlobalLists {
 	};
 	
 	private static final CaseState caseStates[] = {
-		CaseState.WAITING_TREATMENT,
 		CaseState.ONTREATMENT,
 		CaseState.TRANSFERRING,
 		CaseState.CURED,
@@ -62,14 +61,15 @@ public class GlobalLists {
 		CaseState.FAILED,
 		CaseState.DEFAULTED,
 		CaseState.DIED,
+		CaseState.DIED_NOTTB,
 		CaseState.TRANSFERRED_OUT,
 		CaseState.DIAGNOSTIC_CHANGED,
 		CaseState.OTHER,
-		CaseState.MDR_CASE,
-		CaseState.TREATMENT_INTERRUPTION,
-		CaseState.NOT_CONFIRMED, 
-		CaseState.DIED_NOTTB,
-		CaseState.REGIMEN_CHANGED
+		CaseState.REGIMEN_CHANGED,
+		CaseState.MONORESISTANT,
+		CaseState.POLIRESISTANT,
+		CaseState.MULTIRESISTANT,
+		CaseState.EXTRESISTANT
 	};
 	
 
