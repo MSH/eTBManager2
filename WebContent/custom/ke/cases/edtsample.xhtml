@@ -10,12 +10,13 @@
 
 	<div class="paragraph">#{messages['PatientSample.identification']}
 	</div>
+	
     <div id="divdtcollected">
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="future" value="true" /> 
-    	<ui:param name="datefield" value="#{examHome.dateCollected}" /> 
+    	<ui:param name="datefield" value="#{examHome.instance.dateCollected}" /> 
     </s:decorate>
     </div>
 
@@ -30,7 +31,7 @@
 	
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['PatientSample.sampleNumber']}:</ui:define>
-    	<h:inputText value="#{examHome.sampleNumber}" maxlength="50" style="width:200px;"/>
+    	<h:inputText value="#{examHome.instance.sampleNumber}" maxlength="50" style="width:200px;"/>
     </s:decorate>
     </div>
 
