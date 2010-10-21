@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator2D;
@@ -24,7 +23,6 @@ public class TreatResultIndicator extends Indicator2D {
 	@Override
 	protected void createIndicators() {
 		setNewCasesOnly(true);
-		setClassification(outcomeIndicator.getClassification()!=null?outcomeIndicator.getClassification():CaseClassification.MDRTB_DOCUMENTED);
 
 		List<Object[]> lst = generateValuesByField("c.state, c.patientType", "c.state >= " + CaseState.WAITING_TREATMENT.ordinal());
 		createItems(lst);

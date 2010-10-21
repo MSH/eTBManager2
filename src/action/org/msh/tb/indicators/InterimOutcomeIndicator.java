@@ -9,7 +9,6 @@ import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.CultureResult;
 import org.msh.mdrtb.entities.enums.MicroscopyResult;
 import org.msh.tb.indicators.core.Indicator2D;
-import org.msh.tb.indicators.core.IndicatorDate;
 import org.msh.utils.date.DateUtils;
 
 
@@ -131,15 +130,6 @@ public class InterimOutcomeIndicator extends Indicator2D {
 	@Override
 	public CaseClassification getClassification() {
 		return CaseClassification.MDRTB_DOCUMENTED;
-	}
-
-
-	/* (non-Javadoc)
-	 * @see org.msh.tb.indicators.CaseHQLBase#getIndicatorDate()
-	 */
-	@Override
-	public IndicatorDate getIndicatorDate() {
-		return IndicatorDate.DIAGNOSIS_DATE;
 	}
 
 }

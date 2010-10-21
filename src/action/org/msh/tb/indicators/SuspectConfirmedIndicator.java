@@ -9,7 +9,6 @@ import org.msh.mdrtb.entities.enums.DiagnosisType;
 import org.msh.mdrtb.entities.enums.MedicineLine;
 import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator2D;
-import org.msh.tb.indicators.core.IndicatorDate;
 
 @Name("suspectConfirmedIndicator")
 public class SuspectConfirmedIndicator extends Indicator2D {
@@ -68,15 +67,14 @@ public class SuspectConfirmedIndicator extends Indicator2D {
 	}
 
 	
-	
 	/* (non-Javadoc)
 	 * @see org.msh.tb.indicators.CaseHQLBase#getIndicatorDate()
 	 */
-	@Override
+/*	@Override
 	public IndicatorDate getIndicatorDate() {
 		return IndicatorDate.INITREATMENT_DATE;
 	}
-	
+*/	
 	@Override
 	public boolean isUseDiagnosisTypeFilter() {
 		return false;

@@ -1,10 +1,8 @@
 package org.msh.tb.indicators;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.DrugResistanceType;
 import org.msh.tb.indicators.core.Indicator;
-import org.msh.tb.indicators.core.IndicatorDate;
 
 /**
  * Generate indicator table with number of cases on treatment by drug resistance type
@@ -23,8 +21,7 @@ public class DrugResistanceIndicator extends Indicator {
 	protected void createIndicators() {
 		setNewCasesOnly(true);
 		setCaseState(null);
-		setIndicatorDate(IndicatorDate.INITREATMENT_DATE);
-		setClassification(CaseClassification.MDRTB_DOCUMENTED);
+//		setIndicatorDate(IndicatorDate.INITREATMENT_DATE);
 
 		// add rows
 		for (DrugResistanceType res: DrugResistanceType.values()) {
@@ -33,4 +30,5 @@ public class DrugResistanceIndicator extends Indicator {
 
 		createItems(generateValuesByField("c.drugResistanceType", null));
 	}
+	
 }

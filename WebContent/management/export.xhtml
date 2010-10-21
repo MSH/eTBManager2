@@ -12,7 +12,7 @@
 <ui:param name="title" value="#{messages['manag.export']}" />
 
 <ui:param name="topmenu" value="2" />
-<ui:param name="indicator" value="#{caseExport}" />
+<ui:param name="indicator" value="#{caseExportHome}" />
 <ui:param name="useclassification" value="0" />
 <ui:param name="waitdlg" value="0" />
 <ui:param name="left" value="0" />
@@ -49,12 +49,12 @@
 	
 	<s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['ExportContent']}:</ui:define>
-		<h:selectOneRadio value="#{caseExport.exportContent}" layout="pageDirection" >
-			<s:selectItems value="#{caseExport.contents}" var="it" label="#{messages[it.key]}" />
+		<h:selectOneRadio value="#{caseExportHome.exportContent}" layout="pageDirection" >
+			<s:selectItems value="#{caseExportHome.contents}" var="it" label="#{messages[it.key]}" />
 		</h:selectOneRadio>
 	</s:decorate>
 	<div class="button-bar">
-	<h:commandButton action="#{caseExport.download}" value="#{messages['global.export']}" styleClass="button" />
+	<h:commandButton action="#{caseExportHome.download}" value="#{messages['global.export']}" styleClass="button" />
 	</div>
 </s:decorate>
 

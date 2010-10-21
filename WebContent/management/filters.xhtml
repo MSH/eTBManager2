@@ -7,12 +7,12 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:p="http://jboss.com/products/seam/pdf"
       xmlns:s="http://jboss.com/products/seam/taglib">
-      
+
 	<table width="100%" style="border-collapse: collapse;"><tr><td colspan="2">
 
-	<s:decorate template="/layout/edit.xhtml" rendered="#{indicator.classification==null}">
+	<s:decorate template="/layout/edit.xhtml" rendered="#{selectClassification}">
 		<ui:define name="label">#{messages['CaseClassification']}:	</ui:define>
-		<h:selectOneMenu value="#{indicator.classification}">
+		<h:selectOneMenu value="#{indicatorFilters.classification}">
 			<s:selectItems value="#{globalLists.caseClassifications}" var="r" label="#{messages[r.key]}" noSelectionLabel="#{messages['form.noselection']}" />
 		</h:selectOneMenu>
 	</s:decorate>
@@ -71,11 +71,11 @@ function handleContextClick(comp) {
 	</td></tr>
 	<tr><td colspan="2">
 
-	<div class="paragraph">#{messages['manag.ind.periodfilter']}: #{messages[indicator.indicatorDate.key]}</div>
+	<div class="paragraph">#{messages['manag.ind.periodfilter']}</div>
 	
 	</td></tr>
 	<tr><td>
-		<h:selectOneRadio value="#{indicator.indicatorDate}" >
+		<h:selectOneRadio value="#{indicatorFilters.indicatorDate}" >
 			<s:selectItems var="v" value="#{indicatorDates}" label="#{messages[v.key]}" />
 			<s:convertEnum />
 		</h:selectOneRadio>

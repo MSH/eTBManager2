@@ -13,6 +13,6 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/ke"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/md"/>
         <property name="java-output-path" value="build/classes"/>
-        <property name="context-root" value="mdrtb"/>
+        <property name="context-root" value="etbmanager"/>
     </wb-module>
 </project-modules>

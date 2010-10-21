@@ -8,7 +8,6 @@ import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.MedicineLine;
 import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator2D;
-import org.msh.tb.indicators.core.IndicatorDate;
 
 @Name("drugPrevTreatmentIndicator")
 public class DrugPrevTreatmentIndicator extends Indicator2D {
@@ -54,9 +53,9 @@ public class DrugPrevTreatmentIndicator extends Indicator2D {
 	/* (non-Javadoc)
 	 * @see org.msh.tb.indicators.CaseHQLBase#getIndicatorDate()
 	 */
-	@Override
+/*	@Override
 	public IndicatorDate getIndicatorDate() {
 		return IndicatorDate.INITREATMENT_DATE;
 	}
 
-}
+*/}

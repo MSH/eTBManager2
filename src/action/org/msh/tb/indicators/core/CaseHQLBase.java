@@ -29,14 +29,12 @@ import org.msh.tb.indicators.IndicatorMicroscopyResult;
 public class CaseHQLBase extends Controller {
 	private static final long serialVersionUID = -1817340544631871046L;
 
-	private CaseClassification classification;
 	private String groupFields;
 	private String orderByFields;
 	private String condition;
 	private boolean consolidated;
 	private CaseState caseState;
 	private IndicatorFilters indicatorFilter;
-	private IndicatorDate indicatorDate = IndicatorDate.DIAGNOSIS_DATE;
 	private boolean newCasesOnly = true;
 	private boolean outputSelected = false;
 	
@@ -117,12 +115,12 @@ public class CaseHQLBase extends Controller {
 	 */
 	protected String getHQLWhere() {
 		String hql = "where c.notificationUnit.workspace.id = " + getWorkspace().getId().toString();
+		
+		IndicatorFilters filters = getIndicatorFilters();
 
 		hql += " and c.notificationUnit.healthSystem.id = #{userWorkspace.tbunit.healthSystem.id}";
 		if (getClassification() != null)
-			hql += " and c.classification = :classification ";
-		
-		IndicatorFilters filters = getIndicatorFilters();
+			hql += " and c.classification = :classification";
 
 		// include filter by gender
 		if (filters.getGender() != null)
@@ -208,15 +206,6 @@ public class CaseHQLBase extends Controller {
 		if (caseState != null)
 			 return "c.state = :state";
 		else return null;
-	}
-
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public CaseClassification getClassification() {
-		return classification;
 	}
 
 
@@ -364,8 +353,10 @@ public class CaseHQLBase extends Controller {
 	 * @return
 	 */
 	protected String getPeriodCondition() {
+		IndicatorFilters filters = getIndicatorFilters();
+
 		String field;
-		switch (getIndicatorDate()) {
+		switch (filters.getIndicatorDate()) {
 		case DIAGNOSIS_DATE: field = "c.diagnosisDate";
 			break;
 		case INITREATMENT_DATE: field = "c.treatmentPeriod.iniDate";
@@ -378,7 +369,6 @@ public class CaseHQLBase extends Controller {
 		if (field == null)
 			return null;
 		
-		IndicatorFilters filters = getIndicatorFilters();
 		if (filters.isPeriodCompleted()) {
 			if (newCasesOnly)
 				 return field + " between #{indicatorFilters.iniDate} and #{indicatorFilters.endDate}";
@@ -455,15 +445,6 @@ public class CaseHQLBase extends Controller {
 
 
 	/**
-	 * Set the classification of the cases to query for the indicator
-	 * @param classification {@link CaseClassification}
-	 */
-	public void setClassification(CaseClassification classification) {
-		this.classification = classification;
-	}
-
-
-	/**
 	 * @param condition the condition to set
 	 */
 	public void setCondition(String condition) {
@@ -507,16 +488,6 @@ public class CaseHQLBase extends Controller {
 		if (caseState != null)
 			query.setParameter("state", caseState);
 	}
-	
-	
-	public void setIndicatorDate(IndicatorDate value) {
-		this.indicatorDate = value;
-	}
-	
-	public IndicatorDate getIndicatorDate() {
-		return indicatorDate;
-	}
-
 
 	/**
 	 * @param outputSelected the outputSelected to set
@@ -539,5 +510,10 @@ public class CaseHQLBase extends Controller {
 	 */
 	public boolean isUseDiagnosisTypeFilter() {
 		return true;
+	}
+
+	
+	public CaseClassification getClassification() {
+		return getIndicatorFilters().getClassification();
 	}
 }

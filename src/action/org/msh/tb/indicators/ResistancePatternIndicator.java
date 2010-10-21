@@ -23,7 +23,6 @@ public class ResistancePatternIndicator extends Indicator {
 	
 	@Override
 	protected void createIndicators() {
-		setClassification(CaseClassification.MDRTB_DOCUMENTED);
 		setGroupFields(null);
 
 		calcTotal();
@@ -37,6 +36,11 @@ public class ResistancePatternIndicator extends Indicator {
 		addValue( getMessages().get("manag.ind.resist.other"), total);
 	}
 
+
+	@Override
+	public CaseClassification getClassification() {
+		return CaseClassification.MDRTB_DOCUMENTED;
+	}
 	
 	/**
 	 * Mounts resistance pattern of a set of medicines

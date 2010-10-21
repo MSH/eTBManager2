@@ -1,4 +1,4 @@
-package org.msh.tb.importexport;
+package org.msh.tb.export;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.faces.context.FacesContext;
@@ -30,6 +31,7 @@ import jxl.write.WriteException;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.international.Messages;
+import org.msh.mdrtb.entities.TbCase;
 
 public class ExcelCreator {
 	
@@ -437,6 +439,36 @@ public class ExcelCreator {
 	 */
 	public void addColumnMark(String markName) {
 		columnMarks.put(markName, column);
+	}
+
+
+	/**
+	 * Add an array of values to the excel file. The first value of the array is the case id
+	 * and is not included in the Excel file, 
+	 * and just array of same id as the id of the tbcase parameters are included in the file.
+	 * @param tbcase
+	 * @param lst
+	 */
+	protected void addArrayValues(TbCase tbcase, List<Object[]> lst, String columnMark) {
+		if (!gotoMark(columnMark))
+			return;
+	
+		setColIdent(column);
+		
+		boolean bFirst = true;
+		for (Object values[]: lst) {
+			int id = (Integer)values[0];
+			if (tbcase.getId().equals(id)) {
+				// if it's first line, doesn't break it
+				if (!bFirst)
+					lineBreak();
+				else bFirst = false;
+
+				for (int i = 1; i < values.length; i++) {
+					addValue(values[i]);
+				}
+			}
+		}		
 	}
 
 

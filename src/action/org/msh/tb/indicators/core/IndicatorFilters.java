@@ -29,6 +29,8 @@ public class IndicatorFilters {
 	private Integer endMonth;
 	private Integer endYear;
 
+	private IndicatorDate indicatorDate = IndicatorDate.DIAGNOSIS_DATE;
+	
 	private TBUnitSelection tbunitselection = new TBUnitSelection(true, TBUnitFilter.HEALTH_UNITS);
 	private CaseClassification classification;
 	private PatientType patientType;
@@ -342,5 +344,13 @@ public class IndicatorFilters {
 	 */
 	public void setDiagnosisType(DiagnosisType diagnosisType) {
 		this.diagnosisType = diagnosisType;
+	}
+
+	public IndicatorDate getIndicatorDate() {
+		return indicatorDate;
+	}
+
+	public void setIndicatorDate(IndicatorDate indicatorDate) {
+		this.indicatorDate = indicatorDate;
 	}
 }

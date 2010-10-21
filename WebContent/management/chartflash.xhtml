@@ -71,7 +71,7 @@ var data2 =
 			<f:param name="title" value="#{title}" />
 		</h:outputText>
 
-swfobject.embedSWF("#{facesContext.externalContext.request.contextPath}/js/open-flash-chart.swf", "my_chart", "400", "#{indicatorFilters.chartType==1?(series.chartHeight):'400px'}", "9.0.0");
+swfobject.embedSWF("#{request.contextPath}/js/open-flash-chart.swf", "my_chart", "400", "#{indicatorFilters.chartType==1?(series.chartHeight):'400px'}", "9.0.0");
 </script>
 
 	<div style="border:1px solid #a0a8a8;width:400px;" >

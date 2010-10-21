@@ -122,7 +122,7 @@
 		}
 		month=cbmonth.options[cbmonth.selectedIndex].value;
 		year=cbyear.options[cbyear.selectedIndex].value;
-		window.location='#{facesContext.externalContext.request.contextPath}/cases/regdispensing.seam?huid=#{treatmentsInfoHome.tbunitId}&month=' + month + '&year=' + year;
+		window.location='#{request.contextPath}/cases/regdispensing.seam?huid=#{treatmentsInfoHome.tbunitId}&month=' + month + '&year=' + year;
 	}
 	-->
 	</script>

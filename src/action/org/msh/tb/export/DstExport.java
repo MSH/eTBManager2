@@ -1,4 +1,4 @@
-package org.msh.tb.importexport;
+package org.msh.tb.export;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,24 +7,28 @@ import java.util.List;
 import org.jboss.seam.international.Messages;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.enums.DstResult;
+import org.msh.tb.indicators.core.CaseHQLBase;
 
 /**
  * Export DST results to an Excel file. All results of all cases will be loaded at once, but exported case by case
  * @author Ricardo Memoria
  *
  */
-public class DstExport {
+public class DstExport extends CaseHQLBase {
+	private static final long serialVersionUID = -4038073908982284863L;
+
+	private String hqlSelect;
+	private String hqlFrom;
 
 	private List<Object[]> dstList;
 	private List<String> medicines;
 	private TbCase tbcase;
-	private CaseExport caseExport;
 	private ExcelCreator excel;
 
 
-	public DstExport(CaseExport caseExport) {
+	public DstExport(ExcelCreator excelCreator) {
 		super();
-		this.caseExport = caseExport;
+		excel = excelCreator;
 	}
 
 
@@ -42,7 +46,6 @@ public class DstExport {
 		if (dstList != null)
 			return;
 		
-		excel = caseExport.getExcel();
 		loadData();
 		mountMedicineList();
 	}
@@ -51,10 +54,10 @@ public class DstExport {
 	 * Load DST results into memory
 	 */
 	protected void loadData() {
-		caseExport.setHqlFrom("from ExamDSTResult res join res.exam exam join exam.tbcase c");
-		caseExport.setHqlSelect("select c.id, exam.dateCollected, res.result, res.substance.abbrevName.name1");
-		caseExport.setOrderByFields("exam.tbcase.id, exam.dateCollected");
-		dstList = caseExport.createQuery().getResultList();			
+		hqlFrom = "from ExamDSTResult res join res.exam exam join exam.tbcase c";
+		hqlSelect = "select c.id, exam.dateCollected, res.result, res.substance.abbrevName.name1, exam.id";
+		setOrderByFields("exam.tbcase.id, exam.dateCollected");
+		dstList = createQuery().getResultList();			
 	}
 
 
@@ -77,8 +80,9 @@ public class DstExport {
 	protected void exportCaseResults() {
 		int caseid = tbcase.getId();
 		boolean isRead = false;
-		Date dt = null;
+		Integer prevExamId = null; 
 		excel.gotoMark("dst");
+		excel.setColIdent(excel.getColumn());
 
 		for (Object[] values: dstList) {
 			Integer id = (Integer)values[0];
@@ -88,13 +92,14 @@ public class DstExport {
 				isRead = true;
 				
 				Date dtCollected = (Date)values[1];
+				Integer examId = (Integer)values[4];
 				
 				// first loop for the case or date collected has changed ?
-				if ((dt == null) || (!dt.equals(dtCollected))) {
-					if (dt != null)
+				if ((prevExamId == null) || (!prevExamId.equals(examId))) {
+					if (prevExamId != null)
 						excel.lineBreak();
 					excel.addDate(dtCollected);
-					dt = dtCollected;
+					prevExamId = examId;
 				}
 				addResult(values);
 			}
@@ -123,7 +128,6 @@ public class DstExport {
 	public void addTitles() {
 		initialize();
 
-		ExcelCreator excel = caseExport.getExcel();
 		excel.addColumnMark("dst");
 		excel.addGroupHeaderFromResource("cases.examdst", medicines.size() + 1, "title");
 		excel.addTextFromResource("PatientSample.dateCollected", "title");
@@ -132,4 +136,19 @@ public class DstExport {
 		}
 	}
 	
+	
+	@Override
+	protected String getHQLJoin() {
+		return null;
+	}
+
+	@Override
+	protected String getHQLSelect() {
+		return (hqlSelect != null? hqlSelect: super.getHQLSelect());
+	}
+
+	@Override
+	protected String getHQLFrom() {
+		return (hqlFrom != null? hqlFrom: super.getHQLFrom());
+	}
 }
