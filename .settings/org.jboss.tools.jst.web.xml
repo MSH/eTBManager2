@@ -315,6 +315,18 @@
  <file-system NAME="src-7" location="%workspace.home%/../../src/md" model-entity="FileSystemFolder"/>
  <file-system NAME="lib-jtds-1.1.jar"
   location="C:\java\jboss-4.2.3.GA\server\default\lib\jtds-1.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-resources.jar"
+  location="C:\Java\jdk\jdk1.6.0_21\jre\lib\resources.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-dnsns.jar"
+  location="C:\Java\jdk\jdk1.6.0_21\jre\lib\ext\dnsns.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-localedata.jar"
+  location="C:\Java\jdk\jdk1.6.0_21\jre\lib\ext\localedata.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-sunjce_provider.jar"
+  location="C:\Java\jdk\jdk1.6.0_21\jre\lib\ext\sunjce_provider.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-sunmscapi.jar"
+  location="C:\Java\jdk\jdk1.6.0_21\jre\lib\ext\sunmscapi.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-sunpkcs11.jar"
+  location="C:\Java\jdk\jdk1.6.0_21\jre\lib\ext\sunpkcs11.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>

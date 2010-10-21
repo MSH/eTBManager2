@@ -42,7 +42,7 @@
     	<param name="imgName" value="#{workspaceViewService.pictureFile}" />
     	<action execute="#{workspaceViewService.responseImage}"/>
     </page>
-
+    
 
 	<!-- PRODUCT GROUP -->
 	<page view-id="/admin/groups.xhtml">
@@ -63,12 +63,6 @@
 
 
 	<!-- DRUG ORDER -->
-	<page view-id="/medicines/orders.xhtml">
-		<restrict>#{s:hasRole('ORDERS')}</restrict>
-		<param name="firstResult" value="#{orders.firstResult}" />
-		<param name="order" value="#{orders.order}" />
-	</page>
-	
 	<page view-id="/medicines/orderdata.xhtml">
 		<restrict>#{s:hasRole('ORDERS')}</restrict>
 		<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />

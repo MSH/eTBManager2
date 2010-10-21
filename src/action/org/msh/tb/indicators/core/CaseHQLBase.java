@@ -183,7 +183,7 @@ public class CaseHQLBase extends Controller {
 	 * Create an HQL query and set the default parameters
 	 * @return {@link Query} instance
 	 */
-	protected Query createQuery() {
+	public Query createQuery() {
 		String hql = createHQL();
 		Query query = getEntityManager().createQuery(hql);
 		setQueryParameters(query);
