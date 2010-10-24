@@ -115,7 +115,7 @@
 
 <ui:include src="/cases/issues.xhtml" />
 
-<div class="pgtab">
+<div id="pgtab" class="pgtab" style="display:none">
 <ul>
 	<li class="#{caseFilters.tabIndex=='0'?'selected':'unselected'}">
 		<a:commandLink value="#{messages['cases.details.case']}" reRender="main" >
@@ -166,6 +166,7 @@
 	</s:fragment>
 </ul>
 </div>
+<rich:jQuery timing="onload" selector="#pgtab" query="show()"  />
 <div class="pgbody">
 
 	<s:fragment rendered="#{caseFilters.tabIndex==0}">

@@ -71,7 +71,7 @@
 		<a:actionparam name="param2" assignTo="#{caseHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
-<div class="pgtab">
+<div id="pgtab" class="pgtab" style="display:none">
 <ul>
 	<li class="#{caseFilters.tabIndex=='0'?'selected':'unselected'}">
 		<a:commandLink value="#{messages['cases.details.case']}" onclick="changeTab(0, #{caseHome.id}); return false;" />
@@ -102,6 +102,7 @@
 	</li>
 </ul>
 </div>
+<rich:jQuery timing="onload" selector="#pgtab" query="show()"  />
 <div class="pgbody">
 	<s:fragment rendered="#{caseFilters.tabIndex==0}">
 		<ui:include src="data.xhtml" />

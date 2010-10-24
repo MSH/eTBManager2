@@ -163,7 +163,6 @@
 					<a:commandLink value="#{messages['form.remove']}" style="padding-right:20px;"
 						onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}"
 						ajaxSingle="true" 
-						oncomplete="initializeTreatmentView();"
 						reRender="pnltreatment" action="#{prescribedMedicineHome.deleteMedicine(p.item)}"	/>
 					</div></div>
 				</s:div>
