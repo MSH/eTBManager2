@@ -6,9 +6,11 @@ import java.util.Random;
 
 import javax.persistence.EntityManager;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.utils.date.DateUtils;
 
@@ -24,6 +26,7 @@ public class CaseManagementTest {
 	@In(create=true) EntityManager entityManager;
 	@In(create=true) ExecuteAsyncAction executeAsyncAction;
 	@In(create=true) FacesMessages facesMessages;
+	
 	
 	/**
 	 * Fills patient type with random values (just for cases with no patient value information)
@@ -77,4 +80,8 @@ public class CaseManagementTest {
 		facesMessages.add("Execution is under progress... Don't click on the update button again");
 	}
 
+
+	public void updateRegimens() throws Exception {
+		executeAsyncAction.updateRegimens((Workspace)Component.getInstance("defaultWorkspace"));
+	}
 }
