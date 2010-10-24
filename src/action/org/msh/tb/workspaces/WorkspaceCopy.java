@@ -5,6 +5,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,8 +70,7 @@ public class WorkspaceCopy {
 	
 	private List<Workspace> options;
 	
-	private Object parent;
-	private List<Object> loop;
+	private Map<Object, Object> loop;
 
 
 	/**
@@ -197,7 +197,7 @@ public class WorkspaceCopy {
 			}
 
 			if (destEntity == null) {
-				loop = new ArrayList<Object>();
+				loop = new HashMap<Object, Object>();
 				destEntity = (E)createEntityClone(sourceEntity);
 				entityManager.persist(destEntity);
 			}
@@ -242,7 +242,8 @@ public class WorkspaceCopy {
 		try {
 			Object dest = entityClass.newInstance();
 			copyProperties(source, dest);
-			PropertyUtils.setProperty(dest, "workspace", workspaceHome.getInstance());
+			if (PropertyUtils.isWriteable(dest, "workspace"))
+				PropertyUtils.setProperty(dest, "workspace", workspaceHome.getInstance());
 			return dest;
 
 		} catch (Exception e) {
@@ -267,14 +268,19 @@ public class WorkspaceCopy {
 
 					// is it a list ?
 					if (val instanceof List) {
-						Class cl = (Class)getGenericType(source, key);
-						if (cl != null) {
-							// is it a list of the same class ?
-							if (!cl.isAssignableFrom(dest.getClass())) {
-								parent = source;
-								newVal = copyListProperty((List)val);
+						List lstSource = (List)val;
+						List lstDest = copySpecificListProperty(dest, key, lstSource);
+						
+						if (lstDest == null) {
+							Class cl = (Class)getGenericType(source, key);
+							if (cl != null) {
+								// is it a list of the same class ?
+								if (!cl.isAssignableFrom(dest.getClass())) {
+									newVal = copyListProperty((List)val);
+								}
 							}
 						}
+						else newVal = lstDest;
 					}
 					else {
 						// is not a primitive type?
@@ -282,23 +288,24 @@ public class WorkspaceCopy {
 							(val instanceof String) ||
 							(val instanceof Character) ||
 							(val instanceof Boolean) ||
-							(val instanceof Enum) ||
-							(val instanceof Date)))
+							(val instanceof Enum)))
 						{
+							if (val instanceof Date) {
+								Date dt = new Date();
+								dt.setTime(((Date)val).getTime());
+								newVal = dt;
+							}
+							else
 							if (val != null) {
-								// TEMPORARY
-								if ((source instanceof MedicineComponent) && (key.equals("medicine")))
-									val = parent;
-								else {
-									Object item = checkLoopList(val);
-									if (item == null) {
-										newVal = loadEntityProperty(val);
-										if (newVal == null) {
-											newVal = val.getClass().newInstance();
-											copyProperties(val, newVal);
-										}
+								Object item = checkLoopList(val);
+								if (item == null) {
+									newVal = loadEntityProperty(val);
+									if (newVal == null) {
+										newVal = val.getClass().newInstance();
+										copyProperties(val, newVal);
 									}
 								}
+								else newVal = item;
 							}
 						}
 						else newVal = val;
@@ -353,8 +360,8 @@ public class WorkspaceCopy {
 			ent = lst.get(0);
 		
 		if (ent == null) {
-			loop.add(obj);
 			ent = createEntityClone(obj);
+			loop.put(obj, ent);
 			entityManager.persist(ent);
 		}
 
@@ -364,18 +371,36 @@ public class WorkspaceCopy {
 
 	
 	protected Object checkLoopList(Object obj) {
-		for (Object aux: loop) {
+		for (Object aux: loop.entrySet()) {
 			if ((aux.getClass().isAssignableFrom(obj.getClass())) && (aux.toString().equals(obj.toString()))) {
-				return aux;
+				return loop.get(aux);
 			}
 		}
 		return null;
 	}
 
 
+	protected <E> List<E> copySpecificListProperty(Object dest, String key, List<E> lst) {
+		if ((dest instanceof Medicine) && (key.equals("components"))) {
+			List<E> lstDest = new ArrayList<E>();
+			for (E aux: lst) {
+				MedicineComponent compSource = (MedicineComponent)aux;
+				MedicineComponent compDest = new MedicineComponent();
+				Medicine medDest = (Medicine)dest;
+				compDest.setMedicine(medDest);
+				compDest.setStrength(compSource.getStrength());
+				compDest.setSubstance( (Substance)loadEntityProperty(compSource.getSubstance()) );
+				
+				lstDest.add((E)compDest);
+			}
+			return lstDest;
+		}
+		return null;
+	}
 	
-	protected <E> List<E> copyListProperty(List<E> lst) {
+	protected <E> List<E> copyListProperty( List<E> lst ) {
 		List<E> destList = new ArrayList<E>();
+		
 		for (E entity: lst) {
 			destList.add((E)createEntityClone(entity));
 		}
@@ -417,221 +442,8 @@ public class WorkspaceCopy {
 			return "id";
 		else return null;
 	}
+
 	
-	/**
-	 * Copy an entity to the destination workspace, checking if it exists before coping
-	 * @param <E>
-	 * @param source
-	 * @param uniqueField
-	 * @return
-	 */
-/*	protected <E> E copyEntity(E source, String uniqueField, boolean save) {
-		E dest = null;
-		
-		if (uniqueField != null) {
-			// read value of the unique field of object
-			Object value;
-			try {
-				value = BeanUtils.getProperty(source, uniqueField);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException(e.getMessage());
-			}
-
-			// search for object in the target workspace
-			dest = (E)findEntity(translateClass(source), uniqueField, value);			
-		}
-
-		// object exists in the target workspace
-		if (dest == null) {
-			// clone source object
-			dest = clone(source);
-			try {
-				// change entity's workspace to the target workspace
-				if (PropertyUtils.isWriteable(dest, "workspace"))
-					PropertyUtils.setProperty(dest, "workspace", workspaceHome.getInstance());
-				// set new entity id to null
-				PropertyUtils.setProperty(dest, "id", null);
-
-				if (save)
-					entityManager.persist(dest);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException(e.getMessage());
-			}
-		}
-		return dest;
-	}
-*/
-
-	/**
-	 * Translate class, i.e, return the right entity class. Hibernate wraps the right class by javaAssist classes
-	 * @param entityClass
-	 * @return
-	 */
-/*	protected Class translateClass(Object entity) {
-		if (entity instanceof HealthSystem)
-			return HealthSystem.class;
-		else
-		if (entity instanceof AdministrativeUnit)
-			return AdministrativeUnit.class;
-		else
-		if (entity instanceof Tbunit)
-			return Tbunit.class;
-		else
-		if (entity instanceof CountryStructure)
-			return CountryStructure.class;
-		else
-		if (entity instanceof Source)
-			return Source.class;
-		else
-		if (entity instanceof Substance)
-			return Substance.class;
-		else
-		if (entity instanceof Medicine)
-			return Medicine.class;
-		else
-		if (entity instanceof Laboratory)
-			return Laboratory.class;
-		else
-		if (entity instanceof Regimen)
-			return Regimen.class;
-		else
-		if (entity instanceof UserProfile)
-			return UserProfile.class;
-		else
-		if (entity instanceof UserWorkspace)
-			return UserWorkspace.class;
-		else return entity.getClass();	
-	}
-*/	
-	/**
-	 * Search for a specific entity
-	 * @param <E>
-	 * @param entityClass
-	 * @param criteria
-	 * @return
-	 */
-/*	protected <E>E findEntity(Class<E> entityClass, String nameField, Object nameValue) {
-		String hql = "from " + entityClass.getSimpleName() + " aux where aux." + nameField + " = :name " +
-				"and aux.workspace.id = " + workspaceHome.getId();
-		
-		List<E> res = entityManager.createQuery(hql)
-			.setParameter("name", nameValue)
-			.getResultList();
-		
-		if (res.size() == 0)
-			 return null;
-		else return res.get(0);
-	}
-*/
-	
-	/**
-	 * Clone an specific object
-	 * @param <T>
-	 * @param obj
-	 * @return
-	 */
-/*	protected <T> T clone(T obj) {
-		T aux = null;
-		try
-		{
-			// create new instance of class
-			try {
-				aux = (T)translateClass(obj).newInstance();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-				throw new RuntimeException(e1.getMessage());
-			}
-			
-			// map properties of object 
-			Map<String, Object> values = PropertyUtils.describe(obj);
-			
-			// copy values
-			for (String key: values.keySet()) {
-				if ((PropertyUtils.isWriteable(obj, key)) && 
-					((!("id".equals(key))) && (!("workspace".equals(key))))) 
-				{
-					Object val = values.get(key);
-					if (!(val instanceof List)) {
-						// is a primitive type?
-						if (!((val instanceof Number) ||
-							(val instanceof String) ||
-							(val instanceof Character) ||
-							(val instanceof Boolean) ||
-							(val instanceof Enum) ||
-							(val instanceof Date)))
-						{
-							val = translateObject(val);
-						}
-						BeanUtils.setProperty(aux, key, val);						
-					}
-				}
-			}
-			
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
-		}
-		
-        return aux;
-	}
-*/
-	
-	/**
-	 * Translate dependency to an object of the workspace
-	 * @param obj
-	 * @return
-	 */
-/*	protected Object translateObject(Object obj) {
-		if ((obj instanceof CountryStructure) ||
-			(obj instanceof AdministrativeUnit) ||
-			(obj instanceof Tbunit) ||
-			(obj instanceof HealthSystem) ||
-			(obj instanceof Source) ||
-			(obj instanceof Substance)) 
-			return copyEntity(obj, "name.name1", true);
-		else
-		if (obj instanceof UserProfile) {
-			return copyEntity(obj, "name", true);
-		}
-		else
-		if (obj instanceof UserWorkspace) {
-			return copyEntity(obj, "user.login", true);
-		}
-		else
-		if (obj instanceof Medicine)
-		{
-			return copyEntity(obj, "genericName.name1", true);
-		}
-		else
-		if (obj instanceof Regimen)
-		{
-			Regimen aux = (Regimen)copyEntity(obj, "name", false);
-			if (aux.getMedicines().size() == 0)
-				for (MedicineRegimen reg: ((Regimen) obj).getMedicines()) {
-					MedicineRegimen it = copyEntity(reg, null, true);
-					aux.getMedicines().add(it);
-				}
-			entityManager.persist(aux);
-			return aux;
-		}
-		if (obj instanceof Laboratory) {
-			return copyEntity(obj, "name", true);
-		}
-		else
-		if (obj instanceof LocalizedNameComp)
-		{
-			LocalizedNameComp it1 = (LocalizedNameComp)obj;
-			LocalizedNameComp it2 = new LocalizedNameComp();
-			it2.setName1(it1.getName1());
-			it2.setName2(it1.getName2());
-			return it2;
-		}
-		else return obj;
-	}
-*/	
 	public boolean isAdminUnits() {
 		return adminUnits;
 	}

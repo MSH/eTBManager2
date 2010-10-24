@@ -29,7 +29,6 @@
 	<ui:param name="list" value="#{medicines}" />
 </s:decorate>
 <h:panelGroup id="meds">
-<h:outputText value="#{messages['form.norecordfound']}" rendered="#{medicines.resultCount == 0}" styleClass="warn" />
 <h:dataTable id="tbl" value="#{medicines.resultList}" var="r" border="0" columnClasses="coll,coll,#{defaultWorkspace.alternateDisplayLocale?'coll,':''}coll,coll,coll,coll,coll,colc"
   styleClass="tabela" rowClasses="lin1,lin2" width="100%" rendered="#{medicines.resultCount > 0}">
   <h:column>
