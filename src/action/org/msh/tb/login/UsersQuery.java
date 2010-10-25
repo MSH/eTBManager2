@@ -4,11 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
+import org.msh.mdrtb.entities.User;
+import org.msh.mdrtb.entities.UserWorkspace;
 import org.msh.utils.EntityQuery;
 
 
 @Name("users")
-public class UsersQuery extends EntityQuery<UsersQuery>{
+public class UsersQuery extends EntityQuery<UserWorkspace>{
 	private static final long serialVersionUID = -8293352124405808033L;
 
 	private static final String[] restrictions = {
@@ -42,4 +44,16 @@ public class UsersQuery extends EntityQuery<UsersQuery>{
 		return "select count(*) from UserWorkspace uw ";
 	}
 
+	/**
+	 * Search for an instance of an {@link UserWorkspace} class by its user
+	 * @param user
+	 * @return {@link UserWorkspace} instance, or null if there is no instance assigned to the user
+	 */
+	public UserWorkspace getInstanceByUser(User user) {
+		for (UserWorkspace uw: getResultList()) {
+			if (uw.getUser().equals(user))
+				return uw;
+		}
+		return null;
+	}
 }

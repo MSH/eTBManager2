@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -11,8 +12,10 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.mdrtb.entities.UserPermission;
 import org.msh.mdrtb.entities.UserProfile;
 import org.msh.mdrtb.entities.UserRole;
+import org.msh.mdrtb.entities.UserWorkspace;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.log.LogInfo;
+import org.msh.utils.EntityQuery;
 
 
 @Name("profileHome")
@@ -74,12 +77,21 @@ public class UserProfileHome extends EntityHomeEx<UserProfile>{
 	
 	@Override
 	public String remove() {
+		if (!isManaged())
+			return "error";
+	
 		// check if profile can be deleted
-		if (getUserWorkspace().getProfile().equals(getInstance())) {
+		UserWorkspace userWorkspace = getUserWorkspace();
+		if (userWorkspace.getProfile().equals(getInstance())) {
 			facesMessages.addFromResourceBundle("admin.profiles.delerror1");
 			return "error";
 		}
 		
 		return super.remove();
+	}
+	
+	@Override
+	public EntityQuery<UserProfile> getEntityQuery() {
+		return (UserProfilesQuery)Component.getInstance("profiles", false);
 	}
 }

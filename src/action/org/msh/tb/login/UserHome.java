@@ -17,7 +17,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
-import org.jboss.seam.framework.EntityQuery;
 import org.msh.mdrtb.entities.AdministrativeUnit;
 import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.User;
@@ -38,7 +37,7 @@ public class UserHome extends EntityHomeEx<User> {
 	private static final long serialVersionUID = -1722666162646162093L;
 	
 	@In(create=true) DmSystemHome dmsystem;
-	@In(create=true) EntityQuery profiles;
+	@In(create=true) UserProfilesQuery profiles;
 	@In(required=true) UserLogin userLogin;
 	@In(create=true) Map<String, String> messages;
 	@In(create=true) FacesMessages facesMessages;
@@ -153,8 +152,18 @@ public class UserHome extends EntityHomeEx<User> {
 			facesMessages.addFromResourceBundle("admin.users.delerror1");
 			return "error";
 		}
+		
+		UsersQuery users = (UsersQuery)Component.getInstance("users", false);
+		if (users != null) {
+			UserWorkspace uw = users.getInstanceByUser(getInstance());
+			if (uw != null)
+				users.getResultList().remove(uw);
+		}
+		
 		return super.remove();
 	}
+
+
 	
 	public void enviaMailNovoUsuario() {
 		if (!sendEmail)

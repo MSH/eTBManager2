@@ -41,7 +41,12 @@ public class UserProfile extends WSObject implements Serializable, Comparable<Us
 		if (!(obj instanceof UserProfile))
 			return false;
 		
-		return ((UserProfile)obj).getId().equals(getId());
+		Integer objId = ((UserProfile)obj).getId();
+		
+		if (objId == null) 
+			return false;
+		
+		return objId.equals(getId());
 	}
 
 	@Override

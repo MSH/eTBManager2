@@ -5,11 +5,13 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="#{workspaceViewService.templatePage}">
 
 <ui:param name="title" value="#{messages['admin.profiles']}" />
 <ui:param name="topmenu" value="3" />
+<ui:param name="waitdlg" value="1" />
 
 <ui:define name="menu_lateral">
 	<ui:include src="/layout/adminmenu.xhtml" />
@@ -40,9 +42,11 @@
 
   <h:column>
   	<f:facet name="header">#{messages['form.action']}</f:facet>
-        <s:link action="#{profileHome.remove}" value="#{messages['form.remove']}" onclick="return confirm('#{messages['form.confirm_remove']}');" >
-			<f:param name="id" value="#{p.id}" />
-        </s:link>
+	<a:commandLink action="#{profileHome.remove}" value="#{messages['form.remove']}" 
+		onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" 
+		reRender="main,messages">
+		<a:actionparam assignTo="#{profileHome.id}" value="#{p.id}" name="id" converter="javax.faces.Integer"/>
+	</a:commandLink>
   </h:column>
 </h:dataTable>
 </h:form>

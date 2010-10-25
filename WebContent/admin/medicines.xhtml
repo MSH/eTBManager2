@@ -102,9 +102,11 @@
 
   <h:column  rendered="#{s:hasRole('MEDICINES_EDT') and (not workspaceViewService.printing)}">
   	<f:facet name="header">#{messages['form.action']}</f:facet>
-        <s:link action="#{medicineHome.remove}" value="#{messages['form.remove']}" onclick="return confirm('#{messages['form.confirm_remove']}');" >
-        	<f:param name="id" value="#{r.id}" />
-        </s:link>
+	<a:commandLink action="#{medicineHome.remove}" value="#{messages['form.remove']}" 
+		onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" 
+		reRender="main,messages">
+		<a:actionparam assignTo="#{medicineHome.id}" value="#{r.id}" name="id" converter="javax.faces.Integer"/>
+	</a:commandLink>
   </h:column>
 </h:dataTable>
 </h:panelGroup>

@@ -1,9 +1,11 @@
 package org.msh.tb;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.msh.mdrtb.entities.Source;
 import org.msh.tb.log.LogInfo;
+import org.msh.utils.EntityQuery;
 
 
 @Name("sourceHome")
@@ -16,17 +18,13 @@ public class SourceHome extends EntityHomeEx<Source> {
 		return (Source)getInstance();
 	}
 
-	@Override
-	public String persist() {
-		return super.persist();
-	}
-
-	@Override
-	public String remove() {
-		return super.remove();
-	}
-
 	
+	@Override
+	public EntityQuery<Source> getEntityQuery() {
+		return (SourcesQuery)Component.getInstance("sources", false);
+	}
+
+
 	public void setSource(Source source) {
 		if (source == null)
 			 setId(null);

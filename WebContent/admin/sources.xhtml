@@ -17,7 +17,7 @@
 </ui:define>
 
 <ui:define name="body">
-<h:form>
+<h:form id="main">
 <s:button view="/admin/edtsource.xhtml" value="#{messages['form.newf']}" styleClass="button"  rendered="#{s:hasRole('SOURCES_EDT')}">
 	<f:param name="id" value="#{null}" />
 </s:button>
@@ -57,9 +57,11 @@
 
   <h:column rendered="#{s:hasRole('SOURCES_EDT')}">
   	<f:facet name="header">#{messages['form.action']}</f:facet>
-        <s:link action="#{sourceHome.remove}" value="#{messages['form.remove']}" onclick="return confirm('#{messages['form.confirm_remove']}');" >
-        	<f:param name="id" value="#{r.id}" />
-        </s:link>
+	<a:commandLink action="#{sourceHome.remove}" value="#{messages['form.remove']}" 
+		onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" 
+		reRender="main,messages">
+		<a:actionparam assignTo="#{sourceHome.id}" value="#{r.id}" name="id" converter="javax.faces.Integer"/>
+	</a:commandLink>
   </h:column>
 </h:dataTable>
 </h:form>

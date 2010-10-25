@@ -11,8 +11,8 @@
         
 <ui:param name="title" value="#{regimen.id==null? messages['admin.regimens.new']: messages['admin.regimens.edt']}" />
 <ui:param name="topmenu" value="3" />
-
 <ui:param name="waitdlg" value="1" />
+
 
 <ui:define name="body">
 <h:form id="main">
@@ -181,8 +181,10 @@
 
     </td></tr>
     <tr><td align="right" colspan="2">
-            <h:commandButton action="#{regimenHome.persist}" value="#{messages['form.ok']}" styleClass="button"/>  
-            <h:commandButton action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" immediate="true"/>
+            <a:commandButton action="#{regimenHome.persist}" value="#{messages['form.ok']}" 
+            	styleClass="button" 
+            	reRender="main,messages"/>  
+            <a:commandButton action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" ajaxSingle="true"/>
     </td></tr>
     </table>
 

@@ -1,5 +1,6 @@
 package org.msh.tb;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -7,6 +8,7 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.mdrtb.entities.HealthSystem;
 import org.msh.mdrtb.entities.UserWorkspace;
 import org.msh.tb.log.LogInfo;
+import org.msh.utils.EntityQuery;
 
 
 /**
@@ -45,4 +47,8 @@ public class HealthSystemHome extends EntityHomeEx<HealthSystem> {
 		return super.remove();
 	}
 
+	@Override
+	public EntityQuery<HealthSystem> getEntityQuery() {
+		return (HealthSystemsQuery)Component.getInstance("healthSystems", false);
+	}
 }

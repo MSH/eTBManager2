@@ -7,6 +7,7 @@ import java.util.List;
 import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -32,6 +33,7 @@ import org.msh.tb.adminunits.CountryStructuresQuery;
 import org.msh.tb.application.WorkspaceViewService;
 import org.msh.tb.log.LogInfo;
 import org.msh.tb.log.LogService;
+import org.msh.utils.EntityQuery;
 
 
 @Name("workspaceHome")
@@ -229,6 +231,11 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		return "defaultws-persisted";
 	}
 	
+	
+	@Override
+	public EntityQuery<Workspace> getEntityQuery() {
+		return (WorkspacesQuery)Component.getInstance("workspaces", false);
+	}
 	
 	/**
 	 * Update the picture options changed by the user

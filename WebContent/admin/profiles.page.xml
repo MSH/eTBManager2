@@ -3,10 +3,6 @@
 	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
 
 	<restrict>#{s:hasRole('PROFILES')}</restrict>
-	<param name="id" value="#{profileHome.idWithLog}" converterId="javax.faces.Integer" />
 	<param name="order" value="#{profiles.order}" />
-	<navigation from-action="#{profileHome.remove}">
-		<redirect view-id="/admin/profiles.xhtml" />
-	</navigation>
 
 </page>

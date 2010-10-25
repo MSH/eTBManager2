@@ -22,6 +22,7 @@ import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.enums.RoleAction;
 import org.msh.tb.log.LogInfo;
 import org.msh.tb.log.LogService;
+import org.msh.utils.EntityQuery;
 
 public class EntityHomeEx<E> extends EntityHome<E> {
 	private static final long serialVersionUID = 2466367489746346196L;
@@ -120,7 +121,15 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	
 	@Override
 	public String remove() {
+		if (!isManaged())
+			return "error";
+
 		saveTransactionLog(RoleAction.DELETE);
+		
+		EntityQuery<E> entityQuery = getEntityQuery();
+		if (entityQuery != null)
+			entityQuery.getResultList().remove(getInstance());
+
 		return super.remove();
 	}
 	
@@ -359,5 +368,12 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 
 	public void setCheckSecurityOnOpen(boolean checkSecurityOnOpen) {
 		this.checkSecurityOnOpen = checkSecurityOnOpen;
+	}
+	
+	/**
+	 * Return the entity query assigned to this home class
+	 */
+	public EntityQuery<E> getEntityQuery() {
+		return null;
 	}
 }

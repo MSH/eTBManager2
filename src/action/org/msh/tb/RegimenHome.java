@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -14,6 +15,7 @@ import org.msh.mdrtb.entities.Regimen;
 import org.msh.mdrtb.entities.enums.RegimenPhase;
 import org.msh.tb.log.LogInfo;
 import org.msh.tb.medicines.MedicineSelection;
+import org.msh.utils.EntityQuery;
 
 
 @Name("regimenHome")
@@ -30,6 +32,13 @@ public class RegimenHome extends EntityHomeEx<Regimen> {
 	public Regimen getRegimen() {
 		return getInstance();
 	}
+
+
+	@Override
+	public EntityQuery<Regimen> getEntityQuery() {
+		return (RegimensQuery)Component.getInstance("regimens", false);
+	}
+
 
 	/**
 	 * Inclume medicines selected

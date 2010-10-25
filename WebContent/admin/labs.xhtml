@@ -88,7 +88,8 @@
 
   <h:column  rendered="#{s:hasRole('LABS_EDT') and (not workspaceViewService.printing)}">
   	<f:facet name="header">#{messages['form.action']}</f:facet>
-	<a:commandLink action="#{laboratoryHome.remove}" value="#{messages['form.remove']}" onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" reRender="main,messages">
+	<a:commandLink action="#{laboratoryHome.remove}" value="#{messages['form.remove']}" 
+		onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" reRender="main,messages">
 		<a:actionparam assignTo="#{laboratoryHome.id}" value="#{r.id}" name="id" converter="javax.faces.Integer"/>
 	</a:commandLink>
   </h:column>

@@ -3,9 +3,5 @@
 	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
 
 	<restrict>#{s:hasRole('SOURCES')}</restrict>
-	<param name="id" value="#{sourceHome.id}" converterId="javax.faces.Integer" />
 	<param name="order" value="#{sources.order}" />
-	<navigation from-action="#{sourceHome.remove}">
-		<redirect view-id="/admin/sources.xhtml"></redirect>
-	</navigation>
 </page>

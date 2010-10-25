@@ -1,5 +1,6 @@
 package org.msh.tb.laboratories;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -7,6 +8,7 @@ import org.msh.mdrtb.entities.Laboratory;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.log.LogInfo;
+import org.msh.utils.EntityQuery;
 
 
 @Name("laboratoryHome")
@@ -29,6 +31,13 @@ public class LaboratoryHome extends EntityHomeEx<Laboratory>{
 			laboratories.refresh();
 		return super.remove();
 	}
+
+	
+	@Override
+	public EntityQuery<Laboratory> getEntityQuery() {
+		return (EntityQuery)Component.getInstance("laboratories", false);
+	}
+
 	
 	@Override
 	public String persist() {

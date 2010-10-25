@@ -5,6 +5,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="#{workspaceViewService.templatePage}">
 
@@ -56,9 +57,11 @@
 
   <h:column  rendered="#{s:hasRole('REGIMENS_EDT')}">
   	<f:facet name="header">#{messages['form.action']}</f:facet>
-        <s:link action="#{regimenHome.remove}" value="#{messages['form.remove']}" onclick="return confirm('#{messages['form.confirm_remove']}');" >
-        	<f:param name="id" value="#{r.id}" />
-        </s:link>
+	<a:commandLink action="#{regimenHome.remove}" value="#{messages['form.remove']}" 
+		onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" 
+		reRender="main,messages">
+		<a:actionparam assignTo="#{regimenHome.id}" value="#{r.id}" name="id" converter="javax.faces.Integer"/>
+	</a:commandLink>
   </h:column>
 </h:dataTable>
 

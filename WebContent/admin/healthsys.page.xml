@@ -5,6 +5,5 @@
 
    	<restrict>#{s:hasRole('HEALTHSYS')}</restrict>
 	<param name="order" value="#{healthSystems.order}" />
-	<param name="firstResult" value="#{healthSystems.firstResult}" />
 	
 </page>

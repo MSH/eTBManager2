@@ -5,11 +5,13 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="#{workspaceViewService.templatePage}">
 
 <ui:param name="title" value="#{messages['admin.users']}" />
 <ui:param name="topmenu" value="3" />
+<ui:param name="waitdlg" value="1" />
 
 <ui:define name="menu_lateral">
 	<ui:include src="/layout/adminmenu.xhtml" />
@@ -17,9 +19,8 @@
 
 <ui:define name="body">
 <h:form id="main">
-<s:button view="/admin/edtuser.xhtml" value="#{messages['form.new']}" styleClass="button"  rendered="#{s:hasRole('USERS_EDT')}">
-	<f:param name="id" value="#{null}" />
-</s:button>
+
+<s:button view="/admin/edtuser.xhtml" value="#{messages['form.new']}" styleClass="button"  rendered="#{s:hasRole('USERS_EDT')}" />
 
 <p/>
 <s:decorate template="/layout/listresult.xhtml">
@@ -97,9 +98,11 @@
   </h:column>
   <h:column rendered="#{s:hasRole('USERS_EDT')}">
   	<f:facet name="header">#{messages['form.action']}</f:facet>
-        <s:link action="#{userHome.remove}" value="#{messages['form.remove']}" onclick="return confirm('#{messages['form.confirm_remove']}');" >
-			<f:param name="id" value="#{it.user.id}" />
-        </s:link>
+	<a:commandLink action="#{userHome.remove}" value="#{messages['form.remove']}" 
+		onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" 
+		reRender="main,messages">
+		<a:actionparam assignTo="#{userHome.id}" value="#{it.user.id}" name="id" converter="javax.faces.Integer"/>
+	</a:commandLink>
   </h:column>
 </h:dataTable>
 </h:form>

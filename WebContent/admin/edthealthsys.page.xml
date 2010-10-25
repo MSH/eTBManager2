@@ -9,7 +9,6 @@
 	<navigation>
 		<rule if-outcome="persisted">
 			<redirect view-id="/admin/healthsys.xhtml" >
-				<param name="id" value="#{null}"/>
 			</redirect>
 		</rule>
 	</navigation>

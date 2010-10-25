@@ -1,5 +1,6 @@
 package org.msh.tb.tbunits;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -73,6 +74,13 @@ public class TbUnitHome extends EntityHomeEx<Tbunit> {
 		
 		return super.remove();
 	}
+
+
+	@Override
+	public UnitsQuery getEntityQuery() {
+		return (UnitsQuery)Component.getInstance("unitspg", false);
+	}
+
 
 	/**
 	 * @return the ausel

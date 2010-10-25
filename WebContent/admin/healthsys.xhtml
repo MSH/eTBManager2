@@ -18,9 +18,9 @@
 
 <ui:define name="body">
 <h:form id="main">
-<s:button view="/admin/edthealthsys.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{s:hasRole('HEALTHSYS_EDT')}">
-	<f:param name="id" value="#{null}" />
-</s:button>
+<s:button view="/admin/edthealthsys.xhtml" value="#{messages['form.new']}" 
+	styleClass="button" 
+	rendered="#{s:hasRole('HEALTHSYS_EDT')}" />
 <p/>
 <h:dataTable id="tbl" value="#{healthSystems.resultList}" var="r" border="0" columnClasses="coll#{defaultWorkspace.hasAlternateLocale?',coll':''},colc" 
 	width="700px"  styleClass="tabela" rowClasses="lin1,lin2" rendered="#{not empty healthSystems.resultList}" style="margin-top:4px;">
@@ -48,7 +48,9 @@
 
   <h:column rendered="#{s:hasRole('HEALTHSYS_EDT')}">
   	<f:facet name="header">#{messages['form.action']}</f:facet>
-	<a:commandLink action="#{healthSystemHome.remove}" value="#{messages['form.remove']}" onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" reRender="main,messages">
+	<a:commandLink action="#{healthSystemHome.remove}" value="#{messages['form.remove']}" 
+		onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" 
+		reRender="main,messages">
 		<a:actionparam assignTo="#{healthSystemHome.id}" value="#{r.id}" name="id" converter="javax.faces.Integer"/>
 	</a:commandLink>
   </h:column>
