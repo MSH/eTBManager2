@@ -16,17 +16,10 @@
 <ui:define name="body">
 <p/>
 <table width="100%"><tr><td>
-<s:decorate template="/layout/roundrect.xhtml">
-	<ui:define name="header"><b>#{messages['manag.reports']}</b></ui:define>
-	<ui:param name="showfooter" value="0" />
-	
-	<s:link value="#{messages['manag.rel1']}" view="/management/rel1.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}"/>
-	<s:link value="#{messages['manag.rel4']}" view="/management/rel4.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP4')}"/>
-</s:decorate>
-<p/>
+
 
 <s:decorate template="/layout/roundrect.xhtml">
-	<ui:define name="header"><b>#{messages['manag.ind']}</b></ui:define>
+	<ui:define name="header"><b>#{messages['manag.case.reports']}</b></ui:define>
 	<ui:param name="showfooter" value="0" />
 
 	<div>
@@ -34,11 +27,18 @@
 	<tr><td valign="top"> 	
 	<s:link value="#{messages['manag.ind.incidence']}" view="/management/incidence.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}" />
 	<s:link value="#{messages['manag.ind.prevalence']}" view="/management/prevalence.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}"/>
-	<s:link value="#{messages['manag.ind.outcome']}" view="/management/outcome.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}"/>
+<!--  	<s:link value="#{messages['manag.ind.outcome']}" view="/management/outcome.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}"/>  --> 
+  	<s:link value="#{messages['manag.ind.treatoutcome']}" view="/management/treatoutcome.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}">
+		<f:param name="cla" value="MDRTB_DOCUMENTED"/>
+	</s:link>
 	<s:link value="#{messages['manag.ind.detrate']}" view="/management/detrate.xhtml" styleClass="optionmenu" rendered="false"/>
 	<s:link value="#{messages['manag.ind.perctb']}" view="/management/perctb.xhtml" styleClass="optionmenu" rendered="false"/>
 	<s:link value="#{messages['manag.ind.resist']}" view="/management/resist.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}" />
 	<s:link value="#{messages['cases.sideeffects']}" view="/management/sideeffects.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}" />
+
+	<s:link value="#{messages['manag.hivreport']}" view="/management/hivresults.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}" />
+	<s:link value="#{messages['manag.ind.dstprofile']}" view="/management/dstprofile.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}" />
+
 	<s:link value="#{messages['manag.ind.infectsite']}" view="/management/infecsite.xhtml" styleClass="optionmenu" rendered="false"/>
 	<s:link value="#{messages['manag.ind.prevtreat']}" view="/management/infecsite.xhtml" styleClass="optionmenu" rendered="false"/>
 	<s:link value="#{messages['manag.ind.hiv']}" view="/management/hiv.xhtml" styleClass="optionmenu" rendered="false" />
@@ -47,14 +47,16 @@
 	<s:link value="#{messages['manag.ind.cover']}" view="/management/cover.xhtml" styleClass="optionmenu" rendered="false"/>
 	
 	</td></tr>
-	<tr><td>
-		<s:link value="#{messages['manag.ind.treatres']}" view="/management/treatres.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}" >
+	 <tr><td>
+<!-- 	<s:link value="#{messages['manag.ind.treatres']}" view="/management/treatres.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}" >
 			<f:param name="cla" value="MDRTB_DOCUMENTED"/>
 		</s:link>
+-->		
 		<s:link value="#{messages['manag.ind.starttreat']}" view="/management/starttreat.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}" />
 		<s:link value="#{messages['manag.ind.interim']}" view="/management/interim.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}" />
 		<s:link value="#{messages['manag.confmdrrep']}" view="/management/confmdrrep.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}" />
 	</td></tr>
+
 	<tr><td>
 		<hr/>
 		<s:link value="#{messages['manag.ind.customind']}" view="/management/customind.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}" />
@@ -62,6 +64,15 @@
 	</table>
 	</div>
 
+</s:decorate>
+<p/>
+
+<s:decorate template="/layout/roundrect.xhtml">
+	<ui:define name="header"><b>#{messages['manag.drug.reports']}</b></ui:define>
+	<ui:param name="showfooter" value="0" />
+	
+	<s:link value="#{messages['manag.rel1']}" view="/management/rel1.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}"/>
+	<s:link value="#{messages['manag.rel4']}" view="/management/rel4.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP4')}"/>
 </s:decorate>
 <p/>
 
