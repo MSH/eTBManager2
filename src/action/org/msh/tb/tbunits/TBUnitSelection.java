@@ -22,6 +22,7 @@ public class TBUnitSelection {
 	public TBUnitSelection(boolean applyUserRestrictions, TBUnitFilter filter) {
 		super();
 		setApplyUserRestrictions(applyUserRestrictions);
+		setApplyHealthSystemRestrictions(true);
 		this.filter = filter;
 	}
 	
@@ -35,6 +36,7 @@ public class TBUnitSelection {
 	private boolean applyUserRestrictions;
 	private TBUnitFilter filter;
 	private HealthSystem healthSystem;
+	private boolean applyHealthSystemRestrictions;
 
 	
 	/**
@@ -51,8 +53,8 @@ public class TBUnitSelection {
 	 * @param unit to be selected
 	 */
 	public void setTbunit(Tbunit unit) {
-		if (unit != null)
-			getAuselection().setSelectedUnit(unit.getAdminUnit());
+		if (unit != null) 
+			getAuselection().setSelectedUnit( unit.getAdminUnit().getParentLevel1() );
 		this.tbunit = unit;
 	}
 
@@ -80,7 +82,7 @@ public class TBUnitSelection {
 	 */
 	public List<Tbunit> getOptions() {
 		TbunitSelectionList lst = (TbunitSelectionList)Component.getInstance("tbunitSelectionList", true);
-		lst.setHealthSystem(healthSystem);
+		lst.setApplyHealthSystemRestrictions(applyHealthSystemRestrictions);
 		lst.setRestriction(createHQLUnitFilter());
 		lst.setAdminUnit(getAuselection().getSelectedUnit());
 		return lst.getUnits();
@@ -205,5 +207,20 @@ public class TBUnitSelection {
 	 */
 	public void setHealthSystem(HealthSystem healthSystem) {
 		this.healthSystem = healthSystem;
+	}
+
+	/**
+	 * @return the applyHealthSystemRestrictions
+	 */
+	public boolean isApplyHealthSystemRestrictions() {
+		return applyHealthSystemRestrictions;
+	}
+
+	/**
+	 * @param applyHealthSystemRestrictions the applyHealthSystemRestrictions to set
+	 */
+	public void setApplyHealthSystemRestrictions(
+			boolean applyHealthSystemRestrictions) {
+		this.applyHealthSystemRestrictions = applyHealthSystemRestrictions;
 	}
 }

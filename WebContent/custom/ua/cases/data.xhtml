@@ -201,25 +201,29 @@
 
 	<tr><td valign="top">
 		<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">#{messages['uk_UA.dateFirstVisitGMC']}:</ui:define>
-    		<h:outputText value="#{caseDataUA.dateFirstVisitGMC}" converter="localeDateConverter" />
+    		<ui:define name="label">#{messages['uk_UA.dateFirstSymptoms']}:</ui:define>
+    		<h:outputText value="#{caseDataUA.dateFirstSymptoms}" converter="localeDateConverter" />
 		</s:decorate>
 	</td>
 	<td valign="top">
 		<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">#{messages['uk_UA.firstTBMedExamDate']}:</ui:define>
-    		<h:outputText value="#{tbCase.registrationDate}" converter="localeDateConverter" />
+    		<ui:define name="label">#{messages['uk_UA.dateFirstVisitGMC']}:</ui:define>
+    		<h:outputText value="#{caseDataUA.dateFirstVisitGMC}" converter="localeDateConverter" />
 		</s:decorate>
 	</td></tr>
 
 	<tr>
 	<td valign="top">
 		<s:decorate template="/layout/display.xhtml" >
-    		<ui:define name="label">#{messages['uk_UA.hospitalizationDate']}:</ui:define>
-    		<h:outputText value="#{caseDataUA.hospitalizationDate}" converter="localeDateConverter" />
+    		<ui:define name="label">#{messages['uk_UA.firstVisitDate']}:</ui:define>
+    		<h:outputText value="#{tbCase.registrationDate}" converter="localeDateConverter" />
 		</s:decorate>
 	
 	</td><td>
+		<s:decorate template="/layout/display.xhtml" >
+    		<ui:define name="label">#{messages['uk_UA.hospitalizationDate']}:</ui:define>
+    		<h:outputText value="#{caseDataUA.hospitalizationDate}" converter="localeDateConverter" />
+		</s:decorate>
 
 	</td></tr>
 	

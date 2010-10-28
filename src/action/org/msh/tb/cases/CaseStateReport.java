@@ -76,7 +76,7 @@ public class CaseStateReport {
 		String sql = "select c.state, c.validationState, count(*) " +
 				"from TbCase c " +
 				"inner join Tbunit u on u.id = c.notification_unit_id " + aucond +
-				"where c.state <> " + CaseState.ONTREATMENT.ordinal() + " " +
+				"where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
 				(hsID != null? "and u.healthSystem_id = " + hsID.toString(): "") +
 				" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
 				" group by c.state, c.validationState " +
@@ -85,7 +85,7 @@ public class CaseStateReport {
 				"from TbCase c " +
 				"inner join TreatmentHealthUnit h on h.case_id = c.id " +
 				"inner join Tbunit u on u.id = h.unit_id " + aucond + 
-				"where c.state = " + CaseState.ONTREATMENT.ordinal() + 
+				"where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " + 
 				" and u.workspace_id = " + defaultWorkspace.getId() + " and h.enddate = c.endtreatmentdate " + cond + condByCase +
 				(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
 				" group by c.state, c.validationState";

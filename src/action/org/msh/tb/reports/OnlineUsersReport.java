@@ -37,6 +37,14 @@ public class OnlineUsersReport {
 	
 	
 	/**
+	 * Refresh the report data
+	 */
+	public void refresh() {
+		items = null;
+	}
+
+
+	/**
 	 * Create the report of on-line users by workspace
 	 */
 	protected void createReport() {

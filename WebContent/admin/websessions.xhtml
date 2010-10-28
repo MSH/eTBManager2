@@ -27,11 +27,12 @@
 		<h:selectOneMenu value="#{reportSelection.userWorkspace}" >
     		<s:selectItems value="#{userSettings.userWorkspaces}" var="c" label="#{c.workspace.name}" noSelectionLabel="-" />
         	<s:convertEntity/>
-        	<a:support event="onchange" reRender="main" />
+        	<a:support event="onchange" reRender="main" action="#{onlineUsersReport.refresh}"/>
 		</h:selectOneMenu>
 	</s:decorate>
 
-	<h:dataTable value="#{onlineUsersReport.items}" var="it" styleClass="tabela" width="95%" columnClasses="colc,colc,colc,coll,coll,colc,colc" rowClasses="lin1,lin2">
+	<h:dataTable value="#{onlineUsersReport.items}" var="it" styleClass="tabela" width="95%" 
+		columnClasses="colc,colc,colc,coll,coll,colc,colc" rowClasses="lin1,lin2" rendered="#{not empty onlineUsersReport.items}">
 		<h:column>
 			<f:facet name="header">#{messages['form.id']}</f:facet>
 			#{it.userLogin.id}

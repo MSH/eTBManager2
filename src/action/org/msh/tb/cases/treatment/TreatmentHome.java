@@ -16,6 +16,7 @@ import org.msh.mdrtb.entities.CaseRegimen;
 import org.msh.mdrtb.entities.PrescribedMedicine;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.TreatmentHealthUnit;
+import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.tb.cases.CaseHome;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
@@ -239,6 +240,32 @@ public class TreatmentHome {
 		return true;
 	}
 	
+	
+	/**
+	 * Undo the treatment, turning the case to the 'waiting for treatment' state again
+	 */
+	public String undoTreatment() {
+		TbCase tbcase = caseHome.getInstance();
+		tbcase.setState(CaseState.WAITING_TREATMENT);
+		tbcase.setTreatmentPeriod(null);
+
+		Integer id = caseHome.getInstance().getId();
+		entityManager.createQuery("delete from PrescribedMedicine where tbcase.id = " + id.toString()).executeUpdate();
+		entityManager.createQuery("delete from TreatmentHealthUnit where tbCase.id = " + id.toString()).executeUpdate();
+		entityManager.createQuery("delete from CaseRegimen where tbCase.id = " + id.toString()).executeUpdate();
+		
+//		tbcase.getTreatmentPeriod().set(null, null);
+		tbcase.getHealthUnits().clear();
+		tbcase.getRegimens().clear();
+		tbcase.getPrescribedMedicines().clear();
+
+		caseHome.setDisplayMessage(false);
+		caseHome.persist();
+
+		facesMessages.addFromResourceBundle("cases.treat.undo.executed");
+		
+		return "treatment-undone";
+	}
 
 	public Date getIniDate() {
 		return iniDate;

@@ -50,8 +50,26 @@
 	<s:fragment rendered="#{caseHome.inTreatment}">
 
 	<h:panelGroup id="pnltreatment">
-	<s:div styleClass="link-bar">
-		<s:link value="#{messages['form.edit']}" view="/cases/treatmentedt.xhtml" style="float:right;"/>
+	<s:div styleClass="link-bar" rendered="#{caseHome.canEditTreatment}">
+		<s:link value="#{messages['form.edit']}" view="/cases/treatmentedt.xhtml" />
+
+		<s:link value="#{messages['cases.move']}" view="/cases/casemove.xhtml" rendered="#{caseHome.canTransferOut}">
+			<f:param name="id" value="#{caseHome.id}" />
+		</s:link>
+
+		<a:commandLink value="#{messages['cases.move.cancel']}"
+			onclick="if (!confirm('#{messages['cases.move.cancel-confirm']}')) return false"
+			action="#{caseMoveHome.rollbackTransferOut}"
+			reRender="main,leftmenu,messages"
+			rendered="#{prescriptionTable.transferredCase}" 
+			style="position:relative" styleClass="right-icon" >
+			<f:param name="name" value="#{prescriptionTable.lastHealthUnit.tbunit.name}"/>
+		</a:commandLink>
+
+		<a:commandLink value="#{messages['cases.treat.undo']}"
+			onclick="if (!confirm('#{messages['cases.treat.undo.confirm']}')) return false;" 
+			action="#{treatmentHome.undoTreatment}" 
+			reRender="main,messages"/>
 	</s:div>
 
 	<s:decorate template="/cases/treattable.xhtml">

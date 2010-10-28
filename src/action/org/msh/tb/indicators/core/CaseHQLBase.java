@@ -16,10 +16,10 @@ import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
+import org.msh.mdrtb.entities.enums.CultureResult;
 import org.msh.mdrtb.entities.enums.InfectionSite;
 import org.msh.mdrtb.entities.enums.MicroscopyResult;
 import org.msh.tb.adminunits.AdminUnitSelection;
-import org.msh.tb.indicators.IndicatorMicroscopyResult;
 
 /**
  * Base class to generate HQL queries in the TB Cases database based on the filters in the {@link IndicatorFilters} component
@@ -162,6 +162,15 @@ public class CaseHQLBase extends Controller {
 			else s = Integer.toString(MicroscopyResult.POSITIVE.ordinal());
 			hql += " and exists(select ex.id from ExamMicroscopy ex where ex.result = " + s + " and ex.tbcase.id = c.id" +
 				" and ex.dateCollected = (select min(sp.dateCollected) from ExamMicroscopy sp where sp.tbcase.id = c.id))";
+		}
+		
+		if (filters.getCultureResult() != null) {
+			String s;
+			if (filters.getCultureResult() == IndicatorCultureResult.NEGATIVE)
+				 s = Integer.toString(CultureResult.NEGATIVE.ordinal());
+			else s = Integer.toString(CultureResult.POSITIVE.ordinal());
+			hql += " and exists(select ex.id from ExamCulture ex where ex.result = " + s + " and ex.tbcase.id = c.id" +
+				" and ex.dateCollected = (select min(sp.dateCollected) from ExamCulture sp where sp.tbcase.id = c.id))";
 		}
 		
 		// include filter by unit

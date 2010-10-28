@@ -281,6 +281,8 @@ public class CaseMoveHome extends Controller {
 	public TBUnitSelection getTbunitselection() {
 		if (tbunitselection == null) {
 			tbunitselection = new TBUnitSelection(false, TBUnitFilter.HEALTH_UNITS);
+			tbunitselection.setApplyHealthSystemRestrictions(false);
+			tbunitselection.setHealthSystem(null);
 		}
 		return tbunitselection;
 	}

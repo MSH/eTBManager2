@@ -51,7 +51,8 @@ public class CaseExportUA extends CaseExport {
 	protected String getHQLJoin() {
 		return super.getHQLJoin().concat(" join fetch c.notificationUnit nu " +
 			"join fetch nu.adminUnit " +
-			"join fetch c.pulmonaryType");
+			"left join fetch c.pulmonaryType " +
+			"left join fetch c.extrapulmonaryType");
 	}
 
 
@@ -142,7 +143,14 @@ public class CaseExportUA extends CaseExport {
 		excel.addText(tbcase.getPatient().getFullName());
 		excel.addTextFromResource(tbcase.getClassification().getKey());
 		excel.addText(tbcase.getDisplayCaseNumber());
-		excel.addValue(tbcase, "state");
+		
+		String s = getMessages().get( tbcase.getState().getKey() );
+		if (data.getExtraOutcomeInfo() != null) {
+			String extra = getMessages().get( data.getExtraOutcomeInfo().getKey() );
+			if ((extra != null) && (!extra.isEmpty()))
+				s += " - " + extra;
+		}
+		excel.addValue(s);
 		excel.addText(tbcase.getRegistrationCode());
 		excel.addValue(tbcase.getPatient(), "gender");
 		excel.addDate(tbcase.getPatient().getBirthDate());

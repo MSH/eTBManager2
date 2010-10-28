@@ -201,6 +201,15 @@ public class AdminUnitSelection {
 		notifyChange();
 	}
 
+	
+	public Integer getUnitIdLevel1() {
+		return (units[0] != null? units[0].getId(): null);
+	}
+	
+	public void setUnitIdLevel1(Integer id) {
+		EntityManager em = getEntityManager();
+		units[0] = em.find(AdministrativeUnit.class, id);
+	}
 
 	/**
 	 * @return the level2
@@ -405,6 +414,10 @@ public class AdminUnitSelection {
 		unitsList = null;
 	}
 
+	
+	protected EntityManager getEntityManager() {
+		return (EntityManager)Component.getInstance("entityManager");
+	}
 	
 	/**
 	 * Return the list of parent units and the selected one

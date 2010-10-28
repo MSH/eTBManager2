@@ -1,4 +1,4 @@
-package org.msh.tb.indicators;
+package org.msh.tb.indicators.core;
 
 public enum IndicatorMicroscopyResult {
 

@@ -16,7 +16,6 @@ import org.msh.mdrtb.entities.enums.DrugResistanceType;
 import org.msh.mdrtb.entities.enums.Gender;
 import org.msh.mdrtb.entities.enums.InfectionSite;
 import org.msh.mdrtb.entities.enums.PatientType;
-import org.msh.tb.indicators.IndicatorMicroscopyResult;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
 
@@ -44,6 +43,7 @@ public class IndicatorFilters {
 	private IndicatorSite indicatorSite = IndicatorSite.TREATMENTSITE;
 	private AgeRange ageRange;
 	private IndicatorMicroscopyResult microscopyResult;
+	private IndicatorCultureResult cultureResult;
 	private DrugResistanceType drugResistanceType;
 	private DiagnosisType diagnosisType;
 
@@ -63,7 +63,12 @@ public class IndicatorFilters {
 		numPrevTBTreatments = null;
 		drugResistanceType = null;
 	}
-	
+
+
+	/**
+	 * Return the initial date based on the initial month and year
+	 * @return
+	 */
 	public Date getIniDate() {
 		if (iniYear == null)
 			return null;
@@ -77,7 +82,12 @@ public class IndicatorFilters {
 
 		return c.getTime();
 	}
-	
+
+
+	/**
+	 * Return the ending date based on the ending month and year
+	 * @return
+	 */
 	public Date getEndDate() {
 		if (endYear == null)
 			return null;
@@ -306,6 +316,7 @@ public class IndicatorFilters {
 	public void setMicroscopyResult(IndicatorMicroscopyResult microscopyResult) {
 		this.microscopyResult = microscopyResult;
 	}
+	
 
 	/**
 	 * @return the microscopyResult
@@ -316,6 +327,10 @@ public class IndicatorFilters {
 	
 	public IndicatorMicroscopyResult[] getMicroscopyResults() {
 		return IndicatorMicroscopyResult.values();
+	}
+	
+	public IndicatorCultureResult[] getCultureResults() {
+		return IndicatorCultureResult.values();
 	}
 
 	/**
@@ -352,5 +367,19 @@ public class IndicatorFilters {
 
 	public void setIndicatorDate(IndicatorDate indicatorDate) {
 		this.indicatorDate = indicatorDate;
+	}
+
+	/**
+	 * @return the cultureResult
+	 */
+	public IndicatorCultureResult getCultureResult() {
+		return cultureResult;
+	}
+
+	/**
+	 * @param cultureResult the cultureResult to set
+	 */
+	public void setCultureResult(IndicatorCultureResult cultureResult) {
+		this.cultureResult = cultureResult;
 	}
 }

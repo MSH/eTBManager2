@@ -24,10 +24,6 @@
 <ui:define name="left">
 	<h:panelGroup id="leftmenu" styleClass="menubv">
 	<h:form>
-
-	<s:link value="#{messages['cases.move']}" view="/cases/casemove.xhtml" rendered="#{caseHome.canTransferOut}">
-		<f:param name="id" value="#{caseHome.id}" />
-	</s:link>
 	
 	<h:commandLink value="#{messages['form.remove']}" action="#{caseHome.remove}" onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" rendered="#{caseHome.canEdit}">
 	</h:commandLink>
@@ -75,7 +71,6 @@
 
 <ui:define name="body">
 <h:form id="main">
-
 <s:decorate template="/layout/casebody.xhtml">
 
 	<ui:define name="state-content">
@@ -83,7 +78,8 @@
 			<b style="padding-right:4px;">#{messages['medicines.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
 			<br/>
 			<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
-				style="position:relative;" propagation="none" styleClass="right-icon">
+				style="position:relative;" propagation="none" 
+				styleClass="right-icon">
 				<f:param name="id" value="#{caseHome.id}" />
 			</s:link>
 			<br/>

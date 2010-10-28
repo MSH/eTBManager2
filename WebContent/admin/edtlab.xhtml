@@ -25,9 +25,8 @@
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['Laboratory.abbrevName']}:</ui:define>
-        <h:inputText value="#{laboratory.abbrevName}" maxlength="20" style="width : 80px;" required="true"
-        	validator="#{laboratoryHome.validateUniqueValue}">
+    	<ui:define name="label">#{messages['form.abbrevName']}:</ui:define>
+        <h:inputText value="#{laboratory.abbrevName}" maxlength="20" style="width : 80px;" required="true">
         	<f:param id="field" value="abbrevName"/>
         </h:inputText>
     </s:decorate>

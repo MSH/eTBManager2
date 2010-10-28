@@ -43,7 +43,7 @@ public class InterimOutcomeIndicator extends Indicator2D {
 		unkCol = getMessage("manag.ind.interim.unknown");
 		diedCol = getMessage("CaseState.DIED");
 		defCol = getMessage("CaseState.DEFAULTED");
-		transCol = getMessage("CaseState.TRASNFERRED_OUT");
+		transCol = getMessage("CaseState.TRANSFERRED_OUT");
 		
 		getTable().addColumn(negCol, null);
 		getTable().addColumn(posCol, null);

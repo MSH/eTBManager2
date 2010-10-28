@@ -5,11 +5,11 @@
 	<restrict>#{s:hasRole('USERS')}</restrict>
 	<param name="id" value="#{userHome.idWithLog}" converterId="javax.faces.Integer" />
 	<begin-conversation join="true" />
-	<navigation from-action="#{userHome.persist}">
-		<end-conversation />
-		<redirect view-id="/admin/users.xhtml" />
-	</navigation>
 	<navigation>
+		<rule if-outcome="persisted">
+			<end-conversation />
+			<redirect view-id="/admin/users.xhtml" />
+		</rule>
 		<rule if-outcome="cancel">
 			<end-conversation before-redirect="true" />
 			<redirect view-id="/admin/users.xhtml" />

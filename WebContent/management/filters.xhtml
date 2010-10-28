@@ -10,7 +10,7 @@
 
 	<table width="100%" style="border-collapse: collapse;"><tr><td colspan="2">
 
-	<s:decorate template="/layout/edit.xhtml" rendered="#{selectClassification}">
+	<s:decorate template="/layout/edit.xhtml" rendered="#{empty hideclassification}">
 		<ui:define name="label">#{messages['CaseClassification']}:	</ui:define>
 		<h:selectOneMenu value="#{indicatorFilters.classification}">
 			<s:selectItems value="#{globalLists.caseClassifications}" var="r" label="#{messages[r.key]}" noSelectionLabel="#{messages['form.noselection']}" />
@@ -194,11 +194,12 @@ function handleContextClick(comp) {
 	</s:decorate>
 
 	</td><td>
-	<s:decorate template="/layout/display.xhtml">
-		<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
-    	<ui:param name="labelstyle" value="width:140px;" />
-		<h:selectOneMenu value="#{indicatorFilters.drugResistanceType}">
-			<s:selectItems var="it" value="#{drugResistanceTypes}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+
+	<s:decorate template="/layout/edit.xhtml">
+   		<ui:param name="labelstyle" value="width:140px;" />
+		<ui:define name="label">#{messages['CultureResult']}:</ui:define>
+		<h:selectOneMenu value="#{indicatorFilters.cultureResult}">
+			<s:selectItems var="it" value="#{indicatorFilters.cultureResults}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
 			<s:convertEnum />
 		</h:selectOneMenu>
 	</s:decorate>
@@ -214,6 +215,15 @@ function handleContextClick(comp) {
 		</h:selectOneMenu>
 	</s:decorate>
 
+	</td><td>
+		<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
+    		<ui:param name="labelstyle" value="width:140px;" />
+			<h:selectOneMenu value="#{indicatorFilters.drugResistanceType}">
+				<s:selectItems var="it" value="#{drugResistanceTypes}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+				<s:convertEnum />
+			</h:selectOneMenu>
+		</s:decorate>
 	</td></tr>
 <s:fragment rendered="#{hideupdtbar == null}">
 	<tr><td colspan="2">

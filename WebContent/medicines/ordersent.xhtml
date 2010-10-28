@@ -76,7 +76,7 @@
 					<h:outputText value="#{it.item.shippedQuantity}" rendered="#{not it.unavailable}"><f:convertNumber pattern="#,###,###"/></h:outputText>
 				</td>
 				<td class="colc">
-					<h:commandLink value="#{messages['medicines.orders.selbatches']}" action="#{orderBatchHome.selectOrderItem(it.item)}" rendered="#{not it.unavailable}" immediate="true"/>
+					<h:commandLink value="#{messages['medicines.selbatches']}" action="#{orderBatchHome.selectOrderItem(it.item)}" rendered="#{not it.unavailable}" immediate="true"/>
 				</td>
 				</tr>
 				

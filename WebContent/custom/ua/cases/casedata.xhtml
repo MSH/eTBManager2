@@ -22,10 +22,6 @@
 <ui:define name="menu_lateral">
 	<h:panelGroup id="leftmenu">
 	<h:form>
-
-	<s:link value="#{messages['cases.move']}" view="/cases/casemove.xhtml" rendered="#{caseHome.canTransferOut}">
-		<f:param name="id" value="#{caseHome.id}" />
-	</s:link>
 	
 	<h:commandLink value="#{messages['form.remove']}" action="#{caseHome.remove}" onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" rendered="#{caseHome.canEdit}">
 	</h:commandLink>
@@ -52,12 +48,19 @@
 		<s:div rendered="#{tbCase.state=='TRANSFERRING'}" styleClass="hu-icon" style="margin-top:6px;font-size:11px;max-width:320px;" >
 			<b style="padding-right:4px;">#{messages['medicines.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
 			<br/>
-			<span class="right-icon" >
 			<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
-				style="position:relative;" propagation="none">
+				style="position:relative;" propagation="none" 
+				styleClass="right-icon">
 				<f:param name="id" value="#{caseHome.id}" />
 			</s:link>
-			</span>
+			<br/>
+			<a:commandLink value="#{messages['cases.move.cancel']}"
+				onclick="if (!confirm('#{caseMoveHome.confirmMsgRollbackTransfer}')) return false"
+				action="#{caseMoveHome.rollbackTransferOut}"
+				reRender="main,leftmenu,messages" 
+				style="position:relative" styleClass="right-icon" >
+				<f:param name="name" value="#{caseHome.transferInHealthUnit.tbunit.name}"/>
+			</a:commandLink>
 		</s:div>
 	</ui:define>
 

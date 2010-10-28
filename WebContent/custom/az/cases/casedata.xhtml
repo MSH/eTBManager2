@@ -41,10 +41,6 @@
 <td width="150px">
 	<h:panelGroup id="leftmenu" styleClass="menubv">
 	<h:form>
-
-	<s:link value="#{messages['cases.move']}" view="/cases/casemove.xhtml" rendered="#{caseHome.canTransferOut}">
-		<f:param name="id" value="#{caseHome.id}" />
-	</s:link>
 	
 	<s:link value="#{messages['cases.validate']}" view="/cases/validate.xhtml" rendered="#{caseHome.canValidate}">
 		<f:param name="id" value="#{caseHome.id}"/>

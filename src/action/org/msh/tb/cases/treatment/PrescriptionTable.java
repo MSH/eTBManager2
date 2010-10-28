@@ -108,6 +108,26 @@ public class PrescriptionTable {
 
 	
 	/**
+	 * Check if the case was transferred from a health unit to another
+	 * @return true if was transferred
+	 */
+	public boolean isTransferredCase() {
+		TbCase tbcase = caseHome.getInstance();
+		int num = tbcase.getHealthUnits().size();
+		return (tbcase.isOpen()) && (num > 1) && (!tbcase.getHealthUnits().get(num - 1).isTransferring());
+	}
+
+	
+	/**
+	 * Return the last treatment health unit of the case
+	 * @return
+	 */
+	public TreatmentHealthUnit getLastHealthUnit() {
+		List<TreatmentHealthUnit> lst = caseHome.getInstance().getHealthUnits();
+		return (lst.size() > 0? lst.get(lst.size() - 1) : null);
+	}
+	
+	/**
 	 * Create phases to be displayed in the table
 	 */
 	protected void createPhases() {

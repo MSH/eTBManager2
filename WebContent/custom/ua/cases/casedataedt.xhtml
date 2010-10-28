@@ -198,8 +198,17 @@
 		<rich:jQuery selector="#diagtype" query="change(function(){changeDiagType(this); })" />
     </s:decorate>
 
+	<div id="divDiagDate" style="#{tbCase.diagnosisType=='CONFIRMED'?'':'display:none;'}">
+    <s:decorate id="diagdt" template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['uk_UA.dateCMCCRegistration']}:<span style="color:red;">*</span></ui:define>
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="datefield" value="#{tbCase.diagnosisDate}" /> 
+    	<h:inputHidden id="reghidden" />
+    </s:decorate>
+    </div>
+
     <s:decorate template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['uk_UA.dateCMCCRegistration']}:</ui:define>
+    	<ui:define name="label">#{messages['uk_UA.dateFirstSymptoms']}:</ui:define>
     	<ui:param name="required" value="false" /> 
     	<ui:param name="datefield" value="#{caseDataUA.dateFirstSymptoms}" /> 
     </s:decorate>
@@ -218,15 +227,6 @@
     </s:decorate>
     </div>
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
-
-	<div id="divDiagDate" style="#{tbCase.diagnosisType=='CONFIRMED'?'':'display:none;'}">
-    <s:decorate id="diagdt" template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['uk_UA.dateCMCCRegistration']}:<span style="color:red;">*</span></ui:define>
-    	<ui:param name="required" value="false" /> 
-    	<ui:param name="datefield" value="#{tbCase.diagnosisDate}" /> 
-    	<h:inputHidden id="reghidden" />
-    </s:decorate>
-    </div>
 
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['uk_UA.hospitalizationDate']}:</ui:define>

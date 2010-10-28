@@ -29,7 +29,21 @@ public class CaseRegimenHome {
 	@In(create=true) TreatmentHome treatmentHome;
 	@In EntityManager entityManager;
 	@In(create=true) RegimensQuery regimens;
+
+	private Regimen regimen;
 	
+	/**
+	 * Indicate if, when changing the regimen, if the periods of intensive and continuous phases should be preserved 
+	 */
+	private boolean preservePeriods;
+
+	
+	/**
+	 * Change the current regimen
+	 */
+	public void changeRegimen() {
+		
+	}
 
 	/**
 	 * Update treatment regimens according to the medicines prescribed 
@@ -206,6 +220,36 @@ public class CaseRegimenHome {
 		public Date getEndDate() {
 			return endDate;
 		}
+	}
+
+
+
+	/**
+	 * @return the regimen
+	 */
+	public Regimen getRegimen() {
+		return regimen;
+	}
+
+	/**
+	 * @param regimen the regimen to set
+	 */
+	public void setRegimen(Regimen regimen) {
+		this.regimen = regimen;
+	}
+
+	/**
+	 * @return the preservePeriods
+	 */
+	public boolean isPreservePeriods() {
+		return preservePeriods;
+	}
+
+	/**
+	 * @param preservePeriods the preservePeriods to set
+	 */
+	public void setPreservePeriods(boolean preservePeriods) {
+		this.preservePeriods = preservePeriods;
 	}
 
 }

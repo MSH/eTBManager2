@@ -48,7 +48,8 @@ public class CaseExport extends CaseHQLBase implements CaseIterator {
 	protected String getHQLJoin() {
 		return super.getHQLJoin().concat(" join fetch c.notificationUnit nu " +
 			"join fetch nu.adminUnit " +
-			"join fetch c.pulmonaryType");
+			"left join fetch c.pulmonaryType " +
+			"left join fetch c.extrapulmonaryType");
 	}
 
 

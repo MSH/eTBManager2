@@ -10,7 +10,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.HealthSystem;
 import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.UserWorkspace;
 
@@ -27,7 +26,7 @@ public class TbunitSelectionList {
 	
 	private AdministrativeUnit adminUnit;
 	private List<Tbunit> units;
-	private HealthSystem healthSystem;
+	private boolean applyHealthSystemRestrictions;
 
 	private String restriction;
 
@@ -51,9 +50,7 @@ public class TbunitSelectionList {
 		
 		// add dynamic condition by health system
 		Integer healthSystemID = null;
-		if (healthSystem != null)
-			healthSystemID = healthSystem.getId();
-		else {
+		if (applyHealthSystemRestrictions) {
 			UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
 			if (userWorkspace.getHealthSystem() != null)
 				healthSystemID = userWorkspace.getHealthSystem().getId();
@@ -119,18 +116,19 @@ public class TbunitSelectionList {
 
 
 	/**
-	 * @return the healthSystem
+	 * @return the applyHealthSystemRestrictions
 	 */
-	public HealthSystem getHealthSystem() {
-		return healthSystem;
+	public boolean isApplyHealthSystemRestrictions() {
+		return applyHealthSystemRestrictions;
 	}
 
 
 	/**
-	 * @param healthSystem the healthSystem to set
+	 * @param applyHealthSystemRestrictions the applyHealthSystemRestrictions to set
 	 */
-	public void setHealthSystem(HealthSystem healthSystem) {
-		this.healthSystem = healthSystem;
+	public void setApplyHealthSystemRestrictions(
+			boolean applyHealthSystemRestrictions) {
+		this.applyHealthSystemRestrictions = applyHealthSystemRestrictions;
 	}
 
 

@@ -352,11 +352,11 @@ public class ExcelCreator {
 
 		response.setContentType("application/vnd.ms-excel");
 		response.setContentLength(((Long)excelFile.length()).intValue());
-		response.setHeader("Cache-Control","no-store");
+/*		response.setHeader("Cache-Control","no-store");
 		response.setHeader("Pragma","no-cache");
 		response.setDateHeader("Expires",0);
-
-		response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xls");
+*/
+//		response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xls");
 
         OutputStream os;
 		try {

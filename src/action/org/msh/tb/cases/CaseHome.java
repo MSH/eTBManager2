@@ -146,11 +146,13 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	 * @return true if can be transfered
 	 */
 	public boolean isCanTransferOut() {
-		return (getInstance().getState() == CaseState.ONTREATMENT) && (checkRoleBySufix("TRANSFER"));
+		TbCase tbcase = getInstance();
+		return (tbcase.isOpen()) && (tbcase.getState() == CaseState.ONTREATMENT) && (checkRoleBySufix("TRANSFER"));
 	}
 	
 	public boolean isCanTransferIn() {
-		return (getInstance().getState() == CaseState.TRANSFERRING) && (checkRoleBySufix("TRANSFER"));
+		TbCase tbcase = getInstance();
+		return (tbcase.isOpen()) && (tbcase.getState() == CaseState.TRANSFERRING) && (checkRoleBySufix("TRANSFER"));
 	}
 	
 	public boolean isCanOpenExams() {
@@ -158,7 +160,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	}
 	
 	public boolean isCanEditExams() {
-		return checkRoleBySufix("EXAMS_EDT");
+		return (getInstance().isOpen()) && checkRoleBySufix("EXAMS_EDT");
 	}
 	
 	public boolean isCanOpenTreatment() {
@@ -166,7 +168,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	}
 	
 	public boolean isCanEditTreatment() {
-		return checkRoleBySufix("TREAT_EDT");
+		return (getInstance().isOpen()) && (checkRoleBySufix("TREAT_EDT"));
 	}
 	
 	public boolean isCanClose() {
@@ -183,7 +185,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	}
 	
 	public boolean isCanEdit() {
-		return checkRoleBySufix("CASES_EDT");
+		return (getInstance().isOpen()) && checkRoleBySufix("CASES_EDT");
 	}
 
 	@Override
