@@ -97,7 +97,7 @@ public class JSONDataRender {
 				}
 				labels = labels + "{" + 
 					wrapInteger("value", item.getValue()) + "," +
-					wrapElement("label", item.getKey()) + "}";				
+					wrapElement("label", item.getShortKey()) + "}";				
 			}
 		}
 		
@@ -133,7 +133,7 @@ public class JSONDataRender {
 				labels = "," + labels;
 				vals = vals + ",";
 			}
-			labels = "\"" + item.getKey() + "\"" + labels;
+			labels = "\"" + item.getShortKey() + "\"" + labels;
 			vals += "{\"right\":" + item.getValue() + "}";
 			
 			if (item.getValue() > max)

@@ -21,6 +21,16 @@ public class IndicatorItem {
 		else return (float)value/(float)total * 100;
 	}
 	
+	/**
+	 * Return the key limited in length to be displayed in a chart
+	 * @return
+	 */
+	public String getShortKey() {
+		if ((key != null) && (key.length() > 20))
+			 return key.substring(0, 19) + "...";
+		else return key;
+	}
+	
 	public String getKey() {
 		return key;
 	}

@@ -20,8 +20,8 @@ public class CustomIndicator extends Indicator2D {
 		if ((filters.getOutputSelection() == null) || (colSelection == null))
 			return;
 		
-		String rowField = filters.getOutputSelection().getField();
-		String colField = colSelection.getField();
+		String rowField = getOutputSelectionField( filters.getOutputSelection() );
+		String colField = getOutputSelectionField( colSelection );
 		
 		List<Object[]> lst = generateValuesByField(colField + "," + rowField, "c.state >= " + CaseState.WAITING_TREATMENT.ordinal());
 		
@@ -52,13 +52,15 @@ public class CustomIndicator extends Indicator2D {
 		
 		return lst;
 	}
-	
+
+
 	/**
 	 * @return the colSelection
 	 */
 	public OutputSelection getColSelection() {
 		return colSelection;
 	}
+
 
 	/**
 	 * @param colSelection the colSelection to set
