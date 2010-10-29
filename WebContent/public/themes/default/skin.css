@@ -920,6 +920,18 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	font-size:12px;
 }
 
-.rich-ddmenu-label {
+.dropdown-link {
 	color: #008422;
+	background: transparent url(images/down.gif) no-repeat left 5px;
+	padding-left:12px;
+}
+
+.dropdown-link .rich-label-text-decor {
+	font-weight: normal;
+	text-decoration: underline;
+	font-size:12px;
+}
+
+.rich-menu-item-label,.rich-menu-item-label a, .rich-menu-item-label a:hover {
+	font-size:12px;
 }

@@ -11,12 +11,14 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.msh.mdrtb.entities.AdministrativeUnit;
+import org.msh.mdrtb.entities.Workspace;
 
 @Name("adjustAdminUnits")
 public class AdjustAdminUnits {
 
 //	@In(create=true) Workspace defaultWorkspace;
 	
+	private Workspace workspace;
 	
 	public EntityManager getEntityManager() {
 		return (EntityManager)Component.getInstance("entityManager");
@@ -28,13 +30,14 @@ public class AdjustAdminUnits {
 	 */
 	@Asynchronous
 	@Transactional
-	public void execute() throws Exception {
+	public void execute(Workspace workspace) throws Exception {
+		this.workspace = workspace;
 		updateAdminUnits(null);
 	}
 
 
 	private void updateAdminUnits(AdministrativeUnit parent) throws Exception {
-		String hql = "from AdministrativeUnit a where a.workspace.id = 19465";
+		String hql = "from AdministrativeUnit a where a.workspace.id = " + workspace.getId();
 		if (parent != null)
 			 hql += " and a.parent.id = " + parent.getId().toString();
 		else hql += " and a.parent.id is null";

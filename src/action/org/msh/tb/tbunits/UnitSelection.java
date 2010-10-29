@@ -116,7 +116,7 @@ public class UnitSelection {
 		Tbunit unit = userWorkspace.getTbunit();
 
 		switch (userWorkspace.getView()) {
-		case ADMINUNIT: cond = conditionHQLAdminUnit(unit.getAdminUnit());
+		case ADMINUNIT: cond = conditionHQLAdminUnit(userWorkspace.getAdminUnit());
 			break;
 		case TBUNIT: cond = "and u.id = " + unit.getId();
 			break;

@@ -24,6 +24,7 @@ import org.msh.tb.cases.treatment.StartTreatmentHome;
 public class ExecuteAsyncAction {
 
 	@In(create=true) AdjustDaysPlannedAction adjustDaysPlannedAction;
+	@In(create=true) AdjustAdminUnits adjustAdminUnits;
 	@In(create=true) EntityManager entityManager;
 
 	private Random random;
@@ -43,6 +44,16 @@ public class ExecuteAsyncAction {
 				break;
 			ini += 50;
 		}
+	}
+
+	
+	/**
+	 * Adjust administrative unit codes
+	 * @throws Exception 
+	 */
+	public void adjustAdminUnitsCode() throws Exception {
+		Workspace workspace = (Workspace)Component.getInstance("defaultWorkspace");
+		adjustAdminUnits.execute(workspace);
 	}
 
 

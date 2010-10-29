@@ -48,7 +48,10 @@
 <s:decorate template="/layout/casebody.xhtml">
 
 	<ui:define name="state-content">
-		<s:div rendered="#{tbCase.state=='TRANSFERRING'}" styleClass="hu-icon" style="margin-top:6px;font-size:11px;max-width:320px;" >
+	<div style="overflow: auto">
+		<s:div rendered="#{tbCase.state=='TRANSFERRING'}" styleClass="hu-icon" 
+			style="margin-top:6px;font-size:11px;max-width:320px;height:70px" >
+			
 			<b style="padding-right:4px;">#{messages['medicines.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
 			<br/>
 			<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
@@ -65,6 +68,7 @@
 				<f:param name="name" value="#{caseHome.transferInHealthUnit.tbunit.name}"/>
 			</a:commandLink>
 		</s:div>
+	</div>
 	</ui:define>
 
 <ui:include src="/cases/issues.xhtml" />

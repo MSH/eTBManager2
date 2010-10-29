@@ -356,7 +356,7 @@ public class ExcelCreator {
 		response.setHeader("Pragma","no-cache");
 		response.setDateHeader("Expires",0);
 */
-//		response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xls");
+		response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xls");
 
         OutputStream os;
 		try {

@@ -86,7 +86,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			"c.validationState, c.registrationCode " +
 			"from TbCase c " +
 			"join c.patient p " +
-			"join c.notificationUnit nu join nu.adminUnit loc ".concat(dynamicConditions());
+			"join c.notificationUnit nu join c.notifAddress.adminUnit loc ".concat(dynamicConditions());
 	}
 
 	@Override
