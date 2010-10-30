@@ -243,7 +243,7 @@ function showHuDlg() {	Richfaces.showModalPanel('hudlg'); }
 </s:decorate>
 
 
-<rich:modalPanel id="medicinedlg" width="700" height="350" zindex="2000" trimOverlayedElements="false">
+<rich:modalPanel id="medicinedlg" width="700" autosized="true" zindex="2000" trimOverlayedElements="false">
 	<f:facet name="header">#{messages['PrescribedMedicine']}</f:facet>
 	<ui:param name="labelstyle" value="width:110px" />
 	<h:panelGroup id="medicinepnl">

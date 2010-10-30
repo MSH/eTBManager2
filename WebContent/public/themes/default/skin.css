@@ -911,6 +911,10 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 
 /* RICHFACES OVERWRITE */
 
+.rich-mpnl-panel {
+	position: relative;
+}
+
 .rich-mpnl-header {
 	background-image:none;
 	background-color:#34612f;

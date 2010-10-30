@@ -137,10 +137,14 @@
 				<exclude name="/org/msh/tb/ua/**"/>
 				<exclude name="/org/msh/tb/md/**"/>
 				<exclude name="/org/msh/tb/in/**"/>
+				<exclude name="/messages*" />
+				<exclude name="/custom_messages*" />
 			</classes>
 			
 			<zipfileset file="WebContent/public/loginph.xhtml" fullpath="login.xhtml" />
 			<zipfileset file="WebContent/public/loginph.page.xml" fullpath="login.page.xml" />
+			<zipfileset file="src/model/messages_en_PH.properties" fullpath="WEB-INF/classes/messages_en.properties" />
+			<zipfileset file="src/model/custom_messages_en_PH.properties" fullpath="WEB-INF/classes/custom_messages_en.properties" />
 
 			<zipfileset file="production/persistence.xml" prefix="WEB-INF/classes/META-INF" />
 			<zipfileset file="production/components.xml" prefix="WEB-INF" />

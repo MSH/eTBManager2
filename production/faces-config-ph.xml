@@ -5,8 +5,8 @@
  <application>
   <view-handler>org.msh.tb.application.WorkspaceFaceletViewHandler</view-handler>
   <locale-config>
-   <default-locale>en_PH</default-locale>
-   <supported-locale>en_PH</supported-locale>
+   <default-locale>en</default-locale>
+   <supported-locale>en</supported-locale>
   </locale-config>
  </application>
 </faces-config>

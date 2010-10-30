@@ -61,7 +61,7 @@ function showHuDlg() {	Richfaces.showModalPanel('hudlg'); }
 
 <ui:define name="dialogs">
 
-<rich:modalPanel id="perioddlg" width="500" height="180" zindex="2000" trimOverlayedElements="false">
+<rich:modalPanel id="perioddlg" width="500" autosized="true" zindex="2000" trimOverlayedElements="false">
 	<f:facet name="header">#{messages['cases.treat']}</f:facet>
 	<ui:param name="labelstyle" value="width:110px" />
 	<h:panelGroup id="periodpnl">

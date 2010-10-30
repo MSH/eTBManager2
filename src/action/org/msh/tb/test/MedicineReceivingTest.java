@@ -1,6 +1,7 @@
 package org.msh.tb.test;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 import org.jboss.seam.annotations.In;
@@ -12,6 +13,7 @@ import org.msh.mdrtb.entities.enums.Container;
 import org.msh.tb.medicines.MedicineReceivingHome;
 import org.msh.tb.medicines.MedicineSelection;
 import org.msh.utils.ItemSelect;
+import org.msh.utils.date.DateUtils;
 
 
 @Name("medicineReceivingTest")
@@ -20,7 +22,7 @@ public class MedicineReceivingTest {
 	@In(create=true) MedicineReceivingHome medicineReceivingHome;
 	@In(create=true) MedicineSelection medicineSelection;
 	
-	private String[] manufactures = {"Lab Test", "WWW Laboratories", "MSH Labs", "Moon creating" };
+	private String[] manufactures = {"Lab Test", "WWW Laboratories", "MSH Labs", "Copacabana Lab" };
 	private Integer[] qtds = {100, 200, 50, 500};
 	
 	/**
@@ -54,7 +56,7 @@ public class MedicineReceivingTest {
 			Random r = new Random();
 			
 			// generate expiration date
-			int year = r.nextInt(3) + 2009;
+			int year = r.nextInt(3) + DateUtils.yearOf(new Date());
 			int month = r.nextInt(12);
 			System.out.println("mes=" + month + " ano=" + year);
 			Calendar c = Calendar.getInstance();
