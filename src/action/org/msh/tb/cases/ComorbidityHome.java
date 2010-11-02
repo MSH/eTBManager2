@@ -44,7 +44,10 @@ public class ComorbidityHome {
 		
 		List<FieldValue> lst = ItemSelectHelper.createItemsList(comorbidities, true);
 		
-		caseHome.getInstance().setComorbidities(lst);
+		TbCase tbCase = caseHome.getInstance();
+		if(!tbCase.isTbContact())
+			tbCase.setPatientContactName(null);
+		tbCase.setComorbidities(lst);
 		
 		String s = caseHome.persist();
 		System.out.println(s);
