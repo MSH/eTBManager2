@@ -5,6 +5,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.mdrtb.entities.enums.DotBy;
 import org.msh.mdrtb.entities.enums.HIVResultKe;
+import org.msh.mdrtb.entities.enums.Nationality;
 import org.msh.mdrtb.entities.enums.ReferredBy;
 import org.msh.mdrtb.entities.enums.ReferredTo;
 import org.msh.tb.ke.entities.enums.Dot;
@@ -14,6 +15,44 @@ import org.msh.tb.ke.entities.enums.Dot;
 @BypassInterceptors
 public class GlobalLists {
 
+	private final static Nationality[] nationalityTypes = {
+		Nationality.KENYA,
+		Nationality.BURUNDI,
+		Nationality.ETHIOPIA,
+		Nationality.RWANDA,
+		Nationality.SOMALIA,
+		Nationality.SUDAN,
+		Nationality.TANZANIA,
+		Nationality.UGANDA,
+		Nationality.OTHER
+	};	
+	
+	@Factory("nationalitiesKe")
+	public Nationality[] getNationalitiesKe() {
+		return nationalityTypes;
+	}
+	
+	private final static HIVResultKe[] hivResult = {
+		HIVResultKe.POSITIVE,
+		HIVResultKe.NEGATIVE,
+		HIVResultKe.ONGOING,
+		HIVResultKe.DECLINED
+	};	
+	
+	private final static HIVResultKe[] partnerHIVResult = {
+		HIVResultKe.NO_PARTNER,
+		HIVResultKe.POSITIVE,
+		HIVResultKe.NEGATIVE,
+		HIVResultKe.ONGOING,
+		HIVResultKe.DECLINED
+	};		
+	
+	@Factory("partnerHIVResult")
+	public HIVResultKe[] getPartnerHIVResult() {
+		return partnerHIVResult;
+	}	
+	
+	
 	private final static ReferredBy[] refByTypes = {
 		ReferredBy.VCT_CENTER,
 		ReferredBy.HIV_COMP_CARE_UNIT,
@@ -48,7 +87,7 @@ public class GlobalLists {
 		
 	@Factory("hivResults_ke")
 	public HIVResultKe[] getHIVResults() {
-		return HIVResultKe.values();
+		return hivResult;
 	}	
 	
 	public DotBy[] getDotByTypes() {
