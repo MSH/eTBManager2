@@ -9,7 +9,7 @@
                  
 	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
 		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+			<s:link value="#{messages['form.edit']}" view="/custom/ke/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
 				<f:param name="id" value="#{caseHome.id}" />
 			</s:link>
 			<b>#{messages['cases.patientdata']}</b>
