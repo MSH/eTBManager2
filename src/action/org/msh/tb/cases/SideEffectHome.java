@@ -78,6 +78,14 @@ public class SideEffectHome {
 				it.setSubstance(it.getSubstance2());
 				it.setSubstance2(null);
 			}
+			String name ="";
+			if(it.getSubstance()!= null)
+				name += it.getSubstance().getAbbrevName().getName1();
+			if(it.getSubstance2()!= null)
+				name += " "+it.getSubstance2().getAbbrevName().getName1();
+			it.setMedicines(name);
+			
+			
 		}
 		
 		for (CaseSideEffect it: tbcase.getSideEffects()) {
