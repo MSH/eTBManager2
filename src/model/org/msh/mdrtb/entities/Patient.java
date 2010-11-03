@@ -13,6 +13,7 @@ import org.hibernate.validator.NotNull;
 import org.jboss.seam.Component;
 import org.msh.mdrtb.entities.enums.Gender;
 import org.msh.mdrtb.entities.enums.NameComposition;
+import org.msh.tb.bd.entities.enums.SalaryRange;
 
 /**
  * Store information about a patient
@@ -36,6 +37,9 @@ public class Patient extends WSObject implements Serializable {
 	
 	@Column(length=100)
 	private String lastName;
+
+	@Column(length=100)
+	private String fatherName;	
 	
 	@Column(length=50)
 	private String securityNumber;
@@ -53,6 +57,7 @@ public class Patient extends WSObject implements Serializable {
 	@Column(length=50)
 	private String legacyId;
 
+	private SalaryRange salary;
 
 	public String getFullName() {
 		Workspace ws;
@@ -184,4 +189,23 @@ public class Patient extends WSObject implements Serializable {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
+	public SalaryRange getSalary() {
+		return salary;
+	}
+
+	public void setSalary(SalaryRange salary) {
+		this.salary = salary;
+	}
+
+	public String getFatherName() {
+		return fatherName;
+	}
+
+	public void setFatherName(String fatherName) {
+		this.fatherName = fatherName;
+	}
+
+	
+	
 }
