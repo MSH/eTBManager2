@@ -173,6 +173,11 @@ public class FieldsQuery {
 		return getValues();
 	}
 	
+	public List<FieldValue> getBiopsyMethods() {
+		field = TbField.BIOPSY_METHOD;
+		return getValues();
+	}		
+	
 	public List<FieldValue> getSmearMethods() {
 		field = TbField.SMEAR_METHOD;
 		return getValues();
