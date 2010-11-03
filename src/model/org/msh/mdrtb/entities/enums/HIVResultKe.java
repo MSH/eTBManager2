@@ -4,7 +4,8 @@ public enum HIVResultKe {
 	POSITIVE,
 	NEGATIVE,
 	ONGOING,
-	DECLINED;
+	DECLINED, 
+	NO_PARTNER;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
