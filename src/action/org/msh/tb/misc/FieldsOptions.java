@@ -111,6 +111,13 @@ public class FieldsOptions {
 		return getOptions(TbField.DST_METHOD);
 	}
 
+	/**
+	 * Return list of Biopsy methods in use
+	 * @return
+	 */
+	public List<FieldValue> getBiopsyMethods() {
+		return getOptions(TbField.BIOPSY_METHOD);
+	}
 
 	/**
 	 * Return list of culture methods
