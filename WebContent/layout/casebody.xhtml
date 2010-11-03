@@ -9,17 +9,17 @@
 
 <table width="#{pagewidth==null?'100%':pagewidth}" class="tabela3">
 <tr><td class="header">
-	<div class="#{tbCase.patient.gender=='MALE'?'male-icon':'female-icon'}">
+	<div class="#{tbcase.patient.gender=='MALE'?'male-icon':'female-icon'}">
 	<div style="float:right">
-		<h:outputText value="#{messages[tbCase.state.key]}" styleClass="status-label" />
+		<h:outputText value="#{messages[tbcase.state.key]}" styleClass="status-label" />
 		<ui:insert name="state-content" />
 	</div>
 	<div style="font-size:16px;font-weight:bold;">
-		#{tbCase.patient.fullName}
+		#{tbcase.patient.fullName}
 		<br/>
 	</div>
 	<div style="font-size:12px;font-weight:bold;">
-		#{tbCase.caseNumber==null?messages['cases.new']:tbCase.displayCaseNumber}
+		#{tbcase.caseNumber==null?messages['cases.new']:tbcase.displayCaseNumber}
 	</div>
 	</div>
 </td></tr>

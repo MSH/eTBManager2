@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.CaseRegimen;
 import org.msh.mdrtb.entities.Medicine;
 import org.msh.mdrtb.entities.PrescribedMedicine;
 import org.msh.mdrtb.entities.TbCase;
@@ -33,6 +32,16 @@ public class PrescriptionTable {
 	 * Store the current period of treatment, considering transfering of health unit
 	 */
 	private Period period;
+
+	/**
+	 * Treatment period of the intensive phase
+	 */
+	private Period intensivePhasePeriod;
+	
+	/**
+	 * Treatment period of the continuous phase
+	 */
+	private Period continuousPhasePeriod;
 	
 	/**
 	 * List of medicines prescribed to the patient during the treatment
@@ -43,12 +52,70 @@ public class PrescriptionTable {
 	 * Store the number of days of treatment 
 	 */
 	private int numDaysTreatment;
+	
+	/**
+	 * Indicate if the period will be displayed for editing, in this case, just the period
+	 * of the current treatment health unit will be displayed
+	 */
+	private boolean editing;
 
 	private TbCase tbcase;
 	
-	private List<TreatmentPeriod> regimens;
 	private List<TreatmentPeriod> healthUnits;
 	private List<TreatmentPeriod> phases;
+
+
+	/**
+	 * Calculate the treatment period
+	 */
+	protected boolean calculateTreatmentPeriod() {
+		healthUnits = new ArrayList<TreatmentPeriod>();
+
+		// is just for displaying
+		if (!isEditing()) {
+			period = tbcase.getTreatmentPeriod();
+			intensivePhasePeriod = tbcase.getIntensivePhasePeriod();
+			continuousPhasePeriod = tbcase.getContinuousPhasePeriod();
+			
+			for (TreatmentHealthUnit hu: tbcase.getHealthUnits())
+				healthUnits.add( new TreatmentPeriod(this, hu, hu.getPeriod()) );
+			
+			numDaysTreatment = period.getDays();
+			updateListValues(healthUnits);
+	
+			return true;
+		}
+
+		// get the treatment health unit being edited
+		TreatmentHealthUnit item = null;
+		for (TreatmentHealthUnit hu: tbcase.getHealthUnits()) {
+			if (!hu.isTransferring()) {
+				if ((item == null) || (item.getPeriod().isBefore( hu.getPeriod() ))) {
+					item = hu;
+				}
+			}
+		}
+		
+		if (item == null)
+			return false;
+
+		healthUnits.add( new TreatmentPeriod(this, item, item.getPeriod()) );
+		
+		numDaysTreatment = period.getDays();
+		updateListValues(healthUnits);
+		
+		period = item.getPeriod();
+		if (tbcase.getIntensivePhasePeriod() != null) {
+			intensivePhasePeriod = new Period(period);
+			intensivePhasePeriod.intersect( tbcase.getIntensivePhasePeriod() );
+		}
+		
+		if (tbcase.getContinuousPhasePeriod() != null) {
+			continuousPhasePeriod = new Period(period);
+			continuousPhasePeriod.intersect( tbcase.getContinuousPhasePeriod() );
+		}
+		return true;
+	}
 
 
 	/**
@@ -57,55 +124,40 @@ public class PrescriptionTable {
 	protected void createTable() {
 		medicines = new ArrayList<MedicineInfo>();
 		tbcase = caseHome.getInstance();
-		period = new Period();
 
 		// calculate the treatment period
-		for (TreatmentHealthUnit unit: getTbcase().getHealthUnits()) {
-			if (!unit.isTransferring()) {
-				Period p = unit.getPeriod();
-				if ((period.getIniDate() == null) || (period.getIniDate().after(p.getIniDate())))
-					period.setIniDate(p.getIniDate());
-				if ((period.getEndDate() == null) || (period.getEndDate().before(p.getEndDate())))
-					period.setEndDate(p.getEndDate());
-			}			
-		}
-		
-		if ((period.isEmpty()) && (tbcase.getTreatmentPeriod() != null)) 
-			period.set(tbcase.getTreatmentPeriod());
-		numDaysTreatment = period.getDays();
-		
-		healthUnits = new ArrayList<TreatmentPeriod>();
-		for (TreatmentHealthUnit unit: getTbcase().getHealthUnits()) {
-			if (!unit.isTransferring()) {
-				TreatmentPeriod p = new TreatmentPeriod(this, unit, unit.getPeriod());
-				healthUnits.add(p);
-			}
-		}
-		updateListValues(healthUnits);
-		
+		if (!calculateTreatmentPeriod())
+			return;
+
 		for (PrescribedMedicine pm: tbcase.getPrescribedMedicines()) {
 			MedicineInfo medInfo = findMedicine(pm.getMedicine());
 			if (pm.getPeriod().isIntersected(period))
 				medInfo.addMedicinePrescribed(pm);
 		}
-
-		regimens = new ArrayList<TreatmentPeriod>();
-		for (CaseRegimen r: getTbcase().getRegimens()) {
-			// is regimen in the treatment period ?
-			if (r.getPeriod().isIntersected(period)) {
-				TreatmentPeriod p = new TreatmentPeriod(this, r, r.getPeriod());
-				regimens.add(p);
-			}
-		}
-		updateListValues(regimens);
-		
-		createPhases();
 		
 		for (MedicineInfo medInfo: getMedicines()) {
 			updateListValues(medInfo.getPrescriptions());
 		}
+		
+		createPhases();
 	}
 
+
+	/**
+	 * Create intensive and continuous phase of the treatment
+	 */
+	public void createPhases() {
+		phases = new ArrayList<TreatmentPeriod>();
+		
+		if (intensivePhasePeriod != null)
+			phases.add( new TreatmentPeriod(this, RegimenPhase.INTENSIVE, intensivePhasePeriod) );
+		
+		if (continuousPhasePeriod != null)
+			phases.add( new TreatmentPeriod(this, RegimenPhase.CONTINUOUS, continuousPhasePeriod) );
+		
+		updateListValues(phases);
+	}
+	
 	
 	/**
 	 * Check if the case was transferred from a health unit to another
@@ -126,68 +178,13 @@ public class PrescriptionTable {
 		List<TreatmentHealthUnit> lst = caseHome.getInstance().getHealthUnits();
 		return (lst.size() > 0? lst.get(lst.size() - 1) : null);
 	}
-	
-	/**
-	 * Create phases to be displayed in the table
-	 */
-	protected void createPhases() {
-		phases = new ArrayList<TreatmentPeriod>();
-		TreatmentPeriod treatPeriod = null;
-
-		for (CaseRegimen r: getTbcase().getRegimens()) {
-			RegimenPhase phase;
-			Period period;
-			if (r.isHasIntensivePhase()) {
-				phase = RegimenPhase.INTENSIVE;
-				period = r.getPeriodIntPhase();
-				treatPeriod = addPhasePeriod(treatPeriod, phase, period);
-			}
-			
-			if (r.isHasContinuousPhase()) {
-				phase = RegimenPhase.CONTINUOUS;
-				period = r.getPeriodContPhase();
-				treatPeriod = addPhasePeriod(treatPeriod, phase, period);
-			}
-		}
-		updateListValues(phases);
-	}
-	
-	
-	/**
-	 * Add a new period to the list of phases 
-	 * @param prevPeriod
-	 * @param phase
-	 * @param period
-	 * @return
-	 */
-	private TreatmentPeriod addPhasePeriod(TreatmentPeriod prevPeriod, RegimenPhase phase, Period period) {
-		if (prevPeriod == null) {
-			TreatmentPeriod treatPeriod = new TreatmentPeriod(this, phase, period);
-			phases.add(treatPeriod);
-			return treatPeriod;
-		}
 		
-		RegimenPhase prevPhase = (RegimenPhase)prevPeriod.getItem();
-		
-		// previous phase is equals the current phase ?
-		if (prevPhase.equals(phase)) {
-			prevPeriod.expandEndDate(period.getEndDate());
-			return prevPeriod;
-		}
-
-		TreatmentPeriod treatPeriod = new TreatmentPeriod(this, phase, period);
-		phases.add(treatPeriod);
-
-		return treatPeriod;
-	}
-	
 	
 	/**
 	 * Force the table to be reconstructed next time it'll be used
 	 */
 	public void refresh() {
 		period = null;
-		regimens = null;
 		healthUnits = null;
 		medicines = null;
 	}
@@ -325,18 +322,6 @@ public class PrescriptionTable {
 
 
 	/**
-	 * Return the list of regimen periods
-	 * @return
-	 */
-	public List<TreatmentPeriod> getRegimens() {
-		if (regimens == null) {
-			createTable();
-		}
-		return regimens;
-	}
-
-
-	/**
 	 * return list of health unit periods
 	 * @return
 	 */
@@ -363,5 +348,37 @@ public class PrescriptionTable {
 		if (phases == null)
 			createTable();
 		return phases;
+	}
+
+
+	/**
+	 * @return the intensivePhasePeriod
+	 */
+	public Period getIntensivePhasePeriod() {
+		return intensivePhasePeriod;
+	}
+
+
+	/**
+	 * @return the continuousPhasePeriod
+	 */
+	public Period getContinuousPhasePeriod() {
+		return continuousPhasePeriod;
+	}
+
+
+	/**
+	 * @return the editing
+	 */
+	public boolean isEditing() {
+		return editing;
+	}
+
+
+	/**
+	 * @param editing the editing to set
+	 */
+	public void setEditing(boolean editing) {
+		this.editing = editing;
 	}
 }

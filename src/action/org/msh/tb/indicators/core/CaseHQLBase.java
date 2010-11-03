@@ -151,7 +151,7 @@ public class CaseHQLBase extends Controller {
 		
 		// include filter by regimen
 		if (filters.getRegimen() != null)
-			hql += " and exists(select reg.id from CaseRegimen reg where reg.regimen.id = #{indicatorFilters.regimen.id} and reg.tbCase.id = c.id)";
+			hql += " and c.regimen.id = #{indicatorFilters.regimen.id}";
 		
 		// include filter by patient type
 		if (filters.getPatientType() != null)

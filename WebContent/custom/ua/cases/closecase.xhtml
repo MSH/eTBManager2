@@ -43,7 +43,7 @@
     </s:decorate>
     </div>
 
-	<div id="extrainfo1" style="display:block;clear:both;#{(tbCase.state=='FAILED')?'':'display:none;'}" >
+	<div id="extrainfo1" style="display:block;clear:both;#{(tbcase.state=='FAILED')?'':'display:none;'}" >
     <s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['ExtraOutcomeInfo']}:</ui:define>
 		<h:selectOneMenu value="#{caseDataUA.extraOutcomeInfo}">
@@ -53,7 +53,7 @@
     </s:decorate>
     </div>
 
-	<div id="extrainfo2" style="display:block;clear:both;#{(tbCase.state=='DIED')?'':'display:none;'}" >
+	<div id="extrainfo2" style="display:block;clear:both;#{(tbcase.state=='DIED')?'':'display:none;'}" >
     <s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['ExtraOutcomeInfo']}:</ui:define>
 		<h:selectOneMenu value="#{caseDataUA.extraOutcomeInfo}">
@@ -63,7 +63,7 @@
     </s:decorate>
     </div>
 
-	<div id="transferoutdiv" style="display:block;clear:both;#{(tbCase.state=='TRANSFERRED_OUT')?'':'display:none;'}" >
+	<div id="transferoutdiv" style="display:block;clear:both;#{(tbcase.state=='TRANSFERRED_OUT')?'':'display:none;'}" >
     <s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['CaseState.TRANSFERRED_OUT.desc']}:</ui:define>
 		<h:inputText value="#{caseDataUA.transferOutDescription}" maxlength="100" style="width:300px;"/>

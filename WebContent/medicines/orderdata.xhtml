@@ -255,12 +255,12 @@
 		<ui:repeat value="#{it.item.cases}" var="c">
 			<tr>
 				<td class="colb">
-					<s:link value="#{c.tbCase.displayCaseNumber}" view="/cases/casedata.xhtml">
-						<f:param name="id" value="#{c.tbCase.id}"/>
+					<s:link value="#{c.tbcase.displayCaseNumber}" view="/cases/casedata.xhtml">
+						<f:param name="id" value="#{c.tbcase.id}"/>
 					</s:link>
 				</td>
 				<td class="colb">
-					#{c.tbCase.patient.fullName}
+					#{c.tbcase.patient.fullName}
 				</td>
 				<td class="colb"></td>
 				<td class="colrb">

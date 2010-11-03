@@ -149,7 +149,6 @@ public class ForecastingCalculation {
 					.getResultList();
 			
 			pm = new PrescribedMedicine();
-//			pm.setCaseRegimen(new CaseRegimen());
 		}
 
 		// remove unused new cases that are blank

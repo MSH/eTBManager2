@@ -56,7 +56,7 @@ public class TreatmentsInfoHome {
 				"join c.patient p left join c.dispensing disp " + 
 				"where c.state = " + CaseState.ONTREATMENT.ordinal() +
 				" and exists (select aux.id from TreatmentHealthUnit aux where aux.tbunit.id = " + tbunit.getId().toString() + 
-				" and aux.tbCase.id = c.id and aux.period.endDate = c.treatmentPeriod.endDate) " +
+				" and aux.tbcase.id = c.id and aux.period.endDate = c.treatmentPeriod.endDate) " +
 				"group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod.iniDate, c.daysTreatPlanned, c.classification " +
 				"order by p.name, p.lastName, p.middleName")
 			.getResultList();

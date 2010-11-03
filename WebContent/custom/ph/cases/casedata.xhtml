@@ -10,7 +10,7 @@
       template="#{workspaceViewService.templatePage}">
 
 
-<ui:param name="title" value="#{messages['cases.details']} - #{messages[tbCase.classification.key]}" />
+<ui:param name="title" value="#{messages['cases.details']} - #{messages[tbcase.classification.key]}" />
 <ui:param name="waitdlg" value="1" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
@@ -49,7 +49,7 @@
 
 	<ui:define name="state-content">
 	<div style="overflow: auto">
-		<s:div rendered="#{tbCase.state=='TRANSFERRING'}" styleClass="hu-icon" 
+		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="hu-icon" 
 			style="margin-top:6px;font-size:11px;max-width:320px;height:70px" >
 			
 			<b style="padding-right:4px;">#{messages['medicines.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />

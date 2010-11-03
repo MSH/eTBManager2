@@ -26,7 +26,7 @@ public class TreatmentHealthUnit implements Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="CASE_ID")
 	@NotNull
-	private TbCase tbCase;
+	private TbCase tbcase;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="UNIT_ID")
@@ -53,61 +53,6 @@ public class TreatmentHealthUnit implements Serializable {
 	}
 
 
-/*	public Date addRegimenPhase(Regimen regimen, RegimenPhase phase, Date dateIni, Date dateEnd, boolean fillDoses) {
-		List<Integer> months = regimen.groupMonthsTreatment(phase);
-		TbCase tbCase = getTbCase();
-		
-		Date dt = dateIni;
-		for (Integer num: months) {
-			CaseRegimen cr = new CaseRegimen();
-			cr.setRegimen(regimen);
-			cr.setIniDate(dt);
-			dt = DateUtils.incMonths(dt, num);
-			cr.setEndDate(DateUtils.incDays(dt, -1));
-			if ((dateEnd != null) && (cr.getEndDate().after(dateEnd)))
-				cr.setEndDate(dateEnd);
-			cr.setPhase(phase);
-			cr.setTbCase(tbCase);
-			cr.setTreatmentHealthUnit(this);
-			tbCase.getRegimens().add(cr);
-			this.getRegimens().add(cr);
-
-			List<MedicineRegimen> meds = regimen.groupMedicinesByMonthTreatment(phase, num);
-			for (MedicineRegimen medreg: meds) {
-				PrescribedMedicine pm = new PrescribedMedicine();
-				if (fillDoses) {
-					pm.setDoseUnit(medreg.getDefaultDoseUnit());
-					pm.setFrequency(medreg.getDefaultFrequency());
-				}
-				pm.setMedicine(medreg.getMedicine());
-				pm.setSource(medreg.getDefaultSource());
-				pm.setCaseRegimen(cr);
-				cr.getMedicines().add(pm);
-			}
-			
-			if ((endDate != null) && (cr.getEndDate().equals(dateEnd))) 
-				return DateUtils.incDays(cr.getEndDate(), 1);
-		}
-		return dt;
-	}
-*/
-	
-/*	public List<CaseRegimen> getRegimens() {
-		return regimens;
-	}
-
-	public List<CaseRegimen> getSortedRegimens() {
-		if (sortedregs == null) {
-			Collections.sort(getRegimens(), new CaseRegimenComparator());
-			sortedregs = regimens;
-		}
-		return sortedregs;
-	}
-	
-	public void setRegimens(List<CaseRegimen> regimens) {
-		this.regimens = regimens;
-	}
-*/
 	public Integer getId() {
 		return id;
 	}
@@ -116,12 +61,12 @@ public class TreatmentHealthUnit implements Serializable {
 		this.id = id;
 	}
 
-	public TbCase getTbCase() {
-		return tbCase;
+	public TbCase getTbcase() {
+		return tbcase;
 	}
 
-	public void setTbCase(TbCase tbCase) {
-		this.tbCase = tbCase;
+	public void setTbCase(TbCase tbcase) {
+		this.tbcase = tbcase;
 	}
 
 	public Tbunit getTbunit() {

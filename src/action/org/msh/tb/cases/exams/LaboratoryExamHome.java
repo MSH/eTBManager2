@@ -182,7 +182,7 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 		String entityClass = getEntityClass().getSimpleName();
 		String hql = "from " + entityClass + " exam " +
 				getJoinFetchHQL() +
-				" where exam.tbcase.id = #{tbCase.id}";
+				" where exam.tbcase.id = #{tbcase.id}";
 	
 		if (isLastResult())
 			hql = hql.concat(" and s.dateCollected = (select max(aux.dateCollected) " +

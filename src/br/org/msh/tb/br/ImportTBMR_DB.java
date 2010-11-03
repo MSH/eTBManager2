@@ -21,13 +21,12 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.mdrtb.entities.Address;
 import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.CaseRegimen;
 import org.msh.mdrtb.entities.CountryStructure;
 import org.msh.mdrtb.entities.ExamCulture;
+import org.msh.mdrtb.entities.ExamDST;
+import org.msh.mdrtb.entities.ExamDSTResult;
 import org.msh.mdrtb.entities.ExamHIV;
 import org.msh.mdrtb.entities.ExamMicroscopy;
-import org.msh.mdrtb.entities.ExamDSTResult;
-import org.msh.mdrtb.entities.ExamDST;
 import org.msh.mdrtb.entities.ExamXRay;
 import org.msh.mdrtb.entities.FieldValue;
 import org.msh.mdrtb.entities.HealthSystem;
@@ -50,14 +49,14 @@ import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.CultureResult;
 import org.msh.mdrtb.entities.enums.DiagnosisType;
 import org.msh.mdrtb.entities.enums.DrugResistanceType;
+import org.msh.mdrtb.entities.enums.DstResult;
 import org.msh.mdrtb.entities.enums.Gender;
 import org.msh.mdrtb.entities.enums.HIVResult;
 import org.msh.mdrtb.entities.enums.InfectionSite;
+import org.msh.mdrtb.entities.enums.MicroscopyResult;
 import org.msh.mdrtb.entities.enums.Nationality;
 import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.mdrtb.entities.enums.PrevTBTreatmentOutcome;
-import org.msh.mdrtb.entities.enums.MicroscopyResult;
-import org.msh.mdrtb.entities.enums.DstResult;
 import org.msh.mdrtb.entities.enums.TbField;
 import org.msh.mdrtb.entities.enums.ValidationState;
 import org.msh.mdrtb.entities.enums.XRayEvolution;
@@ -68,8 +67,8 @@ import org.msh.tb.br.entities.enums.FailureType;
 import org.msh.tb.br.entities.enums.TipoResistencia;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.exams.ExamCultureHome;
-import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.tb.cases.exams.ExamDSTHome;
+import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.misc.FieldsQuery;
 import org.msh.utils.TransactionalBatchComponent;
@@ -519,7 +518,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 				break;
 			}
 			aux.setOutcome(res);
-			aux.setTbCase(tbcase);
+			aux.setTbcase(tbcase);
 			
 			entityManager.persist(aux);
 			entityManager.flush();
@@ -598,6 +597,8 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		p.setIniDate(dtIni);
 		p.setEndDate(dtEnd);
 		tbcase.setTreatmentPeriod(p);
+		tbcase.setRegimen(getRegimen());
+		tbcase.setIniContinuousPhase( DateUtils.incMonths(p.getIniDate(), 6) );
 		
 		tbcase.getPrescribedMedicines().clear();
 		List<PrescribedMedicine> lst = getMedicinesPrescribed(rsCases.getInt("NUM_FICHA"));
@@ -607,13 +608,6 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 			pm.setSource(getSource());
 			tbcase.getPrescribedMedicines().add(pm);
 		}
-		
-		CaseRegimen reg = new CaseRegimen();
-		reg.setRegimen(getRegimen());
-		reg.setPeriod(new Period(p));
-		reg.setTbCase(tbcase);
-		reg.setIniContPhase(DateUtils.incMonths(p.getIniDate(), 6));
-		tbcase.getRegimens().add(reg);
 		
 		TreatmentHealthUnit hu = new TreatmentHealthUnit();
 		hu.setPeriod(new Period(p));

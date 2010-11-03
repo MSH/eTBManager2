@@ -229,8 +229,8 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     	List<CaseDispensing> lstDisp = entityManager.createQuery("from CaseDispensing c " +
     			"left join fetch c.dispensingDays " +
     			"where c.month = :month and c.year = :year " +
-    			"and c.tbcase.id in (select hu.tbCase.id from TreatmentHealthUnit hu " +
-    			"where hu.tbunit.id = :huid and tbCase.id = c.tbcase.id)")
+    			"and c.tbcase.id in (select hu.tbcase.id from TreatmentHealthUnit hu " +
+    			"where hu.tbunit.id = :huid and tbcase.id = c.tbcase.id)")
     			.setParameter("month", month + 1)
     			.setParameter("year", year)
     			.setParameter("huid", userSession.getTbunit().getId())

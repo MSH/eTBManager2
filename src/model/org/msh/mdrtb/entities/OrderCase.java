@@ -22,7 +22,7 @@ public class OrderCase implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="CASE_ID")
 	@NotNull
-	private TbCase tbCase;
+	private TbCase tbcase;
 	
 	@ManyToOne
 	@JoinColumn(name="ORDERITEM_ID")
@@ -40,12 +40,12 @@ public class OrderCase implements Serializable {
 		this.id = id;
 	}
 
-	public TbCase getTbCase() {
-		return tbCase;
+	public TbCase getTbcase() {
+		return tbcase;
 	}
 
-	public void setTbCase(TbCase tbCase) {
-		this.tbCase = tbCase;
+	public void setTbcase(TbCase tbcase) {
+		this.tbcase = tbcase;
 	}
 
 	public OrderItem getItem() {

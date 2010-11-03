@@ -10,7 +10,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.mdrtb.entities.CaseRegimen;
 import org.msh.mdrtb.entities.Medicine;
 import org.msh.mdrtb.entities.PrescribedMedicine;
 import org.msh.mdrtb.entities.TbCase;
@@ -71,6 +70,8 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 		// update case
 		tbcase.setTreatmentPeriod(treatPeriod);
 		tbcase.setState(CaseState.ONTREATMENT);
+		tbcase.setRegimen(null);
+		tbcase.setIniContinuousPhase( DateUtils.incMonths(iniTreatmentDate, monthsIntPhase) );
 		
 		// create treatment health unit
 		TreatmentHealthUnit hu = new TreatmentHealthUnit();
@@ -81,16 +82,7 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 		
 		tbcase.getHealthUnits().clear();
 		tbcase.getHealthUnits().add(hu);
-		
-		// create regimens
-		CaseRegimen cr = new CaseRegimen();
-		cr.setPeriod(new Period(treatPeriod));
-		cr.setIniContPhase( DateUtils.incMonths(iniTreatmentDate, monthsIntPhase));
-		cr.setTbCase(tbcase);
-		
-		tbcase.getRegimens().clear();
-		tbcase.getRegimens().add(cr);
-
+	
 		SourcesQuery sources = (SourcesQuery)Component.getInstance("sources");
 
 		// include medicines of the intensive phase
@@ -104,7 +96,7 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 
 		// include medicines of the continuous phase
 		for (PrescribedMedicine pm: medicinesContPhase) {
-			pm.getPeriod().movePeriod(cr.getIniContPhase());
+			pm.getPeriod().movePeriod(tbcase.getIniContinuousPhase());
 			pm.setTbcase(tbcase);
 			if (pm.getSource() == null)
 				pm.setSource(sources.getResultList().get(0));
@@ -116,34 +108,6 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 
 		return "treatment-started";
 		
-/*		for (CaseRegimen cr: tbcase.getRegimens()) {
-			cr.getPeriod().movePeriod(iniTreatmentDate);
-			
-			// initialize the treatment period
-			if ((treatPeriod.getIniDate() == null) || (treatPeriod.getIniDate().before(cr.getPeriod().getIniDate())))
-				treatPeriod.setIniDate(cr.getPeriod().getIniDate());
-			
-			if ((treatPeriod.getEndDate() == null) || (treatPeriod.getEndDate().after(cr.getPeriod().getEndDate())))
-				treatPeriod.setEndDate(cr.getPeriod().getEndDate());
-		}
-		treatPeriod.movePeriod(iniTreatmentDate);
-
-		for (PrescribedMedicine pm: tbcase.getPrescribedMedicines()) {
-			Date dt = DateUtils.incMonths(iniTreatmentDate, pm.getIniMonth());
-			pm.getPeriod().movePeriod(dt);
-		}
-		
-		TreatmentHealthUnit hu = new TreatmentHealthUnit();
-		Period p = new Period(treatPeriod);
-		hu.setPeriod(p);
-		hu.setTbCase(tbcase);
-		hu.setTbunit(getTbunitselection().getTbunit());
-		hu.setTransferring(false);
-		tbcase.getHealthUnits().add(hu);
-
-		tbcase.setTreatmentPeriod(new Period(treatPeriod));
-		tbcase.setState(CaseState.ONTREATMENT);
-*/
 	}
 
 

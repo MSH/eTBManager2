@@ -10,7 +10,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="#{workspaceViewService.templatePage}">
 
-<ui:param name="title" value="#{messages['cases.newnotif']} - #{messages[tbCase.classification.key]}" />
+<ui:param name="title" value="#{messages['cases.newnotif']} - #{messages[tbcase.classification.key]}" />
 
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:130px" />
@@ -39,39 +39,39 @@
 		<s:decorate template="/layout/dateedit.xhtml">
     		<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
     		<ui:param name="required" value="true" /> 
-    		<ui:param name="datefield" value="#{tbCase.registrationDate}" /> 
+    		<ui:param name="datefield" value="#{tbcase.registrationDate}" /> 
 		</s:decorate>
 	
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbCase.registrationCode']}:</ui:define>
-			<h:inputText id="edtscreening" value="#{tbCase.registrationCode}" style="width:100px;" required="true"/>
+			<h:inputText id="edtscreening" value="#{tbcase.registrationCode}" style="width:100px;" required="true"/>
 		</s:decorate>
 	
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Patient.lastName']}:</ui:define>
-			<h:inputText id="edtscreening" value="#{tbCase.patient.lastName}" style="width:100px;" />
+			<h:inputText id="edtscreening" value="#{tbcase.patient.lastName}" style="width:100px;" />
 		</s:decorate>
 	
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Patient.middleName']}:</ui:define>
-			<h:inputText id="edtscreening" value="#{tbCase.patient.middleName}" style="width:100px;" />
+			<h:inputText id="edtscreening" value="#{tbcase.patient.middleName}" style="width:100px;" />
 		</s:decorate>
 	
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Patient.firstname']}:</ui:define>
-			<h:inputText id="edtscreening" value="#{tbCase.patient.name}" style="width:100px;" />
+			<h:inputText id="edtscreening" value="#{tbcase.patient.name}" style="width:100px;" />
 		</s:decorate>
 	
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
-    		<h:inputText id="edtage" value="#{tbCase.age}" style="width:80px;" required="true">
+    		<h:inputText id="edtage" value="#{tbcase.age}" style="width:80px;" required="true">
     			<f:validateLongRange minimum="0" maximum="150"/>
     		</h:inputText>
 		</s:decorate>
 
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Gender']}:</ui:define>
-    		<h:selectOneMenu value="#{tbCase.patient.gender}" required="true">
+    		<h:selectOneMenu value="#{tbcase.patient.gender}" required="true">
     			<s:selectItems value="#{genders}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
     			<s:convertEnum />
     		</h:selectOneMenu>
@@ -84,7 +84,7 @@
 	
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">Street and No.:</ui:define>
-			<h:inputText value="#{tbCase.notifAddress.address}" style="width:150px;" />
+			<h:inputText value="#{tbcase.notifAddress.address}" style="width:150px;" />
 		</s:decorate>
 		
 		<s:decorate template="/layout/auselection.xhtml">

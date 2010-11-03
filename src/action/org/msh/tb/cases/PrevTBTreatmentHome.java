@@ -86,7 +86,7 @@ public class PrevTBTreatmentHome {
 		for (Item item: getItems()) {
 			updateSubstances(item);
 			PrevTBTreatment prev = item.getPrevTBTreatment();
-			prev.setTbCase(tbcase);
+			prev.setTbcase(tbcase);
 			entityManager.persist(prev);
 		}
 
@@ -125,7 +125,7 @@ public class PrevTBTreatmentHome {
 
 		if (caseHome.getId() != null)
 			prevs = entityManager
-				.createQuery("from PrevTBTreatment t where t.tbCase.id = " + caseHome.getId().toString() +
+				.createQuery("from PrevTBTreatment t where t.tbcase.id = " + caseHome.getId().toString() +
 						" order by t.year, t.month")
 				.getResultList();
 		else prevs = new ArrayList<PrevTBTreatment>();

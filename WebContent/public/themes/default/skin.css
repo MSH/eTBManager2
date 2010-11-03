@@ -804,7 +804,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	font-size:9px;
 }
 
-.bar, .bar-active, .bar-header, .bar-header-active {
+.bar, .bar-active, .bar-header, .bar-header-active, .intensivephase-bar, .continuousphase-bar {
 	position:relative;
 	float:left;
 	height:25px;
@@ -819,7 +819,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .bar-left-active{	background:transparent url(images/bar-left.png) no-repeat left bottom; }
 .bar-right {	background:transparent url(images/bar-right.png) no-repeat right top;}
 .bar-right-active {	background:transparent url(images/bar-right.png) no-repeat right bottom;}
-.bar-header {	background-color:#f0f0f0; }
+.bar-header {	background:#f0f0f0; }
 .bar-header-active {	background-color:#d0d0d0; }
 
 .bar-caption {
@@ -831,6 +831,12 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .treatment-header {
 	border-bottom:1px solid #6FA977;
 }
+
+.intensivephase-bar {	background-color:#f7744c; color:white; font-weight:bold; }
+.intensivephase-bar:hover {	background-color:#c4512e; color:white; }
+
+.continuousphase-bar { 	background-color:#f7e54c; font-weight:bold; }
+.continuousphase-bar:hover { background-color:#c3b00a; }
 
 .popup,.popup-long {
 	background:transparent url(images/popuphint.png) no-repeat left top;
@@ -939,3 +945,4 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .rich-menu-item-label,.rich-menu-item-label a, .rich-menu-item-label a:hover {
 	font-size:12px;
 }
+

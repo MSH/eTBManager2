@@ -24,14 +24,14 @@
 	
 	<s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>
-    	<h:outputText id="dt" value="#{tbCase.patient.birthDate}" converter="localeDateConverter"/>
+    	<h:outputText id="dt" value="#{tbcase.patient.birthDate}" converter="localeDateConverter"/>
 	</s:decorate>
 	
 	</td><td>
 	
 	<s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['TbCase.patientAge']}:</ui:define>
-    	<h:outputText value="#{tbCase.patientAge}" style="padding-right:4px;" />#{messages['global.age']}
+    	<h:outputText value="#{tbcase.patientAge}" style="padding-right:4px;" />#{messages['global.age']}
 	</s:decorate>
 
 	</td></tr>
@@ -39,56 +39,56 @@
 		
 	<s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['Gender']}:</ui:define>
-		#{messages[tbCase.patient.gender.key]}
+		#{messages[tbcase.patient.gender.key]}
 	</s:decorate>
 	
 	</td></tr>
     <tr><td colspan="2">
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbCase.nationality != null}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.nationality != null}">
     		<ui:define name="label">#{messages['Nationality']}:</ui:define>
-    		<h:outputText value="#{messages[tbCase.nationality.key]}" />
+    		<h:outputText value="#{messages[tbcase.nationality.key]}" />
 		</s:decorate>
 
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbCase.patient.motherName}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.patient.motherName}">
     		<ui:define name="label">#{messages['Patient.motherName']}:</ui:define>
-    		#{tbCase.patient.motherName}
+    		#{tbcase.patient.motherName}
     	</s:decorate>
     </td></tr>
-    <s:fragment rendered="#{not tbCase.notifAddress.emptyy}">
+    <s:fragment rendered="#{not tbcase.notifAddress.emptyy}">
     <tr><td colspan="2">
     	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
 	
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
-    		#{tbCase.notifAddress.address}
+    		#{tbcase.notifAddress.address}
     		<br/>
-    		#{tbCase.notifAddress.complement}
+    		#{tbcase.notifAddress.complement}
 		</s:decorate>
    		<s:decorate template="/layout/audisplay.xhtml">
-   			<ui:param name="adminunit" value="#{tbCase.notifAddress.adminUnit}" />
+   			<ui:param name="adminunit" value="#{tbcase.notifAddress.adminUnit}" />
    		</s:decorate>
 		<s:decorate template="/layout/display.xhtml" >
 			<ui:define name="label">#{messages['Address.zipCode']}:</ui:define>
-			#{tbCase.notifAddress.zipCode}
+			#{tbcase.notifAddress.zipCode}
 		</s:decorate>
 	</td></tr>
 	</s:fragment>
-	<s:fragment rendered="#{tbCase.notifAddressChanged}">
+	<s:fragment rendered="#{tbcase.notifAddressChanged}">
 	<tr><td colspan="2">
 		<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
 	
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
-    		#{tbCase.currentAddress.address}
+    		#{tbcase.currentAddress.address}
     		<br/>
-    		#{tbCase.currentAddress.complement}
+    		#{tbcase.currentAddress.complement}
 		</s:decorate>
    		<s:decorate template="/layout/audisplay.xhtml">
-   			<ui:param name="adminunit" value="#{tbCase.currentAddress.adminUnit}" />
+   			<ui:param name="adminunit" value="#{tbcase.currentAddress.adminUnit}" />
    		</s:decorate>
 		<s:decorate template="/layout/display.xhtml" >
 			<ui:define name="label">#{messages['Address.zipCode']}:</ui:define>
-			#{tbCase.currentAddress.zipCode}
+			#{tbcase.currentAddress.zipCode}
 		</s:decorate>
 	</td></tr>
 	</s:fragment>
@@ -97,15 +97,15 @@
 		<hr/>
 	</td></tr>
 	<tr><td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbCase.mobileNumber}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
     		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
-    		#{tbCase.phoneNumber}
+    		#{tbcase.phoneNumber}
 		</s:decorate>
 	</td>
 	<td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbCase.mobileNumber}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
     		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
-    		#{tbCase.mobileNumber}
+    		#{tbcase.mobileNumber}
 		</s:decorate>
 	</td></tr>
 
@@ -123,9 +123,9 @@
 	<div>
 	<table style="border-collapse:collapse;width:98%;" cellpadding="1" >
 	<tr><td colspan="2">
-	<s:decorate template="/layout/display.xhtml" rendered="#{tbCase.notificationUnit!=null}">
+	<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.notificationUnit!=null}">
     	<ui:define name="label">#{messages['cases.details.notifhu']}:</ui:define>
-    	#{tbCase.notificationUnit.name}
+    	#{tbcase.notificationUnit.name}
 	</s:decorate>
 
 	</td></tr>
@@ -133,14 +133,14 @@
 	
 	<s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
-    	<h:outputText id="dt" value="#{tbCase.registrationDate}" converter="localeDateConverter"/>
+    	<h:outputText id="dt" value="#{tbcase.registrationDate}" converter="localeDateConverter"/>
 	</s:decorate>
 	
 	</td><td>
 	
 	<s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['TbCase.registrationCode']}:</ui:define>
-		#{tbCase.registrationCode}
+		#{tbcase.registrationCode}
 	</s:decorate>
 	
 	</td></tr>
@@ -148,7 +148,7 @@
 	
 	<s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
-    	<h:outputText id="dt" value="#{tbCase.diagnosisDate}" converter="localeDateConverter"/>
+    	<h:outputText id="dt" value="#{tbcase.diagnosisDate}" converter="localeDateConverter"/>
 	</s:decorate>
 	
 	</td><td>
@@ -161,14 +161,14 @@
 	</td></tr>
 	<tr>
 	<td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbCase.treatmentPeriod.iniDate}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.treatmentPeriod.iniDate}">
     		<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
-    		<h:outputText value="#{tbCase.treatmentPeriod.iniDate}" converter="localeDateConverter" />
+    		<h:outputText value="#{tbcase.treatmentPeriod.iniDate}" converter="localeDateConverter" />
 		</s:decorate>
 	</td><td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbCase.treatmentPeriod.iniDate}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.treatmentPeriod.iniDate}">
     		<ui:define name="label">#{messages['TbCase.endTreatmentDate']}:</ui:define>
-    		<h:outputText value="#{tbCase.treatmentPeriod.endDate}" converter="localeDateConverter" />
+    		<h:outputText value="#{tbcase.treatmentPeriod.endDate}" converter="localeDateConverter" />
 		</s:decorate>
 	</td></tr>
 
@@ -184,34 +184,34 @@
 	
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
-		#{messages[tbCase.diagnosisType.key]}
+		#{messages[tbcase.diagnosisType.key]}
 	</s:decorate>
 	</td></tr>
 	
 	<tr><td	colspan="2">
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbCase.drugResistanceType}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.drugResistanceType}">
 			<ui:define name="label">#{messages['DrugResistanceType']}</ui:define>
-			#{messages[tbCase.drugResistanceType.key]}
+			#{messages[tbcase.drugResistanceType.key]}
 		</s:decorate>
 
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbCase.patientType!=null}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.patientType!=null}">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
-    		#{messages[tbCase.patientType.key]}
+    		#{messages[tbcase.patientType.key]}
 		</s:decorate>
 		
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbCase.infectionSite}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.infectionSite}">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
-    		#{messages[tbCase.infectionSite.key]}
+    		#{messages[tbcase.infectionSite.key]}
 		</s:decorate>
 
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbCase.pulmonaryType!=null}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.pulmonaryType!=null}">
     		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
-    		#{tbCase.pulmonaryType}
+    		#{tbcase.pulmonaryType}
 		</s:decorate>
 
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbCase.extrapulmonaryType!=null}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.extrapulmonaryType!=null}">
     		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
-    		#{tbCase.extrapulmonaryType} <h:outputText value="/ #{tbCase.extrapulmonaryType2}" />
+    		#{tbcase.extrapulmonaryType} <h:outputText value="/ #{tbcase.extrapulmonaryType2}" />
 		</s:decorate>
 
 	</td></tr>

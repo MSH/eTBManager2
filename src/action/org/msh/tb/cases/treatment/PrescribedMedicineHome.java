@@ -131,12 +131,24 @@ public class PrescribedMedicineHome extends EntityHomeEx<PrescribedMedicine> {
 		
 		validated = true;
 		treatmentHome.setFormEditing(FormEditing.NONE);
-		caseRegimenHome.updateRegimensByMedicinesPrescribed();
+//		caseRegimenHome.updateRegimensByMedicinesPrescribed();
 
 		if (prescriptionTable != null)
 			prescriptionTable.refresh();
 	}
 
+	
+	/**
+	 * Add a prescribed medicine to the case
+	 * @param pm
+	 */
+	public void addPrescribedMedicine(PrescribedMedicine pm) {
+		setInstance(pm);
+		removePeriod(pm.getPeriod(), pm.getMedicine());
+		TbCase tbcase = caseHome.getInstance();
+		tbcase.getPrescribedMedicines().add(pm);
+		pm.setTbcase(tbcase);
+	}
 	
 	/**
 	 * Remove a prescribed medicine from the treatment
@@ -149,7 +161,7 @@ public class PrescribedMedicineHome extends EntityHomeEx<PrescribedMedicine> {
 		if (getEntityManager().contains(pm))
 			getEntityManager().remove(pm);
 		
-		caseRegimenHome.updateRegimensByMedicinesPrescribed();
+//		caseRegimenHome.updateRegimensByMedicinesPrescribed();
 
 		if (prescriptionTable != null)
 			prescriptionTable.refresh();
@@ -193,7 +205,7 @@ public class PrescribedMedicineHome extends EntityHomeEx<PrescribedMedicine> {
 			}
 		}
 		
-		if (tbcase.getTreatmentPeriod().getEndDate().before(period.getEndDate()))
+		if ((tbcase.getTreatmentPeriod() != null) && (!tbcase.getTreatmentPeriod().isEmpty()) && (tbcase.getTreatmentPeriod().getEndDate().before(period.getEndDate())))
 			tbcase.getTreatmentPeriod().setEndDate(period.getEndDate());
 	}
 

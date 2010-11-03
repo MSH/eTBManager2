@@ -28,7 +28,7 @@ public class PrevTBTreatment implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="CASE_ID")
 	@NotNull
-	private TbCase tbCase;
+	private TbCase tbcase;
 	
 	@Column(name="TREATMENT_MONTH")
 	private Integer month;
@@ -87,11 +87,11 @@ public class PrevTBTreatment implements Serializable {
 		this.substances = substances;
 	}
 
-	public TbCase getTbCase() {
-		return tbCase;
+	public TbCase getTbcase() {
+		return tbcase;
 	}
 
-	public void setTbCase(TbCase tbCase) {
-		this.tbCase = tbCase;
+	public void setTbcase(TbCase tbcase) {
+		this.tbcase = tbcase;
 	}
 }

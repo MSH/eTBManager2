@@ -35,7 +35,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	 * Return an instance of a {@link TbCase} class
 	 * @return
 	 */
-	@Factory("tbCase")
+	@Factory("tbcase")
 	public TbCase getTbCase() {
 		return getInstance();
 	}
@@ -217,7 +217,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	public List<TbCase> getOtherCases() {
 		if (otherCases == null) {
 			otherCases = getEntityManager().createQuery("from TbCase c " +
-					"where c.patient.id = #{tbCase.patient.id} and c.id <> #{tbCase.id} " +
+					"where c.patient.id = #{tbcase.patient.id} and c.id <> #{tbcase.id} " +
 					"order by c.registrationDate")
 					.getResultList();
 		}

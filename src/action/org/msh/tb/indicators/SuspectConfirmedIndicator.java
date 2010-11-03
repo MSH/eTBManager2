@@ -30,15 +30,15 @@ public class SuspectConfirmedIndicator extends Indicator2D {
 
 		// get prev treatment with 1st line drugs
 		String condition = "not exists(select p.id from PrevTBTreatment p, in(p.substances) s " +
-				"where s.line = #{suspectConfirmedIndicator.medicineSecLine} and p.tbCase.id = c.id) " +
-				"and exists(select p.id from PrevTBTreatment p where p.tbCase.id = c.id) " +
+				"where s.line = #{suspectConfirmedIndicator.medicineSecLine} and p.tbcase.id = c.id) " +
+				"and exists(select p.id from PrevTBTreatment p where p.tbcase.id = c.id) " +
 				"and c.state >= " + CaseState.ONTREATMENT.ordinal();
 		List<Object[]> vals = generateValuesByField("c.diagnosisType", condition);
 		addColValues(getMessage("manag.ind.starttreat.prev1l"), null, vals);
 
 		// get prev treatment with 2nd line drugs
 		condition = "exists(select p.id from PrevTBTreatment p, in(p.substances) s " +
-				"where s.line =#{suspectConfirmedIndicator.medicineSecLine} and p.tbCase.id = c.id) " +
+				"where s.line =#{suspectConfirmedIndicator.medicineSecLine} and p.tbcase.id = c.id) " +
 				"and c.state >= " + CaseState.ONTREATMENT.ordinal();
 		vals = generateValuesByField("c.diagnosisType", condition);
 		addColValues(getMessage("manag.ind.starttreat.prev2l"), null, vals);

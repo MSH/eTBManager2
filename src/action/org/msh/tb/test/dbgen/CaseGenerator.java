@@ -16,7 +16,6 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.msh.mdrtb.entities.Address;
 import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.CaseRegimen;
 import org.msh.mdrtb.entities.CaseSideEffect;
 import org.msh.mdrtb.entities.ExamCulture;
 import org.msh.mdrtb.entities.ExamDST;
@@ -48,10 +47,10 @@ import org.msh.mdrtb.entities.enums.HIVResult;
 import org.msh.mdrtb.entities.enums.InfectionSite;
 import org.msh.mdrtb.entities.enums.LocalityType;
 import org.msh.mdrtb.entities.enums.MedAppointmentType;
+import org.msh.mdrtb.entities.enums.MicroscopyResult;
 import org.msh.mdrtb.entities.enums.Nationality;
 import org.msh.mdrtb.entities.enums.NumTreatments;
 import org.msh.mdrtb.entities.enums.RegimenPhase;
-import org.msh.mdrtb.entities.enums.MicroscopyResult;
 import org.msh.mdrtb.entities.enums.ValidationState;
 import org.msh.mdrtb.entities.enums.XRayEvolution;
 import org.msh.mdrtb.entities.enums.YesNoType;
@@ -830,15 +829,11 @@ public class CaseGenerator {
 		tbcase.getHealthUnits().add(hu);
 
 		// initialize case regimen
-		CaseRegimen cr = new CaseRegimen();
-		cr.getPeriod().set(treatPeriod);
-		cr.setRegimen(reg);
+		tbcase.setRegimen(reg);
 		Date iniCont = DateUtils.incMonths(treatPeriod.getIniDate(), reg.getMonthsPhase(RegimenPhase.INTENSIVE));
 		if (iniCont.after(treatPeriod.getEndDate()))
 			iniCont = null;
-		cr.setIniContPhase(iniCont);
-		cr.setTbCase(tbcase);
-		tbcase.getRegimens().add(cr);
+		tbcase.setIniContinuousPhase(iniCont);
 		
 		// create list of medicines for the intensive phase
 		Date dt = tbcase.getTreatmentPeriod().getIniDate();

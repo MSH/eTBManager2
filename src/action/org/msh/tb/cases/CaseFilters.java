@@ -224,9 +224,9 @@ public class CaseFilters {
 
 	public CaseClassification getClassification() {
 		boolean mdrCases = Identity.instance().hasRole("MDRCASES");
-		boolean tbCases = Identity.instance().hasRole("TBCASES");
+		boolean tbcases = Identity.instance().hasRole("TBCASES");
 		
-		if (mdrCases && tbCases)
+		if (mdrCases && tbcases)
 			return classification;
 		else {
 			if (mdrCases)

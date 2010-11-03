@@ -11,7 +11,7 @@
 		<h:outputText value="#{messages['cases.details.notreatment']}" styleClass="warn" style="display:block;padding:30px;"/>
 
 		<s:button value="#{messages['cases.details.starttreatment']}" onclick="showSelRegimenDlg();return false;" 
-			rendered="#{tbCase.state == 'WAITING_TREATMENT'}"
+			rendered="#{tbcase.state == 'WAITING_TREATMENT'}"
 			style="display:block;margin-left:30px;marign-bottom:30px;width:160px;" styleClass="button">
 			<f:param name="id" value="#{caseHome.id}" />
 		</s:button>
@@ -66,10 +66,10 @@
 			</h:outputText>
 			<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
 				<div style="display:block;clear:both;font-weight:bold;">#{messages['global.period']}</div>
-				<h:outputText value="#{tbCase.treatmentPeriod.iniDate}" converter="localeDateConverter" style="float:left;"/>
-				<h:outputText value="#{tbCase.treatmentPeriod.endDate}" converter="localeDateConverter" style="float:right;margin-right:16px;"/>
-				<h:outputText value="#{tbCase.treatmentPeriod.iniDate}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">
-					<f:param name="endDate" value="#{tbCase.treatmentPeriod.endDate}"/>
+				<h:outputText value="#{tbcase.treatmentPeriod.iniDate}" converter="localeDateConverter" style="float:left;"/>
+				<h:outputText value="#{tbcase.treatmentPeriod.endDate}" converter="localeDateConverter" style="float:right;margin-right:16px;"/>
+				<h:outputText value="#{tbcase.treatmentPeriod.iniDate}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">
+					<f:param name="endDate" value="#{tbcase.treatmentPeriod.endDate}"/>
 					<f:param name="type" value="length"/>
 				</h:outputText>
 			</div></div></div>

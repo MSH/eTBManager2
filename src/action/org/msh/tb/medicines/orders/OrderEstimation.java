@@ -128,7 +128,7 @@ public class OrderEstimation {
 		String hql = "from PrescribedMedicine pm " +
 				"join fetch pm.source s join fetch pm.medicine m " +
 				"where exists(select a.id from TreatmentHealthUnit a " +
-				"where a.tbCase.id = pm.tbcase " +
+				"where a.tbcase.id = pm.tbcase " +
 				"and a.tbunit.id  in (" + s + ")) " +
 				"and pm.tbcase.state = :state " +
 				"and ((pm.period.endDate >= :dtini) or (pm.period.endDate is null)) " +

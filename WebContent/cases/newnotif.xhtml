@@ -9,7 +9,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="#{workspaceViewService.templatePage}">
 
-<ui:param name="title" value="#{messages['cases.newnotif']} - #{messages[tbCase.classification.key]}" />
+<ui:param name="title" value="#{messages['cases.newnotif']} - #{messages[tbcase.classification.key]}" />
 
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:140px" />
@@ -49,7 +49,7 @@ function checkfields() {
     </s:decorate>
     </h:panelGroup>
 
-	<h:inputHidden value="#{tbCase.classification}" />
+	<h:inputHidden value="#{tbcase.classification}" />
 
 	<table width="100%"><tr><td>
 		<a:commandButton id="btnsearch" value="#{messages['form.search']}" action="#{patients.search}" styleClass="button"
@@ -86,7 +86,7 @@ function checkfields() {
 		<s:link value="#{it.fullName}" view="/cases/casenew.xhtml"  
 			onclick="openWaitDlg();">
 			<f:param name="pacid" value="#{it.id}" />
-			<f:param name="classif" value="#{tbCase.classification}"/>
+			<f:param name="classif" value="#{tbcase.classification}"/>
 		</s:link>
 	</h:column>
 

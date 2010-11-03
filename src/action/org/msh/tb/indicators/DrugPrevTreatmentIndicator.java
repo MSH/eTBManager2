@@ -25,14 +25,14 @@ public class DrugPrevTreatmentIndicator extends Indicator2D {
 
 		// get cases previously treated with 1st line drugs
 		String cond = "not exists(select p.id from PrevTBTreatment p, in(p.substances) s " +
-				"where s.line = " + MedicineLine.SECOND_LINE.ordinal() + " and p.tbCase.id = c.id) " +
+				"where s.line = " + MedicineLine.SECOND_LINE.ordinal() + " and p.tbcase.id = c.id) " +
 				outcomes;
 		lst = generateValuesByField("c.state", cond);
 		addRowValues(getMessage("manag.confmdrrep.prev1line"), null, lst);
 
 		// get cases previously treated with 1st and 2nd line drugs
 		cond = "exists(select p.id from PrevTBTreatment p, in(p.substances) s " +
-				"where s.line = " + MedicineLine.SECOND_LINE.ordinal() + " and p.tbCase.id = c.id) " +
+				"where s.line = " + MedicineLine.SECOND_LINE.ordinal() + " and p.tbcase.id = c.id) " +
 				outcomes;
 		lst = generateValuesByField("c.state", cond);
 		addRowValues(getMessage("manag.confmdrrep.prev12line"), null, lst);

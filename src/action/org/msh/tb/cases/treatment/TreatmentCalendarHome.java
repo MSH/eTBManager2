@@ -2,8 +2,6 @@ package org.msh.tb.cases.treatment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +10,6 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.mdrtb.entities.CaseDispensing;
-import org.msh.mdrtb.entities.CaseRegimen;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.enums.RegimenPhase;
 import org.msh.tb.cases.CaseHome;
@@ -52,37 +49,15 @@ public class TreatmentCalendarHome {
 	protected void createPhasesList() {
 		TbCase tbcase = caseHome.getInstance();
 
-		// sort by dates
-		Collections.sort(tbcase.getRegimens(), new Comparator<CaseRegimen>() {
-			public int compare(CaseRegimen p1, CaseRegimen p2) {
-				return p1.getPeriod().getIniDate().compareTo(p2.getPeriod().getIniDate());
-			}
-		});
-
 		phases = new ArrayList<PhaseInfo>();
-		for (CaseRegimen cr: tbcase.getRegimens()) {
-			if (cr.isHasIntensivePhase())
-				addPhase(cr.getPeriodIntPhase(), RegimenPhase.INTENSIVE);
-			
-			if (cr.isHasContinuousPhase())
-				addPhase(cr.getPeriodContPhase(), RegimenPhase.CONTINUOUS);
-			
-/*			if (cr.isIndividualized()) {
-				if (dtini == null)
-					dtini = cr.getPeriod().getIniDate();
-			}
-			else {
-				PhaseInfo phaseInfo = new PhaseInfo();
-				phaseInfo.setCaseRegimen(cr);
-				if (dtini == null)
-					dtini = cr.getPeriod().getIniDate();
-				phaseInfo.setIniDate(dtini);
-				phaseInfo.setEndDate(cr.getPeriod().getEndDate());
-				phases.add(phaseInfo);
-				
-				dtini = null;
-			}
-*/		}
+
+		Period p = tbcase.getIntensivePhasePeriod();
+		if (p != null)
+			addPhase(p, RegimenPhase.INTENSIVE);
+		
+		p = tbcase.getContinuousPhasePeriod();
+		if (p != null)
+			addPhase(p, RegimenPhase.CONTINUOUS);			
 	}
 
 	
@@ -215,18 +190,17 @@ public class TreatmentCalendarHome {
 	 * Fill calendar with planned prescription days 
 	 */
 	protected void mountPlanned() {
-		for (CaseRegimen caseReg: caseHome.getInstance().getRegimens()) {
-			Date inidt = caseReg.getPeriod().getIniDate();
-			Date enddt = caseReg.getPeriod().getEndDate();
+		TbCase tbcase = caseHome.getInstance();
+		Date inidt = tbcase.getTreatmentPeriod().getIniDate();
+		Date enddt = tbcase.getTreatmentPeriod().getEndDate();
 
-			while (!inidt.after(enddt)) {
-				DayInfo dayInfo = getDay(inidt);
-				if (dayInfo != null) {
-					if (caseReg.isDayPrescription(inidt))
-						dayInfo.setPrescribed(true);
-				}
-				inidt = DateUtils.incDays(inidt, 1);
+		while (!inidt.after(enddt)) {
+			DayInfo dayInfo = getDay(inidt);
+			if (dayInfo != null) {
+				if (tbcase.isDayPrescription(inidt))
+					dayInfo.setPrescribed(true);
 			}
+			inidt = DateUtils.incDays(inidt, 1);
 		}
 	}
 	

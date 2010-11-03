@@ -25,7 +25,7 @@
 	
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
-    	<h:outputText value="#{tbCase.diagnosisDate}"  converter="localeDateConverter"/>
+    	<h:outputText value="#{tbcase.diagnosisDate}"  converter="localeDateConverter"/>
     </s:decorate>
 
 	<div class="paragraph">#{messages['cases.healthUnit']}</div>
@@ -36,7 +36,7 @@
 
     <s:decorate template="/layout/display.xhtml" >
    		<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
-   		<h:outputText value="#{tbCase.registrationDate}" />
+   		<h:outputText value="#{tbcase.registrationDate}" />
    	</s:decorate>
 
 
@@ -62,14 +62,14 @@
 		</th>
 		<td style="text-align:center;">
 			<div class="bar-header" style="width:100%;">
-			<h:outputText value="#{tbCase.treatmentPeriod.iniDate}" converter="periodConverter">
-				<f:param name="endDate" value="#{tbCase.treatmentPeriod.endDate}" />
+			<h:outputText value="#{tbcase.treatmentPeriod.iniDate}" converter="periodConverter">
+				<f:param name="endDate" value="#{tbcase.treatmentPeriod.endDate}" />
 				<f:param name="type" value="length"/>
 			</h:outputText>
 			<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
 				<div style="display:block;clear:both;font-weight:bold;">#{messages['cases.treat']}</div>
-				<h:outputText value="#{tbCase.treatmentPeriod.iniDate}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">
-					<f:param name="endDate" value="#{tbCase.treatmentPeriod.endDate}"/>
+				<h:outputText value="#{tbcase.treatmentPeriod.iniDate}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">
+					<f:param name="endDate" value="#{tbcase.treatmentPeriod.endDate}"/>
 					<f:param name="type" value="length"/>
 				</h:outputText>
 			</div></div></div>

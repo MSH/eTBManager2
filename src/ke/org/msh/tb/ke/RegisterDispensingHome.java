@@ -86,7 +86,7 @@ public class RegisterDispensingHome {
 		// load the dispensing days information recorded in the database
 		List<CaseDispensing_Ke> lst = entityManager.createQuery("from CaseDispensing_Ke d join fetch d.tbcase c " +
 				"join fetch c.patient p " +
-				"where exists(select hu.id from TreatmentHealthUnit hu where hu.tbCase.id = c.id and hu.endDate = c.endTreatmentDate " +
+				"where exists(select hu.id from TreatmentHealthUnit hu where hu.tbcase.id = c.id and hu.endDate = c.endTreatmentDate " +
 				"and hu.tbunit.id = " + tbunit.getId() + ") " +
 				"and d.month = " + (month + 1) + " and d.year = " + year +
 				" and c.state = " + CaseState.ONTREATMENT.ordinal())
@@ -99,7 +99,7 @@ public class RegisterDispensingHome {
 		
 		// load the remaining cases on treatment
 		List<TbCase> lstcases = entityManager.createQuery("from TbCase c join fetch c.patient p " +
-				"where exists(select hu.id from TreatmentHealthUnit hu where hu.tbCase.id = c.id and hu.endDate = c.endTreatmentDate " +
+				"where exists(select hu.id from TreatmentHealthUnit hu where hu.tbcase.id = c.id and hu.endDate = c.endTreatmentDate " +
 				"and hu.tbunit.id = " + tbunit.getId() + ") " + 
 				" and c.state = " + CaseState.ONTREATMENT.ordinal())
 				.getResultList();

@@ -12,7 +12,7 @@
 		<ui:param name="showfooter" value="0" />
 		<ui:define name="header">
 			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexamhiv.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
-				<f:param name="id" value="#{tbCase.id}"/>
+				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 			</s:link>
 			<b>#{messages['cases.examhiv']}</b>
@@ -27,7 +27,7 @@
 					<h:outputText value="#{messages['global.month']}" styleClass="colch"/>
 				</f:facet>
 				<s:link view="/cases/edtexamhiv.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
-					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
 						<f:param value="#{r.monthTreatment}"/>
@@ -85,7 +85,7 @@
 		<ui:param name="showfooter" value="0" />
 		<ui:define name="header">
 			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexammicroscopy.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
-				<f:param name="id" value="#{tbCase.id}"/>
+				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 			</s:link>
 			<b>#{messages['cases.exammicroscopy']}</b>
@@ -100,7 +100,7 @@
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
 				<s:link view="/cases/edtexammicroscopy.xhtml" propagation="none" enabled="#{caseHome.canEditExams}" >
-					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
 						<f:param value="#{r.monthTreatment}"/>
@@ -158,7 +158,7 @@
 		<ui:param name="showfooter" value="0" />
 		<ui:define name="header">
 			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexamculture.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
-				<f:param name="id" value="#{tbCase.id}"/>
+				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 			</s:link>
 			<b>#{messages['cases.examculture']}</b>
@@ -173,7 +173,7 @@
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
 				<s:link view="/cases/edtexamculture.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
-					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
 						<f:param value="#{r.monthTreatment}"/>
@@ -236,7 +236,7 @@
 		<ui:param name="showfooter" value="0" />
 		<ui:define name="header">
 			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexamdst.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
-				<f:param name="id" value="#{tbCase.id}"/>
+				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 			</s:link>
 			<b>#{messages['cases.examdst']}</b>
@@ -270,7 +270,7 @@
 		<tr>
 			<td>
 				<s:link view="/cases/edtexamdst.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
-					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.examResult.id}"/>
 					<h:outputFormat value="#{messages[r.examResult.monthDisplay]}" >
 						<f:param value="#{r.examResult.monthTreatment}"/>
@@ -325,7 +325,7 @@
 		<ui:param name="showfooter" value="0" />
 		<ui:define name="header">
 			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexamxray.xhtml" style="float:right;">
-				<f:param name="id" value="#{tbCase.id}"/>
+				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 			</s:link>
 			<b>#{messages['cases.examxray']}</b>
@@ -338,7 +338,7 @@
 			<h:column>
 				<f:facet name="header">#{messages['global.month']}</f:facet>
 				<s:link view="/cases/edtexamxray.xhtml" propagation="none" >
-					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
 						<f:param value="#{r.monthTreatment}"/>

@@ -10,6 +10,11 @@
 			<redirect view-id="/cases/index.xhtml">
 			</redirect>
 		</rule>
+		<rule if-outcome="edit">
+			<redirect view-id="/cases/treatmentedt.xhtml">
+				<param name="id" value="#{caseHome.id}" />
+			</redirect>
+		</rule>
 		<rule if-outcome="validated">
 			<redirect view-id="/cases/casedata.xhtml">
 				<message>#{messages['cases.validate.success']}</message>

@@ -18,7 +18,7 @@
 	<tr><td colspan="2">
 	<s:decorate template="/layout/editname.xhtml">
     	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
-		<ui:param name="patientdata" value="#{tbCase.patient}" />
+		<ui:param name="patientdata" value="#{tbcase.patient}" />
 		<ui:param name="required" value="#{true}" />
 		<ui:param name="fieldStyle" value="text-transform:uppercase;" />
 	</s:decorate>
@@ -28,7 +28,7 @@
 	
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
-		<h:inputText value="#{tbCase.patient.securityNumber}" style="width:120px;text-transform:uppercase;" maxlength="50"></h:inputText>
+		<h:inputText value="#{tbcase.patient.securityNumber}" style="width:120px;text-transform:uppercase;" maxlength="50"></h:inputText>
 	</s:decorate>
 	
 	</td><td>
@@ -43,7 +43,7 @@
 	
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Gender']}:</ui:define>
-    	<h:selectOneMenu id="cbgender" value="#{tbCase.patient.gender}" required="true">
+    	<h:selectOneMenu id="cbgender" value="#{tbcase.patient.gender}" required="true">
     		<s:selectItems value="#{genders}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
@@ -59,7 +59,7 @@
 	
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Patient.motherName']}:</ui:define>
-		<h:inputText value="#{tbCase.patient.motherName}" style="width:300px;text-transform:uppercase;" maxlength="100" />
+		<h:inputText value="#{tbcase.patient.motherName}" style="width:300px;text-transform:uppercase;" maxlength="100" />
 	</s:decorate>
 	
 	</td></tr>
@@ -67,7 +67,7 @@
 	
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Nationality']}:</ui:define>
-    	<h:selectOneMenu id="nationality" value="#{tbCase.nationality}" >
+    	<h:selectOneMenu id="nationality" value="#{tbcase.nationality}" >
     		<s:selectItems var="s" value="#{nationalities}" noSelectionLabel="-" label="#{messages[s.key]}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
@@ -94,7 +94,7 @@
     <tr><td colspan="2">
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.address']}:</ui:define>
-    		<h:inputText value="#{tbCase.notifAddress.address}" style="width:300px;text-transform:uppercase;" required="true" maxlength="100"/>
+    		<h:inputText value="#{tbcase.notifAddress.address}" style="width:300px;text-transform:uppercase;" required="true" maxlength="100"/>
     		#{messages['pt_BR.addressNumber']}: <h:inputText value="#{caseDataBR.notifAddressNumber}" style="width:80px;text-transform:uppercase;" maxlength="20" />
     	</s:decorate>
     	
@@ -103,7 +103,7 @@
     <tr><td colspan="2">
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.complement']}</ui:define>
-    		<h:inputText value="#{tbCase.notifAddress.complement}" style="width:300px;text-transform:uppercase;" maxlength="100"/>
+    		<h:inputText value="#{tbcase.notifAddress.complement}" style="width:300px;text-transform:uppercase;" maxlength="100"/>
     	</s:decorate>
 
     	<s:decorate template="/layout/edit.xhtml">
@@ -121,7 +121,7 @@
     <tr><td>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.zipCode']}</ui:define>
-    		<h:inputText value="#{tbCase.notifAddress.zipCode}" maxlength="8" />
+    		<h:inputText value="#{tbcase.notifAddress.zipCode}" maxlength="8" />
     	</s:decorate>
     </td></tr>
 
@@ -130,7 +130,7 @@
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:param name="labelstyle" value="width:400px;" />
     		<ui:define name="label">#{messages['TbCase.notifAddressChanged']}:</ui:define>
-    		<h:selectOneMenu id="addrChanged" value="#{tbCase.notifAddressChanged}" >
+    		<h:selectOneMenu id="addrChanged" value="#{tbcase.notifAddressChanged}" >
     			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
     			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
     		</h:selectOneMenu>
@@ -142,13 +142,13 @@
     	<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.address']}:</ui:define>
-    		<h:inputText value="#{tbCase.currentAddress.address}" style="width:300px;margin-bottom:2px;" maxlength="100"/>
+    		<h:inputText value="#{tbcase.currentAddress.address}" style="width:300px;margin-bottom:2px;" maxlength="100"/>
     		#{messages['pt_BR.addressNumber']}: <h:inputText value="#{caseDataBR.currAddressNumber}" style="width:80px;text-transform:uppercase;" maxlength="20"  />
     	</s:decorate>
    
 	   	<s:decorate template="/layout/edit.xhtml"> 	
     		<ui:define name="label">#{messages['Address.complement']}</ui:define>
-    		<h:inputText value="#{tbCase.currentAddress.complement}" style="width:300px" maxlength="100"/>
+    		<h:inputText value="#{tbcase.currentAddress.complement}" style="width:300px" maxlength="100"/>
     	</s:decorate>
 
     	<s:decorate template="/layout/edit.xhtml">
@@ -158,7 +158,7 @@
 
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.zipCode']}</ui:define>
-    		<h:inputText value="#{tbCase.currentAddress.zipCode}" maxlength="20" />
+    		<h:inputText value="#{tbcase.currentAddress.zipCode}" maxlength="20" />
     	</s:decorate>
     	
     	<table width="100%" style="border-collapse: collapse;">
@@ -180,7 +180,7 @@
     		<s:decorate styleClass="label">
 			<s:label value="DDD" styleClass="over" />
    			<h:inputText id="dddphone" value="#{caseDataBR.prefixPhone}" style="width:50px;margin-right:4px;text-transform:uppercase;" maxlength="3"/>
-    		<h:inputText value="#{tbCase.phoneNumber}" maxlength="50" style="text-transform:uppercase;"/>
+    		<h:inputText value="#{tbcase.phoneNumber}" maxlength="50" style="text-transform:uppercase;"/>
     		</s:decorate>
     	</s:decorate>	
 		<rich:jQuery selector="#phone .label label" query="labelOver('over');" />
@@ -190,7 +190,7 @@
     		<s:decorate styleClass="label"> 
 			<s:label value="DDD" styleClass="over" />
    			<h:inputText id="dddmobile" value="#{caseDataBR.prefixMobile}" style="width:50px;margin-right:4px;text-transform:uppercase;" maxlength="3"/>
-    		<h:inputText value="#{tbCase.mobileNumber}" maxlength="50" style="text-transform:uppercase;"/>
+    		<h:inputText value="#{tbcase.mobileNumber}" maxlength="50" style="text-transform:uppercase;"/>
     		</s:decorate>
     	</s:decorate>	
 		<rich:jQuery selector="#mobile .label label" query="labelOver('over');" />
@@ -235,14 +235,14 @@
 	<div id="divregdate">
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
-    	<ui:param name="datefield" value="#{tbCase.registrationDate}" /> 
+    	<ui:param name="datefield" value="#{tbcase.registrationDate}" /> 
     </s:decorate>
     </div>
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
 
 	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
-    		<h:selectOneMenu id="patType" value="#{tbCase.patientType}" required="#{tbCase.validated}">
+    		<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="#{tbcase.validated}">
     			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
     			<s:convertEnum />
     		</h:selectOneMenu>
@@ -254,7 +254,7 @@
 	<div id="patientTypeOther">
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['TbCase.patientTypeOther']}:</ui:define>
-    		<h:inputText value="#{tbCase.patientTypeOther}" style="width:200px;" maxlength="100" />
+    		<h:inputText value="#{tbcase.patientTypeOther}" style="width:200px;" maxlength="100" />
 		</s:decorate>
 	</div>
 	<div id="divSchemaChanged" >
@@ -276,14 +276,14 @@
 		</s:decorate>
 	</div>
 
-    <s:decorate template="/layout/editfield.xhtml" rendered="#{tbCase.classification=='NMT'}">
+    <s:decorate template="/layout/editfield.xhtml" rendered="#{tbcase.classification=='NMT'}">
     	<ui:define name="label">#{messages['pt_BR.tipo_mnt']}:</ui:define>
     	<ui:param name="id" value="mnt" />
     	<ui:param name="field" value="#{caseDataBR.microbacteriose}" />
     	<ui:param name="list" value="#{fieldsQuery.microbacterioses}" />
     </s:decorate>
 
-    <s:decorate template="/layout/editfield.xhtml"  rendered="#{tbCase.classification=='MDRTB_DOCUMENTED'}">
+    <s:decorate template="/layout/editfield.xhtml"  rendered="#{tbcase.classification=='MDRTB_DOCUMENTED'}">
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
     	<ui:param name="id" value="mnt" />
     	<ui:param name="field" value="#{caseDataBR.resistanceType}" />
@@ -292,7 +292,7 @@
 
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
-    		<h:selectOneMenu id="infectsite" value="#{tbCase.infectionSite}" required="#{tbCase.validated}">
+    		<h:selectOneMenu id="infectsite" value="#{tbcase.infectionSite}" required="#{tbcase.validated}">
     			<s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="-" label="#{messages[it.key]}" />
     			<s:convertEnum />
     		</h:selectOneMenu>
@@ -301,12 +301,12 @@
 	<div id="extrapul" style="clear:both;">
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
-    		<h:selectOneMenu value="#{tbCase.extrapulmonaryType}" style="margin-right:4px;">
+    		<h:selectOneMenu value="#{tbcase.extrapulmonaryType}" style="margin-right:4px;">
     			<s:selectItems var="it" value="#{fieldOptions.extrapulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
     			<s:convertEntity />
     		</h:selectOneMenu>
 
-    		<h:selectOneMenu value="#{tbCase.extrapulmonaryType2}">
+    		<h:selectOneMenu value="#{tbcase.extrapulmonaryType2}">
     			<s:selectItems var="it" value="#{fieldOptions.extrapulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
     			<s:convertEntity />
     		</h:selectOneMenu>
@@ -317,7 +317,7 @@
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:param name="redasterisk" value="true" />
     		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
-    		<h:selectOneMenu id="cbpulmonary" value="#{tbCase.pulmonaryType}" style="margin-right:4px;">
+    		<h:selectOneMenu id="cbpulmonary" value="#{tbcase.pulmonaryType}" style="margin-right:4px;">
     			<s:selectItems var="it" value="#{fieldOptions.pulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
     			<s:convertEntity />
     		</h:selectOneMenu>

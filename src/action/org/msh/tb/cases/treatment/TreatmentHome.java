@@ -12,7 +12,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.mdrtb.entities.CaseRegimen;
 import org.msh.mdrtb.entities.PrescribedMedicine;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.TreatmentHealthUnit;
@@ -29,12 +28,14 @@ public class TreatmentHome {
 	public enum FormEditing {	NONE, TREATMENT, HEALTHUNIT, REGIMEN, MEDICINE; 	}
 
 	@In(required=true) CaseHome caseHome;
-	@In(create=true) FacesMessages facesMessages;
 	@In(required=false) PrescriptionTable prescriptionTable;
+	@In(create=true) CaseRegimenHome caseRegimenHome;
+	@In(create=true) FacesMessages facesMessages;
 	@In EntityManager entityManager;
 	
 	private Date iniDate;
 	private Date endDate;
+	private Date iniContinuousPhase;
 	
 	private List<Date> prescriptionChanges;
 
@@ -56,7 +57,8 @@ public class TreatmentHome {
 	private TreatmentHealthUnit healthUnit;
 	private FormEditing formEditing;
 	
-
+	
+	
 	/**
 	 * Save changes to the treatment
 	 * @return
@@ -131,7 +133,27 @@ public class TreatmentHome {
 		
 		cropTreatmentPeriod(caseHome.getInstance().getTreatmentPeriod());
 	}
+
 	
+	/**
+	 * Initialize regimen change 
+	 */
+	public void startRegimenChange() {
+		formEditing = FormEditing.REGIMEN;
+	}
+
+
+	/**
+	 * Change the treatment regimen
+	 */
+	public void endRegimenChange() {
+		Date dt = caseHome.getInstance().getTreatmentPeriod().getIniDate();
+		caseRegimenHome.setErasePreviousRegimen(true);
+		caseRegimenHome.applyRegimen(dt, null, true);
+		caseHome.persist();
+		
+		formEditing = FormEditing.NONE;
+	}
 	
 	/**
 	 * Create list of dates indicating the changes in the medicine prescription
@@ -192,18 +214,6 @@ public class TreatmentHome {
 			else index++;
 		}
 		
-		// crop case regimens
-		index = 0;
-		while (index < tbcase.getRegimens().size()) {
-			CaseRegimen cr = tbcase.getRegimens().get(index);
-			if (!cr.getPeriod().intersect(p)) {
-				tbcase.getRegimens().remove(cr);
-				if (entityManager.contains(cr))
-					entityManager.remove(cr);
-			}
-			else index++;
-		}
-		
 		// crop prescribed medicines
 		index = 0;
 		while (index < tbcase.getPrescribedMedicines().size()) {
@@ -248,15 +258,15 @@ public class TreatmentHome {
 		TbCase tbcase = caseHome.getInstance();
 		tbcase.setState(CaseState.WAITING_TREATMENT);
 		tbcase.setTreatmentPeriod(null);
+		tbcase.setIniContinuousPhase(null);
+		tbcase.setRegimen(null);
 
 		Integer id = caseHome.getInstance().getId();
 		entityManager.createQuery("delete from PrescribedMedicine where tbcase.id = " + id.toString()).executeUpdate();
-		entityManager.createQuery("delete from TreatmentHealthUnit where tbCase.id = " + id.toString()).executeUpdate();
-		entityManager.createQuery("delete from CaseRegimen where tbCase.id = " + id.toString()).executeUpdate();
+		entityManager.createQuery("delete from TreatmentHealthUnit where tbcase.id = " + id.toString()).executeUpdate();
 		
 //		tbcase.getTreatmentPeriod().set(null, null);
 		tbcase.getHealthUnits().clear();
-		tbcase.getRegimens().clear();
 		tbcase.getPrescribedMedicines().clear();
 
 		caseHome.setDisplayMessage(false);
@@ -320,5 +330,21 @@ public class TreatmentHome {
 		if (period == null)
 			initializePeriod();
 		return period;
+	}
+
+
+	/**
+	 * @return the iniContinuousPhase
+	 */
+	public Date getIniContinuousPhase() {
+		return iniContinuousPhase;
+	}
+
+
+	/**
+	 * @param iniContinuousPhase the iniContinuousPhase to set
+	 */
+	public void setIniContinuousPhase(Date iniContinuousPhase) {
+		this.iniContinuousPhase = iniContinuousPhase;
 	}
 }

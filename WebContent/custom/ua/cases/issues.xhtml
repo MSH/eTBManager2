@@ -16,11 +16,11 @@
 	#{messages['ValidationState']}:
 	<br/>
 	<span class="status-label"> 
-		#{messages[tbCase.validationState.key]}
+		#{messages[tbcase.validationState.key]}
 	</span>
 	<span id="lnkDetails">
 	<a:commandLink value="#{messages['form.details']}" action="#{caseValidationHome.displayIssues}" 
-		reRender="pnlIssues" style="padding-left:20px;padding-right:30px;" rendered="#{tbCase.issueCounter > 0}" 
+		reRender="pnlIssues" style="padding-left:20px;padding-right:30px;" rendered="#{tbcase.issueCounter > 0}" 
 		oncomplete="showIssuesCommand(); return false;" />
 	</span>
 

@@ -8,7 +8,7 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 	<s:link value="#{messages['cases.details.newresult']}" view="/custom/ke/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
-		<f:param name="id" value="#{tbCase.id}"/>
+		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 	</s:link>
 
@@ -21,7 +21,7 @@
 		<ui:define name="header">
 			<div style="float:right;">
 				<s:link value="#{messages['form.edit']}" view="/custom/ke/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEdit}">
-					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 				</s:link>
 				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remMedExam(#{r.id}, #{medicalExaminationHome.lastResult});return false;" 

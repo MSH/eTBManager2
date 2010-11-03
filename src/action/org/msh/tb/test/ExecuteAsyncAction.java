@@ -81,10 +81,7 @@ public class ExecuteAsyncAction {
 			entityManager.createQuery("delete from PrescribedMedicine p where p.tbcase.id in (select aux.id from TbCase aux where aux.patient.workspace.id = #{defaultWorkspace.id})")
 				.executeUpdate();
 
-			entityManager.createQuery("delete from CaseRegimen p where p.tbCase.id in (select aux.id from TbCase aux where aux.patient.workspace.id = #{defaultWorkspace.id})")
-				.executeUpdate();
-
-			entityManager.createQuery("delete from TreatmentHealthUnit p where p.tbCase.id in (select aux.id from TbCase aux where aux.patient.workspace.id = #{defaultWorkspace.id})")
+			entityManager.createQuery("delete from TreatmentHealthUnit p where p.tbcase.id in (select aux.id from TbCase aux where aux.patient.workspace.id = #{defaultWorkspace.id})")
 				.executeUpdate();
 			
 			List<TbCase> cases = entityManager

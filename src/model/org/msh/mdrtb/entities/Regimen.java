@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.RegimenPhase;
 
 
@@ -31,8 +32,7 @@ public class Regimen extends WSObject implements Serializable {
 	@Column(length=100, name="regimen_name")
 	private String name;
 	
-	private boolean mdrTreatment;
-	private boolean tbTreatment;
+	private CaseClassification caseClassification;
 
 	@OneToMany(cascade={CascadeType.ALL})
 	@JoinColumn(name="REGIMEN_ID")
@@ -69,6 +69,24 @@ public class Regimen extends WSObject implements Serializable {
 
 	
 	/**
+	 * Return the number of months of the intensive phase
+	 * @return
+	 */
+	public int getMonthsIntensivePhase() {
+		return getMonthsPhase(RegimenPhase.INTENSIVE);
+	}
+
+	
+	/**
+	 * Return the number of months of the continuous phase
+	 * @return
+	 */
+	public int getMonthsContinuousPhase() {
+		return getMonthsPhase(RegimenPhase.CONTINUOUS);
+	}
+	
+	
+	/**
 	 * Include a medicine regimen to the regimen and also update the intensive and continuous list
 	 * @param mr
 	 */
@@ -93,6 +111,7 @@ public class Regimen extends WSObject implements Serializable {
 			else continuousPhaseMedicines.remove(mr);
 		}
 	}
+	
 	
 	/**
 	 * get medicines used in the intensive phase
@@ -202,7 +221,7 @@ public class Regimen extends WSObject implements Serializable {
 	 * @param phase
 	 * @return
 	 */
-	public Integer getMonthsPhase(RegimenPhase phase) {
+	public int getMonthsPhase(RegimenPhase phase) {
 		int num=0;
 		for (MedicineRegimen medreg: getMedicines()) {
 			if ((medreg.getMonthsTreatment() > num) && (medreg.getPhase().equals(phase))) {
@@ -257,15 +276,7 @@ public class Regimen extends WSObject implements Serializable {
 	 * @return the mdrTreatment
 	 */
 	public boolean isMdrTreatment() {
-		return mdrTreatment;
-	}
-
-
-	/**
-	 * @param mdrTreatment the mdrTreatment to set
-	 */
-	public void setMdrTreatment(boolean mdrTreatment) {
-		this.mdrTreatment = mdrTreatment;
+		return CaseClassification.MDRTB_DOCUMENTED.equals(caseClassification);
 	}
 
 
@@ -273,17 +284,9 @@ public class Regimen extends WSObject implements Serializable {
 	 * @return the tbTreatment
 	 */
 	public boolean isTbTreatment() {
-		return tbTreatment;
+		return CaseClassification.TB_DOCUMENTED.equals(caseClassification);
 	}
-
-
-	/**
-	 * @param tbTreatment the tbTreatment to set
-	 */
-	public void setTbTreatment(boolean tbTreatment) {
-		this.tbTreatment = tbTreatment;
-	}
-
+	
 
 	/**
 	 * @return the legacyId
@@ -298,5 +301,21 @@ public class Regimen extends WSObject implements Serializable {
 	 */
 	public void setLegacyId(String legacyId) {
 		this.legacyId = legacyId;
+	}
+
+
+	/**
+	 * @return the caseClassification
+	 */
+	public CaseClassification getCaseClassification() {
+		return caseClassification;
+	}
+
+
+	/**
+	 * @param caseClassification the caseClassification to set
+	 */
+	public void setCaseClassification(CaseClassification caseClassification) {
+		this.caseClassification = caseClassification;
 	}
 }

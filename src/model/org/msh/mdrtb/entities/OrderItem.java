@@ -18,6 +18,11 @@ import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
 
+/**
+ * Store data about the medicines ordered in an order
+ * @author Ricardo Memoria
+ *
+ */
 @Entity
 public class OrderItem implements Serializable {
 	private static final long serialVersionUID = -7765596999719386981L;
@@ -99,12 +104,12 @@ public class OrderItem implements Serializable {
 	
 	public void addCase(TbCase c, int estimatedQtd) {
 		for (OrderCase oc: cases) {
-			if (oc.getTbCase().equals(c))
+			if (oc.getTbcase().equals(c))
 				return;
 		}
 
 		OrderCase oc = new OrderCase();
-		oc.setTbCase(c);
+		oc.setTbcase(c);
 		oc.setItem(this);
 		oc.setEstimatedQuantity(estimatedQtd);
 		

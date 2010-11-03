@@ -10,7 +10,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="#{workspaceViewService.templatePage}">
 
-<ui:param name="title" value="#{messages['cases.comorbidities']} - #{messages[tbCase.classification.key]}" />
+<ui:param name="title" value="#{messages['cases.comorbidities']} - #{messages[tbcase.classification.key]}" />
 
 <ui:param name="topmenu" value="0" />
 <ui:param name="waitdlg" value="1" />
@@ -41,13 +41,13 @@
 	<tr><td>
     	<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">#{messages['TbCase.tbContact']}:</ui:define>
-    		<h:selectBooleanCheckbox id="chkcont" value="#{tbCase.tbContact}" />
+    		<h:selectBooleanCheckbox id="chkcont" value="#{tbcase.tbContact}" />
     	</s:decorate>
     </td><td>
     	<div id="divpatname">
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbCase.patientContactName']}:</ui:define>
-    		<h:inputText value="#{tbCase.patientContactName}" style="width:300px" maxlength="100"/>
+    		<h:inputText value="#{tbcase.patientContactName}" style="width:300px" maxlength="100"/>
     	</s:decorate>
     	</div>
     </td></tr>

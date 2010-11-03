@@ -16,16 +16,16 @@
     	</ui:define>
 		<ui:param name="showfooter" value="0" />
     	<ul>
-    	<ui:repeat value="#{tbCase.comorbidities}" var="it">
+    	<ui:repeat value="#{tbcase.comorbidities}" var="it">
     		<li>#{it.name}
     		</li>
     	</ui:repeat>
     	</ul>
     	<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">#{messages['TbCase.tbContact']}:</ui:define>
-    		<h:outputText value="#{tbCase.tbContact?messages['global.yes']:messages['global.no']}" /> 
-    		<s:fragment rendered="#{not empty tbCase.patientContactName}">
-    		<b style="margin-left:30px;">#{messages['TbCase.patientContactName']}:</b> #{tbCase.patientContactName}
+    		<h:outputText value="#{tbcase.tbContact?messages['global.yes']:messages['global.no']}" /> 
+    		<s:fragment rendered="#{not empty tbcase.patientContactName}">
+    		<b style="margin-left:30px;">#{messages['TbCase.patientContactName']}:</b> #{tbcase.patientContactName}
     		</s:fragment>
     	</s:decorate>
     </s:decorate>
@@ -41,10 +41,10 @@
 		<ui:param name="showfooter" value="0" />
 	
 	<h:panelGroup id="pnlcontact">
-	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty tbCase.contacts}" />
+	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty tbcase.contacts}" />
 	
-	<s:fragment rendered="#{not empty tbCase.contacts}">
-	<a:repeat value="#{tbCase.contacts}" var="it">
+	<s:fragment rendered="#{not empty tbcase.contacts}">
+	<a:repeat value="#{tbcase.contacts}" var="it">
 	<table width="99%" class="tabela2" style="margin-top:10px;margin-left:2px;border:1px solid #d0d0d0" cellpadding="0" cellspacing="0">
 	<tr>
 		<th colspan="2" align="left">
@@ -157,8 +157,8 @@
 		</ui:define>
 		<ui:param name="showfooter" value="0" />
 	<div>
-	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty tbCase.sideEffects}" />
-	<h:dataTable value="#{tbCase.sideEffects}" var="it" width="100%" styleClass="tabela4" rowClasses="lin1,lin2" rendered="#{not empty tbCase.sideEffects}">
+	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty tbcase.sideEffects}" />
+	<h:dataTable value="#{tbcase.sideEffects}" var="it" width="100%" styleClass="tabela4" rowClasses="lin1,lin2" rendered="#{not empty tbcase.sideEffects}">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />

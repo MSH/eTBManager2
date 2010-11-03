@@ -2,8 +2,6 @@ package org.msh.tb.ke;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -13,11 +11,12 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.msh.mdrtb.entities.CaseRegimen;
 import org.msh.mdrtb.entities.TbCase;
+import org.msh.mdrtb.entities.enums.RegimenPhase;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.ke.entities.CaseDispensing_Ke;
 import org.msh.utils.date.DateUtils;
+import org.msh.utils.date.Period;
 
 
 /**
@@ -53,34 +52,35 @@ public class TreatmentCalendarHome {
 	protected void createPhasesList() {
 		TbCase tbcase = caseHome.getInstance();
 
-		// sort by dates
-		Collections.sort(tbcase.getRegimens(), new Comparator<CaseRegimen>() {
-			public int compare(CaseRegimen p1, CaseRegimen p2) {
-				return p1.getPeriod().getIniDate().compareTo(p2.getPeriod().getIniDate());
-			}
-		});
-
 		phases = new ArrayList<PhaseInfo>();
-		Date dtini = null;
-		for (CaseRegimen cr: tbcase.getRegimens()) {
-			if (cr.isIndividualized()) {
-				if (dtini == null)
-					dtini = cr.getPeriod().getIniDate();
-			}
-			else {
-				PhaseInfo phaseInfo = new PhaseInfo();
-				phaseInfo.setCaseRegimen(cr);
-				if (dtini == null)
-					dtini = cr.getPeriod().getIniDate();
-				phaseInfo.setIniDate(dtini);
-				phaseInfo.setEndDate(cr.getPeriod().getEndDate());
-				phases.add(phaseInfo);
-				
-				dtini = null;
-			}
-		}
+
+		Period p = tbcase.getIntensivePhasePeriod();
+		if (p != null)
+			addPhase(p, RegimenPhase.INTENSIVE);
+		
+		p = tbcase.getContinuousPhasePeriod();
+		if (p != null)
+			addPhase(p, RegimenPhase.CONTINUOUS);			
 	}
 	
+	
+	private PhaseInfo addPhase(Period period, RegimenPhase regimenPhase) {
+		PhaseInfo phaseInfo = null;
+		if (phases.size() > 0)
+			phaseInfo = phases.get(phases.size() - 1);
+		
+		if ((phaseInfo == null) || (!phaseInfo.getRegimenPhase().equals(regimenPhase))) {
+			phaseInfo = new PhaseInfo();
+			phaseInfo.setPeriod(period);
+			phaseInfo.setRegimenPhase(regimenPhase);
+			phases.add(phaseInfo);
+		}
+		else {
+			phaseInfo.getPeriod().setEndDate(period.getEndDate());
+		}
+		
+		return phaseInfo;
+	}
 	
 	/**
 	 * Create list of months for the intensive phase and continuous phase 
@@ -91,17 +91,7 @@ public class TreatmentCalendarHome {
 		createPhasesList();
 
 		for (PhaseInfo pi: phases) {
-			CaseRegimen cr = pi.getCaseRegimen();
-			
-			if (pi.isHasIntensivePhase())
-				createMonths(pi.getMonthsIntensivePhase(), pi.getIniDate(), cr.getPeriodIntPhase().getEndDate()); // getEndIntPhase());
-			if (pi.isHasContinuousPhase()) {
-				Date ini;
-				if (pi.isHasIntensivePhase())
-					 ini = cr.getIniContPhase();
-				else ini = pi.getIniDate();
-				createMonths(pi.getMonthsContinuousPhase(), ini, cr.getPeriodContPhase().getEndDate()); // cr.getEndContPhase());
-			}
+			createMonths(pi.getMonths(), pi.getPeriod().getIniDate(), pi.getPeriod().getEndDate());
 		}
 		
 		mountPlanned();
@@ -202,21 +192,17 @@ public class TreatmentCalendarHome {
 	 * Fill calendar with planned prescription days 
 	 */
 	protected void mountPlanned() {
-		for (CaseRegimen caseReg: caseHome.getInstance().getRegimens()) {
-			Date inidt = caseReg.getPeriod().getIniDate();
-			Date enddt = caseReg.getPeriod().getEndDate();
+		TbCase tbcase = caseHome.getInstance();
+		Date inidt = tbcase.getTreatmentPeriod().getIniDate();
+		Date enddt = tbcase.getTreatmentPeriod().getEndDate();
 
-			System.out.println("inidt == "+inidt);
-			System.out.println("enddt == "+enddt);
-			
-			while (!inidt.after(enddt)) {
-				DayInfo dayInfo = getDay(inidt);
-				if (dayInfo != null) {
-					if (caseReg.isDayPrescription(inidt))
-						dayInfo.setPrescribed(true);
-				}
-				inidt = DateUtils.incDays(inidt, 1);
+		while (!inidt.after(enddt)) {
+			DayInfo dayInfo = getDay(inidt);
+			if (dayInfo != null) {
+				if (tbcase.isDayPrescription(inidt))
+					dayInfo.setPrescribed(true);
 			}
+			inidt = DateUtils.incDays(inidt, 1);
 		}
 	}
 	
@@ -259,64 +245,45 @@ public class TreatmentCalendarHome {
 	 *
 	 */
 	public class PhaseInfo {
-		private List<MonthInfo> monthsIntensivePhase = new ArrayList<MonthInfo>();
-		private List<MonthInfo> monthsContinuousPhase = new ArrayList<MonthInfo>();
-		private CaseRegimen caseRegimen;
-		private Date iniDate;
-		private Date endDate;
+		private List<MonthInfo> months = new ArrayList<MonthInfo>();
+		private RegimenPhase regimenPhase;
+		private Period period = new Period();
+
 		/**
-		 * Check if a case regimen is individualized
-		 * @return
+		 * Is intensive phase ?
+		 * @return true if is intensive phase
 		 */
-		public boolean isIndividualized() {
-			return caseRegimen.getRegimen() == null;
+		public boolean isIntensivePhase() {
+			return regimenPhase.equals(RegimenPhase.INTENSIVE); 
+		}
+
+		/**
+		 * Is continuous phase ?
+		 * @return true if so
+		 */
+		public boolean isContinuousPhase() {
+			return regimenPhase.equals(RegimenPhase.CONTINUOUS); 
 		}
 		
-		/**
-		 * Check if has the intensive phase data
-		 * @return
-		 */
-		public boolean isHasIntensivePhase() {
-			return caseRegimen.isHasIntensivePhase();
-		}
-		
-		/**
-		 * Check if has the continuous phase data
-		 * @return
-		 */
-		public boolean isHasContinuousPhase() {
-			return caseRegimen.isHasContinuousPhase();
+		public List<MonthInfo> getMonths() {
+			return months;
 		}
 
-		public CaseRegimen getCaseRegimen() {
-			return caseRegimen;
-		}
-		public void setCaseRegimen(CaseRegimen caseRegimen) {
-			this.caseRegimen = caseRegimen;
+		public Period getPeriod() {
+			return period;
 		}
 
-		public List<MonthInfo> getMonthsIntensivePhase() {
-			return monthsIntensivePhase;
+		public void setPeriod(Period period) {
+			this.period = period;
 		}
 
-		public List<MonthInfo> getMonthsContinuousPhase() {
-			return monthsContinuousPhase;
+		public RegimenPhase getRegimenPhase() {
+			return regimenPhase;
 		}
 
-		public Date getIniDate() {
-			return iniDate;
+		public void setRegimenPhase(RegimenPhase regimenPhase) {
+			this.regimenPhase = regimenPhase;
 		}
 
-		public void setIniDate(Date iniDate) {
-			this.iniDate = iniDate;
-		}
-
-		public Date getEndDate() {
-			return endDate;
-		}
-
-		public void setEndDate(Date endDate) {
-			this.endDate = endDate;
-		}
 	}
 }

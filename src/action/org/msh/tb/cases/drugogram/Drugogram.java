@@ -222,29 +222,7 @@ public class Drugogram {
 				dt = DateUtils.incMonths(dt, 1);
 			}
 		}
-		
-/*		for (CaseRegimen reg: tbcase.getRegimens()) {
-			Date dt = reg.getIniDate();
-			Date dtEnd = reg.getEndDate();
-
-			while (dt.before(dtEnd)) {
-				DrugogramItem item = findItemByDate(dt);
-
-				item.setMonthTreatment(tbcase.getMonthTreatment(dt));
-				
-				for (PrescribedMedicine presc: reg.getMedicines()) {
-					Medicine med = presc.getMedicine();
-					List<String> subs = getSubstancesAbbrevName(med);
-					for (String subName: subs) {
-						SubstanceItem sub = item.findSubstance(subName);
-						sub.setPrescribed(true);						
-					}
-				}
-
-				dt = DateUtils.incMonths(dt, 1);
-			}
-		}
-*/	}
+	}
 	
 	
 	/**

@@ -45,7 +45,7 @@ public class ExamHome<E> extends EntityHomeEx<E> {
 	 * @return
 	 */
 	public String getResultsHQL() {
-		String hql = "from " + getEntityClass().getSimpleName() + " exam where exam.tbcase.id = #{tbCase.id}";
+		String hql = "from " + getEntityClass().getSimpleName() + " exam where exam.tbcase.id = #{tbcase.id}";
 		
 		if (lastResult)
 			hql = hql.concat(" and exam.date = (select max(aux.date) " +

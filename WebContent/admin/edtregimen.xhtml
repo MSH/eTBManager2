@@ -29,11 +29,10 @@
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml">
-        <h:selectBooleanCheckbox value="#{regimen.tbTreatment}" />#{messages['cases.treat.tb']}
-    </s:decorate>
-
-    <s:decorate template="/layout/edit.xhtml">
-        <h:selectBooleanCheckbox value="#{regimen.mdrTreatment}" />#{messages['cases.treat.mdr']}
+    	<ui:define name="label">#{messages['Regimen.caseClassification']}:</ui:define>
+    	<h:selectOneMenu value="#{regimen.caseClassification}" required="true">
+    		<s:selectItems value="#{globalLists.caseClassifications}" var="c" label="#{messages[c.key]}" noSelectionLabel="-"/>
+    	</h:selectOneMenu>
     </s:decorate>
 
 	<div style="margin-top:10px;margin-bottom:4px;">

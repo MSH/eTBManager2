@@ -70,10 +70,16 @@ public class TbCase implements Serializable{
 	private Integer age;
 
 	@NotNull
-	@Temporal(TemporalType.DATE) private Date registrationDate;
-	@Temporal(TemporalType.DATE) private Date diagnosisDate;
-	@Temporal(TemporalType.DATE) private Date outcomeDate;
+	@Temporal(TemporalType.DATE) 
+	private Date registrationDate;
+	
+	@Temporal(TemporalType.DATE) 
+	private Date diagnosisDate;
+	
+	@Temporal(TemporalType.DATE) 
+	private Date outcomeDate;
 
+	// Treatment information
 	@Embedded
 	@AttributeOverrides({
 		@AttributeOverride(name="iniDate", column=@Column(name="iniTreatmentDate")),
@@ -81,6 +87,25 @@ public class TbCase implements Serializable{
 	})
 	private Period treatmentPeriod = new Period();
 	
+	@Temporal(TemporalType.DATE)
+	private Date iniContinuousPhase; 
+
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="REGIMEN_ID")
+	private Regimen regimen;
+
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="TREATMENT_UNIT_ID")
+	private Tbunit treatmentUnit;
+	
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	private List<TreatmentHealthUnit> healthUnits = new ArrayList<TreatmentHealthUnit>();
+
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	private List<PrescribedMedicine> prescribedMedicines = new ArrayList<PrescribedMedicine>();
+
+
+
 	@NotNull
 	private CaseState state;
 	
@@ -177,13 +202,6 @@ public class TbCase implements Serializable{
 	@ManyToMany(cascade={CascadeType.ALL})
 	@JoinTable(name="CASE_COMORBIDITIES")
 	private List<FieldValue> comorbidities = new ArrayList<FieldValue>();
-
-
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbCase")
-	private List<CaseRegimen> regimens = new ArrayList<CaseRegimen>();
-	
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbCase")
-	private List<TreatmentHealthUnit> healthUnits = new ArrayList<TreatmentHealthUnit>();
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
 	private List<MedicalExamination> examinations = new ArrayList<MedicalExamination>();
@@ -197,8 +215,6 @@ public class TbCase implements Serializable{
 	@OneToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="tbcase")
 	private List<CaseDispensing> dispensing = new ArrayList<CaseDispensing>();
 	
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
-	private List<PrescribedMedicine> prescribedMedicines = new ArrayList<PrescribedMedicine>();
 
 	/* EXAMS */
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
@@ -235,6 +251,28 @@ public class TbCase implements Serializable{
 		daysTreatPlanned = num;
 	}
 
+	/**
+	 * Returns if the date dt is a day of medicine prescription
+	 * @param dt - Date
+	 * @return true - if it's a day of medicine prescription
+	 */
+	public boolean isDayPrescription(Date dt) {
+		if ((treatmentPeriod == null) || (treatmentPeriod.isEmpty()))
+			return false;
+		
+		if (!treatmentPeriod.isDateInside(dt))
+			return false;
+
+		for (PrescribedMedicine pm: getPrescribedMedicines()) {
+			if (pm.getPeriod().isDateInside(dt)) {
+				WeeklyFrequency wf = pm.getWeeklyFrequency();
+				if (wf.isDateSet(dt))
+					return true;
+			}
+		}
+		
+		return false;
+	}
 
 	/**
 	 * Return number of month of treatment based on the date 
@@ -381,35 +419,6 @@ public class TbCase implements Serializable{
 		else return s;		
 	}
 
-	/**
-	 * returns the beginning intensive phase date
-	 * @return
-	 */
-/*	public Date getIniIntensivePhase() {
-		Date dt = null;
-		for (CaseRegimen r: getRegimens()) {
-			if ((r.getPhase() == RegimenPhase.INTENSIVE) && ((dt == null) || (dt.after(r.getIniDate()))))
-				dt = r.getIniDate();
-		}
-		
-		return dt;
-	}
-*/
-
-	/**
-	 * returns the ending intensive phase date
-	 * @return
-	 */
-/*	public Date getEndingIntensivePhase() {
-		Date dt = null;
-		for (CaseRegimen r: getRegimens()) {
-			if ((r.getPhase() == RegimenPhase.INTENSIVE) && ((dt == null) || (dt.before(r.getEndDate()))))
-				dt = r.getEndDate();
-		}
-		
-		return dt;
-	}
-*/
 	
 	/**
 	 * Check if the case is open
@@ -419,36 +428,34 @@ public class TbCase implements Serializable{
 		return (state != null ? state.ordinal() <=  CaseState.TRANSFERRING.ordinal() : null);
 	}
 
-	/**
-	 * returns the continuous phase beginning date
-	 * @return
-	 */
-/*	public Date getBeginningContinuousPhase() {
-		Date dt = null;
-		for (CaseRegimen r: getRegimens()) {
-			if ((r.getPhase() == RegimenPhase.CONTINUOUS) && ((dt == null) || (dt.after(r.getIniDate()))))
-				dt = r.getIniDate();
-		}
-		
-		return dt;
-	}
-*/
+
 
 	/**
-	 * returns the continuous phase ending date
+	 * Return the treatment period of the intensive phase
 	 * @return
 	 */
-/*	public Date getEndingContinuousPhase() {
-		Date dt = null;
-		for (CaseRegimen r: getRegimens()) {
-			if ((r.getPhase() == RegimenPhase.CONTINUOUS) && ((dt == null) || (dt.before(r.getEndDate()))))
-				dt = r.getEndDate();
-		}
-		
-		return dt;
+	public Period getIntensivePhasePeriod() {
+		if ((treatmentPeriod == null) || (treatmentPeriod.isEmpty()))
+			return null;
+
+		if (iniContinuousPhase != null)
+			 return new Period(treatmentPeriod.getIniDate(), DateUtils.incDays( iniContinuousPhase, -1 ) );
+		else return new Period(treatmentPeriod);
 	}
-*/
-	
+
+
+	/**
+	 * Return the treatment period of the continuous phase
+	 * @return
+	 */
+	public Period getContinuousPhasePeriod() {
+		if ((iniContinuousPhase == null) || (treatmentPeriod == null) || (treatmentPeriod.isEmpty()))
+			return null;
+
+		return new Period(iniContinuousPhase, treatmentPeriod.getEndDate());
+	}
+
+
 	/**
 	 * Returns patient age at the date of the notification
 	 * @return
@@ -471,13 +478,6 @@ public class TbCase implements Serializable{
 		return DateUtils.yearsBetween(dt, dt2);
 	}
 
-	public List<CaseRegimen> getRegimens() {
-		return regimens;
-	}
-
-	public void setRegimens(List<CaseRegimen> regimens) {
-		this.regimens = regimens;
-	}
 
 	public Integer getCaseNumber() {
 		return caseNumber;
@@ -1066,5 +1066,53 @@ public class TbCase implements Serializable{
 
 	public void setExamsDST(List<ExamDST> examsDST) {
 		this.examsDST = examsDST;
+	}
+
+
+	/**
+	 * @return the iniContinuousPhase
+	 */
+	public Date getIniContinuousPhase() {
+		return iniContinuousPhase;
+	}
+
+
+	/**
+	 * @param iniContinuousPhase the iniContinuousPhase to set
+	 */
+	public void setIniContinuousPhase(Date iniContinuousPhase) {
+		this.iniContinuousPhase = iniContinuousPhase;
+	}
+
+
+	/**
+	 * @return the regimen
+	 */
+	public Regimen getRegimen() {
+		return regimen;
+	}
+
+
+	/**
+	 * @param regimen the regimen to set
+	 */
+	public void setRegimen(Regimen regimen) {
+		this.regimen = regimen;
+	}
+
+
+	/**
+	 * @return the treatmentUnit
+	 */
+	public Tbunit getTreatmentUnit() {
+		return treatmentUnit;
+	}
+
+
+	/**
+	 * @param treatmentUnit the treatmentUnit to set
+	 */
+	public void setTreatmentUnit(Tbunit treatmentUnit) {
+		this.treatmentUnit = treatmentUnit;
 	}
 }

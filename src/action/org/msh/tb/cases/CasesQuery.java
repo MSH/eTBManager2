@@ -61,10 +61,10 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 				"nu.healthSystem.id = #{userWorkspace.healthSystem.id}"};
 
 	private static final String notifCond = "(nu.id = #{caseFilters.tbunitselection.tbunit.id})";
-	private static final String treatCond = "(exists(select tu.id from TreatmentHealthUnit tu where tu.tbCase.id = c.id and tu.tbunit.id like #{caseFilters.tbunitselection.tbunit.id}))";
+	private static final String treatCond = "(exists(select tu.id from TreatmentHealthUnit tu where tu.tbcase.id = c.id and tu.tbunit.id like #{caseFilters.tbunitselection.tbunit.id}))";
 	
 	private static final String notifRegCond = "(nu.adminUnit.code like #{caseFilters.tbAdminUnitLike})";
-	private static final String treatRegCond = "(exists(select tu.id from TreatmentHealthUnit tu where tu.tbCase.id = c.id and tu.tbunit.adminUnit.code like #{caseFilters.tbAdminUnitLike}))";
+	private static final String treatRegCond = "(exists(select tu.id from TreatmentHealthUnit tu where tu.tbcase.id = c.id and tu.tbunit.adminUnit.code like #{caseFilters.tbAdminUnitLike}))";
 
 	@Override
 	public List<CaseResultItem> getResultList() {

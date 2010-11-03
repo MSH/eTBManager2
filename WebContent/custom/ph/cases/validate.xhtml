@@ -29,7 +29,7 @@
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
-    	<ui:param name="datefield" value="#{tbCase.diagnosisDate}" /> 
+    	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
     </s:decorate>
 
 	<s:decorate template="/layout/edit.xhtml">
@@ -41,7 +41,7 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
-    	<h:selectOneMenu value="#{tbCase.diagnosisType}" required="true">
+    	<h:selectOneMenu value="#{tbcase.diagnosisType}" required="true">
     		<s:selectItems var="it" value="#{diagnosisTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
@@ -49,7 +49,7 @@
 
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
-    		<h:selectOneMenu id="patType" value="#{tbCase.patientType}" required="true">
+    		<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="true">
     			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
     			<s:convertEnum />
     		</h:selectOneMenu>
@@ -60,13 +60,13 @@
 		<div id="patientTypeOther">
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['TbCase.patientTypeOther']}</ui:define>
-    		<h:inputText value="#{tbCase.patientTypeOther}" style="width:200px;" maxlength="100" />
+    		<h:inputText value="#{tbcase.patientTypeOther}" style="width:200px;" maxlength="100" />
 		</s:decorate>
 		</div>
 
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
-    		<h:selectOneMenu id="infectsite" value="#{tbCase.infectionSite}" required="true">
+    		<h:selectOneMenu id="infectsite" value="#{tbcase.infectionSite}" required="true">
     			<s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="-" label="#{messages[it.key]}" />
     			<s:convertEnum />
     		</h:selectOneMenu>
@@ -103,12 +103,12 @@ function isPulmonary(cb) {
 	<div id="extrapul" style="clear:both;">
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
-    		<h:selectOneMenu value="#{tbCase.extrapulmonaryType}" style="margin-right:4px;">
+    		<h:selectOneMenu value="#{tbcase.extrapulmonaryType}" style="margin-right:4px;">
     			<s:selectItems var="it" value="#{fieldsQuery.extrapulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
     			<s:convertEntity />
     		</h:selectOneMenu>
 
-    		<h:selectOneMenu value="#{tbCase.extrapulmonaryType2}">
+    		<h:selectOneMenu value="#{tbcase.extrapulmonaryType2}">
     			<s:selectItems var="it" value="#{fieldsQuery.extrapulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
     			<s:convertEntity />
     		</h:selectOneMenu>
@@ -118,7 +118,7 @@ function isPulmonary(cb) {
 	<div id="pulmonary" style="clear:both;">
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
-    		<h:selectOneMenu value="#{tbCase.pulmonaryType}" style="margin-right:4px;">
+    		<h:selectOneMenu value="#{tbcase.pulmonaryType}" style="margin-right:4px;">
     			<s:selectItems var="it" value="#{fieldsQuery.pulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
     			<s:convertEntity />
     		</h:selectOneMenu>

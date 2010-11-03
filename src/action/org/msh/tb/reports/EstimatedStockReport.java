@@ -154,7 +154,7 @@ public class EstimatedStockReport {
 					"and sp.tbunit.id=#{userSession.tbunit.id} " + 
 					"and sp.medicine.id=d.medicine.id)) " +
 					(reportSelection.getSource() != null? "and d.source.id = #{reportSelection.source.id} ": "") +
-					"and exists(select aux.id from TreatmentHealthUnit aux where aux.tbCase.id=d.tbcase.id and aux.tbunit.id = #{userSession.tbunit.id})")
+					"and exists(select aux.id from TreatmentHealthUnit aux where aux.tbcase.id=d.tbcase.id and aux.tbunit.id = #{userSession.tbunit.id})")
 					.getResultList();
 	}
 

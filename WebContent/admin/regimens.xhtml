@@ -39,20 +39,11 @@
 
   <h:column>
   	<f:facet name="header">
-  		<s:link value="#{messages['cases.treat.tb']}">
-  			<f:param name="order" value="#{regimens.order=='tbTreatment'?'tbTreatment desc':'name'}" />
+  		<s:link value="#{messages['Regimen.caseClassification']}">
+  			<f:param name="order" value="caseClassification#{regimens.order=='caseClassification'?' desc':''}" />
   		</s:link>
   	</f:facet>
-  	<s:div styleClass="checked-icon" rendered="#{r.tbTreatment}" style="margin-left:40px;"/>
-  </h:column>
-
-  <h:column>
-  	<f:facet name="header">
-  		<s:link value="#{messages['cases.treat.mdr']}">
-  			<f:param name="order" value="#{regimens.order=='mdrTreatment'?'mdrTreatment desc':'name'}" />
-  		</s:link>
-  	</f:facet>
-  	<s:div styleClass="checked-icon" rendered="#{r.mdrTreatment}"  style="margin-left:40px;"/>
+  	<h:outputText value="#{messages[r.caseClassification.key]}" />
   </h:column>
 
   <h:column  rendered="#{s:hasRole('REGIMENS_EDT')}">

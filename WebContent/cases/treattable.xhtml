@@ -9,13 +9,13 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 
-	<table class="tabela" width="100%">
+	<table class="tabela4" width="100%" style="margin-bottom:20px">
 	<tr>
 		<th width="150px">
 			#{messages['global.period']}
 		</th>
 		<td style="text-align:center;">
-			<div class="bar-header" style="width:100%;">
+			<div class="bar-header" style="width:100%">
 			<h:outputText value="#{prescriptionTable.period.endDate}" converter="localeDateConverter" style="float:right"/>
 			<h:outputText value="#{prescriptionTable.period.iniDate}" converter="localeDateConverter" style="float:left;"/>
 			<h:outputText value="#{prescriptionTable.period}" converter="periodConverter">
@@ -31,6 +31,29 @@
 				<a:commandLink value="#{messages['cases.regimens.changeperiod']}..." action="#{treatmentHome.startTreatmentPeriodEditing}"
 					 reRender="periodpnl" oncomplete="showPeriodDlg();" rendered="#{editing}"/>
 			</div></div></div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			#{messages['Regimen']}
+		</th>
+		<td>
+			<div class="bar-header" style="width:100%">
+				<div class="bar-caption">
+				#{tbcase.regimen!=null ? (tbcase.regimen.name): messages['regimens.individualized']}
+				</div>
+				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
+					<div style="display:block;clear:both;font-weight:bold;" >
+						#{tbcase.regimen!=null ? (tbcase.regimen.name): messages['regimens.individualized']}
+					</div>
+					<h:outputText value="#{prescriptionTable.period.iniDate}" converter="localeDateConverter" style="float:left;"/>
+					<h:outputText value="#{prescriptionTable.period.endDate}" converter="localeDateConverter" style="float:right;margin-right:16px;"/>
+					<h:outputText value="#{prescriptionTable.period}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">
+						<f:param name="type" value="length"/>
+					</h:outputText>
+				</div></div></div>
+
 			</div>
 		</td>
 	</tr>
@@ -62,34 +85,19 @@
 	</tr>
 	<tr>
 		<th>
-			#{messages['Regimen']}
-		</th>
-		<td>
-			<a:repeat value="#{prescriptionTable.regimens}" var="p">
-				<div class="bar-header"  style="width:#{p.width}%; margin-left:#{p.left}% ">
-				<div class="bar-caption">#{p.item}</div>
-				
-				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
-					<div style="display:block;clear:both;font-weight:bold;">#{p.item}</div>
-					<h:outputText value="#{p.period.iniDate}" converter="localeDateConverter" style="float:left;"/>
-					<h:outputText value="#{p.period.endDate}" converter="localeDateConverter" style="float:right;margin-right:16px;"/>
-					<h:outputText value="#{p.period}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">
-						<f:param name="type" value="length"/>
-					</h:outputText>
-				</div></div></div>
-				
-				</div>
-			</a:repeat>
-		</td>
-	</tr>
-	<tr>
-		<th>
 			#{messages['RegimenPhase']}
 		</th>
 		<td>
 			<a:repeat value="#{prescriptionTable.phases}" var="p">
-				<div class="bar-header"  style="width:#{p.width}%; margin-left:#{p.left}% ">
-				<div class="bar-caption">#{messages[p.item.key]}</div>
+				<div class="bar-header #{p.item=='INTENSIVE'?'intensivephase-bar':'continuousphase-bar'}" 
+					style="width:#{p.width}%; margin-left:#{p.left}% ">
+				<div class="bar-caption">#{messages[p.item.key]}
+					<span style="font-weight:normal">
+						(<h:outputText value="#{p.period}" converter="periodConverter" style="font-weight:normal">
+							<f:param name="type" value="length"/>
+						</h:outputText>)
+					</span>
+				</div>
 				
 				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
 					<div style="display:block;clear:both;font-weight:bold;">#{p.item}</div>
@@ -107,7 +115,7 @@
 	
 	<a:repeat value="#{prescriptionTable.medicines}" var="med">
 	<tr>
-		<td>
+		<td class="colb">
 			#{med.medicine.fullAbbrevName}<br/>
 			#{med.medicine.dosageForm}
 		</td>
