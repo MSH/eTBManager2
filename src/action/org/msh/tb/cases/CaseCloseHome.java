@@ -66,9 +66,12 @@ public class CaseCloseHome extends Controller{
 		}
 		
 		tbcase.setOutcomeDate(date);
-		if ((!tbcase.getTreatmentPeriod().isEmpty()))
-			treatmentHome.cropTreatmentPeriod(new Period(tbcase.getTreatmentPeriod().getIniDate(), date));
-
+		
+		if(tbcase.getTreatmentPeriod()!=null){
+			if ((!tbcase.getTreatmentPeriod().isEmpty()))
+				treatmentHome.cropTreatmentPeriod(new Period(tbcase.getTreatmentPeriod().getIniDate(), date));
+		}
+		
 		tbcase.setState(state);
 		if (state.equals(CaseState.OTHER))
 			 tbcase.setOtherOutcome(comment);
