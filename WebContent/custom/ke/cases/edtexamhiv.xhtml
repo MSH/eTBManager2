@@ -115,7 +115,7 @@
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['cases.details.partnerresult']}:</ui:define>
     	<h:selectOneMenu id="cbpartres" value="#{examHIVKe.partnerResult}" required="false">
-    		<s:selectItems value="#{hivResults_ke}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+    		<s:selectItems value="#{partnerHIVResult}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
     		<s:convertEnum />
     	</h:selectOneMenu>
     </s:decorate>

@@ -64,7 +64,7 @@
 		</td></tr>
 		<tr><td>
 			<s:decorate template="/layout/display.xhtml">
-				<ui:define name="label">#{messages['MedAppointmentType']}:</ui:define>
+ 				<ui:define name="label">#{messages['MedAppointmentType']}:</ui:define>
 				#{messages[r.appointmentType.key]}
 			</s:decorate>		
 		</td></tr>
@@ -76,7 +76,9 @@
 			</s:decorate>
 		</td></tr>
 		</s:fragment>
-		<tr><td>
+		<s:fragment rendered="#{not empty r.patientRefBy || not empty r.patientRefTo}">
+		<tr>
+		<td>
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['MedicalExamination.ReferredBy']}:</ui:define>
 				#{messages[r.patientRefBy.key]}
@@ -87,7 +89,9 @@
 				<ui:define name="label">#{messages['MedicalExamination.ReferredTo']}:</ui:define>
 				#{messages[r.patientRefTo.key]}
 			</s:decorate>		
-		</td></tr>
+		</td>
+		</tr>
+		</s:fragment>
 		</table>
 		
 		

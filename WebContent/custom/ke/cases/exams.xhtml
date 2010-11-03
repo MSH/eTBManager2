@@ -18,7 +18,7 @@
 			<b>#{messages['cases.examhiv']}</b>
 		</ui:define>
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examHIVHome.allResults}" />
+		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examHIVHomeKe.allResults}" />
 		<div>
 		<h:dataTable value="#{examHIVHomeKe.allResults}" var="r" rendered="#{not empty examHIVHomeKe.allResults}" 
 			width="100%" styleClass="tabela4" columnClasses="colcb,colcb,colb,colb,colb">
