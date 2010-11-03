@@ -14,6 +14,7 @@ import org.msh.mdrtb.entities.enums.MedAppointmentType;
 import org.msh.mdrtb.entities.enums.ReferredBy;
 import org.msh.mdrtb.entities.enums.ReferredTo;
 import org.msh.mdrtb.entities.enums.YesNoType;
+import org.msh.tb.bd.entities.enums.DotProvider;
 
 /**
  *
@@ -87,6 +88,11 @@ public class MedicalExamination extends CaseData implements Serializable {
 	
 	//end used for kenya workspace
 
+	private DotProvider dotType;
+	
+	@Column(length=100)
+	private String dotProvName;
+	
 	
 	public String getSurgicalProcedureDesc() {
 		return surgicalProcedureDesc;
@@ -335,5 +341,23 @@ public class MedicalExamination extends CaseData implements Serializable {
 
 	public void setNutrtnSupport(YesNoType nutrtnSupport) {
 		this.nutrtnSupport = nutrtnSupport;
-	}		
+	}
+
+	public DotProvider getDotType() {
+		return dotType;
+	}
+
+	public void setDotType(DotProvider dotType) {
+		this.dotType = dotType;
+	}
+
+	public String getDotProvName() {
+		return dotProvName;
+	}
+
+	public void setDotProvName(String dotProvName) {
+		this.dotProvName = dotProvName;
+	}
+	
+	
 }
