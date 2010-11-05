@@ -313,9 +313,15 @@ public class GlobalLists {
 		return lst;
 	}
 
+	private static final Nationality nationalities[] = {
+		Nationality.FOREIGN,
+		Nationality.NATIVE
+	};
+	
+	
 	@Factory("nationalities")
 	public Nationality[] getNationalities() {
-		return Nationality.values();
+		return nationalities;
 	}
 	
 	@Factory("patientTypes")
