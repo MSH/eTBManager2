@@ -234,7 +234,7 @@ public class FieldsQuery {
 	}
 	
 	public List<FieldValue> getMicrobacterioses() {
-		field = TbField.MICROBACTERIOSE;
+		field = TbField.MICOBACTERIOSE;
 		return getValues();
 	}
 	
