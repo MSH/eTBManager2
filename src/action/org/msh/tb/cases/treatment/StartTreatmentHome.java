@@ -10,12 +10,10 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.msh.mdrtb.entities.Regimen;
 import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.TreatmentHealthUnit;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
-import org.msh.utils.date.Period;
 
 
 /**
@@ -58,25 +56,18 @@ public class StartTreatmentHome {
 
 		TbCase tbcase = caseHome.getInstance();
 		
-		if (!CaseState.WAITING_TREATMENT.equals(tbcase.getState())) {
+		if (!CaseState.WAITING_TREATMENT.equals(tbcase.getState()))
 			return "error";
-		}
 
+		entityManager.createQuery("delete from PrescribedMedicine pm where pm.tbcase.id = " + tbcase.getId()).executeUpdate();
+		entityManager.createQuery("delete from TreatmentHealthUnit hu where hu.tbcase.id = " + tbcase.getId()).executeUpdate();
+		
 		caseRegimenHome.setUseDefaultDoseUnit(false);
-		caseRegimenHome.applyRegimen(iniTreatmentDate, endTreatmentDate, false); 
+		caseRegimenHome.startNewRegimen(iniTreatmentDate, endTreatmentDate, tbunitselection.getTbunit()); 
 
 		// initialize case data
 		tbcase.setState(CaseState.ONTREATMENT);
 
-		// initialize treatment health unit
-		TreatmentHealthUnit hu = new TreatmentHealthUnit();
-		hu.setPeriod(new Period(tbcase.getTreatmentPeriod()));
-		hu.setTbCase(tbcase);
-		hu.setTbunit(tbunitselection.getTbunit());
-		hu.setTransferring(false);
-		tbcase.getHealthUnits().clear();
-		tbcase.getHealthUnits().add(hu);
-		
 		if (saveChages)
 			caseHome.persist();
 		

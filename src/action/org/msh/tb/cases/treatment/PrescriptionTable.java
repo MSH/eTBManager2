@@ -6,8 +6,10 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.msh.mdrtb.entities.Medicine;
 import org.msh.mdrtb.entities.PrescribedMedicine;
 import org.msh.mdrtb.entities.TbCase;
@@ -24,6 +26,7 @@ import org.msh.utils.date.Period;
  *
  */
 @Name("prescriptionTable")
+@Scope(ScopeType.CONVERSATION)
 public class PrescriptionTable {
 
 	@In(required=true) CaseHome caseHome;
@@ -99,12 +102,12 @@ public class PrescriptionTable {
 		if (item == null)
 			return false;
 
+		period = item.getPeriod();
 		healthUnits.add( new TreatmentPeriod(this, item, item.getPeriod()) );
 		
 		numDaysTreatment = period.getDays();
 		updateListValues(healthUnits);
 		
-		period = item.getPeriod();
 		if (tbcase.getIntensivePhasePeriod() != null) {
 			intensivePhasePeriod = new Period(period);
 			intensivePhasePeriod.intersect( tbcase.getIntensivePhasePeriod() );

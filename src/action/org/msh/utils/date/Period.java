@@ -221,6 +221,18 @@ public class Period {
 
 	
 	/**
+	 * Check if the period is totally inside the given period
+	 * @param p outer period
+	 * @return true if period is inside period p
+	 */
+	public boolean isInside(Period p) {
+		if (isEmpty())
+			return false;
+		
+		return ((!iniDate.before(p.getIniDate())) && (!endDate.after(p.getEndDate())));
+	}
+	
+	/**
 	 * Initialize the period from an existing period
 	 * @param p
 	 */

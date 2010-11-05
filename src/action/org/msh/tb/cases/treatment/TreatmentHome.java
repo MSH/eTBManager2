@@ -1,21 +1,25 @@
 package org.msh.tb.cases.treatment;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.mdrtb.entities.PrescribedMedicine;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.TreatmentHealthUnit;
 import org.msh.mdrtb.entities.enums.CaseState;
+import org.msh.mdrtb.entities.enums.RegimenPhase;
+import org.msh.tb.SourcesQuery;
 import org.msh.tb.cases.CaseHome;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
@@ -28,8 +32,8 @@ public class TreatmentHome {
 	public enum FormEditing {	NONE, TREATMENT, HEALTHUNIT, REGIMEN, MEDICINE; 	}
 
 	@In(required=true) CaseHome caseHome;
-	@In(required=false) PrescriptionTable prescriptionTable;
 	@In(create=true) CaseRegimenHome caseRegimenHome;
+	@In(create=true) PrescribedMedicineHome prescribedMedicineHome;
 	@In(create=true) FacesMessages facesMessages;
 	@In EntityManager entityManager;
 	
@@ -37,18 +41,10 @@ public class TreatmentHome {
 	private Date endDate;
 	private Date iniContinuousPhase;
 	
-	private List<Date> prescriptionChanges;
-
-	/**
-	 * Period been edited
-	 */
-	private Period period;
+	private List<SelectItem> months;
+	private List<SelectItem> iniMonths;
+	private List<SelectItem> doses;
 	
-	/**
-	 * Check if initial date can be changed 
-	 */
-	private boolean canChangeIniDate;
-
 	/**
 	 * Return to the UI if there is any validation problem during ajax requests
 	 */
@@ -57,15 +53,26 @@ public class TreatmentHome {
 	private TreatmentHealthUnit healthUnit;
 	private FormEditing formEditing;
 	
-	
-	
+
 	/**
-	 * Save changes to the treatment
+	 * Initialize editing of the treatment
+	 */
+	public void initializeEditing() {
+		PrescriptionTable tbl = getPrescriptionTable();
+		tbl.setEditing(true);
+		tbl.refresh();
+		TbCase tbcase = caseHome.getInstance();
+		if (tbcase.getIniContinuousPhase() != null)
+			prescribedMedicineHome.splitPeriod(tbcase.getIniContinuousPhase());
+	}
+
+
+	/**
+	 * Save changes made to the treatment and finish editing
 	 * @return
 	 */
 	public String saveChanges() {
-		if (prescriptionTable != null)
-			prescriptionTable.refresh();
+		getPrescriptionTable().refresh();
 
 		caseHome.getInstance().updateDaysTreatPlanned();
 		return caseHome.persist();
@@ -78,36 +85,15 @@ public class TreatmentHome {
 	public void startTreatmentPeriodEditing() {
 		TbCase tbcase = caseHome.getInstance();
 
-		List<TreatmentHealthUnit> lst = tbcase.getSortedTreatmentHealthUnits();
+		healthUnit = tbcase.getHealthUnits().get( tbcase.getHealthUnits().size() - 1 );
 
-		healthUnit = lst.get(lst.size() - 1);
-		
-		// ini treatment date can only be changed if there is only one treatment health unit
-		canChangeIniDate = lst.size() == 1;
-		
 		iniDate = tbcase.getTreatmentPeriod().getIniDate();
 		endDate = healthUnit.getPeriod().getEndDate();
+		iniContinuousPhase = tbcase.getIniContinuousPhase();
 		
 		formEditing = FormEditing.TREATMENT;
 	}
 	
-	
-	/**
-	 * Start editing of health unit properties
-	 * @param hu
-	 */
-	public void startHealthUnitEditing(TreatmentHealthUnit hu) {
-		healthUnit = hu;
-		TbCase tbcase = caseHome.getInstance();
-
-		List<TreatmentHealthUnit> lst = tbcase.getSortedTreatmentHealthUnits();
-		canChangeIniDate = lst.indexOf(hu) == 0;
-		
-		iniDate = hu.getPeriod().getIniDate();
-		endDate = hu.getPeriod().getEndDate();
-		
-		formEditing = FormEditing.HEALTHUNIT;
-	}
 
 
 	/**
@@ -118,20 +104,23 @@ public class TreatmentHome {
 		
 		if (!validated)
 			return;
-
-		if (canChangeIniDate) {
-			healthUnit.getPeriod().setIniDate(iniDate);
-			TbCase tbcase = caseHome.getInstance();
-			tbcase.getTreatmentPeriod().setIniDate(iniDate);
-		}
 		
-		healthUnit.getPeriod().setEndDate(endDate);
+		TbCase tbcase = caseHome.getInstance();
+		
+		Period intPeriod = new Period(iniDate, DateUtils.incDays(iniContinuousPhase, -1));
+		Period conPeriod = new Period(iniContinuousPhase, endDate);
+
+		prescribedMedicineHome.adjustPhasePeriod(RegimenPhase.INTENSIVE, intPeriod);
+		prescribedMedicineHome.adjustPhasePeriod(RegimenPhase.CONTINUOUS, conPeriod);
+		
+		Period p = new Period(iniDate, endDate);
+		healthUnit.setPeriod(p);
+		
+		tbcase.setTreatmentPeriod(p);
+		tbcase.setIniContinuousPhase(iniContinuousPhase);
+
 		formEditing = FormEditing.NONE;
-
-		if (prescriptionTable != null)
-			prescriptionTable.refresh();
-		
-		cropTreatmentPeriod(caseHome.getInstance().getTreatmentPeriod());
+		getPrescriptionTable().refresh();
 	}
 
 	
@@ -140,6 +129,7 @@ public class TreatmentHome {
 	 */
 	public void startRegimenChange() {
 		formEditing = FormEditing.REGIMEN;
+		caseRegimenHome.setRegimen(null);
 	}
 
 
@@ -147,18 +137,100 @@ public class TreatmentHome {
 	 * Change the treatment regimen
 	 */
 	public void endRegimenChange() {
-		Date dt = caseHome.getInstance().getTreatmentPeriod().getIniDate();
-		caseRegimenHome.setErasePreviousRegimen(true);
-		caseRegimenHome.applyRegimen(dt, null, true);
-		caseHome.persist();
+		TbCase tbcase = caseHome.getInstance();
+		Date dt = tbcase.getTreatmentPeriod().getIniDate();
+		caseRegimenHome.setUseDefaultDoseUnit(false);
+		caseRegimenHome.applyRegimen(dt, null);
+		tbcase.setRegimen(caseRegimenHome.getRegimen());
+		//caseHome.persist();
 		
 		formEditing = FormEditing.NONE;
+		validated = true;
+
+		getPrescriptionTable().refresh();
 	}
+
+
+	/**
+	 * Start entering a new prescription period
+	 */
+	public void startAddMedicine() {
+		PrescribedMedicine pm = new PrescribedMedicine();
+		Contexts.getConversationContext().set("prescribedMedicine", pm);
+
+		// check the initial treatment date for individualized regimen
+		TbCase tbcase = caseHome.getInstance();
+		Period p = tbcase.getTreatmentPeriod();
+		pm.setTbcase(tbcase);
+		if (p == null) {
+			p = new Period();
+			caseHome.getInstance().setTreatmentPeriod(p);
+		}
+
+		if (p.getIniDate() == null) 
+			p.setIniDate(new Date());
+		if (p.getEndDate() == null)
+			p.setEndDate(new Date());
+
+		formEditing = FormEditing.MEDICINE;
+		validated = false;
+	}
+
+	/**
+	 * Start editing an existing prescription period
+	 * @param pm
+	 */
+	public void startEditingMedicine(PrescribedMedicine pm) {
+		Contexts.getConversationContext().set("prescribedMedicine", pm);
+		formEditing = FormEditing.MEDICINE;
+		validated = false;
+	}
+
+
+	/**
+	 * Add a medicine to the prescription of the case
+	 */
+	public void endMedicineEditing() {
+		validated = false;
+		
+		TbCase tbcase = caseHome.getInstance();
+		
+		PrescribedMedicine pm = (PrescribedMedicine)Contexts.getConversationContext().get("prescribedMedicine");
+		
+		if (pm.getSource() == null) {
+			SourcesQuery sources = (SourcesQuery)Component.getInstance("sources");
+			if (sources.isSingleResult())
+				pm.setSource(sources.getResultList().get(0));
+			else return;
+		}
+
+		if (!checkDateBasicRules(pm.getPeriod().getIniDate(), pm.getPeriod().getEndDate()))
+			return;
+		
+		if (pm.getPeriod().getIniDate().before(tbcase.getTreatmentPeriod().getIniDate())) {
+			facesMessages.addToControlFromResourceBundle("edtIniDate", "javax.faces.component.UIInput.REQUIRED");
+			return;
+		}
+
+		prescribedMedicineHome.removePeriod(pm.getPeriod(), pm.getMedicine());
+		if (!tbcase.getPrescribedMedicines().contains(pm)) {
+			pm.setTbcase(tbcase);
+			tbcase.getPrescribedMedicines().add(pm);
+		}
+		
+		validated = true;
+		formEditing = FormEditing.NONE;
+
+		getPrescriptionTable().refresh();
+	}
+
+
+	
 	
 	/**
 	 * Create list of dates indicating the changes in the medicine prescription
 	 */
-	private void createListMedicineChanges() {
+/*	private void createListMedicineChanges() {
 		prescriptionChanges = new ArrayList<Date>();
 		
 		TbCase tbcase = caseHome.getInstance();
@@ -176,12 +248,12 @@ public class TreatmentHome {
 		}
 		Collections.sort(prescriptionChanges);
 	}
-	
+*/	
 
 	/**
 	 * Initialize the period been edited
 	 */
-	public void initializePeriod() {
+/*	public void initializePeriod() {
 		TbCase tbcase = caseHome.getInstance();
 		
 		if (tbcase.getHealthUnits().size() == 0)
@@ -191,7 +263,7 @@ public class TreatmentHome {
 			 period = tbcase.getHealthUnits().get(tbcase.getHealthUnits().size() - 1).getPeriod();
 		else period = tbcase.getTreatmentPeriod();
 	}
-
+*/
 
 	/** 
 	 * Crop the treatment period according to the new period
@@ -294,11 +366,6 @@ public class TreatmentHome {
 	}
 
 
-	public boolean isCanChangeIniDate() {
-		return canChangeIniDate;
-	}
-
-
 	public boolean isValidated() {
 		return validated;
 	}
@@ -319,19 +386,19 @@ public class TreatmentHome {
 	 * Return list of changes in the medicine prescription 
 	 * @return
 	 */
-	public List<Date> getPrescriptionChanges() {
+/*	public List<Date> getPrescriptionChanges() {
 		if (prescriptionChanges == null)
 			createListMedicineChanges();
 		return prescriptionChanges;
 	}
+*/
 
-
-	public Period getPeriod() {
+/*	public Period getPeriod() {
 		if (period == null)
 			initializePeriod();
 		return period;
 	}
-
+*/
 
 	/**
 	 * @return the iniContinuousPhase
@@ -346,5 +413,60 @@ public class TreatmentHome {
 	 */
 	public void setIniContinuousPhase(Date iniContinuousPhase) {
 		this.iniContinuousPhase = iniContinuousPhase;
+	}
+
+	/**
+	 * Return the list of months as options for the user
+	 * @return
+	 */
+	public List<SelectItem> getMonths() {
+		if (months == null) {
+			months = new ArrayList<SelectItem>();
+			for (int i = 1; i <= 24; i++) {
+				months.add(new SelectItem(i, Integer.toString(i)));
+			}
+		}
+		return months;
+	}
+
+
+	/**
+	 * Return the list of months as options for the user
+	 * @return
+	 */
+	public List<SelectItem> getIniMonths() {
+		if (iniMonths == null) {
+			iniMonths = new ArrayList<SelectItem>();
+			for (int i = 0; i < 24; i++) {
+				iniMonths.add(new SelectItem(i, Integer.toString(i + 1)));
+			}
+		}
+		return iniMonths;
+	}
+
+
+	/**
+	 * Return the options for the dose unit during prescription
+	 * @return
+	 */
+	public List<SelectItem> getDoses() {
+		if (doses == null) {
+			doses = new ArrayList<SelectItem>();
+			doses.add(new SelectItem(null, "-"));
+			for (int i = 1; i <= 10; i++) {
+				doses.add(new SelectItem(i, Integer.toString(i)));
+			}
+		}
+
+		return doses;
+	}
+
+	
+	/**
+	 * Return a reference to a prescription table component
+	 * @return
+	 */
+	protected PrescriptionTable getPrescriptionTable() {
+		return (PrescriptionTable)Component.getInstance("prescriptionTable", true);
 	}
 }

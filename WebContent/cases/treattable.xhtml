@@ -9,6 +9,12 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 
+	<s:decorate template="/layout/display.xhtml" rendered="#{not editing}" style="padding-top:5px;padding-bottom:5px;">
+		<ui:param name="labelstyle" value="width:150px;" />
+		<ui:define name="label">#{messages['Regimen']}:</ui:define>
+		#{tbcase.regimen!=null ? (tbcase.regimen.name): messages['regimens.individualized']}
+	</s:decorate>
+	
 	<table class="tabela4" width="100%" style="margin-bottom:20px">
 	<tr>
 		<th width="150px">
@@ -28,32 +34,7 @@
 				<h:outputText value="#{prescriptionTable.period}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">
 					<f:param name="type" value="length"/>
 				</h:outputText>
-				<a:commandLink value="#{messages['cases.regimens.changeperiod']}..." action="#{treatmentHome.startTreatmentPeriodEditing}"
-					 reRender="periodpnl" oncomplete="showPeriodDlg();" rendered="#{editing}"/>
 			</div></div></div>
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<th>
-			#{messages['Regimen']}
-		</th>
-		<td>
-			<div class="bar-header" style="width:100%">
-				<div class="bar-caption">
-				#{tbcase.regimen!=null ? (tbcase.regimen.name): messages['regimens.individualized']}
-				</div>
-				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
-					<div style="display:block;clear:both;font-weight:bold;" >
-						#{tbcase.regimen!=null ? (tbcase.regimen.name): messages['regimens.individualized']}
-					</div>
-					<h:outputText value="#{prescriptionTable.period.iniDate}" converter="localeDateConverter" style="float:left;"/>
-					<h:outputText value="#{prescriptionTable.period.endDate}" converter="localeDateConverter" style="float:right;margin-right:16px;"/>
-					<h:outputText value="#{prescriptionTable.period}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">
-						<f:param name="type" value="length"/>
-					</h:outputText>
-				</div></div></div>
-
 			</div>
 		</td>
 	</tr>
@@ -73,10 +54,6 @@
 					<h:outputText value="#{p.period}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">
 						<f:param name="type" value="length"/>
 					</h:outputText>
-					<s:fragment rendered="#{editing}">
-						<a:commandLink value="#{messages['form.edit']}..." style="display:block;clear:both;"/>
-						<a:commandLink value="#{messages['form.remove']}" />
-					</s:fragment>
 				</div></div></div>
 				
 				</div>
@@ -100,7 +77,7 @@
 				</div>
 				
 				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
-					<div style="display:block;clear:both;font-weight:bold;">#{p.item}</div>
+					<div style="display:block;clear:both;font-weight:bold;">#{messages[p.item.key]}</div>
 					<h:outputText value="#{p.period.iniDate}" converter="localeDateConverter" style="float:left;"/>
 					<h:outputText value="#{p.period.endDate}" converter="localeDateConverter" style="float:right;margin-right:16px;"/>
 					<h:outputText value="#{p.period}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">

@@ -19,13 +19,22 @@ inicontinuousphase = (select cr.inicontphase
 from CaseRegimen cr where cr.case_id = TbCase.id
 and cr.inidate = tbcase.initreatmentdate limit 1);
 
+update PrescribedMedicine
+set inidate = cast(inidate as date),
+enddate = cast(enddate as date);
+
+ALTER TABLE PrescribedMedicine MODIFY COLUMN `IniDate` DATE NOT NULL,
+ MODIFY COLUMN `EndDate` DATE NOT NULL;
+
+
 update TbCase
-set inicontinuousphase = (select min(cast(pm.inidate as date))
+set inicontinuousphase = (select min(pm.inidate)
 from PrescribedMedicine pm
 where pm.case_id = TbCase.id
 and pm.inidate > TbCase.initreatmentdate)
 where inicontinuousphase is null
 and initreatmentdate is not null;
+
 
 update TbCase
 set inicontinuousphase = date_add(initreatmentdate, interval (select max(monthstreatment)

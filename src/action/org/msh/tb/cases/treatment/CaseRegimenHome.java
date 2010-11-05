@@ -15,6 +15,8 @@ import org.msh.mdrtb.entities.MedicineRegimen;
 import org.msh.mdrtb.entities.PrescribedMedicine;
 import org.msh.mdrtb.entities.Regimen;
 import org.msh.mdrtb.entities.TbCase;
+import org.msh.mdrtb.entities.Tbunit;
+import org.msh.mdrtb.entities.TreatmentHealthUnit;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.RegimenPhase;
 import org.msh.tb.RegimensQuery;
@@ -39,11 +41,6 @@ public class CaseRegimenHome {
 	private List<Regimen> availableRegimens;
 	
 	/**
-	 * If there is already a regimen under treatment, indicates if the previous regimen will be preserved (period outside the new regimen period) 
-	 */
-	private boolean erasePreviousRegimen;
-	
-	/**
 	 * If true, the default dose unit defined in the regimen will be used when creating the prescribed medicines of the case
 	 */
 	private boolean useDefaultDoseUnit;
@@ -53,7 +50,8 @@ public class CaseRegimenHome {
 	 */
 	private List<TreatmentPhase> phases;
 	
-	
+
+
 	/**
 	 * Apply a regimen to a case. If the case has already a regimen specified, the property preserveOuterPeriods will be
 	 * used to indicate if any outer period of treatment will be preserved or erased
@@ -61,18 +59,72 @@ public class CaseRegimenHome {
 	 * @param endDate final date of the regimen. If not informed, the end of the regimen will be considered
 	 * @param useDefaultDoses if true, the default doses specified in the regimen will be used
 	 */
-	public void applyRegimen(Date iniDate, Date endDate, boolean useDefaultDoses) {
+	public void applyRegimen(Date iniDate, Date endDate) {
 		if (regimen == null)
 			throw new RuntimeException("Regimen was not defined");
+
+		TbCase tbcase = caseHome.getInstance();
+
+		// remove all medicines from the initial date
+		Period remPeriod = new Period(iniDate, tbcase.getTreatmentPeriod().getEndDate());
+		prescribedMedicineHome.removePeriod(remPeriod, null);
 		
-		if (erasePreviousRegimen)
-			erasePrescribedMedicines();
+		Date dt = addMedicinesRegimen(regimen, iniDate, endDate);
+		if ((endDate == null) || (dt.before(endDate)))
+			endDate = dt;
 		
-		int monthsIntPhase = regimen.getMonthsPhase(RegimenPhase.INTENSIVE);
+		Period p = tbcase.getTreatmentPeriod();
+		if (p.getEndDate().after(endDate))
+			p.setEndDate(endDate);
+		
+		TreatmentHealthUnit hu = tbcase.getHealthUnits().get( tbcase.getHealthUnits().size() - 1 );
+		hu.getPeriod().setEndDate( p.getEndDate() );
+	
+		tbcase.setIniContinuousPhase( DateUtils.incMonths(p.getIniDate(), regimen.getMonthsPhase(RegimenPhase.INTENSIVE) ));
+	}
+
+	
+	/**
+	 * Start a new regimen for a case
+	 * @param iniDate
+	 * @param endDate
+	 * @param tbunit
+	 */
+	public void startNewRegimen(Date iniDate, Date endDate, Tbunit tbunit) {
+		if (regimen == null)
+			throw new RuntimeException("Regimen was not defined");
 		
 		Period p = new Period();
 		p.setIniDate(iniDate);
 		p.setEndDate(endDate);
+
+		Date dt = addMedicinesRegimen(regimen, iniDate, endDate);
+		if ((endDate == null) || (dt.before(endDate)))
+			p.setEndDate(dt);
+
+		TbCase tbcase = caseHome.getInstance();
+		tbcase.setTreatmentPeriod(p);
+		tbcase.setRegimen(regimen);
+		tbcase.setIniContinuousPhase( DateUtils.incMonths(p.getIniDate(), regimen.getMonthsIntensivePhase() ));
+		
+		TreatmentHealthUnit hu = new TreatmentHealthUnit();
+		hu.setPeriod( new Period(p) );
+		hu.setTbCase(tbcase);
+		hu.setTbunit(tbunit);
+		hu.setTransferring(false);
+		tbcase.getHealthUnits().add(hu);
+	}
+
+	
+	/**
+	 * Add medicines from a specific regimen
+	 * @param regimen
+	 * @param iniDate
+	 */
+	private Date addMedicinesRegimen(Regimen regimen, Date iniDate, Date endDate) {
+		int monthsIntPhase = regimen.getMonthsIntensivePhase();
+		
+		Date endPeriod = null;
 		
 		for (MedicineRegimen mr: regimen.getMedicines()) {
 			int num = (RegimenPhase.INTENSIVE.equals(mr.getPhase()) ? 0: monthsIntPhase); 
@@ -96,16 +148,14 @@ public class CaseRegimenHome {
 				pm.getPeriod().setEndDate( dt );
 				prescribedMedicineHome.addPrescribedMedicine(pm);
 				
-				if ((p.getEndDate() == null) || (p.getEndDate().before(dt)))
-					p.setEndDate(dt);
+				if ((endPeriod == null) || (endPeriod.before(dt)))
+					endPeriod = dt;
 			}
 		}
-				
-		TbCase tbcase = caseHome.getInstance();
-		tbcase.setTreatmentPeriod(p);
-		tbcase.setIniContinuousPhase( DateUtils.incMonths(p.getIniDate(), monthsIntPhase ));
-	}
 
+		return endPeriod;
+	}
+	
 	
 	/**
 	 * Refresh the list of phases and its prescribed medicines
@@ -133,19 +183,6 @@ public class CaseRegimenHome {
 		return availableRegimens;
 	}
 
-	
-	/**
-	 * Erase all prescribed medicines
-	 */
-	protected void erasePrescribedMedicines() {
-		TbCase tbcase = caseHome.getInstance();
-		
-		for (PrescribedMedicine pm: tbcase.getPrescribedMedicines()) {
-			if (entityManager.contains(pm))
-				entityManager.remove(pm);
-		}
-		tbcase.getPrescribedMedicines().clear();
-	}
 
 
 	/**
@@ -312,19 +349,4 @@ public class CaseRegimenHome {
 		this.useDefaultDoseUnit = useDefaultDoseUnit;
 	}
 
-
-	/**
-	 * @return the erasePreviousRegimen
-	 */
-	public boolean isErasePreviousRegimen() {
-		return erasePreviousRegimen;
-	}
-
-
-	/**
-	 * @param erasePreviousRegimen the erasePreviousRegimen to set
-	 */
-	public void setErasePreviousRegimen(boolean erasePreviousRegimen) {
-		this.erasePreviousRegimen = erasePreviousRegimen;
-	}
 }
