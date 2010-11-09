@@ -132,7 +132,7 @@ public class PrescriptionTable {
 		if (!calculateTreatmentPeriod())
 			return;
 
-		for (PrescribedMedicine pm: tbcase.getPrescribedMedicines()) {
+		for (PrescribedMedicine pm: tbcase.getSortedPrescribedMedicines()) {
 			MedicineInfo medInfo = findMedicine(pm.getMedicine());
 			if (pm.getPeriod().isIntersected(period))
 				medInfo.addMedicinePrescribed(pm);

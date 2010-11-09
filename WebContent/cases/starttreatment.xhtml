@@ -76,7 +76,7 @@
 		<h:column>
 			<f:facet name="header">#{messages['PrescribedMedicine.doseUnit']}</f:facet>
 			<h:selectOneMenu id="dose" value="#{m.doseUnit}" required="true">
-				<f:selectItems value="#{prescribedMedicineHome.doses}" />
+				<f:selectItems value="#{treatmentHome.doses}" />
 			</h:selectOneMenu>
 			<h:message for="dose" styleClass="erro" />
 		</h:column>

@@ -52,9 +52,14 @@
 	
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Workspace.defaultTimeZone']}:</ui:define>
-		<h:selectOneMenu value="#{workspace.defaultTimeZone}" required="true">
+		<h:selectOneMenu value="#{workspaceHome.defaultWorkspace.defaultTimeZone}" required="true">
            	<f:selectItems value="#{timezones.selectItems}" />
       	</h:selectOneMenu>
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['SystemConfig.systemURL']}:</ui:define>
+    	<h:inputText value="#{workspaceHome.defaultWorkspace.url}" size="200" style=" width : 300px;" />
     </s:decorate>
 	
     <s:decorate template="/layout/edit.xhtml" >

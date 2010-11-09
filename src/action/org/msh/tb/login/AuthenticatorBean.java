@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.faces.FacesManager;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.TimeZoneSelector;
@@ -15,6 +16,7 @@ import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
 import org.msh.mdrtb.entities.User;
 import org.msh.mdrtb.entities.UserWorkspace;
+import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.enums.UserState;
 import org.msh.utils.Passwords;
 
@@ -106,6 +108,19 @@ public class AuthenticatorBean {
         }
     }
 
+    
+    public String logout() {
+    	Workspace workspace = (Workspace)Component.getInstance("defaultWorkspace");
+    	String url = workspace.getUrl();
+    	
+    	identity.logout();
+
+    	if ((url != null) && (!url.isEmpty())) {
+        	FacesManager.instance().redirectToExternalURL(url);
+    	}
+    	
+    	return "logged-out";
+    }
 
     /**
      * return the user session component in the session context

@@ -142,13 +142,16 @@
 						<b>#{messages['Source']}: </b> #{p.item.source.abbrevName}
 					</div>
 
-					<a:commandLink value="#{messages['form.edit']}..." style="padding-right:20px;" reRender="medicinepnl"
-						action="#{prescribedMedicineHome.startEditing(p.item)}" oncomplete="showMedicineDlg()"/>
+					<a:commandLink value="#{messages['form.edit']}..." 
+						style="padding-right:20px;" 
+						reRender="medicinepnl"
+						action="#{treatmentHome.startEditingMedicine(p.item)}" oncomplete="showMedicineDlg()"/>
 
 					<a:commandLink value="#{messages['form.remove']}" style="padding-right:20px;"
-						onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}"
 						ajaxSingle="true" 
-						reRender="pnltreatment" action="#{prescribedMedicineHome.deleteMedicine(p.item)}"	/>
+						reRender="removepnl" 
+						action="#{treatmentHome.startRemovePeriod(p.item)}"	
+						oncomplete="showRemoveDlg()" />
 					</div></div>
 				</s:div>
 			</div>			

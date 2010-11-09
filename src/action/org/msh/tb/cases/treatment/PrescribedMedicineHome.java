@@ -37,39 +37,34 @@ public class PrescribedMedicineHome {
 	 * @param pm
 	 */
 	public void addPrescribedMedicine(PrescribedMedicine pm) {
-		removePeriod(pm.getPeriod(), pm.getMedicine());
+		removePeriod(pm.getPeriod(), pm.getMedicine(), null);
 		TbCase tbcase = caseHome.getInstance();
 		tbcase.getPrescribedMedicines().add(pm);
 		pm.setTbcase(tbcase);
+		
+		if (tbcase.getIniContinuousPhase() != null)
+			splitPeriod(tbcase.getIniContinuousPhase());
 	}
 	
-	/**
-	 * Remove a prescribed medicine from the treatment
-	 * @param pm
-	 */
-	public void deleteMedicine(PrescribedMedicine pm) {
-		TbCase tbcase = caseHome.getInstance();
-		tbcase.getPrescribedMedicines().remove(pm);
-
-		if (entityManager.contains(pm))
-			entityManager.remove(pm);
-	}
-
 
 	/**
 	 * Update dates of the medicine prescribed to prevent that the prescription doesn't overlap other periods with the same medicine
-	 * @param pm
+	 * @param period Period to be removed from the prescription
+	 * @param medicine Medicine to be removed. If null, all medicines of the period will be removed
+	 * @param pmException PrescribedMedicine that will be not deleted from the entityManager
 	 */
-	protected void removePeriod(Period period, Medicine medicine) {
+	protected boolean removePeriod(Period period, Medicine medicine, PrescribedMedicine pmException) {
 		TbCase tbcase = caseHome.getInstance();
+		boolean removed = false;
 		
 		List<PrescribedMedicine> lst = createPrescribedMedicineList(medicine);
 		for (PrescribedMedicine aux: lst) {
 			// prescription is inside new/edited one?
 			if (period.contains(aux.getPeriod())) {
 				tbcase.getPrescribedMedicines().remove(aux);
-				if (entityManager.contains(aux))
+				if ((entityManager.contains(aux)) && (aux != pmException))
 					entityManager.remove(aux);
+				removed = true;
 			}
 			else
 			// prescription is containing the whole new/edit prescription
@@ -78,6 +73,7 @@ public class PrescribedMedicineHome {
 				aux.getPeriod().setEndDate( DateUtils.incDays(period.getIniDate(), -1) );
 				aux2.getPeriod().setIniDate( DateUtils.incDays(period.getEndDate(), 1) );
 				tbcase.getPrescribedMedicines().add(aux2);
+				removed = true;
 			}
 			else 
 			if (period.isDateInside(aux.getPeriod().getIniDate())) {
@@ -89,8 +85,9 @@ public class PrescribedMedicineHome {
 			}
 		}
 		
-		if ((tbcase.getTreatmentPeriod() != null) && (!tbcase.getTreatmentPeriod().isEmpty()) && (tbcase.getTreatmentPeriod().getEndDate().before(period.getEndDate())))
-			tbcase.getTreatmentPeriod().setEndDate(period.getEndDate());
+//		if ((tbcase.getTreatmentPeriod() != null) && (!tbcase.getTreatmentPeriod().isEmpty()) && (tbcase.getTreatmentPeriod().getEndDate().before(period.getEndDate())))
+//			tbcase.getTreatmentPeriod().setEndDate(period.getEndDate());
+		return removed;
 	}
 
 	
@@ -133,13 +130,13 @@ public class PrescribedMedicineHome {
 		if (p == null)
 			throw new RuntimeException("Null period for case phase " + phase);
 		
-		// just for security, split the period between intensive and continuous phases
-		if (RegimenPhase.INTENSIVE.equals(phase))
-			 splitPeriod( DateUtils.incDays(p.getEndDate(), 1));
-		else splitPeriod( p.getIniDate() );
+		List<PrescribedMedicine> lst = new ArrayList<PrescribedMedicine>();
 		
 		for (PrescribedMedicine pm: tbcase.getPrescribedMedicines()) {
 			if (pm.getPeriod().isInside(p)) {
+				// indicate if end date of medicine is at end date of period
+				boolean fixedEndDate = pm.getPeriod().getEndDate().equals(p.getEndDate());
+				
 				// calc number of days period is ahead phase
 				int days = DateUtils.daysBetween(p.getIniDate(), pm.getPeriod().getIniDate());
 
@@ -148,10 +145,23 @@ public class PrescribedMedicineHome {
 				
 				// move period
 				pm.getPeriod().movePeriod( dt );
+				
+				if (fixedEndDate)
+					pm.getPeriod().setEndDate( newperiod.getEndDate() );
 
 				// cut period if end date is after
 				pm.getPeriod().intersect(newperiod);
+				
+				if (pm.getPeriod().getDays() == 0)
+					lst.add(pm);
 			}
+		}
+
+		// remove periods that are out of the new adjustment
+		for (PrescribedMedicine pm: lst) {
+			tbcase.getPrescribedMedicines().remove(pm);
+			if (entityManager.contains(pm))
+				entityManager.remove(pm);
 		}
 	}
 
@@ -161,17 +171,17 @@ public class PrescribedMedicineHome {
 	 * @param pm
 	 * @return
 	 */
-	private PrescribedMedicine clonePrescribedMedicine(PrescribedMedicine pm) {
+	public PrescribedMedicine clonePrescribedMedicine(PrescribedMedicine pm) {
 		PrescribedMedicine aux = new PrescribedMedicine();
 		aux.setDoseUnit(pm.getDoseUnit());
-		aux.getPeriod().setEndDate(pm.getPeriod().getEndDate());
-		aux.getPeriod().setIniDate(pm.getPeriod().getIniDate());
+		aux.setPeriod( new Period(pm.getPeriod()) );
 		aux.setFrequency(pm.getFrequency());
 		aux.setMedicine(pm.getMedicine());
 		aux.setSource(pm.getSource());
 		aux.setTbcase(pm.getTbcase());
 		return aux;
 	}
+
 	
 	/**
 	 * Generate a list of prescribed medicines of a specific medicine for the current case

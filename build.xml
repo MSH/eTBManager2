@@ -117,6 +117,7 @@
 			<attribute name="Built-Date" value="${TODAY}"/>
 			<attribute name="Build-Jdk" value="${java.version}" />
 		</manifest>
+		<echo message="Build number          :  ${build.number}" />
 
 		<war destfile="build/${war-file-name}" webxml="production/web.xml" manifest="WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="WebContent" >

@@ -32,7 +32,7 @@
                  
 	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
 		<ui:define name="header">
-			<s:link value="#{messages['form.new']}" view="/cases/edtcontact.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+			<s:link value="#{messages['form.new']}" view="/custom/br/cases/edtcontact.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
 				<f:param name="id" value="#{caseHome.id}" />
 				<f:param name="conid" value="#{null}" />
 			</s:link>
@@ -51,7 +51,7 @@
 			<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remContact(#{it.id});return false;" 
 				style="font-size:9px;float:right;">
 			</h:commandLink>
-			<s:link value="#{it.name}" view="/cases/edtcontact.xhtml">
+			<s:link value="#{it.name}" view="/custom/br/cases/edtcontact.xhtml">
 				<f:param name="conid" value="#{it.id}"/>
 			</s:link>
 		</th>
@@ -170,7 +170,10 @@
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.medicine']}" styleClass="collh" />
 			</f:facet>
-			#{it.medicines}
+			<h:outputText value="#{it.substance.abbrevName}" title="#{it.substance.name}" />
+			<s:fragment rendered="#{not empty it.substance2}">,
+				<h:outputText value="#{it.substance2.abbrevName}" title="#{it.substance2.name}" /> 
+			</s:fragment>
 		</h:column>
 
 		<h:column>

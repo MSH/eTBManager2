@@ -55,7 +55,7 @@
   <mapping class="org.msh.mdrtb.entities.ResistancePattern"/>
   <mapping class="org.msh.mdrtb.entities.SequenceInfo"/>
   <mapping class="org.msh.mdrtb.entities.StockPosition"/>
-  <mapping class="org.msh.mdrtb.entities.TbCase"/>
+  <mapping class="org.msh.mdrtb.entities.tbcase"/>
   <mapping class="org.msh.mdrtb.entities.Tbunit"/>
   <mapping class="org.msh.mdrtb.entities.Transfer"/>
   <mapping class="org.msh.mdrtb.entities.TransferBatch"/>

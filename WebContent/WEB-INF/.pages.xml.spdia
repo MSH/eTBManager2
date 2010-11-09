@@ -23,8 +23,6 @@
   <output ID="/admin/groups.xhtml" NAME="output"
    PATH="/admin/groups.xhtml" TARGET="#xadmin#xgroups.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
  </item>
- <item ID="#medicines#orders.xhtml" NAME="#xmedicines#xorders.xhtml"
-  PATH="/medicines/orders.xhtml" SHAPE="472,505,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
  <item ID="#medicines#orderdata.xhtml"
   NAME="#xmedicines#xorderdata.xhtml" PATH="/medicines/orderdata.xhtml"
   SHAPE="472,377,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">

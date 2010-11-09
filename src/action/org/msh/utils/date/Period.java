@@ -35,17 +35,12 @@ public class Period {
 	 */
 	public Period(Date iniDate, Date endDate) {
 		super();
-		if (!iniDate.after(endDate)) {
-			this.iniDate = (Date)iniDate.clone();
-			this.endDate = (Date)endDate.clone();
-		}
-		else {
-			this.iniDate = (Date)endDate.clone();
-			this.endDate = (Date)endDate.clone();
-		}
+		this.iniDate = (Date)iniDate.clone();
+		this.endDate = (Date)endDate.clone();
+		checkDatesOrder();
 	}
 
-
+	
 	/**
 	 * Create a new period from an existing period
 	 * @param p
@@ -65,6 +60,7 @@ public class Period {
 	public void set(Date ini, Date end) {
 		iniDate = (Date)ini.clone();
 		endDate = (Date)end.clone();
+		checkDatesOrder();
 	}
 
 
@@ -75,6 +71,19 @@ public class Period {
 		super();
 	}
 
+	
+	/**
+	 * Check if initial date is before the initial date. If not, they are swapped
+	 */
+	private void checkDatesOrder() {
+		if ((iniDate == null) || (endDate == null))
+			return;
+		if (iniDate.after(endDate)) {
+			Date dt = iniDate;
+			iniDate = endDate;
+			endDate = dt;
+		}
+	}
 	
 	/**
 	 * Return the number of days in the period
@@ -166,12 +175,25 @@ public class Period {
 	 * @param newIniDate the initial date of the period
 	 */
 	public void movePeriod(Date newIniDate) {
-		if (iniDate == null)
+		if (isEmpty())
 			return;
 		
 		int days = DateUtils.daysBetween(this.iniDate, newIniDate);
 		if (iniDate.after(newIniDate))
 			days = -days;
+
+		iniDate = DateUtils.incDays(iniDate, days);
+		endDate = DateUtils.incDays(endDate, days);
+	}
+	
+	
+	/**
+	 * Move the period to a specific quantity of days, keeping the distance between the initial and final date
+	 * @param days
+	 */
+	public void movePeriod(int days) {
+		if (isEmpty())
+			return;
 
 		iniDate = DateUtils.incDays(iniDate, days);
 		endDate = DateUtils.incDays(endDate, days);
@@ -231,7 +253,8 @@ public class Period {
 		
 		return ((!iniDate.before(p.getIniDate())) && (!endDate.after(p.getEndDate())));
 	}
-	
+
+
 	/**
 	 * Initialize the period from an existing period
 	 * @param p
@@ -240,6 +263,7 @@ public class Period {
 		iniDate = (Date)p.getIniDate().clone();
 		endDate = (Date)p.getEndDate().clone();
 	}
+
 
 	/**
 	 * Intersect the period with the given period. The period is changed according
@@ -281,6 +305,7 @@ public class Period {
 		return (!dt.before(iniDate)) && (!dt.after(endDate));
 	}
 
+
 	/**
 	 * Return the initial date
 	 * @return
@@ -296,7 +321,9 @@ public class Period {
 	 */
 	public void setIniDate(Date iniDate) {
 		this.iniDate = (iniDate != null? (Date)iniDate.clone(): iniDate);
+		checkDatesOrder();
 	}
+
 
 	/**
 	 * Return the ending date
@@ -306,12 +333,14 @@ public class Period {
 		return endDate;
 	}
 
+
 	/**
 	 * Set the ending date
 	 * @param endDate
 	 */
 	public void setEndDate(Date endDate) {
 		this.endDate = (endDate != null? (Date)endDate.clone(): endDate);
+		checkDatesOrder();
 	}
 
 

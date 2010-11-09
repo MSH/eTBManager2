@@ -258,13 +258,12 @@
 		</s:decorate>
 	</div>
 	<div id="divSchemaChanged" >
-		<s:decorate template="/layout/edit.xhtml">
-			<ui:define name="label">#{messages['TbField.SCHEMA_TYPES']}:</ui:define>
-			<h:selectOneMenu value="#{caseDataBR.schemaChangeType}">
-				<s:selectItems var="fld" value="#{fieldsQuery.schemaTypes}" label="#{fld.name}" noSelectionLabel="-" />
-				<s:convertEntity />
-			</h:selectOneMenu>
-		</s:decorate>
+    	<s:decorate template="/layout/editfield.xhtml" >
+    		<ui:define name="label">#{messages['TbField.SCHEMA_TYPES']}:</ui:define>
+    		<ui:param name="id" value="schema" />
+    		<ui:param name="field" value="#{caseDataBR.schemaChangeType}" />
+    		<ui:param name="list" value="#{fieldsQuery.schemaTypes}" />
+    	</s:decorate>
 	</div>
 	<div id="divFailure" >
 		<s:decorate template="/layout/edit.xhtml">

@@ -67,7 +67,7 @@ public class CaseRegimenHome {
 
 		// remove all medicines from the initial date
 		Period remPeriod = new Period(iniDate, tbcase.getTreatmentPeriod().getEndDate());
-		prescribedMedicineHome.removePeriod(remPeriod, null);
+		prescribedMedicineHome.removePeriod(remPeriod, null, null);
 		
 		Date dt = addMedicinesRegimen(regimen, iniDate, endDate);
 		if ((endDate == null) || (dt.before(endDate)))

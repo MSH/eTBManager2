@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
 
 	<restrict>#{userSession.canEditCases}</restrict>
-	<param name="classif" value="#{tbCase.classification}" />
+	<param name="classif" value="#{tbcase.classification}" />
 	<end-conversation />
 	<navigation>
 		<rule if-outcome="newpatient">

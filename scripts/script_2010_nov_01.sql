@@ -77,3 +77,7 @@ set caseClassification=1
 where caseClassification is null;
 
 ALTER TABLE Regimen MODIFY COLUMN `caseClassification` INT(11) NOT NULL;
+
+ALTER TABLE Regimen DROP COLUMN `mdrTreatment`,
+ DROP COLUMN `tbTreatment`;
+

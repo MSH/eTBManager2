@@ -6,7 +6,7 @@
 		<restrict>#{userSession.canEditCases}</restrict>
 		<action execute="#{caseEditingHome.initializeNewNotification}"/>
 		<param name="pacid" value="#{patientHome.id}" converterId="javax.faces.Integer"/>
-		<param name="cla" value="#{tbCase.classification}" />
+		<param name="cla" value="#{tbcase.classification}" />
 		<begin-conversation join="true"/>
 		<navigation>
 			<rule if-outcome="patient-searching">

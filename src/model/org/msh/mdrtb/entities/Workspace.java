@@ -100,6 +100,9 @@ public class Workspace implements Serializable {
 	 */
 	private Integer patientAddrRequiredLevels;
 	
+	@Column(length=200)
+	private String url;
+	
 	
 
 
@@ -409,6 +412,20 @@ public class Workspace implements Serializable {
 	public void setStartDRTBTreatBeforeValidation(
 			boolean startDRTBTreatBeforeValidation) {
 		this.startDRTBTreatBeforeValidation = startDRTBTreatBeforeValidation;
+	}
+
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
+
+	/**
+	 * @param url the url to set
+	 */
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 }

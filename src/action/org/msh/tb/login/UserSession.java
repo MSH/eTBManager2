@@ -46,7 +46,8 @@ public class UserSession {
 	private UserLogin userLogin;
 	private UserWorkspace userWorkspace;
 	private boolean displayMessagesKeys;
-	
+
+
 	@In(create=true) EntityManager entityManager;
 
 
