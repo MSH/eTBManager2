@@ -40,7 +40,8 @@
 	<div style="float:right" >
 	<a:commandButton value="#{messages['manag.forecast.execute']}" styleClass="button" title="Execute the forecasting (re)calculating the results" 
 		action="#{forecastingCalculation.execute}" reRender="main,messages"
-		oncomplete="RichFaces.switchTab('#{rich:clientId('tabPanelForecasting')}','#{rich:clientId('tabresult')}','#{rich:clientId('tabOptions')}')" />
+		oncomplete="RichFaces.switchTab('main:tabPanelForecasting','main:tabresult','tabresult')"
+		/>
 	<a:commandButton value="#{messages['form.save']}" styleClass="button" action="#{forecastingHome.persist}" 
 	    reRender="messages" rendered="#{forecastingHome.managed}"/>
 	<a:commandButton value="#{messages['form.save']}" styleClass="button" onclick="showForecastDlg();return false;"  

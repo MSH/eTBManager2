@@ -31,6 +31,7 @@ public class PrescribedMedicineHome {
 	@In EntityManager entityManager;
 
 
+	private List<PrescribedMedicine> deletedMedicines;
 	
 	/**
 	 * Add a prescribed medicine to the case
@@ -57,6 +58,8 @@ public class PrescribedMedicineHome {
 		TbCase tbcase = caseHome.getInstance();
 		boolean removed = false;
 		
+		initializeMedicinesToBeDeleted();
+		
 		List<PrescribedMedicine> lst = createPrescribedMedicineList(medicine);
 		for (PrescribedMedicine aux: lst) {
 			// prescription is inside new/edited one?
@@ -71,8 +74,12 @@ public class PrescribedMedicineHome {
 			if (aux.getPeriod().contains(period)) {	
 				PrescribedMedicine aux2 = clonePrescribedMedicine(aux);
 				aux.getPeriod().setEndDate( DateUtils.incDays(period.getIniDate(), -1) );
+				if (aux.getPeriod().getDays() <= 1)
+					addMedicineToBeDeleted(aux);
+				
 				aux2.getPeriod().setIniDate( DateUtils.incDays(period.getEndDate(), 1) );
-				tbcase.getPrescribedMedicines().add(aux2);
+				if (aux2.getPeriod().getDays() > 1)
+					tbcase.getPrescribedMedicines().add(aux2);
 				removed = true;
 			}
 			else 
@@ -84,7 +91,8 @@ public class PrescribedMedicineHome {
 				aux.getPeriod().cutEnd( DateUtils.incDays(period.getIniDate(), -1) );
 			}
 		}
-		
+
+		commitDeleteMedicines();
 //		if ((tbcase.getTreatmentPeriod() != null) && (!tbcase.getTreatmentPeriod().isEmpty()) && (tbcase.getTreatmentPeriod().getEndDate().before(period.getEndDate())))
 //			tbcase.getTreatmentPeriod().setEndDate(period.getEndDate());
 		return removed;
@@ -129,8 +137,8 @@ public class PrescribedMedicineHome {
 		
 		if (p == null)
 			throw new RuntimeException("Null period for case phase " + phase);
-		
-		List<PrescribedMedicine> lst = new ArrayList<PrescribedMedicine>();
+
+		initializeMedicinesToBeDeleted();
 		
 		for (PrescribedMedicine pm: tbcase.getPrescribedMedicines()) {
 			if (pm.getPeriod().isInside(p)) {
@@ -152,17 +160,13 @@ public class PrescribedMedicineHome {
 				// cut period if end date is after
 				pm.getPeriod().intersect(newperiod);
 				
-				if (pm.getPeriod().getDays() == 0)
-					lst.add(pm);
+				if (pm.getPeriod().getDays() <= 1)
+					addMedicineToBeDeleted(pm);
 			}
 		}
 
 		// remove periods that are out of the new adjustment
-		for (PrescribedMedicine pm: lst) {
-			tbcase.getPrescribedMedicines().remove(pm);
-			if (entityManager.contains(pm))
-				entityManager.remove(pm);
-		}
+		commitDeleteMedicines();
 	}
 
 
@@ -199,4 +203,39 @@ public class PrescribedMedicineHome {
 		return lst;
 	}
 
+	
+	/**
+	 * Add objects {@link PrescribedMedicine} to be deleted
+	 * @param pm
+	 */
+	private void addMedicineToBeDeleted(PrescribedMedicine pm) {
+		if (deletedMedicines == null)
+			deletedMedicines = new ArrayList<PrescribedMedicine>();
+		deletedMedicines.add(pm);
+	}
+
+	
+	private void initializeMedicinesToBeDeleted() {
+		deletedMedicines = null;
+	}
+
+	
+	/**
+	 * Delete objects PrescribedMedicines in the temporary list
+	 * @param pm
+	 */
+	private void commitDeleteMedicines() {
+		if (deletedMedicines == null)
+			return;
+
+		TbCase tbcase = caseHome.getInstance();
+		
+		for (PrescribedMedicine pm: deletedMedicines) {
+			tbcase.getPrescribedMedicines().remove(pm);
+			if (entityManager.contains(pm))
+				entityManager.remove(pm);
+		}
+		
+		deletedMedicines = null;
+	}
 }

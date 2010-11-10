@@ -190,9 +190,9 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
     	<ui:param name="datefield" value="#{prescribedMedicine.period.endDate}"/> 
 	</s:decorate>
 	
-	<div style="display:block;height:40px;">
+	<s:div style="display:block;height:40px;" rendered="#{not treatmentHome.newPrescribedMedicine}">
 		<h:selectBooleanCheckbox value="#{treatmentHome.preservePreviousPeriod}"/>#{messages['cases.treat.preservePreviousPeriod']}
-	</div>
+	</s:div>
 
 	<s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['PrescribedMedicine.doseUnit']}:</ui:define>
@@ -241,7 +241,7 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 	<h:panelGroup id="regimenpnl" >
 	<h:form style="padding:10px;" rendered="#{treatmentHome.formEditing=='REGIMEN'}">
 
-	<h:messages styleClass="erro" layout="table" />
+	<h:messages styleClass="erro" layout="table" globalOnly="true" />
 	<s:decorate template="/layout/display.xhtml" >
 		<ui:define name="label">#{messages['Regimen']}:</ui:define>
     	<h:selectOneMenu value="#{caseRegimenHome.regimen}" required="true">

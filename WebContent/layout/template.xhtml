@@ -101,7 +101,7 @@ div#body {
 
 	<script type="text/javascript">
 	A4J.AJAX.onError=function(req, status, message) {
-		window.alert(#{messages['mdrtbsys.request_error']} + '... Request=' + req + ', Status=' + status + ', Message=' +  message);
+		window.alert('#{messages['mdrtbsys.request_error']}' + '... Request=' + req + ', Status=' + status + ', Message=' +  message);
 		closeWaitDlg();
 	}
 	</script>

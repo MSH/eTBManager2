@@ -60,7 +60,7 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 
 		forecasting.setWorkspace(getWorkspace());
 		forecasting.setUser(getUser());
-		
+	
 		return super.persist();
 	}
 

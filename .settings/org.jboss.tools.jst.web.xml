@@ -321,12 +321,12 @@
   location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\lib\jboss-seam-excel.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jxl.jar"
   location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\lib\jxl.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-api-3.3.2.SR1.jar"
-  location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\lib\richfaces-api-3.3.2.SR1.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-impl-3.3.2.SR1.jar"
-  location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\lib\richfaces-impl-3.3.2.SR1.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-richfaces-ui-3.3.2.SR1.jar"
-  location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\lib\richfaces-ui-3.3.2.SR1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-api-3.3.3.Final.jar"
+  location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\lib\richfaces-api-3.3.3.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-impl-3.3.3.Final.jar"
+  location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\lib\richfaces-impl-3.3.3.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-ui-3.3.3.Final.jar"
+  location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\lib\richfaces-ui-3.3.3.Final.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>

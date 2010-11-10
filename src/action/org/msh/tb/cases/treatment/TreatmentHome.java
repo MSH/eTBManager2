@@ -72,6 +72,7 @@ public class TreatmentHome {
 		PrescriptionTable tbl = getPrescriptionTable();
 		tbl.setEditing(true);
 		tbl.refresh();
+		updateTreatmentPeriod();
 
 		TbCase tbcase = caseHome.getInstance();
 		if (tbcase.getIniContinuousPhase() != null)
@@ -153,6 +154,7 @@ public class TreatmentHome {
 	 */
 	public void startRegimenChange() {
 		formEditing = FormEditing.REGIMEN;
+		validated = false;
 		caseRegimenHome.setRegimen(null);
 	}
 
@@ -213,6 +215,8 @@ public class TreatmentHome {
 		preservePreviousPeriod = true;
 		formEditing = FormEditing.MEDICINE;
 		validated = false;
+		
+		System.out.println("### startEditingMedicine " + pm.getMedicine().toString());
 	}
 
 
@@ -236,6 +240,7 @@ public class TreatmentHome {
 
 		if (!checkDateBasicRules(pm.getPeriod().getIniDate(), pm.getPeriod().getEndDate()))
 			return;
+		
 		
 /*		if (pm.getPeriod().getIniDate().before(tbcase.getTreatmentPeriod().getIniDate())) {
 			facesMessages.addToControlFromResourceBundle("edtIniDate", "javax.faces.component.UIInput.REQUIRED");
@@ -268,6 +273,14 @@ public class TreatmentHome {
 		formEditing = FormEditing.NONE;
 
 		getPrescriptionTable().refresh();
+	}
+
+
+	/**
+	 * @return
+	 */
+	public boolean isNewPrescribedMedicine() {
+		return pmcopy == null;
 	}
 
 
