@@ -124,6 +124,48 @@ public class PrescribedMedicineHome {
 			tbcase.getPrescribedMedicines().add(pm);
 	}
 
+
+	/**
+	 * Join two periods that were split in a date dt
+	 * @param dt date to join two adjacents periods
+	 */
+	public void joinPeriods(Date dt) {
+		TbCase tbcase = caseHome.getInstance();
+		
+		initializeMedicinesToBeDeleted();
+		
+		for (PrescribedMedicine pm: tbcase.getPrescribedMedicines()) {
+			if (pm.getPeriod().getIniDate().equals(dt)) {
+				PrescribedMedicine aux = findCompactibleLeftAdjacentPeriod(pm);
+				if (aux != null) {
+					pm.getPeriod().setIniDate(aux.getPeriod().getIniDate());
+					addMedicineToBeDeleted(aux);
+				}
+			}
+		}
+		commitDeleteMedicines();
+	}
+
+
+	/**
+	 * Find a compatible left adjacent prescribed medicine of the prescribed medicine pm 
+	 * @param pm
+	 * @return
+	 */
+	private PrescribedMedicine findCompactibleLeftAdjacentPeriod(PrescribedMedicine pm) {
+		TbCase tbcase = caseHome.getInstance();
+		Date dt = DateUtils.incDays( pm.getPeriod().getIniDate(), -1);
+		for (PrescribedMedicine aux: tbcase.getPrescribedMedicines()) {
+			if ((aux.getPeriod().getEndDate().equals(dt)) && (aux.getMedicine().equals(pm.getMedicine())) &&
+			   (aux.getSource().equals(pm.getSource())) &&
+			   (aux.getDoseUnit() == pm.getDoseUnit()) && (aux.getFrequency() == pm.getFrequency()))
+			{
+				return aux;
+			}
+		}
+		return null;
+	}
+	
 	
 	/**
 	 * Adjust medicines of the phase according to the new period

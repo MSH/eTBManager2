@@ -38,6 +38,7 @@
 			</div>
 		</td>
 	</tr>
+	<s:fragment rendered="#{not editing}">
 	<tr>
 		<th>
 			#{messages['TbCase.healthUnits']}
@@ -60,6 +61,7 @@
 			</a:repeat>
 		</td>
 	</tr>
+	</s:fragment>
 	<tr>
 		<th>
 			#{messages['RegimenPhase']}

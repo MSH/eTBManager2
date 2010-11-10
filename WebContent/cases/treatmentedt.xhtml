@@ -48,10 +48,12 @@
 			style="margin-left:10px;" 
 			oncomplete="showRegimenDlg(); return false;" />
 	</s:decorate>						
-	
-	<s:decorate template="/layout/edit.xhtml">
-		<ui:define name="label">#{messages['TbCase.healthUnits']}:</ui:define>
-	</s:decorate>
+
+	<div class="paragraph">#{messages['FilterHealthUnit.TREATMENT_UNIT']}</div>	
+    <s:decorate template="/layout/tbselection.xhtml" >
+    	<ui:param name="tbunitselection" value="#{treatmentHome.tbunitselection}" />
+    	<ui:param name="required" value="true" />
+    </s:decorate>
 	</div>						
 
 	<s:decorate template="treattable.xhtml">
@@ -91,20 +93,30 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 	<h:panelGroup id="periodpnl">
 	<h:form style="padding:10px;" rendered="#{treatmentHome.formEditing=='TREATMENT'}">
 
-	<h:messages globalOnly="false" styleClass="erro" layout="table" />
+	<h:messages globalOnly="true" styleClass="erro" layout="table" />
 
 	<div class="paragraph">#{messages['RegimenPhase.INTENSIVE']}</div>
-	<s:decorate template="/layout/dateedit.xhtml">
+	<s:decorate template="/layout/dateedit.xhtml" rendered="#{treatmentHome.canChangeIniTreatmentDate}">
 		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{treatmentHome.iniDate}"/> 
 	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml" rendered="#{not treatmentHome.canChangeIniTreatmentDate}">
+		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+		<h:outputText value="#{treatmentHome.iniDate}" converter="localeDateConverter"/>
+	</s:decorate>
 
 	<div class="paragraph">#{messages['RegimenPhase.CONTINUOUS']}</div>
-	<s:decorate template="/layout/dateedit.xhtml">
+	<s:decorate template="/layout/dateedit.xhtml" rendered="#{treatmentHome.canChangeIniContinuousPhase}">
 		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{treatmentHome.iniContinuousPhase}"/> 
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml" rendered="#{not treatmentHome.canChangeIniContinuousPhase}">
+		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+		<h:outputText value="#{treatmentHome.iniContinuousPhase}" converter="localeDateConverter"/>
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml">
@@ -133,7 +145,7 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 	<h:panelGroup id="removepnl">
 	<h:form style="padding:10px;" rendered="#{treatmentHome.formEditing=='REMOVE'}">
 
-	<h:messages globalOnly="false" styleClass="erro" layout="table" />
+	<h:messages globalOnly="true" styleClass="erro" layout="table" />
 
 	<s:decorate template="/layout/dateedit.xhtml">
 		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>

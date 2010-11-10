@@ -16,6 +16,7 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.mdrtb.entities.PrescribedMedicine;
 import org.msh.mdrtb.entities.TbCase;
+import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.TreatmentHealthUnit;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
@@ -56,6 +57,7 @@ public class TreatmentHome {
 	private TBUnitSelection tbunitselection;
 	private PrescribedMedicine pmcopy;
 	
+	
 	/**
 	 * Return to the UI if there is any validation problem during ajax requests
 	 */
@@ -83,6 +85,8 @@ public class TreatmentHome {
 		if (lst.indexOf(healthUnit) > 0)
 			 minIniDate = healthUnit.getPeriod().getIniDate();
 		else minIniDate = null;
+		
+		getTbunitselection().setTbunit(healthUnit.getTbunit());
 	}
 
 
@@ -92,8 +96,15 @@ public class TreatmentHome {
 	 */
 	public String saveChanges() {
 		getPrescriptionTable().refresh();
+		
+		Tbunit unit = getTbunitselection().getTbunit();
+		
+		healthUnit.setTbunit( unit );
+		TbCase tbcase = caseHome.getInstance();
 
+		tbcase.setTreatmentUnit(unit);
 		caseHome.getInstance().updateDaysTreatPlanned();
+
 		return caseHome.persist();
 	}
 	
@@ -661,4 +672,5 @@ public class TreatmentHome {
 	public void setPreservePreviousPeriod(boolean preservePreviousPeriod) {
 		this.preservePreviousPeriod = preservePreviousPeriod;
 	}
+
 }

@@ -1,7 +1,6 @@
 package org.msh.tb.cases;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,15 +11,14 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.annotations.security.Restrict;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
 import org.jboss.seam.international.Messages;
-import org.msh.mdrtb.entities.PrescribedMedicine;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.TreatmentHealthUnit;
 import org.msh.mdrtb.entities.enums.CaseState;
+import org.msh.tb.cases.treatment.PrescribedMedicineHome;
 import org.msh.tb.cases.treatment.PrescriptionTable;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
@@ -30,7 +28,7 @@ import org.msh.utils.date.Period;
 
 /**
  * Handle the transfer of cases from one health unit to another health unit.
- * Actions available: Transfer out, Transfer in and Rollback transfer 
+ * Actions available: Transfer out, Transfer in and Roll back transfer 
  * @author Ricardo Memoria
  *
  */
@@ -43,6 +41,7 @@ public class CaseMoveHome extends Controller {
 	@In(create=true) EntityManager entityManager;
 	@In(create=true) FacesMessages facesMessages;
 	@In(required=false) PrescriptionTable prescriptionTable;
+	@In(create=true) PrescribedMedicineHome prescribedMedicineHome;
 	
 	private Date moveDate;
 	private TBUnitSelection tbunitselection;
@@ -53,9 +52,11 @@ public class CaseMoveHome extends Controller {
 	 * Execute the transfer of a case to another health unit 
 	 * @return
 	 */
-	@Restrict("#{caseHome.canTransferOut}")
 	@Transactional
 	public String transferOut() {
+		if (!caseHome.isCanTransferOut())
+			return "error";
+		
 		if (!validateTransferOut())
 			return "error";
 		
@@ -75,38 +76,19 @@ public class CaseMoveHome extends Controller {
 		newhu.setTbunit(tbunit);
 
 		currentHealthUnit.getPeriod().intersect(prevPeriod);
-
-		List<PrescribedMedicine> lst = new ArrayList<PrescribedMedicine>();
-		// split the prescribed medicine period
-		for (PrescribedMedicine pm: tbcase.getPrescribedMedicines()) {
-			Period p = new Period(pm.getPeriod());
-			if ((p.intersect(newPeriod)) && (!p.equals(pm.getPeriod()))) {
-				PrescribedMedicine aux = new PrescribedMedicine();
-				aux.setDoseUnit(pm.getDoseUnit());
-				aux.setPeriod(p);
-				aux.setFrequency(pm.getFrequency());
-				aux.setMedicine(pm.getMedicine());
-				aux.setSource(pm.getSource());
-				aux.setTbcase(pm.getTbcase());
-				lst.add(aux);
-				
-				pm.getPeriod().intersect(prevPeriod);
-			}
-		}
 		
-		// add new periods of prescribed medicines
-		for (PrescribedMedicine pm: lst) {
-			tbcase.getPrescribedMedicines().add(pm);
-		}
-
 		entityManager.persist(newhu);
-		entityManager.flush();
+
+		prescribedMedicineHome.splitPeriod(newPeriod.getIniDate());
 		
 		tbcase.setState(CaseState.TRANSFERRING);
 
 		caseHome.setDisplayMessage(false);
 		caseHome.persist();
-		
+
+		if (prescriptionTable != null)
+			prescriptionTable.refresh();
+
 		return "transferred-out";
 	}
 
@@ -126,7 +108,7 @@ public class CaseMoveHome extends Controller {
 			return false;
 		
 		// checks if date is before beginning treatment date
-		if (!moveDate.after(prev.getPeriod().getIniDate())) {
+		if (!prev.getPeriod().isDateInside(moveDate)) {
 			facesMessages.addFromResourceBundle("cases.move.errortreatdate");
 			return false;
 		}
@@ -153,7 +135,7 @@ public class CaseMoveHome extends Controller {
 			return "error";
 		}
 
-		List<TreatmentHealthUnit> hus = tbcase.getHealthUnits();
+		List<TreatmentHealthUnit> hus = tbcase.getSortedTreatmentHealthUnits();
 		TreatmentHealthUnit tout = hus.get(hus.size() - 2);
 		TreatmentHealthUnit tin = hus.get(hus.size() - 1);
 
@@ -161,19 +143,29 @@ public class CaseMoveHome extends Controller {
 		entityManager.remove(tin);
 		
 		tout.getPeriod().setEndDate(tin.getPeriod().getEndDate());
-
-		// check prescriptions to merge
-		int i = 0;
-		while (i < tbcase.getPrescribedMedicines().size()) {
-			PrescribedMedicine pm = tbcase.getPrescribedMedicines().get(i);
-			PrescribedMedicine aux = findAdjacentPrescription(pm);
-			if (aux != null) {
-				aux.getPeriod().setEndDate(pm.getPeriod().getEndDate());
-				entityManager.remove(pm);
-				tbcase.getPrescribedMedicines().remove(pm);
+		
+		Date movdt = tin.getPeriod().getIniDate();
+		
+		Date iniContPhase = tbcase.getIniContinuousPhase();
+		if ((iniContPhase != null) && (!iniContPhase.equals(movdt))) {
+			prescribedMedicineHome.joinPeriods(movdt);
+/*			// check prescriptions to merge
+			int i = 0;
+			while (i < tbcase.getPrescribedMedicines().size()) {
+				PrescribedMedicine pm = tbcase.getPrescribedMedicines().get(i);
+				
+				if (pm.getPeriod().getIniDate().equals(movdt)) {
+					PrescribedMedicine aux = findAdjacentPrescription(pm);
+					if (aux != null) {
+						aux.getPeriod().setEndDate(pm.getPeriod().getEndDate());
+						entityManager.remove(pm);
+						tbcase.getPrescribedMedicines().remove(pm);
+					}
+					else i++;
+				}
+				else i++;
 			}
-			else i++;
-		}
+*/		}
 
 		tbcase.setState(CaseState.ONTREATMENT);
 		caseHome.persist();
@@ -190,7 +182,7 @@ public class CaseMoveHome extends Controller {
 	 * @param pm
 	 * @return
 	 */
-	protected PrescribedMedicine findAdjacentPrescription(PrescribedMedicine pm) {
+/*	protected PrescribedMedicine findAdjacentPrescription(PrescribedMedicine pm) {
 		TbCase tbcase = caseHome.getInstance();
 		Date dt = DateUtils.incDays( pm.getPeriod().getIniDate(), -1);
 		for (PrescribedMedicine aux: tbcase.getPrescribedMedicines()) {
@@ -203,7 +195,7 @@ public class CaseMoveHome extends Controller {
 		}
 		return null;
 	}
-
+*/
 	
 	/**
 	 * Initialize the transfer in registration
