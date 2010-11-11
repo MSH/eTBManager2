@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
 import org.msh.mdrtb.entities.enums.Container;
@@ -24,6 +26,7 @@ public class Batch implements Serializable {
 	private Integer id;
 
 	@NotNull
+	@Temporal(TemporalType.DATE)
 	private Date expiryDate;
 
 	@Column(length=80)

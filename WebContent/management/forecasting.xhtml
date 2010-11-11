@@ -267,7 +267,7 @@
 		
 		<h:panelGroup id="meds">
 		<h:dataTable value="#{forecasting.medicines}" var="r" styleClass="tabela4"  
-			rowClasses="lin1,lin2" columnClasses="colb,colrb,colrb,colcb,colcb" width="100%">
+			rowClasses="hlcolor" columnClasses="colb,colrb,colrb,colcb,colcb" width="100%">
 			<h:column>
 				<f:facet name="header">
 					#{messages['Medicine']}
@@ -291,20 +291,22 @@
 			
 			<h:column>
 				<f:facet name="header">
-					#{messages['manag.forecast.stockonorder']}
+					#{messages['manag.forecast.batchtoexpire']}
 				</f:facet>
-				<a:commandLink value="#{messages['manag.forecast.neworder']}" styleClass="right-icon"
-					action="#{forecastingView.newOrder(r)}" style="padding-right:10px;" 
-					reRender="orderpnl" oncomplete="showOrderDlg(); return false;"/>
+				<div class="link-bar">
+				<a:commandLink value="#{messages['medicines.medicinerecs.newbatch']}" 
+					action="#{forecastingView.newBatch(r)}" 
+					reRender="batchpnl" oncomplete="showBatchDlg();"/>
+				</div>
 					
-				<h:dataTable value="#{r.orders}" var="b" styleClass="tabela4" width="150px" 
-					style="font-size:10px;" rendered="#{not empty r.orders}" columnClasses="colc,colr">
+				<h:dataTable value="#{r.batchesToExpire}" var="b" styleClass="tabela4" width="100%" rowClasses="row-bodybk" 
+					style="font-size:10px;" rendered="#{not empty r.batchesToExpire}" columnClasses="colc,colr">
 					<h:column >
 						<f:facet name="header" >
-							#{messages['Order.receivingDate']}
+							#{messages['Batch.expiryDate']}
 						</f:facet>
-						<a:commandLink action="#{forecastingView.editOrder(b)}" reRender="batchpnl" oncomplete="showBatchDlg();">
-						<h:outputText value="#{b.arrivalDate}" converter="localeDateConverter" />
+						<a:commandLink action="#{forecastingView.editBatch(b)}" reRender="batchpnl" oncomplete="showBatchDlg();" styleClass="small-link">
+							<h:outputText value="#{b.expiryDate}" converter="localeDateConverter" />
 						</a:commandLink>
 					</h:column>
 
@@ -312,6 +314,10 @@
 						<f:facet name="header" >
 							#{messages['Movement.quantity']}
 						</f:facet>
+						<a:commandLink action="#{forecastingView.deleteBatch(b)}" style="float:right;" 
+							styleClass="delete-small-icon" 
+							reRender="meds"
+							title="#{messages['form.remove']}"/>
 						<h:outputText value="#{b.quantity}">
 							<f:convertNumber pattern="#,###,##0"/>
 						</h:outputText>
@@ -321,20 +327,22 @@
 			
 			<h:column>
 				<f:facet name="header">
-					#{messages['manag.forecast.batchtoexpire']}
+					#{messages['manag.forecast.stockonorder']}
 				</f:facet>
-				<a:commandLink value="#{messages['medicines.medicinerecs.newbatch']}" styleClass="right-icon"
-					action="#{forecastingView.newBatch(r)}" 
-					reRender="batchpnl" oncomplete="showBatchDlg();"/>
+				<div class="link-bar">
+				<a:commandLink value="#{messages['manag.forecast.neworder']}" 
+					action="#{forecastingView.newOrder(r)}" style="padding-right:10px;" 
+					reRender="orderpnl" oncomplete="showOrderDlg(this); return false;"/>
+				</div>
 					
-				<h:dataTable value="#{r.batchesToExpire}" var="b" styleClass="tabela4" width="150px" 
-					style="font-size:10px;" rendered="#{not empty r.batchesToExpire}" columnClasses="colc,colr">
+				<h:dataTable value="#{r.orders}" var="b" styleClass="tabela4" width="100%" rowClasses="row-bodybk"
+					style="font-size:10px;" rendered="#{not empty r.orders}" columnClasses="colc,colr">
 					<h:column >
 						<f:facet name="header" >
-							#{messages['Batch.expiryDate']}
+							#{messages['Order.receivingDate']}
 						</f:facet>
-						<a:commandLink action="#{forecastingView.editBatch(b)}" reRender="batchpnl" oncomplete="showBatchDlg();">
-						<h:outputText value="#{b.expiryDate}" converter="localeDateConverter" />
+						<a:commandLink action="#{forecastingView.editOrder(b)}" reRender="batchpnl" oncomplete="showBatchDlg();" styleClass="small-link">
+						<h:outputText value="#{b.arrivalDate}" converter="localeDateConverter" />
 						</a:commandLink>
 					</h:column>
 
@@ -342,6 +350,10 @@
 						<f:facet name="header" >
 							#{messages['Movement.quantity']}
 						</f:facet>
+						<a:commandLink action="#{forecastingView.deleteOrder(b)}" style="float:right;" 
+							styleClass="delete-small-icon" 
+							reRender="meds"
+							title="#{messages['form.remove']}"/>
 						<h:outputText value="#{b.quantity}">
 							<f:convertNumber pattern="#,###,##0"/>
 						</h:outputText>
@@ -370,7 +382,7 @@
 <s:fragment rendered="#{not forecastingHome.managed}">
 <script type="text/javascript">
 function showForecastDlg() {
-	Richfaces.showModalPanel('saveforecastdlg');
+	showModalAutoTop('saveforecastdlg');
 	document.getElementById("main:newfor:edtname").focus();
 }
 function hideForecastDlg() {
@@ -384,6 +396,7 @@ function validateNewForecasting() {
 		return false;
 	return true;
 }
+
 function showLoadForecastingDlg() {
 	Richfaces.showModalPanel('loadfordlg');	
 }
@@ -425,18 +438,21 @@ function showLoadForecastingDlg() {
 <ui:define name="dialogs">
 
 <script type="text/javascript">
+<!--
 function showOrderDlg() {
-	Richfaces.showModalPanel('orderdlg');
+	showModalAutoTop('orderdlg');
 }
 function showBatchDlg() {
-	Richfaces.showModalPanel('batchdlg');
+	showModalAutoTop('batchdlg');
 }
 function showDatesDlg() {
-	Richfaces.showModalPanel('datesdlg');
+	showModalAutoTop('datesdlg');
 }
 function showLoadForecastingDlg() {
-	Richfaces.showModalPanel('loadfordlg');
+	showModalAutoTop('loadfordlg');
 }
+
+-->
 </script>
 
 

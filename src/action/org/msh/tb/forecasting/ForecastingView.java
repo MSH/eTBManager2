@@ -40,6 +40,11 @@ public class ForecastingView {
 	@In(create=true) EntityManager entityManager;
 	@In(create=true) RegimensQuery regimens;
 	@In(create=true) MedicinesQuery medicines;
+	
+	/**
+	 * Indicate if current UI operation was validated (if so, form can be closed by application)
+	 */
+	private boolean validated;
 
 
 	/**
@@ -88,8 +93,10 @@ public class ForecastingView {
 		int year = DateUtils.yearOf(dt);
 		dt = DateUtils.newDate(year, month, 1);
 		forecasting.setIniDate(dt);
-		dt = DateUtils.incMonths(dt, 6);
+		dt = DateUtils.incDays( DateUtils.incMonths(dt, 12), -1);
 		forecasting.setEndDate(dt);
+		
+		forecasting.setLeadTime(6);
 
 		medicineLineChangeListener();
 		datesChangeListener();
@@ -255,6 +262,7 @@ public class ForecastingView {
 	public void newBatch(ForecastingMedicine med) {
 		batch = new ForecastingBatch();
 		batch.setForecastingMedicine(med);
+		validated = false;
 	}
 
 	
@@ -264,6 +272,7 @@ public class ForecastingView {
 	 */
 	public void editBatch(ForecastingBatch batch) {
 		this.batch = batch;
+		validated = false;
 	}
 	
 
@@ -275,6 +284,16 @@ public class ForecastingView {
 		if (!batches.contains(batch))
 			batch.getForecastingMedicine().getBatchesToExpire().add(batch);
 		batch = null;
+		validated = true;
+	}
+	
+	
+	/**
+	 * Remove a batch
+	 * @param batch
+	 */
+	public void deleteBatch(ForecastingBatch batch) {
+		batch.getForecastingMedicine().getBatchesToExpire().remove(batch);
 	}
 	
 	/**
@@ -284,6 +303,7 @@ public class ForecastingView {
 	public void newOrder(ForecastingMedicine med) {
 		order = new ForecastingOrder();
 		order.setForecastingMedicine(med);
+		validated = false;
 	}
 	
 	/**
@@ -292,6 +312,7 @@ public class ForecastingView {
 	 */
 	public void editOrder(ForecastingOrder order) {
 		this.order = order;
+		validated = false;
 	}
 
 
@@ -303,7 +324,17 @@ public class ForecastingView {
 		if (!orders.contains(order))
 			orders.add(order);
 		order = null;
+		validated = true;
 	}
+
+	
+	/**
+	 * Delete an order
+	 */
+	public void deleteOrder(ForecastingOrder order) {
+		order.getForecastingMedicine().getOrders().remove(order);
+	}
+
 
 	/**
 	 * update medicines and regimens according to the medicine line selected
@@ -416,6 +447,14 @@ public class ForecastingView {
 			resultTable = new ForecastingResultTable(forecastingHome.getForecasting());
 		}
 		return resultTable;
+	}
+
+
+	/**
+	 * @return the validated
+	 */
+	public boolean isValidated() {
+		return validated;
 	}
 	
 }

@@ -33,6 +33,9 @@
 			<f:facet name="header">
 				#{messages['manag.forecast.stockonorder']}
 			</f:facet>
+			<h:outputText value="#{m.stockOnOrder}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
 		</h:column>
 		
 		<h:column>
@@ -46,9 +49,24 @@
 		
 		<h:column>
 			<f:facet name="header">
-				#{messages['manag.forecast.stockafterleadtime']}
+				<s:fragment>
+					<h:outputText value="#{messages['manag.forecast.stockafterleadtime']}" />
+					<br/>
+					<div class="small-text">
+						(<h:outputText value="#{forecasting.iniDateLeadTime}" converter="localeDateConverter" />)
+					</div>
+				</s:fragment>
 			</f:facet>
 			<h:outputText value="#{m.stockOnHandAfterLeadTime}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.expiredquantity']}
+			</f:facet>
+			<h:outputText value="#{m.quantityExpired}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
 		</h:column>
@@ -101,6 +119,8 @@
 		</h:column>
 	</h:dataTable>
 </rich:tab>
+
+
 
 <rich:tab label="#{messages['manag.forecast.tabres2']}" rendered="#{forecasting.hasResult}">
 <table width="100%" class="tabela">
@@ -168,6 +188,8 @@
 </a:repeat>
 </table>
 </rich:tab>
+
+
 
 <rich:tab label="#{messages['manag.forecast.tabres3']}" rendered="#{forecasting.hasResult}">
 <table width="100%" class="tabela">

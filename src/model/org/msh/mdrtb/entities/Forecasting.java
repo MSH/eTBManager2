@@ -132,6 +132,20 @@ public class Forecasting extends WSObject implements Serializable {
 
 
 	/**
+	 * Return the initial date of forecasting considering the forecasting
+	 * @return
+	 */
+	public Date getIniDateLeadTime() {
+		if ((referenceDate == null) || (iniDate == null))
+			return null;
+
+		int months = DateUtils.monthsBetween(referenceDate, iniDate);
+		if (months > leadTime)
+			 return iniDate;
+		else return DateUtils.incMonths(iniDate, leadTime - months);
+	}
+	
+	/**
 	 * Clear all results
 	 */
 	public void clearResults() {
@@ -188,6 +202,9 @@ public class Forecasting extends WSObject implements Serializable {
 			med.setEstimatedQtyCases(0);
 			med.setEstimatedQtyNewCases(0);
 			med.setDispensingLeadTime(0);
+			med.setQuantityExpired(0);
+			med.setStockOnOrder(0);
+
 			for (int i = 0; i <= num; i++) {
 				ForecastingResult res = new ForecastingResult();
 				res.setForecasting(this);

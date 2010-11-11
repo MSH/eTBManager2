@@ -11,7 +11,7 @@
 <script type="text/javascript">
 window.decSeparator = '#{timezones.decimalSeparator}';
 function showBatchDlg() {
-	Richfaces.showModalPanel('batchdlg');
+	showModalAutoTop('batchdlg');
 	jQuery('#formbatch\\:dt\\:dtInputDate').mask('#{messages['locale.dateMask']}');
 }
 

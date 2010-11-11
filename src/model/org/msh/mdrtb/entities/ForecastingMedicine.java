@@ -36,7 +36,8 @@ public class ForecastingMedicine implements Serializable {
 	private Medicine medicine;
 	
 	private int stockOnHand;
-	
+	private int stockOnOrder;
+
 	private float unitPrice;
 	
 	private int estimatedQtyCases;
@@ -44,6 +45,7 @@ public class ForecastingMedicine implements Serializable {
 	private int bufferStock;
 	private int requestedQty;
 	private int dispensingLeadTime;
+	private int quantityExpired;
 
 
 	/**
@@ -243,5 +245,37 @@ public class ForecastingMedicine implements Serializable {
 
 	public void setOrders(List<ForecastingOrder> orders) {
 		this.orders = orders;
+	}
+
+
+	/**
+	 * @return the stockOnOrder
+	 */
+	public int getStockOnOrder() {
+		return stockOnOrder;
+	}
+
+
+	/**
+	 * @param stockOnOrder the stockOnOrder to set
+	 */
+	public void setStockOnOrder(int stockOnOrder) {
+		this.stockOnOrder = stockOnOrder;
+	}
+
+
+	/**
+	 * @return the quantityExpired
+	 */
+	public int getQuantityExpired() {
+		return quantityExpired;
+	}
+
+
+	/**
+	 * @param quantityExpired the quantityExpired to set
+	 */
+	public void setQuantityExpired(int quantityExpired) {
+		this.quantityExpired = quantityExpired;
 	}
 }

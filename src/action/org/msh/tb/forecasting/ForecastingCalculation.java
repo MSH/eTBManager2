@@ -103,7 +103,7 @@ public class ForecastingCalculation {
 		// clear current results
 		forecasting.clearResults();
 
-		monthIndexIniDate = forecasting.getMonthIndex(forecasting.getIniDate());
+		monthIndexIniDate = forecasting.getMonthIndex(forecasting.getIniDateLeadTime());
 		
 		forecasting.initializeResults();
 /*		for (ForecastingMedicine med: forecasting.getMedicines()) {
@@ -208,10 +208,17 @@ public class ForecastingCalculation {
 
 				if (stockOnHand < 0)
 					stockOnHand = 0;
+
+				ForecastingMedicine fmed = forecasting.findMedicineById(res.getMedicine().getId());
+				if (fmed != null) {
+					fmed.setStockOnOrder( fmed.getStockOnOrder() + qtdOrder );
+					fmed.setQuantityExpired( fmed.getQuantityExpired() + qtdExpired);
+				}
 			}
 		}
 	}
 
+	
 	
 	/**
 	 * Calculate the quantity to expire for the medicine in the month index

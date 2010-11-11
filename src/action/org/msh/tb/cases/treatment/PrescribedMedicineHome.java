@@ -127,7 +127,7 @@ public class PrescribedMedicineHome {
 
 	/**
 	 * Join two periods that were split in a date dt
-	 * @param dt date to join two adjacents periods
+	 * @param dt date to join two adjacent periods
 	 */
 	public void joinPeriods(Date dt) {
 		TbCase tbcase = caseHome.getInstance();

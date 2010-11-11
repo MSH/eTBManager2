@@ -151,8 +151,14 @@ td {
 
 .small-text {
 	font-size:10px;
-	color: #808080;
+	font-weight: normal;
 }
+
+.small-link {
+	font-size:10px;
+	font-weight: normal;
+}
+
 .titulo_info {
   font-weight:bold;
   background-color:#A7C0E4;
@@ -223,6 +229,7 @@ td {
 .colu {	border-bottom:1px solid #5DCA72; }
 .row1 { background-color:#F7F6E3;}
 .row2 { background-color:#F6F4B8;}
+.row-bodybk { background-color:#ffffff }
 
 .menubv {
 	width: 100%;
@@ -874,6 +881,15 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	height:16px;
 	position:relative;
 	float:right;
+	cursor:pointer;
+}
+
+.delete-small-icon {
+	background: transparent url(images/close2.png) no-repeat left top;
+	width:16px;
+	height:16px;
+	margin:2px;
+	position:relative;
 	cursor:pointer;
 }
 

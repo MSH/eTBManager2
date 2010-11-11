@@ -81,3 +81,10 @@ ALTER TABLE Regimen MODIFY COLUMN `caseClassification` INT(11) NOT NULL;
 ALTER TABLE Regimen DROP COLUMN `mdrTreatment`,
  DROP COLUMN `tbTreatment`;
 
+update Batch set expirydate = cast(expirydate as date);
+
+ALTER TABLE Batch MODIFY COLUMN `expiryDate` DATE NOT NULL;
+
+update ForecastingMedicine
+set stockonorder=0, quantityexpired=0
+where stockonorder is null;
