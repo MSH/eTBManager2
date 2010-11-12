@@ -32,7 +32,7 @@ public class PrescriptionTable {
 	@In(required=true) CaseHome caseHome;
 
 	/**
-	 * Store the current period of treatment, considering transfering of health unit
+	 * Store the current period of treatment, considering transferring of health unit
 	 */
 	private Period period;
 
@@ -55,6 +55,7 @@ public class PrescriptionTable {
 	 * Store the number of days of treatment 
 	 */
 	private int numDaysTreatment;
+
 	
 	/**
 	 * Indicate if the period will be displayed for editing, in this case, just the period
@@ -205,35 +206,55 @@ public class PrescriptionTable {
 
 
 	/**
+	 * Calculate position of the bar based on the give date
+	 * @param dt
+	 * @return
+	 */
+	private int calcBarPosition(Date dt) {
+		if (dt.after(period.getEndDate()))
+			return 100;
+		
+		int days = DateUtils.daysBetween(period.getIniDate(), dt);
+		
+		int pos = Math.round((days / (float)numDaysTreatment * 100f) - 0.5f);
+		
+		return pos;
+	}
+
+
+	/**
 	 * Update values of a list of treatment periods
 	 * @param lst
 	 */
 	protected void updateListValues(List<TreatmentPeriod> lst) {
-		int prevLeft = 0;
 		sortPeriodList(lst);
-		float numDaysTreat = getNumDaysTreatment();
 
-		Date dtAnt = null;
-
+		int lastpos = 0;
+		
 		for (TreatmentPeriod p: lst) {
-			float daysPeriod = p.getPeriod().getDays();
-			int width = Math.round(daysPeriod / numDaysTreat * 100);
+			int left = calcBarPosition(p.getIniDate());
+			int right = calcBarPosition( DateUtils.incDays(p.getEndDate(), 1) );
+			
+			int width = right - left;
+			
+			left -= lastpos;
+			lastpos = right;
 
-			int daysLeft = DateUtils.daysBetween(p.getIniDate(), period.getIniDate());
-			int left = Math.round(daysLeft / numDaysTreat * 100);
+/*			if (width > 100)
+				width = 100;
+
+			left -= lastpos;
+			lastpos = lastpos + left + width;
 			
-			p.setWidth(width);
-			
-			if ((dtAnt != null) && (DateUtils.daysBetween(dtAnt, p.getPeriod().getIniDate()) == 1)) {
-				// make small adjustment in the round operation 
-				p.setLeft(0);
-				if (left - prevLeft > 0)
-					p.setWidth(width + 1);
+			if (left < 0) {
+				int val = left;
+				left = 0;
+				if (prevPeriod != null)
+					prevPeriod.setWidth( prevPeriod.getWidth() + val);
 			}
-			else p.setLeft(left - prevLeft);
-			
-			prevLeft = left + width;
-			dtAnt = p.getPeriod().getEndDate();
+*/			
+			p.setLeft(left);
+			p.setWidth(width);
 		}
 	}
 

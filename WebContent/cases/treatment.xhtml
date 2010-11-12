@@ -51,10 +51,12 @@
 
 	<h:panelGroup id="pnltreatment">
 
-		<rich:dropDownMenu style="width:auto;float:right;" rendered="#{caseHome.canEditTreatment}" styleClass="dropdown-link">
+		<rich:dropDownMenu style="width:auto;float:right;" rendered="#{(caseHome.canEditTreatment) and (tbcase.state!='TRANSFERRING')}" 
+			styleClass="dropdown-link" >
+			
 			<f:facet name="label">#{messages['form.options']}
 			</f:facet>
-			<rich:menuItem value="#{messages['form.edit']}" submitMode="server" action="edit" rendered="#{tbcase.state!='TRANSFERRING'}">
+			<rich:menuItem value="#{messages['form.edit']}" submitMode="server" action="edit" >
 			</rich:menuItem>
 			<rich:menuItem  rendered="#{caseHome.canTransferOut}" submitMode="client">
 				<s:link value="#{messages['cases.move']}" view="/cases/casemove.xhtml">

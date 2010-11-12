@@ -204,6 +204,12 @@ public class PrescribedMedicine implements Serializable {
 		period.setEndDate(dt);
 	}
 	
+
+	@Override
+	public String toString() {
+		return ((medicine != null) && (period != null)? period.toString() + " - " + medicine.toString(): null);
+	}
+	
 	public Medicine getMedicine() {
 		return medicine;
 	}

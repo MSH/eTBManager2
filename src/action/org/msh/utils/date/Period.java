@@ -165,7 +165,7 @@ public class Period {
 		if (!isDateInside(dt))
 			return false;
 		
-		endDate = dt;
+		iniDate = dt;
 		return true;
 	}
 

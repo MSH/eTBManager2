@@ -65,7 +65,7 @@
     
     </td></tr>
     <tr><td align="right">
-    	<a:commandButton action="#{caseMoveHome.transferOut}" value="#{messages['form.ok']}" styleClass="button" />
+    	<a:commandButton action="#{caseMoveHome.transferOut}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>
     	<s:button view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" >
     		<f:param name="id" value="#{caseHome.id}" />
     	</s:button>

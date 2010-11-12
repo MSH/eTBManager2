@@ -71,7 +71,7 @@ public class TreatmentHome {
 	 * Initialize editing of the treatment
 	 */
 	public void initializeEditing() {
-		PrescriptionTable tbl = getPrescriptionTable();
+		PrescriptionTable tbl = (PrescriptionTable)Component.getInstance("prescriptionTable", true);
 		tbl.setEditing(true);
 		tbl.refresh();
 		updateTreatmentPeriod();
@@ -95,8 +95,6 @@ public class TreatmentHome {
 	 * @return
 	 */
 	public String saveChanges() {
-		getPrescriptionTable().refresh();
-		
 		Tbunit unit = getTbunitselection().getTbunit();
 		
 		healthUnit.setTbunit( unit );
@@ -105,6 +103,8 @@ public class TreatmentHome {
 		tbcase.setTreatmentUnit(unit);
 		caseHome.getInstance().updateDaysTreatPlanned();
 
+		refreshPrescriptionTable();
+		
 		return caseHome.persist();
 	}
 	
@@ -140,13 +140,19 @@ public class TreatmentHome {
 
 		TbCase tbcase = caseHome.getInstance();
 		
-		Period intPeriod = new Period(iniDate, DateUtils.incDays(iniContinuousPhase, -1));
-		Period conPeriod = new Period(iniContinuousPhase, endDate);
+		// case has continuous phase ?
+		if (tbcase.getIniContinuousPhase() != null) {
+			Period intPeriod = new Period(iniDate, DateUtils.incDays(iniContinuousPhase, -1));
+			Period conPeriod = new Period(iniContinuousPhase, endDate);
 
-		if (tbcase.getIniContinuousPhase() != null)
 			prescribedMedicineHome.splitPeriod(tbcase.getIniContinuousPhase());
-		prescribedMedicineHome.adjustPhasePeriod(RegimenPhase.INTENSIVE, intPeriod);
-		prescribedMedicineHome.adjustPhasePeriod(RegimenPhase.CONTINUOUS, conPeriod);
+			prescribedMedicineHome.adjustPhasePeriod(RegimenPhase.INTENSIVE, intPeriod);
+			prescribedMedicineHome.adjustPhasePeriod(RegimenPhase.CONTINUOUS, conPeriod);
+		}
+		else {
+			prescribedMedicineHome.adjustPhasePeriod(RegimenPhase.INTENSIVE, new Period(iniDate, endDate));
+			prescribedMedicineHome.splitPeriod(iniContinuousPhase);
+		}
 		
 		Period p = new Period(iniDate, endDate);
 		healthUnit.setPeriod(p);
@@ -156,7 +162,7 @@ public class TreatmentHome {
 
 		formEditing = FormEditing.NONE;
 		validated = true;
-		getPrescriptionTable().refresh();
+		refreshPrescriptionTable();
 	}
 
 	
@@ -184,7 +190,7 @@ public class TreatmentHome {
 		formEditing = FormEditing.NONE;
 		validated = true;
 
-		getPrescriptionTable().refresh();
+		refreshPrescriptionTable();
 	}
 
 
@@ -283,7 +289,7 @@ public class TreatmentHome {
 		validated = true;
 		formEditing = FormEditing.NONE;
 
-		getPrescriptionTable().refresh();
+		refreshPrescriptionTable();
 	}
 
 
@@ -322,7 +328,7 @@ public class TreatmentHome {
 			tbcase.setRegimen(null);
 		}
 		updateTreatmentPeriod();
-		getPrescriptionTable().refresh();
+		refreshPrescriptionTable();
 		validated = true;
 		formEditing = FormEditing.NONE;
 	}
@@ -636,8 +642,10 @@ public class TreatmentHome {
 	 * Return a reference to a prescription table component
 	 * @return
 	 */
-	protected PrescriptionTable getPrescriptionTable() {
-		return (PrescriptionTable)Component.getInstance("prescriptionTable", true);
+	protected void refreshPrescriptionTable() {
+		PrescriptionTable tbl = (PrescriptionTable)Component.getInstance("prescriptionTable");
+		if (tbl != null)
+			tbl.refresh();
 	}
 
 
