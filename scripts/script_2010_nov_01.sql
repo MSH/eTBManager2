@@ -85,6 +85,10 @@ update Batch set expirydate = cast(expirydate as date);
 
 ALTER TABLE Batch MODIFY COLUMN `expiryDate` DATE NOT NULL;
 
+alter table ForecastingMedicine 
+  add column stockOnOrder int,
+  add column quantityExpired int;
+
 update ForecastingMedicine
 set stockonorder=0, quantityexpired=0
 where stockonorder is null;

@@ -52,7 +52,7 @@
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['regimens.standard']}:</ui:define>
     	<h:selectOneMenu value="#{startTreatmentHome.regimen}" required="true">
-    		<s:selectItems value="#{startTreatmentHome.regimens}" var="it" label="#{it.name}" noSelectionLabel="-"/>
+    		<s:selectItems value="#{caseRegimenHome.availableRegimens}" var="it" label="#{it.name}" noSelectionLabel="-"/>
     		<s:convertEntity />
     		<a:support event="onchange" reRender="pnlregimen" ajaxSingle="true" action="#{startTreatmentHome.updatePhases}"/>
     	</h:selectOneMenu>
@@ -62,9 +62,10 @@
 	<h:panelGroup id="pnlregimen">
 
 	<s:fragment rendered="#{not empty startTreatmentHome.regimen}">
-		<a:repeat value="#{startTreatmentHome.phases}" var="p">
+		<a:repeat value="#{caseRegimenHome.phases}" var="p">
 		<table width="100%" cellpadding="2" cellspacing="0" style="margin-top:35px;margin-bottom:1px;border:2px solid #d0d0d0;">
 		<tr><td style="background-color:#e0e0e0" height="30px">
+				<div style="text-transform: uppercase;font-weight:bold;">#{messages[p.phase.key]}</div>
 				<span style="margin-right:10px;"><b>#{messages['global.period']}:</b></span>
 				#{p.months} #{messages['global.months']}
 		</td></tr>
@@ -76,20 +77,20 @@
 		   rowClasses="lin1,lin2" style="clear:left;" rendered="#{not empty p.medicines}">
 		<h:column>
 			<f:facet name="header">#{messages['Medicine']}</f:facet>
-			#{m.prescribedMedicine.medicine}
+			#{m.medicine}
 		</h:column>
-		
+
 		<h:column>
 			<f:facet name="header">#{messages['PrescribedMedicine.doseUnit']}</f:facet>
-			<h:inputText value="#{m.prescribedMedicine.doseUnit}" id="dose" style="width:60px">
-				<f:validateLongRange minimum="1" maximum="10"/>
-			</h:inputText>
+			<h:selectOneMenu id="dose" value="#{m.doseUnit}" required="true">
+				<f:selectItems value="#{treatmentHome.doses}" />
+			</h:selectOneMenu>
 			<h:message for="dose" styleClass="erro" />
 		</h:column>
 		
 		<h:column>
 			<f:facet name="header">#{messages['PrescribedMedicine.frequency']}</f:facet>
-			<h:selectOneMenu value="#{m.prescribedMedicine.frequency}" required="true" id="freq">
+			<h:selectOneMenu value="#{m.frequency}" required="true" id="freq">
             	<f:selectItems value="#{frequencies}" />
 			</h:selectOneMenu>
 			<h:message for="freq" styleClass="erro" />
@@ -97,7 +98,7 @@
 		
 		<h:column>
 			<f:facet name="header">#{messages['Source']}</f:facet>
-			<h:selectOneMenu id="sourcei" value="#{m.prescribedMedicine.source}" required="true">
+			<h:selectOneMenu id="sourcei" value="#{m.source}" required="true">
             	<s:selectItems value="#{sources}" var="c" label="#{c.name}" noSelectionLabel="-" />
             	<s:convertEntity />
 			</h:selectOneMenu>

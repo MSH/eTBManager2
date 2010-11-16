@@ -111,6 +111,10 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 	}
 
 
+	/**
+	 * Initialize medicine selection dialog box
+	 * @param phase
+	 */
 	public void initMedicineSelection(RegimenPhase phase) {
 		List<PrescribedMedicine> meds;
 		if (RegimenPhase.CONTINUOUS.equals(phase))
@@ -121,7 +125,11 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 		medicineSelection.applyFilter(meds, "medicine");
 		this.phase = phase;
 	}
+
 	
+	/**
+	 * Add new medicines
+	 */
 	public void addMedicines() {
 		List<PrescribedMedicine> meds;
 		if (RegimenPhase.CONTINUOUS.equals(phase))

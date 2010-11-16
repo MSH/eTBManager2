@@ -240,19 +240,6 @@ public class PrescriptionTable {
 			left -= lastpos;
 			lastpos = right;
 
-/*			if (width > 100)
-				width = 100;
-
-			left -= lastpos;
-			lastpos = lastpos + left + width;
-			
-			if (left < 0) {
-				int val = left;
-				left = 0;
-				if (prevPeriod != null)
-					prevPeriod.setWidth( prevPeriod.getWidth() + val);
-			}
-*/			
 			p.setLeft(left);
 			p.setWidth(width);
 		}
