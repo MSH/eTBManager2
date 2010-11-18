@@ -34,6 +34,9 @@
             <rule if-outcome="home">
                 <redirect view-id="/home.xhtml"/>
             </rule>
+            <rule if-outcome="med-home">
+            	<redirect view-id="/medicines/index.xhtml" />
+            </rule>
         </navigation>
     </page>
     
@@ -63,62 +66,10 @@
 
 
 	<!-- DRUG ORDER -->
-	<page view-id="/medicines/orderdata.xhtml">
-		<restrict>#{s:hasRole('ORDERS')}</restrict>
-		<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-		<navigation>
-			<rule if-outcome="removed">
-				<redirect view-id="/medicines/orders.seam">
-				</redirect>
-			</rule>
-		</navigation>
-	</page>
 	
 	<page view-id="/reports/orderdata.xhtml">
 		<restrict>#{s:hasRole('ORDER_PRINT')}</restrict>
 		<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-	</page>
-	
-	<page view-id="/medicines/orderaut.xhtml" >
-		<restrict>#{s:hasRole('VAL_ORDER')}</restrict>
-		<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-		<navigation>
-			<rule if-outcome="authorized">
-				<redirect view-id="/medicines/orderdata.xhtml">
-					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-				</redirect>
-			</rule>
-			<rule if-outcome="canceled">
-				<redirect view-id="/medicines/orderdata.xhtml">
-					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-				</redirect>
-			</rule>
-		</navigation>
-	</page>
-	
-	<page view-id="/medicines/ordersent.xhtml" conversation-required="true" no-conversation-view-id="/medicines/orders.xhtml">
-		<restrict>#{s:hasRole('SEND_ORDER')}</restrict>
-		<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-		<navigation>
-			<rule if-outcome="persisted">
-				<end-conversation/>
-				<redirect view-id="/medicines/orderdata.xhtml">
-					<message>#{messages['medicines.orders.shipped']}</message>
-					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-				</redirect>
-			</rule>
-			<rule if-outcome="selbatches">
-				<redirect view-id="/medicines/selbatch.xhtml">
-					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-				</redirect>
-			</rule>
-			<rule if-outcome="cancel">
-				<end-conversation before-redirect="true"/>
-				<redirect view-id="/medicines/orderdata.xhtml">
-					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer"/>
-				</redirect>
-			</rule>
-		</navigation>
 	</page>
 	
 	<page view-id="/medicines/selbatch.xhtml" conversation-required="true" no-conversation-view-id="/medicines/orderdata.xhtml">
@@ -129,55 +80,6 @@
 		</navigation>
 	</page>
 	
-	<page view-id="/medicines/orderrec.xhtml" conversation-required="true" no-conversation-view-id="/medicines/orders.xhtml">
-		<restrict>#{s:hasRole('RECEIV_ORDER')}</restrict>
-		<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-		<navigation>
-			<rule if-outcome="received">
-				<redirect view-id="/medicines/orderdata.xhtml">
-					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-				</redirect>
-			</rule>
-			<rule if-outcome="cancel">
-				<end-conversation before-redirect="true" />
-				<redirect view-id="/medicines/orderdata.xhtml">
-					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-				</redirect>
-			</rule>
-		</navigation>
-	</page>
-	
-	<page view-id="/medicines/orderrecbatch.xhtml" conversation-required="true" no-conversation-view-id="/medicines/orders.xhtml">
-		<restrict>#{s:hasRole('RECEIV_ORDER')}</restrict>
-		<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-		<navigation>
-			<rule if-outcome="received">
-				<redirect view-id="/medicines/orderdata.xhtml">
-					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-				</redirect>
-			</rule>
-			<rule if-outcome="cancel">
-				<end-conversation before-redirect="true" />
-				<redirect view-id="/medicines/orderdata.xhtml">
-					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-				</redirect>
-			</rule>
-		</navigation>
-	</page>
-	
-	<page view-id="/medicines/ordercancel.xhtml">
-		<restrict>#{s:hasRole('ORDER_CANC')}</restrict>
-		<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-		<navigation>
-			<rule if-outcome="ordercanceled">
-				<redirect view-id="/medicines/orderdata.xhtml">
-					<message>#{messages['']}</message>
-					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-				</redirect>
-			</rule>
-		</navigation>
-	</page>
-
 
 	<!-- CASE DISPENSING -->
 		
@@ -220,100 +122,13 @@
 
 
 	<!-- TRANSFER -->
-	<page view-id="/medicines/transfer.xhtml" action="#{transfers.execute}">
-		<restrict>#{s:hasRole('TRANSFER')}</restrict>
-		<param name="sit" value="#{transfers.status}"/>
-	</page>
-	
-	<page view-id="/medicines/transfedt.xhtml" >
-		<restrict>#{s:hasRole('TRANSFER_EDT')}</restrict>
-		<begin-conversation join="true"/>
-		<navigation>
-			<rule if-outcome="persisted">
-				<end-conversation/>
-				<redirect view-id="/medicines/transfer.xhtml" />
-			</rule>
-		</navigation>
-	</page>
-	
-	<page view-id="/medicines/transfcancel.xhtml" >
-		<restrict>#{s:hasRole('TRANSFER_EDT')}</restrict>
-		<param name="id" value="#{transferHome.id}" converterId="javax.faces.Integer"/>
-		<navigation>
-			<rule if-outcome="canceled">
-				<redirect view-id="/medicines/transfdata.xhtml" >
-					<param name="id" value="#{transferHome.id}" converterId="javax.faces.Integer"/>
-				</redirect>
-			</rule>
-		</navigation>
-	</page>
 
-	<page view-id="/medicines/transfdata.xhtml" >
-		<restrict>#{s:hasRole('TRANSFER')}</restrict>
-		<param name="id" value="#{transferHome.id}" converterId="javax.faces.Integer"/>
-		<navigation>
-			<rule if-outcome="success">
-				<redirect view-id="/medicines/transfedt.xhtml" />
-			</rule>
-		</navigation>
-	</page>
-
-	<page view-id="/reports/transfdata.xhtml" >
+	<page view-id="/reports/transfdata.xhtml">
 		<restrict>#{s:hasRole('TRANSFER')}</restrict>
 		<param name="id" value="#{transferHome.id}" converterId="javax.faces.Integer"/>
 	</page>
 	
-	<page view-id="/medicines/transfrec.xhtml" action="#{transferHome.initializeReceiving}">
-		<restrict>#{s:hasRole('TRANSF_REC')}</restrict>
-		<param name="id" value="#{transferHome.id}" converterId="javax.faces.Integer"/>
-		<begin-conversation join="true"/>
-		<navigation>
-			<rule if-outcome="received">
-				<end-conversation />
-				<redirect view-id="/medicines/transfdata.xhtml">
-					<param name="id" value="#{transferHome.id}" />
-				</redirect>
-			</rule>
-			<rule if-outcome="cancel">
-				<end-conversation before-redirect="true"/>
-				<redirect view-id="/medicines/transfdata.xhtml">
-					<param name="id" value="#{transferHome.id}" />
-				</redirect>
-			</rule>
-		</navigation>
-	</page>
 
-
-
-	<!-- STOCKPOS -->
-	<page view-id="/medicines/stockpos.xhtml" action="#{stockPosHome.execute}">
-		<restrict>#{s:hasRole('STOCKPOS')}</restrict>
-		<param name="sorder" value="#{stockPosHome.order}" />
-		<param name="order" value="#{batchesReport.order}" />
-		<param name="bb" value="#{stockPosHome.showBatch}" />
-	</page>
-
-	<page view-id="/reports/stockpos.xhtml" action="#{stockPosHome.execute}">
-		<restrict>#{s:hasRole('STOCKPOS')}</restrict>
-		<param name="source" value="#{stockPosHome.sourceId}" converterId="javax.faces.Integer" />
-		<param name="sorder" value="#{stockPosHome.order}" />
-		<param name="order" value="#{batchesReport.order}" />
-		<param name="bb" value="#{stockPosHome.showBatch}" />
-	</page>
-
-	<page view-id="/medicines/stockadj.xhtml">
-		<restrict>#{s:hasRole('STOCKPOS_EDT')}</restrict>
-		<param name="srcid" value="#{stockAdjustmentHome.sourceId}" />
-		<begin-conversation join="true"/>
-		<navigation>
-			<rule if-outcome="success">
-				<end-conversation/>
-				<redirect view-id="/medicines/stockpos.xhtml">
-					<message>#{messages['medicines.movs.adjustok']}</message>
-				</redirect>
-			</rule>
-		</navigation>
-	</page>
 
 	<page view-id="/medicines/unitsetupedt.xhtml">
 		<restrict>#{s:hasRole('UNITSETUP')}</restrict>
@@ -347,10 +162,6 @@
 		<param name="endyear" value="#{reportSelection.endYear}" converterId="javax.faces.Integer" />
 	</page>
 
-
-	<page view-id="/admin/websessions.xhtml">
-		<restrict>#{s:hasRole('ONLINE')}</restrict>
-	</page>
 
 
     

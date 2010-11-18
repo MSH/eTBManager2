@@ -37,6 +37,8 @@ public class TBUnitSelection {
 	private TBUnitFilter filter;
 	private HealthSystem healthSystem;
 	private boolean applyHealthSystemRestrictions;
+	
+	private TbunitSelectionList options;
 
 	
 	/**
@@ -81,11 +83,13 @@ public class TBUnitSelection {
 	 * @return List of {@link Tbunit} instances
 	 */
 	public List<Tbunit> getOptions() {
-		TbunitSelectionList lst = (TbunitSelectionList)Component.getInstance("tbunitSelectionList", true);
-		lst.setApplyHealthSystemRestrictions(applyHealthSystemRestrictions);
-		lst.setRestriction(createHQLUnitFilter());
-		lst.setAdminUnit(getAuselection().getSelectedUnit());
-		return lst.getUnits();
+		if (options == null) {
+			options = new TbunitSelectionList();
+			options.setApplyHealthSystemRestrictions(applyHealthSystemRestrictions);
+			options.setRestriction(createHQLUnitFilter());
+			options.setAdminUnit(getAuselection().getSelectedUnit());
+		}
+		return options.getUnits();
 	}
 
 

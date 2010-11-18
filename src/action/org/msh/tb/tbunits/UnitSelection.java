@@ -79,7 +79,8 @@ public class UnitSelection {
 		// avoid lazy init error
 		unit.getHealthSystem().getName();
 		userSession.setTbunit(unit);
-		return "unitselected";
+		
+  	    return "med-home";
 	}
 
 	

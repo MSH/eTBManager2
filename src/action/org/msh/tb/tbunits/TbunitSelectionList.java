@@ -5,10 +5,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.msh.mdrtb.entities.AdministrativeUnit;
 import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.UserWorkspace;
@@ -18,12 +14,8 @@ import org.msh.mdrtb.entities.UserWorkspace;
  * @author Ricardo Memoria
  *
  */
-@Name("tbunitSelectionList")
-@Scope(ScopeType.EVENT)
 public class TbunitSelectionList {
 
-	@In EntityManager entityManager;
-	
 	private AdministrativeUnit adminUnit;
 	private List<Tbunit> units;
 	private boolean applyHealthSystemRestrictions;
@@ -70,11 +62,12 @@ public class TbunitSelectionList {
 			hql = hql.concat(" and " + restriction);
 		
 		hql = hql + " order by u.name.name1";
-		
-		units = entityManager.createQuery(hql)
-					.setParameter("code", adminUnit.getCode() + "%")
-					.setParameter("active", true)
-					.getResultList();
+
+		EntityManager em = (EntityManager)Component.getInstance("entityManager");
+		units = em.createQuery(hql)
+				.setParameter("code", adminUnit.getCode() + "%")
+				.setParameter("active", true)
+				.getResultList();
 	}
 
 

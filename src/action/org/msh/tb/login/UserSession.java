@@ -53,7 +53,6 @@ public class UserSession {
      * @return {@link Workspace} instance
      */
     @Factory("defaultWorkspace")
-    @BypassInterceptors
     public Workspace getDefaultWorkspace() {
     	return (userWorkspace != null? userWorkspace.getWorkspace(): null);
     }
@@ -242,14 +241,6 @@ public class UserSession {
 
 
 
-	/**
-	 * Return if user can play activities not only of his unit, but with other units
-	 * @return true if user can play activities of other units
-	 */
-	public boolean isCanPlayOrderUnits() {
-		return userLogin.getUser().getDefaultWorkspace().isPlayOtherUnits();
-	}
-
 
 	public Tbunit getWorkingTbunit() {
 		UserWorkspace uw = userLogin.getUser().getDefaultWorkspace();
@@ -294,17 +285,17 @@ public class UserSession {
 
 
 	public boolean isCanCheckOrders() {
-		return Identity.instance().hasRole("ORDERS");
+		return (Identity.instance().hasRole("ORDERS")) && (getTbunit().isMedicineManagementStarted());
 	}
 
 
 	public boolean isCanCheckMovements() {
-		return Identity.instance().hasRole("MOVS") && (getTbunit().isMedicineStorage());
+		return (Identity.instance().hasRole("MOVS") && (getTbunit().isMedicineStorage())) && (getTbunit().isMedicineManagementStarted());
 	}
 
 
 	public boolean isCanCheckTransfers() {
-		return Identity.instance().hasRole("TRANSFER") && (getTbunit().isMedicineStorage());
+		return ((Identity.instance().hasRole("TRANSFER")) && (getTbunit().isMedicineManagementStarted()));
 	}
 
 

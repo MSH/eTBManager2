@@ -2,7 +2,7 @@
 <page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
 
-	<restrict>#{s:hasRole('DISP_PAC')}</restrict>
+	<restrict>#{userSession.canCheckDispensing}</restrict>
 	<action execute="#{dispensingView.initializeMonthYear}"/>
 	<param name="month" value="#{dispensingView.month}" converterId="javax.faces.Integer"/>
 	<param name="year" value="#{dispensingView.year}" converterId="javax.faces.Integer"/>

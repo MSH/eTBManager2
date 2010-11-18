@@ -33,7 +33,7 @@
 </table>
 
 <s:fragment id="sf" rendered="#{selunit=='1'}">
-<rich:modalPanel id="unitSelDlg" autosized="true" top="200" width="490" zindex="2000" style="background-color:#F2F5F0">
+<rich:modalPanel id="unitSelDlg" autosized="true" width="490" zindex="2000" style="background-color:#F2F5F0">
 	<f:facet name="header">
 		<h:outputText value="#{messages['medicines.selunit']}" />
 	</f:facet>
@@ -86,20 +86,16 @@
 
 <script type="text/javascript">
 function showUnitSelDlg() {
-	Richfaces.showModalPanel('unitSelDlg');
+	showModalAutoTop('unitSelDlg');
 	document.getElementById("medroot:frmunit:unitname").value = "";
 }
 function hideUnitSelDlg() {
 	Richfaces.hideModalPanel('unitSelDlg');
 }
-function selectUnit(id) {
-var elem = document.getElementById("unitid");
-elem = elem.firstChild;
-elem.value = id;
-var form = document.getElementById("unitform").firstChild;
-while (form.nodeType != 1) form = form.nextSibling;
-form.submit();
-}
 </script>
+<a:jsFunction name="selectUnit" ajaxSingle="true" action="#{unitSelection.selectUnit}" reRender="main">
+	<a:actionparam name="param1" assignTo="#{unitSelection.unitId}" converter="javax.faces.Integer" />
+</a:jsFunction>
+
 </s:fragment>
 </ui:composition>

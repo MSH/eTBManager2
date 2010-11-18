@@ -4,6 +4,11 @@
 
 	<restrict>#{userSession.canCheckOrders}</restrict>
 
-	<param name="firstResult" value="#{orders.firstResult}" />
-	<param name="order" value="#{orders.order}" />
+	<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
+	<navigation>
+		<rule if-outcome="removed">
+			<redirect view-id="/medicines/orders.seam">
+			</redirect>
+		</rule>
+	</navigation>
 </page>
