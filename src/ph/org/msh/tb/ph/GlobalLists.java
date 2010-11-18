@@ -27,15 +27,19 @@ public class GlobalLists {
 	};
 
 	private static final TbField tbfields[] = {
-		TbField.PHYSICAL_EXAMS,
+		TbField.CONTACTCONDUCT,
+		TbField.CONTACTTYPE,
+		TbField.COMORBIDITY,
+		TbField.CULTURE_METHOD,
 		TbField.DIAG_CONFIRMATION,
 		TbField.DST_METHOD,
-		TbField.CULTURE_METHOD,
+		TbField.EXTRAPULMONARY_TYPES,
+		TbField.PHYSICAL_EXAMS,
+		TbField.PULMONARY_TYPES,
 		TbField.SMEAR_METHOD,
 		TbField.SYMPTOMS,
-		TbField.XRAYPRESENTATION,
-		TbField.PULMONARY_TYPES,
-		TbField.EXTRAPULMONARY_TYPES
+		TbField.SIDEEFFECT,
+		TbField.XRAYPRESENTATION
 	};
 	
 	private static final PrevTBTreatmentOutcome prevTBTreatmentOutcomes[] = {

@@ -1,10 +1,12 @@
 package org.msh.tb.workspaces;
 
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.mdrtb.entities.Workspace;
 import org.msh.utils.EntityQuery;
 
 @Name("workspaces")
+@BypassInterceptors
 public class WorkspacesQuery extends EntityQuery<Workspace> {
 	private static final long serialVersionUID = 859882528182398990L;
 

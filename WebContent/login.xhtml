@@ -44,7 +44,8 @@
       <tr>
         <td colspan="2">
         	<h:commandButton id="btnOk" value="#{messages['login.enter']}" action="#{identity.login}" styleClass="button" onclick="openWaitDlg();"/> 
-        	<h:selectBooleanCheckbox id="rememberMe" value="#{rememberMe.enabled}"/>#{messages['login.rememberme']}</td>
+        	<h:selectBooleanCheckbox id="rememberMe" value="#{rememberMe.enabled}"/>#{messages['login.rememberme']}
+        </td>
 			<rich:jQuery timming="onload" selector="#nome" query="focus()" />
 			<rich:hotKey selector="#nome" key="return" handler="#{rich:element('btnOk')}.click();" /> 
         </tr>

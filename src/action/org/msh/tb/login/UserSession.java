@@ -15,7 +15,6 @@ import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Create;
 import org.jboss.seam.annotations.Factory;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.RaiseEvent;
@@ -40,15 +39,13 @@ import org.msh.mdrtb.entities.enums.UserView;
  */
 @Name("userSession")
 @Scope(ScopeType.SESSION)
+@BypassInterceptors
 public class UserSession {
 
 	private Tbunit tbunit;
 	private UserLogin userLogin;
 	private UserWorkspace userWorkspace;
 	private boolean displayMessagesKeys;
-
-
-	@In(create=true) EntityManager entityManager;
 
 
     /**
@@ -87,7 +84,7 @@ public class UserSession {
 	public void initialize() {
 		if (userLogin == null)
 			return;
-		tbunit = entityManager.merge(userWorkspace.getTbunit());
+		tbunit = getEntityManager().merge(userWorkspace.getTbunit());
 		tbunit.getAdminUnit().getParents();
 		tbunit.getHealthSystem().getName();
 	}
@@ -133,7 +130,7 @@ public class UserSession {
     	Contexts.getSessionContext().set("defaultWorkspace", userWorkspace.getWorkspace());
     	Contexts.getSessionContext().set("userWorkspace", userWorkspace);
     	
-    	entityManager.flush();
+    	getEntityManager().flush();
     	
     	return "workspacechanged";
     }
@@ -162,7 +159,7 @@ public class UserSession {
         OnlineUsersHome onlineUsers = (OnlineUsersHome)Component.getInstance("onlineUsers");
         onlineUsers.add(userLogin);
         
-        entityManager.persist(userLogin);    	
+        getEntityManager().persist(userLogin);    	
     }
 
 
@@ -170,14 +167,16 @@ public class UserSession {
      * Register the logout of the current user
      */
     protected void registerLogout() {
-    	userLogin = entityManager.merge(userLogin);
+    	EntityManager em = getEntityManager();
+    	
+    	userLogin = em.merge(userLogin);
     	userLogin.setLogoutDate(new Date());
 
         OnlineUsersHome onlineUsers = (OnlineUsersHome)Component.getInstance("onlineUsers");
         onlineUsers.remove(userLogin);
 
-        entityManager.persist(userLogin);
-        entityManager.flush();
+        em.persist(userLogin);
+        em.flush();
     }
 
     
@@ -197,7 +196,7 @@ public class UserSession {
     	if (userWorkspace.getView() == UserView.TBUNIT) 
     		useCaseMan = userWorkspace.getTbunit().isTreatmentHealthUnit(); 
     	
-    	List<Object[]> lst = entityManager.createQuery("select u.userRole.name, u.canChange " +
+    	List<Object[]> lst = getEntityManager().createQuery("select u.userRole.name, u.canChange " +
     			"from UserPermission u where u.userProfile.id = :id and (u.canExecute = true or u.canOpen = true)")
     			.setParameter("id", prof.getId())
     			.getResultList();
@@ -507,6 +506,11 @@ public class UserSession {
 
 	public void setDisplayMessagesKeys(boolean displayMessagesKeys) {
 		this.displayMessagesKeys = displayMessagesKeys;
+	}
+	
+	
+	public EntityManager getEntityManager() {
+		return (EntityManager)Component.getInstance("entityManager");
 	}
 
 }

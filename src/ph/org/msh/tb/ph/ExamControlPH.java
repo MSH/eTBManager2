@@ -3,6 +3,7 @@ package org.msh.tb.ph;
 import java.util.Date;
 
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.tb.workspaces.customizable.ExamControl;
 import org.msh.utils.date.DateUtils;
@@ -15,6 +16,7 @@ import org.msh.utils.date.DateUtils;
  *
  */
 @Name("examControl_ph")
+@BypassInterceptors
 public class ExamControlPH extends ExamControl {
 
 	@Override
@@ -31,7 +33,7 @@ public class ExamControlPH extends ExamControl {
 		
 		int days = DateUtils.daysBetween(dt, dtTreat);
 		
-		if (((dt.before(dtTreat)) && (days >= 30)) ||
+		if (((dt.before(dtTreat)) && (days <= 30)) ||
 			((dt.after(dtTreat)) && (days <= 7))) {
 			return "cases.exams.zero";
 		}

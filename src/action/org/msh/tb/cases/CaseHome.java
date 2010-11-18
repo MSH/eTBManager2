@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.security.Identity;
 import org.msh.mdrtb.entities.Patient;
 import org.msh.mdrtb.entities.TbCase;
@@ -23,6 +24,7 @@ import org.msh.tb.EntityHomeEx;
  *
  */
 @Name("caseHome")
+@BypassInterceptors
 public class CaseHome extends EntityHomeEx<TbCase>{
 	private static final long serialVersionUID = -8072727373977321407L;
 

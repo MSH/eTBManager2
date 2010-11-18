@@ -7,6 +7,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.mdrtb.entities.AgeRange;
 import org.msh.mdrtb.entities.Regimen;
 import org.msh.mdrtb.entities.Source;
@@ -21,6 +22,7 @@ import org.msh.tb.tbunits.TBUnitSelection;
 
 @Name("indicatorFilters")
 @Scope(ScopeType.SESSION)
+@BypassInterceptors
 public class IndicatorFilters {
 	private Integer iniMonth;
 	private Integer iniYear;

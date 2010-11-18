@@ -5,6 +5,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.mdrtb.entities.Workspace;
 
 
@@ -17,6 +18,7 @@ import org.msh.mdrtb.entities.Workspace;
  */
 @Name("workspaceCustomizationService")
 @Scope(ScopeType.SESSION)
+@BypassInterceptors
 public class WorkspaceCustomizationService {
 
 	private static WorkspaceCustomizationService instance; 
