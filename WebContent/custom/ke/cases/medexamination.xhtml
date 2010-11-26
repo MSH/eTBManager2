@@ -7,7 +7,7 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<s:link value="#{messages['cases.details.newresult']}" view="/custom/ke/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+	<s:link value="#{messages['cases.details.newresult']}" view="/custom/ke/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 	</s:link>
@@ -20,12 +20,12 @@
 		<s:decorate template="/layout/roundrect.xhtml" style="margin-right:10px;">
 		<ui:define name="header">
 			<div style="float:right;">
-				<s:link value="#{messages['form.edit']}" view="/custom/ke/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEdit}">
+				<s:link value="#{messages['form.edit']}" view="/custom/ke/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 				</s:link>
 				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remMedExam(#{r.id}, #{medicalExaminationHome.lastResult});return false;" 
-				      rendered="#{caseHome.canEdit}">
+				      rendered="#{caseHome.canEditCaseData}">
 				</h:commandLink>
 			</div>
 			<div class="name2">#{messages['cases.details.date']}: </div> 
@@ -33,7 +33,7 @@
 		</ui:define>
 		<ui:param name="showfooter" value="0" />
 
-		<a:jsFunction name="remMedExam" action="#{medicalExaminationHome.remove}" reRender="medexamtbl" ajaxSingle="true" rendered="#{caseHome.canEdit}">
+		<a:jsFunction name="remMedExam" action="#{medicalExaminationHome.remove}" reRender="medexamtbl" ajaxSingle="true" rendered="#{caseHome.canEditCaseData}">
 			<a:actionparam name="param1" assignTo="#{medicalExaminationHome.id}" converter="javax.faces.Integer"/>
 		</a:jsFunction>
 
@@ -64,7 +64,7 @@
 		</td></tr>
 		<tr><td>
 			<s:decorate template="/layout/display.xhtml">
- 				<ui:define name="label">#{messages['MedAppointmentType']}:</ui:define>
+				<ui:define name="label">#{messages['MedAppointmentType']}:</ui:define>
 				#{messages[r.appointmentType.key]}
 			</s:decorate>		
 		</td></tr>
@@ -76,9 +76,7 @@
 			</s:decorate>
 		</td></tr>
 		</s:fragment>
-		<s:fragment rendered="#{not empty r.patientRefBy || not empty r.patientRefTo}">
-		<tr>
-		<td>
+		<tr><td>
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['MedicalExamination.ReferredBy']}:</ui:define>
 				#{messages[r.patientRefBy.key]}
@@ -89,9 +87,7 @@
 				<ui:define name="label">#{messages['MedicalExamination.ReferredTo']}:</ui:define>
 				#{messages[r.patientRefTo.key]}
 			</s:decorate>		
-		</td>
-		</tr>
-		</s:fragment>
+		</td></tr>
 		</table>
 		
 		

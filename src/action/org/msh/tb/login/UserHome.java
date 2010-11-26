@@ -28,6 +28,7 @@ import org.msh.tb.EntityHomeEx;
 import org.msh.tb.log.LogInfo;
 import org.msh.tb.misc.DmSystemHome;
 import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.userprofile.UserProfilesQuery;
 import org.msh.utils.Passwords;
 
 

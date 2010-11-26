@@ -286,7 +286,7 @@ public class CaseEditingHome {
 		if (tbcase.getValidationState() == null)
 			tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
 		
-		if (tbcase.getClassification() == CaseClassification.MDRTB_DOCUMENTED)
+		if (tbcase.getClassification() == CaseClassification.DRTB)
 			tbcase.setCategory(TbCategory.CATEGORY_IV);
 		
 		tbcase.setState(CaseState.WAITING_TREATMENT);

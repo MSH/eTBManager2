@@ -108,20 +108,20 @@ public class CaseGenerator {
 		counter = 0;
 
 		Map<CaseClassification, Integer> caseType = new HashMap<CaseClassification, Integer>();
-		caseType.put(CaseClassification.TB_DOCUMENTED, caseInfo.getNumTBCases());
-		caseType.put(CaseClassification.MDRTB_DOCUMENTED, caseInfo.getNumMDRTBCases());
+		caseType.put(CaseClassification.TB, caseInfo.getNumTBCases());
+		caseType.put(CaseClassification.DRTB, caseInfo.getNumMDRTBCases());
 		
 		while ((!caseInfo.isAllMDRTBGenerated()) || (!caseInfo.isAllTBGenerated())) {
 			// choose a case type
 			CaseClassification cla = newValue(caseType);
 			if (cla == null)
-				cla = CaseClassification.TB_DOCUMENTED;
+				cla = CaseClassification.TB;
 			
 			if (caseInfo.isAllMDRTBGenerated())
-				cla = CaseClassification.TB_DOCUMENTED;
+				cla = CaseClassification.TB;
 			else
 			if (caseInfo.isAllTBGenerated())
-				cla = CaseClassification.MDRTB_DOCUMENTED;
+				cla = CaseClassification.DRTB;
 
 			generatePatientCases(caseInfo.getYear(), cla);
 		}
@@ -174,7 +174,7 @@ public class CaseGenerator {
 			}
 			
 			int months;
-			if (classif == CaseClassification.TB_DOCUMENTED)
+			if (classif == CaseClassification.TB)
 				 months = random.nextInt(12) + 3;
 			else months = random.nextInt(24) + 3;
 			DateUtils.incMonths(dt, months);
@@ -212,12 +212,12 @@ public class CaseGenerator {
 		tbcase.setCaseNumber(caseNum);
 		tbcase.setValidationState(ValidationState.VALIDATED);
 		
-		if (classif == CaseClassification.TB_DOCUMENTED)
+		if (classif == CaseClassification.TB)
 			tbcase.setPatientType(newValue(preferences.getPatientTypesTB()));
 		else tbcase.setPatientType(newValue(preferences.getPatientTypesMDR()));
 		tbcase.setInfectionSite(newValue(preferences.getInfectionSites()));
 		
-		if (classif == CaseClassification.MDRTB_DOCUMENTED)
+		if (classif == CaseClassification.DRTB)
 			 tbcase.setDiagnosisType(newValue(preferences.getMdrDiagnosis()));
 		else tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
 		
@@ -227,7 +227,7 @@ public class CaseGenerator {
 		
 		// days to start treatment after diagnosis
 		RangeValue startTreat;
-		if (classif == CaseClassification.TB_DOCUMENTED)
+		if (classif == CaseClassification.TB)
 			 startTreat = preferences.getStartTreatmentTB();
 		else startTreat = preferences.getStartTreatmentMDR();
 		int daysStartTreat = newRangeValue(startTreat);
@@ -279,13 +279,13 @@ public class CaseGenerator {
 		}
 		else {
 			// regimen
-			if (classif == CaseClassification.TB_DOCUMENTED)
+			if (classif == CaseClassification.TB)
 				reg = newValue(preferences.getRegimensTB());
 			else reg = newValue(preferences.getRegimensMDR());
 			reg = entityManager.merge(reg);
 
 			// outcome
-			if (classif == CaseClassification.TB_DOCUMENTED)
+			if (classif == CaseClassification.TB)
 				outcome = newValue(preferences.getOutcomesTB());
 			else outcome = newValue(preferences.getOutcomesMDR());
 			
@@ -295,7 +295,7 @@ public class CaseGenerator {
 			}
 			else {
 				int months;
-				if (classif == CaseClassification.TB_DOCUMENTED)
+				if (classif == CaseClassification.TB)
 					 months = random.nextInt(8);
 				else months = random.nextInt(24);
 				outcomeDate = DateUtils.incMonths(dtIniTreat, months);
@@ -348,7 +348,7 @@ public class CaseGenerator {
 		}
 		
 		// increments the number of cases
-		if (classif == CaseClassification.TB_DOCUMENTED)
+		if (classif == CaseClassification.TB)
 			 caseInfo.setNumTBGenerated(caseInfo.getNumTBGenerated() + 1);
 		else caseInfo.setNumMDRTBGenerated(caseInfo.getNumMDRTBGenerated() + 1);
 		
@@ -366,7 +366,7 @@ public class CaseGenerator {
 
 		List<Substance> resPattern;
 		int freq;
-		if (tbcase.getClassification() == CaseClassification.TB_DOCUMENTED) {
+		if (tbcase.getClassification() == CaseClassification.TB) {
 			 resPattern = newValue(preferences.getResPatternsTB());
 			 freq = preferences.getDstFreqTB();
 		}
@@ -402,7 +402,7 @@ public class CaseGenerator {
 				ExamDSTResult res = exam.findResultBySubstance(sub);
 				if (res == null) {
 					res = new ExamDSTResult();
-					if (tbcase.getClassification() == CaseClassification.MDRTB_DOCUMENTED)
+					if (tbcase.getClassification() == CaseClassification.DRTB)
 						 res.setResult(newValue(preferences.getDstResultsMDR()));
 					else res.setResult(newValue(preferences.getDstResultsTB()));
 					res.setSubstance(sub);
@@ -516,7 +516,7 @@ public class CaseGenerator {
 		Laboratory laboratory = selectLaboratory();
 
 		int freq;
-		if (tbcase.getClassification() == CaseClassification.TB_DOCUMENTED)
+		if (tbcase.getClassification() == CaseClassification.TB)
 			freq = preferences.getCultureFreqTB();
 		else freq = preferences.getCultureFreqMDR();
 		
@@ -585,7 +585,7 @@ public class CaseGenerator {
 	 */
 	private void createMicroscopyExams() {
 		int freq = 0;
-		if (tbcase.getClassification() == CaseClassification.TB_DOCUMENTED)
+		if (tbcase.getClassification() == CaseClassification.TB)
 			freq = preferences.getMicroscopyFreqTB();
 		else freq = preferences.getMicroscopyFreqMDR();
 		
@@ -627,7 +627,7 @@ public class CaseGenerator {
 	 */
 	protected void createHIVExams() {
 		int freq = 0;
-		if (tbcase.getClassification() == CaseClassification.TB_DOCUMENTED)
+		if (tbcase.getClassification() == CaseClassification.TB)
 			freq = preferences.getHivFreqTB();
 		else freq = preferences.getHivFreqMDR();
 		

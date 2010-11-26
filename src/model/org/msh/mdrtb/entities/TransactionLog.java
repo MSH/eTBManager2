@@ -18,6 +18,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
+import org.jboss.seam.international.Messages;
+import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.RoleAction;
 
 /**
@@ -67,6 +69,27 @@ public class TransactionLog {
 
 	@Column(length=100)
 	private String entityClass;
+	
+	private CaseClassification caseClassification;
+
+	
+	/**
+	 * Return the display text representation of the log service
+	 * @return
+	 */
+	public String getDisplayText() {
+		String s = (role != null? role.getDisplayName(): super.toString());
+
+		if (caseClassification != null)
+			s = Messages.instance().get(caseClassification.getKey()) + " - " + s;
+		return s;
+	}
+
+	@Override
+	public String toString() {
+		return getDisplayText();
+	}
+	
 	
 	/**
 	 * @return the entityClass
@@ -234,5 +257,19 @@ public class TransactionLog {
 	 */
 	public int getNumValues() {
 		return numValues;
+	}
+
+	/**
+	 * @return the caseClassification
+	 */
+	public CaseClassification getCaseClassification() {
+		return caseClassification;
+	}
+
+	/**
+	 * @param caseClassification the caseClassification to set
+	 */
+	public void setCaseClassification(CaseClassification caseClassification) {
+		this.caseClassification = caseClassification;
 	}
 }

@@ -40,7 +40,6 @@ import org.msh.mdrtb.entities.enums.Nationality;
 import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.mdrtb.entities.enums.TbCategory;
 import org.msh.mdrtb.entities.enums.ValidationState;
-import org.msh.mdrtb.entities.enums.YesNoType;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
@@ -159,8 +158,6 @@ public class TbCase implements Serializable{
 	
 	@Column(length=100)
 	private String patientContactName;
-	
-	private YesNoType bcgScar;	
 	
 	@Lob
 	private String comments;
@@ -313,14 +310,16 @@ public class TbCase implements Serializable{
 	
 	
 	/**
-	 * Return list of prescribed medicines sorted by period
+	 * Return list of prescribed medicines sorted by medicine name and initial date of the period
 	 * @return
 	 */
 	public List<PrescribedMedicine> getSortedPrescribedMedicines() {
 		// sort the periods
 		Collections.sort(prescribedMedicines, new Comparator<PrescribedMedicine>() {
-			public int compare(PrescribedMedicine o1, PrescribedMedicine o2) {
-				return o1.getPeriod().getIniDate().compareTo(o2.getPeriod().getIniDate());
+			public int compare(PrescribedMedicine pm1, PrescribedMedicine pm2) {
+				int val = pm1.getMedicine().getAbbrevName().compareTo(pm2.getMedicine().getAbbrevName());
+				
+				return (val != 0? val: pm1.getPeriod().getIniDate().compareTo(pm2.getPeriod().getEndDate()));
 			}
 		});
 		
@@ -1072,17 +1071,6 @@ public class TbCase implements Serializable{
 	}
 
 
-	public YesNoType getBcgScar() {
-		return bcgScar;
-	}
-
-
-	public void setBcgScar(YesNoType bcgScar) {
-		this.bcgScar = bcgScar;
-	}
-	
-
-
 	/**
 	 * @return the iniContinuousPhase
 	 */
@@ -1129,5 +1117,4 @@ public class TbCase implements Serializable{
 	public void setTreatmentUnit(Tbunit treatmentUnit) {
 		this.treatmentUnit = treatmentUnit;
 	}
-	
 }

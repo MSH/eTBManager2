@@ -9,7 +9,7 @@
 
 	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
 		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/cases/comorbedt.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+			<s:link value="#{messages['form.edit']}" view="/cases/comorbedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
 				<f:param name="id" value="#{caseHome.id}" />
 			</s:link>
     		<b>#{messages['cases.comorbidities']}</b>
@@ -32,7 +32,7 @@
                  
 	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
 		<ui:define name="header">
-			<s:link value="#{messages['form.new']}" view="/cases/edtcontact.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+			<s:link value="#{messages['form.new']}" view="/cases/edtcontact.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
 				<f:param name="id" value="#{caseHome.id}" />
 				<f:param name="conid" value="#{null}" />
 			</s:link>
@@ -87,12 +87,12 @@
 			#{it.conduct.name}
 		</h:column>
  
-		<h:column rendered="#{caseHome.canEdit}">
+		<h:column rendered="#{caseHome.canEditCaseData}">
 			<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remContact(#{it.id});return false;" style="font-size:9px;">
 			</h:commandLink>
 		</h:column>			
 	</h:dataTable>
-		<a:jsFunction name="remContact" action="#{tbContactHome.remove}" reRender="pnlcontact"  rendered="#{caseHome.canEdit}">
+		<a:jsFunction name="remContact" action="#{tbContactHome.remove}" reRender="pnlcontact"  rendered="#{caseHome.canEditCaseData}">
 			<a:actionparam name="param1" assignTo="#{tbContactHome.id}" converter="javax.faces.Integer"/>
 		</a:jsFunction>
 	</h:panelGroup>
@@ -101,7 +101,7 @@
                  
 	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
 		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+			<s:link value="#{messages['form.edit']}" view="/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
 				<f:param name="id" value="#{caseHome.id}" />
 			</s:link>
 			<b>#{messages['cases.sideeffects']}</b>

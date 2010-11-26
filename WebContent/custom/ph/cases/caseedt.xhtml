@@ -2,5 +2,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-<ui:include src="#{tbcase.classification=='TB_DOCUMENTED'?'casedataedttb.xhtml':'caseedtmdrtb.xhtml'}" />
+<ui:include src="#{tbcase.classification=='TB'?'casedataedttb.xhtml':'caseedtmdrtb.xhtml'}" />
 </ui:composition>

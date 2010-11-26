@@ -9,7 +9,7 @@
                  
 	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
 		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/custom/ke/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+			<s:link value="#{messages['form.edit']}" view="/custom/ke/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
 				<f:param name="id" value="#{caseHome.id}" />
 			</s:link>
 			<b>#{messages['cases.patientdata']}</b>
@@ -75,18 +75,6 @@
 			<ui:param name="adminunit" value="#{tbcase.notifAddress.adminUnit}" />
 		</s:decorate>
 	</td></tr>
-	<tr><td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
-    		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
-    		#{tbcase.phoneNumber}
-		</s:decorate>
-	</td>
-	<td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
-    		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
-    		#{tbcase.mobileNumber}
-		</s:decorate>
-	</td></tr>
 	</s:fragment>
 	<s:fragment rendered="#{tbcase.notifAddressChanged}">
 	<tr><td colspan="2">
@@ -102,19 +90,19 @@
 			<ui:param name="adminunit" value="#{tbcase.currentAddress.adminUnit}" />
 		</s:decorate>
 	</td></tr>
+	</s:fragment>
 	<tr><td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.currentAddress.mobileNumber}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.phoneNumber}">
     		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
-    		#{tbcase.currentAddress.phoneNumber}
+    		#{tbcase.phoneNumber}
 		</s:decorate>
 	</td>
 	<td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.currentAddress.mobileNumber}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
     		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
-    		#{tbcase.currentAddress.mobileNumber}
+    		#{tbcase.mobileNumber}
 		</s:decorate>
 	</td></tr>
-	</s:fragment>
 	</table></div>
 	</s:decorate>
 	

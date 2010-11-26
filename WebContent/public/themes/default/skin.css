@@ -119,6 +119,15 @@ td {
 	background-color: #F5DADA;
 }
 
+.checkbox {
+	float:right;
+	width:80px;
+	text-align:center;
+	margin:auto;
+	min-height:20px;
+	overflow: hidden;
+	padding:2px;
+}
 .prop {
 	font-family: Verdana,Arial,Sans Serif;
 	display: table;
@@ -194,7 +203,7 @@ td {
 	border-collapse: collapse;
 	background-color: white;
 }
-.tabela th {
+.tabela th, .tabela .header {
 	background-color:#6FA977;
 	color:white;
 	font-weight: bold;
@@ -202,6 +211,10 @@ td {
 	font-weight:bold;
 	font-size:11px;
 	border:1px solid #dddddd;
+}
+.tabela .header {
+	display:table;
+	width:100%;
 }
 .tabela th a {
 	color:yellow;

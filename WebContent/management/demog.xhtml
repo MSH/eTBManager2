@@ -10,7 +10,7 @@
       xmlns:p="http://jboss.com/products/seam/pdf"
       template="#{workspaceViewService.templatePage}">
 
-<ui:param name="title" value="#{prevalenceHome.classification=='TB_DOCUMENTED'?messages['manag.ind.tb']:messages['manag.ind.mdr']} - #{messages['manag.ind.demog']}" />
+<ui:param name="title" value="#{prevalenceHome.classification=='TB'?messages['manag.ind.tb']:messages['manag.ind.mdr']} - #{messages['manag.ind.demog']}" />
 
 <ui:param name="topmenu" value="2" />
 <ui:param name="labelstyle" value="width:180px;" />

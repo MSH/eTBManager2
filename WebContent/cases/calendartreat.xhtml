@@ -27,12 +27,12 @@
 		<ui:repeat value="#{list}" var="it">
 		<tr>
 			<td class="colcb">
-				<s:fragment rendered="#{not caseHome.canEdit}">
+				<s:fragment rendered="#{not caseHome.canEditTreatmentCalendar}">
 					<h:outputText value="#{it.month}" converter="monthYearConverter">
 						<f:param name="year" value="#{it.year}"/>
 					</h:outputText>
 				</s:fragment>
-				<s:link view="/cases/casedispensing.xhtml" style="font-size:10px;" rendered="#{caseHome.canEdit}">
+				<s:link view="/cases/casedispensing.xhtml" style="font-size:10px;" rendered="#{caseHome.canEditTreatmentCalendar}">
 					<f:param name="year" value="#{it.year}"/>
 					<f:param name="month" value="#{it.month}"/>
 					<f:param name="id" value="#{caseHome.id}"/>

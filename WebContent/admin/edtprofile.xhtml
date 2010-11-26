@@ -18,7 +18,7 @@
 <s:button view="/admin/profiles.seam" value="#{messages['form.return']}" styleClass="button" />
 </s:fragment>
 <h:form id="main" rendered="#{not empty profileHome.roles}">
-    <table class="tabela" width="750px">
+    <table class="tabela3" width="750px">
     <tr><td>
     <s:decorate template="/layout/edit.xhtml" rendered="#{profile.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
@@ -35,64 +35,78 @@
     </td></tr>
 	<tr><td>
 
-    <h:dataTable value="#{profileHome.items}" var="r" width="100%" 
-    	styleClass="tabela" rowClasses="lin1,lin2" columnClasses="colb,colcb,colcb,colcb,colc">
-    	<h:column>
-    		<f:facet name="header">
-    			<h:outputText value="#{messages['UserPermission']}" styleClass="collh" />
-    		</f:facet>
-    		<span style="font-weight:#{r.userRole.level==1?'bold':'normal'};margin-left:#{(r.userRole.level-1) * 32}px;">
-    			#{r.userRole.displayName}
-    		</span>
-    	</h:column>
+	<div style="width:740px;" class="tabela">
+	<div class="header">
+		#{messages['UserPermission']}
+		<div class="checkbox">
+			#{messages['UserPermission.grantPermission']}
+			<br/>
+			<input type="checkbox" onclick="changeChecks(this.checked, 'chk-grant');" />
+		</div>
+		<div class="checkbox">
+			#{messages['UserPermission.canChange']}
+			<br/>
+			<input type="checkbox" onclick="changeChecks(this.checked, 'chk-change');" />
+		</div>
+	</div>
+	
+	<a:repeat value="#{profileHome.nodes}" var="it">
+		<s:decorate template="permissionnode.xhtml">
+			<ui:param name="node" value="#{it}" />
+		</s:decorate>
+		
+		<s:fragment rendered="#{not empty it.children}">
+		<div id="div#{it.uniqueName}" style="display:#{it.checked?'block':'none'}" >
+		<a:repeat value="#{it.children}" var="it2">
+		
+			<s:decorate template="permissionnode.xhtml">
+				<ui:param name="node" value="#{it2}" />
+			</s:decorate>
+		
+			<s:fragment rendered="#{not empty it2.children}">
+			<div id="div#{it2.uniqueName}" style="display:#{it2.checked?'block':'none'}" >
+			<a:repeat value="#{it2.children}" var="it3">
+		
+				<s:decorate template="permissionnode.xhtml">
+					<ui:param name="node" value="#{it3}" />
+				</s:decorate>
+			</a:repeat>
+			</div>
+			</s:fragment>
+		
+		</a:repeat>
+		</div>
+		</s:fragment>
+	</a:repeat>
+	</div>
 
-    	<h:column>
-    		<f:facet name="header">
-    			<s:div>
-    			<input type="checkbox" onclick="changeChecks(this.checked, 'chk-open');"/>
-    			<br/>
-    			<h:outputText value="#{messages['UserPermission.canOpen']}"/>
-    			</s:div>
-    		</f:facet>
-    		<h:selectBooleanCheckbox value="#{r.canOpen}" rendered="#{not r.userRole.executable}"  styleClass="chk-open"/>
-    	</h:column>
+<script type="text/javascript">
+function permissionClickHandler(checkbox, divname) {
+	var b = checkbox.checked;
+	var prop = jQuery(checkbox).closest('.prop');
+	var chkelem = prop.addClass('highlight');
+	if (b) {
+		chkelem.addClass('highlight');
+		prop.find('.chk-change').show();
+	}
+	else {
+		chkelem.removeClass('highlight');
+		prop.find('.chk-change').hide();
+	}
 
-    	<h:column>
-    		<f:facet name="header">
-    			<s:div>
-    			<input type="checkbox"  onclick="changeChecks(this.checked, 'chk-change');"/>
-    			<br/>
-    			<h:outputText value="#{messages['UserPermission.canChange']}"/>
-    			</s:div>
-    		</f:facet>
-    		<h:selectBooleanCheckbox value="#{r.canChange}"  rendered="#{r.userRole.changeable}"  styleClass="chk-change"/>
-    	</h:column>
+	var divelem = document.getElementById(divname);
+	if (!divelem)
+		return;
 
-    	<h:column>
-    		<f:facet name="header">
-    			<s:div>
-    			<input type="checkbox"  onclick="changeChecks(this.checked, 'chk-exec');"/>
-    			<br/>
-    			<h:outputText value="#{messages['UserPermission.canExecute']}" />
-    			</s:div>
-    		</f:facet>
-    		<h:selectBooleanCheckbox value="#{r.canExecute}"  rendered="#{r.userRole.executable}" styleClass="chk-exec"/>
-    	</h:column>
-    	
-    	<h:column>
-    		<f:facet name="header">
-    			<s:div>
-    			<input type="checkbox"  onclick="changeChecks(this.checked, 'chk-grant');"/>
-    			<br/>
-    			<h:outputText value="#{messages['UserPermission.grantPermission']}" />
-    			</s:div>
-    		</f:facet>
-    		<h:selectBooleanCheckbox value="#{r.grantPermission}" styleClass="chk-grant"/>
-    	</h:column>
-    </h:dataTable>
+	if (b)
+		jQuery(divelem).slideDown(500);
+	else
+		jQuery(divelem).slideUp(500);
+}
+</script>
 
 	</td></tr>
-	<tr><td colspan="2" align="right">
+	<tr><td align="right">
             <h:commandButton action="#{profileHome.persist}" value="#{messages['form.ok']}" styleClass="button"/>  
             <s:button view="/admin/profiles.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" >
             	<f:param name="id" value="#{null}" />

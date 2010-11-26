@@ -41,7 +41,7 @@
 		<s:link value="#{messages['cases']}" view="/cases/index.xhtml" propagation="none"/>
 	</li>
 	</s:fragment>
-	<s:fragment rendered="#{s:hasRole('OPER')}">
+	<s:fragment rendered="#{s:hasRole('MEDMAN')}">
 	<li class="#{topmenu=='1'?'selected':'unselected'}">
 		<s:link value="#{messages['medicines']}" view="/medicines/index.xhtml"  propagation="none"/>
 	</li>

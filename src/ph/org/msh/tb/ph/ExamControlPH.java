@@ -27,6 +27,9 @@ public class ExamControlPH extends ExamControl {
 			return "global.monthth";  //Integer.toString(num);
 		}
 		
+		if (tbcase.getTreatmentPeriod() == null)
+			return "cases.exams.prevdt";
+	
 		Date dtTreat = tbcase.getTreatmentPeriod().getIniDate();
 		if (dtTreat == null)
 			return "cases.exams.prevdt";

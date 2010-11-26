@@ -17,7 +17,6 @@ public class UsersQuery extends EntityQuery<UserWorkspace>{
 		"uw.workspace.id = #{defaultWorkspace.id}",
 		"not exists(select perm.id from UserPermission perm " +
 				"where perm.userProfile.id = uw.profile.id " +
-				"and (perm.canOpen = true or perm.canExecute = true) " +
 				"and perm.userRole.id not in (select r.id from UserPermission aux " +
 				"join aux.userRole r where aux.grantPermission = true " +
 				"and aux.userProfile.id = #{userWorkspace.profile.id}))"

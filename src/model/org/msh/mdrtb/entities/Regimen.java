@@ -276,7 +276,7 @@ public class Regimen extends WSObject implements Serializable {
 	 * @return the mdrTreatment
 	 */
 	public boolean isMdrTreatment() {
-		return CaseClassification.MDRTB_DOCUMENTED.equals(caseClassification);
+		return CaseClassification.DRTB.equals(caseClassification);
 	}
 
 
@@ -284,7 +284,7 @@ public class Regimen extends WSObject implements Serializable {
 	 * @return the tbTreatment
 	 */
 	public boolean isTbTreatment() {
-		return CaseClassification.TB_DOCUMENTED.equals(caseClassification);
+		return CaseClassification.TB.equals(caseClassification);
 	}
 	
 

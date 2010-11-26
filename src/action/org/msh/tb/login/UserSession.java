@@ -20,7 +20,6 @@ import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.security.Identity;
 import org.msh.mdrtb.entities.Tbunit;
@@ -29,7 +28,6 @@ import org.msh.mdrtb.entities.UserProfile;
 import org.msh.mdrtb.entities.UserWorkspace;
 import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.UserView;
 
 
 /**
@@ -39,7 +37,6 @@ import org.msh.mdrtb.entities.enums.UserView;
  */
 @Name("userSession")
 @Scope(ScopeType.SESSION)
-@BypassInterceptors
 public class UserSession {
 
 	private Tbunit tbunit;
@@ -123,7 +120,7 @@ public class UserSession {
 
     	registerLogin();
     	initialize();
-    	mountRoleList();
+    	updateUserRoleList();
     	
     	Contexts.getSessionContext().set("userLogin", userLogin);
     	Contexts.getSessionContext().set("defaultWorkspace", userWorkspace.getWorkspace());
@@ -183,31 +180,25 @@ public class UserSession {
      * Monta a lista de permiss�es do usu�rio
      * @param usu
      */
-    protected void mountRoleList() {
+    public void updateUserRoleList() {
     	removePermissions();
     	
     	Identity identity = Identity.instance();
     	UserProfile prof = userWorkspace.getProfile();
 
-    	// restriction to case manager. If user has a vision by TB Unit, and this TB Unit isn't a health facility, 
-    	// so this user can't access the case management module
-    	boolean useCaseMan = true;
-    	if (userWorkspace.getView() == UserView.TBUNIT) 
-    		useCaseMan = userWorkspace.getTbunit().isTreatmentHealthUnit(); 
-    	
-    	List<Object[]> lst = getEntityManager().createQuery("select u.userRole.name, u.canChange " +
-    			"from UserPermission u where u.userProfile.id = :id and (u.canExecute = true or u.canOpen = true)")
+    	List<Object[]> lst = getEntityManager().createQuery("select u.userRole.name, u.canChange, u.caseClassification " +
+    			"from UserPermission u where u.userProfile.id = :id and u.canExecute = true")
     			.setParameter("id", prof.getId())
     			.getResultList();
     	
     	for (Object[] vals: lst) {
     		String roleName = (String)vals[0];
+    		
+    		CaseClassification classification = (CaseClassification)vals[2];
 
-    		if (roleName.equals("CASEMAN")) {
-    			if (useCaseMan)
-    				identity.addRole(roleName);
-    		}
-    		else identity.addRole(roleName);
+    		if (classification != null)
+    			roleName = classification.toString() + "_" + roleName;
+    		identity.addRole(roleName);
     	
     		boolean change = (Boolean)vals[1];
     		if (change) {
@@ -316,7 +307,7 @@ public class UserSession {
 
 	public boolean isCanCreateOrder() {
 		Tbunit u = getTbunit(); 
-		return Identity.instance().hasRole("ORDERS_EDT") && u.isMedicineStorage() && (getWorkingTbunit().equals(u)) && 
+		return Identity.instance().hasRole("NEW_ORDER") && u.isMedicineStorage() && (getWorkingTbunit().equals(u)) && 
 				((u.getFirstLineSupplier() != null) || (u.getSecondLineSupplier() != null));
 	}
 
@@ -326,154 +317,70 @@ public class UserSession {
 	 * @return
 	 */
 	public boolean isCanOpenCases() {
-		return Identity.instance().hasRole("TBCASES") || Identity.instance().hasRole("MDRCASES");
+		return checkRoleAnyClassification("CASE_VIEW");
 	}
 
-	
+
+	/**
+	 * Check if a specific role name is allowed to the current user for any classification
+	 * @param roleName
+	 * @return
+	 */
+	public boolean checkRoleAnyClassification(String roleName) {
+		for (CaseClassification cla: CaseClassification.values()) {
+			if (Identity.instance().hasRole(cla.toString() + "_" + roleName))
+				return true;
+		}
+		return false;
+	}
+
+
 	/**
 	 * Return true if the user can edit TB or MDR cases
 	 * @return
 	 */
 	public boolean isCanEditCases() {
-		return Identity.instance().hasRole("TBCASES_EDT") || Identity.instance().hasRole("MDRCASES_EDT");
+		return checkRoleAnyClassification("CASE_DATA_EDT");
 	}
 
 
 	/**
-	 * Check if the user can open laboratory exam results
-	 * @return true if the user can view results
-	 */
-	public boolean isCanOpenExams() {
-		return Identity.instance().hasRole("TBEXAMS") || Identity.instance().hasRole("MDREXAMS");
-	}
-
-
-	/**
-	 * Check if the user can edit laboratory exam results
-	 * @return true if user can edit results
-	 */
-	public boolean isCanEditExams() {
-		return Identity.instance().hasRole("TBEXAMS_EDT") || Identity.instance().hasRole("MDREXAMS_EDT");
-	}
-
-
-	/**
-	 * Check if user can open treatment regimens of a case
-	 * @return true if user can open treatment
-	 */
-	public boolean isCanOpenTreatment() {
-		return Identity.instance().hasRole("TBTREAT") || Identity.instance().hasRole("MDRTREAT");
-	}
-
-	
-	/**
-	 * Check if user can edit treatment regimen of a case
-	 * @return true if user can edit the treatment
-	 */
-	public boolean isCanEditTreatment() {
-		return Identity.instance().hasRole("TBTREAT_EDT") || Identity.instance().hasRole("MDRTREAT_EDT");
-	}
-
-
-	/**
-	 * Check if user can change data of more than one case classification
+	 * Check if user can notify or change data of more than one case classification
 	 * @return true if so
 	 */
-	public boolean isCanEditSeveralClassifs() {
+	public boolean isCanNotifySeveralClassifs() {
 		Identity id = Identity.instance();
 		int count = 0;
 		for (CaseClassification classif: CaseClassification.values()) {
-			if (id.hasRole(classif.getUserroleChange()))
+			String roleName = classif.toString() + "_CASE_DATA_EDT";
+			if (id.hasRole(roleName))
 				count++;
 		}
 		return count > 1;
 	}
 
-	
-	/**
-	 * Check if user can validate cases
-	 * @return
-	 */
-	public boolean isCanValidateCases() {
-		return Identity.instance().hasRole("MDRVALIDATE") || Identity.instance().hasRole("TBVALIDATE");
-	}
+
 
 
 	/**
-	 * Check if user can notify more than one case classification, for instance, TB and DR-TB
+	 * Check if user can notify or change data of a specific classification
 	 * @param classif
 	 * @return true if user can notify more than one classification
 	 */
-	public boolean isCanNotifyOnlyOneClassif(CaseClassification classif) {
-		Identity id = Identity.instance();
-		for (CaseClassification c: CaseClassification.values()) {
-			if ((c != classif) && (id.hasRole(c.getUserroleChange())))
-				return false;
-		}
-		return true;
-	}
-	
-
-	/**
-	 * Check if user can notify only TB cases
-	 * @return true if so
-	 */
-	public boolean isCanNotifyOnlyTB() {
-		return isCanNotifyOnlyOneClassif(CaseClassification.TB_DOCUMENTED);
+	public boolean isCanEditCaseByClassification(CaseClassification classif) {
+		return Identity.instance().hasRole(classif.toString() + "_CASE_DATA_EDT");
 	}
 
 	
 	/**
-	 * Check if user can notify only MDR cases
-	 * @return true if so
-	 */
-	public boolean isCanNotifyOnlyMDR() {
-		return isCanNotifyOnlyOneClassif(CaseClassification.MDRTB_DOCUMENTED);
-	}
-
-	
-	/**
-	 * Check if user can notify only NMT cases
+	 * Check if a specific case classification can be opened by the user 
+	 * @param classif
 	 * @return
 	 */
-	public boolean isCanNotifyOnlyNMT() {
-		return isCanNotifyOnlyOneClassif(CaseClassification.NMT);
+	public boolean isCanOpenCaseByClassification(CaseClassification classif) {
+		return Identity.instance().hasRole(classif.toString() + "_CASE_DATA");
 	}
-
-	/**
-	 * Check if can open both TB and MDRTB cases
-	 * @return
-	 */
-	public boolean isCanOpenTBMDRTB() { 
-		return Identity.instance().hasRole("MDRCASES") && Identity.instance().hasRole("TBCASES") && Identity.instance().hasRole("NMTCASES");
-	}
-
 	
-	/**
-	 * Check if user can open TB cases
-	 * @return
-	 */
-	public boolean isCanOpenTBCases() {
-		return Identity.instance().hasRole("TBCASES");
-	}
-
-	
-	/**
-	 * Check if user can open MDR-TB cases
-	 * @return
-	 */
-	public boolean isCanOpenMDRTBCases() {
-		return Identity.instance().hasRole("MDRCASES");
-	}
-
-	
-	/**
-	 * Check if can transfer MDR or TB cases
-	 * @return
-	 */
-	public boolean isCanTransferCases() {
-		return Identity.instance().hasRole("MDRTRANSFER") || Identity.instance().hasRole("TBTRANSFER");
-	}
 	
 	/**
 	 * @param userLogin the userLogin to set

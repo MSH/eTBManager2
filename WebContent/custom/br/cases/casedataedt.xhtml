@@ -282,7 +282,7 @@
     	<ui:param name="list" value="#{fieldsQuery.micobacterioses}" />
     </s:decorate>
 
-    <s:decorate template="/layout/editfield.xhtml"  rendered="#{tbcase.classification=='MDRTB_DOCUMENTED'}">
+    <s:decorate template="/layout/editfield.xhtml"  rendered="#{tbcase.classification=='DRTB'}">
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
     	<ui:param name="id" value="mnt" />
     	<ui:param name="field" value="#{caseDataBR.resistanceType}" />

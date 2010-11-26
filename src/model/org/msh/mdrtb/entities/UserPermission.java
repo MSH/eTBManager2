@@ -1,6 +1,7 @@
 package org.msh.mdrtb.entities;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.validator.NotNull;
+import org.jboss.seam.international.Messages;
+import org.msh.mdrtb.entities.enums.CaseClassification;
 
 @Entity
 public class UserPermission implements Serializable, Comparable<UserPermission> {
@@ -29,11 +32,31 @@ public class UserPermission implements Serializable, Comparable<UserPermission> 
 	@NotNull
 	private UserProfile userProfile;
 
-	private boolean canOpen;
-	private boolean canChange;
 	private boolean canExecute;
+	private boolean canChange;
 	private boolean grantPermission;
+	
+	/**
+	 * Case classification that this permission shall be applied
+	 */
+	private CaseClassification caseClassification;
 
+
+	@Override
+	public String toString() {
+		Map<String, String> msgs = Messages.instance();
+
+		String s = "";
+		if (!userRole.getName().equals("-"))
+			s = userRole.getDisplayName();
+		
+		if ((caseClassification != null) && (userRole.isByCaseClassification())) {
+			s = msgs.get(caseClassification.getKey()) + " - " + s;
+		}
+		return s;
+	}
+
+	
 	public boolean isGrantPermission() {
 		return grantPermission;
 	}
@@ -73,20 +96,6 @@ public class UserPermission implements Serializable, Comparable<UserPermission> 
 	}
 
 	/**
-	 * @return the canOpen
-	 */
-	public boolean isCanOpen() {
-		return canOpen;
-	}
-
-	/**
-	 * @param canOpen the canOpen to set
-	 */
-	public void setCanOpen(boolean canOpen) {
-		this.canOpen = canOpen;
-	}
-
-	/**
 	 * @return the canChange
 	 */
 	public boolean isCanChange() {
@@ -101,11 +110,27 @@ public class UserPermission implements Serializable, Comparable<UserPermission> 
 	}
 
 	/**
+	 * @return the caseClassification
+	 */
+	public CaseClassification getCaseClassification() {
+		return caseClassification;
+	}
+
+	/**
+	 * @param caseClassification the caseClassification to set
+	 */
+	public void setCaseClassification(CaseClassification caseClassification) {
+		this.caseClassification = caseClassification;
+	}
+
+
+	/**
 	 * @return the canExecute
 	 */
 	public boolean isCanExecute() {
 		return canExecute;
 	}
+
 
 	/**
 	 * @param canExecute the canExecute to set

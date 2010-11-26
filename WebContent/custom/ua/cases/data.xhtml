@@ -10,7 +10,7 @@
                  
 	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
 		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+			<s:link value="#{messages['form.edit']}" view="/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
 				<f:param name="id" value="#{caseHome.id}" />
 			</s:link>
 			<b>#{messages['cases.patientdata']}</b>
@@ -163,7 +163,7 @@
 	</td></tr>
 	<tr><td>
 	
-	<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.classification=='MDRTB_DOCUMENTED'}">
+	<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.classification=='DRTB'}">
 		<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
 		#{messages[tbcase.diagnosisType.key]}
 	</s:decorate>
@@ -326,7 +326,7 @@
                  
 	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
 		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/custom/ua/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+			<s:link value="#{messages['form.edit']}" view="/custom/ua/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
 				<f:param name="id" value="#{caseHome.id}" />
 			</s:link>
 			<b>#{messages['cases.sideeffects']}</b>

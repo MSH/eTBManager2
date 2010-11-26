@@ -39,7 +39,7 @@ public class ResistancePatternIndicator extends Indicator {
 
 	@Override
 	public CaseClassification getClassification() {
-		return CaseClassification.MDRTB_DOCUMENTED;
+		return CaseClassification.DRTB;
 	}
 	
 	/**

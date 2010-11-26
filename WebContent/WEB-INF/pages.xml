@@ -14,7 +14,7 @@
 		<restrict>#{s:hasRole('ADMIN')}</restrict>
 	</page>
 	<page view-id="/medicines/*" login-required="true" >
-		<restrict>#{s:hasRole('OPER')}</restrict>
+		<restrict>#{s:hasRole('MEDMAN')}</restrict>
 	</page>
 	<page view-id="/cases/*" login-required="true" >
 		<restrict>#{s:hasRole('CASEMAN')}</restrict>

@@ -130,6 +130,7 @@ public class TBUnitSelection {
 	public void setAdminUnit(AdministrativeUnit admin) {
 		getAuselection().setUnitLevel1(admin);
 		tbunit = null;
+		options = null;
 	}
 
 	

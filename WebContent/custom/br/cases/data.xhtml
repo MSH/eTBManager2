@@ -9,7 +9,7 @@
                  
 	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
 		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+			<s:link value="#{messages['form.edit']}" view="/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
 				<f:param name="id" value="#{caseHome.id}" />
 			</s:link>
 			<b style="text-transform:uppercase;">#{messages['cases.patientdata']}</b>
@@ -207,7 +207,7 @@
     		<s:fragment rendered="#{tbcase.patientType=='SCHEMA_CHANGED'}">
     			<h:outputText value="#{caseDataBR.schemaChangeType}" styleClass="right-icon" style="margin-left:16px;"/>
     		</s:fragment>
-    		<s:fragment rendered="#{tbcase.classification=='MDRTB_DOCUMENTED'}">
+    		<s:fragment rendered="#{tbcase.classification=='DRTB'}">
     			<h:outputText value="#{caseDataBR.resistanceType}" styleClass="right-icon" style="margin-left:16px;"/>
     		</s:fragment>
 		</s:decorate>

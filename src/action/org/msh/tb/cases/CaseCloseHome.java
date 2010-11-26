@@ -64,14 +64,12 @@ public class CaseCloseHome extends Controller{
 			facesMessages.addFromResourceBundle("cases.close.msg1");
 			return "error";
 		}
+
+		if ((tbcase.getTreatmentPeriod() != null) && (!tbcase.getTreatmentPeriod().isEmpty()))
+			treatmentHome.cropTreatmentPeriod(new Period(tbcase.getTreatmentPeriod().getIniDate(), date));
 		
 		tbcase.setOutcomeDate(date);
-		
-		if(tbcase.getTreatmentPeriod()!=null){
-			if ((!tbcase.getTreatmentPeriod().isEmpty()))
-				treatmentHome.cropTreatmentPeriod(new Period(tbcase.getTreatmentPeriod().getIniDate(), date));
-		}
-		
+
 		tbcase.setState(state);
 		if (state.equals(CaseState.OTHER))
 			 tbcase.setOtherOutcome(comment);
@@ -102,7 +100,7 @@ public class CaseCloseHome extends Controller{
 	 * @return Array of {@link CaseState} enumerations
 	 */
 	public CaseState[] getOutcomes() {
-		if (caseHome.getInstance().getClassification() == CaseClassification.MDRTB_DOCUMENTED)
+		if (caseHome.getInstance().getClassification() == CaseClassification.DRTB)
 			 return outcomesMDR;
 		else return outcomesTB;
 	}

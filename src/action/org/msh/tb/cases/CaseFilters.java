@@ -46,7 +46,6 @@ public class CaseFilters {
 	private String recordNumber;
 	private CaseState caseState;
 	private ValidationState validationState;
-	private int tabIndex;
 	private CaseClassification classification;
 	private int firstRecord;
 	private int order;
@@ -77,17 +76,23 @@ public class CaseFilters {
 	private ItemSelectList<CaseClassification> classifications;
 	
 	/**
+	 * Selected view in the detail page of the case
+	 */
+	private CaseView caseView;
+
+	/**
 	 * Used by {@link CasesQuery} to check which search mode to use 
 	 */
 	private SearchCriteria searchCriteria;
-	
 
+	
 	/**
 	 * Initialize the filters reseting values 
 	 */
 	@Observer("change-workspace")
 	public void initialize() {
 		searchCriteria = SearchCriteria.CUSTOM_FILTER;
+		classifications = null;
 		
 		clearFilters();
 	}
@@ -102,7 +107,7 @@ public class CaseFilters {
 		recordNumber = null;
 		caseState = null;
 		validationState = null;
-		tabIndex = 0;
+		caseView = CaseView.DATA;
 		classification = null;
 		auselection = null;
 		tbunitselection = null;
@@ -216,24 +221,16 @@ public class CaseFilters {
 		this.recordNumber = recordNumber;
 	}
 
-	public int getTabIndex() {
-		return tabIndex;
-	}
-
-	public void setTabIndex(int tabIndex) {
-		this.tabIndex = tabIndex;
-	}
-
 	public CaseClassification getClassification() {
-		boolean mdrCases = Identity.instance().hasRole("MDRCASES");
-		boolean tbcases = Identity.instance().hasRole("TBCASES");
+		boolean mdrCases = Identity.instance().hasRole(CaseClassification.DRTB.toString() + "_CASE_VIEW");
+		boolean tbcases = Identity.instance().hasRole(CaseClassification.TB.toString() + "_CASE_VIEW");
 		
 		if (mdrCases && tbcases)
 			return classification;
 		else {
 			if (mdrCases)
-				 return CaseClassification.MDRTB_DOCUMENTED;
-			else return CaseClassification.TB_DOCUMENTED;
+				 return CaseClassification.DRTB;
+			else return CaseClassification.TB;
 		}
 	}
 
@@ -655,5 +652,19 @@ public class CaseFilters {
 			classifications.selectAll();
 		}
 		return classifications;
+	}
+
+	/**
+	 * @return the caseView
+	 */
+	public CaseView getCaseView() {
+		return caseView;
+	}
+
+	/**
+	 * @param caseView the caseView to set
+	 */
+	public void setCaseView(CaseView caseView) {
+		this.caseView = caseView;
 	}
 }

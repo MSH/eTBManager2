@@ -39,7 +39,7 @@
 		<h:inputText value="#{caseFilters.recordNumber}" style="width:120px;"></h:inputText>
 	</s:decorate>
 
-	<s:decorate template="/layout/display.xhtml" rendered="#{userSession.canOpenTBMDRTB}">
+	<s:decorate template="/layout/display.xhtml" >
 		<ui:define name="label">#{messages['CaseClassification']}:</ui:define>
 		<h:selectOneMenu value="#{caseFilters.classification}" >
 			<s:selectItems value="#{globalLists.caseClassifications}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />

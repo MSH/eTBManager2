@@ -258,7 +258,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		PatientType tp = tbcase.getPatientType();
 		if (tp != PatientType.SCHEMA_CHANGED)
 			data.setSchemaChangeType(null);
-		if (!CaseClassification.MDRTB_DOCUMENTED.equals( tbcase.getClassification() ))
+		if (!CaseClassification.DRTB.equals( tbcase.getClassification() ))
 			data.setResistanceType(null);
 
 		if (tp != PatientType.OTHER)

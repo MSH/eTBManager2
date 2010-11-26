@@ -11,7 +11,7 @@
 
 	<h:panelGroup id="medexams">
 	<div style="display:table;width:100%;">
-	<s:link value="#{messages['cases.details.newconsult']}" style="float:right;" view="/cases/edtmedexam.xhtml" styleClass="right-icon" rendered="#{caseHome.canEdit}">
+	<s:link value="#{messages['cases.details.newconsult']}" style="float:right;" view="/cases/edtmedexam.xhtml" styleClass="right-icon" rendered="#{caseHome.canEditCaseData}">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 	</s:link>
@@ -25,13 +25,13 @@
 		<s:decorate template="/layout/roundrect.xhtml" >
 		<ui:define name="header">
 			<div style="float:right;">
-				<s:link value="#{messages['form.edit']}" view="/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEdit}">
+				<s:link value="#{messages['form.edit']}" view="/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 				</s:link>
 				<h:commandLink value="#{messages['form.remove']}" 
 					onclick="if (confirm('#{messages['form.confirm_remove']}')) remMedExamination(#{r.id});return false;" 
-				    rendered="#{caseHome.canEdit}">
+				    rendered="#{caseHome.canEditCaseData}">
 				</h:commandLink>
 			</div>
 			<b>#{messages['cases.details.date']}: </b> 

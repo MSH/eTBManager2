@@ -19,6 +19,7 @@ import org.msh.mdrtb.entities.UserLogin;
 import org.msh.mdrtb.entities.UserWorkspace;
 import org.msh.mdrtb.entities.WSObject;
 import org.msh.mdrtb.entities.Workspace;
+import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.RoleAction;
 import org.msh.tb.log.LogInfo;
 import org.msh.tb.log.LogService;
@@ -229,6 +230,8 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		String roleName = getRoleName();
 		if (roleName == null)
 			return;
+		
+		CaseClassification classif = getCaseClassificationForLog();
 
 		// if the log service didn't map object state previously, so there is nothing to do
 		if ((logService == null) && (action == RoleAction.EDIT))
@@ -237,6 +240,8 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		if (getLogService() == null)
 			return;
 		
+		logService.setCaseClassification(classif);
+
 		switch (action) {
 		case DELETE: logService.saveRemoveTransaction(getInstance(), roleName);
 			break;
@@ -258,6 +263,16 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		
 		return logInfo.roleName();
 	}
+
+	
+	/**
+	 * Return the case classification to be used to
+	 * @return
+	 */
+	public CaseClassification getCaseClassificationForLog() {
+		return null;
+	}
+
 
 	@Override
 	public void setId(Object id) {

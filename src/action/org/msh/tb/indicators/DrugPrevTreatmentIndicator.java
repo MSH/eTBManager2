@@ -45,7 +45,7 @@ public class DrugPrevTreatmentIndicator extends Indicator2D {
 	 */
 	@Override
 	public CaseClassification getClassification() {
-		return CaseClassification.MDRTB_DOCUMENTED;
+		return CaseClassification.DRTB;
 	}
 
 

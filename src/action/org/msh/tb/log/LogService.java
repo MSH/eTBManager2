@@ -21,6 +21,7 @@ import org.msh.mdrtb.entities.UserLogin;
 import org.msh.mdrtb.entities.UserRole;
 import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.WorkspaceLog;
+import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.LogValueType;
 import org.msh.mdrtb.entities.enums.RoleAction;
 
@@ -37,6 +38,8 @@ public class LogService {
 
 	private List<BeanState> beans;
 	private BeanState mainBean;
+	
+	private CaseClassification caseClassification;
 	
 
 	/**
@@ -165,6 +168,7 @@ public class LogService {
 		log.setUser(getUserLog());
 		log.setWorkspace(getWorkspaceLog());
 		log.setEntityClass(entity.getClass().getSimpleName());
+		log.setCaseClassification(caseClassification);
 		
 		// pega a descrição da entidade
 		String desc = entity.toString();
@@ -358,6 +362,22 @@ public class LogService {
 		values.add(val);
 		
 		return val;
+	}
+
+
+	/**
+	 * @return the caseClassification
+	 */
+	public CaseClassification getCaseClassification() {
+		return caseClassification;
+	}
+
+
+	/**
+	 * @param caseClassification the caseClassification to set
+	 */
+	public void setCaseClassification(CaseClassification caseClassification) {
+		this.caseClassification = caseClassification;
 	}
 	
 }

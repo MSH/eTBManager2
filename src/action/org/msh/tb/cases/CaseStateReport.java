@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
@@ -18,6 +19,7 @@ import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.UserView;
 import org.msh.mdrtb.entities.enums.ValidationState;
+import org.msh.tb.misc.GlobalLists;
 import org.msh.tb.login.UserSession;
 
 /**
@@ -147,7 +149,24 @@ public class CaseStateReport {
 	 * @return SQL condition to be used in a where clause
 	 */
 	protected String generateSQLConditionByCase() {
-		boolean tbcases = userSession.isCanOpenTBCases();
+		CaseClassification[] classifs = ((GlobalLists)Component.getInstance("globalLists")).getCaseClassifications();
+		
+		String caseCondition = "";
+
+		for (CaseClassification cla: classifs) {
+			boolean hasClassif = userSession.isCanOpenCaseByClassification(cla);
+			if (hasClassif) {
+				if (!caseCondition.isEmpty())
+					caseCondition += ",";
+				 caseCondition += cla.ordinal();
+			}
+		}
+		
+		if (!caseCondition.isEmpty())
+			 return " and c.classification in (" + caseCondition + ")";
+		else return caseCondition;
+		
+/*		boolean tbcases = userSession.isCanOpenCaseByClassification(CaseClassification.TB);
 		boolean mdrcases = userSession.isCanOpenMDRTBCases();
 		
 		if (tbcases && mdrcases) {
@@ -157,12 +176,13 @@ public class CaseStateReport {
 		String caseCondition = "";
 		
 		if (tbcases)
-			 caseCondition = " and (c.classification = " + CaseClassification.TB_DOCUMENTED.ordinal() + ")";
+			 caseCondition = " and (c.classification = " + CaseClassification.TB.ordinal() + ")";
 		else
 		if (mdrcases)
-			caseCondition = " and (c.classification = " + CaseClassification.MDRTB_DOCUMENTED.ordinal() + ")";
+			caseCondition = " and (c.classification = " + CaseClassification.DRTB.ordinal() + ")";
 		
 		return caseCondition;
+*/
 	}
 
 

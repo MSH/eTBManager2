@@ -10,7 +10,7 @@
 	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
 		<ui:param name="labelstyle" value="width:310px;" /> 
 		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/custom/ua/cases/annexedt.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+			<s:link value="#{messages['form.edit']}" view="/custom/ua/cases/annexedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
 				<f:param name="id" value="#{caseHome.id}" />
 			</s:link>
 			<b>#{messages['uk_UA.annex.title1']}</b>

@@ -24,7 +24,7 @@
 <ui:define name="body">
 <h:form id="main">
 
-	<s:link view="/medicines/transfedt.xhtml" value="#{messages['medicines.transfer.new']}" style="float:right;width:150px;text-align:right;" rendered="#{s:hasRole('TRANSFER_EDT')}"/>
+	<s:link view="/medicines/transfedt.xhtml" value="#{messages['medicines.transfer.new']}" style="float:right;width:150px;text-align:right;" rendered="#{s:hasRole('NEW_TRANSFER')}"/>
 
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>

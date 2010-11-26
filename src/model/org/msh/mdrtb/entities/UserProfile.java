@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import org.hibernate.validator.NotNull;
+import org.msh.mdrtb.entities.enums.CaseClassification;
 
 @Entity
 public class UserProfile extends WSObject implements Serializable, Comparable<UserProfile> {
@@ -54,10 +55,11 @@ public class UserProfile extends WSObject implements Serializable, Comparable<Us
 		return (getName() != null? name: super.toString());
 	}
 	
-	public UserPermission permissionByRole(UserRole role) {
+	public UserPermission permissionByRole(UserRole role, CaseClassification classif) {
 		for (UserPermission up: getPermissions()) {
 			if (up.getUserRole().equals(role)) {
-				return up;
+				if ((classif == null) || ((classif != null) && (classif == up.getCaseClassification())))
+					return up;
 			}
 		}
 		return null;

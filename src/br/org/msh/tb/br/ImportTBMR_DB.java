@@ -256,7 +256,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		tbcase.setCaseNumber(rsCases.getInt("NUM_CASO"));
 		if (tbcase.getCaseNumber() == 0)
 			tbcase.setCaseNumber(null);
-		tbcase.setClassification(CaseClassification.MDRTB_DOCUMENTED);
+		tbcase.setClassification(CaseClassification.DRTB);
 		
 		int val = rsCases.getInt("COD_CASO_TBMR");
 		if (val == 1)

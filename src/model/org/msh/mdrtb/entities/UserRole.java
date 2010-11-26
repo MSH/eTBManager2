@@ -18,15 +18,15 @@ import javax.persistence.Id;
 import org.jboss.seam.international.Messages;
 
 /**
- *
- * @author Ricardo
+ * Store information about a system event
+ * @author Ricardo Memoria
  */
 
 @Entity
 public class UserRole implements java.io.Serializable, Comparable<UserRole> {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
@@ -34,22 +34,52 @@ public class UserRole implements java.io.Serializable, Comparable<UserRole> {
     @Column(length=80, nullable=false, name="Role_Name")
     private String name;
 
+    @Column(length=50)
     private String code;
 
     /**
-     * Describes if the role is for executing an operation
-     */
-    private boolean executable;
-
-    /**
-     * Describes if this role contains operations of read-write, like, for instance, insert-update-delete command
+     * Indicate if this role contains operations of read-write, like, for instance, insert-update-delete commands
      */
     private boolean changeable;
     
     /**
-     * Describes if the role is used internally by the system or is available to be assigned in a profile
+     * Indicate if the role is used internally by the system or is available to be assigned in a profile
      */
     private boolean internalUse;
+    
+    /**
+     * Indicate if role is assigned to profile by case classification
+     */
+    private boolean byCaseClassification;
+
+    
+    /**
+     * Return the parent code of the user role
+     * @return
+     */
+    public String getParentCode() {
+    	int level = getLevel();
+    	switch (level) {
+    	case 2: return code.substring(0, 2).concat("0000");
+    	case 3: return code.substring(0, 4).concat("00");
+    	default: return null;
+    	}
+    }
+
+
+    /**
+     * Check if user role is a child of the given role
+     * @param role
+     * @return
+     */
+    public boolean isChildOf(UserRole role) {
+    	int parentLevel = role.getLevel();
+    	if ((parentLevel >= getLevel()) || (parentLevel == 0))
+    		return false;
+    	
+    	String parentCode = role.getCode().substring(0, parentLevel * 2);
+    	return code.startsWith(parentCode);
+    }
 
     public int getLevel() {
 		if ((code == null) || (code.isEmpty()))
@@ -67,6 +97,9 @@ public class UserRole implements java.io.Serializable, Comparable<UserRole> {
 	}
 
     public String getDisplayName() {
+    	if (name.equals("-"))
+    		return "";
+    	
     	String msg = "userrole." + name;
     	return Messages.instance().get(msg);
     }
@@ -100,20 +133,6 @@ public class UserRole implements java.io.Serializable, Comparable<UserRole> {
 	}
 
 	/**
-	 * @return the executable
-	 */
-	public boolean isExecutable() {
-		return executable;
-	}
-
-	/**
-	 * @param executable the executable to set
-	 */
-	public void setExecutable(boolean executable) {
-		this.executable = executable;
-	}
-
-	/**
 	 * @return the changeable
 	 */
 	public boolean isChangeable() {
@@ -139,5 +158,19 @@ public class UserRole implements java.io.Serializable, Comparable<UserRole> {
 	 */
 	public boolean isInternalUse() {
 		return internalUse;
+	}
+
+	/**
+	 * @return the byClassification
+	 */
+	public boolean isByCaseClassification() {
+		return byCaseClassification;
+	}
+
+	/**
+	 * @param byClassification the byClassification to set
+	 */
+	public void setByCaseClassification(boolean byCaseClassification) {
+		this.byCaseClassification = byCaseClassification;
 	}
 }

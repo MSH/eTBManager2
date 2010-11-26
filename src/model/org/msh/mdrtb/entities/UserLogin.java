@@ -13,6 +13,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,7 +39,7 @@ public class UserLogin implements java.io.Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="USER_ID")
 	@NotNull
     private User user;
@@ -56,7 +57,7 @@ public class UserLogin implements java.io.Serializable {
     @Column(length=16)
     private String IpAddress;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="WORKSPACE_ID")
 	@NotNull
     private Workspace workspace;

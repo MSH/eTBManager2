@@ -657,7 +657,7 @@ public class TreatmentHome {
 		if (tbunitselection == null) {
 			TbCase tbcase = caseHome.getInstance();
 			TBUnitFilter filter;
-			if (tbcase.getClassification() == CaseClassification.MDRTB_DOCUMENTED)
+			if (tbcase.getClassification() == CaseClassification.DRTB)
 				 filter = TBUnitFilter.MDRHEALTH_UNITS;
 			else filter = TBUnitFilter.TBHEALTH_UNITS;
 			tbunitselection= new TBUnitSelection(true, filter);

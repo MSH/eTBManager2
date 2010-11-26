@@ -1,5 +1,6 @@
 package org.msh.tb.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,6 +14,7 @@ import org.msh.mdrtb.entities.UserPermission;
 import org.msh.mdrtb.entities.UserProfile;
 import org.msh.mdrtb.entities.UserRole;
 import org.msh.mdrtb.entities.Workspace;
+import org.msh.mdrtb.entities.enums.CaseClassification;
 
 @Name("workspaceInit")
 public class WorkspaceInit {
@@ -64,28 +66,31 @@ public class WorkspaceInit {
 				.setParameter("name", "Admin%".toUpperCase())
 				.getResultList();
 		
-		List<UserRole> roles = entityManager.createQuery("from UserRole").getResultList();
+		List<UserRole> roles = entityManager.createQuery("from UserRole a order by a.code").getResultList();
 
+		// store the roles that are by case classification
+		List<UserRole> roleClassifs = new ArrayList<UserRole>();
+		
 		for (UserProfile prof: lst) {
 			for (UserRole role: roles) {
-				UserPermission perm = prof.permissionByRole(role); 
-				if (perm == null) {
-					perm = new UserPermission();
-					perm.setUserRole(role);
-					perm.setUserProfile(prof);
-					
-					prof.getPermissions().add(perm);
+				// check if role is by case classification, either by the attribute "byCaseClassification"
+				// or if it's a child of a role by case classification
+				boolean b = role.isByCaseClassification();
+				if (!b) {
+					for (UserRole r: roleClassifs)
+						if (role.isChildOf(r)) {
+							b = true;
+							break;
+						}
 				}
-				perm.setGrantPermission(true);
-				if (perm.getUserRole().isExecutable()) {
-					perm.setCanExecute(true);
+				
+				// is by case classification ?
+				if (b) {
+					for (CaseClassification cla: CaseClassification.values())
+						addRole(prof, role, cla);
+					roleClassifs.add(role);
 				}
-				else
-				if (perm.getUserRole().isChangeable()) {
-					perm.setCanChange(true);
-					perm.setCanOpen(true);
-				}
-				else perm.setCanOpen(true);
+				else addRole(prof, role, null);
 			}
 			
 			entityManager.persist(prof);
@@ -93,5 +98,28 @@ public class WorkspaceInit {
 		entityManager.flush();
 		
 		facesMessages.add("All user profiles with name 'Administrator' were updated");
+	}
+
+
+	/**
+	 * Add a role to a given profile
+	 * @param prof
+	 * @param role
+	 * @param classif
+	 */
+	private void addRole(UserProfile prof, UserRole role, CaseClassification classif) {
+		UserPermission perm = prof.permissionByRole(role, classif); 
+		if (perm == null) {
+			perm = new UserPermission();
+			perm.setUserRole(role);
+			perm.setUserProfile(prof);
+			perm.setCaseClassification(classif);
+			
+			prof.getPermissions().add(perm);
+		}
+		perm.setGrantPermission(true);
+		if (perm.getUserRole().isChangeable()) {
+			perm.setCanChange(true);
+		}
 	}
 }

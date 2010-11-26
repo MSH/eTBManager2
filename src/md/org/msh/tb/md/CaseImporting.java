@@ -99,7 +99,7 @@ public class CaseImporting extends ImportingBase{
 
 			if (lstcases.size() == 0) {
 				tbcase = new TbCase();
-				tbcase.setClassification(CaseClassification.MDRTB_DOCUMENTED);
+				tbcase.setClassification(CaseClassification.DRTB);
 				tbcase.setState(CaseState.WAITING_TREATMENT);
 			}
 			else {
@@ -108,7 +108,7 @@ public class CaseImporting extends ImportingBase{
 			}
 		} catch (Exception e) {
 			tbcase = new TbCase();
-			tbcase.setClassification(CaseClassification.MDRTB_DOCUMENTED);
+			tbcase.setClassification(CaseClassification.DRTB);
 			tbcase.setState(CaseState.WAITING_TREATMENT);
 		}
 		

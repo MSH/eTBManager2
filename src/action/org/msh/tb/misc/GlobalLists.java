@@ -346,12 +346,9 @@ public class GlobalLists {
 	public List<CaseClassification> getUserCaseClassifications() {
 		ArrayList<CaseClassification> lst = new ArrayList<CaseClassification>();
 		Identity identity = Identity.instance();
-		if (identity.hasRole("TBCASES"))
-			lst.add(CaseClassification.TB_DOCUMENTED);
-		if (identity.hasRole("MDRCASES"))
-			lst.add(CaseClassification.MDRTB_DOCUMENTED);
-		if (identity.hasRole("NMTCASES"))
-			lst.add(CaseClassification.NMT);
+		for (CaseClassification cla: CaseClassification.values())
+			if (identity.hasRole(cla.toString() + "_CASE_VIEW"))
+				lst.add(cla);
 		return lst;
 	}
 

@@ -7,7 +7,7 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<s:link value="#{messages['cases.details.newresult']}" view="/custom/ph/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
+	<s:link value="#{messages['cases.details.newresult']}" view="/custom/ph/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 	</s:link>

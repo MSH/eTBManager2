@@ -20,7 +20,7 @@
 
 <ui:define name="body">
 
-<s:decorate template="/layout/casebody.xhtml">
+<s:decorate template="/layout/casebody.xhtml" rendered="#{caseHome.canEditTreatment}">
 	<a:form id="main">
 	<h:panelGroup id="pnltreatment">
 

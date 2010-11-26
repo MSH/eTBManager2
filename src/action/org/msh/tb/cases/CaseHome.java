@@ -3,6 +3,7 @@ package org.msh.tb.cases;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
@@ -67,8 +68,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 		return ret;
 	}
 
-	
-	
+
 	/**
 	 * Return if case is under treatment
 	 * @return
@@ -108,12 +108,17 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	}
 
 	
-	protected boolean checkRoleBySufix(String sufixName) {
+	/**
+	 * Check if role name suffix is allowed to the case according to its classification
+	 * @param sufixName
+	 * @return
+	 */
+	protected boolean checkRoleBySuffix(String suffixName) {
 		TbCase tbcase = getInstance();
-		
-		return ((tbcase.getClassification() == CaseClassification.MDRTB_DOCUMENTED) && (Identity.instance().hasRole("MDR" + sufixName)) ||
-			   ((tbcase.getClassification() == CaseClassification.TB_DOCUMENTED) && (Identity.instance().hasRole("TB" + sufixName))));
+
+		return Identity.instance().hasRole(tbcase.getClassification().toString() + "_" + suffixName);
 	}
+
 
 
 	/**
@@ -122,7 +127,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	 */
 	public boolean isCanValidate() {
 		ValidationState vs = getInstance().getValidationState();
-		return ((vs == ValidationState.WAITING_VALIDATION) || (vs == ValidationState.PENDING_ANSWERED)) && (checkRoleBySufix("VALIDATE"));
+		return ((vs == ValidationState.WAITING_VALIDATION) || (vs == ValidationState.PENDING_ANSWERED)) && (checkRoleBySuffix("VALIDATE"));
 	}
 
 	
@@ -149,47 +154,75 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	 */
 	public boolean isCanTransferOut() {
 		TbCase tbcase = getInstance();
-		return (tbcase.isOpen()) && (tbcase.getState() == CaseState.ONTREATMENT) && (checkRoleBySufix("TRANSFER"));
+		return (tbcase.isOpen()) && (tbcase.getState() == CaseState.ONTREATMENT) && (checkRoleBySuffix("CASE_TRANSFER"));
 	}
 	
 	public boolean isCanTransferIn() {
 		TbCase tbcase = getInstance();
-		return (tbcase.isOpen()) && (tbcase.getState() == CaseState.TRANSFERRING) && (checkRoleBySufix("TRANSFER"));
+		return (tbcase.isOpen()) && (tbcase.getState() == CaseState.TRANSFERRING) && (checkRoleBySuffix("CASE_TRANSFER"));
 	}
 	
-	public boolean isCanOpenExams() {
-		return checkRoleBySufix("EXAMS");
+	public boolean isCanViewExams() {
+		return checkRoleBySuffix("CASE_EXAMS");
 	}
 	
-	public boolean isCanEditExams() {
-		return (getInstance().isOpen()) && checkRoleBySufix("EXAMS_EDT");
+	public boolean isCanViewTreatment() {
+		return checkRoleBySuffix("CASE_TREAT");
 	}
 	
-	public boolean isCanOpenTreatment() {
-		return checkRoleBySufix("TREAT");
+	public boolean isCanViewTreatmentCalendar() {
+		return checkRoleBySuffix("CASE_INTAKEMED");
 	}
 	
-	public boolean isCanEditTreatment() {
-		return (getInstance().isOpen()) && (checkRoleBySufix("TREAT_EDT"));
+	public boolean isCanViewDrugogram() {
+		return checkRoleBySuffix("CASE_DRUGOGRAM");
 	}
 	
 	public boolean isCanClose() {
-		return (getInstance().isOpen()) && (checkRoleBySufix("CLOSE"));
+		return (getInstance().isOpen()) && (checkRoleBySuffix("CASE_CLOSE"));
 	}
 	
 	public boolean isCanReopen() {
-		return (!getInstance().isOpen()) && (checkRoleBySufix("REOPEN"));
+		return (!getInstance().isOpen()) && (checkRoleBySuffix("CASE_REOPEN"));
 	}
 	
 	@Override
 	public boolean isCanOpen() {
-		return checkRoleBySufix("CASES");
+		return checkRoleBySuffix("CASE_VIEW");
 	}
 	
-	public boolean isCanEdit() {
-		return (getInstance().isOpen()) && checkRoleBySufix("CASES_EDT");
+	/**
+	 * Check if case data can be displayed (patient data and clinical view)
+	 * @return
+	 */
+	public boolean isCanViewCaseData() {
+		return checkRoleBySuffix("CASE_DATA");
+	}
+		
+	public boolean isCanViewAditionalInfo() {
+		return checkRoleBySuffix("CASE_ADDINFO");
+	}
+	
+	public boolean isCanEditCaseData() {
+		return (getInstance().isOpen()) && checkRoleBySuffix("CASE_DATA_EDT");
+	}
+	
+	public boolean isCanEditTreatment() {
+		return (getInstance().isOpen()) && (checkRoleBySuffix("CASE_TREAT_EDT"));
 	}
 
+	public boolean isCanEditTreatmentCalendar() {
+		return (getInstance().isOpen()) && (checkRoleBySuffix("CASE_INTAKEMED_EDT"));		
+	}
+	
+	public boolean isCanEditExams() {
+		return getInstance().isOpen() && checkRoleBySuffix("CASE_EXAMS_EDT");
+	}
+	
+	public boolean isCanEditAditionalInfo() {
+		return getInstance().isOpen() && checkRoleBySuffix("CASE_ADDINFO_EDT");
+	}
+	
 	@Override
 	public Workspace getInstanceWorkspace() {
 		Patient p = getInstance().getPatient();
@@ -198,11 +231,12 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	
 	@Override
 	public String getRoleName() {
-		switch (getInstance().getClassification()) {
-		case TB_DOCUMENTED: return "TBCASES";
-		case MDRTB_DOCUMENTED: return "MDRCASES";
-		default: return null;
-		}
+		return "CASEDATA";
+	}
+
+	@Override
+	public CaseClassification getCaseClassificationForLog() {
+		return getInstance().getClassification();
 	}
 
 
@@ -238,5 +272,40 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 			hasIssues = numIssues > 0;
 		}
 		return hasIssues;
+	}
+
+
+	/**
+	 * Initialize view of the detail page of the case
+	 */
+	public void initView() {
+		CaseFilters filters = (CaseFilters)Component.getInstance("caseFilters", true);
+		CaseView view = filters.getCaseView();
+
+		boolean bOK = ((CaseView.DATA.equals(view) || (CaseView.MEDEXAMS.equals(view))) && (isCanViewCaseData())) ||
+		((CaseView.TREATMENT.equals(view)) && (isCanViewTreatment())) ||
+		((CaseView.EXAMS.equals(view)) && (isCanViewExams())) ||
+		((CaseView.ADDINFO.equals(view)) && (isCanViewAditionalInfo())) ||
+		((CaseView.RESUME.equals(view)) && (isCanViewDrugogram()));
+		
+		if (bOK)
+			return;
+
+		// find available view
+		if (isCanViewCaseData())
+			filters.setCaseView(CaseView.DATA);
+		else
+		if (isCanViewExams())
+			filters.setCaseView(CaseView.EXAMS);
+		else
+		if (isCanViewTreatment())
+			filters.setCaseView(CaseView.TREATMENT);
+		else
+		if (isCanViewAditionalInfo())
+			filters.setCaseView(CaseView.ADDINFO);
+		else
+		if (isCanViewDrugogram())
+			filters.setCaseView(CaseView.RESUME);
+		else filters.setCaseView(null);
 	}
 }

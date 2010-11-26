@@ -49,7 +49,7 @@
 		<f:param name="id" value="#{caseHome.id}"/>
 	</s:link>
 		
-	<h:commandLink value="#{messages['form.remove']}" action="#{caseHome.remove}" onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" rendered="#{caseHome.canEdit}">
+	<h:commandLink value="#{messages['form.remove']}" action="#{caseHome.remove}" onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" rendered="#{caseHome.canEditCaseData}">
 	</h:commandLink>
 
 	<s:link value="#{messages['cases.close']}" view="/cases/closecase.xhtml" rendered="#{caseHome.canClose}">
@@ -114,53 +114,45 @@
 
 <ui:include src="/cases/issues.xhtml" />
 
+<a:jsFunction name="changeTab" reRender="main" ajaxSingle="true">
+		<a:actionparam name="param1" assignTo="#{caseFilters.caseView}"/>
+		<a:actionparam name="param2" assignTo="#{caseHome.id}" converter="javax.faces.Integer"/>
+</a:jsFunction>
 <div id="pgtab" class="pgtab" style="display:none">
 <ul>
-	<li class="#{caseFilters.tabIndex=='0'?'selected':'unselected'}">
-		<a:commandLink value="#{messages['cases.details.case']}" reRender="main" >
-			<a:actionparam name="vid" assignTo="#{caseFilters.tabIndex}" value="0" />
-		</a:commandLink>
-	</li>
-	
-	<s:fragment rendered="#{caseHome.canOpenTreatment}">
-	<li class="#{caseFilters.tabIndex=='1'?'selected':'unselected'}">
-		<a:commandLink value="#{messages['cases.details.treatment']}" reRender="main">
-			<a:actionparam name="vid" assignTo="#{caseFilters.tabIndex}" value="1" />
-		</a:commandLink>
+	<s:fragment rendered="#{caseHome.canViewCaseData}">
+	<li class="#{caseFilters.caseView=='DATA'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['cases.details.case']}" onclick="changeTab('DATA', #{caseHome.id}); return false;" />
 	</li>
 	</s:fragment>
 	
-	<s:fragment rendered="#{caseHome.canOpenExams}">
-	<li class="#{caseFilters.tabIndex=='2'?'selected':'unselected'}">
-		<a:commandLink value="#{messages['cases.details.exams']}" reRender="main">
-			<a:actionparam name="vid" assignTo="#{caseFilters.tabIndex}" value="2" />
-		</a:commandLink>
+	<s:fragment rendered="#{caseHome.canViewTreatment}">
+	<li class="#{caseFilters.caseView=='TREATMENT'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['cases.details.treatment']}" onclick="changeTab('TREATMENT', #{caseHome.id}); return false;" />
 	</li>
 	</s:fragment>
 	
-	<li class="#{caseFilters.tabIndex=='3'?'selected':'unselected'}">
-		<a:commandLink value="#{messages['cases.details.medexam']}" reRender="main">
-			<a:actionparam name="vid" assignTo="#{caseFilters.tabIndex}" value="3" />
-		</a:commandLink>
+	<s:fragment rendered="#{caseHome.canViewExams}">
+	<li class="#{caseFilters.caseView=='EXAMS'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['cases.details.exams']}" onclick="changeTab('EXAMS', #{caseHome.id}); return false;" />
 	</li>
-
-	<li class="#{caseFilters.tabIndex=='6'?'selected':'unselected'}">
-		<a:commandLink value="#{messages['cases.details.otherinfo']}" reRender="main">
-			<a:actionparam name="vid" assignTo="#{caseFilters.tabIndex}" value="6" />
-		</a:commandLink>
-	</li>
-
-	<li class="#{caseFilters.tabIndex=='4'?'selected':'unselected'}">
-		<a:commandLink value="#{messages['cases.details.report1']}" reRender="main">
-			<a:actionparam name="vid" assignTo="#{caseFilters.tabIndex}" value="4" />
-		</a:commandLink>
-	</li>
+	</s:fragment>
 	
-	<s:fragment rendered="#{false}">
-	<li class="#{caseFilters.tabIndex=='5'?'selected':'unselected'}">
-		<a:commandLink value="#{messages['cases.details.agenda']}" reRender="main">
-			<a:actionparam name="vid" assignTo="#{caseFilters.tabIndex}" value="5" />
-		</a:commandLink>
+	<s:fragment rendered="#{caseHome.canViewCaseData}">
+	<li class="#{caseFilters.caseView=='MEDEXAMS'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['cases.details.medexam']}" onclick="changeTab('MEDEXAMS', #{caseHome.id}); return false;" />
+	</li>
+	</s:fragment>
+
+	<s:fragment rendered="#{caseHome.canViewAditionalInfo}">
+	<li class="#{caseFilters.caseView=='ADDINFO'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['cases.details.otherinfo']}" onclick="changeTab('ADDINFO', #{caseHome.id}); return false;" />
+	</li>
+	</s:fragment>
+
+	<s:fragment rendered="#{caseHome.canViewDrugogram}">
+	<li class="#{caseFilters.caseView=='RESUME'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['cases.details.report1']}" onclick="changeTab('RESUME', #{caseHome.id}); return false;" />
 	</li>
 	</s:fragment>
 </ul>
@@ -168,32 +160,28 @@
 <rich:jQuery timing="onload" selector="#pgtab" query="show()"  />
 <div class="pgbody">
 
-	<s:fragment rendered="#{caseFilters.tabIndex==0}">
+	<s:fragment rendered="#{caseFilters.caseView=='DATA'}">
 		<ui:include src="data.xhtml" />
 	</s:fragment>
 
-	<s:fragment rendered="#{caseFilters.tabIndex==1}">
+	<s:fragment rendered="#{caseFilters.caseView=='TREATMENT'}">
 		<ui:include src="treatment.xhtml" />
 	</s:fragment>
 
-	<s:fragment rendered="#{caseFilters.tabIndex==2}">
+	<s:fragment rendered="#{caseFilters.caseView=='EXAMS'}">
 		<ui:include src="exams.xhtml" />
 	</s:fragment>
 
-	<s:fragment rendered="#{caseFilters.tabIndex==3}">
+	<s:fragment rendered="#{caseFilters.caseView=='MEDEXAMS'}">
 		<ui:include src="medexamination.xhtml" />
 	</s:fragment>
 
-	<s:fragment rendered="#{caseFilters.tabIndex==4}">
-		<ui:include src="/cases/drugogram.xhtml" />
-	</s:fragment>
-
-	<s:fragment rendered="#{caseFilters.tabIndex==5}">
-		<ui:include src="/cases/agenda.xhtml" />
-	</s:fragment>
-
-	<s:fragment rendered="#{caseFilters.tabIndex==6}">
+	<s:fragment rendered="#{caseFilters.caseView=='ADDINFO'}">
 		<ui:include src="/cases/otherinfo.xhtml" />
+	</s:fragment>
+
+	<s:fragment rendered="#{caseFilters.caseView=='RESUME'}">
+		<ui:include src="/cases/drugogram.xhtml" />
 	</s:fragment>
 </div>
 

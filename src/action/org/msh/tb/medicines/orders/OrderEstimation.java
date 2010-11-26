@@ -101,6 +101,8 @@ public class OrderEstimation {
 			
 			TbCase tbcase = p.getTbcase();
 			
+			if (p.getMedicine().getAbbrevName().equals("Z"))
+				System.out.println("Z...");
 			if (!item.getItem().getCases().contains(tbcase)) 
 				item.getItem().addCase(p.getTbcase(), qtd);
 		}
@@ -126,12 +128,12 @@ public class OrderEstimation {
 		}
 		
 		String hql = "from PrescribedMedicine pm " +
-				"join fetch pm.source s join fetch pm.medicine m " +
+				"join fetch pm.tbcase c join fetch pm.source s join fetch pm.medicine m " +
 				"where exists(select a.id from TreatmentHealthUnit a " +
-				"where a.tbcase.id = pm.tbcase " +
-				"and a.tbunit.id  in (" + s + ")) " +
+				"where a.tbcase.id = pm.tbcase.id " +
+				"and a.tbunit.id  in (" + s + ") and a.period.endDate = c.treatmentPeriod.endDate) " +
 				"and pm.tbcase.state = :state " +
-				"and ((pm.period.endDate >= :dtini) or (pm.period.endDate is null)) " +
+				"and (pm.period.endDate >= :dtini) " +
 				"and (pm.period.iniDate <= :dtend)";
 		prescmeds = entityManager.createQuery(hql)
 				.setParameter("dtini", iniDate)

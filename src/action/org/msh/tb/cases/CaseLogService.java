@@ -24,7 +24,7 @@ public class CaseLogService {
 		TbCase tbcase = caseHome.getInstance();
 		
 		String role;
-		if (tbcase.getClassification() == CaseClassification.TB_DOCUMENTED)
+		if (tbcase.getClassification() == CaseClassification.TB)
 			role = "TBVALIDATE";
 		else role = "MDRVALIDATE";
 		
@@ -41,7 +41,7 @@ public class CaseLogService {
 		CaseMoveHome caseMoveHome = (CaseMoveHome)Component.getInstance("caseMoveHome");
 		
 		String role;
-		if (tbcase.getClassification() == CaseClassification.TB_DOCUMENTED)
+		if (tbcase.getClassification() == CaseClassification.TB)
 			 role = "TBTRANSFER";
 		else role = "MDRTRANSFER";
 		
@@ -60,7 +60,7 @@ public class CaseLogService {
 		TbCase tbcase = caseHome.getInstance();
 		
 		String role;
-		if (tbcase.getClassification() == CaseClassification.TB_DOCUMENTED)
+		if (tbcase.getClassification() == CaseClassification.TB)
 			 role = "TBCLOSE";
 		else role = "MDRCLOSE";
 
@@ -78,7 +78,7 @@ public class CaseLogService {
 		TbCase tbcase = caseHome.getInstance();
 		
 		String role;
-		if (tbcase.getClassification() == CaseClassification.TB_DOCUMENTED)
+		if (tbcase.getClassification() == CaseClassification.TB)
 			 role = "TBREOPEN";
 		else role = "MDRREOPEN";
 		
