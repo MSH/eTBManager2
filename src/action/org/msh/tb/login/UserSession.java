@@ -280,6 +280,31 @@ public class UserSession {
 	}
 
 
+	/**
+	 * Check if user can view the estimated position report
+	 * @return
+	 */
+	public boolean isCanViewEstPositionReport() {
+		return (Identity.instance().hasRole("REP_ESTPOS")) && (getTbunit().isMedicineManagementStarted());		
+	}
+
+	
+	/**
+	 * Check if user can view the stock evolution report
+	 * @return
+	 */
+	public boolean  isCanViewStockEvolutionReport() {
+		return (Identity.instance().hasRole("REP_STOCKEVOL")) && (getTbunit().isMedicineManagementStarted());				
+	}
+	
+	/**
+	 * Check if user can view the cost of treatment per patient report
+	 * @return
+	 */
+	public boolean  isCanViewCostPatientReport() {
+		return (Identity.instance().hasRole("REP_COSTPAT")) && (getTbunit().isMedicineManagementStarted());				
+	}
+
 	public boolean isCanCheckMovements() {
 		return (Identity.instance().hasRole("MOVS") && (getTbunit().isMedicineStorage())) && (getTbunit().isMedicineManagementStarted());
 	}

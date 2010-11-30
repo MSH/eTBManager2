@@ -147,13 +147,13 @@
 
 	<!-- REPORTS -->
 	<page view-id="/reports/rel2.xhtml" >
-		<restrict>#{s:hasRole('REP2')}</restrict>
+		<restrict>#{s:hasRole('REP_ESTPOS')}</restrict>
 		<param name="source" value="#{reportSelection.sourceId}" converterId="javax.faces.Integer" />
 		<param name="ds" value="#{reportSelection.tbunitId}" converterId="javax.faces.Integer" />
 	</page>
 
 	<page view-id="/reports/rel3.xhtml">
-		<restrict>#{s:hasRole('REP3')}</restrict>
+		<restrict>#{s:hasRole('REP_STOCKEVOL')}</restrict>
 		<param name="source" value="#{reportSelection.sourceId}" converterId="javax.faces.Integer" />
 		<param name="ds" value="#{reportSelection.tbunitId}" converterId="javax.faces.Integer" />
 		<param name="inimonth" value="#{reportSelection.iniMonth}" converterId="javax.faces.Integer" />

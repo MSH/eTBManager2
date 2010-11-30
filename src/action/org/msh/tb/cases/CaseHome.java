@@ -127,7 +127,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	 */
 	public boolean isCanValidate() {
 		ValidationState vs = getInstance().getValidationState();
-		return ((vs == ValidationState.WAITING_VALIDATION) || (vs == ValidationState.PENDING_ANSWERED)) && (checkRoleBySuffix("VALIDATE"));
+		return ((vs == ValidationState.WAITING_VALIDATION) || (vs == ValidationState.PENDING_ANSWERED)) && (checkRoleBySuffix("CASE_VALIDATE"));
 	}
 
 	
@@ -231,7 +231,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	
 	@Override
 	public String getRoleName() {
-		return "CASEDATA";
+		return "CASE_DATA";
 	}
 
 	@Override

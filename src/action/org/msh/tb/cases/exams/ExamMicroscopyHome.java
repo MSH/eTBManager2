@@ -11,6 +11,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.msh.mdrtb.entities.ExamMicroscopy;
+import org.msh.mdrtb.entities.enums.MicroscopyResult;
 import org.msh.tb.log.LogInfo;
 
 @Name("examMicroscopyHome")
@@ -25,7 +26,18 @@ public class ExamMicroscopyHome extends LaboratoryExamHome<ExamMicroscopy> {
 	public ExamMicroscopy getExamMicroscopy() {
 		return (ExamMicroscopy)getInstance();
 	}
+
 	
+	@Override
+	public String persist() {
+		ExamMicroscopy exam = getInstance();
+		if (exam.getResult() != MicroscopyResult.POSITIVE)
+			exam.setNumberOfAFB(null);
+		
+		return super.persist();
+	}
+
+
 	public List<SelectItem> getAFBs() {
 		if (afbs == null) {
 			afbs = new ArrayList<SelectItem>();

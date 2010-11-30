@@ -212,7 +212,8 @@ public class Drugogram {
 			while (dt.before(dtEnd)) {
 				DrugogramItem item = findItemByDate(dt);
 				
-				item.setMonthTreatment(tbcase.getMonthTreatment(dt));
+//				item.setMonthTreatment(tbcase.getMonthTreatment(dt));
+				
 				Medicine med = pm.getMedicine();
 				List<String> subs = getSubstancesAbbrevName(med);
 				for (String subName: subs) {
@@ -285,6 +286,7 @@ public class Drugogram {
 		item.setDrugogram(this);
 		item.setMonth(month);
 		item.setYear(year);
+		item.setMonthTreatment(tbcase.getMonthTreatment(date));
 		items.add(item);
 		
 		return item;

@@ -233,7 +233,7 @@ public class FieldsQuery {
 		return getValues();
 	}
 	
-	public List<FieldValue> getMicrobacterioses() {
+	public List<FieldValue> getMicobacterioses() {
 		field = TbField.MICOBACTERIOSE;
 		return getValues();
 	}

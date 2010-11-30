@@ -23,12 +23,8 @@ public class CaseLogService {
 	public void logValidation() {
 		TbCase tbcase = caseHome.getInstance();
 		
-		String role;
-		if (tbcase.getClassification() == CaseClassification.TB)
-			role = "TBVALIDATE";
-		else role = "MDRVALIDATE";
-		
-		logService.saveExecuteTransaction(tbcase, role);
+		logService.setCaseClassification(tbcase.getClassification());
+		logService.saveExecuteTransaction(tbcase, "CASE_VALIDATE");
 	}
 
 

@@ -65,12 +65,16 @@ public class TreatmentHome {
 
 	private TreatmentHealthUnit healthUnit;
 	private FormEditing formEditing;
+	private boolean initialized;
 	
 
 	/**
 	 * Initialize editing of the treatment
 	 */
 	public void initializeEditing() {
+		if (initialized)
+			return;
+		
 		PrescriptionTable tbl = (PrescriptionTable)Component.getInstance("prescriptionTable", true);
 		tbl.setEditing(true);
 		tbl.refresh();
@@ -87,6 +91,7 @@ public class TreatmentHome {
 		else minIniDate = null;
 		
 		getTbunitselection().setTbunit(healthUnit.getTbunit());
+		initialized = true;
 	}
 
 

@@ -8,6 +8,7 @@ import javax.faces.model.SelectItem;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.msh.mdrtb.entities.ExamCulture;
+import org.msh.mdrtb.entities.enums.CultureResult;
 import org.msh.tb.log.LogInfo;
 
 @Name("examCultureHome")
@@ -20,6 +21,16 @@ public class ExamCultureHome extends LaboratoryExamHome<ExamCulture> {
 	@Factory("examCulture")
 	public ExamCulture getExamCulture() {
 		return getInstance();
+	}
+	
+	
+	@Override
+	public String persist() {
+		ExamCulture exam = getInstance();
+		if (exam.getResult() != CultureResult.POSITIVE)
+			exam.setNumberOfColonies(null);
+		
+		return super.persist();
 	}
 	
 	public List<SelectItem> getNumColonies() {

@@ -3,7 +3,7 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
 
-	<restrict>#{s:hasRole('REP5')}</restrict>
+	<restrict>#{s:hasRole('REP_COSTPAT')}</restrict>
 	<param name="source" value="#{reportSelection.sourceId}" converterId="javax.faces.Integer" />
 	<param name="ds" value="#{reportSelection.tbunitId}" converterId="javax.faces.Integer" />
 	<param name="inimonth" value="#{reportSelection.iniMonth}" converterId="javax.faces.Integer" />

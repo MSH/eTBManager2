@@ -65,10 +65,10 @@ public class OrderShippingHome extends Controller {
 //			Tbunit dto = order.getTbunitTo();
 			
 			// check if stock can be decreased
-			Tbunit unitFrom = order.getTbunitFrom();
+			Tbunit unitTo = order.getTbunitTo();
 			boolean canShip = true;
 			for (OrderItem it: order.getItems()) {
-				if (!movementHome.canDecreaseStock(unitFrom, it.getSource(), 
+				if (!movementHome.canDecreaseStock(unitTo, it.getSource(), 
 						it.getMedicine(), it.getShippedQuantity(), order.getShippingDate())) {
 					canShip = false;
 					it.setData(true);
