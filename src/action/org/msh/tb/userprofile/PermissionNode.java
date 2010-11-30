@@ -8,7 +8,8 @@ import org.msh.mdrtb.entities.UserRole;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 
 /**
- * Represents a node in the profile list
+ * Represents a node in the list of permissions of the user. A node is used as a representative display of
+ * the user profile, where permissions are displayed in a tree view
  * @author Ricardo Memoria
  *
  */
