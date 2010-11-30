@@ -57,7 +57,7 @@
 
     <s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['HealthSystem']}:</ui:define>
-        <h:selectOneMenu value="#{tbunit.healthSystem}" >
+        <h:selectOneMenu value="#{tbunit.healthSystem}" required="true">
              <s:selectItems value="#{healthSystems}" var="r" label="#{r.name}" noSelectionLabel="-" />
              <s:convertEntity />
         </h:selectOneMenu>  
@@ -75,6 +75,7 @@
 -->
 	<s:decorate template="/layout/auselection.xhtml">
 		<ui:param name="auselection" value="#{tbunitHome.ausel}" />
+		<ui:param name="required" value="true" />
 	</s:decorate>
 
     <s:decorate template="/layout/edit.xhtml">
