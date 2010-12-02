@@ -179,8 +179,8 @@
     
     <exception class="javax.persistence.OptimisticLockException">
         <end-conversation/>
-        <redirect view-id="/error.xhtml">
-            <message>Another user changed the same data, please try again</message>
+        <redirect view-id="/home.xhtml">
+            <message>#{messages['exceptions.optimisticLock']}</message>
         </redirect>
     </exception>
     

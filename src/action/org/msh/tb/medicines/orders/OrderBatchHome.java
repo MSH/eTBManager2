@@ -95,6 +95,7 @@ public class OrderBatchHome {
 		for (OrderBatch b: availableBatches) {
 			if (b.getQuantity() > 0) {
 				orderItem.getBatches().add(b);
+				b.setOrderItem(orderItem);
 				qtd += b.getQuantity();
 			}
 		}

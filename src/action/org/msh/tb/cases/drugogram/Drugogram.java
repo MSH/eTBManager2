@@ -30,6 +30,12 @@ import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.utils.date.DateUtils;
 
 
+/**
+ * Display the drugogram of a case, i.e, a resume of the case displaying in a single table the
+ * treatment time line, the list of medicines prescribed, microscopy results, culture results and DST results
+ * @author Ricardo Memoria
+ *
+ */
 @Name("drugogram")
 public class Drugogram {
 

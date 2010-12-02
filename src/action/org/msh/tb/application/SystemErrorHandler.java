@@ -2,6 +2,7 @@ package org.msh.tb.application;
 
 import javax.faces.application.ViewExpiredException;
 import javax.faces.context.FacesContext;
+import javax.persistence.OptimisticLockException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.seam.Component;
@@ -31,7 +32,7 @@ public class SystemErrorHandler {
 	protected void registerException() {
 		Exception exception = (Exception)Component.getInstance("org.jboss.seam.handledException");
 		if ((exception == null) || (exception instanceof ViewExpiredException) ||
-			(exception instanceof IllegalStateException) ||
+			(exception instanceof IllegalStateException) || (exception instanceof OptimisticLockException) ||
 			(exception instanceof NotLoggedInException) || (exception instanceof AuthorizationException))
 			return;
 

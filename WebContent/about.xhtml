@@ -81,6 +81,13 @@
 			</ui:define>
 			#{etbmanagerApp.countryCode}
 		</s:decorate>
+
+		<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">
+				Client browser:
+			</ui:define>
+			#{browserInfo.browserType} #{browserInfo.browserVersion}
+		</s:decorate>
 		<s:button view="/login.xhtml" value="#{messages['form.return']}" styleClass="button" />
 		</div>
 	</h:form>

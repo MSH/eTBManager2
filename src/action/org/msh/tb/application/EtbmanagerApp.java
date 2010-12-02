@@ -119,6 +119,7 @@ public class EtbmanagerApp {
 	}
 
 
+	
 	/**
 	 * Read the MANIFEST.MF properties loaded in a {@link Properties} object
 	 * @param prop

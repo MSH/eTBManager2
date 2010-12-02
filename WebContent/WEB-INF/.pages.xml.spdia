@@ -90,8 +90,8 @@
   NAME="exception:javax.persistence.OptimisticLockException"
   PATH="javax.persistence.OptimisticLockException" SHAPE="24,4745,0,0"
   TYPE="exception" model-entity="SeamPagesDiagramItem">
-  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
-   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/home.xhtml" NAME="output" PATH="/home.xhtml"
+   TARGET="#xhome.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
  </item>
  <item ID="org.jboss.seam.security.AuthorizationException"
   NAME="exception:org.jboss.seam.security.AuthorizationException"

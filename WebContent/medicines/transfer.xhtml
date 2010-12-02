@@ -67,7 +67,7 @@
 </ul>
 </div>
 <div class="pgbody" style="height:200px;">
-	<s:fragment rendered="#{transfers.executing}">
+	<s:fragment rendered="#{facesContext.renderResponse}">
 		<h:outputText value="#{messages['medicines.transfer.nofound']}" 
 			style="width:100%;font-weight:bold;text-align:center;height:100%;padding-top:20px;display:table;color:red;" 
 			rendered="#{empty transfers.resultList}"/>
