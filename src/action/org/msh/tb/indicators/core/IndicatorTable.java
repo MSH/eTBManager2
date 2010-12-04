@@ -386,7 +386,11 @@ public class IndicatorTable {
 	 * @return
 	 */
 	public TableColumn addColumn(String colTitle, Object id) {
-		TableColumn col = findColumnByTitle(colTitle);
+		TableColumn col;
+		if (id != null)
+			col = findColumnById(id);
+		else
+			col = findColumnByTitle(colTitle);
 		
 		if (col == null) {
 			col = new TableColumn(this, colTitle, id);

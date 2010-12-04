@@ -1,7 +1,6 @@
 package org.msh.tb.cases.drugogram;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -218,8 +217,6 @@ public class Drugogram {
 			while (dt.before(dtEnd)) {
 				DrugogramItem item = findItemByDate(dt);
 				
-//				item.setMonthTreatment(tbcase.getMonthTreatment(dt));
-				
 				Medicine med = pm.getMedicine();
 				List<String> subs = getSubstancesAbbrevName(med);
 				for (String subName: subs) {
@@ -277,22 +274,16 @@ public class Drugogram {
 	 * @return instance of the {@link DrugogramItem} class
 	 */
 	protected DrugogramItem findItemByDate(Date date) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		int year = c.get(Calendar.YEAR);
-		int month = c.get(Calendar.MONTH);
-		
+		int monthTreatment = tbcase.getMonthTreatment(date);
 		for (DrugogramItem item: items) {
-			if ((item.getMonth() == month) && (item.getYear() == year)) {
+			if (item.getMonthTreatment() == monthTreatment) {
 				return item;
 			}
 		}
 		
 		DrugogramItem item = new DrugogramItem();
 		item.setDrugogram(this);
-		item.setMonth(month);
-		item.setYear(year);
-		item.setMonthTreatment(tbcase.getMonthTreatment(date));
+		item.setMonthTreatment(monthTreatment);
 		items.add(item);
 		
 		return item;

@@ -17,6 +17,8 @@
    TARGET="#xhome.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
   <output ID="/medicines/index.xhtml" NAME="output1"
    PATH="/medicines/index.xhtml" TARGET="#xmedicines#xindex.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/medicines/index.xhtml" NAME="output2"
+   PATH="/medicines/index.xhtml" TARGET="#xmedicines#xindex.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
  </item>
  <item ID="#admin#groups.xhtml" NAME="#xadmin#xgroups.xhtml"
   PATH="/admin/groups.xhtml" SHAPE="344,2633,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>

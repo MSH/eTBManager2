@@ -158,14 +158,23 @@ public abstract class Indicator extends CaseHQLBase {
 
 	
 	/**
-	 * Group result values by age range. The result is another list of values with the age position in the array (specified by
-	 * ageIndex) grouped by age range
+	 * Return the age range home component with the list of age ranges in use by the system
+	 * @return
+	 */
+	protected AgeRangeHome getAgeRangeHome() {
+		return (AgeRangeHome)Component.getInstance("ageRangeHome", true);
+	}
+
+	
+	/**
+	 * Group result values by age range. The result is another list with the same structure but
+	 * the position of the age (ageIndex) replaced and grouped by an {@link AgeRange} object 
 	 * @param lst - List of objects with the ageIndex position of the array grouped by age range
 	 * @param ageIndex - Position of the array where age information is stored
 	 * @return List of Object[] with the ageIndex position grouped by age range
 	 */
 	protected List<Object[]> groupValuesByAreRange(List<Object[]> lst, int ageIndex, int keyCount) {
-		AgeRangeHome ageRangeHome = (AgeRangeHome)Component.getInstance("ageRangeHome", true);
+		AgeRangeHome ageRangeHome = getAgeRangeHome();
 		
 		List<Object[]> retlst = new ArrayList<Object[]>();
 		

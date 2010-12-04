@@ -10,12 +10,13 @@
       template="#{workspaceViewService.templateMedPage}">
 
 <ui:param name="title" value="#{messages.medicines}" />
-
+<ui:param name="waitdlg" value="1" />
 <ui:param name="topmenu" value="1" />
 
 <ui:define name="body">
 <div>
 
+	<h:form>
     <s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['HealthSystem']}:</ui:define>
     	#{userSession.tbunit.healthSystem.name}
@@ -73,7 +74,7 @@
 			reRender="main"
 			styleClass="right-icon"
 			rendered="#{s:hasRole('MED_INIT')}"
-			onclick="if (!confirm('#{messages['medicines.start.removeconfirm']}')) return false;" />
+			onclick="if (!confirm('#{messages['medicines.start.removeconfirm']}')) {return false};" />
 	</div>
 	
 	</s:fragment>
@@ -86,8 +87,8 @@
 			rendered="#{s:hasRole('MED_INIT')}"/>
 	</s:fragment>
 
-<p/>
-
+	<p/>
+	</h:form>
 </div>
 </ui:define>
 

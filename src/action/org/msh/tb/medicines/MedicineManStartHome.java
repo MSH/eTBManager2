@@ -179,11 +179,15 @@ public class MedicineManStartHome {
 	@Transactional
 	public String cancelMedicineManagement() {
 		Tbunit unit = userSession.getTbunit();
+		unit = entityManager.merge(unit);
+
 		removeMovements(unit);
 		
 		unit.setMedManStartDate(null);
 		entityManager.persist(unit);
 		entityManager.flush();
+		
+		userSession.setTbunit(unit);
 		
 		return "medman-cancelled";
 	}
@@ -200,6 +204,7 @@ public class MedicineManStartHome {
 		execQueryUnit(unit, "delete from Transfer aux where (aux.unitFrom.id = :id or aux.unitTo.id = :id)");
 		execQueryUnit(unit, "delete from MedicineReceiving aux where aux.tbunit.id = :id");
 		execQueryUnit(unit, "delete from MedicineDispensing aux where aux.tbunit.id = :id");
+		execQueryUnit(unit, "delete from BatchQuantity sp where sp.tbunit.id = :id");
 	}
 	
 	

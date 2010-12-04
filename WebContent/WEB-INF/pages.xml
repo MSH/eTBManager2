@@ -37,6 +37,9 @@
             <rule if-outcome="med-home">
             	<redirect view-id="/medicines/index.xhtml" />
             </rule>
+            <rule if-outcome="medman-cancelled">
+            	<redirect view-id="/medicines/index.xhtml" />
+            </rule>
         </navigation>
     </page>
     
