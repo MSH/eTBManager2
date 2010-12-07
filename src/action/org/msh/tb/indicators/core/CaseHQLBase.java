@@ -181,12 +181,12 @@ public class CaseHQLBase extends Controller {
 		// add filters by culture
 		String s = getHQLCultureCondition();
 		if (s != null)
-			hql += s;
+			hql += " and " + s;
 		
 		// add filters by microscopy
 		s = getHQLMicroscopyCondition();
 		if (s != null)
-			hql += s;
+			hql += " and " + s;
 		
 		// include filter by unit
 		Tbunit unit = filters.getTbunitselection().getTbunit();
@@ -205,7 +205,7 @@ public class CaseHQLBase extends Controller {
 	 * Return microscopy HQL condition depending on the microscopy filter
 	 * @return if there is a filter (positive or negative) return HQL condition, otherwise, return null
 	 */
-	private String getHQLMicroscopyCondition() {
+	protected String getHQLMicroscopyCondition() {
 		IndicatorFilters filters = getIndicatorFilters();
 		if (filters.getMicroscopyResult() == null)
 			return null;
@@ -231,7 +231,7 @@ public class CaseHQLBase extends Controller {
 			}
 			cond += ")";
 		}
-		return " and exists(select ex.id from ExamMicroscopy ex where ex.result " + cond + " and ex.tbcase.id = c.id" +
+		return "exists(select ex.id from ExamMicroscopy ex where ex.result " + cond + " and ex.tbcase.id = c.id" +
 		" and ex.dateCollected = (select min(sp.dateCollected) from ExamMicroscopy sp where sp.tbcase.id = c.id))";
 	}
 
@@ -240,7 +240,7 @@ public class CaseHQLBase extends Controller {
 	 * Return microscopy HQL condition depending on the microscopy filter
 	 * @return if there is a filter (positive or negative) return HQL condition, otherwise, return null
 	 */
-	private String getHQLCultureCondition() {
+	protected String getHQLCultureCondition() {
 		IndicatorFilters filters = getIndicatorFilters();
 		if (filters.getCultureResult() == null)
 			return null;
@@ -266,7 +266,7 @@ public class CaseHQLBase extends Controller {
 			}
 			cond += ")";
 		}
-		return " and exists(select ex.id from ExamCulture ex where ex.result " + cond + " and ex.tbcase.id = c.id" +
+		return "exists(select ex.id from ExamCulture ex where ex.result " + cond + " and ex.tbcase.id = c.id" +
 		" and ex.dateCollected = (select min(sp.dateCollected) from ExamCulture sp where sp.tbcase.id = c.id))";
 	}
 

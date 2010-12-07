@@ -9,7 +9,7 @@ div#outer_title {
 	background-color:#ffffff;
 	height:50px;
 	min-height:50px;
-	display:block;
+	display:table;
 }
 div#title{
 	width:90%;
@@ -750,7 +750,6 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	width:100%;
 }
 .content-title {
-	color:black;
 	font-size:22px;
 	color:#439E00;
 }

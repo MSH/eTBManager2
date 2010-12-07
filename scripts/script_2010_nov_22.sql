@@ -109,95 +109,95 @@ alter table UserPermission drop column canOpen;
 
 /* DRTB CASE_VIEW */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select false, grantpermission, profile_id, 100, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select false, grantpermission, profile_id, 100, caseClassification, canExecute
   from UserPermission where role_id=140 and caseClassification in (1,2);
 
-  
+
 /* CASE_DATA */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select false, grantpermission, profile_id, 140, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select false, grantpermission, profile_id, 140, caseClassification, canExecute
   from UserPermission where role_id=100 and canchange=true;
 
 
 /* CASE_PERSONALVIEW */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select false, grantpermission, profile_id, 147, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select false, grantpermission, profile_id, 147, caseClassification, canExecute
   from UserPermission where role_id=100;
 
 /* CASE_INTAKEMED */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 141, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 141, caseClassification, canExecute
   from UserPermission where role_id=106;
 
 /* CASE_DRUGOGRAM */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 142, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 142, caseClassification, canExecute
   from UserPermission where role_id=100;
 
 /* CASE_ADDINFO */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 146, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 146, caseClassification, canExecute
   from UserPermission where role_id=100;
 
 /* CASE_DELVAL */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 143, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 143, caseClassification, canExecute
   from UserPermission where role_id=101;
 
 /* MNT */
 /* CASE_TREAT */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 106, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 106, caseClassification, canExecute
   from UserPermission where role_id=100 and caseClassification=2;
 
 /* CASE_INTAKEMED */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 141, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 141, caseClassification, canExecute
   from UserPermission where role_id=100 and caseClassification=2;
 
 /* CASE_EXAMS */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 105, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 105, caseClassification, canExecute
   from UserPermission where role_id=100 and caseClassification=2;
 
 /* CASE_VALIDATE */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 101, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 101, caseClassification, canExecute
   from UserPermission where role_id=100 and caseClassification=2;
 
 /* CASE_DELVAL */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 143, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 143, caseClassification, canExecute
   from UserPermission where role_id=100 and caseClassification=2;
 
 /* CASE_TRANSFER */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 102, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 102, caseClassification, canExecute
   from UserPermission where role_id=100 and caseClassification=2;
 
 /* CASE_CLOSE */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 103, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 103, caseClassification, canExecute
   from UserPermission where role_id=100 and caseClassification=2;
 
 /* CASE_REOPEN */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 104, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 104, caseClassification, canExecute
   from UserPermission where role_id=100 and caseClassification=2;
 
 
@@ -248,16 +248,16 @@ update UserRole set role_name='MEDMAN' where id=9;
 
 /* NEW_ORDER */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 144, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 144, caseClassification, canExecute
   from UserPermission p
   inner join UserRole r on r.id = p.role_id
   where role_id=18 and changeable=true;
 
 /* NEW_TRANSFER */
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 145, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 145, caseClassification, canExecute
   from UserPermission p
   inner join UserRole r on r.id = p.role_id
   where role_id=46 and changeable=true;
@@ -278,15 +278,15 @@ insert into UserRole (id, changeable, code, role_name, internalUse, byCaseClassi
   (151, false, '030500', 'INDICATORS', false, false);
 
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 150, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 150, caseClassification, canExecute
   from UserPermission p
   inner join UserRole r on r.id = p.role_id
   where role_id=37;
 
 insert into UserPermission (canchange, grantpermission,
-  profile_id, role_id, caseClassification)
-  select canchange, grantpermission, profile_id, 151, caseClassification
+  profile_id, role_id, caseClassification, canExecute)
+  select canchange, grantpermission, profile_id, 151, caseClassification, canExecute
   from UserPermission p
   inner join UserRole r on r.id = p.role_id
   where role_id=10;

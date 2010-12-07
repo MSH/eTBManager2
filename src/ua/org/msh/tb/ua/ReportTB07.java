@@ -7,13 +7,14 @@ import org.jboss.seam.annotations.Name;
 import org.msh.mdrtb.entities.AgeRange;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.Gender;
+import org.msh.mdrtb.entities.enums.HIVResult;
 import org.msh.mdrtb.entities.enums.InfectionSite;
 import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator2D;
+import org.msh.tb.indicators.core.IndicatorCultureResult;
 import org.msh.tb.indicators.core.IndicatorFilters;
 import org.msh.tb.indicators.core.IndicatorMicroscopyResult;
 import org.msh.tb.indicators.core.IndicatorTable;
-import org.msh.tb.indicators.core.OutputSelection;
 
 @Name("reportTB07")
 public class ReportTB07 extends Indicator2D {
@@ -43,6 +44,8 @@ public class ReportTB07 extends Indicator2D {
 		setConsolidated(true);
 		generateTable1000();
 		generateTable2000();
+		generateTable3000();
+		generateTable4000();
 	}
 
 
@@ -51,25 +54,25 @@ public class ReportTB07 extends Indicator2D {
 	 */
 	protected void generateTable1000() {
 		IndicatorFilters filters = (IndicatorFilters)Component.getInstance("indicatorFilters");
-		filters.setClassification(CaseClassification.TB);
+		IndicatorTable table = getTable1000();
 		
 		filters.setMicroscopyResult(IndicatorMicroscopyResult.POSITIVE);
 		filters.setInfectionSite(InfectionSite.PULMONARY);
 		List<Object[]> lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", "c.patientType != null and c.infectionSite != null");
-		addTable1000Values(lst, IndicatorMicroscopyResult.POSITIVE);
+		addTable1000Values(table, lst, IndicatorMicroscopyResult.POSITIVE);
 		
 		filters.setMicroscopyResult(IndicatorMicroscopyResult.NEGATIVE);
 		lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", "c.patientType != null and c.infectionSite != null");
-		addTable1000Values(lst, IndicatorMicroscopyResult.NEGATIVE);
+		addTable1000Values(table, lst, IndicatorMicroscopyResult.NEGATIVE);
 		
 		filters.setMicroscopyResult(null);
 		filters.setInfectionSite(InfectionSite.EXTRAPULMONARY);
 		lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", "c.patientType != null and c.infectionSite != null");
-		addTable1000Values(lst, IndicatorMicroscopyResult.NEGATIVE);
+		addTable1000Values(table, lst, null);
 	}
 
 
-	private void addTable1000Values(List<Object[]> lst, IndicatorMicroscopyResult result) {
+	private void addTable1000Values(IndicatorTable table, List<Object[]> lst, IndicatorMicroscopyResult result) {
 		for (Object[] vals: lst) {
 			PatientType patType = (PatientType)vals[0];
 			InfectionSite site = (InfectionSite)vals[1];
@@ -78,25 +81,28 @@ public class ReportTB07 extends Indicator2D {
 
 			if ((site == InfectionSite.PULMONARY) || (site == InfectionSite.EXTRAPULMONARY)) {
 				String key = null;
-				if (InfectionSite.PULMONARY.equals(site)) {
-					if (result == IndicatorMicroscopyResult.POSITIVE)
-						 key = "positive_";
-					else key = "negative_";
-				}
-				else 
-				if (InfectionSite.EXTRAPULMONARY.equals(site))
-					key = "extrapulmonary_";
+				if (result != null) 
+					 key = (result == IndicatorMicroscopyResult.POSITIVE ? "positive_": "negative_");
+				else key = (site == InfectionSite.EXTRAPULMONARY ? "extrapulmonary_": "pulmonary_"); 
 				
-				addTableValue(getTable1000(), key, patType, val.floatValue());
+				addTableValue(table, key, patType, val.floatValue());
 				
 				if (gender == Gender.MALE)
-					 getTable1000().addIdValue("male", "row", val.floatValue());
-				else getTable1000().addIdValue("female", "row", val.floatValue());
-				getTable1000().addIdValue("all", "row", val.floatValue());
+					 table.addIdValue("male", "row", val.floatValue());
+				else table.addIdValue("female", "row", val.floatValue());
+				table.addIdValue("all", "row", val.floatValue());
 			}
 		}		
 	}
 
+	private String getPatientTypeKey(PatientType patientType) {
+		if (PatientType.NEW.equals(patientType))
+			return "newcases";
+		else
+		if (PatientType.RELAPSE.equals(patientType))
+			return "relapses";
+		else return "other";
+	}
 
 	/**
 	 * Add a value to a table
@@ -106,13 +112,7 @@ public class ReportTB07 extends Indicator2D {
 	 * @param value value to include
 	 */
 	private void addTableValue(IndicatorTable table, String prefix, PatientType patientType, Float value) {
-		String key = prefix;
-		if (PatientType.NEW.equals(patientType))
-			key = key + "newcases";
-		else
-		if (PatientType.RELAPSE.equals(patientType))
-			key = key + "relapses";
-		else key = key + "other";
+		String key = prefix + getPatientTypeKey(patientType);
 		
 		table.addIdValue(key, "row", value);
 		table.addIdValue(prefix + "all", "row", value);
@@ -144,6 +144,79 @@ public class ReportTB07 extends Indicator2D {
 	}
 	
 	
+	/**
+	 * Generate values of table 3000 from the TB07 report
+	 */
+	private void generateTable3000() {
+		IndicatorFilters filters = (IndicatorFilters)Component.getInstance("indicatorFilters");
+		IndicatorTable table = getTable3000();
+
+		filters.setInfectionSite(InfectionSite.PULMONARY);
+		
+		String condition = getHQLTable3000Condition(IndicatorMicroscopyResult.POSITIVE, IndicatorCultureResult.POSITIVE);
+		List<Object[]> lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", condition);
+		addTable1000Values(table, lst, IndicatorMicroscopyResult.POSITIVE);
+
+		condition = getHQLTable3000Condition(IndicatorMicroscopyResult.NEGATIVE, IndicatorCultureResult.NEGATIVE);
+		lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", condition);
+		addTable1000Values(table, lst, IndicatorMicroscopyResult.NEGATIVE);
+		
+		filters.setInfectionSite(InfectionSite.EXTRAPULMONARY);
+		condition = "c.patientType != null and c.patient.gender != null " +
+				"and (exists(select aux.id from ExamCulture aux where aux.tbcase.id = c.id) or " +
+				"exists(select em.id from ExamMicroscopy em where em.tbcase.id = c.id))";
+		lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", condition);
+		addTable1000Values(table, lst, null);
+	}
+
+
+	/**
+	 * Return condition of culture and microscopy for table 3000
+	 * @return
+	 */
+	private String getHQLTable3000Condition(IndicatorMicroscopyResult microscopyResult, IndicatorCultureResult cultureResult) {
+		IndicatorFilters filters = (IndicatorFilters)Component.getInstance("indicatorFilters");
+		filters.setMicroscopyResult(microscopyResult);
+		String condition = getHQLMicroscopyCondition();
+
+		filters.setCultureResult(cultureResult);
+		condition = "(" + condition + " or " + getHQLCultureCondition() + ")";
+
+		filters.setMicroscopyResult(null);
+		filters.setCultureResult(null);
+		
+		return "c.patientType != null and c.infectionSite != null and " + condition;
+	}
+	
+	/**
+	 * Generate values of table 4000 from the TB07 report
+	 */
+	private void generateTable4000() {
+		IndicatorFilters filters = (IndicatorFilters)Component.getInstance("indicatorFilters");
+		IndicatorTable table = getTable4000();
+
+		filters.setInfectionSite(null);
+		
+		String condition = "c.infectionSite != null and c.patientType != null and " +
+				"exists(select aux.id from ExamHIV aux where aux.tbcase.id=c.id and aux.result = " + HIVResult.POSITIVE.ordinal() + ")";
+		List<Object[]> lst = generateValuesByField("c.patientType, c.infectionSite", condition);
+
+		for (Object[] vals: lst) {
+			PatientType ptype = (PatientType)vals[0];
+			InfectionSite site = (InfectionSite)vals[1];
+			Float total = ((Long)vals[2]).floatValue();
+			
+			if ((site == InfectionSite.PULMONARY) || (site == InfectionSite.EXTRAPULMONARY)) {
+				String sitekey = (site == InfectionSite.PULMONARY ? "pulmonary_" : "extrapulmonary_");
+				String cellkey = sitekey + getPatientTypeKey(ptype);
+				table.addIdValue(cellkey, "row", total);
+				table.addIdValue(sitekey + "all", "row", total);
+				table.addIdValue("all", "row", total);
+			}
+		}
+	}
+
+
 	/**
 	 * Initialize layout of the table 1000 of the TB07 report
 	 */
