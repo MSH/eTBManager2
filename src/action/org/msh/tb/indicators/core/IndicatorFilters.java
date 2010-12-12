@@ -17,6 +17,7 @@ import org.msh.mdrtb.entities.enums.DrugResistanceType;
 import org.msh.mdrtb.entities.enums.Gender;
 import org.msh.mdrtb.entities.enums.InfectionSite;
 import org.msh.mdrtb.entities.enums.PatientType;
+import org.msh.mdrtb.entities.enums.ValidationState;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
 
@@ -48,6 +49,7 @@ public class IndicatorFilters {
 	private IndicatorCultureResult cultureResult;
 	private DrugResistanceType drugResistanceType;
 	private DiagnosisType diagnosisType;
+	private ValidationState validationState = ValidationState.VALIDATED;
 
 	@Observer("change-workspace")
 	public void initializeFilters() {
@@ -383,5 +385,21 @@ public class IndicatorFilters {
 	 */
 	public void setCultureResult(IndicatorCultureResult cultureResult) {
 		this.cultureResult = cultureResult;
+	}
+
+
+	/**
+	 * @return the validationState
+	 */
+	public ValidationState getValidationState() {
+		return validationState;
+	}
+
+
+	/**
+	 * @param validationState the validationState to set
+	 */
+	public void setValidationState(ValidationState validationState) {
+		this.validationState = validationState;
 	}
 }

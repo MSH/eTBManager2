@@ -322,6 +322,72 @@ public class IndicatorTable {
 	
 
 	/**
+	 * Return a value of a specific cell in the table
+	 * @param columnId is the ID of the column
+	 * @param rowId is the ID of the row
+	 * @return value stored in the cell or, if there is no value, returns null
+	 */
+	public Float getValue(String columnId, String rowId) {
+		TableColumn col = findColumnById(columnId);
+		if (col == null)
+			return null;
+		
+		TableRow row = findRowById(rowId);
+		if (row == null)
+			return null;
+		
+		TableCell cell = row.findCell(col);
+		if (cell == null)
+			return null;
+		
+		return cell.getValue();
+	}
+	
+	
+	public void setValue(String columnId, String rowId, Float value) {
+		TableColumn col = findColumnById(columnId);
+		if (col == null) {
+			if (value == null)
+				return;
+			col = new TableColumn(this, columnId, null);
+			columns.add(col);
+		}
+		
+		TableRow row = findRowById(rowId);
+		if (row == null) {
+			if (value == null)
+				return;
+			row = new TableRow(this, rowId, null);
+			rows.add(row);
+		}
+		
+		TableCell cell = row.findCell(col);
+		if (cell == null) {
+			if (value == null)
+				return;
+			cell = row.newValue(col, value);
+		}
+		else {
+			if (value == null) {
+				row.getCells().remove(cell);
+			}
+			else cell.setValue(value);
+		}
+	}
+
+
+	/**
+	 * Return the value of a cell as a float value (if cell value is null, it returns 0)
+	 * @param columnId
+	 * @param rowId
+	 * @return
+	 */
+	public float getCellAsFloat(String columnId, String rowId) {
+		Float val = getValue(columnId, rowId);
+		return (val == null? 0: val);
+	}
+	
+	/**
 	 * Set the value of a cell
 	 * @param columnTitle column title, if no column is found with the title, a new one is created
 	 * @param rowTitle row title, if no row is found with the title, a new one is created

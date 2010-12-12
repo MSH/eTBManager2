@@ -125,13 +125,21 @@ public class CaseRegimenHome {
 		int monthsIntPhase = regimen.getMonthsIntensivePhase();
 		
 		Date endPeriod = null;
+
+		// set new regimen period
+		Date iniCont = DateUtils.incMonths(iniDate, regimen.getMonthsIntensivePhase());
+		if (endDate == null)
+			endDate = DateUtils.incMonths(iniCont, regimen.getMonthsContinuousPhase());
+		TbCase tbcase = caseHome.getInstance();
+		tbcase.setTreatmentPeriod( new Period(iniDate, endDate) );
+		tbcase.setIniContinuousPhase(iniCont);
 		
 		for (MedicineRegimen mr: regimen.getMedicines()) {
 			int num = (RegimenPhase.INTENSIVE.equals(mr.getPhase()) ? 0: monthsIntPhase); 
 			Date dt = DateUtils.incMonths(iniDate, num);
 
 			// check if it's inside the period
-			if ((endDate == null) || ((endDate != null) && (dt.before(endDate)))) {
+			if (dt.before(endDate)) {
 				PrescribedMedicine pm = findPrescribedMedicine(mr.getMedicine(), mr.getPhase());
 
 				if (pm == null)

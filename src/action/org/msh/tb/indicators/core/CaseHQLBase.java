@@ -162,9 +162,9 @@ public class CaseHQLBase extends Controller {
 			hql += " and exists(select aux.id from PrescribedMedicine aux where aux.source.id = #{indicatorFilters.source.id} and aux.tbcase.id = c.id)";
 
 		// include filter by infectionSite
-		if (filters.getInfectionSite() != null) {
-			hql += " and c.infectionSite = #{indicatorFilters.infectionSite}";
-		}
+		String s = getHQLInfectionSite();
+		if (s != null)
+			hql += " and " + s;
 		
 		if (filters.getAgeRange() != null) {
 			hql += " and c.age between #{indicatorFilters.ageRange.iniAge} and #{indicatorFilters.ageRange.endAge}";
@@ -179,12 +179,16 @@ public class CaseHQLBase extends Controller {
 		}
 
 		// add filters by culture
-		String s = getHQLCultureCondition();
+		s = getHQLCultureCondition();
 		if (s != null)
 			hql += " and " + s;
 		
 		// add filters by microscopy
 		s = getHQLMicroscopyCondition();
+		if (s != null)
+			hql += " and " + s;
+		
+		s = getHQLValidationState();
 		if (s != null)
 			hql += " and " + s;
 		
@@ -200,7 +204,23 @@ public class CaseHQLBase extends Controller {
 		return hql;
 	}
 
-	
+
+	/**
+	 * Return HQL condition to the infection site filter 
+	 * @return HQL condition of the infection site filter selection, otherwise returns null if infection site not selected
+	 */
+	protected String getHQLInfectionSite() {
+		if (getIndicatorFilters().getInfectionSite() != null) 
+			 return "c.infectionSite = #{indicatorFilters.infectionSite}";
+		else return null;
+	}
+
+	protected String getHQLValidationState() {
+		if (getIndicatorFilters().getValidationState() != null) 
+			 return "c.validationState = #{indicatorFilters.validationState}";
+		else return null;
+	}
+
 	/**
 	 * Return microscopy HQL condition depending on the microscopy filter
 	 * @return if there is a filter (positive or negative) return HQL condition, otherwise, return null

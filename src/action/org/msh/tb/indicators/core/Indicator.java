@@ -288,7 +288,6 @@ public abstract class Indicator extends CaseHQLBase {
 	 * @return name of the administrative unit
 	 */
 	protected String getAdminUnitDisplayText(String code) {
-		System.out.println(code);
 		if (code == null)
 			return "-";
 		List<AdministrativeUnit> lst = null;
