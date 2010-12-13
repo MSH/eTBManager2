@@ -37,6 +37,7 @@ public class CaseHQLBase extends Controller {
 	private IndicatorFilters indicatorFilter;
 	private boolean newCasesOnly = true;
 	private boolean outputSelected = false;
+	private String hqlSelect;
 	
 	private List<SelectItem> outputSelections;
 
@@ -215,11 +216,17 @@ public class CaseHQLBase extends Controller {
 		else return null;
 	}
 
+
+	/**
+	 * Return HQL condition of the validation state of the cases to be selected
+	 * @return
+	 */
 	protected String getHQLValidationState() {
 		if (getIndicatorFilters().getValidationState() != null) 
 			 return "c.validationState = #{indicatorFilters.validationState}";
 		else return null;
 	}
+
 
 	/**
 	 * Return microscopy HQL condition depending on the microscopy filter
@@ -230,8 +237,21 @@ public class CaseHQLBase extends Controller {
 		if (filters.getMicroscopyResult() == null)
 			return null;
 		
+		String cond = getHQLMicroscopyResultCondition(filters.getMicroscopyResult());
+
+		return "exists(select ex.id from ExamMicroscopy ex where ex.result " + cond + " and ex.tbcase.id = c.id" +
+		" and ex.dateCollected = (select min(sp.dateCollected) from ExamMicroscopy sp where sp.tbcase.id = c.id))";
+	}
+
+
+	/**
+	 * Return the condition to be used in a HQL expression to include all microscopy results positive or negative
+	 * @param result indicates if it shall return HQL condition to include all positive or negative results
+	 * @return HQL expression to be used as condition
+	 */
+	protected String getHQLMicroscopyResultCondition(IndicatorMicroscopyResult result) {
 		MicroscopyResult[] lst;
-		if (filters.getMicroscopyResult().equals(IndicatorMicroscopyResult.POSITIVE))
+		if (result.equals(IndicatorMicroscopyResult.POSITIVE))
 			 lst = MicroscopyResult.getPositiveResults();
 		else lst = MicroscopyResult.getNegativeResults();
 		
@@ -251,8 +271,7 @@ public class CaseHQLBase extends Controller {
 			}
 			cond += ")";
 		}
-		return "exists(select ex.id from ExamMicroscopy ex where ex.result " + cond + " and ex.tbcase.id = c.id" +
-		" and ex.dateCollected = (select min(sp.dateCollected) from ExamMicroscopy sp where sp.tbcase.id = c.id))";
+		return cond;
 	}
 
 	
@@ -265,8 +284,21 @@ public class CaseHQLBase extends Controller {
 		if (filters.getCultureResult() == null)
 			return null;
 		
+		String cond = getHQLCultureResultCondition(filters.getCultureResult());
+
+		return "exists(select ex.id from ExamCulture ex where ex.result " + cond + " and ex.tbcase.id = c.id" +
+		" and ex.dateCollected = (select min(sp.dateCollected) from ExamCulture sp where sp.tbcase.id = c.id))";
+	}
+
+
+	/**
+	 * Return the condition to be used in a HQL expression to include all culture exam results positive or negative
+	 * @param result indicates if it shall return HQL condition to include all positive or negative results
+	 * @return HQL expression to be used as condition in culture exams
+	 */
+	protected String getHQLCultureResultCondition(IndicatorCultureResult result) {
 		CultureResult[] lst;
-		if (filters.getCultureResult().equals(IndicatorCultureResult.POSITIVE))
+		if (result.equals(IndicatorCultureResult.POSITIVE))
 			 lst = CultureResult.getPositiveResults();
 		else lst = CultureResult.getNegativeResults();
 		
@@ -286,10 +318,8 @@ public class CaseHQLBase extends Controller {
 			}
 			cond += ")";
 		}
-		return "exists(select ex.id from ExamCulture ex where ex.result " + cond + " and ex.tbcase.id = c.id" +
-		" and ex.dateCollected = (select min(sp.dateCollected) from ExamCulture sp where sp.tbcase.id = c.id))";
+		return cond;
 	}
-
 
 	/**
 	 * Create an HQL query and set the default parameters
@@ -366,9 +396,13 @@ public class CaseHQLBase extends Controller {
 	protected String getHQLSelect() {
 		if (consolidated)
 			 return "select " + (groupFields != null? groupFields + ", ": "") + "count(*)";
-		else return null;
+		else return hqlSelect;
 	}
-
+	
+	
+	protected void setHQLSelect(String hqlSelect) {
+		this.hqlSelect = hqlSelect;
+	}
 	
 	
 	/**

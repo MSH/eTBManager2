@@ -92,11 +92,12 @@ public abstract class Indicator2D extends Indicator {
 		return table;
 	}
 	
+
 	
 	/**
 	 * Create the table and fill it with the indicator values
 	 */
-	public void createTable() {
+	protected void createTable() {
 		setConsolidated(true);
 		table = new IndicatorTable();
 		createIndicators();

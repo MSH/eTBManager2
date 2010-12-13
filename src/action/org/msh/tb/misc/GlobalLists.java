@@ -314,8 +314,8 @@ public class GlobalLists {
 	}
 
 	private static final Nationality nationalities[] = {
-		Nationality.FOREIGN,
-		Nationality.NATIVE
+		Nationality.NATIVE,
+		Nationality.FOREIGN
 	};
 	
 	

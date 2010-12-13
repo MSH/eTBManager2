@@ -113,9 +113,6 @@ public class UserSession {
     	if (userLogin != null)
     		registerLogout();
 
-    	userWorkspace.getTbunit().getAdminUnit().getParentsTreeList(true);
-    	if (userWorkspace.getAdminUnit() != null)
-    		userWorkspace.getAdminUnit().getId();
     	userWorkspace.getUser().setDefaultWorkspace(userWorkspace);
 
     	registerLogin();

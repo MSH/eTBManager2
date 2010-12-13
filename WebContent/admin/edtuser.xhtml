@@ -50,7 +50,7 @@
         <h:inputText maxlength="50" value="#{user.comments}" style="width : 315px;"/> 
     </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" rendered="#{userWorkspace.healthSystem==null}">
+    <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['HealthSystem']}:</ui:define>
         <h:selectOneMenu value="#{userHome.userWorkspace.healthSystem}">
             <s:selectItems value="#{healthSystems}" var="it" label="#{it.name}" noSelectionLabel="#{messages['form.noselection']}" />

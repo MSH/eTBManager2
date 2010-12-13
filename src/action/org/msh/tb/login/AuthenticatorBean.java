@@ -81,6 +81,13 @@ public class AuthenticatorBean {
             	facesMessages.addFromResourceBundle("login.norole");
         		return false;
         	}
+
+        	// avoid lazy initialization problem
+        	userWorkspace.getTbunit().getAdminUnit().getParentsTreeList(true);
+        	if (userWorkspace.getAdminUnit() != null)
+        		userWorkspace.getAdminUnit().getId();
+        	if (userWorkspace.getHealthSystem() != null)
+        		userWorkspace.getHealthSystem().getId();
         			
             // adjust time zone
         	String tm = user.getTimeZone();

@@ -403,12 +403,13 @@ public class ReportTB07 extends Indicator2D {
 	/**
 	 * Create all tables of the report and generate indicators
 	 */
-	protected void createTables() {
+	@Override
+	protected void createTable() {
 		table2000 = new IndicatorTable();
 		table3000 = new IndicatorTable();
 		table4000 = new IndicatorTable();
 		table5000 = new IndicatorTable();
-		createTable();
+		super.createTable();
 	}
 
 
@@ -425,7 +426,7 @@ public class ReportTB07 extends Indicator2D {
 	 */
 	public IndicatorTable getTable2000() {
 		if (table2000 == null)
-			createTables();
+			createTable();
 		return table2000;
 	}
 
@@ -433,6 +434,8 @@ public class ReportTB07 extends Indicator2D {
 	 * @return the table3000
 	 */
 	public IndicatorTable getTable3000() {
+		if (table3000 == null)
+			createTable();
 		return table3000;
 	}
 
@@ -440,6 +443,8 @@ public class ReportTB07 extends Indicator2D {
 	 * @return the table4000
 	 */
 	public IndicatorTable getTable4000() {
+		if (table4000 == null)
+			createTable();
 		return table4000;
 	}
 
@@ -447,6 +452,8 @@ public class ReportTB07 extends Indicator2D {
 	 * @return the table5000
 	 */
 	public IndicatorTable getTable5000() {
+		if (table5000 == null)
+			createTable();
 		return table5000;
 	}
 
