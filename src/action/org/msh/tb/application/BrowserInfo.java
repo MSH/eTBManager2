@@ -34,8 +34,8 @@ public class BrowserInfo {
 		if (browserType == null)
 			updateBrowserInfo();
 
-		// is Internet Explorer under version 8? so it's not valid 
-		if ((browserType == BrowserType.MSIE) && (browserVersion < 800))
+		// is Internet Explorer under version 7? so it's not valid 
+		if ((browserType == BrowserType.MSIE) && (browserVersion < 700))
 			return false;
 		
 		return true;

@@ -199,6 +199,33 @@
 		</ui:repeat>
 	</table>
 
+
+	<h2>#{messages['uk_UA.reports.tb07.table5']}</h2>
+	<table class="tabela" width="100%">
+		<tr>
+			<th colspan="3">
+				#{messages['uk_UA.reports.tb07.5.tblheader1']}
+			</th>
+		</tr>
+		<tr>
+		<ui:repeat value="#{indicator.table5000.columns}" var="col">
+			<th>
+				#{col.title}
+			</th>
+		</ui:repeat>
+		</tr>
+		<ui:repeat value="#{indicator.table5000.rows}" var="row">
+		<tr>
+			<ui:repeat value="#{row.cells}" var="val">
+			<td class="colcb">
+				<h:outputText value="#{val.value}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			</ui:repeat>
+		</tr>
+		</ui:repeat>
+	</table>
 	</s:fragment>
 
 </h:panelGroup>

@@ -40,6 +40,7 @@ public class ReportTB07 extends Indicator2D {
 		initTable2000();
 		initTable3000();
 		initTable4000();
+		initTable5000();
 
 		IndicatorFilters filters = getIndicatorFilters();
 		filters.setPatientType(null);
@@ -51,6 +52,7 @@ public class ReportTB07 extends Indicator2D {
 		generateTable2000();
 		generateTable3000();
 		generateTable4000();
+		generateTable5000();
 	}
 
 
@@ -233,6 +235,7 @@ public class ReportTB07 extends Indicator2D {
 		return "c.patientType != null and c.infectionSite != null and " + condition;
 	}
 	
+
 	/**
 	 * Generate values of table 4000 from the TB07 report
 	 */
@@ -262,6 +265,24 @@ public class ReportTB07 extends Indicator2D {
 				table.addIdValue("all", rowid, total);
 			}
 		}
+	}
+
+	/**
+	 * Generate values of table 4000 from the TB07 report
+	 */
+	private void generateTable5000() {
+		IndicatorFilters filters = (IndicatorFilters)Component.getInstance("indicatorFilters");
+		IndicatorTable table = getTable5000();
+
+		filters.setInfectionSite(null);
+		filters.setPatientType(null);
+		filters.setMicroscopyResult(IndicatorMicroscopyResult.POSITIVE);
+		filters.setCultureResult(null);
+		
+		String condition = "c.registrationDate > (select min(exam.dateCollected) from ExamMicroscopy exam where exam.tbcase.id = c.id)"; 
+		
+		float num = calcNumberOfCases(condition);
+		table.setValue("col2", rowid, num);
 	}
 
 
@@ -365,14 +386,29 @@ public class ReportTB07 extends Indicator2D {
 		table.addRow("TOTAL", rowid);
 	}
 
+
 	/**
-	 * Create all tables of the report
+	 * Initialize table 5000
+	 */
+	private void initTable5000() {
+		IndicatorTable table = getTable5000();
+
+		table.addColumn(getMessage("uk_UA.reports.tb07.5.tblheader2"), "col1");
+		table.addColumn(getMessage("uk_UA.reports.tb07.5.tblheader3"), "col2");
+		table.addColumn("%", "col3");
+		
+		table.addRow("TOTAL", rowid);
+	}
+
+	/**
+	 * Create all tables of the report and generate indicators
 	 */
 	protected void createTables() {
 		table2000 = new IndicatorTable();
 		table3000 = new IndicatorTable();
 		table4000 = new IndicatorTable();
 		table5000 = new IndicatorTable();
+		createTable();
 	}
 
 
