@@ -18,7 +18,7 @@
 	<h:form>
 	<div >
 	<div class="menubv">
-	<h:commandLink value="#{messages['cases.newnotif']}" onclick="Richfaces.showModalPanel('selclassificationdlg');return false;" 
+	<h:commandLink value="#{messages['cases.newnotif']}" onclick="showModalAutoTop('selclassificationdlg');return false;" 
 		rendered="#{userSession.canNotifySeveralClassifs}"/>
 
 	<s:fragment rendered="#{not userSession.canNotifySeveralClassifs}">

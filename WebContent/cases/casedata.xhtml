@@ -24,7 +24,7 @@
 <ui:define name="left">
 
 	<ui:define name="state-content">
-		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="hu-icon" style="margin-top:6px;font-size:11px;max-width:320px;" >
+		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="hu-icon" style="margin-top:6px;font-size:11px;max-width:320px;height:60px;" >
 			<b style="padding-right:4px;">#{messages['medicines.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
 			<br/>
 			<span class="right-icon" >

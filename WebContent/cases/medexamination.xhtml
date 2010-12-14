@@ -19,7 +19,7 @@
 	
 		<s:decorate template="/layout/roundrect.xhtml" style="margin-right:10px;">
 		<ui:define name="header">
-			<div style="float:right;">
+			<div style="float:right;" class="link-bar">
 				<s:link value="#{messages['form.edit']}" view="/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
