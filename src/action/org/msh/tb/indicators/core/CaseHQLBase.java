@@ -8,11 +8,13 @@ import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.framework.Controller;
 import org.jboss.seam.international.Messages;
 import org.msh.mdrtb.entities.AdministrativeUnit;
 import org.msh.mdrtb.entities.Tbunit;
+import org.msh.mdrtb.entities.UserWorkspace;
 import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
@@ -142,7 +144,11 @@ public class CaseHQLBase extends Controller {
 		
 		IndicatorFilters filters = getIndicatorFilters();
 
-		hql += " and c.notificationUnit.healthSystem.id = #{userWorkspace.tbunit.healthSystem.id}";
+		UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
+		if (userWorkspace.getHealthSystem() != null)
+			hql += " and c.notificationUnit.healthSystem.id = " + userWorkspace.getHealthSystem().getId();
+//		hql += " and c.notificationUnit.healthSystem.id = #{userWorkspace.tbunit.healthSystem.id}";
+
 		if (getClassification() != null)
 			hql += " and c.classification = :classification";
 

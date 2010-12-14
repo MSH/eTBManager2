@@ -615,7 +615,13 @@ public class CaseFilters {
 	 * @return
 	 */
 	public Integer getPatientRecordNumber() {
-		if ((isRecordNumberEmpty()) || (DisplayCaseNumber.REGISTRATION_CODE.equals(defaultWorkspace.getDisplayCaseNumber())))
+		if (isRecordNumberEmpty())
+			return null;
+		
+		if (defaultWorkspace == null)
+			defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace");
+		
+		if ((defaultWorkspace == null) || (DisplayCaseNumber.REGISTRATION_CODE.equals(defaultWorkspace.getDisplayCaseNumber())))
 			return null;
 
 		return getNumberFromString(recordNumber, 0);

@@ -86,7 +86,7 @@
 			<ui:repeat value="#{row.cells}" var="val">
 			<td class="colcb">
 				<h:outputText value="#{val.value}" >
-					<f:convertNumber pattern="#,###,##0"/>
+					<f:convertNumber pattern="#,###,##0.##"/>
 				</h:outputText>
 			</td>
 			</ui:repeat>

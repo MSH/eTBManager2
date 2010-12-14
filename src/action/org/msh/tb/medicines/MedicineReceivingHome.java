@@ -98,6 +98,13 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 	 * @return
 	 */
 	private boolean validateDrugReceiving() {
+		Tbunit unit = userSession.getTbunit();
+		
+		if (getInstance().getReceivingDate().before( unit.getMedManStartDate()) ) {
+			facesMessages.addFromResourceBundle("medicines.movs.datebefore", unit.getMedManStartDate());
+			return false;
+		}
+		
 		boolean res = true;
 		
 		MedicineReceiving rec = getInstance();

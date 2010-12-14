@@ -36,6 +36,7 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	private boolean transactionLogActive = true;
 	private boolean displayMessage = true;
 	private boolean checkSecurityOnOpen = true;
+	private String roleName;
 	
 	private UserLogin userLogin;
 
@@ -257,11 +258,19 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	 * @return name of the role for this entity home
 	 */
 	public String getRoleName() {
+		if (roleName != null)
+			return roleName;
+
 		LogInfo logInfo = getClass().getAnnotation(LogInfo.class);
 		if ((logInfo == null) || (logInfo.roleName() == null))
 			return null;
 		
 		return logInfo.roleName();
+	}
+
+
+	public void setRoleName(String name) {
+		roleName = name;
 	}
 
 	

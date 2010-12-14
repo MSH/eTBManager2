@@ -131,7 +131,10 @@
     	</h:panelGroup>
     </td></tr>
     <tr><td align="right">
-            <a:commandButton action="#{medicineReceivingHome.persist}" value="#{messages['form.ok']}" styleClass="button" onclick="openWaitDlg();" oncomplete="closeWaitDlg();" reRender="main"/>
+            <a:commandButton action="#{medicineReceivingHome.persist}" value="#{messages['form.ok']}" styleClass="button" 
+            	onclick="openWaitDlg();" 
+            	oncomplete="closeWaitDlg();" 
+            	reRender="messages,main"/>
             <s:button action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" />
     </td></tr>
 	</table>

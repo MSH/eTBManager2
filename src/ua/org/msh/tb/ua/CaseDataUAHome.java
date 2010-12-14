@@ -66,6 +66,7 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 			data.setMbtResult(null);
 		}
 		
+		setDisplayMessage(false);
 		return persist();
 	}
 
@@ -88,8 +89,10 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 		if (data.getId() == null)
 			data.setId(tbcase.getId());
 
+		setDisplayMessage(false);
 		return persist(); 
 	}
+
 
 	@Transactional
 	public String saveAnnex() {
@@ -99,11 +102,21 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 			data.setId((Integer)caseHome.getId());
 		return persist();
 	}
-	
+
+
+	/**
+	 * Close a case and save specific ukrainian data
+	 * @return
+	 */
 	@Transactional
 	public String closeCase() {
-		persist();
-		return caseCloseHome.closeCase();
+		String ret = caseCloseHome.closeCase(); 
+		if (ret.equals("case-closed")) {
+			setDisplayMessage(false);
+			persist();
+		}
+
+		return "case-closed";
 	}
 	
 	private boolean checkConstraints() {

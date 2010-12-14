@@ -44,7 +44,11 @@
 
 <table width="100%">
 <tr><td align="right">
-	<h:commandButton action="#{caseCloseHome.closeCase}" value="#{messages['form.ok']}" styleClass="button" onclick="openWaitDlg();"/> 
+	<a:commandButton action="#{caseCloseHome.closeCase}" value="#{messages['form.ok']}" 
+		styleClass="button" 
+		onclick="openWaitDlg();"
+		reRender="main,messages"/>
+ 
     <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel">
        	<f:param name="id" value="#{caseHome.id}"/>
     </s:button>

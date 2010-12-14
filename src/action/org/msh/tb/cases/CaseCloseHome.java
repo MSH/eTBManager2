@@ -60,7 +60,8 @@ public class CaseCloseHome extends Controller{
 	public String closeCase() {
 		TbCase tbcase = caseHome.getInstance();
 
-		if (date.before(tbcase.getRegistrationDate())) {
+		Date dt = tbcase.getDiagnosisDate();
+		if ((dt != null) && (date.before(dt))) {
 			facesMessages.addFromResourceBundle("cases.close.msg1");
 			return "error";
 		}
@@ -74,7 +75,14 @@ public class CaseCloseHome extends Controller{
 		if (state.equals(CaseState.OTHER))
 			 tbcase.setOtherOutcome(comment);
 		else tbcase.setOtherOutcome(null);
+
+		// save transaction log
+		caseHome.getLogService().addValue("TbCase.outcomeDate", date);
+		caseHome.getLogService().addMessageValue("TbCase.otherOutcome", tbcase.getState().getKey());
+		caseHome.getLogService().saveExecuteTransaction(tbcase, "CASE_CLOSE");
 		
+		// save case changes
+		caseHome.setTransactionLogActive(false);
 		caseHome.persist();
 		return "case-closed";
 	}
@@ -83,12 +91,14 @@ public class CaseCloseHome extends Controller{
 	public String reopenCase() {
 		TbCase tbcase = caseHome.getInstance();
 		
-		if (tbcase.getTreatmentPeriod().isEmpty())
+		if ((tbcase.getTreatmentPeriod() == null) || (tbcase.getTreatmentPeriod().isEmpty()))
 			 tbcase.setState(CaseState.WAITING_TREATMENT);
 		else tbcase.setState(CaseState.ONTREATMENT);
 		
 		tbcase.setOtherOutcome(null);
-		
+
+		caseHome.getLogService().saveExecuteTransaction(tbcase, "CASE_REOPEN");
+		caseHome.setTransactionLogActive(false);
 		caseHome.persist();
 		
 		return "case-reopened";

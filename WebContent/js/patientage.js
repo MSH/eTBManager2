@@ -2,15 +2,13 @@ function handleCaseDateChange() {
 	sBirth = jQuery("#divbirthdate input[type='text']").val();
 	sReg = jQuery("#divregdate input[type='text']").val();
 	if (!(sReg))
-		sReg = "01/05/2009";
+		 dt2 = new Date();
+	else dt2 = convertDate(sReg);
 	var dt1=convertDate(sBirth);
-	var dt2=convertDate(sReg);
 	window.formato = jQuery("#formatodata").val();
 	
 	var age = "";
 	if (dt1!=null) {
-		if (dt2==null)
-			dt2 = new Date();
 		age = yearsBetween(dt1, dt2);
 	}
 	

@@ -15,7 +15,7 @@
 		<ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>
 		<span id="divbirthdate">
 		<rich:calendar id="pacbirthdate" enableManualInput="true" value="#{tbcase.patient.birthDate}" 
-			required="#{required}" locale="#{locale}" datePattern="#{messages['locale.datePattern']}" 
+			required="false" locale="#{locale}" datePattern="#{messages['locale.datePattern']}" 
 			timeZone="#{timezones.default}" validator="#{futureDateValidator.validate}" inputStyle="width:100px;" 
 			showWeeksBar="false" onchanged="handleCaseDateChange();">
 		</rich:calendar>
@@ -24,11 +24,6 @@
 		(#{messages['locale.displayDatePattern']})
 		<rich:jQuery selector="#divbirthdate .rich-calendar-input" query="mask('#{messages['locale.dateMask']}')" />
 	</s:decorate>
-    <s:decorate id="edtbirthdate" template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>
-    	<ui:param name="required" value="false" /> 
-    	<ui:param name="datefield" value="#{tbcase.patient.birthDate}" /> 
-    </s:decorate>
     <rich:jQuery selector="#divbirthdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
     </div>
 

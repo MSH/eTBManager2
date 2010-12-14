@@ -127,8 +127,26 @@ public class ReportTB10 extends Indicator2D {
 			boolean noexam = vals[5] == null && vals[6] == null;
 			addValueTable((Date)vals[0], (PatientType)vals[1], (CaseState)vals[2], (Date)vals[3], (Date)vals[4], noexam);
 		}
+		
+		String rows[] = {"newcases", "relapses", "others"};
+		String cols[] = {"month2", "month3", "month4"};
+		
+		for (String rowid: rows)
+			for (String colid: cols) {
+				calcPercentage(colid, rowid);
+			}
 	}
 
+	
+	private void calcPercentage(String colid, String rowid) {
+		float total = table1000.getCellAsFloat("numcases", rowid);
+		if (total == 0)
+			return;
+		
+		float num = table1000.getCellAsFloat(colid, rowid);
+		
+		table1000.setValue(colid + "_perc", rowid, num * 100F / total);
+	}
 
 	
 	/**

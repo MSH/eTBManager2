@@ -16,6 +16,7 @@ import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.ValidationState;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.log.LogInfo;
 
 
 /**
@@ -25,6 +26,7 @@ import org.msh.tb.EntityHomeEx;
  *
  */
 @Name("caseHome")
+@LogInfo(roleName="CASE_DATA")
 @BypassInterceptors
 public class CaseHome extends EntityHomeEx<TbCase>{
 	private static final long serialVersionUID = -8072727373977321407L;
@@ -33,7 +35,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	private Boolean hasIssues;
 	private List<TreatmentHealthUnit> treatmentHealthUnits;
 
-	
+
 	/**
 	 * Return an instance of a {@link TbCase} class
 	 * @return
@@ -229,11 +231,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 		return (p != null? p.getWorkspace(): null);
 	}
 	
-	@Override
-	public String getRoleName() {
-		return "CASE_DATA";
-	}
-
+	
 	@Override
 	public CaseClassification getCaseClassificationForLog() {
 		return getInstance().getClassification();

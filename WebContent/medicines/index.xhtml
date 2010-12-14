@@ -12,6 +12,7 @@
 <ui:param name="title" value="#{messages.medicines}" />
 <ui:param name="waitdlg" value="1" />
 <ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
 
 <ui:define name="body">
 <div>
@@ -32,6 +33,13 @@
 	</s:decorate>
 
 	<s:fragment rendered="#{userSession.medicineManagementStarted}">
+
+    <s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">
+			#{messages['TbUnit.medManStartDate']}:
+		</ui:define>
+		<h:outputText value="#{userSession.tbunit.medManStartDate}" converter="localeDateConverter" />
+	</s:decorate>
 
 	<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
     <s:decorate template="/layout/display.xhtml">
