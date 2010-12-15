@@ -167,6 +167,8 @@ public class MedicineManStartHome {
 		}
 		
 		userSession.setTbunit(unit);
+		
+		entityManager.flush();
 
 		return "medman-started";
 	}

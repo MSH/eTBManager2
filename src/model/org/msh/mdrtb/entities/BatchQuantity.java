@@ -42,7 +42,7 @@ public class BatchQuantity implements Serializable {
 
 	private int quantity;
 	
-
+	
 	/**
 	 * @return the id
 	 */

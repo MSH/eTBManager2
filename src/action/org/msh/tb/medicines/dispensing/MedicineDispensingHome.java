@@ -16,7 +16,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
-import org.jboss.seam.framework.EntityQuery;
 import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.Identity;
 import org.msh.mdrtb.entities.Batch;
@@ -28,6 +27,7 @@ import org.msh.mdrtb.entities.MedicineDispensingBatch;
 import org.msh.mdrtb.entities.MedicineDispensingItem;
 import org.msh.mdrtb.entities.Movement;
 import org.msh.mdrtb.entities.Source;
+import org.msh.mdrtb.entities.StockPosition;
 import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.enums.MovementType;
@@ -49,7 +49,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 	@In(create=true) BatchSelection batchSelection;
 	@In(create=true) UserSession userSession;
 	@In(create=true) MovementHome movementHome;
-	
+
 	private List<SourceGroup> sources;
 	private Integer month;
 	private Integer year;
@@ -60,7 +60,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 	private String clientError;
 	private boolean initialized;
 	
-	public class SourceGroup extends org.msh.tb.SourceGroup<MedicineDispensingItem> {}
+	public class SourceGroup extends org.msh.tb.SourceGroup<DispItem> {}
 
 	
 	@Factory("medicineDispensing")
@@ -87,39 +87,8 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 			return;
 		}
 		
-		Integer wsid = ((Workspace)Component.getInstance("defaultWorkspace")).getId();
-        List<Object[]> lst = entityManager.createNativeQuery("select distinct sp.source_id, sp.medicine_id from StockPosition sp join Source s" +
-        			" on s.id = sp.source_id where s.workspace_id = " + wsid)
-        		.getResultList();
-
-        List<Source> lstSources = ((EntityQuery)Component.getInstance("sources")).getResultList();
-        MedicineDispensingItem item;
-        for (Object[] val: lst)
-        {
-            item = new MedicineDispensingItem();
-            Integer id = (Integer)val[0];
-            Source source = null;
-            for(Source s: lstSources)
-                if(s.getId().equals(id)) {
-                    source = s;
-                    break;
-                }
-
-            id = (Integer)val[1];
-            Medicine med = null;
-            for (Medicine m: medicines.getResultList())
-                if(m.getId().equals(id)) {
-                    med = m;
-                    break;
-                }
-
-            item.setSource(source);
-            item.setMedicine(med);
-            item.setDispensing(dispensing);
-            dispensing.getItems().add(item);
-        }
-        
-        initializeDays();
+        if (!isManaged())
+        	initializeDays();
 	}
 
     
@@ -131,13 +100,15 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     public String saveDispensing()
     {
     	MedicineDispensing dispensing = getInstance();
+
     	// check if any batch were entered
     	boolean hasBatch = false;
-
-    	for (MedicineDispensingItem item: dispensing.getItems()) {
-    		if (item.getBatches().size() > 0) {
-    			hasBatch = true;
-    			break;
+    	for (SourceGroup grp: sources) {
+    		for (DispItem item: grp.getItems()) {
+        		if (item.getItem().getBatches().size() > 0) {
+        			hasBatch = true;
+        			break;
+        		}
     		}
     	}
     	
@@ -167,35 +138,60 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     	// check if can decrease the quantity in stock
     	boolean validMovements = true;
 
-    	for (MedicineDispensingItem item: dispensing.getItems()) {
-    		if (item.getBatches().size() > 0) {
-    			int qtd = item.getQuantity();
-    			Movement mov = item.getMovement();
-    			if (mov != null)
-    				qtd -= mov.getQuantity();
-    			
-    			boolean erroQuantity = false;
-    			if (qtd > 0) {
-    				erroQuantity = !movementHome.canDecreaseStock(dispensing.getTbunit(), item.getSource(), 
-    						item.getMedicine(), item.getQuantity(), dispensing.getEndDate());
-    			}
-    			item.setData(erroQuantity);
-    			if (erroQuantity)
-    				validMovements = false;
-    		}
+    	for (SourceGroup grp: sources) {
+        	for (DispItem aux: grp.getItems()) {
+        		MedicineDispensingItem item = aux.getItem(); 
+        		if (item.getBatches().size() > 0) {
+        			int qtd = item.getQuantity();
+        			Movement mov = item.getMovement();
+        			if (mov != null)
+        				qtd -= mov.getQuantity();
+        			
+        			boolean erroQuantity = false;
+        			if (qtd > 0) {
+        				erroQuantity = !movementHome.canDecreaseStock(dispensing.getTbunit(), item.getSource(), 
+        						item.getMedicine(), item.getQuantity(), dispensing.getEndDate());
+        			}
+      
+        			aux.setInvalid(erroQuantity);
+        			if (erroQuantity)
+        				validMovements = false;
+        		}
+        	}
     	}
     	
     	if (!validMovements)
     		return "error";
     	
-    	// remove items with no batches
-    	int index = 0;
+    	// mount dispensing object with items 
+    	for (SourceGroup grp: sources) {
+    		for (DispItem aux: grp.getItems()) {
+    			MedicineDispensingItem item = aux.getItem();
+    			// has any batch in the medicine item ?
+    			if (item.getBatches().size() == 0) {
+    				// is managed ?
+    				if (item.getDispensing() != null) {
+    					entityManager.remove(item);
+    					entityManager.flush();
+    					dispensing.getItems().remove(item);
+    				}
+    			}
+    			else {
+    				if (item.getDispensing() == null) {
+    					dispensing.getItems().add(item);
+    					item.setDispensing(dispensing);
+    				}
+    			}
+    		}
+    	}
+/*
+     	int index = 0;
     	while (index < dispensing.getItems().size()) {
     		if (dispensing.getItems().get(index).getBatches().size() == 0)
     			 dispensing.getItems().remove(index);
     		else index++;
     	}
-
+*/
     	// create movements
 		for (MedicineDispensingItem it: dispensing.getItems()) {
 			// check if movement has to be created
@@ -214,7 +210,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 				}
 				else {
 					it.setMovement(mov);
-				}				
+				}
 			}
 		}
     	
@@ -327,22 +323,96 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
         return sources;
     }
 
+
+    /**
+     * Create the list of sources to be displayed in the form
+     */
     protected void createSources()  {
+    	MedicineDispensing dispensing = getInstance();
+        
         sources = new ArrayList<SourceGroup>();
-        SourceGroup grp;
-        for (MedicineDispensingItem item: getInstance().getItems()) {
-            grp = findSource(item.getSource());
-            if(grp == null)
-            {
-                grp = new SourceGroup();
-                grp.setSource(item.getSource());
-                sources.add(grp);
+    	
+    	// is for editing ?
+    	if (initialized) {
+    		Integer wsid = ((Workspace)Component.getInstance("defaultWorkspace")).getId();
+            List<StockPosition> lst = entityManager.createQuery("from StockPosition sp " +
+            		"join fetch sp.source s join fetch sp.medicine m " +
+            		"where s.workspace.id = " + wsid + " and sp.tbunit.id = " + userSession.getTbunit().getId() +
+            		" and sp.date = (select max(aux.date) from StockPosition aux " +
+            		"where aux.tbunit.id = sp.tbunit.id and aux.medicine.id = sp.medicine.id and aux.source.id = sp.source.id) " +
+            		"order by s.name.name1, m.genericName.name1")
+            		.getResultList();
+            
+            for (StockPosition sp: lst) {
+            	Source source = sp.getSource();
+            	Medicine medicine = sp.getMedicine();
+
+            	// search for group
+            	SourceGroup grp = null;
+            	for (SourceGroup aux: sources) {
+            		if (aux.getSource().equals(source)) {
+            			grp = aux;
+            			break;
+            		}
+            	}
+            	
+            	if (grp == null) {
+            		grp = new SourceGroup();
+            		grp.setSource(source);
+            		sources.add(grp);
+            	}
+            	
+            	DispItem dispItem = new DispItem();
+            	
+            	MedicineDispensingItem item = dispensing.findItem(source, medicine);
+            	if (item == null) {
+            		item = new MedicineDispensingItem();
+            		item.setMedicine(medicine);
+            		item.setSource(source);
+            	}
+            	
+            	dispItem.setItem(item);
+            	dispItem.setAvailableQuantity(sp.getQuantity());
+            	grp.getItems().add(dispItem);
             }
-            grp.getItems().add(item);
+    	}
+        
+        // check if there is any item recorded in the dispensing that was not included in 
+        // the list of sources and medicines
+        for (MedicineDispensingItem item: dispensing.getItems()) {
+        	SourceGroup grp = findSource(item.getSource());
+        	if (grp == null) {
+        		grp = new SourceGroup();
+        		grp.setSource(item.getSource());
+        		sources.add(grp);
+        	}
+
+        	DispItem aux = findItem(grp, item);
+        	if (aux == null) {
+        		aux = new DispItem();
+        		aux.setItem(item);
+        		aux.setAvailableQuantity(0);
+        		grp.getItems().add(aux);
+        	}
         }
     }
 
     
+    /**
+     * Search for an item of the {@link SourceGroup} class by its {@link MedicineDispensingItem} property
+     * @param grp
+     * @param item
+     * @return
+     */
+    protected DispItem findItem(SourceGroup grp, MedicineDispensingItem item) {
+    	for (DispItem aux: grp.getItems()) {
+    		if (aux.getItem() == item) {
+    			return aux;
+    		}
+    	}
+    	return null;
+    }
+        
     protected SourceGroup findSource(Source source)
     {
         for(SourceGroup grp: sources)   {
@@ -511,5 +581,47 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 	 */
 	public String getClientError() {
 		return clientError;
+	}
+	
+	public class DispItem {
+		private MedicineDispensingItem item;
+		private int availableQuantity;
+		private boolean invalid;
+		/**
+		 * @return the item
+		 */
+		public MedicineDispensingItem getItem() {
+			return item;
+		}
+		/**
+		 * @param item the item to set
+		 */
+		public void setItem(MedicineDispensingItem item) {
+			this.item = item;
+		}
+		/**
+		 * @return the availableQuantity
+		 */
+		public int getAvailableQuantity() {
+			return availableQuantity;
+		}
+		/**
+		 * @param availableQuantity the availableQuantity to set
+		 */
+		public void setAvailableQuantity(int availableQuantity) {
+			this.availableQuantity = availableQuantity;
+		}
+		/**
+		 * @return the invalid
+		 */
+		public boolean isInvalid() {
+			return invalid;
+		}
+		/**
+		 * @param invalid the invalid to set
+		 */
+		public void setInvalid(boolean invalid) {
+			this.invalid = invalid;
+		}
 	}
 }

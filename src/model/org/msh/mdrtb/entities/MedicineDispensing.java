@@ -41,6 +41,22 @@ public class MedicineDispensing implements Serializable {
 	@OneToMany(mappedBy="dispensing", cascade={CascadeType.ALL})
 	private List<MedicineDispensingItem> items = new ArrayList<MedicineDispensingItem>();
 
+	
+	/**
+	 * Search for a specific item by its source and medicine
+	 * @param source
+	 * @param medicine
+	 * @return
+	 */
+	public MedicineDispensingItem findItem(Source source, Medicine medicine) {
+		for (MedicineDispensingItem item: items) {
+			if ((item.getMedicine().equals(medicine)) && (item.getSource().equals(source))) {
+				return item;
+			}
+		}
+		return null;
+	}
+	
 
 	public Integer getMonth() {
 		return (endDate == null? null: DateUtils.monthOf(endDate));

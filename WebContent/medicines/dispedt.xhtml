@@ -49,7 +49,7 @@
 	<table width="100%" class="tabela">
 	<a:repeat value="#{medicineDispensingHome.sources}" var="s">
 	<tr>
-		<td colspan="5" class="highlight">
+		<td colspan="6" class="highlight">
 			#{s.source.name}
 		</td>
 	</tr>
@@ -57,12 +57,17 @@
 		<th>
 			#{messages['Medicine']}
 		</th>
-		<th>#{messages['Batch.expiryDate']}
+		<th>
+			#{messages['Batch.expiryDate']}
+		</th>
+		<th>
+			#{messages['Batch.remainingQuantity']}
 		</th>
 		<th>
 			#{messages['MedicineDispensing.quantity']}
 		</th>
-		<th>#{messages['global.unitPrice']}
+		<th>
+			#{messages['global.unitPrice']}
 		</th>
 		<th>
 		</th>
@@ -71,27 +76,32 @@
 		<tr>
 			<td>
 				<div class="medicine-icon">
-				#{it.medicine}
+				#{it.item.medicine}
 				</div>
-				<s:fragment rendered="#{it.data==true}">
+				<s:fragment rendered="#{it.invalid}">
  				   <h:outputText value="#{messages['medicines.movs.invalidqtd']}" styleClass="warn"/> 
 				</s:fragment>
 			</td>
 			<td>
 			</td>
 			<td align="right">
-				<h:outputText value="#{it.quantity}" >
+				<h:outputText value="#{it.availableQuantity}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			<td align="right">
+				<h:outputText value="#{it.item.quantity}" >
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 			</td>
 			<td>
 			</td>
 			<td align="center">
-				<a:commandLink value="#{messages['medicines.selbatches']}" action="#{medicineDispensingHome.initializeBatchSelection(it)}" 
+				<a:commandLink value="#{messages['medicines.selbatches']}" action="#{medicineDispensingHome.initializeBatchSelection(it.item)}" 
 					reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" ajaxSingle="true"/> 
 			</td>
 		</tr>
-		<ui:repeat value="#{it.batches}" var="b">
+		<ui:repeat value="#{it.item.batches}" var="b">
 			<tr style="font-size:9px;">
 				<td class="colb" >
 					<div class="batch-icon">
@@ -101,6 +111,8 @@
 				</td>
 				<td align="center" class="colb">
 					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+				</td>
+				<td>
 				</td>
 				<td class="colb" align="right">
 					<h:outputText value="#{b.quantity}">
@@ -112,6 +124,7 @@
 						<f:convertNumber pattern="#,###,##0.0000"/>
 					</h:outputText>
 				</td>
+				<td></td>
 			</tr>
 		</ui:repeat>
 		</a:repeat>

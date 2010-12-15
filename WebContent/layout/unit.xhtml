@@ -65,12 +65,12 @@
 			</div>
 			<h:dataTable value="#{it.units}" var="u" >
 			<h:column>
-  				<h:commandLink onclick="selectUnit(#{u.id}); return false;" 
+  				<a:commandLink onclick="selectUnit(#{u.id}); return false;" 
   					styleClass="#{u.treatmentHealthUnit?'hu-icon':'ds-icon'}" style="width:100%;">
   					<span class="#{u.medicineManagementStarted?'':'warn-icon'}" title="#{u.medicineManagementStarted?'':messages['medicines.start.alert']}">
   						#{u.name}
   					</span>
-  				</h:commandLink>
+  				</a:commandLink>
 			</h:column>
 			</h:dataTable>
 		</a:repeat>
@@ -93,9 +93,11 @@ function hideUnitSelDlg() {
 	Richfaces.hideModalPanel('unitSelDlg');
 }
 </script>
+<h:form>
 <a:jsFunction name="selectUnit" ajaxSingle="true" action="#{unitSelection.selectUnit}" reRender="main">
 	<a:actionparam name="param1" assignTo="#{unitSelection.unitId}" converter="javax.faces.Integer" />
 </a:jsFunction>
+</h:form>
 
 </s:fragment>
 </ui:composition>

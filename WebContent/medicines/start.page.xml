@@ -9,6 +9,7 @@
 	
 	<navigation>
 		<rule if-outcome="medman-started">
+			<end-conversation/>
 			<redirect view-id="/medicines/index.xhtml" />
 		</rule>
 	</navigation>

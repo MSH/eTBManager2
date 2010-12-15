@@ -91,7 +91,7 @@ function validateInput(edt) {
 			<f:facet name="header">
 				<h:selectBooleanCheckbox id="todos" onclick="checkClick(this);"/>				
 			</f:facet>
-			<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" />
+			<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" rendered="#{not it.item.batch.expired}"/>
 		</h:column>
 		
 		<h:column>
@@ -131,7 +131,12 @@ function validateInput(edt) {
 			<f:facet name="header">
 				<h:outputText value="#{quantitytitle}" styleClass="colrh"/>
 			</f:facet>
-			<h:inputText id="qtd" value="#{it.item.quantity}" style="width:80px;" onkeypress="return numbersOnly(this,event);" />
+			<h:inputText id="qtd" value="#{it.item.quantity}" style="width:80px;" 
+				onkeypress="return numbersOnly(this,event);" 
+				rendered="#{not it.item.batch.expired}" />
+			<h:outputText value="#{messages['manag.forecast.expiredquantity']}" 
+				rendered="#{it.item.batch.expired}" 
+				styleClass="warn" />
 			<input type="hidden" value="#{it.item.batchQuantity.quantity}" />
 		</h:column>
 	</h:dataTable>

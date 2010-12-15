@@ -54,6 +54,15 @@ public class Batch implements Serializable {
 	private float unitPrice;
 
 
+	/**
+	 * Check if batch is 
+	 * @return
+	 */
+	public boolean isExpired() {
+		return (expiryDate != null) && (expiryDate.before(new Date()));
+	}
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

@@ -1,7 +1,6 @@
 package org.msh.tb.medicines;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,7 +99,7 @@ public class BatchSelection {
 		else hql = "";
 		
 		batches = entityManager.createQuery("from BatchQuantity b join fetch b.batch " +
-				"where b.tbunit.id = :unitid and b.batch.expiryDate >= :dt" +
+				"where b.tbunit.id = :unitid " +
 				hql +
 				" and b.source.id = :sourceid " + 
 				"and b.batch.medicine.id = :medid " +
@@ -108,7 +107,6 @@ public class BatchSelection {
 				.setParameter("unitid", tbunit.getId())
 				.setParameter("sourceid", source.getId())
 				.setParameter("medid", medicine.getId())
-				.setParameter("dt", new Date())
 				.getResultList();
 	}
 
