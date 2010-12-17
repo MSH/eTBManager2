@@ -188,10 +188,10 @@ public class BeanState {
 					Object value = vals.get(key);
 					
 					// check for specific log instructions
-					org.msh.tb.log.LogValue logValAnot;
+					org.msh.tb.log.FieldLog logValAnot;
 					try {
 						Field fld = obj.getClass().getDeclaredField(key);						
-						logValAnot = (org.msh.tb.log.LogValue)fld.getAnnotation(org.msh.tb.log.LogValue.class);
+						logValAnot = (org.msh.tb.log.FieldLog)fld.getAnnotation(org.msh.tb.log.FieldLog.class);
 					} catch (Exception e) {
 						logValAnot = null;
 					}

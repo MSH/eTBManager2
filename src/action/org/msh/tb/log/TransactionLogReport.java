@@ -54,7 +54,11 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 	 */
 	@Override
 	public String getEjbql() {
-		return "from TransactionLog log join fetch log.user join fetch log.workspace join fetch log.role " + getStaticConditions();
+		return "from TransactionLog log " +
+				"join fetch log.user " +
+				"join fetch log.workspace " +
+				"join fetch log.role " +
+				"join fetch log.logValues " + getStaticConditions();
 	}
 
 

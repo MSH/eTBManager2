@@ -1,4 +1,4 @@
-package org.msh.tb.cases;
+package org.msh.mdrtb.entities;
 
 import java.io.Serializable;
 
@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.Substance;
 
 /**
  * Component of a medicine, 
@@ -67,6 +65,48 @@ public class MedicineComponent implements Serializable{
 
 	public void setStrength(Integer strength) {
 		this.strength = strength;
+	}
+
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return super.toString();
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (obj instanceof MedicineComponent)
+			return false;
+		MedicineComponent other = (MedicineComponent) obj;
+		if (id == null) {
+			if (other.getId() != null)
+				return false;
+		} else if (!id.equals(other.getId()))
+			return false;
+		return true;
 	}
 		
 }

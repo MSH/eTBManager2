@@ -26,6 +26,7 @@ import org.msh.mdrtb.entities.ExamXRay;
 import org.msh.mdrtb.entities.FieldValue;
 import org.msh.mdrtb.entities.Laboratory;
 import org.msh.mdrtb.entities.MedicalExamination;
+import org.msh.mdrtb.entities.MedicineComponent;
 import org.msh.mdrtb.entities.MedicineRegimen;
 import org.msh.mdrtb.entities.Patient;
 import org.msh.mdrtb.entities.PrescribedMedicine;
@@ -54,7 +55,6 @@ import org.msh.mdrtb.entities.enums.RegimenPhase;
 import org.msh.mdrtb.entities.enums.ValidationState;
 import org.msh.mdrtb.entities.enums.XRayEvolution;
 import org.msh.mdrtb.entities.enums.YesNoType;
-import org.msh.tb.cases.MedicineComponent;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 

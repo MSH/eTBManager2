@@ -83,7 +83,7 @@
   		<b>#{messages['Medicine.secondLine']}: </b> #{r.secondLineSupplier.name}
   	</s:div>
   	<s:div rendered="#{r.authorizerUnit!=null}">
-  		<b>#{messages['TbUnit.authorizerUnit']}: </b> #{r.authorizerUnit.name}
+  		<b>#{messages['Tbunit.authorizerUnit']}: </b> #{r.authorizerUnit.name}
   	</s:div>
   </h:column>
 
@@ -91,19 +91,19 @@
 		<f:facet name="header"><h:outputText value="#{messages['form.options']}" styleClass="collh" /></f:facet>
 		
 		<div class="#{r.treatmentHealthUnit? 'checked-icon':'unchecked-icon'}" >
-			#{messages['TbUnit.treatmentHealthUnit']}
+			#{messages['Tbunit.treatmentHealthUnit']}
 		</div>
 		<div class="#{r.medicineStorage?'checked-icon':'unchecked-icon'}">
-			#{messages['TbUnit.medicineStorage']}
+			#{messages['Tbunit.medicineStorage']}
 		</div>
 		<div class="#{r.receivingFromSource?'checked-icon':'unchecked-icon'}" >
-			#{messages['TbUnit.receivingFromSource']}
+			#{messages['Tbunit.receivingFromSource']}
 		</div>
 		<div class="#{r.changeEstimatedQuantity?'checked-icon':'unchecked-icon'}">
-			#{messages['TbUnit.changeEstimatedQuantity']}
+			#{messages['Tbunit.changeEstimatedQuantity']}
 		</div>
 		<div class="#{r.medicineSupplier?'checked-icon':'unchecked-icon'}">
-			#{messages['TbUnit.medicineSupplier']}
+			#{messages['Tbunit.medicineSupplier']}
 		</div>
 	</h:column>
 

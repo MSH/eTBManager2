@@ -23,7 +23,7 @@ import org.hibernate.annotations.TypeDefs;
 import org.jboss.seam.international.LocaleSelector;
 import org.msh.mdrtb.entities.enums.DisplayCaseNumber;
 import org.msh.mdrtb.entities.enums.NameComposition;
-import org.msh.tb.log.LogValue;
+import org.msh.tb.log.FieldLog;
 
 @TypeDefs({@TypeDef(name="weeklyFrequency", typeClass=WeeklyFrequencyType.class)})
 
@@ -39,7 +39,7 @@ public class Workspace implements Serializable {
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@OneToMany(mappedBy="workspace", cascade={CascadeType.PERSIST, CascadeType.REMOVE})
-	@LogValue(ignore=true)
+	@FieldLog(ignore=true)
 	private List<UserWorkspace> users = new ArrayList<UserWorkspace>();
 
 	@Column(length=150)

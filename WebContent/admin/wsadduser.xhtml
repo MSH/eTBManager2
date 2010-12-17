@@ -79,7 +79,7 @@ function processSelectedUser(suggestion) {
 </script>
 
    		<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['TbUnit']}:</ui:define>
+    		<ui:define name="label">#{messages['Tbunit']}:</ui:define>
     	    <h:selectOneMenu value="#{workspaceHome.userWorkspace.tbunit}" required="true">
     	        <s:selectItems value="#{workspaceHome.units}" var="it" label="#{it.name}" noSelectionLabel="-" />
     	     	<s:convertEntity />

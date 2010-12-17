@@ -9,7 +9,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="#{workspaceViewService.templatePage}">
         
-<ui:param name="title" value="#{messages['form.data_edit']} - #{messages['TbUnit']}" />
+<ui:param name="title" value="#{messages['form.data_edit']} - #{messages['Tbunit']}" />
 <ui:param name="topmenu" value="3" />
 
 <ui:param name="waitdlg" value="1" />
@@ -64,12 +64,12 @@
     </s:decorate>
     
     <s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['TbUnit.address']}:</ui:define>
+    	<ui:define name="label">#{messages['Tbunit.address']}:</ui:define>
         <h:inputText maxlength="100" value="#{tbunit.address}" style="width : 320px;" />
     </s:decorate>
 <!--     
     <s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['TbUnit.district']}:</ui:define>
+    	<ui:define name="label">#{messages['Tbunit.district']}:</ui:define>
         <h:inputText maxlength="50" value="#{tbunit.district}" style=" width : 178px;" />
     </s:decorate>
 -->
@@ -79,7 +79,7 @@
 	</s:decorate>
 
     <s:decorate template="/layout/edit.xhtml">
-    	<h:selectBooleanCheckbox id="chkhu" value="#{tbunit.treatmentHealthUnit}" /> #{messages['TbUnit.treatmentHealthUnit']}
+    	<h:selectBooleanCheckbox id="chkhu" value="#{tbunit.treatmentHealthUnit}" /> #{messages['Tbunit.treatmentHealthUnit']}
     </s:decorate>
 
 	<div id="pnlhealthunit" style="clear:both;">
@@ -88,22 +88,22 @@
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml">
-    	<h:selectBooleanCheckbox value="#{tbunit.tbHealthUnit}" style="margin-left:32px;"/>#{messages['TbUnit.tbHealthUnit']}
+    	<h:selectBooleanCheckbox value="#{tbunit.tbHealthUnit}" style="margin-left:32px;"/>#{messages['Tbunit.tbHealthUnit']}
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml">
-    	<h:selectBooleanCheckbox value="#{tbunit.mdrHealthUnit}" style="margin-left:32px;"/>#{messages['TbUnit.mdrHealthUnit']}
+    	<h:selectBooleanCheckbox value="#{tbunit.mdrHealthUnit}" style="margin-left:32px;"/>#{messages['Tbunit.mdrHealthUnit']}
     </s:decorate>
     </div>
     
     <p/>
     <span class="paragraph">#{messages['admin.tbunits.medmanagement']}</span>
     <s:decorate template="/layout/edit.xhtml">
-    	<h:selectBooleanCheckbox id="chkmed" value="#{tbunit.medicineStorage}" /> #{messages['TbUnit.medicineStorage']}
+    	<h:selectBooleanCheckbox id="chkmed" value="#{tbunit.medicineStorage}" /> #{messages['Tbunit.medicineStorage']}
     </s:decorate>
     <div id="medform" style="clear:left;">
     <s:decorate template="/layout/edit.xhtml" style="min-height:20px;">
-    	<h:selectBooleanCheckbox value="#{tbunit.receivingFromSource}" /> #{messages['TbUnit.receivingFromSource']}
+    	<h:selectBooleanCheckbox value="#{tbunit.receivingFromSource}" /> #{messages['Tbunit.receivingFromSource']}
     </s:decorate>
 
     <s:decorate template="/layout/roundrect.xhtml" style="padding-top:10px;clear:both;">
@@ -113,29 +113,29 @@
     	<ui:param name="showfooter" value="0" />
 
 	<div class="paragraph">
-		#{messages['TbUnit.secondLineSupplier']}
+		#{messages['Tbunit.secondLineSupplier']}
 	</div>
 	<s:decorate template="/layout/tbselection.xhtml">
 		<ui:param name="tbunitselection" value="#{tbunitHome.slmSupplier}" />
 	</s:decorate>
 
 	<div class="paragraph">
-		#{messages['TbUnit.firstLineSupplier']}
+		#{messages['Tbunit.firstLineSupplier']}
 	</div>
 	<s:decorate template="/layout/tbselection.xhtml">
 		<ui:param name="tbunitselection" value="#{tbunitHome.flmSupplier}" />
 	</s:decorate>
 	
     <s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['TbUnit.numDaysOrder']}:</ui:define>
+    	<ui:define name="label">#{messages['Tbunit.numDaysOrder']}:</ui:define>
     	<h:inputText value="#{tbunit.numDaysOrder}" /> 
     </s:decorate>
     <s:decorate template="/layout/edit.xhtml" >
-    	<h:selectBooleanCheckbox value="#{tbunit.changeEstimatedQuantity}" /> #{messages['TbUnit.changeEstimatedQuantity']}
+    	<h:selectBooleanCheckbox value="#{tbunit.changeEstimatedQuantity}" /> #{messages['Tbunit.changeEstimatedQuantity']}
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
-    	<h:selectBooleanCheckbox value="#{tbunit.orderOverMinimum}" /> #{messages['TbUnit.orderOverMinimum']}
+    	<h:selectBooleanCheckbox value="#{tbunit.orderOverMinimum}" /> #{messages['Tbunit.orderOverMinimum']}
     </s:decorate>
     <br/>
     
@@ -146,11 +146,11 @@
 		#{messages['admin.tbunits.ordershipping']}
 	</span>    
     <s:decorate template="/layout/edit.xhtml">
-    	<h:selectBooleanCheckbox id="chkaut" value="#{tbunit.medicineSupplier}" /> #{messages['TbUnit.medicineSupplier']}
+    	<h:selectBooleanCheckbox id="chkaut" value="#{tbunit.medicineSupplier}" /> #{messages['Tbunit.medicineSupplier']}
     </s:decorate>
     <div id="autform" style="clear:left;">
 	<div class="paragraph">
-		#{messages['TbUnit.authorizerUnit']}
+		#{messages['Tbunit.authorizerUnit']}
 	</div>
 	<s:decorate id="cbautor" template="/layout/tbselection.xhtml">
 		<ui:param name="tbunitselection" value="#{tbunitHome.orderAuthorizer}" />

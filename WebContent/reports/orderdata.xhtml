@@ -22,7 +22,7 @@
     		style="margin:0;padding:0;font-size:16px;font-weight:bold;color:#{order.status=='CANCELLED'? 'red': (order.status=='WAITINGAUT'?'#707070':'#707070')}" />
 		<s:div rendered="#{order.status=='WAITINGAUT'}" style="font-size:11px;color:#707070;">
 			<br/>
-    		#{messages['TbUnit.authorizerUnit']}: #{order.tbunitTo.authorizerUnit.name}
+    		#{messages['Tbunit.authorizerUnit']}: #{order.tbunitTo.authorizerUnit.name}
     	</s:div>
 </td></tr>
 </table>
@@ -71,7 +71,7 @@
     </s:decorate>
     
     <s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['TbUnit.numDaysOrder']}:</ui:define>
+    	<ui:define name="label">#{messages['Tbunit.numDaysOrder']}:</ui:define>
     	#{order.numDays}
     </s:decorate>
     

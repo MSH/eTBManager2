@@ -31,22 +31,22 @@
 
 	<table><tr><td>
     <s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['TbUnit.secondLineSupplier']}:</ui:define>
+    	<ui:define name="label">#{messages['Tbunit.secondLineSupplier']}:</ui:define>
         <h:outputText value="#{unitSetup.unit.secondLineSupplier.name}" />
     </s:decorate>
 
     <s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['TbUnit.firstLineSupplier']}:</ui:define>
+    	<ui:define name="label">#{messages['Tbunit.firstLineSupplier']}:</ui:define>
         <h:outputText value="#{unitSetup.unit.firstLineSupplier.name}" />
     </s:decorate>
     
     <s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['TbUnit.numDaysOrder']}:</ui:define>
+    	<ui:define name="label">#{messages['Tbunit.numDaysOrder']}:</ui:define>
     	<h:outputText value="#{unitSetup.unit.numDaysOrder} #{messages['global.days']}" /> 
     </s:decorate>
 
     <s:decorate template="/layout/display.xhtml" style="min-height:20px;">
-    	<ui:define name="label">#{messages['TbUnit.orderOverMinimum']}:</ui:define>
+    	<ui:define name="label">#{messages['Tbunit.orderOverMinimum']}:</ui:define>
     	<h:outputText value="#{messages['global.yes']}" rendered="#{unitSetup.unit.orderOverMinimum}"/>
     	<h:outputText value="#{messages['global.no']}" rendered="#{not unitSetup.unit.orderOverMinimum}"/>
     </s:decorate>
@@ -114,7 +114,7 @@
 
 			<h:column rendered="#{unitSetup.unit.orderMedicines}">
 				<f:facet name="header">
-					<h:outputText value="#{messages['TbUnit.numDaysOrder']} (#{messages['Order']})" styleClass="colch"/>
+					<h:outputText value="#{messages['Tbunit.numDaysOrder']} (#{messages['Order']})" styleClass="colch"/>
 				</f:facet>
 				<s:fragment rendered="#{it.numDaysOrder== null}">
 					<h:outputText value="#{unitSetup.unit.numDaysOrder} #{messages['global.days']} (#{messages['medicines.unitsetup.overwrite']})" />

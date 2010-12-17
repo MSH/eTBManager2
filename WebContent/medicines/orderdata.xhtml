@@ -67,7 +67,7 @@
 		<h:outputText value="#{messages[order.status.key]}"
 			styleClass="#{order.status=='CANCELLED'?'status-cancel':'status-label'}" /> 
 		<s:div rendered="#{order.status=='WAITINGAUT'}" >
-    		<b>#{messages['TbUnit.authorizerUnit']}: </b>
+    		<b>#{messages['Tbunit.authorizerUnit']}: </b>
     		#{order.tbunitTo.authorizerUnit.name}<br/>
     	</s:div>
     	</div>
@@ -121,7 +121,7 @@
     </s:decorate>
     
     <s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['TbUnit.numDaysOrder']}:</ui:define>
+    	<ui:define name="label">#{messages['Tbunit.numDaysOrder']}:</ui:define>
     	#{order.numDays}
     </s:decorate>
     

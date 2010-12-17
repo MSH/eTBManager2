@@ -50,7 +50,7 @@
 	
 	<h:panelGroup id="pnlws">
     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['TbUnit']}:</ui:define>
+    	<ui:define name="label">#{messages['Tbunit']}:</ui:define>
 		<h:selectOneMenu value="#{systemConfigHome.systemConfig.tbunit}" required="true">
            	<s:selectItems value="#{systemConfigHome.units}" var="it" label="#{it.name}" noSelectionLabel="-"/>
 			<s:convertEntity />

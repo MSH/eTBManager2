@@ -17,7 +17,6 @@ import javax.persistence.OneToMany;
 
 import org.msh.mdrtb.entities.enums.MedicineCategory;
 import org.msh.mdrtb.entities.enums.MedicineLine;
-import org.msh.tb.cases.MedicineComponent;
 
 @Entity
 public class Medicine extends WSObject implements Serializable{

@@ -57,7 +57,7 @@
 <p/>
 
 <h:panelGroup id="reportPanel">
-<table style="width:800px" >
+<table style="width:100%" >
 <tr><td>
 
 <s:decorate template="/layout/naveg.xhtml">
@@ -94,8 +94,21 @@
 		<f:facet name="header">#{messages['Workspace.description']}</f:facet>
 		#{it.entityDescription}
 		<div>
-		<a:commandLink value="Details" rendered="#{it.numValues > 0}" >
-		</a:commandLink>
+		<table width="auto" class="tabela4">
+		<a:repeat value="#{it.logValues}" var="v">
+			<tr>
+				<td>
+					#{messages[v.messageKey]}
+				</td>
+				<td>
+					#{v.prevValue}
+				</td>
+				<td>
+					#{v.newValue}
+				</td>
+			</tr>
+		</a:repeat>
+		</table>
 		</div>
 	</h:column>
 

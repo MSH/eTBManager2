@@ -13,7 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.jboss.seam.international.Messages;
 import org.msh.mdrtb.entities.enums.LogValueType;
+import org.msh.utils.date.DateUtils;
 
 @Entity
 public class LogValue {
@@ -37,6 +39,72 @@ public class LogValue {
 	
 	private LogValueType type = LogValueType.TEXT;
 
+
+	public Object getPrevValueObject() {
+		return getValueAsObject(prevValue);
+	}
+	
+	public Object getNewValueObject() {
+		return getValueAsObject(newValue);
+	}
+
+	
+	/**
+	 * Return value as its display representation
+	 * @param value
+	 * @return
+	 */
+	protected String getDisplayValue(String value) {
+		if (type == null)
+			return value;
+		
+		switch (type) {
+		case MESSAGE: return Messages.instance().get(value);
+		case BOOLEAN: return ("1".equals(value)? "(x)": "( )");
+		}
+		return value;
+	}
+
+
+	/**
+	 * Return value as an object according to its type
+	 * @param value
+	 * @return
+	 */
+	protected Object getValueAsObject(String value) {
+		if (type == null)
+			return value;
+		
+		if ((value == null) || (value.isEmpty()))
+			return null;
+		
+		switch (type) {
+		case BOOLEAN: return ("1".equals(value)? true: false);
+		case MESSAGE: return Messages.instance().get(value);
+		case NUMBER: return Float.parseFloat(value);
+		case DATE: return parseDateValue(value);
+		}
+		
+		return value;
+	}
+
+	
+	/**
+	 * Parse a value from string to a date value
+	 * @param value
+	 * @return
+	 */
+	protected Date parseDateValue(String value) {
+		try {
+			int year = Integer.parseInt(value.substring(0, 4));
+			int month = Integer.parseInt(value.substring(4, 6));
+			int day = Integer.parseInt(value.substring(6, 8));
+			return DateUtils.newDate(year, month, day);
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
 
 	public void truncateValues() {
 		if ((prevValue != null) && (prevValue.length() > 100))

@@ -24,7 +24,7 @@
     </s:decorate>
     
     <s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['TbUnit.address']}:</ui:define>
+    	<ui:define name="label">#{messages['Tbunit.address']}:</ui:define>
     	#{userSession.tbunit.address}
     </s:decorate>
     
@@ -36,7 +36,7 @@
 
     <s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">
-			#{messages['TbUnit.medManStartDate']}:
+			#{messages['Tbunit.medManStartDate']}:
 		</ui:define>
 		<h:outputText value="#{userSession.tbunit.medManStartDate}" converter="localeDateConverter" />
 	</s:decorate>
@@ -44,7 +44,7 @@
 	<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
     <s:decorate template="/layout/display.xhtml">
 		<div class="star-icon" >
-			#{messages['TbUnit.treatmentHealthUnit']}
+			#{messages['Tbunit.treatmentHealthUnit']}
 		</div>
 	</s:decorate>
     <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.notifHealthUnit}">
@@ -54,12 +54,12 @@
 	</s:decorate>
     <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.tbHealthUnit}">
 		<div class="star-icon" >
-		#{messages['TbUnit.tbHealthUnit']}
+		#{messages['Tbunit.tbHealthUnit']}
 		</div>
 	</s:decorate>
     <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.mdrHealthUnit}">
 		<div class="star-icon" >
-			#{messages['TbUnit.mdrHealthUnit']}
+			#{messages['Tbunit.mdrHealthUnit']}
 		</div>
 	</s:decorate>
 	</s:fragment>
@@ -67,12 +67,12 @@
     <span class="paragraph">#{messages['admin.tbunits.medmanagement']}</span>
     <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.medicineStorage}">
 		<div class="star-icon" >
-			#{messages['TbUnit.medicineStorage']}
+			#{messages['Tbunit.medicineStorage']}
 		</div>
 	</s:decorate>
     <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.receivingFromSource}">
 		<div class="star-icon" >
-		#{messages['TbUnit.receivingFromSource']}
+		#{messages['Tbunit.receivingFromSource']}
 		</div>
 	</s:decorate>
 	
