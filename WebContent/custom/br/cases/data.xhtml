@@ -175,7 +175,7 @@
 	</td></tr>
 	<tr><td colspan="2">
 	<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.notificationUnit!=null}">
-    	<ui:define name="label"><div style="height:32px"> #{messages['cases.details.notifhu']}:</div></ui:define>
+    	<ui:define name="label"><div style="height:32px"> #{messages['TbCase.notificationUnit']}:</div></ui:define>
     		<h:outputText value="#{tbcase.notificationUnit.name}" style="display:block;height:20px;"/> 
 			<ui:repeat value="#{tbcase.notificationUnit.adminUnit.parents}" var="it">
 				<span class="right-icon">#{it.name}</span>

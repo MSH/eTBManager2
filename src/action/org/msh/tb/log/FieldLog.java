@@ -18,6 +18,7 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 @Documented
 public @interface FieldLog {
+
 	/**
 	 * field value will be ignored and its value won't be logged
 	 * @return
@@ -32,8 +33,15 @@ public @interface FieldLog {
 
 	/**
 	 * If field is another entity, it indicates if log values of the entity will also be logged (true) or
-	 * the value of the entity as a string (using toString) will be used for logging (false)
+	 * the value of the entity as a string (using toString) will be used for logging (false). Default value is false
 	 * @return
 	 */
-	boolean browseFields() default true; 
+	boolean logFields() default false;
+
+
+	/**
+	 * Extra message key to be displayed at the left side of the original message key
+	 * @return
+	 */
+	String extraKey() default "";
 }

@@ -65,60 +65,71 @@
 	<ui:param name="page" value="/admin/reptransactionlog.xhtml" />
 </s:decorate>
 
-<h:dataTable value="#{transactionLogReport.resultList}" var="it" styleClass="tabela" width="100%" 
-	rowClasses="lin1,lin2" columnClasses="coll,coll,coll,coll,coll" rendered="#{not empty transactionLogReport.resultList}">
-	<h:column>
-		<f:facet name="header">
-			<h:outputText value="#{messages['User']}" />
-		</f:facet>
-		#{it.user.name}
-		<br/>
-		<h:outputText value="#{it.transactionDate}" styleClass="small-text">
-			<f:convertDateTime type="both" timeZone="#{timezones.default}"/>
-		</h:outputText>
-	</h:column>
-
-	<h:column>
-		<f:facet name="header">
-			<h:outputText value="#{messages['UserRole']}" styleClass="collh"/>
-		</f:facet>
-		<div class="log-#{it.action}">
-		<b>#{it}</b><br/>
-		<div class="small-text">
-			#{messages[it.action.key]}
-		</div>
-		</div>
-	</h:column>
-	
-	<h:column>
-		<f:facet name="header">#{messages['Workspace.description']}</f:facet>
-		#{it.entityDescription}
-		<div>
-		<table width="auto" class="tabela4">
+<s:fragment rendered="#{not empty transactionLogReport.resultList}">
+<table width="100%">
+	<ui:repeat value="#{transactionLogReport.resultList}" var="it">
+	<tr bgcolor="#e0e0e0">
+		<td>
+			<div class="log-#{it.action}">
+			<b style="font-size:1.1em">#{it}</b><br/>
+			<div class="small-text">
+				#{messages[it.action.key]}
+			</div>
+			</div>
+		</td>
+		<td>
+			#{it.user.name}
+			<br/>
+			<h:outputText value="#{it.transactionDate}" styleClass="small-text">
+				<f:convertDateTime type="both" timeZone="#{timezones.default}"/>
+			</h:outputText>
+		</td>
+		<td>
+			<h:outputText value="#{it.workspace.name}" />
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3" style="padding-left:40px;padding-bottom:10px;">
+		<b> #{it.entityDescription}</b>
+		<s:div rendered="#{not empty it.logValues}">
+		
+		<table width="100%" >
+		<tr>
+			<th align="left" width="180px" style="border-bottom:1px solid #909090;color:#909090">
+				#{messages['LogValue.key']}
+			</th>
+			<s:fragment rendered="#{it.hasPrevValues}">
+			<th align="left" width="250px" style="border-bottom:1px solid #909090;color:#909090">
+				#{messages['LogValue.prevValue']}
+			</th>
+			</s:fragment>
+			<th align="left" style="border-bottom:1px solid #909090;color:#909090">
+				#{it.hasPrevValues? messages['LogValue.newValue'] :  messages['LogValue.fieldValue']}
+			</th>
+		</tr>
 		<a:repeat value="#{it.logValues}" var="v">
 			<tr>
 				<td>
 					#{messages[v.messageKey]}
 				</td>
+				<s:fragment rendered="#{it.hasPrevValues}">
 				<td>
-					#{v.prevValue}
+					#{v.prevDisplayValue}
 				</td>
+				</s:fragment>
 				<td>
-					#{v.newValue}
+					#{v.newDisplayValue}
 				</td>
 			</tr>
 		</a:repeat>
 		</table>
-		</div>
-	</h:column>
+		</s:div>
+		</td>
+	</tr>
+	</ui:repeat>
+</table>
+</s:fragment>
 
-	<h:column>
-		<f:facet name="header">
-			<h:outputText value="#{messages['Workspace']}" styleClass="collh"/>
-		</f:facet>
-		<h:outputText value="#{it.workspace.name}" />
-	</h:column>
-</h:dataTable>
 </td></tr></table>
 <ui:include src="/layout/tablerow.xhtml" />
 </h:panelGroup>

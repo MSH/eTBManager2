@@ -1,4 +1,4 @@
-package org.msh.utils;
+package org.msh.utils.date;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,12 +21,23 @@ public class LocaleDateConverter implements Converter{
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
 		return null;
 	}
+
 	
 	public String getAsString(FacesContext facesContext, UIComponent comp, Object obj) {
+		return getDisplayDate((Date)obj);
+	}
+
+	
+	/**
+	 * Return a string representation of a date ready for displaying
+	 * @param dt
+	 * @return
+	 */
+	static public String getDisplayDate(Date dt) {
 		String patt = Messages.instance().get("locale.outputDatePattern");
 		Locale locale = LocaleSelector.instance().getLocale();
 		SimpleDateFormat df = new SimpleDateFormat(patt, locale);
 		
-		return df.format((Date)obj);
+		return df.format(dt);
 	}
 }

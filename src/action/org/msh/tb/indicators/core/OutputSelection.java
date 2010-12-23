@@ -8,7 +8,7 @@ package org.msh.tb.indicators.core;
 public enum OutputSelection {
 
 	ADMINUNIT("AdministrativeUnit"),
-	TBUNIT("cases.details.notifhu"),
+	TBUNIT("TbCase.notificationUnit"),
 	GENDER("Gender"),
 	PATIENT_TYPE("PatientType"),
 	INFECTION_SITE("InfectionSite"),

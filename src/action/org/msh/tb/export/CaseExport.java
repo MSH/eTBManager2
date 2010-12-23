@@ -78,7 +78,7 @@ public class CaseExport extends CaseHQLBase implements CaseIterator {
 		excel.addTextFromResource("Address.zipCode", "title");
 		excel.addTextFromResource("TbCase.phoneNumber", "title");
 		excel.addTextFromResource("TbCase.mobileNumber", "title");
-		excel.addTextFromResource("cases.details.notifhu", "title");
+		excel.addTextFromResource("TbCase.notificationUnit", "title");
 		// notification health unit
 		excel.addText(levelInfo.getNameLevel1().toString(), "title");
 		excel.addTextFromResource("TbCase.registrationDate", "title");

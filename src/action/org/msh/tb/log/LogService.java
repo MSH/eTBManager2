@@ -1,14 +1,10 @@
 package org.msh.tb.log;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Id;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.Component;
@@ -250,12 +246,14 @@ public class LogService {
 	 * @return Object containing the entity ID
 	 */
 	protected Object getEntityId(Object entity) {
-		Class c = entity.getClass();
+/*		Class c = entity.getClass();
 		
 		Field fid = null;
-		
+*/		
 		try {
-			// pega a lista de propriedades
+			return PropertyUtils.getProperty(entity, "id");
+			
+/*			// pega a lista de propriedades
 			Map props = PropertyUtils.describe(entity);
 			String pname = null;
 
@@ -269,14 +267,16 @@ public class LogService {
 						fid = f;
 						break;
 					}
-				} catch (Exception e) {}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 			if (fid == null)
 				return null;
 
 			return props.get(pname);
-
+*/
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

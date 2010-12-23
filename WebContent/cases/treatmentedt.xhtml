@@ -97,30 +97,30 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 
 	<div class="paragraph">#{messages['RegimenPhase.INTENSIVE']}</div>
 	<s:decorate template="/layout/dateedit.xhtml" rendered="#{treatmentHome.canChangeIniTreatmentDate}">
-		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{treatmentHome.iniDate}"/> 
 	</s:decorate>
 	
 	<s:decorate template="/layout/display.xhtml" rendered="#{not treatmentHome.canChangeIniTreatmentDate}">
-		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
 		<h:outputText value="#{treatmentHome.iniDate}" converter="localeDateConverter"/>
 	</s:decorate>
 
 	<div class="paragraph">#{messages['RegimenPhase.CONTINUOUS']}</div>
 	<s:decorate template="/layout/dateedit.xhtml" rendered="#{treatmentHome.canChangeIniContinuousPhase}">
-		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{treatmentHome.iniContinuousPhase}"/> 
 	</s:decorate>
 	
 	<s:decorate template="/layout/display.xhtml" rendered="#{not treatmentHome.canChangeIniContinuousPhase}">
-		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
 		<h:outputText value="#{treatmentHome.iniContinuousPhase}" converter="localeDateConverter"/>
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml">
-		<ui:define name="label">#{messages['global.endDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{treatmentHome.endDate}"/> 
 	</s:decorate>
@@ -148,13 +148,13 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 	<h:messages globalOnly="true" styleClass="erro" layout="table" />
 
 	<s:decorate template="/layout/dateedit.xhtml">
-		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{treatmentHome.iniDate}"/> 
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml">
-		<ui:define name="label">#{messages['global.endDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{treatmentHome.endDate}"/> 
 	</s:decorate>
@@ -191,13 +191,13 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml">
-		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{prescribedMedicine.period.iniDate}"/> 
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml">
-		<ui:define name="label">#{messages['global.endDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{prescribedMedicine.period.endDate}"/> 
 	</s:decorate>

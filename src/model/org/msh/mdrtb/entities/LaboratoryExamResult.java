@@ -18,6 +18,7 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.international.LocaleSelector;
+import org.msh.tb.log.FieldLog;
 import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 
 
@@ -31,12 +32,15 @@ public abstract class LaboratoryExamResult implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	@NotNull
+	@FieldLog(key="PatientSample.dateCollected")
 	private Date dateCollected;
 	
 	@Column(length=50)
+	@FieldLog(key="PatientSample.sampleNumber")
 	private String sampleNumber;
 	
 	@Column(length=250)
+	@FieldLog(key="global.comments")
 	private String comments;
 
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -48,10 +52,12 @@ public abstract class LaboratoryExamResult implements Serializable {
 	private Laboratory laboratory;
 
 	@Temporal(TemporalType.DATE)
+	@FieldLog(key="cases.exams.dateRelease")
 	private Date dateRelease;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="METHOD_ID")
+	@FieldLog(key="cases.exams.method")
 	private FieldValue method;
 
 	/**

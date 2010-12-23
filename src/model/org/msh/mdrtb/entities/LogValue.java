@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import org.jboss.seam.international.Messages;
 import org.msh.mdrtb.entities.enums.LogValueType;
 import org.msh.utils.date.DateUtils;
+import org.msh.utils.date.LocaleDateConverter;
 
 @Entity
 public class LogValue {
@@ -48,7 +49,25 @@ public class LogValue {
 		return getValueAsObject(newValue);
 	}
 
-	
+
+	/**
+	 * Return a string representation of the previous value ready for displaying
+	 * @return
+	 */
+	public String getPrevDisplayValue() {
+		return getDisplayValue(prevValue);
+	}
+
+
+	/**
+	 * Return a string representation of the new value ready for displaying
+	 * @return
+	 */
+	public String getNewDisplayValue() {
+		return getDisplayValue(newValue);
+	}
+
+
 	/**
 	 * Return value as its display representation
 	 * @param value
@@ -57,10 +76,14 @@ public class LogValue {
 	protected String getDisplayValue(String value) {
 		if (type == null)
 			return value;
+
+		if ((value == null) || (value.isEmpty()))
+			return null;
 		
 		switch (type) {
 		case MESSAGE: return Messages.instance().get(value);
 		case BOOLEAN: return ("1".equals(value)? "(x)": "( )");
+		case DATE: return LocaleDateConverter.getDisplayDate(parseDateValue(value));
 		}
 		return value;
 	}

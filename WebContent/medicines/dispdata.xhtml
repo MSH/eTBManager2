@@ -49,12 +49,12 @@
     </s:decorate>
 
 	<s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+    	<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<h:outputText value="#{medicineDispensing.iniDate}" converter="localeDateConverter" />
 	</s:decorate>
 
 	<s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['global.endDate']}:</ui:define>
+    	<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
     	<h:outputText value="#{medicineDispensing.endDate}" converter="localeDateConverter" />
 	</s:decorate>
 

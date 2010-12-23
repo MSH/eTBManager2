@@ -20,11 +20,9 @@ import org.msh.mdrtb.entities.MedicalExamination;
 import org.msh.mdrtb.entities.Patient;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.DiagnosisType;
 import org.msh.mdrtb.entities.enums.MedAppointmentType;
-import org.msh.mdrtb.entities.enums.TbCategory;
 import org.msh.mdrtb.entities.enums.ValidationState;
 import org.msh.mdrtb.entities.enums.YesNoType;
 import org.msh.tb.adminunits.AdminUnitSelection;
@@ -286,8 +284,8 @@ public class CaseEditingHome {
 		if (tbcase.getValidationState() == null)
 			tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
 		
-		if (tbcase.getClassification() == CaseClassification.DRTB)
-			tbcase.setCategory(TbCategory.CATEGORY_IV);
+//		if (tbcase.getClassification() == CaseClassification.DRTB)
+//			tbcase.setCategory(TbCategory.CATEGORY_IV);
 		
 		tbcase.setState(CaseState.WAITING_TREATMENT);
 

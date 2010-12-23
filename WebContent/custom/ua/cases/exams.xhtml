@@ -221,7 +221,7 @@
 				<div class="#{r.result=='NEGATIVE'? 'result-negative': 'result-positive'}">#{messages[r.result.key]}</div>
 				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}" style="display:block;"/>
 				<s:div rendered="#{not empty r.numberOfColonies}" style="display:block;clear:both;">
-					<h:outputText value="#{messages['cases.exams.numcolonies']}"/>: #{r.numberOfColonies}
+					<h:outputText value="#{messages['ExamCulture.numberOfColonies']}"/>: #{r.numberOfColonies}
 				</s:div>
 				<s:div rendered="#{not empty r.method}" style="display:block;clear:both;">
 					<h:outputText value="#{messages['cases.exams.method']}"/>: #{r.method}

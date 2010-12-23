@@ -69,18 +69,18 @@ function showHuDlg() {	Richfaces.showModalPanel('hudlg'); }
 
 	<h:messages globalOnly="false" styleClass="erro" layout="table" />
 	<s:decorate template="/layout/display.xhtml" rendered="#{not treatmentHome.canChangeIniDate}">
-		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
 		<h:outputText value="#{treatmentHome.iniDate}"/>
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml" rendered="#{treatmentHome.canChangeIniDate}">
-		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{treatmentHome.iniDate}"/> 
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml">
-		<ui:define name="label">#{messages['global.endDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{treatmentHome.endDate}"/> 
 	</s:decorate>
@@ -115,13 +115,13 @@ function showHuDlg() {	Richfaces.showModalPanel('hudlg'); }
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml">
-		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{prescribedMedicine.period.iniDate}"/> 
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml">
-		<ui:define name="label">#{messages['global.endDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{prescribedMedicine.period.endDate}"/> 
 	</s:decorate>
@@ -177,18 +177,18 @@ function showHuDlg() {	Richfaces.showModalPanel('hudlg'); }
 
 	<h:messages styleClass="erro" layout="table" />
 	<s:decorate template="/layout/display.xhtml" rendered="#{not treatmentHome.canChangeIniDate}">
-		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
 		<h:outputText value="#{treatmentHome.iniDate}"/>
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml" rendered="#{treatmentHome.canChangeIniDate}">
-		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{treatmentHome.iniDate}"/> 
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml">
-		<ui:define name="label">#{messages['global.endDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{treatmentHome.endDate}"/> 
 	</s:decorate>

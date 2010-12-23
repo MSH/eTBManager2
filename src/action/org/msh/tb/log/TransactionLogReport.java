@@ -58,7 +58,7 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 				"join fetch log.user " +
 				"join fetch log.workspace " +
 				"join fetch log.role " +
-				"join fetch log.logValues " + getStaticConditions();
+				"left join fetch log.logValues " + getStaticConditions();
 	}
 
 

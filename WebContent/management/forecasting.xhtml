@@ -477,13 +477,13 @@ function showLoadForecastingDlg() {
 
 	<div class="paragraph">#{messages['manag.forecast.reviewperiod']}</div>
 	<s:decorate template="/layout/dateedit.xhtml">
-		<ui:define name="label">#{messages['global.iniDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{forecasting.iniDate}"/> 
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml">
-		<ui:define name="label">#{messages['global.endDate']}:</ui:define>
+		<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{forecasting.endDate}"/> 
 	</s:decorate>

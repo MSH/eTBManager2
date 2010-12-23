@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.msh.tb.log.FieldLog;
+
 @Entity
 public class Source extends WSObject implements Serializable {
 	private static final long serialVersionUID = -8115568635572935159L;
@@ -20,6 +22,7 @@ public class Source extends WSObject implements Serializable {
 	private Integer id;
 
 	@Embedded
+	@FieldLog(logFields=true)
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@Embedded

@@ -38,8 +38,8 @@ import org.msh.mdrtb.entities.enums.DrugResistanceType;
 import org.msh.mdrtb.entities.enums.InfectionSite;
 import org.msh.mdrtb.entities.enums.Nationality;
 import org.msh.mdrtb.entities.enums.PatientType;
-import org.msh.mdrtb.entities.enums.TbCategory;
 import org.msh.mdrtb.entities.enums.ValidationState;
+import org.msh.tb.log.FieldLog;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
@@ -53,6 +53,7 @@ public class TbCase implements Serializable{
 	private Integer id;
 	
 	@Version
+	@FieldLog(ignore=true)
 	private Integer version;
 	
 	private Integer caseNumber;
@@ -65,6 +66,7 @@ public class TbCase implements Serializable{
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="PATIENT_ID")
 	@NotNull
+	@FieldLog(logFields=true)
 	private Patient patient;
 	
 	private Integer age;
@@ -85,6 +87,7 @@ public class TbCase implements Serializable{
 		@AttributeOverride(name="iniDate", column=@Column(name="iniTreatmentDate")),
 		@AttributeOverride(name="endDate", column=@Column(name="endTreatmentDate"))
 	})
+	@FieldLog(logFields=true)
 	private Period treatmentPeriod = new Period();
 	
 	@Temporal(TemporalType.DATE)
@@ -104,8 +107,6 @@ public class TbCase implements Serializable{
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
 	private List<PrescribedMedicine> prescribedMedicines = new ArrayList<PrescribedMedicine>();
 
-
-
 	@NotNull
 	private CaseState state;
 	
@@ -113,9 +114,7 @@ public class TbCase implements Serializable{
 	private ValidationState validationState;
 	
 	private PatientType patientType;
-	
-	private TbCategory category;
-	
+
 	private DiagnosisType diagnosisType;
 	
 	private DrugResistanceType drugResistanceType;
@@ -123,18 +122,22 @@ public class TbCase implements Serializable{
 	@NotNull
 	private CaseClassification classification;
 	
+	@FieldLog(key="InfectionSite")
 	private InfectionSite infectionSite;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="PULMONARY_ID")
+	@FieldLog(key="TbField.PULMONARY_TYPES")
 	private FieldValue pulmonaryType;
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="EXTRAPULMONARY_ID")
+	@FieldLog(key="TbField.EXTRAPULMONARY_TYPES")
 	private FieldValue extrapulmonaryType;
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="EXTRAPULMONARY2_ID")
+	@FieldLog(key="TbField.EXTRAPULMONARY_TYPES")
 	private FieldValue extrapulmonaryType2;
 	
 	@Column(length=100)
@@ -733,20 +736,6 @@ public class TbCase implements Serializable{
 	 */
 	public void setRegistrationDate(Date registrationDate) {
 		this.registrationDate = registrationDate;
-	}
-
-	/**
-	 * @param category the category to set
-	 */
-	public void setCategory(TbCategory category) {
-		this.category = category;
-	}
-
-	/**
-	 * @return the category
-	 */
-	public TbCategory getCategory() {
-		return category;
 	}
 
 

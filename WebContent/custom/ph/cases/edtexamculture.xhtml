@@ -45,7 +45,7 @@
 
 	<div style="display:block;width:600px;"><div id="pnlrespositive">
     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['cases.exams.numcolonies']}:</ui:define>
+    	<ui:define name="label">#{messages['ExamCulture.numberOfColonies']}:</ui:define>
     	<h:selectOneMenu value="#{examCulture.numberOfColonies}" >
     		<f:selectItems value="#{examCultureHome.numColonies}"/>
     	</h:selectOneMenu>

@@ -137,14 +137,14 @@
 
 		<e:column style="xls-column-autosize: true" rendered="#{levelInfo.hasLevel1}">
 			<f:facet name="header">
-				<e:cell value="#{messages['cases.details.notifhu']}" style="xls-font: red bold 10 Verdana"/>
+				<e:cell value="#{messages['TbCase.notificationUnit']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
 			<e:cell value="#{c.tbcase.notificationUnit.name}" row="#{c.iniRow}" />
 		</e:column>
 
 		<e:column style="xls-column-autosize: true" rendered="#{levelInfo.hasLevel1}">
 			<f:facet name="header">
-				<e:cell value="#{levelInfo.nameLevel1} - #{messages['cases.details.notifhu']}" style="xls-font: red bold 10 Verdana"/>
+				<e:cell value="#{levelInfo.nameLevel1} - #{messages['TbCase.notificationUnit']}" style="xls-font: red bold 10 Verdana"/>
 			</f:facet>
 			<e:cell value="#{c.tbcase.notificationUnit.adminUnit.parentLevel1}" row="#{c.iniRow}" />
 		</e:column>
