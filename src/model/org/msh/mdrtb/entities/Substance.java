@@ -13,6 +13,7 @@ import javax.persistence.Id;
 
 import org.hibernate.validator.NotNull;
 import org.msh.mdrtb.entities.enums.MedicineLine;
+import org.msh.tb.log.FieldLog;
 
 
 @Entity
@@ -25,6 +26,7 @@ public class Substance extends WSObject implements Serializable {
 
 	@Embedded
 	@NotNull
+	@FieldLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 	
 	@Embedded
@@ -43,6 +45,7 @@ public class Substance extends WSObject implements Serializable {
 	private Integer prevTreatmentOrder;
 
 	@Column(length=50)
+	@FieldLog(key="global.legacyId")
 	private String legacyId;
 
 	@Override

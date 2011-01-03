@@ -74,9 +74,9 @@ public class MedicineComponent implements Serializable{
 	 */
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
+		return ((substance != null) && (medicine != null)? substance.getAbbrevName() + " " + strength + medicine.getStrengthUnit(): super.toString());
 	}
+
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()

@@ -1,7 +1,5 @@
 package org.msh.tb;
 
-import java.util.List;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -47,18 +45,10 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	public void initTransactionLog() {
 		if ((!bNew) && (logService == null)) {
 			logService = new LogService();
-			logService.startEntityMonitoring(getInstance(), !isManaged(), getExtraNestedProperties());
+			logService.startEntityMonitoring(getInstance(), !isManaged());
 		}
 	}
 	
-	
-	/**
-	 * Return the extra nested properties to be included in the log values list
-	 * @return
-	 */
-	public List<String> getExtraNestedProperties() {
-		return null;
-	}
 	
 	/**
 	 * Returns the current managed workspace

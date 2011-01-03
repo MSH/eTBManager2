@@ -1,9 +1,12 @@
 package org.msh.mdrtb.entities;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.msh.tb.log.FieldLog;
 
 /**
  * Represent an age range for the workspace
@@ -18,6 +21,8 @@ public class AgeRange extends WSObject {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
+	@Embedded
+	@FieldLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	private int iniAge;

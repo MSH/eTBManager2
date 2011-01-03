@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.msh.tb.log.FieldLog;
+
 @Entity
 public class HealthSystem extends WSObject {
 	private static final long serialVersionUID = 8006343659248774062L;
@@ -16,9 +18,11 @@ public class HealthSystem extends WSObject {
     private Integer id;
 
 	@Embedded
+	@FieldLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@Column(length=50)
+	@FieldLog(key="global.legacyId")
 	private String legacyId;
 	
 	/* (non-Javadoc)

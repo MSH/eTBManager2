@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Table;
+import org.msh.tb.log.FieldLog;
 
 
 @Entity
@@ -29,6 +30,7 @@ public class AdministrativeUnit extends WSObject {
 	private Integer id;
 
 	@Embedded
+	@FieldLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 	
 	@ManyToOne
@@ -40,12 +42,14 @@ public class AdministrativeUnit extends WSObject {
 	private List<AdministrativeUnit> units = new ArrayList<AdministrativeUnit>();
 
 	@Column(length=50)
+	@FieldLog(key="global.legacyId")
 	private String legacyId;
 	
 	// properties to help dealing with trees
 	private int unitsCount;
 	
 	@Column(length=15, nullable=false)
+	@FieldLog(ignore=true)
 	private String code;
 	
 	@ManyToOne

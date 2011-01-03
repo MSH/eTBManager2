@@ -45,9 +45,9 @@ public class LogService {
 	 * made to the entity
 	 * @param entity
 	 */
-	public void startEntityMonitoring(Object entity, boolean isNew, List<String> extraBeans) {
+	public void startEntityMonitoring(Object entity, boolean isNew) {
 		beans = new ArrayList<BeanState>();
-		mainBean = new BeanState(entity, isNew, extraBeans);
+		mainBean = new BeanState(entity, isNew);
 		beans.add(mainBean);
 	}
 	
@@ -60,7 +60,7 @@ public class LogService {
 		if (mainBean == null)
 			throw new RuntimeException("MainBean must be informed first");
 	
-		beans.add(new BeanState(entity, mainBean.isNewBean(), null));
+		beans.add(new BeanState(entity, mainBean.isNewBean()));
 	}
 
 
@@ -113,9 +113,9 @@ public class LogService {
 	 * @param role
 	 * @return
 	 */
-	public TransactionLog saveEntityDifferences(Object oldEntity, Object newEntity, String role, List<String> extraNestedBeans) {
+	public TransactionLog saveEntityDifferences(Object oldEntity, Object newEntity, String role) {
 		beans = new ArrayList<BeanState>();
-		mainBean = new BeanState(oldEntity, false, extraNestedBeans);
+		mainBean = new BeanState(oldEntity, false);
 		beans.add(mainBean);
 		
 		// update to the new entity

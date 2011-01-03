@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.validator.NotNull;
 import org.msh.mdrtb.entities.enums.CaseClassification;
+import org.msh.tb.log.FieldLog;
 
 @Entity
 public class UserProfile extends WSObject implements Serializable, Comparable<UserProfile> {
@@ -32,6 +33,7 @@ public class UserProfile extends WSObject implements Serializable, Comparable<Us
     private List<UserPermission> permissions = new ArrayList<UserPermission>();
 
 	@Column(length=50)
+	@FieldLog(key="global.legacyId")
 	private String legacyId;
 
 	@Override

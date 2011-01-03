@@ -83,7 +83,10 @@ public class LogValue {
 		switch (type) {
 		case MESSAGE: return Messages.instance().get(value);
 		case BOOLEAN: return ("1".equals(value)? "(x)": "( )");
-		case DATE: return LocaleDateConverter.getDisplayDate(parseDateValue(value));
+		case DATE: {
+				Date dt = parseDateValue(value);
+				return (dt != null ? LocaleDateConverter.getDisplayDate(parseDateValue(value)) : null);
+			}
 		}
 		return value;
 	}
@@ -180,8 +183,10 @@ public class LogValue {
 		}
 		
 		if (value instanceof Enum) {
-			type = LogValueType.ENUM;
-			return Integer.toString(((Enum) value).ordinal());
+			type = LogValueType.MESSAGE;
+			return value.getClass().getSimpleName() + "." + value.toString();
+//			type = LogValueType.ENUM;
+//			return Integer.toString(((Enum) value).ordinal());
 		}
 
 		type = LogValueType.TEXT;

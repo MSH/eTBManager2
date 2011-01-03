@@ -221,7 +221,7 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		
 		LogService logService = new LogService();
 		defaultWorkspace.setUsers(null);
-		logService.saveEntityDifferences(defaultWorkspace, getInstance(), "SETUPWS", null);
+		logService.saveEntityDifferences(defaultWorkspace, getInstance(), "SETUPWS");
 		
 		defaultWorkspace = getInstance();
 		

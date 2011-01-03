@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.validator.NotNull;
+import org.msh.tb.log.FieldLog;
 
 @Entity
 public class Laboratory extends WSObject implements Serializable {
@@ -36,6 +37,7 @@ public class Laboratory extends WSObject implements Serializable {
 	private HealthSystem healthSystem;
 
 	@Column(length=50)
+	@FieldLog(key="global.legacyId")
 	private String legacyId;
 
 	@Override

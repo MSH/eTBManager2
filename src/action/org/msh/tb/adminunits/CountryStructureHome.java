@@ -5,9 +5,11 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.mdrtb.entities.CountryStructure;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.log.LogInfo;
 
 
 @Name("countryStructureHome")
+@LogInfo(roleName="ADMSTR")
 public class CountryStructureHome extends EntityHomeEx<CountryStructure> {
 	private static final long serialVersionUID = -3711659526254901707L;
 

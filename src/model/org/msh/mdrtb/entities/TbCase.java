@@ -66,7 +66,7 @@ public class TbCase implements Serializable{
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="PATIENT_ID")
 	@NotNull
-	@FieldLog(logFields=true)
+	@FieldLog(logEntityFields=true)
 	private Patient patient;
 	
 	private Integer age;
@@ -87,7 +87,7 @@ public class TbCase implements Serializable{
 		@AttributeOverride(name="iniDate", column=@Column(name="iniTreatmentDate")),
 		@AttributeOverride(name="endDate", column=@Column(name="endTreatmentDate"))
 	})
-	@FieldLog(logFields=true)
+	@FieldLog(logEntityFields=true)
 	private Period treatmentPeriod = new Period();
 	
 	@Temporal(TemporalType.DATE)
@@ -149,6 +149,7 @@ public class TbCase implements Serializable{
 	private String otherOutcome;
 	
 	@Column(length=50)
+	@FieldLog(key="global.legacyId")
 	private String legacyId;
 	
 	@ManyToOne(fetch=FetchType.LAZY)

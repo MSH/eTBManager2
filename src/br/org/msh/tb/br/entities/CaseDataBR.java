@@ -21,6 +21,7 @@ import org.msh.mdrtb.entities.FieldValueComponent;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.tb.br.entities.enums.FailureType;
 import org.msh.tb.br.entities.enums.TipoResistencia;
+import org.msh.tb.log.FieldLog;
 
 @Entity
 public class CaseDataBR {
@@ -31,6 +32,7 @@ public class CaseDataBR {
 	// specific information by country
 	@OneToOne(cascade={CascadeType.ALL})
 	@PrimaryKeyJoinColumn
+	@FieldLog(logEntityFields=true)
 	private TbCase tbcase;
 
 	@Column(length=100)

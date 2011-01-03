@@ -117,7 +117,7 @@ public class SystemConfigHome {
 		if (workspace == null) {
 			workspace = getSystemConfig().getWorkspace();
 			logService = new LogService();
-			logService.startEntityMonitoring(getSystemConfig(), false, null);
+			logService.startEntityMonitoring(getSystemConfig(), false);
 		}
 	}
 

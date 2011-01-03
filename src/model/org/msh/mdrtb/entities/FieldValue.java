@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.msh.mdrtb.entities.enums.TbField;
+import org.msh.tb.log.FieldLog;
 
 /**
  * Stores data about a field value from TB forms
@@ -27,6 +28,7 @@ public class FieldValue extends WSObject implements Serializable {
     private Integer id;
 
 	@Embedded
+	@FieldLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@Embedded

@@ -110,7 +110,7 @@
 		<a:repeat value="#{it.logValues}" var="v">
 			<tr>
 				<td>
-					#{messages[v.messageKey]}
+					<ul style="margin:0px;padding-left:20px;"><li>#{messages[v.messageKey]}</li></ul>
 				</td>
 				<s:fragment rendered="#{it.hasPrevValues}">
 				<td>

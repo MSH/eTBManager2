@@ -31,6 +31,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.validator.Email;
 import org.hibernate.validator.NotNull;
 import org.msh.mdrtb.entities.enums.UserState;
+import org.msh.tb.log.FieldLog;
 
 
 /**
@@ -88,6 +89,7 @@ public class User implements java.io.Serializable {
 	private Date registrationDate;
 
 	@Column(length=50)
+	@FieldLog(key="global.legacyId")
 	private String legacyId;
 
 	

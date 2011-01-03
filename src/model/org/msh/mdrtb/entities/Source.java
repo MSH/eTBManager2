@@ -22,7 +22,7 @@ public class Source extends WSObject implements Serializable {
 	private Integer id;
 
 	@Embedded
-	@FieldLog(logFields=true)
+	@FieldLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@Embedded

@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 
 import org.msh.mdrtb.entities.enums.MedicineCategory;
 import org.msh.mdrtb.entities.enums.MedicineLine;
+import org.msh.tb.log.FieldLog;
 
 @Entity
 public class Medicine extends WSObject implements Serializable{
@@ -27,6 +28,7 @@ public class Medicine extends WSObject implements Serializable{
 	private Integer id;
 	
 	@Embedded
+	@FieldLog(key="form.name")
 	private LocalizedNameComp genericName= new LocalizedNameComp();
 	
 	@Column(length=30)
@@ -42,6 +44,7 @@ public class Medicine extends WSObject implements Serializable{
 	private String dosageForm;
 
 	@Column(length=50)
+	@FieldLog(key="global.legacyId")
 	private String legacyId;
 
 	private MedicineCategory category;

@@ -36,6 +36,7 @@ public class Workspace implements Serializable {
 	private Integer id;
 
 	@Embedded
+	@FieldLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@OneToMany(mappedBy="workspace", cascade={CascadeType.PERSIST, CascadeType.REMOVE})

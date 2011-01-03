@@ -7,9 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Embeddable;
-
 import org.apache.commons.beanutils.PropertyUtils;
+import org.hibernate.Hibernate;
 import org.msh.mdrtb.entities.LogValue;
 
 public class BeanState {
@@ -17,13 +16,12 @@ public class BeanState {
 	private boolean newBean;
 	private Object bean;
 	private Map<String, Object> state = new HashMap<String, Object>();
-	private List<String> extraNestedProperties;
+	private Map<String, FieldLog> fieldsLog = new HashMap<String, FieldLog>();
 
-	public BeanState(Object bean, boolean newBean, List<String> extraNestedProperties) {
+	public BeanState(Object bean, boolean newBean) {
 		super();
 		this.bean = bean;
 		this.newBean = newBean;
-		this.extraNestedProperties = extraNestedProperties;
 		
 		if (!this.newBean)
 			addProperties(bean, "");
@@ -57,22 +55,24 @@ public class BeanState {
 			// recupera novo valor
 			try {
 				newValue = PropertyUtils.getProperty(bean, prop);
+				if ((newValue != null) && (!isPrimitiveType(newValue)))
+					newValue = newValue.toString();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
-			// compara valores anterior e atual da propriedade
+/*			// compara valores anterior e atual da propriedade
 			boolean bChanged;
 			if ((oldValue != null) && (newValue != null)) {
 				if (oldValue instanceof Date) {
 					bChanged = ((Date)oldValue).compareTo((Date)newValue) != 0;
 				}
-				else bChanged = !oldValue.toString().equals(newValue.toString());
+				else bChanged = !oldValue.equals(newValue);
 			}
 			else bChanged = oldValue != newValue;
 			
-			// propriedade foi modificada ?
-			if (bChanged) {
+*/			// propriedade foi modificada ?
+			if (!isValuesEquals(oldValue, newValue)) {
 				lst.add(createValue(prop, oldValue, newValue));
 			}
 		}
@@ -81,33 +81,85 @@ public class BeanState {
 	}
 
 	
-	protected LogValue createValue(String key, Object prevValue, Object newValue) {
-		LogValue val = new LogValue();
+	/**
+	 * Compare previous and new values of a log record
+	 * @param val1
+	 * @param val2
+	 * @return
+	 */
+	public boolean isValuesEquals(Object val1, Object val2) {
+		if ((val1 instanceof String) && (val1.toString().isEmpty()))
+			val1 = null;
 		
-		Object obj = (prevValue != null? prevValue: newValue);
+		if ((val2 instanceof String) && (val2.toString().isEmpty()))
+			val2 = null;
+		
+		if ((val1 == null) && (val2 == null))
+			return true;
 
-		if ((obj instanceof String) || (obj instanceof Number) || 
-			(obj instanceof Boolean) ||	(obj instanceof Date)) {
-			key = translateKey(key);
+		if ((val1 != null) && (val2 != null)) {
+			if (val1 instanceof Date)
+				 return ((Date)val1).compareTo((Date)val2) == 0;
+			else return val1.equals(val2);
 		}
-		else
-		if (obj instanceof Enum)
-			key = obj.getClass().getSimpleName();
+		else return false;
+	}
 
+	
+	/**
+	 * Create an object {@link LogValue} to be registered in the logging system
+	 * @param key
+	 * @param prevValue
+	 * @param newValue
+	 * @return
+	 */
+	protected LogValue createValue(String key, Object prevValue, Object newValue) {
+		// translate key according to values and context
+		FieldLog fieldLog = fieldsLog.get(key);
+		if ((fieldLog != null) && (!fieldLog.key().isEmpty())) {
+			key = fieldLog.key();
+		}
+		else {
+			// check if it's an enumeration
+			Object obj = (prevValue != null ? prevValue : newValue);
+			
+			if (obj instanceof Enum) {
+				key = obj.getClass().getSimpleName(); 
+			}
+			
+			// check if key is nested property  
+			int pos = key.lastIndexOf('.');
+			if (pos >= 0) {
+				String prop1 = key.substring(0, pos);
+				String prop2 = key.substring(pos, key.length());
+				try {
+					Object val = PropertyUtils.getProperty(bean, prop1);
+					Class clazz = Hibernate.getClass(val);
+//					Class clazz = HibernateProxyHelper.getClassWithoutInitializingProxy(val.getClass());
+					key = clazz.getSimpleName() + prop2;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			else key = '.' + key;
+		}
+		
+		LogValue val = new LogValue();
 		val.setKey(key);
 		val.setPrevObjectValue(prevValue);
 		val.setNewObjectValue(newValue);
 		
 		return val;
 	}
-
+	
+	
 	
 	/**
 	 * Translate the names to the corresponding names in the list of messages
 	 * @param key
 	 * @return
 	 */
-	protected String translateKey(String key) {
+/*	protected String translateKey(String key) {
 		if (key.equals("name.name1"))
 			return "form.name";
 		
@@ -122,7 +174,7 @@ public class BeanState {
 		
 		return "." + key;
 	}
-
+*/
 	/**
 	 * Return the bean with state mapped
 	 * @return
@@ -145,12 +197,12 @@ public class BeanState {
 		return state;
 	}
 	
-
+/*
 	
-	/**
+	*//**
 	 * Add extra nested properties to the state
 	 * @param obj
-	 */
+	 *//*
 	protected void addExtraNestedProperties(Object obj) {
 		List<String> props = getExtraNestedProperties();
 		if (props == null)
@@ -164,8 +216,43 @@ public class BeanState {
 			}			
 		}
 	}
-
+*/
 	
+	/**
+	 * Return the annotation {@link FieldLog} associated to the field
+	 * @param obj
+	 * @param propertyName
+	 * @return
+	 */
+	public FieldLog getFieldLog(Object obj, String propertyName) {
+		try {
+			Field fld = obj.getClass().getDeclaredField(propertyName);						
+			return (FieldLog)fld.getAnnotation(FieldLog.class);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+
+	private Field findField(Object obj, String fieldName) {
+		Class clazz = obj.getClass();
+		while (clazz != null) {
+			try {
+				return clazz.getDeclaredField(fieldName);
+			} catch (SecurityException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			} catch (NoSuchFieldException e) {
+				clazz = clazz.getSuperclass();
+				// is the root class ?
+				if (clazz == Object.class)
+					break;
+			}
+		}
+		return null;
+	}
+
+
 	/**
 	 * Map the properties of the bean to the propstate Map
 	 * @param obj
@@ -173,9 +260,6 @@ public class BeanState {
 	 * @param propertyName
 	 */
 	protected void addProperties(Object obj, String propertyName) {
-		if (propertyName.isEmpty())
-			addExtraNestedProperties(obj);
-		
 		try {
 			Map<String, Object> vals = PropertyUtils.describe(obj);
 
@@ -184,31 +268,31 @@ public class BeanState {
 			vals.remove("id");
 
 			for (String key: vals.keySet()) {
-				if (PropertyUtils.isWriteable(obj, key)) {
+				Field fld = findField(obj, key);
+				if (fld != null) {
 					Object value = vals.get(key);
 					
 					// check for specific log instructions
-					org.msh.tb.log.FieldLog logValAnot;
-					try {
-						Field fld = obj.getClass().getDeclaredField(key);						
-						logValAnot = (org.msh.tb.log.FieldLog)fld.getAnnotation(org.msh.tb.log.FieldLog.class);
-					} catch (Exception e) {
-						logValAnot = null;
-					}
+					FieldLog logValAnot = getFieldLog(obj, key);
 
-					// should log for this property be ignored
+					// shall logging for this property be ignored
 					boolean ignore = false;
-					if (logValAnot != null)
+					if (logValAnot != null) {
 						ignore = logValAnot.ignore();
-					
-					Class cl = PropertyUtils.getPropertyType(obj, key);
+						fieldsLog.put(key, logValAnot);
+					}
 					
 					if (!ignore) {
-						if (cl.getAnnotation(Embeddable.class) != null) {
-							if (value != null)
-								addProperties(value, key + ".");
+						boolean logEntityFields = (logValAnot != null) && (logValAnot.logEntityFields());
+						if (logEntityFields)
+							 addProperties(value, key + ".");
+						else {
+							// check if it's not a primitive type, if so, the string representation is returned
+							if ((value != null) && (!isPrimitiveType(value)))
+								value = value.toString();
+							state.put(propertyName + key, value);	
+							System.out.println(propertyName+key + "=" + value + " " + (value!=null? value.getClass().toString(): null));
 						}
-						else state.put(propertyName + key, value);						
 					}
 				}
 			}
@@ -219,25 +303,28 @@ public class BeanState {
 	}
 	
 	
+	/**
+	 * Check if value is a primitive type and can be directly compared to each other using method equals()
+	 * @param obj
+	 * @return
+	 */
+	public boolean isPrimitiveType(Object obj) {
+		Class clazz = obj.getClass();
+		return clazz.equals(String.class) || 
+			clazz.equals(Boolean.class) || 
+        	clazz.equals(Integer.class) ||
+        	(obj instanceof Date) ||
+        	(obj instanceof Number) ||
+        	clazz.equals(Byte.class) ||
+        	clazz.equals(Short.class) ||
+        	clazz.equals(Double.class) ||
+        	clazz.equals(Long.class) ||
+        	clazz.equals(Character.class) ||
+        	clazz.equals(Float.class);
+	}
+	
 	public boolean isNewBean() {
 		return newBean;
-	}
-
-
-
-	/**
-	 * @return the extraNestedProperties
-	 */
-	public List<String> getExtraNestedProperties() {
-		return extraNestedProperties;
-	}
-
-
-	/**
-	 * @param extraNestedProperties the extraNestedProperties to set
-	 */
-	public void setExtraNestedProperties(List<String> extraNestedProperties) {
-		this.extraNestedProperties = extraNestedProperties;
 	}
 
 }

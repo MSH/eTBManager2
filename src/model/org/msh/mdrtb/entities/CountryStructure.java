@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.msh.tb.log.FieldLog;
+
 
 @Entity
 public class CountryStructure extends WSObject implements Serializable{
@@ -19,10 +21,13 @@ public class CountryStructure extends WSObject implements Serializable{
     private Integer id;
 	
 	@Embedded
+	@FieldLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 	
 	@Column(name="STRUCTURE_LEVEL")
 	private int level;
+	
+
 
 	/**
 	 * @return the id
@@ -64,5 +69,13 @@ public class CountryStructure extends WSObject implements Serializable{
 	 */
 	public int getLevel() {
 		return level;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return (name != null? name.toString() : super.toString());
 	}
 }

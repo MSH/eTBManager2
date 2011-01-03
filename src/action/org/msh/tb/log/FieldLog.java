@@ -36,7 +36,7 @@ public @interface FieldLog {
 	 * the value of the entity as a string (using toString) will be used for logging (false). Default value is false
 	 * @return
 	 */
-	boolean logFields() default false;
+	boolean logEntityFields() default false;
 
 
 	/**
