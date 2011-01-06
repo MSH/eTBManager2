@@ -3,10 +3,11 @@ package org.msh.tb.test;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
 
@@ -15,12 +16,17 @@ import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.core.SeamResourceBundle;
 import org.jboss.seam.international.LocaleSelector;
-import org.jboss.seam.international.Messages;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
 
 
+/**
+ * Export system messages to an Excel spreadsheet. The system messages are exported to the languages selected in the languages properties 
+ * @author Ricardo Memoria
+ *
+ */
 @Name("messagesExport")
 @Scope(ScopeType.CONVERSATION)
 public class MessagesExport {
@@ -148,8 +154,11 @@ public class MessagesExport {
 				localeSelector.setLocale(locale);
 				localeSelector.select();
 
-				Map<String, String> msgs = Messages.instance();
-				for (String key: msgs.keySet()) {
+				ResourceBundle bundle = SeamResourceBundle.getBundle();
+
+				Enumeration<String> lstKeys = bundle.getKeys();
+				while (lstKeys.hasMoreElements()) {
+					String key = lstKeys.nextElement();
 					String prefix = getKeyPrefix(key);
 					boolean isLanguagePrefix = (prefix != null) && (langsStr.contains(prefix));
 					if (isLanguagePrefix) {
@@ -160,23 +169,29 @@ public class MessagesExport {
 					else keys.add(key);
 				}
 			}
-
-			// create table of messages
+			
 			for (Locale locale: langs) {
 				localeSelector.setLocale(locale);
 				localeSelector.select();
-				
-				Map<String, String> msgs = Messages.instance();
+
+				ResourceBundle bundle = SeamResourceBundle.getBundle();
+
 				for (String key: keys) {
 					MessageRow row = findRow(key);
-					String value = msgs.get(key);
-					if ((value.equals(key)) && (!locale.getLanguage().equals("en")))
-						value = "";
-					row.getMessages().set(index, value);
+					String value;
+					try {
+						value = bundle.getString(key);
+					}
+					catch (RuntimeException e) {
+						value = null;
+					}
+
+					if (value != null)
+						row.getMessages().set(index, value);
 				}
 				index++;
 			}
-			
+				
 			Collections.sort(messages, new Comparator<MessageRow>() {
 
 				public int compare(MessageRow row1, MessageRow row2) {
@@ -211,11 +226,4 @@ public class MessagesExport {
 		return key.substring(0, pos);
 	}
 	
-/*	private String getLocaleCode(Locale loc) {
-		String s = loc.getLanguage();
-		String aux = loc.getCountry();
-		if ((aux != null) && (!aux.isEmpty()))
-			s += "_" + aux;
-		return s;
-	}
-*/}
+}
