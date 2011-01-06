@@ -75,7 +75,7 @@ public class LocalizedNameComp implements Serializable {
 
 
 	public String getDefaultName() {
-		return (isFirstLanguage() ? getName1() : (getName2() != null || getName2().isEmpty()? name2: name1));
+		return (isFirstLanguage() ? getName1() : (getName2() != null && (!getName2().isEmpty())? name2: name1));
 	}
 	
 	public void setDefaultName(String name) {

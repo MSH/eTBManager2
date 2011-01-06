@@ -34,6 +34,7 @@ public class Substance extends WSObject implements Serializable {
 		@AttributeOverride(name="name1", column=@Column(name="ABBREV_NAME1",length=10)),
 		@AttributeOverride(name="name2", column=@Column(name="ABBREV_NAME2",length=10))
 	})
+	@FieldLog(key="form.abbrevName")
 	private LocalizedNameComp abbrevName = new LocalizedNameComp();
 	
 	private MedicineLine line;
@@ -42,6 +43,7 @@ public class Substance extends WSObject implements Serializable {
 	
 	private boolean dstResultForm;
 	
+	@FieldLog(key="form.displayorder")
 	private Integer prevTreatmentOrder;
 
 	@Column(length=50)

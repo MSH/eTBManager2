@@ -102,9 +102,11 @@ public class TbCase implements Serializable{
 	private Tbunit treatmentUnit;
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@FieldLog(ignore=true)
 	private List<TreatmentHealthUnit> healthUnits = new ArrayList<TreatmentHealthUnit>();
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@FieldLog(ignore=true)
 	private List<PrescribedMedicine> prescribedMedicines = new ArrayList<PrescribedMedicine>();
 
 	@NotNull
@@ -178,6 +180,7 @@ public class TbCase implements Serializable{
 	@AssociationOverrides({
 		@AssociationOverride(name="adminUnit", joinColumns=@JoinColumn(name="NOTIF_ADMINUNIT_ID"))
 	})
+	@FieldLog(logEntityFields=true)
 	private Address notifAddress = new Address();
 	
 	@Embedded
@@ -192,6 +195,7 @@ public class TbCase implements Serializable{
 	@AssociationOverrides({
 		@AssociationOverride(name="adminUnit", joinColumns=@JoinColumn(name="CURR_ADMINUNIT_ID"))
 	})
+	@FieldLog(logEntityFields=true)
 	private Address currentAddress = new Address();
 	
 	@Column(length=50)
@@ -201,36 +205,46 @@ public class TbCase implements Serializable{
 	private String mobileNumber;
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@FieldLog(ignore=true)
 	private List<CaseSideEffect> sideEffects = new ArrayList<CaseSideEffect>();
 
 	@ManyToMany(cascade={CascadeType.ALL})
 	@JoinTable(name="CASE_COMORBIDITIES")
+	@FieldLog(ignore=true)
 	private List<FieldValue> comorbidities = new ArrayList<FieldValue>();
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@FieldLog(ignore=true)
 	private List<MedicalExamination> examinations = new ArrayList<MedicalExamination>();
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@FieldLog(ignore=true)
 	private List<ExamXRay> resXRay = new ArrayList<ExamXRay>();
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@FieldLog(ignore=true)
 	private List<TbContact> contacts = new ArrayList<TbContact>();
 	
 	@OneToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="tbcase")
+	@FieldLog(ignore=true)
 	private List<CaseDispensing> dispensing = new ArrayList<CaseDispensing>();
 	
 
 	/* EXAMS */
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@FieldLog(ignore=true)
 	private List<ExamHIV> resHIV = new ArrayList<ExamHIV>();
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@FieldLog(ignore=true)
 	private List<ExamCulture> examsCulture = new ArrayList<ExamCulture>();
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@FieldLog(ignore=true)
 	private List<ExamMicroscopy> examsMicroscopy = new ArrayList<ExamMicroscopy>();
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@FieldLog(ignore=true)
 	private List<ExamDST> examsDST = new ArrayList<ExamDST>();
 	
 	private int issueCounter;

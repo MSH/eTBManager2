@@ -169,7 +169,10 @@ public class MessagesExport {
 				Map<String, String> msgs = Messages.instance();
 				for (String key: keys) {
 					MessageRow row = findRow(key);
-					row.getMessages().set(index, msgs.get(key));
+					String value = msgs.get(key);
+					if ((value.equals(key)) && (!locale.getLanguage().equals("en")))
+						value = "";
+					row.getMessages().set(index, value);
 				}
 				index++;
 			}

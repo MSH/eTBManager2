@@ -78,9 +78,12 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	@Factory("caseDataBR")
 	public CaseDataBR getCaseDataBR() {
 		try {
-			entityManager.createQuery("from CaseDataBR c where c.tbcase.id = #{caseHome.id}").getSingleResult();
+			if (caseHome.getId() != null) {
+				entityManager.createQuery("from CaseDataBR c where c.tbcase.id = #{caseHome.id}").getSingleResult();
+				getAuselection().setSelectedUnit(getInstance().getAdminUnitUsOrigem());
+				caseHome.getLogService().addEntityMonitoring(getInstance());
+			}
 			setId(caseHome.getId());
-			getAuselection().setSelectedUnit(getInstance().getAdminUnitUsOrigem());
 		} catch (Exception e) {
 			setId(null);
 		}

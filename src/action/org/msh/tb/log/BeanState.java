@@ -61,17 +61,7 @@ public class BeanState {
 				e.printStackTrace();
 			}
 
-/*			// compara valores anterior e atual da propriedade
-			boolean bChanged;
-			if ((oldValue != null) && (newValue != null)) {
-				if (oldValue instanceof Date) {
-					bChanged = ((Date)oldValue).compareTo((Date)newValue) != 0;
-				}
-				else bChanged = !oldValue.equals(newValue);
-			}
-			else bChanged = oldValue != newValue;
-			
-*/			// propriedade foi modificada ?
+			// propriedade foi modificada ?
 			if (!isValuesEquals(oldValue, newValue)) {
 				lst.add(createValue(prop, oldValue, newValue));
 			}
@@ -126,22 +116,22 @@ public class BeanState {
 			if (obj instanceof Enum) {
 				key = obj.getClass().getSimpleName(); 
 			}
-			
-			// check if key is nested property  
-			int pos = key.lastIndexOf('.');
-			if (pos >= 0) {
-				String prop1 = key.substring(0, pos);
-				String prop2 = key.substring(pos, key.length());
-				try {
-					Object val = PropertyUtils.getProperty(bean, prop1);
-					Class clazz = Hibernate.getClass(val);
-//					Class clazz = HibernateProxyHelper.getClassWithoutInitializingProxy(val.getClass());
-					key = clazz.getSimpleName() + prop2;
-				} catch (Exception e) {
-					e.printStackTrace();
+			else {
+				// check if key is nested property  
+				int pos = key.lastIndexOf('.');
+				if (pos >= 0) {
+					String prop1 = key.substring(0, pos);
+					String prop2 = key.substring(pos, key.length());
+					try {
+						Object val = PropertyUtils.getProperty(bean, prop1);
+						Class clazz = Hibernate.getClass(val);
+						key = clazz.getSimpleName() + prop2;
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
+				else key = '.' + key;
 			}
-			else key = '.' + key;
 		}
 		
 		LogValue val = new LogValue();
@@ -290,8 +280,7 @@ public class BeanState {
 							// check if it's not a primitive type, if so, the string representation is returned
 							if ((value != null) && (!isPrimitiveType(value)))
 								value = value.toString();
-							state.put(propertyName + key, value);	
-							System.out.println(propertyName+key + "=" + value + " " + (value!=null? value.getClass().toString(): null));
+							state.put(propertyName + key, value);
 						}
 					}
 				}
@@ -315,6 +304,7 @@ public class BeanState {
         	clazz.equals(Integer.class) ||
         	(obj instanceof Date) ||
         	(obj instanceof Number) ||
+        	(obj instanceof Enum) ||
         	clazz.equals(Byte.class) ||
         	clazz.equals(Short.class) ||
         	clazz.equals(Double.class) ||

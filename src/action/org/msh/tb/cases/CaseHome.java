@@ -241,13 +241,11 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	/* (non-Javadoc)
 	 * @see org.msh.tb.EntityHomeEx#initTransactionLog()
 	 */
-	@Override
+/*	@Override
 	public void initTransactionLog() {
 		super.initTransactionLog();
-		
-		getLogService().addEntityMonitoring(getInstance().getPatient());
 	}
-	
+*/	
 	public List<TbCase> getOtherCases() {
 		if (otherCases == null) {
 			otherCases = getEntityManager().createQuery("from TbCase c " +
