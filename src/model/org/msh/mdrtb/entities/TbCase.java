@@ -208,7 +208,7 @@ public class TbCase implements Serializable{
 	@FieldLog(ignore=true)
 	private List<CaseSideEffect> sideEffects = new ArrayList<CaseSideEffect>();
 
-	@ManyToMany(cascade={CascadeType.ALL})
+	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
 	@JoinTable(name="CASE_COMORBIDITIES")
 	@FieldLog(ignore=true)
 	private List<FieldValue> comorbidities = new ArrayList<FieldValue>();

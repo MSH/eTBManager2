@@ -151,7 +151,7 @@ public class LogService {
 	 * @param values
 	 * @return {@link TransactionLog} object containing transaction log registered
 	 */
-	protected TransactionLog saveTransaction(Object entity, String role, RoleAction action) {
+	public TransactionLog saveTransaction(Object entity, String role, RoleAction action) {
 		UserRole userRole = getUserRole(role);
 		
 		TransactionLog log = new TransactionLog();
