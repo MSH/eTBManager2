@@ -472,7 +472,10 @@ public class IndicatorTable {
 	 * @return
 	 */
 	public TableRow addRow(String rowTitle, Object id) {
-		TableRow row = findRowByTitle(rowTitle);
+		TableRow row;
+		if (id != null)
+			 row = findRowById(id);
+		else row = findRowByTitle(rowTitle);
 		
 		if (row == null) {
 			row = new TableRow(this, rowTitle, id);

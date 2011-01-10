@@ -48,19 +48,19 @@
 		
         <mkdir dir="build/classes"/>
         <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/action" excludes="**/*.launch, **/*.java"/>
+            <fileset dir="src/action" excludes="**/*.launch, **/*.java, **/*.html"/>
         </copy>
         <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/model" excludes="**/*.launch, **/*.java"/>
+            <fileset dir="src/model" excludes="**/*.launch, **/*.java, **/*.html"/>
         </copy>
         <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/ph" excludes="**/*.launch, **/*.java"/>
+            <fileset dir="src/ph" excludes="**/*.launch, **/*.java, **/*.html"/>
         </copy>
         <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/ua" excludes="**/*.launch, **/*.java"/>
+            <fileset dir="src/ua" excludes="**/*.launch, **/*.java, **/*.html"/>
         </copy>
         <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/in" excludes="**/*.launch, **/*.java"/>
+            <fileset dir="src/in" excludes="**/*.launch, **/*.java, **/*.html"/>
         </copy>
     </target>
     
@@ -123,6 +123,7 @@
 			<fileset dir="WebContent" >
 				<exclude name="WEB-INF/web.xml"/>
 				<exclude name="WEB-INF/components.xml" />
+				<exclude name="WEB-INF/classes/META-INF/persistence.xml" />
 			</fileset>
 			
 			<classes dir="build/classes">

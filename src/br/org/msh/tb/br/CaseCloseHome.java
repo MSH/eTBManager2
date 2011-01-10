@@ -30,7 +30,6 @@ public class CaseCloseHome extends Controller{
 	private Date date;
 	private CaseState state;
 	private String comment;
-	private ExtraOutcomeInfo extraOutcomeInfo;
 	
 	private static final CaseState[] outcomes = {
 		CaseState.CURED, 
@@ -121,20 +120,6 @@ public class CaseCloseHome extends Controller{
 
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
-
-	/**
-	 * @return the extraInfoInfo
-	 */
-	public ExtraOutcomeInfo getExtraOutcomeInfo() {
-		return extraOutcomeInfo;
-	}
-
-	/**
-	 * @param extraInfoInfo the extraInfoInfo to set
-	 */
-	public void setExtraOutcomeInfo(ExtraOutcomeInfo extraOutcomeInfo) {
-		this.extraOutcomeInfo = extraOutcomeInfo;
 	}
 
 }

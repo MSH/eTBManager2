@@ -10,7 +10,7 @@ public enum ExtraOutcomeInfo {
 	
 	
 	public String getKey() {
-		return getClass().getSimpleName().concat("." + name());
+		return "uk_UA." + getClass().getSimpleName().concat("." + name());
 	}
 
 }

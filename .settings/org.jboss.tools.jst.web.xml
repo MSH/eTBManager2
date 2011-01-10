@@ -113,8 +113,6 @@
   location="C:\java\jboss-4.2.3.GA\client\jboss-transaction-client.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jboss-xml-binding.jar"
   location="C:\java\jboss-4.2.3.GA\client\jboss-xml-binding.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jbossall-client.jar"
-  location="C:\java\jboss-4.2.3.GA\client\jbossall-client.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jbosscx-client.jar"
   location="C:\java\jboss-4.2.3.GA\client\jbosscx-client.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jbossha-client.jar"
@@ -327,12 +325,14 @@
   location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\lib\richfaces-impl-3.3.3.Final.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-richfaces-ui-3.3.3.Final.jar"
   location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\lib\richfaces-ui-3.3.3.Final.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-hibernate-search.jar"
-  location="C:\Java\jboss-4.2.3.GA\client\hibernate-search.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-hibernate.jar"
   location="C:\Java\jboss-4.2.3.GA\client\hibernate.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-lucene-core.jar"
   location="C:\Java\jboss-4.2.3.GA\server\default\lib\lucene-core.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-hibernate-search.jar"
+  location="C:\Java\jboss-4.2.3.GA\server\default\lib\hibernate-search.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jbossall-client.jar"
+  location="C:\Java\jboss-4.2.3.GA\client\jbossall-client.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>
