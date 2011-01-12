@@ -50,19 +50,19 @@
         <mkdir dir="build/classes"/>
 		<delete file="build/classes/*.*" />
         <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/action" excludes="**/*.launch, **/*.java"/>
+            <fileset dir="src/action" excludes="**/*.launch, **/*.java, **/*.html"/>
         </copy>
         <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/model" excludes="**/*.launch, **/*.java"/>
+            <fileset dir="src/model" excludes="**/*.launch, **/*.java, **/*.html, **/*.properties"/>
         </copy>
         <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/ph" excludes="**/*.launch, **/*.java"/>
+            <fileset dir="src/ph" excludes="**/*.launch, **/*.java, **/*.html"/>
         </copy>
         <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/ua" excludes="**/*.launch, **/*.java"/>
+            <fileset dir="src/ua" excludes="**/*.launch, **/*.java, **/*.html"/>
         </copy>
         <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/in" excludes="**/*.launch, **/*.java"/>
+            <fileset dir="src/in" excludes="**/*.launch, **/*.java, **/*.html"/>
         </copy>
     </target>
     
@@ -71,8 +71,8 @@
     </target>
     
 	<target depends="clean" name="cleanall"/>
-	
-	
+
+
     <target depends="build-project,war" name="build" />
 	
 	<target depends="init" name="build-project">
@@ -120,11 +120,14 @@
 			<fileset dir="WebContent" >
 				<exclude name="WEB-INF/web.xml"/>
 				<exclude name="WEB-INF/components.xml" />
+				<exclude name="WEB-INF/faces-config.xml" />
+				<exclude name="custom/az/**"/>
 				<exclude name="custom/br/**"/>
 				<exclude name="custom/in/**"/>
 				<exclude name="custom/ke/**"/>
 				<exclude name="custom/ph/**"/>
 				<exclude name="custom/md/**"/>
+				<exclude name="custom/bd/**"/>
 			</fileset>
 			
 			<classes dir="build/classes">
@@ -134,6 +137,7 @@
 				<exclude name="/org/msh/tb/ph/**"/>
 				<exclude name="/org/msh/tb/md/**"/>
 				<exclude name="/org/msh/tb/in/**"/>
+				<exclude name="/org/msh/tb/bd/**"/>
 			</classes>
 			
 			<zipfileset file="production/persistence.xml" prefix="WEB-INF/classes/META-INF" />

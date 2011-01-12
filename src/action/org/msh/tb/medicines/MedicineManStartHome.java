@@ -22,6 +22,7 @@ import org.msh.mdrtb.entities.enums.MovementType;
 import org.msh.tb.MedicinesQuery;
 import org.msh.tb.SourceGroup;
 import org.msh.tb.SourcesQuery;
+import org.msh.tb.log.LogService;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.movs.MovementHome;
 
@@ -170,6 +171,8 @@ public class MedicineManStartHome {
 		
 		entityManager.flush();
 
+		registerStartManLog();
+		
 		return "medman-started";
 	}
 
@@ -190,6 +193,8 @@ public class MedicineManStartHome {
 		entityManager.flush();
 		
 		userSession.setTbunit(unit);
+		
+		registerRemoveManLog();
 		
 		return "medman-cancelled";
 	}
@@ -219,6 +224,44 @@ public class MedicineManStartHome {
 		entityManager.createQuery(hql).setParameter("id", unit.getId()).executeUpdate();
 	}
 
+	
+	/**
+	 * Register in the logging system the starting of the unit in the medicine management control
+	 */
+	public void registerStartManLog() {
+		LogService logService = new LogService();
+		Tbunit unit = userSession.getTbunit();
+		
+		logService.addValue("Tbunit.medManStartDate", unit.getMedManStartDate());
+		for (SourceInfo si: sourcesInfo) {
+			String meds = "";
+			for (MedicineInfo medInfo: si.getItems()) {
+				if (medInfo.getBatches().size() > 0) {
+					if (!meds.isEmpty())
+						meds += ", ";
+					meds += medInfo.getMedicine().getFullAbbrevName();
+				}
+			}
+			if (!meds.isEmpty()) {
+				meds = si.getSource().getAbbrevName() + " [" + meds + "]";
+				logService.addValue("form.selectedmeds", meds);
+			}
+		}
+		logService.saveExecuteTransaction(unit, "MED_INIT");
+	}
+
+
+	/**
+	 * Register in the logging system the removing of the unit from the medicine management control 
+	 */
+	public void registerRemoveManLog() {
+		LogService logService = new LogService();
+		Tbunit unit = userSession.getTbunit();
+		
+		unit = entityManager.merge(unit);
+
+		logService.saveExecuteTransaction(unit, "MED_INIT_REM");
+	}
 
 /*	*//**
 	 * @param med
