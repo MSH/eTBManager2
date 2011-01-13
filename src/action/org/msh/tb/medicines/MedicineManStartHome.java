@@ -31,6 +31,11 @@ import org.msh.tb.medicines.movs.MovementHome;
  * @author Ricardo Memoria
  *
  */
+/**
+ * Handle actions to include and remove a TB unit from the medicine module control
+ * @author Ricardo Memoria
+ *
+ */
 @Name("medicineManStartHome")
 @Scope(ScopeType.CONVERSATION)
 public class MedicineManStartHome {
@@ -51,7 +56,7 @@ public class MedicineManStartHome {
 
 
 	/**
-	 * Initialize medicine management starting
+	 * Initialize medicine module control for UI processing
 	 */
 	public void initialize() {
 		if (sourcesInfo != null)
@@ -74,7 +79,7 @@ public class MedicineManStartHome {
 
 
 	/**
-	 * Start new batch editing
+	 * Start new batch form for UI processing
 	 * @param medicine
 	 */
 	public void startNewBatch(MedicineInfo medicineInfo) {
@@ -87,7 +92,7 @@ public class MedicineManStartHome {
 	
 
 	/**
-	 * Start editing of a batch
+	 * Start editing of an existing batch for UI processing
 	 * @param medInfo
 	 * @param batch
 	 */
@@ -100,7 +105,7 @@ public class MedicineManStartHome {
 
 	
 	/**
-	 * Delete a batch from the medicines
+	 * Delete a batch from one specific medicine entered by the user
 	 * @param medInfo
 	 * @param batch
 	 */
@@ -110,7 +115,7 @@ public class MedicineManStartHome {
 
 	
 	/**
-	 * Finish editing of a batch
+	 * Finish editing of a batch done by the user
 	 */
 	public void finishBatchEditing() {
 		if (batchQuantity == null)
@@ -131,7 +136,8 @@ public class MedicineManStartHome {
 
 	
 	/**
-	 * Start the medicine management control
+	 * Start the medicine management control, specifying the starting date of the control
+	 * and initializing the stock in unit based on the medicines and batches selected by the user in the UI   
 	 * @return
 	 */
 	@Transactional
@@ -178,7 +184,8 @@ public class MedicineManStartHome {
 
 
 	/**
-	 * Cancel  medicine management control in a TB unit. All stock information will be deleted after this operation 
+	 * Cancel  medicine management control in a TB unit. All medicine information of the TB Unit will be deleted after this operation
+	 * and the TB unit will be out of the medicine module control 
 	 * @return
 	 */
 	@Transactional

@@ -24,50 +24,7 @@
 <a:form id="main">
 <table style="width:100%"><tr><td>
 
-	<ui:include src="casedataedt.xhtml" />	
-
-	<s:decorate template="/layout/roundrect.xhtml" style="clear:both;display:block;">
-		<ui:define name="header">
-			<b>#{messages['MedicalExamination']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
-		<div><table width="99%" style="border-collapse:collapse;"><tr><td>
-    		<s:decorate template="/layout/dateedit.xhtml" >
-    			<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
-    			<ui:param name="required" value="false" /> 
-    			<ui:param name="datefield" value="#{medicalExamination.date}" /> 
-    		</s:decorate>
-		
-		    <s:decorate template="/layout/edit.xhtml" >
-		    	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
-		    	<h:inputText value="#{medicalExamination.responsible}" style=" width : 340px;" maxlength="100"/>
-	    	</s:decorate>
-    
-    	<s:decorate template="/layout/edit.xhtml" >
-    		<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
-    		<h:inputText value="#{medicalExamination.height}" required="false">
-    		</h:inputText>
-    		#{messages['MedicalExamination.height.unit']}
-    	</s:decorate>
-
-    
-    	<s:decorate template="/layout/edit.xhtml" >
-    		<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
-    		<h:inputText value="#{medicalExamination.weight}" required="false"/>#{messages['MedicalExamination.weight.unit']}
-    	</s:decorate>
-    
-
-		    <s:decorate template="/layout/textarea.xhtml" >
-		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-		    	<ui:param name="maxlength" value="250" />
-		    	<ui:param name="field" value="#{medicalExamination.comments}" />
-		    	<ui:param name="style" value="width : 500px; height:100px;" />
-		    </s:decorate>
-		</td></tr></table>
-		</div>
-	</s:decorate>
-
+	<ui:include src="/cases/casedataedt.xhtml" />	
 
 	<p/>
 	<table width="100%"><tr><td align="right">

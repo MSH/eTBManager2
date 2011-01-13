@@ -322,10 +322,11 @@ public class ForecastingCalculation {
 						fm.setDispensingLeadTime(fm.getDispensingLeadTime() + qtd);
 					else
 					if (i == monthIndexIniDate) { // is last month of lead time ?
-						qtd = calcConsumptionCaseOnTreatment(prescDrug, new Period(dtIni, forecasting.getIniDate()));
-						fm.setDispensingLeadTime(fm.getDispensingLeadTime() + qtd);
+						int qtd2 = calcConsumptionCaseOnTreatment(prescDrug, new Period(dtIni, forecasting.getIniDate()));
+						fm.setDispensingLeadTime(fm.getDispensingLeadTime() + qtd2);
+						fm.setEstimatedQtyCases(qtd - qtd2);
 					}
-					fm.setEstimatedQtyCases(fm.getEstimatedQtyCases() + qtd);
+					else fm.setEstimatedQtyCases(fm.getEstimatedQtyCases() + qtd);
 					
 					// update batches consumption
 					List<ForecastingBatch> lst = getBatchesMonth(fm, i);
