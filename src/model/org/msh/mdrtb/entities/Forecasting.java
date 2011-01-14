@@ -139,11 +139,15 @@ public class Forecasting extends WSObject implements Serializable {
 		if ((referenceDate == null) || (iniDate == null))
 			return null;
 
-		int months = DateUtils.monthsBetween(referenceDate, iniDate);
+		Date dt = DateUtils.incMonths(referenceDate, leadTime);
+		if (dt.after(iniDate))
+			 return dt;
+		else return iniDate;
+/*		int months = DateUtils.monthsBetween(referenceDate, iniDate);
 		if (months > leadTime)
 			 return iniDate;
 		else return DateUtils.incMonths(iniDate, leadTime - months);
-	}
+*/	}
 	
 	/**
 	 * Clear all results

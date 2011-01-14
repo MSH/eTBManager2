@@ -29,6 +29,7 @@
 	<h:selectOneMenu id="cbunits" value="#{tbunitselection.tbunit}" required="#{required}" rendered="#{!tbunitselection.readOnly}">
         <s:selectItems value="#{tbunitselection.options}" var="it" label="#{it.name}" noSelectionLabel="-" />
       	<s:convertEntity/>
+      	<ui:insert name="events" />
     </h:selectOneMenu>
     <h:outputText value="#{tbunitselection.tbunit}" rendered="#{tbunitselection.readOnly}" />
     <ui:insert />

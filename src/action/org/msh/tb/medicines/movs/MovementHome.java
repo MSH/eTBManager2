@@ -33,7 +33,7 @@ public class MovementHome {
 
 
 	/**
-	 * Generates a new stock medicine transaction
+	 * Generates a new stock medicine transaction. The new movement will influence in the stock quantity of the medicine in the TB Unit
 	 * @param date
 	 * @param unit
 	 * @param source

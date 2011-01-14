@@ -1,5 +1,6 @@
 package org.msh.tb.tbunits;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jboss.seam.Component;
@@ -40,6 +41,7 @@ public class TBUnitSelection {
 	
 	private TbunitSelectionList options;
 
+	private List<TbunitChangeListener> listeners;
 	
 	/**
 	 * Return the TB Unit selected by the user
@@ -55,9 +57,13 @@ public class TBUnitSelection {
 	 * @param unit to be selected
 	 */
 	public void setTbunit(Tbunit unit) {
+		if (this.tbunit == unit)
+			return;
+		
 		if (unit != null) 
 			getAuselection().setSelectedUnit( unit.getAdminUnit().getParentLevel1() );
 		this.tbunit = unit;
+		notifyChange();
 	}
 
 	
@@ -75,6 +81,18 @@ public class TBUnitSelection {
 	 */
 	public List<AdministrativeUnit> getParentUnits() {
 		return getAuselection().getParentUnits();
+	}
+
+	
+	/**
+	 * Notify about selection changing 
+	 */
+	protected void notifyChange() {
+		if (listeners == null)
+			return;
+
+		for (TbunitChangeListener lst: listeners)
+			lst.notifyTbunitChange(this);
 	}
 
 
@@ -113,7 +131,29 @@ public class TBUnitSelection {
 		return null;
 	}
 
-	
+
+	/**
+	 * Include a listener to receive notification about selection changing
+	 * @param listener
+	 */
+	public void addListener(TbunitChangeListener listener) {
+		if (listeners == null)
+			listeners = new ArrayList<TbunitChangeListener>();
+		listeners.add(listener);
+	}
+
+
+	/**
+	 * Remove a notification changing listener
+	 * @param listener
+	 */
+	public void remListener(TbunitChangeListener listener) {
+		if (listeners == null)
+			return;
+		listeners.remove(listener);
+	}
+
+
 	public String getLabelAdminUnit() {
 		return getAuselection().getLabelLevel1();
 	}

@@ -25,6 +25,7 @@ import org.msh.mdrtb.entities.WeeklyFrequency;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.MedicineLine;
 import org.msh.mdrtb.entities.enums.RegimenPhase;
+import org.msh.mdrtb.entities.enums.UserView;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
@@ -136,11 +137,22 @@ public class ForecastingCalculation {
 					"where pm.medicine.workspace.id = #{defaultWorkspace.id} " +
 					"and tb.state = :val " +
 					"and pm.period.endDate >= :dtIni ";
+
+			// set restriction by medicine line
 			if (MedicineLine.FIRST_LINE.equals(forecasting.getMedicineLine()))
 				hql += " and pm.medicine.line = " + MedicineLine.FIRST_LINE.ordinal();
 			else
 			if (MedicineLine.SECOND_LINE.equals(forecasting.getMedicineLine()))
 				hql += " and pm.medicine.line = " + MedicineLine.SECOND_LINE.ordinal();
+
+			// set restriction by view
+			if ((forecasting.getView() == UserView.TBUNIT) && (forecastingHome.getTbunitSelection().getTbunit() != null)) 
+				hql += "and exists(from TreatmentHealthUnit hu where hu.tbcase.id = pm.tbcase.id and hu.period.endDate = pm.tbcase.treatmentPeriod.endDate " +
+					"and hu.tbunit.id = " + forecastingHome.getTbunitSelection().getTbunit().getId().toString() +")";
+			else
+			if ((forecasting.getView() == UserView.ADMINUNIT) && (forecastingHome.getAdminUnitSelection().getSelectedUnit() != null))
+				hql += "and exists(from TreatmentHealthUnit hu where hu.tbcase.id = pm.tbcase.id and hu.period.endDate = pm.tbcase.treatmentPeriod.endDate " +
+					"and hu.tbunit.adminUnit.code like '" + forecastingHome.getAdminUnitSelection().getSelectedUnit().getCode() + "%')";
 
 			hql += " order by tb.id, pm.medicine.id";
 			casesOnTreatment = entityManager.createQuery(hql)
@@ -322,7 +334,7 @@ public class ForecastingCalculation {
 						fm.setDispensingLeadTime(fm.getDispensingLeadTime() + qtd);
 					else
 					if (i == monthIndexIniDate) { // is last month of lead time ?
-						int qtd2 = calcConsumptionCaseOnTreatment(prescDrug, new Period(dtIni, forecasting.getIniDate()));
+						int qtd2 = calcConsumptionCaseOnTreatment(prescDrug, new Period(dtIni, DateUtils.incDays( forecasting.getIniDate(), -1)));
 						fm.setDispensingLeadTime(fm.getDispensingLeadTime() + qtd2);
 						fm.setEstimatedQtyCases(qtd - qtd2);
 					}

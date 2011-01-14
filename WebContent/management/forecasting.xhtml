@@ -80,7 +80,7 @@
 		<h:selectOneMenu value="#{forecasting.view}">
             <s:selectItems value="#{userViews}" var="it" label="#{messages[it.key]}" hideNoSelectionLabel="true"/>
          	<s:convertEnum />
-         	<a:support event="onchange" reRender="pnlcontext" ajaxSingle="true" />
+         	<a:support event="onchange" reRender="pnlcontext,pnlcasesontreat" ajaxSingle="true" action="#{forecastingView.contextChangeListener}"/>
 		</h:selectOneMenu>
 	</s:decorate>
 
@@ -88,12 +88,16 @@
     <span class="paragraph">#{messages['Tbunit']}</span>
 	<s:decorate template="/layout/tbselection.xhtml">
 		<ui:param name="tbunitselection" value="#{forecastingHome.tbunitSelection}" />
+		<ui:define name="events">
+			<a:support event="onchange" reRender="pnlcasesontreat" ajaxSingle="true" />
+		</ui:define>
 	</s:decorate>
 	</s:fragment>
 
 	<s:fragment rendered="#{forecasting.view == 'ADMINUNIT'}">
 	<s:decorate template="/layout/auselection.xhtml">
 		<ui:param name="auselection" value="#{forecastingHome.adminUnitSelection}" />
+		<ui:param name="rerender" value="pnlcasesontreat" />
 	</s:decorate>
 	</s:fragment>
 
@@ -150,7 +154,7 @@
 	<h:panelGroup id="pnlcasesontreat">
 	<s:decorate template="/layout/display.xhtml" rendered="#{forecasting.casesFromDatabase}">
 		<ui:define name="label">#{messages['manag.forecast.numcases']}:</ui:define>
-		<h:outputText value="#{forecasting.numCasesOnTreatment}" >
+		<h:outputText value="#{forecastingView.numCasesOnTreatment}" >
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
 	</s:decorate>

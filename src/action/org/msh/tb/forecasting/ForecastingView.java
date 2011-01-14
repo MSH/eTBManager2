@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -14,6 +15,7 @@ import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.international.Messages;
+import org.msh.mdrtb.entities.AdministrativeUnit;
 import org.msh.mdrtb.entities.Forecasting;
 import org.msh.mdrtb.entities.ForecastingBatch;
 import org.msh.mdrtb.entities.ForecastingMedicine;
@@ -22,11 +24,16 @@ import org.msh.mdrtb.entities.ForecastingOrder;
 import org.msh.mdrtb.entities.ForecastingRegimen;
 import org.msh.mdrtb.entities.Medicine;
 import org.msh.mdrtb.entities.Regimen;
+import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.MedicineLine;
 import org.msh.mdrtb.entities.enums.UserView;
 import org.msh.tb.MedicinesQuery;
 import org.msh.tb.RegimensQuery;
+import org.msh.tb.adminunits.AdminUnitChangeListener;
+import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.tbunits.TbunitChangeListener;
 import org.msh.utils.date.DateUtils;
 
 
@@ -40,6 +47,12 @@ public class ForecastingView {
 	@In(create=true) EntityManager entityManager;
 	@In(create=true) RegimensQuery regimens;
 	@In(create=true) MedicinesQuery medicines;
+	
+	
+	/**
+	 * store in memory number of cases on treatment
+	 */
+	private Integer numCasesOnTreatment;
 	
 	/**
 	 * Indicate if current UI operation was validated (if so, form can be closed by application)
@@ -96,13 +109,26 @@ public class ForecastingView {
 		dt = DateUtils.incDays( DateUtils.incMonths(dt, 12), -1);
 		forecasting.setEndDate(dt);
 		
-		forecasting.setLeadTime(6);
+		forecasting.setLeadTime(3);
 
+		// add listener to list of administrative units when user selects a new one
+		forecastingHome.getAdminUnitSelection().addListener(new AdminUnitChangeListener() {
+			public void notifyAdminUnitChange(AdminUnitSelection auselection) {
+				numCasesOnTreatment = null;
+			}
+		});
+		
+		// add listener to list of TB units when user selects a new one
+		forecastingHome.getTbunitSelection().addListener(new TbunitChangeListener() {
+			public void notifyTbunitChange(TBUnitSelection tbunitSelection) {
+				numCasesOnTreatment = null;
+			}
+		});
+		
 		medicineLineChangeListener();
 		datesChangeListener();
 		
 		initializeStockOnHand();
-		updateNumCasesOnTreatment();
 		
 		return "initialized";
 	}
@@ -127,7 +153,7 @@ public class ForecastingView {
 		String restriction;
 		Forecasting forecasting = forecastingHome.getInstance();
 		if ((forecasting.getView() == UserView.TBUNIT) && (forecastingHome.getTbunitSelection().getTbunit() != null)) 
-			restriction = "and s.tbunit.id = " + forecastingHome.getTbunitSelection().getTbunit().getId().toString();
+			restriction = "and s.tbunit.medManStartDate is not null and s.tbunit.id = " + forecastingHome.getTbunitSelection().getTbunit().getId().toString();
 		else
 		if ((forecasting.getView() == UserView.ADMINUNIT) && (forecastingHome.getAdminUnitSelection().getSelectedUnit() != null))
 			restriction = "and s.tbunit.adminUnit.code like '" + forecastingHome.getAdminUnitSelection().getSelectedUnit().getCode() + "%'";
@@ -186,10 +212,11 @@ public class ForecastingView {
 		}
 		
 		// update batches to expire
-		hql = "select b.medicine.id, b.expiryDate, sum(a.quantity) " +
-			"from BatchQuantity a join a.batch b " +
-			"where a.quantity > 0 and b.expiryDate > :dt " +
-			"and b.medicine.workspace.id = #{defaultWorkspace.id} " +
+		hql = "select b.medicine.id, b.expiryDate, sum(s.quantity) " +
+			"from BatchQuantity s join s.batch b " +
+			"where s.quantity > 0 and b.expiryDate > :dt " +
+			(restriction != null? restriction: "") +
+			" and b.medicine.workspace.id = #{defaultWorkspace.id} " +
 			"group by b.medicine.id, b.expiryDate";
 		lst = entityManager
 				.createQuery(hql)
@@ -216,12 +243,46 @@ public class ForecastingView {
 	 * Update information about number of new cases on treatment
 	 */
 	public void updateNumCasesOnTreatment() {
-		Long num = (Long) entityManager.createQuery("select count(*) from TbCase c where c.patient.workspace.id = #{defaultWorkspace.id} " +
-				"and c.state = :state")
-				.setParameter("state", CaseState.ONTREATMENT)
-				.getSingleResult();
+		if (numCasesOnTreatment != null)
+			return;
+
+		String hql = "select count(*) from TbCase c where c.patient.workspace.id = #{defaultWorkspace.id} " +
+			"and c.state = :state and c.treatmentPeriod.endDate >= :dt";
+	
 		Forecasting forecasting = forecastingHome.getInstance();
+		UserView view = forecasting.getView();
+		AdministrativeUnit admUnit = forecastingHome.getAdminUnitSelection().getSelectedUnit();
+	
+		if ((view == UserView.ADMINUNIT) && (admUnit != null))
+			hql += " and exists(from TreatmentHealthUnit hu where hu.tbcase.id = c.id and hu.period.endDate = c.treatmentPeriod.endDate " +
+					"and hu.tbunit.adminUnit.code like :aucode)";
+		else admUnit = null;
+		
+		Tbunit unit = forecastingHome.getTbunitSelection().getTbunit();
+		if ((view == UserView.TBUNIT) && (unit != null))
+			hql += " and exists(from TreatmentHealthUnit hu where hu.tbcase.id = c.id and hu.period.endDate = c.treatmentPeriod.endDate " +
+					"and hu.tbunit.id = :unitid)";
+		else unit = null;
+
+		// declare query
+		Query qry = entityManager.createQuery(hql);
+		
+		// set parameters
+		if (admUnit != null)
+			qry.setParameter("aucode", admUnit.getCode() + "%");
+		if (unit != null)
+			qry.setParameter("unitid", unit.getId());
+		
+		Date dt = forecasting.getReferenceDate();
+		
+		// execute query
+		Long num = (Long) qry
+				.setParameter("state", CaseState.ONTREATMENT)
+				.setParameter("dt", dt)
+				.getSingleResult();
+
 		forecasting.setNumCasesOnTreatment(num.intValue());
+		numCasesOnTreatment = num.intValue();
 	}
 
 
@@ -252,6 +313,7 @@ public class ForecastingView {
 				forecasting.getNewCases().remove(c);
 			else i++;
 		}
+		numCasesOnTreatment = null;
 	}
 
 
@@ -370,8 +432,16 @@ public class ForecastingView {
 			}
 		}	
 		casesRegimenTable = null;
+		numCasesOnTreatment = null;
 	}
 
+	
+	/**
+	 * Called when the context in the forecasting is changed by the user
+	 */
+	public void contextChangeListener() {
+		numCasesOnTreatment = null;
+	}
 
 
 	/**
@@ -455,6 +525,16 @@ public class ForecastingView {
 	 */
 	public boolean isValidated() {
 		return validated;
+	}
+
+
+	/**
+	 * @return the numCasesOnTreatment
+	 */
+	public int getNumCasesOnTreatment() {
+		if (numCasesOnTreatment == null)
+			updateNumCasesOnTreatment();
+		return numCasesOnTreatment;
 	}
 	
 }
