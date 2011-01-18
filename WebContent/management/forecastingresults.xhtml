@@ -135,7 +135,7 @@
 </tr>
 <a:repeat value="#{forecastingView.resultTable.rows}" var="r">
 <tr class="highlight">
-	<td rowspan="4" class="colb">
+	<td rowspan="5" class="colb">
 		#{r.medicine.medicine}
 	</td>
 	<td class="colb">
@@ -180,6 +180,18 @@
 	<a:repeat value="#{r.results}" var="s">
 	<td class="colrb">
 		<h:outputText value="#{s.quantityExpired}" rendered="#{s.quantityExpired!=0}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="colb">
+		#{messages['manag.forecast.batchtoexpire']}
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.quantityToExpire}" rendered="#{s.quantityToExpire!=0}">
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
 	</td>

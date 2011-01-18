@@ -246,18 +246,21 @@
 		<tr><td>
     		<s:decorate template="/layout/edit.xhtml" >
     			<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
-    			<h:selectOneMenu value="#{examHIV.result}" required="true" onchange="toggleYesNo(this.selectedIndex=='1'?'0':'1', '#divpos')">
+    			<h:selectOneMenu value="#{examHIV.result}" required="true" onchange="hivResultChangeListener(this);">
     				<s:selectItems value="#{hivResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
     				<s:convertEnum />
     			</h:selectOneMenu>
     		</s:decorate>
     	</td><td>
-    		<s:decorate id="dt" template="/layout/dateedit.xhtml" >
-    			<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
-    			<ui:param name="required" value="true" /> 
+    		<div id="divDateHIV" style="display:none;">
+    		<s:decorate template="/layout/dateedit.xhtml" >
+    			<ui:define name="label">#{messages['cases.exams.dateRelease']}:<span style="color:red">*</span></ui:define>
+    			<ui:param name="required" value="false" /> 
     			<ui:param name="future" value="true" /> 
     			<ui:param name="datefield" value="#{examHIV.date}" /> 
+    			<ui:param name="edtid" value="edthivdate" /> 
     		</s:decorate>
+    		</div>
 		</td></tr>
 		
 		</table>
@@ -483,6 +486,13 @@ function updateDSTResultsView(immediate) {
 	if (b)
 		 jQuery('#tblres').show(immediate?0:500)
 	else jQuery('#tblres').hide(immediate?0:500);
+}
+
+function hivResultChangeListener(cb) {
+	var index = cb.selectedIndex;
+	if (index <= 2)
+		 jQuery('#divDateHIV').slideUp();
+	else jQuery('#divDateHIV').slideDown();
 }
 -->
 </script>

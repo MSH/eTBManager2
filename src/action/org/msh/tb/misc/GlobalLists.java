@@ -154,7 +154,12 @@ public class GlobalLists {
 	};
 
 	private CaseClassification caseClassifications[];
-	
+
+	private static final HIVResult hivResults[] = {
+		HIVResult.ONGOING,
+		HIVResult.NEGATIVE,
+		HIVResult.POSITIVE
+	};
 	
 	/**
 	 * Get component according to the workspace in use
@@ -375,7 +380,7 @@ public class GlobalLists {
 	
 	@Factory("hivResults")
 	public HIVResult[] getHIVResults() {
-		return HIVResult.values();
+		return getComponentValueWorkspace("hivResults", HIVResult[].class, hivResults);
 	}
 	
 	@Factory("cultureResults")

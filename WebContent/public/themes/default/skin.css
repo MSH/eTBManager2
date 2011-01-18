@@ -7,20 +7,20 @@ body {
 div#outer_title {
 	width:100%;
 	background-color:#ffffff;
-	height:50px;
-	min-height:50px;
+	height:30px;
+	min-height:30px;
 	display:table;
 }
 div#title{
-	width:90%;
+	width:100%;
 	margin-left:auto;
 	margin-right:auto;
 	padding:4px;
 	background-color:#fffff;
-	padding-left:16px;
+	padding-left:0px;
 }
 div#outer {
-    width: 90%;
+    width: 100%;
     background-color:#FFFFFF;
     margin-bottom: 10px;
     margin-left: auto;
@@ -807,7 +807,6 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	min-height:18px;
 	height:18px;
 	font-size:10px;
-	height:30px;
 	display:block;
 	font-weight: normal;
 }

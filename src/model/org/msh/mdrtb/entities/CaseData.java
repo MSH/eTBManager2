@@ -28,7 +28,6 @@ public class CaseData {
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="EVENT_DATE")
-	@NotNull
 	private Date date;
 	
 	@Lob
@@ -45,6 +44,8 @@ public class CaseData {
 	 */
 	public Integer getMonthTreatment() {
 		Date dt = getDate();
+		if (dt == null)
+			return null;
 		
 		if (getTbcase() == null)
 			return null;
@@ -57,6 +58,8 @@ public class CaseData {
 	 * @return
 	 */
 	public String getMonthDisplay() {
+		if (date == null)
+			return null;
 		WorkspaceCustomizationService wsservice = WorkspaceCustomizationService.instance();
 		return wsservice.getExamControl().getMonthDisplay(tbcase, getDate());
 /*		Integer num = getMonthTreatment();
@@ -111,6 +114,9 @@ public class CaseData {
 	 */
 	@Override
 	public String toString() {
+		if (date == null)
+			return getTbcase().getPatient().getFullName();
+		
 		Locale locale = LocaleSelector.instance().getLocale();
 		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 		String s = dateFormat.format(getDate());

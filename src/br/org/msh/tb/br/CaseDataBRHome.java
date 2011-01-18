@@ -28,6 +28,7 @@ import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.CultureResult;
 import org.msh.mdrtb.entities.enums.Gender;
+import org.msh.mdrtb.entities.enums.HIVResult;
 import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.mdrtb.entities.enums.MicroscopyResult;
 import org.msh.mdrtb.entities.enums.DstResult;
@@ -354,6 +355,16 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 				res = res || molecularBiologyHome.validate();
 		}
 		
+		
+		// check if HIV exam date was informed
+		if (examHIVHome != null) {
+			ExamHIV examHIV = examHIVHome.getInstance();
+			if ((examHIV.getResult() != HIVResult.NOTDONE) && (examHIV.getResult() != HIVResult.ONGOING)) {
+				facesMessages.addToControlFromResourceBundle("edthivdate", "javax.faces.component.UIInput.REQUIRED");
+				res = false;
+			}
+		}
+		
 //		if ((!caseHome.isManaged()) && (treatmentHealthUnitHome != null) && (treatmentHealthUnitHome.getRegimen() == null))
 //			return false;
 		return res;
@@ -364,6 +375,14 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	 * Save exams results for DST, Culture and microscopy
 	 */
 	protected boolean saveExams() {
+		// check HIV
+		ExamHIV exam = examHIVHome.getInstance();
+		if (exam.getResult() != HIVResult.NOTDONE) {
+			if (exam.getResult() == HIVResult.ONGOING)
+				exam.setDate(null);
+			examHIVHome.persist();
+		}
+
 		if ((examCultureHome == null) || (examMicroscopyHome == null))
 			return true;
 
@@ -427,12 +446,6 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		if (hasResult) {
 			examDSTHome.getInstance().setDateCollected(dtCollected);
 			examDSTHome.persist();
-		}
-		
-		// check HIV
-		ExamHIV exam = examHIVHome.getInstance();
-		if (exam.getResult() != null) {
-			examHIVHome.persist();
 		}
 		
 		return true;

@@ -4,6 +4,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.ClinicalEvolution;
+import org.msh.mdrtb.entities.enums.HIVResult;
 import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.mdrtb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.mdrtb.entities.enums.TbField;
@@ -73,8 +74,24 @@ public class GlobalLists {
 	};
 	
 
+	private static final HIVResult hivResults[] = {
+		HIVResult.NOTDONE,
+		HIVResult.ONGOING,
+		HIVResult.NEGATIVE,
+		HIVResult.POSITIVE
+	};
+
 	public TipoResistencia[] getTiposResistencia() {
 		return TipoResistencia.values();
+	}
+
+
+	/**
+	 * Return list of HIV results specific for Brazilian version
+	 * @return
+	 */
+	public HIVResult[] getHivResults() {
+		return hivResults;
 	}
 	
 	public PatientType[] getPatientTypes() {

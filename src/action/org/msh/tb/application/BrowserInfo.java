@@ -129,10 +129,34 @@ public class BrowserInfo {
 		if (vals.length == 0)
 			browserVersion = 0;
 		else
-		if (vals.length == 1)
-			browserVersion = Integer.parseInt(vals[0]) * 100;
+		if (vals.length == 1) {
+			Integer version = parseVersionNumber(vals[0]);
+			if (version != null)
+				 browserVersion = version * 100;
+			else browserVersion = 0;
+		}
 		else {
-			browserVersion = (Integer.parseInt(vals[0]) * 100) + Integer.parseInt(vals[1]);
+			Integer v1 = parseVersionNumber(vals[0]);
+			if (v1 != null)
+				 browserVersion = v1 * 100;
+			else browserVersion = 0;
+			
+			v1 = parseVersionNumber(vals[1]);
+			if (v1 != null)
+				browserVersion += v1;
+		}
+	}
+	
+	/**
+	 * Parse a string to an integer number. If the string is not well formatted, the value returned is null  
+	 * @param val
+	 * @return
+	 */
+	private Integer parseVersionNumber(String val) {
+		try {
+			return Integer.parseInt(val);
+		} catch (Exception e) {
+			return null;
 		}
 	}
 }

@@ -32,12 +32,13 @@
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
 						<f:param value="#{r.monthTreatment}"/>
 					</h:outputFormat>
+					<h:outputText value="#{messages['form.edit']}" rendered="#{r.date==null}" />
 				</s:link>
 			</h:column>
 			
 			<h:column>
 				<f:facet name="header">
-					#{messages['cases.exams.date']}
+					#{messages['cases.exams.dateRelease']}
 				</f:facet>
 				<h:outputText value="#{r.date}" converter="localeDateConverter"/>
 			</h:column>

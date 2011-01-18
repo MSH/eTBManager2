@@ -23,9 +23,6 @@ public class ExamHIV extends CaseData implements Serializable {
 	private HIVResult result;
 	
 	@Temporal(TemporalType.DATE)
-	private Date resultDate;
-	
-	@Temporal(TemporalType.DATE)
 	private Date startedARTdate;
 	
 	@Temporal(TemporalType.DATE)
@@ -88,14 +85,6 @@ public class ExamHIV extends CaseData implements Serializable {
 
 	public void setResult(HIVResult result) {
 		this.result = result;
-	}
-
-	public Date getResultDate() {
-		return resultDate;
-	}
-
-	public void setResultDate(Date resultDate) {
-		this.resultDate = resultDate;
 	}
 
 	public Date getStartedARTdate() {

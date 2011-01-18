@@ -107,20 +107,9 @@ public class ForecastingCalculation {
 		monthIndexIniDate = forecasting.getMonthIndex(forecasting.getIniDateLeadTime());
 		
 		forecasting.initializeResults();
-/*		for (ForecastingMedicine med: forecasting.getMedicines()) {
-			int expiryQtd = 0;
-			for (int i = 0; i <= numMonths; i++) {
-				ForecastingResult res = new ForecastingResult();
-				res.setMedicine(med.getMedicine());
-				res.setMonthIndex(i);
-				expiryQtd += quantityToExpire(res);
-				int stockOnHand = med.getStockOnHand() - expiryQtd;
-				res.setStockOnHand(stockOnHand);
-				forecasting.getResults().add(res);
-			}
-		}
-*/
+
 		// cases are from the database ?
+		// if so, load list of prescribed medicines in the period
 		if (forecasting.isCasesFromDatabase()) {
 			// update number of cases on treatment
 			Long count = (Long)entityManager.createQuery("select count(*) from TbCase c " + 
@@ -197,6 +186,13 @@ public class ForecastingCalculation {
 			int stockOnHand = med.getStockOnHand();
 			int totalConsumption = 0;
 
+			if (med.getMedicine().getId() == 940801)
+				System.out.println("ola...");
+
+			// quantity used for consumption from batches,
+			// progressively increased month by month
+			int qtdBatchUsed = 0;
+	
 			for (ForecastingResult res: med.getResults()) {
 				int qtdOrder = quantityOnOrder(res);
 				stockOnHand += qtdOrder;
@@ -205,15 +201,19 @@ public class ForecastingCalculation {
 				int cons = Math.round(res.getQuantityCasesOnTreatment() + res.getQuantityNewCases());
 				stockOnHand -= cons;
 
+				// pega a soma dos lotes que irão expirar no mês
 				int qtdToExpire = quantityToExpire(res);
 				totalConsumption += cons;
 				
 				int qtdExpired = 0;
 				if (totalConsumption < qtdToExpire) {
-					qtdExpired = qtdToExpire - totalConsumption;
+					qtdExpired = qtdToExpire - totalConsumption; // + qtdBatchUsed;
 					stockOnHand -= qtdExpired;
-					totalConsumption = 0;
+					totalConsumption = totalConsumption - qtdToExpire + qtdExpired;
 				}
+				
+//				qtdBatchUsed += qtdToExpire - qtdExpired;
+				
 				res.setQuantityToExpire(qtdToExpire);
 				res.setQuantityExpired(qtdExpired);
 				res.setQuantityOnOrder(qtdOrder);
@@ -233,7 +233,7 @@ public class ForecastingCalculation {
 	
 	
 	/**
-	 * Calculate the quantity to expire for the medicine in the month index
+	 * Calculate the quantity to expire of the medicine in the month index (the quantity of all batches in the month are summed to get the total quantity)
 	 * @param med
 	 * @param monthIndex
 	 * @return
@@ -310,11 +310,12 @@ public class ForecastingCalculation {
 			Integer prevMedId = null;
 			
 			for (Object[] prescDrug: casesOnTreatment) {
-				// calculate consumption for a prescribed medicine
+				// calculate consumption for a prescribed medicine of a specific case
 				int qtd = calcConsumptionCaseOnTreatment(prescDrug, new Period(dtIni, dtEnd));
 				Integer caseId = (Integer)prescDrug[5];
 				Integer medId = (Integer)prescDrug[3];
 
+				// there is consumption for this prescription in the month ?
 				if (qtd > 0) {
 					// update results
 					ForecastingMedicine fm = forecasting.findMedicineById((Integer)prescDrug[3]);
@@ -334,7 +335,7 @@ public class ForecastingCalculation {
 						fm.setDispensingLeadTime(fm.getDispensingLeadTime() + qtd);
 					else
 					if (i == monthIndexIniDate) { // is last month of lead time ?
-						int qtd2 = calcConsumptionCaseOnTreatment(prescDrug, new Period(dtIni, DateUtils.incDays( forecasting.getIniDate(), -1)));
+						int qtd2 = calcConsumptionCaseOnTreatment(prescDrug, new Period(dtIni, DateUtils.incDays( forecasting.getIniDateLeadTime(), -1)));
 						fm.setDispensingLeadTime(fm.getDispensingLeadTime() + qtd2);
 						fm.setEstimatedQtyCases(qtd - qtd2);
 					}
@@ -345,9 +346,11 @@ public class ForecastingCalculation {
 					Date ini = dtIni;
 					for (ForecastingBatch bt: lst) {
 						Date end = bt.getExpiryDate();
+
 						int qtdBatch = calcConsumptionCaseOnTreatment(prescDrug, new Period(ini, end));
-//						bt.setConsumptionInMonth(bt.getConsumptionInMonth() + qtdBatch);
-						bt.setQuantityToExpire(bt.getQuantityToExpire() + qtdBatch);
+						bt.setConsumptionInMonth(qtdBatch);
+						ini = DateUtils.incDays(end, 1);
+//						bt.setQuantityToExpire(bt.getQuantityToExpire() + qtdBatch);
 					}
 				}
 			}
