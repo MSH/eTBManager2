@@ -1,6 +1,8 @@
 package org.msh.tb.forecasting;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -184,15 +186,10 @@ public class ForecastingCalculation {
 		// update stock quantity
 		for (ForecastingMedicine med: forecasting.getMedicines()) {
 			int stockOnHand = med.getStockOnHand();
-			int totalConsumption = 0;
 
-			if (med.getMedicine().getId() == 940801)
-				System.out.println("ola...");
+			// calculate expired quantity separately from the main loop
+			calculateExpiredQuantity(med);
 
-			// quantity used for consumption from batches,
-			// progressively increased month by month
-			int qtdBatchUsed = 0;
-	
 			for (ForecastingResult res: med.getResults()) {
 				int qtdOrder = quantityOnOrder(res);
 				stockOnHand += qtdOrder;
@@ -200,22 +197,8 @@ public class ForecastingCalculation {
 				res.setStockOnHand(stockOnHand);
 				int cons = Math.round(res.getQuantityCasesOnTreatment() + res.getQuantityNewCases());
 				stockOnHand -= cons;
-
-				// pega a soma dos lotes que irão expirar no mês
-				int qtdToExpire = quantityToExpire(res);
-				totalConsumption += cons;
+				stockOnHand -= res.getQuantityExpired();
 				
-				int qtdExpired = 0;
-				if (totalConsumption < qtdToExpire) {
-					qtdExpired = qtdToExpire - totalConsumption; // + qtdBatchUsed;
-					stockOnHand -= qtdExpired;
-					totalConsumption = totalConsumption - qtdToExpire + qtdExpired;
-				}
-				
-//				qtdBatchUsed += qtdToExpire - qtdExpired;
-				
-				res.setQuantityToExpire(qtdToExpire);
-				res.setQuantityExpired(qtdExpired);
 				res.setQuantityOnOrder(qtdOrder);
 
 				if (stockOnHand < 0)
@@ -224,12 +207,51 @@ public class ForecastingCalculation {
 				ForecastingMedicine fmed = forecasting.findMedicineById(res.getMedicine().getId());
 				if (fmed != null) {
 					fmed.setStockOnOrder( fmed.getStockOnOrder() + qtdOrder );
-					fmed.setQuantityExpired( fmed.getQuantityExpired() + qtdExpired);
 				}
 			}
 		}
 	}
 
+
+	/**
+	 * Calculate the quantity of medicine expired for each month of the medicine
+	 * @param forMedicine
+	 */
+	protected void calculateExpiredQuantity(ForecastingMedicine forMedicine) {
+		// accumulated consumption
+		int c = 0;
+		int total = 0;
+		
+		if (forMedicine.getMedicine().getId() == 940801)
+			System.out.println("ola...");
+
+		for (ForecastingResult res: forMedicine.getResults()) {
+			// lost in the month
+			int pm = 0;
+			int qtdToExpire = 0;
+			
+			// quanto foi o consumo até o último lote do mês
+			int cbatch = 0;
+
+			for (ForecastingBatch batch: res.getBatchesToExpire()) {
+				qtdToExpire += batch.getQuantity();
+				c += batch.getConsumptionInMonth();
+				if (c < batch.getQuantity()) {
+					pm += batch.getQuantity() - c;
+					c = 0;
+				}
+				else c -= batch.getQuantity();
+				cbatch += batch.getConsumptionInMonth();
+			}
+
+			res.setQuantityExpired(pm);
+			res.setQuantityToExpire(qtdToExpire);
+			total += pm;
+			c += res.getQuantityCasesOnTreatment() + res.getQuantityNewCases() - cbatch;
+		}
+		
+		forMedicine.setQuantityExpired( total );
+	}
 	
 	
 	/**
@@ -550,6 +572,13 @@ public class ForecastingCalculation {
 				lst.add(b);
 			}
 		}
+		
+		Collections.sort(lst, new Comparator<ForecastingBatch>() {
+			public int compare(ForecastingBatch o1, ForecastingBatch o2) {
+				return o1.getExpiryDate().compareTo(o2.getExpiryDate());
+			}
+			
+		});
 		return lst;
 	}
 	

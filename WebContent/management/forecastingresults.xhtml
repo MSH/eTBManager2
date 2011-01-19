@@ -135,7 +135,7 @@
 </tr>
 <a:repeat value="#{forecastingView.resultTable.rows}" var="r">
 <tr class="highlight">
-	<td rowspan="5" class="colb">
+	<td rowspan="6" class="colb">
 		#{r.medicine.medicine}
 	</td>
 	<td class="colb">
@@ -144,6 +144,18 @@
 	<a:repeat value="#{r.results}" var="s">
 	<td class="colrb">
 		<h:outputText value="#{s.stockOnHand}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="colb">
+		#{messages['manag.forecast.stockonorder']}
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.quantityOnOrder}" rendered="#{s.quantityOnOrder!=0}">
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
 	</td>
@@ -191,9 +203,12 @@
 	</td>
 	<a:repeat value="#{r.results}" var="s">
 	<td class="colrb">
-		<h:outputText value="#{s.quantityToExpire}" rendered="#{s.quantityToExpire!=0}">
-			<f:convertNumber pattern="#,###,##0" />
-		</h:outputText>
+		<a:commandLink rendered="#{s.quantityToExpire!=0}" 
+			onclick="showDetailResult(#{s.medicine.id},#{s.monthIndex}); return false;">
+			<h:outputText value="#{s.quantityToExpire}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</a:commandLink>
 	</td>
 	</a:repeat>
 </tr>
@@ -258,6 +273,11 @@
 </table>
 </rich:tab>
 
+<a:jsFunction name="showDetailResult" reRender="resultDetailsPnl" action="#{forecastingView.initializeResult}" 
+	ajaxSingle="true" oncomplete="showModalAutoTop('resultDetailsDlg');">
+	<a:actionparam name="param1" assignTo="#{forecastingView.medicineId}" converter="javax.faces.Integer" />
+	<a:actionparam name="param2" assignTo="#{forecastingView.monthIndex}" converter="javax.faces.Integer" />
+</a:jsFunction>
 
 </ui:composition>  
 

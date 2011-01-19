@@ -22,6 +22,7 @@ import org.msh.mdrtb.entities.ForecastingMedicine;
 import org.msh.mdrtb.entities.ForecastingNewCases;
 import org.msh.mdrtb.entities.ForecastingOrder;
 import org.msh.mdrtb.entities.ForecastingRegimen;
+import org.msh.mdrtb.entities.ForecastingResult;
 import org.msh.mdrtb.entities.Medicine;
 import org.msh.mdrtb.entities.Regimen;
 import org.msh.mdrtb.entities.Tbunit;
@@ -47,6 +48,11 @@ public class ForecastingView {
 	@In(create=true) EntityManager entityManager;
 	@In(create=true) RegimensQuery regimens;
 	@In(create=true) MedicinesQuery medicines;
+
+	// support for displaying forecasting result details
+	private Integer medicineId;
+	private Integer monthIndex;
+	private ForecastingResult result;
 	
 	
 	/**
@@ -535,6 +541,63 @@ public class ForecastingView {
 		if (numCasesOnTreatment == null)
 			updateNumCasesOnTreatment();
 		return numCasesOnTreatment;
+	}
+
+	/**
+	 * Initialize result to be displayed
+	 * @param medicineId
+	 * @param monthIndex
+	 */
+	public void initializeResult() {
+		if ((medicineId == null) || (monthIndex == null))
+			return;
+
+		Forecasting forecasting = forecastingHome.getInstance();
+		ForecastingMedicine fm =  forecasting.findMedicineById(medicineId);
+		if (fm == null)
+			return;
+		
+		result = forecasting.findResult(fm.getMedicine(), monthIndex);
+	}
+	
+	/**
+	 * Return instance of {@link ForecastingResult} class according to the call to initializeResult() method
+	 * @return
+	 */
+	public ForecastingResult getResult() {
+		return result;
+	}
+
+
+	/**
+	 * @return the medicineId
+	 */
+	public Integer getMedicineId() {
+		return medicineId;
+	}
+
+
+	/**
+	 * @param medicineId the medicineId to set
+	 */
+	public void setMedicineId(Integer medicineId) {
+		this.medicineId = medicineId;
+	}
+
+
+	/**
+	 * @return the monthIndex
+	 */
+	public Integer getMonthIndex() {
+		return monthIndex;
+	}
+
+
+	/**
+	 * @param monthIndex the monthIndex to set
+	 */
+	public void setMonthIndex(Integer monthIndex) {
+		this.monthIndex = monthIndex;
 	}
 	
 }

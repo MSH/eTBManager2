@@ -91,11 +91,10 @@ public class ForecastingResult implements Serializable {
 	public List<ForecastingBatch> getBatchesToExpire() {
 		if (batchesToExpire == null) {
 			batchesToExpire = new ArrayList<ForecastingBatch>();
-			for (ForecastingMedicine med: forecasting.getMedicines()) {
-				for (ForecastingBatch batch: med.getBatchesToExpire()) {
-					if (forecasting.getMonthIndex(batch.getExpiryDate()) == monthIndex)
-						batchesToExpire.add(batch);
-				}
+			ForecastingMedicine fm = forecasting.findMedicineById(medicine.getId());
+			for (ForecastingBatch batch: fm.getBatchesToExpire()) {
+				if (forecasting.getMonthIndex(batch.getExpiryDate()) == monthIndex)
+					batchesToExpire.add(batch);
 			}
 		}
 		return batchesToExpire;

@@ -15,7 +15,8 @@ public class ForecastingQuery extends EntityQuery<Forecasting> {
 	private boolean loading;
 	
 	private static final String[] restrictions = {
-		"f.user.id = #{userLogin.user.id}"
+		"f.user.id = #{userLogin.user.id}",
+		"f.workspace.id = #{defaultWorkspace.id}"
 	};
 	
 	

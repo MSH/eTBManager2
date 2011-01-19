@@ -589,6 +589,44 @@ function showLoadForecastingDlg() {
 	<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" onclick="Richfaces.hideModalPanel('loadfordlg'); return false;"/>
 </rich:modalPanel>
 
+
+<rich:modalPanel id="resultDetailsDlg" width="500" autosized="true" zindex="2000">
+	<f:facet name="header">#{messages['manag.forecast.load']}</f:facet>
+	<h:panelGroup id="resultDetailsPnl">
+	<h:dataTable value="#{forecastingView.result.batchesToExpire}" var="v" width="100%"
+		styleClass="tabela4" rendered="#{not empty forecastingView.result.batchesToExpire}">
+		<h:column >
+			<f:facet name="header">
+				#{messages['Batch.expiryDate']}
+			</f:facet>
+			<h:outputText value="#{v.expiryDate}" converter="localeDateConverter"/>
+		</h:column>
+
+		<h:column >
+			<f:facet name="header">
+				#{messages['Movement.quantity']}
+			</f:facet>
+			<h:outputText value="#{v.quantity}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column >
+			<f:facet name="header">
+				#{messages['manag.forecast.tabres2']}
+			</f:facet>
+			<h:outputText value="#{v.consumptionInMonth}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+	</h:dataTable>
+	</h:panelGroup>
+	<a:commandButton value="#{messages['form.return']}"
+		styleClass="button" 
+		onclick="Richfaces.hideModalPanel('resultDetailsDlg');return false;"/>
+	
+</rich:modalPanel>
+
 </ui:define>
 
 </ui:composition>  

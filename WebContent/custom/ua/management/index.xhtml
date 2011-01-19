@@ -26,12 +26,6 @@
 	<table width="99%">
 	<tr><td valign="top"> 	
 	
-	<s:link value="#{messages['uk_UA.reports.tb07']}" view="/custom/ua/management/tb07.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
-	<s:link value="#{messages['uk_UA.reports.tb08']}" view="/custom/ua/management/tb08.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
-	<s:link value="#{messages['uk_UA.reports.tb10']}" view="/custom/ua/management/tb10.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
-	
-	<hr/>
-	
 	<s:link value="#{messages['manag.ind.incidence']}" view="/management/incidence.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
 	<s:link value="#{messages['manag.ind.prevalence']}" view="/management/prevalence.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}"/>
 <!--  	<s:link value="#{messages['manag.ind.outcome']}" view="/management/outcome.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}"/>  --> 
@@ -66,6 +60,13 @@
 	<tr><td>
 		<hr/>
 		<s:link value="#{messages['manag.ind.customind']}" view="/management/customind.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
+	
+		<hr/>
+
+		<s:link value="#{messages['uk_UA.reports.tb07']}" view="/custom/ua/management/tb07.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
+		<s:link value="#{messages['uk_UA.reports.tb08']}" view="/custom/ua/management/tb08.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
+		<s:link value="#{messages['uk_UA.reports.tb10']}" view="/custom/ua/management/tb10.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
+	
 	</td></tr>
 	</table>
 	</div>
