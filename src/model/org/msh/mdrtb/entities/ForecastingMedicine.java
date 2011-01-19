@@ -37,6 +37,7 @@ public class ForecastingMedicine implements Serializable {
 	
 	private int stockOnHand;
 	private int stockOnOrder;
+	private int stockOnOrderBeforeLeadTime;
 
 	private float unitPrice;
 	
@@ -111,12 +112,12 @@ public class ForecastingMedicine implements Serializable {
 	}
 
 	public int getStockOnHandAfterLeadTime() {
-		int val = stockOnHand - dispensingLeadTime;
+		int val = stockOnHand - dispensingLeadTime + stockOnOrderBeforeLeadTime;
 		return (val < 0? 0: val);
 	}
 	
 	public int getEstimatedQty() {
-		int val = estimatedQtyCases + estimatedQtyNewCases + estimatedQtyCohort - getStockOnHandAfterLeadTime(); 
+		int val = estimatedQtyCases + estimatedQtyNewCases + estimatedQtyCohort - getStockOnHandAfterLeadTime() + quantityExpired; 
 		return (val < 0? 0: val);
 	}
 	
@@ -277,5 +278,29 @@ public class ForecastingMedicine implements Serializable {
 	 */
 	public void setQuantityExpired(int quantityExpired) {
 		this.quantityExpired = quantityExpired;
+	}
+
+
+	/**
+	 * @return the stockOnOrderBeforeLeadTime
+	 */
+	public Integer getStockOnOrderBeforeLeadTime() {
+		return stockOnOrderBeforeLeadTime;
+	}
+
+
+	/**
+	 * @param stockOnOrderBeforeLeadTime the stockOnOrderBeforeLeadTime to set
+	 */
+	public void setStockOnOrderBeforeLeadTime(Integer stockOnOrderBeforeLeadTime) {
+		this.stockOnOrderBeforeLeadTime = stockOnOrderBeforeLeadTime;
+	}
+
+
+	/**
+	 * @param stockOnOrderBeforeLeadTime the stockOnOrderBeforeLeadTime to set
+	 */
+	public void setStockOnOrderBeforeLeadTime(int stockOnOrderBeforeLeadTime) {
+		this.stockOnOrderBeforeLeadTime = stockOnOrderBeforeLeadTime;
 	}
 }

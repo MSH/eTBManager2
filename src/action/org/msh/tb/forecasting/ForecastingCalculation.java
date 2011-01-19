@@ -189,12 +189,13 @@ public class ForecastingCalculation {
 
 			// calculate expired quantity separately from the main loop
 			calculateExpiredQuantity(med);
-
+			
 			for (ForecastingResult res: med.getResults()) {
-				int qtdOrder = quantityOnOrder(res);
+				int qtdOrder = quantityOnOrder(res, false);
 				stockOnHand += qtdOrder;
 				
 				res.setStockOnHand(stockOnHand);
+				
 				int cons = Math.round(res.getQuantityCasesOnTreatment() + res.getQuantityNewCases());
 				stockOnHand -= cons;
 				stockOnHand -= res.getQuantityExpired();
@@ -204,10 +205,12 @@ public class ForecastingCalculation {
 				if (stockOnHand < 0)
 					stockOnHand = 0;
 
-				ForecastingMedicine fmed = forecasting.findMedicineById(res.getMedicine().getId());
-				if (fmed != null) {
-					fmed.setStockOnOrder( fmed.getStockOnOrder() + qtdOrder );
-				}
+//				ForecastingMedicine fmed = forecasting.findMedicineById(res.getMedicine().getId());
+//				if (fmed != null) {
+					med.setStockOnOrder( med.getStockOnOrder() + qtdOrder );
+					int qtd = quantityOnOrder(res, true);
+					med.setStockOnOrderBeforeLeadTime( med.getStockOnOrderBeforeLeadTime() + qtd);
+//				}
 			}
 		}
 	}
@@ -221,9 +224,6 @@ public class ForecastingCalculation {
 		// accumulated consumption
 		int c = 0;
 		int total = 0;
-		
-		if (forMedicine.getMedicine().getId() == 940801)
-			System.out.println("ola...");
 
 		for (ForecastingResult res: forMedicine.getResults()) {
 			// lost in the month
@@ -278,12 +278,16 @@ public class ForecastingCalculation {
 	 * @param result
 	 * @return
 	 */
-	protected int quantityOnOrder(ForecastingResult result) {
+	protected int quantityOnOrder(ForecastingResult result, boolean leadTimeOnly) {
 		int qtd = 0;
+		Date dt = (leadTimeOnly? forecasting.getIniDateLeadTime(): null);
+
 		for (ForecastingMedicine med: forecasting.getMedicines()) {
 			for (ForecastingOrder order: med.getOrders()) {
-				if ((result.getMedicine().equals(med.getMedicine())) && (forecasting.getMonthIndex(order.getArrivalDate()) == result.getMonthIndex()))
+				if ((result.getMedicine().equals(med.getMedicine())) && (forecasting.getMonthIndex(order.getArrivalDate()) == result.getMonthIndex())) {
+					if ((dt == null) || ((dt != null) && (order.getArrivalDate().before(dt))))
 					qtd += order.getQuantity();
+				}
 			}
 		}
 		return qtd;
@@ -336,7 +340,7 @@ public class ForecastingCalculation {
 				int qtd = calcConsumptionCaseOnTreatment(prescDrug, new Period(dtIni, dtEnd));
 				Integer caseId = (Integer)prescDrug[5];
 				Integer medId = (Integer)prescDrug[3];
-
+				
 				// there is consumption for this prescription in the month ?
 				if (qtd > 0) {
 					// update results

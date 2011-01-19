@@ -208,6 +208,7 @@ public class Forecasting extends WSObject implements Serializable {
 			med.setDispensingLeadTime(0);
 			med.setQuantityExpired(0);
 			med.setStockOnOrder(0);
+			med.setStockOnOrderBeforeLeadTime(0);
 
 			for (int i = 0; i <= num; i++) {
 				ForecastingResult res = new ForecastingResult();
