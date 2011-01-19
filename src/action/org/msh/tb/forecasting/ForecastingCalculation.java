@@ -509,27 +509,47 @@ public class ForecastingCalculation {
 			return;
 		
 		float newCases = forNewCases.getNumNewCases() * forRegimen.getPercNewCases() / totalPerc;
+		if (newCases == 0)
+			return;
 
 		// calculate number of new cases and quantity for each medicine
 		for (ForecastingMedicine fm: forecasting.getMedicines()) {
+			if (fm.getMedicine().getId() == 940801)
+				System.out.println("ola...");
 			if (reg.isMedicineInRegimen(fm.getMedicine())) {
 				for (int i = 0; i < len; i++) {
-					Date dtIni = forecasting.getIniDateMonthIndex(monthIndex + i);
+					int index = monthIndex + i;
+					
+					Date dtIni = forecasting.getIniDateMonthIndex(index);
 					if (dtIni == null)
 						break;
 					
-					Date dtEnd = forecasting.getEndDateMonthIndex(monthIndex + i);
+					Date dtEnd = forecasting.getEndDateMonthIndex(index);
 					if (dtEnd == null)
 						dtEnd = endForecasting;
 					float qty = calcQuantityRegimen(reg, dtIni, dtEnd, i, fm.getMedicine());
 					qty = qty * newCases;
 					
-					ForecastingResult res = forecasting.findResult(fm.getMedicine(), monthIndex + i);
+					ForecastingResult res = forecasting.findResult(fm.getMedicine(), index);
 					if (res != null) {
 						// if it's the first month of treatment, increase number of new cases
 						res.increaseNewCases(newCases, qty);
-						fm.setEstimatedQtyNewCases(fm.getEstimatedQtyNewCases() + Math.round(qty));
 					}
+					
+					int q = Math.round(qty);
+
+//					fm.setEstimatedQtyNewCases(fm.getEstimatedQtyNewCases() + q);
+					// update consumption up to end of lead time
+					// during lead time ?
+					if (index < monthIndexIniDate) 
+						fm.setDispensingLeadTime(fm.getDispensingLeadTime() + q);
+					else
+					if (index == monthIndexIniDate) { // is last month of lead time ?
+						int qtd2 = Math.round( calcQuantityRegimen(reg, dtIni, DateUtils.incDays( forecasting.getIniDateLeadTime(), -1), index, fm.getMedicine()) );
+						fm.setDispensingLeadTime(fm.getDispensingLeadTime() + qtd2);
+						fm.setEstimatedQtyNewCases(q - qtd2);
+					}
+					else fm.setEstimatedQtyNewCases(fm.getEstimatedQtyNewCases() + q);
 				}
 			}
 		}
