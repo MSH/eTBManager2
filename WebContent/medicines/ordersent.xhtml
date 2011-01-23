@@ -6,8 +6,9 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:c="http://java.sun.com/jstl/core"
-      template="..#{workspaceViewService.templatePage}">
+      template="#{workspaceViewService.templatePage}">
 
 <ui:param name="title" value="#{messages['medicines.orders.shipment']}" />
 
@@ -45,6 +46,7 @@
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 <p/>
 
+<h:panelGroup id="pnlitems">
 <b>#{messages['Order.items']}:</b>
 <table width="100%">
 	<c:forEach items="#{orderSources}" var="s">
@@ -76,7 +78,10 @@
 					<h:outputText value="#{it.item.shippedQuantity}" rendered="#{not it.unavailable}"><f:convertNumber pattern="#,###,###"/></h:outputText>
 				</td>
 				<td class="colc">
-					<h:commandLink value="#{messages['medicines.selbatches']}" action="#{orderBatchHome.selectOrderItem(it.item)}" rendered="#{not it.unavailable}" immediate="true"/>
+					<a:commandLink value="#{messages['medicines.selbatches']}" ajaxSingle="true" 
+						action="#{orderShippingHome.initBatchesSelection(it.item)}"
+						reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" 
+						style="width:120px;display:block;"/>
 				</td>
 				</tr>
 				
@@ -111,13 +116,21 @@
 	</td></tr>
 	</c:forEach>
 </table>
+</h:panelGroup>
 
 <div >
     <h:commandButton action="#{orderShippingHome.registerShipping}" value="#{messages['form.ok']}" styleClass="button" />
     <s:button action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" />
 </div>
 </rich:panel>
+
 </h:form>
+
+<s:decorate template="/layout/batchselection.xhtml" >
+	<a:commandButton value="#{messages['form.ok']}" action="#{orderShippingHome.finishBatchesSelection}" 
+		onclick="if (!validateBatchSelection(this)) return false;" 
+		oncomplete="hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button"/>
+</s:decorate>
 
 </ui:define>
 

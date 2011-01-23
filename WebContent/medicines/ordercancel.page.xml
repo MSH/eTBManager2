@@ -7,7 +7,7 @@
 		<navigation>
 			<rule if-outcome="ordercanceled">
 				<redirect view-id="/medicines/orderdata.xhtml">
-					<message>#{messages['']}</message>
+					<message>#{messages['medicines.orders.cancelsuccess']}</message>
 					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
 				</redirect>
 			</rule>

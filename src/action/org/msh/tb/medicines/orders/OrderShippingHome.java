@@ -7,8 +7,10 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
 import org.msh.mdrtb.entities.Batch;
@@ -21,10 +23,13 @@ import org.msh.mdrtb.entities.Source;
 import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.enums.MovementType;
 import org.msh.mdrtb.entities.enums.OrderStatus;
+import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
+import org.msh.utils.date.DateUtils;
 
 @Name("orderShippingHome")
+@Scope(ScopeType.CONVERSATION)
 public class OrderShippingHome extends Controller {
 	private static final long serialVersionUID = -3201092037704977645L;
 	
@@ -33,6 +38,10 @@ public class OrderShippingHome extends Controller {
 	@In(create=true) MovementHome movementHome;
 	@In(create=true) List<SourceOrderItem> orderSources;
 	@In(create=true) FacesMessages facesMessages;
+	@In(create=true) BatchSelection batchSelection;
+	
+	private OrderItem orderItem;
+
 
 	public String registerShipping() {
 		try {
@@ -110,8 +119,10 @@ public class OrderShippingHome extends Controller {
 		List<BatchQuantity> batches = entityManager.createQuery("from BatchQuantity b " +
 				"join fetch b.batch bat " +
 				"where b.tbunit = :unit " +
+				"and bat.expiryDate >= :dt " +
 				"order by bat.expiryDate")
 				.setParameter("unit", order.getTbunitTo())
+				.setParameter("dt", DateUtils.getDate())
 				.getResultList();
 		
 		// percorre as fontes de medicamentos do pedido
@@ -176,5 +187,62 @@ public class OrderShippingHome extends Controller {
 				orderSources.remove(i);
 			else i++;
 		}		
+	}
+
+
+	/**
+	 * Prepare the batch selection dialog to be displayed to the user
+	 * @param it
+	 */
+	public void initBatchesSelection(OrderItem it) {
+		orderItem = it;
+		batchSelection.clear();
+		batchSelection.setTbunit(it.getOrder().getTbunitTo());
+		batchSelection.setMedicine(it.getMedicine());
+		batchSelection.setSource(it.getSource());
+
+		Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
+		for (OrderBatch ob: it.getBatches())
+			batches.put(ob.getBatch(), ob.getQuantity());
+		
+		batchSelection.setSelectedBatches(batches);
+	}
+
+
+	/**
+	 * Called when the user confirm the selection made in the batch selection dialog
+	 */
+	public void finishBatchesSelection() {
+		Map<Batch, Integer> selectedBatches = batchSelection.getSelectedBatches();
+
+		// update or include batches
+		for (Batch batch: selectedBatches.keySet()) {
+			Integer qtd = selectedBatches.get(batch);
+			if ((qtd != null) && (qtd > 0)) {
+				OrderBatch ob = orderItem.findOrderBatchByBatch(batch);
+				if (ob != null)
+					ob.setQuantity(qtd);
+				else {
+					ob = new OrderBatch();
+					ob.setBatch(batch);
+					ob.setOrderItem(orderItem);
+					ob.setQuantity(qtd);
+					ob.setReceivedQuantity(null);
+					orderItem.getBatches().add(ob);
+				}
+			}
+		}
+		
+		// remove batches
+		int i = 0;
+		while (i < orderItem.getBatches().size()) {
+			OrderBatch ob = orderItem.getBatches().get(i);
+			Integer qtd = selectedBatches.get(ob.getBatch());
+			if ((qtd == null) || (qtd == 0)) {
+				entityManager.remove(ob);
+				orderItem.getBatches().remove(ob);
+			}
+			else i++;
+		}
 	}
 }

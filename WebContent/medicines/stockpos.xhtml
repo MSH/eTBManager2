@@ -194,7 +194,7 @@
 	<h:column rendered="#{empty userSelection.source}">
 		<f:facet name="header">
 			<s:link value="#{messages['Source']}" styleClass="collh" action="#{stockPosHome.execute}" >
-  				<f:param name="order" value="#{batchesReport.order=='upper(b.source.name)'?'upper(b.source.name) desc':'upper(b.source.name)'}" />
+  				<f:param name="order" value="b.source.name.name1#{batchesReport.order=='upper(b.source.name.name1)'?' desc':''}" />
   				<f:param name="bb" value="#{stockPosHome.showBatch}" />
 			</s:link>
 		</f:facet>
@@ -204,7 +204,7 @@
 	<h:column>
 		<f:facet name="header">
 			<s:link value="#{messages['Medicine']}" styleClass="collh" action="#{stockPosHome.execute}" >
-  				<f:param name="order" value="#{batchesReport.order=='b.medicine.genericName'?'b.medicine.genericName desc':'b.medicine.genericName'}" />
+  				<f:param name="order" value="b.batch.medicine.genericName.name1#{batchesReport.order=='b.batch.medicine.genericName.name1'?' desc':''}" />
   				<f:param name="bb" value="#{stockPosHome.showBatch}" />
 			</s:link>
 		</f:facet>
@@ -214,7 +214,7 @@
 	<h:column>
 		<f:facet name="header">
 			<s:link value="#{messages['Batch.expiryDate']}" styleClass="colch" action="#{stockPosHome.execute}" >
-  				<f:param name="order" value="#{batchesReport.order=='b.expiryDate'?'b.expiryDate desc':'b.expiryDate'}" />
+  				<f:param name="order" value="b.batch.expiryDate#{batchesReport.order=='b.batch.expiryDate'?' desc':''}" />
   				<f:param name="bb" value="#{stockPosHome.showBatch}" />
 			</s:link>
 		</f:facet>
@@ -224,7 +224,7 @@
 	<h:column>
 		<f:facet name="header">
 			<s:link value="#{messages['Batch.batchNumber']}" styleClass="collh" action="#{stockPosHome.execute}" >
-  				<f:param name="order" value="#{batchesReport.order=='b.batchNumber'?'b.batchNumber desc':'b.batchNumber'}" />
+  				<f:param name="order" value="b.batch.batchNumber#{batchesReport.order=='b.batch.batchNumber'?' desc':''}" />
   				<f:param name="bb" value="#{stockPosHome.showBatch}" />
 			</s:link>
 		</f:facet>
@@ -234,7 +234,7 @@
 	<h:column>
 		<f:facet name="header">
 			<s:link value="#{messages['Batch.manufacturer']}" styleClass="collh" action="#{stockPosHome.execute}" >
-  				<f:param name="order" value="#{batchesReport.order=='b.manufacturer'?'b.manufacturer desc':'b.manufacturer'}" />
+  				<f:param name="order" value="b.batch.manufacturer#{batchesReport.order=='b.batch.manufacturer'?' desc':''}" />
   				<f:param name="bb" value="#{stockPosHome.showBatch}" />
 			</s:link>
 		</f:facet>
@@ -244,7 +244,7 @@
 	<h:column>
 		<f:facet name="header">
 			<s:link value="#{messages['Batch.remainingQuantity']}" styleClass="colrh" action="#{stockPosHome.execute}" >
-  				<f:param name="order" value="#{batchesReport.order=='b.remainingQuantity'?'b.remainingQuantity desc':'b.remainingQuantity'}" />
+  				<f:param name="order" value="b.quantity#{batchesReport.order=='b.quantity'?' desc':''}" />
   				<f:param name="bb" value="#{stockPosHome.showBatch}" />
 			</s:link>
 		</f:facet>
@@ -255,7 +255,10 @@
 
 	<h:column>
 		<f:facet name="header">
-			<h:outputText value="#{messages['global.unitPrice']}" styleClass="colrh" />
+			<s:link value="#{messages['global.unitPrice']}" styleClass="colrh" action="#{stockPosHome.execute}" >
+  				<f:param name="order" value="b.batch.unitPrice#{batchesReport.order=='b.batch.unitPrice'?' desc':''}" />
+  				<f:param name="bb" value="#{stockPosHome.showBatch}" />
+			</s:link>
 		</f:facet>
 		<h:outputText value="#{r.batch.unitPrice}">
 			<f:convertNumber pattern="###,###,##0.0000"/>
@@ -265,7 +268,7 @@
 	<h:column>
 		<f:facet name="header">
 			<s:link value="#{messages['global.totalPrice']}" styleClass="colrh" action="#{stockPosHome.execute}" >
-  				<f:param name="border" value="#{batchesReport.order=='b.totaPrice'?'b.totalPrice desc':'b.totalPrice'}" />
+  				<f:param name="order" value="(b.batch.unitPrice*b.quantity)#{batchesReport.order=='(b.batch.unitPrice*b.quantity)'?' desc':''}" />
   				<f:param name="bb" value="#{stockPosHome.showBatch}" />
 			</s:link>
 		</f:facet>

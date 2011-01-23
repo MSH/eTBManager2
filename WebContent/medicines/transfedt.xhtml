@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      template="..#{workspaceViewService.templatePage}">
+      template="#{workspaceViewService.templatePage}">
 
 <ui:param name="title" value="#{messages['medicines.transfer.new']}" />
 
@@ -86,8 +86,10 @@
 			</b>
 		</td>
 		<td align="center">
-			<a:commandLink value="#{messages['medicines.selbatches']}" ajaxSingle="true" action="#{transferHome.initBatchSelection(it)}"
-				reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" style="width:120px;display:block;"/>
+			<a:commandLink value="#{messages['medicines.selbatches']}" ajaxSingle="true" 
+				action="#{transferHome.initBatchSelection(it)}"
+				reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" 
+				style="width:120px;display:block;"/>
 			<a:commandLink value="#{messages['form.remove']}" ajaxSingle="true" action="#{transferHome.removeItem(it)}" reRender="pnlitems" />
 		</td></tr>
 		<s:fragment rendered="#{it.data==true}">

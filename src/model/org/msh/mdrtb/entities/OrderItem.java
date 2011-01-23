@@ -79,7 +79,7 @@ public class OrderItem implements Serializable {
 	@Transient
 	private Object data;
 
-	@Transient
+
 	public float getTotalPrice() {
 		float total = 0;
 		for (OrderBatch b: batches) {
@@ -89,7 +89,6 @@ public class OrderItem implements Serializable {
 		return total;
 	}
 	
-	@Transient
 	public float getUnitPrice() {
 		float total = 0;
 		float qtd = 0;
@@ -101,7 +100,13 @@ public class OrderItem implements Serializable {
 		
 		return (qtd > 0? total/qtd: 0);
 	}
-	
+
+
+	/**
+	 * Add a new case that uses the medicine in the order item
+	 * @param c
+	 * @param estimatedQtd
+	 */
 	public void addCase(TbCase c, int estimatedQtd) {
 		for (OrderCase oc: cases) {
 			if (oc.getTbcase().equals(c))
@@ -115,6 +120,20 @@ public class OrderItem implements Serializable {
 		
 		cases.add(oc);
 		numPatients = cases.size();
+	}
+
+	
+	/**
+	 * Search for an instance of {@link OrderBatch} of this item by its {@link Batch}
+	 * @param batch Batch to be used to search for an instance of {@link OrderBatch} class
+	 * @return object {@link OrderBatch} of this item, or null if no OrderBatch found
+	 */
+	public OrderBatch findOrderBatchByBatch(Batch batch) {
+		for (OrderBatch ob: batches) {
+			if (ob.getBatch().equals(batch))
+				return ob;
+		}
+		return null;
 	}
 	
 	public Integer getApprovedQuantity() {

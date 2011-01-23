@@ -5,6 +5,9 @@
 
 		<restrict>#{s:hasRole('SEND_ORDER')}</restrict>
 		<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
+		<begin-conversation join="true"/>
+		<action execute="#{orderShippingHome.initialize}"/>
+
 		<navigation>
 			<rule if-outcome="persisted">
 				<end-conversation/>
