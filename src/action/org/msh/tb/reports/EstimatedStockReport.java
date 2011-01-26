@@ -29,9 +29,9 @@ public class EstimatedStockReport {
 		private long consumption;
 		private int numPatients;
 
-		public void addConsumption(long qtd) {
+		public void addConsumption(long qtd, int numpats) {
 			consumption += qtd;
-			numPatients++;
+			numPatients += numpats;
 		}
 		public long getConsumption() {
 			return consumption;
@@ -124,14 +124,27 @@ public class EstimatedStockReport {
 	
 	protected int calcConsumption() {
 		Date dt = DateUtils.getDate();
-		
+
+		Integer caseid = null;
+		Integer medid = null;
 		for (PrescribedMedicine p: prescs) {
 			Item item = itemByMedicine(p.getMedicine());
-			if (dt.after(item.getLastUpdate())) {
-				int qtd = p.calcEstimatedDispensing(new Period(item.getLastUpdate(), dt));
-				item.addConsumption(qtd);				
+			
+			if (item.getMedicine().getId() != medid)
+				caseid = null;
+			medid = item.getMedicine().getId();
+			
+			int qtd = 0;
+			
+			if ((dt.after(item.getLastUpdate())) && (p.getPeriod().isDateInside(item.getLastUpdate()))) {
+				Period per = new Period( DateUtils.incDays( item.getLastUpdate(), 1) , dt);
+				qtd = p.calcEstimatedDispensing(per);
+				item.addConsumption(qtd, (caseid != p.getTbcase().getId() ? 1 : 0));
+				caseid = p.getTbcase().getId();
+				
+				System.out.println(caseid + ", " + medid + " == " + per.toString() + " - " + qtd);
 			}
-			else item.addConsumption(0);
+
 		}
 		return 0;
 	}
@@ -149,12 +162,14 @@ public class EstimatedStockReport {
 	
 	protected void loadPrescriptions() {
 		prescs = entityManager.createQuery("from PrescribedMedicine d join fetch d.medicine " +
+					"join fetch d.tbcase " + 
 					"where (d.period.endDate is null or d.period.endDate >= (select max(sp.date) " + 
 					"from StockPosition sp where sp.source.id=d.source.id " + 
 					"and sp.tbunit.id=#{userSession.tbunit.id} " + 
 					"and sp.medicine.id=d.medicine.id)) " +
 					(reportSelection.getSource() != null? "and d.source.id = #{reportSelection.source.id} ": "") +
-					"and exists(select aux.id from TreatmentHealthUnit aux where aux.tbcase.id=d.tbcase.id and aux.tbunit.id = #{userSession.tbunit.id})")
+					"and exists(select aux.id from TreatmentHealthUnit aux where aux.tbcase.id=d.tbcase.id and aux.tbunit.id = #{userSession.tbunit.id}) " +
+					"order by d.tbcase.id")
 					.getResultList();
 	}
 

@@ -22,11 +22,11 @@
 <s:decorate template="/layout/casebody.xhtml">
 	<a:form id="formtreat">
 	<table width="100%" style="border-collapse:collapse;"><tr><td>
-	
+
     <s:decorate template="/layout/display.xhtml" >
-    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
-    	<h:outputText value="#{tbcase.diagnosisDate}"  converter="localeDateConverter"/>
-    </s:decorate>
+   		<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
+   		<h:outputText value="#{tbcase.registrationDate}" />
+   	</s:decorate>
 
 	<div class="paragraph">#{messages['cases.healthUnit']}</div>
 	<s:decorate template="/layout/tbselection.xhtml" style="margin-bottom:10px;">
@@ -34,202 +34,129 @@
 		<ui:param name="required" value="true" />
 	</s:decorate>
 
-    <s:decorate template="/layout/display.xhtml" >
-   		<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
-   		<h:outputText value="#{tbcase.registrationDate}" />
-   	</s:decorate>
 
+	<h:panelGroup id="pnltreatment_int">
 
-	<h:panelGroup id="pnltreatment">
+	<rich:spacer height="10" />
+	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
+		<ui:define name="header">
+			<a:commandLink action="#{startTreatmentIndivHome.initMedicineSelection('INTENSIVE')}"
+				style="float:right;" ajaxSingle="true" 
+				value="#{messages['Regimen.add']}..." 
+				reRender="medpnl" oncomplete="showMedicinesDlg()" />
+			<b>#{messages['RegimenPhase.INTENSIVE']}</b>
+		</ui:define>
+		<ui:param name="showfooter" value="0" />
 
-	<a:commandButton value="#{messages['Regimen.add']}..."
-		action="#{prescribedMedicineHome.startNew}" 
-		style="float:right;width:200px;"
-		styleClass="button" 
-		reRender="medicinepnl"
-		ajaxSingle="true"
-		oncomplete="showMedicineDlg();" 
-		/>
-
-	<s:fragment rendered="#{not empty prescriptionTable.medicines}">
-	<s:decorate template="/cases/treattable.xhtml">
-		<ui:param name="editing" value="true" />
+		<h:outputText value="#{messages['edtrec.nomedicine']}" styleClass="warn" rendered="#{empty startTreatmentIndivHome.medicinesIntPhase}"/>
+		<h:dataTable value="#{startTreatmentIndivHome.medicinesIntPhase}" var="it" styleClass="tabela" width="100%" 
+			rendered="#{not empty startTreatmentIndivHome.medicinesIntPhase}" >
+			<h:column>
+				<f:facet name="header">
+					#{messages['Medicine']}
+				</f:facet>
+				<div class="medicine-icon">#{it.medicine}</div>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['PrescribedMedicine.months']}</f:facet>
+				<h:selectOneMenu id="month" value="#{it.months}" required="true" >
+           			<f:selectItems value="#{treatmentHome.months}" />
+				</h:selectOneMenu>
+				<h:message for="month" styleClass="erro" />
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['PrescribedMedicine.doseUnit']}</f:facet>
+				<h:selectOneMenu id="dose" value="#{it.doseUnit}" required="true" >
+           			<f:selectItems value="#{treatmentHome.doses}" />
+				</h:selectOneMenu>
+				<h:message for="dose" styleClass="erro" />
+			</h:column>
+		
+			<h:column>
+				<f:facet name="header">#{messages['PrescribedMedicine.frequency']}</f:facet>
+				<h:selectOneMenu id="freq" value="#{it.frequency}" required="true" >
+            		<f:selectItems value="#{frequencies}" />
+				</h:selectOneMenu>
+				<h:message for="freq" styleClass="erro" />
+			</h:column>
+		
+			<h:column rendered="#{not sources.singleResult}">
+				<f:facet name="header">#{messages['Source']}</f:facet>
+				<h:selectOneMenu id="sourcei" value="#{it.source}" required="true">
+            		<s:selectItems value="#{sources}" var="c" label="#{c.name}" noSelectionLabel="-" />
+            		<s:convertEntity />
+				</h:selectOneMenu>
+				<h:message for="sourcei" styleClass="erro"/>
+			</h:column>
+		</h:dataTable>
 	</s:decorate>
-	<table class="tabela" width="100%" style="padding:8px;">
-	<tr>
-		<th width="150px">
-			#{messages['global.period']}
-		</th>
-		<td style="text-align:center;">
-			<div class="bar-header" style="width:100%;">
-			<h:outputText value="#{tbcase.treatmentPeriod.iniDate}" converter="periodConverter">
-				<f:param name="endDate" value="#{tbcase.treatmentPeriod.endDate}" />
-				<f:param name="type" value="length"/>
-			</h:outputText>
-			<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
-				<div style="display:block;clear:both;font-weight:bold;">#{messages['cases.treat']}</div>
-				<h:outputText value="#{tbcase.treatmentPeriod.iniDate}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">
-					<f:param name="endDate" value="#{tbcase.treatmentPeriod.endDate}"/>
-					<f:param name="type" value="length"/>
-				</h:outputText>
-			</div></div></div>
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<th>
-			#{messages['Regimen']}
-		</th>
-		<td>
-			<a:repeat value="#{prescriptionTable.regimens}" var="p">
-				<div class="bar-header"  style="width:#{p.width}%; left:#{p.left}% ">
-				<div class="bar-caption">#{p.item}</div>
-				
-				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
-					<div style="display:block;clear:both;font-weight:bold;">#{p.item}</div>
-					<h:outputText value="#{p.iniDate}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">
-						<f:param name="endDate" value="#{p.endDate}"/>
-						<f:param name="type" value="length"/>
-					</h:outputText>
-				</div></div></div>
-				
-				</div>
-			</a:repeat>
-		</td>
-	</tr>
-	
-	<a:repeat value="#{prescriptionTable.medicines}" var="med">
-	<tr>
-		<td>
-			#{med.medicine.fullAbbrevName}<br/>
-			#{med.medicine.dosageForm}
-		</td>
-		<td>
-			<a:repeat value="#{med.prescriptions}" var="p">
-			<div class="bar"  style="width:#{p.width}%; left:#{p.left}% ">
-				<div class="bar-left"><div class="bar-right"><div class="bar-caption"><s:div styleClass="bar-comments" rendered="#{p.item.hasComments}" />
-					#{p.item.doseUnit} (#{p.item.frequency}/7)
-				</div></div></div>
-				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
-					<div style="display:block;clear:both;font-weight:bold;">#{med.medicine.fullAbbrevName}</div>
-					<h:outputText value="#{p.iniDate}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">
-						<f:param name="endDate" value="#{p.endDate}"/>
-						<f:param name="type" value="length"/>
-					</h:outputText>
-					
-					<b>#{messages['PrescribedMedicine.doseUnit']}: </b> #{p.item.doseUnit} (#{p.item.frequency}/7) <br/>	
-					<div style="display:block;clear;both;width:100%;">
-						<b>#{messages['PrescribedMedicine.frequency']}: </b> #{p.item.frequency}/7
-					</div>
-					<div style="display:block;clear;both;width:95%;margin-bottom:8px;">
-						<b>#{messages['Source']}: </b> #{p.item.source.abbrevName}
-					</div>
-
-					<a:commandLink value="#{messages['form.edit']}..." style="padding-right:20px;" 
-						reRender="medicinepnl" ajaxSingle="true"
-						action="#{prescribedMedicineHome.startEditing(p.item)}" oncomplete="showMedicineDlg()"/>
-
-					<a:commandLink value="#{messages['form.remove']}" style="padding-right:20px;"
-						onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}"
-						ajaxSingle="true" 
-						oncomplete="initializeTreatmentView();"
-						reRender="pnltreatment" action="#{prescribedMedicineHome.deleteMedicine(p.item)}"	/>
-				</div></div></div>
-			</div>			
-			</a:repeat>
-		</td>
-	</tr>
-	</a:repeat>
-	</table>
-	</s:fragment>
-
 	</h:panelGroup>
+	
+	<h:panelGroup id="pnltreatment_cont">
+	<rich:spacer height="10" />
+	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
+		<ui:define name="header">
+			<a:commandLink action="#{startTreatmentIndivHome.initMedicineSelection('CONTINUOUS')}"
+				style="float:right;" ajaxSingle="true"
+				value="#{messages['Regimen.add']}..." 
+				reRender="medpnl" oncomplete="showMedicinesDlg()" />
+			<b>#{messages['RegimenPhase.CONTINUOUS']}</b>
+		</ui:define>
+		<ui:param name="showfooter" value="0" />
 
-<script type="text/javascript"><!--
-jQuery(document).ready(function () {
-	popupTreatment = null;
-	popupLong = false;
-	initializeTreatmentView();
-});
-
-function initializeTreatmentView() {
-	jQuery(".bar,.bar-header").click(function() {
-		var aux = jQuery(".popup", this);
-		// is long popup ?
-		if (aux.size() == 0) {
-			aux = jQuery(".popup-long", this);
-			if (aux.is(':hidden')) {
-				if (popupTreatment != null)
-					closePopupHint(popupTreatment);
-				popupLong = true;
-				aux.animate({opacity: "show", top: "-240px"}, "slow");
-				popupTreatment = aux;
-			}
-			else closePopupHint(aux);
-		}
-		else {
-			if (aux.is(':hidden')) {
-				if (popupTreatment != null)
-					closePopupHint(popupTreatment);
-				popupLong = false;
-				aux.animate({opacity: "show", top: "-120px"}, "slow");
-				popupTreatment = aux;
-			}
-			else closePopupHint(aux);
-		}
-	});
-
-	jQuery('.bar-header').mouseenter(function() {
-		jQuery(this).removeClass('bar-header');
-		jQuery(this).addClass('bar-header-active');
-	});
-
-	jQuery('.bar-header').mouseleave(function() {
-		jQuery(this).removeClass('bar-header-active');
-		jQuery(this).addClass('bar-header');
-	});
-
-	jQuery('.bar').mouseenter(function() {
-		jQuery(this).removeClass('bar');
-		jQuery('.bar-left', this).addClass('bar-left-active').removeClass('bar-left');
-		jQuery('.bar-right', this).addClass('bar-right-active').removeClass('bar-right');
-
-		jQuery(this).addClass('bar-active');
-	});
-
-	jQuery('.bar').mouseleave(function() {
-		jQuery(this).removeClass('bar-active');
-		jQuery('.bar-left-active', this).addClass('bar-left').removeClass('bar-left-active');
-		jQuery('.bar-right-active', this).addClass('bar-right').removeClass('bar-right-active');
-
-		jQuery(this).addClass('bar');		
-	});
-
-	jQuery('.popup #closewin').click( function() {
-		closePopupHint(jQuery(this).parent('.popup'));
-	});
-	jQuery('.popup-long #closewin').click( function() {
-		closePopupHint(jQuery(this).parent('.popup'));
-	});
-}
-
-function closePopupHint(jqryElem, isLong) {
-	if (popupLong)
-		 jqryElem.animate({opacity: "hide", top: "-250px"}, "fast");
-	else jqryElem.animate({opacity: "hide", top: "-130px"}, "fast");
-	popupTreatment = null;	
-}
-
-function showMedicineDlg() {	Richfaces.showModalPanel('medicinedlg'); }
-function showPeriodDlg() {	Richfaces.showModalPanel('perioddlg'); }
-function showHuDlg() {	Richfaces.showModalPanel('hudlg'); }
-
---></script>
+		<h:outputText value="#{messages['edtrec.nomedicine']}" styleClass="warn" rendered="#{empty startTreatmentIndivHome.medicinesContPhase}"/>
+		<h:dataTable value="#{startTreatmentIndivHome.medicinesContPhase}" var="it" styleClass="tabela" width="100%" 
+			rendered="#{not empty startTreatmentIndivHome.medicinesContPhase}" >
+			<h:column>
+				<f:facet name="header">
+					#{messages['Medicine']}
+				</f:facet>
+				<div class="medicine-icon">#{it.medicine}</div>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['PrescribedMedicine.months']}</f:facet>
+				<h:selectOneMenu id="month" value="#{it.months}" required="true" >
+           			<f:selectItems value="#{treatmentHome.months}" />
+				</h:selectOneMenu>
+				<h:message for="month" styleClass="erro" />
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['PrescribedMedicine.doseUnit']}</f:facet>
+				<h:selectOneMenu id="dose2" value="#{it.doseUnit}" required="true" >
+           			<f:selectItems value="#{treatmentHome.doses}" />
+				</h:selectOneMenu>
+				<h:message for="dose2" styleClass="erro" />
+			</h:column>
+		
+			<h:column>
+				<f:facet name="header">#{messages['PrescribedMedicine.frequency']}</f:facet>
+				<h:selectOneMenu id="freq2" value="#{it.frequency}" required="true">
+            		<f:selectItems value="#{frequencies}" />
+				</h:selectOneMenu>
+				<h:message for="freq2" styleClass="erro" />
+			</h:column>
+		
+			<h:column rendered="#{not sources.singleResult}">
+				<f:facet name="header">#{messages['Source']}</f:facet>
+				<h:selectOneMenu id="sourcei" value="#{it.source}" required="true">
+ 	           		<s:selectItems value="#{sources}" var="c" label="#{c.name}" noSelectionLabel="-" />
+            		<s:convertEntity />
+				</h:selectOneMenu>
+				<h:message for="sourcei" styleClass="erro"/>
+			</h:column>
+		</h:dataTable>
+	</s:decorate>
+	
+	</h:panelGroup>
 
 	</td></tr>
     <tr><td align="right">
     
-		<a:commandButton action="#{startTreatmentHome.startIndividualizedRegimen}" value="#{messages['form.ok']}" styleClass="button" 
+		<a:commandButton action="#{caseDataBRHome.saveTreatmentEditing}" value="#{messages['form.ok']}" styleClass="button" 
 				reRender="formtreat,messages" 
             	oncomplete="this.disabled=false;"
             	onclick="this.disabled=true;" />
@@ -243,73 +170,12 @@ function showHuDlg() {	Richfaces.showModalPanel('hudlg'); }
 </s:decorate>
 
 
-<rich:modalPanel id="medicinedlg" width="700" autosized="true" zindex="2000" trimOverlayedElements="false">
-	<f:facet name="header">#{messages['PrescribedMedicine']}</f:facet>
-	<ui:param name="labelstyle" value="width:110px" />
-	<h:panelGroup id="medicinepnl">
-	<h:form style="padding:10px;" rendered="#{treatmentHome.formEditing=='MEDICINE'}">
-
-	<h:messages globalOnly="false" styleClass="erro" layout="table" />
-	<s:decorate template="/layout/edit.xhtml">
-		<ui:define name="label">#{messages['Medicine']}:</ui:define>
-		<h:selectOneMenu value="#{prescribedMedicine.medicine}" required="true"> 
-			<s:selectItems var="med" value="#{medicines}" noSelectionLabel="-" label="#{med}"/>
-			<s:convertEntity />
-		</h:selectOneMenu>
-	</s:decorate>
-
-	<s:decorate template="/layout/edit.xhtml">
-		<ui:define name="label">#{messages['PrescribedMedicine.iniMonth']}:</ui:define>
-		<h:selectOneMenu value="#{prescribedMedicine.iniMonth}" required="true" >
-           	<f:selectItems value="#{prescribedMedicineHome.iniMonths}" />
-		</h:selectOneMenu>
-	</s:decorate>
-
-	<s:decorate template="/layout/edit.xhtml">
-		<ui:define name="label">#{messages['PrescribedMedicine.months']}:</ui:define>
-		<h:selectOneMenu value="#{prescribedMedicine.months}" required="true" >
-           	<f:selectItems value="#{prescribedMedicineHome.months}" />
-		</h:selectOneMenu>
-	</s:decorate>
-
-	<s:decorate template="/layout/edit.xhtml">
-		<ui:define name="label">#{messages['PrescribedMedicine.doseUnit']}:</ui:define>
-		<h:selectOneMenu value="#{prescribedMedicine.doseUnit}" required="true" >
-           	<f:selectItems value="#{prescribedMedicineHome.doses}" />
-		</h:selectOneMenu>
-	</s:decorate>
-
-	<s:decorate template="/layout/edit.xhtml">
-		<ui:define name="label">#{messages['PrescribedMedicine.frequency']}:</ui:define>
-		<h:selectOneMenu value="#{prescribedMedicine.frequency}" required="true" >
-           	<f:selectItems value="#{frequencies}" />
-		</h:selectOneMenu>
-	</s:decorate>
-
-	<s:decorate template="/layout/edit.xhtml">
-		<ui:define name="label">#{messages['Source']}:</ui:define>
-		<h:selectOneMenu value="#{prescribedMedicine.source}" required="true" >
-			<s:selectItems var="s" value="#{sources}" noSelectionLabel="-" label="#{s}"/>
-			<s:convertEntity />
-		</h:selectOneMenu>
-	</s:decorate>
-
-	<s:decorate template="/layout/edit.xhtml">
-		<ui:define name="label">#{messages['global.comments']}:</ui:define>
-		<h:inputTextarea value="#{prescribedMedicine.comments}" style="width:400px;height:40px;"/>
-	</s:decorate>
-	
-	<a:commandButton value="#{messages['form.ok']}" action="#{prescribedMedicineHome.updateChanges}"
-		data="#{prescribedMedicineHome.validated}"
-		styleClass="button" reRender="pnltreatment,medicinepnl" 
-		oncomplete="initializeTreatmentView(); if (!data) return false;Richfaces.hideModalPanel('medicinedlg');"/>
-		
-	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
-		onclick="Richfaces.hideModalPanel('medicinedlg'); return false;"/>
-	</h:form>
-	</h:panelGroup>
-</rich:modalPanel>
-
+<s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
+	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
+	<a:commandButton value="#{messages['form.ok']}" styleClass="button" action="#{startTreatmentIndivHome.addMedicines}" 
+		oncomplete="hideMedicinesDlg();" 
+		reRender="#{startTreatmentIndivHome.phase=='INTENSIVE'? 'pnltreatment_int':'pnltreatment_cont'}"/>
+</s:decorate>
 
 </ui:define>
 

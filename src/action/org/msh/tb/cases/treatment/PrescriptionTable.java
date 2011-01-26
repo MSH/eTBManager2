@@ -84,7 +84,7 @@ public class PrescriptionTable {
 			for (TreatmentHealthUnit hu: tbcase.getHealthUnits())
 				healthUnits.add( new TreatmentPeriod(this, hu, hu.getPeriod()) );
 			
-			numDaysTreatment = period.getDays();
+			numDaysTreatment = (period != null ? period.getDays() : 0);
 			updateListValues(healthUnits);
 	
 			return true;

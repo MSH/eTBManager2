@@ -18,6 +18,7 @@ import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.User;
 import org.msh.mdrtb.entities.enums.OrderStatus;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.log.LogInfo;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
@@ -25,6 +26,7 @@ import org.msh.utils.date.DateUtils;
 
 
 @Name("orderHome")
+@LogInfo(roleName="ORDERS")
 public class OrderHome extends EntityHomeEx<Order>{
 	private static final long serialVersionUID = 2666375478687085792L;
 

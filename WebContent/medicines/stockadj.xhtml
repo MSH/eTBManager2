@@ -51,7 +51,7 @@
 			</h:outputText>
 		</td>
 		<td>
-			<h:graphicImage value="#{request.contextPath}/public/themes/default/images/arrow.gif" rendered="#{it.quantity>0}"/>
+			<h:graphicImage value="/public/themes/default/images/arrow.gif" rendered="#{it.quantity>0}"/>
 		</td>
 		<td align="left">
 			<b>
@@ -61,7 +61,10 @@
 			</b>
 		</td>
 		<td align="center" width="150px">
-			<a:commandLink value="#{messages['medicines.movs.adjchange']}" action="#{stockAdjustmentHome.initializeBatchSelection(it)}" reRender="batchselpnl,messages" oncomplete="showBatchesSelectionDlg();" ajaxSingle="true"/>
+			<a:commandLink value="#{messages['medicines.movs.adjchange']}" 
+				action="#{stockAdjustmentHome.initializeBatchSelection(it)}" 
+				reRender="batchselpnl,messages" oncomplete="showBatchesSelectionDlg();" 
+				ajaxSingle="false"/>
 		</td>
 	</tr>
 		<a:repeat value="#{it.batches}" var="b">

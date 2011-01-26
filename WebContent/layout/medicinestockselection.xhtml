@@ -14,7 +14,7 @@ function mscheckClick(obj) {
   if (obj.checked)
 	  msselectall()
   else msunselectall();
-  updateRows();
+  msupdateRows();
 }
 function msupdateRows() {
 jQuery(".tbl tr").removeClass("activerow");
@@ -37,7 +37,7 @@ function hideMedicinesStockDlg() {
 	<h:panelGroup id="medstkpnl">
 	<a:region renderRegionOnly="false">
 	<a:form id="dlg" rendered="#{medicineStockSelection.tbunit != null}">
-	<h:selectBooleanCheckbox id="todos" style="margin-left:4px;margin-right:10px;margin-right:20px;" onclick="checkClick(this);"/>
+	<h:selectBooleanCheckbox id="todos" style="margin-left:4px;margin-right:10px;margin-right:20px;" onclick="mscheckClick(this);"/>
 	<b>#{messages['Medicine']}</b>
 
 	<div id="tblsel" style="overflow: auto; width: 98%; height: 290px;border: 1px gray solid;">	

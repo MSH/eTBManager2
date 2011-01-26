@@ -84,7 +84,7 @@ public class TreatmentCostReport {
 			TbCase tbcase = caseInfo.getTbcase();
 			String caseNumber = tbcase.getRegistrationCode();
 			
-			Item it = itemByPatient(tbcase.getId(), tbcase.getPatient().getName(), tbcase.getState());
+			Item it = itemByPatient(tbcase.getId(), tbcase.getPatient().getFullName(), tbcase.getState());
 			
 			it.setCaseNumber(caseNumber);
 			it.setIniTreatmentDate(tbcase.getTreatmentPeriod().getIniDate());

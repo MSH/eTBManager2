@@ -31,7 +31,7 @@ public class OrderItem implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
-	@ManyToOne
+	@ManyToOne(cascade={CascadeType.ALL})
 	@JoinColumn(name="ORDER_ID")
 	@NotNull
 	private Order order;
@@ -65,12 +65,10 @@ public class OrderItem implements Serializable {
 	@Column(length=200)
 	private String comment;
 
-	@OneToMany(cascade={CascadeType.ALL})
-	@JoinColumn(name="ORDERITEM_ID")
+	@OneToMany(mappedBy="orderItem", cascade={CascadeType.ALL})
 	private List<OrderBatch> batches = new ArrayList<OrderBatch>();
 
-	@OneToMany(cascade={CascadeType.ALL})
-	@JoinColumn(name="ORDERITEM_ID")
+	@OneToMany(mappedBy="item", cascade={CascadeType.ALL})
 	private List<OrderCase> cases = new ArrayList<OrderCase>();
 
 	/**

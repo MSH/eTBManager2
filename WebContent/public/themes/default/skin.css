@@ -980,5 +980,6 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 
 .rich-menu-item-label,.rich-menu-item-label a, .rich-menu-item-label a:hover {
 	font-size:12px;
+	width:100%;
 }
 

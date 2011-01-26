@@ -53,7 +53,9 @@
 		<rich:dropDownMenu style="width:auto;float:right;" rendered="#{caseHome.canEditTreatment}" styleClass="dropdown-link">
 			<f:facet name="label">#{messages['form.options']}
 			</f:facet>
-			<rich:menuItem value="#{messages['form.edit']}" action="edit" submitMode="ajax">
+			<rich:menuItem submitMode="client"
+				value="#{messages['form.edit']}" 
+				onclick="document.location.href='#{request.contextPath}/cases/treatmentedt.seam?id=#{caseHome.id}'">
 			</rich:menuItem>
 			<rich:menuItem  rendered="#{caseHome.canTransferOut}" >
 				<s:link value="#{messages['cases.move']}" view="/cases/casemove.xhtml" style="width:100%">

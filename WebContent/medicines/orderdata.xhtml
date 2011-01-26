@@ -31,8 +31,10 @@
 
 <ui:define name="menu_lateral">
 	<h:form>
-	<h:commandLink action="#{orderHome.remove}" value="#{messages['medicines.orders.remove']}" rendered="#{orderHome.canRemove}" 
-		onclick="return confirm('#{messages['form.confirm_remove']}');" />
+	<a:commandLink action="#{orderHome.remove}" value="#{messages['medicines.orders.remove']}"
+		ajaxSingle="true" 
+		rendered="#{orderHome.canRemove}" 
+		onclick="if (!confirm('#{messages['form.confirm_remove']}')) {return false};" />
 
 	<s:link view="/medicines/orderaut.xhtml" value="#{messages['medicines.orders.autorize']}" rendered="#{orderHome.canAuthorize}">
 		<f:param name="id" value="#{order.id}" />
@@ -42,7 +44,7 @@
 		<f:param name="id" value="#{order.id}" />
 	</s:link>
 
-	<s:link view="/medicines/ordersent.xhtml" value="#{messages['medicines.orders.shipment']}" rendered="#{(orderHome.canShip)}" >
+	<s:link view="/medicines/ordersent.xhtml" value="#{messages['medicines.orders.shipment']}" rendered="#{orderHome.canShip}" propagation="none">
 		<f:param name="id" value="#{order.id}" />
 	</s:link>
 

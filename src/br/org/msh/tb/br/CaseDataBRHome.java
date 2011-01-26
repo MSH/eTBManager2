@@ -509,9 +509,11 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	 * @return
 	 */
 	public String saveTreatmentEditing() {
+		TbCase tbcase = caseHome.getInstance();
+		startTreatmentIndivHome.setIniTreatmentDate(tbcase.getRegistrationDate());
+
 		String ret = startTreatmentIndivHome.startIndividualizedRegimen(); 
 		if (ret.equals("persisted")) {
-			TbCase tbcase = caseHome.getInstance();
 			if (tbcase.getHealthUnits().size() > 0) {
 				tbcase.setNotificationUnit(tbcase.getHealthUnits().get(0).getTbunit());
 				caseHome.persist();

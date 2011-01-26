@@ -6,17 +6,19 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 template="usertemplate.xhtml">
       
-      <ui:param name="subject" value="New user account" />
+      <ui:param name="subject" value="#{messages['mail.newuser']}" />
       
       <ui:define name="body">
           
-        <h3>New user account and password</h3><p/>
-        Hi #{user.name},<p/>
-        This is an automatic message sent by the e-TB Manager and it shall not be answered.<br/>
-        A new user account and password were created to log into the e-TB Manager:<p/>
-        <table border="0" cellpadding="4" style="font-size:12px;font-name:Courier New;">
-            <tr><td>User account:</td><td>#{user.login}</td></tr>
-            <tr><td>Password:</td><td>#{password}</td></tr>
+        <h3>#{messages['mail.newuser']}</h3><p/>
+        <h:outputFormat value="#{messages['mail.hi']}">
+        	<f:param value="#{user.name}" />
+        </h:outputFormat>,<p/>
+        #{messages['mail.introduction']}<br/>
+        #{messages['mail.newuser.msg']}<p/>
+        <table border="0" cellpadding="4" style="font-size:14px;font-name:Courier New;">
+            <tr><td>#{messages['User.login']}:</td><td>#{user.login}</td></tr>
+            <tr><td>#{messages['User.password']}:</td><td>#{password}</td></tr>
         </table>
 
       </ui:define>

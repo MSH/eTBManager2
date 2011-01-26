@@ -8,7 +8,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -74,8 +73,7 @@ public class Order implements Serializable {
 	@JoinColumn(name="AUTHORIZER_UNIT_ID")
 	private Tbunit authorizer;
 	
-	@OneToMany(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
-	@JoinColumn(name="ORDER_ID")
+	@OneToMany(mappedBy="order", cascade={CascadeType.ALL})
 	private List<OrderItem> items = new ArrayList<OrderItem>();
 
 	@Column(length=50)
@@ -89,7 +87,14 @@ public class Order implements Serializable {
 		}
 		return tot;
 	}
-	
+
+	@Override
+	public String toString() {
+		if (id != null)
+			 return id.toString();
+		else return super.toString();
+	}
+
 	public Date getShippingDate() {
 		return shippingDate;
 	}

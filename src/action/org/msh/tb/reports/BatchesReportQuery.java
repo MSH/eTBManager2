@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Batch;
+import org.msh.mdrtb.entities.BatchQuantity;
 import org.msh.utils.EntityQuery;
 
 
 @Name("batchesReport")
-public class BatchesReportQuery extends EntityQuery<Batch> {
+public class BatchesReportQuery extends EntityQuery<BatchQuantity> {
 	private static final long serialVersionUID = 2716061240331114210L;
 
 	private static final String[] restrictions = {"b.source = #{stockPosHome.source}",

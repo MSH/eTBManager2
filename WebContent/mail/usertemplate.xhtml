@@ -6,25 +6,25 @@
                 xmlns:f="http://java.sun.com/jsf/core">
       
  <m:message>
-    <m:from name="e-TB Manager" address="#{etbmanagerApp.configuration.systemMail}" />
+    <m:from name="#{messages['mdrtb_system']}" address="#{etbmanagerApp.configuration.systemMail}" />
     <m:to name="#{user.name}">#{user.email}</m:to>
-    <m:subject>e-TB Manager - #{subject}</m:subject>
+    <m:subject>#{subject}</m:subject>
 
     <m:body>
         <html>
             <body>
                 <span style="font-family:Verdana,Arial,Sans Serif;font-size:12px;">
-                    <b>e-TB Manager</b>
+                    <b>#{messages['mdrtb_system']}</b>
                     <br/>
                     <ui:insert name="body">
                         This is the default body, specified by the template.
                     </ui:insert>
                     <p/>
-                    To login just click on 
+                    #{messages['mail.loginmsg']}
                     <a href="#{dmsystem.systemURL}">#{dmsystem.systemURL}</a>.<p/>
                     <p/>
-                    Regards,<br/>
-                    e-TB Manager System Administrator
+                    #{messages['mail.regards']},<br/>
+                    #{messages['mail.signature']}
                 </span>
             <p/>
         </body>

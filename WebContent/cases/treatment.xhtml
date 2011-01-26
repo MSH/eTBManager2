@@ -56,7 +56,9 @@
 			
 			<f:facet name="label">#{messages['form.options']}
 			</f:facet>
-			<rich:menuItem value="#{messages['form.edit']}" submitMode="server" action="edit" >
+			<rich:menuItem submitMode="client"
+				value="#{messages['form.edit']}" 
+				onclick="document.location.href='#{request.contextPath}/cases/treatmentedt.seam?id=#{caseHome.id}'">
 			</rich:menuItem>
 			<rich:menuItem  rendered="#{caseHome.canTransferOut}" submitMode="client">
 				<s:link value="#{messages['cases.move']}" view="/cases/casemove.xhtml">

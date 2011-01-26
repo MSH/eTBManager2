@@ -43,11 +43,11 @@
 </s:button>
 <p/>
 
+<h:panelGroup id="pnllabs">
 <s:decorate template="/layout/listresult.xhtml">
 	<ui:param name="list" value="#{laboratories}" />
 </s:decorate>
 
-<h:panelGroup id="pnllabs">
 <h:dataTable id="tbl" value="#{laboratories.resultList}" var="r" border="0" columnClasses="coll,coll,colc" width="100%"
   styleClass="tabela" rowClasses="lin1,lin2" rendered="#{laboratories.resultCount > 0}">
   <h:column>
