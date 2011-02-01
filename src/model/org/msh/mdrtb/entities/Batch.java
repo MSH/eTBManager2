@@ -16,6 +16,7 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
 import org.msh.mdrtb.entities.enums.Container;
+import org.msh.utils.date.DateUtils;
 
 @Entity
 public class Batch implements Serializable {
@@ -59,7 +60,7 @@ public class Batch implements Serializable {
 	 * @return
 	 */
 	public boolean isExpired() {
-		return (expiryDate != null) && (expiryDate.before(new Date()));
+		return (expiryDate != null) && (expiryDate.before(DateUtils.getDate()));
 	}
 
 

@@ -64,21 +64,25 @@ public class BrowserInfo {
 	}
 
 	private void updateBrowserInfo() {
-		updateUserAgent();
-		if (userAgent == null)
-			return;
-		
-		if (userAgent.indexOf("Firefox/") != -1)
-			getFirefoxInfo();
-		else
-		if (userAgent.indexOf("MSIE") != -1) 
-			getInternetExplorerInfo();
-		else
-		if (userAgent.indexOf("Chrome/") != -1)
-			getGoogleChromeInfo();
-		else {
-			browserType = null;
-			browserVersion = null;
+		try {
+			updateUserAgent();
+			if (userAgent == null)
+				return;
+			
+			if (userAgent.indexOf("Firefox/") != -1)
+				getFirefoxInfo();
+			else
+			if (userAgent.indexOf("MSIE") != -1) 
+				getInternetExplorerInfo();
+			else
+			if (userAgent.indexOf("Chrome/") != -1)
+				getGoogleChromeInfo();
+			else {
+				browserType = null;
+				browserVersion = null;
+			}
+		} catch (Exception e) {
+			System.out.println("Error getting browser info: userAgent = " + userAgent);
 		}
 	}
 

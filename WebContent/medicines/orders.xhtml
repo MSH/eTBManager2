@@ -51,7 +51,7 @@
 
 <s:decorate template="/layout/naveg.xhtml">
 	<ui:param name="list" value="#{orders}" />
-	<ui:param name="page" value="/medicines/medicineorders.xhtml" />
+	<ui:param name="page" value="/medicines/orders.xhtml" />
 </s:decorate>
 
 <h:dataTable value="#{orders.resultList}" var="r" styleClass="tabela" rendered="#{orders.resultCount > 0}" 

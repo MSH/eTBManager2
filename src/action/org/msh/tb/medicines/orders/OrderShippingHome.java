@@ -42,8 +42,17 @@ public class OrderShippingHome extends Controller {
 	@In(create=true) BatchSelection batchSelection;
 	
 	private OrderItem orderItem;
+	
+	/**
+	 * Check if notify shipment functionality was initialized
+	 */
+	private boolean initialized;
 
 
+	/**
+	 * Register shipment of order
+	 * @return
+	 */
 	public String registerShipping() {
 		Date dt = order.getApprovingDate();
 		if (dt == null)
@@ -112,8 +121,15 @@ public class OrderShippingHome extends Controller {
 		return "persisted";	
 	}
 
+
 	
+	/**
+	 * Initialize order shipment 
+	 */
 	public void initialize() {
+		if (initialized)
+			return;
+		
 		// retorna todos os lotes
 		List<BatchQuantity> batches = entityManager.createQuery("from BatchQuantity b " +
 				"join fetch b.batch bat " +
@@ -185,7 +201,9 @@ public class OrderShippingHome extends Controller {
 			if (orderSources.get(i).getItems().size() == 0)
 				orderSources.remove(i);
 			else i++;
-		}		
+		}
+		
+		initialized = true;
 	}
 
 
