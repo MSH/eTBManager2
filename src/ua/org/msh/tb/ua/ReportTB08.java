@@ -191,7 +191,6 @@ public class ReportTB08 extends Indicator2D {
 			if (col != null) {
 				table.addIdValue(col, key + micResult, val);
 				table.addIdValue("TOTAL", key + micResult, val);
-				System.out.println(col + " = " + val);
 			}
 		}
 	}

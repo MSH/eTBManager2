@@ -30,14 +30,25 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 	
 	@Factory("caseDataUA")
 	public CaseDataUA getCaseDataUA() {
-		try {
-			entityManager.createQuery("from CaseDataUA c where c.tbcase.id = #{caseHome.id}").getSingleResult();
+		if ((!isManaged()) && (caseHome.isManaged())) {
+			Integer id = (Integer)caseHome.getId();
+			if (id != null) {
+				try {
+					setId(id);
+				} catch (Exception e) {
+					e.printStackTrace();
+					setId(null);
+				}
+			}
+		}
+/*		try {
+			List<CaseDataUA> entityManager.createQuery("from CaseDataUA c where c.tbcase.id = #{caseHome.id}").getResultList();
 			setId(caseHome.getId());
 		} catch (Exception e) {
 			e.printStackTrace();
 			setId(null);
 		}
-		return getInstance();
+*/		return getInstance();
 	}
 
 	

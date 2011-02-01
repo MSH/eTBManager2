@@ -18,7 +18,7 @@ import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.User;
 import org.msh.mdrtb.entities.enums.OrderStatus;
 import org.msh.tb.EntityHomeEx;
-import org.msh.tb.log.LogInfo;
+import org.msh.tb.log.LogService;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
@@ -26,7 +26,6 @@ import org.msh.utils.date.DateUtils;
 
 
 @Name("orderHome")
-@LogInfo(roleName="ORDERS")
 public class OrderHome extends EntityHomeEx<Order>{
 	private static final long serialVersionUID = 2666375478687085792L;
 
@@ -87,11 +86,11 @@ public class OrderHome extends EntityHomeEx<Order>{
 			st = OrderStatus.WAITINGAUT;
 		else {
 			st = OrderStatus.AUTHORIZED;
-			order.setApprovingDate(orderDate);
+/*			order.setApprovingDate(orderDate);
 			for (OrderItem it: order.getItems()) {
 				it.setApprovedQuantity(it.getRequestedQuantity());
 			}
-		}
+*/		}
 		order.setStatus(st);
 		order.setOrderDate(orderDate);
 		order.setNumDays(order.getTbunitFrom().getNumDaysOrder());
@@ -102,7 +101,17 @@ public class OrderHome extends EntityHomeEx<Order>{
 
 		facesMessages.addFromResourceBundle("default.entity_created");
 		
-		return persist();
+		String ret = persist();
+		if (!ret.equals("persisted"))
+			return ret;
+
+		// register log about new order
+		LogService logSrv = getLogService();
+		logSrv.addValue(".tbunitFrom", order.getTbunitFrom().toString());
+		logSrv.addValue(".tbunitTo", order.getTbunitTo().toString());
+		logSrv.saveExecuteTransaction(order, "NEW_ORDER");
+		
+		return ret;
 	}
 	
 
@@ -136,6 +145,9 @@ public class OrderHome extends EntityHomeEx<Order>{
 				movementHome.removeMovement(mov);
 			}
 		}
+
+		// register log
+		getLogService().saveExecuteTransaction(getInstance(), "ORDER_CANC");
 		
 		if (update().equals("updated"))
 			 return "ordercanceled";
@@ -234,6 +246,12 @@ public class OrderHome extends EntityHomeEx<Order>{
 		return userUnit.getId().equals(order.getTbunitFrom().getId());
 	}
 	
+	
+	@Override
+	public String remove() {
+		getLogService().saveRemoveTransaction(getInstance(), "ORDERS");
+		return super.remove();
+	}
 	
 	/**
 	 * Check if the order can be removed. The only one that can remove is the owner of the order

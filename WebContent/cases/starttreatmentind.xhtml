@@ -14,8 +14,10 @@
 
 <ui:param name="topmenu" value="0" />
 <ui:param name="waitdlg" value="1" />
+<ui:param name="left" value="0" />
 
 <ui:param name="labelstyle" value="width:140px" />
+
 
 <ui:define name="body">
 
@@ -98,6 +100,13 @@
 				</h:selectOneMenu>
 				<h:message for="sourcei" styleClass="erro"/>
 			</h:column>
+
+			<h:column>
+				<a:commandLink value="#{messages['form.remove']}" 
+					action="#{startTreatmentIndivHome.removePrescribedMedicine(it)}"
+					ajaxSingle="true" 
+					reRender="pnltreatment_int"/>
+			</h:column>
 		</h:dataTable>
 	</s:decorate>
 	</h:panelGroup>
@@ -156,6 +165,13 @@
 				</h:selectOneMenu>
 				<h:message for="sourcei" styleClass="erro"/>
 			</h:column>
+
+			<h:column>
+				<a:commandLink value="#{messages['form.remove']}" 
+					action="#{startTreatmentIndivHome.removePrescribedMedicine(it)}"
+					ajaxSingle="true" 
+					reRender="pnltreatment_cont"/>
+			</h:column>
 		</h:dataTable>
 	</s:decorate>
 
@@ -176,7 +192,8 @@
 <s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
 	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
 	<a:commandButton value="#{messages['form.ok']}" styleClass="button" action="#{startTreatmentIndivHome.addMedicines}" 
-		oncomplete="hideMedicinesDlg();" 
+		oncomplete="this.enabled=true;hideMedicinesDlg();" 
+		onclick="this.disabled=true;"
 		reRender="#{startTreatmentIndivHome.phase=='INTENSIVE'? 'pnltreatment_int':'pnltreatment_cont'}"/>
 </s:decorate>
 

@@ -12,7 +12,6 @@ import org.jboss.seam.framework.Controller;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.ExtraOutcomeInfo;
 import org.msh.tb.cases.treatment.TreatmentHome;
 import org.msh.utils.date.Period;
 

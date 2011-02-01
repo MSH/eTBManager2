@@ -23,6 +23,7 @@ import org.msh.mdrtb.entities.Source;
 import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.enums.MovementType;
 import org.msh.mdrtb.entities.enums.OrderStatus;
+import org.msh.tb.log.LogService;
 import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
@@ -44,73 +45,71 @@ public class OrderShippingHome extends Controller {
 
 
 	public String registerShipping() {
-		try {
-			Date dt = order.getApprovingDate();
-			if (dt == null)
-				dt = order.getOrderDate();
-			
-			if (dt.after(order.getShippingDate())) {
-				facesMessages.addFromResourceBundle("medicines.orders.invalidshipmentdate");
-				return "error";
-			}
-			
-			// verifica se algum lote foi informado
-			boolean bBatchSel = false;
-			for (OrderItem it: order.getItems()) {
-				if (it.getShippedQuantity() != null) {
-					bBatchSel = true;
-					break;
-				}
-			}
-			if (!bBatchSel) {
-				facesMessages.addFromResourceBundle("medicines.orders.nobatchsel");
-				return "error";
-			}
-			
-			// altera o status para autorizado
-			OrderStatus status = OrderStatus.SHIPPED;
-			order.setStatus(status);
-			Date dtShipping = order.getShippingDate();
-//			Tbunit dto = order.getTbunitTo();
-			
-			// check if stock can be decreased
-			Tbunit unitTo = order.getTbunitTo();
-			boolean canShip = true;
-			for (OrderItem it: order.getItems()) {
-				if (!movementHome.canDecreaseStock(unitTo, it.getSource(), 
-						it.getMedicine(), it.getShippedQuantity(), order.getShippingDate())) {
-					canShip = false;
-					it.setData(true);
-				}
-			}
-
-			if (!canShip)
-				return "error";
-			
-			MovementType type = MovementType.ORDERSHIPPING;
-			// gera os movimentos de saída do pedido
-			for (OrderItem it: order.getItems())
-				if ((it.getShippedQuantity() != null) && (it.getShippedQuantity() > 0))
-				{
-					Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
-					for (OrderBatch ob: it.getBatches())
-						batches.put(ob.getBatch(), ob.getQuantity());
-					
-					Movement mov = movementHome.newMovement(dtShipping, order.getTbunitTo(), it.getSource(), it.getMedicine(), type, batches, null);
-					
-					it.setMovementOut(mov);
-				}
-			
-//			facesMessages.addFromResourceBundle("medicines.orders.shipped");
-			
-			entityManager.persist(order);
-			return "persisted";
-			
-		} catch (Exception e) {
-			facesMessages.add(e.getLocalizedMessage());
+		Date dt = order.getApprovingDate();
+		if (dt == null)
+			dt = order.getOrderDate();
+		
+		if (dt.after(order.getShippingDate())) {
+			facesMessages.addFromResourceBundle("medicines.orders.invalidshipmentdate");
 			return "error";
 		}
 		
+		// verifica se algum lote foi informado
+		boolean bBatchSel = false;
+		for (OrderItem it: order.getItems()) {
+			if (it.getShippedQuantity() != null) {
+				bBatchSel = true;
+				break;
+			}
+		}
+		if (!bBatchSel) {
+			facesMessages.addFromResourceBundle("medicines.orders.nobatchsel");
+			return "error";
+		}
+		
+		// altera o status para autorizado
+		OrderStatus status = OrderStatus.SHIPPED;
+		order.setStatus(status);
+		Date dtShipping = order.getShippingDate();
+//		Tbunit dto = order.getTbunitTo();
+		
+		// check if stock can be decreased
+		Tbunit unitTo = order.getTbunitTo();
+		boolean canShip = true;
+		for (OrderItem it: order.getItems()) {
+			if (!movementHome.canDecreaseStock(unitTo, it.getSource(), 
+					it.getMedicine(), it.getShippedQuantity(), order.getShippingDate())) {
+				canShip = false;
+				it.setData(true);
+			}
+		}
+
+		if (!canShip)
+			return "error";
+		
+		MovementType type = MovementType.ORDERSHIPPING;
+		// gera os movimentos de saída do pedido
+		for (OrderItem it: order.getItems())
+			if ((it.getShippedQuantity() != null) && (it.getShippedQuantity() > 0))
+			{
+				Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
+				for (OrderBatch ob: it.getBatches())
+					batches.put(ob.getBatch(), ob.getQuantity());
+				
+				Movement mov = movementHome.newMovement(dtShipping, order.getTbunitTo(), it.getSource(), it.getMedicine(), type, batches, null);
+				
+				it.setMovementOut(mov);
+			}
+		
+//		facesMessages.addFromResourceBundle("medicines.orders.shipped");
+		
+		entityManager.persist(order);
+		
+		LogService log = new LogService();
+		log.addValue(".shippingDate", order.getShippingDate());
+		log.saveExecuteTransaction(order, "SEND_ORDER");
+		
+		return "persisted";	
 	}
 
 	

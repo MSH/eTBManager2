@@ -148,7 +148,6 @@ public class UserProfileHome extends EntityHomeEx<UserProfile>{
 		if (parent == null)
 			 nodes.add(node);
 		
-		System.out.println("Adding " + node.getUserRole().getCode() + " - " + node.getUserRole().getDisplayName());
 		return node;
 	}
 	

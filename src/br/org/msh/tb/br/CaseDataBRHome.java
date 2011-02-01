@@ -359,7 +359,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		// check if HIV exam date was informed
 		if (examHIVHome != null) {
 			ExamHIV examHIV = examHIVHome.getInstance();
-			if ((examHIV.getResult() != HIVResult.NOTDONE) && (examHIV.getResult() != HIVResult.ONGOING)) {
+			if ((examHIV.getDate() == null) && (examHIV.getResult() != HIVResult.NOTDONE) && (examHIV.getResult() != HIVResult.ONGOING)) {
 				facesMessages.addToControlFromResourceBundle("edthivdate", "javax.faces.component.UIInput.REQUIRED");
 				res = false;
 			}
@@ -549,10 +549,5 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 
 	public Integer getDstRequired() {
 		return dstRequired;
-	}
-
-	
-	public void doNothing() {
-		System.out.println("do nothing...");
 	}
 }

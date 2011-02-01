@@ -69,9 +69,7 @@ public class ComorbidityHome {
 			tbCase.setPatientContactName(null);
 		tbCase.setComorbidities(lst);
 		
-		String s = caseHome.persist();
-		System.out.println(s);
-		return s;
+		return caseHome.persist();
 	}
 
 	

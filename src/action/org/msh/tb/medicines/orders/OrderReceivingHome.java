@@ -25,6 +25,7 @@ import org.msh.mdrtb.entities.OrderBatch;
 import org.msh.mdrtb.entities.OrderItem;
 import org.msh.mdrtb.entities.enums.MovementType;
 import org.msh.mdrtb.entities.enums.OrderStatus;
+import org.msh.tb.log.LogService;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
 
@@ -116,7 +117,11 @@ public class OrderReceivingHome extends Controller {
 
 		facesMessages.addFromResourceBundle("medicines.orders.received");
 		entityManager.persist(order);
-		
+
+		LogService log = new LogService();
+		log.addValue(".receivingDate", order.getReceivingDate());
+		log.saveExecuteTransaction(order, "RECEIV_ORDER");
+
 		return "received";		
 	}
 

@@ -130,10 +130,6 @@ public class AdminUnitImport extends ImportBase {
 		adminUnitHome.setTransactionLogActive(false);
 		adminUnitHome.persist();
 		
-		System.out.println("Record " + getLineNumber() + " - " + (customId != null? "(ID=" + customId + ") ": "") +
-				" ( " +type + " )  " +
- 				parentName + " - Level " + nameLevel + ": " + name);
-		
 		return adminUnit;
 	}
 

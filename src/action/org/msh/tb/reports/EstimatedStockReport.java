@@ -141,8 +141,6 @@ public class EstimatedStockReport {
 				qtd = p.calcEstimatedDispensing(per);
 				item.addConsumption(qtd, (caseid != p.getTbcase().getId() ? 1 : 0));
 				caseid = p.getTbcase().getId();
-				
-				System.out.println(caseid + ", " + medid + " == " + per.toString() + " - " + qtd);
 			}
 
 		}

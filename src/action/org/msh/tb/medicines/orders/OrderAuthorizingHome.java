@@ -13,6 +13,7 @@ import org.jboss.seam.framework.Controller;
 import org.msh.mdrtb.entities.Order;
 import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.enums.OrderStatus;
+import org.msh.tb.log.LogService;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
 
@@ -60,8 +61,14 @@ public class OrderAuthorizingHome extends Controller {
 			}
 		
 		facesMessages.addFromResourceBundle("medicines.orders.authorized");
+
+		// register log
+		LogService logsrv = new LogService();
+		logsrv.addValue("Tbunit.authorizerUnit", order.getAuthorizer().toString());
+		logsrv.saveExecuteTransaction(order, "VAL_ORDER");
 		
 		entityManager.persist(order);
+		
 		return "authorized";
 	}
 }

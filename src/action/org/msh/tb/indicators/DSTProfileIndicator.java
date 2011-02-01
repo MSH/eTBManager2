@@ -61,7 +61,6 @@ public class DSTProfileIndicator extends ResistProfileIndicatorBase {
 		"		and ed.dateCollected = (select MAX(aux.dateCollected) " +
 		"								from examdst aux where aux.CASE_ID = c.id) " +
 		"		group by s.ABBREV_NAME1";
-		System.out.println("SQL == "+sqlStat);
 		return sqlStat;
 	}
 

@@ -80,10 +80,12 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 			movementHome.removeMovement(mov);
 		}
 		
-		if (!isManaged()) {
-			getLogService().addValue("Source", getInstance().getSource());
-			getLogService().addValue(".receivingDate", getInstance().getReceivingDate());
-			getLogService().addValue("global.totalPrice", getInstance().getTotalPrice());
+		getLogService().addValue("Source", getInstance().getSource());
+		getLogService().addValue(".receivingDate", getInstance().getReceivingDate());
+		getLogService().addValue("global.totalPrice", getInstance().getTotalPrice());
+
+		if (isManaged()) {
+			getLogService().startEntityMonitoring(getInstance(), false);
 		}
 		
 		getEntityManager().persist(getInstance());

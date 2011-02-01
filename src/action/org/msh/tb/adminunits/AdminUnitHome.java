@@ -243,7 +243,6 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 		int i = 1;
 		for (AdministrativeUnit adm: lst) {
 			String code = intToCode(i);
-			System.out.println(code);
 			adm.setCode(code);
 			updateCodeAdminUnit(adm);
 			getEntityManager().persist(adm);

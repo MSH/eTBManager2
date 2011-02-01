@@ -514,8 +514,6 @@ public class ForecastingCalculation {
 
 		// calculate number of new cases and quantity for each medicine
 		for (ForecastingMedicine fm: forecasting.getMedicines()) {
-			if (fm.getMedicine().getId() == 940801)
-				System.out.println("ola...");
 			if (reg.isMedicineInRegimen(fm.getMedicine())) {
 				for (int i = 0; i < len; i++) {
 					int index = monthIndex + i;

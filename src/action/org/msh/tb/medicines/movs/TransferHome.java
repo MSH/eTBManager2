@@ -24,6 +24,7 @@ import org.msh.mdrtb.entities.enums.MovementType;
 import org.msh.mdrtb.entities.enums.TransferStatus;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.SourceGroup;
+import org.msh.tb.log.LogService;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.MedicineStockSelection;
@@ -115,6 +116,13 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 			
 			it.setMovementOut(movOut);
 		}
+
+		// register transfer in the log system
+		LogService log = getLogService();
+		log.addValue(".unitFrom", transfer.getUnitFrom());
+		log.addValue(".unitTo", transfer.getUnitTo());
+		log.addValue(".shippingDate", transfer.getShippingDate());
+		log.saveExecuteTransaction(transfer, "NEW_TRANSFER");
 		
 		return persist();
 	}
@@ -158,7 +166,14 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		
 		getEntityManager().persist(transfer);
 		getEntityManager().flush();
-		
+
+		// register transfer in the log system
+		LogService log = getLogService();
+		log.addValue(".unitFrom", transfer.getUnitFrom());
+		log.addValue(".unitTo", transfer.getUnitTo());
+		log.addValue(".receivingDate", transfer.getReceivingDate());
+		log.saveExecuteTransaction(transfer, "TRANSF_REC");
+
 		return "received";
 	}
 
@@ -247,9 +262,15 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 
 		getEntityManager().persist(transfer);
 		
+
+		// register transfer in the log system
+		LogService log = getLogService();
+		log.saveExecuteTransaction(transfer, "TRANSF_CANCEL");
+
 		return "canceled";
 	}
 	
+
 	public void createSources() {
 		sources = new ArrayList<SourceItem>();
 		
@@ -390,13 +411,20 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 	 */
 	public boolean isCanCancel() {
 		Transfer transfer = getInstance();
-		if ((transfer.getStatus() != TransferStatus.WAITING_RECEIVING) || (!Identity.instance().hasRole("TRANSF_NEW")))
-			return false;
 		
 		Tbunit userunit = userSession.getWorkingTbunit();
+
+		// is transfer sent and is unit that shipped the medicines ?
+		if ((transfer.getStatus() == TransferStatus.WAITING_RECEIVING) && (userunit.equals(transfer.getUnitFrom()))) {
+			return Identity.instance().hasRole("NEW_TRANSFER");
+		}
 		
-		return ((transfer.getUnitFrom().getId().equals(userunit.getId())) || 
-				(transfer.getUnitTo().getId().equals(userunit.getId())));		
+		// is transfer received and is unit that received the medicines ?
+		if ((transfer.getStatus() == TransferStatus.DONE) && (userunit.equals(transfer.getUnitTo()))) {
+			return Identity.instance().hasRole("TRANSF_REC");
+		}
+		
+		return false;
 	}
 
 	/**

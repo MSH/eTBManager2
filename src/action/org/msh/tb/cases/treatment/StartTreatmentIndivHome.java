@@ -146,6 +146,15 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 		}
 	}
 
+	
+	public void removePrescribedMedicine(PrescribedMedicine pm) {
+		if (pm == null)
+			return;
+		
+		medicinesContPhase.remove(pm);
+		medicinesIntPhase.remove(pm);
+	}
+
 
 	public List<PrescribedMedicine> getMedicinesIntPhase() {
 		return medicinesIntPhase;

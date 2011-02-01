@@ -45,7 +45,7 @@
 	</s:decorate>
 	</div>
 
-    <s:decorate template="/layout/edit.xhtml" >
+    <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['Regimen.length']}:</ui:define>
 		<ui:param name="labelstyle" value="background-color:#fff" />
 		<a:commandLink value="#{messages['Regimen.add']}" action="#{regimenHome.filterMedicines('INTENSIVE')}" style="margin-left:10px;float:right;" 
@@ -119,7 +119,7 @@
 	</s:decorate>
 	</div>
 
-    <s:decorate template="/layout/edit.xhtml">
+    <s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['Regimen.length']}:</ui:define>
 		<ui:param name="labelstyle" value="background-color:#fff" />
 		<a:commandLink value="#{messages['Regimen.add']}" action="#{regimenHome.filterMedicines('CONTINUOUS')}" style="margin-left:10px;float:right;" 

@@ -101,8 +101,6 @@ public class OrderEstimation {
 			
 			TbCase tbcase = p.getTbcase();
 			
-			if (p.getMedicine().getAbbrevName().equals("Z"))
-				System.out.println("Z...");
 			if (!item.getItem().getCases().contains(tbcase)) 
 				item.getItem().addCase(p.getTbcase(), qtd);
 		}

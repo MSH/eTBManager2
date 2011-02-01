@@ -33,6 +33,10 @@ public class BrowserInfo {
 	public boolean isValidBrowser() {
 		if (browserType == null)
 			updateBrowserInfo();
+		
+		// not possible to take browser version, so let it go
+		if (browserVersion == null)
+			return true;
 
 		// is Internet Explorer under version 7? so it's not valid 
 		if ((browserType == BrowserType.MSIE) && (browserVersion < 700))
@@ -74,7 +78,7 @@ public class BrowserInfo {
 			getGoogleChromeInfo();
 		else {
 			browserType = null;
-			browserVersion = 0;
+			browserVersion = null;
 		}
 	}
 
@@ -120,30 +124,35 @@ public class BrowserInfo {
 	}
 	
 	private void updateBrowserVersion(String token, char delimiter) {
-		int pos = userAgent.indexOf(token);
-		String s = userAgent.substring(pos + token.length());
-		pos = s.indexOf(delimiter);
-		if (pos != -1)
-			s = s.substring(0, pos);
-		String[] vals = s.split("\\.");
-		if (vals.length == 0)
-			browserVersion = 0;
-		else
-		if (vals.length == 1) {
-			Integer version = parseVersionNumber(vals[0]);
-			if (version != null)
-				 browserVersion = version * 100;
-			else browserVersion = 0;
+		try {
+			int pos = userAgent.indexOf(token);
+			String s = userAgent.substring(pos + token.length());
+			pos = s.indexOf(delimiter);
+			if (pos != -1)
+				s = s.substring(0, pos);
+			String[] vals = s.split("\\.");
+			if (vals.length == 0)
+				browserVersion = 0;
+			else
+			if (vals.length == 1) {
+				Integer version = parseVersionNumber(vals[0]);
+				if (version != null)
+					 browserVersion = version * 100;
+				else browserVersion = 0;
+			}
+			else {
+				Integer v1 = parseVersionNumber(vals[0]);
+				if (v1 != null)
+					 browserVersion = v1 * 100;
+				else browserVersion = 0;
+				
+				v1 = parseVersionNumber(vals[1]);
+				if (v1 != null)
+					browserVersion += v1;
+			}
 		}
-		else {
-			Integer v1 = parseVersionNumber(vals[0]);
-			if (v1 != null)
-				 browserVersion = v1 * 100;
-			else browserVersion = 0;
-			
-			v1 = parseVersionNumber(vals[1]);
-			if (v1 != null)
-				browserVersion += v1;
+		catch (Exception e) {
+			browserVersion = null;
 		}
 	}
 	

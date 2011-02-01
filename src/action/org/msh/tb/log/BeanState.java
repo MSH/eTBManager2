@@ -287,6 +287,7 @@ public class BeanState {
 			}
 			
 		} catch (Exception e) {
+			System.out.println("Error reading bean state: " + (obj != null? obj.getClass().toString(): null) + " = " + obj);
 			e.printStackTrace();
 		}
 	}

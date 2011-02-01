@@ -720,10 +720,6 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	background-color:#f0f0f0;
 }
 
-.logo-icon {
-	background: transparent url(images/mdrtb.gif) no-repeat left top; }
-}
-
 .header-table {
 	background-color:#368D41;
 	font-size:11px;

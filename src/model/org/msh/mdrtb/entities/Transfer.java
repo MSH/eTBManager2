@@ -72,6 +72,11 @@ public class Transfer implements Serializable {
 	@JoinColumn(name="TRANSFER_ID")
 	private List<TransferItem> items = new ArrayList<TransferItem>();
 
+	
+	@Override
+	public String toString() {
+		return (id != null? id.toString() : super.toString());
+	}
 
 	public Integer getId() {
 		return id;

@@ -237,8 +237,6 @@ public class TreatmentHome {
 		preservePreviousPeriod = true;
 		formEditing = FormEditing.MEDICINE;
 		validated = false;
-		
-		System.out.println("### startEditingMedicine " + pm.getMedicine().toString());
 	}
 
 

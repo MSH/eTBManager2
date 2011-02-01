@@ -8,7 +8,7 @@
  <m:message>
     <m:from name="e-TB Manager" address="#{etbmanagerApp.configuration.systemMail}" />
     <m:to name="System Administrator" >#{etbmanagerApp.configuration.adminMail} </m:to>
-    <m:subject>e-TB Manager - #{systemErrorDispatcher.errorLog.exceptionMessage}</m:subject>
+    <m:subject>Error #{systemErrorDispatcher.errorLog.id} - #{systemErrorDispatcher.errorLog.exceptionMessage}</m:subject>
 
     <m:body>
         <html>

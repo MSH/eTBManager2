@@ -243,7 +243,6 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		if (view != null) {
 			if (clearPicture)
 				view.setPicture(null);
-			System.out.println("file=" + pictureFileName);
 			if (bHasPicture) { 
 				int ind = pictureFileName.lastIndexOf('.');
 				String ext = pictureFileName.substring(ind);

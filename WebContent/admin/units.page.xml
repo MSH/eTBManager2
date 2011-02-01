@@ -5,7 +5,6 @@
 
 
    	<restrict>#{s:hasRole('TBUNITS')}</restrict>
-	<param name="id" value="#{tbunitHome.id}" converterId="javax.faces.Integer" />
 	<param name="order" value="#{unitspg.order}" />
 	<param name="firstResult" value="#{unitspg.firstResult}" />
 	<navigation from-action="#{tbunitHome.remove}">

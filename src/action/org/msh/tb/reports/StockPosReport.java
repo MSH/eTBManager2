@@ -58,7 +58,8 @@ public class StockPosReport {
 		
 		String hql = "from StockPosition sp join fetch sp.medicine " +
 			"join fetch sp.tbunit ds join fetch ds.adminUnit a1 join fetch a1.parent " +
-			"where sp.date = (select max(aux.date) from StockPosition aux " +
+			"where ds.medManStartDate is not null " +
+			"and sp.date = (select max(aux.date) from StockPosition aux " +
 			"where " + (source == null? "": "aux.source.id=sp.source.id and ") +
 			"aux.tbunit.id = sp.tbunit.id " +
 			"and aux.medicine.id = sp.medicine.id) " +

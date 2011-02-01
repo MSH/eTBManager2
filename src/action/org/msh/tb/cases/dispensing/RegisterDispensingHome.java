@@ -44,7 +44,6 @@ public class RegisterDispensingHome {
 	 * @return List of {@link CaseDispensingInfo} objects
 	 */
 	public List<CaseDispensingInfo> getCases() {
-		System.out.println("Conversation = " + Conversation.instance().getId() );
 		if (cases == null)
 			createCasesList();
 		return cases;
