@@ -49,7 +49,7 @@ public class OrderEstimation {
 		if (ord.getTbunitFrom() != null)
 			return;
 		
-		Tbunit unit = entityManager.merge(userSession.getTbunit());
+		Tbunit unit = entityManager.find(Tbunit.class, userSession.getTbunit().getId());
 
 		if (unit.getNumDaysOrder() == null) {
 			facesMessages.addFromResourceBundle("medicines.orders.initerror");

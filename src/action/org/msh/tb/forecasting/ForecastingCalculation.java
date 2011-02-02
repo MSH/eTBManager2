@@ -374,7 +374,7 @@ public class ForecastingCalculation {
 						Date end = bt.getExpiryDate();
 
 						int qtdBatch = calcConsumptionCaseOnTreatment(prescDrug, new Period(ini, end));
-						bt.setConsumptionInMonth(qtdBatch);
+						bt.setConsumptionInMonth(qtdBatch + bt.getConsumptionInMonth());
 						ini = DateUtils.incDays(end, 1);
 					}
 				}
@@ -518,12 +518,13 @@ public class ForecastingCalculation {
 					int index = monthIndex + i;
 					
 					Date dtIni = forecasting.getIniDateMonthIndex(index);
+					Date dtEnd = forecasting.getEndDateMonthIndex(index);
+					
 					if (dtIni == null)
 						break;
-					
-					Date dtEnd = forecasting.getEndDateMonthIndex(index);
 					if (dtEnd == null)
-						dtEnd = endForecasting;
+						dtEnd = DateUtils.incMonths(forecasting.getEndDate(), forecasting.getBufferStock());
+					
 					float qty = calcQuantityRegimen(reg, dtIni, dtEnd, i, fm.getMedicine());
 					qty = qty * newCases;
 					
@@ -549,13 +550,13 @@ public class ForecastingCalculation {
 					else fm.setEstimatedQtyNewCases(fm.getEstimatedQtyNewCases() + q);
 					
 					// update batches consumption of new cases
-					List<ForecastingBatch> lst = getBatchesMonth(fm, i);
+					List<ForecastingBatch> lst = getBatchesMonth(fm, index);
 					Date ini = dtIni;
 					for (ForecastingBatch bt: lst) {
 						Date end = bt.getExpiryDate();
 
 						int qtdBatch = calcQuantityRegimen(reg, ini, end, index, fm.getMedicine());
-						bt.setConsumptionInMonth(qtdBatch);
+						bt.setConsumptionInMonth(qtdBatch + bt.getConsumptionInMonth());
 						ini = DateUtils.incDays(end, 1);
 					}
 				}

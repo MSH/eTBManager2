@@ -5,7 +5,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core">
       
- <m:message>
+ <m:message charset="UTF-8">
     <m:from name="#{messages['mdrtb_system']}" address="#{etbmanagerApp.configuration.systemMail}" />
     <m:to name="#{user.name}">#{user.email}</m:to>
     <m:subject>#{subject}</m:subject>

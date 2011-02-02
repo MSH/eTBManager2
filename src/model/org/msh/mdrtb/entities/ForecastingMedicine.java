@@ -105,6 +105,10 @@ public class ForecastingMedicine implements Serializable {
 	 */
 	public void refreshResults() {
 		results = null;
+		for (ForecastingBatch b: batchesToExpire) {
+			b.setConsumptionInMonth(0);
+			b.setQuantityToExpire(0);
+		}
 	}
 
 	public int getTotalEstimatedQtyCases() {

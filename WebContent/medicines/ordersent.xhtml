@@ -40,6 +40,7 @@
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['Order.shippingDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="false" /> 
     	<ui:param name="datefield" value="#{order.shippingDate}" /> 
     </s:decorate>
 

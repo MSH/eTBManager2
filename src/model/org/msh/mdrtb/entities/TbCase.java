@@ -350,7 +350,7 @@ public class TbCase implements Serializable{
 	 * @return true - if the case is validated, false - otherwise
 	 */
 	public boolean isValidated() {
-		return (getState() != null? state.ordinal() >= CaseState.WAITING_TREATMENT.ordinal(): false);
+		return getValidationState() == ValidationState.VALIDATED;
 	}
 	
 	/**

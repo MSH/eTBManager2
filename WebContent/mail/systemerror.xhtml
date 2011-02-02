@@ -5,7 +5,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:m="http://jboss.com/products/seam/mail"
                 xmlns:f="http://java.sun.com/jsf/core">
- <m:message>
+ <m:message charset="UTF-8">
     <m:from name="e-TB Manager" address="#{etbmanagerApp.configuration.systemMail}" />
     <m:to name="System Administrator" >#{etbmanagerApp.configuration.adminMail} </m:to>
     <m:subject>Error #{systemErrorDispatcher.errorLog.id} - #{systemErrorDispatcher.errorLog.exceptionMessage}</m:subject>

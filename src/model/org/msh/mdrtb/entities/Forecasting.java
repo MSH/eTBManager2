@@ -520,7 +520,9 @@ public class Forecasting extends WSObject implements Serializable {
 		Date dt = DateUtils.incMonths(referenceDate, monthIndex);
 		int month = DateUtils.monthOf(dt);
 		int year = DateUtils.yearOf(dt);
-		return DateUtils.newDate(year, month, DateUtils.daysInAMonth(year, month));
+		dt = DateUtils.newDate(year, month, DateUtils.daysInAMonth(year, month));
+		Date dtend = DateUtils.incMonths(endDate, bufferStock);
+		return (dt.after(dtend)? dtend: dt);
 	}
 
 	public void setEndDate(Date endDate) {

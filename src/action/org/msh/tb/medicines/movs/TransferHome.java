@@ -86,7 +86,7 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		
 		transfer.setUnitTo(tbunitSelection.getTbunit());
 		
-		Tbunit unit = userSession.getTbunit(); 
+		Tbunit unit = userSession.getTbunit();
 		
 		transfer.setUnitFrom(unit);
 		transfer.setStatus(TransferStatus.WAITING_RECEIVING);
