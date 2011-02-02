@@ -376,7 +376,6 @@ public class ForecastingCalculation {
 						int qtdBatch = calcConsumptionCaseOnTreatment(prescDrug, new Period(ini, end));
 						bt.setConsumptionInMonth(qtdBatch);
 						ini = DateUtils.incDays(end, 1);
-//						bt.setQuantityToExpire(bt.getQuantityToExpire() + qtdBatch);
 					}
 				}
 			}
@@ -548,6 +547,17 @@ public class ForecastingCalculation {
 						fm.setEstimatedQtyNewCases(q - qtd2);
 					}
 					else fm.setEstimatedQtyNewCases(fm.getEstimatedQtyNewCases() + q);
+					
+					// update batches consumption of new cases
+					List<ForecastingBatch> lst = getBatchesMonth(fm, i);
+					Date ini = dtIni;
+					for (ForecastingBatch bt: lst) {
+						Date end = bt.getExpiryDate();
+
+						int qtdBatch = calcQuantityRegimen(reg, ini, end, index, fm.getMedicine());
+						bt.setConsumptionInMonth(qtdBatch);
+						ini = DateUtils.incDays(end, 1);
+					}
 				}
 			}
 		}

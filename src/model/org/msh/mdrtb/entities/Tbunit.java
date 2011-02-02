@@ -45,7 +45,7 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 	@JoinColumn(name="SECONDLINE_SUPPLIER_ID")
 	private Tbunit secondLineSupplier;
     
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="AUTHORIZERUNIT_ID")
     private Tbunit authorizerUnit;
 	

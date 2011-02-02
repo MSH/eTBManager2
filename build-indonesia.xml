@@ -125,7 +125,6 @@
 				<exclude name="custom/br/**"/>
 				<exclude name="custom/ua/**"/>
 				<exclude name="custom/ke/**"/>
-				<exclude name="custom/ph/**"/>
 				<exclude name="custom/md/**"/>
 				<exclude name="custom/bd/**"/>
 			</fileset>
@@ -134,7 +133,6 @@
 				<exclude name="META-INF/persistence.xml"/>
 				<exclude name="/org/msh/tb/ke/**" />
 				<exclude name="/org/msh/tb/br/**"/>
-				<exclude name="/org/msh/tb/ph/**"/>
 				<exclude name="/org/msh/tb/md/**"/>
 				<exclude name="/org/msh/tb/ua/**"/>
 				<exclude name="/org/msh/tb/bd/**"/>

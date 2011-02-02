@@ -141,6 +141,7 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 				p.setGrantPermission(true);
 				p.setUserProfile(prof);
 				p.setUserRole(role);
+				p.setCanExecute(true);
 				if (role.isChangeable())
 					p.setCanChange(true);
 				prof.getPermissions().add(p);

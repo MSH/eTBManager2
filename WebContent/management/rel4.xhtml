@@ -21,17 +21,6 @@
 </ui:define>
 
 
-<ui:define name="print-link">
-	<h:panelGroup id="pnlPrintLink">
-	<s:link value="#{messages['global.print']}" rendered="#{not orderLeadTimeReport.executing}" target="_blank">
-		<f:param name="print" value="1"/>
-	</s:link>
-
-	<s:link view="/reports/rel4.xhtml" value="#{messages['global.print']}" rendered="#{orderLeadTimeReport.executing}" target="_blank" />
-	</h:panelGroup>
-</ui:define>
-
-
 <ui:define name="body">
 <p/>
 <h:form id="main">

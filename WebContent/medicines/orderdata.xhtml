@@ -187,7 +187,7 @@
 				</h:outputText>
 			</h:column>
 			
-			<h:column rendered="#{order.status != 'WAITINGAUT'}">
+			<h:column rendered="#{order.approvingDate != null}">
 			<f:facet name="header"><h:outputText value="#{messages['OrderItem.approvedQuantity']}" styleClass="colrh" /></f:facet>
 				<h:outputText value="#{it.item.approvedQuantity}">
 					<f:convertNumber pattern="###,###,###"/>

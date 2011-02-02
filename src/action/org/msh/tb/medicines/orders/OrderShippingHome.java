@@ -143,55 +143,58 @@ public class OrderShippingHome extends Controller {
 		// percorre as fontes de medicamentos do pedido
 		for (SourceOrderItem s: orderSources) {
 			Source source = s.getSource();
-			
-			// remove itens com quantidade aprovada 0
-			int i = 0;
-			List<OrderItemAux> lst = s.getItems();
-			while (i < lst.size()) {
-				OrderItemAux it = lst.get(i);
-				if ((it.getItem().getApprovedQuantity() == null) || (it.getItem().getApprovedQuantity() == 0))
-					 lst.remove(i);
-				else i++;
+
+			// pedido foi aprovado ?
+			if (order.getApprovingDate() != null) {
+				// remove itens com quantidade aprovada 0
+				int i = 0;
+				List<OrderItemAux> lst = s.getItems();
+				while (i < lst.size()) {
+					OrderItemAux it = lst.get(i);
+					if ((it.getItem().getApprovedQuantity() == null) || (it.getItem().getApprovedQuantity() == 0))
+						 lst.remove(i);
+					else i++;
+				}
 			}
 			
 			// percorre os itens do pedido por fonte
 			for (OrderItemAux it: s.getItems()) {
 				// quantidade foi definida ?
-				if (it.getItem().getApprovedQuantity() != null) {
-					int qtd = it.getItem().getApprovedQuantity();
-					int qtdDeliv = 0;
-					it.setUnavailable(true);
-					
-					// procura pelos lotes
-					for (BatchQuantity batch: batches) {
-						if ((batch.getSource().equals(source)) &&
-							(batch.getBatch().getMedicine().equals(it.getItem().getMedicine()))) 
-						{
-							OrderBatch dob = new OrderBatch();
+				OrderItem item = it.getItem();
+				
+				int qtd = (order.getApprovingDate() == null? item.getRequestedQuantity(): item.getApprovedQuantity());
+				int qtdDeliv = 0;
+				it.setUnavailable(true);
+				
+				// procura pelos lotes
+				for (BatchQuantity batch: batches) {
+					if ((batch.getSource().equals(source)) &&
+						(batch.getBatch().getMedicine().equals(it.getItem().getMedicine()))) 
+					{
+						OrderBatch dob = new OrderBatch();
 
-							// calcula a quantidade do lote
-							int remQtd = batch.getQuantity();
-							if (remQtd > qtd) {
-								dob.setQuantity(qtd);
-								qtd = 0;
-							}
-							else {
-								dob.setQuantity(remQtd);
-								qtd -= remQtd;
-							}
-							it.setUnavailable(false);
-							dob.setBatch(batch.getBatch());
-							dob.setOrderItem(it.getItem());
-							it.getItem().getBatches().add(dob);
-							qtdDeliv += dob.getQuantity();
-							
-							if (qtd <= 0)
-								break;
+						// calcula a quantidade do lote
+						int remQtd = batch.getQuantity();
+						if (remQtd > qtd) {
+							dob.setQuantity(qtd);
+							qtd = 0;
 						}
+						else {
+							dob.setQuantity(remQtd);
+							qtd -= remQtd;
+						}
+						it.setUnavailable(false);
+						dob.setBatch(batch.getBatch());
+						dob.setOrderItem(it.getItem());
+						it.getItem().getBatches().add(dob);
+						qtdDeliv += dob.getQuantity();
+						
+						if (qtd <= 0)
+							break;
 					}
-					
-					it.getItem().setShippedQuantity(qtdDeliv);
 				}
+				
+				it.getItem().setShippedQuantity(qtdDeliv);
 			}
 		}
 
@@ -261,5 +264,12 @@ public class OrderShippingHome extends Controller {
 			}
 			else i++;
 		}
+		
+		// update quantity of order
+		int qtd = 0;
+		for (OrderBatch b: orderItem.getBatches()) {
+			qtd += b.getQuantity();
+		}
+		orderItem.setShippedQuantity(qtd);
 	}
 }

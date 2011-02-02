@@ -57,7 +57,7 @@ public class BrowserInfo {
 	 * Get browser version in the format AABB, where AA is the major version and BB is the minor version number
 	 * @return
 	 */
-	public int getBrowserVersion() {
+	public Integer getBrowserVersion() {
 		if (browserVersion == null)
 			updateBrowserInfo();
 		return browserVersion;

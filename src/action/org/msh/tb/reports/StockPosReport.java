@@ -15,6 +15,12 @@ import org.msh.mdrtb.entities.Tbunit;
 
 
 
+/**
+ * Generates data to be displayed in the "stock position by region" report.
+ * This report displays a table with medicines in columns and regions/health units in rows 
+ * @author Ricardo Memoria
+ *
+ */
 @Name("stockPosReport")
 public class StockPosReport {
 
@@ -56,12 +62,14 @@ public class StockPosReport {
 		Source source = reportSelection.getSource();
 		AdministrativeUnit region = reportSelection.getAuselection().getSelectedUnit();
 		
+		List<AdministrativeUnit> adminUnits = reportSelection.getAuselection().getOptionsLevel1();
+		
 		String hql = "from StockPosition sp join fetch sp.medicine " +
-			"join fetch sp.tbunit ds join fetch ds.adminUnit a1 join fetch a1.parent " +
+			"join fetch sp.tbunit ds join fetch ds.adminUnit a1 " +
 			"where ds.medManStartDate is not null " +
 			"and sp.date = (select max(aux.date) from StockPosition aux " +
-			"where " + (source == null? "": "aux.source.id=sp.source.id and ") +
-			"aux.tbunit.id = sp.tbunit.id " +
+			"where aux.tbunit.id = sp.tbunit.id " +
+			"and aux.source.id = sp.source.id " +
 			"and aux.medicine.id = sp.medicine.id) " +
 			"and sp.tbunit.workspace.id = #{defaultWorkspace.id} " +
 			(source == null? "": "and sp.source.id = " + source.getId());
@@ -69,7 +77,7 @@ public class StockPosReport {
 		if (region != null)
 			hql = hql.concat(" and sp.tbunit.adminUnit.parent.id = " + region.getId().toString());
 		
-		hql = hql.concat(" order by sp.tbunit.adminUnit.parent.name, sp.tbunit.name");
+		hql = hql.concat(" order by sp.tbunit.name");
 		
 		List<StockPosition> lst = entityManager.createQuery(hql).getResultList();
 		
@@ -81,18 +89,30 @@ public class StockPosReport {
 		// monta relatorio
 		for (StockPosition sp: lst) {
 			Tbunit ds = sp.getTbunit();
-			AdministrativeUnit adm = ds.getAdminUnit().getParent();
+			AdministrativeUnit adm = ds.getAdminUnit();
 			
-			StockPosReportItem regItem = root.findChild(adm);
-			if (regItem == null)
-				regItem = root.addChild(adm);
-			
-			StockPosReportItem dsItem = regItem.findChild(ds);
-			if (dsItem == null)
-				dsItem = regItem.addChild(ds);
-			
-			int index = medicines.indexOf(sp.getMedicine());
-			dsItem.setQuantity(index, sp.getQuantity());
+			// find 1st level administrative unit
+			AdministrativeUnit admRoot = null;
+			for (AdministrativeUnit aux: adminUnits) {
+				if (aux.isSameOrChildCode(adm.getCode())) {
+					admRoot = aux;
+					break;
+				}
+			}
+
+			// administrative unit was found ?
+			if ((admRoot != null) && (sp.getQuantity() > 0)) {
+				StockPosReportItem regItem = root.findChild(admRoot);
+				if (regItem == null)
+					regItem = root.addChild(admRoot);
+				
+				StockPosReportItem dsItem = regItem.findChild(ds);
+				if (dsItem == null)
+					dsItem = regItem.addChild(ds);
+				
+				int index = medicines.indexOf(sp.getMedicine());
+				dsItem.setQuantity(index, sp.getQuantity());
+			}
 		}
 	}
 

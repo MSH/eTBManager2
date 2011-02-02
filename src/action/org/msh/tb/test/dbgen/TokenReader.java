@@ -23,7 +23,7 @@ public class TokenReader {
 	 * Initialize the reader to start reading a new document
 	 */
 	public void initialize() {
-		scanner = new Scanner(textFile);
+		scanner = new Scanner(textFile, "UTF-8");
 		lineNumber = 0;
 		textLine = null;
 		tokenType = null;
