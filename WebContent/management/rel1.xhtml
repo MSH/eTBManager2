@@ -39,7 +39,7 @@
 <h:form id="main">
 <table class="tabela" width="100%">
 <tr><td>
-	<s:decorate id="source" template="/layout/edit.xhtml">
+	<s:decorate id="source" template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['Source']}:</ui:define>
 		<h:selectOneMenu id="source" value="#{reportSelection.source}">
             <s:selectItems var="s" value="#{sources}" label="#{s.name}" noSelectionLabel="-"/>
@@ -47,12 +47,13 @@
 		</h:selectOneMenu>
 	</s:decorate>
 
-	<s:decorate id="reg" template="/layout/edit.xhtml">
+	<s:decorate id="reg" template="/layout/display.xhtml">
 		<ui:define name="label">#{reportSelection.auselection.labelLevel1}:</ui:define>
-		<h:selectOneMenu value="#{reportSelection.auselection.unitLevel1}">
+		<h:selectOneMenu value="#{reportSelection.auselection.unitLevel1}" rendered="#{not reportSelection.auselection.level1ReadOnly}">
             <s:selectItems var="s" value="#{reportSelection.auselection.optionsLevel1}" label="#{s.name}" noSelectionLabel="-"/>
             <s:convertEntity />
 		</h:selectOneMenu>
+		<h:outputText value="#{reportSelection.auselection.unitLevel1.name}" rendered="#{reportSelection.auselection.level1ReadOnly}" />
 	</s:decorate>
 	
 </td></tr>
@@ -63,7 +64,9 @@
 </table>
 
 <h:panelGroup id="pnlresult" width="100%">
-<s:fragment rendered="#{stockPosReport.executing}">
+<s:fragment rendered="#{facesContext.renderResponse}">
+<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty stockPosReport.medicines}" />
+<s:fragment rendered="not empty stockPosReport.medicines">
 <table class="tabela" style="margin-top:20px;" >
 	<tr>
 	<th width="200px">
@@ -116,6 +119,7 @@
 
 	</tr>
 </table>
+</s:fragment>
 </s:fragment>
 </h:panelGroup>
 

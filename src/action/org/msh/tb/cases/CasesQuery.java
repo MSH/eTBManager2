@@ -79,7 +79,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 
 	@Override
 	public String getEjbql() {
-		return "select p.name, p.birthDate, p.gender, p.recordNumber, c.caseNumber, " + 
+		return "select p.name, c.age, p.gender, p.recordNumber, c.caseNumber, " + 
 			"c.treatmentPeriod.iniDate, c.registrationDate, nu.name.name1, " +
 			"loc.name.name1, loc.code, c.id, " +
 			"c.treatmentPeriod.endDate, c.state, c.classification, p.middleName, p.lastName, " +
@@ -324,7 +324,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			item.setPatientName(patname);
 */			
 			item.setPatientName(p.getFullName());
-			item.setPatientBirthDate((Date)obj[1]);
+			item.setPatientAge((Integer)obj[1]);
 			item.setGender((Gender)obj[2]);
 			item.setBeginningTreatmentDate((Date)obj[5]);
 			item.setNotificationDate((Date)obj[6]);

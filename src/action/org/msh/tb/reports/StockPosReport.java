@@ -60,9 +60,12 @@ public class StockPosReport {
 	 */
 	public void createReport() {
 		Source source = reportSelection.getSource();
+
 		AdministrativeUnit region = reportSelection.getAuselection().getSelectedUnit();
-		
 		List<AdministrativeUnit> adminUnits = reportSelection.getAuselection().getOptionsLevel1();
+
+		if ((adminUnits == null) && (region == null))
+			return;
 		
 		String hql = "from StockPosition sp join fetch sp.medicine " +
 			"join fetch sp.tbunit ds join fetch ds.adminUnit a1 " +
@@ -75,7 +78,7 @@ public class StockPosReport {
 			(source == null? "": "and sp.source.id = " + source.getId());
 		
 		if (region != null)
-			hql = hql.concat(" and sp.tbunit.adminUnit.parent.id = " + region.getId().toString());
+			hql = hql.concat(" and sp.tbunit.adminUnit.code like '" + region.getCode() + "%'");
 		
 		hql = hql.concat(" order by sp.tbunit.name");
 		
@@ -92,11 +95,13 @@ public class StockPosReport {
 			AdministrativeUnit adm = ds.getAdminUnit();
 			
 			// find 1st level administrative unit
-			AdministrativeUnit admRoot = null;
-			for (AdministrativeUnit aux: adminUnits) {
-				if (aux.isSameOrChildCode(adm.getCode())) {
-					admRoot = aux;
-					break;
+			AdministrativeUnit admRoot = region;
+			if (admRoot == null) {
+				for (AdministrativeUnit aux: adminUnits) {
+					if (aux.isSameOrChildCode(adm.getCode())) {
+						admRoot = aux;
+						break;
+					}
 				}
 			}
 

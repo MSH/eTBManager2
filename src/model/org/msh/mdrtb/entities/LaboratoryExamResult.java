@@ -49,6 +49,7 @@ public abstract class LaboratoryExamResult implements Serializable {
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="LABORATORY_ID")
+	@FieldLog(key="Laboratory")
 	private Laboratory laboratory;
 
 	@Temporal(TemporalType.DATE)

@@ -29,7 +29,7 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
-    	<h:selectOneMenu value="#{examHIV.result}" required="true" onchange="toggleYesNo(this.selectedIndex=='1'?'0':'1', '#divpos')">
+    	<h:selectOneMenu value="#{examHIV.result}" required="true" onchange="toggleYesNo(this.options[this.selectedIndex].value=='POSITIVE'?'0':'1', '#divpos')">
     		<s:selectItems value="#{hivResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
     		<s:convertEnum />
     	</h:selectOneMenu>

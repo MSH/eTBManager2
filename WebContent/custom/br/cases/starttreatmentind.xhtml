@@ -90,6 +90,13 @@
 				</h:selectOneMenu>
 				<h:message for="sourcei" styleClass="erro"/>
 			</h:column>
+
+			<h:column>
+				<a:commandLink value="#{messages['form.remove']}" 
+					action="#{startTreatmentIndivHome.removePrescribedMedicine(it)}"
+					ajaxSingle="true" 
+					reRender="pnltreatment_int"/>
+			</h:column>
 		</h:dataTable>
 	</s:decorate>
 	</h:panelGroup>
@@ -147,6 +154,13 @@
             		<s:convertEntity />
 				</h:selectOneMenu>
 				<h:message for="sourcei" styleClass="erro"/>
+			</h:column>
+
+			<h:column>
+				<a:commandLink value="#{messages['form.remove']}" 
+					action="#{startTreatmentIndivHome.removePrescribedMedicine(it)}"
+					ajaxSingle="true" 
+					reRender="pnltreatment_cont"/>
 			</h:column>
 		</h:dataTable>
 	</s:decorate>

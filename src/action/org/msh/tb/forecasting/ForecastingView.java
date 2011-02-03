@@ -363,7 +363,8 @@ public class ForecastingView {
 	public void deleteBatch(ForecastingBatch batch) {
 		batch.getForecastingMedicine().getBatchesToExpire().remove(batch);
 	}
-	
+
+
 	/**
 	 * Start entering data for a new order
 	 * @param med {@link ForecastingMedicine} instance to include the order
@@ -373,7 +374,8 @@ public class ForecastingView {
 		order.setForecastingMedicine(med);
 		validated = false;
 	}
-	
+
+
 	/**
 	 * Start editing an existing order 
 	 * @param order to be edited
@@ -475,12 +477,16 @@ public class ForecastingView {
 	 * @return
 	 */
 	public ForecastingBatch getBatch() {
+		if (batch == null)
+			batch = new ForecastingBatch();
 		return batch;
 	}
 
 
 
 	public ForecastingOrder getOrder() {
+		if (order == null)
+			order = new ForecastingOrder();
 		return order;
 	}
 
@@ -500,7 +506,7 @@ public class ForecastingView {
 		return bufferStockOptions;
 	}
 
-	
+
 	/**
 	 * Called when a forecasting is executed
 	 */

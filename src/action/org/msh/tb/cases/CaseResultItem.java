@@ -7,13 +7,12 @@ import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.Gender;
 import org.msh.mdrtb.entities.enums.ValidationState;
-import org.msh.utils.date.DateUtils;
 
 
 public class CaseResultItem {
 	private Integer caseId;
 	private String patientName;
-	private Date patientBirthDate;
+	private Integer patientAge;
 	private Gender gender;
 	private Integer caseNumber;
 	private String healthUnit;
@@ -62,13 +61,6 @@ public class CaseResultItem {
 	}
 	public void setEndingTreatmentDate(Date endingTreatmentDate) {
 		this.endingTreatmentDate = endingTreatmentDate;
-	}
-	/**
-	 * Calc patient age from the birth date to the notification date 
-	 * @return
-	 */
-	public Integer getPatientAge() {
-		return (patientBirthDate==null? null: DateUtils.yearsBetween(patientBirthDate, notificationDate));
 	}
 	public Integer getCaseId() {
 		return caseId;
@@ -136,12 +128,6 @@ public class CaseResultItem {
 	public void setTreatmentLenght(Integer treatmentLenght) {
 		this.treatmentLenght = treatmentLenght;
 	}
-	public Date getPatientBirthDate() {
-		return patientBirthDate;
-	}
-	public void setPatientBirthDate(Date patientBirthDate) {
-		this.patientBirthDate = patientBirthDate;
-	}
 
 	public CaseClassification getClassification() {
 		return classification;
@@ -163,5 +149,19 @@ public class CaseResultItem {
 	 */
 	public void setValidationState(ValidationState validationState) {
 		this.validationState = validationState;
+	}
+
+	/**
+	 * @return the age
+	 */
+	public Integer getPatientAge() {
+		return patientAge;
+	}
+
+	/**
+	 * @param age the age to set
+	 */
+	public void setPatientAge(Integer age) {
+		this.patientAge = age;
 	}
 }
