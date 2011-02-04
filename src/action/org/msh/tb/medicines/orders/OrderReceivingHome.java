@@ -86,7 +86,7 @@ public class OrderReceivingHome extends Controller {
 	@Transactional
 	public String notifyReceiving() {
 		Date dtReceiving = order.getReceivingDate();
-		if (dtReceiving.before(order.getShippingDate())) {
+		if (dtReceiving.before(order.getShippingDate()) || (dtReceiving.after(new Date()))) {
 			facesMessages.addFromResourceBundle("medicines.orders.invalidreceivingdate");
 			return "error";
 		}

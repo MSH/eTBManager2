@@ -55,8 +55,6 @@
   location="C:\java\jboss-4.2.3.GA\client\getopt.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-hibernate-annotations.jar"
   location="C:\java\jboss-4.2.3.GA\client\hibernate-annotations.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-hibernate-client.jar"
-  location="C:\java\jboss-4.2.3.GA\client\hibernate-client.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jacorb.jar"
   location="C:\java\jboss-4.2.3.GA\client\jacorb.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-javassist.jar"
@@ -199,8 +197,6 @@
   location="C:\java\jboss-4.2.3.GA\server\default\lib\hibernate-entitymanager.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-hibernate-validator.jar"
   location="C:\java\jboss-4.2.3.GA\server\default\lib\hibernate-validator.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-hibernate3.jar"
-  location="C:\java\jboss-4.2.3.GA\server\default\lib\hibernate3.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-hsqldb-plugin.jar"
   location="C:\java\jboss-4.2.3.GA\server\default\lib\hsqldb-plugin.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-hsqldb.jar"
@@ -325,14 +321,14 @@
   location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\lib\richfaces-impl-3.3.3.Final.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-richfaces-ui-3.3.3.Final.jar"
   location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\lib\richfaces-ui-3.3.3.Final.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-hibernate.jar"
-  location="C:\Java\jboss-4.2.3.GA\client\hibernate.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-lucene-core.jar"
   location="C:\Java\jboss-4.2.3.GA\server\default\lib\lucene-core.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-hibernate-search.jar"
   location="C:\Java\jboss-4.2.3.GA\server\default\lib\hibernate-search.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-jbossall-client.jar"
   location="C:\Java\jboss-4.2.3.GA\client\jbossall-client.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-hibernate-core.jar"
+  location="C:\Java\jboss-4.2.3.GA\client\hibernate-core.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>

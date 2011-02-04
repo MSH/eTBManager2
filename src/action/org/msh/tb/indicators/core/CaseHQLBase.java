@@ -166,7 +166,7 @@ public class CaseHQLBase extends Controller {
 		
 		// include filter by source
 		if (filters.getSource() != null)
-			hql += " and exists(select aux.id from PrescribedMedicine aux where aux.source.id = #{indicatorFilters.source.id} and aux.tbcase.id = c.id)";
+			hql += " and exists(select pm.id from PrescribedMedicine pm where pm.source.id = #{indicatorFilters.source.id} and pm.tbcase.id = c.id)";
 
 		// include filter by infectionSite
 		String s = getHQLInfectionSite();
@@ -333,6 +333,7 @@ public class CaseHQLBase extends Controller {
 	 */
 	public Query createQuery() {
 		String hql = createHQL();
+
 		Query query = getEntityManager().createQuery(hql);
 		setQueryParameters(query);
 		return query;
@@ -391,7 +392,9 @@ public class CaseHQLBase extends Controller {
 	protected String getHQLJoin() {
 		if (!consolidated)
 			 return "join fetch c.patient p";
-		else return null;
+		else {
+			return null;
+		}
 	}
 
 

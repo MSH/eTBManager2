@@ -64,6 +64,7 @@
     <s:decorate template="/layout/dateedit.xhtml">
     	<ui:define name="label">#{messages['Transfer.receivingDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="false" /> 
     	<ui:param name="datefield" value="#{transfer.receivingDate}" /> 
 	</s:decorate>
 
