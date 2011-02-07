@@ -29,12 +29,17 @@
     	<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="future" value="true" /> 
-    	<ui:param name="datefield" value="#{medicalExamination.date}" /> 
+    	<ui:param name="datefield" value="#{medicalExaminationBR.date}" /> 
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['MedicalExaminationBR.nextAppointment']}:</ui:define>
+    	<ui:param name="datefield" value="#{medicalExaminationBR.nextAppointment}" /> 
     </s:decorate>
 
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['pt_BR.ClinicalEvolution']}:</ui:define>
-		<h:selectOneMenu value="#{medicalExamination.clinicalEvolution}">
+		<h:selectOneMenu value="#{medicalExaminationBR.clinicalEvolution}">
 			<s:selectItems var="s" value="#{globalLists_br.clinicalEvolutions}" label="#{messages[s.key]}" noSelectionLabel="-" />
 			<s:convertEnum />
 		</h:selectOneMenu>
@@ -42,7 +47,7 @@
 
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['pt_BR.supervisedTreatment']}:</ui:define>
-		<h:selectOneMenu id="cbsuptreatment" value="#{medicalExamination.supervisedTreatment}">
+		<h:selectOneMenu id="cbsuptreatment" value="#{medicalExaminationBR.supervisedTreatment}">
 			<s:selectItems var="s" value="#{globalLists.yesNoTypeList}" label="#{messages[s.key]}" noSelectionLabel="-" />
 			<s:convertEnum />
 		</h:selectOneMenu>
@@ -50,7 +55,7 @@
 	<div id="div_supunit">
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['pt_BR.supervisionUnit']}:</ui:define>
-		<h:inputText value="#{medicalExamination.supervisionUnitName}" style="width:300px;text-transform:uppercase;" maxlength="100"/>
+		<h:inputText value="#{medicalExaminationBR.supervisionUnitName}" style="width:300px;text-transform:uppercase;" maxlength="100"/>
 	</s:decorate>
 	</div>
 <rich:jQuery selector="#cbsuptreatment" query="change(function(){showSupUnit(this); })" />
@@ -61,7 +66,7 @@
     	<s:decorate template="/layout/edit.xhtml" >
     		<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
     		<div id="edtweight">
-    		<h:inputText value="#{medicalExamination.weight}" required="true" converter="localeDoubleConverter" 
+    		<h:inputText value="#{medicalExaminationBR.weight}" required="true" converter="localeDoubleConverter" 
     			onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');" onkeyup="updateBMI(this, event);"
     			style="width:80px;" >
     		</h:inputText>#{messages['MedicalExamination.weight.unit']}
@@ -73,7 +78,7 @@
     	<s:decorate template="/layout/edit.xhtml" >
     		<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
     		<span id="edtheight">
-    		<h:inputText value="#{medicalExamination.height}" style="width:80px;"
+    		<h:inputText value="#{medicalExaminationBR.height}" style="width:80px;"
     			onkeypress="return numbersOnly(this,event);" onkeyup="updateBMI(this, event);"/>
     		#{messages['MedicalExamination.height.unit']}
     		</span>
@@ -89,7 +94,7 @@
 
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['MedicalExamination.surgicalProcedure']}:</ui:define>
-		<h:selectOneMenu id="cbsurgproc" value="#{medicalExamination.surgicalProcedure}">
+		<h:selectOneMenu id="cbsurgproc" value="#{medicalExaminationBR.surgicalProcedure}">
 			<s:selectItems var="s" value="#{globalLists.yesNoTypeList}" label="#{messages[s.key]}" noSelectionLabel="-" />
 			<s:convertEnum />
 		</h:selectOneMenu>
@@ -97,7 +102,7 @@
 	<div id="div_surgproc">
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['MedicalExamination.surgicalProcedureDesc']}:</ui:define>
-		<h:inputText value="#{medicalExamination.surgicalProcedureDesc}" style="width:300px;text-transform:uppercase;" maxlength="100"/>
+		<h:inputText value="#{medicalExaminationBR.surgicalProcedureDesc}" style="width:300px;text-transform:uppercase;" maxlength="100"/>
 	</s:decorate>
 	</div>
 <rich:jQuery selector="#cbsurgproc" query="change(function(){showSurgProc(this); })" />
@@ -105,17 +110,17 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
-    	<h:inputText value="#{medicalExamination.responsible}" style=" width : 340px;text-transform:uppercase;" maxlength="100"/>
+    	<h:inputText value="#{medicalExaminationBR.responsible}" style=" width : 340px;text-transform:uppercase;" maxlength="100"/>
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.positionResponsible']}:</ui:define>
-    	<h:inputText value="#{medicalExamination.positionResponsible}" style=" width : 340px;text-transform:uppercase;" maxlength="100"/>
+    	<h:inputText value="#{medicalExaminationBR.positionResponsible}" style=" width : 340px;text-transform:uppercase;" maxlength="100"/>
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	<h:inputText value="#{medicalExamination.comments}" style=" width : 340px;" maxlength="100"/>
+    	<h:inputText value="#{medicalExaminationBR.comments}" style=" width : 340px;" maxlength="100"/>
     </s:decorate>
 
 	</td></tr>

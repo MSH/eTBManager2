@@ -27,6 +27,7 @@ public class UserProfile extends WSObject implements Serializable, Comparable<Us
 
 	@Column(length=100)
 	@NotNull
+	@FieldLog(key="form.name")
 	private String name;
 
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="userProfile",cascade={CascadeType.ALL})

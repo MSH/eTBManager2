@@ -1,9 +1,11 @@
 package org.msh.tb.laboratories;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.msh.mdrtb.entities.Laboratory;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.AdminUnitSelection;
@@ -12,6 +14,7 @@ import org.msh.utils.EntityQuery;
 
 
 @Name("laboratoryHome")
+@Scope(ScopeType.CONVERSATION)
 @LogInfo(roleName="LABS")
 public class LaboratoryHome extends EntityHomeEx<Laboratory>{
 	private static final long serialVersionUID = -4352110924970540613L;

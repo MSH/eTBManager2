@@ -15,9 +15,9 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.mdrtb.entities.AdministrativeUnit;
 import org.msh.mdrtb.entities.ExamCulture;
+import org.msh.mdrtb.entities.ExamDSTResult;
 import org.msh.mdrtb.entities.ExamHIV;
 import org.msh.mdrtb.entities.ExamMicroscopy;
-import org.msh.mdrtb.entities.ExamDSTResult;
 import org.msh.mdrtb.entities.ExamXRay;
 import org.msh.mdrtb.entities.FieldValue;
 import org.msh.mdrtb.entities.MedicalExamination;
@@ -27,11 +27,11 @@ import org.msh.mdrtb.entities.UserWorkspace;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.CultureResult;
+import org.msh.mdrtb.entities.enums.DstResult;
 import org.msh.mdrtb.entities.enums.Gender;
 import org.msh.mdrtb.entities.enums.HIVResult;
-import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.mdrtb.entities.enums.MicroscopyResult;
-import org.msh.mdrtb.entities.enums.DstResult;
+import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.mdrtb.entities.enums.YesNoType;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.AdminUnitSelection;
@@ -42,11 +42,10 @@ import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.ComorbidityHome;
 import org.msh.tb.cases.exams.ExamCultureHome;
+import org.msh.tb.cases.exams.ExamDSTHome;
 import org.msh.tb.cases.exams.ExamHIVHome;
 import org.msh.tb.cases.exams.ExamMicroscopyHome;
-import org.msh.tb.cases.exams.ExamDSTHome;
 import org.msh.tb.cases.exams.ExamXRayHome;
-import org.msh.tb.cases.exams.MedicalExaminationHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.cases.treatment.StartTreatmentIndivHome;
 import org.msh.tb.misc.FieldsOptions;
@@ -67,7 +66,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	@In(required=false) ExamDSTHome examDSTHome;
 	@In(required=false) ExamHIVHome examHIVHome;
 	@In(required=false) ComorbidityHome comorbidityHome;
-	@In(required=false) MedicalExaminationHome medicalExaminationHome;
+	@In(required=false) MedicalExaminationBRHome medicalExaminationBRHome;
 	@In(required=false) MolecularBiologyHome molecularBiologyHome;
 	@In(create=true) FacesMessages facesMessages;
 	@In(create=true) ExamXRayHome examXRayHome;
@@ -277,10 +276,10 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	 * Adjust values of the medical examination fields
 	 */
 	protected void adjustMedicalExaminationFields() {
-		if (medicalExaminationHome == null)
+		if (medicalExaminationBRHome == null)
 			return;
 
-		MedicalExamination medExam = medicalExaminationHome.getInstance();
+		MedicalExamination medExam = medicalExaminationBRHome.getInstance();
 		setPropertyUpperCase(medExam, "positionResponsible");
 		setPropertyUpperCase(medExam, "responsible");
 		if (!YesNoType.YES.equals(medExam.getSupervisedTreatment()))
@@ -294,11 +293,11 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	 * @return
 	 */
 	public String saveMedicalExamination() {
-		if (medicalExaminationHome == null)
+		if (medicalExaminationBRHome == null)
 			return "error";
 
 		adjustMedicalExaminationFields();
-		return medicalExaminationHome.persist();
+		return medicalExaminationBRHome.persist();
 	}
 
 
@@ -317,8 +316,8 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 			res = false;
 		}
 		
-		if (medicalExaminationHome != null) {
-			MedicalExamination medExam = medicalExaminationHome.getInstance();
+		if (medicalExaminationBRHome != null) {
+			MedicalExamination medExam = medicalExaminationBRHome.getInstance();
 			if (YesNoType.YES.equals(medExam.getSupervisedTreatment())) {
 				if ((medExam.getSupervisionUnitName() == null) || (medExam.getSupervisionUnitName().isEmpty())) {
 					facesMessages.addToControlFromResourceBundle("supUnitName", "javax.faces.component.UIInput.REQUIRED");

@@ -11,7 +11,10 @@
 
 	<h:panelGroup id="medexams">
 	<div style="display:table;width:100%;">
-	<s:link value="#{messages['cases.details.newconsult']}" style="float:right;" view="/cases/edtmedexam.xhtml" styleClass="right-icon" rendered="#{caseHome.canEditCaseData}">
+	<s:link value="#{messages['cases.details.newconsult']}" style="float:right;" 
+		view="/custom/br/cases/edtmedexam.xhtml" 
+		styleClass="right-icon" 
+		rendered="#{caseHome.canEditCaseData}">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 	</s:link>
@@ -25,7 +28,7 @@
 		<s:decorate template="/layout/roundrect.xhtml" >
 		<ui:define name="header">
 			<div style="float:right;">
-				<s:link value="#{messages['form.edit']}" view="/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
+				<s:link value="#{messages['form.edit']}" view="/custom/br/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 				</s:link>
@@ -41,6 +44,11 @@
 
 		<table width="100%" style="border-collapse:collapse;" cellpadding="0" cellspacing="0">
 		<tr><td colspan="2">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty r.nextAppointment}">
+    		<ui:define name="label">#{messages['MedicalExaminationBR.nextAppointment']}:</ui:define>
+			<h:outputText value="#{r.nextAppointment}" converter="localeDateConverter" />
+		</s:decorate>
+
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty r.clinicalEvolution}">
     		<ui:define name="label">#{messages['pt_BR.ClinicalEvolution']}:</ui:define>
     		#{messages[r.clinicalEvolution.key]}
