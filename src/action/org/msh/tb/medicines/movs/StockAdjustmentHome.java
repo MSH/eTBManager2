@@ -97,6 +97,7 @@ public class StockAdjustmentHome extends Controller {
 		
 		MovementType type = MovementType.ADJUSTMENT;
 		
+		movementHome.initMovementRecording();
 		for (AdjustmentItem item: items) {			
 			if ((item.getQuantity() != null) && (item.getQuantity() != item.getStockPosition().getQuantity())) {
 
@@ -105,11 +106,11 @@ public class StockAdjustmentHome extends Controller {
 				for (BatchAdjustmentItem it: item.getBatches())
 					batches.put(it.getBatchQtd().getBatch(), it.getQuantity() - it.getBatchQtd().getQuantity());
 	
-				// cria movimento de ajuste
-				movementHome.newMovement(DateUtils.getDate(), userSession.getTbunit(), source, item.getStockPosition().getMedicine(),
+				movementHome.prepareNewMovement(DateUtils.getDate(), userSession.getTbunit(), source, item.getStockPosition().getMedicine(),
 						type, batches, item.getComment());
 			}
 		}
+		movementHome.savePreparedMovements();
 		
 		entityManager.flush();
 		

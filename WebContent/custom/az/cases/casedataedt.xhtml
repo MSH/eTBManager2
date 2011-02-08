@@ -85,6 +85,7 @@
 	<tr><td>
 		<s:decorate template="/layout/auselection.xhtml">
 			<ui:param name="auselection" value="#{caseEditingHome.notifAdminUnit}" />
+			<ui:param name="requiredLevel" value="#{defaultWorkspace.patientAddrRequiredLevels}" />
 		</s:decorate>
     </td></tr>
 
@@ -122,7 +123,6 @@
 		<tr><td>
 			<s:decorate template="/layout/auselection.xhtml">
 				<ui:param name="auselection" value="#{caseEditingHome.currentAdminUnit}" />
-				<ui:param name="required" value="false" />
 			</s:decorate>
     	</td></tr>
     	</table>

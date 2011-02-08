@@ -136,7 +136,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     	dispensing.setEndDate(c.getTime());
 
     	// check if can decrease the quantity in stock
-    	boolean validMovements = true;
+/*    	boolean validMovements = true;
 
     	for (SourceGroup grp: sources) {
         	for (DispItem aux: grp.getItems()) {
@@ -162,7 +162,8 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     	
     	if (!validMovements)
     		return "error";
-    	
+*/
+    	boolean validMovements = true;
     	// mount dispensing object with items 
     	for (SourceGroup grp: sources) {
     		for (DispItem aux: grp.getItems()) {
@@ -193,10 +194,11 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     	}
 */
     	// create movements
+    	movementHome.initMovementRecording();
 		for (MedicineDispensingItem it: dispensing.getItems()) {
 			// check if movement has to be created
 			if ((it.getMovement() == null) || (it.getMovement().getQuantity() != it.getQuantity())) {
-				Movement mov = movementHome.newMovement(c.getTime(), dispensing.getTbunit(), 
+				Movement mov = movementHome.prepareNewMovement(c.getTime(), dispensing.getTbunit(), 
 						it.getSource(), it.getMedicine(), MovementType.DISPENSING, 
 						getBatchesMap(it), null);				
 
@@ -213,6 +215,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 				}
 			}
 		}
+		movementHome.savePreparedMovements();
     	
         return persist();
     }

@@ -20,11 +20,11 @@ import org.msh.mdrtb.entities.Order;
 import org.msh.mdrtb.entities.OrderBatch;
 import org.msh.mdrtb.entities.OrderItem;
 import org.msh.mdrtb.entities.Source;
-import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.enums.MovementType;
 import org.msh.mdrtb.entities.enums.OrderStatus;
 import org.msh.tb.log.LogService;
 import org.msh.tb.medicines.BatchSelection;
+import org.msh.tb.medicines.movs.MovementException;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
 import org.msh.utils.date.DateUtils;
@@ -83,7 +83,7 @@ public class OrderShippingHome extends Controller {
 //		Tbunit dto = order.getTbunitTo();
 		
 		// check if stock can be decreased
-		Tbunit unitTo = order.getTbunitTo();
+/*		Tbunit unitTo = order.getTbunitTo();
 		boolean canShip = true;
 		for (OrderItem it: order.getItems()) {
 			if (!movementHome.canDecreaseStock(unitTo, it.getSource(), 
@@ -95,20 +95,37 @@ public class OrderShippingHome extends Controller {
 
 		if (!canShip)
 			return "error";
-		
+*/		
 		MovementType type = MovementType.ORDERSHIPPING;
 		// gera os movimentos de saída do pedido
+		boolean canShip = true;
+		movementHome.initMovementRecording();
 		for (OrderItem it: order.getItems())
 			if ((it.getShippedQuantity() != null) && (it.getShippedQuantity() > 0))
 			{
 				Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
 				for (OrderBatch ob: it.getBatches())
 					batches.put(ob.getBatch(), ob.getQuantity());
-				
-				Movement mov = movementHome.newMovement(dtShipping, order.getTbunitTo(), it.getSource(), it.getMedicine(), type, batches, null);
-				
-				it.setMovementOut(mov);
+
+				try {
+					Movement mov = movementHome.prepareNewMovement(dtShipping, 
+							order.getTbunitTo(), 
+							it.getSource(), 
+							it.getMedicine(), 
+							type, 
+							batches, 
+							order.getTbunitTo().toString());
+					it.setMovementOut(mov);
+				} catch (MovementException e) {
+					facesMessages.add(e.getMessage());
+					canShip = false;
+					it.setData(true);
+				}
 			}
+		
+		if (!canShip)
+			return "error";
+		movementHome.savePreparedMovements();
 		
 //		facesMessages.addFromResourceBundle("medicines.orders.shipped");
 		

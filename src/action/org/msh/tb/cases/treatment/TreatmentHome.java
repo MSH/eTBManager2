@@ -74,17 +74,21 @@ public class TreatmentHome {
 	public void initializeEditing() {
 		if (initialized)
 			return;
+
+		// check if there is something to edit
+		TbCase tbcase = caseHome.getInstance();
+		List<TreatmentHealthUnit> lst = tbcase.getSortedTreatmentHealthUnits();
+		if (lst.size() == 0)
+			return;
 		
 		PrescriptionTable tbl = (PrescriptionTable)Component.getInstance("prescriptionTable", true);
 		tbl.setEditing(true);
 		tbl.refresh();
 		updateTreatmentPeriod();
 
-		TbCase tbcase = caseHome.getInstance();
 		if (tbcase.getIniContinuousPhase() != null)
 			prescribedMedicineHome.splitPeriod(tbcase.getIniContinuousPhase());
 
-		List<TreatmentHealthUnit> lst = tbcase.getSortedTreatmentHealthUnits();
 		healthUnit = lst.get( lst.size() - 1 );
 		if (lst.indexOf(healthUnit) > 0)
 			 minIniDate = healthUnit.getPeriod().getIniDate();

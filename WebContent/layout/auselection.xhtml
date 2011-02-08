@@ -9,7 +9,7 @@
 
 <s:decorate id="sel" template="/layout/edit.xhtml">
 	<ui:define name="label">#{auselection.labelLevel1}:</ui:define>
-	<h:selectOneMenu id="cbselau1" value="#{auselection.unitLevel1}" required="#{required or auselection.level1Required}" rendered="#{not auselection.level1ReadOnly}">
+	<h:selectOneMenu id="cbselau1" value="#{auselection.unitLevel1}" required="#{requiredLevel > 0}" rendered="#{not auselection.level1ReadOnly}">
 		<s:selectItems var="it" value="#{auselection.optionsLevel1}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
 		<a:support event="onchange" ajaxSingle="true" reRender="aulevels,#{rerender}" focus="cbselau2"/>
@@ -21,7 +21,7 @@
 <s:decorate template="/layout/edit.xhtml" rendered="#{auselection.unitLevel1.unitsCount > 0}">
 	<ui:define name="label">#{auselection.labelLevel2}:</ui:define>
 	<ui:param name="required" value="#{required and auselection.level2Required}" />
-	<h:selectOneMenu id="cbselau2" value="#{auselection.unitLevel2}" rendered="#{not auselection.level2ReadOnly}" required="#{required}">
+	<h:selectOneMenu id="cbselau2" value="#{auselection.unitLevel2}" rendered="#{not auselection.level2ReadOnly}" required="#{requiredLevel > 1}">
 		<s:selectItems var="it" value="#{auselection.optionsLevel2}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
 		<a:support event="onchange" ajaxSingle="true" reRender="aulevels,#{rerender}" focus="cbselau3"/>
@@ -32,7 +32,7 @@
 <s:decorate template="/layout/edit.xhtml" rendered="#{auselection.unitLevel2.unitsCount > 0}">
 	<ui:define name="label">#{auselection.labelLevel3}:</ui:define>
 	<ui:param name="required" value="#{required and auselection.level3Required}" />
-	<h:selectOneMenu id="cbselau3" value="#{auselection.unitLevel3}" rendered="#{not auselection.level3ReadOnly}" required="#{required}">
+	<h:selectOneMenu id="cbselau3" value="#{auselection.unitLevel3}" rendered="#{not auselection.level3ReadOnly}" required="#{requiredLevel > 2}">
 		<s:selectItems var="it" value="#{auselection.optionsLevel3}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
 		<a:support event="onchange" ajaxSingle="true" reRender="aulevels,#{rerender}" focus="cbselau4"/>
@@ -43,7 +43,7 @@
 <s:decorate template="/layout/edit.xhtml" rendered="#{auselection.unitLevel3.unitsCount > 0}">
 	<ui:define name="label">#{auselection.labelLevel4}:</ui:define>
 	<ui:param name="required" value="#{required and auselection.level4Required}" />
-	<h:selectOneMenu id="cbselau3" value="#{auselection.unitLevel4}" rendered="#{not auselection.level4ReadOnly}" required="#{required}">
+	<h:selectOneMenu id="cbselau3" value="#{auselection.unitLevel4}" rendered="#{not auselection.level4ReadOnly}" required="#{requiredLevel > 3}">
 		<s:selectItems var="it" value="#{auselection.optionsLevel4}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
 		<a:support event="onchange" ajaxSingle="true" reRender="aulevels,#{rerender}" focus="cbselau5"/>
@@ -54,7 +54,7 @@
 <s:decorate template="/layout/edit.xhtml" rendered="#{auselection.unitLevel4.unitsCount > 0}">
 	<ui:define name="label">#{auselection.labelLevel5}:</ui:define>
 	<ui:param name="required" value="#{required and auselection.level5Required}" />
-	<h:selectOneMenu id="cbselau3" value="#{auselection.unitLevel5}" rendered="#{not auselection.level5ReadOnly}" required="#{required}">
+	<h:selectOneMenu id="cbselau3" value="#{auselection.unitLevel5}" rendered="#{not auselection.level5ReadOnly}" required="#{requiredLevel > 4}">
 		<s:selectItems var="it" value="#{auselection.optionsLevel5}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
 		<a:support event="onchange" ajaxSingle="true" reRender="#{rerender}" focus="cbselau5"/>

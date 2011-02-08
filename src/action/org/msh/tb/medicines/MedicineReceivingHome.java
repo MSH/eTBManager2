@@ -130,6 +130,7 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 		Tbunit unit = rec.getTbunit();
 		Date date = rec.getReceivingDate();
 		
+		movementHome.initMovementRecording();
 		for (MedicineReceivingItem it: movs.keySet()) {
 			Movement aux = movs.get(it);
 			Medicine medicine = aux.getMedicine();
@@ -139,9 +140,10 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 			for (Batch b: it.getBatches()) {
 				batches.put(b, b.getQuantityReceived());
 			}
-			Movement mov = movementHome.newMovement(date, unit, source, medicine, type, batches, null); 
+			Movement mov = movementHome.prepareNewMovement(date, unit, source, medicine, type, batches, null); 
 			it.setMovement(mov);
 		}
+		movementHome.savePreparedMovements();
 	}
 	
 	/**

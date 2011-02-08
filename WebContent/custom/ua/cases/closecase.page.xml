@@ -6,6 +6,12 @@
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"
 		required="true" />
 	<navigation>
+		<rule if="#{not caseHome.instance.open}">
+			<end-conversation/>
+			<redirect view-id="/cases/casedata.xhtml">
+				<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
+			</redirect>
+		</rule>
 		<rule if-outcome="case-closed">
 			<redirect view-id="/cases/casedata.xhtml">
 				<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />

@@ -94,28 +94,27 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		
 		Date dt = transfer.getShippingDate();
 
-		// check if transfer can be done at the date
+		// creates out movements
+		movementHome.initMovementRecording();
 		boolean bCanTransfer = true;
 		for (TransferItem it: transfer.getItems()) {
-			if (!movementHome.canDecreaseStock(unit, it.getSource(), it.getMedicine(), it.getQuantity(), dt)) {
+			String comment = transfer.getUnitTo().getName().getDefaultName();
+			try {
+				Movement movOut = movementHome.prepareNewMovement(dt, unit, it.getSource(), 
+						it.getMedicine(), MovementType.TRANSFEROUT, 
+						getBatchesMap(it, true), comment);
+				
+				it.setMovementOut(movOut);
+			} catch (MovementException e) {
+				facesMessages.add(e.getMessage());
 				bCanTransfer = false;
 				it.setData(true);
 			}
-			else it.setData(false);
 		}
 		
 		if (!bCanTransfer)
 			return "error";
-		
-		// creates out movements
-		for (TransferItem it: transfer.getItems()) {
-			String comment = transfer.getUnitTo().getName().getDefaultName();
-			Movement movOut = movementHome.newMovement(dt, unit, it.getSource(), 
-					it.getMedicine(), MovementType.TRANSFEROUT, 
-					getBatchesMap(it, true), comment);
-			
-			it.setMovementOut(movOut);
-		}
+		movementHome.savePreparedMovements();
 
 		// register transfer in the log system
 		LogService log = getLogService();
@@ -145,6 +144,7 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		Date dt = transfer.getReceivingDate();
 		Tbunit unit = transfer.getUnitTo();
 		
+		movementHome.initMovementRecording();
 		for (TransferItem it: transfer.getItems()) {
 			String comment = transfer.getUnitFrom().getName().getDefaultName();
 			
@@ -155,11 +155,12 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 			}
 
 			// create receiving movement
-			Movement movIn = movementHome.newMovement(dt, unit, it.getSource(), it.getMedicine(), MovementType.TRANSFERIN, 
+			Movement movIn = movementHome.prepareNewMovement(dt, unit, it.getSource(), it.getMedicine(), MovementType.TRANSFERIN, 
 					batches, comment);
 			
 			it.setMovementIn(movIn);
 		}
+		movementHome.savePreparedMovements();
 		
 		transfer.setStatus(TransferStatus.DONE);
 		transfer.setUserTo(getUser());

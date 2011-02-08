@@ -56,7 +56,6 @@ function handleContextClick(comp) {
 	<s:decorate template="/layout/auselection.xhtml" rendered="#{indicatorFilters.indicatorSite=='PATIENTADDRESS'}">
 		<ui:param name="auselection" value="#{indicatorFilters.tbunitselection.auselection}" />
 		<ui:param name="rerender" value="pnloutput" />
-		<ui:param name="required" value="false" />
 	</s:decorate>
 
 	<s:decorate template="/layout/tbselection2.xhtml" rendered="#{indicatorFilters.indicatorSite=='TREATMENTSITE'}">

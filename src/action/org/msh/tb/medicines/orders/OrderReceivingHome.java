@@ -101,7 +101,9 @@ public class OrderReceivingHome extends Controller {
 		order.setStatus(OrderStatus.RECEIVED);
 		
 		MovementType type = MovementType.ORDERRECEIVING;
+
 		// gera os movimentos de saída do pedido
+		movementHome.initMovementRecording();
 		for (OrderItem it: order.getItems())
 			if ((it.getReceivedQuantity() != null) && (it.getReceivedQuantity() > 0))
 			{
@@ -110,10 +112,21 @@ public class OrderReceivingHome extends Controller {
 				for (OrderBatch ob: it.getBatches())
 					batches.put(ob.getBatch(), ob.getReceivedQuantity());
 
+				String s = order.getTbunitFrom().getName().toString();
+				if ((it.getComment() != null) && (!it.getComment().isEmpty()))
+					s = "[" + s + "] " + it.getComment();
+	
 				// create the stock movement
-				Movement mov = movementHome.newMovement(dtReceiving, order.getTbunitFrom(), it.getSource(), it.getMedicine(), type, batches, it.getComment());
+				Movement mov = movementHome.prepareNewMovement(dtReceiving, 
+						order.getTbunitFrom(), 
+						it.getSource(), 
+						it.getMedicine(), 
+						type, 
+						batches,
+						s);
 				it.setMovementIn(mov);
 			}
+		movementHome.savePreparedMovements();
 
 		facesMessages.addFromResourceBundle("medicines.orders.received");
 		entityManager.persist(order);

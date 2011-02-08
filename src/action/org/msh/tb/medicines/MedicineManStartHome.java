@@ -160,6 +160,7 @@ public class MedicineManStartHome {
 		entityManager.persist(unit);
 		
 		// create movements
+		movementHome.initMovementRecording();
 		for (SourceInfo sourceInfo: sourcesInfo) {
 			for (MedicineInfo medInfo: sourceInfo.getItems()) {
 
@@ -170,9 +171,11 @@ public class MedicineManStartHome {
 					entityManager.flush();
 				}
 				
-				movementHome.newMovement(startDate, unit, sourceInfo.getSource(), medInfo.getMedicine(), MovementType.INITIALIZE, medInfo.getBatchesMap(), null);
+				if (medInfo.getBatches().size() > 0)
+					movementHome.prepareNewMovement(startDate, unit, sourceInfo.getSource(), medInfo.getMedicine(), MovementType.INITIALIZE, medInfo.getBatchesMap(), null);
 			}
 		}
+		movementHome.savePreparedMovements();
 		
 		userSession.setTbunit(unit);
 		

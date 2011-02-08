@@ -5,6 +5,12 @@
 	<restrict>#{userSession.canValidateCases}</restrict>
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" required="true" />
 	<navigation>
+		<rule if="#{caseHome.instance.validated}">
+			<end-conversation />
+			<redirect view-id="/cases/casedata.xhtml">
+				<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
+			</redirect>
+		</rule>
 		<rule if-outcome="validated">
 			<end-conversation />
 			<redirect view-id="/cases/casedata.xhtml">
