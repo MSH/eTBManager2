@@ -126,7 +126,8 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     		Tbunit unit = entityManager.merge(userSession.getTbunit());
     		dispensing.setTbunit(unit);
     	}
-    	
+
+    	// set the dispensing period
     	Calendar c = Calendar.getInstance();
     	c.clear();
     	c.set(year, month, dayIni);
@@ -135,35 +136,10 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     	c.set(year, month, dayEnd);
     	dispensing.setEndDate(c.getTime());
 
-    	// check if can decrease the quantity in stock
-/*    	boolean validMovements = true;
-
-    	for (SourceGroup grp: sources) {
-        	for (DispItem aux: grp.getItems()) {
-        		MedicineDispensingItem item = aux.getItem(); 
-        		if (item.getBatches().size() > 0) {
-        			int qtd = item.getQuantity();
-        			Movement mov = item.getMovement();
-        			if (mov != null)
-        				qtd -= mov.getQuantity();
-        			
-        			boolean erroQuantity = false;
-        			if (qtd > 0) {
-        				erroQuantity = !movementHome.canDecreaseStock(dispensing.getTbunit(), item.getSource(), 
-        						item.getMedicine(), item.getQuantity(), dispensing.getEndDate());
-        			}
-      
-        			aux.setInvalid(erroQuantity);
-        			if (erroQuantity)
-        				validMovements = false;
-        		}
-        	}
-    	}
     	
-    	if (!validMovements)
-    		return "error";
-*/
-    	boolean validMovements = true;
+    	// remove unused dispensing registers
+    	List<MedicineDispensingItem> itemsToRemove = new ArrayList<MedicineDispensingItem>();
+
     	// mount dispensing object with items 
     	for (SourceGroup grp: sources) {
     		for (DispItem aux: grp.getItems()) {
@@ -171,11 +147,8 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     			// has any batch in the medicine item ?
     			if (item.getBatches().size() == 0) {
     				// is managed ?
-    				if (item.getDispensing() != null) {
-    					entityManager.remove(item);
-    					entityManager.flush();
-    					dispensing.getItems().remove(item);
-    				}
+    				if (item.getMovement() != null)
+    					itemsToRemove.add(item);
     			}
     			else {
     				if (item.getDispensing() == null) {
@@ -185,14 +158,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     			}
     		}
     	}
-/*
-     	int index = 0;
-    	while (index < dispensing.getItems().size()) {
-    		if (dispensing.getItems().get(index).getBatches().size() == 0)
-    			 dispensing.getItems().remove(index);
-    		else index++;
-    	}
-*/
+
     	// create movements
     	movementHome.initMovementRecording();
 		for (MedicineDispensingItem it: dispensing.getItems()) {
@@ -264,6 +230,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     	return ret;
     }
 
+
     /**
      * Initialize the batches to be selected by the user
      * @param item
@@ -291,6 +258,9 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     }
 
    
+    /**
+     * This method is called by the UI when user selects batches of the dispensing item, i.e, changes the quantity dispensed for the period
+     */
     public void selectBatches()
     {
         Map<BatchQuantity, Integer> sels = batchSelection.getSelectedBatchesQtds();
