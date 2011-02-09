@@ -55,7 +55,7 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 			rec.setTbunit(userSession.getTbunit());
 		
 		movs.clear();
-		
+
 		for (MedicineReceivingItem it: rec.getMedicines()) {
 			// remove movement, if exists
 			Movement mov = it.getMovement();

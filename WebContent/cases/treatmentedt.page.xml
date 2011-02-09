@@ -4,7 +4,7 @@
 
 	<action execute="#{treatmentHome.initializeEditing}"/>
 	<begin-conversation join="true" />
-	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" required="true" />
+	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
 	<navigation>
 		<rule if="#{not caseHome.inTreatment}">
 			<end-conversation/>

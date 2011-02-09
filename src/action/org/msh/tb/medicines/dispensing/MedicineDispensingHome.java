@@ -55,7 +55,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 	private Integer year;
 	private Integer dayIni;
 	private Integer dayEnd;
-	private MedicineDispensingItem item;
+	private DispItem item;
 	private List<SelectItem> days;
 	private String clientError;
 	private boolean initialized;
@@ -118,7 +118,6 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     	}
     	
     	if (!validateDates()) {
-    		facesMessages.addFromResourceBundle("medicines.dispensing.perioderror");
     		return "error";
     	}
     	
@@ -126,6 +125,9 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     		Tbunit unit = entityManager.merge(userSession.getTbunit());
     		dispensing.setTbunit(unit);
     	}
+
+    	// check if end date was changed
+    	boolean endDateChanged = DateUtils.dayOf(dispensing.getIniDate()) != dayEnd;
 
     	// set the dispensing period
     	Calendar c = Calendar.getInstance();
@@ -135,32 +137,29 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     	
     	c.set(year, month, dayEnd);
     	dispensing.setEndDate(c.getTime());
-
     	
-    	// remove unused dispensing registers
-    	List<MedicineDispensingItem> itemsToRemove = new ArrayList<MedicineDispensingItem>();
+    	movementHome.initMovementRecording();
 
     	// mount dispensing object with items 
     	for (SourceGroup grp: sources) {
     		for (DispItem aux: grp.getItems()) {
     			MedicineDispensingItem item = aux.getItem();
-    			// has any batch in the medicine item ?
-    			if (item.getBatches().size() == 0) {
-    				// is managed ?
-    				if (item.getMovement() != null)
-    					itemsToRemove.add(item);
-    			}
-    			else {
-    				if (item.getDispensing() == null) {
-    					dispensing.getItems().add(item);
-    					item.setDispensing(dispensing);
+    			// has any batch in the medicine item or item was modified?
+    			if (item.getMovement() != null) {
+    				if ((endDateChanged) || (aux.isModified())) {
+    					movementHome.prepareMovementsToRemove(item.getMovement());
+    					item.setMovement(null);
     				}
+    			}
+    			
+    			if ((item.getDispensing() == null) && (item.getBatches().size() > 0)) {
+					dispensing.getItems().add(item);
+					item.setDispensing(dispensing);
     			}
     		}
     	}
 
     	// create movements
-    	movementHome.initMovementRecording();
 		for (MedicineDispensingItem it: dispensing.getItems()) {
 			// check if movement has to be created
 			if ((it.getMovement() == null) || (it.getMovement().getQuantity() != it.getQuantity())) {
@@ -168,20 +167,23 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 						it.getSource(), it.getMedicine(), MovementType.DISPENSING, 
 						getBatchesMap(it), null);				
 
-				// there is already a movement ?
-				if (it.getMovement() != null) {
-					Movement movold = it.getMovement();
-					// remove movement
-					it.setMovement(mov);
-					entityManager.flush();
-					movementHome.removeMovement(movold);
-				}
-				else {
-					it.setMovement(mov);
+				it.setMovement(mov);
+			}
+		}
+		
+		// save movements
+		movementHome.savePreparedMovements();
+
+		// delete items that has no batch
+		for (SourceGroup grp: sources) {
+			for (DispItem it: grp.getItems()) {
+				MedicineDispensingItem item = it.getItem();
+				if ((item.getBatches().size() == 0) && (dispensing.getItems().contains(item))) {
+					dispensing.getItems().remove(item);
+					entityManager.remove(item);
 				}
 			}
 		}
-		movementHome.savePreparedMovements();
     	
         return persist();
     }
@@ -235,15 +237,16 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
      * Initialize the batches to be selected by the user
      * @param item
      */
-    public void initializeBatchSelection(MedicineDispensingItem item)
+    public void initializeBatchSelection(DispItem item)
     {
         this.item = item;
+    	MedicineDispensingItem it = item.getItem();
         batchSelection.clear();
         batchSelection.setTbunit(userSession.getTbunit());
-        batchSelection.setMedicine(item.getMedicine());
-        batchSelection.setSource(item.getSource());
+        batchSelection.setMedicine(it.getMedicine());
+        batchSelection.setSource(it.getSource());
         batchSelection.setAllowQtdOverStock(false);
-        batchSelection.setSelectedBatches(getBatchesMap(item));
+        batchSelection.setSelectedBatches(getBatchesMap(it));
     }
 
    
@@ -271,14 +274,17 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
             }
         }
 
-        item.getBatches().clear();
+        MedicineDispensingItem it = item.getItem();
+        List<MedicineDispensingBatch> batches = new ArrayList<MedicineDispensingBatch>();
         for (BatchQuantity b: sels.keySet()) {
         	MedicineDispensingBatch dispBatch = new MedicineDispensingBatch();
-        	dispBatch.setItem(item);
+        	dispBatch.setItem(it);
             dispBatch.setBatch(b.getBatch());
             dispBatch.setQuantity(((Integer)sels.get(b)).intValue());
-            item.getBatches().add(dispBatch);
+            batches.add(dispBatch);
         }
+        it.setBatches(batches);
+        item.setModified(true);
 
         batchSelection.clear();
         item = null;
@@ -518,7 +524,13 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 	protected boolean validateDates() {
 		Date dtIni = DateUtils.newDate(year, month, dayIni);
 		Date dtEnd = DateUtils.newDate(year, month, dayEnd);
-		
+
+		Date dt = DateUtils.getDate();
+    	if ((dtIni.after(dt)) || (dtEnd.after(dt))) {
+    		facesMessages.addFromResourceBundle("validator.notfuture");
+    		return false;
+    	}
+
 		String cond = (isManaged()? " and md.id <> " + getId().toString(): "");
 		
 		Long num = (Long)entityManager.createQuery("select count(*) from MedicineDispensing md " +
@@ -528,7 +540,10 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 				.setParameter("dt1", dtEnd)
 				.setParameter("dt2", dtIni)
 				.getSingleResult();
-		
+
+		if (num != 0)
+			facesMessages.addFromResourceBundle("medicines.dispensing.perioderror");
+
 		return num == 0;
 	}
 
@@ -560,6 +575,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 		private MedicineDispensingItem item;
 		private int availableQuantity;
 		private boolean invalid;
+		private boolean modified;
 		/**
 		 * @return the item
 		 */
@@ -595,6 +611,18 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 		 */
 		public void setInvalid(boolean invalid) {
 			this.invalid = invalid;
+		}
+		/**
+		 * @return the modified
+		 */
+		public boolean isModified() {
+			return modified;
+		}
+		/**
+		 * @param modified the modified to set
+		 */
+		public void setModified(boolean modified) {
+			this.modified = modified;
 		}
 	}
 }

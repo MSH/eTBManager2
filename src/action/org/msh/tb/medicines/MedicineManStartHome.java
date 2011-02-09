@@ -223,6 +223,9 @@ public class MedicineManStartHome {
 		execQueryUnit(unit, "delete from MedicineReceiving aux where aux.tbunit.id = :id");
 		execQueryUnit(unit, "delete from MedicineDispensing aux where aux.tbunit.id = :id");
 		execQueryUnit(unit, "delete from BatchQuantity sp where sp.tbunit.id = :id");
+
+		// delete unused batches
+		entityManager.createQuery("delete from Batch where id not in (select bm.batch.id from BatchMovement bm)").executeUpdate();
 	}
 	
 	

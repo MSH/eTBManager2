@@ -25,7 +25,6 @@
 <s:decorate id="formdisp" template="/layout/unit.xhtml">
 <h:form id="main"> 
 
-<h:panelGroup id="dispdata">
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['medicines.dispensing.dayini']}:</ui:define>
     	<h:selectOneMenu value="#{medicineDispensingHome.dayIni}" required="true">
@@ -35,7 +34,7 @@
     		<f:param name="year" value="#{medicineDispensingHome.year}"/>
     	</h:outputText>
 	</s:decorate>
-	
+
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['medicines.dispensing.dayend']}:</ui:define>
     	<h:selectOneMenu value="#{medicineDispensingHome.dayEnd}" required="true">
@@ -46,6 +45,7 @@
     	</h:outputText>
 	</s:decorate>
 
+<h:panelGroup id="dispdata">
 	<table width="100%" class="tabela">
 	<a:repeat value="#{medicineDispensingHome.sources}" var="s">
 	<tr>
@@ -97,7 +97,7 @@
 			<td>
 			</td>
 			<td align="center">
-				<a:commandLink value="#{messages['medicines.selbatches']}" action="#{medicineDispensingHome.initializeBatchSelection(it.item)}" 
+				<a:commandLink value="#{messages['medicines.selbatches']}" action="#{medicineDispensingHome.initializeBatchSelection(it)}" 
 					reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" ajaxSingle="true"/> 
 			</td>
 		</tr>

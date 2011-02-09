@@ -59,8 +59,7 @@ public class RegimenUnitHome extends Controller {
 	 * Create list of regimens by unit for editing/displaying 
 	 */
 	protected void createItems() {		
-		Tbunit unit = entityManager.merge(userSession.getTbunit());
-		userSession.setTbunit(unit);
+		Tbunit unit = entityManager.find(Tbunit.class, userSession.getTbunit().getId());
 
 		items = entityManager.createQuery("from RegimenUnit ru " + 
 				"join fetch ru.regimen " +

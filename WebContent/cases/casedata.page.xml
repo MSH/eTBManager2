@@ -4,8 +4,12 @@
 
 	<restrict>#{userSession.canOpenCases}</restrict>
 	<action execute="#{caseHome.initView}"/>
-	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" required="true" />
+	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
 	<navigation>
+		<rule if="#{not caseHome.managed}">
+			<redirect view-id="/cases/index.xhtml">
+			</redirect>
+		</rule>
 		<rule if-outcome="removed">
 			<redirect view-id="/cases/index.xhtml">
 			</redirect>

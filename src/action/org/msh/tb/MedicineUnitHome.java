@@ -64,8 +64,7 @@ public class MedicineUnitHome  extends Controller {
 	private void createMedicineList() {
 		sources = new ArrayList<SourceMedicineUnit>();
 		
-		Tbunit unit = entityManager.merge(userSession.getTbunit());
-		userSession.setTbunit(unit);
+		Tbunit unit = entityManager.find(Tbunit.class, userSession.getTbunit().getId());
 		
 		List<MedicineUnit> items = entityManager.createQuery("from MedicineUnit mu " +
 				"join fetch mu.source s join fetch mu.tbunit " +
