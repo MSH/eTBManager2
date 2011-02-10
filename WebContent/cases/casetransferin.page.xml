@@ -6,6 +6,12 @@
 	<action execute="#{caseMoveHome.initializeTransferIn}"/>
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" required="true" />
 	<navigation>
+		<rule if="#{not caseHome.canTransferIn}">
+			<end-conversation />
+			<redirect view-id="/cases/casedata.xhtml">
+				<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
+			</redirect>
+		</rule>
 		<rule if-outcome="trasnferred-in">
 			<end-conversation />
 			<redirect view-id="/cases/casedata.xhtml">

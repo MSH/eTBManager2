@@ -7,7 +7,11 @@
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
 	<begin-conversation join="true"/>
 	<navigation>
-		<rule if="#{caseHome.inTreatment}">
+		<rule if="#{not caseHome.managed}">
+			<redirect view-id="/cases/index.xhtml" />
+		</rule>
+		
+		<rule if="#{not caseHome.canStartTreatment}">
 			<end-conversation/>
 			<redirect view-id="/cases/casedata.xhtml">
 				<param name="id" value="#{caseHome.id}" />

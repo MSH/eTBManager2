@@ -81,6 +81,9 @@ public class PrescriptionTable {
 			intensivePhasePeriod = tbcase.getIntensivePhasePeriod();
 			continuousPhasePeriod = tbcase.getContinuousPhasePeriod();
 			
+			if ((period == null) || (period.isEmpty()))
+				return false;
+			
 			for (TreatmentHealthUnit hu: tbcase.getHealthUnits())
 				healthUnits.add( new TreatmentPeriod(this, hu, hu.getPeriod()) );
 			
@@ -391,5 +394,16 @@ public class PrescriptionTable {
 	 */
 	public void setEditing(boolean editing) {
 		this.editing = editing;
+	}
+	
+	
+	/**
+	 * Return true if prescription table is valid, i.e, if the treatment period is ok
+	 * @return
+	 */
+	public boolean isValid() {
+		if (period == null)
+			createTable();
+		return ((period != null) && (!period.isEmpty()) && (healthUnits.size() > 0));
 	}
 }

@@ -193,6 +193,9 @@ public class TreatmentCalendarHome {
 		TbCase tbcase = caseHome.getInstance();
 		Date inidt = tbcase.getTreatmentPeriod().getIniDate();
 		Date enddt = tbcase.getTreatmentPeriod().getEndDate();
+		
+		if ((inidt == null) || (enddt == null))
+			return;
 
 		while (!inidt.after(enddt)) {
 			DayInfo dayInfo = getDay(inidt);

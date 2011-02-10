@@ -157,6 +157,8 @@ public class PeriodConverter implements Converter{
 		
 		Date dtIni = period.getIniDate();
 		Date dtEnd = period.getEndDate();
+		if ((dtIni == null) || (dtEnd == null))
+			return "<null>";
 		dtEnd = DateUtils.incDays(dtEnd, 1);
 		
 		Map<String, String> messages = Messages.instance();

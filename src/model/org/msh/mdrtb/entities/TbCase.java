@@ -445,7 +445,7 @@ public class TbCase implements Serializable{
 	 * @return
 	 */
 	public boolean isOpen() {
-		return (state != null ? state.ordinal() <=  CaseState.TRANSFERRING.ordinal() : null);
+		return (state != null ? state.ordinal() <=  CaseState.TRANSFERRING.ordinal() : false);
 	}
 
 

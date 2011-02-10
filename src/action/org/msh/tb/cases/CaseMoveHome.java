@@ -201,6 +201,9 @@ public class CaseMoveHome extends Controller {
 	 * Initialize the transfer in registration
 	 */
 	public void initializeTransferIn() {
+		if (!caseHome.isCanTransferIn())
+			return;
+
 		TreatmentHealthUnit hu = caseHome.getTransferInHealthUnit();
 		moveDate = hu.getPeriod().getIniDate();
 	}

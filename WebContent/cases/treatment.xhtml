@@ -58,9 +58,10 @@
 			</f:facet>
 			<rich:menuItem submitMode="client"
 				value="#{messages['form.edit']}" 
-				onclick="document.location.href='#{request.contextPath}/cases/treatmentedt.seam?id=#{caseHome.id}'">
+				onclick="document.location.href='#{request.contextPath}/cases/treatmentedt.seam?id=#{caseHome.id}'"
+				rendered="#{prescriptionTable.valid}">
 			</rich:menuItem>
-			<rich:menuItem  rendered="#{caseHome.canTransferOut}" submitMode="client">
+			<rich:menuItem  rendered="#{caseHome.canTransferOut and prescriptionTable.valid}" submitMode="client">
 				<s:link value="#{messages['cases.move']}" view="/cases/casemove.xhtml">
 					<f:param name="id" value="#{caseHome.id}" />
 				</s:link>

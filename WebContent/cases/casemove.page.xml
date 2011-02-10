@@ -5,6 +5,13 @@
 	<begin-conversation join="true"/>
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" required="true" />
 	<navigation>
+		<rule if="#{not caseHome.canTransferOut}">
+			<end-conversation />
+			<redirect view-id="/cases/casedata.xhtml">
+				<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
+			</redirect>
+		</rule>
+
 		<rule if-outcome="transferred-out">
 			<end-conversation />
 			<redirect view-id="/cases/casedata.xhtml">

@@ -147,7 +147,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	 * @return
 	 */
 	public boolean isCanAnswerIssue() {
-		return (getInstance().getValidationState() == ValidationState.PENDING);
+		return (isManaged()) && (getInstance().getValidationState() == ValidationState.PENDING);
 	}
 	
 	/**
@@ -207,6 +207,11 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	
 	public boolean isCanEditCaseData() {
 		return (getInstance().isOpen()) && checkRoleBySuffix("CASE_DATA_EDT");
+	}
+	
+	public boolean isCanStartTreatment() {
+		CaseState st = getInstance().getState();
+		return (isManaged()) && (st != null) && (st.ordinal() < CaseState.ONTREATMENT.ordinal()) && (isCanEditTreatment());
 	}
 	
 	public boolean isCanEditTreatment() {
