@@ -77,7 +77,7 @@
 	
 	</td></tr><tr><td align="right">
 		<h:commandButton action="#{workspaceHome.persist}" value="#{messages['form.ok']}" styleClass="button" />
-		<s:button view="/admin/workspacedata.xhtml" value="Cancela" rendered="#{workspace.id != null}" styleClass="button">
+		<s:button view="/admin/workspacedata.xhtml" value="#{messages['form.cancel']}" rendered="#{workspace.id != null}" styleClass="button">
 			<f:param name="id" value="#{workspace.id}" />
 		</s:button>
 		<s:button view="/admin/workspaces.xhtml" value="#{messages['form.cancel']}" rendered="#{workspace.id == null}" styleClass="button-cancel" />
