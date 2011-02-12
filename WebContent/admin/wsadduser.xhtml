@@ -37,7 +37,7 @@
 
 			<h:column>
 				<f:facet name="header">#{messages['form.action']}</f:facet>
-				<a:commandLink value="Excluir" action="#{workspaceHome.remUser(it)}" ajaxSingle="true" reRender="main"/>
+				<a:commandLink value="#{messages['admin.users.remove']}" action="#{workspaceHome.remUser(it)}" ajaxSingle="true" reRender="main"/>
 			</h:column>
 		</h:dataTable>
 
