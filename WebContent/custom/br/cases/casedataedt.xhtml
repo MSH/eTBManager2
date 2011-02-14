@@ -59,7 +59,7 @@
 	
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Patient.motherName']}:</ui:define>
-		<h:inputText value="#{tbcase.patient.motherName}" style="width:300px;text-transform:uppercase;" maxlength="100" />
+		<h:inputText value="#{tbcase.patient.motherName}" style="width:300px;text-transform:uppercase;" maxlength="100" required="true" />
 	</s:decorate>
 	
 	</td></tr>

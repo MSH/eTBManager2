@@ -308,7 +308,7 @@
 
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['pt_BR.supervisedTreatment']}:</ui:define>
-		<h:selectOneMenu id="cbsuptreatment" value="#{medicalExamination.supervisedTreatment}" required="true">
+		<h:selectOneMenu id="cbsuptreatment" value="#{medicalExaminationBR.supervisedTreatment}" required="true">
 			<s:selectItems var="s" value="#{globalLists.yesNoTypeList}" label="#{messages[s.key]}" noSelectionLabel="-" />
 			<s:convertEnum />
 		</h:selectOneMenu>
@@ -316,7 +316,7 @@
 	<div id="div_supunit">
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['pt_BR.supervisionUnit']}:<span style="color:red">*</span></ui:define>
-		<h:inputText id="supUnitName" value="#{medicalExamination.supervisionUnitName}" style="width:300px;text-transform:uppercase;" maxlength="100"/>
+		<h:inputText id="supUnitName" value="#{medicalExaminationBR.supervisionUnitName}" style="width:300px;text-transform:uppercase;" maxlength="100"/>
 	</s:decorate>
 	</div>
 <rich:jQuery selector="#cbsuptreatment" query="change(function(){showSupUnit(this); })" />
@@ -346,24 +346,29 @@
     		<s:decorate template="/layout/dateedit.xhtml" >
     			<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
     			<ui:param name="required" value="true" /> 
-    			<ui:param name="datefield" value="#{medicalExamination.date}" /> 
+    			<ui:param name="datefield" value="#{medicalExaminationBR.date}" /> 
+    		</s:decorate>
+
+		    <s:decorate template="/layout/dateedit.xhtml" >
+    			<ui:define name="label">#{messages['MedicalExaminationBR.nextAppointment']}:</ui:define>
+    			<ui:param name="datefield" value="#{medicalExaminationBR.nextAppointment}" /> 
     		</s:decorate>
 		
 		    <s:decorate template="/layout/edit.xhtml" >
 		    	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
-		    	<h:inputText id="edtmedresp" value="#{medicalExamination.responsible}" required="true" style=" width:340px; text-transform:uppercase;" maxlength="100"/>
+		    	<h:inputText id="edtmedresp" value="#{medicalExaminationBR.responsible}" required="true" style=" width:340px; text-transform:uppercase;" maxlength="100"/>
 	    	</s:decorate>
 		
 		    <s:decorate template="/layout/edit.xhtml" >
 		    	<ui:define name="label">#{messages['MedicalExamination.positionResponsible']}:</ui:define>
-		    	<h:inputText value="#{medicalExamination.positionResponsible}" required="true" style=" width:340px; text-transform:uppercase;" maxlength="100"/>
+		    	<h:inputText value="#{medicalExaminationBR.positionResponsible}" required="true" style=" width:340px; text-transform:uppercase;" maxlength="100"/>
 	    	</s:decorate>
     
 
 		    <s:decorate template="/layout/textarea.xhtml" >
 		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
 		    	<ui:param name="maxlength" value="250" />
-		    	<ui:param name="field" value="#{medicalExamination.comments}" />
+		    	<ui:param name="field" value="#{medicalExaminationBR.comments}" />
 		    	<ui:param name="style" value="width : 500px; height:100px;" />
 		    </s:decorate>
 		</td></tr></table>

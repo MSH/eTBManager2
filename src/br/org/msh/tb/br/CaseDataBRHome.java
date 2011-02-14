@@ -78,13 +78,14 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	@Factory("caseDataBR")
 	public CaseDataBR getCaseDataBR() {
 		try {
-			if (caseHome.getId() != null) {
+			if (caseHome.getId() != null)
+				setId(caseHome.getId());
+/*			if (caseHome.getId() != null) {
 				entityManager.createQuery("from CaseDataBR c where c.tbcase.id = #{caseHome.id}").getSingleResult();
 				getAuselection().setSelectedUnit(getInstance().getAdminUnitUsOrigem());
-				caseHome.getLogService().addEntityMonitoring(getInstance());
 			}
 			setId(caseHome.getId());
-		} catch (Exception e) {
+*/		} catch (Exception e) {
 			setId(null);
 		}
 		return getInstance();
@@ -374,6 +375,19 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	 * Save exams results for DST, Culture and microscopy
 	 */
 	protected boolean saveExams() {
+
+		// turn off message displaying
+		if (examMicroscopyHome != null) 
+			examMicroscopyHome.setDisplayMessage(false);
+		if (examCultureHome != null) 
+			examCultureHome.setDisplayMessage(false);
+		if (molecularBiologyHome != null) 
+			molecularBiologyHome.setDisplayMessage(false);
+		if (examDSTHome != null) 
+			examDSTHome.setDisplayMessage(false);
+		if (examHIVHome != null) 
+			examHIVHome.setDisplayMessage(false);
+
 		// check HIV
 		ExamHIV exam = examHIVHome.getInstance();
 		if (exam.getResult() != HIVResult.NOTDONE) {
@@ -388,13 +402,6 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		ExamCulture examCulture = examCultureHome.getInstance();
 		ExamMicroscopy examMicroscopy = examMicroscopyHome.getInstance();
 		MolecularBiology molecularBiology = molecularBiologyHome.getInstance();
-
-		// turn off message displaying
-		examMicroscopyHome.setDisplayMessage(false);
-		examCultureHome.setDisplayMessage(false);
-		molecularBiologyHome.setDisplayMessage(false);
-		examDSTHome.setDisplayMessage(false);
-		examHIVHome.setDisplayMessage(false);
 
 		Date dtCollected = examCultureHome.getInstance().getDateCollected();
 		
