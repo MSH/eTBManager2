@@ -1,4 +1,4 @@
-package org.msh.tb.br.entities;
+package org.msh.tb.br;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.cases.CasesQuery;

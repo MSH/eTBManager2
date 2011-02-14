@@ -8,11 +8,6 @@
 	<param name="month" value="#{registerDispensingHome.month}"/>
 	<param name="year" value="#{registerDispensingHome.year}"/>
 	<navigation>
-		<rule if="#{not caseHome.canEditTreatmentCalendar}">
-			<end-conversation/>
-			<redirect view-id="/cases/index.xhtml"/>
-		</rule>
-		
 		<rule if-outcome="dispensing-saved">
 			<end-conversation/>
 			<redirect view-id="/cases/treatments.xhtml">

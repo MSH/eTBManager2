@@ -60,6 +60,7 @@
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['cases.movdate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="false" /> 
     	<ui:param name="datefield" value="#{caseMoveHome.moveDate}" /> 
     </s:decorate>
 	<span style="color:red;">*</span> #{messages['form.required']}<p/>
