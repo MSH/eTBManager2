@@ -55,7 +55,7 @@
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['MedicalExamination.BMI']}:</ui:define>
 				<h:outputText value="#{r.BMI}" >
-					<f:convertNumber pattern="#,###,##0.000"/>
+					<f:convertNumber pattern="#,###,##0.0"/>
 				</h:outputText>
 			</s:decorate>		
 		</td></tr>

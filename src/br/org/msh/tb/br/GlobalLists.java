@@ -67,10 +67,7 @@ public class GlobalLists {
 		CaseState.DIAGNOSTIC_CHANGED,
 		CaseState.OTHER,
 		CaseState.REGIMEN_CHANGED,
-		CaseState.MONORESISTANT,
-		CaseState.POLIRESISTANT,
-		CaseState.MULTIRESISTANT,
-		CaseState.EXTRESISTANT
+		CaseState.MDR_CASE
 	};
 	
 

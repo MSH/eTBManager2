@@ -79,21 +79,33 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 
 	@Override
 	public String getEjbql() {
+		System.out.println(getClass().toString());
 		return "select p.name, c.age, p.gender, p.recordNumber, c.caseNumber, " + 
 			"c.treatmentPeriod.iniDate, c.registrationDate, nu.name.name1, " +
 			"loc.name.name1, loc.code, c.id, " +
 			"c.treatmentPeriod.endDate, c.state, c.classification, p.middleName, p.lastName, " +
 			"c.validationState, c.registrationCode " +
-			"from TbCase c " +
-			"join c.patient p " +
-			"join c.notificationUnit nu join c.notifAddress.adminUnit loc ".concat(dynamicConditions());
+			getFromHQL() + " join c.patient p " +
+		 	   "join c.notificationUnit nu " +
+		 	   "join c.notifAddress.adminUnit loc ".concat(dynamicConditions());
 	}
+
 
 	@Override
 	public String getCountEjbql() {
-		return "select count(*) from TbCase c " +
-				"join c.patient p " +
-				"join c.notificationUnit nu".concat(dynamicConditions());
+		return "select count(*) " + getFromHQL() + 
+			" join c.patient p " +
+	 	   	"join c.notificationUnit nu " + 
+	 	   	dynamicConditions();
+	}
+
+
+	/**
+	 * Return join tables in use in this query
+	 * @return
+	 */
+	public String getFromHQL() {
+		return "from TbCase c";
 	}
 
 

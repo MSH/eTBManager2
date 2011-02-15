@@ -83,7 +83,7 @@
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
 				<h:outputText value="#{r.weight}" >
-					<f:convertNumber pattern="#,###,##0.000"/>
+					<f:convertNumber pattern="#,###,##0.0"/>
 				</h:outputText>#{messages['MedicalExamination.weight.unit']}
 			</s:decorate>
 		</td><td>

@@ -48,7 +48,7 @@
 		columnClasses="coll slink,colr slink" width="100%">
 		<h:column>
 			<div style="display:block;min-height:30px;">
-			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" >
+			<s:link value="#{it.description}"  view="/custom/br/cases/searchresult.xhtml" >
 				<f:param name="stateIndex" value="#{it.stateIndex}"/>
 				<f:param name="sc" value="#{'CASE_STATE'}"/>
 				<f:param name="vs" />
@@ -77,7 +77,7 @@
 		columnClasses="coll slink,colr slink" width="100%">
 		<h:column>
 			<div style="display:block;min-height:30px;">
-			<s:link value="#{messages[it.validationState.key]}"  view="/cases/searchresult.xhtml" >
+			<s:link value="#{messages[it.validationState.key]}"  view="/custom/br/cases/searchresult.xhtml" >
 				<f:param name="vs" value="#{it.validationState}"/>
 				<f:param name="sc" value="#{'VALIDATION_STATE'}"/>
 				<f:param name="stateIndex" />
@@ -113,7 +113,7 @@
 	<h:outputText value="#{messages['Patient']}:" style="margin-right:20px;margin-left:4px;font-weight:bold;"/>
 	
 	<h:inputText id="patname" value="#{caseFilters.patient}" style="width:150px" />
-	<a:commandButton id="btnsearchpat" value="#{messages['form.search']}" action="search" styleClass="button" >
+	<a:commandButton id="btnsearchpat" value="#{messages['form.search']}" action="/custom/br/cases/searchresult.xhtml" styleClass="button" >
 		<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
 	</a:commandButton>
 	<rich:jQuery timming="onload" selector="#patname" query="focus()" />
@@ -189,7 +189,7 @@
 	</td>
 
 	<td align="right">
-		<a:commandButton id="btnsearch" value="#{messages['form.search']}" action="search"	styleClass="button" >
+		<a:commandButton id="btnsearch" value="#{messages['form.search']}" action="/custom/br/cases/searchresult.xhtml"	styleClass="button" >
 			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
 		</a:commandButton>
 		<s:button value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-cancel"/>

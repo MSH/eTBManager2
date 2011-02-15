@@ -60,7 +60,20 @@
 		<h:selectOneMenu value="#{caseFilters.caseState}" >
 			<s:selectItems value="#{caseStates}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
 			<s:convertEnum />
+			<a:support event="onchange" reRender="pnlOutcome" ajaxSingle="true"/>
 		</h:selectOneMenu>
+
+		<h:panelGroup id="pnlOutcome">
+			<h:selectOneMenu value="#{caseFiltersBR.outcomeResistanceType}" rendered="#{caseFilters.caseState=='MDR_CASE'}">
+				<s:selectItems value="#{fieldsQuery.resistanceTypes}" var="x" label="#{x}" noSelectionLabel="-" />
+				<s:convertEntity />
+			</h:selectOneMenu>
+
+			<h:selectOneMenu value="#{caseFiltersBR.outcomeRegimenChanged}" rendered="#{caseFilters.caseState=='REGIMEN_CHANGED'}">
+				<s:selectItems value="#{fieldsQuery.schemaTypes}" var="x" label="#{x}" noSelectionLabel="-" />
+				<s:convertEntity />
+			</h:selectOneMenu>
+		</h:panelGroup>
 	</s:decorate>
 
 	<s:decorate template="/layout/display.xhtml">
@@ -80,7 +93,7 @@
 		</h:selectOneMenu>
 
 		<h:panelGroup id="pnlSchemaChange">
-			<h:selectOneMenu value="#{caseFiltersBR.schemaChanged}" rendered="#{caseFilters.patientType=='SCHEMA_CHANGED'}">
+			<h:selectOneMenu value="#{caseFiltersBR.schemaChangeType}" rendered="#{caseFilters.patientType=='SCHEMA_CHANGED'}">
 				<s:selectItems value="#{fieldsQuery.schemaTypes}" var="x" label="#{x}" noSelectionLabel="-" />
 				<s:convertEntity />
 			</h:selectOneMenu>
