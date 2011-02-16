@@ -44,56 +44,56 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 	public MedicineReceiving getMedicineReceiving() {
 		return getInstance();
 	}
-	
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.EntityHomeEx#persist()
+	 */
 	@Override
 	public String persist() {		
 		if (!validateDrugReceiving())
 			return "error";
 		
 		MedicineReceiving rec = getInstance();
+
+		// if movements can't be saved (because it may be an editing and the quantity was changed to a 
+		// quantity that makes the stock negative) the system will just return an error message
+		movs.clear();
+		movementHome.initMovementRecording();
+		if (!prepareMovements())
+			return "error";
+
 		if (rec.getTbunit() == null)
 			rec.setTbunit(userSession.getTbunit());
-		
-		movs.clear();
 
-		for (MedicineReceivingItem it: rec.getMedicines()) {
-			// remove movement, if exists
-			Movement mov = it.getMovement();
-			movs.put(it, mov);
-			it.setMovement(null);
-		}
-		
-		// exclui os movimentos (melhor opção custo x benefício, pois exigiria
-		// uma grande quantidade de código para saber se mudou data ou drug storage ou
-		// source ou quantidade
-		for (MedicineReceivingItem it: movs.keySet()) {
-			Movement mov = movs.get(it);
-			if (mov.getId() != null) {
-				movementHome.removeMovement(mov);
-			}
-		}
-
-		// remove movimentos excluídos
-		for (MedicineReceivingItem it: remMovs) {
-			Movement mov = it.getMovement();
-			it.setMovement(null);
-			movementHome.removeMovement(mov);
-		}
-		
+		// register log
 		getLogService().addValue("Source", getInstance().getSource());
 		getLogService().addValue(".receivingDate", getInstance().getReceivingDate());
 		getLogService().addValue("global.totalPrice", getInstance().getTotalPrice());
 
-		if (isManaged()) {
+		if (isManaged()) 
 			getLogService().startEntityMonitoring(getInstance(), false);
-		}
-		
+
+		// clear all movements, because the batch must be saved before movement is created,
+		// and to save the batch, the MedicineReceiving must be saved 
+		for (MedicineReceivingItem it: getInstance().getMedicines())
+			it.setMovement(null);
+
+		// save instance
 		getEntityManager().persist(getInstance());
 		getEntityManager().flush();
-		saveMovements();
+
+		// now the movements will be saved and stock position will be updated
+		movementHome.savePreparedMovements();
+		
+		for (MedicineReceivingItem it: movs.keySet()) {
+			it.setMovement( movs.get(it) );
+			getEntityManager().persist( it );
+		}
 		
 		return super.persist();
 	}
+
 
 	/**
 	 * Valida os dados do recebimento de medicamento
@@ -118,11 +118,12 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 		}
 		return res;
 	}
-	
+
+
 	/**
 	 * Prepara o novo recebimento para ser salvo. Grava novos movimentos 
 	 */
-	private void saveMovements() {
+	private boolean prepareMovements() {
 		MedicineReceiving rec = getInstance();
 		MovementType type = MovementType.DRUGRECEIVING;
 		
@@ -130,47 +131,54 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 		Tbunit unit = rec.getTbunit();
 		Date date = rec.getReceivingDate();
 		
-		movementHome.initMovementRecording();
-		for (MedicineReceivingItem it: movs.keySet()) {
-			Movement aux = movs.get(it);
-			Medicine medicine = aux.getMedicine();
+
+		//  prepare to remove movements of medicines removed by the user
+		for (MedicineReceivingItem it: remMovs) {
+			if (it.getMovement() != null)
+				movementHome.prepareMovementsToRemove(it.getMovement());
+		}
+
+		// update current movements
+		for (MedicineReceivingItem it: getInstance().getMedicines()) {
+			Movement mov = it.getMovement();
+			Medicine medicine = mov.getMedicine();
+
+			// remove movements previously saved (if it's an editing of an existing receiving) 
+			if (mov.getId() != null)
+				movementHome.prepareMovementsToRemove(mov);
 
 			// mount batch list
 			Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
 			for (Batch b: it.getBatches()) {
 				batches.put(b, b.getQuantityReceived());
 			}
-			Movement mov = movementHome.prepareNewMovement(date, unit, source, medicine, type, batches, null); 
-			it.setMovement(mov);
+			
+			// prepare movement to be saved
+			mov = movementHome.prepareNewMovement(date, unit, source, medicine, type, batches, null);
+			if (mov == null) {
+				facesMessages.add(movementHome.getErrorMessage());
+				return false;
+			}
+			// link the new movement to the item
+			movs.put(it, mov);
 		}
-		movementHome.savePreparedMovements();
+
+		return true;
 	}
-	
+
+
 	/**
 	 * @return Item do recebimento de medicamento a ser editado ou incluído 
 	 */
 	public MedicineReceivingItem getItem() {
 		return item;
 	}
-	
-	public void addItem() {
-		// verifica se medicamento já não foi informado 
-		MedicineReceiving rec = getInstance();
-		for (MedicineReceivingItem it: rec.getMedicines()) {
-			if (it.getMovement().getMedicine() == movement.getMedicine()) {
-				facesMessages.addFromResourceBundle("edtrec.uniquedrug", movement.getMedicine().getGenericName());
-				return;
-			}
-		}
-		
-		item = new MedicineReceivingItem();
-		item.setMovement(movement);
-		getInstance().getMedicines().add(item);
-		item.setMedicineReceiving(getInstance());
-		// limpa referência do movimento para próximo produto
-		movement = null;
-	}
 
+
+	/**
+	 * Remove a medicine already included in the receiving
+	 * @param item
+	 */
 	public void removeItem(MedicineReceivingItem item) {
 		getInstance().getMedicines().remove(item);
 
@@ -180,36 +188,54 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 			remMovs.add(item);
 		}
 	}
-	
+
+
+	/**
+	 * Start editing of a new batch for a specific medicine in the receiving
+	 * @param item
+	 */
 	public void newBatch(MedicineReceivingItem item) {
 		this.item = item;
 		batch = new Batch();
 		batch.setMedicineReceivingItem(item);
 		batch.setMedicine(item.getMovement().getMedicine());
 	}
-	
+
+
 	public void addBatch() {
 		if (!item.getBatches().contains(batch))
 			item.getBatches().add(batch);
 
 		batch.setMedicineReceivingItem(item);
 	}
-	
+
+
 	public void editBatch(Batch batch) {
 		this.batch = batch;
 		item = batch.getMedicineReceivingItem();
 	}
-	
+
+
+	/**
+	 * Remove a batch from the receiving
+	 * @param batch
+	 */
 	public void removeBatch(Batch batch) {
 		item = batch.getMedicineReceivingItem();
 		item.getBatches().remove(batch);
+		
+		// is managed ?
+		if (batch.getId() != null)
+			getEntityManager().remove(batch);
 	}
-	
+
+
 	public Movement getMovement() {
 		if (movement == null)
 			movement = new Movement();
 		return movement;
 	}
+
 
 	public Batch getBatch() {
 		if (batch == null)
@@ -222,6 +248,10 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 		return getMedicineReceiving().getMedicines().size();
 	}
 
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.EntityHomeEx#remove()
+	 */
 	@Override
 	public String remove() {
 		// check if there are batches already in use
@@ -256,9 +286,10 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 			lst.add(it.getMovement().getMedicine());
 		medicineSelection.applyFilter(lst);
 	}
-	
+
+
 	/**
-	 * Includes selected medicines
+	 * Include in the receiving the medicines selected by the user
 	 */
 	public void addMedicines() {
 		List<Medicine> lst =  medicineSelection.getSelectedMedicines();

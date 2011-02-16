@@ -99,17 +99,18 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		boolean bCanTransfer = true;
 		for (TransferItem it: transfer.getItems()) {
 			String comment = transfer.getUnitTo().getName().getDefaultName();
-			try {
-				Movement movOut = movementHome.prepareNewMovement(dt, unit, it.getSource(), 
-						it.getMedicine(), MovementType.TRANSFEROUT, 
-						getBatchesMap(it, true), comment);
-				
-				it.setMovementOut(movOut);
-			} catch (MovementException e) {
-				facesMessages.add(e.getMessage());
+			
+			Movement movOut = movementHome.prepareNewMovement(dt, unit, it.getSource(), 
+					it.getMedicine(), MovementType.TRANSFEROUT, 
+					getBatchesMap(it, true), comment);
+
+			if (movOut == null) {
+				facesMessages.add(movementHome.getErrorMessage());
 				bCanTransfer = false;
 				it.setData(true);
 			}
+			
+			it.setMovementOut(movOut);
 		}
 		
 		if (!bCanTransfer)

@@ -3,7 +3,6 @@ package org.msh.tb.br;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.msh.mdrtb.entities.FieldValue;
 import org.msh.mdrtb.entities.enums.CaseClassification;
@@ -26,7 +25,6 @@ public class CaseFiltersBR {
 	private FieldValue outcomeResistanceType;
 
 	
-	@Observer("cases-clear-filters")
 	public void clear() {
 		resistanceType = null;
 		schemaChangeType = null;

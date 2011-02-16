@@ -209,7 +209,7 @@ public class ForecastingCalculation {
 //				if (fmed != null) {
 					med.setStockOnOrder( med.getStockOnOrder() + qtdOrder );
 					int qtd = quantityOnOrder(res, true);
-					med.setStockOnOrderBeforeLeadTime( med.getStockOnOrderBeforeLeadTime() + qtd);
+					med.setStockOnOrderLT( med.getStockOnOrderLT() + qtd);
 //				}
 			}
 		}

@@ -127,7 +127,8 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     	}
 
     	// check if end date was changed
-    	boolean endDateChanged = DateUtils.dayOf(dispensing.getIniDate()) != dayEnd;
+    	Date dt = dispensing.getIniDate();
+    	boolean endDateChanged = (dt != null? DateUtils.dayOf(dt) != dayEnd : true);
 
     	// set the dispensing period
     	Calendar c = Calendar.getInstance();
@@ -162,10 +163,16 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     	// create movements
 		for (MedicineDispensingItem it: dispensing.getItems()) {
 			// check if movement has to be created
-			if ((it.getMovement() == null) || (it.getMovement().getQuantity() != it.getQuantity())) {
+			if ((it.getQuantity() > 0) || (it.getMovement() == null) || 
+				(it.getMovement().getQuantity() != it.getQuantity())) 
+			{
 				Movement mov = movementHome.prepareNewMovement(c.getTime(), dispensing.getTbunit(), 
 						it.getSource(), it.getMedicine(), MovementType.DISPENSING, 
-						getBatchesMap(it), null);				
+						getBatchesMap(it), null);		
+				if (mov == null) {
+					facesMessages.add(movementHome.getErrorMessage());
+					return "error";
+				}
 
 				it.setMovement(mov);
 			}
@@ -173,7 +180,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 		
 		// save movements
 		movementHome.savePreparedMovements();
-
+		
 		// delete items that has no batch
 		for (SourceGroup grp: sources) {
 			for (DispItem it: grp.getItems()) {
@@ -267,23 +274,44 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     public void selectBatches()
     {
         Map<BatchQuantity, Integer> sels = batchSelection.getSelectedBatchesQtds();
-        for (BatchQuantity b: sels.keySet()) {
-            Integer val = (Integer)sels.get(b);
-            if(val == null || val.intValue() == 0) {
-                return;
-            }
-        }
 
         MedicineDispensingItem it = item.getItem();
-        List<MedicineDispensingBatch> batches = new ArrayList<MedicineDispensingBatch>();
+
+        for (MedicineDispensingBatch mdb: it.getBatches())
+        	mdb.setQuantity(0);
+        
+        // replace/include new batches
         for (BatchQuantity b: sels.keySet()) {
-        	MedicineDispensingBatch dispBatch = new MedicineDispensingBatch();
-        	dispBatch.setItem(it);
-            dispBatch.setBatch(b.getBatch());
-            dispBatch.setQuantity(((Integer)sels.get(b)).intValue());
-            batches.add(dispBatch);
+        	Batch batch = b.getBatch();
+            int qtd = (Integer)sels.get(b);
+
+            MedicineDispensingBatch aux = null;
+        	for (MedicineDispensingBatch mdb: it.getBatches()) {
+        		if (mdb.getBatch().getId().equals(batch.getId())) {
+        			mdb.setQuantity(qtd);
+        			aux = mdb;
+        			break;
+        		}
+        	}
+        	
+        	if (aux == null) {
+            	MedicineDispensingBatch dispBatch = new MedicineDispensingBatch();
+            	dispBatch.setItem(it);
+                dispBatch.setBatch(b.getBatch());
+                dispBatch.setQuantity(qtd);
+                it.getBatches().add(dispBatch);
+        	}
         }
-        it.setBatches(batches);
+        
+        // remove batches unchecked
+        int i = 0;
+        while (i < it.getBatches().size()) {
+        	MedicineDispensingBatch b = it.getBatches().get(i);
+        	if (b.getQuantity() == 0)
+        		it.getBatches().remove(i);
+        	else i++;
+        }
+
         item.setModified(true);
 
         batchSelection.clear();

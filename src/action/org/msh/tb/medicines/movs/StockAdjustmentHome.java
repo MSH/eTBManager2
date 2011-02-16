@@ -16,6 +16,7 @@ import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
 import org.msh.mdrtb.entities.Batch;
 import org.msh.mdrtb.entities.BatchQuantity;
+import org.msh.mdrtb.entities.Movement;
 import org.msh.mdrtb.entities.Source;
 import org.msh.mdrtb.entities.StockPosition;
 import org.msh.mdrtb.entities.Tbunit;
@@ -106,8 +107,12 @@ public class StockAdjustmentHome extends Controller {
 				for (BatchAdjustmentItem it: item.getBatches())
 					batches.put(it.getBatchQtd().getBatch(), it.getQuantity() - it.getBatchQtd().getQuantity());
 	
-				movementHome.prepareNewMovement(DateUtils.getDate(), userSession.getTbunit(), source, item.getStockPosition().getMedicine(),
+				Movement mov = movementHome.prepareNewMovement(DateUtils.getDate(), userSession.getTbunit(), source, item.getStockPosition().getMedicine(),
 						type, batches, item.getComment());
+				if (mov == null) {
+					facesMessages.add(movementHome.getErrorMessage());
+					return "error";
+				}
 			}
 		}
 		movementHome.savePreparedMovements();

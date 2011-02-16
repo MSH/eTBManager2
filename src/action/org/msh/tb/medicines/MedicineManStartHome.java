@@ -59,6 +59,9 @@ public class MedicineManStartHome {
 	 * Initialize medicine module control for UI processing
 	 */
 	public void initialize() {
+		if (userSession.isMedicineManagementStarted())
+			return;
+
 		if (sourcesInfo != null)
 			return;
 
@@ -110,7 +113,7 @@ public class MedicineManStartHome {
 	 * @param batch
 	 */
 	public void deleteBatch(MedicineInfo medInfo, BatchQuantity batchQuantity) {
-		medicineInfo.getBatches().remove(batchQuantity);
+		medInfo.getBatches().remove(batchQuantity);
 	}
 
 	

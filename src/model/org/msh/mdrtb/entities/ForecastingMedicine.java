@@ -35,9 +35,10 @@ public class ForecastingMedicine implements Serializable {
 	@NotNull
 	private Medicine medicine;
 	
+	private int stockOnHandLT;
+	private int stockOnOrderLT;
 	private int stockOnHand;
 	private int stockOnOrder;
-	private int stockOnOrderBeforeLeadTime;
 
 	private float unitPrice;
 	
@@ -47,6 +48,7 @@ public class ForecastingMedicine implements Serializable {
 	private int requestedQty;
 	private int dispensingLeadTime;
 	private int quantityExpired;
+	private int quantityExpiredLT;
 
 
 	/**
@@ -116,7 +118,7 @@ public class ForecastingMedicine implements Serializable {
 	}
 
 	public int getStockOnHandAfterLeadTime() {
-		int val = stockOnHand - dispensingLeadTime + stockOnOrderBeforeLeadTime;
+		int val = stockOnHand - dispensingLeadTime + stockOnOrderLT;
 		return (val < 0? 0: val);
 	}
 	
@@ -286,25 +288,49 @@ public class ForecastingMedicine implements Serializable {
 
 
 	/**
-	 * @return the stockOnOrderBeforeLeadTime
+	 * @return the stockOnHandLT
 	 */
-	public Integer getStockOnOrderBeforeLeadTime() {
-		return stockOnOrderBeforeLeadTime;
+	public int getStockOnHandLT() {
+		return stockOnHandLT;
 	}
 
 
 	/**
-	 * @param stockOnOrderBeforeLeadTime the stockOnOrderBeforeLeadTime to set
+	 * @param stockOnHandLT the stockOnHandLT to set
 	 */
-	public void setStockOnOrderBeforeLeadTime(Integer stockOnOrderBeforeLeadTime) {
-		this.stockOnOrderBeforeLeadTime = stockOnOrderBeforeLeadTime;
+	public void setStockOnHandLT(int stockOnHandLT) {
+		this.stockOnHandLT = stockOnHandLT;
 	}
 
 
 	/**
-	 * @param stockOnOrderBeforeLeadTime the stockOnOrderBeforeLeadTime to set
+	 * @return the stockOnOrderLT
 	 */
-	public void setStockOnOrderBeforeLeadTime(int stockOnOrderBeforeLeadTime) {
-		this.stockOnOrderBeforeLeadTime = stockOnOrderBeforeLeadTime;
+	public int getStockOnOrderLT() {
+		return stockOnOrderLT;
+	}
+
+
+	/**
+	 * @param stockOnOrderLT the stockOnOrderLT to set
+	 */
+	public void setStockOnOrderLT(int stockOnOrderLT) {
+		this.stockOnOrderLT = stockOnOrderLT;
+	}
+
+
+	/**
+	 * @return the quantityExpiredLT
+	 */
+	public int getQuantityExpiredLT() {
+		return quantityExpiredLT;
+	}
+
+
+	/**
+	 * @param quantityExpiredLT the quantityExpiredLT to set
+	 */
+	public void setQuantityExpiredLT(int quantityExpiredLT) {
+		this.quantityExpiredLT = quantityExpiredLT;
 	}
 }

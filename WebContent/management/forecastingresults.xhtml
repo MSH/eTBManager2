@@ -11,6 +11,20 @@
 
 
 <rich:tab id="tabresult" label="#{messages['manag.forecast.tabres1']}" rendered="#{forecasting.hasResult}">
+	<table class="tabela">
+	<tr>
+		<th>
+			#{messages['Medicine']}
+		</th>
+		<th colspan="3">
+			#{messages['manag.forecast.leadtime']}
+		</th>
+		<th colspan="8">
+			#{messages['manag.forecast.reviewperiod']}
+		</th>
+	</tr>
+	</table>
+
 	<h:dataTable value="#{forecasting.medicines}" var="m" styleClass="tabela" rowClasses="lin1,lin2" 
 		columnClasses="colb,colrb,colrb,colrb,colrb,colrb hlcolor,colrb hlcolor,colrb hlcolor,colrb hlcolor,colrb,colrb">
 		<h:column>

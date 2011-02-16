@@ -114,9 +114,16 @@
 						<td class="colrb">
 							<h:outputText value="#{b.batch.totalPrice}"><f:convertNumber pattern="#,###,##0.00" /></h:outputText></td>
 						<td class="colcb">
-							<a:commandLink action="#{medicineManStartHome.startBatchEdit(it,b)}" value="#{messages['form.edit']}" reRender="batchpnl" oncomplete="showBatchDlg();" immediate="true"/> <br/>
-							<a:commandLink action="#{medicineManStartHome.deleteBatch(it,b)}" value="#{messages['form.remove']}" reRender="medicines" immediate="true" 
-								enableManualInput="true" onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;"/>
+							<a:commandLink action="#{medicineManStartHome.startBatchEdit(it,b)}" 
+								value="#{messages['form.edit']}" 
+								reRender="batchpnl" 
+								oncomplete="showBatchDlg();" 
+								ajaxSingle="true"/> <br/>
+							<a:commandLink action="#{medicineManStartHome.deleteBatch(it,b)}" 
+								value="#{messages['form.remove']}" 
+								reRender="medicines" 
+								ajaxSingle="true" 
+								onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;"/>
 						</td>
 					</tr>
 				</a:repeat>
@@ -156,7 +163,7 @@ return true;
 <script type="text/javascript">
 window.decSeparator = '#{timezones.decimalSeparator}';
 function showBatchDlg() {
-	Richfaces.showModalPanel('batchdlg');
+	showModalAutoTop('batchdlg');
 	jQuery('#formbatch\\:dt\\:dtInputDate').mask('#{messages['locale.dateMask']}');
 }
 

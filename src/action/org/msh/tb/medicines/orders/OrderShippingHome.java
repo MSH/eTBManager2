@@ -24,7 +24,6 @@ import org.msh.mdrtb.entities.enums.MovementType;
 import org.msh.mdrtb.entities.enums.OrderStatus;
 import org.msh.tb.log.LogService;
 import org.msh.tb.medicines.BatchSelection;
-import org.msh.tb.medicines.movs.MovementException;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
 import org.msh.utils.date.DateUtils;
@@ -107,20 +106,20 @@ public class OrderShippingHome extends Controller {
 				for (OrderBatch ob: it.getBatches())
 					batches.put(ob.getBatch(), ob.getQuantity());
 
-				try {
-					Movement mov = movementHome.prepareNewMovement(dtShipping, 
-							order.getTbunitTo(), 
-							it.getSource(), 
-							it.getMedicine(), 
-							type, 
-							batches, 
-							order.getTbunitTo().toString());
-					it.setMovementOut(mov);
-				} catch (MovementException e) {
-					facesMessages.add(e.getMessage());
+				Movement mov = movementHome.prepareNewMovement(dtShipping, 
+						order.getTbunitTo(), 
+						it.getSource(), 
+						it.getMedicine(), 
+						type, 
+						batches, 
+						order.getTbunitTo().toString());
+
+				if (mov == null) {
+					facesMessages.add(movementHome.getErrorMessage());
 					canShip = false;
 					it.setData(true);
 				}
+				it.setMovementOut(mov);
 			}
 		
 		if (!canShip)

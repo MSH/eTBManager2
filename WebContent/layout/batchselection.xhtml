@@ -134,7 +134,7 @@ function validateInput(edt) {
 			<h:inputText id="qtd" value="#{it.item.quantity}" style="width:80px;" 
 				onkeypress="return numbersOnly(this,event);" 
 				rendered="#{not it.item.batch.expired}" />
-			<h:outputText value="#{messages['manag.forecast.expiredquantity']}" 
+			<h:outputText value="#{messages['medicines.selbatches.expired']}" 
 				rendered="#{it.item.batch.expired}" 
 				styleClass="warn" />
 			<input type="hidden" value="#{it.item.batchQuantity.quantity}" />
