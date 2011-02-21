@@ -9,7 +9,8 @@ public enum PrevTBTreatmentOutcome {
 	SCHEME_CHANGED,
 	TRANSFERRED_OUT,
 	SHIFT_CATIV,
-	UNKNOWN;
+	UNKNOWN,
+	ONGOING;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

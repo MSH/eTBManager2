@@ -76,6 +76,12 @@ public class ForecastingCalculation {
 	 */
 	private int monthIndexIniDate;
 
+	
+	private Period leadTimePeriod;
+	
+	private Period reviewPeriod;
+	
+	
 	/**
 	 * Execute the forecasting
 	 */
@@ -104,11 +110,14 @@ public class ForecastingCalculation {
 	 */
 	protected void startCalculation() {
 		// clear current results
-		forecasting.clearResults();
+		forecasting.initialize();
 
-		monthIndexIniDate = forecasting.getMonthIndex(forecasting.getIniDateLeadTime());
+		Date dt = forecasting.getIniDateLeadTime();
 		
-		forecasting.initializeResults();
+		leadTimePeriod = new Period(forecasting.getReferenceDate(), DateUtils.incDays(dt, -1));
+		reviewPeriod = new Period(dt, endForecasting);
+		
+		monthIndexIniDate = forecasting.getMonthIndex(forecasting.getIniDateLeadTime());
 
 		// cases are from the database ?
 		// if so, load list of prescribed medicines in the period
@@ -180,39 +189,12 @@ public class ForecastingCalculation {
 	 * @param monthIndex
 	 */
 	protected void calculate() {
+		calculateStockOnOrder();
+
 		calculateCasesOnTreatment();
 		calculateNewCases();
 
-		// update stock quantity
-		for (ForecastingMedicine med: forecasting.getMedicines()) {
-			int stockOnHand = med.getStockOnHand();
-
-			// calculate expired quantity separately from the main loop
-			calculateExpiredQuantity(med);
-			
-			for (ForecastingResult res: med.getResults()) {
-				int qtdOrder = quantityOnOrder(res, false);
-				stockOnHand += qtdOrder;
-				
-				res.setStockOnHand(stockOnHand);
-				
-				int cons = Math.round(res.getQuantityCasesOnTreatment() + res.getQuantityNewCases());
-				stockOnHand -= cons;
-				stockOnHand -= res.getQuantityExpired();
-				
-				res.setQuantityOnOrder(qtdOrder);
-
-				if (stockOnHand < 0)
-					stockOnHand = 0;
-
-//				ForecastingMedicine fmed = forecasting.findMedicineById(res.getMedicine().getId());
-//				if (fmed != null) {
-					med.setStockOnOrder( med.getStockOnOrder() + qtdOrder );
-					int qtd = quantityOnOrder(res, true);
-					med.setStockOnOrderLT( med.getStockOnOrderLT() + qtd);
-//				}
-			}
-		}
+		updateStockQuantities();
 	}
 
 
@@ -220,8 +202,102 @@ public class ForecastingCalculation {
 	 * Calculate the quantity of medicine expired for each month of the medicine
 	 * @param forMedicine
 	 */
-	protected void calculateExpiredQuantity(ForecastingMedicine forMedicine) {
-		// accumulated consumption
+	protected void updateStockQuantities() {
+		for (ForecastingMedicine fm: forecasting.getMedicines()) {
+			int stockOnHand = fm.getStockOnHand();
+			System.out.println(fm.getMedicine().toString() + " = " + fm.getStockOnHand());
+
+			for (ForecastingResult res: fm.getResults()) {
+				res.setStockOnHand(stockOnHand);
+				
+				// update batches to expire
+				for (ForecastingBatch b: fm.getBatchesToExpire())
+					if (forecasting.getMonthIndex(b.getExpiryDate()) == res.getMonthIndex())
+						res.setQuantityToExpire(res.getQuantityToExpire() + b.getQuantity());
+				
+				// get consumption in the month
+				int consumptionMonth = res.getConsumptionCases() + res.getConsumptionNewCases();
+				if (consumptionMonth > res.getStockOnHand())
+					consumptionMonth = res.getStockOnHand();
+
+				int qtdExpired = calcExpiredQuantity(fm, res, consumptionMonth);
+				stockOnHand -= (consumptionMonth + qtdExpired); 
+			}
+		}
+	}
+	
+	
+	/**
+	 * Calculates quantity expired of a specific medicine for a specific month
+	 * based on the quantity available for each batch
+	 * @param fm
+	 * @param res
+	 * @param consumptionMonth
+	 * @return
+	 */
+	protected int calcExpiredQuantity(ForecastingMedicine fm, ForecastingResult res, int consumptionMonth) {
+		Date dtini = forecasting.getIniDateMonthIndex(res.getMonthIndex());
+		Date dtend = forecasting.getEndDateMonthIndex(res.getMonthIndex());
+
+		int qtdExpired = 0;
+		// consumption to be distributed by batches
+		int conBatch = consumptionMonth;
+		
+		// update batch consumption
+		while (true) {
+			ForecastingBatch b = fm.findAvailableBatch(dtini);
+			
+			if (b == null)
+				break;
+			
+			boolean expiresThisMonth = !b.getExpiryDate().after(dtend);
+			
+			// quantity available of the current batch
+			int quantityAvailable = b.getQuantityAvailable();
+			
+			// batch expires this month ?
+			if (expiresThisMonth) {
+				int qtdBatchExp = 0;
+				// available is bigger than consumption
+				if (quantityAvailable > b.getConsumptionInMonth()) {
+					qtdBatchExp = quantityAvailable - b.getConsumptionInMonth();
+					if (b.getExpiryDate().before(forecasting.getIniDateLeadTime()))
+						 fm.addQuantityExpiredLT(qtdBatchExp);
+					else fm.addQuantityExpired(qtdBatchExp);
+				}
+
+				b.setQuantityAvailable(0);
+				b.setQuantityExpired(qtdBatchExp);
+
+				conBatch -= quantityAvailable;
+				qtdExpired += qtdBatchExp;
+			}
+			else {
+				if (quantityAvailable > conBatch) {
+					b.setQuantityAvailable( quantityAvailable - conBatch );
+					conBatch = 0;
+				}
+				else {
+					b.setQuantityAvailable(0);
+					conBatch -= quantityAvailable;
+				}
+			}
+
+			// calculate quantity consumed of the batch
+			int con = quantityAvailable - b.getQuantityAvailable() - b.getQuantityExpired();
+			if (con > 0)
+				res.addBatchConsumption(b, con);
+
+			if (conBatch == 0)
+				break;
+		}
+		
+		res.setQuantityExpired(qtdExpired);
+		
+		return qtdExpired;
+	}
+		
+/*		// accumulated consumption
 		int c = 0;
 		int total = 0;
 
@@ -252,7 +328,7 @@ public class ForecastingCalculation {
 		
 		forMedicine.setQuantityExpired( total );
 	}
-	
+*/	
 	
 	/**
 	 * Calculate the quantity to expire of the medicine in the month index (the quantity of all batches in the month are summed to get the total quantity)
@@ -260,7 +336,7 @@ public class ForecastingCalculation {
 	 * @param monthIndex
 	 * @return
 	 */
-	protected int quantityToExpire(ForecastingResult result) {
+/*	protected int quantityToExpire(ForecastingResult result) {
 		int res = 0;
 		Medicine med = result.getMedicine();
 		
@@ -269,6 +345,36 @@ public class ForecastingCalculation {
 				res += b.getQuantity();
 	
 		return res;
+	}
+*/
+	
+	/**
+	 * Calculate stock on order for all medicines in every month of forecasting
+	 */
+	protected void calculateStockOnOrder() {
+		Date dt = forecasting.getIniDateLeadTime();
+		
+		for (ForecastingMedicine fm: forecasting.getMedicines()) {
+			for (ForecastingOrder fo: fm.getOrders()) {
+				int qtd = fo.getQuantity();
+				
+				int index = forecasting.getMonthIndex(fo.getArrivalDate());
+				ForecastingResult res = fm.findResultByMonthIndex(index);
+				
+				if (res != null)
+					res.addStockOnOrder(qtd);
+
+				// is during lead time ?
+				if ((fo.getArrivalDate().before(dt)) && (!fo.getArrivalDate().before(forecasting.getReferenceDate()))) {
+					fm.addStockOnOrderLT(qtd);
+				}
+				else {
+					// add order if is during review period
+					if ((!fo.getArrivalDate().before(dt)) && (fo.getArrivalDate().before(endForecasting)))
+						fm.addStockOnOrder(qtd);
+				}
+			}
+		}
 	}
 	
 	
@@ -357,17 +463,18 @@ public class ForecastingCalculation {
 					
 					// update consumption up to end of lead time
 					// during lead time ?
-					if (i < monthIndexIniDate) 
-						fm.setDispensingLeadTime(fm.getDispensingLeadTime() + qtd);
+					if (i < monthIndexIniDate)
+						fm.addConsumptionLT( qtd );
 					else
 					if (i == monthIndexIniDate) { // is last month of lead time ?
 						int qtd2 = calcConsumptionCaseOnTreatment(prescDrug, new Period(dtIni, DateUtils.incDays( forecasting.getIniDateLeadTime(), -1)));
-						fm.setDispensingLeadTime(fm.getDispensingLeadTime() + qtd2);
-						fm.setEstimatedQtyCases(qtd - qtd2);
+
+						fm.addConsumptionLT( qtd2 );
+						fm.addConsumptionCases(qtd - qtd2);
 					}
-					else fm.setEstimatedQtyCases(fm.getEstimatedQtyCases() + qtd);
+					else fm.addConsumptionCases( qtd);
 					
-					// update batches consumption
+					// update batches consumption in the month they expire
 					List<ForecastingBatch> lst = getBatchesMonth(fm, i);
 					Date ini = dtIni;
 					for (ForecastingBatch bt: lst) {
@@ -456,7 +563,7 @@ public class ForecastingCalculation {
 			return;
 		
 		res.increaseCasesOnTreatment(fcot.getNumCases(), qty);
-		fm.setEstimatedQtyCases(fm.getEstimatedQtyCases() + qty);
+		fm.setConsumptionCases(fm.getConsumptionCases() + qty);
 
 		// update dispensing in lead time month
 		int qtdLeadTime = 0;
@@ -475,7 +582,7 @@ public class ForecastingCalculation {
 		}
 		
 		if (qtdLeadTime > 0)
-			fm.setDispensingLeadTime(fm.getDispensingLeadTime() + qtdLeadTime);
+			fm.setConsumptionLT(fm.getConsumptionLT() + qtdLeadTime);
 		
 		// update batches consumption
 		List<ForecastingBatch> lst = res.getBatchesToExpire();
@@ -540,14 +647,14 @@ public class ForecastingCalculation {
 					// update consumption up to end of lead time
 					// during lead time ?
 					if (index < monthIndexIniDate) 
-						fm.setDispensingLeadTime(fm.getDispensingLeadTime() + q);
+						fm.setConsumptionLT(fm.getConsumptionLT() + q);
 					else
 					if (index == monthIndexIniDate) { // is last month of lead time ?
 						int qtd2 = Math.round( calcQuantityRegimen(reg, dtIni, DateUtils.incDays( forecasting.getIniDateLeadTime(), -1), index, fm.getMedicine()) );
-						fm.setDispensingLeadTime(fm.getDispensingLeadTime() + qtd2);
-						fm.setEstimatedQtyNewCases(q - qtd2);
+						fm.setConsumptionLT(fm.getConsumptionLT() + qtd2);
+						fm.setConsumptionNewCases(q - qtd2);
 					}
-					else fm.setEstimatedQtyNewCases(fm.getEstimatedQtyNewCases() + q);
+					else fm.setConsumptionNewCases(fm.getConsumptionNewCases() + q);
 					
 					// update batches consumption of new cases
 					List<ForecastingBatch> lst = getBatchesMonth(fm, index);
@@ -632,4 +739,21 @@ public class ForecastingCalculation {
 	public Date getEndForecasting() {
 		return endForecasting;
 	}
+
+
+	/**
+	 * @return the leadTimePeriod
+	 */
+	public Period getLeadTimePeriod() {
+		return leadTimePeriod;
+	}
+
+
+	/**
+	 * @return the reviewPeriod
+	 */
+	public Period getReviewPeriod() {
+		return reviewPeriod;
+	}
+	
 }

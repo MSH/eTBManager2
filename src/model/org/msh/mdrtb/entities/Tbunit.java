@@ -77,6 +77,8 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
     private boolean tbHealthUnit;
     private boolean mdrHealthUnit;
     private boolean notifHealthUnit;
+
+    @FieldLog(key="EntityState.ACTIVE")
     private boolean active;
 
     /**

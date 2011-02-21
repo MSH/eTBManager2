@@ -118,7 +118,15 @@ ALTER TABLE `ForecastingResult` ADD CONSTRAINT `FK50DDAE412F7EF28` FOREIGN KEY `
     ON DELETE CASCADE
     ON UPDATE CASCADE;
 
-ALTER TABLE ForecastingMedicine CHANGE COLUMN `quantityExpired` `quantityExpiredLT` INT(11) DEFAULT NULL,
- CHANGE COLUMN `stockOnOrderBeforeLeadTime` `stockOnOrderLT` INT(11) DEFAULT NULL;
+ALTER TABLE ForecastingMedicine
+ DROP COLUMN `bufferStock`,
+ CHANGE COLUMN `dispensingLeadTime` `consumptionLT` INT(11) NOT NULL,
+ CHANGE COLUMN `estimatedQtyCases` `consumptionCases` INT(11) NOT NULL,
+ DROP COLUMN `estimatedQtyCohort`,
+ CHANGE COLUMN `estimatedQtyNewCases` `consumptionNewCases` INT(11) NOT NULL,
+ DROP COLUMN `requestedQty`,
+ CHANGE COLUMN `stockOnOrderBeforeLeadTime` `stockOnOrderLT` INT(11) DEFAULT NULL,
+ ADD COLUMN `quantityExpiredLT` INT(11) UNSIGNED;
 
 update ForecastingMedicine set quantityExpiredLT=0;
+

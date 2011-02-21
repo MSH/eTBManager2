@@ -49,7 +49,8 @@ public class GlobalLists {
 		PrevTBTreatmentOutcome.DEFAULTED,
 		PrevTBTreatmentOutcome.SCHEME_CHANGED,
 		PrevTBTreatmentOutcome.SHIFT_CATIV,
-		PrevTBTreatmentOutcome.UNKNOWN
+		PrevTBTreatmentOutcome.UNKNOWN,
+		PrevTBTreatmentOutcome.ONGOING
 	};
 	
 	private static final CaseState outcomes[] = {

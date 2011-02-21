@@ -78,6 +78,7 @@ public class WorkspaceCustomizationService {
 	@Observer("change-workspace")
 	public void workspaceChangeListener() {
 		examControl = null;
+		WorkspaceCustomizationService.instance = null;
 	}
 
 

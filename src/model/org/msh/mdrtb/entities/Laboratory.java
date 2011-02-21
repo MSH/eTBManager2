@@ -22,9 +22,11 @@ public class Laboratory extends WSObject implements Serializable {
     private Integer id;
 	
 	@Column(length=20)
+	@FieldLog(key="form.abbrevName")
 	private String abbrevName;
 	
 	@Column(length=100)
+	@FieldLog(key="form.name")
 	private String name;
 	
 	@ManyToOne

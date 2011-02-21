@@ -131,8 +131,9 @@ public class Forecasting extends WSObject implements Serializable {
 	}
 
 
+
 	/**
-	 * Return the initial date of forecasting considering the forecasting
+	 * Return the initial date of forecasting considering the lead time
 	 * @return
 	 */
 	public Date getIniDateLeadTime() {
@@ -149,14 +150,6 @@ public class Forecasting extends WSObject implements Serializable {
 		else return DateUtils.incMonths(iniDate, leadTime - months);
 */	}
 	
-	/**
-	 * Clear all results
-	 */
-	public void clearResults() {
-		results.clear();
-		for (ForecastingMedicine med: medicines)
-			med.refreshResults();
-	}
 	
 	
 	/**
@@ -199,18 +192,12 @@ public class Forecasting extends WSObject implements Serializable {
 	 * Initialize the results, clearing all values and creating list of objects {@link ForecastingResult} 
 	 * according to the medicines and number of months of forecasting
 	 */
-	public void initializeResults() {
+	public void initialize() {
 		getResults().clear();
 		int num = getNumMonths();
+
 		for (ForecastingMedicine med: getMedicines()) {
-			med.setEstimatedQtyCases(0);
-			med.setEstimatedQtyNewCases(0);
-			med.setDispensingLeadTime(0);
-			med.setQuantityExpired(0);
-			med.setStockOnOrder(0);
-			med.setStockOnOrderLT(0);
-			med.setStockOnHand(0);
-			med.setStockOnHandLT(0);
+			med.initialize();
 
 			for (int i = 0; i <= num; i++) {
 				ForecastingResult res = new ForecastingResult();

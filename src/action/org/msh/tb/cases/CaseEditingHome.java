@@ -133,7 +133,7 @@ public class CaseEditingHome {
 	 * Update the patient's age according to his birth date and the diagnosis date 
 	 */
 	protected void updatePatientAge() {
-		Date dtBirth = patientHome.getInstance().getBirthDate();
+		Date dtBirth = caseHome.getInstance().getPatient().getBirthDate();
 		if (dtBirth == null)
 			return;
 		
@@ -228,6 +228,8 @@ public class CaseEditingHome {
 		}
 
 		prevTBTreatmentHome.persist();
+		
+		updatePatientAge();
 
 		return caseHome.persist();
 	}
@@ -288,6 +290,8 @@ public class CaseEditingHome {
 //			tbcase.setCategory(TbCategory.CATEGORY_IV);
 		
 		tbcase.setState(CaseState.WAITING_TREATMENT);
+		
+		updatePatientAge();
 
 		// treatment was defined ?
 		if (!caseHome.persist().equals("persisted"))

@@ -82,6 +82,7 @@ public class CaseDataPHHome extends EntityHomeEx<CaseDataPH> {
 		caseSymptomsHome.save();
 		//mountPhysicalExams();
 
+		setDisplayMessage(false);
 		return persist();
 	}
 
@@ -118,6 +119,7 @@ public class CaseDataPHHome extends EntityHomeEx<CaseDataPH> {
 		caseSymptomsHome.save();
 //		mountPhysicalExams();
 
+		setDisplayMessage(false);
 		return persist(); 
 	}
 

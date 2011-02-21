@@ -593,18 +593,18 @@ function showLoadForecastingDlg() {
 <rich:modalPanel id="resultDetailsDlg" width="500" autosized="true" zindex="2000">
 	<f:facet name="header">#{messages['manag.forecast.load']}</f:facet>
 	<h:panelGroup id="resultDetailsPnl">
-	<h:dataTable value="#{forecastingView.result.batchesToExpire}" var="v" width="100%"
-		styleClass="tabela4" rendered="#{not empty forecastingView.result.batchesToExpire}">
+	<h:dataTable value="#{forecastingView.result.batchesConsumed}" var="v" width="100%" columnClasses="col,colrb,colrb,colrb"
+		styleClass="tabela4" rendered="#{not empty forecastingView.result.batchesConsumed}">
 		<h:column >
 			<f:facet name="header">
 				#{messages['Batch.expiryDate']}
 			</f:facet>
-			<h:outputText value="#{v.expiryDate}" converter="localeDateConverter"/>
+			<h:outputText value="#{v.batch.expiryDate}" converter="localeDateConverter"/>
 		</h:column>
 
 		<h:column >
 			<f:facet name="header">
-				#{messages['Movement.quantity']}
+				#{messages['medicines.dispensing.totdisp']}
 			</f:facet>
 			<h:outputText value="#{v.quantity}" >
 				<f:convertNumber pattern="#,###,##0" />
@@ -613,9 +613,18 @@ function showLoadForecastingDlg() {
 
 		<h:column >
 			<f:facet name="header">
-				#{messages['manag.forecast.tabres2']}
+				#{messages['manag.forecast.expiredquantity']}
 			</f:facet>
-			<h:outputText value="#{v.consumptionInMonth}" >
+			<h:outputText value="#{v.quantityExpired}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column >
+			<f:facet name="header">
+				#{messages['medicines.movs.availableqtty']}
+			</f:facet>
+			<h:outputText value="#{v.quantityAvailable}" >
 				<f:convertNumber pattern="#,###,##0" />
 			</h:outputText>
 		</h:column>

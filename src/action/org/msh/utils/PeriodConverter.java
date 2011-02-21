@@ -1,8 +1,7 @@
 package org.msh.utils;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
@@ -12,7 +11,6 @@ import javax.faces.convert.Converter;
 
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.Messages;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
@@ -54,7 +52,7 @@ public class PeriodConverter implements Converter{
 	protected String getAsPeriod(UIComponent comp, Object obj) {
 		long days = period.getDays() + 1;
 		
-		Locale locale = LocaleSelector.instance().getLocale();
+//		Locale locale = LocaleSelector.instance().getLocale();
 
 		Map<String, String> messages = Messages.instance();
 
@@ -65,8 +63,9 @@ public class PeriodConverter implements Converter{
 		if (days == 1)
 			dayTxt = " (" + days + " " + messages.get("global.day") + ")";
 		else dayTxt = " (" + days + " " + messages.get("global.days") + ")";
-		
-		DateFormat dtf = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);		
+
+		SimpleDateFormat dtf = new SimpleDateFormat(Messages.instance().get("locale.outputDatePattern"));
+//		DateFormat dtf = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
 		String s = dtf.format(period.getIniDate()) + "..." + dtf.format(period.getEndDate()) + dayTxt;
 		
 		return s;

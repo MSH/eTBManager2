@@ -36,7 +36,8 @@ public class ExamControlPH extends ExamControl {
 		
 		int days = DateUtils.daysBetween(dt, dtTreat);
 		
-		if (((dt.before(dtTreat)) && (days <= 30)) ||
+		if ((days == 0) ||
+			((dt.before(dtTreat)) && (days <= 30)) ||
 			((dt.after(dtTreat)) && (days <= 7))) {
 			return "cases.exams.zero";
 		}

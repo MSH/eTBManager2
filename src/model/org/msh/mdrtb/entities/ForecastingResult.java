@@ -55,15 +55,16 @@ public class ForecastingResult implements Serializable {
 	 */
 	private int stockOnHand;
 	
+	
 	/**
-	 * Estimated quantity of medicine for consumption of cases on treatment in the month 
+	 * Estimated consumption of medicine for cases on treatment
 	 */
-	private int quantityCasesOnTreatment;
-
+	private int consumptionCases;
+	
 	/**
-	 * Estimated quantity of medicine for consumption of new cases in the month
+	 * Estimated consumption of medicine for new cases 
 	 */
-	private float quantityNewCases;
+	private int consumptionNewCases;
 	
 	/**
 	 * Quantity of medicine that is going to expire in the month
@@ -78,12 +79,28 @@ public class ForecastingResult implements Serializable {
 	/**
 	 * Quantity on order to be arrived in the month for the medicine
 	 */
-	private int quantityOnOrder;
+	private int stockOnOrder;
 
 	@Transient
 	private List<ForecastingBatch> batchesToExpire;
 
+	@Transient
+	private List<BatchConsumption> batchesConsumed = new ArrayList<BatchConsumption>();
 
+
+	/**
+	 * Increment quantity on order
+	 * @param qtd
+	 */
+	public void addStockOnOrder(int qtd) {
+		stockOnOrder += qtd;
+	}
+	
+	
+	public void addBatchConsumption(ForecastingBatch batch, int quantity) {
+		batchesConsumed.add(new BatchConsumption(batch, quantity));
+	}
+	
 	/**
 	 * Return list of batches to expire for the medicine in the month (month index)
 	 * @return List of instances of {@link ForecastingBatch} class
@@ -100,6 +117,7 @@ public class ForecastingResult implements Serializable {
 		return batchesToExpire;
 	}
 
+	
 
 	/**
 	 * Return the total number of cases for the month
@@ -114,8 +132,8 @@ public class ForecastingResult implements Serializable {
 	 * Return the total quantity of medicine necessary for the total number of cases on treatment
 	 * @return
 	 */
-	public int getTotalQuantity() {
-		return Math.round(quantityNewCases) + quantityCasesOnTreatment;
+	public int getTotalConsumption() {
+		return Math.round(consumptionNewCases) + consumptionCases;
 	}
 
 	/**
@@ -125,7 +143,7 @@ public class ForecastingResult implements Serializable {
 	 */
 	public void increaseCasesOnTreatment(int numCases, int quantity) {
 		numCasesOnTreatment += numCases;
-		quantityCasesOnTreatment += quantity;
+		consumptionCases += quantity;
 	}
 
 	
@@ -136,7 +154,7 @@ public class ForecastingResult implements Serializable {
 	 */
 	public void increaseNewCases(float numNewCases, float quantity) {
 		this.numNewCases += numNewCases;
-		quantityNewCases += quantity;
+		consumptionNewCases += quantity;
 	}
 	
 	public Integer getId() {
@@ -200,26 +218,6 @@ public class ForecastingResult implements Serializable {
 	}
 
 
-	public int getQuantityCasesOnTreatment() {
-		return quantityCasesOnTreatment;
-	}
-
-
-	public void setQuantityCasesOnTreatment(int quantityCasesOnTreatment) {
-		this.quantityCasesOnTreatment = quantityCasesOnTreatment;
-	}
-
-
-	public float getQuantityNewCases() {
-		return quantityNewCases;
-	}
-
-
-	public void setQuantityNewCases(float quantityNewCases) {
-		this.quantityNewCases = quantityNewCases;
-	}
-
-
 	public int getStockOnHand() {
 		return stockOnHand;
 	}
@@ -250,12 +248,100 @@ public class ForecastingResult implements Serializable {
 	}
 
 
-	public int getQuantityOnOrder() {
-		return quantityOnOrder;
+	public int getStockOnOrder() {
+		return stockOnOrder;
 	}
 
 
-	public void setQuantityOnOrder(int quantityOnOrder) {
-		this.quantityOnOrder = quantityOnOrder;
+	public void setStockOnOrder(int quantityOnOrder) {
+		this.stockOnOrder = quantityOnOrder;
+	}
+	
+	
+	/**
+	 * Store the quantity of each batch consumed in the month
+	 * @author Ricardo Memoria
+	 *
+	 */
+	public class BatchConsumption {
+		private ForecastingBatch batch;
+		private int quantity;
+		private int quantityAvailable;
+		private int quantityExpired;
+
+		public BatchConsumption(ForecastingBatch batch, int quantity) {
+			super();
+			this.batch = batch;
+			this.quantity = quantity;
+			this.quantityAvailable = batch.getQuantityAvailable();
+			this.quantityExpired = batch.getQuantityExpired();
+		}
+
+		/**
+		 * @return the batch
+		 */
+		public ForecastingBatch getBatch() {
+			return batch;
+		}
+		/**
+		 * @return the quantity
+		 */
+		public int getQuantity() {
+			return quantity;
+		}
+
+		/**
+		 * @return the quantityAvailable
+		 */
+		public int getQuantityAvailable() {
+			return quantityAvailable;
+		}
+
+		/**
+		 * @return the quantityExpired
+		 */
+		public int getQuantityExpired() {
+			return quantityExpired;
+		}
+	}
+
+
+	/**
+	 * @return the batchesConsumed
+	 */
+	public List<BatchConsumption> getBatchesConsumed() {
+		return batchesConsumed;
+	}
+
+
+	/**
+	 * @return the consumptionCases
+	 */
+	public int getConsumptionCases() {
+		return consumptionCases;
+	}
+
+
+	/**
+	 * @param consumptionCases the consumptionCases to set
+	 */
+	public void setConsumptionCases(int consumptionCases) {
+		this.consumptionCases = consumptionCases;
+	}
+
+
+	/**
+	 * @return the consumptionNewCases
+	 */
+	public int getConsumptionNewCases() {
+		return consumptionNewCases;
+	}
+
+
+	/**
+	 * @param consumptionNewCases the consumptionNewCases to set
+	 */
+	public void setConsumptionNewCases(int consumptionNewCases) {
+		this.consumptionNewCases = consumptionNewCases;
 	}
 }

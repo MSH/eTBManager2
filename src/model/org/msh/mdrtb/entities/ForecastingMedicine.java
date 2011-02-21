@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -35,20 +36,50 @@ public class ForecastingMedicine implements Serializable {
 	@NotNull
 	private Medicine medicine;
 	
-	private int stockOnHandLT;
-	private int stockOnOrderLT;
+	/**
+	 * stock on hand in the reference date
+	 */
 	private int stockOnHand;
+
+	/**
+	 * Stock on order during lead time
+	 */
+	private int stockOnOrderLT;
+	
+	/**
+	 * Consumption during lead time
+	 */
+	private int consumptionLT;
+	
+	/**
+	 * Quantity expired during lead time
+	 */
+	private int quantityExpiredLT;
+
+	/**
+	 * Stock on order during review period
+	 */
 	private int stockOnOrder;
 
-	private float unitPrice;
-	
-	private int estimatedQtyCases;
-	private int estimatedQtyNewCases;
-	private int bufferStock;
-	private int requestedQty;
-	private int dispensingLeadTime;
+	/**
+	 * Quantity expired during the review period
+	 */
 	private int quantityExpired;
-	private int quantityExpiredLT;
+	
+	/**
+	 * Consumption of cases on treatment during the review period
+	 */
+	private int consumptionCases;
+
+	/**
+	 * Consumption of new cases during review period
+	 */
+	private int consumptionNewCases;
+
+	/**
+	 * Unit price of the medicine
+	 */
+	private float unitPrice;
 
 
 	/**
@@ -65,17 +96,86 @@ public class ForecastingMedicine implements Serializable {
 	private List<ForecastingOrder> orders = new ArrayList<ForecastingOrder>();
 	
 	/**
-	 * Estimated quantity for cases in a cohort
-	 */
-	private int estimatedQtyCohort;
-
-	/**
 	 * Keep temporary list of results for the current medicine
 	 */
 	@Transient
 	private List<ForecastingResult> results;
 
+
+	/**
+	 * Increment stock on order before lead time 
+	 * @param qtd
+	 */
+	public void addStockOnOrderLT(int qtd) {
+		stockOnOrderLT += qtd;
+	}
+
+
+	/**
+	 * Increment stock on order during review period
+	 * @param qtd
+	 */
+	public void addStockOnOrder(int qtd) {
+		stockOnOrder += qtd;
+	}
 	
+	
+	/**
+	 * Increment quantity in consumption before lead time
+	 * @param qtd
+	 */
+	public void addConsumptionLT(int qtd) {
+		consumptionLT += qtd;
+	}
+
+	
+	/**
+	 * Increment quantity expired before lead time
+	 * @param qtd
+	 */
+	public void addQuantityExpiredLT(int qtd) {
+		quantityExpiredLT += qtd;
+	}
+
+	
+	/**
+	 * Increment quantity expired during review period
+	 * @param qtd
+	 */
+	public void addQuantityExpired(int qtd) {
+		quantityExpired += qtd;
+	}
+
+	
+	/**
+	 * Increment consumption of cases on treatment during review period
+	 * @param qtd
+	 */
+	public void addConsumptionCases(int qtd) {
+		consumptionCases += qtd;
+	}
+	
+	
+	/**
+	 * Increment consumption of new cases during review period
+	 * @param qtd
+	 */
+	public void addConsumptionNewCases(int qtd) {
+		consumptionNewCases += qtd;
+	}
+
+
+	public int getStockOnHandAfterLT() {
+		int val = stockOnHand + stockOnOrderLT - consumptionLT - quantityExpiredLT;
+		return (val < 0? 0: val);
+	}
+	
+	public int getEstimatedQty() {
+		int val = consumptionCases + consumptionNewCases - getStockOnHandAfterLT() - quantityExpired;
+		return (val < 0? 0: val);
+	}
+
+
 	/**
 	 * @return
 	 */
@@ -103,34 +203,61 @@ public class ForecastingMedicine implements Serializable {
 
 
 	/**
-	 * Refresh result list
+	 * Find {@link ForecastingResult} by its month index
+	 * @return
 	 */
-	public void refreshResults() {
+	public ForecastingResult findResultByMonthIndex(int monthIndex) {
+		for (ForecastingResult res: getResults()) {
+			if (res.getMonthIndex() == monthIndex)
+				return res;
+		}
+		return null;
+	}
+
+
+	/**
+	 * Initialize values 
+	 */
+	public void initialize() {
+		stockOnOrderLT = 0;
+		quantityExpiredLT = 0;
+		stockOnOrder = 0;
+		quantityExpired = 0;
+		quantityExpiredLT = 0;
+		consumptionCases = 0;
+		consumptionLT = 0;
+		consumptionNewCases = 0;
 		results = null;
 		for (ForecastingBatch b: batchesToExpire) {
-			b.setConsumptionInMonth(0);
-			b.setQuantityToExpire(0);
+			b.initialize();
 		}
 	}
 
-	public int getTotalEstimatedQtyCases() {
-		return estimatedQtyCases + estimatedQtyCohort;
-	}
 
-	public int getStockOnHandAfterLeadTime() {
-		int val = stockOnHand - dispensingLeadTime + stockOnOrderLT;
-		return (val < 0? 0: val);
-	}
-	
-	public int getEstimatedQty() {
-		int val = estimatedQtyCases + estimatedQtyNewCases + estimatedQtyCohort - getStockOnHandAfterLeadTime() + quantityExpired; 
-		return (val < 0? 0: val);
-	}
-	
+	/**
+	 * Return the total price of the estimated quantity
+	 * @return
+	 */
 	public float getTotalPrice() {
 		return unitPrice * getEstimatedQty();
 	}
+
 	
+	/**
+	 * Find first batch with available quantity and where expiring date is after the given date
+	 * @param dt
+	 * @return
+	 */
+	public ForecastingBatch findAvailableBatch(Date dt) {
+		for (ForecastingBatch batch: batchesToExpire) {
+			if ((batch.getQuantityAvailable() > 0) && (!batch.getExpiryDate().before(dt))) {
+				return batch;
+			}
+		}
+		return null;
+	}
+
+
 	public int getStockOnHand() {
 		return stockOnHand;
 	}
@@ -161,67 +288,6 @@ public class ForecastingMedicine implements Serializable {
 
 	public void setUnitPrice(float unitPrice) {
 		this.unitPrice = unitPrice;
-	}
-
-	public int getEstimatedQtyCases() {
-		return estimatedQtyCases;
-	}
-
-	public void setEstimatedQtyCases(int estimatedQtyCases) {
-		this.estimatedQtyCases = estimatedQtyCases;
-	}
-
-	public int getBufferStock() {
-		return bufferStock;
-	}
-
-	public void setBufferStock(int bufferStock) {
-		this.bufferStock = bufferStock;
-	}
-
-	public int getRequestedQty() {
-		return requestedQty;
-	}
-
-	public void setRequestedQty(int requestedQty) {
-		this.requestedQty = requestedQty;
-	}
-
-	public void setEstimatedQtyNewCases(int estimatedQtyNewCases) {
-		this.estimatedQtyNewCases = estimatedQtyNewCases;
-	}
-
-	public int getEstimatedQtyNewCases() {
-		return estimatedQtyNewCases;
-	}
-
-	/**
-	 * @return the dispensingLeadTime
-	 */
-	public int getDispensingLeadTime() {
-		return dispensingLeadTime;
-	}
-
-	/**
-	 * @param dispensingLeadTime the dispensingLeadTime to set
-	 */
-	public void setDispensingLeadTime(int dispensingLeadTime) {
-		this.dispensingLeadTime = dispensingLeadTime;
-	}
-
-
-	/**
-	 * @param estimatedQtyCohort the estimatedQtyCohort to set
-	 */
-	public void setEstimatedQtyCohort(int estimatedQtyCohort) {
-		this.estimatedQtyCohort = estimatedQtyCohort;
-	}
-
-	/**
-	 * @return the estimatedQtyCohort
-	 */
-	public int getEstimatedQtyCohort() {
-		return estimatedQtyCohort;
 	}
 
 	/**
@@ -288,22 +354,6 @@ public class ForecastingMedicine implements Serializable {
 
 
 	/**
-	 * @return the stockOnHandLT
-	 */
-	public int getStockOnHandLT() {
-		return stockOnHandLT;
-	}
-
-
-	/**
-	 * @param stockOnHandLT the stockOnHandLT to set
-	 */
-	public void setStockOnHandLT(int stockOnHandLT) {
-		this.stockOnHandLT = stockOnHandLT;
-	}
-
-
-	/**
 	 * @return the stockOnOrderLT
 	 */
 	public int getStockOnOrderLT() {
@@ -332,5 +382,53 @@ public class ForecastingMedicine implements Serializable {
 	 */
 	public void setQuantityExpiredLT(int quantityExpiredLT) {
 		this.quantityExpiredLT = quantityExpiredLT;
+	}
+
+
+	/**
+	 * @return the consumptionLT
+	 */
+	public int getConsumptionLT() {
+		return consumptionLT;
+	}
+
+
+	/**
+	 * @param consumptionLT the consumptionLT to set
+	 */
+	public void setConsumptionLT(int consumptionLT) {
+		this.consumptionLT = consumptionLT;
+	}
+
+
+	/**
+	 * @return the consumptionCases
+	 */
+	public int getConsumptionCases() {
+		return consumptionCases;
+	}
+
+
+	/**
+	 * @param consumptionCases the consumptionCases to set
+	 */
+	public void setConsumptionCases(int consumptionCases) {
+		this.consumptionCases = consumptionCases;
+	}
+
+
+	/**
+	 * @return the consumptionNewCases
+	 */
+	public int getConsumptionNewCases() {
+		return consumptionNewCases;
+	}
+
+
+	/**
+	 * @param consumptionNewCases the consumptionNewCases to set
+	 */
+	public void setConsumptionNewCases(int consumptionNewCases) {
+		this.consumptionNewCases = consumptionNewCases;
 	}
 }

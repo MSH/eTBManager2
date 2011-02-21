@@ -1,6 +1,7 @@
 package org.msh.tb.cases;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -282,4 +283,24 @@ public class PrevTBTreatmentHome {
 		}
 		return substances;
 	}
+
+	public List<SelectItem> getYears() {
+		List<SelectItem> lst = new ArrayList<SelectItem>();
+		Calendar c = Calendar.getInstance();
+		int ano = c.get(Calendar.YEAR);
+		
+		SelectItem si = new SelectItem();
+		si.setLabel("-");
+		lst.add(si);
+		
+		for (int i = ano + 1; i >= 1970; i--) {
+			SelectItem it = new SelectItem();
+			it.setLabel(Integer.toString(i));
+			it.setValue(i);
+			lst.add(it);
+		}
+		
+		return lst;
+	}
+
 }
