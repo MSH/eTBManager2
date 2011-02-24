@@ -171,7 +171,7 @@ public class Forecasting extends WSObject implements Serializable {
 
 
 	/**
-	 * Return the number of months of the forecating (including lead time and review period)
+	 * Return the number of months of the forecasting (including lead time and review period)
 	 * @return number of months
 	 */
 	public int getNumMonths() {

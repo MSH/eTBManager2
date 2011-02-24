@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
@@ -17,6 +19,7 @@ import org.msh.mdrtb.entities.ForecastingCasesOnTreat;
 import org.msh.mdrtb.entities.ForecastingMedicine;
 import org.msh.mdrtb.entities.ForecastingNewCases;
 import org.msh.mdrtb.entities.ForecastingOrder;
+import org.msh.mdrtb.entities.ForecastingPeriod;
 import org.msh.mdrtb.entities.ForecastingRegimen;
 import org.msh.mdrtb.entities.ForecastingResult;
 import org.msh.mdrtb.entities.Medicine;
@@ -171,6 +174,15 @@ public class ForecastingCalculation {
 				 forecasting.getCasesOnTreatment().remove(i);
 			else i++;
 		}
+		
+		// sort batches by date
+		for (ForecastingMedicine fm: forecasting.getMedicines()) {
+			Collections.sort(fm.getBatchesToExpire(), new Comparator<ForecastingBatch>() {
+				public int compare(ForecastingBatch o1, ForecastingBatch o2) {
+					return o1.getExpiryDate().compareTo(o2.getExpiryDate());
+				}
+			});
+		}
 	}
 
 
@@ -189,7 +201,8 @@ public class ForecastingCalculation {
 	 * @param monthIndex
 	 */
 	protected void calculate() {
-		calculateStockOnOrder();
+		createPeriods();
+		updateStockOnOrderAndQtdToExpire();
 
 		calculateCasesOnTreatment();
 		calculateNewCases();
@@ -205,24 +218,65 @@ public class ForecastingCalculation {
 	protected void updateStockQuantities() {
 		for (ForecastingMedicine fm: forecasting.getMedicines()) {
 			int stockOnHand = fm.getStockOnHand();
-			System.out.println(fm.getMedicine().toString() + " = " + fm.getStockOnHand());
-
-			for (ForecastingResult res: fm.getResults()) {
-				res.setStockOnHand(stockOnHand);
+			
+			if (fm.getMedicine().getId().equals(940801))
+				System.out.println(fm.getMedicine().toString());
+			
+			for (ForecastingPeriod p: fm.getPeriods()) {
+				// update stock on hand and missing quantities
+				p.setStockOnHand(stockOnHand);
 				
-				// update batches to expire
-				for (ForecastingBatch b: fm.getBatchesToExpire())
-					if (forecasting.getMonthIndex(b.getExpiryDate()) == res.getMonthIndex())
-						res.setQuantityToExpire(res.getQuantityToExpire() + b.getQuantity());
+				// update expired quantities
+				int qtdExp = calcExpiredQuantity(fm, p);
+				p.setQuantityExpired(qtdExp);
 				
-				// get consumption in the month
-				int consumptionMonth = res.getConsumptionCases() + res.getConsumptionNewCases();
-				if (consumptionMonth > res.getStockOnHand())
-					consumptionMonth = res.getStockOnHand();
+				int cons = p.getEstimatedConsumption();
 
-				int qtdExpired = calcExpiredQuantity(fm, res, consumptionMonth);
-				stockOnHand -= (consumptionMonth + qtdExpired); 
+				if (cons > stockOnHand) {
+					p.setQuantityMissing(stockOnHand - cons);
+					stockOnHand = 0;
+
+					stockOnHand += p.getQuantity();
+				}
+				else {
+					stockOnHand += -cons - qtdExp;
+					if (p.getQuantity() > 0)
+						stockOnHand += p.getQuantity();
+				}
+				
+				if (stockOnHand < 0)
+					stockOnHand = 0;
+				
+				updateMonthQuantities(fm, p);
 			}
+		}
+	}
+	
+
+	protected void updateMonthQuantities(ForecastingMedicine fm, ForecastingPeriod p) {
+		int index = forecasting.getMonthIndex(p.getPeriod().getIniDate());
+		ForecastingResult fr = fm.findResultByMonthIndex(index);
+
+		// update month data
+		if (fr.getStockOnHand() == 0)
+			fr.setStockOnHand(p.getStockOnHand());
+
+		fr.setQuantityExpired( fr.getQuantityExpired() + p.getQuantityExpired() );
+		fr.setConsumptionCases( fr.getConsumptionCases() + p.getEstConsumptionCases() );
+		fr.setConsumptionNewCases( fr.getConsumptionNewCases() + p.getEstConsumptionNewCases() );
+
+		// update resume data
+
+		// is during lead time ?
+		if ( p.getPeriod().getIniDate().before(reviewPeriod.getIniDate()) ) {
+			fm.addConsumptionLT( p.getEstimatedConsumption());
+			fm.setQuantityMissingLT( fm.getQuantityMissingLT() + p.getQuantityMissing() );
+			fm.addQuantityExpiredLT( p.getQuantityExpired() );
+		}
+		else {
+			fm.addConsumptionCases( p.getEstConsumptionCases() );
+			fm.addConsumptionNewCases( p.getEstConsumptionNewCases() );
+			fm.addQuantityExpired( p.getQuantityExpired() );
 		}
 	}
 	
@@ -235,123 +289,58 @@ public class ForecastingCalculation {
 	 * @param consumptionMonth
 	 * @return
 	 */
-	protected int calcExpiredQuantity(ForecastingMedicine fm, ForecastingResult res, int consumptionMonth) {
-		Date dtini = forecasting.getIniDateMonthIndex(res.getMonthIndex());
-		Date dtend = forecasting.getEndDateMonthIndex(res.getMonthIndex());
-
+	protected int calcExpiredQuantity(ForecastingMedicine fm, ForecastingPeriod per) {
+		int con = per.getEstimatedConsumption();
 		int qtdExpired = 0;
-		// consumption to be distributed by batches
-		int conBatch = consumptionMonth;
 		
-		// update batch consumption
+		Date dt = per.getPeriod().getIniDate();
+
+		if (fm.getMedicine().getId().equals(940801))
+			System.out.println(fm.getMedicine().toString());
+		
 		while (true) {
-			ForecastingBatch b = fm.findAvailableBatch(dtini);
-			
-			if (b == null)
+			ForecastingBatch batch = fm.findAvailableBatch(dt);
+			if (batch == null)
 				break;
-			
-			boolean expiresThisMonth = !b.getExpiryDate().after(dtend);
-			
+
+			boolean expiresThisMonth = dt.equals( batch.getExpiryDate() );
+
 			// quantity available of the current batch
-			int quantityAvailable = b.getQuantityAvailable();
-			
-			// batch expires this month ?
-			if (expiresThisMonth) {
-				int qtdBatchExp = 0;
-				// available is bigger than consumption
-				if (quantityAvailable > b.getConsumptionInMonth()) {
-					qtdBatchExp = quantityAvailable - b.getConsumptionInMonth();
-					if (b.getExpiryDate().before(forecasting.getIniDateLeadTime()))
-						 fm.addQuantityExpiredLT(qtdBatchExp);
-					else fm.addQuantityExpired(qtdBatchExp);
-				}
+			int quantityAvailable = batch.getQuantityAvailable();
+			int consumed;
+			int exp = 0;
 
-				b.setQuantityAvailable(0);
-				b.setQuantityExpired(qtdBatchExp);
-
-				conBatch -= quantityAvailable;
-				qtdExpired += qtdBatchExp;
+			if (quantityAvailable > con) {
+				consumed = con;
+				exp = (expiresThisMonth? quantityAvailable - con : 0);
+				qtdExpired += exp;
+				con = 0;
+				batch.setQuantityExpired(exp);
 			}
 			else {
-				if (quantityAvailable > conBatch) {
-					b.setQuantityAvailable( quantityAvailable - conBatch );
-					conBatch = 0;
-				}
-				else {
-					b.setQuantityAvailable(0);
-					conBatch -= quantityAvailable;
-				}
+				consumed = quantityAvailable;
+				con -= quantityAvailable;
 			}
 
-			// calculate quantity consumed of the batch
-			int con = quantityAvailable - b.getQuantityAvailable() - b.getQuantityExpired();
-			if (con > 0)
-				res.addBatchConsumption(b, con);
+			batch.setQuantityAvailable( quantityAvailable - consumed - exp);
 
-			if (conBatch == 0)
+			if (consumed > 0) {
+				ForecastingResult res = fm.findResultByMonthIndex( forecasting.getMonthIndex(per.getPeriod().getIniDate()) );
+				res.addBatchConsumption(batch, consumed);
+			}
+
+			if (con == 0)
 				break;
 		}
-		
-		res.setQuantityExpired(qtdExpired);
 		
 		return qtdExpired;
 	}
-		
-/*		// accumulated consumption
-		int c = 0;
-		int total = 0;
 
-		for (ForecastingResult res: forMedicine.getResults()) {
-			// lost in the month
-			int pm = 0;
-			int qtdToExpire = 0;
-			
-			// quanto foi o consumo até o último lote do mês
-			int cbatch = 0;
-
-			for (ForecastingBatch batch: res.getBatchesToExpire()) {
-				qtdToExpire += batch.getQuantity();
-				c += batch.getConsumptionInMonth();
-				if (c < batch.getQuantity()) {
-					pm += batch.getQuantity() - c;
-					c = 0;
-				}
-				else c -= batch.getQuantity();
-				cbatch += batch.getConsumptionInMonth();
-			}
-
-			res.setQuantityExpired(pm);
-			res.setQuantityToExpire(qtdToExpire);
-			total += pm;
-			c += res.getQuantityCasesOnTreatment() + res.getQuantityNewCases() - cbatch;
-		}
-		
-		forMedicine.setQuantityExpired( total );
-	}
-*/	
-	
-	/**
-	 * Calculate the quantity to expire of the medicine in the month index (the quantity of all batches in the month are summed to get the total quantity)
-	 * @param med
-	 * @param monthIndex
-	 * @return
-	 */
-/*	protected int quantityToExpire(ForecastingResult result) {
-		int res = 0;
-		Medicine med = result.getMedicine();
-		
-		for (ForecastingBatch b: result.getBatchesToExpire())
-			if ((b.getForecastingMedicine().getMedicine().equals(med)) && (forecasting.getMonthIndex(b.getExpiryDate()) == result.getMonthIndex()))
-				res += b.getQuantity();
-	
-		return res;
-	}
-*/
 	
 	/**
 	 * Calculate stock on order for all medicines in every month of forecasting
 	 */
-	protected void calculateStockOnOrder() {
+	protected void updateStockOnOrderAndQtdToExpire() {
 		Date dt = forecasting.getIniDateLeadTime();
 		
 		for (ForecastingMedicine fm: forecasting.getMedicines()) {
@@ -374,6 +363,15 @@ public class ForecastingCalculation {
 						fm.addStockOnOrder(qtd);
 				}
 			}
+
+			// update batches to expire
+			for (ForecastingBatch fb: fm.getBatchesToExpire()) {
+				int index = forecasting.getMonthIndex(fb.getExpiryDate());
+				
+				ForecastingResult res = fm.findResultByMonthIndex(index);
+				if (res != null)
+					res.setQuantityToExpire(res.getQuantityToExpire() + fb.getQuantity());
+			}
 		}
 	}
 	
@@ -384,7 +382,7 @@ public class ForecastingCalculation {
 	 * @param result
 	 * @return
 	 */
-	protected int quantityOnOrder(ForecastingResult result, boolean leadTimeOnly) {
+/*	protected int quantityOnOrder(ForecastingResult result, boolean leadTimeOnly) {
 		int qtd = 0;
 		Date dt = (leadTimeOnly? forecasting.getIniDateLeadTime(): null);
 
@@ -398,7 +396,7 @@ public class ForecastingCalculation {
 		}
 		return qtd;
 	}
-
+*/
 
 
 	/**
@@ -428,7 +426,43 @@ public class ForecastingCalculation {
 	 * Calculate the consumption of medicine for each one of the cases registered in the database
 	 */
 	private void calculateCasesOnTreatmentFromDB() {
-		for (int i = 0; i <= numMonths; i++) {
+		Integer prevCaseId = null;
+		Integer prevMedId = null;
+
+		for (Object[] prescDrug: casesOnTreatment) {
+			ForecastingMedicine fm = forecasting.findMedicineById((Integer)prescDrug[3]);
+
+			// update consumption for each period
+			for (ForecastingPeriod forPeriod: fm.getPeriods()) {
+				int qtd = calcConsumptionCaseOnTreatment(prescDrug, forPeriod.getPeriod());
+				forPeriod.setEstConsumptionCases(qtd);
+			}
+
+			Integer caseId = (Integer)prescDrug[5];
+			Integer medId = (Integer)prescDrug[3];
+			
+			// count number of cases
+			boolean newcase = (!caseId.equals(prevCaseId) || (!medId.equals(prevMedId)));
+			if (newcase) {
+				int indexini = forecasting.getMonthIndex((Date)prescDrug[0]);
+				int indexend = forecasting.getMonthIndex((Date)prescDrug[1]);
+				int max = forecasting.getNumMonths();
+				if ((indexini <= max) || (indexend >= 0)) {
+					if (indexini < 0)
+						indexini = 0;
+					if (indexend > max)
+						indexend = max;
+
+					for (int i = indexini; i <= indexend; i++) {
+						ForecastingResult res = fm.findResultByMonthIndex(i);
+						res.setNumCasesOnTreatment( res.getNumCasesOnTreatment() + 1);
+					}
+				}
+			}
+		}
+	}
+
+/*		for (int i = 0; i <= numMonths; i++) {
 			Date dtIni = forecasting.getIniDateMonthIndex(i);
 			Date dtEnd = forecasting.getEndDateMonthIndex(i);
 
@@ -487,7 +521,7 @@ public class ForecastingCalculation {
 				}
 			}
 		}
-	}
+*/	
 
 	
 	/**
@@ -557,7 +591,7 @@ public class ForecastingCalculation {
 		Date dtEnd = forecasting.getEndDateMonthIndex(monthIndex);
 		
 		// get consumption of the month
-		int qty = calcQuantityRegimen(reg, dtIni, dtEnd, monthTreat, fm.getMedicine()) * fcot.getNumCases();
+		int qty = calcQuantityRegimen(reg, new Period(dtIni, dtEnd), monthTreat, fm.getMedicine()) * fcot.getNumCases();
 			
 		if (qty == 0) 
 			return;
@@ -587,7 +621,7 @@ public class ForecastingCalculation {
 		// update batches consumption
 		List<ForecastingBatch> lst = res.getBatchesToExpire();
 		for (ForecastingBatch bt: lst) {
-			int qtdBatch = calcQuantityRegimen(reg, dtIni, bt.getExpiryDate(), monthTreat, fm.getMedicine());
+			int qtdBatch = calcQuantityRegimen(reg, new Period(dtIni, bt.getExpiryDate()), monthTreat, fm.getMedicine());
 			bt.setConsumptionInMonth(bt.getConsumptionInMonth() + qtdBatch);
 		}		
 	}
@@ -601,10 +635,6 @@ public class ForecastingCalculation {
 	 * @param dtfim
 	 */
 	protected void calculateNewCasesRegimen(ForecastingNewCases forNewCases, ForecastingRegimen forRegimen) {
-		int monthIndex = forNewCases.getMonthIndex();
-		
-		Regimen reg = forRegimen.getRegimen();
-		int len = reg.getMonthsPhase(RegimenPhase.INTENSIVE) + reg.getMonthsPhase(RegimenPhase.CONTINUOUS);
 		
 		// calculate total percentage of regimens
 		float totalPerc = 0;
@@ -618,8 +648,32 @@ public class ForecastingCalculation {
 		if (newCases == 0)
 			return;
 
+		Regimen reg = forRegimen.getRegimen();
+//		int monthIndex = forNewCases.getMonthIndex();
+//		int len = reg.getMonthsPhase(RegimenPhase.INTENSIVE) + reg.getMonthsPhase(RegimenPhase.CONTINUOUS);
+		Date dtini = forecasting.getIniDateMonthIndex(forNewCases.getMonthIndex());
+//		Date dtend = DateUtils.incMonths(dtini, len);
+		// get period of treatment
+//		Period perTreat = new Period(dtini, dtend);
+
 		// calculate number of new cases and quantity for each medicine
 		for (ForecastingMedicine fm: forecasting.getMedicines()) {
+			if (reg.isMedicineInRegimen(fm.getMedicine())) {
+				for (ForecastingPeriod forPer: fm.getPeriods()) {
+					int qty = calcEstimatedConsumptionRegimen(reg, fm.getMedicine(), dtini, forPer.getPeriod());
+					qty = Math.round( (float)qty * newCases );
+					forPer.setEstConsumptionNewCases(qty);
+
+					// update number of new cases
+					ForecastingResult res = fm.findResultByMonthIndex( forecasting.getMonthIndex(forPer.getPeriod().getIniDate()) );
+					res.setNumNewCases( res.getNumNewCases() + newCases);
+				}
+			}
+		}
+
+
+		// calculate number of new cases and quantity for each medicine
+/*		for (ForecastingMedicine fm: forecasting.getMedicines()) {
 			if (reg.isMedicineInRegimen(fm.getMedicine())) {
 				for (int i = 0; i < len; i++) {
 					int index = monthIndex + i;
@@ -631,7 +685,7 @@ public class ForecastingCalculation {
 						break;
 					if (dtEnd == null)
 						dtEnd = DateUtils.incMonths(forecasting.getEndDate(), forecasting.getBufferStock());
-					
+
 					float qty = calcQuantityRegimen(reg, dtIni, dtEnd, i, fm.getMedicine());
 					qty = qty * newCases;
 					
@@ -669,8 +723,40 @@ public class ForecastingCalculation {
 				}
 			}
 		}
+*/
 	}
 
+	
+	/**
+	 * Calculate estimated consumption for a regimen where treatment started in dtIniTreatment date using a 
+	 * specific medicine. The estimated consumption is for a period specified by p
+	 * @param reg
+	 * @param medicine
+	 * @param dtIniTreatment
+	 * @param p
+	 * @return
+	 */
+	private int calcEstimatedConsumptionRegimen(Regimen reg, Medicine medicine, Date dtIniTreatment, Period p) {
+		int monthsInt = reg.getMonthsIntensivePhase();
+		int result = 0;
+		
+		for (MedicineRegimen medreg: reg.getMedicines()) {
+			if (medreg.getMedicine().equals(medicine)) {
+				// get initial date of prescription of the medicine
+				Date ini = (medreg.getPhase() == RegimenPhase.INTENSIVE? dtIniTreatment : DateUtils.incMonths(dtIniTreatment, monthsInt));
+				Date end = DateUtils.incDays( DateUtils.incMonths(ini, medreg.getMonthsTreatment()), -1);
+				Period regper = new Period(ini, end);
+				Period aux = new Period(p);
+				if (aux.intersect(regper)) {
+					WeeklyFrequency wf = forecastingHome.getWorkspace().getWeeklyFrequency(medreg.getDefaultFrequency());
+					int numDays = wf.calcNumDays(aux);
+					result += numDays * medreg.getDefaultDoseUnit();
+				}
+			}
+		}
+		return result;
+	}
+	
 
 	/**
 	 * Calculate the estimated quantity based on the initial month (0 is the first) and the medicine
@@ -678,7 +764,7 @@ public class ForecastingCalculation {
 	 * @param medicine
 	 * @return
 	 */
-	private int calcQuantityRegimen(Regimen reg, Date dtIni, Date dtEnd, int monthOfTreatment, Medicine medicine) {
+	private int calcQuantityRegimen(Regimen reg, Period p, int monthOfTreatment, Medicine medicine) {
 		int intPhaseMonths = reg.getMonthsPhase(RegimenPhase.INTENSIVE);
 		RegimenPhase phase = (monthOfTreatment < intPhaseMonths? RegimenPhase.INTENSIVE: RegimenPhase.CONTINUOUS);
 
@@ -694,10 +780,86 @@ public class ForecastingCalculation {
 			return 0;
 		
 		WeeklyFrequency wf = forecastingHome.getWorkspace().getWeeklyFrequency(medReg.getDefaultFrequency());
-		int numDays = wf.calcNumDays(new Period(dtIni, dtEnd));
+		int numDays = wf.calcNumDays(p);
 		return numDays * medReg.getDefaultDoseUnit();
 	}
 
+	
+	/**
+	 * Create periods to be calculated
+	 */
+	protected void createPeriods() {
+		Map<Date, Integer> dates = new HashMap<Date, Integer>();
+		
+		Period forPeriod = new Period(forecasting.getReferenceDate(), endForecasting);
+
+		for (ForecastingMedicine fm: forecasting.getMedicines()) {
+			dates.clear();
+
+			// set forecasting boundaries
+			Date dtini = forecasting.getReferenceDate();
+			dates.put(endForecasting, 0);
+			dates.put(forecasting.getIniDateLeadTime(), 0);
+			
+			for (int n = 0; n <= forecasting.getNumMonths(); n++) {
+				Date dt1 = forecasting.getIniDateMonthIndex(n);
+				dates.put(dt1, 0);
+			}
+			
+			// add dates of batches to expire
+			for (ForecastingBatch b: fm.getBatchesToExpire()) {
+				Date dt = DateUtils.getDatePart( b.getExpiryDate() );
+				if (forPeriod.isDateInside(dt)) {
+					
+					if (DateUtils.dayOf(dt) == 1) {
+						dates.put(dt, 0);
+						dates.put( DateUtils.incDays(dt, 1), -b.getQuantity());
+					}
+					else dates.put(dt, -b.getQuantity());
+				}
+			}
+			
+			// add dates of orders to arrive
+			for (ForecastingOrder order: fm.getOrders()) {
+				Date dt = DateUtils.getDatePart( order.getArrivalDate() );
+				if (forPeriod.isDateInside(dt)) {
+					Integer qtd = dates.get(dt);
+					if (qtd == null)
+						 qtd = order.getQuantity();
+					else qtd += order.getQuantity();
+						dates.put(dt, qtd);
+				}
+			}
+
+			// when all relevant dates are included, just sort them
+			List<Date> lst = new ArrayList(dates.keySet());
+			Collections.sort(lst);
+			
+			if (lst.contains(dtini))
+				lst.remove(dtini);
+
+			// create all periods starting by the reference date
+			for (Date dt: lst) {
+				Integer qtd = dates.get(dt);
+
+				ForecastingPeriod mov = new ForecastingPeriod();
+
+				Date dtend;
+				// if is before end of forecasting, the date is reduced in 1 day to avoid
+				// overlapping with the next period
+				if (dt.before(endForecasting))
+					 dtend = DateUtils.incDays(dt, -1);
+				else dtend = dt;
+
+				Period p = new Period(dtini, dtend);
+				mov.setPeriod(p);
+				mov.setQuantity(qtd);
+				fm.getPeriods().add(mov);
+				dtini = dt;
+			}
+		}
+	}
+	
 	
 	/**
 	 * Return batches of a medicine in a specific month of treatment
@@ -705,7 +867,7 @@ public class ForecastingCalculation {
 	 * @param monthIndex
 	 * @return
 	 */
-	private List<ForecastingBatch> getBatchesMonth(ForecastingMedicine fm, int monthIndex) {
+/*	private List<ForecastingBatch> getBatchesMonth(ForecastingMedicine fm, int monthIndex) {
 		List<ForecastingBatch> lst = new ArrayList<ForecastingBatch>();
 		for (ForecastingBatch b: fm.getBatchesToExpire()) {
 			if (forecasting.getMonthIndex(b.getExpiryDate()) == monthIndex) {
@@ -721,7 +883,7 @@ public class ForecastingCalculation {
 		});
 		return lst;
 	}
-	
+*/	
 	/**
 	 * Raise exception if result is not found for an specific medicine and monthIndex (it's always suposed to be found)
 	 * @param med

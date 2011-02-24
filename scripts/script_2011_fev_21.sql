@@ -12,3 +12,9 @@ UPDATE ForecastingBatch
 
 ALTER TABLE ForecastingBatch 
 	CHANGE COLUMN `quantityToExpire` `quantityExpired` INT(11) NOT NULL;
+
+ALTER TABLE ForecastingMedicine
+	add quantityMissingLT int(11);
+
+UPDATE ForecastingMedicine
+	set quantityMissingLT = 0;

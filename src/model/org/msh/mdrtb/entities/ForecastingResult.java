@@ -98,7 +98,20 @@ public class ForecastingResult implements Serializable {
 	
 	
 	public void addBatchConsumption(ForecastingBatch batch, int quantity) {
-		batchesConsumed.add(new BatchConsumption(batch, quantity));
+		BatchConsumption batchCon = null;
+		for (BatchConsumption b: batchesConsumed) {
+			if (b.getBatch().equals(batch)) {
+				batchCon = b;
+				break;
+			}
+		}
+		
+		if (batchCon == null) {
+			batchesConsumed.add(new BatchConsumption(batch, quantity));
+		}
+		else {
+			batchCon.addQuantity(quantity);
+		}
 	}
 	
 	/**
@@ -256,7 +269,7 @@ public class ForecastingResult implements Serializable {
 	public void setStockOnOrder(int quantityOnOrder) {
 		this.stockOnOrder = quantityOnOrder;
 	}
-	
+
 	
 	/**
 	 * Store the quantity of each batch consumed in the month
@@ -273,6 +286,16 @@ public class ForecastingResult implements Serializable {
 			super();
 			this.batch = batch;
 			this.quantity = quantity;
+			this.quantityAvailable = batch.getQuantityAvailable();
+			this.quantityExpired = batch.getQuantityExpired();
+		}
+		
+		/**
+		 * Add quantity of the same batch
+		 * @param quantity
+		 */
+		public void addQuantity(int quantity) {
+			this.quantity += quantity;
 			this.quantityAvailable = batch.getQuantityAvailable();
 			this.quantityExpired = batch.getQuantityExpired();
 		}

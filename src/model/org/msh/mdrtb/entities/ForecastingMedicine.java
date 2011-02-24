@@ -52,6 +52,11 @@ public class ForecastingMedicine implements Serializable {
 	private int consumptionLT;
 	
 	/**
+	 * Quantity missing for the cases during lead time due to shortage of medicines or expired batches
+	 */
+	private int quantityMissingLT;
+	
+	/**
 	 * Quantity expired during lead time
 	 */
 	private int quantityExpiredLT;
@@ -101,6 +106,10 @@ public class ForecastingMedicine implements Serializable {
 	@Transient
 	private List<ForecastingResult> results;
 
+	
+	@Transient
+	private List<ForecastingPeriod> periods = new ArrayList<ForecastingPeriod>();
+	
 
 	/**
 	 * Increment stock on order before lead time 
@@ -165,13 +174,30 @@ public class ForecastingMedicine implements Serializable {
 	}
 
 
+	/**
+	 * Return the quantity dispensed to patient during lead time 
+	 * @return
+	 */
+	public int getDispensingQuantityLT() {
+		int qtd = consumptionLT - quantityMissingLT;
+		return qtd < 0 ? 0: qtd;
+	}
+
+
+	/**
+	 * @return
+	 */
 	public int getStockOnHandAfterLT() {
-		int val = stockOnHand + stockOnOrderLT - consumptionLT - quantityExpiredLT;
+		int val = stockOnHand + stockOnOrderLT - getDispensingQuantityLT() - quantityExpiredLT;
 		return (val < 0? 0: val);
 	}
-	
+
+
+	/**
+	 * @return
+	 */
 	public int getEstimatedQty() {
-		int val = consumptionCases + consumptionNewCases - getStockOnHandAfterLT() - quantityExpired;
+		int val = consumptionCases + consumptionNewCases - getStockOnHandAfterLT() + quantityExpired;
 		return (val < 0? 0: val);
 	}
 
@@ -231,6 +257,7 @@ public class ForecastingMedicine implements Serializable {
 		for (ForecastingBatch b: batchesToExpire) {
 			b.initialize();
 		}
+		periods.clear();
 	}
 
 
@@ -430,5 +457,29 @@ public class ForecastingMedicine implements Serializable {
 	 */
 	public void setConsumptionNewCases(int consumptionNewCases) {
 		this.consumptionNewCases = consumptionNewCases;
+	}
+
+
+	/**
+	 * @return the quantityMissingLT
+	 */
+	public int getQuantityMissingLT() {
+		return quantityMissingLT;
+	}
+
+
+	/**
+	 * @param quantityMissingLT the quantityMissingLT to set
+	 */
+	public void setQuantityMissingLT(int quantityMissingLT) {
+		this.quantityMissingLT = quantityMissingLT;
+	}
+
+
+	/**
+	 * @return the movements
+	 */
+	public List<ForecastingPeriod> getPeriods() {
+		return periods;
 	}
 }

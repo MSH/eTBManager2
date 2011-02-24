@@ -82,7 +82,7 @@
 			</h:outputText>
 		</td>
 		<td class="colrb highlight">
-			<h:outputText value="#{m.consumptionLT}" >
+			<h:outputText value="#{m.dispensingQuantityLT}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
 		</td>
@@ -140,7 +140,7 @@
 
 
 
-<rich:tab label="#{messages['manag.forecast.tabres2']}" rendered="#{forecasting.hasResult}">
+<rich:tab label="#{messages['manag.forecast.tabres2']}" rendered="#{forecasting.hasResult and facesContext.renderResponse}">
 <table width="100%" class="tabela">
 <tr>
 	<th colspan="2">#{messages['Medicine']}
@@ -236,7 +236,7 @@
 
 
 
-<rich:tab label="#{messages['manag.forecast.tabres3']}" rendered="#{forecasting.hasResult}">
+<rich:tab label="#{messages['manag.forecast.tabres3']}" rendered="#{forecasting.hasResult and facesContext.renderResponse}">
 <table width="100%" class="tabela">
 <tr>
 	<th colspan="2">#{messages['Medicine']}
@@ -289,6 +289,94 @@
 </tr>
 </a:repeat>
 </table>
+</rich:tab>
+
+<rich:tab label="#{messages['form.details']}" rendered="#{forecasting.hasResult}">
+	<a:form>
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['Medicine']}:</ui:define>
+		<h:selectOneMenu value="#{forecastingView.medicine}">
+			<s:selectItems value="#{forecastingHome.instance.medicines}" var="m" noSelectionLabel="-" label="#{m.medicine}"/>
+			<s:convertEntity />
+			<a:support event="onchange" reRender="pnldetails" ajaxSingle="true"/>
+		</h:selectOneMenu>
+	</s:decorate>
+	</a:form>
+
+	<h:panelGroup id="pnldetails">
+	<h:dataTable value="#{forecastingView.medicine.periods}" var="p" styleClass="tabela" 
+		rendered="#{not empty forecastingView.medicine.periods}" columnClasses="colb,colrb,colrb,colrb,colrb,colrb,colrb,colrb">
+		<h:column>
+			<f:facet name="header">
+				#{messages['global.period']}
+			</f:facet>
+			<h:outputText value="#{p.period}" converter="periodConverter" />
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.stockonhand']}
+			</f:facet>
+			<h:outputText value="#{p.stockOnHand}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				Estimated consumption<br/> (on-going cases)
+			</f:facet>
+			<h:outputText value="#{p.estConsumptionCases}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				Estimated consumption<br/> (new cases)
+			</f:facet>
+			<h:outputText value="#{p.estConsumptionNewCases}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				#{messages['reports.estimatedcons']}
+			</f:facet>
+			<h:outputText value="#{p.estimatedConsumption}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				Expired/Orders
+			</f:facet>
+			<h:outputText value="#{p.quantity}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.tabres2.cell3']}
+			</f:facet>
+			<h:outputText value="#{p.quantityExpired}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				Missing quantities
+			</f:facet>
+			<h:outputText value="#{p.quantityMissing}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+	</h:dataTable>
+	</h:panelGroup>
 </rich:tab>
 
 <a:jsFunction name="showDetailResult" reRender="resultDetailsPnl" action="#{forecastingView.initializeResult}" 

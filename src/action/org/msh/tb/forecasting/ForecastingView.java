@@ -53,6 +53,7 @@ public class ForecastingView {
 	private Integer medicineId;
 	private Integer monthIndex;
 	private ForecastingResult result;
+	private ForecastingMedicine medicine;
 	
 	
 	/**
@@ -604,6 +605,22 @@ public class ForecastingView {
 	 */
 	public void setMonthIndex(Integer monthIndex) {
 		this.monthIndex = monthIndex;
+	}
+
+
+	/**
+	 * @return the medicine
+	 */
+	public ForecastingMedicine getMedicine() {
+		return medicine;
+	}
+
+
+	/**
+	 * @param medicine the medicine to set
+	 */
+	public void setMedicine(ForecastingMedicine medicine) {
+		this.medicine = medicine;
 	}
 	
 }
