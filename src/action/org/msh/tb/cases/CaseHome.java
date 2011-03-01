@@ -10,7 +10,9 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.security.Identity;
 import org.msh.mdrtb.entities.Patient;
 import org.msh.mdrtb.entities.TbCase;
+import org.msh.mdrtb.entities.Tbunit;
 import org.msh.mdrtb.entities.TreatmentHealthUnit;
+import org.msh.mdrtb.entities.UserWorkspace;
 import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
@@ -118,10 +120,39 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	protected boolean checkRoleBySuffix(String suffixName) {
 		TbCase tbcase = getInstance();
 
-		return Identity.instance().hasRole(tbcase.getClassification().toString() + "_" + suffixName);
+		CaseClassification cla = tbcase.getClassification();
+		
+		if (cla == null)
+			 return false;
+		else return Identity.instance().hasRole(cla.toString() + "_" + suffixName);
 	}
 
 
+	/**
+	 * Check if user is working on its working unit. It depends on the case state and the user profile.
+	 * 1) If user can play activities of all other units, so it's the working unit;
+	 * 2) If case is waiting for treatment, the user unit is compared to the case notification unit;
+	 * 3) If case is on treatment, the user unit is compared to the case treatment unit;
+	 * @return
+	 */
+	public boolean isWorkingUnit() {
+		UserWorkspace ws = (UserWorkspace)Component.getInstance("userWorkspace");
+		if (ws.isPlayOtherUnits())
+			return true;
+
+		TbCase tbcase = getInstance();
+		Tbunit treatmentUnit = tbcase.getTreatmentUnit();
+
+		if (treatmentUnit != null)
+			return (treatmentUnit.getId().equals(ws.getTbunit().getId()));
+
+		Tbunit unit = tbcase.getNotificationUnit();
+		if (unit != null)
+			return ((unit != null) && (unit.getId().equals(ws.getTbunit().getId())));
+
+		return true;
+	}
+	
 
 	/**
 	 * Check if the case can be validated
@@ -129,7 +160,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	 */
 	public boolean isCanValidate() {
 		ValidationState vs = getInstance().getValidationState();
-		return ((vs == ValidationState.WAITING_VALIDATION) || (vs == ValidationState.PENDING_ANSWERED)) && (checkRoleBySuffix("CASE_VALIDATE"));
+		return ((vs == ValidationState.WAITING_VALIDATION) || (vs == ValidationState.PENDING_ANSWERED)) && (checkRoleBySuffix("CASE_VALIDATE") && (isWorkingUnit()));
 	}
 
 	
@@ -138,7 +169,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	 * @return
 	 */
 	public boolean isCanCreateIssue() {
-		return (getInstance().getValidationState() != ValidationState.VALIDATED);
+		return ((getInstance().getValidationState() != ValidationState.VALIDATED) && (isWorkingUnit()));
 	}
 
 	
@@ -147,7 +178,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	 * @return
 	 */
 	public boolean isCanAnswerIssue() {
-		return (isManaged()) && (getInstance().getValidationState() == ValidationState.PENDING);
+		return ((isManaged()) && (getInstance().getValidationState() == ValidationState.PENDING) && (isWorkingUnit()));
 	}
 	
 	/**
@@ -156,12 +187,12 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	 */
 	public boolean isCanTransferOut() {
 		TbCase tbcase = getInstance();
-		return (tbcase.isOpen()) && (tbcase.getState() == CaseState.ONTREATMENT) && (checkRoleBySuffix("CASE_TRANSFER"));
+		return (tbcase.isOpen()) && (tbcase.getState() == CaseState.ONTREATMENT) && (checkRoleBySuffix("CASE_TRANSFER")) && (isWorkingUnit());
 	}
 	
 	public boolean isCanTransferIn() {
 		TbCase tbcase = getInstance();
-		return (tbcase.isOpen()) && (tbcase.getState() == CaseState.TRANSFERRING) && (checkRoleBySuffix("CASE_TRANSFER"));
+		return (tbcase.isOpen()) && (tbcase.getState() == CaseState.TRANSFERRING) && (checkRoleBySuffix("CASE_TRANSFER")) && (isWorkingUnit());
 	}
 	
 	public boolean isCanViewExams() {
@@ -206,7 +237,7 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 	}
 	
 	public boolean isCanEditCaseData() {
-		return (getInstance().isOpen()) && checkRoleBySuffix("CASE_DATA_EDT");
+		return (getInstance().isOpen()) && checkRoleBySuffix("CASE_DATA_EDT") && (isWorkingUnit());
 	}
 	
 	public boolean isCanStartTreatment() {

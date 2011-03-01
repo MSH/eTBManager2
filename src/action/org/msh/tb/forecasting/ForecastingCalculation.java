@@ -435,7 +435,7 @@ public class ForecastingCalculation {
 			// update consumption for each period
 			for (ForecastingPeriod forPeriod: fm.getPeriods()) {
 				int qtd = calcConsumptionCaseOnTreatment(prescDrug, forPeriod.getPeriod());
-				forPeriod.setEstConsumptionCases(qtd);
+				forPeriod.setEstConsumptionCases(forPeriod.getEstConsumptionCases() + qtd);
 			}
 
 			Integer caseId = (Integer)prescDrug[5];
@@ -462,66 +462,6 @@ public class ForecastingCalculation {
 		}
 	}
 
-/*		for (int i = 0; i <= numMonths; i++) {
-			Date dtIni = forecasting.getIniDateMonthIndex(i);
-			Date dtEnd = forecasting.getEndDateMonthIndex(i);
-
-			if (dtIni == null)
-				break;
-			
-			if ((i == numMonths) || (dtEnd == null))
-				dtEnd = endForecasting;
-			
-			Integer prevCaseId = null;
-			Integer prevMedId = null;
-			
-			for (Object[] prescDrug: casesOnTreatment) {
-				// calculate consumption for a prescribed medicine of a specific case
-				int qtd = calcConsumptionCaseOnTreatment(prescDrug, new Period(dtIni, dtEnd));
-				Integer caseId = (Integer)prescDrug[5];
-				Integer medId = (Integer)prescDrug[3];
-				
-				// there is consumption for this prescription in the month ?
-				if (qtd > 0) {
-					// update results
-					ForecastingMedicine fm = forecasting.findMedicineById((Integer)prescDrug[3]);
-					ForecastingResult res = forecasting.findResult(fm.getMedicine(), i);
-					if (res == null)
-						RaiseResultException(fm.getMedicine(), i);
-					
-					int numcases = ((caseId.equals(prevCaseId) && (medId.equals(prevMedId)))? 0: 1);
-					res.increaseCasesOnTreatment(numcases, qtd);
-
-					prevCaseId = caseId;
-					prevMedId = medId;
-					
-					// update consumption up to end of lead time
-					// during lead time ?
-					if (i < monthIndexIniDate)
-						fm.addConsumptionLT( qtd );
-					else
-					if (i == monthIndexIniDate) { // is last month of lead time ?
-						int qtd2 = calcConsumptionCaseOnTreatment(prescDrug, new Period(dtIni, DateUtils.incDays( forecasting.getIniDateLeadTime(), -1)));
-
-						fm.addConsumptionLT( qtd2 );
-						fm.addConsumptionCases(qtd - qtd2);
-					}
-					else fm.addConsumptionCases( qtd);
-					
-					// update batches consumption in the month they expire
-					List<ForecastingBatch> lst = getBatchesMonth(fm, i);
-					Date ini = dtIni;
-					for (ForecastingBatch bt: lst) {
-						Date end = bt.getExpiryDate();
-
-						int qtdBatch = calcConsumptionCaseOnTreatment(prescDrug, new Period(ini, end));
-						bt.setConsumptionInMonth(qtdBatch + bt.getConsumptionInMonth());
-						ini = DateUtils.incDays(end, 1);
-					}
-				}
-			}
-		}
-*/	
 
 	
 	/**
@@ -546,6 +486,8 @@ public class ForecastingCalculation {
 
 		Period p = new Period(period);
 		p.intersect(pm.getPeriod());
+		
+		System.out.println(pm.getMedicine().toString() + ", " + p.toString());
 		
 		return pm.calcEstimatedDispensing(p);
 	}
@@ -649,84 +591,31 @@ public class ForecastingCalculation {
 			return;
 
 		Regimen reg = forRegimen.getRegimen();
-//		int monthIndex = forNewCases.getMonthIndex();
-//		int len = reg.getMonthsPhase(RegimenPhase.INTENSIVE) + reg.getMonthsPhase(RegimenPhase.CONTINUOUS);
 		Date dtini = forecasting.getIniDateMonthIndex(forNewCases.getMonthIndex());
-//		Date dtend = DateUtils.incMonths(dtini, len);
-		// get period of treatment
-//		Period perTreat = new Period(dtini, dtend);
 
+		int prevMonthIndex = -1;
 		// calculate number of new cases and quantity for each medicine
 		for (ForecastingMedicine fm: forecasting.getMedicines()) {
 			if (reg.isMedicineInRegimen(fm.getMedicine())) {
 				for (ForecastingPeriod forPer: fm.getPeriods()) {
 					int qty = calcEstimatedConsumptionRegimen(reg, fm.getMedicine(), dtini, forPer.getPeriod());
-					qty = Math.round( (float)qty * newCases );
-					forPer.setEstConsumptionNewCases(qty);
+					if (qty > 0) {
+						qty = Math.round( (float)qty * newCases );
+						forPer.setEstConsumptionNewCases(forPer.getEstConsumptionNewCases() + qty);
 
-					// update number of new cases
-					ForecastingResult res = fm.findResultByMonthIndex( forecasting.getMonthIndex(forPer.getPeriod().getIniDate()) );
-					res.setNumNewCases( res.getNumNewCases() + newCases);
-				}
-			}
-		}
-
-
-		// calculate number of new cases and quantity for each medicine
-/*		for (ForecastingMedicine fm: forecasting.getMedicines()) {
-			if (reg.isMedicineInRegimen(fm.getMedicine())) {
-				for (int i = 0; i < len; i++) {
-					int index = monthIndex + i;
-					
-					Date dtIni = forecasting.getIniDateMonthIndex(index);
-					Date dtEnd = forecasting.getEndDateMonthIndex(index);
-					
-					if (dtIni == null)
-						break;
-					if (dtEnd == null)
-						dtEnd = DateUtils.incMonths(forecasting.getEndDate(), forecasting.getBufferStock());
-
-					float qty = calcQuantityRegimen(reg, dtIni, dtEnd, i, fm.getMedicine());
-					qty = qty * newCases;
-					
-					ForecastingResult res = forecasting.findResult(fm.getMedicine(), index);
-					if (res != null) {
-						// if it's the first month of treatment, increase number of new cases
-						res.increaseNewCases(newCases, qty);
-					}
-					
-					int q = Math.round(qty);
-
-//					fm.setEstimatedQtyNewCases(fm.getEstimatedQtyNewCases() + q);
-					// update consumption up to end of lead time
-					// during lead time ?
-					if (index < monthIndexIniDate) 
-						fm.setConsumptionLT(fm.getConsumptionLT() + q);
-					else
-					if (index == monthIndexIniDate) { // is last month of lead time ?
-						int qtd2 = Math.round( calcQuantityRegimen(reg, dtIni, DateUtils.incDays( forecasting.getIniDateLeadTime(), -1), index, fm.getMedicine()) );
-						fm.setConsumptionLT(fm.getConsumptionLT() + qtd2);
-						fm.setConsumptionNewCases(q - qtd2);
-					}
-					else fm.setConsumptionNewCases(fm.getConsumptionNewCases() + q);
-					
-					// update batches consumption of new cases
-					List<ForecastingBatch> lst = getBatchesMonth(fm, index);
-					Date ini = dtIni;
-					for (ForecastingBatch bt: lst) {
-						Date end = bt.getExpiryDate();
-
-						int qtdBatch = calcQuantityRegimen(reg, ini, end, index, fm.getMedicine());
-						bt.setConsumptionInMonth(qtdBatch + bt.getConsumptionInMonth());
-						ini = DateUtils.incDays(end, 1);
+						// update number of new cases
+						ForecastingResult res = fm.findResultByMonthIndex( forecasting.getMonthIndex(forPer.getPeriod().getIniDate()) );
+						if (prevMonthIndex != res.getMonthIndex()) {
+							res.setNumNewCases( res.getNumNewCases() + newCases );
+							prevMonthIndex = res.getMonthIndex();
+						}
 					}
 				}
 			}
 		}
-*/
 	}
 
-	
+
 	/**
 	 * Calculate estimated consumption for a regimen where treatment started in dtIniTreatment date using a 
 	 * specific medicine. The estimated consumption is for a period specified by p

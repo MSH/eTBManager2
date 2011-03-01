@@ -292,16 +292,13 @@
 </rich:tab>
 
 <rich:tab label="#{messages['form.details']}" rendered="#{forecasting.hasResult}">
-	<a:form>
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['Medicine']}:</ui:define>
-		<h:selectOneMenu value="#{forecastingView.medicine}">
-			<s:selectItems value="#{forecastingHome.instance.medicines}" var="m" noSelectionLabel="-" label="#{m.medicine}"/>
-			<s:convertEntity />
+		<h:selectOneMenu value="#{forecastingView.medicineIndex}">
+			<f:selectItems value="#{forecastingView.medicineItems}" />
 			<a:support event="onchange" reRender="pnldetails" ajaxSingle="true"/>
 		</h:selectOneMenu>
 	</s:decorate>
-	</a:form>
 
 	<h:panelGroup id="pnldetails">
 	<h:dataTable value="#{forecastingView.medicine.periods}" var="p" styleClass="tabela" 

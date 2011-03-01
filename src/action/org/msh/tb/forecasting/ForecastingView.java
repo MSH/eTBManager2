@@ -55,6 +55,8 @@ public class ForecastingView {
 	private ForecastingResult result;
 	private ForecastingMedicine medicine;
 	
+	private List<SelectItem> medicineItems;
+	
 	
 	/**
 	 * store in memory number of cases on treatment
@@ -622,5 +624,38 @@ public class ForecastingView {
 	public void setMedicine(ForecastingMedicine medicine) {
 		this.medicine = medicine;
 	}
+
 	
+	public List<SelectItem> getMedicineItems() {
+		if (medicineItems == null) {
+			int counter = 1;
+			medicineItems = new ArrayList<SelectItem>();
+			List<ForecastingMedicine> lst = forecastingHome.getInstance().getMedicines();
+			medicineItems.add(new SelectItem(null, "-"));
+			for (ForecastingMedicine fm: lst) {
+				medicineItems.add(new SelectItem(lst.indexOf(fm), fm.getMedicine().toString()));
+				counter++;
+			}
+		}
+		
+		return medicineItems;
+	}
+
+
+	/**
+	 * @return the medicineItem
+	 */
+	public Integer getMedicineIndex() {
+		return forecastingHome.getInstance().getMedicines().indexOf(medicine);
+	}
+
+
+	/**
+	 * @param medicineItem the medicineItem to set
+	 */
+	public void setMedicineIndex(Integer medicineItem) {
+		if ((medicineItem != null) && (medicineItem >= 0))
+			 medicine = forecastingHome.getInstance().getMedicines().get(medicineItem);
+		else medicine = null;
+	}
 }

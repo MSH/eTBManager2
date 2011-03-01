@@ -18,3 +18,14 @@ ALTER TABLE ForecastingMedicine
 
 UPDATE ForecastingMedicine
 	set quantityMissingLT = 0;
+
+ALTER TABLE ForecastingResult
+ CHANGE COLUMN `quantityCasesOnTreatment` `consumptionCases` INT(11) NOT NULL,
+ CHANGE COLUMN `quantityNewCases` `consumptionNewCases` FLOAT NOT NULL,
+ CHANGE COLUMN `quantityOnOrder` `stockOnOrder` INT(11) NOT NULL;
+
+update TbCase
+set TbCase.treatment_unit_id = (select max(unit_id)
+from TreatmentHealthUnit
+where case_id = TbCase.id
+and enddate = (select max(aux.enddate) from TreatmentHealthUnit aux where aux.case_id = TbCase.id));

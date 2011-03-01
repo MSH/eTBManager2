@@ -56,15 +56,15 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 		
 		MedicineReceiving rec = getInstance();
 
+		if (rec.getTbunit() == null)
+			rec.setTbunit(userSession.getTbunit());
+
 		// if movements can't be saved (because it may be an editing and the quantity was changed to a 
 		// quantity that makes the stock negative) the system will just return an error message
 		movs.clear();
 		movementHome.initMovementRecording();
 		if (!prepareMovements())
 			return "error";
-
-		if (rec.getTbunit() == null)
-			rec.setTbunit(userSession.getTbunit());
 
 		// register log
 		getLogService().addValue("Source", getInstance().getSource());
