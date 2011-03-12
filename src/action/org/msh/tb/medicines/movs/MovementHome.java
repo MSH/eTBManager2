@@ -149,7 +149,9 @@ public class MovementHome {
 				bm.setQuantity(qtd);
 				bm.setMovement(mov);
 				mov.getBatches().add(bm);
-				entityManager.persist( entityManager.merge( batchQuantity ));
+				if (batchQuantity.getId() != null)
+					batchQuantity = entityManager.merge( batchQuantity );
+				entityManager.persist( batchQuantity );
 			}
 
 			entityManager.persist(pm.getStockPosition());

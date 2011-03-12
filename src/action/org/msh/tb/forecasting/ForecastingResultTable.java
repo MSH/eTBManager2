@@ -68,8 +68,13 @@ public class ForecastingResultTable {
 			rows.add(row);
 			for (int i = 0; i <= numMonths; i++) {
 				ForecastingResult res = forecasting.findResult(med.getMedicine(), i);
-				if (res == null)
-					throw new RuntimeException("Forecasting result was not found for " + med.getMedicine().toString() + " and monthIndex=" + Integer.toString(i));
+				if (res == null) {
+					res = new ForecastingResult();
+					res.setMonthIndex(i);
+					res.setMedicine(med.getMedicine());
+					forecasting.getResults().add(res);
+				}
+//					throw new RuntimeException("Forecasting result was not found for " + med.getMedicine().toString() + " and monthIndex=" + Integer.toString(i));
 				row.getResults().add(res);
 			}
 		}

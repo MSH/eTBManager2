@@ -23,31 +23,44 @@
 
 <table width="100%" style="border:2px solid #e0e0e0;border-collapse: collapse;">
 <tr><td class="header">
-	<div style="float:right;">
-		<a:commandLink value="#{messages['manag.forecast.new']}" style="margin-right:15px;" 
-			action="#{forecastingView.startNew}" reRender="main"
-			onclick="if (!confirm('#{messages['form.confirmnew']}')) {return false;}" />
-		<a:commandLink value="#{messages['manag.forecast.load']}" 
-			style="margin-right:15px;" ajaxSingle="true"
-			oncomplete="showLoadForecastingDlg()" reRender="fclist" action="#{forecastings.initLoading}" />
+	<div style="float:right" >
+	<a:commandButton value="#{messages['manag.forecast.execute']}" styleClass="button" title="Execute the forecasting (re)calculating the results" 
+		action="#{forecastingCalculation.execute}" reRender="main,messages"
+		oncomplete="RichFaces.switchTab('main:tabPanelForecasting','main:tabresult','tabresult')"
+		/>
+	<s:button value="#{messages['form.cancel']}" view="/management/index.xhtml" styleClass="button-cancel" propagation="end"/>
+
+		<rich:dropDownMenu style="width:auto;float:right;" styleClass="dropdown-link" >
+
+			<f:facet name="label">#{messages['form.options']}
+			</f:facet>
+
+			<rich:menuItem value="#{messages['manag.forecast.new']}" 
+				action="#{forecastingView.startNew}" reRender="main"
+				onclick="if (!confirm('#{messages['form.confirmnew']}')) {return false;}" />
+
+			<rich:menuItem value="#{messages['manag.forecast.load']}..." submitMode="Ajax" 
+				ajaxSingle="true" oncomplete="showLoadForecastingDlg()" 
+				reRender="fclist" action="#{forecastings.initLoading}" />
+
+			<rich:menuItem value="#{messages['form.save']}" action="#{forecastingHome.persist}"
+	    		reRender="messages" rendered="#{forecastingHome.managed}"/>
+
+			<rich:menuItem value="#{forecastingHome.managed? messages['form.saveas']: messages['form.save']}..." 
+				onclick="showForecastDlg();return false;" />
+
+			<rich:menuItem value="#{messages['form.remove']}" submitMode="Ajax" ajaxSingle="true"
+				action="#{forecastingHome.remove}"
+				rendered="#{forecastingHome.managed}" />
+		</rich:dropDownMenu>
 	</div>
+
 	<h:outputText value="#{forecastingHome.instance.name}" styleClass="forecast-icon" />
 	<br/>
 	<h:outputText value="#{forecasting.recordingDate}" style="font-size:9px;" converter="localeDateConverter" />
 </td></tr>
 <tr><td>
 
-	<div style="float:right" >
-	<a:commandButton value="#{messages['manag.forecast.execute']}" styleClass="button" title="Execute the forecasting (re)calculating the results" 
-		action="#{forecastingCalculation.execute}" reRender="main,messages"
-		oncomplete="RichFaces.switchTab('main:tabPanelForecasting','main:tabresult','tabresult')"
-		/>
-	<a:commandButton value="#{messages['form.save']}" styleClass="button" action="#{forecastingHome.persist}" 
-	    reRender="messages" rendered="#{forecastingHome.managed}"/>
-	<a:commandButton value="#{messages['form.save']}" styleClass="button" onclick="showForecastDlg();return false;"  
-	    rendered="#{not forecastingHome.managed}"/>
-	<s:button value="#{messages['form.cancel']}" view="/management/index.xhtml" styleClass="button-cancel" propagation="end"/>
-	</div>
 </td></tr>
 </table>
 
@@ -380,31 +393,6 @@
 </rich:tabPanel>
 
 
-
-
-
-<s:fragment rendered="#{not forecastingHome.managed}">
-<script type="text/javascript">
-function showForecastDlg() {
-	showModalAutoTop('saveforecastdlg');
-	document.getElementById("main:newfor:edtname").focus();
-}
-function hideForecastDlg() {
-	Richfaces.hideModalPanel('saveforecastdlg');
-}
-function validateNewForecasting() {
-	edt = document.getElementById("main:newfor:edtname");
-	if (edt == null)
-		return false;
-	if (edt.value == '')
-		return false;
-	return true;
-}
-
-function showLoadForecastingDlg() {
-	Richfaces.showModalPanel('loadfordlg');	
-}
-</script>
 <rich:modalPanel id="saveforecastdlg" height="150" width="450" >
 	<f:facet name="header">
 		#{messages['manag.forecast.new']}: #{messages['form.save']}
@@ -413,14 +401,17 @@ function showLoadForecastingDlg() {
 	<ui:param name="labelstyle" value="width:80px;" />
 	<s:decorate template="/layout/edit.xhtml" id="newfor">
 		<ui:define name="label">#{messages['form.name']}:</ui:define>
-		<h:inputText id="edtname" value="#{forecastingHome.instance.name}" style="width:300px;"/>
+		<h:inputText id="edtname" value="#{forecastingHome.newName}" style="width:300px;"/>
+		<br/>
+		<h:selectBooleanCheckbox id="chkpub" value="#{forecastingHome.publicView}"/> #{messages['Forecasting.publicView']}
 	</s:decorate>
 	<div style="float:right;margin-top:20px;">
 	<a:commandButton value="#{messages['form.ok']}" styleClass="button" 
-		action="#{forecastingHome.persist}" reRender="messages"
+		action="#{forecastingHome.saveAs}" reRender="messages"
 		onclick="if (!validateNewForecasting()) {alert('#{messages['form.name']}: #{messages['javax.faces.component.UIInput.REQUIRED']}'); return false;} " 
 		oncomplete="this.disabled=false;hideForecastDlg();" ignoreDupResponses="true">
 		<a:actionparam noEscape="true" assignTo="#{forecastingHome.instance.name}" value="document.getElementById('main:newfor:edtname').value" />
+		<a:actionparam noEscape="true" assignTo="#{forecastingHome.instance.publicView}" value="document.getElementById('main:newfor:chkpub').checked" converter="javax.faces.Boolean"/>
 	</a:commandButton>
 
 	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel" 
@@ -428,10 +419,8 @@ function showLoadForecastingDlg() {
 	</div>
 	</h:panelGroup> 
 </rich:modalPanel>
-</s:fragment>
 
 </h:form>
-
 
 </ui:define>
 
@@ -455,10 +444,28 @@ function showDatesDlg() {
 function showLoadForecastingDlg() {
 	showModalAutoTop('loadfordlg');
 }
+function showForecastDlg() {
+	showModalAutoTop('saveforecastdlg');
+	document.getElementById("main:newfor:edtname").focus();
+}
+function hideForecastDlg() {
+	Richfaces.hideModalPanel('saveforecastdlg');
+}
+function validateNewForecasting() {
+	edt = document.getElementById("main:newfor:edtname");
+	if (edt == null)
+		return false;
+	if (edt.value == '')
+		return false;
+	return true;
+}
+
+function showLoadForecastingDlg() {
+	Richfaces.showModalPanel('loadfordlg');	
+}
 
 -->
 </script>
-
 
 <rich:modalPanel id="datesdlg" width="490" autosized="true" zindex="2000" style="background-color:#F2F5F0" trimOverlayedElements="false">
 	<f:facet name="header">#{messages['form.otheroptions']}</f:facet>

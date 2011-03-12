@@ -1,14 +1,24 @@
 package org.msh.tb.forecasting;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.persistence.EntityManager;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
 import org.msh.mdrtb.entities.Forecasting;
+import org.msh.mdrtb.entities.ForecastingBatch;
+import org.msh.mdrtb.entities.ForecastingCasesOnTreat;
+import org.msh.mdrtb.entities.ForecastingMedicine;
+import org.msh.mdrtb.entities.ForecastingNewCases;
+import org.msh.mdrtb.entities.ForecastingOrder;
+import org.msh.mdrtb.entities.ForecastingRegimen;
+import org.msh.mdrtb.entities.ForecastingResult;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.tbunits.TBUnitFilter;
@@ -28,6 +38,9 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 	
 	private AdminUnitSelection adminUnitSelection;
 	private TBUnitSelection tbunitSelection;
+	
+	private String newName;
+	private boolean publicView;
 
 	
 	@Factory("forecasting")
@@ -42,10 +55,97 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 		if (isManaged()) {
 			getAdminUnitSelection().setSelectedUnit(getInstance().getAdministrativeUnit());
 			getTbunitSelection().setTbunit(getInstance().getTbunit());
+			newName = getInstance().getName();
+			publicView = getInstance().isPublicView();
 		}
 	}
 
 
+	/**
+	 * Save forecasting as a different name. If it's a new forecasting, the execution is redirected to the persist method, otherwise
+	 * a copy of the {@link Forecasting} instance is created with blank IDs and replaced by the current instance
+	 * @return
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 */
+	public String saveAs() throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
+		if (isManaged()) {
+			// generate clone of the forecasting object
+			Forecasting newForecasting = new Forecasting();
+			BeanUtils.copyProperties(newForecasting, getInstance());
+			newForecasting.setId(null);
+			newForecasting.setUser(getUser());
+			newForecasting.setRecordingDate(new Date());
+			
+			newForecasting.setMedicines(new ArrayList<ForecastingMedicine>());
+			for (ForecastingMedicine fm: getInstance().getMedicines()) {
+				ForecastingMedicine newFm = new ForecastingMedicine();
+				BeanUtils.copyProperties(newFm, fm);
+				newFm.setForecasting(newForecasting);
+				newFm.setId(null);
+				newForecasting.getMedicines().add(newFm);
+				newFm.setBatchesToExpire(new ArrayList<ForecastingBatch>());
+				newFm.setOrders(new ArrayList<ForecastingOrder>());
+
+				// clone batches
+				for (ForecastingBatch fb: fm.getBatchesToExpire()) {
+					ForecastingBatch newfb = new ForecastingBatch(); 
+					BeanUtils.copyProperties(newfb, fb);
+					newfb.setForecastingMedicine(newFm);
+					newfb.setId(null);
+					newFm.getBatchesToExpire().add(newfb);
+				}
+
+				// clone orders
+				for (ForecastingOrder fo: fm.getOrders()) {
+					ForecastingOrder newfo = new ForecastingOrder(); 
+					BeanUtils.copyProperties(newfo, fo);
+					newfo.setForecastingMedicine(newFm);
+					newfo.setId(null);
+					newFm.getOrders().add(newfo);
+				}
+			}
+
+			// copy new cases
+			newForecasting.setNewCases(new ArrayList<ForecastingNewCases>());
+			for (ForecastingNewCases nc: getInstance().getNewCases()) {
+				ForecastingNewCases newnc = new ForecastingNewCases();
+				BeanUtils.copyProperties(newnc, nc);
+				newnc.setForecasting(newForecasting);
+				newnc.setId(null);
+				newForecasting.getNewCases().add(newnc);
+			}
+
+			// copy cases on treatment
+			newForecasting.setCasesOnTreatment(new ArrayList<ForecastingCasesOnTreat>());
+			for (ForecastingCasesOnTreat fc: getInstance().getCasesOnTreatment()) {
+				ForecastingCasesOnTreat newfc = (ForecastingCasesOnTreat)BeanUtils.cloneBean(fc);
+				newfc.setId(null);
+				newForecasting.getCasesOnTreatment().add(newfc);
+			}
+
+			// copy regimens
+			newForecasting.setRegimens(new ArrayList<ForecastingRegimen>());
+			for (ForecastingRegimen reg: getInstance().getRegimens()) {
+				ForecastingRegimen newreg = new ForecastingRegimen();
+				BeanUtils.copyProperties(newreg, reg);
+				newreg.setId(null);
+				newForecasting.getRegimens().add(newreg);
+			}
+			
+			newForecasting.setResults(new ArrayList<ForecastingResult>());
+			
+			setInstance(newForecasting);
+		}
+
+		getInstance().setName(newName);
+		getInstance().setPublicView(publicView);
+		
+		return persist();
+	}
+	
 
 	/* (non-Javadoc)
 	 * @see com.rmemoria.utils.EntityHomeEx#persist()
@@ -59,7 +159,9 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 		forecasting.setTbunit(getTbunitSelection().getTbunit());
 
 		forecasting.setWorkspace(getWorkspace());
-		forecasting.setUser(getUser());
+
+		if (forecasting.getUser() == null)
+			forecasting.setUser(getUser());
 	
 		return super.persist();
 	}
@@ -82,6 +184,34 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 		if (tbunitSelection == null)
 			tbunitSelection = new TBUnitSelection(true, TBUnitFilter.MEDICINE_WAREHOUSES);
 		return tbunitSelection;
+	}
+
+	/**
+	 * @return the newName
+	 */
+	public String getNewName() {
+		return newName;
+	}
+
+	/**
+	 * @param newName the newName to set
+	 */
+	public void setNewName(String newName) {
+		this.newName = newName;
+	}
+
+	/**
+	 * @return the publicView
+	 */
+	public boolean isPublicView() {
+		return publicView;
+	}
+
+	/**
+	 * @param publicView the publicView to set
+	 */
+	public void setPublicView(boolean publicView) {
+		this.publicView = publicView;
 	}
 
 }

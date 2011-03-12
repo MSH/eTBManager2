@@ -8,5 +8,20 @@
 	<action execute="#{forecastingView.initialize}"/>
 	<param name="id" value="#{forecastingHome.id}" converterId="javax.faces.Integer"/>
 	<navigation>
+		<rule if-outcome="persisted">
+			<redirect view-id="/management/forecasting.xhtml">
+				<param name="id" value="#{forecasting.id}"/>
+			</redirect>
+		</rule>
+		<rule if-outcome="new-forecasting">
+			<redirect view-id="/management/forecasting.xhtml">
+				<param name="id" value="#{null}"/>
+			</redirect>
+		</rule>
+		<rule if-outcome="removed">
+			<redirect view-id="/management/forecasting.xhtml">
+				<param name="id" value="#{null}"/>
+			</redirect>
+		</rule>
 	</navigation>
 </page>

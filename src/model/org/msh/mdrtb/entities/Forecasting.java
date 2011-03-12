@@ -121,6 +121,7 @@ public class Forecasting extends WSObject implements Serializable {
 	@Lob
 	private String comment;
 
+	private boolean publicView;
 	
 	/**
 	 * Check if forecasting has results, i.e, if it was executed before
@@ -196,6 +197,7 @@ public class Forecasting extends WSObject implements Serializable {
 		getResults().clear();
 		int num = getNumMonths();
 
+		// initialize results for the medicines
 		for (ForecastingMedicine med: getMedicines()) {
 			med.initialize();
 
@@ -205,6 +207,16 @@ public class Forecasting extends WSObject implements Serializable {
 				res.setMedicine(med.getMedicine());
 				res.setMonthIndex(i);
 				getResults().add(res);
+			}
+		}
+
+		// initialize results for the regimen
+		for (ForecastingRegimen reg: getRegimens()) {
+			reg.getResults().clear();
+			for (int i = 0; i <= num; i++) {
+				ForecastingRegimenResult res = new ForecastingRegimenResult();
+				res.setMonthIndex(i);
+				reg.getResults().add(res);
 			}
 		}
 	}
@@ -240,6 +252,20 @@ public class Forecasting extends WSObject implements Serializable {
 		return null;
 	}
 
+	
+	/**
+	 * Search for an instance of {@link ForecastingRegimen} by its regimen id
+	 * @param id
+	 * @return
+	 */
+	public ForecastingRegimen findRegimenById(Integer id) {
+		for (ForecastingRegimen fr: getRegimens()) {
+			if (fr.getRegimen().getId().equals(id)) {
+				return fr;
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Search for instance of {@link ForecastingCasesOnTreat} class by its regimen and month index
@@ -555,5 +581,23 @@ public class Forecasting extends WSObject implements Serializable {
 
 	public void setLeadTimeMeasuring(LeadTimeMeasuring leadTimeMeasuring) {
 		this.leadTimeMeasuring = leadTimeMeasuring;
+	}
+
+
+
+	/**
+	 * @return the publicView
+	 */
+	public boolean isPublicView() {
+		return publicView;
+	}
+
+
+
+	/**
+	 * @param publicView the publicView to set
+	 */
+	public void setPublicView(boolean publicView) {
+		this.publicView = publicView;
 	}
 }

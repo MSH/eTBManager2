@@ -1,6 +1,8 @@
 package org.msh.mdrtb.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
 
@@ -27,8 +30,10 @@ public class ForecastingRegimen implements Serializable {
 	@JoinColumn(name="REGIMEN_ID")
 	@NotNull
 	private Regimen regimen;
-	
-	
+
+	@Transient
+	private List<ForecastingRegimenResult> results = new ArrayList<ForecastingRegimenResult>();
+
 	/**
 	 * Percentage of new cases for this regimen
 	 */
@@ -73,6 +78,16 @@ public class ForecastingRegimen implements Serializable {
 		return forecasting;
 	}
 
+
+	public ForecastingRegimenResult findResultByMonthIndex(int monthIndex) {
+		for (ForecastingRegimenResult res: getResults()) {
+			if (res.getMonthIndex() == monthIndex)
+				return res;
+		}
+		return null;
+	}
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -96,6 +111,13 @@ public class ForecastingRegimen implements Serializable {
 		} else if (!regimen.equals(other.regimen))
 			return false;
 		return true;
+	}
+
+	/**
+	 * @return the results
+	 */
+	public List<ForecastingRegimenResult> getResults() {
+		return results;
 	}
 
 }

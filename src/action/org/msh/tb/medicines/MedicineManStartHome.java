@@ -133,7 +133,7 @@ public class MedicineManStartHome {
 			medicineInfo.getBatches().add(batchQuantity);
 		}
 	
-		batchQuantity.setQuantity(0);
+//		batchQuantity.setQuantity(0);
 //		batch.setQuantityReceived(batchQuantity.getQuantity());
 		validated = true;
 	}
@@ -363,7 +363,7 @@ public class MedicineManStartHome {
 		public Map<Batch, Integer> getBatchesMap() {
 			Map<Batch, Integer> btmap = new HashMap<Batch, Integer>();
 			for (BatchQuantity batchInfo: batches) {
-				btmap.put(batchInfo.getBatch(), batchInfo.getBatch().getQuantityReceived());
+				btmap.put(batchInfo.getBatch(), batchInfo.getQuantity());
 			}
 			return btmap;
 		}

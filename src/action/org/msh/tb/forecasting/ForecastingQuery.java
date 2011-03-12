@@ -11,23 +11,23 @@ import org.msh.utils.EntityQuery;
 @Name("forecastings")
 public class ForecastingQuery extends EntityQuery<Forecasting> {
 	private static final long serialVersionUID = 3609366685898863832L;
+	private static final String staticCondition = " where (f.user.id = #{userLogin.user.id} or f.publicView = true)";
 
 	private boolean loading;
 	
 	private static final String[] restrictions = {
-		"f.user.id = #{userLogin.user.id}",
 		"f.workspace.id = #{defaultWorkspace.id}"
 	};
 	
 	
 	@Override
 	protected String getCountEjbql() {
-		return "select count(*) from Forecasting f";
+		return "select count(*) from Forecasting f" + staticCondition;
 	}
 
 	@Override
 	public String getEjbql() {
-		return "from Forecasting f";
+		return "from Forecasting f" + staticCondition;
 	}
 
 	@Override

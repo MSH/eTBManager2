@@ -286,10 +286,8 @@ public class CaseEditingHome {
 		if (tbcase.getValidationState() == null)
 			tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
 		
-//		if (tbcase.getClassification() == CaseClassification.DRTB)
-//			tbcase.setCategory(TbCategory.CATEGORY_IV);
-		
-		tbcase.setState(CaseState.WAITING_TREATMENT);
+		if (tbcase.getState() == null)
+			tbcase.setState(CaseState.WAITING_TREATMENT);
 		
 		updatePatientAge();
 
@@ -303,15 +301,18 @@ public class CaseEditingHome {
 		if (regimenType != 2)
 			startTreatment();
 		
-		MedicalExamination medExa = medicalExaminationHome.getInstance();
-		if (medExa.getDate() != null) {
-			medExa.setAppointmentType(MedAppointmentType.SCHEDULLED);
-			medExa.setUsingPrescMedicines(YesNoType.YES);
-			medicalExaminationHome.persist();			
+		if (medicalExaminationHome != null) {
+			MedicalExamination medExa = medicalExaminationHome.getInstance();
+			if (medExa.getDate() != null) {
+				medExa.setAppointmentType(MedAppointmentType.SCHEDULLED);
+				medExa.setUsingPrescMedicines(YesNoType.YES);
+				medicalExaminationHome.persist();			
+			}
 		}
 
 		// save additional information
-		prevTBTreatmentHome.persist();
+		if (prevTBTreatmentHome != null)
+			prevTBTreatmentHome.persist();
 		
 		return (regimenType == 2? "individualized": "persisted");
 	}

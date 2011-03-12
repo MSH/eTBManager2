@@ -146,11 +146,12 @@ public class ForecastingView {
 	/**
 	 * Start a new forecasting
 	 */
-	public void startNew() {
+	public String startNew() {
 		forecastingHome.setInstance(null);
 		forecastingHome.setId(null);
 		
-		Contexts.getConversationContext().set("forecasting", forecastingHome.getInstance());		
+		Contexts.getConversationContext().set("forecasting", forecastingHome.getInstance());
+		return "new-forecasting";
 	}
 	
 

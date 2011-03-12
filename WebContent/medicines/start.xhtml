@@ -215,7 +215,7 @@ else return false;
 
     <s:decorate id="qtd" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['medicines.movs.availableqtty']}:</ui:define>
-    	<h:inputText id="qtd" value="#{medicineManStartHome.batchQuantity.batch.quantityReceived}" required="true" onkeypress="return numbersOnly(this,event);" >
+    	<h:inputText id="qtd" value="#{medicineManStartHome.batchQuantity.quantity}" required="true" onkeypress="return numbersOnly(this,event);" >
     		<f:validateDoubleRange minimum="1"/>
     	</h:inputText>
     	(#{medicineManStartHome.medicineInfo.medicine.dosageForm})

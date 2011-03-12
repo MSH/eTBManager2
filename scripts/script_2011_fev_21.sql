@@ -29,3 +29,9 @@ set TbCase.treatment_unit_id = (select max(unit_id)
 from TreatmentHealthUnit
 where case_id = TbCase.id
 and enddate = (select max(aux.enddate) from TreatmentHealthUnit aux where aux.case_id = TbCase.id));
+
+
+/* CHANGES IN 01-mar-2011 */
+alter table Forecasting add publicView BIT(1);
+
+update Forecasting set publicview=0;

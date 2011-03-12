@@ -8,6 +8,7 @@
 	<classpathentry kind="src" path="src/ua"/>
 	<classpathentry kind="src" path="src/ph"/>
 	<classpathentry kind="src" path="src/md"/>
+	<classpathentry kind="src" path="src/az"/>
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.jboss.ide.eclipse.as.core.server.runtime.runtimeTarget/JBoss 4.2.3.GA">
 		<attributes>
 			<attribute name="owner.project.facets" value="jst.web;jst.jsf"/>

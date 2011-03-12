@@ -19,6 +19,9 @@
 		<th rowspan="2">
 			#{messages['manag.forecast.stockonhand']}
 		</th>
+		<th rowspan="2">
+			#{messages['manag.forecast.orderDate']}
+		</th>
 		<th colspan="3">
 			#{messages['manag.forecast.leadtime']}
 			<br/>
@@ -74,6 +77,10 @@
 		<td class="colrb">
 			<h:outputText value="#{m.stockOnHand}" >
 				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+		<td class="colrb">
+			<h:outputText value="#{m.orderDate}" converter="localeDateConverter" style="width:80px;display:block;">
 			</h:outputText>
 		</td>
 		<td class="colrb highlight">
@@ -238,6 +245,59 @@
 
 <rich:tab label="#{messages['manag.forecast.tabres3']}" rendered="#{forecasting.hasResult and facesContext.renderResponse}">
 <table width="100%" class="tabela">
+
+<tr>
+	<th colspan="2">#{messages['Medicine']}
+	</th>
+	<a:repeat value="#{forecastingView.resultTable.columns}" var="it">
+	<th>
+		#{it}
+	</th>
+	</a:repeat>
+</tr>
+<a:repeat value="#{forecasting.regimens}" var="reg">
+<tr>
+	<td rowspan="3" class="colb highlight">
+		#{reg.regimen}
+	</td>
+	<td class="colb">
+		#{messages['manag.forecast.tabres3.cell1']}
+	</td>
+	<a:repeat value="#{reg.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.numCasesOnTreatment}" rendered="#{s.numCasesOnTreatment!=0}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="colb">
+		#{messages['manag.forecast.tabres3.cell2']}
+	</td>
+	<a:repeat value="#{reg.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.numNewCases}" rendered="#{s.numNewCases!=0}">
+			<f:convertNumber pattern="#,###,##0.##" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr class="highlight">
+	<td class="colb">
+		#{messages['global.total']}
+	</td>
+	<a:repeat value="#{reg.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.totalCases}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+</a:repeat>
+
+
 <tr>
 	<th colspan="2">#{messages['Medicine']}
 	</th>
@@ -270,7 +330,7 @@
 	<a:repeat value="#{r.results}" var="s">
 	<td class="colrb">
 		<h:outputText value="#{s.numNewCases}" rendered="#{s.numNewCases!=0}">
-			<f:convertNumber pattern="#,###,##0" />
+			<f:convertNumber pattern="#,###,##0.##" />
 		</h:outputText>
 	</td>
 	</a:repeat>

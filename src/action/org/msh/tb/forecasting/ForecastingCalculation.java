@@ -21,6 +21,7 @@ import org.msh.mdrtb.entities.ForecastingNewCases;
 import org.msh.mdrtb.entities.ForecastingOrder;
 import org.msh.mdrtb.entities.ForecastingPeriod;
 import org.msh.mdrtb.entities.ForecastingRegimen;
+import org.msh.mdrtb.entities.ForecastingRegimenResult;
 import org.msh.mdrtb.entities.ForecastingResult;
 import org.msh.mdrtb.entities.Medicine;
 import org.msh.mdrtb.entities.MedicineRegimen;
@@ -134,7 +135,7 @@ public class ForecastingCalculation {
 			forecasting.setNumCasesOnTreatment(count.intValue());
 
 			// load information about cases on treatment
-			String hql = "select pm.period.iniDate, pm.period.endDate, pm.doseUnit, pm.medicine.id, pm.frequency, tb.id " +
+			String hql = "select pm.period.iniDate, pm.period.endDate, pm.doseUnit, pm.medicine.id, pm.frequency, tb.id, tb.regimen.id " +
 					"from PrescribedMedicine pm " +
 					"join pm.tbcase tb " +
 					"where pm.medicine.workspace.id = #{defaultWorkspace.id} " +
@@ -219,9 +220,6 @@ public class ForecastingCalculation {
 		for (ForecastingMedicine fm: forecasting.getMedicines()) {
 			int stockOnHand = fm.getStockOnHand();
 			
-			if (fm.getMedicine().getId().equals(940801))
-				System.out.println(fm.getMedicine().toString());
-			
 			for (ForecastingPeriod p: fm.getPeriods()) {
 				// update stock on hand and missing quantities
 				p.setStockOnHand(stockOnHand);
@@ -295,9 +293,6 @@ public class ForecastingCalculation {
 		
 		Date dt = per.getPeriod().getIniDate();
 
-		if (fm.getMedicine().getId().equals(940801))
-			System.out.println(fm.getMedicine().toString());
-		
 		while (true) {
 			ForecastingBatch batch = fm.findAvailableBatch(dt);
 			if (batch == null)
@@ -336,7 +331,8 @@ public class ForecastingCalculation {
 		return qtdExpired;
 	}
 
-	
+
+
 	/**
 	 * Calculate stock on order for all medicines in every month of forecasting
 	 */
@@ -437,6 +433,8 @@ public class ForecastingCalculation {
 				int qtd = calcConsumptionCaseOnTreatment(prescDrug, forPeriod.getPeriod());
 				forPeriod.setEstConsumptionCases(forPeriod.getEstConsumptionCases() + qtd);
 			}
+			
+			ForecastingRegimen freg = forecasting.findRegimenById((Integer)prescDrug[6]);
 
 			Integer caseId = (Integer)prescDrug[5];
 			Integer medId = (Integer)prescDrug[3];
@@ -456,6 +454,11 @@ public class ForecastingCalculation {
 					for (int i = indexini; i <= indexend; i++) {
 						ForecastingResult res = fm.findResultByMonthIndex(i);
 						res.setNumCasesOnTreatment( res.getNumCasesOnTreatment() + 1);
+						
+						if (freg != null) {
+							ForecastingRegimenResult regres = freg.findResultByMonthIndex(i);
+							regres.setNumCasesOnTreatment( regres.getNumCasesOnTreatment() + 1);
+						}
 					}
 				}
 			}
@@ -486,8 +489,6 @@ public class ForecastingCalculation {
 
 		Period p = new Period(period);
 		p.intersect(pm.getPeriod());
-		
-		System.out.println(pm.getMedicine().toString() + ", " + p.toString());
 		
 		return pm.calcEstimatedDispensing(p);
 	}
@@ -598,9 +599,14 @@ public class ForecastingCalculation {
 		for (ForecastingMedicine fm: forecasting.getMedicines()) {
 			if (reg.isMedicineInRegimen(fm.getMedicine())) {
 				for (ForecastingPeriod forPer: fm.getPeriods()) {
+					if ((fm.getMedicine().getId() == 940801) && (forecasting.getMonthIndex(forPer.getPeriod().getIniDate()) == 8))
+						System.out.println(forRegimen.getId() + "-" + fm.getMedicine()); // + " = " + qty + " NewCases= "+ newCases + " ... " + forPer.getPeriod().getIniDate());
+
 					int qty = calcEstimatedConsumptionRegimen(reg, fm.getMedicine(), dtini, forPer.getPeriod());
+
 					if (qty > 0) {
 						qty = Math.round( (float)qty * newCases );
+
 						forPer.setEstConsumptionNewCases(forPer.getEstConsumptionNewCases() + qty);
 
 						// update number of new cases
@@ -608,6 +614,10 @@ public class ForecastingCalculation {
 						if (prevMonthIndex != res.getMonthIndex()) {
 							res.setNumNewCases( res.getNumNewCases() + newCases );
 							prevMonthIndex = res.getMonthIndex();
+							
+							ForecastingRegimenResult resreg = forRegimen.findResultByMonthIndex(res.getMonthIndex());
+							if (resreg != null)
+								resreg.setNumNewCases( resreg.getNumNewCases() + newCases );
 						}
 					}
 				}

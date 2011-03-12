@@ -75,6 +75,7 @@ public abstract class ImportBase {
 		}
 		catch (Exception e) {
 			tx.rollback();
+			throw e;
 		}
 		
 		return true;

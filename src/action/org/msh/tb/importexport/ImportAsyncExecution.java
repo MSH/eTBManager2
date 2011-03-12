@@ -9,7 +9,6 @@ import org.jboss.seam.annotations.async.Asynchronous;
 import org.jboss.seam.contexts.Contexts;
 import org.msh.mdrtb.entities.UserLogin;
 import org.msh.mdrtb.entities.Workspace;
-import org.msh.tb.importexport.ImportDataHome.ImportTable;
 import org.msh.tb.misc.DmSystemHome;
 
 /**
@@ -24,18 +23,19 @@ public class ImportAsyncExecution {
 
 	@In(create=true) DmSystemHome dmsystem;
 	
-	private ImportTable table;
 	private ImportBase importBase;
 	private String error;
 	
+	
+	
 	@Asynchronous
-	public void execute(ImportTable table, InputStream data, String charset, char delimiter, Workspace workspace, UserLogin userLogin) {
+	public void execute(ImportBase importBase, InputStream data, String charset, char delimiter, Workspace workspace, UserLogin userLogin) {
 		error = null;
-		this.table = table;
 		
-		importBase = null;
+		Contexts.getEventContext().set("userLogin", userLogin);
+		Contexts.getEventContext().set("defaultWorkspace", workspace);
+		
 		try {
-			importBase = (ImportBase)table.getImportClass().newInstance();
 			importBase.setDelimiter(delimiter);
 			importBase.setCharSet(charset);
 			
@@ -47,8 +47,16 @@ public class ImportAsyncExecution {
 		} catch (Exception e) {
 			e.printStackTrace();
 			error = e.getMessage();
+			System.out.println(e.getMessage());
 		}
 		sendNotificationMail();
+	}
+
+	
+	@Asynchronous
+	public void execute(String importComponent, InputStream data, String charset, char delimiter, Workspace workspace, UserLogin userLogin) {
+		ImportBase importBase = (ImportBase)Component.getInstance(importComponent, true);
+		execute(importBase, data, charset, delimiter, workspace, userLogin);
 	}
 
 	
@@ -67,10 +75,6 @@ public class ImportAsyncExecution {
 	}
 
 	
-	public ImportTable getTable() {
-		return table;
-	}
-
 	
 	public Integer getLineNumber() {
 		return (importBase != null? importBase.getLineNumber(): null);

@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
+import org.msh.utils.date.DateUtils;
 
 @Entity
 public class ForecastingMedicine implements Serializable {
@@ -110,6 +111,28 @@ public class ForecastingMedicine implements Serializable {
 	@Transient
 	private List<ForecastingPeriod> periods = new ArrayList<ForecastingPeriod>();
 	
+	
+	/**
+	 * Calculate the order date of the current medicine
+	 * @return
+	 */
+	public Date getOrderDate() {
+		if ((forecasting == null) || (results == null))
+			return null;
+
+		Date stockOutDate = forecasting.getEndDate();
+		stockOutDate = DateUtils.incMonths(stockOutDate, forecasting.getBufferStock());
+		for (ForecastingPeriod period: periods) {
+			if (period.getStockOnHand() == 0) {
+				stockOutDate = period.getPeriod().getIniDate();
+				break;
+			}
+		}
+
+		int num = forecasting.getBufferStock() + forecasting.getLeadTime();
+		
+		return DateUtils.incMonths(stockOutDate, -num);
+	}
 
 	/**
 	 * Increment stock on order before lead time 
