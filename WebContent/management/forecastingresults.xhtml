@@ -28,7 +28,7 @@
 			<h:outputText value="#{forecastingCalculation.leadTimePeriod}" converter="periodConverter" styleClass="small-text"/>
 		</th>
 		<th colspan="8">
-			#{messages['manag.forecast.reviewperiod']}
+			#{messages['manag.forecast.reviewperiod']} + #{messages['manag.forecast.bufferStock']}
 			<br/>
 			<h:outputText value="#{forecastingCalculation.reviewPeriod}" converter="periodConverter" styleClass="small-text"/>
 		</th>
@@ -176,6 +176,21 @@
 </tr>
 <tr>
 	<td class="colb">
+		#{messages['manag.forecast.batchtoexpire']}
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.quantityToExpire}" >
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+		<a:commandLink rendered="#{not empty s.batchesConsumed}" 
+			onclick="showDetailResult(#{s.medicine.id},#{s.monthIndex}); return false;" styleClass="plus-icon" style="float:right;">
+		</a:commandLink>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="colb">
 		#{messages['manag.forecast.stockonorder']}
 	</td>
 	<a:repeat value="#{r.results}" var="s">
@@ -222,21 +237,6 @@
 	</td>
 	</a:repeat>
 </tr>
-<tr>
-	<td class="colb">
-		#{messages['manag.forecast.batchtoexpire']}
-	</td>
-	<a:repeat value="#{r.results}" var="s">
-	<td class="colrb">
-		<h:outputText value="#{s.quantityToExpire}" >
-			<f:convertNumber pattern="#,###,##0" />
-		</h:outputText>
-		<a:commandLink rendered="#{not empty s.batchesConsumed}" 
-			onclick="showDetailResult(#{s.medicine.id},#{s.monthIndex}); return false;" styleClass="plus-icon" style="float:right;">
-		</a:commandLink>
-	</td>
-	</a:repeat>
-</tr>
 </a:repeat>
 </table>
 </rich:tab>
@@ -247,7 +247,7 @@
 <table width="100%" class="tabela">
 
 <tr>
-	<th colspan="2">#{messages['Medicine']}
+	<th colspan="2">#{messages['Regimen']}
 	</th>
 	<a:repeat value="#{forecastingView.resultTable.columns}" var="it">
 	<th>
@@ -296,6 +296,42 @@
 	</a:repeat>
 </tr>
 </a:repeat>
+<tr class="highlight">
+	<td class="colb" colspan="2">
+		#{messages['regimens.standard']} (#{messages['global.total']})
+	</td>
+	<a:repeat value="#{forecasting.totalRegimens}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.quantity}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr class="highlight">
+	<td class="colb" colspan="2">
+		#{messages['regimens.individualized']} (#{messages['global.total']})
+	</td>
+	<a:repeat value="#{forecasting.totalIndividualized}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.quantity}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr class="highlight">
+	<td class="colb" colspan="2">
+		#{messages['global.total']}
+	</td>
+	<a:repeat value="#{forecasting.total}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.quantity}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
 
 
 <tr>
@@ -362,7 +398,7 @@
 
 	<h:panelGroup id="pnldetails">
 	<h:dataTable value="#{forecastingView.medicine.periods}" var="p" styleClass="tabela" 
-		rendered="#{not empty forecastingView.medicine.periods}" columnClasses="colb,colrb,colrb,colrb,colrb,colrb,colrb,colrb">
+		rendered="#{not empty forecastingView.medicine.periods}" columnClasses="colb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colrb">
 		<h:column>
 			<f:facet name="header">
 				#{messages['global.period']}
@@ -399,7 +435,7 @@
 
 		<h:column>
 			<f:facet name="header">
-				#{messages['reports.estimatedcons']}
+				#{messages['reports.estimatedcons']} <br/>(#{messages['global.total']})
 			</f:facet>
 			<h:outputText value="#{p.estimatedConsumption}" >
 				<f:convertNumber pattern="#,###,##0" />
@@ -408,9 +444,18 @@
 
 		<h:column>
 			<f:facet name="header">
-				Expired/Orders
+				#{messages['manag.forecast.batchtoexpire']}
 			</f:facet>
-			<h:outputText value="#{p.quantity}" >
+			<h:outputText value="#{p.quantityToExpire}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.stockonorder']}
+			</f:facet>
+			<h:outputText value="#{p.quantityInOrder}" >
 				<f:convertNumber pattern="#,###,##0" />
 			</h:outputText>
 		</h:column>

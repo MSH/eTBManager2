@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.msh.mdrtb.entities.enums.MedicineLine;
 import org.msh.mdrtb.entities.enums.UserView;
@@ -123,6 +124,26 @@ public class Forecasting extends WSObject implements Serializable {
 
 	private boolean publicView;
 	
+	
+
+	/**
+	 * Contains the total number of cases by month of the standard regimens 
+	 */
+	@Transient
+	private List<ForecastingItem> totalRegimens = new ArrayList<ForecastingItem>();
+
+	/**
+	 * Contains the number of cases by month using individualized regimen
+	 */
+	@Transient
+	private List<ForecastingItem> totalIndividualized = new ArrayList<ForecastingItem>();
+	
+	/**
+	 * Contains the total number of cases by month 
+	 */
+	@Transient
+	private List<ForecastingItem> total = new ArrayList<ForecastingItem>();
+	
 	/**
 	 * Check if forecasting has results, i.e, if it was executed before
 	 * @return true if has results
@@ -218,6 +239,16 @@ public class Forecasting extends WSObject implements Serializable {
 				res.setMonthIndex(i);
 				reg.getResults().add(res);
 			}
+		}
+		
+		totalRegimens.clear();
+		totalIndividualized.clear();
+		total.clear();
+		
+		for (int i = 0; i <= num; i++) {
+			totalRegimens.add(new ForecastingItem(i));
+			totalIndividualized.add(new ForecastingItem(i));
+			total.add(new ForecastingItem(i));
 		}
 	}
 
@@ -600,4 +631,41 @@ public class Forecasting extends WSObject implements Serializable {
 	public void setPublicView(boolean publicView) {
 		this.publicView = publicView;
 	}
+
+
+
+	/**
+	 * @return the individualizedResults
+	 */
+	public List<ForecastingItem> getIndividualizedResults() {
+		return totalIndividualized;
+	}
+
+
+
+	/**
+	 * @return the totalRegimens
+	 */
+	public List<ForecastingItem> getTotalRegimens() {
+		return totalRegimens;
+	}
+
+
+
+	/**
+	 * @return the total
+	 */
+	public List<ForecastingItem> getTotal() {
+		return total;
+	}
+
+
+
+	/**
+	 * @return the totalIndividualized
+	 */
+	public List<ForecastingItem> getTotalIndividualized() {
+		return totalIndividualized;
+	}
+
 }

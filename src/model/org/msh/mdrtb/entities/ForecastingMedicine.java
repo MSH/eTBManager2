@@ -129,7 +129,7 @@ public class ForecastingMedicine implements Serializable {
 			}
 		}
 
-		int num = forecasting.getBufferStock() + forecasting.getLeadTime();
+		int num = forecasting.getLeadTime();
 		
 		return DateUtils.incMonths(stockOutDate, -num);
 	}
@@ -276,6 +276,7 @@ public class ForecastingMedicine implements Serializable {
 		consumptionCases = 0;
 		consumptionLT = 0;
 		consumptionNewCases = 0;
+		quantityMissingLT = 0;
 		results = null;
 		for (ForecastingBatch b: batchesToExpire) {
 			b.initialize();

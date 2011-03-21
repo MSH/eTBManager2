@@ -6,8 +6,6 @@ public class ForecastingPeriod {
 
 	private Period period;
 	
-	private int quantity;
-
 	private int estConsumptionCases;
 	
 	private int estConsumptionNewCases;
@@ -17,6 +15,10 @@ public class ForecastingPeriod {
 	private int stockOnHand;
 	
 	private int quantityExpired;
+	
+	private int quantityToExpire;
+	
+	private int quantityInOrder;
 
 
 	/**
@@ -31,20 +33,6 @@ public class ForecastingPeriod {
 	 */
 	public void setPeriod(Period period) {
 		this.period = period;
-	}
-
-	/**
-	 * @return the quantity
-	 */
-	public int getQuantity() {
-		return quantity;
-	}
-
-	/**
-	 * @param quantity the quantity to set
-	 */
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
 	}
 
 	/**
@@ -123,5 +111,33 @@ public class ForecastingPeriod {
 	 */
 	public void setEstConsumptionNewCases(int estConsumptionNewCases) {
 		this.estConsumptionNewCases = estConsumptionNewCases;
+	}
+
+	/**
+	 * @return the quantityToExpire
+	 */
+	public int getQuantityToExpire() {
+		return quantityToExpire;
+	}
+
+	/**
+	 * @param quantityToExpire the quantityToExpire to set
+	 */
+	public void setQuantityToExpire(int quantityToExpire) {
+		this.quantityToExpire = quantityToExpire;
+	}
+
+	/**
+	 * @return the quantityInOrder
+	 */
+	public int getQuantityInOrder() {
+		return quantityInOrder;
+	}
+
+	/**
+	 * @param quantityInOrder the quantityInOrder to set
+	 */
+	public void setQuantityInOrder(int quantityInOrder) {
+		this.quantityInOrder = quantityInOrder;
 	}
 }

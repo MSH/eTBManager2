@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.international.LocaleSelector;
 import org.msh.mdrtb.entities.Forecasting;
 import org.msh.mdrtb.entities.ForecastingMedicine;
@@ -35,16 +36,6 @@ public class ForecastingResultTable {
 	 */
 	private List<Row> rows;
 
-	
-	/**
-	 * Constructor of the table
-	 * @param forecasting
-	 */
-	public ForecastingResultTable(Forecasting forecasting) {
-		super();
-		this.forecasting = forecasting;
-	}
-	
 
 	public void refresh() {
 		columns = null;
@@ -55,6 +46,7 @@ public class ForecastingResultTable {
 	 * Create the table based on the results of the forecasting
 	 */
 	protected void createTable() {
+		Forecasting forecasting = (Forecasting)Component.getInstance("forecasting");
 		if (forecasting.getReferenceDate() == null)
 			return;
 		

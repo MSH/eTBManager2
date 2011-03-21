@@ -530,7 +530,7 @@ public class ForecastingView {
 	 */
 	public ForecastingResultTable getResultTable() {
 		if (resultTable == null) {
-			resultTable = new ForecastingResultTable(forecastingHome.getForecasting());
+			resultTable = new ForecastingResultTable();
 		}
 		return resultTable;
 	}

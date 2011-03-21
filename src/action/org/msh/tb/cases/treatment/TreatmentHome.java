@@ -253,7 +253,8 @@ public class TreatmentHome {
 		TbCase tbcase = caseHome.getInstance();
 		
 		PrescribedMedicine pm = (PrescribedMedicine)Contexts.getConversationContext().get("prescribedMedicine");
-		boolean bNew = tbcase.getPrescribedMedicines().contains(pm);
+//		boolean bNew = tbcase.getPrescribedMedicines().contains(pm);
+		boolean bNew = pmcopy == null;
 		
 		if (pm.getSource() == null) {
 			SourcesQuery sources = (SourcesQuery)Component.getInstance("sources");
@@ -271,9 +272,10 @@ public class TreatmentHome {
 			return;
 		}
 */
-		
+		boolean periodChanged = (pmcopy != null) && (!pmcopy.getPeriod().equals(pm.getPeriod()));
+
 		// there is a clone and the period was changed ?
-		if ((pmcopy != null) && (preservePreviousPeriod) && (!pmcopy.getPeriod().equals(pm.getPeriod()))) {
+		if ((periodChanged) && (preservePreviousPeriod)) {
 			tbcase.getPrescribedMedicines().remove(pm);
 			tbcase.getPrescribedMedicines().add(pmcopy);
 			prescribedMedicineHome.removePeriod(pm.getPeriod(), pm.getMedicine(), null);
@@ -281,6 +283,8 @@ public class TreatmentHome {
 		}
 		else {
 			prescribedMedicineHome.removePeriod(pm.getPeriod(), pm.getMedicine(), pm);
+			if (periodChanged)
+				tbcase.setRegimen(null);
 		}
 
 		if (!tbcase.getPrescribedMedicines().contains(pm)) {
@@ -388,44 +392,6 @@ public class TreatmentHome {
 		}
 	}
 	
-	
-	/**
-	 * Create list of dates indicating the changes in the medicine prescription
-	 */
-/*	private void createListMedicineChanges() {
-		prescriptionChanges = new ArrayList<Date>();
-		
-		TbCase tbcase = caseHome.getInstance();
-		
-		// create period list
-		prescriptionChanges.add(  tbcase.getTreatmentPeriod().getIniDate());
-		prescriptionChanges.add(tbcase.getTreatmentPeriod().getEndDate());
-		for (PrescribedMedicine pm: tbcase.getPrescribedMedicines()) {
-			Date dt = pm.getPeriod().getIniDate();
-			if (!prescriptionChanges.contains(dt))
-				prescriptionChanges.add(dt);
-			dt = DateUtils.incDays( pm.getPeriod().getEndDate(), 1 );
-			if (!prescriptionChanges.contains(dt))
-				prescriptionChanges.add(dt);
-		}
-		Collections.sort(prescriptionChanges);
-	}
-*/	
-
-	/**
-	 * Initialize the period been edited
-	 */
-/*	public void initializePeriod() {
-		TbCase tbcase = caseHome.getInstance();
-		
-		if (tbcase.getHealthUnits().size() == 0)
-			return;
-		
-		if (tbcase.getHealthUnits().size() > 1)
-			 period = tbcase.getHealthUnits().get(tbcase.getHealthUnits().size() - 1).getPeriod();
-		else period = tbcase.getTreatmentPeriod();
-	}
-*/
 
 
 	/** 
@@ -564,24 +530,6 @@ public class TreatmentHome {
 	}
 	
 
-
-	/**
-	 * Return list of changes in the medicine prescription 
-	 * @return
-	 */
-/*	public List<Date> getPrescriptionChanges() {
-		if (prescriptionChanges == null)
-			createListMedicineChanges();
-		return prescriptionChanges;
-	}
-*/
-
-/*	public Period getPeriod() {
-		if (period == null)
-			initializePeriod();
-		return period;
-	}
-*/
 
 	/**
 	 * @return the iniContinuousPhase
