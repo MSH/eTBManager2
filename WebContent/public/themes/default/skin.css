@@ -76,6 +76,11 @@ h3 {
 	clear:both;
 }
 
+.text {
+	font-family:Courier New;
+	font-size:13px;
+}
+
 a {
 	text-decoration: underline;
 /*	color: #0060c0; */

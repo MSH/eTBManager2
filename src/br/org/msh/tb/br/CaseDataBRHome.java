@@ -225,7 +225,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	}
 
 	
-		/**
+	/**
 	 * change the text fields to upper case
 	 */
 	protected void adjustFields() {
@@ -329,6 +329,13 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		
 		// check exams
 		if ((examCultureHome != null) && (examMicroscopyHome != null)) {
+			if (examMicroscopyHome.getInstance().getResult() != MicroscopyResult.NOTDONE) {
+				if (examMicroscopyHome.getInstance().getDateCollected() == null) {
+					facesMessages.addToControlFromResourceBundle("edtdatemicroscopy", "javax.faces.component.UIInput.REQUIRED");
+					res = false;
+				}
+			}
+			
 			if ((!examCultureHome.getInstance().getResult().equals(CultureResult.NOTDONE)) || 
 				(!examMicroscopyHome.getInstance().getResult().equals(MicroscopyResult.NOTDONE))) 
 			{
@@ -413,9 +420,9 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 				facesMessages.addToControlFromResourceBundle("dtrelease", "cases.exams.datereleasebeforecol");
 				return false;			
 			}
-			examMicroscopyHome.getInstance().setDateCollected(dtCollected);
-			examMicroscopy.setDateRelease(examCulture.getDateRelease());
-			examMicroscopy.setLaboratory(examCulture.getLaboratory());
+//			examMicroscopyHome.getInstance().setDateCollected(dtCollected);
+//			examMicroscopy.setDateRelease(examCulture.getDateRelease());
+//			examMicroscopy.setLaboratory(examCulture.getLaboratory());
 			examMicroscopyHome.persist();
 		}
 		

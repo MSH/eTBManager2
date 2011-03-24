@@ -17,7 +17,8 @@
 		<ui:param name="showfooter" value="0" />
     	<ul>
     	<ui:repeat value="#{tbcase.comorbidities}" var="it">
-    		<li>#{it.name}
+    		<li>#{it.comorbidity.name}
+    			<h:outputText value="(#{it.comment})" rendered="#{not empty it.comment}" style="padding-left:12px;"/>
     		</li>
     	</ui:repeat>
     	</ul>
@@ -193,4 +194,8 @@
 	</div>
 	</s:decorate>
     
+
+	<s:decorate template="/cases/comments.xhtml">
+		<ui:param name="panel" value="other" />
+	</s:decorate>
 </ui:composition>

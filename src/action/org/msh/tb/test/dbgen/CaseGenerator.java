@@ -16,6 +16,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.msh.mdrtb.entities.Address;
 import org.msh.mdrtb.entities.AdministrativeUnit;
+import org.msh.mdrtb.entities.CaseComorbidity;
 import org.msh.mdrtb.entities.CaseSideEffect;
 import org.msh.mdrtb.entities.ExamCulture;
 import org.msh.mdrtb.entities.ExamDST;
@@ -771,7 +772,10 @@ public class CaseGenerator {
 			int perc = preferences.getComorbidities().get(field);
 			// has this comorbidity ?
 			if (randomWillHappen(perc)) {
-				tbcase.getComorbidities().add(entityManager.merge(field));
+				CaseComorbidity com = new CaseComorbidity();
+				com.setComorbidity(entityManager.merge(field));
+				com.setTbcase(tbcase);
+				tbcase.getComorbidities().add(com);
 			}
 		}
 	}

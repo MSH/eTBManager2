@@ -21,6 +21,7 @@
 <a:loadScript src="/js/util.js"/>
 
 <s:decorate template="/layout/casebody.xhtml">
+	<ui:param name="pagewidth" value="800px" />
 	<a:form id="formexam" >
     <table width="100%" cellspacing="0" cellpadding="0">
     <tr><td colspan="2">
@@ -121,7 +122,7 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	<h:inputText value="#{medicalExaminationBR.comments}" style=" width : 340px;" maxlength="100"/>
+    	<h:inputTextarea value="#{medicalExaminationBR.comments}" style=" width : 500px;height:100px;" />
     </s:decorate>
 
 	</td></tr>

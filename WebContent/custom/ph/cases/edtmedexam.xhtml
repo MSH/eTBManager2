@@ -71,7 +71,7 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	<h:inputText value="#{medicalExamination.comments}" style=" width : 340px;" maxlength="100"/>
+    	<h:inputTextarea value="#{medicalExamination.comments}" style="width:500px;height:100px;" />
     </s:decorate>
 
 	</td></tr>

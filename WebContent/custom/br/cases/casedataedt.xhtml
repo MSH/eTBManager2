@@ -557,7 +557,7 @@ function genderChange(cb) {
     </div>
     	<rich:dataGrid  value="#{comorbidityHome.comorbidities}" var="it" width="100%" columns="2">
 				<h:selectBooleanCheckbox value="#{it.selected}" />
-				#{it.item.name}
+				#{it.item.comorbidity.name}
     	</rich:dataGrid>
     </s:fragment>    
 

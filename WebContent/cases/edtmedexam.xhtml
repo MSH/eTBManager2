@@ -14,6 +14,7 @@
 
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="pagewidth" value="900px" />
 
 
 <ui:define name="body">
@@ -73,7 +74,7 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	<h:inputText value="#{medicalExamination.comments}" style=" width : 340px;" maxlength="100"/>
+    	<h:inputTextarea value="#{medicalExamination.comments}" style="width:500px;height:100px;" />
     </s:decorate>
 
 	</td></tr>

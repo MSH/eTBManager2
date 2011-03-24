@@ -21,7 +21,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -44,6 +43,11 @@ import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
 
+/**
+ * Store information about a case (TB or DR-TB)
+ * @author Ricardo Memoria
+ *
+ */
 @Entity
 public class TbCase implements Serializable{
 	private static final long serialVersionUID = 7221451624723376561L;
@@ -208,10 +212,9 @@ public class TbCase implements Serializable{
 	@FieldLog(ignore=true)
 	private List<CaseSideEffect> sideEffects = new ArrayList<CaseSideEffect>();
 
-	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
-	@JoinTable(name="CASE_COMORBIDITIES")
+	@ManyToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
 	@FieldLog(ignore=true)
-	private List<FieldValue> comorbidities = new ArrayList<FieldValue>();
+	private List<CaseComorbidity> comorbidities = new ArrayList<CaseComorbidity>();
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
 	@FieldLog(ignore=true)
@@ -710,7 +713,7 @@ public class TbCase implements Serializable{
 	/**
 	 * @return the comorbidities
 	 */
-	public List<FieldValue> getComorbidities() {
+	public List<CaseComorbidity> getComorbidities() {
 		return comorbidities;
 	}
 
@@ -718,7 +721,7 @@ public class TbCase implements Serializable{
 	/**
 	 * @param comorbidities the comorbidities to set
 	 */
-	public void setComorbidities(List<FieldValue> comorbidities) {
+	public void setComorbidities(List<CaseComorbidity> comorbidities) {
 		this.comorbidities = comorbidities;
 	}
 

@@ -21,21 +21,29 @@
 <ui:define name="body">
 <h:form id="main">
 <p/>
-<s:decorate template="/layout/casebody.xhtml">
+<s:decorate template="/layout/casebody.xhtml" >
 	<table width="100%">
 	<tr><td colspan="2" style="padding:6px;">
 		<div class="paragraph">
 			#{messages['cases.comorbidities']}
 		</div>
+		<div id="tbldata">
 		<h:dataTable value="#{comorbidityHome.comorbidities}" var="it" styleClass="tabela" rowClasses="lin1,lin2" width="100%">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['form.name']}" styleClass="collh"/>
 				</f:facet>
-				<h:selectBooleanCheckbox value="#{it.selected}" />
-				#{it.item.name}
+				<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows();"/>
+				#{it.item.comorbidity.name}
 			</h:column>
-		</h:dataTable>		
+			<h:column >
+				<f:facet name="header" >
+					<h:outputText value="#{messages['global.comments']}"  styleClass="collh" />
+				</f:facet>
+				<h:inputText value="#{it.item.comment}" style="width:400px;display:none; "/>
+			</h:column>
+		</h:dataTable>
+		</div>		
 
 	</td></tr>
 	<tr><td>
@@ -47,7 +55,7 @@
     	<div id="divpatname">
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbCase.patientContactName']}:</ui:define>
-    		<h:inputText value="#{tbcase.patientContactName}" style="width:300px" maxlength="100"/>
+    		<h:inputText value="#{tbcase.patientContactName}" style="width:400px" maxlength="200"/>
     	</s:decorate>
     	</div>
     </td></tr>
@@ -64,11 +72,19 @@
 	
 
 </h:form>
+<rich:jQuery selector="document" query="ready(function() {updateRows();})" />
 <script type="text/javascript">
+function updateRows() {
+	jQuery("#tbldata tr").removeClass("activerow");
+	jQuery("#tbldata tr input[type='text'],select").hide();
+	jQuery("#tbldata tr:has(:checked) input[type='text']").show();
+	jQuery("#tbldata tr:has(:checked) select").show();
+	jQuery("#tbldata tr:has(:checked)").addClass("activerow");
+}
 function toggleDivPanel(chk, divname) {
-if (chk.checked)
-	 jQuery(divname).show();
-else jQuery(divname).hide();
+	if (chk.checked)
+		jQuery(divname).show();
+	else jQuery(divname).hide();
 }
 </script>
 

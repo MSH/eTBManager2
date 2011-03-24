@@ -59,11 +59,35 @@
     				<s:convertEnum />
     			</h:selectOneMenu>
     			</div>
-				<rich:jQuery selector="#cbressputum select" query="change( function(){ examResultChanged(); })" />
-				<rich:jQuery selector="#cbressputum select" timing="onload" query="each( function(){ examResultChanged(true); })" />
+				<rich:jQuery selector="#cbressputum select" query="change( function(){ examMicroscopyResultChanged(); })" />
+				<rich:jQuery selector="#cbressputum select" timing="onload" query="each( function(){ examMicroscopyResultChanged(true); })" />
 			</s:decorate>
 			
 		</td></tr>
+		<tr>
+			<td>
+				<div id="exam_mic_row1">
+    			<s:decorate template="/layout/dateedit.xhtml" >
+    				<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
+					<ui:param name="redasterisk" value="true" />
+    				<ui:param name="required" value="false" /> 
+    				<ui:param name="future" value="true" /> 
+    				<ui:param name="datefield" value="#{examMicroscopyHome.instance.dateCollected}" />
+    				<ui:param name="edtid" value="edtdatemicroscopy" /> 
+    			</s:decorate>
+    			</div>
+			</td>
+			<td>
+				<div id="exam_mic_row2">
+		    	<s:decorate template="/layout/dateedit.xhtml" >
+		    		<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+		    		<ui:param name="required" value="false" /> 
+		    		<ui:param name="future" value="true" /> 
+		    		<ui:param name="datefield" value="#{examMicroscopyHome.instance.dateRelease}" />
+			    </s:decorate>
+			    </div>
+			</td>
+		</tr>
 		<tr><td>
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['cases.examculture']}:
@@ -92,8 +116,9 @@
 		    		<s:convertEnum />
     			</h:selectOneMenu>
     			</div>
+				<rich:jQuery selector="#cbresculture select" query="change( function(){ examResultChanged(); })" />
+				<rich:jQuery selector="#cbresculture select" timing="onload" query="each( function(){ examResultChanged(true); })" />
 			</s:decorate>
-			<rich:jQuery selector="#cbresculture select" query="change( function(){ examResultChanged(); })" />
 			
 		</td></tr>
 		<tr><td>
@@ -111,7 +136,7 @@
     	
     	</td><td>
 
-		<div id="exam_row3">
+		<div id="exam_row3" >
     	<s:decorate template="/layout/dateedit.xhtml" >
     		<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
     		<ui:param name="required" value="false" /> 
@@ -123,7 +148,7 @@
     	</td></tr>
     	<tr><td colspan="2">
 
-		<div id="exam_row2">
+		<div id="exam_row2" >
 	    <s:decorate template="/layout/edit.xhtml" >
     		<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
     		<h:selectOneMenu value="#{examCulture.method}" required="false">
@@ -140,6 +165,7 @@
 			<h:message for="cblabculture" styleClass="erro"/>
 		</s:decorate>
     	</div>
+		<rich:jQuery selector="#cbresculture select" query="change( function(){ examResultChanged(); })" />
     	
 		</td></tr>
 		<tr><td colspan="2">
@@ -162,7 +188,7 @@
     			<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
 		    	<ui:param name="redasterisk" value="true" /> 
 		    	<ui:param name="future" value="true" /> 
-		    	<ui:param name="datefield" value="#{molecularBiology.date}" /> 
+		    	<ui:param name="datefield" value="#{molecularBiology.date}" />
 		    </s:decorate>
 
     		<s:decorate template="/layout/dateedit.xhtml" >
@@ -411,16 +437,23 @@ function updateExamType(cb) {
 	else jQuery('.sample-sel').hide();
 }
 
-function hasExamResult() {
-	var cb1;
+function hasMicroscopyResult() {
 	var cb2;
-	jQuery('#cbresculture select').each(function(){cb1=this;});
 	jQuery('#cbressputum select').each(function(){cb2=this;});
 
-	var s1 = cb1.options[cb1.selectedIndex].value;
 	var s2 = cb2.options[cb2.selectedIndex].value;
-	return (((cb1.selectedIndex>0) && (s1!='NOTDONE')) ||
-					(cb2.selectedIndex>0) && (s2!='NOTDONE'));
+	return (cb2.selectedIndex>0) && (s2!='NOTDONE');
+}
+function hasExamResult() {
+	var cb1;
+//	var cb2;
+	jQuery('#cbresculture select').each(function(){cb1=this;});
+//	jQuery('#cbressputum select').each(function(){cb2=this;});
+
+	var s1 = cb1.options[cb1.selectedIndex].value;
+//	var s2 = cb2.options[cb2.selectedIndex].value;
+	return ((cb1.selectedIndex>0) && (s1!='NOTDONE')); 
+//	 ||	(cb2.selectedIndex>0) && (s2!='NOTDONE'));
 }
 
 function hasMolecularBiologyResult() {
@@ -432,34 +465,44 @@ function hasMolecularBiologyResult() {
 
 function examResultChanged(immediate) {
 	if (hasExamResult()) {
-		jQuery('#exam_row1').show(immediate?0:500);
-		jQuery('#exam_row2').show(immediate?0:500);
-		jQuery('#exam_row3').show(immediate?0:500);
+		jQuery('#exam_row1').slideDown(immediate?0:500);
+		jQuery('#exam_row2').slideDown(immediate?0:500);
+		jQuery('#exam_row3').slideDown(immediate?0:500);
 	}
 	else {
-		jQuery('#exam_row1').hide(immediate?0:500);
-		jQuery('#exam_row2').hide(immediate?0:500);
-		jQuery('#exam_row3').hide(immediate?0:500);
+		jQuery('#exam_row1').slideUp(immediate?0:500);
+		jQuery('#exam_row2').slideUp(immediate?0:500);
+		jQuery('#exam_row3').slideUp(immediate?0:500);
 	}
     updateDSTView(false);
+}
+function examMicroscopyResultChanged(immediate) {
+	if (hasMicroscopyResult()) {
+		jQuery('#exam_mic_row1').slideDown(immediate?0:500);
+		jQuery('#exam_mic_row2').slideDown(immediate?0:500);
+	}
+	else {
+		jQuery('#exam_mic_row1').slideUp(immediate?0:500);
+		jQuery('#exam_mic_row2').slideUp(immediate?0:500);
+	}
 }
 
 function showSupUnit(cb, immediate) {
 	  if (cb.selectedIndex == 1)
-		   jQuery('#div_supunit').show(immediate?0:500)
-	  else jQuery('#div_supunit').hide(immediate?0:500);
+		   jQuery('#div_supunit').slideUp(immediate?0:500)
+	  else jQuery('#div_supunit').slideDown(immediate?0:500);
 }
 
 function showRegimens(cb, immediate) {
 	  if (cb.selectedIndex == 1)
-		   jQuery('#divregtype').show(immediate?0:500)
-	  else jQuery('#divregtype').hide(immediate?0:500);
+		   jQuery('#divregtype').slideUp(immediate?0:500)
+	  else jQuery('#divregtype').slideDown(immediate?0:500);
 }
 
 function molbioResultChange(cb, immediate) {
 	if (cb.selectedIndex > 1)
-	     jQuery('#divmolbio').show(immediate?0:500)
-    else jQuery('#divmolbio').hide(immediate?0:500);
+	     jQuery('#divmolbio').slideUp(immediate?0:500)
+    else jQuery('#divmolbio').slideDown(immediate?0:500);
     updateDSTView(false);
 }
 

@@ -233,28 +233,7 @@
 	</table></div>
 	</s:decorate>
 
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
-		<ui:define name="header">
-			<b>#{messages['global.comments']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
-		<h:panelGroup id="pnlComments">
-		#{userLogin.user.name}
-		<h:inputTextarea value="#{caseComment.comment}" style="width:400px;"/>
-		<a:commandButton value="Add Comment" styleClass="button" action="#{caseCommentsHome.addCaseDataComment}" reRender="pnlComments"/>
-		
-		<h:dataTable value="#{caseCommentsHome.caseDataComments}" var="it" rendered="#{facesContext.renderResponse}">
-			<h:column >
-				#{it.user.name}
-				<br/>
-				<h:outputText value="#{it.date}" converter="localeDateConverter"/>
-			</h:column>
-
-			<h:column >
-				<h:outputText value="#{it.comment}" escape="false" converter="rmemoria.TextConverter"/>
-			</h:column>
-		</h:dataTable>
-		</h:panelGroup>
-	</s:decorate>    
+	<s:decorate template="/cases/comments.xhtml">
+		<ui:param name="panel" value="data" />
+	</s:decorate>
 </ui:composition>

@@ -1,9 +1,14 @@
 package org.msh.tb.cases;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.mdrtb.entities.CaseComorbidity;
 import org.msh.mdrtb.entities.FieldValue;
 import org.msh.mdrtb.entities.TbCase;
 import org.msh.mdrtb.entities.enums.RoleAction;
@@ -25,7 +30,7 @@ public class ComorbidityHome {
 	@In(required=true) CaseHome caseHome;
 	@In(create=true) FieldsQuery fieldsQuery;
 	
-	private List<ItemSelect<FieldValue>> comorbidities;
+	private List<ItemSelect<CaseComorbidity>> comorbidities;
 
 
 	/**
@@ -34,18 +39,44 @@ public class ComorbidityHome {
 	public void initializeSelection() {
 		TbCase tbcase = caseHome.getInstance();
 		
-		List<FieldValue> lst = tbcase.getComorbidities();
+		List<CaseComorbidity> lst = tbcase.getComorbidities();
 
+		List<CaseComorbidity> fullList = new ArrayList<CaseComorbidity>();
+		for (FieldValue value: fieldsQuery.getComorbidities()) {
+			CaseComorbidity com = findComorbidity(lst, value);
+			if (com == null) {
+				com = new CaseComorbidity();
+				com.setComorbidity(value);
+			}
+			fullList.add(com);
+		}
+		
 		// create list of items
-		comorbidities = ItemSelectHelper.createList(fieldsQuery.getComorbidities());
+		comorbidities = ItemSelectHelper.createList(fullList);
 		ItemSelectHelper.selectItems(comorbidities, lst, true);
+	}
+
+
+	/**
+	 * Search for a comorbidity in the list of {@link CaseComorbidity} items
+	 * @param lst
+	 * @param comorbidity
+	 * @return
+	 */
+	public CaseComorbidity findComorbidity(List<CaseComorbidity> lst, FieldValue comorbidity) {
+		for (CaseComorbidity casecom: lst) {
+			if (comorbidity.getId().equals(casecom.getComorbidity().getId())) {
+				return casecom;
+			}
+		}
+		return null;
 	}
 
 
 	/**
 	 * @return the comorbidities
 	 */
-	public List<ItemSelect<FieldValue>> getComorbidities() {
+	public List<ItemSelect<CaseComorbidity>> getComorbidities() {
 		if (comorbidities == null)  
 			initializeSelection();
 		return comorbidities;
@@ -60,14 +91,38 @@ public class ComorbidityHome {
 		if (comorbidities == null)
 			return "error";
 		
-		List<FieldValue> lst = ItemSelectHelper.createItemsList(comorbidities, true);
+		List<CaseComorbidity> lst = ItemSelectHelper.createItemsList(comorbidities, true);
 		
 		registerLog(lst);
 		
-		TbCase tbCase = caseHome.getInstance();
-		if(!tbCase.isTbContact())
-			tbCase.setPatientContactName(null);
-		tbCase.setComorbidities(lst);
+		TbCase tbcase = caseHome.getInstance();
+		
+		EntityManager em = (EntityManager)Component.getInstance("entityManager");
+		
+		// add new comorbidities
+		for (ItemSelect<CaseComorbidity> item: comorbidities) {
+			CaseComorbidity com = item.getItem();
+			CaseComorbidity aux = findComorbidity(tbcase.getComorbidities(), com.getComorbidity());
+
+			// item is selected ?
+			if (item.isSelected()) {
+				if (aux == null) {
+					com.setTbcase(tbcase);
+					tbcase.getComorbidities().add(com);
+				}
+			}
+			else {
+				// item is removed
+				if (aux != null) {
+					em.remove(aux);
+					tbcase.getComorbidities().remove(aux);
+				}
+			}
+		}
+		
+		if(!tbcase.isTbContact())
+			tbcase.setPatientContactName(null);
+//		tbcase.setComorbidities(lst);
 		
 		return caseHome.persist();
 	}
@@ -77,21 +132,21 @@ public class ComorbidityHome {
 	 * Register in log the comorbidities changed
 	 * @param newComorbidities
 	 */
-	public void registerLog(List<FieldValue> newComorbidities) {
+	public void registerLog(List<CaseComorbidity> newComorbidities) {
 		LogService logService = new LogService();
 		
 		TbCase tbcase = caseHome.getInstance();
 
 		// check new comorbidities
-		for (FieldValue fld: newComorbidities) {
+		for (CaseComorbidity fld: newComorbidities) {
 			if (!tbcase.getComorbidities().contains(fld))
-				logService.addValue("RoleAction.NEW", fld);
+				logService.addValue("RoleAction.NEW", fld.getComorbidity());
 		}
 
 		// check removed comorbidities
-		for (FieldValue fld: tbcase.getComorbidities()) {
+		for (CaseComorbidity fld: tbcase.getComorbidities()) {
 			if (!newComorbidities.contains(fld))
-				logService.addValue("RoleAction.DELETE", fld);
+				logService.addValue("RoleAction.DELETE", fld.getComorbidity());
 		}
 		
 		logService.setCaseClassification(tbcase.getClassification());

@@ -21,6 +21,7 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.mdrtb.entities.Address;
 import org.msh.mdrtb.entities.AdministrativeUnit;
+import org.msh.mdrtb.entities.CaseComorbidity;
 import org.msh.mdrtb.entities.CountryStructure;
 import org.msh.mdrtb.entities.ExamCulture;
 import org.msh.mdrtb.entities.ExamDST;
@@ -712,7 +713,10 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 			return;
 		
 		FieldValue value = getFieldValue(TbField.COMORBIDITY, id);
-		tbcase.getComorbidities().add(value);
+		CaseComorbidity caseComorbidity = new CaseComorbidity();
+		caseComorbidity.setTbcase(tbcase);
+		caseComorbidity.setComorbidity(value);
+		tbcase.getComorbidities().add(caseComorbidity);
 	}
 
 

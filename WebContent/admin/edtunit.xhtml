@@ -79,14 +79,14 @@
 	</s:decorate>
 
     <s:decorate template="/layout/edit.xhtml">
+    	<h:selectBooleanCheckbox value="#{tbunit.notifHealthUnit}"/>#{messages['TbCase.notificationUnit']}
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
     	<h:selectBooleanCheckbox id="chkhu" value="#{tbunit.treatmentHealthUnit}" /> #{messages['Tbunit.treatmentHealthUnit']}
     </s:decorate>
 
 	<div id="pnlhealthunit" style="clear:both;">
-    <s:decorate template="/layout/edit.xhtml">
-    	<h:selectBooleanCheckbox value="#{tbunit.notifHealthUnit}" style="margin-left:32px;"/>#{messages['TbCase.notificationUnit']}
-    </s:decorate>
-
     <s:decorate template="/layout/edit.xhtml">
     	<h:selectBooleanCheckbox value="#{tbunit.tbHealthUnit}" style="margin-left:32px;"/>#{messages['Tbunit.tbHealthUnit']}
     </s:decorate>

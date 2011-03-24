@@ -75,7 +75,7 @@
 			<s:fragment rendered="#{not empty r.comments}">
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['global.comments']}: </ui:define>
-				#{r.comments}
+				<h:outputText value="#{r.comments}" escape="false" converter="rmemoria.TextConverter" styleClass="text" />
 			</s:decorate>
 			</s:fragment>
 		</td></tr>

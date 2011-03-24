@@ -390,4 +390,8 @@
 	<a:actionparam name="param2" assignTo="#{examXRayHome.lastResult}" converter="javax.faces.Boolean"/>
 </a:jsFunction>
 
+	<s:decorate template="/cases/comments.xhtml">
+		<ui:param name="panel" value="exams" />
+	</s:decorate>
+
 </ui:composition>

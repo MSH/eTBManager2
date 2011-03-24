@@ -16,7 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
-import org.msh.mdrtb.entities.enums.CaseSection;
+import org.msh.tb.cases.CaseView;
 
 
 /**
@@ -52,7 +52,7 @@ public class CaseComment implements Serializable {
 	private String comment;
 
 	@NotNull
-	private CaseSection section;
+	private CaseView view;
 
 
 	/**
@@ -126,16 +126,18 @@ public class CaseComment implements Serializable {
 	}
 
 	/**
-	 * @return the section
+	 * @return the view
 	 */
-	public CaseSection getSection() {
-		return section;
+	public CaseView getView() {
+		return view;
 	}
 
 	/**
-	 * @param section the section to set
+	 * @param view the view to set
 	 */
-	public void setSection(CaseSection section) {
-		this.section = section;
+	public void setView(CaseView view) {
+		this.view = view;
 	}
+
+
 }
