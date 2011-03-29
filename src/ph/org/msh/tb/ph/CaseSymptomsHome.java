@@ -64,7 +64,7 @@ public class CaseSymptomsHome {
 			.createQuery("from CaseSymptom s where s.tbcase.id = #{caseHome.instance.id} order by s.symptom.name.name1")
 			.getResultList();
 
-		if (editing) {
+//		if (editing) {
 			List<FieldValue> fields = fieldsQuery.getSymptoms();
 			for (FieldValue field: fields) {
 				CaseSymptom aux = findCaseSymptom(field);
@@ -75,7 +75,7 @@ public class CaseSymptomsHome {
 					caseSymptoms.add(aux);
 				}
 				else aux.setChecked(true);
-			}
+//			}
 			
 			// sort the items
 			Collections.sort(caseSymptoms, new Comparator<CaseSymptom>() {

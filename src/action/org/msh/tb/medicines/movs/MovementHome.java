@@ -125,9 +125,6 @@ public class MovementHome {
 	 */
 	@Transactional
 	public void savePreparedMovements() {
-		if (preparedMovements == null)
-			return;
-		
 		// remove previous movement
 		if (movementsToBeRemoved != null) {
 			for (Movement mov: movementsToBeRemoved) {
@@ -136,6 +133,9 @@ public class MovementHome {
 			}
 			movementsToBeRemoved = null;
 		}
+
+		if (preparedMovements == null)
+			return;
 
 		// create batch movements and save changes to the batch quantities of the unit
 		for (PreparedMovement pm: preparedMovements) {
@@ -343,12 +343,14 @@ public class MovementHome {
 
 		for (Batch b: batches.keySet()) {
 			Integer qtd = batches.get(b);
-			if ((qtd != null) && (qtd > 0)) {
+			if ((qtd != null) && (qtd != 0)) {
 				BatchQuantity batchQuantity = loadBatchQuantity(b, unit, source);
 				
 				if (batchQuantity == null)
 					throw new MovementException("No batch of " + b.getMedicine().toString() + 
 							" found for " + unit.toString() + ", " + source.toString());
+				
+				System.out.println(batchQuantity.getBatch().getBatchNumber() + " qtd available=" + batchQuantity.getQuantity());
 
 				int availableQtd = batchQuantity.getQuantity() + (qtd * oper);
 				

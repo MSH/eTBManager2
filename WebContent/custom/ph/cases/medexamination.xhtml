@@ -12,6 +12,7 @@
 		<f:param name="examid" value="#{null}"/>
 	</s:link>
 
+	<h:panelGroup id="medexams">
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty medicalExaminationHome.allResults}" />
 
 	<h:dataTable value="#{medicalExaminationHome.allResults}" var="r" rendered="#{not empty medicalExaminationHome.allResults}" width="100%">
@@ -24,7 +25,9 @@
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 				</s:link>
-				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamCulture(#{r.id}, #{examCultureHome.lastResult});return false;">
+				<h:commandLink value="#{messages['form.remove']}" 
+					onclick="if (confirm('#{messages['form.confirm_remove']}')) remMedExamination(#{r.id});return false;" 
+				    rendered="#{caseHome.canEditCaseData}">
 				</h:commandLink>
 			</div>
 			<b>#{messages['cases.details.date']}: </b> 
@@ -86,5 +89,11 @@
 
 		</h:column>
 	</h:dataTable>
+	</h:panelGroup>
+
+<a:jsFunction name="remMedExamination" action="#{medicalExaminationHome.remove}" reRender="medexams"  rendered="#{caseHome.canEditExams}">
+	<a:actionparam name="param1" assignTo="#{medicalExaminationHome.id}" converter="javax.faces.Integer"/>
+</a:jsFunction>
+
 
 </ui:composition>

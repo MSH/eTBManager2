@@ -265,12 +265,19 @@ public class TbCase implements Serializable{
 	 * Update number of days of treatment planned for the patient
 	 */
 	public void updateDaysTreatPlanned() {
+		Date dt = getTreatmentPeriod().getIniDate();
+		Date dtend = getTreatmentPeriod().getEndDate();
+		
 		int num = 0;
-		for (PrescribedMedicine pm: getPrescribedMedicines()) {
-			num += pm.getNumPrescribedDays();
+		while (!dt.after(dtend)) {
+			if (isDayPrescription(dt))
+				num++;
+			dt = DateUtils.incDays(dt, 1);
 		}
+
 		daysTreatPlanned = num;
 	}
+
 
 	/**
 	 * Returns if the date dt is a day of medicine prescription

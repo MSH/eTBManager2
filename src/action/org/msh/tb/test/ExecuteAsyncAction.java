@@ -35,12 +35,12 @@ public class ExecuteAsyncAction {
 	 * Initialize the field {@link TbCase}.numDaysPlanned
 	 */
 	@Asynchronous
-	public void adjustDaysPlanned() {
+	public void adjustDaysPlanned(Workspace ws) {
 		int ini = 0;
 		int max = 50;
 		
 		while (true) {
-			if (!adjustDaysPlannedAction.adjust(ini, max))
+			if (!adjustDaysPlannedAction.adjust(ws, ini, max))
 				break;
 			ini += 50;
 		}

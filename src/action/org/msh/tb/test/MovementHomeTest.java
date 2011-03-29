@@ -11,8 +11,8 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
+import org.jboss.seam.international.Messages;
 import org.msh.mdrtb.entities.Batch;
-import org.msh.mdrtb.entities.BatchQuantity;
 import org.msh.mdrtb.entities.Medicine;
 import org.msh.mdrtb.entities.Movement;
 import org.msh.mdrtb.entities.Source;
@@ -21,6 +21,7 @@ import org.msh.mdrtb.entities.enums.Container;
 import org.msh.mdrtb.entities.enums.MovementType;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.MedicineManStartHome;
+import org.msh.tb.medicines.MedicineManStartHome.BatchInfo;
 import org.msh.tb.medicines.MedicineManStartHome.MedicineInfo;
 import org.msh.tb.medicines.MedicineManStartHome.SourceInfo;
 import org.msh.tb.medicines.movs.MovementException;
@@ -80,7 +81,7 @@ public class MovementHomeTest {
 		batches.put(b1, 700);
 		batches.put(b2, 500);
 		movementHome.initMovementRecording();
-		Movement movRec = prepareMovement(DateUtils.newDate(2011, 1, 1), MovementType.DRUGRECEIVING, batches);
+		prepareMovement(DateUtils.newDate(2011, 1, 1), MovementType.DRUGRECEIVING, batches);
 		movementHome.savePreparedMovements();
 		entityManager.flush();
 
@@ -89,7 +90,7 @@ public class MovementHomeTest {
 		batches.put(b1, 900);
 		batches.put(b2, 800);
 		movementHome.initMovementRecording();
-		Movement movDisp = prepareMovement(DateUtils.newDate(2011, 1, 5), MovementType.DISPENSING, batches);
+		Movement movDisp = prepareMovement(DateUtils.newDate(2011, 1, 1), MovementType.DISPENSING, batches);
 		movementHome.savePreparedMovements();
 		entityManager.flush();
 
@@ -98,7 +99,7 @@ public class MovementHomeTest {
 		batches.put(b1, 200);
 		batches.put(b2, 200);
 		movementHome.initMovementRecording();
-		prepareMovement(DateUtils.newDate(2011, 1, 7), MovementType.ORDERRECEIVING, batches);
+		prepareMovement(DateUtils.newDate(2011, 1, 1), MovementType.ORDERRECEIVING, batches);
 		movementHome.savePreparedMovements();
 		entityManager.flush();
 		
@@ -122,8 +123,8 @@ public class MovementHomeTest {
 		movementHome.savePreparedMovements();
 		entityManager.flush();
 
-		System.out.println("receiving = " + movRec.getQuantity());
-		System.out.println("dispensing = " + movDisp.getQuantity());
+//		System.out.println("receiving = " + movRec.getQuantity());
+//		System.out.println("dispensing = " + movDisp.getQuantity());
 	}
 	
 	/**
@@ -143,13 +144,15 @@ public class MovementHomeTest {
 		medicineManStartHome.setStartDate(DateUtils.newDate(2010, 12, 1));
 		
 		medicineManStartHome.startNewBatch(medInfo);
-		BatchQuantity bq = medicineManStartHome.getBatchQuantity();
+		BatchInfo bq = medicineManStartHome.getBatchInfo();
 		bq.setBatch(b1);
+		bq.setQuantity(b1.getQuantityReceived());
 		medicineManStartHome.finishBatchEditing();
 
 		medicineManStartHome.startNewBatch(medInfo);
-		bq = medicineManStartHome.getBatchQuantity();
+		bq = medicineManStartHome.getBatchInfo();
 		bq.setBatch(b2);
+		bq.setQuantity(b2.getQuantityReceived());
 		medicineManStartHome.finishBatchEditing();
 		
 		medicineManStartHome.startMedicineManagement();
@@ -168,10 +171,18 @@ public class MovementHomeTest {
 	 */
 	protected Movement prepareMovement(Date dt, MovementType movType, Map<Batch, Integer> batches) {
 		try {
-			Thread.sleep(500);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("*** PREPARING NEW MOVEMENT ***");
+		System.out.println("  Type = " + Messages.instance().get( movType.getKey() ) + ", Date = " + DateUtils.formatDate(dt, "dd-MMM-yyyy"));
+		System.out.println("  Batches");
+		for (Batch bq: batches.keySet()) {
+			System.out.println("  batch=" + bq.getBatchNumber() + ", " + batches.get(bq));
+		}
+		
 		return movementHome.prepareNewMovement(dt, unit, source, medicine, movType, batches, null);
 	}
 
@@ -191,7 +202,7 @@ public class MovementHomeTest {
 		b1.setQuantityContainer(200);
 		b1.setTotalPrice(1000F);
 		b1.setUnitPrice( b1.getTotalPrice() / b1.getQuantityReceived());
-		entityManager.persist(b1);
+//		entityManager.persist(b1);
 		
 		b2 = new Batch();
 		b2.setBatchNumber("ABCD");
@@ -204,7 +215,7 @@ public class MovementHomeTest {
 		b2.setQuantityContainer(300);
 		b2.setTotalPrice(1200F);
 		b2.setUnitPrice( b2.getTotalPrice() / b2.getQuantityReceived());
-		entityManager.persist(b2);
+//		entityManager.persist(b2);
 		
 /*		BatchQuantity qtd = new BatchQuantity();
 		qtd.setBatch(b1);
@@ -220,7 +231,8 @@ public class MovementHomeTest {
 		qtd.setTbunit(unit);
 		entityManager.persist(qtd);
 		
-*/		entityManager.flush();
+*/
+//		entityManager.flush();
 	}
 	
 }

@@ -39,12 +39,12 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
-    	<h:inputText value="#{tbContactBR.age}" />
+    	<h:inputText value="#{tbContactBR.age}" required="true"/>
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.contactType']}:</ui:define>
-    	<h:selectOneMenu value="#{tbContactBR.contactType}" required="false">
+    	<h:selectOneMenu value="#{tbContactBR.contactType}" required="true">
     		<s:selectItems value="#{fieldsQuery.contactTypes}" var="s" noSelectionLabel="-" label="#{s.name}" />
     		<s:convertEntity />
     	</h:selectOneMenu>
@@ -52,7 +52,7 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.examined']}:</ui:define>
-    	<h:selectOneMenu id="cbexamined" value="#{tbContactBR.examinated}" required="false">
+    	<h:selectOneMenu id="cbexamined" value="#{tbContactBR.examinated}" required="true">
 			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
 			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
     	</h:selectOneMenu>
@@ -96,14 +96,6 @@
     </div>
 
     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['TbContact.conduct']}:</ui:define>
-    	<h:selectOneMenu value="#{tbContactBR.conduct}" required="false">
-    		<s:selectItems value="#{fieldsQuery.contactConducts}" var="s" noSelectionLabel="-" label="#{s.name}" />
-    		<s:convertEntity />
-    	</h:selectOneMenu>
-    </s:decorate>
-
-    <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MicroscopyResult']}:</ui:define>
     	<h:selectOneMenu value="#{tbContactBR.microscopyResult}" required="false" style="margin-left:4px;">
     		<s:selectItems value="#{tbContactBRHome.microscopyResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}"/>
@@ -116,6 +108,14 @@
     	<h:selectOneMenu value="#{tbContactBR.cultureResult}" required="false" style="margin-left:4px;">
     		<s:selectItems value="#{tbContactBRHome.cultureResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}"/>
     		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbContact.conduct']}:</ui:define>
+    	<h:selectOneMenu value="#{tbContactBR.conduct}" required="false">
+    		<s:selectItems value="#{fieldsQuery.contactConducts}" var="s" noSelectionLabel="-" label="#{s.name}" />
+    		<s:convertEntity />
     	</h:selectOneMenu>
     </s:decorate>
 

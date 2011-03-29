@@ -76,7 +76,8 @@ public class CaseManagementTest {
 	}
 
 	public void adjustNumDaysPlanned() {
-		executeAsyncAction.adjustDaysPlanned();
+		Workspace ws = (Workspace)Component.getInstance("defaultWorkspace");
+		executeAsyncAction.adjustDaysPlanned(ws);
 		facesMessages.add("Execution is under progress... Don't click on the update button again");
 	}
 

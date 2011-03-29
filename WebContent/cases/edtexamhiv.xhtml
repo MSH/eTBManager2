@@ -22,9 +22,11 @@
 	<a:form id="formexam">
     <s:decorate id="dt" template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
-    	<ui:param name="required" value="true" /> 
+    	<ui:param name="required" value="false" /> 
     	<ui:param name="future" value="true" /> 
     	<ui:param name="datefield" value="#{examHIV.date}" /> 
+		<ui:param name="edtid" value="edtdate" /> 
+		<ui:param name="redasterisk" value="true" />
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >

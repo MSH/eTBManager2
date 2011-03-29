@@ -15,7 +15,7 @@
 		<ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>
 		<span id="divbirthdate">
 		<rich:calendar id="pacbirthdate" enableManualInput="true" value="#{tbcase.patient.birthDate}" 
-			required="false" locale="#{locale}" datePattern="#{messages['locale.datePattern']}" 
+			required="#{not empty birthdaterequired}" locale="#{locale}" datePattern="#{messages['locale.datePattern']}" 
 			timeZone="#{timezones.default}" validator="#{futureDateValidator.validate}" inputStyle="width:100px;" 
 			showWeeksBar="false" onchanged="handleCaseDateChange();">
 		</rich:calendar>

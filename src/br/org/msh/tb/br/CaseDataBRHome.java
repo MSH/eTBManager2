@@ -298,6 +298,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 			return "error";
 
 		adjustMedicalExaminationFields();
+		medicalExaminationBRHome.setDisplayMessage(false);
 		return medicalExaminationBRHome.persist();
 	}
 
@@ -336,8 +337,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 				}
 			}
 			
-			if ((!examCultureHome.getInstance().getResult().equals(CultureResult.NOTDONE)) || 
-				(!examMicroscopyHome.getInstance().getResult().equals(MicroscopyResult.NOTDONE))) 
+			if (!examCultureHome.getInstance().getResult().equals(CultureResult.NOTDONE)) 
 			{
 				if (examCultureHome.getInstance().getDateCollected() == null) {
 					facesMessages.addToControlFromResourceBundle("edtdatecollected", "javax.faces.component.UIInput.REQUIRED");
@@ -400,6 +400,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		if (exam.getResult() != HIVResult.NOTDONE) {
 			if (exam.getResult() == HIVResult.ONGOING)
 				exam.setDate(null);
+			examHIVHome.setDisplayMessage(false);
 			examHIVHome.persist();
 		}
 
@@ -423,6 +424,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 //			examMicroscopyHome.getInstance().setDateCollected(dtCollected);
 //			examMicroscopy.setDateRelease(examCulture.getDateRelease());
 //			examMicroscopy.setLaboratory(examCulture.getLaboratory());
+			examMicroscopyHome.setDisplayMessage(false);
 			examMicroscopyHome.persist();
 		}
 		
@@ -432,12 +434,15 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 				facesMessages.addToControlFromResourceBundle("dtrelease", "cases.exams.datereleasebeforecol");
 				return false;
 			}			
+			examCultureHome.setDisplayMessage(false);
 			examCultureHome.persist();
 		}
 
 		// save molecular biology
-		if (!MolecularBiologyResult.NOTDONE.equals(molecularBiology.getResult()))
+		if (!MolecularBiologyResult.NOTDONE.equals(molecularBiology.getResult())) {
+			molecularBiologyHome.setDisplayMessage(false);
 			molecularBiologyHome.persist();
+		}
 
 		if (dtCollected == null) {
 			dtCollected = molecularBiology.getDate();
@@ -458,6 +463,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		
 		if (hasResult) {
 			examDSTHome.getInstance().setDateCollected(dtCollected);
+			examDSTHome.setDisplayMessage(false);
 			examDSTHome.persist();
 		}
 		
@@ -500,6 +506,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		ExamXRay exam = examXRayHome.getInstance();
 		exam.setDate(notifDate);
 		exam.setPresentation(presentation);
+		examXRayHome.setDisplayMessage(false);
 		examXRayHome.persist();
 		
 		return true;
@@ -529,6 +536,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		if (ret.equals("persisted")) {
 			if (tbcase.getHealthUnits().size() > 0) {
 				tbcase.setNotificationUnit(tbcase.getHealthUnits().get(0).getTbunit());
+				caseHome.setDisplayMessage(false);
 				caseHome.persist();
 			}
 		}
@@ -549,8 +557,11 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	 * @return
 	 */
 	public AdminUnitSelection getAuselection() {
-		if (auselection == null)
+		if (auselection == null) {
 			auselection = new AdminUnitSelection();
+			if (isManaged())
+				auselection.setSelectedUnit(getInstance().getAdminUnitUsOrigem());
+		}
 		return auselection;
 	}
 

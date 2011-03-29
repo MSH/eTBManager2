@@ -194,28 +194,28 @@ else return false;
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Batch.brandName']}:</ui:define>
-    	<h:inputText value="#{medicineManStartHome.batchQuantity.batch.brandName}" size="80" style="width:250px"/>
+    	<h:inputText value="#{medicineManStartHome.batchInfo.batch.brandName}" size="80" style="width:250px"/>
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Batch.batchNumber']}:</ui:define>
-    	<h:inputText value="#{medicineManStartHome.batchQuantity.batch.batchNumber}" size="30" required="true" />
+    	<h:inputText value="#{medicineManStartHome.batchInfo.batch.batchNumber}" size="30" required="true" />
     </s:decorate>
 
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['Batch.expiryDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
-    	<ui:param name="datefield" value="#{medicineManStartHome.batchQuantity.batch.expiryDate}" /> 
+    	<ui:param name="datefield" value="#{medicineManStartHome.batchInfo.batch.expiryDate}" /> 
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Batch.manufacturer']}:</ui:define>
-    	<h:inputText value="#{medicineManStartHome.batchQuantity.batch.manufacturer}" size="80" style="width:250px" />
+    	<h:inputText value="#{medicineManStartHome.batchInfo.batch.manufacturer}" size="80" style="width:250px" />
     </s:decorate>
 
     <s:decorate id="qtd" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['medicines.movs.availableqtty']}:</ui:define>
-    	<h:inputText id="qtd" value="#{medicineManStartHome.batchQuantity.quantity}" required="true" onkeypress="return numbersOnly(this,event);" >
+    	<h:inputText id="qtd" value="#{medicineManStartHome.batchInfo.quantity}" required="true" onkeypress="return numbersOnly(this,event);" >
     		<f:validateDoubleRange minimum="1"/>
     	</h:inputText>
     	(#{medicineManStartHome.medicineInfo.medicine.dosageForm})
@@ -223,7 +223,7 @@ else return false;
 
     <s:decorate id="qtdcon" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Batch.quantityContainer']}:</ui:define>
-    	<h:inputText id="qtdcon" value="#{medicineManStartHome.batchQuantity.batch.quantityContainer}" required="true" onkeypress="return numbersOnly(this,event);" >
+    	<h:inputText id="qtdcon" value="#{medicineManStartHome.batchInfo.batch.quantityContainer}" required="true" onkeypress="return numbersOnly(this,event);" >
     		<f:validateDoubleRange minimum="1"/>
     	</h:inputText>
     	(#{medicineManStartHome.medicineInfo.medicine.dosageForm})
@@ -231,14 +231,14 @@ else return false;
 
     <s:decorate id="uprice" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.unitPrice']}:</ui:define>
-    	<h:inputText id="uprice" value="#{medicineManStartHome.batchQuantity.batch.unitPrice}" required="true" 
+    	<h:inputText id="uprice" value="#{medicineManStartHome.batchInfo.batch.unitPrice}" required="true" 
     		converter="currencyConverter" onkeyup="return changeUnitPrice(this);">
     	</h:inputText>
     </s:decorate>
 
     <s:decorate id="tprice" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
-    	<h:inputText id="tprice" value="#{medicineManStartHome.batchQuantity.batch.totalPrice}" required="true" 
+    	<h:inputText id="tprice" value="#{medicineManStartHome.batchInfo.batch.totalPrice}" required="true" 
     		converter="currencyConverter" onkeyup="return changeTotalPrice(this);">
     		<f:validateDoubleRange minimum="1"/>
     	</h:inputText>

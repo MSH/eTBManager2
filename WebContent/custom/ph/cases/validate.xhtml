@@ -34,7 +34,7 @@
 
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['en_PH.casedata.catIVRegNumber']}:</ui:define>
-		<h:inputText id="cativregnumber" value="#{caseDataPH.catIVRegNumber}" style="width:100px;" />
+		<h:inputText id="cativregnumber" value="#{caseDataPH.catIVRegNumber}" style="width:100px;" required="true"/>
 		(TC-YY-NNNN)
 		<rich:jQuery selector="#cativregnumber" query="mask('99-99-9999')" />
 	</s:decorate>

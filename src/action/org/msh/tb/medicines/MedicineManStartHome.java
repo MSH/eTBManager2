@@ -47,7 +47,7 @@ public class MedicineManStartHome {
 	@In EntityManager entityManager;
 	
 	private Date startDate;
-	private BatchQuantity batchQuantity;
+	private BatchInfo batchInfo;
 	private MedicineInfo medicineInfo;
 	private List<SourceInfo> sourcesInfo;
 	private boolean newBatch;
@@ -86,8 +86,8 @@ public class MedicineManStartHome {
 	 * @param medicine
 	 */
 	public void startNewBatch(MedicineInfo medicineInfo) {
-		batchQuantity = new BatchQuantity();
-		batchQuantity.setBatch(new Batch());
+		batchInfo = new BatchInfo();
+		batchInfo.setBatch(new Batch());
 		this.medicineInfo = medicineInfo;
 		newBatch = true;
 		validated = false;
@@ -99,8 +99,8 @@ public class MedicineManStartHome {
 	 * @param medInfo
 	 * @param batch
 	 */
-	public void startBatchEdit(MedicineInfo medInfo, BatchQuantity batchInfo) {
-		this.batchQuantity = batchInfo;
+	public void startBatchEdit(MedicineInfo medInfo, BatchInfo batchInfo) {
+		this.batchInfo = batchInfo;
 		medicineInfo = medInfo;
 		newBatch = false;
 		validated = false;
@@ -121,16 +121,14 @@ public class MedicineManStartHome {
 	 * Finish editing of a batch done by the user
 	 */
 	public void finishBatchEditing() {
-		if (batchQuantity == null)
+		if (batchInfo == null)
 			return;
 
-		Batch batch = batchQuantity.getBatch();
+		Batch batch = batchInfo.getBatch();
 		
 		if (newBatch) {
-			batchQuantity.setSource(medicineInfo.getSource());
-			batchQuantity.setTbunit(unit);
 			batch.setMedicine(medicineInfo.getMedicine());
-			medicineInfo.getBatches().add(batchQuantity);
+			medicineInfo.getBatches().add(batchInfo);
 		}
 	
 //		batchQuantity.setQuantity(0);
@@ -168,7 +166,13 @@ public class MedicineManStartHome {
 			for (MedicineInfo medInfo: sourceInfo.getItems()) {
 
 				// save batches before creating movements
-				for (BatchQuantity batchQuantity: medInfo.getBatches()) {
+				for (BatchInfo batchInfo: medInfo.getBatches()) {
+					BatchQuantity batchQuantity = new BatchQuantity();
+					batchQuantity.setSource(medInfo.getSource());
+					batchQuantity.setTbunit(unit);
+					batchQuantity.setBatch(batchInfo.getBatch());
+					batchQuantity.setQuantity(0);
+					
 					entityManager.persist(batchQuantity.getBatch());
 					entityManager.persist(batchQuantity);
 					entityManager.flush();
@@ -307,6 +311,46 @@ public class MedicineManStartHome {
 
 
 	/**
+	 * @author Ricardo Memoria
+	 *
+	 */
+	public class BatchInfo {
+		private Batch batch;
+		private int quantity;
+
+		public float getTotalPrice() {
+			return quantity * batch.getUnitPrice();
+		}
+		
+		/**
+		 * @return the batch
+		 */
+		public Batch getBatch() {
+			return batch;
+		}
+		/**
+		 * @param batch the batch to set
+		 */
+		public void setBatch(Batch batch) {
+			this.batch = batch;
+		}
+		/**
+		 * @return the quantity
+		 */
+		public int getQuantity() {
+			return quantity;
+		}
+		/**
+		 * @param quantity the quantity to set
+		 */
+		public void setQuantity(int quantity) {
+			this.quantity = quantity;
+		}
+	}
+
+	
+
+	/**
 	 * Information about the medicines by source
 	 * @author Ricardo Memoria
 	 *
@@ -314,7 +358,7 @@ public class MedicineManStartHome {
 	public class MedicineInfo {
 		private Medicine medicine;
 		private Source source;
-		private List<BatchQuantity> batches = new ArrayList<BatchQuantity>();
+		private List<BatchInfo> batches = new ArrayList<BatchInfo>();
 		
 		public MedicineInfo(Medicine medicine, Source source) {
 			super();
@@ -329,7 +373,7 @@ public class MedicineManStartHome {
 		 */
 		public int getQuantity() {
 			int qtd = 0;
-			for (BatchQuantity batchInfo: batches) {
+			for (BatchInfo batchInfo: batches) {
 				qtd += batchInfo.getQuantity();
 			}
 			return qtd;
@@ -342,7 +386,7 @@ public class MedicineManStartHome {
 		 */
 		public float getTotalPrice() {
 			float tot = 0;
-			for (BatchQuantity batchInfo: batches)
+			for (BatchInfo batchInfo: batches)
 				tot += batchInfo.getTotalPrice();
 			return tot;
 		}
@@ -362,8 +406,8 @@ public class MedicineManStartHome {
 		
 		public Map<Batch, Integer> getBatchesMap() {
 			Map<Batch, Integer> btmap = new HashMap<Batch, Integer>();
-			for (BatchQuantity batchInfo: batches) {
-				btmap.put(batchInfo.getBatch(), batchInfo.getQuantity());
+			for (BatchInfo batchInfo: batches) {
+				btmap.put(batchInfo.getBatch(), batchInfo.getBatch().getQuantityReceived());
 			}
 			return btmap;
 		}
@@ -380,7 +424,7 @@ public class MedicineManStartHome {
 		public void setSource(Source source) {
 			this.source = source;
 		}
-		public List<BatchQuantity> getBatches() {
+		public List<BatchInfo> getBatches() {
 			return batches;
 		}
 	}
@@ -411,8 +455,8 @@ public class MedicineManStartHome {
 	}
 
 
-	public BatchQuantity getBatchQuantity() {
-		return batchQuantity;
+	public BatchInfo getBatchInfo() {
+		return batchInfo;
 	}
 
 

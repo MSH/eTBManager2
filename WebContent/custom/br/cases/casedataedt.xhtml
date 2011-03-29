@@ -53,7 +53,9 @@
 	
 	</td></tr>
 	
-	<ui:include src="/layout/editbirthdate.xhtml" />
+	<ui:include src="/layout/editbirthdate.xhtml" >
+		<ui:param name="birthdaterequired" value="true" />
+	</ui:include>
 	
 	<tr><td colspan="2">
 	
@@ -218,7 +220,6 @@
     	<ui:define name="label">#{messages['form.name']}:</ui:define>
 		<h:inputText value="#{caseDataBR.usOrigem}" style="width:250px;text-transform:uppercase;" maxlength="100" required="true"/>
 	</s:decorate>
-	
 	<s:decorate template="/layout/auselection.xhtml">
 		<ui:param name="auselection" value="#{caseDataBRHome.auselection}" />
 		<ui:param name="requiredLevel" value="2" />
@@ -242,7 +243,7 @@
 
 	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
-    		<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="#{tbcase.validated}">
+    		<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="true">
     			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
     			<s:convertEnum />
     		</h:selectOneMenu>
@@ -277,6 +278,7 @@
 
     <s:decorate template="/layout/editfield.xhtml" rendered="#{tbcase.classification=='NMT'}">
     	<ui:define name="label">#{messages['pt_BR.tipo_mnt']}:</ui:define>
+    	<ui:param name="required" value="true" />
     	<ui:param name="id" value="mnt" />
     	<ui:param name="field" value="#{caseDataBR.microbacteriose}" />
     	<ui:param name="list" value="#{fieldsQuery.micobacterioses}" />
@@ -284,6 +286,7 @@
 
     <s:decorate template="/layout/editfield.xhtml"  rendered="#{tbcase.classification=='DRTB'}">
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
+    	<ui:param name="required" value="true" />
     	<ui:param name="id" value="mnt" />
     	<ui:param name="field" value="#{caseDataBR.resistanceType}" />
     	<ui:param name="list" value="#{fieldsQuery.resistanceTypes}" />
@@ -385,7 +388,7 @@ function genderChange(cb) {
     	<s:decorate template="/layout/edit.xhtml" >
     		<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
     		<div id="edtweight">
-    		<h:inputText value="#{medicalExamination.weight}" required="true" 
+    		<h:inputText value="#{medicalExaminationBRHome.instance.weight}" required="true" 
     			onkeypress="return numbersOnly(this,event);" onkeyup="updateBMI(this, event);"
     			style="width:80px;" />#{messages['MedicalExamination.weight.unit']}
     		</div>
@@ -396,7 +399,7 @@ function genderChange(cb) {
     	<s:decorate template="/layout/edit.xhtml" >
     		<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
     		<span id="edtheight">
-    		<h:inputText value="#{medicalExamination.height}" style="width:80px;"
+    		<h:inputText value="#{medicalExaminationBRHome.instance.height}" style="width:80px;"
     			onkeypress="return numbersOnly(this,event);" onkeyup="updateBMI(this, event);"/>
     		#{messages['MedicalExamination.height.unit']}
     		</span>
@@ -430,7 +433,7 @@ function genderChange(cb) {
 				#{messages['cases.prevtreat.numprev']}:
 			</ui:define>
 			<h:selectOneMenu value="#{prevTBTreatmentHome.numItems}">
-				<f:selectItems value="#{prevTBTreatmentHome.numTreatmentsOptions}"/>
+				<f:selectItems value="#{prevTBTreatmentHome.numTreatmentsOptions}" required="true"/>
 				<a:support event="onchange" ajaxSingle="true" reRender="prevtreats"/>
 			</h:selectOneMenu>
 		</s:decorate>
@@ -516,6 +519,7 @@ function genderChange(cb) {
 
     <s:decorate template="/layout/editfield.xhtml" >
     	<ui:define name="label">#{messages['TbField.SKINCOLOR']}:</ui:define>
+    	<ui:param name="required" value="true" />
     	<ui:param name="id" value="skinColor" />
     	<ui:param name="field" value="#{caseDataBR.skinColor}" />
     	<ui:param name="list" value="#{fieldsQuery.skinColors}" />
@@ -523,6 +527,7 @@ function genderChange(cb) {
 	
     <s:decorate template="/layout/editfield.xhtml" >
     	<ui:define name="label">#{messages['TbField.POSITION']}:</ui:define>
+    	<ui:param name="required" value="true" />
     	<ui:param name="id" value="position" />
     	<ui:param name="field" value="#{caseDataBR.position}" />
     	<ui:param name="list" value="#{fieldsQuery.positions}" />
@@ -530,6 +535,7 @@ function genderChange(cb) {
 
     <s:decorate template="/layout/editfield.xhtml" >
     	<ui:define name="label">#{messages['TbField.EDUCATIONAL_DEGREE']}:</ui:define>
+    	<ui:param name="required" value="true" />
     	<ui:param name="id" value="eduDegree" />
     	<ui:param name="field" value="#{caseDataBR.educationalDegree}" />
     	<ui:param name="list" value="#{fieldsQuery.educationalDegree}" />
@@ -537,6 +543,7 @@ function genderChange(cb) {
 	
     <s:decorate template="/layout/editfield.xhtml" >
     	<ui:define name="label">#{messages['TbField.CONTAG_PLACE']}:</ui:define>
+    	<ui:param name="required" value="true" />
     	<ui:param name="id" value="contagPlace" />
     	<ui:param name="field" value="#{caseDataBR.contagPlace}" />
     	<ui:param name="list" value="#{fieldsQuery.contagPlace}" />

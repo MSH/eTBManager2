@@ -310,6 +310,7 @@
     		<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
     		<ui:param name="datefield" value="#{startTreatmentHome.iniTreatmentDate}" /> 
     		<ui:param name="required" value="true" /> 
+    		<ui:param name="future" value="false" /> 
     	</s:decorate>
 
     	<s:decorate template="/layout/edit.xhtml" >
@@ -489,20 +490,20 @@ function examMicroscopyResultChanged(immediate) {
 
 function showSupUnit(cb, immediate) {
 	  if (cb.selectedIndex == 1)
-		   jQuery('#div_supunit').slideUp(immediate?0:500)
-	  else jQuery('#div_supunit').slideDown(immediate?0:500);
+		   jQuery('#div_supunit').slideDown(immediate?0:500)
+	  else jQuery('#div_supunit').slideUp(immediate?0:500);
 }
 
 function showRegimens(cb, immediate) {
 	  if (cb.selectedIndex == 1)
-		   jQuery('#divregtype').slideUp(immediate?0:500)
-	  else jQuery('#divregtype').slideDown(immediate?0:500);
+		   jQuery('#divregtype').slideDown(immediate?0:500)
+	  else jQuery('#divregtype').slideUp(immediate?0:500);
 }
 
 function molbioResultChange(cb, immediate) {
 	if (cb.selectedIndex > 1)
-	     jQuery('#divmolbio').slideUp(immediate?0:500)
-    else jQuery('#divmolbio').slideDown(immediate?0:500);
+	     jQuery('#divmolbio').slideDown(immediate?0:500)
+    else jQuery('#divmolbio').slideUp(immediate?0:500);
     updateDSTView(false);
 }
 

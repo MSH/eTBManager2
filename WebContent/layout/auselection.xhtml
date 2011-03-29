@@ -20,7 +20,6 @@
 <h:panelGroup id="aulevels">
 <s:decorate template="/layout/edit.xhtml" rendered="#{auselection.unitLevel1.unitsCount > 0}">
 	<ui:define name="label">#{auselection.labelLevel2}:</ui:define>
-	<ui:param name="required" value="#{required and auselection.level2Required}" />
 	<h:selectOneMenu id="cbselau2" value="#{auselection.unitLevel2}" rendered="#{not auselection.level2ReadOnly}" required="#{requiredLevel > 1}">
 		<s:selectItems var="it" value="#{auselection.optionsLevel2}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
@@ -31,7 +30,6 @@
 
 <s:decorate template="/layout/edit.xhtml" rendered="#{auselection.unitLevel2.unitsCount > 0}">
 	<ui:define name="label">#{auselection.labelLevel3}:</ui:define>
-	<ui:param name="required" value="#{required and auselection.level3Required}" />
 	<h:selectOneMenu id="cbselau3" value="#{auselection.unitLevel3}" rendered="#{not auselection.level3ReadOnly}" required="#{requiredLevel > 2}">
 		<s:selectItems var="it" value="#{auselection.optionsLevel3}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
@@ -42,7 +40,6 @@
 
 <s:decorate template="/layout/edit.xhtml" rendered="#{auselection.unitLevel3.unitsCount > 0}">
 	<ui:define name="label">#{auselection.labelLevel4}:</ui:define>
-	<ui:param name="required" value="#{required and auselection.level4Required}" />
 	<h:selectOneMenu id="cbselau3" value="#{auselection.unitLevel4}" rendered="#{not auselection.level4ReadOnly}" required="#{requiredLevel > 3}">
 		<s:selectItems var="it" value="#{auselection.optionsLevel4}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
@@ -53,7 +50,6 @@
 
 <s:decorate template="/layout/edit.xhtml" rendered="#{auselection.unitLevel4.unitsCount > 0}">
 	<ui:define name="label">#{auselection.labelLevel5}:</ui:define>
-	<ui:param name="required" value="#{required and auselection.level5Required}" />
 	<h:selectOneMenu id="cbselau3" value="#{auselection.unitLevel5}" rendered="#{not auselection.level5ReadOnly}" required="#{requiredLevel > 4}">
 		<s:selectItems var="it" value="#{auselection.optionsLevel5}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
