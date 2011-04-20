@@ -44,6 +44,7 @@ public class CaseFilters {
 	private String middleName;
 	private String lastName;
 	private String recordNumber;
+	private String registrationCode;
 	private CaseState caseState;
 	private ValidationState validationState;
 	private CaseClassification classification;
@@ -107,6 +108,7 @@ public class CaseFilters {
 		middleName = null;
 		lastName = null;
 		recordNumber = null;
+		registrationCode = null;
 		caseState = null;
 		validationState = null;
 		caseView = CaseView.DATA;
@@ -683,7 +685,7 @@ public class CaseFilters {
 	public void setCaseView(CaseView caseView) {
 		this.caseView = caseView;
 	}
-
+	
 	/**
 	 * @return the tagid
 	 */
@@ -697,4 +699,15 @@ public class CaseFilters {
 	public void setTagid(Integer tagid) {
 		this.tagid = tagid;
 	}
+		
+
+	public String getRegistrationCode() {
+		return registrationCode;
+	}
+
+	public void setRegistrationCode(String registrationCode) {
+		this.registrationCode = registrationCode;
+	}
+	
+	
 }
