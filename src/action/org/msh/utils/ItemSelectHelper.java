@@ -53,7 +53,7 @@ public class ItemSelectHelper {
      * <b>Retorno</b>
      *    Lista de objetos referenciados por ItemSelect
      */
-	public static <E> List<E> createItemsList(List<ItemSelect<E>> selItems, boolean aSelected) {
+	public static <E> List<E> getSelectedItems(List<ItemSelect<E>> selItems, boolean aSelected) {
         ArrayList<E> lst = new ArrayList<E>();
         
         for (int i=0; i < selItems.size(); i++) {

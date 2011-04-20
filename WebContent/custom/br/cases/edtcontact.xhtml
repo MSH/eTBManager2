@@ -113,12 +113,14 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.conduct']}:</ui:define>
-    	<h:selectOneMenu value="#{tbContactBR.conduct}" required="false">
+    	<h:selectOneMenu id="cbconduct" value="#{tbContactBR.conduct}" required="false">
     		<s:selectItems value="#{fieldsQuery.contactConducts}" var="s" noSelectionLabel="-" label="#{s.name}" />
     		<s:convertEntity />
     	</h:selectOneMenu>
     </s:decorate>
+	<rich:jQuery selector="#cbconduct" query="change(function(){ conductChange(this, 500); })" />
 
+	<div id="periodo" style="#{(empty tbContactBR.conduct) or (tbContactBR.conduct.customId == '1')?'display:none':''}">
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['pt_BR.contact.dateIniTreat']}:</ui:define>
     	<ui:param name="required" value="false" /> 
@@ -130,6 +132,7 @@
     	<ui:param name="required" value="false" /> 
     	<ui:param name="datefield" value="#{tbContactBR.dateEndTreat}" /> 
     </s:decorate>
+    </div>
     </div>
     </div>
 
@@ -163,6 +166,12 @@ function tuberculinTestChange(cb, interval) {
 	if (cb.selectedIndex == 1) 
 		 jQuery('#divtestresult').show(interval)
 	else jQuery('#divtestresult').hide(interval);
+}
+
+function conductChange(cb, interval) {
+	if (cb.selectedIndex > 1) 
+		 jQuery('#periodo').show(interval)
+	else jQuery('#periodo').hide(interval);
 }
 -->
 </script>

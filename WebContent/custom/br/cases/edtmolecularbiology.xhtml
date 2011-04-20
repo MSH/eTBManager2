@@ -32,7 +32,7 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['pt_BR.MolecularBiology.result']}:</ui:define>
-    	<h:selectOneMenu value="#{molecularBiology.result}">
+    	<h:selectOneMenu value="#{molecularBiology.result}" required="true">
     		<s:selectItems value="#{molecularBiologyHome.resultOptions}" var="it" noSelectionLabel="-" label="#{it.message}" />
     		<s:convertEnum />
     	</h:selectOneMenu>

@@ -42,6 +42,11 @@ public class TbContactBRHome extends EntityHomeEx<TbContactBR> {
 	@Override
 	public String persist() {
 		TbContactBR con = getInstance();
+		
+		if ((con.getConduct() == null) || (con.getConduct().getCustomId().equals("1"))) {
+			con.setDateEndTreat(null);
+			con.setDateIniTreat(null);
+		}
 
 		if ((con.getDateEndTreat() != null) && (con.getDateIniTreat() != null) && 
 			(con.getDateEndTreat().before(con.getDateIniTreat()))) 

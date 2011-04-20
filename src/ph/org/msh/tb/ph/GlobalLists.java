@@ -7,6 +7,7 @@ import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.mdrtb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.mdrtb.entities.enums.TbField;
 import org.msh.tb.ph.entities.enums.PhysicalExamResult;
+import org.msh.tb.ph.entities.enums.PreEnrollmentOrigin;
 
 @Name("globalLists_ph")
 public class GlobalLists {
@@ -88,5 +89,10 @@ public class GlobalLists {
 	@Factory("tbFields.ph")
 	public TbField[] getTbFields() {
 		return tbfields;
+	}
+
+
+	public PreEnrollmentOrigin[] getPreEnrollmentOrigins() {
+		return PreEnrollmentOrigin.values();
 	}
 }

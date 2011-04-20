@@ -57,8 +57,33 @@
 		onclick="if (!confirm('#{messages['cases.reopen.confirm']}')) return false;">
 	</h:commandLink>
 
+	<s:link value="#{messages['admin.tags']}" view="/cases/casetagsedt.xhtml" rendered="#{caseHome.canEditCaseData and empty tbcase.tags}">
+		<f:param name="id" value="#{caseHome.id}" />
+	</s:link>
+
 	</h:form>
 	</h:panelGroup>
+
+	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:10px;" rendered="#{not empty tbcase.tags}">
+	<ui:define name="header">
+		<b>#{messages['admin.tags']}</b>
+	</ui:define>
+	<ui:define name="footer" >
+		<s:link value="#{messages['form.edit']}" 
+			rendered="#{caseHome.canEditCaseData}" 
+			view="/cases/casetagsedt.xhtml"
+			style="padding:4px;display:table;">
+			<f:param name="id" value="#{caseHome.id}"/>
+		</s:link>
+	</ui:define>
+	<h:dataTable value="#{tbcase.tags}" var="it">
+		<h:column>
+			<div class="tag-icon">
+				#{it.name}
+			</div>
+		</h:column>
+	</h:dataTable>
+	</s:decorate>
 	
 	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:10px;" rendered="#{not empty caseHome.otherCases}">
 		<ui:define name="header">

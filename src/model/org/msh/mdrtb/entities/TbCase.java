@@ -21,6 +21,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -30,9 +31,11 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import org.hibernate.validator.NotNull;
+import org.jboss.seam.international.Messages;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.DiagnosisType;
+import org.msh.mdrtb.entities.enums.DisplayCaseNumber;
 import org.msh.mdrtb.entities.enums.DrugResistanceType;
 import org.msh.mdrtb.entities.enums.InfectionSite;
 import org.msh.mdrtb.entities.enums.Nationality;
@@ -212,7 +215,7 @@ public class TbCase implements Serializable{
 	@FieldLog(ignore=true)
 	private List<CaseSideEffect> sideEffects = new ArrayList<CaseSideEffect>();
 
-	@ManyToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
 	@FieldLog(ignore=true)
 	private List<CaseComorbidity> comorbidities = new ArrayList<CaseComorbidity>();
 	
@@ -252,6 +255,13 @@ public class TbCase implements Serializable{
 	
 	private int issueCounter;
 
+	@ManyToMany
+	@JoinTable(name="TAGS_CASE", 
+			joinColumns={@JoinColumn(name="CASE_ID")},
+			inverseJoinColumns={@JoinColumn(name="TAG_ID")})
+	private List<Tag> tags = new ArrayList<Tag>();
+
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -426,11 +436,16 @@ public class TbCase implements Serializable{
 	 * @return
 	 */
 	public String getDisplayCaseNumber() {
-		Integer number = getCaseNumber();
-		if ((number == null) || (getPatient() == null))
-			return null;
-		
-		return formatCaseNumber(patient.getRecordNumber(), caseNumber);
+		Workspace ws = (patient != null? patient.getWorkspace() : null);
+		if ((ws != null) && (ws.getDisplayCaseNumber() == DisplayCaseNumber.REGISTRATION_CODE))
+			return getRegistrationCode();
+		else {
+			Integer number = getCaseNumber();
+			if ((number == null) || (getPatient() == null))
+				return Messages.instance().get("cases.new");
+			
+			return formatCaseNumber(patient.getRecordNumber(), caseNumber);
+		}
 	}
 	
 
@@ -1130,5 +1145,21 @@ public class TbCase implements Serializable{
 	 */
 	public void setTreatmentUnit(Tbunit treatmentUnit) {
 		this.treatmentUnit = treatmentUnit;
+	}
+
+
+	/**
+	 * @return the tags
+	 */
+	public List<Tag> getTags() {
+		return tags;
+	}
+
+
+	/**
+	 * @param tags the tags to set
+	 */
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
 	}
 }

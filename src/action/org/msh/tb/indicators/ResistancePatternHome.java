@@ -40,7 +40,7 @@ public class ResistancePatternHome extends EntityHomeEx<ResistancePattern>{
 	 * @return
 	 */
 	public String save() {
-		List<Substance> itens = ItemSelectHelper.createItemsList(getSelectableSubstances(), true);
+		List<Substance> itens = ItemSelectHelper.getSelectedItems(getSelectableSubstances(), true);
 
 		// update the pattern name
 		String s = "";

@@ -24,7 +24,7 @@ import org.msh.mdrtb.entities.enums.YesNoType;
  *
  * Records information about a medical examination of a case
  *
- * @author Ricardo Memï¿½ria
+ * @author Ricardo Memória
  *
  */
 @Entity

@@ -91,7 +91,7 @@ public class ComorbidityHome {
 		if (comorbidities == null)
 			return "error";
 		
-		List<CaseComorbidity> lst = ItemSelectHelper.createItemsList(comorbidities, true);
+		List<CaseComorbidity> lst = ItemSelectHelper.getSelectedItems(comorbidities, true);
 		
 		registerLog(lst);
 		

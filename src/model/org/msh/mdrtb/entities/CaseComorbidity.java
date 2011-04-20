@@ -28,6 +28,9 @@ public class CaseComorbidity {
 	@NotNull
 	FieldValue comorbidity;
 	
+	@Column(length=100)
+	private String duration;
+	
 	@Column(length=200)
 	private String comment;
 
@@ -86,5 +89,19 @@ public class CaseComorbidity {
 	 */
 	public void setComorbidity(FieldValue comorbidity) {
 		this.comorbidity = comorbidity;
+	}
+
+	/**
+	 * @return the duration
+	 */
+	public String getDuration() {
+		return duration;
+	}
+
+	/**
+	 * @param duration the duration to set
+	 */
+	public void setDuration(String duration) {
+		this.duration = duration;
 	} 
 }

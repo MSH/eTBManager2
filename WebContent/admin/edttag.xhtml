@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+        
+<ui:param name="title" value="#{messages['admin.tag.edt']}" />
+<ui:param name="topmenu" value="3" />
+
+<ui:param name="waitdlg" value="1" />
+<ui:param name="labelstyle" value="width:160px;" />
+
+<ui:define name="body">
+<h:form id="main">
+    <table class="tabela" width="600px">
+    <tr><td>
+    <s:decorate template="/layout/display.xhtml" rendered="#{tagHome.managed}">
+    	<ui:define name="label">#{messages['form.id']}:</ui:define>
+    	<h:outputText value="#{tagHome.instance.id}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['form.name']}:</ui:define>
+        <h:inputText value="#{tagHome.instance.name}" maxlength="100" style="width : 300px;" required="true" validator="#{tagHome.validateUniqueValue}">
+        	<f:param id="field" value="name"/>
+        </h:inputText>
+    </s:decorate>
+
+    </td></tr>
+    <tr><td align="right">
+            <a:commandButton action="#{tagHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main"/>
+            <s:button view="/admin/tags.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" />
+    </td></tr>
+    </table>
+
+	<p/>
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+</h:form>
+
+
+</ui:define>
+        
+</ui:composition> 

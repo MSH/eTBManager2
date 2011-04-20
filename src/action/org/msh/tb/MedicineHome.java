@@ -42,7 +42,7 @@ public class MedicineHome extends EntityHomeEx<Medicine> {
 	@Override
 	public String persist() {
 		// save list of component substances
-		List<MedicineComponent> lst = ItemSelectHelper.createItemsList(components, true);
+		List<MedicineComponent> lst = ItemSelectHelper.getSelectedItems(components, true);
 		getInstance().setComponents(lst);
 		
 		return super.persist();

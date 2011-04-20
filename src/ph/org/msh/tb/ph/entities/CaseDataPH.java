@@ -15,6 +15,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 
 import org.msh.mdrtb.entities.FieldValue;
 import org.msh.mdrtb.entities.TbCase;
+import org.msh.tb.ph.entities.enums.PreEnrollmentOrigin;
 
 @Entity
 public class CaseDataPH {
@@ -53,8 +54,10 @@ public class CaseDataPH {
 	private FieldValue sourceOfReferral;
 	
 	@OneToMany(mappedBy="caseDataPH", cascade={CascadeType.ALL})
-	private List<PhysicalExam> physicalExams = new ArrayList<PhysicalExam>(); 
-
+	private List<PhysicalExam> physicalExams = new ArrayList<PhysicalExam>();
+	
+	private PreEnrollmentOrigin preEnrollmentOrigin;
+	
 
 	/**
 	 * Search for a physical exam result by its exam type 
@@ -195,6 +198,22 @@ public class CaseDataPH {
 	 */
 	public void setPersonPhone(String personPhone) {
 		this.personPhone = personPhone;
+	}
+
+
+	/**
+	 * @return the preEnrollmentOrigin
+	 */
+	public PreEnrollmentOrigin getPreEnrollmentOrigin() {
+		return preEnrollmentOrigin;
+	}
+
+
+	/**
+	 * @param preEnrollmentOrigin the preEnrollmentOrigin to set
+	 */
+	public void setPreEnrollmentOrigin(PreEnrollmentOrigin preEnrollmentOrigin) {
+		this.preEnrollmentOrigin = preEnrollmentOrigin;
 	}
 
 }

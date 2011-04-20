@@ -9,14 +9,14 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="#{workspaceViewService.templatePage}">
 
-<ui:param name="title" value="#{messages['cases.details.medexam']}" />
-<ui:param name="waitdlg" value="1" />
-
+<ui:param name="title" value="#{messages['cases.details.medexam']}" /><ui:param name="waitdlg" value="1" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:180px;" />
 
-
 <ui:define name="body">
+
+<a:loadScript src="/js/util.js"/>
+
 <p/>
 
 <s:decorate template="/layout/casebody.xhtml">
@@ -33,14 +33,24 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
-    	<h:inputText value="#{medicalExamination.weight}" /> (Kg)
+   		<div id="edtweight">
+    	<h:inputText value="#{medicalExamination.weight}" 
+    		onkeypress="return numbersOnly(this,event);" onkeyup="updateBMI(this, event);"/> (Kg)
+    	</div>
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
-    	<h:inputText value="#{medicalExamination.height}" /> (cm)
+   		<div id="edtheight">
+    	<h:inputText value="#{medicalExamination.height}" 
+    		onkeypress="return numbersOnly(this,event);" onkeyup="updateBMI(this, event);"/> (cm)
+    	</div>
     </s:decorate>
 
+	<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">#{messages['MedicalExamination.BMI']}:</ui:define>
+			<div id="divBMI">-</div>
+	</s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.heartRate']}:</ui:define>
@@ -99,6 +109,8 @@
 
 <rich:jQuery selector="#cbpresc" query="change(function(){checkClick(this.selectedIndex==2, '#edtreason');})" />
 <rich:jQuery selector="#cbpresc[selectedIndex!=2]" query="each(function(){jQuery('#edtreason').hide();})" />
+
+<rich:jQuery selector="#edtheight input" timing="onload" query="each(function() {updateBMI(this);})" />
 
 <script type="text/javascript">
 function checkClick(ashow, divname) {

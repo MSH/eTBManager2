@@ -52,6 +52,7 @@
 				<f:param name="stateIndex" value="#{it.stateIndex}"/>
 				<f:param name="sc" value="#{'CASE_STATE'}"/>
 				<f:param name="vs" />
+				<f:param name="tag" />
 			</s:link>
 			</div>
 		</h:column>
@@ -81,6 +82,38 @@
 				<f:param name="vs" value="#{it.validationState}"/>
 				<f:param name="sc" value="#{'VALIDATION_STATE'}"/>
 				<f:param name="stateIndex" />
+				<f:param name="tag" />
+			</s:link>
+			</div>
+		</h:column>
+
+		<h:column>
+			<h:outputText value="#{it.cases}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+	</h:dataTable>
+	</div>
+	
+</s:decorate>
+	
+
+<s:decorate template="/layout/roundrect.xhtml" style="margin-top:17px;" rendered="#{not empty caseStateReport.tags}" >
+	<ui:define name="header">
+		<b>#{messages['admin.tags']}</b>	
+	</ui:define>
+	<ui:param name="showfooter" value="0" />
+	
+	<div>
+	<h:dataTable value="#{caseStateReport.tags}" var="it" style="font-size:10px;"  
+		columnClasses="coll slink,colr slink" width="100%">
+		<h:column>
+			<div class="tag-icon" style="display:block;min-height:30px;">
+			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" >
+				<f:param name="tag" value="#{it.stateIndex}"/>
+				<f:param name="sc" value="#{'CASE_TAG'}"/>
+				<f:param name="stateIndex" />
+				<f:param name="vs" />
 			</s:link>
 			</div>
 		</h:column>

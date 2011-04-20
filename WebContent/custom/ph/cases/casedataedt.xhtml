@@ -67,7 +67,7 @@
     		<h:inputText value="#{tbcase.notifAddress.zipCode}" maxlength="20" />
     	</s:decorate>
 	</td></tr>
-	<tr><td>
+	<tr><td colspan="2">
 		<s:decorate template="/layout/auselection.xhtml">
 			<ui:param name="auselection" value="#{caseEditingHome.notifAdminUnit}" />
 			<ui:param name="requiredLevel" value="#{defaultWorkspace.patientAddrRequiredLevels}" />
@@ -157,6 +157,7 @@
 	<div class="paragraph">#{messages['TbCase.notificationUnit']}
 	</div>
 	<s:decorate template="/layout/tbselection.xhtml" style="margin-bottom:10px;">
+		<ui:param name="required" value="true" />
 		<ui:param name="tbunitselection" value="#{caseEditingHome.tbunitselection}" />
 	</s:decorate>
 
@@ -184,7 +185,11 @@
 	<s:decorate template="/layout/dateedit.xhtml">
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     	<ui:param name="required" value="#{tbcase.validated}" /> 
-    	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
+    	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" />
+    	<br/>
+    	<h:selectOneMenu value="#{caseDataPH.preEnrollmentOrigin}">
+    		<s:selectItems var="it" value="#{globalLists_ph.preEnrollmentOrigins}" noSelectionLabel="-" label="#{messages[it.key]}"/>
+    	</h:selectOneMenu> 
 	</s:decorate>
 	
 	</td><td>
@@ -331,11 +336,6 @@ function isPulmonary(cb) {
 			<h:inputText value="#{it.comments}" style="width:350px;"/>
 		</h:column>
 	</h:dataTable>
-		    <s:decorate template="/layout/edit.xhtml" >
-		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-		    	<h:inputTextarea value="#{tbcase.comments}" style="width:500px; height:100px;" />
-		    </s:decorate>
-
 
 		</td></tr></table></div>
 	</s:decorate>
@@ -412,6 +412,12 @@ function isPulmonary(cb) {
 		</td></tr></table></div>
 	</s:decorate>
 
+	<s:decorate template="/layout/roundrect.xhtml" style="clear:both;display:block;padding-top:10px">
+		<ui:define name="header">
+			<b>#{messages['global.comments']}</b>
+		</ui:define>
+		<h:inputTextarea value="#{tbcase.comments}" style="width:99%;height:100px;"/>
+	</s:decorate>
 	<p/>
 
 <rich:jQuery selector="#addrChanged" query="change(function(){ showCurrAddress(this); })" />

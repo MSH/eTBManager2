@@ -410,7 +410,7 @@
 		action="#{forecastingHome.saveAs}" reRender="messages"
 		onclick="if (!validateNewForecasting()) {alert('#{messages['form.name']}: #{messages['javax.faces.component.UIInput.REQUIRED']}'); return false;} " 
 		oncomplete="this.disabled=false;hideForecastDlg();" ignoreDupResponses="true">
-		<a:actionparam noEscape="true" assignTo="#{forecastingHome.instance.name}" value="document.getElementById('main:newfor:edtname').value" />
+		<a:actionparam noEscape="true" assignTo="#{forecastingHome.newName}" value="document.getElementById('main:newfor:edtname').value" />
 		<a:actionparam noEscape="true" assignTo="#{forecastingHome.instance.publicView}" value="document.getElementById('main:newfor:chkpub').checked" converter="javax.faces.Boolean"/>
 	</a:commandButton>
 

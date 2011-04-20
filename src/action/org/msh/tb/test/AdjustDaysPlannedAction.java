@@ -25,10 +25,13 @@ public class AdjustDaysPlannedAction {
 				.setMaxResults(max)
 				.getResultList();
 
+		System.out.println("Ini = " + ini + ", max = " + max);
+
 		if (lst.size() == 0)
 			return false;
 
 		for (TbCase tbcase: lst) {
+			System.out.println("Updating case " + tbcase.getId());
 			tbcase.updateDaysTreatPlanned();
 			entityManager.persist(tbcase);
 			entityManager.flush();

@@ -45,8 +45,61 @@
 		onclick="if (!confirm('#{messages['cases.reopen.confirm']}')) return false;">
 	</h:commandLink>
 
+	<s:link value="#{messages['admin.tags']}" view="/cases/casetagsedt.xhtml" rendered="#{caseHome.canEditCaseData and empty tbcase.tags}">
+		<f:param name="id" value="#{caseHome.id}" />
+	</s:link>
+
 	</h:form>
 	</h:panelGroup>
+
+	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:10px;" rendered="#{not empty tbcase.tags}">
+	<ui:define name="header">
+		<b>#{messages['admin.tags']}</b>
+	</ui:define>
+	<ui:define name="footer" >
+		<s:link value="#{messages['form.edit']}" 
+			rendered="#{caseHome.canEditCaseData}" 
+			view="/cases/casetagsedt.xhtml"
+			style="padding:4px;display:table;">
+			<f:param name="id" value="#{caseHome.id}"/>
+		</s:link>
+	</ui:define>
+	<h:dataTable value="#{tbcase.tags}" var="it">
+		<h:column>
+			<div class="tag-icon">
+				#{it.name}
+			</div>
+		</h:column>
+	</h:dataTable>
+	</s:decorate>
+	
+	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:10px;" rendered="#{not empty caseHome.otherCases}">
+		<ui:define name="header">
+			<b>#{messages['cases.details.others']} #{tbcase.patient.name}</b>
+		</ui:define>
+		<ui:param name="showfooter" value="0" />
+		
+		<h:dataTable id="taboc" value="#{caseHome.otherCases}" var="it" style="font-size:10px;" 
+			columnClasses="coll" width="100%">
+			<h:column>
+				<div onclick="openWaitDlg();location.href='#{request.contextPath}/cases/casedata.seam?id=#{it.id}';" style="cursor:pointer;">
+				<b style="color:green;font-size:12px;width:100%;text-decoration: underline;">#{messages[it.classification.key]}
+				</b>
+				<br/>
+				#{it.notificationUnit.name}
+				<p/>
+				<b>#{messages['TbCase.registrationDate']}:</b><br/> <h:outputText value="#{it.registrationDate}" converter="localeDateConverter" />
+				<p/>
+				<b>#{messages['CaseState']}:</b><br/> #{messages[it.state.key]}
+				<hr style="margin-bottom:16px;" />
+				</div>
+			</h:column>
+		</h:dataTable>
+		<rich:jQuery selector="#taboc tr" 
+                query="mouseover(function(){jQuery(this).addClass('sel-row')})"/>
+		<rich:jQuery selector="#taboc tr" 
+                query="mouseout(function(){jQuery(this).removeClass('sel-row')})"/>
+	</s:decorate>
 </ui:define>
 
 <ui:define name="body">

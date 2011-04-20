@@ -125,7 +125,7 @@ public class MessagesExport {
 	 * Create the list of messages to be exported to the user
 	 */
 	protected void createMessages() {
-		langs = ItemSelectHelper.createItemsList(getLanguages(), true);
+		langs = ItemSelectHelper.getSelectedItems(getLanguages(), true);
 		
 		if (langs.size() == 0)
 			return;

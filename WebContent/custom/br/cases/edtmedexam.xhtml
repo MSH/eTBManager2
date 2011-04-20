@@ -68,7 +68,8 @@
     		<ui:define name="label">#{messages['MedicalExamination.weight']}: <s:span style="color:red;">*</s:span></ui:define>
     		<div id="edtweight">
     		<h:inputText value="#{medicalExaminationBR.weight}" converter="localeDoubleConverter" 
-    			onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');" onkeyup="updateBMI(this, event);"
+    			onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');" 
+    			onkeyup="updateBMI(this, event);"
     			style="width:80px;" >
     			<f:validateDoubleRange maximum="500" minimum="1"/>
     		</h:inputText>#{messages['MedicalExamination.weight.unit']}
@@ -156,6 +157,8 @@
 
 <rich:jQuery selector="#cbpresc" query="change(function(){checkClick(this.selectedIndex==2, '#edtreason');})" />
 <rich:jQuery selector="#cbpresc[selectedIndex!=2]" query="each(function(){jQuery('#edtreason').hide();})" />
+
+<rich:jQuery selector="#edtheight input" timing="onload" query="each(function() {updateBMI(this);})" />
 
 <script type="text/javascript">
 <!--

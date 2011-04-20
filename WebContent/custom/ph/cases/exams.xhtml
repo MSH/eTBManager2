@@ -371,7 +371,7 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
 				</f:facet>
-				#{r.comments}
+				<h:outputText value="#{r.comments}" converter="rmemoria.TextConverter" escape="false" styleClass="text"/>
 			</h:column>
 
 			<h:column>

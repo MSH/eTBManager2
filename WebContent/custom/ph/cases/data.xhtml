@@ -149,6 +149,7 @@
 	<s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     	<h:outputText id="dt" value="#{tbcase.diagnosisDate}" converter="localeDateConverter"/>
+    	<h:outputText value="(#{messages[caseDataPH.preEnrollmentOrigin.key]})" rendered="#{not empty caseDataPH.preEnrollmentOrigin}" style="padding-left:20px;"/>
 	</s:decorate>
 	
 	</td><td>
@@ -235,7 +236,7 @@
 				#{it.comments}
 			</h:column>
 		</h:dataTable>
-		
+
 	</td></tr>
 	<tr><td colspan="2">
 
@@ -278,9 +279,18 @@
 		</a:repeat>
 		</table>
 		</s:fragment>
-
 	</td></tr>
 	</table></div>
+	</s:decorate>
+
+	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;" rendered="#{not empty tbcase.comments}">
+		<ui:define name="header">
+			<b>#{messages['global.comments']}</b>
+		</ui:define>
+		<ui:param name="showfooter" value="0" />
+		<h:outputText value="#{tbcase.comments}" 
+			escape="false" converter="rmemoria.TextConverter"
+			styleClass="text" />
 	</s:decorate>
 
 	<s:decorate template="/cases/comments.xhtml">

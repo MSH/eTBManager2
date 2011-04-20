@@ -8,5 +8,6 @@
 	<param name="stateIndex" value="#{caseFilters.stateIndex}" />
 	<param name="sc" value="#{caseFilters.searchCriteria}" />
 	<param name="vs" value="#{caseFilters.validationState}" />
+	<param name="tag" value="#{caseFilters.tagid}" converterId="javax.faces.Integer"/>
 
 </page>

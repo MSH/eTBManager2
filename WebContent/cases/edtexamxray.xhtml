@@ -31,7 +31,7 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbField.XRAYPRESENTATION']}:</ui:define>
-    	<h:selectOneMenu value="#{examXRay.presentation}">
+    	<h:selectOneMenu value="#{examXRay.presentation}" required="true">
     		<s:selectItems value="#{fieldsQuery.XRayPresentations}" var="it" noSelectionLabel="-" label="#{it.name}" />
     		<s:convertEntity />
     	</h:selectOneMenu>

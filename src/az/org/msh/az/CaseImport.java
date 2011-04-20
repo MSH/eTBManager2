@@ -31,7 +31,7 @@ public class CaseImport extends ImportBase {
 	private static final int workspaceID = 940349;
 	private static final int regimenID = 940780;
 	private static final int unitID = 940725;
-	private static final int adminUnitID = 950756;
+	private static final int adminUnitID = 958373;
 	private static final int healthSystemID = 903;
 
 	@In(create=true) CaseEditingHome caseEditingHome;
@@ -48,6 +48,17 @@ public class CaseImport extends ImportBase {
 		String lastName = values[1];
 		String middleName = values[2];
 		String firstName = values[3];
+		
+		// check if patient was already imported
+		String hql = "select count(*) from Patient where lastName = :last and middleName = :middle and name = :name";
+		long num = (Long) getEntityManager().createQuery(hql)
+			.setParameter("name", firstName)
+			.setParameter("middle", middleName)
+			.setParameter("last", lastName)
+			.getSingleResult();
+		if (num > 0)
+			return;
+		
 		Integer yearBirth = parseInt(values[4]);
 		String city = values[5];
 		String address = values[6];
@@ -85,7 +96,8 @@ public class CaseImport extends ImportBase {
 		tbcase.setValidationState(ValidationState.PENDING);
 		tbcase.getNotifAddress().setAddress(address);
 		tbcase.setClassification(CaseClassification.DRTB);
-		
+
+		System.out.println("## Importing " + p.getFullName());
 		AdministrativeUnit adminUnit = getAdminUnit(city);
 //		tbcase.getNotifAddress().setAdminUnit(adminUnit);
 		caseEditingHome.getNotifAdminUnit().setSelectedUnit(adminUnit);

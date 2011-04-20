@@ -19,6 +19,7 @@
 	<h:form id="main">
 	<s:decorate template="/layout/roundrect.xhtml" style="width:300px;">
 		<ui:define name="header"><b>Update treatment information</b></ui:define>
+		<p>Adjust the number of days of treatment planned for the case.</p>
 		<ui:param name="showfooter" value="0" />
 		<a:commandButton action="#{caseManagementTest.adjustNumDaysPlanned}" value="Update" reRender="messages" />
 	</s:decorate>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="..#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['admin.tags']}" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:160px" />
+<ui:param name="pagewidth" value="600px" />
+
+<ui:define name="body">
+<p/>
+<h:form id="main">
+
+<s:decorate template="/layout/casebody.xhtml">
+
+	<h:panelGroup id="pnlTags">
+	<div style="padding:6px">
+	<a:commandLink value="#{messages['admin.tags.new']}" onclick="showNewTagForm(); return false;" />
+	<span id="tagspan" style="display:none;">
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['form.name']}:</ui:define>
+		<h:inputText value="#{caseTagHome.tagName}"/>
+		<a:commandButton value="#{messages['form.save']}" 
+			styleClass="button" 
+			action="#{caseTagHome.saveNewTag}" 
+			reRender="pnlTags"/>
+	</s:decorate>
+	</span> 
+	</div>
+
+	<h:dataTable value="#{caseTagHome.items}" var="it">
+		<h:column >
+			<div class="tag-icon">
+				<h:selectBooleanCheckbox value="#{it.selected}" />
+				#{it.item.name}
+			</div>
+		</h:column>
+	</h:dataTable>
+	</h:panelGroup>
+
+	<a:commandButton action="#{caseTagHome.saveTags}" value="#{messages['form.ok']}" 
+		styleClass="button" 
+		onclick="openWaitDlg();"
+		reRender="main,messages"/>
+ 
+    <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel">
+       	<f:param name="id" value="#{caseHome.id}"/>
+    </s:button>
+</s:decorate>
+
+<script type="text/javascript">
+function showNewTagForm() {
+	jQuery("#tagspan").show(500);
+}
+</script>
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

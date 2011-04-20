@@ -47,6 +47,14 @@
 				#{r.height} cm
 			</s:decorate>
 		</td></tr>
+		<tr><td colspan="2">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['MedicalExamination.BMI']}:</ui:define>
+				<h:outputText value="#{r.BMI}" >
+					<f:convertNumber pattern="#,###,##0.000"/>
+				</h:outputText>
+			</s:decorate>		
+		</td></tr>
 		<tr><td valign="top">
 		    <s:decorate template="/layout/display.xhtml" >
     			<ui:define name="label">#{messages['MedicalExamination.heartRate']}:</ui:define>

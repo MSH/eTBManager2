@@ -37,12 +37,12 @@ public class ExecuteAsyncAction {
 	@Asynchronous
 	public void adjustDaysPlanned(Workspace ws) {
 		int ini = 0;
-		int max = 50;
+		int max = 1;
 		
 		while (true) {
 			if (!adjustDaysPlannedAction.adjust(ws, ini, max))
 				break;
-			ini += 50;
+			ini += max;
 		}
 	}
 

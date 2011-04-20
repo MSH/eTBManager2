@@ -119,7 +119,7 @@ public class BatchSelection {
 		if (items == null)
 			return selectedBatches;
 		
-		List<BatchItem> lst = ItemSelectHelper.createItemsList(getItems(), true);
+		List<BatchItem> lst = ItemSelectHelper.getSelectedItems(getItems(), true);
 		
 		selectedBatches = new HashMap<Batch, Integer>();
 		
@@ -135,7 +135,7 @@ public class BatchSelection {
 	 * @return Map of BatchQuantity and Integer objects
 	 */
 	public Map<BatchQuantity, Integer> getSelectedBatchesQtds() {
-		List<BatchItem> lst = ItemSelectHelper.createItemsList(getItems(), true);
+		List<BatchItem> lst = ItemSelectHelper.getSelectedItems(getItems(), true);
 		
 		Map<BatchQuantity, Integer> batches = new HashMap<BatchQuantity, Integer>();
 		

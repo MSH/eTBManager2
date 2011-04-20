@@ -15,13 +15,32 @@
     		<b>#{messages['cases.comorbidities']}</b>
     	</ui:define>
 		<ui:param name="showfooter" value="0" />
-    	<ul>
-    	<ui:repeat value="#{tbcase.comorbidities}" var="it">
-    		<li>#{it.comorbidity.name}
-    			<h:outputText value="(#{it.comment})" rendered="#{not empty it.comment}" style="padding-left:12px;"/>
-    		</li>
-    	</ui:repeat>
-    	</ul>
+
+		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty tbcase.comorbidities}" style="display:block;padding:4px"/>
+		<h:dataTable value="#{tbcase.comorbidities}" var="it" style="margin-top:10px;margin-bottom:10px;"
+			styleClass="tabela4" rowClasses="lin1,lin2" width="100%" rendered="#{not empty tbcase.comorbidities}">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['form.name']}" styleClass="collh"/>
+				</f:facet>
+				#{it.comorbidity.name}
+			</h:column>
+			
+			<h:column >
+				<f:facet name="header" >
+					<h:outputText value="#{messages['global.duration']}"  styleClass="collh" />
+				</f:facet>
+				#{it.duration}
+			</h:column>
+			
+			<h:column >
+				<f:facet name="header" >
+					<h:outputText value="#{messages['global.comments']}"  styleClass="collh" />
+				</f:facet>
+				#{it.comment}
+			</h:column>
+		</h:dataTable>
+
     	<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">#{messages['TbCase.tbContact']}:</ui:define>
     		<h:outputText value="#{tbcase.tbContact?messages['global.yes']:messages['global.no']}" /> 
@@ -43,56 +62,70 @@
 	
 	<h:panelGroup id="pnlcontact">
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty tbcase.contacts}" />
-	<h:dataTable value="#{tbcase.contacts}" var="it" width="100%" styleClass="tabela4" rowClasses="lin1,lin2" rendered="#{not empty tbcase.contacts}">
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['TbContact.name']}" styleClass="collh" />
-			</f:facet>
+
+	<a:repeat value="#{tbcase.contacts}" var="it">
+	<table width="99%" class="tabela2" style="margin-top:10px;margin-left:2px;border:1px solid #d0d0d0" cellpadding="0" cellspacing="0">
+	<tr>
+		<th colspan="2" align="left">
+			<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remContact(#{it.id});return false;" 
+				style="font-size:9px;float:right;">
+			</h:commandLink>
 			<s:link value="#{it.name}" view="/cases/edtcontact.xhtml">
 				<f:param name="conid" value="#{it.id}"/>
 			</s:link>
-		</h:column>
+		</th>
+	</tr>
+		<tr>
+			<td>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages['Gender']}:</ui:define>
+					#{messages[it.gender.key]}
+				</s:decorate>
+			</td>
+			<td>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
+					#{it.age}
+				</s:decorate>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages['TbContact.contactType']}:</ui:define>
+					#{it.contactType.name}
+				</s:decorate>
+			</td>
+			<td>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages['TbContact.examined']}:</ui:define>
+					#{it.examinated?messages['global.yes']: messages['global.no']}
+				</s:decorate>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages['TbContact.conduct']}:</ui:define>
+					#{it.conduct.name}
+				</s:decorate>
+			</td>
+		</tr>
+		<s:fragment rendered="#{not empty it.comments}">
+		<tr>
+			<td colspan="2">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages['global.comments']}:</ui:define>
+					<h:outputText value="#{it.comments}" 
+						escape="false" converter="rmemoria.TextConverter"
+						styleClass="text"/>
+				</s:decorate>
+			</td>
+		</tr>
+		</s:fragment>
+	</table>
+	</a:repeat>
 
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['Gender']}" styleClass="collh" />
-			</f:facet>
-			#{messages[it.gender.key]}
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['TbCase.age']}" styleClass="collh" />
-			</f:facet>
-			#{it.age}
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['TbContact.contactType']}" styleClass="collh" />
-			</f:facet>
-			#{it.contactType.name}
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['TbContact.examined']}" styleClass="collh" />
-			</f:facet>
-			#{it.examinated?messages['global.yes']: messages['global.no']}
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['TbContact.conduct']}" styleClass="collh" />
-			</f:facet>
-			#{it.conduct.name}
-		</h:column>
- 
-		<h:column rendered="#{caseHome.canEditCaseData}">
-			<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remContact(#{it.id});return false;" style="font-size:9px;">
-			</h:commandLink>
-		</h:column>			
-	</h:dataTable>
 		<a:jsFunction name="remContact" action="#{tbContactHome.remove}" reRender="pnlcontact"  rendered="#{caseHome.canEditCaseData}">
 			<a:actionparam name="param1" assignTo="#{tbContactHome.id}" converter="javax.faces.Integer"/>
 		</a:jsFunction>
@@ -141,10 +174,10 @@
 	</h:dataTable>
 	</div>
 
+	</s:decorate>
 
 	<s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="other" />
-	</s:decorate>
 	</s:decorate>
     
 </ui:composition>

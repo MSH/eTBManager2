@@ -201,7 +201,7 @@
 
 		    <s:decorate template="/layout/edit.xhtml" >
     			<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
-    			<h:selectOneMenu value="#{molecularBiology.method}" required="false">
+    			<h:selectOneMenu id="cbMBMethod" value="#{molecularBiology.method}" required="false">
     				<s:selectItems value="#{fieldsQuery.molecularBiologyMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
     				<s:convertEntity />
     			</h:selectOneMenu>

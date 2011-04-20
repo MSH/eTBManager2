@@ -64,6 +64,11 @@
     	</h:selectOneMenu>
     </s:decorate>
 
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputTextarea value="#{tbContact.comments}" style="width:500px;height:80px;"/>
+    </s:decorate>
+
 	</td></tr>
     <tr><td align="right">
 		<div style="float:left;">

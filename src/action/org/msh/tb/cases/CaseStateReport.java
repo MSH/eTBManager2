@@ -40,6 +40,7 @@ public class CaseStateReport {
 	private List<ValidationItem> validationItems;
 	private Item total;
 	private Map<String, String> messages;
+	private List<Item> tags;
 
 
 	/**
@@ -185,6 +186,38 @@ public class CaseStateReport {
 */
 	}
 
+	
+	/**
+	 * Return report by tags
+	 * @return
+	 */
+	public List<Item> getTags() {
+		if (tags == null)
+			createTagsReport();
+		return tags;
+	}
+	
+	
+	protected void createTagsReport() {
+		Workspace workspace = (Workspace)Component.getInstance("defaultWorkspace");
+		
+		List<Object[]> lst = entityManager.createNativeQuery("select t.id, t.tag_name, count(*) " +
+				"from TAGS_CASE a inner join Tag t on t.id = a.tag_id " +
+				"where t.workspace_id = :id " +
+				"group by t.id, t.tag_name")
+				.setParameter("id", workspace.getId())
+				.getResultList();
+		
+		tags = new ArrayList<Item>();
+		for (Object[] vals: lst) {
+			Item item = new Item();
+			item.setStateIndex((Integer)vals[0]);
+			item.setDescription(vals[1].toString());
+			item.setCases(((BigInteger)vals[2]).intValue());
+			tags.add(item);
+		}
+	}
+	
 
 	/**
 	 * Return an item from the validation list from its validation state

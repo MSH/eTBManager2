@@ -581,6 +581,14 @@ td {
 	height:28px;
 }
 
+.tag-icon {
+	background: transparent url(images/tag_small.png) no-repeat left top;
+	padding-left:20px;
+	min-height:20px;
+	display:block;
+		
+}
+
 .hu-icon {	background: transparent url(images/hu.gif) no-repeat left top; }
 
 .ds-icon {	background: transparent url(images/storage.gif) no-repeat left top; }
@@ -988,4 +996,3 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	font-size:12px;
 	width:100%;
 }
-

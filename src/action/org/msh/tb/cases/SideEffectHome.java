@@ -68,7 +68,7 @@ public class SideEffectHome {
 	public String save() {
 		TbCase tbcase = caseHome.getInstance();
 		
-		List<CaseSideEffect> lst = ItemSelectHelper.createItemsList(getItems(), true);
+		List<CaseSideEffect> lst = ItemSelectHelper.getSelectedItems(getItems(), true);
 		for (CaseSideEffect it: lst) {
 			it.setTbcase(tbcase);
 			if ((it.getSubstance() != null) && (it.getSubstance2() != null) && (it.getSubstance().equals(it.getSubstance2())))

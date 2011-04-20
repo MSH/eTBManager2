@@ -53,6 +53,11 @@ public class MolecularBiologyHome extends ExamHome<MolecularBiology> {
 			facesMessages.addToControlFromResourceBundle("edtMBreleasedate", "javax.faces.component.UIInput.REQUIRED");
 			res = false;
 		}
+
+		if (mb.getMethod() == null) {
+			facesMessages.addToControlFromResourceBundle("cbMBMethod", "javax.faces.component.UIInput.REQUIRED");
+			res = false;
+		}
 		
 		return res;
 	}

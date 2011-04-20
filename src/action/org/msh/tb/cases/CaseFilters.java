@@ -73,6 +73,8 @@ public class CaseFilters {
 	 */
 	private Integer stateIndex;
 	
+	private Integer tagid;
+	
 	private ItemSelectList<CaseClassification> classifications;
 	
 	/**
@@ -126,6 +128,8 @@ public class CaseFilters {
 		patient = null;
 		stateIndex = null;
 
+		tagid = null;
+		
 		order = 0;
 		inverseOrder = false;
 	}
@@ -167,10 +171,16 @@ public class CaseFilters {
 				clearFilters();
 				validationState = vs;
 				break;
+			case CASE_TAG:
+				Integer id = tagid;
+				clearFilters();
+				tagid = id;
+				break;
 			case CUSTOM_FILTER:
 				patient = null;
 				validationState = null;
 				stateIndex = null;
+				tagid = null;
 				break;
 		}
 	}
@@ -672,5 +682,19 @@ public class CaseFilters {
 	 */
 	public void setCaseView(CaseView caseView) {
 		this.caseView = caseView;
+	}
+
+	/**
+	 * @return the tagid
+	 */
+	public Integer getTagid() {
+		return tagid;
+	}
+
+	/**
+	 * @param tagid the tagid to set
+	 */
+	public void setTagid(Integer tagid) {
+		this.tagid = tagid;
 	}
 }
