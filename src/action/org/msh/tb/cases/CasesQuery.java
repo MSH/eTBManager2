@@ -47,6 +47,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	private static final String[] restrictions = {/*"nu.id = #{caseFilters.tbunit.id}",*/
 				/*"p.recordNumber = #{caseFilters.recordNumber}", */ // just search by recordNumber if workspace.displayCaseNumber = RECORD_NUMBER
 				"p.recordNumber = #{caseFilters.patientRecordNumber}",
+				"c.registrationCode = #{caseFilters.registrationCode}",
 				"c.caseNumber = #{caseFilters.caseNumber}",
 				"p.workspace.id = #{defaultWorkspace.id}",
 				"c.state = #{caseFilters.caseState}",
