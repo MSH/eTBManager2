@@ -247,4 +247,10 @@ public class FieldsQuery {
 		field = TbField.MOLECULARBIOLOGY_METHOD;
 		return getValues();
 	}
+	
+	public List<FieldValue> getArtRegimens() {
+		field = TbField.ART_REGIMEN;
+		return getValues();
+	}
+	
 }
