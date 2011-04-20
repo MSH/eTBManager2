@@ -208,6 +208,15 @@ public class FieldsOptions {
 		return getOptions(TbField.CONTAG_PLACE);		
 	}
 
+	/**
+	 * Return list of ART  Regimens.
+	 * Namibia workspace implementation
+	 * @UT 
+	 * @return
+	 */
+	public List<FieldValue> getARTRegimens() {
+		return getOptions(TbField.ART_REGIMEN);		
+	}	
 
 	
 	/**
