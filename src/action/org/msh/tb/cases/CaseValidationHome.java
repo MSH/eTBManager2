@@ -34,9 +34,12 @@ public class CaseValidationHome {
 
 	public static final String caseGenId = "CASE_NUMBER";
 
-	@In(required=true) CaseHome caseHome;
-	@In EntityManager entityManager;
-	@In(create=true) SequenceGenerator sequenceGenerator;
+	@In(required=true)
+	protected CaseHome caseHome;
+	@In
+	protected EntityManager entityManager;
+	@In(create=true)
+	protected SequenceGenerator sequenceGenerator;
 		
 	private List<CaseIssue> issues;
 	private CaseIssue issue;
