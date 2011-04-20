@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+
+<ui:param name="title" value="#{messages['cases.details']} - #{messages[tbcase.classification.key]}" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:160px" />
+<ui:param name="pagewidth" value="900px" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['cases']}" view="/cases/index.html" propagation="none"/>
+	<s:link value="#{messages['cases.searchresult']}" view="/cases/searchresult.xhtml" />
+</ui:define>
+
+
+<ui:define name="left">
+
+	<ui:define name="state-content">
+		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="hu-icon" style="margin-top:6px;font-size:11px;max-width:320px;height:60px;" >
+			<b style="padding-right:4px;">#{messages['medicines.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
+			<br/>
+			<span class="right-icon" >
+			<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
+				style="position:relative;" propagation="none">
+				<f:param name="id" value="#{caseHome.id}" />
+			</s:link>
+			<s:link value="#{messages['cases.move.cancel']}" 
+				style="position:relative" />
+			</span>
+		</s:div>
+	</ui:define>
+
+<td width="150px">
+	<h:panelGroup id="leftmenu" styleClass="menubv">
+	<h:form>
+		
+	<h:commandLink value="#{messages['form.remove']}" action="#{caseHome.remove}" 
+		onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" 
+		rendered="#{caseHome.canEditCaseData}">
+	</h:commandLink>
+
+	<s:link value="#{messages['cases.close']}" view="/cases/closecase.xhtml" rendered="#{caseHome.canClose}">
+		<f:param name="id" value="#{caseHome.id}" />
+	</s:link>
+
+	<h:commandLink value="#{messages['cases.reopen']}" action="#{caseCloseHome.reopenCase}"
+		rendered="#{caseHome.canReopen}" 
+		onclick="if (!confirm('#{messages['cases.reopen.confirm']}')) return false;">
+	</h:commandLink>
+
+	</h:form>
+	</h:panelGroup>
+	
+	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:10px;" rendered="#{not empty caseHome.otherCases}">
+		<ui:define name="header">
+			<b>#{messages['cases.details.others']} #{tbcase.patient.name}</b>
+		</ui:define>
+		<ui:param name="showfooter" value="0" />
+		
+		<h:dataTable id="taboc" value="#{caseHome.otherCases}" var="it" style="font-size:10px;" 
+			columnClasses="coll" width="100%">
+			<h:column>
+				<div onclick="openWaitDlg();location.href='#{request.contextPath}/cases/casedata.seam?id=#{it.id}';" style="cursor:pointer;">
+				<b style="color:green;font-size:12px;width:100%;text-decoration: underline;">#{messages[it.classification.key]}
+				</b>
+				<br/>
+				#{it.notificationUnit.name}
+				<p/>
+				<b>#{messages['TbCase.registrationDate']}:</b><br/> <h:outputText value="#{it.registrationDate}" converter="localeDateConverter" />
+				<p/>
+				<b>#{messages['CaseState']}:</b><br/> #{messages[it.state.key]}
+				<hr style="margin-bottom:16px;" />
+				</div>
+			</h:column>
+		</h:dataTable>
+		<rich:jQuery selector="#taboc tr" 
+                query="mouseover(function(){jQuery(this).addClass('sel-row')})"/>
+		<rich:jQuery selector="#taboc tr" 
+                query="mouseout(function(){jQuery(this).removeClass('sel-row')})"/>
+	</s:decorate>
+</td>
+</ui:define>
+
+<ui:define name="body">
+<p/>
+<h:form id="main">
+<s:decorate template="/layout/casebody.xhtml">
+
+	<ui:define name="state-content">
+	Namibia Workspace
+		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="hu-icon" style="margin-top:6px;font-size:11px;max-width:320px;" >
+			<b style="padding-right:4px;">#{messages['medicines.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
+			<br/>
+			<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
+				style="position:relative;" propagation="none" 
+				styleClass="right-icon">
+				<f:param name="id" value="#{caseHome.id}" />
+			</s:link>
+			<br/>
+			<a:commandLink value="#{messages['cases.move.cancel']}"
+				onclick="if (!confirm('#{caseMoveHome.confirmMsgRollbackTransfer}')) return false"
+				action="#{caseMoveHome.rollbackTransferOut}"
+				reRender="main,leftmenu,messages" 
+				style="position:relative" styleClass="right-icon" >
+				<f:param name="name" value="#{caseHome.transferInHealthUnit.tbunit.name}"/>
+			</a:commandLink>
+		</s:div>
+	</ui:define>
+
+<ui:include src="/custom/na/cases/issues.xhtml" />
+
+<a:jsFunction name="changeTab" reRender="main" ajaxSingle="true">
+		<a:actionparam name="param1" assignTo="#{caseFilters.caseView}"/>
+		<a:actionparam name="param2" assignTo="#{caseHome.id}" converter="javax.faces.Integer"/>
+</a:jsFunction>
+
+<div id="pgtab" class="pgtab" style="display:none">
+<ul>
+	<s:fragment rendered="#{caseHome.canViewCaseData}">
+	<li class="#{caseFilters.caseView=='DATA'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['cases.details.case']}" onclick="changeTab('DATA', #{caseHome.id}); return false;" />
+	</li>
+	</s:fragment>
+	
+	<s:fragment rendered="#{caseHome.canViewTreatment}">
+	<li class="#{caseFilters.caseView=='TREATMENT'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['cases.details.treatment']}" onclick="changeTab('TREATMENT', #{caseHome.id}); return false;" />
+	</li>
+	</s:fragment>
+	
+	<s:fragment rendered="#{caseHome.canViewExams}">
+	<li class="#{caseFilters.caseView=='EXAMS'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['cases.details.exams']}" onclick="changeTab('EXAMS', #{caseHome.id}); return false;" />
+	</li>
+	</s:fragment>
+	
+	<s:fragment rendered="#{caseHome.canViewCaseData}">
+	<li class="#{caseFilters.caseView=='MEDEXAMS'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['cases.details.medexam']}" onclick="changeTab('MEDEXAMS', #{caseHome.id}); return false;" />
+	</li>
+	</s:fragment>
+
+	<s:fragment rendered="#{caseHome.canViewAditionalInfo}">
+	<li class="#{caseFilters.caseView=='ADDINFO'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['cases.details.otherinfo']}" onclick="changeTab('ADDINFO', #{caseHome.id}); return false;" />
+	</li>
+	</s:fragment>
+
+	<s:fragment rendered="#{caseHome.canViewDrugogram}">
+	<li class="#{caseFilters.caseView=='RESUME'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['cases.details.report1']}" onclick="changeTab('RESUME', #{caseHome.id}); return false;" />
+	</li>
+	</s:fragment>
+</ul>
+</div>
+<rich:jQuery timing="onload" selector="#pgtab" query="show()"  />
+<div class="pgbody">
+
+	<s:fragment rendered="#{caseFilters.caseView=='DATA'}">
+		<ui:include src="/custom/na/cases/data.xhtml" />
+	</s:fragment>
+
+	<s:fragment rendered="#{caseFilters.caseView=='TREATMENT'}">
+		<ui:include src="/custom/na/cases/treatment.xhtml" />
+	</s:fragment>
+
+	<s:fragment rendered="#{caseFilters.caseView=='EXAMS'}">
+		<ui:include src="/custom/na/cases/exams.xhtml" />
+	</s:fragment>
+
+	<s:fragment rendered="#{caseFilters.caseView=='MEDEXAMS'}">
+		<ui:include src="/custom/na/cases/medexamination.xhtml" />
+	</s:fragment>
+
+	<s:fragment rendered="#{caseFilters.caseView=='ADDINFO'}">
+		<ui:include src="/custom/na/cases/otherinfo.xhtml" />
+	</s:fragment>
+
+	<s:fragment rendered="#{caseFilters.caseView=='RESUME'}">
+		<ui:include src="/cases/drugogram.xhtml" />
+	</s:fragment>
+</div>
+
+</s:decorate>	
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

@@ -1,0 +1,152 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['mdrtbsys']}" />
+
+<ui:define name="left">
+	<td valign="top" width="150px">
+	
+	<table width="100%" class="tabela">
+	<tr><th>#{messages['form.information']}</th></tr>
+	<tr><td>
+		<b>#{messages['User.name']}:</b>
+		<br/>
+		#{userLogin.user.name}
+		<p/>
+		
+		<b>#{messages['Tbunit']}:</b>
+		<br/>
+		#{userLogin.user.defaultWorkspace.tbunit.name}
+		<p/>
+		
+		<br/>
+		<b>#{messages['UserProfile']}:</b>
+		#{userLogin.user.defaultWorkspace.profile.name}
+		<p/>
+		
+		<br/>
+		<b>#{messages['UserView']}:</b>
+		<br/>
+		#{messages[userLogin.user.defaultWorkspace.view.key]}
+		<p/>
+		
+		<b>#{messages['global.localtime']}:</b>
+		<br/>
+		<h:outputText value="#{timezones.date}">
+			<s:convertDateTime pattern="dd-MMM-yyyy HH:mm:ss"/>
+		</h:outputText>
+		<p/>
+		
+		<b>#{messages['User.language']}:</b>
+		<br/>
+		#{userLogin.displayLocale}
+		<p/>
+		
+		<b>#{messages['User.timeZone']}:</b>
+		<br/>
+		#{timeZone.displayName}
+		<p/>
+	</td></tr>
+	</table>
+	</td>	
+</ui:define>
+
+<ui:define name="body">
+    
+    <p/>
+
+
+
+	<table width="600px" cellpadding="6">
+	<tr><td>
+	    
+    <div style="width:300px;display:block;">
+    
+	<s:decorate template="/layout/rounded.xhtml">
+		<ui:param name="color" value="#22A834" />
+		<ui:param name="bgcolor" value="#fff" />
+		<div style="padding:5px; position:relative; height:100px;" >
+			<s:fragment rendered="#{s:hasRole('CASEMAN')}">
+    		<s:link view="/custom/na/cases/index.xhtml" style="color:white;font-size:12px;">
+    		 <div class="mod-cases-icon">
+    		 <b>#{messages['cases']}</b><br/>
+   			 <span style="font-weight:normal;color:#ABE4B2;padding-top:6px;display:block;"> #{messages['cases.desc']}</span>
+   			 </div>
+    		</s:link>
+    		</s:fragment>
+    	</div>
+	</s:decorate>
+	</div>
+
+	</td><td>
+
+    <div style="width:300px;display:block;">
+	<s:decorate template="/layout/rounded.xhtml">
+		<ui:param name="color" value="#B3DCB3" />
+		<ui:param name="bgcolor" value="#fff" />
+		<div style="padding:5px; position:relative; height:100px;">
+			<s:fragment rendered="#{s:hasRole('MEDMAN')}">
+    		<s:link view="/medicines/index.xhtml" style="color:black;font-size:12px;">
+    		<div class="mod-medicines-icon">
+    		 	<b>#{messages['medicines']}</b><br/>
+   			 	<span style="font-weight:normal;color:green;padding-top:6px;display:block;"> #{messages['medicines.desc']}</span>
+   			</div>
+    		</s:link>
+    		</s:fragment>
+    	</div>
+	</s:decorate>
+
+    </div>
+    
+    </td></tr>
+    <tr><td>
+
+    <div style="width:300px;display:block;">
+	<s:decorate template="/layout/rounded.xhtml">
+		<ui:param name="color" value="#B3DCB3" />
+		<ui:param name="bgcolor" value="#fff" />
+		<div style="padding:5px; position:relative; height:100px;">
+			<s:fragment rendered="#{s:hasRole('MANAGEMENT')}">
+    		<s:link view="/management/index.xhtml" style="color:black;font-size:12px;">
+    			<div class="mod-manag-icon">
+    				<b>#{messages['manag']}</b><br/>
+    				<span style="font-weight:normal;color:green;padding-top:6px;display:block;"> #{messages['manag.desc']}</span>
+    			</div>
+    		</s:link>
+    		</s:fragment>
+    	</div>
+	</s:decorate>
+    </div>
+
+	</td><td>
+
+    <div style="width:300px;display:block;">
+	<s:decorate template="/layout/rounded.xhtml">
+		<ui:param name="color" value="#22A834" />
+		<ui:param name="bgcolor" value="#fff" />
+		<div style="padding:5px; position:relative; height:100px;">
+			<s:fragment rendered="#{s:hasRole('ADMIN')}">
+    		<s:link view="/admin/index.xhtml" style="color:white;font-size:12px;">
+    			<div class="mod-admin-icon">
+    		 		<b>#{messages['admin']}</b><br/>
+   			 		<span style="font-weight:normal;color:#ABE4B2;padding-top:6px;display:block;"> #{messages['admin.desc']}</span>
+   			 	</div>
+    		</s:link>
+    		</s:fragment>
+    	</div>
+	</s:decorate>
+
+    </div>
+    
+    </td></tr>
+    </table>
+    
+</ui:define> 
+</ui:composition>

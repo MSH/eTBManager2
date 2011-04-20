@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	<a:repeat value="#{caseFilters.classifications}" var="it">
+		<span style="margin-right:20px;">
+			<h:selectBooleanCheckbox value="#{it.selected}">
+				<a:support event="onclick" ajaxSingle="true" reRender="pnlhealthunits"/>
+			</h:selectBooleanCheckbox>
+			#{messages[it.item.key]}
+		</span>
+	</a:repeat>
+
+	<table class="table1" width="100%">
+	<a:repeat value="#{healthUnitsQuery.adminUnits}" var="adm">
+		<tr><th colspan="6">
+			<b style="text-transform: uppercase;">#{adm.adminUnit.name}</b>
+		</th></tr>
+		<tr>
+			<th>#{messages['cases.healthUnit']}</th>
+			<th align="right">#{messages['cases.ongoing.notifs']}</th>
+			<th align="right">#{messages['CaseState.ONTREATMENT']}</th>
+			<th align="right">#{messages['cases.trasnferin']}</th>
+			<th align="right">#{messages['cases.trasnferout']}</th>
+			<th></th>
+		</tr>		
+		<a:repeat value="#{adm.items}" var="it">
+		<tr>
+			<td><div class="hu-icon">#{it.unitName}</div></td>
+			<td align="right">#{it.casesNotifs==null?'-':it.casesNotifs}</td>
+			<td align="right">#{it.casesOnTreatment==null?'-':it.casesOnTreatment}</td>
+			<td align="right">#{it.casesTransferIn==null?'-':it.casesTransferIn}</td>
+			<td align="right">#{it.casesTransferOut==null?'-':it.casesTransferOut}</td>
+			<td align="center"><s:link value="#{messages['cases.mantreatment']}" view="/cases/treatments.xhtml">
+					<f:param name="huid" value="#{it.unitId}"/>
+				</s:link> 
+			</td>
+		</tr>
+		</a:repeat>
+		<tr><td style="background-color:transparent;" colspan="5"><rich:spacer />
+		</td></tr>
+	</a:repeat>
+	</table>
+    
+</ui:composition>

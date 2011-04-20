@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['manag']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="left" value="0" />
+
+<ui:define name="body">
+<p/>
+<table width="100%"><tr><td>
+
+
+<s:decorate template="/layout/roundrect.xhtml">
+	<ui:define name="header"><b>#{messages['manag.case.reports']}</b></ui:define>
+	<ui:param name="showfooter" value="0" />
+
+	<div>
+	<table width="99%">
+	<tr><td valign="top"> 	
+	<s:link value="#{messages['manag.ind.incidence']}" view="/management/incidence.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
+	<s:link value="#{messages['manag.ind.prevalence']}" view="/management/prevalence.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}"/>
+<!--  	<s:link value="#{messages['manag.ind.outcome']}" view="/management/outcome.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}"/>  --> 
+  	<s:link value="#{messages['manag.ind.treatoutcome']}" view="/management/treatoutcome.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}"/>
+	<s:link value="#{messages['manag.ind.detrate']}" view="/management/detrate.xhtml" styleClass="optionmenu" rendered="false"/>
+	<s:link value="#{messages['manag.ind.perctb']}" view="/management/perctb.xhtml" styleClass="optionmenu" rendered="false"/>
+	<s:link value="#{messages['manag.ind.resist']}" view="/management/resist.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
+	<s:link value="#{messages['manag.ind.dstprofile']}" view="/management/dstprofile.xhtml" styleClass="optionmenu" rendered="false" />
+
+	<s:link value="#{messages['cases.sideeffects']}" view="/management/sideeffects.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
+	<s:link value="#{messages['manag.hivreport']}" view="/management/hivresults.xhtml" styleClass="optionmenu" rendered="true" />
+
+	<s:link value="#{messages['manag.ind.infectsite']}" view="/management/infecsite.xhtml" styleClass="optionmenu" rendered="false"/>
+	<s:link value="#{messages['manag.ind.prevtreat']}" view="/management/infecsite.xhtml" styleClass="optionmenu" rendered="false"/>
+	<s:link value="#{messages['manag.ind.hiv']}" view="/management/hiv.xhtml" styleClass="optionmenu" rendered="false" />
+	<s:link value="#{messages['manag.ind.bacmdr']}" view="/management/cover.xhtml" styleClass="optionmenu" rendered="false" />
+	<s:link value="#{messages['manag.ind.outcome6']}" view="/management/outcome6.xhtml" styleClass="optionmenu" rendered="false" />
+	<s:link value="#{messages['manag.ind.cover']}" view="/management/cover.xhtml" styleClass="optionmenu" rendered="false"/>
+	
+	</td></tr>
+	 <tr><td>
+<!-- 	<s:link value="#{messages['manag.ind.treatres']}" view="/management/treatres.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}" >
+			<f:param name="cla" value="DRTB"/>
+		</s:link>
+-->		
+		<s:link value="#{messages['manag.ind.starttreat']}" view="/management/starttreat.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
+		<s:link value="#{messages['manag.ind.interim']}" view="/management/interim.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
+		<s:link value="#{messages['manag.confmdrrep']}" view="/management/confmdrrep.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
+	</td></tr>
+
+	<tr><td>
+		<hr/>
+		<s:link value="#{messages['manag.ind.customind']}" view="/management/customind.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
+	</td></tr>
+	</table>
+	</div>
+
+</s:decorate>
+<p/>
+
+<s:decorate template="/layout/roundrect.xhtml">
+	<ui:define name="header"><b>#{messages['manag.drug.reports']}</b></ui:define>
+	<ui:param name="showfooter" value="0" />
+	
+	<s:link value="#{messages['manag.rel1']}" view="/management/rel1.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}"/>
+	<s:link value="#{messages['manag.rel4']}" view="/management/rel4.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP4')}"/>
+</s:decorate>
+<p/>
+
+<s:decorate template="/layout/roundrect.xhtml">
+	<s:link value="#{messages['manag.export']}" view="/management/export.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('EXPORT')}" propagation="none"/>
+
+	<ui:define name="header"><b>#{messages['manag.forecast']}</b></ui:define>
+	<ui:param name="showfooter" value="0" />
+	<s:link value="#{messages['manag.forecast.med']}" view="/management/forecasting.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('FORECAST')}" propagation="none">
+		<f:param name="id" value="#{null}"/>
+	</s:link>
+	<p/>
+</s:decorate>
+<p/>
+</td></tr></table>
+
+</ui:define>
+
+</ui:composition>  

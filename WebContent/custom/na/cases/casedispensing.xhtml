@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="#{messages['cases.treat.dispedt']}" />
+<ui:param name="show_menu" value="1" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:160px;" />
+
+
+<ui:define name="body">
+<p/>
+
+<rich:jQuery name="updateChecks1" timing="onJScall" selector="#tbldays td" query="removeClass('activerow')"/>
+<rich:jQuery name="updateChecks2" timing="onJScall" selector="#tbldays td:has(:selected)" query="addClass('activerow')"/>
+
+<ui:param name="pagewidth" value="450px;" />
+<s:decorate template="/layout/casebody.xhtml">
+	<a:form id="main">
+    <table width="100%">
+    <tr><td>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
+		<h:outputText value="#{tbcase.treatmentPeriod.iniDate}" converter="localeDateConverter" />
+	</s:decorate>
+
+    <s:decorate id="dt" template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['global.month']}/#{messages['global.year']}:</ui:define>
+    	<h:outputText value="#{caseDispensingHomeNA.month}" converter="monthYearConverter">
+    		<f:param name="year" value="#{caseDispensingHomeNA.year}"/>
+    	</h:outputText>
+    </s:decorate>
+    
+	<h:outputText value="#{messages['cases.disp.types']}" />
+
+    <h:panelGroup id="pnlcalend">
+    <table id="tbldays" width="450px" class="tabela4">
+    <tr>
+    	<ui:repeat offset="1" value="#{shortWeekNames}" var="w">
+    		<th>
+    			#{w}
+    		</th>
+    	</ui:repeat>
+    </tr>
+    <a:repeat value="#{caseDispensingHomeNA.weeks}" var="it">
+    	<tr>
+    	<a:repeat value="#{it.days}" var="item">
+    		<td class="colcb#{item.selected!=null?' activerow':''}">
+    			<s:fragment rendered="#{item.available}">
+    			   #{item.day}<br/>
+			    	<h:selectOneMenu value="#{item.selected}" onchange="updateChecks1();updateChecks2();" >
+			    		<s:selectItems value="#{globalLists_na.dot}" var="it" noSelectionLabel="" label="#{messages[it.key]}" />
+			    		<s:convertEnum/>
+			    	</h:selectOneMenu>
+    			   
+    			</s:fragment>
+    		</td>
+    	</a:repeat>
+    	</tr>
+    </a:repeat>
+	</table>
+    </h:panelGroup>
+
+	</td></tr>
+    <tr><td align="right">
+            <a:commandButton action="#{caseDispensingHomeNA.saveDispensing}" value="#{messages['form.ok']}" styleClass="button"  
+            	reRender="main" />
+            <s:button value="#{messages['form.cancel']}" view="/custom/na/cases/casedata.xhtml" styleClass="button-cancel" propagation="end">
+            	<f:param name="id" value="#{caseHome.id}"/>
+            </s:button>
+    </td></tr>
+    
+    </table>
+    
+	</a:form>
+</s:decorate>
+
+<p/>
+
+
+</ui:define>
+
+</ui:composition>  
