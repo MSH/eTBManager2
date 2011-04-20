@@ -29,8 +29,9 @@ public enum TbField {
 	// ukraine
 	REGISTRATION_CATEGORY,
 	// Bangladesh
-	BIOPSY_METHOD
-	;
+	BIOPSY_METHOD,
+	//Namibia
+	ART_REGIMEN;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
