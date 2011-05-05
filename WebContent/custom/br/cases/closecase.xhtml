@@ -38,7 +38,7 @@
     <div id="regchanged" style="display:none">
     <s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['TbField.SCHEMA_TYPES']}:</ui:define>
-		<h:selectOneMenu value="#{caseDataBR.outcomeRegimenChanged}" >
+		<h:selectOneMenu value="#{tbcase.outcomeRegimenChanged}" >
 			<s:selectItems value="#{fieldsQuery.schemaTypes}" var="v" label="#{v}"/>
 			<s:convertEntity />
 		</h:selectOneMenu>
@@ -48,7 +48,7 @@
     <div id="restype" style="display:none">
     <s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['TbField.RESISTANCE_TYPES']}:</ui:define>
-		<h:selectOneMenu value="#{caseDataBR.outcomeResistanceType}" >
+		<h:selectOneMenu value="#{tbcase.outcomeResistanceType}" >
 			<s:selectItems value="#{fieldsQuery.resistanceTypes}" var="v" label="#{v}"/>
 			<s:convertEntity />
 		</h:selectOneMenu>

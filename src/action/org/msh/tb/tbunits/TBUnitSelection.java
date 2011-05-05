@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jboss.seam.Component;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.HealthSystem;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.enums.UserView;
 import org.msh.tb.adminunits.AdminUnitChangeListener;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.HealthSystem;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.enums.UserView;
 
 
 /**

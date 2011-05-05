@@ -3,10 +3,10 @@ package org.msh.tb.cases;
 import java.text.DecimalFormat;
 import java.util.Date;
 
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.Gender;
-import org.msh.mdrtb.entities.enums.ValidationState;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.ValidationState;
 
 
 public class CaseResultItem {

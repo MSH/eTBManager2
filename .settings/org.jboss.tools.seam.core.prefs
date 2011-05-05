@@ -1,8 +1,8 @@
-#Wed Apr 06 11:40:36 BRT 2011
+#Thu May 05 11:34:19 BRT 2011
 action.package=org.msh.tb
 action.sources=/etbmanager/src/action
 eclipse.preferences.version=1
-model.package=org.msh.mdrtb.entities
+model.package=org.msh.tb.entities
 model.sources=/etbmanager/src/model
 seam.ejb.project=etbmanager
 seam.project.connection.profile=RPROJ

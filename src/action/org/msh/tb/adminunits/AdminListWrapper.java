@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.mdrtb.entities.AdministrativeUnit;
+import org.msh.tb.entities.AdministrativeUnit;
 
 /**
  * Wrapper class to hold administration unit lists for {@link AdminUnitSelection} class

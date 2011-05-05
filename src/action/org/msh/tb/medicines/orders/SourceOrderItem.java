@@ -3,9 +3,9 @@ package org.msh.tb.medicines.orders;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.OrderItem;
-import org.msh.mdrtb.entities.Source;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.OrderItem;
+import org.msh.tb.entities.Source;
 
 /**
  * @author Ricardo

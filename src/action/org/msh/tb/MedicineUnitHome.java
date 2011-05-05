@@ -11,10 +11,10 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.framework.Controller;
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.MedicineUnit;
-import org.msh.mdrtb.entities.Source;
-import org.msh.mdrtb.entities.Tbunit;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.MedicineUnit;
+import org.msh.tb.entities.Source;
+import org.msh.tb.entities.Tbunit;
 import org.msh.tb.login.UserSession;
 
 

@@ -7,8 +7,8 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.WeeklyFrequency;
-import org.msh.mdrtb.entities.Workspace;
+import org.msh.tb.entities.WeeklyFrequency;
+import org.msh.tb.entities.Workspace;
 
 @Name("weeklyFrequencyHome")
 public class WeeklyFrequencyHome {

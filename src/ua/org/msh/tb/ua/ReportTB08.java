@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.ExtraOutcomeInfo;
-import org.msh.mdrtb.entities.enums.InfectionSite;
-import org.msh.mdrtb.entities.enums.PatientType;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.ExtraOutcomeInfo;
+import org.msh.tb.entities.enums.InfectionSite;
+import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorCultureResult;
 import org.msh.tb.indicators.core.IndicatorFilters;

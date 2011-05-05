@@ -14,13 +14,13 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.framework.EntityQuery;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.Source;
-import org.msh.mdrtb.entities.UserLogin;
-import org.msh.mdrtb.entities.UserWorkspace;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.application.WorkspaceViewService;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.Source;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.UserWorkspace;
 import org.msh.utils.date.DateUtils;
 
 

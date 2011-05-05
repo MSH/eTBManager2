@@ -11,13 +11,13 @@ import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Conversation;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.HealthSystem;
-import org.msh.mdrtb.entities.SystemParam;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.UserLogin;
-import org.msh.mdrtb.entities.Workspace;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.HealthSystem;
+import org.msh.tb.entities.SystemParam;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.tbunits.TBUnitSelection;
 
 /**

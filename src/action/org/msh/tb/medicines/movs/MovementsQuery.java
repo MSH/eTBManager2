@@ -6,8 +6,8 @@ import java.util.List;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Movement;
-import org.msh.mdrtb.entities.enums.MovementType;
+import org.msh.tb.entities.Movement;
+import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.login.UserSession;
 import org.msh.utils.EntityQuery;
 

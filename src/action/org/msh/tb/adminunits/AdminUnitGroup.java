@@ -3,7 +3,7 @@ package org.msh.tb.adminunits;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.msh.mdrtb.entities.AdministrativeUnit;
+import org.msh.tb.entities.AdministrativeUnit;
 
 /**
  * Maintain a list of objects related to an {@link AdministrativeUnit} object

@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.transaction.UserTransaction;
-import org.msh.mdrtb.entities.Workspace;
+import org.msh.tb.entities.Workspace;
 import org.msh.utils.CsvReader;
 
 

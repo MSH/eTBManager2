@@ -7,36 +7,14 @@ import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.Component;
-import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.ExamCulture;
-import org.msh.mdrtb.entities.ExamDSTResult;
-import org.msh.mdrtb.entities.ExamHIV;
-import org.msh.mdrtb.entities.ExamMicroscopy;
-import org.msh.mdrtb.entities.ExamXRay;
-import org.msh.mdrtb.entities.FieldValue;
-import org.msh.mdrtb.entities.MedicalExamination;
-import org.msh.mdrtb.entities.Patient;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.CultureResult;
-import org.msh.mdrtb.entities.enums.DstResult;
-import org.msh.mdrtb.entities.enums.Gender;
-import org.msh.mdrtb.entities.enums.HIVResult;
-import org.msh.mdrtb.entities.enums.MicroscopyResult;
-import org.msh.mdrtb.entities.enums.PatientType;
-import org.msh.mdrtb.entities.enums.YesNoType;
-import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.AdminUnitSelection;
-import org.msh.tb.br.entities.CaseDataBR;
 import org.msh.tb.br.entities.MolecularBiology;
+import org.msh.tb.br.entities.TbCaseBR;
 import org.msh.tb.br.entities.enums.MolecularBiologyResult;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
@@ -48,11 +26,31 @@ import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.tb.cases.exams.ExamXRayHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.cases.treatment.StartTreatmentIndivHome;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.ExamCulture;
+import org.msh.tb.entities.ExamDSTResult;
+import org.msh.tb.entities.ExamHIV;
+import org.msh.tb.entities.ExamMicroscopy;
+import org.msh.tb.entities.ExamXRay;
+import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.MedicalExamination;
+import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.CultureResult;
+import org.msh.tb.entities.enums.DstResult;
+import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.HIVResult;
+import org.msh.tb.entities.enums.MicroscopyResult;
+import org.msh.tb.entities.enums.PatientType;
+import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.misc.FieldsOptions;
 import org.msh.tb.tbunits.TBUnitSelection;
 
 @Name("caseDataBRHome")
-public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
+public class CaseDataBRHome {
 	private static final long serialVersionUID = 8895495231680746480L;
 
 	@In EntityManager entityManager;
@@ -75,22 +73,17 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	private AdminUnitSelection auselection;
 	private Integer dstRequired;
 
-	@Factory("caseDataBR")
-	public CaseDataBR getCaseDataBR() {
+/*	@Factory("caseDataBR")
+	public TbCaseBR getCaseDataBR() {
 		try {
 			if (caseHome.getId() != null)
 				setId(caseHome.getId());
-/*			if (caseHome.getId() != null) {
-				entityManager.createQuery("from CaseDataBR c where c.tbcase.id = #{caseHome.id}").getSingleResult();
-				getAuselection().setSelectedUnit(getInstance().getAdminUnitUsOrigem());
-			}
-			setId(caseHome.getId());
-*/		} catch (Exception e) {
+		} catch (Exception e) {
 			setId(null);
 		}
 		return getInstance();
 	}
-
+*/
 	
 	/**
 	 * Called when a new notification is about to begin
@@ -138,25 +131,24 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 //		if (caseEditingHome!=null)
 //			return "error";
 
-		TbCase tbcase = caseEditingHome.getTbcase();
+		TbCaseBR tbcase = (TbCaseBR)caseHome.getInstance();
+
 		tbcase.setDiagnosisDate(startTreatmentHome.getIniTreatmentDate());
 		tbcase.setState(CaseState.WAITING_TREATMENT);
 
 		adjustFields();
+		
+//		data.setTbcase(tbcase);
+//		data.setId(tbcase.getId());
+		tbcase.setCurrAddressNumber(tbcase.getNotifAddressNumber());
+		tbcase.setAdminUnitUsOrigem(getAuselection().getSelectedUnit());
 
+		caseHome.setTransactionLogActive(false);
 		String ret = caseEditingHome.saveNew();
 
 		if ("error".equals(ret))
 			return ret;
 		
-		CaseDataBR data = getInstance();
-		
-		data.setTbcase(tbcase);
-		data.setId(tbcase.getId());
-		data.setCurrAddressNumber(data.getNotifAddressNumber());
-		data.setAdminUnitUsOrigem(getAuselection().getSelectedUnit());
-
-		caseHome.setTransactionLogActive(false);
 		
 		// save exam results
 		if (!saveExams()) 
@@ -167,8 +159,6 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		saveXRay();
 		
 		saveMedicalExamination();
-		
-		persist();
 		
 		if (caseEditingHome.getRegimenType() == 2)
 			 return "individualized";
@@ -204,24 +194,14 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		if (!validateForm())
 			return "error";
 		
-		if (!caseEditingHome.saveEditing().equals("persisted"))
-			return "error";
-		
 		adjustFields();
 
-		CaseDataBR data = getInstance();
-		TbCase tbcase = caseEditingHome.getTbcase();
-		
-		if (data.getId() == null)
-			data.setId(tbcase.getId());
-
+		TbCaseBR tbcase = (TbCaseBR)caseHome.getInstance();
 		if (!tbcase.isNotifAddressChanged())
-			data.setCurrAddressNumber(data.getNotifAddressNumber());
-		data.setAdminUnitUsOrigem(getAuselection().getSelectedUnit());
-		
-		setDisplayMessage(false);
+			tbcase.setCurrAddressNumber(tbcase.getNotifAddressNumber());
+		tbcase.setAdminUnitUsOrigem(getAuselection().getSelectedUnit());
 
-		return persist(); 
+		return caseEditingHome.saveEditing();
 	}
 
 	
@@ -229,7 +209,7 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	 * change the text fields to upper case
 	 */
 	protected void adjustFields() {
-		TbCase tbcase = caseHome.getInstance();
+		TbCaseBR tbcase = (TbCaseBR)caseHome.getInstance();
 		setPropertyUpperCase(tbcase.getNotifAddress(), "address");
 		setPropertyUpperCase(tbcase.getNotifAddress(), "complement");
 		setPropertyUpperCase(tbcase.getNotifAddress(), "zipCode");
@@ -246,30 +226,28 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 		setPropertyUpperCase(p, "motherName");
 		setPropertyUpperCase(p, "securityNumber");
 		setPropertyUpperCase(p, "motherName");
-
-		CaseDataBR data = getInstance();
 		
-		setPropertyUpperCase(data, "numSinan");
-		setPropertyUpperCase(data, "usOrigem");
-		setPropertyUpperCase(data, "country");
-		setPropertyUpperCase(data, "currAddressNumber");
-		setPropertyUpperCase(data, "notifAddressNumber");
-		setPropertyUpperCase(data, "prefixMobile");
-		setPropertyUpperCase(data, "prefixPhone");
-		setPropertyUpperCase(data, "notifDistrict");
-		setPropertyUpperCase(data, "currDistrict");
+		setPropertyUpperCase(tbcase, "numSinan");
+		setPropertyUpperCase(tbcase, "usOrigem");
+		setPropertyUpperCase(tbcase, "country");
+		setPropertyUpperCase(tbcase, "currAddressNumber");
+		setPropertyUpperCase(tbcase, "notifAddressNumber");
+		setPropertyUpperCase(tbcase, "prefixMobile");
+		setPropertyUpperCase(tbcase, "prefixPhone");
+		setPropertyUpperCase(tbcase, "notifDistrict");
+		setPropertyUpperCase(tbcase, "currDistrict");
 		
 		PatientType tp = tbcase.getPatientType();
 		if (tp != PatientType.SCHEMA_CHANGED)
-			data.setSchemaChangeType(null);
+			tbcase.setSchemaChangeType(null);
 		if (!CaseClassification.DRTB.equals( tbcase.getClassification() ))
-			data.setResistanceType(null);
+			tbcase.setResistanceType(null);
 
 		if (tp != PatientType.OTHER)
 			tbcase.setPatientTypeOther(null);
 		
 		if (p.getGender() == Gender.MALE)
-			data.setPregnancePeriod(null);
+			tbcase.setPregnancePeriod(null);
 	}
 
 	
@@ -559,8 +537,8 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 	public AdminUnitSelection getAuselection() {
 		if (auselection == null) {
 			auselection = new AdminUnitSelection();
-			if (isManaged())
-				auselection.setSelectedUnit(getInstance().getAdminUnitUsOrigem());
+			if (caseHome.isManaged())
+				auselection.setSelectedUnit(getTbCase().getAdminUnitUsOrigem());
 		}
 		return auselection;
 	}
@@ -573,5 +551,9 @@ public class CaseDataBRHome extends EntityHomeEx<CaseDataBR> {
 
 	public Integer getDstRequired() {
 		return dstRequired;
+	}
+	
+	public TbCaseBR getTbCase() {
+		return (TbCaseBR)caseHome.getInstance();
 	}
 }

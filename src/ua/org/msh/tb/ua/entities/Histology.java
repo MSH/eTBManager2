@@ -2,7 +2,7 @@ package org.msh.tb.ua.entities;
 
 import javax.persistence.Entity;
 
-import org.msh.mdrtb.entities.CaseData;
+import org.msh.tb.entities.CaseData;
 import org.msh.tb.ua.entities.enums.HistologyResult;
 
 /**

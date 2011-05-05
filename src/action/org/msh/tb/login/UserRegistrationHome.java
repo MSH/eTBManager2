@@ -13,12 +13,12 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
-import org.msh.mdrtb.entities.SystemConfig;
-import org.msh.mdrtb.entities.User;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.enums.UserState;
-import org.msh.mdrtb.entities.enums.UserView;
 import org.msh.tb.application.EtbmanagerApp;
+import org.msh.tb.entities.SystemConfig;
+import org.msh.tb.entities.User;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.enums.UserState;
+import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.misc.DmSystemHome;
 import org.msh.utils.Passwords;
 

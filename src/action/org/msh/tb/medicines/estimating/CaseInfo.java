@@ -3,9 +3,9 @@ package org.msh.tb.medicines.estimating;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.msh.mdrtb.entities.Patient;
-import org.msh.mdrtb.entities.PrescribedMedicine;
-import org.msh.mdrtb.entities.TbCase;
+import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.PrescribedMedicine;
+import org.msh.tb.entities.TbCase;
 
 public class CaseInfo {
 

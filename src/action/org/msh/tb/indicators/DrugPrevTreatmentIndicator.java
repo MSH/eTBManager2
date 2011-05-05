@@ -3,10 +3,10 @@ package org.msh.tb.indicators;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.MedicineLine;
-import org.msh.mdrtb.entities.enums.PatientType;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.MedicineLine;
+import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator2D;
 
 @Name("drugPrevTreatmentIndicator")

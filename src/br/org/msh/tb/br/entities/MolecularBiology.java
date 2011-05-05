@@ -9,10 +9,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.msh.mdrtb.entities.CaseData;
-import org.msh.mdrtb.entities.FieldValue;
-import org.msh.mdrtb.entities.Laboratory;
 import org.msh.tb.br.entities.enums.MolecularBiologyResult;
+import org.msh.tb.entities.CaseData;
+import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.Laboratory;
 
 @Entity
 public class MolecularBiology extends CaseData implements Serializable {

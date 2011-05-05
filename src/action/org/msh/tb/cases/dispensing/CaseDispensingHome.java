@@ -9,8 +9,8 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
-import org.msh.mdrtb.entities.CaseDispensing;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.CaseDispensing;
 
 
 /**

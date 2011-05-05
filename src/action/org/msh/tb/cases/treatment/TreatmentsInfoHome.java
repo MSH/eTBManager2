@@ -9,12 +9,12 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Patient;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.PatientType;
+import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.PatientType;
 
 /**
  * Return information about cases on treatment

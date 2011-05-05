@@ -8,10 +8,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.HealthSystem;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.Workspace;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.HealthSystem;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.Workspace;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

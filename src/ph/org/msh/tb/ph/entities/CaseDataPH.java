@@ -13,8 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
-import org.msh.mdrtb.entities.FieldValue;
-import org.msh.mdrtb.entities.TbCase;
+import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.ph.entities.enums.PreEnrollmentOrigin;
 
 @Entity

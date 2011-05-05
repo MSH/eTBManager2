@@ -2,10 +2,10 @@ package org.msh.tb.ph;
 
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.PatientType;
-import org.msh.mdrtb.entities.enums.PrevTBTreatmentOutcome;
-import org.msh.mdrtb.entities.enums.TbField;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.PatientType;
+import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
+import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.ph.entities.enums.PhysicalExamResult;
 import org.msh.tb.ph.entities.enums.PreEnrollmentOrigin;
 

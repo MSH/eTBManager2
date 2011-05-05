@@ -9,8 +9,8 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.framework.EntityQuery;
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.enums.MedicineCategory;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.enums.MedicineCategory;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
 

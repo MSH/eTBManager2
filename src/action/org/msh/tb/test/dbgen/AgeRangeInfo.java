@@ -1,6 +1,6 @@
 package org.msh.tb.test.dbgen;
 
-import org.msh.mdrtb.entities.AgeRange;
+import org.msh.tb.entities.AgeRange;
 
 /**
  * Store information about are range generation preferences

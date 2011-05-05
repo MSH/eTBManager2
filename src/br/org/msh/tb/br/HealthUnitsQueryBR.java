@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.Workspace;
 import org.msh.tb.cases.HealthUnitInfo;
 import org.msh.tb.cases.HealthUnitsQuery;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.Workspace;
 
 @Name("healthUnitsQueryBR")
 public class HealthUnitsQueryBR extends HealthUnitsQuery {

@@ -1,7 +1,7 @@
 package org.msh.tb;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Regimen;
+import org.msh.tb.entities.Regimen;
 import org.msh.utils.EntityQuery;
 
 

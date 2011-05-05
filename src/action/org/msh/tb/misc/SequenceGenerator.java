@@ -5,8 +5,8 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-import org.msh.mdrtb.entities.SequenceInfo;
-import org.msh.mdrtb.entities.Workspace;
+import org.msh.tb.entities.SequenceInfo;
+import org.msh.tb.entities.Workspace;
 
 @Name("sequenceGenerator")
 public class SequenceGenerator {

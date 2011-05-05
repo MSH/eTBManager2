@@ -3,9 +3,9 @@ package org.msh.tb.importexport;
 import java.util.List;
 
 import org.jboss.seam.Component;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.CountryStructure;
 import org.msh.tb.adminunits.AdminUnitHome;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.CountryStructure;
 
 
 

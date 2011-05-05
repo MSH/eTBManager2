@@ -1,7 +1,7 @@
 package org.msh.tb;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Tag;
+import org.msh.tb.entities.Tag;
 import org.msh.utils.EntityQuery;
 
 @Name("tagsQuery")

@@ -10,12 +10,12 @@ import javax.persistence.Query;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.UserView;
 import org.msh.tb.adminunits.AdminUnitGroup;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.login.UserSession;
 import org.msh.utils.EntityQuery;
 

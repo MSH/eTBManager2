@@ -11,10 +11,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.msh.mdrtb.entities.CaseData;
-import org.msh.mdrtb.entities.FieldValue;
-import org.msh.mdrtb.entities.enums.HIVResult;
-import org.msh.mdrtb.entities.enums.HIVResultKe;
+import org.msh.tb.entities.CaseData;
+import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.enums.HIVResult;
+import org.msh.tb.entities.enums.HIVResultKe;
 import org.msh.tb.log.FieldLog;
 
 /**

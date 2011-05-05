@@ -4,8 +4,8 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.CountryStructure;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.entities.CountryStructure;
 import org.msh.tb.log.LogInfo;
 import org.msh.utils.EntityQuery;
 

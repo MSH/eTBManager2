@@ -13,9 +13,9 @@ import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.TimeZoneSelector;
 import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
-import org.msh.mdrtb.entities.User;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.enums.UserState;
+import org.msh.tb.entities.User;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.enums.UserState;
 import org.msh.utils.Passwords;
 
 

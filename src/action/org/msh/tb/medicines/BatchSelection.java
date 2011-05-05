@@ -16,11 +16,11 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.msh.mdrtb.entities.Batch;
-import org.msh.mdrtb.entities.BatchQuantity;
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.Source;
-import org.msh.mdrtb.entities.Tbunit;
+import org.msh.tb.entities.Batch;
+import org.msh.tb.entities.BatchQuantity;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.Source;
+import org.msh.tb.entities.Tbunit;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
 

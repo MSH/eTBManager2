@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.hibernate.Hibernate;
-import org.msh.mdrtb.entities.LogValue;
+import org.msh.tb.entities.LogValue;
 
 public class BeanState {
 

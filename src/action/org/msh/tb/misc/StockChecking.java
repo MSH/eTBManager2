@@ -10,9 +10,9 @@ import org.jboss.seam.annotations.async.Asynchronous;
 import org.jboss.seam.annotations.async.Expiration;
 import org.jboss.seam.annotations.async.FinalExpiration;
 import org.jboss.seam.annotations.async.IntervalDuration;
-import org.msh.mdrtb.entities.MedicineUnit;
-import org.msh.mdrtb.entities.StockPosition;
-import org.msh.mdrtb.entities.Tbunit;
+import org.msh.tb.entities.MedicineUnit;
+import org.msh.tb.entities.StockPosition;
+import org.msh.tb.entities.Tbunit;
 import org.msh.tb.medicines.movs.MinBufferStockList;
 import org.msh.tb.medicines.movs.StockPositionList;
  

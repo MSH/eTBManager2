@@ -35,7 +35,7 @@
 
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['pt_BR.numsinan']}:</ui:define>
-		<h:inputText value="#{caseDataBR.numSinan}" style="width:120px;text-transform:uppercase;" maxlength="50"></h:inputText>
+		<h:inputText value="#{tbcase.numSinan}" style="width:120px;text-transform:uppercase;" maxlength="50"></h:inputText>
 	</s:decorate>
 
 	</td></tr>
@@ -82,7 +82,7 @@
 	<div id="countryPanel" >	
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['pt_BR.country']}:</ui:define>
-    	<h:inputText value="#{caseDataBR.country}" maxlength="100" style="width:120px;text-transform:uppercase;"/>
+    	<h:inputText value="#{tbcase.country}" maxlength="100" style="width:120px;text-transform:uppercase;"/>
     </s:decorate>
     </div>
 	
@@ -97,7 +97,7 @@
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.address']}:</ui:define>
     		<h:inputText value="#{tbcase.notifAddress.address}" style="width:300px;text-transform:uppercase;" required="true" maxlength="100"/>
-    		#{messages['pt_BR.addressNumber']}: <h:inputText value="#{caseDataBR.notifAddressNumber}" style="width:80px;text-transform:uppercase;" maxlength="20" />
+    		#{messages['pt_BR.addressNumber']}: <h:inputText value="#{tbcase.notifAddressNumber}" style="width:80px;text-transform:uppercase;" maxlength="20" />
     	</s:decorate>
     	
     </td></tr>
@@ -110,7 +110,7 @@
 
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.district']}</ui:define>
-    		<h:inputText value="#{caseDataBR.notifDistrict}" style="width:150px;text-transform:uppercase;" maxlength="100"/>
+    		<h:inputText value="#{tbcase.notifDistrict}" style="width:150px;text-transform:uppercase;" maxlength="100"/>
     	</s:decorate>
     </td></tr>
 
@@ -146,7 +146,7 @@
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.address']}:</ui:define>
     		<h:inputText value="#{tbcase.currentAddress.address}" style="width:300px;margin-bottom:2px;" maxlength="100"/>
-    		#{messages['pt_BR.addressNumber']}: <h:inputText value="#{caseDataBR.currAddressNumber}" style="width:80px;text-transform:uppercase;" maxlength="20"  />
+    		#{messages['pt_BR.addressNumber']}: <h:inputText value="#{tbcase.currAddressNumber}" style="width:80px;text-transform:uppercase;" maxlength="20"  />
     	</s:decorate>
    
 	   	<s:decorate template="/layout/edit.xhtml"> 	
@@ -156,7 +156,7 @@
 
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.district']}</ui:define>
-    		<h:inputText value="#{caseDataBR.currDistrict}" style="width:150px;text-transform:uppercase;" maxlength="100"/>
+    		<h:inputText value="#{tbcase.currDistrict}" style="width:150px;text-transform:uppercase;" maxlength="100"/>
     	</s:decorate>
 
     	<s:decorate template="/layout/edit.xhtml">
@@ -181,7 +181,7 @@
     		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
     		<s:decorate styleClass="label">
 			<s:label value="DDD" styleClass="over" />
-   			<h:inputText id="dddphone" value="#{caseDataBR.prefixPhone}" style="width:50px;margin-right:4px;text-transform:uppercase;" maxlength="3"/>
+   			<h:inputText id="dddphone" value="#{tbcase.prefixPhone}" style="width:50px;margin-right:4px;text-transform:uppercase;" maxlength="3"/>
     		<h:inputText value="#{tbcase.phoneNumber}" maxlength="50" style="text-transform:uppercase;"/>
     		</s:decorate>
     	</s:decorate>	
@@ -191,7 +191,7 @@
     		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
     		<s:decorate styleClass="label"> 
 			<s:label value="DDD" styleClass="over" />
-   			<h:inputText id="dddmobile" value="#{caseDataBR.prefixMobile}" style="width:50px;margin-right:4px;text-transform:uppercase;" maxlength="3"/>
+   			<h:inputText id="dddmobile" value="#{tbcase.prefixMobile}" style="width:50px;margin-right:4px;text-transform:uppercase;" maxlength="3"/>
     		<h:inputText value="#{tbcase.mobileNumber}" maxlength="50" style="text-transform:uppercase;"/>
     		</s:decorate>
     	</s:decorate>	
@@ -218,7 +218,7 @@
 	<div class="paragraph">#{messages['pt_BR.usOrigem']}</div>
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['form.name']}:</ui:define>
-		<h:inputText value="#{caseDataBR.usOrigem}" style="width:250px;text-transform:uppercase;" maxlength="100" required="true"/>
+		<h:inputText value="#{tbcase.usOrigem}" style="width:250px;text-transform:uppercase;" maxlength="100" required="true"/>
 	</s:decorate>
 	<s:decorate template="/layout/auselection.xhtml">
 		<ui:param name="auselection" value="#{caseDataBRHome.auselection}" />
@@ -262,14 +262,14 @@
     	<s:decorate template="/layout/editfield.xhtml" >
     		<ui:define name="label">#{messages['TbField.SCHEMA_TYPES']}:</ui:define>
     		<ui:param name="id" value="schema" />
-    		<ui:param name="field" value="#{caseDataBR.schemaChangeType}" />
+    		<ui:param name="field" value="#{tbcase.schemaChangeType}" />
     		<ui:param name="list" value="#{fieldsQuery.schemaTypes}" />
     	</s:decorate>
 	</div>
 	<div id="divFailure" >
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['PatientType.FAILURE']}:</ui:define>
-			<h:selectOneMenu value="#{caseDataBR.failureType}">
+			<h:selectOneMenu value="#{tbcase.failureType}">
 				<s:selectItems var="s" value="#{globalLists_br.failureTypes}" label="#{messages[s.key]}" noSelectionLabel="-" />
 				<s:convertEnum />
 			</h:selectOneMenu>
@@ -280,7 +280,7 @@
     	<ui:define name="label">#{messages['pt_BR.tipo_mnt']}:</ui:define>
     	<ui:param name="required" value="true" />
     	<ui:param name="id" value="mnt" />
-    	<ui:param name="field" value="#{caseDataBR.microbacteriose}" />
+    	<ui:param name="field" value="#{tbcase.microbacteriose}" />
     	<ui:param name="list" value="#{fieldsQuery.micobacterioses}" />
     </s:decorate>
 
@@ -288,7 +288,7 @@
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
     	<ui:param name="required" value="true" />
     	<ui:param name="id" value="mnt" />
-    	<ui:param name="field" value="#{caseDataBR.resistanceType}" />
+    	<ui:param name="field" value="#{tbcase.resistanceType}" />
     	<ui:param name="list" value="#{fieldsQuery.resistanceTypes}" />
     </s:decorate>
 
@@ -496,7 +496,7 @@ function genderChange(cb) {
 
     	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
-    	<h:selectOneMenu value="#{caseDataBR.tipoResistencia}" required="true">
+    	<h:selectOneMenu value="#{tbcase.tipoResistencia}" required="true">
     		<s:selectItems var="it" value="#{globalLists_br.tiposResistencia}" noSelectionLabel="-" label="#{it.message}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
@@ -521,7 +521,7 @@ function genderChange(cb) {
     	<ui:define name="label">#{messages['TbField.SKINCOLOR']}:</ui:define>
     	<ui:param name="required" value="true" />
     	<ui:param name="id" value="skinColor" />
-    	<ui:param name="field" value="#{caseDataBR.skinColor}" />
+    	<ui:param name="field" value="#{tbcase.skinColor}" />
     	<ui:param name="list" value="#{fieldsQuery.skinColors}" />
     </s:decorate>
 	
@@ -529,7 +529,7 @@ function genderChange(cb) {
     	<ui:define name="label">#{messages['TbField.POSITION']}:</ui:define>
     	<ui:param name="required" value="true" />
     	<ui:param name="id" value="position" />
-    	<ui:param name="field" value="#{caseDataBR.position}" />
+    	<ui:param name="field" value="#{tbcase.position}" />
     	<ui:param name="list" value="#{fieldsQuery.positions}" />
     </s:decorate>
 
@@ -537,7 +537,7 @@ function genderChange(cb) {
     	<ui:define name="label">#{messages['TbField.EDUCATIONAL_DEGREE']}:</ui:define>
     	<ui:param name="required" value="true" />
     	<ui:param name="id" value="eduDegree" />
-    	<ui:param name="field" value="#{caseDataBR.educationalDegree}" />
+    	<ui:param name="field" value="#{tbcase.educationalDegree}" />
     	<ui:param name="list" value="#{fieldsQuery.educationalDegree}" />
     </s:decorate>
 	
@@ -545,14 +545,14 @@ function genderChange(cb) {
     	<ui:define name="label">#{messages['TbField.CONTAG_PLACE']}:</ui:define>
     	<ui:param name="required" value="true" />
     	<ui:param name="id" value="contagPlace" />
-    	<ui:param name="field" value="#{caseDataBR.contagPlace}" />
+    	<ui:param name="field" value="#{tbcase.contagPlace}" />
     	<ui:param name="list" value="#{fieldsQuery.contagPlace}" />
     </s:decorate>
 
 	<div id="div_pergnant">
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbField.PREGNANCE_PERIOD']}:</ui:define>
-    	<h:selectOneMenu value="#{caseDataBR.pregnancePeriod}">
+    	<h:selectOneMenu value="#{tbcase.pregnancePeriod}">
     		<s:selectItems var="s" value="#{fieldsQuery.pregnancePeriod}" noSelectionLabel="-" label="#{s.name}"/>
     		<s:convertEntity />
     	</h:selectOneMenu>

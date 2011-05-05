@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.msh.mdrtb.entities.MedicalExamination;
+import org.msh.tb.entities.MedicalExamination;
 
 @Entity
 @DiscriminatorValue("br")

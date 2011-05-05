@@ -7,8 +7,8 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.jboss.seam.contexts.Contexts;
-import org.msh.mdrtb.entities.UserLogin;
-import org.msh.mdrtb.entities.Workspace;
+import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.misc.DmSystemHome;
 
 /**

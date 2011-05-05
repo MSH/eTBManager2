@@ -9,10 +9,10 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.tb.cases.treatment.TreatmentHome;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseState;
 import org.msh.utils.date.Period;
 
 @Name("caseCloseHome")

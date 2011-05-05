@@ -5,8 +5,8 @@ import java.util.Map;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
-import org.msh.mdrtb.entities.TbCase;
 import org.msh.tb.adminunits.InfoCountryLevels;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.indicators.core.CaseHQLBase;
 
 

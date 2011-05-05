@@ -2,7 +2,7 @@ package org.msh.tb.reports;
 
 import java.util.Date;
 
-import org.msh.mdrtb.entities.Medicine;
+import org.msh.tb.entities.Medicine;
 
 
 

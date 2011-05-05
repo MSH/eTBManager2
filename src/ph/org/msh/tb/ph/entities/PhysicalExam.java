@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.msh.mdrtb.entities.FieldValue;
+import org.msh.tb.entities.FieldValue;
 import org.msh.tb.ph.entities.enums.PhysicalExamResult;
 
 @Entity

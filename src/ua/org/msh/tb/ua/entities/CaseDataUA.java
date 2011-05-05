@@ -17,10 +17,10 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.msh.mdrtb.entities.FieldValueComponent;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.enums.ExtraOutcomeInfo;
-import org.msh.mdrtb.entities.enums.YesNoType;
+import org.msh.tb.entities.FieldValueComponent;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.ExtraOutcomeInfo;
+import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.ua.entities.enums.DiagnosisSource;
 import org.msh.tb.ua.entities.enums.MBTResult;
 

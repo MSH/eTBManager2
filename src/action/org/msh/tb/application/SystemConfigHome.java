@@ -9,10 +9,10 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.international.LocaleSelector;
-import org.msh.mdrtb.entities.SystemConfig;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.UserProfile;
-import org.msh.mdrtb.entities.Workspace;
+import org.msh.tb.entities.SystemConfig;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.UserProfile;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.log.LogService;
 
 @Name("systemConfigHome")

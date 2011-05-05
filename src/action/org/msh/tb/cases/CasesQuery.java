@@ -13,14 +13,16 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.core.Expressions;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.Patient;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.DisplayCaseNumber;
-import org.msh.mdrtb.entities.enums.Gender;
-import org.msh.mdrtb.entities.enums.ValidationState;
+import org.msh.tb.ETB;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DisplayCaseNumber;
+import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.ValidationState;
 import org.msh.utils.EntityQuery;
 
 
@@ -107,7 +109,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	 * @return
 	 */
 	public String getFromHQL() {
-		return "from TbCase c";
+		return "from " + ETB.getWsClassName(TbCase.class) + " c";
 	}
 
 
@@ -396,6 +398,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		
 		super.refresh();
 	}
+
 
 	public String getNamesOrderBy() {
 		boolean descOrder = caseFilters.isInverseOrder();

@@ -19,51 +19,8 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.mdrtb.entities.Address;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.CaseComorbidity;
-import org.msh.mdrtb.entities.CountryStructure;
-import org.msh.mdrtb.entities.ExamCulture;
-import org.msh.mdrtb.entities.ExamDST;
-import org.msh.mdrtb.entities.ExamDSTResult;
-import org.msh.mdrtb.entities.ExamHIV;
-import org.msh.mdrtb.entities.ExamMicroscopy;
-import org.msh.mdrtb.entities.ExamXRay;
-import org.msh.mdrtb.entities.FieldValue;
-import org.msh.mdrtb.entities.HealthSystem;
-import org.msh.mdrtb.entities.Laboratory;
-import org.msh.mdrtb.entities.MedicalExamination;
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.Patient;
-import org.msh.mdrtb.entities.PrescribedMedicine;
-import org.msh.mdrtb.entities.PrevTBTreatment;
-import org.msh.mdrtb.entities.Regimen;
-import org.msh.mdrtb.entities.Source;
-import org.msh.mdrtb.entities.Substance;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.TreatmentHealthUnit;
-import org.msh.mdrtb.entities.UserLogin;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.CultureResult;
-import org.msh.mdrtb.entities.enums.DiagnosisType;
-import org.msh.mdrtb.entities.enums.DrugResistanceType;
-import org.msh.mdrtb.entities.enums.DstResult;
-import org.msh.mdrtb.entities.enums.Gender;
-import org.msh.mdrtb.entities.enums.HIVResult;
-import org.msh.mdrtb.entities.enums.InfectionSite;
-import org.msh.mdrtb.entities.enums.MicroscopyResult;
-import org.msh.mdrtb.entities.enums.Nationality;
-import org.msh.mdrtb.entities.enums.PatientType;
-import org.msh.mdrtb.entities.enums.PrevTBTreatmentOutcome;
-import org.msh.mdrtb.entities.enums.TbField;
-import org.msh.mdrtb.entities.enums.ValidationState;
-import org.msh.mdrtb.entities.enums.XRayEvolution;
-import org.msh.mdrtb.entities.enums.YesNoType;
 import org.msh.tb.adminunits.AdminUnitHome;
-import org.msh.tb.br.entities.CaseDataBR;
+import org.msh.tb.br.entities.TbCaseBR;
 import org.msh.tb.br.entities.enums.FailureType;
 import org.msh.tb.br.entities.enums.TipoResistencia;
 import org.msh.tb.cases.CaseHome;
@@ -71,6 +28,48 @@ import org.msh.tb.cases.exams.ExamCultureHome;
 import org.msh.tb.cases.exams.ExamDSTHome;
 import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
+import org.msh.tb.entities.Address;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.CaseComorbidity;
+import org.msh.tb.entities.CountryStructure;
+import org.msh.tb.entities.ExamCulture;
+import org.msh.tb.entities.ExamDST;
+import org.msh.tb.entities.ExamDSTResult;
+import org.msh.tb.entities.ExamHIV;
+import org.msh.tb.entities.ExamMicroscopy;
+import org.msh.tb.entities.ExamXRay;
+import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.HealthSystem;
+import org.msh.tb.entities.Laboratory;
+import org.msh.tb.entities.MedicalExamination;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.PrescribedMedicine;
+import org.msh.tb.entities.PrevTBTreatment;
+import org.msh.tb.entities.Regimen;
+import org.msh.tb.entities.Source;
+import org.msh.tb.entities.Substance;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.TreatmentHealthUnit;
+import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.CultureResult;
+import org.msh.tb.entities.enums.DiagnosisType;
+import org.msh.tb.entities.enums.DrugResistanceType;
+import org.msh.tb.entities.enums.DstResult;
+import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.HIVResult;
+import org.msh.tb.entities.enums.InfectionSite;
+import org.msh.tb.entities.enums.MicroscopyResult;
+import org.msh.tb.entities.enums.Nationality;
+import org.msh.tb.entities.enums.PatientType;
+import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
+import org.msh.tb.entities.enums.TbField;
+import org.msh.tb.entities.enums.ValidationState;
+import org.msh.tb.entities.enums.XRayEvolution;
+import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.misc.FieldsQuery;
 import org.msh.utils.TransactionalBatchComponent;
 import org.msh.utils.date.DateUtils;
@@ -115,8 +114,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	private CachedRowSet rsCases;
 	private String uf;
 	private List<CountryStructure> structures;
-	private TbCase tbcase;
-	private CaseDataBR caseData;
+	private TbCaseBR tbcase;
 	private HealthSystem healthSystem;
 	private Regimen regimen;
 	private Source source;
@@ -244,8 +242,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		// initialize object
 		caseHome.setId(null);
 
-		tbcase = caseHome.getInstance();
-		caseData = caseDataBRHome.getCaseDataBR();
+		tbcase = (TbCaseBR)caseHome.getInstance();
 		
 		tbcase.setPatient(p);
 		tbcase.setLegacyId(rsCases.getString("COD_CASO"));
@@ -287,31 +284,31 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		
 		String codMun = rsCases.getString("COD_MUN_US_ORIGEM");
 		AdministrativeUnit municipio = loadMunicipio(codMun);
-		caseData.setAdminUnitUsOrigem(municipio);
-		caseData.setUsOrigem(rsCases.getString("NOME_US_ORIGEM"));
+		tbcase.setAdminUnitUsOrigem(municipio);
+		tbcase.setUsOrigem(rsCases.getString("NOME_US_ORIGEM"));
 
 		FieldValue fieldValue = getFieldValue(TbField.CONTAG_PLACE, rsCases.getString("COD_LOCAL_CONTAGIO"));  
-		caseData.getContagPlace().setValue(fieldValue);
+		tbcase.getContagPlace().setValue(fieldValue);
 		
 		fieldValue = getFieldValue(TbField.EDUCATIONAL_DEGREE, rsCases.getString("ESCOLARIDADE"));
-		caseData.getEducationalDegree().setValue(fieldValue);
+		tbcase.getEducationalDegree().setValue(fieldValue);
 
 		fieldValue = getFieldValue(TbField.POSITION, rsCases.getString("OCUPACAO"));
-		caseData.getPosition().setValue(fieldValue);
+		tbcase.getPosition().setValue(fieldValue);
 		
 		fieldValue = getFieldValue(TbField.SKINCOLOR, rsCases.getString("COR"));
-		caseData.getSkinColor().setValue(fieldValue);
+		tbcase.getSkinColor().setValue(fieldValue);
 
 		if (numCasosAnt == 0)
-			 caseData.setFailureType(FailureType.FIRST_TREATMENT);
-		else caseData.setFailureType(FailureType.RETREATMENT);
+			 tbcase.setFailureType(FailureType.FIRST_TREATMENT);
+		else tbcase.setFailureType(FailureType.RETREATMENT);
 		
 		val = rsCases.getInt("TIPO_RESISTENCIA");
 		if (val == 1)
-			 caseData.setTipoResistencia(TipoResistencia.PRIMARIA);
-		else caseData.setTipoResistencia(TipoResistencia.ADQUIRIDA);
+			 tbcase.setTipoResistencia(TipoResistencia.PRIMARIA);
+		else tbcase.setTipoResistencia(TipoResistencia.ADQUIRIDA);
 		
-		caseData.setNumSinan(rsCases.getString("NUM_SINAN"));
+		tbcase.setNumSinan(rsCases.getString("NUM_SINAN"));
 		
 		updateCaseOutcome();
 		importMedicalExamination(rsCases);
@@ -319,10 +316,10 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		
 		caseHome.persist();
 		
-		caseData.setTbcase(tbcase);
-		caseData.setId(tbcase.getId());
-		caseDataBRHome.setDisplayMessage(false);
-		caseDataBRHome.persist();
+//		caseData.setTbcase(tbcase);
+//		caseData.setId(tbcase.getId());
+//		caseDataBRHome.setDisplayMessage(false);
+//		caseDataBRHome.persist();
 		
 		importExams(rsCases);
 		importDSTExam(rsCases);
@@ -857,8 +854,8 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 
 		aux.setComplement(rs.getString("COMPLEMENTO"));
 		aux.setZipCode(rs.getString("CEP"));
-		caseData.setNotifAddressNumber(rs.getString("NUMERO_ENDERECO"));
-		caseData.setNotifDistrict(rs.getString("BAIRRO"));
+		tbcase.setNotifAddressNumber(rs.getString("NUMERO_ENDERECO"));
+		tbcase.setNotifDistrict(rs.getString("BAIRRO"));
 		tbcase.setPhoneNumber(rs.getString("TELEFONE"));
 		tbcase.setMobileNumber(rs.getString("CELULAR"));
 		

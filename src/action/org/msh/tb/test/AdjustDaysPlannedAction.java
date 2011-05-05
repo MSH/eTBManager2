@@ -7,9 +7,9 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.CaseState;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseState;
 
 @Name("adjustDaysPlannedAction")
 public class AdjustDaysPlannedAction {

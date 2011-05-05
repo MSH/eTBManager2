@@ -8,8 +8,8 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.FieldValue;
-import org.msh.mdrtb.entities.enums.TbField;
+import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.enums.TbField;
 
 /**
  * Class for handle lists of field values for a drop down menu in a TB form

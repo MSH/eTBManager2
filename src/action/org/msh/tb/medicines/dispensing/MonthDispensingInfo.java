@@ -3,7 +3,7 @@ package org.msh.tb.medicines.dispensing;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.msh.mdrtb.entities.Medicine;
+import org.msh.tb.entities.Medicine;
 
 /**
  * @author Ricardo

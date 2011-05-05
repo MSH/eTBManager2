@@ -7,8 +7,8 @@ import javax.faces.model.SelectItem;
 
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.ExamCulture;
-import org.msh.mdrtb.entities.enums.CultureResult;
+import org.msh.tb.entities.ExamCulture;
+import org.msh.tb.entities.enums.CultureResult;
 import org.msh.tb.log.LogInfo;
 
 @Name("examCultureHome")

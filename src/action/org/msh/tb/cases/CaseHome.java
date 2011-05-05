@@ -8,15 +8,16 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.security.Identity;
-import org.msh.mdrtb.entities.Patient;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.TreatmentHealthUnit;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.ValidationState;
+import org.msh.tb.ETB;
+import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.TreatmentHealthUnit;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.log.LogInfo;
 
 
@@ -29,7 +30,7 @@ import org.msh.tb.log.LogInfo;
 @Name("caseHome")
 @LogInfo(roleName="CASE_DATA")
 @BypassInterceptors
-public class CaseHome extends WorkspaceSensitiveEntityHome<TbCase>{
+public class CaseHome extends WsEntityHome<TbCase>{
 	private static final long serialVersionUID = -8072727373977321407L;
 
 	private List<TbCase> otherCases;
@@ -283,7 +284,7 @@ public class CaseHome extends WorkspaceSensitiveEntityHome<TbCase>{
 */	
 	public List<TbCase> getOtherCases() {
 		if (otherCases == null) {
-			otherCases = getEntityManager().createQuery("from TbCase c " +
+			otherCases = getEntityManager().createQuery("from " + ETB.getWsClassName(TbCase.class) + " c " +
 					"where c.patient.id = #{tbcase.patient.id} and c.id <> #{tbcase.id} " +
 					"order by c.registrationDate")
 					.getResultList();

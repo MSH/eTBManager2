@@ -2,7 +2,7 @@ package org.msh.tb.export;
 
 import java.util.List;
 
-import org.msh.mdrtb.entities.TbCase;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.indicators.core.CaseHQLBase;
 
 public class ExamsExport extends CaseHQLBase {

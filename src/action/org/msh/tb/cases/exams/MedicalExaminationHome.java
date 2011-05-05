@@ -2,7 +2,7 @@ package org.msh.tb.cases.exams;
 
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.MedicalExamination;
+import org.msh.tb.entities.MedicalExamination;
 
 
 @Name("medicalExaminationHome")

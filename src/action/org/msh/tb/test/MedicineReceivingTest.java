@@ -6,10 +6,10 @@ import java.util.Random;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Batch;
-import org.msh.mdrtb.entities.MedicineReceiving;
-import org.msh.mdrtb.entities.MedicineReceivingItem;
-import org.msh.mdrtb.entities.enums.Container;
+import org.msh.tb.entities.Batch;
+import org.msh.tb.entities.MedicineReceiving;
+import org.msh.tb.entities.MedicineReceivingItem;
+import org.msh.tb.entities.enums.Container;
 import org.msh.tb.medicines.MedicineReceivingHome;
 import org.msh.tb.medicines.MedicineSelection;
 import org.msh.utils.ItemSelect;

@@ -10,12 +10,12 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Batch;
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.Movement;
-import org.msh.mdrtb.entities.ProductGroup;
-import org.msh.mdrtb.entities.Source;
-import org.msh.mdrtb.entities.StockPosition;
+import org.msh.tb.entities.Batch;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.Movement;
+import org.msh.tb.entities.ProductGroup;
+import org.msh.tb.entities.Source;
+import org.msh.tb.entities.StockPosition;
 import org.msh.tb.login.UserSession;
 
 

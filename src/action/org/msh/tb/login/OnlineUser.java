@@ -2,7 +2,7 @@ package org.msh.tb.login;
 
 import java.util.Date;
 
-import org.msh.mdrtb.entities.UserLogin;
+import org.msh.tb.entities.UserLogin;
 
 
 public class OnlineUser {

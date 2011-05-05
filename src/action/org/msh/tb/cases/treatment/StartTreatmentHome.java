@@ -8,10 +8,10 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.msh.mdrtb.entities.Regimen;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.Regimen;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
 

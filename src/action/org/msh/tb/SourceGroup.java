@@ -3,7 +3,7 @@ package org.msh.tb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.msh.mdrtb.entities.Source;
+import org.msh.tb.entities.Source;
 
 public class SourceGroup<E> {
 

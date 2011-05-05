@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.AgeRange;
-import org.msh.mdrtb.entities.enums.Gender;
-import org.msh.mdrtb.entities.enums.HIVResult;
-import org.msh.mdrtb.entities.enums.InfectionSite;
-import org.msh.mdrtb.entities.enums.PatientType;
+import org.msh.tb.entities.AgeRange;
+import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.HIVResult;
+import org.msh.tb.entities.enums.InfectionSite;
+import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorCultureResult;
 import org.msh.tb.indicators.core.IndicatorFilters;

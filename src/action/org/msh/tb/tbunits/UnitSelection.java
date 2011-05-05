@@ -11,9 +11,9 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.UserWorkspace;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.login.UserSession;
 
 @Name("unitSelection")

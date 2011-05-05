@@ -12,13 +12,13 @@ import org.jboss.seam.core.Expressions.ValueExpression;
 import org.jboss.seam.framework.EntityHome;
 import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.AuthorizationException;
-import org.msh.mdrtb.entities.User;
-import org.msh.mdrtb.entities.UserLogin;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.WSObject;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.RoleAction;
+import org.msh.tb.entities.User;
+import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.WSObject;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.log.LogInfo;
 import org.msh.tb.log.LogService;
 import org.msh.utils.EntityQuery;
@@ -103,14 +103,16 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		
 		return ret;
 	}
-	
+
+
 	@Override
 	public String update() {
 		String ret = super.update();
 		saveTransactionLog(RoleAction.EDIT);
 		return ret;
 	}
-	
+
+
 	@Override
 	public String remove() {
 		if (!isManaged())

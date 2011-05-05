@@ -13,16 +13,16 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.security.Restrict;
 import org.jboss.seam.core.Events;
-import org.msh.mdrtb.entities.CaseIssue;
-import org.msh.mdrtb.entities.Patient;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.User;
-import org.msh.mdrtb.entities.UserLogin;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.enums.ValidationState;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.CaseValidationHome;
+import org.msh.tb.entities.CaseIssue;
+import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.User;
+import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.misc.SequenceGenerator;
 
 /**

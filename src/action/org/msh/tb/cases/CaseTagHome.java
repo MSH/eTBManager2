@@ -7,9 +7,9 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Tag;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.Workspace;
+import org.msh.tb.entities.Tag;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Workspace;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
 

@@ -13,7 +13,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.mdrtb.entities.SystemConfig;
+import org.msh.tb.entities.SystemConfig;
 
 /**
  * Store application specific information like version number, build number and implementation title

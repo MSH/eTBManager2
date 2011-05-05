@@ -1,6 +1,6 @@
 package org.msh.tb.medicines.movs;
 
-import org.msh.mdrtb.entities.Batch;
+import org.msh.tb.entities.Batch;
 
 public class BatchTransferItem {
 

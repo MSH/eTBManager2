@@ -7,11 +7,11 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.UserLogin;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.UserView;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.UserView;
 
 /**
  * Helper class to allow users to select an administrative unit

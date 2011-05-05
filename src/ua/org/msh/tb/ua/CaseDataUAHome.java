@@ -6,13 +6,13 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.enums.YesNoType;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.cases.CaseCloseHome;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.ComorbidityHome;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.ua.entities.CaseDataUA;
 
 

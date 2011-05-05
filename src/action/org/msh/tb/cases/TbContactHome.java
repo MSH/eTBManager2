@@ -3,9 +3,9 @@ package org.msh.tb.cases;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.TbContact;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.TbContact;
 
 @Name("tbContactHome")
 public class TbContactHome extends EntityHomeEx<TbContact> {

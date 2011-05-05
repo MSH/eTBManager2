@@ -10,8 +10,8 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.Workspace;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.Workspace;
 
 @Name("adjustAdminUnits")
 public class AdjustAdminUnits {

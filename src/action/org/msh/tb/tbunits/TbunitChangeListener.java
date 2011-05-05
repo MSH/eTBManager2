@@ -1,6 +1,6 @@
 package org.msh.tb.tbunits;
 
-import org.msh.mdrtb.entities.Tbunit;
+import org.msh.tb.entities.Tbunit;
 
 /**
  * Interface all class must implement to receive notifications from {@link TBUnitSelection} component

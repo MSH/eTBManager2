@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.enums.PatientType;
+import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator;
 import org.msh.tb.indicators.core.IndicatorFilters;
 

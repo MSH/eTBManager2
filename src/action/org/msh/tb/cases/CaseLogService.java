@@ -4,8 +4,8 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.enums.CaseClassification;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.log.LogService;
 
 @Name("caseLogService")

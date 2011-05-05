@@ -5,22 +5,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.FieldValue;
-import org.msh.mdrtb.entities.Regimen;
-import org.msh.mdrtb.entities.Substance;
-import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.CultureResult;
-import org.msh.mdrtb.entities.enums.DiagnosisType;
-import org.msh.mdrtb.entities.enums.Gender;
-import org.msh.mdrtb.entities.enums.HIVResult;
-import org.msh.mdrtb.entities.enums.InfectionSite;
-import org.msh.mdrtb.entities.enums.LocalityType;
-import org.msh.mdrtb.entities.enums.Nationality;
-import org.msh.mdrtb.entities.enums.NumTreatments;
-import org.msh.mdrtb.entities.enums.PatientType;
-import org.msh.mdrtb.entities.enums.MicroscopyResult;
-import org.msh.mdrtb.entities.enums.DstResult;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.Regimen;
+import org.msh.tb.entities.Substance;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.CultureResult;
+import org.msh.tb.entities.enums.DiagnosisType;
+import org.msh.tb.entities.enums.DstResult;
+import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.HIVResult;
+import org.msh.tb.entities.enums.InfectionSite;
+import org.msh.tb.entities.enums.LocalityType;
+import org.msh.tb.entities.enums.MicroscopyResult;
+import org.msh.tb.entities.enums.Nationality;
+import org.msh.tb.entities.enums.NumTreatments;
+import org.msh.tb.entities.enums.PatientType;
 
 /**
  * Store preferences about the cases to be generated in the database 

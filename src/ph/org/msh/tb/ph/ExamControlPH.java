@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.mdrtb.entities.TbCase;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.workspaces.customizable.ExamControl;
 import org.msh.utils.date.DateUtils;
 

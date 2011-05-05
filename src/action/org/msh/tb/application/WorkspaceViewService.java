@@ -15,8 +15,8 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.contexts.Contexts;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.WorkspaceView;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.WorkspaceView;
 
 /**
  * Handle specific pages of each workspace, control page printing return right template page

@@ -3,7 +3,7 @@ package org.msh.tb.medicines.movs;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.msh.mdrtb.entities.StockPosition;
+import org.msh.tb.entities.StockPosition;
 
 
 

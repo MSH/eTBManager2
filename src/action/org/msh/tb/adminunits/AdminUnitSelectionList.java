@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
-import org.msh.mdrtb.entities.AdministrativeUnit;
+import org.msh.tb.entities.AdministrativeUnit;
 
 public class AdminUnitSelectionList {
 

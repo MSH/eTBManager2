@@ -12,16 +12,16 @@ import org.jboss.seam.Component;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.framework.Controller;
 import org.jboss.seam.international.Messages;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.CultureResult;
-import org.msh.mdrtb.entities.enums.InfectionSite;
-import org.msh.mdrtb.entities.enums.MicroscopyResult;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.CultureResult;
+import org.msh.tb.entities.enums.InfectionSite;
+import org.msh.tb.entities.enums.MicroscopyResult;
 
 /**
  * Base class to generate HQL queries in the TB Cases database based on the filters in the {@link IndicatorFilters} component

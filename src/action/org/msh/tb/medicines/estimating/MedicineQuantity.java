@@ -1,6 +1,6 @@
 package org.msh.tb.medicines.estimating;
 
-import org.msh.mdrtb.entities.Medicine;
+import org.msh.tb.entities.Medicine;
 
 public class MedicineQuantity {
 

@@ -15,8 +15,8 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.msh.mdrtb.entities.FieldValue;
-import org.msh.mdrtb.entities.TbCase;
+import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.log.FieldLog;
 
 @Entity

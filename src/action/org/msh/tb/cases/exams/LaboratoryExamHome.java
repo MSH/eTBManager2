@@ -4,9 +4,9 @@ import java.util.Date;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.mdrtb.entities.Laboratory;
-import org.msh.mdrtb.entities.LaboratoryExamResult;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.Laboratory;
+import org.msh.tb.entities.LaboratoryExamResult;
 import org.msh.tb.laboratories.LaboratorySelection;
 
 /**

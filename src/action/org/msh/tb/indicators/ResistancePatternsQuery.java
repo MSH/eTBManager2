@@ -1,7 +1,7 @@
 package org.msh.tb.indicators;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.ResistancePattern;
+import org.msh.tb.entities.ResistancePattern;
 import org.msh.utils.EntityQuery;
 
 

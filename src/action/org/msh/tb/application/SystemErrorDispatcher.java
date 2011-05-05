@@ -11,10 +11,10 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
-import org.msh.mdrtb.entities.ErrorLog;
-import org.msh.mdrtb.entities.SystemConfig;
-import org.msh.mdrtb.entities.User;
-import org.msh.mdrtb.entities.UserLogin;
+import org.msh.tb.entities.ErrorLog;
+import org.msh.tb.entities.SystemConfig;
+import org.msh.tb.entities.User;
+import org.msh.tb.entities.UserLogin;
 import org.msh.tb.misc.DmSystemHome;
 
 @Name("systemErrorDispatcher")

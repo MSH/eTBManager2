@@ -8,13 +8,13 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.Patient;
-import org.msh.mdrtb.entities.PrescribedMedicine;
-import org.msh.mdrtb.entities.Source;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.enums.CaseState;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.PrescribedMedicine;
+import org.msh.tb.entities.Source;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.enums.CaseState;
 import org.msh.utils.date.Period;
 
 @Name("medicineEstimation")

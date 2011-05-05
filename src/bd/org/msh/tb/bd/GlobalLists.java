@@ -3,11 +3,11 @@ package org.msh.tb.bd;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.mdrtb.entities.enums.TbField;
 import org.msh.tb.bd.entities.enums.BiopsyResult;
 import org.msh.tb.bd.entities.enums.DotProvider;
 import org.msh.tb.bd.entities.enums.ReferredTo;
 import org.msh.tb.bd.entities.enums.SkinTestResult;
+import org.msh.tb.entities.enums.TbField;
 
 
 @Name("globalLists_bd")

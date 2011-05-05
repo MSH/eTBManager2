@@ -16,14 +16,14 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.AgeRange;
-import org.msh.mdrtb.entities.Regimen;
-import org.msh.mdrtb.entities.Substance;
 import org.msh.tb.AgeRangeHome;
 import org.msh.tb.RegimensQuery;
 import org.msh.tb.SubstancesQuery;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.AgeRange;
+import org.msh.tb.entities.Regimen;
+import org.msh.tb.entities.Substance;
 import org.msh.tb.misc.FieldsQuery;
 
 /**

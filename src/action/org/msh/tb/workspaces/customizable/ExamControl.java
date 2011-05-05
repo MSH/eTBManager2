@@ -2,7 +2,7 @@ package org.msh.tb.workspaces.customizable;
 
 import java.util.Date;
 
-import org.msh.mdrtb.entities.TbCase;
+import org.msh.tb.entities.TbCase;
 
 public class ExamControl {
 

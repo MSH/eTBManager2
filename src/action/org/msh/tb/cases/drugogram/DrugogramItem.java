@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.international.Messages;
-import org.msh.mdrtb.entities.ExamXRay;
-import org.msh.mdrtb.entities.MedicalExamination;
+import org.msh.tb.entities.ExamXRay;
+import org.msh.tb.entities.MedicalExamination;
 
 public class DrugogramItem {
 	private int month;

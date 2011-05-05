@@ -16,10 +16,10 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
-import org.msh.mdrtb.entities.PrevTBTreatment;
-import org.msh.mdrtb.entities.Substance;
-import org.msh.mdrtb.entities.TbCase;
 import org.msh.tb.SubstancesQuery;
+import org.msh.tb.entities.PrevTBTreatment;
+import org.msh.tb.entities.Substance;
+import org.msh.tb.entities.TbCase;
 import org.msh.utils.ItemSelect;
 
 

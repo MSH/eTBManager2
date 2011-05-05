@@ -5,7 +5,7 @@ import java.util.List;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Substance;
+import org.msh.tb.entities.Substance;
 import org.msh.utils.EntityQuery;
 
 

@@ -17,10 +17,10 @@ public class CasesQueryBR extends CasesQuery {
 		List<String> rest = new ArrayList<String>();
 		for (String s: lst)
 			rest.add(s);
-		rest.add("br.resistanceType.value = #{caseFiltersBR.resistanceType}");
-		rest.add("br.schemaChangeType.value = #{caseFiltersBR.schemaChangeType}");
-		rest.add("br.outcomeRegimenChanged = #{caseFiltersBR.outcomeRegimenChanged}");
-		rest.add("br.outcomeResistanceType = #{caseFiltersBR.outcomeResistanceType}");
+		rest.add("c.resistanceType.value = #{caseFiltersBR.resistanceType}");
+		rest.add("c.schemaChangeType.value = #{caseFiltersBR.schemaChangeType}");
+		rest.add("c.outcomeRegimenChanged = #{caseFiltersBR.outcomeRegimenChanged}");
+		rest.add("c.outcomeResistanceType = #{caseFiltersBR.outcomeResistanceType}");
 		
 		return rest;
 	}
@@ -29,8 +29,8 @@ public class CasesQueryBR extends CasesQuery {
 	/* (non-Javadoc)
 	 * @see org.msh.tb.cases.CasesQuery#getJoinTablesHQL()
 	 */
-	@Override
+/*	@Override
 	public String getFromHQL() {
-		return "from CaseDataBR br join br.tbcase c";
+		return "from TbCaseBR c";
 	}
-}
+*/}

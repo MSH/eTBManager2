@@ -11,9 +11,9 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
-import org.msh.mdrtb.entities.BatchQuantity;
-import org.msh.mdrtb.entities.OrderBatch;
-import org.msh.mdrtb.entities.OrderItem;
+import org.msh.tb.entities.BatchQuantity;
+import org.msh.tb.entities.OrderBatch;
+import org.msh.tb.entities.OrderItem;
 
 
 

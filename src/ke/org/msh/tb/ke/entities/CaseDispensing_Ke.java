@@ -13,7 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 import org.hibernate.validator.NotNull;
-import org.msh.mdrtb.entities.TbCase;
+import org.msh.tb.entities.TbCase;
 
 @Entity
 public class CaseDispensing_Ke implements Serializable {

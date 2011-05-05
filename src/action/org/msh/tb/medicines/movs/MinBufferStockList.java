@@ -6,10 +6,10 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.MedicineUnit;
-import org.msh.mdrtb.entities.Source;
-import org.msh.mdrtb.entities.Tbunit;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.MedicineUnit;
+import org.msh.tb.entities.Source;
+import org.msh.tb.entities.Tbunit;
 
 /**
  * Holds information about the minimum buffer stock of a TB unit

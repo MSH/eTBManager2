@@ -1,6 +1,6 @@
 package org.msh.tb.adminunits;
 
-import org.msh.mdrtb.entities.LocalizedNameComp;
+import org.msh.tb.entities.LocalizedNameComp;
 
 /**
  * Store information about the country structure of a workspace. This information is kept in memory in application level

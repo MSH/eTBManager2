@@ -6,9 +6,9 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.msh.mdrtb.entities.Tbunit;
 import org.msh.tb.MedicineUnitHome;
 import org.msh.tb.RegimenUnitHome;
+import org.msh.tb.entities.Tbunit;
 import org.msh.tb.login.UserSession;
 
 @Name("unitSetup")

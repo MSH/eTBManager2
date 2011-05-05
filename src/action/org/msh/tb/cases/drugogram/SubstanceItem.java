@@ -1,6 +1,6 @@
 package org.msh.tb.cases.drugogram;
 
-import org.msh.mdrtb.entities.enums.DstResult;
+import org.msh.tb.entities.enums.DstResult;
 
 public class SubstanceItem {
 

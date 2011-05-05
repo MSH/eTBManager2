@@ -8,8 +8,8 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.FieldValue;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.FieldValue;
 import org.msh.tb.misc.FieldsQuery;
 import org.msh.tb.ph.entities.CaseSymptom;
 

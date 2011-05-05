@@ -6,11 +6,11 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.CountryStructure;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.Workspace;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.CountryStructure;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.log.LogInfo;
 
 

@@ -8,18 +8,18 @@ import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.Component;
-import org.msh.mdrtb.entities.LocalizedNameComp;
-import org.msh.mdrtb.entities.LogValue;
-import org.msh.mdrtb.entities.TransactionLog;
-import org.msh.mdrtb.entities.User;
-import org.msh.mdrtb.entities.UserLog;
-import org.msh.mdrtb.entities.UserLogin;
-import org.msh.mdrtb.entities.UserRole;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.WorkspaceLog;
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.LogValueType;
-import org.msh.mdrtb.entities.enums.RoleAction;
+import org.msh.tb.entities.LocalizedNameComp;
+import org.msh.tb.entities.LogValue;
+import org.msh.tb.entities.TransactionLog;
+import org.msh.tb.entities.User;
+import org.msh.tb.entities.UserLog;
+import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.UserRole;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.WorkspaceLog;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.LogValueType;
+import org.msh.tb.entities.enums.RoleAction;
 
 /**
  * Register log of events that occur in the system

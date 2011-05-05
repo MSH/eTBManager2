@@ -14,15 +14,15 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.international.Messages;
-import org.msh.mdrtb.entities.Batch;
-import org.msh.mdrtb.entities.BatchMovement;
-import org.msh.mdrtb.entities.BatchQuantity;
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.Movement;
-import org.msh.mdrtb.entities.Source;
-import org.msh.mdrtb.entities.StockPosition;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.enums.MovementType;
+import org.msh.tb.entities.Batch;
+import org.msh.tb.entities.BatchMovement;
+import org.msh.tb.entities.BatchQuantity;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.Movement;
+import org.msh.tb.entities.Source;
+import org.msh.tb.entities.StockPosition;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.enums.MovementType;
 import org.msh.utils.date.DateUtils;
 
 

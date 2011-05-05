@@ -9,8 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import org.msh.mdrtb.entities.FieldValue;
-import org.msh.mdrtb.entities.TbCase;
+import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.TbCase;
 
 @Entity
 public class CaseSymptom {

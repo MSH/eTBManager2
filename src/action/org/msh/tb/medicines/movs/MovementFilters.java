@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.enums.MovementType;
+import org.msh.tb.entities.enums.MovementType;
 
 /**
  * Control the report execution between batch and medicine display

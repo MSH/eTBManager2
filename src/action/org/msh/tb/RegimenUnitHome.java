@@ -10,9 +10,9 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.framework.Controller;
-import org.msh.mdrtb.entities.Regimen;
-import org.msh.mdrtb.entities.RegimenUnit;
-import org.msh.mdrtb.entities.Tbunit;
+import org.msh.tb.entities.Regimen;
+import org.msh.tb.entities.RegimenUnit;
+import org.msh.tb.entities.Tbunit;
 import org.msh.tb.login.UserSession;
 
 @Name("regimenUnitHome")

@@ -13,13 +13,13 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.UserView;
-import org.msh.mdrtb.entities.enums.ValidationState;
 import org.msh.tb.misc.GlobalLists;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.UserView;
+import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.login.UserSession;
 
 /**

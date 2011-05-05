@@ -10,8 +10,8 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.mdrtb.entities.UserLogin;
-import org.msh.mdrtb.entities.Workspace;
+import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.Workspace;
 
 /**
  * Collects information to import data from a file to a table

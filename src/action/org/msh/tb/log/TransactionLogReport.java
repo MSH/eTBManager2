@@ -7,9 +7,9 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.mdrtb.entities.TransactionLog;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.enums.RoleAction;
+import org.msh.tb.entities.TransactionLog;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.reports.ReportSelection;
 import org.msh.utils.EntityQuery;
 

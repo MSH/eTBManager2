@@ -4,11 +4,11 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 
-import org.msh.mdrtb.entities.TbContact;
-import org.msh.mdrtb.entities.enums.YesNoType;
-import org.msh.mdrtb.entities.enums.MicroscopyResult;
-import org.msh.mdrtb.entities.enums.CultureResult;
 import org.msh.tb.br.entities.enums.XRayContactBR;
+import org.msh.tb.entities.TbContact;
+import org.msh.tb.entities.enums.CultureResult;
+import org.msh.tb.entities.enums.MicroscopyResult;
+import org.msh.tb.entities.enums.YesNoType;
 
 @Entity
 public class TbContactBR extends TbContact {

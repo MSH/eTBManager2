@@ -31,7 +31,7 @@ import jxl.write.WriteException;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.international.Messages;
-import org.msh.mdrtb.entities.TbCase;
+import org.msh.tb.entities.TbCase;
 
 public class ExcelCreator {
 	

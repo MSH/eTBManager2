@@ -3,8 +3,8 @@ package org.msh.tb.export;
 import java.util.List;
 
 import org.jboss.seam.Component;
-import org.msh.mdrtb.entities.TbCase;
 import org.msh.tb.adminunits.InfoCountryLevels;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.indicators.core.CaseHQLBase;
 import org.msh.tb.indicators.core.IndicatorFilters;
 

@@ -8,8 +8,8 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.UserLogin;
-import org.msh.mdrtb.entities.Workspace;
+import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.Workspace;
 
 @Name("importTBMRHome")
 public class ImportTBMRHome {

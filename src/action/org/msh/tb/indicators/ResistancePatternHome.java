@@ -7,10 +7,10 @@ import org.jboss.seam.annotations.End;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.ResistancePattern;
-import org.msh.mdrtb.entities.Substance;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.SubstancesQuery;
+import org.msh.tb.entities.ResistancePattern;
+import org.msh.tb.entities.Substance;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
 

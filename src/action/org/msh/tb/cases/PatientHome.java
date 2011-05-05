@@ -2,8 +2,8 @@ package org.msh.tb.cases;
 
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Patient;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.entities.Patient;
 
 
 @Name("patientHome")

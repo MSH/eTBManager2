@@ -1,6 +1,6 @@
 package org.msh.tb.medicines.movs;
 
-import org.msh.mdrtb.entities.BatchQuantity;
+import org.msh.tb.entities.BatchQuantity;
 
 /**
  * Store information about batches quantity to be adjusted

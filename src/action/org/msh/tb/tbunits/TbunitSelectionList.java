@@ -5,9 +5,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.UserWorkspace;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.UserWorkspace;
 
 /**
  * Provide the list of TB Units to be used by {@link TBUnitSelection} class

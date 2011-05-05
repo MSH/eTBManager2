@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.international.Messages;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.enums.DstResult;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.indicators.core.CaseHQLBase;
 
 /**

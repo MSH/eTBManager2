@@ -5,10 +5,10 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-import org.msh.mdrtb.entities.Patient;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.Workspace;
 import org.msh.tb.cases.CaseValidationHome;
+import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.misc.SequenceGenerator;
 
 @Name("saveCase")

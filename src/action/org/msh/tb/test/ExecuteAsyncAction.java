@@ -13,12 +13,12 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.transaction.UserTransaction;
-import org.msh.mdrtb.entities.Regimen;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
+import org.msh.tb.entities.Regimen;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseState;
 
 @Name("executeAsyncAction")
 public class ExecuteAsyncAction {

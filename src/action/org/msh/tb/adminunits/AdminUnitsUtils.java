@@ -1,6 +1,6 @@
 package org.msh.tb.adminunits;
 
-import org.msh.mdrtb.entities.AdministrativeUnit;
+import org.msh.tb.entities.AdministrativeUnit;
 
 /**
  * Administrative unit utilities functions

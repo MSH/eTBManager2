@@ -7,11 +7,11 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.HealthSystem;
-import org.msh.mdrtb.entities.Laboratory;
 import org.msh.tb.adminunits.AdminUnitChangeListener;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.HealthSystem;
+import org.msh.tb.entities.Laboratory;
 
 public class LaboratorySelection {
 

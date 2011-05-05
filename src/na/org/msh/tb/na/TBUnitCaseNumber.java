@@ -15,11 +15,11 @@ import org.jboss.seam.annotations.security.Restrict;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.Messages;
-import org.msh.mdrtb.entities.Patient;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.enums.ValidationState;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.na.entities.CaseDataNA;
 import org.msh.utils.date.DateUtils;
 

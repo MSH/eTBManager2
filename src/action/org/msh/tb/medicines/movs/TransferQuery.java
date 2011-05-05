@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Transfer;
-import org.msh.mdrtb.entities.enums.TransferStatus;
+import org.msh.tb.entities.Transfer;
+import org.msh.tb.entities.enums.TransferStatus;
 import org.msh.utils.EntityQuery;
 
 

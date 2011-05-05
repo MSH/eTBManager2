@@ -7,10 +7,10 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.jboss.seam.Component;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.AgeRange;
 import org.msh.tb.AgeRangeHome;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.AgeRange;
 
 /**
  * Base class supporting TB/MDR-TB indicator generation

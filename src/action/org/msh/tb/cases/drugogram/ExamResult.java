@@ -1,7 +1,7 @@
 package org.msh.tb.cases.drugogram;
 
-import org.msh.mdrtb.entities.ExamCulture;
-import org.msh.mdrtb.entities.ExamMicroscopy;
+import org.msh.tb.entities.ExamCulture;
+import org.msh.tb.entities.ExamMicroscopy;
 
 public class ExamResult {
 

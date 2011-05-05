@@ -1,7 +1,7 @@
 package org.msh.tb;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Tbunit;
+import org.msh.tb.entities.Tbunit;
 import org.msh.utils.EntityQuery;
 
 

@@ -1,7 +1,7 @@
 package org.msh.tb;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.UserRole;
+import org.msh.tb.entities.UserRole;
 
 @Name("userRoleHome")
 public class UserRoleHome extends EntityHomeEx<UserRole> {

@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.HealthSystem;
-import org.msh.mdrtb.entities.Tbunit;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.HealthSystem;
+import org.msh.tb.entities.Tbunit;
 import org.msh.utils.EntityQuery;
 
 

@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.HealthSystem;
-import org.msh.mdrtb.entities.Laboratory;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.entities.HealthSystem;
+import org.msh.tb.entities.Laboratory;
 import org.msh.utils.EntityQuery;
 
 

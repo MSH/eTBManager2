@@ -8,9 +8,9 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.TimeZoneSelector;
-import org.msh.mdrtb.entities.User;
-import org.msh.mdrtb.entities.UserLogin;
-import org.msh.mdrtb.entities.UserWorkspace;
+import org.msh.tb.entities.User;
+import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.UserWorkspace;
 
 @Name("userSettings")
 public class UserSettings {

@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.jboss.seam.annotations.End;
 import org.jboss.seam.annotations.In;
-import org.msh.mdrtb.entities.CaseData;
-import org.msh.mdrtb.entities.TbCase;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.CaseData;
+import org.msh.tb.entities.TbCase;
 
 
 public class ExamHome<E> extends EntityHomeEx<E> {

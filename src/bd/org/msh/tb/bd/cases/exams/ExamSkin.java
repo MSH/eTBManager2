@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 
-import org.msh.mdrtb.entities.LaboratoryExamResult;
 import org.msh.tb.bd.entities.enums.SkinTestResult;
+import org.msh.tb.entities.LaboratoryExamResult;
 
 @Entity
 public class ExamSkin extends LaboratoryExamResult implements Serializable {

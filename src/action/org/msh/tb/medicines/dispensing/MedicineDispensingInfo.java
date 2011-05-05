@@ -1,7 +1,7 @@
 package org.msh.tb.medicines.dispensing;
 
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.Source;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.Source;
 
 
 public class MedicineDispensingInfo {

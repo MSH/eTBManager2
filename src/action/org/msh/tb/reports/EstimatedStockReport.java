@@ -8,9 +8,9 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.PrescribedMedicine;
-import org.msh.mdrtb.entities.StockPosition;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.PrescribedMedicine;
+import org.msh.tb.entities.StockPosition;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 

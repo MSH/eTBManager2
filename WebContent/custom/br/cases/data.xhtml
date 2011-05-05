@@ -31,7 +31,7 @@
 	
 	<s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['pt_BR.numsinan']}:</ui:define>
-		#{messages[caseDataBR.numSinan]}
+		#{messages[tbcase.numSinan]}
 	</s:decorate>
 	
 	</td></tr>
@@ -73,7 +73,7 @@
     </td><td>
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.nationality == 'FOREIGN'}">
     		<ui:define name="label">#{messages['pt_BR.country']}:</ui:define>
-    		<h:outputText value="#{caseDataBR.country}" />
+    		<h:outputText value="#{tbcase.country}" />
 		</s:decorate>
     </td></tr>
     <s:fragment rendered="#{not tbcase.notifAddress.emptyy}">
@@ -83,8 +83,8 @@
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
     		#{tbcase.notifAddress.address}
-    		<s:fragment rendered="#{not empty caseDataBR.notifAddressNumber}">
-    			<h:outputText value=", #{caseDataBR.notifAddressNumber}" />
+    		<s:fragment rendered="#{not empty tbcase.notifAddressNumber}">
+    			<h:outputText value=", #{tbcase.notifAddressNumber}" />
     		</s:fragment> 
     		<br/>
     		#{tbcase.notifAddress.complement}
@@ -92,7 +92,7 @@
 		
 		<s:decorate template="/layout/display.xhtml">
 			<ui:define name="label">#{messages['Address.district']}:</ui:define>
-			#{caseDataBR.notifDistrict}
+			#{tbcase.notifDistrict}
 		</s:decorate>
 		
 		<s:decorate template="/layout/audisplay.xhtml">
@@ -102,14 +102,14 @@
 	<tr><td>
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
     		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
-    		<h:outputText value="#{caseDataBR.prefixPhone} - " rendered="#{not empty caseDataBR.prefixPhone}"/> 
+    		<h:outputText value="#{tbcase.prefixPhone} - " rendered="#{not empty tbcase.prefixPhone}"/> 
     		#{tbcase.phoneNumber}
 		</s:decorate>
 	</td>
 	<td>
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
     		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
-    		<h:outputText value="#{caseDataBR.prefixMobile} - " rendered="#{not empty caseDataBR.prefixMobile}"/> 
+    		<h:outputText value="#{tbcase.prefixMobile} - " rendered="#{not empty tbcase.prefixMobile}"/> 
     		#{tbcase.mobileNumber}
 		</s:decorate>
 	</td></tr>
@@ -121,8 +121,8 @@
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
     		#{tbcase.currentAddress.address}
-    		<s:fragment rendered="#{not empty caseDataBR.currAddressNumber}">
-    			<b>#{messages['pt_BR.addressNumber']}:</b> <h:outputText value="#{caseDataBR.currAddressNumber}}" />
+    		<s:fragment rendered="#{not empty tbcase.currAddressNumber}">
+    			<b>#{messages['pt_BR.addressNumber']}:</b> <h:outputText value="#{tbcase.currAddressNumber}}" />
     		</s:fragment> 
     		<br/>
     		#{tbcase.currentAddress.complement}
@@ -130,7 +130,7 @@
 		
 		<s:decorate template="/layout/display.xhtml">
 			<ui:define name="label">#{messages['Address.district']}:</ui:define>
-			#{caseDataBR.currDistrict}
+			#{tbcase.currDistrict}
 		</s:decorate>
 
 		<s:decorate template="/layout/audisplay.xhtml">
@@ -166,8 +166,8 @@
 	<tr><td colspan="2">
 		<s:decorate template="/layout/display.xhtml">
 			<ui:define name="label"><div style="height:32px">#{messages['pt_BR.usOrigem']}:</div></ui:define>
-			<h:outputText value="#{caseDataBR.usOrigem}" style="display:block;height:20px" />
-			<ui:repeat value="#{caseDataBR.adminUnitUsOrigem.parents}" var="it">
+			<h:outputText value="#{tbcase.usOrigem}" style="display:block;height:20px" />
+			<ui:repeat value="#{tbcase.adminUnitUsOrigem.parents}" var="it">
 				<span class="right-icon">#{it.name}</span>
 			</ui:repeat>
 		</s:decorate>
@@ -205,10 +205,10 @@
     			<h:outputText value="#{tbcase.patientTypeOther}" styleClass="right-icon" style="margin-left:16px;"/>
     		</s:fragment>
     		<s:fragment rendered="#{tbcase.patientType=='SCHEMA_CHANGED'}">
-    			<h:outputText value="#{caseDataBR.schemaChangeType}" styleClass="right-icon" style="margin-left:16px;"/>
+    			<h:outputText value="#{tbcase.schemaChangeType}" styleClass="right-icon" style="margin-left:16px;"/>
     		</s:fragment>
     		<s:fragment rendered="#{tbcase.classification=='DRTB'}">
-    			<h:outputText value="#{caseDataBR.resistanceType}" styleClass="right-icon" style="margin-left:16px;"/>
+    			<h:outputText value="#{tbcase.resistanceType}" styleClass="right-icon" style="margin-left:16px;"/>
     		</s:fragment>
 		</s:decorate>
 		
@@ -269,7 +269,7 @@
 
     	<s:decorate template="/layout/display.xhtml" style="padding-top:4px;">
     		<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
-    		#{caseDataBR.tipoResistencia.message}
+    		#{tbcase.tipoResistencia.message}
     	</s:decorate>
 
 	</td></tr>
@@ -287,27 +287,27 @@
 
     <s:decorate template="/layout/displayfield.xhtml" >
     	<ui:define name="label">#{messages['TbField.SKINCOLOR']}:</ui:define>
-    	<ui:param name="field" value="#{caseDataBR.skinColor}" />
+    	<ui:param name="field" value="#{tbcase.skinColor}" />
     </s:decorate>
 	
     <s:decorate template="/layout/displayfield.xhtml" >
     	<ui:define name="label">#{messages['TbField.POSITION']}:</ui:define>
-    	<ui:param name="field" value="#{caseDataBR.position}" />
+    	<ui:param name="field" value="#{tbcase.position}" />
     </s:decorate>
 
-    <s:decorate template="/layout/display.xhtml" rendered="#{not empty caseDataBR.pregnancePeriod}">
+    <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.pregnancePeriod}">
     	<ui:define name="label">#{messages['TbField.PREGNANCE_PERIOD']}:</ui:define>
-    	<h:outputText value="#{caseDataBR.pregnancePeriod.name}" />
+    	<h:outputText value="#{tbcase.pregnancePeriod.name}" />
     </s:decorate>
 
     <s:decorate template="/layout/displayfield.xhtml" >
     	<ui:define name="label">#{messages['TbField.EDUCATIONAL_DEGREE']}:</ui:define>
-    	<ui:param name="field" value="#{caseDataBR.educationalDegree}" />
+    	<ui:param name="field" value="#{tbcase.educationalDegree}" />
     </s:decorate>
 	
     <s:decorate template="/layout/displayfield.xhtml" >
     	<ui:define name="label">#{messages['TbField.CONTAG_PLACE']}:</ui:define>
-    	<ui:param name="field" value="#{caseDataBR.contagPlace}" />
+    	<ui:param name="field" value="#{tbcase.contagPlace}" />
     </s:decorate>
     
     </td></tr></table></div>

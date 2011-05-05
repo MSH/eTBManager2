@@ -6,7 +6,6 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-import org.msh.mdrtb.entities.TbCase;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
@@ -14,6 +13,7 @@ import org.msh.tb.cases.CaseValidationHome;
 import org.msh.tb.cases.exams.MedicalExaminationHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.cases.treatment.TreatmentHome;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.na.entities.CaseDataNA;
 
 

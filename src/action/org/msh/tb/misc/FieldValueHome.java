@@ -7,9 +7,9 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.Messages;
-import org.msh.mdrtb.entities.FieldValue;
-import org.msh.mdrtb.entities.enums.TbField;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.log.LogInfo;
 
 

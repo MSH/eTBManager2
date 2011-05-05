@@ -8,12 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.msh.mdrtb.entities.CaseData;
-import org.msh.mdrtb.entities.enums.ClinicalEvolution;
-import org.msh.mdrtb.entities.enums.MedAppointmentType;
-import org.msh.mdrtb.entities.enums.YesNoType;
 import org.msh.tb.bd.entities.enums.DotProvider;
 import org.msh.tb.bd.entities.enums.ReferredTo;
+import org.msh.tb.entities.CaseData;
+import org.msh.tb.entities.enums.ClinicalEvolution;
+import org.msh.tb.entities.enums.MedAppointmentType;
+import org.msh.tb.entities.enums.YesNoType;
 
 /**
  *

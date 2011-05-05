@@ -6,9 +6,9 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.msh.mdrtb.entities.Laboratory;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.entities.Laboratory;
 import org.msh.tb.log.LogInfo;
 import org.msh.utils.EntityQuery;
 

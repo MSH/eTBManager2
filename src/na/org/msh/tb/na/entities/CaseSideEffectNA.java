@@ -4,11 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 
 import org.hibernate.validator.NotNull;
-import org.msh.mdrtb.entities.CaseSideEffect;
-import org.msh.mdrtb.entities.TbCase;
+import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.na.entities.enums.SideEffectAction;
 import org.msh.tb.na.entities.enums.SideEffectGrading;
 import org.msh.tb.na.entities.enums.SideEffectOutcome;
@@ -80,10 +78,5 @@ public class CaseSideEffectNA extends CaseSideEffect{
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-	
-
-
-	
-	
 	
 }

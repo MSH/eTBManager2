@@ -2,7 +2,7 @@ package org.msh.tb.log;
 
 import java.util.Date;
 
-import org.msh.mdrtb.entities.enums.RoleAction;
+import org.msh.tb.entities.enums.RoleAction;
 
 public class ReportItem {
 

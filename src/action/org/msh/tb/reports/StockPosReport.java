@@ -7,11 +7,11 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.AdministrativeUnit;
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.Source;
-import org.msh.mdrtb.entities.StockPosition;
-import org.msh.mdrtb.entities.Tbunit;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.Source;
+import org.msh.tb.entities.StockPosition;
+import org.msh.tb.entities.Tbunit;
 
 
 

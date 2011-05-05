@@ -4,11 +4,11 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.msh.mdrtb.entities.FieldValue;
-import org.msh.mdrtb.entities.enums.CaseClassification;
-import org.msh.mdrtb.entities.enums.CaseState;
-import org.msh.mdrtb.entities.enums.PatientType;
 import org.msh.tb.cases.CaseFilters;
+import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.PatientType;
 
 @Name("caseFiltersBR")
 @Scope(ScopeType.SESSION)

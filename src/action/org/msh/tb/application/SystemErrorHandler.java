@@ -11,7 +11,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.security.AuthorizationException;
 import org.jboss.seam.security.NotLoggedInException;
-import org.msh.mdrtb.entities.UserLogin;
+import org.msh.tb.entities.UserLogin;
 
 @Name("systemErrorHandler")
 public class SystemErrorHandler {

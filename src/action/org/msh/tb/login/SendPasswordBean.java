@@ -9,7 +9,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
-import org.msh.mdrtb.entities.User;
+import org.msh.tb.entities.User;
 import org.msh.tb.misc.DmSystemHome;
 import org.msh.utils.Passwords;
 

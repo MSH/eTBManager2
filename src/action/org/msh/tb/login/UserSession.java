@@ -22,12 +22,12 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.security.Identity;
-import org.msh.mdrtb.entities.Tbunit;
-import org.msh.mdrtb.entities.UserLogin;
-import org.msh.mdrtb.entities.UserProfile;
-import org.msh.mdrtb.entities.UserWorkspace;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.CaseClassification;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.UserProfile;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseClassification;
 
 
 /**

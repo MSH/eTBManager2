@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Locale;
 
 import org.jboss.seam.international.LocaleSelector;
-import org.msh.mdrtb.entities.Forecasting;
-import org.msh.mdrtb.entities.ForecastingCasesOnTreat;
-import org.msh.mdrtb.entities.ForecastingRegimen;
+import org.msh.tb.entities.Forecasting;
+import org.msh.tb.entities.ForecastingCasesOnTreat;
+import org.msh.tb.entities.ForecastingRegimen;
 import org.msh.utils.date.DateUtils;
 
 

@@ -9,12 +9,12 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.mdrtb.entities.UserLogin;
-import org.msh.mdrtb.entities.UserPermission;
-import org.msh.mdrtb.entities.UserProfile;
-import org.msh.mdrtb.entities.UserRole;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.CaseClassification;
+import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.UserPermission;
+import org.msh.tb.entities.UserProfile;
+import org.msh.tb.entities.UserRole;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseClassification;
 
 @Name("workspaceInit")
 public class WorkspaceInit {

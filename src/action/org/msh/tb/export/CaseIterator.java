@@ -1,6 +1,6 @@
 package org.msh.tb.export;
 
-import org.msh.mdrtb.entities.TbCase;
+import org.msh.tb.entities.TbCase;
 
 public interface CaseIterator {
 

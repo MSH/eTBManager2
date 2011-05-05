@@ -3,7 +3,7 @@ package org.msh.tb.na.entities;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import org.msh.mdrtb.entities.MedicalExamination;
+import org.msh.tb.entities.MedicalExamination;
 import org.msh.tb.na.entities.enums.DotOptions;
 
 @Entity

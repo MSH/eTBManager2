@@ -8,11 +8,11 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.Source;
-import org.msh.mdrtb.entities.StockPosition;
-import org.msh.mdrtb.entities.Tbunit;
 import org.msh.tb.SourceGroup;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.Source;
+import org.msh.tb.entities.StockPosition;
+import org.msh.tb.entities.Tbunit;
 import org.msh.tb.medicines.movs.StockPositionList;
 import org.msh.utils.ItemSelect;
 

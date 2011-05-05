@@ -8,11 +8,11 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.Medicine;
-import org.msh.mdrtb.entities.PrescribedMedicine;
-import org.msh.mdrtb.entities.TbCase;
-import org.msh.mdrtb.entities.enums.RegimenPhase;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.PrescribedMedicine;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 

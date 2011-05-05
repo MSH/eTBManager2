@@ -8,8 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.msh.mdrtb.entities.CaseData;
-import org.msh.mdrtb.entities.enums.HIVResultKe;
+import org.msh.tb.entities.CaseData;
+import org.msh.tb.entities.enums.HIVResultKe;
 
 /**
  * @author Ricardo Memória

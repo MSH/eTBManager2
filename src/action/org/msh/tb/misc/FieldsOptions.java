@@ -11,9 +11,9 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.msh.mdrtb.entities.FieldValue;
-import org.msh.mdrtb.entities.Workspace;
-import org.msh.mdrtb.entities.enums.TbField;
+import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.TbField;
 
 
 /**

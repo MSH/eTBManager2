@@ -10,8 +10,8 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.msh.mdrtb.entities.ExamMicroscopy;
-import org.msh.mdrtb.entities.enums.MicroscopyResult;
+import org.msh.tb.entities.ExamMicroscopy;
+import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.log.LogInfo;
 
 @Name("examMicroscopyHome")
