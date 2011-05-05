@@ -14,6 +14,7 @@ public class HealthUnitInfo {
 	private Long casesOnTreatment;
 	private Long casesTransferIn;
 	private Long casesTransferOut;
+	private Long medExamMissing;
 
 	
 	/**
@@ -99,5 +100,17 @@ public class HealthUnitInfo {
 	 */
 	public void setAdminUnitCode(String adminUnitCode) {
 		this.adminUnitCode = adminUnitCode;
+	}
+	/**
+	 * @return the medExamMissing
+	 */
+	public Long getMedExamMissing() {
+		return medExamMissing;
+	}
+	/**
+	 * @param medExamMissing the medExamMissing to set
+	 */
+	public void setMedExamMissing(Long medExamMissing) {
+		this.medExamMissing = medExamMissing;
 	}
 }

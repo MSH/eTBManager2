@@ -31,7 +31,10 @@ public enum TbField {
 	// Bangladesh
 	BIOPSY_METHOD,
 	//Namibia
-	ART_REGIMEN;
+	ART_REGIMEN,
+	// Azerbaijan
+	MARITAL_STATUS
+	;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

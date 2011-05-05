@@ -35,6 +35,7 @@
 
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExaminationBR.nextAppointment']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{medicalExaminationBR.nextAppointment}" /> 
     </s:decorate>
 

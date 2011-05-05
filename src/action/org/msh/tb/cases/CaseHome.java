@@ -17,7 +17,6 @@ import org.msh.mdrtb.entities.Workspace;
 import org.msh.mdrtb.entities.enums.CaseClassification;
 import org.msh.mdrtb.entities.enums.CaseState;
 import org.msh.mdrtb.entities.enums.ValidationState;
-import org.msh.tb.EntityHomeEx;
 import org.msh.tb.log.LogInfo;
 
 
@@ -30,7 +29,7 @@ import org.msh.tb.log.LogInfo;
 @Name("caseHome")
 @LogInfo(roleName="CASE_DATA")
 @BypassInterceptors
-public class CaseHome extends EntityHomeEx<TbCase>{
+public class CaseHome extends WorkspaceSensitiveEntityHome<TbCase>{
 	private static final long serialVersionUID = -8072727373977321407L;
 
 	private List<TbCase> otherCases;
@@ -340,4 +339,5 @@ public class CaseHome extends EntityHomeEx<TbCase>{
 			filters.setCaseView(CaseView.RESUME);
 		else filters.setCaseView(null);
 	}
+
 }

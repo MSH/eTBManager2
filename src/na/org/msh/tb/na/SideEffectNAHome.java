@@ -74,7 +74,7 @@ public class SideEffectNAHome{
 		CaseDataNA caseData = caseDataNAHome.getCaseDataNA();
 		TbCase tbcase = caseHome.getInstance();
 		
-		List<CaseSideEffectNA> lst = ItemSelectHelper.createItemsList(getItems(), true);
+		List<CaseSideEffectNA> lst = ItemSelectHelper.getSelectedItems(getItems(), true);
 		for (CaseSideEffectNA it: lst) {
 			it.setCaseData(caseData);
 			it.setTbcase(tbcase);

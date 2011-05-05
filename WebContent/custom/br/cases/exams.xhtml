@@ -128,9 +128,11 @@
 					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
 				</f:facet>
 				<div class="#{r.result=='NEGATIVE'? 'result-negative': 'result-positive'}">#{messages[r.result.key]}</div>
-				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}" style="display:block;"/>
 				<s:fragment rendered="#{not empty r.numberOfAFB}" style="display:block;clear:both;">
 					<h:outputText value="#{messages['cases.exams.afb']}"/>: #{r.numberOfAFB}
+				</s:fragment>
+				<s:fragment rendered="#{not empty r.dateRelease}" style="display:block;clear:both;">
+				#{messages['cases.exams.dateRelease']}: <h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}" style="display:block;"/>
 				</s:fragment>
 			</h:column>
 			
@@ -201,9 +203,11 @@
 					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
 				</f:facet>
 				<div class="#{r.result=='NEGATIVE'? 'result-negative': 'result-positive'}">#{messages[r.result.key]}</div>
-				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}" style="display:block;"/>
 				<s:div rendered="#{not empty r.numberOfColonies}" style="display:block;clear:both;">
 					<h:outputText value="#{messages['ExamCulture.numberOfColonies']}"/>: #{r.numberOfColonies}
+				</s:div>
+				<s:div rendered="#{not empty r.dateRelease}" style="display:block;clear:both;">
+				#{messages['cases.exams.dateRelease']}:<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}" />
 				</s:div>
 				<s:div rendered="#{not empty r.method}" style="display:block;clear:both;">
 					<h:outputText value="#{messages['cases.exams.method']}"/>: #{r.method}
@@ -252,7 +256,7 @@
 			#{messages['PatientSample.dateCollected']}
 		</th>
 		<th align="left">
-			#{messages['cases.exams.method']}
+			#{messages['cases.details.result']}
 		</th>
 		<th align="left">
 			#{messages['Laboratory']}
@@ -284,10 +288,15 @@
 				</div>
 			</td>
 			<td class="colb">
-				#{r.examResult.method.name}
+				<s:div rendered="#{not empty r.examResult.dateRelease}" style="display:block;clear:both;">
+				#{messages['cases.exams.dateRelease']}:<h:outputText value="#{r.examResult.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}" />
+				</s:div>
+				#{messages['cases.exams.method']}: #{r.examResult.method.name}
 			</td>
 			<td class="colb">
 				#{r.examResult.laboratory.abbrevName}
+				<br/>
+				#{r.examResult.laboratory.adminUnit.name}
 			</td>
 			<ui:repeat value="#{r.results}" var="rs">
 			<td class="colcb" rowspan="#{empty r.examResult.comments?'1':'2'}">

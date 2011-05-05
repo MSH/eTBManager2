@@ -20,6 +20,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
@@ -52,6 +54,7 @@ import org.msh.utils.date.Period;
  *
  */
 @Entity
+@Inheritance(strategy=InheritanceType.JOINED)
 public class TbCase implements Serializable{
 	private static final long serialVersionUID = 7221451624723376561L;
 

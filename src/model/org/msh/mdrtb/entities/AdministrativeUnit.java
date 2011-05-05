@@ -92,13 +92,28 @@ public class AdministrativeUnit extends WSObject {
 	 * @return true if code is of a child unit, otherwise return false
 	 */
 	public boolean isSameOrChildCode(String code) {
-		int len = this.code.length();
+		return isSameOrChildCode(this.code, code);
+/*		int len = this.code.length();
 		if (len > code.length())
 			return false;
 		return (this.code.equals(code.substring(0, this.code.length())));
+*/	}
+	
+	
+	/**
+	 * Static method to check if a code is equals of a child of the code given by the parentCode param
+	 * @param parentCode
+	 * @param code
+	 * @return
+	 */
+	public static boolean isSameOrChildCode(String parentCode, String code) {
+		int len = parentCode.length();
+		if (len > code.length())
+			return false;
+		return (parentCode.equals(code.substring(0, parentCode.length())));
 	}
-	
-	
+
+
 	/**
 	 * Return the parent administrative unit based on its level. If level is the same of this unit, it returns itself.
 	 * If level is bigger than the level of this unit, it returns null

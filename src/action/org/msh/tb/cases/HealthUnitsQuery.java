@@ -126,9 +126,7 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 	public List<HealthUnitInfo> getResultList() {
 		if (resultList == null)
 		{
-	         javax.persistence.Query query = createQuery();
-	         List<Object[]> lst = query==null ? null : query.getResultList();
-	         fillResultList(lst);
+			resultList = createResultList();
 	    }
 		return resultList;
 	}
@@ -139,9 +137,25 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 		return 50;
 	}
 
+	
+	/**
+	 * Create the result to be exposed by the component
+	 * @return
+	 */
+	public List<HealthUnitInfo> createResultList() {
+        javax.persistence.Query query = createQuery();
+        List<Object[]> lst = query==null ? null : query.getResultList();
+        return fillResultList(lst);
+	}
 
-	protected void fillResultList(List<Object[]> lst) {
-		resultList = new ArrayList<HealthUnitInfo>();
+
+	/**
+	 * Create the result list from the resultset of the query
+	 * @param lst
+	 * @return
+	 */
+	protected List<HealthUnitInfo> fillResultList(List<Object[]> lst) {
+		List<HealthUnitInfo> res = new ArrayList<HealthUnitInfo>();
 		
 		for (Object[] vals: lst) {
 			HealthUnitInfo info = new HealthUnitInfo();
@@ -153,8 +167,9 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 			info.setCasesTransferIn(readLongValue(vals[5]));
 			info.setCasesTransferOut(readLongValue(vals[6]));
 
-			resultList.add(info);
+			res.add(info);
 		}
+		return res;
 	}
 
 
@@ -241,4 +256,5 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 			createAdminUnits();
 		return adminUnits;
 	}
+	
 }

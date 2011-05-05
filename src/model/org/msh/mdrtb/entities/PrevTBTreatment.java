@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -18,6 +20,7 @@ import org.hibernate.validator.NotNull;
 import org.msh.mdrtb.entities.enums.PrevTBTreatmentOutcome;
 
 @Entity
+@Inheritance(strategy=InheritanceType.JOINED)
 public class PrevTBTreatment implements Serializable {
 	private static final long serialVersionUID = -4070705919226815216L;
 
