@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.mdrtb.entities.UserProfile;
+import org.msh.tb.entities.UserProfile;
 import org.msh.utils.EntityQuery;
 
 
