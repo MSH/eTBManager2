@@ -2,6 +2,7 @@ package org.msh.tb.az;
 
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.tb.az.entities.enums.CaseFindingStrategy;
 import org.msh.tb.br.entities.enums.FailureType;
 import org.msh.tb.br.entities.enums.TipoResistencia;
 import org.msh.tb.entities.enums.CaseState;
@@ -75,6 +76,10 @@ public class GlobalLists {
 		return TipoResistencia.values();
 	}
 
+	
+	public CaseFindingStrategy[] getCaseFindingStrategies() {
+		return CaseFindingStrategy.values();
+	}
 
 	/**
 	 * Return list of HIV results specific for Brazilian version

@@ -253,4 +253,9 @@ public class FieldsQuery {
 		return getValues();
 	}
 	
+	public List<FieldValue> getMaritalStatus() {
+		field = TbField.MARITAL_STATUS;
+		return getValues();
+	}
+	
 }

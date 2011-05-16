@@ -35,7 +35,6 @@ import org.msh.utils.date.DateUtils;
  */
 @Name("caseFilters")
 @Scope(ScopeType.SESSION)
-@BypassInterceptors
 public class CaseFilters {
 
 	@In(create=true) Workspace defaultWorkspace;
@@ -44,7 +43,7 @@ public class CaseFilters {
 	private String middleName;
 	private String lastName;
 	private String recordNumber;
-	private String registrationCode;
+//	private String registrationCode;
 	private CaseState caseState;
 	private ValidationState validationState;
 	private CaseClassification classification;
@@ -108,7 +107,7 @@ public class CaseFilters {
 		middleName = null;
 		lastName = null;
 		recordNumber = null;
-		registrationCode = null;
+//		registrationCode = null;
 		caseState = null;
 		validationState = null;
 		caseView = CaseView.DATA;
@@ -630,13 +629,27 @@ public class CaseFilters {
 		if (isRecordNumberEmpty())
 			return null;
 		
-		if (defaultWorkspace == null)
-			defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace");
+//		if (defaultWorkspace == null)
+//			defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace");
 		
 		if ((defaultWorkspace == null) || (DisplayCaseNumber.REGISTRATION_CODE.equals(defaultWorkspace.getDisplayCaseNumber())))
 			return null;
 
 		return getNumberFromString(recordNumber, 0);
+	}
+
+	
+	/**
+	 * If patient search number is by its registration code, then return the record number given by the user
+	 * @return
+	 */
+	public String getRegistrationCode() {
+//		if (defaultWorkspace == null)
+//			defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace");
+
+		if (DisplayCaseNumber.REGISTRATION_CODE.equals(defaultWorkspace.getDisplayCaseNumber()))
+			 return recordNumber;
+		else return (getNumberFromString(recordNumber, 0) != null? null: recordNumber);
 	}
 
 
@@ -658,11 +671,21 @@ public class CaseFilters {
 			return null;
 		
 		String[] vals = val.split("-");
-		if (vals.length > index)
-			 return Integer.parseInt(vals[index]);
+		if (vals.length > index) {
+			try {
+				return Integer.parseInt(vals[index]);
+			} catch (Exception e) {
+				return null;
+			}
+		}
 		else return null;		
 	}
 
+
+	/**
+	 * Return the list of classifications available in the workspace
+	 * @return
+	 */
 	public ItemSelectList<CaseClassification> getClassifications() {
 		if (classifications == null) {
 			GlobalLists globalLists = (GlobalLists)Component.getInstance("globalLists");
@@ -701,13 +724,13 @@ public class CaseFilters {
 	}
 		
 
-	public String getRegistrationCode() {
+/*	public String getRegistrationCode() {
 		return registrationCode;
 	}
 
 	public void setRegistrationCode(String registrationCode) {
 		this.registrationCode = registrationCode;
 	}
-	
+*/	
 	
 }

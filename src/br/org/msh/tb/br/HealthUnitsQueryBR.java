@@ -48,16 +48,6 @@ public class HealthUnitsQueryBR extends HealthUnitsQuery {
 			" and med.nextAppointment is not null and med.nextAppointment + 7 < current_date " +
 			"group by u.id";
 
-/*		String hql = "select u.id, count(*) " +
-			"from MedicalExamination med " +
-			"join med.tbcase c " +
-			"join c.notificationUnit u " +
-			"where u.workspace.id = " + defaultWorkspace.getId().toString() + generateSQLConditionByUserView() +
-		(hsID != null? " and u.healthsystem.id = " + hsID: "") + casecond +
-		" and med.nextAppointment is not null and med.nextAppointment + 7 < current_date() " +
-		"group by u.id";
-*/
-
 		List<Object[]> res = getEntityManager()
 			.createNativeQuery(hql)
 			.getResultList();

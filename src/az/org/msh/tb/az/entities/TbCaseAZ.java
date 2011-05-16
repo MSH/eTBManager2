@@ -1,5 +1,7 @@
 package org.msh.tb.az.entities;
 
+import java.util.Date;
+
 import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
 import javax.persistence.AttributeOverride;
@@ -9,6 +11,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 
+import org.msh.tb.az.entities.enums.CaseFindingStrategy;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
 
@@ -26,11 +29,21 @@ public class TbCaseAZ extends TbCase{
 	@AttributeOverrides({	@AttributeOverride(name="complement", column=@Column(name="EDUCATIONALDEGREE_Complement"))})
 	private FieldValueComponent educationalDegree; 
 
+	private CaseFindingStrategy caseFindingStrategy;
+	
+	private Integer numberOfImprisonments;
+	
+	private Date inprisonIniDate;
+	
+	private Date inprisonEndDate;
+
 
 	/**
 	 * @return the maritalStatus
 	 */
 	public FieldValueComponent getMaritalStatus() {
+		if (maritalStatus == null)
+			maritalStatus = new FieldValueComponent();
 		return maritalStatus;
 	}
 
@@ -45,6 +58,8 @@ public class TbCaseAZ extends TbCase{
 	 * @return the educationalDegree
 	 */
 	public FieldValueComponent getEducationalDegree() {
+		if (educationalDegree == null)
+			educationalDegree = new FieldValueComponent();
 		return educationalDegree;
 	}
 
@@ -53,5 +68,61 @@ public class TbCaseAZ extends TbCase{
 	 */
 	public void setEducationalDegree(FieldValueComponent educationalDegree) {
 		this.educationalDegree = educationalDegree;
+	}
+
+	/**
+	 * @return the caseFindingStrategy
+	 */
+	public CaseFindingStrategy getCaseFindingStrategy() {
+		return caseFindingStrategy;
+	}
+
+	/**
+	 * @param caseFindingStrategy the caseFindingStrategy to set
+	 */
+	public void setCaseFindingStrategy(CaseFindingStrategy caseFindingStrategy) {
+		this.caseFindingStrategy = caseFindingStrategy;
+	}
+
+	/**
+	 * @return the numberOfImprisonments
+	 */
+	public Integer getNumberOfImprisonments() {
+		return numberOfImprisonments;
+	}
+
+	/**
+	 * @param numberOfImprisonments the numberOfImprisonments to set
+	 */
+	public void setNumberOfImprisonments(Integer numberOfImprisonments) {
+		this.numberOfImprisonments = numberOfImprisonments;
+	}
+
+	/**
+	 * @return the inprisonIniDate
+	 */
+	public Date getInprisonIniDate() {
+		return inprisonIniDate;
+	}
+
+	/**
+	 * @param inprisonIniDate the inprisonIniDate to set
+	 */
+	public void setInprisonIniDate(Date inprisonIniDate) {
+		this.inprisonIniDate = inprisonIniDate;
+	}
+
+	/**
+	 * @return the inprisionEndDate
+	 */
+	public Date getInprisonEndDate() {
+		return inprisonEndDate;
+	}
+
+	/**
+	 * @param inprisionEndDate the inprisionEndDate to set
+	 */
+	public void setInprisonEndDate(Date inprisionEndDate) {
+		this.inprisonEndDate = inprisionEndDate;
 	}
 }

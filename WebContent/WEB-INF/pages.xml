@@ -169,14 +169,14 @@
 
     
     <exception class="org.jboss.seam.framework.EntityNotFoundException">
-        <redirect view-id="/error.xhtml">
-            <message>Not found</message>
+        <redirect view-id="/home.xhtml">
+            <message>#{messages['error.entityNotFound']}</message>
         </redirect>
     </exception>
     
     <exception class="javax.persistence.EntityNotFoundException">
-        <redirect view-id="/error.xhtml">
-            <message>Not found</message>
+        <redirect view-id="/home.xhtml">
+            <message>#{messages['error.entityNotFound']}</message>
         </redirect>
     </exception>
     

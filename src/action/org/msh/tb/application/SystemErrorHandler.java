@@ -9,6 +9,7 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
+import org.jboss.seam.framework.EntityNotFoundException;
 import org.jboss.seam.security.AuthorizationException;
 import org.jboss.seam.security.NotLoggedInException;
 import org.msh.tb.entities.UserLogin;
@@ -33,6 +34,7 @@ public class SystemErrorHandler {
 		Exception exception = (Exception)Component.getInstance("org.jboss.seam.handledException");
 		if ((exception == null) || (exception instanceof ViewExpiredException) ||
 			(exception instanceof IllegalStateException) || (exception instanceof OptimisticLockException) ||
+			(exception instanceof EntityNotFoundException) || (exception instanceof javax.persistence.EntityNotFoundException) ||
 			(exception instanceof NotLoggedInException) || (exception instanceof AuthorizationException))
 			return;
 

@@ -142,6 +142,42 @@
     	</s:decorate>	
     
     </td></tr>
+	<tr><td>
+	    <s:decorate template="/layout/editfield.xhtml" >
+    		<ui:define name="label">#{messages['az_AZ.case.maritalStatus']}:</ui:define>
+	    	<ui:param name="required" value="true" />
+	    	<ui:param name="id" value="maritalst" />
+	    	<ui:param name="field" value="#{tbcase.maritalStatus}" />
+	    	<ui:param name="list" value="#{fieldsQuery.maritalStatus}" />
+	    </s:decorate>
+    </td></tr>
+	<tr><td>
+	    <s:decorate template="/layout/editfield.xhtml" >
+    		<ui:define name="label">#{messages['az_AZ.case.educationalDegree']}:</ui:define>
+	    	<ui:param name="required" value="true" />
+	    	<ui:param name="id" value="eduDegree" />
+	    	<ui:param name="field" value="#{tbcase.educationalDegree}" />
+	    	<ui:param name="list" value="#{fieldsQuery.educationalDegree}" />
+	    </s:decorate>
+    </td></tr>
+    <tr><td>
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['az_AZ.case.numberOfImprisonments']}:</ui:define>
+    		<h:inputText value="#{tbcase.numberOfImprisonments}" style="width:80px"/>
+    	</s:decorate>	
+
+    	<s:decorate template="/layout/dateedit.xhtml">
+    		<ui:define name="label">#{messages['az_AZ.case.inprisonIniDate']}:</ui:define>
+    		<ui:param name="datefield" value="#{tbcase.inprisonIniDate}" /> 
+			<ui:param name="required" value="false" />
+    	</s:decorate>	
+
+    	<s:decorate template="/layout/dateedit.xhtml">
+    		<ui:define name="label">#{messages['az_AZ.case.inprisonEndDate']}:</ui:define>
+    		<ui:param name="datefield" value="#{tbcase.inprisonEndDate}" /> 
+			<ui:param name="required" value="false" />
+    	</s:decorate>	
+    </td></tr>
     </table>
     </div>
     
@@ -279,7 +315,20 @@ function isPulmonary(cb) {
 <rich:jQuery selector="#infectsite" query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary').hide(); }})" />
 <rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
 		
-		</td></tr></table></div>
+		</td></tr>
+		<tr>
+			<td>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['az_AZ.CaseFindingStrategy']}:</ui:define>
+    				<h:selectOneMenu value="#{tbcase.caseFindingStrategy}" style="margin-right:4px;">
+		    			<s:selectItems var="it" value="#{globalLists_az.caseFindingStrategies}" noSelectionLabel="-" label="#{messages[it.key]}" />
+		    			<s:convertEnum />
+		    		</h:selectOneMenu>
+				</s:decorate>
+			</td>
+		</tr>
+		
+		</table></div>
 	</s:decorate>
 	<p/>
 

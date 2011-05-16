@@ -75,16 +75,20 @@ public class LocalizedNameComp implements Serializable {
 
 
 	public String getDefaultName() {
-		return (isFirstLanguage() ? getName1() : (getName2() != null && (!getName2().isEmpty())? name2: name1));
+		return (isAlternateLanguage() ? (name2 != null && (!name2.isEmpty())? name2: name1) : name1);
 	}
 	
 	public void setDefaultName(String name) {
-		if (isFirstLanguage())
+		if (isAlternateLanguage())
 			 name1 = name;
 		else name2 = name;
 	}
 	
-	public boolean isFirstLanguage() {
+	/**
+	 * Check if language selected by the user is the alternate language defined in the workspace
+	 * @return
+	 */
+	public boolean isAlternateLanguage() {
 		UserLogin userLogin = (UserLogin)Contexts.getSessionContext().get("userLogin");
 		Workspace ws = (Workspace)Contexts.getSessionContext().get("defaultWorkspace");
 		
@@ -93,7 +97,7 @@ public class LocalizedNameComp implements Serializable {
 
 		String lang = ws.getAlternateLocale();
 		if ((lang != null) && (lang.equals(userLogin.getUser().getLanguage())))
-			 return false;
-		else return true;
+			 return true;
+		else return false;
 	}
 }
