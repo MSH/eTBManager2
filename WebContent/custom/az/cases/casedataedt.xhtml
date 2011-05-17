@@ -329,9 +329,25 @@ function isPulmonary(cb) {
 		</tr>
 		
 		</table></div>
-	</s:decorate>
-	<p/>
 
+	<p/>
+	<div class="paragraph">
+		#{messages['TbField.SEVERITY_MARKS']}
+	</div>
+	<h:dataTable value="#{caseAZHome.caseSeverityMarks}" var="it" columnClasses="col,colr"
+		rowClasses="lin1,lin2" style="clear:left;border-collapse:collapse;margin-bottom:10px;">
+		<h:column>
+			<h:selectBooleanCheckbox value="#{it.checked}" />
+			#{it.severityMark.name}
+		</h:column>
+		
+		<h:column>
+			<h:inputText value="#{it.comments}" style="width:350px;"/>
+		</h:column>
+	</h:dataTable>
+	</s:decorate>
+
+	<p/>
 
 
 	<s:decorate template="/layout/roundrect.xhtml" style="clear:both;display:block;">

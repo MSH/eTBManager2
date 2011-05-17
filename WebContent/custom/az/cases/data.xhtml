@@ -228,6 +228,25 @@
 			#{messages[tbcase.caseFindingStrategy.key]}
 		</s:decorate>
 
+		<div class="paragraph">
+			#{messages['TbField.SEVERITY_MARKS']}
+		</div>
+		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty caseSymptomsHome.caseSymptoms}" />
+		<h:dataTable value="#{caseSeverityMarksHome.severityMarks}" var="it" styleClass="tabela4"  columnClasses="colb,colb"
+			rowClasses="lin1,lin2" style="clear:left;width:100%;border-collapse:collapse;"
+			rendered="#{not empty caseSeverityMarksHome.severityMarks}" >
+			<h:column>
+   				<div class="#{it.checked?'checked-icon':'unchecked-icon'}">
+				#{it.severityMark.name}
+				</div>
+			</h:column>
+		
+			<h:column>
+				#{it.comments}
+			</h:column>
+		</h:dataTable>
+
+
 		<s:fragment rendered="#{not empty prevTBTreatmentHome.items}">
 		<div class="paragraph">#{messages['cases.prevtreat']}</div>
 		<table width="98%" class="tabela4">

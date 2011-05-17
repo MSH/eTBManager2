@@ -1,15 +1,21 @@
 package org.msh.tb.az.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import org.msh.tb.az.entities.enums.CaseFindingStrategy;
 import org.msh.tb.entities.FieldValueComponent;
@@ -36,6 +42,9 @@ public class TbCaseAZ extends TbCase{
 	private Date inprisonIniDate;
 	
 	private Date inprisonEndDate;
+
+	@OneToMany(mappedBy="tbcase", cascade={CascadeType.ALL})
+	private List<CaseSeverityMark> severityMarks = new ArrayList<CaseSeverityMark>();
 
 
 	/**
@@ -124,5 +133,19 @@ public class TbCaseAZ extends TbCase{
 	 */
 	public void setInprisonEndDate(Date inprisionEndDate) {
 		this.inprisonEndDate = inprisionEndDate;
+	}
+
+	/**
+	 * @return the severityMarks
+	 */
+	public List<CaseSeverityMark> getSeverityMarks() {
+		return severityMarks;
+	}
+
+	/**
+	 * @param severityMarks the severityMarks to set
+	 */
+	public void setSeverityMarks(List<CaseSeverityMark> severityMarks) {
+		this.severityMarks = severityMarks;
 	}
 }

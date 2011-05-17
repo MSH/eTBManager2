@@ -28,7 +28,7 @@
 	<div style="float:left;">
 		<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 	</div>
-	<a:commandButton value="#{messages['form.ok']}" action="#{caseEditingHome.saveEditing}" styleClass="button" reRender="main,messages"/>
+	<a:commandButton value="#{messages['form.ok']}" action="#{caseAZHome.persist}" styleClass="button" reRender="main,messages"/>
 	<s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel" propagation="end">
 		<f:param name="id" value="#{caseHome.id}" />
 	</s:button>

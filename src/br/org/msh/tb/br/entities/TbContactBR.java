@@ -2,9 +2,17 @@ package org.msh.tb.br.entities;
 
 import java.util.Date;
 
+import javax.persistence.AssociationOverride;
+import javax.persistence.AssociationOverrides;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 
 import org.msh.tb.br.entities.enums.XRayContactBR;
+import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbContact;
 import org.msh.tb.entities.enums.CultureResult;
 import org.msh.tb.entities.enums.MicroscopyResult;
@@ -31,6 +39,11 @@ public class TbContactBR extends TbContact {
 	private Date dateIniTreat;
 	
 	private Date dateEndTreat;
+	
+	@Embedded
+	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "XRAY_RESULT")) })
+	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "XRAY_RESULT_Complement")) })
+	private FieldValueComponent xrayResult;
 
 
 
@@ -104,5 +117,21 @@ public class TbContactBR extends TbContact {
 
 	public void setTuberculinTestResult(String tuberculinTestResult) {
 		this.tuberculinTestResult = tuberculinTestResult;
+	}
+
+	/**
+	 * @return the xrayResult
+	 */
+	public FieldValueComponent getXrayResult() {
+		if (xrayResult == null)
+			xrayResult = new FieldValueComponent();
+		return xrayResult;
+	}
+
+	/**
+	 * @param xrayResult the xrayResult to set
+	 */
+	public void setXrayResult(FieldValueComponent xrayResult) {
+		this.xrayResult = xrayResult;
 	}
 }

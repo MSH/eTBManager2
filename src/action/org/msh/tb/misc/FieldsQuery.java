@@ -258,4 +258,14 @@ public class FieldsQuery {
 		return getValues();
 	}
 	
+	public List<FieldValue> getSeverityMarks() {
+		field = TbField.SEVERITY_MARKS;
+		return getValues();
+	}
+	
+	public List<FieldValue> getXRayContacts() {
+		field = TbField.XRAY_CONTACT;
+		return getValues();
+	}
+	
 }

@@ -37,7 +37,8 @@ public class GlobalLists {
 		TbField.PULMONARY_TYPES,
 		TbField.EXTRAPULMONARY_TYPES,
 		TbField.MARITAL_STATUS,
-		TbField.EDUCATIONAL_DEGREE
+		TbField.EDUCATIONAL_DEGREE,
+		TbField.SEVERITY_MARKS
 	};
 
 	private static final PrevTBTreatmentOutcome prevTBTreatmentOutcomes[] = {
@@ -112,4 +113,6 @@ public class GlobalLists {
 	public CaseState[] getCaseStates() {
 		return caseStates;
 	}
+	
+	
 }

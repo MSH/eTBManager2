@@ -126,6 +126,12 @@
     			#{messages[it.cultureResult.key]}
     		</s:decorate>
 	</td></tr>
+	<tr><td colspan="2">
+	    <s:decorate template="/layout/displayfield.xhtml" >
+    		<ui:define name="label">#{messages['TbField.XRAY_CONTACT']}:</ui:define>
+    		<ui:param name="field" value="#{it.xrayResult}" />
+    	</s:decorate>
+	</td></tr>
 	<tr><td>
     		<s:decorate template="/layout/display.xhtml" >
     			<ui:define name="label">#{messages['pt_BR.contact.dateIniTreat']}:</ui:define>

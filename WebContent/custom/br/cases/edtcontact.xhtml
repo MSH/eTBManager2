@@ -111,6 +111,14 @@
     	</h:selectOneMenu>
     </s:decorate>
 
+    <s:decorate template="/layout/editfield.xhtml" >
+    	<ui:define name="label">#{messages['XRayResult']}:</ui:define>
+    	<ui:param name="required" value="false" />
+    	<ui:param name="id" value="xray" />
+    	<ui:param name="field" value="#{tbContactBR.xrayResult}" />
+    	<ui:param name="list" value="#{fieldsQuery.XRayContacts}" />
+    </s:decorate>
+
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.conduct']}:</ui:define>
     	<h:selectOneMenu id="cbconduct" value="#{tbContactBR.conduct}" required="false">
