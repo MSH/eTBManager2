@@ -25,7 +25,7 @@
     	<ui:define name="label">#{messages['PatientSample.sampleNumber']}:</ui:define>
     	<h:inputText id="labid" value="#{examHome.instance.sampleNumber}" maxlength="50" style="width:120px;"/>
 		(TC-C-YY-NNNN-N)
-		<rich:jQuery selector="#labid" query="mask('99-a-99-9999-9')" />
+		<rich:jQuery selector="#labid" />
     </s:decorate>
     </div>
 

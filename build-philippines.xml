@@ -62,6 +62,15 @@
             <fileset dir="src/ua" excludes="**/*.launch, **/*.java"/>
         </copy>
         <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src/az" excludes="**/*.launch, **/*.java"/>
+        </copy>
+        <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src/na" excludes="**/*.launch, **/*.java"/>
+        </copy>
+        <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src/bd" excludes="**/*.launch, **/*.java"/>
+        </copy>
+        <copy includeemptydirs="false" todir="build/classes">
             <fileset dir="src/in" excludes="**/*.launch, **/*.java"/>
         </copy>
     </target>
@@ -125,6 +134,9 @@
 				<exclude name="custom/in/**"/>
 				<exclude name="custom/ke/**"/>
 				<exclude name="custom/ua/**"/>
+				<exclude name="custom/az/**"/>
+				<exclude name="custom/na/**"/>
+				<exclude name="custom/bd/**"/>
 				<exclude name="custom/md/**"/>
 				<exclude name="login.xhtml"/>
 				<exclude name="login.page.xml"/>
@@ -135,7 +147,10 @@
 				<exclude name="/org/msh/tb/ke/**" />
 				<exclude name="/org/msh/tb/br/**"/>
 				<exclude name="/org/msh/tb/ua/**"/>
+				<exclude name="/org/msh/tb/az/**"/>
+				<exclude name="/org/msh/tb/na/**"/>
 				<exclude name="/org/msh/tb/md/**"/>
+				<exclude name="/org/msh/tb/bd/**"/>
 				<exclude name="/org/msh/tb/in/**"/>
 				<exclude name="/messages*" />
 				<exclude name="/custom_messages*" />

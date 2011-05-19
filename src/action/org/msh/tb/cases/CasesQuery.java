@@ -208,7 +208,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			for (String name: names) {
 				name = name.replaceAll("'", "''");
 				if (s.length() > 1)
-					s += " or ";
+					s += " and ";
 				s += "(upper(p.name) like '%" + name.toUpperCase() + 
 					 "%') or (upper(p.middleName) like '%" + name.toUpperCase() + 
 					 "%') or (upper(p.lastName) like '%" + name.toUpperCase() + "%')";
