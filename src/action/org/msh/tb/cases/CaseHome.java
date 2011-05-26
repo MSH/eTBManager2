@@ -261,6 +261,10 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		return getInstance().isOpen() && checkRoleBySuffix("CASE_ADDINFO_EDT");
 	}
 	
+	public boolean isCanTagCase() {
+		return getInstance().isOpen() && checkRoleBySuffix("CASE_TAG");
+	}
+	
 	@Override
 	public Workspace getInstanceWorkspace() {
 		Patient p = getInstance().getPatient();

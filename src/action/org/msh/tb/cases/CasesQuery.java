@@ -209,9 +209,9 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 				name = name.replaceAll("'", "''");
 				if (s.length() > 1)
 					s += " and ";
-				s += "(upper(p.name) like '%" + name.toUpperCase() + 
+				s += "((upper(p.name) like '%" + name.toUpperCase() + 
 					 "%') or (upper(p.middleName) like '%" + name.toUpperCase() + 
-					 "%') or (upper(p.lastName) like '%" + name.toUpperCase() + "%')";
+					 "%') or (upper(p.lastName) like '%" + name.toUpperCase() + "%'))";
 			}
 			
 			addCondition(s + (numberCond == null? ")": " or (" + numberCond + "))"));	

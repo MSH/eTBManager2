@@ -207,10 +207,17 @@
     		<s:fragment rendered="#{tbcase.patientType=='SCHEMA_CHANGED'}">
     			<h:outputText value="#{tbcase.schemaChangeType}" styleClass="right-icon" style="margin-left:16px;"/>
     		</s:fragment>
-    		<s:fragment rendered="#{tbcase.classification=='DRTB'}">
-    			<h:outputText value="#{tbcase.resistanceType}" styleClass="right-icon" style="margin-left:16px;"/>
-    		</s:fragment>
 		</s:decorate>
+
+	    <s:decorate template="/layout/displayfield.xhtml" rendered="#{tbcase.classification=='NMT'}">
+    		<ui:define name="label">#{messages['pt_BR.tipo_mnt']}:</ui:define>
+    		<ui:param name="field" value="#{tbcase.microbacteriose}" />
+	    </s:decorate>
+
+	    <s:decorate template="/layout/displayfield.xhtml" rendered="#{tbcase.classification=='DRTB'}">
+    		<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
+    		<ui:param name="field" value="#{tbcase.resistanceType}" />
+	    </s:decorate>
 		
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.infectionSite}">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>

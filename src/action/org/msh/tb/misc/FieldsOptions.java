@@ -233,7 +233,7 @@ public class FieldsOptions {
 
 		values = entityManager
 				.createQuery("from FieldValue f where f.field = :field " +
-							 "and f.workspace.id = #{defaultWorkspace.id} order by f.name.name1")
+							 "and f.workspace.id = #{defaultWorkspace.id} order by f.displayOrder,f.name.name1")
 				.setParameter("field", field)
 				.getResultList();
 	

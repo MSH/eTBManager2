@@ -39,7 +39,7 @@ public class FieldsQuery {
 		
 		values = entityManager
 			.createQuery("from FieldValue f where f.field = #{fieldsQuery.field} " +
-					"and f.workspace.id = #{defaultWorkspace.id} order by f.displayOrder")
+					"and f.workspace.id = #{defaultWorkspace.id} order by f.displayOrder, f.name.name1")
 			.getResultList();
 		
 		lists.put(field, values);

@@ -7,9 +7,11 @@ import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.Component;
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.adminunits.AdminUnitSelection;
@@ -50,6 +52,7 @@ import org.msh.tb.misc.FieldsOptions;
 import org.msh.tb.tbunits.TBUnitSelection;
 
 @Name("caseDataBRHome")
+@Scope(ScopeType.CONVERSATION)
 public class CaseDataBRHome {
 	private static final long serialVersionUID = 8895495231680746480L;
 

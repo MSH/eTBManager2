@@ -51,6 +51,7 @@ public class GlobalLists {
 		PrevTBTreatmentOutcome.CURED,
 		PrevTBTreatmentOutcome.COMPLETED,
 		PrevTBTreatmentOutcome.DEFAULTED,
+		PrevTBTreatmentOutcome.DIAGNOSTIC_CHANGED,
 		PrevTBTreatmentOutcome.FAILURE,
 		PrevTBTreatmentOutcome.SCHEME_CHANGED
 	};

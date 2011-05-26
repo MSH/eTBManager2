@@ -23,6 +23,7 @@
 
 	<h:panelGroup id="pnlTags">
 	<div style="padding:6px">
+	<s:fragment rendered="#{s:hasRole('TAGS')}">
 	<a:commandLink value="#{messages['admin.tags.new']}" onclick="showNewTagForm(); return false;" />
 	<span id="tagspan" style="display:none;">
 	<s:decorate template="/layout/edit.xhtml">
@@ -33,7 +34,8 @@
 			action="#{caseTagHome.saveNewTag}" 
 			reRender="pnlTags"/>
 	</s:decorate>
-	</span> 
+	</span>
+	</s:fragment> 
 	</div>
 
 	<h:dataTable value="#{caseTagHome.items}" var="it">
