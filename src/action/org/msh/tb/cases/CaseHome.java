@@ -36,6 +36,9 @@ public class CaseHome extends WsEntityHome<TbCase>{
 	private List<TbCase> otherCases;
 	private Boolean hasIssues;
 	private List<TreatmentHealthUnit> treatmentHealthUnits;
+	
+	private Integer newPatientNumber;
+	private Integer newCaseNumber;
 
 
 	/**
@@ -345,4 +348,54 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		else filters.setCaseView(null);
 	}
 
+
+
+	/**
+	 * @return the newPatientNumber
+	 */
+	public Integer getNewPatientNumber() {
+		return newPatientNumber;
+	}
+
+
+
+	/**
+	 * @param newPatientNumber the newPatientNumber to set
+	 */
+	public void setNewPatientNumber(Integer newPatientNumber) {
+		this.newPatientNumber = newPatientNumber;
+	}
+
+
+
+	/**
+	 * @return the newCaseNumber
+	 */
+	public Integer getNewCaseNumber() {
+		return newCaseNumber;
+	}
+
+
+
+	/**
+	 * @param newCaseNumber the newCaseNumber to set
+	 */
+	public void setNewCaseNumber(Integer newCaseNumber) {
+		this.newCaseNumber = newCaseNumber;
+	}
+
+	public String changeNumber() {
+		if (!isManaged())
+			return "error";
+		
+		if (newPatientNumber != null)
+			getInstance().getPatient().setRecordNumber(newPatientNumber);
+		
+		if (newCaseNumber != null)
+			getInstance().setCaseNumber(newCaseNumber);
+		
+		getEntityManager().persist(getInstance().getPatient());
+		persist();
+		return "number-changed";
+	}
 }

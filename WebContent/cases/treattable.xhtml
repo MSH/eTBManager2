@@ -40,7 +40,7 @@
 	</tr>
 	<s:fragment rendered="#{not editing}">
 	<tr>
-		<th>
+		<th width="150px">
 			#{messages['TbCase.healthUnits']}
 		</th>
 		<td>
@@ -63,7 +63,7 @@
 	</tr>
 	</s:fragment>
 	<tr>
-		<th>
+		<th width="150px">
 			#{messages['RegimenPhase']}
 		</th>
 		<td>
@@ -94,7 +94,7 @@
 	
 	<a:repeat value="#{prescriptionTable.medicines}" var="med">
 	<tr>
-		<td class="colb">
+		<td class="colb" width="150px">
 			#{med.medicine.fullAbbrevName}<br/>
 			#{med.medicine.dosageForm}
 		</td>

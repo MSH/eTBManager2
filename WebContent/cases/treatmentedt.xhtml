@@ -124,7 +124,8 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{treatmentHome.endDate}"/> 
 	</s:decorate>
-	
+
+	<div class="button-bar">	
 	<a:commandButton value="#{messages['form.ok']}" action="#{treatmentHome.endTreatmentPeriodEditing}"
 		data="#{treatmentHome.validated}"
 		styleClass="button" reRender="pnltreatment,periodpnl" 
@@ -132,7 +133,8 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 
 	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
 		onclick="Richfaces.hideModalPanel('perioddlg'); return false;"/>
-
+	</div>
+	
 	</h:form>
 	</h:panelGroup>
 </rich:modalPanel>
@@ -159,6 +161,7 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
     	<ui:param name="datefield" value="#{treatmentHome.endDate}"/> 
 	</s:decorate>
 	
+	<div class="button-bar">
 	<a:commandButton value="#{messages['form.remove']}" action="#{treatmentHome.endRemovePeriod}"
 		data="#{treatmentHome.validated}"
 		styleClass="button" reRender="pnltreatment,removepnl" 
@@ -166,7 +169,7 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 
 	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
 		onclick="Richfaces.hideModalPanel('removedlg'); return false;"/>
-
+	</div>
 	</h:form>
 	</h:panelGroup>
 </rich:modalPanel>
@@ -175,7 +178,7 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 
 
 <rich:modalPanel id="medicinedlg" width="700" autosized="true" zindex="2000" 
-	trimOverlayedElements="false" style="overflow:auto" >
+	trimOverlayedElements="false">
 	<f:facet name="header">#{messages['PrescribedMedicine']}</f:facet>
 	<ui:param name="labelstyle" value="width:110px" />
 	<h:panelGroup id="medicinepnl">
@@ -234,6 +237,7 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 		<h:inputTextarea value="#{prescribedMedicine.comments}" style="width:400px;height:40px;"/>
 	</s:decorate>
 	
+	<div class="button-bar">
 	<a:commandButton value="#{messages['form.ok']}" action="#{treatmentHome.endMedicineEditing}"
 		data="#{treatmentHome.validated}"
 		styleClass="button" reRender="pnltreatment,medicinepnl" 
@@ -241,6 +245,7 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 		
 	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
 		onclick="Richfaces.hideModalPanel('medicinedlg'); return false;"/>
+	</div>
 	</h:form>
 	</h:panelGroup>
 </rich:modalPanel>

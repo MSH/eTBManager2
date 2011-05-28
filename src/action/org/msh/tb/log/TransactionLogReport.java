@@ -34,10 +34,15 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 	private static final String[] restrictions = {
 		"log.action = #{transactionLogReport.action}",
 		"log.role.id = #{userRoleHome.instance.id}",
+		"log.user.name like #{transactionLogReport.userNameLike}",
+		"log.entityDescription like #{transactionLogReport.searchKeyLike}"
 	};
 
 	private RoleAction action;
 	private ReportSelection reportSelection;
+
+	private String userName;	
+	private String searchKey;
 	
 
 	/* (non-Javadoc)
@@ -130,5 +135,45 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 		if (reportSelection == null)
 			reportSelection = (ReportSelection)Component.getInstance("reportSelection");
 		return reportSelection;
+	}
+
+
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
+
+
+	/**
+	 * @param userName the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+
+	/**
+	 * @return the searchKey
+	 */
+	public String getSearchKey() {
+		return searchKey;
+	}
+
+
+	/**
+	 * @param searchKey the searchKey to set
+	 */
+	public void setSearchKey(String searchKey) {
+		this.searchKey = searchKey;
+	}
+	
+	public String getUserNameLike() {
+		return (userName != null? "%" + userName + "%" : null);
+	}
+	
+	public String getSearchKeyLike() {
+		return (searchKey != null? "%" + searchKey + "%" : null);
 	}
 }

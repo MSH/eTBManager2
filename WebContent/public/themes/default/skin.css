@@ -7,8 +7,6 @@ body {
 div#outer_title {
 	width:100%;
 	background-color:#ffffff;
-	height:30px;
-	min-height:30px;
 	display:table;
 }
 div#title{

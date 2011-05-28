@@ -482,7 +482,7 @@ function genderChange(cb) {
 				<td class="colcb">
 					<s:validateAll>
 					<h:selectOneMenu id="oc" value="#{it.prevTBTreatment.outcome}" required="true">
-						<s:selectItems var="v" value="#{globalLists.prevTBTreatmentOutcomes}" label="#{messages[v.key]}" noSelectionLabel="-" />
+						<s:selectItems var="v" value="#{globalLists_br.prevTBTreatmentOutcomes}" label="#{messages[v.key]}" noSelectionLabel="-" />
 						<s:convertEnum />
 					</h:selectOneMenu>
 					</s:validateAll>

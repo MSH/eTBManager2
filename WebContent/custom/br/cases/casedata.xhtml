@@ -98,6 +98,12 @@
 <h:form id="main">
 <s:decorate template="/layout/casebody.xhtml">
 
+	<ui:define name="casenumber">
+		<a:commandLink value="Modificar número" styleClass="small-link"
+			rendered="#{s:hasRole('CASE_CHANGENUMBER')}" 
+			style="padding-left:20px" onclick="Richfaces.showModalPanel('caseNumberDlg');return false;" />
+	</ui:define>
+
 	<ui:define name="state-content">
 		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="hu-icon" 
 			style="margin-top:6px;font-size:11px;max-width:320px;height:70px;" >
@@ -196,6 +202,40 @@
 
 </h:form>
 
+<rich:modalPanel id="caseNumberDlg" width="500" autosized="true" zindex="2000" trimOverlayedElements="false" rendered="#{s:hasRole('CASE_CHANGENUMBER')}">
+	<f:facet name="header">Modificar número do caso</f:facet>
+	<ui:param name="labelstyle" value="width:110px" />
+	<h:panelGroup id="periodpnl">
+	<h:form style="padding:10px;">
+
+	<h:messages globalOnly="true" styleClass="erro" layout="table" />
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">Novo número do paciente:</ui:define>
+		<h:inputText value="#{caseHome.newPatientNumber}"  style="width:80px" />
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">Díigito do caso:</ui:define>
+		<h:inputText value="#{caseHome.newCaseNumber}" style="width:40px" />
+	</s:decorate>
+
+	<div class="button-bar">	
+	<a:commandButton value="#{messages['form.ok']}" action="#{caseHome.changeNumber}"
+		styleClass="button" reRender="main" 
+		oncomplete="Richfaces.hideModalPanel('caseNumberDlg');"/>
+
+	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
+		onclick="Richfaces.hideModalPanel('caseNumberDlg'); return false;"/>
+	</div>
+	
+	</h:form>
+	</h:panelGroup>
+</rich:modalPanel>
+
+
+
 </ui:define>
+
 
 </ui:composition>  

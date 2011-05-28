@@ -50,6 +50,16 @@
 		</h:selectOneMenu>
 	</s:decorate>
 	
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['User']}:</ui:define>
+		<h:inputText value="#{transactionLogReport.userName}" />
+	</s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['global.searchkey']}:</ui:define>
+		<h:inputText value="#{transactionLogReport.searchKey}" />
+	</s:decorate>
+	
 	<a:commandButton value="#{messages['form.refresh']}" reRender="reportPanel" action="#{transactionLogReport.refresh}" styleClass="button" />
 	
 </s:decorate>

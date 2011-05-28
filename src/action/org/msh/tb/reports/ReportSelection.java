@@ -296,4 +296,6 @@ public class ReportSelection {
 	public Integer getUserWorkspaceId() {
 		return (userWorkspace != null? userWorkspace.getId(): null);
 	}
+
+
 }

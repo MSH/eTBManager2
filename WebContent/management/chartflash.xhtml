@@ -59,6 +59,18 @@
 
 </td><td valign="top"  align="right">
 
+	<div style="border:1px solid #a0a8a8;width:400px;" >
+	<div id="my_chart">
+	</div>
+	</div>
+</td></tr></table>
+
+</s:fragment>
+</s:fragment>
+
+<ui:include src="/layout/tablerow.xhtml" />
+
+
 <script type="text/javascript">
 function ofc_ready() {}
 
@@ -71,18 +83,9 @@ var data2 =
 			<f:param name="title" value="#{title}" />
 		</h:outputText>
 
-swfobject.embedSWF("#{request.contextPath}/js/open-flash-chart.swf", "my_chart", "400", "#{indicatorFilters.chartType==1?(series.chartHeight):'400px'}", "9.0.0");
+function showChart() {
+	swfobject.embedSWF("#{request.contextPath}/js/open-flash-chart.swf", "my_chart", "400", "#{indicatorFilters.chartType==1?(series.chartHeight):'400px'}", "9.0.0");
+}
 </script>
-
-	<div style="border:1px solid #a0a8a8;width:400px;" >
-	<div id="my_chart" style="z-index: 2001">
-	</div>
-	</div>
-</td></tr></table>
-
-</s:fragment>
-</s:fragment>
-
-<ui:include src="/layout/tablerow.xhtml" />
 
 </ui:composition>

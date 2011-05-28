@@ -14,13 +14,16 @@
 		<ui:define name="header">
 			<b>#{messages['global.comments']}</b>
 			<br/>
-			<s:div style="display:table;" rendered="#{s:hasRole('CASE_COMMENTS')}">
+			<table width="100%"><tr><td>
+			<s:fragment rendered="#{s:hasRole('CASE_COMMENTS')}">
 				<h:inputTextarea value="#{caseComment.comment}" style="width:500px;height:50px;float:left;"/>
 				<a:commandButton value="#{messages['cases.comments.add']}" style="width:200px" 
 					styleClass="button" 
 					action="#{caseCommentsHome.addComment}" 
 					reRender="#{panel}pnlComments"/>
-			</s:div>
+			</s:fragment>
+			</td></tr>
+			</table>
 		</ui:define>
 		<ui:param name="showfooter" value="0" />
 

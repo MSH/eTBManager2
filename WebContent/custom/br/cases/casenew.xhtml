@@ -215,7 +215,7 @@
 			</s:decorate>
 			</div>
 
-			<div id="divdst">		
+			<div id="divdst" style="display:block;width:100%;">		
 			<div class="paragraph">#{messages['cases.examdst']}
 			</div>
 			<h:panelGroup id="pnlDSTResults">
@@ -278,7 +278,7 @@
     			</h:selectOneMenu>
     		</s:decorate>
     	</td><td>
-    		<div id="divDateHIV" style="display:none;">
+    		<div id="divDateHIV" style="#{(examHIV.result=='NEGATIVE') or (examHIV.result=='POSITIVE')?'display:block': 'display:none;'}">
     		<s:decorate template="/layout/dateedit.xhtml" >
     			<ui:define name="label">#{messages['cases.exams.dateRelease']}:<span style="color:red">*</span></ui:define>
     			<ui:param name="required" value="false" /> 

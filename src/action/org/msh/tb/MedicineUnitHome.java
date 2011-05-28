@@ -14,7 +14,6 @@ import org.jboss.seam.framework.Controller;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineUnit;
 import org.msh.tb.entities.Source;
-import org.msh.tb.entities.Tbunit;
 import org.msh.tb.login.UserSession;
 
 
@@ -64,7 +63,7 @@ public class MedicineUnitHome  extends Controller {
 	private void createMedicineList() {
 		sources = new ArrayList<SourceMedicineUnit>();
 		
-		Tbunit unit = entityManager.find(Tbunit.class, userSession.getTbunit().getId());
+//		Tbunit unit = entityManager.find(Tbunit.class, userSession.getTbunit().getId());
 		
 		List<MedicineUnit> items = entityManager.createQuery("from MedicineUnit mu " +
 				"join fetch mu.source s join fetch mu.tbunit " +
