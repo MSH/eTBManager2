@@ -20,7 +20,7 @@
 <h:form id="main" rendered="#{not empty profileHome.roles}">
     <table class="tabela3" width="750px">
     <tr><td>
-    <s:decorate template="/layout/edit.xhtml" rendered="#{profile.id != null}">
+    <s:decorate template="/layout/display.xhtml" rendered="#{profile.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{profile.id}" />
     </s:decorate>

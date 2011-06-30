@@ -74,16 +74,15 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	public List<CaseResultItem> getResultList() {
 		if (resultList == null)
 		{
-	         javax.persistence.Query query = createQuery();
-	         List<Object[]> lst = query==null ? null : query.getResultList();
-	         fillResultList(lst);
+			javax.persistence.Query query = createQuery();
+	        List<Object[]> lst = query==null ? null : query.getResultList();
+	        fillResultList(lst);
 	    }
 		return resultList;
 	}
 
 	@Override
 	public String getEjbql() {
-		System.out.println(getClass().toString());
 		return "select p.name, c.age, p.gender, p.recordNumber, c.caseNumber, " + 
 			"c.treatmentPeriod.iniDate, c.registrationDate, nu.name.name1, " +
 			"loc.name.name1, loc.code, c.id, " +

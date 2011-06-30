@@ -217,6 +217,42 @@
 		</ui:repeat>
 	</table>
 
+
+	<h2>#{messages['uk_UA.reports.tb08.3']}</h2>
+	<table class="tabela" width="100%">
+		<tr>
+			<th>
+				#{messages['uk_UA.reports.tb08.3.header1']}
+			</th>
+			<th>
+				#{messages['uk_UA.reports.tb08.3.header2']}
+			</th>
+			<th>
+				#{messages['uk_UA.reports.tb08.3.header3']}
+			</th>
+			<th width="150px">
+				#{messages['uk_UA.reports.tb08.3.header4']}
+			</th>
+		</tr>
+		<ui:repeat value="#{indicator.table3000.rows}" var="row">
+		<tr>
+			<th>
+				#{row.title}
+			</th>
+			
+			<ui:repeat value="#{row.cells}" var="val">
+			<td class="colcb">
+				<h:outputText value="#{val.value}" >
+					<f:convertNumber pattern="#,###,##0.##"/>
+				</h:outputText>
+			</td>
+			</ui:repeat>
+		</tr>
+		</ui:repeat>
+	</table>
+
+
+
 	</s:fragment>
 
 </h:panelGroup>

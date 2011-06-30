@@ -13,12 +13,14 @@ import org.msh.tb.indicators.core.IndicatorCultureResult;
 import org.msh.tb.indicators.core.IndicatorFilters;
 import org.msh.tb.indicators.core.IndicatorMicroscopyResult;
 import org.msh.tb.indicators.core.IndicatorTable;
+import org.msh.tb.indicators.core.IndicatorTable.TableRow;
 
 @Name("reportTB08")
 public class ReportTB08 extends Indicator2D {
 	private static final long serialVersionUID = -1617171254497253851L;
 
 	private IndicatorTable table2000;
+	private IndicatorTable table3000;
 
 	private static final String statesIn = "(" + 
 		CaseState.CURED.ordinal() + "," + 
@@ -37,9 +39,11 @@ public class ReportTB08 extends Indicator2D {
 	protected void createIndicators() {
 		initTable(getTable1000());
 		initTable(getTable2000());
+		initTable3000();
 		
 		generateTable1000();
 		generateTable2000();
+		generateTable3000();
 	}
 
 	
@@ -75,6 +79,18 @@ public class ReportTB08 extends Indicator2D {
 		table.addRow(txtNegative, "other_negative");
 	}
 
+	
+	/**
+	 * Initialize structure of table 3000
+	 */
+	protected void initTable3000() {
+		table3000.addColumn(getMessage("uk_UA.reports.tb08.3.header2"), "col1");
+		table3000.addColumn(getMessage("uk_UA.reports.tb08.3.header3"), "col2");
+		table3000.addColumn(getMessage("uk_UA.reports.tb08.3.header4"), "col3");
+		table3000.addRow(getMessage("PatientType.NEW"), "new");
+		table3000.addRow(getMessage("PatientType.RELAPSE"), "relapse");
+		table3000.addRow(getMessage("PatientType.OTHER"), "other");
+	}
 
 	/**
 	 * Generate the report values
@@ -126,6 +142,64 @@ public class ReportTB08 extends Indicator2D {
 		filters.setInfectionSite(InfectionSite.PULMONARY);
 		lst = generateValuesByField("c.patientType, c.state, ua.extraOutcomeInfo", condition);
 		addTableValues(table, lst, "_negative");
+	}
+
+
+	/**
+	 * Generate data of table 3000
+	 */
+	protected void generateTable3000() {
+		IndicatorFilters filters = getIndicatorFilters();
+		IndicatorTable table = getTable3000();
+
+		filters.setInfectionSite(InfectionSite.PULMONARY);
+		filters.setMicroscopyResult(null);
+		filters.setCultureResult(null);
+	
+		// calculate number of cases with pulmonary destruction at notification
+		List<Object[]> lst = generateValuesByField("c.patientType", 
+				"c.patientType != null and ua.pulmonaryDestruction='YES'");
+		addValues(table, "col1", lst);
+
+		// calculate number of cases with pulmonary destruction at notification and where the last exam has no destruction
+		lst = generateValuesByField("c.patientType", 
+			"c.patientType != null and ua.pulmonaryDestruction='YES' " +
+			"and exists(from ExamXRay exam where exam.tbcase.id=c.id and exam.destruction=true" +
+			" and exam.date = (select max(aux.date) from ExamXRay aux where aux.tbcase.id=c.id))");
+		addValues(table, "col2", lst);
+
+		// calculate percentage
+		table.getColumns().get(2).setNumberPattern("#,###,##0.00");
+		for (TableRow row: table.getRows()) {
+			Float val1 = table.getValue("col1", row.getId().toString());
+			Float val2 = table.getValue("col2", row.getId().toString());
+			float perc = 0;
+			
+			if ((val1 != null) && (val2 != null))
+				perc = val2 / val1 * 100;
+			else {
+				if (val1 != null)
+					perc = 100;
+			}
+			table.addIdValue("col3", row.getId(), perc);
+		}
+	}
+
+
+	protected void addValues(IndicatorTable table, String col, List<Object[]> lst) {
+		for (Object[] vals: lst) {
+			PatientType pt = (PatientType)vals[0];
+			String s;
+			switch (pt) {
+			case NEW: s = "new";
+				break;
+			case RELAPSE:  s = "relapse";
+				break;
+			default: s = "other";
+			}
+			Float val = ((Long)vals[1]).floatValue();
+			table.addIdValue(col, s, val);
+		}
 	}
 
 
@@ -203,6 +277,7 @@ public class ReportTB08 extends Indicator2D {
 	@Override
 	protected void createTable() {
 		table2000 = new IndicatorTable();
+		table3000 = new IndicatorTable();
 		super.createTable();
 	}
 
@@ -227,6 +302,16 @@ public class ReportTB08 extends Indicator2D {
 		return table2000;
 	}
 
+
+	/**
+	 * Return table3000 report
+	 * @return
+	 */
+	public IndicatorTable getTable3000() {
+		if (table3000 == null)
+			createTable();
+		return table3000;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.indicators.core.CaseHQLBase#getHQLJoin()

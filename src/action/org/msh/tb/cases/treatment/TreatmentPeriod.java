@@ -18,7 +18,7 @@ public class TreatmentPeriod<E> {
 	private int width;
 	private int left;
 	private Period period;
-
+	
 
 	/**
 	 * Return an instance of the {@link Period} class containing the period of the treatment
@@ -91,4 +91,5 @@ public class TreatmentPeriod<E> {
 	public void setLeft(int left) {
 		this.left = left;
 	}
+
 }

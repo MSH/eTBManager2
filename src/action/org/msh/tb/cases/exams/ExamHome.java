@@ -2,8 +2,8 @@ package org.msh.tb.cases.exams;
 
 import java.util.List;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.End;
-import org.jboss.seam.annotations.In;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.CaseData;
@@ -13,14 +13,17 @@ import org.msh.tb.entities.TbCase;
 public class ExamHome<E> extends EntityHomeEx<E> {
 	private static final long serialVersionUID = -3507272066511042267L;
 	
-	@In(required=true) CaseHome caseHome;
-	
 	private boolean lastResult = true;
 	private List<E> results;
+	private CaseHome caseHome;
 	
 	@Override
 	@End(beforeRedirect=true)
 	public String persist() {
+		if (getCaseHome() == null) {
+			return "error";
+		}
+		
 		Object obj = getInstance();
 		
 		if (obj instanceof CaseData)
@@ -36,7 +39,18 @@ public class ExamHome<E> extends EntityHomeEx<E> {
 	 * @return
 	 */
 	public TbCase getTbCase() {
-		return caseHome.getInstance();
+		return getCaseHome().getInstance();
+	}
+
+	
+	/**
+	 * Return an instance of the {@link CaseHome} component
+	 * @return
+	 */
+	public CaseHome getCaseHome() {
+		if (caseHome == null)
+			caseHome = (CaseHome)Component.getInstance("caseHome");
+		return caseHome;
 	}
 	
 	/**
@@ -80,7 +94,7 @@ public class ExamHome<E> extends EntityHomeEx<E> {
 	 * @return
 	 */
 	protected List<E> createResults() {
-		if (!caseHome.isManaged())
+		if (!getCaseHome().isManaged())
 			return null;
 
 		return getEntityManager()

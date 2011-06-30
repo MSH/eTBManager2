@@ -20,6 +20,7 @@ import org.jboss.seam.annotations.async.Asynchronous;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.adminunits.AdminUnitHome;
+import org.msh.tb.br.entities.MedicalExaminationBR;
 import org.msh.tb.br.entities.TbCaseBR;
 import org.msh.tb.br.entities.enums.FailureType;
 import org.msh.tb.br.entities.enums.TipoResistencia;
@@ -315,6 +316,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		updateCaseTreatment();
 		
 		caseHome.persist();
+		System.out.println("case id = " + tbcase.getId() + " (" + tbcase.getPatient().getFullName() + ")");
 		
 //		caseData.setTbcase(tbcase);
 //		caseData.setId(tbcase.getId());
@@ -364,7 +366,6 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		}
 
 		if (resCulture != null) {
-			
 			examCultureHome.setId(null);
 			ExamCulture culture = examCultureHome.getInstance();
 			culture.setResult(resCulture);
@@ -379,6 +380,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 			culture.setMethod(method);
 
 			examCultureHome.getInstance().setDateCollected(dtColeta);
+			examCultureHome.getInstance().setTbcase(tbcase);
 			examCultureHome.setDisplayMessage(false);
 			examCultureHome.setTransactionLogActive(false);
 			examCultureHome.persist();
@@ -413,7 +415,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 
 	
 	private void importDSTExam(ResultSet rs) throws Exception {
-		Date dtColeta = rsCases.getDate("DATA_CULTURA_ESCARRO");
+		Date dtColeta = rs.getDate("DATA_CULTURA_ESCARRO");
 		if (dtColeta == null)
 			return;
 
@@ -438,6 +440,8 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		checkResultDST(rs, "COD_PADRAO_RES_LEVOFLOXACINO", "Lfx");
 		checkResultDST(rs, "COD_PADRAO_RES_TERIZIDONA", "Tzd");
 
+		System.out.println("***** data coleta = " + dtColeta);
+		
 		ExamDST dst = examDSTHome.getInstance();
 		dst.setLaboratory(lab);
 		examDSTHome.getInstance().setDateCollected(dtColeta);
@@ -558,7 +562,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 	 * @throws Exception
 	 */
 	protected void importMedicalExamination(ResultSet rs) throws Exception {
-		MedicalExamination medExam = new MedicalExamination();
+		MedicalExamination medExam = new MedicalExaminationBR();
 		
 		medExam.setTbcase(tbcase);
 		medExam.setWeight(rs.getDouble("PESO_ATUAL"));
@@ -907,8 +911,6 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 			rs.getStatement().close();
 			System.out.println("NOVA UNIDADE: " + unit.getName().toString());
 			
-			rs.getStatement().close();
-
 			return unit;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -940,7 +942,10 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 			Laboratory lab = new Laboratory();
 			
 			lab.setName(rs.getString("NOME"));
-			lab.setAbbrevName(lab.getName());
+			String s = lab.getName();
+			if (s.length() > 20)
+				s = s.substring(0, 19);
+			lab.setAbbrevName(s);
 			AdministrativeUnit adm = loadUF(rs.getString("SIGLA_UF"));
 			lab.setAdminUnit(adm);
 			lab.setLegacyId(legacyID.toString());

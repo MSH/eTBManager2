@@ -155,6 +155,9 @@ public class ReportTB07 extends Indicator2D {
 	}
 	
 	
+	/**
+	 * Generate data for table 2000
+	 */
 	private void generateTable2000() {
 		IndicatorFilters filters = (IndicatorFilters)Component.getInstance("indicatorFilters");
 		filters.setPatientType(PatientType.NEW);
@@ -324,8 +327,8 @@ public class ReportTB07 extends Indicator2D {
 		List<AgeRange> ageRanges = getAgeRangeHome().getItems();
 
 		for (AgeRange r: ageRanges) {
-			table.addColumn(txtMale, r.getIniAge() + "_female");
-			table.addColumn(txtFemale, r.getIniAge() + "_male");
+			table.addColumn(txtMale, r.getIniAge() + "_male");
+			table.addColumn(txtFemale, r.getIniAge() + "_female");
 		}
 		
 		table.addColumn(txtMale, "male_all");

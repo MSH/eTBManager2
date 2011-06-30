@@ -38,11 +38,11 @@
 
 <ui:define name="body">
 
-	<h:form id="listCases" rendered="#{facesContext.renderResponse}">
+	<h:form id="listCases" >
 
 	<table width="99%"><tr><td>
 	
-		<s:decorate template="/layout/navegajax.xhtml">
+		<s:decorate template="/layout/navegajax.xhtml" rendered="#{facesContext.renderResponse}">
 			<ui:param name="list" value="#{casesQueryBR}" />
 			<ui:param name="reRender" value="listCases" />
 		</s:decorate>
@@ -115,7 +115,8 @@
 				</div>
 			</th>
 		</tr>
-	<ui:repeat value="#{casesQueryBR.resultList}" var="it">
+	<s:fragment rendered="#{facesContext.renderResponse}">
+	<ui:repeat value="#{casesQueryBR.resultList}" var="it" >
 	<tr><td width="90px" align="center">
 			<s:link value="#{it.caseNumber==null?messages['cases.new']:it.displayCaseNumber}" view="/cases/casedata.xhtml">
 				<f:param name="id" value="#{it.caseId}" />
@@ -154,6 +155,7 @@
 	</td>
 	</tr>
 	</ui:repeat>
+	</s:fragment>
 	</table>
 	</h:panelGroup>
 

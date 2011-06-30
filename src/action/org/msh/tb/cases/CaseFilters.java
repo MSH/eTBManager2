@@ -35,7 +35,7 @@ import org.msh.utils.date.DateUtils;
  */
 @Name("caseFilters")
 @Scope(ScopeType.SESSION)
-@Synchronized(timeout=5000L)
+@Synchronized(timeout=10000L)
 public class CaseFilters {
 
 	@In(create=true) Workspace defaultWorkspace;

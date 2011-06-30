@@ -156,6 +156,9 @@ public class ReportTB10 extends Indicator2D {
 	 * @param dtMicro
 	 */
 	protected void addValueTable(Date dtIniTreat, PatientType ptype, CaseState state, Date dtCult, Date dtMicro, boolean noexam) {
+		if (dtIniTreat == null)
+			return;
+
 		// select row id
 		String rowkey;
 		switch (ptype) {

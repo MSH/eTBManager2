@@ -32,7 +32,8 @@ public class ExamCultureHome extends LaboratoryExamHome<ExamCulture> {
 		
 		return super.persist();
 	}
-	
+
+
 	public List<SelectItem> getNumColonies() {
 		if (numColonies == null) {
 			numColonies = new ArrayList<SelectItem>();

@@ -146,14 +146,16 @@
 
 					<a:commandLink value="#{messages['form.edit']}..." 
 						style="padding-right:20px;" 
-						reRender="medicinepnl"
-						action="#{treatmentHome.startEditingMedicine(p.item)}" oncomplete="showMedicineDlg()"/>
+						onclick="showMedicineDlg();"
+						action="#{treatmentHome.startEditingMedicine(p.item)}" 
+						reRender="formmedicine"
+						/>
 
 					<a:commandLink value="#{messages['form.remove']}" style="padding-right:20px;"
 						ajaxSingle="true" 
-						reRender="removepnl" 
+						reRender="formremove" 
 						action="#{treatmentHome.startRemovePeriod(p.item)}"	
-						oncomplete="showRemoveDlg()" />
+						onclick="showRemoveDlg()" />
 					</div></div>
 				</s:div>
 			</div>			
@@ -239,5 +241,7 @@ function closePopupHint(jqryElem, isLong) {
 }
 
 --></script>
+
+<a:jsFunction name="updateTreatmentTable" reRender="pnltreatment" ajaxSingle="true"/>
 
 </ui:composition>  

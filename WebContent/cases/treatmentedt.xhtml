@@ -14,7 +14,6 @@
 
 <ui:param name="left" value="0" />
 <ui:param name="topmenu" value="0" />
-<ui:param name="waitdlg" value="1" />
 
 <ui:param name="labelstyle" value="width:180px" />
 
@@ -27,14 +26,14 @@
 	
 	<div class="link-bar">
 		<a:commandLink value="#{messages['cases.regimens.changeperiod']}..." 
+			onclick="showPeriodDlg();"
 			action="#{treatmentHome.startTreatmentPeriodEditing}"
-			reRender="periodpnl"
-			oncomplete="showPeriodDlg();" />
+			reRender="formperiod" />
 
 		<a:commandLink value="#{messages['Regimen.add']}..."
-			action="#{treatmentHome.startAddMedicine}" 
-			reRender="medicinepnl"
-			oncomplete="showMedicineDlg();" 
+			onclick="showMedicineDlg();"
+			action="#{treatmentHome.startAddMedicine}"
+			reRender="formmedicine" 
 			/>
 	</div>
 	
@@ -44,9 +43,9 @@
 		#{tbcase.regimen!=null ? (tbcase.regimen.name): messages['regimens.individualized']}
 		<a:commandLink value="#{messages['cases.regimens.change']}..."
 			action="#{treatmentHome.startRegimenChange}"
-			reRender="regimenpnl"
+			reRender="formregimen"
 			style="margin-left:10px;" 
-			oncomplete="showRegimenDlg(); return false;" />
+			onclick="showRegimenDlg();" />
 	</s:decorate>						
 
 	<div class="paragraph">#{messages['FilterHealthUnit.TREATMENT_UNIT']}</div>	
@@ -62,24 +61,41 @@
 
 	</h:panelGroup>
 
-<script type="text/javascript"><!--
-
-function showMedicineDlg() {	Richfaces.showModalPanel('medicinedlg'); }
-function showPeriodDlg() {	Richfaces.showModalPanel('perioddlg'); }
-function showRegimenDlg() { Richfaces.showModalPanel('regimendlg'); } 
-function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); } 
-
---></script>
-
 	<div class="button-bar">
 	<a:commandButton action="#{treatmentHome.saveChanges}" value="#{messages['form.save']}" styleClass="button" 
             	reRender="main,messages" 
-            	oncomplete="this.disabled=false;"
-            	onclick="this.disabled=true;" />
+            	oncomplete="this.disabled=false;closeWaitDlg();"
+            	onclick="this.disabled=true;openWaitDlg();" />
 
 	<h:commandButton action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" immediate="true"/>
 	</div>
-	
+
+<script type="text/javascript"><!--
+waitdiv = '<div style="float:left" class="wait-icon"/>';
+function showMedicineDlg() {
+	jQuery('#formmedicine .form-content').html(waitdiv);
+	Richfaces.showModalPanel('medicinedlg');
+}
+function showPeriodDlg() {	
+	jQuery('#formperiod .form-content').html(waitdiv);
+	Richfaces.showModalPanel('perioddlg'); 
+}
+function showRegimenDlg() { 
+	jQuery('#formregimen .form-content').html(waitdiv);
+	Richfaces.showModalPanel('regimendlg'); 
+} 
+function showRemoveDlg() { 
+	jQuery('#formremove .form-content').html(waitdiv);
+	Richfaces.showModalPanel('removedlg'); 
+} 
+function formButtonPost(button) {
+	button.disabled=true;
+	jQuery(button).closest('.button-bar').prepend(waitdiv);
+}
+
+--></script>
+
+ 
 	</a:form>
 </s:decorate>
 
@@ -90,9 +106,10 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 <rich:modalPanel id="perioddlg" width="500" autosized="true" zindex="2000" trimOverlayedElements="false">
 	<f:facet name="header">#{messages['cases.treat']}</f:facet>
 	<ui:param name="labelstyle" value="width:110px" />
-	<h:panelGroup id="periodpnl">
-	<h:form style="padding:10px;" rendered="#{treatmentHome.formEditing=='TREATMENT'}">
+	<h:form id="formperiod" style="padding:10px;">
 
+	<div class="form-content">
+	<h:panelGroup rendered="#{treatmentHome.formEditing=='TREATMENT'}">
 	<h:messages globalOnly="true" styleClass="erro" layout="table" />
 
 	<div class="paragraph">#{messages['RegimenPhase.INTENSIVE']}</div>
@@ -124,19 +141,21 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{treatmentHome.endDate}"/> 
 	</s:decorate>
-
+	</h:panelGroup>
+	</div>
+	
 	<div class="button-bar">	
 	<a:commandButton value="#{messages['form.ok']}" action="#{treatmentHome.endTreatmentPeriodEditing}"
 		data="#{treatmentHome.validated}"
-		styleClass="button" reRender="pnltreatment,periodpnl" 
-		oncomplete="if (!data) return false; Richfaces.hideModalPanel('perioddlg');"/>
+		styleClass="button" reRender="formperiod"
+		onclick="formButtonPost(this)" 
+		oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('perioddlg'); updateTreatmentTable();"/>
 
 	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
 		onclick="Richfaces.hideModalPanel('perioddlg'); return false;"/>
 	</div>
 	
 	</h:form>
-	</h:panelGroup>
 </rich:modalPanel>
 
 
@@ -144,9 +163,10 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 <rich:modalPanel id="removedlg" width="500" autosized="true" zindex="2000" trimOverlayedElements="false">
 	<f:facet name="header">#{messages['form.remove']}</f:facet>
 	<ui:param name="labelstyle" value="width:110px" />
-	<h:panelGroup id="removepnl">
-	<h:form style="padding:10px;" rendered="#{treatmentHome.formEditing=='REMOVE'}">
+	<h:form id="formremove" style="padding:10px;">
 
+	<div class="form-content">
+	<h:panelGroup id="removepnl" rendered="#{treatmentHome.formEditing=='REMOVE'}">
 	<h:messages globalOnly="true" styleClass="erro" layout="table" />
 
 	<s:decorate template="/layout/dateedit.xhtml">
@@ -160,18 +180,20 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{treatmentHome.endDate}"/> 
 	</s:decorate>
+	</h:panelGroup>
+	</div>
 	
 	<div class="button-bar">
 	<a:commandButton value="#{messages['form.remove']}" action="#{treatmentHome.endRemovePeriod}"
 		data="#{treatmentHome.validated}"
-		styleClass="button" reRender="pnltreatment,removepnl" 
-		oncomplete="if (!data) return false; Richfaces.hideModalPanel('removedlg');"/>
+		styleClass="button" reRender="formremove"
+		onclick="formButtonPost(this)" 
+		oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('removedlg');updateTreatmentTable();"/>
 
 	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
 		onclick="Richfaces.hideModalPanel('removedlg'); return false;"/>
 	</div>
 	</h:form>
-	</h:panelGroup>
 </rich:modalPanel>
 
 
@@ -181,8 +203,10 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 	trimOverlayedElements="false">
 	<f:facet name="header">#{messages['PrescribedMedicine']}</f:facet>
 	<ui:param name="labelstyle" value="width:110px" />
-	<h:panelGroup id="medicinepnl">
-	<h:form style="padding:10px;" rendered="#{treatmentHome.formEditing=='MEDICINE'}">
+	<h:form id="formmedicine" style="padding:10px;">
+
+	<div class="form-content">
+	<h:panelGroup rendered="#{treatmentHome.formEditing=='MEDICINE'}">
 
 	<h:messages globalOnly="true" styleClass="erro" layout="table" />
 	<s:decorate template="/layout/edit.xhtml">
@@ -236,18 +260,22 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 		<ui:define name="label">#{messages['global.comments']}:</ui:define>
 		<h:inputTextarea value="#{prescribedMedicine.comments}" style="width:400px;height:40px;"/>
 	</s:decorate>
-	
+	</h:panelGroup>
+	</div>
+		
 	<div class="button-bar">
-	<a:commandButton value="#{messages['form.ok']}" action="#{treatmentHome.endMedicineEditing}"
+	<a:commandButton value="#{messages['form.ok']}" 
+		action="#{treatmentHome.endMedicineEditing}"
 		data="#{treatmentHome.validated}"
-		styleClass="button" reRender="pnltreatment,medicinepnl" 
-		oncomplete="if (!data) return false;Richfaces.hideModalPanel('medicinedlg');"/>
+		styleClass="button"
+		onclick="formButtonPost(this)" 
+		reRender="formmedicine" 
+		oncomplete="this.disabled=false;if (!data) return false;Richfaces.hideModalPanel('medicinedlg');updateTreatmentTable();"/>
 		
 	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
 		onclick="Richfaces.hideModalPanel('medicinedlg'); return false;"/>
 	</div>
 	</h:form>
-	</h:panelGroup>
 </rich:modalPanel>
 
 
@@ -255,9 +283,10 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 <rich:modalPanel id="regimendlg" width="550" autosized="true" zindex="2000" trimOverlayedElements="false">
 	<f:facet name="header">#{messages['cases.treat']}</f:facet>
 	<ui:param name="labelstyle" value="width:110px" />
-	<h:panelGroup id="regimenpnl" >
-	<h:form style="padding:10px;" rendered="#{treatmentHome.formEditing=='REGIMEN'}">
+	<h:form id="formregimen" style="padding:10px;">
 
+	<div class="form-content">
+	<h:panelGroup id="regimenpnl" rendered="#{treatmentHome.formEditing=='REGIMEN'}" >
 	<h:messages styleClass="erro" layout="table" globalOnly="true" />
 	<s:decorate template="/layout/display.xhtml" >
 		<ui:define name="label">#{messages['Regimen']}:</ui:define>
@@ -304,6 +333,8 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 		</a:repeat>
 	</s:fragment>
 	</div>
+	</h:panelGroup>
+	</div>
 	
 	<div class="button-bar">
 	<a:commandButton value="#{messages['form.ok']}" action="#{treatmentHome.endRegimenChange}"
@@ -315,8 +346,9 @@ function showRemoveDlg() { Richfaces.showModalPanel('removedlg'); }
 		onclick="Richfaces.hideModalPanel('regimendlg'); return false;"/>
 	</div>
 	</h:form>
-	</h:panelGroup>
 </rich:modalPanel>
+
+<ui:include src="/layout/waitdlg.xhtml" />
 
 </ui:define>
 

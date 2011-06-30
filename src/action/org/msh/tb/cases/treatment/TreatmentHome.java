@@ -236,7 +236,22 @@ public class TreatmentHome {
 	 * @param pm
 	 */
 	public void startEditingMedicine(PrescribedMedicine pm) {
-		Contexts.getConversationContext().set("prescribedMedicine", pm);
+/*		if (prescribedMedicineId == null)
+			throw new RuntimeException("Medicine not define for editing");
+		
+		PrescribedMedicine pm = null;
+		TbCase tbcase = caseHome.getInstance();
+		for (PrescribedMedicine aux: tbcase.getPrescribedMedicines()) {
+			if (aux.getId().equals(prescribedMedicineId)) {
+				pm = aux;
+				break;
+			}
+		}
+
+		if (pm == null)
+			throw new RuntimeException("Medicine not define for editing");
+		
+*/		Contexts.getConversationContext().set("prescribedMedicine", pm);
 		pmcopy = prescribedMedicineHome.clonePrescribedMedicine(pm);
 		preservePreviousPeriod = true;
 		formEditing = FormEditing.MEDICINE;
@@ -635,5 +650,6 @@ public class TreatmentHome {
 	public void setPreservePreviousPeriod(boolean preservePreviousPeriod) {
 		this.preservePreviousPeriod = preservePreviousPeriod;
 	}
+
 
 }

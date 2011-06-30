@@ -327,6 +327,11 @@ public class CaseEditingHome {
 	public boolean validateData() {
 		TbCase tbcase = caseHome.getInstance();
 
+		if (tbcase.getRegistrationDate() == null) {
+			facesMessages.addToControlFromResourceBundle("edtregdate", "javax.faces.component.UIInput.REQUIRED");
+			return false;
+		}
+		
 		if ((tbcase.getDiagnosisType() == DiagnosisType.CONFIRMED) && (tbcase.getDiagnosisDate() == null)) {
 			facesMessages.addToControlFromResourceBundle("reghidden", "javax.faces.component.UIInput.REQUIRED");
 			return false;

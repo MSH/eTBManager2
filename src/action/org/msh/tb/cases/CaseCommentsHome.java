@@ -122,8 +122,7 @@ public class CaseCommentsHome extends EntityHomeEx<CaseComment> {
 	 * @return
 	 */
 	public boolean isDisplayComments() {
-		Identity ident = Identity.instance();
-		if (!ident.hasRole("CASE_COMMENTS"))
+		if (!caseHome.checkRoleBySuffix("CASE_COMMENTS"))
 			return false;
 		
 		boolean canEdit;
