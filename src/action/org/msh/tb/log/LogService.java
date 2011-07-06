@@ -163,14 +163,17 @@ public class LogService {
 		log.setTransactionDate(new Date());
 		log.setUser(getUserLog());
 		log.setWorkspace(getWorkspaceLog());
-		log.setEntityClass(entity.getClass().getSimpleName());
+		if (entity != null)
+			log.setEntityClass(entity.getClass().getSimpleName());
 		log.setCaseClassification(caseClassification);
 		
 		// pega a descrição da entidade
-		String desc = entity.toString();
-		if (desc.length() > 100)
-			desc = desc.substring(0, 96) + "...";
-		log.setEntityDescription(desc);
+		if (entity != null) {
+			String desc = entity.toString();
+			if (desc.length() > 100)
+				desc = desc.substring(0, 96) + "...";
+			log.setEntityDescription(desc);
+		}
 		
 		boolean hasPrevValues = false;
 

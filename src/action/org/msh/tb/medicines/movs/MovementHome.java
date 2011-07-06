@@ -149,9 +149,12 @@ public class MovementHome {
 				bm.setQuantity(qtd);
 				bm.setMovement(mov);
 				mov.getBatches().add(bm);
-				if (batchQuantity.getId() != null)
+				if (batchQuantity.getId() != null) {
 					batchQuantity = entityManager.merge( batchQuantity );
-				entityManager.persist( batchQuantity );
+					if (batchQuantity.getQuantity() == 0)
+						entityManager.remove(batchQuantity);
+				}
+				else entityManager.persist( batchQuantity );
 			}
 
 			entityManager.persist(pm.getStockPosition());
@@ -163,7 +166,9 @@ public class MovementHome {
 			// update stock positions over the date of the movement
 			execMovementUpdate(mov, qtd, totalPrice);
 		}
-		
+
+		entityManager.flush();
+
 		preparedMovements = null;
 	}
 
@@ -245,6 +250,9 @@ public class MovementHome {
 			totalPrice += b.getUnitPrice() * qtdaux;
 //			b = entityManager.merge(b);
 		}
+
+		if (qtd == 0)
+			throw new MovementException("No movement to be executed because the quantity is 0");
 		
 		Map<BatchQuantity, Integer> batchQuantities = prepareBatches(unit, source, batches, oper);
 

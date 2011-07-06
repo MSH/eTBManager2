@@ -82,6 +82,7 @@ function validateInput(edt) {
 	</div>
 	<a:region renderRegionOnly="false">
 	<a:form id="dlg" rendered="#{batchSelection.tbunit != null}">
+	<ui:insert name="before-form" />
 	<input id="qtdover" type="hidden" value="#{batchSelection.qtdOverStockValue}" />
 	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
 

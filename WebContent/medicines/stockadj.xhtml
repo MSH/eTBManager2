@@ -16,84 +16,84 @@
 <ui:define name="left">
 </ui:define>
 
+<ui:define name="naveg" >
+	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
+	<s:link value="#{messages['medicines.stockpos']}" view="/medicines/stockpos.html" propagation="none" />
+</ui:define>
+
 <ui:define name="body">
+<div style="width:800px">
 <s:decorate template="/layout/unit.xhtml">
 <h:form id="main">
+	<a:commandLink value="#{messages['medicines.medicinerecs.newbatch']}..." onclick="openNewBatchDlg();" style="float:right;"/>
+
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['Source']}:</ui:define>
-    	#{stockAdjustmentHome.source.name}
+    	<h:selectOneMenu value="#{stockAdjustmentHome.source}">
+    		<s:selectItems var="s" value="#{sources}" label="#{s}" noSelectionLabel="-"/>
+    		<s:convertEntity />
+    		<a:support event="onchange" reRender="main" ajaxSingle="true" onsubmit="openWaitDlg();" oncomplete="closeWaitDlg();"/>
+    	</h:selectOneMenu>
     </s:decorate>
+
 
 <h:panelGroup id="pnlitems">
 <table id="medlist" width="100%" class="tabela">
-	<tr><th>
+	<tr><th width="400px">
 			#{messages['Medicine']}
 		</th>
-		<th><h:outputText value="#{messages['Batch.expiryDate']}" styleClass="colch" /></th>	
-		<th><h:outputText value="#{messages['medicines.movs.regqtty']}" styleClass="colrh" /></th>	
-		<th></th>
-		<th><h:outputText value="#{messages['medicines.movs.newqtty']}" styleClass="collh" /></th>
-		<th><h:outputText value="#{messages['form.action']}" styleClass="colch" /></th>
+		<th width="150px"><h:outputText value="#{messages['Batch.expiryDate']}" styleClass="colch" /></th>	
+		<th width="150px"><h:outputText value="#{messages['medicines.movs.availableqtty']}" styleClass="colrh" /></th>	
+		<th width="140px"><h:outputText value="#{messages['form.action']}" styleClass="colch" /></th>
 	</tr>
 <a:repeat value="#{stockAdjustmentHome.items}" var="it">
-	<tr><td colspan="2">
-			<h:outputText value="#{it.stockPosition.medicine}" style="#{it.quantity>0?'font-weight:bold;':''}"/>
-			<s:fragment rendered="#{it.quantity > 0}">
-			<br/>
-			#{messages['global.comments']}:<br/>
-			<h:inputText id="com" value="#{it.comment}" style="width:320px;" required="true"/>
-			<s:message for="com" styleClass="erro"/>
-			</s:fragment>
-		</td>
-		<td align="right">
-			<h:outputText value="#{it.stockPosition.quantity}" style="#{it.quantity>0?'font-weight:bold;':''}">
-				<f:convertNumber pattern="#,###,###,##0"/>
-			</h:outputText>
-		</td>
-		<td>
-			<h:graphicImage value="/public/themes/default/images/arrow.gif" rendered="#{it.quantity>0}"/>
-		</td>
-		<td align="left">
-			<b>
-			<h:outputText value="#{it.quantity}" >
-				<f:convertNumber pattern="#,###,###,##0"/>
-			</h:outputText>
-			</b>
-		</td>
-		<td align="center" width="150px">
-			<a:commandLink value="#{messages['medicines.movs.adjchange']}" 
-				action="#{stockAdjustmentHome.initializeBatchSelection(it)}" 
-				reRender="batchselpnl,messages" oncomplete="showBatchesSelectionDlg();" 
-				ajaxSingle="false"/>
-		</td>
-	</tr>
+	<tr class="med">
+		<td colspan="4">
+			<a:commandLink value="#{messages['medicines.movs.newadjust']}"
+				onclick="openAdjustDlg(#{it.stockPosition.id});return false;" 
+				style="float:right;" 
+				styleClass="right-icon small-link"
+				/>
+
+			<div id="med-row" style="height:30px;min-height:30px;cursor: pointer;">
+			<div style="float:left;width:500px;">
+				<a:commandLink value="#{messages['form.details']}" style="float:right;" onclick="detailsClick(this);return false;" />
+				<h:outputText value="#{it.stockPosition.medicine}" class="medicine-icon"/>
+			</div>
+			<div style="float:left;width:140px;text-align:right;">
+				<h:outputText value="#{it.stockPosition.quantity}" style="#{it.stockPosition.quantity>0?'font-weight:bold;':''}">
+					<f:convertNumber pattern="#,###,###,##0"/>
+				</h:outputText>
+			</div>
+			</div>
+
+		<div id="tblbatch" style="display:none;">					
 		<a:repeat value="#{it.batches}" var="b">
-			<tr style="font-size:9px;">
-				<td>
+			<div style="clear:both;position:relative;min-height:40px;height:40px;border-top:1px solid #d0d0d0;padding-top:4px;">
+				<a:commandLink value="#{messages['medicines.movs.delbatch']}" 
+					style="float:right;" 
+					styleClass="right-icon small-link" 
+					onclick="initBatchDeleting(#{b.id})"/>
+				<div style="float:left;width:350px;padding-left:30px;">
 					<div class="batch-icon">
-					#{b.batchQtd.batch.batchNumber}<br/>
-					#{b.batchQtd.batch.manufacturer}
+					#{b.batch.batchNumber}<br/>
+					#{b.batch.manufacturer}
 					</div>
-				</td>
-				<td align="center">
-					<h:outputText value="#{b.batchQtd.batch.expiryDate}" converter="localeDateConverter" />
-				</td>
-				<td align="right">
-					<h:outputText value="#{b.batchQtd.quantity}">
-						<f:convertNumber pattern="#,###,##0"/>
-					</h:outputText>
-				</td>
-				<td>
-					<img src="#{request.contextPath}/public/themes/default/images/arrow.gif" />
-				</td>
-				<td align="left">
+				</div>
+				<div style="float:left;width:130px;text-align:center;">
+					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+				</div>
+				<div style="float:left;width:130px;text-align:right;">
 					<h:outputText value="#{b.quantity}">
 						<f:convertNumber pattern="#,###,##0"/>
 					</h:outputText>
-				</td>
-				<td></td>
-			</tr>
+				</div>
+			</div>
 		</a:repeat>
+		</div>
+			
+		</td>
+	</tr>
 </a:repeat>
 </table>
 
@@ -102,23 +102,246 @@
 </h:panelGroup>
 
 
-<table width="100%">
-<tr><td align="right">
-    <a:commandButton action="#{stockAdjustmentHome.execute}" value="#{messages['form.ok']}" styleClass="button" reRender="pnlitems,messages"/>
-	<s:button view="/medicines/stockpos.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" />
-</td></tr></table>
+<a:jsFunction name="initBatchEditing" reRender="batchselpnl" 
+	action="#{stockAdjustmentHome.initializeBatchAdjustment}" 
+	ajaxSingle="true" oncomplete="showBatchesSelectionDlg();">
+	<a:actionparam name="param1" assignTo="#{stockAdjustmentHome.stockPositionId}" converter="javax.faces.Integer" />
+</a:jsFunction>
+
+<a:jsFunction name="initBatchDeletingDlg" reRender="delbatchpnl" ajaxSingle="true">
+	<a:actionparam name="param1" assignTo="#{stockAdjustmentHome.batchQuantityId}" converter="javax.faces.Integer" />
+</a:jsFunction>
+
+<a:jsFunction name="refreshMedTable" reRender="pnlitems" ajaxSingle="true" />
+<a:jsFunction name="refreshNewBatchDlg" reRender="pnlitems,newbatchpnl" ajaxSingle="true" />
+
+<a:jsFunction name="initNewBatchDlg" reRender="newbatchpnl"	ajaxSingle="true" />
 
 </h:form>
 </s:decorate>
+</div>          
 
 <s:decorate template="/layout/batchselection.xhtml">
 	<ui:param name="quantitytitle" value="#{messages['medicines.movs.newqtty']}" />
-	<a:commandButton value="#{messages['form.ok']}" action="#{stockAdjustmentHome.selectBatches}" 
+	<a:commandButton value="#{messages['form.ok']}" action="#{stockAdjustmentHome.executeBatchAdjustment}"
+		data="#{stockAdjustmentHome.actionExecuted}"  
 		onclick="if (!validateBatchSelection(this)) return false;" 
-		oncomplete="hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button"/>
+		oncomplete="if (!data) return false; hideBatchesSelectionDlg();refreshMedTable();" reRender="batchselpnl" styleClass="button"/>
+	
+	<ui:define name="before-form">
+		<h:inputHidden value="#{stockAdjustmentHome.stockPositionId}" />
+		<s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages['medicines.movs.adjreason']}:</ui:define>
+			<h:inputText value="#{stockAdjustmentHome.reasonAdjustment}" style="width:300px;margin-bottom:10px;" required="true"/>
+		</s:decorate>
+	</ui:define>
 </s:decorate>
 
-          
+<script type="text/javascript">
+<!--
+waitdiv = '<div style="float:left" class="wait-icon"/>';
+function detailsClick(elem) {
+	var tbl=jQuery(elem).closest("td").find("#tblbatch");
+	var bVisible=jQuery(tbl).is(":visible");
+	tbl.slideToggle(500);
+	if (bVisible)
+		 jQuery(elem).text('#{messages['form.details']}');
+	else jQuery(elem).text('#{messages['form.hidedetails']}');
+	
+}
+function openAdjustDlg(id) {
+	initBatchEditing(id);
+}
+
+function openNewBatchDlg() {
+	jQuery('#batchfields').html(waitdiv);
+	Richfaces.showModalPanel('newbatchdlg');
+	initNewBatchDlg();	
+}
+
+function initBatchDeleting(batchId) {
+	jQuery('#delbatchfields').html(waitdiv);
+	Richfaces.showModalPanel('delbatchdlg');
+	initBatchDeletingDlg(batchId);
+}
+
+-->
+</script>
+
+
+
+
+<rich:modalPanel id="newbatchdlg" width="650" zindex="2000" autosized="true">
+	<f:facet name="header">
+		<h:outputText id="title1" value="#{messages['form.data_edit']} - #{messages['Batch']}" />
+	</f:facet>
+	<h:panelGroup id="newbatchpnl">
+	<a:region>
+	<a:form id="formbatch">
+    <table width="100%" style="border-collapse:collapse;">
+    <tr><td colspan="2">
+	<div id="batchfields">	
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['Medicine']}:</ui:define>
+		<h:selectOneMenu value="#{stockAdjustmentHome.batchQuantity.batch.medicine}" required="true"> 
+			<s:selectItems var="med" value="#{medicines}" noSelectionLabel="-" label="#{med}"/>
+			<s:convertEntity />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate template="/layout/dateedit.xhtml" >
+		<ui:define name="label">#{messages['MedicineReceiving.receivingDate']}:</ui:define>
+		<ui:param name="required" value="true" /> 
+		<ui:param name="datefield" value="#{stockAdjustmentHome.movementDate}" /> 
+	</s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['medicines.movs.adjreason']}:</ui:define>
+    	<h:inputText value="#{stockAdjustmentHome.reasonAdjustment}" size="250" style="width:250px"/>
+    </s:decorate>
+
+	<hr/>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Batch.brandName']}:</ui:define>
+    	<h:inputText value="#{stockAdjustmentHome.batchQuantity.batch.brandName}" size="80" style="width:250px"/>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Batch.batchNumber']}:</ui:define>
+    	<h:inputText value="#{stockAdjustmentHome.batchQuantity.batch.batchNumber}" size="30" required="true" />
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['Batch.expiryDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{stockAdjustmentHome.batchQuantity.batch.expiryDate}" /> 
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Batch.manufacturer']}:</ui:define>
+    	<h:inputText value="#{stockAdjustmentHome.batchQuantity.batch.manufacturer}" size="80" style="width:250px" />
+    </s:decorate>
+
+    <s:decorate id="qtd" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['medicines.movs.availableqtty']}:</ui:define>
+    	<h:inputText id="qtd" value="#{stockAdjustmentHome.batchQuantity.quantity}" required="true" onkeypress="return numbersOnly(this,event);" >
+    		<f:validateDoubleRange minimum="1"/>
+    	</h:inputText>
+    </s:decorate>
+
+    <s:decorate id="qtdcon" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Batch.quantityContainer']}:</ui:define>
+    	<h:inputText id="qtdcon" value="#{stockAdjustmentHome.batchQuantity.batch.quantityContainer}" required="true" onkeypress="return numbersOnly(this,event);" >
+    		<f:validateDoubleRange minimum="1"/>
+    	</h:inputText>
+    </s:decorate>
+
+    <s:decorate id="uprice" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.unitPrice']}:</ui:define>
+    	<h:inputText id="uprice" value="#{stockAdjustmentHome.batchQuantity.batch.unitPrice}" required="true" 
+    		converter="currencyConverter" onkeyup="return changeUnitPrice(this);">
+    	</h:inputText>
+    </s:decorate>
+
+    <s:decorate id="tprice" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
+    	<h:inputText id="tprice" value="#{stockAdjustmentHome.batchQuantity.batch.totalPrice}" required="true" 
+    		converter="currencyConverter" onkeyup="return changeTotalPrice(this);">
+    		<f:validateDoubleRange minimum="1"/>
+    	</h:inputText>
+    </s:decorate>
+	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
+
+	</div>
+	</td></tr>
+    <tr><td>
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+    		<ui:include src="/layout/waitstatus.xhtml" />
+    	</td>
+    	<td align="right">
+            <a:commandButton action="#{stockAdjustmentHome.saveNewBatch}" value="#{messages['form.ok']}" styleClass="button" 
+            	reRender="newbatchpnl"
+            	data="#{stockAdjustmentHome.actionExecuted}"
+            	onclick="this.disabled=true;" 
+            	oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('newbatchdlg');refreshMedTable();"/>
+			<s:button value="#{messages['form.cancel']}" 
+				styleClass="button-cancel" 
+				onclick="Richfaces.hideModalPanel('newbatchdlg'); return false;" />
+    </td></tr>
+    
+    </table>
+    
+	</a:form>
+	</a:region>
+	</h:panelGroup>
+</rich:modalPanel>
+
+
+
+<rich:modalPanel id="delbatchdlg" width="650" zindex="2000" autosized="true">
+	<f:facet name="header">
+		<h:outputText value="#{messages['medicines.movs.delbatch']}" />
+	</f:facet>
+	<h:panelGroup id="delbatchpnl">
+	<a:region>
+	<a:form>
+    <table width="100%" style="border-collapse:collapse;">
+    <tr><td colspan="2">
+	<div id="delbatchfields">
+	<h:inputHidden value="#{stockAdjustmentHome.batchQuantityId}" />	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['Medicine']}:</ui:define>
+		#{stockAdjustmentHome.batchQuantity.batch.medicine}
+	</s:decorate>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['Batch.batchNumber']}:</ui:define>
+		#{stockAdjustmentHome.batchQuantity.batch.batchNumber}
+	</s:decorate>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['Batch.expiryDate']}:</ui:define>
+		<h:outputText value="#{stockAdjustmentHome.batchQuantity.batch.expiryDate}" converter="localeDateConverter" />
+	</s:decorate>
+
+	<s:decorate template="/layout/dateedit.xhtml" >
+		<ui:define name="label">#{messages['medicines.movs.outdate']}:</ui:define>
+		<ui:param name="required" value="true" /> 
+		<ui:param name="datefield" value="#{stockAdjustmentHome.movementDate}" /> 
+	</s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['medicines.movs.adjreason']}:</ui:define>
+    	<h:inputText value="#{stockAdjustmentHome.reasonAdjustment}" size="250" style="width:350px"/>
+    </s:decorate>
+
+	</div>
+	</td></tr>
+    <tr><td>
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+    		<ui:include src="/layout/waitstatus.xhtml" />
+    	</td>
+    	<td align="right">
+            <a:commandButton action="#{stockAdjustmentHome.deleteBatch()}" value="#{messages['form.ok']}" styleClass="button" 
+            	reRender="newbatchpnl"
+            	data="#{stockAdjustmentHome.actionExecuted}"
+            	onclick="this.disabled=true;" 
+            	oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('delbatchdlg');refreshMedTable();"/>
+			<s:button value="#{messages['form.cancel']}" 
+				styleClass="button-cancel" 
+				onclick="Richfaces.hideModalPanel('delbatchdlg'); return false;" />
+    </td></tr>
+    
+    </table>
+    
+	</a:form>
+	</a:region>
+	</h:panelGroup>
+</rich:modalPanel>
+
+<ui:include src="/layout/waitdlg.xhtml" />
+
 </ui:define>
 
 </ui:composition>  
