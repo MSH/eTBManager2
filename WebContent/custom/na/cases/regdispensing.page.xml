@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
+
+	<restrict>#{userSession.canOpenCases}</restrict>
+	<begin-conversation join="true"/>
+	<param name="huid" value="#{registerDispensingHome.tbunitId}"/>
+	<param name="month" value="#{registerDispensingHome.month}"/>
+	<param name="year" value="#{registerDispensingHome.year}"/>
+	<navigation>
+		<rule if-outcome="dispensing-saved">
+			<end-conversation/>
+			<redirect view-id="/custom/na/cases/treatments.xhtml">
+				<param name="huid" value="#{registerDispensingHome.tbunitId}"/>
+			</redirect>
+		</rule>
+	</navigation>
+</page>
