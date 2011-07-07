@@ -80,6 +80,11 @@
     	</h:selectOneMenu>
 	</s:decorate>        
 
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['MedicalExamination.dotintprovider']}:</ui:define>
+    	<h:inputText value="#{medicalExaminationNA.dotProvName}" style=" width : 340px;" maxlength="100"/>
+    </s:decorate>
+
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['MedicalExamination.dotduringcontphase']}:</ui:define>
 		<h:selectOneMenu value="#{medicalExaminationNA.dotContOptions}" >
@@ -87,6 +92,11 @@
     		<s:convertEnum />
     	</h:selectOneMenu>
 	</s:decorate>        
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['MedicalExamination.dotcontprovider']}:</ui:define>
+    	<h:inputText value="#{medicalExaminationNA.dotContProvName}" style=" width : 340px;" maxlength="100"/>
+    </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
