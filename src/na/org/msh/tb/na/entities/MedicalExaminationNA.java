@@ -1,5 +1,6 @@
 package org.msh.tb.na.entities;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -14,6 +15,17 @@ public class MedicalExaminationNA extends MedicalExamination {
 	private DotOptions dotIntOptions;	
 	
 	private DotOptions dotContOptions;
+	
+	@Column(length=100)
+	private String dotContProvName;
+
+	public String getDotContProvName() {
+		return dotContProvName;
+	}
+
+	public void setDotContProvName(String dotContProvName) {
+		this.dotContProvName = dotContProvName;
+	}
 
 	public DotOptions getDotIntOptions() {
 		return dotIntOptions;
