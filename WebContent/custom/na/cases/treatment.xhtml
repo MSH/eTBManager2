@@ -50,8 +50,34 @@
 	<s:fragment rendered="#{caseHome.inTreatment}">
 
 	<h:panelGroup id="pnltreatment">
-	<s:link value="#{messages['form.edit']}" view="/cases/treatmentedt.xhtml" style="float:right;"/>
-
+		<rich:dropDownMenu style="width:auto;float:right;" rendered="#{(caseHome.canEditTreatment) and (tbcase.state!='TRANSFERRING')}" 
+			styleClass="dropdown-link" >
+			
+			<f:facet name="label">#{messages['form.options']}
+			</f:facet>
+			<rich:menuItem submitMode="client"
+				value="#{messages['form.edit']}" 
+				onclick="document.location.href='#{request.contextPath}/cases/treatmentedt.seam?id=#{caseHome.id}'"
+				rendered="#{prescriptionTable.valid}">
+			</rich:menuItem>
+			<rich:menuItem  rendered="#{caseHome.canTransferOut and prescriptionTable.valid}" submitMode="client">
+				<s:link value="#{messages['cases.move']}" view="/cases/casemove.xhtml">
+					<f:param name="id" value="#{caseHome.id}" />
+				</s:link>
+			</rich:menuItem>
+			<rich:menuItem value="#{messages['cases.move.cancel']}" 
+					onclick="if (!confirm('#{messages['cases.move.cancel-confirm']}')) return false"
+					action="#{caseMoveHome.rollbackTransferOut}"
+					reRender="main,leftmenu,messages"
+					rendered="#{prescriptionTable.transferredCase}" >
+					<f:param name="name" value="#{prescriptionTable.lastHealthUnit.tbunit.name}"/>
+			</rich:menuItem>
+			<rich:menuItem value="#{messages['cases.treat.undo']}"
+					onclick="if (!confirm('#{messages['cases.treat.undo.confirm']}')) return false;" 
+					action="#{treatmentHome.undoTreatment}" 
+					reRender="main,messages">
+			</rich:menuItem>
+		</rich:dropDownMenu>
 	<s:decorate template="/cases/treattable.xhtml">
 		<ui:param name="editing" value="false" />
 	</s:decorate>

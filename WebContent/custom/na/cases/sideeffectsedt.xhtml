@@ -38,9 +38,9 @@ jQuery("#tblse tr:has(:checked)").addClass("activerow");
 
 function validateForm() {
 	valOk=true;
-	jQuery("#tblse tr:has(:checked) input[type='text']")
-		.css("background-color", "white")
-		.each(function() { validateMedicine(this); });
+//	jQuery("#tblse tr:has(:checked) input[type='text']")
+//		.css("background-color", "white")
+//		.each(function() { validateMedicine(this); });
 
 	if (valOk)
 		jQuery("#tblse tr:has(:checked) select[class='xpto']")
@@ -144,7 +144,7 @@ function validateYesNo(cb) {
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.outcome']}" styleClass="collh" />
 			</f:facet>
-			<h:selectOneMenu value="#{it.item.outcome}" styleClass="xpto">
+			<h:selectOneMenu value="#{it.item.outcome}" >
 				<s:selectItems value="#{outcomeList}" var="v" noSelectionLabel="-" label="#{messages[v.key]}"/>
 				<s:convertEnum />
 			</h:selectOneMenu>

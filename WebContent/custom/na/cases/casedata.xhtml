@@ -95,7 +95,6 @@
 <s:decorate template="/layout/casebody.xhtml">
 
 	<ui:define name="state-content">
-	Namibia Workspace
 		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="hu-icon" style="margin-top:6px;font-size:11px;max-width:320px;" >
 			<b style="padding-right:4px;">#{messages['medicines.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
 			<br/>
