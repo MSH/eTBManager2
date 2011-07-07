@@ -2,7 +2,7 @@ package org.msh.tb.na.entities.enums;
 
 public enum Dot {
 	N, 
-	O,
+	T,
 	X;
 	
 	public String getKey() {
