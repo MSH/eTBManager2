@@ -21,7 +21,7 @@ import org.msh.utils.date.Period;
 
 /**
  * Support displaying of the treatment calendar
- * @author Ricardo Memoria
+ * @author Utkarsh Srivastava
  *
  */
 @Name("treatmentCalendarHomeNA")
@@ -35,6 +35,22 @@ public class TreatmentCalendarHome {
 	private List<org.msh.tb.na.MonthInfo> months;
 	private List<Integer> days;
 	
+
+	
+
+
+	public TreatmentCalendarHome(TbCase tbcase, EntityManager entityManager) {
+		caseHome = new  CaseHome();
+		caseHome.setId(tbcase.getId());
+		this.entityManager = entityManager;
+		createMonthList();
+	}
+
+	public TreatmentCalendarHome() {
+	}
+
+	
+	
 	/**
 	 * Return information about a regimen phase 
 	 * @return list of {@link PhaseInfo} instances
@@ -44,8 +60,6 @@ public class TreatmentCalendarHome {
 			createMonthList();
 		return phases;
 	}
-
-
 	/**
 	 * Calculates the initial and final date of the intensive and continuous phase
 	 */
@@ -213,7 +227,6 @@ public class TreatmentCalendarHome {
 	 * Fill calendar with dispensing information
 	 */
 	protected void mountDispensing() {
-		System.out.println("---- inside mountDispensing na----"+caseHome.getId());
 		List<CaseDispensingNA> lst = entityManager.createQuery("from CaseDispensingNA c  " +
 				"left join fetch c.dispensingDays " +
 				"where c.tbcase.id = :id ")
