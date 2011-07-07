@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:p="http://jboss.com/products/seam/pdf"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<table width="100%" style="border-collapse: collapse;"><tr><td colspan="2">
+
+	<s:decorate template="/layout/edit.xhtml" rendered="#{empty hideclassification}">
+		<ui:define name="label">#{messages['CaseClassification']}:	</ui:define>
+		<h:selectOneMenu value="#{indicatorFilters.classification}">
+			<s:selectItems value="#{globalLists.caseClassifications}" var="r" label="#{messages[r.key]}" noSelectionLabel="#{messages['form.noselection']}" />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<div id="divcntxt" >
+	<h:panelGroup id="pnlcntxt">
+	<s:decorate template="/layout/tbselection2.xhtml" >
+		<ui:param name="tbunitselection" value="#{indicatorFilters.tbunitselection}" />
+		<ui:param name="unitlabel" value="#{messages['Tbunit.treatmentHealthUnit']}" />
+		<ui:param name="rerender" value="pnloutput" />
+		<ui:param name="required" value="false" />
+	</s:decorate>
+	</h:panelGroup>
+	</div>
+
+	</td></tr>
+	<tr><td colspan="2">
+
+	<div class="paragraph">#{messages['manag.ind.periodfilter']}</div>
+	
+	</td></tr>
+
+	<tr><td>
+	<s:decorate template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['global.inimonthyear']}:	</ui:define>
+		<h:selectOneMenu value="#{indicatorFilters.iniMonth}" style="margin-right:4px;">
+			<f:selectItems value="#{months}"/>
+		</h:selectOneMenu>
+		<h:selectOneMenu value="#{indicatorFilters.iniYear}">
+			<f:selectItems value="#{years}"/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+	</td></tr>
+	
+	<tr><td colspan="2">
+
+	<div class="paragraph">#{messages['manag.ind.otherfilters']}</div>
+	
+	</td></tr>
+	<tr><td>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">
+			#{messages['PatientType']}:
+		</ui:define>
+		<h:selectOneMenu value="#{indicatorFilters.patientType}">
+			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+	</td><td>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">
+			#{messages['Gender']}:
+		</ui:define>
+    	<ui:param name="labelstyle" value="width:140px;" />
+		<h:selectOneMenu value="#{indicatorFilters.gender}">
+			<s:selectItems var="it" value="#{genders}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+	</td></tr>
+	<tr><td>
+	
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">
+			#{messages['Regimen']}:
+		</ui:define>
+		<h:selectOneMenu value="#{indicatorFilters.regimen}">
+			<s:selectItems var="it" value="#{regimens}" noSelectionLabel="#{messages['form.noselection']}" label="#{it.name}"/>
+			<s:convertEntity />
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	</td><td>
+	
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">
+			#{messages['Source']}:
+		</ui:define>
+    	<ui:param name="labelstyle" value="width:140px;" />
+		<h:selectOneMenu value="#{indicatorFilters.source}">
+			<s:selectItems var="it" value="#{sources}" noSelectionLabel="#{messages['form.noselection']}" label="#{it.abbrevName}"/>
+			<s:convertEntity />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	</td></tr>
+	<tr><td>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">
+			#{messages['InfectionSite']}:
+		</ui:define>
+		<h:selectOneMenu value="#{indicatorFilters.infectionSite}">
+			<s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	</td><td>
+	
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['AgeRange']}:</ui:define>
+    	<ui:param name="labelstyle" value="width:140px;" />
+		<h:selectOneMenu value="#{indicatorFilters.ageRange}">
+			<s:selectItems var="it" value="#{ageRangeHome.items}" noSelectionLabel="#{messages['form.noselection']}" label="#{it}"/>
+			<s:convertEntity />
+		</h:selectOneMenu>
+	</s:decorate>
+	</td></tr>
+	
+	<tr><td>
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['MicroscopyResult']}:</ui:define>
+		<h:selectOneMenu value="#{indicatorFilters.microscopyResult}">
+			<s:selectItems var="it" value="#{indicatorFilters.microscopyResults}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	</td><td>
+
+	<s:decorate template="/layout/edit.xhtml">
+   		<ui:param name="labelstyle" value="width:140px;" />
+		<ui:define name="label">#{messages['CultureResult']}:</ui:define>
+		<h:selectOneMenu value="#{indicatorFilters.cultureResult}">
+			<s:selectItems var="it" value="#{indicatorFilters.cultureResults}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	</td></tr>
+	<tr><td>
+
+	<s:decorate template="/layout/display.xhtml" rendered="#{indicator.useDiagnosisTypeFilter}">
+		<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
+		<h:selectOneMenu value="#{indicatorFilters.diagnosisType}">
+			<s:selectItems var="it" value="#{diagnosisTypes}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	</td><td>
+		<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
+    		<ui:param name="labelstyle" value="width:140px;" />
+			<h:selectOneMenu value="#{indicatorFilters.drugResistanceType}">
+				<s:selectItems var="it" value="#{drugResistanceTypes}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+				<s:convertEnum />
+			</h:selectOneMenu>
+		</s:decorate>
+	</td></tr>
+<s:fragment rendered="#{hideupdtbar == null}">
+	<tr><td colspan="2">
+		<div class="paragraph" >
+			<h:outputText value="#{messages['OutputSelection']}" rendered="#{showoutputselection}"/>
+		</div>
+	</td></tr>
+	<tr><td>
+
+	<h:panelGroup id="pnloutput" rendered="#{showoutputselection}">
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['global.table.rows']}:</ui:define>
+		<h:selectOneMenu value="#{indicatorFilters.outputSelectionInt}">
+			<f:selectItems value="#{indicator.outputSelections}" />
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	<ui:insert name="outputFilter" />
+	</h:panelGroup>
+	
+	</td>
+	<td align="right" >
+	<ui:include src="/layout/waitstatus.xhtml" />
+	<a:commandButton value="#{messages['form.update']}" reRender="indicator" styleClass="button" 
+		action="#{indicatorController.execute}"
+		onclick="this.disabled=true;" oncomplete="this.disabled=false;showpictype();"/>
+	<rich:jQuery name="showpictype" timing="onJScall" selector="#charttypediv" query="show(500)" />
+
+	</td></tr>
+</s:fragment>
+	</table>
+
+</ui:composition>
