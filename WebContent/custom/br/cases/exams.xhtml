@@ -7,21 +7,18 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
+	<div class="spacer" />
+	<s:link view="/cases/edtexamhiv.xhtml" 
+		style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h2>#{messages['cases.examhiv']}</h2>
 	<h:panelGroup id="pnlhiv">	
-	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:20px;">
-		<ui:param name="showfooter" value="0" />
-		<ui:define name="header">
-			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexamhiv.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
-				<f:param name="id" value="#{tbcase.id}"/>
-				<f:param name="examid" value="#{null}"/>
-			</s:link>
-			<b>#{messages['cases.examhiv']}</b>
-		</ui:define>
-		
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examHIVHome.allResults}" />
-		<div>
 		<h:dataTable value="#{examHIVHome.allResults}" var="r" rendered="#{not empty examHIVHome.allResults}" 
-			width="100%" styleClass="tabela4" columnClasses="colcb,colcb,colb,colb,colb">
+			width="100%" styleClass="table1" columnClasses="colcb,colcb,colb,colb,colb">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['global.month']}" styleClass="colch"/>
@@ -69,33 +66,26 @@
 				</h:commandLink>
 			</h:column>			
 		</h:dataTable>
-		</div>
-	</s:decorate>
 	</h:panelGroup>
-                 
-	
-	<p/>	
 
 <a:jsFunction name="remExamHIV" action="#{examHIVHome.remove}" reRender="pnlhiv"  rendered="#{caseHome.canEditExams}">
 	<a:actionparam name="param1" assignTo="#{examHIVHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
     
 
+    
+    <div class="spacer" />
+
+	<s:link view="/cases/edtexammicroscopy.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h2>#{messages['cases.exammicroscopy']}</h2>	
 	<h:panelGroup id="pnlmicroscopy">	
-	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:20px;">
-		<ui:param name="showfooter" value="0" />
-		<ui:define name="header">
-			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexammicroscopy.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
-				<f:param name="id" value="#{tbcase.id}"/>
-				<f:param name="examid" value="#{null}"/>
-			</s:link>
-			<b>#{messages['cases.exammicroscopy']}</b>
-		</ui:define>
-		
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examMicroscopyHome.allResults}" />
-		<div>
 		<h:dataTable value="#{examMicroscopyHome.allResults}" var="r" rendered="#{not empty examMicroscopyHome.allResults}" 
-			width="100%" styleClass="tabela4" columnClasses="colb,colb,colb,colb,colb">
+			width="100%" styleClass="table1" columnClasses="colb,colb,colb,colb,colb">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
@@ -148,29 +138,25 @@
 				</h:commandLink>
 			</h:column>			
 		</h:dataTable>
-		</div>
-	</s:decorate>
 	</h:panelGroup>
 <a:jsFunction name="remexamMicroscopy" action="#{examMicroscopyHome.remove}" reRender="pnlmicroscopy"  rendered="#{caseHome.canEditExams}">
 	<a:actionparam name="param1" assignTo="#{examMicroscopyHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
 
-	<h:panelGroup id="pnlculture">	
-	<s:decorate template="/layout/roundrect.xhtml" style="padding-top:20px;">
-		<ui:param name="showfooter" value="0" />
-		<ui:define name="header">
-			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexamculture.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
-				<f:param name="id" value="#{tbcase.id}"/>
-				<f:param name="examid" value="#{null}"/>
-			</s:link>
-			<b>#{messages['cases.examculture']}</b>
-		</ui:define>
-		
+
+	<div class="spacer" />
+
+	<h:panelGroup id="pnlculture">
+	<s:link view="/cases/edtexamculture.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h2>#{messages['cases.examculture']}</h2>
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examCultureHome.allResults}" />
-		<div>
 		<h:dataTable value="#{examCultureHome.allResults}" var="r" rendered="#{not empty examCultureHome.allResults}" width="100%" 
-			styleClass="tabela4" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
+			styleClass="table1" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
@@ -226,31 +212,26 @@
 				</h:commandLink>
 			</h:column>			
 		</h:dataTable>
-		</div>
-	</s:decorate>
 	</h:panelGroup>
 	
-	<p/>	
-
 <a:jsFunction name="remExamCulture" action="#{examCultureHome.remove}" reRender="pnlculture" ajaxSingle="true" rendered="#{caseHome.canEditExams}">
 	<a:actionparam name="param1" assignTo="#{examCultureHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
+
+	<div class="spacer" />	
+
+	<s:link view="/cases/edtexamdst.xhtml" style="float:right;"
+		rendered="#{caseHome.canEditExams}" styleClass="button-alt">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h2>#{messages['cases.examdst']}</h2>
 	<h:panelGroup id="pnldst">	
-	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:20px;">
-		<ui:param name="showfooter" value="0" />
-		<ui:define name="header">
-			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexamdst.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
-				<f:param name="id" value="#{tbcase.id}"/>
-				<f:param name="examid" value="#{null}"/>
-			</s:link>
-			<b>#{messages['cases.examdst']}</b>
-		</ui:define>
-		
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examDSTTable.allResults}" />
 		<s:fragment rendered="#{not empty examDSTTable.allResults}">
-		<div>
-		<table class="tabela4" width="100%">
+		<table class="table1" width="100%">
 		<tr>
 		<th>
 			#{messages['PatientSample.dateCollected']}
@@ -321,30 +302,25 @@
 		</s:fragment>
 		</a:repeat>
 		</table>
-		</div>
 		</s:fragment>
-	</s:decorate>
 	</h:panelGroup>
 	
 <a:jsFunction name="remExamDST" action="#{examDSTHome.remove}" reRender="pnldst" ajaxSingle="true"  rendered="#{caseHome.canEditExams}">
 	<a:actionparam name="param1" assignTo="#{examDSTHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
+	<div class="spacer" />
+
+	<s:link view="/cases/edtexamxray.xhtml" style="float:right;" styleClass="button-alt">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h2>#{messages['cases.examxray']}</h2>
 	<h:panelGroup id="pnlXRay">	
-	<s:decorate template="/layout/roundrect.xhtml" style="padding-top:20px;">
-		<ui:param name="showfooter" value="0" />
-		<ui:define name="header">
-			<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtexamxray.xhtml" style="float:right;">
-				<f:param name="id" value="#{tbcase.id}"/>
-				<f:param name="examid" value="#{null}"/>
-			</s:link>
-			<b>#{messages['cases.examxray']}</b>
-		</ui:define>
-		
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examXRayHome.allResults}" />
-		<div>
 		<h:dataTable value="#{examXRayHome.allResults}" var="r" rendered="#{not empty examXRayHome.allResults}" width="100%" 
-			styleClass="tabela4" columnClasses="colb,colb,colb,colb,colcb">
+			styleClass="table1" columnClasses="colb,colb,colb,colb,colcb">
 			<h:column>
 				<f:facet name="header">#{messages['global.month']}</f:facet>
 				<s:link view="/cases/edtexamxray.xhtml" propagation="none" >
@@ -384,12 +360,8 @@
 				</h:commandLink>
 			</h:column>			
 		</h:dataTable>
-		</div>
-	</s:decorate>
 	</h:panelGroup>
 	
-	<p/>	
-
 <a:jsFunction name="remExamXRay" action="#{examXRayHome.remove}" reRender="pnlXRay" >
 	<a:actionparam name="param1" assignTo="#{examXRayHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
@@ -398,21 +370,18 @@
 	<a:actionparam name="param1" assignTo="#{molecularBiologyHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
+	<div class="spacer" />
+
+	<s:link view="/custom/br/cases/edtmolecularbiology.xhtml" style="float:right;" styleClass="button-alt">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h2>#{messages['pt_BR.MolecularBiology']}</h2>
 	<h:panelGroup id="pnlMolecularBiology">	
-	<s:decorate template="/layout/roundrect.xhtml" style="padding-top:20px;">
-		<ui:param name="showfooter" value="0" />
-		<ui:define name="header">
-			<s:link value="#{messages['cases.details.newresult']}" view="/custom/br/cases/edtmolecularbiology.xhtml" style="float:right;">
-				<f:param name="id" value="#{tbcase.id}"/>
-				<f:param name="examid" value="#{null}"/>
-			</s:link>
-			<b>#{messages['pt_BR.MolecularBiology']}</b>
-		</ui:define>
-		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examXRayHome.allResults}" />
-		<div>
+		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty molecularBiologyHome.allResults}" />
 		<h:dataTable value="#{molecularBiologyHome.allResults}" var="r" rendered="#{not empty molecularBiologyHome.allResults}" width="100%" 
-			styleClass="tabela4" columnClasses="colb,colb,colb,colb,colcb">
+			styleClass="table1" columnClasses="colb,colb,colb,colb,colcb">
 			<h:column>
 				<f:facet name="header">#{messages['cases.exams.date']}</f:facet>
 				<s:link view="/custom/br/cases/edtmolecularbiology.xhtml" propagation="none" >
@@ -455,14 +424,9 @@
 				</h:commandLink>
 			</h:column>			
 		</h:dataTable>
-		</div>
-	</s:decorate>
+	</h:panelGroup>
 
 	<s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="exams" />
 	</s:decorate>
-	</h:panelGroup>
-	
-	<p/>	
-
 </ui:composition>

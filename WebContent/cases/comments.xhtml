@@ -7,26 +7,25 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<h:panelGroup id="#{panel}pnlComments" >
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;" 
-		rendered="#{caseCommentsHome.displayComments}">
+	<h:panelGroup id="#{panel}pnlComments" styleClass="form1">
+	<s:fragment rendered="#{caseCommentsHome.displayComments}"> 
+	<div class="form-content">
+		
 
-		<ui:define name="header">
-			<b>#{messages['global.comments']}</b>
-			<br/>
-			<table width="100%"><tr><td>
+	<h2>#{messages['global.comments']}</h2>
+			<table width="100%">
+			<tr><td>
 			<s:fragment rendered="#{s:hasRole('CASE_COMMENTS')}">
 				<h:inputTextarea value="#{caseComment.comment}" style="width:500px;height:50px;float:left;"/>
-				<a:commandButton value="#{messages['cases.comments.add']}" style="width:200px" 
-					styleClass="button" 
+				<a:commandLink style="float:right" 
+					styleClass="button-alt" 
 					action="#{caseCommentsHome.addComment}" 
-					reRender="#{panel}pnlComments"/>
+					reRender="#{panel}pnlComments">
+					<span>#{messages['cases.comments.add']}</span>
+				</a:commandLink>
 			</s:fragment>
 			</td></tr>
 			</table>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
 		
 		<h:dataTable value="#{caseCommentsHome.comments}" var="it" >
 			<h:column >
@@ -60,7 +59,8 @@
 			
 		</h:dataTable>
 		
-	</s:decorate>    
-
+	</div>
+	</s:fragment>
+	
 	</h:panelGroup>
 </ui:composition>

@@ -7,22 +7,22 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.details.newconsult']}" />
-<ui:param name="waitdlg" value="1" />
-
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:180px;" />
 
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 
 <a:loadScript src="/js/util.js"/>
 
 <s:decorate template="/layout/casebody.xhtml">
-	<ui:param name="pagewidth" value="800px" />
-	<a:form id="formexam" >
+	<a:form id="formexam" styleClass="form1">
+
+	<div class="form-content">
     <table width="100%" cellspacing="0" cellpadding="0">
     <tr><td colspan="2">
 
@@ -132,21 +132,25 @@
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
     	<h:inputTextarea value="#{medicalExaminationBR.comments}" style=" width : 500px;height:100px;" />
     </s:decorate>
-
+	
 	</td></tr>
-    <tr><td align="right" colspan="2">
-		<div style="float:left;">
+	</table>
+	
+	</div>
+	<div class="form-footer">
+		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandButton action="#{caseDataBRHome.saveMedicalExamination}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam" 
+            <a:commandLink action="#{caseDataBRHome.saveMedicalExamination}" styleClass="button" reRender="formexam" 
             	oncomplete="this.disabled=false;"
-            	onclick="this.disabled=true;" />
-            <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel" propagation="end">
+            	onclick="this.disabled=true;" >
+            	<span>#{messages['form.save']}</span>
+            </a:commandLink>
+            <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
             	<f:param name="id" value="#{caseHome.id}"/>
-            </s:button>
-    </td></tr>
-    
-    </table>
+            	<span>#{messages['form.cancel']}</span>
+            </s:link>
+	</div>
     
 	</a:form>
 </s:decorate>

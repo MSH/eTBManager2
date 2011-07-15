@@ -8,7 +8,7 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 	<a:repeat value="#{caseFilters.classifications}" var="it">
-		<span style="margin-right:20px;">
+		<span style="margin-center:20px;">
 			<h:selectBooleanCheckbox value="#{it.selected}">
 				<a:support event="onclick" ajaxSingle="true" reRender="pnlhealthunits"/>
 			</h:selectBooleanCheckbox>
@@ -16,35 +16,34 @@
 		</span>
 	</a:repeat>
 
+	<a:repeat value="#{healthUnitsQuery.adminUnits}" var="adm">
 	<table class="table1" width="100%">
-	<a:repeat value="#{healthUnitsQueryBR.adminUnits}" var="adm">
 		<tr><th colspan="6">
-			<b style="text-transform: uppercase;">#{adm.adminUnit.name}</b>
+			<div class="text-big">#{adm.adminUnit.name}</div>
 		</th></tr>
 		<tr>
 			<th>#{messages['cases.healthUnit']}</th>
-			<th align="right">#{messages['CaseState.ONTREATMENT']}</th>
-			<th align="right">#{messages['cases.trasnferin']}</th>
-			<th align="right">#{messages['cases.trasnferout']}</th>
-			<th align="right">#{messages['cases.medexammissing']}</th>
+			<th align="center">#{messages['CaseState.ONTREATMENT']}</th>
+			<th align="center">#{messages['cases.trasnferin']}</th>
+			<th align="center">#{messages['cases.trasnferout']}</th>
+			<th align="center">#{messages['cases.medexammissing']}</th>
 			<th></th>
 		</tr>		
 		<a:repeat value="#{adm.items}" var="it">
 		<tr>
 			<td><div class="hu-icon">#{it.unitName}</div></td>
-			<td align="right">#{it.casesOnTreatment==null?'-':it.casesOnTreatment}</td>
-			<td align="right">#{it.casesTransferIn==null?'-':it.casesTransferIn}</td>
-			<td align="right">#{it.casesTransferOut==null?'-':it.casesTransferOut}</td>
-			<td align="right">#{it.medExamMissing==null?'-':it.medExamMissing}</td>
+			<td align="center">#{it.casesOnTreatment==null?'-':it.casesOnTreatment}</td>
+			<td align="center">#{it.casesTransferIn==null?'-':it.casesTransferIn}</td>
+			<td align="center">#{it.casesTransferOut==null?'-':it.casesTransferOut}</td>
+			<td align="center">#{it.medExamMissing==null?'-':it.medExamMissing}</td>
 			<td align="center"><s:link value="#{messages['cases.mantreatment']}" view="/cases/treatments.xhtml">
 					<f:param name="huid" value="#{it.unitId}"/>
 				</s:link> 
 			</td>
 		</tr>
 		</a:repeat>
-		<tr><td style="background-color:transparent;" colspan="5"><rich:spacer />
-		</td></tr>
-	</a:repeat>
 	</table>
+	<div class="spacer" />
+	</a:repeat>
     
 </ui:composition>

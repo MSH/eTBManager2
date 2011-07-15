@@ -98,7 +98,7 @@
 	</s:decorate>
 
 	<s:fragment rendered="#{forecasting.view == 'TBUNIT'}">
-    <span class="paragraph">#{messages['Tbunit']}</span>
+    <h2>#{messages['Tbunit']}</h2>
 	<s:decorate template="/layout/tbselection.xhtml">
 		<ui:param name="tbunitselection" value="#{forecastingHome.tbunitSelection}" />
 		<ui:define name="events">

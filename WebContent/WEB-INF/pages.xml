@@ -30,6 +30,7 @@
 	</page>
 
     <page view-id="*" action="#{onlineUsers.update}">
+    	<param name="lang" value="#{localeSelector.localeString}"/>
         <navigation>
             <rule if-outcome="home">
                 <redirect view-id="/home.xhtml"/>
@@ -39,6 +40,11 @@
             </rule>
             <rule if-outcome="medman-cancelled">
             	<redirect view-id="/medicines/index.xhtml" />
+            </rule>
+            <rule if-outcome="workspacechanged">
+            	<redirect view-id="/home.xhtml">
+					<message>#{messages['usersettings.workspacechanged']}</message>
+            	</redirect>
             </rule>
         </navigation>
     </page>

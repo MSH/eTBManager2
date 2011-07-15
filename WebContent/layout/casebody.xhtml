@@ -7,9 +7,8 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-<table width="#{pagewidth==null?'100%':pagewidth}" class="tabela3">
-<tr><td class="header">
 	<div class="#{tbcase.patient.gender=='MALE'?'male-icon':'female-icon'}">
+
 	<div style="float:right">
 		<h:outputText value="#{messages[tbcase.state.key]}" styleClass="status-label" />
 		<s:fragment rendered="#{not tbcase.open}">
@@ -29,12 +28,7 @@
 		<ui:insert name="casenumber" />
 	</div>
 	</div>
-</td></tr>
-<tr><td style="padding-top:5px;">
 
 	<ui:insert />
-
-</td></tr>
-</table>
 
 </ui:composition>

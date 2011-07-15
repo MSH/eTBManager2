@@ -8,36 +8,34 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.mantreatment']}" />
 <ui:param name="topmenu" value="0" />
-<ui:param name="waitdlg" value="1" />
 
 <ui:define name="naveg"  >
 	<s:link value="#{messages['cases']}" view="/cases/index.xhtml" propagation="none"/>
 </ui:define>
 
-<ui:define name="menu_lateral">
-<h:form>
-	<a:commandLink value="#{messages['cases.treat.dispedt']}" onclick="showMonthYearSelectionDlg(); return false;" 
+<ui:define name="left">
+<h:form styleClass="vertical-menu">
+	<a:commandLink onclick="showMonthYearSelectionDlg(); return false;" 
 	   rendered="#{not empty treatmentsInfoHome.groups}">
+	   <span>#{messages['cases.treat.dispedt']}</span>
 	</a:commandLink>
 </h:form>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form>
 
-<s:decorate template="/layout/roundrect.xhtml" style="width:750px;margin-top:10px;">
-	<ui:param name="showfooter" value="0" />
-	<ui:param name="showheader" value="0" />
-	
-	<div class="hu-icon" style="margin-bottom:10px;display:block;">
-		<b>#{treatmentsInfoHome.tbunit.name}</b><br/>
-		<h:outputText value="#{treatmentsInfoHome.tbunit.adminUnit.parent.name} - " rendered="#{not empty treatmentsInfoHome.tbunit.adminUnit.parent}" />
-		#{treatmentsInfoHome.tbunit.adminUnit.name}
-	</div>
+	<div class="spacer" />
+	<div class="hu-icon"/>
+	<div class="text-big">#{treatmentsInfoHome.tbunit.name}</div>
+	<h:outputText value="#{treatmentsInfoHome.tbunit.adminUnit.parent.name} - " rendered="#{not empty treatmentsInfoHome.tbunit.adminUnit.parent}" />
+	#{treatmentsInfoHome.tbunit.adminUnit.name}
+	<div class="spacer" />
 
 	<table style="width:99%;z-index: 100;" class="table1" >
 	<a:repeat var="grp" value="#{treatmentsInfoHome.groups}">
@@ -94,7 +92,6 @@
 	</a:repeat>
 	</a:repeat>
 	</table>
-</s:decorate>
 
 </h:form>
 
