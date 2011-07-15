@@ -4,7 +4,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib">
-
+ 
 	<div class="vertical-menu">
      <s:link view="/admin/websessions.xhtml" value="#{messages['admin.websessions']}" propagation="none" rendered="#{s:hasRole('ONLINE')}" />
      <s:link view="/admin/repusersession.xhtml" value="#{messages['admin.reports.usersession']}" propagation="none" rendered="#{s:hasRole('USERSESREP')}"/>
