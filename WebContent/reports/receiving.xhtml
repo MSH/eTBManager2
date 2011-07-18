@@ -13,7 +13,7 @@
 <ui:param name="labelstyle" value="width:200px;" />
 <ui:param name="showunit" value="1" />
 
-<ui:define name="body">
+<ui:define name="content">
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{medicineReceiving.id}" />
@@ -36,7 +36,7 @@
     	</h:outputText>
     </s:decorate>
 
-	<table width="100%" class="tabela" >
+	<table width="100%" class="table1" >
 		<tr><th align="left">#{messages['Medicine']}/<br/>
 				#{messages['Batch.batchNumber']}</th>
 				<th align="left">#{messages['Batch.brandName']}</th>

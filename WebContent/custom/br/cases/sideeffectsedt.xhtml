@@ -7,15 +7,15 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.sideeffects']}" />
-<ui:param name="waitdlg" value="1" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
 
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 
 <rich:jQuery selector="document" query="ready(function() {updateRows();})" />
 
@@ -29,11 +29,11 @@ function checkClick(obj) {
 }
 
 function updateRows() {
-jQuery("#tblse tr").removeClass("activerow");
+jQuery("#tblse tr").removeClass("highlight");
 jQuery("#tblse tr input[type='text'],select").hide();
 jQuery("#tblse tr:has(:checked) input[type='text']").show();
 jQuery("#tblse tr:has(:checked) select").show();
-jQuery("#tblse tr:has(:checked)").addClass("activerow");
+jQuery("#tblse tr:has(:checked)").addClass("highlight");
 }
 
 function validateForm() {
@@ -70,15 +70,14 @@ function validateYesNo(cb) {
 	}
 }
 </script>
-<p/>
-<h:form id="main">
+<h:form id="main" styleClass="form1">
 
 <s:decorate template="/layout/casebody.xhtml">
 
 <table width="100%">
 <tr><td>
 	<div id="tblse">
-	<h:dataTable value="#{sideEffectHome.items}" var="it" width="100%" styleClass="tabela">
+	<h:dataTable value="#{sideEffectHome.items}" var="it" width="100%" styleClass="table1">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
@@ -113,16 +112,18 @@ function validateYesNo(cb) {
 	</div>
 
 </td></tr>
-<tr><td align="right">
-	<h:commandButton action="#{sideEffectHome.save}" value="#{messages['form.ok']}" styleClass="button" onclick="if (!validateForm()) {return false;} else openWaitDlg();"/> 
-    <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel" propagation="end">
-       	<f:param name="id" value="#{caseHome.id}"/>
-    </s:button>
-</td></tr>
 </table>
-</s:decorate>
 
-<p/>
+<div class="form-footer">
+	<h:commandLink action="#{sideEffectHome.save}" styleClass="button" onclick="if (!validateForm()) {return false;} else openWaitDlg();">
+		<span>#{messages['form.save']}</span>
+	</h:commandLink> 
+    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+       	<f:param name="id" value="#{caseHome.id}"/>
+       	<span>#{messages['form.cancel']}</span>
+    </s:link>
+</div>
+</s:decorate>
 
 </h:form>
 

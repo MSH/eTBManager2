@@ -6,16 +6,16 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{messages['form.data_edit']} - #{messages['UserProfile']}" />
 <ui:param name="topmenu" value="3" />
 
 
-<ui:define name="body">
+<ui:define name="content">
 <s:fragment rendered="#{empty profileHome.roles}">
 <div class="warn">No permission available to edit/create profile</div>
-<s:button view="/admin/profiles.seam" value="#{messages['form.return']}" styleClass="button" />
+<s:link view="/admin/profiles.seam" value="#{messages['form.return']}" styleClass="button" />
 </s:fragment>
 <h:form id="main" rendered="#{not empty profileHome.roles}">
     <table class="tabela3" width="750px">
@@ -35,7 +35,7 @@
     </td></tr>
 	<tr><td>
 
-	<div style="width:740px;" class="tabela">
+	<div style="width:740px;" class="table1">
 	<div class="header">
 		#{messages['UserPermission']}
 		<div class="checkbox">
@@ -107,10 +107,10 @@ function permissionClickHandler(checkbox, divname) {
 
 	</td></tr>
 	<tr><td align="right">
-            <h:commandButton action="#{profileHome.persist}" value="#{messages['form.ok']}" styleClass="button"/>  
-            <s:button view="/admin/profiles.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" >
+            <h:commandLink action="#{profileHome.persist}" value="#{messages['form.ok']}" styleClass="button"/>  
+            <s:link view="/admin/profiles.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" >
             	<f:param name="id" value="#{null}" />
-            </s:button>
+            </s:link>
     </td></tr>
     </table>
 

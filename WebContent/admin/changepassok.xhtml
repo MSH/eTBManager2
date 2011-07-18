@@ -6,18 +6,18 @@
       xmlns:t="http://myfaces.apache.org/tomahawk"
       xmlns:si="http://jboss.com/products/seam/selectitems/taglib"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:composition template="..#{workspaceViewService.templatePage}">
+    <ui:composition template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{messages['changepwd']}" />
 
         
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
-<table class="tabela" width="500px" cellpadding="10">
+<table class="table1" width="500px" cellpadding="10">
    <tr><td style="padding-left:20px;"><b>#{messages['changepwd.success1']}</b>
    <p/>#{messages['changepwd.success2']}
    </td></tr>
-   <tr><td align="right"><h:commandButton action="home" value="#{messages['form.ok']}"  styleClass="button" ></h:commandButton> </td></tr>
+   <tr><td align="right"><h:commandLink action="home" value="#{messages['form.ok']}"  styleClass="button" ></h:commandLink> </td></tr>
 </table>
 </h:form>
 </ui:define>

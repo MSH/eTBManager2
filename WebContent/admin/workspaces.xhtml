@@ -7,7 +7,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-                template="..#{workspaceViewService.templatePage}">
+                template="/layout/template_new.xhtml">
 
 <ui:param name="topmenu" value="3" />
 <ui:param name="title" value="#{messages['admin.workspaces']}" />
@@ -16,18 +16,18 @@
 	<s:link value="#{messages['configuracoes']}" view="/admin/index.xhtml" propagation="none" />
 </ui:define>
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 
 	<p/>
-	<s:button view="/admin/workspaceedt.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{s:hasRole('WORKSPACES_EDT')}">
+	<s:link view="/admin/workspaceedt.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{s:hasRole('WORKSPACES_EDT')}">
 		<f:param name="id" value="#{null}"/>
-	</s:button>
+	</s:link>
 	
-	<h:dataTable id="tbl" value="#{workspaces.resultList}" var="r" width="650px" styleClass="tabela" rowClasses="lin1,lin2" 
+	<h:dataTable id="tbl" value="#{workspaces.resultList}" var="r" width="650px" styleClass="table1" rowClasses="lin1,lin2" 
 		columnClasses="coll,coll,coll" rendered="#{workspaces.resultCount>0}" >
 	<h:column>
 		<f:facet name="header">

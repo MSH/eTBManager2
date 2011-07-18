@@ -6,14 +6,14 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{messages['admin.setup']} #{defaultWorkspace.name}" />
 <ui:param name="topmenu" value="3" />
 
 <ui:param name="labelstyle" value="width:170px" />
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main" enctype="multipart/form-data">
 	<table width="750px" style="border:2px solid #f0f0f0" ><tr><td>
 	
@@ -113,8 +113,8 @@
     </s:decorate>
 	
 	</td></tr><tr><td align="right">
-		<h:commandButton action="#{workspaceHome.saveDefaultworkspace}" value="#{messages['form.ok']}" styleClass="button" />
-		<s:button view="/admin/index.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" />
+		<h:commandLink action="#{workspaceHome.saveDefaultworkspace}" value="#{messages['form.ok']}" styleClass="button" />
+		<s:link view="/admin/index.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" />
 	</td></tr></table>
 </h:form>
 </ui:define>

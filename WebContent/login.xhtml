@@ -14,7 +14,7 @@
 <meta http-equiv="expires" content="0" />
 <meta http-equiv="keywords" content="e-TB Manager,TB,Tuberculosis,DR-TB,MSH" />
 <meta http-equiv="description" content="e-TB Manager" />
-<a:loadStyle src="/public/themes/default/skin.css" />  
+<a:loadStyle src="/public/themes/green/skin.css" />  
 </head>
     
 <body>
@@ -29,7 +29,7 @@
   <tr>
     <td width="229px" height="186" style="background:transparent url('public/images/toploginme.jpg') top left no-repeat"></td>
     <td width="471px" height="186" valign="top" style="background-image:url('public/images/toploginmd.jpg')">
-	<h:form>
+	<h:form id="main">
 	<table width="471" border="0">
       <tr>
         <td colspan="2"><div align="left"><font color="#FFFFFF"><strong>#{messages['login.msg1']}</strong></font></div></td>
@@ -44,15 +44,20 @@
       </tr>
       <tr>
         <td colspan="2">
-        	<h:commandButton id="btnOk" value="#{messages['login.enter']}" action="#{identity.login}" styleClass="button" onclick="openWaitDlg();"/> 
+        	<a:commandLink id="btnOk" styleClass="button" onclick="execLogin(); return false;">
+        		<span>#{messages['login.enter']}</span>
+        	</a:commandLink> 
         	<h:selectBooleanCheckbox id="rememberMe" value="#{rememberMe.enabled}"/>#{messages['login.rememberme']}
         </td>
 			<rich:jQuery timming="onload" selector="#nome" query="focus()" />
-			<rich:hotKey selector="#nome" key="return" handler="#{rich:element('btnOk')}.click();" /> 
+			<a:jsFunction name="execLogin" action="#{identity.login}" reRender="messages" />
+			<rich:hotKey selector="#main input" key="return" handler="execLogin();" /> 
         </tr>
       <tr>
         <td colspan="2">
-        	<h:messages styleClass="warn" layout="table" style="background-color:#fff;margin-top:10px;"/>
+        	<h:panelGroup id="messages">
+        		<h:messages styleClass="warn" layout="table" style="background-color:#fff;margin-top:10px;"/>
+        	</h:panelGroup>
         </td>
       </tr>
     </table>
@@ -124,6 +129,7 @@
   </div>
 
 <ui:include src="/layout/waitdlg.xhtml" />
+<a:status onstart="openWaitDlg();" onstop="closeWaitDlg();"></a:status>
  
 </f:view></div>
 </h:panelGroup> 

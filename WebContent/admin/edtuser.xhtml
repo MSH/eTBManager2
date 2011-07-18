@@ -6,16 +6,16 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{user.id==null? messages['form.new']: messages['form.edit']} - #{messages['User']}" />
 <ui:param name="topmenu" value="3" />
 
 <ui:param name="waitdlg" value="1" />
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
-    <table class="tabela" width="550px">
+    <table class="table1" width="550px">
     <tr><td colspan="2">
     <s:decorate template="/layout/edit.xhtml" rendered="#{user.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
@@ -110,17 +110,17 @@
     </td></tr>
     <tr>
     	<td>
-			<a:commandButton value="#{messages['admin.users.newpasswd']}" action="#{userHome.sendNewPassword}" styleClass="button" style="width:150px"
+			<a:commandLink value="#{messages['admin.users.newpasswd']}" action="#{userHome.sendNewPassword}" styleClass="button" style="width:150px"
 				onclick="if (!confirm('#{messages['admin.users.confirmnewpass']}')) return false;" 
 				reRender="main,messages"
 				rendered="#{userHome.managed}"
 				/>
     	</td>
     	<td align="right">
-            <a:commandButton action="#{userHome.persist}" value="Ok" styleClass="button" reRender="main" />
-            <s:button action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel">
+            <a:commandLink action="#{userHome.persist}" value="Ok" styleClass="button" reRender="main" />
+            <s:link action="cancel" value="#{messages['form.cancel']}" styleClass="button-alt">
             	<f:param name="id" value="#{null}" />
-            </s:button>
+            </s:link>
     </td></tr>
     </table>
 

@@ -11,7 +11,7 @@
 
 
 <rich:tab id="tabresult" label="#{messages['manag.forecast.tabres1']}" rendered="#{forecasting.hasResult and facesContext.renderResponse}">
-	<table class="tabela">
+	<table class="table1">
 	<tr>
 		<th rowspan="2">
 			#{messages['Medicine']}
@@ -148,7 +148,7 @@
 
 
 <rich:tab label="#{messages['manag.forecast.tabres2']}" rendered="#{forecasting.hasResult and facesContext.renderResponse}">
-<table width="100%" class="tabela">
+<table width="100%" class="table1">
 <tr>
 	<th colspan="2">#{messages['Medicine']}
 	</th>
@@ -244,7 +244,7 @@
 
 
 <rich:tab label="#{messages['manag.forecast.tabres3']}" rendered="#{forecasting.hasResult and facesContext.renderResponse}">
-<table width="100%" class="tabela">
+<table width="100%" class="table1">
 
 <tr>
 	<th colspan="2">#{messages['Regimen']}
@@ -397,7 +397,7 @@
 	</s:decorate>
 
 	<h:panelGroup id="pnldetails">
-	<h:dataTable value="#{forecastingView.medicine.periods}" var="p" styleClass="tabela" 
+	<h:dataTable value="#{forecastingView.medicine.periods}" var="p" styleClass="table1" 
 		rendered="#{not empty forecastingView.medicine.periods}" columnClasses="colb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colrb">
 		<h:column>
 			<f:facet name="header">

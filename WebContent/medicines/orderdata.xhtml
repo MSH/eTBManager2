@@ -8,7 +8,7 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['Order']} # #{order.id}" />
 <ui:param name="topmenu" value="1" />
@@ -29,7 +29,7 @@
 </ui:define>
 
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<h:form>
 	<a:commandLink action="#{orderHome.remove}" value="#{messages['medicines.orders.remove']}"
 		ajaxSingle="true" 
@@ -63,7 +63,7 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 <table width="100%">
 <tr><td></td>
@@ -162,7 +162,7 @@
 		#{s.source.name}
 	</td></tr>
 	<tr><td>
-		<h:dataTable value="#{s.items}" var="it" class="tabela" width="100%" columnClasses="coll,colc,colr,colr,colr,colr,colr,colr" rowClasses="lin1,lin2">
+		<h:dataTable value="#{s.items}" var="it" class="table1" width="100%" columnClasses="coll,colc,colr,colr,colr,colr,colr,colr" rowClasses="lin1,lin2">
 			<h:column>
 				<f:facet name="header"><h:outputText value="#{messages['Medicine']}" styleClass="collh"/></f:facet>
 				<h:outputText value="#{it.item.medicine}" styleClass="medicine-icon" />
@@ -228,7 +228,7 @@
 		#{s.source.name}
 	</td></tr>
 <tr><td>
-<table width="100%" class="tabela">
+<table width="100%" class="table1">
 	<tr><th colspan="2">#{messages['Medicine']}
 		</th>
 		<th style="text-align:right;">
@@ -288,7 +288,7 @@
 	<a:repeat value="#{orderSources}" var="s">
 	<tr><th class="colheader">#{s.source.name}  </th></tr>
 	<tr><td>
-		<table width="100%" class="tabela">
+		<table width="100%" class="table1">
 			<tr><th><h:outputText value="#{messages['Medicine']}" styleClass="collh" /></th>
 				<th align="center">#{messages['Batch.expiryDate']}</th>
 				<th align="right">#{messages['Batch.numContainers']}</th>

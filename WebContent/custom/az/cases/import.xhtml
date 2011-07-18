@@ -7,15 +7,15 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.import']}" />
 <ui:param name="topmenu" value="1" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 
 <s:decorate template="/layout/roundrect.xhtml" style="margin-top:20px;">
 	<ui:param name="showheader" value="0" />
@@ -43,7 +43,7 @@
     </s:decorate>
 
 	<p/>
-	<h:commandButton action="#{az.importDataHome.execute}" value="#{messages['form.import']}" styleClass="button" />
+	<h:commandLink action="#{az.importDataHome.execute}" value="#{messages['form.import']}" styleClass="button" />
 	
 </h:form>
 

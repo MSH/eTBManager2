@@ -5,6 +5,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib">
 
+	<div class="vertical-menu">
 	<s:fragment rendered="#{userSession.medicineManagementStarted}">
 	
 	<s:link value="#{messages['medicines.medicinerecs']}" view="/medicines/receivings.xhtml" propagation="none" rendered="#{userSession.canCheckReceiving}"/>
@@ -19,7 +20,7 @@
 	<s:link value="#{messages['medicines.movs']}" view="/medicines/movements.xhtml" propagation="none" rendered="#{userSession.canCheckMovements}"/>
 	<s:link value="#{messages['manag.rel2']}" view="/medicines/releststockpos.xhtml" rendered="#{userSession.canViewEstPositionReport}"/>
 	<s:link value="#{messages['manag.rel3']}" view="/medicines/relstockevol.xhtml" rendered="#{userSession.canViewStockEvolutionReport}"/>
-	<s:link value="#{messages['manag.rel5']}" view="/medicines/reltreatcost.xhtml" rendered="#{userSession.canViewCostPatientReport}"/>
+	<s:link value="#{messages['manag.rel5']}" view="/medicines/reltreatcost.xhtml" rendered="false" />
 	
 
 	<s:fragment rendered="false">
@@ -30,4 +31,5 @@
 	</s:fragment>
 	
 	</s:fragment>
+	</div>
 </ui:composition>

@@ -50,8 +50,12 @@ select {font-size:1em; }
 .text-small {
 	font-size:0.9em;
 }
+.text-medium {
+	font-size:1.2em;
+}
 .text-big {
-	font-size:1.4em;
+	font-size:1.7em;
+	margin-bottom:2px;
 }
 .text {
 	font-family:Courier New;
@@ -514,6 +518,11 @@ font-weight:bold;
 	background-color:#c8e0d6;
 	color:#073d07;
 }
+.table1 .inactive {
+	background-color:#ffffff;
+	color:#e0e0e0;
+	border:1px solid #f0f0f0;
+}
 
 
 
@@ -556,9 +565,8 @@ font-weight:bold;
 	background-color:#c1d6c1;
 }
 
-.colr {
-	text-align:right;
-}
+.small th {	padding:1px;}
+.small td {	padding:1px;}
 
 .collh {text-align:left; display:block; padding-right:5px;}
 .colrh {text-align:right; display:block; padding-left:5px;}
@@ -768,7 +776,8 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 
 /* ICONS */
 
-.icon-user-header, .icon-bullet-menu, .dst-resistant, .dst-contaminated, .dst-susceptible, .tag-icon, .delete-icon {
+.icon-user-header, .icon-bullet, .icon-bullet-menu, .dst-resistant, .dst-contaminated, .dst-susceptible, 
+.tag-icon, .delete-icon, .male-icon, .female-icon, .new-icon {
 	background-image: url('images/icons.png');
 	width:16px;
 	height:16px;
@@ -776,32 +785,32 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	display:inline-block;
 }
 
+.male-icon {
+	width:32px;
+	height:32px;
+	background-position:-64px 0px;
+}
+
+.female-icon {
+	width:32px;
+	height:32px;
+	background-position:-96px 0px;
+}
+
 .icon-bullet-menu {
 	margin-right:8px;
 	background-position:-32px -48px;
 }
+.icon-bullet {	background-position:-32px -48px; }
+.icon-user-header {	background-position:-16px -48px; }
 
-.icon-user-header {
-	background-position:-16px -48px;
-}
+.dst-susceptible {	background-position:0px -80px;  }
+.dst-resistant { background-position:-16px -80px;  }
+.dst-contaminated {	background-position:-32px -80px;  }
 
-.dst-susceptible {
-	background-position:0px -80px;
-}
-.dst-resistant {
-	background-position:-16px -80px;
-}
-.dst-contaminated {
-	background-position:-32px -80px;
-}
+.tag-icon {	background-position:-48px -48px;  }
 
-.tag-icon {
-	background-position:-48px -48px;
-}
-
-.delete-icon {
-	background-position:0px -16px;
-}
+.delete-icon {	background-position:0px -16px; }
 
 /* RICHFACES */
 
@@ -861,3 +870,70 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .rich-tbpnl-tb-sel {
 	background-color:#afcfc1;
 }
+
+
+
+/* TREATMENT */
+
+.bar, .bar-active, .bar-header, .bar-header-active, .intensivephase-bar, .continuousphase-bar {
+	position:relative;
+	float:left;
+	height:25px;
+	color: black;
+	cursor:pointer;
+	display:inline;
+}
+.bar 		{	font-weight: bold; background:transparent url(images/bar-body.png) repeat-x top; }
+.bar-active {	font-weight: bold; background:transparent url(images/bar-body.png) repeat-x bottom; }
+.bar-left, .bar-left-active, .bar-right, .bar-right-active { height:25px;	cursor:pointer; }
+.bar-left 		{	background:transparent url(images/bar-left.png) no-repeat left top;}
+.bar-left-active{	background:transparent url(images/bar-left.png) no-repeat left bottom; }
+.bar-right {	background:transparent url(images/bar-right.png) no-repeat right top;}
+.bar-right-active {	background:transparent url(images/bar-right.png) no-repeat right bottom;}
+.bar-header {	background:#f0f0f0; }
+.bar-header-active {	background-color:#d0d0d0; }
+
+.bar-caption {
+	margin-left:4px;
+	padding-top:4px;
+	font-size:10px;
+}
+
+.treatment-header {
+	border-bottom:1px solid #6FA977;
+}
+
+.intensivephase-bar {	background-color:#f7744c; color:white; font-weight:bold; }
+.intensivephase-bar:hover {	background-color:#c4512e; color:white; }
+
+.continuousphase-bar { 	background-color:#f7e54c; font-weight:bold; }
+.continuousphase-bar:hover { background-color:#c3b00a; }
+
+.popup,.popup-long {
+	background:transparent url(images/popuphint.png) no-repeat left top;
+	position:absolute;
+	width:284px;
+	z-index:2;
+	display:none;
+	font-style: normal;
+	font-weight: normal;
+	text-align: left;
+}
+.popup #bottom,.popup-long #bottom {
+	background:transparent url(images/popuphint.png) no-repeat left bottom;
+	position:absolute;
+	width:284px;
+	height:20px;
+}
+.popup #content, .popup-long #content {
+	padding:10px;
+	color:black;
+	position:relative;
+}
+.popup {	height:100px; top:-130px;}
+.popup #bottom {	top:100px;}
+.popup #content {top:-104px; }
+
+.popup-long { height:170px; top:-250px; }
+.popup-long #bottom {	top:170px; height:70px;}
+.popup-long #content {top:-170px; }

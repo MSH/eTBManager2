@@ -8,7 +8,7 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.mantreatment']}" />
 <ui:param name="topmenu" value="0" />
@@ -16,7 +16,7 @@
 
 
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
 
 <s:decorate template="/layout/roundrect.xhtml" style="width:750px;margin-top:10px;">
@@ -90,10 +90,10 @@
 	</table>
 	
 	<table width="100%"><tr><td align="right">
-	<a:commandButton value="#{messages['form.save']}" styleClass="button" action="#{registerDispensingHome.save}"/>
-	<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" view="/cases/treatments.xhtml">
+	<a:commandLink value="#{messages['form.save']}" styleClass="button" action="#{registerDispensingHome.save}"/>
+	<s:link value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end" view="/cases/treatments.xhtml">
 		<f:param name="huid" value="#{registerDispensingHome.tbunitId}"/>
-	</s:button>
+	</s:link>
 	</td></tr></table>
 	</h:panelGroup>
 

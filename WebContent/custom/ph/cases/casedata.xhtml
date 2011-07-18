@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 
 <ui:param name="title" value="#{messages['cases.details']} - #{messages[tbcase.classification.key]}" />
@@ -22,7 +22,7 @@
 
 
 <ui:define name="left">
-	<h:panelGroup id="leftmenu" styleClass="menubv">
+	<h:panelGroup id="leftmenu" styleClass="vertical-menu">
 	<h:form>
 
 	<h:commandLink value="#{messages['form.remove']}" action="#{caseHome.remove}" onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" rendered="#{caseHome.canEditCaseData}">
@@ -94,7 +94,7 @@
 	</s:decorate>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 
 <h:form id="main">
 

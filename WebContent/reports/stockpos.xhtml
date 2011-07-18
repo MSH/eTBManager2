@@ -14,7 +14,7 @@
 <ui:param name="pagestyle" value="width:800px;" />
 <ui:param name="showunit" value="1" />
 
-<ui:define name="body">
+<ui:define name="content">
 	<s:decorate template="/layout/edit.xhtml" rendered="false">
 		<ui:define name="label">#{messages['ProductGroup']}:</ui:define>
 		#{stockPosHome.productGroup.name}
@@ -41,7 +41,7 @@
 </td></tr>
 <tr><td>
 <h:dataTable value="#{s.items}" var="r" rendered="#{stockPosHome.report.size != 0}" width="100%"
-  styleClass="tabela" rowClasses="lin1,lin2" columnClasses="coll,colr,colr,colc,colc" style="margin-bottom:10px;">
+  styleClass="table1" rowClasses="lin1,lin2" columnClasses="coll,colr,colr,colc,colc" style="margin-bottom:10px;">
 	<h:column>
 		<f:facet name="header">
 			<h:outputText value="#{messages['Medicine']}" styleClass="collh" />
@@ -96,7 +96,7 @@
 </td></tr>
 <tr><td>
 <h:dataTable value="#{stockPosHome.total.items}" var="r" rendered="#{stockPosHome.report.size != 0}" width="100%"
-  styleClass="tabela" rowClasses="lin1,lin2" columnClasses="coll,colr,colc,colc" style="margin-bottom:10px;">
+  styleClass="table1" rowClasses="lin1,lin2" columnClasses="coll,colr,colc,colc" style="margin-bottom:10px;">
 	<h:column>
 		<f:facet name="header">
 			<h:outputText value="#{messages['Medicine']}" styleClass="collh" action="#{stockPosHome.execute}" >
@@ -139,7 +139,7 @@
 <h:panelGroup rendered="#{stockPosHome.showBatch and stockPosHome.executing}">
 <h:outputText value="#{messages['form.norecordfound']}" rendered="#{batchesReport.resultCount == 0}" styleClass="warn" />
 <h:dataTable value="#{batchesReport.resultList}" var="r" rendered="#{batchesReport.resultCount > 0}" width="100%"
-  styleClass="tabela" rowClasses="lin1,lin2" columnClasses="#{empty userSelection.source?'coll,':''}coll,colc,coll,coll,colr,colr,colr,colr">
+  styleClass="table1" rowClasses="lin1,lin2" columnClasses="#{empty userSelection.source?'coll,':''}coll,colc,coll,coll,colr,colr,colr,colr">
 	<h:column rendered="#{empty userSelection.source}">
 		<f:facet name="header">
 			<s:link value="#{messages['Source']}" styleClass="collh" action="#{stockPosHome.execute}" >

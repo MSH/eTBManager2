@@ -6,14 +6,14 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="System Messages - Export to Excel" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 	<h:form >
 
 	<table width="500px">
@@ -37,7 +37,7 @@
 	</td></tr></table>
 
 	<p/>
-	<h:commandButton action="#{messagesExport.export}" value="Export to Excel" styleClass="button" style="width:250px"/>
+	<h:commandLink action="#{messagesExport.export}" value="Export to Excel" styleClass="button" style="width:250px"/>
 	
 	</h:form>
 </ui:define>

@@ -7,17 +7,17 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.tbunits']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
 <s:decorate id="sel" template="/layout/display.xhtml">
 	<ui:define name="label">#{unitspg.auselection.labelLevel1}:</ui:define>
@@ -37,9 +37,9 @@
 	</h:selectOneMenu>
 </s:decorate>                 
 
-<s:button view="/admin/edtunit.xhtml" value="#{messages['form.newf']}" styleClass="button" rendered="#{s:hasRole('TBUNITS_EDT')}">
+<s:link view="/admin/edtunit.xhtml" value="#{messages['form.newf']}" styleClass="button" rendered="#{s:hasRole('TBUNITS_EDT')}">
 	<f:param name="id" value="#{null}" />
-</s:button>
+</s:link>
 <p/>
 
 <h:panelGroup id="pnlunits">
@@ -51,7 +51,7 @@
 
 <b><h:outputText value="#{messages['form.norecordfound']}" rendered="#{allunits.resultCount == 0}" /></b>
 <h:dataTable id="tbl" value="#{unitspg.resultList}" var="r" border="0" columnClasses="colb,colb,colb,colcb"
-  styleClass="tabela" rowClasses="lin1,lin2" width="100%" rendered="#{unitspg.resultCount > 0}">
+  styleClass="table1" rowClasses="lin1,lin2" width="100%" rendered="#{unitspg.resultCount > 0}">
   <h:column>
   	<f:facet name="header">
   		<s:link value="#{messages['form.name']}" styleClass="collh">

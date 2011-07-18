@@ -6,14 +6,14 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.move.regtransferin']}" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main" rendered="#{caseHome.canTransferIn}">
 
 
@@ -26,7 +26,7 @@
 		<b>#{messages['TbCase.healthUnits']}</b>
 	</div>
 
-	<h:dataTable value="#{caseHome.treatmentHealthUnits}" var="hu" styleClass="tabela" width="100%">
+	<h:dataTable value="#{caseHome.treatmentHealthUnits}" var="hu" styleClass="table1" width="100%">
 		<h:column>
 			<f:facet name="header"><h:outputText value="#{messages['cases.healthUnit']}" styleClass="collh" /></f:facet>
 			#{hu.tbunit.name}
@@ -68,10 +68,10 @@
     
     </td></tr>
     <tr><td align="right">
-    	<h:commandButton action="#{caseMoveHome.transferIn}" value="#{messages['form.ok']}" styleClass="button" />
-    	<s:button view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" >
+    	<h:commandLink action="#{caseMoveHome.transferIn}" value="#{messages['form.ok']}" styleClass="button" />
+    	<s:link view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end" >
     		<f:param name="id" value="#{caseHome.id}" />
-    	</s:button>
+    	</s:link>
     </td></tr>
 	</table>
 </s:decorate>

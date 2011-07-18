@@ -7,7 +7,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{messages['form.data_edit']} - #{messages['Tbunit']}" />
 <ui:param name="topmenu" value="3" />
@@ -15,7 +15,7 @@
 <ui:param name="waitdlg" value="1" />
 <ui:param name="labelstyle" value="width:160px;" />
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
     <table width="650px" style="border:2px solid #e0e0e0;" cellpadding="4">
     <tr><td >
@@ -165,10 +165,10 @@
 
     </td></tr>
     <tr><td align="right" colspan="2">
-            <a:commandButton action="#{tbunitHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main"/>  
-            <s:button view="/admin/units.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end">
+            <a:commandLink action="#{tbunitHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main"/>  
+            <s:link view="/admin/units.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end">
             	<f:param name="id" value="#{null}" />
-            </s:button>
+            </s:link>
     </td></tr>
     </table>
 

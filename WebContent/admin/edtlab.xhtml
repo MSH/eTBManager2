@@ -7,7 +7,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{messages['admin.labs.new']}" />
 <ui:param name="topmenu" value="3" />
@@ -15,9 +15,9 @@
 <ui:param name="waitdlg" value="1" />
 <ui:param name="labelstyle" value="width:160px;" />
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
-    <table class="tabela" width="550px">
+    <table class="table1" width="550px">
     <tr><td>
     <s:decorate template="/layout/display.xhtml" rendered="#{laboratory.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
@@ -61,8 +61,8 @@
 
     </td></tr>
     <tr><td align="right" colspan="2">
-            <a:commandButton action="#{laboratoryHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main"/>  
-            <h:commandButton action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" immediate="true"/>  
+            <a:commandLink action="#{laboratoryHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main"/>  
+            <h:commandLink action="cancel" value="#{messages['form.cancel']}" styleClass="button-alt" immediate="true"/>  
     </td></tr>
     </table>
 

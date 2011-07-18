@@ -7,8 +7,8 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<div class="#{tbcase.patient.gender=='MALE'?'male-icon':'female-icon'}">
 
+	<div class="spacer" />
 	<div style="float:right">
 		<h:outputText value="#{messages[tbcase.state.key]}" styleClass="status-label" />
 		<s:fragment rendered="#{not tbcase.open}">
@@ -19,14 +19,13 @@
 		</s:fragment>
 		<ui:insert name="state-content" />
 	</div>
-	<div style="font-size:16px;font-weight:bold;">
-		#{tbcase.patient.fullName}
-		<br/>
-	</div>
-	<div style="font-size:12px;font-weight:bold;">
-		#{tbcase.displayCaseNumber}
+	<div>
+		<div class="#{tbcase.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;"/>
+		<div class="text-big">#{tbcase.patient.fullName}</div>
+		<div class="text-medium">#{tbcase.displayCaseNumber}</div>
 		<ui:insert name="casenumber" />
 	</div>
+	<div>
 	</div>
 
 	<ui:insert />

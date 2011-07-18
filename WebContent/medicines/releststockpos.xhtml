@@ -7,21 +7,20 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      template="#{workspaceViewService.templateMedPage}">
+      template="/layout/templatemed.xhtml">
 
 <ui:param name="title" value="#{messages['manag.rel2']}" />
 
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 <ui:param name="pagestyle" value="width:90%" />
-<ui:param name="waitdlg" value="1" />
 
 <ui:define name="naveg" >
 	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content_unit">
 <h:form id="main">
 <table width="100%">
 <tr><td>
@@ -37,13 +36,15 @@
 
 </td></tr>
 <tr><td align="right">
-	<a:commandButton value="#{messages['form.update']}" styleClass="button" reRender="main" action="#{estimatedStockReport.execute}"/>
+	<a:commandLink styleClass="button-alt" reRender="main" action="#{estimatedStockReport.execute}">
+		<span>#{messages['form.update']}</span>
+	</a:commandLink>
 </td></tr>
 </table>
 
 <div style="margin-top:10px;">
 <s:fragment rendered="#{not empty estimatedStockReport.itens}">
-<table class="tabela" style="margin-top:10px;" width="100%">
+<table class="table1" style="margin-top:10px;" width="100%">
 <tr>
 	<th align="left" class="colbb">
 	#{messages['Medicine']}

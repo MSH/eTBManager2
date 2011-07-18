@@ -8,18 +8,18 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:c="http://java.sun.com/jstl/core"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.weeklyfreq']}" />
 <ui:param name="topmenu" value="3" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
 
-<table class="tabela" width="400px" >
+<table class="table1" width="400px" >
 	<tr><th>
 			#{messages['admin.weeklyfreq']}
 		</th>
@@ -41,8 +41,8 @@
 	</tr>
 </c:forEach>
 <tr><td align="right">
-	<h:commandButton value="#{messages['form.ok']}" action="#{weeklyFrequencyHome.save}" styleClass="button" />
-	<s:button value="#{messages['form.cancel']}" view="/admin/weekfreqs.xhtml" styleClass="button-cancel" />
+	<h:commandLink value="#{messages['form.ok']}" action="#{weeklyFrequencyHome.save}" styleClass="button" />
+	<s:link value="#{messages['form.cancel']}" view="/admin/weekfreqs.xhtml" styleClass="button-alt" />
 </td></tr>
 </table>
 

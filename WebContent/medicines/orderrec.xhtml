@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.orders.receive']}" />
 
@@ -15,7 +15,7 @@
 
 <ui:param name="labelstyle" value="width:180px;" />
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 <h:form>
 <rich:panel style="width:600px;">
@@ -54,7 +54,7 @@
 	<c:forEach items="#{orderSources}" var="s">
 	<tr><th style="height:25px;background-color:#E0E0E0;color:black;font-weight: bold;">#{s.source.name}  </th></tr>
 	<tr><td>
-		<h:dataTable value="#{s.items}" var="it" class="tabela" width="100%" columnClasses="colb,colcb" rowClasses="lin1,lin2">
+		<h:dataTable value="#{s.items}" var="it" class="table1" width="100%" columnClasses="colb,colcb" rowClasses="lin1,lin2">
 			<h:column>
 				<f:facet name="header">#{messages['Medicine']}</f:facet>
 				#{it.item.medicine}
@@ -81,8 +81,8 @@
 </table>
 
 <div >
-    <h:commandButton action="#{orderReceivingHome.notifyReceiving}" value="#{messages['form.ok']}" styleClass="button" />
-    <s:button action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" />
+    <h:commandLink action="#{orderReceivingHome.notifyReceiving}" value="#{messages['form.ok']}" styleClass="button" />
+    <s:link action="cancel" value="#{messages['form.cancel']}" styleClass="button-alt" />
 </div>
 </rich:panel>
 </h:form>

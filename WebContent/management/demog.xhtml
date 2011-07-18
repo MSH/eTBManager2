@@ -8,7 +8,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:p="http://jboss.com/products/seam/pdf"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{prevalenceHome.classification=='TB'?messages['manag.ind.tb']:messages['manag.ind.mdr']} - #{messages['manag.ind.demog']}" />
 
@@ -27,7 +27,7 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 
 <h:form>
 <table style="border:2px solid #f0f0f0;" width="780px" cellspacing="4" cellpadding="4">
@@ -38,7 +38,7 @@
 </td></tr>
 <tr><td align="right" bgcolor="#f8f8f8">
 	<ui:include src="/layout/waitstatus.xhtml" />
-	<a:commandButton value="#{messages['form.update']}" reRender="indicator" styleClass="button" 
+	<a:commandLink value="#{messages['form.update']}" reRender="indicator" styleClass="button" 
 		action="#{demoProfileIndicator.execute}"
 		onclick="this.disabled=true;" oncomplete="this.disabled=false;"/>
 </td></tr>

@@ -13,7 +13,7 @@
 <ui:param name="labelstyle" value="width:200px;" />
 <ui:param name="showunit" value="1" />
 
-<ui:define name="body">
+<ui:define name="content">
     <table width="100%" style="margin-bottom:10px" cellpadding="8">
     <tr><td class="header">
     	<b style="float:left;margin-right:4px;">#{messages['Transfer.unitFrom']}: </b>
@@ -66,7 +66,7 @@
 	</div>
 	
 	<h:panelGroup id="pnlitems">
-	<table width="100%" class="tabela">
+	<table width="100%" class="table1">
 	<ui:repeat value="#{transferHome.sources}" var="s">
 		<tr class="cellheader"><td colspan="7">
 			<b>#{s.source.name}</b>

@@ -12,7 +12,7 @@
 	<a:form id="formsamples">
 
 	<div id="tblsel" style="overflow: auto; width: 280px; height:150px;border: 1px #d0d0d0 solid; padding:0px; margin: 0px;">	
-	<table id="tblstatus" width="279px" class="tabela" cellpadding="4">
+	<table id="tblstatus" width="279px" class="table1" cellpadding="4">
 		<tr><th>#{messages['PatientSample.dateCollected']}
 			</th>
 			<th>#{messages['PatientSample.sampleNumber']}
@@ -28,7 +28,7 @@
 	</ui:repeat>
 	</table>
 	</div>
-	<s:button value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('samplesdlg');return false;" styleClass="button-cancel" />
+	<s:link value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('samplesdlg');return false;" styleClass="button-alt" />
 	<rich:jQuery selector=".tabela tr" query="click(function(){selectSample(this);})" /> 
 	<rich:jQuery selector=".tabela td" query="css('cursor','pointer')" /> 
 	<ui:include src="/layout/tablerow.xhtml" />

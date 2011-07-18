@@ -8,7 +8,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:c="http://java.sun.com/jstl/core"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.orders.shipment']}" />
 
@@ -16,8 +16,8 @@
 
 <ui:param name="labelstyle" value="width:160px;" />
 
-<ui:define name="body">
-<p/>
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form>
 <rich:panel style="width:700px;">
     
@@ -55,7 +55,7 @@
 		<b>#{s.source.name}</b>
 	</td></tr>
 	<tr><td>
-		<table width="100%" class="tabela" style="margin-bottom:15px;">
+		<table width="100%" class="table1" style="margin-bottom:15px;">
 			<tr><th><h:outputText value="#{messages['Medicine']}" styleClass="collh" /></th>
 				<th><h:outputText value="#{messages['OrderItem.approvedQuantity']}" /></th>
 				<th><h:outputText value="#{messages['OrderItem.shippedQuantity']}" /></th>
@@ -79,10 +79,12 @@
 					<h:outputText value="#{it.item.shippedQuantity}" rendered="#{not it.unavailable}"><f:convertNumber pattern="#,###,###"/></h:outputText>
 				</td>
 				<td class="colc">
-					<a:commandLink value="#{messages['medicines.selbatches']}" ajaxSingle="true" 
+					<a:commandLink ajaxSingle="true" 
 						action="#{orderShippingHome.initBatchesSelection(it.item)}"
 						reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" 
-						style="width:120px;display:block;"/>
+						style="width:120px;display:block;">
+						<span>#{messages['medicines.selbatches']}</span>
+					</a:commandLink>
 				</td>
 				</tr>
 				
@@ -120,17 +122,23 @@
 </h:panelGroup>
 
 <div >
-    <h:commandButton action="#{orderShippingHome.registerShipping}" value="#{messages['form.ok']}" styleClass="button" />
-    <s:button action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" />
+    <h:commandLink action="#{orderShippingHome.registerShipping}" styleClass="button" >
+    	<span>#{messages['form.ok']}</span>
+    </h:commandLink>
+    <s:link action="cancel" styleClass="button-alt" >
+    	<span>#{messages['form.cancel']}</span>
+    </s:link>
 </div>
 </rich:panel>
 
 </h:form>
 
 <s:decorate template="/layout/batchselection.xhtml" >
-	<a:commandButton value="#{messages['form.ok']}" action="#{orderShippingHome.finishBatchesSelection}" 
+	<a:commandLink action="#{orderShippingHome.finishBatchesSelection}" 
 		onclick="if (!validateBatchSelection(this)) return false;" 
-		oncomplete="hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button"/>
+		oncomplete="hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
 </s:decorate>
 
 </ui:define>

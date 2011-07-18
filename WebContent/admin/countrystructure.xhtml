@@ -7,13 +7,13 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.auorg']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
@@ -21,13 +21,14 @@
 	<s:link value="#{messages['admin.adminunits']}" view="/admin/adminunits.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form id="main">
-<p/>
 <h:panelGroup id="pnltable">
-<s:button view="/admin/edtaustructure.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{s:hasRole('ADMSTR_EDT')}">
+<s:link view="/admin/edtaustructure.xhtml" styleClass="button" rendered="#{s:hasRole('ADMSTR_EDT')}">
 	<f:param name="id" value="#{null}" />
-</s:button>
+	<span>#{messages['form.new']}</span>
+</s:link>
 <p/>
 
 <h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty countryStructures.resultList}" styleClass="warn" />
@@ -35,7 +36,7 @@
 <s:fragment rendered="#{not empty countryStructures.resultList}">
 <b>#{countryStructures.resultCount}</b> #{messages['form.resultlist']}.<br/>
 <h:dataTable id="tbl" value="#{countryStructures.resultList}" var="r" border="0" columnClasses="coll#{defaultWorkspace.hasAlternateLocale?',coll':''},colc,colc" width="700px"
-  styleClass="tabela" rowClasses="lin1,lin2" rendered="#{not empty countryStructures.resultList}" style="margin-top:4px;">
+  styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty countryStructures.resultList}" style="margin-top:4px;">
   
   <h:column>
   	<f:facet name="header">

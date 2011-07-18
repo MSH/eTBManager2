@@ -7,7 +7,7 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.move']}" />
 <ui:param name="topmenu" value="1" />
@@ -16,7 +16,7 @@
 <ui:param name="left" value="0" />
 
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main" rendered="#{caseHome.canTransferOut}">
 
 
@@ -29,7 +29,7 @@
 		<b>#{messages['TbCase.healthUnits']}</b>
 	</div>
 
-	<h:dataTable value="#{tbcase.healthUnits}" var="hu" styleClass="tabela" width="100%">
+	<h:dataTable value="#{tbcase.healthUnits}" var="hu" styleClass="table1" width="100%">
 		<h:column>
 			<f:facet name="header"><h:outputText value="#{messages['cases.healthUnit']}" styleClass="collh" /></f:facet>
 			#{hu.tbunit.name}
@@ -67,10 +67,10 @@
     
     </td></tr>
     <tr><td align="right">
-    	<a:commandButton action="#{caseMoveHome.transferOut}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>
-    	<s:button view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" >
+    	<a:commandLink action="#{caseMoveHome.transferOut}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>
+    	<s:link view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end" >
     		<f:param name="id" value="#{caseHome.id}" />
-    	</s:button>
+    	</s:link>
     </td></tr>
 	</table>
 </s:decorate>

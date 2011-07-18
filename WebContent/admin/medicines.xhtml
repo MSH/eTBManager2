@@ -7,30 +7,30 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.medicines']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
-<s:button view="/admin/edtmedicine.xhtml" value="#{messages['form.new']}" styleClass="button"  rendered="#{s:hasRole('MEDICINES_EDT')}">
+<s:link view="/admin/edtmedicine.xhtml" value="#{messages['form.new']}" styleClass="button"  rendered="#{s:hasRole('MEDICINES_EDT')}">
 	<f:param name="id" value="#{null}" />
-</s:button>
+</s:link>
 <p/>
 <s:decorate template="/layout/listresult.xhtml">
 	<ui:param name="list" value="#{medicines}" />
 </s:decorate>
 <h:panelGroup id="meds">
 <h:dataTable id="tbl" value="#{medicines.resultList}" var="r" border="0" columnClasses="coll,coll,#{defaultWorkspace.alternateDisplayLocale?'coll,':''}coll,coll,coll,coll,coll,colc"
-  styleClass="tabela" rowClasses="lin1,lin2" width="100%" rendered="#{medicines.resultCount > 0}">
+  styleClass="table1" rowClasses="lin1,lin2" width="100%" rendered="#{medicines.resultCount > 0}">
   <h:column>
   	<f:facet name="header">
   		<s:link value="#{messages['Medicine.genericName']}" style="padding-left:10px;" styleClass="collh">

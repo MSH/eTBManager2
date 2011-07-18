@@ -6,16 +6,16 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{source.id==null? messages['admin.sources.new']: messages['admin.sources.edit']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
-    <table class="tabela" width="550px" style="border:2px solid #f0f0f0;">
+    <table class="table1" width="550px" style="border:2px solid #f0f0f0;">
     <tr><td>
     <s:decorate template="/layout/display.xhtml" rendered="#{source.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
@@ -77,13 +77,13 @@
 
     </td></tr>
     <tr><td align="right" colspan="2">
-            <a:commandButton action="#{sourceHome.persist}" value="#{messages['form.ok']}" 
+            <a:commandLink action="#{sourceHome.persist}" value="#{messages['form.ok']}" 
             	styleClass="button" 
             	reRender="main,messages"/>
   
-            <s:button view="/admin/sources.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" >
+            <s:link view="/admin/sources.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" >
             	<f:param name="id" value="#{null}" />
-            </s:button>
+            </s:link>
     </td></tr>
     </table>
 

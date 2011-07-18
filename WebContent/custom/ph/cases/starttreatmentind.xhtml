@@ -8,7 +8,7 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['regimens.individualized']}" />
 
@@ -17,7 +17,7 @@
 
 <ui:param name="labelstyle" value="width:140px" />
 
-<ui:define name="body">
+<ui:define name="content">
 
 <s:decorate template="/layout/casebody.xhtml">
 
@@ -64,7 +64,7 @@
 		<ui:param name="showfooter" value="0" />
 
 		<h:outputText value="#{messages['edtrec.nomedicine']}" styleClass="warn" rendered="#{empty startTreatmentIndivHome.medicinesIntPhase}"/>
-		<h:dataTable value="#{startTreatmentIndivHome.medicinesIntPhase}" var="it" styleClass="tabela" width="100%" 
+		<h:dataTable value="#{startTreatmentIndivHome.medicinesIntPhase}" var="it" styleClass="table1" width="100%" 
 			rendered="#{not empty startTreatmentIndivHome.medicinesIntPhase}" >
 			<h:column>
 				<f:facet name="header">
@@ -122,7 +122,7 @@
 		<ui:param name="showfooter" value="0" />
 
 		<h:outputText value="#{messages['edtrec.nomedicine']}" styleClass="warn" rendered="#{empty startTreatmentIndivHome.medicinesContPhase}"/>
-		<h:dataTable value="#{startTreatmentIndivHome.medicinesContPhase}" var="it" styleClass="tabela" width="100%" 
+		<h:dataTable value="#{startTreatmentIndivHome.medicinesContPhase}" var="it" styleClass="table1" width="100%" 
 			rendered="#{not empty startTreatmentIndivHome.medicinesContPhase}" >
 			<h:column>
 				<f:facet name="header">
@@ -170,11 +170,11 @@
 	
 	</td></tr>
 	<tr><td align="right">
-		<a:commandButton value="#{messages['form.ok']}" styleClass="button" action="#{startTreatmentIndivHome.startIndividualizedRegimen}" 
+		<a:commandLink value="#{messages['form.ok']}" styleClass="button" action="#{startTreatmentIndivHome.startIndividualizedRegimen}" 
 			reRender="messages,formtreat"/>
-		<s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel" propagation="end">
+		<s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
 			<f:param name="id" value="#{caseHome.id}" />
-		</s:button>
+		</s:link>
 	</td></tr>
 	</table>
 	</a:form>
@@ -182,7 +182,7 @@
 
 <s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
 	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
-	<a:commandButton value="#{messages['form.ok']}" styleClass="button" action="#{startTreatmentIndivHome.addMedicines}" 
+	<a:commandLink value="#{messages['form.ok']}" styleClass="button" action="#{startTreatmentIndivHome.addMedicines}" 
 		oncomplete="hideMedicinesDlg();" 
 		reRender="#{startTreatmentIndivHome.phase=='INTENSIVE'? 'pnltreatment_int':'pnltreatment_cont'}"/>
 </s:decorate>

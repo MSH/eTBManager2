@@ -8,13 +8,13 @@
                 xmlns:h="http://java.sun.com/jsf/html"
       			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-                template="#{workspaceViewService.templatePage}">
+                template="/layout/template_new.xhtml">
 
 <ui:param name="topmenu" value="0" />
 <ui:param name="waitdlg" value="1" />
 <ui:param name="title" value="Create training users" />
 
-<ui:define name="body">
+<ui:define name="content">
 	<h:form id="main">
 	<s:decorate template="/layout/roundrect.xhtml" style="width:600px;">
 		<ui:define name="header"><b>Enter data of the new users to be created</b></ui:define>
@@ -71,7 +71,7 @@
 			<h:inputText value="#{trainingHome.healthUnitPrefix}" style="width:300px" required="true"/>
 		</s:decorate>
 		
-		<a:commandButton action="#{trainingHome.createUsers}" value="Create" styleClass="button" reRender="messages,main"/>
+		<a:commandLink action="#{trainingHome.createUsers}" value="Create" styleClass="button" reRender="messages,main"/>
 	</s:decorate>
 	</h:form>
 </ui:define>

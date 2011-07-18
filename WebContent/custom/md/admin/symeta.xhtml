@@ -7,17 +7,17 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
    	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['ro.admin.symeta']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/custom/md/admin/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 	<h:form >
 	<div id="pnldata">
 	<s:decorate template="/layout/roundrect.xhtml" style="width:540px;">
@@ -26,7 +26,7 @@
 		<div style="padding:10px;">
 		#{messages['ro.admin.symeta.desc']}
 		<p/>
-		<a:commandButton value="#{messages['ro.admin.symeta.run']}" styleClass="button" style="width:190px" 
+		<a:commandLink value="#{messages['ro.admin.symeta.run']}" styleClass="button" style="width:190px" 
 			action="#{symetaIntHome.execute}"
 			oncomplete="jQuery('#pnldata').hide();"
 			reRender="messages"/>
@@ -87,12 +87,12 @@
 		<ui:param name="tbunitselection" value="#{symetaIntHome.tbunitSelection}" />
 	</s:decorate>
 
-	<a:commandButton value="#{messages['form.ok']}" action="#{symetaIntHome.saveConfigs}"
+	<a:commandLink value="#{messages['form.ok']}" action="#{symetaIntHome.saveConfigs}"
 		data="#{symetaIntHome.configSaved}"
 		styleClass="button" reRender="cfgpnl" 
 		oncomplete="if (!data) return false;Richfaces.hideModalPanel('symetaConfigdlg');"/>
 		
-	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
+	<a:commandLink value="#{messages['form.cancel']}" styleClass="button-alt"  
 		oncomplete="Richfaces.hideModalPanel('symetaConfigdlg'); return false;"
 		ajaxSingle="true"
 		action="#{conversation.end}" />

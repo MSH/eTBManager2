@@ -53,7 +53,7 @@
 				<f:param name="tag" />
 			</s:link>
 		</td>
-		<td>
+		<td align="right">
 			<h:outputText value="#{it.cases}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
@@ -64,7 +64,7 @@
 		<td>
 			<b>#{messages['global.total']}</b>
 		</td>
-		<td>
+		<td align="right">
 			<b><h:outputText value="#{caseStateReport.total.cases}">
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText></b>
@@ -88,8 +88,8 @@
 				<f:param name="tag" />
 			</s:link>
 		</td>
-		<td>
-			<h:outputText value="#{it.cases}" >
+		<td align="right">
+			<h:outputText value="#{it.cases}">
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
 		</td>
@@ -107,14 +107,15 @@
 	<ui:repeat value="#{caseStateReport.tags}" var="it">
 	<tr>
 		<td>
-			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" >
+			<div class="tag-icon" />
+			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" styleClass="text-small">
 				<f:param name="tag" value="#{it.stateIndex}"/>
 				<f:param name="sc" value="#{'CASE_TAG'}"/>
 				<f:param name="stateIndex" />
 				<f:param name="vs" />
 			</s:link>
 		</td>
-		<td>
+		<td align="right">
 			<h:outputText value="#{it.cases}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
@@ -171,16 +172,20 @@
 	<a:form id="formclassifcation">
 
 	#{messages['cases.newnotif.title']}
-	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
+	<div class="vertical-menu">
 	<c:forEach items="#{globalLists.caseClassifications}" var="it">
-		<tr><td class="menubv">
-			<s:link value="#{messages[it.key]}" view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
-				<f:param name="classif" value="#{it}"/>
-			</s:link>
-		</td></tr>
+		<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
+			<f:param name="classif" value="#{it}"/>
+			<div class="new-icon" />#{messages[it.key]}
+		</s:link>
 	</c:forEach>
-	</table>
-	<s:button value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" styleClass="button-cancel" />
+	</div>
+	<div class="button-bar">
+		<s:link onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" 
+			styleClass="button-alt" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
 	</a:form>
 </rich:modalPanel>
 </s:fragment>

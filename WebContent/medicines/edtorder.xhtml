@@ -8,7 +8,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.orders.new']}" />
 
@@ -16,7 +16,7 @@
 <ui:param name="labelstyle" value="width:200px;" />
 <ui:param name="waitdlg" value="1" />
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 <s:decorate template="/layout/unit.xhtml">
 <h:form id="main">
@@ -46,7 +46,7 @@
 		<b>#{s.source.name}</b>
 	</td></tr>
 	<tr><td>
-		<h:dataTable value="#{s.items}" var="it" class="tabela" columnClasses="colb,colrb,colrb,colrb,highlight colrb" rowClasses="lin1" width="100%">
+		<h:dataTable value="#{s.items}" var="it" class="table1" columnClasses="colb,colrb,colrb,colrb,highlight colrb" rowClasses="lin1" width="100%">
 			<h:column>
 			<f:facet name="header">Item</f:facet>
 				<h:outputText value="#{it.item.medicine}" styleClass="medicine-icon" />
@@ -83,20 +83,23 @@
 </c:forEach>
 
 	<tr><td style="text-align:right;">
-            <a:commandButton action="#{orderHome.saveNew}" value="#{messages['form.ok']}" styleClass="button" reRender="msg,main"/>
-            <s:button action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" />
+            <a:commandLink action="#{orderHome.saveNew}" styleClass="button" reRender="msg,main">
+            	<span>#{messages['form.ok']}</span>
+            </a:commandLink>
+            <s:link action="cancel" styleClass="button-alt" >
+            	<span>#{messages['form.cancel']}</span>
+            </s:link>
 	</td></tr>
 </table>
 </s:fragment>
 
 <s:fragment rendered="#{empty orderSources}" >
-<s:decorate template="/layout/rounded.xhtml" style="padding:10px;width:80%;">
-	<ui:param name="color" value="orange" />
-	<div style="padding:10px;font-weight:bold;color:white;">
+	<div class="error">
 		#{messages['medicines.orders.nomedicine']}
 	</div>
-</s:decorate>
-    <s:button action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" style="float:right;"/>	
+    <s:link action="cancel" styleClass="button-alt" style="float:right;">
+    	<span>#{messages['form.cancel']}</span>
+    </s:link>	
 </s:fragment>
 
 </h:form>

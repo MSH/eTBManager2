@@ -8,13 +8,13 @@
                 xmlns:h="http://java.sun.com/jsf/html"
       			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-                template="#{workspaceViewService.templatePage}">
+                template="/layout/template_new.xhtml">
 
 <ui:param name="topmenu" value="0" />
 
 <ui:param name="title" value="Importacao Sistema TBMR" />
 
-<ui:define name="body">
+<ui:define name="content">
 
 	<h:form id="main">
 	<s:decorate template="/layout/roundrect.xhtml" style="width:300px;">
@@ -33,7 +33,7 @@
 			#{defaultWorkspace.name}
 		</s:decorate>
 		
-		<a:commandButton action="#{importTBMRHome.execute}" value="Execute" reRender="messages,main"/>
+		<a:commandLink action="#{importTBMRHome.execute}" value="Execute" reRender="messages,main"/>
 	</s:decorate>
 	</h:form>
 </ui:define>

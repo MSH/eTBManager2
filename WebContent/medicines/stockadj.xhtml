@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
  	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.movs.newadjust']}" />
 <ui:param name="topmenu" value="1" />
@@ -19,13 +19,18 @@
 <ui:define name="naveg" >
 	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
 	<s:link value="#{messages['medicines.stockpos']}" view="/medicines/stockpos.html" propagation="none" />
+	<div class="item selected">
+		<s:link value="#{title}" />
+	</div>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <div style="width:800px">
 <s:decorate template="/layout/unit.xhtml">
 <h:form id="main">
-	<a:commandLink value="#{messages['medicines.medicinerecs.newbatch']}..." onclick="openNewBatchDlg();" style="float:right;"/>
+	<a:commandLink onclick="openNewBatchDlg();" style="float:right;" styleClass="button-alt">
+		<span>#{messages['medicines.medicinerecs.newbatch']}...</span>
+	</a:commandLink>
 
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['Source']}:</ui:define>
@@ -38,7 +43,7 @@
 
 
 <h:panelGroup id="pnlitems">
-<table id="medlist" width="100%" class="tabela">
+<table id="medlist" width="100%" class="table1">
 	<tr><th width="400px">
 			#{messages['Medicine']}
 		</th>
@@ -49,11 +54,12 @@
 <a:repeat value="#{stockAdjustmentHome.items}" var="it">
 	<tr class="med">
 		<td colspan="4">
-			<a:commandLink value="#{messages['medicines.movs.newadjust']}"
+			<a:commandLink
 				onclick="openAdjustDlg(#{it.stockPosition.id});return false;" 
 				style="float:right;" 
-				styleClass="right-icon small-link"
-				/>
+				styleClass="button-alt"	>
+				<span>#{messages['medicines.movs.newadjust']}</span>
+			</a:commandLink>
 
 			<div id="med-row" style="height:30px;min-height:30px;cursor: pointer;">
 			<div style="float:left;width:500px;">
@@ -123,10 +129,12 @@
 
 <s:decorate template="/layout/batchselection.xhtml">
 	<ui:param name="quantitytitle" value="#{messages['medicines.movs.newqtty']}" />
-	<a:commandButton value="#{messages['form.ok']}" action="#{stockAdjustmentHome.executeBatchAdjustment}"
+	<a:commandLink action="#{stockAdjustmentHome.executeBatchAdjustment}"
 		data="#{stockAdjustmentHome.actionExecuted}"  
 		onclick="if (!validateBatchSelection(this)) return false;" 
-		oncomplete="if (!data) return false; hideBatchesSelectionDlg();refreshMedTable();" reRender="batchselpnl" styleClass="button"/>
+		oncomplete="if (!data) return false; hideBatchesSelectionDlg();refreshMedTable();" reRender="batchselpnl" styleClass="button">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
 	
 	<ui:define name="before-form">
 		<h:inputHidden value="#{stockAdjustmentHome.stockPositionId}" />
@@ -260,14 +268,18 @@ function initBatchDeleting(batchId) {
     		<ui:include src="/layout/waitstatus.xhtml" />
     	</td>
     	<td align="right">
-            <a:commandButton action="#{stockAdjustmentHome.saveNewBatch}" value="#{messages['form.ok']}" styleClass="button" 
+            <a:commandLink action="#{stockAdjustmentHome.saveNewBatch}" styleClass="button" 
             	reRender="newbatchpnl"
             	data="#{stockAdjustmentHome.actionExecuted}"
             	onclick="this.disabled=true;" 
-            	oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('newbatchdlg');refreshMedTable();"/>
-			<s:button value="#{messages['form.cancel']}" 
-				styleClass="button-cancel" 
-				onclick="Richfaces.hideModalPanel('newbatchdlg'); return false;" />
+            	oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('newbatchdlg');refreshMedTable();">
+            	<span>#{messages['form.ok']}</span>
+            </a:commandLink>
+			<s:link 
+				styleClass="button-alt" 
+				onclick="Richfaces.hideModalPanel('newbatchdlg'); return false;" >
+				<span>#{messages['form.cancel']}</span>
+			</s:link>
     </td></tr>
     
     </table>
@@ -323,14 +335,18 @@ function initBatchDeleting(batchId) {
     		<ui:include src="/layout/waitstatus.xhtml" />
     	</td>
     	<td align="right">
-            <a:commandButton action="#{stockAdjustmentHome.deleteBatch()}" value="#{messages['form.ok']}" styleClass="button" 
+            <a:commandLink action="#{stockAdjustmentHome.deleteBatch()}" styleClass="button" 
             	reRender="newbatchpnl"
             	data="#{stockAdjustmentHome.actionExecuted}"
             	onclick="this.disabled=true;" 
-            	oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('delbatchdlg');refreshMedTable();"/>
-			<s:button value="#{messages['form.cancel']}" 
-				styleClass="button-cancel" 
-				onclick="Richfaces.hideModalPanel('delbatchdlg'); return false;" />
+            	oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('delbatchdlg');refreshMedTable();">
+            	<span>#{messages['form.ok']}</span>
+            </a:commandLink>
+			<s:link 
+				styleClass="button-alt" 
+				onclick="Richfaces.hideModalPanel('delbatchdlg'); return false;" >
+				<span>#{messages['form.cancel']}</span>
+			</s:link>
     </td></tr>
     
     </table>

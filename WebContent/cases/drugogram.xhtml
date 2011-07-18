@@ -6,9 +6,11 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-                 
 
-<table class="tabela4" width="100%">
+<div class="spacer" />                 
+
+<s:fragment rendered="#{not empty drugogram.examLabels}">
+<table class="table1">
 	<tr>
 		<th>
 			#{messages['global.month']}
@@ -62,5 +64,6 @@
 	</tr>
 </a:repeat>
 </table>
+</s:fragment>
 
 </ui:composition>

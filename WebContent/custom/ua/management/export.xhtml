@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['manag.export']}" />
 
@@ -22,7 +22,7 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 <h:form id="main" >
 <table width="100%"><tr><td>
@@ -54,7 +54,7 @@
 		</h:selectOneRadio>
 	</s:decorate>
 	<div class="button-bar">
-	<h:commandButton action="#{caseExportUAHome.download}" value="#{messages['global.export']}" styleClass="button" />
+	<h:commandLink action="#{caseExportUAHome.download}" value="#{messages['global.export']}" styleClass="button" />
 	</div>
 </s:decorate>
 

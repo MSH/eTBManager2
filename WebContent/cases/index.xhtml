@@ -173,14 +173,14 @@
 	#{messages['cases.newnotif.title']}
 	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
 	<c:forEach items="#{globalLists.caseClassifications}" var="it">
-		<tr><td class="menubv">
+		<tr><td class="vertical-menu">
 			<s:link value="#{messages[it.key]}" view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
 				<f:param name="classif" value="#{it}"/>
 			</s:link>
 		</td></tr>
 	</c:forEach>
 	</table>
-	<s:button value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" styleClass="button-cancel" />
+	<s:link value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" styleClass="button-alt" />
 	</a:form>
 </rich:modalPanel>
 </s:fragment>

@@ -8,7 +8,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:c="http://java.sun.com/jstl/core"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.start']}"/>
 <ui:param name="topmenu" value="1" />
@@ -20,7 +20,7 @@
 	<a:loadScript src="/js/util.js" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 
 <s:decorate template="/layout/unit.xhtml">
 <ui:param name="pagestyle" value="width:780px;" />
@@ -47,7 +47,7 @@
 		<h:outputText value="#{messages['edtrec.nomedicine']}" rendered="#{empty medicineManStartHome.sourcesInfo}" style="color:#b0b0b0;padding:5px;"/>
 		<s:fragment rendered="#{not empty medicineManStartHome.sourcesInfo}">
 		<a:repeat value="#{medicineManStartHome.sourcesInfo}" var="s">
-		<table width="100%" class="tabela">
+		<table width="100%" class="table1">
 			<tr>
 				<td colspan="7" class="highlight">
 					#{s.source.name}
@@ -134,12 +134,16 @@
     	</h:panelGroup>
     </td></tr>
     <tr><td align="right">
-            <a:commandButton action="#{medicineManStartHome.startMedicineManagement}" value="#{messages['form.ok']}" 
+            <a:commandLink action="#{medicineManStartHome.startMedicineManagement}" 
             	styleClass="button" 
             	onclick="openWaitDlg();" 
             	oncomplete="closeWaitDlg();" 
-            	reRender="main"/>
-            <s:button view="/medicines/index.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" />
+            	reRender="main">
+            	<span>#{messages['form.ok']}</span>
+            </a:commandLink>
+            <s:link view="/medicines/index.xhtml" styleClass="button-alt" >
+            	<span>#{messages['form.cancel']}</span>
+            </s:link>
     </td></tr>
 	</table>
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
@@ -252,12 +256,16 @@ else return false;
     		<ui:include src="/layout/waitstatus.xhtml" />
     	</td>
     	<td align="right">
-            <a:commandButton action="#{medicineManStartHome.finishBatchEditing}" value="#{messages['form.ok']}" styleClass="button" 
+            <a:commandLink action="#{medicineManStartHome.finishBatchEditing}" styleClass="button" 
             	reRender="batchpnl,medicines"
             	data="#{medicineManStartHome.validated}"
             	onclick="this.disabled=true;" 
-            	oncomplete="this.disabled=false;if (data) hideBatchDlg();"/>
-			<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" onclick="hideBatchDlg(); return false;" propagation="end"/>
+            	oncomplete="this.disabled=false;if (data) hideBatchDlg();">
+            	<span>#{messages['form.ok']}</span>
+            </a:commandLink>
+			<s:link styleClass="button-alt" onclick="hideBatchDlg(); return false;" propagation="end">
+				<span>#{messages['form.cancel']}</span>
+			</s:link>
     </td></tr>
     
     </table>

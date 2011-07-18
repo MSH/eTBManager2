@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:c="http://java.sun.com/jstl/core"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.orders.receive']}" />
 
@@ -15,7 +15,7 @@
 <ui:param name="labelstyle" value="width:180px;" />
 
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 <h:form>
 <rich:panel style="width:700px;">
@@ -114,8 +114,12 @@
 	</c:forEach>
 	
 	<tr><td colspan="4" align="right">
-    	<h:commandButton action="#{orderReceivingHome.notifyReceiving}" value="#{messages['form.ok']}" styleClass="button" />
-    	<s:button action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" />
+    	<h:commandLink action="#{orderReceivingHome.notifyReceiving}" styleClass="button" >
+    		<span>#{messages['form.ok']}</span>
+    	</h:commandLink>
+    	<s:link action="cancel" styleClass="button-alt" >
+    		<span>#{messages['form.cancel']}</span>
+    	</s:link>
 	</td></tr>
 </table>
 </rich:panel>

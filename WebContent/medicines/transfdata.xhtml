@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.transfer.detail']}" />
 <ui:param name="topmenu" value="1" />
@@ -20,7 +20,7 @@
 </ui:define>
 
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<h:form>
 	<s:link view="/medicines/transfrec.xhtml" value="#{messages['medicines.transfer.receive']}" rendered="#{(transferHome.canReceive)}">
 		<f:param name="id" value="#{transfer.id}" />
@@ -37,7 +37,7 @@
 	<s:link view="/reports/transfdata.xhtml" value="#{messages['global.print']}" target="_blank" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
     <table width="100%" class="tabela3" style="margin-bottom:10px" cellpadding="8">
     <tr><td class="header">
@@ -93,7 +93,7 @@
 	</div>
 	
 	<h:panelGroup id="pnlitems">
-	<table width="100%" class="tabela">
+	<table width="100%" class="table1">
 	<ui:repeat value="#{transferHome.sources}" var="s">
 		<tr style="background-color:#EDF7EF;"><td colspan="6" style="border:1px solid #B4E8BB;padding:5px;">
 			<b>#{s.source.name}</b>

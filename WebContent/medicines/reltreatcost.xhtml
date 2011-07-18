@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templateMedPage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['manag.rel5']}" />
 
@@ -21,7 +21,7 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
 <table width="100%">
 <tr><td>
@@ -58,7 +58,7 @@
 </td></tr>
 <tr>
 	<td align="right">
-	<a:commandButton value="#{messages['form.update']}" styleClass="button" 
+	<a:commandLink value="#{messages['form.update']}" styleClass="button" 
 		action="#{treatmentCostReport.createReport}" 
 		reRender="main"/>
 </td></tr>
@@ -69,7 +69,7 @@
 <s:link view="/reports/rel5.xhtml" target="_blank" >
 	<ui:include src="/layout/print_icon.xhtml" />
 </s:link>
-<table class="tabela" style="margin-top:10px;" width="100%">
+<table class="table1" style="margin-top:10px;" width="100%">
 <tr><th align="left" rowspan="2" class="colbb">
 		#{messages['Patient']}
 	</th>

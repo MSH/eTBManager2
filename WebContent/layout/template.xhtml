@@ -46,13 +46,13 @@ div#body {
 <div id="outer">
 
 <s:div id="left" rendered="#{empty left}">
-	<div class="menubv">
-	<ui:insert name="menu_lateral" />
+	<div class="vertical-menu">
+	<ui:insert name="left" />
 	</div>
 	<ui:insert name="left" />
 </s:div>
 
-<div id="body">
+<div id="content">
 
 <div id="outer_title">
 <div id="title">
@@ -84,7 +84,7 @@ div#body {
 	</s:decorate>
 	</h:panelGroup>
 
-	<ui:insert name="body" />
+	<ui:insert name="content" />
 
 </div>
 

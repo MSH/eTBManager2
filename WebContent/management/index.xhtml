@@ -6,24 +6,19 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['manag']}" />
 
 <ui:param name="topmenu" value="2" />
 <ui:param name="left" value="0" />
 
-<ui:define name="body">
-<p/>
-<table width="100%"><tr><td>
+<ui:define name="content">
+<h1>#{title}</h1>
+	<h2>#{messages['manag.case.reports']}</h2>
 
-
-<s:decorate template="/layout/roundrect.xhtml">
-	<ui:define name="header"><b>#{messages['manag.case.reports']}</b></ui:define>
-	<ui:param name="showfooter" value="0" />
-
-	<div>
-	<table width="99%">
+	<div class="vertical-menu">
+	<table width="100%">
 	<tr><td valign="top"> 	
 	<s:link value="#{messages['manag.ind.incidence']}" view="/management/incidence.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
 	<s:link value="#{messages['manag.ind.prevalence']}" view="/management/prevalence.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}"/>
@@ -62,30 +57,24 @@
 	</table>
 	</div>
 
-</s:decorate>
-<p/>
+	<div class="spacer" />
 
-<s:decorate template="/layout/roundrect.xhtml">
-	<ui:define name="header"><b>#{messages['manag.drug.reports']}</b></ui:define>
-	<ui:param name="showfooter" value="0" />
-	
-	<s:link value="#{messages['manag.rel1']}" view="/management/rel1.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}"/>
-	<s:link value="#{messages['manag.rel4']}" view="/management/rel4.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP4')}"/>
-</s:decorate>
-<p/>
+	<h2>#{messages['manag.drug.reports']}</h2>
 
-<s:decorate template="/layout/roundrect.xhtml">
-	<s:link value="#{messages['manag.export']}" view="/management/export.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('EXPORT')}" propagation="none"/>
+	<div class="vertical-menu">	
+		<s:link value="#{messages['manag.rel1']}" view="/management/rel1.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}"/>
+		<s:link value="#{messages['manag.rel4']}" view="/management/rel4.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP4')}"/>
+	</div>
 
-	<ui:define name="header"><b>#{messages['manag.forecast']}</b></ui:define>
+	<div class="spacer" />
+
+	<h2>#{messages['manag.forecast']}</h2>
 	<ui:param name="showfooter" value="0" />
 	<s:link value="#{messages['manag.forecast.med']}" view="/management/forecasting.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('FORECAST')}" propagation="none">
 		<f:param name="id" value="#{null}"/>
 	</s:link>
-	<p/>
-</s:decorate>
-<p/>
-</td></tr></table>
+	<s:link value="#{messages['manag.export']}" view="/management/export.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('EXPORT')}" propagation="none"/>
+
 
 </ui:define>
 

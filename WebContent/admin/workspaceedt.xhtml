@@ -6,16 +6,16 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{workspace.id != null?messages['admin.workspaces.edt']:messages['admin.workspaces.new']}" />
 <ui:param name="topmenu" value="3" />
 
 <ui:param name="labelstyle" value="width:170px" />
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main" prependId="true" enctype="multipart/form-data">
-	<table width="550px" class="tabela" ><tr><td>
+	<table width="550px" class="table1" ><tr><td>
 	
     <s:decorate template="/layout/display.xhtml" rendered="#{usuario.id != null}" >
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
@@ -76,11 +76,11 @@
     </s:decorate>
 	
 	</td></tr><tr><td align="right">
-		<h:commandButton action="#{workspaceHome.persist}" value="#{messages['form.ok']}" styleClass="button" />
-		<s:button view="/admin/workspacedata.xhtml" value="#{messages['form.cancel']}" rendered="#{workspace.id != null}" styleClass="button">
+		<h:commandLink action="#{workspaceHome.persist}" value="#{messages['form.ok']}" styleClass="button" />
+		<s:link view="/admin/workspacedata.xhtml" value="#{messages['form.cancel']}" rendered="#{workspace.id != null}" styleClass="button">
 			<f:param name="id" value="#{workspace.id}" />
-		</s:button>
-		<s:button view="/admin/workspaces.xhtml" value="#{messages['form.cancel']}" rendered="#{workspace.id == null}" styleClass="button-cancel" />
+		</s:link>
+		<s:link view="/admin/workspaces.xhtml" value="#{messages['form.cancel']}" rendered="#{workspace.id == null}" styleClass="button-alt" />
 	</td></tr></table>
 	<p/>
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}

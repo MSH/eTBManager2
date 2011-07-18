@@ -8,7 +8,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:p="http://jboss.com/products/seam/pdf"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['manag.ind.starttreat']}" />
 
@@ -26,7 +26,7 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form>
 <table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
 <tr><td bgcolor="#f8f8f8">
@@ -41,7 +41,7 @@
 
 	<div class="paragraph">#{messages['manag.ind.starttreat.title1']}
 	</div>
-	<h:dataTable value="#{drugResistanceIndicator.series.items}" var="it" styleClass="tabela" rowClasses="lin1,lin2" 
+	<h:dataTable value="#{drugResistanceIndicator.series.items}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
 		columnClasses="colb,colrb,colrb" width="380px" style="margin-bottom:10px;">
 		
 		<h:column>
@@ -83,7 +83,7 @@
 
 	<div class="paragraph">#{messages['manag.ind.starttreat.title2']}
 	</div>
-	<table class="tabela" width="100%">
+	<table class="table1" width="100%">
 		<tr>
 			<th>
 				

@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['manag.rel4']}" />
 
@@ -21,10 +21,10 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 <h:form id="main">
-<table class="tabela" width="700px">
+<table class="table1" width="700px">
 <tr><td>
 	<s:decorate id="ds" template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['admin.tbunits.medsuppliers']}:</ui:define>
@@ -54,7 +54,7 @@
 </td></tr>
 <tr>
 	<td align="right">
-	<a:commandButton value="#{messages['form.generate']}" styleClass="button" 
+	<a:commandLink value="#{messages['form.generate']}" styleClass="button" 
 		action="#{orderLeadTimeReport.generate}" 
 		reRender="main,pnlPrintLink"/>
 </td></tr>
@@ -62,7 +62,7 @@
 
 <div style="margin-top:10px;">
 <s:fragment rendered="#{orderLeadTimeReport.executing}">
-<table class="tabela" style="margin-top:10px;" width="400px">
+<table class="table1" style="margin-top:10px;" width="400px">
 <tr>
 	<th>#{messages['reports.orderEvent']}</th>
 	<th>#{messages['reports.averageDays']}</th>

@@ -8,22 +8,18 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:c="http://java.sun.com/jstl/core"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{medicineReceiving.id==null? messages['medicines.medicinerecs.new'] :messages['medicines.medicinerecs.edt']}"/>
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 
-<ui:param name="waitdlg" value="1" />
+<ui:param name="left" value="0" />
 
-<ui:define name="left">
-</ui:define>
-
-<ui:define name="body">
+<ui:define name="content">
 
 <s:decorate template="/layout/unit.xhtml">
 <ui:param name="pagestyle" value="width:780px;" />
-<p/>
 <h:form id="main">
     <table width="100%">
     <tr><td>
@@ -49,7 +45,11 @@
 
 	</td></tr>
 	<tr><td>
-		<a:commandLink action="#{medicineReceivingHome.filterMedicines}" ajaxSingle="true" value="#{messages['edtrec.addmed']}" styleClass="button2" reRender="medpnl" oncomplete="showMedicinesDlg()" style="width:180px;float:right;"/>
+		<a:commandLink action="#{medicineReceivingHome.filterMedicines}" ajaxSingle="true" 
+			styleClass="button-alt" reRender="medpnl" 
+			oncomplete="showMedicinesDlg()" style="float:right;">
+			<span>#{messages['edtrec.addmed']}</span>
+		</a:commandLink>
 		<b>#{messages['MedicineReceiving.medicines']}</b>
 	</td></tr>
 	<tr><td>
@@ -57,7 +57,7 @@
 
 		<h:outputText value="#{messages['edtrec.nomedicine']}" rendered="#{empty medicineReceiving.medicines}" style="color:#b0b0b0;padding:5px;"/>
 		<s:fragment rendered="#{not empty medicineReceiving.medicines}">
-		<table width="100%" class="tabela">
+		<table width="100%" class="table1">
 			<tr><th>#{messages['Medicine']}</th>
 				<th>#{messages['Batch.expiryDate']}</th>
 				<th align="right">#{messages['Batch.numContainers']}</th>
@@ -131,11 +131,15 @@
     	</h:panelGroup>
     </td></tr>
     <tr><td align="right">
-            <a:commandButton action="#{medicineReceivingHome.persist}" value="#{messages['form.ok']}" styleClass="button" 
+            <a:commandLink action="#{medicineReceivingHome.persist}" styleClass="button" 
             	onclick="openWaitDlg();" 
             	oncomplete="closeWaitDlg();" 
-            	reRender="messages,main"/>
-            <s:button action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" />
+            	reRender="messages,main">
+            	<span>#{messages['form.save']}</span>
+            </a:commandLink>
+            <s:link action="cancel" styleClass="button-alt" >
+            	<span>#{messages['form.cancel']}</span>
+            </s:link>
     </td></tr>
 	</table>
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
@@ -159,9 +163,11 @@ return true;
 
 <s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
 	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
-	<a:commandButton value="#{messages['form.ok']}" styleClass="button" action="#{medicineReceivingHome.addMedicines}" 
+	<a:commandLink styleClass="button" action="#{medicineReceivingHome.addMedicines}" 
 		oncomplete="hideMedicinesDlg();" 
-		reRender="medicines"/>
+		reRender="medicines">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
 </s:decorate>
 
 <ui:include src="edtbatch.xhtml" />

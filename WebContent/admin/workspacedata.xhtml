@@ -6,7 +6,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{messages['Workspace']}: #{workspace.name}" />
 <ui:param name="topmenu" value="3" />
@@ -16,7 +16,7 @@
 	<s:link value="#{messages['Workspace']}" view="/admin/workspaces.xhtml" />
 </ui:define>
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<h:form>
 	<s:link value="#{messages['form.edit']}" view="/admin/workspaceedt.xhtml" rendered="#{s:hasRole('WORKSPACES_EDT')}" >
 		<f:param name="id" value="#{workspace.id}" />
@@ -33,7 +33,7 @@
 	</h:form>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
 	<table width="500px" class="tab1" ><tr><td>
 
@@ -72,7 +72,7 @@
 	</td></tr></table>
 
 	<p/>
-	<table width="500px" class="tabela" >
+	<table width="500px" class="table1" >
 	<tr><th>#{messages['admin.workspaces.users']}
 	</th></tr>
 	<tr><td>

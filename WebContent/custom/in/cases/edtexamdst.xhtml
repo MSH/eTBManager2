@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.examdst']}" />
 <ui:param name="waitdlg" value="1" />
@@ -16,7 +16,7 @@
 <ui:param name="examHome" value="#{examDSTHome}" />
 
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 <s:decorate template="/layout/casebody.xhtml">
 	<ui:param name="pagewidth" value="650px" />
@@ -50,7 +50,7 @@
 
 	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
 
-	<h:dataTable value="#{examDSTHome.items}" var="it" style="clear:left;" styleClass="tabela" width="100%" columnClasses="coll,colc" rowClasses="lin1,lin2">
+	<h:dataTable value="#{examDSTHome.items}" var="it" style="clear:left;" styleClass="table1" width="100%" columnClasses="coll,colc" rowClasses="lin1,lin2">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['Medicine']}" styleClass="collh"/>
@@ -75,12 +75,12 @@
  		<div style="float:left;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandButton action="#{examDSTHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam" 
+            <a:commandLink action="#{examDSTHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam" 
             	oncomplete="this.disabled=false;"
             	onclick="this.disabled=true;" />
-            <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel">
+            <s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt">
             	<f:param name="id" value="#{caseHome.id}"/>
-            </s:button>
+            </s:link>
     </td></tr>
     
     </table>

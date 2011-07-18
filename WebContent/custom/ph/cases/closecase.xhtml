@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.close']}" />
 <ui:param name="waitdlg" value="1" />
@@ -15,7 +15,7 @@
 
 <ui:param name="labelstyle" value="width:160px" />
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 <h:form id="main">
 
@@ -45,10 +45,10 @@
 
 <table width="100%">
 <tr><td align="right">
-	<h:commandButton action="#{caseCloseHome.closeCase}" value="#{messages['form.ok']}" styleClass="button" onclick="openWaitDlg();"/> 
-    <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel">
+	<h:commandLink action="#{caseCloseHome.closeCase}" value="#{messages['form.ok']}" styleClass="button" onclick="openWaitDlg();"/> 
+    <s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt">
        	<f:param name="id" value="#{caseHome.id}"/>
-    </s:button>
+    </s:link>
 </td></tr>
 </table>
 </s:decorate>

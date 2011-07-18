@@ -42,7 +42,7 @@
 	</ui:define>
 
 <ui:define name="left">
-	<h:panelGroup id="leftmenu" styleClass="menubv">
+	<h:panelGroup id="leftmenu" >
 	<h:form class="vertical-menu">
 	
 	<h:commandLink action="#{caseHome.remove}" 
@@ -67,26 +67,34 @@
 	</h:form>
 	</h:panelGroup>
 
-	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:10px;" rendered="#{caseHome.canTagCase and not empty tbcase.tags}">
-	<ui:define name="header">
-		<b>#{messages['admin.tags']}</b>
-	</ui:define>
-	<ui:define name="footer" >
+
+	<s:fragment rendered="#{not empty tbcase.tags}">
+	<table class="table2">
+	<tr>
+		<th>#{messages['admin.tags']}</th>
+	</tr>
+	<tr>
+		<td>
+		<a:repeat value="#{tbcase.tags}" var="it">
+			<div class="tag-icon"/>#{it.name}<br/>
+		</a:repeat>
+		</td>
+	</tr>
+	<s:fragment rendered="#{caseHome.canTagCase}">
+	<tr>
+		<th>
 		<s:link value="#{messages['form.edit']}" 
 			rendered="#{caseHome.canEditCaseData}" 
-			view="/cases/casetagsedt.xhtml"
-			style="padding:4px;display:table;">
+			view="/cases/casetagsedt.xhtml">
 			<f:param name="id" value="#{caseHome.id}"/>
 		</s:link>
-	</ui:define>
-	<h:dataTable value="#{tbcase.tags}" var="it">
-		<h:column>
-			<div class="tag-icon">
-				#{it.name}
-			</div>
-		</h:column>
-	</h:dataTable>
-	</s:decorate>
+		</th>
+	</tr>
+	</s:fragment>
+	</table>
+	</s:fragment>
+
+	<div class="spacer" />
 	
 	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:10px;" rendered="#{not empty caseHome.otherCases}">
 		<ui:define name="header">
@@ -116,6 +124,8 @@
                 query="mouseout(function(){jQuery(this).removeClass('sel-row')})"/>
 	</s:decorate>
 </ui:define>
+
+
 
 <ui:define name="content">
 <h1>#{title}</h1>
@@ -256,11 +266,11 @@ function updateTab(tabIndex) {
 	</s:decorate>
 
 	<div class="button-bar">	
-	<a:commandButton value="#{messages['form.ok']}" action="#{caseHome.changeNumber}"
+	<a:commandLink value="#{messages['form.ok']}" action="#{caseHome.changeNumber}"
 		styleClass="button" reRender="main" 
 		oncomplete="Richfaces.hideModalPanel('caseNumberDlg');"/>
 
-	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
+	<a:commandLink value="#{messages['form.cancel']}" styleClass="button-alt"  
 		onclick="Richfaces.hideModalPanel('caseNumberDlg'); return false;"/>
 	</div>
 	

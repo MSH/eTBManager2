@@ -7,7 +7,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{ageRangeHome.managed? messages['admin.ageranges.edt']: messages['admin.ageranges.new']}" />
 <ui:param name="topmenu" value="3" />
@@ -15,9 +15,9 @@
 <ui:param name="waitdlg" value="1" />
 <ui:param name="labelstyle" value="width:160px;" />
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
-    <table class="tabela" width="550px">
+    <table class="table1" width="550px">
     <tr><td>
     <s:decorate template="/layout/display.xhtml" rendered="#{ageRange.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
@@ -36,9 +36,9 @@
     
     </td></tr>
     <tr><td align="right" colspan="2">
-            <a:commandButton action="#{ageRangeHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>  
-            <s:button value="#{messages['form.cancel']}" styleClass="button-cancel" view="/admin/ageranges.xhtml">
-            </s:button>  
+            <a:commandLink action="#{ageRangeHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>  
+            <s:link value="#{messages['form.cancel']}" styleClass="button-alt" view="/admin/ageranges.xhtml">
+            </s:link>  
     </td></tr>
     </table>
 

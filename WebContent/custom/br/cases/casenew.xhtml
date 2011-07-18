@@ -8,29 +8,20 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.newnotif']} - #{messages[tbcase.classification.key]}" />
 
 <ui:param name="topmenu" value="0" />
+<ui:param name="left" value="0" />
 <ui:param name="labelstyle" value="width:140px" />
-
-<ui:param name="waitdlg" value="1" />
-
-<ui:define name="left">
-</ui:define>
 
 
 <ui:define name="exams">
-	<s:decorate template="/layout/roundrect.xhtml" style="clear:both;display:block;width:800px;">
-		<ui:define name="header">
-			<b style="text-transform:uppercase;"> #{messages['cases.details.exams']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+	<div class="form-content">
+		<h2>#{messages['cases.details.exams']}</h2>
 		
-	<div>
-		
-		<table width="100%" style="border-collapse: collapse;" cellpadding="0" cellspacing="0">
+		<table width="100%" style="border-collapse: collapse;">
 		<tr><td>
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['cases.exammicroscopy']}:
@@ -290,21 +281,15 @@
 		</td></tr>
 		
 		</table>
-		
 	</div>
-		
-	</s:decorate>
-	<p/>
+
 </ui:define>
 
 
 <ui:define name="treatment">
 
-	<s:decorate template="/layout/roundrect.xhtml" style="clear:both;display:block;">
-		<ui:define name="header">
-			<b style="text-transform:uppercase;"> #{messages['pt_BR.treatment']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+	<div class="form-content">
+		<h2> #{messages['pt_BR.treatment']}</h2>
 
     	<s:decorate template="/layout/dateedit.xhtml" >
     		<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
@@ -349,25 +334,21 @@
 <rich:jQuery selector="#cbsuptreatment" query="change(function(){showSupUnit(this); })" />
 <rich:jQuery selector="#cbsuptreatment" timing="onload" query="each(function(){ showSupUnit(this,true); })" />
 
-	</s:decorate>
-	<p/>
+	</div>
+	
 </ui:define>
 
 
 
-<ui:define name="body">
-<p/>
-<a:form id="main">
-<table style="width:800px"><tr><td>
+<ui:define name="content">
+<h1>#{title}</h1>
+<a:form id="main" styleClass="form1">
+<table style="width:100%"><tr><td>
 
 	<ui:include src="casedataedt.xhtml" />	
 	
-	
-	<s:decorate template="/layout/roundrect.xhtml" style="clear:both;display:block;">
-		<ui:define name="header">
-			<b>#{messages['MedicalExamination']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+	<div class="form-content">
+		<h2>#{messages['MedicalExamination']}</h2>
 
 		<div><table width="99%" style="border-collapse:collapse;"><tr><td>
     		<s:decorate template="/layout/dateedit.xhtml" >
@@ -400,14 +381,17 @@
 		    </s:decorate>
 		</td></tr></table>
 		</div>
-	</s:decorate>
+	</div>
+	
 
-
-	<p/>
-	<table width="100%"><tr><td align="right">
-	<a:commandButton value="#{messages['form.ok']}" action="#{caseDataBRHome.saveNew}" styleClass="button" reRender="main,messages"/>
-	<s:button value="#{messages['form.cancel']}" view="/cases/index.xhtml" styleClass="button-cancel" propagation="end" />
-	</td></tr></table>
+	<div class="form-footer">
+		<a:commandLink action="#{caseDataBRHome.saveNew}" styleClass="button" reRender="main,messages">
+			<span>#{messages['form.ok']}</span>
+		</a:commandLink>
+		<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
 </td></tr></table>
 <p/>
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}

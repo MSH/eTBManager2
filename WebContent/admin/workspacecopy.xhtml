@@ -7,7 +7,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{workspace.name} - #{messages['admin.workspaces.copy']}" />
 <ui:param name="topmenu" value="3" />
@@ -20,7 +20,7 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
 	<table width="500px" class="tab1" ><tr><td>
 
@@ -62,7 +62,7 @@
 	</td></tr>
 	<tr><td>
 
-	<a:commandButton value="#{messages['form.copy']}" action="#{workspaceCopy.copy}" styleClass="button" reRender="main"/>
+	<a:commandLink value="#{messages['form.copy']}" action="#{workspaceCopy.copy}" styleClass="button" reRender="main"/>
 
 	</td></tr></table>
 

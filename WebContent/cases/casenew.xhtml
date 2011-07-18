@@ -8,7 +8,7 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.newnotif']} - #{messages[tbcase.classification.key]}" />
 <ui:param name="left" value="0" />
@@ -16,7 +16,7 @@
 <ui:param name="labelstyle" value="width:160px" />
 <ui:param name="waitdlg" value="1" />
 
-<ui:define name="body">
+<ui:define name="content">
 <a:form id="main">
 <table style="width:100%"><tr><td>
 
@@ -67,8 +67,8 @@
 
 	<p/>
 	<table width="100%"><tr><td align="right">
-	<a:commandButton value="#{messages['form.ok']}" action="#{caseEditingHome.saveNew}" styleClass="button" reRender="main,messages"/>
-	<s:button value="#{messages['form.cancel']}" view="/cases/index.xhtml" styleClass="button-cancel" propagation="end" />
+	<a:commandLink value="#{messages['form.ok']}" action="#{caseEditingHome.saveNew}" styleClass="button" reRender="main,messages"/>
+	<s:link value="#{messages['form.cancel']}" view="/cases/index.xhtml" styleClass="button-alt" propagation="end" />
 	</td></tr></table>
 </td></tr></table>
 <p/>

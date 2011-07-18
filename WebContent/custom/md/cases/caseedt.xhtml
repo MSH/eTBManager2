@@ -8,7 +8,7 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.edit']} - #{messages[tbcase.classification.key]}" />
 
@@ -20,7 +20,7 @@
 <ui:define name="left">
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
 <p/>
 <table width="780px"><tr><td>
@@ -33,10 +33,10 @@
 	<div style="float:left;">
 		<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 	</div>
-	<a:commandButton value="#{messages['form.ok']}" action="#{caseEditingHome.saveEditing}" styleClass="button" reRender="main"/>
-	<s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel" propagation="end">
+	<a:commandLink value="#{messages['form.ok']}" action="#{caseEditingHome.saveEditing}" styleClass="button" reRender="main"/>
+	<s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
 		<f:param name="id" value="#{caseHome.id}" />
-	</s:button>
+	</s:link>
 	</td></tr></table>
 </td></tr></table>
 <p/>

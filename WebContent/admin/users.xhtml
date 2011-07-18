@@ -7,25 +7,25 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.users']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
 
-<s:button view="/admin/edtuser.xhtml" value="#{messages['form.new']}" 
+<s:link view="/admin/edtuser.xhtml" value="#{messages['form.new']}" 
 	styleClass="button"  
 	rendered="#{s:hasRole('USERS_EDT')}"
 	propagation="none" >
 	<f:param name="id" value="#{null}" />
-</s:button>
+</s:link>
 
 <p/>
 <s:decorate template="/layout/listresult.xhtml">
@@ -33,7 +33,7 @@
 </s:decorate>
 
 <h:dataTable id="tbl" value="#{users.resultList}" var="it" 
-  styleClass="tabela" rowClasses="lin1,lin2" width="100%"  columnClasses="coll,coll,coll,colc,coll,coll,coll,colc"
+  styleClass="table1" rowClasses="lin1,lin2" width="100%"  columnClasses="coll,coll,coll,colc,coll,coll,coll,colc"
   rendered="#{not empty users.resultList}">
   <h:column>
   	<f:facet name="header">

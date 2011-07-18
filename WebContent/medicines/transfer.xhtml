@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
  	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templateMedPage}">
+      template="../layout/templatemed.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.transfer']}" />
 <ui:param name="topmenu" value="1" />
@@ -16,12 +16,17 @@
 <ui:param name="labelstyle" value="width:210px;" />
 <ui:param name="pagestyle" value="width:650px;" />
 
-
 <ui:define name="naveg">
-	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none"/>
+	<div class="item">
+		<s:link value="#{messages['home']}" view="/medicines/index.xhtml" propagation="none"/>
+	</div>
+	<div class="item selected">
+		<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none"/>
+	</div>
 </ui:define>
 
-<ui:define name="body">
+
+<ui:define name="content_unit">
 <h:form id="main">
 
 	<s:link view="/medicines/transfedt.xhtml" value="#{messages['medicines.transfer.new']}" style="float:right;width:150px;text-align:right;" rendered="#{s:hasRole('NEW_TRANSFER')}"/>
@@ -72,7 +77,7 @@
 			style="width:100%;font-weight:bold;text-align:center;height:100%;padding-top:20px;display:table;color:red;" 
 			rendered="#{empty transfers.resultList}"/>
 		
-		<h:dataTable value="#{transfers.resultList}" var="it" width="100%" styleClass="tabela" rendered="#{not empty transfers.resultList}" 
+		<h:dataTable value="#{transfers.resultList}" var="it" width="100%" styleClass="table1" rendered="#{not empty transfers.resultList}" 
 		  columnClasses="colc,coll,colc" rowClasses="lin1,lin2">
 			<h:column>
 				<f:facet name="header">

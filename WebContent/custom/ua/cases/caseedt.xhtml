@@ -6,7 +6,7 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.edit']} - #{messages[tbcase.classification.key]}" />
 
@@ -19,7 +19,7 @@
 <ui:define name="left">
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
 <p/>
 <table width="100%"><tr><td>
@@ -27,10 +27,10 @@
 	<ui:include src="casedataedt.xhtml" />
 	
 	<table width="100%"><tr><td align="right">
-	<a:commandButton value="#{messages['form.ok']}" action="#{caseDataUAHome.saveEditing}" styleClass="button" reRender="main,messages"/>
-	<s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel" propagation="end">
+	<a:commandLink value="#{messages['form.ok']}" action="#{caseDataUAHome.saveEditing}" styleClass="button" reRender="main,messages"/>
+	<s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
 		<f:param name="id" value="#{caseHome.id}" />
-	</s:button>
+	</s:link>
 	</td></tr></table>
 </td></tr></table>
 <p/>

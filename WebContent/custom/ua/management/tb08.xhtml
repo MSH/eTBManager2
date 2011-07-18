@@ -8,7 +8,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:p="http://jboss.com/products/seam/pdf"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['uk_UA.reports.tb08']}" />
 
@@ -25,7 +25,7 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form>
 <table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
 <tr><td bgcolor="#f8f8f8">
@@ -40,7 +40,7 @@
 
 	<s:fragment rendered="#{indicatorController.executing}">
 	<h2>#{messages['uk_UA.reports.tb08.1']}</h2>
-	<table class="tabela" width="100%">
+	<table class="table1" width="100%">
 		<tr>
 			<th rowspan="2">
 				#{messages['PatientType']}
@@ -129,7 +129,7 @@
 	</table>
 
 	<h2>#{messages['uk_UA.reports.tb08.2']}</h2>
-	<table class="tabela" width="100%">
+	<table class="table1" width="100%">
 		<tr>
 			<th rowspan="2">
 				#{messages['PatientType']}
@@ -219,7 +219,7 @@
 
 
 	<h2>#{messages['uk_UA.reports.tb08.3']}</h2>
-	<table class="tabela" width="100%">
+	<table class="table1" width="100%">
 		<tr>
 			<th>
 				#{messages['uk_UA.reports.tb08.3.header1']}

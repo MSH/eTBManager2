@@ -7,17 +7,24 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templateMedPage}">
+      template="/layout/templatemed.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.medicinerecs']}" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="waitdlg" value="1" />
 
 <ui:define name="naveg">
-	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
+	<div class="item">
+		<s:link value="#{messages['home']}" view="/medicines/index.xhtml" propagation="none"/>
+	</div>
+	<div class="item selected">
+		<s:link value="#{title}" propagation="none" />
+	</div>
 </ui:define>
 
-<ui:define name="body">
+
+
+<ui:define name="content_unit">
 <h:form>
 	<s:link view="/medicines/edtrec.xhtml" value="#{messages['medicines.medicinerecs.new']}" rendered="#{s:hasRole('RECEIV_EDT')}" style="float:right;width:150px;" >
 		<f:param name="id" value="#{null}" />
@@ -37,7 +44,7 @@
 	<ui:param name="page" value="/medicines/medicinerecs.xhtml" />
 </s:decorate>
 
-<h:dataTable value="#{medicineReceivings.resultList}" var="r" styleClass="tabela" width="100%" 
+<h:dataTable value="#{medicineReceivings.resultList}" var="r" styleClass="table1" width="100%" 
 	rowClasses="lin1,lin2" columnClasses="colc,colc,coll,coll" rendered="#{medicineReceivings.resultCount > 0}">
 <h:column>
   	<f:facet name="header">

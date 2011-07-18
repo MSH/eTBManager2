@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 
 <ui:param name="title" value="#{messages['cases.details']}" />
@@ -21,7 +21,7 @@
 </ui:define>
 
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<h:panelGroup id="leftmenu">
 	<h:form>
 
@@ -102,7 +102,7 @@
 	</s:decorate>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 <h:form id="main">
 <s:decorate template="/layout/casebody.xhtml">

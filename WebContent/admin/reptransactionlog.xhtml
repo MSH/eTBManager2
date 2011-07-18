@@ -7,17 +7,17 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['userrole.LOGREP']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
 
 <s:decorate template="/layout/roundrect.xhtml" style="width:800px">
@@ -60,7 +60,7 @@
 		<h:inputText value="#{transactionLogReport.searchKey}" />
 	</s:decorate>
 	
-	<a:commandButton value="#{messages['form.refresh']}" reRender="reportPanel" action="#{transactionLogReport.refresh}" styleClass="button" />
+	<a:commandLink value="#{messages['form.refresh']}" reRender="reportPanel" action="#{transactionLogReport.refresh}" styleClass="button" />
 	
 </s:decorate>
 

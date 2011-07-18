@@ -8,7 +8,7 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:c="http://java.sun.com/jstl/core"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['dispensing.new']}" />
 
@@ -19,7 +19,7 @@
 <ui:define name="left">
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 
 <s:decorate id="formdisp" template="/layout/unit.xhtml">
@@ -46,7 +46,7 @@
 	</s:decorate>
 
 <h:panelGroup id="dispdata">
-	<table width="100%" class="tabela">
+	<table width="100%" class="table1">
 	<a:repeat value="#{medicineDispensingHome.sources}" var="s">
 	<tr>
 		<td colspan="6" class="highlight">
@@ -132,12 +132,12 @@
 	</table>
 
 	<div style="float:right">
-		<a:commandButton value="#{messages['form.ok']}" action="#{medicineDispensingHome.saveDispensing}" 
+		<a:commandLink value="#{messages['form.ok']}" action="#{medicineDispensingHome.saveDispensing}" 
 			styleClass="button" reRender="main,messages" />
-		<s:button value="#{messages['form.cancel']}" view="/medicines/dispensing.xhtml" styleClass="button-cancel" propagation="end">
+		<s:link value="#{messages['form.cancel']}" view="/medicines/dispensing.xhtml" styleClass="button-alt" propagation="end">
 			<f:param name="month" value="#{medicineDispensingHome.month}"/>
 			<f:param name="year" value="#{medicineDispensingHome.year}"/>
-		</s:button>
+		</s:link>
 	</div>
 </h:panelGroup>
 </h:form>
@@ -145,7 +145,7 @@
 
 
 <s:decorate template="/layout/batchselection.xhtml" >
-	<a:commandButton value="#{messages['form.ok']}" action="#{medicineDispensingHome.selectBatches}"
+	<a:commandLink value="#{messages['form.ok']}" action="#{medicineDispensingHome.selectBatches}"
 	    onclick="if (!validateBatchSelection(self)) return false;"
 		oncomplete="this.disabled=false;if (batchValOk) hideBatchesSelectionDlg();" 
 		styleClass="button" reRender="dispdata"/>

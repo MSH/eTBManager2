@@ -7,40 +7,26 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.searchresult']}" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="left" value="0" />
-<ui:param name="waitdlg" value="1" />
+
 
 <ui:define name="naveg">
 	<s:link value="#{messages['cases']}" view="/cases/index.html" propagation="none"/>
+	<div class="item selected">
+		<s:link value="#{title}" view="/cases/searchresult.html" />
+	</div>
 </ui:define>
 
-<ui:define name="left">
-</ui:define>
 
-<ui:define name="head">
-<style type="text/css">
-.searchtitle{
-/* 	background-color:#e0e0e0; */
-	border:1px solid #d0d0d0;
-}
-.searchtitle a {
-/*   color:black; */
-   font-size:10px;
-   text-transform:uppercase;
-   font-weight:bold;
-}
-</style>
-</ui:define>
-
-<ui:define name="body">
-
+<ui:define name="content">
+<h1>#{title}</h1>
 	<h:form id="listCases" >
 
-	<table width="99%"><tr><td>
+	<table width="100%"><tr><td>
 	
 		<s:decorate template="/layout/navegajax.xhtml" rendered="#{facesContext.renderResponse}">
 			<ui:param name="list" value="#{casesQueryBR}" />
@@ -48,11 +34,13 @@
 		</s:decorate>
 	
 	</td><td align="right">
-		<h:commandButton value="#{messages['cases.newsearch']}" styleClass="button" onclick="Richfaces.showModalPanel('filtersdlg');return false;" style="float:right;width:150px;"/>	
+		<h:commandLink styleClass="button-alt" onclick="Richfaces.showModalPanel('filtersdlg');return false;" style="float:right;">
+			<span>#{messages['cases.newsearch']}</span>
+		</h:commandLink>	
 	</td></tr></table>
 	
 	<h:panelGroup id="res" >
-	<table id="tblres" width="100%" class="tabela">
+	<table id="tblres" width="100%" class="table1">
 		<tr><th class="searchtitle">
 				<div style="padding:4px;">
 				<a:commandLink value="#{messages['Patient.caseNumber']}" reRender="listCases" bypassUpdates="true" ajaxSingle="true">
@@ -188,12 +176,13 @@
 	</td>
 
 	<td align="right">
-		<a:commandButton id="btnsearch" value="#{messages['form.search']}" action="#{casesQueryBR.refresh}" 
+		<a:commandLink id="btnsearch" action="#{casesQueryBR.refresh}" 
 			styleClass="button"	reRender="listCases" onclick="if (!validateFilters()) return false;this.disabled=true"
 			oncomplete="this.disabled=false;Richfaces.hideModalPanel('filtersdlg');return false;">
 			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
-		</a:commandButton>
-		<s:button value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-cancel"/>
+			<span>#{messages['form.search']}</span>
+		</a:commandLink>
+		<s:link value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-alt"/>
 	</td></tr></table>	
 	</a:region>
 	<rich:hotKey selector="#tblfilters input,select" key="return" handler="#{rich:element('btnsearch')}.click();" /> 

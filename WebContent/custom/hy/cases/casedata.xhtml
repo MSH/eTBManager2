@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 
 <ui:param name="title" value="#{messages['cases.details']} - #{messages[tbcase.classification.key]}" />
@@ -40,7 +40,7 @@
 	</ui:define>
 
 <td width="150px">
-	<h:panelGroup id="leftmenu" styleClass="menubv">
+	<h:panelGroup id="leftmenu" styleClass="vertical-menu">
 	<h:form>
 	
 	<s:link value="#{messages['cases.validate']}" view="/cases/validate.xhtml" rendered="#{caseHome.canValidate}">
@@ -117,7 +117,7 @@
 </td>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 <h:form id="main">
 <s:decorate template="/layout/casebody.xhtml">

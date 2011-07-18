@@ -7,14 +7,14 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templateMedPage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="TEST OF MOVEMENTS - DON'T EXECUTE IT IF YOU'RE NOT SURE WHAT IT DOES!" />
 <ui:param name="waitdlg" value="1" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 
-<ui:define name="body">
+<ui:define name="content">
 <div>
 
 	<h:form id="main" rendered="#{userLogin.user.login=='RICARDO'}">

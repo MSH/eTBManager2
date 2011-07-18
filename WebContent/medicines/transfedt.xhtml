@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.transfer.new']}" />
 
@@ -19,7 +19,7 @@
 <ui:define name="left">
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <s:decorate template="/layout/unit.xhtml">
 <h:form id="main">
 
@@ -47,7 +47,7 @@
 	<b>#{messages['medicines.movs.itensmov']}</b><br/>
 
 	<h:panelGroup id="pnlitems">
-	<table width="100%" class="tabela" style="clear:right;">
+	<table width="100%" class="table1" style="clear:right;">
 	<a:repeat value="#{transferHome.sources}" var="s">
 		<tr style="background-color:#EDF7EF;"><td colspan="6" style="border:1px solid #B4E8BB;padding:5px;">
 			<b>#{s.source.name}</b>
@@ -135,8 +135,8 @@
 	</h:panelGroup>		
 
 	<table width="100%"><tr><td align="right">
-        <a:commandButton action="#{transferHome.saveNewTransfer}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>
-		<s:button view="/medicines/transfer.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" />
+        <a:commandLink action="#{transferHome.saveNewTransfer}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>
+		<s:link view="/medicines/transfer.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end" />
 	</td></tr></table>
 </h:form>
 </s:decorate>
@@ -146,11 +146,11 @@
 </div>   
 
 <s:decorate template="/layout/medicinestockselection.xhtml" >
-	<a:commandButton value="#{messages['form.ok']}" action="#{transferHome.selectMedicines}" oncomplete="hideMedicinesStockDlg();" reRender="pnlitems" styleClass="button"/>
+	<a:commandLink value="#{messages['form.ok']}" action="#{transferHome.selectMedicines}" oncomplete="hideMedicinesStockDlg();" reRender="pnlitems" styleClass="button"/>
 </s:decorate>
 
 <s:decorate template="/layout/batchselection.xhtml" >
-	<a:commandButton value="#{messages['form.ok']}" action="#{transferHome.selectBatches}" 
+	<a:commandLink value="#{messages['form.ok']}" action="#{transferHome.selectBatches}" 
 		onclick="if (!validateBatchSelection(this)) return false;" 
 		oncomplete="hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button"/>
 </s:decorate>

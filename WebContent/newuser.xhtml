@@ -73,9 +73,9 @@
 		</div>
 
 		<table width="95%" style="margin-top:50px;margin-bottom:20px;"><tr><td align="right">		
-			<a:commandButton action="#{userRegistrationHome.register}" value="#{messages['form.ok']}" 
+			<a:commandLink action="#{userRegistrationHome.register}" value="#{messages['form.ok']}" 
 				styleClass="button" reRender="formnewuser" onclick="openWaitDlg();" oncomplete="closeWaitDlg();"/>
-			<s:button view="/login.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel"/>
+			<s:link view="/login.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt"/>
 		</td></tr></table>
 	</h:form>
 	</s:decorate>

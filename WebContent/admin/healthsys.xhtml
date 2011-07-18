@@ -7,25 +7,25 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.healthsys']}" />
 <ui:param name="topmenu" value="3" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
-<s:button view="/admin/edthealthsys.xhtml" value="#{messages['form.new']}" 
+<s:link view="/admin/edthealthsys.xhtml" value="#{messages['form.new']}" 
 	styleClass="button" 
 	rendered="#{s:hasRole('HEALTHSYS_EDT')}" >
 	<f:param name="id" value="#{null}" />
-</s:button>
+</s:link>
 <p/>
 <h:dataTable id="tbl" value="#{healthSystems.resultList}" var="r" border="0" columnClasses="coll#{defaultWorkspace.hasAlternateLocale?',coll':''},colc" 
-	width="700px"  styleClass="tabela" rowClasses="lin1,lin2" rendered="#{not empty healthSystems.resultList}" style="margin-top:4px;">
+	width="700px"  styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty healthSystems.resultList}" style="margin-top:4px;">
   <h:column>
   	<f:facet name="header">
   		<s:link value="#{messages['form.name']}" styleClass="collh">

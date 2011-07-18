@@ -8,7 +8,7 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['manag.rel1']}" />
 
@@ -35,9 +35,9 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
-<table class="tabela" width="100%">
+<table class="table1" width="100%">
 <tr><td>
 	<s:decorate id="source" template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['Source']}:</ui:define>
@@ -58,7 +58,7 @@
 	
 </td></tr>
 <tr><td align="right">
-	<a:commandButton value="#{messages['form.generate']}" styleClass="button" action="#{stockPosReport.execute}" 
+	<a:commandLink value="#{messages['form.generate']}" styleClass="button" action="#{stockPosReport.execute}" 
 		reRender="pnlresult,pnlPrintLink"/>
 </td></tr>
 </table>
@@ -67,7 +67,7 @@
 <s:fragment rendered="#{facesContext.renderResponse}">
 <h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty stockPosReport.medicines}" />
 <s:fragment rendered="#{not empty stockPosReport.medicines}">
-<table class="tabela" style="margin-top:20px;" >
+<table class="table1" style="margin-top:20px;" >
 	<tr>
 	<th width="200px">
 		#{levelInfo.nameLevel1} / #{messages['Tbunit']}

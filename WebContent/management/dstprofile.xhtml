@@ -8,7 +8,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:p="http://jboss.com/products/seam/pdf"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['manag.ind.dstprofile']}" />
 
@@ -31,7 +31,7 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form>
 <table style="border:2px solid #f0f0f0;" width="100%" align="left" cellspacing="4" cellpadding="4">
 <tr><td bgcolor="#f8f8f8">
@@ -47,7 +47,7 @@
 			#{messages['manag.dstprofile.title.dstresults']}
 		</div>
 
-	<table class="tabela" width="750px" align="left">
+	<table class="table1" width="750px" align="left">
 		<tr>
 		<th>   </th>
 		<ui:repeat value="#{table.columns}" var="col">
@@ -80,7 +80,7 @@
 		<div class="paragraph">
 			#{messages['manag.dstprofile.monoresistance']}
 		</div>
-	<table class="tabela" width="800px" align="left">
+	<table class="table1" width="800px" align="left">
 		<tr>
 		<th>   </th>
 		<ui:repeat value="#{dstUniqueResistIndicator.table.columns}" var="col">
@@ -126,7 +126,7 @@
 		<div class="paragraph">
 			#{messages['manag.dstprofile.mdrresistance']}
 		</div>
-	<table class="tabela" width="800px" align="left">
+	<table class="table1" width="800px" align="left">
 		<tr>
 		<th>   </th>
 		<ui:repeat value="#{mdrResistanceIndicator.table.columns}" var="col">
@@ -171,7 +171,7 @@
 		<div class="paragraph">
 			#{messages['manag.dstprofile.polyresistance']}
 		</div>
-	<table class="tabela" width="800px" align="left">
+	<table class="table1" width="800px" align="left">
 		<tr>
 		<th>   </th>
 		<ui:repeat value="#{polyResistanceIndicator.table.columns}" var="col">

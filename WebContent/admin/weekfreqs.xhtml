@@ -8,23 +8,23 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:c="http://java.sun.com/jstl/core"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.weeklyfreq']}" />
 <ui:param name="topmenu" value="3" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
-<s:button view="/admin/edtweekfreq.xhtml" value="#{messages['form.edit']}" styleClass="button" rendered="#{s:hasRole('WEEKFREQ_EDT')}">
+<s:link view="/admin/edtweekfreq.xhtml" value="#{messages['form.edit']}" styleClass="button" rendered="#{s:hasRole('WEEKFREQ_EDT')}">
 	<f:param name="id" value="#{null}" />
-</s:button>
+</s:link>
 <p/>
 
-<table class="tabela" width="400px" >
+<table class="table1" width="400px" >
 	<tr><th>
 			#{messages['admin.weeklyfreq']}
 		</th>

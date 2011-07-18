@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.details.medexam']}" />
 <ui:param name="show_menu" value="1" />
@@ -17,7 +17,7 @@
 <ui:param name="labelstyle" value="width:180px;" />
 
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 
 <s:decorate template="/layout/casebody.xhtml">
@@ -138,12 +138,12 @@
 		<div style="float:left;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandButton action="#{medicalExaminationHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam" 
+            <a:commandLink action="#{medicalExaminationHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam" 
             	oncomplete="this.disabled=false;"
             	onclick="this.disabled=true;" />
-            <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel" propagation="end">
+            <s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
             	<f:param name="id" value="#{caseHome.id}"/>
-            </s:button>
+            </s:link>
     </td></tr>
     
     </table>

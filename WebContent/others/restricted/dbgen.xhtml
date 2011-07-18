@@ -6,22 +6,22 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="DB Generator" />
 <ui:param name="topmenu" value="3" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 	<h:form enctype="multipart/form-data">
 	<s:fileUpload data="#{preferencesReader.textFile}">
 	</s:fileUpload>
 	
 	<p/>
-	<h:commandButton action="#{preferencesReader.read}" value="Read" styleClass="button" rendered="false"/>
-	<h:commandButton action="#{dbgenHome.readAndExecute}" value="Execute" styleClass="button"/>
+	<h:commandLink action="#{preferencesReader.read}" value="Read" styleClass="button" rendered="false"/>
+	<h:commandLink action="#{dbgenHome.readAndExecute}" value="Execute" styleClass="button"/>
 	
 	</h:form>
 </ui:define>

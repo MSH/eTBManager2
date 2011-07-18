@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.newnotif']} - #{messages[tbcase.classification.key]}" />
 
@@ -17,7 +17,7 @@
 
 <ui:param name="waitdlg" value="1" />
 
-<ui:define name="body">
+<ui:define name="content">
 
 <script type="text/javascript">
 function checkfields() {
@@ -53,10 +53,10 @@ function checkfields() {
 	<h:inputHidden value="#{tbcase.classification}" />
 
 	<table width="100%"><tr><td>
-		<a:commandButton id="btnsearch" value="#{messages['form.search']}" action="#{patients.search}" styleClass="button"
+		<a:commandLink id="btnsearch" value="#{messages['form.search']}" action="#{patients.search}" styleClass="button"
 			data="#{patients.searching}" focus="name"
 			reRender="pnlpatients,dt" onclick="if (!checkfields()) return false" oncomplete="if (data) showbutton();"/>
-		<s:button value="#{messages['form.cancel']}" view="/cases/index.xhtml" styleClass="button-cancel" />
+		<s:link value="#{messages['form.cancel']}" view="/cases/index.xhtml" styleClass="button-alt" />
 	</td></tr></table> 
 
 	<rich:jQuery timming="onload" selector="#main input[type='text']:first" query="focus()" />
@@ -67,16 +67,16 @@ function checkfields() {
 <p/>
 <h:panelGroup id="pnlpatients">
 
-<h:commandButton id="btnpac" value="#{messages['cases.newpatient']}" onclick="openWaitDlg();"
+<h:commandLink id="btnpac" value="#{messages['cases.newpatient']}" onclick="openWaitDlg();"
     action="#{caseEditingHome.selectPatientData}" styleClass="button" style="display:none;width:160px;" >
-</h:commandButton>
+</h:commandLink>
 
 <s:decorate template="/layout/naveg.xhtml" rendered="#{patients.searching}">
 	<ui:param name="list" value="#{patients}" />
 	<ui:param name="page" value="/cases/newnotif.xhtml" />
 </s:decorate>
 
-<h:dataTable value="#{patients.resultList}" var="it" styleClass="tabela" rowClasses="lin1,lin2" 
+<h:dataTable value="#{patients.resultList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
 	rendered="#{patients.searching and (not empty patients.resultList)}" width="680px" columnClasses="coll,colc,colc,coll">
 	<h:column>
 		<f:facet name="header">

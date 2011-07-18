@@ -63,10 +63,10 @@ function hideIssuesCommand() {
 <h:panelGroup id="pnlIssues" style="display:none;">
 <s:fragment rendered="#{caseValidationHome.displayingIssues}">
 
-	<s:button value="#{messages['cases.pending.answer']}" view="/cases/postanswer.xhtml" 
+	<s:link value="#{messages['cases.pending.answer']}" view="/cases/postanswer.xhtml" 
 		rendered="#{caseHome.canAnswerIssue}" styleClass="button" style="width:200px;">
 		<f:param name="id" value="#{caseHome.id}"/>
-	</s:button>
+	</s:link>
 
 <table width="100%" >
 <a:repeat value="#{caseValidationHome.issues}" var="it">

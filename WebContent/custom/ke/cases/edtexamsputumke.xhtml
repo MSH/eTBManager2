@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.exammicroscopy']}" />
 <ui:param name="show_menu" value="1" />
@@ -18,7 +18,7 @@
 <ui:param name="examType" value="#{examMicroscopyHome.examMicroscopy}" />
 
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 
 <s:decorate template="/custom/ke/cases/casebody.xhtml">
@@ -76,11 +76,11 @@
 		<div style="float:left;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandButton action="#{examMicroscopyHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam,messages" 
+            <a:commandLink action="#{examMicroscopyHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam,messages" 
             	oncomplete="this.disabled=false;"
             	onclick="this.disabled=true;" 
             	/>
-            <a:commandButton action="canceled" styleClass="button-cancel" value="#{messages['form.cancel']}" ajaxSingle="true"/>
+            <a:commandLink action="canceled" styleClass="button-alt" value="#{messages['form.cancel']}" ajaxSingle="true"/>
     </td></tr>
     
     </table>

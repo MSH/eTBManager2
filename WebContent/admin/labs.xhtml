@@ -7,17 +7,17 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.labs']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
 <s:decorate id="sel" template="/layout/display.xhtml">
 	<ui:define name="label">#{laboratories.auselection.labelLevel1}:</ui:define>
@@ -38,9 +38,9 @@
 </s:decorate>                 
 
 
-<s:button view="/admin/edtlab.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{s:hasRole('LABS_EDT')}">
+<s:link view="/admin/edtlab.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{s:hasRole('LABS_EDT')}">
 	<f:param name="id" value="#{null}" />
-</s:button>
+</s:link>
 <p/>
 
 <h:panelGroup id="pnllabs">
@@ -49,7 +49,7 @@
 </s:decorate>
 
 <h:dataTable id="tbl" value="#{laboratories.resultList}" var="r" border="0" columnClasses="coll,coll,colc" width="100%"
-  styleClass="tabela" rowClasses="lin1,lin2" rendered="#{laboratories.resultCount > 0}">
+  styleClass="table1" rowClasses="lin1,lin2" rendered="#{laboratories.resultCount > 0}">
   <h:column>
   	<f:facet name="header">
   		<s:link value="#{messages['form.name']}" styleClass="collh">

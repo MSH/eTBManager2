@@ -6,15 +6,15 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.movs.newtransfer']} - #{messages['Batch']} - #{messages['form.new']}" />
 
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 
-<ui:define name="body">
-    <table class="tabela" width="650px">
+<ui:define name="content">
+    <table class="table1" width="650px">
     <tr><td>
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['Source']}:</ui:define>
@@ -88,7 +88,7 @@
     	</h:inputText>
     </s:decorate>
 
-	<h:commandButton action="#{batchTransferHome.addBatch}" value="#{messages['form.add']}" styleClass="button" style="display:block;"/>
+	<h:commandLink action="#{batchTransferHome.addBatch}" value="#{messages['form.add']}" styleClass="button" style="display:block;"/>
 	</h:form>
 		
 	</td></tr>
@@ -97,7 +97,7 @@
 	
 	<tr><td>
 		<h:form>
-		<h:dataTable value="#{batchTransferHome.newBatches}" var="b" styleClass="tabela" width="100%" columnClasses="coll,coll,colc,colr,colr,colc" rowClasses="lin1,lin2" rendered="#{not empty batchTransferHome.newBatches}">
+		<h:dataTable value="#{batchTransferHome.newBatches}" var="b" styleClass="table1" width="100%" columnClasses="coll,coll,colc,colr,colr,colc" rowClasses="lin1,lin2" rendered="#{not empty batchTransferHome.newBatches}">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['Batch.brandName']}" styleClass="collh"/>
@@ -139,8 +139,8 @@
 		</h:form>
 	</td></tr>
     <tr><td align="right">
-            <s:button action="#{batchTransferHome.selectNewBatches}" value="#{messages['form.ok']}" styleClass="button" rendered="#{not empty batchTransferHome.newBatches}" />
-			<s:button action="/medicines/transfedt.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" />
+            <s:link action="#{batchTransferHome.selectNewBatches}" value="#{messages['form.ok']}" styleClass="button" rendered="#{not empty batchTransferHome.newBatches}" />
+			<s:link action="/medicines/transfedt.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" />
     </td></tr>
     
     </table>

@@ -7,13 +7,13 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['Order']} - #{messages['medicines.orders.autorize']}" />
 
 <ui:param name="topmenu" value="1" />
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 <h:form>
 <rich:panel style="width:600px;">
@@ -39,7 +39,7 @@
 		<b>#{s.source.name}</b>
 	</td></tr>
 	<tr><td>
-		<h:dataTable value="#{s.items}" var="it" class="tabela" width="100%" rowClasses="lin1,lin2" columnClasses="coll,coll,colr,colr,highlight colr">
+		<h:dataTable value="#{s.items}" var="it" class="table1" width="100%" rowClasses="lin1,lin2" columnClasses="coll,coll,colr,colr,highlight colr">
 			<h:column>
 				<f:facet name="header"><h:outputText value="#{messages['Medicine']}" styleClass="collh" /></f:facet>
 				<h:outputText value="#{it.item.medicine}" styleClass="medicine-icon" />
@@ -75,10 +75,10 @@
 </table>
 
 <div >
-    <h:commandButton action="#{orderAuthorizingHome.authorize}" value="#{messages['form.ok']}" styleClass="button" />
-    <s:button action="/medicines/orderdata.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" >
+    <h:commandLink action="#{orderAuthorizingHome.authorize}" value="#{messages['form.ok']}" styleClass="button" />
+    <s:link action="/medicines/orderdata.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" >
     	<f:facet name="id" value="#{order.id}" />
-    </s:button>
+    </s:link>
 </div>
 </rich:panel>
 </h:form>

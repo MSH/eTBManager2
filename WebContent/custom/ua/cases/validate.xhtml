@@ -6,7 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.validate']}" />
 <ui:param name="topmenu" value="1" />
@@ -14,7 +14,7 @@
 
 
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main" rendered="#{caseHome.canValidate}">
 
 
@@ -128,10 +128,10 @@ function isPulmonary(cb) {
     
     </td></tr>
     <tr><td align="right">
-    	<h:commandButton action="#{caseValidationHome.validate}" value="#{messages['cases.validate']}" styleClass="button" style="width:180px;"/>
-    	<s:button view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" >
+    	<h:commandLink action="#{caseValidationHome.validate}" value="#{messages['cases.validate']}" styleClass="button" style="width:180px;"/>
+    	<s:link view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end" >
     		<f:param name="id" value="#{caseHome.id}" />
-    	</s:button>
+    	</s:link>
     </td></tr>
 	</table>
 </s:decorate>

@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.exambiopsy']}" />
 <ui:param name="waitdlg" value="1" />
@@ -16,7 +16,7 @@
 <ui:param name="examHome" value="#{examBiopsyHome}" />
 
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 
 <s:decorate template="/layout/casebody.xhtml">
@@ -66,11 +66,11 @@
 		<div style="float:left;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandButton action="#{examBiopsyHome.persist}" value="#{messages['form.ok']}" styleClass="button" 
+            <a:commandLink action="#{examBiopsyHome.persist}" value="#{messages['form.ok']}" styleClass="button" 
             	reRender="formexam,messages" 
             	oncomplete="this.disabled=false;"
             	onclick="this.disabled=true;" />
-            <a:commandButton action="canceled" value="#{messages['form.cancel']}" styleClass="button-cancel" ajaxSingle="true"/>
+            <a:commandLink action="canceled" value="#{messages['form.cancel']}" styleClass="button-alt" ajaxSingle="true"/>
     </td></tr>
     
     </table>

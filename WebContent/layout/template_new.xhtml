@@ -126,7 +126,9 @@
 		</td>
 		</s:fragment>
 		<td class="central-content">
-    		<h:messages id="messages" globalOnly="true" layout="table" styleClass="global-messages" />
+			<h:panelGroup id="messages">
+    			<h:messages globalOnly="true" layout="table" styleClass="global-messages" />
+    		</h:panelGroup>
     		<ui:insert name="content" />
 		</td>
 	</tr>
