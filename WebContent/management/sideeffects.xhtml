@@ -29,10 +29,11 @@
 
 
 <ui:define name="content">
+<h1>#{title}</h1>
 <h:form>
 <h:panelGroup id="indicator">
-<table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
-<tr><td bgcolor="#f8f8f8" colspan="2">
+<table width="100%">
+<tr><td colspan="2">
 	<ui:include src="filters.xhtml" >
 		<ui:param name="showoutputselection" value="false" />
 	</ui:include>

@@ -7,14 +7,11 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
-		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/cases/comorbedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
-				<f:param name="id" value="#{caseHome.id}" />
-			</s:link>
-    		<b>#{messages['cases.comorbidities']}</b>
-    	</ui:define>
-		<ui:param name="showfooter" value="0" />
+	<s:link view="/cases/comorbedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
+		<f:param name="id" value="#{caseHome.id}" />
+		<span>#{messages['form.edit']}</span>
+	</s:link>
+	<h2>#{messages['cases.comorbidities']}</h2>
 
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty tbcase.comorbidities}" style="display:block;padding:4px"/>
 		<h:dataTable value="#{tbcase.comorbidities}" var="it" style="margin-top:10px;margin-bottom:10px;"
@@ -48,7 +45,6 @@
     		<b style="margin-left:30px;">#{messages['TbCase.patientContactName']}:</b> #{tbcase.patientContactName}
     		</s:fragment>
     	</s:decorate>
-    </s:decorate>
                  
 	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
 		<ui:define name="header">

@@ -18,7 +18,7 @@
 <ui:param name="left" value="0" />
 
 <ui:define name="naveg" >
-	<s:link value="#{messages['management']}" view="/management/index.html" propagation="none" />
+	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
 </ui:define>
 
 
@@ -36,8 +36,9 @@
 
 
 <ui:define name="content">
+<h1>#{title}</h1>
 <h:form id="main">
-<table class="table1" width="100%">
+<table width="100%">
 <tr><td>
 	<s:decorate id="source" template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['Source']}:</ui:define>
@@ -58,8 +59,9 @@
 	
 </td></tr>
 <tr><td align="right">
-	<a:commandLink value="#{messages['form.generate']}" styleClass="button" action="#{stockPosReport.execute}" 
-		reRender="pnlresult,pnlPrintLink"/>
+	<a:commandLink styleClass="button" action="#{stockPosReport.execute}" reRender="pnlresult,pnlPrintLink">
+		<span>#{messages['form.generate']}</span>
+	</a:commandLink>
 </td></tr>
 </table>
 
@@ -67,7 +69,8 @@
 <s:fragment rendered="#{facesContext.renderResponse}">
 <h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty stockPosReport.medicines}" />
 <s:fragment rendered="#{not empty stockPosReport.medicines}">
-<table class="table1" style="margin-top:20px;" >
+<div class="spacer" />
+<table class="table1 small" >
 	<tr>
 	<th width="200px">
 		#{levelInfo.nameLevel1} / #{messages['Tbunit']}

@@ -22,9 +22,9 @@
 
 
 <ui:define name="content">
-<p/>
+<h1>#{title}</h1>
 <h:form id="main">
-<table class="table1" width="700px">
+<table width="100%">
 <tr><td>
 	<s:decorate id="ds" template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['admin.tbunits.medsuppliers']}:</ui:define>
@@ -54,15 +54,17 @@
 </td></tr>
 <tr>
 	<td align="right">
-	<a:commandLink value="#{messages['form.generate']}" styleClass="button" 
+	<a:commandLink styleClass="button" 
 		action="#{orderLeadTimeReport.generate}" 
-		reRender="main,pnlPrintLink"/>
+		reRender="main,pnlPrintLink">
+		<span>#{messages['form.generate']}</span>
+	</a:commandLink>
 </td></tr>
 </table>
 
-<div style="margin-top:10px;">
+<div class="spacer" />
 <s:fragment rendered="#{orderLeadTimeReport.executing}">
-<table class="table1" style="margin-top:10px;" width="400px">
+<table class="table1">
 <tr>
 	<th>#{messages['reports.orderEvent']}</th>
 	<th>#{messages['reports.averageDays']}</th>
@@ -94,7 +96,6 @@
 </tr>
 </table>
 </s:fragment>
-</div>
 
 </h:form>
 

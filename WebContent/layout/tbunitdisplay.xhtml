@@ -9,7 +9,7 @@
         <span class="name" style="#{empty labelstyle? '': labelstyle};height:20px;">
             <ui:insert name="label"/>
         </span>
-        <span class="value #{unit.treatmentHealthUnit?'hu-icon':'ds-icon'}">
+        <span class="value #{unit.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}">
         	<h:outputText value="#{unit.name}" />
         	<br/>
 			<s:span styleClass="right-icon" rendered="#{unit.adminUnit.parent != null}">#{unit.adminUnit.parent.name}</s:span>

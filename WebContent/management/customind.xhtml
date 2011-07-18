@@ -27,9 +27,10 @@
 
 
 <ui:define name="content">
+<h1>#{title}</h1>
 <h:form>
-<table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
-<tr><td bgcolor="#f8f8f8">
+<table width="100%">
+<tr><td>
 	<s:decorate template="filters.xhtml">
 		<ui:param name="showoutputselection" value="true" />
 		<ui:define name="outputFilter">
@@ -69,7 +70,7 @@
 		</tr>
 		<ui:repeat value="#{table.rows}" var="row">
 		<tr>
-			<td class="colb" align="left">
+			<td class="colb highlight" align="left">
 				#{row.title}
 			</td>
 			<ui:repeat value="#{row.cells}" var="val">
@@ -79,7 +80,7 @@
 				</h:outputText>
 			</td>
 			</ui:repeat>
-			<td class="colcb" bgcolor="#DBFADC">
+			<td class="colcb highlight">
 				<b>
 				<h:outputText value="#{row.total}" >
 					<f:convertNumber pattern="#,###,##0"/>
@@ -90,11 +91,11 @@
 		</ui:repeat>
 
 		<tr>
-			<td class="colb" bgcolor="#DBFADC">
+			<td class="colb highlight">
 				<b>#{messages['global.total']}</b>
 			</td>
 		<ui:repeat value="#{table.columns}" var="col">
-			<td class="colcb" bgcolor="#DBFADC">
+			<td class="colcb highlight">
 				<b>
 				<h:outputText value="#{col.total}" >
 					<f:convertNumber pattern="#,###,##0"/>
@@ -102,7 +103,7 @@
 				</b>
 			</td>
 		</ui:repeat>
-			<td class="colcb"  bgcolor="#DBFADC">
+			<td class="colcb highlight">
 				<b>
 				<h:outputText value="#{table.total}" >
 					<f:convertNumber pattern="#,###,##0"/>

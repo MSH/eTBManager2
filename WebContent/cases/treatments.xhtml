@@ -31,13 +31,13 @@
 <h:form>
 
 	<div class="spacer" />
-	<div class="hu-icon"/>
+	<div class="icon-hu-big" style="float:left;"/>
 	<div class="text-big">#{treatmentsInfoHome.tbunit.name}</div>
 	<h:outputText value="#{treatmentsInfoHome.tbunit.adminUnit.parent.name} - " rendered="#{not empty treatmentsInfoHome.tbunit.adminUnit.parent}" />
 	#{treatmentsInfoHome.tbunit.adminUnit.name}
 	<div class="spacer" />
 
-	<table style="width:99%;z-index: 100;" class="table1" >
+	<table class="table1" >
 	<a:repeat var="grp" value="#{treatmentsInfoHome.groups}">
 	
 		<tr><th colspan="6">#{messages[grp.classification.key]}
@@ -80,7 +80,7 @@
 			</td>
 			<td align="left" width="155px">
 				<s:fragment rendered="#{it.progressPoints!=null}">
-				<div class="progress-icon" style="width:#{it.progressPoints}px;height:18px;display:block;min-height:16px;float:left;margin-left:2px;margin-right:2px;border:1px solid black;">
+				<div class="progress-icon" style="width:#{it.progressPoints}px;float:left;">
 					<!-- &nbsp;  -->
 				</div>
 				<h:outputText value="#{it.progress}" >
@@ -101,7 +101,8 @@
 	<ui:param name="month" value="#{registerDispensingHome.month}" />
 	<ui:param name="year" value="#{registerDispensingHome.year}" />
 	<h:inputHidden id="unitid" type="hidden" value="#{treatmentsInfoHome.tbunitId}" />
-	<a:commandLink value="#{messages['form.ok']}" styleClass="button" onclick="openRegisterDispensingPage(); return false;" >
+	<a:commandLink styleClass="button" onclick="openRegisterDispensingPage(); return false;" >
+		<span>#{messages['form.ok']}</span>
 	</a:commandLink>
 	
 	<script type="text/javascript">

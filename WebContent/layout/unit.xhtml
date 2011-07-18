@@ -10,7 +10,7 @@
 <h1>#{title}</h1>
 <table style="width:100%">
 <tr><td class="header">
-<div class="#{userSession.tbunit.treatmentHealthUnit?'hu-icon':'ds-icon'}">
+<div>
 	<h:form style="margin:0px">
 	<div style="float:right;">
 		<a:region>
@@ -19,12 +19,15 @@
 		</a:region>
 	</div>
 	</h:form>
-	<div style="font-size:14px;">
+	
+	<div class="#{userSession.tbunit.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}" style="float:left;"/>
+	<div class="text-medium">
 	#{userSession.tbunit.name}
 	</div>
-	<div style="font-size:9px">
+	<div>
 		#{userSession.tbunit.adminUnit.name} - #{userSession.tbunit.adminUnit.parent.name}
 	</div>
+	<hr/>
 </div>
 </td></tr>
 <tr><td style="padding:4px;">
@@ -63,13 +66,14 @@
 		</s:fragment>
 		<s:fragment rendered="#{unitSelection.selecting}">
 		<a:repeat value="#{unitSelection.items}" var="it">
-			<div class="paragraph" style="padding:4px;margin-top:10px;width:98%">
-				#{it.name}
+			<div style="padding:4px;margin-top:10px;width:98%">
+				<h3>#{it.name}</h3>
+				<hr/>
 			</div>
 			<h:dataTable value="#{it.units}" var="u" >
 			<h:column>
-  				<a:commandLink onclick="selectUnit(#{u.id}); return false;" 
-  					styleClass="#{u.treatmentHealthUnit?'hu-icon':'ds-icon'}" style="width:100%;">
+				<div class="#{u.treatmentHealthUnit?'icon-hu':'icon-ds'}" />
+  				<a:commandLink onclick="selectUnit(#{u.id}); return false;"	style="width:100%;">
   					<span class="#{u.medicineManagementStarted?'':'warn-icon'}" title="#{u.medicineManagementStarted?'':messages['medicines.start.alert']}">
   						#{u.name}
   					</span>

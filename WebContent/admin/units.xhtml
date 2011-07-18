@@ -58,7 +58,7 @@
   			<f:param name="order" value="#{unitspg.order=='u.name.name1'?'u.name.name1 desc':'u.name.name1'}" />
   		</s:link>
   	</f:facet>
-  	<div class="#{r.treatmentHealthUnit?'hu-icon':'ds-icon'}">
+  	<div class="#{r.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}">
 	<h:outputText value="#{r.name.name1}" rendered="#{not s:hasRole('TBUNITS_EDT')}" styleClass="#{r.active?'':'entity-inactive'}"/>
 	<s:link view="/admin/edtunit.xhtml" value="#{r.name.name1}" style="display:block;" rendered="#{s:hasRole('TBUNITS_EDT')}"
 		 styleClass="#{r.active?'':'entity-inactive'}">

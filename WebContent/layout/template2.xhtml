@@ -21,6 +21,8 @@
 <a:loadScript src="resource://org/richfaces/renderkit/html/scripts/jquery/jquery.js"/>
 <a:loadScript src="/js/jquery.maskedinput-1.1.3.pack.js"/>
 
+<script src="/etbmanager/a4j/g/3_3_3.Finalorg.ajax4jsf.javascript.PrototypeScript" type="text/javascript"></script>
+
 <ui:insert name="head" />
 </head>
 
@@ -33,25 +35,6 @@
 	</div>
 	<div class="page-header-right">
 		<a:form>
-		<rich:dropDownMenu styleClass="user-data">
-			<f:facet name="label">
-			<div class="icon-user-header"></div>
-			#{userLogin.user.name}
-			</f:facet>
-			<rich:menuItem value="#{messages['usersettings.preferences']}" submitMode="none"
-				onclick="document.location.href='#{request.contextPath}/others/usersettings.seam'" />
-			<rich:menuItem value="#{messages['changepwd']}" submitMode="none" 
-				onclick="document.location.href='#{request.contextPath}/others/changepassword.seam'" />
-			<rich:menuItem value="#{messages['form.exit']}" action="#{authenticator.logout}" submitMode="server"/>
-			<rich:menuSeparator />
-			<rich:menuItem value="#{messages['User.language']}" submitMode="none" disabled="true"/>
-			<rich:menuSeparator />
-			<c:forEach items="#{localeSelector.supportedLocales}" var="it">
-				<rich:menuItem value="#{it.label}" submitMode="none" 
-					onclick="changeLang('#{it.value}')" iconClass="#{localeSelector.localeString==it.value?'icon-bullet-menu':''}">
-				</rich:menuItem>
-			</c:forEach>
-		</rich:dropDownMenu>
 		</a:form>
 	</div>
 
@@ -87,27 +70,6 @@
 <div class="sub-menu">
 	<div class="sub-menu-wrapper">
 	<h:form>
-		<rich:dropDownMenu styleClass="workspace-data" 
-			onexpand="if (!window.wslist) {initWorkspaceList();}" 
-			oncollapse="unhoverWorkspace()"
-			popupWidth="270px" event="onclick">
-			<f:facet name="label">
-				<h:panelGroup>
-					<h:graphicImage value="#{workspaceViewService.view.pictureURI}" rendered="#{not empty workspaceViewService.view.pictureURI}"/>
-					<span class="workspace-name">#{defaultWorkspace.name}</span>
-				</h:panelGroup>
-			</f:facet>
-			<rich:menuItem submitMode="none" disabled="true">
-				<h:panelGroup id="pnlwslist">
-					<a:repeat value="#{userSettings.userWorkspaces}" var="it" rendered="#{userWsInited}">
-						<a:commandLink onclick="changeWorkspace(#{it.id});" styleClass="workspace-link">
-							<h:graphicImage value="#{it.workspace.view.pictureURI}" rendered="#{it.workspace.view.pictureURI != null}"/>
-							<span>#{it.workspace.name}</span>
-						</a:commandLink>
-					</a:repeat>
-				</h:panelGroup>
-			</rich:menuItem>
-		</rich:dropDownMenu>
 		<ui:insert name="naveg" />
 	</h:form>
 	</div>
@@ -170,7 +132,7 @@ function showModalAutoTop(name, val) {
 	Richfaces.showModalPanel(name, {top:val});
 }
 function windowPosTop() {
-	return jQuery("html").scrollTop();
+	return typeof window.pageYOffset != 'undefined' ? window.pageYOffset : document.documentElement && document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop ? document.body.scrollTop : 0;
 }
 -->
 </script>

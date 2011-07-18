@@ -12,6 +12,7 @@ body {
 a {
 	text-decoration:none;
 	color:#069;
+	font-size:12px;
 }
 
 a:hover {
@@ -33,6 +34,11 @@ h2 {
 	line-height:150%;
 	margin:8px 1px 5px 1px;
 	border-bottom:1px solid #c0dacf; 
+}
+
+hr {
+	border-top:1px solid #000000;
+	border-bottom:none;
 }
 
 input, select {
@@ -513,6 +519,7 @@ font-weight:bold;
 	padding:2px;
 	padding:8px 4px 8px 4px;
 	border:1px solid white;
+	vertical-align: top;
 }
 .table1 .highlight {
 	background-color:#c8e0d6;
@@ -566,13 +573,16 @@ font-weight:bold;
 }
 
 .small th {	padding:1px;}
-.small td {	padding:1px;}
+.small td {	padding:2px 1px 2px 2px;}
 
 .collh {text-align:left; display:block; padding-right:5px;}
 .colrh {text-align:right; display:block; padding-left:5px;}
 .colc {	text-align: center;}
 .coll { text-align:left;}
 .colr { text-align:right; }
+.colcb {	text-align: center;}
+.collb { text-align:left;}
+.colrb { text-align:right; }
 .colr2 {text-align:right; display:block; padding-left:5px; background-color:#EFF9F0;}
 .colheader {background-color:#EDF7EF;border:1px solid #B4E8BB;padding:5px;}
 .colbb {border:1px solid #a0a0a0; }
@@ -777,25 +787,34 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 /* ICONS */
 
 .icon-user-header, .icon-bullet, .icon-bullet-menu, .dst-resistant, .dst-contaminated, .dst-susceptible, 
-.tag-icon, .delete-icon, .male-icon, .female-icon, .new-icon {
+.tag-icon, .delete-icon, .new-icon, .progress-icon, .plus-icon, .icon-checked, .icon-unchecked,
+.icon-square, .icon-lab, .icon-hu, .icon-ds, .icon-report {
 	background-image: url('images/icons.png');
 	width:16px;
 	height:16px;
 	margin-right:2px;
 	display:inline-block;
 }
-
-.male-icon {
+.male-icon, .female-icon, .icon-lab-big, .icon-hu-big, .icon-ds-big {
+	background-image: url('images/icons.png');
 	width:32px;
 	height:32px;
-	background-position:-64px 0px;
+	margin-right:2px;
+	display:inline-block;
 }
 
-.female-icon {
-	width:32px;
-	height:32px;
-	background-position:-96px 0px;
-}
+.male-icon { background-position:-64px 0px; }
+.female-icon { 	background-position:-96px 0px; }
+
+.icon-ds {  background-position:-16px -64px; }
+.icon-lab { background-position:-32px -64px; }
+.icon-hu {  background-position:-48px -64px; }
+
+.icon-ds-big {	background-position:-160px 0px; }
+.icon-hu-big {	background-position:-192px 0px; }
+.icon-lab-big {	background-position:-224px 0px; }
+
+.icon-report {	background-position:-64px -32px; }
 
 .icon-bullet-menu {
 	margin-right:8px;
@@ -809,8 +828,18 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .dst-contaminated {	background-position:-32px -80px;  }
 
 .tag-icon {	background-position:-48px -48px;  }
-
 .delete-icon {	background-position:0px -16px; }
+.plus-icon { background-position:-32px -16px; }
+
+.progress-icon {
+	width:100px;
+	height:16px;
+	background-position:0px -96px;
+	min-heigth:16px;
+	margin:2px;
+	border:1px solid black;
+}
+
 
 /* RICHFACES */
 

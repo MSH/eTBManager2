@@ -37,13 +37,14 @@ function showMonthYearSelectionDlg() {
 	</s:decorate>
 
    	</td></tr>
-   	<tr><td height="30px">
-   		</td>
-   		<td align="right">
-   			<ui:insert />
-   			<s:link value="#{messages['form.cancel']}" onclick="javascript:Richfaces.hideModalPanel('monthyeardlg'); return false;" styleClass="button-alt" />
-   		</td>
-   	</tr></table>
+   	</table>
+   	<div class="button-bar">
+   		<ui:insert />
+   		<s:link onclick="javascript:Richfaces.hideModalPanel('monthyeardlg'); return false;" styleClass="button-alt" >
+   			<span>#{messages['form.cancel']}</span>
+   		</s:link>
+   	</div>
+   	
 	</a:form>
 	</a:region>
 
