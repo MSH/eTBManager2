@@ -19,8 +19,9 @@
 
 <ui:define name="content">
 <h:form id="main">
-<s:link view="/admin/edtweekfreq.xhtml" value="#{messages['form.edit']}" styleClass="button" rendered="#{s:hasRole('WEEKFREQ_EDT')}">
+<s:link view="/admin/edtweekfreq.xhtml" styleClass="button" rendered="#{s:hasRole('WEEKFREQ_EDT')}">
 	<f:param name="id" value="#{null}" />
+	<span>#{messages['form.edit']}</span>
 </s:link>
 <p/>
 
