@@ -76,11 +76,16 @@
     </s:decorate>
 	
 	</td></tr><tr><td align="right">
-		<h:commandLink action="#{workspaceHome.persist}" value="#{messages['form.ok']}" styleClass="button" />
-		<s:link view="/admin/workspacedata.xhtml" value="#{messages['form.cancel']}" rendered="#{workspace.id != null}" styleClass="button">
+		<h:commandLink action="#{workspaceHome.persist}" styleClass="button">
+		 <span>#{messages['form.ok']}</span>
+		 </h:commandLink>
+		<s:link view="/admin/workspacedata.xhtml" rendered="#{workspace.id != null}" styleClass="button">
 			<f:param name="id" value="#{workspace.id}" />
+			 <span>#{messages['form.cancel']}</span>
 		</s:link>
-		<s:link view="/admin/workspaces.xhtml" value="#{messages['form.cancel']}" rendered="#{workspace.id == null}" styleClass="button-alt" />
+		<s:link view="/admin/workspaces.xhtml" rendered="#{workspace.id == null}" styleClass="button-alt" >
+		 <span>#{messages['form.cancel']}</span>
+		 </s:link>
 	</td></tr></table>
 	<p/>
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
