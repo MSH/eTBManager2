@@ -14,9 +14,10 @@
 
 
 <ui:define name="content">
-<h:form id="main">
-    <table class="table1" width="550px" style="border:2px solid #f0f0f0;">
-    <tr><td>
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+
+    <div class="form-content">
     <s:decorate template="/layout/display.xhtml" rendered="#{source.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{source.id}" />
@@ -75,22 +76,22 @@
     </s:decorate>
     </s:fragment>
 
-    </td></tr>
-    <tr><td align="right" colspan="2">
+  </div>
+  
+   <div class="form-footer">
             <a:commandLink action="#{sourceHome.persist}"  
             	styleClass="button" 
             	reRender="main,messages">
-            	<span>#{messages['form.ok']}</span>
+            	<span>#{messages['form.save']}</span>
             	</a:commandLink>
   
             <s:link view="/admin/sources.xhtml" styleClass="button-alt" >
             	<f:param name="id" value="#{null}" />
             	  <span>#{messages['form.cancel']}</span>
             </s:link>
-    </td></tr>
-    </table>
+   </div>
 
-	<p/>
+	
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 </h:form>
 </ui:define>
