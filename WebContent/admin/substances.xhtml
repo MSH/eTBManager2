@@ -18,8 +18,9 @@
 
 <ui:define name="content">
 <h:form id="main">
-<s:link view="/admin/edtsubstance.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{s:hasRole('SUBSTANCES_EDT')}">
+<s:link view="/admin/edtsubstance.xhtml" styleClass="button" rendered="#{s:hasRole('SUBSTANCES_EDT')}">
 	<f:param name="id" value="#{null}" />
+	<span>#{messages['form.newf']}</span>
 </s:link>
 <p/>
 
