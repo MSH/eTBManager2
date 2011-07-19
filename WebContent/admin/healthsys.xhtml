@@ -18,10 +18,11 @@
 
 <ui:define name="content">
 <h:form id="main">
-<s:link view="/admin/edthealthsys.xhtml" value="#{messages['form.new']}" 
+<s:link view="/admin/edthealthsys.xhtml"  
 	styleClass="button" 
 	rendered="#{s:hasRole('HEALTHSYS_EDT')}" >
 	<f:param name="id" value="#{null}" />
+	<span>#{messages['form.newf']}</span>
 </s:link>
 <p/>
 <h:dataTable id="tbl" value="#{healthSystems.resultList}" var="r" border="0" columnClasses="coll#{defaultWorkspace.hasAlternateLocale?',coll':''},colc" 
