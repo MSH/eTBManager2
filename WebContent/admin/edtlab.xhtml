@@ -61,8 +61,12 @@
 
     </td></tr>
     <tr><td align="right" colspan="2">
-            <a:commandLink action="#{laboratoryHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main"/>  
-            <h:commandLink action="cancel" value="#{messages['form.cancel']}" styleClass="button-alt" immediate="true"/>  
+            <a:commandLink action="#{laboratoryHome.persist}" styleClass="button" reRender="main">
+            <span>#{messages['form.ok']}</span> 
+            </a:commandLink>
+            <h:commandLink action="cancel" styleClass="button-alt" immediate="true">
+              <span>#{messages['form.cancel']}</span>  
+              </h:commandLink>
     </td></tr>
     </table>
 
