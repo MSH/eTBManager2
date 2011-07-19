@@ -18,8 +18,9 @@
 
 <ui:define name="content">
 <h:form id="main">
-<s:link view="/admin/edtsource.xhtml" value="#{messages['form.newf']}" styleClass="button"  rendered="#{s:hasRole('SOURCES_EDT')}">
+<s:link view="/admin/edtsource.xhtml" styleClass="button"  rendered="#{s:hasRole('SOURCES_EDT')}">
 	<f:param name="id" value="#{null}" />
+	<span>#{messages['form.newf']}</span>
 </s:link>
 <p/>
 <h:outputText value="#{messages['form.norecordfound']}" rendered="#{sources.resultCount == 0}" styleClass="warn" />
