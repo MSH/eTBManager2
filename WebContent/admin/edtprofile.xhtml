@@ -13,13 +13,14 @@
 
 
 <ui:define name="content">
+<h1>#{title}</h1>
 <s:fragment rendered="#{empty profileHome.roles}">
 <div class="warn">No permission available to edit/create profile</div>
 <s:link view="/admin/profiles.seam" value="#{messages['form.return']}" styleClass="button" />
 </s:fragment>
-<h:form id="main" rendered="#{not empty profileHome.roles}">
-    <table class="tabela3" width="750px">
-    <tr><td>
+<h:form id="main" rendered="#{not empty profileHome.roles}" styleClass="form1">
+    
+    <div class="form-content">
     <s:decorate template="/layout/display.xhtml" rendered="#{profile.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{profile.id}" />
@@ -32,8 +33,7 @@
         	<f:param id="field" value="name"/>
         </h:inputText>
     </s:decorate>
-    </td></tr>
-	<tr><td>
+    
 
 	<div style="width:740px;" class="table1">
 	<div class="header">
@@ -105,19 +105,18 @@ function permissionClickHandler(checkbox, divname) {
 }
 </script>
 
-	</td></tr>
-	<tr><td align="right">
+</div>
+	<div class="form-footer">
             <h:commandLink action="#{profileHome.persist}" styleClass="button">
-            <span>#{messages['form.ok']}</span>
+            <span>#{messages['form.save']}</span>
             </h:commandLink>  
             <s:link view="/admin/profiles.xhtml" styleClass="button-alt" >
             	<f:param name="id" value="#{null}" />
             	 <span>#{messages['form.cancel']}</span>
             </s:link>
-    </td></tr>
-    </table>
+    </div>
 
-	<p/>
+
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 
 	<ui:include src="/layout/tablerow.xhtml" />
