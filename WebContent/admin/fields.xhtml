@@ -26,9 +26,10 @@
 	<a:support event="onchange" reRender="main,messages" />
 </h:selectOneMenu>
 <p/>
-<s:link view="/admin/edtfield.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{fieldsQuery.field != null}">
+<s:link view="/admin/edtfield.xhtml" styleClass="button" rendered="#{fieldsQuery.field != null}">
 	<f:param name="id" value="#{null}" />
 	<f:param name="fld" value="#{fieldsQuery.field}" />
+	<span>#{messages['form.newf']}</span>
 </s:link>
 <p/>
 
