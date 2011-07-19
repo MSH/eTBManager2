@@ -165,9 +165,12 @@
 
     </td></tr>
     <tr><td align="right" colspan="2">
-            <a:commandLink action="#{tbunitHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main"/>  
-            <s:link view="/admin/units.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end">
+            <a:commandLink action="#{tbunitHome.persist}" styleClass="button" reRender="main">
+            <span>#{messages['form.ok']}</span>
+            </a:commandLink>  
+            <s:link view="/admin/units.xhtml" styleClass="button-alt" propagation="end">
             	<f:param name="id" value="#{null}" />
+            	  <span>#{messages['form.cancel']}</span>
             </s:link>
     </td></tr>
     </table>
