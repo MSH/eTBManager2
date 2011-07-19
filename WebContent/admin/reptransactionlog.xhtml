@@ -60,7 +60,9 @@
 		<h:inputText value="#{transactionLogReport.searchKey}" />
 	</s:decorate>
 	
-	<a:commandLink value="#{messages['form.refresh']}" reRender="reportPanel" action="#{transactionLogReport.refresh}" styleClass="button" />
+	<a:commandLink reRender="reportPanel" action="#{transactionLogReport.refresh}" styleClass="button" > 
+		<span>#{messages['form.refresh']}</span>
+	</a:commandLink> 	
 	
 </s:decorate>
 
