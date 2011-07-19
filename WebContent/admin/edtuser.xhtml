@@ -14,9 +14,10 @@
 <ui:param name="waitdlg" value="1" />
 
 <ui:define name="content">
-<h:form id="main">
-    <table class="table1" width="550px">
-    <tr><td colspan="2">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+   
+   <div class="form-content">
     <s:decorate template="/layout/edit.xhtml" rendered="#{user.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{user.id}" />
@@ -107,9 +108,7 @@
     </s:decorate>
     </h:panelGroup>
     
-    </td></tr>
-    <tr>
-    	<td>
+    
     	<!-- value="#{messages['admin.users.newpasswd']}" -->
 			<a:commandLink action="#{userHome.sendNewPassword}" styleClass="button" 
 				onclick="if (!confirm('#{messages['admin.users.confirmnewpass']}')) return false;" 
@@ -118,19 +117,19 @@
 				>
 				<span>#{messages['Send New Password']}</span>
 				</a:commandLink>
-    	</td>
-    	<td align="right">
+		</div>
+    	
+    	<div class="form-footer">
             <a:commandLink action="#{userHome.persist}" styleClass="button" reRender="main" >
-              <span>#{messages['form.ok']}</span>
+              <span>#{messages['form.save']}</span>
               </a:commandLink>
             <s:link action="cancel" styleClass="button-alt">
             	<f:param name="id" value="#{null}" />
             	<span>#{messages['form.cancel']}</span>
             </s:link>
-    </td></tr>
-    </table>
+ 		 </div>
 
-	<p/>
+	
 	<span style="color:red;">*</span>  #{messages['javax.faces.component.UIInput.REQUIRED']}
 	
 </h:form>
