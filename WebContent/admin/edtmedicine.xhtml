@@ -108,9 +108,12 @@
     <tr>
     	<td style="border:none">
     	</td><td align="right">
-            <a:commandLink action="#{medicineHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>  
-            <s:link view="/admin/medicines.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end" onclick="openWaitDlg();">
+            <a:commandLink action="#{medicineHome.persist}" styleClass="button" reRender="main,messages"> 
+             <span>#{messages['form.ok']}</span>
+             </a:commandLink>
+            <s:link view="/admin/medicines.xhtml" styleClass="button-alt" propagation="end" onclick="openWaitDlg();">
             	<f:param name="id" value="#{null}" />
+            	<span>#{messages['form.cancel']}</span>
             </s:link>
     </td></tr>
     </table>
