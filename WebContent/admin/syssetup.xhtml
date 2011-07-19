@@ -15,6 +15,10 @@
 <ui:param name="waitdlg" value="1" />
 <ui:param name="labelstyle" value="width:170px" />
 
+<ui:define name="left">
+	<ui:include src="/layout/adminmenu.xhtml" />
+</ui:define>
+
 <ui:define name="content">
 <h:form id="main" >
 	<table width="600px" style="border:2px solid #f0f0f0" ><tr><td>
@@ -67,8 +71,14 @@
     </h:panelGroup>
 	
 	</td></tr><tr><td align="right">
-		<h:commandLink action="#{systemConfigHome.saveCofiguration}" value="#{messages['form.ok']}" styleClass="button" />
-		<s:link view="/admin/index.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end" />
+		
+		<h:commandLink action="#{systemConfigHome.saveCofiguration}" styleClass="button" >
+		<span>#{messages['form.ok']}</span>
+		</h:commandLink> 
+		
+		<s:link view="/admin/index.xhtml" styleClass="button-alt" propagation="end" >
+		<span>#{messages['form.cancel']}</span>
+		</s:link>
 	</td></tr></table>
 </h:form>
 </ui:define>
