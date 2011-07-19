@@ -16,9 +16,10 @@
 <ui:param name="labelstyle" value="width:160px;" />
 
 <ui:define name="content">
-<h:form id="main">
-    <table class="table1" width="550px">
-    <tr><td>
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+    
+    <div class="form-content">
     <s:decorate template="/layout/display.xhtml" rendered="#{laboratory.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{laboratory.id}" />
@@ -58,19 +59,18 @@
     	<ui:param name="auselection" value="#{laboratoryHome.auselection}" />
     	<ui:param name="requiredLevel" value="1" />
     </s:decorate>
-
-    </td></tr>
-    <tr><td align="right" colspan="2">
+</div>
+    
+    <div class="form-footer">
             <a:commandLink action="#{laboratoryHome.persist}" styleClass="button" reRender="main">
-            <span>#{messages['form.ok']}</span> 
+            <span>#{messages['form.save']}</span> 
             </a:commandLink>
             <h:commandLink action="cancel" styleClass="button-alt" immediate="true">
               <span>#{messages['form.cancel']}</span>  
               </h:commandLink>
-    </td></tr>
-    </table>
+   </div>
 
-	<p/>
+	
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 </h:form>
 
