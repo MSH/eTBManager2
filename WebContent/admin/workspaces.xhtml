@@ -23,8 +23,9 @@
 <ui:define name="content">
 
 	<p/>
-	<s:link view="/admin/workspaceedt.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{s:hasRole('WORKSPACES_EDT')}">
+	<s:link view="/admin/workspaceedt.xhtml" styleClass="button" rendered="#{s:hasRole('WORKSPACES_EDT')}">
 		<f:param name="id" value="#{null}"/>
+		<span>#{messages['form.newf']}</span>
 	</s:link>
 	
 	<h:dataTable id="tbl" value="#{workspaces.resultList}" var="r" width="650px" styleClass="table1" rowClasses="lin1,lin2" 
