@@ -14,6 +14,7 @@
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
 
+
 <ui:define name="naveg">
 	<div class="item">
 		<s:link value="#{messages['cases']}" view="/cases/index.html" propagation="none"/>
@@ -26,20 +27,7 @@
 	</div>
 </ui:define>
 
-	<ui:define name="state-content">
-		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="icon-hu-big" style="margin-top:6px;font-size:11px;max-width:320px;height:60px;" >
-			<b style="padding-right:4px;">#{messages['medicines.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
-			<br/>
-			<span class="right-icon" >
-			<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
-				style="position:relative;" propagation="none">
-				<f:param name="id" value="#{caseHome.id}" />
-			</s:link>
-			<s:link value="#{messages['cases.move.cancel']}" 
-				style="position:relative" />
-			</span>
-		</s:div>
-	</ui:define>
+
 
 <ui:define name="left">
 	<h:panelGroup id="leftmenu" >
@@ -138,26 +126,24 @@
 			style="padding-left:20px" onclick="Richfaces.showModalPanel('caseNumberDlg');return false;" />
 	</ui:define>
 
-	<ui:define name="state-content">
-		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="icon-hu-big" 
-			style="margin-top:6px;font-size:11px;max-width:320px;height:70px;" >
-			<b style="padding-right:4px;">#{messages['medicines.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
-			<br/>
-			<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
-				style="position:relative;" propagation="none" 
-				styleClass="right-icon">
-				<f:param name="id" value="#{caseHome.id}" />
-			</s:link>
-			<br/>
-			<a:commandLink value="#{messages['cases.move.cancel']}"
-				onclick="if (!confirm('#{caseMoveHome.confirmMsgRollbackTransfer}')) return false"
-				action="#{caseMoveHome.rollbackTransferOut}"
-				reRender="main,leftmenu,messages" 
-				style="position:relative" styleClass="right-icon" >
-				<f:param name="name" value="#{caseHome.transferInHealthUnit.tbunit.name}"/>
-			</a:commandLink>
-		</s:div>
-	</ui:define>
+<ui:define name="state-content">
+	<s:fragment rendered="#{tbcase.state=='TRANSFERRING'}" > 
+	<div style="margin-top:6px;font-size:11px;max-width:320px;height:60px;" >
+		<b style="padding-right:4px;">#{messages['medicines.movs.destunit']}:</b> 
+		<div class="icon-hu"/><h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
+		<br/>
+		<span class="right-icon" />
+		<div class="vertical-menu">
+		<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
+			style="position:relative;" propagation="none">
+			<f:param name="id" value="#{caseHome.id}" />
+		</s:link>
+		<s:link value="#{messages['cases.move.cancel']}" 
+			style="position:relative" />
+		</div>
+	</div>
+	</s:fragment>
+</ui:define>
 
 <ui:include src="issues.xhtml" />
 

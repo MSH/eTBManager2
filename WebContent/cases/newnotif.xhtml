@@ -20,16 +20,7 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 
-<script type="text/javascript">
-function checkfields() {
-	if (jQuery("#pacname input[value!='']").size() == 0) {
-		alert("#{messages['cases.new.namereq']}");
-		return false;
-	}
-	return true;
-}
-</script>
-<rich:jQuery name="showbutton" selector="#btnpac" query="show(500)" />
+<rich:jQuery name="showbutton" selector="#newpacbutton" query="slideDown(500)" />
 <h:form id="main" styleClass="form1">
 <div class="form-content">
 
@@ -53,9 +44,8 @@ function checkfields() {
 </div>
 
 	<div class="form-footer">
-		<a:commandLink id="btnsearch" action="#{patients.search}" styleClass="button"
-			data="#{patients.searching}" focus="name"
-			reRender="pnlpatients,dt" onclick="if (!checkfields()) return false" oncomplete="if (data) showbutton();">
+		<a:commandLink id="btnsearch" styleClass="button"
+			focus="name" onclick="initPatientSearch(); return false" >
 			<span>#{messages['form.search']}</span>
 		</a:commandLink>
 		<s:link view="/cases/index.xhtml" styleClass="button-alt" >
@@ -63,16 +53,17 @@ function checkfields() {
 		</s:link>
 
 	<rich:jQuery timming="onload" selector="#main input[type='text']:first" query="focus()" />
-	<rich:hotKey selector="#main input" key="return" handler="#{rich:element('btnsearch')}.click();" />
-	</div> 
-
-<p/>
+	<rich:hotKey selector="#main input" key="return" handler="initPatientSearch()" />
+	</div>
+	
 <h:panelGroup id="pnlpatients">
 
-<h:commandLink id="btnpac" onclick="openWaitDlg();"
-    action="#{caseEditingHome.selectPatientData}" styleClass="button" style="display:none;width:160px;" >
-    <span>#{messages['cases.newpatient']}</span>
-</h:commandLink>
+<div id="newpacbutton" class="button-bar" style="display:none;" >
+	<h:commandLink onclick="openWaitDlg();"
+    	action="#{caseEditingHome.selectPatientData}" styleClass="button" >
+	    <span>#{messages['cases.newpatient']}</span>
+	</h:commandLink>
+</div>
 
 <s:decorate template="/layout/naveg.xhtml" rendered="#{patients.searching}">
 	<ui:param name="list" value="#{patients}" />
@@ -122,6 +113,26 @@ function checkfields() {
 	</h:column>
 </h:dataTable>
 </h:panelGroup>
+
+<script type="text/javascript">
+function initPatientSearch() {
+	if (!checkfields())
+		return false;
+	searchPatient();
+}
+function checkfields() {
+	if (jQuery("#pacname input[value!='']").size() == 0) {
+		alert("#{messages['cases.new.namereq']}");
+		return false;
+	}
+	return true;
+}
+</script>
+<a:jsFunction name="searchPatient" reRender="pnlpatients,dt" 
+	oncomplete="if (data) showbutton();"
+	action="#{patients.search}"  
+	data="#{patients.searching}" />
+
 
 </h:form>
 </ui:define>

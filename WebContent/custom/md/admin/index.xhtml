@@ -12,11 +12,18 @@
 <ui:param name="title" value="#{messages['admin']}" />
 <ui:param name="topmenu" value="3" />
 
+<ui:define name="naveg">
+	<div class="item selected">
+		<s:link value="#{messages['home']}" />
+	</div>
+</ui:define>
+
 <ui:define name="left">
 	<ui:include src="/custom/md/admin/adminmenu.xhtml" />
 </ui:define>
 
 <ui:define name="content">
+<h1>#{title}</h1>
 </ui:define>
 
 </ui:composition>  

@@ -18,31 +18,33 @@
 </ui:define>
 
 <ui:define name="content">
-	<h:form >
-	<div id="pnldata">
-	<s:decorate template="/layout/roundrect.xhtml" style="width:540px;">
-		<ui:param name="showheader" value="0" />
-		<ui:param name="showfooter" value="0" />
-		<div style="padding:10px;">
-		#{messages['ro.admin.symeta.desc']}
-		<p/>
-		<a:commandLink value="#{messages['ro.admin.symeta.run']}" styleClass="button" style="width:190px" 
+	<h1>#{title}</h1>
+	<h:form styleClass="form1">
+	<div id="pnldata" class="form-content">
+		<h2>#{messages['ro.admin.symeta.desc']}</h2>
+		<a:commandLink styleClass="button" style="width:190px" 
 			action="#{symetaIntHome.execute}"
 			oncomplete="jQuery('#pnldata').hide();"
-			reRender="messages"/>
+			reRender="messages">
+			<span>#{messages['ro.admin.symeta.run']}</span>
+		</a:commandLink>
 		
-		<p/>
-		<a:commandLink value="#{messages['ro.admin.symeta.erase']}" style="display:block;margin-bottom:20px;margin-top:20px;"
-			action="#{symetaIntHome.eraseCases}"
+		<div class="spacer" />
+		
+		<div class="button-bar">
+		<a:commandLink 
+			action="#{symetaIntHome.eraseCases}" styleClass="button-alt"
 			onclick="if (!confirm('#{messages['ro.admin.symeta.removecases']}')) {return false;}"
-			reRender="messages"/>
-		<br/>
+			reRender="messages">
+			<span>#{messages['ro.admin.symeta.erase']}</span>
+		</a:commandLink>
 
-		<a:commandLink value="#{messages['ro.admin.symeta.config']}..." action="#{symetaIntHome.initConfigEditing}" 
-		    reRender="cfgpnl"
-			oncomplete="showConfigDlg();"/>
+		<a:commandLink action="#{symetaIntHome.initConfigEditing}" 
+		    reRender="cfgpnl" styleClass="button-alt"
+			oncomplete="showConfigDlg();">
+			<span>#{messages['ro.admin.symeta.config']}...</span>
+		</a:commandLink>
 		</div>
-	</s:decorate>
 	</div>
 	</h:form>		
 
@@ -87,15 +89,19 @@
 		<ui:param name="tbunitselection" value="#{symetaIntHome.tbunitSelection}" />
 	</s:decorate>
 
-	<a:commandLink value="#{messages['form.ok']}" action="#{symetaIntHome.saveConfigs}"
+	<a:commandLink action="#{symetaIntHome.saveConfigs}"
 		data="#{symetaIntHome.configSaved}"
 		styleClass="button" reRender="cfgpnl" 
-		oncomplete="if (!data) return false;Richfaces.hideModalPanel('symetaConfigdlg');"/>
+		oncomplete="if (!data) return false;Richfaces.hideModalPanel('symetaConfigdlg');">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
 		
-	<a:commandLink value="#{messages['form.cancel']}" styleClass="button-alt"  
+	<a:commandLink styleClass="button-alt"  
 		oncomplete="Richfaces.hideModalPanel('symetaConfigdlg'); return false;"
 		ajaxSingle="true"
-		action="#{conversation.end}" />
+		action="#{conversation.end}" >
+		<span>#{messages['form.cancel']}</span>
+	</a:commandLink>
 	</h:form>
 	</h:panelGroup>
 </rich:modalPanel>

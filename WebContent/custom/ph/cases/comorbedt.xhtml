@@ -19,16 +19,16 @@
 </ui:define>
 
 <ui:define name="content">
-<h:form id="main">
-<p/>
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
 <s:decorate template="/layout/casebody.xhtml" >
+
+	<div class="form-content">
 	<table width="100%">
 	<tr><td colspan="2" style="padding:6px;">
-		<div class="paragraph">
-			#{messages['cases.comorbidities']}
-		</div>
+		<h2>#{messages['cases.comorbidities']}</h2>
 		<div id="tbldata">
-		<h:dataTable value="#{comorbidityHome.comorbidities}" var="it" styleClass="table1" rowClasses="lin1,lin2" width="100%">
+		<h:dataTable value="#{comorbidityHome.comorbidities}" var="it" styleClass="table1" rowClasses="lin1,lin2">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['form.name']}" styleClass="collh"/>
@@ -70,12 +70,18 @@
 	<rich:jQuery selector="#chkcont" query="click(function(){toggleDivPanel(this, '#divpatname');})" />
 	<rich:jQuery selector="#chkcont:not(:checked)" query="each(function(){jQuery('#divpatname').hide();})" />
 
-	<tr><td align="right" colspan="2">
-	<a:commandLink value="#{messages['form.ok']}" action="#{comorbidityHome.save}" styleClass="button" reRender="main"/>
-	<s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
-		<f:param name="id" value="#{caseHome.id}" />
-	</s:link>
-	</td></tr></table>
+	</table>
+	</div>
+
+	<div class="form-footer">
+		<a:commandLink action="#{comorbidityHome.save}" styleClass="button" reRender="main">
+			<span>#{messages['form.ok']}</span>
+		</a:commandLink>
+		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
 </s:decorate>
 	
 

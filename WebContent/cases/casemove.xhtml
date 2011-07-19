@@ -17,14 +17,12 @@
 
 
 <ui:define name="content">
-<h:form id="main" rendered="#{caseHome.canTransferOut}">
+<h1>#{title}</h1>
+<h:form id="main" rendered="#{caseHome.canTransferOut}" styleClass="form1">
 
 
 <s:decorate template="/layout/casebody.xhtml">
-    <table width="100%">
-	<tr><td>
-	
-	<p/>
+	<div class="form-content">
 	<div style="display:block;padding:5px;color:gray;">
 		<b>#{messages['TbCase.healthUnits']}</b>
 	</div>
@@ -64,15 +62,18 @@
     	<ui:param name="datefield" value="#{caseMoveHome.moveDate}" /> 
     </s:decorate>
 	<span style="color:red;">*</span> #{messages['form.required']}<p/>
+
+	</div>
     
-    </td></tr>
-    <tr><td align="right">
-    	<a:commandLink action="#{caseMoveHome.transferOut}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>
-    	<s:link view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end" >
+    <div class="form-footer">
+    	<a:commandLink action="#{caseMoveHome.transferOut}" styleClass="button" reRender="main,messages">
+    		<span>#{messages['form.ok']}</span>
+    	</a:commandLink>
+    	<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" >
     		<f:param name="id" value="#{caseHome.id}" />
+    		<span>#{messages['form.cancel']}</span>
     	</s:link>
-    </td></tr>
-	</table>
+    </div>
 </s:decorate>
 
 </h:form>

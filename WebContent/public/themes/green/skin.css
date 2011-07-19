@@ -573,7 +573,7 @@ font-weight:bold;
 }
 
 .small th {	padding:1px;}
-.small td {	padding:2px 1px 2px 2px;}
+.small td {	padding:2px 0px 2px 1px;}
 
 .collh {text-align:left; display:block; padding-right:5px;}
 .colrh {text-align:right; display:block; padding-left:5px;}
@@ -743,7 +743,7 @@ height:16px;
 min-height:16px;
 }
 
-.bar {
+.bar-panel {
 width:100%;
 clear:both;
 height:8px;
@@ -904,6 +904,17 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 
 /* TREATMENT */
 
+.treattable {
+	padding:0px;
+	margin:0px;
+	width:800px;
+}
+
+.treattable td {
+	padding:0px;
+	margin:0px;
+}
+
 .bar, .bar-active, .bar-header, .bar-header-active, .intensivephase-bar, .continuousphase-bar {
 	position:relative;
 	float:left;
@@ -966,3 +977,14 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .popup-long { height:170px; top:-250px; }
 .popup-long #bottom {	top:170px; height:70px;}
 .popup-long #content {top:-170px; }
+
+#closewin {
+	background: transparent url(images/icons.png) no-repeat left top;
+	background-position:-48px -80px;
+	margin:4px 8px 4px 4px;
+	width:16px;
+	height:16px;
+	position:relative;
+	float:right;
+	cursor:pointer;
+}

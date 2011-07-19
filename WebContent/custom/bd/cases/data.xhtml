@@ -6,20 +6,19 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-                 
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
-		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/custom/bd/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
-				<f:param name="id" value="#{caseHome.id}" />
-			</s:link>
-			<b>#{messages['cases.patientdata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+
+	<div class="form1">
+	<div class="form-content">
+	<s:link view="/custom/bd/cases/caseedt.xhtml" 
+		styleClass="button-alt" 
+		style="float:right;" 
+		rendered="#{caseHome.canEditCaseData}">
+		<f:param name="id" value="#{caseHome.id}" />
+		<span>#{messages['form.edit']}</span>
+	</s:link>
+	<h2>#{messages['cases.patientdata']}</h2>
 	
-	<div>	
-	<table style="border-collapse:collapse;width:98%;" cellpadding="1" ><tr><td colspan="2">
-	
-	</td></tr>
+	<table style="border-collapse:collapse;width:100%;">
 	<tr><td>
 	
 	<s:decorate template="/layout/display.xhtml">
@@ -129,19 +128,14 @@
 		</s:decorate>
 	</td></tr>
 	</s:fragment>
-	</table></div>
-	</s:decorate>
+	</table>
+	</div>
 	
 
                  
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
-		<ui:define name="header">
-			<b>#{messages['cases.generaldata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-	
-	<div>
-	<table style="border-collapse:collapse;width:98%;" cellpadding="1" >
+	<div class="form-content">
+	<h2>#{messages['cases.generaldata']}</h2>
+	<table style="border-collapse:collapse;width:100%;" >
 	<tr><td>
 	<s:decorate template="/layout/display.xhtml" rendered="#{tbCase.notificationUnit!=null}">
     	<ui:define name="label">#{messages['cases.details.notifhu']}:</ui:define>
@@ -251,8 +245,9 @@
 		</s:fragment>
 
 	</td></tr>
-	</table></div>
-	</s:decorate>
+	</table>
+	</div>
+	
+	</div>
 
-    
 </ui:composition>

@@ -7,15 +7,19 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<s:link value="#{messages['cases.details.newresult']}" view="/custom/ph/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
+	<div class="spacer" />
+	
+	<s:link view="/custom/ph/cases/edtmedexam.xhtml" styleClass="button-alt" 
+		style="float:right;" rendered="#{caseHome.canEditCaseData}">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
 	</s:link>
 
 	<h:panelGroup id="medexams">
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty medicalExaminationHome.allResults}" />
 
-	<h:dataTable value="#{medicalExaminationHome.allResults}" var="r" rendered="#{not empty medicalExaminationHome.allResults}" width="100%">
+	<h:dataTable value="#{medicalExaminationHome.allResults}" var="r" rendered="#{not empty medicalExaminationHome.allResults}" styleClass="table1">
 		<h:column>
 	
 		<s:decorate template="/layout/roundrect.xhtml" style="margin-right:10px;">
