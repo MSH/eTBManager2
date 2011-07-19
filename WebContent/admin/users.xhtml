@@ -20,11 +20,12 @@
 <ui:define name="content">
 <h:form id="main">
 
-<s:link view="/admin/edtuser.xhtml" value="#{messages['form.new']}" 
+<s:link view="/admin/edtuser.xhtml"
 	styleClass="button"  
 	rendered="#{s:hasRole('USERS_EDT')}"
 	propagation="none" >
 	<f:param name="id" value="#{null}" />
+	<span>#{messages['form.newf']}</span>
 </s:link>
 
 <p/>
