@@ -17,6 +17,7 @@
 </ui:define>
 
 <ui:define name="content">
+<h1>#{title}</h1>
 <h:form id="main">
 
 <table class="table1" width="400px" >
@@ -42,7 +43,7 @@
 </c:forEach>
 <tr><td align="right">
 	<h:commandLink action="#{weeklyFrequencyHome.save}" styleClass="button">
-	 <span>#{messages['form.ok']}</span> 
+	 <span>#{messages['form.save']}</span> 
 	 </h:commandLink>
 	<s:link view="/admin/weekfreqs.xhtml" styleClass="button-alt">
 	  <span>#{messages['form.cancel']}</span>  
