@@ -10,24 +10,23 @@
 	<s:fragment rendered="#{not caseHome.inTreatment}" >
 		<h:outputText value="#{messages['cases.details.notreatment']}" styleClass="warn" style="display:block;padding:30px;"/>
 
+		<div style="display:block;margin-left:30px;marign-bottom:30px;"> 
 		<s:link onclick="showSelRegimenDlg();return false;" 
 			rendered="#{tbcase.state == 'WAITING_TREATMENT'}"
-			style="display:block;margin-left:30px;marign-bottom:30px;" styleClass="button">
+			styleClass="button-alt">
 			<f:param name="id" value="#{caseHome.id}" />
 			<span>#{messages['cases.details.starttreatment']}</span>
 		</s:link>
+		</div>
 		
 		<rich:jQuery timing="onJScall" name="showSelRegimenDlg" selector="#seltttype" query="show(500)" />
 		<div id="seltttype" style="display:none;padding:20px;width:500px;">
-			
-			<s:decorate template="/layout/roundrect.xhtml">
-				<ui:param name="showfooter" value="0" />
-				<ui:define name="header">
-					<b>#{messages['cases.treat.selreg']}:</b><br/>
-				</ui:define>
-				
-				<div style="padding:20px">
 
+			<div class="region1">
+				<div class="header">
+					<h2>#{messages['cases.treat.selreg']}:</h2>			
+				</div>
+				<div class="content">
 				<div style="display:block;padding:4px;">
 					<div class="linknaveg">
 					<s:link value="#{messages['regimens.standard']}" style="font-size:12px" view="/cases/starttreatment.xhtml">
@@ -44,7 +43,7 @@
 					</div>
 				</div>
 				</div>
-			</s:decorate>
+			</div>
 		</div>
 	</s:fragment>
 

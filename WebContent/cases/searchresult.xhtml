@@ -12,28 +12,12 @@
 <ui:param name="title" value="#{messages['cases.searchresult']}" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="left" value="0" />
-<ui:param name="waitdlg" value="1" />
 
 <ui:define name="naveg">
 	<s:link value="#{messages['cases']}" view="/cases/index.html" propagation="none"/>
 </ui:define>
 
 <ui:define name="left">
-</ui:define>
-
-<ui:define name="head">
-<style type="text/css">
-.searchtitle{
-/* 	background-color:#e0e0e0; */
-	border:1px solid #d0d0d0;
-}
-.searchtitle a {
-/*   color:black; */
-   font-size:10px;
-   text-transform:uppercase;
-   font-weight:bold;
-}
-</style>
 </ui:define>
 
 <ui:define name="content">
@@ -47,8 +31,10 @@
 			<ui:param name="reRender" value="listCases" />
 		</s:decorate>
 	
-	</td><td align="right">
-		<h:commandLink value="#{messages['cases.newsearch']}" styleClass="button" onclick="Richfaces.showModalPanel('filtersdlg');return false;" style="float:right;width:150px;"/>	
+	</td><td>
+		<h:commandLink styleClass="button-alt" onclick="Richfaces.showModalPanel('filtersdlg');return false;" style="float:right;">
+			<span>#{messages['cases.newsearch']}</span>
+		</h:commandLink>	
 	</td></tr></table>
 	
 	<h:panelGroup id="res">
@@ -122,18 +108,18 @@
 			</s:link>
 			<br/>
 			<s:link view="/cases/casedata.xhtml" 
-				styleClass="#{it.gender=='MALE'?'male-icon':'female-icon'}" style="margin-left:30px;">
+				styleClass="#{it.gender=='MALE'?'male-icon':'female-icon'}" >
 				<f:param name="id" value="#{it.caseId}" />
 			</s:link>
 	</td>
-	<td style="border-left:1px solid #E0E0E0;">
+	<td>
 		<b>#{messages[it.classification.key]}</b>
 		<div style="padding-top:6px;clear:left;">
 		#{it.patientName}
 		<br /> #{it.patientAge} #{messages['global.age']}
 		</div>
 	</td>
-	<td style="border-left:1px solid #E0E0E0;">
+	<td>
 		<b>#{it.healthUnit}</b><br />
 		<h:outputText value="#{it.region} - #{it.locality}" style="font-size:10px;" /> 
    		<div style="padding-top:6px;clear:left;">
@@ -183,16 +169,20 @@
 	</td></tr>
 	<tr><td>
 		<ui:include src="/layout/waitstatus.xhtml" />
-	</td>
 
-	<td align="right">
-		<a:commandLink id="btnsearch" value="#{messages['form.search']}" action="#{cases.refresh}" 
+	</td></tr></table>	
+	
+	<div class="button-bar">
+		<a:commandLink id="btnsearch" action="#{cases.refresh}" 
 			styleClass="button"	reRender="listCases" onclick="if (!validateFilters()) return false;this.disabled=true"
 			oncomplete="this.disabled=false;Richfaces.hideModalPanel('filtersdlg');return false;">
 			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
+			<span>#{messages['form.search']}</span>
 		</a:commandLink>
-		<s:link value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-alt"/>
-	</td></tr></table>	
+		<s:link onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-alt">
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
 	</a:region>
 	<rich:hotKey selector="#tblfilters input,select" key="return" handler="#{rich:element('btnsearch')}.click();" /> 
 	</h:form>

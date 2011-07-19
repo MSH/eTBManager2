@@ -53,7 +53,7 @@
 				<f:param name="tag" />
 			</s:link>
 		</td>
-		<td>
+		<td align="right">
 			<h:outputText value="#{it.cases}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
@@ -64,7 +64,7 @@
 		<td>
 			<b>#{messages['global.total']}</b>
 		</td>
-		<td>
+		<td align="right">
 			<b><h:outputText value="#{caseStateReport.total.cases}">
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText></b>
@@ -88,7 +88,7 @@
 				<f:param name="tag" />
 			</s:link>
 		</td>
-		<td>
+		<td align="right">
 			<h:outputText value="#{it.cases}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
@@ -100,6 +100,7 @@
 	<div class="spacer"/>
 
 
+	<s:fragment rendered="#{not empty caseStateRerport.tags}">
 	<table class="table2">
 	<tr>
 		<th colspan="2">#{messages['admin.tags']}</th>
@@ -107,14 +108,15 @@
 	<ui:repeat value="#{caseStateReport.tags}" var="it">
 	<tr>
 		<td>
-			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" >
+			<div class="tag-icon" />
+			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" styleClass="link-small">
 				<f:param name="tag" value="#{it.stateIndex}"/>
 				<f:param name="sc" value="#{'CASE_TAG'}"/>
 				<f:param name="stateIndex" />
 				<f:param name="vs" />
 			</s:link>
 		</td>
-		<td>
+		<td align="right">
 			<h:outputText value="#{it.cases}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
@@ -122,7 +124,7 @@
 	</tr>
 	</ui:repeat>
 	</table>
-
+	</s:fragment>
 	
 	</h:form>
 </ui:define>
@@ -174,13 +176,18 @@
 	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
 	<c:forEach items="#{globalLists.caseClassifications}" var="it">
 		<tr><td class="vertical-menu">
-			<s:link value="#{messages[it.key]}" view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
+			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
 				<f:param name="classif" value="#{it}"/>
+				<div class="new-icon" />#{messages[it.key]}
 			</s:link>
 		</td></tr>
 	</c:forEach>
 	</table>
-	<s:link value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" styleClass="button-alt" />
+	<div class="button-bar">
+		<s:link onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" styleClass="button-alt" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
 	</a:form>
 </rich:modalPanel>
 </s:fragment>

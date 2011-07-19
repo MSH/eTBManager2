@@ -16,6 +16,7 @@
 </ui:define>
 
 <ui:define name="content">
+<h1>#{title}</h1>
 
 <s:decorate template="/layout/roundrect.xhtml" style="margin-top:20px;">
 	<ui:param name="showheader" value="0" />
@@ -43,7 +44,9 @@
     </s:decorate>
 
 	<p/>
-	<h:commandLink action="#{az.importDataHome.execute}" value="#{messages['form.import']}" styleClass="button" />
+	<h:commandLink action="#{az.importDataHome.execute}" styleClass="button" >
+		<span>#{messages['form.import']}</span>
+	</h:commandLink>
 	
 </h:form>
 

@@ -17,7 +17,7 @@
 	</a:repeat>
 
 	<a:repeat value="#{healthUnitsQuery.adminUnits}" var="adm">
-	<table class="table1" width="100%">
+	<table class="table1">
 		<tr><th colspan="6">
 			<div class="text-big">#{adm.adminUnit.name}</div>
 		</th></tr>
@@ -31,7 +31,7 @@
 		</tr>		
 		<a:repeat value="#{adm.items}" var="it">
 		<tr>
-			<td><div class="icon-hu-big">#{it.unitName}</div></td>
+			<td><div class="icon-hu"/>#{it.unitName}</td>
 			<td align="center">#{it.casesOnTreatment==null?'-':it.casesOnTreatment}</td>
 			<td align="center">#{it.casesTransferIn==null?'-':it.casesTransferIn}</td>
 			<td align="center">#{it.casesTransferOut==null?'-':it.casesTransferOut}</td>

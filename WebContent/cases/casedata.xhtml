@@ -68,9 +68,6 @@
 		<f:param name="id" value="#{caseHome.id}" />
 	</s:link>
 
-	<a:commandLink value="Test" onclick="initTab();return false;">
-	</a:commandLink>
-
 	</h:form>
 	</h:panelGroup>
 
@@ -216,7 +213,7 @@ jQuery().ready(function() {
 function initTab() {
 	var updt=window.inicasetab==0;
 	if (updt)
-		window.inicasetab=2;
+		window.inicasetab=1;
 	var tabid = 'tab' + window.inicasetab;
 	var dest = 'main:bodydiv:tab' + window.inicasetab;
 	RichFaces.switchTab('main:bodydiv:tabCase', dest, tabid);

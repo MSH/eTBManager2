@@ -20,12 +20,14 @@
 
 
 <ui:define name="content">
+<h1>#{title}</h1>
 
 <s:decorate template="/layout/casebody.xhtml">
 
-	<a:form id="formtreat">
-	<table width="100%" style="border-collapse:collapse;"><tr><td>
+	<a:form id="formtreat" styleClass="form1">
 	
+	<div class="form-content">
+
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     	<h:outputText value="#{tbcase.diagnosisDate}"  converter="localeDateConverter"/>
@@ -43,21 +45,18 @@
    		<ui:param name="future" value="true" />
    		<ui:param name="datefield" value="#{startTreatmentIndivHome.iniTreatmentDate}" /> 
    	</s:decorate>
+	</div>
 
-
+	<div class="form-content">
 	<h:panelGroup id="pnltreatment_int">
 	
-	<rich:spacer height="10" />
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
-		<ui:define name="header">
-			<a:commandLink action="#{startTreatmentIndivHome.initMedicineSelection('INTENSIVE')}"
-				style="float:right;" ajaxSingle="true" 
-				value="#{messages['Regimen.add']}..." 
-				reRender="medpnl" oncomplete="showMedicinesDlg()" />
-			<b>#{messages['RegimenPhase.INTENSIVE']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
+	<div class="spacer" />
+	<a:commandLink action="#{startTreatmentIndivHome.initMedicineSelection('INTENSIVE')}"
+		style="float:right;" ajaxSingle="true" styleClass="button-alt" 
+		reRender="medpnl" oncomplete="showMedicinesDlg()" >
+		<span>#{messages['Regimen.add']}...</span>
+	</a:commandLink>
+	<h2>#{messages['RegimenPhase.INTENSIVE']}</h2>
 		<h:outputText value="#{messages['edtrec.nomedicine']}" styleClass="warn" rendered="#{empty startTreatmentIndivHome.medicinesIntPhase}"/>
 		<h:dataTable value="#{startTreatmentIndivHome.medicinesIntPhase}" var="it" styleClass="table1" width="100%" 
 			rendered="#{not empty startTreatmentIndivHome.medicinesIntPhase}" >
@@ -108,20 +107,17 @@
 					reRender="pnltreatment_int"/>
 			</h:column>
 		</h:dataTable>
-	</s:decorate>
 	</h:panelGroup>
 	
 	<h:panelGroup id="pnltreatment_cont">
-	<rich:spacer height="10" />
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
-		<ui:define name="header">
-			<a:commandLink action="#{startTreatmentIndivHome.initMedicineSelection('CONTINUOUS')}"
-				style="float:right;" ajaxSingle="true"
-				value="#{messages['Regimen.add']}..." 
-				reRender="medpnl" oncomplete="showMedicinesDlg()" />
-			<b>#{messages['RegimenPhase.CONTINUOUS']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+	<div class="spacer" />
+	
+	<a:commandLink action="#{startTreatmentIndivHome.initMedicineSelection('CONTINUOUS')}"
+		style="float:right;" ajaxSingle="true" styleClass="button-alt"
+		reRender="medpnl" oncomplete="showMedicinesDlg()" >
+		<span>#{messages['Regimen.add']}...</span>
+	</a:commandLink>
+	<h2>#{messages['RegimenPhase.CONTINUOUS']}</h2>
 
 		<h:outputText value="#{messages['edtrec.nomedicine']}" styleClass="warn" rendered="#{empty startTreatmentIndivHome.medicinesContPhase}"/>
 		<h:dataTable value="#{startTreatmentIndivHome.medicinesContPhase}" var="it" styleClass="table1" width="100%" 
@@ -173,28 +169,31 @@
 					reRender="pnltreatment_cont"/>
 			</h:column>
 		</h:dataTable>
-	</s:decorate>
 
 	</h:panelGroup>
-	
-	</td></tr>
-	<tr><td align="right">
-		<a:commandLink value="#{messages['form.ok']}" styleClass="button" action="#{startTreatmentIndivHome.startIndividualizedRegimen}" 
-			reRender="messages,formtreat"/>
-		<s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+	</div>
+
+	<div class="form-footer">	
+		<a:commandLink styleClass="button" action="#{startTreatmentIndivHome.startIndividualizedRegimen}" 
+			reRender="messages,formtreat">
+			<span>#{messages['form.ok']}</span>
+		</a:commandLink>
+		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
 			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['form.cancel']}</span>
 		</s:link>
-	</td></tr>
-	</table>
+	</div>
 	</a:form>
 </s:decorate>
 
 <s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
 	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
-	<a:commandLink value="#{messages['form.ok']}" styleClass="button" action="#{startTreatmentIndivHome.addMedicines}" 
+	<a:commandLink styleClass="button" action="#{startTreatmentIndivHome.addMedicines}" 
 		oncomplete="this.enabled=true;hideMedicinesDlg();" 
 		onclick="this.disabled=true;"
-		reRender="#{startTreatmentIndivHome.phase=='INTENSIVE'? 'pnltreatment_int':'pnltreatment_cont'}"/>
+		reRender="#{startTreatmentIndivHome.phase=='INTENSIVE'? 'pnltreatment_int':'pnltreatment_cont'}">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
 </s:decorate>
 
 </ui:define>
