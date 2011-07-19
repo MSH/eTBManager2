@@ -110,16 +110,22 @@
     </td></tr>
     <tr>
     	<td>
-			<a:commandLink value="#{messages['admin.users.newpasswd']}" action="#{userHome.sendNewPassword}" styleClass="button" style="width:150px"
+    	<!-- value="#{messages['admin.users.newpasswd']}" -->
+			<a:commandLink action="#{userHome.sendNewPassword}" styleClass="button" 
 				onclick="if (!confirm('#{messages['admin.users.confirmnewpass']}')) return false;" 
 				reRender="main,messages"
 				rendered="#{userHome.managed}"
-				/>
+				>
+				<span>#{messages['Send New Password']}</span>
+				</a:commandLink>
     	</td>
     	<td align="right">
-            <a:commandLink action="#{userHome.persist}" value="Ok" styleClass="button" reRender="main" />
-            <s:link action="cancel" value="#{messages['form.cancel']}" styleClass="button-alt">
+            <a:commandLink action="#{userHome.persist}" styleClass="button" reRender="main" >
+              <span>#{messages['form.ok']}</span>
+              </a:commandLink>
+            <s:link action="cancel" styleClass="button-alt">
             	<f:param name="id" value="#{null}" />
+            	<span>#{messages['form.cancel']}</span>
             </s:link>
     </td></tr>
     </table>
