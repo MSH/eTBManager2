@@ -18,8 +18,9 @@
 
 <ui:define name="content">
 <h:form id="main">
-<s:link view="/admin/edtagerange.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{s:hasRole('AGERANGES_EDT')}">
+<s:link view="/admin/edtagerange.xhtml" styleClass="button" rendered="#{s:hasRole('AGERANGES_EDT')}">
 	<f:param name="id" value="#{null}" />
+	<span>#{messages['form.newf']}</span>
 </s:link>
 <p/>
 <h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty ageRangeHome.items}" styleClass="warn"/>
