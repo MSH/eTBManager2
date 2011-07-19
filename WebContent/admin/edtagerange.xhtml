@@ -36,8 +36,11 @@
     
     </td></tr>
     <tr><td align="right" colspan="2">
-            <a:commandLink action="#{ageRangeHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>  
-            <s:link value="#{messages['form.cancel']}" styleClass="button-alt" view="/admin/ageranges.xhtml">
+            <a:commandLink action="#{ageRangeHome.persist}" styleClass="button" reRender="main,messages">
+             <span>#{messages['form.ok']}</span> 
+             </a:commandLink>  
+            <s:link  styleClass="button-alt" view="/admin/ageranges.xhtml">
+             <span>#{messages['form.cancel']}</span> 
             </s:link>  
     </td></tr>
     </table>
