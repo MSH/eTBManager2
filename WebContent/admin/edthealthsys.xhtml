@@ -52,8 +52,11 @@
     
     </td></tr>
     <tr><td align="right" colspan="2">
-            <a:commandLink action="#{healthSystemHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main"/>  
-            <s:link value="#{messages['form.cancel']}" styleClass="button-alt" view="/admin/healthsys.xhtml">
+            <a:commandLink action="#{healthSystemHome.persist}" styleClass="button" reRender="main">
+             <span>#{messages['form.ok']}</span>
+             </a:commandLink>  
+            <s:link styleClass="button-alt" view="/admin/healthsys.xhtml">
+            <span>#{messages['form.cancel']}</span>
             </s:link>  
     </td></tr>
     </table>
