@@ -38,8 +38,9 @@
 </s:decorate>                 
 
 
-<s:link view="/admin/edtlab.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{s:hasRole('LABS_EDT')}">
+<s:link view="/admin/edtlab.xhtml" styleClass="button" rendered="#{s:hasRole('LABS_EDT')}">
 	<f:param name="id" value="#{null}" />
+	<span>#{messages['form.newf']}</span>
 </s:link>
 <p/>
 
