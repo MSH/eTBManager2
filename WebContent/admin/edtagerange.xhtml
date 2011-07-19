@@ -16,9 +16,10 @@
 <ui:param name="labelstyle" value="width:160px;" />
 
 <ui:define name="content">
-<h:form id="main">
-    <table class="table1" width="550px">
-    <tr><td>
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+    
+    <div class="form-content">
     <s:decorate template="/layout/display.xhtml" rendered="#{ageRange.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{ageRange.id}" />
@@ -33,19 +34,18 @@
     	<ui:define name="label">#{messages['AgeRange.endAge']}:</ui:define>
         <h:inputText id="endage" value="#{ageRange.endAge}" maxlength="100" style="width : 100px;" required="true" />
     </s:decorate>
+    </div>
     
-    </td></tr>
-    <tr><td align="right" colspan="2">
+    <div class="form-footer">
             <a:commandLink action="#{ageRangeHome.persist}" styleClass="button" reRender="main,messages">
-             <span>#{messages['form.ok']}</span> 
+             <span>#{messages['form.save']}</span> 
              </a:commandLink>  
             <s:link  styleClass="button-alt" view="/admin/ageranges.xhtml">
              <span>#{messages['form.cancel']}</span> 
             </s:link>  
-    </td></tr>
-    </table>
+ </div>
 
-	<p/>
+	
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 </h:form>
 
