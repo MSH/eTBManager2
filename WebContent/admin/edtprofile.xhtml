@@ -107,9 +107,12 @@ function permissionClickHandler(checkbox, divname) {
 
 	</td></tr>
 	<tr><td align="right">
-            <h:commandLink action="#{profileHome.persist}" value="#{messages['form.ok']}" styleClass="button"/>  
-            <s:link view="/admin/profiles.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" >
+            <h:commandLink action="#{profileHome.persist}" styleClass="button">
+            <span>#{messages['form.ok']}</span>
+            </h:commandLink>  
+            <s:link view="/admin/profiles.xhtml" styleClass="button-alt" >
             	<f:param name="id" value="#{null}" />
+            	 <span>#{messages['form.cancel']}</span>
             </s:link>
     </td></tr>
     </table>
