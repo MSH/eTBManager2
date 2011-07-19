@@ -16,9 +16,10 @@
 <ui:param name="labelstyle" value="width:200px;" />
 
 <ui:define name="content">
-<h:form id="main">
-    <table class="tabela3" width="650px" style="border:2px solid #e0e0e0">
-    <tr><td colspan="2">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+
+   <div class="form-content">
     <s:decorate template="/layout/display.xhtml" rendered="#{medicine.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{medicine.id}" />
@@ -103,22 +104,18 @@
 		</h:column>
 	</h:dataTable>
 	</div>
+</div>
 
-	</td></tr>
-    <tr>
-    	<td style="border:none">
-    	</td><td align="right">
-            <a:commandLink action="#{medicineHome.persist}" styleClass="button" reRender="main,messages"> 
-             <span>#{messages['form.ok']}</span>
-             </a:commandLink>
+			<div class="form-footer">	
+            <a:commandLink action="#{medicineHome.persist}" styleClass="button" reRender="main,messages">
+            <span>#{messages['form.save']}</span>
+            </a:commandLink>  
             <s:link view="/admin/medicines.xhtml" styleClass="button-alt" propagation="end" onclick="openWaitDlg();">
             	<f:param name="id" value="#{null}" />
             	<span>#{messages['form.cancel']}</span>
             </s:link>
-    </td></tr>
-    </table>
+   			</div>
 
-	<p/>
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 </h:form>
 
