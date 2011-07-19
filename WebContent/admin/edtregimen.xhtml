@@ -15,9 +15,10 @@
 
 
 <ui:define name="content">
-<h:form id="main">
-    <table width="650px">
-    <tr><td>
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+
+    <div class="form-content">
     <s:decorate template="/layout/display.xhtml" rendered="#{regimen.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{regimen.id}" />
@@ -177,30 +178,34 @@
 		</h:column>		
 	</h:dataTable>
 	</h:panelGroup>
+</div>
 
-    </td></tr>
-    <tr><td align="right" colspan="2">
+	<div class="form-footer">   
             <a:commandLink action="#{regimenHome.persist}" 
             	styleClass="button" 
             	reRender="main,messages">
-            	<span>#{messages['form.ok']}</span>
+            	<span>#{messages['form.save']}</span>
             	</a:commandLink>  
             <a:commandLink action="cancel" styleClass="button-alt" ajaxSingle="true">
              <span>#{messages['form.cancel']}</span>
              </a:commandLink>
-    </td></tr>
-    </table>
+   </div>
 
-	<p/>
+
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 </h:form>
 
-
+   
 <s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
 	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
-   	<a:commandLink action="#{regimenHome.addMedicines}" value="#{messages['form.ok']}" styleClass="button" oncomplete="hideMedicinesDlg();"  reRender="main:tab1" rendered="#{regimenHome.phase=='INTENSIVE'}"/>
-   	<a:commandLink action="#{regimenHome.addMedicines}" value="#{messages['form.ok']}" styleClass="button" oncomplete="hideMedicinesDlg();"  reRender="main:tab2" rendered="#{regimenHome.phase=='CONTINUOUS'}"/>
+   	<a:commandLink action="#{regimenHome.addMedicines}" styleClass="button" oncomplete="hideMedicinesDlg();"  reRender="main:tab1" rendered="#{regimenHome.phase=='INTENSIVE'}">
+   	<span>#{messages['form.ok']}</span>
+   	</a:commandLink>
+   	<a:commandLink action="#{regimenHome.addMedicines}" styleClass="button" oncomplete="hideMedicinesDlg();"  reRender="main:tab2" rendered="#{regimenHome.phase=='CONTINUOUS'}">
+   	<span>#{messages['form.ok']}</span>
+   	</a:commandLink>
 </s:decorate>
+
 
 </ui:define>
         
