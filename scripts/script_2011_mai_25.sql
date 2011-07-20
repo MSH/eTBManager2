@@ -10,11 +10,11 @@ values (165, false, '010115', 'CASE_TAG', false, true);
 
 
 insert into UserRole (id, changeable, code, Role_Name, internalUse, byCaseClassification)
-values (166, false, '010115', 'ADM_TAGS', false, true);
+values (162, false, '010115', 'TAGS', false, true);
 
 
 insert into UserRole (id, changeable, code, Role_Name, internalUse, byCaseClassification)
-values (167, false, '010200', 'CASE_CHANGENUMBER', false, true);
+values (166, false, '010200', 'CASE_CHANGENUMBER', false, false);
 
 
 INSERT INTO UserPermission

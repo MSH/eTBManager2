@@ -9,7 +9,7 @@
 
 	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
 		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/cases/comorbedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
+			<s:link value="#{messages['form.edit']}" view="/cases/comorbedt.xhtml" style="float:right;" rendered="#{caseHome.canEditAditionalInfo}">
 				<f:param name="id" value="#{caseHome.id}" />
 			</s:link>
     		<b>#{messages['cases.comorbidities']}</b>
@@ -68,9 +68,11 @@
 	<tr>
 		<th colspan="2" align="left">
 			<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remContact(#{it.id});return false;" 
+				rendered="#{caseHome.canEditAditionalInfo}"
 				style="font-size:9px;float:right;">
 			</h:commandLink>
-			<s:link value="#{it.name}" view="/cases/edtcontact.xhtml">
+			<h:outputText value="#{it.name}" rendered="#{not caseHome.canEditAditionalInfo}" />
+			<s:link value="#{it.name}" view="/cases/edtcontact.xhtml" rendered="#{caseHome.canEditAditionalInfo}">
 				<f:param name="conid" value="#{it.id}"/>
 			</s:link>
 		</th>

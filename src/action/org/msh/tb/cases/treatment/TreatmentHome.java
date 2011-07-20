@@ -194,6 +194,7 @@ public class TreatmentHome {
 		caseRegimenHome.setUseDefaultDoseUnit(false);
 		caseRegimenHome.applyRegimen(dt, null);
 		tbcase.setRegimen(caseRegimenHome.getRegimen());
+		tbcase.setRegimenIni(caseRegimenHome.getRegimen());
 		//caseHome.persist();
 		
 		formEditing = FormEditing.NONE;

@@ -215,11 +215,11 @@ public class CaseHome extends WsEntityHome<TbCase>{
 	}
 	
 	public boolean isCanClose() {
-		return (getInstance().isOpen()) && (checkRoleBySuffix("CASE_CLOSE"));
+		return (getInstance().isOpen()) && (checkRoleBySuffix("CASE_CLOSE")) && isWorkingUnit();
 	}
 	
 	public boolean isCanReopen() {
-		return (!getInstance().isOpen()) && (checkRoleBySuffix("CASE_REOPEN"));
+		return (!getInstance().isOpen()) && (checkRoleBySuffix("CASE_REOPEN")) && isWorkingUnit();
 	}
 	
 	@Override
@@ -240,32 +240,33 @@ public class CaseHome extends WsEntityHome<TbCase>{
 	}
 	
 	public boolean isCanEditCaseData() {
-		return (getInstance().isOpen()) && checkRoleBySuffix("CASE_DATA_EDT") && (isWorkingUnit());
+		return checkRoleBySuffix("CASE_DATA_EDT") && (isWorkingUnit());
 	}
 	
+		
 	public boolean isCanStartTreatment() {
 		CaseState st = getInstance().getState();
 		return (isManaged()) && (st != null) && (st.ordinal() < CaseState.ONTREATMENT.ordinal()) && (isCanEditTreatment());
 	}
 	
 	public boolean isCanEditTreatment() {
-		return (getInstance().isOpen()) && (checkRoleBySuffix("CASE_TREAT_EDT"));
+		return (getInstance().isOpen()) && (checkRoleBySuffix("CASE_TREAT_EDT") && (isWorkingUnit()));
 	}
 
 	public boolean isCanEditTreatmentCalendar() {
-		return (getInstance().isOpen()) && (checkRoleBySuffix("CASE_INTAKEMED_EDT"));		
+		return (getInstance().isOpen()) && (checkRoleBySuffix("CASE_INTAKEMED_EDT") && (isWorkingUnit()));
 	}
 	
 	public boolean isCanEditExams() {
-		return getInstance().isOpen() && checkRoleBySuffix("CASE_EXAMS_EDT");
+		return checkRoleBySuffix("CASE_EXAMS_EDT") && isWorkingUnit();
 	}
 	
 	public boolean isCanEditAditionalInfo() {
-		return getInstance().isOpen() && checkRoleBySuffix("CASE_ADDINFO_EDT");
+		return checkRoleBySuffix("CASE_ADDINFO_EDT") && isWorkingUnit();
 	}
 	
 	public boolean isCanTagCase() {
-		return getInstance().isOpen() && checkRoleBySuffix("CASE_TAG");
+		return Identity.instance().hasRole("CASE_TAG") && isWorkingUnit();
 	}
 	
 	@Override

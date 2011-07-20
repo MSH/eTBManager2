@@ -63,7 +63,10 @@ public class StartTreatmentHome {
 		entityManager.createQuery("delete from TreatmentHealthUnit hu where hu.tbcase.id = " + tbcase.getId()).executeUpdate();
 		
 		caseRegimenHome.setUseDefaultDoseUnit(useDefaultDoseUnit);
-		caseRegimenHome.startNewRegimen(iniTreatmentDate, endTreatmentDate, tbunitselection.getTbunit()); 
+		caseRegimenHome.startNewRegimen(iniTreatmentDate, endTreatmentDate, tbunitselection.getTbunit());
+		
+		// save the initial regimen information
+		tbcase.setRegimenIni(tbcase.getRegimen());
 
 		// initialize case data
 		tbcase.setState(CaseState.ONTREATMENT);

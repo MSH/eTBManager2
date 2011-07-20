@@ -1,5 +1,6 @@
 package org.msh.tb.cases.drugogram;
 
+import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.enums.DstResult;
 
 public class SubstanceItem {
@@ -7,6 +8,7 @@ public class SubstanceItem {
 	private String medicine;
 	private DstResult dstResult;
 	private boolean prescribed;
+	private Substance substance;
 
 
 	/**
@@ -44,5 +46,17 @@ public class SubstanceItem {
 	 */
 	public boolean isPrescribed() {
 		return prescribed;
+	}
+	/**
+	 * @return the substance
+	 */
+	public Substance getSubstance() {
+		return substance;
+	}
+	/**
+	 * @param substance the substance to set
+	 */
+	public void setSubstance(Substance substance) {
+		this.substance = substance;
 	}
 }

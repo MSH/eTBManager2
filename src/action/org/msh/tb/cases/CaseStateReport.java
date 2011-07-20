@@ -18,6 +18,7 @@ import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.login.UserSession;
@@ -76,7 +77,7 @@ public class CaseStateReport {
 		if (userWorkspace.getHealthSystem() != null)
 			hsID = userWorkspace.getHealthSystem().getId();
 		
-		String sql = "select c.state, c.validationState, count(*) " +
+		String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
 				"from TbCase c " +
 				"inner join Tbunit u on u.id = c.notification_unit_id " + aucond +
 				"where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
@@ -84,7 +85,7 @@ public class CaseStateReport {
 				" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
 				" group by c.state, c.validationState " +
 				"union " +
-				"select c.state, c.validationState, count(*) " +
+				"select c.state, c.validationState, 0, count(*) " +
 				"from TbCase c " +
 				"inner join TreatmentHealthUnit h on h.case_id = c.id " +
 				"inner join Tbunit u on u.id = h.unit_id " + aucond + 
@@ -98,12 +99,14 @@ public class CaseStateReport {
 		total.setDescription(messages.get("global.total"));
 		
 		for (Object[] val: lst) {
-			int qty = ((BigInteger)val[2]).intValue();
-			Item item = findItem(CaseState.values()[(Integer)val[0]]);
+			int qty = ((BigInteger)val[3]).intValue();
+			DiagnosisType diagType = DiagnosisType.values()[((BigInteger)val[2]).intValue()];
+			ValidationState vs = ValidationState.values()[(Integer)val[1]];
+
+			Item item = findItem(CaseState.values()[(Integer)val[0]], diagType);
 			item.add(qty);
 			total.add(qty);
 			
-			ValidationState vs = ValidationState.values()[(Integer)val[1]];
 			if (!ValidationState.VALIDATED.equals(vs)) {
 				ValidationItem valItem = findValidationItem(vs);
 				valItem.addCases(qty);
@@ -243,27 +246,34 @@ public class CaseStateReport {
 	 * @param state
 	 * @return
 	 */
-	private Item findItem(CaseState state) {
-		if (state.ordinal() >= CaseState.CURED.ordinal())
-			state = null;
+	private Item findItem(CaseState state, DiagnosisType diagType) {
+		int stateIndex = state.ordinal();
+		String desc = null;
+		
+		if (state.ordinal() >= CaseState.CURED.ordinal()) {
+			stateIndex = 100;
+			desc = messages.get("cases.closed");
+		}
+		else
+		if ((state == CaseState.WAITING_TREATMENT) && (diagType == DiagnosisType.SUSPECT)) {
+			stateIndex = 200;
+			desc = messages.get("CaseState.NOT_ON_TREATMENT");
+		}
+		else {
+			desc = messages.get(state.getKey());
+			stateIndex = state.ordinal();
+		}
 
 		for (Item item: items) {
-			if (item.getState() == state)
+			if (item.getStateIndex() == stateIndex)
 				return item;
 		}
 		
 		Item item = new Item();
 		item.setState(state);
+		item.setDescription(desc);
+		item.setStateIndex(stateIndex);
 		
-		if (state == null) {
-			item.setDescription(messages.get("cases.closed"));
-			item.setStateIndex(100);
-		}
-		else {
-			item.setDescription(messages.get(state.getKey()));
-			item.setStateIndex(state.ordinal());
-		}
-
 		items.add(item);
 		
 		return item;

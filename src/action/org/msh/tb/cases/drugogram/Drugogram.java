@@ -19,11 +19,11 @@ import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.ExamXRay;
-import org.msh.tb.entities.LocalizedNameComp;
 import org.msh.tb.entities.MedicalExamination;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineComponent;
 import org.msh.tb.entities.PrescribedMedicine;
+import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.utils.date.DateUtils;
@@ -50,7 +50,7 @@ public class Drugogram {
 	private int numExams;
 
 	private List<String> examLabels;
-	private List<String> medicines;
+	private List<MedicineColumn> medicines;
 	
 	private boolean includeXRay;
 	private boolean includeMedicalExamination;
@@ -148,7 +148,7 @@ public class Drugogram {
 	 * Fill the drugogram with DST results
 	 */
 	protected void createDSTResults() {
-		List<Object[]> lst = entityManager.createQuery("select res.result, res.substance.abbrevName, exam.dateCollected " +
+		List<Object[]> lst = entityManager.createQuery("select res.result, res.substance, exam.dateCollected " +
 				"from ExamDSTResult res " +
 				"join res.exam exam " +
 				"where exam.tbcase.id = :id")
@@ -158,10 +158,11 @@ public class Drugogram {
 		for (Object[] vals: lst) {
 			Date dt = (Date)vals[2];
 			DstResult res = (DstResult)vals[0];
-			String subname = ((LocalizedNameComp)vals[1]).toString();
+			Substance sub = (Substance)vals[1];
 			
 			DrugogramItem item = findItemByDate(dt);
-			SubstanceItem subitem = item.findSubstance(subname);
+			SubstanceItem subitem = item.findSubstance(sub.getAbbrevName().toString());
+			subitem.setSubstance(sub);
 			subitem.setDstResult(res);
 		}
 	}
@@ -218,12 +219,24 @@ public class Drugogram {
 				DrugogramItem item = findItemByDate(dt);
 				
 				Medicine med = pm.getMedicine();
-				List<String> subs = getSubstancesAbbrevName(med);
+				
+				// medicine has substances assigned to
+				if (med.getComponents().size() > 0) {
+					for (MedicineComponent medcomp: med.getComponents()) {
+						SubstanceItem sub = item.findSubstance(medcomp.getSubstance().getAbbrevName().toString());
+						sub.setPrescribed(true);
+						sub.setSubstance(medcomp.getSubstance());
+					}
+				}
+				else {
+					item.findSubstance(med.getAbbrevName()).setPrescribed(true);
+				}
+/*				List<String> subs = getSubstancesAbbrevName(med);
 				for (String subName: subs) {
 					SubstanceItem sub = item.findSubstance(subName);
 					sub.setPrescribed(true);						
 				}
-				dt = DateUtils.incMonths(dt, 1);
+*/				dt = DateUtils.incMonths(dt, 1);
 			}
 		}
 	}
@@ -316,19 +329,41 @@ public class Drugogram {
 	}
 
 
-	public List<String> getMedicines() {
+	public List<MedicineColumn> getMedicines() {
 		if (medicines == null) {
-			medicines = new ArrayList<String>();
+			medicines = new ArrayList<MedicineColumn>();
 			for (DrugogramItem item: getItems()) {
 				for (SubstanceItem sub: item.getSubstances()) {
-					if (!medicines.contains(sub.getMedicine()))
-						medicines.add(sub.getMedicine());
+					if (!isSubstanceInList(medicines, sub.getMedicine()))
+						medicines.add(new MedicineColumn(sub.getMedicine(), sub.getSubstance()));
 				}
 			}
-			Collections.sort(medicines);
+			
+			// sort list of substances
+			Collections.sort(medicines, new Comparator<MedicineColumn>() {
+				public int compare(MedicineColumn c1, MedicineColumn c2) {
+					Substance s1 = c1.getSubstance();
+					Substance s2 = c2.getSubstance();
+					Integer order1 = (s1 != null && s1.getPrevTreatmentOrder() != null ? s1.getPrevTreatmentOrder(): 0);
+					Integer order2 = (s2 != null && s2.getPrevTreatmentOrder() != null ? s2.getPrevTreatmentOrder(): 0);
+
+					return order1.compareTo(order2);
+				}
+			});
 		}
 		return medicines;
 	}
+	
+	
+	private boolean isSubstanceInList(List<MedicineColumn> lst, String subName) {
+		for (MedicineColumn col: lst) {
+			if (col.getMedicine().equals(subName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	
 	/**
 	 * Return the TB case of the drugogram
@@ -355,5 +390,47 @@ public class Drugogram {
 
 	public void setIncludeMedicalExamination(boolean includeMedicalExamination) {
 		this.includeMedicalExamination = includeMedicalExamination;
+	}
+	
+
+	public class MedicineColumn {
+		public MedicineColumn(String medicine, Substance substance) {
+			super();
+			this.medicine = medicine;
+			this.substance = substance;
+		}
+
+		@Override
+		public String toString() {
+			return medicine;
+		}
+		
+		private String medicine;
+		private Substance substance;
+		
+		/**
+		 * @return the medicine
+		 */
+		public String getMedicine() {
+			return medicine;
+		}
+		/**
+		 * @param medicine the medicine to set
+		 */
+		public void setMedicine(String medicine) {
+			this.medicine = medicine;
+		}
+		/**
+		 * @return the substance
+		 */
+		public Substance getSubstance() {
+			return substance;
+		}
+		/**
+		 * @param substance the substance to set
+		 */
+		public void setSubstance(Substance substance) {
+			this.substance = substance;
+		}
 	}
 }
