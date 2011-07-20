@@ -268,4 +268,9 @@ public class FieldsQuery {
 		return getValues();
 	}
 	
+	
+	public List<FieldValue> getXRayLocalizations() {
+		field = TbField.XRAY_LOCALIZATION;
+		return getValues();
+	}
 }
