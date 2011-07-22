@@ -21,23 +21,23 @@
 </ui:define>
 
 <ui:define name="content">
-<h:form id="main">
-<p/>
-<table width="100%"><tr><td>
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
 
 	<ui:include src="casedataedt.xhtml" />
 
-	<table width="100%"><tr><td align="right">
-	<div style="float:left;">
+	<div class="form-footer">
+	<div style="float:right;">
 		<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 	</div>
-	<a:commandLink value="#{messages['form.ok']}" action="#{caseDataPHHome.saveEditing}" styleClass="button" reRender="main"/>
-	<s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+	<a:commandLink action="#{caseDataPHHome.saveEditing}" styleClass="button" reRender="main">
+		<span>#{messages['form.save']}</span>
+	</a:commandLink>
+	<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
 		<f:param name="id" value="#{caseHome.id}" />
+		<span>#{messages['form.cancel']}</span>
 	</s:link>
-	</td></tr></table>
-</td></tr></table>
-<p/>
+	</div>
 
 </h:form>
 

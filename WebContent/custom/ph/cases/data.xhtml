@@ -6,17 +6,16 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-                 
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
-		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
-				<f:param name="id" value="#{caseHome.id}" />
-			</s:link>
-			<b>#{messages['cases.patientdata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+
+	<div class="form1">
 	
-	<div>	
+	<div class="form-content">
+		<s:link view="/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
+			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['form.edit']}</span>
+		</s:link>
+		<h2>#{messages['cases.patientdata']}</h2>
+	
 	<table style="border-collapse:collapse;width:98%;" cellpadding="1" ><tr><td colspan="2">
 	
 	</td></tr>
@@ -109,18 +108,13 @@
 		</s:decorate>
 	</td></tr>
 
-	</table></div>
-	</s:decorate>
+	</table>
+	</div>
 	
 
                  
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
-		<ui:define name="header">
-			<b>#{messages['cases.generaldata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-	
-	<div>
+	<div class="form-content">
+	<b>#{messages['cases.generaldata']}</b>
 	<table style="border-collapse:collapse;width:98%;" cellpadding="1" >
 	<tr><td colspan="2">
 	<s:decorate template="/layout/display.xhtml">
@@ -226,9 +220,8 @@
 			rendered="#{not empty caseSymptomsHome.caseSymptoms}" >
 			<h:column>
 				<f:facet name="header"><h:outputText value="#{messages['global.symptom']}" styleClass="collh"/> </f:facet>
-   				<div class="#{it.checked?'checked-icon':'unchecked-icon'}">
+   				<div class="#{it.checked?'checked-icon':'unchecked-icon'}"/>
 				#{it.symptom.name}
-				</div>
 			</h:column>
 		
 			<h:column>
@@ -280,21 +273,21 @@
 		</table>
 		</s:fragment>
 	</td></tr>
-	</table></div>
-	</s:decorate>
+	</table>
+	</div>
 
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;" rendered="#{not empty tbcase.comments}">
-		<ui:define name="header">
-			<b>#{messages['global.comments']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+
+	<div class="form-content">
+	<h2>#{messages['global.comments']}</h2>
 		<h:outputText value="#{tbcase.comments}" 
 			escape="false" converter="rmemoria.TextConverter"
 			styleClass="text" />
-	</s:decorate>
+	</div>
 
 	<s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="data" />
 	</s:decorate>
 
+	</div>
+	
 </ui:composition>

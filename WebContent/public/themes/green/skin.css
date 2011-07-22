@@ -788,7 +788,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 
 .icon-user-header, .icon-bullet, .icon-bullet-menu, .dst-resistant, .dst-contaminated, .dst-susceptible, 
 .tag-icon, .delete-icon, .new-icon, .progress-icon, .plus-icon, .icon-checked, .icon-unchecked,
-.icon-square, .icon-lab, .icon-hu, .icon-ds, .icon-report {
+.icon-square, .icon-lab, .icon-hu, .icon-ds, .icon-report, .checked-icon, .unchecked-icon {
 	background-image: url('images/icons.png');
 	width:16px;
 	height:16px;
@@ -830,6 +830,8 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .tag-icon {	background-position:-48px -48px;  }
 .delete-icon {	background-position:0px -16px; }
 .plus-icon { background-position:-32px -16px; }
+.checked-icon { background-position:-16px -112px; }
+.unchecked-icon { background-position:-32px -112px; }
 
 .progress-icon {
 	width:100px;
@@ -840,65 +842,6 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	border:1px solid black;
 }
 
-
-/* RICHFACES */
-
-.rich-menu-item {
-	text-align:left;
-	font-size:1.1em;
-	font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
-}
-
-.rich-mpnl-header {
-	background-image:none;
-	background-color:#34612f;
-	padding:6px;
-	color:white;
-	font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
-	font-size:13px;
-}
-
-.rich-mpnl-body {
-	font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
-	font-size:1em;
-}
-
-.rich-tabhdr-side-border, .rich-tabhdr-side-cell, .rich-tabhdr-cell-inactive {
-	border:none;
-	background:transparent;
-}
-
-.rich-tab-bottom-line {
-	border-bottom-color:#c6d5ce;
-}
-
-.rich-tab-header {
-	padding:4px 12px 4px 12px;
-	font-weight:bold;
-	font-size:12px;
-}
-.rich-tab-inactive {
-	border:1px solid #ffffff;
-  	background: #d5e5de;
-  	color:#438b6b;
-  	border-bottom:2px solid white;
-  	cursor: pointer;
-}
-.rich-tab-active {
-	border:1px solid #c6d5ce;
-  	background: #fff;
-  	color:#000;
-  	border-bottom:1px solid white;
-}
-.rich-tabpanel-content {
-	border-left:none;
-	border-bottom:none;
-	border-right:none;
-	padding:1px;
-}
-.rich-tbpnl-tb-sel {
-	background-color:#afcfc1;
-}
 
 
 
@@ -988,3 +931,68 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	float:right;
 	cursor:pointer;
 }
+
+
+/* RICHFACES */
+
+.rich-mpnl-panel {
+	position: relative;
+}
+
+.rich-menu-item {
+	text-align:left;
+	font-size:1.1em;
+	font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.rich-mpnl-header {
+	background-image:none;
+	background-color:#34612f;
+	padding:6px;
+	color:white;
+	font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
+	font-size:13px;
+}
+
+.rich-mpnl-body {
+	font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
+	font-size:1em;
+}
+
+.rich-tabhdr-side-border, .rich-tabhdr-side-cell, .rich-tabhdr-cell-inactive {
+	border:none;
+	background:transparent;
+}
+
+.rich-tab-bottom-line {
+	border-bottom-color:#c6d5ce;
+}
+
+.rich-tab-header {
+	padding:4px 12px 4px 12px;
+	font-weight:bold;
+	font-size:12px;
+}
+.rich-tab-inactive {
+	border:1px solid #ffffff;
+  	background: #d5e5de;
+  	color:#438b6b;
+  	border-bottom:2px solid white;
+  	cursor: pointer;
+}
+.rich-tab-active {
+	border:1px solid #c6d5ce;
+  	background: #fff;
+  	color:#000;
+  	border-bottom:1px solid white;
+}
+.rich-tabpanel-content {
+	border-left:none;
+	border-bottom:none;
+	border-right:none;
+	padding:1px;
+}
+.rich-tbpnl-tb-sel {
+	background-color:#afcfc1;
+}
+

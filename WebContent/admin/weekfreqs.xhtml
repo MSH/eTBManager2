@@ -26,7 +26,7 @@
 </s:link>
 <p/>
 
-<table class="table1" width="400px" >
+<table class="table1">
 	<tr><th>
 			#{messages['admin.weeklyfreq']}
 		</th>
@@ -37,11 +37,11 @@
 </ui:repeat>
 	</tr>
 <c:forEach begin="0" end="6" var="n">
-	<tr><td style="padding:3px;border:2px solid #f0f0f0;text-align:center;" colspan="2">
+	<tr><td colspan="2" align="center">
 			#{n+1}/7
 		</td>
 	<ui:repeat value="#{defaultWorkspace.weeklyFrequencies[n].weekMask}" var="m">
-		<td style="padding:3px;border:2px solid #f0f0f0">
+		<td align="center">
 			<s:div styleClass="checked-icon" rendered="#{m}"/>
 		</td>
 	</ui:repeat>

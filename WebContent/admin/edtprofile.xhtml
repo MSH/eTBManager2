@@ -12,6 +12,21 @@
 <ui:param name="topmenu" value="3" />
 
 
+<ui:define name="head">
+<style type="text/css">
+.checkbox {
+float: right;
+width: 80px;
+text-align: center;
+margin: auto;
+min-height: 20px;
+overflow: hidden;
+padding: 2px;
+}
+</style>
+</ui:define>
+
+
 <ui:define name="content">
 <h1>#{title}</h1>
 <s:fragment rendered="#{empty profileHome.roles}">
