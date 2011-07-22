@@ -15,6 +15,7 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.InfectionSite;
@@ -121,6 +122,8 @@ public class CaseImporting extends ImportingBase{
 		tbcase.setNotificationUnit(unit);
 		tbcase.setLegacyId(caseId);
 		tbcase.setDiagnosisDate(beginTreatmentDate);
+		if (tbcase.getDiagnosisType() == null)
+			tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
 		tbcase.setRegistrationDate(beginTreatmentDate);
 		tbcase.setValidationState(ValidationState.VALIDATED);
 		tbcase.setRegistrationCode(personalNumber);

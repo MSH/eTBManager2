@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+  	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="#{workspaceViewService.templatePage}">
+
+<ui:param name="title" value="Testing async tasks" />
+
+<ui:define name="menu_lateral">
+</ui:define>
+
+<ui:define name="body">
+	<h:form >
+
+	<table width="700px">
+	<tr><td>
+		<s:decorate template="/layout/roundrect.xhtml">
+			<ui:define name="header">
+				<b>Task execution</b> 
+			</ui:define>
+	
+		<h3>This page demonstrate the execution of tasks and its monitoring in the task manager</h3>
+
+		<a:poll reRender="tbltasks" interval="1500" ajaxSingle="true"/>
+
+		<p>
+		<h:panelGroup id="pnlTasks">
+			<h:dataTable id="tbltasks" value="#{taskManager.tasks}" var="it" styleClass="tabela1" width="100%">
+				<h:column>
+					<f:facet name="header">Task Id</f:facet>
+					#{it.id}
+					<br/>
+					#{it.class}
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">Description</f:facet>
+					#{it.displayName}
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">Status</f:facet>
+					#{it.status}
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">Progress</f:facet>
+					#{it.progress}
+					<div style="width:100px;display:block;height:20px;">
+					<div class="progress-icon" style="width:#{it.progress}%;height:18px;display:block;border:1px solid black;"></div>
+					</div>
+				</h:column>
+			</h:dataTable>
+		</h:panelGroup>
+		</p>
+
+			<a:commandLink action="#{taskTestingHome.runTask}" styleClass="button" ajaxSingle="true" reRender="tbltasks">
+				<span>Run task</span>
+			</a:commandLink>			
+
+		<p/>
+		
+			<a:commandLink action="#{taskTestingHome.runMoldovaInt}" styleClass="button" ajaxSingle="true" reRender="tbltasks">
+				<span>Run moldova</span>
+			</a:commandLink>			
+		</s:decorate>
+		
+	
+	</td></tr></table>
+
+	</h:form>
+</ui:define>
+
+</ui:composition>  

@@ -79,7 +79,7 @@ public class SymetaIntegration {
 				userTx.commit();
 				userTx.begin();
 				
-//				readUnits();
+				readUnits();
 				readCases();
 				
 				userTx.commit();

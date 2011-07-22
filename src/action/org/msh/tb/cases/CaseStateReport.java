@@ -100,7 +100,11 @@ public class CaseStateReport {
 		
 		for (Object[] val: lst) {
 			int qty = ((BigInteger)val[3]).intValue();
-			DiagnosisType diagType = DiagnosisType.values()[((BigInteger)val[2]).intValue()];
+			
+			DiagnosisType diagType;
+			if (val[2] != null)
+				 diagType = DiagnosisType.values()[((BigInteger)val[2]).intValue()];
+			else diagType = DiagnosisType.CONFIRMED;
 			ValidationState vs = ValidationState.values()[(Integer)val[1]];
 
 			Item item = findItem(CaseState.values()[(Integer)val[0]], diagType);
