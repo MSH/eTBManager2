@@ -688,7 +688,7 @@ td {
 	height:56px;
 }
 
-.checked-icon, .unchecked-icon, .wait-icon, .result-positive, .result-negative, .dst-resistant, .dst-susceptible, .dst-contaminated {
+.checked-icon, .unchecked-icon, .wait-icon, .result-positive, .result-negative, .dst-resistant, .dst-susceptible, .dst-contaminated, .dst-baseline {
 	padding-left:16px;
 	min-height:16px;
 	display:block;
@@ -699,6 +699,7 @@ td {
 .dst-resistant {	background: transparent url(images/resistant.gif) no-repeat left top; }
 .dst-susceptible {	background: transparent url(images/suscept.gif) no-repeat left top; }
 .dst-contaminated {	background: transparent url(images/contaminated.gif) no-repeat left top; }
+.dst-baseline {	background: transparent url(images/baseline.png) no-repeat left top; }
 .wait-icon { background: transparent url(images/spinner.gif) no-repeat left top; font-weight: bold;}
 
 .progress-icon {

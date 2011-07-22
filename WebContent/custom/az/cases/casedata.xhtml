@@ -29,18 +29,20 @@
 
 
 <ui:define name="state-content">
-	<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="icon-hu-big" style="margin-top:6px;font-size:11px;max-width:320px;height:60px;" >
+	<s:fragment rendered="#{tbcase.state=='TRANSFERRING'}" > 
+	<div class="icon-hu-big"/>
+	<div style="margin-top:6px;font-size:11px;max-width:320px;height:60px;" >
 		<b style="padding-right:4px;">#{messages['medicines.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
 		<br/>
-		<span class="right-icon" >
+		<span class="right-icon" />
 		<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
 			style="position:relative;" propagation="none">
 			<f:param name="id" value="#{caseHome.id}" />
 		</s:link>
 		<s:link value="#{messages['cases.move.cancel']}" 
 			style="position:relative" />
-		</span>
-	</s:div>
+	</div>
+	</s:fragment>
 </ui:define>
 		
 
@@ -166,7 +168,7 @@
 
 <rich:tab label="#{messages['cases.details.exams']}" id="tab2" ontabenter="updateTab(2)">
 	<h:panelGroup id="pnltab2">
-		<s:decorate template="/cases/exams.xhtml" rendered="#{userSession.caseTab==2}"/>
+		<s:decorate template="exams.xhtml" rendered="#{userSession.caseTab==2}"/>
 	</h:panelGroup>
 </rich:tab>
 

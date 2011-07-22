@@ -19,13 +19,10 @@
 
 <ui:define name="content">
 <h1>#{title}</h1>
-<h:form id="main">
+<h:form id="main" styleClass="form1">
 
-<s:decorate template="/layout/roundrect.xhtml" style="width:800px">
-	<ui:param name="showfooter" value="0" />
-	<ui:define name="header">
-		<b>#{messages['global.filters']}</b>
-	</ui:define>
+	<div class="form-content">
+	<h2>#{messages['global.filters']}</h2>
 	
 	<s:decorate template="/layout/display.xhtml" rendered="#{userSettings.multipleUserWorkspaces}">
 		<ui:define name="label">#{messages['Workspace']}:</ui:define>
@@ -60,14 +57,14 @@
 		<ui:define name="label">#{messages['global.searchkey']}:</ui:define>
 		<h:inputText value="#{transactionLogReport.searchKey}" />
 	</s:decorate>
-	
+	</div>
+
+	<div class="form-footer">	
 	<a:commandLink reRender="reportPanel" action="#{transactionLogReport.refresh}" styleClass="button" > 
 		<span>#{messages['form.refresh']}</span>
-	</a:commandLink> 	
+	</a:commandLink>
+	</div>
 	
-</s:decorate>
-
-<p/>
 
 <h:panelGroup id="reportPanel">
 <table style="width:100%" >
@@ -81,16 +78,16 @@
 <s:fragment rendered="#{not empty transactionLogReport.resultList}">
 <table width="100%">
 	<ui:repeat value="#{transactionLogReport.resultList}" var="it">
-	<tr bgcolor="#e0e0e0">
+	<tr style="background-color:#f0f0f0">
 		<td>
-			<div class="log-#{it.action}">
+			<div class="icon-log-#{it.action}" style="float:left" />
 			<b style="font-size:1.1em">#{it}</b><br/>
 			<div class="small-text">
 				#{messages[it.action.key]}
 			</div>
-			</div>
 		</td>
 		<td>
+			<div class="icon-user" style="float:left"/>
 			#{it.user.name}
 			<br/>
 			<h:outputText value="#{it.transactionDate}" styleClass="small-text">

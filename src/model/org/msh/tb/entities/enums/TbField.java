@@ -35,7 +35,9 @@ public enum TbField {
 	// Azerbaijan
 	MARITAL_STATUS, SEVERITY_MARKS,
 	// Brazil
-	XRAY_CONTACT
+	XRAY_CONTACT,
+	// Azerbaijan
+	XRAY_LOCALIZATION
 	;
 	
 	public String getKey() {

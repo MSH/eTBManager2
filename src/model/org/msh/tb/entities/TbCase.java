@@ -108,6 +108,10 @@ public class TbCase implements Serializable{
 	private Regimen regimen;
 
 	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="REGIMEN_INI_ID")
+	private Regimen regimenIni;
+
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="TREATMENT_UNIT_ID")
 	private Tbunit treatmentUnit;
 	
@@ -270,10 +274,30 @@ public class TbCase implements Serializable{
 	 */
 	@Override
 	public String toString() {
-		return ((registrationCode != null) && (!registrationCode.isEmpty())? registrationCode: getPatient().getFullName());
+		String s = getPatient().getFullName();
+		String num = getDisplayCaseNumber();
+		if (num != null)
+			s = "(" + num + ") " + s;
+
+		return s;
 	}
 
-	
+
+	/**
+	 * Check if the regimen has changed compared to the initial regimen
+	 * @return
+	 */
+	public boolean isInitialRegimenChanged() {
+		if (regimen == regimenIni) 
+			return false;
+		
+		if ((regimen == null) || (regimenIni == null))
+			return true;
+		
+		return (regimen.getId().equals(regimenIni.getId()));
+	}
+
+
 	/**
 	 * Update number of days of treatment planned for the patient
 	 */
@@ -1164,5 +1188,21 @@ public class TbCase implements Serializable{
 	 */
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
+	}
+
+
+	/**
+	 * @return the regimenIni
+	 */
+	public Regimen getRegimenIni() {
+		return regimenIni;
+	}
+
+
+	/**
+	 * @param regimenIni the regimenIni to set
+	 */
+	public void setRegimenIni(Regimen regimenIni) {
+		this.regimenIni = regimenIni;
 	}
 }

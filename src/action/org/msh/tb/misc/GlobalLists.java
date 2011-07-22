@@ -161,6 +161,14 @@ public class GlobalLists {
 		HIVResult.POSITIVE
 	};
 	
+	private static final DstResult dstResults[] = {
+		DstResult.NOTDONE,
+		DstResult.SUSCEPTIBLE,
+		DstResult.RESISTANT,
+		DstResult.CONTAMINATED
+	};
+
+
 	/**
 	 * Get component according to the workspace in use
 	 * @param <E>
@@ -400,7 +408,7 @@ public class GlobalLists {
 	
 	@Factory("dstResults")
 	public DstResult[] getDstResults() {
-		return DstResult.values();
+		return getComponentValueWorkspace("dstResults", DstResult[].class, dstResults);
 	}
 	
 	@Factory("medAppointmentTypes")

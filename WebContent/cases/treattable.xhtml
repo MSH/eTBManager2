@@ -9,11 +9,19 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 
+	<s:fragment rendered="#{not editing}">
+	<s:decorate template="/layout/display.xhtml" style="padding-top:5px;padding-bottom:5px;" rendered="#{tbcase.initialRegimenChanged}">
+		<ui:param name="labelstyle" value="width:150px;" />
+		<ui:define name="label">#{messages['TbCase.regimenIni']}:</ui:define>
+		#{tbcase.regimenIni!=null ? (tbcase.regimenIni.name): messages['regimens.individualized']}
+	</s:decorate>
+
 	<s:decorate template="/layout/display.xhtml" rendered="#{not editing}" style="padding-top:5px;padding-bottom:5px;">
 		<ui:param name="labelstyle" value="width:150px;" />
-		<ui:define name="label">#{messages['Regimen']}:</ui:define>
+		<ui:define name="label">#{messages['TbCase.regimen']}:</ui:define>
 		#{tbcase.regimen!=null ? (tbcase.regimen.name): messages['regimens.individualized']}
 	</s:decorate>
+	</s:fragment>
 	
 	<table class="table2 treattable">
 	<tr>

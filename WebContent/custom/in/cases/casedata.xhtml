@@ -135,15 +135,15 @@
 	</li>
 	</s:fragment>
 	
-	<s:fragment rendered="#{caseHome.canViewTreatment}">
-	<li class="#{caseFilters.caseView=='TREATMENT'?'selected':'unselected'}">
-		<a:commandLink value="#{messages['cases.details.treatment']}" onclick="changeTab('TREATMENT', #{caseHome.id}); return false;" />
-	</li>
-	</s:fragment>
-	
 	<s:fragment rendered="#{caseHome.canViewExams}">
 	<li class="#{caseFilters.caseView=='EXAMS'?'selected':'unselected'}">
 		<a:commandLink value="#{messages['cases.details.exams']}" onclick="changeTab('EXAMS', #{caseHome.id}); return false;" />
+	</li>
+	</s:fragment>
+	
+	<s:fragment rendered="#{caseHome.canViewTreatment}">
+	<li class="#{caseFilters.caseView=='TREATMENT'?'selected':'unselected'}">
+		<a:commandLink value="#{messages['cases.details.treatment']}" onclick="changeTab('TREATMENT', #{caseHome.id}); return false;" />
 	</li>
 	</s:fragment>
 	
@@ -169,7 +169,7 @@
 <rich:jQuery timing="onload" selector="#pgtab" query="show()"  />
 <div class="pgbody">
 	<s:fragment rendered="#{caseFilters.caseView=='DATA'}">
-		<ui:include src="data.xhtml" />
+		<ui:include src="/cases/data.xhtml" />
 	</s:fragment>
 
 	<s:fragment rendered="#{caseFilters.caseView=='TREATMENT'}">
@@ -177,11 +177,11 @@
 	</s:fragment>
 
 	<s:fragment rendered="#{caseFilters.caseView=='EXAMS'}">
-		<ui:include src="exams.xhtml" />
+		<ui:include src="/cases/exams.xhtml" />
 	</s:fragment>
 
 	<s:fragment rendered="#{caseFilters.caseView=='MEDEXAMS'}">
-		<ui:include src="medexamination.xhtml" />
+		<ui:include src="/cases/medexamination.xhtml" />
 	</s:fragment>
 
 	<s:fragment rendered="#{caseFilters.caseView=='ADDINFO'}">

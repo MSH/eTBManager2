@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.international.Messages;
+import org.msh.tb.cases.drugogram.Drugogram.MedicineColumn;
 import org.msh.tb.entities.ExamXRay;
 import org.msh.tb.entities.MedicalExamination;
 
@@ -204,8 +205,8 @@ public class DrugogramItem {
 	protected void createListSubstancesDisplay() {
 		substancesDisplay = new ArrayList<SubstanceItem>();
 		
-		for (String med: drugogram.getMedicines()) {
-			SubstanceItem item = findSubstance(med);
+		for (MedicineColumn med: drugogram.getMedicines()) {
+			SubstanceItem item = findSubstance(med.getMedicine());
 			substancesDisplay.add(item);
 		}
 	}

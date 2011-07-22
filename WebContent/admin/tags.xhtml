@@ -12,16 +12,27 @@
 <ui:param name="title" value="#{messages['admin.tags']}" />
 <ui:param name="topmenu" value="3" />
 
+<ui:define name="naveg">
+	<div class="item" >
+		<s:link value="#{messages['home']}" view="/admin/index.xhtml" />
+	</div>
+	<div class="item selected" >
+		<s:link value="#{title}"  />
+	</div>
+</ui:define>
+
 <ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
 <ui:define name="content">
+<h1>#{title}</h1>
 <h:form id="main">
-<s:link view="/admin/edttag.xhtml" value="#{messages['form.new']}" 
+<s:link view="/admin/edttag.xhtml"
 	styleClass="button" 
 	rendered="#{s:hasRole('TAGS_EDT')}" >
 	<f:param name="id" value="#{null}" />
+	<span>#{messages['form.new']}</span>
 </s:link>
 <p/>
 <h:dataTable id="tbl" value="#{tagsQuery.resultList}" var="r" border="0" columnClasses="coll,coll" 

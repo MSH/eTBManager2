@@ -396,15 +396,17 @@ a.workspace-data {
 /* Links and menus */
 
 .vertical-menu {
-	padding-left:4px;
 	margin:0px;
-	border:1ps solid red;
 }
 
 .vertical-menu  a{
+	padding:2px 2px 6px 2px;
 	display:block;
 	height:30px;
 	min-height:30px;
+}
+.vertical-menu a:hover {
+	background-color:#e2eae2;
 }
 
 .vertical-menu li ul {
@@ -788,7 +790,8 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 
 .icon-user-header, .icon-bullet, .icon-bullet-menu, .dst-resistant, .dst-contaminated, .dst-susceptible, 
 .tag-icon, .delete-icon, .new-icon, .progress-icon, .plus-icon, .icon-checked, .icon-unchecked,
-.icon-square, .icon-lab, .icon-hu, .icon-ds, .icon-report, .checked-icon, .unchecked-icon {
+.icon-square, .icon-lab, .icon-hu, .icon-ds, .icon-report, .checked-icon, .unchecked-icon,
+.icon-user, .icon-log-NEW, .icon-log-EDIT, .icon-log-DELETE, .icon-log-EXEC {
 	background-image: url('images/icons.png');
 	width:16px;
 	height:16px;
@@ -822,6 +825,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 }
 .icon-bullet {	background-position:-32px -48px; }
 .icon-user-header {	background-position:-16px -48px; }
+.icon-user {	background-position:0px -48px; }
 
 .dst-susceptible {	background-position:0px -80px;  }
 .dst-resistant { background-position:-16px -80px;  }
@@ -842,6 +846,9 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	border:1px solid black;
 }
 
+.icon-log-EDIT { background-position:-16px 0px; }
+.icon-log-DELETE { background-position:0px -16px; }
+.icon-log-EXEC { background-position:-112px -32px; }
 
 
 

@@ -13,6 +13,7 @@ import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.treatment.TreatmentHome;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.log.LogService;
 import org.msh.utils.date.Period;
 
 @Name("caseCloseHomeBR")
@@ -67,6 +68,13 @@ public class CaseCloseHome extends Controller{
 		else tbcase.setOtherOutcome(null);
 		
 		caseHome.persist();
+
+		// register log
+		LogService logsrv = new LogService();
+		logsrv.addValue("TbCase.outcomeDate", tbcase.getOutcomeDate());
+		logsrv.addValue("CaseState", state);
+		logsrv.saveExecuteTransaction(tbcase, "CASE_CLOSE");
+
 		return "case-closed";
 	}
 
@@ -82,6 +90,11 @@ public class CaseCloseHome extends Controller{
 		tbcase.setOtherOutcome(null);
 		
 		caseHome.persist();
+
+		// register log
+		LogService logsrv = new LogService();
+		logsrv.addValue("CaseState", state);
+		logsrv.saveExecuteTransaction(tbcase, "CASE_REOPEN");
 		
 		return "case-reopened";
 	}

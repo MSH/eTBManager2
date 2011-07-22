@@ -26,9 +26,12 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['global.month']}" styleClass="colch"/>
 				</f:facet>
-				<s:link value="#{messages[r.monthDisplay]}" view="/cases/edtexamhiv.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
+				<s:link view="/cases/edtexamhiv.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
+					<h:outputFormat value="#{messages[r.monthDisplay]}" >
+						<f:param value="#{r.monthTreatment}"/>
+					</h:outputFormat>
 				</s:link>
 			</h:column>
 			
@@ -91,57 +94,43 @@
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examMicroscopyHome.allResults}" />
 		<div>
 		<h:dataTable value="#{examMicroscopyHome.allResults}" var="r" rendered="#{not empty examMicroscopyHome.allResults}" 
-			width="100%" styleClass="tabela4" columnClasses="colcb,colcb,colb,colb,colb">
+			width="100%" styleClass="tabela4" columnClasses="colb,colb,colb,colb,colb">
 			<h:column>
 				<f:facet name="header">
-					<h:outputText value="#{messages['global.month']}" styleClass="colch"/>
+					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
-				<s:link value="#{messages[r.monthDisplay]}" view="/cases/edtexammicroscopy.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
+				<s:link view="/cases/edtexammicroscopy.xhtml" propagation="none" enabled="#{caseHome.canEditExams}" >
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
+					<h:outputFormat value="#{messages[r.monthDisplay]}" >
+						<f:param value="#{r.monthTreatment}"/>
+					</h:outputFormat>
 				</s:link>
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">
-					#{messages['cases.exams.date']}
-				</f:facet>
-				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter"/>
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="#{messages['PatientSample.sampleNumber']}" styleClass="collh"/>
-				</f:facet>
-				#{r.sampleNumber}
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">
-					#{messages['cases.exams.dateRelease']}
-				</f:facet>
-				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter"/>
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
-				</f:facet>
-				#{messages[r.result.key]}
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="#{messages['cases.exams.afb']}" styleClass="collh"/>
-				</f:facet>
-				#{r.numberOfAFB}
+				<div style="display:block;">
+				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
+				<br/>
+				<h:outputText value="#{r.sampleNumber}" title="#{messages['PatientSample.sampleNumber']}" />
+				</div>
 			</h:column>
 			
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['Laboratory']}" styleClass="collh"/>
 				</f:facet>
-				#{r.laboratory.name}
+				<h:outputText value="#{r.laboratory.abbrevName}" title="#{r.laboratory.name}" />
+				<br/>
+				#{r.laboratory.adminUnit.name}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
+				</f:facet>
+				<div class="#{r.result=='NEGATIVE'? 'result-negative': 'result-positive'}">#{messages[r.result.key]}</div>
+				<s:fragment rendered="#{not empty r.numberOfAFB}" style="display:block;clear:both;">
+					<h:outputText value="#{messages['cases.exams.afb']}"/>: #{r.numberOfAFB}
+				</s:fragment>
+				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}" style="display:block;"/>
 			</h:column>
 			
 			<h:column>
@@ -152,14 +141,14 @@
 			</h:column>
 
 			<h:column rendered="#{caseHome.canEditExams}">
-				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remexamMicroscopy(#{r.id});return false;" style="font-size:9px;">
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamMicroscopy(#{r.id});return false;" style="font-size:9px;">
 				</h:commandLink>
 			</h:column>			
 		</h:dataTable>
 		</div>
 	</s:decorate>
 	</h:panelGroup>
-<a:jsFunction name="remexamMicroscopy" action="#{examMicroscopyHome.remove}" reRender="pnlmicroscopy"  rendered="#{caseHome.canEditExams}">
+<a:jsFunction name="remExamMicroscopy" action="#{examMicroscopyHome.remove}" reRender="pnlmicroscopy"  rendered="#{caseHome.canEditExams}">
 	<a:actionparam name="param1" assignTo="#{examMicroscopyHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
@@ -178,55 +167,46 @@
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examCultureHome.allResults}" />
 		<div>
 		<h:dataTable value="#{examCultureHome.allResults}" var="r" rendered="#{not empty examCultureHome.allResults}" width="100%" 
-			styleClass="tabela4" columnClasses="colcb,colcb,colb,colb,colb,colcb">
+			styleClass="tabela4" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
 			<h:column>
-				<f:facet name="header">#{messages['global.month']}</f:facet>
-				<s:link value="#{messages[r.monthDisplay]}" view="/cases/edtexamculture.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
+				</f:facet>
+				<s:link view="/cases/edtexamculture.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
+					<h:outputFormat value="#{messages[r.monthDisplay]}" >
+						<f:param value="#{r.monthTreatment}"/>
+					</h:outputFormat>
 				</s:link>
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">
-					#{messages['cases.exams.date']}
-				</f:facet>
-				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter"/>
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="#{messages['PatientSample.sampleNumber']}" styleClass="collh"/>
-				</f:facet>
-				#{r.sampleNumber}
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">
-					#{messages['cases.exams.dateRelease']}
-				</f:facet>
-				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter"/>
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
-				</f:facet>
-				#{messages[r.result.key]}
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="#{messages['ExamCulture.numberOfColonies']}" styleClass="collh"/>
-				</f:facet>
-				#{r.numberOfColonies}
+				<div style="margin-left:20px;display:block;">
+				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
+				<br/>
+				<h:outputText value="#{r.sampleNumber}" title="#{messages['PatientSample.sampleNumber']}" />
+				</div>
 			</h:column>
 			
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['Laboratory']}" styleClass="collh"/>
 				</f:facet>
-				#{r.laboratory.name}
+				<h:outputText value="#{r.laboratory.abbrevName}" title="#{r.laboratory.name}" />
+				<br/>
+				#{r.laboratory.adminUnit.name}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
+				</f:facet>
+				<div class="#{r.result=='NEGATIVE'? 'result-negative': 'result-positive'}">#{messages[r.result.key]}</div>
+				<s:div rendered="#{not empty r.numberOfColonies}" style="display:block;clear:both;">
+					<h:outputText value="#{messages['ExamCulture.numberOfColonies']}"/>: #{r.numberOfColonies}
+				</s:div>
+				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}" style="display:block;"/>
+				<s:div rendered="#{not empty r.method}" style="display:block;clear:both;">
+					<h:outputText value="#{messages['cases.exams.method']}"/>: #{r.method}
+				</s:div>
 			</h:column>
 			
 			<h:column>
@@ -268,13 +248,7 @@
 		<table class="tabela4" width="100%">
 		<tr>
 		<th>
-			#{messages['global.month']}
-		</th>
-		<th>
 			#{messages['PatientSample.dateCollected']}
-		</th>
-		<th>
-			#{messages['PatientSample.sampleNumber']}
 		</th>
 		<th align="left">
 			#{messages['cases.exams.method']}
@@ -294,17 +268,19 @@
 		</tr>
 		<a:repeat value="#{examDSTTable.allResults}" var="r">
 		<tr>
-			<td class="colcb">
-				<s:link value="#{messages[r.examResult.monthDisplay]}" view="/cases/edtexamdst.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
+			<td>
+				<s:link view="/cases/edtexamdst.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.examResult.id}"/>
+					<h:outputFormat value="#{messages[r.examResult.monthDisplay]}" >
+						<f:param value="#{r.examResult.monthTreatment}"/>
+					</h:outputFormat>
 				</s:link>
-			</td>
-			<td class="colcb">
-			<h:outputText value="#{r.examResult.dateCollected}" converter="localeDateConverter"/>
-			</td>
-			<td>
-				#{r.examResult.sampleNumber}
+				<div style="margin-left:20px;display:block;">
+				<h:outputText value="#{r.examResult.dateCollected}" converter="localeDateConverter" />
+				<br/>
+				<h:outputText value="#{r.examResult.sampleNumber}" title="#{messages['PatientSample.sampleNumber']}" />
+				</div>
 			</td>
 			<td class="colb">
 				#{r.examResult.method.name}
@@ -317,6 +293,7 @@
 				<s:fragment  rendered="#{rs=='RESISTANT'}"><div class="dst-resistant" title="#{messages[rs.key]}" /></s:fragment>
 				<s:fragment  rendered="#{rs=='SUSCEPTIBLE'}"><div class="dst-susceptible" title="#{messages[rs.key]}" /></s:fragment>
 				<s:fragment  rendered="#{rs=='CONTAMINATED'}"><div class="dst-contaminated" title="#{messages[rs.key]}" /></s:fragment>
+				<s:fragment  rendered="#{rs=='BASELINE'}"><div class="dst-baseline" title="#{messages[rs.key]}" /></s:fragment>
 				<h:outputText value="x" rendered="#{rs=='NOTDONE'}" title="#{messages[rs.key]}"/>
 			</td>
 			</ui:repeat>
@@ -357,29 +334,27 @@
 		
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examXRayHome.allResults}" />
 		<div>
-		<h:dataTable value="#{examXRayHome.allResults}" var="r" rendered="#{not empty examXRayHome.allResults}" width="100%" styleClass="tabela4" columnClasses="colcb,colcb,colb,colb,colb,colcb">
+		<h:dataTable value="#{examXRayHome.allResults}" var="r" rendered="#{not empty examXRayHome.allResults}" width="100%" 
+			styleClass="tabela4" columnClasses="colb,colb,colb,colb,colcb">
 			<h:column>
 				<f:facet name="header">#{messages['global.month']}</f:facet>
-				<s:link value="#{messages[r.monthDisplay]}" view="/cases/edtexamxray.xhtml" propagation="none" >
+				<s:link view="/cases/edtexamxray.xhtml" propagation="none" >
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
+					<h:outputFormat value="#{messages[r.monthDisplay]}" >
+						<f:param value="#{r.monthTreatment}"/>
+					</h:outputFormat>
 				</s:link>
+				<br/>
+				<h:outputText value="#{r.date}" converter="localeDateConverter"/>
 			</h:column>
 			
 			<h:column>
 				<f:facet name="header">
-					#{messages['cases.details.date']}
+					<h:outputText value="#{messages['TbField.XRAYPRESENTATION']}" styleClass="collh"/>
 				</f:facet>
-				<h:outputText value="#{r.date}">
-					<f:convertDateTime timeZone="#{timezones.default}"/>
-				</h:outputText>
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="#{messages['XRayBaseline']}" styleClass="collh"/>
-				</f:facet>
-				#{messages[r.baseline.key]}
+				#{r.presentation.name}
+				<h:outputText value=" - #{r.localization.name}" rendered="#{not empty r.localization}" />
 			</h:column>
 			
 			<h:column>
@@ -415,5 +390,4 @@
 	<s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="exams" />
 	</s:decorate>
-
 </ui:composition>

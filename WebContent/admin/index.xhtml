@@ -11,6 +11,12 @@
 <ui:param name="title" value="#{messages['admin']}" />
 <ui:param name="topmenu" value="3" />
 
+<ui:define name="naveg">
+	<div class="item selected" >
+		<s:link value="#{messages['home']}" view="/admin/index.xhtml" />
+	</div>
+</ui:define>
+
 <ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>

@@ -7,6 +7,7 @@ import org.msh.tb.br.entities.enums.FailureType;
 import org.msh.tb.br.entities.enums.TipoResistencia;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.ClinicalEvolution;
+import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
@@ -38,7 +39,8 @@ public class GlobalLists {
 		TbField.EXTRAPULMONARY_TYPES,
 		TbField.MARITAL_STATUS,
 		TbField.EDUCATIONAL_DEGREE,
-		TbField.SEVERITY_MARKS
+		TbField.SEVERITY_MARKS,
+		TbField.XRAY_LOCALIZATION
 	};
 
 	private static final PrevTBTreatmentOutcome prevTBTreatmentOutcomes[] = {
@@ -73,6 +75,15 @@ public class GlobalLists {
 		HIVResult.POSITIVE
 	};
 
+	private static final DstResult dstResults[] = {
+		DstResult.NOTDONE,
+		DstResult.SUSCEPTIBLE,
+		DstResult.RESISTANT,
+		DstResult.CONTAMINATED,
+		DstResult.BASELINE
+	};
+
+	
 	public TipoResistencia[] getTiposResistencia() {
 		return TipoResistencia.values();
 	}
@@ -114,5 +125,8 @@ public class GlobalLists {
 		return caseStates;
 	}
 	
+	public DstResult[] getDstResults() {
+		return dstResults;
+	}
 	
 }

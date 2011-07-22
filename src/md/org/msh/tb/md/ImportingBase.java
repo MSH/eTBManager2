@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.contexts.Contexts;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.HealthSystem;
 import org.msh.tb.entities.Tbunit;
@@ -207,6 +208,10 @@ public class ImportingBase {
 
 
 	public void setWorkspace(Workspace workspace) {
+		if (this.workspace == workspace)
+			return;
+		
+		Contexts.getEventContext().set("defaultWorkspace", workspace);
 		this.workspace = workspace;
 	}
 

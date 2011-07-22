@@ -2,7 +2,6 @@ package org.msh.tb.md;
 
 import javax.persistence.EntityManager;
 
-import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.In;
@@ -12,11 +11,12 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Conversation;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.application.tasks.AsyncTask;
+import org.msh.tb.application.tasks.TaskManager;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.HealthSystem;
 import org.msh.tb.entities.SystemParam;
 import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.tbunits.TBUnitSelection;
 
@@ -37,6 +37,7 @@ public class SymetaIntHome {
 	private final static String EMAIL_REPORTS = "email_reports";
 	
 	@In EntityManager entityManager;
+	@In TaskManager taskManager;
 	@In(required=false) Workspace defaultWorkspace;
 	@In(create=true) SymetaIntegration symetaIntegration;
 	@In(create=true) FacesMessages facesMessages;
@@ -47,14 +48,13 @@ public class SymetaIntHome {
 	private TBUnitSelection tbunitSelection;
 	private AdminUnitSelection auselection;
 
+
 	/**
 	 * Execute the integration with SYMETA system 
 	 */
 	public String execute() {
 		try {
-			UserLogin userLogin = (UserLogin)Component.getInstance("userLogin", false);
-			symetaIntegration.execute( getConfig(), (userLogin != null? userLogin.getUser(): null) );
-			
+			taskManager.runTask(SymetaImportTask.class);
 		} catch (Exception e) {
 			facesMessages.add(e.getMessage());
 			return "error";
@@ -64,13 +64,30 @@ public class SymetaIntHome {
 		return "success";
 	}
 
+
+	/**
+	 * Check if integration is running
+	 * @return
+	 */
+	public boolean isTaskRunning() {
+		return taskManager.findTaskByClass(SymetaImportTask.class) != null;
+	}
+
 	
+	/**
+	 * Return the task
+	 * @return
+	 */
+	public AsyncTask getTask() {
+		return taskManager.findTaskByClass(SymetaImportTask.class);
+	}
+
 	@Observer("system-timer-event")
 	public void systemTimerListener() {
 		System.out.println("Executing automatic SYMETA integration...");
 		execute();
 	}
-
+	
 
 	/**
 	 * Erase all cases imported
