@@ -8,20 +8,22 @@
                 xmlns:h="http://java.sun.com/jsf/html"
       			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-                template="..#{workspaceViewService.templatePage}">
-
+                template="/layout/template_new.xhtml">
+               <!-- template="..#{workspaceViewService.templatePage}"> -->
+               
 <ui:param name="title" value="#{messages['admin.websessions']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
-<ui:define name="menu_lateral">
+	<ui:define name="left">
 	<ui:include src="../layout/adminmenu.xhtml" />
 </ui:define>
 
-
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 
 <h:form id="main">
+
 	<s:decorate template="/layout/display.xhtml" rendered="#{userSettings.multipleUserWorkspaces}">
 		<ui:define name="label">#{messages['Workspace']}:</ui:define>
 		<h:selectOneMenu value="#{reportSelection.userWorkspace}" >
@@ -31,8 +33,8 @@
 		</h:selectOneMenu>
 	</s:decorate>
 
-	<h:dataTable value="#{onlineUsersReport.items}" var="it" styleClass="tabela" width="95%" 
-		columnClasses="colc,colc,colc,coll,coll,colc,colc" rowClasses="lin1,lin2" rendered="#{not empty onlineUsersReport.items}">
+	<h:dataTable value="#{onlineUsersReport.items}" var="it" border="0" width="95%" styleClass="table1"
+		columnClasses="colc,colc,colc,coll,coll,colc,colc" rowClasses="lin1,lin2" rendered="#{not empty onlineUsersReport.items}" style="margin-top:4px;">
 		<h:column>
 			<f:facet name="header">#{messages['form.id']}</f:facet>
 			#{it.userLogin.id}
@@ -77,6 +79,8 @@
 			</h:outputText>
 		</h:column>
 	</h:dataTable>
+	
+	
 </h:form>
 </ui:define>
 

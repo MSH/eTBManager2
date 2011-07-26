@@ -10,23 +10,22 @@
 <ui:param name="labelstyle" value="width:120px;" />
 
 	<h:panelGroup id="medexams">
-	<div style="display:table;width:100%;">
-	<s:link value="#{messages['cases.details.newconsult']}" style="float:right;" 
+	<s:link style="float:right;margin-top:6px;" 
 		view="/custom/br/cases/edtmedexam.xhtml" 
-		styleClass="right-icon" 
+		styleClass="button-alt" 
 		rendered="#{caseHome.canEditCaseData}">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newconsult']}</span>
 	</s:link>
-	</div>
 
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty medicalExaminationHome.allResults}" />
 
-	<h:dataTable value="#{medicalExaminationHome.allResults}" var="r" rendered="#{not empty medicalExaminationHome.allResults}" width="100%">
-		<h:column>
-	
-		<s:decorate template="/layout/roundrect.xhtml" >
-		<ui:define name="header">
+	<ui:repeat var="r" value="#{medicalExaminationHome.allResults}">
+		<div class="spacer" />
+
+		<div class="region1">
+			<div class="header">
 			<div style="float:right;">
 				<s:link value="#{messages['form.edit']}" view="/custom/br/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 					<f:param name="id" value="#{tbcase.id}"/>
@@ -37,10 +36,9 @@
 				    rendered="#{caseHome.canEditCaseData}">
 				</h:commandLink>
 			</div>
-			<b>#{messages['cases.details.date']}: </b> 
-			<h:outputText value="#{r.date}" converter="localeDateConverter" />
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+			<h2><h:outputText value="#{r.date}" converter="localeDateConverter" /></h2>
+			</div>
+			<div class="content">
 
 		<table width="100%" style="border-collapse:collapse;" cellpadding="0" cellspacing="0">
 		<tr><td colspan="2">
@@ -128,12 +126,10 @@
 		</td></tr>
 		</s:fragment>
 		</table>
+			</div>
+		</div>	
 		
-		
-		</s:decorate>
-
-		</h:column>
-	</h:dataTable>
+	</ui:repeat>
 	</h:panelGroup>
 
 <a:jsFunction name="remMedExamination" action="#{medicalExaminationHome.remove}" reRender="medexams"  rendered="#{caseHome.canEditExams}">

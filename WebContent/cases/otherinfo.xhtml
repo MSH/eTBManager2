@@ -7,14 +7,14 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
-		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/cases/comorbedt.xhtml" style="float:right;" rendered="#{caseHome.canEditAditionalInfo}">
-				<f:param name="id" value="#{caseHome.id}" />
-			</s:link>
-    		<b>#{messages['cases.comorbidities']}</b>
-    	</ui:define>
-		<ui:param name="showfooter" value="0" />
+	<div class="spacer" />
+
+	<s:link view="/cases/comorbedt.xhtml" style="float:right;" 
+		rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
+		<f:param name="id" value="#{caseHome.id}" />
+		<span>#{messages['form.edit']}</span>
+	</s:link>
+	<h2>#{messages['cases.comorbidities']}</h2>
 
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty tbcase.comorbidities}" style="display:block;padding:4px"/>
 		<h:dataTable value="#{tbcase.comorbidities}" var="it" style="margin-top:10px;margin-bottom:10px;"
@@ -48,31 +48,28 @@
     		<b style="margin-left:30px;">#{messages['TbCase.patientContactName']}:</b> #{tbcase.patientContactName}
     		</s:fragment>
     	</s:decorate>
-    </s:decorate>
-                 
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
-		<ui:define name="header">
-			<s:link value="#{messages['form.new']}" view="/cases/edtcontact.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
-				<f:param name="id" value="#{caseHome.id}" />
-				<f:param name="conid" value="#{null}" />
-			</s:link>
-			<b>#{messages['cases.contacts']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+
+	<div class="spacer" />
+
+	<s:link view="/cases/edtcontact.xhtml" styleClass="button-alt" 
+		style="float:right;" rendered="#{caseHome.canEditCaseData}">
+		<f:param name="id" value="#{caseHome.id}" />
+		<f:param name="conid" value="#{null}" />
+		<span>#{messages['form.new']}</span>
+	</s:link>
+	<h2>#{messages['cases.contacts']}</h2>
 	
 	<h:panelGroup id="pnlcontact">
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty tbcase.contacts}" />
 
 	<a:repeat value="#{tbcase.contacts}" var="it">
-	<table width="99%" class="tabela2" style="margin-top:10px;margin-left:2px;border:1px solid #d0d0d0" cellpadding="0" cellspacing="0">
+	<table width="100%" class="table1" style="margin-top:10px;margin-left:2px;border:1px solid #d0d0d0" cellpadding="0" cellspacing="0">
 	<tr>
 		<th colspan="2" align="left">
 			<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remContact(#{it.id});return false;" 
-				rendered="#{caseHome.canEditAditionalInfo}"
 				style="font-size:9px;float:right;">
 			</h:commandLink>
-			<h:outputText value="#{it.name}" rendered="#{not caseHome.canEditAditionalInfo}" />
-			<s:link value="#{it.name}" view="/cases/edtcontact.xhtml" rendered="#{caseHome.canEditAditionalInfo}">
+			<s:link value="#{it.name}" view="/cases/edtcontact.xhtml">
 				<f:param name="conid" value="#{it.id}"/>
 			</s:link>
 		</th>
@@ -132,20 +129,17 @@
 			<a:actionparam name="param1" assignTo="#{tbContactHome.id}" converter="javax.faces.Integer"/>
 		</a:jsFunction>
 	</h:panelGroup>
-	</s:decorate>
 
+	<div class="spacer" />
                  
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
-		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
-				<f:param name="id" value="#{caseHome.id}" />
-			</s:link>
-			<b>#{messages['cases.sideeffects']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-	<div>
+	<s:link view="/cases/sideeffectsedt.xhtml" styleClass="button-alt" 
+		style="float:right;" rendered="#{caseHome.canEditCaseData}">
+		<f:param name="id" value="#{caseHome.id}" />
+		<span>#{messages['form.edit']}</span>
+	</s:link>
+	<h2>#{messages['cases.sideeffects']}</h2>
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty tbcase.sideEffects}" />
-	<h:dataTable value="#{tbcase.sideEffects}" var="it" width="100%" styleClass="tabela4" rowClasses="lin1,lin2" rendered="#{not empty tbcase.sideEffects}">
+	<h:dataTable value="#{tbcase.sideEffects}" var="it" width="100%" styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty tbcase.sideEffects}">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
@@ -174,9 +168,6 @@
 			#{messages[it.resolved.key]}
 		</h:column>
 	</h:dataTable>
-	</div>
-
-	</s:decorate>
 
 	<s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="other" />

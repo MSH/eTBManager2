@@ -7,24 +7,26 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.ageranges']}" />
 <ui:param name="topmenu" value="3" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form id="main">
-<s:button view="/admin/edtagerange.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{s:hasRole('AGERANGES_EDT')}">
+<s:link view="/admin/edtagerange.xhtml" styleClass="button" rendered="#{s:hasRole('AGERANGES_EDT')}">
 	<f:param name="id" value="#{null}" />
-</s:button>
+	<span>#{messages['form.newf']}</span>
+</s:link>
 <p/>
 <h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty ageRangeHome.items}" styleClass="warn"/>
 <h:dataTable id="tbl" value="#{ageRangeHome.items}" var="r" border="0" columnClasses="colc,colc" width="600px"
-  styleClass="tabela" rowClasses="lin1,lin2" rendered="#{not empty ageRangeHome.items}">
+  styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty ageRangeHome.items}">
   <h:column>
   	<f:facet name="header">
   		<h:outputText value="#{messages['AgeRange']}" />

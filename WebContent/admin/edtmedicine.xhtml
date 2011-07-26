@@ -7,7 +7,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{medicine.id==null? messages['form.new']: messages['form.data_edit']} - #{messages['Medicine']}" />
 <ui:param name="topmenu" value="3" />
@@ -15,10 +15,11 @@
 <ui:param name="waitdlg" value="1" />
 <ui:param name="labelstyle" value="width:200px;" />
 
-<ui:define name="body">
-<h:form id="main">
-    <table class="tabela3" width="650px" style="border:2px solid #e0e0e0">
-    <tr><td colspan="2">
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+
+   <div class="form-content">
     <s:decorate template="/layout/display.xhtml" rendered="#{medicine.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{medicine.id}" />
@@ -103,19 +104,20 @@
 		</h:column>
 	</h:dataTable>
 	</div>
+</div>
 
-	</td></tr>
-    <tr>
-    	<td style="border:none">
-    	</td><td align="right">
-            <a:commandButton action="#{medicineHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>  
-            <s:button view="/admin/medicines.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" onclick="openWaitDlg();">
+			<div class="form-footer">	
+            <a:commandLink action="#{medicineHome.persist}" styleClass="button" 
+            	reRender="main,messages"
+            	onclick="if (!disableButtons(this)) return false;" >
+            	<span>#{messages['form.save']}</span>
+            </a:commandLink>  
+            <s:link view="/admin/medicines.xhtml" styleClass="button-alt" propagation="end" onclick="openWaitDlg();">
             	<f:param name="id" value="#{null}" />
-            </s:button>
-    </td></tr>
-    </table>
+            	<span>#{messages['form.cancel']}</span>
+            </s:link>
+   			</div>
 
-	<p/>
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 </h:form>
 

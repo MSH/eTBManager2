@@ -7,16 +7,23 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
    	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin']}" />
 <ui:param name="topmenu" value="3" />
 
-<ui:define name="menu_lateral">
+<ui:define name="naveg">
+	<div class="item selected">
+		<s:link value="#{messages['home']}" />
+	</div>
+</ui:define>
+
+<ui:define name="left">
 	<ui:include src="/custom/md/admin/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 </ui:define>
 
 </ui:composition>  

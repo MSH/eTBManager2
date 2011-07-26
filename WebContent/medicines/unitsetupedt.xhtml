@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
  	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.unitsetup']}" />
 <ui:param name="topmenu" value="1" />
@@ -17,7 +17,7 @@
 <ui:define name="left">
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 
 <s:decorate template="/layout/unit.xhtml">
 <h:form id="main">
@@ -29,7 +29,7 @@
 	<ui:param name="showfooter" value="0" />
 
 	<br/>	
-	<h:dataTable value="#{regimenUnitHome.items}" var="it" width="400px" styleClass="tabela" rowClasses="lin1,lin2" columnClasses="coll,colc">
+	<h:dataTable value="#{regimenUnitHome.items}" var="it" width="400px" styleClass="table1" rowClasses="lin1,lin2" columnClasses="coll,colc">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['Medicine']}" styleClass="collh"/>				
@@ -106,8 +106,8 @@
 
 <table width="100%">
 	<tr><td>
-		<h:commandButton action="#{unitSetup.persist}" value="#{messages['form.ok']}" styleClass="button"/>
-		<s:button value="#{messages['form.cancel']}" view="/medicines/unitsetup.xhtml" styleClass="button-cancel" propagation="end"/>
+		<h:commandLink action="#{unitSetup.persist}" value="#{messages['form.ok']}" styleClass="button"/>
+		<s:link value="#{messages['form.cancel']}" view="/medicines/unitsetup.xhtml" styleClass="button-alt" propagation="end"/>
 	</td></tr>
 </table>
 

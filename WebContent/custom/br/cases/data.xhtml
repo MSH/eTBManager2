@@ -7,19 +7,17 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
                  
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
-		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
-				<f:param name="id" value="#{caseHome.id}" />
-			</s:link>
-			<b style="text-transform:uppercase;">#{messages['cases.patientdata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+	<div class="form1" style="width:100%">
+	<div class="form-content">
+
+		<s:link view="/cases/caseedt.xhtml" styleClass="button-alt" onclick="openWaitDlg();" 
+			style="float:right;" rendered="#{caseHome.canEditCaseData}">
+			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['form.edit']}</span>
+		</s:link>
+
+	<table style="border-collapse:collapse;width:100%" >
 	
-	<div>	
-	<table style="border-collapse:collapse;width:99%;" ><tr><td colspan="2">
-	
-	</td></tr>
 	<tr><td>
 	
 	<s:decorate template="/layout/display.xhtml">
@@ -78,7 +76,7 @@
     </td></tr>
     <s:fragment rendered="#{not tbcase.notifAddress.emptyy}">
     <tr><td colspan="2">
-    	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
+    	<h2>#{messages['cases.details.addressnotif']}</h2>
 	
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
@@ -116,7 +114,7 @@
 	</s:fragment>
 	<s:fragment rendered="#{tbcase.notifAddressChanged}">
 	<tr><td colspan="2">
-		<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
+		<h2>#{messages['cases.details.addresscurr']}</h2>
 	
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
@@ -150,18 +148,12 @@
 		</s:decorate>
 	</td></tr>
 	</s:fragment>
-	</table></div>
-	</s:decorate>
-	
+	</table>
+	</div>
 
-                 
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
-		<ui:define name="header">
-			<b style="text-transform:uppercase;">#{messages['cases.generaldata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-	
-	<div>
+
+	<div class="form-content">	
+		<h2>#{messages['cases.generaldata']}</h2>
 	<table style="border-collapse:collapse;width:98%;" cellpadding="1" >
 	<tr><td colspan="2">
 		<s:decorate template="/layout/display.xhtml">
@@ -235,8 +227,8 @@
 		</s:decorate>
 
 		<s:fragment rendered="#{not empty prevTBTreatmentHome.items}">
-		<div class="paragraph">#{messages['cases.prevtreat']}</div>
-		<table width="98%" class="tabela4">
+		<h2>#{messages['cases.prevtreat']}</h2>
+		<table width="100%" class="table1">
 			<tr>
 				<th rowspan="2">#{messages['cases.prevtreat.num']}
 				</th>
@@ -280,17 +272,11 @@
     	</s:decorate>
 
 	</td></tr>
-	</table></div>
-	</s:decorate>
+	</table>
+	</div>
 
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
-		<ui:define name="header">
-			<b style="text-transform:uppercase;">#{messages['cases.details.otherinfo']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
-	<div><table width="99%" style="border-collapse:collapse;">
-	<tr><td style="padding-bottom:10px;">
+	<div class="form-content">
+	<h2>#{messages['cases.details.otherinfo']}</h2>
 
     <s:decorate template="/layout/displayfield.xhtml" >
     	<ui:define name="label">#{messages['TbField.SKINCOLOR']}:</ui:define>
@@ -316,11 +302,11 @@
     	<ui:define name="label">#{messages['TbField.CONTAG_PLACE']}:</ui:define>
     	<ui:param name="field" value="#{tbcase.contagPlace}" />
     </s:decorate>
-    
-    </td></tr></table></div>
-    </s:decorate>
+	</div>    
+	</div>
     
 	<s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="data" />
 	</s:decorate>
+	
 </ui:composition>

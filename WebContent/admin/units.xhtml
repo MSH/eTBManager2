@@ -7,17 +7,18 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.tbunits']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form id="main">
 <s:decorate id="sel" template="/layout/display.xhtml">
 	<ui:define name="label">#{unitspg.auselection.labelLevel1}:</ui:define>
@@ -37,9 +38,10 @@
 	</h:selectOneMenu>
 </s:decorate>                 
 
-<s:button view="/admin/edtunit.xhtml" value="#{messages['form.newf']}" styleClass="button" rendered="#{s:hasRole('TBUNITS_EDT')}">
+<s:link view="/admin/edtunit.xhtml" styleClass="button" rendered="#{s:hasRole('TBUNITS_EDT')}">
 	<f:param name="id" value="#{null}" />
-</s:button>
+	<span>#{messages['form.newf']}</span>
+</s:link>
 <p/>
 
 <h:panelGroup id="pnlunits">
@@ -51,23 +53,22 @@
 
 <b><h:outputText value="#{messages['form.norecordfound']}" rendered="#{allunits.resultCount == 0}" /></b>
 <h:dataTable id="tbl" value="#{unitspg.resultList}" var="r" border="0" columnClasses="colb,colb,colb,colcb"
-  styleClass="tabela" rowClasses="lin1,lin2" width="100%" rendered="#{unitspg.resultCount > 0}">
+  styleClass="table1" rowClasses="lin1,lin2" width="100%" rendered="#{unitspg.resultCount > 0}">
   <h:column>
   	<f:facet name="header">
   		<s:link value="#{messages['form.name']}" styleClass="collh">
   			<f:param name="order" value="#{unitspg.order=='u.name.name1'?'u.name.name1 desc':'u.name.name1'}" />
   		</s:link>
   	</f:facet>
-  	<div class="#{r.treatmentHealthUnit?'hu-icon':'ds-icon'}">
+  	<div class="#{r.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}" style="float:left;"/>
 	<h:outputText value="#{r.name.name1}" rendered="#{not s:hasRole('TBUNITS_EDT')}" styleClass="#{r.active?'':'entity-inactive'}"/>
 	<s:link view="/admin/edtunit.xhtml" value="#{r.name.name1}" style="display:block;" rendered="#{s:hasRole('TBUNITS_EDT')}"
 		 styleClass="#{r.active?'':'entity-inactive'}">
 		<f:param name="id" value="#{r.id}" />
 	</s:link>
 	<h:outputText value="#{r.name.name2}" rendered="#{defaultWorkspace.hasAlternateLocale}" style="display:block;" />
-	<span class="right-icon">#{r.adminUnit.parent.name}</span>
-	<span class="right-icon">#{r.adminUnit.name}</span>
-	</div>
+	<span class="right-icon"/>#{r.adminUnit.parent.name}
+	<span class="right-icon"/>#{r.adminUnit.name}
   </h:column>
   
   <h:column>
@@ -90,21 +91,20 @@
 	<h:column>
 		<f:facet name="header"><h:outputText value="#{messages['form.options']}" styleClass="collh" /></f:facet>
 		
-		<div class="#{r.treatmentHealthUnit? 'checked-icon':'unchecked-icon'}" >
+		<div class="#{r.treatmentHealthUnit? 'checked-icon':'unchecked-icon'}" />
 			#{messages['Tbunit.treatmentHealthUnit']}
-		</div>
-		<div class="#{r.medicineStorage?'checked-icon':'unchecked-icon'}">
+		<br/>
+		<div class="#{r.medicineStorage?'checked-icon':'unchecked-icon'}"/>
 			#{messages['Tbunit.medicineStorage']}
-		</div>
-		<div class="#{r.receivingFromSource?'checked-icon':'unchecked-icon'}" >
+		<br/>
+		<div class="#{r.receivingFromSource?'checked-icon':'unchecked-icon'}" />
 			#{messages['Tbunit.receivingFromSource']}
-		</div>
-		<div class="#{r.changeEstimatedQuantity?'checked-icon':'unchecked-icon'}">
+		<br/>
+		<div class="#{r.changeEstimatedQuantity?'checked-icon':'unchecked-icon'}" />
 			#{messages['Tbunit.changeEstimatedQuantity']}
-		</div>
-		<div class="#{r.medicineSupplier?'checked-icon':'unchecked-icon'}">
+		<br/>
+		<div class="#{r.medicineSupplier?'checked-icon':'unchecked-icon'}" />
 			#{messages['Tbunit.medicineSupplier']}
-		</div>
 	</h:column>
 
   <h:column rendered="#{s:hasRole('TBUNITS_EDT') and (not workspaceViewService.printing)}">

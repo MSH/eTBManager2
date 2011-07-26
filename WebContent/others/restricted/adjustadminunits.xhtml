@@ -8,13 +8,13 @@
                 xmlns:h="http://java.sun.com/jsf/html"
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-                template="#{workspaceViewService.templatePage}">
+                template="/layout/template_new.xhtml">
 
 <ui:param name="topmenu" value="0" />
 
 <ui:param name="title" value="Adjust Admin Units" />
 
-<ui:define name="body">
+<ui:define name="content">
 
 	<h:form>
 	<p>
@@ -23,7 +23,7 @@
 	<s:decorate template="/layout/roundrect.xhtml" style="width:300px;">
 		<ui:define name="header"><b>Adjust admin units code</b></ui:define>
 		<ui:param name="showfooter" value="0" />
-		<a:commandButton action="#{executeAsyncAction.adjustAdminUnitsCode}" value="Execute" />
+		<a:commandLink action="#{executeAsyncAction.adjustAdminUnitsCode}" value="Execute" />
 	</s:decorate>
 	</h:form>
 </ui:define>

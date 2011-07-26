@@ -8,7 +8,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:p="http://jboss.com/products/seam/pdf"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['manag.ind.interim']}" />
 
@@ -26,10 +26,11 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form>
-<table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
-<tr><td bgcolor="#f8f8f8">
+<table width="100%">
+<tr><td>
 	<ui:include src="filters.xhtml" />
 
 </td></tr>
@@ -38,7 +39,7 @@
 <h:panelGroup id="indicator">
 
 	<s:fragment rendered="#{indicatorController.executing}">
-	<table class="tabela" width="100%">
+	<table class="table1" width="100%">
 		<tr>
 			<th rowspan="2">
 				#{messages['manag.ind.interim.starttreat']}

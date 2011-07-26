@@ -6,7 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['drugs.patients']}" />
 <ui:param name="topmenu" value="1" />
@@ -17,13 +17,13 @@
 	<s:link value="#{messages['drugs']}" view="/drugs/index.html" propagation="none" />
 </ui:define>
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<s:link value="#{messages['drugs.patients.new']}" view="/drugs/mdrcasenew.xhtml" propagation="begin" rendered="#{s:hasRole('PAC_EDT')}">
 		<f:param name="id" value="#{null}" />
 	</s:link>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
 <rich:panel style="width:600px;">
 	<s:decorate template="/layout/edit.xhtml">
@@ -48,7 +48,7 @@
 	</s:decorate>
 	
 	<div style="width:100%;text-align: right;">
-		<h:commandButton action="#{mdrCases.refresh}" value="#{messages['form.search']}" styleClass="button" />
+		<h:commandLink action="#{mdrCases.refresh}" value="#{messages['form.search']}" styleClass="button" />
 	</div>
 </rich:panel>
 <p/>
@@ -60,7 +60,7 @@
 	<ui:param name="page" value="/drugs/patients.xhtml" />
 </s:decorate>
 
-<h:dataTable value="#{mdrCases.resultList}" var="c" styleClass="tabela" width="600px" rowClasses="lin1,lin2" 
+<h:dataTable value="#{mdrCases.resultList}" var="c" styleClass="table1" width="600px" rowClasses="lin1,lin2" 
 	columnClasses="coll,coll,colc,colc,colc,colc" rendered="#{mdrCases.resultCount > 0}">
 	<h:column>
   		<f:facet name="header">

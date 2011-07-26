@@ -8,23 +8,25 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:c="http://java.sun.com/jstl/core"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.weeklyfreq']}" />
 <ui:param name="topmenu" value="3" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form id="main">
-<s:button view="/admin/edtweekfreq.xhtml" value="#{messages['form.edit']}" styleClass="button" rendered="#{s:hasRole('WEEKFREQ_EDT')}">
+<s:link view="/admin/edtweekfreq.xhtml" styleClass="button" rendered="#{s:hasRole('WEEKFREQ_EDT')}">
 	<f:param name="id" value="#{null}" />
-</s:button>
+	<span>#{messages['form.edit']}</span>
+</s:link>
 <p/>
 
-<table class="tabela" width="400px" >
+<table class="table1">
 	<tr><th>
 			#{messages['admin.weeklyfreq']}
 		</th>
@@ -35,11 +37,11 @@
 </ui:repeat>
 	</tr>
 <c:forEach begin="0" end="6" var="n">
-	<tr><td style="padding:3px;border:2px solid #f0f0f0;text-align:center;" colspan="2">
+	<tr><td colspan="2" align="center">
 			#{n+1}/7
 		</td>
 	<ui:repeat value="#{defaultWorkspace.weeklyFrequencies[n].weekMask}" var="m">
-		<td style="padding:3px;border:2px solid #f0f0f0">
+		<td align="center">
 			<s:div styleClass="checked-icon" rendered="#{m}"/>
 		</td>
 	</ui:repeat>

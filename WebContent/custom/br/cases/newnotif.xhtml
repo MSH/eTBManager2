@@ -7,16 +7,17 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.newnotif']} - #{messages[tbcase.classification.key]}" />
 
 <ui:param name="topmenu" value="0" />
-<ui:param name="labelstyle" value="width:140px" />
+<ui:param name="left" value="0" />
+<ui:param name="labelstyle" value="width:180px" />
 
-<ui:param name="waitdlg" value="1" />
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 
 <script type="text/javascript">
 <!--
@@ -30,14 +31,11 @@ function checkfields() {
 -->
 </script>
 <rich:jQuery name="showbutton" selector="#btnpac" query="show(500)" />
-<p/>
-<h:form id="main">
-<s:decorate template="/layout/roundrect.xhtml">
 
-	<ui:define name="header"><b>#{messages['cases.searchpatient']}</b></ui:define>
-	<ui:param name="showfooter" value="0" />
+<h:form id="main" styleClass="form1">
 
-	<div id="pacdata">
+	<div id="pacdata" class="form-content">
+	<h2>#{messages['cases.searchpatient']}</h2>
     <s:decorate id="name" template="/layout/editname.xhtml">
     	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
     	<ui:param name="fieldStyle" value="text-transform:uppercase;" />
@@ -55,44 +53,54 @@ function checkfields() {
 
 	<h:inputHidden value="#{tbcase.classification}" />
 
-	<table width="100%" ><tr><td>
-		<a:commandButton id="btnsearch" value="#{messages['form.search']}" action="#{patients.search}" 
-			styleClass="button"	data="#{patients.searching}" 
-			reRender="pnlpatients,dt" onclick="if (!checkfields()) return false" oncomplete="if (data) showbutton();"/>
-		<s:button value="#{messages['form.cancel']}" view="/cases/index.xhtml" styleClass="button-cancel" />
-	</td></tr></table> 
 
+	<div class="form-footer">
+		<a:commandLink id="btnsearch" action="#{patients.search}" 
+			styleClass="button"	data="#{patients.searching}"
+			reRender="pnlpatients,dt" onclick="if (!disableButtons(this)) return false;if (!checkfields()) return false"
+			oncomplete="enableButton();showbutton();">
+			<span>#{messages['form.search']}</span>
+		</a:commandLink>
+		
+		<s:link view="/cases/index.xhtml" styleClass="button-alt" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
 	<rich:jQuery timming="onload" selector="#main input[type='text']:first" query="focus()" />
-	<rich:hotKey selector="#main input[type='text']}" key="return" handler="#{rich:element('btnsearch')}.click();" /> 
+	<rich:hotKey selector="#main input" key="return" handler="initPatientSearch()" />
+	</div>
 
-</s:decorate>
-<p/>
-
-<p/>
 <h:panelGroup id="pnlpatients">
 
-<h:commandButton id="btnpac" value="#{messages['cases.newpatient']}" onclick="openWaitDlg();"
-    action="#{caseEditingHome.selectPatientData}" styleClass="button" style="display:none;width:160px;" >
-</h:commandButton>
+<div id="newpacbutton" class="button-bar" style="display:none;" >
+	<a:commandLink onclick="if (!disableButtons(this)) return false;"
+    	action="#{caseEditingHome.selectPatientData}" styleClass="button" >
+	    <span>#{messages['cases.newpatient']}</span>
+	</a:commandLink>
+</div>
 
 <s:decorate template="/layout/naveg.xhtml" rendered="#{patients.searching}">
 	<ui:param name="list" value="#{patients}" />
 	<ui:param name="page" value="/cases/newnotif.xhtml" />
 </s:decorate>
 
-<h:dataTable value="#{patients.resultList}" var="it" styleClass="tabela" rowClasses="lin1,lin2" 
-	rendered="#{patients.searching and (not empty patients.resultList)}" width="680px" columnClasses="coll,colc,colc,coll">
+<h:dataTable value="#{patients.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
+	rendered="#{patients.searching and (not empty patients.resultList)}" columnClasses="coll,colc,colc,coll">
 	<h:column>
 		<f:facet name="header">
 			<s:link value="#{messages['Patient.name']}" styleClass="collh">
   			<f:param name="order" value="#{patients.order=='p.name,p.middleName'?'p.name desc,p.middleName desc':''}" />
 			</s:link>
 		</f:facet>
-		<s:link value="#{it.fullName}" view="/cases/casenew.xhtml"  
-			onclick="openWaitDlg();">
-			<f:param name="pacid" value="#{it.id}" />
+		<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;">
+			<f:param name="pacid" value="#{it.patient.id}" />
 			<f:param name="classif" value="#{tbcase.classification}"/>
 		</s:link>
+		<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml" onclick="openWaitDlg();">
+			<f:param name="pacid" value="#{it.patient.id}" />
+			<f:param name="classif" value="#{tbcase.classification}"/>
+		</s:link>
+		<br/>
+		#{it.patient.recordNumber}
 	</h:column>
 
 	<h:column>
@@ -101,16 +109,7 @@ function checkfields() {
   			<f:param name="order" value="p.birthDate#{patients.order=='p.birthDate'?' desc':''}" />
 			</s:link>
 		</f:facet>
-		<h:outputText value="#{it.birthDate}"  converter="localeDateConverter"/>
-	</h:column>
-
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Patient.recordNumber']}">
-  			<f:param name="order" value="p.recordNumber#{patients.order=='p.recordNumber'?' desc':''}" />
-			</s:link>
-		</f:facet>
-		#{it.recordNumber}
+		<h:outputText value="#{it.patient.birthDate}"  converter="localeDateConverter"/>
 	</h:column>
 
 	<h:column>
@@ -119,10 +118,38 @@ function checkfields() {
   			<f:param name="order" value="p.motherName#{patients.order=='p.motherName'?' desc':''}" />
 			</s:link>
 		</f:facet>
-		#{it.motherName}
+		#{it.patient.motherName}
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['cases.sit.current']}" styleClass="collh" />
+		</f:facet>
+		<h:outputText value="#{it.caseStatus}" escape="false" />
 	</h:column>
 </h:dataTable>
+
 </h:panelGroup>
+
+<script type="text/javascript">
+function initPatientSearch() {
+	if (!checkfields())
+		return false;
+	searchPatient();
+}
+function checkfields() {
+	if (jQuery("#pacname input[value!='']").size() == 0) {
+		alert("#{messages['cases.new.namereq']}");
+		return false;
+	}
+	return true;
+}
+</script>
+<a:jsFunction name="searchPatient" reRender="pnlpatients,dt" 
+	oncomplete="if (data) showbutton();"
+	action="#{patients.search}"  
+	data="#{patients.searching}" /> 
+<rich:jQuery timing="onJScall" name="showbutton" selector="#newpacbutton" query="slideDown(500)" />
 
 </h:form>
 </ui:define>

@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['drugs.disppac']}: #{caseDispensing.mdrCase.name}" />
 <ui:param name="show_menu" value="#{s:hasRole('DISPPAC_EDT')?'1':'0'}"/>
@@ -19,7 +19,7 @@
 	<s:link value="#{messages['drugs.disppac']}" view="/drugs/disppac.xhtml" propagation="none"/>
 </ui:define>
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<s:link view="/drugs/edtdisppac.xhtml" value="#{messages['form.edit']}" propagation="begin" rendered="#{s:hasRole('DISPPAC_EDT')}">
 		<f:param name="id" value="#{caseDispensingHome.id}" />
 	</s:link>
@@ -28,7 +28,7 @@
 	</s:link>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 <h:form id="main"> 
 <rich:panel style="width:600px;">
@@ -66,7 +66,7 @@
     	<ui:define name="label">#{messages['CaseDispensing.drugs']}:</ui:define>
     </s:decorate>
     
-    <h:dataTable value="#{caseDispensing.drugs}" var="r" styleClass="tabela" width="100%" 
+    <h:dataTable value="#{caseDispensing.drugs}" var="r" styleClass="table1" width="100%" 
     	columnClasses="coll,coll,coll,colr,colr,colr" rowClasses="lin1,lin2">
     	<h:column>
     		<f:facet name="header">

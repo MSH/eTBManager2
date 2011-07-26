@@ -7,19 +7,20 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.close']}" />
-<ui:param name="waitdlg" value="1" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
 
-<ui:define name="body">
-<p/>
-<h:form id="main">
+<ui:define name="content">
+<h1>#{title}</h1>
 
 <s:decorate template="/layout/casebody.xhtml">
 
+<h:form id="main" styleClass="form1">
+
+	<div class="form-content">
     <s:decorate template="/layout/dateedit.xhtml" >
 		<ui:define name="label">#{messages['TbCase.outcomeDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
@@ -61,16 +62,17 @@
 		<h:inputText value="#{caseCloseHomeBR.comment}" maxlength="100" style="width:300px;"/>
     </s:decorate>
     </div>
-
-<table width="100%">
-<tr><td align="right">
-	<h:commandButton action="#{caseCloseHomeBR.closeCase}" value="#{messages['form.ok']}" styleClass="button" onclick="openWaitDlg();"/> 
-    <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel">
+	</div>
+	
+	<div class="form-footer">
+	<a:commandLink action="#{caseCloseHomeBR.closeCase}" styleClass="button" onclick="if (!disableButtons(this)) return false;" reRender="main">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink> 
+    <s:link view="/cases/casedata.xhtml" styleClass="button-alt">
        	<f:param name="id" value="#{caseHome.id}"/>
-    </s:button>
-</td></tr>
-</table>
-</s:decorate>
+       	<span>#{messages['form.cancel']}</span>
+    </s:link>
+	</div>
 
 <rich:jQuery selector="#selstate input[type=radio]" query="click(function(){statecheckClick(this);})" />
 <script type="text/javascript">
@@ -90,6 +92,7 @@ function statecheckClick(elem) {
 </script>
 
 </h:form>
+</s:decorate>
 
 </ui:define>
 

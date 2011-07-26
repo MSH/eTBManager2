@@ -7,14 +7,14 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:c="http://java.sun.com/jstl/core"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.orders.shipment']}" />
 
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 <h:form>
 <rich:panel style="width:680px;">
@@ -37,7 +37,7 @@
 
 <br/>
 <b>#{messages['OrderItem.batches']}:</b>
-<h:dataTable value="#{orderBatchHome.availableBatches}" var="b" width="100%" styleClass="tabela" columnClasses="col,colc,colc,colr,colr,colc" rowClasses="lin1,lin2">
+<h:dataTable value="#{orderBatchHome.availableBatches}" var="b" width="100%" styleClass="table1" columnClasses="col,colc,colc,colr,colr,colc" rowClasses="lin1,lin2">
 	<h:column>
 	<f:facet name="header">
 		<h:outputText value="#{messages['Batch.manufacturer']} - #{messages['Batch.batchNumber']}" styleClass="collh"/>
@@ -84,10 +84,10 @@
 
 <br/>
 <div >
-    <h:commandButton action="#{orderBatchHome.addBatches}" value="#{messages['form.ok']}" styleClass="button" />
-    <s:button action="/medicines/ordersent.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" >
+    <h:commandLink action="#{orderBatchHome.addBatches}" value="#{messages['form.ok']}" styleClass="button" />
+    <s:link action="/medicines/ordersent.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" >
     	<f:facet name="id" value="#{order.id}" />
-    </s:button>
+    </s:link>
 </div>
 </rich:panel>
 </h:form>

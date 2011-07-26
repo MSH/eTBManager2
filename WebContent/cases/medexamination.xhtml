@@ -7,20 +7,22 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<s:link value="#{messages['cases.details.newresult']}" view="/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
+	<div class="spacer" />
+	<s:link view="/cases/edtmedexam.xhtml" style="float:right;" styleClass="button-alt" rendered="#{caseHome.canEditCaseData}">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
 	</s:link>
 
 	<h:panelGroup id="medexams">
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty medicalExaminationHome.allResults}" />
 
-	<h:dataTable value="#{medicalExaminationHome.allResults}" var="r" rendered="#{not empty medicalExaminationHome.allResults}" width="100%">
-		<h:column>
-	
-		<s:decorate template="/layout/roundrect.xhtml" style="margin-right:10px;">
-		<ui:define name="header">
-			<div style="float:right;" class="link-bar">
+	<ui:repeat var="r" value="#{medicalExaminationHome.allResults}">
+		<div class="spacer" />
+
+		<div class="region1">
+			<div class="header">
+			<div style="float:right;">
 				<s:link value="#{messages['form.edit']}" view="/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
@@ -30,11 +32,9 @@
 				    rendered="#{caseHome.canEditCaseData}">
 				</h:commandLink>
 			</div>
-			<div class="name2">#{messages['cases.details.date']}: </div> 
-			<h:outputText value="#{r.date}" converter="localeDateConverter" />
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
+			<h2><h:outputText value="#{r.date}" converter="localeDateConverter" /></h2>
+			</div>
+			<div class="content">
 		<table width="100%" style="border-collapse:collapse;">
 		<tr><td>
 			<s:decorate template="/layout/display.xhtml">
@@ -74,12 +74,10 @@
 		</td></tr>
 		</s:fragment>
 		</table>
-		
-		
-		</s:decorate>
+			</div>
+		</div>
+	</ui:repeat>
 
-		</h:column>
-	</h:dataTable>
 	</h:panelGroup>
 
 <a:jsFunction name="remMedExamination" action="#{medicalExaminationHome.remove}" reRender="medexams"  rendered="#{caseHome.canEditExams}">

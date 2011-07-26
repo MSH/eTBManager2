@@ -6,24 +6,26 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.validate']}" />
-<ui:param name="topmenu" value="1" />
+<ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:180px;" />
 
 
 
-<ui:define name="body">
-<h:form id="main" rendered="#{caseHome.canValidate}">
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" rendered="#{caseHome.canValidate}" styleClass="form1">
 
-
-<s:decorate template="/layout/casebody.xhtml">
+<div class="form-content">
     <table width="100%">
     <tr><td height="30">
-    	<div class="warn-icon">
+    	<h2>
+    	<div class="warn-icon" />
     	#{messages['cases.validate.msg']}
-    	</div>
+    	</h2>
+
     </td></tr>
 	<tr><td>
     <s:decorate template="/layout/dateedit.xhtml" >
@@ -127,14 +129,18 @@ function isPulmonary(cb) {
     </div>
     
     </td></tr>
-    <tr><td align="right">
-    	<h:commandButton action="#{caseValidationHome.validate}" value="#{messages['cases.validate']}" styleClass="button" style="width:180px;"/>
-    	<s:button view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" >
+    </table>
+	</div>
+
+	<div class="form-footer">
+    	<a:commandLink action="#{caseValidationHome.validate}" styleClass="button" reRender="main,messages" onclick="if (!disableButtons(this)) return false;" >
+    		<span>#{messages['cases.validate']}</span>
+    	</a:commandLink>
+    	<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" >
     		<f:param name="id" value="#{caseHome.id}" />
-    	</s:button>
-    </td></tr>
-	</table>
-</s:decorate>
+    		<span>#{messages['form.cancel']}</span>
+    	</s:link>
+    </div>
 
 </h:form>
 </ui:define>

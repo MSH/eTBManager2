@@ -8,7 +8,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:p="http://jboss.com/products/seam/pdf"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['manag.confmdrrep']}" />
 
@@ -26,22 +26,22 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form>
-<table style="border:2px solid #f0f0f0;margin-top:35px;" width="100%" cellspacing="4" cellpadding="4">
-<tr><td bgcolor="#f8f8f8">
+<table width="100%">
+<tr><td>
 	<ui:include src="filters.xhtml" />
-
 </td></tr>
 <tr><td align="center">
 
 <h:panelGroup id="indicator">
 
 	<s:fragment rendered="#{indicatorController.executing}">
-	<table class="tabela" width="100%">
+	<table class="table1" width="100%">
 		<tr>
 			<th>
-				
+				#{messages['PatientType']}
 			</th>
 		<ui:repeat value="#{table.columns}" var="col">
 			<th>
@@ -54,7 +54,7 @@
 		</tr>
 		<ui:repeat value="#{table.rows}" var="row">
 		<tr>
-			<td class="colb">
+			<td class="colb highlight">
 				#{row.title}
 			</td>
 			<ui:repeat value="#{row.cells}" var="val">
@@ -64,7 +64,7 @@
 				</h:outputText>
 			</td>
 			</ui:repeat>
-			<td class="colcb" bgcolor="#DBFADC">
+			<td class="colcb highlight">
 				<b>
 				<h:outputText value="#{row.total}" >
 					<f:convertNumber pattern="#,###,##0"/>
@@ -75,11 +75,11 @@
 		</ui:repeat>
 
 		<tr>
-			<td class="colb" bgcolor="#DBFADC">
+			<td class="colb highlight">
 				<b>#{messages['global.total']}</b>
 			</td>
 		<ui:repeat value="#{table.columns}" var="col">
-			<td class="colcb" bgcolor="#DBFADC">
+			<td class="colcb highlight">
 				<b>
 				<h:outputText value="#{col.total}" >
 					<f:convertNumber pattern="#,###,##0"/>
@@ -87,7 +87,7 @@
 				</b>
 			</td>
 		</ui:repeat>
-			<td class="colcb"  bgcolor="#DBFADC">
+			<td class="colcb highlight">
 				<b>
 				<h:outputText value="#{table.total}" >
 					<f:convertNumber pattern="#,###,##0"/>

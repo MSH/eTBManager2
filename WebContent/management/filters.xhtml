@@ -245,10 +245,11 @@ function handleContextClick(comp) {
 	
 	</td>
 	<td align="right" >
-	<ui:include src="/layout/waitstatus.xhtml" />
-	<a:commandButton value="#{messages['form.update']}" reRender="indicator" styleClass="button" 
+	<a:commandLink reRender="indicator" styleClass="button" 
 		action="#{indicatorController.execute}"
-		onclick="this.disabled=true;" oncomplete="this.disabled=false;showpictype();showChart();"/>
+		onclick="if (!disableButtons(this)) return false;" oncomplete="enableButton();showChart();">
+		<span>#{messages['form.update']}</span>
+	</a:commandLink>
 	<rich:jQuery name="showpictype" timing="onJScall" selector="#charttypediv" query="show(500)" />
 
 	</td></tr>

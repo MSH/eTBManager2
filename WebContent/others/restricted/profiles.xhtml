@@ -7,20 +7,20 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-                template="#{workspaceViewService.templatePage}">
+                template="/layout/template_new.xhtml">
 
 <ui:param name="topmenu" value="0" />
 
 <ui:param name="title" value="Update Admin Profiles" />
 <ui:param name="activeroundcorners" value="1" />
 
-<ui:define name="body">
+<ui:define name="content">
 
 	<h:form>
 	<s:decorate template="/layout/roundrect.xhtml" style="width:300px;">
 		<ui:define name="header"><b>Update Administrator profiles</b></ui:define>
 		<ui:param name="showfooter" value="0" />
-		<h:commandButton action="#{workspaceInit.updateAdministratorProfile}" value="Update" />
+		<h:commandLink action="#{workspaceInit.updateAdministratorProfile}" value="Update" />
 	</s:decorate>
 	</h:form>
 </ui:define>

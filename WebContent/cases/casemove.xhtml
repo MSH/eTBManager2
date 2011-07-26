@@ -7,7 +7,7 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.move']}" />
 <ui:param name="topmenu" value="1" />
@@ -16,20 +16,18 @@
 <ui:param name="left" value="0" />
 
 
-<ui:define name="body">
-<h:form id="main" rendered="#{caseHome.canTransferOut}">
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" rendered="#{caseHome.canTransferOut}" styleClass="form1">
 
 
 <s:decorate template="/layout/casebody.xhtml">
-    <table width="100%">
-	<tr><td>
-	
-	<p/>
+	<div class="form-content">
 	<div style="display:block;padding:5px;color:gray;">
 		<b>#{messages['TbCase.healthUnits']}</b>
 	</div>
 
-	<h:dataTable value="#{tbcase.healthUnits}" var="hu" styleClass="tabela" width="100%">
+	<h:dataTable value="#{tbcase.healthUnits}" var="hu" styleClass="table1" width="100%">
 		<h:column>
 			<f:facet name="header"><h:outputText value="#{messages['cases.healthUnit']}" styleClass="collh" /></f:facet>
 			#{hu.tbunit.name}
@@ -64,15 +62,18 @@
     	<ui:param name="datefield" value="#{caseMoveHome.moveDate}" /> 
     </s:decorate>
 	<span style="color:red;">*</span> #{messages['form.required']}<p/>
+
+	</div>
     
-    </td></tr>
-    <tr><td align="right">
-    	<a:commandButton action="#{caseMoveHome.transferOut}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>
-    	<s:button view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" >
+    <div class="form-footer">
+    	<a:commandLink action="#{caseMoveHome.transferOut}" styleClass="button" onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
+    		<span>#{messages['form.ok']}</span>
+    	</a:commandLink>
+    	<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" >
     		<f:param name="id" value="#{caseHome.id}" />
-    	</s:button>
-    </td></tr>
-	</table>
+    		<span>#{messages['form.cancel']}</span>
+    	</s:link>
+    </div>
 </s:decorate>
 
 </h:form>

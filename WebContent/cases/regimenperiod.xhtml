@@ -62,11 +62,11 @@ if (regDatesValidate()) {
    			<s:decorate template="/layout/waitstatus.xhtml" />
    		</td>
    		<td align="right">
-   		<a:commandButton value="#{messages['form.ok']}" action="#{caseRegimenHome.changePeriod}" 
+   		<a:commandLink value="#{messages['form.ok']}" action="#{caseRegimenHome.changePeriod}" 
    			styleClass="button"
-   			onclick="this.disabled=true;" 
-   			oncomplete="this.disabled=false;regDatesValidateAndClose();" reRender="regdatesform,formtreat"/>
-   		<s:button value="#{messages['form.cancel']}" onclick="hideRegDatesDlg(); return false;" styleClass="button-cancel" />
+   			onclick="if (!disableButtons(this)) return false;"  
+   			oncomplete="enableButton();regDatesValidateAndClose();" reRender="regdatesform,formtreat"/>
+   		<s:link value="#{messages['form.cancel']}" onclick="hideRegDatesDlg(); return false;" styleClass="button-alt" />
    	</td></tr>
    	</table>
 	</h:form>

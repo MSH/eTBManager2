@@ -6,20 +6,36 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{messages['form.data_edit']} - #{messages['UserProfile']}" />
 <ui:param name="topmenu" value="3" />
 
 
-<ui:define name="body">
+<ui:define name="head">
+<style type="text/css">
+.checkbox {
+float: right;
+width: 80px;
+text-align: center;
+margin: auto;
+min-height: 20px;
+overflow: hidden;
+padding: 2px;
+}
+</style>
+</ui:define>
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
 <s:fragment rendered="#{empty profileHome.roles}">
 <div class="warn">No permission available to edit/create profile</div>
-<s:button view="/admin/profiles.seam" value="#{messages['form.return']}" styleClass="button" />
+<s:link view="/admin/profiles.seam" value="#{messages['form.return']}" styleClass="button" />
 </s:fragment>
-<h:form id="main" rendered="#{not empty profileHome.roles}">
-    <table class="tabela3" width="750px">
-    <tr><td>
+<h:form id="main" rendered="#{not empty profileHome.roles}" styleClass="form1">
+    
+    <div class="form-content">
     <s:decorate template="/layout/display.xhtml" rendered="#{profile.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{profile.id}" />
@@ -32,10 +48,9 @@
         	<f:param id="field" value="name"/>
         </h:inputText>
     </s:decorate>
-    </td></tr>
-	<tr><td>
+    
 
-	<div style="width:740px;" class="tabela">
+	<div style="width:740px;" class="table1">
 	<div class="header">
 		#{messages['UserPermission']}
 		<div class="checkbox">
@@ -105,16 +120,19 @@ function permissionClickHandler(checkbox, divname) {
 }
 </script>
 
-	</td></tr>
-	<tr><td align="right">
-            <h:commandButton action="#{profileHome.persist}" value="#{messages['form.ok']}" styleClass="button"/>  
-            <s:button view="/admin/profiles.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" >
+</div>
+	<div class="form-footer">
+            <a:commandLink action="#{profileHome.persist}" styleClass="button"
+            	onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
+            	<span>#{messages['form.save']}</span>
+            </a:commandLink>  
+            <s:link view="/admin/profiles.xhtml" styleClass="button-alt" >
             	<f:param name="id" value="#{null}" />
-            </s:button>
-    </td></tr>
-    </table>
+            	 <span>#{messages['form.cancel']}</span>
+            </s:link>
+    </div>
 
-	<p/>
+
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 
 	<ui:include src="/layout/tablerow.xhtml" />

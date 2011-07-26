@@ -7,27 +7,26 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.examdst']}" /><ui:param name="left" value="0" />
-<ui:param name="waitdlg" value="1" />
 
 <ui:param name="topmenu" value="0" />
 <ui:param name="examHome" value="#{examDSTHome}" />
+<ui:param name="labelstyle" value="width:200px;" />
 
 
-<ui:define name="body">
-<p/>
+<ui:define name="content">
+<h1>#{title}</h1>
 <s:decorate template="/layout/casebody.xhtml">
 	<ui:param name="pagewidth" value="650px" />
-	<h:form id="formexam" >
-    <table width="100%">
-    <tr><td>
+	<h:form id="formexam" styleClass="form1">
 
+	<div class="form-content">
 	<s:decorate template="/layout/edtsample.xhtml">
 	</s:decorate>
 
-	<div class="paragraph">#{messages['cases.exams.results']}</div>
+	<h2>#{messages['cases.exams.results']}</h2>
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
     	<ui:param name="required" value="false" /> 
@@ -50,7 +49,7 @@
 
 	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
 
-	<h:dataTable value="#{examDSTHome.items}" var="it" style="clear:left;" styleClass="tabela" width="100%" columnClasses="coll,coll" rowClasses="lin1,lin2">
+	<h:dataTable value="#{examDSTHome.items}" var="it" styleClass="table2" columnClasses="coll,colr" rowClasses="lin1,lin2">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['Medicine']}" styleClass="collh"/>
@@ -60,15 +59,16 @@
 
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['cases.details.result']}" />
+				<h:outputText value="#{messages['cases.details.result']}" styleClass="colrh"/>
 			</f:facet>
-			<span id="divicon" style="float:right">
+			<span style="width:250px;float:left">
+			<div id="divicon" />
 			<h:selectOneMenu id="res" value="#{it.result}" required="true" onchange="dstResultChange(this);">
     			<s:selectItems value="#{dstResults}" var="ss" noSelectionLabel="-" label="#{messages[ss.key]}" />
     			<s:convertEnum />
 			</h:selectOneMenu>
 			</span>
-			<h:message for="res" styleClass="erro" />
+			<h:message for="res" styleClass="error" style="float:left" />
 		</h:column>
 	</h:dataTable>
 
@@ -76,7 +76,7 @@
 <!--
 function dstResultChange(cb) {
 	var val=cb.options[cb.selectedIndex].value;
-	var elem = jQuery(cb).parent('#divicon');
+	var elem = jQuery(cb).prev();
 	var s = '';
 	if (val == 'RESISTANT')
 		s = 'dst-resistant';
@@ -92,18 +92,20 @@ function dstResultChange(cb) {
 </script>
 <rich:jQuery selector="#divicon select" query="each(function(){dstResultChange(this);})" />
 
-	</td></tr>
-    <tr><td align="right">
- 		<div style="float:left;">
+	</div>
+	
+	<div class="form-footer">
+ 		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandButton action="#{examDSTHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam" 
-            	oncomplete="this.disabled=false;"
-            	onclick="this.disabled=true;" />
-            <a:commandButton action="canceled" styleClass="button-cancel" value="#{messages['form.cancel']}" ajaxSingle="true"/>
-    </td></tr>
-    
-    </table>
+            <a:commandLink action="#{examDSTHome.persist}" styleClass="button" reRender="formexam" 
+            	onclick="if (!disableButtons(this)) return false;"  >
+            	<span>#{messages['form.save']}</span>
+            </a:commandLink>
+            <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true">
+            	<span>#{messages['form.cancel']}</span>
+            </a:commandLink>
+	</div>
     
 	</h:form>
 </s:decorate>

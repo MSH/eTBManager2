@@ -6,21 +6,15 @@
 <script type="text/javascript">
 <!--
 function openWaitDlg() {
-	Richfaces.showModalPanel('waitmsgpanel');
+	jQuery('#waitdiv').show();
 }
 function closeWaitDlg() {
-javascript:Richfaces.hideModalPanel('waitmsgpanel');
+	jQuery('#waitdiv').fadeOut(500);
 }
 -->
 </script>
-<rich:modalPanel id="waitmsgpanel" width="250" height="80" top="350">
-
-	<div style="padding-top:15px;padding-left:30px;">
-	<span class="wait-icon" style="font-size: 16px;font-weight:bold;">
-		#{messages['global.wait']}
-	</span>
-	<br/><span style="color:#d0d0d0">#{messages['global.waitmsg']}</span>
-	</div>
-</rich:modalPanel>
+<div id="waitdiv" class="waitpnl" >
+	<div class="wait-icon"/>#{messages['global.wait']}
+</div>
     
 </ui:composition>

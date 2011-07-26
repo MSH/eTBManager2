@@ -42,9 +42,9 @@ else return false;
 		<div style="float:right;">
 			#{messages['medicines.stockpos.msg1']}
 			<br/>
-			<s:button value="#{messages['medicines.stockpos.adjust']}" view="/medicines/adjustedt.xhtml">
+			<s:link value="#{messages['medicines.stockpos.adjust']}" view="/medicines/adjustedt.xhtml">
 				<f:param name="id" value="#{stockPosHome.item.id}" />
-			</s:button>
+			</s:link>
 		</div>
 		<s:decorate template="/layout/display.xhtml">
 			<ui:define name="label">#{messages['Movement.quantity']}:</ui:define>
@@ -82,7 +82,7 @@ else return false;
 		</s:decorate>
 	</td></tr>
     <tr><td align="right">
-			<s:button value="#{messages['form.return']}" styleClass="button" onclick="hideStockPosInfoDlg(); return false;"/>
+			<s:link value="#{messages['form.return']}" styleClass="button" onclick="hideStockPosInfoDlg(); return false;"/>
     </td></tr>
     
     </table>

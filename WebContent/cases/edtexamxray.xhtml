@@ -7,18 +7,18 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.examxray']}" /><ui:param name="left" value="0" />
-<ui:param name="waitdlg" value="1" />
 <ui:param name="topmenu" value="0" />
 
 
-<ui:define name="body">
-<p/>
+<ui:define name="content">
+<h1>#{title}</h1>
 
 <s:decorate template="/layout/casebody.xhtml">
-	<a:form id="formexam">
+	<a:form id="formexam" styleClass="form1">
+	<div class="form-content">
     <table width="100%">
     <tr><td>
 
@@ -53,25 +53,25 @@
 	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
 
 	</td></tr>
-    <tr><td align="right">
-		<div style="float:left;">
+	</table>
+	</div>
+	
+	<div class="form-footer">
+		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandButton action="#{examXRayHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam" 
-            	oncomplete="this.disabled=false;"
-            	onclick="this.disabled=true;" />
-            <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel">
+            <a:commandLink action="#{examXRayHome.persist}" styleClass="button" reRender="formexam" 
+            	onclick="if (!disableButtons(this)) return false;" >
+            	<span>#{messages['form.save']}</span>
+            </a:commandLink>
+            <s:link view="/cases/casedata.xhtml" styleClass="button-alt">
             	<f:param name="id" value="#{caseHome.id}"/>
-            </s:button>
-    </td></tr>
-    
-    </table>
+            	<span>#{messages['form.cancel']}</span>
+            </s:link>
+    </div>
     
 	</a:form>
 </s:decorate>
-
-
-<p/>
 
 
 </ui:define>

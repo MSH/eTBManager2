@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.tags']}" />
 <ui:param name="waitdlg" value="1" />
@@ -15,48 +15,58 @@
 <ui:param name="labelstyle" value="width:160px" />
 <ui:param name="pagewidth" value="600px" />
 
-<ui:define name="body">
-<p/>
-<h:form id="main">
-
+<ui:define name="content">
+<h1>#{title}</h1>
 <s:decorate template="/layout/casebody.xhtml">
+<h:form id="main" styleClass="form1">
+
+	<div class="form-content">
 
 	<h:panelGroup id="pnlTags">
 	<div style="padding:6px">
 	<s:fragment rendered="#{s:hasRole('TAGS')}">
-	<a:commandLink value="#{messages['admin.tags.new']}" onclick="showNewTagForm(); return false;" />
+	<a:commandLink onclick="showNewTagForm(); return false;" style="float:right;" styleClass="button-alt">
+		<span>#{messages['admin.tags.new']}</span>
+	</a:commandLink>
 	<span id="tagspan" style="display:none;">
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['form.name']}:</ui:define>
 		<h:inputText value="#{caseTagHome.tagName}"/>
-		<a:commandButton value="#{messages['form.save']}" 
+		<a:commandLink
 			styleClass="button" 
-			action="#{caseTagHome.saveNewTag}" 
-			reRender="pnlTags"/>
+			action="#{caseTagHome.saveNewTag}"
+			onclick="if (!disableButtons(this)) return false;"  
+			reRender="pnlTags">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink>
 	</s:decorate>
 	</span>
 	</s:fragment> 
 	</div>
 
-	<h:dataTable value="#{caseTagHome.items}" var="it">
+	<h:dataTable value="#{caseTagHome.items}" var="it" width="100%">
 		<h:column >
-			<div class="tag-icon">
+			<div class="tag-icon"/>
 				<h:selectBooleanCheckbox value="#{it.selected}" />
 				#{it.item.name}
-			</div>
 		</h:column>
 	</h:dataTable>
 	</h:panelGroup>
+	</div>
 
-	<a:commandButton action="#{caseTagHome.saveTags}" value="#{messages['form.ok']}" 
+	<div class="form-footer">
+	<a:commandLink action="#{caseTagHome.saveTags}" 
 		styleClass="button" 
-		onclick="openWaitDlg();"
-		reRender="main,messages"/>
+		onclick="if (!disableButtons(this)) return false;" 
+		reRender="main,messages">
+		<span>#{messages['form.save']}</span>
+	</a:commandLink>
  
-    <s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel">
+    <s:link view="/cases/casedata.xhtml" styleClass="button-alt">
        	<f:param name="id" value="#{caseHome.id}"/>
-    </s:button>
-</s:decorate>
+       	<span>#{messages['form.cancel']}</span>
+    </s:link>
+    </div>
 
 <script type="text/javascript">
 function showNewTagForm() {
@@ -65,6 +75,7 @@ function showNewTagForm() {
 </script>
 
 </h:form>
+</s:decorate>
 
 </ui:define>
 

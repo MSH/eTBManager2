@@ -6,14 +6,15 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.medicinerecs']}" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 <ui:param name="pagestyle" value="width:700px;" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
+	<div class="vertical-menu">
 	<s:link view="/medicines/edtrec.xhtml" value="#{messages['form.edit']}" >
 		<f:param name="id" value="#{medicineReceivingHome.id}" />
 	</s:link>
@@ -21,12 +22,20 @@
     <s:link action="#{medicineReceivingHome.remove}" value="#{messages['form.remove']}" onclick="return confirm('#{messages['form.confirm_remove']}');" >
        	<f:param name="id" value="#{medicineReceivingHome.id}" />
     </s:link>
+    </div>
 </ui:define>
 
 
 <ui:define name="naveg">
-	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
-	<s:link view="/medicines/receivings.xhtml" value="#{messages['medicines.medicinerecs']}" />
+	<div class="item">
+		<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
+	</div>
+	<div class="item">
+		<s:link view="/medicines/receivings.xhtml" value="#{messages['medicines.medicinerecs']}" />
+	</div>
+	<div class="item selected">
+		<s:link value="#{title}" />
+	</div>
 </ui:define>
 
 <ui:define name="print-link">
@@ -37,7 +46,7 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 <s:decorate template="/layout/unit.xhtml">
 <h:form id="main">
     <s:decorate template="/layout/display.xhtml" >
@@ -63,7 +72,7 @@
     </s:decorate>
 	<p/>
 
-	<table width="100%" class="tabela" >
+	<table width="100%" class="table1" >
 		<tr><th><h:outputText value="#{messages['Medicine']}" styleClass="collh" /></th>
 				<th><h:outputText value="#{messages['Batch.expiryDate']}" styleClass="colch" /></th>
 				<th align="right">#{messages['Batch.numContainers']}</th>

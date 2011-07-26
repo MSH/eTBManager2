@@ -7,17 +7,19 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
+     <!--template="#{workspaceViewService.templatePage}">-->
 
 <ui:param name="title" value="#{messages['admin.reports.usersession']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form id="main">
 
 <s:decorate template="/layout/roundrect.xhtml" style="width:780px;">
@@ -58,7 +60,7 @@
 </td></tr>
 <tr><td>
 <h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty userSessionReport.items}" styleClass="warn"/>
-<h:dataTable value="#{userSessionReport.items}" var="it" styleClass="tabela" width="100%" 
+<h:dataTable value="#{userSessionReport.items}" var="it" styleClass="table1" width="100%" style="margin-top:4px;"
 	rowClasses="lin1,lin2" columnClasses="colc,coll,colc,colc,coll,coll" rendered="#{not empty userSessionReport.items}">
 	<h:column>
 		<f:facet name="header">

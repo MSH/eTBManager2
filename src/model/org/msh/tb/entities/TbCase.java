@@ -274,10 +274,15 @@ public class TbCase implements Serializable{
 	 */
 	@Override
 	public String toString() {
-		return ((registrationCode != null) && (!registrationCode.isEmpty())? registrationCode: getPatient().getFullName());
+		String s = getPatient().getFullName();
+		String num = getDisplayCaseNumber();
+		if (num != null)
+			s = "(" + num + ") " + s;
+
+		return s;
 	}
 
-	
+
 	/**
 	 * Check if the regimen has changed compared to the initial regimen
 	 * @return

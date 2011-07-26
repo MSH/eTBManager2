@@ -7,14 +7,9 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<s:decorate template="/layout/roundrect.xhtml">
-		<ui:define name="header">
-			<b>#{messages['cases.patientdata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
-	<div>
-	<table width="99%" style="border-collapse:collapse;">
+	<div class="form-content">
+	<h2>#{messages['cases.patientdata']}</h2>
+	<table width="100%" style="border-collapse:collapse;">
 	<tr><td colspan="2">
 	<s:decorate template="/layout/editname.xhtml">
     	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
@@ -65,7 +60,7 @@
 	</td></tr>    
     
     <tr><td colspan="2">
-    	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
+    	<h2>#{messages['cases.details.addressnotif']}</h2>
     </td></tr>
     
     <tr><td colspan="2">
@@ -107,7 +102,7 @@
     	</s:decorate>
     	
     	<div id="curraddr" style="clear:both;">
-    	<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
+    	<h2>#{messages['cases.details.addresscurr']}</h2>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.address']}:</ui:define>
     		<h:inputText value="#{tbcase.currentAddress.address}" style="width:300px;margin-bottom:2px;" maxlength="100"/><br/>
@@ -143,23 +138,18 @@
     
     </td></tr>
     </table>
-    </div>
     
-	</s:decorate>
-	<p/>
+	</div>
 
 
 
-	<s:decorate template="/layout/roundrect.xhtml">
-		<ui:define name="header">
-			<b>#{messages['cases.generaldata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+	<div class="form-content">
+	<h2>#{messages['cases.generaldata']}</h2>
 
 	<div><table width="99%" style="border-collapse:collapse;">
 	<tr><td style="padding-bottom:10px;">
 
-	<div class="paragraph">#{messages['TbCase.notificationUnit']}</div>
+	<h2>#{messages['TbCase.notificationUnit']}</h2>
 	<s:decorate template="/layout/tbselection.xhtml" >
 		<ui:param name="tbunitselection" value="#{caseEditingHome.tbunitselection}" />
 		<ui:param name="required" value="true" />
@@ -176,18 +166,18 @@
     </div>
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
 
-    <s:decorate template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
-    	<ui:param name="required" value="#{tbcase.validated}" /> 
-    	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
-    </s:decorate>
-
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
     	<h:selectOneMenu value="#{tbcase.diagnosisType}" required="#{tbcase.validated}">
     		<s:selectItems var="it" value="#{diagnosisTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
+    	<ui:param name="required" value="#{tbcase.validated}" /> 
+    	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
@@ -280,18 +270,12 @@ function isPulmonary(cb) {
 <rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
 		
 		</td></tr></table></div>
-	</s:decorate>
-	<p/>
+	</div>
 
 
-
-	<s:decorate template="/layout/roundrect.xhtml" style="clear:both;display:block;">
-		<ui:define name="header">
-			<b>#{messages['cases.prevtreat']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
-		<div><table width="99%" style="border-collapse:collapse;"><tr><td>
+	<div class="form-content">
+	<h2>#{messages['cases.prevtreat']}</h2>
+		<table width="99%" style="border-collapse:collapse;"><tr><td>
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">
 				#{messages['cases.prevtreat.numprev']}:
@@ -304,7 +288,7 @@ function isPulmonary(cb) {
 
 		<h:panelGroup id="prevtreats">
 		<s:fragment rendered="#{prevTBTreatmentHome.numItems>0}">
-		<table width="98%" class="tabela4">
+		<table width="98%" class="table1 small">
 			<tr>
 				<th rowspan="2">#{messages['cases.prevtreat.num']}
 				</th>
@@ -356,10 +340,8 @@ function isPulmonary(cb) {
 		</table>
 		</s:fragment>
 		</h:panelGroup>
-		</td></tr></table></div>
-	</s:decorate>
-
-	<p/>
+		</td></tr></table>
+	</div>
 
 <rich:jQuery selector="#addrChanged" query="change(function(){ showCurrAddress(this); })" />
 <script type="text/javascript">

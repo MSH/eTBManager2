@@ -7,17 +7,18 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
  	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{regimen.id==null? messages['admin.regimens.new']: messages['admin.regimens.edt']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
 
-<ui:define name="body">
-<h:form id="main">
-    <table width="650px">
-    <tr><td>
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+
+    <div class="form-content">
     <s:decorate template="/layout/display.xhtml" rendered="#{regimen.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{regimen.id}" />
@@ -52,7 +53,7 @@
 			ajaxSingle="true" oncomplete="showMedicinesDlg();" reRender="medpnl" />
     </s:decorate>
     <h:panelGroup id="tab1">
-	<h:dataTable value="#{regimen.intensivePhaseMedicines}" var="it" width="100%" rowClasses="lin1,lin2" styleClass="tabela" rendered="#{not empty regimen.intensivePhaseMedicines}" style="margin-bottom:30px;">
+	<h:dataTable value="#{regimen.intensivePhaseMedicines}" var="it" width="100%" rowClasses="lin1,lin2" styleClass="table1" rendered="#{not empty regimen.intensivePhaseMedicines}" style="margin-bottom:30px;">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['Medicine']}" styleClass="collh" />
@@ -126,7 +127,7 @@
 				ajaxSingle="true" oncomplete="showMedicinesDlg();" reRender="medpnl"/>
     </s:decorate>
     <h:panelGroup id="tab2">
-	<h:dataTable value="#{regimen.continuousPhaseMedicines}" var="it" width="100%" rowClasses="lin1,lin2" styleClass="tabela" rendered="#{not empty regimen.continuousPhaseMedicines}" style="margin-bottom:30px;">
+	<h:dataTable value="#{regimen.continuousPhaseMedicines}" var="it" width="100%" rowClasses="lin1,lin2" styleClass="table1" rendered="#{not empty regimen.continuousPhaseMedicines}" style="margin-bottom:30px;">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['Medicine']}" styleClass="collh" />
@@ -177,26 +178,38 @@
 		</h:column>		
 	</h:dataTable>
 	</h:panelGroup>
+</div>
 
-    </td></tr>
-    <tr><td align="right" colspan="2">
-            <a:commandButton action="#{regimenHome.persist}" value="#{messages['form.ok']}" 
+	<div class="form-footer">   
+            <a:commandLink action="#{regimenHome.persist}" 
             	styleClass="button" 
-            	reRender="main,messages"/>  
-            <a:commandButton action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" ajaxSingle="true"/>
-    </td></tr>
-    </table>
+            	reRender="main,messages">
+            	<span>#{messages['form.save']}</span>
+            	</a:commandLink>  
+            <a:commandLink action="cancel" styleClass="button-alt" ajaxSingle="true">
+             <span>#{messages['form.cancel']}</span>
+             </a:commandLink>
+   </div>
 
-	<p/>
+
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 </h:form>
 
-
+   
 <s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
 	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
-   	<a:commandButton action="#{regimenHome.addMedicines}" value="#{messages['form.ok']}" styleClass="button" oncomplete="hideMedicinesDlg();"  reRender="main:tab1" rendered="#{regimenHome.phase=='INTENSIVE'}"/>
-   	<a:commandButton action="#{regimenHome.addMedicines}" value="#{messages['form.ok']}" styleClass="button" oncomplete="hideMedicinesDlg();"  reRender="main:tab2" rendered="#{regimenHome.phase=='CONTINUOUS'}"/>
+   	<a:commandLink action="#{regimenHome.addMedicines}" styleClass="button"
+   		onclick="if (!disableButtons(this)) return false;"  
+   		oncomplete="hideMedicinesDlg();"  reRender="main:tab1" rendered="#{regimenHome.phase=='INTENSIVE'}">
+   		<span>#{messages['form.ok']}</span>
+   	</a:commandLink>
+   	<a:commandLink action="#{regimenHome.addMedicines}" styleClass="button"
+   		onclick="if (!disableButtons(this)) return false;"  
+   		oncomplete="hideMedicinesDlg();"  reRender="main:tab2" rendered="#{regimenHome.phase=='CONTINUOUS'}">
+   	<span>#{messages['form.ok']}</span>
+   	</a:commandLink>
 </s:decorate>
+
 
 </ui:define>
         

@@ -40,4 +40,13 @@ public class TestingTask extends AsyncTaskImpl {
 			e.printStackTrace();
 		}
 	}
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.application.tasks.AsyncTaskImpl#isUnique()
+	 */
+	@Override
+	public boolean isUnique() {
+		return false;
+	}
 }

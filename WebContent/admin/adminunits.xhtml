@@ -7,25 +7,27 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.adminunits']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form id="main">
 <h:panelGroup id="pnltable">
-<s:button view="/admin/edtadminunit.xhtml" value="#{messages['form.newf']}" styleClass="button" rendered="#{(adminUnitHome.auselection.selectedUnit.level!=5)and(s:hasRole('ADMINUNITS_EDT'))}" >
+<s:link view="/admin/edtadminunit.xhtml" styleClass="button" rendered="#{(adminUnitHome.auselection.selectedUnit.level!=5)and(s:hasRole('ADMINUNITS_EDT'))}" >
 	<f:param name="id" value="#{null}" />
 	<f:param name="parentid" value="#{adminUnitHome.parentId}" />
-</s:button>
+	<span>#{messages['form.newf']}</span>
+</s:link>
 <p/>
 
 <h:commandLink action="#{adminUnitHome.updateCode}" value="Update code"  rendered="#{userLogin.user.login=='RICARDO'}"/>
@@ -58,7 +60,7 @@
 <tr><td>
 
 <h:dataTable id="tbl" value="#{adminUnits.resultList}" var="r" border="0" columnClasses="colc,coll#{defaultWorkspace.hasAlternateLocale?',coll':''},coll,colc" 
-	width="100%"  styleClass="tabela" rowClasses="lin1,lin2" rendered="#{not empty adminUnits.resultList}" style="margin-top:4px;">
+	width="100%"  styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty adminUnits.resultList}" style="margin-top:4px;">
   <h:column>
   	<s:link view="/admin/adminunits.xhtml" styleClass="plus-icon" style="margin-left:4px;margin-top:4px;" rendered="#{r.level!=5}"> 
   		<f:param name="parentid" value="#{r.id}"/>

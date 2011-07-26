@@ -8,33 +8,35 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.regs']}" />
 
-<ui:param name="left" value="0" />
 <ui:param name="topmenu" value="0" />
 
 <ui:param name="labelstyle" value="width:180px" />
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 
 <s:decorate template="/layout/casebody.xhtml" rendered="#{caseHome.canEditTreatment}">
 	<a:form id="main">
 	<h:panelGroup id="pnltreatment">
-
 	
-	<div class="link-bar">
-		<a:commandLink value="#{messages['cases.regimens.changeperiod']}..." 
+	<div class="button-bar">
+		<a:commandLink 
 			onclick="showPeriodDlg();"
 			action="#{treatmentHome.startTreatmentPeriodEditing}"
-			reRender="formperiod" />
+			reRender="formperiod" styleClass="button-alt">
+			<span>#{messages['cases.regimens.changeperiod']}...</span>
+		</a:commandLink>
 
-		<a:commandLink value="#{messages['Regimen.add']}..."
+		<a:commandLink
 			onclick="showMedicineDlg();"
 			action="#{treatmentHome.startAddMedicine}"
-			reRender="formmedicine" 
-			/>
+			reRender="formmedicine" styleClass="button-alt"	>
+			<span>#{messages['Regimen.add']}...</span>
+		</a:commandLink>
 	</div>
 	
 	<div style="padding-left:4px;padding-top:10px;padding-bottom:10px;">
@@ -62,12 +64,16 @@
 	</h:panelGroup>
 
 	<div class="button-bar">
-	<a:commandButton action="#{treatmentHome.saveChanges}" value="#{messages['form.save']}" styleClass="button" 
+	<a:commandLink action="#{treatmentHome.saveChanges}" styleClass="button" 
             	reRender="main,messages" 
-            	oncomplete="this.disabled=false;closeWaitDlg();"
-            	onclick="this.disabled=true;openWaitDlg();" />
+            	oncomplete="enableButton();"
+            	onclick="if (!disableButtons(this)) return false;"  >
+		<span>#{messages['form.save']}</span>
+    </a:commandLink>
 
-	<h:commandButton action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" immediate="true"/>
+	<h:commandLink action="cancel" styleClass="button-alt" immediate="true">
+		<span>#{messages['form.cancel']}</span>
+	</h:commandLink>
 	</div>
 
 <script type="text/javascript"><!--
@@ -89,8 +95,9 @@ function showRemoveDlg() {
 	Richfaces.showModalPanel('removedlg'); 
 } 
 function formButtonPost(button) {
-	button.disabled=true;
+	if (!disableButtons(this)) return false;
 	jQuery(button).closest('.button-bar').prepend(waitdiv);
+	return true;
 }
 
 --></script>
@@ -145,14 +152,17 @@ function formButtonPost(button) {
 	</div>
 	
 	<div class="button-bar">	
-	<a:commandButton value="#{messages['form.ok']}" action="#{treatmentHome.endTreatmentPeriodEditing}"
+	<a:commandLink action="#{treatmentHome.endTreatmentPeriodEditing}"
 		data="#{treatmentHome.validated}"
 		styleClass="button" reRender="formperiod"
 		onclick="formButtonPost(this)" 
-		oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('perioddlg'); updateTreatmentTable();"/>
+		oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('perioddlg'); updateTreatmentTable();">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
 
-	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
-		onclick="Richfaces.hideModalPanel('perioddlg'); return false;"/>
+	<a:commandLink styleClass="button-alt" onclick="Richfaces.hideModalPanel('perioddlg'); return false;">
+		<span>#{messages['form.cancel']}</span>
+	</a:commandLink>
 	</div>
 	
 	</h:form>
@@ -184,14 +194,18 @@ function formButtonPost(button) {
 	</div>
 	
 	<div class="button-bar">
-	<a:commandButton value="#{messages['form.remove']}" action="#{treatmentHome.endRemovePeriod}"
+	<a:commandLink action="#{treatmentHome.endRemovePeriod}"
 		data="#{treatmentHome.validated}"
 		styleClass="button" reRender="formremove"
 		onclick="formButtonPost(this)" 
-		oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('removedlg');updateTreatmentTable();"/>
+		oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('removedlg');updateTreatmentTable();">
+		<span>#{messages['form.remove']}</span>
+	</a:commandLink>
 
-	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
-		onclick="Richfaces.hideModalPanel('removedlg'); return false;"/>
+	<a:commandLink styleClass="button-alt"  
+		onclick="Richfaces.hideModalPanel('removedlg'); return false;">
+		<span>#{messages['form.cancel']}</span>
+	</a:commandLink>
 	</div>
 	</h:form>
 </rich:modalPanel>
@@ -264,16 +278,20 @@ function formButtonPost(button) {
 	</div>
 		
 	<div class="button-bar">
-	<a:commandButton value="#{messages['form.ok']}" 
+	<a:commandLink 
 		action="#{treatmentHome.endMedicineEditing}"
 		data="#{treatmentHome.validated}"
 		styleClass="button"
 		onclick="formButtonPost(this)" 
 		reRender="formmedicine" 
-		oncomplete="this.disabled=false;if (!data) return false;Richfaces.hideModalPanel('medicinedlg');updateTreatmentTable();"/>
+		oncomplete="this.disabled=false;if (!data) return false;Richfaces.hideModalPanel('medicinedlg');updateTreatmentTable();">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
 		
-	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
-		onclick="Richfaces.hideModalPanel('medicinedlg'); return false;"/>
+	<a:commandLink styleClass="button-alt"  
+		onclick="Richfaces.hideModalPanel('medicinedlg'); return false;">
+		<span>#{messages['form.cancel']}</span>
+	</a:commandLink>
 	</div>
 	</h:form>
 </rich:modalPanel>
@@ -311,7 +329,7 @@ function formButtonPost(button) {
 
 		<h:panelGroup id="meds">
 		<h:outputText value="#{messages['edtrec.nomedicine']}" rendered="#{empty p.medicines}" styleClass="warn"/>
-		<h:dataTable value="#{p.medicines}" var="m" width="100%" styleClass="tabela" columnClasses="coll,colc,colc,colc"  
+		<h:dataTable value="#{p.medicines}" var="m" width="100%" styleClass="table1" columnClasses="coll,colc,colc,colc"  
 		   rowClasses="lin1,lin2" style="clear:left;" rendered="#{not empty p.medicines}">
 		<h:column>
 			<f:facet name="header">#{messages['Medicine']}</f:facet>
@@ -337,13 +355,17 @@ function formButtonPost(button) {
 	</div>
 	
 	<div class="button-bar">
-	<a:commandButton value="#{messages['form.ok']}" action="#{treatmentHome.endRegimenChange}"
+	<a:commandLink action="#{treatmentHome.endRegimenChange}"
 		data="#{treatmentHome.validated}"
 		styleClass="button" reRender="regimenpnl,main"
-		oncomplete="if (!data) return false; Richfaces.hideModalPanel('regimendlg');"/>
+		oncomplete="if (!data) return false; Richfaces.hideModalPanel('regimendlg');">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
 
-	<a:commandButton value="#{messages['form.cancel']}" styleClass="button-cancel"  
-		onclick="Richfaces.hideModalPanel('regimendlg'); return false;"/>
+	<a:commandLink styleClass="button-alt"  
+		onclick="Richfaces.hideModalPanel('regimendlg'); return false;">
+		<span>#{messages['form.cancel']}</span>
+	</a:commandLink>
 	</div>
 	</h:form>
 </rich:modalPanel>

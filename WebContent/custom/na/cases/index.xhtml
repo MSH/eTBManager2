@@ -8,7 +8,7 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases']}" />
 <ui:param name="topmenu" value="0" />
@@ -17,7 +17,7 @@
 <ui:define name="left">
 	<h:form>
 	<div >
-	<div class="menubv">
+	<div class="vertical-menu">
 	<h:commandLink value="#{messages['cases.newnotif']}" onclick="showModalAutoTop('selclassificationdlg');return false;" 
 		rendered="#{userSession.canNotifySeveralClassifs}"/>
 
@@ -98,7 +98,7 @@
 	</h:form>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form>
 <div >
 <s:decorate template="/layout/roundrect.xhtml" style="width:100%">
@@ -113,9 +113,9 @@
 	<h:outputText value="#{messages['Patient']}:" style="margin-right:20px;margin-left:4px;font-weight:bold;"/>
 	
 	<h:inputText id="patname" value="#{caseFilters.patient}" style="width:150px" />
-	<a:commandButton id="btnsearchpat" value="#{messages['form.search']}" action="search" styleClass="button" >
+	<a:commandLink id="btnsearchpat" value="#{messages['form.search']}" action="search" styleClass="button" >
 		<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
-	</a:commandButton>
+	</a:commandLink>
 	<rich:jQuery timming="onload" selector="#patname" query="focus()" />
 	<rich:hotKey selector="#patname" key="return" handler="#{rich:element('btnsearchpat')}.click();" /> 
 
@@ -158,14 +158,14 @@
 	#{messages['cases.newnotif.title']}
 	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
 	<c:forEach items="#{globalLists.caseClassifications}" var="it">
-		<tr><td class="menubv">
+		<tr><td class="vertical-menu">
 			<s:link value="#{messages[it.key]}" view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
 				<f:param name="classif" value="#{it}"/>
 			</s:link>
 		</td></tr>
 	</c:forEach>
 	</table>
-	<s:button value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" styleClass="button-cancel" />
+	<s:link value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" styleClass="button-alt" />
 	</a:form>
 </rich:modalPanel>
 </s:fragment>
@@ -189,10 +189,10 @@
 	</td>
 
 	<td align="right">
-		<a:commandButton id="btnsearch" value="#{messages['form.search']}" action="search"	styleClass="button" >
+		<a:commandLink id="btnsearch" value="#{messages['form.search']}" action="search"	styleClass="button" >
 			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
-		</a:commandButton>
-		<s:button value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-cancel"/>
+		</a:commandLink>
+		<s:link value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-alt"/>
 	</td></tr></table>	
 	</a:region>
 	<rich:hotKey selector="#tblfilters input,select" key="return" handler="#{rich:element('btnsearch')}.click();" /> 

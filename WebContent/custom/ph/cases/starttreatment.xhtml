@@ -8,7 +8,7 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.regs']}" />
 
@@ -17,12 +17,13 @@
 
 <ui:param name="labelstyle" value="width:140px" />
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 
 <s:decorate template="/layout/casebody.xhtml">
 
-	<a:form id="formtreat">
-	<table width="100%" style="border-collapse:collapse;"><tr><td>
+	<a:form id="formtreat" styleClass="form1">
+	<div class="form-content">
 	
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
@@ -73,7 +74,7 @@
 
 		<h:panelGroup id="meds">
 		<h:outputText value="#{messages['edtrec.nomedicine']}" rendered="#{empty p.medicines}" styleClass="warn"/>
-		<h:dataTable value="#{p.medicines}" var="m" width="100%" styleClass="tabela" columnClasses="coll,colc,colc,colc"  
+		<h:dataTable value="#{p.medicines}" var="m" width="100%" styleClass="table1" columnClasses="coll,colc,colc,colc"  
 		   rowClasses="lin1,lin2" style="clear:left;" rendered="#{not empty p.medicines}">
 		<h:column>
 			<f:facet name="header">#{messages['Medicine']}</f:facet>
@@ -113,18 +114,22 @@
 	</s:fragment>
 	</h:panelGroup>
 
-    </td></tr>
-    <tr><td align="right">
-    
-		<a:commandButton action="#{startTreatmentHome.startStandardRegimen}" value="#{messages['form.ok']}" styleClass="button" 
+	</div>
+
+
+	<div class="form-footer">    
+		<a:commandLink action="#{startTreatmentHome.startStandardRegimen}" styleClass="button" 
 				reRender="formtreat,messages" 
             	oncomplete="this.disabled=false;"
-            	onclick="this.disabled=true;" />
+            	onclick="this.disabled=true;" >
+            <span>#{messages['form.ok']}</span>
+        </a:commandLink>
            
-		<s:button view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end">
+		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
 			<f:param name="id" value="#{caseHome.id}"/>
-		</s:button>
-	</td></tr></table>
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
 
 	</a:form>
 </s:decorate>

@@ -21,7 +21,7 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 
 <s:decorate template="/layout/display.xhtml" rendered="#{reportSelection.source != null}">
 	<ui:define name="label">#{messages['Source']}:</ui:define>
@@ -32,7 +32,7 @@
 	<ui:param name="adminunit" value="#{reportSelection.auselection.selectedUnit}" />
 </s:decorate>
 
-<table class="tabela" style="margin-top:20px;" width="100%">
+<table class="table1" style="margin-top:20px;" width="100%">
 	<tr>
 	<th width="200px">
 		#{levelInfo.nameLevel1} / #{messages['Tbunit']}

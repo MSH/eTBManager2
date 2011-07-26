@@ -6,7 +6,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 
 <ui:param name="title" value="#{messages['cases.details']} - #{messages[tbcase.classification.key]}" />
@@ -20,7 +20,7 @@
 </ui:define>
 
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<h:panelGroup id="leftmenu">
 	<h:form>
 
@@ -101,13 +101,13 @@
 	</s:decorate>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <p/>
 <h:form id="main">
 <s:decorate template="/layout/casebody.xhtml">
 
 	<ui:define name="state-content">
-		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="hu-icon" 
+		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="icon-hu-big" 
 			style="margin-top:6px;font-size:11px;max-width:320px;height:70px" >
 			<b style="padding-right:4px;">#{messages['medicines.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
 			<br/>

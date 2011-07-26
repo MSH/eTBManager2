@@ -266,7 +266,7 @@ public class CaseHome extends WsEntityHome<TbCase>{
 	}
 	
 	public boolean isCanTagCase() {
-		return Identity.instance().hasRole("CASE_TAG") && isWorkingUnit();
+		return checkRoleBySuffix("CASE_TAG") && isWorkingUnit();
 	}
 	
 	@Override

@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.examdst']}" />
 <ui:param name="waitdlg" value="1" />
@@ -16,14 +16,13 @@
 <ui:param name="examHome" value="#{examDSTHome}" />
 
 
-<ui:define name="body">
-<p/>
+<ui:define name="content">
+<h1>#{title}</h1>
 <s:decorate template="/layout/casebody.xhtml">
 	<ui:param name="pagewidth" value="650px" />
-	<a:form id="formexam" >
-    <table width="100%">
-    <tr><td>
-
+	<a:form id="formexam" styleClass="form1">
+    
+    <div class="form-content">
 	<s:decorate template="/custom/ph/cases/edtsample.xhtml">
 	</s:decorate>
 
@@ -50,7 +49,7 @@
 
 	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
 
-	<h:dataTable value="#{examDSTHome.items}" var="it" style="clear:left;" styleClass="tabela" width="100%" columnClasses="coll,coll" rowClasses="lin1,lin2">
+	<h:dataTable value="#{examDSTHome.items}" var="it" style="clear:left;" styleClass="table1" width="100%" columnClasses="coll,coll" rowClasses="lin1,lin2">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['Medicine']}" styleClass="collh"/>
@@ -92,18 +91,21 @@ function dstResultChange(cb) {
 </script>
 <rich:jQuery selector="#divicon select" query="each(function(){dstResultChange(this);})" />
 
-	</td></tr>
-    <tr><td align="right">
- 		<div style="float:left;">
+	</div>
+	
+	<div class="form-footer">
+ 		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandButton action="#{examDSTHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam" 
+        <a:commandLink action="#{examDSTHome.persist}" styleClass="button" reRender="formexam" 
             	oncomplete="this.disabled=false;"
-            	onclick="this.disabled=true;" />
-            <a:commandButton action="canceled" value="#{messages['form.cancel']}" styleClass="button-cancel" ajaxSingle="true"/>
-    </td></tr>
-    
-    </table>
+            	onclick="this.disabled=true;" >
+            	<span>#{messages['form.save']}</span>
+        </a:commandLink>
+        <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true">
+        	<span>#{messages['form.cancel']}</span>
+        </a:commandLink>
+    </div>
     
 	</a:form>
 </s:decorate>

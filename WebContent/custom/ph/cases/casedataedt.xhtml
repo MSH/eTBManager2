@@ -9,13 +9,8 @@
 
 	<ui:param name="labelstyle" value="width:130px;" />
 
-	<s:decorate template="/layout/roundrect.xhtml" >
-		<ui:define name="header">
-			<b>#{messages['cases.patientdata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
-	<div>
+	<div class="form-content">
+	<h2>#{messages['cases.patientdata']}</h2>
 	<table width="100%" style="border-collapse:collapse;">
 	<tr><td colspan="2">
 	<s:decorate template="/layout/editname.xhtml">
@@ -49,7 +44,7 @@
 	</td></tr>
     
     <tr><td colspan="2">
-    	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
+    	<h2>#{messages['cases.details.addressnotif']}</h2>
     </td></tr>
     
     <tr><td colspan="2">
@@ -85,7 +80,7 @@
     	</s:decorate>
     	
     	<div id="curraddr" style="clear:both;">
-    	<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
+    	<h2>#{messages['cases.details.addresscurr']}</h2>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.address']}:</ui:define>
     		<h:inputText value="#{tbcase.currentAddress.address}" style="width:300px;margin-bottom:2px;" maxlength="100"/><br/>
@@ -121,7 +116,7 @@
     	</td></tr>
 
     <tr><td colspan="2">
-		<div class="paragraph">In case of emergency</div>
+		<h2>In case of emergency</h2>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['en_PH.casedata.personToNotify']}:</ui:define>
     		<h:inputText value="#{caseDataPH.personToNotify}" maxlength="100" style="width:300px" />
@@ -140,22 +135,14 @@
     </table>
     </div>
     
-	</s:decorate>
-	<p/>
 
-	<s:decorate template="/layout/roundrect.xhtml">
-		<ui:define name="header">
-			<b>#{messages['cases.generaldata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
-		<div><table width="99%" style="border-collapse:collapse;">
-		
+	<div class="form-content">
+	<h2>#{messages['cases.generaldata']}</h2>
+	<table width="100%" style="border-collapse:collapse;">
 	<tr><td colspan="2">
 
 
-	<div class="paragraph">#{messages['TbCase.notificationUnit']}
-	</div>
+	<h2>#{messages['TbCase.notificationUnit']}</h2>
 	<s:decorate template="/layout/tbselection.xhtml" style="margin-bottom:10px;">
 		<ui:param name="required" value="true" />
 		<ui:param name="tbunitselection" value="#{caseEditingHome.tbunitselection}" />
@@ -322,9 +309,7 @@ function isPulmonary(cb) {
 
 
 	<p/>
-	<div class="paragraph">
-		Symptoms
-	</div>
+	<h2>Symptoms</h2>
 	<h:dataTable value="#{caseDataPHHome.caseSymptoms}" var="it" columnClasses="col,colr"
 		rowClasses="lin1,lin2" style="clear:left;border-collapse:collapse;margin-bottom:10px;">
 		<h:column>
@@ -337,17 +322,13 @@ function isPulmonary(cb) {
 		</h:column>
 	</h:dataTable>
 
-		</td></tr></table></div>
-	</s:decorate>
-	<p/>
+		</td></tr></table>
+	</div>
 
-	<s:decorate template="/layout/roundrect.xhtml" style="clear:both;display:block;">
-		<ui:define name="header">
-			<b>#{messages['cases.prevtreat']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+	<div class="form-content">
+		<h2>#{messages['cases.prevtreat']}</h2>
 
-		<div><table width="99%" style="border-collapse:collapse;"><tr><td>
+		<table width="100%" style="border-collapse:collapse;"><tr><td>
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">
 				#{messages['cases.prevtreat.numprev']}:
@@ -409,16 +390,13 @@ function isPulmonary(cb) {
 		</table>
 		</s:fragment>
 		</h:panelGroup>
-		</td></tr></table></div>
-	</s:decorate>
+		</td></tr></table>
+	</div>
 
-	<s:decorate template="/layout/roundrect.xhtml" style="clear:both;display:block;padding-top:10px">
-		<ui:define name="header">
-			<b>#{messages['global.comments']}</b>
-		</ui:define>
+	<div class="form-content">
+	<h2>#{messages['global.comments']}</h2>
 		<h:inputTextarea value="#{tbcase.comments}" style="width:99%;height:100px;"/>
-	</s:decorate>
-	<p/>
+	</div>
 
 <rich:jQuery selector="#addrChanged" query="change(function(){ showCurrAddress(this); })" />
 <script type="text/javascript">

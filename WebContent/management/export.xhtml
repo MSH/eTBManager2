@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['manag.export']}" />
 
@@ -22,25 +22,20 @@
 </ui:define>
 
 
-<ui:define name="body">
-<p/>
-<h:form id="main">
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+
+<div class="form-content">
 <table width="100%"><tr><td>
-<s:decorate template="/layout/roundrect.xhtml" >
-	<ui:define name="header">
-		<b>#{messages['global.filters']}</b>
-	</ui:define>
-	<ui:param name="showfooter" value="0" />
+		<h2>#{messages['global.filters']}</h2>
 	<s:decorate template="filters.xhtml">
 		<ui:param name="hideupdtbar" value="true" />
 	</s:decorate>
-</s:decorate>
-<p/>
-<s:decorate template="/layout/roundrect.xhtml" >
-	<ui:define name="header">
-		<b>#{messages['manag.export.format']}</b>
-	</ui:define>
-	<ui:param name="showfooter" value="0" />
+
+<div class="spacer" />
+
+	<h2>#{messages['manag.export.format']}</h2>
 
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['DestinationFormat']}:</ui:define>
@@ -53,12 +48,15 @@
 			<s:selectItems value="#{caseExportHome.contents}" var="it" label="#{messages[it.key]}" />
 		</h:selectOneRadio>
 	</s:decorate>
-	<div class="button-bar">
-	<h:commandButton action="#{caseExportHome.download}" value="#{messages['global.export']}" styleClass="button" />
-	</div>
-</s:decorate>
 
 </td></tr></table>
+</div>
+
+<div class="form-footer">
+	<h:commandLink action="#{caseExportHome.download}" styleClass="button" >
+		<span>#{messages['global.export']}</span>
+	</h:commandLink>
+</div>
 </h:form>
 
 </ui:define>

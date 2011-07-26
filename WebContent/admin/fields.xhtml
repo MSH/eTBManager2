@@ -7,17 +7,17 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.fields']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
 <b style="margin-right:20px;">#{messages['TbField']}:</b>
 <h:selectOneMenu value="#{fieldsQuery.field}">
@@ -26,10 +26,11 @@
 	<a:support event="onchange" reRender="main,messages" />
 </h:selectOneMenu>
 <p/>
-<s:button view="/admin/edtfield.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{fieldsQuery.field != null}">
+<s:link view="/admin/edtfield.xhtml" styleClass="button" rendered="#{fieldsQuery.field != null}">
 	<f:param name="id" value="#{null}" />
 	<f:param name="fld" value="#{fieldsQuery.field}" />
-</s:button>
+	<span>#{messages['form.newf']}</span>
+</s:link>
 <p/>
 
 <s:fragment rendered="#{not empty fieldsQuery.values}">
@@ -39,7 +40,7 @@
 
 <h:panelGroup id="tblpanel">
 <h:dataTable id="tbl" value="#{fieldsQuery.values}" var="r" columnClasses="coll,coll,colc,colc,colc" width="100%"
-  styleClass="tabela" rowClasses="lin1,lin2" rendered="#{not empty fieldsQuery.values}">
+  styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty fieldsQuery.values}">
   <h:column>
   	<f:facet name="header">
   		<s:link value="#{messages['form.name']}" styleClass="collh">

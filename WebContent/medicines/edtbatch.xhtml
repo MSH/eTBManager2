@@ -34,7 +34,7 @@ else return false;
 	<a:form id="formbatch">
     <table width="100%" style="border-collapse:collapse;">
     <tr><td colspan="2">
-	<div id="tblsel" style="overflow: auto; width: 505px; height: 270px;border: 1px gray solid; padding:0px; margin: 0px;background-color:#f2f2f2;">	
+	<div id="tblsel" style="overflow: auto; width: 505px; border: 1px gray solid; padding:0px; margin: 0px;background-color:#f2f2f2;">	
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['Medicine']}:</ui:define>
     	<h:outputText value="#{medicineReceivingHome.item.movement.medicine}" />
@@ -107,11 +107,15 @@ else return false;
     		<ui:include src="/layout/waitstatus.xhtml" />
     	</td>
     	<td align="right">
-            <a:commandButton action="#{medicineReceivingHome.addBatch}" value="#{messages['form.ok']}" styleClass="button" 
+            <a:commandLink action="#{medicineReceivingHome.addBatch}" styleClass="button" 
             	reRender="batchpnl,medicines"
-            	onclick="this.disabled=true;" 
-            	oncomplete="this.disabled=false;if (!batchValidationErrors()) hideBatchDlg();"/>
-			<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" onclick="hideBatchDlg(); return false;"/>
+            	onclick="if (!disableButtons(this)) return false;" 
+            	oncomplete="enableButton();if (!batchValidationErrors()) hideBatchDlg();" >
+            	<span>#{messages['form.ok']}</span>
+            </a:commandLink>
+			<s:link styleClass="button-alt" onclick="hideBatchDlg(); return false;">
+				<span>#{messages['form.cancel']}</span>
+			</s:link>
     </td></tr>
     
     </table>

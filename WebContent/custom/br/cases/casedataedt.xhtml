@@ -7,13 +7,8 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<s:decorate template="/layout/roundrect.xhtml" style="width:100%;">
-		<ui:define name="header">
-			<b style="text-transform:uppercase;">#{messages['cases.patientdata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
-	<div>
+	<div class="form-content">
+		<h2>#{messages['cases.patientdata']}</h2>
 	<table width="99%" style="border-collapse:collapse;">
 	<tr><td colspan="2">
 	<s:decorate template="/layout/editname.xhtml">
@@ -90,7 +85,7 @@
 
     
     <tr><td colspan="2">
-    	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
+    	<h2>#{messages['cases.details.addressnotif']}</h2>
     </td></tr>
     
     <tr><td colspan="2">
@@ -200,19 +195,12 @@
 
     </table>
     </div>
-    
-	</s:decorate>
-	<p/>
 
 
 
-	<s:decorate template="/layout/roundrect.xhtml" style="width:100%">
-		<ui:define name="header">
-			<b style="text-transform:uppercase;">#{messages['cases.generaldata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
-	<div><table width="800px" style="border-collapse:collapse;">
+	<div class="form-content">
+		<h2>#{messages['cases.generaldata']}</h2>
+	<table width="800px" style="border-collapse:collapse;">
 	<tr><td style="padding-bottom:10px;" colspan="2">
 
 	<div class="paragraph">#{messages['pt_BR.usOrigem']}</div>
@@ -415,21 +403,16 @@ function genderChange(cb) {
 			</s:decorate>
 		</td></tr>
 		</s:fragment>
-		</table></div>
-	</s:decorate>
-	<p/>
+		</table>
+	</div>
 
 
 	<ui:insert name="treatment" />
 	<ui:insert name="exams" />
 
-	<s:decorate template="/layout/roundrect.xhtml" style="clear:both;display:block;">
-		<ui:define name="header">
-			<b style="text-transform:uppercase;">#{messages['cases.prevtreat']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
-		<div><table width="99%" style="border-collapse:collapse;"><tr><td>
+	<div class="form-content">
+		<h2>#{messages['cases.prevtreat']}</h2>
+		<table width="99%" style="border-collapse:collapse;"><tr><td>
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">
 				#{messages['cases.prevtreat.numprev']}:
@@ -442,7 +425,7 @@ function genderChange(cb) {
 
 		<h:panelGroup id="prevtreats">
 		<s:fragment rendered="#{prevTBTreatmentHome.numItems>0}">
-		<table width="98%" class="tabela4">
+		<table width="100%" class="table1">
 			<tr>
 				<th rowspan="2">#{messages['cases.prevtreat.num']}
 				</th>
@@ -504,19 +487,13 @@ function genderChange(cb) {
     	</h:selectOneMenu>
     	</s:decorate>
 
-		</td></tr></table></div>
-	</s:decorate>
-
-	<p/>
+		</td></tr></table>
+	</div>
 
 
-	<s:decorate template="/layout/roundrect.xhtml">
-		<ui:define name="header">
-			<b style="text-transform:uppercase;">#{messages['cases.details.otherinfo']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
-	<div><table width="99%" style="border-collapse:collapse;">
+	<div class="form-content">
+		<h2>#{messages['cases.details.otherinfo']}</h2>
+	<table width="99%" style="border-collapse:collapse;">
 	<tr><td style="padding-bottom:10px;">
 
     <s:decorate template="/layout/editfield.xhtml" >
@@ -562,8 +539,7 @@ function genderChange(cb) {
     </div>
     
     <s:fragment rendered="#{!caseHome.managed}">
-    <div class="paragraph">#{messages['cases.comorbidities']}
-    </div>
+    <h2>#{messages['cases.comorbidities']}</h2>
     	<rich:dataGrid  value="#{comorbidityHome.comorbidities}" var="it" width="100%" columns="2">
 				<h:selectBooleanCheckbox value="#{it.selected}" />
 				#{it.item.comorbidity.name}
@@ -574,7 +550,5 @@ function genderChange(cb) {
 </tr>
 </table>
 </div>
-</s:decorate>
-<p/>
 		
 </ui:composition>

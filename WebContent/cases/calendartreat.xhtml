@@ -8,13 +8,15 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<table width="100%" class="tabela4" style="font-size:9px">
+	<table class="table1 small">
 		<tr><th>
-				#{messages['global.month']}/#{messages['global.year']}
+				<span class="small-text">#{messages['global.month']}/#{messages['global.year']}</span>
 			</th>
 			<ui:repeat value="#{treatmentCalendarHome.days}" var="d">
-			<th width="20px">
+			<th>
+				<div style="width:16px">
 				#{d}
+				</div>
 			</th>
 			</ui:repeat>
 			<th>
@@ -42,8 +44,9 @@
 				</s:link>
 			</td>
 			<ui:repeat value="#{it.days}" var="d">
-			<td class="colcb" style="#{d.notused?'background-color:#f0f0f0;': (d.treated? 'background-color:#E6E8D8;border:2px solid #C6C8B8;':'background-color:transparent;')}">
-				<h:outputText value="x" rendered="#{d.prescribed}" style="color:#d0d0d0;"/>
+			<td class="colcb #{d.notused?'inactive': (d.treated? 'highlight': '')}" > 
+				<h:outputText value="x" rendered="#{d.prescribed and not d.treated}" style="color:#d0d0d0;"/>
+				<s:div styleClass="icon-bullet" rendered="#{d.treated}" style="width:15px;"/>
 			</td>
 			</ui:repeat>
 			<td>

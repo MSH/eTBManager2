@@ -6,145 +6,100 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-                template="#{workspaceViewService.templatePage}">
+                template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['mdrtbsys']}" />
+<ui:param name="title" value="#{messages['mdrtbsys']}" />
 
-<ui:define name="left">
-	<td valign="top" width="150px">
-	
-	<table width="100%" class="tabela">
-	<tr><th>#{messages['form.information']}</th></tr>
-	<tr><td>
-		<b>#{messages['User.name']}:</b>
-		<br/>
-		#{userLogin.user.name}
-		<p/>
-		
-		<b>#{messages['Tbunit']}:</b>
-		<br/>
-		#{userLogin.user.defaultWorkspace.tbunit.name}
-		<p/>
-		
-		<br/>
-		<b>#{messages['UserProfile']}:</b>
-		#{userLogin.user.defaultWorkspace.profile.name}
-		<p/>
-		
-		<br/>
-		<b>#{messages['UserView']}:</b>
-		<br/>
-		#{messages[userLogin.user.defaultWorkspace.view.key]}
-		<p/>
-		
-		<b>#{messages['global.localtime']}:</b>
-		<br/>
-		<h:outputText value="#{timezones.date}">
-			<s:convertDateTime pattern="dd-MMM-yyyy HH:mm:ss"/>
-		</h:outputText>
-		<p/>
-		
-		<b>#{messages['User.language']}:</b>
-		<br/>
-		#{userLogin.displayLocale}
-		<p/>
-		
-		<b>#{messages['User.timeZone']}:</b>
-		<br/>
-		#{timeZone.displayName}
-		<p/>
-	</td></tr>
-	</table>
-	</td>	
+<ui:define name="naveg">
+	<div class="item selected">
+		<s:link value="#{messages['home']}" view="/home.xhtml" />
+	</div>
 </ui:define>
 
-<ui:define name="body">
-    
-    <p/>
+<ui:define name="left">
+	<h2>#{messages['form.information']}</h2>
 
+	<div class="content">
+		<div class="prop2">
+			<div class="name2">#{messages['User.name']}:</div>
+			#{userLogin.user.name}
+		</div>
 
+		<div class="prop2">
+			<div class="name2">#{messages['Tbunit']}:</div>
+			#{userLogin.user.defaultWorkspace.tbunit.name}
+		</div>		
 
-	<table width="600px" cellpadding="6">
-	<tr><td>
-	    
-    <div style="width:300px;display:block;">
-    
-	<s:decorate template="/layout/rounded.xhtml">
-		<ui:param name="color" value="#22A834" />
-		<ui:param name="bgcolor" value="#fff" />
-		<div style="padding:5px; position:relative; height:100px;" >
-			<s:fragment rendered="#{s:hasRole('CASEMAN')}">
-    		<s:link view="/cases/index.xhtml" style="color:white;font-size:12px;">
-    		 <div class="mod-cases-icon">
-    		 <b>#{messages['cases']}</b><br/>
-   			 <span style="font-weight:normal;color:#ABE4B2;padding-top:6px;display:block;"> #{messages['cases.desc']}</span>
-   			 </div>
-    		</s:link>
-    		</s:fragment>
-    	</div>
-	</s:decorate>
+		<div class="prop2">
+			<div class="name2">#{messages['UserProfile']}:</div>
+			#{userLogin.user.defaultWorkspace.profile.name}
+		</div>
+
+		<div class="prop2">
+			<div class="name2">#{messages['UserView']}:</div>
+			#{messages[userLogin.user.defaultWorkspace.view.key]}
+		</div>
 	</div>
+	
+</ui:define>
 
+<ui:define name="content">
+	<h1>#{title}</h1>
+
+	<table cellpadding="6" width="100%">
+	<tr><td width="48%">
+
+	<div class="region2">
+		<div class="header">
+    		<s:link view="/cases/index.xhtml" rendered="#{s:hasRole('CASEMAN')}">
+    		 <h2>#{messages['cases']}</h2>
+    		</s:link>
+		</div>
+		<div class="content" style="height:100px;">
+   			 #{messages['cases.desc']}
+		</div>
+	</div>
+	
 	</td><td>
 
-    <div style="width:300px;display:block;">
-	<s:decorate template="/layout/rounded.xhtml">
-		<ui:param name="color" value="#B3DCB3" />
-		<ui:param name="bgcolor" value="#fff" />
-		<div style="padding:5px; position:relative; height:100px;">
-			<s:fragment rendered="#{s:hasRole('MEDMAN')}">
-    		<s:link view="/medicines/index.xhtml" style="color:black;font-size:12px;">
-    		<div class="mod-medicines-icon">
-    		 	<b>#{messages['medicines']}</b><br/>
-   			 	<span style="font-weight:normal;color:green;padding-top:6px;display:block;"> #{messages['medicines.desc']}</span>
-   			</div>
+	<div class="region2">
+		<div class="header">
+    		<s:link view="/medicines/index.xhtml" rendered="#{s:hasRole('MEDMAN')}">
+    		 <h2>#{messages['medicines']}</h2>
     		</s:link>
-    		</s:fragment>
-    	</div>
-	</s:decorate>
-
-    </div>
+		</div>
+		<div class="content" style="height:100px;">
+   			 #{messages['medicines.desc']}
+		</div>
+	</div>
     
     </td></tr>
     <tr><td>
-
-    <div style="width:300px;display:block;">
-	<s:decorate template="/layout/rounded.xhtml">
-		<ui:param name="color" value="#B3DCB3" />
-		<ui:param name="bgcolor" value="#fff" />
-		<div style="padding:5px; position:relative; height:100px;">
-			<s:fragment rendered="#{s:hasRole('MANAGEMENT')}">
-    		<s:link view="/management/index.xhtml" style="color:black;font-size:12px;">
-    			<div class="mod-manag-icon">
-    				<b>#{messages['manag']}</b><br/>
-    				<span style="font-weight:normal;color:green;padding-top:6px;display:block;"> #{messages['manag.desc']}</span>
-    			</div>
-    		</s:link>
-    		</s:fragment>
+    
+    	<div class="region2">
+    		<div class="header">
+    			<s:link view="/medicines/index.xhtml" rendered="#{s:hasRole('MANAGEMENT')}">
+    		 		<h2>#{messages['manag']}</h2>
+	    		</s:link>
+    		</div>
+    		<div class="content" style="height:100px;">
+   			 	#{messages['manag.desc']}
+    		</div>
     	</div>
-	</s:decorate>
-    </div>
 
 	</td><td>
-
-    <div style="width:300px;display:block;">
-	<s:decorate template="/layout/rounded.xhtml">
-		<ui:param name="color" value="#22A834" />
-		<ui:param name="bgcolor" value="#fff" />
-		<div style="padding:5px; position:relative; height:100px;">
-			<s:fragment rendered="#{s:hasRole('ADMIN')}">
-    		<s:link view="/admin/index.xhtml" style="color:white;font-size:12px;">
-    			<div class="mod-admin-icon">
-    		 		<b>#{messages['admin']}</b><br/>
-   			 		<span style="font-weight:normal;color:#ABE4B2;padding-top:6px;display:block;"> #{messages['admin.desc']}</span>
-   			 	</div>
-    		</s:link>
-    		</s:fragment>
-    	</div>
-	</s:decorate>
-
-    </div>
     
+    	<div class="region2">
+    		<div class="header">
+    			<s:link view="/medicines/index.xhtml" rendered="#{s:hasRole('ADMIN')}">
+    		 		<h2>#{messages['admin']}</h2>
+	    		</s:link>
+    		</div>
+    		<div class="content" style="height:100px;">
+   			 	#{messages['admin.desc']}
+    		</div>
+    	</div>
+
     </td></tr>
     </table>
     

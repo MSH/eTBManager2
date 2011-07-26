@@ -7,7 +7,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      template="#{workspaceViewService.templatePage}"
+      template="/layout/template_new.xhtml"
                 >
         
 <ui:param name="title" value="#{messages['Workspace']}: #{messages['admin.workspaces.addremuser']}" />
@@ -20,7 +20,7 @@
 	<td></td>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main" prependId="true">
 	<table class="tab1" style="background-color:#F7F5EF;" cellspacing="10">
 	<tr><td colspan="3" class="header2"><h1>#{workspace.name}</h1>
@@ -29,7 +29,7 @@
 		<b style="padding-left:10px;padding-bottom:5px;">#{messages['admin.workspaces.users']}</b>
 		<div style="padding:10px">
 
-		<h:dataTable value="#{workspace.users}" var="it" width="100%" styleClass="tabela">
+		<h:dataTable value="#{workspace.users}" var="it" width="100%" styleClass="table1">
 			<h:column>
 				<f:facet name="header">#{messages['User.name']}</f:facet>
 				#{it.user.login} - #{it.user.name}
@@ -102,15 +102,17 @@ function processSelectedUser(suggestion) {
         	</h:selectOneMenu>  
 	    </s:decorate>
 		
-		<a:commandButton action="#{workspaceHome.addUser}" value="#{messages['form.add']}" styleClass="button" 
-			reRender="main" />
+		<a:commandLink action="#{workspaceHome.addUser}" styleClass="button" 
+			onclick="if (!disableButtons(this)) return false;" reRender="main" >
+			<span>#{messages['form.add']}</span>
+		</a:commandLink>
 		
 		</div>
 
 	</td></tr>
 	<tr><td align="right" colspan="3">
-		<h:commandButton action="#{workspaceHome.saveUsers}" value="#{messages['form.ok']}" styleClass="button" immediate="true" />
-		<h:commandButton action="cancel" value="#{messages['form.cancel']}" styleClass="button-cancel" immediate="true" />
+		<h:commandLink action="#{workspaceHome.saveUsers}" value="#{messages['form.ok']}" styleClass="button" immediate="true" />
+		<h:commandLink action="cancel" value="#{messages['form.cancel']}" styleClass="button-alt" immediate="true" />
 	</td></tr></table>
 </h:form>
 </ui:define>

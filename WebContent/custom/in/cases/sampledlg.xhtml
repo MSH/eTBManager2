@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+
+
+<rich:modalPanel id="samplesdlg" autosized="true" width="300" zindex="2000">
+	<a:form id="formsamples">
+
+	<div id="tblsel" style="overflow: auto; width: 280px; height:150px;border: 1px #d0d0d0 solid; padding:0px; margin: 0px;">	
+	<table id="tblstatus" width="279px" class="table1" cellpadding="4">
+		<tr><th>#{messages['PatientSample.dateCollected']}
+			</th>
+			<th>#{messages['PatientSample.sampleNumber']}
+		</th></tr>
+	<ui:repeat value="#{examHome.patientSamples}" var="it">
+		<tr><td>
+			<div id="dt"><h:outputText value="#{it.dateCollected}">
+    			<f:convertDateTime pattern="#{messages['locale.datePattern']}"/>
+    		</h:outputText></div>
+		</td><td>
+			<div id="num">#{it.sampleNumber}</div>
+		</td></tr>
+	</ui:repeat>
+	</table>
+	</div>
+	<s:link value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('samplesdlg');return false;" styleClass="button-alt" />
+	<rich:jQuery selector=".tabela tr" query="click(function(){selectSample(this);})" /> 
+	<rich:jQuery selector=".tabela td" query="css('cursor','pointer')" /> 
+	<ui:include src="/layout/tablerow.xhtml" />
+	<script type="text/javascript">
+	<!--
+	function selectSample(row) {
+		dt = jQuery('#dt', row).text();
+		sample = jQuery('#num', row).text();
+		jQuery("#divdtcollected input[type=text]").each(function() {this.value=dt});
+		jQuery("#divsample input[type=text]").each(function() {this.value=sample});
+		Richfaces.hideModalPanel('samplesdlg');
+		jQuery(row).removeClass('sel-row');
+	}
+	-->
+	</script>
+	</a:form>
+</rich:modalPanel>
+
+</ui:composition>

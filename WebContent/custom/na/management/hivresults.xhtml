@@ -8,7 +8,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:p="http://jboss.com/products/seam/pdf"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['manag.hivreport']}" />
 
@@ -32,7 +32,7 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form>
 <h:panelGroup id="indicator">
 <table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
@@ -49,7 +49,7 @@
 		<div class="paragraph">
 			#{messages['manag.hivreport.title1']}
 		</div>
-	<h:dataTable value="#{hivYesNoIndicatorNA.series.items}" var="it" styleClass="tabela" rowClasses="lin1,lin2" 
+	<h:dataTable value="#{hivYesNoIndicatorNA.series.items}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
 		columnClasses="colb,colrb,colrb" width="380px" rendered="#{indicatorController.executing}">
 		
 		<h:column>
@@ -127,7 +127,7 @@
 			#{messages['manag.hivreport.title3']}
 		</div>
 		
-	<table class="tabela" width="380px">
+	<table class="table1" width="380px">
 		<tr>
 			<th>
 				

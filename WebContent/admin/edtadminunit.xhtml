@@ -6,18 +6,18 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{adminUnitHome.managed? messages['admin.adminunits.edt']: messages['admin.adminunits.new']}" />
 <ui:param name="topmenu" value="3" />
 
 <ui:param name="labelstyle" value="width:150px" />
 
-<ui:define name="body">
-<h:form id="main">
-    <table class="tabela" width="600px">
-    <tr><td>
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
 
+	<div class="form-content">
     <s:decorate template="/layout/edit.xhtml" rendered="#{adminUnit.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{adminUnit.id}" />
@@ -75,18 +75,21 @@
         	<f:param id="field" value="legacyId"/>
         </h:inputText>
     </s:decorate>
+    
+    </div>
+    
+    <div class="form-footer">
+		<a:commandLink action="#{adminUnitHome.persist}" styleClass="button" reRender="main" onclick="if (!disableButtons(this)) return false;">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink>  
+		<s:link view="/admin/adminunits.xhtml" styleClass="button-alt" >
+			<f:param name="id" value="#{null}" />
+			<f:param name="parentid" value="#{adminUnitHome.parentId}" />
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+    </div>
 
-    </td></tr>
-    <tr><td align="right" colspan="2">
-            <h:commandButton action="#{adminUnitHome.persist}" value="#{messages['form.ok']}" styleClass="button"/>  
-            <s:button view="/admin/adminunits.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" >
-            	<f:param name="id" value="#{null}" />
-            	<f:param name="parentid" value="#{adminUnitHome.parentId}" />
-            </s:button>
-    </td></tr>
-    </table>
 
-	<p/>
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 </h:form>
 </ui:define>

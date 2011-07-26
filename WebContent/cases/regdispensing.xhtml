@@ -8,20 +8,16 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.mantreatment']}" />
 <ui:param name="topmenu" value="0" />
-<ui:param name="waitdlg" value="1" />
 
 
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form id="main">
-
-<s:decorate template="/layout/roundrect.xhtml" style="width:750px;margin-top:10px;">
-	<ui:param name="showfooter" value="0" />
-	<ui:param name="showheader" value="0" />
 
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['Tbunit']}:</ui:define>
@@ -36,12 +32,12 @@
 	</s:decorate>
 	
 	<h:panelGroup id="pnldata">
-	<table width="100%" class="table1" id="#tbldays">
+	<table class="table1" id="#tbldays">
 	<tr>
 		<th rowspan="2" align="left">#{messages['Patient']}
 		</th>
 		<th colspan="7">
-		<table width="100%" style="border:none;">
+		<table class="table1" style="border:none;">
 		<tr>
 		<a:repeat value="#{registerDispensingHome.weeks}" var="it">
 			<s:fragment rendered="#{registerDispensingHome.selectedWeek==it}">
@@ -88,13 +84,17 @@
 	</tr>
 	</a:repeat>
 	</table>
-	
-	<table width="100%"><tr><td align="right">
-	<a:commandButton value="#{messages['form.save']}" styleClass="button" action="#{registerDispensingHome.save}"/>
-	<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" view="/cases/treatments.xhtml">
-		<f:param name="huid" value="#{registerDispensingHome.tbunitId}"/>
-	</s:button>
-	</td></tr></table>
+
+	<div class="button-bar">	
+		<a:commandLink styleClass="button" action="#{registerDispensingHome.save}"
+			onclick="if (!disableButtons(this)) return false;">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink>
+		<s:link styleClass="button-alt" propagation="end" view="/cases/treatments.xhtml">
+			<f:param name="huid" value="#{registerDispensingHome.tbunitId}"/>
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
 	</h:panelGroup>
 
 	<rich:jQuery selector="#chkall" query="each(function(){this.checked=false;})"/>
@@ -109,7 +109,6 @@
 	}
 	-->
 	</script>
-</s:decorate>
 
 </h:form>
  

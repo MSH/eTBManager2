@@ -7,21 +7,21 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-                template="#{workspaceViewService.templatePage}">
+                template="/layout/template_new.xhtml">
 
 <ui:param name="topmenu" value="0" />
 
 <ui:param name="title" value="Update case data" />
 
-<ui:define name="body">
+<ui:define name="content">
 
 	<h:form>
 	<s:decorate template="/layout/roundrect.xhtml" style="width:300px;">
 		<ui:define name="header"><b>Update patient's age</b></ui:define>
 		<ui:param name="showfooter" value="0" />
-		<h:commandButton action="#{caseManagementTest.fillAge}" value="Update" />
+		<h:commandLink action="#{caseManagementTest.fillAge}" value="Update" />
 		<br/>
-		<h:commandButton action="#{caseManagementTest.updateRegimens}" value="Update regimen for all cases" />
+		<h:commandLink action="#{caseManagementTest.updateRegimens}" value="Update regimen for all cases" />
 	</s:decorate>
 	</h:form>
 </ui:define>

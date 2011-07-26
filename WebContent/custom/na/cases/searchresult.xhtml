@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.searchresult']}" />
 <ui:param name="topmenu" value="0" />
@@ -36,7 +36,7 @@
 </style>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 
 	<h:form id="listCases">
 
@@ -48,11 +48,11 @@
 		</s:decorate>
 	
 	</td><td align="right">
-		<h:commandButton value="#{messages['cases.newsearch']}" styleClass="button" onclick="Richfaces.showModalPanel('filtersdlg');return false;" style="float:right;width:150px;"/>	
+		<h:commandLink value="#{messages['cases.newsearch']}" styleClass="button" onclick="Richfaces.showModalPanel('filtersdlg');return false;" style="float:right;width:150px;"/>	
 	</td></tr></table>
 	
 	<h:panelGroup id="res">
-	<table id="tblres" width="100%" class="tabela">
+	<table id="tblres" width="100%" class="table1">
 		<tr><th class="searchtitle">
 				<div style="padding:4px;">
 				<a:commandLink value="#{messages['Patient.caseNumber']}" reRender="listCases" bypassUpdates="true" ajaxSingle="true">
@@ -186,12 +186,12 @@
 	</td>
 
 	<td align="right">
-		<a:commandButton id="btnsearch" value="#{messages['form.search']}" action="#{casesQueryNA.refresh}" 
+		<a:commandLink id="btnsearch" value="#{messages['form.search']}" action="#{casesQueryNA.refresh}" 
 			styleClass="button"	reRender="listCases" onclick="if (!validateFilters()) return false;this.disabled=true"
 			oncomplete="this.disabled=false;Richfaces.hideModalPanel('filtersdlg');return false;">
 			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
-		</a:commandButton>
-		<s:button value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-cancel"/>
+		</a:commandLink>
+		<s:link value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-alt"/>
 	</td></tr></table>	
 	</a:region>
 	<rich:hotKey selector="#tblfilters input,select" key="return" handler="#{rich:element('btnsearch')}.click();" /> 

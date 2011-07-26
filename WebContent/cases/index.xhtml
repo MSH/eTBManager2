@@ -8,173 +8,165 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases']}" />
 <ui:param name="topmenu" value="0" />
-<ui:param name="waitdlg" value="1" />
+
+<ui:define name="naveg">
+	<div class="item selected">
+		<s:link value="#{messages['home']}" />
+	</div>
+</ui:define>
 
 <ui:define name="left">
 	<h:form>
-	<div >
-	<div class="menubv">
-	<h:commandLink value="#{messages['cases.newnotif']}" onclick="showModalAutoTop('selclassificationdlg');return false;" 
-		rendered="#{userSession.canNotifySeveralClassifs}"/>
+
+	<h:commandLink 
+		onclick="showModalAutoTop('selclassificationdlg');return false;" style="width:130px"
+		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button">
+		<span>#{messages['cases.newnotif']}</span>
+	</h:commandLink>
+
+	<div class="spacer" />
+
+	<h:commandLink 
+		onclick="showModalAutoTop('newsuspectdlg');return false;" style="width:130px"
+		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button-alt">
+		<span>#{messages['cases.newsusp']}</span>
+	</h:commandLink>
 
 	<s:fragment rendered="#{not userSession.canNotifySeveralClassifs}">
 		<a:repeat value="#{globalLists.caseClassifications}" var="cla">
-			<s:link value="#{messages['cases.newnotif']}" view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}">
+			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}" styleClass="button">
 				<f:param name="classif" value="#{cla}"/>
+				<span>#{messages['cases.newnotif']}</span>
 			</s:link>
 		</a:repeat>
 	</s:fragment>
-	</div></div>
 
-<s:decorate template="/layout/roundrect.xhtml" style="margin-top:17px;" rendered="#{userWorkspace.view!='TBUNIT'}">
-	<ui:define name="header">
-		<b>#{messages['cases.registered']}</b>	
-	</ui:define>
-	<ui:define name="footer">
-		<div style="float:right;font-weight:bold;">
-			<h:outputText value="#{caseStateReport.total.cases}">
-				<f:convertNumber pattern="#,###,##0"/>
-			</h:outputText>
-		</div>
-		<b>#{messages['global.total']}</b>
-	</ui:define>
-	
-	<div>
-	<h:dataTable value="#{caseStateReport.items}" var="it" style="font-size:10px;" rowClasses="row1,row2" 
-		columnClasses="coll slink,colr slink" width="100%">
-		<h:column>
-			<div style="display:block;min-height:30px;">
-			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" >
+	<div class="spacer" />
+
+	<table class="table2">
+	<tr>
+		<th colspan="2">#{messages['cases.registered']}</th>
+	</tr>
+	<ui:repeat value="#{caseStateReport.items}" var="it">
+	<tr>
+		<td>
+			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" styleClass="link-small">
 				<f:param name="stateIndex" value="#{it.stateIndex}"/>
 				<f:param name="sc" value="#{'CASE_STATE'}"/>
 				<f:param name="vs" />
 				<f:param name="tag" />
 			</s:link>
-			</div>
-		</h:column>
-
-		<h:column>
+		</td>
+		<td align="right">
 			<h:outputText value="#{it.cases}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
-		</h:column>
-	</h:dataTable>
-	</div>
-</s:decorate>
+		</td>
+	</tr>
+	</ui:repeat>
+	<tr>
+		<td>
+			<b>#{messages['global.total']}</b>
+		</td>
+		<td align="right">
+			<b><h:outputText value="#{caseStateReport.total.cases}">
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText></b>
+		</td>
+	</tr>
+	</table>
 
-
-<s:decorate template="/layout/roundrect.xhtml" style="margin-top:17px;" rendered="#{not empty caseStateReport.validationItems}" >
-	<ui:define name="header">
-		<b>#{messages['ValidationState']}</b>	
-	</ui:define>
-	<ui:param name="showfooter" value="0" />
+	<div class="spacer"/>
 	
-	<div>
-	<h:dataTable value="#{caseStateReport.validationItems}" var="it" style="font-size:10px;" rowClasses="row1,row2" 
-		columnClasses="coll slink,colr slink" width="100%">
-		<h:column>
-			<div style="display:block;min-height:30px;">
-			<s:link value="#{messages[it.validationState.key]}"  view="/cases/searchresult.xhtml" >
+	<table class="table2">
+	<tr>
+		<th colspan="2">#{messages['ValidationState']}</th>
+	</tr>
+	<ui:repeat value="#{caseStateReport.validationItems}" var="it">
+	<tr>
+		<td>
+			<s:link value="#{messages[it.validationState.key]}"  view="/cases/searchresult.xhtml" styleClass="link-small">
 				<f:param name="vs" value="#{it.validationState}"/>
 				<f:param name="sc" value="#{'VALIDATION_STATE'}"/>
 				<f:param name="stateIndex" />
 				<f:param name="tag" />
 			</s:link>
-			</div>
-		</h:column>
-
-		<h:column>
+		</td>
+		<td align="right">
 			<h:outputText value="#{it.cases}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
-		</h:column>
-	</h:dataTable>
-	</div>
-	
-</s:decorate>
-	
+		</td>
+	</tr>
+	</ui:repeat>
+	</table>
 
-<s:decorate template="/layout/roundrect.xhtml" style="margin-top:17px;" rendered="#{not empty caseStateReport.tags}" >
-	<ui:define name="header">
-		<b>#{messages['admin.tags']}</b>	
-	</ui:define>
-	<ui:param name="showfooter" value="0" />
-	
-	<div>
-	<h:dataTable value="#{caseStateReport.tags}" var="it" style="font-size:10px;"  
-		columnClasses="coll slink,colr slink" width="100%">
-		<h:column>
-			<div class="tag-icon" style="display:block;min-height:30px;">
-			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" >
+	<div class="spacer"/>
+
+
+	<s:fragment rendered="#{not empty caseStateRerport.tags}">
+	<table class="table2">
+	<tr>
+		<th colspan="2">#{messages['admin.tags']}</th>
+	</tr>
+	<ui:repeat value="#{caseStateReport.tags}" var="it">
+	<tr>
+		<td>
+			<div class="tag-icon" />
+			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" styleClass="link-small">
 				<f:param name="tag" value="#{it.stateIndex}"/>
 				<f:param name="sc" value="#{'CASE_TAG'}"/>
 				<f:param name="stateIndex" />
 				<f:param name="vs" />
 			</s:link>
-			</div>
-		</h:column>
-
-		<h:column>
+		</td>
+		<td align="right">
 			<h:outputText value="#{it.cases}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
-		</h:column>
-	</h:dataTable>
-	</div>
-	
-</s:decorate>
+		</td>
+	</tr>
+	</ui:repeat>
+	</table>
+	</s:fragment>
 	
 	</h:form>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form>
-<div >
-<s:decorate template="/layout/roundrect.xhtml" style="width:100%">
-	<ui:param name="showheader" value="1" />
-	<ui:param name="showfooter" value="1" />
-	<ui:param name="styleclass" value="background-color:#f0f0f0;" />
-
-	<h:commandLink value="#{messages['cases.advancedsearch']}"  
+	<h:commandLink
+		styleClass="button-alt"  
 		onclick="Richfaces.showModalPanel('filtersdlg');return false;" 
-		style="float:right;"/>	
+		style="float:right;">
+		<span>#{messages['cases.advancedsearch']}</span>
+	</h:commandLink>	
 
-	<h:outputText value="#{messages['Patient']}:" style="margin-right:20px;margin-left:4px;font-weight:bold;"/>
+	<h:outputText value="#{messages['Patient']}:"/>
 	
-	<h:inputText id="patname" value="#{caseFilters.patient}" style="width:150px" />
-	<a:commandButton id="btnsearchpat" value="#{messages['form.search']}" action="search" styleClass="button" >
+	<h:inputText id="patname" value="#{caseFilters.patient}" style="width:150px;margin:4px" />
+
+	<a:commandLink id="btnsearchpat" action="search" styleClass="button" onclick="if (!disableButtons(this)) return false;" >
 		<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
-	</a:commandButton>
+		<span>#{messages['form.search']}</span>
+	</a:commandLink>
 	<rich:jQuery timming="onload" selector="#patname" query="focus()" />
 	<rich:hotKey selector="#patname" key="return" handler="#{rich:element('btnsearchpat')}.click();" /> 
 
-</s:decorate>
+	<div class="spacer" />
 
-<rich:spacer height="40" />
-
-<s:decorate template="/layout/roundrect.xhtml" >
-	<ui:define name="header">
-		<b>#{messages['cases.ongoing']}</b>	
-	</ui:define>
-	<ui:param name="showfooter" value="0" />
-
-	<div >
+	<h2>#{messages['cases.ongoing']}</h2>
 	<h:panelGroup id="pnlhealthunits">
-
 		<ui:include src="#{userWorkspace.view=='TBUNIT'?'index_tbunit_content.xhtml':'index_content.xhtml'}" />
-
 	</h:panelGroup>
-	</div>
-	
-</s:decorate>
 
 	<ui:include src="/layout/tablerow.xhtml" />
 
-</div>
 </h:form>
 </ui:define>
 
@@ -186,19 +178,51 @@
 		#{messages['cases.newnotif']}
 	</f:facet>
 
-	<a:form id="formclassifcation">
+	<a:form>
 
 	#{messages['cases.newnotif.title']}
 	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
 	<c:forEach items="#{globalLists.caseClassifications}" var="it">
-		<tr><td class="menubv">
-			<s:link value="#{messages[it.key]}" view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
+		<tr><td class="vertical-menu">
+			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
 				<f:param name="classif" value="#{it}"/>
+				<f:param name="type" value="CONFIRMED"/>
+				<div class="new-icon" />#{messages[it.key]}
 			</s:link>
 		</td></tr>
 	</c:forEach>
 	</table>
-	<s:button value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" styleClass="button-cancel" />
+	<div class="button-bar">
+		<s:link onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" styleClass="button-alt" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+	</a:form>
+</rich:modalPanel>
+<rich:modalPanel id="newsuspectdlg" width="300" zindex="2000" autosized="true">
+	<f:facet name="header" >
+		#{messages['cases.newsusp']}
+	</f:facet>
+
+	<a:form>
+
+	#{messages['cases.newnotif.title']}
+	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
+	<c:forEach items="#{globalLists.caseClassifications}" var="it">
+		<tr><td class="vertical-menu">
+			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
+				<f:param name="classif" value="#{it}"/>
+				<f:param name="type" value="SUSPECT"/>
+				<div class="new-icon" />#{messages[it.key]}
+			</s:link>
+		</td></tr>
+	</c:forEach>
+	</table>
+	<div class="button-bar">
+		<s:link onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" styleClass="button-alt" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
 	</a:form>
 </rich:modalPanel>
 </s:fragment>
@@ -211,22 +235,17 @@
 	<h:form>
 	<a:region>
 	
-	<table width="99%">
-	<tr><td colspan="2">
-
 	<ui:include src="searchfilters.xhtml" />
 
-	</td></tr>
-	<tr><td>
-		<ui:include src="/layout/waitstatus.xhtml" />
-	</td>
-
-	<td align="right">
-		<a:commandButton id="btnsearch" value="#{messages['form.search']}" action="search"	styleClass="button" >
+	<div class="button-bar">
+		<a:commandLink id="btnsearch" action="search" styleClass="button" onclick="if (!disableButtons(this)) return false;" >
 			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
-		</a:commandButton>
-		<s:button value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-cancel"/>
-	</td></tr></table>	
+			<span>#{messages['form.search']}</span>
+		</a:commandLink>
+		<s:link onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-alt">
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
 	</a:region>
 	<rich:hotKey selector="#tblfilters input,select" key="return" handler="#{rich:element('btnsearch')}.click();" /> 
 	</h:form>

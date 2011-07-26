@@ -7,25 +7,27 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<s:link value="#{messages['cases.details.newresult']}" view="/custom/bd/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEdit}">
-		<f:param name="id" value="#{tbCase.id}"/>
+	<s:link view="/custom/bd/cases/edtmedexam.xhtml" 
+		style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
+		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
 	</s:link>
 
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty medicalExaminationBdHome.allResults}" />
 
-	<h:dataTable value="#{medicalExaminationBdHome.allResults}" var="r" rendered="#{not empty medicalExaminationBdHome.allResults}" width="100%">
+	<h:dataTable value="#{medicalExaminationBdHome.allResults}" var="r" rendered="#{not empty medicalExaminationBdHome.allResults}" styleClass="table1">
 		<h:column>
 	
 		<s:decorate template="/layout/roundrect.xhtml" style="margin-right:10px;">
 		<ui:define name="header">
 			<div style="float:right;">
-				<s:link value="#{messages['form.edit']}" view="/custom/bd/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEdit}">
+				<s:link value="#{messages['form.edit']}" view="/custom/bd/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 					<f:param name="id" value="#{tbCase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 				</s:link>
 				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamCulture(#{r.id}, #{examCultureHome.lastResult});return false;" 
-				      rendered="#{caseHome.canEdit}">
+				      rendered="#{caseHome.canEditCaseData}">
 				</h:commandLink>
 			</div>
 			<div class="name2">#{messages['cases.details.date']}: </div> 

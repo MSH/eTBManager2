@@ -45,6 +45,8 @@ public class UserSession {
 	private UserLogin userLogin;
 	private UserWorkspace userWorkspace;
 	private boolean displayMessagesKeys;
+	private boolean initingList;
+	private int caseTab;
 
 
     /**
@@ -103,6 +105,14 @@ public class UserSession {
 
     
     /**
+     * Sign the UI that the user wants to select a workspace among the list available
+     */
+    public void initWorkspaceList() {
+    	Contexts.getEventContext().set("userWsInited", true);
+    }
+
+
+    /**
      * Change the user workspace
      * @param userWorkspace
      */
@@ -112,6 +122,7 @@ public class UserSession {
     	if (userWorkspace == null)
     		return "error";
 
+    	System.out.println(userWorkspace.getWorkspace().getName().toString());
     	if (userLogin != null)
     		registerLogout();
 
@@ -435,4 +446,55 @@ public class UserSession {
 		return (EntityManager)Component.getInstance("entityManager");
 	}
 
+
+	/**
+	 * Set the current user workspace id
+	 * @param id
+	 */
+	public void setUserWorkspaceId(Integer id) {
+		if (id == null)
+			 userWorkspace = null;
+		else userWorkspace = getEntityManager().find(UserWorkspace.class, id);
+	}
+
+
+	/**
+	 * Get the current user workspace id
+	 * @return
+	 */
+	public Integer getUserWorkspaceId() {
+		return (userWorkspace == null? null: userWorkspace.getId());
+	}
+
+
+	/**
+	 * @return the initingList
+	 */
+	public boolean isInitingList() {
+		return initingList;
+	}
+
+
+	/**
+	 * @param initingList the initingList to set
+	 */
+	public void setInitingList(boolean initingList) {
+		this.initingList = initingList;
+	}
+
+
+	/**
+	 * @return the caseTab
+	 */
+	public int getCaseTab() {
+		return caseTab;
+	}
+
+
+	/**
+	 * @param caseTab the caseTab to set
+	 */
+	public void setCaseTab(int caseTab) {
+		this.caseTab = caseTab;
+	}
 }

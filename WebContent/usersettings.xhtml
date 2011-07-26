@@ -7,18 +7,13 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-                template="#{workspaceViewService.templatePage}">
+                template="/layout/template_new.xhtml">
 
 <ui:param name="topmenu" value="0" />
 
 <ui:param name="title" value="#{messages['form.profile']}" />
-<ui:param name="activeroundcorners" value="1" />
 
-<ui:define name="roundcorners">
-	RoundedTop("div.roundborder","#fff","#77ABD8");
-</ui:define>
-
-<ui:define name="body">
+<ui:define name="content">
 
 	<table border="0" width="800px" style="table-layout: fixed;">
 	<tr><td style="padding-right:30px; vertical-align:top;">
@@ -29,7 +24,7 @@
 		</h3>
 		<p>
 			<h:form>
-			<table border="0" class="tabela" width="350px">
+			<table border="0" class="table1" width="350px">
 			<tr><td valign="top">
 				#{messages['User.name']}:
 			</td><td>
@@ -56,7 +51,7 @@
             	</h:selectOneMenu>
 			</td></tr>
 			<tr><td colspan="2">
-				<h:commandButton action="#{userSettings.savePreferences}" value="Ok" style="width:80px;" styleClass="button" />
+				<h:commandLink action="#{userSettings.savePreferences}" value="Ok" style="width:80px;" styleClass="button" />
 			</td></tr>
 			</table>
 			
@@ -72,7 +67,7 @@
 		</h3>
 		<p>
 			<h:form>
-			<table border="0" cellpadding="2" class="tabela" width="300px">
+			<table border="0" cellpadding="2" class="table1" width="300px">
 			<tr><td valign="top">
 				#{messages['changepwd.passinuse']}:
 			</td><td>
@@ -92,7 +87,7 @@
 				<h:message for="pwd3" styleClass="error"/>
 			</td></tr>
 			<tr><td colspan="2">
-				<h:commandButton action="#{changePwd.execute}" value="Ok" style="width:80px;" styleClass="button" />
+				<h:commandLink action="#{changePwd.execute}" value="Ok" style="width:80px;" styleClass="button" />
 			</td></tr>
 			</table>
 			</h:form>
@@ -108,7 +103,7 @@
 		</h3>
 		<p>
 			<h:form>
-			<table border="0" cellpadding="2" class="tabela" width="300px">
+			<table border="0" cellpadding="2" class="table1" width="300px">
 			<tr><td valign="top">
 				#{messages['usersettings.workspace']}:
 			</td><td>
@@ -119,7 +114,7 @@
 				<h:message for="ws"></h:message>
 			</td></tr>
 			<tr><td colspan="2">
-				<h:commandButton action="#{userSession.changeUserWorkspace}" value="#{messages['form.ok']}" style="width:80px;" styleClass="button" />
+				<h:commandLink action="#{userSession.changeUserWorkspace}" value="#{messages['form.ok']}" style="width:80px;" styleClass="button" />
 			</td></tr>
 			</table>
 			</h:form>
@@ -130,7 +125,7 @@
 	</td></tr>
 	
 	<tr><td style="margin-top:20px">
-		<s:button value="#{messages['form.cancel']}" view="/home.xhtml" styleClass="button-cancel" propagation="none" />
+		<s:link value="#{messages['form.cancel']}" view="/home.xhtml" styleClass="button-alt" propagation="none" />
 	</td></tr>
 	</table>
 </ui:define>

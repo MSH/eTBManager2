@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
 	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templateMedPage}">
+      template="/layout/templatemed.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.dispensing']}" />
 
@@ -17,17 +17,21 @@
 <ui:param name="labelstyle" value="width:180px;" />
 
 <ui:define name="naveg">
-	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
+	<div class="item">
+		<s:link value="#{messages['home']}" view="/medicines/index.xhtml" propagation="none"/>
+	</div>
+	<div class="item selected">
+		<s:link value="#{title}" view="/medicines/dispensing.html" propagation="none"/>
+	</div>
 </ui:define>
 
-<ui:define name="body">
-<p/>
-
+<ui:define name="content_unit">
 <h:form>
-	<s:link id="lnknew" value="#{messages['medicines.dispensing.new']}" view="/medicines/dispedt.xhtml" 
+	<s:link id="lnknew" view="/medicines/dispedt.xhtml" styleClass="button-alt"
 		style="float:right;" rendered="#{s:hasRole('DISP_PAC_EDT')}">
 		<f:param name="month" value="#{dispensingView.month}"/>
 		<f:param name="year" value="#{dispensingView.year}"/>
+		<span>#{messages['medicines.dispensing.new']}</span>
 	</s:link>
 	
 	<s:decorate template="/layout/edit.xhtml" >
@@ -52,7 +56,7 @@
 			</td>
 		</tr>
 		<tr><td>
-		<table width="100%" class="tabela">
+		<table width="100%" class="table1">
 		<tr><th rowspan="2">
 				#{messages['Medicine']}
 			</th>

@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
         
 <ui:param name="title" value="#{messages['admin.syssetup']}" />
 <ui:param name="topmenu" value="3" />
@@ -15,7 +15,11 @@
 <ui:param name="waitdlg" value="1" />
 <ui:param name="labelstyle" value="width:170px" />
 
-<ui:define name="body">
+<ui:define name="left">
+	<ui:include src="/layout/adminmenu.xhtml" />
+</ui:define>
+
+<ui:define name="content">
 <h:form id="main" >
 	<table width="600px" style="border:2px solid #f0f0f0" ><tr><td>
 
@@ -67,8 +71,15 @@
     </h:panelGroup>
 	
 	</td></tr><tr><td align="right">
-		<h:commandButton action="#{systemConfigHome.saveCofiguration}" value="#{messages['form.ok']}" styleClass="button" />
-		<s:button view="/admin/index.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" />
+		
+		<a:commandLink action="#{systemConfigHome.saveCofiguration}" styleClass="button" 
+			onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink> 
+		
+		<s:link view="/admin/index.xhtml" styleClass="button-alt" propagation="end" >
+		<span>#{messages['form.cancel']}</span>
+		</s:link>
 	</td></tr></table>
 </h:form>
 </ui:define>

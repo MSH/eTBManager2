@@ -127,6 +127,7 @@
 				<exclude name="custom/na/**"/>
 				<exclude name="login.xhtml"/>
 				<exclude name="login.page.xml"/>
+				<exclude name="public/themes/green/images/logo.png" />
 			</fileset>
 			
 			<classes dir="build/classes">
@@ -142,6 +143,7 @@
 				<exclude name="/custom_messages*" />
 			</classes>
 			
+			<zipfileset file="resources/br/logo.png" fullpath="public/themes/green/images/logo.png" />
 			<zipfileset file="WebContent/public/loginbr.xhtml" fullpath="login.xhtml" />
 			<zipfileset file="WebContent/public/loginbr.page.xml" fullpath="login.page.xml" />
 			<zipfileset file="src/model/messages_pt_BR.properties" fullpath="WEB-INF/classes/messages_pt_BR.properties" />

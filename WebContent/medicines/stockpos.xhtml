@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
  	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templateMedPage}">
+      template="/layout/templatemed.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.stockpos']}" />
 
@@ -15,10 +15,15 @@
 <ui:param name="labelstyle" value="width:200px;" />
 <ui:param name="pagestyle" value="width:800px;" />
 
-<ui:define name="naveg" >
-	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
-	
+<ui:define name="naveg">
+	<div class="item">
+		<s:link value="#{messages['home']}" view="/medicines/index.xhtml" propagation="none"/>
+	</div>
+	<div class="item selected">
+		<s:link value="#{title}" view="/medicines/stockpos.html" propagation="none" />
+	</div>
 </ui:define>
+
 
 <ui:define name="print-link">
 	<s:link view="/reports/stockpos.xhtml" target="_blank">
@@ -26,8 +31,11 @@
 	</s:link>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content_unit">
 <h:form id="main">
+	<h:commandLink action="#{stockPosHome.execute}" styleClass="button-alt" style="float:right;">
+		<span>#{messages['form.update']}</span>
+	</h:commandLink>
 	<s:decorate template="/layout/edit.xhtml" rendered="false">
 		<ui:define name="label">#{messages['ProductGroup']}:</ui:define>
 		<h:selectOneMenu value="#{stockPosHome.productGroup}">
@@ -49,9 +57,6 @@
 		<h:selectBooleanCheckbox value="#{stockPosHome.showBatch}"></h:selectBooleanCheckbox>
 	</s:decorate>
 	
-	<div style="width:100%;text-align: right;">
-		<h:commandButton value="#{messages['form.update']}" action="#{stockPosHome.execute}" styleClass="button"/>
-	</div>
 <p/>
 
 <s:fragment rendered="#{not stockPosHome.showBatch}">
@@ -69,7 +74,7 @@
 </td></tr>
 <tr><td>
 <h:dataTable value="#{s.items}" var="r" rendered="#{stockPosHome.report.size != 0}" width="100%"
-  styleClass="tabela" rowClasses="lin1,lin2" columnClasses="coll,colr,colr,colc,colc" style="margin-bottom:10px;">
+  styleClass="table1" rowClasses="lin1,lin2" columnClasses="coll,colr,colr,colc,colc" style="margin-bottom:10px;">
 	<h:column>
 		<f:facet name="header">
 			<s:link value="#{messages['Medicine']}" styleClass="collh" action="#{stockPosHome.execute}" >
@@ -136,7 +141,7 @@
 </td></tr>
 <tr><td>
 <h:dataTable value="#{stockPosHome.total.items}" var="r" rendered="#{stockPosHome.report.size != 0}" width="100%"
-  styleClass="tabela" rowClasses="lin1,lin2" columnClasses="coll,colr,colr,colc,colc" style="margin-bottom:10px;">
+  styleClass="table1" rowClasses="lin1,lin2" columnClasses="coll,colr,colr,colc,colc" style="margin-bottom:10px;">
 	<h:column>
 		<f:facet name="header">
 			<h:outputText value="#{messages['Medicine']}" styleClass="collh" action="#{stockPosHome.execute}" >
@@ -190,7 +195,7 @@
 <h:panelGroup rendered="#{stockPosHome.showBatch and stockPosHome.executing}">
 <h:outputText value="#{messages['form.norecordfound']}" rendered="#{batchesReport.resultCount == 0}" styleClass="warn" />
 <h:dataTable value="#{batchesReport.resultList}" var="r" rendered="#{batchesReport.resultCount > 0}" width="100%"
-  styleClass="tabela" rowClasses="lin1,lin2" columnClasses="#{empty userSelection.source?'coll,':''}coll,colc,coll,coll,colr,colr,colr,colr">
+  styleClass="table1" rowClasses="lin1,lin2" columnClasses="#{empty userSelection.source?'coll,':''}coll,colc,coll,coll,colr,colr,colr,colr">
 	<h:column rendered="#{empty userSelection.source}">
 		<f:facet name="header">
 			<s:link value="#{messages['Source']}" styleClass="collh" action="#{stockPosHome.execute}" >

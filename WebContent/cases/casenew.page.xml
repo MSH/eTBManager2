@@ -6,8 +6,10 @@
 		<restrict>#{userSession.canEditCases}</restrict>
 		<action execute="#{caseEditingHome.initializeNewNotification}"/>
 		<param name="pacid" value="#{patientHome.id}" converterId="javax.faces.Integer"/>
-		<param name="cla" value="#{tbcase.classification}" />
+		<param name="cla" value="#{tbcase.classification}" required="true" />
+		<param name="type" value="#{tbcase.diagnosisType}" required="true" />
 		<begin-conversation join="true"/>
+
 		<navigation>
 			<rule if-outcome="patient-searching">
 				<end-conversation before-redirect="true"/>
@@ -25,6 +27,11 @@
 			<rule if-outcome="individualized">
 				<redirect view-id="/cases/starttreatmentind.xhtml">
 					<param name="id" value="#{caseHome.id}"/>
+				</redirect>
+			</rule>
+			
+			<rule if="#{tbcase.diagnosisType==null}">
+				<redirect view-id="/cases/index.xhtml">
 				</redirect>
 			</rule>
 		</navigation>

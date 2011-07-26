@@ -8,37 +8,35 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.edit']} - #{messages[tbcase.classification.key]}" />
 
 <ui:param name="topmenu" value="0" />
-<ui:param name="waitdlg" value="1" />
+<ui:param name="left" value="0" />
 
 <ui:param name="labelstyle" value="width:150px" />
 
-<ui:define name="left">
-</ui:define>
 
-<ui:define name="body">
-<h:form id="main">
-<table width="100%"><tr><td>
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
 
 	<ui:include src="casedataedt.xhtml" />
-
-	<p/>
 	
-	<table width="100%"><tr><td align="right">
-	<div style="float:left;">
+	<div class="form-footer">
+	<div style="float:right;">
 		<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 	</div>
-	<a:commandButton value="#{messages['form.ok']}" action="#{caseDataBRHome.saveEditing}" styleClass="button" reRender="main,messages"/>
-	<s:button value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-cancel" propagation="end">
+	<a:commandLink action="#{caseDataBRHome.saveEditing}" styleClass="button" reRender="main,messages"
+		onclick="if (!disableButtons(this)) return false;" >
+		<span>#{messages['form.save']}</span>
+	</a:commandLink>
+	<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
 		<f:param name="id" value="#{caseHome.id}" />
-	</s:button>
-	</td></tr></table>
-</td></tr></table>
-<p/>
+		<span>#{messages['form.cancel']}</span>
+	</s:link>
+	</div>
 
 </h:form>
 

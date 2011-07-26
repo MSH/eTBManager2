@@ -10,14 +10,14 @@
 <ui:param name="labelstyle" value="width:150px;" />
 
 <table id="tblfilters" style="border-collapse: collapse;width:100%;"><tr><td>          
-   <span class="paragraph">#{messages['cases.details.addressnotif']}</span>
+   <h2>#{messages['cases.details.addressnotif']}</h2>
 	<ui:param name="required" value="false" />
 
 	<s:decorate template="/layout/auselection.xhtml">
 		<ui:param name="auselection" value="#{caseFilters.auselection}" />
 	</s:decorate>
 
-    <span class="paragraph">#{messages['cases.healthUnit']}</span>
+    <h2>#{messages['cases.healthUnit']}</h2>
 	<s:decorate template="/layout/tbselection.xhtml">
 		<ui:param name="tbunitselection" value="#{caseFilters.tbunitselection}" />
 
@@ -27,7 +27,7 @@
 		</h:selectOneRadio>
 	</s:decorate>
 
-   <span class="paragraph">#{messages['cases.details.case']}</span>
+   <h2>#{messages['cases.details.case']}</h2>
 
 	<s:decorate template="/layout/editname.xhtml">
 		<ui:define name="label">#{messages['cases.casesearching.patient']}:</ui:define>
@@ -79,7 +79,7 @@
 		</h:selectOneMenu>
 	</s:decorate>
 
-   <span class="paragraph">#{messages['cases.casesearching.filterdates']}</span>
+   <h2>#{messages['cases.casesearching.filterdates']}</h2>
 
    <div id="datesdiv" style="padding:6px;">
    	<h:selectBooleanCheckbox value="#{caseFilters.registrationDate}" />#{messages['TbCase.registrationDate']}

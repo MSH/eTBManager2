@@ -5,17 +5,18 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['Order']} - #{messages['medicines.orders.cancel']}" />
 <ui:param name="topmenu" value="1" />
 
 <ui:param name="labelstyle" value="width:150px;" />
 
-<ui:define name="body">
-<p/>
-<h:form>
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main">
 <rich:panel style="width:600px;">
     
     <table width="100%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse">
@@ -54,11 +55,16 @@
     	<h:inputTextarea value="#{order.cancelReason}" style="width : 385px; height : 63px;" required="true"/>
     </s:decorate>
     
-	<div style="display:block;margin-top:60px;float:right;margin-bottom:5px;">
-    	<h:commandButton action="#{orderHome.cancelOrder}" value="#{messages['form.ok']}" styleClass="button" />
-    	<s:button action="/medicines/orderdata.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" >
+	<div class="button-bar">
+    	<a:commandLink action="#{orderHome.cancelOrder}" styleClass="button" 
+    		onclick="if (!disableButtons(this)) return false;"
+    		oncomplete="enableButton()" reRender="main">
+    		<span>#{messages['form.ok']}</span>
+    	</a:commandLink>
+    	<s:link action="/medicines/orderdata.xhtml" styleClass="button-alt" >
     		<f:facet name="id" value="#{order.id}" />
-    	</s:button>
+    		<span>#{messages['form.cancel']}</span>
+    	</s:link>
 	</div>
 
 </rich:panel>

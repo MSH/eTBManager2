@@ -7,14 +7,20 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templateMedPage}">
+      template="/layout/templatemed.xhtml">
 
 <ui:param name="title" value="#{messages.medicines}" />
 <ui:param name="waitdlg" value="1" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 
-<ui:define name="body">
+<ui:define name="naveg">
+	<div class="item selected">
+		<s:link value="#{messages['home']}" />
+	</div>
+</ui:define>
+
+<ui:define name="content_unit">
 <div>
 
 	<h:form>
@@ -64,7 +70,7 @@
 	</s:decorate>
 	</s:fragment>
 	
-    <span class="paragraph">#{messages['admin.tbunits.medmanagement']}</span>
+    <h2>#{messages['admin.tbunits.medmanagement']}</h2>
     <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.medicineStorage}">
 		<div class="star-icon" >
 			#{messages['Tbunit.medicineStorage']}
@@ -95,7 +101,6 @@
 			rendered="#{s:hasRole('MED_INIT')}"/>
 	</s:fragment>
 
-	<p/>
 	</h:form>
 </div>
 </ui:define>

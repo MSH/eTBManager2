@@ -21,7 +21,7 @@
 	<h:panelGroup id="pnlres">
 	<a:region>
 	<a:status onstart="openWaitDlg();" onstop="closeWaitDlg();"/>
-	<table width="100%" class="tabela">
+	<table width="100%" class="table1">
 	<ui:repeat value="#{batchReservingHome.sources}" var="s">
 		<tr style="background-color:#EDF7EF;"><td colspan="6" style="border:1px solid #B4E8BB;padding:5px;">
 			<b>#{s.source.name}</b>
@@ -105,13 +105,13 @@
 
 
 <s:decorate template="/layout/batchselection.xhtml" >
-	<a:commandButton value="#{messages['form.ok']}" action="#{batchReservingHome.reserveBatches}"
+	<a:commandLink value="#{messages['form.ok']}" action="#{batchReservingHome.reserveBatches}"
 	    onclick="if (!validateBatchSelection(self)) return false;"
 		oncomplete="this.disabled=false;if (batchValOk) hideBatchesSelectionDlg();" 
 		styleClass="button" reRender="pnlres"/>
 	<ui:define name="cancel">
-		<a:commandButton value="#{messages['form.cancel']}" action="#{conversation.end}" 
-			oncomplete="hideBatchesSelectionDlg();" styleClass="button-cancel" ajaxSingle="true"/>
+		<a:commandLink value="#{messages['form.cancel']}" action="#{conversation.end}" 
+			oncomplete="hideBatchesSelectionDlg();" styleClass="button-alt" ajaxSingle="true"/>
 	</ui:define>
 </s:decorate>
 

@@ -78,7 +78,9 @@ function hideMedicinesStockDlg() {
 		<td align="right">
 			<div id="selmedstkbtns">
    			<ui:insert />
-   			<s:button value="#{messages['form.cancel']}" onclick="hideMedicinesStockDlg(); return false;" styleClass="button-cancel" />
+   			<s:link onclick="hideMedicinesStockDlg(); return false;" styleClass="button-alt" >
+   				<span>#{messages['form.cancel']}</span>
+   			</s:link>
    			</div>
 		</td>
 	</tr></table>

@@ -72,7 +72,10 @@ function hideMedicinesDlg() {
    		<td align="right">
    			<div id="selmedbtns">
    			<ui:insert />
-   			<s:button value="#{messages['form.cancel']}" onclick="javascript:Richfaces.hideModalPanel('meddlg'); return false;" styleClass="button-cancel" />
+   			<s:link	onclick="javascript:Richfaces.hideModalPanel('meddlg'); return false;" 
+   				styleClass="button-alt" >
+   				<span>#{messages['form.cancel']}</span>
+   			</s:link>
    			</div>
    		</td>
    	</tr></table>

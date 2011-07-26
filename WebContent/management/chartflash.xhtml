@@ -7,12 +7,12 @@
       xmlns:p="http://jboss.com/products/seam/pdf"
       xmlns:s="http://jboss.com/products/seam/taglib">
 
-<s:fragment rendered="#{(indicatorController.executing)}">
+<s:fragment rendered="#{indicatorController.executing}">
 <h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty series.items}" styleClass="warn"/>
 <s:fragment rendered="#{not empty series.items}">
 <table width="100%">
 <tr><td valign="top" align="left" >
-	<table width="380px" class="tabela">
+	<table width="380px" class="table1">
 		<tr><th>
 			#{title}
 		</th>
@@ -59,8 +59,8 @@
 
 </td><td valign="top"  align="right">
 
-	<div style="border:1px solid #a0a8a8;width:400px;" >
-	<div id="my_chart">
+	<div style="border:1px solid #a0a8a8;width:400px;z-index:4000" >
+	<div id="my_chart" style="z-index:2000">
 	</div>
 	</div>
 </td></tr></table>
@@ -76,15 +76,16 @@ function ofc_ready() {}
 
 function open_flash_chart_data()
 {
-	return JSON.stringify(data2);
-}
-var data2 = 
+	var data2 = 
 		<h:outputText value="#{series}" converter="chartDataConverter" escape="false">
 			<f:param name="title" value="#{title}" />
 		</h:outputText>
+	return JSON2.stringify(data2);
+}
 
 function showChart() {
-	swfobject.embedSWF("#{request.contextPath}/js/open-flash-chart.swf", "my_chart", "400", "#{indicatorFilters.chartType==1?(series.chartHeight):'400px'}", "9.0.0");
+	swfobject.embedSWF("#{request.contextPath}/js/open-flash-chart.swf", "my_chart", "400", "#{indicatorFilters.chartType==1?(series.chartHeight):'400'}", "9.0.0");
+	jQuery("#charttypediv").show(500);
 }
 </script>
 

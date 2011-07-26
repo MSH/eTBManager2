@@ -7,25 +7,27 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['admin.substances']}" />
 <ui:param name="topmenu" value="3" />
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 	<ui:include src="/layout/adminmenu.xhtml" />
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form id="main">
-<s:button view="/admin/edtsubstance.xhtml" value="#{messages['form.new']}" styleClass="button" rendered="#{s:hasRole('SUBSTANCES_EDT')}">
+<s:link view="/admin/edtsubstance.xhtml" styleClass="button" rendered="#{s:hasRole('SUBSTANCES_EDT')}">
 	<f:param name="id" value="#{null}" />
-</s:button>
+	<span>#{messages['form.newf']}</span>
+</s:link>
 <p/>
 
 <h:outputText value="#{messages['form.norecordfound']}" rendered="#{substances.resultCount == 0}" styleClass="warn"/>
 <h:dataTable id="tbl" value="#{substances.resultList}" var="r" border="0" columnClasses="coll,coll,coll,colc" width="600px"
-  styleClass="tabela" rowClasses="lin1,lin2" rendered="#{substances.resultCount > 0}">
+  styleClass="table1" rowClasses="lin1,lin2" rendered="#{substances.resultCount > 0}">
   <h:column>
   	<f:facet name="header">
   		<s:link value="#{messages['form.name']}" styleClass="collh">

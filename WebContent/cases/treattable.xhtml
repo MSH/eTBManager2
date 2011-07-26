@@ -23,7 +23,7 @@
 	</s:decorate>
 	</s:fragment>
 	
-	<table class="tabela4" width="100%" style="margin-bottom:20px">
+	<table class="table2 treattable">
 	<tr>
 		<th width="150px">
 			#{messages['global.period']}
@@ -57,7 +57,8 @@
 				<div class="bar-caption">#{p.item.tbunit.name}</div>
 				
 				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
-					<div style="display:block;clear:both;font-weight:bold;" class="hu-icon">#{p.item.tbunit.name}</div>
+					<div class="icon-hu"/>
+					<div style="display:block;clear:both;font-weight:bold;">#{p.item.tbunit.name}</div>
 					<h:outputText value="#{p.period.iniDate}" converter="localeDateConverter" style="float:left;"/>
 					<h:outputText value="#{p.period.endDate}" converter="localeDateConverter" style="float:right;margin-right:16px;"/>
 					<h:outputText value="#{p.period}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">
@@ -102,7 +103,7 @@
 	
 	<a:repeat value="#{prescriptionTable.medicines}" var="med">
 	<tr>
-		<td class="colb" width="150px">
+		<td class="colb highlight" width="150px">
 			#{med.medicine.fullAbbrevName}<br/>
 			#{med.medicine.dosageForm}
 		</td>

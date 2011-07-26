@@ -8,7 +8,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:p="http://jboss.com/products/seam/pdf"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['manag.ind.resist']}" />
 
@@ -25,18 +25,19 @@
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content">
 
 <h:panelGroup id="pnlresistance">
 
 <h:form>
-<a:commandButton value="#{messages['form.new']}"
+<a:commandLink value="#{messages['form.new']}"
 	reRender="resistpnl"
 	action="#{conversation.begin}" 
-	oncomplete="showMedSelectionDlg();return false;" styleClass="button">
-</a:commandButton>
+	onclick="if (!disableButtons(this)) return false;"
+	oncomplete="enableButton();showMedSelectionDlg();return false;" styleClass="button">
+</a:commandLink>
 	<h:outputText value="#{messages['form.norecordfound']}" styleClass="warn" rendered="#{empty resistancePatterns.resultList}"/>
-	<h:dataTable value="#{resistancePatterns.resultList}" var="p" width="500px" styleClass="tabela" rowClasses="lin1,lin2" rendered="#{not empty resistancePatterns.resultList}">
+	<h:dataTable value="#{resistancePatterns.resultList}" var="p" width="500px" styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty resistancePatterns.resultList}">
 		<h:column>
 			<f:facet name="header">
 				#{messages['manag.ind.resist']}
@@ -89,7 +90,7 @@ jQuery("#resistdiv tr:has(:checked)").addClass("activerow");
 
 	#{messages['manag.ind.resist.medsel']}:
 	<div id="resistdiv" style="overflow: auto; width: 425px; height: 270px;border: 1px gray solid; padding:0px; margin: 0px">	
-	<h:dataTable value="#{resistancePatternHome.selectableSubstances}" var="it" width="100%" styleClass="tabela" columnClasses="colc,coll,coll">
+	<h:dataTable value="#{resistancePatternHome.selectableSubstances}" var="it" width="100%" styleClass="table1" columnClasses="colc,coll,coll">
 		<h:column>
 			<f:facet name="header">
 				<h:selectBooleanCheckbox id="todos" onclick="checkClick(this);"/>				
@@ -119,16 +120,17 @@ jQuery("#resistdiv tr:has(:checked)").addClass("activerow");
 			<ui:include src="/layout/waitstatus.xhtml" />
 		</td>
 		<td align="right">
-			<a:commandButton value="#{messages['form.ok']}" 
+			<a:commandLink value="#{messages['form.ok']}" 
 				action="#{resistancePatternHome.saveAndEnd}"
 				styleClass="button" 
 				reRender="pnlresistance"
-				oncomplete="hideMedSelectionDlg();">
-			</a:commandButton>
-			<a:commandButton value="#{messages['form.cancel']}"
+				onclick="if (!disableButtons(this)) return false;"
+				oncomplete="enableButton();hideMedSelectionDlg();">
+			</a:commandLink>
+			<a:commandLink value="#{messages['form.cancel']}"
 				action="#{conversation.end}"
 				oncomplete="hideMedSelectionDlg();return false;" 
-				styleClass="button-cancel" />
+				styleClass="button-alt" />
 		</td>
 	</tr></table>
 	<rich:jQuery selector="#resistdlgs" query="click(function(){this.disabled=true;})" />

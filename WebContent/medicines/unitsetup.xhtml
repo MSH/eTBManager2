@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
  	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templateMedPage}">
+      template="../layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.unitsetup']}" />
 <ui:param name="topmenu" value="1" />
@@ -17,10 +17,10 @@
 <ui:define name="left">
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
 
-<s:button value="#{messages['form.edit']}" view="/medicines/unitsetupedt.xhtml" styleClass="button" />
+<s:link value="#{messages['form.edit']}" view="/medicines/unitsetupedt.xhtml" styleClass="button" />
 
 <s:decorate template="/layout/roundrect.xhtml" rendered="#{unitSetup.unit.orderMedicines}">
 	<ui:define name="header">

@@ -4,18 +4,19 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="..#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.movs.newadjust']} - #{messages['medicines.selbatches']}" />
 
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 
-<ui:define name="body">
+<ui:define name="content">
 <h:form id="main">
-    <table class="tabela" width="650px">
+    <table class="table1" width="650px">
     <tr><td>
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['Source']}:</ui:define>
@@ -36,7 +37,7 @@
 	
 	</td></tr>
 	<tr><td>
-		<h:dataTable value="#{stockAdjustmentHome.batches}" var="b" styleClass="tabela" width="100%" columnClasses="coll,colc,colr,colr" rowClasses="lin1,lin2">
+		<h:dataTable value="#{stockAdjustmentHome.batches}" var="b" styleClass="table1" width="100%" columnClasses="coll,colc,colr,colr" rowClasses="lin1,lin2">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['Batch.manufacturer']} - #{messages['Batch.batchNumber']}" styleClass="collh"/>
@@ -67,8 +68,11 @@
 		</h:dataTable>
 	</td></tr>
     <tr><td align="right">
-            <h:commandButton action="#{stockAdjustmentHome.selectBatches}" value="#{messages['form.ok']}" styleClass="button" />
-			<s:button action="/medicines/adjustedt.xhtml" value="#{messages['form.cancel']}" styleClass="button-cancel" />
+            <a:commandLink action="#{stockAdjustmentHome.selectBatches}" styleClass="button" 
+            	onclick="if (!disableButtons(this)) return false;" oncomplete="enableButton()">
+            	<span>#{messages['form.ok']}</span>
+            </a:commandLink>
+			<s:link action="/medicines/adjustedt.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" />
     </td></tr>
     
     </table>

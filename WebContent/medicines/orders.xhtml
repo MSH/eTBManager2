@@ -6,7 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templateMedPage}">
+      template="/layout/templatemed.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.orders']}" />
 <ui:param name="topmenu" value="1" />
@@ -14,14 +14,23 @@
 <ui:param name="pagestyle" value="width:750px;" />
 
 <ui:define name="naveg">
-	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none"/>
+	<div class="item">
+		<s:link value="#{messages['home']}" view="/medicines/index.xhtml" propagation="none"/>
+	</div>
+	<div class="item selected">
+		<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none"/>
+	</div>
 </ui:define>
 
 
-<ui:define name="body">
+<ui:define name="content_unit">
 <p/>
 <h:form id="main"> 
-	<s:link view="/medicines/edtorder.xhtml" value="#{messages['medicines.orders.new']}" rendered="#{userSession.canCreateOrder}" style="float:right;width:150px;text-align:right;"/>
+	<s:link view="/medicines/edtorder.xhtml" rendered="#{userSession.canCreateOrder}" 
+		style="float:right" 
+		styleClass="button-alt" >
+		<span>#{messages['medicines.orders.new']}</span>
+	</s:link>
 
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
@@ -41,9 +50,9 @@
 		</h:selectOneMenu>
 	</s:decorate>
 
-	<span style="width:100%;text-align:right;display:block;">
-		<h:commandButton action="#{orders.refresh}" value="#{messages['form.update']}"  styleClass="button" />
-	</span>
+	<h:commandLink action="#{orders.refresh}"  styleClass="button-alt" style="float:right;">
+		<span>#{messages['form.update']}</span>
+	</h:commandLink>
 	
 <p/>
 
@@ -54,7 +63,7 @@
 	<ui:param name="page" value="/medicines/orders.xhtml" />
 </s:decorate>
 
-<h:dataTable value="#{orders.resultList}" var="r" styleClass="tabela" rendered="#{orders.resultCount > 0}" 
+<h:dataTable value="#{orders.resultList}" var="r" styleClass="table1" rendered="#{orders.resultCount > 0}" 
 	width="100%" rowClasses="lin1,lin2" columnClasses="colc,colc,coll,coll,coll">
 	<h:column>
   		<f:facet name="header">

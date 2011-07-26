@@ -8,33 +8,26 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.newnotif']} - #{messages[tbcase.classification.key]}" />
 
 <ui:param name="topmenu" value="0" />
+<ui:param name="left" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
 
-<ui:param name="waitdlg" value="1" />
 
-<ui:define name="left">
-</ui:define>
+<ui:define name="content">
+<h1>#{title}</h1>
 
-<ui:define name="body">
-<p/>
-<a:form id="main">
-<table style="width:780px"><tr><td>
+<a:form id="main" styleClass="form1">
 
 	<ui:include src="casedataedt.xhtml" />
 	
-	
-	<s:decorate template="/layout/roundrect.xhtml" style="clear:both;display:block;">
-		<ui:define name="header">
-			<b>#{messages['MedicalExamination']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+	<div class="form-content">
+	<h2>#{messages['MedicalExamination']}</h2>
 
-		<div><table width="99%" style="border-collapse:collapse;"><tr><td colspan="2">
+	<table width="100%" style="border-collapse:collapse;"><tr><td colspan="2">
     		<s:decorate template="/layout/dateedit.xhtml" >
     			<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
     			<ui:param name="required" value="true" /> 
@@ -94,18 +87,18 @@
 		    	<h:inputTextarea value="#{medicalExamination.comments}" style="width:500px; height:100px;" />
 		    </s:decorate>
 
-		</td></tr></table>
-		</div>
-	</s:decorate>
-
-
-	<p/>
-	<table width="100%"><tr><td align="right">
-	<a:commandButton value="#{messages['form.ok']}" action="#{caseDataPHHome.saveNew}" styleClass="button" reRender="main"/>
-	<s:button value="#{messages['form.cancel']}" view="/cases/index.xhtml" styleClass="button-cancel" propagation="end" />
 	</td></tr></table>
-</td></tr></table>
-<p/>
+
+	</div>
+	
+	<div class="form-footer">
+		<a:commandLink action="#{caseDataPHHome.saveNew}" styleClass="button" reRender="main">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink>
+		<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 
 </a:form>
