@@ -117,7 +117,7 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
 				</f:facet>
-				<div class="#{r.result=='NEGATIVE'? 'result-negative': 'result-positive'}">#{messages[r.result.key]}</div>
+				<div><div class="#{r.result=='NEGATIVE'? 'icon-negative': 'icon-positive'}" style="float:left;"/>#{messages[r.result.key]}</div>
 				<s:fragment rendered="#{not empty r.numberOfAFB}" style="display:block;clear:both;">
 					<h:outputText value="#{messages['cases.exams.afb']}"/>: #{r.numberOfAFB}
 				</s:fragment>
@@ -188,7 +188,7 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
 				</f:facet>
-				<div class="#{r.result=='NEGATIVE'? 'result-negative': 'result-positive'}">#{messages[r.result.key]}</div>
+				<div><div class="#{r.result=='NEGATIVE'? 'icon-negative': 'icon-positive'}" style="float:left;"/>#{messages[r.result.key]}</div>
 				<s:div rendered="#{not empty r.numberOfColonies}" style="display:block;clear:both;">
 					<h:outputText value="#{messages['ExamCulture.numberOfColonies']}"/>: #{r.numberOfColonies}
 				</s:div>

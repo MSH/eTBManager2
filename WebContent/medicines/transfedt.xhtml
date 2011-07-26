@@ -135,8 +135,14 @@
 	</h:panelGroup>		
 
 	<table width="100%"><tr><td align="right">
-        <a:commandLink action="#{transferHome.saveNewTransfer}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>
-		<s:link view="/medicines/transfer.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end" />
+        <a:commandLink action="#{transferHome.saveNewTransfer}" styleClass="button" reRender="main,messages"
+        	onclick="if (!disableButtons(this)) return false;" 
+        	oncomplete="disableButton()">
+        	<span>#{messages['form.ok']}</span>
+        </a:commandLink>
+		<s:link view="/medicines/transfer.xhtml" styleClass="button-alt" propagation="end" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
 	</td></tr></table>
 </h:form>
 </s:decorate>
@@ -146,13 +152,19 @@
 </div>   
 
 <s:decorate template="/layout/medicinestockselection.xhtml" >
-	<a:commandLink value="#{messages['form.ok']}" action="#{transferHome.selectMedicines}" oncomplete="hideMedicinesStockDlg();" reRender="pnlitems" styleClass="button"/>
+	<a:commandLink action="#{transferHome.selectMedicines}"
+		onclick="if (!disableButtons(this)) return false;" 
+		oncomplete="enableButton();hideMedicinesStockDlg();" reRender="pnlitems" styleClass="button">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
 </s:decorate>
 
 <s:decorate template="/layout/batchselection.xhtml" >
-	<a:commandLink value="#{messages['form.ok']}" action="#{transferHome.selectBatches}" 
-		onclick="if (!validateBatchSelection(this)) return false;" 
-		oncomplete="hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button"/>
+	<a:commandLink action="#{transferHome.selectBatches}" 
+		onclick="if (!disableButtons(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
+		oncomplete="enableButton();hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
 </s:decorate>
 
 </ui:define>

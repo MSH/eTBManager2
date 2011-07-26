@@ -1,13 +1,16 @@
 package org.msh.tb.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.Component;
@@ -52,6 +55,9 @@ public class Patient extends WSObject implements Serializable {
 	
 	@Column(length=50)
 	private String legacyId;
+	
+	@OneToMany(mappedBy="patient")
+	private List<TbCase> cases = new ArrayList<TbCase>();
 
 
 	public String getFullName() {
@@ -183,5 +189,19 @@ public class Patient extends WSObject implements Serializable {
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	/**
+	 * @return the cases
+	 */
+	public List<TbCase> getCases() {
+		return cases;
+	}
+
+	/**
+	 * @param cases the cases to set
+	 */
+	public void setCases(List<TbCase> cases) {
+		this.cases = cases;
 	}
 }

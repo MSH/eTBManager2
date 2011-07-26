@@ -34,7 +34,8 @@
 </div>
 
 <div class="form-footer">
-	<a:commandLink action="#{caseValidationHome.registerPending}" styleClass="button" >
+	<a:commandLink action="#{caseValidationHome.registerPending}" styleClass="button" 
+		onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink> 
     <s:link view="/cases/casedata.xhtml" styleClass="button-alt">

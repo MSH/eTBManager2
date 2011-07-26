@@ -259,8 +259,8 @@ else return false;
             <a:commandLink action="#{medicineManStartHome.finishBatchEditing}" styleClass="button" 
             	reRender="batchpnl,medicines"
             	data="#{medicineManStartHome.validated}"
-            	onclick="this.disabled=true;" 
-            	oncomplete="this.disabled=false;if (data) hideBatchDlg();">
+            	onclick="if (!disableButtons(this)) return false;" 
+            	oncomplete="enableButton();if (data) hideBatchDlg();">
             	<span>#{messages['form.ok']}</span>
             </a:commandLink>
 			<s:link styleClass="button-alt" onclick="hideBatchDlg(); return false;" propagation="end">

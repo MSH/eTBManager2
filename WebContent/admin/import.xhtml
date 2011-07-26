@@ -52,9 +52,10 @@
     </s:decorate>
 
 	<p/>
-	<h:commandLink action="#{importDataHome.execute}" styleClass="button" >
-	<span>#{messages['form.import']}</span>
-	</h:commandLink>
+	<a:commandLink action="#{importDataHome.execute}" styleClass="button" 
+		onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
+		<span>#{messages['form.import']}</span>
+	</a:commandLink>
 </h:form>
 
 </s:decorate>

@@ -66,8 +66,8 @@
 	<div class="button-bar">
 	<a:commandLink action="#{treatmentHome.saveChanges}" styleClass="button" 
             	reRender="main,messages" 
-            	oncomplete="this.disabled=false;closeWaitDlg();"
-            	onclick="this.disabled=true;openWaitDlg();" >
+            	oncomplete="enableButton();"
+            	onclick="if (!disableButtons(this)) return false;"  >
 		<span>#{messages['form.save']}</span>
     </a:commandLink>
 
@@ -95,8 +95,9 @@ function showRemoveDlg() {
 	Richfaces.showModalPanel('removedlg'); 
 } 
 function formButtonPost(button) {
-	button.disabled=true;
+	if (!disableButtons(this)) return false;
 	jQuery(button).closest('.button-bar').prepend(waitdiv);
+	return true;
 }
 
 --></script>

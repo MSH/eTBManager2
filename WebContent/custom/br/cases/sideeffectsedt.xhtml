@@ -115,9 +115,11 @@ function validateYesNo(cb) {
 </table>
 
 <div class="form-footer">
-	<h:commandLink action="#{sideEffectHome.save}" styleClass="button" onclick="if (!validateForm()) {return false;} else openWaitDlg();">
+	<a:commandLink action="#{sideEffectHome.save}" styleClass="button" 
+		onclick="if (!disableButtons(this)) return false;if (!validateForm()) {enableButton();return false;}"
+		reRender="main">
 		<span>#{messages['form.save']}</span>
-	</h:commandLink> 
+	</a:commandLink> 
     <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
        	<f:param name="id" value="#{caseHome.id}"/>
        	<span>#{messages['form.cancel']}</span>

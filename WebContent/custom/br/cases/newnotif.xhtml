@@ -56,8 +56,9 @@ function checkfields() {
 
 	<div class="form-footer">
 		<a:commandLink id="btnsearch" action="#{patients.search}" 
-			styleClass="button"	data="#{patients.searching}" 
-			reRender="pnlpatients,dt" onclick="if (!checkfields()) return false" oncomplete="if (data) showbutton();">
+			styleClass="button"	data="#{patients.searching}"
+			reRender="pnlpatients,dt" onclick="if (!disableButtons(this)) return false;if (!checkfields()) return false"
+			oncomplete="enableButton();showbutton();">
 			<span>#{messages['form.search']}</span>
 		</a:commandLink>
 		
@@ -71,10 +72,10 @@ function checkfields() {
 <h:panelGroup id="pnlpatients">
 
 <div id="newpacbutton" class="button-bar" style="display:none;" >
-	<h:commandLink onclick="openWaitDlg();"
+	<a:commandLink onclick="if (!disableButtons(this)) return false;"
     	action="#{caseEditingHome.selectPatientData}" styleClass="button" >
 	    <span>#{messages['cases.newpatient']}</span>
-	</h:commandLink>
+	</a:commandLink>
 </div>
 
 <s:decorate template="/layout/naveg.xhtml" rendered="#{patients.searching}">
@@ -82,7 +83,7 @@ function checkfields() {
 	<ui:param name="page" value="/cases/newnotif.xhtml" />
 </s:decorate>
 
-<h:dataTable value="#{patients.resultList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
+<h:dataTable value="#{patients.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
 	rendered="#{patients.searching and (not empty patients.resultList)}" columnClasses="coll,colc,colc,coll">
 	<h:column>
 		<f:facet name="header">
@@ -90,11 +91,16 @@ function checkfields() {
   			<f:param name="order" value="#{patients.order=='p.name,p.middleName'?'p.name desc,p.middleName desc':''}" />
 			</s:link>
 		</f:facet>
-		<s:link value="#{it.fullName}" view="/cases/casenew.xhtml"  
-			onclick="openWaitDlg();">
-			<f:param name="pacid" value="#{it.id}" />
+		<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;">
+			<f:param name="pacid" value="#{it.patient.id}" />
 			<f:param name="classif" value="#{tbcase.classification}"/>
 		</s:link>
+		<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml" onclick="openWaitDlg();">
+			<f:param name="pacid" value="#{it.patient.id}" />
+			<f:param name="classif" value="#{tbcase.classification}"/>
+		</s:link>
+		<br/>
+		#{it.patient.recordNumber}
 	</h:column>
 
 	<h:column>
@@ -103,16 +109,7 @@ function checkfields() {
   			<f:param name="order" value="p.birthDate#{patients.order=='p.birthDate'?' desc':''}" />
 			</s:link>
 		</f:facet>
-		<h:outputText value="#{it.birthDate}"  converter="localeDateConverter"/>
-	</h:column>
-
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Patient.recordNumber']}">
-  			<f:param name="order" value="p.recordNumber#{patients.order=='p.recordNumber'?' desc':''}" />
-			</s:link>
-		</f:facet>
-		#{it.recordNumber}
+		<h:outputText value="#{it.patient.birthDate}"  converter="localeDateConverter"/>
 	</h:column>
 
 	<h:column>
@@ -121,9 +118,17 @@ function checkfields() {
   			<f:param name="order" value="p.motherName#{patients.order=='p.motherName'?' desc':''}" />
 			</s:link>
 		</f:facet>
-		#{it.motherName}
+		#{it.patient.motherName}
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['cases.sit.current']}" styleClass="collh" />
+		</f:facet>
+		<h:outputText value="#{it.caseStatus}" escape="false" />
 	</h:column>
 </h:dataTable>
+
 </h:panelGroup>
 
 <script type="text/javascript">

@@ -5,19 +5,19 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.orders.receive']}" />
-
 <ui:param name="topmenu" value="1" />
-
 <ui:param name="labelstyle" value="width:180px;" />
 
+
 <ui:define name="content">
-<p/>
-<h:form>
+<h1>#{title}</h1>
+<h:form id="main">
 <rich:panel style="width:600px;">
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['Order.tbunitFrom']}:</ui:define>
@@ -81,8 +81,13 @@
 </table>
 
 <div >
-    <h:commandLink action="#{orderReceivingHome.notifyReceiving}" value="#{messages['form.ok']}" styleClass="button" />
-    <s:link action="cancel" value="#{messages['form.cancel']}" styleClass="button-alt" />
+    <a:commandLink action="#{orderReceivingHome.notifyReceiving}" styleClass="button" 
+    	onclick="if (!disableButtons(this)) return false;" oncomplete="enableButton()" reRender="main">
+    	<span>#{messages['form.ok']}</span>
+    </a:commandLink>
+    <s:link action="cancel" styleClass="button-alt" >
+    	<span>#{messages['form.cancel']}</span>
+    </s:link>
 </div>
 </rich:panel>
 </h:form>

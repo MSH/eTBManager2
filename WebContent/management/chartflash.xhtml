@@ -85,6 +85,7 @@ function open_flash_chart_data()
 
 function showChart() {
 	swfobject.embedSWF("#{request.contextPath}/js/open-flash-chart.swf", "my_chart", "400", "#{indicatorFilters.chartType==1?(series.chartHeight):'400'}", "9.0.0");
+	jQuery("#charttypediv").show(500);
 }
 </script>
 

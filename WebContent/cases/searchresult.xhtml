@@ -21,10 +21,10 @@
 </ui:define>
 
 <ui:define name="content">
-
+<h1>#{title}</h1>
 	<h:form id="listCases">
 
-	<table width="99%"><tr><td>
+	<table width="100%"><tr><td>
 	
 		<s:decorate template="/layout/navegajax.xhtml">
 			<ui:param name="list" value="#{cases}" />
@@ -174,7 +174,8 @@
 	
 	<div class="button-bar">
 		<a:commandLink id="btnsearch" action="#{cases.refresh}" 
-			styleClass="button"	reRender="listCases" onclick="if (!validateFilters()) return false;this.disabled=true"
+			styleClass="button"	reRender="listCases" 
+			onclick="if (!disableButtons(this)) return false;if (!validateFilters()) {enableButton();return false}"
 			oncomplete="this.disabled=false;Richfaces.hideModalPanel('filtersdlg');return false;">
 			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
 			<span>#{messages['form.search']}</span>

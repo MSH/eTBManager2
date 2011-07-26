@@ -163,12 +163,6 @@
 	</h:panelGroup>
 </rich:tab>
 
-<rich:tab label="#{messages['cases.details.treatment']}" id="tab3" ontabenter="updateTab(3)">
-	<h:panelGroup id="pnltab3">
-		<s:decorate template="/custom/br/cases/treatment.xhtml" rendered="#{userSession.caseTab==3}"/>
-	</h:panelGroup>
-</rich:tab>
-
 <rich:tab label="#{messages['cases.details.medexam']}" id="tab4" ontabenter="updateTab(4)">
 	<h:panelGroup id="pnltab4">
 		<s:decorate template="medexamination.xhtml" rendered="#{userSession.caseTab==4}"/>
@@ -178,6 +172,12 @@
 <rich:tab label="#{messages['cases.details.otherinfo']}" id="tab5" ontabenter="updateTab(5)">
 	<h:panelGroup id="pnltab5">
 		<s:decorate template="/custom/br/cases/otherinfo.xhtml" rendered="#{userSession.caseTab==5}"/>
+	</h:panelGroup>
+</rich:tab>
+
+<rich:tab label="#{messages['cases.details.treatment']}" id="tab3" ontabenter="updateTab(3)">
+	<h:panelGroup id="pnltab3">
+		<s:decorate template="/custom/br/cases/treatment.xhtml" rendered="#{userSession.caseTab==3}"/>
 	</h:panelGroup>
 </rich:tab>
 
@@ -253,7 +253,8 @@ function updateTab(tabIndex) {
 
 	<div class="button-bar">	
 	<a:commandLink value="#{messages['form.ok']}" action="#{caseHome.changeNumber}"
-		styleClass="button" reRender="main" 
+		styleClass="button" reRender="main"
+		onclick="if (!disableButtons(this)) return false;"  
 		oncomplete="Richfaces.hideModalPanel('caseNumberDlg');"/>
 
 	<a:commandLink value="#{messages['form.cancel']}" styleClass="button-alt"  

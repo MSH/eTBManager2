@@ -45,7 +45,7 @@
 
 	<div class="form-footer">
 		<a:commandLink id="btnsearch" styleClass="button"
-			focus="name" onclick="initPatientSearch(); return false" >
+			focus="name" onclick="if (!disableButtons(this)) return false;initPatientSearch(); return false" >
 			<span>#{messages['form.search']}</span>
 		</a:commandLink>
 		<s:link view="/cases/index.xhtml" styleClass="button-alt" >
@@ -59,10 +59,10 @@
 <h:panelGroup id="pnlpatients">
 
 <div id="newpacbutton" class="button-bar" style="display:none;" >
-	<h:commandLink onclick="openWaitDlg();"
+	<a:commandLink onclick="if (!disableButtons(this)) return false;"
     	action="#{caseEditingHome.selectPatientData}" styleClass="button" >
 	    <span>#{messages['cases.newpatient']}</span>
-	</h:commandLink>
+	</a:commandLink>
 </div>
 
 <s:decorate template="/layout/naveg.xhtml" rendered="#{patients.searching}">
@@ -70,7 +70,7 @@
 	<ui:param name="page" value="/cases/newnotif.xhtml" />
 </s:decorate>
 
-<h:dataTable value="#{patients.resultList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
+<h:dataTable value="#{patients.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
 	rendered="#{patients.searching and (not empty patients.resultList)}" width="680px" columnClasses="coll,colc,colc,coll">
 	<h:column>
 		<f:facet name="header">
@@ -78,11 +78,16 @@
   			<f:param name="order" value="#{patients.order=='p.name,p.middleName'?'p.name desc,p.middleName desc':''}" />
 			</s:link>
 		</f:facet>
-		<s:link value="#{it.fullName}" view="/cases/casenew.xhtml"  
-			onclick="openWaitDlg();">
-			<f:param name="pacid" value="#{it.id}" />
+		<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;">
+			<f:param name="pacid" value="#{it.patient.id}" />
 			<f:param name="classif" value="#{tbcase.classification}"/>
 		</s:link>
+		<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml" onclick="openWaitDlg();">
+			<f:param name="pacid" value="#{it.patient.id}" />
+			<f:param name="classif" value="#{tbcase.classification}"/>
+		</s:link>
+		<br/>
+		#{it.patient.recordNumber}
 	</h:column>
 
 	<h:column>
@@ -91,16 +96,7 @@
   			<f:param name="order" value="p.birthDate#{patients.order=='p.birthDate'?' desc':''}" />
 			</s:link>
 		</f:facet>
-		<h:outputText value="#{it.birthDate}"  converter="localeDateConverter"/>
-	</h:column>
-
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Patient.recordNumber']}">
-  			<f:param name="order" value="p.recordNumber#{patients.order=='p.recordNumber'?' desc':''}" />
-			</s:link>
-		</f:facet>
-		#{it.recordNumber}
+		<h:outputText value="#{it.patient.birthDate}"  converter="localeDateConverter"/>
 	</h:column>
 
 	<h:column>
@@ -109,15 +105,24 @@
   			<f:param name="order" value="p.securityNumber#{patients.order=='p.securityNumber'?' desc':''}" />
 			</s:link>
 		</f:facet>
-		#{it.securityNumber}
+		#{it.patient.securityNumber}
+	</h:column>
+	
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['cases.sit.current']}" styleClass="collh" />
+		</f:facet>
+		<h:outputText value="#{it.caseStatus}" escape="false" />
 	</h:column>
 </h:dataTable>
 </h:panelGroup>
 
 <script type="text/javascript">
 function initPatientSearch() {
-	if (!checkfields())
+	if (!checkfields()){
+		enableButton();
 		return false;
+	}
 	searchPatient();
 }
 function checkfields() {
@@ -129,7 +134,7 @@ function checkfields() {
 }
 </script>
 <a:jsFunction name="searchPatient" reRender="pnlpatients,dt" 
-	oncomplete="if (data) showbutton();"
+	oncomplete="if (data) showbutton();enableButton();"
 	action="#{patients.search}"  
 	data="#{patients.searching}" />
 

@@ -37,9 +37,10 @@
     </div>
     
     <div class="form-footer">
-            <a:commandLink action="#{ageRangeHome.persist}" styleClass="button" reRender="main,messages">
-             <span>#{messages['form.save']}</span> 
-             </a:commandLink>  
+            <a:commandLink action="#{ageRangeHome.persist}" styleClass="button" reRender="main,messages" 
+            	onclick="if (!disableButtons(this)) return false;">
+             	<span>#{messages['form.save']}</span> 
+            </a:commandLink>  
             <s:link  styleClass="button-alt" view="/admin/ageranges.xhtml">
              <span>#{messages['form.cancel']}</span> 
             </s:link>  

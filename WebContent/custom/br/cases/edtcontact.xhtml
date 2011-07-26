@@ -152,9 +152,8 @@
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
             <a:commandLink action="#{tbContactBRHome.persist}" styleClass="button" reRender="formexam" 
-            	oncomplete="this.disabled=false;"
-            	onclick="this.disabled=true;" >
-            	<span>#{messages['form.ok']}</span>
+            	onclick="if (!disableButtons(this)) return false;"  >
+            	<span>#{messages['form.save']}</span>
             </a:commandLink>
             <s:link view="/cases/casedata.xhtml" styleClass="button-alt">
             	<f:param name="id" value="#{caseHome.id}"/>

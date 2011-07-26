@@ -102,8 +102,10 @@ function processSelectedUser(suggestion) {
         	</h:selectOneMenu>  
 	    </s:decorate>
 		
-		<a:commandLink action="#{workspaceHome.addUser}" value="#{messages['form.add']}" styleClass="button" 
-			reRender="main" />
+		<a:commandLink action="#{workspaceHome.addUser}" styleClass="button" 
+			onclick="if (!disableButtons(this)) return false;" reRender="main" >
+			<span>#{messages['form.add']}</span>
+		</a:commandLink>
 		
 		</div>
 

@@ -86,7 +86,8 @@
 	</table>
 
 	<div class="button-bar">	
-		<a:commandLink styleClass="button" action="#{registerDispensingHome.save}">
+		<a:commandLink styleClass="button" action="#{registerDispensingHome.save}"
+			onclick="if (!disableButtons(this)) return false;">
 			<span>#{messages['form.save']}</span>
 		</a:commandLink>
 		<s:link styleClass="button-alt" propagation="end" view="/cases/treatments.xhtml">

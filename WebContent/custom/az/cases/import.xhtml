@@ -44,9 +44,10 @@
     </s:decorate>
 
 	<p/>
-	<h:commandLink action="#{az.importDataHome.execute}" styleClass="button" >
+	<a:commandLink action="#{az.importDataHome.execute}" styleClass="button" reRender="main,messages" 
+		onclick="if (!disableButtons(this)) return false;" >
 		<span>#{messages['form.import']}</span>
-	</h:commandLink>
+	</a:commandLink>
 	
 </h:form>
 

@@ -166,18 +166,18 @@
     </div>
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
 
-    <s:decorate template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
-    	<ui:param name="required" value="#{tbcase.validated}" /> 
-    	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
-    </s:decorate>
-
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
     	<h:selectOneMenu value="#{tbcase.diagnosisType}" required="#{tbcase.validated}">
     		<s:selectItems var="it" value="#{diagnosisTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
+    	<ui:param name="required" value="#{tbcase.validated}" /> 
+    	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">

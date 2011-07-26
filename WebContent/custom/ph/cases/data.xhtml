@@ -55,7 +55,7 @@
     </td></tr>
     <s:fragment>
     <tr><td colspan="2">
-    	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
+    	<h2>#{messages['cases.details.addressnotif']}</h2>
 	
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
@@ -74,7 +74,7 @@
 	</s:fragment>
 	<s:fragment rendered="#{tbcase.notifAddressChanged}">
 	<tr><td colspan="2">
-		<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
+		<h2>#{messages['cases.details.addresscurr']}</h2>
 	
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
@@ -114,7 +114,7 @@
 
                  
 	<div class="form-content">
-	<b>#{messages['cases.generaldata']}</b>
+	<h2>#{messages['cases.generaldata']}</h2>
 	<table style="border-collapse:collapse;width:98%;" cellpadding="1" >
 	<tr><td colspan="2">
 	<s:decorate template="/layout/display.xhtml">
@@ -211,9 +211,7 @@
 
 	</td></tr>
 	<tr><td colspan="2">
-		<div class="paragraph">
-			Symptoms
-		</div>
+		<h2>Symptoms</h2>
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty caseSymptomsHome.caseSymptoms}" />
 		<h:dataTable value="#{caseSymptomsHome.caseSymptoms}" var="it" styleClass="tabela4"  columnClasses="colb,colb"
 			rowClasses="lin1,lin2" style="clear:left;width:100%;border-collapse:collapse;"
@@ -234,7 +232,7 @@
 	<tr><td colspan="2">
 
 		<s:fragment rendered="#{not empty prevTBTreatmentHome.items}">
-		<div class="paragraph">#{messages['cases.prevtreat']}</div>
+		<h2>#{messages['cases.prevtreat']}</h2>
 		<table width="98%" class="tabela4">
 			<tr>
 				<th rowspan="2">#{messages['cases.prevtreat.num']}

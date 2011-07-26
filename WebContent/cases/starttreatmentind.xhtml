@@ -175,6 +175,7 @@
 
 	<div class="form-footer">	
 		<a:commandLink styleClass="button" action="#{startTreatmentIndivHome.startIndividualizedRegimen}" 
+			onclick="if (!disableButtons(this)) return false;" 
 			reRender="messages,formtreat">
 			<span>#{messages['form.ok']}</span>
 		</a:commandLink>
@@ -189,8 +190,8 @@
 <s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
 	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
 	<a:commandLink styleClass="button" action="#{startTreatmentIndivHome.addMedicines}" 
-		oncomplete="this.enabled=true;hideMedicinesDlg();" 
-		onclick="this.disabled=true;"
+		oncomplete="enableButton();hideMedicinesDlg();" 
+		onclick="if (!disableButtons(this)) return false;" 
 		reRender="#{startTreatmentIndivHome.phase=='INTENSIVE'? 'pnltreatment_int':'pnltreatment_cont'}">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink>

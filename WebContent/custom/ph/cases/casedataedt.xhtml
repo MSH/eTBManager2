@@ -44,7 +44,7 @@
 	</td></tr>
     
     <tr><td colspan="2">
-    	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
+    	<h2>#{messages['cases.details.addressnotif']}</h2>
     </td></tr>
     
     <tr><td colspan="2">
@@ -80,7 +80,7 @@
     	</s:decorate>
     	
     	<div id="curraddr" style="clear:both;">
-    	<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
+    	<h2>#{messages['cases.details.addresscurr']}</h2>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.address']}:</ui:define>
     		<h:inputText value="#{tbcase.currentAddress.address}" style="width:300px;margin-bottom:2px;" maxlength="100"/><br/>
@@ -116,7 +116,7 @@
     	</td></tr>
 
     <tr><td colspan="2">
-		<div class="paragraph">In case of emergency</div>
+		<h2>In case of emergency</h2>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['en_PH.casedata.personToNotify']}:</ui:define>
     		<h:inputText value="#{caseDataPH.personToNotify}" maxlength="100" style="width:300px" />
@@ -142,7 +142,7 @@
 	<tr><td colspan="2">
 
 
-	<div class="paragraph">#{messages['TbCase.notificationUnit']}</div>
+	<h2>#{messages['TbCase.notificationUnit']}</h2>
 	<s:decorate template="/layout/tbselection.xhtml" style="margin-bottom:10px;">
 		<ui:param name="required" value="true" />
 		<ui:param name="tbunitselection" value="#{caseEditingHome.tbunitselection}" />

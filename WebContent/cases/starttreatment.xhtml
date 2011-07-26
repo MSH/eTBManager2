@@ -91,7 +91,7 @@
 		<h:column>
 			<f:facet name="header">#{messages['Source']}</f:facet>
 			<h:selectOneMenu id="sourcei" value="#{m.source}" required="true">
-            	<s:selectItems value="#{sources}" var="c" label="#{c.name}" noSelectionLabel="-" />
+            	<s:selectItems value="#{sources}" var="c" label="#{c.abbrevName}" noSelectionLabel="-" />
             	<s:convertEntity />
 			</h:selectOneMenu>
 			<h:message for="sourcei" styleClass="erro"/>
@@ -113,8 +113,7 @@
 	<div class="form-footer">    
 		<a:commandLink action="#{startTreatmentHome.startStandardRegimen}" styleClass="button" 
 				reRender="formtreat,messages" 
-            	oncomplete="this.disabled=false;"
-            	onclick="this.disabled=true;" >
+            	onclick="if (!disableButtons(this)) return false;"  >
             <span>#{messages['form.ok']}</span>
         </a:commandLink>
            

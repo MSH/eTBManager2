@@ -28,6 +28,14 @@
 		<span>#{messages['cases.newnotif']}</span>
 	</h:commandLink>
 
+	<div class="spacer" />
+
+	<h:commandLink 
+		onclick="showModalAutoTop('newsuspectdlg');return false;" style="width:130px"
+		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button-alt">
+		<span>#{messages['cases.newsusp']}</span>
+	</h:commandLink>
+
 	<s:fragment rendered="#{not userSession.canNotifySeveralClassifs}">
 		<a:repeat value="#{globalLists.caseClassifications}" var="cla">
 			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}" styleClass="button">
@@ -143,7 +151,7 @@
 	
 	<h:inputText id="patname" value="#{caseFilters.patient}" style="width:150px;margin:4px" />
 
-	<a:commandLink id="btnsearchpat" action="search" styleClass="button" >
+	<a:commandLink id="btnsearchpat" action="search" styleClass="button" onclick="if (!disableButtons(this)) return false;" >
 		<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
 		<span>#{messages['form.search']}</span>
 	</a:commandLink>
@@ -170,7 +178,7 @@
 		#{messages['cases.newnotif']}
 	</f:facet>
 
-	<a:form id="formclassifcation">
+	<a:form>
 
 	#{messages['cases.newnotif.title']}
 	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
@@ -178,6 +186,33 @@
 		<tr><td class="vertical-menu">
 			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
 				<f:param name="classif" value="#{it}"/>
+				<f:param name="type" value="CONFIRMED"/>
+				<div class="new-icon" />#{messages[it.key]}
+			</s:link>
+		</td></tr>
+	</c:forEach>
+	</table>
+	<div class="button-bar">
+		<s:link onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" styleClass="button-alt" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+	</a:form>
+</rich:modalPanel>
+<rich:modalPanel id="newsuspectdlg" width="300" zindex="2000" autosized="true">
+	<f:facet name="header" >
+		#{messages['cases.newsusp']}
+	</f:facet>
+
+	<a:form>
+
+	#{messages['cases.newnotif.title']}
+	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
+	<c:forEach items="#{globalLists.caseClassifications}" var="it">
+		<tr><td class="vertical-menu">
+			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
+				<f:param name="classif" value="#{it}"/>
+				<f:param name="type" value="SUSPECT"/>
 				<div class="new-icon" />#{messages[it.key]}
 			</s:link>
 		</td></tr>
@@ -203,7 +238,7 @@
 	<ui:include src="searchfilters.xhtml" />
 
 	<div class="button-bar">
-		<a:commandLink id="btnsearch" action="search" styleClass="button" >
+		<a:commandLink id="btnsearch" action="search" styleClass="button" onclick="if (!disableButtons(this)) return false;" >
 			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
 			<span>#{messages['form.search']}</span>
 		</a:commandLink>

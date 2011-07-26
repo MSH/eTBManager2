@@ -84,7 +84,7 @@
 	
 	<div class="form-footer">
         <a:commandLink action="#{caseDispensingHome.saveDispensing}" styleClass="button"  
-            	reRender="main" >
+            	reRender="main" onclick="if (!disableButtons(this)) return false;" >
 			<span>#{messages['form.save']}</span>
         </a:commandLink>
         <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">

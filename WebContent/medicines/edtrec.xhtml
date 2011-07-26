@@ -132,8 +132,7 @@
     </td></tr>
     <tr><td align="right">
             <a:commandLink action="#{medicineReceivingHome.persist}" styleClass="button" 
-            	onclick="openWaitDlg();" 
-            	oncomplete="closeWaitDlg();" 
+            	onclick="if (!disableButtons(this)) return false;" 
             	reRender="messages,main">
             	<span>#{messages['form.save']}</span>
             </a:commandLink>

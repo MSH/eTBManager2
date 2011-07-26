@@ -385,8 +385,9 @@
 	
 
 	<div class="form-footer">
-		<a:commandLink action="#{caseDataBRHome.saveNew}" styleClass="button" reRender="main,messages">
-			<span>#{messages['form.ok']}</span>
+		<a:commandLink action="#{caseDataBRHome.saveNew}" styleClass="button" reRender="main,messages"
+			onclick="if (!disableButtons(this)) return false;" >
+			<span>#{messages['form.save']}</span>
 		</a:commandLink>
 		<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" >
 			<span>#{messages['form.cancel']}</span>

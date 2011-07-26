@@ -72,9 +72,10 @@
 	
 	</td></tr><tr><td align="right">
 		
-		<h:commandLink action="#{systemConfigHome.saveCofiguration}" styleClass="button" >
-		<span>#{messages['form.save']}</span>
-		</h:commandLink> 
+		<a:commandLink action="#{systemConfigHome.saveCofiguration}" styleClass="button" 
+			onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink> 
 		
 		<s:link view="/admin/index.xhtml" styleClass="button-alt" propagation="end" >
 		<span>#{messages['form.cancel']}</span>

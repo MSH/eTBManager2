@@ -109,8 +109,8 @@ else return false;
     	<td align="right">
             <a:commandLink action="#{medicineReceivingHome.addBatch}" styleClass="button" 
             	reRender="batchpnl,medicines"
-            	onclick="this.disabled=true;" 
-            	oncomplete="this.disabled=false;if (!batchValidationErrors()) hideBatchDlg();" >
+            	onclick="if (!disableButtons(this)) return false;" 
+            	oncomplete="enableButton();if (!batchValidationErrors()) hideBatchDlg();" >
             	<span>#{messages['form.ok']}</span>
             </a:commandLink>
 			<s:link styleClass="button-alt" onclick="hideBatchDlg(); return false;">

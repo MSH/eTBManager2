@@ -53,9 +53,11 @@
     
     </div>
    <div class="form-footer">
-            <a:commandLink action="#{healthSystemHome.persist}" styleClass="button" reRender="main">
-             <span>#{messages['form.save']}</span>
-             </a:commandLink>  
+            <a:commandLink action="#{healthSystemHome.persist}" styleClass="button" 
+            	reRender="main,messages"
+            	onclick="if (!disableButtons(this)) return false;" >
+             	<span>#{messages['form.save']}</span>
+            </a:commandLink>  
             <s:link styleClass="button-alt" view="/admin/healthsys.xhtml">
             <span>#{messages['form.cancel']}</span>
             </s:link>  

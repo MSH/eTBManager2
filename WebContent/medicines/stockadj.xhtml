@@ -131,8 +131,9 @@
 	<ui:param name="quantitytitle" value="#{messages['medicines.movs.newqtty']}" />
 	<a:commandLink action="#{stockAdjustmentHome.executeBatchAdjustment}"
 		data="#{stockAdjustmentHome.actionExecuted}"  
-		onclick="if (!validateBatchSelection(this)) return false;" 
-		oncomplete="if (!data) return false; hideBatchesSelectionDlg();refreshMedTable();" reRender="batchselpnl" styleClass="button">
+		onclick="if (!disableButtons(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
+		oncomplete="enableButton();if (!data) return false; hideBatchesSelectionDlg();refreshMedTable();" 
+		reRender="batchselpnl" styleClass="button">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink>
 	
@@ -271,8 +272,8 @@ function initBatchDeleting(batchId) {
             <a:commandLink action="#{stockAdjustmentHome.saveNewBatch}" styleClass="button" 
             	reRender="newbatchpnl"
             	data="#{stockAdjustmentHome.actionExecuted}"
-            	onclick="this.disabled=true;" 
-            	oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('newbatchdlg');refreshMedTable();">
+            	onclick="if (!disableButtons(this)) return false;"
+            	oncomplete="enableButton();if (!data) return false; Richfaces.hideModalPanel('newbatchdlg');refreshMedTable();">
             	<span>#{messages['form.ok']}</span>
             </a:commandLink>
 			<s:link 
@@ -338,8 +339,8 @@ function initBatchDeleting(batchId) {
             <a:commandLink action="#{stockAdjustmentHome.deleteBatch()}" styleClass="button" 
             	reRender="newbatchpnl"
             	data="#{stockAdjustmentHome.actionExecuted}"
-            	onclick="this.disabled=true;" 
-            	oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('delbatchdlg');refreshMedTable();">
+            	onclick="if (!disableButtons(this)) return false;"
+            	oncomplete="enableButton();if (!data) return false; Richfaces.hideModalPanel('delbatchdlg');refreshMedTable();">
             	<span>#{messages['form.ok']}</span>
             </a:commandLink>
 			<s:link 

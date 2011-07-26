@@ -80,7 +80,8 @@
   
    <div class="form-footer">
             <a:commandLink action="#{sourceHome.persist}"  
-            	styleClass="button" 
+            	styleClass="button"
+            	onclick="if (!disableButtons(this)) return false;"  
             	reRender="main,messages">
             	<span>#{messages['form.save']}</span>
             	</a:commandLink>

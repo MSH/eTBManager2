@@ -56,7 +56,9 @@
 	<td align="right">
 	<a:commandLink styleClass="button" 
 		action="#{orderLeadTimeReport.generate}" 
-		reRender="main,pnlPrintLink">
+		reRender="main,pnlPrintLink"
+		onclick="if (!disableButtons(this)) return false;"
+		oncomplete="enableButton()">
 		<span>#{messages['form.generate']}</span>
 	</a:commandLink>
 </td></tr>

@@ -62,7 +62,10 @@
 	</td></tr>
 	<tr><td>
 
-	<a:commandLink value="#{messages['form.copy']}" action="#{workspaceCopy.copy}" styleClass="button" reRender="main"/>
+	<a:commandLink value="#{messages['form.copy']}" action="#{workspaceCopy.copy}" 
+		styleClass="button" 
+		onclick="if (!disableButtons(this)) return false;"  
+		reRender="main"/>
 
 	</td></tr></table>
 

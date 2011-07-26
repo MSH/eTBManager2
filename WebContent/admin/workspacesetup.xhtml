@@ -119,8 +119,9 @@
 	
 	</td></tr><tr><td align="right">
 		
-		<h:commandLink action="#{workspaceHome.saveDefaultworkspace}" styleClass="button" >
-		<span>#{messages['form.save']}</span>
+		<h:commandLink action="#{workspaceHome.saveDefaultworkspace}" styleClass="button" 
+			onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
+			<span>#{messages['form.save']}</span>
 		</h:commandLink> 
 		
 		<s:link view="/admin/index.xhtml" styleClass="button-alt" >

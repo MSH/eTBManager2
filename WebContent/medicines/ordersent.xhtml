@@ -11,14 +11,13 @@
       template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['medicines.orders.shipment']}" />
-
 <ui:param name="topmenu" value="1" />
-
 <ui:param name="labelstyle" value="width:160px;" />
+
 
 <ui:define name="content">
 <h1>#{title}</h1>
-<h:form>
+<h:form id="main">
 <rich:panel style="width:700px;">
     
     <table width="100%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse">
@@ -122,7 +121,8 @@
 </h:panelGroup>
 
 <div >
-    <h:commandLink action="#{orderShippingHome.registerShipping}" styleClass="button" >
+    <h:commandLink action="#{orderShippingHome.registerShipping}" styleClass="button" 
+    	onclick="if (!disableButtons(this)) return false;" reRender="main">
     	<span>#{messages['form.ok']}</span>
     </h:commandLink>
     <s:link action="cancel" styleClass="button-alt" >
@@ -134,9 +134,9 @@
 </h:form>
 
 <s:decorate template="/layout/batchselection.xhtml" >
-	<a:commandLink action="#{orderShippingHome.finishBatchesSelection}" 
-		onclick="if (!validateBatchSelection(this)) return false;" 
-		oncomplete="hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button">
+	<a:commandLink action="#{orderShippingHome.finishBatchesSelection}"
+		onclick="if (!disableButtons(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
+		oncomplete="enableButton();hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink>
 </s:decorate>

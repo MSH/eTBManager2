@@ -172,8 +172,7 @@
     
 		<a:commandLink action="#{caseDataBRHome.saveTreatmentEditing}" value="#{messages['form.ok']}" styleClass="button" 
 				reRender="formtreat,messages" 
-            	oncomplete="this.disabled=false;"
-            	onclick="this.disabled=true;" />
+            	onclick="if (!disableButtons(this)) return false;" />
            
 		<s:link view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end">
 			<f:param name="id" value="#{caseHome.id}"/>
@@ -186,8 +185,9 @@
 
 <s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
 	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
-	<a:commandLink value="#{messages['form.ok']}" styleClass="button" action="#{startTreatmentIndivHome.addMedicines}" 
-		oncomplete="hideMedicinesDlg();" 
+	<a:commandLink value="#{messages['form.ok']}" styleClass="button" action="#{startTreatmentIndivHome.addMedicines}"
+		onclick="if (!disableButtons(this)) return false;"  
+		oncomplete="enableButton();hideMedicinesDlg();" 
 		reRender="#{startTreatmentIndivHome.phase=='INTENSIVE'? 'pnltreatment_int':'pnltreatment_cont'}"/>
 </s:decorate>
 

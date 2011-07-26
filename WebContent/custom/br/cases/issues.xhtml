@@ -66,7 +66,7 @@ function hideIssuesCommand() {
 <s:fragment rendered="#{caseValidationHome.displayingIssues}">
 
 	<s:link value="#{messages['cases.pending.answer']}" view="/cases/postanswer.xhtml" 
-		rendered="#{caseHome.canAnswerIssue}" styleClass="button" style="width:200px;">
+		rendered="#{caseHome.canAnswerIssue}" styleClass="button-alt" >
 		<f:param name="id" value="#{caseHome.id}"/>
 	</s:link>
 

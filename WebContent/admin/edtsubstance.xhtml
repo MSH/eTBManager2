@@ -89,8 +89,10 @@
   </div>
     
   <div class="form-footer">
-            <a:commandLink action="#{substanceHome.persist}" styleClass="button" reRender="main">
-            <span>#{messages['form.save']}</span>
+            <a:commandLink action="#{substanceHome.persist}" styleClass="button"
+            	onclick="if (!disableButtons(this)) return false;" 
+                reRender="main,messages">
+            	<span>#{messages['form.save']}</span>
             </a:commandLink>
             <s:link view="/admin/substances.xhtml" styleClass="button-alt" >
             <span>#{messages['form.cancel']}</span>

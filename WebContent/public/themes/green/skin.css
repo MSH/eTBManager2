@@ -500,7 +500,17 @@ font-weight:bold;
 	padding-top:4px;
 }
 
-
+.button-disabled, .button-disabled:hover {
+	background-position: right -52px;
+	text-decoration: none;
+	cursor:default;
+}
+.button-disabled span, .button-disabled:hover span{
+	background-position: left -52px;
+	text-decoration: none;
+	cursor:default;
+	color:#e0e0e0;
+}
 
 /* TABELAS */
 .table1 {
@@ -723,7 +733,7 @@ font-weight:bold;
 	display:inline-block;
 }
 .warn {
-	color:#d5b14f;
+	color:#c5a13f;
 	font-weight: bold;
 }
 .global-messages {
@@ -791,7 +801,8 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .icon-user-header, .icon-bullet, .icon-bullet-menu, .dst-resistant, .dst-contaminated, .dst-susceptible, 
 .tag-icon, .delete-icon, .new-icon, .progress-icon, .plus-icon, .icon-checked, .icon-unchecked,
 .icon-square, .icon-lab, .icon-hu, .icon-ds, .icon-report, .checked-icon, .unchecked-icon,
-.icon-user, .icon-log-NEW, .icon-log-EDIT, .icon-log-DELETE, .icon-log-EXEC {
+.icon-user, .icon-log-NEW, .icon-log-EDIT, .icon-log-DELETE, .icon-log-EXEC, 
+.naveg-first, .naveg-prev, .naveg-next, .naveg-last, .icon-positive, .icon-negative {
 	background-image: url('images/icons.png');
 	width:16px;
 	height:16px;
@@ -831,6 +842,9 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .dst-resistant { background-position:-16px -80px;  }
 .dst-contaminated {	background-position:-32px -80px;  }
 
+.icon-negative {	background-position:-80px -80px;  }
+.icon-positive {	background-position:-64px -80px;  }
+
 .tag-icon {	background-position:-48px -48px;  }
 .delete-icon {	background-position:0px -16px; }
 .plus-icon { background-position:-32px -16px; }
@@ -850,7 +864,10 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .icon-log-DELETE { background-position:0px -16px; }
 .icon-log-EXEC { background-position:-112px -32px; }
 
-
+.naveg-first { background-position:0px -32px; }
+.naveg-prev { background-position:-16px -32px; }
+.naveg-next { background-position:-32px -32px; }
+.naveg-last { background-position:-48px -32px; }
 
 /* TREATMENT */
 

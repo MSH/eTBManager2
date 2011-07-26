@@ -65,9 +65,9 @@
 	</div>
 	
 	<div class="form-footer">
-	<h:commandLink action="#{caseCloseHomeBR.closeCase}" styleClass="button" onclick="openWaitDlg();">
+	<a:commandLink action="#{caseCloseHomeBR.closeCase}" styleClass="button" onclick="if (!disableButtons(this)) return false;" reRender="main">
 		<span>#{messages['form.ok']}</span>
-	</h:commandLink> 
+	</a:commandLink> 
     <s:link view="/cases/casedata.xhtml" styleClass="button-alt">
        	<f:param name="id" value="#{caseHome.id}"/>
        	<span>#{messages['form.cancel']}</span>

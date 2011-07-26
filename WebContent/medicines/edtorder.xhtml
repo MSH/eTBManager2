@@ -83,7 +83,7 @@
 </c:forEach>
 
 	<tr><td style="text-align:right;">
-            <a:commandLink action="#{orderHome.saveNew}" styleClass="button" reRender="msg,main">
+            <a:commandLink action="#{orderHome.saveNew}" styleClass="button" reRender="msg,main" onclick="if (!disableButtons(this)) return false;">
             	<span>#{messages['form.ok']}</span>
             </a:commandLink>
             <s:link action="cancel" styleClass="button-alt" >

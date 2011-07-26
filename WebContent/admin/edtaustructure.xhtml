@@ -61,9 +61,10 @@
     </div>
     
     <div class="form-footer">
-		<h:commandLink action="#{countryStructureHome.persist}" styleClass="button">
+		<a:commandLink action="#{countryStructureHome.persist}" styleClass="button"
+			reRender="main,messages" onclick="if (!disableButtons(this)) return false;">
 			<span>#{messages['form.save']}</span>
-		</h:commandLink>  
+		</a:commandLink>  
 		<s:link view="/admin/countrystructure.xhtml" styleClass="button-alt" >
 			<f:param name="id" value="#{null}" />
 			<span>#{messages['form.cancel']}</span>

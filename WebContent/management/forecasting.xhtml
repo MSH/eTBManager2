@@ -36,7 +36,8 @@
 	<div style="float:right" >
 	<a:commandLink styleClass="button" title="Execute the forecasting (re)calculating the results" 
 		action="#{forecastingCalculation.execute}" reRender="main,messages"
-		oncomplete="RichFaces.switchTab('main:tabPanelForecasting','main:tabresult','tabresult')">
+		onclick="if (!disableButtons(this)) return false;"
+		oncomplete="enableButton();RichFaces.switchTab('main:tabPanelForecasting','main:tabresult','tabresult')">
 		<span>#{messages['manag.forecast.execute']}</span>
 	</a:commandLink>
 	<s:link view="/management/index.xhtml" styleClass="button-alt" propagation="end">
@@ -511,7 +512,9 @@ function showLoadForecastingDlg() {
 
 	<div class="button-bar">
 		<a:commandLink action="#{forecastingView.datesChangeListener}"
-			styleClass="button" reRender="datespnl,main" oncomplete="Richfaces.hideModalPanel('datesdlg');">
+			styleClass="button" reRender="datespnl,main"
+			onclick="if (!disableButtons(this)) return false;" 
+			oncomplete="enableButton();Richfaces.hideModalPanel('datesdlg');">
 			<span>#{messages['form.ok']}</span>
 		</a:commandLink>
 		<s:link styleClass="button-alt" onclick="Richfaces.hideModalPanel('datesdlg'); return false;">
@@ -543,7 +546,9 @@ function showLoadForecastingDlg() {
 
 	<div class="button-bar">
 		<a:commandLink action="#{forecastingView.confirmOrderChanges}"
-			styleClass="button" reRender="orderpnl,meds" oncomplete="Richfaces.hideModalPanel('orderdlg');">
+			styleClass="button" reRender="orderpnl,meds" 
+			onclick="if (!disableButtons(this)) return false;"
+			oncomplete="enableButton();Richfaces.hideModalPanel('orderdlg');">
 			<span>#{messages['form.ok']}</span>
 		</a:commandLink>
 		<s:link styleClass="button-alt" onclick="Richfaces.hideModalPanel('orderdlg'); return false;">
@@ -575,7 +580,9 @@ function showLoadForecastingDlg() {
 	
 	<div class="button-bar">
 		<a:commandLink action="#{forecastingView.confirmBatchChanges}"
-			styleClass="button" reRender="batchpnl,meds" oncomplete="Richfaces.hideModalPanel('batchdlg');">
+			styleClass="button" reRender="batchpnl,meds"
+			onclick="if (!disableButtons(this)) return false;" 
+			oncomplete="enableButton();Richfaces.hideModalPanel('batchdlg');">
 			<span>#{messages['form.ok']}</span>
 		</a:commandLink>
 		<s:link styleClass="button-alt" onclick="Richfaces.hideModalPanel('batchdlg'); return false;">

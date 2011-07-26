@@ -198,10 +198,14 @@
    
 <s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
 	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
-   	<a:commandLink action="#{regimenHome.addMedicines}" styleClass="button" oncomplete="hideMedicinesDlg();"  reRender="main:tab1" rendered="#{regimenHome.phase=='INTENSIVE'}">
-   	<span>#{messages['form.ok']}</span>
+   	<a:commandLink action="#{regimenHome.addMedicines}" styleClass="button"
+   		onclick="if (!disableButtons(this)) return false;"  
+   		oncomplete="hideMedicinesDlg();"  reRender="main:tab1" rendered="#{regimenHome.phase=='INTENSIVE'}">
+   		<span>#{messages['form.ok']}</span>
    	</a:commandLink>
-   	<a:commandLink action="#{regimenHome.addMedicines}" styleClass="button" oncomplete="hideMedicinesDlg();"  reRender="main:tab2" rendered="#{regimenHome.phase=='CONTINUOUS'}">
+   	<a:commandLink action="#{regimenHome.addMedicines}" styleClass="button"
+   		onclick="if (!disableButtons(this)) return false;"  
+   		oncomplete="hideMedicinesDlg();"  reRender="main:tab2" rendered="#{regimenHome.phase=='CONTINUOUS'}">
    	<span>#{messages['form.ok']}</span>
    	</a:commandLink>
 </s:decorate>

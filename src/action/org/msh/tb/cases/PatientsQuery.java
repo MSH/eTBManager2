@@ -1,26 +1,30 @@
 package org.msh.tb.cases;
 
 
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.utils.EntityQuery;
 
 
 @Name("patients")
-public class PatientsQuery extends EntityQuery<Patient> {
+public class PatientsQuery extends EntityQuery {
 	private static final long serialVersionUID = -2441729659688297288L;
 
-/*	private static final String[] restrictions = {
-		"p.birthDate = #{patient.birthDate}",
-		"p.name like #{patients.nameLike}",
-		"p.middleName like #{patients.middleNameLike}",
-		"p.lastName like #{patients.lastNameLike}"
-	};
-*/	
 	@In(required=false) Patient patient;
 
 	private boolean searching;
+	private List<Item> patientList;
 
 
 	/* (non-Javadoc)
@@ -28,7 +32,9 @@ public class PatientsQuery extends EntityQuery<Patient> {
 	 */
 	@Override
 	public String getEjbql() {
-		return "from Patient p where p.workspace.id = #{defaultWorkspace.id} " + conditions();
+		return "from Patient p left outer join p.cases c " +
+			"where p.workspace.id = #{defaultWorkspace.id} " + conditions() +
+			" and c.registrationDate in (select max(aux.registrationDate) from TbCase aux where aux.patient.id = p.id)";
 	}
 
 	/**
@@ -63,6 +69,12 @@ public class PatientsQuery extends EntityQuery<Patient> {
 		return 50;
 	}
 
+	public List<Item> getPatientList() {
+		if (patientList == null)
+			createPatientList();
+		return patientList;
+	}
+	
 	@Override
 	public String getOrder() {
 		return "p.name";
@@ -93,12 +105,88 @@ public class PatientsQuery extends EntityQuery<Patient> {
 		this.searching = searching;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.rmemoria.utils.EntityQuery#getStringRestrictions()
+	/**
+	 * Create list of patient wrapper in an {@link Item} object
 	 */
-/*	@Override
-	protected List<String> getStringRestrictions() {
-		return Arrays.asList(restrictions);
+	private void createPatientList() {
+		patientList = new ArrayList<Item>();
+
+		for (Object obj: getResultList()) {
+			Object[] vals = (Object[])obj;
+			Item item = new Item((Patient)vals[0], (TbCase)vals[1]);
+			patientList.add(item);
+		}
 	}
-*/}
+
+
+	public class Item {
+		private Patient patient;
+		private TbCase tbcase;
+
+		public Item(Patient patient, TbCase tbcase) {
+			super();
+			this.patient = patient;
+			this.tbcase = tbcase;
+		}
+		/**
+		 * @return the patient
+		 */
+		public Patient getPatient() {
+			return patient;
+		}
+		/**
+		 * @param patient the patient to set
+		 */
+		public void setPatient(Patient patient) {
+			this.patient = patient;
+		}
+		/**
+		 * @return the tbcase
+		 */
+		public TbCase getTbcase() {
+			return tbcase;
+		}
+		/**
+		 * @param tbcase the tbcase to set
+		 */
+		public void setTbcase(TbCase tbcase) {
+			this.tbcase = tbcase;
+		}
+		
+		public String getCaseStatus() {
+			if (tbcase == null)
+				return null;
+			
+			Map<String, String> msgs = Messages.instance();
+			
+			String s = msgs.get(tbcase.getClassification().getKey());
+	
+			if (tbcase.getDiagnosisType() != null)
+				s += " - " + msgs.get(tbcase.getDiagnosisType().getKey());
+
+			s = "<b>" + s + "</b><br/>";
+
+			SimpleDateFormat f = new SimpleDateFormat("MMM-yyyy");
+			
+			if (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT) {
+				s += "<div class='warn'>" + MessageFormat.format(msgs.get("cases.sit.SUSP.date"), f.format(tbcase.getRegistrationDate())) + "</div>";
+			}
+			else 
+			if (tbcase.getState() == CaseState.WAITING_TREATMENT) {
+				s += "<div class='warn'>" + MessageFormat.format(msgs.get("cases.sit.CONF.date"), f.format( tbcase.getDiagnosisDate() )) + "</div>";
+			}
+			else 
+			if ((tbcase.getState() == CaseState.ONTREATMENT) || (tbcase.getState() == CaseState.TRANSFERRING)) {
+				s += "<div class='warn'>" + MessageFormat.format(msgs.get("cases.sit.ONTREAT.date"), f.format( tbcase.getTreatmentPeriod().getIniDate() )) + "</div>";
+			}
+			else 
+			if (tbcase.getState().ordinal() > CaseState.TRANSFERRING.ordinal()) {
+				s += MessageFormat.format(msgs.get("cases.sit.OUTCOME.date"), f.format( tbcase.getOutcomeDate() )) + "<br/>" +
+					msgs.get(tbcase.getState().getKey());
+	
+			}
+			
+			return s;
+		}
+	}
+}

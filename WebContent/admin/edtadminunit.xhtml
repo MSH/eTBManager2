@@ -79,9 +79,9 @@
     </div>
     
     <div class="form-footer">
-		<h:commandLink action="#{adminUnitHome.persist}" styleClass="button">
+		<a:commandLink action="#{adminUnitHome.persist}" styleClass="button" reRender="main" onclick="if (!disableButtons(this)) return false;">
 			<span>#{messages['form.save']}</span>
-		</h:commandLink>  
+		</a:commandLink>  
 		<s:link view="/admin/adminunits.xhtml" styleClass="button-alt" >
 			<f:param name="id" value="#{null}" />
 			<f:param name="parentid" value="#{adminUnitHome.parentId}" />

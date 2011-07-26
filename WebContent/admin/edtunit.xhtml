@@ -167,8 +167,9 @@
 
   </div>
    <div class="form-footer">
-            <a:commandLink action="#{tbunitHome.persist}" styleClass="button" reRender="main">
-            <span>#{messages['form.save']}</span>
+            <a:commandLink action="#{tbunitHome.persist}" styleClass="button" reRender="main,messages"
+            	onclick="if (!disableButtons(this)) return false;" >
+            	<span>#{messages['form.save']}</span>
             </a:commandLink>  
             <s:link view="/admin/units.xhtml" styleClass="button-alt" propagation="end">
             	<f:param name="id" value="#{null}" />

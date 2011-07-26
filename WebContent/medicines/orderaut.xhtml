@@ -75,9 +75,13 @@
 </table>
 
 <div >
-    <h:commandLink action="#{orderAuthorizingHome.authorize}" value="#{messages['form.ok']}" styleClass="button" />
-    <s:link action="/medicines/orderdata.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" >
+    <a:commandLink action="#{orderAuthorizingHome.authorize}" styleClass="button" 
+    	onclick="if (!disableButtons(this)) return false;" oncomplete="enableButton()">
+    	<span>#{messages['form.ok']}</span>
+    </a:commandLink>
+    <s:link action="/medicines/orderdata.xhtml" styleClass="button-alt" >
     	<f:facet name="id" value="#{order.id}" />
+    	<span>#{messages['form.cancel']}</span>
     </s:link>
 </div>
 </rich:panel>

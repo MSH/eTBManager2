@@ -40,7 +40,8 @@
 	<ui:include src="/layout/waitstatus.xhtml" />
 	<a:commandLink value="#{messages['form.update']}" reRender="indicator" styleClass="button" 
 		action="#{demoProfileIndicator.execute}"
-		onclick="this.disabled=true;" oncomplete="this.disabled=false;"/>
+		onclick="if (!disableButtons(this)) return false;" 
+		oncomplete="enableButton()"/>
 </td></tr>
 <tr><td align="center">
 

@@ -38,7 +38,9 @@
 			</s:decorate>
 		</div>
 		<div class="form-footer">
-			<a:commandLink action="#{userSettings.savePreferences}" styleClass="button" reRender="messages,main">
+			<a:commandLink action="#{userSettings.savePreferences}" styleClass="button" reRender="messages,main"
+				onclick="if (!disableButtons(this)) return false;"
+				oncomplete="enableButton()">
 				<span>#{messages['form.save']}</span>
 			</a:commandLink>
 			<s:link view="/home.xhtml" styleClass="button-alt" propagation="none" >

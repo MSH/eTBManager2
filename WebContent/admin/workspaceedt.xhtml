@@ -5,6 +5,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
         
@@ -78,9 +79,10 @@
 	</div>
 	
 	<div class="form-footer">
-		<h:commandLink action="#{workspaceHome.persist}" styleClass="button">
-		 <span>#{messages['form.save']}</span>
-		 </h:commandLink>
+		<a:commandLink action="#{workspaceHome.persist}" styleClass="button"
+			onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink>
 		<s:link view="/admin/workspacedata.xhtml" rendered="#{workspace.id != null}" styleClass="button">
 			<f:param name="id" value="#{workspace.id}" />
 			 <span>#{messages['form.cancel']}</span>

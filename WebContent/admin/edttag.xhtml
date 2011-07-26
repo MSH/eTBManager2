@@ -33,7 +33,11 @@
 
     </td></tr>
     <tr><td align="right">
-            <a:commandLink action="#{tagHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="main"/>
+            <a:commandLink action="#{tagHome.persist}" styleClass="button"
+            	onclick="if (!disableButtons(this)) return false;"  
+            	reRender="main">
+            	<span>#{messages['form.save']}</span>
+            </a:commandLink>
             <s:link view="/admin/tags.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" />
     </td></tr>
     </table>

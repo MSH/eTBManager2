@@ -44,7 +44,9 @@
       </tr>
       <tr>
         <td colspan="2">
-        	<a:commandLink id="btnOk" styleClass="button" onclick="execLogin(); return false;">
+        	<a:commandLink id="btnOk" styleClass="button" 
+        		onclick="if (!disableButton(this)) return false;execLogin(); return false;"
+        		oncomplete="enableButton()">
         		<span>#{messages['login.enter']}</span>
         	</a:commandLink> 
         	<h:selectBooleanCheckbox id="rememberMe" value="#{rememberMe.enabled}"/>#{messages['login.rememberme']}
@@ -130,6 +132,17 @@
 
 <ui:include src="/layout/waitdlg.xhtml" />
 <a:status onstart="openWaitDlg();" onstop="closeWaitDlg();"></a:status>
+
+<script type="text/javascript">
+<!--
+function disableButton(button) {
+	if (jQuery(button).is(".button-disabled"))	return false;
+	jQuery(button).addClass("button-disabled");
+	return true;
+}
+function enableButton() { jQuery('.button').removeClass("button-disabled"); }
+-->
+</script>
  
 </f:view></div>
 </h:panelGroup> 

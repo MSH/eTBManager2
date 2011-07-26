@@ -29,7 +29,7 @@
 	<div class="float:right">
 		<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 	</div>
-	<a:commandLink action="#{caseAZHome.persist}" styleClass="button" reRender="main,messages">
+	<a:commandLink action="#{caseAZHome.persist}" styleClass="button" reRender="main,messages" onclick="if (!disableButtons(this)) return false;" >
 		<span>#{messages['form.save']}</span>
 	</a:commandLink>
 	<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" >

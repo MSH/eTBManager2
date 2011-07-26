@@ -5,6 +5,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:c="http://java.sun.com/jstl/core"
       template="/layout/template_new.xhtml">
@@ -16,8 +17,8 @@
 
 
 <ui:define name="content">
-<p/>
-<h:form>
+<h1>#{title}</h1>
+<h:form id="main">
 <rich:panel style="width:700px;">
     
     <table width="90%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse">
@@ -47,7 +48,7 @@
 <p/>
  
 <b>#{messages['Order.items']}:</b>
-<table width="95%" cellspacing="4">
+<table width="100%" cellspacing="4">
 	<c:forEach items="#{orderSources}" var="s">
 	<tr style="background-color:#EDF7EF;"><td colspan="4" style="border:1px solid #B4E8BB;padding:5px;">
 		<b>#{s.source.name}</b>
@@ -114,9 +115,11 @@
 	</c:forEach>
 	
 	<tr><td colspan="4" align="right">
-    	<h:commandLink action="#{orderReceivingHome.notifyReceiving}" styleClass="button" >
+    	<a:commandLink action="#{orderReceivingHome.notifyReceiving}" styleClass="button" 
+    		onclick="if (!disableButtons(this)) return false;"
+    		oncomplete="enableButton()" reRender="main">
     		<span>#{messages['form.ok']}</span>
-    	</h:commandLink>
+    	</a:commandLink>
     	<s:link action="cancel" styleClass="button-alt" >
     		<span>#{messages['form.cancel']}</span>
     	</s:link>

@@ -159,8 +159,13 @@
     </td></tr>
 
 	<tr><td align="right" colspan="2">
-        <a:commandLink action="#{transferHome.receiveTransfer}" value="#{messages['form.ok']}" styleClass="button" reRender="main,messages"/>
-        <h:commandLink action="cancel" value="#{messages['form.cancel']}" styleClass="button-alt" immediate="true"/>
+        <a:commandLink action="#{transferHome.receiveTransfer}" styleClass="button" reRender="main,messages"
+        	onclick="if (!disableButtons(this)) return false;">
+        	<span>#{messages['form.ok']}</span>
+        </a:commandLink>
+        <h:commandLink action="cancel" styleClass="button-alt" immediate="true">
+        	<span>#{messages['form.cancel']}</span>
+        </h:commandLink>
 	</td></tr>
     </table>
 

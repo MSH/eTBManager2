@@ -4,6 +4,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
@@ -67,7 +68,10 @@
 		</h:dataTable>
 	</td></tr>
     <tr><td align="right">
-            <h:commandLink action="#{stockAdjustmentHome.selectBatches}" value="#{messages['form.ok']}" styleClass="button" />
+            <a:commandLink action="#{stockAdjustmentHome.selectBatches}" styleClass="button" 
+            	onclick="if (!disableButtons(this)) return false;" oncomplete="enableButton()">
+            	<span>#{messages['form.ok']}</span>
+            </a:commandLink>
 			<s:link action="/medicines/adjustedt.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" />
     </td></tr>
     

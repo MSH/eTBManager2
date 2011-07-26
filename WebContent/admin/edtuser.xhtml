@@ -110,19 +110,20 @@
     
     
     	<!-- value="#{messages['admin.users.newpasswd']}" -->
-			<a:commandLink action="#{userHome.sendNewPassword}" styleClass="button" 
-				onclick="if (!confirm('#{messages['admin.users.confirmnewpass']}')) return false;" 
+			<a:commandLink action="#{userHome.sendNewPassword}" styleClass="button"
+				onclick="if (!disableButtons(this)) return false;if (!confirm('#{messages['admin.users.confirmnewpass']}')) {enableButton(this);return false;}" 
 				reRender="main,messages"
-				rendered="#{userHome.managed}"
-				>
+				rendered="#{userHome.managed}">
 				<span>#{messages['Send New Password']}</span>
-				</a:commandLink>
+			</a:commandLink>
 		</div>
     	
     	<div class="form-footer">
-            <a:commandLink action="#{userHome.persist}" styleClass="button" reRender="main" >
-              <span>#{messages['form.save']}</span>
-              </a:commandLink>
+            <a:commandLink action="#{userHome.persist}" styleClass="button" 
+            	reRender="main" 
+            	onclick="if (!disableButtons(this)) return false;" >
+              	<span>#{messages['form.save']}</span>
+            </a:commandLink>
             <s:link action="cancel" styleClass="button-alt">
             	<f:param name="id" value="#{null}" />
             	<span>#{messages['form.cancel']}</span>
