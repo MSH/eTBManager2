@@ -225,9 +225,8 @@
 			rowClasses="lin1,lin2" style="clear:left;width:100%;border-collapse:collapse;"
 			rendered="#{not empty caseSeverityMarksHome.severityMarks}" >
 			<h:column>
-   				<div class="#{it.checked?'checked-icon':'unchecked-icon'}">
+   				<div class="#{it.checked?'checked-icon':'unchecked-icon'}" />
 				#{it.severityMark.name}
-				</div>
 			</h:column>
 		
 			<h:column>

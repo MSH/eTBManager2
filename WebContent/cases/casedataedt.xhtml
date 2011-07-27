@@ -174,6 +174,7 @@
     	</h:selectOneMenu>
     </s:decorate>
 
+	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     	<ui:param name="required" value="#{tbcase.validated}" /> 
@@ -269,10 +270,12 @@ function isPulmonary(cb) {
 <rich:jQuery selector="#infectsite" query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary').hide(); }})" />
 <rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
 		
+		</s:fragment>
 		</td></tr></table></div>
 	</div>
 
 
+	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<div class="form-content">
 	<h2>#{messages['cases.prevtreat']}</h2>
 		<table width="99%" style="border-collapse:collapse;"><tr><td>
@@ -340,8 +343,10 @@ function isPulmonary(cb) {
 		</table>
 		</s:fragment>
 		</h:panelGroup>
+		
 		</td></tr></table>
 	</div>
+	</s:fragment>
 
 <rich:jQuery selector="#addrChanged" query="change(function(){ showCurrAddress(this); })" />
 <script type="text/javascript">

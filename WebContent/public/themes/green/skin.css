@@ -1,8 +1,9 @@
 
 body {
 	background: #FFFFFF;
-	font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
+/*	font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif; */
+	font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif;
+	font-size: 13px;
 	color: #000000;
 	line-height:150%;
 	margin:0px;
@@ -12,7 +13,7 @@ body {
 a {
 	text-decoration:none;
 	color:#069;
-	font-size:12px;
+/*	font-size:12px; */
 }
 
 a:hover {
@@ -29,11 +30,12 @@ h1 {
 }
 
 h2 {
-	font-size:1.4em;
-	color: #529252;
+	font-size:1.1em;
+	color: #45793D;
 	line-height:150%;
 	margin:8px 1px 5px 1px;
 	border-bottom:1px solid #c0dacf; 
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 hr {
@@ -44,17 +46,17 @@ hr {
 input, select {
 	border:1px solid #8c9b8c;
 	padding:1px;
-	font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
 	margin:1px;
+	font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif;
 }
-input {font-size:1.1em; }
+input {font-size:1em; }
 select {font-size:1em; }
 
 .link-small {
 	font-size:0.9em;
 }
 .text-small {
-	font-size:0.9em;
+	font-size:10px;
 }
 .text-medium {
 	font-size:1.2em;
@@ -158,11 +160,12 @@ a.user-data:hover, .page-header-right .rich-ddmenu-label-select {
 	margin-top:2px;
 }
 .top-menu a {
+	font-family: Verdana,Arial,Helvetica, sans-serif;
 	background: #23583f;
 	text-decoration: none;
 	display:block;
 	border-bottom:1px solid #5b9f84;
-	font-size:0.9em;
+	font-size:10px;
 	color:#a1a19d;
 	text-decoration:none;
 	text-align:center;
@@ -337,11 +340,12 @@ a.workspace-data {
 }
 
 .form1 h2 {
-	font-size:1.3em;
-	color:#529252;
+	font-size:13px;
+	color:#45793D;
 	font-weight:bold;
 	margin:4px 1px 4px 1px;
 	border:none;
+	font-family: Verdana,Arial, Helvetica, sans-serif;
 }
 
 .form1 .form-header {
@@ -443,7 +447,7 @@ padding-right: 16px;
 text-decoration: none;
 height:26px;
 outline: none;
-font-size:1em;
+font-size:12px;
 }
 .button span {
 /* Background left image */ 
@@ -472,7 +476,7 @@ padding-right: 16px;
 text-decoration: none;
 height:26px;
 outline: none;
-font-size:1em;
+font-size:12px;
 }
 .button-alt span {
 background: transparent url('images/alt-button-left.png') no-repeat; 
@@ -513,11 +517,13 @@ font-weight:bold;
 }
 
 /* TABELAS */
+table {
+	font-size:13px;
+}
 .table1 {
 	border-collapse:collapse;
 	background-color:#e2eae2;
 	width:100%;
-	font-size:11px;
 }
 .table1 th {
 	font-weight:bold;
@@ -558,7 +564,7 @@ font-weight:bold;
 	color:white;
 	border-right:1px solid white;
 	color:#45793d;
-	font-size:1em;
+/*	font-size:1em; */
 }
 .table2 td {
 	padding:2px;
@@ -616,7 +622,7 @@ font-weight:bold;
 .region1 .header h2 {
 	margin:0;
 	color: #18590b;
-	font-size:1.3em;
+	font-size:1.1em;
 	border:none;
 }
 .region1 .header {
@@ -645,7 +651,7 @@ font-weight:bold;
 	border:none;
 	margin:0;
 	color: #18590b;
-	font-size:1.3em;
+	font-size:1.2em;
 }
 .region2 .header {
 	color:black;
@@ -685,15 +691,14 @@ font-weight:bold;
 	padding: 5px 4px 4px 4px;
 	clear: left;
 	text-align: right;
-	font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
-	font-size:1em;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size:12px;
 }
 .value {
 	float: left;
 	vertical-align: middle;
 	padding:1px;
-	font-size:1.1em;
-	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-size:1em;
 }
 
 .prop2 {
@@ -707,8 +712,8 @@ font-weight:bold;
 	font-weight: bold;
 	clear: right;
 	text-align: left;
-	font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
-	font-size:1em;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size:12px;
 	color:black;
 }
 
@@ -716,8 +721,9 @@ font-weight:bold;
 	float: left;
 	vertical-align: middle;
 	padding-left:5px;
-	padding-top:4px;
-	font-size:1.1em;
+	padding-top:5px;
+	font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif;
+/*	font-size:1.1em; */
 }
 .hint {
 	font-size:0.9em;
@@ -729,7 +735,6 @@ font-weight:bold;
 	color:red;
 	font-weight: bold;
 	padding:2px;
-	font-size:1.1em;
 	display:inline-block;
 }
 .warn {
@@ -925,6 +930,8 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	font-style: normal;
 	font-weight: normal;
 	text-align: left;
+	font-size:11px;
+	line-height:120%;
 }
 .popup #bottom,.popup-long #bottom {
 	background:transparent url(images/popuphint.png) no-repeat left bottom;

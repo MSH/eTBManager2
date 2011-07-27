@@ -9,20 +9,20 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 	<table class="table1 small">
-		<tr><th>
+		<tr><th class="text-small">
 				<span class="small-text">#{messages['global.month']}/#{messages['global.year']}</span>
 			</th>
 			<ui:repeat value="#{treatmentCalendarHome.days}" var="d">
-			<th>
+			<th class="text-small">
 				<div style="width:16px">
 				#{d}
 				</div>
 			</th>
 			</ui:repeat>
-			<th>
+			<th class="text-small">
 				#{messages['cases.treat.presc']}
 			</th>
-			<th>
+			<th class="text-small">
 				#{messages['cases.treat.disp']}
 			</th>
 		</tr>
@@ -49,11 +49,11 @@
 				<s:div styleClass="icon-bullet" rendered="#{d.treated}" style="width:15px;"/>
 			</td>
 			</ui:repeat>
-			<td>
-				#{it.totalPrescribed}
+			<td align="center">
+				<span class="text-small">#{it.totalPrescribed}</span> 
 			</td>
-			<td>
-				#{it.dispensingDays}
+			<td align="center">
+				<span class="text-small">#{it.dispensingDays}</span>
 			</td>
 		</tr>
 		</ui:repeat>
