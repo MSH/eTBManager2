@@ -8,7 +8,7 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="#{workspaceViewService.templatePage}">
+      template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.mantreatment']}" />
 <ui:param name="topmenu" value="0" />
@@ -18,7 +18,7 @@
 	<s:link value="#{messages['cases']}" view="/cases/index.xhtml" propagation="none"/>
 </ui:define>
 
-<ui:define name="menu_lateral">
+<ui:define name="left">
 <h:form>
 	<a:commandLink value="#{messages['cases.treat.dispedt']}" onclick="showMonthYearSelectionDlg(); return false;" 
 	   rendered="#{not empty treatmentsInfoHome.groups}">
@@ -26,7 +26,8 @@
 </h:form>
 </ui:define>
 
-<ui:define name="body">
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form>
 
 <s:decorate template="/layout/roundrect.xhtml" style="width:750px;margin-top:10px;">

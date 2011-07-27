@@ -197,29 +197,29 @@ a.user-data:hover, .page-header-right .rich-ddmenu-label-select {
 	float:left;
 	padding-top:3px;
 }
-.sub-menu .item {
+.naveg .item {
 	float:left;
 	height:26px;
 }
-.sub-menu  a {
+.naveg  a {
 	color:#d7d242;
 	text-decoration:none;
 	text-align:center;
 	margin-right:4px;
-	padding:4px 20px 4px 20px;
+	padding:4px 20px 1px 20px;
 	float:left;
 	height:26px;
 }
-.sub-menu  a:hover {
+.naveg  a:hover {
 	text-decoration:underline;
 	color:white;
 }
 
-.sub-menu .selected{
+.naveg .selected{
 	background: transparent url(images/submenu-hover-right.png) no-repeat top right;
 	padding-right:4px;
 }
-.sub-menu .selected a{
+.naveg .selected a{
 	background: transparent url(images/submenu-hover-left.png) no-repeat top left;
 	color:white;
 	display:block;
@@ -266,12 +266,14 @@ a.workspace-data {
 .workspace-link {
 	color:#000000;
 	display:block;
-	margin:0;
+	margin:0 0 0 20px;
 	padding:0;
 }
 .workspace-link span {
 	vertical-align:top;
 	color:#000000;
+	font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif;
+	font-size:12px;
 }
 .workspace-link img {
 	border:none;
@@ -744,7 +746,7 @@ table {
 .global-messages {
 	width:100%;
 	padding:4px;
-	font-size:1.2em;
+	font-size:1em;
 	margin-bottom:4px;
 	color: #000000;
 	background-color:#d5b14f;
