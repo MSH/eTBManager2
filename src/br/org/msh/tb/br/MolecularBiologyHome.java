@@ -49,7 +49,7 @@ public class MolecularBiologyHome extends ExamHome<MolecularBiology> {
 		MolecularBiology mb = getInstance();
 		boolean res = true;
 
-		if ((mb.getDateRelease() != null) || (mb.getDateRelease().before(mb.getDate()))) {
+		if ((mb.getDateRelease() == null) || (mb.getDateRelease().before(mb.getDate()))) {
 			facesMessages.addToControlFromResourceBundle("edtMBreleasedate", "javax.faces.component.UIInput.REQUIRED");
 			res = false;
 		}

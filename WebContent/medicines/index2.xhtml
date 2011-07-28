@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="Inventory" />
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:define name="naveg">
+	<div class="item selected">
+		<s:link value="#{messages['Inventory']}" />
+	</div>
+</ui:define>
+
+<ui:define name="left">
+
+<a:commandLink styleClass="button-alt" style="width:140px;">
+	<span>#{messages['Select another unit']}</span>
+</a:commandLink>
+<div class="vertical-menu">
+	<h2>Receiving from manufacturer</h2>
+	<a>New medicine receiving</a>
+	<a>View all receivings</a>
+
+	<h2>Orders</h2>
+	<a>New medicine order</a>
+	<a>View open orders</a>
+	<a>View all orders</a>
+
+	<h2>Dispensing</h2>
+	<a>Register medicine dispensing</a>
+	<a>View registered dispensings</a>
+
+	<h2>Transfer</h2>
+	<a>New transfer</a>
+	<a>View shipped transfers</a>
+	<a>View received transfers</a>
+
+	<h2>Reports</h2>
+	<a>Movements</a>
+	<a>Stock evolution</a>
+	<a>Estimated stock position</a>
+</div>
+</ui:define> 
+
+<ui:define name="content">
+	<s:decorate template="/layout/unit.xhtml">
+	<ui:param name="selunit" value="0" />
+	<h:form>
+<table width="100%">
+<ui:repeat value="#{stockPosHome.report}" var="s">
+<tr><td>
+	<div style="float:right">
+		<s:link value="#{messages['medicines.movs.newadjust']}" view="/medicines/stockadj.xhtml" rendered="#{userSession.canAdjustStock}" style="margin-left:20px;">
+			<f:param name="srcid" value="#{s.source.id}"/>
+		</s:link>
+	</div>
+	<h2>#{s.source.name}</h2>
+</td></tr>
+<tr><td>
+<h:dataTable value="#{s.items}" var="r" rendered="#{stockPosHome.report.size != 0}" width="100%"
+  styleClass="table1" rowClasses="lin1,lin2" columnClasses="coll,colr,colr,colc,colc" style="margin-bottom:10px;">
+	<h:column>
+		<f:facet name="header">
+			<s:link value="#{messages['Medicine']}" styleClass="collh" action="#{stockPosHome.execute}" >
+  				<f:param name="sorder" value="upper(sp.medicine.genericName.name1)#{stockPosHome.order=='upper(sp.medicine.genericName.name1)'?' desc':''}" />
+  				<f:param name="bb" value="#{false}" />
+			</s:link>
+		</f:facet>
+		<s:link view="/medicines/movements.xhtml" value="#{r.medicine}">
+			<f:param name="medid" value="#{r.medicine.id}"/>
+			<f:param name="sourceid" value="#{s.source.id}"/>
+		</s:link>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<s:link value="#{messages['Movement.quantity']}" styleClass="colrh" action="#{stockPosHome.execute}" >
+  				<f:param name="sorder" value="sp.quantity#{stockPosHome.order=='sp.quantity'?' desc':''}" />
+  				<f:param name="bb" value="#{stockPosHome.showBatch}" />
+			</s:link>
+		</f:facet>
+		<h:outputText value="#{r.quantity}" style="#{r.underBufferStock? 'color:red;font-weight:bold;cursor:help;': ''}" 
+			title="#{r.underBufferStock? messages['medicines.stockpos.minbs']: ''}">
+			<f:convertNumber pattern="###,###,###"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<s:link value="#{messages['global.totalPrice']}" styleClass="colrh" action="#{stockPosHome.execute}" >
+  				<f:param name="sorder" value="sp.totalPrice#{stockPosHome.order=='sp.totalPrice'?' desc':''}" />
+  				<f:param name="bb" value="#{stockPosHome.showBatch}" />
+			</s:link>
+		</f:facet>
+		<h:outputText value="#{r.totalPrice}" >
+			<f:convertNumber pattern="###,###,##0.00"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<s:link value="#{messages['StoragePosReport.lastMovement']}" action="#{stockPosHome.execute}" >
+  				<f:param name="sorder" value="sp.date#{stockPosHome.order=='sp.date'?' desc':''}" />
+  				<f:param name="bb" value="#{stockPosHome.showBatch}" />
+			</s:link>
+		</f:facet>
+		<h:outputText value="#{r.lastMovement}" converter="localeDateConverter" />
+	</h:column>
+
+	<h:column rendered="#{userSession.tbunit.batchControl}">
+		<f:facet name="header">
+			<s:link value="#{messages['StoragePosReport.nextExpirationBatch']}" action="#{stockPosHome.execute}" >
+  				<f:param name="sorder" value="neb#{stockPosHome.order=='neb'?' desc':''}" />
+  				<f:param name="bb" value="#{false}" />
+			</s:link>
+		</f:facet>
+		<h:outputText value="#{r.nextExpirationBatch}" converter="localeDateConverter" />
+	</h:column>
+</h:dataTable>
+</td></tr>
+</ui:repeat>
+
+<s:fragment rendered="#{(stockPosHome.source == null) and (stockPosHome.report.size > 1)}">
+<tr style="background-color:#368D41;"><td style="padding:5px;color:white;"><b>#{messages['global.total']}</b>
+</td></tr>
+<tr><td>
+<h:dataTable value="#{stockPosHome.total.items}" var="r" rendered="#{stockPosHome.report.size != 0}" width="100%"
+  styleClass="table1" rowClasses="lin1,lin2" columnClasses="coll,colr,colr,colc,colc" style="margin-bottom:10px;">
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Medicine']}" styleClass="collh" action="#{stockPosHome.execute}" >
+  				<f:param name="order" value="#{stockPosHome.order=='upper(sp.medicine.genericName)'?'upper(sp.medicine.genericName) desc':'upper(sp.medicine.genericName)'}" />
+  				<f:param name="bb" value="#{stockPosHome.showBatch}" />
+			</h:outputText>
+		</f:facet>
+		#{r.medicine}
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Movement.quantity']}" styleClass="colrh" >
+			</h:outputText>
+		</f:facet>
+		<h:outputText value="#{r.quantity}">
+			<f:convertNumber pattern="###,###,###"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh" >
+			</h:outputText>
+		</f:facet>
+		<h:outputText value="#{r.totalPrice}">
+			<f:convertNumber pattern="###,###,##0.00"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['StoragePosReport.lastMovement']}" >
+			</h:outputText>
+		</f:facet>
+		<h:outputText value="#{r.lastMovement}" converter="localeDateConverter" />
+	</h:column>
+
+	<h:column rendered="#{userSession.tbunit.batchControl}">
+		<f:facet name="header">#{messages['StoragePosReport.nextExpirationBatch']}</f:facet>
+		<h:outputText value="#{r.nextExpirationBatch}" converter="localeDateConverter" />
+	</h:column>
+</h:dataTable>
+</td></tr>
+</s:fragment>
+</table>
+	</h:form>
+	</s:decorate>
+</ui:define>
+
+</ui:composition>  

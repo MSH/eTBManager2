@@ -184,13 +184,14 @@
 
     		<s:decorate template="/layout/dateedit.xhtml" >
     			<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
-		    	<ui:param name="required" value="false" /> 
+		    	<ui:param name="redasterisk" value="true" /> 
 		    	<ui:param name="future" value="true" /> 
     			<ui:param name="edtid" value="edtMBreleasedate" /> 
     			<ui:param name="datefield" value="#{molecularBiology.dateRelease}" /> 
 		    </s:decorate>
 
 		    <s:decorate template="/layout/edit.xhtml" >
+		    	<ui:param name="redasterisk" value="true" /> 
     			<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
     			<h:selectOneMenu id="cbMBMethod" value="#{molecularBiology.method}" required="false">
     				<s:selectItems value="#{fieldsQuery.molecularBiologyMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />

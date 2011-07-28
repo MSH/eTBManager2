@@ -31,10 +31,11 @@ h1 {
 
 h2 {
 	font-size:1.1em;
-	color: #45793D;
 	line-height:150%;
 	margin:8px 1px 5px 1px;
-	border-bottom:1px solid #c0dacf; 
+	color: black;
+/*	color: #45793D;
+	border-bottom:1px solid #c0dacf; */ 
 	font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -405,12 +406,19 @@ a.workspace-data {
 .vertical-menu {
 	margin:0px;
 }
-
+.vertical-menu h2 {
+	color:black;
+	font-size:14px;
+	font-weight:bold;
+	text-decoration: none;
+	margin:0;padding:8px 0px 0px 2px;
+	border:none;
+	line-height:120%;
+	font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif;
+}
 .vertical-menu  a{
 	padding:2px 2px 6px 2px;
 	display:block;
-	height:30px;
-	min-height:30px;
 }
 .vertical-menu a:hover {
 	background-color:#e2eae2;
