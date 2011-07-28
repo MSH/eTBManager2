@@ -10,7 +10,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.newnotif']} - #{messages[tbcase.classification.key]} - #{messages[tbcase.diagnosisType.key]}" />
+<ui:param name="title" value="#{messages['cases.newnotif']} - #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect] : messages[tbcase.classification.key]}" />
 <ui:param name="left" value="0" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
@@ -21,8 +21,9 @@
 <a:form id="main" styleClass="form1">
 	<ui:include src="casedataedt.xhtml" />	
 
-	<h2>#{messages['MedicalExamination']}</h2>
+	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<div class="form-content">
+		<h2>#{messages['MedicalExamination']}</h2>
 		<div><table width="100%" style="border-collapse:collapse;"><tr><td>
     		<s:decorate template="/layout/dateedit.xhtml" >
     			<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
@@ -58,6 +59,7 @@
 		</td></tr></table>
 		</div>
 	</div>
+	</s:fragment>
 
 
 	<div class="form-footer">

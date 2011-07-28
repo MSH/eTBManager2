@@ -158,12 +158,13 @@ public class PatientsQuery extends EntityQuery {
 				return null;
 			
 			Map<String, String> msgs = Messages.instance();
-			
-			String s = msgs.get(tbcase.getClassification().getKey());
-	
-			if (tbcase.getDiagnosisType() != null)
-				s += " - " + msgs.get(tbcase.getDiagnosisType().getKey());
 
+			String s;
+			
+			if (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT)
+				 s = msgs.get(tbcase.getClassification().getKeySuspect());
+			else s = msgs.get(tbcase.getClassification().getKey());
+	
 			s = "<b>" + s + "</b><br/>";
 
 			SimpleDateFormat f = new SimpleDateFormat("MMM-yyyy");

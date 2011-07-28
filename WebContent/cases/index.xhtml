@@ -199,6 +199,8 @@
 	</div>
 	</a:form>
 </rich:modalPanel>
+
+
 <rich:modalPanel id="newsuspectdlg" width="300" zindex="2000" autosized="true">
 	<f:facet name="header" >
 		#{messages['cases.newsusp']}
@@ -213,7 +215,7 @@
 			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
 				<f:param name="classif" value="#{it}"/>
 				<f:param name="type" value="SUSPECT"/>
-				<div class="new-icon" />#{messages[it.key]}
+				<div class="new-icon" />#{messages[it.keySuspect]}
 			</s:link>
 		</td></tr>
 	</c:forEach>

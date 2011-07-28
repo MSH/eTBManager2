@@ -230,6 +230,7 @@ a.user-data:hover, .page-header-right .rich-ddmenu-label-select {
 	color:#23583f;
 	top:-2px;
 	position:relative;
+	padding:0px 2px 2px 2px;
 }
 a.workspace-data:hover, .sub-menu .rich-ddmenu-label-select {
 	background-color:#23583f;
@@ -786,9 +787,16 @@ display:table;
 }
 
 .wait-icon {
-	background-image: url('images/loading.gif');
+	background:transparent url('images/loading.gif') no-repeat;
 	width:15px;
 	height:15px;
+	margin-right:2px;
+	display:inline-block;
+}
+.wait-icon2 {
+	background:transparent url('images/loading2.gif') no-repeat;
+	width:16px;
+	height:11px;
 	margin-right:2px;
 	display:inline-block;
 }

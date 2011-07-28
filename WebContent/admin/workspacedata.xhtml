@@ -12,12 +12,16 @@
 <ui:param name="topmenu" value="3" />
 
 <ui:define name="naveg">
-	<s:link value="#{messages['admin']}" view="/admin/index.xhtml" />
-	<s:link value="#{messages['Workspace']}" view="/admin/workspaces.xhtml" />
+	<div class="item">
+		<s:link value="#{messages['admin']}" view="/admin/index.xhtml" />
+	</div>
+	<div class="item selected">
+		<s:link value="#{messages['Workspace']}" view="/admin/workspaces.xhtml" />
+	</div>
 </ui:define>
 
 <ui:define name="left">
-	<h:form>
+	<h:form styleClass="vertical-menu">
 	<s:link value="#{messages['form.edit']}" view="/admin/workspaceedt.xhtml" rendered="#{s:hasRole('WORKSPACES_EDT')}" >
 		<f:param name="id" value="#{workspace.id}" />
 	</s:link>

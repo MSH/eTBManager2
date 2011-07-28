@@ -7,6 +7,7 @@
 		<action execute="#{caseEditingHome.initializeNewNotification}"/>
 		<param name="pacid" value="#{patientHome.id}" converterId="javax.faces.Integer"/>
 		<param name="cla" value="#{tbcase.classification}" />
+		<param name="type" value="#{tbcase.diagnosisType}" />
 		<begin-conversation join="true"/>
 		<navigation>
 			<rule if-outcome="patient-searching">

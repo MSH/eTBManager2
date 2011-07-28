@@ -4,6 +4,7 @@
 
 	<restrict>#{userSession.canEditCases}</restrict>
 	<param name="classif" value="#{tbcase.classification}" />
+	<param name="type" value="#{tbcase.diagnosisType}" />
 	<end-conversation />
 	<navigation>
 		<rule if-outcome="newpatient">
