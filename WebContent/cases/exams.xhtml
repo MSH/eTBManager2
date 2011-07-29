@@ -318,7 +318,6 @@
 		<s:div styleClass="region3" rendered="#{empty examXRayHome.allResults}"><div class="content">
 			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
 		</div></s:div>
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examXRayHome.allResults}" />
 		<h:dataTable value="#{examXRayHome.allResults}" var="r" rendered="#{not empty examXRayHome.allResults}" width="100%" 
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colcb">
 			<h:column>

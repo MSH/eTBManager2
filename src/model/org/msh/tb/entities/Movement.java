@@ -63,7 +63,7 @@ public class Movement implements Serializable {
 
 	// variables for stock inventory control
 	private int stockQuantity;
-	private double stockTotalPrice;
+//	private double stockTotalPrice;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@NotNull
@@ -304,14 +304,14 @@ public class Movement implements Serializable {
 	/**
 	 * @return the stockTotalPrice
 	 */
-	public double getStockTotalPrice() {
+/*	public double getStockTotalPrice() {
 		return stockTotalPrice;
 	}
-
+*/
 	/**
 	 * @param stockTotalPrice the stockTotalPrice to set
 	 */
-	public void setStockTotalPrice(double stockTotalPrice) {
+/*	public void setStockTotalPrice(double stockTotalPrice) {
 		this.stockTotalPrice = stockTotalPrice;
 	}
-}
+*/}
