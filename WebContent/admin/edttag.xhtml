@@ -9,14 +9,17 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
         
-<ui:param name="title" value="#{messages['admin.tag.edt']}" />
+<ui:param name="title" value="#{messages['admin.tags.new']}" />
 <ui:param name="topmenu" value="3" />
 
 <ui:param name="waitdlg" value="1" />
 <ui:param name="labelstyle" value="width:160px;" />
 
 <ui:define name="content">
-<h:form id="main">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+
+<div class="form-content">
     <table class="table1" width="600px">
     <tr><td>
     <s:decorate template="/layout/display.xhtml" rendered="#{tagHome.managed}">
@@ -30,17 +33,22 @@
         	<f:param id="field" value="name"/>
         </h:inputText>
     </s:decorate>
+    </td>
+    </tr>
+   </table>
+    </div>
 
-    </td></tr>
-    <tr><td align="right">
+   <div class="form-footer">
             <a:commandLink action="#{tagHome.persist}" styleClass="button"
             	onclick="if (!disableButtons(this)) return false;"  
             	reRender="main">
             	<span>#{messages['form.save']}</span>
             </a:commandLink>
-            <s:link view="/admin/tags.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" />
-    </td></tr>
-    </table>
+            <s:link view="/admin/tags.xhtml" styleClass="button-alt" >
+             <span>#{messages['form.cancel']}</span>
+             </s:link>
+            </div>
+    
 
 	<p/>
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
