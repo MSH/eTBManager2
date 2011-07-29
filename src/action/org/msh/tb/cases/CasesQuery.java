@@ -60,6 +60,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 				"upper(p.lastName) like #{caseFilters.lastNameLike}",
 				"c.patientType = #{caseFilters.patientType}",
 				"c.infectionSite = #{caseFilters.infectionSite}",
+				"c.diagnosisType = #{caseFilters.diagnosisType}",
 				"c.validationState = #{caseFilters.validationState}",
 				"nu.healthSystem.id = #{userWorkspace.healthSystem.id}",
 				"exists(select t.id from c.tags t where t.id = #{caseFilters.tagid})"};
