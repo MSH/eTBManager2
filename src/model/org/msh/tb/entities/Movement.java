@@ -60,8 +60,10 @@ public class Movement implements Serializable {
 	@JoinColumn(name="SOURCE_ID")
 	@NotNull
 	private Source source;
-	
+
+	// variables for stock inventory control
 	private int stockQuantity;
+	private double stockTotalPrice;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@NotNull
@@ -297,5 +299,19 @@ public class Movement implements Serializable {
 	 */
 	public void setStockQuantity(int stockQuantity) {
 		this.stockQuantity = stockQuantity;
+	}
+
+	/**
+	 * @return the stockTotalPrice
+	 */
+	public double getStockTotalPrice() {
+		return stockTotalPrice;
+	}
+
+	/**
+	 * @param stockTotalPrice the stockTotalPrice to set
+	 */
+	public void setStockTotalPrice(double stockTotalPrice) {
+		this.stockTotalPrice = stockTotalPrice;
 	}
 }

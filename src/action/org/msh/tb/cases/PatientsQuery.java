@@ -174,11 +174,13 @@ public class PatientsQuery extends EntityQuery {
 			}
 			else 
 			if (tbcase.getState() == CaseState.WAITING_TREATMENT) {
-				s += "<div class='warn'>" + MessageFormat.format(msgs.get("cases.sit.CONF.date"), f.format( tbcase.getDiagnosisDate() )) + "</div>";
+				if (tbcase.getDiagnosisDate() != null)
+					s += "<div class='warn'>" + MessageFormat.format(msgs.get("cases.sit.CONF.date"), f.format( tbcase.getDiagnosisDate() )) + "</div>";
 			}
 			else 
 			if ((tbcase.getState() == CaseState.ONTREATMENT) || (tbcase.getState() == CaseState.TRANSFERRING)) {
-				s += "<div class='warn'>" + MessageFormat.format(msgs.get("cases.sit.ONTREAT.date"), f.format( tbcase.getTreatmentPeriod().getIniDate() )) + "</div>";
+				if (tbcase.getTreatmentPeriod().getIniDate() != null)
+					s += "<div class='warn'>" + MessageFormat.format(msgs.get("cases.sit.ONTREAT.date"), f.format( tbcase.getTreatmentPeriod().getIniDate() )) + "</div>";
 			}
 			else 
 			if (tbcase.getState().ordinal() > CaseState.TRANSFERRING.ordinal()) {

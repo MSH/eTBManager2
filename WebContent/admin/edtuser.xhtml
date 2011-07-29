@@ -110,11 +110,11 @@
     
     
     	<!-- value="#{messages['admin.users.newpasswd']}" -->
-			<a:commandLink action="#{userHome.sendNewPassword}" styleClass="button"
+			<a:commandLink action="#{userHome.sendNewPassword}" styleClass="button-alt"
 				onclick="if (!disableButtons(this)) return false;if (!confirm('#{messages['admin.users.confirmnewpass']}')) {enableButton(this);return false;}" 
 				reRender="main,messages"
 				rendered="#{userHome.managed}">
-				<span>#{messages['Send New Password']}</span>
+				<span>#{messages['admin.users.newpasswd']}</span>
 			</a:commandLink>
 		</div>
     	
@@ -124,7 +124,7 @@
             	onclick="if (!disableButtons(this)) return false;" >
               	<span>#{messages['form.save']}</span>
             </a:commandLink>
-            <s:link action="cancel" styleClass="button-alt">
+            <s:link action="cancel" styleClass="button-alt" onclick="disableButtons(this)">
             	<f:param name="id" value="#{null}" />
             	<span>#{messages['form.cancel']}</span>
             </s:link>

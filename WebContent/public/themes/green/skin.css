@@ -30,12 +30,12 @@ h1 {
 }
 
 h2 {
-	font-size:1.1em;
+	font-size:14px;
 	line-height:150%;
 	margin:8px 1px 5px 1px;
 	color: black;
-/*	color: #45793D;
-	border-bottom:1px solid #c0dacf; */ 
+/*	color: #45793D; 
+	border-bottom:1px solid #c0dacf; */  
 	font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -524,7 +524,6 @@ font-weight:bold;
 	background-position: left -52px;
 	text-decoration: none;
 	cursor:default;
-	color:#e0e0e0;
 }
 
 /* TABELAS */
@@ -687,6 +686,29 @@ table {
 	color:white;
 }
 
+.region3 {
+	background-color:#e2eae2;
+	display:block;
+}
+.region3 .header {
+	color:black;
+	font-size:1em;
+	height:20px;
+	padding:4px;
+	display:table;
+	width:100%;
+	background-color#afcfc1;
+}
+.region3 .content {
+	margin-top:2px;
+	padding:4px;
+}
+.region3 .footer {
+	padding:2px;
+}
+
+
+
 /* fields */
 
 .prop {
@@ -749,8 +771,10 @@ table {
 	display:inline-block;
 }
 .warn {
-	color:#c5a13f;
+	color:#b5912f;
 	font-weight: bold;
+	font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif;
+	font-size:13px;
 }
 .global-messages {
 	width:100%;
@@ -771,12 +795,12 @@ height:16px;
 min-height:16px;
 }
 
-.bar-panel {
+.separator {
 width:100%;
 clear:both;
-height:8px;
-min-height:8px;
-background-color:#bdd5b9;
+height:2px;
+min-height:2px;
+background-color:#e2eae2;
 margin-top:6px;
 margin-bottom:6px;
 display:table;

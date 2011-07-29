@@ -21,18 +21,14 @@
 </ui:define>
 
 <ui:define name="content">
-<a:form id="main">
-<table style="width:100%"><tr><td>
+<h1>#{title}</h1>
+<a:form id="main" styleClass="form1">
 
 	<ui:include src="/custom/ke/cases/casedataedt.xhtml" />	
 
-	<s:decorate template="/layout/roundrect.xhtml" style="clear:both;display:block;">
-		<ui:define name="header">
-			<b>#{messages['MedicalExamination']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+	<div class="form-content">
+	<h2>#{messages['MedicalExamination']}</h2>
 
-		<div><table width="99%" style="border-collapse:collapse;"><tr><td>
     		<s:decorate template="/layout/dateedit.xhtml" >
     			<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
     			<ui:param name="required" value="true" /> 
@@ -64,19 +60,19 @@
 		    	<ui:param name="field" value="#{medicalExamination.comments}" />
 		    	<ui:param name="style" value="width : 500px; height:100px;" />
 		    </s:decorate>
-		</td></tr></table>
+	</div>
+	
+	<div class="form-footer">
+		<div style="float:right">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-	</s:decorate>
-
-
-	<p/>
-	<table width="100%"><tr><td align="right">
-	<a:commandLink value="#{messages['form.ok']}" action="#{caseEditingHome.saveNew}" styleClass="button" reRender="main,messages"/>
-	<s:link value="#{messages['form.cancel']}" view="/cases/index.xhtml" styleClass="button-alt" propagation="end" />
-	</td></tr></table>
-</td></tr></table>
-<p/>
-	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		<a:commandLink action="#{caseEditingHome.saveNew}" styleClass="button" reRender="main,messages">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink>
+		<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
 
 </a:form>
 

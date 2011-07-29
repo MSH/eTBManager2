@@ -16,7 +16,9 @@
 	</s:link>
 	<h2>#{messages['cases.examhiv']}</h2>
 	<h:panelGroup id="pnlhiv">
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examHIVHome.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examHIVHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 		<h:dataTable value="#{examHIVHome.allResults}" var="r" rendered="#{not empty examHIVHome.allResults}" 
 			width="100%" styleClass="table1" columnClasses="colcb,colcb,colb,colb,colb">
 			<h:column>
@@ -80,7 +82,9 @@
 	</s:link>
 	<h:panelGroup id="pnlmicroscopy">
 	<h2>#{messages['cases.exammicroscopy']}</h2>	
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examMicroscopyHome.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examMicroscopyHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 		<h:dataTable value="#{examMicroscopyHome.allResults}" var="r" rendered="#{not empty examMicroscopyHome.allResults}" 
 			width="100%" styleClass="table1" columnClasses="colb,colb,colb,colb,colb">
 			<h:column>
@@ -147,7 +151,9 @@
 		<span>#{messages['cases.details.newresult']}</span>
 	</s:link>
 	<h2>#{messages['cases.examculture']}</h2>
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examCultureHome.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examCultureHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 		<h:dataTable value="#{examCultureHome.allResults}" var="r" rendered="#{not empty examCultureHome.allResults}" width="100%" 
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
 			<h:column>
@@ -220,7 +226,9 @@
 		</s:link>
 		<h2>#{messages['cases.examdst']}</h2>
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examDSTTable.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examDSTTable.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 		<s:fragment rendered="#{not empty examDSTTable.allResults}">
 		<div>
 		<table class="table1" width="100%">
@@ -307,6 +315,9 @@
 		</s:link>
 		<h2>#{messages['cases.examxray']}</h2>
 		
+		<s:div styleClass="region3" rendered="#{empty examXRayHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examXRayHome.allResults}" />
 		<h:dataTable value="#{examXRayHome.allResults}" var="r" rendered="#{not empty examXRayHome.allResults}" width="100%" 
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colcb">

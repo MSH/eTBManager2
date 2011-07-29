@@ -12,7 +12,7 @@
 
 		<div style="display:block;margin-left:30px;marign-bottom:30px;"> 
 		<s:link onclick="showSelRegimenDlg();return false;" 
-			rendered="#{tbcase.state == 'WAITING_TREATMENT'}"
+			rendered="#{caseHome.canEditTreatment}"
 			styleClass="button-alt">
 			<f:param name="id" value="#{caseHome.id}" />
 			<span>#{messages['cases.details.starttreatment']}</span>

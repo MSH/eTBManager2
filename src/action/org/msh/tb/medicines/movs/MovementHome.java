@@ -358,7 +358,7 @@ public class MovementHome {
 					throw new MovementException("No batch of " + b.getMedicine().toString() + 
 							" found for " + unit.toString() + ", " + source.toString());
 				
-				System.out.println(batchQuantity.getBatch().getBatchNumber() + " qtd available=" + batchQuantity.getQuantity());
+//				System.out.println(batchQuantity.getBatch().getBatchNumber() + " qtd available=" + batchQuantity.getQuantity());
 
 				int availableQtd = batchQuantity.getQuantity() + (qtd * oper);
 				
@@ -524,7 +524,37 @@ public class MovementHome {
 		entityManager.remove(mov);
 		entityManager.flush();
 	}
+
 	
+	/**
+	 * Return information about the stock position at the specified date
+	 * @param dt
+	 * @param tbunit
+	 * @param source
+	 * @param med
+	 * @return
+	 */
+/*	protected Movement getDatePosition(Date dt, Tbunit tbunit, Source source, Medicine med) {
+		List<Movement> lst = entityManager.createQuery("from Movement m " +
+				"where m.date = " +
+				"(select max(aux.date) from Movement aux where aux.tbunit.id = m.tbunit.id " +
+				"and aux.date <= :data " + 
+				"and aux.source.id = m.source.id and aux.medicine.id = m.medicine.id) " +
+				"and m.tbunit.id = :unitid and m.source.id = :sourceid and m.medicine.id = :medid " +
+				"order by m.recordDate desc")
+				.setParameter("data", dt)
+				.setParameter("medid", med.getId())
+				.setParameter("sourceid", source.getId())
+				.setParameter("unitid", tbunit.getId())
+				.setMaxResults(1)
+				.getResultList();
+
+		if (lst.size() == 0)
+		 	 return null;
+		else return lst.get(0);
+	}
+*/	
+
 	/**
 	 * Retorna a posição de estoque em uma determinada data
 	 * @param dt
