@@ -78,6 +78,17 @@
 			<s:convertEnum />
 		</h:selectOneMenu>
 	</s:decorate>
+	
+	<!-- VR: To add 'Type of Diagnostic' in the advance search page -->
+ 	 <s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
+		<h:selectOneMenu value="#{caseFilters.diagnosisType}" >
+			<s:selectItems value="#{diagnosisTypes}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+	<!-- End -->
+	
 
    <h2>#{messages['cases.casesearching.filterdates']}</h2>
 
