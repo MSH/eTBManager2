@@ -177,9 +177,10 @@
 	</s:decorate>
 	
 	</h:panelGroup>
-	<a:commandButton value="#{messages['form.return']}"
-		styleClass="button" 
-		onclick="Richfaces.hideModalPanel('usersessiondlg');return false;"/>
+	<a:commandLink styleClass="button" 
+		onclick="Richfaces.hideModalPanel('usersessiondlg');return false;">
+		<span>#{messages['form.return']}</span>
+	</a:commandLink>
 </rich:modalPanel>
 
 <script type="text/javascript"><!--
