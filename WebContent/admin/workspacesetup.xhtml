@@ -19,7 +19,9 @@
 
 <ui:define name="content">
 <h1>#{title}</h1>
-<h:form id="main" enctype="multipart/form-data">
+<h:form id="main" enctype="multipart/form-data" styleClass="form1">
+
+<div class="form-content">
 	<table width="750px" style="border:2px solid #f0f0f0" ><tr><td>
 	
     <s:decorate template="/layout/edit.xhtml" >
@@ -117,8 +119,11 @@
     		fileSize="#{workspaceHome.pictureSize}" />
     </s:decorate>
 	
-	</td></tr><tr><td align="right">
-		
+	</td></tr></table>
+
+	</div>
+	
+		<div class="form-footer">
 		<h:commandLink action="#{workspaceHome.saveDefaultworkspace}" styleClass="button" 
 			onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
 			<span>#{messages['form.save']}</span>
@@ -127,7 +132,8 @@
 		<s:link view="/admin/index.xhtml" styleClass="button-alt" >
 		<span>#{messages['form.cancel']}</span>
 		</s:link>
-	</td></tr></table>
+		</div>
+	
 </h:form>
 </ui:define>
         
