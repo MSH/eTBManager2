@@ -8,7 +8,8 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       template="/layout/template_new.xhtml">
         
-<ui:param name="title" value="#{messages['form.data_edit']} - #{messages['UserProfile']}" />
+<!-- <ui:param name="title" value="#{messages['form.data_edit']} - #{messages['UserProfile']}" /> -->
+<ui:param name="title" value="#{profile.id==null? messages['admin.profiles.new']: messages['admin.profiles.edt']}" />
 <ui:param name="topmenu" value="3" />
 
 
