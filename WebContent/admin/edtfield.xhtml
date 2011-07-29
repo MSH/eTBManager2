@@ -9,7 +9,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
         
-<ui:param name="title" value="#{clinicalForm.id==null?messages['admin.fields.new']:messages['admin.fields.edt']}" />
+<ui:param name="title" value="#{fieldValue.id==null?messages['admin.fields.new']:messages['admin.fields.edt']}" />
 <ui:param name="topmenu" value="3" />
 
 <ui:param name="waitdlg" value="1" />
