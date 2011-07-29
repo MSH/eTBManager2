@@ -9,7 +9,8 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
         
-<ui:param name="title" value="#{messages['admin.labs.new']}" />
+<!--<ui:param name="title" value="#{messages['admin.labs.new']}" />  -->
+<ui:param name="title" value="#{laboratory.id==null? messages['admin.labs.new']: messages['admin.labs.edt']}" />
 <ui:param name="topmenu" value="3" />
 
 <ui:param name="waitdlg" value="1" />
