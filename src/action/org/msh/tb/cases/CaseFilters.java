@@ -17,6 +17,7 @@ import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
@@ -53,6 +54,7 @@ public class CaseFilters {
 	private boolean inverseOrder;
 	private PatientType patientType;
 	private InfectionSite infectionSite;
+	private DiagnosisType diagnosisType;
 	private Integer iniMonth;
 	private Integer iniYear;
 	private Integer endMonth;
@@ -118,6 +120,7 @@ public class CaseFilters {
 		firstRecord = 0;
 		patientType = null;
 		infectionSite = null;
+		diagnosisType = null;
 		iniMonth = null;
 		iniYear = null;
 		endMonth = null;
@@ -300,6 +303,20 @@ public class CaseFilters {
 	 */
 	public void setInfectionSite(InfectionSite infectionSite) {
 		this.infectionSite = infectionSite;
+	}
+	// VR: To include 'Type of Diagnostic' in Advance Search Page
+	/**
+	 * @return the diagnosisType
+	 */
+	public DiagnosisType getDiagnosisType(){
+		return diagnosisType;
+	}
+	
+	/**
+	 * @param diagnosisType the diagnosisType to set
+	 */
+	public void setDiagnosisType(DiagnosisType diagnosisType){
+		this.diagnosisType = diagnosisType;
 	}
 
 	/**
