@@ -9,7 +9,7 @@
 
 	<div class="spacer" />
 	<s:link view="/cases/edtexamhiv.xhtml" 
-		style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
+		style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt" onclick="disableButtons(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 		<span>#{messages['cases.details.newresult']}</span>
@@ -76,7 +76,7 @@
     
     <div class="spacer" />
 
-	<s:link view="/cases/edtexammicroscopy.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
+	<s:link view="/cases/edtexammicroscopy.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt" onclick="disableButtons(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 		<span>#{messages['cases.details.newresult']}</span>
@@ -148,7 +148,7 @@
 	<div class="spacer" />
 
 	<h:panelGroup id="pnlculture">
-	<s:link view="/cases/edtexamculture.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
+	<s:link view="/cases/edtexamculture.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt" onclick="disableButtons(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 		<span>#{messages['cases.details.newresult']}</span>
@@ -222,7 +222,7 @@
 	<div class="spacer" />	
 
 	<s:link view="/cases/edtexamdst.xhtml" style="float:right;"
-		rendered="#{caseHome.canEditExams}" styleClass="button-alt">
+		rendered="#{caseHome.canEditExams}" styleClass="button-alt" onclick="disableButtons(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 		<span>#{messages['cases.details.newresult']}</span>
@@ -311,7 +311,7 @@
 
 	<div class="spacer" />
 
-	<s:link view="/cases/edtexamxray.xhtml" style="float:right;" styleClass="button-alt">
+	<s:link view="/cases/edtexamxray.xhtml" style="float:right;" styleClass="button-alt" onclick="disableButtons(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 		<span>#{messages['cases.details.newresult']}</span>
@@ -372,7 +372,7 @@
 
 	<div class="spacer" />
 
-	<s:link view="/custom/br/cases/edtmolecularbiology.xhtml" style="float:right;" styleClass="button-alt">
+	<s:link view="/custom/br/cases/edtmolecularbiology.xhtml" style="float:right;" styleClass="button-alt" onclick="disableButtons(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 		<span>#{messages['cases.details.newresult']}</span>

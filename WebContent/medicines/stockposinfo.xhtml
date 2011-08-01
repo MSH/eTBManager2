@@ -27,7 +27,7 @@ else return false;
 
 <rich:modalPanel id="stockdlg" autosized="true" width="530" zindex="2000">
 	<f:facet name="header">
-		<h:outputText id="title1" value="#{messages['medicines.stockpos.info']}" />
+		<h:outputText id="title1" value="#{messages['meds.stockpos.info']}" />
 	</f:facet>
 <h:panelGroup id="stockpnl">
 	<ui:param name="labelstyle" value="width:100px;" />
@@ -40,9 +40,9 @@ else return false;
 	</td></tr>
 	<tr><td>
 		<div style="float:right;">
-			#{messages['medicines.stockpos.msg1']}
+			#{messages['meds.stockpos.msg1']}
 			<br/>
-			<s:link value="#{messages['medicines.stockpos.adjust']}" view="/medicines/adjustedt.xhtml">
+			<s:link value="#{messages['meds.stockpos.adjust']}" view="/medicines/adjustedt.xhtml">
 				<f:param name="id" value="#{stockPosHome.item.id}" />
 			</s:link>
 		</div>

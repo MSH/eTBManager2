@@ -9,7 +9,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/templatemed.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.stockpos']}" />
+<ui:param name="title" value="#{messages['meds.stockpos']}" />
 
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:200px;" />
@@ -66,7 +66,7 @@
 <ui:repeat value="#{stockPosHome.report}" var="s">
 <tr><td class="colheader">
 	<div style="float:right">
-		<s:link value="#{messages['medicines.movs.newadjust']}" view="/medicines/stockadj.xhtml" rendered="#{userSession.canAdjustStock}" style="margin-left:20px;">
+		<s:link value="#{messages['meds.movs.newadjust']}" view="/medicines/stockadj.xhtml" rendered="#{userSession.canAdjustStock}" style="margin-left:20px;">
 			<f:param name="srcid" value="#{s.source.id}"/>
 		</s:link>
 	</div>

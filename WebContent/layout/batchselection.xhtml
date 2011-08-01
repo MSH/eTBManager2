@@ -57,7 +57,7 @@ function validateInput(edt) {
 	qtdOver = window.document.getElementById("qtdover").value;
 	if (qtdOver == "0") {
 	if (Number(edt.value) > Number(val.value)) {
-		alert("#{messages['medicines.transfer.batchqtty']}");
+		alert("#{messages['meds.transfer.batchqtty']}");
 		jQuery(edt).css("background-color", "#FFD2B4");
 		edt.focus();
 		batchValOk = false;
@@ -71,7 +71,7 @@ function validateInput(edt) {
 <rich:modalPanel id="batchseldlg" minWidth="370" 
             autosized="true" width="550" zindex="2000">
 	<f:facet name="header">
-		<h:outputText id="title1" value="#{messages['medicines.selbatches']}" />
+		<h:outputText id="title1" value="#{messages['meds.selbatches']}" />
 	</f:facet>
 	<h:panelGroup id="batchselpnl">
 	<div style="clear:both;display:table;margin-bottom:10px;width:100%;">
@@ -135,7 +135,7 @@ function validateInput(edt) {
 			<h:inputText id="qtd" value="#{it.item.quantity}" style="width:80px;" 
 				onkeypress="return numbersOnly(this,event);" 
 				rendered="#{not it.item.batch.expired}" />
-			<h:outputText value="#{messages['medicines.selbatches.expired']}" 
+			<h:outputText value="#{messages['meds.selbatches.expired']}" 
 				rendered="#{it.item.batch.expired}" 
 				styleClass="warn" />
 			<input type="hidden" value="#{it.item.batchQuantity.quantity}" />
@@ -143,24 +143,16 @@ function validateInput(edt) {
 	</h:dataTable>
 
 	</div>
-	<table width="100%">
-	<tr>
-		<td>
-			<ui:include src="/layout/waitstatus.xhtml" />
-		</td>
-		<td align="right">
-			<div id="batchseldlgs">
-				<span id="div_buttonok"> 
-   					<ui:insert />
-   				</span>
-   				<ui:insert name="cancel">
-   					<s:link onclick="hideBatchesSelectionDlg();return false;" styleClass="button-alt" >
-   						<span>#{messages['form.cancel']}</span>
-   					</s:link>
-   				</ui:insert>
-   			</div>
-		</td>
-	</tr></table>
+	<div id="batchseldlgs" class="button-bar">
+		<span id="div_buttonok"> 
+   			<ui:insert />
+   		</span>
+   		<ui:insert name="cancel">
+   			<s:link onclick="hideBatchesSelectionDlg();return false;" styleClass="button-alt" >
+   				<span>#{messages['form.cancel']}</span>
+			</s:link>
+		</ui:insert>
+	</div>
 	<rich:jQuery selector="#div_buttonok input" query="bind('click', function(event) { var ret = validateBatchSelection(this); event.preventDefault(); return ret;})" />
 	</a:form>
 	</a:region>

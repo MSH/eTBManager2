@@ -9,7 +9,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="../layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.unitsetup']}" />
+<ui:param name="title" value="#{messages['meds.unitsetup']}" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="pagestyle" value="width:650px" />
 <ui:param name="waitdlg" value="1" />
@@ -24,7 +24,7 @@
 
 <s:decorate template="/layout/roundrect.xhtml" rendered="#{unitSetup.unit.orderMedicines}">
 	<ui:define name="header">
-		<b>#{messages['medicines.unitsetup.order']}</b>
+		<b>#{messages['meds.unitsetup.order']}</b>
 	</ui:define>
 	<ui:param name="showfooter" value="0" />	
 	<ui:param name="labelstyle" value="width:230px;" />	
@@ -57,7 +57,7 @@
 
 <s:decorate template="/layout/roundrect.xhtml" rendered="#{unitSetup.unit.orderMedicines}">
 	<ui:define name="header">
-		<b>#{messages['medicines.unitsetup.regs']}</b>
+		<b>#{messages['meds.unitsetup.regs']}</b>
 	</ui:define>
 	<ui:param name="showfooter" value="0" />
 	
@@ -83,7 +83,7 @@
 <p/>
 <s:decorate template="/layout/roundrect.xhtml">
 	<ui:define name="header">
-		<b>#{messages['medicines.unitsetup.meds']}</b>
+		<b>#{messages['meds.unitsetup.meds']}</b>
 	</ui:define>
 	<ui:param name="showfooter" value="0" />
 
@@ -117,7 +117,7 @@
 					<h:outputText value="#{messages['Tbunit.numDaysOrder']} (#{messages['Order']})" styleClass="colch"/>
 				</f:facet>
 				<s:fragment rendered="#{it.numDaysOrder== null}">
-					<h:outputText value="#{unitSetup.unit.numDaysOrder} #{messages['global.days']} (#{messages['medicines.unitsetup.overwrite']})" />
+					<h:outputText value="#{unitSetup.unit.numDaysOrder} #{messages['global.days']} (#{messages['meds.unitsetup.overwrite']})" />
 				</s:fragment>
 				<h:outputText value="#{it.numDaysOrder} #{messages['global.days']}" rendered="#{it.numDaysOrder!= null}">
 					<f:convertNumber pattern="#,###,##0"/>

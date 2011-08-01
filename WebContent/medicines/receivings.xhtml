@@ -9,7 +9,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/templatemed.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.medicinerecs']}" />
+<ui:param name="title" value="#{messages['meds.receiving']}" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="waitdlg" value="1" />
 
@@ -26,10 +26,6 @@
 
 <ui:define name="content_unit">
 <h:form>
-	<s:link view="/medicines/edtrec.xhtml" value="#{messages['medicines.medicinerecs.new']}" rendered="#{s:hasRole('RECEIV_EDT')}" style="float:right;width:150px;" >
-		<f:param name="id" value="#{null}" />
-	</s:link>
-
 	<b>#{messages['Source']}: </b>
 	<h:selectOneMenu value="#{medicineReceivings.source}">
 		<s:selectItems value="#{sources.resultList}" var="r" label="#{r.name}" noSelectionLabel="-" />
@@ -41,7 +37,7 @@
 
 <s:decorate template="/layout/naveg.xhtml">
 	<ui:param name="list" value="#{medicineReceivings}" />
-	<ui:param name="page" value="/medicines/medicinerecs.xhtml" />
+	<ui:param name="page" value="/medicines/receiving.xhtml" />
 </s:decorate>
 
 <h:dataTable value="#{medicineReceivings.resultList}" var="r" styleClass="table1" width="100%" 

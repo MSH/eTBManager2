@@ -95,7 +95,7 @@
             	onclick="if (!disableButtons(this)) return false;" >
             	<span>#{messages['form.save']}</span>
             </a:commandLink>
-            <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true">
+            <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true" onclick="disableButtons(this)">
             	<span>#{messages['form.cancel']}</span>
             </a:commandLink>
     </div>

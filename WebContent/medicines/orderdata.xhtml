@@ -18,7 +18,7 @@
 
 <ui:define name="naveg">
 	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
-	<s:link view="/medicines/orders.xhtml" value="#{messages['medicines.orders']}" propagation="none"/>
+	<s:link view="/medicines/orders.xhtml" value="#{messages['meds.orders']}" propagation="none"/>
 </ui:define>
 
 
@@ -31,30 +31,30 @@
 
 <ui:define name="left">
 	<h:form>
-	<a:commandLink action="#{orderHome.remove}" value="#{messages['medicines.orders.remove']}"
+	<a:commandLink action="#{orderHome.remove}" value="#{messages['meds.orders.remove']}"
 		ajaxSingle="true" 
 		rendered="#{orderHome.canRemove}" 
 		onclick="if (!confirm('#{messages['form.confirm_remove']}')) {return false};" />
 
-	<s:link view="/medicines/orderaut.xhtml" value="#{messages['medicines.orders.autorize']}" rendered="#{orderHome.canAuthorize}">
+	<s:link view="/medicines/orderaut.xhtml" value="#{messages['meds.orders.autorize']}" rendered="#{orderHome.canAuthorize}">
 		<f:param name="id" value="#{order.id}" />
 	</s:link>
 
-	<s:link view="/medicines/ordercancel.xhtml" value="#{messages['medicines.orders.cancel']}" rendered="#{orderHome.canCancel}" >
+	<s:link view="/medicines/ordercancel.xhtml" value="#{messages['meds.orders.cancel']}" rendered="#{orderHome.canCancel}" >
 		<f:param name="id" value="#{order.id}" />
 	</s:link>
 
-	<s:link view="/medicines/ordersent.xhtml" value="#{messages['medicines.orders.shipment']}" rendered="#{orderHome.canShip}" propagation="none">
+	<s:link view="/medicines/ordersent.xhtml" value="#{messages['meds.orders.shipment']}" rendered="#{orderHome.canShip}" propagation="none">
 		<f:param name="id" value="#{order.id}" />
 	</s:link>
 
-	<s:link view="/medicines/orderrec.xhtml" value="#{messages['medicines.orders.receive']}" 
+	<s:link view="/medicines/orderrec.xhtml" value="#{messages['meds.orders.receive']}" 
 		rendered="#{(!order.tbunitFrom.batchControl) and (orderHome.canReceive)}" 
 		propagation="begin"  action="#{orderReceivingHome.beginReceiving}">
 		<f:param name="id" value="#{order.id}" />
 	</s:link>
 
-	<s:link view="/medicines/orderrecbatch.xhtml" value="#{messages['medicines.orders.receive']}" 
+	<s:link view="/medicines/orderrecbatch.xhtml" value="#{messages['meds.orders.receive']}" 
 		rendered="#{(orderHome.canReceive) and (order.tbunitFrom.batchControl)}" 
 		propagation="begin" action="#{orderReceivingHome.beginReceiving}">
 		<f:param name="id" value="#{order.id}" />
@@ -93,7 +93,7 @@
     </td></tr>
 
     <tr><td colspan="2" style="font-size:11px;padding-top:5px;color:#808080">
-    #{messages['medicines.orders.createdin']}     	
+    #{messages['meds.orders.createdin']}     	
 	<span style="color:black;font-weight:bold;"> 
 	<h:outputText value="#{order.orderDate}" converter="localeDateConverter" />
 	</span> 
@@ -281,7 +281,7 @@
 </rich:tab>
 
 
-<rich:tab label="#{messages['medicines.orders.batches']}" rendered="#{(order.status=='SHIPPED') or (order.status=='RECEIVED')}">
+<rich:tab label="#{messages['meds.orders.batches']}" rendered="#{(order.status=='SHIPPED') or (order.status=='RECEIVED')}">
 <table width="100%">
 	<a:repeat value="#{orderSources}" var="s">
 	<tr><th class="colheader">#{s.source.name}  </th></tr>

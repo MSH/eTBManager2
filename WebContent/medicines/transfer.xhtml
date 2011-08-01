@@ -9,7 +9,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="../layout/templatemed.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.transfer']}" />
+<ui:param name="title" value="#{messages['meds.transfer']}" />
 <ui:param name="topmenu" value="1" />
 
 <ui:param name="waitdlg" value="1" />
@@ -28,9 +28,6 @@
 
 <ui:define name="content_unit">
 <h:form id="main">
-
-	<s:link view="/medicines/transfedt.xhtml" value="#{messages['medicines.transfer.new']}" style="float:right;width:150px;text-align:right;" rendered="#{s:hasRole('NEW_TRANSFER')}"/>
-
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
 		<h:selectOneMenu value="#{transfers.month}">
@@ -46,7 +43,7 @@
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TransferStatus']}:</ui:define>
 		<h:selectOneMenu value="#{transfers.status}">
-  			<s:selectItems value="#{transferStatus}" var="r" label="#{messages[r.key]}" noSelectionLabel="#{messages['medicines.transfer.all']}" />
+  			<s:selectItems value="#{transferStatus}" var="r" label="#{messages[r.key]}" noSelectionLabel="#{messages['meds.transfer.all']}" />
   			<s:convertEnum />
 			<a:support event="onchange" reRender="pnltab"/>
 		</h:selectOneMenu>
@@ -60,12 +57,12 @@
 <div class="pgtab">
 <ul>
 	<li class="#{transfers.folder=='0'?'selected':'unselected'}">
-		<a:commandLink value="#{messages['medicines.transfer.received']}" style="margin-right:15px;" reRender="pnltab">
+		<a:commandLink value="#{messages['meds.transfer.received']}" style="margin-right:15px;" reRender="pnltab">
 			<a:actionparam name="fld" value="#{0}" assignTo="#{transfers.folder}" />
 		</a:commandLink>
 	</li>
 	<li class="#{transfers.folder=='1'?'selected':'unselected'}">
-		<a:commandLink value="#{messages['medicines.transfer.sent']}" style="margin-right:15px;" reRender="pnltab">
+		<a:commandLink value="#{messages['meds.transfer.sent']}" style="margin-right:15px;" reRender="pnltab">
 			<a:actionparam name="fld" value="#{1}" assignTo="#{transfers.folder}" />
 		</a:commandLink>
 	</li>
@@ -73,7 +70,7 @@
 </div>
 <div class="pgbody" style="height:200px;">
 	<s:fragment rendered="#{facesContext.renderResponse}">
-		<h:outputText value="#{messages['medicines.transfer.nofound']}" 
+		<h:outputText value="#{messages['meds.transfer.nofound']}" 
 			style="width:100%;font-weight:bold;text-align:center;height:100%;padding-top:20px;display:table;color:red;" 
 			rendered="#{empty transfers.resultList}"/>
 		

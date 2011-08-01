@@ -186,7 +186,6 @@ function enableButton() {
 	jQuery('span',this).html(s);
 	});
 }
-
 -->
 </script>
 
@@ -194,11 +193,10 @@ function enableButton() {
 <a:jsFunction name="initWorkspaceList" ajaxSingle="true" 
 	reRender="pnlwslist" 
 	action="#{userSession.initWorkspaceList}"
-	oncomplete="window.wslist=true;"
+	oncomplete="window.wslist=true;" 
 	/>
 
-<a:jsFunction name="changeWorkspace" ajaxSingle="true" 
-	action="#{userSession.changeUserWorkspace}">
+<a:jsFunction name="changeWorkspace" ajaxSingle="true" action="#{userSession.changeUserWorkspace}" >
 	<a:actionparam name="param1" assignTo="#{userSession.userWorkspaceId}" converter="javax.faces.Integer" />
 </a:jsFunction>
 </h:form>

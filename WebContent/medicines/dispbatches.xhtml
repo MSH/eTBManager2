@@ -13,7 +13,7 @@
 		<ui:param name="color" value="#EE5C34" />
 		<ui:param name="bgcolor" value="#fff" />
 		<div style="padding:3px;">
-			<h:outputText value="#{messages['medicines.dispensing.nobatches']}" style="color:white;font-weight:bold;"/>
+			<h:outputText value="#{messages['meds.dispensing.nobatches']}" style="color:white;font-weight:bold;"/>
 		</div>
 	</s:decorate>
 	</s:div>
@@ -28,7 +28,7 @@
 		</td></tr>
 		
 		<tr><th align="left">#{messages['Medicine']}
-		</th><th align="right">#{messages['medicines.movs.stockqtty']}
+		</th><th align="right">#{messages['meds.movs.stockqtty']}
 		</th><th align="center">#{messages['Batch.expiryDate']}
 		</th><th align="right">#{messages['global.unitPrice']}
 		</th><th align="right">#{messages['Batch.reservedQuantity']}
@@ -55,7 +55,7 @@
 		<td align="right">
 			<s:fragment rendered="#{m.reservedQuantity == 0}">
 				<img src="#{request.contextPath}/public/themes/default/images/central.gif" style="float:right;" />
-				<h:outputText value="#{messages['medicines.dispensing.noreserv']}" style="color:silver;"/>
+				<h:outputText value="#{messages['meds.dispensing.noreserv']}" style="color:silver;"/>
 			</s:fragment>
 			<b><h:outputText value="#{m.reservedQuantity}" rendered="#{m.reservedQuantity > 0}">
 				<f:convertNumber pattern="#,###,##0"/>
@@ -63,7 +63,7 @@
 			</b>
 		</td>
 		<td align="center">
-			<a:commandLink value="#{messages['medicines.selbatches']}" action="#{batchReservingHome.setReservedMedicine(m)}" 
+			<a:commandLink value="#{messages['meds.selbatches']}" action="#{batchReservingHome.setReservedMedicine(m)}" 
 				reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" />
 		</td></tr>
 		

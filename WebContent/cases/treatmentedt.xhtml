@@ -27,14 +27,14 @@
 		<a:commandLink 
 			onclick="showPeriodDlg();"
 			action="#{treatmentHome.startTreatmentPeriodEditing}"
-			reRender="formperiod" styleClass="button-alt">
+			reRender="formperiod" styleClass="button-alt" >
 			<span>#{messages['cases.regimens.changeperiod']}...</span>
 		</a:commandLink>
 
 		<a:commandLink
 			onclick="showMedicineDlg();"
 			action="#{treatmentHome.startAddMedicine}"
-			reRender="formmedicine" styleClass="button-alt"	>
+			reRender="formmedicine" styleClass="button-alt" >
 			<span>#{messages['Regimen.add']}...</span>
 		</a:commandLink>
 	</div>
@@ -71,9 +71,9 @@
 		<span>#{messages['form.save']}</span>
     </a:commandLink>
 
-	<h:commandLink action="cancel" styleClass="button-alt" immediate="true">
+	<a:commandLink action="cancel" styleClass="button-alt" immediate="true" onclick="disableButtons(this)">
 		<span>#{messages['form.cancel']}</span>
-	</h:commandLink>
+	</a:commandLink>
 	</div>
 
 <script type="text/javascript"><!--

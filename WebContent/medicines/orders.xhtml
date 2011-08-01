@@ -8,7 +8,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/templatemed.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.orders']}" />
+<ui:param name="title" value="#{messages['meds.orders']}" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 <ui:param name="pagestyle" value="width:750px;" />
@@ -26,12 +26,6 @@
 <ui:define name="content_unit">
 <p/>
 <h:form id="main"> 
-	<s:link view="/medicines/edtorder.xhtml" rendered="#{userSession.canCreateOrder}" 
-		style="float:right" 
-		styleClass="button-alt" >
-		<span>#{messages['medicines.orders.new']}</span>
-	</s:link>
-
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
 		<h:selectOneMenu value="#{orders.month}">

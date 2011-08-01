@@ -122,7 +122,7 @@ public class UserSession {
     	if (userWorkspace == null)
     		return "error";
 
-    	System.out.println(userWorkspace.getWorkspace().getName().toString());
+//    	System.out.println(userWorkspace.getWorkspace().getName().toString());
     	if (userLogin != null)
     		registerLogout();
 

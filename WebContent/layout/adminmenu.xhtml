@@ -11,11 +11,7 @@
      <s:link view="/admin/reptransactionlog.xhtml" value="#{messages['userrole.LOGREP']}" propagation="none" rendered="#{s:hasRole('LOGREP')}"/>
      <s:link view="/admin/workspacesetup.xhtml" value="#{messages['admin.setup']} #{defaultWorkspace.name}" propagation="none" rendered="#{s:hasRole('SETUPWS')}" />
      <s:link view="/admin/syssetup.xhtml" value="#{messages['admin.syssetup']}" propagation="none" rendered="#{s:hasRole('SYSSETUP')}"/>
-     <div style="margin-top:10px;">
-     <span style="width:100%;font-weight:bold;text-align:center;color:#a0a0a0;">
-     #{messages['tables']}
-     </span>
-     </div>
+     <h2>#{messages['tables']}</h2>
       <s:link view="/admin/adminunits.xhtml" value="#{messages['admin.adminunits']}" propagation="none" rendered="#{s:hasRole('ADMINUNITS')}"/>
       <s:link view="/admin/healthsys.xhtml" value="#{messages['admin.healthsys']}" propagation="none" rendered="#{s:hasRole('HEALTHSYS')}"/>
       <s:link view="/admin/units.xhtml" value="#{messages['admin.tbunits']}" propagation="none" rendered="#{s:hasRole('TBUNITS')}"/>

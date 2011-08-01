@@ -314,7 +314,7 @@
 				<div class="link-bar">
 				<a:commandLink action="#{forecastingView.newBatch(r)}" styleClass="button-alt" 
 					reRender="batchpnl" oncomplete="showBatchDlg();">
-					<span>#{messages['medicines.medicinerecs.newbatch']}</span>
+					<span>#{messages['meds.receiving.newbatch']}</span>
 				</a:commandLink>
 				</div>
 					
@@ -642,7 +642,7 @@ function showLoadForecastingDlg() {
 
 		<h:column >
 			<f:facet name="header">
-				#{messages['medicines.dispensing.totdisp']}
+				#{messages['meds.dispensing.totdisp']}
 			</f:facet>
 			<h:outputText value="#{v.quantity}" >
 				<f:convertNumber pattern="#,###,##0" />
@@ -660,7 +660,7 @@ function showLoadForecastingDlg() {
 
 		<h:column >
 			<f:facet name="header">
-				#{messages['medicines.movs.availableqtty']}
+				#{messages['meds.movs.availableqtty']}
 			</f:facet>
 			<h:outputText value="#{v.quantityAvailable}" >
 				<f:convertNumber pattern="#,###,##0" />

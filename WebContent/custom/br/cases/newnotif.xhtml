@@ -62,7 +62,7 @@ function checkfields() {
 			<span>#{messages['form.search']}</span>
 		</a:commandLink>
 		
-		<s:link view="/cases/index.xhtml" styleClass="button-alt" >
+		<s:link view="/cases/index.xhtml" styleClass="button-alt"  onclick="disableButtons(this)">
 			<span>#{messages['form.cancel']}</span>
 		</s:link>
 	<rich:jQuery timming="onload" selector="#main input[type='text']:first" query="focus()" />

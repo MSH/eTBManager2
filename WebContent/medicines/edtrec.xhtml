@@ -10,7 +10,7 @@
       xmlns:c="http://java.sun.com/jstl/core"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{medicineReceiving.id==null? messages['medicines.medicinerecs.new'] :messages['medicines.medicinerecs.edt']}"/>
+<ui:param name="title" value="#{medicineReceiving.id==null? messages['medicines.receiving.new'] :messages['medicines.receiving.edt']}"/>
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 
@@ -19,10 +19,8 @@
 <ui:define name="content">
 
 <s:decorate template="/layout/unit.xhtml">
-<ui:param name="pagestyle" value="width:780px;" />
+
 <h:form id="main">
-    <table width="100%">
-    <tr><td>
     <s:decorate template="/layout/edit.xhtml" rendered="#{medicineReceiving.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{medicineReceiving.id}" />
@@ -41,18 +39,15 @@
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{medicineReceiving.receivingDate}" /> 
     </s:decorate>
-	<p/>
 
-	</td></tr>
-	<tr><td>
 		<a:commandLink action="#{medicineReceivingHome.filterMedicines}" ajaxSingle="true" 
 			styleClass="button-alt" reRender="medpnl" 
 			oncomplete="showMedicinesDlg()" style="float:right;">
 			<span>#{messages['edtrec.addmed']}</span>
 		</a:commandLink>
 		<b>#{messages['MedicineReceiving.medicines']}</b>
-	</td></tr>
-	<tr><td>
+
+	<div class="spacer" />
 		<h:panelGroup id="medicines">
 
 		<h:outputText value="#{messages['edtrec.nomedicine']}" rendered="#{empty medicineReceiving.medicines}" style="color:#b0b0b0;padding:5px;"/>
@@ -86,7 +81,7 @@
 							<f:convertNumber pattern="#,###,##0.00"/>							
 						</h:outputText></b></td>
 					<td class="colcb">
-    					<a:commandLink value="#{messages['medicines.medicinerecs.newbatch']}" action="#{medicineReceivingHome.newBatch(it)}" reRender="batchpnl" oncomplete="showBatchDlg();" immediate="true"/>
+    					<a:commandLink value="#{messages['meds.receiving.newbatch']}" action="#{medicineReceivingHome.newBatch(it)}" reRender="batchpnl" oncomplete="showBatchDlg();" immediate="true"/>
     					<br/>
 						<a:commandLink value="#{messages['form.remove']}" action="#{medicineReceivingHome.removeItem(it)}" reRender="medicines" enableManualInput="true" onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" immediate="true"/>
     				</td>
@@ -129,19 +124,20 @@
 		</table>
 		</s:fragment>
     	</h:panelGroup>
-    </td></tr>
-    <tr><td align="right">
-            <a:commandLink action="#{medicineReceivingHome.persist}" styleClass="button" 
+
+	<div class="button-bar">
+		<div style="float:right">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+        <a:commandLink action="#{medicineReceivingHome.persist}" styleClass="button" 
             	onclick="if (!disableButtons(this)) return false;" 
             	reRender="messages,main">
             	<span>#{messages['form.save']}</span>
-            </a:commandLink>
-            <s:link action="cancel" styleClass="button-alt" >
-            	<span>#{messages['form.cancel']}</span>
-            </s:link>
-    </td></tr>
-	</table>
-	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+        </a:commandLink>
+        <s:link action="cancel" styleClass="button-alt" onclick="disableButtons(this);">
+         	<span>#{messages['form.cancel']}</span>
+        </s:link>
+    </div>
 	
 	<h:commandLink value="Generate for testing" action="#{medicineReceivingTest.createReceiving}" rendered="#{userLogin.user.login=='RICARDO'}"/>
 </h:form>
@@ -162,7 +158,8 @@ return true;
 
 <s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
 	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
-	<a:commandLink styleClass="button" action="#{medicineReceivingHome.addMedicines}" 
+	<a:commandLink styleClass="button" action="#{medicineReceivingHome.addMedicines}"
+		onclick="disableButtons(this)" 
 		oncomplete="hideMedicinesDlg();" 
 		reRender="medicines">
 		<span>#{messages['form.ok']}</span>

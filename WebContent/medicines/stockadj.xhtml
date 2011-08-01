@@ -9,7 +9,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.movs.newadjust']}" />
+<ui:param name="title" value="#{messages['meds.movs.newadjust']}" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="pagestyle" value="width:750px" />
 
@@ -17,8 +17,7 @@
 </ui:define>
 
 <ui:define name="naveg" >
-	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
-	<s:link value="#{messages['medicines.stockpos']}" view="/medicines/stockpos.html" propagation="none" />
+	<s:link value="#{messages['meds.inventory']}" view="/medicines/index.html" propagation="none" />
 	<div class="item selected">
 		<s:link value="#{title}" />
 	</div>
@@ -29,7 +28,7 @@
 <s:decorate template="/layout/unit.xhtml">
 <h:form id="main">
 	<a:commandLink onclick="openNewBatchDlg();" style="float:right;" styleClass="button-alt">
-		<span>#{messages['medicines.medicinerecs.newbatch']}...</span>
+		<span>#{messages['meds.receiving.newbatch']}...</span>
 	</a:commandLink>
 
     <s:decorate template="/layout/display.xhtml" >
@@ -44,11 +43,11 @@
 
 <h:panelGroup id="pnlitems">
 <table id="medlist" width="100%" class="table1">
-	<tr><th width="400px">
+	<tr><th width="350px">
 			#{messages['Medicine']}
 		</th>
 		<th width="150px"><h:outputText value="#{messages['Batch.expiryDate']}" styleClass="colch" /></th>	
-		<th width="150px"><h:outputText value="#{messages['medicines.movs.availableqtty']}" styleClass="colrh" /></th>	
+		<th width="150px"><h:outputText value="#{messages['meds.movs.availableqtty']}" styleClass="colrh" /></th>	
 		<th width="140px"><h:outputText value="#{messages['form.action']}" styleClass="colch" /></th>
 	</tr>
 <a:repeat value="#{stockAdjustmentHome.items}" var="it">
@@ -58,11 +57,11 @@
 				onclick="openAdjustDlg(#{it.stockPosition.id});return false;" 
 				style="float:right;" 
 				styleClass="button-alt"	>
-				<span>#{messages['medicines.movs.newadjust']}</span>
+				<span>#{messages['meds.movs.newadjust']}</span>
 			</a:commandLink>
 
 			<div id="med-row" style="height:30px;min-height:30px;cursor: pointer;">
-			<div style="float:left;width:500px;">
+			<div style="float:left;width:450px;">
 				<a:commandLink value="#{messages['form.details']}" style="float:right;" onclick="detailsClick(this);return false;" />
 				<h:outputText value="#{it.stockPosition.medicine}" class="medicine-icon"/>
 			</div>
@@ -76,7 +75,7 @@
 		<div id="tblbatch" style="display:none;">					
 		<a:repeat value="#{it.batches}" var="b">
 			<div style="clear:both;position:relative;min-height:40px;height:40px;border-top:1px solid #d0d0d0;padding-top:4px;">
-				<a:commandLink value="#{messages['medicines.movs.delbatch']}" 
+				<a:commandLink value="#{messages['meds.movs.delbatch']}" 
 					style="float:right;" 
 					styleClass="right-icon small-link" 
 					onclick="initBatchDeleting(#{b.id})"/>
@@ -128,7 +127,7 @@
 </div>          
 
 <s:decorate template="/layout/batchselection.xhtml">
-	<ui:param name="quantitytitle" value="#{messages['medicines.movs.newqtty']}" />
+	<ui:param name="quantitytitle" value="#{messages['meds.movs.newqtty']}" />
 	<a:commandLink action="#{stockAdjustmentHome.executeBatchAdjustment}"
 		data="#{stockAdjustmentHome.actionExecuted}"  
 		onclick="if (!disableButtons(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
@@ -140,7 +139,7 @@
 	<ui:define name="before-form">
 		<h:inputHidden value="#{stockAdjustmentHome.stockPositionId}" />
 		<s:decorate template="/layout/edit.xhtml">
-			<ui:define name="label">#{messages['medicines.movs.adjreason']}:</ui:define>
+			<ui:define name="label">#{messages['meds.movs.adjreason']}:</ui:define>
 			<h:inputText value="#{stockAdjustmentHome.reasonAdjustment}" style="width:300px;margin-bottom:10px;" required="true"/>
 		</s:decorate>
 	</ui:define>
@@ -182,7 +181,7 @@ function initBatchDeleting(batchId) {
 
 <rich:modalPanel id="newbatchdlg" width="650" zindex="2000" autosized="true">
 	<f:facet name="header">
-		<h:outputText id="title1" value="#{messages['medicines.medicinerecs.newbatch']}" />
+		<h:outputText id="title1" value="#{messages['meds.receiving.newbatch']}" />
 	</f:facet>
 	<h:panelGroup id="newbatchpnl">
 	<a:region>
@@ -205,7 +204,7 @@ function initBatchDeleting(batchId) {
 	</s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['medicines.movs.adjreason']}:</ui:define>
+    	<ui:define name="label">#{messages['meds.movs.adjreason']}:</ui:define>
     	<h:inputText value="#{stockAdjustmentHome.reasonAdjustment}" size="250" style="width:250px"/>
     </s:decorate>
 
@@ -233,7 +232,7 @@ function initBatchDeleting(batchId) {
     </s:decorate>
 
     <s:decorate id="qtd" template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['medicines.movs.availableqtty']}:</ui:define>
+    	<ui:define name="label">#{messages['meds.movs.availableqtty']}:</ui:define>
     	<h:inputText id="qtd" value="#{stockAdjustmentHome.batchQuantity.quantity}" required="true" onkeypress="return numbersOnly(this,event);" >
     		<f:validateDoubleRange minimum="1"/>
     	</h:inputText>
@@ -294,7 +293,7 @@ function initBatchDeleting(batchId) {
 
 <rich:modalPanel id="delbatchdlg" width="650" zindex="2000" autosized="true">
 	<f:facet name="header">
-		<h:outputText value="#{messages['medicines.movs.delbatch']}" />
+		<h:outputText value="#{messages['meds.movs.delbatch']}" />
 	</f:facet>
 	<h:panelGroup id="delbatchpnl">
 	<a:region>
@@ -319,13 +318,13 @@ function initBatchDeleting(batchId) {
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml" >
-		<ui:define name="label">#{messages['medicines.movs.outdate']}:</ui:define>
+		<ui:define name="label">#{messages['meds.movs.outdate']}:</ui:define>
 		<ui:param name="required" value="true" /> 
 		<ui:param name="datefield" value="#{stockAdjustmentHome.movementDate}" /> 
 	</s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['medicines.movs.adjreason']}:</ui:define>
+    	<ui:define name="label">#{messages['meds.movs.adjreason']}:</ui:define>
     	<h:inputText value="#{stockAdjustmentHome.reasonAdjustment}" size="250" style="width:350px"/>
     </s:decorate>
 

@@ -9,14 +9,14 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/templatemed.xhtml">
 
-<ui:param name="title" value="#{messages.medicines}" />
+<ui:param name="title" value="#{messages['meds.inventory']}" />
 <ui:param name="waitdlg" value="1" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 
 <ui:define name="naveg">
 	<div class="item selected">
-		<s:link value="#{messages['home']}" />
+		<s:link value="#{title}" />
 	</div>
 </ui:define>
 
@@ -24,79 +24,136 @@
 <div>
 
 	<h:form>
-    <s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['HealthSystem']}:</ui:define>
-    	#{userSession.tbunit.healthSystem.name}
-    </s:decorate>
-    
-    <s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['Tbunit.address']}:</ui:define>
-    	#{userSession.tbunit.address}
-    </s:decorate>
-    
-	<s:decorate template="/layout/audisplay.xhtml">
-		<ui:param name="adminunit" value="#{userSession.tbunit.adminUnit}" />
-	</s:decorate>
-
 	<s:fragment rendered="#{userSession.medicineManagementStarted}">
-
-    <s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">
-			#{messages['Tbunit.medManStartDate']}:
-		</ui:define>
-		<h:outputText value="#{userSession.tbunit.medManStartDate}" converter="localeDateConverter" />
-	</s:decorate>
-
-	<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
-    <s:decorate template="/layout/display.xhtml">
-		<div class="star-icon" >
-			#{messages['Tbunit.treatmentHealthUnit']}
-		</div>
-	</s:decorate>
-    <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.notifHealthUnit}">
-		<div class="star-icon" >
-			#{messages['TbCase.notificationUnit']}
-		</div>
-	</s:decorate>
-    <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.tbHealthUnit}">
-		<div class="star-icon" >
-		#{messages['Tbunit.tbHealthUnit']}
-		</div>
-	</s:decorate>
-    <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.mdrHealthUnit}">
-		<div class="star-icon" >
-			#{messages['Tbunit.mdrHealthUnit']}
-		</div>
-	</s:decorate>
-	</s:fragment>
-	
-    <h2>#{messages['admin.tbunits.medmanagement']}</h2>
-    <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.medicineStorage}">
-		<div class="star-icon" >
-			#{messages['Tbunit.medicineStorage']}
-		</div>
-	</s:decorate>
-    <s:decorate template="/layout/display.xhtml" rendered="#{userSession.tbunit.receivingFromSource}">
-		<div class="star-icon" >
-		#{messages['Tbunit.receivingFromSource']}
-		</div>
-	</s:decorate>
-	
-	<div class="link-bar">
-		<a:commandLink value="#{messages['medicines.start.remove']}" 
-			action="#{medicineManStartHome.cancelMedicineManagement}" 
-			reRender="main"
-			styleClass="right-icon"
-			rendered="#{s:hasRole('MED_INIT_REM')}"
-			onclick="if (!confirm('#{messages['medicines.start.removeconfirm']}')) {return false};" />
+<table width="100%">
+<ui:repeat value="#{stockPosHome.report}" var="s">
+<tr><td>
+	<div style="float:right">
+		<s:link value="#{messages['meds.movs.newadjust']}" view="/medicines/stockadj.xhtml" rendered="#{userSession.canAdjustStock}" style="margin-left:20px;">
+			<f:param name="srcid" value="#{s.source.id}"/>
+		</s:link>
 	</div>
-	
+	<h2>#{s.source.name}</h2>
+<h:dataTable value="#{s.items}" var="r" rendered="#{stockPosHome.report.size != 0}" width="100%"
+  styleClass="table1" rowClasses="lin1,lin2" columnClasses="coll,colr,colr,colc,colc" style="margin-bottom:10px;">
+	<h:column>
+		<f:facet name="header">
+			<s:link value="#{messages['Medicine']}" styleClass="collh" action="#{stockPosHome.execute}" >
+  				<f:param name="sorder" value="upper(sp.medicine.genericName.name1)#{stockPosHome.order=='upper(sp.medicine.genericName.name1)'?' desc':''}" />
+  				<f:param name="bb" value="#{false}" />
+			</s:link>
+		</f:facet>
+		<s:link view="/medicines/movements.xhtml" value="#{r.medicine}">
+			<f:param name="medid" value="#{r.medicine.id}"/>
+			<f:param name="sourceid" value="#{s.source.id}"/>
+		</s:link>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<s:link value="#{messages['Movement.quantity']}" styleClass="colrh" action="#{stockPosHome.execute}" >
+  				<f:param name="sorder" value="sp.quantity#{stockPosHome.order=='sp.quantity'?' desc':''}" />
+  				<f:param name="bb" value="#{stockPosHome.showBatch}" />
+			</s:link>
+		</f:facet>
+		<h:outputText value="#{r.quantity}" style="#{r.underBufferStock? 'color:red;font-weight:bold;cursor:help;': ''}" 
+			title="#{r.underBufferStock? messages['medicines.stockpos.minbs']: ''}">
+			<f:convertNumber pattern="###,###,###"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<s:link value="#{messages['global.totalPrice']}" styleClass="colrh" action="#{stockPosHome.execute}" >
+  				<f:param name="sorder" value="sp.totalPrice#{stockPosHome.order=='sp.totalPrice'?' desc':''}" />
+  				<f:param name="bb" value="#{stockPosHome.showBatch}" />
+			</s:link>
+		</f:facet>
+		<h:outputText value="#{r.totalPrice}" >
+			<f:convertNumber pattern="###,###,##0.00"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<s:link value="#{messages['StoragePosReport.lastMovement']}" action="#{stockPosHome.execute}" >
+  				<f:param name="sorder" value="sp.date#{stockPosHome.order=='sp.date'?' desc':''}" />
+  				<f:param name="bb" value="#{stockPosHome.showBatch}" />
+			</s:link>
+		</f:facet>
+		<h:outputText value="#{r.lastMovement}" converter="localeDateConverter" />
+	</h:column>
+
+	<h:column rendered="#{userSession.tbunit.batchControl}">
+		<f:facet name="header">
+			<s:link value="#{messages['StoragePosReport.nextExpirationBatch']}" action="#{stockPosHome.execute}" >
+  				<f:param name="sorder" value="neb#{stockPosHome.order=='neb'?' desc':''}" />
+  				<f:param name="bb" value="#{false}" />
+			</s:link>
+		</f:facet>
+		<h:outputText value="#{r.nextExpirationBatch}" converter="localeDateConverter" />
+	</h:column>
+</h:dataTable>
+</td></tr>
+</ui:repeat>
+
+<s:fragment rendered="#{(stockPosHome.source == null) and (stockPosHome.report.size > 1)}">
+<tr><td>
+<h2>#{messages['global.total']}</h2>
+<h:dataTable value="#{stockPosHome.total.items}" var="r" rendered="#{stockPosHome.report.size != 0}" width="100%"
+  styleClass="table1" rowClasses="lin1,lin2" columnClasses="coll,colr,colr,colc,colc" style="margin-bottom:10px;">
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Medicine']}" styleClass="collh" action="#{stockPosHome.execute}" >
+  				<f:param name="order" value="#{stockPosHome.order=='upper(sp.medicine.genericName)'?'upper(sp.medicine.genericName) desc':'upper(sp.medicine.genericName)'}" />
+  				<f:param name="bb" value="#{stockPosHome.showBatch}" />
+			</h:outputText>
+		</f:facet>
+		#{r.medicine}
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Movement.quantity']}" styleClass="colrh" >
+			</h:outputText>
+		</f:facet>
+		<h:outputText value="#{r.quantity}">
+			<f:convertNumber pattern="###,###,###"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh" >
+			</h:outputText>
+		</f:facet>
+		<h:outputText value="#{r.totalPrice}">
+			<f:convertNumber pattern="###,###,##0.00"/>
+		</h:outputText>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['StoragePosReport.lastMovement']}" >
+			</h:outputText>
+		</f:facet>
+		<h:outputText value="#{r.lastMovement}" converter="localeDateConverter" />
+	</h:column>
+
+	<h:column rendered="#{userSession.tbunit.batchControl}">
+		<f:facet name="header">#{messages['StoragePosReport.nextExpirationBatch']}</f:facet>
+		<h:outputText value="#{r.nextExpirationBatch}" converter="localeDateConverter" />
+	</h:column>
+</h:dataTable>
+</td></tr>
+</s:fragment>
+</table>
 	</s:fragment>
 
 	<s:fragment rendered="#{not userSession.medicineManagementStarted}">
-		<h:outputText value="#{messages['medicines.start.notstarted']}" styleClass="warn warn-icon"/>
+		<h:outputText value="#{messages['meds.start.notstarted']}" styleClass="warn warn-icon"/>
 		<p/>
-		<s:link value="#{messages['medicines.start']}" view="/medicines/start.xhtml" 
+		<s:link value="#{messages['meds.start']}" view="/medicines/start.xhtml" 
 			styleClass="right-icon" 
 			rendered="#{s:hasRole('MED_INIT')}"/>
 	</s:fragment>

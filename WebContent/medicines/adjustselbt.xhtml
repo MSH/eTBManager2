@@ -9,7 +9,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.movs.newadjust']} - #{messages['medicines.selbatches']}" />
+<ui:param name="title" value="#{messages['meds.movs.newadjust']} - #{messages['meds.selbatches']}" />
 
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
@@ -60,7 +60,7 @@
 			</h:column>
 
 			<h:column>
-				<f:facet name="header"><h:outputText value="#{messages['medicines.movs.newqtty']}" styleClass="colrh" /></f:facet>
+				<f:facet name="header"><h:outputText value="#{messages['meds.movs.newqtty']}" styleClass="colrh" /></f:facet>
 				<h:inputText value="#{b.quantity}" style="width:60;">
 					<f:validateLongRange minimum="0"/>
 				</h:inputText>

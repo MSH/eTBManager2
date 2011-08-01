@@ -9,24 +9,24 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.transfer.detail']}" />
+<ui:param name="title" value="#{messages['meds.transfer.detail']}" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="waitdlg" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 
 <ui:define name="naveg">
 	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
-	<s:link view="/medicines/transfer.xhtml" value="#{messages['medicines.transfer']}" propagation="none"/>
+	<s:link view="/medicines/transfer.xhtml" value="#{messages['meds.transfer']}" propagation="none"/>
 </ui:define>
 
 
 <ui:define name="left">
 	<h:form>
-	<s:link view="/medicines/transfrec.xhtml" value="#{messages['medicines.transfer.receive']}" rendered="#{(transferHome.canReceive)}">
+	<s:link view="/medicines/transfrec.xhtml" value="#{messages['meds.transfer.receive']}" rendered="#{(transferHome.canReceive)}">
 		<f:param name="id" value="#{transfer.id}" />
 	</s:link>
 
-	<s:link view="/medicines/transfcancel.xhtml" value="#{messages['medicines.transfer.cancel']}" rendered="#{transferHome.canCancel}" >
+	<s:link view="/medicines/transfcancel.xhtml" value="#{messages['meds.transfer.cancel']}" rendered="#{transferHome.canCancel}" >
 		<f:param name="id" value="#{transfer.id}" />
 	</s:link>
 	</h:form>
@@ -89,7 +89,7 @@
     </s:decorate>
 
 	<div  style="margin-top:30px;clear:left;">
-	<b>#{messages['medicines.movs.itensmov']}</b><br/>
+	<b>#{messages['meds.movs.itensmov']}</b><br/>
 	</div>
 	
 	<h:panelGroup id="pnlitems">

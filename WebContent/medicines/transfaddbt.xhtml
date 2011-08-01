@@ -8,7 +8,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.movs.newtransfer']} - #{messages['Batch']} - #{messages['form.new']}" />
+<ui:param name="title" value="#{messages['meds.movs.newtransfer']} - #{messages['Batch']} - #{messages['form.new']}" />
 
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
@@ -22,12 +22,12 @@
     </s:decorate>
 
     <s:decorate template="/layout/display.xhtml" >
-    	<ui:define name="label">#{messages['medicines.movs.from']}:</ui:define>
+    	<ui:define name="label">#{messages['meds.movs.from']}:</ui:define>
     	#{medicineTransferHome.fromTbunit.name}
     </s:decorate>
 
     <s:decorate template="/layout/display.xhtml" >
-    	<ui:define name="label">#{messages['medicines.movs.to']}:</ui:define>
+    	<ui:define name="label">#{messages['meds.movs.to']}:</ui:define>
 		#{medicineTransferHome.toTbunit.name}
     </s:decorate>
 
@@ -46,7 +46,7 @@
 	</s:decorate>
 	
 	</td></tr>
-	<tr><th>#{messages['medicines.movs.itensmov']}</th></tr>
+	<tr><th>#{messages['meds.movs.itensmov']}</th></tr>
 	
 	<tr><td>
 
@@ -77,7 +77,7 @@
 	</s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['medicines.movs.transferqtty']}:</ui:define>
+    	<ui:define name="label">#{messages['meds.movs.transferqtty']}:</ui:define>
     	<h:inputText value="#{batchTransferHome.quantity}" required="true">
     	</h:inputText>
     </s:decorate>
@@ -120,7 +120,7 @@
 			</h:column>
 
 			<h:column>
-				<f:facet name="header"><h:outputText value="#{messages['medicines.movs.transferqtty']}" styleClass="colrh" /></f:facet>
+				<f:facet name="header"><h:outputText value="#{messages['meds.movs.transferqtty']}" styleClass="colrh" /></f:facet>
 				<h:outputText value="#{b.quantity}" style="width:60;"></h:outputText>
 			</h:column>
 

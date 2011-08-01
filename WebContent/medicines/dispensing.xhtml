@@ -9,7 +9,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/templatemed.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.dispensing']}" />
+<ui:param name="title" value="#{messages['meds.dispensing']}" />
 
 <ui:param name="waitdlg" value="1" />
 <ui:param name="topmenu" value="1" />
@@ -27,12 +27,6 @@
 
 <ui:define name="content_unit">
 <h:form>
-	<s:link id="lnknew" view="/medicines/dispedt.xhtml" styleClass="button-alt"
-		style="float:right;" rendered="#{s:hasRole('DISP_PAC_EDT')}">
-		<f:param name="month" value="#{dispensingView.month}"/>
-		<f:param name="year" value="#{dispensingView.year}"/>
-		<span>#{messages['medicines.dispensing.new']}</span>
-	</s:link>
 	
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>

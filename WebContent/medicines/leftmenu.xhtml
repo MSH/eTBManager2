@@ -7,17 +7,50 @@
 
 	<div class="vertical-menu">
 	<s:fragment rendered="#{userSession.medicineManagementStarted}">
+
+	<s:fragment rendered="#{userSession.canCheckReceiving}">
+		<h2>#{messages['meds.receiving']}</h2>	
+		<s:link view="/medicines/edtrec.xhtml" rendered="#{s:hasRole('RECEIV_EDT')}" >
+			<f:param name="id" value="#{null}" />
+			<div class="new-icon" style="float:left"/>#{messages['meds.receiving.new']}
+		</s:link>
+		<s:link value="#{messages['meds.receiving.viewall']}" view="/medicines/receivings.xhtml" propagation="none" rendered="#{userSession.canCheckReceiving}"/>
+	</s:fragment>
+
+	<s:fragment rendered="#{s:hasRole('ORDERS')}">
+		<h2>#{messages['meds.orders']}</h2>	
+		<s:link view="/medicines/edtorder.xhtml" rendered="#{userSession.canCreateOrder}" >
+			<div class="new-icon" style="float:left;"/>#{messages['meds.orders.new']}
+		</s:link>
+		<s:link value="#{messages['meds.orders.viewopen']}" view="/medicines/orders.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}"/>
+		<s:link value="#{messages['meds.orders.viewall']}" view="/medicines/orders.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}"/>
+	</s:fragment>
+
+	<s:fragment rendered="#{s:hasRole('TRANSFER')}">
+		<h2>#{messages['meds.transfer']}</h2>	
+		<s:link view="/medicines/transfedt.xhtml" rendered="#{s:hasRole('NEW_TRANSFER')}" >
+			<div class="new-icon" style="float:left"/>#{messages['meds.transfer.new']}
+		</s:link>
+		<s:link value="#{messages['meds.transfer.sent']}" view="/medicines/transfer.xhtml" propagation="none" rendered="#{userSession.canCheckTransfers}">
+			<f:param name="sit" value="#{'WAITING_RECEIVING'}"/>
+		</s:link>
+		<s:link value="#{messages['meds.transfer.received']}" view="/medicines/transfer.xhtml" propagation="none" rendered="#{userSession.canCheckTransfers}">
+			<f:param name="sit" value="#{'WAITING_RECEIVING'}"/>
+		</s:link>
+	</s:fragment>
+
+	<s:fragment rendered="#{userSession.canCheckDispensing}">
+		<h2>#{messages['meds.dispensing']}</h2>	
+		<s:link id="lnknew" view="/medicines/dispedt.xhtml" rendered="#{s:hasRole('DISP_PAC_EDT')}">
+			<f:param name="month" value="#{dispensingView.month}"/>
+			<f:param name="year" value="#{dispensingView.year}"/>
+			<div class="new-icon" style="float:left;"/>#{messages['meds.dispensing.new']}
+		</s:link>
+		<s:link value="#{messages['meds.dispensing.view']}" view="/medicines/dispensing.xhtml" propagation="none" /> 
+	</s:fragment>
 	
-	<s:link value="#{messages['medicines.medicinerecs']}" view="/medicines/receivings.xhtml" propagation="none" rendered="#{userSession.canCheckReceiving}"/>
-	<s:link value="#{messages['medicines.orders']}" view="/medicines/orders.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}"/>
-	<s:link value="#{messages['medicines.dispensing']}" view="/medicines/dispensing.xhtml" propagation="none" rendered="#{userSession.canCheckDispensing}"/>
-	<s:link value="#{messages['medicines.transfer']}" view="/medicines/transfer.xhtml" propagation="none" rendered="#{userSession.canCheckTransfers}">
-		<f:param name="sit" value="#{'WAITING_RECEIVING'}"/>
-	</s:link>
-	
-	<div class="paragraph" style="margin-top:10px;">#{messages['manag.reports']}</div>
-	<s:link value="#{messages['medicines.stockpos']}" view="/medicines/stockpos.xhtml"  propagation="none" rendered="#{userSession.canCheckStockPos}"/>
-	<s:link value="#{messages['medicines.movs']}" view="/medicines/movements.xhtml" propagation="none" rendered="#{userSession.canCheckMovements}"/>
+	<h2>#{messages['meds.reports']}</h2>
+	<s:link value="#{messages['meds.movs']}" view="/medicines/movements.xhtml" propagation="none" rendered="#{userSession.canCheckMovements}"/>
 	<s:link value="#{messages['manag.rel2']}" view="/medicines/releststockpos.xhtml" rendered="#{userSession.canViewEstPositionReport}"/>
 	<s:link value="#{messages['manag.rel3']}" view="/medicines/relstockevol.xhtml" rendered="#{userSession.canViewStockEvolutionReport}"/>
 	<s:link value="#{messages['manag.rel5']}" view="/medicines/reltreatcost.xhtml" rendered="false" />
@@ -26,7 +59,7 @@
 	<s:fragment rendered="false">
 	<s:fragment rendered="#{userSession.canSetupUnit}">
 	<hr/>
-	<s:link value="#{messages['medicines.unitsetup']}" view="/medicines/unitsetup.xhtml" propagation="none" />
+	<s:link value="#{messages['meds.unitsetup']}" view="/medicines/unitsetup.xhtml" propagation="none" />
 	</s:fragment>
 	</s:fragment>
 	

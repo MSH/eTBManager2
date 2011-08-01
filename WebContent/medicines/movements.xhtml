@@ -9,7 +9,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="../layout/templatemed.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.movs']}" />
+<ui:param name="title" value="#{messages['meds.movs']}" />
 <ui:param name="topmenu" value="1" />
 
 <ui:param name="labelstyle" value="width:210px;" />
@@ -66,13 +66,13 @@
 	</s:decorate>
 
     <s:decorate template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['medicines.movs.refdate']}:</ui:define>
+    	<ui:define name="label">#{messages['meds.movs.refdate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{movementFilters.date}" /> 
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['medicines.movs.showbatches']}:</ui:define>
+    	<ui:define name="label">#{messages['meds.movs.showbatches']}:</ui:define>
     	<h:selectBooleanCheckbox value="#{movementFilters.batchesOutput}" />
     </s:decorate>
     
@@ -82,7 +82,7 @@
    	<span style="color:red;clear:both;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 
 <p/>
-<h:outputText value="#{messages['medicines.movs.selectfilter']}" style="font-weight:bold;" rendered="#{movementFilters.date==null}"/>
+<h:outputText value="#{messages['meds.movs.selectfilter']}" style="font-weight:bold;" rendered="#{movementFilters.date==null}"/>
 <h:panelGroup rendered="#{movementFilters.date != null}">
 
 <s:fragment rendered="#{movementFilters.medicineMovsExecuting}">
@@ -120,7 +120,7 @@
 	</h:column>
 
 	<h:column>
-		<f:facet name="header"><h:outputText value="#{messages['medicines.movs.movqtd']}" styleClass="colrh" /></f:facet>
+		<f:facet name="header"><h:outputText value="#{messages['meds.movs.movqtd']}" styleClass="colrh" /></f:facet>
 		<h:outputText value="#{m.qtdOperation}" style="#{m.qtdOperation > 0? '': 'font-weight:bold;color:red;'}">
 			<f:convertNumber pattern="#,###,###"/>
 		</h:outputText>
@@ -141,7 +141,7 @@
 	</h:column>
 
 	<h:column>
-		<f:facet name="header"><h:outputText value="#{messages['medicines.movs.stockqtty']}" styleClass="colrh" /></f:facet>
+		<f:facet name="header"><h:outputText value="#{messages['meds.movs.stockqtty']}" styleClass="colrh" /></f:facet>
 		<b><h:outputText value="#{m.stockQuantity}">
 			<f:convertNumber pattern="#,###,###"/>
 		</h:outputText>
@@ -180,13 +180,13 @@
 		</th>
 		<th>#{messages['Batch.manufacturer']}
 		</th>
-		<th class="colr">#{messages['medicines.movs.movqtd']}
+		<th class="colr">#{messages['meds.movs.movqtd']}
 		</th>
 		<th class="colr">#{messages['global.unitPrice']}
 		</th>
 		<th class="colr">#{messages['global.totalPrice']}
 		</th>
-		<th class="colr">#{messages['medicines.movs.stockqtty']}
+		<th class="colr">#{messages['meds.movs.stockqtty']}
 		</th>
 	</tr>
 <a:repeat value="#{batchMovements.rows}" var="m">

@@ -137,10 +137,18 @@
 <!--
 function disableButton(button) {
 	if (jQuery(button).is(".button-disabled"))	return false;
+	var el=jQuery('span', button);
+	var s=el.text();
+	el.html('<div class="wait-icon2"/>' + s);
 	jQuery(button).addClass("button-disabled");
 	return true;
 }
-function enableButton() { jQuery('.button').removeClass("button-disabled"); }
+function enableButton() { 
+	jQuery('.button-disabled').each(function() {
+	var s=jQuery(this).removeClass("button-disabled").text();
+	jQuery('span',this).html(s);
+	});
+}
 -->
 </script>
  

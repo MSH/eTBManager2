@@ -26,7 +26,7 @@
 <h:form id="main"> 
 
 	<s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['medicines.dispensing.dayini']}:</ui:define>
+    	<ui:define name="label">#{messages['meds.dispensing.dayini']}:</ui:define>
     	<h:selectOneMenu value="#{medicineDispensingHome.dayIni}" required="true">
     		<f:selectItems value="#{medicineDispensingHome.days}" />
     	</h:selectOneMenu>
@@ -36,7 +36,7 @@
 	</s:decorate>
 
 	<s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['medicines.dispensing.dayend']}:</ui:define>
+    	<ui:define name="label">#{messages['meds.dispensing.dayend']}:</ui:define>
     	<h:selectOneMenu value="#{medicineDispensingHome.dayEnd}" required="true">
     		<f:selectItems value="#{medicineDispensingHome.days}" />
     	</h:selectOneMenu>
@@ -79,7 +79,7 @@
 				#{it.item.medicine}
 				</div>
 				<s:fragment rendered="#{it.invalid}">
- 				   <h:outputText value="#{messages['medicines.movs.invalidqtd']}" styleClass="warn"/> 
+ 				   <h:outputText value="#{messages['meds.movs.invalidqtd']}" styleClass="warn"/> 
 				</s:fragment>
 			</td>
 			<td>
@@ -97,7 +97,7 @@
 			<td>
 			</td>
 			<td align="center">
-				<a:commandLink value="#{messages['medicines.selbatches']}" action="#{medicineDispensingHome.initializeBatchSelection(it)}" 
+				<a:commandLink value="#{messages['meds.selbatches']}" action="#{medicineDispensingHome.initializeBatchSelection(it)}" 
 					reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" ajaxSingle="true"/> 
 			</td>
 		</tr>

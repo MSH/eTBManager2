@@ -14,7 +14,7 @@
 		</rule>
 		<rule if-outcome="cancel">
 			<end-conversation before-redirect="true" />
-			<redirect view-id="/medicines/orders.xhtml"></redirect>
+			<redirect view-id="/medicines/index.xhtml"></redirect>
 		</rule>
 	</navigation>
 

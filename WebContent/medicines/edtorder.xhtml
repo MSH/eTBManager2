@@ -10,7 +10,7 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.orders.new']}" />
+<ui:param name="title" value="#{messages['meds.orders.new']}" />
 
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:200px;" />
@@ -53,7 +53,7 @@
 			</h:column>
 			
 			<h:column>
-			<f:facet name="header"><h:outputText value="#{messages['medicines.orders.available']}" styleClass="colrh"/></f:facet>
+			<f:facet name="header"><h:outputText value="#{messages['meds.orders.available']}" styleClass="colrh"/></f:facet>
 				#{it.stockQuantity}
 			</h:column>
 			
@@ -86,7 +86,7 @@
             <a:commandLink action="#{orderHome.saveNew}" styleClass="button" reRender="msg,main" onclick="if (!disableButtons(this)) return false;">
             	<span>#{messages['form.ok']}</span>
             </a:commandLink>
-            <s:link action="cancel" styleClass="button-alt" >
+            <s:link view="/medicines/index.xhtml" styleClass="button-alt" onclick="disableButtons(this)">
             	<span>#{messages['form.cancel']}</span>
             </s:link>
 	</td></tr>
@@ -95,9 +95,9 @@
 
 <s:fragment rendered="#{empty orderSources}" >
 	<div class="error">
-		#{messages['medicines.orders.nomedicine']}
+		#{messages['meds.orders.nomedicine']}
 	</div>
-    <s:link action="cancel" styleClass="button-alt" style="float:right;">
+    <s:link view="/medicines/index.xhtml" styleClass="button-alt" onclick="disableButtons(this);">
     	<span>#{messages['form.cancel']}</span>
     </s:link>	
 </s:fragment>

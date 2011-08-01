@@ -849,7 +849,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .tag-icon, .delete-icon, .new-icon, .progress-icon, .plus-icon, .icon-checked, .icon-unchecked,
 .icon-square, .icon-lab, .icon-hu, .icon-ds, .icon-report, .checked-icon, .unchecked-icon,
 .icon-user, .icon-log-NEW, .icon-log-EDIT, .icon-log-DELETE, .icon-log-EXEC, 
-.naveg-first, .naveg-prev, .naveg-next, .naveg-last, .icon-positive, .icon-negative {
+.naveg-first, .naveg-prev, .naveg-next, .naveg-last, .icon-positive, .icon-negative, .icon-error {
 	background-image: url('images/icons.png');
 	width:16px;
 	height:16px;
@@ -891,6 +891,8 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 
 .icon-negative {	background-position:-80px -80px;  }
 .icon-positive {	background-position:-64px -80px;  }
+
+.icon-error { background-position:-48px -80px }
 
 .tag-icon {	background-position:-48px -48px;  }
 .delete-icon {	background-position:0px -16px; }

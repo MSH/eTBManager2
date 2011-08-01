@@ -9,7 +9,7 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.transfer.new']}" />
+<ui:param name="title" value="#{messages['meds.transfer.new']}" />
 
 <ui:param name="topmenu" value="1" />
 <ui:param name="waitdlg" value="1" />
@@ -23,7 +23,7 @@
 <s:decorate template="/layout/unit.xhtml">
 <h:form id="main">
 
-	<div class="paragraph">#{messages['medicines.movs.destunit']}</div>
+	<div class="paragraph">#{messages['meds.movs.destunit']}</div>
 	<s:decorate template="/layout/tbselection.xhtml">
 		<ui:param name="tbunitselection" value="#{transferHome.tbunitSelection}" />
 		<ui:param name="required" value="true" />
@@ -44,7 +44,7 @@
 	<p/>
 	<a:commandLink ajaxSingle="true" value="#{messages['form.selmeds']}" styleClass="button2" reRender="medstkpnl" 
 		action="#{transferHome.filterMedicines}" oncomplete="showMedicinesStockDlg()" style="width:180px;float:right;"/>
-	<b>#{messages['medicines.movs.itensmov']}</b><br/>
+	<b>#{messages['meds.movs.itensmov']}</b><br/>
 
 	<h:panelGroup id="pnlitems">
 	<table width="100%" class="table1" style="clear:right;">
@@ -87,7 +87,7 @@
 			</b>
 		</td>
 		<td align="center">
-			<a:commandLink value="#{messages['medicines.selbatches']}" ajaxSingle="true" 
+			<a:commandLink value="#{messages['meds.selbatches']}" ajaxSingle="true" 
 				action="#{transferHome.initBatchSelection(it)}"
 				reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" 
 				style="width:120px;display:block;"/>
@@ -95,7 +95,7 @@
 		</td></tr>
 		<s:fragment rendered="#{it.data==true}">
 		<tr><td colspan="6">
- 				   <h:outputText value="#{messages['medicines.movs.invalidqtd']}" styleClass="erro"/>
+ 				   <h:outputText value="#{messages['meds.movs.invalidqtd']}" styleClass="erro"/>
  		</td></tr> 
 		</s:fragment>
 		

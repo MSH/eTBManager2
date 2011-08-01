@@ -13,7 +13,8 @@
 	<s:link style="float:right;margin-top:6px;" 
 		view="/custom/br/cases/edtmedexam.xhtml" 
 		styleClass="button-alt" 
-		rendered="#{caseHome.canEditCaseData}">
+		rendered="#{caseHome.canEditCaseData}"
+		onclick="disableButtons(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 		<span>#{messages['cases.details.newconsult']}</span>

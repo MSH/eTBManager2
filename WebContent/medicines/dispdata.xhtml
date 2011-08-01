@@ -9,14 +9,14 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.dispensing.details']}" />
+<ui:param name="title" value="#{messages['meds.dispensing.details']}" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="waitdlg" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 
 <ui:define name="naveg">
 	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
-	<s:link view="/medicines/dispensing.xhtml" value="#{messages['medicines.dispensing']}" propagation="none">
+	<s:link view="/medicines/dispensing.xhtml" value="#{messages['meds.dispensing']}" propagation="none">
 		<f:param name="month" value="#{medicineDispensing.month}"/>
 		<f:param name="year" value="#{medicineDispensing.year}"/>
 	</s:link>

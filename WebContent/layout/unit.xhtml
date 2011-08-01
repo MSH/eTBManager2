@@ -11,10 +11,10 @@
 <table style="width:100%">
 <tr><td class="header">
 <div>
-	<h:form style="margin:0px">
+	<h:form>
 	<div style="float:right;">
 		<a:region>
-		<a:commandLink value="#{messages['medicines.selunit']}" action="#{unitSelection.startSelecting}" reRender="units,unitCount" 
+		<a:commandLink value="#{messages['meds.selunit']}" action="#{unitSelection.startSelecting}" reRender="units,unitCount" 
 			onclick="showUnitSelDlg();" rendered="#{selunit=='1'}" ajaxSingle="true" focus="unitname"/>
 		</a:region>
 	</div>
@@ -27,10 +27,10 @@
 	<div>
 		#{userSession.tbunit.adminUnit.name} - #{userSession.tbunit.adminUnit.parent.name}
 	</div>
-	<hr/>
+	<div class="separator" />
 </div>
 </td></tr>
-<tr><td style="padding:4px;">
+<tr><td>
 
   <ui:insert />
 </td></tr>
@@ -39,7 +39,7 @@
 <s:fragment id="sf" rendered="#{selunit=='1'}">
 <rich:modalPanel id="unitSelDlg" autosized="true" width="490" zindex="2000" style="background-color:#F2F5F0">
 	<f:facet name="header">
-		<h:outputText value="#{messages['medicines.selunit']}" />
+		<h:outputText value="#{messages['meds.selunit']}" />
 	</f:facet>
 	<div id="unitform"><h:form id="frmunit" style="margin:0px">
 	<a:region>
@@ -74,9 +74,8 @@
 			<h:column>
 				<div class="#{u.treatmentHealthUnit?'icon-hu':'icon-ds'}" />
   				<a:commandLink onclick="selectUnit(#{u.id}); return false;"	style="width:100%;">
-  					<span class="#{u.medicineManagementStarted?'':'warn-icon'}" title="#{u.medicineManagementStarted?'':messages['medicines.start.alert']}">
-  						#{u.name}
-  					</span>
+  					<span class="#{u.medicineManagementStarted?'':'icon-error'}" title="#{u.medicineManagementStarted?'':messages['medicines.start.alert']}" />
+					#{u.name}
   				</a:commandLink>
 			</h:column>
 			</h:dataTable>

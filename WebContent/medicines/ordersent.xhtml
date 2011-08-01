@@ -10,7 +10,7 @@
       xmlns:c="http://java.sun.com/jstl/core"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['medicines.orders.shipment']}" />
+<ui:param name="title" value="#{messages['meds.orders.shipment']}" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:160px;" />
 
@@ -67,14 +67,14 @@
 				</td>
 				<s:fragment rendered="#{it.item.data==true}">
 				<tr><td colspan="6">
- 				   <h:outputText value="#{messages['medicines.movs.invalidqtd']}" styleClass="erro"/>
+ 				   <h:outputText value="#{messages['meds.movs.invalidqtd']}" styleClass="erro"/>
  				</td></tr> 
 				</s:fragment>
 				<td class="colc">
 						<h:outputText value="#{it.item.approvedQuantity}"><f:convertNumber pattern="#,###,###"/></h:outputText>
 				</td>
 				<td class="colc">
-					<h:outputText value="#{messages['medicines.orders.unavailable']}" rendered="#{it.unavailable}" style="font-weight:bold;color:#F5AA0A;font-size:12px;" />
+					<h:outputText value="#{messages['meds.orders.unavailable']}" rendered="#{it.unavailable}" style="font-weight:bold;color:#F5AA0A;font-size:12px;" />
 					<h:outputText value="#{it.item.shippedQuantity}" rendered="#{not it.unavailable}"><f:convertNumber pattern="#,###,###"/></h:outputText>
 				</td>
 				<td class="colc">
@@ -82,7 +82,7 @@
 						action="#{orderShippingHome.initBatchesSelection(it.item)}"
 						reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" 
 						style="width:120px;display:block;">
-						<span>#{messages['medicines.selbatches']}</span>
+						<span>#{messages['meds.selbatches']}</span>
 					</a:commandLink>
 				</td>
 				</tr>

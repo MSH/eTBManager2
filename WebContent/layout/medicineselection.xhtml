@@ -17,8 +17,8 @@ function checkClick(obj) {
   updateRows();
 }
 function updateRows() {
-jQuery(".tbl tr").removeClass("activerow");
-jQuery(".tbl tr:has(:checked)").addClass("activerow");
+jQuery(".tbl tr").removeClass("selected-row");
+jQuery(".tbl tr:has(:checked)").addClass("selected-row");
 }
 
 function showMedicinesDlg() {
@@ -66,19 +66,15 @@ function hideMedicinesDlg() {
 	</div>
 
    	</td></tr>
-   	<tr><td height="30px">
-   			<ui:include src="/layout/waitstatus.xhtml" />
-   		</td>
-   		<td align="right">
-   			<div id="selmedbtns">
-   			<ui:insert />
-   			<s:link	onclick="javascript:Richfaces.hideModalPanel('meddlg'); return false;" 
-   				styleClass="button-alt" >
-   				<span>#{messages['form.cancel']}</span>
-   			</s:link>
-   			</div>
-   		</td>
-   	</tr></table>
+   	</table>
+   	
+   	<div id="selmedbtns" class="button-bar">
+		<ui:insert />
+		<s:link	onclick="javascript:Richfaces.hideModalPanel('meddlg'); return false;" 
+  				styleClass="button-alt" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
 	</a:form>
 	</a:region>
 

@@ -60,7 +60,7 @@
 <table width="100%">
 <tr><td align="right">
 	<a:commandLink action="#{caseValidationHome.answer}" value="#{messages['form.ok']}" styleClass="button" /> 
-    <s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt">
+    <s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt" onclick="disableButtons(this)">
        	<f:param name="id" value="#{caseHome.id}"/>
     </s:link>
 </td></tr>
