@@ -49,7 +49,8 @@
 		<h:dataTable value="#{s.items}" var="it" class="table1" columnClasses="colb,colrb,colrb,colrb,highlight colrb" rowClasses="lin1" width="100%">
 			<h:column>
 			<f:facet name="header">Item</f:facet>
-				<h:outputText value="#{it.item.medicine}" styleClass="medicine-icon" />
+				<div class="medicine-icon" style="float:left"/>
+				<h:outputText value="#{it.item.medicine}" />
 			</h:column>
 			
 			<h:column>
@@ -83,10 +84,10 @@
 </c:forEach>
 
 	<tr><td style="text-align:right;">
-            <a:commandLink action="#{orderHome.saveNew}" styleClass="button" reRender="msg,main" onclick="if (!disableButtons(this)) return false;">
+            <a:commandLink action="#{orderHome.saveNew}" styleClass="button" reRender="msg,main" onclick="if (!disableButton(this)) return false;">
             	<span>#{messages['form.ok']}</span>
             </a:commandLink>
-            <s:link view="/medicines/index.xhtml" styleClass="button-alt" onclick="disableButtons(this)">
+            <s:link view="/medicines/index.xhtml" styleClass="button-alt" onclick="disableButton(this)">
             	<span>#{messages['form.cancel']}</span>
             </s:link>
 	</td></tr>
@@ -97,7 +98,7 @@
 	<div class="error">
 		#{messages['meds.orders.nomedicine']}
 	</div>
-    <s:link view="/medicines/index.xhtml" styleClass="button-alt" onclick="disableButtons(this);">
+    <s:link view="/medicines/index.xhtml" styleClass="button-alt" onclick="disableButton(this);">
     	<span>#{messages['form.cancel']}</span>
     </s:link>	
 </s:fragment>

@@ -9,7 +9,8 @@
 
 	<div class="spacer" />
 
-	<s:link view="/cases/comorbedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
+	<s:link view="/cases/comorbedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" 
+		styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{caseHome.id}" />
 		<span>#{messages['form.edit']}</span>
 	</s:link>
@@ -38,7 +39,8 @@
 	<div class="spacer" />
 
                  
-	<s:link view="/custom/br/cases/edtcontact.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
+	<s:link view="/custom/br/cases/edtcontact.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" 
+		styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{caseHome.id}" />
 		<f:param name="conid" value="#{null}" />
 		<span>#{messages['form.new']}</span>
@@ -159,7 +161,8 @@
 
 	<div class="spacer" />
 
-	<s:link view="/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
+	<s:link view="/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" 
+		styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{caseHome.id}" />
 		<span>#{messages['form.edit']}</span>
 	</s:link>

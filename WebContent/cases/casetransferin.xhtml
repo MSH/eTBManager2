@@ -70,7 +70,7 @@
     </td></tr>
     <tr><td align="right">
     	<a:commandLink action="#{caseMoveHome.transferIn}" styleClass="button" 
-    		onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
+    		onclick="if (!disableButton(this)) return false;" reRender="main,messages">
     		<span>#{messages['form.ok']}</span>
     	</a:commandLink>
     	<s:link view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end" >

@@ -33,7 +33,7 @@
 <a:commandLink value="#{messages['form.new']}"
 	reRender="resistpnl"
 	action="#{conversation.begin}" 
-	onclick="if (!disableButtons(this)) return false;"
+	onclick="if (!disableButton(this)) return false;"
 	oncomplete="enableButton();showMedSelectionDlg();return false;" styleClass="button">
 </a:commandLink>
 	<h:outputText value="#{messages['form.norecordfound']}" styleClass="warn" rendered="#{empty resistancePatterns.resultList}"/>
@@ -124,7 +124,7 @@ jQuery("#resistdiv tr:has(:checked)").addClass("activerow");
 				action="#{resistancePatternHome.saveAndEnd}"
 				styleClass="button" 
 				reRender="pnlresistance"
-				onclick="if (!disableButtons(this)) return false;"
+				onclick="if (!disableButton(this)) return false;"
 				oncomplete="enableButton();hideMedSelectionDlg();">
 			</a:commandLink>
 			<a:commandLink value="#{messages['form.cancel']}"

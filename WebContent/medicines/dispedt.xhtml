@@ -75,9 +75,8 @@
 		<a:repeat value="#{s.items}" var="it">
 		<tr>
 			<td>
-				<div class="medicine-icon">
+				<div class="medicine-icon" style="float:left"/>
 				#{it.item.medicine}
-				</div>
 				<s:fragment rendered="#{it.invalid}">
  				   <h:outputText value="#{messages['meds.movs.invalidqtd']}" styleClass="warn"/> 
 				</s:fragment>

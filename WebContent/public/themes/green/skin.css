@@ -343,7 +343,7 @@ a.workspace-data {
 	width:100%;
 }
 
-.form1 h2 {
+.form1 .form-content h2 {
 	font-size:13px;
 	color:#45793D;
 	font-weight:bold;
@@ -848,7 +848,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .icon-user-header, .icon-bullet, .icon-bullet-menu, .dst-resistant, .dst-contaminated, .dst-susceptible, 
 .tag-icon, .delete-icon, .new-icon, .progress-icon, .plus-icon, .icon-checked, .icon-unchecked,
 .icon-square, .icon-lab, .icon-hu, .icon-ds, .icon-report, .checked-icon, .unchecked-icon,
-.icon-user, .icon-log-NEW, .icon-log-EDIT, .icon-log-DELETE, .icon-log-EXEC, 
+.icon-user, .icon-log-NEW, .icon-log-EDIT, .icon-log-DELETE, .icon-log-EXEC, .batch-icon,
 .naveg-first, .naveg-prev, .naveg-next, .naveg-last, .icon-positive, .icon-negative, .icon-error {
 	background-image: url('images/icons.png');
 	width:16px;
@@ -856,7 +856,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	margin-right:2px;
 	display:inline-block;
 }
-.male-icon, .female-icon, .icon-lab-big, .icon-hu-big, .icon-ds-big {
+.male-icon, .female-icon, .icon-lab-big, .icon-hu-big, .icon-ds-big, .medicine-icon {
 	background-image: url('images/icons.png');
 	width:32px;
 	height:32px;
@@ -866,6 +866,8 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 
 .male-icon { background-position:-64px 0px; }
 .female-icon { 	background-position:-96px 0px; }
+
+.medicine-icon { background-position:-64px -48px; }
 
 .icon-ds {  background-position:-16px -64px; }
 .icon-lab { background-position:-32px -64px; }
@@ -899,6 +901,8 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .plus-icon { background-position:-32px -16px; }
 .checked-icon { background-position:-16px -112px; }
 .unchecked-icon { background-position:-32px -112px; }
+
+.batch-icon { background-position:-16px -16px; }
 
 .progress-icon {
 	width:100px;

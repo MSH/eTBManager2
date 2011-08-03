@@ -14,7 +14,7 @@
 		view="/custom/br/cases/edtmedexam.xhtml" 
 		styleClass="button-alt" 
 		rendered="#{caseHome.canEditCaseData}"
-		onclick="disableButtons(this)">
+		onclick="disableButton(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 		<span>#{messages['cases.details.newconsult']}</span>

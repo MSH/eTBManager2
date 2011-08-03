@@ -64,7 +64,8 @@
 			<c:forEach items="#{medicineReceiving.medicines}" var="it">
 				<tr class="lin1">
 				<td class="colb" colspan="3">
-					<h:outputText value="#{it.movement.medicine}" styleClass="medicine-icon" />
+					<div class="medicine-icon" style="float:left"/>
+					<h:outputText value="#{it.movement.medicine}" />
 					</td>
 					<td class="colrb"><b> 
 						<h:outputText value="#{it.totalQtdBatches}" >
@@ -130,11 +131,11 @@
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
         <a:commandLink action="#{medicineReceivingHome.persist}" styleClass="button" 
-            	onclick="if (!disableButtons(this)) return false;" 
+            	onclick="if (!disableButton(this)) return false;" 
             	reRender="messages,main">
             	<span>#{messages['form.save']}</span>
         </a:commandLink>
-        <s:link action="cancel" styleClass="button-alt" onclick="disableButtons(this);">
+        <s:link action="cancel" styleClass="button-alt" onclick="disableButton(this);">
          	<span>#{messages['form.cancel']}</span>
         </s:link>
     </div>
@@ -159,7 +160,7 @@ return true;
 <s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
 	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
 	<a:commandLink styleClass="button" action="#{medicineReceivingHome.addMedicines}"
-		onclick="disableButtons(this)" 
+		onclick="disableButton(this)" 
 		oncomplete="hideMedicinesDlg();" 
 		reRender="medicines">
 		<span>#{messages['form.ok']}</span>

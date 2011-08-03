@@ -64,7 +64,7 @@
     
     <div class="form-footer">
             <a:commandLink action="#{laboratoryHome.persist}" styleClass="button" reRender="main,messages"
-            	onclick="if (!disableButtons(this)) return false;" >
+            	onclick="if (!disableButton(this)) return false;" >
             	<span>#{messages['form.save']}</span> 
             </a:commandLink>
             <h:commandLink action="cancel" styleClass="button-alt" immediate="true">

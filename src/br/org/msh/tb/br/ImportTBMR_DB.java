@@ -257,10 +257,12 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 			tbcase.setCaseNumber(null);
 		tbcase.setClassification(CaseClassification.DRTB);
 		
-		int val = rsCases.getInt("COD_CASO_TBMR");
+/*		int val = rsCases.getInt("COD_CASO_TBMR");
 		if (val == 1)
 			 tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
 		else tbcase.setDiagnosisType(DiagnosisType.SUSPECT);
+*/		
+		tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
 		
 		tbcase.setDrugResistanceType(DrugResistanceType.MONO_RESISTANCE);
 
@@ -304,7 +306,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 			 tbcase.setFailureType(FailureType.FIRST_TREATMENT);
 		else tbcase.setFailureType(FailureType.RETREATMENT);
 		
-		val = rsCases.getInt("TIPO_RESISTENCIA");
+		int val = rsCases.getInt("TIPO_RESISTENCIA");
 		if (val == 1)
 			 tbcase.setTipoResistencia(TipoResistencia.PRIMARIA);
 		else tbcase.setTipoResistencia(TipoResistencia.ADQUIRIDA);

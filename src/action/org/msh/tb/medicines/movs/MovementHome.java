@@ -56,8 +56,8 @@ public class MovementHome {
 	 * When all movements are ready to be saved, the method savePreparedMovements() must be called to
 	 * commit the movement recording.
 	 * While preparing the movement, the system will test dates and quantities checking if somewhere the
-	 * quantity will be negative. If the test fails, the system will raise a {@link MovementException} exception
-	 * with a message describing the error
+	 * quantity will be negative. If the test fails, the system will return null and the error described
+	 * in the getErrorMessage() method
 	 * @param date
 	 * @param unit
 	 * @param source
@@ -65,7 +65,7 @@ public class MovementHome {
 	 * @param type
 	 * @param batches
 	 * @param comment
-	 * @return an instance of {@link Movement} class, that will be saved when the method savePreparedMovements() is called.
+	 * @return an instance of {@link Movement} class, that will be saved when the method savePreparedMovements() is called, or null if the movement could not be prepared
 	 */
 	public Movement prepareNewMovement(Date date, Tbunit unit, Source source, Medicine medicine, MovementType type, Map<Batch, Integer> batches, String comment) {
 		try {

@@ -178,7 +178,7 @@
 	<td align="right">
 		<a:commandLink id="btnsearch" action="#{casesQueryBR.refresh}" 
 			styleClass="button"	reRender="listCases" 
-			onclick="if (!disableButtons(this)) return false;if (!validateFilters()) {enableButton();return false}"
+			onclick="if (!disableButton(this)) return false;if (!validateFilters()) {enableButton();return false}"
 			oncomplete="Richfaces.hideModalPanel('filtersdlg');enableButton();">
 			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
 			<span>#{messages['form.search']}</span>

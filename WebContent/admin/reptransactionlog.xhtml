@@ -61,7 +61,7 @@
 
 	<div class="form-footer">	
 	<a:commandLink reRender="reportPanel" action="#{transactionLogReport.refresh}" styleClass="button"
-		onclick="if (!disableButtons(this)) return false;" oncomplete="enableButton(this)"> 
+		onclick="if (!disableButton(this)) return false;" oncomplete="enableButton(this)"> 
 		<span>#{messages['form.refresh']}</span>
 	</a:commandLink>
 	</div>

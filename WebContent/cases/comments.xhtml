@@ -20,39 +20,43 @@
 				<a:commandLink style="float:right" 
 					styleClass="button-alt" 
 					action="#{caseCommentsHome.addComment}" 
-					reRender="#{panel}pnlComments">
+					reRender="#{panel}pnlComments" onclick="disableButton(this)">
 					<span>#{messages['cases.comments.add']}</span>
 				</a:commandLink>
 			</s:fragment>
 			</td></tr>
 			</table>
 		
-		<h:dataTable value="#{caseCommentsHome.comments}" var="it" >
+		<a:jsFunction name="deleteComment" reRender="#{panel}pnlComments,messages" ajaxSingle="true" action="#{caseCommentsHome.remove}">
+			<a:actionparam name="param1" assignTo="#{caseCommentsHome.id}" converter="javax.faces.Integer" />
+		</a:jsFunction>
+		
+		<h:dataTable value="#{caseCommentsHome.comments}" var="it" rendered="#{facesContext.renderResponse}">
 			<h:column >
-				<div style="width:100%;background-color:#ededed;padding:4px;">
+				<div class="icon-user" style="float:left;"/>
 				<b>#{it.caseComment.user.name}</b>
-				<br/>
-				<h:outputText value="#{it.caseComment.date}" converter="localeDateConverter"/>
-				<h:outputText value="#{it.caseComment.date}" style="margin-left:8px;">
-					<s:convertDateTime type="time" timeZone="#{timezones.default}"/>
-				</h:outputText>
+				<div class="text-small">
+					<h:outputText value="#{it.caseComment.date}" converter="localeDateConverter" style="padding-right:4px"/>
+					<h:outputText value="#{it.caseComment.date}">
+						<s:convertDateTime type="time" timeZone="#{timezones.default}"/>
+					</h:outputText>
 				</div>
 			</h:column>
 
 			<h:column >
-				<div style="padding-left:10px">
+				<div style="padding-left:10px;padding-top:10px;">
 				<h:outputText value="#{it.caseComment.comment}" 
 					escape="false" converter="rmemoria.TextConverter"
 					styleClass="text" />
-				<a:commandLink value="#{messages['form.remove']}"
-					action="#{caseCommentsHome.remove}" 
-					reRender="#{panel}pnlComments,messages"
+				<a:commandLink
+					onclick="disableButton(this);deleteComment(#{it.caseComment.id});return false;"
 					style="display:table;margin-bottom:10px;"
 					styleClass="small-link" 
 					rendered="#{it.canRemove}">
 					<a:actionparam name="param1" value="#{it.caseComment.id}" 
 						assignTo="#{caseCommentsHome.id}" 
 						converter="javax.faces.Integer" />
+					<span>#{messages['form.remove']}</span>
 				</a:commandLink>
 				</div>
 			</h:column>

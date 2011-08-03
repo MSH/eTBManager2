@@ -124,7 +124,7 @@ function permissionClickHandler(checkbox, divname) {
 </div>
 	<div class="form-footer">
             <a:commandLink action="#{profileHome.persist}" styleClass="button"
-            	onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
+            	onclick="if (!disableButton(this)) return false;" reRender="main,messages">
             	<span>#{messages['form.save']}</span>
             </a:commandLink>  
             <s:link view="/admin/profiles.xhtml" styleClass="button-alt" >

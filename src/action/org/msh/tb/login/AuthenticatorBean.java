@@ -99,6 +99,7 @@ public class AuthenticatorBean {
             
         	// adjust the language
         	user.setLanguage(localeSelector.getLanguage());
+        	localeSelector.select();
       
             // registra o usuário
         	UserSession userSession = getUserSession();

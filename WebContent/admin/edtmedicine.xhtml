@@ -109,7 +109,7 @@
 			<div class="form-footer">	
             <a:commandLink action="#{medicineHome.persist}" styleClass="button" 
             	reRender="main,messages"
-            	onclick="if (!disableButtons(this)) return false;" >
+            	onclick="if (!disableButton(this)) return false;" >
             	<span>#{messages['form.save']}</span>
             </a:commandLink>  
             <s:link view="/admin/medicines.xhtml" styleClass="button-alt" propagation="end" onclick="openWaitDlg();">

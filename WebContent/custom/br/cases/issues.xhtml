@@ -45,8 +45,8 @@
 </td></tr>
 </table>
 
-<rich:jQuery timing="onJScall" name="showIssues" selector="#pnlIssues" query="show(500)" />
-<rich:jQuery timing="onJScall" name="hideIssues" selector="#pnlIssues" query="hide(500)" />
+<rich:jQuery timing="onJScall" name="showIssues" selector="#pnlIssues" query="slideDown(500)" />
+<rich:jQuery timing="onJScall" name="hideIssues" selector="#pnlIssues" query="slideUp(500)" />
 <script type="text/javascript">
 <!--
 function showIssuesCommand() {
@@ -65,24 +65,27 @@ function hideIssuesCommand() {
 <h:panelGroup id="pnlIssues" style="display:none;">
 <s:fragment rendered="#{caseValidationHome.displayingIssues}">
 
-	<s:link value="#{messages['cases.pending.answer']}" view="/cases/postanswer.xhtml" 
+	<s:link view="/cases/postanswer.xhtml" onclick="disableButton(this)"
 		rendered="#{caseHome.canAnswerIssue}" styleClass="button-alt" >
 		<f:param name="id" value="#{caseHome.id}"/>
+		<span>#{messages['cases.pending.answer']}</span>
 	</s:link>
 
 <table width="100%" >
 <a:repeat value="#{caseValidationHome.issues}" var="it">
 <tr>
 	<td style="border-top:1px solid #d0d0d0;">
-		<s:div style="display:block;float:right;" rendered="#{it.tbunit!=null}">
-			<div class="#{r.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}">
+		<s:div style="display:block;float:right;min-width:150px" rendered="#{it.tbunit!=null}">
+			<div class="#{r.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}" style="float:left;"/>
 				#{it.tbunit.name}
 				<br/>
-				<span class="right-icon">#{it.tbunit.adminUnit.parent.name}</span>
-				<span class="right-icon">#{it.tbunit.adminUnit.name}</span>
-			</div>
+				<span class="text-small">
+				<span class="right-icon" />#{it.tbunit.adminUnit.parent.name}
+				<span class="right-icon" />#{it.tbunit.adminUnit.name}
+				</span>
 		</s:div>
-		<div class="#{it.answer? 'replyissue-icon' :'postissue-icon'}" style="float:left;color:#a0a0a0">
+		<div style="float:left;color:#a0a0a0">
+		<div class="#{it.answer? 'replyissue-icon' :'postissue-icon'}" />
 		<b style="font-size:12px;">#{it.user.name}</b>
 		<br/>
 		<h:outputText value="#{it.date}" >

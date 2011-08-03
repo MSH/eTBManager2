@@ -83,7 +83,7 @@ public class CaseFilters {
 	/**
 	 * Selected view in the detail page of the case
 	 */
-	private CaseView caseView;
+	private int caseTab;
 
 	/**
 	 * Used by {@link CasesQuery} to check which search mode to use 
@@ -113,7 +113,6 @@ public class CaseFilters {
 //		registrationCode = null;
 		caseState = null;
 		validationState = null;
-		caseView = CaseView.DATA;
 		classification = null;
 		auselection = null;
 		tbunitselection = null;
@@ -713,20 +712,37 @@ public class CaseFilters {
 		return classifications;
 	}
 
+
 	/**
 	 * @return the caseView
 	 */
 	public CaseView getCaseView() {
-		return caseView;
+		switch (caseTab) {
+		case 2: return CaseView.EXAMS;
+		case 3: return CaseView.TREATMENT;
+		case 4: return CaseView.MEDEXAMS;
+		case 5: return CaseView.ADDINFO;
+		case 6: return CaseView.RESUME;
+		}
+		return CaseView.DATA;
 	}
 
-	/**
-	 * @param caseView the caseView to set
-	 */
-	public void setCaseView(CaseView caseView) {
-		this.caseView = caseView;
+	public void setCaseView(CaseView view) {
+		switch (view) {
+		case DATA: caseTab = 1;
+			break;
+		case EXAMS: caseTab = 2;
+			break;
+		case TREATMENT: caseTab = 3;
+			break;
+		case MEDEXAMS: caseTab = 4;
+			break;
+		case ADDINFO: caseTab = 5;
+			break;
+		case RESUME: caseTab = 6;
+		}
 	}
-	
+
 	/**
 	 * @return the tagid
 	 */
@@ -739,6 +755,20 @@ public class CaseFilters {
 	 */
 	public void setTagid(Integer tagid) {
 		this.tagid = tagid;
+	}
+
+	/**
+	 * @return the caseTab
+	 */
+	public int getCaseTab() {
+		return caseTab;
+	}
+
+	/**
+	 * @param caseTab the caseTab to set
+	 */
+	public void setCaseTab(int caseTab) {
+		this.caseTab = caseTab;
 	}
 		
 

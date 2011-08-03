@@ -42,7 +42,8 @@
 		<h:dataTable value="#{s.items}" var="it" class="table1" width="100%" rowClasses="lin1,lin2" columnClasses="coll,coll,colr,colr,highlight colr">
 			<h:column>
 				<f:facet name="header"><h:outputText value="#{messages['Medicine']}" styleClass="collh" /></f:facet>
-				<h:outputText value="#{it.item.medicine}" styleClass="medicine-icon" />
+				<div class="medicine-icon" style="float:left"/>
+				<h:outputText value="#{it.item.medicine}" />
 			</h:column>
 
 			<h:column>
@@ -76,7 +77,7 @@
 
 <div >
     <a:commandLink action="#{orderAuthorizingHome.authorize}" styleClass="button" 
-    	onclick="if (!disableButtons(this)) return false;" oncomplete="enableButton()">
+    	onclick="if (!disableButton(this)) return false;" oncomplete="enableButton()">
     	<span>#{messages['form.ok']}</span>
     </a:commandLink>
     <s:link action="/medicines/orderdata.xhtml" styleClass="button-alt" >

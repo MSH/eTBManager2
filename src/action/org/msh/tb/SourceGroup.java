@@ -22,4 +22,5 @@ public class SourceGroup<E> {
 	public void setItems(List<E> items) {
 		this.items = items;
 	}
+	
 }

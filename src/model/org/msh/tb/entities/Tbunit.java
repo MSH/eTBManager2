@@ -77,6 +77,7 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
     private boolean tbHealthUnit;
     private boolean mdrHealthUnit;
     private boolean notifHealthUnit;
+    private boolean patientDispensing;
 
     @FieldLog(key="EntityState.ACTIVE")
     private boolean active;
@@ -343,5 +344,21 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 
 	public void setMedManStartDate(Date medManStartDate) {
 		this.medManStartDate = medManStartDate;
+	}
+
+
+	/**
+	 * @return the patientDispensing
+	 */
+	public boolean isPatientDispensing() {
+		return patientDispensing;
+	}
+
+
+	/**
+	 * @param patientDispensing the patientDispensing to set
+	 */
+	public void setPatientDispensing(boolean patientDispensing) {
+		this.patientDispensing = patientDispensing;
 	}
 }

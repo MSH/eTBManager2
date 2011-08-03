@@ -63,9 +63,10 @@ function hideIssuesCommand() {
 <h:panelGroup id="pnlIssues" style="display:none;">
 <s:fragment rendered="#{caseValidationHome.displayingIssues}">
 
-	<s:link value="#{messages['cases.pending.answer']}" view="/cases/postanswer.xhtml" 
-		rendered="#{caseHome.canAnswerIssue}" styleClass="button" style="width:200px;">
+	<s:link view="/cases/postanswer.xhtml" 
+		rendered="#{caseHome.canAnswerIssue}" styleClass="button-alt" style="width:200px;">
 		<f:param name="id" value="#{caseHome.id}"/>
+		<span>#{messages['cases.pending.answer']}</span>
 	</s:link>
 
 <table width="100%" >
@@ -73,12 +74,11 @@ function hideIssuesCommand() {
 <tr>
 	<td style="border-top:1px solid #d0d0d0;">
 		<s:div style="display:block;float:right;" rendered="#{it.tbunit!=null}">
-			<div class="#{r.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}">
+			<div class="#{r.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}" style="float:left;"/>
 				#{it.tbunit.name}
 				<br/>
-				<span class="right-icon">#{it.tbunit.adminUnit.parent.name}</span>
-				<span class="right-icon">#{it.tbunit.adminUnit.name}</span>
-			</div>
+				<span class="right-icon"/>#{it.tbunit.adminUnit.parent.name}
+				<span class="right-icon"/>#{it.tbunit.adminUnit.name}
 		</s:div>
 		<div class="#{it.answer? 'replyissue-icon' :'postissue-icon'}" style="float:left;color:#a0a0a0">
 		<b style="font-size:12px;">#{it.user.name}</b>

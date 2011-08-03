@@ -66,7 +66,7 @@
 	</div>
     
     <div class="form-footer">
-    	<a:commandLink action="#{caseMoveHome.transferOut}" styleClass="button" onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
+    	<a:commandLink action="#{caseMoveHome.transferOut}" styleClass="button" onclick="if (!disableButton(this)) return false;" reRender="main,messages">
     		<span>#{messages['form.ok']}</span>
     	</a:commandLink>
     	<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" >

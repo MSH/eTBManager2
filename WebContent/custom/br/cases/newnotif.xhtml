@@ -57,12 +57,12 @@ function checkfields() {
 	<div class="form-footer">
 		<a:commandLink id="btnsearch" action="#{patients.search}" 
 			styleClass="button"	data="#{patients.searching}"
-			reRender="pnlpatients,dt" onclick="if (!disableButtons(this)) return false;if (!checkfields()) return false"
+			reRender="pnlpatients,dt" onclick="if (!disableButton(this)) return false;if (!checkfields()) return false"
 			oncomplete="enableButton();showbutton();">
 			<span>#{messages['form.search']}</span>
 		</a:commandLink>
 		
-		<s:link view="/cases/index.xhtml" styleClass="button-alt"  onclick="disableButtons(this)">
+		<s:link view="/cases/index.xhtml" styleClass="button-alt"  onclick="disableButton(this)">
 			<span>#{messages['form.cancel']}</span>
 		</s:link>
 	<rich:jQuery timming="onload" selector="#main input[type='text']:first" query="focus()" />
@@ -72,7 +72,7 @@ function checkfields() {
 <h:panelGroup id="pnlpatients">
 
 <div id="newpacbutton" class="button-bar" style="display:none;" >
-	<a:commandLink onclick="if (!disableButtons(this)) return false;"
+	<a:commandLink onclick="if (!disableButton(this)) return false;"
     	action="#{caseEditingHome.selectPatientData}" styleClass="button" >
 	    <span>#{messages['cases.newpatient']}</span>
 	</a:commandLink>

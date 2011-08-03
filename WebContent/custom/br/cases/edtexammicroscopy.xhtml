@@ -92,10 +92,10 @@
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
             <a:commandLink action="#{examMicroscopyHome.persist}" styleClass="button" reRender="formexam,messages" 
-            	onclick="if (!disableButtons(this)) return false;" >
+            	onclick="if (!disableButton(this)) return false;" >
             	<span>#{messages['form.save']}</span>
             </a:commandLink>
-            <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true" onclick="disableButtons(this)">
+            <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true" onclick="disableButton(this)">
             	<span>#{messages['form.cancel']}</span>
             </a:commandLink>
     </div>

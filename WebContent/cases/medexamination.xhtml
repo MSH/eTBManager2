@@ -8,7 +8,7 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 	<div class="spacer" />
-	<s:link view="/cases/edtmedexam.xhtml" style="float:right;" styleClass="button-alt" rendered="#{caseHome.canEditCaseData}">
+	<s:link view="/cases/edtmedexam.xhtml" style="float:right;" styleClass="button-alt" rendered="#{caseHome.canEditCaseData}" onclick="disableButton(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 		<span>#{messages['cases.details.newresult']}</span>

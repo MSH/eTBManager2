@@ -64,7 +64,7 @@ if (regDatesValidate()) {
    		<td align="right">
    		<a:commandLink value="#{messages['form.ok']}" action="#{caseRegimenHome.changePeriod}" 
    			styleClass="button"
-   			onclick="if (!disableButtons(this)) return false;"  
+   			onclick="if (!disableButton(this)) return false;"  
    			oncomplete="enableButton();regDatesValidateAndClose();" reRender="regdatesform,formtreat"/>
    		<s:link value="#{messages['form.cancel']}" onclick="hideRegDatesDlg(); return false;" styleClass="button-alt" />
    	</td></tr>

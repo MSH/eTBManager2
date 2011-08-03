@@ -12,12 +12,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.msh.utils.date.DateUtils;
+import org.hibernate.validator.NotNull;
 
 
 @Entity
@@ -33,38 +35,22 @@ public class MedicineDispensing implements Serializable {
 	private Tbunit tbunit;
 	
 	@Temporal(TemporalType.DATE)
-	private Date iniDate;
+	@NotNull
+	private Date dispensingDate;
 	
-	@Temporal(TemporalType.DATE)
-	private Date endDate;
+	@ManyToMany
+	@JoinTable(name="MOVEMENTS_DISPENSING", 
+			joinColumns={@JoinColumn(name="DISPENSING_ID")},
+			inverseJoinColumns={@JoinColumn(name="MOVEMENT_ID")})
+	private List<Movement> movements = new ArrayList<Movement>();
 	
 	@OneToMany(mappedBy="dispensing", cascade={CascadeType.ALL})
-	private List<MedicineDispensingItem> items = new ArrayList<MedicineDispensingItem>();
+	private List<BatchDispensing> batches = new ArrayList<BatchDispensing>();
+	
+	@OneToMany(mappedBy="dispensing", cascade={CascadeType.ALL})
+	private List<PatientDispensing> patients = new ArrayList<PatientDispensing>();
 
-	
-	/**
-	 * Search for a specific item by its source and medicine
-	 * @param source
-	 * @param medicine
-	 * @return
-	 */
-	public MedicineDispensingItem findItem(Source source, Medicine medicine) {
-		for (MedicineDispensingItem item: items) {
-			if ((item.getMedicine().equals(medicine)) && (item.getSource().equals(source))) {
-				return item;
-			}
-		}
-		return null;
-	}
-	
-
-	public Integer getMonth() {
-		return (endDate == null? null: DateUtils.monthOf(endDate));
-	}
-	
-	public Integer getYear() {
-		return (endDate == null? null: DateUtils.yearOf(endDate));
-	}
+		
 
 	public Integer getId() {
 		return id;
@@ -74,19 +60,6 @@ public class MedicineDispensing implements Serializable {
 		this.id = id;
 	}
 
-	/**
-	 * @return the items
-	 */
-	public List<MedicineDispensingItem> getItems() {
-		return items;
-	}
-
-	/**
-	 * @param items the items to set
-	 */
-	public void setItems(List<MedicineDispensingItem> items) {
-		this.items = items;
-	}
 
 	/**
 	 * @return the tbunit
@@ -102,31 +75,63 @@ public class MedicineDispensing implements Serializable {
 		this.tbunit = tbunit;
 	}
 
+
 	/**
-	 * @return the iniDate
+	 * @return the dispensingDate
 	 */
-	public Date getIniDate() {
-		return iniDate;
+	public Date getDispensingDate() {
+		return dispensingDate;
+	}
+
+
+	/**
+	 * @param dispensingDate the dispensingDate to set
+	 */
+	public void setDispensingDate(Date dispensingDate) {
+		this.dispensingDate = dispensingDate;
+	}
+
+
+	/**
+	 * @return the movements
+	 */
+	public List<Movement> getMovements() {
+		return movements;
+	}
+
+
+	/**
+	 * @param movements the movements to set
+	 */
+	public void setMovements(List<Movement> movements) {
+		this.movements = movements;
 	}
 
 	/**
-	 * @param iniDate the iniDate to set
+	 * @return the batches
 	 */
-	public void setIniDate(Date iniDate) {
-		this.iniDate = iniDate;
+	public List<BatchDispensing> getBatches() {
+		return batches;
 	}
 
 	/**
-	 * @return the endDate
+	 * @param batches the batches to set
 	 */
-	public Date getEndDate() {
-		return endDate;
+	public void setBatches(List<BatchDispensing> batches) {
+		this.batches = batches;
 	}
 
 	/**
-	 * @param endDate the endDate to set
+	 * @return the patients
 	 */
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public List<PatientDispensing> getPatients() {
+		return patients;
+	}
+
+	/**
+	 * @param patients the patients to set
+	 */
+	public void setPatients(List<PatientDispensing> patients) {
+		this.patients = patients;
 	}
 }

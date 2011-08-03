@@ -116,7 +116,7 @@
 	
 	<tr><td colspan="4" align="right">
     	<a:commandLink action="#{orderReceivingHome.notifyReceiving}" styleClass="button" 
-    		onclick="if (!disableButtons(this)) return false;"
+    		onclick="if (!disableButton(this)) return false;"
     		oncomplete="enableButton()" reRender="main">
     		<span>#{messages['form.ok']}</span>
     	</a:commandLink>

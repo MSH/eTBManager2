@@ -62,8 +62,8 @@
 			</tr>
 			<c:forEach var="it" items="#{s.items}">
 				<tr class="highlight"><td class="col" style="height:25px;">
-					<div style="font-size:11px;" class="medicine-icon">#{it.item.medicine}
-					</div> 
+					<div class="medicine-icon" style="float:left"/>
+					#{it.item.medicine}
 				</td>
 				<s:fragment rendered="#{it.item.data==true}">
 				<tr><td colspan="6">
@@ -122,7 +122,7 @@
 
 <div >
     <h:commandLink action="#{orderShippingHome.registerShipping}" styleClass="button" 
-    	onclick="if (!disableButtons(this)) return false;" reRender="main">
+    	onclick="if (!disableButton(this)) return false;" reRender="main">
     	<span>#{messages['form.ok']}</span>
     </h:commandLink>
     <s:link action="cancel" styleClass="button-alt" >
@@ -135,7 +135,7 @@
 
 <s:decorate template="/layout/batchselection.xhtml" >
 	<a:commandLink action="#{orderShippingHome.finishBatchesSelection}"
-		onclick="if (!disableButtons(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
+		onclick="if (!disableButton(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
 		oncomplete="enableButton();hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink>

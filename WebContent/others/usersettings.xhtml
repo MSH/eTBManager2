@@ -39,7 +39,7 @@
 		</div>
 		<div class="form-footer">
 			<a:commandLink action="#{userSettings.savePreferences}" styleClass="button" reRender="messages,main"
-				onclick="if (!disableButtons(this)) return false;"
+				onclick="if (!disableButton(this)) return false;"
 				oncomplete="enableButton()">
 				<span>#{messages['form.save']}</span>
 			</a:commandLink>

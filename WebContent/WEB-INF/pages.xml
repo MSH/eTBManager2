@@ -92,19 +92,6 @@
 
 	<!-- CASE DISPENSING -->
 		
-	<page view-id="/medicines/dispnew.xhtml">
-		<restrict>#{s:hasRole('DISPPAC_EDT')}</restrict>
-		<param name="month" value="#{unitDispensing.month}" converterId="javax.faces.Integer" />
-		<param name="year" value="#{unitDispensing.year}" converterId="javax.faces.Integer" />
-		<param name="unitid" value="#{dispensingHome.unitId}" converterId="javax.faces.Integer" />
-		<navigation>
-			<rule if-outcome="persisted">
-				<redirect view-id="/medicines/dispensing.xhtml">
-				</redirect>
-			</rule>
-		</navigation>
-	</page>
-
 	<page view-id="/medicines/disppacdata.xhtml" >
 		<restrict>#{s:hasRole('DISP_PAC')}</restrict>
 		<param name="id" value="#{caseDispensingHome.id}" converterId="javax.faces.Integer" />

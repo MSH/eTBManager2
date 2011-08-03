@@ -99,7 +99,7 @@ function dstResultChange(cb) {
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
             <a:commandLink action="#{examDSTHome.persist}" styleClass="button" reRender="formexam" 
-            	onclick="if (!disableButtons(this)) return false;"  >
+            	onclick="if (!disableButton(this)) return false;"  >
             	<span>#{messages['form.save']}</span>
             </a:commandLink>
             <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true">

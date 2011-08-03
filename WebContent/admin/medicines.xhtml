@@ -39,12 +39,11 @@
   			<f:param name="order" value="m.genericName.name1#{medicines.order=='m.genericName.name1'?' desc':''}" />
   		</s:link>
   	</f:facet>
-  	<span class="medicine-icon">
+  	<span class="medicine-icon" style="float:left" />
   		<h:outputText value="#{r.genericName.name1}"  rendered="#{not s:hasRole('MEDICINES_EDT')}"/>
 		<s:link view="/admin/edtmedicine.xhtml" value="#{r.genericName.name1}" rendered="#{s:hasRole('MEDICINES_EDT')}">
 			<f:param name="id" value="#{r.id}" />
 		</s:link>
-	</span>
   </h:column>
 
   <h:column rendered="#{defaultWorkspace.hasAlternateLocale}">
@@ -53,7 +52,8 @@
   			<f:param name="order" value="m.genericName.name2#{medicines.order=='m.genericName.name2'?' desc':''}" />
   		</s:link>
   	</f:facet>
-  	<h:outputText value="#{r.genericName.name2}" styleClass="medicine-icon" />
+  	<div class="medicine-icon" />
+  	<h:outputText value="#{r.genericName.name2}" />
   </h:column>
 
   <h:column>

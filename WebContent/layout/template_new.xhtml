@@ -172,7 +172,7 @@ function showModalAutoTop(name, val) {
 	Richfaces.showModalPanel(name, {top:val});
 }
 function windowPosTop() { return jQuery("body").scrollTop(); }
-function disableButtons(button) {
+function disableButton(button) {
 	if (jQuery(button).is(".button-disabled"))	return false;
 	var el=jQuery('span', button);
 	var s=el.text();

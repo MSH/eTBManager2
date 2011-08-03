@@ -78,7 +78,7 @@
 		</div>
             <a:commandLink action="#{examCultureHome.persist}" styleClass="button" 
             	reRender="formexam,messages" 
-            	onclick="if (!disableButtons(this)) return false;" >
+            	onclick="if (!disableButton(this)) return false;" >
             	<span>#{messages['form.save']}</span>
             </a:commandLink>
             <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true">

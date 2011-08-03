@@ -36,7 +36,8 @@
 		</th></tr>
 		<ui:repeat value="#{s.medicines}" var="m">
 		<tr bgcolor="#f3f3f0"><td>
-			<h:outputText value="#{m.medicine}" styleClass="medicine-icon" />
+			<div class="medicine-icon" />
+			<h:outputText value="#{m.medicine}" />
 		</td>
 		<td align="right">
 			<b><h:outputText value="#{m.quantity}">

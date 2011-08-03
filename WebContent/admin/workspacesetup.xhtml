@@ -125,7 +125,7 @@
 	
 		<div class="form-footer">
 		<h:commandLink action="#{workspaceHome.saveDefaultworkspace}" styleClass="button" 
-			onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
+			onclick="if (!disableButton(this)) return false;" reRender="main,messages">
 			<span>#{messages['form.save']}</span>
 		</h:commandLink> 
 		

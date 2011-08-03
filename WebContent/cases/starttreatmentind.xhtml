@@ -64,7 +64,7 @@
 				<f:facet name="header">
 					#{messages['Medicine']}
 				</f:facet>
-				<div class="medicine-icon">#{it.medicine}</div>
+				<div class="medicine-icon" style="float:left"/>#{it.medicine}
 			</h:column>
 			
 			<h:column>
@@ -126,7 +126,7 @@
 				<f:facet name="header">
 					#{messages['Medicine']}
 				</f:facet>
-				<div class="medicine-icon">#{it.medicine}</div>
+				<div class="medicine-icon" style="float:left" />#{it.medicine}
 			</h:column>
 			
 			<h:column>
@@ -175,7 +175,7 @@
 
 	<div class="form-footer">	
 		<a:commandLink styleClass="button" action="#{startTreatmentIndivHome.startIndividualizedRegimen}" 
-			onclick="if (!disableButtons(this)) return false;" 
+			onclick="if (!disableButton(this)) return false;" 
 			reRender="messages,formtreat">
 			<span>#{messages['form.ok']}</span>
 		</a:commandLink>
@@ -191,7 +191,7 @@
 	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
 	<a:commandLink styleClass="button" action="#{startTreatmentIndivHome.addMedicines}" 
 		oncomplete="enableButton();hideMedicinesDlg();" 
-		onclick="if (!disableButtons(this)) return false;" 
+		onclick="if (!disableButton(this)) return false;" 
 		reRender="#{startTreatmentIndivHome.phase=='INTENSIVE'? 'pnltreatment_int':'pnltreatment_cont'}">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink>

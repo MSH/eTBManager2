@@ -53,9 +53,10 @@ function hideMedicinesDlg() {
 	<tr><td>
     	<h:dataTable id="tbl" value="#{cat.medicines}" var="it" styleClass="tabela tbl" width="100%">
 		<h:column>
-			<div style="float:left;vertical-align:top;" class="medicine-icon">
+			<div style="float:left;vertical-align:top;" >
 				<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" />
 			</div>
+			<div class="medicine-icon" />
 			#{it.item}
 			<br/>
 			<div style="color:#b0b0b0;">#{messages[it.item.tbInfoKey]}</div>

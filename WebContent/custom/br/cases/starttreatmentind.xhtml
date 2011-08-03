@@ -18,9 +18,10 @@
 <ui:param name="labelstyle" value="width:140px" />
 
 <ui:define name="content">
+<h1>#{title}</h1>
 
 <s:decorate template="/layout/casebody.xhtml">
-	<a:form id="formtreat">
+	<a:form id="formtreat" styleClass="form1">
 	<table width="100%" style="border-collapse:collapse;"><tr><td>
 
     <s:decorate template="/layout/display.xhtml" >
@@ -55,7 +56,7 @@
 				<f:facet name="header">
 					#{messages['Medicine']}
 				</f:facet>
-				<div class="medicine-icon">#{it.medicine}</div>
+				<div class="medicine-icon" style="float:left" />#{it.medicine}
 			</h:column>
 			
 			<h:column>
@@ -120,7 +121,7 @@
 				<f:facet name="header">
 					#{messages['Medicine']}
 				</f:facet>
-				<div class="medicine-icon">#{it.medicine}</div>
+				<div class="medicine-icon" style="float:left" />#{it.medicine}
 			</h:column>
 			
 			<h:column>
@@ -167,17 +168,20 @@
 	
 	</h:panelGroup>
 
-	</td></tr>
-    <tr><td align="right">
-    
-		<a:commandLink action="#{caseDataBRHome.saveTreatmentEditing}" value="#{messages['form.ok']}" styleClass="button" 
-				reRender="formtreat,messages" 
-            	onclick="if (!disableButtons(this)) return false;" />
-           
-		<s:link view="/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end">
-			<f:param name="id" value="#{caseHome.id}"/>
-		</s:link>
 	</td></tr></table>
+
+	<div class="form-footer">    
+		<a:commandLink action="#{caseDataBRHome.saveTreatmentEditing}" styleClass="button" 
+				reRender="formtreat,messages" 
+            	onclick="if (!disableButton(this)) return false;" >
+            <span>#{messages['form.ok']}</span>
+        </a:commandLink>
+           
+		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+			<f:param name="id" value="#{caseHome.id}"/>
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
 
 	</a:form>
 </s:decorate>
@@ -185,10 +189,12 @@
 
 <s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
 	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
-	<a:commandLink value="#{messages['form.ok']}" styleClass="button" action="#{startTreatmentIndivHome.addMedicines}"
-		onclick="if (!disableButtons(this)) return false;"  
+	<a:commandLink styleClass="button" action="#{startTreatmentIndivHome.addMedicines}"
+		onclick="if (!disableButton(this)) return false;"  
 		oncomplete="enableButton();hideMedicinesDlg();" 
-		reRender="#{startTreatmentIndivHome.phase=='INTENSIVE'? 'pnltreatment_int':'pnltreatment_cont'}"/>
+		reRender="#{startTreatmentIndivHome.phase=='INTENSIVE'? 'pnltreatment_int':'pnltreatment_cont'}">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
 </s:decorate>
 
 </ui:define>

@@ -46,7 +46,6 @@ public class UserSession {
 	private UserWorkspace userWorkspace;
 	private boolean displayMessagesKeys;
 	private boolean initingList;
-	private int caseTab;
 
 
     /**
@@ -483,18 +482,4 @@ public class UserSession {
 	}
 
 
-	/**
-	 * @return the caseTab
-	 */
-	public int getCaseTab() {
-		return caseTab;
-	}
-
-
-	/**
-	 * @param caseTab the caseTab to set
-	 */
-	public void setCaseTab(int caseTab) {
-		this.caseTab = caseTab;
-	}
 }

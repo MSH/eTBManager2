@@ -8,9 +8,11 @@ import javax.persistence.Query;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
+import org.msh.tb.medicines.SourceMedicineGroup;
 
 @Name("stockPositionList")
 public class StockPositionList {
@@ -51,4 +53,39 @@ public class StockPositionList {
 		
 		return qry.getResultList();
 	}
+
+
+	/**
+	 * Return the list of batches available grouped by medicine
+	 * @param unit
+	 * @param source
+	 * @param date
+	 * @return
+	 */
+	public SourceMedicineGroup<BatchQuantity> getBatchAvailable(Tbunit unit, Source source) {
+		String hql = "from BatchQuantity b " + 
+			"join fetch b.batch bt join fetch bt.medicine join fetch b.source " + 
+			"where b.tbunit.id = :unit "; 
+	
+		if (source != null)
+			hql = hql + " and b.source.id = :source";
+
+		hql = hql + "order by b.source.name.name1, bt.medicine.genericName.name1";
+	
+		Query qry = entityManager.createQuery(hql);
+	
+		qry.setParameter("unit", unit.getId());
+		if (source != null)
+			qry.setParameter("source", source.getId());
+		
+		List<BatchQuantity> batches = qry.getResultList();
+
+		SourceMedicineGroup<BatchQuantity> grp = new SourceMedicineGroup<BatchQuantity>(MedicineStockPosList.class);
+		for (BatchQuantity b: batches) {
+			grp.addItem(b.getSource(), b.getBatch().getMedicine(), b);
+		}
+
+		return grp;
+	}
+
 }

@@ -36,7 +36,7 @@
 	<div style="float:right" >
 	<a:commandLink styleClass="button" title="Execute the forecasting (re)calculating the results" 
 		action="#{forecastingCalculation.execute}" reRender="main,messages"
-		onclick="if (!disableButtons(this)) return false;"
+		onclick="if (!disableButton(this)) return false;"
 		oncomplete="enableButton();RichFaces.switchTab('main:tabPanelForecasting','main:tabresult','tabresult')">
 		<span>#{messages['manag.forecast.execute']}</span>
 	</a:commandLink>
@@ -290,7 +290,8 @@
 				<f:facet name="header">
 					#{messages['Medicine']}
 				</f:facet>
-				<h:outputText value="#{r.medicine}" styleClass="medicine-icon" />
+				<div class="medicine-icon" style="float:left"/>
+				<h:outputText value="#{r.medicine}"  />
 			</h:column>
 
 			<h:column>
@@ -513,7 +514,7 @@ function showLoadForecastingDlg() {
 	<div class="button-bar">
 		<a:commandLink action="#{forecastingView.datesChangeListener}"
 			styleClass="button" reRender="datespnl,main"
-			onclick="if (!disableButtons(this)) return false;" 
+			onclick="if (!disableButton(this)) return false;" 
 			oncomplete="enableButton();Richfaces.hideModalPanel('datesdlg');">
 			<span>#{messages['form.ok']}</span>
 		</a:commandLink>
@@ -547,7 +548,7 @@ function showLoadForecastingDlg() {
 	<div class="button-bar">
 		<a:commandLink action="#{forecastingView.confirmOrderChanges}"
 			styleClass="button" reRender="orderpnl,meds" 
-			onclick="if (!disableButtons(this)) return false;"
+			onclick="if (!disableButton(this)) return false;"
 			oncomplete="enableButton();Richfaces.hideModalPanel('orderdlg');">
 			<span>#{messages['form.ok']}</span>
 		</a:commandLink>
@@ -581,7 +582,7 @@ function showLoadForecastingDlg() {
 	<div class="button-bar">
 		<a:commandLink action="#{forecastingView.confirmBatchChanges}"
 			styleClass="button" reRender="batchpnl,meds"
-			onclick="if (!disableButtons(this)) return false;" 
+			onclick="if (!disableButton(this)) return false;" 
 			oncomplete="enableButton();Richfaces.hideModalPanel('batchdlg');">
 			<span>#{messages['form.ok']}</span>
 		</a:commandLink>

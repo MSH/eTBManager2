@@ -63,7 +63,8 @@
 			<div id="med-row" style="height:30px;min-height:30px;cursor: pointer;">
 			<div style="float:left;width:450px;">
 				<a:commandLink value="#{messages['form.details']}" style="float:right;" onclick="detailsClick(this);return false;" />
-				<h:outputText value="#{it.stockPosition.medicine}" class="medicine-icon"/>
+				<div class="medicine-icon" />
+				<h:outputText value="#{it.stockPosition.medicine}" />
 			</div>
 			<div style="float:left;width:140px;text-align:right;">
 				<h:outputText value="#{it.stockPosition.quantity}" style="#{it.stockPosition.quantity>0?'font-weight:bold;':''}">
@@ -130,7 +131,7 @@
 	<ui:param name="quantitytitle" value="#{messages['meds.movs.newqtty']}" />
 	<a:commandLink action="#{stockAdjustmentHome.executeBatchAdjustment}"
 		data="#{stockAdjustmentHome.actionExecuted}"  
-		onclick="if (!disableButtons(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
+		onclick="if (!disableButton(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
 		oncomplete="enableButton();if (!data) return false; hideBatchesSelectionDlg();refreshMedTable();" 
 		reRender="batchselpnl" styleClass="button">
 		<span>#{messages['form.ok']}</span>
@@ -271,7 +272,7 @@ function initBatchDeleting(batchId) {
             <a:commandLink action="#{stockAdjustmentHome.saveNewBatch}" styleClass="button" 
             	reRender="newbatchpnl"
             	data="#{stockAdjustmentHome.actionExecuted}"
-            	onclick="if (!disableButtons(this)) return false;"
+            	onclick="if (!disableButton(this)) return false;"
             	oncomplete="enableButton();if (!data) return false; Richfaces.hideModalPanel('newbatchdlg');refreshMedTable();">
             	<span>#{messages['form.ok']}</span>
             </a:commandLink>
@@ -338,7 +339,7 @@ function initBatchDeleting(batchId) {
             <a:commandLink action="#{stockAdjustmentHome.deleteBatch()}" styleClass="button" 
             	reRender="newbatchpnl"
             	data="#{stockAdjustmentHome.actionExecuted}"
-            	onclick="if (!disableButtons(this)) return false;"
+            	onclick="if (!disableButton(this)) return false;"
             	oncomplete="enableButton();if (!data) return false; Richfaces.hideModalPanel('delbatchdlg');refreshMedTable();">
             	<span>#{messages['form.ok']}</span>
             </a:commandLink>

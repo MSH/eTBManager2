@@ -79,14 +79,14 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 		
 		initialized = true;
 		MedicineDispensing dispensing = getInstance();
-		if (isManaged()) {
+/*		if (isManaged()) {
 			year = DateUtils.yearOf( dispensing.getEndDate() );
 			month = DateUtils.monthOf( dispensing.getEndDate() );			
 			dayIni = DateUtils.dayOf( dispensing.getIniDate() );			
 			dayEnd = DateUtils.dayOf( dispensing.getEndDate() );
 			return;
 		}
-		
+*/		
         if (!isManaged())
         	initializeDays();
 	}
@@ -126,7 +126,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     		dispensing.setTbunit(unit);
     	}
 
-    	// check if end date was changed
+/*    	// check if end date was changed
     	Date dt = dispensing.getIniDate();
     	boolean endDateChanged = (dt != null? DateUtils.dayOf(dt) != dayEnd : true);
 
@@ -191,7 +191,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
 				}
 			}
 		}
-    	
+*/    	
         return persist();
     }
 	
@@ -222,12 +222,12 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     public String remove() {
     	List<Movement> movs = new ArrayList<Movement>();
     	
-    	for (MedicineDispensingItem item: getInstance().getItems()) {
+/*    	for (MedicineDispensingItem item: getInstance().getItems()) {
     		if (item.getMovement() != null)
     			movs.add(item.getMovement());
     		item.setMovement(null);
     	}
-    	
+*/    	
     	String ret = super.remove();
     	
     	// it was removed?
@@ -371,7 +371,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
             	
             	DispItem dispItem = new DispItem();
             	
-            	MedicineDispensingItem item = dispensing.findItem(source, medicine);
+/*            	MedicineDispensingItem item = dispensing.findItem(source, medicine);
             	if (item == null) {
             		item = new MedicineDispensingItem();
             		item.setMedicine(medicine);
@@ -381,12 +381,12 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
             	dispItem.setItem(item);
             	dispItem.setAvailableQuantity(sp.getQuantity());
             	grp.getItems().add(dispItem);
-            }
+*/            }
     	}
         
         // check if there is any item recorded in the dispensing that was not included in 
         // the list of sources and medicines
-        for (MedicineDispensingItem item: dispensing.getItems()) {
+/*        for (MedicineDispensingItem item: dispensing.getItems()) {
         	SourceGroup grp = findSource(item.getSource());
         	if (grp == null) {
         		grp = new SourceGroup();
@@ -402,7 +402,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
         		grp.getItems().add(aux);
         	}
         }
-    }
+*/    }
 
     
     /**

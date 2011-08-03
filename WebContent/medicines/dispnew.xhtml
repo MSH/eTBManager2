@@ -19,64 +19,88 @@
 </ui:define>
 
 <ui:define name="content">
-<p/>
-<h:form id="main"> 
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1"> 
 
-<rich:panel style="width:600px;">
-    <s:decorate template="/layout/display.xhtml" >
-    	<ui:define name="label">#{messages['Tbunit']}:</ui:define>
-    	#{unitDispensing.tbunit.name}
+	<div class="form-content">
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['meds.dispensing.date']}:</ui:define>
+    	<ui:param name="datefield" value="#{batchDispensingUIHome.dispensingDate}" /> 
+		<ui:param name="required" value="true" />
     </s:decorate>
-
-	<s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
-    	#{unitDispensing.month} - #{unitDispensing.year}
-	</s:decorate>
-
-    <h:panelGroup id="pnlcases">
-	<table width="100%">
-	<a:repeat value="#{dispensingHome.items}" var="s">
-	<tr style="background-color:#EDF7EF;"><td style="border:1px solid #B4E8BB;padding:5px;">
-		<b>#{s.tbcase.patient.name}</b>
-	</td></tr>
-	<tr><td>
-		<h:dataTable value="#{s.medicines}" var="it" style="width:100%" styleClass="table1" columnClasses="coll,colc,colc,colc">
-			<h:column>
-				<f:facet name="header">#{messages['Medicine']}</f:facet>
-				#{it.medicine}
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">#{messages['Movement.quantity']}</f:facet>
-				<h:inputText value="#{it.quantity}" style="width:100px;"/>
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">#{messages['global.unitPrice']}</f:facet>
-				<h:inputText value="#{it.unitPrice}" style="width:100px;"/>
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">#{messages['global.totalPrice']}</f:facet>
-				<h:outputText value="#{it.totalPrice}">
-					<f:convertNumber pattern="#,###,##0.00"/>
-				</h:outputText>
-			</h:column>
-		</h:dataTable>
-	</td></tr>
-	</a:repeat>
-	</table>
-
-	</h:panelGroup>
 	
-    <br/>
-    <span style="float:right;width:100%;text-align:right;">
-        <h:commandLink action="#{dispensingHome.saveDispensing}" value="#{messages['form.ok']}" styleClass="button"  />  
-        <s:link view="/medicines/dispensing.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end" />
-    </span>
-</rich:panel>
+	</div>
+    
+    <a:repeat value="#{batchDispensingUIHome.sources}" var="s">
+    <h2>#{s.source}</h2>
+    	<a:repeat value="#{s.medicines}" var="med">
+    		<table class="table1">
+    			<td>
+					<div id="med-row">
+					<div style="float:left;width:450px;">
+						<a:commandLink onclick="detailsClick(this);return false;">
+							<div class="plus-icon" style="float:left;"/>
+						</a:commandLink>
+						<h:outputText value="#{med.medicine}" />
+					</div>
+					<div style="float:left;width:140px;text-align:right;">
+					<h:outputText value="#{med.quantityAvailable}" >
+						<f:convertNumber pattern="#,###,###,##0"/>
+					</h:outputText>
+					</div>
+					</div>
+			
+					<div id="tblbatch" style="display:none;">					
+					<a:repeat value="#{med.items}" var="b">
+					<div style="clear:both;position:relative;min-height:40px;height:40px;border-top:1px solid #d0d0d0;padding-top:4px;">
+					<div style="float:left;width:350px;padding-left:30px;">
+					<div class="batch-icon" style="float:left;"/>
+					#{b.batchQuantity.batch.batchNumber}<br/>
+					#{b.batchQuantity.batch.manufacturer}
+					</div>
+				<div style="float:left;width:130px;text-align:center;">
+					<h:outputText value="#{b.batchQuantity.batch.expiryDate}" converter="localeDateConverter" />
+				</div>
+				<div style="float:left;width:130px;text-align:right;">
+					<h:outputText value="#{b.dispensingQuantity}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</div>
+			</div>
+		</a:repeat>
+		</div>
+    			</td>
+    		</table>
+    	</a:repeat>
+    </a:repeat>
+	
+    <div class="button-bar">
+        <h:commandLink action="#{batchDispensingUIHome.saveDispensing}" styleClass="button"  >
+        	<span>#{messages['form.ok']}</span>
+        </h:commandLink>  
+        <s:link view="/medicines/index.xhtml" styleClass="button-alt" propagation="end" >
+        	<span>#{messages['form.cancel']}</span>
+        </s:link>
+    </div>
 
 </h:form>
+
+<script type="text/javascript">
+<!--
+waitdiv = '<div style="float:left" class="wait-icon"/>';
+function detailsClick(elem) {
+	var tbl=jQuery(elem).closest("td").find("#tblbatch");
+	var bVisible=jQuery(tbl).is(":visible");
+	tbl.slideToggle(500);
+/*	if (bVisible)
+		 jQuery(elem).text('#{messages['form.details']}');
+	else jQuery(elem).text('#{messages['form.hidedetails']}'); */
+	
+}
+
+-->
+</script>
 
 </ui:define>
 

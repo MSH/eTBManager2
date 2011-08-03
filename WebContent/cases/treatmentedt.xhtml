@@ -67,11 +67,11 @@
 	<a:commandLink action="#{treatmentHome.saveChanges}" styleClass="button" 
             	reRender="main,messages" 
             	oncomplete="enableButton();"
-            	onclick="if (!disableButtons(this)) return false;"  >
+            	onclick="if (!disableButton(this)) return false;"  >
 		<span>#{messages['form.save']}</span>
     </a:commandLink>
 
-	<a:commandLink action="cancel" styleClass="button-alt" immediate="true" onclick="disableButtons(this)">
+	<a:commandLink action="cancel" styleClass="button-alt" immediate="true" onclick="disableButton(this)">
 		<span>#{messages['form.cancel']}</span>
 	</a:commandLink>
 	</div>
@@ -95,7 +95,7 @@ function showRemoveDlg() {
 	Richfaces.showModalPanel('removedlg'); 
 } 
 function formButtonPost(button) {
-	if (!disableButtons(this)) return false;
+	if (!disableButton(this)) return false;
 	jQuery(button).closest('.button-bar').prepend(waitdiv);
 	return true;
 }

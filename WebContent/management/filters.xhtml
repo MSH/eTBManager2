@@ -247,7 +247,7 @@ function handleContextClick(comp) {
 	<td align="right" >
 	<a:commandLink reRender="indicator" styleClass="button" 
 		action="#{indicatorController.execute}"
-		onclick="if (!disableButtons(this)) return false;" oncomplete="enableButton();showChart();">
+		onclick="if (!disableButton(this)) return false;" oncomplete="enableButton();showChart();">
 		<span>#{messages['form.update']}</span>
 	</a:commandLink>
 	<rich:jQuery name="showpictype" timing="onJScall" selector="#charttypediv" query="show(500)" />

@@ -66,7 +66,7 @@
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
             <a:commandLink action="#{examMicroscopyHome.persist}" styleClass="button" reRender="formexam,messages" 
-            	onclick="if (!disableButtons(this)) return false;"  
+            	onclick="if (!disableButton(this)) return false;"  
             	>
             	<span>#{messages['form.save']}</span>
             </a:commandLink>

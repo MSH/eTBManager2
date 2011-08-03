@@ -73,11 +73,11 @@
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
         <a:commandLink action="#{molecularBiologyHome.persist}" styleClass="button" reRender="formexam" 
-        	onclick="if (!disableButtons(this)) return false;" >
+        	onclick="if (!disableButton(this)) return false;" >
         	<span>#{messages['form.save']}</span>
         </a:commandLink>
         
-        <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButtons(this)">
+        <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
         	<f:param name="id" value="#{caseHome.id}"/>
         	<span>#{messages['form.cancel']}</span>
         </s:link>

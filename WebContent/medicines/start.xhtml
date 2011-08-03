@@ -64,7 +64,8 @@
 			<a:repeat value="#{s.items}" var="it">
 				<tr class="lin1">
 				<td class="colb" colspan="3">
-					<h:outputText value="#{it.medicine}" styleClass="medicine-icon" />
+					<div class="medicine-icon" />
+					<h:outputText value="#{it.medicine}" />
 					</td>
 					<td class="colrb"><b> 
 						<h:outputText value="#{it.quantity}" >
@@ -259,7 +260,7 @@ else return false;
             <a:commandLink action="#{medicineManStartHome.finishBatchEditing}" styleClass="button" 
             	reRender="batchpnl,medicines"
             	data="#{medicineManStartHome.validated}"
-            	onclick="if (!disableButtons(this)) return false;" 
+            	onclick="if (!disableButton(this)) return false;" 
             	oncomplete="enableButton();if (data) hideBatchDlg();">
             	<span>#{messages['form.ok']}</span>
             </a:commandLink>

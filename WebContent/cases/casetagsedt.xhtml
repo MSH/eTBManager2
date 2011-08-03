@@ -35,7 +35,7 @@
 		<a:commandLink
 			styleClass="button" 
 			action="#{caseTagHome.saveNewTag}"
-			onclick="if (!disableButtons(this)) return false;"  
+			onclick="if (!disableButton(this)) return false;"  
 			reRender="pnlTags">
 			<span>#{messages['form.save']}</span>
 		</a:commandLink>
@@ -57,7 +57,7 @@
 	<div class="form-footer">
 	<a:commandLink action="#{caseTagHome.saveTags}" 
 		styleClass="button" 
-		onclick="if (!disableButtons(this)) return false;" 
+		onclick="if (!disableButton(this)) return false;" 
 		reRender="main,messages">
 		<span>#{messages['form.save']}</span>
 	</a:commandLink>

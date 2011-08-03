@@ -17,8 +17,8 @@ function mscheckClick(obj) {
   msupdateRows();
 }
 function msupdateRows() {
-jQuery(".tbl tr").removeClass("activerow");
-jQuery(".tbl tr:has(:checked)").addClass("activerow");
+jQuery(".tbl tr").removeClass("hightlight");
+jQuery(".tbl tr:has(:checked)").addClass("hightlight");
 }
 
 function showMedicinesStockDlg() {
@@ -47,14 +47,15 @@ function hideMedicinesStockDlg() {
 		#{s.source.name}
 	</td></tr>
 	<tr><td>
-    <h:dataTable id="tbl" value="#{s.items}" var="it" styleClass="tabela tbl" width="100%" columnClasses="coll,colr">
+    <h:dataTable id="tbl" value="#{s.items}" var="it" styleClass="table1" width="100%" columnClasses="coll,colr">
 	<h:column>
 		<f:facet name="header">
 			<h:outputText value="#{messages['Medicine']}" styleClass="collh" />
 		</f:facet>
-		<div style="float:left;vertical-align:top;" class="medicine-icon">
+		<div style="float:left;vertical-align:top;">
 			<h:selectBooleanCheckbox value="#{it.selected}" onclick="msupdateRows()" />
 		</div>
+		<div class="medicine-icon" style="float:left" />
 		<h:outputText value="#{it.item.medicine}" />
 		<br/>
 		<div style="color:#b0b0b0;">#{messages[it.item.medicine.tbInfoKey]}</div>

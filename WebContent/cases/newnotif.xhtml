@@ -45,7 +45,7 @@
 
 	<div class="form-footer">
 		<a:commandLink id="btnsearch" styleClass="button"
-			focus="name" onclick="if (!disableButtons(this)) return false;initPatientSearch(); return false" >
+			focus="name" onclick="if (!disableButton(this)) return false;initPatientSearch(); return false" >
 			<span>#{messages['form.search']}</span>
 		</a:commandLink>
 		<s:link view="/cases/index.xhtml" styleClass="button-alt" >
@@ -59,7 +59,7 @@
 <h:panelGroup id="pnlpatients">
 
 <div id="newpacbutton" class="button-bar" style="display:none;" >
-	<a:commandLink onclick="if (!disableButtons(this)) return false;"
+	<a:commandLink onclick="if (!disableButton(this)) return false;"
     	action="#{caseEditingHome.selectPatientData}" styleClass="button" >
 	    <span>#{messages['cases.newpatient']}</span>
 	</a:commandLink>

@@ -60,7 +60,7 @@
 </td></tr>
 <tr><td align="right">
 	<a:commandLink styleClass="button" action="#{stockPosReport.execute}" reRender="pnlresult,pnlPrintLink"
-		onclick="if (!disableButtons(this)) return false;"
+		onclick="if (!disableButton(this)) return false;"
 		oncomplete="enableButton()">
 		<span>#{messages['form.generate']}</span>
 	</a:commandLink>

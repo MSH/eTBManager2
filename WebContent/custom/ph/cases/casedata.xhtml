@@ -154,53 +154,53 @@
 <rich:tabPanel switchType="client" id="tabCase">
 <rich:tab label="#{messages['cases.details.case']}" id="tab1" ontabenter="updateTab(1)">
 	<h:panelGroup id="pnltab1">
-		<s:decorate template="data.xhtml" rendered="#{userSession.caseTab==1}"/>
+		<s:decorate template="data.xhtml" rendered="#{caseFilters.caseTab==1}"/>
 	</h:panelGroup>
 </rich:tab>
 
 <rich:tab label="#{messages['cases.details.exams']}" id="tab2" ontabenter="updateTab(2)">
 	<h:panelGroup id="pnltab2">
-		<s:decorate template="exams.xhtml" rendered="#{userSession.caseTab==2}"/>
+		<s:decorate template="exams.xhtml" rendered="#{caseFilters.caseTab==2}"/>
 	</h:panelGroup>
 </rich:tab>
 
 <rich:tab label="#{messages['cases.details.treatment']}" id="tab3" ontabenter="updateTab(3)">
 	<h:panelGroup id="pnltab3">
-		<s:decorate template="/cases/treatment.xhtml" rendered="#{userSession.caseTab==3}"/>
+		<s:decorate template="/cases/treatment.xhtml" rendered="#{caseFilters.caseTab==3}"/>
 	</h:panelGroup>
 </rich:tab>
 
 <rich:tab label="#{messages['cases.details.medexam']}" id="tab4" ontabenter="updateTab(4)">
 	<h:panelGroup id="pnltab4">
-		<s:decorate template="medexamination.xhtml" rendered="#{userSession.caseTab==4}"/>
+		<s:decorate template="medexamination.xhtml" rendered="#{caseFilters.caseTab==4}"/>
 	</h:panelGroup>
 </rich:tab>
 
 <rich:tab label="#{messages['cases.details.otherinfo']}" id="tab5" ontabenter="updateTab(5)">
 	<h:panelGroup id="pnltab5">
-		<s:decorate template="/cases/otherinfo.xhtml" rendered="#{userSession.caseTab==5}"/>
+		<s:decorate template="/cases/otherinfo.xhtml" rendered="#{caseFilters.caseTab==5}"/>
 	</h:panelGroup>
 </rich:tab>
 
 <rich:tab label="#{messages['cases.details.report1']}" id="tab6" ontabenter="updateTab(6)">
 	<h:panelGroup id="pnltab6">
-		<s:decorate template="/cases/drugogram.xhtml" rendered="#{userSession.caseTab==6}"/>
+		<s:decorate template="/cases/drugogram.xhtml" rendered="#{caseFilters.caseTab==6}"/>
 	</h:panelGroup>
 </rich:tab>
 
 </rich:tabPanel>
 
 
-<a:jsFunction name="updateTabContent" reRender="pnltab#{userSession.caseTab}">
-	<a:actionparam name="param1" assignTo="#{userSession.caseTab}" converter="javax.faces.Integer" />
+<a:jsFunction name="updateTabContent" reRender="pnltab#{caseFilters.caseTab}">
+	<a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
 </a:jsFunction>
 <a:jsFunction name="updateTabSelection">
-	<a:actionparam name="param1" assignTo="#{userSession.caseTab}" converter="javax.faces.Integer" />
+	<a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
 </a:jsFunction>
 <script type="text/javascript">
 <!--
 window.tabLoaded = new Array();
-window.inicasetab = #{userSession.caseTab};
+window.inicasetab = #{caseFilters.caseTab};
 jQuery().ready(function() {
 	initTab();
 });

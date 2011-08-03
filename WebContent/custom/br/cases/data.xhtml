@@ -10,7 +10,7 @@
 	<div class="form1" style="width:100%">
 	<div class="form-content">
 
-		<s:link view="/cases/caseedt.xhtml" styleClass="button-alt" onclick="openWaitDlg();" 
+		<s:link view="/cases/caseedt.xhtml" styleClass="button-alt" onclick="disableButton(this);" 
 			style="float:right;" rendered="#{caseHome.canEditCaseData}">
 			<f:param name="id" value="#{caseHome.id}" />
 			<span>#{messages['form.edit']}</span>

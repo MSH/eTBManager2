@@ -11,7 +11,6 @@
 
 <ui:param name="title" value="#{messages['cases.pending.notify']}" />
 
-<ui:param name="waitdlg" value="1" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
 <ui:param name="pagewidth" value="700px" />
@@ -35,10 +34,10 @@
 
 <div class="form-footer">
 	<a:commandLink action="#{caseValidationHome.registerPending}" styleClass="button" 
-		onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
+		onclick="if (!disableButton(this)) return false;" reRender="main,messages">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink> 
-    <s:link view="/cases/casedata.xhtml" styleClass="button-alt">
+    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" onclick="disableButton(this)">
        	<f:param name="id" value="#{caseHome.id}"/>
        	<span>#{messages['form.cancel']}</span>
     </s:link>

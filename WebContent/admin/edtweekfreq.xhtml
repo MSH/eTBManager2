@@ -43,7 +43,7 @@
 </c:forEach>
 <tr><td align="right">
 	<a:commandLink action="#{weeklyFrequencyHome.save}" styleClass="button"
-		onclick="if (!disableButtons(this)) return false;" reRender="main,messages">
+		onclick="if (!disableButton(this)) return false;" reRender="main,messages">
 	 <span>#{messages['form.save']}</span> 
 	</a:commandLink>
 	<s:link view="/admin/weekfreqs.xhtml" styleClass="button-alt">

@@ -42,6 +42,7 @@ import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.CultureResult;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.HIVResult;
@@ -145,6 +146,9 @@ public class CaseDataBRHome {
 //		data.setId(tbcase.getId());
 		tbcase.setCurrAddressNumber(tbcase.getNotifAddressNumber());
 		tbcase.setAdminUnitUsOrigem(getAuselection().getSelectedUnit());
+
+		// all cases are confirmed
+		tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
 
 		caseHome.setTransactionLogActive(false);
 		String ret = caseEditingHome.saveNew();
