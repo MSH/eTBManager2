@@ -17,23 +17,33 @@
 <ui:param name="labelstyle" value="width:150px" />
 
 <ui:define name="content">
-<h:form id="main">
-<table width="100%"><tr><td>
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+
+ <div class="form-content">
+<!-- <table width="100%"><tr><td> -->
 
 	<ui:include src="casedataedt.xhtml" />
 
 	<p/>
 	
-	<table width="100%"><tr><td align="right">
-	<div style="float:left;">
+<!-- <table width="100%"><tr><td align="right"> -->
+	
+	</div>
+	 <div class="form-footer">
+	 <div style="float:right">
 		<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 	</div>
-	<a:commandLink value="#{messages['form.ok']}" action="#{caseEditingHome.saveEditing}" styleClass="button" reRender="main,messages"/>
-	<s:link value="#{messages['form.cancel']}" view="/custom/ke/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+	<a:commandLink action="#{caseEditingHome.saveEditing}" styleClass="button" reRender="main,messages">
+	<span>#{messages['form.save']}</span> 
+	</a:commandLink>
+	<s:link view="/custom/ke/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
 		<f:param name="id" value="#{caseHome.id}" />
+		<span>#{messages['form.cancel']}</span> 
 	</s:link>
-	</td></tr></table>
-</td></tr></table>
+	</div>
+<!-- </td></tr></table>
+</td></tr></table>-->
 <p/>
 
 </h:form>
