@@ -21,7 +21,8 @@
 </ui:define>
 
 <ui:define name="content">
-<h:form id="main" prependId="true">
+<h:form id="main" prependId="true" styleClass="form1">
+ <div class="form-content">
 	<table class="tab1" style="background-color:#F7F5EF;" cellspacing="10">
 	<tr><td colspan="3" class="header2"><h1>#{workspace.name}</h1>
 	</td></tr>
@@ -103,17 +104,23 @@ function processSelectedUser(suggestion) {
 	    </s:decorate>
 		
 		<a:commandLink action="#{workspaceHome.addUser}" styleClass="button" 
-			onclick="if (!disableButton(this)) return false;" reRender="main" >
+			onclick="if (!disableButtons(this)) return false;" reRender="main" >
 			<span>#{messages['form.add']}</span>
 		</a:commandLink>
 		
 		</div>
+		</td></tr></table>
+		</div>
 
-	</td></tr>
-	<tr><td align="right" colspan="3">
-		<h:commandLink action="#{workspaceHome.saveUsers}" value="#{messages['form.ok']}" styleClass="button" immediate="true" />
-		<h:commandLink action="cancel" value="#{messages['form.cancel']}" styleClass="button-alt" immediate="true" />
-	</td></tr></table>
+	<div class="form-footer">
+
+		<h:commandLink action="#{workspaceHome.saveUsers}" styleClass="button" immediate="true" >
+		<span>#{messages['form.save']}</span> 
+		</h:commandLink>
+		<h:commandLink action="cancel" styleClass="button-alt" immediate="true" >
+		<span>#{messages['form.cancel']}</span> 
+		</h:commandLink>
+	</div>
 </h:form>
 </ui:define>
         
