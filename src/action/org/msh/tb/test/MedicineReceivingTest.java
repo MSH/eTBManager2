@@ -6,13 +6,11 @@ import java.util.Random;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.MedicinesQuery;
 import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.MedicineReceiving;
-import org.msh.tb.entities.MedicineReceivingItem;
+import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.enums.Container;
 import org.msh.tb.medicines.MedicineReceivingHome;
-import org.msh.tb.medicines.MedicineSelection;
-import org.msh.utils.ItemSelect;
 import org.msh.utils.date.DateUtils;
 
 
@@ -20,7 +18,7 @@ import org.msh.utils.date.DateUtils;
 public class MedicineReceivingTest {
 
 	@In(create=true) MedicineReceivingHome medicineReceivingHome;
-	@In(create=true) MedicineSelection medicineSelection;
+	@In(create=true) MedicinesQuery medicines;
 	
 	private String[] manufactures = {"Lab Test", "WWW Laboratories", "MSH Labs", "Copacabana Lab" };
 	private Integer[] qtds = {100, 200, 50, 500};
@@ -29,28 +27,16 @@ public class MedicineReceivingTest {
 	 * Generate a medicine receiving package
 	 */
 	public void createReceiving() {
-		
-		// create a new receiving
-		MedicineReceiving mr = medicineReceivingHome.getInstance();
-		
-		addMedicines();
-		
-		for (MedicineReceivingItem it: mr.getMedicines()) {
-			addBatches(it);			
+		for (Medicine med: medicines.getResultList()) {
+			addBatches(med);
 		}
 	}
+
 	
-	public void addMedicines() {
-		// add medicines
-		for (ItemSelect it: medicineSelection.getItems()) {
-			it.setSelected(true);
-		}
-		medicineReceivingHome.addMedicines();
-	}
-	
-	public void addBatches(MedicineReceivingItem it) {
-		while (it.getBatches().size() < 3) {
-			medicineReceivingHome.newBatch(it);
+	public void addBatches(Medicine med) {
+		for (int loop = 0; loop < 3; loop++) {
+			medicineReceivingHome.startNewBatch(med);
+
 			Batch b = medicineReceivingHome.getBatch();
 			
 			Random r = new Random();
@@ -58,7 +44,7 @@ public class MedicineReceivingTest {
 			// generate expiration date
 			int year = r.nextInt(3) + DateUtils.yearOf(new Date());
 			int month = r.nextInt(12);
-			System.out.println("mes=" + month + " ano=" + year);
+//			System.out.println("mes=" + month + " ano=" + year);
 			Calendar c = Calendar.getInstance();
 			c.set(Calendar.YEAR, year);
 			c.set(Calendar.MONTH, month);
@@ -70,13 +56,13 @@ public class MedicineReceivingTest {
 				bn = bn + r.nextInt(10);
 			b.setBatchNumber(bn);
 			
-			b.setBrandName(it.getMovement().getMedicine().getGenericName().getName1());
+			b.setMedicine(med);
 			b.setContainer(Container.BOX);
 			b.setManufacturer(manufactures[r.nextInt(4)]);
 			b.setQuantityContainer(qtds[r.nextInt(4)]);
 			b.setQuantityReceived((r.nextInt(5) + 2) * 10000);
 			b.setUnitPrice(((float)(r.nextInt(15000) + 3000)) / 10000F);
-			medicineReceivingHome.addBatch();
+			medicineReceivingHome.finishBatchEditing();
 		}
 	}
 	

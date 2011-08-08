@@ -22,7 +22,7 @@
 
 <ui:define name="content">
 
-<s:decorate template="/layout/unit.xhtml">
+<s:decorate template="/layout/unitsel.xhtml">
 <ui:param name="pagestyle" value="width:780px;" />
 <p/>
 <h:form id="main">
@@ -91,11 +91,9 @@
 				<a:repeat value="#{it.batches}" var="b">
 					<tr>
 						<td class="colb" style="padding-left:35px;">
-							<div class="batch-icon" >
-							<h:outputText value="#{messages['Batch.batchNumber']}: #{b.batch.batchNumber}" /><br/>
-							<h:outputText value="#{messages['Batch.manufacturer']}: #{b.batch.manufacturer}" rendered="#{not empty b.batch.manufacturer}" /><br/>
-							<h:outputText value="#{messages['Batch.brandName']}: #{b.batch.brandName}" rendered="#{not empty b.batch.brandName}" />
-							</div>
+							<s:decorate template="/layout/batch.xhtml" >
+								<ui:param name="batch" value="#{b.batch}" />
+							</s:decorate>
 						</td>
 						<td class="colcb">
 							<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />

@@ -25,7 +25,7 @@
 
 <ui:define name="content">
 <div style="width:800px">
-<s:decorate template="/layout/unit.xhtml">
+<s:decorate template="/layout/unitsel.xhtml">
 <h:form id="main">
 	<a:commandLink onclick="openNewBatchDlg();" style="float:right;" styleClass="button-alt">
 		<span>#{messages['meds.receiving.newbatch']}...</span>
@@ -81,10 +81,9 @@
 					styleClass="right-icon small-link" 
 					onclick="initBatchDeleting(#{b.id})"/>
 				<div style="float:left;width:350px;padding-left:30px;">
-					<div class="batch-icon">
-					#{b.batch.batchNumber}<br/>
-					#{b.batch.manufacturer}
-					</div>
+					<s:decorate template="/layout/batch.xhtml" >
+						<ui:param name="batch" value="#{b.batch}" />
+					</s:decorate>
 				</div>
 				<div style="float:left;width:130px;text-align:center;">
 					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />

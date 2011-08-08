@@ -37,7 +37,7 @@ public class WorkspaceInit {
 
 		execUpdate("delete from OrderCase oc where oc.item.id in (select aux.id from OrderItem aux where aux.source.workspace.id = :id)");
 		execUpdate("delete from OrderItem it where it.source.id in (select aux.id from Source aux where aux.workspace.id = :id)");
-		execUpdate("delete from Order c where c.tbunitFrom.id in (select aux.id from Tbunit aux where aux.workspace.id = :id)");
+		execUpdate("delete from Order c where c.unitFrom.id in (select aux.id from Tbunit aux where aux.workspace.id = :id)");
 		
 		execUpdate("delete from TransferItem it where it.transfer.id in (select aux.id from Transfer aux where aux.unitFrom.workspace.id = :id)");
 		execUpdate("delete from Transfer c where c.unitFrom.id in (select aux.id from Tbunit aux where aux.workspace.id = :id)");

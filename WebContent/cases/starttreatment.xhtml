@@ -77,7 +77,7 @@
 			<h:selectOneMenu id="dose" value="#{m.doseUnit}" required="true">
 				<f:selectItems value="#{treatmentHome.doses}" />
 			</h:selectOneMenu>
-			<h:message for="dose" styleClass="erro" />
+			<h:message for="dose" styleClass="error" />
 		</h:column>
 		
 		<h:column>
@@ -85,7 +85,7 @@
 			<h:selectOneMenu value="#{m.frequency}" required="true" id="freq">
             	<f:selectItems value="#{frequencies}" />
 			</h:selectOneMenu>
-			<h:message for="freq" styleClass="erro" />
+			<h:message for="freq" styleClass="error" />
 		</h:column>
 		
 		<h:column>
@@ -94,7 +94,7 @@
             	<s:selectItems value="#{sources}" var="c" label="#{c.abbrevName}" noSelectionLabel="-" />
             	<s:convertEntity />
 			</h:selectOneMenu>
-			<h:message for="sourcei" styleClass="erro"/>
+			<h:message for="sourcei" styleClass="error"/>
 		</h:column>
 
 		</h:dataTable>

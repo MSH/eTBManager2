@@ -48,6 +48,31 @@ public class SourceOrderItem {
 	
 	private Source source;
 	private List<OrderItemAux> items = new ArrayList<OrderItemAux>();
+	private List<OrderItemAux> itemsWithRequest;
+
+
+	/**
+	 * Return the list of items with quantity requested by the user. Items with 0 quantity requested are not included 
+	 * @return
+	 */
+	public List<OrderItemAux> getItemsWithRequest() {
+		if (itemsWithRequest == null) {
+			itemsWithRequest = new ArrayList<SourceOrderItem.OrderItemAux>();
+			for (OrderItemAux aux: items) {
+				if (aux.getItem().getRequestedQuantity() > 0)
+					itemsWithRequest.add(aux);
+			}
+		}
+		return itemsWithRequest;
+	}
+
+	
+	/**
+	 * Clear information about items with request information forcing it to be recreated again
+	 */
+	public void refreshItemsWithRequest() {
+		itemsWithRequest = null;
+	}
 	
 	/**
 	 * Returns order item by medicine

@@ -330,7 +330,7 @@ function isPulmonary(cb) {
 							<f:selectItems value="#{years}"/>
 						</h:selectOneMenu>
 					</s:validateAll>
-					<h:message for="year" styleClass="erro"/>
+					<h:message for="year" styleClass="error"/>
 				</td>
 				<a:repeat value="#{it.items}" var="sub">
 				<td class="colcb">
@@ -344,7 +344,7 @@ function isPulmonary(cb) {
 						<s:convertEnum />
 					</h:selectOneMenu>
 					</s:validateAll>
-					<h:message for="oc" styleClass="erro"/>
+					<h:message for="oc" styleClass="error"/>
 				</td>
 			</tr>
 		</a:repeat>

@@ -36,7 +36,7 @@ public class OrderShippingHome extends Controller {
 	@In(create=true) Order order;
 	@In(create=true) EntityManager entityManager;
 	@In(create=true) MovementHome movementHome;
-	@In(create=true) List<SourceOrderItem> orderSources;
+	@In(create=true) OrderHome orderHome;
 	@In(create=true) FacesMessages facesMessages;
 	@In(create=true) BatchSelection batchSelection;
 	
@@ -79,10 +79,10 @@ public class OrderShippingHome extends Controller {
 		OrderStatus status = OrderStatus.SHIPPED;
 		order.setStatus(status);
 		Date dtShipping = order.getShippingDate();
-//		Tbunit dto = order.getTbunitTo();
+//		Tbunit dto = order.getUnitTo();
 		
 		// check if stock can be decreased
-/*		Tbunit unitTo = order.getTbunitTo();
+/*		Tbunit unitTo = order.getUnitTo();
 		boolean canShip = true;
 		for (OrderItem it: order.getItems()) {
 			if (!movementHome.canDecreaseStock(unitTo, it.getSource(), 
@@ -107,12 +107,12 @@ public class OrderShippingHome extends Controller {
 					batches.put(ob.getBatch(), ob.getQuantity());
 
 				Movement mov = movementHome.prepareNewMovement(dtShipping, 
-						order.getTbunitTo(), 
+						order.getUnitTo(), 
 						it.getSource(), 
 						it.getMedicine(), 
 						type, 
 						batches, 
-						order.getTbunitTo().toString());
+						order.getUnitTo().toString());
 
 				if (mov == null) {
 					facesMessages.add(movementHome.getErrorMessage());
@@ -152,12 +152,12 @@ public class OrderShippingHome extends Controller {
 				"where b.tbunit = :unit " +
 				"and bat.expiryDate >= :dt " +
 				"order by bat.expiryDate")
-				.setParameter("unit", order.getTbunitTo())
+				.setParameter("unit", order.getUnitTo())
 				.setParameter("dt", DateUtils.getDate())
 				.getResultList();
 		
 		// percorre as fontes de medicamentos do pedido
-		for (SourceOrderItem s: orderSources) {
+		for (SourceOrderItem s: orderHome.getSources()) {
 			Source source = s.getSource();
 
 			// pedido foi aprovado ?
@@ -216,9 +216,9 @@ public class OrderShippingHome extends Controller {
 
 		// remove fontes que não possuam nenhum item aprovado
 		int i = 0;
-		while (i < orderSources.size()) {
-			if (orderSources.get(i).getItems().size() == 0)
-				orderSources.remove(i);
+		while (i < orderHome.getSources().size()) {
+			if (orderHome.getSources().get(i).getItems().size() == 0)
+				orderHome.getSources().remove(i);
 			else i++;
 		}
 		
@@ -233,7 +233,7 @@ public class OrderShippingHome extends Controller {
 	public void initBatchesSelection(OrderItem it) {
 		orderItem = it;
 		batchSelection.clear();
-		batchSelection.setTbunit(it.getOrder().getTbunitTo());
+		batchSelection.setTbunit(it.getOrder().getUnitTo());
 		batchSelection.setMedicine(it.getMedicine());
 		batchSelection.setSource(it.getSource());
 

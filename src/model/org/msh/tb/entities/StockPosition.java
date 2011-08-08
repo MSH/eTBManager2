@@ -51,6 +51,16 @@ public class StockPosition implements Serializable {
 	private int quantity;
 	private float totalPrice;
 
+
+	/**
+	 * Return the unit price of the medicine
+	 * @return
+	 */
+	public float getUnitPrice() {
+		return (quantity != 0? totalPrice / quantity: 0);
+	}
+
+
 	/**
 	 * Returns the date of the stock position information
 	 * @return date of the stock position

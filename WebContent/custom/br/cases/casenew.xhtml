@@ -153,7 +153,7 @@
 			<ui:param name="required" value="false" />
 			<ui:param name="redasterisk" value="true" />
 			<h:inputHidden id="cblabculture" />
-			<h:message for="cblabculture" styleClass="erro"/>
+			<h:message for="cblabculture" styleClass="error"/>
 		</s:decorate>
     	</div>
 		<rich:jQuery selector="#cbresculture select" query="change( function(){ examResultChanged(); })" />
@@ -203,7 +203,7 @@
 				<ui:param name="labselection" value="#{molecularBiologyHome.labselection}" />
 				<ui:param name="required" value="false" />
 				<ui:param name="redasterisk" value="true" />
-				<h:message for="cblabmethod" styleClass="erro"/>
+				<h:message for="cblabmethod" styleClass="error"/>
 			</s:decorate>
 			</div>
 
@@ -315,7 +315,7 @@
 				<s:selectItems var="r" value="#{regimens.resultList}" label="#{r}" noSelectionLabel="-"/>
 				<s:convertEntity />
 			</h:selectOneMenu>
-			<h:message for="cbregimen" styleClass="erro"/>
+			<h:message for="cbregimen" styleClass="error"/>
 			</div>
 		</s:decorate>		
 

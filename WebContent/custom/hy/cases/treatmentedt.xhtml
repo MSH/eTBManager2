@@ -67,7 +67,7 @@ function showHuDlg() {	Richfaces.showModalPanel('hudlg'); }
 	<h:panelGroup id="periodpnl">
 	<h:form style="padding:10px;" rendered="#{treatmentHome.formEditing=='TREATMENT'}">
 
-	<h:messages globalOnly="false" styleClass="erro" layout="table" />
+	<h:messages globalOnly="false" styleClass="error" layout="table" />
 	<s:decorate template="/layout/display.xhtml" rendered="#{not treatmentHome.canChangeIniDate}">
 		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
 		<h:outputText value="#{treatmentHome.iniDate}"/>
@@ -105,7 +105,7 @@ function showHuDlg() {	Richfaces.showModalPanel('hudlg'); }
 	<h:panelGroup id="medicinepnl">
 	<h:form style="padding:10px;" rendered="#{treatmentHome.formEditing=='MEDICINE'}">
 
-	<h:messages globalOnly="true" styleClass="erro" layout="table" />
+	<h:messages globalOnly="true" styleClass="error" layout="table" />
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['Medicine']}:</ui:define>
 		<h:selectOneMenu value="#{prescribedMedicine.medicine}" required="true"> 
@@ -175,7 +175,7 @@ function showHuDlg() {	Richfaces.showModalPanel('hudlg'); }
 	<h:panelGroup id="hupnl" >
 	<h:form style="padding:10px;" rendered="#{treatmentHome.formEditing=='HEALTHUNIT'}">
 
-	<h:messages styleClass="erro" layout="table" />
+	<h:messages styleClass="error" layout="table" />
 	<s:decorate template="/layout/display.xhtml" rendered="#{not treatmentHome.canChangeIniDate}">
 		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
 		<h:outputText value="#{treatmentHome.iniDate}"/>

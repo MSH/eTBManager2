@@ -31,11 +31,14 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 	@FieldLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 	
-	@Column(length=80)
+	@Column(length=200)
 	private String address;
 	
+	@Column(length=200)
+	private String addressCont;
+	
 	@Column(length=50)
-	private String district;
+	private String zipCode;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="FIRSTLINE_SUPPLIER_ID")
@@ -95,6 +98,29 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
     @Temporal(TemporalType.DATE)
     private Date medManStartDate;
 
+    /**
+     * Order address
+     */
+    @Column(length=200)
+    private String shipAddress;
+
+    /**
+     * Order address (continuing)
+     */
+    @Column(length=200)
+    private String shipAddressCont;
+
+    /**
+     * Order contact name
+     */
+    @Column(length=200)
+    private String shipContactName;
+    
+    /**
+     * Order contact phone
+     */
+    @Column(length=200)
+    private String shipContactPhone;
     
     /**
      * Check if medicine management was already started for this TB Unit
@@ -104,7 +130,7 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
     	return medManStartDate != null;
     }
 
- 
+    
     @Override
     public String toString() {
     	return getName().toString();
@@ -154,14 +180,6 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 
 	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public String getDistrict() {
-		return district;
-	}
-
-	public void setDistrict(String district) {
-		this.district = district;
 	}
 
 	public Integer getId() {
@@ -360,5 +378,102 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 	 */
 	public void setPatientDispensing(boolean patientDispensing) {
 		this.patientDispensing = patientDispensing;
+	}
+
+
+
+	/**
+	 * @return the shipAddress
+	 */
+	public String getShipAddress() {
+		return shipAddress;
+	}
+
+
+	/**
+	 * @param shipAddress the shipAddress to set
+	 */
+	public void setShipAddress(String shipAddress) {
+		this.shipAddress = shipAddress;
+	}
+
+
+	/**
+	 * @return the shipAddressCont
+	 */
+	public String getShipAddressCont() {
+		return shipAddressCont;
+	}
+
+
+	/**
+	 * @param shipAddressCont the shipAddressCont to set
+	 */
+	public void setShipAddressCont(String shipAddressCont) {
+		this.shipAddressCont = shipAddressCont;
+	}
+
+
+	/**
+	 * @return the shipContactName
+	 */
+	public String getShipContactName() {
+		return shipContactName;
+	}
+
+
+	/**
+	 * @param shipContactName the shipContactName to set
+	 */
+	public void setShipContactName(String shipContactName) {
+		this.shipContactName = shipContactName;
+	}
+
+
+	/**
+	 * @return the shipContactPhone
+	 */
+	public String getShipContactPhone() {
+		return shipContactPhone;
+	}
+
+
+	/**
+	 * @param shipContactPhone the shipContactPhone to set
+	 */
+	public void setShipContactPhone(String shipContactPhone) {
+		this.shipContactPhone = shipContactPhone;
+	}
+
+
+	/**
+	 * @return the addressCont
+	 */
+	public String getAddressCont() {
+		return addressCont;
+	}
+
+
+	/**
+	 * @param addressCont the addressCont to set
+	 */
+	public void setAddressCont(String addressCont) {
+		this.addressCont = addressCont;
+	}
+
+
+	/**
+	 * @return the zipCode
+	 */
+	public String getZipCode() {
+		return zipCode;
+	}
+
+
+	/**
+	 * @param zipCode the zipCode to set
+	 */
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
 	}
 }

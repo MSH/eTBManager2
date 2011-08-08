@@ -5,6 +5,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
@@ -15,12 +16,14 @@
 
 <ui:define name="left">
 	<div class="vertical-menu">
-	<s:link view="/medicines/edtrec.xhtml" value="#{messages['form.edit']}" >
+	<s:link view="/medicines/edtrec.xhtml" >
 		<f:param name="id" value="#{medicineReceivingHome.id}" />
+		<div class="edit-icon" style="float:left"/>#{messages['form.edit']}
 	</s:link>
 
-    <s:link action="#{medicineReceivingHome.remove}" value="#{messages['form.remove']}" onclick="return confirm('#{messages['form.confirm_remove']}');" >
+    <s:link action="#{medicineReceivingHome.remove}" onclick="return confirm('#{messages['form.confirm_remove']}');" >
        	<f:param name="id" value="#{medicineReceivingHome.id}" />
+		<div class="delete-icon" style="float:left"/>#{messages['form.remove']}
     </s:link>
     </div>
 </ui:define>
@@ -28,13 +31,15 @@
 
 <ui:define name="naveg">
 	<div class="item">
-		<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
+		<s:link value="#{messages['meds.inventory']}" view="/medicines/index.html" propagation="none" />
 	</div>
 	<div class="item">
 		<s:link view="/medicines/receivings.xhtml" value="#{messages['meds.receiving']}" />
 	</div>
 	<div class="item selected">
-		<s:link value="#{title}" />
+		<s:link >
+			<h:outputText value="#{medicineReceiving.receivingDate}"  converter="localeDateConverter" />
+		</s:link>
 	</div>
 </ui:define>
 
@@ -47,7 +52,7 @@
 
 
 <ui:define name="content">
-<s:decorate template="/layout/unit.xhtml">
+<s:decorate template="/layout/unitsel.xhtml">
 <h:form id="main">
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
@@ -70,89 +75,66 @@
 			<f:convertNumber pattern="#,###,##0.00"/>
     	</h:outputText>
     </s:decorate>
-	<p/>
 
-	<table width="100%" class="table1" >
-		<tr><th><h:outputText value="#{messages['Medicine']}" styleClass="collh" /></th>
-				<th><h:outputText value="#{messages['Batch.expiryDate']}" styleClass="colch" /></th>
+		<table width="100%" class="table1">
+			<tr><th>#{messages['Medicine']}</th>
+				<th>#{messages['Batch.expiryDate']}</th>
 				<th align="right">#{messages['Batch.numContainers']}</th>
-				<th><h:outputText value="#{messages['Batch.quantityReceived']}" styleClass="colrh" /></th>
-				<th><h:outputText value="#{messages['global.unitPrice']}" styleClass="colrh" /></th>
-				<th><h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh" /></th>
-		</tr>
-		<ui:repeat value="#{medicineReceiving.medicines}" var="it">
-				<tr style="background-color:#F3F8F4;">
-					<td colspan="3">
-						<div class="medicine-icon" style="float:left"/>
-						#{it.movement.medicine}
+				<th align="right">#{messages['Movement.quantity']}</th>
+				<th align="right">#{messages['global.unitPrice']}</th>
+				<th align="right">#{messages['global.totalPrice']}</th>
+			</tr>
+			<a:repeat value="#{medicineReceivingHome.medicines}" var="it">
+				<tr class="highlight">
+				<td class="colb" colspan="3">
+					<div class="medicine-icon" style="float:left"/>
+					<h:outputText value="#{it.medicine}" />
 					</td>
-					<td class="colr">
-						<b>
-						<h:outputText value="#{it.movement.quantity}">
-							<f:convertNumber pattern="###,###,###"/>
+					<td class="colrb"> 
+						<h:outputText value="#{it.item.quantity}" >
+							<f:convertNumber pattern="#,###,###,##0"/>
 						</h:outputText>
-						</b>
+						</td>
+					<td class="colrb">
+							<h:outputText value="#{it.item.unitPrice}" >
+								<f:convertNumber pattern="#,###,##0.00"/>
+							</h:outputText>
 					</td>
-					<td class="colr">
-						<b>
-						<h:outputText value="#{it.unitPrice}">
-							<f:convertNumber pattern="###,###,##0.0000"/>
+					<td class="colrb"> 
+						<h:outputText value="#{it.item.totalPrice}" >
+							<f:convertNumber pattern="#,###,##0.00"/>							
 						</h:outputText>
-						</b>
-					</td>
-					<td class="colr">
-						<b>
-						<h:outputText value="#{it.totalPrice}">
-							<f:convertNumber pattern="###,###,##0.00"/>
-						</h:outputText>
-						</b>
 					</td>
 				</tr>
-				<ui:repeat value="#{it.batches}" var="b">
-				<tr class="lin2b">
-				<td class="colb">
-					<div class="batch-icon">
-					<span style="width:100px;" >#{messages['Batch.batchNumber']}:</span> #{b.batchNumber}<br/>
-					<span style="width:100px;" >#{messages['Batch.manufacturer']}: </span> #{b.manufacturer}<br/>
-					<span style="width:100px;" >#{messages['Batch.brandName']}: </span>  #{b.brandName}
-					</div>
-				</td>
-				<td class="colcb">
-					<h:outputText value="#{b.expiryDate}" converter="localeDateConverter" />
-				</td>
-				<td class="colrb">
-					<h:outputText value="#{b.numContainers}" >
-						<f:convertNumber pattern="#,###,##0"/>
-					</h:outputText>
-					<h:outputText value="(#{b.quantityContainer})" style="margin-left:5px;">
-						<f:convertNumber pattern="#,###,##0"/>
-					</h:outputText>
-				</td>
-				<td class="colrb">
-					<h:outputText value="#{b.quantityReceived}"><f:convertNumber pattern="###,###,###"/></h:outputText>
-				</td>
-				<td class="colrb">
-					<h:outputText value="#{b.unitPrice}">
-									<f:convertNumber pattern="#,###,##0.0000"/>
-								</h:outputText>
-				</td>
-				<td class="colrb">
-					<h:outputText value="#{b.totalPrice}">
-						<f:convertNumber pattern="#,###,##0.00"/>
-					</h:outputText>
-				</td>
-				</tr>
-				</ui:repeat>
-		</ui:repeat>
-		<tr><th colspan="5" align="left">
-				<b>#{messages['global.totalPrice']}</b>
-		</th>
-		<th align="right">
-			<h:outputText value="#{medicineReceiving.totalPrice}" >
-					<f:convertNumber pattern="#,###,##0.00"/>
-   			</h:outputText>
-		</th></tr>
-	</table>
+				
+				<a:repeat value="#{it.batches}" var="b">
+					<tr>
+						<td class="colb">
+							<s:decorate template="/layout/batch.xhtml">
+								<ui:param name="batch" value="#{b}" />
+							</s:decorate>
+						</td>
+						<td class="colcb">
+							<h:outputText value="#{b.expiryDate}" converter="localeDateConverter" />
+						</td>
+						<td class="colrb">
+							<h:outputText value="#{b.numContainers}" >
+								<f:convertNumber pattern="#,###,##0"/>
+							</h:outputText>
+							<h:outputText value="(#{b.quantityContainer})" style="margin-left:5px;">
+								<f:convertNumber pattern="#,###,##0"/>
+							</h:outputText>
+						</td>
+						<td class="colrb">
+							<h:outputText value="#{b.quantityReceived}"><f:convertNumber pattern="#,###,##0" /></h:outputText></td>
+						<td class="colrb">
+							<h:outputText value="#{b.unitPrice}"><f:convertNumber pattern="#,###,##0.00" /></h:outputText></td>
+						<td class="colrb">
+							<h:outputText value="#{b.totalPrice}"><f:convertNumber pattern="#,###,##0.00" /></h:outputText></td>
+					</tr>
+				</a:repeat>
+			</a:repeat>
+		</table>
 </h:form>
 </s:decorate>
 

@@ -117,7 +117,7 @@ function formButtonPost(button) {
 
 	<div class="form-content">
 	<h:panelGroup rendered="#{treatmentHome.formEditing=='TREATMENT'}">
-	<h:messages globalOnly="true" styleClass="erro" layout="table" />
+	<h:messages globalOnly="true" styleClass="error" layout="table" />
 
 	<div class="paragraph">#{messages['RegimenPhase.INTENSIVE']}</div>
 	<s:decorate template="/layout/dateedit.xhtml" rendered="#{treatmentHome.canChangeIniTreatmentDate}">
@@ -177,7 +177,7 @@ function formButtonPost(button) {
 
 	<div class="form-content">
 	<h:panelGroup id="removepnl" rendered="#{treatmentHome.formEditing=='REMOVE'}">
-	<h:messages globalOnly="true" styleClass="erro" layout="table" />
+	<h:messages globalOnly="true" styleClass="error" layout="table" />
 
 	<s:decorate template="/layout/dateedit.xhtml">
 		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
@@ -222,7 +222,7 @@ function formButtonPost(button) {
 	<div class="form-content">
 	<h:panelGroup rendered="#{treatmentHome.formEditing=='MEDICINE'}">
 
-	<h:messages globalOnly="true" styleClass="erro" layout="table" />
+	<h:messages globalOnly="true" styleClass="error" layout="table" />
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['Medicine']}:</ui:define>
 		<h:selectOneMenu value="#{prescribedMedicine.medicine}" required="true"> 
@@ -305,7 +305,7 @@ function formButtonPost(button) {
 
 	<div class="form-content">
 	<h:panelGroup id="regimenpnl" rendered="#{treatmentHome.formEditing=='REGIMEN'}" >
-	<h:messages styleClass="erro" layout="table" globalOnly="true" />
+	<h:messages styleClass="error" layout="table" globalOnly="true" />
 	<s:decorate template="/layout/display.xhtml" >
 		<ui:define name="label">#{messages['Regimen']}:</ui:define>
     	<h:selectOneMenu value="#{caseRegimenHome.regimen}" required="true">
@@ -341,7 +341,7 @@ function formButtonPost(button) {
 			<h:selectOneMenu id="dose" value="#{m.doseUnit}" required="true">
 				<f:selectItems value="#{treatmentHome.doses}" />
 			</h:selectOneMenu>
-			<h:message for="dose" styleClass="erro" />
+			<h:message for="dose" styleClass="error" />
 		</h:column>
 
 		</h:dataTable>

@@ -121,10 +121,9 @@
 		<ui:repeat value="#{it.batches}" var="b">
 			<tr style="font-size:9px;">
 				<td class="colb" >
-					<div class="batch-icon">
-					#{b.batch.batchNumber}<br/>
-					#{b.batch.manufacturer}
-					</div>
+					<s:decorate template="/layout/batch.xhtml" >
+						<ui:param name="batch" value="#{b.batch}" />
+					</s:decorate>
 				</td>
 				<td align="center" class="colb">
 					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
@@ -147,7 +146,7 @@
 				<td align="right" class="colb" bgcolor="#f3f3f0">
 					<h:inputText id="qtdrec" value="#{b.quantityReceived}" required="true">
 					</h:inputText>
-					<h:message for="qtdrec" styleClass="erro"/>
+					<h:message for="qtdrec" styleClass="error"/>
 				</td>
 			</tr>
 		</ui:repeat>

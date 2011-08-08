@@ -5,17 +5,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
 import org.msh.utils.date.DateUtils;
@@ -42,11 +42,31 @@ public class MedicineReceiving implements Serializable {
 	@JoinColumn(name="SOURCE_ID")
 	@NotNull
 	private Source source;
+
+	@Lob
+	private String comments;
 	
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="medicineReceiving")
-	private List<MedicineReceivingItem> medicines = new ArrayList<MedicineReceivingItem>();
+	private float totalPrice;
+	
+	@ManyToMany
+	@JoinTable(name="movements_receiving", 
+			joinColumns={@JoinColumn(name="RECEIVING_ID")},
+			inverseJoinColumns={@JoinColumn(name="MOVEMENT_ID")})
+	private List<Movement> movements = new ArrayList<Movement>();
 
 	
+	/**
+	 * Search for a movement by its medicine
+	 * @param med
+	 * @return
+	 */
+	public Movement movementByMedicine(Medicine med) {
+		for (Movement mov: movements) {
+			if (mov.getMedicine().equals(med))
+				return mov;
+		}
+		return null;
+	}
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -56,16 +76,6 @@ public class MedicineReceiving implements Serializable {
 		return (source != null? source.toString() + " - " + DateUtils.formatDate(receivingDate, "dd-MMM-yyyy"): super.toString());
 	}
 
-	@Transient
-	public float getTotalPrice() {
-		float tot = 0;
-		
-		for (MedicineReceivingItem item: medicines) {
-			tot += item.getTotalPrice();
-		}
-		
-		return tot;
-	}
 	
 	public Integer getId() {
 		return id;
@@ -91,20 +101,54 @@ public class MedicineReceiving implements Serializable {
 		this.source = source;
 	}
 
-	public List<MedicineReceivingItem> getMedicines() {
-		return medicines;
-	}
-
-	public void setDrugs(List<MedicineReceivingItem> medicines) {
-		this.medicines = medicines;
-	}
-
 	public Tbunit getTbunit() {
 		return tbunit;
 	}
 
 	public void setTbunit(Tbunit tbunit) {
 		this.tbunit = tbunit;
+	}
+
+	/**
+	 * @return the comments
+	 */
+	public String getComments() {
+		return comments;
+	}
+
+	/**
+	 * @param comments the comments to set
+	 */
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	/**
+	 * @return the movements
+	 */
+	public List<Movement> getMovements() {
+		return movements;
+	}
+
+	/**
+	 * @param movements the movements to set
+	 */
+	public void setMovements(List<Movement> movements) {
+		this.movements = movements;
+	}
+
+	/**
+	 * @return the totalPrice
+	 */
+	public float getTotalPrice() {
+		return totalPrice;
+	}
+
+	/**
+	 * @param totalPrice the totalPrice to set
+	 */
+	public void setTotalPrice(float totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 
 }

@@ -5,7 +5,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,10 +38,6 @@ public class Batch implements Serializable {
 	
 	@Column(length=80)
 	private String manufacturer;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="RECEIVINGITEM_ID")
-	private MedicineReceivingItem medicineReceivingItem;
 	
 	@ManyToOne
 	@JoinColumn(name="MEDICINE_ID")
@@ -153,14 +148,6 @@ public class Batch implements Serializable {
 
 	public void setManufacturer(String manufacturer) {
 		this.manufacturer = manufacturer;
-	}
-
-	public MedicineReceivingItem getMedicineReceivingItem() {
-		return medicineReceivingItem;
-	}
-
-	public void setMedicineReceivingItem(MedicineReceivingItem medicineReceivingItem) {
-		this.medicineReceivingItem = medicineReceivingItem;
 	}
 
 	public float getTotalPrice() {

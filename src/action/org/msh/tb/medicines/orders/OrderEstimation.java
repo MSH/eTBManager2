@@ -28,7 +28,6 @@ import org.msh.utils.date.Period;
 public class OrderEstimation {
 
 	@In(create=true) EntityManager entityManager;
-	@In(create=true) List<SourceOrderItem> orderSources;
 	@In(required=true) OrderHome orderHome;
 	@In(required=true) UserSession userSession;
 	@In(create=true) MedicineUnitHome medicineUnitHome;
@@ -46,7 +45,7 @@ public class OrderEstimation {
 	public void initialize() {
 		Order ord = orderHome.getInstance();
 
-		if (ord.getTbunitFrom() != null)
+		if (ord.getUnitFrom() != null)
 			return;
 		
 		Tbunit unit = entityManager.find(Tbunit.class, userSession.getTbunit().getId());
@@ -56,7 +55,9 @@ public class OrderEstimation {
 			return;
 		}
 
-		ord.setTbunitFrom(unit);
+		ord.setUnitFrom(unit);
+		
+		initializeAddress(unit);
 		
 		// get the current date
 		iniDate = DateUtils.getDate();
@@ -68,10 +69,10 @@ public class OrderEstimation {
 		c.setTime(iniDate);
 		c.add(Calendar.DAY_OF_YEAR, numEstimatingDays - 1);
 		endDate = c.getTime();
-		
-		orderSources.clear();
 
-		ord.setTbunitTo(ord.getTbunitFrom().getSecondLineSupplier());
+		orderHome.getSources().clear();
+
+		ord.setUnitTo(ord.getUnitFrom().getSecondLineSupplier());
 		
 		loadPrescribedMedicines();
 		
@@ -79,6 +80,49 @@ public class OrderEstimation {
 		if (units.size() > 0) {
 			createOrderItems();
 			loadStockPosition();			
+		}
+	}
+	
+	
+	/**
+	 * Initialize order address based on last order or the current address set in the unit record
+	 * @param unit
+	 */
+	public void initializeAddress(Tbunit unit) {
+		List<Order> lst = entityManager.createQuery("from Order a where a.unitFrom.id = :id " +
+				"and a.orderDate = (select max(b.orderDate) from Order b where b.unitFrom.id = a.unitFrom.id)")
+				.setParameter("id", unit.getId())
+				.getResultList();
+
+		Order order = orderHome.getInstance();
+		Order lastOrder;
+		if (lst.size() > 0)
+			lastOrder = lst.get(0);
+		else lastOrder = null;
+		
+		boolean orderAddr = lastOrder != null;
+		if (orderAddr) {
+			orderAddr = lastOrder.isHasShipAddress();
+		}
+
+		if (orderAddr) {
+			order.setShipAddress(lastOrder.getShipAddress());
+			order.setShipAddressCont(lastOrder.getShipAddressCont());
+			order.setShipInstitutionName(lastOrder.getShipInstitutionName());
+			order.setShipZipCode(lastOrder.getShipZipCode());
+			orderHome.getAuselection().setSelectedUnit(lastOrder.getShipAdminUnit());
+		}
+		else {
+			order.setShipInstitutionName(unit.getName().toString());
+			order.setShipAddress(unit.getAddress());
+			order.setShipAddressCont(unit.getAddressCont());
+			order.setShipZipCode(unit.getZipCode());
+			orderHome.getAuselection().setSelectedUnit(unit.getAdminUnit());
+		}
+		
+		if (lastOrder != null) {
+			order.setShipContactName(lastOrder.getShipContactName());
+			order.setShipContactPhone(lastOrder.getShipContactPhone());
 		}
 	}
 
@@ -113,7 +157,7 @@ public class OrderEstimation {
 	protected void loadPrescribedMedicines() {
 		Order order = orderHome.getInstance();
 		units = new ArrayList<Tbunit>();
-		mountTbList(order.getTbunitFrom());		
+		mountTbList(order.getUnitFrom());		
 		
 		if (units.size() == 0)
 			return;
@@ -163,7 +207,7 @@ public class OrderEstimation {
 	
 	protected void loadStockPosition() {
 		Order order = orderHome.getInstance();
-		Tbunit unitFrom = order.getTbunitFrom();
+		Tbunit unitFrom = order.getUnitFrom();
 		
 		// monta instrução HQL IN
 		String hql = "from StockPosition sp join fetch sp.medicine m " +
@@ -171,7 +215,7 @@ public class OrderEstimation {
 			"where sp.date = (select max(aux.date) from StockPosition aux " +
 			"where aux.source.id = sp.source.id and aux.tbunit.id = sp.tbunit.id " +
 			"and aux.medicine.id = sp.medicine.id) " +
-			"and sp.tbunit.id = #{order.tbunitFrom.id}";
+			"and sp.tbunit.id = #{order.unitFrom.id}";
 	
 		List<StockPosition> lst = entityManager.createQuery(hql).getResultList();
 		for (StockPosition sp: lst) {

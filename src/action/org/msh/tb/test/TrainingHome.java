@@ -125,7 +125,7 @@ public class TrainingHome {
 		unit.setAuthorizerUnit(authorizerUnit);
 		unit.setChangeEstimatedQuantity(true);
 		unit.setDispensingFrequency(DispensingFrequency.MONTHLY);
-		unit.setDistrict("Atlantic");
+		unit.setAddressCont("Atlantic");
 		unit.setFirstLineSupplier(supplier);
 		unit.setSecondLineSupplier(supplier);
 		unit.setMedicineStorage(true);

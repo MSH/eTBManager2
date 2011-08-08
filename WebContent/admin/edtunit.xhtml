@@ -41,6 +41,23 @@
         	<f:param id="field" value="name.name2"/>
         </h:inputText>
     </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['Tbunit.address']}:</ui:define>
+        <h:inputText maxlength="200" value="#{tbunit.address}" style="width : 320px;" />
+        <br/>
+        <h:inputText maxlength="200" value="#{tbunit.addressCont}" style="width : 320px;" />
+    </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['Tbunit.zipCode']}:</ui:define>
+        <h:inputText maxlength="50" value="#{tbunit.zipCode}" style="width:120px;" />
+    </s:decorate>
+
+	<s:decorate template="/layout/auselection.xhtml">
+		<ui:param name="auselection" value="#{tbunitHome.ausel}" />
+		<ui:param name="requiredLevel" value="1" />
+	</s:decorate>
 
     <s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['global.legacyId']}:</ui:define>
@@ -64,21 +81,6 @@
              <s:convertEntity />
         </h:selectOneMenu>  
     </s:decorate>
-    
-    <s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['Tbunit.address']}:</ui:define>
-        <h:inputText maxlength="100" value="#{tbunit.address}" style="width : 320px;" />
-    </s:decorate>
-<!--     
-    <s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['Tbunit.district']}:</ui:define>
-        <h:inputText maxlength="50" value="#{tbunit.district}" style=" width : 178px;" />
-    </s:decorate>
--->
-	<s:decorate template="/layout/auselection.xhtml">
-		<ui:param name="auselection" value="#{tbunitHome.ausel}" />
-		<ui:param name="requiredLevel" value="1" />
-	</s:decorate>
 
     <s:decorate template="/layout/edit.xhtml">
     	<h:selectBooleanCheckbox value="#{tbunit.notifHealthUnit}"/>#{messages['TbCase.notificationUnit']}

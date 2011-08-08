@@ -66,14 +66,14 @@ public class OrderLeadTimeReport {
 
 		String s;
 		if (reportSelection.getTbunit() != null)
-			 s = " and d.tbunitTo.id = " + reportSelection.getTbunit().getId();
+			 s = " and d.unitTo.id = " + reportSelection.getTbunit().getId();
 		else s = "";
 		
 		String hql = "select d.orderDate, d.approvingDate, d.shippingDate, d.receivingDate " + 
 					"from Order d " +
 					"where d.approvingDate is not null" + s +
 					" and d.orderDate between :dt1 and :dt2 " +
-					"and d.tbunitFrom.workspace.id = #{defaultWorkspace.id}";
+					"and d.unitFrom.workspace.id = #{defaultWorkspace.id}";
 		List<Object[]> orders = entityManager.createQuery(hql)
 				.setParameter("dt1", reportSelection.getIniDate())
 				.setParameter("dt2", reportSelection.getDayAfterEndDate())

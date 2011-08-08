@@ -897,7 +897,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 			unit.setAddress(rs.getString("ENDERECO"));
 			unit.setBatchControl(true);
 			unit.setChangeEstimatedQuantity(true);
-			unit.setDistrict(rs.getString("COMPLEMENTO"));
+			unit.setAddressCont(rs.getString("COMPLEMENTO"));
 			unit.setLegacyId(legacyID.toString());
 			unit.setMdrHealthUnit(true);
 			unit.setTbHealthUnit(false);

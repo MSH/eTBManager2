@@ -78,7 +78,7 @@
 				<h:selectOneMenu id="month" value="#{it.months}" required="true" >
            			<f:selectItems value="#{treatmentHome.months}" />
 				</h:selectOneMenu>
-				<h:message for="month" styleClass="erro" />
+				<h:message for="month" styleClass="error" />
 			</h:column>
 			
 			<h:column>
@@ -86,7 +86,7 @@
 				<h:selectOneMenu id="dose" value="#{it.doseUnit}" required="true" >
            			<f:selectItems value="#{treatmentHome.doses}" />
 				</h:selectOneMenu>
-				<h:message for="dose" styleClass="erro" />
+				<h:message for="dose" styleClass="error" />
 			</h:column>
 		
 			<h:column>
@@ -94,7 +94,7 @@
 				<h:selectOneMenu id="freq" value="#{it.frequency}" required="true" >
             		<f:selectItems value="#{frequencies}" />
 				</h:selectOneMenu>
-				<h:message for="freq" styleClass="erro" />
+				<h:message for="freq" styleClass="error" />
 			</h:column>
 		
 			<h:column rendered="#{not sources.singleResult}">
@@ -103,7 +103,7 @@
             		<s:selectItems value="#{sources}" var="c" label="#{c.name}" noSelectionLabel="-" />
             		<s:convertEntity />
 				</h:selectOneMenu>
-				<h:message for="sourcei" styleClass="erro"/>
+				<h:message for="sourcei" styleClass="error"/>
 			</h:column>
 		</h:dataTable>
 	</s:decorate>
@@ -136,7 +136,7 @@
 				<h:selectOneMenu id="month" value="#{it.months}" required="true" >
            			<f:selectItems value="#{treatmentHome.months}" />
 				</h:selectOneMenu>
-				<h:message for="month" styleClass="erro" />
+				<h:message for="month" styleClass="error" />
 			</h:column>
 			
 			<h:column>
@@ -144,7 +144,7 @@
 				<h:selectOneMenu id="dose2" value="#{it.doseUnit}" required="true" >
            			<f:selectItems value="#{treatmentHome.doses}" />
 				</h:selectOneMenu>
-				<h:message for="dose2" styleClass="erro" />
+				<h:message for="dose2" styleClass="error" />
 			</h:column>
 		
 			<h:column>
@@ -152,7 +152,7 @@
 				<h:selectOneMenu id="freq2" value="#{it.frequency}" required="true">
             		<f:selectItems value="#{frequencies}" />
 				</h:selectOneMenu>
-				<h:message for="freq2" styleClass="erro" />
+				<h:message for="freq2" styleClass="error" />
 			</h:column>
 		
 			<h:column rendered="#{not sources.singleResult}">
@@ -161,7 +161,7 @@
  	           		<s:selectItems value="#{sources}" var="c" label="#{c.name}" noSelectionLabel="-" />
             		<s:convertEntity />
 				</h:selectOneMenu>
-				<h:message for="sourcei" styleClass="erro"/>
+				<h:message for="sourcei" styleClass="error"/>
 			</h:column>
 		</h:dataTable>
 	</s:decorate>

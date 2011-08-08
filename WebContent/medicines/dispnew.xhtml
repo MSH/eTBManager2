@@ -55,9 +55,9 @@
 					<a:repeat value="#{med.items}" var="b">
 					<div style="clear:both;position:relative;min-height:40px;height:40px;border-top:1px solid #d0d0d0;padding-top:4px;">
 					<div style="float:left;width:350px;padding-left:30px;">
-					<div class="batch-icon" style="float:left;"/>
-					#{b.batchQuantity.batch.batchNumber}<br/>
-					#{b.batchQuantity.batch.manufacturer}
+					<s:decorate template="/layout/batch.xhtml" >
+						<ui:param name="batch" value="#{b.batchQuantity.batch}" />
+					</s:decorate>
 					</div>
 				<div style="float:left;width:130px;text-align:center;">
 					<h:outputText value="#{b.batchQuantity.batch.expiryDate}" converter="localeDateConverter" />

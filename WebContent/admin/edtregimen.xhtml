@@ -36,29 +36,20 @@
     	</h:selectOneMenu>
     </s:decorate>
 
-	<div style="margin-top:10px;margin-bottom:4px;">
-	<s:decorate template="/layout/rounded.xhtml">
-		<ui:param name="color" value="#B3DCB3" />
-		<ui:param name="bgcolor" value="#fff" />
-		<div style="font-size:14px;font-weight:bold;">
-			#{messages['RegimenPhase.INTENSIVE']}
-		</div>
-	</s:decorate>
-	</div>
+	<a:commandLink action="#{regimenHome.filterMedicines('INTENSIVE')}" style="float:right;" styleClass="button-alt" 
+			ajaxSingle="true" oncomplete="showMedicinesDlg();" reRender="medpnl" >
+		<span>#{messages['Regimen.add']}...</span>
+	</a:commandLink>
+	<h2>#{messages['RegimenPhase.INTENSIVE']}</h2>
 
-    <s:decorate template="/layout/display.xhtml" >
-    	<ui:define name="label">#{messages['Regimen.length']}:</ui:define>
-		<ui:param name="labelstyle" value="background-color:#fff" />
-		<a:commandLink value="#{messages['Regimen.add']}" action="#{regimenHome.filterMedicines('INTENSIVE')}" style="margin-left:10px;float:right;" 
-			ajaxSingle="true" oncomplete="showMedicinesDlg();" reRender="medpnl" />
-    </s:decorate>
     <h:panelGroup id="tab1">
 	<h:dataTable value="#{regimen.intensivePhaseMedicines}" var="it" width="100%" rowClasses="lin1,lin2" styleClass="table1" rendered="#{not empty regimen.intensivePhaseMedicines}" style="margin-bottom:30px;">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['Medicine']}" styleClass="collh" />
 			</f:facet>
-			<h:outputText value="#{it.medicine}" styleClass="medicine-icon" />
+			<div class="medicine-icon" style="float:left;"/>
+			<h:outputText value="#{it.medicine}" />
 		</h:column>
 		
 		<h:column>
@@ -66,7 +57,7 @@
 				<h:outputText value="#{messages['Regimen.doseunit']}" styleClass="collh" />
 			</f:facet>
 			<h:inputText id="dose" value="#{it.defaultDoseUnit}" required="true" style="width: 62px;"></h:inputText>
-			<h:message for="dose" styleClass="erro" />
+			<h:message for="dose" styleClass="error" />
 		</h:column>
 		
 		<h:column>
@@ -76,7 +67,7 @@
 			<h:selectOneMenu id="months" value="#{it.monthsTreatment}" required="true" >
             	<f:selectItems value="#{regimenHome.months}" />
 			</h:selectOneMenu>
-			<h:message for="months" styleClass="erro" />
+			<h:message for="months" styleClass="error" />
 		</h:column>
 		
 		<h:column>
@@ -86,7 +77,7 @@
 			<h:selectOneMenu id="freq" value="#{it.defaultFrequency}" required="true">
             	<f:selectItems value="#{frequencies}" />
 			</h:selectOneMenu>
-			<h:message for="freq" styleClass="erro" />
+			<h:message for="freq" styleClass="error" />
 		</h:column>
 		
 		<h:column>
@@ -97,7 +88,7 @@
             	<s:selectItems value="#{sources}" var="c" label="#{c.name}" noSelectionLabel="-" />
             	<s:convertEntity />
 			</h:selectOneMenu>
-			<h:message for="sourcei" styleClass="erro"/>
+			<h:message for="sourcei" styleClass="error"/>
 		</h:column>
 
 		<h:column>
@@ -110,29 +101,20 @@
 
 	
 
-	<div style="margin-top:10px;margin-bottom:4px;">
-	<s:decorate template="/layout/rounded.xhtml">
-		<ui:param name="color" value="#B3DCB3" />
-		<ui:param name="bgcolor" value="#fff" />
-		<div style="font-size:14px;font-weight:bold;">
-			#{messages['RegimenPhase.CONTINUOUS']}
-		</div>
-	</s:decorate>
-	</div>
+	<a:commandLink action="#{regimenHome.filterMedicines('CONTINUOUS')}" style="float:right;" styleClass="button-alt" 
+				ajaxSingle="true" oncomplete="showMedicinesDlg();" reRender="medpnl">
+		<span>#{messages['Regimen.add']}...</span>
+	</a:commandLink>
+	<h2>#{messages['RegimenPhase.CONTINUOUS']}</h2>
 
-    <s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['Regimen.length']}:</ui:define>
-		<ui:param name="labelstyle" value="background-color:#fff" />
-		<a:commandLink value="#{messages['Regimen.add']}" action="#{regimenHome.filterMedicines('CONTINUOUS')}" style="margin-left:10px;float:right;" 
-				ajaxSingle="true" oncomplete="showMedicinesDlg();" reRender="medpnl"/>
-    </s:decorate>
     <h:panelGroup id="tab2">
 	<h:dataTable value="#{regimen.continuousPhaseMedicines}" var="it" width="100%" rowClasses="lin1,lin2" styleClass="table1" rendered="#{not empty regimen.continuousPhaseMedicines}" style="margin-bottom:30px;">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['Medicine']}" styleClass="collh" />
 			</f:facet>
-			<h:outputText value="#{it.medicine}" styleClass="medicine-icon" />
+			<div class="medicine-icon" style="float:left;"/>
+			<h:outputText value="#{it.medicine}" />
 		</h:column>
 		
 		<h:column>
@@ -149,7 +131,7 @@
 			<h:selectOneMenu id="months" value="#{it.monthsTreatment}" required="true">
             	<f:selectItems value="#{regimenHome.months}" />
 			</h:selectOneMenu>
-			<h:message for="months" styleClass="erro" />
+			<h:message for="months" styleClass="error" />
 		</h:column>
 		
 		<h:column>
@@ -169,7 +151,7 @@
             	<s:selectItems value="#{sources}" var="c" label="#{c.name}" noSelectionLabel="-" />
             	<s:convertEntity />
 			</h:selectOneMenu>
-			<h:message for="sourcec" styleClass="erro"/>
+			<h:message for="sourcec" styleClass="error"/>
 		</h:column>
 
 		<h:column>
@@ -182,11 +164,11 @@
 
 	<div class="form-footer">   
             <a:commandLink action="#{regimenHome.persist}" 
-            	styleClass="button" 
+            	styleClass="button" onclick="disableButton(this)"
             	reRender="main,messages">
             	<span>#{messages['form.save']}</span>
             	</a:commandLink>  
-            <a:commandLink action="cancel" styleClass="button-alt" ajaxSingle="true">
+            <a:commandLink action="cancel" styleClass="button-alt" ajaxSingle="true" onclick="disableButton(this)">
              <span>#{messages['form.cancel']}</span>
              </a:commandLink>
    </div>

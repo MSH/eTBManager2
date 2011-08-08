@@ -22,8 +22,8 @@
 <rich:panel style="width:700px;">
     
     <table width="90%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse">
-    <tr><td><b>#{messages['Order.tbunitFrom']}: </b>#{order.tbunitFrom.name}
-    </td><td><b>#{messages['Order.tbunitTo']}: </b>#{order.tbunitTo.name}
+    <tr><td><b>#{messages['Order.unitFrom']}: </b>#{order.unitFrom.name}
+    </td><td><b>#{messages['Order.unitTo']}: </b>#{order.unitTo.name}
     </td></tr>
     </table>
 
@@ -49,7 +49,7 @@
  
 <b>#{messages['Order.items']}:</b>
 <table width="100%" cellspacing="4">
-	<c:forEach items="#{orderSources}" var="s">
+	<c:forEach items="#{orderHome.sources}" var="s">
 	<tr style="background-color:#EDF7EF;"><td colspan="4" style="border:1px solid #B4E8BB;padding:5px;">
 		<b>#{s.source.name}</b>
 	</td></tr>
@@ -76,19 +76,17 @@
 			</td>
 			<td colspan="3">
 				<h:inputText id="d#{it.item.id}" value="#{it.item.comment}" style="width:300px;" size="200" />
-				<h:message for="d#{it.item.id}" styleClass="erro" />
+				<h:message for="d#{it.item.id}" styleClass="error" />
 			</td>
 		</tr>
 		<tr>
 			<td colspan="5">
 			<h:dataTable value="#{it.item.batches}" var="b" width="100%" columnClasses="col,col" >
 			  <h:column>
-			  	<div class="batch-icon" />
-			  </h:column>
-			  <h:column>
 			  	<span style="height:100%;vertical-align:middle;">
-				#{messages['Batch.batchNumber']}: #{b.batch.batchNumber}<br/>
-				#{messages['Batch.manufacturer']}: #{b.batch.manufacturer}<br/>
+					<s:decorate template="/layout/batch.xhtml" >
+						<ui:param name="batch" value="#{b}" />
+					</s:decorate>
 			    #{messages['Batch.expiryDate']}: 
 			    <h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
 			    </span>
@@ -104,7 +102,7 @@
 					<f:validateLongRange minimum="0" />
 			    	<f:param id="batch" value="#{b}" />
 			    </h:inputText>
-			    <h:message for="qtd" styleClass="erro" />
+			    <h:message for="qtd" styleClass="error" />
 			  </h:column>
 			</h:dataTable>
 			<p style="height:20px;"/>

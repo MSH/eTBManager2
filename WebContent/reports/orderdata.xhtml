@@ -22,7 +22,7 @@
     		style="margin:0;padding:0;font-size:16px;font-weight:bold;color:#{order.status=='CANCELLED'? 'red': (order.status=='WAITINGAUT'?'#707070':'#707070')}" />
 		<s:div rendered="#{order.status=='WAITINGAUT'}" style="font-size:11px;color:#707070;">
 			<br/>
-    		#{messages['Tbunit.authorizerUnit']}: #{order.tbunitTo.authorizerUnit.name}
+    		#{messages['Tbunit.authorizerUnit']}: #{order.unitTo.authorizerUnit.name}
     	</s:div>
 </td></tr>
 </table>
@@ -31,12 +31,12 @@
 <tr><td>
     <table width="100%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse" bgcolor="#f0f0f0" cellpadding="8">
     <tr><td>
-    	<b style="float:left;margin-right:4px;">#{messages['Order.tbunitFrom']}: </b>
-    	#{order.tbunitFrom.name}
+    	<b style="float:left;margin-right:4px;">#{messages['Order.unitFrom']}: </b>
+    	#{order.unitFrom.name}
     </td>
     <td>
-    	<b style="float:left;margin-right:4px;">#{messages['Order.tbunitTo']}: </b>
-    	#{order.tbunitTo.name}
+    	<b style="float:left;margin-right:4px;">#{messages['Order.unitTo']}: </b>
+    	#{order.unitTo.name}
     </td></tr>
 
     <tr><td colspan="2" style="font-size:11px;padding-top:5px;color:#808080">
@@ -85,7 +85,7 @@
     	#{order.cancelReason}
     </s:decorate>
     
-    <h:panelGroup rendered="#{order.tbunitFrom.treatmentHealthUnit}">
+    <h:panelGroup rendered="#{order.unitFrom.treatmentHealthUnit}">
 
     <s:decorate template="/layout/display.xhtml" rendered="#{not empty order.comments}">
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
@@ -101,7 +101,7 @@
 
 
 <table width="100%">
-	<ui:repeat value="#{orderSources}" var="s">
+	<ui:repeat value="#{orderHome.sources}" var="s">
 	<tr><td class="colheader">
 		#{s.source.name}
 	</td></tr>
@@ -125,7 +125,7 @@
 				</h:outputText>
 			</h:column>
 			
-			<h:column rendered="#{order.tbunitFrom.changeEstimatedQuantity}">
+			<h:column rendered="#{order.unitFrom.changeEstimatedQuantity}">
 			<f:facet name="header"><h:outputText value="#{messages['OrderItem.requestedQuantity']}" styleClass="colrh" /></f:facet>
 				<h:outputText value="#{it.item.requestedQuantity}">
 					<f:convertNumber pattern="###,###,###"/>

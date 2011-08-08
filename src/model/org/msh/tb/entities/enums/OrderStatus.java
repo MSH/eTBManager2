@@ -3,10 +3,11 @@ package org.msh.tb.entities.enums;
 
 public enum OrderStatus {
 	WAITINGAUT,
-	AUTHORIZED,
+	WAITSHIPMENT,
 	SHIPPED,
 	RECEIVED,
-	CANCELLED;
+	CANCELLED,
+	PREPARINGSHIPMENT;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

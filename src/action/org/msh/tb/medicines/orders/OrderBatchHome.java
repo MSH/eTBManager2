@@ -63,7 +63,7 @@ public class OrderBatchHome {
 					"order by b.batch.expiryDate")
 			.setParameter("medid", orderItem.getMedicine().getId())
 			.setParameter("sourceid", orderItem.getSource().getId())
-			.setParameter("unitid", orderItem.getOrder().getTbunitTo().getId())
+			.setParameter("unitid", orderItem.getOrder().getUnitTo().getId())
 			.getResultList();
 		
 		availableBatches = new ArrayList<OrderBatch>();

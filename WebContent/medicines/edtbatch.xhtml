@@ -8,41 +8,42 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
                  
 <script src="../js/util.js" type="text/javascript" />
+<a:jsFunction name="initNewBatch" action="#{medicineReceivingHome.startNewBatch(null)}" 
+	reRender="formbatch" ajaxSingle="true" oncomplete="finishShowBatchDlg();"/>
 <script type="text/javascript">
 window.decSeparator = '#{timezones.decimalSeparator}';
-function showBatchDlg() {
+function newBatchDlg() {
+	startShowBatchDlg();
+	initNewBatch();
+}
+function startShowBatchDlg() {
+	jQuery("#formbatch\\:batchdlgcontent}").html('<div class="wait-icon"/>');
 	showModalAutoTop('batchdlg');
+}
+function finishShowBatchDlg() {
 	jQuery('#formbatch\\:dt\\:dtInputDate').mask('#{messages['locale.dateMask']}');
 }
+
 
 function hideBatchDlg() {
 	Richfaces.hideModalPanel('batchdlg');
 }
-function batchValidationErrors() {
-fld = document.getElementById("formbatch:maximunSeverity");
-if (fld != null)
-	return fld.value == "2";
-else return false;
-}
 </script>
-<rich:modalPanel id="batchdlg" autosized="true" width="530" zindex="2000">
+<rich:modalPanel id="batchdlg" autosized="true" width="700" zindex="2000">
 	<f:facet name="header">
 		<h:outputText id="title1" value="#{messages['form.data_edit']} - #{messages['Batch']}" />
 	</f:facet>
-	<h:panelGroup id="batchpnl">
-	<a:region>
-	<a:form id="formbatch">
-    <table width="100%" style="border-collapse:collapse;">
-    <tr><td colspan="2">
-	<div id="tblsel" style="overflow: auto; width: 505px; border: 1px gray solid; padding:0px; margin: 0px;background-color:#f2f2f2;">	
-    <s:decorate template="/layout/display.xhtml" >
-    	<ui:define name="label">#{messages['Medicine']}:</ui:define>
-    	<h:outputText value="#{medicineReceivingHome.item.movement.medicine}" />
-    </s:decorate>
+	<a:form id="formbatch" styleClass="form1">
+
+    <h:panelGroup id="batchdlgcontent">
+	<s:div rendered="#{medicineReceivingHome.editingBatch}" styleClass="form-content">
 
     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['Batch.brandName']}:</ui:define>
-    	<h:inputText value="#{medicineReceivingHome.batch.brandName}" size="80" required="true" style="width:250px"/>
+    	<ui:define name="label">#{messages['Medicine']}:</ui:define>
+    	<h:selectOneMenu value="#{medicineReceivingHome.batch.medicine}" required="true">
+    		<s:selectItems value="#{medicines}" var="it" label="#{it}" noSelectionLabel="-" />
+    		<s:convertEntity />
+    	</h:selectOneMenu>
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
@@ -66,7 +67,7 @@ else return false;
     	<h:inputText id="qtd" value="#{medicineReceivingHome.batch.quantityReceived}" required="true" onkeypress="return numbersOnly(this,event);" onkeyup="changeQtd(this, event);">
     		<f:validateDoubleRange minimum="1"/>
     	</h:inputText>
-    	(#{medicineReceivingHome.item.movement.medicine.dosageForm})
+    	(#{medicineReceivingHome.batch.medicine.dosageForm})
     </s:decorate>
 
     <s:decorate id="num" template="/layout/edit.xhtml" >
@@ -81,7 +82,7 @@ else return false;
     	<h:inputText id="qtdcon" value="#{medicineReceivingHome.batch.quantityContainer}" required="true" onkeypress="return numbersOnly(this,event);" onkeyup="changeQtdCon(this, event);">
     		<f:validateDoubleRange minimum="1"/>
     	</h:inputText>
-    	(#{medicineReceivingHome.item.movement.medicine.dosageForm})
+    	(#{medicineReceivingHome.batch.medicine.dosageForm})
     </s:decorate>
 
     <s:decorate id="uprice" template="/layout/edit.xhtml" >
@@ -98,31 +99,25 @@ else return false;
     		<f:validateDoubleRange minimum="1"/>
     	</h:inputText>
     </s:decorate>
-	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
 
-	</div>
-	</td></tr>
-    <tr><td>
-			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
-    		<ui:include src="/layout/waitstatus.xhtml" />
-    	</td>
-    	<td align="right">
-            <a:commandLink action="#{medicineReceivingHome.addBatch}" styleClass="button" 
-            	reRender="batchpnl,medicines"
-            	onclick="if (!disableButton(this)) return false;" 
-            	oncomplete="enableButton();if (!batchValidationErrors()) hideBatchDlg();" >
+	</s:div>
+	</h:panelGroup>
+
+	<s:decorate template="/layout/form-footer.xhtml">
+		<a:commandLink action="#{medicineReceivingHome.finishBatchEditing}" styleClass="button" 
+            	reRender="batchdlgcontent"
+            	rendered="#{medicineReceivingHome.editingBatch}"
+            	onclick="if (!disableButton(this)) return false;"
+                data="#{medicineReceivingHome.editingBatch}" 
+            	oncomplete="enableButton();if (!data) {hideBatchDlg();refreshMedicines();}" >
             	<span>#{messages['form.ok']}</span>
-            </a:commandLink>
-			<s:link styleClass="button-alt" onclick="hideBatchDlg(); return false;">
+		</a:commandLink>
+		<s:link styleClass="button-alt" onclick="hideBatchDlg(); return false;">
 				<span>#{messages['form.cancel']}</span>
-			</s:link>
-    </td></tr>
-    
-    </table>
+		</s:link>
+	</s:decorate>
     
 	</a:form>
-	</a:region>
-	</h:panelGroup>
 </rich:modalPanel>
 
 </ui:composition>

@@ -36,7 +36,7 @@ public class OrderReceivingHome extends Controller {
 
 	@In(create=true) EntityManager entityManager;
 	@In(create=true) MovementHome movementHome;
-	@In(create=true) List<SourceOrderItem> orderSources;
+	@In(create=true) OrderHome orderHome;
 	@In(create=true) Order order;
 	@In(create=true) FacesMessages facesMessages;
 
@@ -44,9 +44,9 @@ public class OrderReceivingHome extends Controller {
 	 * Inicia os dados para notificação do pedido de medicamentos
 	 */
 	public void beginReceiving() {
-		boolean bBatchControl = order.getTbunitFrom().isBatchControl();
+		boolean bBatchControl = order.getUnitFrom().isBatchControl();
 		
-		for (SourceOrderItem s: orderSources) {
+		for (SourceOrderItem s: orderHome.getSources()) {
 			// remove items que não foram enviados
 			int i = 0;
 			while (i < s.getItems().size()) {
@@ -71,9 +71,9 @@ public class OrderReceivingHome extends Controller {
 		
 		// remove fontes sem itens
 		int i = 0;
-		while (i < orderSources.size()) {
-			if (orderSources.get(i).getItems().size() == 0)
-				orderSources.remove(i);
+		while (i < orderHome.getSources().size()) {
+			if (orderHome.getSources().get(i).getItems().size() == 0)
+				orderHome.getSources().remove(i);
 			else i++;
 		}
 	}
@@ -91,7 +91,7 @@ public class OrderReceivingHome extends Controller {
 			return "error";
 		}
 
-		boolean bBatchControl = order.getTbunitFrom().isBatchControl();
+		boolean bBatchControl = order.getUnitFrom().isBatchControl();
 
 		if (bBatchControl) {
 			updateBatchInfo();
@@ -112,13 +112,13 @@ public class OrderReceivingHome extends Controller {
 				for (OrderBatch ob: it.getBatches())
 					batches.put(ob.getBatch(), ob.getReceivedQuantity());
 
-				String s = order.getTbunitFrom().getName().toString();
+				String s = order.getUnitFrom().getName().toString();
 				if ((it.getComment() != null) && (!it.getComment().isEmpty()))
 					s = "[" + s + "] " + it.getComment();
 	
 				// create the stock movement
 				Movement mov = movementHome.prepareNewMovement(dtReceiving, 
-						order.getTbunitFrom(), 
+						order.getUnitFrom(), 
 						it.getSource(), 
 						it.getMedicine(), 
 						type, 
@@ -143,7 +143,7 @@ public class OrderReceivingHome extends Controller {
 	 * Atualiza o total do recebimento pelo total dos lotes 
 	 */
 	public void updateBatchInfo() {
-//		Tbunit unit = order.getTbunitFrom();
+//		Tbunit unit = order.getUnitFrom();
 		
 		for (OrderItem item: order.getItems()) {
 			int qtd = 0;

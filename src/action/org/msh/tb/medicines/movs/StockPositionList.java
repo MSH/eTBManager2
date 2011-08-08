@@ -12,7 +12,6 @@ import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
-import org.msh.tb.medicines.SourceMedicineGroup;
 
 @Name("stockPositionList")
 public class StockPositionList {
@@ -29,7 +28,7 @@ public class StockPositionList {
 	public List<StockPosition> generate(Tbunit unit, Source source, Date date) {
 		String hql = "from StockPosition sp " + 
 			"join fetch sp.medicine join fetch sp.source " + 
-			"where sp.tbunit.id = :unit " + 
+			"where sp.tbunit.id = :unit " +
 			"and sp.date = (select max(aux.date) from StockPosition aux " +
 			"where aux.tbunit.id = sp.tbunit.id and aux.source.id = sp.source.id " +
 			"and aux.medicine.id = sp.medicine.id ";
@@ -62,7 +61,7 @@ public class StockPositionList {
 	 * @param date
 	 * @return
 	 */
-	public SourceMedicineGroup<BatchQuantity> getBatchAvailable(Tbunit unit, Source source) {
+	public List<BatchQuantity> getBatchAvailable(Tbunit unit, Source source) {
 		String hql = "from BatchQuantity b " + 
 			"join fetch b.batch bt join fetch bt.medicine join fetch b.source " + 
 			"where b.tbunit.id = :unit "; 
@@ -80,12 +79,7 @@ public class StockPositionList {
 		
 		List<BatchQuantity> batches = qry.getResultList();
 
-		SourceMedicineGroup<BatchQuantity> grp = new SourceMedicineGroup<BatchQuantity>(MedicineStockPosList.class);
-		for (BatchQuantity b: batches) {
-			grp.addItem(b.getSource(), b.getBatch().getMedicine(), b);
-		}
-
-		return grp;
+		return batches;
 	}
 
 }

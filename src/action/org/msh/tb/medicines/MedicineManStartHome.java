@@ -225,7 +225,7 @@ public class MedicineManStartHome {
 	protected void removeMovements(Tbunit unit) {
 		execQueryUnit(unit, "delete from Movement m where m.tbunit.id = :id");
 		execQueryUnit(unit, "delete from StockPosition sp where sp.tbunit.id = :id");
-		execQueryUnit(unit, "delete from Order aux where (aux.tbunitFrom.id = :id or aux.tbunitTo.id = :id)");
+		execQueryUnit(unit, "delete from Order aux where (aux.unitFrom.id = :id or aux.unitTo.id = :id)");
 		execQueryUnit(unit, "delete from Transfer aux where (aux.unitFrom.id = :id or aux.unitTo.id = :id)");
 		execQueryUnit(unit, "delete from MedicineReceiving aux where aux.tbunit.id = :id");
 		execQueryUnit(unit, "delete from MedicineDispensing aux where aux.tbunit.id = :id");

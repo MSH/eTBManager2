@@ -1,7 +1,6 @@
 package org.msh.tb.medicines.orders;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 
@@ -23,7 +22,7 @@ public class OrderAuthorizingHome extends Controller {
 
 	@In(create=true) Order order;
 	@In(create=true) EntityManager entityManager;
-	@In(create=true) List<SourceOrderItem> orderSources;
+	@In(create=true) OrderHome orderHome;
 	@In(required=true) UserSession userSession;
 	@In(create=true) FacesMessages facesMessages;
 
@@ -31,7 +30,7 @@ public class OrderAuthorizingHome extends Controller {
 	 * Inicializa os dados para a autorização
 	 */
 	public void initialize() {
-		for (SourceOrderItem s: orderSources) 
+		for (SourceOrderItem s: orderHome.getSources()) 
 			for (OrderItemAux item: s.getItems()) {
 				if (item.getApprovedQuantity() == null)
 					item.setApprovedQuantity(item.getItem().getRequestedQuantity());
@@ -48,14 +47,14 @@ public class OrderAuthorizingHome extends Controller {
 		Date authDate = new Date();
 		
 		// altera o status para autorizado
-		order.setStatus(OrderStatus.AUTHORIZED);
+		order.setStatus(OrderStatus.WAITSHIPMENT);
 		order.setApprovingDate(authDate);
 
 		Tbunit unit = entityManager.merge(userSession.getTbunit());
 		order.setAuthorizer(unit);
 
 		// pega os valores informados pelo usuário e atualiza no pedido
-		for (SourceOrderItem s: orderSources)
+		for (SourceOrderItem s: orderHome.getSources())
 			for (OrderItemAux item: s.getItems()) {
 				item.getItem().setApprovedQuantity(item.getApprovedQuantity());
 			}

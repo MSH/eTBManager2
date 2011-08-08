@@ -24,14 +24,14 @@ public class OrdersQuery extends EntityQuery<Order> {
 			"year(o.orderDate) = #{orders.year}",
 			"o.status = #{orders.status}"};
 	
-	private String condition = " where (o.tbunitTo.id = #{userSession.tbunit.id} or " +
-			"o.tbunitFrom.id = #{userSession.tbunit.id} or " +
-			"o.tbunitTo.authorizerUnit.id = #{userSession.tbunit.id})";
+	private String condition = " where (o.unitTo.id = #{userSession.tbunit.id} or " +
+			"o.unitFrom.id = #{userSession.tbunit.id} or " +
+			"o.unitTo.authorizerUnit.id = #{userSession.tbunit.id})";
 			
 	
 	@Override
 	public String getEjbql() {
-		return "from Order o join fetch o.tbunitFrom".concat(condition);
+		return "from Order o join fetch o.unitFrom".concat(condition);
 	}
 
 	@Override

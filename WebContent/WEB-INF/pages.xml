@@ -134,7 +134,7 @@
 			<rule if-outcome="persisted">
 				<end-conversation/>
 				<redirect view-id="/medicines/unitsetup.xhtml">
-					<message>#{messages['medicines.unitsetup.msgok']}</message>
+					<message>#{messages['meds.unitsetup.msgok']}</message>
 				</redirect>
 			</rule>
 		</navigation>

@@ -75,11 +75,11 @@
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
             <a:commandLink action="#{tbContactHome.persist}" styleClass="button" reRender="formexam" 
-            	oncomplete="this.disabled=false;"
-            	onclick="this.disabled=true;" >
+            	oncomplete="enableButton()"
+            	onclick="if (!disableButton(this)) return false;" >
             	<span>#{messages['form.ok']}</span>
             </a:commandLink>
-            <s:link view="/cases/casedata.xhtml" styleClass="button-alt">
+            <s:link view="/cases/casedata.xhtml" styleClass="button-alt" onclick="disableButton(this);">
             	<f:param name="id" value="#{caseHome.id}"/>
             	<span>#{messages['form.cancel']}</span>
             </s:link>

@@ -100,10 +100,9 @@ function validateInput(edt) {
 			<f:facet name="header">
 				<h:outputText value="#{messages['Batch']}" styleClass="collh"/>
 			</f:facet>
-			<div style="width:160px" class="batch-icon">
-			#{it.item.batch.batchNumber}<br/>
-			#{it.item.batch.manufacturer}
-			</div>
+			<s:decorate template="/layout/batch.xhtml">
+				<ui:param name="batch" value="#{it.item.batch}" />
+			</s:decorate>
 		</h:column>
 
 		<h:column>

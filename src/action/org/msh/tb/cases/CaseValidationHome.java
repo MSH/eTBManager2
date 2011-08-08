@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
@@ -210,16 +211,20 @@ public class CaseValidationHome {
 	 * @return
 	 */
 	public CaseIssue getLastIssue() {
-		if (lastIssue == null) {
-			lastIssue = (CaseIssue)entityManager.createQuery("from CaseIssue c " +
-					"join fetch c.user " +
-					"where c.tbcase.id = :id and c.answer = false " +
-					"and c.date = (select max(aux.date) from CaseIssue aux " +
-					"where aux.tbcase.id=c.tbcase.id and aux.answer=false)")
-					.setParameter("id", caseHome.getId())
-					.getSingleResult();
+		try {
+			if (lastIssue == null) {
+				lastIssue = (CaseIssue)entityManager.createQuery("from CaseIssue c " +
+						"join fetch c.user " +
+						"where c.tbcase.id = :id and c.answer = false " +
+						"and c.date = (select max(aux.date) from CaseIssue aux " +
+						"where aux.tbcase.id=c.tbcase.id and aux.answer=false)")
+						.setParameter("id", caseHome.getId())
+						.getSingleResult();
+			}
+			return lastIssue;
+		} catch (NoResultException e) {
+			return null;
 		}
-		return lastIssue;
 	}
 
 

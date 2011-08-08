@@ -25,137 +25,111 @@
 
 	<h:form>
 	<s:fragment rendered="#{userSession.medicineManagementStarted}">
-<table width="100%">
-<ui:repeat value="#{stockPosHome.report}" var="s">
-<tr><td>
-	<div style="float:right">
-		<s:link value="#{messages['meds.movs.newadjust']}" view="/medicines/stockadj.xhtml" rendered="#{userSession.canAdjustStock}" style="margin-left:20px;">
-			<f:param name="srcid" value="#{s.source.id}"/>
-		</s:link>
-	</div>
-	<h2>#{s.source.name}</h2>
-<h:dataTable value="#{s.items}" var="r" rendered="#{stockPosHome.report.size != 0}" width="100%"
-  styleClass="table1" rowClasses="lin1,lin2" columnClasses="coll,colr,colr,colc,colc" style="margin-bottom:10px;">
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Medicine']}" styleClass="collh" action="#{stockPosHome.execute}" >
-  				<f:param name="sorder" value="upper(sp.medicine.genericName.name1)#{stockPosHome.order=='upper(sp.medicine.genericName.name1)'?' desc':''}" />
-  				<f:param name="bb" value="#{false}" />
-			</s:link>
-		</f:facet>
-		<s:link view="/medicines/movements.xhtml" value="#{r.medicine}">
-			<f:param name="medid" value="#{r.medicine.id}"/>
-			<f:param name="sourceid" value="#{s.source.id}"/>
-		</s:link>
-	</h:column>
 
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Movement.quantity']}" styleClass="colrh" action="#{stockPosHome.execute}" >
-  				<f:param name="sorder" value="sp.quantity#{stockPosHome.order=='sp.quantity'?' desc':''}" />
-  				<f:param name="bb" value="#{stockPosHome.showBatch}" />
-			</s:link>
-		</f:facet>
-		<h:outputText value="#{r.quantity}" style="#{r.underBufferStock? 'color:red;font-weight:bold;cursor:help;': ''}" 
-			title="#{r.underBufferStock? messages['medicines.stockpos.minbs']: ''}">
-			<f:convertNumber pattern="###,###,###"/>
-		</h:outputText>
-	</h:column>
+<h:panelGroup id="pnlitems">
 
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['global.totalPrice']}" styleClass="colrh" action="#{stockPosHome.execute}" >
-  				<f:param name="sorder" value="sp.totalPrice#{stockPosHome.order=='sp.totalPrice'?' desc':''}" />
-  				<f:param name="bb" value="#{stockPosHome.showBatch}" />
-			</s:link>
-		</f:facet>
-		<h:outputText value="#{r.totalPrice}" >
-			<f:convertNumber pattern="###,###,##0.00"/>
-		</h:outputText>
-	</h:column>
+<a:repeat value="#{inventoryReport.sources}" var="s">
 
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['StoragePosReport.lastMovement']}" action="#{stockPosHome.execute}" >
-  				<f:param name="sorder" value="sp.date#{stockPosHome.order=='sp.date'?' desc':''}" />
-  				<f:param name="bb" value="#{stockPosHome.showBatch}" />
-			</s:link>
-		</f:facet>
-		<h:outputText value="#{r.lastMovement}" converter="localeDateConverter" />
-	</h:column>
+<h2><s:link value="#{messages['meds.movs.newadjust']}" view="/medicines/stockadj.xhtml" rendered="#{userSession.canAdjustStock}" style="float:right">
+	<f:param name="srcid" value="#{s.source.id}"/>
+</s:link>
+#{s.source.abbrevName}
+<span class="text-small">(#{s.source.name})</span></h2>
 
-	<h:column rendered="#{userSession.tbunit.batchControl}">
-		<f:facet name="header">
-			<s:link value="#{messages['StoragePosReport.nextExpirationBatch']}" action="#{stockPosHome.execute}" >
-  				<f:param name="sorder" value="neb#{stockPosHome.order=='neb'?' desc':''}" />
-  				<f:param name="bb" value="#{false}" />
-			</s:link>
-		</f:facet>
-		<h:outputText value="#{r.nextExpirationBatch}" converter="localeDateConverter" />
-	</h:column>
-</h:dataTable>
-</td></tr>
-</ui:repeat>
-
-<s:fragment rendered="#{(stockPosHome.source == null) and (stockPosHome.report.size > 1)}">
-<tr><td>
-<h2>#{messages['global.total']}</h2>
-<h:dataTable value="#{stockPosHome.total.items}" var="r" rendered="#{stockPosHome.report.size != 0}" width="100%"
-  styleClass="table1" rowClasses="lin1,lin2" columnClasses="coll,colr,colr,colc,colc" style="margin-bottom:10px;">
-	<h:column>
-		<f:facet name="header">
-			<h:outputText value="#{messages['Medicine']}" styleClass="collh" action="#{stockPosHome.execute}" >
-  				<f:param name="order" value="#{stockPosHome.order=='upper(sp.medicine.genericName)'?'upper(sp.medicine.genericName) desc':'upper(sp.medicine.genericName)'}" />
-  				<f:param name="bb" value="#{stockPosHome.showBatch}" />
+<table id="tblinv" class="table1">
+	<tr><th width="35%">
+			#{messages['Medicine']}
+		</th>
+		<th><h:outputText value="#{messages['Batch.expiryDate']}" styleClass="colch" /></th>	
+		<th><h:outputText value="#{messages['meds.movs.availableqtty']}" styleClass="colrh" /></th>	
+		<th><h:outputText value="#{messages['global.totalPrice']}" styleClass="colch" /></th>
+		<th><h:outputText value="#{messages['global.unitPrice']}" styleClass="colch" /></th>
+		<th><h:outputText value="#{messages['StoragePosReport.lastMovement']}" styleClass="colch" /></th>
+	</tr>
+<a:repeat value="#{s.medicines}" var="it">
+	<tr class="highlight">
+		<td>
+			<a:commandLink styleClass="plus-icon" style="float:left" onclick="detailsClick(this, 'med#{it.item.rowId}');return false;" />
+			#{it.medicine}
+		</td>
+		<td align="center">
+			<h:outputText value="#{it.item.nextBatchExpire}" converter="localeDateConverter" />
+		</td>
+		<td align="right">
+			<h:outputText value="#{it.item.quantity}" >
+				<f:convertNumber pattern="###,###,###"/>
 			</h:outputText>
-		</f:facet>
-		#{r.medicine}
-	</h:column>
-
-	<h:column>
-		<f:facet name="header">
-			<h:outputText value="#{messages['Movement.quantity']}" styleClass="colrh" >
+		</td>
+		<td align="right">
+			<h:outputText value="#{it.item.totalPrice}" >
+				<f:convertNumber pattern="###,###,##0.00"/>
 			</h:outputText>
-		</f:facet>
-		<h:outputText value="#{r.quantity}">
-			<f:convertNumber pattern="###,###,###"/>
-		</h:outputText>
-	</h:column>
-
-	<h:column>
-		<f:facet name="header">
-			<h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh" >
+		</td>
+		<td align="right">
+			<h:outputText value="#{it.item.unitPrice}" >
+				<f:convertNumber pattern="###,###,##0.00"/>
 			</h:outputText>
-		</f:facet>
-		<h:outputText value="#{r.totalPrice}">
-			<f:convertNumber pattern="###,###,##0.00"/>
-		</h:outputText>
-	</h:column>
-
-	<h:column>
-		<f:facet name="header">
-			<h:outputText value="#{messages['StoragePosReport.lastMovement']}" >
+		</td>
+		<td align="center">
+			<h:outputText value="#{it.item.lastMovement}" converter="localeDateConverter" />
+		</td>
+	</tr>
+	<a:repeat value="#{it.batches}" var="b">
+	<tr id="med#{it.item.rowId}" style="display:none">
+		<td>
+			<s:decorate template="/layout/batch.xhtml" >
+				<ui:param name="batch" value="#{b.batch}" />
+			</s:decorate>
+		</td>
+		<td align="center">
+			<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+		</td>
+		<td align="right">
+			<h:outputText value="#{b.quantity}" >
+				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
-		</f:facet>
-		<h:outputText value="#{r.lastMovement}" converter="localeDateConverter" />
-	</h:column>
-
-	<h:column rendered="#{userSession.tbunit.batchControl}">
-		<f:facet name="header">#{messages['StoragePosReport.nextExpirationBatch']}</f:facet>
-		<h:outputText value="#{r.nextExpirationBatch}" converter="localeDateConverter" />
-	</h:column>
-</h:dataTable>
-</td></tr>
-</s:fragment>
+		</td>			
+		<td align="right">
+			<h:outputText value="#{b.totalPrice}" >
+				<f:convertNumber pattern="#,###,##0.00"/>
+			</h:outputText>
+		</td>			
+		<td align="right">
+			<h:outputText value="#{b.batch.unitPrice}" >
+				<f:convertNumber pattern="#,###,##0.00"/>
+			</h:outputText>
+		</td>			
+	</tr>
+	</a:repeat>
+</a:repeat>
 </table>
-	</s:fragment>
 
-	<s:fragment rendered="#{not userSession.medicineManagementStarted}">
-		<h:outputText value="#{messages['meds.start.notstarted']}" styleClass="warn warn-icon"/>
-		<p/>
-		<s:link value="#{messages['meds.start']}" view="/medicines/start.xhtml" 
-			styleClass="right-icon" 
-			rendered="#{s:hasRole('MED_INIT')}"/>
+</a:repeat>
+
+
+</h:panelGroup>
+
+
+<script type="text/javascript">
+<!--
+waitdiv = '<div style="float:left" class="wait-icon"/>';
+function detailsClick(elem, elemName) {
+	var s = '#tblinv #' + elemName;
+	try { s = eval(s);} catch(e){ }
+	var row=jQuery(s);
+	var bVisible=jQuery(row).is(":visible");
+	if (bVisible) {
+		jQuery(elem).removeClass('collapse-icon').addClass('plus-icon');
+		row.hide();
+	}
+	else {
+		jQuery(elem).removeClass('plus-icon').addClass('collapse-icon');
+		row.show();
+	}
+}
+-->
+</script>
+
 	</s:fragment>
 
 	</h:form>

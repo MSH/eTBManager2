@@ -57,7 +57,7 @@ public class BatchDispensingUIHome {
 	 */
 	private void createSources() {
 		Tbunit unit = userSession.getTbunit();
-		SourceMedicineGroup<BatchQuantity> items = stockPositionList.getBatchAvailable(unit, null);
+/*		SourceMedicineGroup<BatchQuantity> items = stockPositionList.getBatchAvailable(unit, null);
 
 		// create list of batches
 		sources = new SourceMedicineGroup<BatchItem>(MedicineDispensingItem.class);
@@ -67,7 +67,7 @@ public class BatchDispensingUIHome {
 			b.setBatchQuantity(item);
 			sources.addItem(item.getSource(), item.getBatch().getMedicine(), b);
 		}
-	}
+*/	}
 
 	
 	public class BatchItem {

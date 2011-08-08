@@ -2,9 +2,11 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib">
 
+	<h:form>
 	<div class="vertical-menu">
 	<s:fragment rendered="#{userSession.medicineManagementStarted}">
 
@@ -19,7 +21,7 @@
 
 	<s:fragment rendered="#{s:hasRole('ORDERS')}">
 		<h2>#{messages['meds.orders']}</h2>	
-		<s:link view="/medicines/edtorder.xhtml" rendered="#{userSession.canCreateOrder}" >
+		<s:link view="/medicines/ordernew.xhtml" rendered="#{userSession.canCreateOrder}" >
 			<div class="new-icon" style="float:left;"/>#{messages['meds.orders.new']}
 		</s:link>
 		<s:link value="#{messages['meds.orders.viewopen']}" view="/medicines/orders.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}"/>
@@ -54,6 +56,14 @@
 	<s:link value="#{messages['manag.rel5']}" view="/medicines/reltreatcost.xhtml" rendered="false" />
 	
 
+	<s:fragment rendered="#{s:hasRole('MED_INIT_REM')}">
+	<h2>#{messages['form.otheroptions']}</h2>
+	<a:commandLink action="#{medicineManStartHome.cancelMedicineManagement}"
+		onclick="if (!confirm('#{messages['meds.start.removeconfirm']}')) {return false;}" >
+		<span><div class="delete-icon" style="float:left"/>#{messages['meds.start.remove']}</span>
+	</a:commandLink>
+	</s:fragment>
+	
 	<s:fragment rendered="false">
 	<s:fragment rendered="#{userSession.canSetupUnit}">
 	<hr/>
@@ -63,4 +73,6 @@
 	
 	</s:fragment>
 	</div>
+	
+	</h:form>
 </ui:composition>

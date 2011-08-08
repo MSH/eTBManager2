@@ -38,6 +38,11 @@ h2 {
 	border-bottom:1px solid #c0dacf; */  
 	font-family: Arial, Helvetica, sans-serif;
 }
+h2 a {
+	font-size:13px;
+	font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif;
+	font-weight: normal;
+}
 
 hr {
 	border-top:1px solid #000000;
@@ -58,6 +63,7 @@ select {font-size:1em; }
 }
 .text-small {
 	font-size:10px;
+	line-height: 100%;
 }
 .text-medium {
 	font-size:1.2em;
@@ -362,6 +368,7 @@ a.workspace-data {
 	color:#E47911;
 }
 .form1 .form-content {
+	display:block;
 	border-top:1px solid #becebe;
 	background-color: #e2eae2;
 	padding:4px 10px 10px 10px;
@@ -453,7 +460,7 @@ background: transparent url('images/button-right.png') no-repeat scroll top righ
 display: inline-block;
 min-width:100px;
 height: 32px; 
-margin-right: 6px;
+margin: 1px 6px 2px 2px;
 padding-right: 16px; 
 text-decoration: none;
 height:26px;
@@ -482,7 +489,7 @@ background: transparent url('images/alt-button-right.png') no-repeat scroll top 
 display: inline-block;
 min-width:100px;
 height: 32px; 
-margin-right: 6px;
+margin: 1px 6px 2px 2px;
 padding-right: 16px; 
 text-decoration: none;
 height:26px;
@@ -551,7 +558,8 @@ table {
 }
 .table1 .highlight {
 	background-color:#c8e0d6;
-	color:#073d07;
+	color:black;
+/*	color:#073d07; */
 }
 .table1 .inactive {
 	background-color:#ffffff;
@@ -560,10 +568,9 @@ table {
 }
 
 
-
 .table2 {
 	border-collapse:collapse;
-	border:2px solid #c6dec6;
+	border-top:2px solid #c6dec6;
 	background-color:#ffffff;
 	width:100%;
 }
@@ -571,9 +578,8 @@ table {
 	font-weight:bold;
 	background-color:#c6dec6;
 	padding:8px;
-	color:white;
 	border-right:1px solid white;
-	color:#45793d;
+	color:#073d07;
 /*	font-size:1em; */
 }
 .table2 td {
@@ -762,7 +768,6 @@ table {
 	font-size:0.9em;
 	color:#909090;
 	display:block;
-	margin-bottom:6px;
 }
 .error {
 	color:red;
@@ -843,18 +848,49 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 }
 
 
+.progress-tab {
+	display:table;
+	height:30px;
+	font-weight: bold;
+	font-family: Verdana,Arial,helvetica,sans-serif;
+	margin:0px;
+	padding:0px;
+	font-size:12px;
+}
+.progress-tab li {
+	display:block;
+	text-transform: uppercase;
+	float:left;
+	padding:4px 15px 4px 15px;
+}
+.progress-tab .prev-selected {
+	color:#9eafa7;
+	border-bottom:1px solid #4a9272;
+}
+.progress-tab .selected {
+	color:#4a9272;
+	border-top:1px solid #4a9272;
+	border-left:1px solid #4a9272;
+	border-right:1px solid #4a9272;
+}
+.progress-tab .unselected {
+	color:#b8b8b8;
+	border-bottom:1px solid #b8b8b8;
+}
+
 /* ICONS */
 
 .icon-user-header, .icon-bullet, .icon-bullet-menu, .dst-resistant, .dst-contaminated, .dst-susceptible, 
-.tag-icon, .delete-icon, .new-icon, .progress-icon, .plus-icon, .icon-checked, .icon-unchecked,
+.tag-icon, .delete-icon, .new-icon, .edit-icon, .progress-icon, .plus-icon, .minor-icon, .collapse-icon, .icon-unchecked,
 .icon-square, .icon-lab, .icon-hu, .icon-ds, .icon-report, .checked-icon, .unchecked-icon,
-.icon-user, .icon-log-NEW, .icon-log-EDIT, .icon-log-DELETE, .icon-log-EXEC, .batch-icon,
-.naveg-first, .naveg-prev, .naveg-next, .naveg-last, .icon-positive, .icon-negative, .icon-error {
+.icon-user, .icon-log-NEW, .icon-log-EDIT, .icon-log-DELETE, .icon-log-EXEC, .batch-icon, .bar-comments,
+.naveg-first, .naveg-prev, .naveg-next, .naveg-last, .icon-positive, .icon-negative, .icon-error, .icon-phone {
 	background-image: url('images/icons.png');
 	width:16px;
 	height:16px;
 	margin-right:2px;
 	display:inline-block;
+	float:left;
 }
 .male-icon, .female-icon, .icon-lab-big, .icon-hu-big, .icon-ds-big, .medicine-icon {
 	background-image: url('images/icons.png');
@@ -878,6 +914,9 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .icon-lab-big {	background-position:-224px 0px; }
 
 .icon-report {	background-position:-64px -32px; }
+.icon-phone {	background-position:-96px -64px; }
+
+.bar-comments {	background-position:-112px -80px; float:left; }
 
 .icon-bullet-menu {
 	margin-right:8px;
@@ -899,10 +938,11 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .tag-icon {	background-position:-48px -48px;  }
 .delete-icon {	background-position:0px -16px; }
 .plus-icon { background-position:-32px -16px; }
+.collapse-icon { background-position:-96px -80px; }
 .checked-icon { background-position:-16px -112px; }
 .unchecked-icon { background-position:-32px -112px; }
 
-.batch-icon { background-position:-16px -16px; }
+.batch-icon { background-position:-16px -16px; margin-bottom:10px; float:left;}
 
 .progress-icon {
 	width:100px;
@@ -913,7 +953,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	border:1px solid black;
 }
 
-.icon-log-EDIT { background-position:-16px 0px; }
+.edit-icon, .icon-log-EDIT { background-position:-16px 0px; }
 .icon-log-DELETE { background-position:0px -16px; }
 .icon-log-EXEC { background-position:-112px -32px; }
 

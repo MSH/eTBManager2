@@ -41,7 +41,7 @@ if (regDatesValidate()) {
 	<h:form id="regdatesform">
 	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
 
-		<h:messages styleClass="erro" globalOnly="true"/>	
+		<h:messages styleClass="error" globalOnly="true"/>	
 		
 	    <s:decorate template="/layout/dateedit.xhtml" >
     		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>

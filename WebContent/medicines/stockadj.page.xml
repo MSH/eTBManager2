@@ -9,7 +9,7 @@
 			<rule if-outcome="success">
 				<end-conversation/>
 				<redirect view-id="/medicines/stockpos.xhtml">
-					<message>#{messages['medicines.movs.adjustok']}</message>
+					<message>#{messages['meds.movs.adjustok']}</message>
 				</redirect>
 			</rule>
 		</navigation>

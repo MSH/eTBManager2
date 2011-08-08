@@ -11,7 +11,7 @@
 			<rule if-outcome="persisted">
 				<end-conversation/>
 				<redirect view-id="/medicines/orderdata.xhtml">
-					<message>#{messages['medicines.orders.shipped']}</message>
+					<message>#{messages['meds.orders.shipped']}</message>
 					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
 				</redirect>
 			</rule>

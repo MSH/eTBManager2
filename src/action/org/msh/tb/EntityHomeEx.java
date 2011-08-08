@@ -37,7 +37,7 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	private String roleName;
 	
 	private UserLogin userLogin;
-
+	
 	
 	/**
 	 * Initiate transaction log service for this entityHome. The transaction will be saved on a update or persist call
@@ -392,4 +392,5 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	public EntityQuery<E> getEntityQuery() {
 		return null;
 	}
+	
 }

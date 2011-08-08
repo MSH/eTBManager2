@@ -7,8 +7,8 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
                  
-<rich:jQuery name="selectall" timing="onJScall" selector=".tbl :checkbox" query="attr('checked', true)" />
-<rich:jQuery name="unselectall" timing="onJScall" selector=".tbl :checkbox" query="attr('checked', false)" />
+<rich:jQuery name="selectall" timing="onJScall" selector="#tblsel .table1 :checkbox" query="attr('checked', true)" />
+<rich:jQuery name="unselectall" timing="onJScall" selector="#tblsel .table1 :checkbox" query="attr('checked', false)" />
 <script type="text/javascript">
 function checkClick(obj) {
   if (obj.checked)
@@ -17,8 +17,8 @@ function checkClick(obj) {
   updateRows();
 }
 function updateRows() {
-jQuery(".tbl tr").removeClass("selected-row");
-jQuery(".tbl tr:has(:checked)").addClass("selected-row");
+jQuery("#tblsel .table1 tr").removeClass("highlight");
+jQuery("#tblsel .table1 tr:has(:checked)").addClass("highlight");
 }
 
 function showMedicinesDlg() {
@@ -41,22 +41,22 @@ function hideMedicinesDlg() {
 	<table width="100%" cellspacing="4px">
 	<tr><td colspan="2">
 	
-	<h:selectBooleanCheckbox id="todos" style="margin-left:4px;margin-right:10px;" onclick="checkClick(this);"/>
-	<b>#{messages['Medicine']}</b>
+	<h:selectBooleanCheckbox id="todos" onclick="checkClick(this);"/>
+	#{messages['form.selectall']}
 
 	<div id="tblsel" style="overflow: auto; width: 100%; height:300px;border: 1px gray solid; padding:0px; margin: 0px;">	
 	<a:repeat value="#{medicineSelection.categories}" var="cat">
 	<table width="100%" style="border-collapse:collapse;">
-	<tr><td style="width:100%;background-color:#F0F0F0;font-weight:bold;padding:4px;">
-		#{messages[cat.category.key]}
-	</td></tr>
+	<tr><th>
+		<h2>#{messages[cat.category.key]}</h2>
+	</th></tr>
 	<tr><td>
-    	<h:dataTable id="tbl" value="#{cat.medicines}" var="it" styleClass="tabela tbl" width="100%">
+    	<h:dataTable id="tbl" value="#{cat.medicines}" var="it" styleClass="table1" width="100%">
 		<h:column>
 			<div style="float:left;vertical-align:top;" >
 				<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" />
 			</div>
-			<div class="medicine-icon" />
+			<div class="medicine-icon" style="float:left"/>
 			#{it.item}
 			<br/>
 			<div style="color:#b0b0b0;">#{messages[it.item.tbInfoKey]}</div>

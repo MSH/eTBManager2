@@ -22,7 +22,7 @@
 <ui:define name="content">
 <p/>
 
-<s:decorate id="formdisp" template="/layout/unit.xhtml">
+<s:decorate id="formdisp" template="/layout/unitsel.xhtml">
 <h:form id="main"> 
 
 	<s:decorate template="/layout/edit.xhtml">
@@ -103,10 +103,9 @@
 		<ui:repeat value="#{it.item.batches}" var="b">
 			<tr style="font-size:9px;">
 				<td class="colb" >
-					<div class="batch-icon">
+					<div class="batch-icon" style="float:left" />
 					#{b.batch.batchNumber}<br/>
 					#{b.batch.manufacturer}
-					</div>
 				</td>
 				<td align="center" class="colb">
 					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />

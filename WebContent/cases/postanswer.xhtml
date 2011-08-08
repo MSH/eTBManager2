@@ -28,7 +28,7 @@
 </th></tr>
 <tr><td class="highlight">
 		<div style="font-weight: normal">
-		<s:div style="display:block;float:right;min-width:150px" rendered="#{caseValidationHome.lastIssue.tbunit!=null}">
+		<s:div style="display:block;float:right;min-width:150px" rendered="#{not empty caseValidationHome.lastIssue.tbunit}">
 			<div class="#{r.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}" style="float:left;" />
 				#{caseValidationHome.lastIssue.tbunit.name}
 				<br/>

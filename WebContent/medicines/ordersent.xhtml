@@ -21,8 +21,8 @@
 <rich:panel style="width:700px;">
     
     <table width="100%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse">
-    <tr><td><b>#{messages['Order.tbunitFrom']}: </b>#{order.tbunitFrom.name}
-    </td><td><b>#{messages['Order.tbunitTo']}: </b>#{order.tbunitTo.name}
+    <tr><td><b>#{messages['Order.unitFrom']}: </b>#{order.unitFrom.name}
+    </td><td><b>#{messages['Order.unitTo']}: </b>#{order.unitTo.name}
     </td></tr>
     </table>
 
@@ -49,7 +49,7 @@
 <h:panelGroup id="pnlitems">
 <b>#{messages['Order.items']}:</b>
 <table width="100%">
-	<c:forEach items="#{orderSources}" var="s">
+	<c:forEach items="#{orderHome.sources}" var="s">
 	<tr><td class="colheader">
 		<b>#{s.source.name}</b>
 	</td></tr>
@@ -67,7 +67,7 @@
 				</td>
 				<s:fragment rendered="#{it.item.data==true}">
 				<tr><td colspan="6">
- 				   <h:outputText value="#{messages['meds.movs.invalidqtd']}" styleClass="erro"/>
+ 				   <h:outputText value="#{messages['meds.movs.invalidqtd']}" styleClass="error"/>
  				</td></tr> 
 				</s:fragment>
 				<td class="colc">

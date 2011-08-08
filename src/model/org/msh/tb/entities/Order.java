@@ -8,10 +8,12 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -51,14 +53,14 @@ public class Order implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="UNIT_FROM_ID")
 	@NotNull
-	private Tbunit tbunitFrom;
+	private Tbunit unitFrom;
 
 	@ManyToOne
 	@JoinColumn(name="UNIT_TO_ID")
 	@NotNull
-	private Tbunit tbunitTo;
+	private Tbunit unitTo;
 
-	@Column(length=200)
+	@Lob
 	private String comments;
 	
 	@Column(length=200)
@@ -78,6 +80,29 @@ public class Order implements Serializable {
 
 	@Column(length=50)
 	private String legacyId;
+	
+	@Column(length=200)
+	private String shipAddress;
+
+	@Column(length=200)
+	private String shipAddressCont;
+
+	@Column(length=200)
+	private String shipContactName;
+
+	@Column(length=200)
+	private String shipContactPhone;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="SHIP_ADMINUNIT_ID")
+	private AdministrativeUnit shipAdminUnit;
+	
+	@Column(length=50)
+	private String shipZipCode;
+	
+	@Column(length=200)
+	private String shipInstitutionName;
+	
 
 	@Transient
 	public float getTotalPrice() {
@@ -95,6 +120,15 @@ public class Order implements Serializable {
 		else return super.toString();
 	}
 
+	
+	public boolean isHasShipAddress() {
+		return (!checkEmpty(shipAddress)) || (!checkEmpty(shipZipCode));
+	}
+	
+	private boolean checkEmpty(String s) {
+		return (s == null) || (s.isEmpty());
+	}
+	
 	public Date getShippingDate() {
 		return shippingDate;
 	}
@@ -167,20 +201,20 @@ public class Order implements Serializable {
 		this.comments = comments;
 	}
 
-	public Tbunit getTbunitFrom() {
-		return tbunitFrom;
+	public Tbunit getUnitFrom() {
+		return unitFrom;
 	}
 
-	public void setTbunitFrom(Tbunit tbunitFrom) {
-		this.tbunitFrom = tbunitFrom;
+	public void setUnitFrom(Tbunit unitFrom) {
+		this.unitFrom = unitFrom;
 	}
 
-	public Tbunit getTbunitTo() {
-		return tbunitTo;
+	public Tbunit getUnitTo() {
+		return unitTo;
 	}
 
-	public void setTbunitTo(Tbunit tbunitTo) {
-		this.tbunitTo = tbunitTo;
+	public void setUnitTo(Tbunit unitTo) {
+		this.unitTo = unitTo;
 	}
 
 	public Integer getNumDays() {
@@ -219,6 +253,104 @@ public class Order implements Serializable {
 	 */
 	public void setLegacyId(String legacyId) {
 		this.legacyId = legacyId;
+	}
+
+	/**
+	 * @return the shipAddress
+	 */
+	public String getShipAddress() {
+		return shipAddress;
+	}
+
+	/**
+	 * @param shipAddress the shipAddress to set
+	 */
+	public void setShipAddress(String shipAddress) {
+		this.shipAddress = shipAddress;
+	}
+
+	/**
+	 * @return the shipAddressCont
+	 */
+	public String getShipAddressCont() {
+		return shipAddressCont;
+	}
+
+	/**
+	 * @param shipAddressCont the shipAddressCont to set
+	 */
+	public void setShipAddressCont(String shipAddressCont) {
+		this.shipAddressCont = shipAddressCont;
+	}
+
+	/**
+	 * @return the shipContactName
+	 */
+	public String getShipContactName() {
+		return shipContactName;
+	}
+
+	/**
+	 * @param shipContactName the shipContactName to set
+	 */
+	public void setShipContactName(String shipContactName) {
+		this.shipContactName = shipContactName;
+	}
+
+	/**
+	 * @return the shipContactPhone
+	 */
+	public String getShipContactPhone() {
+		return shipContactPhone;
+	}
+
+	/**
+	 * @param shipContactPhone the shipContactPhone to set
+	 */
+	public void setShipContactPhone(String shipContactPhone) {
+		this.shipContactPhone = shipContactPhone;
+	}
+
+	/**
+	 * @return the shipAdminUnit
+	 */
+	public AdministrativeUnit getShipAdminUnit() {
+		return shipAdminUnit;
+	}
+
+	/**
+	 * @param shipAdminUnit the shipAdminUnit to set
+	 */
+	public void setShipAdminUnit(AdministrativeUnit shipAdminUnit) {
+		this.shipAdminUnit = shipAdminUnit;
+	}
+
+	/**
+	 * @return the shipZipCode
+	 */
+	public String getShipZipCode() {
+		return shipZipCode;
+	}
+
+	/**
+	 * @param shipZipCode the shipZipCode to set
+	 */
+	public void setShipZipCode(String shipZipCode) {
+		this.shipZipCode = shipZipCode;
+	}
+
+	/**
+	 * @return the shipInstitutionName
+	 */
+	public String getShipInstitutionName() {
+		return shipInstitutionName;
+	}
+
+	/**
+	 * @param shipInstitutionName the shipInstitutionName to set
+	 */
+	public void setShipInstitutionName(String shipInstitutionName) {
+		this.shipInstitutionName = shipInstitutionName;
 	}
 
 
