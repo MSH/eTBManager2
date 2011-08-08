@@ -12,7 +12,7 @@
 		<f:param name="examid" value="#{null}"/>
 	</s:link>
 
-	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="erro" rendered="#{empty medicalExaminationHome.allResults}" />
+	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="error" rendered="#{empty medicalExaminationHome.allResults}" />
 
 	<h:dataTable id="medexamtbl" value="#{medicalExaminationHome.allResults}" var="r" rendered="#{not empty medicalExaminationHome.allResults}" width="100%">
 		<h:column>
