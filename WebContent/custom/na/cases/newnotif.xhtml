@@ -18,6 +18,7 @@
 <ui:param name="waitdlg" value="1" />
 
 <ui:define name="content">
+<h1>#{title}</h1>
 
 <script type="text/javascript">
 function checkfields() {
@@ -30,11 +31,10 @@ function checkfields() {
 </script>
 <rich:jQuery name="showbutton" selector="#btnpac" query="show(500)" />
 <p/>
-<h:form id="main">
-<s:decorate template="/layout/roundrect.xhtml">
+<h:form id="main" styleClass="form1">
+<div class="form-content">
 
-	<ui:define name="header"><b>#{messages['cases.searchpatient']}</b></ui:define>
-	<ui:param name="showfooter" value="0" />
+	<h2>#{messages['cases.searchpatient']}</h2>
 
     <s:decorate id="name" template="/layout/editname.xhtml">
     	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
@@ -51,17 +51,22 @@ function checkfields() {
     </h:panelGroup>
 
 	<h:inputHidden value="#{tbcase.classification}" />
+</div>
 
-	<table width="100%"><tr><td>
-		<a:commandLink id="btnsearch" value="#{messages['form.search']}" action="#{patients.search}" styleClass="button"
+	<div class="form-footer">
+		<a:commandLink id="btnsearch" action="#{patients.search}" styleClass="button"
 			data="#{patients.searching}" focus="name"
-			reRender="pnlpatients,dt" onclick="if (!checkfields()) return false" oncomplete="if (data) showbutton();"/>
-		<s:link value="#{messages['form.cancel']}" view="/cases/index.xhtml" styleClass="button-alt" />
-	</td></tr></table> 
+			reRender="pnlpatients,dt" onclick="if (!checkfields()) return false" oncomplete="if (data) showbutton();">
+			<span>#{messages['form.search']}</span>
+			</a:commandLink>
+		<s:link view="/cases/index.xhtml" styleClass="button-alt" >
+		<span>#{messages['form.cancel']}</span>
+		</s:link>
+	
 
 	<rich:jQuery timming="onload" selector="#main input[type='text']:first" query="focus()" />
 	<rich:hotKey selector="#main input" key="return" handler="#{rich:element('btnsearch')}.click();" /> 
-</s:decorate>
+	</div>
 <p/>
 
 <p/>
