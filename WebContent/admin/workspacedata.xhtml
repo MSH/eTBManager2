@@ -81,7 +81,8 @@
 	</th></tr>
 	<tr><td>
     	<ui:repeat value="#{workspace.users}" var="u">
-    		<span style="width:240px;float:left;height:18px;">
+    		<span style="width:240px;float:left;padding:4px;">
+    			<div class="icon-user" />
     			#{u.user.name}
     		</span>
     	</ui:repeat>

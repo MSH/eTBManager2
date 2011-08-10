@@ -10,7 +10,7 @@
       template="/layout/template_new.xhtml"
                 >
         
-<ui:param name="title" value="#{messages['Workspace']}: #{messages['admin.workspaces.addremuser']}" />
+<ui:param name="title" value="#{workspace.name}: #{messages['admin.workspaces.addremuser']}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="waitdlg" value="1" />
 
@@ -21,31 +21,10 @@
 </ui:define>
 
 <ui:define name="content">
+<h1>#{title}</h1>
 <h:form id="main" prependId="true" styleClass="form1">
- <div class="form-content">
-	<table class="tab1" style="background-color:#F7F5EF;" cellspacing="10">
-	<tr><td colspan="3" class="header2"><h1>#{workspace.name}</h1>
-	</td></tr>
-	<tr><td width="330" style="background-color:#FFFFFF; border:1px solid #E4DCC7;" valign="top">
-		<b style="padding-left:10px;padding-bottom:5px;">#{messages['admin.workspaces.users']}</b>
-		<div style="padding:10px">
-
-		<h:dataTable value="#{workspace.users}" var="it" width="100%" styleClass="table1">
-			<h:column>
-				<f:facet name="header">#{messages['User.name']}</f:facet>
-				#{it.user.login} - #{it.user.name}
-			</h:column>
-
-			<h:column>
-				<f:facet name="header">#{messages['form.action']}</f:facet>
-				<a:commandLink value="#{messages['admin.users.remove']}" action="#{workspaceHome.remUser(it)}" ajaxSingle="true" reRender="main"/>
-			</h:column>
-		</h:dataTable>
-
-		</div>
-	</td>
-	<td valign="top" style="border:1px solid #E4DCC7;">
-		<b style="padding-left:10px;padding-bottom:5px;">#{messages['admin.users']}</b>
+	<div class="form-content">
+ 		<b style="padding-left:10px;padding-bottom:5px;">#{messages['admin.users']}</b>
 		<div style="padding:10px">
 		<a:region immediate="true">
     	<s:decorate template="/layout/edit.xhtml">
@@ -109,18 +88,48 @@ function processSelectedUser(suggestion) {
 		</a:commandLink>
 		
 		</div>
-		</td></tr></table>
-		</div>
+ 
+	</div>
 
 	<div class="form-footer">
 
-		<h:commandLink action="#{workspaceHome.saveUsers}" styleClass="button" immediate="true" >
-		<span>#{messages['form.save']}</span> 
-		</h:commandLink>
-		<h:commandLink action="cancel" styleClass="button-alt" immediate="true" >
-		<span>#{messages['form.cancel']}</span> 
-		</h:commandLink>
+		<a:commandLink action="#{workspaceHome.saveUsers}" styleClass="button" 
+			ajaxSingle="true"
+			reRender="main,messages"
+			onclick="if (!disableButton(this)) return false;">
+			<span>#{messages['form.save']}</span> 
+		</a:commandLink>
+		<a:commandLink action="cancel" styleClass="button-alt" immediate="true" onclick="disableButton(this)">
+			<span>#{messages['form.cancel']}</span> 
+		</a:commandLink>
 	</div>
+
+	<b style="padding-left:10px;padding-bottom:5px;">#{messages['admin.workspaces.users']}</b>
+	<div style="padding:10px">
+		<h:dataTable value="#{workspace.users}" var="it" width="100%" styleClass="table1">
+			<h:column>
+				<f:facet name="header">#{messages['User.name']}</f:facet>
+				<div class="icon-user" />
+				#{it.user.login} - #{it.user.name}
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">#{messages['UserProfile']}</f:facet>
+				#{it.profile.name}
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">#{messages['UserView']}</f:facet>
+				#{messages[it.view.key]}
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">#{messages['form.action']}</f:facet>
+				<a:commandLink value="#{messages['admin.users.remove']}" action="#{workspaceHome.remUser(it)}" ajaxSingle="true" reRender="main"/>
+			</h:column>
+		</h:dataTable>
+	</div>
+
 </h:form>
 </ui:define>
         
