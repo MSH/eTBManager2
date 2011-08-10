@@ -40,6 +40,7 @@
 		<a:repeat value="#{globalLists.caseClassifications}" var="cla">
 			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}" styleClass="button">
 				<f:param name="classif" value="#{cla}"/>
+				<f:param name="type" value="CONFIRMED"/>
 				<span>#{messages['cases.newnotif']}</span>
 			</s:link>
 		</a:repeat>
@@ -215,7 +216,7 @@
 	<ui:include src="searchfilters.xhtml" />
 
 	<div class="button-bar">
-		<a:commandLink id="btnsearch" action="search" styleClass="button" onclick="if (!disableButtons(this)) return false;" >
+		<a:commandLink id="btnsearch" action="search" styleClass="button" onclick="if (!disableButton(this)) return false;" >
 			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
 			<span>#{messages['form.search']}</span>
 		</a:commandLink>
