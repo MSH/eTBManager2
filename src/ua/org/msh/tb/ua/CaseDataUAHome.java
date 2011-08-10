@@ -111,6 +111,7 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 		CaseDataUA data = getInstance();
 		if (data.getId() == null)
 			data.setId((Integer)caseHome.getId());
+		setDisplayMessage(false);
 		return persist();
 	}
 

@@ -13,7 +13,7 @@
 <ui:param name="title" value="#{messages['Order']} # #{order.id}" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="show_menu" value="#{order.status!='CANCELLED' ? '1': '0'}" />
-<ui:param name="labelstyle" value="width:200px;" />
+<ui:param name="labelstyle" value="width:250px;" />
 
 <ui:define name="naveg">
 	<s:link value="#{messages['meds.inventory']}" view="/medicines/index.html" propagation="none" />
@@ -74,11 +74,14 @@
 
 <div style="float:right">
 	<h:outputText value="#{messages[order.status.key]}"
-		styleClass="#{order.status=='CANCELLED'?'status-cancel':'status-label'}" /> 
-	<s:div rendered="#{order.status=='WAITINGAUT'}" >
-   		<b>#{messages['Tbunit.authorizerUnit']}: </b>
-   		#{order.unitTo.authorizerUnit.name}<br/>
-   	</s:div>
+		styleClass="#{order.status=='CANCELLED'?'status-cancel':'status-label'}" />
+	<br/>
+	<s:fragment  rendered="#{order.status=='WAITINGAUT'}">
+		<div class="text-small">#{messages['meds.orders.authorizerdesc']}</div>
+		<s:decorate template="/layout/unit.xhtml" >
+			<ui:param name="unit" value="#{order.unitTo.authorizerUnit}" />
+		</s:decorate>
+	</s:fragment>
 </div>
 <table width="100%">
 <tr><td></td>
@@ -104,16 +107,15 @@
 	    </s:decorate>
     </td></tr>
 
-    <tr><td colspan="2" style="font-size:11px;padding-top:5px;color:#808080">
-    #{messages['meds.orders.createdin']}     	
-	<span style="color:black;font-weight:bold;"> 
-	<h:outputText value="#{order.orderDate}" converter="localeDateConverter" />
-	</span> 
-    <br/>
-    #{messages['form.by']} 
-    <span style="color:black;font-weight:bold;">
-    	#{order.userCreator.name}
-    </span>
+    <tr><td colspan="2">
+	    <div class="hint">
+    	#{messages['meds.orders.createdin']}     	
+		<span style="color:black;font-weight:bold;"> 
+		<h:outputText value="#{order.orderDate}" converter="localeDateConverter" />
+		</span> 
+    	<br/>
+    	<div class="icon-user"/>#{order.userCreator.name}
+	    </div>
     </td></tr>
     </table>
 	</div>
@@ -144,6 +146,26 @@
     	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
     	<h:outputText value="#{order.totalPrice}"><f:convertNumber pattern="#,###,###,##0.00"/> </h:outputText>
     </s:decorate>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['Order.shipContactName']}:</ui:define>
+		#{order.shipContactName}
+		<s:div rendered="#{not empty order.shipContactPhone}"><div class="icon-phone"/>#{order.shipContactPhone}</s:div>
+	</s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['meds.orders.shipaddr']}:</ui:define>
+    	<b>#{order.shipInstitutionName}</b>
+    	<br/>
+    	#{order.shipAddress}
+    	<br/>
+    	#{order.shipAddressCont}
+    	<br/>
+    	#{order.shipZipCode} <br/>
+    	<a:repeat value="#{orderHome.auselection.selectedUnit.parents}" var="it">
+    		<span style="margin-right:10px;">#{it.name}</span> 
+    	</a:repeat>
+    </s:decorate>
     
     <s:decorate template="/layout/display.xhtml" rendered="#{order.status=='CANCELLED'}">
     	<ui:define name="label">#{messages['Order.cancelReason']}:</ui:define>
@@ -159,9 +181,6 @@
 
     </h:panelGroup>
 
-	<br/>   
-
-<br/>
 
 <rich:tabPanel switchType="ajax">
 
@@ -169,12 +188,14 @@
 <table width="100%">
 	<ui:repeat value="#{orderHome.sources}" var="s">
 	<tr><td>
-		<h2>#{s.source.name}</h2>
+		<h2>#{s.source.abbrevName} <span class="text-small">(#{s.source.name})</span></h2>
 	</td></tr>
 	<tr><td>
 		<h:dataTable value="#{s.items}" var="it" class="table1" width="100%" columnClasses="coll,colc,colr,colr,colr,colr,colr,colr" rowClasses="lin1,lin2">
 			<h:column>
-				<f:facet name="header"><h:outputText value="#{messages['Medicine']}" styleClass="collh"/></f:facet>
+				<f:facet name="header">
+					<h:outputText value="#{messages['Medicine']}" styleClass="collh"/>
+				</f:facet>
 				<div class="medicine-icon" style="float:left"/>
 				<h:outputText value="#{it.item.medicine}" />
 			</h:column>

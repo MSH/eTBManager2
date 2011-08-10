@@ -26,10 +26,8 @@
 	<h2>#{messages['manag.case.reports']}</h2>
 
 	<div class="vertical-menu">
-	<table width="100%">
-	<tr><td valign="top"> 	
 	<s:link view="/management/incidence.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
-		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.incidence']}
+		<div class="icon-report" />#{messages['manag.ind.incidence']}
 	</s:link>
 	<s:link view="/management/prevalence.xhtml" rendered="#{s:hasRole('INDICATORS')}">
 		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.prevalence']}
@@ -62,8 +60,6 @@
 	<s:link value="#{messages['manag.ind.outcome6']}" view="/management/outcome6.xhtml" styleClass="icon-report" rendered="false" />
 	<s:link value="#{messages['manag.ind.cover']}" view="/management/cover.xhtml" styleClass="icon-report" rendered="false"/>
 	
-	</td></tr>
-	 <tr><td>
 <!-- 	<s:link value="#{messages['manag.ind.treatres']}" view="/management/treatres.xhtml" styleClass="icon-report" rendered="#{s:hasRole('REP1')}" >
 			<f:param name="cla" value="DRTB"/>
 		</s:link>
@@ -77,15 +73,10 @@
 		<s:link view="/management/confmdrrep.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
 			<div class="icon-report" style="float:left;"/>#{messages['manag.confmdrrep']}
 		</s:link>
-	</td></tr>
-
-	<tr><td>
 		<hr/>
 		<s:link view="/management/customind.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
 			<div class="icon-report" style="float:left;"/>#{messages['manag.ind.customind']}
 		</s:link>
-	</td></tr>
-	</table>
 	</div>
 
 	<div class="spacer" />

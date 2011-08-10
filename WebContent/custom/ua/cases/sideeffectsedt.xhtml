@@ -16,6 +16,7 @@
 
 
 <ui:define name="content">
+<h1>#{title}</h1>
 
 <rich:jQuery selector="document" query="ready(function() {updateRows();})" />
 
@@ -123,13 +124,19 @@ function validateYesNo(cb) {
 	</div>
 
 </td></tr>
-<tr><td align="right">
-	<h:commandLink action="#{sideEffectHome.save}" value="#{messages['form.ok']}" styleClass="button" onclick="if (!validateForm()) {return false;} else openWaitDlg();"/> 
-    <s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
-       	<f:param name="id" value="#{caseHome.id}"/>
-    </s:link>
-</td></tr>
 </table>
+
+	<div class="form-footer">
+	<h:commandLink action="#{sideEffectHome.save}" styleClass="button" 
+		onclick="if (!validateForm()) {return false;} else disableButton(this);">
+		<span>#{messages['form.ok']}</span>
+	</h:commandLink> 
+    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+       	<f:param name="id" value="#{caseHome.id}"/>
+       	<span>#{messages['form.cancel']}</span>
+    </s:link>
+    </div>
+
 </s:decorate>
 
 <p/>

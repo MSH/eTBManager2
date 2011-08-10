@@ -7,20 +7,19 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:c="http://java.sun.com/jstl/core"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-                 
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
-		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
-				<f:param name="id" value="#{caseHome.id}" />
-			</s:link>
-			<b>#{messages['cases.patientdata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+
+	<div class="form1">
+	<div class="form-content">	
+	<h2>                 
+		<s:link view="/cases/caseedt.xhtml" style="float:right;" 
+			rendered="#{caseHome.canEditCaseData}" styleClass="button-alt"
+			onclick="disableButton(this)">
+			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['form.edit']}</span>
+		</s:link>
+	#{messages['cases.patientdata']}</h2>
 	
-	<div>	
-	<table style="border-collapse:collapse;width:98%;" cellpadding="1" ><tr><td colspan="2">
-	
-	</td></tr>
+	<table style="border-collapse:collapse;width:100%;">
 	<tr><td>
 	
 	<s:decorate template="/layout/display.xhtml">
@@ -59,7 +58,7 @@
 
     </td></tr>
     <tr><td colspan="2">
-    	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
+    	<h2>#{messages['cases.details.addressnotif']}</h2>
 	
 		<s:decorate template="/layout/audisplay.xhtml">
 			<ui:param name="adminunit" value="#{tbcase.notifAddress.adminUnit}" />
@@ -97,7 +96,7 @@
     </td></tr>
 	<s:fragment rendered="#{tbcase.notifAddressChanged}">
 	<tr><td colspan="2">
-		<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
+		<h2>#{messages['cases.details.addresscurr']}</h2>
 		<s:decorate template="/layout/audisplay.xhtml">
 			<ui:param name="adminunit" value="#{tbcase.currentAddress.adminUnit}" />
 		</s:decorate>
@@ -139,17 +138,12 @@
 		</s:decorate>
 	</td></tr>
 	</table></div>
-	</s:decorate>
 	
 
-                 
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
-		<ui:define name="header">
-			<b>#{messages['cases.generaldata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+
+	<div class="form-content">
+		<h2>#{messages['cases.generaldata']}</h2>
 	
-	<div>
 	<ui:param name="labelstyle" value="width:190px;" />
 	<table style="border-collapse:collapse;width:98%;" cellpadding="1" >
 	<tr><td colspan="2">
@@ -159,7 +153,7 @@
 	</s:decorate>
 	</td></tr>
 	<tr><td colspan="2">
-		<div class="paragraph">#{messages['cases.details.currhist']}</div>
+		<h2>#{messages['cases.details.currhist']}</h2>
 	</td></tr>
 	<tr><td>
 	
@@ -279,8 +273,8 @@
 		</s:decorate>
 
 		<s:fragment rendered="#{not empty prevTBTreatmentHome.items}">
-		<div class="paragraph">#{messages['cases.prevtreat']}</div>
-		<table width="98%" class="tabela4">
+		<h2>#{messages['cases.prevtreat']}</h2>
+		<table width="100%" class="table1">
 			<tr>
 				<th rowspan="2">#{messages['cases.prevtreat.num']}
 				</th>
@@ -319,21 +313,22 @@
 		</s:fragment>
 
 	</td></tr>
-	</table></div>
-	</s:decorate>
+	</table>
+	</div>
 
 
-                 
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
-		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/custom/ua/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
+	<div class="form-content">
+
+		<h2>                 
+			<s:link view="/custom/ua/cases/sideeffectsedt.xhtml" style="float:right;" 
+				rendered="#{caseHome.canEditCaseData}" styleClass="button-alt"
+				onclick="disableButton(this)">
 				<f:param name="id" value="#{caseHome.id}" />
+				<span>#{messages['form.edit']}</span>
 			</s:link>
-			<b>#{messages['cases.sideeffects']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+			#{messages['cases.sideeffects']}
+		</h2>
 	
-	<div>
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty tbcase.sideEffects}" />
 	<h:dataTable value="#{tbcase.sideEffects}" var="it" width="100%" styleClass="tabela4" rowClasses="lin1,lin2" rendered="#{not empty tbcase.sideEffects}">
 		<h:column>
@@ -366,7 +361,8 @@
 		</h:column>
 	</h:dataTable>
 	</div>
-	</s:decorate>
+	
+	</div>
 
 	<s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="data" />

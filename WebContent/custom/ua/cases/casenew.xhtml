@@ -22,21 +22,22 @@
 </ui:define>
 
 <ui:define name="content">
-<p/>
-<a:form id="main">
-<table style="width:100%"><tr><td>
+<h1>#{title}</h1>
+<a:form id="main" styleClass="form1">
 
 	<ui:include src="casedataedt.xhtml" />	
 	
-
-	<p/>
-	<table width="100%"><tr><td align="right">
-	<a:commandLink value="#{messages['form.ok']}" action="#{caseDataUAHome.saveNew}" styleClass="button" reRender="main,messages"/>
-	<s:link value="#{messages['form.cancel']}" view="/cases/index.xhtml" styleClass="button-alt" propagation="end" />
-	</td></tr></table>
-</td></tr></table>
-<p/>
-	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+	<div class="form-footer">
+		<div style="float:right">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+	<a:commandLink action="#{caseDataUAHome.saveNew}" styleClass="button" reRender="main,messages" onclick="if (!disableButton(this)) return false;">
+		<span>#{messages['form.save']}</span>
+	</a:commandLink>
+	<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+		<span>#{messages['form.cancel']}</span>
+	</s:link>
+	</div>
 
 </a:form>
 

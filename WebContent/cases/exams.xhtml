@@ -8,13 +8,14 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 	<div class="spacer" />
+	<h2>
 	<s:link view="/cases/edtexamhiv.xhtml" 
 		style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 		<span>#{messages['cases.details.newresult']}</span>
 	</s:link>
-	<h2>#{messages['cases.examhiv']}</h2>
+	#{messages['cases.examhiv']}</h2>
 	<h:panelGroup id="pnlhiv">
 		<s:div styleClass="region3" rendered="#{empty examHIVHome.allResults}"><div class="content">
 			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />

@@ -13,23 +13,21 @@
 <ui:param name="title" value="#{messages['cases.edit']} - #{messages[tbcase.classification.key]}" />
 <ui:param name="left" value="0" />
 <ui:param name="topmenu" value="0" />
-<ui:param name="waitdlg" value="1" />
-<ui:param name="labelstyle" value="width:300px" />
+<ui:param name="labelstyle" value="width:160px" />
 
-
-<ui:define name="left">
-</ui:define>
 
 <ui:define name="content">
-<h:form id="main">
-<p/>
+<h1>#{title}</h1>
+
 <s:decorate template="/layout/casebody.xhtml">
-	<table width="100%">
+<h:form id="main" styleClass="form1">
+	<div class="form-content">
+	<table width="100%" >
 	<tr><td>
 
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:param name="labelstyle" value="width:110px" />
-		<ui:define name="label">#{messages['cases.examhiv.vct']}</ui:define>
+		<ui:define name="label">#{messages['cases.examhiv.vct']}:</ui:define>
 		<h:selectOneMenu value="#{caseDataUA.VCTstarted}" onchange="toggleYesNo(this.selectedIndex, '#vctdiv');">
 			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
 			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
@@ -59,43 +57,34 @@ function toggleYesNo(option, divname) {
 }
 -->
 </script>
-	<s:decorate template="/layout/display.xhtml">
-   		<ui:define name="label">
-			<h:selectBooleanCheckbox value="#{caseDataUA.alcoholAbuse}" />
-   			#{messages['uk_UA.alcoholAbuse']}:
-   		</ui:define>
-	</s:decorate>
+	<div class="prop">
+	<h:selectBooleanCheckbox value="#{caseDataUA.alcoholAbuse}" />
+	#{messages['uk_UA.alcoholAbuse']}
+	</div>
 	
-	<s:decorate template="/layout/display.xhtml">
-   		<ui:define name="label">
-			<h:selectBooleanCheckbox value="#{caseDataUA.migrant}" />
-   			#{messages['uk_UA.migrant']}:
-   		</ui:define>
-	</s:decorate>
+	<div class="prop">
+	<h:selectBooleanCheckbox value="#{caseDataUA.migrant}" />
+	#{messages['uk_UA.migrant']}
+	</div>
 
 	</td>
 	<td valign="top">
 	
-	<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">
-				<h:selectBooleanCheckbox value="#{caseDataUA.homeless}" />
-    			#{messages['uk_UA.homeless']}:
-    		</ui:define>
-	</s:decorate>
+	<div class="prop">
+		<h:selectBooleanCheckbox value="#{caseDataUA.homeless}" />
+  			#{messages['uk_UA.homeless']}
+  	</div>
 	
-	<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">
-				<h:selectBooleanCheckbox value="#{caseDataUA.unemployed}" />
-    			#{messages['uk_UA.unemployed']}:
-    		</ui:define>
-	</s:decorate>
+	<div class="prop">
+		<h:selectBooleanCheckbox value="#{caseDataUA.unemployed}" />
+   			#{messages['uk_UA.unemployed']}
+   	</div>
 	
-	<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">
-				<h:selectBooleanCheckbox value="#{caseDataUA.healthWorker}" />
-    			#{messages['uk_UA.healthWorker']}:
-    		</ui:define>
-	</s:decorate>
+	<div class="prop">
+		<h:selectBooleanCheckbox value="#{caseDataUA.healthWorker}" />
+   			#{messages['uk_UA.healthWorker']}
+   	</div>
+
 	<div style="display:block;clear:both;">
 		<h:selectBooleanCheckbox value="#{caseDataUA.healthWorkerTB}" style="margin-left:20px;"/>
 		#{messages['uk_UA.healthWorker.TB']}
@@ -111,39 +100,31 @@ function toggleYesNo(option, divname) {
     </td></tr>
 
 	<tr><td valign="top">
-		<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">
-				<h:selectBooleanCheckbox value="#{caseDataUA.injectableDrugUse}" />
-    			#{messages['uk_UA.injectableDrugUse']}:
-    		</ui:define>
-		</s:decorate>
+		<div class="prop">
+			<h:selectBooleanCheckbox value="#{caseDataUA.injectableDrugUse}" />
+   			#{messages['uk_UA.injectableDrugUse']}:
+		</div>
 	</td><td valign="top">
-		<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">
-				<h:selectBooleanCheckbox value="#{caseDataUA.refugee}" />
-    			#{messages['uk_UA.refugee']}:
-    		</ui:define>
-		</s:decorate>
+		<div class="prop">
+			<h:selectBooleanCheckbox value="#{caseDataUA.refugee}" />
+   			#{messages['uk_UA.refugee']}:
+		</div>
     </td></tr>
 
 	<tr><td valign="top">
-		<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">
-				<h:selectBooleanCheckbox value="#{caseDataUA.tbContact}" />
-    			#{messages['TbCase.tbContact']}:
-    		</ui:define>
-		</s:decorate>
+		<div class="prop">
+			<h:selectBooleanCheckbox value="#{caseDataUA.tbContact}" />
+   			#{messages['TbCase.tbContact']}:
+		</div>
 	</td><td valign="top">
-		<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">
+		<div class="prop">
 				<h:selectBooleanCheckbox value="#{caseDataUA.prisioner}" />
     			#{messages['uk_UA.prisioner']}:
-    		</ui:define>
-		</s:decorate>
+		</div>
     </td></tr>
     
     <tr><td colspan="2">
-		<s:decorate template="/layout/display.xhtml">
+		<s:decorate template="/layout/edit.xhtml">
 			<ui:param name="labelstyle" value="width:100px;" />
     		<ui:define name="label">#{messages['uk_UA.otherFeature']}:</ui:define>
     		<h:inputText value="#{caseDataUA.otherFeature}" style="width:350px;"/>
@@ -163,18 +144,22 @@ function toggleYesNo(option, divname) {
 				#{it.item.comorbidity.name}
 			</h:column>
 		</h:dataTable>		
-    </td></tr>
-	
-	<tr><td align="right" colspan="2">
-	<a:commandLink value="#{messages['form.ok']}" action="#{caseDataUAHome.saveAnnex}" styleClass="button" reRender="main"/>
-	<s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
-		<f:param name="id" value="#{caseHome.id}" />
-	</s:link>
 	</td></tr></table>
+	</div>
+
+	<div class="form-footer">	
+	<a:commandLink action="#{caseDataUAHome.saveAnnex}" styleClass="button" reRender="main" onclick="disableButton(this)">
+		<span>#{messages['form.save']}</span>
+	</a:commandLink>
+	<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+		<f:param name="id" value="#{caseHome.id}" />
+		<span>#{messages['form.cancel']}</span>
+	</s:link>
+	</div>
+</h:form>
+
 </s:decorate>
 	
-
-</h:form>
 
 </ui:define>
 

@@ -6,59 +6,46 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-                 
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
-		<ui:param name="labelstyle" value="width:310px;" /> 
-		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/custom/ua/cases/annexedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
-				<f:param name="id" value="#{caseHome.id}" />
-			</s:link>
-			<b>#{messages['uk_UA.annex.title1']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+
+	<h2>                 
+		<s:link view="/custom/ua/cases/annexedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
+			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['form.edit']}</span>
+		</s:link>
+		#{messages['uk_UA.annex.title1']}
+	</h2>
 	
-	<div>	
 	<table style="border-collapse:collapse;width:98%;" cellpadding="1" ><tr><td colspan="2">
 	
 	</td></tr>
-	<tr><td valign="top" height="100px;">
-	
-	<s:decorate template="/layout/display.xhtml">
+	<tr><td valign="top" height="100px;" width="400px">
+
+	<div class="prop">
+		<div class="#{caseDataUA.VCTstarted?'checked-icon':'unchecked-icon'}"/>
+		#{messages['cases.examhiv.vct']}
+	</div>	
+	<s:decorate template="/layout/display.xhtml" rendered="#{caseDataUA.VCTstarted}">
 		<ui:param name="labelstyle" value="width:120px;" />
    		<ui:define name="label">
-   			<div class="#{caseDataUA.VCTstarted?'checked-icon':'unchecked-icon'}">
-   			#{messages['cases.examhiv.vct']}
-   			</div>
-   		</ui:define>
-   		<s:fragment rendered="#{caseDataUA.VCTstarted}">
    			#{messages['global.date']}:
-   			<h:outputText value="#{caseDataUA.startedVCTdate}" converter="localeDateConverter" />		
-   		</s:fragment>
-	</s:decorate>
-
-	<s:decorate template="/layout/display.xhtml">
-   		<ui:define name="label">
-   			<div class="#{caseDataUA.alcoholAbuse?'checked-icon':'unchecked-icon'}">
-   			#{messages['uk_UA.alcoholAbuse']}
-   			</div>
    		</ui:define>
+		<h:outputText value="#{caseDataUA.startedVCTdate}" converter="localeDateConverter" />		
 	</s:decorate>
-	
-		<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">
-   				<div class="#{caseDataUA.injectableDrugUse?'checked-icon':'unchecked-icon'}">
-    			#{messages['uk_UA.injectableDrugUse']}
-    			</div>
-    		</ui:define>
-		</s:decorate>
 
-		<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">
-   				<div class="#{caseDataUA.tbContact?'checked-icon':'unchecked-icon'}">
+	<div class="prop">
+   			<div class="#{caseDataUA.alcoholAbuse?'checked-icon':'unchecked-icon'}"/>
+   			#{messages['uk_UA.alcoholAbuse']}
+	</div>
+	
+		<div class="prop">
+   				<div class="#{caseDataUA.injectableDrugUse?'checked-icon':'unchecked-icon'}"/>
+    			#{messages['uk_UA.injectableDrugUse']}
+		</div>
+
+		<div class="prop">
+   				<div class="#{caseDataUA.tbContact?'checked-icon':'unchecked-icon'}" />
     			#{messages['TbCase.tbContact']}
-    			</div>
-    		</ui:define>
-		</s:decorate>
+		</div>
 
 		<s:decorate template="/layout/display.xhtml">
 			<ui:param name="labelstyle" value="width:120px;" />
@@ -68,38 +55,28 @@
 
 	</td><td valign="top">
 	
-	<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">
-   				<div class="#{caseDataUA.homeless?'checked-icon':'unchecked-icon'}">
-    			#{messages['uk_UA.homeless']}
-    			</div>
-    		</ui:define>
-	</s:decorate>
+	<div class="prop">
+		<div class="#{caseDataUA.homeless?'checked-icon':'unchecked-icon'}" />
+    	#{messages['uk_UA.homeless']}
+	</div>
 	
-	<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">
-   				<div class="#{caseDataUA.unemployed?'checked-icon':'unchecked-icon'}">
-    			#{messages['uk_UA.unemployed']}
-    			</div>
-    		</ui:define>
-	</s:decorate>
+	<div class="prop">
+   		<div class="#{caseDataUA.unemployed?'checked-icon':'unchecked-icon'}" />
+    	#{messages['uk_UA.unemployed']}
+	</div>
 	
-	<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">
-   				<div class="#{caseDataUA.healthWorker?'checked-icon':'unchecked-icon'}">
-    			#{messages['uk_UA.healthWorker']}:
-    			</div>
-    		</ui:define>
-	</s:decorate>
-	<div style="display:block;clear:both;">
-		<div class="#{caseDataUA.healthWorkerTB?'checked-icon':'unchecked-icon'}" >
+	<div class="prop">
+    	<div class="#{caseDataUA.healthWorker?'checked-icon':'unchecked-icon'}" />
+    	#{messages['uk_UA.healthWorker']}:
+    </div>
+
+	<div style="display:block;margin-left:40px">
+		<div class="#{caseDataUA.healthWorkerTB?'checked-icon':'unchecked-icon'}" />
 			#{messages['uk_UA.healthWorker.TB']}
-		</div>
    	</div>
-	<div style="display:block;clear:both;">
-		<div class="#{caseDataUA.healthWorkerGMC?'checked-icon':'unchecked-icon'}" >
+	<div style="display:block;margin-left:40px;">
+		<div class="#{caseDataUA.healthWorkerGMC?'checked-icon':'unchecked-icon'}" />
    			#{messages['uk_UA.healthWorker.GMC']}
-   		</div>
    	</div>
 	
 	</td></tr>
@@ -107,36 +84,27 @@
 	
 	</td><td valign="top">
 	
-	<s:decorate template="/layout/display.xhtml">
-   		<ui:define name="label">
-			<div class="#{caseDataUA.migrant?'checked-icon':'unchecked-icon'}" >
+   		<div class="prop">
+			<div class="#{caseDataUA.migrant?'checked-icon':'unchecked-icon'}" />
    				#{messages['uk_UA.migrant']}
-   			</div>
-   		</ui:define>
-	</s:decorate>
+		</div>
 
     </td></tr>
 
 	<tr><td valign="top">
 	</td><td valign="top">
-		<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">
-				<div class="#{caseDataUA.refugee?'checked-icon':'unchecked-icon'}" >
+		<div class="prop">
+			<div class="#{caseDataUA.refugee?'checked-icon':'unchecked-icon'}" />
     			#{messages['uk_UA.refugee']}
-    			</div>
-    		</ui:define>
-		</s:decorate>
+		</div>
     </td></tr>
 
 	<tr><td valign="top">
 	</td><td valign="top">
-		<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">
-				<div class="#{caseDataUA.prisioner?'checked-icon':'unchecked-icon'}" >
-    			#{messages['uk_UA.prisioner']}
-    			</div>
-    		</ui:define>
-		</s:decorate>
+		<div class="prop">
+			<div class="#{caseDataUA.prisioner?'checked-icon':'unchecked-icon'}" />
+   			#{messages['uk_UA.prisioner']}
+		</div>
     </td></tr>
     
     <tr><td colspan="2">
@@ -154,7 +122,6 @@
     	</ul>
     </td></tr>
 
-	</table></div>
-	</s:decorate>
+	</table>
     
 </ui:composition>

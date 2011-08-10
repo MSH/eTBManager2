@@ -60,7 +60,7 @@ public class OpenOrders {
 		unitOrders = new ArrayList<Order>();
 		
 		for (Order order: lst) {
-			if ((order.getAuthorizer().equals(unit)) && (order.getStatus() == OrderStatus.WAITINGAUT))
+			if ((unit.equals(order.getAuthorizer())) && (order.getStatus() == OrderStatus.WAITINGAUT))
 				ordersToAuthorize.add(order);
 			else				
 			if (order.getUnitTo().equals(unit))
