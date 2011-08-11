@@ -81,7 +81,10 @@ function checkfields() {
 	<ui:param name="page" value="/cases/newnotif.xhtml" />
 </s:decorate>
 
-<h:dataTable value="#{patients.resultList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
+<!-- VR -->
+<!--  <h:dataTable value="#{patients.resultList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
+	rendered="#{patients.searching and (not empty patients.resultList)}" width="680px" columnClasses="coll,colc,colc,coll">-->
+	<h:dataTable value="#{patients.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
 	rendered="#{patients.searching and (not empty patients.resultList)}" width="680px" columnClasses="coll,colc,colc,coll">
 	<h:column>
 		<f:facet name="header">
@@ -89,9 +92,15 @@ function checkfields() {
   			<f:param name="order" value="#{patients.order=='p.name,p.middleName'?'p.name desc,p.middleName desc':''}" />
 			</s:link>
 		</f:facet>
-		<s:link value="#{it.fullName}" view="/cases/casenew.xhtml"  
+		<!-- VR -->
+			<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;">
+			<f:param name="pacid" value="#{it.patient.id}" />
+			<f:param name="classif" value="#{tbcase.classification}"/>
+		</s:link>
+		<!-- END -->
+		<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml"  
 			onclick="openWaitDlg();">
-			<f:param name="pacid" value="#{it.id}" />
+			<f:param name="pacid" value="#{it.patient.id}" />
 			<f:param name="classif" value="#{tbcase.classification}"/>
 		</s:link>
 	</h:column>
@@ -102,7 +111,7 @@ function checkfields() {
   			<f:param name="order" value="p.birthDate#{patients.order=='p.birthDate'?' desc':''}" />
 			</s:link>
 		</f:facet>
-		<h:outputText value="#{it.birthDate}"  converter="localeDateConverter"/>
+		<h:outputText value="#{it.patient.birthDate}"  converter="localeDateConverter"/>
 	</h:column>
 
 	<h:column>
@@ -111,7 +120,7 @@ function checkfields() {
   			<f:param name="order" value="p.recordNumber#{patients.order=='p.recordNumber'?' desc':''}" />
 			</s:link>
 		</f:facet>
-		#{it.recordNumber}
+		#{it.patient.recordNumber}
 	</h:column>
 
 	<h:column>
@@ -120,7 +129,7 @@ function checkfields() {
   			<f:param name="order" value="p.securityNumber#{patients.order=='p.securityNumber'?' desc':''}" />
 			</s:link>
 		</f:facet>
-		#{it.securityNumber}
+		#{it.patient.securityNumber}
 	</h:column>
 </h:dataTable>
 </h:panelGroup>
