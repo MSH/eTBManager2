@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.msh.tb.ke.entities.enums.Dot;
 import org.msh.utils.date.DateUtils;
 
 
@@ -82,7 +83,7 @@ public class MonthInfo {
 	public int getTotalDispensed() {
 		int nd = 0;
 		for (DayInfo di: days) {
-			if (di.isDispensed())
+			if (di.getSelected()!= Dot.X)
 				nd++;
 		}
 		return nd;
