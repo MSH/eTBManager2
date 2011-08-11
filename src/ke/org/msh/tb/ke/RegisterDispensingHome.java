@@ -18,6 +18,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.ke.entities.CaseDispensing_Ke;
+import org.msh.tb.ke.entities.TbCaseKE;
 import org.msh.utils.date.DateUtils;
 
 /**
@@ -107,7 +108,7 @@ public class RegisterDispensingHome {
 			CaseDispensingInfo info = findCaseDispensingInfo(tbcase);
 			if (info == null) {
 				CaseDispensing_Ke caseDispensing = new CaseDispensing_Ke();
-				caseDispensing.setTbcase(tbcase);
+				caseDispensing.setTbcase((TbCaseKE) tbcase);
 				caseDispensing.setMonth(month + 1);
 				caseDispensing.setYear(year);
 				
