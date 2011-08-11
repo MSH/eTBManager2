@@ -21,13 +21,13 @@
 <ui:define name="left">
 <h:form>
 	<a:commandLink value="#{messages['cases.treat.dispedt']}" onclick="showMonthYearSelectionDlg(); return false;" 
-	   rendered="#{not empty treatmentsInfoHome.groups}">
+	   rendered="#{not empty treatmentsInfoHomeKe.groups}">
 	</a:commandLink>
 </h:form>
 </ui:define>
 
 <ui:define name="content">
-<h1>#{title}</h1>
+<h1>#{title} - Kenya </h1>
 <h:form>
 
 <s:decorate template="/layout/roundrect.xhtml" style="width:750px;margin-top:10px;">
@@ -35,13 +35,13 @@
 	<ui:param name="showheader" value="0" />
 	
 	<div class="hu-icon" style="margin-bottom:10px;display:block;">
-		<b>#{treatmentsInfoHome.tbunit.name}</b><br/>
-		<h:outputText value="#{treatmentsInfoHome.tbunit.adminUnit.parent.name} - " rendered="#{not empty treatmentsInfoHome.tbunit.adminUnit.parent}" />
-		#{treatmentsInfoHome.tbunit.adminUnit.name}
+		<b>#{treatmentsInfoHomeKe.tbunit.name}</b><br/>
+		<h:outputText value="#{treatmentsInfoHomeKe.tbunit.adminUnit.parent.name} - " rendered="#{not empty treatmentsInfoHomeKe.tbunit.adminUnit.parent}" />
+		#{treatmentsInfoHomeKe.tbunit.adminUnit.name}
 	</div>
 
 	<table style="width:99%;z-index: 100;" class="table1" >
-	<a:repeat var="grp" value="#{treatmentsInfoHome.groups}">
+	<a:repeat var="grp" value="#{treatmentsInfoHomeKe.groups}">
 	
 		<tr><th colspan="6">#{messages[grp.classification.key]}
 		</th></tr>
@@ -61,7 +61,7 @@
 	<a:repeat value="#{grp.treatments}" var="it">
 		<tr>
 			<td>
-				<s:link value="#{it.patientName}" view="/cases/casedata.xhtml" >
+				<s:link value="#{it.patientName}" view="/custom/ke/cases/casedata.xhtml" >
 					<f:param name="id" value="#{it.caseId}"/>
 				</s:link>
 			</td>
@@ -104,7 +104,7 @@
 	<ui:param name="title" value="#{messages['cases.treat.dispedt']}" />
 	<ui:param name="month" value="#{registerDispensingHome.month}" />
 	<ui:param name="year" value="#{registerDispensingHome.year}" />
-	<h:inputHidden id="unitid" type="hidden" value="#{treatmentsInfoHome.tbunitId}" />
+	<h:inputHidden id="unitid" type="hidden" value="#{treatmentsInfoHomeKe.tbunitId}" />
 	<a:commandButton value="#{messages['form.ok']}" styleClass="button" onclick="openRegisterDispensingPage(); return false;" >
 	</a:commandButton>
 	
@@ -123,7 +123,7 @@
 		}
 		month=cbmonth.options[cbmonth.selectedIndex].value;
 		year=cbyear.options[cbyear.selectedIndex].value;
-		window.location='#{request.contextPath}/custom/ke/cases/regdispensing.seam?huid=#{treatmentsInfoHome.tbunitId}&month=' + month + '&year=' + year;
+		window.location='#{request.contextPath}/custom/ke/cases/regdispensing.seam?huid=#{treatmentsInfoHomeKe.tbunitId}&month=' + month + '&year=' + year;
 	}
 	-->
 	</script>
