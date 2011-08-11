@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases']}" />
+<ui:param name="topmenu" value="0" />
+
+<ui:define name="naveg">
+	<div class="item selected">
+		<s:link value="#{messages['home']}" />
+	</div>
+</ui:define>
+
+<ui:define name="left">
+	<h:form>
+
+	<h:commandLink 
+		onclick="showModalAutoTop('selclassificationdlg');return false;" style="width:130px"
+		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button">
+		<span>#{messages['cases.newnotif']} Kenya</span>
+	</h:commandLink>
+
+	<div class="spacer" />
+
+	<h:commandLink 
+		onclick="showModalAutoTop('newsuspectdlg');return false;" style="width:130px"
+		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button-alt">
+		<span>#{messages['cases.newsusp']}</span>
+	</h:commandLink>
+
+	<s:fragment rendered="#{not userSession.canNotifySeveralClassifs}">
+		<a:repeat value="#{globalLists.caseClassifications}" var="cla">
+			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}" styleClass="button">
+				<f:param name="classif" value="#{cla}"/>
+				<span>#{messages['cases.newnotif']}</span>
+			</s:link>
+		</a:repeat>
+	</s:fragment>
+
+	<div class="spacer" />
+
+	<table class="table2">
+	<tr>
+		<th colspan="2">#{messages['cases.registered']}</th>
+	</tr>
+	<ui:repeat value="#{caseStateReport.items}" var="it">
+	<tr>
+		<td>
+			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" styleClass="link-small">
+				<f:param name="stateIndex" value="#{it.stateIndex}"/>
+				<f:param name="sc" value="#{'CASE_STATE'}"/>
+				<f:param name="vs" />
+				<f:param name="tag" />
+			</s:link>
+		</td>
+		<td align="right">
+			<h:outputText value="#{it.cases}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+	</tr>
+	</ui:repeat>
+	<tr>
+		<td>
+			<b>#{messages['global.total']}</b>
+		</td>
+		<td align="right">
+			<b><h:outputText value="#{caseStateReport.total.cases}">
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText></b>
+		</td>
+	</tr>
+	</table>
+
+	<div class="spacer"/>
+	
+	<table class="table2">
+	<tr>
+		<th colspan="2">#{messages['ValidationState']}</th>
+	</tr>
+	<ui:repeat value="#{caseStateReport.validationItems}" var="it">
+	<tr>
+		<td>
+			<s:link value="#{messages[it.validationState.key]}"  view="/cases/searchresult.xhtml" styleClass="link-small">
+				<f:param name="vs" value="#{it.validationState}"/>
+				<f:param name="sc" value="#{'VALIDATION_STATE'}"/>
+				<f:param name="stateIndex" />
+				<f:param name="tag" />
+			</s:link>
+		</td>
+		<td align="right">
+			<h:outputText value="#{it.cases}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+	</tr>
+	</ui:repeat>
+	</table>
+
+	<div class="spacer"/>
+
+
+	<s:fragment rendered="#{not empty caseStateRerport.tags}">
+	<table class="table2">
+	<tr>
+		<th colspan="2">#{messages['admin.tags']}</th>
+	</tr>
+	<ui:repeat value="#{caseStateReport.tags}" var="it">
+	<tr>
+		<td>
+			<div class="tag-icon" />
+			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" styleClass="link-small">
+				<f:param name="tag" value="#{it.stateIndex}"/>
+				<f:param name="sc" value="#{'CASE_TAG'}"/>
+				<f:param name="stateIndex" />
+				<f:param name="vs" />
+			</s:link>
+		</td>
+		<td align="right">
+			<h:outputText value="#{it.cases}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+	</tr>
+	</ui:repeat>
+	</table>
+	</s:fragment>
+	
+	</h:form>
+</ui:define>
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form>
+	<h:commandLink
+		styleClass="button-alt"  
+		onclick="Richfaces.showModalPanel('filtersdlg');return false;" 
+		style="float:right;">
+		<span>#{messages['cases.advancedsearch']}</span>
+	</h:commandLink>	
+
+	<h:outputText value="#{messages['Patient']}:"/>
+	
+	<h:inputText id="patname" value="#{caseFilters.patient}" style="width:150px;margin:4px" />
+
+	<a:commandLink id="btnsearchpat" action="search" styleClass="button" onclick="if (!disableButtons(this)) return false;" >
+		<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
+		<span>#{messages['form.search']}</span>
+	</a:commandLink>
+	<rich:jQuery timming="onload" selector="#patname" query="focus()" />
+	<rich:hotKey selector="#patname" key="return" handler="#{rich:element('btnsearchpat')}.click();" /> 
+
+	<div class="spacer" />
+
+	<h2>#{messages['cases.ongoing']}</h2>
+	<h:panelGroup id="pnlhealthunits">
+		<ui:include src="#{userWorkspace.view=='TBUNIT'?'index_tbunit_content.xhtml':'index_content.xhtml'}" />
+	</h:panelGroup>
+
+	<ui:include src="/layout/tablerow.xhtml" />
+
+</h:form>
+</ui:define>
+
+
+<ui:define name="dialogs">
+<s:fragment rendered="#{userSession.canNotifySeveralClassifs}">
+<rich:modalPanel id="selclassificationdlg" width="300" zindex="2000" autosized="true">
+	<f:facet name="header" >
+		#{messages['cases.newnotif']}
+	</f:facet>
+
+	<a:form>
+
+	#{messages['cases.newnotif.title']}
+	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
+	<c:forEach items="#{globalLists.caseClassifications}" var="it">
+		<tr><td class="vertical-menu">
+			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
+				<f:param name="classif" value="#{it}"/>
+				<f:param name="type" value="CONFIRMED"/>
+				<div class="new-icon" />#{messages[it.key]}
+			</s:link>
+		</td></tr>
+	</c:forEach>
+	</table>
+	<div class="button-bar">
+		<s:link onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" styleClass="button-alt" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+	</a:form>
+</rich:modalPanel>
+
+
+<rich:modalPanel id="newsuspectdlg" width="300" zindex="2000" autosized="true">
+	<f:facet name="header" >
+		#{messages['cases.newsusp']}
+	</f:facet>
+
+	<a:form>
+
+	#{messages['cases.newnotif.title']}
+	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
+	<c:forEach items="#{globalLists.caseClassifications}" var="it">
+		<tr><td class="vertical-menu">
+			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
+				<f:param name="classif" value="#{it}"/>
+				<f:param name="type" value="SUSPECT"/>
+				<div class="new-icon" />#{messages[it.keySuspect]}
+			</s:link>
+		</td></tr>
+	</c:forEach>
+	</table>
+	<div class="button-bar">
+		<s:link onclick="Richfaces.hideModalPanel('newsuspectdlg');return false;" styleClass="button-alt" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+	</a:form>
+</rich:modalPanel>
+</s:fragment>
+
+
+<rich:modalPanel id="filtersdlg" width="680" top="100" zindex="2000" autosized="true">
+	<f:facet name="header">
+		#{messages['cases.newsearch']}
+	</f:facet>
+	<h:form>
+	<a:region>
+	
+	<ui:include src="/cases/searchfilters.xhtml" />
+
+	<div class="button-bar">
+		<a:commandLink id="btnsearch" action="search" styleClass="button" onclick="if (!disableButtons(this)) return false;" >
+			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
+			<span>#{messages['form.search']}</span>
+		</a:commandLink>
+		<s:link onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-alt">
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+	</a:region>
+	<rich:hotKey selector="#tblfilters input,select" key="return" handler="#{rich:element('btnsearch')}.click();" /> 
+	</h:form>
+</rich:modalPanel>
+
+</ui:define>
+
+</ui:composition>  
