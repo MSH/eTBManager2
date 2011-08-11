@@ -11,11 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.TbCase;
 
 @Entity
+@Table(name="casedispensing_ke")
 public class CaseDispensing_Ke implements Serializable {
 	private static final long serialVersionUID = -4617800123206697915L;
 
@@ -26,7 +28,7 @@ public class CaseDispensing_Ke implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="CASE_ID")
 	@NotNull
-	private TbCase tbcase;
+	private TbCaseKE tbcase;
 	
 	@Column(name="DISP_MONTH")
 	private int month;
@@ -63,14 +65,14 @@ public class CaseDispensing_Ke implements Serializable {
 	/**
 	 * @return the tbcase
 	 */
-	public TbCase getTbcase() {
+	public TbCaseKE getTbcase() {
 		return tbcase;
 	}
 
 	/**
 	 * @param tbcase the tbcase to set
 	 */
-	public void setTbcase(TbCase tbcase) {
+	public void setTbcase(TbCaseKE tbcase) {
 		this.tbcase = tbcase;
 	}
 
