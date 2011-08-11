@@ -14,29 +14,41 @@
 <ui:param name="left" value="0" />
 
 <ui:define name="content">
-<p/>
-<table width="100%"><tr><td>
-
-
-<s:decorate template="/layout/roundrect.xhtml">
-	<ui:define name="header"><b>#{messages['manag.case.reports']}</b></ui:define>
-	<ui:param name="showfooter" value="0" />
-
-	<div>
-	<table width="99%">
-	<tr><td valign="top"> 	
-	<s:link value="#{messages['manag.ind.incidence']}" view="/management/incidence.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
-	<s:link value="#{messages['manag.ind.prevalence']}" view="/management/prevalence.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}"/>
+	<h1>#{title}</h1>
+	<h2>#{messages['manag.case.reports']}</h2>
+	
+	<div class="vertical-menu">
+	
+	<s:link view="/management/incidence.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" >
+	<div class="icon-report" />#{messages['manag.ind.incidence']}
+	</s:link>
+	<s:link view="/management/prevalence.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}">
+	<div class="icon-report" style="float:left;"/>#{messages['manag.ind.prevalence']}
+	</s:link>
 <!--  	<s:link value="#{messages['manag.ind.outcome']}" view="/management/outcome.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}"/>  --> 
-  	<s:link value="#{messages['manag.ind.treatoutcome']}" view="/management/treatoutcome.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}"/>
-	<s:link value="#{messages['manag.ind.detrate']}" view="/management/detrate.xhtml" styleClass="optionmenu" rendered="false"/>
+  	<s:link view="/management/treatoutcome.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}">
+  	<div class="icon-report" style="float:left;"/>#{messages['manag.ind.treatoutcome']}
+  	</s:link>
+	<s:link view="/management/detrate.xhtml" styleClass="optionmenu" rendered="false">
+	<div class="icon-report" style="float:left;"/>#{messages['manag.ind.detrate']}
+	</s:link>
 	<s:link value="#{messages['manag.ind.perctb']}" view="/management/perctb.xhtml" styleClass="optionmenu" rendered="false"/>
-	<s:link value="#{messages['manag.ind.resist']}" view="/management/resist.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
-	<s:link value="#{messages['manag.ind.dstprofile']}" view="/management/dstprofile.xhtml" styleClass="optionmenu" rendered="false" />
+	<s:link view="/management/resist.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" >
+	<div class="icon-report" style="float:left;"/>#{messages['manag.ind.resist']}
+	</s:link>
+	<s:link view="/management/dstprofile.xhtml" styleClass="optionmenu" rendered="false" >
+	<div class="icon-report" style="float:left;"/>#{messages['manag.ind.dstprofile']}
+	</s:link>
 
-	<s:link value="#{messages['cases.sideeffects']}" view="/management/sideeffects.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
-	<s:link value="#{messages['manag.hivreport']}" view="/custom/na/management/hivresults.xhtml" styleClass="optionmenu" rendered="true" />
-	<s:link value="#{messages['manag.dotsupervision']}" view="/custom/na/management/dotsupervision.xhtml" styleClass="optionmenu" rendered="true" />
+	<s:link view="/management/sideeffects.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" >
+	<div class="icon-report" style="float:left;"/>#{messages['cases.sideeffects']}
+	</s:link>
+	<s:link view="/custom/na/management/hivresults.xhtml" styleClass="optionmenu" rendered="true" >
+	<div class="icon-report" style="float:left;"/>#{messages['manag.hivreport']}
+	</s:link>
+	<s:link view="/custom/na/management/dotsupervision.xhtml" styleClass="optionmenu" rendered="true" >
+	<div class="icon-report" style="float:left;"/>#{messages['manag.dotsupervision']}
+	</s:link>
 
 
 	<s:link value="#{messages['manag.ind.infectsite']}" view="/management/infecsite.xhtml" styleClass="optionmenu" rendered="false"/>
@@ -44,50 +56,66 @@
 	<s:link value="#{messages['manag.ind.hiv']}" view="/management/hiv.xhtml" styleClass="optionmenu" rendered="false" />
 	<s:link value="#{messages['manag.ind.bacmdr']}" view="/management/cover.xhtml" styleClass="optionmenu" rendered="false" />
 	<s:link value="#{messages['manag.ind.outcome6']}" view="/management/outcome6.xhtml" styleClass="optionmenu" rendered="false" />
-	<s:link value="#{messages['manag.ind.cover']}" view="/management/cover.xhtml" styleClass="optionmenu" rendered="true"/>
+	<s:link view="/management/cover.xhtml" styleClass="optionmenu" rendered="true">
+	<div class="icon-report" style="float:left;"/>#{messages['manag.ind.cover']}
+	</s:link>
 	
-	</td></tr>
-	 <tr><td>
+	
 <!-- 	<s:link value="#{messages['manag.ind.treatres']}" view="/management/treatres.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}" >
 			<f:param name="cla" value="DRTB"/>
 		</s:link>
 -->		
-		<s:link value="#{messages['manag.ind.starttreat']}" view="/management/starttreat.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
-		<s:link value="#{messages['manag.ind.interim']}" view="/management/interim.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
-		<s:link value="#{messages['manag.confmdrrep']}" view="/management/confmdrrep.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
-	</td></tr>
+		<s:link view="/management/starttreat.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" >
+		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.starttreat']}
+		</s:link>
+		<s:link view="/management/interim.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" >
+		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.interim']}
+		</s:link>
+		<s:link view="/management/confmdrrep.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" >
+		<div class="icon-report" style="float:left;"/>#{messages['manag.confmdrrep']}
+		</s:link>
+	
 
-	<tr><td>
+	
 		<hr/>
-		<s:link value="#{messages['manag.ind.customind']}" view="/management/customind.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" />
-	</td></tr>
-	</table>
+		<s:link view="/management/customind.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" >
+		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.customind']}
+		</s:link>
+	
 	</div>
 
-</s:decorate>
-<p/>
+
+
 
 <s:decorate template="/layout/roundrect.xhtml">
 	<ui:define name="header"><b>#{messages['manag.drug.reports']}</b></ui:define>
 	<ui:param name="showfooter" value="0" />
 	
-	<s:link value="#{messages['manag.rel1']}" view="/management/rel1.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}"/>
-	<s:link value="#{messages['manag.rel4']}" view="/management/rel4.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP4')}"/>
+	<s:link view="/management/rel1.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}">
+	<div class="icon-report" style="float:left;"/>#{messages['manag.rel1']}
+	</s:link>
+	<p/>
+	<s:link  view="/management/rel4.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP4')}">
+	<div class="icon-report" style="float:left;"/>#{messages['manag.rel4']}
+	</s:link>
 </s:decorate>
 <p/>
 
 <s:decorate template="/layout/roundrect.xhtml">
-	<s:link value="#{messages['manag.export']}" view="/management/export.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('EXPORT')}" propagation="none"/>
-
+	<s:link view="/management/export.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('EXPORT')}" propagation="none">
+	<div class="icon-report" style="float:left;"/>#{messages['manag.export']}
+	</s:link>
+<p/>
 	<ui:define name="header"><b>#{messages['manag.forecast']}</b></ui:define>
 	<ui:param name="showfooter" value="0" />
-	<s:link value="#{messages['manag.forecast.med']}" view="/management/forecasting.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('FORECAST')}" propagation="none">
+	<s:link view="/management/forecasting.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('FORECAST')}" propagation="none">
 		<f:param name="id" value="#{null}"/>
+		<div class="icon-report" style="float:left;"/>#{messages['manag.forecast.med']}
 	</s:link>
 	<p/>
 </s:decorate>
 <p/>
-</td></tr></table>
+
 
 </ui:define>
 
