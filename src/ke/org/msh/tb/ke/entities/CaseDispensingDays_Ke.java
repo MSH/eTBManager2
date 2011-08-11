@@ -4,6 +4,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.msh.tb.ke.entities.enums.Dot;
@@ -14,6 +15,7 @@ import org.msh.tb.ke.entities.enums.Dot;
  *
  */
 @Entity
+@Table(name="casedispensingdays_ke")
 public class CaseDispensingDays_Ke {
 
 	@Id
@@ -56,9 +58,12 @@ public class CaseDispensingDays_Ke {
 	
 	public int getNumDispensingDays() {
 		int res = 0;
-		for (int i = 1; i <= 31; i++)
-			if (getDay(i)!=null)
+		Dot day = null;
+		for (int i = 1; i <= 31; i++){
+			day = getDay(i);
+			if (day!=null&&(day!=Dot.X))
 				res++;
+		}
 		return res;
 	}
 	
