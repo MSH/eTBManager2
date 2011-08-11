@@ -348,4 +348,25 @@ public class DateUtils {
 		return f.format(dt);
 	}
 
+	
+	/**
+	 * Return the difference between two dates. The result is stored in an instance
+	 * of {@link Calendar} class
+	 * @param d1
+	 * @param d2
+	 * @return
+	 */
+	public static Calendar calcDifference(Date d1, Date d2) {
+		Calendar c1 = Calendar.getInstance();
+		Calendar c2 = Calendar.getInstance();
+		c1.setTime(d1);
+		c2.setTime(d2);
+
+		long len = c1.getTimeInMillis() - c2.getTimeInMillis();
+		if (len < 0)
+			len = -len;
+		
+		c1.setTimeInMillis(len);
+		return c1;
+	}
 }

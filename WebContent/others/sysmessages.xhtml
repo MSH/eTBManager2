@@ -5,6 +5,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
@@ -37,7 +38,9 @@
 	</td></tr></table>
 
 	<p/>
-	<h:commandLink action="#{messagesExport.export}" value="Export to Excel" styleClass="button" style="width:250px"/>
+	<a:commandLink action="#{messagesExport.export}" styleClass="button" >
+		<span>Export to Excel</span>
+	</a:commandLink>
 	
 	</h:form>
 </ui:define>

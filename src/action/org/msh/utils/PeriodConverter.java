@@ -1,6 +1,8 @@
 package org.msh.utils;
 
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -30,15 +32,18 @@ public class PeriodConverter implements Converter{
 	public String getAsString(FacesContext facesContext, UIComponent comp, Object obj) {
 
 		UIParameter p = findParam(comp, "type");
+		String typeName = (p == null? null: p.getValue().toString());
 	
 		period = getPeriod(comp, obj);
-		
-		if ((p == null) || (p.getValue().equals("period")))
-			 return getAsPeriod(comp, obj);
-		else if (p.getValue().equals("length"))
+
+		if ((typeName == null) || (typeName.equals("period")))
+			 return getAsPeriod();
+		else if (typeName.equals("length"))
 			return getAsLength(comp, obj);
-		else if (p.getValue().equals("time-length"))
+		else if (typeName.equals("time-length"))
 			return getAsTimeLength(comp, obj);
+		else if (typeName.equals("elapsed-time"))
+			return getAsElapsedTime();
 		else return null;
 	}
 
@@ -49,11 +54,9 @@ public class PeriodConverter implements Converter{
 	 * @param obj
 	 * @return
 	 */
-	protected String getAsPeriod(UIComponent comp, Object obj) {
+	protected String getAsPeriod() {
 		long days = period.getDays() + 1;
 		
-//		Locale locale = LocaleSelector.instance().getLocale();
-
 		Map<String, String> messages = Messages.instance();
 
 		String dayTxt;
@@ -61,11 +64,10 @@ public class PeriodConverter implements Converter{
 			dayTxt = "";
 		else
 		if (days == 1)
-			dayTxt = " (" + days + " " + messages.get("global.day") + ")";
+			 dayTxt = " (" + days + " " + messages.get("global.day") + ")";
 		else dayTxt = " (" + days + " " + messages.get("global.days") + ")";
 
 		SimpleDateFormat dtf = new SimpleDateFormat(Messages.instance().get("locale.outputDatePattern"));
-//		DateFormat dtf = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
 		String s = dtf.format(period.getIniDate()) + "..." + dtf.format(period.getEndDate()) + dayTxt;
 		
 		return s;
@@ -73,65 +75,78 @@ public class PeriodConverter implements Converter{
 
 
 	protected String getAsTimeLength(UIComponent comp, Object obj) {
-/*		if (obj == null)
-			return null;
-		
-		Date dtIni = (Date)obj;
-		
-		UIParameter param = findParam(comp, "endDate");
-		Date dtEnd;
-		if (param == null)
-			 dtEnd = new Date();
-		else dtEnd = (Date)param.getValue();
-*/
+		Calendar c = DateUtils.calcDifference(period.getIniDate(), period.getEndDate());
 
-		if (period.getEndDate() == null)
-			return "-";
-		
+		long len = c.getTimeInMillis();
+
+		String s = "";
+
 		Map<String, String> messages = Messages.instance();
-
-		String res = "";
 		
-		// calculate number of seconds between dates
-		int num = DateUtils.secondsBetween(period.getIniDate(), period.getEndDate());
-		
-		// write seconds
-		int val = num % 60;
-		if (val != 0)
-			res = Integer.toString(val) + messages.get("global.sec");
+		// is bigger than 24 hours ?
+		if (len > 1000 * 60 * 60 * 24) {
+			Date dt = period.getIniDate();
+			
+			int years = DateUtils.yearsBetween(dt, period.getEndDate());
 
-		// calculate number of minutes
-		num = Math.round(num / 60);
-		if (num == 0) {
-			if (res.isEmpty())
-				 return "-";
-			else return res;
+			dt = DateUtils.incYears(dt, years);
+			int months = DateUtils.monthsBetween(dt, period.getEndDate());
+			
+			dt = DateUtils.incMonths(dt, months);
+			int days = DateUtils.daysBetween(dt, period.getEndDate());
+
+			if (years > 0) {
+				if (years == 1)
+					 s = years + " " + messages.get("global.year");
+				else s = years + " " + messages.get("global.years");
+			}
+			
+			if (months > 0) {
+				if (!s.isEmpty())
+					s = s + ", ";
+				if (months == 1)
+					 s = s + months + " " + messages.get("global.month");
+				else s = s + months + " " + messages.get("global.months");
+			}
+
+			if (days > 0) {
+				if (!s.isEmpty())
+					s = s + ", ";
+				if (days == 1)
+					 s = s + days + " " + messages.get("global.day");
+				else s = s + days + " " + messages.get("global.days");
+			}
 		}
-		
-		// write minutes
-		val = num % 60;
-		if (val != 0)
-			res = Integer.toString(val) + messages.get("global.min") + " " + res;
-		
-		// calculate number of hours
-		num = Math.round(num / 60);
-		if (num == 0)
-			return res;
-		
-		// write hours
-		val = num % 24;
-		if (val != 0)
-			res = Integer.toString(val) + (val == 1? messages.get("global.hour"): messages.get("global.hours")) + " " + res;
-
-		// calculate number of days
-		num = Math.round(num / 24);
-		if (num == 0)
-			return res;
-		
-		// write days
-		res = Integer.toString(num) + (num == 1? messages.get("global.day"): messages.get("global.days")) + " " + res;
-
-		return res;
+		else {
+			int hours = (int)Math.floor((float)len / (1000F * 60F * 60F));
+			if (hours > 0)
+				len %= (hours * 1000 * 60 * 60);
+			
+			int min = (int)Math.floor((float)len / (1000F * 60F));
+			if (min > 0)
+				len %= (min * 1000 * 60);
+			
+			int sec = (int)Math.floor((float)len / 1000F);
+			
+			if (hours > 0) {
+				if (hours > 1)
+					 s = hours + " " + messages.get("global.hour");
+				else s = hours + " " + messages.get("global.hours");
+			}
+			
+			if (min > 0) {
+				if (!s.isEmpty())
+					s += " ";
+				 s += min + " " + messages.get("global.min");
+			}
+			
+			if (sec > 0) {
+				if (!s.isEmpty())
+					s += " ";
+				s += sec + " " + messages.get("global.sec");
+			}
+		}
+		return s;
 	}
 
 
@@ -142,18 +157,7 @@ public class PeriodConverter implements Converter{
 	 * @return
 	 */
 	protected String getAsLength(UIComponent comp, Object obj) {
-/*		if (obj == null)
-			return null;
-
-		Date dtIni = (Date)obj;
-		Date dtEnd = (Date)findParam(comp, "endDate").getValue();
-		
-		if (dtEnd == null)
-			dtEnd = new Date();
-*/
-
 		// make adjustment in the final date including 1 more day to count the exactly period of month or year
-		
 		Date dtIni = period.getIniDate();
 		Date dtEnd = period.getEndDate();
 		if ((dtIni == null) || (dtEnd == null))
@@ -195,6 +199,79 @@ public class PeriodConverter implements Converter{
 		return (s.isEmpty()? "-": s);
 	}
 
+	
+	public String getAsElapsedTime() {
+		Calendar c = DateUtils.calcDifference(period.getIniDate(), period.getEndDate());
+
+		long len = c.getTimeInMillis();
+
+		String s = "";
+
+		Map<String, String> messages = Messages.instance();
+		
+		// is bigger than 24 hours ?
+		if (len > 1000 * 60 * 60 * 24) {
+			Date dt = period.getIniDate();
+			
+			int years = DateUtils.yearsBetween(dt, period.getEndDate());
+
+			dt = DateUtils.incYears(dt, years);
+			int months = DateUtils.monthsBetween(dt, period.getEndDate());
+			
+			dt = DateUtils.incMonths(dt, months);
+			int days = DateUtils.daysBetween(dt, period.getEndDate());
+
+			if (years > 0) {
+				if (years == 1)
+					 s = years + " " + messages.get("global.year");
+				else s = years + " " + messages.get("global.years");
+			}
+			
+			if (months > 0) {
+				if (!s.isEmpty())
+					s = s + ", ";
+				if (months == 1)
+					 s = s + months + " " + messages.get("global.month");
+				else s = s + months + " " + messages.get("global.months");
+			}
+
+			if (days > 0) {
+				if (!s.isEmpty())
+					s = s + ", ";
+				if (days == 1)
+					 s = s + days + " " + messages.get("global.day");
+				else s = s + days + " " + messages.get("global.days");
+			}
+		}
+		else {
+			int hours = Math.round((float)len / (1000F * 60F * 60F));
+			int min = Math.round((float)len / (1000F * 60F));
+			int sec = Math.round((float)len / 1000F);
+			
+			if (hours > 0) {
+				if (hours > 1)
+					 s = hours + " " + messages.get("global.hour");
+				else s = hours + " " + messages.get("global.hours");
+			}
+			
+			if (min > 0) {
+				if (min > 1)
+					 s = min + " " + messages.get("global.min");
+				else s = min + " " + messages.get("global.mins");
+			}
+			
+			if (sec > 0) {
+				if (sec > 1)
+					 s = sec + " " + messages.get("global.sec");
+				else s = sec + " " + messages.get("global.secs");
+			}
+		}
+
+		if (!s.isEmpty())
+			s = MessageFormat.format(messages.get("global.timeago"), s);
+		
+		return s;
+	}
 	
 
 	/**

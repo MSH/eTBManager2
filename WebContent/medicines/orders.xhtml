@@ -37,7 +37,7 @@ width:300px;
 
 <s:fragment rendered="#{not empty openOrders.ordersToAuthorize}">
 	<h2>#{messages['meds.orders.openorders.toaut']}</h2>
-	<h:dataTable value="#{openOrders.ordersToAuthorize}" var="it" styleClass="table2" columnClasses="coll col1,colc,coll,colc">
+	<h:dataTable value="#{openOrders.ordersToAuthorize}" var="it" styleClass="table2" columnClasses="coll col1,coll,coll,colc">
 	<h:column>
 		<f:facet name="header">
 			<h:outputText value="#{messages['Order.unitFrom']}"  styleClass="collh"/>
@@ -45,16 +45,17 @@ width:300px;
 		<s:decorate template="/layout/unit.xhtml">
 			<ui:param name="unit" value="#{it.unitFrom}" />
 		</s:decorate>
+		<div class="spacer" />
 	</h:column>
 
 	<h:column>
 		<f:facet name="header">
-			<h:outputText value="#{messages['Order.orderDate']}" />
+			<h:outputText value="#{messages['Order.orderDate']}"  styleClass="collh"/>
 		</f:facet>
 		<h:outputText value="#{it.orderDate}" converter="localeDateConverter"/>
-		<div class="text-small">
+		<div class="hint text-small">
    		<h:outputText value="#{it.orderDate}" converter="periodConverter" >
-   			<f:param name="type" value="length" />
+   			<f:param name="type" value="elapsed-time" />
    		</h:outputText>
    		</div>
 	</h:column>
@@ -79,7 +80,7 @@ width:300px;
 
 <s:fragment rendered="#{not empty openOrders.receivedOrders}">
 	<h2>#{messages['meds.orders.openorders.recs']}</h2>
-	<h:dataTable value="#{openOrders.receivedOrders}" var="it" styleClass="table2" columnClasses="coll col1,colc,coll,colc">
+	<h:dataTable value="#{openOrders.receivedOrders}" var="it" styleClass="table2" columnClasses="coll col1,coll,coll,colc">
 	<h:column>
 		<f:facet name="header">
 			<h:outputText value="#{messages['Order.unitFrom']}"  styleClass="collh"/>
@@ -87,16 +88,17 @@ width:300px;
 		<s:decorate template="/layout/unit.xhtml">
 			<ui:param name="unit" value="#{it.unitFrom}" />
 		</s:decorate>
+		<div class="spacer" />
 	</h:column>
 
 	<h:column>
 		<f:facet name="header">
-			<h:outputText value="#{messages['Order.orderDate']}" />
+			<h:outputText value="#{messages['Order.orderDate']}" styleClass="collh"/>
 		</f:facet>
 		<h:outputText value="#{it.orderDate}" converter="localeDateConverter"/>
-		<div class="text-small">
+		<div class="hint text-small">
    		<h:outputText value="#{it.orderDate}" converter="periodConverter" >
-   			<f:param name="type" value="length" />
+   			<f:param name="type" value="elapsed-time" />
    		</h:outputText>
    		</div>
 	</h:column>
@@ -121,7 +123,7 @@ width:300px;
 
 <s:fragment rendered="#{not empty openOrders.unitOrders}">
 	<h2>#{messages['meds.orders.openorders.my']}</h2>
-	<h:dataTable value="#{openOrders.unitOrders}" var="it" styleClass="table2" columnClasses="coll col1,colc,coll,colc">
+	<h:dataTable value="#{openOrders.unitOrders}" var="it" styleClass="table2" columnClasses="coll col1,coll,coll,colc">
 	<h:column>
 		<f:facet name="header">
 			<h:outputText value="#{messages['Order.unitTo']}" styleClass="collh"/>
@@ -129,26 +131,26 @@ width:300px;
 		<s:decorate template="/layout/unit.xhtml">
 			<ui:param name="unit" value="#{it.unitTo}" />
 		</s:decorate>
+		<div class="spacer" />
 	</h:column>
 
 	<h:column>
 		<f:facet name="header">
-			<h:outputText value="#{messages['Order.orderDate']}" />
+			<h:outputText value="#{messages['Order.orderDate']}"  styleClass="collh" />
 		</f:facet>
 		<h:outputText value="#{it.orderDate}" converter="localeDateConverter"/>
-		<div class="text-small">
+		<div class="hint text-small">
    		<h:outputText value="#{it.orderDate}" converter="periodConverter" >
-   			<f:param name="type" value="length" />
+   			<f:param name="type" value="elapsed-time" />
    		</h:outputText>
    		</div>
 	</h:column>
 
 	<h:column>
 		<f:facet name="header">
-			<h:outputText value="#{messages['global.createdby']}"  styleClass="collh"/>
+			<h:outputText value="#{messages['OrderStatus']}"  styleClass="collh"/>
 		</f:facet>
-		<div class="icon-user" />
-		<h:outputText value="#{it.userCreator.name}" />
+		<h:outputText value="#{messages[it.status.key]}" />
 	</h:column>
 	
 	<h:column>

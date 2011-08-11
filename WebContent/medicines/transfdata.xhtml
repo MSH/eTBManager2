@@ -16,7 +16,10 @@
 
 <ui:define name="naveg">
 	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
-	<s:link view="/medicines/transfer.xhtml" value="#{messages['meds.transfer']}" propagation="none"/>
+	<s:link view="/medicines/transfer.xhtml" value="#{transfer.status == 'WAITING_RECEIVING'? messages['meds.transfer.viewopen']: messages['meds.transfer.viewhistory']}" propagation="none"/>
+	<div class="item selected">
+		<s:link view="/medicines/transfdata.xhtml" value="##{transfer.id}" propagation="none"/>
+	</div>
 </ui:define>
 
 
@@ -38,19 +41,20 @@
 </ui:define>
 
 <ui:define name="content">
-<h:form id="main">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
     <table width="100%" class="tabela3" style="margin-bottom:10px" cellpadding="8">
     <tr><td class="header">
-    	<b style="float:left;margin-right:4px;">#{messages['Transfer.unitFrom']}: </b>
-    	<div class="#{transfer.unitFrom.treatmentHealthUnit?'hu.gif':'ds.gif'}">
-    	#{transfer.unitFrom.name}
-    	</div>
+    	<h2>#{messages['Transfer.unitFrom']}: </h2>
+    	<s:decorate template="/layout/unit.xhtml">
+    		<ui:param name="unit" value="#{transfer.unitFrom}" />
+    	</s:decorate>
     </td>
     <td class="header">
-    	<b style="float:left;margin-right:4px;">#{messages['Transfer.unitTo']}: </b>
-    	<div class="#{transfer.unitTo.treatmentHealthUnit?'hu.gif':'ds.gif'}">
-    	#{transfer.unitTo.name}
-    	</div>
+    	<h2>#{messages['Transfer.unitTo']}: </h2>
+    	<s:decorate template="/layout/unit.xhtml">
+    		<ui:param name="unit" value="#{transfer.unitTo}" />
+    	</s:decorate>
     </td></tr>
 
     <tr><td style="font-size:11px;padding-top:5px" class="header">

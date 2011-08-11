@@ -9,12 +9,9 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="../layout/templatemed.xhtml">
 
-<ui:param name="title" value="#{messages['meds.transfer']}" />
-<ui:param name="topmenu" value="1" />
-
-<ui:param name="waitdlg" value="1" />
+<ui:param name="title" value="#{messages['meds.transfer.viewopen']}" /><ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:210px;" />
-<ui:param name="pagestyle" value="width:650px;" />
+
 
 <ui:define name="naveg">
 	<div class="item">
@@ -27,87 +24,95 @@
 
 
 <ui:define name="content_unit">
-<h:form id="main">
-	<s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
-		<h:selectOneMenu value="#{transfers.month}">
-			<f:selectItems value="#{months}"/>
-			<a:support event="onchange" reRender="pnltab" />
-		</h:selectOneMenu>
-		<h:selectOneMenu value="#{transfers.year}" style="margin-left:5px; width : 70px;">
-			<f:selectItems value="#{years}"/>
-			<a:support event="onchange" reRender="pnltab" />
-		</h:selectOneMenu>
-	</s:decorate>
-
-	<s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['TransferStatus']}:</ui:define>
-		<h:selectOneMenu value="#{transfers.status}">
-  			<s:selectItems value="#{transferStatus}" var="r" label="#{messages[r.key]}" noSelectionLabel="#{messages['meds.transfer.all']}" />
-  			<s:convertEnum />
-			<a:support event="onchange" reRender="pnltab"/>
-		</h:selectOneMenu>
-	</s:decorate>
-	
-	<p/>
+<h:form id="main" styleClass="form1">
 
 <h:panelGroup id="pnltab" >
-<h:inputHidden value="#{transfers.folder}"/>
-<table width="100%"><tr><td>
-<div class="pgtab">
-<ul>
-	<li class="#{transfers.folder=='0'?'selected':'unselected'}">
-		<a:commandLink value="#{messages['meds.transfer.received']}" style="margin-right:15px;" reRender="pnltab">
-			<a:actionparam name="fld" value="#{0}" assignTo="#{transfers.folder}" />
-		</a:commandLink>
-	</li>
-	<li class="#{transfers.folder=='1'?'selected':'unselected'}">
-		<a:commandLink value="#{messages['meds.transfer.sent']}" style="margin-right:15px;" reRender="pnltab">
-			<a:actionparam name="fld" value="#{1}" assignTo="#{transfers.folder}" />
-		</a:commandLink>
-	</li>
-</ul>
-</div>
-<div class="pgbody" style="height:200px;">
-	<s:fragment rendered="#{facesContext.renderResponse}">
-		<h:outputText value="#{messages['meds.transfer.nofound']}" 
-			style="width:100%;font-weight:bold;text-align:center;height:100%;padding-top:20px;display:table;color:red;" 
-			rendered="#{empty transfers.resultList}"/>
-		
-		<h:dataTable value="#{transfers.resultList}" var="it" width="100%" styleClass="table1" rendered="#{not empty transfers.resultList}" 
-		  columnClasses="colc,coll,colc" rowClasses="lin1,lin2">
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="#{messages['Transfer.shippingDate']}" />
-				</f:facet>
-				<s:link view="/medicines/transfdata.xhtml">
-					<h:outputText value="#{it.shippingDate}" converter="localeDateConverter" />
-					<f:param name="id" value="#{it.id}" />
-				</s:link>
-			</h:column>
-			
-			<h:column rendered="#{transfers.folder=='0'}">
-				<f:facet name="header">
-					<h:outputText value="#{messages['Transfer.unitFrom']}" styleClass="collh"/> 
-				</f:facet>
-				#{it.unitFrom.name}
-			</h:column>
-			
-			<h:column rendered="#{transfers.folder=='1'}">
-				<f:facet name="header">
-					<h:outputText value="#{messages['Transfer.unitTo']}" styleClass="collh"/> 
-				</f:facet>
-				#{it.unitTo.name}
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">#{messages['TransferStatus']}</f:facet>
-				#{messages[it.status.key]}
-			</h:column>
-		</h:dataTable>
-	</s:fragment>
-</div>
-</td></tr></table>
+
+<s:fragment rendered="#{not empty openTransfers.receivedTransfers}">
+	<h2>#{messages['meds.transfer.received']}</h2>
+	<h:dataTable value="#{openTransfers.receivedTransfers}" var="it" styleClass="table2" columnClasses="coll col1,coll,coll,colc">
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Transfer.unitFrom']}"  styleClass="collh"/>
+		</f:facet>
+		<s:decorate template="/layout/unit.xhtml">
+			<ui:param name="unit" value="#{it.unitFrom}" />
+		</s:decorate>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Transfer.shippingDate']}" styleClass="collh"/>
+		</f:facet>
+		<h:outputText value="#{it.shippingDate}" converter="localeDateConverter"/>
+		<div class="hint text-small">
+   		<h:outputText value="#{it.shippingDate}" converter="periodConverter" >
+   			<f:param name="type" value="elapsed-time" />
+   		</h:outputText>
+   		</div>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['global.createdby']}"  styleClass="collh"/>
+		</f:facet>
+		<div class="icon-user" />
+		<h:outputText value="#{it.userFrom.name}" />
+	</h:column>
+	
+	<h:column>
+		<s:link value="#{messages['form.details']}" view="/medicines/transfdata.xhtml">
+			<f:param name="id" value="#{it.id}" />
+		</s:link>
+	</h:column>
+	</h:dataTable>
+	<div class="spacer" />
+</s:fragment>
+
+<div class="spacer" />
+
+
+<s:fragment rendered="#{not empty openTransfers.sentTransfers}">
+	<h2>#{messages['meds.transfer.sent']}</h2>
+	<h:dataTable value="#{openTransfers.sentTransfers}" var="it" styleClass="table2" columnClasses="coll col1,coll,coll,colc">
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Transfer.unitTo']}"  styleClass="collh"/>
+		</f:facet>
+		<s:decorate template="/layout/unit.xhtml">
+			<ui:param name="unit" value="#{it.unitTo}" />
+		</s:decorate>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Transfer.shippingDate']}" styleClass="collh"/>
+		</f:facet>
+		<h:outputText value="#{it.shippingDate}" converter="localeDateConverter"/>
+		<div class="hint text-small">
+   		<h:outputText value="#{it.shippingDate}" converter="periodConverter" >
+   			<f:param name="type" value="elapsed-time" />
+   		</h:outputText>
+   		</div>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['global.createdby']}"  styleClass="collh"/>
+		</f:facet>
+		<div class="icon-user" />
+		<h:outputText value="#{it.userFrom.name}" />
+	</h:column>
+	
+	<h:column>
+		<s:link value="#{messages['form.details']}" view="/medicines/transfdata.xhtml">
+			<f:param name="id" value="#{it.id}" />
+		</s:link>
+	</h:column>
+	</h:dataTable>
+	<div class="spacer" />
+</s:fragment>
+
 </h:panelGroup>
 
 </h:form>

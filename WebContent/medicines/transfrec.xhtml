@@ -23,31 +23,29 @@
 
 
 <ui:define name="content">
-<h:form id="main">
+<h:form id="main" styleClass="form1">
+	<div class="form-content">
     <table width="750px" class="tabela3" style="margin-bottom:10px" cellpadding="8">
     <tr><td class="header">
-    	<b style="float:left;margin-right:4px;">#{messages['Transfer.unitFrom']}: </b>
-    	<div class="#{transfer.unitFrom.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}">
-    	#{transfer.unitFrom.name}
-    	</div>
+    	<h2>#{messages['Transfer.unitFrom']}: </h2>
+    	<s:decorate template="/layout/unit.xhtml">
+    		<ui:param name="unit" value="#{transfer.unitFrom}" />
+    	</s:decorate>
     </td>
     <td class="header">
-    	<b style="float:left;margin-right:4px;">#{messages['Transfer.unitTo']}: </b>
-    	<div class="#{transfer.unitTo.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}">
-    	#{transfer.unitTo.name}
-    	</div>
+    	<h2>#{messages['Transfer.unitTo']}: </h2>
+    	<s:decorate template="/layout/unit.xhtml">
+    		<ui:param name="unit" value="#{transfer.unitTo}" />
+    	</s:decorate>
     </td></tr>
 
-    <tr><td colspan="2" style="font-size:11px;padding-top:5px" class="header">
+    <tr><td colspan="2">
     #{messages['Transfer.shippingDate']}:
 	<span style="color:black;font-weight:bold;"> 
 	<h:outputText value="#{transfer.shippingDate}" converter="localeDateConverter" />
 	</span> 
     <br/>
-    #{messages['form.by']} 
-    <span style="color:black;font-weight:bold;">
-    	#{transfer.userFrom.name}
-    </span>
+   	<div class="icon-user" />#{transfer.userFrom.name}
     </td></tr>
     <tr><td colspan="2">
 
@@ -72,6 +70,9 @@
     	<ui:define name="label">#{messages['Transfer.commentsTo']}:</ui:define>
     	<h:inputTextarea value="#{transfer.commentsTo}" style="width:500px;height:60px;"/>
     </s:decorate>
+	</td></tr>
+    </table>
+	</div>
 
 	<div  style="clear:left;">
 	<b>#{messages['meds.movs.itensmov']}</b><br/>
@@ -154,18 +155,16 @@
 	</ui:repeat>
 	</table>
 	</h:panelGroup>		
-    </td></tr>
 
-	<tr><td align="right" colspan="2">
+	<div class="form-footer">
         <a:commandLink action="#{transferHome.receiveTransfer}" styleClass="button" reRender="main,messages"
         	onclick="if (!disableButton(this)) return false;">
         	<span>#{messages['form.ok']}</span>
         </a:commandLink>
-        <h:commandLink action="cancel" styleClass="button-alt" immediate="true">
+        <a:commandLink action="cancel" styleClass="button-alt" ajaxSingle="true" onclick="disableButton(this)">
         	<span>#{messages['form.cancel']}</span>
-        </h:commandLink>
-	</td></tr>
-    </table>
+        </a:commandLink>
+	</div>
 
 </h:form>
 </ui:define>

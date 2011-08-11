@@ -586,6 +586,7 @@ table {
 	padding:2px;
 	padding:4px 5px 4px 5px;
 	border-bottom:1px solid #e2eae2;
+	vertical-align: top;
 }
 .table2 .highlight {
 	background-color:#dbebdb;

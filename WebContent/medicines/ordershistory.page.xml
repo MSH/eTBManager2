@@ -4,4 +4,6 @@
 
 	<restrict>#{userSession.canCheckOrders}</restrict>
 
+	<param name="firstResult" value="#{orders.firstResult}" />
+	<param name="order" value="#{orders.order}" />
 </page>

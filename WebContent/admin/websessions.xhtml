@@ -75,7 +75,7 @@
 		<h:column>
 			<f:facet name="header">#{messages['admin.websessions.idletime']}</f:facet>
 			<h:outputText value="#{it.ultimoAcesso}" converter="periodConverter">
-				<f:param name="type" value="time-length" />
+				<f:param name="type" value="elapsed-time" />
 			</h:outputText>
 		</h:column>
 	</h:dataTable>
