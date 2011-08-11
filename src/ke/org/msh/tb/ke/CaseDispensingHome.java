@@ -11,6 +11,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.ke.entities.CaseDispensing_Ke;
+import org.msh.tb.ke.entities.TbCaseKE;
 
 
 
@@ -84,7 +85,7 @@ public class CaseDispensingHome {
 			caseDispensingInfo = new CaseDispensingInfo(lst.get(0));
 		else {
 			CaseDispensing_Ke caseDispensing = new CaseDispensing_Ke();
-			caseDispensing.setTbcase(caseHome.getInstance());
+			caseDispensing.setTbcase((TbCaseKE) caseHome.getInstance());
 			caseDispensing.setMonth(month + 1);
 			caseDispensing.setYear(year);
 			
