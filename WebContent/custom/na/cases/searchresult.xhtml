@@ -16,31 +16,16 @@
 
 <ui:define name="naveg">
 	<s:link value="#{messages['cases']}" view="/cases/index.html" propagation="none"/>
-</ui:define>
-
-<ui:define name="left">
-</ui:define>
-
-<ui:define name="head">
-<style type="text/css">
-.searchtitle{
-/* 	background-color:#e0e0e0; */
-	border:1px solid #d0d0d0;
-}
-.searchtitle a {
-/*   color:black; */
-   font-size:10px;
-   text-transform:uppercase;
-   font-weight:bold;
-}
-</style>
+	<div class="item selected">
+		<s:link value="#{title}" view="/cases/searchresult.html" />
+		</div>
 </ui:define>
 
 <ui:define name="content">
-
+<h1>#{title}</h1>
 	<h:form id="listCases">
 
-	<table width="99%"><tr><td>
+	<table width="100%"><tr><td>
 	
 		<s:decorate template="/layout/navegajax.xhtml">
 			<ui:param name="list" value="#{casesQueryNA}" />
@@ -48,7 +33,9 @@
 		</s:decorate>
 	
 	</td><td align="right">
-		<h:commandLink value="#{messages['cases.newsearch']}" styleClass="button" onclick="Richfaces.showModalPanel('filtersdlg');return false;" style="float:right;width:150px;"/>	
+		<h:commandLink styleClass="button" onclick="Richfaces.showModalPanel('filtersdlg');return false;" style="float:right;width:150px;">
+		<span>#{messages['cases.newsearch']}</span>
+		</h:commandLink>	
 	</td></tr></table>
 	
 	<h:panelGroup id="res">
@@ -115,6 +102,7 @@
 				</div>
 			</th>
 		</tr>
+		<s:fragment rendered="#{facesContext.renderResponse}">
 	<ui:repeat value="#{casesQueryNA.resultList}" var="it">
 	<tr><td width="90px" align="center">
 			<s:link value="#{it.caseNumber==null?messages['cases.new']:it.displayCaseNumber}" view="/cases/casedata.xhtml">
@@ -122,7 +110,7 @@
 			</s:link>
 			<br/>
 			<s:link view="/cases/casedata.xhtml" 
-				styleClass="#{it.gender=='MALE'?'male-icon':'female-icon'}" style="margin-left:30px;">
+				styleClass="#{it.gender=='MALE'?'male-icon':'female-icon'}">
 				<f:param name="id" value="#{it.caseId}" />
 			</s:link>
 	</td>
@@ -154,12 +142,13 @@
 	</td>
 	</tr>
 	</ui:repeat>
+	</s:fragment>
 	</table>
 	</h:panelGroup>
 
 	<s:decorate template="/layout/navegbottom.xhtml">
 		<ui:param name="list" value="#{casesQueryNA}" />
-		<ui:param name="page" value="/cases/searchresult.xhtml" />
+		<ui:param name="page" value="/custom/na/cases/searchresult.xhtml" />
 	</s:decorate>
 	
 	<rich:jQuery selector="#tblres tr:odd" query="addClass('lin1')" />
@@ -186,12 +175,15 @@
 	</td>
 
 	<td align="right">
-		<a:commandLink id="btnsearch" value="#{messages['form.search']}" action="#{casesQueryNA.refresh}" 
-			styleClass="button"	reRender="listCases" onclick="if (!validateFilters()) return false;this.disabled=true"
-			oncomplete="this.disabled=false;Richfaces.hideModalPanel('filtersdlg');return false;">
+		<a:commandLink id="btnsearch" action="#{casesQueryNA.refresh}" 
+			styleClass="button"	reRender="listCases" onclick="if (!disableButton(this)) return false;if (!validateFilters()) {enableButton();return false}"
+			oncomplete="Richfaces.hideModalPanel('filtersdlg');enableButton();">
 			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
+			<span>#{messages['form.search']}</span>
 		</a:commandLink>
-		<s:link value="#{messages['form.cancel']}" onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-alt"/>
+		<s:link  onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-alt">
+		<span>#{messages['form.cancel']}</span>
+		</s:link>
 	</td></tr></table>	
 	</a:region>
 	<rich:hotKey selector="#tblfilters input,select" key="return" handler="#{rich:element('btnsearch')}.click();" /> 
