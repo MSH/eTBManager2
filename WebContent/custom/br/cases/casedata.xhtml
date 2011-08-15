@@ -138,8 +138,13 @@
 			style="position:relative;" propagation="none">
 			<f:param name="id" value="#{caseHome.id}" />
 		</s:link>
-		<s:link value="#{messages['cases.move.cancel']}" 
-			style="position:relative" />
+		<a:commandLink value="#{messages['cases.move.cancel']}"
+			onclick="if (!confirm('#{caseMoveHome.confirmMsgRollbackTransfer}')) return false"
+			action="#{caseMoveHome.rollbackTransferOut}"
+			reRender="main,leftmenu,messages" 
+			style="position:relative" styleClass="right-icon" >
+			<f:param name="name" value="#{caseHome.transferInHealthUnit.tbunit.name}"/>
+		</a:commandLink>
 		</div>
 	</div>
 	</s:fragment>

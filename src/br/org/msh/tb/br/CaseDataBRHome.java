@@ -129,15 +129,17 @@ public class CaseDataBRHome {
 	 */
 	@Transactional
 	public String saveNew() {
+		TbCaseBR tbcase = (TbCaseBR)caseHome.getInstance();
+		// all cases are confirmed cases
+		tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
+		tbcase.setDiagnosisDate(startTreatmentHome.getIniTreatmentDate());
+		
 		if (!validateForm())
 			return "error";
 
 //		if (caseEditingHome!=null)
 //			return "error";
 
-		TbCaseBR tbcase = (TbCaseBR)caseHome.getInstance();
-
-		tbcase.setDiagnosisDate(startTreatmentHome.getIniTreatmentDate());
 		tbcase.setState(CaseState.WAITING_TREATMENT);
 
 		adjustFields();
@@ -296,7 +298,7 @@ public class CaseDataBRHome {
 		boolean res = caseEditingHome.validateData();
 
 		TbCase tbcase = caseHome.getInstance();
-		
+
 		// check pulmonary type
 		if ((tbcase.isPulmonary()) && (tbcase.getPulmonaryType() == null)) {
 			facesMessages.addToControlFromResourceBundle("cbpulmonary", "javax.faces.component.UIInput.REQUIRED");

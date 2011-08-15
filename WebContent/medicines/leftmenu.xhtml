@@ -39,7 +39,9 @@
 
 	<s:fragment rendered="#{userSession.canCheckDispensing}">
 		<h2>#{messages['meds.dispensing']}</h2>	
-		<s:link id="lnknew" view="/medicines/dispnew.xhtml" rendered="#{s:hasRole('DISP_PAC_EDT')}">
+		<s:link id="lnknew" 
+			view="#{userSession.tbunit.patientDispensing?'/medicines/dispcasenew.xhtml':'/medicines/dispnew.xhtml'}" 
+			rendered="#{s:hasRole('DISP_PAC_EDT')}">
 			<div class="new-icon" style="float:left;"/>#{messages['meds.dispensing.new']}
 		</s:link>
 		<s:link value="#{messages['meds.dispensing.view']}" view="/medicines/dispensing.xhtml" propagation="none" /> 

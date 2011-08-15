@@ -85,7 +85,7 @@
 			  <h:column>
 			  	<span style="height:100%;vertical-align:middle;">
 					<s:decorate template="/layout/batch.xhtml" >
-						<ui:param name="batch" value="#{b}" />
+						<ui:param name="batch" value="#{b.batch}" />
 					</s:decorate>
 			    #{messages['Batch.expiryDate']}: 
 			    <h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />

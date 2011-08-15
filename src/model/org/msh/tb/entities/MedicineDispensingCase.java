@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import org.hibernate.validator.NotNull;
 
 @Entity
-public class PatientDispensing {
+public class MedicineDispensingCase {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)

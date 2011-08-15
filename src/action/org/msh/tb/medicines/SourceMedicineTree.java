@@ -61,7 +61,7 @@ public class SourceMedicineTree<E> {
 		if (mednode != null)
 			return mednode;
 		
-		mednode = new MedicineNode(med);
+		mednode = new MedicineNode(node, med);
 		node.getMedicines().add(mednode);
 		
 		return mednode;
@@ -79,6 +79,16 @@ public class SourceMedicineTree<E> {
 		mg.getBatches().add(item);
 	}
 
+	
+	/**
+	 * Search for a node by its source and medicine. If the node doesn't exist, it returns null
+	 * @param source
+	 * @param med
+	 * @return
+	 */
+	public MedicineNode findMedicineNode(Source source, Medicine med) {
+		return findNodeByMedicineId(source.getId(), med.getId());
+	}
 	
 	/**
 	 * Search for the medicine node by the source and medicine id
@@ -177,6 +187,10 @@ public class SourceMedicineTree<E> {
 		public Source getSource() {
 			return source;
 		}
+		
+		public String getRowId() {
+			return "s" + (source.getId() != null? source.getId().toString(): "");
+		}
 	}
 
 
@@ -188,9 +202,11 @@ public class SourceMedicineTree<E> {
 		private Medicine medicine;
 		private Object item;
 		private List<E> batches = new ArrayList<E>();
+		private SourceNode parent;
 		
-		public MedicineNode(Medicine medicine) {
+		public MedicineNode(SourceNode parent, Medicine medicine) {
 			this.medicine = medicine;
+			this.parent = parent;
 		}
 		/**
 		 * @return the medicine
@@ -221,6 +237,16 @@ public class SourceMedicineTree<E> {
 		 */
 		public List<E> getBatches() {
 			return batches;
+		}
+		
+		public String getRowId() {
+			return parent.getRowId() + "m" + medicine.getId().toString();
+		}
+		/**
+		 * @return the parent
+		 */
+		public SourceNode getParent() {
+			return parent;
 		}
 	}
 

@@ -19,6 +19,11 @@ public class TaskTestingHome {
 	
 	public void runTask() {
 		taskManager.runTask(TestingTask.class);
+		try {
+			Thread.sleep(500);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 	public void runMoldovaInt() {

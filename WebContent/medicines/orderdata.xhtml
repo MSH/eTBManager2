@@ -256,8 +256,8 @@
 <rich:tab label="#{messages['Order.cases']}">
 <ui:repeat value="#{orderHome.sources}" var="s">
 <table width="100%">
-	<tr><td class="colheader">
-		#{s.source.name}
+	<tr><td>
+		<h2>#{s.source.abbrevName} <span class="text-small">(#{s.source.name})</span></h2>
 	</td></tr>
 <tr><td>
 <table width="100%" class="table1">
@@ -319,7 +319,9 @@
 <rich:tab label="#{messages['meds.orders.batches']}" rendered="#{(order.status=='SHIPPED') or (order.status=='RECEIVED')}">
 <table width="100%">
 	<a:repeat value="#{orderHome.sources}" var="s">
-	<tr><th class="colheader">#{s.source.name}  </th></tr>
+	<tr><td>
+		<h2>#{s.source.abbrevName} <span class="text-small">(#{s.source.name})</span></h2>
+	</td></tr>
 	<tr><td>
 		<table width="100%" class="table1">
 			<tr><th><h:outputText value="#{messages['Medicine']}" styleClass="collh" /></th>

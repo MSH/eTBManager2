@@ -31,14 +31,16 @@
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['meds.dispensing.date']}:</ui:define>
     	<ui:param name="edtid" value="edtdate" />
-    	<ui:param name="datefield" value="#{batchDispensingUIHome.dispensingDate}" /> 
+    	<ui:param name="datefield" value="#{caseDispensingUIHome.dispensingDate}" /> 
 		<ui:param name="required" value="true" />
 		<ui:param name="future" value="false" />
     </s:decorate>
 	
 	</div>
-    
-    <a:repeat value="#{batchDispensingUIHome.sources}" var="s">
+
+	<s:decorate template="/layout/casebody.xhtml">
+
+    <a:repeat value="#{caseDispensingUIHome.sources}" var="s">
     <h2>#{s.source}</h2>
    		<table id="tblmed" class="table1">
    		<tr>
@@ -111,6 +113,7 @@
         </s:link>
     </div>
 
+	</s:decorate>
 </h:form>
 
 <script type="text/javascript">

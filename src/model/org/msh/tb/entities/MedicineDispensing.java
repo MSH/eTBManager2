@@ -48,7 +48,7 @@ public class MedicineDispensing implements Serializable {
 	private List<BatchDispensing> batches = new ArrayList<BatchDispensing>();
 	
 	@OneToMany(mappedBy="dispensing", cascade={CascadeType.ALL})
-	private List<PatientDispensing> patients = new ArrayList<PatientDispensing>();
+	private List<MedicineDispensingCase> patients = new ArrayList<MedicineDispensingCase>();
 
 		
 
@@ -124,14 +124,14 @@ public class MedicineDispensing implements Serializable {
 	/**
 	 * @return the patients
 	 */
-	public List<PatientDispensing> getPatients() {
+	public List<MedicineDispensingCase> getPatients() {
 		return patients;
 	}
 
 	/**
 	 * @param patients the patients to set
 	 */
-	public void setPatients(List<PatientDispensing> patients) {
+	public void setPatients(List<MedicineDispensingCase> patients) {
 		this.patients = patients;
 	}
 }

@@ -109,6 +109,9 @@
     <s:decorate template="/layout/edit.xhtml" style="min-height:20px;">
     	<h:selectBooleanCheckbox value="#{tbunit.receivingFromSource}" /> #{messages['Tbunit.receivingFromSource']}
     </s:decorate>
+    <s:decorate template="/layout/edit.xhtml" style="min-height:20px;">
+    	<h:selectBooleanCheckbox value="#{tbunit.patientDispensing}" /> #{messages['Tbunit.patientDispensing']}
+    </s:decorate>
 
     <s:decorate template="/layout/roundrect.xhtml" style="padding-top:10px;clear:both;">
     	<ui:define name="header">
@@ -173,7 +176,7 @@
             	onclick="if (!disableButton(this)) return false;" >
             	<span>#{messages['form.save']}</span>
             </a:commandLink>  
-            <s:link view="/admin/units.xhtml" styleClass="button-alt" propagation="end">
+            <s:link view="/admin/units.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
             	<f:param name="id" value="#{null}" />
             	  <span>#{messages['form.cancel']}</span>
             </s:link>

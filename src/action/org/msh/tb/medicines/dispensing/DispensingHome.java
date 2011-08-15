@@ -17,7 +17,7 @@ import org.msh.tb.entities.BatchDispensing;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineDispensing;
 import org.msh.tb.entities.Movement;
-import org.msh.tb.entities.PatientDispensing;
+import org.msh.tb.entities.MedicineDispensingCase;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
@@ -25,16 +25,26 @@ import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.medicines.MedicineGroup;
 import org.msh.tb.medicines.movs.MovementHome;
 
+/**
+ * Standard API to register medicine dispensing (by patient or consolidated by unit) 
+ * @author Ricardo Memoria
+ *
+ */
 @Name("dispensingHome")
 public class DispensingHome {
 	
 	private Date dispensingDate;
 	private Tbunit unit;
 	private List<MedicineItem> medicines;
-	private List<PatientDispensing> patients;
-	private String errorMessage;
+	private List<MedicineDispensingCase> patients;
+	private Map<MedicineItem, String> errorMessages;
 	
 	@In EntityManager entityManager;
+
+	// interface to traverse errors during dispensing saving
+	public interface ErrorTraverser {
+		void traverse(Source source, Medicine medicine, String errorMessage);
+	}
 
 
 	/**
@@ -78,9 +88,9 @@ public class DispensingHome {
 		addBatchQuantity(batch, source, quantity);
 
 		if (patients == null)
-			patients = new ArrayList<PatientDispensing>();
+			patients = new ArrayList<MedicineDispensingCase>();
 		
-		PatientDispensing pat = findPatientDispensing(tbcase, batch, source);
+		MedicineDispensingCase pat = findPatientDispensing(tbcase, batch, source);
 		pat.setQuantity( pat.getQuantity() + quantity );
 	}
 
@@ -136,6 +146,7 @@ public class DispensingHome {
 		}
 		MedicineItem item = new MedicineItem();
 		item.setMedicine(med);
+		item.setSource(source);
 		medicines.add(item);
 
 		return item;
@@ -149,14 +160,14 @@ public class DispensingHome {
 	 * @param source
 	 * @return
 	 */
-	protected PatientDispensing findPatientDispensing(TbCase tbcase, Batch batch, Source source) {
-		for (PatientDispensing it: patients) {
+	protected MedicineDispensingCase findPatientDispensing(TbCase tbcase, Batch batch, Source source) {
+		for (MedicineDispensingCase it: patients) {
 			if ((it.getTbcase().equals(tbcase)) && (it.getBatch().equals(batch)) && (it.getSource().equals(source))) {
 				return it;
 			}
 		}
 		
-		PatientDispensing it = new PatientDispensing();
+		MedicineDispensingCase it = new MedicineDispensingCase();
 		it.setTbcase(tbcase);
 		it.setSource(it.getSource());
 		it.setBatch(batch);
@@ -189,13 +200,16 @@ public class DispensingHome {
 					MovementType.DISPENSING, 
 					it.getBatches(), null);
 
-			if (mov == null) {
-				errorMessage = movHome.getErrorMessage();
-				return false;
-			}
+			if (mov == null)
+				addErrorMessage(it, movHome.getErrorMessage());
 
 			medDispensing.getMovements().add(mov);
 		}
+		
+		// has errors?
+		if ((errorMessages != null) && (!errorMessages.isEmpty()))
+			return false;
+		
 		movHome.savePreparedMovements();
 
 		// save dispensing records
@@ -208,7 +222,7 @@ public class DispensingHome {
 		
 		// save patient records
 		if (patients != null) {
-			for (PatientDispensing pat: patients) {
+			for (MedicineDispensingCase pat: patients) {
 				medDispensing.getPatients().add(pat);
 				pat.setDispensing(medDispensing);
 			}
@@ -220,7 +234,41 @@ public class DispensingHome {
 		return true;
 	}
 
+	
+	/**
+	 * Add error message
+	 * @param medItem
+	 * @param message
+	 */
+	protected void addErrorMessage(MedicineItem medItem, String message) {
+		if (errorMessages == null)
+			errorMessages = new HashMap<MedicineItem, String>();
+		errorMessages.put(medItem, message);
+	}
 
+
+	/**
+	 * Traverse the list of error messages rose during dispensing saving
+	 * @param intf
+	 */
+	public void traverseErrors(ErrorTraverser intf) {
+		if (errorMessages == null)
+			return;
+		for (MedicineItem item: errorMessages.keySet()) {
+			intf.traverse(item.getSource(), item.getMedicine(), errorMessages.get(item));
+		}
+	}
+	
+
+	/**
+	 * Check if there are error messages during saving of data
+	 * @return
+	 */
+	public boolean isErrorMessages() {
+		return errorMessages != null;
+	}
+
+	
 	/**
 	 * @return the dispensingDate
 	 */
@@ -277,10 +325,4 @@ public class DispensingHome {
 		}
 	}
 
-	/**
-	 * @return the errorMessage
-	 */
-	public String getErrorMessage() {
-		return errorMessage;
-	}
 }

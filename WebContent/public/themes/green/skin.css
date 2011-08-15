@@ -349,15 +349,6 @@ a.workspace-data {
 	width:100%;
 }
 
-.form1 .form-content h2 {
-	font-size:13px;
-	color:#45793D;
-	font-weight:bold;
-	margin:4px 1px 4px 1px;
-	border:none;
-	font-family: Verdana,Arial, Helvetica, sans-serif;
-}
-
 .form1 .form-header {
 	padding:8px;
 }
@@ -368,12 +359,25 @@ a.workspace-data {
 	color:#E47911;
 }
 .form1 .form-content {
-	display:block;
+	display:table;
 	border-top:1px solid #becebe;
 	background-color: #e2eae2;
 	padding:4px 10px 10px 10px;
 	margin:6px 0px 10px 0px;
+	min-height:40px;
+	width:100%;
+	clear:both;
 }
+
+.form1 .form-content h2 {
+	font-size:13px;
+	color:#45793D;
+	font-weight:bold;
+	margin:4px 1px 4px 1px;
+	border:none;
+	font-family: Verdana,Arial, Helvetica, sans-serif;
+}
+
 .form1 .form-footer {
 	border-top:1px solid #becebe;
 	background: transparent url(images/formbg.png) repeat-x;
@@ -429,6 +433,7 @@ a.workspace-data {
 }
 .vertical-menu a:hover {
 	background-color:#e2eae2;
+	border-radius:6px;
 }
 
 .vertical-menu li ul {
@@ -458,7 +463,7 @@ a.workspace-data {
 /* Sliding right image */
 background: transparent url('images/button-right.png') no-repeat scroll top right; 
 display: inline-block;
-min-width:100px;
+min-width:90px;
 height: 32px; 
 margin: 1px 6px 2px 2px;
 padding-right: 16px; 
@@ -466,6 +471,7 @@ text-decoration: none;
 height:26px;
 outline: none;
 font-size:12px;
+cursor:pointer;
 }
 .button span {
 /* Background left image */ 
@@ -476,6 +482,8 @@ padding: 2px 0 0 12px;
 height:24px;
 color:white;
 font-weight:bold;
+min-width:80px;
+cursor:pointer;
 }
 .button img { border:none; }
 .button:hover {  background-position: right -26px; text-decoration:underline; color:white;}
@@ -495,6 +503,8 @@ text-decoration: none;
 height:26px;
 outline: none;
 font-size:12px;
+min-width:90px;
+cursor:pointer;
 }
 .button-alt span {
 background: transparent url('images/alt-button-left.png') no-repeat; 
@@ -504,6 +514,8 @@ padding: 2px 0 0 12px;
 height:24px;
 color:black;
 font-weight:bold;
+min-width:80px;
+cursor:pointer;
 }
 .button-alt img { border:none; }
 .button-alt:hover {  background-position: right -26px; text-decoration:underline; }
@@ -556,7 +568,7 @@ table {
 	border:1px solid white;
 	vertical-align: top;
 }
-.table1 .highlight {
+.table1 .highlight  {
 	background-color:#c8e0d6;
 	color:black;
 /*	color:#073d07; */
@@ -609,6 +621,10 @@ table {
 
 .small th {	padding:1px;}
 .small td {	padding:2px 0px 2px 1px;}
+
+.regular th {	padding:8px;}
+.regular td {	padding:2px 4px 4px 4px;}
+.regular .highlight td { padding:10px 4px 10px 4px;}
 
 .collh {text-align:left; display:block; padding-right:5px;}
 .colrh {text-align:right; display:block; padding-left:5px;}
@@ -899,6 +915,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	height:32px;
 	margin-right:2px;
 	display:inline-block;
+	float:left;
 }
 
 .male-icon { background-position:-64px 0px; }

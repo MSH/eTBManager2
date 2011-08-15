@@ -24,6 +24,14 @@
 <div>
 
 	<h:form>
+	<s:fragment rendered="#{not userSession.medicineManagementStarted}">
+		<h:outputText value="#{messages['meds.start.alert']}" styleClass="warn" />
+		<div class="spacer" />
+		<s:link view="/medicines/start.xhtml" styleClass="button-alt">
+			<span>#{messages['meds.start']}</span>
+		</s:link>
+	</s:fragment>
+	
 	<s:fragment rendered="#{userSession.medicineManagementStarted}">
 
 <h:panelGroup id="pnlitems">
@@ -36,7 +44,7 @@
 #{s.source.abbrevName}
 <span class="text-small">(#{s.source.name})</span></h2>
 
-<table id="tblinv" class="table1">
+<table id="tblinv" class="table1 regular">
 	<tr><th width="35%">
 			#{messages['Medicine']}
 		</th>
@@ -49,7 +57,7 @@
 <a:repeat value="#{s.medicines}" var="it">
 	<tr class="highlight">
 		<td>
-			<a:commandLink styleClass="plus-icon" style="float:left" onclick="detailsClick(this, 'med#{it.item.rowId}');return false;" />
+			<a:commandLink styleClass="plus-icon" onclick="detailsClick(this, 'med#{it.item.rowId}');return false;" />
 			#{it.medicine}
 		</td>
 		<td align="center">
@@ -117,7 +125,7 @@ function detailsClick(elem, elemName) {
 	var s = '#tblinv #' + elemName;
 	try { s = eval(s);} catch(e){ }
 	var row=jQuery(s);
-	var bVisible=jQuery(row).is(":visible");
+	var bVisible=jQuery(elem).is(".collapse-icon");
 	if (bVisible) {
 		jQuery(elem).removeClass('collapse-icon').addClass('plus-icon');
 		row.hide();

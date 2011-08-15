@@ -229,7 +229,7 @@ public class MovementHome {
 			throw new MovementException("Error creating movement. Unit not in medicine management control");
 
 		if (date.before(unit.getMedManStartDate())) {
-			String s = Messages.instance().get("medicines.movs.datebefore");
+			String s = Messages.instance().get("meds.movs.datebefore");
 			s = MessageFormat.format(s, unit.getMedManStartDate());
 			throw new MovementException(s);
 		}
@@ -358,8 +358,6 @@ public class MovementHome {
 					throw new MovementException("No batch of " + b.getMedicine().toString() + 
 							" found for " + unit.toString() + ", " + source.toString());
 				
-//				System.out.println(batchQuantity.getBatch().getBatchNumber() + " qtd available=" + batchQuantity.getQuantity());
-
 				int availableQtd = batchQuantity.getQuantity() + (qtd * oper);
 				
 				// get quantity to be removed from movements

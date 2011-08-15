@@ -83,7 +83,7 @@ function processSelectedUser(suggestion) {
 	    </s:decorate>
 		
 		<a:commandLink action="#{workspaceHome.addUser}" styleClass="button" 
-			onclick="if (!disableButtons(this)) return false;" reRender="main" >
+			onclick="if (!disableButton(this)) return false;" reRender="main" >
 			<span>#{messages['form.add']}</span>
 		</a:commandLink>
 		

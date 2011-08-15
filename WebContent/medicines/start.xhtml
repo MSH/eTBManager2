@@ -196,11 +196,6 @@ else return false;
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['Batch.brandName']}:</ui:define>
-    	<h:inputText value="#{medicineManStartHome.batchInfo.batch.brandName}" size="80" style="width:250px"/>
-    </s:decorate>
-
-    <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Batch.batchNumber']}:</ui:define>
     	<h:inputText value="#{medicineManStartHome.batchInfo.batch.batchNumber}" size="30" required="true" />
     </s:decorate>
