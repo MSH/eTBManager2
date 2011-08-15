@@ -105,8 +105,10 @@
 	<ui:param name="month" value="#{registerDispensingHome.month}" />
 	<ui:param name="year" value="#{registerDispensingHome.year}" />
 	<h:inputHidden id="unitid" type="hidden" value="#{treatmentsInfoHomeKe.tbunitId}" />
-	<a:commandButton value="#{messages['form.ok']}" styleClass="button" onclick="openRegisterDispensingPage(); return false;" >
-	</a:commandButton>
+	<a:commandLink styleClass="button"
+	onclick="openRegisterDispensingPage(); return false;" >
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
 	
 	<script type="text/javascript">
 	<!--
@@ -128,6 +130,7 @@
 	-->
 	</script>
 </s:decorate>
+
  
 </ui:define>
 
