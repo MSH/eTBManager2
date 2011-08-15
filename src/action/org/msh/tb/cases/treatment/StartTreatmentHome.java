@@ -71,8 +71,12 @@ public class StartTreatmentHome {
 		// initialize case data
 		tbcase.setState(CaseState.ONTREATMENT);
 
-		if (saveChages)
+		if (saveChages){
+			caseHome.getInstance().updateDaysTreatPlanned();
 			caseHome.persist();
+		}
+		
+		
 		
 		return "treatment-started";
 	}
