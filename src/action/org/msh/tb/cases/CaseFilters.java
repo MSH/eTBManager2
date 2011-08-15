@@ -46,6 +46,7 @@ public class CaseFilters {
 	private String lastName;
 	private String recordNumber;
 //	private String registrationCode;
+	private String unitRegCode;
 	private CaseState caseState;
 	private ValidationState validationState;
 	private CaseClassification classification;
@@ -111,6 +112,7 @@ public class CaseFilters {
 		lastName = null;
 		recordNumber = null;
 //		registrationCode = null;
+		unitRegCode = null;
 		caseState = null;
 		validationState = null;
 		classification = null;
@@ -770,8 +772,15 @@ public class CaseFilters {
 	public void setCaseTab(int caseTab) {
 		this.caseTab = caseTab;
 	}
-		
 
+	public String getUnitRegCode() {
+		return unitRegCode;
+	}
+
+	public void setUnitRegCode(String unitRegCode) {
+		this.unitRegCode = unitRegCode;
+	}
+		
 /*	public String getRegistrationCode() {
 		return registrationCode;
 	}
