@@ -5,7 +5,7 @@
 	<restrict>#{userSession.canOpenCases}</restrict>
 	<navigation>
 		<rule if-outcome="search">
-			<redirect view-id="/custom/na/cases/searchresult.xhtml">
+			<redirect view-id="/cases/searchresult.xhtml">
 			</redirect>
 		</rule>
 	</navigation>

@@ -55,7 +55,7 @@
 	<ui:repeat value="#{caseStateReport.items}" var="it">
 	<tr>
 		<td>
-			<s:link value="#{it.description}"  view="/custom/na/cases/searchresult.xhtml" styleClass="link-small">
+			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" styleClass="link-small">
 				<f:param name="stateIndex" value="#{it.stateIndex}"/>
 				<f:param name="sc" value="#{'CASE_STATE'}"/>
 				<f:param name="vs" />
@@ -90,7 +90,7 @@
 	<ui:repeat value="#{caseStateReport.validationItems}" var="it">
 	<tr>
 		<td>
-			<s:link value="#{messages[it.validationState.key]}"  view="/custom/na/cases/searchresult.xhtml" styleClass="link-small">
+			<s:link value="#{messages[it.validationState.key]}"  view="/cases/searchresult.xhtml" styleClass="link-small">
 				<f:param name="vs" value="#{it.validationState}"/>
 				<f:param name="sc" value="#{'VALIDATION_STATE'}"/>
 				<f:param name="stateIndex" />
