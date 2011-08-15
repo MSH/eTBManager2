@@ -13,8 +13,8 @@ import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.misc.FieldsQuery;
-import org.msh.tb.na.entities.CaseDataNA;
 import org.msh.tb.na.entities.CaseSideEffectNA;
+import org.msh.tb.na.entities.TbCaseNA;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
 import org.msh.utils.date.Period;
@@ -24,7 +24,7 @@ import org.msh.utils.date.Period;
 public class SideEffectNAHome{
 
 	@In(required=true) CaseHome caseHome;
-	@In(required=true, create=true) CaseDataNAHome caseDataNAHome;
+	@In(required=true, create=true) CaseNAHome caseNAHome;
 	@In(create=true) FieldsQuery fieldsQuery;
 	
 	private List<ItemSelect<CaseSideEffectNA>> items;
@@ -45,10 +45,10 @@ public class SideEffectNAHome{
 				
 		items = new ArrayList<ItemSelect<CaseSideEffectNA>>();
 		
-		CaseDataNA casedata = caseDataNAHome.getCaseDataNA();
+		TbCaseNA casedata = (TbCaseNA)caseHome.getInstance();
 		
 		for (FieldValue sideEffect: sideEffects) {
-			ItemSelect item = new ItemSelect();
+			ItemSelect<CaseSideEffectNA> item = new ItemSelect<CaseSideEffectNA>();
 
 			CaseSideEffectNA cse = casedata.findSideEffectData(sideEffect);
 			if (cse == null) {
@@ -70,8 +70,7 @@ public class SideEffectNAHome{
 	public String save() {
 		String result = null;
 		try{
-		CaseDataNA caseData = caseDataNAHome.getCaseDataNA();
-		TbCase tbcase = caseHome.getInstance();
+		TbCaseNA tbcase = (TbCaseNA)caseHome.getInstance();
 		
 		List<CaseSideEffectNA> lst = ItemSelectHelper.getSelectedItems(getItems(), true);
 		for (CaseSideEffectNA it: lst) {
@@ -92,14 +91,14 @@ public class SideEffectNAHome{
 			it.setMedicines(name);
 		}
 		
-		for (CaseSideEffectNA it:caseData.getSideEffects()) {
+		for (CaseSideEffectNA it:tbcase.getSideEffectsNa()) {
 			if (!lst.contains(it)) {
 				caseHome.getEntityManager().remove(it);
 			}
 		}
 //		caseData.setTbcase(caseHome.getInstance());
-		caseData.setSideEffects(lst);
-		result = caseDataNAHome.persist();
+		tbcase.setSideEffectsNa(lst);
+		result = caseHome.persist();
 		}catch (InvalidStateException iv){
 			iv.printStackTrace();
 			InvalidValue[] values = iv.getInvalidValues();
