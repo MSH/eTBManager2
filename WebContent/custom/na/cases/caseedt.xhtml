@@ -28,7 +28,7 @@
 	<div style="float:left;">
 		<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 	</div>
-	<a:commandLink value="#{messages['form.ok']}" action="#{caseDataNAHome.saveEditing}" styleClass="button" reRender="main,messages"/>
+	<a:commandLink value="#{messages['form.ok']}" action="#{caseNAHome.saveEditing}" styleClass="button" reRender="main,messages"/>
 	<s:link value="#{messages['form.cancel']}" view="/custom/na/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
 		<f:param name="id" value="#{caseHome.id}" />
 	</s:link>
