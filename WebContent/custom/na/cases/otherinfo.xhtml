@@ -110,7 +110,7 @@
 		<ui:param name="showfooter" value="0" />
 	<div>
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty tbcase.sideEffects}" />
-	<h:dataTable value="#{caseDataNA.sideEffects}" var="it" width="100%" styleClass="tabela4" rowClasses="lin1,lin2" rendered="#{not empty tbcase.sideEffects}">
+	<h:dataTable value="#{tbcasena.sideEffectsNa}" var="it" width="100%" styleClass="tabela4" rowClasses="lin1,lin2" rendered="#{not empty tbcase.sideEffects}">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
