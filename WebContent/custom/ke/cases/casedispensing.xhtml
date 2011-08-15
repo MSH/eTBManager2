@@ -10,22 +10,22 @@
       template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.treat.dispedt']}" />
-<ui:param name="show_menu" value="1" />
-<ui:param name="waitdlg" value="1" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px;" />
 
 
 <ui:define name="content">
-<p/>
+<h1>#{title}</h1>
 
 <rich:jQuery name="updateChecks1" timing="onJScall" selector="#tbldays td" query="removeClass('activerow')"/>
 <rich:jQuery name="updateChecks2" timing="onJScall" selector="#tbldays td:has(:selected)" query="addClass('activerow')"/>
 
 <ui:param name="pagewidth" value="450px;" />
 <s:decorate template="/layout/casebody.xhtml">
-	<a:form id="main">
-    <table width="100%">
+	<a:form id="main" styleClass="form1">
+	
+	<div class="form-content">
+	<table width="100%" >
     <tr><td>
 
 	<s:decorate template="/layout/display.xhtml">
@@ -43,7 +43,7 @@
 	<h:outputText value="#{messages['cases.disp.types']}" />
 
     <h:panelGroup id="pnlcalend">
-    <table id="tbldays" width="450px" class="tabela4">
+    <table id="tbldays" width="450px" class="table1">
     <tr>
     	<ui:repeat offset="1" value="#{shortWeekNames}" var="w">
     		<th>
@@ -69,17 +69,21 @@
     </a:repeat>
 	</table>
     </h:panelGroup>
-
-	</td></tr>
-    <tr><td align="right">
-            <a:commandLink action="#{caseDispensingHome_Ke.saveDispensing}" value="#{messages['form.ok']}" styleClass="button"  
-            	reRender="main" />
-            <s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
-            	<f:param name="id" value="#{caseHome.id}"/>
-            </s:link>
-    </td></tr>
     
-    </table>
+	</td></tr>
+	</table>
+	</div>
+	
+    <div class="form-footer">
+            <a:commandLink action="#{caseDispensingHome_Ke.saveDispensing}" styleClass="button"  
+            	reRender="main" onclick="if (!disableButtons(this)) return false;">
+			<span>#{messages['form.save']}</span>
+			</a:commandLink>            	
+            <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+            	<f:param name="id" value="#{caseHome.id}"/>
+	         	<span>#{messages['form.cancel']}</span>
+            </s:link>
+	</div>    
     
 	</a:form>
 </s:decorate>
