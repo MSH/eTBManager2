@@ -24,23 +24,21 @@ import org.msh.utils.date.DateUtils;
 @Name("tbunitcasenumber")
 @Scope(ScopeType.CONVERSATION)
 public class TBUnitCaseNumber {
-	
-	@In(required=true) CaseHome caseHome;
-	@In(create=true, required=true) CaseNAHome caseNAHome;
-	@In EntityManager entityManager;
-	
 
+	@In(create = true) EntityManager entityManager;
+	@In(required=true) CaseHome caseHome;
+	
 	private String prefix = Messages.instance().get("cases.na.prefix");
 	
 	/**
 	 * generates a case number based upon the number of validated patients present in the site.
 	 * @return
 	 */
-	public String gernerateTBUnitCaseNumber() {
-		TbCaseNA tbcase = (TbCaseNA)caseHome.getInstance();
-		ValidationState vstate = tbcase.getValidationState();
+	public String generateTBUnitCaseNumber() {
+		TbCaseNA  tbcasena = (TbCaseNA) caseHome.getTbCase();
+		ValidationState vstate = tbcasena.getValidationState();
 		String unitCaseNumber = "";
-		Tbunit caseUnit = tbcase.getNotificationUnit();
+		Tbunit caseUnit = tbcasena.getNotificationUnit();
 		
 		if(vstate != ValidationState.VALIDATED)
 			return "error";
@@ -60,21 +58,9 @@ public class TBUnitCaseNumber {
 		String formatCaseNum = String.format("%03d", caseNum);
 		
 		unitCaseNumber = prefix + caseUnit.getLegacyId()+"-"+formatMnth+formatYear+"-"+formatCaseNum;
-		
-		
-		//unitCaseNumber.concat(prefix).concat(caseUnit.getLegacyId().concat(""+caseNum));		
-		
-		System.out.println("unitCaseNumber === "+unitCaseNumber);
-		
-		tbcase.setRegistrationCode(unitCaseNumber);
-		
-//		// update case numbers with notification date after this case
-//		entityManager.createQuery("update CaseDataNA c " +
-//				"set c.unitCaseNumber = c.unitCaseNumber " + 
-//				"where c.tbcase.id = :id ")
-//				.setParameter("id", tbcase.getId())
-//				.executeUpdate();
-		entityManager.persist(tbcase);
+		tbcasena.setUnitRegCode(unitCaseNumber);
+
+		entityManager.persist(tbcasena);
 		entityManager.flush();
 		
 		return "update";
