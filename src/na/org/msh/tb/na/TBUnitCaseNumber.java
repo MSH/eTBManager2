@@ -1,8 +1,6 @@
 package org.msh.tb.na;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import javax.persistence.EntityManager;
 
@@ -10,17 +8,11 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.annotations.security.Restrict;
-import org.jboss.seam.core.Events;
-import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.Patient;
-import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.ValidationState;
-import org.msh.tb.na.entities.CaseDataNA;
+import org.msh.tb.na.entities.TbCaseNA;
 import org.msh.utils.date.DateUtils;
 
 
@@ -34,7 +26,7 @@ import org.msh.utils.date.DateUtils;
 public class TBUnitCaseNumber {
 	
 	@In(required=true) CaseHome caseHome;
-	@In(create=true, required=true) CaseDataNAHome caseDataNAHome;
+	@In(create=true, required=true) CaseNAHome caseNAHome;
 	@In EntityManager entityManager;
 	
 
@@ -45,11 +37,10 @@ public class TBUnitCaseNumber {
 	 * @return
 	 */
 	public String gernerateTBUnitCaseNumber() {
-		TbCase tbcase = caseHome.getInstance();
+		TbCaseNA tbcase = (TbCaseNA)caseHome.getInstance();
 		ValidationState vstate = tbcase.getValidationState();
 		String unitCaseNumber = "";
 		Tbunit caseUnit = tbcase.getNotificationUnit();
-		CaseDataNA caseData = caseDataNAHome.getCaseDataNA();
 		
 		if(vstate != ValidationState.VALIDATED)
 			return "error";
@@ -76,7 +67,6 @@ public class TBUnitCaseNumber {
 		System.out.println("unitCaseNumber === "+unitCaseNumber);
 		
 		tbcase.setRegistrationCode(unitCaseNumber);
-		caseData.setTbcase(tbcase);
 		
 //		// update case numbers with notification date after this case
 //		entityManager.createQuery("update CaseDataNA c " +
