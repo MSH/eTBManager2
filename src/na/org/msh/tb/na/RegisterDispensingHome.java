@@ -18,6 +18,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.na.entities.CaseDispensingNA;
+import org.msh.tb.na.entities.TbCaseNA;
 import org.msh.utils.date.DateUtils;
 
 /**
@@ -34,7 +35,7 @@ public class RegisterDispensingHome {
 	private Tbunit tbunit;
 	private Integer month;
 	private Integer year;
-	private List<org.msh.tb.na.CaseDispensingInfo> cases;
+	private List<CaseDispensingInfo> cases;
 	private List<org.msh.tb.na.WeekInfo> weeks;
 	private int weekIndex;
 
@@ -42,7 +43,7 @@ public class RegisterDispensingHome {
 	 * Return the list of cases and its dispensing information of a specific month/year
 	 * @return List of {@link CaseDispensingInfo} objects
 	 */
-	public List<org.msh.tb.na.CaseDispensingInfo> getCases() {
+	public List<CaseDispensingInfo> getCases() {
 		System.out.println("Conversation = " + Conversation.instance().getId() );
 		if (cases == null)
 			createCasesList();
@@ -84,22 +85,22 @@ public class RegisterDispensingHome {
 		cases = new ArrayList<CaseDispensingInfo>();
 		
 		// load the dispensing days information recorded in the database
-		List<CaseDispensingNA> lst = entityManager.createQuery("from CaseDispensingNA d join fetch d.tbcase c " +
+		List<CaseDispensingNA> lst = entityManager.createQuery("from CaseDispensing_Ke d join fetch d.tbcase c " +
 				"join fetch c.patient p " +
-				"where exists(select hu.id from TreatmentHealthUnit hu where hu.tbcase.id = c.id and hu.endDate = c.endTreatmentDate " +
+				"where exists(select hu.id from TreatmentHealthUnit hu where hu.tbcase.id = c.id and hu.period.endDate = c.treatmentPeriod.endDate " +
 				"and hu.tbunit.id = " + tbunit.getId() + ") " +
 				"and d.month = " + (month + 1) + " and d.year = " + year +
 				" and c.state = " + CaseState.ONTREATMENT.ordinal())
 				.getResultList();
 		
 		for (CaseDispensingNA disp: lst) {
-			org.msh.tb.na.CaseDispensingInfo info = new CaseDispensingInfo(disp);
+			CaseDispensingInfo info = new CaseDispensingInfo(disp);
 			cases.add(info);
 		}
 		
 		// load the remaining cases on treatment
 		List<TbCase> lstcases = entityManager.createQuery("from TbCase c join fetch c.patient p " +
-				"where exists(select hu.id from TreatmentHealthUnit hu where hu.tbcase.id = c.id and hu.endDate = c.endTreatmentDate " +
+				"where exists(select hu.id from TreatmentHealthUnit hu where hu.tbcase.id = c.id and hu.period.endDate = c.treatmentPeriod.endDate " +
 				"and hu.tbunit.id = " + tbunit.getId() + ") " + 
 				" and c.state = " + CaseState.ONTREATMENT.ordinal())
 				.getResultList();
@@ -107,7 +108,7 @@ public class RegisterDispensingHome {
 			CaseDispensingInfo info = findCaseDispensingInfo(tbcase);
 			if (info == null) {
 				CaseDispensingNA caseDispensing = new CaseDispensingNA();
-				caseDispensing.setTbcase(tbcase);
+				caseDispensing.setTbcase((TbCaseNA) tbcase);
 				caseDispensing.setMonth(month + 1);
 				caseDispensing.setYear(year);
 				
@@ -214,7 +215,7 @@ public class RegisterDispensingHome {
 	/**
 	 * @return the weeks
 	 */
-	public List<WeekInfo> getWeeks() {
+	public List<org.msh.tb.na.WeekInfo> getWeeks() {
 		if (weeks == null)
 			createCasesList();
 		return weeks;
@@ -238,7 +239,7 @@ public class RegisterDispensingHome {
 	}
 	
 
-	public WeekInfo getSelectedWeek() {
+	public org.msh.tb.na.WeekInfo getSelectedWeek() {
 		if (weeks == null)
 			createCasesList();
 		if (weeks != null) {
