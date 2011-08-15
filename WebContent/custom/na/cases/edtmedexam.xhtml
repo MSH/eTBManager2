@@ -108,7 +108,7 @@
 		<div style="float:left;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandLink action="#{caseDataNAHome.saveMedicalExamination}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam" 
+            <a:commandLink action="#{caseNAHome.saveMedicalExamination}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam" 
             	oncomplete="this.disabled=false;"
             	onclick="this.disabled=true;" />
             <s:link value="#{messages['form.cancel']}" view="/custom/na/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
