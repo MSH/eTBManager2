@@ -34,7 +34,10 @@ public class TbCaseNA extends TbCase{
 	@Column(name="EVENT_DATE")
 	private Date date;
 	
-	@Lob
+	@Column(length=50)
+	private String unitRegCode;
+	
+	
 	private String comments;
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
@@ -90,4 +93,13 @@ public class TbCaseNA extends TbCase{
 		this.comments = comment;
 	}
 
+	public String getUnitRegCode() {
+		return unitRegCode;
+	}
+
+	public void setUnitRegCode(String unitRegCode) {
+		this.unitRegCode = unitRegCode;
+	}
+
+	
 }
