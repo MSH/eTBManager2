@@ -18,7 +18,7 @@ public class CaseSideEffectNA extends CaseSideEffect{
 	@ManyToOne
 	@JoinColumn(name="CASE_DATA_ID")
 	@NotNull
-	private CaseDataNA caseData;	
+	private TbCaseNA tbcase;	
 
 	private SideEffectGrading grade;
 	
@@ -63,12 +63,12 @@ public class CaseSideEffectNA extends CaseSideEffect{
 		this.seriousness = seriousness;
 	}
 
-	public CaseDataNA getCaseData() {
-		return caseData;
+	public TbCaseNA getTbcasena() {
+		return tbcase;
 	}
 
-	public void setCaseData(CaseDataNA caseData) {
-		this.caseData = caseData;
+	public void setTbcasena(TbCaseNA tbcasena) {
+		this.tbcase = tbcasena;
 	}
 
 	public String getComments() {
