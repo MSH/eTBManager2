@@ -127,7 +127,7 @@
 	
 	<h:inputText id="patname" value="#{caseFilters.patient}" style="width:150px;margin:4px" />
 
-	<a:commandLink id="btnsearchpat" action="search" styleClass="button" onclick="if (!disableButtons(this)) return false;" >
+	<a:commandLink id="btnsearchpat" action="search" styleClass="button" onclick="if (!disableButton(this)) return false;" >
 		<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
 		<span>#{messages['form.search']}</span>
 	</a:commandLink>
