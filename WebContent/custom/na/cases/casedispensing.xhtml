@@ -17,14 +17,16 @@
 
 
 <ui:define name="content">
-<p/>
+<h1>#{title}</h1>
+
 
 <rich:jQuery name="updateChecks1" timing="onJScall" selector="#tbldays td" query="removeClass('activerow')"/>
 <rich:jQuery name="updateChecks2" timing="onJScall" selector="#tbldays td:has(:selected)" query="addClass('activerow')"/>
 
 <ui:param name="pagewidth" value="450px;" />
 <s:decorate template="/layout/casebody.xhtml">
-	<a:form id="main">
+	<a:form id="main" styleClass="form1">
+	<div class="form-content">
     <table width="100%">
     <tr><td>
 
@@ -71,15 +73,20 @@
     </h:panelGroup>
 
 	</td></tr>
-    <tr><td align="right">
-            <a:commandLink action="#{caseDispensingHomeNA.saveDispensing}" value="#{messages['form.ok']}" styleClass="button"  
-            	reRender="main" />
-            <s:link value="#{messages['form.cancel']}" view="/custom/na/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+	</table>
+	</div>
+	
+   <div class="form-footer">
+            <a:commandLink action="#{caseDispensingHomeNA.saveDispensing}" styleClass="button"  
+            	reRender="main" >
+            		<span>#{messages['form.save']}</span>
+            		</a:commandLink>
+            <s:link view="/custom/na/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
             	<f:param name="id" value="#{caseHome.id}"/>
+            	<span>#{messages['form.cancel']}</span>
             </s:link>
-    </td></tr>
-    
-    </table>
+            </div>
+   
     
 	</a:form>
 </s:decorate>
