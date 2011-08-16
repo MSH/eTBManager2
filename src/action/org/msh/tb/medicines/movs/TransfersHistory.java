@@ -55,7 +55,7 @@ public class TransfersHistory extends EntityQuery<Transfer> {
 	}
 
 	protected String conditions() {
-		return "where tr.status = 'WAITING_RECEIVING'";
+		return "where tr.status in (1, 2) and (tr.unitTo.id = #{userSession.tbunit.id} or tr.unitFrom.id = #{userSession.tbunit.id})";
 	}
 	
 	@Override

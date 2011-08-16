@@ -1,7 +1,6 @@
 package org.msh.tb.medicines.dispensing;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +31,6 @@ import org.msh.tb.entities.Source;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.movs.MovementHome;

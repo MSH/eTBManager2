@@ -475,6 +475,7 @@ public class TreatmentHome {
 		TbCase tbcase = caseHome.getInstance();
 		tbcase.setState(CaseState.WAITING_TREATMENT);
 		tbcase.setTreatmentPeriod(null);
+		tbcase.setTreatmentUnit(null);
 		tbcase.setIniContinuousPhase(null);
 		tbcase.setRegimen(null);
 

@@ -68,6 +68,9 @@ public class StartTreatmentHome {
 		// save the initial regimen information
 		tbcase.setRegimenIni(tbcase.getRegimen());
 
+		// save the treatment health unit
+		tbcase.setTreatmentUnit(tbunitselection.getTbunit());
+
 		// initialize case data
 		tbcase.setState(CaseState.ONTREATMENT);
 

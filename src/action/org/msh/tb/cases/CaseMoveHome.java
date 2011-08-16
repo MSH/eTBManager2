@@ -167,6 +167,7 @@ public class CaseMoveHome extends Controller {
 			}
 */		}
 
+		tbcase.setTreatmentUnit(tout.getTbunit());
 		tbcase.setState(CaseState.ONTREATMENT);
 		caseHome.persist();
 		
@@ -235,7 +236,10 @@ public class CaseMoveHome extends Controller {
 		hu.setTransferring(false);
 		entityManager.persist(hu);
 
-		caseHome.getInstance().setState(CaseState.ONTREATMENT);
+		TbCase tbcase = caseHome.getInstance();
+		
+		tbcase.setState(CaseState.ONTREATMENT);
+		tbcase.setTreatmentUnit(hu.getTbunit());
 		
 		caseHome.setDisplayMessage(false);
 		caseHome.persist();

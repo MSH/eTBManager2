@@ -221,10 +221,17 @@ public class CaseHome extends WsEntityHome<TbCase>{
 	public boolean isCanReopen() {
 		return (!getInstance().isOpen()) && (checkRoleBySuffix("CASE_REOPEN")) && isWorkingUnit();
 	}
+
+	
+	public boolean isCanViewCase() {
+		if (!isManaged())
+			 return false;
+		else return checkRoleBySuffix("CASE_VIEW");
+	}
 	
 	@Override
 	public boolean isCanOpen() {
-		return checkRoleBySuffix("CASE_VIEW");
+		return true;
 	}
 	
 	/**
