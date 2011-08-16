@@ -125,9 +125,13 @@ function validateYesNo(cb) {
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.month']}" styleClass="collh" />
 			</f:facet>
-			<h:selectOneMenu value="#{it.item.month}" >
-				<f:selectItems value="#{sideEffectNAHome.months}" />
-			</h:selectOneMenu>
+				<rich:calendar id="date1" enableManualInput="true" value="#{it.item.effectSt}" 
+					locale="#{locale}" datePattern="#{messages['locale.datePattern']}" styleClass="xpto"
+					timeZone="#{timezones.default}" validator="futureDateValidator" inputStyle="width:80px;">
+				</rich:calendar>
+				<f:param name="validatefuture" value="true"/>
+   				(#{messages['locale.displayDatePattern']})
+   				<rich:jQuery selector="#edtdatep .rich-calendar-input" query="mask('#{messages['locale.dateMask']}')" />
 		</h:column>
 
 		<h:column>
@@ -150,6 +154,19 @@ function validateYesNo(cb) {
 			</h:selectOneMenu>
 		</h:column>
 		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['cases.sideeffects.month']}" styleClass="collh" />
+			</f:facet>
+				<rich:calendar id="date2" enableManualInput="true" value="#{it.item.effectEnd}" 
+					locale="#{locale}" datePattern="#{messages['locale.datePattern']}" styleClass="xpto"
+					timeZone="#{timezones.default}" validator="futureDateValidator" inputStyle="width:80px;">
+				</rich:calendar>
+				<f:param name="validatefuture" value="true"/>
+   				(#{messages['locale.displayDatePattern']})
+   				<rich:jQuery selector="#edtdatep .rich-calendar-input" query="mask('#{messages['locale.dateMask']}')" />
+		</h:column>
+
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['global.comments']}" styleClass="collh" />
