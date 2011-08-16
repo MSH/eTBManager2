@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
@@ -10,41 +11,51 @@
 
 
 <ui:param name="title" value="#{messages['cases.details']} - #{messages[tbcase.classification.key]}" />
-<ui:param name="waitdlg" value="1" />
+
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
-<ui:param name="pagewidth" value="900px" />
+<ui:param name="pagewidth" value="850px" />
 
 <ui:define name="naveg">
-	<s:link value="#{messages['cases']}" view="/cases/index.html" propagation="none"/>
-	<s:link value="#{messages['cases.searchresult']}" view="/cases/searchresult.xhtml" />
-</ui:define>
-
-
-<ui:define name="left">
-
+	<div class="item">
+		<s:link value="#{messages['cases']}" view="/cases/index.html" propagation="none"/>
+	</div>
+		<div class="item">
+		<s:link value="#{messages['cases.searchresult']}" view="/cases/searchresult.xhtml" />
+		</div>
+		<div class="item selected">
+		<s:link value="#{messages[tbcase.classification.key]}" view="/cases/searchresult.xhtml" />
+		</div>
+	</ui:define>
+	
 	<ui:define name="state-content">
-		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="icon-hu-big" style="margin-top:6px;font-size:11px;max-width:320px;height:60px;" >
-			<b style="padding-right:4px;">#{messages['meds.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
+		<s:fragment rendered="#{tbcase.state=='TRANSFERRING'}" >
+		<div class="icon-hu-big"/> 
+		<div style="margin-top:6px;font-size:11px;max-width:320px;height:60px;" >
+		<b style="padding-right:4px;">#{messages['meds.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
 			<br/>
-			<span class="right-icon" >
+			<span class="right-icon" />
 			<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
 				style="position:relative;" propagation="none">
 				<f:param name="id" value="#{caseHome.id}" />
 			</s:link>
 			<s:link value="#{messages['cases.move.cancel']}" 
-				style="position:relative" />
-			</span>
-		</s:div>
+			style="position:relative" />
+		</div>
+		</s:fragment>
+		
 	</ui:define>
 
-<td width="150px">
-	<h:panelGroup id="leftmenu" styleClass="vertical-menu">
-	<h:form>
-		
-	<h:commandLink value="#{messages['form.remove']}" action="#{caseHome.remove}" 
+
+<ui:define name="left">
+
+<h:panelGroup id="leftmenu" styleClass="vertical-menu">
+	<h:form class="vertical-menu">
+	
+	<h:commandLink action="#{caseHome.remove}" 
 		onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" 
 		rendered="#{caseHome.canEditCaseData}">
+		<div class="delete-icon"/><span>#{messages['form.remove']}</span>
 	</h:commandLink>
 
 	<s:link value="#{messages['cases.close']}" view="/cases/closecase.xhtml" rendered="#{caseHome.canClose}">
@@ -55,16 +66,45 @@
 		rendered="#{caseHome.canReopen}" 
 		onclick="if (!confirm('#{messages['cases.reopen.confirm']}')) return false;">
 	</h:commandLink>
+	
+	<s:link value="#{messages['admin.tags']}" view="/cases/casetagsedt.xhtml" rendered="#{caseHome.canTagCase and empty tbcase.tags}">
+		<f:param name="id" value="#{caseHome.id}" />
+	</s:link>
 
 	</h:form>
 	</h:panelGroup>
 	
-	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:10px;" rendered="#{not empty caseHome.otherCases}">
-		<ui:define name="header">
-			<b>#{messages['cases.details.others']} #{tbcase.patient.name}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-		
+	<s:fragment rendered="#{not empty tbcase.tags}">
+	<table class="table2">
+	<tr>
+		<th>#{messages['admin.tags']}</th>
+	</tr>
+	<tr>
+		<td>
+		<a:repeat value="#{tbcase.tags}" var="it">
+			<div class="tag-icon"/>#{it.name}<br/>
+		</a:repeat>
+		</td>
+	</tr>
+	<s:fragment rendered="#{caseHome.canTagCase}">
+	<tr>
+		<th>
+		<s:link value="#{messages['form.edit']}" 
+			rendered="#{caseHome.canEditCaseData}" 
+			view="/cases/casetagsedt.xhtml">
+			<f:param name="id" value="#{caseHome.id}"/>
+		</s:link>
+		</th>
+	</tr>
+	</s:fragment>
+	</table>
+	</s:fragment>
+
+	<div class="spacer" />
+
+	<s:div styleClass="region1" rendered="#{not empty caseHome.otherCases}">
+		<div class="header">#{messages['cases.details.others']} #{tbcase.patient.name}</div>
+		<div class="content">
 		<h:dataTable id="taboc" value="#{caseHome.otherCases}" var="it" style="font-size:10px;" 
 			columnClasses="coll" width="100%">
 			<h:column>
@@ -85,14 +125,14 @@
                 query="mouseover(function(){jQuery(this).addClass('sel-row')})"/>
 		<rich:jQuery selector="#taboc tr" 
                 query="mouseout(function(){jQuery(this).removeClass('sel-row')})"/>
-	</s:decorate>
-</td>
+                </div>
+                </s:div>
 </ui:define>
 
 <ui:define name="content">
-<p/>
+<h1>#{title}</h1>
 <h:form id="main">
-<s:decorate template="/layout/casebody.xhtml">
+<s:decorate id="bodydiv" template="/layout/casebody.xhtml">
 
 	<ui:define name="state-content">
 		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="icon-hu-big" style="margin-top:6px;font-size:11px;max-width:320px;" >
@@ -116,7 +156,82 @@
 
 <ui:include src="/custom/na/cases/issues.xhtml" />
 
-<a:jsFunction name="changeTab" reRender="main" ajaxSingle="true">
+<div class="spacer" />
+
+<rich:tabPanel switchType="client" id="tabCase">
+<rich:tab label="#{messages['cases.details.case']}" id="tab1" ontabenter="updateTab(1)">
+	<h:panelGroup id="pnltab1">
+		<s:decorate template="/custom/na/cases/data.xhtml" rendered="#{caseFilters.caseTab==1}"/>
+	</h:panelGroup>
+</rich:tab>
+
+<rich:tab label="#{messages['cases.details.exams']}" id="tab2" ontabenter="updateTab(2)">
+	<h:panelGroup id="pnltab2">
+		<s:decorate template="/custom/na/cases/exams.xhtml" rendered="#{caseFilters.caseTab==2}"/>
+	</h:panelGroup>
+</rich:tab>
+
+<rich:tab label="#{messages['cases.details.treatment']}" id="tab3" ontabenter="updateTab(3)">
+	<h:panelGroup id="pnltab3">
+		<s:decorate template="/custom/na/cases/treatment.xhtml" rendered="#{caseFilters.caseTab==3}"/>
+	</h:panelGroup>
+</rich:tab>
+
+<rich:tab label="#{messages['cases.details.medexam']}" id="tab4" ontabenter="updateTab(4)">
+	<h:panelGroup id="pnltab4">
+		<s:decorate template="/custom/na/cases/medexamination.xhtml" rendered="#{caseFilters.caseTab==4}"/>
+	</h:panelGroup>
+</rich:tab>
+
+<rich:tab label="#{messages['cases.details.otherinfo']}" id="tab5" ontabenter="updateTab(5)">
+	<h:panelGroup id="pnltab5">
+		<s:decorate template="/custom/na/cases/otherinfo.xhtml" rendered="#{caseFilters.caseTab==5}"/>
+	</h:panelGroup>
+</rich:tab>
+
+<rich:tab label="#{messages['cases.details.report1']}" id="tab6" ontabenter="updateTab(6)">
+	<h:panelGroup id="pnltab6">
+		<s:decorate template="/cases/drugogram.xhtml" rendered="#{caseFilters.caseTab==6}"/>
+	</h:panelGroup>
+</rich:tab>
+</rich:tabPanel>
+
+<a:jsFunction name="updateTabContent" reRender="pnltab#{caseFilters.caseTab}">
+	<a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
+</a:jsFunction>
+<a:jsFunction name="updateTabSelection">
+	<a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
+</a:jsFunction>
+<script type="text/javascript">
+<!--
+window.tabLoaded = new Array();
+window.inicasetab = #{caseFilters.caseTab};
+jQuery().ready(function() {
+	initTab();
+});
+function initTab() {
+	var updt=window.inicasetab==0;
+	if (updt)
+		window.inicasetab=1;
+	var tabid = 'tab' + window.inicasetab;
+	var dest = 'main:bodydiv:tab' + window.inicasetab;
+	RichFaces.switchTab('main:bodydiv:tabCase', dest, tabid);
+	if (updt)
+		updateTab(window.inicasetab);
+}
+
+function updateTab(tabIndex) {
+	if (window.tabLoaded[tabIndex]==undefined) {
+		window.updateTabContent(tabIndex);
+		window.tabLoaded[tabIndex]=1;
+	}
+	else updateTabSelection(tabIndex);
+}
+-->
+</script>
+
+
+<!-- <a:jsFunction name="changeTab" reRender="main" ajaxSingle="true">
 		<a:actionparam name="param1" assignTo="#{caseFilters.caseView}"/>
 		<a:actionparam name="param2" assignTo="#{caseHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
@@ -186,7 +301,7 @@
 	<s:fragment rendered="#{caseFilters.caseView=='RESUME'}">
 		<ui:include src="/cases/drugogram.xhtml" />
 	</s:fragment>
-</div>
+</div>  -->
 
 </s:decorate>	
 
