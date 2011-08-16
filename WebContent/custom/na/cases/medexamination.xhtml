@@ -6,22 +6,26 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-
-	<s:link value="#{messages['cases.details.newresult']}" view="/custom/na/cases/edtmedexam.xhtml" style="float:right;" >
+	<div class="spacer" />
+	<s:link view="/custom/na/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
 	</s:link>
 
-	<h:panelGroup id="medexams">
+		<h:panelGroup id="medexams">
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty medicalExaminationNAHome.allResults}" />
 
-	<h:dataTable value="#{medicalExaminationNAHome.allResults}" var="r" rendered="#{not empty medicalExaminationNAHome.allResults}" width="100%">
-		<h:column>
-	
-		<s:decorate template="/layout/roundrect.xhtml" style="margin-right:10px;">
-		<ui:define name="header">
-			<div style="float:right;" class="link-bar">
-				<s:link value="#{messages['form.edit']}" view="/custom/na/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" >
+	<!-- <h:dataTable value="#{medicalExaminationNAHome.allResults}" var="r" rendered="#{not empty medicalExaminationNAHome.allResults}" width="100%">
+		<h:column> -->
+
+<ui:repeat var="r" value="#{medicalExaminationHome.allResults}">
+		<div class="spacer" />
+
+		<div class="region1">
+			<div class="header">	
+			<div style="float:right;">
+				<s:link value="#{messages['form.edit']}" view="/custom/na/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 				</s:link>
@@ -29,12 +33,13 @@
 					onclick="if (confirm('#{messages['form.confirm_remove']}')) remMedExamination(#{r.id});return false;" 
 				    rendered="#{caseHome.canEditCaseData}">
 				</h:commandLink>
+			
+			<!-- <div class="name2">#{messages['cases.details.date']}: </div> -->
+			</div> 
+			<h2><h:outputText value="#{r.date}" converter="localeDateConverter" /></h2>
 			</div>
-			<div class="name2">#{messages['cases.details.date']}: </div> 
-			<h:outputText value="#{r.date}" converter="localeDateConverter" />
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
+			<div class="content">
+	
 		<table width="100%" style="border-collapse:collapse;">
 		<tr><td>
 			<s:decorate template="/layout/display.xhtml">
@@ -69,17 +74,16 @@
 		<tr><td>
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['global.comments']}:</ui:define>
-				<h:outputText value="#{r.comments}" escape="false" converter="rmemoria.TextConverter" styleClass="text" />
+				<!-- <h:outputText value="#{r.comments}" escape="false" converter="rmemoria.TextConverter" styleClass="text" /> -->
+					#{r.comments}
 			</s:decorate>
 		</td></tr>
 		</s:fragment>
 		</table>
-		
-		
-		</s:decorate>
-
-		</h:column>
-	</h:dataTable>
+		</div>
+		</div>
+	
+		</ui:repeat>
 	</h:panelGroup>
 
 <a:jsFunction name="remMedExamination" action="#{medicalExaminationNAHome.remove}" reRender="medexams"  rendered="#{caseHome.canEditExams}">
