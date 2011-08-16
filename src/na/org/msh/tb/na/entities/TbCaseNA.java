@@ -40,7 +40,7 @@ public class TbCaseNA extends TbCase{
 	
 	private String comments;
 	
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcasena")
 	@FieldLog(ignore=true)
 	private List<CaseSideEffectNA> sideEffectsNa = new ArrayList<CaseSideEffectNA>();
 	
