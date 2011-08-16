@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
 
 import org.hibernate.validator.InvalidStateException;
 import org.hibernate.validator.InvalidValue;
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.misc.FieldsQuery;
@@ -21,11 +26,12 @@ import org.msh.utils.date.Period;
 
 
 @Name("sideEffectNAHome")
+@Scope(ScopeType.CONVERSATION)
 public class SideEffectNAHome{
 
 	@In(required=true) CaseHome caseHome;
-	@In(required=true, create=true) CaseNAHome caseNAHome;
 	@In(create=true) FieldsQuery fieldsQuery;
+	@In(create=true) EntityManager entityManager;
 	
 	private List<ItemSelect<CaseSideEffectNA>> items;
 	
@@ -67,15 +73,17 @@ public class SideEffectNAHome{
 	 * Saves the changes made to the side effects of the case
 	 * @return - "persisted" if it was successfully saved
 	 */
+	@Transactional
 	public String save() {
 		String result = null;
 		try{
-		TbCaseNA tbcase = (TbCaseNA)caseHome.getInstance();
+		TbCase tbcase = caseHome.getInstance();
 		
 		List<CaseSideEffectNA> lst = ItemSelectHelper.getSelectedItems(getItems(), true);
 		for (CaseSideEffectNA it: lst) {
 //			it.setCaseData(caseData);
 			it.setTbcase(tbcase);
+			it.setTbcasena((TbCaseNA)tbcase);
 			if ((it.getSubstance() != null) && (it.getSubstance2() != null) && (it.getSubstance().equals(it.getSubstance2())))
 				it.setSubstance2(null);
 
@@ -89,16 +97,17 @@ public class SideEffectNAHome{
 			if(it.getSubstance2()!= null)
 				name += " "+it.getSubstance2().getAbbrevName().getName1();
 			it.setMedicines(name);
+			entityManager.persist(it);
 		}
 		
-		for (CaseSideEffectNA it:tbcase.getSideEffectsNa()) {
+		for (CaseSideEffect it:tbcase.getSideEffects()) {
 			if (!lst.contains(it)) {
-				caseHome.getEntityManager().remove(it);
+				entityManager.remove(it);
 			}
 		}
-//		caseData.setTbcase(caseHome.getInstance());
-		tbcase.setSideEffectsNa(lst);
-		result = caseHome.persist();
+		entityManager.flush();
+		entityManager.refresh(tbcase);
+		return "persisted";
 		}catch (InvalidStateException iv){
 			iv.printStackTrace();
 			InvalidValue[] values = iv.getInvalidValues();
