@@ -1,9 +1,13 @@
 package org.msh.tb.na.entities;
 
+import java.util.Date;
+
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.CaseSideEffect;
@@ -13,12 +17,13 @@ import org.msh.tb.na.entities.enums.SideEffectOutcome;
 import org.msh.tb.na.entities.enums.SideEffectSeriousness;
 
 @Entity
+@DiscriminatorValue("na")
 public class CaseSideEffectNA extends CaseSideEffect{
 
 	@ManyToOne
 	@JoinColumn(name="CASE_DATA_ID")
 	@NotNull
-	private TbCaseNA tbcase;	
+	private TbCaseNA tbcasena;	
 
 	private SideEffectGrading grade;
 	
@@ -28,7 +33,12 @@ public class CaseSideEffectNA extends CaseSideEffect{
 	
 	private SideEffectSeriousness seriousness;
 	
-	@Lob
+	@Temporal(TemporalType.DATE)
+	private Date effectSt;
+
+	@Temporal(TemporalType.DATE)
+	private Date effectEnd;
+	
 	private String comments;	
 		
 	public SideEffectGrading getGrade() {
@@ -64,11 +74,11 @@ public class CaseSideEffectNA extends CaseSideEffect{
 	}
 
 	public TbCaseNA getTbcasena() {
-		return tbcase;
+		return tbcasena;
 	}
 
 	public void setTbcasena(TbCaseNA tbcasena) {
-		this.tbcase = tbcasena;
+		this.tbcasena = tbcasena;
 	}
 
 	public String getComments() {
@@ -78,5 +88,22 @@ public class CaseSideEffectNA extends CaseSideEffect{
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
+
+	public Date getEffectSt() {
+		return effectSt;
+	}
+
+	public void setEffectSt(Date effectSt) {
+		this.effectSt = effectSt;
+	}
+
+	public Date getEffectEnd() {
+		return effectEnd;
+	}
+
+	public void setEffectEnd(Date effectEnd) {
+		this.effectEnd = effectEnd;
+	}
+
 	
 }
