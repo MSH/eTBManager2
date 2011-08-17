@@ -5,20 +5,22 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.validate']}" />
-<ui:param name="topmenu" value="1" />
+<ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:180px;" />
 
 
 
 <ui:define name="content">
-<h:form id="main" rendered="#{caseHome.canValidate}">
+<h1>#{title}</h1>
+<h:form id="main" rendered="#{caseHome.canValidate}" styleClass="form1">
 
+<div class="form-content">
 
-<s:decorate template="/layout/casebody.xhtml">
     <table width="100%">
     <tr><td height="30">
     	<div class="warn-icon">
@@ -127,14 +129,20 @@ function isPulmonary(cb) {
     </div>
     
     </td></tr>
-    <tr><td align="right">
-    	<h:commandLink action="#{caseValidationNAHome.validate}" value="#{messages['cases.validate']}" styleClass="button" style="width:180px;"/>
-    	<s:link view="/custom/na/cases/casedata.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" propagation="end" >
+    </table>
+  </div>
+    
+    <div class="form-footer">
+    	<h:commandLink action="#{caseValidationNAHome.validate}" styleClass="button" style="width:180px;">
+    	<span>#{messages['cases.validate']}</span>
+    	</h:commandLink>
+    	<s:link view="/custom/na/cases/casedata.xhtml" styleClass="button-alt" propagation="end" >
     		<f:param name="id" value="#{caseHome.id}" />
+    		<span>#{messages['form.cancel']}</span>
     	</s:link>
-    </td></tr>
-	</table>
-</s:decorate>
+   </div>
+	
+
 
 </h:form>
 </ui:define>
