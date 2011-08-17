@@ -87,7 +87,7 @@ public class OrderReceivingHome extends Controller {
 	public String notifyReceiving() {
 		Date dtReceiving = order.getReceivingDate();
 		if (dtReceiving.before(order.getShippingDate()) || (dtReceiving.after(new Date()))) {
-			facesMessages.addFromResourceBundle("medicines.orders.invalidreceivingdate");
+			facesMessages.addFromResourceBundle("meds.orders.invalidreceivingdate");
 			return "error";
 		}
 
@@ -128,7 +128,7 @@ public class OrderReceivingHome extends Controller {
 			}
 		movementHome.savePreparedMovements();
 
-		facesMessages.addFromResourceBundle("medicines.orders.received");
+		facesMessages.addFromResourceBundle("meds.orders.received");
 		entityManager.persist(order);
 
 		LogService log = new LogService();
@@ -214,7 +214,7 @@ public class OrderReceivingHome extends Controller {
 			if (((UIInput)txt).getValue().toString().isEmpty()) {
 				((UIInput)compQtd).setValid(false);
 
-				FacesMessage message = new FacesMessage(Messages.instance().get("medicines.orders.noobs"));
+				FacesMessage message = new FacesMessage(Messages.instance().get("meds.orders.noobs"));
 				context.addMessage(txt.getClientId(context), message);
 			}
 		}

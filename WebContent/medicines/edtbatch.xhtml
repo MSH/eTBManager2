@@ -8,8 +8,11 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
                  
 <script src="../js/util.js" type="text/javascript" />
+
+<h:form>
 <a:jsFunction name="initNewBatch" action="#{medicineReceivingHome.startNewBatch(null)}" 
 	reRender="formbatch" ajaxSingle="true" oncomplete="finishShowBatchDlg();"/>
+</h:form>
 <script type="text/javascript">
 window.decSeparator = '#{timezones.decimalSeparator}';
 function newBatchDlg() {
@@ -17,7 +20,7 @@ function newBatchDlg() {
 	initNewBatch();
 }
 function startShowBatchDlg() {
-	jQuery("#formbatch\\:batchdlgcontent}").html('<div class="wait-icon"/>');
+	jQuery("#formbatch\\:batchdlgcontent").html('<div class="wait-icon"/>');
 	showModalAutoTop('batchdlg');
 }
 function finishShowBatchDlg() {
@@ -29,7 +32,7 @@ function hideBatchDlg() {
 	Richfaces.hideModalPanel('batchdlg');
 }
 </script>
-<rich:modalPanel id="batchdlg" autosized="true" width="700" zindex="2000">
+<rich:modalPanel id="batchdlg" autosized="true" width="750" zindex="2000">
 	<f:facet name="header">
 		<h:outputText id="title1" value="#{messages['form.data_edit']} - #{messages['Batch']}" />
 	</f:facet>

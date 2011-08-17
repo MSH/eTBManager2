@@ -76,7 +76,7 @@
 	<h:outputText value="#{messages[order.status.key]}"
 		styleClass="#{order.status=='CANCELLED'?'status-cancel':'status-label'}" />
 	<br/>
-	<s:fragment  rendered="#{order.status=='WAITINGAUT'}">
+	<s:fragment  rendered="#{order.status=='WAITAUTHORIZING'}">
 		<div class="text-small">#{messages['meds.orders.authorizerdesc']}</div>
 		<s:decorate template="/layout/unit.xhtml" >
 			<ui:param name="unit" value="#{order.unitTo.authorizerUnit}" />

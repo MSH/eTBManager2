@@ -160,4 +160,13 @@ public abstract class DbBatchTask extends AsyncTaskImpl {
 		this.automaticProgress = automaticProgress;
 	}
 
+
+
+	/**
+	 * @param recordCount the recordCount to set
+	 */
+	public void setRecordCount(int recordCount) {
+		this.recordCount = recordCount;
+	}
+
 }

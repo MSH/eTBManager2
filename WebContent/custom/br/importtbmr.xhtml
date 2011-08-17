@@ -33,7 +33,9 @@
 			#{defaultWorkspace.name}
 		</s:decorate>
 		
-		<a:commandLink action="#{importTBMRHome.execute}" value="Execute" reRender="messages,main"/>
+		<a:commandLink action="#{importTBMRHome.execute}" reRender="messages,main" styleClass="button">
+			<span>Executar</span>
+		</a:commandLink>
 	</s:decorate>
 	</h:form>
 </ui:define>

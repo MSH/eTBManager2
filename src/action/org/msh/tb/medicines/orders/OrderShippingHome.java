@@ -58,7 +58,7 @@ public class OrderShippingHome extends Controller {
 			dt = order.getOrderDate();
 		
 		if (dt.after(order.getShippingDate())) {
-			facesMessages.addFromResourceBundle("medicines.orders.invalidshipmentdate");
+			facesMessages.addFromResourceBundle("meds.orders.invalidshipmentdate");
 			return "error";
 		}
 		
@@ -71,7 +71,7 @@ public class OrderShippingHome extends Controller {
 			}
 		}
 		if (!bBatchSel) {
-			facesMessages.addFromResourceBundle("medicines.orders.nobatchsel");
+			facesMessages.addFromResourceBundle("meds.orders.nobatchsel");
 			return "error";
 		}
 		
@@ -125,8 +125,8 @@ public class OrderShippingHome extends Controller {
 		if (!canShip)
 			return "error";
 		movementHome.savePreparedMovements();
-		
-//		facesMessages.addFromResourceBundle("medicines.orders.shipped");
+
+//		facesMessages.addFromResourceBundle("meds.orders.shipped");
 		
 		entityManager.persist(order);
 		

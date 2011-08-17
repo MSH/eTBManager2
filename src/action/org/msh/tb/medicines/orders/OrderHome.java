@@ -27,7 +27,6 @@ import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.MedicineSelection;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
-import org.msh.utils.date.DateUtils;
 
 
 @Name("orderHome")
@@ -88,14 +87,13 @@ public class OrderHome extends EntityHomeEx<Order>{
 			order.setShipAdminUnit(auselection.getSelectedUnit());
 		
 		if (order.getItems().size() == 0) {
-			facesMessages.addFromResourceBundle("medicines.orders.noproduct");
+			facesMessages.addFromResourceBundle("meds.orders.noproduct");
 			return "error";
 		}
-		Date orderDate = DateUtils.getDatePart(new Date());
 		
 		OrderStatus st;
 		if (order.getUnitTo().getAuthorizerUnit() != null)
-			st = OrderStatus.WAITINGAUT;
+			st = OrderStatus.WAITAUTHORIZING;
 		else {
 			st = OrderStatus.WAITSHIPMENT;
 /*			order.setApprovingDate(orderDate);
@@ -104,7 +102,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 			}
 */		}
 		order.setStatus(st);
-		order.setOrderDate(orderDate);
+		order.setOrderDate(new Date());
 		order.setNumDays(order.getUnitFrom().getNumDaysOrder());
 		order.setUnitTo(order.getUnitFrom().getSecondLineSupplier());
 		
@@ -174,7 +172,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 	@Transactional
 	public String cancelOrder() {
 		if (getOrder().getStatus() == OrderStatus.RECEIVED) {
-			facesMessages.addFromResourceBundle("medicines.orders.cannotcancel");
+			facesMessages.addFromResourceBundle("meds.orders.cannotcancel");
 			return "error";
 		}
 		
@@ -285,7 +283,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 	public boolean isCanAuthorize() {
 		Order order = getInstance();
 		
-		if ((order.getStatus() != OrderStatus.WAITINGAUT) || (!Identity.instance().hasRole("VAL_ORDER")))
+		if ((order.getStatus() != OrderStatus.WAITAUTHORIZING) || (!Identity.instance().hasRole("VAL_ORDER")))
 			return false;
 		
 		Tbunit autUnit = order.getUnitTo().getAuthorizerUnit();
@@ -340,7 +338,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 	public boolean isCanRemove() {
 		Order order = getInstance();
 
-		if ((order.getStatus() != OrderStatus.WAITINGAUT) || (!Identity.instance().hasRole("NEW_ORDER")))
+		if ((order.getStatus() != OrderStatus.WAITAUTHORIZING) || (!Identity.instance().hasRole("NEW_ORDER")))
 			return false;
 		
 		Tbunit userUnit = userSession.getWorkingTbunit();
@@ -356,7 +354,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 	public boolean isCanCancel() {
 		Order order = getInstance();
 
-		if (((order.getStatus() != OrderStatus.WAITINGAUT) &&
+		if (((order.getStatus() != OrderStatus.WAITAUTHORIZING) &&
 			(order.getStatus() != OrderStatus.WAITSHIPMENT)) ||
 			(!Identity.instance().hasRole("ORDER_CANC"))) 
 		{

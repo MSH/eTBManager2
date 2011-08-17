@@ -59,7 +59,7 @@ public class OrderAuthorizingHome extends Controller {
 				item.getItem().setApprovedQuantity(item.getApprovedQuantity());
 			}
 		
-		facesMessages.addFromResourceBundle("medicines.orders.authorized");
+		facesMessages.addFromResourceBundle("meds.orders.authorized");
 
 		// register log
 		LogService logsrv = new LogService();

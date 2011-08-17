@@ -24,6 +24,8 @@
 <ui:define name="content">
 <s:decorate template="/layout/unitsel.xhtml">
 
+
+<s:decorate template="/layout/casebody.xhtml">
 <h:form id="main" styleClass="form1"> 
 
 	<div class="form-content">
@@ -36,12 +38,15 @@
 		<ui:param name="future" value="false" />
     </s:decorate>
 	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['Regimen']}:</ui:define>
+		<h:outputText value="#{tbcase.regimen == null? messages['regimens.individualized'] : tbcase.regimen.name}" />
+	</s:decorate>
+	
 	</div>
 
-	<s:decorate template="/layout/casebody.xhtml">
-
-    <a:repeat value="#{caseDispensingUIHome.sources}" var="s">
-    <h2>#{s.source}</h2>
+	<a:repeat value="#{caseDispensingUIHome.sources}" var="s">
+    <h2>#{s.source.abbrevName} <span class="text-small">(#{s.source.name})</span></h2>
    		<table id="tblmed" class="table1">
    		<tr>
    			<th>
@@ -64,14 +69,11 @@
 				<h:outputText value="#{med.medicine}" />
 			</td>
 			<td align="right">
-				<h:outputText value="#{med.item.quantity}" >
+				<h:outputText value="#{med.item.availableQuantity}" >
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 			</td>
 			<td align="right">
-				<a:commandLink value="#{messages['meds.dispensing.register']}" styleClass="link-small" 
-					onclick="regDispClick(this,'#{med.rowId}');return false;"
-					rendered="#{med.item.dispensingQuantity==0}"/>
 				<div id="disptotal">
 					<h:outputText value="#{med.item.dispensingQuantity}" rendered="#{med.item.dispensingQuantity>0}">
 						<f:convertNumber pattern="#,###,##0"/>
@@ -81,22 +83,22 @@
 			</td>
 		</tr>
 		<a:repeat value="#{med.batches}" var="b">
-		<tr id="#{med.rowId}" style="display:#{med.item.dispensingQuantity>0?'block':'none'}">
+		<tr id="#{med.rowId}" >
 			<td>
 				<s:decorate template="/layout/batch.xhtml" >
-					<ui:param name="batch" value="#{b.batchQuantity.batch}" />
+					<ui:param name="batch" value="#{b.dispensing.batch}" />
 				</s:decorate>
 			</td>
 			<td>
-				<h:outputText value="#{b.batchQuantity.batch.expiryDate}" converter="localeDateConverter" />
+				<h:outputText value="#{b.dispensing.batch.expiryDate}" converter="localeDateConverter" />
 			</td>
 			<td align="right">
-				<h:outputText value="#{b.batchQuantity.quantity}" >
+				<h:outputText value="#{b.availableQuantity}" >
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 			</td>
 			<td align="right">
-				<h:inputText value="#{b.dispensingQuantity}" style="width:80px"/>
+				<h:inputText value="#{b.dispensing.quantity}" style="width:80px"/>
 			</td>
 		</tr>
 		</a:repeat>
@@ -105,16 +107,16 @@
     </a:repeat>
 	
     <div class="form-footer">
-        <h:commandLink action="#{batchDispensingUIHome.saveDispensing}" styleClass="button" onclick="if (!disableButton(this)) return false" >
+        <a:commandLink action="#{caseDispensingUIHome.saveDispensing}" styleClass="button" onclick="if (!disableButton(this)) return false" reRender="main">
         	<span>#{messages['form.save']}</span>
-        </h:commandLink>  
-        <s:link view="/medicines/index.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+        </a:commandLink>  
+        <s:link view="/medicines/dispcasenew.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
         	<span>#{messages['form.cancel']}</span>
         </s:link>
     </div>
 
-	</s:decorate>
 </h:form>
+</s:decorate>
 
 <script type="text/javascript">
 <!--

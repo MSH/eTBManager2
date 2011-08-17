@@ -2,7 +2,7 @@ package org.msh.tb.entities.enums;
 
 
 public enum OrderStatus {
-	WAITINGAUT,
+	WAITAUTHORIZING,
 	WAITSHIPMENT,
 	SHIPPED,
 	RECEIVED,

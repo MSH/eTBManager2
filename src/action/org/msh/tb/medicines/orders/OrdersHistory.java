@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.Order;
+import org.msh.tb.entities.enums.OrderStatus;
 import org.msh.utils.EntityQuery;
 
 @Name("ordersHistory")
@@ -19,19 +20,26 @@ public class OrdersHistory extends EntityQuery<Order> {
 		"year(o.orderDate) = #{orders.year}",
 		"o.status = #{orders.status}"};
 	
-	private String condition = " where (o.unitTo.id = #{userSession.tbunit.id} or " +
-	"o.unitFrom.id = #{userSession.tbunit.id} or " +
-	"o.unitTo.authorizerUnit.id = #{userSession.tbunit.id})";
-	
+
+	protected String getCondition() {
+		return " where (o.unitTo.id = #{userSession.tbunit.id} and o.status in (" +
+				OrderStatus.SHIPPED.ordinal() + "," + OrderStatus.CANCELLED.ordinal() + "," + OrderStatus.RECEIVED.ordinal() + ")) " +
+				" or (o.unitFrom.id = #{userSession.tbunit.id} " +
+				" and o.status in (" +
+				OrderStatus.RECEIVED.ordinal() + "," + OrderStatus.CANCELLED.ordinal() + ")) " +
+				"or (o.unitTo.authorizerUnit.id = #{userSession.tbunit.id} " +
+				" and o.status in (" + OrderStatus.CANCELLED.ordinal() + ", " + OrderStatus.PREPARINGSHIPMENT.ordinal() + ", " + 
+				OrderStatus.RECEIVED.ordinal() + "," + OrderStatus.SHIPPED.ordinal() + "))";
+	}
 
 	@Override
 	public String getEjbql() {
-		return "from Order o join fetch o.unitFrom".concat(condition);
+		return "from Order o join fetch o.unitFrom".concat(getCondition());
 	}
 
 	@Override
 	protected String getCountEjbql() {
-		return "select count(*) from Order o".concat(condition);
+		return "select count(*) from Order o".concat(getCondition());
 	}
 
 	@Override
@@ -69,4 +77,11 @@ public class OrdersHistory extends EntityQuery<Order> {
 		this.year = year;
 	}
 
+	public OrderStatus getReceivedStatus() {
+		return OrderStatus.RECEIVED;
+	}
+
+	public OrderStatus getCanceledStatus() {
+		return OrderStatus.CANCELLED;
+	}
 }

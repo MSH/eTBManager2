@@ -236,11 +236,13 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		caseHome.setCheckSecurityOnOpen(false);
 
 		if (lst.size() > 0) {
-			caseHome.setId(lst.get(0));
-			caseHome.remove();
+			entityManager.createQuery("delete from TbCase c where c.id = :id").setParameter("id", lst.get(0)).executeUpdate();
+//			caseHome.setId(lst.get(0));
+//			caseHome.remove();
 		}
 
 		// initialize object
+		caseHome.clearInstance();
 		caseHome.setId(null);
 
 		tbcase = (TbCaseBR)caseHome.getInstance();
@@ -282,6 +284,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		
 		Tbunit unit = loadTBUnit(rsCases.getInt("COD_US_TRATAMENTO"));
 		tbcase.setNotificationUnit(unit);
+		tbcase.setTreatmentUnit(unit);
 		
 		tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
 		
@@ -318,6 +321,8 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		updateCaseTreatment();
 		
 		caseHome.persist();
+		tbcase = (TbCaseBR)caseHome.getInstance();
+		
 		System.out.println("case id = " + tbcase.getId() + " (" + tbcase.getPatient().getFullName() + ")");
 		
 //		caseData.setTbcase(tbcase);
@@ -347,6 +352,8 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		Laboratory lab = loadLaboratory(rs.getInt("COD_LABORATORIO"));
 
 		Date dtColeta = rs.getDate("DATA_CULTURA_ESCARRO");
+		if (dtColeta == null)
+			return;
 		
 		CultureResult resCulture = null;
 		switch (res) {
@@ -389,7 +396,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		}
 		
 		MicroscopyResult resMicroscopy = null;
-		switch (res) {
+		switch (res2) {
 		case 0:
 			resMicroscopy = MicroscopyResult.NEGATIVE;
 			break;
@@ -408,7 +415,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 			ExamMicroscopy sputum = examMicroscopyHome.getInstance();
 			sputum.setResult(resMicroscopy);
 			sputum.setLaboratory(lab);
-			examMicroscopyHome.getInstance().setDateCollected(dtColeta);
+			sputum.setDateCollected(dtColeta);
 			examMicroscopyHome.setDisplayMessage(false);
 			examMicroscopyHome.setTransactionLogActive(false);
 			examMicroscopyHome.persist();

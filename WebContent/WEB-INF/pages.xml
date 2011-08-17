@@ -54,24 +54,6 @@
     	<param name="imgName" value="#{workspaceViewService.pictureFile}" />
     	<action execute="#{workspaceViewService.responseImage}"/>
     </page>
-    
-
-	<!-- PRODUCT GROUP -->
-	<page view-id="/admin/groups.xhtml">
-    	<restrict>#{s:hasRole('GROUPS')}</restrict>
-		<param name="id" value="#{productGroupHome.id}" converterId="javax.faces.Integer" />
-		<param name="order" value="#{productGroups.order}" />
-	</page>
-	
-	<page view-id="/admin/edtgroup.xhtml">
-    	<restrict>#{s:hasRole('GROUPS')}</restrict>
-    	<param name="id" value="#{productGroupHome.id}" converterId="javax.faces.Integer"/>
-    	<navigation>
-    		<rule if-outcome="persisted">
-    			<redirect view-id="/admin/groups.xhtml" />
-    		</rule>
-    	</navigation>		
-	</page>
 
 
 	<!-- DRUG ORDER -->
@@ -90,19 +72,6 @@
 	</page>
 	
 
-	<!-- CASE DISPENSING -->
-		
-	<page view-id="/medicines/disppacdata.xhtml" >
-		<restrict>#{s:hasRole('DISP_PAC')}</restrict>
-		<param name="id" value="#{caseDispensingHome.id}" converterId="javax.faces.Integer" />
-		<navigation>
-			<rule if-outcome="removed">
-				<redirect view-id="/medicines/disppac.xhtml">
-				</redirect>
-			</rule>
-		</navigation>
-	</page>
-	
 	<!-- MOVEMENTS -->
 
 	<page view-id="/reports/movements.xhtml" action="#{movementFilters.initialize}">

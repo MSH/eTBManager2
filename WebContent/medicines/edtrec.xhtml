@@ -23,11 +23,6 @@
 <h:form id="main" styleClass="form1">
 
 	<div class="form-content">
-    <s:decorate template="/layout/display.xhtml" rendered="#{medicineReceiving.id != null}">
-    	<ui:define name="label">#{messages['form.id']}:</ui:define>
-    	<h:outputText value="#{medicineReceiving.id}" />
-    </s:decorate>
-
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Source']}:</ui:define>
 		<h:selectOneMenu value="#{medicineReceiving.source}" required="true">
@@ -148,6 +143,9 @@
 <a:jsFunction name="refreshMedicines" ajaxSingle="true" reRender="medicines" />
 
 </h:form>
+
+<ui:include src="edtbatch.xhtml" />
+
 </s:decorate>
 
 <script type="text/javascript">
@@ -162,8 +160,6 @@ return true;
 }
 -->
 </script>  
-
-<ui:include src="edtbatch.xhtml" />
 
 </ui:define>
 

@@ -33,11 +33,11 @@ public class Order implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@NotNull
 	private Date orderDate;
-
-	@Temporal(TemporalType.DATE)
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date approvingDate;	
 	
 	@Temporal(TemporalType.DATE)
@@ -70,7 +70,7 @@ public class Order implements Serializable {
 	@JoinColumn(name="USER_CREATOR_ID")
 	@NotNull
 	private User userCreator;
-	
+
 	@ManyToOne
 	@JoinColumn(name="AUTHORIZER_UNIT_ID")
 	private Tbunit authorizer;

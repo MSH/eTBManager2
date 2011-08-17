@@ -26,7 +26,7 @@
 
 <h:form id="main" > 
 
-	<h:dataTable value="#{caseDispensingUIHome.cases}" var="it" styleClass="table2" columnClasses="coll,coll,colr">
+	<h:dataTable value="#{caseDispensingUIHome.cases}" var="it" styleClass="table2" columnClasses="coll,coll,coll,colr">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['Patient']}" styleClass="collh"/>
@@ -38,9 +38,9 @@
 	
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['CaseClassification']}" styleClass="collh"/>
+				<h:outputText value="#{messages['Regimen']}" styleClass="collh"/>
 			</f:facet>
-			#{it.tbcase.classification}
+			<h:outputText value="#{it.tbcase.regimen == null? messages['regimens.individualized'] : it.tbcase.regimen.name}" />
 		</h:column>	
 	
 		<h:column>

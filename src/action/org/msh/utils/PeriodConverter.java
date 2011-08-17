@@ -201,7 +201,10 @@ public class PeriodConverter implements Converter{
 
 	
 	public String getAsElapsedTime() {
-		Calendar c = DateUtils.calcDifference(period.getIniDate(), period.getEndDate());
+		String s = getAsTimeLength(null, null);
+
+		Map<String, String> messages = Messages.instance();
+/*		Calendar c = DateUtils.calcDifference(period.getIniDate(), period.getEndDate());
 
 		long len = c.getTimeInMillis();
 
@@ -256,17 +259,17 @@ public class PeriodConverter implements Converter{
 			
 			if (min > 0) {
 				if (min > 1)
-					 s = min + " " + messages.get("global.min");
-				else s = min + " " + messages.get("global.mins");
+					 s += min + " " + messages.get("global.min");
+				else s += min + " " + messages.get("global.mins");
 			}
 			
 			if (sec > 0) {
 				if (sec > 1)
-					 s = sec + " " + messages.get("global.sec");
-				else s = sec + " " + messages.get("global.secs");
+					 s += sec + " " + messages.get("global.sec");
+				else s += sec + " " + messages.get("global.secs");
 			}
 		}
-
+*/
 		if (!s.isEmpty())
 			s = MessageFormat.format(messages.get("global.timeago"), s);
 		

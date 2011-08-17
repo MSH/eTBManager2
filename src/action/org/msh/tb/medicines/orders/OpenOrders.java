@@ -38,13 +38,13 @@ public class OpenOrders {
 			"join fetch uf.adminUnit join fetch ut.adminUnit " +
 			"where (a.unitFrom.id = :unitid and a.status not in (:stREC, :stCANC))" +
 			"or (a.unitTo.id = :unitid and a.status in (:stWAITSHIP, :stPREPSHIP)) " +
-			"or (a.authorizer.id = :unitid and a.status = :stWAITVAL) " +
+			"or (a.unitTo.authorizerUnit.id = :unitid and a.status = :stWAITVAL) " +
 			"order by a.orderDate";
 		
 		UserSession userSession = (UserSession)Component.getInstance("userSession");
 		
 		Tbunit unit = userSession.getTbunit();
-		
+
 		List<Order> lst = entityManager
 			.createQuery(hql)
 			.setParameter("unitid", userSession.getTbunit().getId())
@@ -52,22 +52,22 @@ public class OpenOrders {
 			.setParameter("stCANC", OrderStatus.CANCELLED)
 			.setParameter("stWAITSHIP", OrderStatus.WAITSHIPMENT)
 			.setParameter("stPREPSHIP", OrderStatus.PREPARINGSHIPMENT)
-			.setParameter("stWAITVAL", OrderStatus.WAITINGAUT)
+			.setParameter("stWAITVAL", OrderStatus.WAITAUTHORIZING)
 			.getResultList();
-		
+
 		receivedOrders = new ArrayList<Order>();
 		ordersToAuthorize = new ArrayList<Order>();
 		unitOrders = new ArrayList<Order>();
 		
 		for (Order order: lst) {
-			if ((unit.equals(order.getAuthorizer())) && (order.getStatus() == OrderStatus.WAITINGAUT))
+			if (order.getUnitFrom().equals(unit))
+				unitOrders.add(order);
+			else
+			if (order.getStatus() == OrderStatus.WAITAUTHORIZING)
 				ordersToAuthorize.add(order);
 			else				
 			if (order.getUnitTo().equals(unit))
 				receivedOrders.add(order);
-			else
-			if (order.getUnitFrom().equals(unit))
-				unitOrders.add(order);
 		}
 	}
 

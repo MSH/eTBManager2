@@ -111,7 +111,7 @@ public class MedicineDispensingHome extends EntityHomeEx<MedicineDispensing>{
     	}
     	
     	if (!hasBatch) {
-    		facesMessages.addFromResourceBundle("medicines.orders.nobatchsel");
+    		facesMessages.addFromResourceBundle("meds.orders.nobatchsel");
     		return "error";
     	}
     	

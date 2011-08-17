@@ -6,7 +6,7 @@
 	<action execute="#{caseHome.initView}"/>
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
 	<navigation>
-		<rule if="#{not caseHome.managed}">
+		<rule if="#{not caseHome.canViewCase}">
 			<redirect view-id="/cases/index.xhtml">
 			</redirect>
 		</rule>
