@@ -66,7 +66,7 @@ public class CaseStateReport {
 		
 		String aucond;
 		if (userWorkspace.getView() == UserView.ADMINUNIT)
-			 aucond = "inner join AdministrativeUnit a on a.id = u.adminunit_id ";
+			 aucond = "inner join administrativeunit a on a.id = u.adminunit_id ";
 		else aucond = "";
 
 		String cond = generateSQLConditionByUserView();
@@ -78,17 +78,17 @@ public class CaseStateReport {
 			hsID = userWorkspace.getHealthSystem().getId();
 		
 		String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
-				"from TbCase c " +
-				"inner join Tbunit u on u.id = c.notification_unit_id " + aucond +
+				"from tbcase c " +
+				"inner join tbunit u on u.id = c.notification_unit_id " + aucond +
 				"where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
 				(hsID != null? "and u.healthSystem_id = " + hsID.toString(): "") +
 				" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
 				" group by c.state, c.validationState " +
 				"union " +
 				"select c.state, c.validationState, 0, count(*) " +
-				"from TbCase c " +
-				"inner join TreatmentHealthUnit h on h.case_id = c.id " +
-				"inner join Tbunit u on u.id = h.unit_id " + aucond + 
+				"from tbcase c " +
+				"inner join treatmenthealthunit h on h.case_id = c.id " +
+				"inner join tbunit u on u.id = h.unit_id " + aucond + 
 				"where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " + 
 				" and u.workspace_id = " + defaultWorkspace.getId() + " and h.enddate = c.endtreatmentdate " + cond + condByCase +
 				(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
@@ -209,7 +209,7 @@ public class CaseStateReport {
 		Workspace workspace = (Workspace)Component.getInstance("defaultWorkspace");
 		
 		List<Object[]> lst = entityManager.createNativeQuery("select t.id, t.tag_name, count(*) " +
-				"from TAGS_CASE a inner join Tag t on t.id = a.tag_id " +
+				"from tags_case a inner join Tag t on t.id = a.tag_id " +
 				"where t.workspace_id = :id " +
 				"group by t.id, t.tag_name")
 				.setParameter("id", workspace.getId())

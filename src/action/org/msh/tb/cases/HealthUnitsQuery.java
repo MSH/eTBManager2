@@ -47,15 +47,15 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 			hsID = userWorkspace.getHealthSystem().getId();
 		
 		String sql = "select u.id, u.name1, a.code, " +
-				"(select count(*) from TbCase c where c.notification_unit_id = u.id and c.state <= 2 " + casecond + ") numcases, " +
-				"(select count(*) from TreatmentHealthUnit t inner join TbCase c on c.id = t.case_id " +
+				"(select count(*) from tbcase c where c.notification_unit_id = u.id and c.state <= 2 " + casecond + ") numcases, " +
+				"(select count(*) from treatmenthealthunit t inner join tbcase c on c.id = t.case_id " +
 				"where t.enddate = c.endtreatmentdate and c.state=1 and t.unit_id = u.id " + casecond + ") as ontreat, " +
-				"(select count(*) from TreatmentHealthUnit t inner join TbCase c on c.id = t.case_id " +
+				"(select count(*) from treatmenthealthunit t inner join tbcase c on c.id = t.case_id " +
 				"where t.inidate > c.initreatmentdate and t.enddate = c.endtreatmentdate and c.state=1 " +
 				"and t.transferring=false and t.unit_id = u.id" + casecond + ") as transferin, " +
-				"(select count(*) from TreatmentHealthUnit t inner join TbCase c on c.id = t.case_id " +
+				"(select count(*) from treatmenthealthunit t inner join tbcase c on c.id = t.case_id " +
 				"where t.enddate < c.endtreatmentdate and c.state in (1,2) and t.unit_id = u.id" + casecond + ") as transferout " +
-				"from Tbunit u inner join AdministrativeUnit a on a.id = u.adminunit_id " +
+				"from tbunit u inner join administrativeunit a on a.id = u.adminunit_id " +
 				"where u.workspace_id = " + defaultWorkspace.getId().toString() + generateSQLConditionByUserView() +
 				(hsID != null? " and u.healthsystem_id = " + hsID: "") + 
 				" group by u.id, u.name1, a.code having numcases > 0 or ontreat > 0  order by a.code, u.name1";
@@ -112,13 +112,13 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 	
 	@Override
 	public String getCountEjbql() {
-		return "select count(*) from Tbunit u where u.workspace.id = #{defaultWorkspace.id}";
+		return "select count(*) from tbunit u where u.workspace.id = #{defaultWorkspace.id}";
 	}
 	
 	@Override
 	public String getEjbql() {
 		// just to avoid "validate" exception
-		return "from Tbunit u where u.workspace.id = #{defaultWorkspace.id}";
+		return "from tbunit u where u.workspace.id = #{defaultWorkspace.id}";
 	}
 	
 	
