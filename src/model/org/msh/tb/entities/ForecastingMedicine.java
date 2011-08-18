@@ -15,12 +15,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
 import org.msh.utils.date.DateUtils;
 
 @Entity
+@Table(name="forecastingmedicine")
 public class ForecastingMedicine implements Serializable {
 	private static final long serialVersionUID = 4483825849526469919L;
 

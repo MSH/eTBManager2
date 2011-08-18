@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.msh.utils.date.DateUtils;
 
@@ -19,6 +20,7 @@ import org.msh.utils.date.DateUtils;
  *
  */
 @Entity
+@Table(name="forecastingcasesontreat")
 public class ForecastingCasesOnTreat implements Serializable {
 	private static final long serialVersionUID = -4173150111908906789L;
 

@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
@@ -32,6 +33,7 @@ import org.msh.utils.date.DateUtils;
  *
  */
 @Entity
+@Table(name="forecasting")
 public class Forecasting extends WSObject implements Serializable {
 	private static final long serialVersionUID = -4515050920327650318L;
 	

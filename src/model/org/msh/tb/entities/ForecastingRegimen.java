@@ -10,11 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
 
 @Entity
+@Table(name="forecastingregimen")
 public class ForecastingRegimen implements Serializable {
 	private static final long serialVersionUID = 1810509102521927840L;
 

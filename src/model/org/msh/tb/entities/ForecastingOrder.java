@@ -9,8 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="forecastingorder")
 public class ForecastingOrder implements Serializable{
 	private static final long serialVersionUID = -5754517154721852537L;
 

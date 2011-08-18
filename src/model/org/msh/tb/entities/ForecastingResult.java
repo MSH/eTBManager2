@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 /**
@@ -18,6 +19,7 @@ import javax.persistence.Transient;
  *
  */
 @Entity
+@Table(name="forecastingresult")
 public class ForecastingResult implements Serializable {
 	private static final long serialVersionUID = -3157222657470999356L;
 

@@ -9,11 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.log.FieldLog;
 
 @Entity
+@Table(name="laboratory")
 public class Laboratory extends WSObject implements Serializable {
 	private static final long serialVersionUID = 2940261304434288722L;
 
