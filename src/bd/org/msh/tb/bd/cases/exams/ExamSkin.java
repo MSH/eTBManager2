@@ -3,11 +3,13 @@ package org.msh.tb.bd.cases.exams;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.msh.tb.bd.entities.enums.SkinTestResult;
 import org.msh.tb.entities.LaboratoryExamResult;
 
 @Entity
+@Table(name="examskin")
 public class ExamSkin extends LaboratoryExamResult implements Serializable {
 
 	/**

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -23,6 +24,7 @@ import org.msh.tb.entities.enums.YesNoType;
  *
  */
 @Entity
+@Table(name="medicalexaminationbd")
 public class MedicalExaminationBd extends CaseData implements Serializable {
 	private static final long serialVersionUID = 2760727118134685773L;
 
