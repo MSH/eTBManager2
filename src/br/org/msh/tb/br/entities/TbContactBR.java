@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.Table;
 
 import org.msh.tb.br.entities.enums.XRayContactBR;
 import org.msh.tb.entities.FieldValueComponent;
@@ -19,6 +20,7 @@ import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.entities.enums.YesNoType;
 
 @Entity
+@Table(name="tbcontactbr")
 public class TbContactBR extends TbContact {
 	private static final long serialVersionUID = -6430798901737624608L;
 

@@ -20,7 +20,7 @@ import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
 
 @Entity
-@Table(name="CaseDataBR")
+@Table(name="casedatabr")
 public class TbCaseBR extends TbCase {
 	private static final long serialVersionUID = -9217679039838707990L;
 

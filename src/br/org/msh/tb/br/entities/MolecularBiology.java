@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -15,6 +16,7 @@ import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.Laboratory;
 
 @Entity
+@Table(name="molecularbiology")
 public class MolecularBiology extends CaseData implements Serializable {
 	private static final long serialVersionUID = 1656875453491288619L;
 
