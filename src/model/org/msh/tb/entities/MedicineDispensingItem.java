@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
@@ -22,6 +23,7 @@ import org.hibernate.validator.NotNull;
  *
  */
 @Entity
+@Table(name="medicinedispensingitem")
 public class MedicineDispensingItem {
 
 	@Id
