@@ -8,6 +8,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.msh.tb.entities.enums.XRayBaseline;
 import org.msh.tb.entities.enums.XRayEvolution;
@@ -22,6 +23,7 @@ import org.msh.tb.entities.enums.XRayResult;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="DISCRIMINATOR", discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue("gen")
+@Table(name="examxray")
 public class ExamXRay extends CaseData {
 
 	private XRayResult result;

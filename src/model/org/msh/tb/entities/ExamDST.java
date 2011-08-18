@@ -7,8 +7,10 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="examdst")
 public class ExamDST extends LaboratoryExamResult implements Serializable {
 	private static final long serialVersionUID = -1911463378908689952L;
 

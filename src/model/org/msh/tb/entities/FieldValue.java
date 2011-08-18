@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.log.FieldLog;
@@ -20,6 +21,7 @@ import org.msh.tb.log.FieldLog;
  *
  */
 @Entity
+@Table(name="fieldvalue")
 public class FieldValue extends WSObject implements Serializable {
 	private static final long serialVersionUID = -754148519681677704L;
 

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -17,6 +18,7 @@ import org.msh.tb.entities.enums.HIVResultKe;
  * Records information about an HIV result during the treatment
  */
 @Entity
+@Table(name="examhiv")
 public class ExamHIV extends CaseData implements Serializable {
 	private static final long serialVersionUID = 2237957846637585494L;
 
