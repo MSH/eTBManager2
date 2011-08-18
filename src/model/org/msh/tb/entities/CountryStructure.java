@@ -8,11 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.msh.tb.log.FieldLog;
 
 
 @Entity
+@Table(name="countrystructure")
 public class CountryStructure extends WSObject implements Serializable{
 	private static final long serialVersionUID = -9182467866935116572L;
 

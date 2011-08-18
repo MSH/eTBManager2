@@ -4,6 +4,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
@@ -13,6 +14,7 @@ import org.apache.commons.beanutils.PropertyUtils;
  *
  */
 @Entity
+@Table(name="casedispensingdays")
 public class CaseDispensingDays {
 
 	@Id

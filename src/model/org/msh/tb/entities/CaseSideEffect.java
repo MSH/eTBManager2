@@ -13,6 +13,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.YesNoType;
@@ -26,6 +27,7 @@ import org.msh.tb.entities.enums.YesNoType;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="DISCRIMINATOR", discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue("gen")
+@Table(name="casesideeffect")
 public class CaseSideEffect {
 
 

@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -20,6 +21,7 @@ import javax.persistence.TemporalType;
  *
  */
 @Entity
+@Table(name="caseissue")
 public class CaseIssue implements Serializable {
 	private static final long serialVersionUID = -4164052707686143441L;
 

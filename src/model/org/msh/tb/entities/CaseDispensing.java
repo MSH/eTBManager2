@@ -11,10 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
 @Entity
+@Table(name="casedispensing")
 public class CaseDispensing implements Serializable {
 	private static final long serialVersionUID = -4617800123206697915L;
 
