@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 
 /**
@@ -17,6 +18,7 @@ import javax.persistence.ManyToOne;
  *
  */
 @Entity
+@Table(name="medicinecomponent")
 public class MedicineComponent implements Serializable{
 	private static final long serialVersionUID = -195735659908845780L;
 

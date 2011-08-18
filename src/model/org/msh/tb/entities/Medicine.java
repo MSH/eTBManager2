@@ -14,12 +14,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.msh.tb.entities.enums.MedicineCategory;
 import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.log.FieldLog;
 
 @Entity
+@Table(name="medicine")
 public class Medicine extends WSObject implements Serializable{
 	private static final long serialVersionUID = 1L;
 

@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.enums.LogValueType;
@@ -19,6 +20,7 @@ import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.LocaleDateConverter;
 
 @Entity
+@Table(name="logvalue")
 public class LogValue {
 
 	@Id
