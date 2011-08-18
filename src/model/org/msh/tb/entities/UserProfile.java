@@ -12,12 +12,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.log.FieldLog;
 
 @Entity
+@Table(name="userprofile")
 public class UserProfile extends WSObject implements Serializable, Comparable<UserProfile> {
 	private static final long serialVersionUID = -1798192936426485144L;
 

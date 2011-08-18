@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.jboss.seam.international.Messages;
 
@@ -23,6 +24,7 @@ import org.jboss.seam.international.Messages;
  */
 
 @Entity
+@Table(name="userrole")
 public class UserRole implements java.io.Serializable, Comparable<UserRole> {
 
 	private static final long serialVersionUID = 1L;

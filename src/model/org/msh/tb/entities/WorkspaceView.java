@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * Handle aspects of the workspace related to its web view
@@ -12,6 +13,7 @@ import javax.persistence.OneToOne;
  *
  */
 @Entity
+@Table(name="workspaceview")
 public class WorkspaceView {
 
 	@Id

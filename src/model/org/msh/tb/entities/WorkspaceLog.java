@@ -3,8 +3,10 @@ package org.msh.tb.entities;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="workspacelog")
 public class WorkspaceLog {
 
 	@Id

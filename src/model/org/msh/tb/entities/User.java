@@ -39,7 +39,7 @@ import org.msh.tb.log.FieldLog;
  * @author Ricardo Memoria
  */
 @Entity
-@Table(name="Sys_User")
+@Table(name="sys_user")
 public class User implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 

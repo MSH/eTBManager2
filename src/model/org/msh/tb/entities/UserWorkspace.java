@@ -10,12 +10,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.enums.UserView;
 
 @Entity
+@Table(name="userworkspace")
 public class UserWorkspace implements Serializable {
 	private static final long serialVersionUID = 8975350130212905881L;
 	

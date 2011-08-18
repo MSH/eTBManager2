@@ -9,12 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.enums.CaseClassification;
 
 @Entity
+@Table(name="userpermission")
 public class UserPermission implements Serializable, Comparable<UserPermission> {
 	private static final long serialVersionUID = 7565244271956307412L;
 

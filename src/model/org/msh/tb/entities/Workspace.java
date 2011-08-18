@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -28,6 +29,7 @@ import org.msh.tb.log.FieldLog;
 @TypeDefs({@TypeDef(name="weeklyFrequency", typeClass=WeeklyFrequencyType.class)})
 
 @Entity
+@Table(name="workspace")
 public class Workspace implements Serializable {
 	private static final long serialVersionUID = -7496421288607921489L;
 
