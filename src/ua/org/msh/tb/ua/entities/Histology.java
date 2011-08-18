@@ -1,6 +1,7 @@
 package org.msh.tb.ua.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.msh.tb.entities.CaseData;
 import org.msh.tb.ua.entities.enums.HistologyResult;
@@ -11,6 +12,7 @@ import org.msh.tb.ua.entities.enums.HistologyResult;
  *
  */
 @Entity
+@Table(name="histology")
 public class Histology extends CaseData {
 
 	private HistologyResult result;
