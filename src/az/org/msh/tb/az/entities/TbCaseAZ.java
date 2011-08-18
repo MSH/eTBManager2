@@ -16,12 +16,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.msh.tb.az.entities.enums.CaseFindingStrategy;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
 
 @Entity
+@Table(name="tbcaseaz")
 public class TbCaseAZ extends TbCase{
 	private static final long serialVersionUID = 3151309615247467018L;
 	
