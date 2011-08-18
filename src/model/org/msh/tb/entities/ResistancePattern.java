@@ -10,8 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="resistancepattern")
 public class ResistancePattern extends WSObject {
 	private static final long serialVersionUID = -2663077939894708009L;
 
@@ -23,7 +25,7 @@ public class ResistancePattern extends WSObject {
 	private String name;
 
 	@ManyToMany
-	@JoinTable(name="SUBSTANCES_RESISTPATTERN")
+	@JoinTable(name="substances_resistpattern")
 	private List<Substance> substances = new ArrayList<Substance>();
 	
 	/**

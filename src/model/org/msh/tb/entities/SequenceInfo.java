@@ -5,10 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
 @Entity
+@Table(name="sequenceinfo")
 public class SequenceInfo extends WSObject {
 	private static final long serialVersionUID = -4563606595107997672L;
 

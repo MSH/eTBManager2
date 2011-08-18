@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -23,6 +24,7 @@ import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.TransferStatus;
 
 @Entity
+@Table(name="transfer")
 public class Transfer implements Serializable {
 	private static final long serialVersionUID = 6722896746113875613L;
 

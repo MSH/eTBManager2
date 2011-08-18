@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -20,6 +21,7 @@ import org.msh.tb.entities.enums.DispensingFrequency;
 import org.msh.tb.log.FieldLog;
 
 @Entity
+@Table(name="tbunit")
 public class Tbunit extends WSObject implements Serializable, EntityState {
 	private static final long serialVersionUID = 7444534501216755257L;
 

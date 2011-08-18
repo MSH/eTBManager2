@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.msh.utils.date.DateUtils;
@@ -23,6 +24,7 @@ import org.msh.utils.date.Period;
  *
  */
 @Entity
+@Table(name="prescribedmedicine")
 public class PrescribedMedicine implements Serializable {
 	private static final long serialVersionUID = 7239969189199419487L;
 

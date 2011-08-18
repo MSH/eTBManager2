@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Specify a system parameter, used in any generic configuration of the system or for a specific workspace
@@ -12,6 +13,7 @@ import javax.persistence.ManyToOne;
  *
  */
 @Entity
+@Table(name="systemparam")
 public class SystemParam {
 
 	@Id

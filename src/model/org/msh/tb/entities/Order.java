@@ -25,7 +25,7 @@ import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.OrderStatus;
 
 @Entity
-@Table(name="MedicineOrder")
+@Table(name="medicineorder")
 public class Order implements Serializable {
 	private static final long serialVersionUID = 2113860266433650022L;
 

@@ -10,12 +10,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.msh.utils.date.Period;
 
 
 @Entity
+@Table(name="treatmenthealthunit")
 public class TreatmentHealthUnit implements Serializable {
 	private static final long serialVersionUID = -7878679577509206518L;
 

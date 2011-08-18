@@ -8,10 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
 @Entity
+@Table(name="transferbatch")
 public class TransferBatch implements Serializable {
 	private static final long serialVersionUID = -3578501257933133181L;
 

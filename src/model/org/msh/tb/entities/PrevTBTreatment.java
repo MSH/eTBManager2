@@ -15,12 +15,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
+@Table(name="prevtbtreatment")
 public class PrevTBTreatment implements Serializable {
 	private static final long serialVersionUID = -4070705919226815216L;
 
@@ -43,7 +45,7 @@ public class PrevTBTreatment implements Serializable {
 	private PrevTBTreatmentOutcome outcome;
 
 	@ManyToMany
-	@JoinTable(name="RES_PREVTBTREATMENT", 
+	@JoinTable(name="res_prevtbtreatment", 
 			joinColumns={@JoinColumn(name="PREVTBTREATMENT_ID")},
 			inverseJoinColumns={@JoinColumn(name="SUBSTANCE_ID")})
 	private List<Substance> substances = new ArrayList<Substance>();

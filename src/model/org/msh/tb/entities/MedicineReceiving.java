@@ -14,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -22,6 +23,7 @@ import org.msh.utils.date.DateUtils;
 
 
 @Entity
+@Table(name="medicinereceiving")
 public class MedicineReceiving implements Serializable {
 	private static final long serialVersionUID = -4879291745573056893L;
 

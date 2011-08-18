@@ -8,11 +8,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.RegimenPhase;
 
 @Entity
+@Table(name="medicineregimen")
 public class MedicineRegimen implements Serializable {
 	private static final long serialVersionUID = 442884632590945592L;
 

@@ -9,11 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.BufferStockMeasure;
 
 @Entity
+@Table(name="medicineunit")
 public class MedicineUnit implements Serializable {
 	private static final long serialVersionUID = 688447456891967008L;
 

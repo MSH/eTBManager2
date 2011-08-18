@@ -28,6 +28,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
@@ -55,6 +56,7 @@ import org.msh.utils.date.Period;
  */
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
+@Table(name="tbcase")
 public class TbCase implements Serializable{
 	private static final long serialVersionUID = 7221451624723376561L;
 
@@ -263,7 +265,7 @@ public class TbCase implements Serializable{
 	private int issueCounter;
 
 	@ManyToMany
-	@JoinTable(name="TAGS_CASE", 
+	@JoinTable(name="tags_case", 
 			joinColumns={@JoinColumn(name="CASE_ID")},
 			inverseJoinColumns={@JoinColumn(name="TAG_ID")})
 	private List<Tag> tags = new ArrayList<Tag>();

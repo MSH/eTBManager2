@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.msh.tb.entities.enums.CaseClassification;
@@ -22,6 +23,7 @@ import org.msh.tb.entities.enums.RegimenPhase;
 
 
 @Entity
+@Table(name="regimen")
 public class Regimen extends WSObject implements Serializable {
 	private static final long serialVersionUID = -8612534215100619569L;
 

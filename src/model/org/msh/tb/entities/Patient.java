@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.Component;
@@ -23,6 +24,7 @@ import org.msh.tb.entities.enums.NameComposition;
  *
  */
 @Entity
+@Table(name="patient")
 public class Patient extends WSObject implements Serializable {
 	private static final long serialVersionUID = 6137777841151141479L;
 	

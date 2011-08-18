@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -27,6 +28,7 @@ import org.msh.tb.entities.enums.MovementType;
  *
  */
 @Entity
+@Table(name="movement")
 public class Movement implements Serializable {
 	private static final long serialVersionUID = 3238105346061740436L;
 
