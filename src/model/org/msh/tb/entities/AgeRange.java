@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.msh.tb.log.FieldLog;
 
@@ -14,6 +15,7 @@ import org.msh.tb.log.FieldLog;
  *
  */
 @Entity
+@Table(name = "agerange")
 public class AgeRange extends WSObject {
 	private static final long serialVersionUID = -9151429225415780966L;
 

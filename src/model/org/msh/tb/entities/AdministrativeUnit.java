@@ -21,7 +21,8 @@ import org.msh.tb.log.FieldLog;
 
 
 @Entity
-@Table(appliesTo="AdministrativeUnit",indexes={@Index(name="idxcode", columnNames={"code"})})
+@javax.persistence.Table(name="administrativeunit")
+@Table(appliesTo="administrativeunit",indexes={@Index(name="idxcode", columnNames={"code"})})
 public class AdministrativeUnit extends WSObject {
 	private static final long serialVersionUID = 7777075173601864769L;
 

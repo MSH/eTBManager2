@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -18,6 +19,7 @@ import org.msh.tb.entities.enums.Container;
 import org.msh.utils.date.DateUtils;
 
 @Entity
+@Table(name = "batch")
 public class Batch implements Serializable {
 	private static final long serialVersionUID = -7099327398266493703L;
 
