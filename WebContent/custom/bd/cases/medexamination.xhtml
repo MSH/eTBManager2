@@ -23,7 +23,7 @@
 		<ui:define name="header">
 			<div style="float:right;">
 				<s:link value="#{messages['form.edit']}" view="/custom/bd/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
-					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 				</s:link>
 				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamCulture(#{r.id}, #{examCultureHome.lastResult});return false;" 

@@ -12,7 +12,7 @@
 	<h:panelGroup id="pnlhiv">	
 		<s:link view="/cases/edtexamhiv.xhtml" 
 			style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
-			<f:param name="id" value="#{tbCase.id}"/>
+			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>
 		</s:link>
@@ -26,7 +26,7 @@
 					<h:outputText value="#{messages['global.month']}" styleClass="colch"/>
 				</f:facet>
 				<s:link view="/cases/edtexamhiv.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
-					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
 						<f:param value="#{r.monthTreatment}"/>
@@ -79,7 +79,7 @@
 	<h:panelGroup id="pnlmicroscopy">	
 		<s:link view="/cases/edtexammicroscopy.xhtml" 
 			style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
-			<f:param name="id" value="#{tbCase.id}"/>
+			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>
 		</s:link>
@@ -93,7 +93,7 @@
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
 				<s:link view="/cases/edtexammicroscopy.xhtml" propagation="none" enabled="#{caseHome.canEditExams}" >
-					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
 						<f:param value="#{r.monthTreatment}"/>
@@ -149,7 +149,7 @@
 	<h:panelGroup id="pnlculture" rendered="false">	
 		<s:link view="/cases/edtexamculture.xhtml" 
 			style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
-			<f:param name="id" value="#{tbCase.id}"/>
+			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>
 		</s:link>
@@ -163,7 +163,7 @@
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
 				<s:link view="/cases/edtexamculture.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
-					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
 						<f:param value="#{r.monthTreatment}"/>
@@ -222,7 +222,7 @@
 	<h:panelGroup id="pnlbiopsy">	
 		<s:link view="/custom/bd/cases/edtexambiopsy.xhtml" 
 			style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
-			<f:param name="id" value="#{tbCase.id}"/>
+			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>
 		</s:link>
@@ -236,7 +236,7 @@
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
 				<s:link view="/custom/bd/cases/edtexambiopsy.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
-					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
 						<f:param value="#{r.monthTreatment}"/>
@@ -293,7 +293,7 @@
 	<h:panelGroup id="pnldst" rendered="false">	
 		<s:link view="/cases/edtexamdst.xhtml" 
 			style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
-			<f:param name="id" value="#{tbCase.id}"/>
+			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>
 		</s:link>
@@ -326,7 +326,7 @@
 		<tr>
 			<td>
 				<s:link view="/cases/edtexamdst.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
-					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.examResult.id}"/>
 					<h:outputFormat value="#{messages[r.examResult.monthDisplay]}" >
 						<f:param value="#{r.examResult.monthTreatment}"/>
@@ -378,7 +378,7 @@
 
 	<h:panelGroup id="pnlXRay">	
 		<s:link view="/cases/edtexamxray.xhtml" style="float:right;" styleClass="button-alt">
-			<f:param name="id" value="#{tbCase.id}"/>
+			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>
 		</s:link>
@@ -390,7 +390,7 @@
 			<h:column>
 				<f:facet name="header">#{messages['global.month']}</f:facet>
 				<s:link view="/cases/edtexamxray.xhtml" propagation="none" >
-					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
 						<f:param value="#{r.monthTreatment}"/>
@@ -439,7 +439,7 @@
 	<h:panelGroup id="pnlskin">	
 		<s:link view="/custom/bd/cases/edtexamskin.xhtml" 
 			style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
-			<f:param name="id" value="#{tbCase.id}"/>
+			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>
 		</s:link>
@@ -453,7 +453,7 @@
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
 				<s:link view="/custom/bd/cases/edtexamskin.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
-					<f:param name="id" value="#{tbCase.id}"/>
+					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
 						<f:param value="#{r.monthTreatment}"/>
