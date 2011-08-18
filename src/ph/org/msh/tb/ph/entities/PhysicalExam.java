@@ -6,11 +6,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.ph.entities.enums.PhysicalExamResult;
 
 @Entity
+@Table(name="physicalexam")
 public class PhysicalExam {
 
 	@Id
