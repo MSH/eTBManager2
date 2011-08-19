@@ -14,14 +14,11 @@ template="/layout/template_new.xhtml">
 <ui:param name="waitdlg" value="1" />
 	  
 <ui:define name="content">
+<h1>#{title}</h1>
 <rich:jQuery name="updateChecks1" timing="onJScall" selector="#tbldays td" query="removeClass('activerow')"/>
 <rich:jQuery name="updateChecks2" timing="onJScall" selector="#tbldays td:has(:selected)" query="addClass('activerow')"/>
 <h:form id="main">
 
-<s:decorate template="/layout/roundrect.xhtml" style="width:750px;margin-top:10px;">
-	<ui:param name="showfooter" value="0" />
-	<ui:param name="showheader" value="0" />
-	
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['Tbunit']}:</ui:define>
 		#{registerDispensingHomeNA.tbunit.name}
@@ -105,12 +102,15 @@ template="/layout/template_new.xhtml">
 	</a:repeat>
 </table>
 
-<table width="100%"><tr><td align="right">
-	<a:commandButton value="#{messages['form.save']}" styleClass="button" action="#{registerDispensingHomeNA.save}"/>
-	<s:button value="#{messages['form.cancel']}" styleClass="button-cancel" propagation="end" view="/custom/na/cases/treatments.xhtml">
+	<div class="form-footer">
+	<a:commandLink styleClass="button" action="#{registerDispensingHomeNA.save}">
+	<span>#{messages['form.save']}</span>
+	</a:commandLink>
+	<s:link styleClass="button-alt" propagation="end" view="/custom/na/cases/treatments.xhtml">
 		<f:param name="huid" value="#{registerDispensingHomeNA.tbunitId}"/>
-	</s:button>
-	</td></tr></table>
+		<span>#{messages['form.cancel']}</span>
+	</s:link>
+	</div>
 	</h:panelGroup>
 	
 	<rich:jQuery selector="#selmain" query="each(function(){this.checkedIndex=false;})"/>
@@ -129,7 +129,7 @@ template="/layout/template_new.xhtml">
 	-->
 	</script>
 	
-	</s:decorate>
+
 	</h:form>
       </ui:define>
       </ui:composition>  
