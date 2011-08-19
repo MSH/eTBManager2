@@ -9,11 +9,12 @@
 	
 	<s:fragment rendered="#{not caseHome.inTreatment}" >
 		<h:outputText value="#{messages['cases.details.notreatment']}" styleClass="warn" style="display:block;padding:30px;"/>
-
-		<s:link value="#{messages['cases.details.starttreatment']}" onclick="showSelRegimenDlg();return false;" 
+		
+		<s:link onclick="showSelRegimenDlg();return false;" 
 			rendered="#{tbcase.state == 'WAITING_TREATMENT'}"
-			style="display:block;margin-left:30px;marign-bottom:30px;width:160px;" styleClass="button">
+			styleClass="button">
 			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['cases.details.starttreatment']}</span>
 		</s:link>
 		
 		<rich:jQuery timing="onJScall" name="showSelRegimenDlg" selector="#seltttype" query="show(500)" />
