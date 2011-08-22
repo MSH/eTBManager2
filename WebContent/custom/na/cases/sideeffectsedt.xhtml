@@ -10,12 +10,13 @@
       template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.sideeffects']}" />
-<ui:param name="waitdlg" value="1" />
+<!-- <ui:param name="waitdlg" value="1" /> -->
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
 
 
 <ui:define name="content">
+<h1>#{title}</h1>
 
 <rich:jQuery selector="document" query="ready(function() {updateRows();})" />
 
@@ -71,10 +72,10 @@ function validateYesNo(cb) {
 }
 </script>
 <p/>
-<h:form id="main">
+<h:form id="main" styleClass="form1">
 
 <s:decorate template="/layout/casebody.xhtml">
-
+<div class="form-content">
 <table width="100%">
 <tr><td>
 	<div id="tblse">
@@ -123,7 +124,7 @@ function validateYesNo(cb) {
 
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.month']}" styleClass="collh" />
+				<h:outputText value="#{messages['cases.sideeffects.startdate']}" styleClass="collh" />
 			</f:facet>
 				<rich:calendar id="date1" enableManualInput="true" value="#{it.item.effectSt}" 
 					locale="#{locale}" datePattern="#{messages['locale.datePattern']}" styleClass="xpto"
@@ -156,7 +157,7 @@ function validateYesNo(cb) {
 		
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.month']}" styleClass="collh" />
+				<h:outputText value="#{messages['cases.sideeffects.statusdate']}" styleClass="collh" />
 			</f:facet>
 				<rich:calendar id="date2" enableManualInput="true" value="#{it.item.effectEnd}" 
 					locale="#{locale}" datePattern="#{messages['locale.datePattern']}" styleClass="xpto"
@@ -176,18 +177,20 @@ function validateYesNo(cb) {
 
 	</h:dataTable>
 	</div>
-
-</td></tr>
-<tr><td align="right">
-	<h:commandLink action="#{sideEffectNAHome.save}" value="#{messages['form.ok']}" styleClass="button" onclick="if (!validateForm()) {return false;} else openWaitDlg();"/> 
-    <s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
-       	<f:param name="id" value="#{caseHome.id}"/>
-    </s:link>
-</td></tr>
+	</td></tr>
 </table>
-</s:decorate>
+</div>
 
-<p/>
+<div class="form-footer">
+	<a:commandLink action="#{sideEffectNAHome.save}" styleClass="button" onclick="if (!validateForm()) {return false;} else openWaitDlg();" reRender="main">
+		 <span>#{messages['form.save']}</span>
+	</a:commandLink> 
+    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+       	<f:param name="id" value="#{caseHome.id}"/>
+       	<span>#{messages['form.cancel']}</span>
+    </s:link>
+</div>
+</s:decorate>
 
 </h:form>
 
