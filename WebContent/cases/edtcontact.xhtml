@@ -62,6 +62,14 @@
     		<s:convertEntity />
     	</h:selectOneMenu>
     </s:decorate>
+    
+    <!-- VR: adding 'Date of Examination' -->
+    <s:decorate template="/layout/dateedit.xhtml">
+    <ui:define name="label">#{messages['TbContact.dateofexamination']}:</ui:define>
+    <ui:param name="required" value="false" /> 
+    	<ui:param name="future" value="true" /> 
+    <ui:param name="datefield" value="#{tbContact.dateOfExamination}" /> 
+    </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
