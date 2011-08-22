@@ -1,6 +1,7 @@
 package org.msh.tb.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,6 +37,9 @@ public class TbContact implements Serializable {
 	private Gender gender;
 	
 	private Integer age;
+	
+	//VR: adding 'date of examination'
+	private Date dateOfExamination;
 	
 	@ManyToOne
 	@JoinColumn(name="CONTACTTYPE_ID")
@@ -175,4 +179,18 @@ public class TbContact implements Serializable {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
+	
+	/**
+	 * @return dateOfExamination
+	 */
+	public Date getDateOfExamination() {
+		return dateOfExamination;
+	}
+
+	/**
+	 * @param comments the comments to set
+	 */
+	public void setDateOfExamination(Date dateOfExamination) {
+		this.dateOfExamination = dateOfExamination;
+}
 }
