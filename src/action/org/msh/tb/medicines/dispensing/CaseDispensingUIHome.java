@@ -25,7 +25,6 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.SourceMedicineTree;
 import org.msh.tb.medicines.SourceMedicineTree.MedicineNode;
-import org.msh.tb.medicines.dispensing.BatchDispensingUIHome.MedicineItem;
 import org.msh.tb.medicines.movs.StockPositionList;
 import org.msh.utils.date.LocaleDateConverter;
 
@@ -140,7 +139,7 @@ public class CaseDispensingUIHome {
 				public void traverse(Source source, Medicine medicine, String errorMessage) {
 					MedicineNode node = sourceTree.findMedicineNode(source, medicine);
 					if (node != null) {
-						((MedicineItem)node.getItem()).setErrorMessage(errorMessage);
+						((MedicineInfo)node.getItem()).setErrorMessage(errorMessage);
 					}
 				}
 			});

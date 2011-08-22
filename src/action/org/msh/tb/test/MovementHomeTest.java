@@ -13,6 +13,8 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.Batch;
+import org.msh.tb.entities.BatchMovement;
+import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.Source;
@@ -49,6 +51,21 @@ public class MovementHomeTest {
 	private Batch b1;
 	private Batch b2;
 
+	
+	/**
+	 * Recreate {@link BatchQuantity} data from the information at {@link BatchMovement}
+	 */
+	@Transactional
+	public void recreateBatchQuantity() {
+		// delete BatchQuantity records
+		entityManager.createQuery("delete from BatchQuantity").executeUpdate();
+
+		// reinsert values in BatchQuantity
+		entityManager.createNativeQuery("insert into BatchQuantity (batch_id, source_id, unit_id, quantity) " +
+				"select a.batch_id, b.source_id, b.unit_id, sum(a.quantity * b.oper) from BatchMovement a " +
+				"inner join Movement b on b.id = a.movement_id " +
+				"group by a.batch_id, b.source_id, b.unit_id").executeUpdate();
+	}
 
 	/**
 	 * Execute test

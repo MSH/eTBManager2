@@ -82,7 +82,7 @@ public class DispensingHome {
 	 * @param quantity
 	 */
 	public void addPatientDispensing(TbCase tbcase, Batch batch, Source source, int quantity) {
-		if (unit.isPatientDispensing())
+		if (!unit.isPatientDispensing())
 			throw new RuntimeException("Method addDispensing cannot be directly called when dispensing is done by patient. Call addPatientDispensing instead");
 
 		addBatchQuantity(batch, source, quantity);
@@ -169,7 +169,7 @@ public class DispensingHome {
 		
 		MedicineDispensingCase it = new MedicineDispensingCase();
 		it.setTbcase(tbcase);
-		it.setSource(it.getSource());
+		it.setSource(source);
 		it.setBatch(batch);
 		patients.add(it);
 

@@ -3,7 +3,6 @@ package org.msh.tb.medicines.movs;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -140,15 +139,19 @@ public class MovementHome {
 		// create batch movements and save changes to the batch quantities of the unit
 		for (PreparedMovement pm: preparedMovements) {
 			Movement mov = pm.getMovement();
-			for (BatchQuantity batchQuantity: pm.getBatchQuantities().keySet()) {
-				Batch batch = batchQuantity.getBatch();
-				int qtd = pm.getBatchQuantities().get(batchQuantity);
+			for (BatchOperation batchOper: pm.getBatchOperations()) {
+				Batch batch = batchOper.getBatchQuantity().getBatch();
+				int movQtd = batchOper.getMovementQuantity();
+				int batQtd = batchOper.getQuantityToBeIncluded();
 				
 				BatchMovement bm = new BatchMovement();
 				bm.setBatch(batch);
-				bm.setQuantity(qtd);
+				bm.setQuantity(movQtd);
 				bm.setMovement(mov);
 				mov.getBatches().add(bm);
+
+				BatchQuantity batchQuantity = batchOper.getBatchQuantity();
+				batchQuantity.setQuantity(batchQuantity.getQuantity() + batQtd);
 				if (batchQuantity.getId() != null) {
 					batchQuantity = entityManager.merge( batchQuantity );
 					if (batchQuantity.getQuantity() == 0)
@@ -254,7 +257,8 @@ public class MovementHome {
 		if (qtd == 0)
 			throw new MovementException("No movement to be executed because the quantity is 0");
 		
-		Map<BatchQuantity, Integer> batchQuantities = prepareBatches(unit, source, batches, oper);
+		// validate and calculate the quantity to be included/reduced from the batches of the unit
+		List<BatchOperation> batchOperations = prepareBatches(unit, source, batches, oper);
 
 		// get quantity to be removed from movements
 		ReturnedValue val = calcQuantityToBeReturned(date, medicine, source, unit);
@@ -329,7 +333,7 @@ public class MovementHome {
 		mov.setStockQuantity(sp.getQuantity());
 
 		pm.setMovement(mov);
-		pm.setBatchQuantities(batchQuantities);
+		pm.setBatchOperations(batchOperations);
 		pm.setStockPosition(sp);
 		
 		if (preparedMovements == null)
@@ -340,14 +344,14 @@ public class MovementHome {
 
 	
 	/**
-	 * Prepare batches to be saved
+	 * Prepare batches and check if quantity of the movement is compatible with the quantity available 
 	 * @param unit
 	 * @param source
 	 * @param batches
 	 * @return
 	 */
-	protected Map<BatchQuantity, Integer> prepareBatches(Tbunit unit, Source source, Map<Batch, Integer> batches, int oper) {
-		Map<BatchQuantity, Integer> lst = new HashMap<BatchQuantity, Integer>();
+	protected List<BatchOperation> prepareBatches(Tbunit unit, Source source, Map<Batch, Integer> batches, int oper) {
+		List<BatchOperation> lst = new ArrayList<MovementHome.BatchOperation>();
 
 		for (Batch b: batches.keySet()) {
 			Integer qtd = batches.get(b);
@@ -371,9 +375,14 @@ public class MovementHome {
 				// the available quantity is the final quantity that will remain when all movements will be
 				// removed and inserted in the system.
 
-				// update batch quantity
-				batchQuantity.setQuantity( availableQtd );
-				lst.put(batchQuantity, qtd);
+				// save quantity to be increased/decreased from the batchQuantity
+				int qtdOper = (qtd * oper) + qtdRem;
+				
+				BatchOperation batchOper = new BatchOperation();
+				batchOper.setBatchQuantity(batchQuantity);
+				batchOper.setMovementQuantity(qtd);
+				batchOper.setQuantityToBeIncluded(qtdOper);
+				lst.add(batchOper);
 			}
 		}
 		
@@ -589,7 +598,7 @@ public class MovementHome {
 	private class PreparedMovement {
 		private Movement movement;
 		private StockPosition stockPosition;
-		private Map<BatchQuantity, Integer> batchQuantities;
+		private List<BatchOperation> batchOperations;
 		/**
 		 * @return the movement
 		 */
@@ -615,16 +624,16 @@ public class MovementHome {
 			this.stockPosition = stockPosition;
 		}
 		/**
-		 * @return the batchQuantities
+		 * @return the batchOperations
 		 */
-		public Map<BatchQuantity, Integer> getBatchQuantities() {
-			return batchQuantities;
+		public List<BatchOperation> getBatchOperations() {
+			return batchOperations;
 		}
 		/**
-		 * @param batchQuantities the batchQuantities to set
+		 * @param batchOperations the batchOperations to set
 		 */
-		public void setBatchQuantities(Map<BatchQuantity, Integer> batchQuantities) {
-			this.batchQuantities = batchQuantities;
+		public void setBatchOperations(List<BatchOperation> batchOperations) {
+			this.batchOperations = batchOperations;
 		}
 	}
 
@@ -657,6 +666,54 @@ public class MovementHome {
 		}
 	}
 
+	
+	/**
+	 * Temporary information about a batch transaction
+	 * @author Ricardo Memoria
+	 *
+	 */
+	private class BatchOperation {
+		private BatchQuantity batchQuantity;
+		private int movementQuantity;
+		// this value includes the movement quantity + the quantity to be removed (if any) 
+		private int quantityToBeIncluded;
+		/**
+		 * @return the batchQuantity
+		 */
+		public BatchQuantity getBatchQuantity() {
+			return batchQuantity;
+		}
+		/**
+		 * @param batchQuantity the batchQuantity to set
+		 */
+		public void setBatchQuantity(BatchQuantity batchQuantity) {
+			this.batchQuantity = batchQuantity;
+		}
+		/**
+		 * @return the movementQuantity
+		 */
+		public int getMovementQuantity() {
+			return movementQuantity;
+		}
+		/**
+		 * @param movementQuantity the movementQuantity to set
+		 */
+		public void setMovementQuantity(int movementQuantity) {
+			this.movementQuantity = movementQuantity;
+		}
+		/**
+		 * @return the quantityToBeIncluded
+		 */
+		public int getQuantityToBeIncluded() {
+			return quantityToBeIncluded;
+		}
+		/**
+		 * @param quantityToBeIncluded the quantityToBeIncluded to set
+		 */
+		public void setQuantityToBeIncluded(int quantityToBeIncluded) {
+			this.quantityToBeIncluded = quantityToBeIncluded;
+		}
+	}
 
 	/**
 	 * @return the errorMessage

@@ -48,7 +48,20 @@
 		action="#{movementHomeTest.execute}" 
 		onclick="if (!confirm('Init tests? All movements will be erased.')) return false;"
 		reRender="main,messages" />
+
+	<div class="spacer" />
+	<h2>Recreate BatchQuantity</h2>
+	<p>
+		This command will recreate all data inside BatchQuantity from the information in BatchMovement 
+	</p>
+	
+	<a:commandLink value="Recreate batches" 
+		action="#{movementHomeTest.recreateBatchQuantity}" 
+		onclick="if (!confirm('Confirm execution?')) return false;"
+		reRender="main,messages" />
+
 	</h:form>
+	
 </div>
 </ui:define>
 

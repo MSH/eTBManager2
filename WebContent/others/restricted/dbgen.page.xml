@@ -7,7 +7,7 @@
 	
 	<navigation>
 		<rule if-outcome="success">
-			<redirect view-id="/others/dbgen.xhtml">
+			<redirect view-id="/others/restricted/dbgen.xhtml">
 				<message>Testing database is being generated. It may take a few minutes depending on the number of cases to be generated, but you may continue using the system</message>
 			</redirect>
 		</rule>
