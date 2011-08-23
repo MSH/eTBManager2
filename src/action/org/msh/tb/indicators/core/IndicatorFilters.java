@@ -15,6 +15,7 @@ import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.ValidationState;
@@ -25,13 +26,20 @@ import org.msh.tb.tbunits.TBUnitSelection;
 @Scope(ScopeType.SESSION)
 @BypassInterceptors
 public class IndicatorFilters {
+	private static final HIVResult[] hivResults = {HIVResult.NOTDONE, HIVResult.ONGOING, HIVResult.NEGATIVE, HIVResult.POSITIVE };
+	
 	private Integer iniMonth;
 	private Integer iniYear;
 	
 	private Integer endMonth;
 	private Integer endYear;
 
-	private IndicatorDate indicatorDate = IndicatorDate.DIAGNOSIS_DATE;
+//	private IndicatorDate indicatorDate = IndicatorDate.DIAGNOSIS_DATE;
+
+	// indicate which dates to filter
+	private boolean useRegistrationDate;
+	private boolean useDiagnosisDate;
+	private boolean useIniTreatmentDate;
 	
 	private TBUnitSelection tbunitselection = new TBUnitSelection(true, TBUnitFilter.HEALTH_UNITS);
 	private CaseClassification classification;
@@ -50,6 +58,8 @@ public class IndicatorFilters {
 	private DrugResistanceType drugResistanceType;
 	private DiagnosisType diagnosisType;
 	private ValidationState validationState = ValidationState.VALIDATED;
+	
+	private HIVResult hivResult;
 
 	@Observer("change-workspace")
 	public void initializeFilters() {
@@ -365,14 +375,14 @@ public class IndicatorFilters {
 		this.diagnosisType = diagnosisType;
 	}
 
-	public IndicatorDate getIndicatorDate() {
+/*	public IndicatorDate getIndicatorDate() {
 		return indicatorDate;
 	}
 
 	public void setIndicatorDate(IndicatorDate indicatorDate) {
 		this.indicatorDate = indicatorDate;
 	}
-
+*/
 	/**
 	 * @return the cultureResult
 	 */
@@ -401,5 +411,73 @@ public class IndicatorFilters {
 	 */
 	public void setValidationState(ValidationState validationState) {
 		this.validationState = validationState;
+	}
+
+
+	/**
+	 * @return the useRegistrationDate
+	 */
+	public boolean isUseRegistrationDate() {
+		return useRegistrationDate;
+	}
+
+
+	/**
+	 * @param useRegistrationDate the useRegistrationDate to set
+	 */
+	public void setUseRegistrationDate(boolean useRegistrationDate) {
+		this.useRegistrationDate = useRegistrationDate;
+	}
+
+
+	/**
+	 * @return the useDiagnosisDate
+	 */
+	public boolean isUseDiagnosisDate() {
+		return useDiagnosisDate;
+	}
+
+
+	/**
+	 * @param useDiagnosisDate the useDiagnosisDate to set
+	 */
+	public void setUseDiagnosisDate(boolean useDiagnosisDate) {
+		this.useDiagnosisDate = useDiagnosisDate;
+	}
+
+
+	/**
+	 * @return the useIniTreatmentDate
+	 */
+	public boolean isUseIniTreatmentDate() {
+		return useIniTreatmentDate;
+	}
+
+
+	/**
+	 * @param useIniTreatmentDate the useIniTreatmentDate to set
+	 */
+	public void setUseIniTreatmentDate(boolean useIniTreatmentDate) {
+		this.useIniTreatmentDate = useIniTreatmentDate;
+	}
+	
+	public HIVResult[] getHivResults() {
+		return hivResults;
+	}
+
+
+	/**
+	 * @return the hivResult
+	 */
+	public HIVResult getHivResult() {
+		return hivResult;
+	}
+
+
+	/**
+	 * @param hivResult the hivResult to set
+	 */
+	public void setHivResult(HIVResult hivResult) {
+		this.hivResult = hivResult;
 	}
 }

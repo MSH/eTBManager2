@@ -20,6 +20,7 @@ import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.CultureResult;
+import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.MicroscopyResult;
 
@@ -189,6 +190,11 @@ public class CaseHQLBase extends Controller {
 		s = getHQLCultureCondition();
 		if (s != null)
 			hql += " and " + s;
+
+		// add filters by HIV result
+		s = getHQLHivResultCondition();
+		if (s != null)
+			hql += " and " + s;
 		
 		// add filters by microscopy
 		s = getHQLMicroscopyCondition();
@@ -327,6 +333,38 @@ public class CaseHQLBase extends Controller {
 		return cond;
 	}
 
+	
+	/**
+	 * Generate HQL restriction by HIV result
+	 * @return
+	 */
+	public String getHQLHivResultCondition() {
+		IndicatorFilters filters = getIndicatorFilters();
+		
+		HIVResult result = filters.getHivResult();
+		
+		if (result == null)
+			return null;
+		
+		String cond = null;
+
+		switch (result) {
+		case NOTDONE: cond = "not exists(select hiv.id from ExamHIV hiv where hiv.tbcase.id = c.id )";
+			break;
+
+		case NEGATIVE: cond = "exists(select id from ExamHIV where tbcase.id=c.id and result=" + HIVResult.NEGATIVE.ordinal() + ") and exists(select hiv.id from ExamHIV hiv where hiv.tbcase.id=c.id and hiv.result!=" + HIVResult.POSITIVE.ordinal() + ")";
+			break;
+
+		case POSITIVE: cond = "exists(select hiv.id from ExamHIV hiv where hiv.tbcase.id=c.id and hiv.result=" + HIVResult.POSITIVE.ordinal() + ")";
+			break;
+
+		case ONGOING: cond = "not exists(select id from ExamHIV where tbcase.id=c.id and result!=" + HIVResult.ONGOING.ordinal() + ") and exists(select hiv.id from ExamHIV hiv where hiv.tbcase.id=c.id and hiv.result=" + HIVResult.ONGOING.ordinal() + ")";
+		}
+		
+		return cond;
+	}
+	
+	
 	/**
 	 * Create an HQL query and set the default parameters
 	 * @return {@link Query} instance
@@ -505,27 +543,15 @@ public class CaseHQLBase extends Controller {
 		return outputSelections;
 	}
 
+	
 	/**
-	 * Get the HQL declaration to filter by region
+	 * Generate HQL period condition using the field passed by argument
+	 * @param field
 	 * @return
 	 */
-	protected String getPeriodCondition() {
+	private String getPeriodConditionByField(String field) {
 		IndicatorFilters filters = getIndicatorFilters();
 
-		String field;
-		switch (filters.getIndicatorDate()) {
-		case DIAGNOSIS_DATE: field = "c.diagnosisDate";
-			break;
-		case INITREATMENT_DATE: field = "c.treatmentPeriod.iniDate";
-			break;
-		case REGISTRATION_DATE: field = "c.registrationDate";
-			break;
-		default: field = null;
-		}
-		
-		if (field == null)
-			return null;
-		
 		if (filters.isPeriodCompleted()) {
 			if (newCasesOnly)
 				 return field + " between #{indicatorFilters.iniDate} and #{indicatorFilters.endDate}";
@@ -545,6 +571,39 @@ public class CaseHQLBase extends Controller {
 			}
 		}
 		return null;
+	}
+
+
+	/**
+	 * Get the HQL declaration to filter by region
+	 * @return
+	 */
+	protected String getPeriodCondition() {
+		IndicatorFilters filters = getIndicatorFilters();
+
+		if ((filters.getIniDate() == null) && (filters.getEndDate() == null))
+			return null;
+
+		String cond = null;
+
+		if (filters.isUseDiagnosisDate())
+			cond = getPeriodConditionByField("c.diagnosisDate");
+		
+		if (filters.isUseRegistrationDate()) {
+			String s = getPeriodConditionByField("c.registrationDate");
+			if (cond != null)
+				cond += " and " + s;
+			else cond = s;
+		}
+		
+		if (filters.isUseIniTreatmentDate()) {
+			String s = getPeriodConditionByField("c.treatmentPeriod.iniDate");
+			if (cond != null)
+				cond += " and " + s;
+			else cond = s;
+		}
+		
+		return cond;
 	}
 	
 	
