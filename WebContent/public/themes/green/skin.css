@@ -362,7 +362,7 @@ a.workspace-data {
 	display:table;
 	border-top:1px solid #becebe;
 	background-color: #e2eae2;
-	padding:4px 0px 10px 0px;
+	padding:4px 4px 10px 4px;
 	margin:6px 0px 10px 0px;
 	min-height:40px;
 	width:100%;
@@ -650,7 +650,7 @@ table {
 	background-color:white;
 	border:1px solid #bdd5b9;
 	padding:2px;
-	display:block;
+	display:table;
 }
 .region1 .header h2 {
 	margin:0;
@@ -665,7 +665,7 @@ table {
 	font-size:1em;
 	height:20px;
 	padding:4px;
-	display:table;
+	display:table-row;
 	width:100%;
 }
 .region1 .content {

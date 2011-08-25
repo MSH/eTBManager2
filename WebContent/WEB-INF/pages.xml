@@ -30,7 +30,7 @@
 	</page>
 
     <page view-id="*" action="#{onlineUsers.update}">
-    	<param name="lang" value="#{localeSelector.localeString}"/>
+    	<param name="lang" value="#{userSettings.localeString}" />
         <navigation>
             <rule if-outcome="home">
                 <redirect view-id="/home.xhtml"/>

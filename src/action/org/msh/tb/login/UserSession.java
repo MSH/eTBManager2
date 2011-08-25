@@ -109,7 +109,7 @@ public class UserSession {
     public void initWorkspaceList() {
     	Contexts.getEventContext().set("userWsInited", true);
     }
-
+    
 
     /**
      * Change the user workspace

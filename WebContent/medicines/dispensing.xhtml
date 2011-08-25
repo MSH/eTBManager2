@@ -30,71 +30,27 @@
 	
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
-		<h:selectOneMenu value="#{dispensingView.month}">
+		<h:selectOneMenu value="#{caseDispensingView.month}">
 			<f:selectItems value="#{months}"/>
 			<a:support event="onchange" reRender="pnldisp,lnknew" action="#{monthDispensingReport.refresh}"/>
 		</h:selectOneMenu>
-		<h:selectOneMenu value="#{dispensingView.year}" style="margin-left:5px;">
+		<h:selectOneMenu value="#{caseDispensingView.year}" style="margin-left:5px;">
 			<f:selectItems value="#{years}"/>
 			<a:support event="onchange" reRender="pnldisp,lnknew" action="#{monthDispensingReport.refresh}"/>
 		</h:selectOneMenu>
 	</s:decorate>
 
 	<h:panelGroup id="pnldisp"> 
-	<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty monthDispensingReport.sources}" styleClass="warn" />
-	<s:fragment rendered="#{not empty monthDispensingReport.sources}">
-	<table width="100%" >
-	<a:repeat value="#{monthDispensingReport.sources}" var="s">
-		<tr><td colspan="#{monthDispensingReport.dispensings.size + 2}" class="colheader">
-				<b>#{s.source.name}</b>
-			</td>
-		</tr>
-		<tr><td>
-		<table width="100%" class="table1">
-		<tr><th rowspan="2">
-				#{messages['Medicine']}
-			</th>
-			<th colspan="#{monthDispensingReport.dispensings.size + 1}">
-				#{messages['MedicineDispensing.quantity']}
-			</th>
-		</tr>
-		<tr>
-			<a:repeat value="#{monthDispensingReport.dispensings}" var="it">
-			<th>
-				<h:outputText value="#{it.iniDate}" converter="periodConverter" >
-					<f:param name="endDate" value="#{it.date}" />
-				</h:outputText>
-				<br/>
-				<s:link value="#{messages['form.details']}" view="/medicines/dispdata.xhtml" style="font-weight:normal;">
-					<f:param name="id" value="#{it.dispensingId}"/>
-				</s:link>
-			</th>
-			</a:repeat>
-			<th>
-				#{messages['global.total']}
-			</th>
-		</tr>
-			<a:repeat value="#{s.items}" var="it">
-			<tr>
-				<td class="colb" width="30%">
-					#{it.medicine}
-				</td>
-				<a:repeat value="#{it.quantities}" var="val">
-				<td align="right" class="colrb">
-					<h:outputText value="#{val}" >
-						<f:convertNumber pattern="#,###,##0"/>
-					</h:outputText>
-				</td>
-				</a:repeat>
-				<td align="right">
-					#{it.total}
-				</td>
-			</tr>
-			</a:repeat>
-			</table>
-			</td></tr>
-	</a:repeat>
-	</table> 
+	<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty caseDispensingView.cases}" styleClass="warn" />
+	<s:fragment rendered="#{not empty caseDispensingView.cases}">
+		<a:repeat value="#{caseDispensingView.cases}" var="it">
+		<s:decorate template="/layout/case.xhtml">
+			<ui:param name="case" value="#{it.tbcase}" />
+		</s:decorate>
+		<s:decorate template="dispensingtable.xhtml">
+			<ui:param name="table" value="#{it.table}" /> 
+		</s:decorate>
+		</a:repeat>
 	</s:fragment>
 	</h:panelGroup>
 </h:form>

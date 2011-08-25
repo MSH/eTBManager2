@@ -8,6 +8,7 @@
       xmlns:p="http://jboss.com/products/seam/pdf"
       xmlns:s="http://jboss.com/products/seam/taglib">
 
+	<div class="form-content">
 	<table width="100%" style="border-collapse: collapse;"><tr><td colspan="2">
 
 	<s:decorate template="/layout/edit.xhtml" rendered="#{empty hideclassification}">
@@ -70,14 +71,13 @@ function handleContextClick(comp) {
 	</td></tr>
 	<tr><td colspan="2">
 
-	<div class="paragraph">#{messages['manag.ind.periodfilter']}</div>
+	<h2>#{messages['manag.ind.periodfilter']}</h2>
 	
 	</td></tr>
 	<tr><td>
-		<h:selectOneRadio value="#{indicatorFilters.indicatorDate}" >
-			<s:selectItems var="v" value="#{indicatorDates}" label="#{messages[v.key]}" />
-			<s:convertEnum />
-		</h:selectOneRadio>
+		<h:selectBooleanCheckbox value="#{indicatorFilters.useRegistrationDate}" style="margin-left:20px;"/>#{messages['TbCase.registrationDate']}
+		<h:selectBooleanCheckbox value="#{indicatorFilters.useDiagnosisDate}" style="margin-left:20px;"/>#{messages['TbCase.diagnosisDate']}
+		<h:selectBooleanCheckbox value="#{indicatorFilters.useIniTreatmentDate}" style="margin-left:20px;"/>#{messages['TbCase.iniTreatmentDate']}
 	</td></tr>
 	<tr><td>
 	
@@ -107,7 +107,7 @@ function handleContextClick(comp) {
 	</td></tr>
 	<tr><td colspan="2">
 
-	<div class="paragraph">#{messages['manag.ind.otherfilters']}</div>
+	<h2>#{messages['manag.ind.otherfilters']}</h2>
 	
 	</td></tr>
 	<tr><td>
@@ -206,7 +206,7 @@ function handleContextClick(comp) {
 	</td></tr>
 	<tr><td>
 
-	<s:decorate template="/layout/display.xhtml" rendered="#{indicator.useDiagnosisTypeFilter}">
+	<s:decorate template="/layout/edit.xhtml" rendered="#{indicator.useDiagnosisTypeFilter}">
 		<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
 		<h:selectOneMenu value="#{indicatorFilters.diagnosisType}">
 			<s:selectItems var="it" value="#{diagnosisTypes}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
@@ -215,7 +215,7 @@ function handleContextClick(comp) {
 	</s:decorate>
 
 	</td><td>
-		<s:decorate template="/layout/display.xhtml">
+		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
     		<ui:param name="labelstyle" value="width:140px;" />
 			<h:selectOneMenu value="#{indicatorFilters.drugResistanceType}">
@@ -224,6 +224,17 @@ function handleContextClick(comp) {
 			</h:selectOneMenu>
 		</s:decorate>
 	</td></tr>
+	<tr>
+		<td colspan="2">
+			<s:decorate template="/layout/edit.xhtml" >
+				<ui:define name="label">#{messages['HIVResult']}:</ui:define>
+				<h:selectOneMenu value="#{indicatorFilters.hivResult}">
+					<s:selectItems var="it" value="#{indicatorFilters.hivResults}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+					<s:convertEnum />
+				</h:selectOneMenu>
+			</s:decorate>
+		</td>
+	</tr>
 <s:fragment rendered="#{hideupdtbar == null}">
 	<tr><td colspan="2">
 		<div class="paragraph" >
@@ -255,5 +266,6 @@ function handleContextClick(comp) {
 	</td></tr>
 </s:fragment>
 	</table>
+	</div>
 
 </ui:composition>

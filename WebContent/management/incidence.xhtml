@@ -30,15 +30,12 @@
 
 <ui:define name="content">
 <h1>#{title}</h1>
-<h:form>
-<table width="100%" cellspacing="4" cellpadding="4">
-<tr><td bgcolor="#f8f8f8" colspan="2">
+<h:form styleClass="form1">
 	<ui:include src="filters.xhtml" >
 		<ui:param name="showoutputselection" value="true" />
 	</ui:include>
 
-</td></tr>
-
+<table width="100%" cellspacing="4" cellpadding="4">
 <tr><td align="center" colspan="2">
 
 <h:panelGroup id="indicator">

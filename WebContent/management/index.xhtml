@@ -49,13 +49,15 @@
 	<s:link view="/management/sideeffects.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
 		<div class="icon-report" style="float:left;"/>#{messages['cases.sideeffects']}
 	</s:link>
-	<s:link view="/management/hivresults.xhtml" rendered="false" >
+	<s:link view="/management/hivresults.xhtml" rendered="true" >
 		<div class="icon-report" style="float:left;"/>#{messages['manag.hivreport']}
 	</s:link>
 
 	<s:link value="#{messages['manag.ind.infectsite']}" view="/management/infecsite.xhtml" styleClass="icon-report" rendered="false"/>
 	<s:link value="#{messages['manag.ind.prevtreat']}" view="/management/infecsite.xhtml" styleClass="icon-report" rendered="false"/>
-	<s:link value="#{messages['manag.ind.hiv']}" view="/management/hiv.xhtml" styleClass="icon-report" rendered="false" />
+	<s:link view="/management/hivresults.xhtml" rendered="false">
+		<div class="icon-report">#{messages['manag.ind.hiv']}</div>
+	</s:link>
 	<s:link value="#{messages['manag.ind.bacmdr']}" view="/management/cover.xhtml" styleClass="icon-report" rendered="false" />
 	<s:link value="#{messages['manag.ind.outcome6']}" view="/management/outcome6.xhtml" styleClass="icon-report" rendered="false" />
 	<s:link value="#{messages['manag.ind.cover']}" view="/management/cover.xhtml" styleClass="icon-report" rendered="false"/>

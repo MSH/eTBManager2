@@ -11,7 +11,7 @@
 <f:view contentType="text/html"/>
 <head>
 <title>#{title}</title>
-<meta http-equiv="keywords" content="eTB Manager,MSH,PSP,DR-TB,TB,Tuberculosis,Second Line,First Line" />
+<meta http-equiv="keywords" content="eTB Manager,MSH,DR-TB,TB,Tuberculosis,Second Line,First Line" />
 <meta http-equiv="description" content="eTB Manager System" />
 <meta http-equiv="Expires" content="0" />
 <meta http-equiv="Cache-Control" content="no-store" />
@@ -153,7 +153,6 @@
 
 <script type="text/javascript">
 <!--
-window.appURL='#{request.requestURL}';
 A4J.AJAX.onError=function(req, status, message) {
 	window.alert('#{messages['mdrtbsys.request_error']}' + '... Request=' + req + ', Status=' + status + ', Message=' +  message);
 	closeWaitDlg();
@@ -165,7 +164,16 @@ jQuery('.workspace-data').hover(function(){
 });
 function unhoverWorkspace(){jQuery('.workspace-data').removeClass('workspace-data-selected');}
 function changeLang(lang) {
-	document.location.href='#{request.requestURL}?lang=' + lang;
+	var s=document.location.href;
+	var slang='lang='+lang;
+	if (s.indexOf('lang=')>=0) {
+		var currlang='lang=#{localeSelector.localeString}';
+		document.location.href=s.replace(currlang,slang);
+	}
+	else {
+		s+=(s.indexOf('?')==-1?'?':'&')+slang; 
+		document.location.href=s;
+	}
 }
 function showModalAutoTop(name, val) {
 	val = (windowPosTop()+(val?val:100))+'px';

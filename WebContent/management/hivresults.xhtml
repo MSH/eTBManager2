@@ -21,8 +21,8 @@
 
 
 <ui:define name="head">
-	<script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/json2.js"></script>
-	<script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/swfobject.js"></script>
+	<script type="text/javascript" src="#{request.contextPath}/js/json2.js"></script>
+	<script type="text/javascript" src="#{request.contextPath}/js/swfobject.js"></script>
 </ui:define>
 
 <ui:define name="naveg">
@@ -31,17 +31,12 @@
 
 
 <ui:define name="content">
-<h:form>
+<h1>#{messages['manag.ind.hiv']}</h1>
+<h:form styleClass="form1">
 <h:panelGroup id="indicator">
-<table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
-<tr><td bgcolor="#f8f8f8" colspan="2">
 	<ui:include src="filters.xhtml" >
 		<ui:param name="showoutputselection" value="false" />
 	</ui:include>
-
-</td></tr>
-
-<tr><td align="left" colspan="2">
 
 	<s:fragment rendered="#{indicatorController.executing}">
 		<div class="paragraph">
@@ -87,10 +82,7 @@
 		</h:column>
 	</h:dataTable>
 
-</td></tr>
-
-
-
+<table width="100%">
 <tr><td align="left" colspan="2">
 
 <h:panelGroup id="indicator2">

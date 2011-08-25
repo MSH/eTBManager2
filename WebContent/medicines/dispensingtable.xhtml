@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+<table class="table1">
+	<tr>
+		<th rowspan="2">
+			#{messages['Source']}
+		</th>
+		<th rowspan="2">
+			#{messages['Medicine']}
+		</th>
+		<th rowspan="2">
+			#{messages['Batch']}
+		</th>
+		<th colspan="2">
+			#{messages['MedicineDispensing.quantity']}
+		</th>
+	</tr>
+	<tr>
+		<th>
+			#{messages['Batch']}
+		</th>
+		<th>
+			#{messages['global.total']}
+		</th>
+	</tr>
+<a:repeat value="#{table.rows}" var="row">
+
+	<tr>
+		<td>
+			#{row.source.abbrevName}
+		</td>
+		<td>
+			#{row.medicine}
+		</td>
+		<td>
+			<s:decorate template="/layout/batch.xhtml">
+				<ui:param name="batch" value="#{row.batch}" />
+			</s:decorate>
+		</td>
+		<td>
+			<h:outputText value="#{row.quantity}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+		<td>
+			<h:outputText value="#{row.totalQuantity}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+	</tr>
+
+</a:repeat>
+</table>
+
+</ui:composition>  
