@@ -74,31 +74,71 @@
     	<h:inputText value="#{medicalExaminationNA.responsible}" style=" width : 340px;" maxlength="100"/>
     </s:decorate>
     
-	<s:decorate template="/layout/edit.xhtml">
+	<!-- <s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['MedicalExamination.dotduringintphase']}:</ui:define>
 		<h:selectOneMenu value="#{medicalExaminationNA.dotIntOptions}" >
     		<s:selectItems var="it" value="#{dotOptions}" noSelectionLabel="-" label="#{messages[it.key]}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
-	</s:decorate>        
-
+	</s:decorate>  --> 
+	
+	<!-- VR -->
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['MedicalExamination.dotduringintphase']}:</ui:define>
+		<h:selectOneMenu id="dotIntPhaseBy" value="#{medicalExaminationNA.dotIntOptions}" >
+    		<s:selectItems var="it" value="#{dotOptions}" noSelectionLabel="-" label="#{messages[it.key]}"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+	</s:decorate> 
+	
+	<rich:jQuery selector="#dotIntPhaseBy" query="change(function(){showDotProvIntPhase(this); })" />
+	
+	
+   
+	<div id="dotProvIntPhase">
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.dotintprovider']}:</ui:define>
     	<h:inputText value="#{medicalExaminationNA.dotProvName}" style=" width : 340px;" maxlength="100"/>
     </s:decorate>
-
+    </div>
+    
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['MedicalExamination.dotduringcontphase']}:</ui:define>
-		<h:selectOneMenu value="#{medicalExaminationNA.dotContOptions}" >
+		<h:selectOneMenu id="dotContPhaseBy" value="#{medicalExaminationNA.dotContOptions}" >
     		<s:selectItems var="it" value="#{dotOptions}" noSelectionLabel="-" label="#{messages[it.key]}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
-	</s:decorate>        
+	</s:decorate>     
+	
+	<rich:jQuery selector="#dotContPhaseBy" query="change(function(){showDotProvContPhase(this); })" />   
 
+	<div id="dotProvContPhase">
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.dotcontprovider']}:</ui:define>
     	<h:inputText value="#{medicalExaminationNA.dotContProvName}" style=" width : 340px;" maxlength="100"/>
     </s:decorate>
+    </div>
+    
+        <script type="text/javascript">
+    <!--
+    	function showDotProvIntPhase(cb) {
+    	  if (isDotIntPhase(cb))
+    	  	jQuery('#dotProvIntPhase').show(500);
+    	  else jQuery('#dotProvIntPhase').hide(500);
+    	}
+ 	   function isDotIntPhase(cb) {
+ 	   return (cb.options[cb.selectedIndex].value == 'SELF_ADMIN');
+ 	}
+   	 function isDotContPhase(cb) {
+      	   return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'SELF_ADMIN'));
+      	}
+  	  function showDotProvContPhase(cb) {
+  	  if (isDotContPhase(cb))
+  	  	jQuery('#dotProvContPhase').show(500);
+  	  else jQuery('#dotProvContPhase').hide(500);
+  	}
+    -->
+    </script>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
