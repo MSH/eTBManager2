@@ -7,7 +7,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -29,10 +28,20 @@ public class TbCaseNA extends TbCase{
 	@OneToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="tbcase")
 	@FieldLog(ignore=true)
 	private List<CaseDispensingNA> dispna = new ArrayList<CaseDispensingNA>();
+	
+	private boolean hospitalized;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="EVENT_DATE")
-	private Date date;
+	private Date hospitalizedDt;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name="EVENT_DATE")
+	private Date dischargeDt;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name="EVENT_DATE")
+	private Date date;	
 	
 	@Column(length=50)
 	private String unitRegCode;
@@ -99,6 +108,30 @@ public class TbCaseNA extends TbCase{
 
 	public void setUnitRegCode(String unitRegCode) {
 		this.unitRegCode = unitRegCode;
+	}
+
+	public boolean isHospitalized() {
+		return hospitalized;
+	}
+
+	public void setHospitalized(boolean hospitalized) {
+		this.hospitalized = hospitalized;
+	}
+
+	public Date getHospitalizedDt() {
+		return hospitalizedDt;
+	}
+
+	public void setHospitalizedDt(Date hospitalizedDt) {
+		this.hospitalizedDt = hospitalizedDt;
+	}
+
+	public Date getDischargeDt() {
+		return dischargeDt;
+	}
+
+	public void setDischargeDt(Date dischargeDt) {
+		this.dischargeDt = dischargeDt;
 	}
 
 	
