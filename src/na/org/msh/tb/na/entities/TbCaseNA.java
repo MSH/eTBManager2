@@ -32,11 +32,9 @@ public class TbCaseNA extends TbCase{
 	private boolean hospitalized;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="EVENT_DATE")
 	private Date hospitalizedDt;
 	
 	@Temporal(TemporalType.DATE)
-	@Column(name="EVENT_DATE")
 	private Date dischargeDt;
 	
 	@Temporal(TemporalType.DATE)
