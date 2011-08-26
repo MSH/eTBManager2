@@ -1,6 +1,7 @@
 package org.msh.tb.na.entities;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import org.msh.tb.na.entities.enums.SideEffectAction;
 import org.msh.tb.na.entities.enums.SideEffectGrading;
 import org.msh.tb.na.entities.enums.SideEffectOutcome;
 import org.msh.tb.na.entities.enums.SideEffectSeriousness;
+import org.msh.utils.date.DateUtils;
 
 @Entity
 @DiscriminatorValue("na")
@@ -40,6 +42,13 @@ public class CaseSideEffectNA extends CaseSideEffect{
 	private Date effectEnd;
 	
 	private String comments;	
+	
+	public Integer getMonthOfTreatment(){
+		int i = 0;
+		i = DateUtils.monthsBetween(tbcasena.getTreatmentPeriod().getIniDate(), effectSt)+1;
+		return i;
+		
+	}
 		
 	public SideEffectGrading getGrade() {
 		return grade;
