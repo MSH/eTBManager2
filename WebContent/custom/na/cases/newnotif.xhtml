@@ -72,8 +72,9 @@ function checkfields() {
 <p/>
 <h:panelGroup id="pnlpatients">
 
-<h:commandLink id="btnpac" value="#{messages['cases.newpatient']}" onclick="openWaitDlg();"
+<h:commandLink id="btnpac" onclick="openWaitDlg();"
     action="#{caseEditingHome.selectPatientData}" styleClass="button" style="display:none;width:160px;" >
+     <span>#{messages['cases.newpatient']}</span>
 </h:commandLink>
 
 <s:decorate template="/layout/naveg.xhtml" rendered="#{patients.searching}">
@@ -81,23 +82,21 @@ function checkfields() {
 	<ui:param name="page" value="/cases/newnotif.xhtml" />
 </s:decorate>
 
-<!-- VR -->
-<!--  <h:dataTable value="#{patients.resultList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
-	rendered="#{patients.searching and (not empty patients.resultList)}" width="680px" columnClasses="coll,colc,colc,coll">-->
+
 	<h:dataTable value="#{patients.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
-	rendered="#{patients.searching and (not empty patients.resultList)}" width="680px" columnClasses="coll,colc,colc,coll">
+	rendered="#{patients.searching and (not empty patients.patientList)}" width="680px" columnClasses="coll,colc,colc,coll">
 	<h:column>
 		<f:facet name="header">
 			<s:link value="#{messages['Patient.name']}" styleClass="collh">
   			<f:param name="order" value="#{patients.order=='p.name,p.middleName'?'p.name desc,p.middleName desc':''}" />
 			</s:link>
 		</f:facet>
-		<!-- VR -->
+		
 			<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;">
 			<f:param name="pacid" value="#{it.patient.id}" />
 			<f:param name="classif" value="#{tbcase.classification}"/>
 		</s:link>
-		<!-- END -->
+	
 		<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml"  
 			onclick="openWaitDlg();">
 			<f:param name="pacid" value="#{it.patient.id}" />
