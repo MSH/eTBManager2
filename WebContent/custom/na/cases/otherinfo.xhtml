@@ -19,7 +19,7 @@
 		</div></s:div>
 		
 			<h:dataTable value="#{tbcase.comorbidities}" var="it" style="margin-top:10px;margin-bottom:10px;"
-			styleClass="tabela4" rowClasses="lin1,lin2" width="100%" rendered="#{not empty tbcase.comorbidities}">
+			styleClass="table1" rowClasses="lin1,lin2" width="100%" rendered="#{not empty tbcase.comorbidities}" columnClasses="colcb,colcb,colb,colb,colb">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['form.name']}" styleClass="collh"/>
@@ -211,7 +211,7 @@
 		</div></s:div>
 		
 	
-	<h:dataTable value="#{tbcasena.sideEffectsNa}" var="it" width="100%" styleClass="tabela4" rowClasses="lin1,lin2" rendered="#{not empty tbcasena.sideEffectsNa}">
+	<h:dataTable value="#{tbcasena.sideEffectsNa}" var="it" width="100%" styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty tbcasena.sideEffectsNa}" columnClasses="colcb,colcb,colb,colb,colb">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
@@ -228,9 +228,10 @@
 
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.month']}" styleClass="collh" />
+				 <h:outputText value="#{messages['cases.sideeffects.month']}" styleClass="collh" />
 			</f:facet>
-			#{it.month}
+		<!-- #{it.month} -->
+		#{it.monthOfTreatment}
 		</h:column>
 
 		<h:column>
