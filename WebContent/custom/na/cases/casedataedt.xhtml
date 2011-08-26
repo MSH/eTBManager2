@@ -162,14 +162,48 @@
 		<ui:param name="required" value="true" />
     </s:decorate>
     </div>
+    </td></tr>
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
 
+	<tr><td>
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     	<ui:param name="required" value="#{tbcase.validated}" /> 
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
     </s:decorate>
+    </td></tr>
+   
+  <tr><td>
+    <s:decorate template="/layout/display.xhtml">
+    		<ui:param name="labelstyle" value="width:250px"/>
+    		<ui:define name="label">#{messages['TbCase.hospitalized']}:</ui:define>
+    		<h:selectBooleanCheckbox id="chkhosp" />
+    	</s:decorate>
+   </td></tr>
 
+    <tr><td>
+    <div id="divhosp">
+    <s:decorate template="/layout/dateedit.xhtml">
+     <ui:define name="label">#{messages['TbCase.dateOfHospitalization']}:</ui:define>
+    <ui:param name="required" value="false" /> 
+    	<ui:param name="future" value="true" /> 
+   <ui:param name="datefield" value="#{tbcasena.hospitalizedDt}" /> 
+    </s:decorate>
+    
+    
+     <s:decorate template="/layout/dateedit.xhtml">
+     <ui:define name="label">#{messages['TbCase.dateOfDischarge']}:</ui:define>
+    <ui:param name="required" value="false" /> 
+    	<ui:param name="future" value="true" /> 
+   <ui:param name="datefield" value="#{tbcasena.dischargeDt}" /> 
+    </s:decorate>
+    </div>
+    </td></tr>
+    
+	<rich:jQuery selector="#chkhosp" query="click(function(){toggleDivPanel(this, '#divhosp');})" />
+    <rich:jQuery selector="#chkhosp:not(:checked)" query="each(function(){jQuery('#divhosp').hide();})" />
+    
+    <tr><td>
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
     	<h:selectOneMenu value="#{tbcase.diagnosisType}" required="#{tbcase.validated}">
@@ -177,7 +211,8 @@
     		<s:convertEnum />
     	</h:selectOneMenu>
     </s:decorate>
-
+	</td></tr>
+	<tr><td>
     <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
     	<h:selectOneMenu value="#{tbcase.drugResistanceType}" >
@@ -185,7 +220,9 @@
     		<s:convertEnum />
     	</h:selectOneMenu>
     </s:decorate>
-
+	</td></tr>
+	
+	<tr><td>
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
     		<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="#{tbcase.validated}">
@@ -193,16 +230,18 @@
     			<s:convertEnum />
     		</h:selectOneMenu>
 		</s:decorate>
-
+	</td></tr>
 <rich:jQuery selector="#patType" query="change(function(){ showPatientTypeOther(this); })" />
 
+	<tr><td>
 		<div id="patientTypeOther">
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['TbCase.patientTypeOther']}</ui:define>
     		<h:inputText value="#{tbcase.patientTypeOther}" style="width:200px;" maxlength="100" />
 		</s:decorate>
 		</div>
-
+	</td></tr>
+	<tr><td>
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
     		<h:selectOneMenu id="infectsite" value="#{tbcase.infectionSite}" required="#{tbcase.validated}">
@@ -210,6 +249,7 @@
     			<s:convertEnum />
     		</h:selectOneMenu>
 		</s:decorate>
+		</td></tr>
 
 <rich:jQuery selector="#infectsite" query="change(function(){showExtrapulmonary(this); })" />
 <script type="text/javascript">
@@ -239,6 +279,7 @@ function isPulmonary(cb) {
 -->
 </script>
 
+	<tr><td>
 	<div id="extrapul" style="clear:both;">
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
@@ -253,7 +294,9 @@ function isPulmonary(cb) {
     		</h:selectOneMenu>
 		</s:decorate>
 	</div>
-
+	</td></tr>
+	
+	<tr><td>
 	<div id="pulmonary" style="clear:both;">
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
@@ -263,11 +306,12 @@ function isPulmonary(cb) {
     		</h:selectOneMenu>
 		</s:decorate>
 	</div>
+		</td></tr>
 <rich:jQuery selector="#infectsite" query="each(function(){ if (!isExtrapulmonary(this)) {jQuery('#extrapul').hide(); }})" />
 <rich:jQuery selector="#infectsite" query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary').hide(); }})" />
 <rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
 		
-		</td></tr></table></div>
+		</table></div>
 	</div>
 	<p/>
 
@@ -354,6 +398,12 @@ function showCurrAddress(cb) {
   if (cb.selectedIndex == 0)
   	jQuery('#curraddr').hide(500);
   else jQuery('#curraddr').show(500);
+}
+
+function toggleDivPanel(chk, divname) {
+	if (chk.checked)
+		jQuery(divname).show();
+	else jQuery(divname).hide();
 }
 </script>
 <rich:jQuery selector="#addrChanged" query="each(function(){ if (this.selectedIndex==0) jQuery('#curraddr').hide(); })" />
