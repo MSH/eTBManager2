@@ -175,6 +175,21 @@
 	</s:decorate>
 	</td></tr>
 	
+	<tr>
+	<td>
+	<s:decorate id="dtHos" template="/layout/display.xhtml" rendered="#{not empty tbcasena.hospitalizedDt}">
+	<ui:define name="label">#{messages['TbCase.dateOfHospitalization']}:</ui:define>
+    <h:outputText id="dt" value="#{tbcasena.hospitalizedDt}" converter="localeDateConverter"/>
+	</s:decorate>
+	</td>
+	
+	<td>
+	<s:decorate id="dtDis" template="/layout/display.xhtml" rendered="#{not empty tbcasena.dischargeDt}">
+	<ui:define name="label">#{messages['TbCase.dateOfDischarge']}:</ui:define>
+    <h:outputText id="dt" value="#{tbcasena.dischargeDt}" converter="localeDateConverter"/>
+	</s:decorate>
+	</td></tr>
+	
 	<tr><td	colspan="2">
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.drugResistanceType}">
 			<ui:define name="label">#{messages['DrugResistanceType']}</ui:define>
