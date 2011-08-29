@@ -1,6 +1,5 @@
 package org.msh.tb.medicines.movs;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -25,28 +24,19 @@ public class StockPositionList {
 	 * @param date - Optional - Reference date of the stock position
 	 * @return
 	 */
-	public List<StockPosition> generate(Tbunit unit, Source source, Date date) {
+	public List<StockPosition> generate(Tbunit unit, Source source) {
 		String hql = "from StockPosition sp " + 
 			"join fetch sp.medicine join fetch sp.source " + 
-			"where sp.tbunit.id = :unit " +
-			"and sp.date = (select max(aux.date) from StockPosition aux " +
-			"where aux.tbunit.id = sp.tbunit.id and aux.source.id = sp.source.id " +
-			"and aux.medicine.id = sp.medicine.id ";
-		
-		if (date != null)
-			 hql = hql + "and aux.date <= :dt)";
-		else hql = hql + ")";
+			"where sp.tbunit.id = :unit";
 		
 		if (source != null)
-			hql = hql + " and sp.source.id = :source";
+			hql = hql + " and sp.source.id = :source ";
 
-		hql = hql + "order by sp.medicine.genericName";
+		hql = hql + " order by sp.medicine.genericName";
 		
 		Query qry = entityManager.createQuery(hql);
 		
 		qry.setParameter("unit", unit.getId());
-		if (date != null)
-			qry.setParameter("dt", date);
 		if (source != null)
 			qry.setParameter("source", source.getId());
 		

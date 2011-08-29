@@ -27,6 +27,8 @@ public class MedicineStockSelection {
 	
 	private Tbunit tbunit;
 	private List<StockSource> sources;
+
+// TODO remove this property and check impact
 	private Date date;
 	
 
@@ -105,7 +107,7 @@ public class MedicineStockSelection {
 		if (tbunit == null)
 			return;
 		
-		List<StockPosition> lst = stockPositionList.generate(tbunit, null, date);
+		List<StockPosition> lst = stockPositionList.generate(tbunit, null);
 	
 		sources = new ArrayList<StockSource>();
 		for (StockPosition sp: lst) {

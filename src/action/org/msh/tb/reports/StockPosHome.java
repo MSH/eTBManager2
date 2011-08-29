@@ -101,10 +101,11 @@ public class StockPosHome implements Comparator<StockPosItem>{
 			StockSource ss = findSource(sp.getSource());
 			StockPosItem it = new StockPosItem();
 			it.setId(sp.getId());
-			it.setLastMovement(sp.getDate());
+			it.setLastMovement(null);
 			it.setMedicine(sp.getMedicine());
 			it.setQuantity(sp.getQuantity());
 			it.setTotalPrice(sp.getTotalPrice());
+			it.setLastMovement(sp.getLastMovement());
 
 			calcTotal(it);
 			
@@ -301,7 +302,6 @@ public class StockPosHome implements Comparator<StockPosItem>{
 		lastMovement = (Movement)entityManager.createQuery("from Movement m where m.medicine = :med " +  
 				"and m.source = :source " +
 				"and m.tbunit = :tbunit " + 
-				"and m.date = :date " + 
 				"and m.recordDate = (select max(aux.recordDate) from Movement aux " + 
 					"where aux.medicine = m.medicine " + 
 					"and aux.source = m.source " +
@@ -310,7 +310,6 @@ public class StockPosHome implements Comparator<StockPosItem>{
 				.setParameter("med", item.getMedicine())
 				.setParameter("source", item.getSource())
 				.setParameter("tbunit", item.getTbunit())
-				.setParameter("date", item.getDate())
 				.getSingleResult();
 	}
 	

@@ -23,6 +23,7 @@ import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.MovementType;
 import org.msh.utils.date.DateUtils;
+import org.msh.utils.date.LocaleDateConverter;
 
 
 @Name("movementHome")
@@ -36,6 +37,8 @@ public class MovementHome {
 */
 	private List<PreparedMovement> preparedMovements;
 	private List<Movement> movementsToBeRemoved;
+	private List<StockPosition> stockPositions;
+	private List<BatchQuantity> batchQuantities;
 	
 	private String errorMessage;
 
@@ -127,54 +130,111 @@ public class MovementHome {
 		// remove previous movement
 		if (movementsToBeRemoved != null) {
 			for (Movement mov: movementsToBeRemoved) {
-				execMovementUpdate(mov, mov.getQuantity() * (-mov.getOper()), mov.getTotalPrice() * (-mov.getOper()));
+				StockPosition sp = findStockPosition(mov.getTbunit(), mov.getSource(), mov.getMedicine());
+				sp.setQuantity( sp.getQuantity() - (mov.getQuantity() * mov.getOper()) );
+				
+				for (BatchMovement bm: mov.getBatches()) {
+					BatchQuantity bq = findBatchQuantity(mov.getTbunit(), mov.getSource(), bm.getBatch());
+					bq.setQuantity( bq.getQuantity() - (bm.getQuantity() * mov.getOper()) );
+				}
+				
 				entityManager.remove(mov);
 			}
 			movementsToBeRemoved = null;
 		}
 
-		if (preparedMovements == null)
-			return;
-
 		// create batch movements and save changes to the batch quantities of the unit
+		if (preparedMovements != null)
 		for (PreparedMovement pm: preparedMovements) {
 			Movement mov = pm.getMovement();
-			for (BatchOperation batchOper: pm.getBatchOperations()) {
-				Batch batch = batchOper.getBatchQuantity().getBatch();
-				int movQtd = batchOper.getMovementQuantity();
-				int batQtd = batchOper.getQuantityToBeIncluded();
-				
+			for (Batch batch: pm.getBatches().keySet()) {
+				int batchqtd = pm.getBatches().get(batch);
+
 				BatchMovement bm = new BatchMovement();
+				BatchQuantity bq = findBatchQuantity(mov.getTbunit(), mov.getSource(), batch);
+				bq.setQuantity( bq.getQuantity() + (batchqtd * mov.getOper()));
+
 				bm.setBatch(batch);
-				bm.setQuantity(movQtd);
+				bm.setQuantity(batchqtd);
 				bm.setMovement(mov);
 				mov.getBatches().add(bm);
-
-				BatchQuantity batchQuantity = batchOper.getBatchQuantity();
-				batchQuantity.setQuantity(batchQuantity.getQuantity() + batQtd);
-				if (batchQuantity.getId() != null) {
-					batchQuantity = entityManager.merge( batchQuantity );
-					if (batchQuantity.getQuantity() == 0)
-						entityManager.remove(batchQuantity);
-				}
-				else entityManager.persist( batchQuantity );
 			}
 
-			entityManager.persist(pm.getStockPosition());
 			entityManager.persist(mov);
 
-			int qtd = mov.getQuantity() * mov.getOper();
-			float totalPrice = mov.getTotalPrice() * mov.getOper();
-			
-			// update stock positions over the date of the movement
-			execMovementUpdate(mov, qtd, totalPrice);
+			StockPosition sp = findStockPosition(mov.getTbunit(), mov.getSource(), mov.getMedicine());
+			sp.setQuantity( sp.getQuantity() + mov.getQtdOperation());
+			sp.setTotalPrice( sp.getTotalPrice() + (mov.getTotalPrice() * mov.getOper()) );
+			entityManager.persist(sp);
 		}
 
+		for (StockPosition sp: stockPositions)
+			entityManager.persist(sp);
+		
+		for (BatchQuantity bq: batchQuantities)
+			entityManager.persist(bq);
+		
 		entityManager.flush();
 
 		preparedMovements = null;
 	}
 
+
+
+	/**
+	 * Find {@link StockPosition} instance by its unit, source and medicine
+	 * @param unit
+	 * @param source
+	 * @param medicine
+	 * @return
+	 */
+	protected StockPosition findStockPosition(Tbunit unit, Source source, Medicine medicine) {
+		if (stockPositions == null)
+			stockPositions = new ArrayList<StockPosition>();
+		
+		for (StockPosition sp: stockPositions) {
+			if ((sp.getTbunit().equals(unit)) && (sp.getSource().equals(source)) && (sp.getMedicine().equals(medicine)))
+				return sp;
+		}
+		
+		List<StockPosition> lst = entityManager.createQuery("from StockPosition where tbunit.id = :unit and source.id = :source and medicine.id = :med")
+			.setParameter("unit", unit.getId())
+			.setParameter("source", source.getId())
+			.setParameter("med", medicine.getId())
+			.getResultList();
+		
+		if (lst.size() > 0) {
+			StockPosition sp = lst.get(0);
+			stockPositions.add(sp);
+			return sp;
+		}
+		
+		StockPosition sp = new StockPosition();
+		stockPositions.add(sp);
+		sp.setTbunit(unit);
+		sp.setSource(source);
+		sp.setMedicine(medicine);
+		return sp;
+	}
+	
+	
+	
+	/**
+	 * Find or create an instance of {@link BatchQuantity} class by its unit, source and batch 
+	 * @param unit
+	 * @param source
+	 * @param batch
+	 * @return
+	 */
+	protected BatchQuantity findBatchQuantity(Tbunit unit, Source source, Batch batch) {
+		BatchQuantity bq = loadBatchQuantity(batch, unit, source);
+
+		if (batchQuantities == null)
+			batchQuantities = new ArrayList<BatchQuantity>();
+		batchQuantities.add(bq);
+	
+		return bq;
+	}
 	
 	/**
 	 * Update stock position and movements after the movement passed as parameter, increment the values 
@@ -183,7 +243,7 @@ public class MovementHome {
 	 * @param qtd
 	 * @param price
 	 */
-	protected void execMovementUpdate(Movement mov, int qtd, float price) {
+/*	protected void execMovementUpdate(Movement mov, int qtd, float price) {
 		entityManager.createQuery("update StockPosition sp " +
 				"set sp.quantity = sp.quantity + :qtd, " +
 				"sp.totalPrice = sp.totalPrice + :price " +
@@ -210,7 +270,7 @@ public class MovementHome {
 				.setParameter("qtd", qtd)
 				.executeUpdate();
 	}
-
+*/
 	
 	/**
 	 * Create a new prepared movement. In case any problem with the new movement is detected, a {@link MovementException}
@@ -251,17 +311,46 @@ public class MovementHome {
 			int qtdaux = batches.get(b);
 			qtd += qtdaux;
 			totalPrice += b.getUnitPrice() * qtdaux;
-//			b = entityManager.merge(b);
 		}
 
 		if (qtd == 0)
 			throw new MovementException("No movement to be executed because the quantity is 0");
-		
-		// validate and calculate the quantity to be included/reduced from the batches of the unit
-		List<BatchOperation> batchOperations = prepareBatches(unit, source, batches, oper);
 
+		// validates batches quantities
+		for (Batch batch: batches.keySet()) {
+			int newqtd = batches.get(batch) * oper;
+			ReturnedValue val = calcQuantityToBeReturned(date, medicine, source, unit, batch);
+			int remqtd = val.getQuantity();
+
+			// only test if it's reducing the total quantity
+			if ((newqtd < 0) || (remqtd < 0)) {
+				// test the worst scenario: both movements will reduce quantity and they are in different dates
+				if ((!(remqtd < 0) && (newqtd < 0)) || (date.equals(val.getDate()))) {
+					// ok, just one movement is reducing the quantity
+					Date dt = date;
+					if (remqtd < 0)
+						dt = val.getDate();
+					testBathQuantityReducing(batch, newqtd + remqtd, dt, source, unit);
+				}
+				else {
+					// both of the movements reduces the quantity
+					if (val.getDate().before(date)) {
+						testBathQuantityReducing(batch, remqtd, val.getDate(), source, unit);
+						testBathQuantityReducing(batch, newqtd + remqtd, date, source, unit);
+					}
+					else {
+						testBathQuantityReducing(batch, newqtd + remqtd, val.getDate(), source, unit);
+						testBathQuantityReducing(batch, newqtd, date, source, unit);
+					}
+				}
+			}
+		}
+		
+/*		// validate and calculate the quantity to be included/reduced from the batches of the unit
+		List<BatchOperation> batchOperations = prepareBatches(unit, source, batches, oper);
+*/
 		// get quantity to be removed from movements
-		ReturnedValue val = calcQuantityToBeReturned(date, medicine, source, unit);
+/*		ReturnedValue val = calcQuantityToBeReturned(date, medicine, source, unit);
 		int qtdRem = (val != null? val.getQuantity(): 0);
 		float priceRem = (val != null? val.getPrice(): 0F);
 
@@ -287,12 +376,10 @@ public class MovementHome {
 			}
 			sp = aux;
 		}
+*/
 
-/* TODO 
- * Se movimento a ser removido é posterior ao novo movimento, então dxQtd não pode incluir qtdRem  
- */
 		// calculate new quantities in stock
-		int dxQtd = (qtd * oper) + qtdRem;
+/*		int dxQtd = (qtd * oper) + qtdRem;
 		float dxPrice = (totalPrice * oper) + priceRem;
 		
 		// check in the current StockPosition object if quantity will be negative because of this transaction
@@ -318,7 +405,7 @@ public class MovementHome {
 		// update quantity of the object, so it will be saved later
 		sp.setQuantity( sp.getQuantity() + dxQtd );
 		sp.setTotalPrice( sp.getTotalPrice() + dxPrice );
-		
+*/		
 		// prepare the new movement to be saved later
 		PreparedMovement pm = new PreparedMovement();
 
@@ -332,13 +419,13 @@ public class MovementHome {
 		mov.setOper(oper);
 		mov.setRecordDate(new Date());
 		mov.setQuantity(qtd);
-		mov.setUnitPrice(totalPrice / qtd);
-		mov.setStockQuantity(sp.getQuantity());
+		mov.setTotalPrice(totalPrice);
 
 		pm.setMovement(mov);
-		pm.setBatchOperations(batchOperations);
+		pm.setBatches(batches);
+/*		pm.setBatchOperations(batchOperations);
 		pm.setStockPosition(sp);
-		
+*/		
 		if (preparedMovements == null)
 			preparedMovements = new ArrayList<PreparedMovement>();
 		preparedMovements.add(pm);
@@ -347,13 +434,46 @@ public class MovementHome {
 
 	
 	/**
+	 * Test if batch quantity can be reduced from a specific date. If quantity cannot be reduced, a {@link MovementException} will be rose with
+	 * descriptions about the error 
+	 * @param batch
+	 * @param qtd
+	 * @param date
+	 * @param source
+	 * @param unit
+	 */
+	protected void testBathQuantityReducing(Batch batch, int qtd, Date date, Source source, Tbunit unit) {
+		// execute quantity validation
+		// verify if, in case of reduction (i.e, dispensing/transfer/etc) if the quantity will be negative from the date to the future 
+		String hql = "select m.date from BatchMovement a join a.movement m " +
+				"where (select sum(b.quantity*b.movement.oper) - :qtd from BatchMovement b " +
+				"join b.movement m2 " +
+				"where b.batch.id=a.batch.id and m2.tbunit.id=m.tbunit.id and m2.source.id=m.source.id " +
+				"and ((m2.date < m.date) or (m2.date = m.date and m2.recordDate <= m.recordDate))) < 0 " +
+				"and a.batch.id = :batch and m.tbunit.id=:unit and m.source.id=:source and m.date >= :dt";
+
+		if (qtd < 0) {
+			List<Date> lst = entityManager.createQuery(hql)
+				.setParameter("qtd", (long)qtd)
+				.setParameter("batch", batch.getId())
+				.setParameter("source", source.getId())
+				.setParameter("unit", unit.getId())
+				.setParameter("dt", date)
+				.getResultList();
+
+			if (lst.size() > 0)
+				throw new MovementException(MessageFormat.format(Messages.instance().get("MovementException.NEGATIVE_STOCK"), batch.getId(), LocaleDateConverter.getDisplayDate(lst.get(0))));
+		}
+	}
+	
+	/**
 	 * Prepare batches and check if quantity of the movement is compatible with the quantity available 
 	 * @param unit
 	 * @param source
 	 * @param batches
 	 * @return
 	 */
-	protected List<BatchOperation> prepareBatches(Tbunit unit, Source source, Map<Batch, Integer> batches, int oper) {
+/*	protected List<BatchOperation> prepareBatches(Tbunit unit, Source source, Map<Batch, Integer> batches, int oper) {
 		List<BatchOperation> lst = new ArrayList<MovementHome.BatchOperation>();
 
 		for (Batch b: batches.keySet()) {
@@ -391,7 +511,7 @@ public class MovementHome {
 		
 		return lst;
 	}
-	
+*/	
 
 	/**
 	 * Calculate the quantity of the medicine from the source x unit to be removed based on the 
@@ -402,9 +522,9 @@ public class MovementHome {
 	 * @param unit
 	 * @return
 	 */
-	protected ReturnedValue calcQuantityToBeReturned(Date dt, Medicine med, Source source, Tbunit unit) {
+	protected ReturnedValue calcQuantityToBeReturned(Date dt, Medicine med, Source source, Tbunit unit, Batch batch) {
 		if (movementsToBeRemoved == null)
-			return null;
+			return new ReturnedValue(0, 0, new Date());
 
 		int qtd = 0;
 		float price = 0;
@@ -416,10 +536,14 @@ public class MovementHome {
 				(mov.getSource().equals(source)) &&
 				(mov.getTbunit().equals(unit))) 
 			{
-				qtd += mov.getQuantity() * (-mov.getOper());
-				price += mov.getTotalPrice() * (-mov.getOper());
-				if ((dtrem == null) || (dtrem.after(mov.getDate())))
-					dtrem = mov.getDate();
+				for (BatchMovement bm: mov.getBatches()) {
+					if (bm.getBatch().equals(batch)) {
+						qtd += mov.getQuantity() * (-mov.getOper());
+						price += mov.getTotalPrice() * (-mov.getOper());
+						if ((dtrem == null) || (dtrem.after(mov.getDate())))
+							dtrem = mov.getDate();
+					}
+				}
 			}
 		}
 		return new ReturnedValue(qtd, price, dtrem);
@@ -432,7 +556,7 @@ public class MovementHome {
 	 * @param batchQtd
 	 * @return
 	 */
-	protected int calcQuantityToBeReturnedToBatch(BatchQuantity batchQtd) {
+/*	protected int calcQuantityToBeReturnedToBatch(BatchQuantity batchQtd) {
 		if (movementsToBeRemoved == null)
 			return 0;
 		
@@ -458,7 +582,7 @@ public class MovementHome {
 
 		return qtd;
 	}
-
+*/
 	
 	/**
 	 * Load batch quantity information from a unit and source
@@ -604,8 +728,7 @@ public class MovementHome {
 	 */
 	private class PreparedMovement {
 		private Movement movement;
-		private StockPosition stockPosition;
-		private List<BatchOperation> batchOperations;
+		private Map<Batch, Integer> batches;
 		/**
 		 * @return the movement
 		 */
@@ -619,28 +742,16 @@ public class MovementHome {
 			this.movement = movement;
 		}
 		/**
-		 * @return the stockPosition
+		 * @return the batches
 		 */
-		public StockPosition getStockPosition() {
-			return stockPosition;
+		public Map<Batch, Integer> getBatches() {
+			return batches;
 		}
 		/**
-		 * @param stockPosition the stockPosition to set
+		 * @param batches the batches to set
 		 */
-		public void setStockPosition(StockPosition stockPosition) {
-			this.stockPosition = stockPosition;
-		}
-		/**
-		 * @return the batchOperations
-		 */
-		public List<BatchOperation> getBatchOperations() {
-			return batchOperations;
-		}
-		/**
-		 * @param batchOperations the batchOperations to set
-		 */
-		public void setBatchOperations(List<BatchOperation> batchOperations) {
-			this.batchOperations = batchOperations;
+		public void setBatches(Map<Batch, Integer> batches) {
+			this.batches = batches;
 		}
 	}
 
@@ -683,54 +794,6 @@ public class MovementHome {
 		}
 	}
 
-	
-	/**
-	 * Temporary information about a batch transaction
-	 * @author Ricardo Memoria
-	 *
-	 */
-	private class BatchOperation {
-		private BatchQuantity batchQuantity;
-		private int movementQuantity;
-		// this value includes the movement quantity + the quantity to be removed (if any) 
-		private int quantityToBeIncluded;
-		/**
-		 * @return the batchQuantity
-		 */
-		public BatchQuantity getBatchQuantity() {
-			return batchQuantity;
-		}
-		/**
-		 * @param batchQuantity the batchQuantity to set
-		 */
-		public void setBatchQuantity(BatchQuantity batchQuantity) {
-			this.batchQuantity = batchQuantity;
-		}
-		/**
-		 * @return the movementQuantity
-		 */
-		public int getMovementQuantity() {
-			return movementQuantity;
-		}
-		/**
-		 * @param movementQuantity the movementQuantity to set
-		 */
-		public void setMovementQuantity(int movementQuantity) {
-			this.movementQuantity = movementQuantity;
-		}
-		/**
-		 * @return the quantityToBeIncluded
-		 */
-		public int getQuantityToBeIncluded() {
-			return quantityToBeIncluded;
-		}
-		/**
-		 * @param quantityToBeIncluded the quantityToBeIncluded to set
-		 */
-		public void setQuantityToBeIncluded(int quantityToBeIncluded) {
-			this.quantityToBeIncluded = quantityToBeIncluded;
-		}
-	}
 
 	/**
 	 * @return the errorMessage

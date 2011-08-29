@@ -16,7 +16,12 @@
 <ui:param name="pagestyle" value="width:90%" />
 
 <ui:define name="naveg" >
-	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
+	<div class="item">
+		<s:link value="#{messages['meds.inventory']}" view="/medicines/index.html" propagation="none" />
+	</div>
+	<div class="item selected">
+		<s:link value="#{title}" propagation="none" />
+	</div>
 </ui:define>
 
 
@@ -42,23 +47,22 @@
 </td></tr>
 </table>
 
-<div style="margin-top:10px;">
 <s:fragment rendered="#{not empty estimatedStockReport.itens}">
-<table class="table1" style="margin-top:10px;" width="100%">
+<table class="table1">
 <tr>
-	<th align="left" class="colbb">
+	<th align="left" class="coll">
 	#{messages['Medicine']}
 	</th>
-	<th align="right" class="colrbb">
+	<th align="right" class="colr">
 		#{messages['meds.movs.stockqtty']}
 	</th>
-	<th align="right" class="colcbb">
+	<th align="right" class="colc">
 		#{messages['StoragePosReport.lastMovement']}
 	</th>
-	<th align="right" class="colcbb">
+	<th align="right" class="colc">
 		#{messages['reports.numDays']}
 	</th>
-	<th align="right" class="colrbb">
+	<th align="right" class="colr">
 		#{messages['reports.numpatients']}
 	</th>
 	<th align="right" class="colrbb">
@@ -105,7 +109,6 @@
 
 <ui:include src="/layout/tablerow.xhtml" />
 </s:fragment>
-</div>
 
 </h:form>
 

@@ -97,44 +97,44 @@
 	columnClasses="colc,#{medicine.id!=null?'':'coll,'}#{source.id!=null?'':'coll,'}coll,colr,colr,colr,colr">
 	<h:column>
 		<f:facet name="header">#{messages['form.date']}</f:facet>
-		<h:outputText value="#{m.date}" style="width:80px" converter="localeDateConverter" />
+		<h:outputText value="#{m.movement.date}" style="width:80px" converter="localeDateConverter" />
 	</h:column>
 
 	<h:column rendered="#{medicine.id == null}">
 		<f:facet name="header"><h:outputText value="#{messages['Medicine']}" styleClass="collh" /></f:facet>
-		#{m.medicine}
+		#{m.movement.medicine}
 	</h:column>
 
 	<h:column rendered="#{source.id == null}">
 		<f:facet name="header"><h:outputText value="#{messages['Source']}" styleClass="collh" /></f:facet>
-		#{m.source.abbrevName}
+		#{m.movement.source.abbrevName}
 	</h:column>
 
 	<h:column>
 		<f:facet name="header"><h:outputText value="#{messages['MovementType']}" styleClass="collh" /></f:facet>
-		#{messages[m.type.key]}
-		<s:fragment rendered="#{not empty m.comment}">
-			: #{m.comment}
+		#{messages[m.movement.type.key]}
+		<s:fragment rendered="#{not empty m.movement.comment}">
+			: #{m.movement.comment}
 		</s:fragment>
 	</h:column>
 
 	<h:column>
 		<f:facet name="header"><h:outputText value="#{messages['meds.movs.movqtd']}" styleClass="colrh" /></f:facet>
-		<h:outputText value="#{m.qtdOperation}" style="#{m.qtdOperation > 0? '': 'font-weight:bold;color:red;'}">
+		<h:outputText value="#{m.movement.qtdOperation}" style="#{m.movement.qtdOperation > 0? '': 'font-weight:bold;color:red;'}">
 			<f:convertNumber pattern="#,###,###"/>
 		</h:outputText>
 	</h:column>
 
 	<h:column>
 		<f:facet name="header"><h:outputText value="#{messages['global.unitPrice']}" styleClass="colrh" /></f:facet>
-		<h:outputText value="#{m.unitPrice}">
+		<h:outputText value="#{m.movement.unitPrice}">
 			<f:convertNumber pattern="#,###,##0.0000"/>
 		</h:outputText>
 	</h:column>
 
 	<h:column>
 		<f:facet name="header"><h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh" /></f:facet>
-		<h:outputText value="#{m.totalPrice}">
+		<h:outputText value="#{m.movement.totalPrice}">
 			<f:convertNumber pattern="#,###,##0.00"/>
 		</h:outputText>
 	</h:column>
@@ -208,27 +208,27 @@
 			</s:fragment>
 		</td>
 		</s:fragment>
-		<td class="colb">#{m.item.batch.batchNumber}
+		<td class="colb">#{m.item.batchMovement.batch.batchNumber}
 		</td>
-		<td class="colcb"><h:outputText value="#{m.item.batch.expiryDate}" converter="localeDateConverter" />
+		<td class="colcb"><h:outputText value="#{m.item.batchMovement.batch.expiryDate}" converter="localeDateConverter" />
 		</td>
-		<td class="colb">#{m.item.batch.manufacturer}
+		<td class="colb">#{m.item.batchMovement.batch.manufacturer}
 		</td>
 		<td class="colrb">
-			<h:outputText value="#{m.item.qtdOperation}" style="#{m.item.movement.qtdOperation > 0? '': 'font-weight:bold;color:red;'}">
+			<h:outputText value="#{m.item.batchMovement.qtdOperation}" style="#{m.item.batchMovement.qtdOperation > 0? '': 'font-weight:bold;color:red;'}">
 				<f:convertNumber pattern="#,###,###"/>
 			</h:outputText>
 		</td>
-		<td class="colrb"><h:outputText value="#{m.item.batch.unitPrice}">
+		<td class="colrb"><h:outputText value="#{m.item.batchMovement.batch.unitPrice}">
 				<f:convertNumber pattern="#,###,##0.0000"/>
 			</h:outputText>
 		</td>
-		<td class="colrb"><h:outputText value="#{m.item.totalPrice}">
+		<td class="colrb"><h:outputText value="#{m.item.batchMovement.totalPrice}">
 				<f:convertNumber pattern="#,###,##0.00"/>
 			</h:outputText>
 		</td>
 		<s:fragment rendered="#{m.spaned}">
-		<td class="colrb" rowspan="#{m.rowSpan}"><b><h:outputText value="#{m.item.movement.stockQuantity}">
+		<td class="colrb" rowspan="#{m.rowSpan}"><b><h:outputText value="#{m.item.stockQuantity}">
 			<f:convertNumber pattern="#,###,###"/>
 		</h:outputText>
 		</b>

@@ -8,7 +8,6 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.StockPosition;
 
 
 
@@ -66,7 +65,42 @@ public class StockEvolutionReport {
 	 * Generates the report
 	 */
 	public void createReport() {
-		// calcula estoque inicial
+		String hql = "select m.medicine," +
+				"(select sum(a.quantity * a.oper) " +  // stock position at the beginning of the period
+				"from Movement a where a.tbunit.id=m.tbunit.id and a.source.id=m.source.id and a.medicine.id=m.medicine.id and a.date<:dt1), " +
+				"(select sum(b.quantity * b.oper) " +  // stock position at the end of the period 
+				"from Movement b where b.tbunit.id=m.tbunit.id and b.source.id=m.source.id and b.medicine.id=m.medicine.id and b.date<:dt2), " +
+				"(select sum(c.quantity) from Movement c where c.oper = 1 and c.quantity > 0 and c.date between :dt1 and :dt2 " +
+				"and c.tbunit.id=m.tbunit.id and c.source.id=m.source.id and c.medicine.id=m.medicine.id) " +
+				"from StockPosition m " +
+				"where m.tbunit.id = #{userSession.tbunit.id} " +
+				(reportSelection.getSource() != null? " and m.source.id = #{reportSelection.source.id} ": "") + 
+				"order by m.medicine.genericName";
+		
+		List<Object[]> lst = entityManager.createQuery(hql)
+			.setParameter("dt1", reportSelection.getIniDate())
+			.setParameter("dt2", reportSelection.getEndDate())
+			.getResultList();
+		
+		itens = new ArrayList<Item>();
+		for (Object[] vals: lst) {
+			Medicine med = (Medicine)vals[0];
+			Long qtdIni = vals[1] == null? 0: (Long)vals[1];
+			Long qtdEnd = vals[2] == null? 0: (Long)vals[2];
+			Long movIn = vals[3] == null? 0: (Long)vals[3];
+			Long movOut = qtdIni + movIn - qtdEnd;
+			
+			Item it = new Item();
+			itens.add(it);
+			
+			it.setMedicine(med);
+			it.setInitialQuantity(qtdIni);
+			it.setFinalQuantity(qtdEnd);
+			it.setInQuantity(movIn);
+			it.setOutQuantity(movOut);
+		}
+		
+/*		// calcula estoque inicial
 		List<StockPosition> lst =  entityManager
 				.createQuery("from StockPosition sp join fetch sp.medicine " + 
 				"where sp.date = (select max(s.date) from StockPosition s where s.medicine.id = sp.medicine.id " +
@@ -121,6 +155,7 @@ public class StockEvolutionReport {
 		for (Item it: itens) {
 			it.setFinalQuantity(it.getInitialQuantity() + it.getInQuantity() - it.getOutQuantity());
 		}
+*/
 /*		lst =  entityManager
 				.createQuery("from StockPosition sp join fetch sp.medicine " + 
 						"where sp.date = (select max(s.date) from StockPosition s where s.medicine.id = sp.medicine.id " +

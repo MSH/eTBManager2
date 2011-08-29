@@ -89,10 +89,6 @@ public class EstimatedStockReport {
 		
 		List<StockPosition> lst = entityManager.createQuery("from StockPosition sp join fetch sp.medicine " +
 				"where sp.tbunit.id = #{userSession.tbunit.id} " + 
-				"and sp.date = (select max(aux.date) from StockPosition aux " +
-				"where aux.tbunit.id = sp.tbunit.id " +
-				"and aux.source.id = sp.source.id " +
-				"and aux.medicine.id = sp.medicine.id) " +
 				"and sp.tbunit.id = #{userSession.tbunit.id} " +
 				(reportSelection.getSource() != null? "and sp.source.id = #{reportSelection.source.id} ": "") +
 				"order by sp.medicine.genericName")
@@ -109,11 +105,11 @@ public class EstimatedStockReport {
 			}
 			item.setQuantity(item.getQuantity() + sp.getQuantity());
 			
-			if ((item.getLastUpdate() == null) || (item.getLastUpdate().before(sp.getDate())))
-				item.setLastUpdate(sp.getDate());
+			if ((item.getLastUpdate() == null) || (item.getLastUpdate().before(sp.getLastMovement())))
+				item.setLastUpdate(sp.getLastMovement());
 			
-			if (sp.getDate().before(dtNow))
-				item.setNumDays(DateUtils.daysBetween(sp.getDate(), dtNow));
+			if (sp.getLastMovement().before(dtNow))
+				item.setNumDays(DateUtils.daysBetween(sp.getLastMovement(), dtNow));
 		}
 		
 		loadPrescriptions();
@@ -161,7 +157,7 @@ public class EstimatedStockReport {
 	protected void loadPrescriptions() {
 		prescs = entityManager.createQuery("from PrescribedMedicine d join fetch d.medicine " +
 					"join fetch d.tbcase " + 
-					"where (d.period.endDate is null or d.period.endDate >= (select max(sp.date) " + 
+					"where (d.period.endDate is null or d.period.endDate >= (select sp.lastMovement " + 
 					"from StockPosition sp where sp.source.id=d.source.id " + 
 					"and sp.tbunit.id=#{userSession.tbunit.id} " + 
 					"and sp.medicine.id=d.medicine.id)) " +

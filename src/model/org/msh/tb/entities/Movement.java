@@ -44,7 +44,7 @@ public class Movement implements Serializable {
 	private int quantity;
 	private int oper;
 	
-	private float unitPrice;
+	private float totalPrice;
 
 	private MovementType type;
 	
@@ -63,10 +63,6 @@ public class Movement implements Serializable {
 	@NotNull
 	private Source source;
 
-	// variables for stock inventory control
-	private int stockQuantity;
-//	private double stockTotalPrice;
-	
 	@Temporal(TemporalType.TIMESTAMP)
 	@NotNull
 	private Date recordDate;
@@ -79,11 +75,11 @@ public class Movement implements Serializable {
 
 	
 	/**
-	 * Returns the total price of the transaction
-	 * @return float number representing the total price
+	 * Returns the unit price of the transaction
+	 * @return float number representing the unit price
 	 */
-	public float getTotalPrice() {
-		return quantity * unitPrice;
+	public float getUnitPrice() {
+		return quantity != 0? totalPrice / quantity : 0;
 	}
 	
 	/**
@@ -272,48 +268,17 @@ public class Movement implements Serializable {
 	}
 
 	/**
-	 * Returns the unit price of the transaction
-	 * @return the unit price
+	 * @return the totalPrice
 	 */
-	public float getUnitPrice() {
-		return unitPrice;
+	public float getTotalPrice() {
+		return totalPrice;
 	}
 
 	/**
-	 * Changes the unit price of the medicine for this transaction
-	 * @param unitPrice - unit price of the medicine
+	 * @param totalPrice the totalPrice to set
 	 */
-	public void setUnitPrice(float unitPrice) {
-		this.unitPrice = unitPrice;
+	public void setTotalPrice(float totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 
-	/**
-	 * Returns the stock quantity of the medicine after the execution of the transaction 
-	 * @return
-	 */
-	public int getStockQuantity() {
-		return stockQuantity;
-	}
-
-	/**
-	 * Changes the stock quantity of the medicine
-	 * @param stockQuantity - quantity of medicine
-	 */
-	public void setStockQuantity(int stockQuantity) {
-		this.stockQuantity = stockQuantity;
-	}
-
-	/**
-	 * @return the stockTotalPrice
-	 */
-/*	public double getStockTotalPrice() {
-		return stockTotalPrice;
-	}
-*/
-	/**
-	 * @param stockTotalPrice the stockTotalPrice to set
-	 */
-/*	public void setStockTotalPrice(double stockTotalPrice) {
-		this.stockTotalPrice = stockTotalPrice;
-	}
-*/}
+}

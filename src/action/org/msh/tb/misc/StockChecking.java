@@ -51,7 +51,7 @@ public class StockChecking {
 		if (minBufferStockList.getItems().size() == 0)
 			return;
 
-		List<StockPosition> stockpos = stockPositionList.generate(unit, null, null);
+		List<StockPosition> stockpos = stockPositionList.generate(unit, null);
 
 		List<StockPosition> meds = new ArrayList<StockPosition>();
 		

@@ -43,7 +43,7 @@ public class InventoryReport {
 
 		UserSession userSession = (UserSession)Component.getInstance("userSession", true);
 		
-		List<StockPosition> lst = stockPositionList.generate(userSession.getTbunit(), null, null);
+		List<StockPosition> lst = stockPositionList.generate(userSession.getTbunit(), null);
 	
 		// mount medicine quantity
 		for (StockPosition sp: lst) {

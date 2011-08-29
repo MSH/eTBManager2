@@ -16,7 +16,12 @@
 <ui:param name="pagestyle" value="width:90%" />
 
 <ui:define name="naveg" >
-	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
+	<div class="item">
+		<s:link value="#{messages['meds.inventory']}" view="/medicines/index.html" propagation="none" />
+	</div>
+	<div class="item selected">
+		<s:link value="#{title}" propagation="none" />
+	</div>
 </ui:define>
 
 

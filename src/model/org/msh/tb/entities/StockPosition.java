@@ -3,7 +3,6 @@ package org.msh.tb.entities;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -45,13 +44,15 @@ public class StockPosition implements Serializable {
 	@NotNull
 	private Source source;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="stock_date")
-	@NotNull
-	private Date date;
-	
 	private int quantity;
 	private float totalPrice;
+	
+	// Average Monthly Consumption
+	private Integer amc;
+	
+	@Temporal(TemporalType.DATE)
+	@NotNull
+	private Date lastMovement;
 
 
 	/**
@@ -62,22 +63,6 @@ public class StockPosition implements Serializable {
 		return (quantity != 0? totalPrice / quantity: 0);
 	}
 
-
-	/**
-	 * Returns the date of the stock position information
-	 * @return date of the stock position
-	 */
-	public Date getDate() {
-		return date;
-	}
-
-	/**
-	 * Changes the date of the stock position
-	 * @param date
-	 */
-	public void setDate(Date date) {
-		this.date = date;
-	}
 
 	/**
 	 * Returns the id of the stock position object
@@ -172,5 +157,37 @@ public class StockPosition implements Serializable {
 	 */
 	public void setTotalPrice(float totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+
+	/**
+	 * @return the amc
+	 */
+	public Integer getAmc() {
+		return amc;
+	}
+
+
+	/**
+	 * @param amc the amc to set
+	 */
+	public void setAmc(Integer amc) {
+		this.amc = amc;
+	}
+
+
+	/**
+	 * @return the lastMovement
+	 */
+	public Date getLastMovement() {
+		return lastMovement;
+	}
+
+
+	/**
+	 * @param lastMovement the lastMovement to set
+	 */
+	public void setLastMovement(Date lastMovement) {
+		this.lastMovement = lastMovement;
 	}
 }
