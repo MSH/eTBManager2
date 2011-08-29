@@ -83,9 +83,9 @@ public class CaseStateReport {
 				"where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
 				(hsID != null? "and u.healthSystem_id = " + hsID.toString(): "") +
 				" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
-				" group by c.state, c.validationState " +
+				" group by c.state, c.validationState, c.diagnosisType " +
 				"union " +
-				"select c.state, c.validationState, 0, count(*) " +
+				"select c.state, c.validationState, 1, count(*) " +
 				"from tbcase c " +
 				"inner join treatmenthealthunit h on h.case_id = c.id " +
 				"inner join tbunit u on u.id = h.unit_id " + aucond + 
