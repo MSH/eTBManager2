@@ -20,6 +20,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.ValidationState;
@@ -221,9 +222,23 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		Integer stateIndex = caseFilters.getStateIndex();
 		if (stateIndex != null) {
 			String cond;
-			if (stateIndex == 100)
-				 cond = "c.state > " + Integer.toString( CaseState.ONTREATMENT.ordinal() );
-			else cond = "c.state = " + stateIndex.toString();
+			switch (stateIndex) {
+			// CLOSED
+			case 100: cond = "c.state > " + Integer.toString( CaseState.ONTREATMENT.ordinal() );
+				break;
+
+			// SUSPECT NOT ON TREATMENT
+			case 200: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal();
+				break;
+
+			// WAIT TO START TREATMENT
+			case 0: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType != " + DiagnosisType.SUSPECT.ordinal();
+			break;
+
+			default: cond = "c.state = " + stateIndex.toString();
+				break;
+			}
+
 			addCondition(cond);
 		}
 	}

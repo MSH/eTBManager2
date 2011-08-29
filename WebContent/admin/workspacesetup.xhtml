@@ -6,34 +6,29 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="/layout/template_new.xhtml">
+      template="admintemplate.xhtml">
         
 <ui:param name="title" value="#{messages['admin.setup']} #{defaultWorkspace.name}" />
 <ui:param name="topmenu" value="3" />
-
+<ui:param name="submenu" value="2" />
 <ui:param name="labelstyle" value="width:170px" />
 
-<ui:define name="left">
-	<ui:include src="/layout/adminmenu.xhtml" />
-</ui:define>
 
 <ui:define name="content">
 <h1>#{title}</h1>
 <h:form id="main" enctype="multipart/form-data" styleClass="form1">
 
 <div class="form-content">
-	<table width="750px" style="border:2px solid #f0f0f0" ><tr><td>
-	
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['form.name']}:</ui:define>
-    	<h:inputText value="#{workspaceHome.defaultWorkspace.name.name1}" size="100" style=" width : 130px;" required="true"></h:inputText>
+    	<h:inputText value="#{workspaceHome.defaultWorkspace.name.name1}" size="100" style=" width : 200px;" required="true"></h:inputText>
     </s:decorate>
 	
     <s:decorate template="/layout/edit.xhtml" rendered="#{workspaceHome.defaultWorkspace.hasAlternateLocale}">
     	<ui:define name="label">#{messages['form.name']}:
     		<br/><span style="font-weight:normal;">(#{workspaceHome.defaultWorkspace.alternateDisplayLocale}):</span>
     	</ui:define>
-    	<h:inputText value="#{workspaceHome.defaultWorkspace.name.name2}" size="100" style=" width : 130px;"></h:inputText>
+    	<h:inputText value="#{workspaceHome.defaultWorkspace.name.name2}" size="100" style=" width : 200px;"></h:inputText>
     </s:decorate>
 	
     <s:decorate template="/layout/edit.xhtml" >
@@ -118,8 +113,6 @@
     		fileName="#{workspaceHome.pictureFileName}"
     		fileSize="#{workspaceHome.pictureSize}" />
     </s:decorate>
-	
-	</td></tr></table>
 
 	</div>
 	
@@ -129,7 +122,7 @@
 			<span>#{messages['form.save']}</span>
 		</h:commandLink> 
 		
-		<s:link view="/admin/index.xhtml" styleClass="button-alt" >
+		<s:link view="/admin/config.xhtml" styleClass="button-alt" >
 		<span>#{messages['form.cancel']}</span>
 		</s:link>
 		</div>

@@ -162,6 +162,8 @@ public class CaseHome extends WsEntityHome<TbCase>{
 	 * @return true if can be validated
 	 */
 	public boolean isCanValidate() {
+		if (!isManaged())
+			return false;
 		ValidationState vs = getInstance().getValidationState();
 		return ((vs == ValidationState.WAITING_VALIDATION) || (vs == ValidationState.PENDING_ANSWERED)) && (checkRoleBySuffix("CASE_VALIDATE") && (isWorkingUnit()));
 	}

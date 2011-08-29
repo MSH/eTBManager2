@@ -8,16 +8,11 @@
                 xmlns:h="http://java.sun.com/jsf/html"
       			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-                template="/layout/template_new.xhtml">
-               <!-- template="..#{workspaceViewService.templatePage}"> -->
+                template="admintemplate.xhtml">
                
 <ui:param name="title" value="#{messages['admin.websessions']}" />
-<ui:param name="topmenu" value="3" />
-<ui:param name="waitdlg" value="1" />
+<ui:param name="submenu" value="1" />
 
-	<ui:define name="left">
-	<ui:include src="../layout/adminmenu.xhtml" />
-</ui:define>
 
 <ui:define name="content">
 <h1>#{title}</h1>

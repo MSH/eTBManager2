@@ -7,15 +7,10 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="/layout/template_new.xhtml">
+      template="admintemplate.xhtml">
 
 <ui:param name="title" value="#{messages['admin.tbunits']}" />
-<ui:param name="topmenu" value="3" />
-<ui:param name="waitdlg" value="1" />
-
-<ui:define name="left">
-	<ui:include src="/layout/adminmenu.xhtml" />
-</ui:define>
+<ui:param name="submenu" value="0" />
 
 <ui:define name="content">
 <h1>#{title}</h1>

@@ -9,9 +9,10 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/templatemed.xhtml">
 
-<ui:param name="title" value="#{messages['meds.dispensing.view']}" />
+<ui:param name="title" value="#{messages['meds.dispensing']}" />
 
 <ui:param name="topmenu" value="1" />
+<ui:param name="pagestyle" value="width:750px;" />
 <ui:param name="labelstyle" value="width:180px;" />
 
 <ui:define name="naveg">
@@ -30,27 +31,26 @@
     	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
 		<h:selectOneMenu value="#{dispensingSelection.month}">
 			<f:selectItems value="#{months}"/>
-			<a:support event="onchange" reRender="pnldisp" />
+			<a:support event="onchange" reRender="pnldisp,lnknew" action="#{monthDispensingReport.refresh}"/>
 		</h:selectOneMenu>
 		<h:selectOneMenu value="#{dispensingSelection.year}" style="margin-left:5px;">
 			<f:selectItems value="#{years}"/>
-			<a:support event="onchange" reRender="pnldisp"/>
+			<a:support event="onchange" reRender="pnldisp,lnknew" action="#{monthDispensingReport.refresh}"/>
 		</h:selectOneMenu>
 	</s:decorate>
 
-	<h:panelGroup id="pnldisp">
-	
-	<s:fragment rendered="#{userSession.tbunit.patientDispensing and facesContext.renderResponse}"> 
-	<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty caseDispensingView.cases}" styleClass="warn" />
-	<s:fragment rendered="#{not empty caseDispensingView.cases}">
-		<a:repeat value="#{caseDispensingView.cases}" var="it">
+	<s:decorate template="/layout/case.xhtml">
+		<ui:param name="case" value="#{caseHome.instance}" />
+	</s:decorate>
+
+	<h:panelGroup id="pnldisp"> 
+	<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty caseDispensingView.dispensingDays}" styleClass="warn" />
+		<a:repeat value="#{caseDispensingView.dispensingDays}" var="it">
 
 		<table width="100%"><tr><td>
-			<s:decorate template="/layout/case.xhtml">
-				<ui:param name="case" value="#{it.tbcase}" />
-			</s:decorate>
+			<h:outputText value="#{it.date}" converter="localeDateConverter" />
 		</td><td valign="bottom">
-			<s:link value="#{messages['form.details']}" view="/medicines/disppac.xhtml" style="float:right">
+			<s:link value="#{messages['form.edit']}" view="/medicines/disppac.xhtml" style="float:right">
 				<f:param name="id" value="#{it.tbcase.id}" />
 			</s:link>
 		</td></tr></table>
@@ -59,17 +59,6 @@
 			<ui:param name="table" value="#{it.table}" /> 
 		</s:decorate>
 		</a:repeat>
-	</s:fragment>
-	</s:fragment>
-	
-	
-	<s:fragment rendered="#{not userSession.tbunit.patientDispensing and facesContext.renderResponse}">
-		<s:link value="#{messages['meds.dispensing.details']}" view="/medicines/dispbatches.xhtml" />
-		<s:decorate template="dispensingtable.xhtml">
-			<ui:param name="table" value="#{batchDispensingView.table}" /> 
-		</s:decorate>
-	</s:fragment>
-	
 	</h:panelGroup>
 </h:form>
 

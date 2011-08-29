@@ -12,16 +12,19 @@
 <s:fragment rendered="#{not empty table.rows}">
 <table class="table1">
 	<tr>
-		<th rowspan="2" align="left" width="100px"> 
-			#{messages['Source']}
-		</th>
 		<th rowspan="2" align="left" width="220px">
 			#{messages['Medicine']}
 		</th>
 		<th rowspan="2" align="left" width="150px">
 			#{messages['Batch']}
 		</th>
+		<th rowspan="2" align="left" width="150px">
+			#{messages['Batch.expiryDate']}
+		</th>
 		<th colspan="2">
+			#{messages['Batch.remainingQuantity']}
+		</th>
+		<th rowspan="2" align="left">
 			#{messages['MedicineDispensing.quantity']}
 		</th>
 	</tr>
@@ -38,16 +41,17 @@
 	<tr>
 		<s:fragment rendered="#{not row.spanned}">
 		<td rowspan="#{row.rowSpan}">
-			#{row.source.abbrevName}
-		</td>
-		<td rowspan="#{row.rowSpan}">
 			#{row.medicine}
+			<h:outputText value="#{row.errorMessage}" rendered="#{not empty row.errorMessage}" styleClass="error"/>
 		</td>
 		</s:fragment>
 		<td>
 			<s:decorate template="/layout/batch.xhtml">
 				<ui:param name="batch" value="#{row.batch}" />
 			</s:decorate>
+		</td>
+		<td>
+			<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" />
 		</td>
 		<td align="right">
 			<h:outputText value="#{row.quantity}" >
@@ -62,6 +66,9 @@
 			</h:outputText>
 		</td>
 		</s:fragment>
+		<td>
+			<h:inputText value="#{row.dispensingQuantity}" style="width:100px"/>
+		</td>
 	</tr>
 
 </a:repeat>

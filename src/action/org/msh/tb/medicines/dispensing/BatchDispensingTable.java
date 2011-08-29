@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.msh.tb.entities.Batch;
+import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Source;
 
 /**
@@ -28,8 +29,10 @@ public class BatchDispensingTable {
 	 */
 	public DispensingRow addRow(Source source, Batch batch) {
 		DispensingRow row = findRowByBatch(source, batch);
-		if (row == null)
-			row = new DispensingRow(this, source, batch);
+		if (row != null)
+			return row;
+		
+		row = new DispensingRow(this, source, batch);
 		rows.add(row);
 		return row;
 	}
@@ -50,6 +53,19 @@ public class BatchDispensingTable {
 
 
 	/**
+	 * Search for first row in the table by its medicine
+	 * @param med
+	 * @return instance of {@link DispensingRow} if medicine matches, or null if medicine is not found
+	 */
+	public DispensingRow findFirstMedicineRow(Medicine med) {
+		for (DispensingRow row: rows)
+			if (row.getMedicine().equals(med)) {
+				return row;
+			}
+		return null;
+	}
+	
+	/**
 	 * Update the layout of the table to be displayed, calculating row spans and sorting rows
 	 */
 	public void updateLayout() {
@@ -68,20 +84,23 @@ public class BatchDispensingTable {
 		// calculate row spans
 		if (rows.size() > 0) {
 			DispensingRow rowaux = rows.get(0);
-			int spanCount = 1;
+			int spanCount = 0;
 			int qtd = 0;
 
 			for (DispensingRow row: rows) {
 				if (!row.getMedicine().equals(rowaux.getMedicine())) {
-					rowaux.setRowSpan(spanCount);
-					rowaux.setTotalQuantity(qtd);
 					spanCount = 1;
-					qtd = 0;
+					qtd = row.getQuantity();
+					rowaux = row;
 				}
 				else {
+					row.setRowSpan(-1);
+
 					spanCount++;
 					qtd += row.getQuantity();
 				}
+				rowaux.setRowSpan(spanCount);
+				rowaux.setTotalQuantity(qtd);
 			}
 		}
 	}

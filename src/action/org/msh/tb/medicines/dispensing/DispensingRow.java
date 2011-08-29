@@ -28,12 +28,24 @@ public class DispensingRow {
 	private int quantity;
 	private int totalQuantity;
 	private int rowSpan;
+	
+	// support for editing of dispensing quantity
+	private Integer dispensingQuantity;
+	private String errorMessage;
 
 	public DispensingRow(BatchDispensingTable table, Source source, Batch batch) {
 		super();
 		this.table = table;
 		this.source = source;
 		this.batch = batch;
+	}
+	
+	/**
+	 * Increment the quantity by qtd
+	 * @param qtd
+	 */
+	public void addQuantity(int qtd) {
+		quantity += qtd;
 	}
 	
 	public int getTotalQuantity() {
@@ -97,5 +109,33 @@ public class DispensingRow {
 	 */
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	/**
+	 * @return the dispensingQuantity
+	 */
+	public Integer getDispensingQuantity() {
+		return dispensingQuantity;
+	}
+
+	/**
+	 * @param dispensingQuantity the dispensingQuantity to set
+	 */
+	public void setDispensingQuantity(Integer dispensingQuantity) {
+		this.dispensingQuantity = dispensingQuantity;
+	}
+
+	/**
+	 * @return the errorMessage
+	 */
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	/**
+	 * @param errorMessage the errorMessage to set
+	 */
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 }

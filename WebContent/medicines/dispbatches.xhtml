@@ -1,118 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
- 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-                xmlns:s="http://jboss.com/products/seam/taglib"
-                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-                 
-<h:form >
-	<s:div rendered="#{empty batchReservingHome.sources}" style="margin-top:10px;margin-bottom:10px;width:50%">
-	<s:decorate template="/layout/roundeds.xhtml">
-		<ui:param name="color" value="#EE5C34" />
-		<ui:param name="bgcolor" value="#fff" />
-		<div style="padding:3px;">
-			<h:outputText value="#{messages['meds.dispensing.nobatches']}" style="color:white;font-weight:bold;"/>
-		</div>
-	</s:decorate>
-	</s:div>
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/templatemed.xhtml">
+
+<ui:param name="title" value="#{messages['meds.dispensing.view']}" />
+
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:define name="naveg">
+	<div class="item">
+		<s:link value="#{messages['home']}" view="/medicines/index.xhtml" propagation="none"/>
+	</div>
+	<div class="item selected">
+		<s:link value="#{title}" view="/medicines/dispensing.html" propagation="none"/>
+	</div>
+</ui:define>
+
+<ui:define name="content_unit">
+<h:form>
 	
-	<h:panelGroup id="pnlres">
-	<a:region>
-	<a:status onstart="openWaitDlg();" onstop="closeWaitDlg();"/>
-	<table width="100%" class="table1">
-	<ui:repeat value="#{batchReservingHome.sources}" var="s">
-		<tr style="background-color:#EDF7EF;"><td colspan="6" style="border:1px solid #B4E8BB;padding:5px;">
-			<b>#{s.source.name}</b>
-		</td></tr>
-		
-		<tr><th align="left">#{messages['Medicine']}
-		</th><th align="right">#{messages['meds.movs.stockqtty']}
-		</th><th align="center">#{messages['Batch.expiryDate']}
-		</th><th align="right">#{messages['global.unitPrice']}
-		</th><th align="right">#{messages['Batch.reservedQuantity']}
-		</th><th>
-		</th></tr>
-		<ui:repeat value="#{s.medicines}" var="m">
-		<tr bgcolor="#f3f3f0"><td>
-			<div class="medicine-icon" />
-			<h:outputText value="#{m.medicine}" />
-		</td>
-		<td align="right">
-			<b><h:outputText value="#{m.quantity}">
-				<f:convertNumber pattern="#,###,##0"/>
-			</h:outputText>
-			</b>
-		</td>
-		<td>
-		</td>
-		<td align="right">
-			<b><h:outputText value="#{m.unitPrice}" rendered="#{m.unitPrice > 0}">
-				<f:convertNumber pattern="#,###,##0.0000"/>
-			</h:outputText>
-			</b>
-		</td>
-		<td align="right">
-			<s:fragment rendered="#{m.reservedQuantity == 0}">
-				<img src="#{request.contextPath}/public/themes/default/images/central.gif" style="float:right;" />
-				<h:outputText value="#{messages['meds.dispensing.noreserv']}" style="color:silver;"/>
-			</s:fragment>
-			<b><h:outputText value="#{m.reservedQuantity}" rendered="#{m.reservedQuantity > 0}">
-				<f:convertNumber pattern="#,###,##0"/>
-			</h:outputText>
-			</b>
-		</td>
-		<td align="center">
-			<a:commandLink value="#{messages['meds.selbatches']}" action="#{batchReservingHome.setReservedMedicine(m)}" 
-				reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" />
-		</td></tr>
-		
-		<ui:repeat value="#{m.batches}" var="b">
-			<tr style="font-size:9px;">
-				<td class="colb" >
-					<s:decorate template="/layout/batch.xhtml" >
-						<ui:param name="batch" value="#{b.batch}" />
-					</s:decorate>
-				</td>
-				<td class="colb" align="right">
-					<h:outputText value="#{b.quantity}">
-						<f:convertNumber pattern="#,###,##0"/>
-					</h:outputText>
-				</td>
-				<td align="center" class="colb">
-					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
-				</td>
-				<td align="right" class="colb">
-					<h:outputText value="#{b.batch.unitPrice}">
-						<f:convertNumber pattern="#,###,##0.0000"/>
-					</h:outputText>
-				</td>
-				<td align="right" class="colb">
-					<h:outputText value="#{b.quantityDispensing}">
-						<f:convertNumber pattern="#,###,###,##0"/>
-					</h:outputText>
-				</td>
-				<td class="colb"></td>
-			</tr>
-		</ui:repeat>
-		</ui:repeat>
-	</ui:repeat>
-	</table>
-	</a:region>
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
+		<h:selectOneMenu value="#{dispensingSelection.month}">
+			<f:selectItems value="#{months}"/>
+			<a:support event="onchange" reRender="pnldisp" />
+		</h:selectOneMenu>
+		<h:selectOneMenu value="#{dispensingSelection.year}" style="margin-left:5px;">
+			<f:selectItems value="#{years}"/>
+			<a:support event="onchange" reRender="pnldisp"/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<h:panelGroup id="pnldisp">
+	
+	<s:fragment rendered="#{facesContext.renderResponse}"> 
+	<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty batchDispensingView.dispensingDays}" styleClass="warn" />
+	<s:fragment rendered="#{not empty batchDispensingView.dispensingDays}">
+		<a:repeat value="#{batchDispensingView.dispensingDays}" var="it">
+
+		<table width="100%"><tr><td>
+			<h2><h:outputText value="#{it.date}" converter="localeDateConverter"/></h2>
+		</td><td valign="bottom">
+			<s:link value="#{messages['form.edit']}" view="/medicines/dispedt.xhtml" style="float:right">
+				<f:param name="id" value="#{it.medicineDispensingId}" />
+			</s:link>
+		</td></tr></table>
+
+		<s:decorate template="dispensingtable.xhtml">
+			<ui:param name="table" value="#{it.table}" /> 
+		</s:decorate>
+		</a:repeat>
+	</s:fragment>
+	</s:fragment>
+	
 	</h:panelGroup>
 </h:form>
 
+<h:panelGroup id="pnlunit">
+</h:panelGroup>
 
-<s:decorate template="/layout/batchselection.xhtml" >
-	<a:commandLink value="#{messages['form.ok']}" action="#{batchReservingHome.reserveBatches}"
-	    onclick="if (!validateBatchSelection(self)) return false;"
-		oncomplete="this.disabled=false;if (batchValOk) hideBatchesSelectionDlg();" 
-		styleClass="button" reRender="pnlres"/>
-	<ui:define name="cancel">
-		<a:commandLink value="#{messages['form.cancel']}" action="#{conversation.end}" 
-			oncomplete="hideBatchesSelectionDlg();" styleClass="button-alt" ajaxSingle="true"/>
-	</ui:define>
-</s:decorate>
+</ui:define>
 
-</ui:composition>
+</ui:composition>  

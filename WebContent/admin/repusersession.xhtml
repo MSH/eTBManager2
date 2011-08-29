@@ -7,26 +7,17 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="/layout/template_new.xhtml">
-     <!--template="#{workspaceViewService.templatePage}">-->
+      template="admintemplate.xhtml">
 
 <ui:param name="title" value="#{messages['admin.reports.usersession']}" />
-<ui:param name="topmenu" value="3" />
-<ui:param name="waitdlg" value="1" />
-
-<ui:define name="left">
-	<ui:include src="/layout/adminmenu.xhtml" />
-</ui:define>
+<ui:param name="submenu" value="1" />
 
 <ui:define name="content">
 <h1>#{title}</h1>
-<h:form id="main">
 
-<s:decorate template="/layout/roundrect.xhtml" style="width:780px;">
-	<ui:param name="showfooter" value="0" />
-	<ui:define name="header">
-		<b>#{messages['global.filters']}</b>
-	</ui:define>
+<h:form id="main" styleClass="form1">
+	<div class="form-content">
+	<h2>#{messages['global.filters']}</h2>
 
 	<div style="display:table">	
 	<div style="float:left;margin-right:10px;">
@@ -48,17 +39,11 @@
 	
 	</div>
 	</div>
+	</div>
 	
-</s:decorate>
-
-<p/>
 
 <h:panelGroup id="reportPanel">
-<table style="width:780px" ><tr><td style="background-color:#f0f0f0;padding:4px;border:1px solid #d0d0d0;">
-<b>#{messages['form.date']}: </b>
-<h:outputText value="#{userSessionReport.date}" converter="localeDateConverter" />
-</td></tr>
-<tr><td>
+<h2><h:outputText value="#{userSessionReport.date}" converter="localeDateConverter" /></h2>
 <h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty userSessionReport.items}" styleClass="warn"/>
 <h:dataTable value="#{userSessionReport.items}" var="it" styleClass="table1" width="100%" style="margin-top:4px;"
 	rowClasses="lin1,lin2" columnClasses="colc,coll,colc,colc,coll,coll" rendered="#{not empty userSessionReport.items}">
@@ -113,8 +98,9 @@
 		<a:commandLink value="#{messages['form.details']}" onclick="initUserSessionDlg(#{it.loginId});return false;" styleClass="right-icon"/>
 	</h:column>
 </h:dataTable>
-</td></tr></table>
+
 <ui:include src="/layout/tablerow.xhtml" />
+
 </h:panelGroup>
 
 <a:jsFunction name="initUserSessionDlg" reRender="userSessionInfo" ajaxSingle="true" oncomplete="showUserSessionDlg();">

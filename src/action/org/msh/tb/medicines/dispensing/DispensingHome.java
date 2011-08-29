@@ -1,7 +1,6 @@
 package org.msh.tb.medicines.dispensing;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +11,12 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.BatchDispensing;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineDispensing;
-import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.MedicineDispensingCase;
+import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
@@ -31,13 +30,13 @@ import org.msh.tb.medicines.movs.MovementHome;
  *
  */
 @Name("dispensingHome")
-public class DispensingHome {
-	
-	private Date dispensingDate;
-	private Tbunit unit;
+public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
+	private static final long serialVersionUID = 1820669849645381520L;
+
 	private List<MedicineItem> medicines;
 	private List<MedicineDispensingCase> patients;
 	private Map<MedicineItem, String> errorMessages;
+	private List<TbCase> cases;
 	
 	@In EntityManager entityManager;
 
@@ -52,11 +51,32 @@ public class DispensingHome {
 	 * @param unit
 	 */
 	public void initialize(Tbunit unit) {
-		this.unit = unit;
+		clearInstance();
+		getInstance().setTbunit(unit);
 		medicines = null;
 		patients = null;
 	}
 
+
+	/**
+	 * Initialize medicine dispensing for editing of an existing {@link MedicineDispensing} instance by its id
+	 * @param id
+	 */
+	public void initEditing(Integer id) {
+		setId(id);
+		medicines = null;
+		patients = null;
+	}
+
+
+
+	/**
+	 * Return the instance of {@link MedicineDispensing} class being edited
+	 * @return managed instance of {@link MedicineDispensing} being edited, or null if it's a new dispensing
+	 */
+	public MedicineDispensing getMedicineDispensing() {
+		return getInstance();
+	}
 
 	/**
 	 * Include a new dispensing done for a batch and source with the given quantity.
@@ -66,7 +86,7 @@ public class DispensingHome {
 	 * @param quantity
 	 */
 	public void addDispensing(Batch batch, Source source, int quantity) {
-		if (unit.isPatientDispensing())
+		if (getInstance().getTbunit().isPatientDispensing())
 			throw new RuntimeException("Method addDispensing cannot be directly called when dispensing is done by patient. Call addPatientDispensing instead");
 
 		addBatchQuantity(batch, source, quantity);
@@ -82,16 +102,22 @@ public class DispensingHome {
 	 * @param quantity
 	 */
 	public void addPatientDispensing(TbCase tbcase, Batch batch, Source source, int quantity) {
-		if (!unit.isPatientDispensing())
+		if (!getInstance().getTbunit().isPatientDispensing())
 			throw new RuntimeException("Method addDispensing cannot be directly called when dispensing is done by patient. Call addPatientDispensing instead");
 
 		addBatchQuantity(batch, source, quantity);
 
-		if (patients == null)
+		if (patients == null) {
 			patients = new ArrayList<MedicineDispensingCase>();
+			cases = new ArrayList<TbCase>();
+		}
 		
 		MedicineDispensingCase pat = findPatientDispensing(tbcase, batch, source);
 		pat.setQuantity( pat.getQuantity() + quantity );
+
+		// create a list of patients being dispensed
+		if (!cases.contains(tbcase))
+			cases.add(tbcase);
 	}
 
 	
@@ -105,7 +131,7 @@ public class DispensingHome {
 		if (medicines == null)
 			medicines = new ArrayList<MedicineItem>();
 		
-		BatchDispensing it = findBatchDispensing(batch, source);
+		BatchItem it = findBatchDispensing(batch, source);
 		
 		it.setQuantity( it.getQuantity() + quantity );
 	}
@@ -117,16 +143,15 @@ public class DispensingHome {
 	 * @param source instance of {@link Source} class to search for dispensing
 	 * @return instance of the {@link BatchDispensing} class containing information about the quantity dispensed
 	 */
-	protected BatchDispensing findBatchDispensing(Batch batch, Source source) {
+	protected BatchItem findBatchDispensing(Batch batch, Source source) {
 		MedicineItem meddisp = findMedicineItem(batch.getMedicine(), source);
 		
-		for (BatchDispensing it: meddisp.getItems())
-			if ((it.getBatch().equals(batch)) && (it.getSource().equals(source)))
+		for (BatchItem it: meddisp.getItems())
+			if (it.getBatch().equals(batch))
 				return it;
 		
-		BatchDispensing it = new BatchDispensing();
+		BatchItem it = new BatchItem();
 		it.setBatch(batch);
-		it.setSource(source);
 		meddisp.getItems().add(it);
 
 		return it;
@@ -183,27 +208,48 @@ public class DispensingHome {
 	 */
 	@Transactional
 	public boolean saveDispensing() {
-		if (dispensingDate == null)
+		MedicineDispensing medicineDispensing = getInstance();
+		if (medicineDispensing.getDispensingDate() == null)
 			return false;
 
-		MedicineDispensing medDispensing = new MedicineDispensing();
-		medDispensing.setDispensingDate(dispensingDate);
-
-		// test movement generation
+		// prepare movements to be recorded
 		MovementHome movHome = (MovementHome)Component.getInstance("movementHome");
 		movHome.initMovementRecording();
+
+		// is this a new dispensing for the date and unit ?
+/*		if (!restoreDispensing()) {
+			medicineDispensing = new MedicineDispensing();
+			UserSession userSession = (UserSession)Component.getInstance("userSession");
+			Tbunit unit = entityManager.find(Tbunit.class, userSession.getTbunit().getId());
+			medicineDispensing.setTbunit(unit);
+		}
+		else {
+*/			
+		if (restoreDispensing()) {
+			includePastCaseDispensing();
+//			removePastCaseDispensing();
+			// prepare previous movements to be removed
+			while (medicineDispensing.getMovements().size() > 0) {
+				Movement mov = medicineDispensing.getMovements().get(0);
+				movHome.prepareMovementsToRemove(mov);
+				medicineDispensing.getMovements().remove(0);
+			}
+		}
+
+		// prepare new movements to be saved
+		List<Movement> movs = new ArrayList<Movement>();
 		for (MedicineItem it: medicines) {
-			Movement mov = movHome.prepareNewMovement(dispensingDate, 
-					unit, 
+			Movement mov = movHome.prepareNewMovement(medicineDispensing.getDispensingDate(), 
+					medicineDispensing.getTbunit(), 
 					it.getSource(),
 					it.getMedicine(),
 					MovementType.DISPENSING, 
-					it.getBatches(), null);
+					it.getBatches(),
+					null);
 
 			if (mov == null)
 				addErrorMessage(it, movHome.getErrorMessage());
-
-			medDispensing.getMovements().add(mov);
+			movs.add(mov);
 		}
 		
 		// has errors?
@@ -211,29 +257,89 @@ public class DispensingHome {
 			return false;
 		
 		movHome.savePreparedMovements();
-
-		// save dispensing records
-		for (MedicineItem it: medicines) {
-			for (BatchDispensing disp: it.getItems()) {
-				medDispensing.getBatches().add(disp);
-				disp.setDispensing(medDispensing);
-			}
-		}
+		
+		removePastCaseDispensing();
+		
+		// add movements to dispensing
+		for (Movement mov: movs)
+			medicineDispensing.getMovements().add(mov);
 		
 		// save patient records
 		if (patients != null) {
 			for (MedicineDispensingCase pat: patients) {
-				medDispensing.getPatients().add(pat);
-				pat.setDispensing(medDispensing);
+				medicineDispensing.getPatients().add(pat);
+				pat.setDispensing(medicineDispensing);
 			}
 		}
-		
-		entityManager.persist(medDispensing);
-		entityManager.flush();
+
+		persist();
 		
 		return true;
 	}
 
+	
+	private void includePastCaseDispensing() {
+		List<MedicineDispensingCase> lst = getInstance().getPatients();
+
+		if ((lst == null) || (lst.size() == 0))
+			return;
+		
+		for (MedicineDispensingCase mdc: lst) {
+			if (!cases.contains(mdc.getTbcase()))
+				addBatchQuantity(mdc.getBatch(), mdc.getSource(), mdc.getQuantity());
+		}
+	}
+
+	/**
+	 * If there is a dispensing already registered in the date, check if the patients being dispensed
+	 * were already dispensed. If so, remove past information about patient dispensing that are dispensed again
+	 */
+	private void removePastCaseDispensing() {
+		MedicineDispensing medicineDispensing = getInstance();
+		// is dispensing by patient ?
+		if (patients == null) {
+			// if it's not by patient, so remove any information of dispensing by patient
+			for (MedicineDispensingCase mdc: medicineDispensing.getPatients())
+				entityManager.remove(mdc);
+			medicineDispensing.getPatients().clear();
+			return;
+		}
+
+		// check if cases being dispensed were already dispensed in the date
+		// if so, remove past registration
+		int index = 0;
+		while (index < medicineDispensing.getPatients().size()) {
+			MedicineDispensingCase it = medicineDispensing.getPatients().get(index);
+			if (cases.contains(it.getTbcase())) {
+				entityManager.remove(it);
+				medicineDispensing.getPatients().remove(index);
+			}
+			else index++;
+		}
+	}
+
+
+	/**
+	 * Return instance of {@link MedicineDispensing} being edited, or try to load the dispensing
+	 * based on the dispensing date. If there is no dispensing in the date, the method returns null
+	 * @return
+	 */
+	private boolean restoreDispensing() {
+		if (isManaged())
+			return true;
+
+		List<MedicineDispensing> lst = entityManager.createQuery("from MedicineDispensing " +
+				"where dispensingDate = :date and tbunit.id = #{userSession.tbunit.id}")
+				.setParameter("date", getInstance().getDispensingDate())
+				.getResultList();
+		
+		if (lst.size() == 0)
+			return false;
+
+		clearInstance();
+		setId(lst.get(0).getId());
+		return true;
+	}
 	
 	/**
 	 * Add error message
@@ -268,34 +374,13 @@ public class DispensingHome {
 		return errorMessages != null;
 	}
 
-	
-	/**
-	 * @return the dispensingDate
-	 */
-	public Date getDispensingDate() {
-		return dispensingDate;
-	}
-
-	/**
-	 * @param dispensingDate the dispensingDate to set
-	 */
-	public void setDispensingDate(Date dispensingDate) {
-		this.dispensingDate = dispensingDate;
-	}
-
-	/**
-	 * @return the unit
-	 */
-	public Tbunit getUnit() {
-		return unit;
-	}
 
 	/**
 	 * Wrapper class to group batches by medicine
 	 * @author Ricardo Memoria
 	 *
 	 */
-	public class MedicineItem extends MedicineGroup<BatchDispensing> {
+	public class MedicineItem extends MedicineGroup<BatchItem> {
 
 		private Source source;
 		
@@ -304,7 +389,7 @@ public class DispensingHome {
 		 */
 		public Map<Batch, Integer> getBatches() {
 			Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
-			for (BatchDispensing it: getItems()) {
+			for (BatchItem it: getItems()) {
 				batches.put(it.getBatch(), it.getQuantity());
 			}
 			return batches;
@@ -325,4 +410,32 @@ public class DispensingHome {
 		}
 	}
 
+	public class BatchItem {
+		private Batch batch;
+		private int quantity;
+		/**
+		 * @return the batch
+		 */
+		public Batch getBatch() {
+			return batch;
+		}
+		/**
+		 * @param batch the batch to set
+		 */
+		public void setBatch(Batch batch) {
+			this.batch = batch;
+		}
+		/**
+		 * @return the quantity
+		 */
+		public int getQuantity() {
+			return quantity;
+		}
+		/**
+		 * @param quantity the quantity to set
+		 */
+		public void setQuantity(int quantity) {
+			this.quantity = quantity;
+		}
+	}
 }

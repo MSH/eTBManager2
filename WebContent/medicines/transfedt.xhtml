@@ -12,12 +12,8 @@
 <ui:param name="title" value="#{messages['meds.transfer.new']}" />
 
 <ui:param name="topmenu" value="1" />
-<ui:param name="waitdlg" value="1" />
-
+<ui:param name="left" value="0" />
 <ui:param name="labelstyle" value="width:180px;" />
-
-<ui:define name="left">
-</ui:define>
 
 <ui:define name="content">
 <s:decorate template="/layout/unitsel.xhtml">
@@ -96,9 +92,9 @@
 				style="width:120px;display:block;"/>
 			<a:commandLink value="#{messages['form.remove']}" ajaxSingle="true" action="#{transferHome.removeItem(it)}" reRender="pnlitems" />
 		</td></tr>
-		<s:fragment rendered="#{it.data==true}">
+		<s:fragment rendered="#{not empty it.data}">
 		<tr><td colspan="6">
- 				   <h:outputText value="#{messages['meds.movs.invalidqtd']}" styleClass="error"/>
+ 			<h:outputText value="#{it.data}" styleClass="error"/>
  		</td></tr> 
 		</s:fragment>
 		
@@ -139,7 +135,7 @@
 	<div class="form-footer">
         <a:commandLink action="#{transferHome.saveNewTransfer}" styleClass="button" reRender="main,messages"
         	onclick="if (!disableButton(this)) return false;" 
-        	oncomplete="disableButton()">
+        	>
         	<span>#{messages['form.ok']}</span>
         </a:commandLink>
 		<s:link view="/medicines/transfer.xhtml" styleClass="button-alt" propagation="end" >

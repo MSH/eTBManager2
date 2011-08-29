@@ -51,7 +51,7 @@
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Source']}:</ui:define>
 		<h:selectOneMenu value="#{sourceHome.source}">
-  		<s:selectItems value="#{sources.resultList}" var="r" label="#{r.name}" noSelectionLabel="-" />
+  		<s:selectItems value="#{sources.resultList}" var="r" label="#{r.abbrevName}" noSelectionLabel="-" />
   		<s:convertEntity />
 		</h:selectOneMenu>
 	</s:decorate>
@@ -107,7 +107,7 @@
 
 	<h:column rendered="#{source.id == null}">
 		<f:facet name="header"><h:outputText value="#{messages['Source']}" styleClass="collh" /></f:facet>
-		#{m.source.name}
+		#{m.source.abbrevName}
 	</h:column>
 
 	<h:column>

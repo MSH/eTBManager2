@@ -7,22 +7,19 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="/layout/template_new.xhtml">
+      template="admintemplate.xhtml">
         
 <ui:param name="title" value="#{messages['admin.syssetup']}" />
 <ui:param name="topmenu" value="3" />
-
-<ui:param name="waitdlg" value="1" />
+<ui:param name="submenu" value="2" />
 <ui:param name="labelstyle" value="width:170px" />
 
-<ui:define name="left">
-	<ui:include src="/layout/adminmenu.xhtml" />
-</ui:define>
 
 <ui:define name="content">
-<h:form id="main" >
-	<table width="600px" style="border:2px solid #f0f0f0" ><tr><td>
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1" >
 
+	<div class="form-content">
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['SystemConfig.systemURL']}: 	</ui:define>
     	<h:inputText value="#{systemConfigHome.systemConfig.systemURL}" size="100" style=" width : 230px;" required="true" />
@@ -39,8 +36,8 @@
     </s:decorate>
 	
     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['SystemConfig.allowRegPage']}:</ui:define>
-    	<h:selectBooleanCheckbox value="#{systemConfigHome.systemConfig.allowRegPage}" />
+    	<ui:define name="label"></ui:define>
+    	<h:selectBooleanCheckbox value="#{systemConfigHome.systemConfig.allowRegPage}" />#{messages['SystemConfig.allowRegPage']}
     </s:decorate>
 	
     <s:decorate template="/layout/edit.xhtml" >
@@ -69,18 +66,18 @@
        	</h:selectOneMenu>
     </s:decorate>
     </h:panelGroup>
+    </div>
 	
-	</td></tr><tr><td align="right">
-		
+	<div class="form-footer">
 		<a:commandLink action="#{systemConfigHome.saveCofiguration}" styleClass="button" 
 			onclick="if (!disableButton(this)) return false;" reRender="main,messages">
 			<span>#{messages['form.save']}</span>
 		</a:commandLink> 
 		
-		<s:link view="/admin/index.xhtml" styleClass="button-alt" propagation="end" >
+		<s:link view="/admin/config.xhtml" styleClass="button-alt" propagation="end" >
 		<span>#{messages['form.cancel']}</span>
 		</s:link>
-	</td></tr></table>
+	</div>
 </h:form>
 </ui:define>
         

@@ -7,22 +7,18 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      template="/layout/template_new.xhtml">
+      template="admintemplate.xhtml">
 
 <ui:param name="title" value="#{messages['admin.import']}" />
-<ui:param name="topmenu" value="3" />
+<ui:param name="submenu" value="0" />
 
-<ui:define name="left">
-	<ui:include src="/layout/adminmenu.xhtml" />
-</ui:define>
 
 <ui:define name="content">
+<h1>#{title}</h1>
 
-<s:decorate template="/layout/roundrect.xhtml" style="margin-top:20px;">
-	<ui:param name="showheader" value="0" />
-	<ui:param name="showfooter" value="0" />
+<h:form id="main" enctype="multipart/form-data" styleClass="form1">
 
-<h:form id="main" enctype="multipart/form-data" style="padding:10px;">
+	<div class="form-content">
     <s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['admin.import.desttable']}:</ui:define>
     	<h:selectOneMenu value="#{importDataHome.table}" required="true">
@@ -51,14 +47,16 @@
     	</h:selectOneMenu>
     </s:decorate>
 
-	<p/>
+	</div>
+	
+	<div class="form-footer">
 	<a:commandLink action="#{importDataHome.execute}" styleClass="button" 
 		onclick="if (!disableButton(this)) return false;" reRender="main,messages">
 		<span>#{messages['form.import']}</span>
 	</a:commandLink>
+	</div>
 </h:form>
 
-</s:decorate>
 
 </ui:define>
 </ui:composition>

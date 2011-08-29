@@ -13,7 +13,8 @@
 <meta http-equiv="expires" content="0" />
 <meta http-equiv="keywords" content="RMEMORIA,rproj,MSH,e-tb Manager" />
 <meta http-equiv="description" content="e-TB Manager" />
-<a:loadStyle src="/public/themes/default/skin.css" />  
+<a:loadStyle src="/public/themes/green/skin.css" />  
+<a:loadScript src="resource://org/richfaces/renderkit/html/scripts/jquery/jquery.js"/>
 </head>
     
 <body>
@@ -36,13 +37,15 @@
 
 		<h1>#{messages['login.regpage.msg2']}</h1>
 		
-		<div style="font-size:12px;margin-top:20px;margin-bottom:30px;display:block;">
+		<div style="margin-top:20px;margin-bottom:30px;display:block;">
 		#{messages['login.regpage.msg3']}
 		<p/>
 		#{messages['login.regpage.msg4']}
 		</div>
 		
-		<s:link view="/login.xhtml" value="#{messages['form.return']}" styleClass="button"/>
+		<s:link view="/login.xhtml" styleClass="button">
+			<span>#{messages['form.return']}</span>
+		</s:link>
 		
 		</s:decorate>
 	</td></tr>

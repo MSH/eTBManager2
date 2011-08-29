@@ -5,7 +5,7 @@
 		<restrict>#{s:hasRole('SETUPWS')}</restrict>
 		<navigation>
 			<rule if-outcome="defaultws-persisted">
-				<redirect view-id="/admin/index.xhtml" />
+				<redirect view-id="/admin/config.xhtml" />
 			</rule>
 		</navigation>
 

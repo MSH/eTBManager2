@@ -170,7 +170,8 @@ public class PatientsQuery extends EntityQuery {
 			SimpleDateFormat f = new SimpleDateFormat("MMM-yyyy");
 			
 			if (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT) {
-				s += "<div class='warn'>" + MessageFormat.format(msgs.get("cases.sit.SUSP.date"), f.format(tbcase.getRegistrationDate())) + "</div>";
+				if (tbcase.getRegistrationDate() != null)
+					s += "<div class='warn'>" + MessageFormat.format(msgs.get("cases.sit.SUSP.date"), f.format(tbcase.getRegistrationDate())) + "</div>";
 			}
 			else 
 			if (tbcase.getState() == CaseState.WAITING_TREATMENT) {
@@ -184,8 +185,9 @@ public class PatientsQuery extends EntityQuery {
 			}
 			else 
 			if (tbcase.getState().ordinal() > CaseState.TRANSFERRING.ordinal()) {
-				s += MessageFormat.format(msgs.get("cases.sit.OUTCOME.date"), f.format( tbcase.getOutcomeDate() )) + "<br/>" +
-					msgs.get(tbcase.getState().getKey());
+				if (tbcase.getOutcomeDate() != null)
+					s += MessageFormat.format(msgs.get("cases.sit.OUTCOME.date"), f.format( tbcase.getOutcomeDate() )) + "<br/>" +
+						msgs.get(tbcase.getState().getKey());
 	
 			}
 			

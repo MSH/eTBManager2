@@ -11,3 +11,7 @@ and a.case_id = tbcase.id)
 
 ALTER TABLE `etbmanager`.`medicineorder` MODIFY COLUMN `approvingDate` DATETIME DEFAULT NULL,
  MODIFY COLUMN `orderDate` DATETIME NOT NULL;
+
+drop table MedicineDispensingBatch;
+
+drop table MedicineDispensingItem;

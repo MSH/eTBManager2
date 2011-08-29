@@ -44,66 +44,13 @@
 	</s:decorate>
 	
 	</div>
+    
+    <a:repeat value="#{caseDispensingUIHome.sources}" var="s">
+	    <h2>#{s.source}</h2>
 
-	<a:repeat value="#{caseDispensingUIHome.sources}" var="s">
-    <h2>#{s.source.abbrevName} <span class="text-small">(#{s.source.name})</span></h2>
-   		<table id="tblmed" class="table1">
-   		<tr>
-   			<th>
-   				#{messages['Medicine']}
-   			</th>
-   			<th>
-   				#{messages['Batch.expiryDate']}
-   			</th>
-   			<th>
-   				#{messages['Batch.remainingQuantity']}
-   			</th>
-   			<th>
-   				#{messages['MedicineDispensing.quantity']}
-   			</th>
-   		</tr>
-    	<a:repeat value="#{s.medicines}" var="med">
-   		<tr class="highlight">
-   			<td colspan="2" class="col1">
-   				<div class="medicine-icon" />
-				<h:outputText value="#{med.medicine}" />
-			</td>
-			<td align="right">
-				<h:outputText value="#{med.item.availableQuantity}" >
-					<f:convertNumber pattern="#,###,##0"/>
-				</h:outputText>
-			</td>
-			<td align="right">
-				<div id="disptotal">
-					<h:outputText value="#{med.item.dispensingQuantity}" rendered="#{med.item.dispensingQuantity>0}">
-						<f:convertNumber pattern="#,###,##0"/>
-					</h:outputText>
-				</div>
-				<h:outputText value="#{med.item.errorMessage}" rendered="#{not empty med.item.errorMessage}" styleClass="error"/>
-			</td>
-		</tr>
-		<a:repeat value="#{med.batches}" var="b">
-		<tr id="#{med.rowId}" >
-			<td>
-				<s:decorate template="/layout/batch.xhtml" >
-					<ui:param name="batch" value="#{b.dispensing.batch}" />
-				</s:decorate>
-			</td>
-			<td>
-				<h:outputText value="#{b.dispensing.batch.expiryDate}" converter="localeDateConverter" />
-			</td>
-			<td align="right">
-				<h:outputText value="#{b.availableQuantity}" >
-					<f:convertNumber pattern="#,###,##0"/>
-				</h:outputText>
-			</td>
-			<td align="right">
-				<h:inputText value="#{b.dispensing.quantity}" style="width:80px"/>
-			</td>
-		</tr>
-		</a:repeat>
-    	</a:repeat>
-   		</table>
+		<s:decorate template="dispensingtableedt.xhtml">
+			<ui:param name="table" value="#{s.table}" />
+		</s:decorate>
     </a:repeat>
 	
     <div class="form-footer">

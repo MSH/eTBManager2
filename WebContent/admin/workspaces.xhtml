@@ -7,27 +7,20 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-                template="/layout/template_new.xhtml">
+                template="admintemplate.xhtml">
 
-<ui:param name="topmenu" value="3" />
+<ui:param name="submenu" value="2" />
 <ui:param name="title" value="#{messages['admin.workspaces']}" />
 
-<ui:define name="naveg">
-	<s:link value="#{messages['configuracoes']}" view="/admin/index.xhtml" propagation="none" />
-</ui:define>
-
-<ui:define name="left">
-	<ui:include src="/layout/adminmenu.xhtml" />
-</ui:define>
 
 <ui:define name="content">
 <h1>#{title}</h1>
-
-	<p/>
 	<s:link view="/admin/workspaceedt.xhtml" styleClass="button" rendered="#{s:hasRole('WORKSPACES_EDT')}">
 		<f:param name="id" value="#{null}"/>
 		<span>#{messages['form.newf']}</span>
 	</s:link>
+	
+	<div class="spacer" />
 	
 	<h:dataTable id="tbl" value="#{workspaces.resultList}" var="r" width="650px" styleClass="table1" rowClasses="lin1,lin2" 
 		columnClasses="coll,coll,coll" rendered="#{workspaces.resultCount>0}" >

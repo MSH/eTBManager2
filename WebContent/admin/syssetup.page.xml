@@ -8,7 +8,7 @@
 	<action execute="#{systemConfigHome.initializeEditing}"/>
 	<navigation>
 		<rule if-outcome="success">
-			<redirect view-id="/admin/index.xhtml" >
+			<redirect view-id="/admin/config.xhtml" >
 				<message>#{messages['admin.syssetup.success']}</message>
 			</redirect>
 		</rule>

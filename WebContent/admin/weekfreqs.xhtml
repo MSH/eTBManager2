@@ -8,14 +8,11 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       xmlns:c="http://java.sun.com/jstl/core"
-      template="/layout/template_new.xhtml">
+      template="admintemplate.xhtml">
 
 <ui:param name="title" value="#{messages['admin.weeklyfreq']}" />
-<ui:param name="topmenu" value="3" />
+<ui:param name="submenu" value="0" />
 
-<ui:define name="left">
-	<ui:include src="/layout/adminmenu.xhtml" />
-</ui:define>
 
 <ui:define name="content">
 <h1>#{title}</h1>

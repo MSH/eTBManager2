@@ -288,6 +288,9 @@ public class MovementHome {
 			sp = aux;
 		}
 
+/* TODO 
+ * Se movimento a ser removido é posterior ao novo movimento, então dxQtd não pode incluir qtdRem  
+ */
 		// calculate new quantities in stock
 		int dxQtd = (qtd * oper) + qtdRem;
 		float dxPrice = (totalPrice * oper) + priceRem;
@@ -405,17 +408,21 @@ public class MovementHome {
 
 		int qtd = 0;
 		float price = 0;
+		Date dtrem = null;
 
 		for (Movement mov: movementsToBeRemoved) {
 			if ((!mov.getDate().after(dt)) &&
 				(mov.getMedicine().equals(med)) &&
 				(mov.getSource().equals(source)) &&
-				(mov.getTbunit().equals(unit))) {
+				(mov.getTbunit().equals(unit))) 
+			{
 				qtd += mov.getQuantity() * (-mov.getOper());
 				price += mov.getTotalPrice() * (-mov.getOper());
+				if ((dtrem == null) || (dtrem.after(mov.getDate())))
+					dtrem = mov.getDate();
 			}
 		}
-		return new ReturnedValue(qtd, price);
+		return new ReturnedValue(qtd, price, dtrem);
 	}
 
 
@@ -646,11 +653,13 @@ public class MovementHome {
 	private class ReturnedValue {
 		private int quantity;
 		private float price;
+		private Date date;
 
-		public ReturnedValue(int quantity, float price) {
+		public ReturnedValue(int quantity, float price, Date date) {
 			super();
 			this.quantity = quantity;
 			this.price = price;
+			this.date = date;
 		}
 		/**
 		 * @return the quantity
@@ -663,6 +672,14 @@ public class MovementHome {
 		 */
 		public float getPrice() {
 			return price;
+		}
+		
+		/**
+		 * Return the date of the first movement to be removed
+		 * @return
+		 */
+		public Date getDate() {
+			return date;
 		}
 	}
 

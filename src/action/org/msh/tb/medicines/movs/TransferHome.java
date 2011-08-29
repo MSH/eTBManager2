@@ -105,9 +105,8 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 					getBatchesMap(it, true), comment);
 
 			if (movOut == null) {
-				facesMessages.add(movementHome.getErrorMessage());
 				bCanTransfer = false;
-				it.setData(true);
+				it.setData(movementHome.getErrorMessage());
 			}
 			
 			it.setMovementOut(movOut);

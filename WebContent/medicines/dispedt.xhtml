@@ -13,143 +13,55 @@
 <ui:param name="title" value="#{messages['dispensing.new']}" />
 
 <ui:param name="topmenu" value="1" />
-<ui:param name="waitdlg" value="1" />
+<ui:param name="left" value="0" />
 <ui:param name="labelstyle" value="width:220px;" />
 
-<ui:define name="left">
+<ui:define name="head">
+<style>
+.col1 {  width:400px; }
+</style>
 </ui:define>
 
 <ui:define name="content">
-<p/>
+<s:decorate template="/layout/unitsel.xhtml">
 
-<s:decorate id="formdisp" template="/layout/unitsel.xhtml">
-<h:form id="main"> 
+<h:form id="main" styleClass="form1"> 
 
-	<s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['meds.dispensing.dayini']}:</ui:define>
-    	<h:selectOneMenu value="#{medicineDispensingHome.dayIni}" required="true">
-    		<f:selectItems value="#{medicineDispensingHome.days}" />
-    	</h:selectOneMenu>
-    	<h:outputText value="#{medicineDispensingHome.month}" converter="monthYearConverter" style="margin-left:6px;">
-    		<f:param name="year" value="#{medicineDispensingHome.year}"/>
-    	</h:outputText>
-	</s:decorate>
+	<div class="form-content">
 
-	<s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['meds.dispensing.dayend']}:</ui:define>
-    	<h:selectOneMenu value="#{medicineDispensingHome.dayEnd}" required="true">
-    		<f:selectItems value="#{medicineDispensingHome.days}" />
-    	</h:selectOneMenu>
-    	<h:outputText value="#{medicineDispensingHome.month}" converter="monthYearConverter" style="margin-left:6px;">
-    		<f:param name="year" value="#{medicineDispensingHome.year}"/>
-    	</h:outputText>
-	</s:decorate>
-
-<h:panelGroup id="dispdata">
-	<table width="100%" class="table1">
-	<a:repeat value="#{medicineDispensingHome.sources}" var="s">
-	<tr>
-		<td colspan="6" class="highlight">
-			#{s.source.name}
-		</td>
-	</tr>
-	<tr>
-		<th>
-			#{messages['Medicine']}
-		</th>
-		<th>
-			#{messages['Batch.expiryDate']}
-		</th>
-		<th>
-			#{messages['Batch.remainingQuantity']}
-		</th>
-		<th>
-			#{messages['MedicineDispensing.quantity']}
-		</th>
-		<th>
-			#{messages['global.unitPrice']}
-		</th>
-		<th>
-		</th>
-	</tr>
-		<a:repeat value="#{s.items}" var="it">
-		<tr>
-			<td>
-				<div class="medicine-icon" style="float:left"/>
-				#{it.item.medicine}
-				<s:fragment rendered="#{it.invalid}">
- 				   <h:outputText value="#{messages['meds.movs.invalidqtd']}" styleClass="warn"/> 
-				</s:fragment>
-			</td>
-			<td>
-			</td>
-			<td align="right">
-				<h:outputText value="#{it.availableQuantity}" >
-					<f:convertNumber pattern="#,###,##0"/>
-				</h:outputText>
-			</td>
-			<td align="right">
-				<h:outputText value="#{it.item.quantity}" >
-					<f:convertNumber pattern="#,###,##0"/>
-				</h:outputText>
-			</td>
-			<td>
-			</td>
-			<td align="center">
-				<a:commandLink value="#{messages['meds.selbatches']}" action="#{medicineDispensingHome.initializeBatchSelection(it)}" 
-					reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" ajaxSingle="true"/> 
-			</td>
-		</tr>
-		<ui:repeat value="#{it.item.batches}" var="b">
-			<tr style="font-size:9px;">
-				<td class="colb" >
-					<div class="batch-icon" style="float:left" />
-					#{b.batch.batchNumber}<br/>
-					#{b.batch.manufacturer}
-				</td>
-				<td align="center" class="colb">
-					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
-				</td>
-				<td>
-				</td>
-				<td class="colb" align="right">
-					<h:outputText value="#{b.quantity}">
-						<f:convertNumber pattern="#,###,##0"/>
-					</h:outputText>
-				</td>
-				<td align="right" class="colb">
-					<h:outputText value="#{b.batch.unitPrice}">
-						<f:convertNumber pattern="#,###,##0.0000"/>
-					</h:outputText>
-				</td>
-				<td></td>
-			</tr>
-		</ui:repeat>
-		</a:repeat>
-	</a:repeat>
-	</table>
-
-	<div style="float:right">
-		<a:commandLink value="#{messages['form.ok']}" action="#{medicineDispensingHome.saveDispensing}" 
-			styleClass="button" reRender="main,messages" />
-		<s:link value="#{messages['form.cancel']}" view="/medicines/dispensing.xhtml" styleClass="button-alt" propagation="end">
-			<f:param name="month" value="#{medicineDispensingHome.month}"/>
-			<f:param name="year" value="#{medicineDispensingHome.year}"/>
-		</s:link>
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['meds.dispensing.date']}:</ui:define>
+    	<ui:param name="edtid" value="edtdate" />
+    	<ui:param name="datefield" value="#{batchDispensingUIHome.dispensingDate}" /> 
+		<ui:param name="required" value="true" />
+		<ui:param name="future" value="false" />
+    </s:decorate>
+	
 	</div>
-</h:panelGroup>
+    
+    <a:repeat value="#{batchDispensingUIHome.sources}" var="s">
+	    <h2>#{s.source}</h2>
+
+		<s:decorate template="dispensingtableedt.xhtml">
+			<ui:param name="table" value="#{s.table}" />
+		</s:decorate>
+    </a:repeat>
+	
+    <div class="form-footer">
+        <a:commandLink action="#{batchDispensingUIHome.saveDispensing}" styleClass="button" onclick="if (!disableButton(this)) return false" reRender="main,messages">
+        	<span>#{messages['form.save']}</span>
+        </a:commandLink>  
+        <s:link view="/medicines/dispbatches.xhtml" styleClass="button-alt" onclick="disableButton(this)">
+			<f:param name="month" value="#{dispensingSelection.month}" />
+			<f:param name="year" value="#{dispensingSelection.year}" />
+        	<span>#{messages['form.cancel']}</span>
+        </s:link>
+    </div>
+
 </h:form>
-</s:decorate>
 
-
-<s:decorate template="/layout/batchselection.xhtml" >
-	<a:commandLink value="#{messages['form.ok']}" action="#{medicineDispensingHome.selectBatches}"
-	    onclick="if (!validateBatchSelection(self)) return false;"
-		oncomplete="this.disabled=false;if (batchValOk) hideBatchesSelectionDlg();" 
-		styleClass="button" reRender="dispdata"/>
 </s:decorate>
 
 </ui:define>
 
 </ui:composition>  
-

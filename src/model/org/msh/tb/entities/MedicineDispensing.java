@@ -47,9 +47,6 @@ public class MedicineDispensing implements Serializable {
 	private List<Movement> movements = new ArrayList<Movement>();
 	
 	@OneToMany(mappedBy="dispensing", cascade={CascadeType.ALL})
-	private List<BatchDispensing> batches = new ArrayList<BatchDispensing>();
-	
-	@OneToMany(mappedBy="dispensing", cascade={CascadeType.ALL})
 	private List<MedicineDispensingCase> patients = new ArrayList<MedicineDispensingCase>();
 
 		
@@ -109,19 +106,6 @@ public class MedicineDispensing implements Serializable {
 		this.movements = movements;
 	}
 
-	/**
-	 * @return the batches
-	 */
-	public List<BatchDispensing> getBatches() {
-		return batches;
-	}
-
-	/**
-	 * @param batches the batches to set
-	 */
-	public void setBatches(List<BatchDispensing> batches) {
-		this.batches = batches;
-	}
 
 	/**
 	 * @return the patients

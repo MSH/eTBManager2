@@ -1,6 +1,7 @@
 package org.msh.tb.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,17 +24,17 @@ public class MedicineDispensingCase {
 	@NotNull
 	private MedicineDispensing dispensing;
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="CASE_ID")
 	@NotNull
 	private TbCase tbcase;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="SOURCE_ID")
 	@NotNull
 	private Source source;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="BATCH_ID")
 	@NotNull
 	private Batch batch;

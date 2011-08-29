@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -56,7 +57,7 @@ public class Medicine extends WSObject implements Serializable{
 	@OneToMany(mappedBy="medicine", cascade={CascadeType.ALL})
 	private List<MedicineComponent> components = new ArrayList<MedicineComponent>();
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="GROUP_ID")
 	private ProductGroup group;
 	
