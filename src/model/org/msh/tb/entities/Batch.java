@@ -60,6 +60,11 @@ public class Batch implements Serializable {
 		return (expiryDate != null) && (expiryDate.before(DateUtils.getDate()));
 	}
 
+	@Override
+	public String toString() {
+		return (batchNumber != null? batchNumber: super.toString());
+	}
+
 
 	@Override
 	public boolean equals(Object obj) {

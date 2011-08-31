@@ -19,11 +19,14 @@ drop table temp_stockposition;
 
 alter table stockposition drop column stock_date;
 
-delete from batchmovement where quantity is null
+delete from batchmovement where quantity is null;
 
 delete from movement
 where not exists(select * from batchmovement a
 where a.movement_id=movement.id);
+
+update batch
+set unitprice = round(unitprice, 2);
 
 update movement
 set quantity = (select sum(b.quantity)
@@ -49,7 +52,7 @@ from movement a
 where a.unit_id=stockposition.unit_id and a.source_id=stockposition.source_id and a.medicine_id=stockposition.medicine_id);
 
 update stockposition
-set totalprice = (select sum(a.quantity * a.oper * c.unitPrice)
+set totalprice = (select sum(b.quantity * a.oper * c.unitPrice)
 from batchmovement b
 join movement a on a.id=b.movement_id
 join batch c on c.id=b.batch_id
@@ -60,3 +63,7 @@ ALTER TABLE stockposition ADD COLUMN `lastMovement` DATE NOT NULL;
 update stockposition
 set lastmovement = (select max(mov_date) from movement a 
 where a.unit_id=stockposition.unit_id and a.source_id=stockposition.source_id and a.medicine_id=stockposition.medicine_id);
+
+delete from stockposition where quantity=0;
+
+delete from batchquantity where quantity=0;

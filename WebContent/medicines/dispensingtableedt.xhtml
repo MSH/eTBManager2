@@ -68,6 +68,7 @@
 		</s:fragment>
 		<td>
 			<h:inputText value="#{row.dispensingQuantity}" style="width:100px"/>
+			<h:outputText value="#{row.batchErrorMessage}" rendered="#{not empty row.batchErrorMessage}" styleClass="error"/>
 		</td>
 	</tr>
 

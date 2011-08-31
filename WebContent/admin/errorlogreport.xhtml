@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="admintemplate.xhtml">
+
+<ui:param name="title" value="#{messages['admin.errorlogreport']}" />
+<ui:param name="submenu" value="0" />
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+
+<div class="form-content">
+<s:decorate id="sel" template="/layout/dateedit.xhtml">
+	<ui:define name="label">#{unitspg.auselection.labelLevel1}:</ui:define>
+	<h:selectOneMenu id="cbselau1" value="#{unitspg.auselection.unitLevel1}" >
+		<s:selectItems var="it" value="#{unitspg.auselection.optionsLevel1}" noSelectionLabel="-" label="#{it.name}"/>
+		<s:convertEntity />
+		<a:support event="onchange" reRender="pnlunits"/>
+	</h:selectOneMenu>
+</s:decorate>
+
+<s:decorate template="/layout/display.xhtml" rendered="#{userWorkspace.healthSystem == null}">
+	<ui:define name="label">#{messages['HealthSystem']}</ui:define>
+	<h:selectOneMenu value="#{unitspg.healthSystem}">
+		<s:selectItems var="it" value="#{healthSystems}" noSelectionLabel="-" label="#{it.name}" />
+		<s:convertEntity />
+		<a:support event="onchange" reRender="pnlunits"/>
+	</h:selectOneMenu>
+</s:decorate>                 
+</div>
+
+
+<h:panelGroup id="pnlunits">
+
+<s:decorate template="/layout/naveg.xhtml">
+	<ui:param name="list" value="#{errorLogReport}" />
+	<ui:param name="page" value="/admin/errorlogreport.xhtml" />
+</s:decorate>
+
+<b><h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty errorLogReport.resultList}" /></b>
+<h:dataTable id="tbl" value="#{errorLogReport.resultList}" var="it" columnClasses="colb,colb,colb,colcb"
+  styleClass="table1" rowClasses="lin1,lin2" width="100%" rendered="#{not empty errorLogReport.resultList}">
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['form.name']}" styleClass="collh">
+  			<f:param name="order" value="#{unitspg.order=='u.name.name1'?'u.name.name1 desc':'u.name.name1'}" />
+  		</s:link>
+  	</f:facet>
+  	<h:outputText value="#{it.errorDate}" converter="localeDateConverter"/>
+  </h:column>
+  
+	<h:column>
+  		<f:facet name="header">
+  			<s:link value="#{messages['admin.tbunits.medsuppliers']}" >
+  				<f:param name="order" value="#{unitspg.order=='u.secondLineSupplier.name'?'u.secondLineSupplier.name desc':'u.secondLineSupplier.name'}" />
+  			</s:link>
+  		</f:facet>
+  		#{it.exceptionClass}
+  		#{it.exceptionMessage}
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['form.options']}" styleClass="collh" />
+		</f:facet>
+	</h:column>
+
+	<h:column rendered="#{s:hasRole('TBUNITS_EDT') and (not workspaceViewService.printing)}">
+  		<f:facet name="header" >
+  		</f:facet>
+	</h:column>
+</h:dataTable>
+</h:panelGroup>
+
+</h:form>
+
+<ui:include src="/layout/tablerow.xhtml" />
+
+</ui:define>
+
+</ui:composition>  

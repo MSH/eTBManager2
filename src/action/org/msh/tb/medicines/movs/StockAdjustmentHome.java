@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
@@ -70,17 +71,9 @@ public class StockAdjustmentHome extends Controller {
 		}
 		
 		// get information about stock position
-		String hql = "from StockPosition sp join fetch sp.medicine " +
-			"where sp.date = (select max(aux.date) from StockPosition aux " +
-			"where aux.source.id = sp.source.id and aux.tbunit.id = sp.tbunit.id " +
-			"and aux.medicine.id = sp.medicine.id) " +
-			"and sp.source.id = :sourceid and sp.tbunit.id = :unitid " +
-			"order by sp.medicine.genericName";
+		StockPositionList srv = (StockPositionList)Component.getInstance("stockPositionList", true);
 
-		List<StockPosition> lst = entityManager.createQuery(hql)
-			.setParameter("sourceid", source.getId())
-			.setParameter("unitid", tbunit.getId())
-			.getResultList();
+		List<StockPosition> lst = srv.generate(tbunit, source); 
 		
 		for (StockPosition sp: lst) {
 			StockPositionItem it = new StockPositionItem();
@@ -88,14 +81,8 @@ public class StockAdjustmentHome extends Controller {
 			items.add(it);
 		}
 		
-		hql = "from BatchQuantity b where b.tbunit.id = :unitid and b.source.id = :sourceid " +
-				"order by b.batch.expiryDate";
-
 		// get information about batches available
-		List<BatchQuantity> batches = entityManager.createQuery(hql)
-			.setParameter("sourceid", source.getId())
-			.setParameter("unitid", tbunit.getId())
-			.getResultList();
+		List<BatchQuantity> batches = srv.getBatchAvailable(tbunit, source); 
 
 		for (BatchQuantity b: batches) {
 			StockPositionItem item = findStockPosition(b.getBatch().getMedicine());

@@ -212,10 +212,7 @@ public class OrderEstimation {
 		// monta instrução HQL IN
 		String hql = "from StockPosition sp join fetch sp.medicine m " +
 			"join fetch sp.source s " +
-			"where sp.date = (select max(aux.date) from StockPosition aux " +
-			"where aux.source.id = sp.source.id and aux.tbunit.id = sp.tbunit.id " +
-			"and aux.medicine.id = sp.medicine.id) " +
-			"and sp.tbunit.id = #{order.unitFrom.id}";
+			"where sp.tbunit.id = #{order.unitFrom.id}";
 	
 		List<StockPosition> lst = entityManager.createQuery(hql).getResultList();
 		for (StockPosition sp: lst) {

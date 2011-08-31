@@ -91,10 +91,7 @@ public abstract class AbstractDispensigUIHome {
 		DispensingHome dispensingHome = getDispensingHome();
 
 		dispensingHome.getInstance().setTbunit(unit);
-/*		if (!dispensingHome.isManaged()) {
-			dispensingHome.initialize(unit);
-		}
-*/
+
 		// inform DispensingHome about the batches to be dispensed
 		for (SourceItem it: getSources())
 			for (DispensingRow row: it.getTable().getRows()) {
@@ -110,11 +107,18 @@ public abstract class AbstractDispensigUIHome {
 		if (!dispensingHome.saveDispensing()) {
 			// handle error messages
 			dispensingHome.traverseErrors(new DispensingHome.ErrorTraverser() {
-				public void traverse(Source source, Medicine medicine, String errorMessage) {
+				public void traverse(Source source, Medicine medicine, Batch batch, String errorMessage) {
 					SourceItem it = findSourceItem(source);
-					DispensingRow row = it.getTable().findFirstMedicineRow(medicine);
-					if (row != null)
-						row.setErrorMessage(errorMessage);
+					if (batch != null) {
+						DispensingRow row = it.getTable().findRowByBatch(source, batch);
+						if (row != null)
+							row.setBatchErrorMessage(errorMessage);
+					}
+					else {
+						DispensingRow row = it.getTable().findFirstMedicineRow(medicine);
+						if (row != null)
+							row.setErrorMessage(errorMessage);
+					}
 				}
 			});
 			return "error";

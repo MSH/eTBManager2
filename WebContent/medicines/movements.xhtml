@@ -128,7 +128,7 @@
 	<h:column>
 		<f:facet name="header"><h:outputText value="#{messages['global.unitPrice']}" styleClass="colrh" /></f:facet>
 		<h:outputText value="#{m.movement.unitPrice}">
-			<f:convertNumber pattern="#,###,##0.0000"/>
+			<f:convertNumber pattern="#,###,##0.00"/>
 		</h:outputText>
 	</h:column>
 
@@ -220,7 +220,7 @@
 			</h:outputText>
 		</td>
 		<td class="colrb"><h:outputText value="#{m.item.batchMovement.batch.unitPrice}">
-				<f:convertNumber pattern="#,###,##0.0000"/>
+				<f:convertNumber pattern="#,###,##0.00"/>
 			</h:outputText>
 		</td>
 		<td class="colrb"><h:outputText value="#{m.item.batchMovement.totalPrice}">

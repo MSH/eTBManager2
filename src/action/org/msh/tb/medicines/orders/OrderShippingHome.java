@@ -56,6 +56,8 @@ public class OrderShippingHome extends Controller {
 		Date dt = order.getApprovingDate();
 		if (dt == null)
 			dt = order.getOrderDate();
+
+		dt = DateUtils.getDatePart(dt);
 		
 		if (dt.after(order.getShippingDate())) {
 			facesMessages.addFromResourceBundle("meds.orders.invalidshipmentdate");

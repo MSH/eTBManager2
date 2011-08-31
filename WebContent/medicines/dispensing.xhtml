@@ -64,7 +64,7 @@
 	
 	
 	<s:fragment rendered="#{not userSession.tbunit.patientDispensing and facesContext.renderResponse}">
-		<s:link value="#{messages['meds.dispensing.details']}" view="/medicines/dispbatches.xhtml" />
+		<s:link value="#{messages['meds.dispensing.details']}" view="/medicines/dispbatches.xhtml" rendered="#{not empty batchDispensingView.table.rows}" />
 		<s:decorate template="dispensingtable.xhtml">
 			<ui:param name="table" value="#{batchDispensingView.table}" /> 
 		</s:decorate>

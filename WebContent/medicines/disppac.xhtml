@@ -31,11 +31,11 @@
     	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
 		<h:selectOneMenu value="#{dispensingSelection.month}">
 			<f:selectItems value="#{months}"/>
-			<a:support event="onchange" reRender="pnldisp,lnknew" action="#{monthDispensingReport.refresh}"/>
+			<a:support event="onchange" reRender="pnldisp" />
 		</h:selectOneMenu>
 		<h:selectOneMenu value="#{dispensingSelection.year}" style="margin-left:5px;">
 			<f:selectItems value="#{years}"/>
-			<a:support event="onchange" reRender="pnldisp,lnknew" action="#{monthDispensingReport.refresh}"/>
+			<a:support event="onchange" reRender="pnldisp" />
 		</h:selectOneMenu>
 	</s:decorate>
 
@@ -44,14 +44,15 @@
 	</s:decorate>
 
 	<h:panelGroup id="pnldisp"> 
+	<s:fragment rendered="#{facesContext.renderResponse}">
 	<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty caseDispensingView.dispensingDays}" styleClass="warn" />
 		<a:repeat value="#{caseDispensingView.dispensingDays}" var="it">
 
 		<table width="100%"><tr><td>
-			<h:outputText value="#{it.date}" converter="localeDateConverter" />
+			<h2><h:outputText value="#{it.date}" converter="localeDateConverter" /></h2>
 		</td><td valign="bottom">
-			<s:link value="#{messages['form.edit']}" view="/medicines/disppac.xhtml" style="float:right">
-				<f:param name="id" value="#{it.tbcase.id}" />
+			<s:link value="#{messages['form.edit']}" view="/medicines/disppacedt.xhtml" style="float:right">
+				<f:param name="dispid" value="#{it.id}" />
 			</s:link>
 		</td></tr></table>
 
@@ -59,6 +60,7 @@
 			<ui:param name="table" value="#{it.table}" /> 
 		</s:decorate>
 		</a:repeat>
+	</s:fragment>
 	</h:panelGroup>
 </h:form>
 

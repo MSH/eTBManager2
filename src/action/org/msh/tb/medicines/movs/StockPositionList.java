@@ -59,7 +59,7 @@ public class StockPositionList {
 		if (source != null)
 			hql = hql + " and b.source.id = :source";
 
-		hql = hql + "order by b.source.name.name1, bt.medicine.genericName.name1";
+		hql = hql + " order by b.source.name.name1, bt.medicine.genericName.name1, bt.expiryDate";
 	
 		Query qry = entityManager.createQuery(hql);
 	

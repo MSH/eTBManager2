@@ -1,6 +1,7 @@
 package org.msh.tb.medicines.dispensing;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,13 +37,14 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 	private List<MedicineItem> medicines;
 	private List<MedicineDispensingCase> patients;
 	private Map<MedicineItem, String> errorMessages;
+	private Map<BatchItem, String> batchErrorMessages;
 	private List<TbCase> cases;
 	
 	@In EntityManager entityManager;
 
 	// interface to traverse errors during dispensing saving
 	public interface ErrorTraverser {
-		void traverse(Source source, Medicine medicine, String errorMessage);
+		void traverse(Source source, Medicine medicine, Batch batch, String errorMessage);
 	}
 
 
@@ -150,7 +152,7 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 			if (it.getBatch().equals(batch))
 				return it;
 		
-		BatchItem it = new BatchItem();
+		BatchItem it = new BatchItem(meddisp);
 		it.setBatch(batch);
 		meddisp.getItems().add(it);
 
@@ -212,28 +214,19 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 		if (medicineDispensing.getDispensingDate() == null)
 			return false;
 
+		Date dispensingDate = medicineDispensing.getDispensingDate();
+		
 		// prepare movements to be recorded
 		MovementHome movHome = (MovementHome)Component.getInstance("movementHome");
 		movHome.initMovementRecording();
 
-		// is this a new dispensing for the date and unit ?
-/*		if (!restoreDispensing()) {
-			medicineDispensing = new MedicineDispensing();
-			UserSession userSession = (UserSession)Component.getInstance("userSession");
-			Tbunit unit = entityManager.find(Tbunit.class, userSession.getTbunit().getId());
-			medicineDispensing.setTbunit(unit);
-		}
-		else {
-*/			
-		if (restoreDispensing()) {
+		// check if there is previous dispensing for that day or if it's an editing
+		MedicineDispensing recDisp = restoreDispensing();
+		if (recDisp != null) {
 			includePastCaseDispensing();
-//			removePastCaseDispensing();
 			// prepare previous movements to be removed
-			while (medicineDispensing.getMovements().size() > 0) {
-				Movement mov = medicineDispensing.getMovements().get(0);
+			for (Movement mov: recDisp.getMovements())
 				movHome.prepareMovementsToRemove(mov);
-				medicineDispensing.getMovements().remove(0);
-			}
 		}
 
 		// prepare new movements to be saved
@@ -248,17 +241,26 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 					null);
 
 			if (mov == null)
-				addErrorMessage(it, movHome.getErrorMessage());
+				addErrorMessage(it, movHome.getErrorMessage(), movHome.getErrorBatch());
 			movs.add(mov);
 		}
 		
 		// has errors?
-		if ((errorMessages != null) && (!errorMessages.isEmpty()))
+		if (((errorMessages != null) && (!errorMessages.isEmpty())) || ((batchErrorMessages != null) && (!batchErrorMessages.isEmpty())))
 			return false;
 		
 		movHome.savePreparedMovements();
 		
+		if (recDisp != null) {
+			setInstance(recDisp);
+			medicineDispensing = recDisp;
+			medicineDispensing.setDispensingDate(dispensingDate);
+		}
+		
 		removePastCaseDispensing();
+		
+		// remove previous movements
+		medicineDispensing.getMovements().clear();
 		
 		// add movements to dispensing
 		for (Movement mov: movs)
@@ -272,6 +274,7 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 			}
 		}
 
+		setDisplayMessage(false);
 		persist();
 		
 		return true;
@@ -324,9 +327,9 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 	 * based on the dispensing date. If there is no dispensing in the date, the method returns null
 	 * @return
 	 */
-	private boolean restoreDispensing() {
+	private MedicineDispensing restoreDispensing() {
 		if (isManaged())
-			return true;
+			return getInstance();
 
 		List<MedicineDispensing> lst = entityManager.createQuery("from MedicineDispensing " +
 				"where dispensingDate = :date and tbunit.id = #{userSession.tbunit.id}")
@@ -334,11 +337,9 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 				.getResultList();
 		
 		if (lst.size() == 0)
-			return false;
+			return null;
 
-		clearInstance();
-		setId(lst.get(0).getId());
-		return true;
+		return lst.get(0);
 	}
 	
 	/**
@@ -346,10 +347,17 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 	 * @param medItem
 	 * @param message
 	 */
-	protected void addErrorMessage(MedicineItem medItem, String message) {
-		if (errorMessages == null)
-			errorMessages = new HashMap<MedicineItem, String>();
-		errorMessages.put(medItem, message);
+	protected void addErrorMessage(MedicineItem medItem, String message, Batch batch) {
+		if (batch != null) {
+			batchErrorMessages = new HashMap<DispensingHome.BatchItem, String>();
+			BatchItem batchItem = findBatchDispensing(batch, medItem.getSource());
+			batchErrorMessages.put(batchItem, message);
+		}
+		else {
+			if (errorMessages == null)
+				errorMessages = new HashMap<MedicineItem, String>();
+			errorMessages.put(medItem, message);
+		}
 	}
 
 
@@ -358,10 +366,18 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 	 * @param intf
 	 */
 	public void traverseErrors(ErrorTraverser intf) {
+		if (batchErrorMessages != null) {
+			for (BatchItem item: batchErrorMessages.keySet()) {
+				intf.traverse(item.getMedicineItem().getSource(), 
+						item.getMedicineItem().getMedicine(), 
+						item.getBatch(), batchErrorMessages.get(item));
+			}
+		}
+		
 		if (errorMessages == null)
 			return;
 		for (MedicineItem item: errorMessages.keySet()) {
-			intf.traverse(item.getSource(), item.getMedicine(), errorMessages.get(item));
+			intf.traverse(item.getSource(), item.getMedicine(), null, errorMessages.get(item));
 		}
 	}
 	
@@ -413,6 +429,12 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 	public class BatchItem {
 		private Batch batch;
 		private int quantity;
+		private MedicineItem medicineItem;
+		
+		public BatchItem(MedicineItem meditem) {
+			this.medicineItem = meditem; 
+		}
+		
 		/**
 		 * @return the batch
 		 */
@@ -437,5 +459,13 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 		public void setQuantity(int quantity) {
 			this.quantity = quantity;
 		}
+
+		/**
+		 * @return the medicineItem
+		 */
+		public MedicineItem getMedicineItem() {
+			return medicineItem;
+		}
 	}
+
 }

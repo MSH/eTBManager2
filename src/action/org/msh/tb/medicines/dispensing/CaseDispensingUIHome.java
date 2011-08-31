@@ -139,11 +139,12 @@ public class CaseDispensingUIHome extends AbstractDispensigUIHome {
 		}
 
 		// check if it's a dispensing being edited, and include the quantity dispensed previously
-		MedicineDispensing medDisp = getDispensingHome().getMedicineDispensing();
-		if (medDisp != null) {
+		if (getDispensingHome().isManaged()) {
+			MedicineDispensing medDisp = getDispensingHome().getMedicineDispensing();
 			for (MedicineDispensingCase mdc: medDisp.getPatients()) {
 				if (mdc.getTbcase().equals(tbcase)) {
-					addSourceRow(mdc.getSource(), mdc.getBatch());
+					DispensingRow row = addSourceRow(mdc.getSource(), mdc.getBatch());
+					row.setDispensingQuantity(mdc.getQuantity());
 				}
 			}
 		}

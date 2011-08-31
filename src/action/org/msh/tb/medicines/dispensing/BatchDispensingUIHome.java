@@ -35,8 +35,8 @@ public class BatchDispensingUIHome extends AbstractDispensigUIHome {
 		}
 
 		// check if it's a dispensing being edited, and include the quantity dispensed previously
-		MedicineDispensing medDisp = getDispensingHome().getMedicineDispensing();
-		if (medDisp != null) {
+		if (getDispensingHome().isManaged()) {
+			MedicineDispensing medDisp = getDispensingHome().getMedicineDispensing();
 			for (Movement mov: medDisp.getMovements()) {
 				for (BatchMovement bm: mov.getBatches()) {
 					DispensingRow row = addSourceRow(mov.getSource(), bm.getBatch());

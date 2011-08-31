@@ -42,6 +42,7 @@
 		<s:link id="lnknew" 
 			view="#{userSession.tbunit.patientDispensing?'/medicines/dispcasenew.xhtml':'/medicines/dispedt.xhtml'}" 
 			rendered="#{s:hasRole('DISP_PAC_EDT')}">
+			<f:param name="id" value="#{null}" />
 			<div class="new-icon" style="float:left;"/>#{messages['meds.dispensing.new']}
 		</s:link>
 		<s:link value="#{messages['meds.dispensing.view']}" view="/medicines/dispensing.xhtml" propagation="none" /> 

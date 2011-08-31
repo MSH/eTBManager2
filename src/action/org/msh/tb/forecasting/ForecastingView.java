@@ -184,9 +184,7 @@ public class ForecastingView {
 		
 		String hql = "select s.medicine.id, sum(s.quantity) " +
 				"from StockPosition s " +
-				"where s.date = (select max(aux.date) from StockPosition aux " +
-				"where aux.tbunit = s.tbunit and aux.source = s.source and aux.medicine = s.medicine) " +
-				"and s.medicine.workspace.id = #{defaultWorkspace.id} " +
+				"where s.medicine.workspace.id = #{defaultWorkspace.id} " +
 				restriction + 
 				" group by s.medicine.id";
 
@@ -202,7 +200,7 @@ public class ForecastingView {
 		}
 		
 		// update unit price
-		hql = "select m.medicine.id, avg(m.unitPrice) " +
+		hql = "select m.medicine.id, avg(m.totalPrice/m.quantity) " +
 				"from Movement m " +
 				"where m.date = (select max(aux.date) from Movement aux " +
 				"where aux.tbunit = m.tbunit and aux.source = m.source and aux.medicine = m.medicine) " +

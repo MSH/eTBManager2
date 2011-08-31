@@ -152,6 +152,7 @@ public class CaseDispensingView {
 		// create list of medicine dispensing information
 		for (MedicineDispensingCase it: lst) {
 			DispensingInfo info = getDayInfo(it.getDispensing().getDispensingDate());
+			info.setId(it.getDispensing().getId());
 			DispensingRow row = info.getTable().addRow(it.getSource(), it.getBatch());
 			row.setQuantity( row.getQuantity() + it.getQuantity() );
 		}
@@ -171,6 +172,7 @@ public class CaseDispensingView {
 	public class DispensingInfo {
 		private TbCase tbcase;
 		private Date date;
+		private Integer id;
 		private BatchDispensingTable table = new BatchDispensingTable();
 		/**
 		 * @return the tbcase
@@ -207,6 +209,18 @@ public class CaseDispensingView {
 		 */
 		public void setDate(Date date) {
 			this.date = date;
+		}
+		/**
+		 * @return the id
+		 */
+		public Integer getId() {
+			return id;
+		}
+		/**
+		 * @param id the id to set
+		 */
+		public void setId(Integer id) {
+			this.id = id;
 		}
 	}
 	

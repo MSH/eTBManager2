@@ -32,6 +32,7 @@ public class DispensingRow {
 	// support for editing of dispensing quantity
 	private Integer dispensingQuantity;
 	private String errorMessage;
+	private String batchErrorMessage;
 
 	public DispensingRow(BatchDispensingTable table, Source source, Batch batch) {
 		super();
@@ -137,5 +138,19 @@ public class DispensingRow {
 	 */
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
+	}
+
+	/**
+	 * @return the batchErrorMessage
+	 */
+	public String getBatchErrorMessage() {
+		return batchErrorMessage;
+	}
+
+	/**
+	 * @param batchErrorMessage the batchErrorMessage to set
+	 */
+	public void setBatchErrorMessage(String batchErrorMessage) {
+		this.batchErrorMessage = batchErrorMessage;
 	}
 }

@@ -4,6 +4,7 @@
 
 	<restrict>#{s:hasRole('DISP_PAC_EDT')}</restrict>
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
+	<param name="dispid" value="#{caseDispensingUIHome.medicineDispensingId}" converterId="javax.faces.Integer" />
 
 	<navigation>
 		<rule if-outcome="persisted">

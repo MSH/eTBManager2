@@ -54,6 +54,7 @@
     	<s:link view="/admin/websessions.xhtml" value="#{messages['admin.websessions']}" propagation="none" rendered="#{s:hasRole('ONLINE')}" />
     	<s:link view="/admin/repusersession.xhtml" value="#{messages['admin.reports.usersession']}" propagation="none" rendered="#{s:hasRole('USERSESREP')}"/>
     	<s:link view="/admin/reptransactionlog.xhtml" value="#{messages['userrole.LOGREP']}" propagation="none" rendered="#{s:hasRole('LOGREP')}"/>
+    	<s:link view="/admin/errorlogreport.xhtml" value="#{messages['admin.errorlogreport']}" propagation="none" rendered="#{s:hasRole('LOGREP')}"/>
     </s:fragment>
 
 	<s:fragment rendered="#{submenu=='2'}">
