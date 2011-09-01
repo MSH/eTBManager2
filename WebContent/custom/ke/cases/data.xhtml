@@ -7,19 +7,19 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
                  
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
-		<ui:define name="header">
-			<s:link value="#{messages['form.edit']}" view="/custom/ke/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
+	
+		<div class="form1" style="width:100%">
+		<div class="form-content">
+			<s:link view="/custom/ke/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
 				<f:param name="id" value="#{caseHome.id}" />
+				<span>#{messages['form.edit']}</span>
 			</s:link>
-			<b>#{messages['cases.patientdata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+			<h2>#{messages['cases.patientdata']}</h2>
+		
+		
+	<table style="border-collapse:collapse;width:100%">
 	
-	<div>	
-	<table style="border-collapse:collapse;width:98%;" cellpadding="1" ><tr><td colspan="2">
 	
-	</td></tr>
 	<tr><td>
 	
 	<s:decorate template="/layout/display.xhtml">
@@ -63,7 +63,7 @@
     </td></tr>
     <s:fragment rendered="#{not tbcase.notifAddress.emptyy}">
     <tr><td colspan="2">
-    	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
+    	<h2>#{messages['cases.details.addressnotif']}</h2>
 	
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
@@ -78,7 +78,7 @@
 	</s:fragment>
 	<s:fragment rendered="#{tbcase.notifAddressChanged}">
 	<tr><td colspan="2">
-		<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
+		<h2>#{messages['cases.details.addresscurr']}</h2>
 	
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
@@ -90,7 +90,7 @@
 			<ui:param name="adminunit" value="#{tbcase.currentAddress.adminUnit}" />
 		</s:decorate>
 	</td></tr>
-	</s:fragment>
+	
 	<tr><td>
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.phoneNumber}">
     		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
@@ -103,20 +103,17 @@
     		#{tbcase.mobileNumber}
 		</s:decorate>
 	</td></tr>
-	</table></div>
-	</s:decorate>
+	</s:fragment>
+	</table>
+	</div>
 	
-
+	
+ 		<div class="form-content">            
+		<h2>#{messages['cases.generaldata']}</h2>
                  
-	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;margin-top:10px;">
-		<ui:define name="header">
-			<b>#{messages['cases.generaldata']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
 	
-	<div>
 	<table style="border-collapse:collapse;width:98%;" cellpadding="1" >
-	<tr><td>
+	<tr><td colspan="2">
 	<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.notificationUnit!=null}">
     	<ui:define name="label">#{messages['TbCase.notificationUnit']}:</ui:define>
     	#{tbcase.notificationUnit.name}
@@ -171,8 +168,8 @@
 		</s:decorate>
 
 		<s:fragment rendered="#{not empty prevTBTreatmentHome.items}">
-		<div class="paragraph">#{messages['cases.prevtreat']}</div>
-		<table width="98%" class="tabela4">
+		<h2>#{messages['cases.prevtreat']}</h2>
+		<table width="100%" class="table1">
 			<tr>
 				<th rowspan="2">#{messages['cases.prevtreat.num']}
 				</th>
@@ -211,8 +208,8 @@
 		</s:fragment>
 
 	</td></tr>
-	</table></div>
-	</s:decorate>
-
+	</table>
+</div>
+</div>
     
 </ui:composition>
