@@ -7,18 +7,23 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<s:link value="#{messages['cases.details.newresult']}" view="/custom/ke/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
+	<div class="spacer" />
+	<s:link view="/custom/ke/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
 	</s:link>
 
+	<h:panelGroup id="medexamtbl">
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="error" rendered="#{empty medicalExaminationHome.allResults}" />
 
-	<h:dataTable id="medexamtbl" value="#{medicalExaminationHome.allResults}" var="r" rendered="#{not empty medicalExaminationHome.allResults}" width="100%">
-		<h:column>
-	
-		<s:decorate template="/layout/roundrect.xhtml" style="margin-right:10px;">
-		<ui:define name="header">
+	<!-- <h:dataTable id="medexamtbl" value="#{medicalExaminationHome.allResults}" var="r" rendered="#{not empty medicalExaminationHome.allResults}" width="100%">
+		<h:column> -->
+	<ui:repeat var="r" value="#{medicalExaminationHome.allResults}">
+		<div class="spacer" />
+		
+		<div class="region1">
+			<div class="header">
 			<div style="float:right;">
 				<s:link value="#{messages['form.edit']}" view="/custom/ke/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 					<f:param name="id" value="#{tbcase.id}"/>
@@ -28,9 +33,12 @@
 				      rendered="#{caseHome.canEditCaseData}">
 				</h:commandLink>
 			</div>
-			<div class="name2">#{messages['cases.details.date']}: </div> 
-			<h:outputText value="#{r.date}" converter="localeDateConverter" />
-		</ui:define>
+			<!-- <div class="name2">#{messages['cases.details.date']}: </div> --> 
+			<h2><h:outputText value="#{r.date}" converter="localeDateConverter" /></h2>
+			</div>
+			
+				<div class="content">
+	
 		<ui:param name="showfooter" value="0" />
 
 		<a:jsFunction name="remMedExam" action="#{medicalExaminationHome.remove}" reRender="medexamtbl" ajaxSingle="true" rendered="#{caseHome.canEditCaseData}">
@@ -89,12 +97,8 @@
 			</s:decorate>		
 		</td></tr>
 		</table>
-		
-		
-		</s:decorate>
-
-		</h:column>
-	</h:dataTable>
-
-    
+		</div>
+		</div>
+    </ui:repeat>
+    </h:panelGroup>
 </ui:composition>
