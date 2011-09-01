@@ -16,16 +16,16 @@
 <ui:param name="topmenu" value="0" />
 <ui:param name="examHome" value="#{examCultureHome}" />
 <ui:param name="examType" value="#{examCultureHome.examCulture}" />
+<ui:param name="left" value="0" />
 
 
 <ui:define name="content">
-<p/>
+<h1>#{title}</h1>
 
 <s:decorate template="/layout/casebody.xhtml">
-	<a:form id="formexam">
-    <table width="100%">
-    <tr><td>
-
+	<a:form id="formexam" styleClass="form1">
+    
+<div class="form-content">
 	<s:decorate template="/custom/ke/cases/edtsample.xhtml">
 	</s:decorate>
 
@@ -73,20 +73,21 @@
     </s:decorate>
 
 	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
-
-	</td></tr>
-    <tr><td align="right">
-		<div style="float:left;">
+</div>
+	<div class="form-footer">
+		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandLink action="#{examCultureHome.persist}" value="#{messages['form.ok']}" styleClass="button" 
+            <a:commandLink action="#{examCultureHome.persist}" styleClass="button" 
             	reRender="formexam,messages" 
             	oncomplete="this.disabled=false;"
-            	onclick="this.disabled=true;" />
-            <a:commandLink action="canceled" value="#{messages['form.cancel']}" styleClass="button-alt" ajaxSingle="true"/>
-    </td></tr>
-    
-    </table>
+            	onclick="this.disabled=true;" >
+            	<span>#{messages['form.save']}</span>
+            	</a:commandLink>
+            <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true">
+            <span>#{messages['form.cancel']}</span>
+            </a:commandLink>
+   	</div>
     
 	</a:form>
 </s:decorate>
