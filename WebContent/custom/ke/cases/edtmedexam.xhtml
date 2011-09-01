@@ -15,13 +15,18 @@
 <ui:param name="maskedit" value="1" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="left" value="0" />
+<ui:param name="pagewidth" value="900px" />
 
 
 <ui:define name="content">
-<p/>
+<h1>#{title}</h1>
+
+
 
 <s:decorate template="/layout/casebody.xhtml">
-	<a:form id="formexam" >
+	<a:form id="formexam" styleClass="form1">
+	<div class="form-content">
     <table width="100%">
     <tr><td>
 
@@ -132,22 +137,24 @@
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
     	<h:inputText value="#{medicalExamination.comments}" style=" width : 340px;" maxlength="100"/>
     </s:decorate>
-
-	</td></tr>
-    <tr><td align="right">
-		<div style="float:left;">
+</td></tr>
+</table>
+</div>
+  
+     <div class="form-footer">
+		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandLink action="#{medicalExaminationHome.persist}" value="#{messages['form.ok']}" styleClass="button" reRender="formexam" 
+            <a:commandLink action="#{medicalExaminationHome.persist}" styleClass="button" reRender="formexam" 
             	oncomplete="this.disabled=false;"
-            	onclick="this.disabled=true;" />
-            <s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+            	onclick="this.disabled=true;" >
+            	<span>#{messages['form.save']}</span>
+            	</a:commandLink>
+            <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
             	<f:param name="id" value="#{caseHome.id}"/>
+            	<span>#{messages['form.cancel']}</span>
             </s:link>
-    </td></tr>
-    
-    </table>
-    
+            </div>
 	</a:form>
 </s:decorate>
 
