@@ -43,6 +43,8 @@ public class UsersQuery extends EntityQuery<UserWorkspace>{
 		return "select count(*) from UserWorkspace uw ";
 	}
 
+	
+	
 	/**
 	 * Search for an instance of an {@link UserWorkspace} class by its user
 	 * @param user
@@ -54,5 +56,16 @@ public class UsersQuery extends EntityQuery<UserWorkspace>{
 				return uw;
 		}
 		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.jboss.seam.framework.Query#getMaxResults()
+	 */
+	@Override
+	public Integer getMaxResults() {
+		Integer maxresults = super.getMaxResults();
+		if (maxresults == null)
+			 return 25;
+		else return super.getMaxResults();
 	}
 }

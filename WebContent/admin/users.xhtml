@@ -26,9 +26,8 @@
 </s:link>
 
 <p/>
-<s:decorate template="/layout/listresult.xhtml">
+<s:decorate template="/layout/naveg.xhtml">
 	<ui:param name="list" value="#{users}" />
-</s:decorate>
 
 <h:dataTable id="tbl" value="#{users.resultList}" var="it" 
   styleClass="table1" rowClasses="lin1,lin2" width="100%"  columnClasses="coll,coll,coll,colc,coll,coll,coll,colc"
@@ -108,6 +107,9 @@
 	</a:commandLink>
   </h:column>
 </h:dataTable>
+
+</s:decorate>
+
 </h:form>
 
 <ui:include src="/layout/tablerow.xhtml" />

@@ -178,23 +178,26 @@ public class OrderHome extends EntityHomeEx<Order>{
 		
 		getOrder().setStatus(OrderStatus.CANCELLED);
 
+		movementHome.initMovementRecording();
 		// exclui os movimento gerados com o pedido
 		for (OrderItem item: getOrder().getItems()) {
 			Movement mov = item.getMovementIn();
 			if (mov != null) {
 				item.setMovementIn(null);
 				getEntityManager().persist(item);
-				movementHome.removeMovement(mov);
+				movementHome.prepareMovementsToRemove(mov);
 			}
 			
 			mov = item.getMovementOut();
 			if (mov != null) {
 				item.setMovementOut(null);
 				getEntityManager().persist(item);
-				movementHome.removeMovement(mov);
+				movementHome.prepareMovementsToRemove(mov);
 			}
 		}
-
+		movementHome.savePreparedMovements();
+		
+		
 		// register log
 		getLogService().saveExecuteTransaction(getInstance(), "ORDER_CANC");
 		

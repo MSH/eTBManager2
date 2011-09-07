@@ -40,8 +40,10 @@ public class ItemSelectHelper {
     public static <E> void selectItems(List<ItemSelect<E>> lst, List<E> items, boolean select) {
     	for (int i=0; i < lst.size(); i++) {
     		ItemSelect it = lst.get(i);
-    		boolean bSel = items.contains(it.getItem()) && (select);
-    		it.setSelected(bSel);
+    		if (it != null) {
+        		boolean bSel = items.contains(it.getItem()) && (select);
+        		it.setSelected(bSel);
+    		}
     	}
     }
     

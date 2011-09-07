@@ -34,12 +34,12 @@ public class UserWorkspace implements Serializable {
 	@NotNull
 	private Tbunit tbunit;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="WORKSPACE_ID")
 	@NotNull
 	private Workspace workspace;
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
 	@NotNull
 	private User user;

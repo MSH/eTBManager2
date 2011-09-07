@@ -26,11 +26,6 @@
 
 <h:commandLink action="#{adminUnitHome.updateCode}" value="Update code"  rendered="#{userLogin.user.login=='RICARDO'}"/>
 
-<s:decorate template="/layout/naveg.xhtml">
-	<ui:param name="list" value="#{adminunits}" />
-	<ui:param name="page" value="/admin/adminunits.xhtml" />
-</s:decorate>
-
 <div class="linknaveg" style="margin-bottom:10px;">
 <s:link value="#{defaultWorkspace.name}" view="/admin/adminunits.xhtml" style="font-size:12px;">
 	<f:param name="parentid" value="#{null}"/>

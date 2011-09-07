@@ -87,7 +87,7 @@ public class LogValue {
 		case BOOLEAN: return ("1".equals(value)? "(x)": "( )");
 		case DATE: {
 				Date dt = parseDateValue(value);
-				return (dt != null ? LocaleDateConverter.getDisplayDate(parseDateValue(value)) : null);
+				return (dt != null ? LocaleDateConverter.getDisplayDate(parseDateValue(value), false) : null);
 			}
 		}
 		return value;

@@ -26,7 +26,7 @@ public class ErrorLog {
 	@Column(length=100)
 	private String exceptionClass;
 	
-	@Column(length=200)
+	@Column(length=500)
 	private String exceptionMessage;
 	
 	@Column(length=150)

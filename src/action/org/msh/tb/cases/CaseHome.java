@@ -9,6 +9,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.ETB;
+import org.msh.tb.TagsCasesHome;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
@@ -75,6 +76,13 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		return ret;
 	}
 
+	
+	/**
+	 * Update tags of the case
+	 */
+	public void updateCaseTags() {
+		TagsCasesHome.instance().updateTags(getInstance());
+	}
 
 	/**
 	 * Return if case is under treatment

@@ -84,7 +84,7 @@ public abstract class AbstractDispensigUIHome {
 		Date dispDate = getDispensingHome().getInstance().getDispensingDate();
 		
 		if (dispDate.before( unit.getMedManStartDate() )) {
-			facesMessages.addToControlFromResourceBundle("edtdate", "meds.movs.datebefore", LocaleDateConverter.getDisplayDate( unit.getMedManStartDate() ));
+			facesMessages.addToControlFromResourceBundle("edtdate", "meds.movs.datebefore", LocaleDateConverter.getDisplayDate( unit.getMedManStartDate(), false ));
 			return "error";
 		}
 

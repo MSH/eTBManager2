@@ -107,9 +107,26 @@ public class EntityQuery<E> extends org.jboss.seam.framework.EntityQuery<E> {
 			return null;
 		
 		Long recordcount = getResultCount();
-		return Math.round((float)recordcount / (float)maxresults) + 1;
+		if (recordcount < maxresults)
+			 return 1;
+		else {
+			return ((int)Math.floor((float)recordcount / (float)maxresults)) + 1;
+		}
 	}
-	
+
+
+	/**
+	 * Check if page is the last one
+	 * @return
+	 */
+	public boolean isLastPage() {
+		Integer curPage = getCurrentPage();
+		if (curPage == null)
+			return true;
+		
+		return (curPage.equals( getMaxPage()) );
+	}
+
 	/**
 	 * Return the result list just in the render phase
 	 * @return

@@ -43,10 +43,7 @@
 
 <s:decorate template="/layout/naveg.xhtml">
 	<ui:param name="list" value="#{unitspg}" />
-	<ui:param name="page" value="/admin/units.xhtml" />
-</s:decorate>
 
-<b><h:outputText value="#{messages['form.norecordfound']}" rendered="#{allunits.resultCount == 0}" /></b>
 <h:dataTable id="tbl" value="#{unitspg.resultList}" var="r" border="0" columnClasses="colb,colb,colb,colcb"
   styleClass="table1" rowClasses="lin1,lin2" width="100%" rendered="#{unitspg.resultCount > 0}">
   <h:column>
@@ -110,6 +107,8 @@
 	</a:commandLink>
   </h:column>
 </h:dataTable>
+</s:decorate>
+
 </h:panelGroup>
 
 </h:form>

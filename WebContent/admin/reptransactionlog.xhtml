@@ -68,8 +68,6 @@
 
 <s:decorate template="/layout/naveg.xhtml">
 	<ui:param name="list" value="#{transactionLogReport}" />
-	<ui:param name="page" value="/admin/reptransactionlog.xhtml" />
-</s:decorate>
 
 <s:fragment rendered="#{not empty transactionLogReport.resultList}">
 <table width="100%">
@@ -135,6 +133,8 @@
 	</ui:repeat>
 </table>
 </s:fragment>
+
+</s:decorate>
 
 </td></tr></table>
 <ui:include src="/layout/tablerow.xhtml" />

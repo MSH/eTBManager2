@@ -898,7 +898,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 /* ICONS */
 
 .icon-user-header, .icon-bullet, .icon-bullet-menu, .dst-resistant, .dst-contaminated, .dst-susceptible, 
-.tag-icon, .delete-icon, .new-icon, .edit-icon, .progress-icon, .plus-icon, .minor-icon, .collapse-icon, .icon-unchecked,
+.tag-icon, .tag-auto-icon, .delete-icon, .new-icon, .edit-icon, .progress-icon, .plus-icon, .minor-icon, .collapse-icon, .icon-unchecked,
 .icon-square, .icon-lab, .icon-hu, .icon-ds, .icon-report, .checked-icon, .unchecked-icon,
 .icon-user, .icon-log-NEW, .icon-log-EDIT, .icon-log-DELETE, .icon-log-EXEC, .batch-icon, .bar-comments,
 .naveg-first, .naveg-prev, .naveg-next, .naveg-last, .icon-positive, .icon-negative, .icon-error, .icon-phone {
@@ -954,6 +954,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .icon-error { background-position:-48px -80px }
 
 .tag-icon {	background-position:-48px -48px;  }
+.tag-auto-icon {	background-position:-112px -64px;  }
 .delete-icon {	background-position:0px -16px; }
 .plus-icon { background-position:-32px -16px; }
 .collapse-icon { background-position:-96px -80px; }

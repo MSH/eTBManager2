@@ -28,78 +28,56 @@
 
 	<table width="100%"><tr><td>
 	
-		<s:decorate template="/layout/navegajax.xhtml">
-			<ui:param name="list" value="#{casesQueryBR}" />
-			<ui:param name="reRender" value="listCases" />
-		</s:decorate>
 	
 	</td><td align="right">
-		<h:commandLink styleClass="button-alt" onclick="Richfaces.showModalPanel('filtersdlg');return false;" style="float:right;">
-			<span>#{messages['cases.newsearch']}</span>
-		</h:commandLink>	
 	</td></tr></table>
 	
+	<s:decorate template="/layout/naveg.xhtml">
+		<ui:param name="list" value="#{casesQueryBR}" />
+		
+		<ui:define name="header">
+			<h:commandLink styleClass="button-alt" onclick="Richfaces.showModalPanel('filtersdlg');return false;" style="float:right;">
+				<span>#{messages['cases.newsearch']}</span>
+			</h:commandLink>	
+		</ui:define>
+		
 	<h:panelGroup id="res" >
 	<table id="tblres" width="100%" class="table1">
 		<tr><th class="searchtitle">
 				<div style="padding:4px;">
-				<a:commandLink value="#{messages['Patient.caseNumber']}" reRender="listCases" bypassUpdates="true" ajaxSingle="true">
-					<a:actionparam assignTo="#{caseFilters.newOrder}" value="0" />
-				</a:commandLink>
+				<a:commandLink value="#{messages['Patient.caseNumber']}" onclick="changeOrder(0); return false;"/>
 				<br/><br/>
-				<a:commandLink value="#{messages['Gender']}" reRender="listCases" bypassUpdates="true" ajaxSingle="true">
-					<a:actionparam assignTo="#{caseFilters.newOrder}" value="1" />
-				</a:commandLink>
+				<a:commandLink value="#{messages['Gender']}" onclick="changeOrder(1); return false;" />
 				</div>
 			</th>
 			<th class="searchtitle">
 				<div style="padding:4px;">
-				<a:commandLink value="#{messages['CaseClassification']}" reRender="listCases" bypassUpdates="true" ajaxSingle="true">
-					<a:actionparam assignTo="#{caseFilters.newOrder}" value="2" />
-				</a:commandLink>
+				<a:commandLink value="#{messages['CaseClassification']}" onclick="changeOrder(2);return false;"/>
 				<br/><br/>
-				<a:commandLink value="#{messages['Patient.name']}" reRender="listCases" bypassUpdates="true" ajaxSingle="true">
-					<a:actionparam assignTo="#{caseFilters.newOrder}" value="3" />
-				</a:commandLink>
+				<a:commandLink value="#{messages['Patient.name']}" onclick="changeOrder(3);return false;"/>
 				<br/><br/>
-				<a:commandLink value="#{messages['TbCase.patientAge']}" reRender="listCases" bypassUpdates="true" ajaxSingle="true">
-					<a:actionparam assignTo="#{caseFilters.newOrder}" value="4" />
-				</a:commandLink>
+				<a:commandLink value="#{messages['TbCase.patientAge']}" onclick="changeOrder(4);return false;"/>
 				</div>
 			</th>
 			<th class="searchtitle">
 				<div style="padding:4px;">
-				<a:commandLink value="#{messages['TbCase.notificationUnit']}" reRender="listCases" bypassUpdates="true" ajaxSingle="true">
-					<a:actionparam assignTo="#{caseFilters.newOrder}" value="5" />
-				</a:commandLink>
+				<a:commandLink value="#{messages['TbCase.notificationUnit']}" onclick="changeOrder(5);return false;"/>
 				<br/><br/>
-				<a:commandLink value="#{levelInfo.nameLevel1}" reRender="listCases" bypassUpdates="true" ajaxSingle="true">
-					<a:actionparam assignTo="#{caseFilters.newOrder}" value="6" />
-				</a:commandLink>
+				<a:commandLink value="#{levelInfo.nameLevel1}" onclick="changeOrder(6);return false;"/>
 				 - 
-				<a:commandLink value="#{levelInfo.nameLevel2}" style="margin-left:4px;" reRender="listCases" bypassUpdates="true" ajaxSingle="true">
-					<a:actionparam assignTo="#{caseFilters.newOrder}" value="7" />
-				</a:commandLink>
+				<a:commandLink value="#{levelInfo.nameLevel2}" onclick="changeOrder(7);return false;"/>
 				(#{messages['Address']})
 				<br/><br/>
-				<a:commandLink value="#{messages['CaseState']}" reRender="listCases" bypassUpdates="true" ajaxSingle="true">
-					<a:actionparam assignTo="#{caseFilters.newOrder}" value="8" />
-				</a:commandLink>
+				<a:commandLink value="#{messages['CaseState']}" onclick="changeOrder(8);return false;"/>
 				</div>
 			</th>
 			<th class="searchtitle">
 				<div style="padding:4px;">
-				<a:commandLink value="#{messages['TbCase.registrationDate']}" reRender="listCases" bypassUpdates="true" ajaxSingle="true">
-					<a:actionparam assignTo="#{caseFilters.newOrder}" value="9" />
-				</a:commandLink>
+				<a:commandLink value="#{messages['TbCase.registrationDate']}" onclick="changeOrder(9);return false;"/>
 				<br/><br/>
-				<a:commandLink value="#{messages['cases.casesearching.treatlen']}" reRender="listCases" bypassUpdates="true" ajaxSingle="true">
-					<a:actionparam assignTo="#{caseFilters.newOrder}" value="10" />
-				</a:commandLink>
+				<a:commandLink value="#{messages['cases.casesearching.treatlen']}" onclick="changeOrder(10);return false;"/>
 				<br/><br/>
-				<a:commandLink value="#{messages['ValidationState']}" reRender="listCases" bypassUpdates="true" ajaxSingle="true">
-					<a:actionparam assignTo="#{caseFilters.newOrder}" value="11" />
-				</a:commandLink>
+				<a:commandLink value="#{messages['ValidationState']}" onclick="changeOrder(11);return false;"/>
 				</div>
 			</th>
 		</tr>
@@ -111,7 +89,7 @@
 			</s:link>
 			<br/>
 			<s:link view="/cases/casedata.xhtml" 
-				styleClass="#{it.gender=='MALE'?'male-icon':'female-icon'}">
+				styleClass="#{it.gender=='MALE'?'male-icon':'female-icon'}" style="float:none">
 				<f:param name="id" value="#{it.caseId}" />
 			</s:link>
 	</td>
@@ -146,14 +124,14 @@
 	</s:fragment>
 	</table>
 	</h:panelGroup>
-
-	<s:decorate template="/layout/navegbottom.xhtml">
-		<ui:param name="list" value="#{casesQueryBR}" />
-		<ui:param name="page" value="/custom/br/cases/searchresult.xhtml" />
 	</s:decorate>
-	
+
 	<rich:jQuery selector="#tblres tr:odd" query="addClass('lin1')" />
 	<rich:jQuery selector="#tblres tr:even" query="addClass('lin2')" />
+
+	<a:jsFunction name="changeOrder" reRender="listCases" ajaxSingle="true" >
+		<a:actionparam name="param1" assignTo="#{caseFilters.newOrder}" converter="javax.faces.Integer" />
+	</a:jsFunction>
 </h:form>	
 
 

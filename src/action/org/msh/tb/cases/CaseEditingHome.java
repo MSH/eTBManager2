@@ -231,6 +231,7 @@ public class CaseEditingHome {
 		
 		updatePatientAge();
 
+		caseHome.updateCaseTags();
 		return caseHome.persist();
 	}
 
@@ -294,6 +295,8 @@ public class CaseEditingHome {
 		// treatment was defined ?
 		if (!caseHome.persist().equals("persisted"))
 			return "error";
+		
+		caseHome.updateCaseTags();
 
 		caseHome.setTransactionLogActive(false);
 

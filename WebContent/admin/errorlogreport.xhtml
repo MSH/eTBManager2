@@ -9,31 +9,35 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="admintemplate.xhtml">
 
-<ui:param name="title" value="#{messages['admin.errorlogreport']}" />
-<ui:param name="submenu" value="0" />
+<ui:param name="title" value="#{messages['userrole.ERRORLOGREP']}" />
+<ui:param name="submenu" value="1" />
 
 <ui:define name="content">
 <h1>#{title}</h1>
 <h:form id="main" styleClass="form1">
 
 <div class="form-content">
-<s:decorate id="sel" template="/layout/dateedit.xhtml">
-	<ui:define name="label">#{unitspg.auselection.labelLevel1}:</ui:define>
-	<h:selectOneMenu id="cbselau1" value="#{unitspg.auselection.unitLevel1}" >
-		<s:selectItems var="it" value="#{unitspg.auselection.optionsLevel1}" noSelectionLabel="-" label="#{it.name}"/>
-		<s:convertEntity />
-		<a:support event="onchange" reRender="pnlunits"/>
-	</h:selectOneMenu>
+<s:decorate template="/layout/dateedit.xhtml">
+	<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
+	<ui:param name="datefield" value="#{errorLogReport.iniDate}" />
+	<ui:param name="required" value="false" />
 </s:decorate>
 
-<s:decorate template="/layout/display.xhtml" rendered="#{userWorkspace.healthSystem == null}">
-	<ui:define name="label">#{messages['HealthSystem']}</ui:define>
-	<h:selectOneMenu value="#{unitspg.healthSystem}">
-		<s:selectItems var="it" value="#{healthSystems}" noSelectionLabel="-" label="#{it.name}" />
-		<s:convertEntity />
-		<a:support event="onchange" reRender="pnlunits"/>
-	</h:selectOneMenu>
-</s:decorate>                 
+<s:decorate template="/layout/dateedit.xhtml">
+	<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
+	<ui:param name="datefield" value="#{errorLogReport.endDate}" />
+	<ui:param name="required" value="false" />
+</s:decorate>
+
+<s:decorate template="/layout/edit.xhtml" >
+	<ui:define name="label">#{messages['global.searchkey']}:</ui:define>
+	<h:inputText value="#{errorLogReport.searchkey}" />
+</s:decorate>
+
+	<a:commandLink reRender="pnlunits" styleClass="button-alt" onclick="if (!disableButton(this)) return false;" oncomplete="enableButton()">
+		<span>#{messages['form.refresh']}</span>
+	</a:commandLink>
+          
 </div>
 
 
@@ -41,42 +45,78 @@
 
 <s:decorate template="/layout/naveg.xhtml">
 	<ui:param name="list" value="#{errorLogReport}" />
-	<ui:param name="page" value="/admin/errorlogreport.xhtml" />
-</s:decorate>
 
 <b><h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty errorLogReport.resultList}" /></b>
 <h:dataTable id="tbl" value="#{errorLogReport.resultList}" var="it" columnClasses="colb,colb,colb,colcb"
   styleClass="table1" rowClasses="lin1,lin2" width="100%" rendered="#{not empty errorLogReport.resultList}">
   <h:column>
   	<f:facet name="header">
-  		<s:link value="#{messages['form.name']}" styleClass="collh">
-  			<f:param name="order" value="#{unitspg.order=='u.name.name1'?'u.name.name1 desc':'u.name.name1'}" />
-  		</s:link>
+  		<h:outputText value="#{messages['global.date']}" styleClass="collh" />
   	</f:facet>
-  	<h:outputText value="#{it.errorDate}" converter="localeDateConverter"/>
+  	<h:outputText value="#{it.errorDate}" converter="localeDateConverter" style="width:120px;display:block;">
+  		<f:param id="type" value="date-time"/>
+  	</h:outputText>
+	<h:outputText value="#{it.errorDate}" converter="periodConverter" styleClass="text-small hint">
+		<f:param name="type" value="elapsed-time" />
+	</h:outputText>
   </h:column>
   
 	<h:column>
   		<f:facet name="header">
-  			<s:link value="#{messages['admin.tbunits.medsuppliers']}" >
-  				<f:param name="order" value="#{unitspg.order=='u.secondLineSupplier.name'?'u.secondLineSupplier.name desc':'u.secondLineSupplier.name'}" />
-  			</s:link>
+  			<h:outputText value="#{messages['admin.errorlogreport.title']}" styleClass="collh"/>
   		</f:facet>
-  		#{it.exceptionClass}
-  		#{it.exceptionMessage}
+  		<a href="#{it.url}" >#{it.url}</a>
+  		<br/>
+  		<b>#{it.exceptionClass}</b>
+  		<br/>
+  		#{it.exceptionMessage} 
+  		<a:commandLink value="#{messages['form.details']}" 
+  			style="padding-left:10px;" 
+  			onclick="displayErrorDetails(#{it.id}); return false"/>
+  		<div id="div#{it.id}" style="display:none;clear:both" class="hint"/>
 	</h:column>
 
 	<h:column>
 		<f:facet name="header">
-			<h:outputText value="#{messages['form.options']}" styleClass="collh" />
+			<h:outputText value="#{messages['User']}" styleClass="collh" />
 		</f:facet>
+		#{it.user}
 	</h:column>
 
-	<h:column rendered="#{s:hasRole('TBUNITS_EDT') and (not workspaceViewService.printing)}">
-  		<f:facet name="header" >
-  		</f:facet>
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Workspace']}" styleClass="collh" />
+		</f:facet>
+		#{it.workspace}
 	</h:column>
 </h:dataTable>
+
+</s:decorate>
+
+<a:jsFunction name="updateErrorDetails" reRender="errordetails" ajaxSingle="true" oncomplete="moveErrorDetail()">
+	<a:actionparam name="param1" assignTo="#{errorLogReport.errorLogId}" converter="javax.faces.Integer" />
+</a:jsFunction>
+<script type="text/javascript">
+function displayErrorDetails(id) {
+	window.errorDetailId = id;
+	updateErrorDetails(id);
+}
+function moveErrorDetail() {
+	var e=jQuery('#diverrodetail');
+	var content=e.text();
+	var s="#div"+window.errorDetailId;
+	jQuery(s).text(content).slideDown(500);
+	e.text('');
+}
+
+</script>
+
+</h:panelGroup>
+
+<h:panelGroup id="errordetails">
+	<div id="diverrodetail" style="display:none">
+		#{errorLogReport.errorLog.stackTrace}
+	</div>
 </h:panelGroup>
 
 </h:form>

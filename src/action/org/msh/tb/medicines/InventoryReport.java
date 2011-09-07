@@ -15,6 +15,7 @@ import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.SourceMedicineTree.MedicineNode;
 import org.msh.tb.medicines.SourceMedicineTree.SourceNode;
 import org.msh.tb.medicines.movs.StockPositionList;
+import org.msh.utils.date.DateUtils;
 
 @Name("inventoryReport")
 public class InventoryReport {
@@ -44,11 +45,13 @@ public class InventoryReport {
 		UserSession userSession = (UserSession)Component.getInstance("userSession", true);
 		
 		List<StockPosition> lst = stockPositionList.generate(userSession.getTbunit(), null);
-	
+
 		// mount medicine quantity
 		for (StockPosition sp: lst) {
 			MedicineNode medNode = root.addMedicine(sp.getSource(), sp.getMedicine());
-			medNode.setItem(new MedicineInfo(medNode, sp));
+			MedicineInfo info = new MedicineInfo(medNode, sp);
+			calcAMC(info);
+			medNode.setItem(info);
 		}
 		
 		// mount batches quantity
@@ -58,6 +61,21 @@ public class InventoryReport {
 		}
 		
 		loadLastMovement(userSession.getTbunit());
+	}
+
+	
+	protected void calcAMC(MedicineInfo info) {
+		StockPosition sp = info.getStockPosition();
+		Integer amc = sp.getAmc();
+		if ((amc == null) || (amc == 0))
+			return;
+		
+		float val = (float)sp.getQuantity() / (float)amc;
+		int days = Math.round(val * 30);
+		
+		Date dt = DateUtils.incDays(sp.getLastMovement(), days);
+		info.setStockOutDate(dt);
+		info.setNextOrderDate(DateUtils.incMonths(dt, -1));
 	}
 
 
@@ -82,7 +100,8 @@ public class InventoryReport {
 			MedicineNode medNode = root.findNodeByMedicineId(sourceId, medId);
 			if (medNode != null) {
 				MedicineInfo info = (MedicineInfo)medNode.getItem();
-				info.setLastMovement(dt);
+				if (info != null)
+					info.setLastMovement(dt);
 			}
 		}
 	}
@@ -96,6 +115,8 @@ public class InventoryReport {
 		private StockPosition stockPosition;
 		private MedicineNode node;
 		private Date lastMovement;
+		private Date stockOutDate;
+		private Date nextOrderDate;
 		
 		public MedicineInfo(MedicineNode node, StockPosition stockPosition) {
 			this.stockPosition = stockPosition;
@@ -167,6 +188,34 @@ public class InventoryReport {
 		 */
 		public void setLastMovement(Date lastMovement) {
 			this.lastMovement = lastMovement;
+		}
+
+		/**
+		 * @return the stockOutDate
+		 */
+		public Date getStockOutDate() {
+			return stockOutDate;
+		}
+
+		/**
+		 * @param stockOutDate the stockOutDate to set
+		 */
+		public void setStockOutDate(Date stockOutDate) {
+			this.stockOutDate = stockOutDate;
+		}
+
+		/**
+		 * @return the nextOrderDate
+		 */
+		public Date getNextOrderDate() {
+			return nextOrderDate;
+		}
+
+		/**
+		 * @param nextOrderDate the nextOrderDate to set
+		 */
+		public void setNextOrderDate(Date nextOrderDate) {
+			this.nextOrderDate = nextOrderDate;
 		}
 	}
 }

@@ -123,6 +123,7 @@ public class CaseValidationHome {
 		entityManager.flush();
 
 		Events.instance().raiseEvent("case.validate");
+		caseHome.updateCaseTags();
 		
 		return "validated";
 	}

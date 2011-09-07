@@ -311,9 +311,11 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 		}
 		
 		// remove os movimentos do recebimento
+		movementHome.initMovementRecording();
 		for (Movement mov: getInstance().getMovements()) {
-			movementHome.removeMovement(mov);
+			movementHome.prepareMovementsToRemove(mov);
 		}
+		movementHome.savePreparedMovements();
 		
 		return super.remove();
 	}

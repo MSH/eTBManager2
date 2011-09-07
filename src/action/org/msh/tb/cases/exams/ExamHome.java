@@ -5,6 +5,7 @@ import java.util.List;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.End;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.TagsCasesHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.CaseData;
 import org.msh.tb.entities.TbCase;
@@ -30,6 +31,9 @@ public class ExamHome<E> extends EntityHomeEx<E> {
 			((CaseData)obj).setTbcase(caseHome.getInstance());
 
 		results = null;
+		
+		if (caseHome.isManaged())
+			caseHome.updateCaseTags();
 		
 		return super.persist();
 	}
@@ -72,6 +76,12 @@ public class ExamHome<E> extends EntityHomeEx<E> {
 	public String remove() {
 		results = null;
 		super.remove();
+		
+		if (getInstance() instanceof CaseData) {
+			TbCase tbcase = ((CaseData)getInstance()).getTbcase();
+			TagsCasesHome.instance().updateTags(tbcase);
+		}
+		
 		return "exam-removed";
 	}
 	

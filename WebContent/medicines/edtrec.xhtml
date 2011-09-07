@@ -110,6 +110,11 @@
 						<td class="colrb">
 							<h:outputText value="#{b.totalPrice}"><f:convertNumber pattern="#,###,##0.00" /></h:outputText></td>
 						<td class="colcb">
+							<a:commandLink action="#{medicineReceivingHome.startBatchEditing(b)}" 
+								value="#{messages['form.edit']}" ajaxSingle="true"
+								reRender="formbatch"
+								onclick="startShowBatchDlg();" />
+							<br/>
 							<a:commandLink action="#{medicineReceivingHome.removeBatch(b)}" value="#{messages['form.remove']}" reRender="medicines" ajaxSingle="true" 
 								enableManualInput="true" onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;"/>
 						</td>
@@ -144,9 +149,10 @@
 
 </h:form>
 
+</s:decorate>
+
 <ui:include src="edtbatch.xhtml" />
 
-</s:decorate>
 
 <script type="text/javascript">
 <!--

@@ -113,7 +113,8 @@ public class TreatmentHome {
 		caseHome.getInstance().updateDaysTreatPlanned();
 
 		refreshPrescriptionTable();
-		
+
+		caseHome.updateCaseTags();
 		return caseHome.persist();
 	}
 	

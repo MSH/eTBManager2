@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
@@ -24,7 +25,10 @@ public class LocaleDateConverter implements Converter{
 
 	
 	public String getAsString(FacesContext facesContext, UIComponent comp, Object obj) {
-		return getDisplayDate((Date)obj);
+		UIParameter aux = (UIParameter)comp.findComponent("type");
+		
+		boolean includeTime = ((aux != null) && (aux.getValue().toString().equals("date-time")));
+		return getDisplayDate((Date)obj, includeTime);
 	}
 
 	
@@ -33,8 +37,10 @@ public class LocaleDateConverter implements Converter{
 	 * @param dt
 	 * @return
 	 */
-	static public String getDisplayDate(Date dt) {
+	static public String getDisplayDate(Date dt, boolean includeTime) {
 		String patt = Messages.instance().get("locale.outputDatePattern");
+		if (includeTime)
+			patt += " HH:mm:ss";
 		Locale locale = LocaleSelector.instance().getLocale();
 		SimpleDateFormat df = new SimpleDateFormat(patt, locale);
 		

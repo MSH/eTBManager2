@@ -246,20 +246,22 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		
 		transfer.setStatus(TransferStatus.CANCELLED);
 		
+		movementHome.initMovementRecording();
 		// remove the movements
 		for (TransferItem it: transfer.getItems()) {
 			Movement mov = it.getMovementIn();
 			if (mov != null) {
 				it.setMovementIn(null);
-				movementHome.removeMovement(mov);
+				movementHome.prepareMovementsToRemove(mov);
 			}
 			
 			mov = it.getMovementOut();
 			if (mov != null) {
 				it.setMovementOut(null);
-				movementHome.removeMovement(mov);
+				movementHome.prepareMovementsToRemove(mov);
 			}
 		}
+		movementHome.savePreparedMovements();
 
 		getEntityManager().persist(transfer);
 		

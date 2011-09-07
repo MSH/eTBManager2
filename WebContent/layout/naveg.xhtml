@@ -2,40 +2,125 @@
 <ui:composition  xmlns="http://www.w3.org/1999/xhtml"
                  xmlns:ui="http://java.sun.com/jsf/facelets"
                  xmlns:h="http://java.sun.com/jsf/html"
+ 	  			 xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                  xmlns:f="http://java.sun.com/jsf/core"
                  xmlns:s="http://jboss.com/products/seam/taglib">
 
-<h:panelGroup rendered="#{not empty list.resultList}">
-#{messages['form.result']}: <b>#{list.firstItemPage} - #{list.lastItemPage}</b> #{messages['form.of']} <b>#{list.resultCount}</b><p/>
-</h:panelGroup>
-<h:panelGroup rendered="#{list.resultCount == 0}">
-<div class="warn">#{messages['form.norecordfound']}</div>
-</h:panelGroup>
+<h:panelGroup id="tablenaveg" rendered="#{facesContext.renderResponse}">
 
-<span>
-<s:link view="#{page}" rendered="#{list.previousExists}" title="#{messages['form.navfirst']}" >
-	<f:param name="firstResult" value="0" />
-	<div class="naveg-first" />
-	<ui:insert />
-</s:link>
+<s:div style="width:100%;margin-bottom:8px;" styleClass="panel2" rendered="#{list.resultList!=null}">
 
-<s:link view="#{page}" rendered="#{list.previousExists}" title="#{messages['form.navprevious']}" >
-	<f:param name="firstResult" value="#{list.previousFirstResult}" />
-	<div class="naveg-prev" />
-	<ui:insert />
-</s:link>
+	<ui:insert name="header" />
+	
+	<s:fragment rendered="#{list.resultCount==0}">
+		<div class="warn">#{messages['form.norecordfound']}</div>
+	</s:fragment>
 
-<s:link view="#{page}" rendered="#{list.nextExists}" title="#{messages['form.navnext']}"  >
-	<f:param name="firstResult" value="#{list.nextFirstResult}" />
-	<div class="naveg-next" />
-	<ui:insert />
-</s:link>
+<s:fragment rendered="#{list.resultCount!=0}">
+	<div style="float:left;width:350px;">
+	#{messages['form.result']}: 
+	<b>
+		#{list.firstItemPage} - #{list.lastItemPage}</b> #{messages['form.of']} <b>
+		<h:outputText value="#{list.resultCount}">
+			<f:convertNumber pattern="#,###,##0"/>
+		</h:outputText>
+	</b>
 
-<s:link view="#{page}" rendered="#{list.nextExists}" title="#{messages['form.navlast']}">
-	<f:param name="firstResult" value="#{list.lastFirstResult}" />
-	<div class="naveg-last" />
-	<ui:insert />
-</s:link>
+</div>
+
+<span style="margin-left:20px;" >
+<a:commandLink styleClass="naveg-first" reRender="#{reRender}" 
+	title="#{messages['form.navfirst']}" 
+	style="color:transparent;float:none"
+	onclick="initNavegWait();moveToFirstPage();return false;" 
+	rendered="#{list.currentPage > 1}" />
+
+<a:commandLink styleClass="naveg-prev" reRender="#{reRender}"
+	style="float:none" 
+	title="#{messages['form.navprevious']}" 
+	onclick="initNavegWait();moveToPage(#{list.currentPage - 1});return false;" 
+	rendered="#{list.currentPage > 1}">
+</a:commandLink>
+
+
+<span style="margin-right:20px;position:relative;top:-4px">
+#{messages['form.navegpage']}:
+<h:selectOneMenu value="#{list.currentPage}" rendered="#{facesContext.renderResponse}" 
+	onchange="initNavegWait();var val=this.options[this.selectedIndex].value;moveToPage(val);">
+	<f:selectItems value="#{list.pageOptions}" />
+</h:selectOneMenu>
+#{messages['form.of']} #{list.maxPage}
 </span>
+
+<a:commandLink styleClass="naveg-next" title="#{messages['form.navnext']}" 
+	onclick="initNavegWait();moveToPage(#{list.currentPage + 1});return false;" style="float:none" rendered="#{not list.lastPage}"/>
+
+<a:commandLink styleClass="naveg-last" 
+	reRender="#{reRender}" 
+	rendered="#{not list.lastPage}"
+	title="#{messages['form.navlast']}"  
+	style="color:transparent;float:none"
+	onclick="initNavegWait();moveToLastPage(); return false;"/>
+</span>
+</s:fragment>
+
+<div id="navegwait1" class="wait-icon2" style="display:none"/>
+</s:div>
+
+<s:fragment rendered="#{facesContext.renderResponse}">
+	<ui:insert />
+
+<div style="padding:8px">
+<a:commandLink styleClass="naveg-first" reRender="#{reRender}" 
+	title="#{messages['form.navfirst']}" 
+	style="color:transparent;float:none"
+	onclick="initNavegWait();moveToFirstPage();return false;" 
+	rendered="#{list.currentPage > 1}" />
+
+<a:commandLink styleClass="naveg-prev" reRender="#{reRender}"
+	style="float:none" 
+	title="#{messages['form.navprevious']}" 
+	onclick="initNavegWait();moveToPage(#{list.currentPage - 1});return false;" 
+	rendered="#{list.currentPage > 1}">
+</a:commandLink>
+
+
+<span style="margin-right:20px;position:relative;top:-4px">
+#{messages['form.navegpage']}:
+<h:selectOneMenu value="#{list.currentPage}" rendered="#{facesContext.renderResponse}" 
+	onchange="initNavegWait();var val=this.options[this.selectedIndex].value;moveToPage(val);">
+	<f:selectItems value="#{list.pageOptions}" />
+</h:selectOneMenu>
+#{messages['form.of']} #{list.maxPage}
+</span>
+
+<a:commandLink styleClass="naveg-next" title="#{messages['form.navnext']}" 
+	onclick="initNavegWait();moveToPage(#{list.currentPage + 1});return false;" style="float:none" />
+
+<a:commandLink styleClass="naveg-last" 
+	reRender="#{reRender}" 
+	title="#{messages['form.navlast']}"  
+	style="color:transparent;float:none"
+	onclick="initNavegWait();moveToLastPage(); return false;"/>
+</div>
+<div id="navegwait2" class="wait-icon2" style="display:none"/>
+</s:fragment>
+
+
+</h:panelGroup>
+
+
+<a:jsFunction name="moveToPage" reRender="tablenaveg">
+	<a:actionparam assignTo="#{list.currentPage}" name="param1" converter="javax.faces.Integer"/>
+</a:jsFunction>
+
+<a:jsFunction name="moveToFirstPage" reRender="tablenaveg" action="#{list.first}" />
+
+<a:jsFunction name="moveToLastPage" reRender="tablenaveg" action="#{list.last}" />
+
+<script type="text/javascript">
+function initNavegWait() { jQuery('#navegwait1,#navegwait2').show(); }
+</script>
+
 
 </ui:composition>
