@@ -32,12 +32,15 @@ public class ExamHome<E> extends EntityHomeEx<E> {
 
 		results = null;
 		
-		if (caseHome.isManaged())
-			caseHome.updateCaseTags();
+		String s = super.persist();
+		if ("persisted".equals(s)) {
+			TagsCasesHome.instance().updateTags(getTbCase());
+		}
 		
-		return super.persist();
+		return s;
 	}
-	
+
+
 	/**
 	 * Returns the managed TB Case in use
 	 * @return

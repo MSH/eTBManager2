@@ -46,7 +46,7 @@
 
 	<h:dataTable value="#{caseTagHome.items}" var="it" width="100%">
 		<h:column >
-			<div class="tag-icon"/>
+			<div class="tag-#{it.item.type}-icon"/>
 				<h:selectBooleanCheckbox value="#{it.selected}" />
 				#{it.item.name}
 		</h:column>

@@ -231,8 +231,12 @@ public class CaseEditingHome {
 		
 		updatePatientAge();
 
-		caseHome.updateCaseTags();
-		return caseHome.persist();
+		String s = caseHome.persist();
+		
+		if ("persisted".equals(s))
+			caseHome.updateCaseTags();
+
+		return s;
 	}
 
 
@@ -295,8 +299,6 @@ public class CaseEditingHome {
 		// treatment was defined ?
 		if (!caseHome.persist().equals("persisted"))
 			return "error";
-		
-		caseHome.updateCaseTags();
 
 		caseHome.setTransactionLogActive(false);
 
@@ -316,7 +318,9 @@ public class CaseEditingHome {
 		// save additional information
 		if (prevTBTreatmentHome != null)
 			prevTBTreatmentHome.persist();
-		
+
+		caseHome.updateCaseTags();
+
 		return (regimenType == 2? "individualized": "persisted");
 	}
 

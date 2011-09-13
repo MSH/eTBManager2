@@ -179,4 +179,7 @@ select false, true, true, id, 167 from UserProfile
 where name like "%adminis%"
 and not exists (select * from UserPermission where role_id=167 and profile_id=UserProfile.id);
 
- 
+
+alter table tag add consistencyCheck bool not null;
+
+update tag set consistencyCheck = false;

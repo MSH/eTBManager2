@@ -34,6 +34,9 @@ public class TagsCasesHome {
 		// get tags
 		List<Tag> tags = entityManager.createQuery("from Tag t where t.sqlCondition is not null and t.workspace.id = #{defaultWorkspace.id}").getResultList();
 
+		if (tags.size() == 0)
+			return;
+		
 		// erase all tags of the current case
 		entityManager.createNativeQuery("delete from tags_case where case_id = :id " +
 				"and tag_id in (select id from tag where sqlCondition is not null)")

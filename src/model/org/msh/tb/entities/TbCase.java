@@ -220,54 +220,55 @@ public class TbCase implements Serializable{
 	@Column(length=50)
 	private String mobileNumber;
 	
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
 	@FieldLog(ignore=true)
 	private List<CaseSideEffect> sideEffects = new ArrayList<CaseSideEffect>();
 
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
 	@FieldLog(ignore=true)
 	private List<CaseComorbidity> comorbidities = new ArrayList<CaseComorbidity>();
 	
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
 	@FieldLog(ignore=true)
 	private List<MedicalExamination> examinations = new ArrayList<MedicalExamination>();
 	
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
 	@FieldLog(ignore=true)
 	private List<ExamXRay> resXRay = new ArrayList<ExamXRay>();
 	
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
 	@FieldLog(ignore=true)
 	private List<TbContact> contacts = new ArrayList<TbContact>();
 	
-	@OneToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="tbcase")
+	@OneToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="tbcase", fetch=FetchType.LAZY)
 	@FieldLog(ignore=true)
 	private List<CaseDispensing> dispensing = new ArrayList<CaseDispensing>();
 	
 
 	/* EXAMS */
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
 	@FieldLog(ignore=true)
 	private List<ExamHIV> resHIV = new ArrayList<ExamHIV>();
 
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
 	@FieldLog(ignore=true)
 	private List<ExamCulture> examsCulture = new ArrayList<ExamCulture>();
 
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
 	@FieldLog(ignore=true)
 	private List<ExamMicroscopy> examsMicroscopy = new ArrayList<ExamMicroscopy>();
 
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
 	@FieldLog(ignore=true)
 	private List<ExamDST> examsDST = new ArrayList<ExamDST>();
 	
 	private int issueCounter;
 
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(name="tags_case", 
 			joinColumns={@JoinColumn(name="CASE_ID")},
 			inverseJoinColumns={@JoinColumn(name="TAG_ID")})
+	@FieldLog(ignore=true)
 	private List<Tag> tags = new ArrayList<Tag>();
 
 	

@@ -91,7 +91,8 @@
             	onclick="if (!disableButton(this)) return false;" >
             	<span>#{messages['form.save']}</span>
             </a:commandLink>
-            <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+            <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end"
+            	onclick="if (!disableButton(this)) return false;">
             	<f:param name="id" value="#{caseHome.id}"/>
             	<span>#{messages['form.cancel']}</span>
             </s:link>

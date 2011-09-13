@@ -38,7 +38,7 @@
 	</td></tr></table>
 
 	<p/>
-	<a:commandLink action="#{messagesExport.export}" styleClass="button" >
+	<a:commandLink action="#{messagesExport.export}" styleClass="button" onclick="if (!disableButton(this)) return false">
 		<span>Export to Excel</span>
 	</a:commandLink>
 	

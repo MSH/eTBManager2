@@ -52,9 +52,12 @@
 		<th><h:outputText value="#{messages['meds.movs.availableqtty']}" styleClass="colrh" /></th>	
 		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
 			<th><h:outputText value="#{messages['meds.amc']}" styleClass="colch" /></th>
+			<th><h:outputText value="#{messages['meds.stockoutdate']}" styleClass="colch" /></th>
 		</s:fragment>
+		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
 		<th><h:outputText value="#{messages['global.totalPrice']}" styleClass="colch" /></th>
 		<th><h:outputText value="#{messages['global.unitPrice']}" styleClass="colch" /></th>
+		</s:fragment>
 		<th><h:outputText value="#{messages['StoragePosReport.lastMovement']}" styleClass="colch" /></th>
 	</tr>
 <a:repeat value="#{s.medicines}" var="it">
@@ -77,7 +80,13 @@
 				<f:convertNumber pattern="###,###,##0"/>
 			</h:outputText>
 		</td>
+		<td align="right">
+			<h:outputText value="#{it.item.stockOutDate}" converter="periodConverter" >
+				<f:param name="type" value="time-length"/>
+			</h:outputText>
+		</td>
 		</s:fragment>
+		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
 		<td align="right">
 			<h:outputText value="#{it.item.totalPrice}" >
 				<f:convertNumber pattern="###,###,##0.00"/>
@@ -88,6 +97,7 @@
 				<f:convertNumber pattern="###,###,##0.00"/>
 			</h:outputText>
 		</td>
+		</s:fragment>
 		<td align="center">
 			<h:outputText value="#{it.item.lastMovement}" converter="localeDateConverter" />
 		</td>

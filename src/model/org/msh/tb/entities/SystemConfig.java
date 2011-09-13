@@ -47,6 +47,11 @@ public class SystemConfig {
 	@Column(length=100)
 	private String adminMail;
 
+	// used to control system version number and database version number
+	private Integer buildVersion;
+	
+	private Integer buildNumber;
+
 
 	/**
 	 * @return the id
@@ -163,5 +168,33 @@ public class SystemConfig {
 	@Override
 	public String toString() {
 		return Messages.instance().get("admin.syssetup");
+	}
+
+	/**
+	 * @return the buildVersion
+	 */
+	public Integer getBuildVersion() {
+		return buildVersion;
+	}
+
+	/**
+	 * @param buildVersion the buildVersion to set
+	 */
+	public void setBuildVersion(Integer buildVersion) {
+		this.buildVersion = buildVersion;
+	}
+
+	/**
+	 * @return the buildNumber
+	 */
+	public Integer getBuildNumber() {
+		return buildNumber;
+	}
+
+	/**
+	 * @param buildNumber the buildNumber to set
+	 */
+	public void setBuildNumber(Integer buildNumber) {
+		this.buildNumber = buildNumber;
 	}
 }

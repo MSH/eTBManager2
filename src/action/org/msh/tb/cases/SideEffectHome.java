@@ -7,6 +7,7 @@ import javax.faces.model.SelectItem;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.TagsCasesHome;
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
@@ -96,7 +97,11 @@ public class SideEffectHome {
 		
 		tbcase.setSideEffects(lst);
 		
-		return caseHome.persist();
+		String s = caseHome.persist();
+		if ("persisted".equals(s))
+			TagsCasesHome.instance().updateTags(tbcase);
+		
+		return s;
 	}
 	
 	/**

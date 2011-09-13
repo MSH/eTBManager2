@@ -88,10 +88,6 @@
 
 <s:decorate template="/layout/naveg.xhtml">
 	<ui:param name="list" value="#{movements}" />
-	<ui:param name="page" value="/medicines/movements.xhtml" />
-</s:decorate>
-
-<p/>
 <h:dataTable value="#{movements.resultList}" var="m" rendered="#{movements.resultCount > 0}" 
 	styleClass="table1" width="100%" rowClasses="lin1,lin2" 
 	columnClasses="colc,#{medicine.id!=null?'':'coll,'}#{source.id!=null?'':'coll,'}coll,colr,colr,colr,colr">
@@ -148,6 +144,7 @@
 	</h:column>
 
 </h:dataTable>
+</s:decorate>
 
 </s:fragment>
 

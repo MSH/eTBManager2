@@ -137,6 +137,8 @@
 				<exclude name="custom/md/**"/>
 				<exclude name="custom/bd/**"/>
 				<exclude name="custom/na/**"/>
+				<exclude name="custom/ph/**"/>
+				<exclude name="custom/hy/**"/>
 			</fileset>
 			
 			<classes dir="build/classes">
@@ -148,6 +150,7 @@
 				<exclude name="/org/msh/tb/ua/**"/>
 				<exclude name="/org/msh/tb/bd/**"/>
 				<exclude name="/org/msh/tb/na/**"/>
+				<exclude name="/org/msh/tb/ph/**"/>
 				<exclude name="/messages*" />
 				<exclude name="/custom_messages*" />
 			</classes>

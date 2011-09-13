@@ -30,7 +30,9 @@ public class PeriodConverter implements Converter{
 	}
 	
 	public String getAsString(FacesContext facesContext, UIComponent comp, Object obj) {
-
+		if (obj == null)
+			return null;
+		
 		UIParameter p = findParam(comp, "type");
 		String typeName = (p == null? null: p.getValue().toString());
 	

@@ -300,13 +300,16 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 	@Override
 	public String remove() {
 		// check if there are batches already in use
-		Long num = (Long)getEntityManager().createQuery("select count(*) from BatchQuantity b " + 
-				"where b.batch.medicineReceivingItem.medicineReceiving.id = :id " +
-				"and b.quantity < b.batch.quantityReceived")
+		String hql = "select count(*) from BatchQuantity where batch.id in (select bm.batch.id from MedicineReceiving mr " +
+				"join mr.movements m join m.batches bm " +
+				"where mr.id = :id) and quantity < batch.quantityReceived";
+
+		Long num = (Long)getEntityManager().createQuery(hql)
 				.setParameter("id", getInstance().getId())
 				.getSingleResult();
+
 		if ((num != null) &&(num > 0)) {
-			facesMessages.addFromResourceBundle("medicines.medicinerecs.removeerror");
+			facesMessages.addFromResourceBundle("meds.receiving.removeerror");
 			return "error";
 		}
 		

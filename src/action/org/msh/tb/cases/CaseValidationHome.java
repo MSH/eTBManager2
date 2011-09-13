@@ -149,6 +149,7 @@ public class CaseValidationHome {
 		tbcase.incIssueCounter();
 		
 		caseHome.persist();
+		caseHome.updateCaseTags();
 		
 		return "pending-registered";
 	}
@@ -170,6 +171,7 @@ public class CaseValidationHome {
 		tbcase.setValidationState(ValidationState.PENDING_ANSWERED);
 		
 		caseHome.persist();
+		caseHome.updateCaseTags();
 		
 		return "answered";
 	}

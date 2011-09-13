@@ -12,7 +12,9 @@
         <span class="name" style="#{empty labelstyle? '': labelstyle}">
             <ui:insert name="label"/>
         </span>
+        <span class="readonly-value">
        	#{field.value}
+       	</span>
     </span>
 
 	</td>
@@ -20,11 +22,12 @@
 	<td>
     <span >
         <s:label styleClass="name" style="pading-left:20px;#{empty labelstyle? '': labelstyle}" >
-    		<span class="right-icon">
+    		<span class="naveg-next" />
         	#{field.value.otherDescription}:
-        	</span>
         </s:label>
+        <span class="readonly-value">
         <h:outputText value="#{field.complement}" />
+        </span>
     </span>
     </td>
     </s:fragment>

@@ -139,7 +139,7 @@ public class MovementHome {
 		// remove previous movement
 		if (movementsToBeRemoved != null) {
 			for (Movement mov: movementsToBeRemoved) {
-				StockPosition sp = findStockPosition(mov.getTbunit(), mov.getSource(), mov.getMedicine());
+				StockPosition sp = findStockPosition(mov.getTbunit(), mov.getSource(), mov.getMedicine(), mov.getDate());
 				sp.setQuantity( sp.getQuantity() - (mov.getQuantity() * mov.getOper()) );
 				sp.setTotalPrice( sp.getTotalPrice() - (mov.getTotalPrice() * mov.getOper()));
 				
@@ -176,7 +176,7 @@ public class MovementHome {
 			checkAMCUpdate(mov);
 			entityManager.persist(mov);
 
-			StockPosition sp = findStockPosition(mov.getTbunit(), mov.getSource(), mov.getMedicine());
+			StockPosition sp = findStockPosition(mov.getTbunit(), mov.getSource(), mov.getMedicine(), mov.getDate());
 			sp.setQuantity( sp.getQuantity() + mov.getQtdOperation());
 			sp.setTotalPrice( sp.getTotalPrice() + (mov.getTotalPrice() * mov.getOper()) );
 			if ((sp.getLastMovement() == null) || (sp.getLastMovement().before(mov.getDate())))
@@ -196,14 +196,16 @@ public class MovementHome {
 
 		// save batches quantities
 		for (BatchQuantity bq: batchQuantities) {
-			if (bq.getQuantity() == 0) {
-				if (entityManager.contains(bq))
-					entityManager.remove(bq);
-			}
-			else entityManager.persist(bq);
+//			if (bq.getQuantity() == 0) {
+//				if (entityManager.contains(bq))
+//					entityManager.remove(bq);
+//			}
+//			else 
+			entityManager.persist(bq);
 		}
 		
 		entityManager.flush();
+		entityManager.createQuery("delete BatchQuantity where quantity=0").executeUpdate();
 
 		// update average monthly consumption
 		updateAMC();
@@ -220,7 +222,7 @@ public class MovementHome {
 	 * @param medicine
 	 * @return
 	 */
-	protected StockPosition findStockPosition(Tbunit unit, Source source, Medicine medicine) {
+	protected StockPosition findStockPosition(Tbunit unit, Source source, Medicine medicine, Date movDate) {
 		if (stockPositions == null)
 			stockPositions = new ArrayList<StockPosition>();
 		
@@ -246,6 +248,7 @@ public class MovementHome {
 		sp.setTbunit(unit);
 		sp.setSource(source);
 		sp.setMedicine(medicine);
+		sp.setLastMovement(movDate);
 		return sp;
 	}
 	

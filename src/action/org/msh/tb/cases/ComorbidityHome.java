@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.TagsCasesHome;
 import org.msh.tb.entities.CaseComorbidity;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
@@ -124,7 +125,11 @@ public class ComorbidityHome {
 			tbcase.setPatientContactName(null);
 //		tbcase.setComorbidities(lst);
 		
-		return caseHome.persist();
+		String s = caseHome.persist();
+		if ("persisted".equals(s))
+			TagsCasesHome.instance().updateTags(tbcase);
+		
+		return s;
 	}
 
 	

@@ -6,7 +6,6 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-	
 	<s:fragment rendered="#{not caseHome.inTreatment}" >
 		<h:outputText value="#{messages['cases.details.notreatment']}" styleClass="warn" style="display:block;padding:30px;"/>
 
@@ -22,7 +21,7 @@
 		<rich:jQuery timing="onJScall" name="showSelRegimenDlg" selector="#seltttype" query="show(500)" />
 		<div id="seltttype" style="display:none;padding:20px;width:500px;">
 
-			<div class="region1">
+			<div class="region1" style="width:400px">
 				<div class="header">
 					<h2>#{messages['cases.treat.selreg']}:</h2>			
 				</div>

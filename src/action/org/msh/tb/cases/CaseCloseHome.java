@@ -82,6 +82,8 @@ public class CaseCloseHome extends Controller{
 		// save case changes
 		caseHome.setTransactionLogActive(false);
 		caseHome.persist();
+		caseHome.updateCaseTags();
+
 		return "case-closed";
 	}
 	
@@ -98,6 +100,7 @@ public class CaseCloseHome extends Controller{
 		caseHome.getLogService().saveExecuteTransaction(tbcase, "CASE_REOPEN");
 		caseHome.setTransactionLogActive(false);
 		caseHome.persist();
+		caseHome.updateCaseTags();
 		
 		return "case-reopened";
 	}

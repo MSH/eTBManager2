@@ -80,7 +80,7 @@
 	</ui:define>
 	<h:dataTable value="#{tbcase.tags}" var="it">
 		<h:column>
-			<div class="tag-icon">
+			<div class="tag-#{it.type}-icon">
 				#{it.name}
 			</div>
 		</h:column>

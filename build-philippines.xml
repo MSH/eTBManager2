@@ -58,21 +58,6 @@
         <copy includeemptydirs="false" todir="build/classes">
             <fileset dir="src/ph" excludes="**/*.launch, **/*.java"/>
         </copy>
-        <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/ua" excludes="**/*.launch, **/*.java"/>
-        </copy>
-        <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/az" excludes="**/*.launch, **/*.java"/>
-        </copy>
-        <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/na" excludes="**/*.launch, **/*.java"/>
-        </copy>
-        <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/bd" excludes="**/*.launch, **/*.java"/>
-        </copy>
-        <copy includeemptydirs="false" todir="build/classes">
-            <fileset dir="src/in" excludes="**/*.launch, **/*.java"/>
-        </copy>
     </target>
     
 	<target name="clean">
@@ -138,6 +123,7 @@
 				<exclude name="custom/na/**"/>
 				<exclude name="custom/bd/**"/>
 				<exclude name="custom/md/**"/>
+				<exclude name="custom/hy/**"/>
 				<exclude name="login.xhtml"/>
 				<exclude name="login.page.xml"/>
 			</fileset>
@@ -156,8 +142,8 @@
 				<exclude name="/custom_messages*" />
 			</classes>
 			
-			<zipfileset file="WebContent/public/loginph.xhtml" fullpath="login.xhtml" />
-			<zipfileset file="WebContent/public/loginph.page.xml" fullpath="login.page.xml" />
+			<zipfileset file="WebContent/custom/ph/login.xhtml" fullpath="login.xhtml" />
+			<zipfileset file="WebContent/custom/ph/login.page.xml" fullpath="login.page.xml" />
 			<zipfileset file="src/model/messages_en_PH.properties" fullpath="WEB-INF/classes/messages_en.properties" />
 			<zipfileset file="src/model/custom_messages_en_PH.properties" fullpath="WEB-INF/classes/custom_messages_en.properties" />
 

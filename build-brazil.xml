@@ -118,6 +118,8 @@
 				<exclude name="WEB-INF/jboss-web.xml"/>
 				<exclude name="META-INF/jboss-app.xml" />
 				<exclude name="META-INF/context.xml" />
+				<exclude name="custom/az/**"/>
+				<exclude name="custom/hy/**"/>
 				<exclude name="custom/ph/**"/>
 				<exclude name="custom/in/**"/>
 				<exclude name="custom/ke/**"/>
@@ -128,10 +130,13 @@
 				<exclude name="login.xhtml"/>
 				<exclude name="login.page.xml"/>
 				<exclude name="public/themes/green/images/logo.png" />
+				<exclude name="WebContent/custom/br/login.xhtml" />
+				<exclude name="WebContent/custom/br/login.page.xml" />
 			</fileset>
 			
 			<classes dir="build/classes">
 				<exclude name="META-INF/persistence.xml"/>
+				<exclude name="/org/msh/tb/az/**" />
 				<exclude name="/org/msh/tb/ke/**" />
 				<exclude name="/org/msh/tb/ph/**"/>
 				<exclude name="/org/msh/tb/ua/**"/>
@@ -144,8 +149,8 @@
 			</classes>
 			
 			<zipfileset file="resources/br/logo.png" fullpath="public/themes/green/images/logo.png" />
-			<zipfileset file="WebContent/public/loginbr.xhtml" fullpath="login.xhtml" />
-			<zipfileset file="WebContent/public/loginbr.page.xml" fullpath="login.page.xml" />
+			<zipfileset file="WebContent/custom/br/login.xhtml" fullpath="login.xhtml" />
+			<zipfileset file="WebContent/custom/br/login.page.xml" fullpath="login.page.xml" />
 			<zipfileset file="src/model/messages_pt_BR.properties" fullpath="WEB-INF/classes/messages_pt_BR.properties" />
 			<zipfileset file="src/model/custom_messages_pt_BR.properties" fullpath="WEB-INF/classes/custom_messages_pt_BR.properties" />
 

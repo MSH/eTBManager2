@@ -4,6 +4,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.TagsCasesHome;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.TbContact;
 
@@ -26,9 +27,15 @@ public class TbContactHome extends EntityHomeEx<TbContact> {
 		con.setTbcase(tbcase);
 		tbcase.getContacts().add(con);
 		
-		return super.persist();
+		String s = super.persist();
+		
+		if ("persisted".equals(s))
+			TagsCasesHome.instance().updateTags(tbcase);
+		
+		return s;
 	}
-	
+
+
 	@Override
 	public String remove() {
 		TbCase tbcase = caseHome.getInstance();
