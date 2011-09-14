@@ -16,6 +16,7 @@ import org.jboss.seam.security.Identity;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.UserState;
+import org.msh.tb.uitheme.ThemeManager;
 import org.msh.utils.Passwords;
 
 
@@ -107,6 +108,9 @@ public class AuthenticatorBean {
         	userSession.setUserWorkspace(userWorkspace);
             userSession.changeUserWorkspace();
             
+            // select the user's theme
+            selectTheme();
+            
             return true;
         }
         catch (NoResultException e) {
@@ -114,6 +118,20 @@ public class AuthenticatorBean {
         }
     }
 
+    
+    /**
+     * Select the user UI theme
+     */
+    public void selectTheme() {
+    	ThemeManager themeManager = ThemeManager.instance();
+    	if (user.getTheme() == null) {
+    		user.setTheme( themeManager.getDefaultTheme() );
+    		entityManager.persist(user);
+    	}
+    	
+    	themeManager.setTheme(user.getTheme());
+    	themeManager.selectTheme();
+    }
     
     public String logout() {
 /*    	Workspace workspace = (Workspace)Component.getInstance("defaultWorkspace");

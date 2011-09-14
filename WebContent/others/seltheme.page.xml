@@ -5,10 +5,8 @@
       login-required="true">
 
 		<navigation>
-			<rule if-outcome="pwdchanged">
-				<redirect view-id="/home.xhtml">
-					<message>#{messages['changepwd.success1']}</message>
-					<param name="id" value="#{null}"/>
+			<rule if-outcome="theme-selected">
+				<redirect view-id="/others/seltheme.xhtml">
 				</redirect>
 			</rule>
 		</navigation>

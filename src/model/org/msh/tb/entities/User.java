@@ -91,6 +91,10 @@ public class User implements java.io.Serializable {
 	@Column(length=50)
 	@FieldLog(key="global.legacyId")
 	private String legacyId;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="THEME_ID")
+	private UITheme theme;
 
 	
 	/* (non-Javadoc)
@@ -305,6 +309,22 @@ public class User implements java.io.Serializable {
 	 */
 	public void setLegacyId(String legacyId) {
 		this.legacyId = legacyId;
+	}
+
+
+	/**
+	 * @return the theme
+	 */
+	public UITheme getTheme() {
+		return theme;
+	}
+
+
+	/**
+	 * @param theme the theme to set
+	 */
+	public void setTheme(UITheme theme) {
+		this.theme = theme;
 	}
 	
 }
