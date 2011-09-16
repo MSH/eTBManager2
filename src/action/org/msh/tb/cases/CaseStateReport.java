@@ -210,7 +210,7 @@ public class CaseStateReport {
 		Workspace workspace = (Workspace)Component.getInstance("defaultWorkspace");
 
 		List<Object[]> lst = entityManager.createNativeQuery("select t.id, t.tag_name, t.sqlCondition is null, t.consistencyCheck, count(*) " +
-				"from tags_case a inner join Tag t on t.id = a.tag_id " +
+				"from tags_case a inner join tag t on t.id = a.tag_id " +
 				"where t.workspace_id = :id " +
 				"group by t.id, t.tag_name order by t.tag_name")
 				.setParameter("id", workspace.getId())

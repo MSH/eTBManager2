@@ -60,7 +60,7 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
 				</f:facet>
-				#{r.comments}
+				<h:outputText value="#{r.comments}" converter="rmemoria.TextConverter" escape="false" styleClass="text"/>
 			</h:column>
 
 			<h:column rendered="#{caseHome.canEditExams}">
@@ -131,7 +131,7 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
 				</f:facet>
-				#{r.comments}
+				<h:outputText value="#{r.comments}" styleClass="text" converter="rmemoria.TextConverter" escape="false"/>
 			</h:column>
 
 			<h:column rendered="#{caseHome.canEditExams}">
@@ -204,7 +204,7 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
 				</f:facet>
-				#{r.comments}
+				<h:outputText value="#{r.comments}" converter="rmemoria.TextConverter" escape="false" styleClass="text"/>
 			</h:column>
 
 			<h:column rendered="#{caseHome.canEditExams}">
@@ -295,7 +295,7 @@
 		<s:fragment rendered="#{not empty r.examResult.comments}">
 			<tr><td colspan="3" class="colb">
 				<b>#{messages['global.comments']} :</b>
-				#{r.examResult.comments}
+				<h:outputText value="#{r.examResult.comments}" converter="rmemoria.TextConverter" escape="false" styleClass="text"/>
 			</td></tr>
 		</s:fragment>
 		</a:repeat>
@@ -355,7 +355,7 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
 				</f:facet>
-				#{r.comments}
+				<h:outputText value="#{r.comments}" converter="rmemoria.TextConverter" escape="false" styleClass="text"/>
 			</h:column>
 
 			<h:column>

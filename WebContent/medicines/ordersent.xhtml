@@ -17,8 +17,7 @@
 
 <ui:define name="content">
 <h1>#{title}</h1>
-<h:form id="main">
-<rich:panel style="width:700px;">
+<h:form id="main" styleClass="form1">
     
     <table width="100%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse">
     <tr><td><b>#{messages['Order.unitFrom']}: </b>#{order.unitFrom.name}
@@ -49,7 +48,7 @@
 <h:panelGroup id="pnlitems">
 <b>#{messages['Order.items']}:</b>
 <table width="100%">
-	<c:forEach items="#{orderHome.sources}" var="s">
+	<a:repeat value="#{orderHome.sources}" var="s">
 	<tr><td class="colheader">
 		<b>#{s.source.name}</b>
 	</td></tr>
@@ -60,7 +59,7 @@
 				<th><h:outputText value="#{messages['OrderItem.shippedQuantity']}" /></th>
 				<th>#{messages['form.action']}</th>
 			</tr>
-			<c:forEach var="it" items="#{s.items}">
+			<a:repeat var="it" value="#{s.items}">
 				<tr class="highlight"><td class="col" style="height:25px;">
 					<div class="medicine-icon" style="float:left"/>
 					#{it.item.medicine}
@@ -89,7 +88,7 @@
 				
 				<tr><td colspan="4">
 					<table width="450px">
-					<c:forEach var="b" items="#{it.item.batches}">
+					<a:repeat var="b" value="#{it.item.batches}">
 						<tr>
 						<td>
 							<div class="batch-icon" />
@@ -109,27 +108,26 @@
 							#{messages['global.totalPrice']} : 
 								<h:outputText value="#{b.quantity * b.batch.unitPrice}"><f:convertNumber pattern="#,###,##0.00"/></h:outputText>
 						</td></tr>
-					</c:forEach>
+					</a:repeat>
 					</table>
 					<br/>
 				</td></tr>
-			</c:forEach>
+			</a:repeat>
 		</table>
 	</td></tr>
-	</c:forEach>
+	</a:repeat>
 </table>
 </h:panelGroup>
 
-<div >
-    <h:commandLink action="#{orderShippingHome.registerShipping}" styleClass="button" 
+<div class="form-footer">
+    <a:commandLink action="#{orderShippingHome.registerShipping}" styleClass="button" 
     	onclick="if (!disableButton(this)) return false;" reRender="main">
     	<span>#{messages['form.ok']}</span>
-    </h:commandLink>
+    </a:commandLink>
     <s:link action="cancel" styleClass="button-alt" >
     	<span>#{messages['form.cancel']}</span>
     </s:link>
 </div>
-</rich:panel>
 
 </h:form>
 

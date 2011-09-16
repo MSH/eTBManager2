@@ -5,22 +5,12 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
-   	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="/layout/template_new.xhtml">
+      template="admintemplate.xhtml">
 
-<ui:param name="title" value="#{messages['admin']}" />
+<ui:param name="title" value="#{messages['admin']} - #{messages['admin.config']}" />
 <ui:param name="topmenu" value="3" />
-
-<ui:define name="naveg">
-	<div class="item selected">
-		<s:link value="#{messages['home']}" />
-	</div>
-</ui:define>
-
-<ui:define name="left">
-	<ui:include src="/custom/md/admin/adminmenu.xhtml" />
-</ui:define>
+<ui:param name="submenu" value="2" />
 
 <ui:define name="content">
 <h1>#{title}</h1>

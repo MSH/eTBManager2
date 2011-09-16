@@ -1,10 +1,15 @@
 package org.msh.tb.test;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.sql.DataSource;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
@@ -84,5 +89,22 @@ public class CaseManagementTest {
 
 	public void updateRegimens() throws Exception {
 		executeAsyncAction.updateRegimens((Workspace)Component.getInstance("defaultWorkspace"));
+	}
+	
+	
+	public void genTableNames() throws Exception {
+		InitialContext initialContext = new InitialContext();
+		DataSource ds = (DataSource)initialContext.lookup("java:mdrtbDatasource");
+		Connection con = ds.getConnection();
+		ResultSet rs = con.getMetaData().getTables("etbmanager", null, "%", null);
+		String script = "";
+		while (rs.next()) {
+			if (rs.getString(4).equals("TABLE")) {
+				String s = rs.getString(3);
+				script += "\nrename table " + s + " to " + s.toLowerCase();
+			}
+		}
+		System.out.println(script);
+		con.close();
 	}
 }

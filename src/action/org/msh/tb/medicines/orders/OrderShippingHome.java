@@ -53,6 +53,10 @@ public class OrderShippingHome extends Controller {
 	 * @return
 	 */
 	public String registerShipping() {
+		if (order.getShippingDate() == null) {
+			return "error";
+		}
+		
 		Date dt = order.getApprovingDate();
 		if (dt == null)
 			dt = order.getOrderDate();

@@ -149,6 +149,9 @@
 	
 	<h:commandLink action="#{trainningHome.createUsers}" value="Create Training users" />
 	<p/>
+
+	<h:commandLink action="#{caseManagementTest.genTableNames}" value="System tables" />
+	<p/>
 	<h:commandLink value="Inicializar Estoque" action="#{workspaceInit.initMedicineManagement}" rendered="#{userLogin.user.login=='RICARDO'}" onclick="if (!confirm('Confirm operation?')) return false;"/>
 
 	</h:form>

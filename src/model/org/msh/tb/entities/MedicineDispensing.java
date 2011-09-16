@@ -41,7 +41,7 @@ public class MedicineDispensing implements Serializable {
 	private Date dispensingDate;
 	
 	@ManyToMany
-	@JoinTable(name="MOVEMENTS_DISPENSING", 
+	@JoinTable(name="movements_dispensing", 
 			joinColumns={@JoinColumn(name="DISPENSING_ID")},
 			inverseJoinColumns={@JoinColumn(name="MOVEMENT_ID")})
 	private List<Movement> movements = new ArrayList<Movement>();
