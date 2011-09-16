@@ -273,4 +273,9 @@ public class FieldsQuery {
 		field = TbField.XRAY_LOCALIZATION;
 		return getValues();
 	}
+	
+	public List<FieldValue> getAnothertbs() {
+		field = TbField.ANOTHERTB;
+		return getValues();
+	}
 }

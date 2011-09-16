@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.edit']} - #{messages[tbcase.classification.key]}" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="left" value="0" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="labelstyle" value="width:150px" />
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+
+	<ui:include src="casedataedt.xhtml" />
+
+	<div class="form-footer">
+		<div style="float:right;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+		<a:commandLink action="#{caseUZHome.persist}" styleClass="button" reRender="main,messages" onclick="if (!disableButton(this)) return false;">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink>
+		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this);">
+			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

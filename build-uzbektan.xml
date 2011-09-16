@@ -77,7 +77,7 @@
             <classpath refid="mdrtb.classpath"/>
         </javac>
         <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
-            <src path="src/in"/>
+            <src path="src/uz"/>
             <classpath refid="mdrtb.classpath"/>
         </javac>
     </target>
@@ -120,6 +120,8 @@
 				<exclude name="custom/bd/**"/>
 				<exclude name="custom/na/**"/>
 				<exclude name="custom/in/**"/>
+				<exclude name="custom/ph/**"/>
+				<exclude name="custom/hy/**"/>
 			</fileset>
 			
 			<classes dir="build/classes">
@@ -132,6 +134,7 @@
 				<exclude name="/org/msh/tb/bd/**"/>
 				<exclude name="/org/msh/tb/na/**"/>
 				<exclude name="/org/msh/tb/in/**"/>
+				<exclude name="/org/msh/tb/ph/**"/>
 				<exclude name="/messages*" />
 				<exclude name="/custom_messages*" />
 			</classes>

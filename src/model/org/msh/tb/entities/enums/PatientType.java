@@ -21,7 +21,9 @@ public enum PatientType {
 // new types used by Brazil
 	SCHEMA_CHANGED,
 // Ukraine
-	FAILURE;
+	FAILURE,
+// Uzbekistan
+	ANOTHER_TB;
 
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

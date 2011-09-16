@@ -23,6 +23,14 @@ public class FieldValueComponent {
 	}
 	
 	/**
+	 * Clear the content of the field
+	 */
+	public void clear() {
+		value = null;
+		complement = null;
+	}
+	
+	/**
 	 * Check if complement is empty
 	 * @return true - complement is empty
 	 */
