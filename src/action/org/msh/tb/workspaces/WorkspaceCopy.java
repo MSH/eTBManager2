@@ -35,7 +35,6 @@ import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.log.LogService;
 import org.msh.tb.test.dbgen.TokenReaderException;
-import org.omg.ETF.Profile;
 
 /**
  * Copy data from one workspace into another
@@ -109,7 +108,7 @@ public class WorkspaceCopy {
 			copyEntities(UserWorkspace.class);
 
 		if (profiles)
-			copyEntities(Profile.class);
+			copyEntities(UserProfile.class);
 
 		if (tbfields)
 			copyEntities(FieldValue.class);
