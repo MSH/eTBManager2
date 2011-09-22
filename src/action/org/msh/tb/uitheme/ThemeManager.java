@@ -73,7 +73,7 @@ public class ThemeManager {
 	 * Restore the theme in use by the user 
 	 */
 	protected void restoreUserTheme() {
-		theme = userLogin.getUser().getTheme();
+		theme = entityManager.merge( userLogin.getUser().getTheme() );
 	}
 	
 	

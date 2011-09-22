@@ -278,15 +278,24 @@
 				#{r.examResult.laboratory.abbrevName}
 			</td>
 			<ui:repeat value="#{r.results}" var="rs">
-			<td class="colcb" rowspan="#{empty r.examResult.comments?'1':'2'}">
-				<s:fragment  rendered="#{rs=='RESISTANT'}"><div class="dst-resistant" title="#{messages[rs.key]}" /></s:fragment>
-				<s:fragment  rendered="#{rs=='SUSCEPTIBLE'}"><div class="dst-susceptible" title="#{messages[rs.key]}" /></s:fragment>
-				<s:fragment  rendered="#{rs=='CONTAMINATED'}"><div class="dst-contaminated" title="#{messages[rs.key]}" /></s:fragment>
-				<h:outputText value="x" rendered="#{rs=='NOTDONE'}" title="#{messages[rs.key]}"/>
+			<td class="colc" rowspan="#{empty r.examResult.comments?'1':'2'}">
+				<s:fragment  rendered="#{rs=='RESISTANT'}">
+					<div class="dst-resistant noprint" title="#{messages[rs.key]}" style="float:none"/>
+					<h:outputText value="R" rendered="#{printing}" />
+				</s:fragment>
+				<s:fragment  rendered="#{rs=='SUSCEPTIBLE'}">
+					<div class="dst-susceptible noprint" title="#{messages[rs.key]}" style="float:none"/>
+					<h:outputText value="S" rendered="#{printing}" />
+				</s:fragment>
+				<s:fragment  rendered="#{rs=='CONTAMINATED'}">
+					<div class="dst-contaminated noprint" title="#{messages[rs.key]}" style="float:none"/>
+					<h:outputText value="C" rendered="#{printing}" />
+				</s:fragment>
+				<h:outputText value="-" rendered="#{rs=='NOTDONE'}" title="#{messages[rs.key]}"/>
 			</td>
 			</ui:repeat>
 			<s:fragment rendered="#{caseHome.canEditExams}">
-			<td class="colcb" rowspan="#{empty r.examResult.comments?'1':'2'}"  >
+			<td class="colc" rowspan="#{empty r.examResult.comments?'1':'2'}"  >
 				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamDST(#{r.examResult.id});return false;" style="font-size:9px">
 				</h:commandLink>
 			</td>

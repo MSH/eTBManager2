@@ -7,7 +7,7 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<h:panelGroup id="#{panel}pnlComments" styleClass="form1">
+	<h:panelGroup id="#{panel}pnlComments" styleClass="form1" rendered="#{empty printing or not empty caseCommentsHome.comments}">
 	<s:fragment rendered="#{caseCommentsHome.displayComments}"> 
 	<div class="form-content">
 		
@@ -15,7 +15,7 @@
 	<h2>#{messages['global.comments']}</h2>
 			<table width="100%">
 			<tr><td>
-			<s:fragment rendered="#{s:hasRole('CASE_COMMENTS')}">
+			<s:fragment rendered="#{s:hasRole('CASE_COMMENTS') and not printing}">
 				<h:inputTextarea value="#{caseComment.comment}" style="width:500px;height:50px;float:left;"/>
 				<a:commandLink style="float:right" 
 					styleClass="button-alt" 

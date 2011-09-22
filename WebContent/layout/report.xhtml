@@ -16,59 +16,54 @@
     <meta http-equiv="Cache-Control" content="no-store" />
     <meta http-equiv="Pragma" content="no-cache" />
     
-	<link rel="stylesheet" type="text/css" href="#{request.contextPath}/stylesheet/print.css" />
+	<link href="#{themeurl}/print.css" rel="stylesheet" type="text/css" media="screen,print" />
 </head>
 
 <body >
 <f:view>
 
-<div style="padding:2px">
-<table width="100%" class="reportbody" >
-<tr>
-<td class="repcell" width="20%">
-	<span style="font-size:16px;font-weight:bold;">
-	#{messages['mdrtb_system']}
-	</span>
-	<br/>
-	<span style="font-size:8px">
-	#{messages['mdrtbsys']}
-	</span>
-</td>
-<td class="repcell">
-<h1>#{title}</h1>
-<s:fragment rendered="#{showunit=='1'}">
-	<b>#{messages['Tbunit']}:</b>
-	#{userSession.tbunit.name}
-</s:fragment>
-</td>
-<td class="repcell" width="30%" style="font-size:9px">
-	#{messages['reports.released']} :
-	<h:outputText value="#{reportDate}" >
-		<s:convertDateTime type="both" timeZone="#{timezones.default}"/>
-	</h:outputText>
-	<br/>
-	#{messages['form.by']} :
-	#{userLogin.user.name}
-</td>
-</tr>
-<tr>
-<td valign="top" class="repcell" colspan="3">
-  	<ui:insert name="content">
-  	</ui:insert>
-</td>
-</tr>
-</table>
-<div style="width:100%;display:block;padding-top:30px;text-align:center;">
-<span style="padding-left:10px;color:#909090;font-size:9px;">#{messages['login.copyright']}</span>
+<ui:param name="printing" value="true" />
+
+<div class="page-header">
+	<div class="page-header-left">
+		<h1>#{title}</h1>
+		<s:fragment rendered="#{not empty unit}">
+			<b>#{messages['Tbunit']}:</b>
+			#{unit.name}
+		</s:fragment>
+	</div>
+	<div class="page-header-right">
+		<h2>#{messages['mdrtb_system']}</h2>
+		<span class="text-small">#{messages['mdrtbsys']}</span>
+	</div>
 </div>
 
+<div class="page-content">
+  	<ui:insert name="content" />
 </div>
+
+<div class="page-footer">
+	<div class="page-footer-left">
+		#{messages['reports.released']} :
+		<h:outputText value="#{reportDate}" >
+			<s:convertDateTime type="both" timeZone="#{timezones.default}"/>
+		</h:outputText>
+		<br/>
+		#{messages['form.by']} :
+		#{userLogin.user.name}
+		<br/>
+		#{messages['Workspace']}: #{defaultWorkspace.name}
+	</div>
+	<div class="page-footer-right">
+		#{messages['login.copyright']}
+	</div>
+</div>
+
 
 </f:view>
 
 <script type="text/javascript">
-//window.print();
-//window.close();
+window.print();
 </script>
 </body>
 </html>
