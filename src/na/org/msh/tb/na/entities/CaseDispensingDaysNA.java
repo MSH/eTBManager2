@@ -59,9 +59,48 @@ public class CaseDispensingDaysNA {
 	
 	public int getNumDispensingDays() {
 		int res = 0;
-		for (int i = 1; i <= 31; i++)
-			if (getDay(i)!=null)
+		Dot day = null;
+		for (int i = 1; i <= 31; i++){
+			day = getDay(i);
+			if (getDay(i)!=null&&(day!=Dot.X))
 				res++;
+		}
+		return res;
+	}
+	
+	//gets number of days 'taken' only
+	public int getNumDispensingDaysTaken(){
+		int res = 0;
+		Dot day = null;
+		for(int i = 1; i <=31; i++){
+			day = getDay(i);
+			if(getDay(i)!=null&&(day==Dot.T))
+				res++;
+			}
+		return res;
+	}
+	
+	//gets number of days 'not taken' only
+	public int getNumDispensingDaysNotTaken(){
+		int res = 0;
+		Dot day = null;
+		for(int i = 1; i <=31; i++){
+			day = getDay(i);
+			if(getDay(i)!=null&&(day==Dot.X))
+				res++;
+			}
+		return res;
+	}
+	
+	//gets number of days 'not supervised' only
+	public int getNumDispensingDaysNotSupervised(){
+		int res = 0;
+		Dot day = null;
+		for(int i = 1; i <=31; i++){
+			day = getDay(i);
+			if(getDay(i)!=null&&(day==Dot.N))
+				res++;
+			}
 		return res;
 	}
 	
