@@ -31,11 +31,12 @@
 </ui:define>
 
 <ui:define name="content">
-
+<h1>#{title}</h1>
 <h:form>
 <table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
 <tr><td bgcolor="#f8f8f8">
-	<ui:include src="/management/filters.xhtml" />
+	<ui:include src="/custom/na/management/dotsupervisionfilters.xhtml" />
+	<!-- /custom/na/management/dotsupervisionfilters.xhtml" -->
 
 </td></tr>
 
@@ -63,11 +64,12 @@
 				#{row.title}
 			</td>
 			<ui:repeat value="#{row.cells}" var="val">
-			<td class="colcb" bgcolor="#{val.column.highlight?'#DBFADC':'transparent'}">
+			<td class="colcb">
+			<!-- bgcolor="#{val.column.highlight?'#DBFADC':'transparent'}"> -->
 				<h:outputText value="#{val.value}" >
-					<f:convertNumber pattern="##,###,##0.##"/>
+					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
-				<h:outputText value="%" rendered="#{val.column.highlight}" />
+				<!-- <h:outputText value="%" rendered="#{val.column.highlight}" /> -->
 			</td>
 			</ui:repeat>
 		</tr>
