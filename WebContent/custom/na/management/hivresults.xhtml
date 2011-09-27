@@ -16,7 +16,7 @@
 <ui:param name="labelstyle" value="width:180px;" />
 <ui:param name="left" value="0" />
 
-<ui:param name="indicator" value="#{hivIndicatorNA}" />
+<ui:param name="indicator" value="#{hivIndicator}" />
 <ui:param name="table" value="#{hivArtIndicatorNA.table}" />
 
 
@@ -33,6 +33,7 @@
 
 
 <ui:define name="content">
+<h1>#{title}</h1>
 <h:form>
 <h:panelGroup id="indicator">
 <table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
@@ -49,7 +50,7 @@
 		<div class="paragraph">
 			#{messages['manag.hivreport.title1']}
 		</div>
-	<h:dataTable value="#{hivYesNoIndicatorNA.series.items}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
+	 	<h:dataTable value="#{hivYesNoIndicator.series.items}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
 		columnClasses="colb,colrb,colrb" width="380px" rendered="#{indicatorController.executing}">
 		
 		<h:column>
@@ -64,7 +65,7 @@
 				<h:outputText value="#{messages['manag.ind.numc']}" styleClass="colrh" />
 			</f:facet>
 			<f:facet name="footer">
-				<h:outputText value="#{hivYesNoIndicatorNA.series.total}" styleClass="colrh" style="font-weight:bold;">
+				<h:outputText value="#{hivYesNoIndicator.series.total}" styleClass="colrh" style="font-weight:bold;">
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 			</f:facet>
@@ -169,6 +170,7 @@
 		</tr>
 
 	</table>
+	
 	</s:fragment>
 
 </td></tr>
