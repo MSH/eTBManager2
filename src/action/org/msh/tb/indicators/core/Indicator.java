@@ -6,11 +6,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.jboss.seam.Component;
+import org.jboss.seam.annotations.In;
 import org.msh.tb.AgeRangeHome;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.AgeRange;
+import org.msh.tb.indicators.core.IndicatorTable.TableCell;
+import org.msh.tb.na.entities.CaseDispensingNA;
 
 /**
  * Base class supporting TB/MDR-TB indicator generation
@@ -25,10 +30,11 @@ public abstract class Indicator extends CaseHQLBase {
 	private boolean executing;
 	private int indexPos;
 	private boolean sortRows = true;
-
+	private IndicatorTable table;
 
 	private IndicatorSeries series;
-	
+	private List<CaseDispensingNA> dispensingList;
+	@In(create=true) EntityManager entityManager;
 	/**
 	 * Abstract method called to generate the indicators
 	 * To include values in the indicator list use {@link #addValue(String, int)}
@@ -395,5 +401,36 @@ public abstract class Indicator extends CaseHQLBase {
 		if (series != null)
 			return;
 		createSeries();
+	}
+	
+	
+	/**
+	 * Return the table containing the data
+	 * @return {@link IndicatorTable} instance
+	 */
+	public IndicatorTable getTable() {
+		if (table == null)
+			createTable();
+		return table;
+	}
+	
+	/**
+	 * Create the table and fill it with the indicator values
+	 */
+	protected void createTable() {
+		setConsolidated(true);
+		table = new IndicatorTable();
+		createIndicators();
+	}
+	
+	/**
+	 * Add a value to the table
+	 * @param columnTitle title of the column
+	 * @param rowTitle title of the row
+	 * @param value value to be set
+	 * @return {@link TableCell} instance containing the cell data
+	 */
+	public TableCell addValue(String columnTitle, String rowTitle, Float value) {
+		return table.addValue(columnTitle, rowTitle, value);
 	}
 }
