@@ -8,6 +8,7 @@
       xmlns:p="http://jboss.com/products/seam/pdf"
       xmlns:s="http://jboss.com/products/seam/taglib">
 
+	<div class="form-content">
 	<table width="100%" style="border-collapse: collapse;"><tr><td colspan="2">
 
 	<s:decorate template="/layout/edit.xhtml" rendered="#{empty hideclassification}">
@@ -17,9 +18,49 @@
 		</h:selectOneMenu>
 	</s:decorate>
 
-	<div id="divcntxt" >
+	<div id="selcntxt">
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['manag.forecast.context']}:</ui:define>
+		<h:selectOneRadio id="cntxt" value="#{indicatorFilters.indicatorSite}" onclick="handleContextClick(this);">
+			<s:selectItems var="it" value="#{indicatorSites}" label="#{messages[it.key]}"  />
+			<s:convertEnum />
+		</h:selectOneRadio>
+	</s:decorate>
+	</div>
+
+<rich:jQuery name="hideContext" timing="onload" selector="#selcntxt input" query="each(function(){ handleContextClick(this); })" />
+<a:jsFunction name="updateContext" reRender="pnlcntxt" />
+<script type="text/javascript">
+function handleContextClick(comp) {
+	if (!comp.checked)
+		return;
+
+	if (!window.contInitialized) {
+		window.contInitialized = true;
+		tmp = 0;
+	}
+	else tmp = 500;
+	
+	if (comp.value == 'COUNTRY') {
+		jQuery('#divcntxt').hide(tmp);
+		return;
+	}
+	jQuery('#divcntxt').show(tmp);
+	if (tmp == 0)
+		return;
+	updateContext();
+}
+</script>
+	
+	<div id="divcntxt" style="display:none;">
 	<h:panelGroup id="pnlcntxt">
-	<s:decorate template="/layout/tbselection2.xhtml" >
+	<s:decorate template="/layout/auselection.xhtml" rendered="#{indicatorFilters.indicatorSite=='PATIENTADDRESS'}">
+		<ui:param name="auselection" value="#{indicatorFilters.tbunitselection.auselection}" />
+		<ui:param name="rerender" value="pnloutput" />
+	</s:decorate>
+
+	<!-- <s:decorate template="/layout/tbselection2.xhtml" rendered="#{indicatorFilters.indicatorSite=='TREATMENTSITE'}"> -->
+	<s:decorate template="/layout/tbselection.xhtml" rendered="#{indicatorFilters.indicatorSite=='TREATMENTSITE'}">
 		<ui:param name="tbunitselection" value="#{indicatorFilters.tbunitselection}" />
 		<ui:param name="unitlabel" value="#{messages['Tbunit.treatmentHealthUnit']}" />
 		<ui:param name="rerender" value="pnloutput" />
@@ -29,28 +70,45 @@
 	</div>
 
 	</td></tr>
-	<tr><td colspan="2">
+<!-- 	<tr><td colspan="2">
 
-	<div class="paragraph">#{messages['manag.ind.periodfilter']}</div>
+	<h2>#{messages['manag.ind.periodfilter']}</h2> 
 	
-	</td></tr>
-
+	</td></tr> -->
 	<tr><td>
-	<s:decorate template="/layout/edit.xhtml" >
+	<!--<h:selectBooleanCheckbox value="#{indicatorFilters.useRegistrationDate}" style="margin-left:20px;"/>#{messages['TbCase.registrationDate']}
+		<h:selectBooleanCheckbox value="#{indicatorFilters.useDiagnosisDate}" style="margin-left:20px;"/>#{messages['TbCase.diagnosisDate']}
+		<h:selectBooleanCheckbox value="#{indicatorFilters.useIniTreatmentDate}" style="margin-left:20px;"/>#{messages['TbCase.iniTreatmentDate']} -->
+	</td></tr>
+	<tr><td>
+	
+	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['global.inimonthyear']}:	</ui:define>
-		<h:selectOneMenu value="#{indicatorFilters.iniMonth}" style="margin-right:4px;">
+		<h:selectOneMenu value="#{indicatorFilters.iniMonth}" required="true" style="margin-right:4px;">
 			<f:selectItems value="#{months}"/>
 		</h:selectOneMenu>
-		<h:selectOneMenu value="#{indicatorFilters.iniYear}">
+		<h:selectOneMenu value="#{indicatorFilters.iniYear}" required="true">
 			<f:selectItems value="#{years}"/>
 		</h:selectOneMenu>
 	</s:decorate>
 
+	</td><td>
+
+<!--    <s:decorate template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['global.endmonthyear']}:	</ui:define>
+		<ui:param name="labelstyle" value="width:140px;" />
+		<h:selectOneMenu value="#{indicatorFilters.endMonth}" style="margin-right:4px;">
+			<f:selectItems value="#{months}"/>
+		</h:selectOneMenu>
+		<h:selectOneMenu value="#{indicatorFilters.endYear}">
+			<f:selectItems value="#{years}"/>
+		</h:selectOneMenu>
+	</s:decorate> -->	
+
 	</td></tr>
-	
 	<tr><td colspan="2">
 
-	<div class="paragraph">#{messages['manag.ind.otherfilters']}</div>
+	<h2>#{messages['manag.ind.otherfilters']}</h2>
 	
 	</td></tr>
 	<tr><td>
@@ -149,7 +207,7 @@
 	</td></tr>
 	<tr><td>
 
-	<s:decorate template="/layout/display.xhtml" rendered="#{indicator.useDiagnosisTypeFilter}">
+	<s:decorate template="/layout/edit.xhtml" rendered="#{indicator.useDiagnosisTypeFilter}">
 		<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
 		<h:selectOneMenu value="#{indicatorFilters.diagnosisType}">
 			<s:selectItems var="it" value="#{diagnosisTypes}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
@@ -158,7 +216,7 @@
 	</s:decorate>
 
 	</td><td>
-		<s:decorate template="/layout/display.xhtml">
+		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
     		<ui:param name="labelstyle" value="width:140px;" />
 			<h:selectOneMenu value="#{indicatorFilters.drugResistanceType}">
@@ -167,6 +225,17 @@
 			</h:selectOneMenu>
 		</s:decorate>
 	</td></tr>
+	<tr>
+		<td colspan="2">
+			<s:decorate template="/layout/edit.xhtml" >
+				<ui:define name="label">#{messages['HIVResult']}:</ui:define>
+				<h:selectOneMenu value="#{indicatorFilters.hivResult}">
+					<s:selectItems var="it" value="#{indicatorFilters.hivResults}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+					<s:convertEnum />
+				</h:selectOneMenu>
+			</s:decorate>
+		</td>
+	</tr>
 <s:fragment rendered="#{hideupdtbar == null}">
 	<tr><td colspan="2">
 		<div class="paragraph" >
@@ -185,17 +254,22 @@
 	
 	<ui:insert name="outputFilter" />
 	</h:panelGroup>
-	
-	</td>
-	<td align="right" >
-	<ui:include src="/layout/waitstatus.xhtml" />
-	<a:commandLink value="#{messages['form.update']}" reRender="indicator" styleClass="button" 
-		action="#{indicatorController.execute}"
-		onclick="this.disabled=true;" oncomplete="this.disabled=false;showpictype();"/>
-	<rich:jQuery name="showpictype" timing="onJScall" selector="#charttypediv" query="show(500)" />
-
 	</td></tr>
 </s:fragment>
 	</table>
+	</div>	
+	
+<div class="form-footer">
+		<div style="float:right;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>	
+	<a:commandLink reRender="indicator" styleClass="button" 
+		action="#{indicatorController.execute}"
+		onclick="if (!disableButton(this)) return false;" oncomplete="enableButton();showChart();">
+		<span>#{messages['form.update']}</span>
+	</a:commandLink>
+	<rich:jQuery name="showpictype" timing="onJScall" selector="#charttypediv" query="show(500)" />
+</div>
+
 
 </ui:composition>
