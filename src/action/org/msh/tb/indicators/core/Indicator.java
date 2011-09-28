@@ -15,7 +15,6 @@ import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.AgeRange;
 import org.msh.tb.indicators.core.IndicatorTable.TableCell;
-import org.msh.tb.na.entities.CaseDispensingNA;
 
 /**
  * Base class supporting TB/MDR-TB indicator generation
@@ -33,7 +32,6 @@ public abstract class Indicator extends CaseHQLBase {
 	private IndicatorTable table;
 
 	private IndicatorSeries series;
-	private List<CaseDispensingNA> dispensingList;
 	@In(create=true) EntityManager entityManager;
 	/**
 	 * Abstract method called to generate the indicators

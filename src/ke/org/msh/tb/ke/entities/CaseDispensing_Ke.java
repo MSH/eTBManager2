@@ -14,7 +14,6 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
-import org.msh.tb.entities.TbCase;
 
 @Entity
 @Table(name="casedispensing_ke")
