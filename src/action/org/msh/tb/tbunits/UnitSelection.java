@@ -227,9 +227,9 @@ public class UnitSelection {
 	public String getUnitCountText() {
 		int num = getUnitCount();
 		if (num == 0)
-			return messages.get("medicines.nounit");
+			return messages.get("meds.nounit");
 		else {
-			MessageFormat format = new MessageFormat(messages.get("medicines.unitsfound"));
+			MessageFormat format = new MessageFormat(messages.get("meds.unitsfound"));
 			Object[] vals = {Integer.toString(num)};
 			return format.format(vals);
 		}

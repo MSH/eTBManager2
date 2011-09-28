@@ -52,7 +52,8 @@ public class ErrorLogReport extends EntityQuery<ErrorLog> {
 		if ((searchkey != null) && (!searchkey.isEmpty())) {
 			return " where (exceptionClass like #{errorLogReport.searchkeyLike} or " +
 					"exceptionMessage like #{errorLogReport.searchkeyLike} or " +
-					"stackTrace like #{errorLogReport.searchkeyLike})";
+					"stackTrace like #{errorLogReport.searchkeyLike} or " +
+					"user like #{errorLogReport.searchkeyLike})";
 		}
 		else return "";
 	}

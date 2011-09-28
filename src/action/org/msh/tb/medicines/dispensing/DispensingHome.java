@@ -12,6 +12,7 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.Medicine;
@@ -210,6 +211,11 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 	 */
 	@Transactional
 	public boolean saveDispensing() {
+		if (medicines == null) {
+			FacesMessages.instance().add("No medicines selected for dispensing");
+			return false;
+		}
+
 		MedicineDispensing medicineDispensing = getInstance();
 		if (medicineDispensing.getDispensingDate() == null)
 			return false;

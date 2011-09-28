@@ -61,7 +61,7 @@
 				#{r.comments}
 			</h:column>
 
-			<h:column rendered="#{caseHome.canEditExams}">
+			<h:column rendered="#{caseHome.canEditExams and not printing}">
 				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamHIV(#{r.id});return false;" style="font-size:9px;">
 				</h:commandLink>
 			</h:column>			
@@ -133,7 +133,7 @@
 				#{r.comments}
 			</h:column>
 
-			<h:column rendered="#{caseHome.canEditExams}">
+			<h:column rendered="#{caseHome.canEditExams and not printing}">
 				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remexamMicroscopy(#{r.id});return false;" style="font-size:9px;">
 				</h:commandLink>
 			</h:column>			
@@ -207,7 +207,7 @@
 				#{r.comments}
 			</h:column>
 
-			<h:column rendered="#{caseHome.canEditExams}">
+			<h:column rendered="#{caseHome.canEditExams and not printing}">
 				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamCulture(#{r.id});return false;" style="font-size:9px;">
 				</h:commandLink>
 			</h:column>			
@@ -247,7 +247,7 @@
 			#{m.abbrevName}
 		</th>
 		</ui:repeat>
-		<s:fragment rendered="#{caseHome.canEditExams}">
+		<s:fragment rendered="#{caseHome.canEditExams and not printing}">
 		<th>
 		</th>
 		</s:fragment>
@@ -281,13 +281,12 @@
 			</td>
 			<ui:repeat value="#{r.results}" var="rs">
 			<td class="colcb" rowspan="#{empty r.examResult.comments?'1':'2'}">
-				<s:fragment  rendered="#{rs=='RESISTANT'}"><div class="dst-resistant" title="#{messages[rs.key]}" /></s:fragment>
-				<s:fragment  rendered="#{rs=='SUSCEPTIBLE'}"><div class="dst-susceptible" title="#{messages[rs.key]}" /></s:fragment>
-				<s:fragment  rendered="#{rs=='CONTAMINATED'}"><div class="dst-contaminated" title="#{messages[rs.key]}" /></s:fragment>
-				<h:outputText value="x" rendered="#{rs=='NOTDONE'}" title="#{messages[rs.key]}"/>
+				<s:decorate template="/layout/dstresult.xhtml">
+					<ui:param name="result" value="#{rs}" />
+				</s:decorate>
 			</td>
 			</ui:repeat>
-			<s:fragment rendered="#{caseHome.canEditExams}">
+			<s:fragment rendered="#{caseHome.canEditExams and not printing}">
 			<td class="colcb" rowspan="#{empty r.examResult.comments?'1':'2'}"  >
 				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamDST(#{r.examResult.id});return false;" style="font-size:9px">
 				</h:commandLink>
@@ -355,7 +354,7 @@
 				#{r.comments}
 			</h:column>
 
-			<h:column>
+			<h:column rendered="#{caseHome.canEditExams and not printing}">
 				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamXRay(#{r.id});return false;" style="font-size:9px;">
 				</h:commandLink>
 			</h:column>			
@@ -419,7 +418,7 @@
 				#{r.comments}
 			</h:column>
 
-			<h:column>
+			<h:column rendered="#{caseHome.canEditExams and not printing}">
 				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remMolecularBiology(#{r.id});return false;" style="font-size:9px;">
 				</h:commandLink>
 			</h:column>			

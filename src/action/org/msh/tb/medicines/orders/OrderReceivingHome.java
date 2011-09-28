@@ -143,47 +143,10 @@ public class OrderReceivingHome extends Controller {
 	 * Atualiza o total do recebimento pelo total dos lotes 
 	 */
 	public void updateBatchInfo() {
-//		Tbunit unit = order.getUnitFrom();
-		
 		for (OrderItem item: order.getItems()) {
 			int qtd = 0;
 			for (OrderBatch b: item.getBatches()) {
 				qtd += b.getReceivedQuantity();
-				
-/*				Batch bout = b.getBatch();
-				Batch bin;
-
-				// verifica se batch existe
-				List<BatchQuantity> lst = entityManager.createQuery("from BatchQuantity b " +
-						"join fetch b.batch bat " +
-						"where b.tbunit = :unit and b.batchNumber = :number " +
-						"and b.source = :source and b.medicine = :med")
-						.setParameter("unit", unit)
-						.setParameter("number", bout.getBatchNumber())
-						.setParameter("source", bout.getSource())
-						.setParameter("med", bout.getMedicine())
-						.getResultList();
-				if (lst.size() > 0) {
-					// grava lote no destino 
-					bin = lst.get(0);
-					bin.setQuantity(b.getReceivedQuantity() + bin.getQuantity());
-				}
-				else {
-					// cria lote de recebimento
-					bin = new Batch();
-					bin.copyFromBatch(bout);
-					bin.setTbunit(unit);
-					bin.setQuantity(b.getReceivedQuantity());
-					// zero because it's going to be updated during movement creation
-					bin.setRemainingQuantity(0);
-				}
-				bin.setTotalPrice(bout.getUnitPrice() * bin.getQuantity());
-				bin.setReservedQuantity(b.getReceivedQuantity());
-				
-				b.setBatchReceiving(bin);
-
-				entityManager.persist(bin);
-*/
 			}
 			
 			item.setReceivedQuantity(qtd);

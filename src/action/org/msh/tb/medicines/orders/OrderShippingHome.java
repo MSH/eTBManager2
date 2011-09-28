@@ -54,12 +54,18 @@ public class OrderShippingHome extends Controller {
 	 */
 	public String registerShipping() {
 		if (order.getShippingDate() == null) {
+			facesMessages.add("Shipping date cannot be null");
 			return "error";
 		}
 		
 		Date dt = order.getApprovingDate();
 		if (dt == null)
 			dt = order.getOrderDate();
+
+		if (dt == null) {
+			facesMessages.add("There is an error in this order. Order date and approvind date are both nulls");
+			return "error";
+		}
 
 		dt = DateUtils.getDatePart(dt);
 		

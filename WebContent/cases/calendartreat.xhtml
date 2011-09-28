@@ -44,9 +44,15 @@
 				</s:link>
 			</td>
 			<ui:repeat value="#{it.days}" var="d">
-			<td class="colcb #{d.notused?'inactive': (d.treated? 'highlight': '')}" > 
-				<h:outputText value="x" rendered="#{d.prescribed and not d.treated}" style="color:#d0d0d0;"/>
-				<s:div styleClass="icon-bullet" rendered="#{d.treated}" style="width:15px;"/>
+			<td class="colcb #{d.notused?'inactive': (d.treated? 'highlight': '')}" >
+				<s:fragment rendered="#{not printing}"> 
+					<h:outputText value="x" rendered="#{d.prescribed and not d.treated}" style="color:#d0d0d0;"/>
+					<s:div styleClass="icon-bullet" rendered="#{d.treated}" style="width:15px;" />
+				</s:fragment>
+				<s:fragment rendered="#{printing}">
+					<h:outputText value="x" rendered="#{d.treated}" />
+					<h:outputText value="." rendered="#{not d.treated and d.prescribed}" />
+				</s:fragment>
 			</td>
 			</ui:repeat>
 			<td align="center">

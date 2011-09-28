@@ -50,7 +50,7 @@
 
 	<h:panelGroup id="pnltreatment">
 
-		<rich:dropDownMenu style="width:auto;float:right;" rendered="#{(caseHome.canEditTreatment) and (tbcase.state!='TRANSFERRING')}" 
+		<rich:dropDownMenu style="width:auto;float:right;" rendered="#{(caseHome.canEditTreatment) and (tbcase.state!='TRANSFERRING') and not printing}" 
 			styleClass="dropdown-link" >
 			
 			<f:facet name="label">#{messages['form.options']}

@@ -61,7 +61,7 @@
 				#{r.comments}
 			</h:column>
 
-			<h:column rendered="#{caseHome.canEditExams}">
+			<h:column rendered="#{caseHome.canEditExams and not printing}">
 				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamHIV(#{r.id});return false;" style="font-size:9px;">
 				</h:commandLink>
 			</h:column>			

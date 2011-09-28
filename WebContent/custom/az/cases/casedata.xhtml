@@ -51,6 +51,11 @@
 	<h:panelGroup id="leftmenu" styleClass="vertical-menu">
 	<h:form class="vertical-menu">
 
+	<s:link view="/custom/az/reports/casedata.xhtml" target="_new">
+		<div class="print-icon"/>#{messages['global.print']}
+		<f:param name="id" value="#{caseHome.id}" />
+	</s:link>
+
 	<h:commandLink action="#{caseHome.remove}" 
 		onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" 
 		rendered="#{caseHome.canEditCaseData}">

@@ -195,12 +195,14 @@ public class OrderEstimation {
 		
 		if (unit.isMedicineSupplier()) {
 			List<Tbunit> lst = entityManager
-				.createQuery("from Tbunit u where u.secondLineSupplier.id = :id and u.secondLineSupplier != u")
+				.createQuery("from Tbunit u where u.secondLineSupplier.id = :id or u.secondLineSupplier != u")
 				.setParameter("id", unit.getId())
 				.getResultList();
 
-			for (Tbunit aux: lst)
-				mountTbList(aux);
+			for (Tbunit aux: lst) {
+				if (!units.contains(aux))
+					mountTbList(aux);
+			}
 		}
 	}
 	

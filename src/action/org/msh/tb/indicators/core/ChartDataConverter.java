@@ -27,7 +27,7 @@ public class ChartDataConverter implements Converter{
 
 	public String getAsString(FacesContext facesContext, UIComponent comp, Object obj) {
 		
-		if (!(obj instanceof IndicatorSeries))
+		if ((obj == null) || (!(obj instanceof IndicatorSeries)))
 			return null;
 		
 		IndicatorSeries series = (IndicatorSeries)obj;
@@ -39,7 +39,7 @@ public class ChartDataConverter implements Converter{
 		
 		UIParameter param = findParam(comp, "title");
 		String title;
-		if (param != null)
+		if ((param != null) && (param.getValue() != null))
 			 title = param.getValue().toString();
 		else title = "No title";
 	
@@ -54,49 +54,7 @@ public class ChartDataConverter implements Converter{
 		
 		String s = render.render();
 		return s;
-	
-/*		for (IndicatorItem item: series.getItems()) {
-			if (!dsc.isEmpty()) {
-				dsc = "," + dsc;
-				vals = vals + ",";
-			}
-			dsc = "\"" + item.getKey() + "\"" + dsc;
-			vals += "{\"right\":" + item.getValue() + "}";
-			
-			if (item.getValue() > max)
-				max = item.getValue();
-		}
-		
-		if (max > 10)
-			steps = Math.round(max / 5) + 1;
-		
-		return "{ " +
-		  "\"title\":{ \"text\":\"" + title + "\",  \"style\":\"{font-size: 18px; font-family: Verdana; text-align: center;}\"	  }, " +
-		  "\"elements\":[   {     \"type\":      \"hbar\",     \"tip\":       \"#val#\", " + 
-		     " \"colour\":    \"#3D829D\", " + 
-		     " \"text\":      \"" + messages.get("manag.forecast.numcasesreg") + "\", " + 
-		     " \"font-size\": 12, " + 
-		    "  \"values\" :   [" + vals + "] " + 
-		   " } " + 
-		  "], " + 
-		  "\"x_axis\":{ " +
-		    "\"grid-colour\": \"#c0c0c0\"," + 
-		    "\"min\":    0, " + 
-		    "\"max\":    " + max + ", " + 
-		    "\"offset\": false, " +
-		    "\"steps\": " + steps +  
-		  "}, " + 
-		  "\"y_axis\":{ " + 
-		    "\"grid-colour\": \"#c0c0c0\"," + 
-		    "\"offset\":      true, " + 
-		    "\"labels\": [" + dsc + "] " + 
-		  "}, " + 
-		  "\"bg_colour\": \"#fafcfa\", " + 
-		  "\"tooltip\":{ " + 
-		   " \"mouse\": 1 " + 
-		  "} " + 
-		"};";
-*/	}
+	}
 
 	public UIParameter findParam(UIComponent comp, String pname) {
 		for (UIComponent c: comp.getChildren()) {

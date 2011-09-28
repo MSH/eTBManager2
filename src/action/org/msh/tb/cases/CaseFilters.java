@@ -6,11 +6,11 @@ import java.util.Date;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Synchronized;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.entities.AdministrativeUnit;
@@ -37,9 +37,10 @@ import org.msh.utils.date.DateUtils;
 @Name("caseFilters")
 @Scope(ScopeType.SESSION)
 @Synchronized(timeout=10000L)
+@BypassInterceptors
 public class CaseFilters {
 
-	@In(create=true) Workspace defaultWorkspace;
+	private Workspace defaultWorkspace;
 	
 	private String name;
 	private String middleName;
@@ -651,13 +652,13 @@ public class CaseFilters {
 //		if (defaultWorkspace == null)
 //			defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace");
 		
-		if ((defaultWorkspace == null) || (DisplayCaseNumber.REGISTRATION_CODE.equals(defaultWorkspace.getDisplayCaseNumber())))
+		if (DisplayCaseNumber.REGISTRATION_CODE.equals(getDefaultWorkspace().getDisplayCaseNumber()))
 			return null;
 
 		return getNumberFromString(recordNumber, 0);
 	}
 
-	
+
 	/**
 	 * If patient search number is by its registration code, then return the record number given by the user
 	 * @return
@@ -666,7 +667,7 @@ public class CaseFilters {
 //		if (defaultWorkspace == null)
 //			defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace");
 
-		if (DisplayCaseNumber.REGISTRATION_CODE.equals(defaultWorkspace.getDisplayCaseNumber()))
+		if (DisplayCaseNumber.REGISTRATION_CODE.equals(getDefaultWorkspace().getDisplayCaseNumber()))
 			 return recordNumber;
 		else return (getNumberFromString(recordNumber, 0) != null? null: recordNumber);
 	}
@@ -678,7 +679,7 @@ public class CaseFilters {
 	 * @return
 	 */
 	public Integer getCaseNumber() {
-		if ((isRecordNumberEmpty()) || (DisplayCaseNumber.REGISTRATION_CODE.equals(defaultWorkspace.getDisplayCaseNumber())))
+		if ((isRecordNumberEmpty()) || (DisplayCaseNumber.REGISTRATION_CODE.equals(getDefaultWorkspace().getDisplayCaseNumber())))
 			return null;
 
 		return getNumberFromString(recordNumber, 1);
@@ -780,14 +781,12 @@ public class CaseFilters {
 	public void setUnitRegCode(String unitRegCode) {
 		this.unitRegCode = unitRegCode;
 	}
-		
-/*	public String getRegistrationCode() {
-		return registrationCode;
-	}
 
-	public void setRegistrationCode(String registrationCode) {
-		this.registrationCode = registrationCode;
+	
+	public Workspace getDefaultWorkspace() {
+		if (defaultWorkspace == null)
+			defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace");
+		return defaultWorkspace;
 	}
-*/	
 	
 }
