@@ -95,7 +95,7 @@
 
 	<target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="false" debuglevel="${debuglevel}" destdir="${build-classes}" source="${source}" target="${target}" encoding="8859_1">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="${build-classes}" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/model"/>
             <src path="src/action"/>
             <src path="src/${country-folder}"/>

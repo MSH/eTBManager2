@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.End;
-import org.msh.tb.EntityHomeEx;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.cases.WsEntityHome;
 import org.msh.tb.entities.CaseData;
 import org.msh.tb.entities.TbCase;
 
 
-public class ExamHome<E> extends EntityHomeEx<E> {
+public class ExamHome<E> extends WsEntityHome<E> {
 	private static final long serialVersionUID = -3507272066511042267L;
 	
 	private boolean lastResult = true;

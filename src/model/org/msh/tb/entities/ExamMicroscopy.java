@@ -2,7 +2,12 @@ package org.msh.tb.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 import org.msh.tb.entities.enums.MicroscopyResult;
@@ -10,6 +15,9 @@ import org.msh.tb.entities.enums.SampleType;
 
 @Entity
 @Table(name="exammicroscopy")
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="DISCRIMINATOR", discriminatorType=DiscriminatorType.STRING)
+@DiscriminatorValue("gen")
 public class ExamMicroscopy extends LaboratoryExamResult implements Serializable {
 	private static final long serialVersionUID = 1514632458011926044L;
 

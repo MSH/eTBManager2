@@ -51,7 +51,7 @@ public class CaseDispensingUIHome extends AbstractDispensigUIHome {
 	protected void createCaseList() {
 		// load list of cases
 		String hql = "from TbCase c join fetch c.patient p " +
-				"join fetch c.regimen " +
+				"left join fetch c.regimen " +
 				"where c.treatmentUnit.id = #{userSession.tbunit.id} " +
 				"and c.state = :st";
 		

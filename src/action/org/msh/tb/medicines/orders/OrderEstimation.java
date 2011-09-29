@@ -35,6 +35,7 @@ public class OrderEstimation {
 	
 	private List<PrescribedMedicine> prescmeds;
 	private List<Tbunit> units;
+	private List<Tbunit> checkedUnits;
 	private Date iniDate;
 	private Date endDate;
 
@@ -157,6 +158,7 @@ public class OrderEstimation {
 	protected void loadPrescribedMedicines() {
 		Order order = orderHome.getInstance();
 		units = new ArrayList<Tbunit>();
+		checkedUnits = new ArrayList<Tbunit>();
 		mountTbList(order.getUnitFrom());		
 		
 		if (units.size() == 0)
@@ -190,17 +192,18 @@ public class OrderEstimation {
 	 * @param unit
 	 */
 	protected void mountTbList(Tbunit unit) {
+		checkedUnits.add(unit);
 		if (unit.isTreatmentHealthUnit())
 			units.add(unit);
 		
 		if (unit.isMedicineSupplier()) {
 			List<Tbunit> lst = entityManager
-				.createQuery("from Tbunit u where u.secondLineSupplier.id = :id or u.secondLineSupplier != u")
+				.createQuery("from Tbunit u where u.secondLineSupplier.id = :id and u.secondLineSupplier.id != u.id")
 				.setParameter("id", unit.getId())
 				.getResultList();
 
 			for (Tbunit aux: lst) {
-				if (!units.contains(aux))
+				if (!checkedUnits.contains(aux))
 					mountTbList(aux);
 			}
 		}

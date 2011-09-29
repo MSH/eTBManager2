@@ -10,6 +10,7 @@
       template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.exammicroscopy']}" /><ui:param name="left" value="0" />
+<ui:param name="labelstyle" value="width:200px" />
 
 <ui:param name="topmenu" value="0" />
 <ui:param name="examHome" value="#{examMicroscopyHome}" />
@@ -42,9 +43,14 @@
     </s:decorate>
     </div>
 
-    <s:decorate template="/layout/labselection.xhtml" >
-    	<ui:param name="required" value="false" />
-    	<ui:param name="labselection" value="#{examHome.labselection}" />
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Laboratory']}:</ui:define>
+    	<h:inputText value="#{examHome.instance.laboratoryName}" maxlength="100" style="width:300px;"/>
+    </s:decorate>
+
+    <s:decorate template="/layout/auselection.xhtml" >
+    	<ui:param name="required" value="true" />
+    	<ui:param name="auselection" value="#{examMicroscopyHomeBR.auselection}" />
     </s:decorate>
 
     </td></tr>
@@ -83,15 +89,13 @@
     	<h:inputText value="#{examMicroscopy.comments}" maxlength="200" style="width:350px;"/>
     </s:decorate>
 
-	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
-
 	</div>
 	
 	<div class="form-footer">
 		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandLink action="#{examMicroscopyHome.persist}" styleClass="button" reRender="formexam,messages" 
+            <a:commandLink action="#{examMicroscopyHomeBR.persist}" styleClass="button" reRender="formexam,messages" 
             	onclick="if (!disableButton(this)) return false;" >
             	<span>#{messages['form.save']}</span>
             </a:commandLink>
