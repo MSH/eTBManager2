@@ -1,9 +1,14 @@
 package org.msh.tb.indicators.core;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import javax.faces.model.SelectItem;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
@@ -58,8 +63,12 @@ public class IndicatorFilters {
 	private DrugResistanceType drugResistanceType;
 	private DiagnosisType diagnosisType;
 	private ValidationState validationState = ValidationState.VALIDATED;
-	
+	private int interimMonths;
 	private HIVResult hivResult;
+	private List<SelectItem> lstInterimMonths;
+
+
+	
 
 	@Observer("change-workspace")
 	public void initializeFilters() {
@@ -480,4 +489,26 @@ public class IndicatorFilters {
 	public void setHivResult(HIVResult hivResult) {
 		this.hivResult = hivResult;
 	}
+	
+	public int getInterimMonths(){
+		return interimMonths;
+	}
+	
+	public void setInterimMonths(int interimMonths){
+		this.interimMonths = interimMonths;
+	}
+
+	@Factory("interimMonths")
+	public List<SelectItem> getLstInterimMonths() {
+		lstInterimMonths = new ArrayList<SelectItem>();
+		
+		for(int i = 1; i<=24; i++){
+		SelectItem item = new SelectItem();
+		item.setValue(i);
+		item.setLabel(Integer.toString(i));
+		lstInterimMonths.add(item);
+		}
+		return lstInterimMonths;
+	}
+	
 }
