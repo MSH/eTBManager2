@@ -31,6 +31,7 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 <h:form styleClass="form1">
+	<ui:param name="hideinterimmonth" value="true" />
 	<ui:include src="filters.xhtml" >
 		<ui:param name="showoutputselection" value="true" />
 	</ui:include>
