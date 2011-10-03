@@ -9,6 +9,7 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.CultureResult;
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.indicators.core.Indicator2D;
+import org.msh.tb.indicators.core.IndicatorFilters;
 import org.msh.utils.date.DateUtils;
 
 
@@ -79,7 +80,9 @@ public class InterimOutcomeIndicator extends Indicator2D {
 	 * @param dtCult
 	 * @param dtMicro
 	 */
-	protected void addValue(Date dtIniTreat, CaseState state, Date dtCult, Date dtMicro) {		
+	protected void addValue(Date dtIniTreat, CaseState state, Date dtCult, Date dtMicro) {	
+		IndicatorFilters filters = getIndicatorFilters();
+		int intrMonths = filters.getInterimMonths();
 		String row = Integer.toString(numcases);
 
 		if (state == CaseState.DIED) {
@@ -101,7 +104,7 @@ public class InterimOutcomeIndicator extends Indicator2D {
 			if ((dtCult != null) && (dtMicro != null)) {
 				int m1 = DateUtils.monthsBetween(dtIniTreat, dtCult);
 				int m2 = DateUtils.monthsBetween(dtIniTreat, dtMicro);
-				negative = (m1 <= 6) && (m2 <= 6);
+				negative = (m1 <= intrMonths) && (m2 <= intrMonths);
 			}
 			
 			if (negative)
