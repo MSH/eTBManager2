@@ -31,6 +31,7 @@
 <h:form styleClass="form1">
 <table width="100%">
 <tr><td>
+	<ui:param name="showoutputselection" value="true" />
 	<ui:include src="filters.xhtml" />
 
 </td></tr>
@@ -45,7 +46,8 @@
 				#{messages['manag.ind.interim.starttreat']}
 			</th>
 			<th colspan="3">
-				#{messages['manag.ind.interim.title1']}
+				<!-- #{messages['manag.ind.interim.title1']} -->
+				#{messages['manag.ind.interim.title1_part1']} #{indicatorFilters.interimMonths} #{messages['manag.ind.interim.title1_part2']}
 			</th>
 			<th colspan="2">
 				#{messages['manag.ind.interim.title2']}
