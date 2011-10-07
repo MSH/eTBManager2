@@ -91,16 +91,15 @@
     	</h:selectOneMenu>
 	</s:decorate> 
 	
-	<rich:jQuery selector="#dotIntPhaseBy" query="change(function(){showDotProvIntPhase(this); })" />
-	
-	
-   
 	<div id="dotProvIntPhase">
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.dotintprovider']}:</ui:define>
     	<h:inputText value="#{medicalExaminationNA.dotProvName}" style=" width : 340px;" maxlength="100"/>
     </s:decorate>
     </div>
+    
+    <rich:jQuery selector="#dotIntPhaseBy" query="change(function(){showDotProvIntPhase(this,'#dotProvIntPhase'); })" />
+	<rich:jQuery selector="#dotIntPhaseBy:not(:selected)" query="each(function(){jQuery('#dotProvIntPhase').hide();})" />
     
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['MedicalExamination.dotduringcontphase']}:</ui:define>
@@ -110,8 +109,6 @@
     	</h:selectOneMenu>
 	</s:decorate>     
 	
-	<rich:jQuery selector="#dotContPhaseBy" query="change(function(){showDotProvContPhase(this); })" />   
-
 	<div id="dotProvContPhase">
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.dotcontprovider']}:</ui:define>
@@ -119,12 +116,15 @@
     </s:decorate>
     </div>
     
+    <rich:jQuery selector="#dotContPhaseBy" query="change(function(){showDotProvContPhase(this,'#dotProvContPhase'); })" />
+    <rich:jQuery selector="#dotContPhaseBy:not(:selected)" query="each(function(){jQuery('#dotProvContPhase').hide();})" />
+    
         <script type="text/javascript">
     <!--
-    	function showDotProvIntPhase(cb) {
+    	function showDotProvIntPhase(cb, dotProvIntPhase) {
     	  if (isDotIntPhase(cb))
-    	  	jQuery('#dotProvIntPhase').show(500);
-    	  else jQuery('#dotProvIntPhase').hide(500);
+    	  	jQuery(dotProvIntPhase).show(500);
+    	  else jQuery(dotProvIntPhase).hide(500);
     	}
  	   function isDotIntPhase(cb) {
  	   return (cb.options[cb.selectedIndex].value == 'SELF_ADMIN');
@@ -132,10 +132,10 @@
    	 function isDotContPhase(cb) {
       	   return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'SELF_ADMIN'));
       	}
-  	  function showDotProvContPhase(cb) {
+  	  function showDotProvContPhase(cb, dotProvContPhase) {
   	  if (isDotContPhase(cb))
-  	  	jQuery('#dotProvContPhase').show(500);
-  	  else jQuery('#dotProvContPhase').hide(500);
+  	  	jQuery(dotProvContPhase).show(500);
+  	  else jQuery(dotProvContPhase).hide(500);
   	}
     -->
     </script>
