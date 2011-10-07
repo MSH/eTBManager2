@@ -7,8 +7,12 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+
+import org.apache.commons.beanutils.PropertyUtils;
+import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
@@ -16,6 +20,7 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.entities.AgeRange;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.Source;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.DrugResistanceType;
@@ -66,9 +71,21 @@ public class IndicatorFilters {
 	private int interimMonths;
 	private HIVResult hivResult;
 	private List<SelectItem> lstInterimMonths;
-
-
-	
+	private PatientType patTypFirstTreat;
+	private final static PatientType[] patTypFirstTreatArr = {
+		PatientType.NEW,
+		PatientType.TRANSFER_IN,
+		PatientType.ALL_RETREATMENT,
+		};
+	private PatientType patTypReTreat;
+	private final static PatientType[] patTypReTreatArr = {
+		PatientType.RELAPSE,
+		PatientType.AFTER_DEFAULT,
+		PatientType.FAILURE_FT,
+		PatientType.FAILURE_RT,
+		PatientType.OTHER,
+		};
+	@In(required=false) Workspace defaultWorkspace;
 
 	@Observer("change-workspace")
 	public void initializeFilters() {
@@ -87,7 +104,7 @@ public class IndicatorFilters {
 		drugResistanceType = null;
 	}
 
-
+	
 	/**
 	 * Return the initial date based on the initial month and year
 	 * @return
@@ -192,10 +209,10 @@ public class IndicatorFilters {
 	/**
 	 * @return the infectionSite
 	 */
+
 	public InfectionSite getInfectionSite() {
 		return infectionSite;
-	}
-	
+	}	
 	/**
 	 * @return the gender
 	 */
@@ -511,4 +528,52 @@ public class IndicatorFilters {
 		return lstInterimMonths;
 	}
 	
+	@Factory("patTypFirstTreatArr")
+	public PatientType[] getPatTypFirstTreatArr() {
+		//return patientTypIncidenceRep;
+		return getComponentValueWorkspace("patTypFirstTreatArr", PatientType[].class, patTypFirstTreatArr);
+	}
+
+	@Factory("patTypReTreatArr")
+	public PatientType[] getPatTypReTreatArr() {
+		return getComponentValueWorkspace("patTypReTreatArr", PatientType[].class, patTypReTreatArr);
+	}
+	/**
+	 * Return a value of a property of a component called enumList + workspace extension
+	 * @param <E>
+	 * @param propertyName
+	 * @param type
+	 * @param result
+	 * @return
+	 */
+	protected <E> E getComponentValueWorkspace(String propertyName, Class<E> type, Object result) {
+		if ((defaultWorkspace == null) || (defaultWorkspace.getExtension() == null))
+			return (E)result;
+		
+		String s = "globalLists_" + defaultWorkspace.getExtension();
+		Object obj = Component.getInstance(s, true);
+		
+		try {
+			E val = (E)PropertyUtils.getProperty(obj, propertyName);
+			return (val == null? (E)result: val);
+		} catch (Exception e) {
+			return (E)result;
+		}
+	}
+
+	public PatientType getPatTypFirstTreat() {
+		return patTypFirstTreat;
+	}
+
+	public void setPatTypFirstTreat(PatientType patTypFirstTreat) {
+		this.patTypFirstTreat = patTypFirstTreat;
+	}
+
+	public PatientType getPatTypReTreat() {
+		return patTypReTreat;
+	}
+
+	public void setPatTypReTreat(PatientType patTypReTreat) {
+		this.patTypReTreat = patTypReTreat;
+	}
 }
