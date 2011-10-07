@@ -23,7 +23,10 @@ public enum PatientType {
 // Ukraine
 	FAILURE,
 // Uzbekistan
-	ANOTHER_TB;
+	ANOTHER_TB,
+	
+// Generic - Incidence Report
+	ALL_RETREATMENT;
 
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
