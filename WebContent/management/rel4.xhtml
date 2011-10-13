@@ -26,12 +26,8 @@
 <h:form id="main">
 <table width="100%">
 <tr><td>
-	<s:decorate id="ds" template="/layout/edit.xhtml">
-		<ui:define name="label">#{messages['admin.tbunits.medsuppliers']}:</ui:define>
-		<h:selectOneMenu id="ds" value="#{reportSelection.tbunit}">
-            <s:selectItems value="#{medicineSuppliers}" var="it" label="#{it.name}"  noSelectionLabel="-"/>
-            <s:convertEntity />
-		</h:selectOneMenu>
+	<s:decorate template="/layout/tbselection.xhtml">
+		<ui:param name="tbunitselection" value="#{orderLeadTimeReport.unitSelection}" />
 	</s:decorate>
 
 	<s:decorate id="ini" template="/layout/edit.xhtml" >

@@ -73,7 +73,7 @@ public class Batch implements Serializable {
 		if (!(obj instanceof Batch))
 			return false;
 		
-		return (((id==null) || (((Batch)obj).getId() != null)? false: ((Batch)obj).id.equals(id)));
+		return (((id==null) || (((Batch)obj).getId() == null)? false: ((Batch)obj).id.equals(id)));
 	}
 	
 	/**

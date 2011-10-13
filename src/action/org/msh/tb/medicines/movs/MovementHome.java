@@ -409,7 +409,7 @@ public class MovementHome {
 			.getResultList();
 
 		if (lst.size() > 0)
-			throw new MovementException(batch, MessageFormat.format(Messages.instance().get("MovementException.NEGATIVE_STOCK"), batch.getBatchNumber(), LocaleDateConverter.getDisplayDate(lst.get(0), false)));
+			throw new MovementException(batch, MessageFormat.format(Messages.instance().get("MovementException.NEGATIVE_STOCK"), batch.getBatchNumber(), LocaleDateConverter.getDisplayDate(date, false)));
 	}
 	
 
@@ -438,8 +438,8 @@ public class MovementHome {
 			{
 				for (BatchMovement bm: mov.getBatches()) {
 					if (bm.getBatch().equals(batch)) {
-						qtd += mov.getQuantity() * (-mov.getOper());
-						price += mov.getTotalPrice() * (-mov.getOper());
+						qtd += bm.getQuantity() * (-mov.getOper());
+						price += bm.getTotalPrice() * (-mov.getOper());
 						if ((dtrem == null) || (dtrem.after(mov.getDate())))
 							dtrem = mov.getDate();
 					}

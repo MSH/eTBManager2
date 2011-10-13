@@ -186,7 +186,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		}
 		
 		if (DisplayCaseNumber.REGISTRATION_CODE.equals(getDefaultWorkspace().getDisplayCaseNumber())) {
-			if (caseFilters.getRecordNumber() != null)
+			if ((caseFilters.getRecordNumber() != null) && (!caseFilters.getRecordNumber().isEmpty()))
 				addCondition("c.registrationCode = #{casesFilter.recordNumber}");
 		}
 	}

@@ -5,47 +5,23 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
+import org.msh.tb.tbunits.TBUnitFilter;
+import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.date.DateUtils;
 
 
 @Name("orderLeadTimeReport")
+@Scope(ScopeType.CONVERSATION)
 public class OrderLeadTimeReport {
 
 	@In(create=true) ReportSelection reportSelection;
 	@In(create=true) EntityManager entityManager;
-
-	/**
-	 * @author Ricardo
-	 * Class to store order event info
-	 */
-	public class OrderEvent {
-		private int numOrders;
-		private int numDays;
-
-		public void addOrder(long numDays) {
-			this.numDays += numDays;
-			numOrders++;
-		}
-		public int getNumDays() {
-			return numDays;
-		}
-		public void setNumDays(int numDays) {
-			this.numDays = numDays;
-		}
-		public int getAverageDays() {
-			if (numOrders > 0)
-				 return numDays / numOrders;
-			else return 0;
-		}
-		public int getNumOrders() {
-			return numOrders;
-		}
-		public void setNumOrders(int numOrders) {
-			this.numOrders = numOrders;
-		}
-	}
+	
+	private TBUnitSelection unitSelection;
 
 	private OrderEvent authorizing;
 	private OrderEvent shipping;
@@ -64,15 +40,18 @@ public class OrderLeadTimeReport {
 		shipping = new OrderEvent();
 		receiving = new OrderEvent();
 
-		String s;
-		if (reportSelection.getTbunit() != null)
-			 s = " and d.unitTo.id = " + reportSelection.getTbunit().getId();
-		else s = "";
-		
+		String s = "";
+		if (unitSelection != null) {
+			if (unitSelection.getTbunit() != null)
+				s = " and d.unitTo.id = " + unitSelection.getTbunit().getId();
+			else
+			if (unitSelection.getAdminUnit() != null)
+				s = " and d.unitTo.adminUnit.code like '" + unitSelection.getAdminUnit().getCode() + "%'";
+		}
+
 		String hql = "select d.orderDate, d.approvingDate, d.shippingDate, d.receivingDate " + 
 					"from Order d " +
-					"where d.approvingDate is not null" + s +
-					" and d.orderDate between :dt1 and :dt2 " +
+					"where d.orderDate between :dt1 and :dt2 " + s +
 					"and d.unitFrom.workspace.id = #{defaultWorkspace.id}";
 		List<Object[]> orders = entityManager.createQuery(hql)
 				.setParameter("dt1", reportSelection.getIniDate())
@@ -87,10 +66,16 @@ public class OrderLeadTimeReport {
 			Date receivingDate = (Date)ord[3];
 			
 			//calculate authorizing
-			authorizing.addOrder(DateUtils.daysBetween(orderDate, approvingDate));
-			
-			if (shippingDate != null)
-				shipping.addOrder(DateUtils.daysBetween(approvingDate, shippingDate));
+			if (approvingDate != null) {
+				authorizing.addOrder(DateUtils.daysBetween(orderDate, approvingDate));
+				
+				if (shippingDate != null)
+					shipping.addOrder(DateUtils.daysBetween(approvingDate, shippingDate));
+			}
+			else {
+				if (shippingDate != null)
+					shipping.addOrder(DateUtils.daysBetween(orderDate, shippingDate));
+			}
 			
 			if (receivingDate != null)
 				receiving.addOrder(DateUtils.daysBetween(shippingDate, receivingDate));
@@ -124,4 +109,46 @@ public class OrderLeadTimeReport {
 	public boolean isExecuting() {
 		return executing;
 	}
+
+	/**
+	 * @return the unitSelection
+	 */
+	public TBUnitSelection getUnitSelection() {
+		if (unitSelection == null)
+			unitSelection = new TBUnitSelection(true, TBUnitFilter.MEDICINE_SUPPLIERS);
+		return unitSelection;
+	}
+
+
+	/**
+	 * @author Ricardo
+	 * Class to store order event info
+	 */
+	public class OrderEvent {
+		private int numOrders;
+		private int numDays;
+
+		public void addOrder(long numDays) {
+			this.numDays += numDays;
+			numOrders++;
+		}
+		public int getNumDays() {
+			return numDays;
+		}
+		public void setNumDays(int numDays) {
+			this.numDays = numDays;
+		}
+		public int getAverageDays() {
+			if (numOrders > 0)
+				 return numDays / numOrders;
+			else return 0;
+		}
+		public int getNumOrders() {
+			return numOrders;
+		}
+		public void setNumOrders(int numOrders) {
+			this.numOrders = numOrders;
+		}
+	}
+
 }
