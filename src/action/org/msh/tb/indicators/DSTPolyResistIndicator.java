@@ -46,8 +46,8 @@ public class DSTPolyResistIndicator extends Indicator2D {
 		
 		String[] message = new String[5];
 		newp 		= getMessage("manag.ind.dstprofile.nevertreated");
-		newPer 		= getMessage("manag.ind.dstprofile.prevtreated");
-		oldp 		= getMessage("manag.ind.dstprofile.nevertreatedpercent");
+		newPer 		= getMessage("manag.ind.dstprofile.nevertreatedpercent");
+		oldp 		= getMessage("manag.ind.dstprofile.prevtreated");
 		oldPer 		= getMessage("manag.ind.dstprofile.prevtreatedpercent");
 		total 		= getMessage("global.total");
 		medicine 	= "";
@@ -126,11 +126,12 @@ public class DSTPolyResistIndicator extends Indicator2D {
 		
 		IndicatorTable table = getTable();
 		table.addColumn(newp, null);
-		table.addColumn(oldp, null);
+		//table.addColumn(oldp, null);
 
 		TableColumn newPercent = table.addColumn(newPer, null);
 		newPercent.setHighlight(true);
 		
+		table.addColumn(oldp, null);
 		TableColumn oldPercent = table.addColumn(oldPer, null);
 		oldPercent.setHighlight(true);
 		
