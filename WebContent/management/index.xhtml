@@ -42,7 +42,8 @@
 	<s:link view="/management/resist.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
 		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.resist']}
 	</s:link>
-	<s:link view="/management/dstprofile.xhtml" rendered="false" >
+	<!-- enbling DST Resistance profile -->
+	<s:link view="/management/dstprofile.xhtml" rendered="#{s:hasRole('INDICATORS')}">
 		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.dstprofile']}
 	</s:link>
 
