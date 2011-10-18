@@ -58,8 +58,8 @@ public abstract class ResistProfileIndicatorBase extends Indicator2D {
 	protected void createIndicators() {
 		
 		newp 		= getMessage("manag.ind.dstprofile.nevertreated");
-		newPer 		= getMessage("manag.ind.dstprofile.prevtreated");
-		oldp 		= getMessage("manag.ind.dstprofile.nevertreatedpercent");
+		newPer 		= getMessage("manag.ind.dstprofile.nevertreatedpercent");
+		oldp 		= getMessage("manag.ind.dstprofile.prevtreated");
 		oldPer 		= getMessage("manag.ind.dstprofile.prevtreatedpercent");
 		total 		= getMessage("global.total");
 		medicine 	= "";
@@ -68,11 +68,12 @@ public abstract class ResistProfileIndicatorBase extends Indicator2D {
 		
 		IndicatorTable table = getTable();
 		table.addColumn(newp, null);
-		table.addColumn(oldp, null);
+		//table.addColumn(oldp, null);
 
 		TableColumn newPercent = table.addColumn(newPer, null);
 		newPercent.setHighlight(true);
 		
+		table.addColumn(oldp, null);
 		TableColumn oldPercent = table.addColumn(oldPer, null);
 		oldPercent.setHighlight(true);
 		
@@ -81,14 +82,17 @@ public abstract class ResistProfileIndicatorBase extends Indicator2D {
 		
 		String resistLabel = getResistLabel();
 		
+		
 		for (int i = 0; i < result.size(); i++) {
 			Object[] object = (Object[]) result.get(i);
 			addValue(newp, getResistLabel()+ " " + object[0].toString(), ((BigDecimal) object[1]).floatValue());
-			addValue(oldp, resistLabel+ " " + object[0].toString(), ((BigDecimal) object[3]).floatValue());
+			//addValue(oldp, resistLabel+ " " + object[0].toString(), ((BigDecimal) object[3]).floatValue());
 			addValue(newPer, resistLabel+ " " + object[0].toString(), ((BigDecimal) object[2]).floatValue());
+			addValue(oldp, resistLabel+ " " + object[0].toString(), ((BigDecimal) object[3]).floatValue());
 			addValue(oldPer, resistLabel+ " " + object[0].toString(), ((BigDecimal) object[4]).floatValue());
 			addValue(total, resistLabel+ " " + object[0].toString(), ((BigInteger) object[5]).floatValue());
-		}		
+		}	
+		
 	}
 	
 	
