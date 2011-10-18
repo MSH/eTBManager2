@@ -32,12 +32,14 @@
 
 
 <ui:define name="content">
-<h:form>
-<table style="border:2px solid #f0f0f0;" width="100%" align="left" cellspacing="4" cellpadding="4">
-<tr><td bgcolor="#f8f8f8">
+<h1>#{title}</h1>
+<h:form styleClass="form1">
+	<ui:param name="hideinterimmonth" value="true" />
 	<ui:include src="filters.xhtml" />
-
-</td></tr>
+	
+	<table width="100%" cellspacing="4" cellpadding="4">
+	<tr><td align="center" colspan="2">
+	</td></tr>
 
 <tr><td align="left">
 <h:panelGroup id="indicator">
@@ -106,7 +108,7 @@
 			
 		</tr>
 		</ui:repeat>
-		<tr>
+	<!-- 	<tr>
 			<td class="colb" bgcolor="#DBFADC">
 				<b>#{messages['global.total']}</b>
 			</td>
@@ -119,7 +121,7 @@
 				</b>
 			</td>
 		</ui:repeat>
-		</tr>
+		</tr> -->
 
 	</table>
 	
@@ -152,7 +154,7 @@
 			
 		</tr>		
 		</ui:repeat>
-		<tr>
+	<!-- 	<tr>
 			<td class="colb" bgcolor="#DBFADC">
 				<b>#{messages['global.total']}</b>
 			</td>
@@ -165,7 +167,7 @@
 				</b>
 			</td>
 		</ui:repeat>
-		</tr>
+		</tr> -->
 	</table>
 	
 		<div class="paragraph">
@@ -197,7 +199,7 @@
 			
 		</tr>		
 		</ui:repeat>
-		<tr>
+	<!-- 	<tr>
 			<td class="colb" bgcolor="#DBFADC">
 				<b>#{messages['global.total']}</b>
 			</td>
@@ -210,16 +212,14 @@
 				</b>
 			</td>
 		</ui:repeat>
-		</tr>
+		</tr> -->
 	</table>
 	</s:fragment>
 
 </h:panelGroup>
 
 </td></tr>
-
 </table>
-
 
 </h:form>
 </ui:define>
