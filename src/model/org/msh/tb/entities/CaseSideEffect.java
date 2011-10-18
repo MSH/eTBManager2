@@ -60,6 +60,8 @@ public class CaseSideEffect {
 	@JoinColumn(name="SUBSTANCE2_ID")
 	private Substance substance2;
 
+	@Column(length=100)
+	private String otherAdverseEffect;
 	
 	/**
 	 * @return the resolved
@@ -171,5 +173,19 @@ public class CaseSideEffect {
 	 */
 	public void setSubstance2(Substance substance2) {
 		this.substance2 = substance2;
+	}
+	
+	/**
+	 * @return the otherAdverseEffect
+	 */
+	public String getOtherAdverseEffect() {
+		return otherAdverseEffect;
+	}
+
+	/**
+	 * @param otherAdverseEffect the otherAdverseEffect to set
+	 */
+	public void setOtherAdverseEffect(String otherAdverseEffect) {
+		this.otherAdverseEffect = otherAdverseEffect;
 	}
 }
