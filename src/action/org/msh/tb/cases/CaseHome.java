@@ -282,6 +282,10 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		return checkRoleBySuffix("CASE_ADDINFO_EDT") && isWorkingUnit();
 	}
 	
+	public boolean isCanAddComments() {
+		return checkRoleBySuffix("CASE_COMMENTS") && isWorkingUnit();
+	}
+	
 	public boolean isCanTagCase() {
 		return checkRoleBySuffix("CASE_TAG") && isWorkingUnit();
 	}

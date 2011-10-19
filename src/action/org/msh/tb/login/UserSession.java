@@ -186,8 +186,7 @@ public class UserSession {
 
     
     /**
-     * Monta a lista de permiss�es do usu�rio
-     * @param usu
+     * Mount the user permission list
      */
     public void updateUserRoleList() {
     	removePermissions();
@@ -208,7 +207,7 @@ public class UserSession {
     		if (classification != null)
     			roleName = classification.toString() + "_" + roleName;
     		identity.addRole(roleName);
-    	
+    		
     		boolean change = (Boolean)vals[1];
     		if (change) {
     			identity.addRole(roleName + "_EDT");

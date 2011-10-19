@@ -29,24 +29,32 @@
 	<s:fragment rendered="#{submenu=='0'}">
     	<s:link view="/admin/adminunits.xhtml" value="#{messages['admin.adminunits']}" propagation="none" rendered="#{s:hasRole('ADMINUNITS')}"/>
     	<s:link view="/admin/healthsys.xhtml" value="#{messages['admin.healthsys']}" propagation="none" rendered="#{s:hasRole('HEALTHSYS')}"/>
-		<span class="icon-hu" />
-    	<s:link view="/admin/units.xhtml" value="#{messages['admin.tbunits']}" propagation="none" rendered="#{s:hasRole('TBUNITS')}"/>
+    	<s:fragment rendered="#{s:hasRole('TBUNITS')}">
+			<span class="icon-hu" />
+    		<s:link view="/admin/units.xhtml" value="#{messages['admin.tbunits']}" propagation="none" />
+    	</s:fragment>
     	<s:link view="/admin/sources.xhtml" value="#{messages['admin.sources']}" propagation="none" rendered="#{s:hasRole('SOURCES')}"/>
     	<s:link view="/admin/substances.xhtml" value="#{messages['admin.substances']}" propagation="none" rendered="#{s:hasRole('SUBSTANCES')}"/>
     	<s:link view="/admin/medicines.xhtml" value="#{messages['admin.medicines']}" propagation="none" rendered="#{s:hasRole('MEDICINES')}"/>
     	<s:link view="/admin/groups.xhtml" value="#{messages['admin.groups']}" propagation="none" rendered="#{s:hasRole('GROUPS')}"/>
     	<s:link view="/admin/regimens.xhtml" value="#{messages['admin.regimens']}" propagation="none" rendered="#{s:hasRole('REGIMENS')}"/>
-		<span class="icon-lab" />
-    	<s:link view="/admin/labs.xhtml" value="#{messages['admin.labs']}" propagation="none" rendered="#{s:hasRole('LABS')}"/>
+    	<s:fragment rendered="#{s:hasRole('LABS')}">
+			<span class="icon-lab" />
+	    	<s:link view="/admin/labs.xhtml" value="#{messages['admin.labs']}" propagation="none" />
+    	</s:fragment>
 		<hr/>
     	<s:link view="/admin/weekfreqs.xhtml" value="#{messages['admin.weeklyfreq']}" propagation="none" rendered="#{s:hasRole('WEEKFREQ')}"/>
     	<s:link view="/admin/ageranges.xhtml" value="#{messages['admin.ageranges']}" propagation="none" rendered="#{s:hasRole('AGERANGES')}"/>
     	<s:link view="/admin/fields.xhtml" value="#{messages['admin.fields']}" propagation="none" rendered="#{s:hasRole('FIELDS') and (not empty tbFields)}"/>
-		<span class="tag-MANUAL-icon" />
-    	<s:link view="/admin/tags.xhtml" value="#{messages['admin.tags']}" propagation="none" rendered="#{s:hasRole('TAGS') and (not empty tbFields)}"/>
+		<s:fragment rendered="#{s:hasRole('TAGS')}">
+			<span class="tag-MANUAL-icon" />
+    		<s:link view="/admin/tags.xhtml" value="#{messages['admin.tags']}" propagation="none" />
+    	</s:fragment>
 		<hr/>
-		<span class="icon-user" />
-    	<s:link view="/admin/users.xhtml" value="#{messages['admin.users']}" propagation="none" rendered="#{s:hasRole('USERS')}"/>
+		<s:fragment rendered="#{s:hasRole('USERS')}">
+			<span class="icon-user" />
+    		<s:link view="/admin/users.xhtml" value="#{messages['admin.users']}" propagation="none"/>
+    	</s:fragment>
     	<s:link view="/admin/profiles.xhtml" value="#{messages['admin.profiles']}" propagation="none" rendered="#{s:hasRole('PROFILES')}"/>
 		<s:fragment rendered="#{s:hasRole('IMPORT')}">
       		<hr/>

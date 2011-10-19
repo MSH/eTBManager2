@@ -10,8 +10,7 @@
       template="/layout/template_new.xhtml">
 
 
-<ui:param name="title" value="#{messages['cases.details']} - #{messages[tbcase.classification.key]}" />
-
+<ui:param name="title" value="#{messages['cases.details']} - #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect] : messages[tbcase.classification.key]}" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
 
@@ -29,12 +28,29 @@
 </ui:define>
 
 
+<ui:define name="state-content">
+	<s:fragment rendered="#{tbcase.state=='TRANSFERRING'}" > 
+	<div class="icon-hu-big"/>
+	<div style="margin-top:6px;font-size:11px;max-width:320px;height:60px;" >
+		<b style="padding-right:4px;">#{messages['meds.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
+		<br/>
+		<span class="right-icon" />
+		<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
+			style="position:relative;" propagation="none">
+			<f:param name="id" value="#{caseHome.id}" />
+		</s:link>
+		<s:link value="#{messages['cases.move.cancel']}" 
+			style="position:relative" />
+	</div>
+	</s:fragment>
+</ui:define>
+
 
 <ui:define name="left">
-	<h:panelGroup id="leftmenu" >
+	<h:panelGroup id="leftmenu" styleClass="vertical-menu">
 	<h:form class="vertical-menu">
 
-	<s:link view="/custom/ph/reports/casedata.xhtml" target="_new">
+	<s:link view="/reports/casedata.xhtml" target="_new">
 		<div class="print-icon"/>#{messages['global.print']}
 		<f:param name="id" value="#{caseHome.id}" />
 	</s:link>
@@ -61,7 +77,7 @@
 	</h:form>
 	</h:panelGroup>
 
-
+	<s:fragment rendered="#{facesContext.renderResponse}">
 	<s:fragment rendered="#{not empty tbcase.tags}">
 	<table class="table2">
 	<tr>
@@ -87,15 +103,13 @@
 	</s:fragment>
 	</table>
 	</s:fragment>
+	</s:fragment>
 
 	<div class="spacer" />
 	
-	<s:decorate template="/layout/roundrect.xhtml" style="margin-top:10px;" rendered="#{not empty caseHome.otherCases}">
-		<ui:define name="header">
-			<b>#{messages['cases.details.others']} #{tbcase.patient.name}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-		
+	<s:div styleClass="region1" rendered="#{not empty caseHome.otherCases}">
+		<div class="header">#{messages['cases.details.others']} #{tbcase.patient.name}</div>
+		<div class="content">
 		<h:dataTable id="taboc" value="#{caseHome.otherCases}" var="it" style="font-size:10px;" 
 			columnClasses="coll" width="100%">
 			<h:column>
@@ -116,7 +130,8 @@
                 query="mouseover(function(){jQuery(this).addClass('sel-row')})"/>
 		<rich:jQuery selector="#taboc tr" 
                 query="mouseout(function(){jQuery(this).removeClass('sel-row')})"/>
-	</s:decorate>
+		</div>
+	</s:div>
 </ui:define>
 
 
@@ -212,7 +227,7 @@ jQuery().ready(function() {
 function initTab() {
 	var updt=window.inicasetab==0;
 	if (updt)
-		window.inicasetab=2;
+		window.inicasetab=1;
 	var tabid = 'tab' + window.inicasetab;
 	var dest = 'main:bodydiv:tab' + window.inicasetab;
 	RichFaces.switchTab('main:bodydiv:tabCase', dest, tabid);

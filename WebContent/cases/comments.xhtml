@@ -15,7 +15,7 @@
 	<h2>#{messages['global.comments']}</h2>
 			<table width="100%">
 			<tr><td>
-			<s:fragment rendered="#{s:hasRole('CASE_COMMENTS') and not printing}">
+			<s:fragment rendered="#{caseHome.canAddComments and not printing}">
 				<h:inputTextarea value="#{caseComment.comment}" style="width:500px;height:50px;float:left;"/>
 				<a:commandLink style="float:right" 
 					styleClass="button-alt" 

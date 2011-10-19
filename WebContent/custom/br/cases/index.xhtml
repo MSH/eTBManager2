@@ -139,15 +139,19 @@
 	</h:commandLink>	
 
 	<h:outputText value="#{messages['Patient']}:"/>
-	
-	<h:inputText id="patname" value="#{caseFilters.patient}" style="width:150px;margin:4px" />
 
+	<h:inputText id="patname" value="#{caseFilters.patient}" style="width:150px;margin:4px" />
+	
 	<a:commandLink id="btnsearchpat" action="search" styleClass="button" onclick="if (!disableButton(this)) return false;" >
 		<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
 		<span>#{messages['form.search']}</span>
 	</a:commandLink>
+
 	<rich:jQuery timming="onload" selector="#patname" query="focus()" />
-	<rich:hotKey selector="#patname" key="return" handler="#{rich:element('btnsearchpat')}.click();" /> 
+	<rich:hotKey selector="#patname" key="return" handler="disableButton(#{rich:element('btnsearchpat')});execSearch();" /> 
+	<a:jsFunction name="execSearch" action="search" reRender="messages">
+		<a:actionparam name="param1" assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
+	</a:jsFunction>
 
 	<div class="spacer" />
 

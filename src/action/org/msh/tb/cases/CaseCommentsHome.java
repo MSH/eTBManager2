@@ -23,7 +23,6 @@ public class CaseCommentsHome extends EntityHomeEx<CaseComment> {
 	@In(create=true) CaseFilters caseFilters;
 	
 	private List<CommentWrapper> comments;
-//	private Map<CaseView, List<CommentWrapper>> lists = new HashMap<CaseView, List<CommentWrapper>>();
 
 	@Factory("caseComment")
 	public CaseComment getCaseComment() {
