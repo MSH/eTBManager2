@@ -158,13 +158,15 @@
 						onclick="showMedicineDlg();"
 						action="#{treatmentHome.startEditingMedicine(p.item)}" 
 						reRender="formmedicine"
+						ajaxSingle="true"
 						/>
 
 					<a:commandLink value="#{messages['form.remove']}" style="padding-right:20px;"
 						ajaxSingle="true" 
 						reRender="formremove" 
 						action="#{treatmentHome.startRemovePeriod(p.item)}"	
-						onclick="showRemoveDlg()" />
+						onclick="showRemoveDlg()"
+						/>
 					</div></div>
 				</s:div>
 			</div>			
