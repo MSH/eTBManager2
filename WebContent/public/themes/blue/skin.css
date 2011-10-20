@@ -910,7 +910,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .icon-square, .icon-lab, .icon-hu, .icon-ds, .icon-report, .checked-icon, .unchecked-icon,
 .icon-user, .icon-log-NEW, .icon-log-EDIT, .icon-log-DELETE, .icon-log-EXEC, .batch-icon, .bar-comments,
 .naveg-first, .naveg-prev, .naveg-next, .naveg-last, .icon-positive, .icon-negative, .icon-error, .icon-phone {
-	background-image: url('images/icons.png');
+	background-image: url('images/icons2.png');
 	width:16px;
 	height:16px;
 	margin-right:2px;
@@ -918,7 +918,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	float:left;
 }
 .male-icon, .female-icon, .icon-lab-big, .icon-hu-big, .icon-ds-big, .medicine-icon {
-	background-image: url('images/icons.png');
+	background-image: url('images/icons2.png');
 	width:32px;
 	height:32px;
 	margin-right:2px;
@@ -1071,7 +1071,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .popup-long #content {top:-170px; }
 
 #closewin {
-	background: transparent url(images/icons.png) no-repeat left top;
+	background: transparent url(images/icons2.png) no-repeat left top;
 	background-position:-48px -80px;
 	margin:4px 8px 4px 4px;
 	width:16px;

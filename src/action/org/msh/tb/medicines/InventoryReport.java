@@ -124,7 +124,13 @@ public class InventoryReport {
 		}
 
 		public int getQuantity() {
-			return stockPosition.getQuantity();
+			int tot = 0;
+			for (Object obj: node.getBatches()) {
+				BatchQuantity bq = (BatchQuantity)obj;
+				if (!bq.getBatch().isExpired())
+					tot += bq.getQuantity();
+			}
+			return tot; //stockPosition.getQuantity();
 		}
 		
 		public float getUnitPrice() {
@@ -147,8 +153,10 @@ public class InventoryReport {
 			Date dt = null;
 			for (Object obj: node.getBatches()) {
 				BatchQuantity bq = (BatchQuantity)obj;
-				if ((dt == null) || (dt.after(bq.getBatch().getExpiryDate())))
-					dt = bq.getBatch().getExpiryDate();
+				if (!bq.getBatch().isExpired()) {
+					if ((dt == null) || ((dt.after(bq.getBatch().getExpiryDate()))))
+						dt = bq.getBatch().getExpiryDate();
+				}
 			}
 			return dt;
 		}

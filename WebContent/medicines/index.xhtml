@@ -48,7 +48,7 @@
 	<tr><th width="35%">
 			#{messages['Medicine']}
 		</th>
-		<th><h:outputText value="#{messages['Batch.expiryDate']}" styleClass="colch" /></th>	
+		<th><h:outputText value="#{messages['StoragePosReport.nextExpirationBatch']}" styleClass="colch" /></th>	
 		<th><h:outputText value="#{messages['meds.movs.availableqtty']}" styleClass="colrh" /></th>	
 		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
 			<th><h:outputText value="#{messages['meds.amc']}" styleClass="colch" /></th>
@@ -109,28 +109,58 @@
 				<ui:param name="batch" value="#{b.batch}" />
 			</s:decorate>
 		</td>
-		<td align="center">
-			<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
-		</td>
-		<td align="right">
-			<h:outputText value="#{b.quantity}" >
-				<f:convertNumber pattern="#,###,##0"/>
-			</h:outputText>
-		</td>
-		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
-			<td>
+
+		<s:fragment rendered="#{not b.batch.expired}">
+			<td align="center">
+				<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+			</td>
+			<td align="right">
+				<h:outputText value="#{b.quantity}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
+				<td>
+				</td>
+			</s:fragment>
+			<td align="right">
+				<h:outputText value="#{b.totalPrice}" >
+					<f:convertNumber pattern="#,###,##0.00"/>
+				</h:outputText>
+			</td>			
+			<td align="right">
+				<h:outputText value="#{b.batch.unitPrice}" >
+					<f:convertNumber pattern="#,###,##0.00"/>
+				</h:outputText>
 			</td>
 		</s:fragment>
-		<td align="right">
-			<h:outputText value="#{b.totalPrice}" >
-				<f:convertNumber pattern="#,###,##0.00"/>
-			</h:outputText>
-		</td>			
-		<td align="right">
-			<h:outputText value="#{b.batch.unitPrice}" >
-				<f:convertNumber pattern="#,###,##0.00"/>
-			</h:outputText>
-		</td>
+
+		<s:fragment rendered="#{b.batch.expired}">
+			<td align="center">
+				<span class="icon-error" />
+				<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" styleClass="error"/>
+			</td>
+			<td align="right">
+				<h:outputText value="#{b.quantity}" styleClass="error">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
+				<td>
+				</td>
+			</s:fragment>
+			<td align="right">
+				<h:outputText value="#{b.totalPrice}" styleClass="error">
+					<f:convertNumber pattern="#,###,##0.00"/>
+				</h:outputText>
+			</td>			
+			<td align="right">
+				<h:outputText value="#{b.batch.unitPrice}" styleClass="error">
+					<f:convertNumber pattern="#,###,##0.00"/>
+				</h:outputText>
+			</td>
+		</s:fragment>
+
 	</tr>
 	</a:repeat>
 </a:repeat>
