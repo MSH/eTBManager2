@@ -909,7 +909,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .tag-MANUAL-icon, .tag-AUTOGEN-icon, .tag-AUTOGEN_CONSISTENCY-icon, .delete-icon, .new-icon, .edit-icon, .progress-icon, .plus-icon, .minor-icon, .collapse-icon, .icon-unchecked,
 .icon-square, .icon-lab, .icon-hu, .icon-ds, .icon-report, .checked-icon, .unchecked-icon,
 .icon-user, .icon-log-NEW, .icon-log-EDIT, .icon-log-DELETE, .icon-log-EXEC, .batch-icon, .bar-comments,
-.naveg-first, .naveg-prev, .naveg-next, .naveg-last, .icon-positive, .icon-negative, .icon-error, .icon-phone {
+.naveg-first, .naveg-prev, .naveg-next, .naveg-last, .icon-positive, .icon-negative, .icon-error, .icon-phone, .alert-icon {
 	background-image: url('images/icons2.png');
 	width:16px;
 	height:16px;
@@ -943,6 +943,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 
 .icon-report {	background-position:-64px -32px; }
 .icon-phone {	background-position:-96px -64px; }
+.alert-icon {	background-position:-80px -64px; }
 
 .bar-comments {	background-position:-112px -80px; float:left; }
 
