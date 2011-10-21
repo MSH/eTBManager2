@@ -67,6 +67,7 @@
 			#{it.medicine}
 		</td>
 		<td align="center">
+			<s:span styleClass="alert-icon" rendered="#{it.item.hasBatchExpired}"/>
 			<h:outputText value="#{it.item.nextBatchExpire}" converter="localeDateConverter" />
 		</td>
 		<td align="right">
@@ -137,8 +138,10 @@
 
 		<s:fragment rendered="#{b.batch.expired}">
 			<td align="center">
-				<span class="icon-error" />
-				<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" styleClass="error"/>
+				<div title="#{messages['manag.forecast.expiredquantity']}">
+					<span class="icon-error" />
+					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" styleClass="error"/>
+				</div>
 			</td>
 			<td align="right">
 				<h:outputText value="#{b.quantity}" styleClass="error">

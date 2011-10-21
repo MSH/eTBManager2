@@ -21,6 +21,7 @@ public class UnitsQuery extends EntityQuery<Tbunit> {
 	
 	private AdminUnitSelection auselection;
 	private HealthSystem healthSystem;
+	private String searchKey;
 
 
 	@Override
@@ -42,18 +43,27 @@ public class UnitsQuery extends EntityQuery<Tbunit> {
 
 	
 	protected String staticHQLRestriction() {
+		String hql = "";
+
 		AdministrativeUnit aux = getAuselection().getSelectedUnit(); 
-		if (aux == null)
-			return "";
+		if (aux != null) {
+			
+			String sid = aux.getId().toString();
+			
+			hql = " left join u.adminUnit.parent par1 left join u.adminUnit.parent.parent par2 " +
+					"left join u.adminUnit.parent.parent.parent par3 " +
+					"left join u.adminUnit.parent.parent.parent.parent par4 " +
+					"where (u.adminUnit.id = " + sid + " or par1.id = " + sid + 
+					" or par2.id = " + sid + " or par3.id = " + sid +
+					" or par4.id = " + sid + ")";
+		}
 		
-		String sid = aux.getId().toString();
-		
-		String hql = " left join u.adminUnit.parent par1 left join u.adminUnit.parent.parent par2 " +
-				"left join u.adminUnit.parent.parent.parent par3 " +
-				"left join u.adminUnit.parent.parent.parent.parent par4 " +
-				"where (u.adminUnit.id = " + sid + " or par1.id = " + sid + 
-				" or par2.id = " + sid + " or par3.id = " + sid +
-				" or par4.id = " + sid + ")";
+		if (getSearchKeyLike() != null) {
+			if (!hql.isEmpty())
+				 hql += " and ";
+			else hql += " where ";
+			hql += " (u.name.name1 like #{unitspg.searchKeyLike} or u.name.name2 like #{unitspg.searchKeyLike}) ";
+		}
 
 		return hql;
 	}
@@ -92,6 +102,26 @@ public class UnitsQuery extends EntityQuery<Tbunit> {
 		if (adm == null)
 			 return null;
 		else return adm.getCode() + "%";
+	}
+
+	
+	public String getSearchKeyLike() {
+		return (searchKey != null) && (!searchKey.isEmpty()) ? "%" + searchKey + "%" : null;
+	}
+
+	/**
+	 * @return the searchKey
+	 */
+	public String getSearchKey() {
+		return searchKey;
+	}
+
+
+	/**
+	 * @param searchKey the searchKey to set
+	 */
+	public void setSearchKey(String searchKey) {
+		this.searchKey = searchKey;
 	}
 	
 }

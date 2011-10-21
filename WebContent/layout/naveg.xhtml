@@ -105,7 +105,7 @@
 	title="#{messages['form.navlast']}"  
 	style="color:transparent;float:none"
 	onclick="initNavegWait();moveToLastPage(); return false;"
-	rendered="#{list.currentPage > 1}" />
+	rendered="#{not list.lastPage}" />
 </div>
 <div id="navegwait2" class="wait-icon2" style="display:none"/>
 </s:fragment>

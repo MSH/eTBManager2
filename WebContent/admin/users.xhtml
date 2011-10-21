@@ -25,7 +25,15 @@
 	<span>#{messages['form.newf']}</span>
 </s:link>
 
-<p/>
+
+<div style="float:right">
+	<s:decorate template="/layout/searchkey.xhtml">
+		<ui:param name="list" value="#{users}" />
+		<ui:param name="tablepanel" value="tablepanel" />
+	</s:decorate>
+</div>
+
+<s:div id="tablepanel">
 <s:decorate template="/layout/naveg.xhtml">
 	<ui:param name="list" value="#{users}" />
 
@@ -109,6 +117,8 @@
 </h:dataTable>
 
 </s:decorate>
+
+</s:div>
 
 </h:form>
 

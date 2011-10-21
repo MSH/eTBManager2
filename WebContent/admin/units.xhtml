@@ -37,7 +37,14 @@
 	<f:param name="id" value="#{null}" />
 	<span>#{messages['form.newf']}</span>
 </s:link>
-<p/>
+
+<div style="float:right">
+	<s:decorate template="/layout/searchkey.xhtml">
+		<ui:param name="list" value="#{unitspg}" />
+		<ui:param name="tablepanel" value="pnlunits" />
+	</s:decorate>
+</div>
+
 
 <h:panelGroup id="pnlunits">
 

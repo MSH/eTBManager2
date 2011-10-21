@@ -22,6 +22,8 @@ public class UsersQuery extends EntityQuery<UserWorkspace>{
 				"and aux.userProfile.id = #{userWorkspace.profile.id}))"
 	};
 	
+	private String searchKey;
+	
 	/* (non-Javadoc)
 	 * @see com.rmemoria.utils.EntityQuery#getStringRestrictions()
 	 */
@@ -35,14 +37,20 @@ public class UsersQuery extends EntityQuery<UserWorkspace>{
 	 */
 	@Override
 	public String getEjbql() {
-		return "from UserWorkspace uw join fetch uw.user left join fetch uw.profile join fetch uw.tbunit left join fetch uw.adminUnit";
+		return "from UserWorkspace uw join fetch uw.user left join fetch uw.profile join fetch uw.tbunit left join fetch uw.adminUnit ".concat(getStaticConditions());
 	}
 
 	@Override
 	protected String getCountEjbql() {
-		return "select count(*) from UserWorkspace uw ";
+		return "select count(*) from UserWorkspace uw ".concat(getStaticConditions());
 	}
 
+	
+	protected String getStaticConditions() {
+		if (getSearchKeyLike() != null)
+			 return "where (uw.user.name like #{users.searchKeyLike} or uw.user.login like #{users.searchKeyLike} or uw.user.email like #{users.searchKeyLike})";
+		else return "";
+	}
 	
 	
 	/**
@@ -67,5 +75,24 @@ public class UsersQuery extends EntityQuery<UserWorkspace>{
 		if (maxresults == null)
 			 return 25;
 		else return super.getMaxResults();
+	}
+
+	public String getSearchKeyLike() {
+		return ((searchKey != null) && (!searchKey.isEmpty())) ? "%" + searchKey + "%" : null; 
+	}
+	
+
+	/**
+	 * @return the searchKey
+	 */
+	public String getSearchKey() {
+		return searchKey;
+	}
+
+	/**
+	 * @param searchKey the searchKey to set
+	 */
+	public void setSearchKey(String searchKey) {
+		this.searchKey = searchKey;
 	}
 }

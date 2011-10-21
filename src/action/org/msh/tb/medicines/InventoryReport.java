@@ -58,6 +58,12 @@ public class InventoryReport {
 		List<BatchQuantity> batches = stockPositionList.getBatchAvailable(userSession.getTbunit(), null);
 		for (BatchQuantity bq: batches) {
 			root.addItem(bq.getSource(), bq.getBatch().getMedicine(), bq);
+
+			// check if batch has expired
+			if (bq.getBatch().isExpired()) {
+				MedicineNode node = root.findMedicineNode(bq.getSource(), bq.getBatch().getMedicine());
+				((MedicineInfo)node.getItem()).setHasBatchExpired(true);
+			}
 		}
 		
 		loadLastMovement(userSession.getTbunit());
@@ -117,6 +123,7 @@ public class InventoryReport {
 		private Date lastMovement;
 		private Date stockOutDate;
 		private Date nextOrderDate;
+		private boolean hasBatchExpired;
 		
 		public MedicineInfo(MedicineNode node, StockPosition stockPosition) {
 			this.stockPosition = stockPosition;
@@ -138,7 +145,13 @@ public class InventoryReport {
 		}
 		
 		public float getTotalPrice() {
-			return stockPosition.getTotalPrice();
+			float tot = 0;
+			for (Object obj: node.getBatches()) {
+				BatchQuantity bq = (BatchQuantity)obj;
+				if (!bq.getBatch().isExpired())
+					tot += bq.getTotalPrice();
+			}
+			return tot; //stockPosition.getQuantity();
 		}
 		
 		/**
@@ -160,6 +173,7 @@ public class InventoryReport {
 			}
 			return dt;
 		}
+		
 		
 		/**
 		 * @return the stockPosition
@@ -224,6 +238,20 @@ public class InventoryReport {
 		 */
 		public void setNextOrderDate(Date nextOrderDate) {
 			this.nextOrderDate = nextOrderDate;
+		}
+
+		/**
+		 * @return the hasBatchExpired
+		 */
+		public boolean isHasBatchExpired() {
+			return hasBatchExpired;
+		}
+
+		/**
+		 * @param hasBatchExpired the hasBatchExpired to set
+		 */
+		public void setHasBatchExpired(boolean hasBatchExpired) {
+			this.hasBatchExpired = hasBatchExpired;
 		}
 	}
 }
