@@ -52,7 +52,7 @@ public class SideEffectHome {
 			CaseSideEffect cse = tbcase.findSideEffectData(sideEffect);
 			if (cse == null) {
 				cse = new CaseSideEffect();
-				cse.setSideEffect(sideEffect);
+				cse.getSideEffect().setValue(sideEffect);
 			}
 			else item.setSelected(true);
 

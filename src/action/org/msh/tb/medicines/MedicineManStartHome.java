@@ -112,8 +112,8 @@ public class MedicineManStartHome {
 	 * @param medInfo
 	 * @param batch
 	 */
-	public void deleteBatch(MedicineInfo medInfo, BatchQuantity batchQuantity) {
-		medInfo.getBatches().remove(batchQuantity);
+	public void deleteBatch(MedicineInfo medInfo, BatchInfo batchInfo) {
+		medInfo.getBatches().remove(batchInfo);
 	}
 
 	

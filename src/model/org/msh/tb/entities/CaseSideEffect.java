@@ -1,9 +1,14 @@
 package org.msh.tb.entities;
 
+import javax.persistence.AssociationOverride;
+import javax.persistence.AssociationOverrides;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -35,10 +40,11 @@ public class CaseSideEffect {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 
-	@ManyToOne
-	@JoinColumn(name="SIDEEFFECT_ID")
+	@Embedded
+	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "SIDEEFFECT_ID")) })
+	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "otherAdverseEffect")) })
 	@NotNull
-	private FieldValue sideEffect;
+	private FieldValueComponent sideEffect;
 	
 	@ManyToOne
 	@JoinColumn(name="CASE_ID")
@@ -59,9 +65,6 @@ public class CaseSideEffect {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="SUBSTANCE2_ID")
 	private Substance substance2;
-
-	@Column(length=100)
-	private String otherAdverseEffect;
 	
 	/**
 	 * @return the resolved
@@ -94,14 +97,16 @@ public class CaseSideEffect {
 	/**
 	 * @return the sideEffect
 	 */
-	public FieldValue getSideEffect() {
+	public FieldValueComponent getSideEffect() {
+		if (sideEffect == null)
+			sideEffect = new FieldValueComponent();
 		return sideEffect;
 	}
 
 	/**
 	 * @param sideEffect the sideEffect to set
 	 */
-	public void setSideEffect(FieldValue sideEffect) {
+	public void setSideEffect(FieldValueComponent sideEffect) {
 		this.sideEffect = sideEffect;
 	}
 
@@ -173,19 +178,5 @@ public class CaseSideEffect {
 	 */
 	public void setSubstance2(Substance substance2) {
 		this.substance2 = substance2;
-	}
-	
-	/**
-	 * @return the otherAdverseEffect
-	 */
-	public String getOtherAdverseEffect() {
-		return otherAdverseEffect;
-	}
-
-	/**
-	 * @param otherAdverseEffect the otherAdverseEffect to set
-	 */
-	public void setOtherAdverseEffect(String otherAdverseEffect) {
-		this.otherAdverseEffect = otherAdverseEffect;
 	}
 }

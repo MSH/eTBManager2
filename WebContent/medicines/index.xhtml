@@ -124,6 +124,7 @@
 				<td>
 				</td>
 			</s:fragment>
+			<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
 			<td align="right">
 				<h:outputText value="#{b.totalPrice}" >
 					<f:convertNumber pattern="#,###,##0.00"/>
@@ -134,6 +135,7 @@
 					<f:convertNumber pattern="#,###,##0.00"/>
 				</h:outputText>
 			</td>
+			</s:fragment>
 		</s:fragment>
 
 		<s:fragment rendered="#{b.batch.expired}">
@@ -152,6 +154,7 @@
 				<td>
 				</td>
 			</s:fragment>
+			<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
 			<td align="right">
 				<h:outputText value="#{b.totalPrice}" styleClass="error">
 					<f:convertNumber pattern="#,###,##0.00"/>
@@ -162,6 +165,7 @@
 					<f:convertNumber pattern="#,###,##0.00"/>
 				</h:outputText>
 			</td>
+			</s:fragment>
 		</s:fragment>
 
 	</tr>

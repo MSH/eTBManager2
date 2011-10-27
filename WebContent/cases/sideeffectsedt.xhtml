@@ -11,6 +11,7 @@
 
 <ui:param name="title" value="#{messages['cases.sideeffects']}" />
 <ui:param name="topmenu" value="0" />
+<ui:param name="left" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
 
 
@@ -29,11 +30,12 @@ function checkClick(obj) {
 }
 
 function updateRows() {
-jQuery("#tblse tr").removeClass("activerow");
-jQuery("#tblse tr input[type='text'],select").hide();
-jQuery("#tblse tr:has(:checked) input[type='text']").show();
-jQuery("#tblse tr:has(:checked) select").show();
-jQuery("#tblse tr:has(:checked)").addClass("activerow");
+	jQuery("#tblse tr").removeClass("highlight");
+	jQuery("#tblse tr input[type='text'],select,#tblse tr .divother").hide();
+	jQuery("#tblse tr:has(:checked) input[type='text']").show();
+	jQuery("#tblse tr:has(:checked) select").show();
+	jQuery("#tblse tr:has(:checked) .divother").show();
+	jQuery("#tblse tr:has(:checked)").addClass("highlight");
 }
 
 function validateForm() {
@@ -85,24 +87,15 @@ function validateYesNo(cb) {
 				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
 			</f:facet>
 			<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" />
-			#{it.item.sideEffect.name}
+			#{it.item.sideEffect.value.name}
+			<s:fragment rendered="#{it.item.sideEffect.value.other}">
+				<div class="divother">
+					<b>#{it.item.sideEffect.value.otherDescription}</b>
+    				<h:inputText value="#{it.item.sideEffect.complement}" style="width:180px"/>
+    			</div>
+			</s:fragment>
 		</h:column>
 		
-<!-- *** -->
-<!-- Custom Field added based on the 'Display field to enter additional info' in the admin-->
- 	<h:column>
-		<div id="otherAdverseEff" style="margin-left:5px;">
-			<f:facet name="header">
-				<h:outputText value="Custom Field" styleClass="collh"/>
-			</f:facet>
-		<s:decorate template="/layout/edit.xhtml" rendered="#{it.item.sideEffect.other}">
-			<ui:define name="label" width="100%">#{it.item.sideEffect.otherDescription}</ui:define>
-    		<h:inputText value="#{it.item.otherAdverseEffect}" width="100%"/>
-		</s:decorate>
-		</div>
-	</h:column>
-
-<!-- ** -->
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.medicine']}" styleClass="collh" />
@@ -148,7 +141,7 @@ function validateYesNo(cb) {
 		onclick="if (!disableButton(this)) return false;if (!validateForm()) {enableButton();return false;}">
 		<span>#{messages['form.save']}</span>
 	</a:commandLink> 
-    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
        	<f:param name="id" value="#{caseHome.id}"/>
        	<span>#{messages['form.cancel']}</span>
     </s:link>

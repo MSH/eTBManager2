@@ -427,7 +427,7 @@ public class TbCase implements Serializable{
 	 */
 	public CaseSideEffect findSideEffectData(FieldValue sideEffect) {
 		for (CaseSideEffect se: getSideEffects()) {
-			if (se.getSideEffect().equals(sideEffect))
+			if (se.getSideEffect().getValue().equals(sideEffect))
 				return se;
 		}
 		return null;

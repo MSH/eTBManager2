@@ -24,6 +24,7 @@ public class InventoryReport {
 	@In(create=true) StockPositionList stockPositionList;
 
 	private SourceMedicineTree<BatchQuantity> root;
+	private Date nextOrderDate;
 	
 	/**
 	 * Return list of sources
@@ -50,7 +51,6 @@ public class InventoryReport {
 		for (StockPosition sp: lst) {
 			MedicineNode medNode = root.addMedicine(sp.getSource(), sp.getMedicine());
 			MedicineInfo info = new MedicineInfo(medNode, sp);
-			calcAMC(info);
 			medNode.setItem(info);
 		}
 		
@@ -67,21 +67,53 @@ public class InventoryReport {
 		}
 		
 		loadLastMovement(userSession.getTbunit());
+		
+		// calculate stock on hand
+		for (SourceNode node: root.getSources()) {
+			for (Object obj: node.getMedicines()) {
+				MedicineNode medNode = (MedicineNode)obj;
+				calcAMC(medNode);
+			}
+		}
 	}
 
 	
-	protected void calcAMC(MedicineInfo info) {
+	/**
+	 * Calculate stock on hand
+	 * @param info
+	 */
+	protected void calcAMC(MedicineNode node) {
+		MedicineInfo info = (MedicineInfo)node.getItem();
 		StockPosition sp = info.getStockPosition();
 		Integer amc = sp.getAmc();
 		if ((amc == null) || (amc == 0))
 			return;
+
+		int qtd = info.getQuantity();
+
+		if (qtd == 0) {
+			info.setStockOutDate(null);
+			if (amc > 0)
+				nextOrderDate = DateUtils.getDate();
+			return;
+		}
 		
-		float val = (float)sp.getQuantity() / (float)amc;
+		float val = (float)qtd / (float)amc;
 		int days = Math.round(val * 30);
-		
+
 		Date dt = DateUtils.incDays(sp.getLastMovement(), days);
+		
+		Date dtExpire = info.getLastBatchExpire();
+		
+		if ((dtExpire != null) && (dt.after(dtExpire)))
+			dt = dtExpire;
+		
 		info.setStockOutDate(dt);
 		info.setNextOrderDate(DateUtils.incMonths(dt, -1));
+		
+		if ((nextOrderDate == null) || (nextOrderDate.after( info.getNextOrderDate()))) {
+			nextOrderDate = info.getNextOrderDate();
+		}
 	}
 
 
@@ -174,6 +206,18 @@ public class InventoryReport {
 			return dt;
 		}
 		
+		public Date getLastBatchExpire() {
+			Date dt = null;
+			for (Object obj: node.getBatches()) {
+				BatchQuantity bq = (BatchQuantity)obj;
+				if (!bq.getBatch().isExpired()) {
+					if ((dt == null) || ((dt.before(bq.getBatch().getExpiryDate()))))
+						dt = bq.getBatch().getExpiryDate();
+				}
+			}
+			return dt;
+		}
+		
 		
 		/**
 		 * @return the stockPosition
@@ -253,5 +297,21 @@ public class InventoryReport {
 		public void setHasBatchExpired(boolean hasBatchExpired) {
 			this.hasBatchExpired = hasBatchExpired;
 		}
+	}
+
+
+	/**
+	 * @return the nextOrderDate
+	 */
+	public Date getNextOrderDate() {
+		return nextOrderDate;
+	}
+
+
+	/**
+	 * @param nextOrderDate the nextOrderDate to set
+	 */
+	public void setNextOrderDate(Date nextOrderDate) {
+		this.nextOrderDate = nextOrderDate;
 	}
 }

@@ -943,7 +943,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 
 .icon-report {	background-position:-64px -32px; }
 .icon-phone {	background-position:-96px -64px; }
-.alert-icon {	background-position:-80px -64px; }
+.alert-icon {	background-position:-96px -48px; }
 
 .bar-comments {	background-position:-112px -80px; float:left; }
 

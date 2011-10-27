@@ -11,6 +11,7 @@
 
 <ui:param name="title" value="#{messages['cases.sideeffects']}" />
 <ui:param name="topmenu" value="0" />
+<ui:param name="left" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
 
 
@@ -30,9 +31,9 @@ function checkClick(obj) {
 
 function updateRows() {
 jQuery("#tblse tr").removeClass("highlight");
-jQuery("#tblse tr input[type='text'],select").hide();
+jQuery("#tblse tr input[type='text'],select,#tblse tr #divother").hide();
 jQuery("#tblse tr:has(:checked) input[type='text']").show();
-jQuery("#tblse tr:has(:checked) select").show();
+jQuery("#tblse tr:has(:checked) select,#tblse tr:has(:checked) #divother").show();
 jQuery("#tblse tr:has(:checked)").addClass("highlight");
 }
 
@@ -83,7 +84,13 @@ function validateYesNo(cb) {
 				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
 			</f:facet>
 			<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" />
-			#{it.item.sideEffect.name}
+			#{it.item.sideEffect.value.name}
+			<s:fragment rendered="#{it.item.sideEffect.value.other}">
+				<div id="divother">
+					<b>#{it.item.sideEffect.value.otherDescription}</b>
+    				<h:inputText value="#{it.item.sideEffect.complement}" style="width:180px"/>
+    			</div>
+			</s:fragment>
 		</h:column>
 
 		<h:column>
@@ -120,7 +127,7 @@ function validateYesNo(cb) {
 		reRender="main">
 		<span>#{messages['form.save']}</span>
 	</a:commandLink> 
-    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
        	<f:param name="id" value="#{caseHome.id}"/>
        	<span>#{messages['form.cancel']}</span>
     </s:link>

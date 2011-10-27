@@ -745,7 +745,7 @@ public class CaseGenerator {
 				se.setResolved(YesNoType.YES);
 				
 				field = entityManager.merge(field);
-				se.setSideEffect(field);
+				se.getSideEffect().setValue(field);
 
 				int months;
 				if (tbcase.getTreatmentPeriod().isEmpty())

@@ -59,7 +59,7 @@ public class SideEffectNAHome{
 			CaseSideEffectNA cse = casedata.findSideEffectData(sideEffect);
 			if (cse == null) {
 				cse = new CaseSideEffectNA();
-				cse.setSideEffect(sideEffect);
+				cse.getSideEffect().setValue(sideEffect);
 			}
 			else item.setSelected(true);
 
