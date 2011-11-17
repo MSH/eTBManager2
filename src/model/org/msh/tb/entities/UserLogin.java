@@ -125,6 +125,8 @@ public class UserLogin implements java.io.Serializable {
 	 */
 	public void setWorkspace(Workspace workspace) {
 		this.workspace = workspace;
+		if (workspace != null)
+			workspace.getId();
 	}
 
 	/**

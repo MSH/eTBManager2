@@ -22,18 +22,28 @@
 	<f:param name="parentid" value="#{adminUnitHome.parentId}" />
 	<span>#{messages['form.newf']}</span>
 </s:link>
+
+<h:commandLink action="#{adminUnitHome.updateCode}"  rendered="#{userLogin.user.login=='RICARDO'}" styleClass="button-alt">
+	<span>Update code</span>
+</h:commandLink>
+
 <p/>
 
-<h:commandLink action="#{adminUnitHome.updateCode}" value="Update code"  rendered="#{userLogin.user.login=='RICARDO'}"/>
-
 <div class="linknaveg" style="margin-bottom:10px;">
-<s:link value="#{defaultWorkspace.name}" view="/admin/adminunits.xhtml" style="font-size:12px;">
+<div style="display:inline-block">
+<s:link view="/admin/adminunits.xhtml">
 	<f:param name="parentid" value="#{null}"/>
+	<span class="naveg-next"/>
+	#{defaultWorkspace.name}
 </s:link>
+</div>
 <a:repeat value="#{adminUnitHome.auselection.parentUnits}" var="it">
-	<s:link value="#{it.name}" view="/admin/adminunits.xhtml" style="font-size:12px;">
+	<div style="display:inline-block">
+	<s:link view="/admin/adminunits.xhtml" >
 		<f:param name="parentid" value="#{it.id}"/>
+		<span class="naveg-next" />#{it.name}
 	</s:link>
+	</div>
 </a:repeat>
 </div>
 

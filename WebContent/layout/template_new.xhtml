@@ -60,26 +60,36 @@
 
 	<div class="top-menu">
 		<div class="item #{empty topmenu?'selected':'unselected'}">
-			<s:link value="#{messages['home']}" view="/home.xhtml" propagation="none"/>
+			<s:link view="/home.xhtml" propagation="none">
+				<span>#{messages['home']}</span>
+			</s:link>
 		</div>
 		<s:fragment rendered="#{s:hasRole('CASEMAN')}">
 			<div class="item #{topmenu=='0'?'selected':'unselected'}">
-				<s:link value="#{messages['cases']}" view="/cases/index.xhtml" propagation="none"/>
+				<s:link view="/cases/index.xhtml" propagation="none">
+					<span>#{messages['cases']}</span>
+				</s:link>
 			</div>
 		</s:fragment>
 		<s:fragment rendered="#{s:hasRole('MEDMAN')}">
 			<div class="item #{topmenu=='1'?'selected':'unselected'}">
-				<s:link value="#{messages['medicines']}" view="/medicines/index.xhtml"  propagation="none"/>
+				<s:link view="/medicines/index.xhtml"  propagation="none">
+					<span>#{messages['medicines']}</span>
+				</s:link>
 			</div>
 		</s:fragment>
 		<s:fragment rendered="#{s:hasRole('MANAGEMENT')}">
 			<div class="item #{topmenu=='2'?'selected':'unselected'}">
-				<s:link value="#{messages['manag']}" view="/management/index.xhtml" propagation="none"/>
+				<s:link view="/management/index.xhtml" propagation="none">
+					<span>#{messages['manag']}</span>
+				</s:link>
 			</div>
 		</s:fragment>
 		<s:fragment rendered="#{s:hasRole('ADMIN')}">
 			<div class="item #{topmenu=='3'?'selected':'unselected'}">
-				<s:link value="#{messages['admin']}" view="/admin/index.xhtml" propagation="none"/>
+				<s:link view="/admin/index.xhtml" propagation="none">
+					<span>#{messages['admin']}</span>
+				</s:link>
 			</div>
 		</s:fragment>
 	</div>

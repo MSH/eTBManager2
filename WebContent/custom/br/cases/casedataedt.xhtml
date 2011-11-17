@@ -317,10 +317,23 @@
 	</div>
 <rich:jQuery selector="#infectsite" query="change(function(){showExtrapulmonary(this); })" />
 <rich:jQuery selector="#infectsite" timing="onload" query="each(function(){ showExtrapulmonary(this,true); })" />
-
+<rich:jQuery selector="#tblcomorb" timing="onload" query="ready(function() {updateRows();})" />
 <script type="text/javascript">
 <!--
 window.decSeparator = '#{timezones.decimalSeparator}';
+function updateRows() {
+	jQuery("#tblcomorb tr").removeClass("activerow");
+	jQuery("#tblcomorb tr input[type='text']").hide();
+	jQuery("#tblcomorb tr select").hide();
+	jQuery("#tblcomorb tr:has(:checked) input[type='text']").show();
+	jQuery("#tblcomorb tr:has(:checked) select").show();
+	jQuery("#tblcomorb tr:has(:checked)").addClass("activerow");
+}
+function toggleDivPanel(chk, divname) {
+	if (chk.checked)
+		jQuery(divname).show();
+	else jQuery(divname).hide();
+}
 function nationalityChange(cb, immediate) {
   if (cb.selectedIndex == 2)
 	   jQuery('#countryPanel').show(immediate?0:500)
@@ -539,11 +552,35 @@ function genderChange(cb) {
     </div>
     
     <s:fragment rendered="#{!caseHome.managed}">
-    <h2>#{messages['cases.comorbidities']}</h2>
-    	<rich:dataGrid  value="#{comorbidityHome.comorbidities}" var="it" width="100%" columns="2">
-				<h:selectBooleanCheckbox value="#{it.selected}" />
+	    <h2>#{messages['cases.comorbidities']}</h2>
+		<div id="tblcomorb">
+		<h:dataTable value="#{comorbidityHome.comorbidities}" var="it" styleClass="table1 small" rowClasses="lin1,lin2" width="100%">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['form.name']}" styleClass="collh"/>
+				</f:facet>
+				<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows();"/>
 				#{it.item.comorbidity.name}
-    	</rich:dataGrid>
+			</h:column>
+			
+			<h:column >
+				<f:facet name="header" >
+					<h:outputText value="#{messages['Regimen.months']}"  styleClass="collh" />
+				</f:facet>
+				<h:selectOneMenu value="#{it.item.duration}">
+					<f:selectItem itemLabel="-" itemValue="#{null}"/>
+					<f:selectItems value="#{sideEffectHome.months}" />
+				</h:selectOneMenu>
+			</h:column>
+			
+			<h:column >
+				<f:facet name="header" >
+					<h:outputText value="#{messages['global.comments']}"  styleClass="collh" style="width:410px"/>
+				</f:facet>
+				<h:inputText value="#{it.item.comment}" style="width:400px;display:none; "/>
+			</h:column>
+		</h:dataTable>
+		</div>	
     </s:fragment>    
 
 </td>

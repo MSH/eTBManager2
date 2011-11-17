@@ -2,6 +2,7 @@ package org.msh.tb.application.tasks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
@@ -9,6 +10,7 @@ import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.Workspace;
 
 @Name("taskManager")
 @Scope(ScopeType.APPLICATION)
@@ -17,8 +19,12 @@ public class TaskManager implements TaskListener {
 
 	private List<AsyncTask> tasks = new ArrayList<AsyncTask>();
 	private int idCounter;
-	
+
 	public void runTask(Class taskClazz) {
+		runTask(taskClazz, null);
+	}
+	
+	public void runTask(Class taskClazz, Map<String, Object> params) {
 		AsyncTask task = findTaskByClass(taskClazz);
 		if ((task != null) && (task.isUnique()))
 			throw new RuntimeException("There is already a task running as " + task.getDisplayName());
@@ -36,9 +42,20 @@ public class TaskManager implements TaskListener {
 
 		task.addListener(this);
 		
+		// feed parameters to the task
+		if (params != null) {
+			for (String param: params.keySet()) {
+				task.addParameter(param, params.get(param));
+			}
+		}
+		
 		UserLogin userLogin = (UserLogin)Component.getInstance("userLogin");
 		if (userLogin != null)
 			task.setUser(userLogin.getUser());
+		
+		Workspace workspace = (Workspace)Component.getInstance("defaultWorkspace");
+		if (workspace != null)
+			task.setWorkspace(workspace);
 		
 		AsyncTaskRunner runner = (AsyncTaskRunner)Component.getInstance("asyncTaskRunner", true);
 		runner.runTask(task);
@@ -115,9 +132,13 @@ public class TaskManager implements TaskListener {
 
 	public void taskStatusChangeHandler(AsyncTask task) {
 		switch (task.getStatus()) {
-		case STARTING: notifyTaskStarting(task);
+		case STARTING: 
+			notifyTaskStarting(task);
 		break;
-		case FINISHED: notifyTaskFinished(task);
+		case FINISHED:
+		case ERROR:
+		case CANCELED:
+			notifyTaskFinished(task);
 		break;
 		}
 	}

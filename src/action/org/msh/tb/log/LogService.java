@@ -201,7 +201,7 @@ public class LogService {
 
 
 	protected WorkspaceLog getWorkspaceLog() {
-		WorkspaceLog wslog = getEntityManager().find(WorkspaceLog.class, getUserLogin().getDefaultWorkspace().getId());
+		WorkspaceLog wslog = getEntityManager().find(WorkspaceLog.class, getUserLogin().getWorkspace().getId());
 		
 		if (wslog == null) {
 			wslog = new WorkspaceLog();

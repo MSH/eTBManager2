@@ -2,11 +2,14 @@ package org.msh.tb.application.tasks;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.log.Log;
 import org.msh.tb.entities.User;
+import org.msh.tb.entities.Workspace;
 
 /**
  * Base implementation for AsyncTask interface
@@ -21,6 +24,9 @@ public abstract class AsyncTaskImpl implements AsyncTask {
 	private TaskStatus status;
 	private Date executionTimestamp;
 	private User user;
+	private Workspace workspace;
+	private Map<String, Object> parameters;
+	private StringBuffer logMessage;
 
 	protected abstract void starting();
 	protected abstract void execute();
@@ -47,7 +53,7 @@ public abstract class AsyncTaskImpl implements AsyncTask {
 
 		} catch (Exception e) {
 			exceptionHandler(e);
-			changeStatus(TaskStatus.FINISHED);
+			changeStatus(TaskStatus.ERROR);
 		}
 	}
 
@@ -81,7 +87,7 @@ public abstract class AsyncTaskImpl implements AsyncTask {
 	 * @param e
 	 */
 	protected void exceptionHandler(Exception e) {
-		changeStatus(TaskStatus.FINISHED);
+		changeStatus(TaskStatus.CANCELING);
 		throw new RuntimeException(e);
 	}
 	
@@ -165,10 +171,37 @@ public abstract class AsyncTaskImpl implements AsyncTask {
 		return status == TaskStatus.CANCELING;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.msh.tb.application.tasks.AsyncTask#addParameter(java.lang.String, java.lang.Object)
+	 */
+	public void addParameter(String param, Object value) {
+		if (parameters == null)
+			parameters = new HashMap<String, Object>();
+		
+		parameters.put(param, value);
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see org.msh.tb.application.tasks.AsyncTask#getParameter(java.lang.String)
+	 */
+	public Object getParameter(String param) {
+		return (parameters == null? null: parameters.get(param));
+	}
+
 
 	public User getUser() {
 		return user;
 	}
+
+	
+	/* (non-Javadoc)
+	 * @see org.msh.tb.application.tasks.AsyncTask#getLogMessage()
+	 */
+	public String getLogMessage() {
+		return (logMessage != null? logMessage.toString(): null);
+	}
+	
 	
 	/**
 	 * Set the user that executed the task
@@ -193,5 +226,17 @@ public abstract class AsyncTaskImpl implements AsyncTask {
 	 */
 	public Date getExecutionTimestamp() {
 		return executionTimestamp;
+	}
+	/**
+	 * @return the workspace
+	 */
+	public Workspace getWorkspace() {
+		return workspace;
+	}
+	/**
+	 * @param workspace the workspace to set
+	 */
+	public void setWorkspace(Workspace workspace) {
+		this.workspace = workspace;
 	}
 }

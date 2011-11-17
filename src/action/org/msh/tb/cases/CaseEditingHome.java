@@ -123,6 +123,9 @@ public class CaseEditingHome {
 				}
 			}
 		}
+
+		// initialize items with previous TB treatments
+		prevTBTreatmentHome.getEditingItems();
 		
 		initialized = true;
 		return "initialized";
@@ -323,7 +326,6 @@ public class CaseEditingHome {
 
 		return (regimenType == 2? "individualized": "persisted");
 	}
-
 
 
 

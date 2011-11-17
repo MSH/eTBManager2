@@ -27,7 +27,7 @@
 	<s:fragment rendered="#{not userSession.medicineManagementStarted}">
 		<h:outputText value="#{messages['meds.start.alert']}" styleClass="warn" />
 		<div class="spacer" />
-		<s:link view="/medicines/start.xhtml" styleClass="button-alt">
+		<s:link view="/medicines/start.xhtml" styleClass="button-alt" rendered="#{s:hasRole('MED_INIT')}">
 			<span>#{messages['meds.start']}</span>
 		</s:link>
 	</s:fragment>

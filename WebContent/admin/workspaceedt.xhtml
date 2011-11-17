@@ -12,7 +12,7 @@
 <ui:param name="title" value="#{workspace.id != null?messages['admin.workspaces.edt']:messages['admin.workspaces.new']}" />
 <ui:param name="topmenu" value="3" />
 
-<ui:param name="labelstyle" value="width:170px" />
+<ui:param name="labelstyle" value="width:250px" />
 
 <ui:define name="content">
 <h1>#{title}</h1>
@@ -32,6 +32,11 @@
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Workspace.description']}:</ui:define>
     	<h:inputText value="#{workspace.description}" size="150" style=" width : 300px;" required="true"></h:inputText>
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.extension']}:</ui:define>
+    	<h:inputText value="#{workspace.extension}" size="4" style=" width : 70px;" />
     </s:decorate>
 	
     <s:decorate template="/layout/edit.xhtml" >
@@ -83,11 +88,11 @@
 			onclick="if (!disableButton(this)) return false;" reRender="main,messages">
 			<span>#{messages['form.save']}</span>
 		</a:commandLink>
-		<s:link view="/admin/workspacedata.xhtml" rendered="#{workspace.id != null}" styleClass="button">
+		<s:link view="/admin/workspacedata.xhtml" rendered="#{workspace.id != null}" styleClass="button-alt" onclick="disableButton(this);">
 			<f:param name="id" value="#{workspace.id}" />
 			 <span>#{messages['form.cancel']}</span>
 		</s:link>
-		<s:link view="/admin/workspaces.xhtml" rendered="#{workspace.id == null}" styleClass="button-alt" >
+		<s:link view="/admin/workspaces.xhtml" rendered="#{workspace.id == null}" styleClass="button-alt" onclick="disableButton(this);">
 		 <span>#{messages['form.cancel']}</span>
 		 </s:link>
 	</div>

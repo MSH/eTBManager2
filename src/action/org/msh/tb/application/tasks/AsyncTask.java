@@ -3,6 +3,7 @@ package org.msh.tb.application.tasks;
 import java.util.Date;
 
 import org.msh.tb.entities.User;
+import org.msh.tb.entities.Workspace;
 
 /**
  * Interface that all task must implement
@@ -22,6 +23,22 @@ public interface AsyncTask {
 	 */
 	void cancel();
 
+	
+	/**
+	 * Add a parameter to the task. This parameter may be used internally by the implemented task to get
+	 * extra information about the execution
+	 * @param param
+	 * @param value
+	 */
+	void addParameter(String param, Object value);
+	
+	/**
+	 * Return the value of a parameter given in the <code>addParameter</code> method
+	 * @param param
+	 * @return
+	 */
+	Object getParameter(String param);
+
 
 	/**
 	 * Return the current status of the task
@@ -35,6 +52,13 @@ public interface AsyncTask {
 	 * @return
 	 */
 	public String getDisplayName();
+
+	
+	/**
+	 * Return the log message to be stored or displayed to the user
+	 * @return
+	 */
+	public String getLogMessage();
 
 
 	/**
@@ -95,4 +119,16 @@ public interface AsyncTask {
 	 * @return
 	 */
 	Date getExecutionTimestamp();
+	
+	/**
+	 * Set the workspace where task will be executed under
+	 * @param ws
+	 */
+	void setWorkspace(Workspace ws);
+	
+	/**
+	 * Return workspace where task will be executed under
+	 * @return
+	 */
+	Workspace getWorkspace();
 }

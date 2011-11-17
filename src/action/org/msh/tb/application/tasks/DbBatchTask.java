@@ -6,6 +6,12 @@ import org.jboss.seam.Component;
 import org.jboss.seam.transaction.UserTransaction;
 
 
+/**
+ * Abstract task to be run as a asynchronous background process specific for database batch processing.<p/>
+ * A concrete class must inherit this class and override method <code>processBatchRecord()</code> 
+ * @author Ricardo Memoria
+ *
+ */
 public abstract class DbBatchTask extends AsyncTaskImpl {
 
 	/**

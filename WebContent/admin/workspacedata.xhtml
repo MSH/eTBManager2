@@ -10,6 +10,7 @@
         
 <ui:param name="title" value="#{messages['Workspace']}: #{workspace.name}" />
 <ui:param name="topmenu" value="3" />
+<ui:param name="labelstyle" value="width:200px" />
 
 <ui:define name="naveg">
 	<div class="item">
@@ -24,9 +25,12 @@
 	<h:form styleClass="vertical-menu">
 	<s:link value="#{messages['form.edit']}" view="/admin/workspaceedt.xhtml" rendered="#{s:hasRole('WORKSPACES_EDT')}" >
 		<f:param name="id" value="#{workspace.id}" />
+		<span class="edit-icon"/>
 	</s:link>
 	<h:commandLink value="#{messages['form.remove']}" action="#{workspaceHome.remove}"
-		onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false" rendered="#{s:hasRole('WORKSPACES_EDT')}"/>
+		onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false" rendered="#{s:hasRole('WORKSPACES_EDT')}">
+		<span class="delete-icon"/>
+	</h:commandLink>
 	<s:link value="#{messages['admin.workspaces.addremuser']}" view="/admin/wsadduser.xhtml" rendered="#{s:hasRole('WORKSPACES_EDT')}" >
 		<f:param name="id" value="#{workspace.id}" />
 	</s:link>
@@ -38,10 +42,13 @@
 </ui:define>
 
 <ui:define name="content">
+<h1>
+	<h:graphicImage value="#{workspace.view.pictureURI}" rendered="#{workspace.view != null}" style="float:left;padding-right:8px;"/>
+	#{title}
+</h1>
 <h:form id="main">
 	<table width="500px" class="tab1" ><tr><td>
 
-	<h:graphicImage value="#{workspace.view.pictureURI}" rendered="#{workspace.view != null}" style="border:1px solid #d0d0d0;padding:10px;"/>
 	
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
@@ -56,6 +63,11 @@
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['Workspace.description']}:</ui:define>
     	<h:outputText value="#{workspace.description}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.extension']}:</ui:define>
+    	<h:outputText value="#{workspace.extension}" />
     </s:decorate>
 	
     <s:decorate template="/layout/display.xhtml" >

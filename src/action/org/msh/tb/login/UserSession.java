@@ -131,6 +131,9 @@ public class UserSession {
     	initialize();
     	updateUserRoleList();
     	
+    	// trying to avoid LazyInitializationException 
+    	userLogin.getDefaultWorkspace().getId();
+    	
     	Contexts.getSessionContext().set("userLogin", userLogin);
     	Contexts.getSessionContext().set("defaultWorkspace", userWorkspace.getWorkspace());
     	Contexts.getSessionContext().set("userWorkspace", userWorkspace);
