@@ -18,6 +18,7 @@ import org.msh.tb.entities.HealthSystem;
 import org.msh.tb.entities.SystemParam;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.Workspace;
+import org.msh.tb.md.symetb.SymetaImportTask;
 import org.msh.tb.tbunits.TBUnitSelection;
 
 /**

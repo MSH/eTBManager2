@@ -1,4 +1,4 @@
-package org.msh.tb.md;
+package org.msh.tb.md.symetb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,11 @@ import org.apache.axis.message.MessageElement;
 import org.jboss.seam.Component;
 import org.msh.tb.application.tasks.DbBatchTask;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.md.AdminUnitImporting;
+import org.msh.tb.md.CaseImporting;
+import org.msh.tb.md.MoldovaServiceConfig;
+import org.msh.tb.md.SymetaIntHome;
+import org.msh.tb.md.WarnMessage;
 import org.msh.tb.md.symetb.wsdlinterface.Get_casesResponseGet_casesResult;
 import org.msh.tb.md.symetb.wsdlinterface.Get_localitiesResponseGet_localitiesResult;
 import org.msh.tb.md.symetb.wsdlinterface.Get_regionsResponseGet_regionsResult;
