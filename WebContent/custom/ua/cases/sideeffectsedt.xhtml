@@ -85,7 +85,7 @@ function validateYesNo(cb) {
 				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
 			</f:facet>
 			<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" />
-			#{it.item.sideEffect.name}
+			#{it.item.sideEffect.value}
 		</h:column>
 
 		<h:column>
@@ -127,10 +127,10 @@ function validateYesNo(cb) {
 </table>
 
 	<div class="form-footer">
-	<h:commandLink action="#{sideEffectHome.save}" styleClass="button" 
+	<a:commandLink action="#{sideEffectHome.save}" styleClass="button" reRender="main,messages" 
 		onclick="if (!validateForm()) {return false;} else disableButton(this);">
-		<span>#{messages['form.ok']}</span>
-	</h:commandLink> 
+		<span>#{messages['form.save']}</span>
+	</a:commandLink> 
     <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
        	<f:param name="id" value="#{caseHome.id}"/>
        	<span>#{messages['form.cancel']}</span>

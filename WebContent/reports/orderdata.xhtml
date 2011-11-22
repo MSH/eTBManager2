@@ -79,6 +79,25 @@
     	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
     	<h:outputText value="#{order.totalPrice}"><f:convertNumber pattern="#,###,###,##0.00"/> </h:outputText>
     </s:decorate>
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['Order.shipContactName']}:</ui:define>
+		#{order.shipContactName}
+		<s:div rendered="#{not empty order.shipContactPhone}"><div class="icon-phone"/>#{order.shipContactPhone}</s:div>
+	</s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['meds.orders.shipaddr']}:</ui:define>
+    	<b>#{order.shipInstitutionName}</b>
+    	<br/>
+    	#{order.shipAddress}
+    	<br/>
+    	#{order.shipAddressCont}
+    	<br/>
+    	#{order.shipZipCode} <br/>
+    	<a:repeat value="#{orderHome.auselection.selectedUnit.parents}" var="it">
+    		<span style="margin-right:10px;">#{it.name}</span> 
+    	</a:repeat>
+    </s:decorate>
     
     <s:decorate template="/layout/display.xhtml" rendered="#{order.status=='CANCELLED'}">
     	<ui:define name="label">#{messages['Order.cancelReason']}:</ui:define>

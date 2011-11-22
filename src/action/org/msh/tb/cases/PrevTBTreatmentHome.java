@@ -72,7 +72,7 @@ public class PrevTBTreatmentHome {
 	@Transactional
 	public String persist() {
 		TbCase tbcase = caseHome.getInstance();
-		for (Item item: getItems()) {
+		for (Item item: getEditingItems()) {
 			updateSubstances(item);
 			PrevTBTreatment prev = item.getPrevTBTreatment();
 			prev.setTbcase(tbcase);
@@ -80,11 +80,14 @@ public class PrevTBTreatmentHome {
 		}
 
 		entityManager.flush();
-		substances.clear();
-		items.clear();
+		if (substances != null)
+			substances.clear();
+		if (items != null)
+			items.clear();
 		
 		editing = false;
-		createItems();
+		viewItems = null;
+		prevTBTreatments = null;
 		
 		return "persisted";
 	}

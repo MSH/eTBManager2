@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.log.Log;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.Workspace;
@@ -39,6 +40,9 @@ public abstract class AsyncTaskImpl implements AsyncTask {
 	public void start() {
 		progress = 0;
 		executionTimestamp = new Date();
+		
+		if (getWorkspace() != null)
+			Contexts.getEventContext().set("defaultWorkspace", getWorkspace());
 
 		try {
 			changeStatus(TaskStatus.STARTING);
@@ -54,6 +58,10 @@ public abstract class AsyncTaskImpl implements AsyncTask {
 		} catch (Exception e) {
 			exceptionHandler(e);
 			changeStatus(TaskStatus.ERROR);
+		}
+		finally {
+			if (isCanceling())
+				changeStatus(TaskStatus.CANCELED);
 		}
 	}
 
@@ -190,6 +198,16 @@ public abstract class AsyncTaskImpl implements AsyncTask {
 	}
 
 
+	/**
+	 * Return a parameter as a string value
+	 * @param param
+	 * @return
+	 */
+	public String getStringParam(String param) {
+		return (String)getParameter(param);
+	}
+
+
 	public User getUser() {
 		return user;
 	}
@@ -201,8 +219,16 @@ public abstract class AsyncTaskImpl implements AsyncTask {
 	public String getLogMessage() {
 		return (logMessage != null? logMessage.toString(): null);
 	}
-	
-	
+
+
+	public void addLogMessage(String msg) {
+		if (logMessage == null)
+			logMessage = new StringBuffer();
+		
+		logMessage.append(msg);
+	}
+
+
 	/**
 	 * Set the user that executed the task
 	 * @param user

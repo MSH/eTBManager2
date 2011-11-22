@@ -807,6 +807,10 @@ table {
 	color: #000000;
 	background-color:#d5b14f;
 }
+.entity-inactive {
+	color:red;
+	text-decoration: line-through;
+}
 
 
 /* Misc */

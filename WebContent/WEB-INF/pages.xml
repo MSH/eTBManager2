@@ -57,12 +57,6 @@
 
 
 	<!-- DRUG ORDER -->
-	
-	<page view-id="/reports/orderdata.xhtml">
-		<restrict>#{s:hasRole('ORDER_PRINT')}</restrict>
-		<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
-	</page>
-	
 	<page view-id="/medicines/selbatch.xhtml" conversation-required="true" no-conversation-view-id="/medicines/orderdata.xhtml">
 		<navigation>
 			<rule if-outcome="success">

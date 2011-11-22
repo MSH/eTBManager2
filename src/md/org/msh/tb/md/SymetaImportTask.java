@@ -66,7 +66,6 @@ public class SymetaImportTask extends DbBatchTask {
 	@Override
 	protected void finishing() {
 		// TODO Auto-generated method stub
-		super.finishing();
 	}
 
 	/**

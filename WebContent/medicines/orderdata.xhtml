@@ -24,13 +24,6 @@
 </ui:define>
 
 
-<ui:define name="print-link">
-	<s:link view="/reports/orderdata.xhtml" value="#{messages['global.print']}" target="_blank" rendered="#{s:hasRole('ORDER_PRINT')}">
-		<f:param name="id" value="#{order.id}" />
-	</s:link>
-</ui:define>
-
-
 <ui:define name="left">
 	<h:form>
 	<div class="vertical-menu">
@@ -61,6 +54,11 @@
 		rendered="#{(orderHome.canReceive) and (order.unitFrom.batchControl)}" 
 		propagation="begin" action="#{orderReceivingHome.beginReceiving}">
 		<f:param name="id" value="#{order.id}" />
+	</s:link>
+
+	<s:link view="/reports/orderdata.xhtml" target="_blank" >
+		<f:param name="id" value="#{order.id}" />
+		<span class="print-icon"/><span>#{messages['global.print']}</span>
 	</s:link>
 	</div>
 	</h:form>
