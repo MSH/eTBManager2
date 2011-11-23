@@ -9,7 +9,7 @@ public class SideEffectIndicator extends Indicator {
 
 	@Override
 	protected void createIndicators() {
-		setGroupFields("se.sideEffect.value.name1");
+		setGroupFields("se.sideEffect.value");
 		createItems( createQuery().getResultList() );
 	}
 

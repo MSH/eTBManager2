@@ -10,7 +10,6 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.md.AdminUnitImporting;
 import org.msh.tb.md.CaseImporting;
 import org.msh.tb.md.MoldovaServiceConfig;
-import org.msh.tb.md.SymetaIntHome;
 import org.msh.tb.md.WarnMessage;
 import org.msh.tb.md.symetb.wsdlinterface.Get_casesResponseGet_casesResult;
 import org.msh.tb.md.symetb.wsdlinterface.Get_localitiesResponseGet_localitiesResult;

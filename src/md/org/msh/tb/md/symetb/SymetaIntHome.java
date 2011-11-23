@@ -1,4 +1,4 @@
-package org.msh.tb.md;
+package org.msh.tb.md.symetb;
 
 import javax.persistence.EntityManager;
 
@@ -18,7 +18,7 @@ import org.msh.tb.entities.HealthSystem;
 import org.msh.tb.entities.SystemParam;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.Workspace;
-import org.msh.tb.md.symetb.SymetaImportTask;
+import org.msh.tb.md.MoldovaServiceConfig;
 import org.msh.tb.tbunits.TBUnitSelection;
 
 /**
@@ -40,7 +40,6 @@ public class SymetaIntHome {
 	@In EntityManager entityManager;
 	@In TaskManager taskManager;
 	@In(required=false) Workspace defaultWorkspace;
-	@In(create=true) SymetaIntegration symetaIntegration;
 	@In(create=true) FacesMessages facesMessages;
 
 	
