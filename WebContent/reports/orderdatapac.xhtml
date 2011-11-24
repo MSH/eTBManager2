@@ -109,70 +109,65 @@
     </h:panelGroup>
 </td></tr></table>
 
+<h1>#{messages['Order.cases']}</h1>
+<ui:repeat value="#{orderHome.sources}" var="s">
 <table width="100%">
-	<ui:repeat value="#{orderHome.sources}" var="s">
-	<tr><td class="colheader">
-		#{s.source.name}
-	</td></tr>
 	<tr><td>
-		<h:dataTable value="#{s.items}" var="it" class="table1" width="100%" columnClasses="coll,colc,colr,colr,colr,colr,colr,colr" rowClasses="lin1,lin2">
-			<h:column>
-				<f:facet name="header"><h:outputText value="#{messages['Medicine']}" styleClass="collh"/></f:facet>
-				<div class="medicine-icon" style="float:left;"/>
-				#{it.item.medicine}
-			</h:column>
-
-			<h:column>
-				<f:facet name="header"><h:outputText value="#{messages['OrderItem.numPatients']}" /></f:facet>
-				#{it.item.numPatients}
-			</h:column>						
-
-			<h:column>
-			<f:facet name="header"><h:outputText value="#{messages['OrderItem.estimatedQuantity']}" styleClass="colrh" /></f:facet>
-				<h:outputText value="#{it.item.estimatedQuantity}">
-					<f:convertNumber pattern="###,###,###"/>
-				</h:outputText>
-			</h:column>
-			
-			<h:column rendered="#{order.unitFrom.changeEstimatedQuantity}">
-			<f:facet name="header"><h:outputText value="#{messages['OrderItem.requestedQuantity']}" styleClass="colrh" /></f:facet>
-				<h:outputText value="#{it.item.requestedQuantity}">
-					<f:convertNumber pattern="###,###,###"/>
-				</h:outputText>
-			</h:column>
-			
-			<h:column rendered="#{order.status != 'WAITAUTHORIZING'}">
-			<f:facet name="header"><h:outputText value="#{messages['OrderItem.approvedQuantity']}" styleClass="colrh" /></f:facet>
-				<h:outputText value="#{it.item.approvedQuantity}">
-					<f:convertNumber pattern="###,###,###"/>
-				</h:outputText>
-			</h:column>
-			
-			<h:column rendered="#{(order.status=='SHIPPED')or(order.status=='RECEIVED')}">
-			<f:facet name="header"><h:outputText value="#{messages['OrderItem.shippedQuantity']}" styleClass="colrh" /></f:facet>
-				<h:outputText value="#{it.item.shippedQuantity}">
-					<f:convertNumber pattern="###,###,###"/>
-				</h:outputText>
-			</h:column>
-			
-			<h:column rendered="#{order.status == 'RECEIVED'}">
-			<f:facet name="header"><h:outputText value="#{messages['OrderItem.receivedQuantity']}" styleClass="colrh" /></f:facet>
-				<h:outputText value="#{it.item.receivedQuantity}">
-					<f:convertNumber pattern="###,###,###"/>
-				</h:outputText>
-			</h:column>
-			
-			<h:column rendered="#{(order.status=='SHIPPED')or(order.status=='RECEIVED')}">
-			<f:facet name="header"><h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh" /></f:facet>
-				<h:outputText value="#{it.item.totalPrice}">
-					<f:convertNumber pattern="###,###,##0.00"/>
-				</h:outputText>
-			</h:column>
-		</h:dataTable>
-		<p/>
+		<h2>#{s.source.abbrevName} <span class="text-small">(#{s.source.name})</span></h2>
 	</td></tr>
+<tr><td>
+<table width="100%" class="table1">
+	<tr><th colspan="2">#{messages['Medicine']}
+		</th>
+		<th style="text-align:right;">
+			#{messages['OrderItem.numPatients']}
+		</th>
+		<th style="text-align:right;">
+			#{messages['OrderItem.estimatedQuantity']}
+		</th>
+	</tr>
+	<ui:repeat value="#{s.items}" var="it">
+	<tr class="highlight">
+		<td class="colb" colspan="2">
+		<div class="medicine-icon" style="float:left"/>
+			<b><h:outputText value="#{it.item.medicine}" /></b>
+		</td>
+		<td class="colrb">
+			<h:outputText value="#{it.item.numPatients}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>		
+		</td>
+		<td class="colrb">
+			<b>
+			<h:outputText value="#{it.item.estimatedQuantity}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+			</b>		
+		</td>
+	</tr>
+		<ui:repeat value="#{it.item.cases}" var="c">
+			<tr>
+				<td class="colb">
+					<s:link value="#{c.tbcase.displayCaseNumber}" view="/cases/casedata.xhtml">
+						<f:param name="id" value="#{c.tbcase.id}"/>
+					</s:link>
+				</td>
+				<td class="colb">
+					#{c.tbcase.patient.fullName}
+				</td>
+				<td class="colb"></td>
+				<td class="colrb">
+					<h:outputText value="#{c.estimatedQuantity}" >
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</td>
+			</tr>
+		</ui:repeat>
+	
 	</ui:repeat>
 </table>
+</td></tr></table>
+</ui:repeat>
 
 </ui:define>
 

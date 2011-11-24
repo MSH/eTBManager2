@@ -39,14 +39,18 @@ public class OrderReceivingHome extends Controller {
 	@In(create=true) OrderHome orderHome;
 	@In(create=true) Order order;
 	@In(create=true) FacesMessages facesMessages;
+	
+	private List<SourceOrderItem> sources;
 
+	
 	/**
-	 * Inicia os dados para notificação do pedido de medicamentos
+	 * Create source list from {@link OrderHome} class, but removing those items that were not shipped
 	 */
-	public void beginReceiving() {
+	public void createSources() {
 		boolean bBatchControl = order.getUnitFrom().isBatchControl();
-		
-		for (SourceOrderItem s: orderHome.getSources()) {
+
+		sources = orderHome.getSources();
+		for (SourceOrderItem s: sources) {
 			// remove items que não foram enviados
 			int i = 0;
 			while (i < s.getItems().size()) {
@@ -71,12 +75,13 @@ public class OrderReceivingHome extends Controller {
 		
 		// remove fontes sem itens
 		int i = 0;
-		while (i < orderHome.getSources().size()) {
-			if (orderHome.getSources().get(i).getItems().size() == 0)
-				orderHome.getSources().remove(i);
+		while (i < sources.size()) {
+			if (sources.get(i).getItems().size() == 0)
+				sources.remove(i);
 			else i++;
 		}
 	}
+
 
 
 	/**
@@ -86,6 +91,7 @@ public class OrderReceivingHome extends Controller {
 	@Transactional
 	public String notifyReceiving() {
 		Date dtReceiving = order.getReceivingDate();
+
 		if (dtReceiving.before(order.getShippingDate()) || (dtReceiving.after(new Date()))) {
 			facesMessages.addFromResourceBundle("meds.orders.invalidreceivingdate");
 			return "error";
@@ -104,6 +110,7 @@ public class OrderReceivingHome extends Controller {
 
 		// gera os movimentos de saída do pedido
 		movementHome.initMovementRecording();
+		Map<OrderItem, Movement> itens = new HashMap<OrderItem, Movement>();
 		for (OrderItem it: order.getItems())
 			if ((it.getReceivedQuantity() != null) && (it.getReceivedQuantity() > 0))
 			{
@@ -124,9 +131,14 @@ public class OrderReceivingHome extends Controller {
 						type, 
 						batches,
 						s);
-				it.setMovementIn(mov);
+				itens.put(it, mov);
 			}
 		movementHome.savePreparedMovements();
+		
+		for (OrderItem it: itens.keySet()) {
+			Movement mov = itens.get(it);
+			it.setMovementIn(mov);
+		}
 
 		facesMessages.addFromResourceBundle("meds.orders.received");
 		entityManager.persist(order);
@@ -146,7 +158,8 @@ public class OrderReceivingHome extends Controller {
 		for (OrderItem item: order.getItems()) {
 			int qtd = 0;
 			for (OrderBatch b: item.getBatches()) {
-				qtd += b.getReceivedQuantity();
+				if (item.getReceivedQuantity() != null)
+					qtd += b.getReceivedQuantity();
 			}
 			
 			item.setReceivedQuantity(qtd);
@@ -181,5 +194,12 @@ public class OrderReceivingHome extends Controller {
 				context.addMessage(txt.getClientId(context), message);
 			}
 		}
+	}
+	
+
+	public List<SourceOrderItem> getSources() {
+		if (sources == null)
+			createSources();
+		return sources;
 	}
 }

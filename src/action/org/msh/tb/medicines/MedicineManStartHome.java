@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
@@ -38,6 +39,7 @@ import org.msh.tb.medicines.movs.MovementHome;
  */
 @Name("medicineManStartHome")
 @Scope(ScopeType.CONVERSATION)
+@AutoCreate
 public class MedicineManStartHome {
 
 	@In(create=true) SourcesQuery sources;

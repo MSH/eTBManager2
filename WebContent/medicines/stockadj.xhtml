@@ -256,7 +256,7 @@ function initBatchDeleting(batchId) {
     	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
     	<h:inputText id="tprice" value="#{stockAdjustmentHome.batchQuantity.batch.totalPrice}" required="true" 
     		converter="currencyConverter" onkeyup="return changeTotalPrice(this);">
-    		<f:validateDoubleRange minimum="1"/>
+    		<f:validateDoubleRange minimum="0.01" />
     	</h:inputText>
     </s:decorate>
 	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />

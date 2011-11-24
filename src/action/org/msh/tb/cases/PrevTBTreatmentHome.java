@@ -122,7 +122,7 @@ public class PrevTBTreatmentHome {
 			"from PrescribedMedicine pm inner join pm.tbcase c inner join pm.medicine m inner join m.components comp " +
 			"where c.patient.id = :id ";
 		
-		Date dt = tbcase.getTreatmentPeriod().getIniDate(); 
+		Date dt = (tbcase.getTreatmentPeriod() != null? tbcase.getTreatmentPeriod().getIniDate() : null); 
 		if (dt != null)
 			hql += " and c.treatmentPeriod.iniDate < :dt";
 		
