@@ -269,12 +269,12 @@ function handleContextClick(comp) {
 
 <s:fragment rendered="#{hideinterimmonth == null}">
 
-<s:decorate template="/layout/edit.xhtml" >
+	<s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['reports.interimMonths']}:	</ui:define>
 		<h:selectOneMenu  value="#{indicatorFilters.interimMonths}" required="true" style="margin-right:4px;">
 		<f:selectItems value="#{interimMonths}"/>
 		</h:selectOneMenu>
-		</s:decorate>
+	</s:decorate>
 		
 </s:fragment>
 

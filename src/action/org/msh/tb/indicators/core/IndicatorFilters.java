@@ -117,7 +117,7 @@ public class IndicatorFilters {
 		c.set(Calendar.YEAR, iniYear);
 		if (iniMonth == null)
 			 c.set(Calendar.MONTH, 0);
-		else c.set(Calendar.MONTH, iniMonth-1);
+		else c.set(Calendar.MONTH, iniMonth);
 		c.set(Calendar.DAY_OF_MONTH, 1);
 
 		return c.getTime();
@@ -136,7 +136,7 @@ public class IndicatorFilters {
 		c.set(Calendar.YEAR, endYear);
 		if (endMonth == null)
 			 c.set(Calendar.MONTH, 11);
-		else c.set(Calendar.MONTH, endMonth-1);
+		else c.set(Calendar.MONTH, endMonth);
 		c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
 
 		return c.getTime();

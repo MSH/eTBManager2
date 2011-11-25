@@ -551,6 +551,7 @@ public class CaseHQLBase extends Controller {
 	 */
 	private String getPeriodConditionByField(String field) {
 		IndicatorFilters filters = getIndicatorFilters();
+		System.out.println("ini=" + filters.getIniDate() + ", end=" + filters.getEndDate());
 
 		if (filters.isPeriodCompleted()) {
 			if (newCasesOnly)

@@ -178,6 +178,16 @@
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.patientType!=null}">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
     		#{messages[tbcase.patientType.key]}
+    		<s:fragment rendered="#{tbcase.patientType=='OTHER'}">
+    			<div style="display:block">
+    				#{tbcase.patientTypeOther}
+    			</div>
+    		</s:fragment>
+		</s:decorate>
+		
+		<s:decorate template="/layout/displayfield.xhtml" rendered="#{tbcase.patientType=='ANOTHER_TB'}">
+    		<ui:define name="label">#{messages['PatientType.ANOTHER_TB']}:</ui:define>
+			<ui:param name="field" value="#{tbcase.anothertb}" />
 		</s:decorate>
 
 		<s:fragment rendered="#{not empty prevTBTreatmentHome.items}">
