@@ -140,14 +140,13 @@ public class OrderEstimation {
 			OrderItemAux item = s.itemByMedicine(p.getMedicine());
 
 			int tot = qtd + item.getItem().getEstimatedQuantity();
-			item.getItem().setEstimatedQuantity(tot);
 
+			item.getItem().setEstimatedQuantity(tot);
 			item.getItem().setRequestedQuantity(tot);
 			
 			TbCase tbcase = p.getTbcase();
-			
-			if (!item.getItem().getCases().contains(tbcase)) 
-				item.getItem().addCase(p.getTbcase(), qtd);
+
+			item.getItem().addCase(tbcase, qtd);
 		}
 	}
 
@@ -240,7 +239,8 @@ public class OrderEstimation {
 					qtd = it.getItem().getEstimatedQuantity() - qtd;
 					if (qtd < 0)
 						qtd = 0;
-					it.getItem().setRequestedQuantity(qtd);					
+					it.getItem().setRequestedQuantity(qtd);
+					it.getItem().setStockQuantity(qtd);
 				}
 			}
 		}

@@ -85,7 +85,7 @@ function validateYesNo(cb) {
 				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
 			</f:facet>
 			<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" />
-			#{it.item.sideEffect.name}
+			#{it.item.sideEffect.value.name}
 		</h:column>
 		
 		<h:column>

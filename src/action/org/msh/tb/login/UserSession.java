@@ -27,7 +27,6 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserProfile;
 import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 
 
@@ -44,6 +43,7 @@ public class UserSession {
 	private Tbunit tbunit;
 	private UserLogin userLogin;
 	private UserWorkspace userWorkspace;
+	private Integer workspaceId;
 	private boolean displayMessagesKeys;
 	private boolean initingList;
 
@@ -52,11 +52,15 @@ public class UserSession {
      * Return the workspace in use
      * @return {@link Workspace} instance
      */
-    @Factory("defaultWorkspace")
+/*    @Factory("defaultWorkspace")
     public Workspace getDefaultWorkspace() {
-    	return (userWorkspace != null? userWorkspace.getWorkspace(): null);
-    }
+    	if (workspaceId == null)
+    		return null;
 
+    	EntityManager em = (EntityManager)Component.getInstance("entityManager");
+    	return em.find(Workspace.class, workspaceId);
+    }
+*/
 
 	/**
 	 * @return the userLogin
@@ -121,7 +125,6 @@ public class UserSession {
     	if (userWorkspace == null)
     		return "error";
 
-//    	System.out.println(userWorkspace.getWorkspace().getName().toString());
     	if (userLogin != null)
     		registerLogout();
 
@@ -131,11 +134,10 @@ public class UserSession {
     	initialize();
     	updateUserRoleList();
     	
-    	// trying to avoid LazyInitializationException 
-    	userLogin.getDefaultWorkspace().getId();
+    	workspaceId = userLogin.getDefaultWorkspace().getId();
     	
     	Contexts.getSessionContext().set("userLogin", userLogin);
-    	Contexts.getSessionContext().set("defaultWorkspace", userWorkspace.getWorkspace());
+    	Contexts.getSessionContext().set("workspaceExtension", userWorkspace.getWorkspace().getExtension());
     	Contexts.getSessionContext().set("userWorkspace", userWorkspace);
     	
     	getEntityManager().flush();
@@ -481,6 +483,22 @@ public class UserSession {
 	 */
 	public void setInitingList(boolean initingList) {
 		this.initingList = initingList;
+	}
+
+
+	/**
+	 * @return the workspaceId
+	 */
+	public Integer getWorkspaceId() {
+		return workspaceId;
+	}
+
+
+	/**
+	 * @param workspaceId the workspaceId to set
+	 */
+	public void setWorkspaceId(Integer workspaceId) {
+		this.workspaceId = workspaceId;
 	}
 
 

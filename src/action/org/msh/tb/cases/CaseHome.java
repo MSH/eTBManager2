@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
@@ -31,6 +32,7 @@ import org.msh.tb.log.LogInfo;
 @Name("caseHome")
 @LogInfo(roleName="CASE_DATA")
 @BypassInterceptors
+@AutoCreate
 public class CaseHome extends WsEntityHome<TbCase>{
 	private static final long serialVersionUID = -8072727373977321407L;
 

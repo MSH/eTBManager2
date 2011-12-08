@@ -27,14 +27,14 @@
 		<a:commandLink 
 			onclick="showPeriodDlg();"
 			action="#{treatmentHome.startTreatmentPeriodEditing}"
-			reRender="formperiod" styleClass="button-alt" >
+			reRender="formperiod" styleClass="button-alt" ajaxSingle="true" >
 			<span>#{messages['cases.regimens.changeperiod']}...</span>
 		</a:commandLink>
 
 		<a:commandLink
 			onclick="showMedicineDlg();"
 			action="#{treatmentHome.startAddMedicine}"
-			reRender="formmedicine" styleClass="button-alt" >
+			reRender="formmedicine" styleClass="button-alt" ajaxSingle="true">
 			<span>#{messages['Regimen.add']}...</span>
 		</a:commandLink>
 	</div>
@@ -46,6 +46,7 @@
 		<a:commandLink value="#{messages['cases.regimens.change']}..."
 			action="#{treatmentHome.startRegimenChange}"
 			reRender="formregimen"
+			ajaxSingle="true"
 			style="margin-left:10px;" 
 			onclick="showRegimenDlg();" />
 	</s:decorate>						
@@ -95,8 +96,7 @@ function showRemoveDlg() {
 	Richfaces.showModalPanel('removedlg'); 
 } 
 function formButtonPost(button) {
-	if (!disableButton(this)) return false;
-	jQuery(button).closest('.button-bar').prepend(waitdiv);
+	if (!disableButton(button)) return false;
 	return true;
 }
 
@@ -112,7 +112,7 @@ function formButtonPost(button) {
 
 <rich:modalPanel id="perioddlg" width="500" autosized="true" zindex="2000" trimOverlayedElements="false">
 	<f:facet name="header">#{messages['cases.treat']}</f:facet>
-	<ui:param name="labelstyle" value="width:110px" />
+	<ui:param name="labelstyle" value="width:150px" />
 	<h:form id="formperiod" style="padding:10px;">
 
 	<div class="form-content">
@@ -155,8 +155,8 @@ function formButtonPost(button) {
 	<a:commandLink action="#{treatmentHome.endTreatmentPeriodEditing}"
 		data="#{treatmentHome.validated}"
 		styleClass="button" reRender="formperiod"
-		onclick="formButtonPost(this)" 
-		oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('perioddlg'); updateTreatmentTable();">
+		onclick="return formButtonPost(this)" 
+		oncomplete="if (!data) {enableButton(); return false;} Richfaces.hideModalPanel('perioddlg'); updateTreatmentTable();">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink>
 
@@ -172,7 +172,7 @@ function formButtonPost(button) {
 
 <rich:modalPanel id="removedlg" width="500" autosized="true" zindex="2000" trimOverlayedElements="false">
 	<f:facet name="header">#{messages['form.remove']}</f:facet>
-	<ui:param name="labelstyle" value="width:110px" />
+	<ui:param name="labelstyle" value="width:150px" />
 	<h:form id="formremove" style="padding:10px;">
 
 	<div class="form-content">
@@ -197,7 +197,7 @@ function formButtonPost(button) {
 	<a:commandLink action="#{treatmentHome.endRemovePeriod}"
 		data="#{treatmentHome.validated}"
 		styleClass="button" reRender="formremove"
-		onclick="formButtonPost(this)" 
+		onclick="formButtonPost(this)"
 		oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('removedlg');updateTreatmentTable();">
 		<span>#{messages['form.remove']}</span>
 	</a:commandLink>
@@ -284,7 +284,7 @@ function formButtonPost(button) {
 		styleClass="button"
 		onclick="formButtonPost(this)" 
 		reRender="formmedicine" 
-		oncomplete="this.disabled=false;if (!data) return false;Richfaces.hideModalPanel('medicinedlg');updateTreatmentTable();">
+		oncomplete="enableButton();if (!data) return false;Richfaces.hideModalPanel('medicinedlg');updateTreatmentTable();">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink>
 		

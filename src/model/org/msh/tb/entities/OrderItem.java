@@ -62,6 +62,8 @@ public class OrderItem implements Serializable {
 	private Integer shippedQuantity;
 	private Integer receivedQuantity;
 	
+	private Integer stockQuantity;
+	
 	private Integer numPatients;
 	
 	@Column(length=200)
@@ -109,15 +111,17 @@ public class OrderItem implements Serializable {
 	 */
 	public void addCase(TbCase c, int estimatedQtd) {
 		for (OrderCase oc: cases) {
-			if (oc.getTbcase().equals(c))
+			if (oc.getTbcase().equals(c)) {
+				oc.setEstimatedQuantity( oc.getEstimatedQuantity() + estimatedQtd );
 				return;
+			}
 		}
 
 		OrderCase oc = new OrderCase();
 		oc.setTbcase(c);
 		oc.setItem(this);
 		oc.setEstimatedQuantity(estimatedQtd);
-		
+
 		cases.add(oc);
 		numPatients = cases.size();
 	}
@@ -237,5 +241,20 @@ public class OrderItem implements Serializable {
 
 	public void setData(Object data) {
 		this.data = data;
+	}
+
+
+	/**
+	 * @return the stockQuantity
+	 */
+	public Integer getStockQuantity() {
+		return stockQuantity;
+	}
+
+	/**
+	 * @param stockQuantity the stockQuantity to set
+	 */
+	public void setStockQuantity(Integer stockQuantity) {
+		this.stockQuantity = stockQuantity;
 	}
 }

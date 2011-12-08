@@ -12,7 +12,6 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.tb.entities.Workspace;
 
 @Name("workspaceUriRewrite")
 @Scope(ScopeType.APPLICATION)
@@ -29,11 +28,7 @@ public class WorkspaceUriRewrite {
 	 * @return
 	 */
 	public String convertUriToView(FacesContext facesContext, String uri) {
-		Workspace ws = getWorkspace();
-		if (ws == null)
-			return uri;
-		
-		String ext = ws.getExtension();
+		String ext = getWorkspaceExtension();
 		if (ext == null)
 			return uri;
 		
@@ -52,8 +47,8 @@ public class WorkspaceUriRewrite {
 	 * @return
 	 */
 	public String convertViewToUri(FacesContext facesContext, String view) {
-		Workspace ws = getWorkspace();
-		if (ws == null)
+		String ext = getWorkspaceExtension(); 
+		if (ext == null)
 			return view;
 		
 		if (view.startsWith(customPath)) {
@@ -69,14 +64,11 @@ public class WorkspaceUriRewrite {
 		else return view;
 	}
 
-
-	/**
-	 * Return the user's workspace
-	 * @return instance of {@link Workspace} class
-	 */
-	protected Workspace getWorkspace() {
-		return (Workspace)Component.getInstance("defaultWorkspace");
+	
+	public String getWorkspaceExtension() {
+		return (String)Component.getInstance("workspaceExtension");
 	}
+	
 	
 	/**
 	 * Check if a extension page exists

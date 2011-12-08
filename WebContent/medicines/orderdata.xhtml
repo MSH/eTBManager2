@@ -182,7 +182,7 @@
 		<h2>#{s.source.abbrevName} <span class="text-small">(#{s.source.name})</span></h2>
 	</td></tr>
 	<tr><td>
-		<h:dataTable value="#{s.items}" var="it" class="table1" width="100%" columnClasses="coll,colc,colr,colr,colr,colr,colr,colr" rowClasses="lin1,lin2">
+		<h:dataTable value="#{s.items}" var="it" class="table1" width="100%" columnClasses="coll,colr,colc,colr,colr,colr,colr,colr,colr" rowClasses="lin1,lin2">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['Medicine']}" styleClass="collh"/>
@@ -190,6 +190,13 @@
 				<div class="medicine-icon" style="float:left"/>
 				<h:outputText value="#{it.item.medicine}" />
 			</h:column>
+
+			<h:column>
+				<f:facet name="header"><h:outputText value="#{messages['meds.stockpos']}" styleClass="colrh" /></f:facet>
+				<h:outputText value="#{it.item.stockQuantity}">
+					<f:convertNumber pattern="###,###,###"/>
+				</h:outputText>
+			</h:column>						
 
 			<h:column>
 				<f:facet name="header"><h:outputText value="#{messages['OrderItem.numPatients']}" /></f:facet>

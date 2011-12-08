@@ -77,7 +77,7 @@ public class CaseMoveHome extends Controller {
 
 		currentHealthUnit.getPeriod().intersect(prevPeriod);
 		
-		entityManager.persist(newhu);
+//		entityManager.persist(newhu);
 
 		prescribedMedicineHome.splitPeriod(newPeriod.getIniDate());
 		
