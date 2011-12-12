@@ -14,7 +14,11 @@ public enum Nationality {
 	SUDAN,
 	TANZANIA,
 	UGANDA,
-	OTHER;
+	OTHER,
+	
+	//Nigeria Workspace
+	NIGERIA;
+	
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
