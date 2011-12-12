@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+	
+	<s:fragment rendered="#{not caseHome.inTreatment}" >
+		<h:outputText value="#{messages['cases.details.notreatment']}" styleClass="warn" style="display:block;padding:30px;"/>
+
+		<s:link onclick="showSelRegimenDlg();return false;" 
+			rendered="#{caseHome.canEditTreatment}"
+			style="display:block;margin-left:30px;marign-bottom:30px;width:160px;" styleClass="button-alt">
+			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['cases.details.starttreatment']}</span>
+		</s:link>
+		
+		<rich:jQuery timing="onJScall" name="showSelRegimenDlg" selector="#seltttype" query="show(500)" />
+		<div id="seltttype" style="display:none;padding:20px;width:500px;">
+			
+			<s:decorate template="/layout/roundrect.xhtml">
+				<ui:param name="showfooter" value="0" />
+				<ui:define name="header">
+					<b>#{messages['cases.treat.selreg']}:</b><br/>
+				</ui:define>
+				
+				<div style="padding:20px">
+
+				<div style="display:block;padding:4px;">
+					<div class="linknaveg">
+					<s:link value="#{messages['regimens.standard']}" style="font-size:12px" view="/cases/starttreatment.xhtml">
+						<f:param name="id" value="#{caseHome.id}"/>
+					</s:link>
+					</div>
+				</div>
+				<br/>
+				<div style="display:block;padding:4px;">
+					<div class="linknaveg">
+					<s:link value="#{messages['regimens.individualized']}" style="font-size:12px" view="/cases/starttreatmentind.xhtml">
+						<f:param name="id" value="#{caseHome.id}"/>
+					</s:link>
+					</div>
+				</div>
+				</div>
+			</s:decorate>
+		</div>
+	</s:fragment>
+
+	<s:fragment rendered="#{caseHome.inTreatment}">
+
+	<h:panelGroup id="pnltreatment">
+	<s:link value="#{messages['form.edit']}" view="/cases/treatmentedt.xhtml" style="float:right;"/>
+
+	<s:decorate template="/cases/treattable.xhtml">
+		<ui:param name="editing" value="false" />
+	</s:decorate>
+
+
+	<a:repeat value="#{treatmentCalendarHome_Ng.phases}" var="phase">
+		<h3>
+			<h:outputText value="#{messages['cases.treat.intphase']}" rendered="#{phase.intensivePhase}"/>
+			<h:outputText value="#{messages['cases.treat.contphase']}" rendered="#{phase.continuousPhase}"/>
+		</h3>
+		<ui:decorate template="calendartreat.xhtml" >
+			<ui:param name="list" value="#{phase.months}" />
+		</ui:decorate>
+	</a:repeat>
+
+	</h:panelGroup>
+
+
+	</s:fragment>
+
+</ui:composition>

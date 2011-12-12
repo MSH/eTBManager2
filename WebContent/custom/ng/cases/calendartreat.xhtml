@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	<table class="table1 small">
+		<tr><th class="text-small">
+				<span class="small-text">#{messages['global.month']}/#{messages['global.year']}</span>
+			</th>
+			<ui:repeat value="#{treatmentCalendarHome.days}" var="d">
+			<th class="text-small">
+				<div style="width:16px">
+				#{d}
+				</div>
+			</th>
+			</ui:repeat>
+			<th class="text-small">
+				#{messages['cases.treat.presc']}
+			</th>
+			<th class="text-small">
+				#{messages['cases.treat.disp']}
+			</th>
+		</tr>
+		<ui:repeat value="#{list}" var="it">
+		<tr>
+			<td class="colcb">
+				<s:fragment rendered="#{not caseHome.canEditTreatmentCalendar}">
+					<h:outputText value="#{it.month}" converter="monthYearConverter">
+						<f:param name="year" value="#{it.year}"/>
+					</h:outputText>
+				</s:fragment>
+				<s:link view="/custom/ng/cases/casedispensing.xhtml" style="font-size:10px;" rendered="#{caseHome.canEditTreatmentCalendar}">
+					<f:param name="year" value="#{it.year}"/>
+					<f:param name="month" value="#{it.month}"/>
+					<f:param name="id" value="#{caseHome.id}"/>
+					<h:outputText value="#{it.month}" converter="monthYearConverter">
+						<f:param name="year" value="#{it.year}"/>
+					</h:outputText>				
+				</s:link>
+			</td>
+			<ui:repeat value="#{it.days}" var="d">
+			<td class="colcb" style="#{d.notused?'background-color:#f0f0f0;': (d.treated? 'background-color:#E6E8D8;border:2px solid #C6C8B8;':'background-color:transparent;')}">
+				<h:outputText value="#{d.selected}" rendered="#{d.prescribed}" style="color:#000000;"/>
+			</td>
+			</ui:repeat>
+			<td>
+				#{it.totalPrescribed}
+			</td>
+			<td>
+				#{it.dispensingDays}
+			</td>
+		</tr>
+		</ui:repeat>
+	</table>
+
+</ui:composition>  
