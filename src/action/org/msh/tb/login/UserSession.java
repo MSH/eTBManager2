@@ -27,6 +27,7 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserProfile;
 import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 
 
@@ -52,15 +53,21 @@ public class UserSession {
      * Return the workspace in use
      * @return {@link Workspace} instance
      */
-/*    @Factory("defaultWorkspace")
+    @Factory(value="defaultWorkspace", autoCreate=true, scope=ScopeType.EVENT)
     public Workspace getDefaultWorkspace() {
     	if (workspaceId == null)
     		return null;
 
-    	EntityManager em = (EntityManager)Component.getInstance("entityManager");
-    	return em.find(Workspace.class, workspaceId);
+		EntityManager entityManager = (EntityManager)Component.getInstance("entityManager");
+		
+		if (entityManager == null)
+			return null;
+		
+		return (Workspace)entityManager.createQuery("from Workspace where id = :id")
+			.setParameter("id", workspaceId)
+			.getSingleResult();
     }
-*/
+
 
 	/**
 	 * @return the userLogin

@@ -34,13 +34,13 @@
     	<b style="float:left;margin-right:4px;">#{messages['Order.unitFrom']}: </b>
     	#{order.unitFrom.name}
     	<br/>
-		#{order.unitFrom.adminUnit.name} - #{order.unitFrom.adminUnit.parent.name}
+    	#{order.unitFrom.adminUnit.fullDisplayName}
     </td>
     <td>
     	<b style="float:left;margin-right:4px;">#{messages['Order.unitTo']}: </b>
     	#{order.unitTo.name}
     	<br/>
-		#{order.unitTo.adminUnit.name} - #{order.unitTo.adminUnit.parent.name}
+    	#{order.unitTo.adminUnit.fullDisplayName}
     </td></tr>
 
     <tr><td colspan="2" style="font-size:11px;padding-top:5px;color:#808080">
@@ -121,6 +121,13 @@
 				<div class="medicine-icon" style="float:left;"/>
 				#{it.item.medicine}
 			</h:column>
+
+			<h:column>
+				<f:facet name="header"><h:outputText value="#{messages['meds.stockpos']}" styleClass="colrh" /></f:facet>
+				<h:outputText value="#{it.item.stockQuantity}">
+					<f:convertNumber pattern="###,###,###"/>
+				</h:outputText>
+			</h:column>						
 
 			<h:column>
 				<f:facet name="header"><h:outputText value="#{messages['OrderItem.numPatients']}" /></f:facet>

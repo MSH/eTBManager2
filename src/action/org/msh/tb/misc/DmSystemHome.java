@@ -16,7 +16,6 @@ import org.msh.tb.application.EtbmanagerApp;
 public class DmSystemHome {
 	
 	@In EntityManager entityManager;
-	@In(create=true) Renderer renderer;
 	@In(create=true) EtbmanagerApp etbmanagerApp;
 	
 
@@ -36,7 +35,7 @@ public class DmSystemHome {
 	 */
 	public boolean enviarEmail(String mailPage) {
 		try {
-			renderer.render("/mail/".concat(mailPage));
+			Renderer.instance().render("/mail/".concat(mailPage));
 			return true;
 		}
 		catch (Exception e) {

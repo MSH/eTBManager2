@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.contexts.Contexts;
 
 @Embeddable
@@ -90,7 +91,7 @@ public class LocalizedNameComp implements Serializable {
 	 */
 	public boolean isAlternateLanguage() {
 		UserLogin userLogin = (UserLogin)Contexts.getSessionContext().get("userLogin");
-		Workspace ws = (Workspace)Contexts.getSessionContext().get("defaultWorkspace");
+		Workspace ws = (Workspace)Component.getInstance("defaultWorkspace");
 		
 		if ((userLogin == null) || (ws == null))
 			return true;

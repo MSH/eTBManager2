@@ -66,6 +66,21 @@ public class AdministrativeUnit extends WSObject {
 		return getParentsTreeList(true);
 	}
 
+
+	/**
+	 * Return the display name of the administrative unit concatenated with its parent units
+	 * @return
+	 */
+	public String getFullDisplayName() {
+		String s = getName().toString();
+
+		for (AdministrativeUnit adm: getParentsTreeList(false)) {
+			s += ", " + adm.getName().toString();
+		}
+		
+		return s;
+	}
+	
 	/**
 	 * Return a list with parents administrative unit, where the first is the upper level administrative unit and
 	 * the last the lowest level

@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="usertemplate.xhtml">
+      
+      <ui:param name="subject" value="#{messages['meds.orders.new']}" />
+      
+      <ui:define name="content">
+          
+        <h2>#{subject}</h2><p/>
+
+        <h:outputFormat value="#{messages['mail.hi']}">
+        	<f:param value="#{user.name}" />
+        </h:outputFormat>,<p/>
+        <br/>
+        #{messages['meds.orders.mail.new.msg1']}:<p/>
+        <br/>
+        <b>#{order.unitFrom.name}</b><br/>
+        #{order.unitFrom.adminUnit.fullDisplayName}
+        
+        <p/>
+       	<b>#{messages['global.id']}: </b>#{order.id}
+       	<p/>
+       	<b>#{messages['meds.orders.createdin']}: </b><h:outputText value="#{order.orderDate}" converter="localeDateConverter" />
+       	<br/>
+    	<div class="icon-user"/>#{order.userCreator.name}
+       	
+
+
+<table width="100%" style="font-family:Verdana,Arial,Sans Serif;font-size:12px;margin-top:20px;border:1px solid black;">
+	<ui:repeat value="#{orderHome.sources}" var="s">
+	<tr><td style="background-color:#194631;color:white;padding:4px;" colspan="5">
+		<b>#{s.source.abbrevName}</b> <span style="font-size:10px">(#{s.source.name})</span>
+	</td></tr>
+	<tr style="background-color:#307b57">
+		<th align="left" style="color:white;padding:4px;">#{messages['Medicine']}</th>
+		<th align="right" style="color:white;padding:4px;">#{messages['meds.stockpos']}</th>
+		<th align="right" style="color:white;padding:4px;">#{messages['OrderItem.numPatients']}</th>
+		<th align="right" style="color:white;padding:4px;">#{messages['OrderItem.estimatedQuantity']}</th>
+		<th align="right" style="color:white;padding:4px;">#{messages['OrderItem.requestedQuantity']}</th>
+	</tr>
+	<ui:repeat value="#{s.items}" var="it" width="500px">
+	<tr>
+		<td align="left" style="border-bottom:1px solid #a4c1b3">
+			#{it.item.medicine}
+		</td>
+		<td align="right" style="border-bottom:1px solid #a4c1b3">
+			<h:outputText value="#{it.item.stockQuantity}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+		</td>
+		<td align="right" style="border-bottom:1px solid #a4c1b3">
+			<h:outputText value="#{it.item.numPatients}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+		</td>
+		<td align="right" style="border-bottom:1px solid #a4c1b3">
+			<h:outputText value="#{it.item.estimatedQuantity}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+		</td>
+		<td align="right" style="border-bottom:1px solid #a4c1b3">
+			<h:outputText value="#{it.item.requestedQuantity}">
+ 				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+		</td>
+	</tr>
+	</ui:repeat>
+	</ui:repeat>
+</table>
+
+	<p/>
+	#{messages['mail.detaillink']}
+	<p/>
+    <a href="#{dmsystem.systemURL}/etbmanager/medicines/orderdata.seam?id=#{order.id}">#{dmsystem.systemURL}/etbmanager/medicines/orderdata.seam?id=#{order.id}</a>
+    <p/>
+   </ui:define>
+      
+</ui:composition>

@@ -155,7 +155,7 @@ function formButtonPost(button) {
 	<a:commandLink action="#{treatmentHome.endTreatmentPeriodEditing}"
 		data="#{treatmentHome.validated}"
 		styleClass="button" reRender="formperiod"
-		onclick="return formButtonPost(this)" 
+		onclick="if (!formButtonPost(this)) return false;" 
 		oncomplete="if (!data) {enableButton(); return false;} Richfaces.hideModalPanel('perioddlg'); updateTreatmentTable();">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink>

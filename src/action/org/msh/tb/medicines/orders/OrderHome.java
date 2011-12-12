@@ -121,6 +121,8 @@ public class OrderHome extends EntityHomeEx<Order>{
 		logSrv.addValue(".unitTo", order.getUnitTo().toString());
 		logSrv.saveExecuteTransaction(order, "NEW_ORDER");
 		
+		OrderMsgDispatcher.instance().notifyNewOrder();
+		
 		return ret;
 	}
 

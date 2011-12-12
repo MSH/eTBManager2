@@ -11,6 +11,8 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
+import org.jboss.seam.contexts.Contexts;
+import org.jboss.seam.faces.Renderer;
 import org.msh.tb.entities.ErrorLog;
 import org.msh.tb.entities.SystemConfig;
 import org.msh.tb.entities.User;
@@ -56,8 +58,17 @@ public class SystemErrorDispatcher {
 		entityManager.flush();
 
 		SystemConfig systemConfig = etbmanagerApp.getConfiguration();
-		if ((systemConfig.getAdminMail() != null) && (!systemConfig.getAdminMail().isEmpty())) {
-			dmsystem.enviarEmail("systemerror.xhtml");
+		
+		String destMails = systemConfig.getAdminMail();
+		
+		if ((destMails != null) && (!destMails.isEmpty())) {
+			String[] dests = destMails.split("[;,]+");
+			for (String dest: dests) {
+				Contexts.getEventContext().set("adminMail", dest);
+				System.out.println(dest);
+				Renderer.instance().render("/mail/systemerror.xhtml");
+			}
+//			dmsystem.enviarEmail("systemerror.xhtml");
 		}
 	}
 

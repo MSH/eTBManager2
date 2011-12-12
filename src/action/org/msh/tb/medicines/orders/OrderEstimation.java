@@ -135,8 +135,13 @@ public class OrderEstimation {
 		for (PrescribedMedicine p: prescmeds) {
 			SourceOrderItem s = orderHome.sourceOrderBySource(p.getSource());
 
-			int qtd = p.calcEstimatedDispensing(new Period(iniDate, endDate));
-			
+			Period period = new Period(iniDate, endDate);
+			int qtd = p.calcEstimatedDispensing(period);
+
+			period.intersect(p.getPeriod());
+			if (p.getMedicine().toString().startsWith("Pirazinamida"))
+				System.out.println(p.getMedicine().toString() + ", " + period.getDays() + " = " + qtd);
+
 			OrderItemAux item = s.itemByMedicine(p.getMedicine());
 
 			int tot = qtd + item.getItem().getEstimatedQuantity();
@@ -240,7 +245,7 @@ public class OrderEstimation {
 					if (qtd < 0)
 						qtd = 0;
 					it.getItem().setRequestedQuantity(qtd);
-					it.getItem().setStockQuantity(qtd);
+					it.getItem().setStockQuantity(sp.getQuantity());
 				}
 			}
 		}

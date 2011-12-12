@@ -144,7 +144,9 @@ public class PrescribedMedicine implements Serializable {
 	 * @return
 	 */
 	public int calcNumDaysDispensing(Period p) {
-		int numDays = getWeeklyFrequency().calcNumDays(p);
+		Period aux = new Period(p);
+		aux.intersect(getPeriod());
+		int numDays = getWeeklyFrequency().calcNumDays(aux);
 		
 		return numDays;
 	}

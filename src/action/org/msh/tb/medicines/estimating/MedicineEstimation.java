@@ -45,13 +45,13 @@ public class MedicineEstimation {
 		
 		quantities = new ArrayList<MedicineQuantity>();
 		loadPrescriptions();
-		
+
 		for (CaseInfo caseInfo: cases) {
 			for (PrescribedMedicine presc: caseInfo.getPrescriptions()) {
 				int qtd = presc.calcEstimatedDispensing(new Period(iniDate, endDate));
 				MedicineQuantity mq = findMedicineQuantity(quantities, presc.getMedicine().getId());
 				mq.setQtyEstimated(mq.getQtyEstimated() + qtd);
-				
+
 				if (detailedByPatient) {
 					mq = findMedicineQuantity(caseInfo.getQuantities(), presc.getMedicine().getId());
 					mq.setQtyEstimated(mq.getQtyEstimated() + qtd);
@@ -102,7 +102,6 @@ public class MedicineEstimation {
 			"where presc.period.iniDate <= :dtend and presc.period.endDate >= :dtini and p.workspace.id = #{defaultWorkspace.id}";
 		if (tbunit != null) 
 			hql += " and exists(select aux.id from TreatmentHealthUnit aux where aux.tbcase.id = c.id and aux.tbunit.id = " + tbunit.getId().toString() + ")";
-//			hql += " and reg.treatmentHealthUnit.tbunit.id = " + tbunit.getId().toString();
 		if (source != null)
 			hql += " and presc.source.id = " + source.getId().toString();
 		
