@@ -133,6 +133,21 @@
 		#{messages[tbcase.diagnosisType.key]}
 	</s:decorate>
 	</td></tr>
+	
+	<tr><td>
+	<s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">#{messages['TbCase.TBDiagnosisDate']}:</ui:define>
+    	<h:outputText id="dt" value="#{tbcaseng.tbDiagnosisDate}" converter="localeDateConverter"/>
+	</s:decorate>
+	
+	</td><td>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['TbCase.TBRegistrationNumber']}:</ui:define>
+		<h:outputText value="#{tbcaseng.tbRegistrationNumber}" />
+	</s:decorate>
+	</td></tr>
+	
 	<tr>
 	<td>
 	<s:decorate id="dt" template="/layout/display.xhtml" rendered="#{not empty tbcase.treatmentPeriod.iniDate}">
