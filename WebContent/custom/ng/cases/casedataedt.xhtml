@@ -168,6 +168,18 @@
 		<ui:param name="required" value="true" />
     </s:decorate>
     </div>
+    <!-- adding TB diag date and TB reg no -->
+     <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['TbCase.TBDiagnosisDate']}:</ui:define>
+    	<ui:param name="datefield" value="#{tbcaseng.tbDiagnosisDate}" /> 
+		<ui:param name="required" value="true" />
+    </s:decorate>
+  
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['TbCase.TBRegistrationNumber']}:</ui:define>
+		<h:inputText value="#{tbcaseng.tbRegistrationNumber}" style="width:120px;" maxlength="50"></h:inputText>
+		</s:decorate>
+    <!--  -->
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
 
     <s:decorate template="/layout/dateedit.xhtml" >
