@@ -10,7 +10,11 @@ import org.msh.tb.ng.entities.ExamHIV_Ng;
 @Name("examHIVHomeNg")
 @LogInfo(roleName="EXAM_HIV")
 public class ExamHIVHome extends ExamHome<ExamHIV_Ng> {
-	private static final long serialVersionUID = 5431512237255765820L;
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7388048431788005218L;
 
 	@Factory("examHIVNg")
 	public ExamHIV_Ng getExamHIV_Ng() {
