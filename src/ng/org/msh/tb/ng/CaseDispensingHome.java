@@ -10,6 +10,8 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.ng.CaseDispensingInfo;
+import org.msh.tb.ng.WeekInfo;
 import org.msh.tb.ng.entities.CaseDispensing_Ng;
 import org.msh.tb.ng.entities.TbCaseNG;
 

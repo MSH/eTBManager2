@@ -245,7 +245,7 @@ public class TreatmentCalendarHome {
 	 *
 	 */
 	public class PhaseInfo {
-		private List<MonthInfo> months = new ArrayList<MonthInfo>();
+		private List<org.msh.tb.ng.MonthInfo> months = new ArrayList<MonthInfo>();
 		private RegimenPhase regimenPhase;
 		private Period period = new Period();
 
