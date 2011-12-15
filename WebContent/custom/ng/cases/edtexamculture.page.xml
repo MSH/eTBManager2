@@ -10,13 +10,13 @@
 		<navigation>
 			<rule if-outcome="canceled">
 				<end-conversation before-redirect="true"/>
-				<redirect view-id="/cases/casedata.xhtml">
+				<redirect view-id="/custom/ng/cases/casedata.xhtml">
 					<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
 				</redirect>
 			</rule>
 			<rule if-outcome="persisted">
 				<end-conversation/>
-				<redirect view-id="/cases/casedata.xhtml">
+				<redirect view-id="/custom/ng/cases/casedata.xhtml">
 					<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
 				</redirect>
 			</rule>

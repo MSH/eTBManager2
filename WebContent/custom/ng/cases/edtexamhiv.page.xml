@@ -10,7 +10,7 @@
 	<navigation>
 		<rule if="#{not caseHome.managed}">
 			<end-conversation />
-			<redirect view-id="/cases/index.xhtml" />
+			<redirect view-id="/custom/ng/cases/index.xhtml" />
 		</rule>
 
 		<rule if-outcome="persisted">
