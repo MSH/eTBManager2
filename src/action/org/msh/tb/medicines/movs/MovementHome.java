@@ -397,8 +397,8 @@ public class MovementHome {
 				"where b.batch.id=a.batch.id and m2.tbunit.id=m.tbunit.id and m2.source.id=m.source.id " +
 				"and ((m2.date < m.date) or (m2.date = m.date and m2.recordDate <= m.recordDate))) < 0 " +
 				"and a.batch.id = :batch and m.tbunit.id=:unit and m.source.id=:source " +
-				"and m.date >= (select max(c.movement.date) from BatchMovement c " +
-				"where c.batch.id = a.batch.id and c.movement.tbunit.id=m.tbunit.id and c.movement.source.id=m.source.id and c.movement.date <= :dt)";
+				"and (m.date > :dt or m.date = (select max(c.movement.date) from BatchMovement c " +
+				"where c.batch.id = a.batch.id and c.movement.tbunit.id=m.tbunit.id and c.movement.source.id=m.source.id and c.movement.date <= :dt))";
 
 		List<Date> lst = entityManager.createQuery(hql)
 			.setParameter("qtd", (long)qtd)

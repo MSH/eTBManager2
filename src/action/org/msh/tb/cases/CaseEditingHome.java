@@ -125,7 +125,7 @@ public class CaseEditingHome {
 		}
 
 		// initialize items with previous TB treatments
-		prevTBTreatmentHome.getEditingItems();
+//		prevTBTreatmentHome.getTreatments();
 		
 		initialized = true;
 		return "initialized";
@@ -157,7 +157,8 @@ public class CaseEditingHome {
 		if (initialized)
 			return;
 		
-		prevTBTreatmentHome.setNumItems(prevTBTreatmentHome.getItems().size());
+		prevTBTreatmentHome.setEditing(true);
+//		prevTBTreatmentHome.setNumItems(prevTBTreatmentHome.getTreatments().size());
 		
 		TbCase tbcase = caseHome.getInstance();
 		Address addr = tbcase.getCurrentAddress();

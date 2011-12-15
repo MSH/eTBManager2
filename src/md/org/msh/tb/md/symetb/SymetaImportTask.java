@@ -1,5 +1,8 @@
 package org.msh.tb.md.symetb;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,11 +10,13 @@ import org.apache.axis.message.MessageElement;
 import org.jboss.seam.Component;
 import org.msh.tb.application.tasks.DbBatchTask;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.md.AdminUnitImporting;
 import org.msh.tb.md.CaseImporting;
 import org.msh.tb.md.MoldovaServiceConfig;
 import org.msh.tb.md.WarnMessage;
 import org.msh.tb.md.symetb.wsdlinterface.Get_casesResponseGet_casesResult;
+import org.msh.tb.md.symetb.wsdlinterface.Get_cases_classicResponseGet_cases_classicResult;
 import org.msh.tb.md.symetb.wsdlinterface.Get_localitiesResponseGet_localitiesResult;
 import org.msh.tb.md.symetb.wsdlinterface.Get_regionsResponseGet_regionsResult;
 import org.msh.tb.md.symetb.wsdlinterface.MDR_TBMISSSoapProxy;
@@ -26,6 +31,9 @@ public class SymetaImportTask extends DbBatchTask {
 	private int countNewCases;
 	private int countCases;
 	private List<String> newCases;
+	private int batchBlock;
+	private int batchBlockCount;
+
 	
 	// interface used to execute web service call
 	protected interface WSCallBack {
@@ -39,12 +47,15 @@ public class SymetaImportTask extends DbBatchTask {
 	@Override
 	public void execute() {
 		setAutomaticProgress(false);
+		batchBlock = 0;
+		batchBlockCount = 4;
 
 		try {
 			executeRegions();
 			executeLocalities();
 //			executeUnits();
 			executeCases();
+			executeCasesClassic();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -69,7 +80,22 @@ public class SymetaImportTask extends DbBatchTask {
 	 */
 	@Override
 	protected void finishing() {
-		// TODO Auto-generated method stub
+		try {
+			FileWriter fw = new FileWriter("c:\\rmemoria\\simetb.txt");
+			PrintWriter p = new PrintWriter(fw);
+			
+			p.println("Num cases read = " + countCasesRead);
+			p.println("Num new cases  = " + countNewCases);
+			p.println("Num cases      = " + countCases);
+			for (WarnMessage s: warnings)
+				p.println(s.getId() + " - " + s.getName() + " - " +  s.getDescription());
+			
+			p.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -81,7 +107,6 @@ public class SymetaImportTask extends DbBatchTask {
 		config = home.getConfig();
 		return config.getWorkspace().getId() != null;
 	}
-
 
 
 	/**
@@ -138,7 +163,7 @@ public class SymetaImportTask extends DbBatchTask {
 
 	
 	/**
-	 * Read units from the SYMETA server
+	 * Read DR-TB cases from the SYMETA server
 	 * @throws Exception 
 	 */
 	protected void executeCases() throws Exception {
@@ -150,7 +175,24 @@ public class SymetaImportTask extends DbBatchTask {
 		});
 
 		if (nodes != null)
-			importCases(nodes);
+			importCases(nodes, CaseClassification.DRTB);
+	}
+
+
+	/**
+	 * Read TB cases from the SYMETA server
+	 * @throws Exception 
+	 */
+	protected void executeCasesClassic() throws Exception {
+		NodeList nodes = executeWSCall(new WSCallBack() {
+			public MessageElement[] getData(MDR_TBMISSSoapProxy proxy) throws Exception {
+				Get_cases_classicResponseGet_cases_classicResult res = proxy.get_cases_classic(null);
+				return res.get_any();
+			}
+		});
+
+		if (nodes != null)
+			importCases(nodes, CaseClassification.TB);
 	}
 
 
@@ -159,11 +201,12 @@ public class SymetaImportTask extends DbBatchTask {
 	 * @param rootElemen
 	 * @throws Exception 
 	 */
-	protected void importCases(final NodeList nodes) throws Exception {
-		countNewCases = 0;
-		countCases = 0;
-		
-		newCases = new ArrayList<String>();
+	protected void importCases(final NodeList nodes, final CaseClassification classification) throws Exception {
+		if (newCases == null) {
+			newCases = new ArrayList<String>();
+			countNewCases = 0;
+			countCases = 0;
+		}
 
 		final CaseImporting caseImporting = new CaseImporting();
 		caseImporting.setWarning(warnings);
@@ -175,13 +218,13 @@ public class SymetaImportTask extends DbBatchTask {
 				
 				if (n.getNodeType() == Node.ELEMENT_NODE) {
 					Element el = (Element)n;
-					if (caseImporting.importCase(el, config.getWorkspace())) {
+					if (caseImporting.importCase(el, config.getWorkspace(), classification)) {
 						countCases++;
 						
 						if (caseImporting.isNewCase()) {
 							countNewCases++;
-							TbCase tbcase = caseImporting.getTbcase();
-							newCases.add("(" + tbcase.getLegacyId() + ") " + tbcase.getPatient().getFullName());
+							/* TbCase tbcase = */ caseImporting.getTbcase();
+//							newCases.add("(" + tbcase.getLegacyId() + ") " + tbcase.getPatient().getFullName());
 						}
 					}
 					countCasesRead++;
@@ -193,6 +236,9 @@ public class SymetaImportTask extends DbBatchTask {
 				return getRecordIndex() < count - 1;
 			}
 		});
+
+//		for (WarnMessage w: caseImporting.getWarning())
+//			newCases.add("****  " + w.getId() + " - " + w.getName() + " - " + w.getDescription());
 	}
 
 	
@@ -285,5 +331,12 @@ public class SymetaImportTask extends DbBatchTask {
 	 */
 	protected void updateProgress(int total, int index, int offset) {
 		setProgress(Math.round(offset + ((float)(index * 33)) / (float)total));
+	}
+	
+	/**
+	 * Used to generate the progress
+	 */
+	protected void startNewBatchBlock() {
+		batchBlock++;
 	}
 }

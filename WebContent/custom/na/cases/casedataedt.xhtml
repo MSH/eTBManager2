@@ -327,33 +327,33 @@ function isPulmonary(cb) {
 			<ui:define name="label">
 				#{messages['cases.prevtreat.numprev']}:
 			</ui:define>
-			<h:selectOneMenu value="#{prevTBTreatmentHome.numItems}">
+			<h:selectOneMenu value="#{prevTBTreatmentHome.numTreatments}">
 				<f:selectItems value="#{prevTBTreatmentHome.numTreatmentsOptions}"/>
 				<a:support event="onchange" ajaxSingle="true" reRender="prevtreats"/>
 			</h:selectOneMenu>
 		</s:decorate>
 
 		<h:panelGroup id="prevtreats">
-		<s:fragment rendered="#{prevTBTreatmentHome.numItems>0}">
+		<s:fragment rendered="#{prevTBTreatmentHome.numTreatments>0}">
 		<table width="98%" class="table1 small">
 			<tr>
 				<th rowspan="2">#{messages['cases.prevtreat.num']}
 				</th>
 				<th rowspan="2">#{messages['cases.prevtreat.date']}
 				</th>
-				<th colspan="#{prevTBTreatmentHome.editingSubstances.size}">
+				<th colspan="#{prevTBTreatmentHome.substances.size}">
 					#{messages['cases.prevtreat.regs']}
 				</th>
 				<th rowspan="2">#{messages['PrevTBTreatment.outcome']}
 				</th>
 			</tr>
 			<tr>
-			<a:repeat value="#{prevTBTreatmentHome.editingSubstances}" var="s">
+			<a:repeat value="#{prevTBTreatmentHome.substances}" var="s">
 				<th>#{s.abbrevName}
 				</th>
 			</a:repeat>
 			</tr>
-		<a:repeat value="#{prevTBTreatmentHome.editingItems}" var="it">
+		<a:repeat value="#{prevTBTreatmentHome.treatments}" var="it">
 			<tr>
 				<td class="colcb">#{it.index}
 				</td>

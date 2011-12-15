@@ -23,6 +23,7 @@ import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.misc.FieldsOptions;
 import org.msh.utils.date.DateUtils;
+import org.msh.utils.date.Period;
 import org.w3c.dom.Element;
 
 /**
@@ -38,7 +39,7 @@ public class CaseImporting extends ImportingBase{
 	private String caseId;
 	private String patientName;
 	
-	public boolean importCase(Element xmlCaseData, Workspace workspace) {
+	public boolean importCase(Element xmlCaseData, Workspace workspace, CaseClassification classification) {
 		EntityManager entityManager = getEntityManager();
 		setWorkspace(workspace);
 
@@ -72,9 +73,9 @@ public class CaseImporting extends ImportingBase{
 		Integer gender = getValueAsInteger(xmlCaseData, "GENDER", false);
 		Date birthDate = getValueAsDate(xmlCaseData, "BIRTHDATE_string", false);
 		Date beginTreatmentDate = getValueAsDate(xmlCaseData, "BEGINTREATMENTDATE_string", true);
-		String unitId = getValue(xmlCaseData, "NOTIFICATIONUNIT", true);
+		String unitId = getValue(xmlCaseData, "NOTIFICATIONUNIT", false);
 		String personalNumber = getValue(xmlCaseData, "PERSONALNUMBER", false);
-		String treatmentUnitId = getValue(xmlCaseData, "TREATMENTUNIT", false);
+		String treatmentUnitId = getValue(xmlCaseData, "TREATMENTUNIT", true);
 		Integer mainLocalization = getValueAsInteger(xmlCaseData, "MAINLOCALIZATION", false);
 		String siteOfDisease = getValue(xmlCaseData, "SITEOFDISEASE", false);
 		String addressLocality = getValue(xmlCaseData, "ADDRESS_LOCALITY", false);
@@ -100,7 +101,6 @@ public class CaseImporting extends ImportingBase{
 
 			if (lstcases.size() == 0) {
 				tbcase = new TbCase();
-				tbcase.setClassification(CaseClassification.DRTB);
 				tbcase.setState(CaseState.WAITING_TREATMENT);
 			}
 			else {
@@ -112,11 +112,23 @@ public class CaseImporting extends ImportingBase{
 			tbcase.setClassification(CaseClassification.DRTB);
 			tbcase.setState(CaseState.WAITING_TREATMENT);
 		}
+
+		tbcase.setClassification(classification);
 		
-		Tbunit unit = loadTBUnit(unitId);
-		if (unit == null) {
+		Tbunit treatmentUnit = loadTBUnit(treatmentUnitId);
+		if (treatmentUnit == null) {
 			addMessage("No TB Unit found with ID = " + unitId);
-			unit = entityManager.merge(getConfig().getDefaultTbunit());
+			treatmentUnit = entityManager.merge(getConfig().getDefaultTbunit());
+		}
+
+		Tbunit unit = loadTBUnit(unitId);
+		
+		if (unit == null)
+			unit = treatmentUnit;
+		
+		if (unit == null) {
+			addMessage("No unit specified");
+			return false;
 		}
 		
 		tbcase.setNotificationUnit(unit);
@@ -125,6 +137,12 @@ public class CaseImporting extends ImportingBase{
 		if (tbcase.getDiagnosisType() == null)
 			tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
 		tbcase.setRegistrationDate(beginTreatmentDate);
+
+		Period treatPeriod = new Period();
+		treatPeriod.setIniDate(beginTreatmentDate);
+		tbcase.setTreatmentPeriod(treatPeriod);
+		tbcase.setTreatmentUnit(treatmentUnit);
+
 		tbcase.setValidationState(ValidationState.VALIDATED);
 		tbcase.setRegistrationCode(personalNumber);
 		if (tbcase.getNotifAddress() == null)
@@ -191,6 +209,9 @@ public class CaseImporting extends ImportingBase{
 		if ("3".equals(typeOfPatient))
 			return PatientType.AFTER_DEFAULT;
 		else
+		if ("4".equals(typeOfPatient))
+			return PatientType.FAILURE;
+		else
 		if ("41".equals(typeOfPatient))
 			return PatientType.FAILURE_FT;
 		else
@@ -202,6 +223,12 @@ public class CaseImporting extends ImportingBase{
 		else
 		if ("6".equals(typeOfPatient))
 			return PatientType.OTHER;
+		else
+		if ("21".equals(typeOfPatient))
+			return PatientType.RELAPSE;
+		else
+		if ("22".equals(typeOfPatient))
+			return PatientType.RELAPSE;
 		
 		if (typeOfPatient != null)
 			addMessage("Ukwown type of patient = " + typeOfPatient);

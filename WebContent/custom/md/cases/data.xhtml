@@ -163,7 +163,7 @@
     		#{messages[tbcase.patientType.key]}
 		</s:decorate>
 
-		<s:fragment rendered="#{not empty prevTBTreatmentHome.items}">
+		<s:fragment rendered="#{not empty prevTBTreatmentHome.treatments}">
 		<div class="paragraph">#{messages['cases.prevtreat']}</div>
 		<table width="98%" class="tabela4">
 			<tr>
@@ -183,7 +183,7 @@
 				</th>
 			</a:repeat>
 			</tr>
-		<a:repeat value="#{prevTBTreatmentHome.items}" var="it">
+		<a:repeat value="#{prevTBTreatmentHome.treatments}" var="it">
 			<tr>
 				<td class="colcb">#{it.index}
 				</td>

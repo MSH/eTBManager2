@@ -30,7 +30,7 @@ public class AdminUnitImporting extends ImportingBase {
 		String nameRo = getValue(xmlLocData, "LOCALITY_NAME_RO", true);
 		String nameRu = getValue(xmlLocData, "LOCALITY_NAME_RU", false);
 		String regionId = getValue(xmlLocData, "REGION_ID", true);
-		
+
 		if (getWarning().size() > numWarnings)
 			return false;
 		

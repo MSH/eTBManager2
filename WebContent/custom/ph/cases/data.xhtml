@@ -231,7 +231,7 @@
 	</td></tr>
 	<tr><td colspan="2">
 
-		<s:fragment rendered="#{not empty prevTBTreatmentHome.items}">
+		<s:fragment rendered="#{not empty prevTBTreatmentHome.treatments}">
 		<h2>#{messages['cases.prevtreat']}</h2>
 		<table width="100%" class="table1">
 			<tr>
@@ -251,7 +251,7 @@
 				</th>
 			</a:repeat>
 			</tr>
-		<a:repeat value="#{prevTBTreatmentHome.items}" var="it">
+		<a:repeat value="#{prevTBTreatmentHome.treatments}" var="it">
 			<tr>
 				<td class="colcb">#{it.index}
 				</td>
