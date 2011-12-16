@@ -19,6 +19,7 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
+import org.msh.tb.ng.entities.enums.HealthFacility;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
@@ -50,7 +51,7 @@ public class PrevTBTreatment implements Serializable {
 			inverseJoinColumns={@JoinColumn(name="SUBSTANCE_ID")})
 	private List<Substance> substances = new ArrayList<Substance>();
 
-
+private HealthFacility healthFacility;
 
 	public Integer getId() {
 		return id;
@@ -98,5 +99,13 @@ public class PrevTBTreatment implements Serializable {
 
 	public void setTbcase(TbCase tbcase) {
 		this.tbcase = tbcase;
+	}
+
+	public HealthFacility getHealthFacility() {
+		return healthFacility;
+	}
+	
+	public void setHealthFacility(HealthFacility healthFacility) {
+		this.healthFacility = healthFacility;
 	}
 }
