@@ -138,10 +138,17 @@
 	</td><td>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
+    		<h:outputText value= "#{messages['global.mandatory']}" style="color: red"/>
     		<h:inputText value="#{tbcase.mobileNumber}" />
     	</s:decorate>	
-    
     </td></tr>
+    <tr><td>
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['TbCase.emailAddress']}:</ui:define>
+    		<h:inputText value="#{tbcaseng.emailAddress}" />
+    	</s:decorate>	
+	</td></tr>
+    
     </table>
     </div>
     
@@ -168,18 +175,12 @@
 		<ui:param name="required" value="true" />
     </s:decorate>
     </div>
-    <!-- adding TB diag date and TB reg no -->
-     <s:decorate template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['TbCase.TBDiagnosisDate']}:</ui:define>
-    	<ui:param name="datefield" value="#{tbcaseng.tbDiagnosisDate}" /> 
-		<ui:param name="required" value="true" />
-    </s:decorate>
-  
+ 
     <s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['TbCase.TBRegistrationNumber']}:</ui:define>
 		<h:inputText value="#{tbcaseng.tbRegistrationNumber}" style="width:120px;" maxlength="50"></h:inputText>
 		</s:decorate>
-    <!--  -->
+    
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
 
     <s:decorate template="/layout/dateedit.xhtml" >
@@ -316,6 +317,8 @@ function isPulmonary(cb) {
 				</th>
 				<th rowspan="2">#{messages['PrevTBTreatment.outcome']}
 				</th>
+				<th rowspan="2">#{messages['PrevTBTreatment.healthFacility']}
+				</th>
 			</tr>
 			<tr>
 			<a:repeat value="#{prevTBTreatmentHome.substances}" var="s">
@@ -351,6 +354,15 @@ function isPulmonary(cb) {
 					</h:selectOneMenu>
 					</s:validateAll>
 					<h:message for="oc" styleClass="error"/>
+				</td>
+				<td class="colcb">
+					<s:validateAll>
+					<h:selectOneMenu id="hf" value="#{it.prevTBTreatment.healthFacility}" required="true">
+						<s:selectItems var="v" value="#{healthfacility_ng}" label="#{messages[v.key]}" noSelectionLabel="-" />
+						<s:convertEnum />
+					</h:selectOneMenu>
+					</s:validateAll>
+					<h:message for="hf" styleClass="error"/>
 				</td>
 			</tr>
 		</a:repeat>
