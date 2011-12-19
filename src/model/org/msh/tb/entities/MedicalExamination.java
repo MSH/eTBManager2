@@ -20,7 +20,6 @@ import org.msh.tb.entities.enums.MedAppointmentType;
 import org.msh.tb.entities.enums.ReferredBy;
 import org.msh.tb.entities.enums.ReferredTo;
 import org.msh.tb.entities.enums.YesNoType;
-import org.msh.tb.ng.entities.enums.Qualification;
 
 /**
  *
@@ -99,8 +98,6 @@ public class MedicalExamination extends CaseData implements Serializable {
 	
 	@Column(length=100)
 	private String dotProvName;
-	
-	private Qualification Qualification;
 	
 	
 	public String getSurgicalProcedureDesc() {
@@ -359,13 +356,6 @@ public class MedicalExamination extends CaseData implements Serializable {
 	public void setDotProvName(String dotProvName) {
 		this.dotProvName = dotProvName;
 	}
-
-	public Qualification getQualification() {
-		return Qualification;
-	}
 	
-	public void setQualification(Qualification qualification) {
-		Qualification = qualification;
-	}
 	
 }
