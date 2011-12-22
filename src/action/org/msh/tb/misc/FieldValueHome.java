@@ -10,7 +10,8 @@ import org.jboss.seam.international.Messages;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.enums.TbField;
-import org.msh.tb.log.LogInfo;
+import org.msh.tb.transactionlog.LogInfo;
+
 
 
 @Name("fieldValueHome")

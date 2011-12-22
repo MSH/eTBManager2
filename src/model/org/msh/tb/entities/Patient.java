@@ -12,11 +12,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.Component;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.NameComposition;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 /**
  * Store information of patient personal information
@@ -34,12 +38,15 @@ public class Patient extends WSObject implements Serializable {
 
 	@Column(length=100, name="PATIENT_NAME")
 	@NotNull
+	@PropertyLog(operations={Operation.ALL})
 	private String name;
 	
 	@Column(length=100)
+	@PropertyLog(operations={Operation.ALL})
 	private String middleName;
 	
 	@Column(length=100)
+	@PropertyLog(operations={Operation.ALL})
 	private String lastName;
 	
 	@Column(length=50)
@@ -48,11 +55,14 @@ public class Patient extends WSObject implements Serializable {
 	@Column(length=100)
 	private String motherName;
 	
+	@Temporal(TemporalType.DATE)
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private Date birthDate;
 	
 	private Integer recordNumber;
 
 	@NotNull
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private Gender gender;
 	
 	@Column(length=50)

@@ -16,6 +16,8 @@ import javax.persistence.TemporalType;
 
 import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.HIVResultKe;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 /**
  * @author Ricardo Memória
@@ -30,6 +32,7 @@ import org.msh.tb.entities.enums.HIVResultKe;
 public class ExamHIV extends CaseData implements Serializable {
 	private static final long serialVersionUID = 2237957846637585494L;
 
+	@PropertyLog(operations={Operation.ALL})
 	private HIVResult result;
 	
 	@Temporal(TemporalType.DATE)
@@ -39,6 +42,7 @@ public class ExamHIV extends CaseData implements Serializable {
 	private Date startedCPTdate;
 	
 	@Column(length=100)
+	@PropertyLog(operations={Operation.ALL})
 	private String laboratory;
 
 	//usrivast

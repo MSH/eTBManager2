@@ -8,6 +8,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.msh.tb.entities.MedicalExamination;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @DiscriminatorValue("br")
@@ -15,6 +17,7 @@ public class MedicalExaminationBR extends MedicalExamination {
 	private static final long serialVersionUID = 7510532907471481516L;
 
 	@Temporal(TemporalType.DATE)
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private Date nextAppointment;
 
 

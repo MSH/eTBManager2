@@ -26,7 +26,31 @@ public class Address {
 	
 	private LocalityType localityType;
 	
+	@Override
+	public String toString() {
+		String s = (address == null? "": address);
 
+		if ((complement != null) && (!complement.isEmpty())) {
+			if (!s.isEmpty())
+				s += '\n';
+			s += complement;
+		}
+		
+		if ((zipCode != null) && (!zipCode.isEmpty())) {
+			if (!s.isEmpty())
+				s += '\n';
+			s += zipCode;
+		}
+		
+		if (adminUnit != null) {
+			if (!s.isEmpty())
+				s += "\n";
+			s += adminUnit.getFullDisplayName();
+		}
+		
+		return s;
+	}
+	
 	/**
 	 * Checks if the address is empty.
 	 * Name changed because of EL expression limitations (bug)

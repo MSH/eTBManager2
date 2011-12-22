@@ -19,7 +19,7 @@ import javax.persistence.Table;
 
 import org.msh.tb.entities.enums.MedicineCategory;
 import org.msh.tb.entities.enums.MedicineLine;
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="medicine")
@@ -31,7 +31,7 @@ public class Medicine extends WSObject implements Serializable{
 	private Integer id;
 	
 	@Embedded
-	@FieldLog(key="form.name")
+	@PropertyLog(key="form.name")
 	private LocalizedNameComp genericName= new LocalizedNameComp();
 	
 	@Column(length=30)
@@ -47,7 +47,7 @@ public class Medicine extends WSObject implements Serializable{
 	private String dosageForm;
 
 	@Column(length=50)
-	@FieldLog(key="global.legacyId")
+	@PropertyLog(key="global.legacyId")
 	private String legacyId;
 
 	private MedicineCategory category;

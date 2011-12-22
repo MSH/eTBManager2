@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.PropertyLog;
 
 
 @Entity
@@ -23,10 +23,11 @@ public class CountryStructure extends WSObject implements Serializable{
     private Integer id;
 	
 	@Embedded
-	@FieldLog(key="form.name")
+	@PropertyLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 	
 	@Column(name="STRUCTURE_LEVEL")
+	@PropertyLog(key="global.level")
 	private int level;
 	
 

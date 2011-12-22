@@ -12,10 +12,11 @@ import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineComponent;
 import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.enums.MedicineCategory;
-import org.msh.tb.log.LogInfo;
+import org.msh.tb.transactionlog.LogInfo;
 import org.msh.utils.EntityQuery;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
+
 
 
 /**

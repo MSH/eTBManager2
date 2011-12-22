@@ -14,7 +14,7 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.MedicineLine;
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.PropertyLog;
 
 
 @Entity
@@ -28,7 +28,7 @@ public class Substance extends WSObject implements Serializable {
 
 	@Embedded
 	@NotNull
-	@FieldLog(key="form.name")
+	@PropertyLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 	
 	@Embedded
@@ -36,7 +36,7 @@ public class Substance extends WSObject implements Serializable {
 		@AttributeOverride(name="name1", column=@Column(name="ABBREV_NAME1",length=10)),
 		@AttributeOverride(name="name2", column=@Column(name="ABBREV_NAME2",length=10))
 	})
-	@FieldLog(key="form.abbrevName")
+	@PropertyLog(key="form.abbrevName")
 	private LocalizedNameComp abbrevName = new LocalizedNameComp();
 	
 	private MedicineLine line;
@@ -45,11 +45,11 @@ public class Substance extends WSObject implements Serializable {
 	
 	private boolean dstResultForm;
 	
-	@FieldLog(key="form.displayorder")
+	@PropertyLog(key="form.displayorder")
 	private Integer prevTreatmentOrder;
 
 	@Column(length=50)
-	@FieldLog(key="global.legacyId")
+	@PropertyLog(key="global.legacyId")
 	private String legacyId;
 
 	@Override

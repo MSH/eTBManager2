@@ -9,7 +9,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.msh.tb.entities.TbCase;
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="tbcaseke")
@@ -21,7 +21,7 @@ public class TbCaseKE extends TbCase{
 	private static final long serialVersionUID = 2227321155884824528L;
 	
 	@OneToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="tbcase")
-	@FieldLog(ignore=true)
+	@PropertyLog(ignore=true)
 	private List<CaseDispensing_Ke> dispke = new ArrayList<CaseDispensing_Ke>();
 
 	public List<CaseDispensing_Ke> getDispke() {

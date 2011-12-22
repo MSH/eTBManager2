@@ -17,7 +17,8 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Table;
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 
 @Entity
@@ -31,11 +32,12 @@ public class AdministrativeUnit extends WSObject {
 	private Integer id;
 
 	@Embedded
-	@FieldLog(key="form.name")
+	@PropertyLog(key="form.name", operations={Operation.ALL})
 	private LocalizedNameComp name = new LocalizedNameComp();
 	
 	@ManyToOne
 	@JoinColumn(name="PARENT_ID")
+	@PropertyLog(operations={Operation.ALL})
 	private AdministrativeUnit parent;
 	
 	@OneToMany(mappedBy="parent",fetch=FetchType.LAZY)
@@ -43,18 +45,19 @@ public class AdministrativeUnit extends WSObject {
 	private List<AdministrativeUnit> units = new ArrayList<AdministrativeUnit>();
 
 	@Column(length=50)
-	@FieldLog(key="global.legacyId")
+	@PropertyLog(key="global.legacyId")
 	private String legacyId;
 	
 	// properties to help dealing with trees
 	private int unitsCount;
 	
 	@Column(length=15, nullable=false)
-	@FieldLog(ignore=true)
+	@PropertyLog(ignore=true)
 	private String code;
 	
 	@ManyToOne
 	@JoinColumn(name="COUNTRYSTRUCTURE_ID")
+	@PropertyLog(operations={Operation.ALL})
 	private CountryStructure countryStructure;
 	
 

@@ -16,9 +16,10 @@ import org.msh.tb.entities.UserProfile;
 import org.msh.tb.entities.UserRole;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.log.LogInfo;
 import org.msh.tb.login.UserSession;
+import org.msh.tb.transactionlog.LogInfo;
 import org.msh.utils.EntityQuery;
+
 
 
 @Name("profileHome")

@@ -7,7 +7,8 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.entities.AgeRange;
-import org.msh.tb.log.LogInfo;
+import org.msh.tb.transactionlog.LogInfo;
+
 
 
 /**

@@ -8,6 +8,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 import org.hibernate.validator.NotNull;
+import org.msh.tb.transactionlog.PropertyLog;
+
 
 
 @MappedSuperclass
@@ -17,6 +19,7 @@ public class WSObject implements Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="WORKSPACE_ID")
 	@NotNull
+	@PropertyLog(ignore=true)
 	private Workspace workspace;
 
 	public Workspace getWorkspace() {

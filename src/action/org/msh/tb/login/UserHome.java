@@ -25,11 +25,12 @@ import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.UserView;
-import org.msh.tb.log.LogInfo;
 import org.msh.tb.misc.DmSystemHome;
 import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.transactionlog.LogInfo;
 import org.msh.tb.userprofile.UserProfilesQuery;
 import org.msh.utils.Passwords;
+
 
 
 @Name("userHome")

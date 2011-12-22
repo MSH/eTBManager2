@@ -17,7 +17,6 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 public class ConvertHtmlText implements Converter {
 
 	public Object getAsObject(FacesContext facesContext, UIComponent comp, String value) throws ConverterException {
-		System.out.println("converte para objeto");
 		return value;
 	}
 

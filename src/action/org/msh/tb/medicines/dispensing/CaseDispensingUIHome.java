@@ -159,7 +159,6 @@ public class CaseDispensingUIHome extends AbstractDispensigUIHome {
 	 */
 	private boolean isMedicinePrescribed(List<PrescribedMedicine> lst, Source source, Medicine med) {
 		for (PrescribedMedicine pm: lst) {
-//			System.out.println(pm.getMedicine().toString() + " (" + pm.getSource().toString() + ") -> " + med.toString() + " (" + source.toString() + ")");
 			if ((pm.getMedicine().equals(med)) && (pm.getSource().equals(source))) {
 				return true;
 			}

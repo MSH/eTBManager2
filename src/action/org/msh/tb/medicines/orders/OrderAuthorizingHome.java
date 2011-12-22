@@ -12,9 +12,9 @@ import org.jboss.seam.framework.Controller;
 import org.msh.tb.entities.Order;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.OrderStatus;
-import org.msh.tb.log.LogService;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
+import org.msh.tb.transactionlog.TransactionLogService;
 
 @Name("orderAuthorizingHome")
 public class OrderAuthorizingHome extends Controller {
@@ -62,9 +62,9 @@ public class OrderAuthorizingHome extends Controller {
 		facesMessages.addFromResourceBundle("meds.orders.authorized");
 
 		// register log
-		LogService logsrv = new LogService();
-		logsrv.addValue("Tbunit.authorizerUnit", order.getAuthorizer().toString());
-		logsrv.saveExecuteTransaction(order, "VAL_ORDER");
+		TransactionLogService logsrv = new TransactionLogService();
+		logsrv.addTableRow("Tbunit.authorizerUnit", order.getAuthorizer().toString());
+		logsrv.saveExecuteTransaction("VAL_ORDER", order.toString(), order.getId());
 		
 		entityManager.persist(order);
 		

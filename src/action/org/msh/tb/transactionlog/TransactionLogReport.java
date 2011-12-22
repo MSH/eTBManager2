@@ -1,4 +1,4 @@
-package org.msh.tb.log;
+package org.msh.tb.transactionlog;
 
 import java.util.Arrays;
 import java.util.List;
@@ -62,8 +62,7 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 		return "from TransactionLog log " +
 				"join fetch log.user " +
 				"join fetch log.workspace " +
-				"join fetch log.role " +
-				"left join fetch log.logValues " + getStaticConditions();
+				"join fetch log.role " + getStaticConditions();
 	}
 
 

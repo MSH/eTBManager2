@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="userprofile")
@@ -29,14 +29,14 @@ public class UserProfile extends WSObject implements Serializable, Comparable<Us
 
 	@Column(length=100)
 	@NotNull
-	@FieldLog(key="form.name")
+	@PropertyLog(key="form.name")
 	private String name;
 
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="userProfile",cascade={CascadeType.ALL})
     private List<UserPermission> permissions = new ArrayList<UserPermission>();
 
 	@Column(length=50)
-	@FieldLog(key="global.legacyId")
+	@PropertyLog(key="global.legacyId")
 	private String legacyId;
 
 	@Override

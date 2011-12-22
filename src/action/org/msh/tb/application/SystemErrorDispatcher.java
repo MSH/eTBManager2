@@ -65,10 +65,8 @@ public class SystemErrorDispatcher {
 			String[] dests = destMails.split("[;,]+");
 			for (String dest: dests) {
 				Contexts.getEventContext().set("adminMail", dest);
-				System.out.println(dest);
 				Renderer.instance().render("/mail/systemerror.xhtml");
 			}
-//			dmsystem.enviarEmail("systemerror.xhtml");
 		}
 	}
 

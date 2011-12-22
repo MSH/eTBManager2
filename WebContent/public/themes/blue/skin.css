@@ -1150,3 +1150,29 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	background-color:#afc8cf;
 }
 
+
+/* TRANSACTION LOG REPORT */
+
+.tl-table {
+	margin-left:50px;
+}
+.tl-table td {
+	vertical-align: top;
+}
+.tl-table th .tlh-key {
+	width:200px;
+}
+.tl-table .tl-key {
+	font-weight: bold;
+	display:list-item;
+	padding-right:10px;
+}
+.tl-table th {
+	text-align:left;
+	font-weight: normal;
+	text-decoration: underline;
+}
+.tl-table .tl-value {
+	min-width:200px;
+	width:200px;
+}

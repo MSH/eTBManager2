@@ -44,9 +44,11 @@ import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.ValidationState;
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
 
 
 /**
@@ -65,12 +67,13 @@ public class TbCase implements Serializable{
 	private Integer id;
 	
 	@Version
-	@FieldLog(ignore=true)
+	@PropertyLog(ignore=true)
 	private Integer version;
 	
 	private Integer caseNumber;
 
 	@Column(length=50)
+	@PropertyLog(operations={Operation.ALL})
 	private String registrationCode;
 
 	private Integer daysTreatPlanned;
@@ -78,16 +81,18 @@ public class TbCase implements Serializable{
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="PATIENT_ID")
 	@NotNull
-	@FieldLog(logEntityFields=true)
+	@PropertyLog(logEntityFields=true)
 	private Patient patient;
 	
 	private Integer age;
 
 	@NotNull
 	@Temporal(TemporalType.DATE) 
+	@PropertyLog(operations={Operation.ALL})
 	private Date registrationDate;
 	
 	@Temporal(TemporalType.DATE) 
+	@PropertyLog(operations={Operation.ALL})
 	private Date diagnosisDate;
 	
 	@Temporal(TemporalType.DATE) 
@@ -99,7 +104,7 @@ public class TbCase implements Serializable{
 		@AttributeOverride(name="iniDate", column=@Column(name="iniTreatmentDate")),
 		@AttributeOverride(name="endDate", column=@Column(name="endTreatmentDate"))
 	})
-	@FieldLog(logEntityFields=true)
+	@PropertyLog(logEntityFields=true)
 	private Period treatmentPeriod = new Period();
 	
 	@Temporal(TemporalType.DATE)
@@ -118,11 +123,11 @@ public class TbCase implements Serializable{
 	private Tbunit treatmentUnit;
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
-	@FieldLog(ignore=true)
+	@PropertyLog(ignore=true)
 	private List<TreatmentHealthUnit> healthUnits = new ArrayList<TreatmentHealthUnit>();
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
-	@FieldLog(ignore=true)
+	@PropertyLog(ignore=true)
 	private List<PrescribedMedicine> prescribedMedicines = new ArrayList<PrescribedMedicine>();
 
 	@NotNull
@@ -131,31 +136,35 @@ public class TbCase implements Serializable{
 	@NotNull
 	private ValidationState validationState;
 	
+	@PropertyLog(operations={Operation.ALL})
 	private PatientType patientType;
 
+	@PropertyLog(operations={Operation.ALL})
 	private DiagnosisType diagnosisType;
 	
+	@PropertyLog(operations={Operation.ALL})
 	private DrugResistanceType drugResistanceType;
 
 	@NotNull
+	@PropertyLog(operations={Operation.ALL})
 	private CaseClassification classification;
 	
-	@FieldLog(key="InfectionSite")
+	@PropertyLog(key="InfectionSite", operations={Operation.NEW, Operation.EDIT})
 	private InfectionSite infectionSite;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="PULMONARY_ID")
-	@FieldLog(key="TbField.PULMONARY_TYPES")
+	@PropertyLog(key="TbField.PULMONARY_TYPES")
 	private FieldValue pulmonaryType;
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="EXTRAPULMONARY_ID")
-	@FieldLog(key="TbField.EXTRAPULMONARY_TYPES")
+	@PropertyLog(key="TbField.EXTRAPULMONARY_TYPES")
 	private FieldValue extrapulmonaryType;
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="EXTRAPULMONARY2_ID")
-	@FieldLog(key="TbField.EXTRAPULMONARY_TYPES")
+	@PropertyLog(key="TbField.EXTRAPULMONARY_TYPES")
 	private FieldValue extrapulmonaryType2;
 	
 	@Column(length=100)
@@ -167,11 +176,12 @@ public class TbCase implements Serializable{
 	private String otherOutcome;
 	
 	@Column(length=50)
-	@FieldLog(key="global.legacyId")
+	@PropertyLog(key="global.legacyId")
 	private String legacyId;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="NOTIFICATION_UNIT_ID")
+	@PropertyLog(operations={Operation.ALL})
 	private Tbunit notificationUnit;
 	
 	private boolean notifAddressChanged;
@@ -196,7 +206,7 @@ public class TbCase implements Serializable{
 	@AssociationOverrides({
 		@AssociationOverride(name="adminUnit", joinColumns=@JoinColumn(name="NOTIF_ADMINUNIT_ID"))
 	})
-	@FieldLog(logEntityFields=true)
+	@PropertyLog(key="cases.details.addressnotif", operations={Operation.NEW, Operation.EDIT})
 	private Address notifAddress = new Address();
 	
 	@Embedded
@@ -211,7 +221,7 @@ public class TbCase implements Serializable{
 	@AssociationOverrides({
 		@AssociationOverride(name="adminUnit", joinColumns=@JoinColumn(name="CURR_ADMINUNIT_ID"))
 	})
-	@FieldLog(logEntityFields=true)
+	@PropertyLog(key="cases.details.addresscurr")
 	private Address currentAddress = new Address();
 	
 	@Column(length=50)
@@ -221,45 +231,35 @@ public class TbCase implements Serializable{
 	private String mobileNumber;
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
-	@FieldLog(ignore=true)
 	private List<CaseSideEffect> sideEffects = new ArrayList<CaseSideEffect>();
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
-	@FieldLog(ignore=true)
 	private List<CaseComorbidity> comorbidities = new ArrayList<CaseComorbidity>();
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
-	@FieldLog(ignore=true)
 	private List<MedicalExamination> examinations = new ArrayList<MedicalExamination>();
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
-	@FieldLog(ignore=true)
 	private List<ExamXRay> resXRay = new ArrayList<ExamXRay>();
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
-	@FieldLog(ignore=true)
 	private List<TbContact> contacts = new ArrayList<TbContact>();
 	
 	@OneToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="tbcase", fetch=FetchType.LAZY)
-	@FieldLog(ignore=true)
 	private List<CaseDispensing> dispensing = new ArrayList<CaseDispensing>();
 	
 
 	/* EXAMS */
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
-	@FieldLog(ignore=true)
 	private List<ExamHIV> resHIV = new ArrayList<ExamHIV>();
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
-	@FieldLog(ignore=true)
 	private List<ExamCulture> examsCulture = new ArrayList<ExamCulture>();
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
-	@FieldLog(ignore=true)
 	private List<ExamMicroscopy> examsMicroscopy = new ArrayList<ExamMicroscopy>();
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
-	@FieldLog(ignore=true)
 	private List<ExamDST> examsDST = new ArrayList<ExamDST>();
 	
 	private int issueCounter;
@@ -268,7 +268,6 @@ public class TbCase implements Serializable{
 	@JoinTable(name="tags_case", 
 			joinColumns={@JoinColumn(name="CASE_ID")},
 			inverseJoinColumns={@JoinColumn(name="TAG_ID")})
-	@FieldLog(ignore=true)
 	private List<Tag> tags = new ArrayList<Tag>();
 
 	

@@ -22,9 +22,9 @@ import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.entities.enums.RoleAction;
-import org.msh.tb.log.LogService;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.BatchSelection;
+import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.DateUtils;
 
 
@@ -234,14 +234,14 @@ public class StockAdjustmentHome extends Controller {
 	 * @param batches
 	 */
 	private void saveLog(RoleAction roleAction, Map<Batch, Integer> batches) {
-		LogService logSrv = new LogService();
+		TransactionLogService logSrv = new TransactionLogService();
 		for (Batch batch: batches.keySet()) {
 			Integer qtd = batches.get(batch);
-			logSrv.addValue("Medicine", batch.getMedicine().toString());
-			logSrv.addValue("Batch", batch.getBatchNumber());
-			logSrv.addValue("Movement.quantity", qtd);
+			logSrv.addTableRow("Medicine", batch.getMedicine().toString());
+			logSrv.addTableRow("Batch", batch.getBatchNumber());
+			logSrv.addTableRow("Movement.quantity", qtd);
 		}
-		logSrv.saveTransaction(null, "STOCKPOS", roleAction);
+		logSrv.save("STOCKPOS", roleAction, null, null);
 	}
 	
 	private Map<Batch, Integer> getBatchesMap(StockPositionItem it, boolean shpippedQtd) {

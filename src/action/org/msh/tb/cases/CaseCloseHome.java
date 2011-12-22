@@ -75,9 +75,9 @@ public class CaseCloseHome extends Controller{
 		else tbcase.setOtherOutcome(null);
 
 		// save transaction log
-		caseHome.getLogService().addValue("TbCase.outcomeDate", date);
-		caseHome.getLogService().addMessageValue("TbCase.otherOutcome", tbcase.getState().getKey());
-		caseHome.getLogService().saveExecuteTransaction(tbcase, "CASE_CLOSE");
+		caseHome.getLogDetailWriter().addTableRow("TbCase.outcomeDate", date);
+		caseHome.getLogDetailWriter().addTableRow("TbCase.otherOutcome", tbcase.getState().getKey());
+		caseHome.saveExecuteTransaction("CASE_CLOSE");
 		
 		// save case changes
 		caseHome.setTransactionLogActive(false);
@@ -97,7 +97,7 @@ public class CaseCloseHome extends Controller{
 		
 		tbcase.setOtherOutcome(null);
 
-		caseHome.getLogService().saveExecuteTransaction(tbcase, "CASE_REOPEN");
+		caseHome.saveExecuteTransaction("CASE_REOPEN");
 		caseHome.setTransactionLogActive(false);
 		caseHome.persist();
 		caseHome.updateCaseTags();
@@ -142,4 +142,5 @@ public class CaseCloseHome extends Controller{
 		this.comment = comment;
 	}
 
+	
 }

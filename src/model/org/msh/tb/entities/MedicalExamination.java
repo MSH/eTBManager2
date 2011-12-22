@@ -21,6 +21,8 @@ import org.msh.tb.entities.enums.ReferredBy;
 import org.msh.tb.entities.enums.ReferredTo;
 import org.msh.tb.entities.enums.YesNoType;
 
+
+
 /**
  *
  * Records information about a medical examination of a case
@@ -356,6 +358,7 @@ public class MedicalExamination extends CaseData implements Serializable {
 	public void setDotProvName(String dotProvName) {
 		this.dotProvName = dotProvName;
 	}
+
 	
 	
 }

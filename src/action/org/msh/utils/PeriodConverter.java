@@ -141,8 +141,8 @@ public class PeriodConverter implements Converter{
 					s += " ";
 				 s += min + " " + messages.get("global.min");
 			}
-			
-			if (sec > 0) {
+
+			if ((hours == 0) && (sec > 0)) {
 				if (!s.isEmpty())
 					s += " ";
 				s += sec + " " + messages.get("global.sec");

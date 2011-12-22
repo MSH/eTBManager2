@@ -14,6 +14,8 @@ import org.msh.tb.br.entities.enums.MolecularBiologyResult;
 import org.msh.tb.entities.CaseData;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.Laboratory;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="molecularbiology")
@@ -23,14 +25,17 @@ public class MolecularBiology extends CaseData implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date dateRelease;
 
+	@PropertyLog(operations={Operation.ALL})
 	private MolecularBiologyResult result;
 
 	@ManyToOne
 	@JoinColumn(name="METHOD_ID")
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private FieldValue method;
 
 	@ManyToOne
 	@JoinColumn(name="LABORATORY_ID")
+	@PropertyLog(operations={Operation.ALL})
 	private Laboratory laboratory; 
 
 

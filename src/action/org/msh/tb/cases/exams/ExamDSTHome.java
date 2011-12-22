@@ -12,7 +12,8 @@ import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.enums.DstResult;
-import org.msh.tb.log.LogInfo;
+import org.msh.tb.transactionlog.LogInfo;
+
 
 @Name("examDSTHome")
 @LogInfo(roleName="EXAM_DST")

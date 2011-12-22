@@ -1,4 +1,4 @@
-package org.msh.tb.log;
+package org.msh.tb.transactionlog;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -6,7 +6,6 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-
 
 /**
  * Annotation that gives extra information about the field being logged. By default all fields in the entity
@@ -17,7 +16,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RUNTIME)
 @Documented
-public @interface FieldLog {
+public @interface PropertyLog {
 
 	/**
 	 * field value will be ignored and its value won't be logged
@@ -38,10 +37,10 @@ public @interface FieldLog {
 	 */
 	boolean logEntityFields() default false;
 
-
 	/**
-	 * Extra message key to be displayed at the left side of the original message key
+	 * Indicate the operations where the field will be logged. Default is the edit operation, i.e, 
+	 * this field will be logged just when the operation is for editing 
 	 * @return
 	 */
-	String extraKey() default "";
+	Operation[] operations() default {Operation.EDIT};
 }

@@ -24,7 +24,7 @@ import org.hibernate.annotations.TypeDefs;
 import org.jboss.seam.international.LocaleSelector;
 import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.NameComposition;
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @TypeDefs({@TypeDef(name="weeklyFrequency", typeClass=WeeklyFrequencyType.class)})
 
@@ -38,11 +38,11 @@ public class Workspace implements Serializable {
 	private Integer id;
 
 	@Embedded
-	@FieldLog(key="form.name")
+	@PropertyLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@OneToMany(mappedBy="workspace", cascade={CascadeType.PERSIST, CascadeType.REMOVE})
-	@FieldLog(ignore=true)
+	@PropertyLog(ignore=true)
 	private List<UserWorkspace> users = new ArrayList<UserWorkspace>();
 
 	@Column(length=150)
@@ -76,7 +76,7 @@ public class Workspace implements Serializable {
 	@Column(length=10)
 	private String extension;
 
-	@OneToOne(cascade={CascadeType.REFRESH, CascadeType.REMOVE}, fetch=FetchType.LAZY)
+	@OneToOne(cascade={CascadeType.REMOVE}, fetch=FetchType.LAZY)
 	@PrimaryKeyJoinColumn
 	private WorkspaceView view;
 

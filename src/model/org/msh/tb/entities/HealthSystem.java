@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="healthsystem")
@@ -20,11 +20,11 @@ public class HealthSystem extends WSObject {
     private Integer id;
 
 	@Embedded
-	@FieldLog(key="form.name")
+	@PropertyLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@Column(length=50)
-	@FieldLog(key="global.legacyId")
+	@PropertyLog(key="global.legacyId")
 	private String legacyId;
 	
 	/* (non-Javadoc)

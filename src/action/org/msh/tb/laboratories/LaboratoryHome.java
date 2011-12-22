@@ -9,8 +9,9 @@ import org.jboss.seam.annotations.Scope;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.entities.Laboratory;
-import org.msh.tb.log.LogInfo;
+import org.msh.tb.transactionlog.LogInfo;
 import org.msh.utils.EntityQuery;
+
 
 
 @Name("laboratoryHome")

@@ -22,11 +22,12 @@ import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.enums.OrderStatus;
-import org.msh.tb.log.LogService;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.MedicineSelection;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
+import org.msh.tb.transactionlog.TransactionLogService;
+
 
 
 @Name("orderHome")
@@ -116,10 +117,10 @@ public class OrderHome extends EntityHomeEx<Order>{
 			return ret;
 
 		// register log about new order
-		LogService logSrv = getLogService();
-		logSrv.addValue(".unitFrom", order.getUnitFrom().toString());
-		logSrv.addValue(".unitTo", order.getUnitTo().toString());
-		logSrv.saveExecuteTransaction(order, "NEW_ORDER");
+		TransactionLogService logSrv = getLogService();
+		logSrv.addTableRow(".unitFrom", order.getUnitFrom().toString());
+		logSrv.addTableRow(".unitTo", order.getUnitTo().toString());
+		logSrv.saveExecuteTransaction("NEW_ORDER", order.toString(), order.getId());
 		
 		OrderMsgDispatcher.instance().notifyNewOrder();
 		
@@ -201,7 +202,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 		
 		
 		// register log
-		getLogService().saveExecuteTransaction(getInstance(), "ORDER_CANC");
+		getLogService().saveExecuteTransaction("ORDER_CANC", getInstance().toString(), getInstance().getId());
 		
 		if (update().equals("updated"))
 			 return "ordercanceled";
@@ -332,7 +333,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 	
 	@Override
 	public String remove() {
-		getLogService().saveRemoveTransaction(getInstance(), "ORDERS");
+//		getLogService().save("ORDERS", getInstance().toString(), getInstance().getId());
 		return super.remove();
 	}
 	

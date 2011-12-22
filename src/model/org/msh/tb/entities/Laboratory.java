@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="laboratory")
@@ -24,11 +24,11 @@ public class Laboratory extends WSObject implements Serializable {
     private Integer id;
 	
 	@Column(length=20)
-	@FieldLog(key="form.abbrevName")
+	@PropertyLog(key="form.abbrevName")
 	private String abbrevName;
 	
 	@Column(length=100)
-	@FieldLog(key="form.name")
+	@PropertyLog(key="form.name")
 	private String name;
 	
 	@ManyToOne
@@ -41,7 +41,7 @@ public class Laboratory extends WSObject implements Serializable {
 	private HealthSystem healthSystem;
 
 	@Column(length=50)
-	@FieldLog(key="global.legacyId")
+	@PropertyLog(key="global.legacyId")
 	private String legacyId;
 
 	@Override

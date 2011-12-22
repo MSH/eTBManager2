@@ -20,7 +20,8 @@ import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.ValidationState;
-import org.msh.tb.log.LogInfo;
+import org.msh.tb.transactionlog.LogInfo;
+
 
 
 /**

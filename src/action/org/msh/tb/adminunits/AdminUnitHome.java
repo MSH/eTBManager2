@@ -11,7 +11,8 @@ import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.CountryStructure;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
-import org.msh.tb.log.LogInfo;
+import org.msh.tb.transactionlog.LogInfo;
+
 
 
 @Name("adminUnitHome")

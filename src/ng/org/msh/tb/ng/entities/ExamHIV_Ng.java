@@ -1,9 +1,7 @@
 package org.msh.tb.ng.entities;
 
-import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,11 +11,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.msh.tb.entities.CaseData;
 import org.msh.tb.entities.ExamHIV;
 import org.msh.tb.entities.FieldValue;
-import org.msh.tb.entities.enums.HIVResultNg;
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.PropertyLog;
 
 
 /**
@@ -42,7 +38,7 @@ public class ExamHIV_Ng extends ExamHIV {
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ART_REGIMEN_ID")
-	@FieldLog(key="TbField.ART_REGIMEN")
+	@PropertyLog(key="TbField.ART_REGIMEN")
 	private FieldValue artRegimen;	
 	
 	public Date getResultDate() {

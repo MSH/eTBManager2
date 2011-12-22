@@ -13,8 +13,8 @@ import org.msh.tb.entities.CaseComorbidity;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.RoleAction;
-import org.msh.tb.log.LogService;
 import org.msh.tb.misc.FieldsQuery;
+import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
 
@@ -138,23 +138,23 @@ public class ComorbidityHome {
 	 * @param newComorbidities
 	 */
 	public void registerLog(List<CaseComorbidity> newComorbidities) {
-		LogService logService = new LogService();
+		TransactionLogService logService = new TransactionLogService();
 		
 		TbCase tbcase = caseHome.getInstance();
 
 		// check new comorbidities
 		for (CaseComorbidity fld: newComorbidities) {
 			if (!tbcase.getComorbidities().contains(fld))
-				logService.addValue("RoleAction.NEW", fld.getComorbidity());
+				logService.addTableRow("RoleAction.NEW", fld.getComorbidity());
 		}
 
 		// check removed comorbidities
 		for (CaseComorbidity fld: tbcase.getComorbidities()) {
 			if (!newComorbidities.contains(fld))
-				logService.addValue("RoleAction.DELETE", fld.getComorbidity());
+				logService.addTableRow("RoleAction.DELETE", fld.getComorbidity());
 		}
 		
-		logService.setCaseClassification(tbcase.getClassification());
-		logService.saveTransaction(tbcase, "COMORBIDITIES", RoleAction.EDIT);
+//		logService.setCaseClassification(tbcase.getClassification());
+		logService.save("COMORBIDITIES", RoleAction.EDIT, tbcase.toString(), tbcase.getId());
 	}
 }

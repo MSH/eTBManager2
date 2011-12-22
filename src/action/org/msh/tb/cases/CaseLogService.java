@@ -6,14 +6,14 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.log.LogService;
+import org.msh.tb.transactionlog.TransactionLogService;
 
 @Name("caseLogService")
 public class CaseLogService {
 
 	@In(required=true) CaseHome caseHome;
 	
-	private LogService logService = new LogService();
+	private TransactionLogService logService = new TransactionLogService();
 
 	
 	/**
@@ -23,8 +23,7 @@ public class CaseLogService {
 	public void logValidation() {
 		TbCase tbcase = caseHome.getInstance();
 		
-		logService.setCaseClassification(tbcase.getClassification());
-		logService.saveExecuteTransaction(tbcase, "CASE_VALIDATE");
+		logService.saveExecuteTransaction("CASE_VALIDATE", tbcase.toString(), tbcase.getId());
 	}
 
 
@@ -41,10 +40,10 @@ public class CaseLogService {
 			 role = "TBTRANSFER";
 		else role = "MDRTRANSFER";
 		
-		logService.addValue("cases.movdate", caseMoveHome.getMoveDate());
-		logService.addValue("patients.desthu", caseMoveHome.getTbunitselection().getTbunit().toString());
+		logService.addTableRow("cases.movdate", caseMoveHome.getMoveDate());
+		logService.addTableRow("patients.desthu", caseMoveHome.getTbunitselection().getTbunit().toString());
 		
-		logService.saveExecuteTransaction(tbcase, role);
+		logService.saveExecuteTransaction(role, tbcase.toString(), tbcase.getId());
 	}
 	
 	
@@ -60,9 +59,9 @@ public class CaseLogService {
 			 role = "TBCLOSE";
 		else role = "MDRCLOSE";
 
-		logService.addValue("TbCase.outcomeDate", tbcase.getOutcomeDate());
-		logService.addMessageValue("cases.outcome", tbcase.getState().getKey());
-		logService.saveExecuteTransaction(tbcase, role);
+		logService.addTableRow("TbCase.outcomeDate", tbcase.getOutcomeDate());
+		logService.addTableRow("cases.outcome", tbcase.getState());
+		logService.saveExecuteTransaction(role, tbcase.toString(), tbcase.getId());
 	}
 
 	
@@ -78,6 +77,6 @@ public class CaseLogService {
 			 role = "TBREOPEN";
 		else role = "MDRREOPEN";
 		
-		logService.saveExecuteTransaction("CaseState", role);
+		logService.saveExecuteTransaction(role, tbcase.toString(), tbcase.getId());
 	}
 }

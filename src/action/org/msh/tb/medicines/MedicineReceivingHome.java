@@ -18,11 +18,13 @@ import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.MovementType;
-import org.msh.tb.log.LogInfo;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.SourceMedicineTree.MedicineNode;
 import org.msh.tb.medicines.SourceMedicineTree.SourceNode;
 import org.msh.tb.medicines.movs.MovementHome;
+import org.msh.tb.transactionlog.LogInfo;
+import org.msh.tb.transactionlog.Operation;
+
 
 
 @Name("medicineReceivingHome")
@@ -114,12 +116,12 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 		rec.setTotalPrice(totalPrice);
 
 		// register log
-		getLogService().addValue("Source", rec.getSource());
-		getLogService().addValue(".receivingDate", rec.getReceivingDate());
-		getLogService().addValue("global.totalPrice", rec.getTotalPrice());
+		getLogDetailWriter().addTableRow("Source", rec.getSource());
+		getLogDetailWriter().addTableRow(".receivingDate", rec.getReceivingDate());
+		getLogDetailWriter().addTableRow("global.totalPrice", rec.getTotalPrice());
 
-		if (isManaged()) 
-			getLogService().startEntityMonitoring(getInstance(), false);
+		if (isManaged())
+			getLogService().recordEntityState(getInstance(), Operation.EDIT);
 
 		// save all batches
 		sourceTree.traverse(new SourceMedicineTree.ItemTraversing<Batch>() {

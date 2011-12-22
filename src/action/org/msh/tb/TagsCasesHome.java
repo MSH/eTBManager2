@@ -44,7 +44,6 @@ public class TagsCasesHome {
 				.executeUpdate();
 		
 		Integer wsid = ((Workspace)Component.getInstance("defaultWorkspace")).getId();
-		System.out.println("Updating tags...");
 		// update tags
 		String sql = "";
 		for (Tag tag: tags) {

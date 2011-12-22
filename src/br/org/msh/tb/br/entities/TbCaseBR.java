@@ -18,6 +18,8 @@ import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="casedatabr")
@@ -28,6 +30,7 @@ public class TbCaseBR extends TbCase {
 	private String numSinan;
 
 	@Column(length = 100)
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private String usOrigem;
 
 	@ManyToOne
@@ -37,73 +40,92 @@ public class TbCaseBR extends TbCase {
 	@Embedded
 	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "SCHEMACHANGETYPE")) })
 	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "SCHEMACHANGETYPE_Complement")) })
+	@PropertyLog(key="TbField.SCHEMA_TYPES")
 	private FieldValueComponent schemaChangeType = new FieldValueComponent();
 
 	@Embedded
 	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "RESISTANCETYPE")) })
 	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "RESISTANCETYPE_Complement")) })
+	@PropertyLog(key="DrugResistanceType")
 	private FieldValueComponent resistanceType;
 
+	@PropertyLog(key="PatientType.FAILURE")
 	private FailureType failureType;
 
 	@Embedded
 	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "SKINCOLOR")) })
 	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "skinColor_Complement")) })
+	@PropertyLog(key="TbField.SKINCOLOR")
 	private FieldValueComponent skinColor;
 
 	@Embedded
 	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "CONTAGPLACE")) })
 	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "contagPlace_Complement")) })
+	@PropertyLog(key="TbField.CONTAG_PLACE")
 	private FieldValueComponent contagPlace;
 
 	@Embedded
 	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "EDUCATIONALDEGREE")) })
 	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "educationalDegree_Complement")) })
+	@PropertyLog(key="TbField.EDUCATIONAL_DEGREE")
 	private FieldValueComponent educationalDegree;
 
 	@ManyToOne
 	@JoinColumn(name = "PREGNANCEPERIOD")
+	@PropertyLog(key="TbField.PREGNANCE_PERIOD")
 	private FieldValue pregnancePeriod;
 
 	@Embedded
 	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "MICROBACTERIOSE")) })
 	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "MICROBACTERIOSE_Complement")) })
+	@PropertyLog(key="pt_BR.tipo_mnt")
 	private FieldValueComponent microbacteriose;
 
 	@Embedded
 	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "POSITION")) })
 	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "positionOther")) })
+	@PropertyLog(key="TbField.POSITION")
 	private FieldValueComponent position;
 
 	@Column(length = 10)
+	@PropertyLog(key="pt_BR.prefixoTel")
 	private String prefixPhone;
 
 	@Column(length = 10)
+	@PropertyLog(key="pt_BR.prefixoCel")
 	private String prefixMobile;
 
 	@Column(length = 100)
+	@PropertyLog(key="pt_BR.country")
 	private String country;
 
 	@Column(length = 50)
+	@PropertyLog(key="pt_BR.numender")
 	private String notifAddressNumber;
 
 	@Column(length = 50)
+	@PropertyLog(key="pt_BR.numender_curr")
 	private String currAddressNumber;
 
+	@PropertyLog(key="DrugResistanceType")
 	private TipoResistencia tipoResistencia;
 
 	@Column(length = 100)
+	@PropertyLog(key="Address.district")
 	private String notifDistrict;
 
 	@Column(length = 100)
+	@PropertyLog(key="Address.district")
 	private String currDistrict;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OUTCOME_REGIMENCHANGED")
+	@PropertyLog(key="TbField.SCHEMA_TYPES")
 	private FieldValue outcomeRegimenChanged;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OUTCOME_RESISTANCETYPE")
+	@PropertyLog(key="TbField.RESISTANCE_TYPES")
 	private FieldValue outcomeResistanceType;
 
 	/**

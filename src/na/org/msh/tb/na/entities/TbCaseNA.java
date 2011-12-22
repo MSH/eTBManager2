@@ -14,7 +14,6 @@ import javax.persistence.TemporalType;
 
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
-import org.msh.tb.log.FieldLog;
 
 @Entity
 @Table(name="tbcasena")
@@ -26,7 +25,6 @@ public class TbCaseNA extends TbCase{
 	private static final long serialVersionUID = 2227321155884824528L;
 	
 	@OneToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="tbcase")
-	@FieldLog(ignore=true)
 	private List<CaseDispensingNA> dispna = new ArrayList<CaseDispensingNA>();
 	
 	private boolean hospitalized;
@@ -48,7 +46,6 @@ public class TbCaseNA extends TbCase{
 	private String comments;
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcasena")
-	@FieldLog(ignore=true)
 	private List<CaseSideEffectNA> sideEffectsNa = new ArrayList<CaseSideEffectNA>();
 	
 	

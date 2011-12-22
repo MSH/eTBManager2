@@ -9,7 +9,8 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.enums.CultureResult;
-import org.msh.tb.log.LogInfo;
+import org.msh.tb.transactionlog.LogInfo;
+
 
 @Name("examCultureHome")
 @LogInfo(roleName="EXAM_CULTURE")

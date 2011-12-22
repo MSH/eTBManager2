@@ -18,7 +18,8 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.international.LocaleSelector;
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 
 
@@ -32,33 +33,34 @@ public abstract class LaboratoryExamResult implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	@NotNull
-	@FieldLog(key="PatientSample.dateCollected")
+	@PropertyLog(key="PatientSample.dateCollected", operations={Operation.ALL})
 	private Date dateCollected;
 	
 	@Column(length=50)
-	@FieldLog(key="PatientSample.sampleNumber")
+	@PropertyLog(key="PatientSample.sampleNumber", operations={Operation.ALL})
 	private String sampleNumber;
 	
 	@Column(length=250)
-	@FieldLog(key="global.comments")
+	@PropertyLog(key="global.comments")
 	private String comments;
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="CASE_ID")
+	@PropertyLog(ignore=true)
 	private TbCase tbcase;
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="LABORATORY_ID")
-	@FieldLog(key="Laboratory")
+	@PropertyLog(key="Laboratory", operations={Operation.ALL})
 	private Laboratory laboratory;
 
 	@Temporal(TemporalType.DATE)
-	@FieldLog(key="cases.exams.dateRelease")
+	@PropertyLog(key="cases.exams.dateRelease", operations={Operation.NEW, Operation.EDIT})
 	private Date dateRelease;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="METHOD_ID")
-	@FieldLog(key="cases.exams.method")
+	@PropertyLog(key="cases.exams.method", operations={Operation.NEW, Operation.EDIT})
 	private FieldValue method;
 
 	/**

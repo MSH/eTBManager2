@@ -12,6 +12,8 @@ import javax.persistence.Table;
 
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.entities.enums.SampleType;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="exammicroscopy")
@@ -21,6 +23,7 @@ import org.msh.tb.entities.enums.SampleType;
 public class ExamMicroscopy extends LaboratoryExamResult implements Serializable {
 	private static final long serialVersionUID = 1514632458011926044L;
 
+	@PropertyLog(operations={Operation.ALL})
 	private MicroscopyResult result;
 	
 	private Integer numberOfAFB;

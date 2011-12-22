@@ -1427,8 +1427,6 @@ public class ImportTBMRTask extends DbBatchTask {
 		log.setAction(RoleAction.EXEC);
 		log.setComments("UF: " + uf + ", Casos importados: " + getRecordCount());
 		log.setEntityDescription("Importação de fichas do Sistema TBMR");
-		log.setHasPrevValues(false);
-		log.setNumValues(0);
 		log.setRole(role);
 		log.setTransactionDate(new Date());
 		

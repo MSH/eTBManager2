@@ -23,9 +23,9 @@ import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.MovementType;
-import org.msh.tb.log.LogService;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.movs.MovementHome;
+import org.msh.tb.transactionlog.TransactionLogService;
 
 /**
  * Home class to handle a TB Unit that start medicine management in e-TB Manager
@@ -252,10 +252,10 @@ public class MedicineManStartHome {
 	 * Register in the logging system the starting of the unit in the medicine management control
 	 */
 	public void registerStartManLog() {
-		LogService logService = new LogService();
+		TransactionLogService logService = new TransactionLogService();
 		Tbunit unit = userSession.getTbunit();
 		
-		logService.addValue("Tbunit.medManStartDate", unit.getMedManStartDate());
+		logService.addTableRow("Tbunit.medManStartDate", unit.getMedManStartDate());
 		for (SourceInfo si: sourcesInfo) {
 			String meds = "";
 			for (MedicineInfo medInfo: si.getItems()) {
@@ -267,10 +267,10 @@ public class MedicineManStartHome {
 			}
 			if (!meds.isEmpty()) {
 				meds = si.getSource().getAbbrevName() + " [" + meds + "]";
-				logService.addValue("form.selectedmeds", meds);
+				logService.addTableRow("form.selectedmeds", meds);
 			}
 		}
-		logService.saveExecuteTransaction(unit, "MED_INIT");
+		logService.saveExecuteTransaction("MED_INIT", unit.toString(), unit.getId());
 	}
 
 
@@ -278,12 +278,12 @@ public class MedicineManStartHome {
 	 * Register in the logging system the removing of the unit from the medicine management control 
 	 */
 	public void registerRemoveManLog() {
-		LogService logService = new LogService();
+		TransactionLogService logService = new TransactionLogService();
 		Tbunit unit = userSession.getTbunit();
 		
 		unit = entityManager.merge(unit);
 
-		logService.saveExecuteTransaction(unit, "MED_INIT_REM");
+		logService.saveExecuteTransaction("MED_INIT_REM", unit.toString(), unit.getId());
 	}
 
 /*	*//**

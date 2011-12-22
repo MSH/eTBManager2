@@ -301,6 +301,7 @@ public class CaseEditingHome {
 		updatePatientAge();
 
 		// treatment was defined ?
+		caseHome.setTransactionLogActive(true);
 		if (!caseHome.persist().equals("persisted"))
 			return "error";
 

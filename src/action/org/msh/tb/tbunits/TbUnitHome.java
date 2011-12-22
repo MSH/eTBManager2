@@ -9,7 +9,8 @@ import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Tbunit;
-import org.msh.tb.log.LogInfo;
+import org.msh.tb.transactionlog.LogInfo;
+
 
 
 @Name("tbunitHome")

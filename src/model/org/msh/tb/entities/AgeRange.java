@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.PropertyLog;
 
 /**
  * Represent an age range for the workspace
@@ -24,7 +24,7 @@ public class AgeRange extends WSObject {
 	private Integer id;
 	
 	@Embedded
-	@FieldLog(key="form.name")
+	@PropertyLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	private int iniAge;

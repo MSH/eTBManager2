@@ -369,4 +369,19 @@ public class DateUtils {
 		c1.setTimeInMillis(len);
 		return c1;
 	}
+	
+	
+	/**
+	 * Check if a data has time information
+	 * @param dt1
+	 * @return
+	 */
+	public static boolean hasTimePart(Date dt1) {
+		if (dt1 instanceof java.sql.Date)
+			return false;
+
+		Calendar c = Calendar.getInstance();
+		return (c.get(Calendar.HOUR) > 0) || (c.get(Calendar.MINUTE) > 0) | (c.get(Calendar.SECOND) > 0) || (c.get(Calendar.MILLISECOND) > 0);
+	}
+	
 }

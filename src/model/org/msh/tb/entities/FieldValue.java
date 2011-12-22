@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.msh.tb.entities.enums.TbField;
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.PropertyLog;
 
 /**
  * Stores data about a field value from TB forms
@@ -30,25 +30,29 @@ public class FieldValue extends WSObject implements Serializable {
     private Integer id;
 
 	@Embedded
-	@FieldLog(key="form.name")
+	@PropertyLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@Embedded
 	@AttributeOverrides({
 		@AttributeOverride(name="name1", column=@Column(name="SHORT_NAME1")),
 		@AttributeOverride(name="name2", column=@Column(name="SHORT_NAME2"))})
+	@PropertyLog(key="form.abbrevName")
 	private LocalizedNameComp shortName = new LocalizedNameComp();
 
 	@Column(length=20)
+	@PropertyLog(key="form.customId")
 	private String customId;
 	
+	@PropertyLog(key="TbField")
 	private TbField field;
 	
 	private boolean other;
 	
 	@Column(length=100)
 	private String otherDescription;
-	
+
+	@PropertyLog(key="form.displayorder")
 	private Integer displayOrder;
 	
 

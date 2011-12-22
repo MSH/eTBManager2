@@ -12,7 +12,8 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.enums.MicroscopyResult;
-import org.msh.tb.log.LogInfo;
+import org.msh.tb.transactionlog.LogInfo;
+
 
 @Name("examMicroscopyHome")
 @LogInfo(roleName="EXAM_MICROSC")

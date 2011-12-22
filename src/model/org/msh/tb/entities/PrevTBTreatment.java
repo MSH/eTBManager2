@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 
+
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @Table(name="prevtbtreatment")
@@ -99,4 +100,6 @@ public class PrevTBTreatment implements Serializable {
 	public void setTbcase(TbCase tbcase) {
 		this.tbcase = tbcase;
 	}
+
+
 }

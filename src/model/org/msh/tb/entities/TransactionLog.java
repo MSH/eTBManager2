@@ -1,10 +1,7 @@
 package org.msh.tb.entities;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,14 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
-import org.jboss.seam.international.Messages;
-import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.RoleAction;
 
 /**
@@ -64,20 +58,17 @@ public class TransactionLog {
 	@NotNull
 	private WorkspaceLog workspace;
 	
-	private boolean hasPrevValues;
-	private int numValues;
-
-	@OneToMany(mappedBy="transactionLog", cascade={CascadeType.PERSIST, CascadeType.REFRESH})
-	private List<LogValue> logValues = new ArrayList<LogValue>();
-
-	@Column(length=100)
-	private String entityClass;
-	
-	private CaseClassification caseClassification;
 	
 	@Lob
 	private String comments;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="ADMINUNIT_ID")
+	private AdministrativeUnit adminUnit;
 
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="UNIT_ID")
+	private Tbunit unit;
 	
 	/**
 	 * Return the display text representation of the log service
@@ -86,8 +77,6 @@ public class TransactionLog {
 	public String getDisplayText() {
 		String s = (role != null? role.getDisplayName(): super.toString());
 
-		if (caseClassification != null)
-			s = Messages.instance().get(caseClassification.getKey()) + " - " + s;
 		return s;
 	}
 
@@ -97,48 +86,6 @@ public class TransactionLog {
 	}
 	
 	
-	/**
-	 * @return the entityClass
-	 */
-	public String getEntityClass() {
-		return entityClass;
-	}
-
-	/**
-	 * @param entityClass the entityClass to set
-	 */
-	public void setEntityClass(String entityClass) {
-		this.entityClass = entityClass;
-	}
-
-	/**
-	 * @return the hasPrevValues
-	 */
-	public boolean isHasPrevValues() {
-		return hasPrevValues;
-	}
-
-	/**
-	 * @param hasPrevValues the hasPrevValues to set
-	 */
-	public void setHasPrevValues(boolean hasPrevValues) {
-		this.hasPrevValues = hasPrevValues;
-	}
-
-	/**
-	 * @return the logValues
-	 */
-	public List<LogValue> getLogValues() {
-		return logValues;
-	}
-
-	/**
-	 * @param logValues the logValues to set
-	 */
-	public void setLogValues(List<LogValue> logValues) {
-		this.logValues = logValues;
-	}
-
 	/**
 	 * @return the id
 	 */
@@ -252,34 +199,6 @@ public class TransactionLog {
 	}
 
 	/**
-	 * @param numValues the numValues to set
-	 */
-	public void setNumValues(int numValues) {
-		this.numValues = numValues;
-	}
-
-	/**
-	 * @return the numValues
-	 */
-	public int getNumValues() {
-		return numValues;
-	}
-
-	/**
-	 * @return the caseClassification
-	 */
-	public CaseClassification getCaseClassification() {
-		return caseClassification;
-	}
-
-	/**
-	 * @param caseClassification the caseClassification to set
-	 */
-	public void setCaseClassification(CaseClassification caseClassification) {
-		this.caseClassification = caseClassification;
-	}
-
-	/**
 	 * @return the comments
 	 */
 	public String getComments() {
@@ -291,5 +210,33 @@ public class TransactionLog {
 	 */
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+
+	/**
+	 * @return the adminUnit
+	 */
+	public AdministrativeUnit getAdminUnit() {
+		return adminUnit;
+	}
+
+	/**
+	 * @param adminUnit the adminUnit to set
+	 */
+	public void setAdminUnit(AdministrativeUnit adminUnit) {
+		this.adminUnit = adminUnit;
+	}
+
+	/**
+	 * @return the unit
+	 */
+	public Tbunit getUnit() {
+		return unit;
+	}
+
+	/**
+	 * @param unit the unit to set
+	 */
+	public void setUnit(Tbunit unit) {
+		this.unit = unit;
 	}
 }

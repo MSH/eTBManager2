@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.DispensingFrequency;
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="tbunit")
@@ -30,7 +30,7 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 	private Integer id;
 
 	@Embedded
-	@FieldLog(key="form.name")
+	@PropertyLog(key="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 	
 	@Column(length=200)
@@ -57,13 +57,12 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ADMINUNIT_ID")
 	@NotNull
-	@FieldLog(key="UserView.ADMINUNIT")
+	@PropertyLog(key="UserView.ADMINUNIT")
 	private AdministrativeUnit adminUnit;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="HEALTHSYSTEM_ID")
 	@NotNull
-	@FieldLog(key="HealthSystem")
 	private HealthSystem healthSystem;
 	
 	@Column(length=50)
@@ -84,7 +83,7 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
     private boolean notifHealthUnit;
     private boolean patientDispensing;
 
-    @FieldLog(key="EntityState.ACTIVE")
+    @PropertyLog(key="EntityState.ACTIVE")
     private boolean active;
 
     /**

@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.ExamMicroscopy;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @DiscriminatorValue("br")
@@ -17,9 +19,11 @@ public class ExamMicroscopyBR extends ExamMicroscopy {
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="LAB_ADMINUNIT_ID")
+	@PropertyLog(operations={Operation.ALL})
 	private AdministrativeUnit laboratoryAdminUnit;
 	
 	@Column(length=200)
+	@PropertyLog(operations={Operation.ALL}, key="Laboratory")
 	private String laboratoryName;
 
 

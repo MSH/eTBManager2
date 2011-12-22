@@ -23,13 +23,15 @@ import org.msh.tb.entities.Transfer;
 import org.msh.tb.entities.TransferBatch;
 import org.msh.tb.entities.TransferItem;
 import org.msh.tb.entities.enums.MovementType;
+import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.entities.enums.TransferStatus;
-import org.msh.tb.log.LogService;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.MedicineStockSelection;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.transactionlog.TransactionLogService;
+
 
 
 @Name("transferHome")
@@ -117,11 +119,11 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		movementHome.savePreparedMovements();
 
 		// register transfer in the log system
-		LogService log = getLogService();
-		log.addValue(".unitFrom", transfer.getUnitFrom());
-		log.addValue(".unitTo", transfer.getUnitTo());
-		log.addValue(".shippingDate", transfer.getShippingDate());
-		log.saveExecuteTransaction(transfer, "NEW_TRANSFER");
+		TransactionLogService log = getLogService();
+		log.addTableRow(".unitFrom", transfer.getUnitFrom());
+		log.addTableRow(".unitTo", transfer.getUnitTo());
+		log.addTableRow(".shippingDate", transfer.getShippingDate());
+		log.save("NEW_TRANSFER", RoleAction.EXEC, transfer.toString(), transfer.getId());
 		
 		return persist();
 	}
@@ -169,11 +171,11 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		getEntityManager().flush();
 
 		// register transfer in the log system
-		LogService log = getLogService();
-		log.addValue(".unitFrom", transfer.getUnitFrom());
-		log.addValue(".unitTo", transfer.getUnitTo());
-		log.addValue(".receivingDate", transfer.getReceivingDate());
-		log.saveExecuteTransaction(transfer, "TRANSF_REC");
+		TransactionLogService log = getLogService();
+		log.addTableRow(".unitFrom", transfer.getUnitFrom());
+		log.addTableRow(".unitTo", transfer.getUnitTo());
+		log.addTableRow(".receivingDate", transfer.getReceivingDate());
+		log.save("TRANSF_REC", RoleAction.EXEC, transfer.toString(), transfer.getId());
 
 		return "received";
 	}
@@ -267,8 +269,8 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		
 
 		// register transfer in the log system
-		LogService log = getLogService();
-		log.saveExecuteTransaction(transfer, "TRANSF_CANCEL");
+		TransactionLogService log = getLogService();
+		log.save("TRANSF_CANCEL", RoleAction.EXEC, transfer.toString(), transfer.getId());
 
 		return "canceled";
 	}

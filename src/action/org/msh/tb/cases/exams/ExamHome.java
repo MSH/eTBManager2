@@ -145,4 +145,24 @@ public class ExamHome<E> extends WsEntityHome<E> {
 		setLastResult(true);
 		return getResults();
 	}
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.EntityHomeEx#getLogDescription()
+	 */
+	@Override
+	protected String getLogDescription() {
+		return getTbCase().toString();
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.EntityHomeEx#getLogEntityId()
+	 */
+	@Override
+	protected Integer getLogEntityId() {
+		return getTbCase().getId();
+	}
+	
+	
 }

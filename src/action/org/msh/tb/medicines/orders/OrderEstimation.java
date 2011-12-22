@@ -139,8 +139,6 @@ public class OrderEstimation {
 			int qtd = p.calcEstimatedDispensing(period);
 
 			period.intersect(p.getPeriod());
-			if (p.getMedicine().toString().startsWith("Pirazinamida"))
-				System.out.println(p.getMedicine().toString() + ", " + period.getDays() + " = " + qtd);
 
 			OrderItemAux item = s.itemByMedicine(p.getMedicine());
 

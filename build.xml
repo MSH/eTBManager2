@@ -12,10 +12,9 @@
 	<path id="Web App Libraries.libraryclasspath">
         <pathelement location="WebContent/WEB-INF/lib/commons-beanutils.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/commons-digester.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/commons-lang-2.3.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-lang.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/drools-compiler.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/drools-core.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/itext-2.0.4.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jboss-el.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jboss-seam-ioc.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jboss-seam-mail.jar"/>
@@ -24,19 +23,35 @@
         <pathelement location="WebContent/WEB-INF/lib/jboss-seam-ui.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jboss-seam.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jsf-facelets.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/richfaces-api.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/richfaces-impl.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/richfaces-ui.jar"/>
-        <pathelement location="C:/Java/jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/"/>
+        <pathelement location="WebContent/WEB-INF/lib/richfaces-api-3.3.3.Final.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/richfaces-impl-3.3.3.Final.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/richfaces-ui-3.3.3.Final.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jxl.jar"/>
         <pathelement location="WebContent/WEB-INF/classes"/>
+    </path>
+
+	<path id="jboss-4.2.3.GA.libraryclasspath">
+        <pathelement location="C:\Java\jboss-4.2.3.GA/client/commons-logging.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/client/jboss-j2ee.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/client/ejb3-persistence.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/client/servlet-api.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-annotations.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-entitymanager.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-core.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/lucene-core.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-search.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-validator.jar"/>
     </path>
 
 	<path id="mdrtb.classpath">
         <pathelement location="build/classes"/>
 <!--        <path refid="All JBoss Libraries [JBoss 4.2].libraryclasspath"/> 
         <path refid="EAR Libraries.libraryclasspath"/> -->
-        <path refid="Web App Libraries.libraryclasspath"/>
-
+        <path refid="Web App Libraries.libraryclasspath"/> 
+        <path refid="jboss-4.2.3.GA.libraryclasspath"/>
     </path>
 
 
@@ -77,9 +92,6 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/action"/>
-            <classpath refid="mdrtb.classpath"/>
-        </javac>
-        <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/model"/>
             <classpath refid="mdrtb.classpath"/>
         </javac>

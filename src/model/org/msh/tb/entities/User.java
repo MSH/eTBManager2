@@ -31,7 +31,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.validator.Email;
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.UserState;
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.PropertyLog;
 
 
 /**
@@ -89,7 +89,7 @@ public class User implements java.io.Serializable {
 	private Date registrationDate;
 
 	@Column(length=50)
-	@FieldLog(key="global.legacyId")
+	@PropertyLog(key="global.legacyId")
 	private String legacyId;
 	
 	@ManyToOne(fetch=FetchType.LAZY)

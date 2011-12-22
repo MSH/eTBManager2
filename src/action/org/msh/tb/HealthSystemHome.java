@@ -7,8 +7,9 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.entities.HealthSystem;
 import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.log.LogInfo;
+import org.msh.tb.transactionlog.LogInfo;
 import org.msh.utils.EntityQuery;
+
 
 
 /**

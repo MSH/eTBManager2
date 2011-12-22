@@ -31,9 +31,10 @@ import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.WorkspaceView;
 import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.NameComposition;
-import org.msh.tb.log.LogInfo;
-import org.msh.tb.log.LogService;
+import org.msh.tb.transactionlog.LogInfo;
+import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.EntityQuery;
+
 
 
 @Name("workspaceHome")
@@ -220,9 +221,9 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		if (!persist().equals("persisted"))
 			return "error";
 		
-		LogService logService = new LogService();
+		TransactionLogService logService = new TransactionLogService();
 		defaultWorkspace.setUsers(null);
-		logService.saveEntityDifferences(defaultWorkspace, getInstance(), "SETUPWS");
+//		logService.saveEntityDifferences(defaultWorkspace, getInstance(), "SETUPWS");
 		
 		defaultWorkspace = getInstance();
 		
@@ -388,17 +389,17 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		removeUsers();
 		
 		// register in log the users changed
-		LogService logService = new LogService();
+		TransactionLogService logService = new TransactionLogService();
 		
 		if (addedUsers != null) {
 			for (User user: addedUsers)
-				logService.addMessageValue("admin.workspaces.addeduser", user.getLogin() + " - " + user.getName());
+				logService.addTableRow("admin.workspaces.addeduser", user.getLogin() + " - " + user.getName());
 		}
 		if (removedUsers != null) {
 			for (UserWorkspace uw: removedUsers)
-				logService.addMessageValue("admin.workspaces.removeduser", uw.getUser().getLogin() + " - " + uw.getUser().getName());
+				logService.addTableRow("admin.workspaces.removeduser", uw.getUser().getLogin() + " - " + uw.getUser().getName());
 		}
-		logService.saveExecuteTransaction(getInstance(), "WSADDREMUSER");
+		logService.saveExecuteTransaction("WSADDREMUSER", getInstance().toString(), getInstance().getId());
 		
 		return persist();
 	}

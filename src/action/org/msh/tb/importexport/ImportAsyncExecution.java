@@ -47,7 +47,6 @@ public class ImportAsyncExecution {
 		} catch (Exception e) {
 			e.printStackTrace();
 			error = e.getMessage();
-			System.out.println(e.getMessage());
 		}
 		sendNotificationMail();
 	}

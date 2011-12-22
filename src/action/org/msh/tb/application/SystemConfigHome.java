@@ -13,7 +13,9 @@ import org.msh.tb.entities.SystemConfig;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserProfile;
 import org.msh.tb.entities.Workspace;
-import org.msh.tb.log.LogService;
+import org.msh.tb.entities.enums.RoleAction;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.TransactionLogService;
 
 @Name("systemConfigHome")
 @Scope(ScopeType.CONVERSATION)
@@ -26,7 +28,7 @@ public class SystemConfigHome {
 	private Workspace workspace;
 	private List<Tbunit> units;
 	private List<UserProfile> profiles;
-	private LogService logService;
+	private TransactionLogService logService;
 
 	/**
 	 * Return the system configuration
@@ -57,7 +59,7 @@ public class SystemConfigHome {
 		entityManager.flush();
 		
 		if (logService != null) {
-			logService.saveChangingTransaction("SYSSETUP");
+			logService.save("SYSSETUP", RoleAction.EDIT, null, null);
 		}
 		
 		etbmanagerApp.setConfiguration(systemConfig);
@@ -116,8 +118,8 @@ public class SystemConfigHome {
 	public void initializeEditing() {
 		if (workspace == null) {
 			workspace = getSystemConfig().getWorkspace();
-			logService = new LogService();
-			logService.startEntityMonitoring(getSystemConfig(), false);
+			logService = new TransactionLogService();
+			logService.recordEntityState(getSystemConfig(), Operation.EDIT);
 		}
 	}
 

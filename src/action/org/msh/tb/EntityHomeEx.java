@@ -19,9 +19,12 @@ import org.msh.tb.entities.WSObject;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.RoleAction;
-import org.msh.tb.log.LogInfo;
-import org.msh.tb.log.LogService;
+import org.msh.tb.transactionlog.DetailXMLWriter;
+import org.msh.tb.transactionlog.LogInfo;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.EntityQuery;
+
 
 public class EntityHomeEx<E> extends EntityHome<E> {
 	private static final long serialVersionUID = 2466367489746346196L;
@@ -30,7 +33,7 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	private ValueExpression updatedMessage;
 	private ValueExpression createdMessage;
 	
-	private LogService logService;
+	private TransactionLogService logService;
 	private boolean transactionLogActive = true;
 	private boolean displayMessage = true;
 	private boolean checkSecurityOnOpen = true;
@@ -44,8 +47,8 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	 */
 	public void initTransactionLog() {
 		if ((!bNew) && (logService == null)) {
-			logService = new LogService();
-			logService.startEntityMonitoring(getInstance(), !isManaged());
+			logService = new TransactionLogService();
+			logService.recordEntityState(getInstance(), isManaged()? Operation.EDIT: Operation.NEW);
 		}
 	}
 	
@@ -224,8 +227,6 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		if (roleName == null)
 			return;
 		
-		CaseClassification classif = getCaseClassificationForLog();
-
 		// if the log service didn't map object state previously, so there is nothing to do
 		if ((logService == null) && (action == RoleAction.EDIT))
 			return;
@@ -233,15 +234,32 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		if (getLogService() == null)
 			return;
 		
-		logService.setCaseClassification(classif);
-
 		switch (action) {
-		case DELETE: logService.saveRemoveTransaction(getInstance(), roleName);
+		case DELETE: logService.recordEntityState(getInstance(), Operation.DELETE);
 			break;
-		case EDIT: logService.saveChangingTransaction(roleName);
-			break;
-		case NEW: logService.saveNewEntityTransaction(getInstance(), roleName);
+		case NEW: logService.recordEntityState(getInstance(), Operation.NEW);
 		}
+		
+		logService.save(roleName, action, getLogDescription(), getLogEntityId());
+	}
+	
+
+	public void saveExecuteTransaction(String roleName) {
+		saveTransactionLog(RoleAction.EXEC);
+	}
+	
+	public DetailXMLWriter getLogDetailWriter() {
+		return getLogService().getDetailWriter();
+	}
+
+
+	protected String getLogDescription() {
+		return getInstance().toString();
+	}
+	
+	
+	protected Integer getLogEntityId() {
+		return (Integer)getId();
 	}
 
 
@@ -335,9 +353,9 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		return transactionLogActive;
 	}
 	
-	public LogService getLogService() {
+	public TransactionLogService getLogService() {
 		if (logService == null) {
-			logService = new LogService();
+			logService = new TransactionLogService();
 		}
 		return logService;
 	}

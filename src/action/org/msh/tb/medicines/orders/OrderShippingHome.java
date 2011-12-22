@@ -22,10 +22,10 @@ import org.msh.tb.entities.OrderItem;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.entities.enums.OrderStatus;
-import org.msh.tb.log.LogService;
 import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
+import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.DateUtils;
 
 @Name("orderShippingHome")
@@ -142,9 +142,9 @@ public class OrderShippingHome extends Controller {
 		
 		entityManager.persist(order);
 		
-		LogService log = new LogService();
-		log.addValue(".shippingDate", order.getShippingDate());
-		log.saveExecuteTransaction(order, "SEND_ORDER");
+		TransactionLogService log = new TransactionLogService();
+		log.addTableRow(".shippingDate", order.getShippingDate());
+		log.saveExecuteTransaction("SEND_ORDER", order.toString(), order.getId());
 		
 		return "persisted";	
 	}

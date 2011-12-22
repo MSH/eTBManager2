@@ -13,7 +13,7 @@ import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.treatment.TreatmentHome;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.log.LogService;
+import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.Period;
 
 @Name("caseCloseHomeBR")
@@ -70,10 +70,10 @@ public class CaseCloseHome extends Controller{
 		caseHome.persist();
 
 		// register log
-		LogService logsrv = new LogService();
-		logsrv.addValue("TbCase.outcomeDate", tbcase.getOutcomeDate());
-		logsrv.addValue("CaseState", state);
-		logsrv.saveExecuteTransaction(tbcase, "CASE_CLOSE");
+		TransactionLogService logsrv = new TransactionLogService();
+		logsrv.addTableRow("TbCase.outcomeDate", tbcase.getOutcomeDate());
+		logsrv.addTableRow("CaseState", state);
+		logsrv.saveExecuteTransaction("CASE_CLOSE", tbcase.toString(), tbcase.getId());
 
 		return "case-closed";
 	}
@@ -92,9 +92,9 @@ public class CaseCloseHome extends Controller{
 		caseHome.persist();
 
 		// register log
-		LogService logsrv = new LogService();
-		logsrv.addValue("CaseState", state);
-		logsrv.saveExecuteTransaction(tbcase, "CASE_REOPEN");
+		TransactionLogService logsrv = new TransactionLogService();
+		logsrv.addTableRow("CaseState", state);
+		logsrv.saveExecuteTransaction("CASE_REOPEN", tbcase.toString(), tbcase.getId());
 		
 		return "case-reopened";
 	}

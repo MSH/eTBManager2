@@ -33,8 +33,8 @@ import org.msh.tb.entities.UserProfile;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.TbField;
-import org.msh.tb.log.LogService;
 import org.msh.tb.test.dbgen.TokenReaderException;
+import org.msh.tb.transactionlog.TransactionLogService;
 
 /**
  * Copy data from one workspace into another
@@ -127,8 +127,8 @@ public class WorkspaceCopy {
 	 * Save in the transaction log the workspace copy procedure
 	 */
 	protected void saveTransactionLog() {
-		LogService logService = new LogService();
-		logService.addValue("admin.workspaces.copy.sourcews", sourceWorkspace);
+		TransactionLogService logService = new TransactionLogService();
+/*		logService.addValue("admin.workspaces.copy.sourcews", sourceWorkspace);
 		if (adminUnits)
 			logService.addMessageValue("admin.adminunits", "admin.workspaces.copy.selcopied");
 		if (healthSystems)
@@ -149,8 +149,8 @@ public class WorkspaceCopy {
 			logService.addMessageValue("admin.profiles", "admin.workspaces.copy.selcopied");
 		if (profiles)
 			logService.addMessageValue("admin.fields", "admin.workspaces.copy.selcopied");
-
-		logService.saveExecuteTransaction(workspaceHome.getInstance(), "WSCOPY");
+*/
+		logService.saveExecuteTransaction("WSCOPY", workspaceHome.getInstance().toString(), workspaceHome.getInstance().getId());
 	}
 
 

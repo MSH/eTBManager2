@@ -7,14 +7,18 @@ import javax.persistence.Table;
 
 import org.msh.tb.entities.enums.CultureResult;
 import org.msh.tb.entities.enums.SampleType;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="examculture")
 public class ExamCulture extends LaboratoryExamResult implements Serializable {
 	private static final long serialVersionUID = 1470269499087718301L;
 
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private CultureResult result;
 
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private Integer numberOfColonies;
 
 	private SampleType sampleType;

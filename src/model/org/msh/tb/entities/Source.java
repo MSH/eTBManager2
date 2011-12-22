@@ -12,7 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.msh.tb.log.FieldLog;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
+
 
 @Entity
 @Table(name="source")
@@ -24,7 +26,7 @@ public class Source extends WSObject implements Serializable {
 	private Integer id;
 
 	@Embedded
-	@FieldLog(key="form.name")
+	@PropertyLog(key="form.name", operations={Operation.ALL})
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@Embedded
@@ -32,9 +34,11 @@ public class Source extends WSObject implements Serializable {
 		@AttributeOverride(name="name1", column=@Column(name="ABBREV_NAME1")),
 		@AttributeOverride(name="name2", column=@Column(name="ABBREV_NAME2"))
 	})
+	@PropertyLog(key="form.abbrevName", operations={Operation.ALL})
 	private LocalizedNameComp abbrevName = new LocalizedNameComp();
 
 	@Column(length=50)
+	@PropertyLog(key="global.legacyId", operations={Operation.ALL})
 	private String legacyId;
 
 	@Override

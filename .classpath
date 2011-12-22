@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/action"/>
+	<classpathentry kind="src" path="src/ng"/>
 	<classpathentry kind="src" path="src/na"/>
 	<classpathentry kind="src" path="src/bd"/>
 	<classpathentry kind="src" path="src/ke"/>

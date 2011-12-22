@@ -22,7 +22,7 @@
 	<s:decorate template="/layout/display.xhtml" rendered="#{userSettings.multipleUserWorkspaces}">
 		<ui:define name="label">#{messages['Workspace']}:</ui:define>
 		<h:selectOneMenu value="#{reportSelection.userWorkspace}" >
-    		<s:selectItems value="#{userSettings.userWorkspaces}" var="c" label="#{c.workspace.name}" noSelectionLabel="-" />
+    		<s:selectItems value="#{userSettings.userWorkspaces}" var="c" label="#{c.workspace.name}" noSelectionLabel="#{messages['form.noselection']}" />
         	<s:convertEntity/>
 		</h:selectOneMenu>
 	</s:decorate>
@@ -70,64 +70,44 @@
 	<ui:param name="list" value="#{transactionLogReport}" />
 
 <s:fragment rendered="#{not empty transactionLogReport.resultList}">
-<table width="100%">
+<table width="100%" style="border-collapse:collapse;">
 	<ui:repeat value="#{transactionLogReport.resultList}" var="it">
-	<tr style="background-color:#f0f0f0">
+	<tr>
 		<td>
-			<div class="icon-log-#{it.action}" style="float:left" />
-			<b style="font-size:1.1em">#{it}</b><br/>
-			<div class="small-text">
-				#{messages[it.action.key]}
+			<div style="min-height:32px;float:left">
+				<div class="icon-log-#{it.action}" />
+			</div>
+			<b><s:fragment rendered="#{it.action!='EXEC'}">#{messages[it.action.key]} - </s:fragment> #{it}</b><br/>
+			#{it.entityDescription}
+		</td>
+		<td align="left">
+			<div class="icon-user"/>
+			#{it.user.name}
+			<div class="text-small">
+			#{it.adminUnit.fullDisplayName}
 			</div>
 		</td>
-		<td>
-			<div class="icon-user" style="float:left"/>
-			#{it.user.name}
-			<br/>
-			<h:outputText value="#{it.transactionDate}" styleClass="small-text">
+		<td align="right">
+			<h:outputText value="#{it.transactionDate}" styleClass="text-small">
 				<f:convertDateTime type="both" timeZone="#{timezones.default}"/>
 			</h:outputText>
+			<h:outputText value="#{it.transactionDate}" styleClass="hint" converter="periodConverter">
+				<f:param name="type" value="elapsed-time" />
+			</h:outputText>
 		</td>
-		<td>
+		<s:fragment rendered="#{empty reportSelection.userWorkspace?'3':'2'}">
+		<td align="right">
 			<h:outputText value="#{it.workspace.name}" />
 		</td>
+		</s:fragment>
 	</tr>
 	<tr>
-		<td colspan="3" style="padding-left:40px;padding-bottom:10px;">
-		<b> #{it.entityDescription}</b>
-		<s:div rendered="#{not empty it.logValues}">
-		
-		<table width="100%" >
-		<tr>
-			<th align="left" width="180px" style="border-bottom:1px solid #909090;color:#909090">
-				#{messages['LogValue.key']}
-			</th>
-			<s:fragment rendered="#{it.hasPrevValues}">
-			<th align="left" width="250px" style="border-bottom:1px solid #909090;color:#909090">
-				#{messages['LogValue.prevValue']}
-			</th>
-			</s:fragment>
-			<th align="left" style="border-bottom:1px solid #909090;color:#909090">
-				#{it.hasPrevValues? messages['LogValue.newValue'] :  messages['LogValue.fieldValue']}
-			</th>
-		</tr>
-		<a:repeat value="#{it.logValues}" var="v">
-			<tr>
-				<td>
-					<ul style="margin:0px;padding-left:20px;"><li>#{messages[v.messageKey]}</li></ul>
-				</td>
-				<s:fragment rendered="#{it.hasPrevValues}">
-				<td>
-					#{v.prevDisplayValue}
-				</td>
-				</s:fragment>
-				<td>
-					#{v.newDisplayValue}
-				</td>
-			</tr>
-		</a:repeat>
-		</table>
-		</s:div>
+		<td colspan="#{empty reportSelection.userWorkspace?'3':'2'}3" >
+			<div style="padding-left:40px;padding-bottom:10px;">
+				<h:outputText value="#{it.comments}" converter="detailHtmlConverter" escape="false"/>
+			</div>
+			<div class="spacer" />
+			<hr/>
 		</td>
 	</tr>
 	</ui:repeat>
