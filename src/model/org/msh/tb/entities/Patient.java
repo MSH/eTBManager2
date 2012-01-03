@@ -94,7 +94,7 @@ public class Patient extends WSObject implements Serializable {
 			break;
 		
 		case FIRSTSURNAME:
-			result = (name != null? name: "") + (middleName != null? ", " + middleName: "");
+			result = (name != null? name: "") + (lastName != null? ", " + lastName: "");
 			break;
 			
 		case LAST_FIRST_MIDDLENAME:
