@@ -3,6 +3,9 @@ package org.msh.tb.entities;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +22,8 @@ import org.msh.tb.entities.enums.Gender;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
+@DiscriminatorColumn(name="DISCRIMINATOR", discriminatorType=DiscriminatorType.STRING)
+@DiscriminatorValue("gen")
 @Table(name="tbcontact")
 public class TbContact implements Serializable {
 	private static final long serialVersionUID = -6862380284209711375L;
