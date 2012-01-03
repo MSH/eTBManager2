@@ -39,7 +39,10 @@ public enum TbField {
 	// Azerbaijan
 	XRAY_LOCALIZATION,
 	// Uzbekistan
-	ANOTHERTB
+	ANOTHERTB,
+	//Nigeria
+	RISK_GROUP
+	
 	;
 	
 	public String getKey() {
