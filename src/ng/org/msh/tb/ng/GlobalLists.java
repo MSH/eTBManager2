@@ -10,6 +10,7 @@ import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.tb.entities.enums.ReferredBy;
 import org.msh.tb.entities.enums.ReferredTo;
+import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.ng.entities.enums.Dot;
 import org.msh.tb.ng.entities.enums.HealthFacility;
 import org.msh.tb.ng.entities.enums.Qualification;
@@ -62,28 +63,54 @@ public class GlobalLists {
 	
 	
 	private final static ReferredBy[] refByTypes = {
-		ReferredBy.VCT_CENTER,
-		ReferredBy.HIV_COMP_CARE_UNIT,
-		ReferredBy.STI_CLINIC,
-		ReferredBy.HOME_BASED_CARE,
-		ReferredBy.ANTENATAL_CLINIC,
+//		ReferredBy.VCT_CENTER,
+//		ReferredBy.HIV_COMP_CARE_UNIT,
+//		ReferredBy.STI_CLINIC,
+//		ReferredBy.HOME_BASED_CARE,
+//		ReferredBy.ANTENATAL_CLINIC,
+//		ReferredBy.PRIVATE_SECTOR,
+//		ReferredBy.PHARMACIST,
+//		ReferredBy.SELF_REFERRAL,
+//		ReferredBy.CONTACT_INVITATION,
+//		ReferredBy.CHW
+		ReferredBy.PUBLIC,
 		ReferredBy.PRIVATE_SECTOR,
-		ReferredBy.PHARMACIST,
-		ReferredBy.SELF_REFERRAL,
-		ReferredBy.CONTACT_INVITATION,
-		ReferredBy.CHW
+		ReferredBy.FBO
 	};
 	
 	private final static ReferredTo[] refToTypes = {
-		ReferredTo.NUTRITION_SUPPORT,
-		ReferredTo.VCT_CENTER,
-		ReferredTo.HIV_COMP_CARE_UNIT,
-		ReferredTo.STI_CLINIC,
-		ReferredTo.HOME_BASED_CARE, 
-		ReferredTo.ANTENATAL_CLINIC,
+//		ReferredTo.NUTRITION_SUPPORT,
+//		ReferredTo.VCT_CENTER,
+//		ReferredTo.HIV_COMP_CARE_UNIT,
+//		ReferredTo.STI_CLINIC,
+//		ReferredTo.HOME_BASED_CARE, 
+//		ReferredTo.ANTENATAL_CLINIC,
+//		ReferredTo.PRIVATE_SECTOR,
+//		ReferredTo.NOT_REFERRED
+		ReferredTo.PUBLIC,
 		ReferredTo.PRIVATE_SECTOR,
-		ReferredTo.NOT_REFERRED
+		ReferredTo.FBO
+		
 	};	
+	
+	private static final TbField tbFields[] = {
+		TbField.COMORBIDITY,
+		TbField.SIDEEFFECT,
+		TbField.DST_METHOD,
+		TbField.CULTURE_METHOD,
+		TbField.CONTACTCONDUCT,
+		TbField.CONTACTTYPE,
+		TbField.XRAYPRESENTATION,
+		TbField.PULMONARY_TYPES,
+		TbField.EXTRAPULMONARY_TYPES,
+		TbField.ART_REGIMEN,
+		TbField.RISK_GROUP
+	};
+	
+	@Factory("tbFields.ng")
+	public TbField[] getTbFields() {
+		return tbFields;
+	}
 	
 	public ReferredBy[] getRefByTypes() {
 		return refByTypes;
@@ -111,9 +138,10 @@ public class GlobalLists {
 		return Qualification.values();
 	}
 	
-	@Factory("healthfacility_ng")
-	public HealthFacility[] gethealthFacility() {
-		return HealthFacility.values();
-	}
+//	@Factory("healthfacility_ng")
+//	public HealthFacility[] gethealthFacility() {
+//		return HealthFacility.values();
+//	}
+
 
 }
