@@ -7,10 +7,13 @@ import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.log.Log;
 import org.jboss.seam.international.StatusMessages;
+import org.msh.tb.br.entities.TbCaseBR;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.treatment.TreatmentHome;
-import org.msh.tb.na.MedicalExaminationNAHome;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DiagnosisType;
+import org.msh.tb.ng.MedicalExaminationNGHome;
 import org.msh.tb.ng.entities.TbCaseNG;
 
 
@@ -18,7 +21,7 @@ import org.msh.tb.ng.entities.TbCaseNG;
  * Specific code to handle case management functionalities for Nigerian
  * workspace
  * 
- * @author Utkarsh Srivastava
+ * @author Vani Rao
  * 
  */
 @Name("caseNGHome")
@@ -30,7 +33,7 @@ public class CaseNGHome {
 	@In(create = true)
 	TreatmentHome treatmentHome;
 	@In(required = false)
-	MedicalExaminationNAHome medicalExaminationNAHome;
+	MedicalExaminationNGHome medicalExaminationNGHome;
 
 	/**
 	 * Return an instance of a {@link TbCaseNA} class
@@ -43,7 +46,7 @@ public class CaseNGHome {
 	}
 
 	/**
-	 * Save a new case for the Namibian workspace. Don't use the class
+	 * Save a new case for the Nigerian workspace. Don't use the class
 	 * {@link CaseEditingHome}, because this class already saves it using the
 	 * {@link CaseEditingHome} component
 	 * 
@@ -51,11 +54,17 @@ public class CaseNGHome {
 	 */
 	@Transactional
 	public String saveNew() {
-		return caseEditingHome.saveNew();
+		//return caseEditingHome.saveNew();
+		TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
+		tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
+		tbcase.setState(CaseState.WAITING_TREATMENT);
+		String ret = caseEditingHome.saveNew();
+		saveMedicalExamination();
+		return ret;
 	}
 
 	/**
-	 * Save changes made to an already existing case in the Namibian workspace
+	 * Save changes made to an already existing case in the Nigerian workspace
 	 * 
 	 * @return "persisted" if successfully saved
 	 */
@@ -65,7 +74,7 @@ public class CaseNGHome {
 	}
 
 	/**
-	 * Save changes made to an already existing case in the Namibian workspace
+	 * Save changes made to an already existing case in the Nigerian workspace
 	 * 
 	 * @return "persisted" if successfully saved
 	 */
@@ -85,11 +94,11 @@ public class CaseNGHome {
 	 * @return
 	 */
 	public String saveMedicalExamination() {
-		if (medicalExaminationNAHome == null)
+		if (medicalExaminationNGHome == null)
 			return "error";
 
-		medicalExaminationNAHome.setDisplayMessage(false);
-		return medicalExaminationNAHome.persist();
+		medicalExaminationNGHome.setDisplayMessage(false);
+		return medicalExaminationNGHome.persist();
 	}
 
 }
