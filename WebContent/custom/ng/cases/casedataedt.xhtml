@@ -40,7 +40,7 @@
 	
 	</td></tr>
 	
-	<ui:include src="/layout/editbirthdate.xhtml" />
+	<ui:include src="/custom/ng/layout/editbirthdate.xhtml" />
 	
 	<tr><td colspan="2">
 	
@@ -70,15 +70,17 @@
     
     <tr><td colspan="2">
     	<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['Address.address']}:</ui:define>
-    		<h:inputText value="#{tbcase.notifAddress.address}" style="width:300px" required="true" maxlength="100"/>
+    		<!-- <ui:define name="label">#{messages['Address.address']}:</ui:define>-->
+    		<ui:define name="label">#{messages['Address.completeAddress']}:</ui:define>
+    		<h:inputText value="#{tbcase.notifAddress.address}" style="width:500px" required="true" maxlength="200"/>
     	</s:decorate>
     	
     </td></tr>
     
     <tr><td colspan="2">
     	<s:decorate template="/layout/edit.xhtml">
-    		<h:inputText value="#{tbcase.notifAddress.complement}" style="width:300px" maxlength="100"/>
+    	<ui:define name="label">#{messages['Address.landmark']}:</ui:define>
+    		<h:inputText value="#{tbcase.notifAddress.complement}" style="width:500px" maxlength="100"/>
     	</s:decorate>
     </td></tr>
 
@@ -133,6 +135,7 @@
 	<tr><td>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
+    		<h:outputText value= "#{messages['global.mandatory']}" style="color: red"/>
     		<h:inputText value="#{tbcase.phoneNumber}" />
     	</s:decorate>	
 	</td><td>
@@ -177,7 +180,8 @@
     </div>
  
     <s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['TbCase.TBRegistrationNumber']}:</ui:define>
+    	<!--<ui:define name="label">#{messages['TbCase.TBRegistrationNumber']}:</ui:define>-->
+    	<ui:define name="label">#{messages['TbCase.LGATBL']}:</ui:define>
 		<h:inputText value="#{tbcaseng.tbRegistrationNumber}" style="width:120px;" maxlength="50"></h:inputText>
 		</s:decorate>
     
@@ -289,7 +293,7 @@ function isPulmonary(cb) {
 		</td></tr></table>
 	</div>
 
-
+	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<div class="form-content">
 	<h2>#{messages['cases.prevtreat']}</h2>
 
@@ -306,7 +310,7 @@ function isPulmonary(cb) {
 
 		<h:panelGroup id="prevtreats">
 		<s:fragment rendered="#{prevTBTreatmentHome.numTreatments>0}">
-		<table width="98%" class="tabela4">
+		<table width="98%" class="table1 small">
 			<tr>
 				<th rowspan="2">#{messages['cases.prevtreat.num']}
 				</th>
@@ -316,8 +320,6 @@ function isPulmonary(cb) {
 					#{messages['cases.prevtreat.regs']}
 				</th>
 				<th rowspan="2">#{messages['PrevTBTreatment.outcome']}
-				</th>
-				<th rowspan="2">#{messages['PrevTBTreatment.healthFacility']}
 				</th>
 			</tr>
 			<tr>
@@ -355,15 +357,6 @@ function isPulmonary(cb) {
 					</s:validateAll>
 					<h:message for="oc" styleClass="error"/>
 				</td>
-				<td class="colcb">
-					<s:validateAll>
-					<h:selectOneMenu id="hf" value="#{it.prevTBTreatment.healthFacility}" required="true">
-						<s:selectItems var="v" value="#{healthfacility_ng}" label="#{messages[v.key]}" noSelectionLabel="-" />
-						<s:convertEnum />
-					</h:selectOneMenu>
-					</s:validateAll>
-					<h:message for="hf" styleClass="error"/>
-				</td>
 			</tr>
 		</a:repeat>
 		</table>
@@ -371,6 +364,7 @@ function isPulmonary(cb) {
 		</h:panelGroup>
 		</td></tr></table>
 	</div>
+	</s:fragment>
 
 <rich:jQuery selector="#addrChanged" query="change(function(){ showCurrAddress(this); })" />
 <script type="text/javascript">
