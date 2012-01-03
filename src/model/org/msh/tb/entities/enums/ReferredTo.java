@@ -8,7 +8,11 @@ public enum ReferredTo {
 	HOME_BASED_CARE, 
 	ANTENATAL_CLINIC,
 	PRIVATE_SECTOR,
-	NOT_REFERRED;
+	NOT_REFERRED,
+	
+	//Nigeria
+	PUBLIC,
+	FBO;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
