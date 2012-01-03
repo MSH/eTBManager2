@@ -6,7 +6,7 @@
 		<restrict>#{userSession.canEditCases}</restrict>
 		<begin-conversation join="true"/>
 		<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
-		<param name="examid" value="#{medicalExaminationHome.id}" converterId="javax.faces.Integer"/>
+		<param name="examid" value="#{medicalExaminationNGHome.id}" converterId="javax.faces.Integer"/>
 		<navigation>
 			<rule if-outcome="persisted">
 				<end-conversation/>
