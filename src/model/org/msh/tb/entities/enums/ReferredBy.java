@@ -10,7 +10,12 @@ public enum ReferredBy {
 	PHARMACIST,
 	SELF_REFERRAL,
 	CONTACT_INVITATION,
-	CHW; // Community Health Worker
+	CHW, // Community Health Worker
+	
+	//Nigeria
+	PUBLIC,
+	FBO;
+	
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
