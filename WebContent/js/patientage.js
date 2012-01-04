@@ -1,9 +1,10 @@
 function handleCaseDateChange() {
 	sBirth = jQuery("#divbirthdate input[type='text']").val();
+	alert(sBirth);
 	sReg = jQuery("#divregdate input[type='text']").val();
 	if (!(sReg))
 		 dt2 = new Date();
-	else dt2 = convertDate(sReg);
+	else dt2 = convertDate(sReg)
 	var dt1=convertDate(sBirth);
 	if (dt1==null)
 		return;
@@ -17,9 +18,11 @@ function handleCaseDateChange() {
 }
 
 function convertDate(s) {
+	alert(s);
 	dia = s.replace(/_/g," ").substring(0,2);
 	mes = s.replace(/_/g," ").substring(3,5);
 	ano = s.replace(/_/g," ").substring(6,10);
+	alert(dia);
 
 	if (window.formato == "MDY") {
 		a=dia; dia=mes; mes=a;
@@ -37,6 +40,7 @@ function convertDate(s) {
 	try {
 		dt.setFullYear(ano, mes-1, dia);
 	} catch(e) {dt = null;}
+	alert(dt);
 	return dt;
 }
 
@@ -45,4 +49,25 @@ function yearsBetween(dt1, dt2) {
 	var milliPerYear=1000*60*60*24*365.26;
 
 	return Math.floor(milli/milliPerYear);
+}
+
+function agetodob(id) {
+	var age = id.value;
+	var curDt = new Date();
+	
+	var mon   = curDt.getMonth() + 1;
+	var year  = curDt.getFullYear();
+	
+	var dobyr = year - age;
+	
+	if(mon<6){
+	var strdob = "01"+"/"+"01"+"/"+dobyr;	
+		}
+		
+	if(mon>6){
+	var strdob = "01"+"/"+"07"+"/"+dobyr;
+	}
+	
+	jQuery("#divbirthdate input[type='text']").val(strdob);
+	;
 }
