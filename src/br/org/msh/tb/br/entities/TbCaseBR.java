@@ -27,14 +27,16 @@ public class TbCaseBR extends TbCase {
 	private static final long serialVersionUID = -9217679039838707990L;
 
 	@Column(length = 100)
+	@PropertyLog(key="pt_BR.numsinan")
 	private String numSinan;
 
 	@Column(length = 100)
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT}, key="pt_BR.usOrigem")
 	private String usOrigem;
 
 	@ManyToOne
 	@JoinColumn(name = "ADMINUNIT_USORIGEM_ID")
+	@PropertyLog(key="pt_BR.usOrigemuf")
 	private AdministrativeUnit adminUnitUsOrigem;
 
 	@Embedded

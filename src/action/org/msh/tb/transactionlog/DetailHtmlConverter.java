@@ -20,6 +20,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.faces.Converter;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.international.Messages;
+import org.msh.tb.entities.enums.MessageKey;
 import org.msh.utils.date.LocaleDateConverter;
 
 @Converter(id="detailHtmlConverter")
@@ -186,7 +187,16 @@ public class DetailHtmlConverter implements javax.faces.convert.Converter {
 		}
 		
 		if (obj instanceof Enum) {
-			String key = obj.getClass().getSimpleName() + '.' + ((Enum)obj).toString();
+			MessageKey mk;
+			if (obj instanceof MessageKey)
+				 mk = (MessageKey)obj;
+			else mk = null;
+
+			String key;
+			if (mk != null)
+			  	 key = mk.getMessageKey();
+			else key = obj.getClass().getSimpleName() + '.' + ((Enum)obj).toString();
+			
 			return Messages.instance().get(key);
 		}
 		

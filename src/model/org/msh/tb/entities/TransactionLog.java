@@ -16,7 +16,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
+import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.enums.RoleAction;
+import org.msh.utils.TextUtils;
 
 /**
  * Register a transaction that happened in the system
@@ -69,6 +71,10 @@ public class TransactionLog {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="UNIT_ID")
 	private Tbunit unit;
+
+	// suffix information to be displayed after the title
+	@Column(length=200)
+	private String titleSuffix;
 	
 	/**
 	 * Return the display text representation of the log service
@@ -80,6 +86,43 @@ public class TransactionLog {
 		return s;
 	}
 
+	
+	/**
+	 * Return the title to be displayed in a transaction log report
+	 * @return
+	 */
+	public String getTitle() {
+		String s;
+
+		if ((action != null) && (action != RoleAction.EXEC))
+			 s = Messages.instance().get(action.getKey()) + " - ";
+		else s = "";
+
+		s += getDisplayText();
+
+		String suf = getDisplayableTitleSuffix();
+		if (suf != null)
+			s += " - " + suf;
+
+		return s;
+	}
+
+	/**
+	 * Return the display representation of the suffix to be appended to the title
+	 * @return
+	 */
+	public String getDisplayableTitleSuffix() {
+		if ((titleSuffix == null) || (titleSuffix.isEmpty()))
+			return null;
+		
+		return TextUtils.eltokenFormat(titleSuffix, new TextUtils.TokenInterpreter() {
+			@Override
+			public String translate(String token) {
+				return Messages.instance().get(token);
+			}
+		});
+	}
+	
 	@Override
 	public String toString() {
 		return getDisplayText();
@@ -238,5 +281,19 @@ public class TransactionLog {
 	 */
 	public void setUnit(Tbunit unit) {
 		this.unit = unit;
+	}
+
+	/**
+	 * @return the titleSuffix
+	 */
+	public String getTitleSuffix() {
+		return titleSuffix;
+	}
+
+	/**
+	 * @param titleSuffix the titleSuffix to set
+	 */
+	public void setTitleSuffix(String titleSuffix) {
+		this.titleSuffix = titleSuffix;
 	}
 }

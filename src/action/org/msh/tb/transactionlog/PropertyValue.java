@@ -118,8 +118,12 @@ public class PropertyValue {
 		if (value == null)
 			return null;
 
-		if (isPrimitiveType(value))
+		if (isPrimitiveType(value)) {
+			// check if string is empty
+			if ((value instanceof String) && (value.toString().trim().isEmpty()))
+				return null;
 			return value;
+		}
 
 		return value.toString();
 	}

@@ -271,7 +271,7 @@ public class AdministrativeUnit extends WSObject {
 	 */
 	@Override
 	public String toString() {
-		return getName().toString();
+		return getFullDisplayName();
 	}
 
 	/**

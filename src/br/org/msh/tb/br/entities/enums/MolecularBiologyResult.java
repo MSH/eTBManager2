@@ -1,19 +1,15 @@
 package org.msh.tb.br.entities.enums;
 
-public enum MolecularBiologyResult {
+import org.msh.tb.entities.enums.MessageKey;
+
+public enum MolecularBiologyResult implements MessageKey {
 
 	NOTDONE,
 	MTUBERCULOSIS,
 	MICROBAC_NONTB,
 	NEGATIVE;
 	
-	public String getMessage() {
-		switch (this) {
-		case NOTDONE: return "Não realizada";
-		case MTUBERCULOSIS: return "M. Tuberculosis";
-		case MICROBAC_NONTB: return "Micobacteria não tuberculosa";
-		case NEGATIVE: return "Negativa";
-		default: return "?";
-		}
+	public String getMessageKey() {
+		return "pt_BR." + getClass().getSimpleName() + "." + toString();
 	}
 }

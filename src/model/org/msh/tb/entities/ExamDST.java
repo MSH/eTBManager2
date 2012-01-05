@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.msh.tb.transactionlog.PropertyLog;
+
 @Entity
 @Table(name="examdst")
 public class ExamDST extends LaboratoryExamResult implements Serializable {
@@ -17,8 +19,13 @@ public class ExamDST extends LaboratoryExamResult implements Serializable {
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="exam")
 	private List<ExamDSTResult> results = new ArrayList<ExamDSTResult>();
 
+	@PropertyLog(ignore=true)
 	private int numResistant;
+
+	@PropertyLog(ignore=true)
 	private int numSusceptible;
+
+	@PropertyLog(ignore=true)
 	private int numContaminated;
 
 	/**

@@ -223,7 +223,7 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		if (!transactionLogActive)
 			return;
 
-		String roleName = getRoleName();
+		String roleName = getRoleName(action);
 		if (roleName == null)
 			return;
 		
@@ -267,7 +267,7 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	 * Return the role name for transaction log. If no transaction log must be registered, return null
 	 * @return name of the role for this entity home
 	 */
-	public String getRoleName() {
+	public String getRoleName(RoleAction action) {
 		if (roleName != null)
 			return roleName;
 

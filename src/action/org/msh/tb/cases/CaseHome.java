@@ -19,6 +19,8 @@ import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DiagnosisType;
+import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.transactionlog.LogInfo;
 
@@ -423,4 +425,34 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		persist();
 		return "number-changed";
 	}
+
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.EntityHomeEx#getRoleName()
+	 */
+	@Override
+	public String getRoleName(RoleAction action) {
+		if (action != RoleAction.NEW)
+			return super.getRoleName(action);
+		
+		if (getInstance().getDiagnosisType() == DiagnosisType.CONFIRMED)
+			 return "NEWCASE";
+		else return "NEWSUSP";
+	}
+
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.EntityHomeEx#saveTransactionLog(org.msh.tb.entities.enums.RoleAction)
+	 */
+	@Override
+	protected void saveTransactionLog(RoleAction action) {
+		if (action == RoleAction.NEW) {
+			String s = "#{" + getInstance().getClassification().getKey() + "}";
+			getLogService().setTitleSuffix(s);
+		}
+		super.saveTransactionLog(action);
+	}
+	
 }

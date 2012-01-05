@@ -1,6 +1,7 @@
 package org.msh.tb.transactionlog;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.Component;
@@ -12,6 +13,7 @@ import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.reports.ReportSelection;
 import org.msh.utils.EntityQuery;
+import org.msh.utils.date.DateUtils;
 
 
 /**
@@ -35,7 +37,9 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 		"log.action = #{transactionLogReport.action}",
 		"log.role.id = #{userRoleHome.instance.id}",
 		"log.user.name like #{transactionLogReport.userNameLike}",
-		"log.entityDescription like #{transactionLogReport.searchKeyLike}"
+		"log.entityDescription like #{transactionLogReport.searchKeyLike}",
+		"log.transactionDate >= #{transactionLogReport.iniDate}",
+		"log.transactionDate <= #{transactionLogReport.endDate1}"
 	};
 
 	private RoleAction action;
@@ -43,6 +47,9 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 
 	private String userName;	
 	private String searchKey;
+	
+	private Date iniDate;
+	private Date endDate;
 	
 
 	/* (non-Javadoc)
@@ -174,5 +181,46 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 	
 	public String getSearchKeyLike() {
 		return (searchKey != null? "%" + searchKey + "%" : null);
+	}
+
+
+	/**
+	 * @return the iniDate
+	 */
+	public Date getIniDate() {
+		return iniDate;
+	}
+
+
+	/**
+	 * @param iniDate the iniDate to set
+	 */
+	public void setIniDate(Date iniDate) {
+		this.iniDate = iniDate;
+	}
+
+
+	/**
+	 * @return the endDate
+	 */
+	public Date getEndDate() {
+		return endDate;
+	}
+	
+	
+	/**
+	 * Return the end date plus one day, to return also the dates with time information inside de date selected
+	 * @return
+	 */
+	public Date getEndDate1() {
+		return (endDate != null? DateUtils.incDays(endDate, 1): null);
+	}
+
+
+	/**
+	 * @param endDate the endDate to set
+	 */
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 }

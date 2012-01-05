@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import org.msh.tb.entities.enums.XRayBaseline;
 import org.msh.tb.entities.enums.XRayEvolution;
 import org.msh.tb.entities.enums.XRayResult;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 /**
  * Stores information about an X-Ray exam of a case
@@ -26,16 +28,20 @@ import org.msh.tb.entities.enums.XRayResult;
 @Table(name="examxray")
 public class ExamXRay extends CaseData {
 
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private XRayResult result;
 	
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private XRayEvolution evolution;
 	
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private XRayBaseline baseline;
 	
 	private Boolean destruction;
 	
 	@ManyToOne
 	@JoinColumn(name="PRESENTATION_ID")
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT}, key="TbField.XRAYPRESENTATION")
 	private FieldValue presentation;
 
 	/**

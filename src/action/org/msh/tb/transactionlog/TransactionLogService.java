@@ -28,6 +28,7 @@ public class TransactionLogService {
 
 	private DetailXMLWriter detailWriter;
 	private List<Item> items;
+	private String titleSuffix;
 	
 	/**
 	 * Capture the properties of the entity that are to be saved in a transaction
@@ -92,11 +93,12 @@ public class TransactionLogService {
 		log.setComments(getDetailWriter().asXML());
 		log.setAdminUnit(getAdminUnit());
 		log.setUnit(getUnit());
+		log.setTitleSuffix(titleSuffix);
 		
 		EntityManager em = getEntityManager();
 		em.persist(log);
 		em.flush();
-		
+
 		return log;
 	}
 
@@ -270,5 +272,20 @@ public class TransactionLogService {
 		public Operation getOperation() {
 			return operation;
 		}
+	}
+
+	/**
+	 * @return the titleSuffix
+	 */
+	public String getTitleSuffix() {
+		return titleSuffix;
+	}
+
+
+	/**
+	 * @param titleSuffix the titleSuffix to set
+	 */
+	public void setTitleSuffix(String titleSuffix) {
+		this.titleSuffix = titleSuffix;
 	}
 }

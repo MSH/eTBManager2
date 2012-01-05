@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.enums.UserView;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="userworkspace")
@@ -27,34 +29,41 @@ public class UserWorkspace implements Serializable {
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="HEALTHSYSTEM_ID")
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private HealthSystem healthSystem;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="TBUNIT_ID")
 	@NotNull
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private Tbunit tbunit;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="WORKSPACE_ID")
 	@NotNull
+	@PropertyLog(ignore=true)
 	private Workspace workspace;
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
 	@NotNull
+	@PropertyLog(ignore=true)
 	private User user;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="PROFILE_ID")
 	@NotNull
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private UserProfile profile;
 	
 	@Column(name="USER_VIEW")
 	@NotNull
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private UserView view;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ADMINUNIT_ID")
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
 	private AdministrativeUnit adminUnit;
     
     private boolean playOtherUnits;

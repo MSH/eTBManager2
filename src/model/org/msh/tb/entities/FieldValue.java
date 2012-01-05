@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.msh.tb.entities.enums.TbField;
+import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 
 /**
@@ -30,14 +31,14 @@ public class FieldValue extends WSObject implements Serializable {
     private Integer id;
 
 	@Embedded
-	@PropertyLog(key="form.name")
+	@PropertyLog(key="form.name", operations={Operation.NEW, Operation.EDIT})
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@Embedded
 	@AttributeOverrides({
 		@AttributeOverride(name="name1", column=@Column(name="SHORT_NAME1")),
 		@AttributeOverride(name="name2", column=@Column(name="SHORT_NAME2"))})
-	@PropertyLog(key="form.abbrevName")
+	@PropertyLog(key="form.abbrevName", operations={Operation.NEW, Operation.EDIT})
 	private LocalizedNameComp shortName = new LocalizedNameComp();
 
 	@Column(length=20)

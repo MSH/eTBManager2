@@ -52,6 +52,16 @@
 		<ui:define name="label">#{messages['global.searchkey']}:</ui:define>
 		<h:inputText value="#{transactionLogReport.searchKey}" />
 	</s:decorate>
+	
+	<s:decorate template="/layout/dateedit.xhtml">
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
+		<ui:param name="datefield" value="#{transactionLogReport.iniDate}" />
+	</s:decorate>
+	
+	<s:decorate template="/layout/dateedit.xhtml">
+		<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
+		<ui:param name="datefield" value="#{transactionLogReport.endDate}" />
+	</s:decorate>
 	</div>
 
 	<div class="form-footer">	
@@ -77,7 +87,7 @@
 			<div style="min-height:32px;float:left">
 				<div class="icon-log-#{it.action}" />
 			</div>
-			<b><s:fragment rendered="#{it.action!='EXEC'}">#{messages[it.action.key]} - </s:fragment> #{it}</b><br/>
+			<b>#{it.title}</b><br/>
 			#{it.entityDescription}
 		</td>
 		<td align="left">
@@ -103,7 +113,7 @@
 	</tr>
 	<tr>
 		<td colspan="#{empty reportSelection.userWorkspace?'3':'2'}3" >
-			<div style="padding-left:40px;padding-bottom:10px;">
+			<div style="padding-left:30px;padding-bottom:10px;">
 				<h:outputText value="#{it.comments}" converter="detailHtmlConverter" escape="false"/>
 			</div>
 			<div class="spacer" />

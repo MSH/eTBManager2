@@ -23,9 +23,10 @@ public class MolecularBiology extends CaseData implements Serializable {
 	private static final long serialVersionUID = 1656875453491288619L;
 
 	@Temporal(TemporalType.DATE)
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT}, key="cases.exams.dateRelease")
 	private Date dateRelease;
 
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.ALL}, key="pt_BR.MolecularBiology.result")
 	private MolecularBiologyResult result;
 
 	@ManyToOne

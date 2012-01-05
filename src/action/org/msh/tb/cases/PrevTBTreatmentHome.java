@@ -166,7 +166,7 @@ public class PrevTBTreatmentHome {
 	 * @param lst
 	 */
 	private void createSubstanceList(List<PrevTBTreatment> lst) {
-		if (editing)
+		if ((editing) || (!caseHome.isManaged()))
 			substances = ((SubstancesQuery)Component.getInstance("substances", true)).getPrevTBsubstances();
 		else {
 			substances = new ArrayList<Substance>();

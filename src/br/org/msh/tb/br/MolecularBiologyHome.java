@@ -8,8 +8,10 @@ import org.msh.tb.br.entities.MolecularBiology;
 import org.msh.tb.br.entities.enums.MolecularBiologyResult;
 import org.msh.tb.cases.exams.ExamHome;
 import org.msh.tb.laboratories.LaboratorySelection;
+import org.msh.tb.transactionlog.LogInfo;
 
 @Name("molecularBiologyHome")
+@LogInfo(roleName="EXAM_BIOMOL")
 public class MolecularBiologyHome extends ExamHome<MolecularBiology> {
 	private static final long serialVersionUID = -1149058962516904296L;
 

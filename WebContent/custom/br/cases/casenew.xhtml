@@ -166,7 +166,7 @@
 				<ui:define name="label">#{messages['pt_BR.MolecularBiology.result']}:
 				</ui:define>
 		    	<h:selectOneMenu id="cbmolbio" value="#{molecularBiology.result}" required="true">
-    				<s:selectItems value="#{molecularBiologyHome.notifResultOptions}" var="it" noSelectionLabel="-" label="#{it.message}" />
+    				<s:selectItems value="#{molecularBiologyHome.notifResultOptions}" var="it" noSelectionLabel="-" label="#{messages[it.messageKey]}" />
 		    		<s:convertEnum />
     			</h:selectOneMenu>
 			</s:decorate>

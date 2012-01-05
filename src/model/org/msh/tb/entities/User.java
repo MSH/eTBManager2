@@ -31,6 +31,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.validator.Email;
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.UserState;
+import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 
 
@@ -49,24 +50,30 @@ public class User implements java.io.Serializable {
     
     @Column(length=30)
 	@NotNull
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
     private String login;
     
     @Column(length=80, name="user_name")
 	@NotNull
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
     private String name;
 
     @Column(length=32, name="user_password")
 	@NotNull
+	@PropertyLog(ignore=true)
     private String password;
     
     @Column(nullable=false, length=80)
     @Email
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
     private String email;
     
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
     private UserState state;
 	
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="DEFAULTWORKSPACE_ID")
+	@PropertyLog(operations={Operation.NEW, Operation.EDIT}, logEntityFields=true)
     private UserWorkspace defaultWorkspace;
     
     @Column(length=6)

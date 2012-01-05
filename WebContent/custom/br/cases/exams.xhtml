@@ -398,7 +398,7 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['pt_BR.MolecularBiology.result']}" styleClass="collh"/>
 				</f:facet>
-				#{r.result.message}
+				#{messages[r.result.messageKey]}
 				<s:div rendered="#{not empty r.method}" style="display:block;clear:both;">
 					<h:outputText value="#{messages['cases.exams.method']}"/>: #{r.method}
 				</s:div>
