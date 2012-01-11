@@ -29,10 +29,6 @@ import org.w3c.dom.NodeList;
 public class SymetaImportTask extends DbBatchTask {
 
 	private MoldovaServiceConfig config;
-//	private int countCasesRead;
-//	private int countNewCases;
-//	private int countCases;
-//	private List<String> newCases;
 	private int batchBlock;
 //	private int batchBlockCount;
 	private ImportingBase importingBase;
@@ -43,9 +39,6 @@ public class SymetaImportTask extends DbBatchTask {
 	protected interface WSCallBack {
 		MessageElement[] getData(MDR_TBMISSSoapProxy proxy) throws Exception;
 	}
-
-	// list of warnings generated during importing
-//	private List<WarnMessage> warnings = new ArrayList<WarnMessage>();
 
 
 	@Override
@@ -101,24 +94,7 @@ public class SymetaImportTask extends DbBatchTask {
 		service.getDetailWriter().addText(log.toString());
 		service.save("TASK", RoleAction.EXEC, "SYMETB Integration", null);
 		commitTransaction();
-/*		
-		try {
-			FileWriter fw = new FileWriter("c:\\rmemoria\\simetb.txt");
-			PrintWriter p = new PrintWriter(fw);
-			
-			p.println("Num cases read = " + countCasesRead);
-			p.println("Num new cases  = " + countNewCases);
-			p.println("Num cases      = " + countCases);
-			for (WarnMessage s: warnings)
-				p.println(s.getId() + " - " + s.getName() + " - " +  s.getDescription());
-			
-			p.close();
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-*/	}
+	}
 
 
 	/**
@@ -146,7 +122,6 @@ public class SymetaImportTask extends DbBatchTask {
 
 		if (nodes != null)
 			executeImporting(nodes, RegionImporting.class, "IMPORTING REGIONS");
-//			importRegions(nodes);		
 	}
 
 
@@ -182,7 +157,6 @@ public class SymetaImportTask extends DbBatchTask {
 		
 		if (nodes != null)
 			executeImporting(nodes, UnitImporting.class, "IMPORTING UNITS");
-//			importUnits(nodes);
 	}
 
 
@@ -218,103 +192,8 @@ public class SymetaImportTask extends DbBatchTask {
 
 		if (nodes != null)
 			executeImporting(nodes, TBCaseImporting.class, "IMPORTING TB CASES");
-//			importCases(nodes, CaseClassification.TB);
 	}
 
-
-	/**
-	 * Import the MDR cases from the root element of the XML
-	 * @param rootElemen
-	 * @throws Exception 
-	 */
-/*	protected void importCases(final NodeList nodes, final CaseClassification classification) throws Exception {
-		if (newCases == null) {
-			newCases = new ArrayList<String>();
-			countNewCases = 0;
-			countCases = 0;
-		}
-
-		final CaseImporting caseImporting = new CaseImporting();
-		caseImporting.setWarning(warnings);
-
-		executeBatch(new BatchIterator() {
-			public boolean processRecord() {
-				int index = getRecordIndex();
-				Node n = nodes.item(index);
-				
-				if (n.getNodeType() == Node.ELEMENT_NODE) {
-					Element el = (Element)n;
-					if (caseImporting.importCase(el, config.getWorkspace(), classification)) {
-						countCases++;
-						
-						if (caseImporting.isNewCase()) {
-							countNewCases++;
-							 TbCase tbcase =  caseImporting.getTbcase();
-//							newCases.add("(" + tbcase.getLegacyId() + ") " + tbcase.getPatient().getFullName());
-						}
-					}
-					countCasesRead++;
-				}
-
-				int count = nodes.getLength();
-				updateProgress(nodes.getLength(), index, 67);
-
-				return getRecordIndex() < count - 1;
-			}
-		});
-
-//		for (WarnMessage w: caseImporting.getWarning())
-//			newCases.add("****  " + w.getId() + " - " + w.getName() + " - " + w.getDescription());
-	}
-*/
-	
-/*	protected void importUnits(final NodeList nodes) throws Exception {
-		final UnitImporting unitImporting = new UnitImporting();
-		unitImporting.setWarning(warnings);
-		
-		executeBatch(new BatchIterator() {
-			public boolean processRecord() {
-				int index = getRecordIndex();
-				Node n = nodes.item(index);
-				
-				if (n.getNodeType() == Node.ELEMENT_NODE)
-					unitImporting.importUnit((Element)n, config);
-
-				int count = nodes.getLength();
-				updateProgress(nodes.getLength(), index, 0);
-
-				return getRecordIndex() < count - 1;
-			}
-		});
-	}
-*/
-	
-	/**
-	 * Import localities from SYMETB
-	 * @param rootElemen
-	 * @throws Exception
-	 */
-/*	protected void importRegions(final NodeList nodes) throws Exception {
-		final AdminUnitImporting adminUnitImporting = new AdminUnitImporting();
-		adminUnitImporting.setWarning(warnings);
-		
-		executeBatch(new BatchIterator() {
-			public boolean processRecord() {
-				int index = getRecordIndex();
-				Node n = nodes.item(index);
-				
-				if (n.getNodeType() == Node.ELEMENT_NODE)
-					adminUnitImporting.importRegion((Element)n, config.getWorkspace());
-
-				int count = nodes.getLength();
-				updateProgress(nodes.getLength(), index, 0);
-
-				return getRecordIndex() < count - 1;
-			}
-		});
-	}
-*/
-	
 	
 	/**
 	 * Execute the importing of an specific group of records in a XML node
@@ -360,31 +239,6 @@ public class SymetaImportTask extends DbBatchTask {
 		}
 	}
 
-	/**
-	 * Import localities from SYMETB
-	 * @param rootElemen
-	 * @throws Exception
-	 */
-/*	protected void importLocalities(final NodeList nodes) throws Exception {
-		final AdminUnitImporting adminUnitImporting = new AdminUnitImporting();
-		adminUnitImporting.setWarning(warnings);
-		
-		executeBatch(new BatchIterator() {
-			public boolean processRecord() {
-				int index = getRecordIndex();
-				Node n = nodes.item(index);
-				
-				if (n.getNodeType() == Node.ELEMENT_NODE)
-					adminUnitImporting.importLocality((Element)n, config.getWorkspace());
-
-				int count = nodes.getLength();
-				updateProgress(nodes.getLength(), index, 34);
-
-				return getRecordIndex() < count - 1;
-			}
-		});
-	}
-*/
 
 	/**
 	 * Connect to the web service and return the XML data

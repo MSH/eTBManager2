@@ -101,7 +101,7 @@ public class MedicineEstimation {
 			"join c.patient p " +
 			"where presc.period.iniDate <= :dtend and presc.period.endDate >= :dtini and p.workspace.id = #{defaultWorkspace.id}";
 		if (tbunit != null) 
-			hql += " and exists(select aux.id from TreatmentHealthUnit aux where aux.tbcase.id = c.id and aux.tbunit.id = " + tbunit.getId().toString() + ")";
+			hql += " and c.treatmentUnit.id  = " + tbunit.getId().toString();
 		if (source != null)
 			hql += " and presc.source.id = " + source.getId().toString();
 		

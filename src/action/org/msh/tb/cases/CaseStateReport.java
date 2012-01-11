@@ -88,10 +88,9 @@ public class CaseStateReport {
 				"union " +
 				"select c.state, c.validationState, 1, count(*) " +
 				"from tbcase c " +
-				"inner join treatmenthealthunit h on h.case_id = c.id " +
-				"inner join tbunit u on u.id = h.unit_id " + aucond + 
+				"inner join tbunit u on u.id = c.treatment_unit_id " + aucond + 
 				"where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " + 
-				" and u.workspace_id = " + defaultWorkspace.getId() + " and h.enddate = c.endtreatmentdate " + cond + condByCase +
+				" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
 				(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
 				" group by c.state, c.validationState";
 		List<Object[]> lst = entityManager.createNativeQuery(sql).getResultList();

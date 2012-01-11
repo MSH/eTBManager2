@@ -175,12 +175,11 @@ public class OrderEstimation {
 		
 		String hql = "from PrescribedMedicine pm " +
 				"join fetch pm.tbcase c join fetch pm.source s join fetch pm.medicine m " +
-				"where exists(select a.id from TreatmentHealthUnit a " +
-				"where a.tbcase.id = pm.tbcase.id " +
-				"and a.tbunit.id  in (" + s + ") and a.period.endDate = c.treatmentPeriod.endDate) " +
+				"where pm.tbcase.treatmentUnit.id in (" + s + ") " +
 				"and pm.tbcase.state = :state " +
 				"and (pm.period.endDate >= :dtini) " +
 				"and (pm.period.iniDate <= :dtend)";
+
 		prescmeds = entityManager.createQuery(hql)
 				.setParameter("dtini", iniDate)
 				.setParameter("dtend", endDate)
