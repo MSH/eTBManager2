@@ -50,13 +50,16 @@ public abstract class AsyncTaskImpl implements AsyncTask {
 
 			changeStatus(TaskStatus.RUNNING);
 			execute();
-			
+
 			changeStatus(TaskStatus.FINISHING);
 			finishing();
 			changeStatus(TaskStatus.FINISHED);
 
 		} catch (Exception e) {
 			exceptionHandler(e);
+			if (getStatus() != TaskStatus.FINISHING) {
+				finishing();
+			}
 			changeStatus(TaskStatus.ERROR);
 		}
 		finally {
@@ -96,7 +99,7 @@ public abstract class AsyncTaskImpl implements AsyncTask {
 	 */
 	protected void exceptionHandler(Exception e) {
 		changeStatus(TaskStatus.CANCELING);
-		throw new RuntimeException(e);
+//		throw new RuntimeException(e);
 	}
 	
 	/**

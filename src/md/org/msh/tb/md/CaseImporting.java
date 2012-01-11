@@ -12,7 +12,6 @@ import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
@@ -31,7 +30,7 @@ import org.w3c.dom.Element;
  * @author Ricardo Memoria
  *
  */
-public class CaseImporting extends ImportingBase{
+public abstract class CaseImporting extends ImportingBase{
 
 	private boolean newCase;
 	
@@ -39,14 +38,20 @@ public class CaseImporting extends ImportingBase{
 	private String caseId;
 	private String patientName;
 	
-	public boolean importCase(Element xmlCaseData, Workspace workspace, CaseClassification classification) {
+	
+	/**
+	 * Return the case classification to be used during importing 
+	 * @return
+	 */
+	public abstract CaseClassification getCaseClassification();
+
+
+	@Override
+	public boolean importRecord(Element xmlCaseData) {
 		EntityManager entityManager = getEntityManager();
-		setWorkspace(workspace);
 
 		// default is new case, and not an existing one
 		newCase = true;
-		
-		int numWarnings = getWarning().size();
 		
 		caseId = getValue(xmlCaseData, "ID", false);
 		String firstName = getValue(xmlCaseData, "FIRSTNAME", false);
@@ -57,16 +62,16 @@ public class CaseImporting extends ImportingBase{
 		p.setLastName(lastName);
 		p.setName(firstName);
 		p.setMiddleName(fatherName);
-		p.setWorkspace(workspace);
+		p.setWorkspace(getWorkspace());
 		patientName = p.getFullName();
 		
 		if (caseId == null) { 
-			addMessage("ERROR: ID of the case was not specified");
+			addError("ERROR: ID of the case was not specified");
 			return false;
 		}
 		
 		if ((patientName == null) || (patientName.isEmpty())) {
-			addMessage("ERROR: Patient name must be specified");
+			addError("ERROR: Patient name must be specified");
 			return false;
 		}
 
@@ -87,7 +92,7 @@ public class CaseImporting extends ImportingBase{
 
 		AdministrativeUnit admAddress = getAdressAdminUnit(addressRayon, addressSector, addressLocality);
 				
-		if (getWarning().size() > numWarnings)
+		if (isErrorOnCurrentImport())
 			return false;
 
 		tbcase = null;
@@ -113,11 +118,11 @@ public class CaseImporting extends ImportingBase{
 			tbcase.setState(CaseState.WAITING_TREATMENT);
 		}
 
-		tbcase.setClassification(classification);
+		tbcase.setClassification(getCaseClassification());
 		
 		Tbunit treatmentUnit = loadTBUnit(treatmentUnitId);
 		if (treatmentUnit == null) {
-			addMessage("No TB Unit found with ID = " + unitId);
+			addError("No TB Unit found with ID = " + unitId);
 			treatmentUnit = entityManager.merge(getConfig().getDefaultTbunit());
 		}
 
@@ -127,7 +132,7 @@ public class CaseImporting extends ImportingBase{
 			unit = treatmentUnit;
 		
 		if (unit == null) {
-			addMessage("No unit specified");
+			addError("No unit specified");
 			return false;
 		}
 		
@@ -231,7 +236,7 @@ public class CaseImporting extends ImportingBase{
 			return PatientType.RELAPSE;
 		
 		if (typeOfPatient != null)
-			addMessage("Ukwown type of patient = " + typeOfPatient);
+			addError("Ukwown type of patient = " + typeOfPatient);
 
 		return null;
 	}
@@ -248,7 +253,7 @@ public class CaseImporting extends ImportingBase{
 			case 1: return InfectionSite.PULMONARY;
 			case 2: return InfectionSite.EXTRAPULMONARY;
 			default:
-				addMessage("Unknown infection site = " + mainLocalization);
+				addError("Unknown infection site = " + mainLocalization);
 			}
 		}
 		return null;
@@ -272,7 +277,7 @@ public class CaseImporting extends ImportingBase{
 				return fld;
 		}
 		
-		addMessage("Site of disease not found = " + legacyId);
+		addError("Site of disease not found = " + legacyId);
 		return null;
 	}
 
@@ -291,7 +296,7 @@ public class CaseImporting extends ImportingBase{
 		if (typeOfResistance.equals("2"))
 			return DrugResistanceType.POLY_RESISTANCE;
 		
-		addMessage("Unkown type of resistance = " + typeOfResistance);
+		addError("Unkown type of resistance = " + typeOfResistance);
 		return null;
 	}
 
@@ -313,31 +318,33 @@ public class CaseImporting extends ImportingBase{
 			legacyId = rayon;
 
 		if (legacyId == null) {
-			addMessage("Rayon/Sector/Locality address not specified");
+			addError("Rayon/Sector/Locality address not specified");
 			return null;
 		}
 
 		AdministrativeUnit adm = loadAdminUnit(legacyId);
 		if (adm == null) {
-			addMessage("Rayon/Sector address number " + rayon + "/" + sector + "/" + locality + " not found");
+			addError("Rayon/Sector address number " + rayon + "/" + sector + "/" + locality + " not found");
 		}
 		return adm;
 	}
 
-	/**
-	 * Add a new warning message during import a case
-	 * @param message
-	 */
-	@Override
-	public WarnMessage addMessage(String message) {
-		return addWarnMessage(caseId, patientName, message);
-	}
-	
 	public boolean isNewCase() {
 		return newCase;
 	}
 
 	public TbCase getTbcase() {
 		return tbcase;
+	}
+	
+	
+	@Override
+	public void addError(String msg) {
+		String s = "";
+		if (caseId != null)
+			s = "(" + caseId + ") ";
+		if (patientName != null)
+			s += patientName + ": ";
+		super.addError(s + msg);
 	}
 }

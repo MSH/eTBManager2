@@ -17,19 +17,66 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class ImportingBase {
+public abstract class ImportingBase {
 
-	/**
-	 * Warnings about case importing
-	 */
-	private List<WarnMessage> warning = new ArrayList<WarnMessage>();
+	private int importedRecords;
+	private int newRecords;
+	private int errorsRecords;
+	
+	private boolean errorOnCurrentImport;
+	
+	private List<String> errors = new ArrayList<String>();
 	
 	/**
-	 * Workspace to use
+	 * Configuration of the importing
 	 */
-	private Workspace workspace;
-	
 	private MoldovaServiceConfig config;
+	
+	/**
+	 * Constructor for importing
+	 * @param config
+	 */
+	public ImportingBase(MoldovaServiceConfig config) {
+		this.config = config;
+		Contexts.getEventContext().set("defaultWorkspace", config.getWorkspace());
+	}
+	
+	public ImportingBase() {
+		super();
+	}
+
+	public void processNode(Node node) {
+		if (node.getNodeType() == Node.ELEMENT_NODE) {
+			errorOnCurrentImport = false;
+			
+			boolean isNew = importRecord((Element)node);
+
+			if (!errorOnCurrentImport) {
+				importedRecords++;
+				if (isNew)
+					newRecords++;
+			}
+			else errorsRecords++;
+			
+		}
+	}
+	
+	/**
+	 * Execute the importing of the given record represented by the element
+	 * @param xmlLocData
+	 * @return true if it's a new record, or false if the record already exists
+	 */
+	protected abstract boolean importRecord(Element xmlLocData);
+	
+	
+	/**
+	 * Add an error message to the record being imported
+	 * @param msg
+	 */
+	protected void addError(String msg) {
+		errorOnCurrentImport = true;
+		errors.add(msg);
+	}
 	
 	/**
 	 * return the entity Manager
@@ -100,7 +147,7 @@ public class ImportingBase {
 		String value =  nodeTagValue(el, tag);
 		if (value == null) {
 			if (required)
-				addMessage("'" + tag + "' must be entered");
+				addError("'" + tag + "' must be entered");
 			return null;
 		}
 		return value; 
@@ -139,7 +186,7 @@ public class ImportingBase {
 		String s = getValue(el, tag, required);
 		if (s == null) {
 			if (required)
-				addMessage("'" + tag + "' must be entered");
+				addError("'" + tag + "' must be informed");
 			return null;
 		}
 		return Integer.valueOf(s);
@@ -156,7 +203,7 @@ public class ImportingBase {
 		String s = getValue(el, tag, required);
 		if (s == null) {
 			if (required)
-				addMessage("'" + tag + "' must be entered");
+				addError("'" + tag + "' must be entered");
 			return null;
 		}
 
@@ -170,49 +217,10 @@ public class ImportingBase {
 		return c.getTime();
 	}
 
-	
-	/**
-	 * Add just a message. Ideally must be overwritten
-	 * @param description
-	 * @return
-	 */
-	protected WarnMessage addMessage(String description) {
-		return addWarnMessage(null, null, description);
-	}
-
-
-	/**
-	 * Add a new warning message from the importing program
-	 * @param id
-	 * @param name
-	 * @param description
-	 * @return
-	 */
-	protected WarnMessage addWarnMessage(String id, String name, String description) {
-		WarnMessage msg = new WarnMessage();
-		msg.setId(id);
-		msg.setName(name);
-		msg.setDescription(description);
-		warning.add(msg);
-		return msg;
-	}
-	
-	public List<WarnMessage> getWarning() {
-		return warning;
-	}
 
 
 	public Workspace getWorkspace() {
-		return workspace;
-	}
-
-
-	public void setWorkspace(Workspace workspace) {
-		if (this.workspace == workspace)
-			return;
-		
-		Contexts.getEventContext().set("defaultWorkspace", workspace);
-		this.workspace = workspace;
+		return config.getWorkspace();
 	}
 
 
@@ -226,7 +234,38 @@ public class ImportingBase {
 	}
 
 
-	public void setWarning(List<WarnMessage> warning) {
-		this.warning = warning;
+	/**
+	 * @return the importedRecords
+	 */
+	public int getImportedRecords() {
+		return importedRecords;
+	}
+
+	/**
+	 * @return the newRecords
+	 */
+	public int getNewRecords() {
+		return newRecords;
+	}
+
+	/**
+	 * @return the errorsRecords
+	 */
+	public int getErrorsRecords() {
+		return errorsRecords;
+	}
+
+	/**
+	 * @return the errorOnCurrentImport
+	 */
+	public boolean isErrorOnCurrentImport() {
+		return errorOnCurrentImport;
+	}
+
+	/**
+	 * @return the errors
+	 */
+	public List<String> getErrors() {
+		return errors;
 	}
 }
