@@ -66,7 +66,9 @@ public class DotSupervisionIndicator extends Indicator{
 			dispNotSup = (caseDispensingNA.getDispensingDays()!=null?new Float(caseDispensingNA.getDispensingDays().getNumDispensingDaysNotSupervised()):null);
 			presc = (dispInfo.get("TotalPrescribed")!=null?dispInfo.get("TotalPrescribed"):0F);
 				if(dispTaken!=null&&presc!=null)
-					percentage = (dispTaken + dispNotSup)/presc*100;
+				//	percentage = (dispTaken + dispNotSup)/presc*100;
+					//VR : Namibia customization - changing DOT % calculation (DOT Taken/Pres)
+					percentage = (dispTaken)/presc*100;
 		addValue(getMessage("cases.treat.presc"), caseDispensingNA.getTbcase().getPatient().getName(), presc);
 		addValue(getMessage("cases.treat.disp.taken"), caseDispensingNA.getTbcase().getPatient().getName(), dispTaken);
 		addValue(getMessage("cases.treat.disp.nottaken"), caseDispensingNA.getTbcase().getPatient().getName(), dispNotTaken);
