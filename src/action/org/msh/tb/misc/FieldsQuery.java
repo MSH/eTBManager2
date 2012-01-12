@@ -278,4 +278,9 @@ public class FieldsQuery {
 		field = TbField.ANOTHERTB;
 		return getValues();
 	}
+	
+	public List<FieldValue> getRiskGroup() {
+		field = TbField.RISK_GROUP;
+		return getValues();
+	}
 }
