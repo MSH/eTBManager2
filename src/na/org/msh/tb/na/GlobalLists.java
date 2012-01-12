@@ -4,6 +4,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.entities.enums.DotBy;
+import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.na.entities.enums.Dot;
@@ -29,6 +30,11 @@ public class GlobalLists {
 		TbField.PULMONARY_TYPES,
 		TbField.EXTRAPULMONARY_TYPES,
 		TbField.ART_REGIMEN
+	};	
+	
+	private final static Nationality[] nationalityTypes = {
+		Nationality.NAMIBIA,
+		Nationality.NON_NAMIBIA
 	};	
 	
 	public TbField[] getTbFields() {
@@ -67,6 +73,11 @@ public class GlobalLists {
 	
 	public Dot[] getDot() {
 		return Dot.values();
+	}
+
+	@Factory("nationalitiesNa")
+	public static Nationality[] getNationalitytypes() {
+		return nationalityTypes;
 	}		
 		
 
