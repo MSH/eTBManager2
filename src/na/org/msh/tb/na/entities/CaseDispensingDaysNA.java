@@ -62,7 +62,7 @@ public class CaseDispensingDaysNA {
 		Dot day = null;
 		for (int i = 1; i <= 31; i++){
 			day = getDay(i);
-			if (getDay(i)!=null&&(day!=Dot.X))
+			if (getDay(i)!=null&&(day!=Dot.N))
 				res++;
 		}
 		return res;
@@ -74,7 +74,7 @@ public class CaseDispensingDaysNA {
 		Dot day = null;
 		for(int i = 1; i <=31; i++){
 			day = getDay(i);
-			if(getDay(i)!=null&&(day==Dot.T))
+			if(getDay(i)!=null&&(day==Dot.D))
 				res++;
 			}
 		return res;
@@ -86,7 +86,7 @@ public class CaseDispensingDaysNA {
 		Dot day = null;
 		for(int i = 1; i <=31; i++){
 			day = getDay(i);
-			if(getDay(i)!=null&&(day==Dot.X))
+			if(getDay(i)!=null&&(day==Dot.N))
 				res++;
 			}
 		return res;
@@ -98,7 +98,7 @@ public class CaseDispensingDaysNA {
 		Dot day = null;
 		for(int i = 1; i <=31; i++){
 			day = getDay(i);
-			if(getDay(i)!=null&&(day==Dot.N))
+			if(getDay(i)!=null&&(day==Dot.S))
 				res++;
 			}
 		return res;
