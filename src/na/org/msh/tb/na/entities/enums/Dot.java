@@ -1,9 +1,9 @@
 package org.msh.tb.na.entities.enums;
 
 public enum Dot {
-	N, 
-	T,
-	X;
+	D, 
+	S,
+	N;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
