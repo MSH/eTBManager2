@@ -138,10 +138,10 @@ public class GlobalLists {
 		return Qualification.values();
 	}
 	
-//	@Factory("healthfacility_ng")
-//	public HealthFacility[] gethealthFacility() {
-//		return HealthFacility.values();
-//	}
+	@Factory("healthfacility_ng")
+	public HealthFacility[] gethealthFacility() {
+		return HealthFacility.values();
+	}
 
 
 }
