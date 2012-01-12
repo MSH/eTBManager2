@@ -52,7 +52,7 @@
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Nationality']}:</ui:define>
     	<h:selectOneMenu value="#{tbcase.nationality}">
-    		<s:selectItems var="s" value="#{nationalities}" noSelectionLabel="-" label="#{messages[s.key]}"/>
+    		<s:selectItems var="s" value="#{nationalitiesNa}" noSelectionLabel="-" label="#{messages[s.key]}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
     </s:decorate>
