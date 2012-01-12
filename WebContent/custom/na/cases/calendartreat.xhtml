@@ -8,19 +8,21 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<table width="100%" class="tabela4" style="font-size:9px">
-		<tr><th>
-				#{messages['global.month']}/#{messages['global.year']}
+	<table width="table1 small">
+		<tr><th class="text-small">
+				<span class="small-text">#{messages['global.month']}/#{messages['global.year']}</span>
 			</th>
 			<ui:repeat value="#{treatmentCalendarHomeNA.days}" var="d">
-			<th width="20px">
+			<th class="text-small">
+				<div style="width:16px">
 				#{d}
+				</div>
 			</th>
 			</ui:repeat>
-			<th>
+			<th class="text-small">
 				#{messages['cases.treat.presc']}
 			</th>
-			<th>
+			<th class="text-small">
 				#{messages['cases.treat.disp']}
 			</th>
 		</tr>
