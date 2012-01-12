@@ -1,6 +1,5 @@
 function handleCaseDateChange() {
 	sBirth = jQuery("#divbirthdate input[type='text']").val();
-	alert(sBirth);
 	sReg = jQuery("#divregdate input[type='text']").val();
 	if (!(sReg))
 		 dt2 = new Date();
@@ -18,11 +17,9 @@ function handleCaseDateChange() {
 }
 
 function convertDate(s) {
-	alert(s);
 	dia = s.replace(/_/g," ").substring(0,2);
 	mes = s.replace(/_/g," ").substring(3,5);
 	ano = s.replace(/_/g," ").substring(6,10);
-	alert(dia);
 
 	if (window.formato == "MDY") {
 		a=dia; dia=mes; mes=a;
@@ -40,7 +37,6 @@ function convertDate(s) {
 	try {
 		dt.setFullYear(ano, mes-1, dia);
 	} catch(e) {dt = null;}
-	alert(dt);
 	return dt;
 }
 
