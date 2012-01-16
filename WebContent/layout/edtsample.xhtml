@@ -14,7 +14,7 @@
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
     	<ui:param name="required" value="true" /> 
-    	<ui:param name="future" value="true" /> 
+    	<ui:param name="future" value="false" /> 
     	<ui:param name="datefield" value="#{examHome.instance.dateCollected}" /> 
     </s:decorate>
     </div>

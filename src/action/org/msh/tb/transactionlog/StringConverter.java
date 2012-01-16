@@ -128,7 +128,7 @@ public class StringConverter {
 		
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, Integer.parseInt(n[0]));
-		c.set(Calendar.MONTH, Integer.parseInt(n[1]));
+		c.set(Calendar.MONTH, Integer.parseInt(n[1])-1);
 		c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(n[2]));
 		c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(n[3]));
 		c.set(Calendar.MINUTE, Integer.parseInt(n[4]));
