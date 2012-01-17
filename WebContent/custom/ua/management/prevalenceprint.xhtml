@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:p="http://jboss.com/products/seam/pdf"
+      template="/custom/ua/layout/report.xhtml">
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:param name="indicator" value="#{prevalenceIndicator}" />
+<ui:param name="useclassification" value="0" />
+<ui:param name="left" value="0" />
+
+<ui:param name="title" value="#{messages['manag.ind.prevalence']}" />
+
+
+<ui:define name="naveg">
+	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
+</ui:define>
+
+
+<ui:define name="content">
+
+<h:form>
+
+<table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
+
+<tr><td align="center">
+<h2>#{title}</h2>
+<ui:include src="outputfilters.xhtml" >
+		<ui:param name="showoutputselection" value="true" />
+</ui:include>
+
+<h:panelGroup id="indicator" styleClass="indicator-tables">
+	<s:decorate template="standardreport.xhtml">
+		<ui:param name="title" value="#{messages['manag.ind.resist']}" />
+		<ui:param name="series" value="#{indicator.series}" />
+		<ui:param name="firstcoltitle" value= "#{indicator.displayOutputSelection}"/>
+		<ui:param name="seriestitle" value="#{indicatorFilters.tbunitselection.tbunit != null? messages['Locality']: messages['Region']}" />
+	</s:decorate>
+
+</h:panelGroup>
+
+</td></tr>
+</table>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

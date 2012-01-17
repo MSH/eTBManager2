@@ -254,7 +254,7 @@ public class ReportTB08 extends Indicator2D {
 			}
 			else if (state == CaseState.FAILED) {
 				if ((extraOutcome == ExtraOutcomeInfo.CLINICAL_EXAM) ||
-					(extraOutcome == ExtraOutcomeInfo.CULTURE) ||
+					(extraOutcome == ExtraOutcomeInfo.CULTURE_SMEAR) ||
 					(extraOutcome == ExtraOutcomeInfo.TRANSFER_CATIV))
 					 col = extraOutcome;
 				else col = state;

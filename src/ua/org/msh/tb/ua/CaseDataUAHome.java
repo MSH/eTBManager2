@@ -2,6 +2,7 @@ package org.msh.tb.ua;
 
 import javax.persistence.EntityManager;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -12,6 +13,8 @@ import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.ComorbidityHome;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.ExtraOutcomeInfo;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.ua.entities.CaseDataUA;
 
@@ -137,5 +140,15 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 			data.setMbtResult(null);
 		}		
 		return true;
+	}
+	
+	public ExtraOutcomeInfo[] getExtraInfo(){
+		if (caseCloseHome.getState()==CaseState.FAILED){
+			return GlobalLists.ocCuredFailed;
+		}else if (caseCloseHome.getState()==CaseState.DIED){
+			return  GlobalLists.ocDied;
+		}
+		return (ExtraOutcomeInfo[]) ArrayUtils.addAll(GlobalLists.ocDied, GlobalLists.ocCuredFailed);
+
 	}
 }

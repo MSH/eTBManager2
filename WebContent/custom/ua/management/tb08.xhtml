@@ -19,7 +19,7 @@
 <ui:param name="useclassification" value="0" />
 <ui:param name="left" value="0" />
 
-
+<ui:param name="print" value="/custom/ua/management/tb08print.xhtml"/>
 <ui:define name="naveg">
 	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
 </ui:define>
@@ -29,7 +29,7 @@
 <h:form>
 <table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
 <tr><td bgcolor="#f8f8f8">
-	<s:decorate template="/management/filters.xhtml">
+	<s:decorate template="filters.xhtml">
 		<ui:param name="showoutputselection" value="false" />
 	</s:decorate>
 

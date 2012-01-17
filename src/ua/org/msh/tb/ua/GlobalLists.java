@@ -35,13 +35,13 @@ public class GlobalLists {
 		CaseState.TRANSFERRED_OUT
 	};
 	
-	private static final ExtraOutcomeInfo ocCuredFailed[] = {
+	public static final ExtraOutcomeInfo ocCuredFailed[] = {
 		ExtraOutcomeInfo.CULTURE_SMEAR,
 		ExtraOutcomeInfo.CLINICAL_EXAM,
 		ExtraOutcomeInfo.TRANSFER_CATIV
 	};
 
-	private static final ExtraOutcomeInfo ocDied[] = {
+	public static final ExtraOutcomeInfo ocDied[] = {
 		ExtraOutcomeInfo.TB,
 		ExtraOutcomeInfo.OTHER_CAUSES
 	};

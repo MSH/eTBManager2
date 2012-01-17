@@ -11,6 +11,7 @@
       template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['uk_UA.reports.tb07']}" />
+<ui:param name="print" value="/custom/ua/management/tb07print.xhtml"/>
 
 <ui:param name="topmenu" value="2" />
 <ui:param name="labelstyle" value="width:180px;" />
@@ -29,11 +30,12 @@
 <h:form>
 <table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
 <tr><td bgcolor="#f8f8f8">
-	<s:decorate template="/management/filters.xhtml">
+	<s:decorate template="filters.xhtml">
 		<ui:param name="showoutputselection" value="false" />
 	</s:decorate>
 
 </td></tr>
+
 <tr><td align="center">
 
 <h:panelGroup id="indicator" styleClass="indicator-tables">

@@ -16,6 +16,7 @@
 <ui:param name="labelstyle" value="width:180px;" />
 
 <ui:param name="indicator" value="#{reportTB10}" />
+<ui:param name="print" value="/custom/ua/management/tb10print.xhtml"/>
 <ui:param name="useclassification" value="0" />
 <ui:param name="left" value="0" />
 
@@ -29,7 +30,7 @@
 <h:form>
 <table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
 <tr><td bgcolor="#f8f8f8">
-	<s:decorate template="/management/filters.xhtml">
+	<s:decorate template="filters.xhtml">
 		<ui:param name="showoutputselection" value="false" />
 	</s:decorate>
 
