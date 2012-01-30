@@ -163,7 +163,7 @@
 	<table width="100%" style="border-collapse:collapse;">
 	<tr><td style="padding-bottom:10px;">
 
-	<div class="paragraph">#{messages['cases.details.notifhu']}</div>
+	<div class="paragraph">#{messages['TbCase.notificationUnit']}</div>
 	<s:decorate template="/layout/tbselection.xhtml" >
 		<ui:param name="tbunitselection" value="#{caseEditingHome.tbunitselection}" />
 		<ui:param name="required" value="true" />
@@ -182,18 +182,19 @@
     <s:decorate template="/layout/edit.xhtml">
     	<!--<ui:define name="label">#{messages['TbCase.TBRegistrationNumber']}:</ui:define>-->
     	<ui:define name="label">#{messages['TbCase.LGATBL']}:</ui:define>
-		<h:inputText value="#{tbcaseng.tbRegistrationNumber}" style="width:120px;" maxlength="50"></h:inputText>
+		<h:inputText value="#{tbcaseng.tbRegistrationNumber}" style="width:120px;" maxlength="50" required="true"></h:inputText>
+		<ui:param name="required" value="true" />
 		</s:decorate>
     
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
 
-    <s:decorate template="/layout/dateedit.xhtml" >
+    <s:decorate template="/layout/dateedit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     	<ui:param name="required" value="#{tbcase.validated}" /> 
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
     </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" >
+    <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
     	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
     	<h:selectOneMenu value="#{tbcase.diagnosisType}" required="#{tbcase.validated}">
     		<s:selectItems var="it" value="#{diagnosisTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
@@ -209,7 +210,7 @@
     	</h:selectOneMenu>
     </s:decorate>
 
-		<s:decorate template="/layout/edit.xhtml">
+		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
     		<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="#{tbcase.validated}">
     			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
@@ -220,13 +221,13 @@
 <rich:jQuery selector="#patType" query="change(function(){ showPatientTypeOther(this); })" />
 
 		<div id="patientTypeOther">
-		<s:decorate template="/layout/edit.xhtml">
+		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 			<ui:define name="label">#{messages['TbCase.patientTypeOther']}</ui:define>
     		<h:inputText value="#{tbcase.patientTypeOther}" style="width:200px;" maxlength="100" />
 		</s:decorate>
 		</div>
 
-		<s:decorate template="/layout/edit.xhtml">
+		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
     		<h:selectOneMenu id="infectsite" value="#{tbcase.infectionSite}" required="#{tbcase.validated}">
     			<s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="-" label="#{messages[it.key]}" />
@@ -263,7 +264,7 @@ function isPulmonary(cb) {
 </script>
 
 	<div id="extrapul" style="clear:both;">
-		<s:decorate template="/layout/edit.xhtml">
+		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
     		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
     		<h:selectOneMenu value="#{tbcase.extrapulmonaryType}" style="margin-right:4px;">
     			<s:selectItems var="it" value="#{fieldOptions.extrapulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
@@ -278,7 +279,7 @@ function isPulmonary(cb) {
 	</div>
 
 	<div id="pulmonary" style="clear:both;">
-		<s:decorate template="/layout/edit.xhtml">
+		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
     		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
     		<h:selectOneMenu value="#{tbcase.pulmonaryType}" style="margin-right:4px;">
     			<s:selectItems var="it" value="#{fieldOptions.pulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
