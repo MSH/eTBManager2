@@ -79,8 +79,8 @@
     				<s:selectItems value="#{qualification_ng}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
     				<s:convertEnum />
     			</h:selectOneMenu>
-    	<!-- adding text filed to 'other' qualification -->		
-    			<div id="otherqual">#{messages['OTHER']}:<br/>
+    	<!-- adding text field to 'other' qualification -->		
+    			<div id="otherqual">#{messages['MedicalExamination.otherProfessional']}:<br/>
     	<h:inputText value="#{medicalExamination_Ng.otherQualifiedProfessional}" style=" width : 340px;" maxlength="100"/>
     	</div>
     	
@@ -187,7 +187,7 @@
 <rich:jQuery selector="#cbrefto[selectedIndex==8]" query="each(function(){jQuery('#refToUnit').hide();})" />
 
 <rich:jQuery selector="#cbqual" query="change(function(){checkClick(this.selectedIndex==4, '#otherqual');})" />
-<rich:jQuery selector="#cbqual[selectedIndex==0]" query="each(function(){jQuery('#edtreason').hide();})" />
+<rich:jQuery selector="#cbqual[selectedIndex!=4]" query="each(function(){jQuery('#otherqual').hide();})" />
 
 
 <script type="text/javascript">
