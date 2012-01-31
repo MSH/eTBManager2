@@ -54,10 +54,6 @@ public class CaseNGHome {
 	 */
 	@Transactional
 	public String saveNew() {
-		//return caseEditingHome.saveNew();
-		TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
-		tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
-		tbcase.setState(CaseState.WAITING_TREATMENT);
 		String ret = caseEditingHome.saveNew();
 		saveMedicalExamination();
 		return ret;
