@@ -44,6 +44,11 @@
 		<div class="delete-icon"/><span>#{messages['form.remove']}</span>
 	</h:commandLink>
 
+	<s:link value="#{messages['form.logreport']}" view="/cases/casehistory.xhtml" >
+		<f:param name="id" value="#{caseHome.id}" />
+		<span class="icon-report" />
+	</s:link>
+
 	<s:link value="#{messages['cases.close']}" view="/cases/closecase.xhtml" rendered="#{caseHome.canClose}">
 		<f:param name="id" value="#{caseHome.id}" />
 	</s:link>

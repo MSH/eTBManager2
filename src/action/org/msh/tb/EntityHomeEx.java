@@ -240,7 +240,7 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		case NEW: logService.recordEntityState(getInstance(), Operation.NEW);
 		}
 		
-		logService.save(roleName, action, getLogDescription(), getLogEntityId());
+		logService.save(roleName, action, getLogDescription(), getLogEntityId(), getLogEntityClass());
 	}
 	
 
@@ -252,6 +252,15 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		return getLogService().getDetailWriter();
 	}
 
+	
+	/**
+	 * Return the entity class to be used in the transaction log recording operation
+	 * @return
+	 */
+	public String getLogEntityClass() {
+		Class clazz = getEntityClass();
+		return (clazz != null? clazz.getSimpleName(): null);
+	}
 
 	protected String getLogDescription() {
 		return getInstance().toString();

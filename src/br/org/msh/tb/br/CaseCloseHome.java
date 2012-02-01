@@ -73,7 +73,7 @@ public class CaseCloseHome extends Controller{
 		TransactionLogService logsrv = new TransactionLogService();
 		logsrv.addTableRow("TbCase.outcomeDate", tbcase.getOutcomeDate());
 		logsrv.addTableRow("CaseState", state);
-		logsrv.saveExecuteTransaction("CASE_CLOSE", tbcase.toString(), tbcase.getId());
+		logsrv.saveExecuteTransaction("CASE_CLOSE", tbcase);
 
 		return "case-closed";
 	}
@@ -94,7 +94,7 @@ public class CaseCloseHome extends Controller{
 		// register log
 		TransactionLogService logsrv = new TransactionLogService();
 		logsrv.addTableRow("CaseState", state);
-		logsrv.saveExecuteTransaction("CASE_REOPEN", tbcase.toString(), tbcase.getId());
+		logsrv.saveExecuteTransaction("CASE_REOPEN", tbcase);
 		
 		return "case-reopened";
 	}

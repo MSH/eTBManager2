@@ -66218,6 +66218,28 @@ a backing bean</description>
    </FOLDER>
   </FOLDER>
  </file-system>
+ <file-system NAME="lib-dom4j-1.6.1.jar"
+  location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\lib\dom4j-1.6.1.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="dom4j" model-entity="JarFolder">
+    <FOLDER NAME="bean" model-entity="JarFolder"/>
+    <FOLDER NAME="datatype" model-entity="JarFolder"/>
+    <FOLDER NAME="dom" model-entity="JarFolder"/>
+    <FOLDER NAME="dtd" model-entity="JarFolder"/>
+    <FOLDER NAME="io" model-entity="JarFolder"/>
+    <FOLDER NAME="jaxb" model-entity="JarFolder"/>
+    <FOLDER NAME="rule" model-entity="JarFolder">
+     <FOLDER NAME="pattern" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="swing" model-entity="JarFolder"/>
+    <FOLDER NAME="tree" model-entity="JarFolder"/>
+    <FOLDER NAME="util" model-entity="JarFolder"/>
+    <FOLDER NAME="xpath" model-entity="JarFolder"/>
+    <FOLDER NAME="xpp" model-entity="JarFolder"/>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>

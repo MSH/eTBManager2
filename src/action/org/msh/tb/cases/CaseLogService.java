@@ -23,7 +23,7 @@ public class CaseLogService {
 	public void logValidation() {
 		TbCase tbcase = caseHome.getInstance();
 		
-		logService.saveExecuteTransaction("CASE_VALIDATE", tbcase.toString(), tbcase.getId());
+		logService.saveExecuteTransaction("CASE_VALIDATE", tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName());
 	}
 
 
@@ -43,7 +43,7 @@ public class CaseLogService {
 		logService.addTableRow("cases.movdate", caseMoveHome.getMoveDate());
 		logService.addTableRow("patients.desthu", caseMoveHome.getTbunitselection().getTbunit().toString());
 		
-		logService.saveExecuteTransaction(role, tbcase.toString(), tbcase.getId());
+		logService.saveExecuteTransaction(role, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName());
 	}
 	
 	
@@ -61,7 +61,7 @@ public class CaseLogService {
 
 		logService.addTableRow("TbCase.outcomeDate", tbcase.getOutcomeDate());
 		logService.addTableRow("cases.outcome", tbcase.getState());
-		logService.saveExecuteTransaction(role, tbcase.toString(), tbcase.getId());
+		logService.saveExecuteTransaction(role, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName());
 	}
 
 	
@@ -77,6 +77,6 @@ public class CaseLogService {
 			 role = "TBREOPEN";
 		else role = "MDRREOPEN";
 		
-		logService.saveExecuteTransaction(role, tbcase.toString(), tbcase.getId());
+		logService.saveExecuteTransaction(role, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName());
 	}
 }

@@ -120,7 +120,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 		TransactionLogService logSrv = getLogService();
 		logSrv.addTableRow(".unitFrom", order.getUnitFrom().toString());
 		logSrv.addTableRow(".unitTo", order.getUnitTo().toString());
-		logSrv.saveExecuteTransaction("NEW_ORDER", order.toString(), order.getId());
+		logSrv.saveExecuteTransaction("NEW_ORDER", order);
 		
 		OrderMsgDispatcher.instance().notifyNewOrder();
 		
@@ -202,7 +202,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 		
 		
 		// register log
-		getLogService().saveExecuteTransaction("ORDER_CANC", getInstance().toString(), getInstance().getId());
+		getLogService().saveExecuteTransaction("ORDER_CANC", getInstance());
 		
 		if (update().equals("updated"))
 			 return "ordercanceled";

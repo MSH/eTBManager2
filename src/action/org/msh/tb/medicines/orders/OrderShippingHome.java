@@ -144,7 +144,7 @@ public class OrderShippingHome extends Controller {
 		
 		TransactionLogService log = new TransactionLogService();
 		log.addTableRow(".shippingDate", order.getShippingDate());
-		log.saveExecuteTransaction("SEND_ORDER", order.toString(), order.getId());
+		log.saveExecuteTransaction("SEND_ORDER", order);
 		
 		return "persisted";	
 	}

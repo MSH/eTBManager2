@@ -60,6 +60,8 @@ public class TransactionLog {
 	@NotNull
 	private WorkspaceLog workspace;
 	
+	@Column(length=100)
+	private String entityClass;
 	
 	@Lob
 	private String comments;
@@ -295,5 +297,21 @@ public class TransactionLog {
 	 */
 	public void setTitleSuffix(String titleSuffix) {
 		this.titleSuffix = titleSuffix;
+	}
+
+
+	/**
+	 * @return the entityClass
+	 */
+	public String getEntityClass() {
+		return entityClass;
+	}
+
+
+	/**
+	 * @param entityClass the entityClass to set
+	 */
+	public void setEntityClass(String entityClass) {
+		this.entityClass = entityClass;
 	}
 }

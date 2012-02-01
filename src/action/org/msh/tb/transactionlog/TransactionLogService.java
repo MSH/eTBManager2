@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
@@ -63,11 +64,31 @@ public class TransactionLogService {
 	}
 
 	/**
+	 * Save transaction log recovering entity data from entity
+	 * @param eventName
+	 * @param action
+	 * @param entity
+	 * @return
+	 */
+	public TransactionLog save(String eventName, RoleAction action, Object entity) {
+		Integer id = null;
+
+		try {
+			id = (Integer)PropertyUtils.getProperty(entity, "id");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("No property id found in entity " + entity.getClass().toString());
+		}
+
+		return save(eventName, action, entity.toString(), id, entity.getClass().getSimpleName());
+	}
+	
+	/**
 	 * Save a new transaction log
 	 * @param eventName is the short name of the event (user role)
 	 * @param action type of action related to this transaction (execution, new, edit, deleted)
 	 */
-	public TransactionLog save(String eventName, RoleAction action, String description, Integer entityId) {
+	public TransactionLog save(String eventName, RoleAction action, String description, Integer entityId, String entityClass) {
 		UserRole role = translateRole(eventName);
 		checkEntityValues();
 
@@ -94,6 +115,7 @@ public class TransactionLogService {
 		log.setAdminUnit(getAdminUnit());
 		log.setUnit(getUnit());
 		log.setTitleSuffix(titleSuffix);
+		log.setEntityClass(entityClass);
 		
 		EntityManager em = getEntityManager();
 		em.persist(log);
@@ -109,10 +131,18 @@ public class TransactionLogService {
 	 * @param description
 	 * @param entityId
 	 */
-	public void saveExecuteTransaction(String userRole, String description, Integer entityId) {
-		save(userRole, RoleAction.EXEC, description, entityId);
+	public void saveExecuteTransaction(String userRole, String description, Integer entityId, String entityClass) {
+		save(userRole, RoleAction.EXEC, description, entityId, entityClass);
 	}
 
+	/**
+	 * Save a transaction log of type execution using an entity to save its information
+	 * @param userRole
+	 * @param entity
+	 */
+	public void saveExecuteTransaction(String userRole, Object entity) {
+		save(userRole, RoleAction.EXEC, entity);
+	}
 	
 	/**
 	 * Check if entity values changed since last time they were captured by the method <code>captureProperties</code>

@@ -64,7 +64,7 @@ public class OrderAuthorizingHome extends Controller {
 		// register log
 		TransactionLogService logsrv = new TransactionLogService();
 		logsrv.addTableRow("Tbunit.authorizerUnit", order.getAuthorizer().toString());
-		logsrv.saveExecuteTransaction("VAL_ORDER", order.toString(), order.getId());
+		logsrv.saveExecuteTransaction("VAL_ORDER", order);
 		
 		entityManager.persist(order);
 		

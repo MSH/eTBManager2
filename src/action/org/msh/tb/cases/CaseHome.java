@@ -454,5 +454,15 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		}
 		super.saveTransactionLog(action);
 	}
+
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.EntityHomeEx#getLogEntityClass()
+	 */
+	@Override
+	public String getLogEntityClass() {
+		return TbCase.class.getSimpleName();
+	}
 	
 }

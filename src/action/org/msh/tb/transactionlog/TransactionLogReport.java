@@ -8,6 +8,8 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.TransactionLog;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.RoleAction;
@@ -39,7 +41,9 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 		"log.user.name like #{transactionLogReport.userNameLike}",
 		"log.entityDescription like #{transactionLogReport.searchKeyLike}",
 		"log.transactionDate >= #{transactionLogReport.iniDate}",
-		"log.transactionDate <= #{transactionLogReport.endDate1}"
+		"log.transactionDate <= #{transactionLogReport.endDate1}",
+		"log.entityId = #{transactionLogReport.entityId}",
+		"log.entityClass = #{transactionLogReport.entityClass}"
 	};
 
 	private RoleAction action;
@@ -50,7 +54,31 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 	
 	private Date iniDate;
 	private Date endDate;
+	private Integer entityId;
+	private String entityClass;
 	
+	private boolean allResults;
+
+	
+	/**
+	 * Initialize report to display changes in a specific case
+	 */
+	public void initCaseReport() {
+		entityClass = TbCase.class.getSimpleName();
+
+		CaseHome caseHome = (CaseHome)Component.getInstance("caseHome");
+		if ((caseHome == null) || (!caseHome.isManaged())) {
+			entityId = -1;
+			return;
+		}
+		
+		entityId = caseHome.getInstance().getId();
+		iniDate = null;
+		endDate = null;
+		searchKey = null;
+		allResults = true;
+	}
+
 
 	/* (non-Javadoc)
 	 * @see org.jboss.seam.framework.Query#getCountEjbql()
@@ -108,7 +136,7 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 	 */
 	@Override
 	public Integer getMaxResults() {
-		return 40;
+		return allResults? null: 40;
 	}
 
 	/**
@@ -222,5 +250,51 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 	 */
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+
+	/**
+	 * @return the entityId
+	 */
+	public Integer getEntityId() {
+		return entityId;
+	}
+
+
+	/**
+	 * @param entityId the entityId to set
+	 */
+	public void setEntityId(Integer entityId) {
+		this.entityId = entityId;
+	}
+
+
+	/**
+	 * @return the entityClass
+	 */
+	public String getEntityClass() {
+		return entityClass;
+	}
+
+
+	/**
+	 * @param entityClass the entityClass to set
+	 */
+	public void setEntityClass(String entityClass) {
+		this.entityClass = entityClass;
+	}
+
+	/**
+	 * @return the allResults
+	 */
+	public boolean isAllResults() {
+		return allResults;
+	}
+
+	/**
+	 * @param allResults the allResults to set
+	 */
+	public void setAllResults(boolean allResults) {
+		this.allResults = allResults;
 	}
 }

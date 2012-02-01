@@ -92,7 +92,7 @@ public class SymetaImportTask extends DbBatchTask {
 		// save result in a log file
 		TransactionLogService service = new TransactionLogService();
 		service.getDetailWriter().addText(log.toString());
-		service.save("TASK", RoleAction.EXEC, "SYMETB Integration", null);
+		service.save("TASK", RoleAction.EXEC, "SYMETB Integration", null, null);
 		commitTransaction();
 	}
 

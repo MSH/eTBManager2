@@ -270,7 +270,7 @@ public class MedicineManStartHome {
 				logService.addTableRow("form.selectedmeds", meds);
 			}
 		}
-		logService.saveExecuteTransaction("MED_INIT", unit.toString(), unit.getId());
+		logService.saveExecuteTransaction("MED_INIT", unit.toString(), unit.getId(), unit.getClass().getSimpleName());
 	}
 
 
@@ -283,7 +283,7 @@ public class MedicineManStartHome {
 		
 		unit = entityManager.merge(unit);
 
-		logService.saveExecuteTransaction("MED_INIT_REM", unit.toString(), unit.getId());
+		logService.saveExecuteTransaction("MED_INIT_REM", unit.toString(), unit.getId(), unit.getClass().getSimpleName());
 	}
 
 /*	*//**

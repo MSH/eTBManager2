@@ -123,7 +123,7 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		log.addTableRow(".unitFrom", transfer.getUnitFrom());
 		log.addTableRow(".unitTo", transfer.getUnitTo());
 		log.addTableRow(".shippingDate", transfer.getShippingDate());
-		log.save("NEW_TRANSFER", RoleAction.EXEC, transfer.toString(), transfer.getId());
+		log.save("NEW_TRANSFER", RoleAction.EXEC, transfer);
 		
 		return persist();
 	}
@@ -175,7 +175,7 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		log.addTableRow(".unitFrom", transfer.getUnitFrom());
 		log.addTableRow(".unitTo", transfer.getUnitTo());
 		log.addTableRow(".receivingDate", transfer.getReceivingDate());
-		log.save("TRANSF_REC", RoleAction.EXEC, transfer.toString(), transfer.getId());
+		log.save("TRANSF_REC", RoleAction.EXEC, transfer);
 
 		return "received";
 	}
@@ -270,7 +270,7 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 
 		// register transfer in the log system
 		TransactionLogService log = getLogService();
-		log.save("TRANSF_CANCEL", RoleAction.EXEC, transfer.toString(), transfer.getId());
+		log.save("TRANSF_CANCEL", RoleAction.EXEC, transfer);
 
 		return "canceled";
 	}

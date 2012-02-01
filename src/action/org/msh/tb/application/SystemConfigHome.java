@@ -59,7 +59,7 @@ public class SystemConfigHome {
 		entityManager.flush();
 		
 		if (logService != null) {
-			logService.save("SYSSETUP", RoleAction.EDIT, null, null);
+			logService.save("SYSSETUP", RoleAction.EDIT, null, null, null);
 		}
 		
 		etbmanagerApp.setConfiguration(systemConfig);

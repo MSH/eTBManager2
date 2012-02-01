@@ -145,7 +145,7 @@ public class OrderReceivingHome extends Controller {
 
 		TransactionLogService log = new TransactionLogService();
 		log.addTableRow(".receivingDate", order.getReceivingDate());
-		log.saveExecuteTransaction("RECEIV_ORDER", order.toString(), order.getId());
+		log.saveExecuteTransaction("RECEIV_ORDER", order);
 
 		return "received";		
 	}
