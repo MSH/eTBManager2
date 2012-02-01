@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <faceted-project>
-  <runtime name="JBoss 4.2 Runtime"/>
+  <runtime name="JBoss 4.2.3.GA"/>
   <fixed facet="jst.jsf"/>
   <fixed facet="jst.web"/>
   <fixed facet="jst.seam"/>
