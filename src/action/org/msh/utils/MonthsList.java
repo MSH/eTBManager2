@@ -58,7 +58,7 @@ public class MonthsList {
 		si.setLabel("-");
 		lst.add(si);
 		
-		for (int i = ano + 1; i >= ano - 30; i--) {
+		for (int i = ano + 1; i >= ano - 40; i--) {
 			SelectItem it = new SelectItem();
 			it.setLabel(Integer.toString(i));
 			it.setValue(i);

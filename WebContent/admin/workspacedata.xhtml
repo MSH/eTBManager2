@@ -31,7 +31,7 @@
 		onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false" rendered="#{s:hasRole('WORKSPACES_EDT')}">
 		<span class="delete-icon"/>
 	</h:commandLink>
-	<s:link value="#{messages['admin.workspaces.addremuser']}" view="/admin/wsadduser.xhtml" rendered="#{s:hasRole('WORKSPACES_EDT')}" >
+	<s:link value="#{messages['userrole.WSADDREMUSER']}" view="/admin/wsadduser.xhtml" rendered="#{s:hasRole('WORKSPACES_EDT')}" >
 		<f:param name="id" value="#{workspace.id}" />
 	</s:link>
 	

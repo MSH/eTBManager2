@@ -443,9 +443,10 @@ public class TreatmentHome {
 			}
 			else index++;
 		}
-		
-		// set the new treatment period
-		tbcase.setTreatmentPeriod(p);
+
+		// set the new treatment period, if necessary
+		if (tbcase.getTreatmentPeriod().getIniDate().before(p.getIniDate()) || tbcase.getTreatmentPeriod().getEndDate().after(p.getEndDate())) 
+			tbcase.setTreatmentPeriod(p);
 	}
 	
 	

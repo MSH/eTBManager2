@@ -128,7 +128,7 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 	 */
 	@Override
 	public String getOrder() {
-		return "log.transactionDate desc";
+		return "log.transactionDate desc, log.id desc";
 	}
 
 	/* (non-Javadoc)

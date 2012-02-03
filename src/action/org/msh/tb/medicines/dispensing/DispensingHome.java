@@ -226,13 +226,14 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 		MovementHome movHome = (MovementHome)Component.getInstance("movementHome");
 		movHome.initMovementRecording();
 
-		// check if there is previous dispensing for that day or if it's an editing
+		// check if there is previous dispensing for that date and unit or if it's an editing
 		MedicineDispensing recDisp = restoreDispensing();
 		if (recDisp != null) {
-			includePastCaseDispensing();
+			includePastCaseDispensing(recDisp);
 			// prepare previous movements to be removed
 			for (Movement mov: recDisp.getMovements())
-				movHome.prepareMovementsToRemove(mov);
+				if (isMedicineBeingDispensed(mov.getMedicine()))
+					movHome.prepareMovementsToRemove(mov);
 		}
 
 		// prepare new movements to be saved
@@ -286,9 +287,26 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 		return true;
 	}
 
+
+	/**
+	 * Return true if medicine is being dispensing
+	 * @param med
+	 * @return
+	 */
+	private boolean isMedicineBeingDispensed(Medicine med) {
+		if (medicines != null) {
+			for (MedicineItem item: medicines) {
+				if (item.getMedicine().equals(med))
+					return true;
+			}
+		}
+		
+		return false;
+	}
 	
-	private void includePastCaseDispensing() {
-		List<MedicineDispensingCase> lst = getInstance().getPatients();
+	
+	private void includePastCaseDispensing(MedicineDispensing medDispensing) {
+		List<MedicineDispensingCase> lst = medDispensing.getPatients();
 
 		if ((lst == null) || (lst.size() == 0))
 			return;
@@ -347,7 +365,8 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 
 		return lst.get(0);
 	}
-	
+
+
 	/**
 	 * Add error message
 	 * @param medItem

@@ -9,8 +9,10 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
 import org.jboss.seam.international.Messages;
@@ -53,6 +55,7 @@ public class CaseMoveHome extends Controller {
 	 * @return
 	 */
 	@Transactional
+	@RaiseEvent("case.transferout")
 	public String transferOut() {
 		if (!caseHome.isCanTransferOut())
 			return "error";
@@ -74,6 +77,9 @@ public class CaseMoveHome extends Controller {
 		newhu.setTransferring(true);
 		tbcase.getHealthUnits().add(newhu);
 		newhu.setTbunit(tbunit);
+		
+		// change health unit on treatment
+		tbcase.setTreatmentUnit(tbunit);
 
 		currentHealthUnit.getPeriod().intersect(prevPeriod);
 		
@@ -128,6 +134,7 @@ public class CaseMoveHome extends Controller {
 	 * @return
 	 */
 	@Transactional
+	@RaiseEvent("case.transferout.rollback")
 	public String rollbackTransferOut() {
 		TbCase tbcase = caseHome.getInstance();
 		if (tbcase.getHealthUnits().size() <= 1) {
@@ -138,7 +145,7 @@ public class CaseMoveHome extends Controller {
 		List<TreatmentHealthUnit> hus = tbcase.getSortedTreatmentHealthUnits();
 		TreatmentHealthUnit tout = hus.get(hus.size() - 2);
 		TreatmentHealthUnit tin = hus.get(hus.size() - 1);
-
+		
 		hus.remove(tin);
 		entityManager.remove(tin);
 		
@@ -174,6 +181,10 @@ public class CaseMoveHome extends Controller {
 		if (prescriptionTable != null)
 			prescriptionTable.refresh();
 
+		// information to be logged
+		Contexts.getEventContext().set("transferdate", tin.getPeriod().getIniDate());
+		Contexts.getEventContext().set("transferunit", tin.getTbunit());
+		
 		return "success";
 	}
 	
@@ -215,6 +226,7 @@ public class CaseMoveHome extends Controller {
 	 * @return
 	 */
 	@Transactional
+	@RaiseEvent("case.transferin")
 	public String transferIn() {
 		TreatmentHealthUnit prev = findTransferOutHealthUnit();
 		

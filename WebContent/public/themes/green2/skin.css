@@ -900,6 +900,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	border-bottom:1px solid #b8b8b8;
 }
 
+
 /* ICONS */
 
 .icon-user-header, .icon-bullet, .icon-bullet-menu, .dst-resistant, .dst-contaminated, .dst-susceptible, .print-icon, 
@@ -1086,7 +1087,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	position: relative;
 }
 
-.rich-menu-item {
+.rich-menu-item, .rich-menu-item a, .rich-menu-item a:hover {
 	text-align:left;
 	font-size:1.1em;
 	font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;

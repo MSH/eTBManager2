@@ -13,12 +13,9 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.BatchQuantity;
-import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineDispensing;
 import org.msh.tb.entities.MedicineDispensingCase;
 import org.msh.tb.entities.Patient;
-import org.msh.tb.entities.PrescribedMedicine;
-import org.msh.tb.entities.Source;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.CaseState;
@@ -117,12 +114,12 @@ public class CaseDispensingUIHome extends AbstractDispensigUIHome {
 		TbCase tbcase = caseHome.getInstance();
 		
 		// return list of medicines prescribed
-		List<PrescribedMedicine> lst = entityManager.createQuery("from PrescribedMedicine pm " +
+/*		List<PrescribedMedicine> lst = entityManager.createQuery("from PrescribedMedicine pm " +
 				"join fetch pm.medicine m join fetch pm.source s " +
 				"where pm.tbcase.id = :id")
 				.setParameter("id", tbcase.getId())
 				.getResultList();
-
+*/
 		sources = new ArrayList<SourceItem>();
 		
 		// return the list of batches available
@@ -130,11 +127,11 @@ public class CaseDispensingUIHome extends AbstractDispensigUIHome {
 		List<BatchQuantity> batches = stockPosList.getBatchAvailable(unit, null);
 
 		for (BatchQuantity bq: batches) {
-			Source source = bq.getSource();
-			Medicine med = bq.getBatch().getMedicine();
+//			Source source = bq.getSource();
+//			Medicine med = bq.getBatch().getMedicine();
 			
 			// is medicine in batch prescribed to the patient ?
-			if (isMedicinePrescribed(lst, source, med))
+//			if (isMedicinePrescribed(lst, source, med))
 				addSourceRow(bq);
 		}
 
@@ -157,7 +154,7 @@ public class CaseDispensingUIHome extends AbstractDispensigUIHome {
 	 * @param med
 	 * @return
 	 */
-	private boolean isMedicinePrescribed(List<PrescribedMedicine> lst, Source source, Medicine med) {
+/*	private boolean isMedicinePrescribed(List<PrescribedMedicine> lst, Source source, Medicine med) {
 		for (PrescribedMedicine pm: lst) {
 			if ((pm.getMedicine().equals(med)) && (pm.getSource().equals(source))) {
 				return true;
@@ -165,7 +162,7 @@ public class CaseDispensingUIHome extends AbstractDispensigUIHome {
 		}
 		return false;
 	}
-	
+*/	
 	
 	/**
 	 * Store temporary information about a case dispensing

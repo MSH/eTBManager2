@@ -38,6 +38,9 @@ public class UserRole implements java.io.Serializable, Comparable<UserRole> {
 
     @Column(length=50)
     private String code;
+    
+    @Column(length=100)
+    private String messageKey;
 
     /**
      * Indicate if this role contains operations of read-write, like, for instance, insert-update-delete commands
@@ -83,6 +86,11 @@ public class UserRole implements java.io.Serializable, Comparable<UserRole> {
     	return code.startsWith(parentCode);
     }
 
+   
+    /**
+     * Return the level of the user role
+     * @return
+     */
     public int getLevel() {
 		if ((code == null) || (code.isEmpty()))
 			 return 0;
@@ -98,13 +106,21 @@ public class UserRole implements java.io.Serializable, Comparable<UserRole> {
 		else return 0;
 	}
 
+
+    /**
+     * Return the text to be displayed to the user
+     * @return
+     */
     public String getDisplayName() {
-    	if (name.equals("-"))
-    		return "";
+    	String msg;
     	
-    	String msg = "userrole." + name;
+    	if ((messageKey != null) && (!messageKey.isEmpty()))
+    		 msg = messageKey;
+    	else msg = "userrole." + name;
+
     	return Messages.instance().get(msg);
     }
+
 
     public Integer getId() {
         return id;
@@ -174,5 +190,21 @@ public class UserRole implements java.io.Serializable, Comparable<UserRole> {
 	 */
 	public void setByCaseClassification(boolean byCaseClassification) {
 		this.byCaseClassification = byCaseClassification;
+	}
+
+
+	/**
+	 * @return the messageKey
+	 */
+	public String getMessageKey() {
+		return messageKey;
+	}
+
+
+	/**
+	 * @param messageKey the messageKey to set
+	 */
+	public void setMessageKey(String messageKey) {
+		this.messageKey = messageKey;
 	}
 }

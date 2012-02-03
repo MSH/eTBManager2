@@ -32,7 +32,7 @@
 <ui:define name="left">
 	<h:form>
 
-	<s:link view="/cases/casedata.xhtml" propagation="none" styleClass="button-alt">
+	<s:link view="/cases/casedata.xhtml" propagation="none" styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{caseHome.id}" />
 		<span>#{messages['form.return']}</span>
 	</s:link>

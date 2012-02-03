@@ -58,7 +58,7 @@
 				
 				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
 					<div class="icon-hu"/>
-					<div style="display:block;clear:both;font-weight:bold;">#{p.item.tbunit.name}</div>
+					<div style="font-weight:bold;">#{p.item.tbunit.name}<br/>#{p.item.tbunit.adminUnit.fullDisplayName}</div>
 					<h:outputText value="#{p.period.iniDate}" converter="localeDateConverter" style="float:left;"/>
 					<h:outputText value="#{p.period.endDate}" converter="localeDateConverter" style="float:right;margin-right:16px;"/>
 					<h:outputText value="#{p.period}" converter="periodConverter" style="display:block;clear:both;width:100%;text-align:center;margin-bottom:4px;">

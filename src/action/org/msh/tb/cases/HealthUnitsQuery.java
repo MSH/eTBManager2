@@ -48,13 +48,17 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 		
 		String sql = "select u.id, u.name1, a.code, " +
 				"(select count(*) from tbcase c where c.notification_unit_id = u.id and c.state <= 2 " + casecond + ") numcases, " +
+				
 				"(select count(*) from tbcase c " +
 				"where c.state=1 and c.treatment_unit_id = u.id " + casecond + ") as ontreat, " +
+				
 				"(select count(*) from treatmenthealthunit t inner join tbcase c on c.id = t.case_id " +
 				"where t.inidate > c.initreatmentdate and t.enddate = c.endtreatmentdate and c.state=1 " +
 				"and t.transferring=false and t.unit_id = u.id" + casecond + ") as transferin, " +
+				
 				"(select count(*) from treatmenthealthunit t inner join tbcase c on c.id = t.case_id " +
 				"where t.enddate < c.endtreatmentdate and c.state in (1,2) and t.unit_id = u.id" + casecond + ") as transferout " +
+				
 				"from tbunit u inner join administrativeunit a on a.id = u.adminunit_id " +
 				"where u.workspace_id = " + defaultWorkspace.getId().toString() + generateSQLConditionByUserView() +
 				(hsID != null? " and u.healthsystem_id = " + hsID: "") + 

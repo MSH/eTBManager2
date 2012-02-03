@@ -70,9 +70,9 @@
 		onclick="if (!confirm('#{messages['cases.reopen.confirm']}')) return false;">
 	</h:commandLink>
 
-	<s:link value="#{messages['form.logreport']}" view="/cases/casehistory.xhtml" >
+	<s:link view="/cases/casehistory.xhtml" >
 		<f:param name="id" value="#{caseHome.id}" />
-		<span class="icon-report" />
+		<div class="icon-report" style="float:none;" /><span>#{messages['form.logreport']}</span>
 	</s:link>
 
 	<s:link value="#{messages['admin.tags']}" view="/cases/casetagsedt.xhtml" rendered="#{caseHome.canTagCase and empty tbcase.tags}">

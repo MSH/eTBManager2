@@ -6,7 +6,9 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
 import org.msh.tb.cases.treatment.TreatmentHome;
@@ -49,7 +51,8 @@ public class CaseCloseHome extends Controller{
 		CaseState.DIAGNOSTIC_CHANGED,
 		CaseState.MDR_CASE,
 		CaseState.OTHER};
-	
+
+
 	/**
 	 * Closes an opened case, setting its outcome
 	 * @return
@@ -58,11 +61,8 @@ public class CaseCloseHome extends Controller{
 	public String closeCase() {
 		TbCase tbcase = caseHome.getInstance();
 
-		Date dt = tbcase.getDiagnosisDate();
-		if ((dt != null) && (date.before(dt))) {
-			facesMessages.addFromResourceBundle("cases.close.msg1");
+		if (!validateClose()) 
 			return "error";
-		}
 
 		if ((tbcase.getTreatmentPeriod() != null) && (!tbcase.getTreatmentPeriod().isEmpty()))
 			treatmentHome.cropTreatmentPeriod(new Period(tbcase.getTreatmentPeriod().getIniDate(), date));
@@ -74,20 +74,40 @@ public class CaseCloseHome extends Controller{
 			 tbcase.setOtherOutcome(comment);
 		else tbcase.setOtherOutcome(null);
 
-		// save transaction log
-		caseHome.getLogDetailWriter().addTableRow("TbCase.outcomeDate", date);
-		caseHome.getLogDetailWriter().addTableRow("TbCase.otherOutcome", tbcase.getState().getKey());
-		caseHome.saveExecuteTransaction("CASE_CLOSE");
-		
 		// save case changes
 		caseHome.setTransactionLogActive(false);
 		caseHome.persist();
 		caseHome.updateCaseTags();
 
+		Events.instance().raiseEvent("case.close");
+		
 		return "case-closed";
 	}
-	
+
+
+	/**
+	 * Check if case can be closed
+	 * @return
+	 */
+	public boolean validateClose() {
+		TbCase tbcase = caseHome.getInstance();
+
+		Date dt = tbcase.getDiagnosisDate();
+		if ((dt != null) && (date.before(dt))) {
+			facesMessages.addFromResourceBundle("cases.close.msg1");
+			return false;
+		}
+		
+		return true;
+	}
+
+
+	/**
+	 * Reopen a closed case
+	 * @return
+	 */
 	@Transactional
+	@RaiseEvent("case.reopen")
 	public String reopenCase() {
 		TbCase tbcase = caseHome.getInstance();
 		
@@ -97,7 +117,6 @@ public class CaseCloseHome extends Controller{
 		
 		tbcase.setOtherOutcome(null);
 
-		caseHome.saveExecuteTransaction("CASE_REOPEN");
 		caseHome.setTransactionLogActive(false);
 		caseHome.persist();
 		caseHome.updateCaseTags();
