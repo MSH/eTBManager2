@@ -51,8 +51,12 @@
 		<table width="100%"><tr><td>
 			<h2><h:outputText value="#{it.date}" converter="localeDateConverter" /></h2>
 		</td><td valign="bottom">
-			<s:link value="#{messages['form.edit']}" view="/medicines/disppacedt.xhtml" style="float:right">
+			<a:commandLink reRender="pnldisp" style="float:right">
+				<span class="delete-icon" />#{messages['form.remove']}
+			</a:commandLink>
+			<s:link view="/medicines/disppacedt.xhtml" style="float:right;padding-right:30px;">
 				<f:param name="dispid" value="#{it.id}" />
+				<span class="edit-icon" />#{messages['form.edit']}
 			</s:link>
 		</td></tr></table>
 
