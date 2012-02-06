@@ -25,8 +25,8 @@ public class TbCaseNG extends TbCase{
 	@PropertyLog(ignore=true)
 	private List<CaseDispensing_Ng> dispng = new ArrayList<CaseDispensing_Ng>();
 	
-		
-	private Integer tbRegistrationNumber;
+	@Column(length=20)	
+	private String tbRegistrationNumber;
 	
 	@Column(length=100)
 	private String emailAddress;
@@ -39,15 +39,13 @@ public class TbCaseNG extends TbCase{
 		this.dispng = dispng;
 	}
 
-
-	public Integer getTbRegistrationNumber() {
+	public String getTbRegistrationNumber() {
 		return tbRegistrationNumber;
 	}
-
-	public void setTbRegistrationNumber(Integer tbRegistrationNumber) {
+	public void setTbRegistrationNumber(String tbRegistrationNumber) {
 		this.tbRegistrationNumber = tbRegistrationNumber;
 	}
-
+	
 	public String getEmailAddress() {
 		return emailAddress;
 	}
@@ -55,5 +53,6 @@ public class TbCaseNG extends TbCase{
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
+
 	
 }
