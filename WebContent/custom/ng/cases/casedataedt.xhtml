@@ -87,6 +87,7 @@
 	<tr><td>
 		<s:decorate template="/layout/auselection.xhtml">
 			<ui:param name="auselection" value="#{caseEditingHome.notifAdminUnit}" />
+			<ui:param name="requiredLevel" value="#{defaultWorkspace.patientAddrRequiredLevels}" />
 		</s:decorate>
     </td></tr>
 
@@ -191,6 +192,7 @@
     <s:decorate template="/layout/dateedit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     	<ui:param name="required" value="#{tbcase.validated}" /> 
+    	<ui:param name="required" value="true" />
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
     </s:decorate>
 
