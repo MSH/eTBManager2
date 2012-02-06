@@ -61,7 +61,7 @@ public class CaseDispensingDays_Ng {
 		Dot day = null;
 		for (int i = 1; i <= 31; i++){
 			day = getDay(i);
-			if (day!=null&&(day!=Dot.X))
+			if (day!=null&&(day!=Dot.O))
 				res++;
 		}
 		return res;
