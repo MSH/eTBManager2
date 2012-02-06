@@ -83,7 +83,7 @@ public class MonthInfo {
 	public int getTotalDispensed() {
 		int nd = 0;
 		for (DayInfo di: days) {
-			if (di.getSelected()!= Dot.X)
+			if (di.getSelected()!= Dot.O)
 				nd++;
 		}
 		return nd;
