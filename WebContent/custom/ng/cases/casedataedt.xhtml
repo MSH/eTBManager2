@@ -183,7 +183,7 @@
     <s:decorate template="/layout/edit.xhtml">
     	<!--<ui:define name="label">#{messages['TbCase.TBRegistrationNumber']}:</ui:define>-->
     	<ui:define name="label">#{messages['TbCase.LGATBL']}:</ui:define>
-		<h:inputText value="#{tbcaseng.tbRegistrationNumber}" style="width:120px;" maxlength="50" required="true"></h:inputText>
+		<h:inputText value="#{tbcaseng.tbRegistrationNumber}" style="width:120px;" maxlength="10" required="true"></h:inputText>		
 		<ui:param name="required" value="true" />
 		</s:decorate>
     
@@ -196,13 +196,14 @@
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
     </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+<!-- Nigeria Customization: hiding 'Type of diagnostic' in the new notification page. it is made visible while editing the case -->
+  <!--   <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
     	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
     	<h:selectOneMenu value="#{tbcase.diagnosisType}" required="#{tbcase.validated}">
     		<s:selectItems var="it" value="#{diagnosisTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
-    </s:decorate>
+    </s:decorate> -->
 
     <s:decorate template="/layout/edit.xhtml" rendered="#{tbCase.classification=='MDRTB_DOCUMENTED'}">
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
