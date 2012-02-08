@@ -202,10 +202,4 @@ public class CaseDispensingUIHome extends AbstractDispensigUIHome {
 			this.lastDispensing = lastDispensing;
 		}
 	}
-
-	
-	/**
-	 * @author Ricardo Memoria
-	 *
-	 */
 }

@@ -51,7 +51,8 @@
 		<table width="100%"><tr><td>
 			<h2><h:outputText value="#{it.date}" converter="localeDateConverter" /></h2>
 		</td><td valign="bottom">
-			<a:commandLink reRender="pnldisp" style="float:right">
+			<a:commandLink reRender="pnldisp" style="float:right" 
+				onclick="if (!confirm('#{messages['form.confirm_remove']}')) {return false;} deleteDispensing(#{it.id},#{caseHome.id})" >
 				<span class="delete-icon" />#{messages['form.remove']}
 			</a:commandLink>
 			<s:link view="/medicines/disppacedt.xhtml" style="float:right;padding-right:30px;">
@@ -66,6 +67,11 @@
 		</a:repeat>
 	</s:fragment>
 	</h:panelGroup>
+	
+	<a:jsFunction name="deleteDispensing" action="#{caseDispensingView.deleteDispensing}">
+		<a:actionparam name="param1" assignTo="#{caseDispensingView.dispensingId}" converter="javax.faces.Integer"/>
+		<a:actionparam name="param2" assignTo="#{caseDispensingView.caseId}" converter="javax.faces.Integer"/>
+	</a:jsFunction>
 </h:form>
 
 <h:panelGroup id="pnlunit">

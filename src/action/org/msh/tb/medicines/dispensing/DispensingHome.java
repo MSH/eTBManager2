@@ -15,6 +15,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.Batch;
+import org.msh.tb.entities.BatchMovement;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineDispensing;
 import org.msh.tb.entities.MedicineDispensingCase;
@@ -124,6 +125,80 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 	}
 
 	
+	/**
+	 * Delete the dispensing of a specific case
+	 * @param medDisp
+	 * @param tbcase
+	 */
+	public void deleteCaseDispensing(MedicineDispensing medDisp, TbCase tbcase) {
+		List<MedicineDispensingCase> cases = new ArrayList<MedicineDispensingCase>();
+		List<Movement> remMovs = new ArrayList<Movement>();
+
+		for (MedicineDispensingCase dispcase: medDisp.getPatients()) {
+			if (dispcase.getTbcase().equals(tbcase)) {
+				cases.add(dispcase);
+				Movement mov = findMovementDispensingByBatch(medDisp, dispcase.getBatch());
+				if (mov != null)
+					remMovs.add(mov);
+			}
+		}
+
+		// prepare movements to be changed
+		MovementHome movHome = (MovementHome)Component.getInstance("movementHome");
+		movHome.initMovementRecording();
+
+		for (Movement mov: remMovs) {
+			movHome.prepareMovementsToRemove(mov);
+			
+			Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
+			for (BatchMovement bm: mov.getBatches()) {
+				// search for batch dispensed to this patient
+				int quantity = bm.getQuantity();
+				for (MedicineDispensingCase mdc: cases) {
+					if (mdc.getBatch().equals(bm.getBatch())) {
+						quantity -= mdc.getQuantity();
+					}
+				}
+				
+				if (quantity < 0)
+					throw new RuntimeException("Error deleting medicine dispensing: " + tbcase.toString() + "... " + medDisp.getId() + "... Negative quantity");
+				
+				if (quantity != 0)
+					batches.put(bm.getBatch(), quantity);
+			}
+			
+			movHome.prepareNewMovement(mov.getDate(), mov.getTbunit(), mov.getSource(), mov.getMedicine(), mov.getType(), batches, mov.getComment());
+		}
+		movHome.savePreparedMovements();
+
+		for (MedicineDispensingCase mdc: cases) {
+			entityManager.remove(mdc);
+			medDisp.getPatients().remove(mdc);
+		}
+		entityManager.persist(medDisp);
+		entityManager.flush();
+	}
+
+	
+	/**
+	 * Search for dispensing movement where batch is being dispensed  
+	 * @param medDisp
+	 * @param batch
+	 * @return
+	 */
+	protected Movement findMovementDispensingByBatch(MedicineDispensing medDisp, Batch batch) {
+		for (Movement mov: medDisp.getMovements()) {
+			if (mov.getMedicine().equals(batch.getMedicine())) {
+				for (BatchMovement bm: mov.getBatches()) {
+					if (bm.getBatch().equals(batch))
+						return mov;
+				}
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 * Include medicine dispensing quantity to a specific batch and source
 	 * @param batch

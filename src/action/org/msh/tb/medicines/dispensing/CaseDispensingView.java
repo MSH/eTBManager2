@@ -6,8 +6,10 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.entities.MedicineDispensing;
 import org.msh.tb.entities.MedicineDispensingCase;
 import org.msh.tb.entities.TbCase;
 
@@ -22,6 +24,9 @@ public class CaseDispensingView {
 	private List<DispensingInfo> cases;
 	private List<DispensingInfo> dispensingDays;
 	private boolean allCaseDispensing;
+	
+	private Integer caseId;
+	private Integer dispensingId;
 	
 	@In EntityManager entityManager;
 	@In DispensingSelection dispensingSelection;
@@ -46,6 +51,22 @@ public class CaseDispensingView {
 	}
 	
 	
+	/**
+	 * Delete the dispensing of a specific case
+	 * @param dispInfo
+	 */
+	public String deleteDispensing() {
+		MedicineDispensing medDisp = entityManager.find(MedicineDispensing.class, dispensingId);
+		TbCase tbcase = entityManager.find(TbCase.class, caseId);
+
+		DispensingHome dispensingHome = (DispensingHome)Component.getInstance("dispensingHome", true);
+		
+		dispensingHome.deleteCaseDispensing(medDisp, tbcase);
+		
+		return "removed";
+	}
+
+
 	/**
 	 * Create the list of cases and its dispensing information in the month
 	 */
@@ -237,5 +258,37 @@ public class CaseDispensingView {
 	 */
 	public void setAllCaseDispensing(boolean allCaseDispensing) {
 		this.allCaseDispensing = allCaseDispensing;
+	}
+
+
+	/**
+	 * @return the caseId
+	 */
+	public Integer getCaseId() {
+		return caseId;
+	}
+
+
+	/**
+	 * @param caseId the caseId to set
+	 */
+	public void setCaseId(Integer caseId) {
+		this.caseId = caseId;
+	}
+
+
+	/**
+	 * @return the dispensingId
+	 */
+	public Integer getDispensingId() {
+		return dispensingId;
+	}
+
+
+	/**
+	 * @param dispensingId the dispensingId to set
+	 */
+	public void setDispensingId(Integer dispensingId) {
+		this.dispensingId = dispensingId;
 	}
 }

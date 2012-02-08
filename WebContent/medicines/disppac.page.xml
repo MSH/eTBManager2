@@ -7,4 +7,9 @@
 	<param name="year" value="#{dispensingSelection.year}" converterId="javax.faces.Integer"/>
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
 
+	<navigation>
+		<rule if-outcome="removed">
+			<redirect view-id="/medicines/dispensing.xhtml" />
+		</rule>
+	</navigation>
 </page>
