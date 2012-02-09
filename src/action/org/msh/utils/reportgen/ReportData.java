@@ -2,13 +2,27 @@ package org.msh.utils.reportgen;
 
 public class ReportData {
 
+	private ReportQuery reportQuery;
 	private Object[] values;
 	private long total;
 
-	public ReportData(Object[] values, long total) {
+	public ReportData(ReportQuery reportQuery, Object[] values, long total) {
 		super();
+		this.reportQuery = reportQuery;
 		this.values = values;
 		this.total = total;
+	}
+
+	/**
+	 * Return the value of a specific variable
+	 * @param variable
+	 * @return
+	 */
+	public Object getValue(Variable variable) {
+		int index = reportQuery.getVariables().indexOf(variable);
+		if (index == -1)
+			throw new RuntimeException("Variable " + variable.getTitle() + " doesn't belong to report");
+		return values[index];
 	}
 	
 	/**

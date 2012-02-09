@@ -281,7 +281,7 @@ public class ReportQuery {
 		ReportData repData = searchSimiliarData(vars);
 
 		if (repData == null) {
-			repData = new ReportData(vars, total);
+			repData = new ReportData(this, vars, total);
 			resultList.add(repData);
 		}
 		else {
