@@ -258,4 +258,12 @@ public class WorkspaceViewService {
 		return printing;
 	}
 	
+	
+	/**
+	 * Return the instance of the component
+	 * @return
+	 */
+	public static WorkspaceViewService instance() {
+		return (WorkspaceViewService)Component.getInstance(WorkspaceViewService.class);
+	}
 }

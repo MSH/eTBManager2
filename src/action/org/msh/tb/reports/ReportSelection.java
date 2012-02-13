@@ -14,12 +14,15 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.framework.EntityQuery;
+import org.jboss.seam.security.management.action.RoleAction;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.application.WorkspaceViewService;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.UserLog;
 import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.UserRole;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.utils.date.DateUtils;
 
@@ -27,12 +30,15 @@ import org.msh.utils.date.DateUtils;
 @Name("reportSelection")
 public class ReportSelection {
 
-	private int iniMonth;
-	private int iniYear;
-	private int endMonth;
-	private int endYear;
+	private Integer iniMonth;
+	private Integer iniYear;
+	private Integer endMonth;
+	private Integer endYear;
 	private Tbunit tbunit;
 	private Source source;
+	private UserLog userLog;
+	private UserRole userRole;
+	private RoleAction roleAction;
 	
 	private String pageToPrint;
 	private UserWorkspace userWorkspace;
@@ -178,40 +184,40 @@ public class ReportSelection {
 		return items;
 	}
 
-	public int getEndMonth() {
+	public Integer getEndMonth() {
 		return endMonth;
 	}
 
-	public void setEndMonth(int endMonth) {
+	public void setEndMonth(Integer endMonth) {
 		this.endMonth = endMonth;
 	}
 
-	public int getEndYear() {
+	public Integer getEndYear() {
 		return endYear;
 	}
 
-	public void setEndYear(int endYear) {
+	public void setEndYear(Integer endYear) {
 		this.endYear = endYear;
 	}
 
-	public int getIniMonth() {
+	public Integer getIniMonth() {
 		return iniMonth;
 	}
 
-	public void setIniMonth(int iniMonth) {
+	public void setIniMonth(Integer iniMonth) {
 		this.iniMonth = iniMonth;
 	}
 
-	public int getIniYear() {
+	public Integer getIniYear() {
 		return iniYear;
 	}
 
-	public void setIniYear(int iniYear) {
+	public void setIniYear(Integer iniYear) {
 		this.iniYear = iniYear;
 	}
 	
 	public Date getIniDate() {
-		if (iniYear == 0)
+		if ((iniYear == null) || (iniMonth == null))
 			return null;
 		Calendar iniDate = Calendar.getInstance();
 		iniDate.setTime(DateUtils.getDate());
@@ -222,7 +228,7 @@ public class ReportSelection {
 	}
 	
 	public Date getEndDate() {
-		if (endYear == 0)
+		if ((endYear == null) || (endMonth == null))
 			return null;
 		Calendar endDate = Calendar.getInstance();
 		endDate.setTime(DateUtils.getDate());
@@ -235,6 +241,8 @@ public class ReportSelection {
 	}
 	
 	public Date getDayAfterEndDate() {
+		if ((endYear == null) || (endMonth == null))
+			return null;
 		Calendar endDate = Calendar.getInstance();
 		endDate.setTime(DateUtils.getDate());
 		endDate.set(Calendar.DAY_OF_MONTH, 1);
@@ -295,6 +303,54 @@ public class ReportSelection {
 	
 	public Integer getUserWorkspaceId() {
 		return (userWorkspace != null? userWorkspace.getId(): null);
+	}
+
+
+	/**
+	 * @return the userLog
+	 */
+	public UserLog getUserLog() {
+		return userLog;
+	}
+
+
+	/**
+	 * @param userLog the userLog to set
+	 */
+	public void setUserLog(UserLog userLog) {
+		this.userLog = userLog;
+	}
+
+
+	/**
+	 * @return the userRole
+	 */
+	public UserRole getUserRole() {
+		return userRole;
+	}
+
+
+	/**
+	 * @param userRole the userRole to set
+	 */
+	public void setUserRole(UserRole userRole) {
+		this.userRole = userRole;
+	}
+
+
+	/**
+	 * @return the roleAction
+	 */
+	public RoleAction getRoleAction() {
+		return roleAction;
+	}
+
+
+	/**
+	 * @param roleAction the roleAction to set
+	 */
+	public void setRoleAction(RoleAction roleAction) {
+		this.roleAction = roleAction;
 	}
 
 

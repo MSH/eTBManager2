@@ -46,6 +46,7 @@
         <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-search.jar"/>
         <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-validator.jar"/>
         <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/dom4j.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/gson-2.1.jar"/>
     </path>
 
 	<path id="mdrtb.classpath">

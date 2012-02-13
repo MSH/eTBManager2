@@ -1,13 +1,22 @@
 package org.msh.tb.reportgen;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
+import org.jboss.seam.Component;
 import org.jboss.seam.international.Messages;
+import org.msh.tb.entities.UserRole;
 import org.msh.utils.reportgen.ReportQuery;
 import org.msh.utils.reportgen.Variable;
 
 public class RoleVariable implements Variable {
 
-	private static final String fields[] = {"userrole.messageKey"};
+	private static final String fields[] = {"role_id"};
 	
+	private List<UserRole> roles;
+
+
 	@Override
 	public String getTitle() {
 		return Messages.instance().get("UserRole");
@@ -15,7 +24,7 @@ public class RoleVariable implements Variable {
 
 	@Override
 	public String[] createSQLSelectFields(ReportQuery reportQuery) {
-		reportQuery.addJoinMasterTable("userrole", "id", "role_id");
+//		reportQuery.addJoinMasterTable("userrole", "id", "role_id");
 		return fields;
 	}
 
@@ -31,12 +40,13 @@ public class RoleVariable implements Variable {
 
 	@Override
 	public Object translateSingleValue(Object value) {
-		return value;
+		Integer id = (Integer)value;
+		return roleById(id);
 	}
 
 	@Override
 	public String getValueDisplayText(Object value) {
-		return (value != null? value.toString() : "-");
+		return (value != null? ((UserRole)value).getDisplayName() : "-");
 	}
 
 	@Override
@@ -50,17 +60,51 @@ public class RoleVariable implements Variable {
 		if (val2 == null)
 			return -1;
 		
-		return val1.toString().compareTo(val2.toString());
+		UserRole role1 = (UserRole)val1;
+		UserRole role2 = (UserRole)val2;
+		
+		return role1.getDisplayName().compareToIgnoreCase(role2.getDisplayName());
 	}
 
 	@Override
 	public boolean setGrouping(boolean value) {
-		return false;
+		return true;
 	}
 
 	@Override
 	public Object getGroupData(Object val1) {
+		UserRole role = (UserRole)val1;
+		String code = role.getCode().substring(0,2) + "0000";
+		return (code != null? roleByCode(code): role);
+	}
+
+
+	protected UserRole roleByCode(String code) {
+		for (UserRole role: getRoles()) {
+			if (role.getCode().equals(code))
+				return role;
+		}
+		return null;
+	}
+	
+	protected UserRole roleById(Integer id) {
+		for (UserRole role: getRoles()) {
+			if (role.getId().equals(id))
+				return role;
+		}
 		return null;
 	}
 
+
+	/**
+	 * Return list of roles
+	 * @return
+	 */
+	public List<UserRole> getRoles() {
+		if (roles == null) {
+			EntityManager em = (EntityManager)Component.getInstance("entityManager");
+			roles = em.createQuery("from UserRole order by code").getResultList();
+		}
+		return roles;
+	}
 }

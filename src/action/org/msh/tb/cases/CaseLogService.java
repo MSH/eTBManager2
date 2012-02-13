@@ -115,4 +115,9 @@ public class CaseLogService {
 		
 		saveExecuteTransaction("CASE_REOPEN", tbcase);
 	}
+	
+	@Observer("case.starttreatment")
+	public void logStartTreatment() {
+		
+	}
 }

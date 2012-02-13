@@ -1,34 +1,34 @@
 package org.msh.utils.reportgen.layouts;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.text.DecimalFormatSymbols;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.msh.utils.reportgen.ReportData;
+import org.jboss.seam.international.LocaleSelector;
+import org.jboss.seam.international.Messages;
 import org.msh.utils.reportgen.ReportQuery;
 import org.msh.utils.reportgen.Variable;
+import org.msh.utils.reportgen.data.DataTableTransform;
+import org.msh.utils.reportgen.data.Row;
+import org.msh.utils.reportgen.data.TableItem;
 
 public class ReportTableLayout implements HTMLLayoutGenerator {
 
 	private ReportQuery reportQuery; 
 	private String styleClass;
+	private String id;
 	
 	private Variable columnVariable;
 	private Variable rowVariable;
 	
-	private Variable colGroupingVariable;
-	private Variable rowGroupingVariable;
-	
-	private List<Row> rows;
-	private List<Column> columns;
-	
+	private Variable groupColumnVariable;
+	private Variable groupRowVariable;
+
+	private DecimalFormat numberFormatter = new DecimalFormat("#,###,##0");
+
 	private StringBuilder html;
 	
-	private boolean colgrouped;
-	private boolean rowgrouped;
+	private DataTableTransform dataTable;
 
 
 	/* (non-Javadoc)
@@ -50,103 +50,88 @@ public class ReportTableLayout implements HTMLLayoutGenerator {
 		if (reportQuery == null)
 			throw new RuntimeException("ReportQuery not specified for layout generator");
 
-		List<ReportData> values = reportQuery.getResultList();
-
-		colgrouped = colGroupingVariable != null;
-		if (!colgrouped)
-			colgrouped = columnVariable.setGrouping(true);
-
-		rowgrouped = rowGroupingVariable != null;
-		if (!rowgrouped)
-			rowgrouped = rowVariable.setGrouping(true);
+		dataTable = new DataTableTransform(reportQuery);
+		dataTable.setColumnVariable(columnVariable);
+		dataTable.setGroupColumnVariable(groupColumnVariable);
+		dataTable.setRowVariable(rowVariable);
+		dataTable.setGroupRowVariable(groupRowVariable);
 		
-		groupData(values);
-
-		html = new StringBuilder(values.size() * 10);
+		DecimalFormatSymbols symb = new DecimalFormatSymbols(LocaleSelector.instance().getLocale());
+		numberFormatter.setDecimalFormatSymbols(symb);
+		
+		dataTable.execute();
+		html = new StringBuilder(dataTable.getRows().size() * 20);
 
 		String s = styleClass != null? "class=" + styleClass: "";
-		html.append("<table " + s + "><tr>");
+		s += id != null? " id=" + id: "";
+		html.append("<table " + s + ">");
 		
 		// create table header
-		html.append("<th rowspan='");
-		html.append(colgrouped? "3": "2");
+		html.append("<tr><th rowspan='");
+		html.append(dataTable.isColumnGrouped()? "3": "2");
 		html.append("'>" + rowVariable.getTitle() + "</th>");
-		html.append("<th colspan='");
-		html.append(Integer.toString(columns.size() + 1));
-		html.append("'>");
-		html.append(escapeString(columnVariable.getTitle()));
-		html.append("</th></tr>");
+		addTH(columnVariable.getTitle(), null, dataTable.getColumns().size() + 1);
+		html.append("</tr>");
 
 		createGroupingColumns();
 
 		html.append("<tr>");
-		for (Column col: columns) {
-			Object val = col.getData();
-			s = escapeString( columnVariable.getValueDisplayText(val) );
-			addTH(s);
-		}
+		for (TableItem col: dataTable.getColumns())
+			addTH( col.getTitle(), "tt", 1);
 		
-		if (!colgrouped)
-			html.append("<th>TOTAL</th></tr>");
+		if (!dataTable.isColumnGrouped())
+			addTH(Messages.instance().get("global.total"), "tt-col", 1);
+		html.append("</tr>");
 		
-		Object rowgrpvalue = (rowgrouped? -1: null);
+		TableItem rowGroup = null;
 		// include rows
-		DecimalFormat f = new DecimalFormat("#,###,##0");
-		for (Row row: rows) {
-			if ((rowgrouped) && (rowgrpvalue != row.getGroupData())) {
-				int span = columns.size() + 2;
-				html.append("<tr><th colspan='" + span + "'>");
-				if (rowGroupingVariable != null)
-					 s = rowGroupingVariable.getValueDisplayText(row.getGroupData());
-				else s = rowVariable.getValueDisplayText(row.getGroupData());
-				html.append( escapeString(s) );
-				html.append("</th></tr>");
-				rowgrpvalue = row.getGroupData();
+		for (Row row: dataTable.getRows()) {
+			if ((dataTable.isRowGrouped()) && (rowGroup != row.getParent())) {
+				addRow((Row)row.getParent(), "-grp");
+				rowGroup = row.getParent();
 			}
-	
-			html.append("<tr>");
-			s = escapeString( rowVariable.getValueDisplayText( row.getData() ));
-			addTH(s);
-			
-			for (Column col: columns) {
-				Long val = row.getColumnValue(col);
-				s = (val != null? f.format(val): null);
-				addTD(s);
-				
-				if (val != null)
-					col.addTotal(val);
-			}
-			Long total = row.getTotal();
-			addTH(total != null? f.format(total): null);
-			html.append("</tr>");
+
+			addRow(row, "");
 		}
 		
 		// include total line
-		html.append("<tr>");
-		addTH("TOTAL");
-		long val = 0;
-		for (Column col: columns) {
-			Long total = col.getTotal();
-			addTH(total != null? f.format(total): null);
-			
-			if (total != null)
-				val += total;
-		}
-		addTH(val > 0? f.format(val): null);
-		html.append("</tr>");
+		addRow(dataTable.getRowTotal(), "-tot");
 		
+		html.append("</table>");
+
 		return html.toString();
 	}
 
 	
 	/**
+	 * Add a row to the table
+	 * @param row
+	 * @param th
+	 */
+	protected void addRow(Row row, String styleSuffix) {
+		html.append("<tr>");
+		addTD(row.getTitle(), "tt-row" + styleSuffix);
+		
+		for (TableItem col: dataTable.getColumns()) {
+			Long val = row.getColumnValue(col);
+			String s = (val != null? numberFormatter.format(val): null);
+			 addTD(s, "vl" + styleSuffix);
+		}
+		long total = row.getTotal();
+		addTD(total != 0? numberFormatter.format(total): null, "vl-tot-v" + styleSuffix);
+		html.append("</tr>");
+	}
+	
+	/**
 	 * Add a TD tag to the HTML code
 	 * @param s
 	 */
-	private void addTD(String s) {
-		html.append("<td>");
+	private void addTD(String s, String styleClass) {
+		if (styleClass != null)
+			 html.append("<td class='" + styleClass + "'>");
+		else html.append("<td>");
 		if (s != null)
-			html.append("<span class='text-small'>" + s + "</span>");
+			html.append(escapeString(s));
 		html.append("</td>");
 	}
 
@@ -155,10 +140,15 @@ public class ReportTableLayout implements HTMLLayoutGenerator {
 	 * Add a TH tag to the HTML code
 	 * @param s
 	 */
-	private void addTH(String s) {
-		html.append("<th>");
+	private void addTH(String s, String styleClass, int span) {
+		html.append("<th");
+		if (styleClass != null)
+			html.append(" class='" + styleClass + "'");
+		if (span > 1)
+			html.append(" colspan='" + Integer.toString(span) + "'");
+		html.append(">");
 		if (s != null)
-			html.append("<span class='text-small'>" + s + "</span>");
+			html.append(escapeString(s));
 		html.append("</th>");
 	}
 	
@@ -172,110 +162,18 @@ public class ReportTableLayout implements HTMLLayoutGenerator {
 
 
 	/**
-	 * Group value data creating the columns and rows of the table
-	 * @param values
-	 */
-	protected void groupData(List<ReportData> values) {
-		int colindex = reportQuery.getVariables().indexOf(columnVariable);
-		int rowindex = reportQuery.getVariables().indexOf(rowVariable);
-		int colgrpindex;
-		if (colGroupingVariable != null)
-			 colgrpindex = reportQuery.getVariables().indexOf(colGroupingVariable);
-		else colgrpindex = -1;
-		
-		int rowgrpindex;
-		if (rowGroupingVariable != null)
-			 rowgrpindex = reportQuery.getVariables().indexOf(rowGroupingVariable);
-		else rowgrpindex = -1;
-		
-		for (ReportData data: values) {
-			Object vals[] = data.getValues();
-			Object coldata = vals[colindex];
-			Object rowdata = vals[rowindex];
-			
-			Object colgrpdata;
-			if ((colgrpindex < 0) && (colgrouped))
-				 colgrpdata = columnVariable.getGroupData(coldata);
-			else colgrpdata = (colgrpindex >= 0? vals[colgrpindex]: null);
-			
-			Object rowgrpdata = (rowgrpindex >= 0? vals[rowgrpindex]: null);
-			if ((rowgrpindex < 0) && (rowgrouped))
-				 rowgrpdata = rowVariable.getGroupData(rowdata);
-			else rowgrpdata = (rowgrpindex >= 0? vals[rowgrpindex]: null);
-			
-			Column col = findColumn(colgrpdata, coldata);
-			Row row = findRow(rowgrpdata, rowdata);
-			
-			Cell cell = row.findOrCreateCell(col);
-			cell.addValue(data.getTotal());
-		}
-
-		sortData();
-	}
-
-	
-	protected void sortData() {
-		// sort columns
-		Collections.sort(columns, new Comparator<Column>() {
-			@Override
-			public int compare(Column o1, Column o2) {
-				Integer comp1 = null;
-				Integer comp2 = null;
-				if (colGroupingVariable != null)
-					comp1 = colGroupingVariable.compareValues(o1.getGroupData(), o2.getGroupData());
-
-				if ((comp1 == null) || (comp1 == 0)) {
-					comp2 = columnVariable.compareValues(o1.getData(), o2.getData());
-					return (comp2 == null? 0: comp2);
-				}
-
-				return (comp1 == null? 0: comp1);
-			}
-		});
-		
-		// sort rows
-		Collections.sort(rows, new Comparator<Row>() {
-			@Override
-			public int compare(Row o1, Row o2) {
-				Integer comp1 = null;
-				Integer comp2 = null;
-				if (rowGroupingVariable != null)
-					comp1 = rowGroupingVariable.compareValues(o1.getGroupData(), o2.getGroupData());
-
-				if ((comp1 == null) || (comp1 == 0)) {
-					comp2 = rowVariable.compareValues(o1.getData(), o2.getData());
-					return (comp2 == null? 0: comp2);
-				}
-
-				return (comp1 == null? 0: comp1);
-			}
-		});
-	}
-	
-	/**
 	 * Create the HTML code with the table TH tags with the columns grouping 
 	 */
 	protected void createGroupingColumns() {
-		if (!colgrouped)
+		if (!dataTable.isColumnGrouped())
 			return;
 
-		Object val = columns.get(0).getGroupData();
-		int span = 0;
-		for (int i = 0; i < columns.size(); i++) {
-			Column c = columns.get(i);
-			if ((c.getGroupData() == val) || ((c.getGroupData() != null) && (c.getGroupData().equals(val)))) {
-				span++;
-			}
-			else {
-				addGroupingHeader(val, span);
-				span = 1;
-				val = c.getGroupData();
-			}
+		html.append("<tr>");
+		for (TableItem grp: dataTable.getGroupColumns()) {
+			addGroupingHeader(grp.getTitle(), grp.getChildren().size());
 		}
-		
-		addGroupingHeader(val, span);
-		
-		html.append("<th rowspan='2'>TOTAL</th>");
+		html.append("<th rowspan='2' class='tt-col-grp'>" + Messages.instance().get("global.total") + "</th>");
+		html.append("</tr>");
 	}
 
 	
@@ -284,212 +182,21 @@ public class ReportTableLayout implements HTMLLayoutGenerator {
 	 * @param data
 	 * @param span
 	 */
-	private void addGroupingHeader(Object data, int span) {
+	private void addGroupingHeader(String title, int span) {
 		html.append("<th");
 		if (span > 1)
 			html.append(" colspan='" + Integer.toString(span) + "'");
 		html.append('>');
-		
-		String s;
-		if (colGroupingVariable != null)
-			s = colGroupingVariable.getValueDisplayText(data);
-		else s = columnVariable.getValueDisplayText(data);
 
-		html.append( escapeString(s));
+		html.append( escapeString(title));
 		html.append("</th>");
 	}
 
-
-	/**
-	 * Search for a column by its data. If column doesn't exists, create a new one as the last column and return it
-	 * @param data
-	 * @return
-	 */
-	protected Column findColumn(Object datagrp, Object data) {
-		if (columns == null) 
-			columns = new ArrayList<ReportTableLayout.Column>();
-
-		for (Column col: columns) {
-			if (((col.getGroupData() == datagrp) || ((col.getGroupData() != null) && (col.getGroupData().equals(datagrp)) )) &&
-				((col.getData() == data) || ((col.getData() != null) && (col.getData().equals(data))))) {
-				return col;
-			}
-		}
-
-		Column col = new Column(datagrp, data);
-		columns.add(col);
-		return col;
-	}
-
-	
-	/**
-	 * Find a row by its data. If row doesn't exists, create a new one at the last row and return it
-	 * @param data
-	 * @return
-	 */
-	protected Row findRow(Object datagrp, Object data) {
-		if (rows == null) 
-			rows = new ArrayList<ReportTableLayout.Row>();
-
-		for (Row row: rows) {
-			if (((row.getGroupData() == datagrp) || ((row.getGroupData() != null) && (row.getGroupData().equals(datagrp)) )) &&
-				((row.getData() == data) || ((row.getData() != null) && (row.getData().equals(data))))) {
-				return row;
-			}
-		}
-
-		Row row = new Row(datagrp, data);
-		rows.add(row);
-		return row;
-	}
 
 
 	@Override
 	public void clear() {
 		reportQuery = null;
-	}
-
-	/**
-	 * Store information about a column in the table
-	 * @author Ricardo Memoria
-	 *
-	 */
-	protected class Column {
-		private Object groupData;
-		private Object data;
-		private Long total;
-
-		public Column(Object groupData, Object data) {
-			super();
-			this.groupData = groupData;
-			this.data = data;
-		}
-		/**
-		 * @return the total
-		 */
-		public Long getTotal() {
-			return total;
-		}
-		/**
-		 * @param total the total to set
-		 */
-		public void setTotal(Long total) {
-			this.total = total;
-		}
-		
-		/**
-		 * Increment the total value
-		 * @param value
-		 */
-		public void addTotal(Long value) {
-			if (total == null)
-				 total = value;
-			else total += value;
-		}
-		/**
-		 * @return the groupData
-		 */
-		public Object getGroupData() {
-			return groupData;
-		}
-		/**
-		 * @param groupData the groupData to set
-		 */
-		public void setGroupData(Object groupData) {
-			this.groupData = groupData;
-		}
-		/**
-		 * @return the data
-		 */
-		public Object getData() {
-			return data;
-		}
-		/**
-		 * @param data the data to set
-		 */
-		public void setData(Object data) {
-			this.data = data;
-		}
-	}
-	
-	/**
-	 * Store information about a row in the table
-	 * @author Ricardo Memoria
-	 *
-	 */
-	protected class Row {
-		private Object groupData;
-		private Object data;
-		private List<Cell> cells = new ArrayList<ReportTableLayout.Cell>();
-
-		public Row(Object groupData, Object data) {
-			super();
-			this.groupData = groupData;
-			this.data = data;
-		}
-		/**
-		 * Find a cell by its column. If cell doesn't exist, a new one is created
-		 * @param col
-		 * @return
-		 */
-		public Cell findOrCreateCell(Column col) {
-			Cell cell = getCellByColumn(col); 
-			
-			if (cell != null)
-				return cell;
-			cell = new Cell(col);
-			cells.add(cell);
-			return cell;
-		}
-		
-		/**
-		 * Return the value of a column
-		 * @param c
-		 * @return
-		 */
-		public Long getColumnValue(Column col) {
-			for (Cell cell: cells)
-				if (cell.getColumn().equals(col))
-					return cell.getValue();
-			return null;
-		}
-		
-		/**
-		 * Search for a cell by its column. If cell doesn't exist create a new one
-		 * @param Col
-		 * @return
-		 */
-		public Cell getCellByColumn(Column col) {
-			for (Cell cell: cells)
-				if (cell.getColumn().equals(col))
-					return cell;
-			return null;
-		}
-		/**
-		 * @return the data
-		 */
-		public Object getData() {
-			return data;
-		}
-		
-		/**
-		 * Return the total value
-		 * @return
-		 */
-		public Long getTotal() {
-			Long total = 0L;
-			for (Cell cell: cells) {
-				total += cell.getValue();
-			}
-			
-			return total == 0? null: total;
-		}
-		/**
-		 * @return the groupData
-		 */
-		public Object getGroupData() {
-			return groupData;
-		}
 	}
 
 	
@@ -525,38 +232,6 @@ public class ReportTableLayout implements HTMLLayoutGenerator {
 	}
 
 
-	protected class Cell {
-		private Column column;
-		private Long value;
-		public Cell(Column column) {
-			super();
-			this.column = column;
-		}
-		/**
-		 * @return the column
-		 */
-		public Column getColumn() {
-			return column;
-		}
-		/**
-		 * @return the value
-		 */
-		public Long getValue() {
-			return value;
-		}
-		
-		public void setValue(Long value) {
-			this.value = value;
-		}
-		
-		public void addValue(Long value) {
-			if (this.value == null)
-				 this.value = value;
-			else this.value += value;
-		}
-	}
-
-
 	/**
 	 * @return the styleClass
 	 */
@@ -574,33 +249,41 @@ public class ReportTableLayout implements HTMLLayoutGenerator {
 
 
 	/**
-	 * @return the colGroupingVariable
+	 * @return the groupRowVariable
 	 */
-	public Variable getColGroupingVariable() {
-		return colGroupingVariable;
+	public Variable getGroupRowVariable() {
+		return groupRowVariable;
 	}
 
 
 	/**
-	 * @param colGroupingVariable the colGroupingVariable to set
+	 * @param groupRowVariable the groupRowVariable to set
 	 */
-	public void setColGroupingVariable(Variable colGroupingVariable) {
-		this.colGroupingVariable = colGroupingVariable;
+	public void setGroupRowVariable(Variable groupRowVariable) {
+		this.groupRowVariable = groupRowVariable;
 	}
 
 
 	/**
-	 * @return the rowGroupingVariable
+	 * @return the dataTable
 	 */
-	public Variable getRowGroupingVariable() {
-		return rowGroupingVariable;
+	public DataTableTransform getDataTable() {
+		return dataTable;
 	}
 
 
 	/**
-	 * @param rowGroupingVariable the rowGroupingVariable to set
+	 * @return the id
 	 */
-	public void setRowGroupingVariable(Variable rowGroupingVariable) {
-		this.rowGroupingVariable = rowGroupingVariable;
+	public String getId() {
+		return id;
+	}
+
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
 	}
 }

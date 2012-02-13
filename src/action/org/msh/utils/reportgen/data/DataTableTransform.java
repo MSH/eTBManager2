@@ -2,13 +2,12 @@ package org.msh.utils.reportgen.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
+import org.jboss.seam.international.Messages;
 import org.msh.utils.reportgen.ReportData;
 import org.msh.utils.reportgen.ReportQuery;
 import org.msh.utils.reportgen.Variable;
-import org.msh.utils.reportgen.layouts.ReportTableLayout;
 
 public class DataTableTransform {
 
@@ -17,6 +16,7 @@ public class DataTableTransform {
 	private List<Row> rows;
 	private List<TableItem> groupColumns;
 	private List<TableItem> groupRows;
+	private Row rowTotal;
 	
 	private Variable columnVariable;
 	private Variable rowVariable;
@@ -25,7 +25,7 @@ public class DataTableTransform {
 	
 	private boolean columnGrouped;
 	private boolean rowGrouped;
-
+	
 
 	public DataTableTransform(ReportQuery reportQuery) {
 		this.reportQuery = reportQuery;
@@ -39,6 +39,8 @@ public class DataTableTransform {
 		rows = new ArrayList<Row>();
 		groupColumns = new ArrayList<TableItem>();
 		groupRows = new ArrayList<TableItem>();
+		rowTotal = new Row();
+		rowTotal.setTitle(Messages.instance().get("global.total"));
 
 		List<ReportData> values = reportQuery.getResultList();
 
@@ -46,7 +48,7 @@ public class DataTableTransform {
 		if (!columnGrouped)
 			columnGrouped = columnVariable.setGrouping(true);
 
-		rowGrouped = groupColumnVariable != null;
+		rowGrouped = groupRowVariable != null;
 		if (!rowGrouped)
 			rowGrouped = rowVariable.setGrouping(true);
 		
@@ -64,14 +66,20 @@ public class DataTableTransform {
 			Object rowdata = data.getValue(rowVariable);
 			
 			Object colgrpdata;
-			if ((groupColumnVariable == null) && (columnGrouped))
-				 colgrpdata = columnVariable.getGroupData(coldata);
-			else colgrpdata = data.getValue(groupColumnVariable);
+			if (columnGrouped) {
+				if (groupColumnVariable == null)
+					 colgrpdata = columnVariable.getGroupData(coldata);
+				else colgrpdata = data.getValue(groupColumnVariable);
+			}
+			else colgrpdata = null;
 			
 			Object rowgrpdata;
-			if ((groupRowVariable == null) && (rowGrouped))
-				 rowgrpdata = rowVariable.getGroupData(rowdata);
-			else rowgrpdata = data.getValue(groupRowVariable);
+			if (rowGrouped) {
+				if (groupRowVariable == null)
+					 rowgrpdata = rowVariable.getGroupData(rowdata);
+				else rowgrpdata = data.getValue(groupRowVariable);
+			}
+			else rowgrpdata = null;
 			
 			TableItem grp;
 			if (columnGrouped)
@@ -85,8 +93,9 @@ public class DataTableTransform {
 			else grp = null;
 			Row row = findOrCreateRow(grp, rowdata);
 			
-			Cell cell = row.findOrCreateCell(col);
-			cell.addValue(data.getTotal());
+			long val = data.getTotal();
+			row.addValue(col, val);
+			rowTotal.addValue(col, val);
 		}
 
 		sortData();
@@ -97,42 +106,11 @@ public class DataTableTransform {
 	 * Sort the data in the table
 	 */
 	protected void sortData() {
-		// sort columns
-/*		Collections.sort(columns, new Comparator<Column>() {
-			@Override
-			public int compare(Column o1, Column o2) {
-				Integer comp1 = null;
-				Integer comp2 = null;
-				if (colGroupingVariable != null)
-					comp1 = colGroupingVariable.compareValues(o1.getGroupData(), o2.getGroupData());
-
-				if ((comp1 == null) || (comp1 == 0)) {
-					comp2 = columnVariable.compareValues(o1.getData(), o2.getData());
-					return (comp2 == null? 0: comp2);
-				}
-
-				return (comp1 == null? 0: comp1);
-			}
-		});
-		
-		// sort rows
-		Collections.sort(rows, new Comparator<Row>() {
-			@Override
-			public int compare(Row o1, Row o2) {
-				Integer comp1 = null;
-				Integer comp2 = null;
-				if (rowGroupingVariable != null)
-					comp1 = rowGroupingVariable.compareValues(o1.getGroupData(), o2.getGroupData());
-
-				if ((comp1 == null) || (comp1 == 0)) {
-					comp2 = rowVariable.compareValues(o1.getData(), o2.getData());
-					return (comp2 == null? 0: comp2);
-				}
-
-				return (comp1 == null? 0: comp1);
-			}
-		});
-*/	}
+		Collections.sort(groupColumns);
+		Collections.sort(columns);
+		Collections.sort(groupRows);
+		Collections.sort(rows);
+	}
 
 
 	/**
@@ -148,6 +126,9 @@ public class DataTableTransform {
 		
 		TableItem grp = new TableItem();
 		grp.setData(data);
+		if (groupColumnVariable != null)
+			 grp.setVariable( groupColumnVariable );
+		else grp.setVariable( columnVariable );
 		groupColumns.add(grp);
 		return grp;
 	}
@@ -164,8 +145,11 @@ public class DataTableTransform {
 				return grp;
 		}
 		
-		TableItem grp = new TableItem();
+		TableItem grp = new Row();
 		grp.setData(data);
+		if (groupRowVariable != null)
+			 grp.setVariable( groupRowVariable );
+		else grp.setVariable( rowVariable );
 		groupRows.add(grp);
 		return grp;
 	}
@@ -187,6 +171,7 @@ public class DataTableTransform {
 
 		TableItem col = new TableItem(groupColumn);
 		col.setData(data);
+		col.setVariable( columnVariable );
 		columns.add(col);
 		return col;
 	}
@@ -208,6 +193,7 @@ public class DataTableTransform {
 
 		Row row = new Row(groupRow);
 		row.setData(data);
+		row.setVariable( rowVariable );
 		rows.add(row);
 		return row;
 	}
@@ -316,5 +302,12 @@ public class DataTableTransform {
 	 */
 	public boolean isRowGrouped() {
 		return rowGrouped;
+	}
+
+	/**
+	 * @return the rowTotal
+	 */
+	public Row getRowTotal() {
+		return rowTotal;
 	}
 }

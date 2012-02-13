@@ -22,8 +22,8 @@
 	</div>
 </ui:define>
 
+
 <ui:define name="left">
- 
 	<div class="vertical-menu">
 
 	<s:fragment rendered="#{submenu=='0'}">
@@ -66,6 +66,7 @@
     	<s:link view="/admin/websessions.xhtml" value="#{messages['admin.websessions']}" propagation="none" rendered="#{s:hasRole('ONLINE')}" />
     	<s:link view="/admin/repusersession.xhtml" value="#{messages['admin.reports.usersession']}" propagation="none" rendered="#{s:hasRole('USERSESREP')}"/>
     	<s:link view="/admin/reptransactionlog.xhtml" value="#{messages['userrole.LOGREP']}" propagation="none" rendered="#{s:hasRole('LOGREP')}"/>
+    	<s:link view="/admin/reptranstats.xhtml" value="#{messages['admin.reports.transactionstats']}" propagation="none" rendered="#{s:hasRole('LOGREP')}"/>
     	<s:link view="/admin/errorlogreport.xhtml" value="#{messages['userrole.ERRORLOGREP']}" propagation="none" rendered="#{s:hasRole('ERRORLOGREP')}"/>
     </s:fragment>
 

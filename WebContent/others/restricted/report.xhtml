@@ -12,14 +12,34 @@
 
 <ui:param name="topmenu" value="0" />
 <ui:param name="left" value="0" />
+<ui:param name="labelstyle" value="width:200px" />
 
-<ui:param name="title" value="Report testing" />
+<ui:param name="title" value="#{messages['admin.reports.transactionstats']}" />
 
 <ui:define name="content">
+	<h1>#{title}</h1>
 
-	<h:form>
+	<h:form id="main">
+
+		<s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages['global.rowvariable']}:</ui:define>
+			<h:selectOneMenu value="#{reportTest.rowVariableIndex}" required="true">
+				<f:selectItems value="#{reportTest.options}"/>
+			</h:selectOneMenu>
+		</s:decorate>
+
+		<s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages['global.rowgrouping']}:</ui:define>
+			<h:selectOneMenu value="#{reportTest.groupRowVariableIndex}">
+				<f:selectItems value="#{reportTest.options}"/>
+			</h:selectOneMenu>
+		</s:decorate>
+		
+		<a:commandLink reRender="main" styleClass="button-alt" onclick="if (!disableButton(this)) return false;">
+			<span>#{messages['form.update']}</span>
+		</a:commandLink>
 	
-		<h:outputText value="#{reportTest.tableHtml}" escape="false"/>
+		<h:outputText id="report" value="#{reportTest.tableHtml}" escape="false"/>
 	</h:form>
 </ui:define>
 

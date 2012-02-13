@@ -17,6 +17,16 @@ public class Row extends TableItem {
 	}
 
 	/**
+	 * Add value to a row
+	 * @param col
+	 * @param value
+	 */
+	public void addValue(TableItem col, long value) {
+		Cell cell = findOrCreateCell(col);
+		cell.addValue(value);
+	}
+	
+	/**
 	 * Find a cell by its column. If cell doesn't exist, a new one is created
 	 * @param col
 	 * @return
@@ -26,7 +36,7 @@ public class Row extends TableItem {
 		
 		if (cell != null)
 			return cell;
-		cell = new Cell(col);
+		cell = new Cell(this, col);
 		cells.add(cell);
 		return cell;
 	}
@@ -53,6 +63,19 @@ public class Row extends TableItem {
 			if (cell.getColumn().equals(col))
 				return cell;
 		return null;
+	}
+	
+	/**
+	 * Return the total value
+	 * @return
+	 */
+	public long getTotal() {
+		long total = 0L;
+		for (Cell cell: cells) {
+			total += cell.getValue();
+		}
+		
+		return total;
 	}
 
 	/**

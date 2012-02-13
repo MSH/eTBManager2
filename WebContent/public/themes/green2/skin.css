@@ -579,10 +579,34 @@ table {
 	border:1px solid #f0f0f0;
 }
 
+/* Table with values and indicator data */
+.table1 .tt {
+	font-size:11px;
+}
+.table1 .tt-row, .table1 .vl-tot, .table1 .tt-row-tot, .table1 .vl-tot-v-tot, .table1 .vl-tot-v  {
+	font-size:11px;
+	background-color:#afcfc1;
+	padding:2px 4px 2px 4px;
+}
+.table1 .vl-grp, .table1 .vl-tot-v-grp, .table1 .vl, .table1 .vl-tot-v, .table1 .vl-tot {
+	padding:2px 4px 2px 4px;
+	font-size:11px;
+	text-align: center;
+}
+.table1 .vl-grp, .table1 .vl-tot-v-grp, .table1 .tt-row-grp{
+	background-color:#bdd7cc;
+	font-weight: bold;
+	padding:2px 4px 2px 4px;
+}
+.table1 .tt-row-grp {
+	font-size:13px;
+	color:#476c5c;
+}
+
 
 .table2 {
 	border-collapse:collapse;
-	border-top:2px solid #c6dec6;
+	border:1px solid #c6dec6;
 	background-color:#ffffff;
 	width:100%;
 }
@@ -590,14 +614,14 @@ table {
 	font-weight:bold;
 	background-color:#c6dec6;
 	padding:8px;
-	border-right:1px solid white;
+	border:1px solid white;
 	color:#073d07;
 /*	font-size:1em; */
 }
 .table2 td {
 	padding:2px;
 	padding:4px 5px 4px 5px;
-	border-bottom:1px solid #e2eae2;
+	border:1px solid #b5d0b5;
 	vertical-align: top;
 }
 .table2 .highlight {
@@ -605,7 +629,34 @@ table {
 	border:1px solid white;
 	color:#34662d;
 }
-
+/* Table with values and indicator data */
+.table2 .tt {
+	font-size:11px;
+	padding:2px 2px 2px 2px;
+	min-width:20px;
+}
+.table2 .tt-row, .table2 .vl-tot, .table2 .vl-tot-v  {
+	font-size:11px;
+	background-color:#e4efe4;
+	padding:2px 4px 2px 4px;
+	border:1px solid #b5d0b5;
+}
+.table2 .vl-grp, .table2 .vl-tot-v-grp, .table2 .vl, .table2 .vl-tot-v-tot, .table2 .vl-tot-v  {
+	padding:2px 4px 2px 4px;
+	font-size:11px;
+	text-align: center;
+}
+.table2 .vl-grp, .table2 .vl-tot-v-grp, .table2 .tt-row-grp, 
+.table2 .vl-tot-v, .table2 .vl-tot, .table2 .tt-row-tot, .table2 .vl-tot-v-tot {
+	border:2px solid #b5d0b5;
+	background-color:#cde1cd;
+	font-weight: bold;
+	padding:2px 4px 2px 4px;
+}
+.table2 .tt-row-grp {
+	font-size:13px;
+	color:#476c5c;
+}
 
 .selected-row  td{
 	color:white;

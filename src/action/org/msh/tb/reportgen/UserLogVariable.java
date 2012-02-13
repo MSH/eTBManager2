@@ -41,7 +41,7 @@ public class UserLogVariable implements Variable {
 
 	@Override
 	public Integer compareValues(Object val1, Object val2) {
-		return val1.toString().compareTo(val2.toString());
+		return val1.toString().compareToIgnoreCase(val2.toString());
 	}
 
 	@Override

@@ -3,11 +3,13 @@ package org.msh.utils.reportgen.data;
 public class Cell {
 
 	private TableItem column;
+	private Row row;
 	private long value = 0;
 	
 	
-	public Cell(TableItem column) {
+	public Cell(Row row, TableItem column) {
 		super();
+		this.row = row;
 		this.column = column;
 	}
 
@@ -16,7 +18,10 @@ public class Cell {
 	 * @param value
 	 */
 	public void addValue(long value) {
-		value += value;
+		this.value += value;
+		// add the value to parent elements
+		if ((row.getParent() != null) && (row.getParent() instanceof Row))
+			((Row)row.getParent()).addValue(column, value);
 	}
 
 	/**
@@ -36,5 +41,12 @@ public class Cell {
 	 */
 	public TableItem getColumn() {
 		return column;
+	}
+
+	/**
+	 * @return the row
+	 */
+	public Row getRow() {
+		return row;
 	}
 }

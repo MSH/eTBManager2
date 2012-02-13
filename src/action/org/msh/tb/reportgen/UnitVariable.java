@@ -37,8 +37,6 @@ public class UnitVariable implements Variable {
 	@Override
 	public String getValueDisplayText(Object value) {
 		String s = (value != null? value.toString(): "");
-		if (s.length() > 30)
-			s = s.substring(0, 29) + "...";
 		return s;
 	}
 

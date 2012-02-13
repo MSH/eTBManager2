@@ -66240,6 +66240,22 @@ a backing bean</description>
    </FOLDER>
   </FOLDER>
  </file-system>
+ <file-system NAME="lib-gson-2.1.jar"
+  location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\lib\gson-2.1.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="com" model-entity="JarFolder">
+   <FOLDER NAME="google" model-entity="JarFolder">
+    <FOLDER NAME="gson" model-entity="JarFolder">
+     <FOLDER NAME="annotations" model-entity="JarFolder"/>
+     <FOLDER NAME="internal" model-entity="JarFolder">
+      <FOLDER NAME="bind" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="reflect" model-entity="JarFolder"/>
+     <FOLDER NAME="stream" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>

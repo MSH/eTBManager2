@@ -1,10 +1,14 @@
 package org.msh.utils.reportgen.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class TableItem {
+import org.msh.utils.reportgen.Variable;
+
+public class TableItem implements Comparable<TableItem> {
 
 	private Object data;
+	private Variable variable;
 	private String title;
 	
 	private TableItem parent;
@@ -17,6 +21,8 @@ public class TableItem {
 	public TableItem(TableItem parent) {
 		super();
 		this.parent = parent;
+		if (parent != null)
+			parent.addChild(this);
 	}
 
 	/**
@@ -43,7 +49,8 @@ public class TableItem {
 	 */
 	public void addChild(TableItem item) {
 		if (children == null)
-			children.add(item);
+			children = new ArrayList<TableItem>();
+		children.add(item);
 	}
 	
 	/**
@@ -62,13 +69,9 @@ public class TableItem {
 	 * @return the title
 	 */
 	public String getTitle() {
-		return title;
-	}
-	/**
-	 * @param title the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
+		if (title != null)
+			return title;
+		return (variable == null? null: variable.getValueDisplayText(data));
 	}
 
 	/**
@@ -83,5 +86,45 @@ public class TableItem {
 	 */
 	public List<TableItem> getChildren() {
 		return children;
+	}
+
+	@Override
+	public int compareTo(TableItem tbl) {
+		if ((parent == null) && (tbl.parent != null))
+			return -1;
+
+		if ((parent != null) && (tbl.parent == null))
+			return 1;
+
+		int comp;
+		if ((parent != null) && (tbl.parent != null))
+			 comp = parent.compareTo(tbl.parent);
+		else comp = 0;
+
+		if (comp == 0)
+			comp = variable.compareValues(data, tbl.getData());
+
+		return comp;
+	}
+
+	/**
+	 * @return the variable
+	 */
+	public Variable getVariable() {
+		return variable;
+	}
+
+	/**
+	 * @param variable the variable to set
+	 */
+	public void setVariable(Variable variable) {
+		this.variable = variable;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }
