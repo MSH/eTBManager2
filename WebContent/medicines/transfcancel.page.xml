@@ -10,5 +10,10 @@
 					<param name="id" value="#{transferHome.id}" converterId="javax.faces.Integer"/>
 				</redirect>
 			</rule>
+			<rule if-outcome="denied">
+				<redirect view-id="/medicines/transfdata.xhtml" >
+					<param name="id" value="#{transferHome.id}" converterId="javax.faces.Integer"/>
+				</redirect>
+			</rule>
 		</navigation>
 </page>
