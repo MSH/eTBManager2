@@ -79,7 +79,7 @@ public class ReportSelection {
 	 */
 	public void initializeDates() {
 		// just initialize if year = 0
-		if (getIniYear() > 0)
+		if (getIniYear()!=null && getIniYear() > 0)
 			return;
 
 		Calendar c = Calendar.getInstance();
