@@ -243,8 +243,10 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 	public String cancel() {
 		Transfer transfer = getInstance();
 		
-		if (transfer.getStatus() != TransferStatus.WAITING_RECEIVING)
+		if (transfer.getStatus() != TransferStatus.WAITING_RECEIVING){
+			facesMessages.addFromResourceBundle("meds.orders.cannotcancel");
 			return "denied";
+		}
 		
 		transfer.setStatus(TransferStatus.CANCELLED);
 		
@@ -271,7 +273,8 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		// register transfer in the log system
 		TransactionLogService log = getLogService();
 		log.save("TRANSF_CANCEL", RoleAction.EXEC, transfer);
-
+		
+		facesMessages.addFromResourceBundle("meds.orders.cancelsuccess");
 		return "canceled";
 	}
 	
