@@ -3,6 +3,8 @@ package org.msh.tb.ph;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.CultureResult;
+import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.tb.entities.enums.TbField;
@@ -61,6 +63,27 @@ public class GlobalLists {
 		CaseState.DEFAULTED,
 		CaseState.DIED
 	};
+
+
+	private static final CultureResult cultureResults[] = {
+		CultureResult.NEGATIVE,
+		CultureResult.POSITIVE,
+		CultureResult.PLUS,
+		CultureResult.PLUS2,
+		CultureResult.PLUS3,
+		CultureResult.CONTAMINATED,
+		CultureResult.NTM,
+		CultureResult.POSITIVE_UNKNOWN_SCALE,
+		CultureResult.NO_GROWTH
+	};
+	
+	
+	
+	@Factory("phcultureResults")
+	public static CultureResult[] getCultureresults() {
+		return cultureResults;
+	}
+
 
 	@Factory("phPatientTypes")
 	public PatientType[] getPatientTypes() {
