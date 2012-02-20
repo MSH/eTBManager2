@@ -366,7 +366,7 @@ function isPulmonary(cb) {
 				<td class="colcb">
 					<s:validateAll>
 						<h:selectOneMenu id="year" value="#{it.prevTBTreatment.year}" required="true">
-							<f:selectItems value="#{prevTBTreatmentHome.years}"/>
+							<f:selectItems value="#{years}"/>
 						</h:selectOneMenu>
 					</s:validateAll>
 					<h:message for="year" styleClass="error"/>
