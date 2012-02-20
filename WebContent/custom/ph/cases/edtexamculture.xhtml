@@ -36,7 +36,7 @@
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
     	<h:selectOneMenu id="cbres" value="#{examCulture.result}" required="true">
-    		<s:selectItems value="#{cultureResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+    		<s:selectItems value="#{phcultureResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
     		<s:convertEnum />
     	</h:selectOneMenu>
     </s:decorate>
