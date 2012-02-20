@@ -98,7 +98,7 @@ public class ReportTB10 extends Indicator2D {
 	protected void generateTable() {
 		// calculate the number of cases
 		numcases = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal());
-
+		
 		if (numcases == 0)
 			return;
 
