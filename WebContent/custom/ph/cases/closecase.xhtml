@@ -26,13 +26,13 @@
 		<ui:define name="label">#{messages['TbCase.outcomeDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="future" value="false" /> 
-    	<ui:param name="datefield" value="#{caseCloseHome.date}" /> 
+    	<ui:param name="datefield" value="#{caseCloseHomeph.date}" /> 
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['cases.outcome']}:</ui:define>
-		<h:selectOneRadio id="selstate" value="#{caseCloseHome.state}" required="true" layout="pageDirection">
-			<s:selectItems value="#{caseCloseHome.outcomes}" var="v" label="#{messages[v.key]}"/>
+		<h:selectOneRadio id="selstate" value="#{caseCloseHomeph.state}" required="true" layout="pageDirection">
+			<s:selectItems value="#{caseCloseHomeph.outcomes}" var="v" label="#{messages[v.key]}"/>
 			<s:convertEnum />
 		</h:selectOneRadio>
     </s:decorate>
@@ -40,7 +40,7 @@
 	<div id="comments" style="display:block;clear:both;" >
     <s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['TbCase.otherOutcome']}:</ui:define>
-		<h:inputText value="#{caseCloseHome.comment}" maxlength="100" style="width:300px;"/>
+		<h:inputText value="#{caseCloseHomeph.comment}" maxlength="100" style="width:300px;"/>
     </s:decorate>
     </div>
 
@@ -48,7 +48,7 @@
 	
 
 	<div class="form-footer">	
-		<h:commandLink action="#{caseCloseHome.closeCase}" styleClass="button" onclick="openWaitDlg();">
+		<h:commandLink action="#{caseCloseHomeph.closeCase}" styleClass="button" onclick="openWaitDlg();">
 			<span>#{messages['form.ok']}</span>
 		</h:commandLink> 
     	<s:link view="/cases/casedata.xhtml" styleClass="button-alt">
