@@ -8,7 +8,10 @@ public enum CultureResult {
 	PLUS3	 ('+'),
 	PLUS4	 ('+'),
 	CONTAMINATED('0'),
-	NOTDONE  ('0');
+	NOTDONE  ('0'),
+	NTM('0'),
+	POSITIVE_UNKNOWN_SCALE('0'), 
+	NO_GROWTH('0');
 	
 	private char result;
 	
