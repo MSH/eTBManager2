@@ -47,7 +47,7 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
-    	<h:inputText value="#{medicalExamination_Ng.weight}" />
+    	<h:inputText value="#{medicalExamination_Ng.weight}" required="true"/>
     	#{messages['MedicalExamination.weight.unit']}
     </s:decorate>
 
@@ -125,9 +125,9 @@
 	</s:decorate>    
 
 	<s:decorate template="/layout/edit.xhtml">
-		<ui:define name="label">#{messages['MedicalExamination.ReferredTo']}:</ui:define>
-		<h:selectOneMenu id="cbrefto" value="#{medicalExamination_Ng.patientRefTo}">
-			<s:selectItems var="s" value="#{globalLists_ng.refToTypes}" label="#{messages[s.key]}" noSelectionLabel="-" />
+		<ui:define name="label">#{messages['MedicalExamination.PatientReferred']}:</ui:define>
+		<h:selectOneMenu id="cbrefto" value="#{medicalExamination_Ng.patientReferred}">
+			<s:selectItems value="#{yesNoList}" var="s" label="#{messages[s.key]}" noSelectionLabel="-" />
 			<s:convertEnum />
 		</h:selectOneMenu>
     	<div id="refToUnit">
@@ -136,6 +136,14 @@
 		    	<h:inputText value="#{medicalExamination_Ng.referredToUnitName}" style=" width : 340px;" maxlength="100"/>
 		    </s:decorate>    	
 		    
+		    <s:decorate template="/layout/edit.xhtml">
+    			<ui:define name="label">#{messages['MedicalExamination.RefReason']}:</ui:define>
+    			  <h:selectOneMenu value="#{medicalExamination_Ng.sideeffect}" required="false">
+    				<s:selectItems value="#{fieldsQuery.sideEffects}" var="q" noSelectionLabel="-" label="#{q.name}" />
+    				<s:convertEntity />
+    			</h:selectOneMenu> 
+   			 </s:decorate>
+   			 
 		    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
 		    	<ui:define name="label">#{messages['MedicalExamination.RefToDate']}:</ui:define>
 		    	<ui:param name="required" value="false" /> 
@@ -183,8 +191,11 @@
 <rich:jQuery selector="#cbrefby" query="change(function(){checkClick(8>this.selectedIndex, '#refByUnit');})" />
 <rich:jQuery selector="#cbrefby[selectedIndex==0||selectedIndex==8||selectedIndex==9||selectedIndex==10]" query="each(function(){jQuery('#refByUnit').hide();})" />
 
-<rich:jQuery selector="#cbrefto" query="change(function(){checkClick(this.selectedIndex!=8, '#refToUnit');})" />
-<rich:jQuery selector="#cbrefto[selectedIndex==8]" query="each(function(){jQuery('#refToUnit').hide();})" />
+<!-- <rich:jQuery selector="#cbrefto" query="change(function(){checkClick(this.selectedIndex!=8, '#refToUnit');})" />
+<rich:jQuery selector="#cbrefto[selectedIndex==8]" query="each(function(){jQuery('#refToUnit').hide();})" /> -->
+
+<rich:jQuery selector="#cbrefto" query="change(function(){checkClick(this.selectedIndex==1, '#refToUnit');})" />
+<rich:jQuery selector="#cbrefto[selectedIndex!=1]" query="each(function(){jQuery('#refToUnit').hide();})" /> 
 
 <rich:jQuery selector="#cbqual" query="change(function(){checkClick(this.selectedIndex==4, '#otherqual');})" />
 <rich:jQuery selector="#cbqual[selectedIndex!=4]" query="each(function(){jQuery('#otherqual').hide();})" />
