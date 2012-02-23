@@ -72,17 +72,17 @@
     	<s:decorate template="/layout/edit.xhtml">
     		<!-- <ui:define name="label">#{messages['Address.address']}:</ui:define>-->
     		<ui:define name="label">#{messages['Address.completeAddress']}:</ui:define>
-    		<h:inputText value="#{tbcase.notifAddress.address}" style="width:500px" required="true" maxlength="200"/>
+    		<h:inputTextarea value="#{tbcase.notifAddress.address}" style="width:300px;height:100px" required="true" maxlength="200"/>
     	</s:decorate>
     	
     </td></tr>
-    
-    <tr><td colspan="2">
+    <!-- address and landmark in a single field -->
+  <!--   <tr><td colspan="2">
     	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Address.landmark']}:</ui:define>
     		<h:inputText value="#{tbcase.notifAddress.complement}" style="width:500px" maxlength="100"/>
     	</s:decorate>
-    </td></tr>
+    </td></tr> -->
 
 	<tr><td>
 		<s:decorate template="/layout/auselection.xhtml">
@@ -109,11 +109,11 @@
     	</s:decorate>
     	
     	<div id="curraddr" style="clear:both;">
-    	<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
+    	<!-- <div class="paragraph">#{messages['cases.details.addresscurr']}</div> -->
     	<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['Address.address']}:</ui:define>
-    		<h:inputText value="#{tbcase.currentAddress.address}" style="width:300px;margin-bottom:2px;" maxlength="100"/><br/>
-    		<h:inputText value="#{tbcase.currentAddress.complement}" style="width:300px" maxlength="100"/>
+    		<ui:define name="label">#{messages['cases.details.addresscurr']}:</ui:define>
+    		<h:inputTextarea value="#{tbcase.currentAddress.address}" style="width:300px;height:100px;margin-bottom:2px;" maxlength="100"/><br/>
+    		<!-- <h:inputText value="#{tbcase.currentAddress.complement}" style="width:300px" maxlength="100"/> -->
     	</s:decorate>
 
     	<s:decorate template="/layout/edit.xhtml">
@@ -134,15 +134,17 @@
     </td></tr>
 
 	<tr><td>
+	
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
-    		<h:outputText value= "#{messages['global.mandatory']}" style="color: red"/>
+    		<!-- <h:outputText value= "#{messages['global.mandatory']}" style="color: red"/> -->
     		<h:inputText value="#{tbcase.phoneNumber}" />
-    	</s:decorate>	
+    	</s:decorate>	   	
 	</td><td>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
-    		<h:outputText value= "#{messages['global.mandatory']}" style="color: red"/>
+    		<!-- <h:outputText value= "#{messages['global.mandatory']}" style="color: red"/> -->
+    		<s:label value="#{messages['global.mandatory']}" styleClass="over" />
     		<h:inputText value="#{tbcase.mobileNumber}" />
     	</s:decorate>	
     </td></tr>
@@ -183,8 +185,9 @@
     <s:decorate template="/layout/edit.xhtml">
     	<!--<ui:define name="label">#{messages['TbCase.TBRegistrationNumber']}:</ui:define>-->
     	<ui:define name="label">#{messages['TbCase.LGATBL']}:</ui:define>
-		<h:inputText value="#{tbcaseng.tbRegistrationNumber}" style="width:120px;" maxlength="10" required="true"></h:inputText>		
-		<ui:param name="required" value="true" />
+		<h:inputText value="#{tbcaseng.tbRegistrationNumber}" style="width:120px;" maxlength="10" required="true">	
+		<ui:param name="required" value="true" />	
+		</h:inputText>
 		</s:decorate>
     
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
@@ -296,6 +299,7 @@ function isPulmonary(cb) {
 		
 		</td></tr></table>
 	</div>
+	
 
 	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<div class="form-content">
@@ -305,6 +309,7 @@ function isPulmonary(cb) {
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">
 				#{messages['cases.prevtreat.numprev']}:
+				
 			</ui:define>
 			<h:selectOneMenu value="#{prevTBTreatmentHome.numTreatments}">
 				<f:selectItems value="#{prevTBTreatmentHome.numTreatmentsOptions}"/>
