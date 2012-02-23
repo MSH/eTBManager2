@@ -75,21 +75,20 @@
     	<h:selectBooleanCheckbox value="#{movementFilters.batchesOutput}" />
     </s:decorate>
     
-   	<h:commandLink styleClass="button-alt" action="#{movementFilters.refresh}" style="float:right;">
+   	<a:commandLink styleClass="button-alt" action="#{movementFilters.refresh}" style="float:right;" onclick="if (!disableButton(this)) return false;" reRender="main">
    		<span>#{messages['form.update']}</span>
-   	</h:commandLink>
+   	</a:commandLink>
    	<span style="color:red;clear:both;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 
 <p/>
 <h:outputText value="#{messages['meds.movs.selectfilter']}" style="font-weight:bold;" rendered="#{movementFilters.date==null}"/>
 <h:panelGroup rendered="#{movementFilters.date != null}">
 
-<s:fragment rendered="#{movementFilters.medicineMovsExecuting}">
+<s:fragment rendered="#{not movementFilters.batchesOutput}">
 
 <s:decorate template="/layout/naveg.xhtml">
 	<ui:param name="list" value="#{movements}" />
-<h:dataTable value="#{movements.resultList}" var="m" rendered="#{movements.resultCount > 0}" 
-	styleClass="table1" width="100%" rowClasses="lin1,lin2" 
+<h:dataTable value="#{movements.resultList}" var="m" rendered="#{movements.resultCount > 0}" styleClass="table1" width="100%" rowClasses="lin1,lin2" 
 	columnClasses="colc,#{medicine.id!=null?'':'coll,'}#{source.id!=null?'':'coll,'}coll,colr,colr,colr,colr">
 	<h:column>
 		<f:facet name="header">#{messages['form.date']}</f:facet>
@@ -148,14 +147,12 @@
 
 </s:fragment>
 
-<s:fragment rendered="#{movementFilters.batchMovsExecuting}">
 
+
+<h:panelGroup id="batches" rendered="#{movementFilters.batchesOutput}">
 <s:decorate template="/layout/naveg.xhtml">
 	<ui:param name="list" value="#{batchMovements}" />
-	<ui:param name="page" value="/medicines/movements.xhtml" />
-</s:decorate>
-
-<p/>
+	<ui:param name="reRender" value="batches" />
 
 <table class="table1" width="100%">
 	<tr><th>#{messages['form.date']}
@@ -234,7 +231,9 @@
 	</tr>
 </a:repeat>
 </table>
-</s:fragment>
+</s:decorate>
+</h:panelGroup>
+
 
 </h:panelGroup>
 

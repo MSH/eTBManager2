@@ -6,6 +6,8 @@
                  xmlns:f="http://java.sun.com/jsf/core"
                  xmlns:s="http://jboss.com/products/seam/taglib">
 
+<ui:param name="renderpanel" value="#{empty reRender? 'tablenaveg': reRender}" />
+
 <h:panelGroup id="tablenaveg" rendered="#{facesContext.renderResponse}">
 
 <s:div style="width:100%;margin-bottom:8px;" styleClass="panel2" rendered="#{list.resultList!=null}">
@@ -76,13 +78,13 @@
 
 <s:fragment rendered="#{list.pageCount > 1}">
 <div style="padding:8px">
-<a:commandLink styleClass="naveg-first" reRender="#{reRender}" 
+<a:commandLink styleClass="naveg-first" 
 	title="#{messages['form.navfirst']}" 
 	style="color:transparent;float:none"
 	onclick="initNavegWait();moveToFirstPage();return false;" 
 	rendered="#{list.currentPage > 1}" />
 
-<a:commandLink styleClass="naveg-prev" reRender="#{reRender}"
+<a:commandLink styleClass="naveg-prev" 
 	style="float:none" 
 	title="#{messages['form.navprevious']}" 
 	onclick="initNavegWait();moveToPage(#{list.currentPage - 1});return false;" 
@@ -116,14 +118,13 @@
 
 </h:panelGroup>
 
-
-<a:jsFunction name="moveToPage" reRender="tablenaveg">
+<a:jsFunction name="moveToPage" reRender="#{renderpanel}">
 	<a:actionparam assignTo="#{list.currentPage}" name="param1" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
-<a:jsFunction name="moveToFirstPage" reRender="tablenaveg" action="#{list.first}" />
+<a:jsFunction name="moveToFirstPage" reRender="#{renderpanel}" action="#{list.first}" />
 
-<a:jsFunction name="moveToLastPage" reRender="tablenaveg" action="#{list.last}" />
+<a:jsFunction name="moveToLastPage" reRender="#{renderpanel}" action="#{list.last}" />
 
 <script type="text/javascript">
 function initNavegWait() { jQuery('#navegwait1,#navegwait2').show(); }

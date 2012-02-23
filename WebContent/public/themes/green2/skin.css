@@ -621,7 +621,6 @@ table {
 .table2 td {
 	padding:2px;
 	padding:4px 5px 4px 5px;
-	border:1px solid #b5d0b5;
 	vertical-align: top;
 }
 .table2 .highlight {
@@ -645,6 +644,7 @@ table {
 	padding:2px 4px 2px 4px;
 	font-size:11px;
 	text-align: center;
+	border:1px solid #b5d0b5; 
 }
 .table2 .vl-grp, .table2 .vl-tot-v-grp, .table2 .tt-row-grp, 
 .table2 .vl-tot-v, .table2 .vl-tot, .table2 .tt-row-tot, .table2 .vl-tot-v-tot {

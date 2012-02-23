@@ -627,7 +627,6 @@ table {
 .table2 td {
 	padding:2px;
 	padding:4px 5px 4px 5px;
-	border:1px solid #e2e8ea;
 	vertical-align: top;
 }
 .table2 .highlight {
@@ -650,6 +649,7 @@ table {
 .table2 .vl-grp, .table2 .vl-tot-v-grp, .table2 .vl, .table2 .vl-tot-v-tot, .table2 .vl-tot-v  {
 	padding:2px 4px 2px 4px;
 	font-size:11px;
+	border:1px solid #e2e8ea; 
 	text-align: center;
 }
 .table2 .vl-grp, .table2 .vl-tot-v-grp, .table2 .tt-row-grp, 
