@@ -14,7 +14,9 @@ public enum ReferredBy {
 	
 	//Nigeria
 	PUBLIC,
-	FBO;
+	PRIVATE_NON_PROFIT,
+	PRIVATE_PROFIT;
+	
 	
 	
 	public String getKey() {
