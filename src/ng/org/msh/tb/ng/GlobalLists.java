@@ -1,5 +1,10 @@
 package org.msh.tb.ng;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.model.SelectItem;
+
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
@@ -63,35 +68,15 @@ public class GlobalLists {
 	
 	
 	private final static ReferredBy[] refByTypes = {
-//		ReferredBy.VCT_CENTER,
-//		ReferredBy.HIV_COMP_CARE_UNIT,
-//		ReferredBy.STI_CLINIC,
-//		ReferredBy.HOME_BASED_CARE,
-//		ReferredBy.ANTENATAL_CLINIC,
-//		ReferredBy.PRIVATE_SECTOR,
-//		ReferredBy.PHARMACIST,
-//		ReferredBy.SELF_REFERRAL,
-//		ReferredBy.CONTACT_INVITATION,
-//		ReferredBy.CHW
 		ReferredBy.PUBLIC,
-		ReferredBy.PRIVATE_SECTOR,
-		ReferredBy.FBO
+		ReferredBy.PRIVATE_NON_PROFIT,
+		ReferredBy.PRIVATE_PROFIT
 	};
 	
 	private final static ReferredTo[] refToTypes = {
-//		ReferredTo.NUTRITION_SUPPORT,
-//		ReferredTo.VCT_CENTER,
-//		ReferredTo.HIV_COMP_CARE_UNIT,
-//		ReferredTo.STI_CLINIC,
-//		ReferredTo.HOME_BASED_CARE, 
-//		ReferredTo.ANTENATAL_CLINIC,
-//		ReferredTo.PRIVATE_SECTOR,
-//		ReferredTo.NOT_REFERRED
-		ReferredTo.PUBLIC,
-		ReferredTo.PRIVATE_SECTOR,
-		ReferredTo.FBO
-		
-	};	
+		ReferredTo.PUBLIC
+	};
+	
 	
 	private static final TbField tbFields[] = {
 		TbField.COMORBIDITY,
@@ -107,6 +92,8 @@ public class GlobalLists {
 		TbField.RISK_GROUP
 	};
 	
+	private int[] comorb_years = {1,2,3,4,5,6,7,8,9,10};
+	
 	@Factory("tbFields.ng")
 	public TbField[] getTbFields() {
 		return tbFields;
@@ -118,7 +105,7 @@ public class GlobalLists {
 	
 	public ReferredTo[] getRefToTypes() {
 		return refToTypes;
-	}	
+	}
 		
 	@Factory("hivResults_ng")
 	public HIVResultNg[] getHIVResults() {
@@ -143,5 +130,12 @@ public class GlobalLists {
 		return HealthFacility.values();
 	}
 
+	public int[] getComorb_years() {
+		return comorb_years;
+	}
+	
+	public void setComorb_years(int[] comorb_years) {
+		this.comorb_years = comorb_years;
+	}
 
 }
