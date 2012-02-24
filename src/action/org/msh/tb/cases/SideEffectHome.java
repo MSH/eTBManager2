@@ -128,4 +128,16 @@ public class SideEffectHome {
 		
 		return lst;
 	}
+	
+	public List<SelectItem> getYears(){
+		List<SelectItem> lst = new ArrayList<SelectItem>();
+		String[] strYears = {"1","2","3","4","5","6","7","8","9","10",">10"};
+		for (int i = 0; i< strYears.length; i++) {
+			SelectItem item = new SelectItem();
+			item.setLabel(strYears[i]);
+			item.setValue(strYears[i]);
+			lst.add(item);
+		}
+		return lst;
+	}
 }
