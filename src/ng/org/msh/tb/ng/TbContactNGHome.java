@@ -25,6 +25,10 @@ public class TbContactNGHome extends EntityHomeEx<TbContact_Ng> {
 	private static final long serialVersionUID = -1176239729083664259L;
 	
 	@In(required=true) CaseHome caseHome;
+	
+	private String contactFName;
+	private String contactLName;
+	private String contactOtherName;
 
 	@Factory("tbContactNG")
 	public TbContact_Ng getTbContact() {
@@ -34,6 +38,9 @@ public class TbContactNGHome extends EntityHomeEx<TbContact_Ng> {
 	@Override
 	public String persist() {		
 		TbContact_Ng con = getInstance();
+		String strEmpty = "";
+		String contFullName = contactFName+strEmpty+contactLName+strEmpty+contactOtherName;
+		con.setName(contFullName);
 		TbCase tbcase = caseHome.getInstance();
 		
 		con.setTbcase(tbcase);
@@ -56,4 +63,30 @@ public class TbContactNGHome extends EntityHomeEx<TbContact_Ng> {
 			 return "contact-removed";
 		else return "error";
 	}
+	
+	
+	public String getContactFName() {
+		return contactFName;
+	}
+		
+	public void setContactFName(String contactFName) {
+		this.contactFName = contactFName;
+	}
+	
+	public String getContactLName() {
+		return contactLName;
+	}
+
+	public void setContactLName(String contactLName) {
+		this.contactLName = contactLName;
+	}
+
+
+	public String getContactOtherName() {
+		return contactOtherName;
+	}
+	
+	public void setContactOtherName(String contactOtherName) {
+		this.contactOtherName = contactOtherName;
+	}	
 }
