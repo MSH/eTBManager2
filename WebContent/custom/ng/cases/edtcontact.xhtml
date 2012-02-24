@@ -19,12 +19,37 @@
 
 <s:decorate template="/layout/casebody.xhtml">
 	<a:form id="formexam" styleClass="form1">
-
 	<div class="form-content">
+	<table width="100%" style="border-collapse:collapse;">
+	<tr>
+	 <s:decorate template="/layout/edit.xhtml" >
+	<ui:define name="label">#{messages['TbContact.name']}:</ui:define>
+	</s:decorate>
+	</tr>
+	<tr><td>
     <s:decorate id="dt" template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['TbContact.name']}:</ui:define>
-    	<h:inputText value="#{tbContactNG.name}" required="true" style="width:320px;"/>
+    	<ui:define name="label">#{messages['TbContact.FirstName']}:</ui:define>
+    	<!--<h:inputText value="#{tbContactNG.name}" required="true" style="width:320px;"/>-->
+    	<h:inputText value="#{tbContactNGHome.contactFName}" style="width:150px;"/>
     </s:decorate>
+    </td>
+    <td>
+    
+    <s:decorate id="dt11" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbContact.Surname']}:</ui:define>
+    	<!--<h:inputText value="#{tbContactNG.name}" required="true" style="width:320px;"/>-->
+    	<h:inputText value="#{tbContactNGHome.contactLName}" style="width:150px;"/>
+    </s:decorate>
+    </td>
+    <td>
+    <s:decorate id="dt22" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbContact.OtherName']}:</ui:define>
+    	<!--<h:inputText value="#{tbContactNG.name}" required="true" style="width:320px;"/>-->
+    	<h:inputText value="#{tbContactNGHome.contactOtherName}" style="width:150px;"/>
+    </s:decorate>
+    </td>
+    </tr>
+    </table>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Gender']}:</ui:define>
