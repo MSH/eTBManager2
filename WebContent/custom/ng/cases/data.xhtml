@@ -14,7 +14,13 @@
 				<f:param name="id" value="#{caseHome.id}" />
 				<span>#{messages['form.edit']}</span>
 			</s:link>
-			<h2>#{messages['cases.patientdata']}</h2>
+			<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+	<h2>#{messages['cases.patientdata']}</h2>
+	</s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='SUSPECT'}">
+	<h2>#{messages['cases.suspectdata']}</h2>
+	</s:decorate>
 		
 		
 	<table style="border-collapse:collapse;width:100%">
@@ -109,7 +115,13 @@
 	
 	
  		<div class="form-content">            
-		<h2>#{messages['cases.generaldata']}</h2>
+		 <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+	<h2>#{messages['cases.generaldata']}</h2>
+	</s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='SUSPECT'}">
+	<h2>#{messages['cases.suspectnotifdata']}</h2>
+	</s:decorate>
                  
 	
 	<table style="border-collapse:collapse;width:98%;" cellpadding="1" >
@@ -134,12 +146,12 @@
 	</s:decorate>
 	</td></tr>
 	
-	<tr><td>
+<!-- 	<tr><td>
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['TbCase.LGATBL']}:</ui:define>
 		<h:outputText value="#{tbcaseng.tbRegistrationNumber}" />
 	</s:decorate>
-	</td></tr>
+	</td></tr> -->
 	
 	<tr>
 	<td>
