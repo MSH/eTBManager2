@@ -68,21 +68,20 @@
     	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
     </td></tr>
     
-    <tr><td colspan="2">
+     <tr><td colspan="2">
     	<s:decorate template="/layout/edit.xhtml">
-    		<!-- <ui:define name="label">#{messages['Address.address']}:</ui:define>-->
+    		<!--<ui:define name="label">#{messages['Address.address']}:</ui:define> -->
     		<ui:define name="label">#{messages['Address.completeAddress']}:</ui:define>
-    		<h:inputText value="#{tbcase.notifAddress.address}" style="width:500px" required="true" maxlength="200"/>
-    	</s:decorate>
-    	
-    </td></tr>
+    		<h:inputTextarea value="#{tbcase.notifAddress.address}" style="width:300px;height:100px" required="true" maxlength="200"/>
+    	</s:decorate>   	
+    </td></tr>  
     
-    <tr><td colspan="2">
+    <!-- <tr><td colspan="2">
     	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Address.landmark']}:</ui:define>
     		<h:inputText value="#{tbcase.notifAddress.complement}" style="width:500px" maxlength="100"/>
     	</s:decorate>
-    </td></tr>
+    </td></tr> -->
 
 	<tr><td>
 		<s:decorate template="/layout/auselection.xhtml">
@@ -109,11 +108,11 @@
     	</s:decorate>
     	
     	<div id="curraddr" style="clear:both;">
-    	<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
+    	<!-- <div class="paragraph">#{messages['cases.details.addresscurr']}</div> -->
     	<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['Address.address']}:</ui:define>
-    		<h:inputText value="#{tbcase.currentAddress.address}" style="width:300px;margin-bottom:2px;" maxlength="100"/><br/>
-    		<h:inputText value="#{tbcase.currentAddress.complement}" style="width:300px" maxlength="100"/>
+    		<ui:define name="label">#{messages['cases.details.addresscurr']}:</ui:define>
+    		<h:inputTextarea value="#{tbcase.currentAddress.address}" style="width:300px;height:100px;margin-bottom:2px;" maxlength="100"/><br/>
+    		<!-- <h:inputText value="#{tbcase.currentAddress.complement}" style="width:300px" maxlength="100"/> -->
     	</s:decorate>
 
     	<s:decorate template="/layout/edit.xhtml">
@@ -136,13 +135,11 @@
 	<tr><td>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
-    		<h:outputText value= "#{messages['global.mandatory']}" style="color: red"/>
     		<h:inputText value="#{tbcase.phoneNumber}" />
     	</s:decorate>	
 	</td><td>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
-    		<h:outputText value= "#{messages['global.mandatory']}" style="color: red"/>
     		<h:inputText value="#{tbcase.mobileNumber}" />
     	</s:decorate>	
     </td></tr>
