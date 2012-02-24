@@ -7,6 +7,8 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
+<script src="#{request.contextPath}/js/jquery.overlabel.js" type="text/javascript" />
+
 	<div class="form-content">
 	 <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<h2>#{messages['cases.patientdata']}</h2>
@@ -142,17 +144,27 @@
 	<tr><td>
 	
     	<s:decorate template="/layout/edit.xhtml">
+    	<div id="num" class="prop">
     		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
-    		<!-- <h:outputText value= "#{messages['global.mandatory']}" style="color: red"/> -->
-    		<h:inputText value="#{tbcase.phoneNumber}" />
+    		<s:decorate styleClass="label">
+    		<s:label value="#{messages['global.mandatory']}" styleClass="over" />
+    		<h:inputText id="homenum" value="#{tbcase.phoneNumber}" />
+    		</s:decorate>
+    		</div>
+    		<rich:jQuery selector="#num .label > label" query="labelOver('over');" />
     	</s:decorate>	   	
 	</td><td>
     	<s:decorate template="/layout/edit.xhtml">
+    	<div id="phnum" class="prop">
     		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
-    		<!-- <h:outputText value= "#{messages['global.mandatory']}" style="color: red"/> -->
+    		<s:decorate styleClass="label">
     		<s:label value="#{messages['global.mandatory']}" styleClass="over" />
-    		<h:inputText value="#{tbcase.mobileNumber}" />
+    		<h:inputText id="mobnum" value="#{tbcase.mobileNumber}" />
+    		</s:decorate>
+    		</div>
+    		<rich:jQuery selector="#phnum .label > label" query="labelOver('over');" />
     	</s:decorate>	
+    	
     </td></tr>
     <tr><td>
     	<s:decorate template="/layout/edit.xhtml">
