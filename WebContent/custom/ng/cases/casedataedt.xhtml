@@ -8,7 +8,13 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 	<div class="form-content">
+	 <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<h2>#{messages['cases.patientdata']}</h2>
+	</s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='SUSPECT'}">
+	<h2>#{messages['cases.suspectdata']}</h2>
+	</s:decorate>
 
 	<table width="100%" style="border-collapse:collapse;">
 	<tr><td colspan="2">
@@ -161,7 +167,13 @@
 
 
 	<div class="form-content">
+	 <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<h2>#{messages['cases.generaldata']}</h2>
+	</s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='SUSPECT'}">
+	<h2>#{messages['cases.suspectnotifdata']}</h2>
+	</s:decorate>
 
 	<table width="100%" style="border-collapse:collapse;">
 	<tr><td style="padding-bottom:10px;">
@@ -185,8 +197,8 @@
     <s:decorate template="/layout/edit.xhtml">
     	<!--<ui:define name="label">#{messages['TbCase.TBRegistrationNumber']}:</ui:define>-->
     	<ui:define name="label">#{messages['TbCase.LGATBL']}:</ui:define>
-		<h:inputText value="#{tbcaseng.tbRegistrationNumber}" style="width:120px;" maxlength="10" required="true">	
-		<ui:param name="required" value="true" />	
+		<h:inputText value="#{tbcaseng.tbRegistrationNumber}" style="width:120px;" maxlength="10">	
+			
 		</h:inputText>
 		</s:decorate>
     
