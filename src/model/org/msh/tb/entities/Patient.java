@@ -17,6 +17,7 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.Component;
+import org.msh.tb.bd.entities.enums.SalaryRange;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.NameComposition;
 import org.msh.tb.transactionlog.Operation;
@@ -71,6 +72,10 @@ public class Patient extends WSObject implements Serializable {
 	@OneToMany(mappedBy="patient")
 	private List<TbCase> cases = new ArrayList<TbCase>();
 
+	@Column(length=100)
+	private String fatherName;
+	
+	private SalaryRange salary;
 
 	public String getFullName() {
 		Workspace ws;
@@ -216,4 +221,22 @@ public class Patient extends WSObject implements Serializable {
 	public void setCases(List<TbCase> cases) {
 		this.cases = cases;
 	}
+
+	public SalaryRange getSalary() {
+		return salary;
+	}
+
+	public void setSalary(SalaryRange salary) {
+		this.salary = salary;
+	}
+
+	public String getFatherName() {
+		return fatherName;
+	}
+
+	public void setFatherName(String fatherName) {
+		this.fatherName = fatherName;
+	}
+	
+	
 }
