@@ -12,7 +12,15 @@ public enum ReferredTo {
 	
 	//Nigeria
 	PUBLIC,
-	FBO;
+	FBO,
+	
+	//Bangladesh
+	PP,
+	GFS,
+	NON_PP,
+	SS,
+	VD, 
+	CV;	
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
