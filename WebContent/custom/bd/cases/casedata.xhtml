@@ -13,7 +13,6 @@
 <ui:param name="title" value="#{messages['cases.details']} - #{messages[tbcase.classification.key]}" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
-<ui:param name="pagewidth" value="850px" />
 
 <ui:define name="naveg">
 	<div class="item">
@@ -29,18 +28,20 @@
 
 
 <ui:define name="state-content">
-	<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="icon-hu-big" style="margin-top:6px;font-size:11px;max-width:320px;height:60px;" >
+	<s:fragment rendered="#{tbcase.state=='TRANSFERRING'}" > 
+	<div class="icon-hu-big"/>
+	<div style="margin-top:6px;font-size:11px;max-width:320px;height:60px;" >
 		<b style="padding-right:4px;">#{messages['meds.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
 		<br/>
-		<span class="right-icon" >
+		<span class="right-icon" />
 		<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
 			style="position:relative;" propagation="none">
 			<f:param name="id" value="#{caseHome.id}" />
 		</s:link>
 		<s:link value="#{messages['cases.move.cancel']}" 
 			style="position:relative" />
-		</span>
-	</s:div>
+		</div>
+	</s:fragment>
 </ui:define>
 		
 
@@ -48,6 +49,11 @@
 
 	<h:panelGroup id="leftmenu" styleClass="vertical-menu">
 	<h:form class="vertical-menu">
+
+	<s:link view="/reports/casedata.xhtml" target="_new">
+		<div class="print-icon"/>#{messages['global.print']}
+		<f:param name="id" value="#{caseHome.id}" />
+	</s:link>
 
 	<h:commandLink action="#{caseHome.remove}" 
 		onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" 
@@ -63,6 +69,11 @@
 		rendered="#{caseHome.canReopen}" 
 		onclick="if (!confirm('#{messages['cases.reopen.confirm']}')) return false;">
 	</h:commandLink>
+	
+	<s:link view="/cases/casehistory.xhtml" >
+		<f:param name="id" value="#{caseHome.id}" />
+		<div class="icon-report" style="float:none;" /><span>#{messages['form.logreport']}</span>
+	</s:link>	
 
 	<s:link value="#{messages['admin.tags']}" view="/cases/casetagsedt.xhtml" rendered="#{caseHome.canTagCase and empty tbcase.tags}">
 		<f:param name="id" value="#{caseHome.id}" />
@@ -71,6 +82,7 @@
 	</h:form>
 	</h:panelGroup>
 
+	<s:fragment rendered="#{facesContext.renderResponse}">
 	<s:fragment rendered="#{not empty tbcase.tags}">
 	<table class="table2">
 	<tr>
@@ -95,6 +107,7 @@
 	</tr>
 	</s:fragment>
 	</table>
+	</s:fragment>
 	</s:fragment>
 
 	<div class="spacer" />

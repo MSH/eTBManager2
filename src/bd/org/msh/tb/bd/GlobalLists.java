@@ -5,8 +5,9 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.bd.entities.enums.BiopsyResult;
 import org.msh.tb.bd.entities.enums.DotProvider;
-import org.msh.tb.bd.entities.enums.ReferredTo;
+import org.msh.tb.bd.entities.enums.SalaryRange;
 import org.msh.tb.bd.entities.enums.SkinTestResult;
+import org.msh.tb.entities.enums.ReferredTo;
 import org.msh.tb.entities.enums.TbField;
 
 
@@ -24,16 +25,25 @@ public class GlobalLists {
 		return SkinTestResult.values();
 	}		
 	
+	@Factory("salaryRangeList")
+	public SalaryRange[] getSalaryRangeList() {
+		return SalaryRange.values();
+	}
+	
 	@Factory("dotProvTypeList")
 	public DotProvider[] getDotProvTypeList() {
 		return DotProvider.values();
 	}		
 	
 	
-	@Factory("refToTypeList")
-	public ReferredTo[] getRefToTypes() {
-		return ReferredTo.values();
-	}		
+	private static final ReferredTo referredToTypes[] = {
+		ReferredTo.PP,
+		ReferredTo.GFS,
+		ReferredTo.NON_PP,
+		ReferredTo.SS,
+		ReferredTo.VD, 
+		ReferredTo.CV
+	};		
 	
 	private static final TbField tbfields[] = {
 		TbField.COMORBIDITY,
@@ -51,6 +61,12 @@ public class GlobalLists {
 	
 	public TbField[] getTbFields() {
 		return tbfields;
+	}
+
+	public ReferredTo[] getReferredtotypes() {
+		return referredToTypes;
 	}	
+	
+
 	
 }

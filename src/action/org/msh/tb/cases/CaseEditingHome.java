@@ -44,10 +44,10 @@ import org.msh.utils.date.DateUtils;
 @Scope(ScopeType.CONVERSATION)
 public class CaseEditingHome {
 
-	@In(create=true) CaseHome caseHome;
+	@In(create=true) protected CaseHome caseHome;
 	@In(create=true) PatientHome patientHome;
 	@In EntityManager entityManager;
-	@In(create=true) PrevTBTreatmentHome prevTBTreatmentHome;
+	@In(create=true) protected PrevTBTreatmentHome prevTBTreatmentHome;
 	@In(create=true) MedicalExaminationHome medicalExaminationHome;
 	@In(create=true) FacesMessages facesMessages;
 	
@@ -58,12 +58,12 @@ public class CaseEditingHome {
 	private TBUnitSelection tbunitselection;
 	private AdminUnitSelection notifAdminUnit;
 	private AdminUnitSelection currentAdminUnit;
-	private boolean initialized;
+	protected boolean initialized;
 
 	/**
 	 * 1 - Standard, 2 - Individualized
 	 */
-	private int regimenType;
+	protected int regimenType;
 	
 	
 	public String selectPatientData() {

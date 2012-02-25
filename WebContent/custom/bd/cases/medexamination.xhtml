@@ -6,7 +6,7 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-
+	<div class="spacer" />
 	<s:link view="/custom/bd/cases/edtmedexam.xhtml" 
 		style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
 		<f:param name="id" value="#{tbcase.id}"/>
@@ -14,27 +14,29 @@
 		<span>#{messages['cases.details.newresult']}</span>
 	</s:link>
 
+	<h:panelGroup id="medexams">
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty medicalExaminationBdHome.allResults}" />
 
-	<h:dataTable value="#{medicalExaminationBdHome.allResults}" var="r" rendered="#{not empty medicalExaminationBdHome.allResults}" styleClass="table1">
-		<h:column>
+	<ui:repeat var="r" value="#{medicalExaminationHome.allResults}">
+		<div class="spacer" />
 	
-		<s:decorate template="/layout/roundrect.xhtml" style="margin-right:10px;">
-		<ui:define name="header">
+		<div class="region1">
+			<div class="header"><div class="content">
 			<div style="float:right;">
 				<s:link value="#{messages['form.edit']}" view="/custom/bd/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 				</s:link>
-				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamCulture(#{r.id}, #{examCultureHome.lastResult});return false;" 
-				      rendered="#{caseHome.canEditCaseData}">
+				<h:commandLink value="#{messages['form.remove']}" 
+					onclick="if (confirm('#{messages['form.confirm_remove']}')) remMedExamination(#{r.id});return false;" 
+				    rendered="#{caseHome.canEditCaseData}">
 				</h:commandLink>
 			</div>
-			<div class="name2">#{messages['cases.details.date']}: </div> 
-			<h:outputText value="#{r.date}" converter="localeDateConverter" />
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
+			<h2><h:outputText value="#{r.date}" converter="localeDateConverter" /></h2>
+			</div>
+			</div>
 
+			<div class="content">
 		<table width="100%" style="border-collapse:collapse;">
 		<tr><td>
 			<s:decorate template="/layout/display.xhtml">
@@ -94,11 +96,15 @@
 		</s:fragment>
 		</table>
 		
-		
-		</s:decorate>
+			</div>
+		</div>
+	</ui:repeat>
 
-		</h:column>
-	</h:dataTable>
+	</h:panelGroup>
+	
+<a:jsFunction name="remMedExamination" action="#{medicalExaminationHome.remove}" reRender="medexams"  rendered="#{caseHome.canEditExams}">
+	<a:actionparam name="param1" assignTo="#{medicalExaminationHome.id}" converter="javax.faces.Integer"/>
+</a:jsFunction>
 
     
 </ui:composition>

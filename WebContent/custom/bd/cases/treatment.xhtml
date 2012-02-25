@@ -10,11 +10,14 @@
 	<s:fragment rendered="#{not caseHome.inTreatment}" >
 		<h:outputText value="#{messages['cases.details.notreatment']}" styleClass="warn" style="display:block;padding:30px;"/>
 
-		<s:link value="#{messages['cases.details.starttreatment']}" onclick="showSelRegimenDlg();return false;" 
-			rendered="#{tbcase.state == 'WAITING_TREATMENT'}"
-			style="display:block;margin-left:30px;marign-bottom:30px;width:160px;" styleClass="button">
+		<div style="display:block;margin-left:30px;marign-bottom:30px;"> 
+		<s:link onclick="showSelRegimenDlg();return false;" 
+			rendered="#{caseHome.canEditTreatment}"
+			styleClass="button-alt">
 			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['cases.details.starttreatment']}</span>
 		</s:link>
+		</div>
 		
 		<rich:jQuery timing="onJScall" name="showSelRegimenDlg" selector="#seltttype" query="show(500)" />
 		<div id="seltttype" style="display:none;padding:20px;width:500px;">
@@ -54,7 +57,7 @@
 		<s:link value="#{messages['form.edit']}" view="/cases/treatmentedt.xhtml" />
 	</s:div>
 
-	<s:decorate template="treattable.xhtml">
+	<s:decorate template="/cases/treattable.xhtml">
 		<ui:param name="editing" value="false" />
 	</s:decorate>
 
@@ -63,7 +66,7 @@
 			<h:outputText value="#{messages['cases.treat.intphase']}" rendered="#{phase.intensivePhase}"/>
 			<h:outputText value="#{messages['cases.treat.contphase']}" rendered="#{phase.continuousPhase}"/>
 		</h3>
-		<ui:decorate template="calendartreat.xhtml" >
+		<ui:decorate template="/cases/calendartreat.xhtml" >
 			<ui:param name="list" value="#{phase.months}" />
 		</ui:decorate>
 	</a:repeat>

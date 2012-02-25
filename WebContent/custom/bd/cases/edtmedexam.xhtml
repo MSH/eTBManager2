@@ -82,7 +82,7 @@
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['MedicalExamination.ReferredTo']}:</ui:define>
 		<h:selectOneMenu id="cbrefto" value="#{medicalExaminationBd.patientRefTo}">
-			<s:selectItems var="s" value="#{refToTypeList}" label="#{messages[s.key]}" noSelectionLabel="-" />
+			<s:selectItems var="s" value="#{globalLists_bd.referredtotypes}" label="#{messages[s.key]}" noSelectionLabel="-" />
 			<s:convertEnum />
 		</h:selectOneMenu>
     	<div id="refToUnit">

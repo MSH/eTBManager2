@@ -1,14 +1,14 @@
-package org.msh.tb.na;
+package org.msh.tb.bd;
 
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.msh.tb.bd.cases.exams.MedicalExaminationBdHome;
+import org.msh.tb.bd.entities.TbCaseBD;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.treatment.TreatmentHome;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.na.entities.TbCaseNA;
 
 
 
@@ -17,29 +17,23 @@ import org.msh.tb.na.entities.TbCaseNA;
  * @author Utkarsh Srivastava
  *
  */
-@Name("caseNAHome")
-public class CaseNAHome {
+@Name("caseBDHome")
+public class CaseBDHome {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6017786643816951651L;
-	@In(create=true) CaseHome caseHome;
+	@In CaseHome caseHome;
+	@In(required=false) MedicalExaminationBdHome medicalExaminationBdHome;
 	@In(create=true) CaseEditingHome caseEditingHome;
 	@In(create=true) TreatmentHome treatmentHome;
-	@In(required=false) MedicalExaminationNAHome medicalExaminationNAHome;
-	
 	
 	/**
-	 * Return an instance of a {@link TbCaseNA} class
+	 * Return an instance of a {@link TbCaseBD} class
 	 * @return
 	 */
-	@Factory("tbcasena")
-	public TbCaseNA getTbCaseNA() {
-		return (TbCaseNA)caseHome.getTbCase();
+	@Factory("tbcasebd")
+	public TbCaseBD getTbCaseBD() {
+		return (TbCaseBD)caseHome.getInstance();
 	}
 	
-
 	/**
 	 * Save a new case for the Namibian workspace. Don't use the class {@link CaseEditingHome}, because this class
 	 * already saves it using the {@link CaseEditingHome} component
@@ -77,27 +71,21 @@ public class CaseNAHome {
 	public String saveTreatment() {
 		return treatmentHome.saveChanges(); 
 	}	
-
-
-	@Transactional
-	public String saveTBCase() {
-		return "error";
-	}
-
+	
 	
 	/**
 	 * Save medical examination
 	 * @return
 	 */
 	public String saveMedicalExamination() {
-		if (medicalExaminationNAHome == null)
+		if (medicalExaminationBdHome == null)
 			return "error";
 
-		medicalExaminationNAHome.setDisplayMessage(false);
-		return medicalExaminationNAHome.persist();
+		medicalExaminationBdHome.setDisplayMessage(false);
+		return medicalExaminationBdHome.persist();
 	}	
 	
-
+	
 	
 }
 	

@@ -11,10 +11,10 @@
       template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['cases.newnotif']} - #{messages[tbCase.classification.key]}" />
-
+<ui:param name="left" value="0" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
-
+<ui:param name="waitdlg" value="1" />
 
 <ui:define name="content">
 <h1>#{title}</h1>
@@ -22,24 +22,25 @@
 
 	<ui:include src="casedataedt.xhtml" />	
 
+	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<div class="form-content">
 		<h2>#{messages['MedicalExamination']}</h2>
 
-		<table width="100%" style="border-collapse:collapse;"><tr><td>
+		<div><table width="100%" style="border-collapse:collapse;"><tr><td>
     		<s:decorate template="/layout/dateedit.xhtml" >
     			<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
     			<ui:param name="required" value="true" /> 
-    			<ui:param name="datefield" value="#{medicalExamination.date}" /> 
+    			<ui:param name="datefield" value="#{medicalExaminationBd.date}" /> 
     		</s:decorate>
 		
 		    <s:decorate template="/layout/edit.xhtml" >
 		    	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
-		    	<h:inputText value="#{medicalExamination.responsible}" required="true" style=" width : 340px;" maxlength="100"/>
+		    	<h:inputText value="#{medicalExaminationBd.responsible}" required="true" style=" width : 340px;" maxlength="100"/>
 	    	</s:decorate>
     
     	<s:decorate template="/layout/edit.xhtml" >
     		<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
-    		<h:inputText value="#{medicalExamination.height}" required="false">
+    		<h:inputText value="#{medicalExaminationBd.height}" required="false">
     		</h:inputText>
     		#{messages['MedicalExamination.height.unit']}
     	</s:decorate>
@@ -47,24 +48,26 @@
     
     	<s:decorate template="/layout/edit.xhtml" >
     		<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
-    		<h:inputText value="#{medicalExamination.weight}" required="false"/>#{messages['MedicalExamination.weight.unit']}
+    		<h:inputText value="#{medicalExaminationBd.weight}" required="false"/>#{messages['MedicalExamination.weight.unit']}
     	</s:decorate>
     
 
 		    <s:decorate template="/layout/textarea.xhtml" >
 		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
 		    	<ui:param name="maxlength" value="250" />
-		    	<ui:param name="field" value="#{medicalExamination.comments}" />
+		    	<ui:param name="field" value="#{medicalExaminationBd.comments}" />
 		    	<ui:param name="style" value="width : 500px; height:100px;" />
 		    </s:decorate>
 		</td></tr></table>
+		</div>
 	</div>
+	</s:fragment>
 
 	<div class="form-footer">
 		<div style="float:right">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-		<a:commandLink action="#{caseEditingHome.saveNew}" styleClass="button" reRender="main,messages">
+		<a:commandLink action="#{caseBDHome.saveNew()}" styleClass="button" reRender="main,messages">
 			<span>#{messages['form.ok']}</span>
 		</a:commandLink>
 		<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" >

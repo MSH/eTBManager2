@@ -7,8 +7,9 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<div class="form1">
+	<div class="form1" style="width:100%">
 	<div class="form-content">
+
 	<s:link view="/custom/bd/cases/caseedt.xhtml" 
 		styleClass="button-alt" 
 		style="float:right;" 
@@ -45,12 +46,12 @@
 	
 	<s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['tbcase.patientAge']}:</ui:define>
-    	<h:outputText value="#{tbcase.patientAge}" style="padding-right:4px;" />#{messages['global.age']}
+    	<h:outputText value="#{tbcasebd.patientAge}" style="padding-right:4px;" />#{messages['global.age']}
 	</s:decorate>
 
 	</td></tr>
     <tr><td colspan="2">
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.nationality != null}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcasebd.nationality != null}">
     		<ui:define name="label">#{messages['Nationality']}:</ui:define>
     		<h:outputText value="#{messages[tbcase.nationality.key]}" />
 		</s:decorate>
@@ -65,11 +66,11 @@
     <td>
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.patient.motherName}">
     		<ui:define name="label">#{messages['Patient.motherName']}:</ui:define>
-    		#{tbcase.patient.motherName}
+    		#{tbcasebd.patient.motherName}
     	</s:decorate>    
     </td></tr>
     <tr><td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.patient.salary}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcasebd.patient.salary}">
     		<ui:define name="label">#{messages['Patient.salary']}:</ui:define>
     		#{messages[tbcase.patient.salary.key]}
     	</s:decorate>    
@@ -172,9 +173,9 @@
 	</td></tr>
 	
 	<tr><td>
-	<s:decorate id="bcg" template="/layout/display.xhtml" rendered="#{not empty tbcase.bcgScar}">
+	<s:decorate id="bcg" template="/layout/display.xhtml" rendered="#{not empty tbcasebd.bcgScar}">
     	<ui:define name="label">#{messages['bcgscar']}:</ui:define>
-    	<h:outputText id="dt" value="#{messages[tbcase.bcgScar.key]}" />
+    	<h:outputText id="dt" value="#{messages[tbcasebd.bcgScar.key]}" />
 	</s:decorate>	
 	</td></tr>
 	
@@ -205,8 +206,8 @@
 		</s:decorate>
 
 		<s:fragment rendered="#{not empty prevTBTreatmentHome.treatments}">
-		<div class="paragraph">#{messages['cases.prevtreat']}</div>
-		<table width="98%" class="tabela4">
+		<h2>#{messages['cases.prevtreat']}</h2>
+		<table width="100%" class="table1">
 			<tr>
 				<th rowspan="2">#{messages['cases.prevtreat.num']}
 				</th>
@@ -249,5 +250,8 @@
 	</div>
 	
 	</div>
-
+	
+	<s:decorate template="/cases/comments.xhtml">
+		<ui:param name="panel" value="data" />
+	</s:decorate>
 </ui:composition>

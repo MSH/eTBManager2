@@ -8,17 +8,19 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 	<div class="spacer" />
+	<h2>
 	
-	<h:panelGroup id="pnlhiv">	
-		<s:link view="/cases/edtexamhiv.xhtml" 
-			style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
-			<f:param name="id" value="#{tbcase.id}"/>
-			<f:param name="examid" value="#{null}"/>
-			<span>#{messages['cases.details.newresult']}</span>
-		</s:link>
-		<h2>#{messages['cases.examhiv']}</h2>
-		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examHIVHome.allResults}" />
+	<s:link view="/cases/edtexamhiv.xhtml" 
+		style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt" onclick="disableButton(this)">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	#{messages['cases.examhiv']}</h2>
+	<h:panelGroup id="pnlhiv">
+		<s:div styleClass="region3" rendered="#{empty examHIVHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 		<h:dataTable value="#{examHIVHome.allResults}" var="r" rendered="#{not empty examHIVHome.allResults}" 
 			width="100%" styleClass="table1" columnClasses="colcb,colcb,colb,colb,colb">
 			<h:column>
@@ -75,17 +77,17 @@
 
 	<div class="spacer" />                 
     
-
-	<h:panelGroup id="pnlmicroscopy">	
-		<s:link view="/cases/edtexammicroscopy.xhtml" 
-			style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
-			<f:param name="id" value="#{tbcase.id}"/>
-			<f:param name="examid" value="#{null}"/>
-			<span>#{messages['cases.details.newresult']}</span>
-		</s:link>
-		<h2>#{messages['cases.exammicroscopy']}</h2>
-	
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examMicroscopyHome.allResults}" />
+	<s:link view="/cases/edtexammicroscopy.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" 
+		styleClass="button-alt" onclick="disableButton(this)">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h:panelGroup id="pnlmicroscopy">
+	<h2>#{messages['cases.exammicroscopy']}</h2>	
+		<s:div styleClass="region3" rendered="#{empty examMicroscopyHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 		<h:dataTable value="#{examMicroscopyHome.allResults}" var="r" rendered="#{not empty examMicroscopyHome.allResults}" 
 			width="100%" styleClass="table1" columnClasses="colb,colb,colb,colb,colb">
 			<h:column>
@@ -146,16 +148,17 @@
 
 	<div class="spacer" />
 
-	<h:panelGroup id="pnlculture" rendered="false">	
-		<s:link view="/cases/edtexamculture.xhtml" 
-			style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
-			<f:param name="id" value="#{tbcase.id}"/>
-			<f:param name="examid" value="#{null}"/>
-			<span>#{messages['cases.details.newresult']}</span>
-		</s:link>
-		<h2>#{messages['cases.examculture']}</h2>
-		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examCultureHome.allResults}" />
+	<h:panelGroup id="pnlculture" rendered="false">
+	<s:link view="/cases/edtexamculture.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" 
+		styleClass="button-alt" onclick="disableButton(this)">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h2>#{messages['cases.examculture']}</h2>
+		<s:div styleClass="region3" rendered="#{empty examCultureHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 		<h:dataTable value="#{examCultureHome.allResults}" var="r" rendered="#{not empty examCultureHome.allResults}" width="100%" 
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
 			<h:column>
@@ -220,6 +223,7 @@
 	<div class="spacer" />
 
 	<h:panelGroup id="pnlbiopsy">	
+	
 		<s:link view="/custom/bd/cases/edtexambiopsy.xhtml" 
 			style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
 			<f:param name="id" value="#{tbcase.id}"/>
@@ -228,7 +232,9 @@
 		</s:link>
 		<h2>#{messages['cases.exambiopsy']}</h2>
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examBiopsyHome.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examBiopsyHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 		<h:dataTable value="#{examBiopsyHome.allResults}" var="r" rendered="#{not empty examBiopsyHome.allResults}" width="100%" 
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
 			<h:column>
@@ -262,7 +268,7 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
 				</f:facet>
-				<div class="#{r.result=='NEGATIVE'? 'result-negative': 'result-positive'}">#{messages[r.result.key]}</div>
+				<div class="#{r.result=='NON_TUBERCULUS'? 'result-negative': 'result-positive'}">#{messages[r.result.key]}</div>
 				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}" style="display:block;"/>
 				<s:div rendered="#{not empty r.method}" style="display:block;clear:both;">
 					<h:outputText value="#{messages['cases.exams.method']}"/>: #{r.method}
@@ -277,7 +283,7 @@
 			</h:column>
 
 			<h:column rendered="#{caseHome.canEditExams}">
-				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamCulture(#{r.id});return false;" style="font-size:9px;">
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamBiopsy(#{r.id});return false;" style="font-size:9px;">
 				</h:commandLink>
 			</h:column>			
 		</h:dataTable>
@@ -377,14 +383,17 @@
 	<div class="spacer" />
 
 	<h:panelGroup id="pnlXRay">	
-		<s:link view="/cases/edtexamxray.xhtml" style="float:right;" styleClass="button-alt">
+		<s:link view="/cases/edtexamxray.xhtml" style="float:right;" 
+			styleClass="button-alt" onclick="disableButton(this)">
 			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>
 		</s:link>
 		<h2>#{messages['cases.examxray']}</h2>
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examXRayHome.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examXRayHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 		<h:dataTable value="#{examXRayHome.allResults}" var="r" rendered="#{not empty examXRayHome.allResults}" width="100%" 
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colcb">
 			<h:column>
@@ -436,16 +445,18 @@
 
 	<div class="spacer" />
 
-	<h:panelGroup id="pnlskin">	
+	<h:panelGroup id="pnlskin">		
 		<s:link view="/custom/bd/cases/edtexamskin.xhtml" 
-			style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
+			style="float:right;" styleClass="button-alt" >
 			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>
 		</s:link>
 		<h2>#{messages['cases.examskintest']}</h2>
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examSkinHome.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examSkinHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 		<h:dataTable value="#{examSkinHome.allResults}" var="r" rendered="#{not empty examSkinHome.allResults}" width="100%" 
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
 			<h:column>
@@ -494,7 +505,7 @@
 			</h:column>
 
 			<h:column rendered="#{caseHome.canEditExams}">
-				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamCulture(#{r.id});return false;" style="font-size:9px;">
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamSkin(#{r.id});return false;" style="font-size:9px;">
 				</h:commandLink>
 			</h:column>			
 		</h:dataTable>
@@ -504,4 +515,7 @@
 	<a:actionparam name="param1" assignTo="#{examSkinHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 	
+	<s:decorate template="/cases/comments.xhtml">
+		<ui:param name="panel" value="exams" />
+	</s:decorate>	
 </ui:composition>
