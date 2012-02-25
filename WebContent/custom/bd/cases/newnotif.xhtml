@@ -32,6 +32,10 @@
     </s:decorate>
 		
 	<h:panelGroup id="bd">
+	<s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['Patient.fatherName']}:</ui:define>
+		<h:inputText value="#{patient.fatherName}" style="width:300px;" maxlength="100" />
+	</s:decorate>
     <s:decorate id="dt" template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>
     	<ui:param name="required" value="false" /> 
@@ -65,17 +69,17 @@
 	</a:commandLink>
 </div>
 
-<s:decorate template="/layout/naveg.xhtml" rendered="#{patients.searching}">
-	<ui:param name="list" value="#{patients}" />
+<s:decorate template="/layout/naveg.xhtml" rendered="#{patientsbd.searching}">
+	<ui:param name="list" value="#{patientsbd}" />
 	<ui:param name="page" value="/custom/bd/cases/newnotif.xhtml" />
 </s:decorate>
 
-<h:dataTable value="#{patients.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
-	rendered="#{patients.searching and (not empty patients.resultList)}" width="680px" columnClasses="coll,colc,colc,coll">
+<h:dataTable value="#{patientsbd.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
+	rendered="#{patientsbd.searching and (not empty patientsbd.resultList)}" width="680px" columnClasses="coll,colc,colc,coll">
 	<h:column>
 		<f:facet name="header">
 			<s:link value="#{messages['Patient.name']}" styleClass="collh">
-  			<f:param name="order" value="#{patients.order=='p.name,p.middleName'?'p.name desc,p.middleName desc':''}" />
+  			<f:param name="order" value="#{patientsbd.order=='p.name,p.middleName'?'p.name desc,p.middleName desc':''}" />
 			</s:link>
 		</f:facet>
 		<s:link view="/custom/bd/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;">
@@ -93,7 +97,7 @@
 	<h:column>
 		<f:facet name="header">
 			<s:link value="#{messages['Patient.birthDate']}" >
-  			<f:param name="order" value="p.birthDate#{patients.order=='p.birthDate'?' desc':''}" />
+  			<f:param name="order" value="p.birthDate#{patientsbd.order=='p.birthDate'?' desc':''}" />
 			</s:link>
 		</f:facet>
 		<h:outputText value="#{it.patient.birthDate}"  converter="localeDateConverter"/>
@@ -102,7 +106,7 @@
 	<h:column>
 		<f:facet name="header">
 			<s:link value="#{messages['Patient.securityNumber']}" styleClass="collh">
-  			<f:param name="order" value="p.securityNumber#{patients.order=='p.securityNumber'?' desc':''}" />
+  			<f:param name="order" value="p.securityNumber#{patientsbd.order=='p.securityNumber'?' desc':''}" />
 			</s:link>
 		</f:facet>
 		#{it.patient.securityNumber}
@@ -135,8 +139,8 @@ function checkfields() {
 </script>
 <a:jsFunction name="searchPatient" reRender="pnlpatients,dt" 
 	oncomplete="if (data) showbutton();enableButton();"
-	action="#{patients.search}"  
-	data="#{patients.searching}" />
+	action="#{patientsbd.search}"  
+	data="#{patientsbd.searching}" />
 
 
 </h:form>

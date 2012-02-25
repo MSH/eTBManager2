@@ -21,7 +21,7 @@ import org.msh.utils.EntityQuery;
 public class PatientsQuery extends EntityQuery {
 	private static final long serialVersionUID = -2441729659688297288L;
 
-	@In(required=false) Patient patient;
+	@In(required=false) protected Patient patient;
 
 	private boolean searching;
 	private List<Item> patientList;
@@ -86,15 +86,15 @@ public class PatientsQuery extends EntityQuery {
 	}
 
 	public String getNameLike() {
-		return (patient == null) || (patient.getName() == null) || (patient.getName().isEmpty()) ? null: patient.getName().toUpperCase() + "%"; 
+		return (patient == null) || (patient.getName() == null) || (patient.getName().isEmpty()) ? null: "%" + patient.getName().toUpperCase() + "%"; 
 	}
 
 	public String getMiddleNameLike() {
-		return (patient == null) || (patient.getMiddleName() == null) || (patient.getMiddleName().isEmpty()) ? null: patient.getMiddleName().toUpperCase() + "%"; 
+		return (patient == null) || (patient.getMiddleName() == null) || (patient.getMiddleName().isEmpty()) ? null: "%" + patient.getMiddleName().toUpperCase() + "%"; 
 	}
 
 	public String getLastNameLike() {
-		return (patient == null) || (patient.getLastName() == null) || (patient.getLastName().isEmpty()) ? null: patient.getLastName().toUpperCase() + "%"; 
+		return (patient == null) || (patient.getLastName() == null) || (patient.getLastName().isEmpty()) ? null: "%" + patient.getLastName().toUpperCase() + "%"; 
 	}
 
 	public boolean isSearching() {
