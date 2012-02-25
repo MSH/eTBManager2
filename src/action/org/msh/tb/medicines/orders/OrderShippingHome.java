@@ -11,6 +11,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
 import org.msh.tb.entities.Batch;
@@ -25,7 +26,6 @@ import org.msh.tb.entities.enums.OrderStatus;
 import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
-import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.DateUtils;
 
 @Name("orderShippingHome")
@@ -137,14 +137,10 @@ public class OrderShippingHome extends Controller {
 		if (!canShip)
 			return "error";
 		movementHome.savePreparedMovements();
-
-//		facesMessages.addFromResourceBundle("meds.orders.shipped");
 		
 		entityManager.persist(order);
 		
-		TransactionLogService log = new TransactionLogService();
-		log.addTableRow(".shippingDate", order.getShippingDate());
-		log.saveExecuteTransaction("SEND_ORDER", order);
+		Events.instance().raiseEvent("medicine-order-shipped");
 		
 		return "persisted";	
 	}
@@ -152,7 +148,7 @@ public class OrderShippingHome extends Controller {
 
 	
 	/**
-	 * Initialize order shipment 
+	 * Initialize order shipment, selecting the best batches (using FEFO) to be shipped
 	 */
 	public void initialize() {
 		if (initialized)

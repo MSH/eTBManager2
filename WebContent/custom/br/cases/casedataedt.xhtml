@@ -226,6 +226,7 @@
     	<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
     	<ui:param name="datefield" value="#{tbcase.registrationDate}" /> 
 		<ui:param name="required" value="true" />
+		<ui:param name="future" value="false" />
 		<ui:param name="edtid" value="edtregdate" />
     </s:decorate>
     </div>
@@ -284,7 +285,7 @@
 
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
-    		<h:selectOneMenu id="infectsite" value="#{tbcase.infectionSite}" required="#{tbcase.validated}">
+    		<h:selectOneMenu id="infectsite" value="#{tbcase.infectionSite}" required="true">
     			<s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="-" label="#{messages[it.key]}" />
     			<s:convertEnum />
     		</h:selectOneMenu>

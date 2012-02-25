@@ -20,8 +20,7 @@ public class ETB {
 		if (workspace == null)
 			return clazz;
 
-		Workspace defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace");
-		String ext = defaultWorkspace.getExtension();
+		String ext = workspace.getExtension();
 		if (ext != null) {
 			String className = clazz.getName();
 			className = className.replace("org.msh.tb", "org.msh.tb." + ext);

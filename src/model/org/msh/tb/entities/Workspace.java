@@ -105,8 +105,12 @@ public class Workspace implements Serializable {
 	
 	@Column(length=200)
 	private String url;
-	
-	
+
+
+	/**
+	 * Indicate if system will send e-mail messages to the users in certain system events (like new orders, orders authorized, etc)
+	 */
+	private boolean sendSystemMessages;
 
 
 	public WeeklyFrequency[] getWeeklyFrequencies() {
@@ -429,6 +433,20 @@ public class Workspace implements Serializable {
 	 */
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	/**
+	 * @return the sendSystemMessages
+	 */
+	public boolean isSendSystemMessages() {
+		return sendSystemMessages;
+	}
+
+	/**
+	 * @param sendSystemMessages the sendSystemMessages to set
+	 */
+	public void setSendSystemMessages(boolean sendSystemMessages) {
+		this.sendSystemMessages = sendSystemMessages;
 	}
 
 }

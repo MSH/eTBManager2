@@ -606,7 +606,7 @@ table {
 
 .table2 {
 	border-collapse:collapse;
-	border:1px solid #c6dec6;
+/*	border:1px solid #c6dec6; */
 	background-color:#ffffff;
 	width:100%;
 }
@@ -622,6 +622,7 @@ table {
 	padding:2px;
 	padding:4px 5px 4px 5px;
 	vertical-align: top;
+	border-bottom:1px solid #d5f0d5; 
 }
 .table2 .highlight {
 	background-color:#dbebdb;

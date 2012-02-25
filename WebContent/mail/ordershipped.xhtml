@@ -6,7 +6,7 @@
       			xmlns:s="http://jboss.com/products/seam/taglib"
                 template="usertemplate.xhtml">
       
-      <ui:param name="subject" value="#{messages['meds.orders.new']}" />
+      <ui:param name="subject" value="#{messages['meds.orders.shipped']}" />
       
       <ui:define name="content">
           
@@ -16,7 +16,7 @@
         	<f:param value="#{user.name}" />
         </h:outputFormat>,<p/>
         <br/>
-        #{messages['meds.orders.mail.new.msg1']}:<p/>
+        #{messages['meds.orders.mail.shipped.msg1']}<p/>
         <br/>
         <div style="font-size:16px;font-weight:bold;">#{order.unitFrom.name}</div>
     	<s:fragment rendered="#{not empty order.shipAddress}">
@@ -27,7 +27,7 @@
     		#{order.shipAddressCont}<br/>
     	</s:fragment>
     	<s:fragment rendered="#{not empty order.shipZipCode}">
-    		#{order.shipZipCode}<br/>
+    		<b>#{messages['Address.zipCode']}: </b> #{order.shipZipCode}<br/>
     	</s:fragment>
         #{order.unitFrom.adminUnit.fullDisplayName}
         
@@ -41,19 +41,18 @@
        	<b>#{messages['Order.shipContactName']}: </b>#{order.shipContactName}
        	<br/>
        	<b>#{messages['Order.shipContactPhone']}: </b>#{order.shipContactPhone}
-        <br/><br/>
+       	<br/><br/>
        	
-<table width="100%" style="font-family:Tahoma,Arial,Sans Serif;font-size:12px;margin-top:20px;border:1px solid black;">
+
+
+<table width="100%" style="font-family:Verdana,Arial,Sans Serif;font-size:12px;margin-top:20px;border:1px solid black;">
 	<ui:repeat value="#{orderHome.sources}" var="s">
-	<tr><td style="background-color:#194631;color:white;padding:4px;" colspan="5">
+	<tr><td style="background-color:#194631;color:white;padding:4px;" colspan="2">
 		<b>#{s.source.abbrevName}</b> <span style="font-size:10px">(#{s.source.name})</span>
 	</td></tr>
 	<tr style="background-color:#307b57">
 		<th align="left" style="color:white;padding:4px;">#{messages['Medicine']}</th>
-		<th align="right" style="color:white;padding:4px;">#{messages['meds.stockpos']}</th>
-		<th align="right" style="color:white;padding:4px;">#{messages['OrderItem.numPatients']}</th>
-		<th align="right" style="color:white;padding:4px;">#{messages['OrderItem.estimatedQuantity']}</th>
-		<th align="right" style="color:white;padding:4px;">#{messages['OrderItem.requestedQuantity']}</th>
+		<th align="right" style="color:white;padding:4px;">#{messages['OrderItem.shippedQuantity']}</th>
 	</tr>
 	<ui:repeat value="#{s.items}" var="it" width="500px">
 	<tr>
@@ -61,22 +60,7 @@
 			#{it.item.medicine}
 		</td>
 		<td align="right" style="border-bottom:1px solid #a4c1b3">
-			<h:outputText value="#{it.item.stockQuantity}">
-				<f:convertNumber pattern="###,###,###"/>
-			</h:outputText>
-		</td>
-		<td align="right" style="border-bottom:1px solid #a4c1b3">
-			<h:outputText value="#{it.item.numPatients}">
-				<f:convertNumber pattern="###,###,###"/>
-			</h:outputText>
-		</td>
-		<td align="right" style="border-bottom:1px solid #a4c1b3">
-			<h:outputText value="#{it.item.estimatedQuantity}">
-				<f:convertNumber pattern="###,###,###"/>
-			</h:outputText>
-		</td>
-		<td align="right" style="border-bottom:1px solid #a4c1b3">
-			<h:outputText value="#{it.item.requestedQuantity}">
+			<h:outputText value="#{it.item.shippedQuantity}">
  				<f:convertNumber pattern="###,###,###"/>
 			</h:outputText>
 		</td>

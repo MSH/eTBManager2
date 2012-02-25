@@ -38,6 +38,10 @@
     	<ui:define name="label">#{messages['Workspace.extension']}:</ui:define>
     	<h:inputText value="#{workspace.extension}" size="4" style=" width : 70px;" />
     </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<h:selectBooleanCheckbox value="#{workspace.sendSystemMessages}" /> #{messages['Workspace.sendSystemMessages']}
+    </s:decorate>
 	
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Workspace.defaultLocale']}:</ui:define>

@@ -59,9 +59,8 @@
       	</h:selectOneMenu>
     </s:decorate>
 	
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['SystemConfig.systemURL']}:</ui:define>
-    	<h:inputText value="#{workspaceHome.defaultWorkspace.url}" size="200" style=" width : 300px;" />
+    <s:decorate template="/layout/edit.xhtml">
+    	<h:selectBooleanCheckbox value="#{workspaceHome.defaultWorkspace.sendSystemMessages}" /> #{messages['Workspace.sendSystemMessages']}
     </s:decorate>
 	
     <s:decorate template="/layout/edit.xhtml" >

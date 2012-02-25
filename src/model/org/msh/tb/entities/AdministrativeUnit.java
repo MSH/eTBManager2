@@ -106,6 +106,24 @@ public class AdministrativeUnit extends WSObject {
 
 
 	/**
+	 * Static method that return the parent code of a given code
+	 * @param code
+	 * @return
+	 */
+	public static String getParentCode(String code) {
+		if ((code == null) || (code.length() <= 3))
+			return null;
+
+		if (code.length() <= 6)
+			return code.substring(0, 3);
+		if (code.length() <= 9)
+			return code.substring(0, 6);
+		if (code.length() <= 12)
+			return code.substring(0, 9);
+		return code.substring(0, 12);
+	}
+	
+	/**
 	 * Check if an administrative unit code (passed as the code parameter) is a child of the current administrative unit
 	 * @param code of the unit
 	 * @return true if code is of a child unit, otherwise return false

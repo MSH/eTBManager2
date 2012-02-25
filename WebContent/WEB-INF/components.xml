@@ -84,17 +84,16 @@
 
 
 	<framework:entity-query name="allusers" ejbql="from User u" order="u.name"/>
-	<framework:entity-query name="userRoles" ejbql="from UserRole ur" order="ur.code" />
 	
     <component name="org.jboss.seam.document.documentStore"> 
         <property name="useExtensions">true</property>
         <property name="errorPage">/pdfMissing.seam</property>
     </component>
 
-	<pdf:key-store-config key-store="pdf.keystore"
+<!-- 	<pdf:key-store-config key-store="pdf.keystore"
 		key-store-password="storepass" key-password="keypass"
 		key-alias="pdfKey" />
-    
+ -->    
 
 	<international:locale-selector cookie-enabled="true"/>
 

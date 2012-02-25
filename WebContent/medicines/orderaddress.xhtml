@@ -21,11 +21,9 @@
     		#{order.shipAddressCont}<br/>
     	</s:fragment>
     	<s:fragment rendered="#{not empty order.shipZipCode}">
-    		#{order.shipZipCode}<br/>
+    		#{messages['Address.zipCode']}: #{order.shipZipCode}<br/>
     	</s:fragment>
-    	<a:repeat value="#{orderHome.auselection.selectedUnit.parents}" var="it">
-    		<span style="margin-right:10px;">#{it.name}</span> 
-    	</a:repeat>
+    	#{order.shipAdminUnit.fullDisplayName}
     </s:decorate>
 
 </ui:composition>  

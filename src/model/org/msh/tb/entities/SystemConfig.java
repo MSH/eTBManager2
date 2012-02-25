@@ -25,6 +25,9 @@ public class SystemConfig {
 	@Column(length=100)
 	@NotNull
 	private String systemURL;
+	
+	@Column(length=200)
+	private String pageRootURL;
 
 	@Column(length=100)
 	@NotNull
@@ -196,5 +199,19 @@ public class SystemConfig {
 	 */
 	public void setBuildNumber(Integer buildNumber) {
 		this.buildNumber = buildNumber;
+	}
+
+	/**
+	 * @return the pageRootURL
+	 */
+	public String getPageRootURL() {
+		return pageRootURL;
+	}
+
+	/**
+	 * @param pageRootURL the pageRootURL to set
+	 */
+	public void setPageRootURL(String pageRootURL) {
+		this.pageRootURL = pageRootURL;
 	}
 }

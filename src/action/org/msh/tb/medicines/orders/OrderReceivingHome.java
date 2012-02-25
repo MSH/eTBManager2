@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
 import org.jboss.seam.international.Messages;
@@ -27,7 +28,6 @@ import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.entities.enums.OrderStatus;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
-import org.msh.tb.transactionlog.TransactionLogService;
 
 
 @Name("orderReceivingHome")
@@ -142,10 +142,8 @@ public class OrderReceivingHome extends Controller {
 
 		facesMessages.addFromResourceBundle("meds.orders.received");
 		entityManager.persist(order);
-
-		TransactionLogService log = new TransactionLogService();
-		log.addTableRow(".receivingDate", order.getReceivingDate());
-		log.saveExecuteTransaction("RECEIV_ORDER", order);
+		
+		Events.instance().raiseEvent("medicine-order-received");
 
 		return "received";		
 	}

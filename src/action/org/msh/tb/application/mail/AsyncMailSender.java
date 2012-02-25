@@ -1,12 +1,14 @@
-package org.msh.tb.login;
+package org.msh.tb.application.mail;
 
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.Queue;
 import java.util.TimeZone;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.async.Asynchronous;
@@ -14,7 +16,6 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.Renderer;
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.TimeZoneSelector;
-import org.msh.tb.application.MailService;
 
 
 /**
@@ -25,7 +26,7 @@ import org.msh.tb.application.MailService;
 @Name("asyncMailSender")
 public class AsyncMailSender {
 	private static final Log logger = LogFactory.getLog(MailService.class);
-	
+
 	@In(create=true) Renderer renderer;
 
 	/**
@@ -90,4 +91,29 @@ public class AsyncMailSender {
 	public void sendLocalizedMessageAsynchronously(String mailPage, Map<String, Object> components, String timeZoneName, String localeName) {
 		sendLocalizedMessage(mailPage, components, timeZoneName, localeName);
 	}
+
+	
+	/**
+	 * Dispatch messages in the queue
+	 */
+	@Asynchronous
+	public void dispatchMessagesAsynchronously(Queue<MessageData> messages) {
+		while (!messages.isEmpty()) {
+			MessageData msg = messages.poll();
+
+			if ((msg.getLocale() != null) || (msg.getTimezone() != null))
+				 sendLocalizedMessage(msg.getMailPage(), msg.getComponents(), msg.getTimezone(), msg.getLocale());
+			else sendMessage(msg.getMailPage(), msg.getComponents());
+		}
+	}
+
+	
+	/**
+	 * Return the application instance of the component
+	 * @return
+	 */
+	public static AsyncMailSender instance() {
+		return (AsyncMailSender)Component.getInstance("asyncMailSender");
+	}
+
 }

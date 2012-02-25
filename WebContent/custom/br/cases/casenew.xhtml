@@ -62,7 +62,7 @@
     				<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
 					<ui:param name="redasterisk" value="true" />
     				<ui:param name="required" value="false" /> 
-    				<ui:param name="future" value="true" /> 
+    				<ui:param name="future" value="false" /> 
     				<ui:param name="datefield" value="#{examMicroscopyHome.instance.dateCollected}" />
     				<ui:param name="edtid" value="edtdatemicroscopy" /> 
     			</s:decorate>
@@ -73,7 +73,7 @@
 		    	<s:decorate template="/layout/dateedit.xhtml" >
 		    		<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
 		    		<ui:param name="required" value="false" /> 
-		    		<ui:param name="future" value="true" /> 
+		    		<ui:param name="future" value="false" /> 
 		    		<ui:param name="datefield" value="#{examMicroscopyHome.instance.dateRelease}" />
 			    </s:decorate>
 			    </div>
@@ -178,14 +178,14 @@
     		<s:decorate template="/layout/dateedit.xhtml" >
     			<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
 		    	<ui:param name="redasterisk" value="true" /> 
-		    	<ui:param name="future" value="true" /> 
+		    	<ui:param name="future" value="false" /> 
 		    	<ui:param name="datefield" value="#{molecularBiology.date}" />
 		    </s:decorate>
 
     		<s:decorate template="/layout/dateedit.xhtml" >
     			<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
 		    	<ui:param name="redasterisk" value="true" /> 
-		    	<ui:param name="future" value="true" /> 
+		    	<ui:param name="future" value="false" /> 
     			<ui:param name="edtid" value="edtMBreleasedate" /> 
     			<ui:param name="datefield" value="#{molecularBiology.dateRelease}" /> 
 		    </s:decorate>
@@ -231,7 +231,7 @@
     			<s:decorate template="/layout/dateedit.xhtml" >
     				<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
     				<ui:param name="required" value="false" /> 
-    				<ui:param name="future" value="true" /> 
+    				<ui:param name="future" value="false" /> 
     				<ui:param name="datefield" value="#{examDST.dateRelease}" /> 
     			</s:decorate>
     		</td><td>
@@ -274,7 +274,7 @@
     		<s:decorate template="/layout/dateedit.xhtml" >
     			<ui:define name="label">#{messages['cases.exams.dateRelease']}:<span style="color:red">*</span></ui:define>
     			<ui:param name="required" value="false" /> 
-    			<ui:param name="future" value="true" /> 
+    			<ui:param name="future" value="false" /> 
     			<ui:param name="datefield" value="#{examHIV.date}" /> 
     			<ui:param name="edtid" value="edthivdate" /> 
     		</s:decorate>
@@ -355,6 +355,7 @@
     		<s:decorate template="/layout/dateedit.xhtml" >
     			<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
     			<ui:param name="required" value="true" /> 
+    			<ui:param name="future" value="false" /> 
     			<ui:param name="datefield" value="#{medicalExaminationBR.date}" /> 
     		</s:decorate>
 

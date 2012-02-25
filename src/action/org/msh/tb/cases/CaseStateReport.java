@@ -205,16 +205,30 @@ public class CaseStateReport {
 	}
 	
 	
+	/**
+	 * Generate the consolidated tag report displayed at the left side of the home page in the case management module
+	 */
 	protected void createTagsReport() {
 		Workspace workspace = (Workspace)Component.getInstance("defaultWorkspace");
 
-		List<Object[]> lst = entityManager.createNativeQuery("select t.id, t.tag_name, t.sqlCondition is null, t.consistencyCheck, count(*) " +
-				"from tags_case a inner join tag t on t.id = a.tag_id " +
-				"where t.workspace_id = :id " +
-				"group by t.id, t.tag_name order by t.tag_name")
+		String s;
+		switch (userWorkspace.getView()) {
+		case TBUNIT: s = "inner join tbcase c on c.id=tc.case_id inner join tbunit u on u.id = c.treatment_unit_id ";
+			break;
+		case ADMINUNIT: s = "inner join tbcase c on c.id=tc.case_id inner join tbunit u on u.id = c.treatment_unit_id inner join administrativeunit a on a.id = u.adminunit_id";
+			break;
+		default: s = "";
+		}
+		
+		String sql = "select t.id, t.tag_name, t.sqlCondition is null, t.consistencyCheck, count(*) " +
+			"from tags_case tc inner join tag t on t.id = tc.tag_id " + s +
+			" where t.workspace_id = :id " + generateSQLConditionByUserView() + 
+			" group by t.id, t.tag_name order by t.tag_name";
+		
+		List<Object[]> lst = entityManager.createNativeQuery(sql)
 				.setParameter("id", workspace.getId())
 				.getResultList();
-		
+
 		tags = new ArrayList<Item>();
 		for (Object[] vals: lst) {
 			Item item = new Item();

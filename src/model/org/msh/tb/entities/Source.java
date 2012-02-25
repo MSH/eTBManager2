@@ -48,7 +48,7 @@ public class Source extends WSObject implements Serializable {
 		if (!(other instanceof Source))
 			return false;
 
-		Integer objid = ((Source)other).id;
+		Integer objid = ((Source)other).getId();
 		
 		if ((objid == null) || (id == null))
 			return false;

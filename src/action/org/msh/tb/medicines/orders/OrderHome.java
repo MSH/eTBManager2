@@ -10,6 +10,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.EntityHomeEx;
@@ -26,7 +27,6 @@ import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.MedicineSelection;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
-import org.msh.tb.transactionlog.TransactionLogService;
 
 
 
@@ -42,6 +42,8 @@ public class OrderHome extends EntityHomeEx<Order>{
 	private List<SourceOrderItem> sources;
 	private SourceOrderItem item;
 	private AdminUnitSelection auselection;
+	
+	private String cancelReason;
 	
 	@Factory("order")
 	public Order getOrder() {
@@ -94,14 +96,9 @@ public class OrderHome extends EntityHomeEx<Order>{
 		
 		OrderStatus st;
 		if (order.getUnitTo().getAuthorizerUnit() != null)
-			st = OrderStatus.WAITAUTHORIZING;
-		else {
-			st = OrderStatus.WAITSHIPMENT;
-/*			order.setApprovingDate(orderDate);
-			for (OrderItem it: order.getItems()) {
-				it.setApprovedQuantity(it.getRequestedQuantity());
-			}
-*/		}
+			 st = OrderStatus.WAITAUTHORIZING;
+		else st = OrderStatus.WAITSHIPMENT;
+
 		order.setStatus(st);
 		order.setOrderDate(new Date());
 		order.setNumDays(order.getUnitFrom().getNumDaysOrder());
@@ -116,13 +113,8 @@ public class OrderHome extends EntityHomeEx<Order>{
 		if (!ret.equals("persisted"))
 			return ret;
 
-		// register log about new order
-		TransactionLogService logSrv = getLogService();
-		logSrv.addTableRow(".unitFrom", order.getUnitFrom().toString());
-		logSrv.addTableRow(".unitTo", order.getUnitTo().toString());
-		logSrv.saveExecuteTransaction("NEW_ORDER", order);
-		
-		OrderMsgDispatcher.instance().notifyNewOrder();
+
+		Events.instance().raiseEvent("new-medicine-order");
 		
 		return ret;
 	}
@@ -174,13 +166,22 @@ public class OrderHome extends EntityHomeEx<Order>{
 	 */
 	@Transactional
 	public String cancelOrder() {
-		if (getOrder().getStatus() == OrderStatus.RECEIVED) {
+		Order order = getOrder();
+		
+		if (order.getStatus() == OrderStatus.RECEIVED) {
 			facesMessages.addFromResourceBundle("meds.orders.cannotcancel");
 			return "error";
 		}
 		
-		getOrder().setStatus(OrderStatus.CANCELLED);
-
+		// limit the number of chars
+		if ((cancelReason != null) && (cancelReason.length() > 200)) {
+			facesMessages.addToControlFromResourceBundle("edtcanceltext", "javax.faces.validator.LengthValidator.MAXIMUM", 200);
+			return "error";
+		}
+		
+		order.setStatus(OrderStatus.CANCELLED);
+		order.setCancelReason(cancelReason);
+		
 		movementHome.initMovementRecording();
 		// exclui os movimento gerados com o pedido
 		for (OrderItem item: getOrder().getItems()) {
@@ -200,9 +201,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 		}
 		movementHome.savePreparedMovements();
 		
-		
-		// register log
-		getLogService().saveExecuteTransaction("ORDER_CANC", getInstance());
+		Events.instance().raiseEvent("order-canceled");
 		
 		if (update().equals("updated"))
 			 return "ordercanceled";
@@ -379,5 +378,21 @@ public class OrderHome extends EntityHomeEx<Order>{
 		if (auselection == null)
 			auselection = new AdminUnitSelection();
 		return auselection;
+	}
+
+
+	/**
+	 * @return the cancelReason
+	 */
+	public String getCancelReason() {
+		return cancelReason;
+	}
+
+
+	/**
+	 * @param cancelReason the cancelReason to set
+	 */
+	public void setCancelReason(String cancelReason) {
+		this.cancelReason = cancelReason;
 	}
 }

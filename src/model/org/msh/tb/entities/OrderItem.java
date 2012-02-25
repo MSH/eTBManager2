@@ -81,7 +81,21 @@ public class OrderItem implements Serializable {
 	@Transient
 	private Object data;
 
+	
+	/**
+	 * Return the quantity to be shipped. If approved quantity is entered, it's returned, otherwise
+	 * the requested quantity is
+	 * @return
+	 */
+	public Integer getQuantityToShip() {
+		return (approvedQuantity != null? approvedQuantity: requestedQuantity);
+	}
 
+
+	/**
+	 * Return the total price of the medicine to be shipped
+	 * @return
+	 */
 	public float getTotalPrice() {
 		float total = 0;
 		for (OrderBatch b: batches) {
@@ -90,7 +104,12 @@ public class OrderItem implements Serializable {
 		
 		return total;
 	}
-	
+
+
+	/**
+	 * Get the unit price
+	 * @return
+	 */
 	public float getUnitPrice() {
 		float total = 0;
 		float qtd = 0;
