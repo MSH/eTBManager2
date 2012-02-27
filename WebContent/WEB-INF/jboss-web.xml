@@ -9,5 +9,6 @@
             <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
         </loader-repository>
     </class-loading>
-	<context-root>etbmanager</context-root>
+	<context-root>/</context-root>
+	<virtual-host>etbmanager</virtual-host>
 </jboss-web>
