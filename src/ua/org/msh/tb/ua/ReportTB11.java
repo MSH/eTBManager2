@@ -1,5 +1,6 @@
 package org.msh.tb.ua;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +27,9 @@ public class ReportTB11 extends Indicator2D {
 	/**
 	 * Total number of cases in the indicator 
 	 */
-	private float numcases;
+	private float numcases1;
+	private float numcases2;
+	private float numcases3;
 	
 	private IndicatorTable table1;
 	/* (non-Javadoc)
@@ -53,7 +56,7 @@ public class ReportTB11 extends Indicator2D {
 			table.addRow(getMessage("uk_UA.reports.tb11.1.rowheader"+i), "row"+i);
 		}
 		String total = getMessage("uk_UA.reports.tb11.1.total");
-
+		
 		table.addColumn(total, "newcases");
 		table.addColumn("%", "newcases_perc");
 
@@ -62,14 +65,17 @@ public class ReportTB11 extends Indicator2D {
 
 		table.addColumn(total, "others");
 		table.addColumn("%", "others_perc");
-		
+		//table.getRows().get(0).get
 			
 	}
 	
 	protected void generateTable1() {
 		// calculate the number of cases
-		numcases = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal());
-		//numcases =1;
+		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
+		numcases1 = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.NEW.ordinal());
+		numcases2 = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.RELAPSE.ordinal());
+		numcases3 = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.OTHER.ordinal());
+		
 		List<TbCase> lst;
 		
 		String res = "";
@@ -77,71 +83,50 @@ public class ReportTB11 extends Indicator2D {
 		String dstQuery = "";
 		String [] sub = {"H","R","E","S"};
 		
-		int indBlockTab = 0;
 		String examMethod = "ExamDST";
 		res = ".result = 1"; 
 		resdst = " in ('H','R','E','S')";
 		
-		if (numcases == 0)
+		if (numcases1+numcases2+numcases3 == 0)
 			return;
-		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
 		setConsolidated(false);
 		for (int i = 1; i < 31; i++){
 			switch (i) {
 			case 1: {
 				examMethod = "ExamMicroscopy";
 				res = ".result in (0,1,2,3,4)";
-				indBlockTab = 1;
 				dstQuery = "";
 				break;}
 			case 2: {
 				examMethod = "ExamMicroscopy";
 				res = ".result in (1,2,3,4)";
-				indBlockTab = 1;
 				dstQuery = "";
 				break;}
 			case 3: {
 				examMethod = "ExamCulture";
 				res = ".result in (0,1,2,3,4)";
-				indBlockTab = 2;
 				dstQuery = "";
 				break;}
 			case 4: {
 				examMethod = "ExamCulture";
 				res = ".result in (1,2,3,4)";
-				indBlockTab = 2;
 				dstQuery = "";
 				break;}
 			case 5: {
 				examMethod = "ExamDST";
 				resdst = " in ('H','R','E','S')"; //ex"+res+" and
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
-				indBlockTab = 3;
 				break;}
 			case 6: {
 				examMethod = "ExamDST";
 				res = ".result = 2"; // 2 ~ Susceptible!
 				resdst = " in ('H','R','E','S')"; 
-				/*dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+
-				" and (ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 = 'H')" +
-				" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 = 'R')" +
-				" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 = 'E')" +
-				" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 = 'S')" +
-				"))";*/
-				indBlockTab = 3;
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 			case 7: {
 				examMethod = "ExamDST";
 				res = ".result = 1"; // 1 ~ Resistant!
 				resdst = " in ('H','R','E','S')";
-				/*dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+
-						" and (ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 = 'H')" +
-						" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 = 'R')" +
-						" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 = 'E')" +
-						" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 = 'S')" +
-						"))";*/
-				indBlockTab = 3;
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 
@@ -152,7 +137,6 @@ public class ReportTB11 extends Indicator2D {
 				sub[3] = "S";
 				res = ".result = 1"; 
 				resdst = " in ('H','R','E','S')";
-				indBlockTab = 4;
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 			
@@ -163,7 +147,6 @@ public class ReportTB11 extends Indicator2D {
 				sub[3] = "S"; 
 				res = ".result = 1"; 
 				resdst = " in ('H','R','E','S')";
-				indBlockTab = 4;
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 			case 11: {
@@ -173,7 +156,6 @@ public class ReportTB11 extends Indicator2D {
 				sub[3] = "S";
 				res = ".result = 1"; 
 				resdst = " in ('H','R','E','S')";
-				indBlockTab = 4;
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 			case 12: {
@@ -183,7 +165,6 @@ public class ReportTB11 extends Indicator2D {
 				sub[3] = "H";
 				res = ".result = 1"; 
 				resdst = " in ('H','R','E','S')";
-				indBlockTab = 4;
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 			case 16: {
@@ -193,7 +174,6 @@ public class ReportTB11 extends Indicator2D {
 				sub[3] = "E";
 				res = ".result = 1"; 
 				resdst = " in ('H','R','E','S')";
-				indBlockTab = 4;
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 			case 21:{
@@ -203,7 +183,6 @@ public class ReportTB11 extends Indicator2D {
 				sub[3] = "R";
 				res = ".result = 1"; 
 				resdst = " in ('H','R','E','S')";
-				indBlockTab = 4;
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 			case 25:{
@@ -213,7 +192,6 @@ public class ReportTB11 extends Indicator2D {
 				sub[3] = "H";
 				res = ".result = 1"; 
 				resdst = " in ('H','R','E','S')";
-				indBlockTab = 4;
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 			
@@ -224,7 +202,6 @@ public class ReportTB11 extends Indicator2D {
 				sub[3] = "S";
 				res = ".result = 1"; 
 				resdst = " in ('H','R','E','S')";
-				indBlockTab = 4;
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 			case 20:{
@@ -234,7 +211,6 @@ public class ReportTB11 extends Indicator2D {
 				sub[3] = "E";
 				res = ".result = 1"; 
 				resdst = " in ('H','R','E','S')";
-				indBlockTab = 4;
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 			case 23:{
@@ -244,7 +220,6 @@ public class ReportTB11 extends Indicator2D {
 				sub[3] = "E"; 
 				res = ".result = 1"; 
 				resdst = " in ('H','R','E','S')";
-				indBlockTab = 4;
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 			case 24:{
@@ -254,7 +229,6 @@ public class ReportTB11 extends Indicator2D {
 				sub[3] = "S"; 
 				res = ".result = 1"; 
 				resdst = " in ('H','R','E','S')";
-				indBlockTab = 4;
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 			case 26:{
@@ -264,7 +238,6 @@ public class ReportTB11 extends Indicator2D {
 				sub[3] = "R"; 
 				res = ".result = 1"; 
 				resdst = " in ('H','R','E','S')";
-				indBlockTab = 4;
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 			
@@ -278,123 +251,88 @@ public class ReportTB11 extends Indicator2D {
 		
 		lst = createQuery().getResultList();
 		Iterator<TbCase> it = lst.iterator();
-		outer:
+		
+		int res0=0;
+		int res1=0;
+		int res2=0;
+		int res3=0;
+		
 		while(it.hasNext()){
 			TbCase tc = it.next();
-			//if (tc.isValidated() && tc.getNotificationUnit().getWorkspace().getId().equals(940358))
+			res0=0;
+			res1=0;
+			res2=0;
+			res3=0;
 			switch (i) {
-			case 1:case 2:case 3:case 4:case 5:{
-				addValueTable(tc.getPatientType(),i);
-				break;}
-			case 6:{
-				for (ExamDST ex: tc.getExamsDST()){
-					int key =0;						
-					if (rightTest(ex,tc))
-						for (ExamDSTResult exr: ex.getResults()) {
-							if (exr.getResult().ordinal()==2){
-								if (exr.getSubstance().getAbbrevName().getName1().equals(sub[0]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[1]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[2]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[3]))
-										key++;
-								if (key == 4)
+				case 1:case 2:case 3:case 4:case 5:{
+					addValueTable(tc.getPatientType(),i);
+					break;}
+				case 6:case 9:case 10:case 11:case 12:case 14:case 19:case 20:case 23:case 24:case 26:case 15:case 16:case 21:case 25:case 17:{
+					ExamDST ex = rightTest(tc);
+					if (ex != null){
+						for (ExamDSTResult exr: ex.getResults()) 
+						{
+							if (exr.getSubstance().getAbbrevName().getName1().equals(sub[0])) res0 = exr.getResult().ordinal();	
+							if (exr.getSubstance().getAbbrevName().getName1().equals(sub[1])) res1 = exr.getResult().ordinal();	
+							if (exr.getSubstance().getAbbrevName().getName1().equals(sub[2])) res2 = exr.getResult().ordinal();	
+							if (exr.getSubstance().getAbbrevName().getName1().equals(sub[3])) res3 = exr.getResult().ordinal();	
+						}					
+						switch (i){
+							case 6:{
+								if (res0 == 2 && res1 == 2 && res2 == 2 && res3 == 2) 
+									addValueTable(tc.getPatientType(),i); 	
+								break;}
+		//					Cases, when 3 substances must be resistant and 1 other must be not resistant 			
+							case 9:case 10:case 11:case 12:{
+								if (res0 == 1 && res1 !=1 && res2 !=1 && res3 !=1) 
+									addValueTable(tc.getPatientType(),i); 	
+								break;}
+		//					Cases, when 2 substances must be resistant and 2 other must be not resistant 
+							case 14:case 19:case 20:case 23:case 24:case 26:{
+								if (res0 == 1 && res1 ==1 && res2 !=1 && res3 !=1) 
 									addValueTable(tc.getPatientType(),i); 
-								}
-							}	
-						}
-				break;}
-			case 7:{
-				for (ExamDST ex: tc.getExamsDST()){
-					int key =0;						
-					if (rightTest(ex,tc))
-						for (ExamDSTResult exr: ex.getResults()) {
-							if (exr.getResult().ordinal()==1){
-								if (exr.getSubstance().getAbbrevName().getName1().equals(sub[0]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[1]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[2]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[3]))
-										key++;
-								if (key == 4)
+								break;}
+		//					Cases, when 1 substances must be resistant and 3 other must be not resistant 			
+							case 15:case 16:case 21:case 25:{
+								if (res0 == 1 && res1 ==1 && res2 ==1 && res3 !=1) 
 									addValueTable(tc.getPatientType(),i); 
-								}
-							}	
+								break;}
+		//					Case when 4 substances must be resistant 			
+							case 17:{
+								if (res0 == 1 && res1 ==1 && res2 !=1 && res3 ==1) 
+									addValueTable(tc.getPatientType(),i); 
+								break;}
 						}
-				break;}
-			
-//			Case when 3 substances must be resistant and 1 other must be not resistant 			
-			case 9:case 10:case 11:case 12:{
-				for (ExamDST ex: tc.getExamsDST()) {
-					//System.out.println(ex.getDateRelease());
-					
-					if (rightTest(ex,tc))
-					for (ExamDSTResult exr: ex.getResults()) {
-						if (exr.getResult().ordinal()==1){
-						if (exr.getSubstance().getAbbrevName().getName1().equals(sub[1]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[2]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[3]))
-								continue outer;
-						if (exr.getSubstance().getAbbrevName().getName1().equals(sub[0]))
-							addValueTable(tc.getPatientType(),i); 
-						}	
 					}
-				}	
-				break;}
-//			Case when 2 substances must be resistant and 2 other must be not resistant 
-			case 14:case 19:case 20:case 23:case 24:case 26:{
-				for (ExamDST ex: tc.getExamsDST()) {
-					int key=0;
-					if (rightTest(ex,tc))
-					for (ExamDSTResult exr: ex.getResults()) {
-						if (exr.getResult().ordinal()==1){
-						if (exr.getSubstance().getAbbrevName().getName1().equals(sub[2]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[3]))
-								continue outer;
-						if (exr.getSubstance().getAbbrevName().getName1().equals(sub[0]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[1]))
-							key++;
-						if (key == 2)
-							addValueTable(tc.getPatientType(),i); 
-						}	
-					}
-				}	
-				break;}
-//			Case when 1 substances must be resistant and 3 other must be not resistant 			
-			case 15:case 16:case 21:case 25:{
-				for (ExamDST ex: tc.getExamsDST()) {
-					int key=0;
-					if (rightTest(ex,tc))
-					for (ExamDSTResult exr: ex.getResults()) {
-						if (exr.getResult().ordinal()==1){
-						if (exr.getSubstance().getAbbrevName().getName1().equals(sub[3]))
-								continue outer;
-						if (exr.getSubstance().getAbbrevName().getName1().equals(sub[2]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[0]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[1]))
-							key++;
-						if (key == 3)
-							addValueTable(tc.getPatientType(),i); 
-						}	
-					}
-				}	
-				break;}
-//			Case when 4 substances must be resistant 			
-			case 17:{
-				for (ExamDST ex: tc.getExamsDST()) {
-					int key=0;
-					if (rightTest(ex,tc))
-					for (ExamDSTResult exr: ex.getResults()) {
-						if (exr.getResult().ordinal()==1){
-						
-						if (exr.getSubstance().getAbbrevName().getName1().equals(sub[2]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[3]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[0]) || exr.getSubstance().getAbbrevName().getName1().equals(sub[1]))
-							key++;
-						if (key == 4)
-							addValueTable(tc.getPatientType(),i); 
-						}	
-					}
-				}	
-				break;}
+					break;}
 		}
 		}
 		}
-		numcases = table1.getCellAsFloat("newcases", "row5")+table1.getCellAsFloat("relapses", "row5")+table1.getCellAsFloat("others", "row5");
+		float gr5 = table1.getCellAsFloat("newcases", "row5")+table1.getCellAsFloat("relapses", "row5")+table1.getCellAsFloat("others", "row5");
+		//numcases += gr5;
 		calcSummaryFields();
 		for (int i = 1; i < 31; i++)
 			for (String colid: cols) 
 				calcPercentage(colid,i);	
 }
+
 	
 	private void calcSummaryFields() {
 		float total;
 		for (int i = 1; i < 31; i++)
 			switch (i){
+			case 7:{
+				for (String colid: cols){
+					total = table1.getCellAsFloat(colid, "row8");
+					total += table1.getCellAsFloat(colid, "row13");
+					total += table1.getCellAsFloat(colid, "row18");
+					total += table1.getCellAsFloat(colid, "row22");
+					total += table1.getCellAsFloat(colid, "row26");
+					
+					table1.addIdValue(colid, "row"+i, total);			
+				}
+				break;
+			}
 			case 8:case 13:case 18:case 22:{
 				calcSum4next(i);
 				break;
@@ -464,28 +402,64 @@ public class ReportTB11 extends Indicator2D {
 		}	
 	}
 	
-	private boolean rightTest(ExamDST ex, TbCase tc){
+	private ExamDST rightTest(TbCase tc){
 		Calendar dateTest = Calendar.getInstance();
 		Calendar dateIniTreat = Calendar.getInstance();
-		dateTest.setTime(ex.getDateCollected());
-		dateIniTreat.setTime(tc.getTreatmentPeriod().getIniDate());
-		long testperiod = dateTest.getTimeInMillis()-dateIniTreat.getTimeInMillis();
-		testperiod/=86400000;
-		if (testperiod<=30) 
-			return true;
-			else return false;
-	}
+		int res=0;
+		ArrayList<ExamDST> lst = new ArrayList<ExamDST>();
+		for (ExamDST ex: tc.getExamsDST()){
+			dateTest.setTime(ex.getDateCollected());
+			dateIniTreat.setTime(tc.getTreatmentPeriod().getIniDate());
+			long testperiod = dateTest.getTimeInMillis()-dateIniTreat.getTimeInMillis();
+			testperiod/=86400000;
+			
+			if (testperiod<=30) {
+				res++;
+				lst.add(ex);
+			}	
+		}
 		
+		switch (lst.size()) {
+		case 0: 
+			return null;
+		case 1: 
+			return lst.get(0);
+		default:
+			return WorstRes(lst);
+		}
+	}
+	
+	private ExamDST WorstRes(List<ExamDST> lst) {
+		int tmp = 0;
+		int max = Integer.MIN_VALUE;
+		ExamDST minEl = null;
+		for (ExamDST el:lst){
+			tmp = 0;
+			tmp = el.getNumResistant();
+			/*for (ExamDSTResult exr: el.getResults()){
+				tmp += (exr.getResult().ordinal()==0 ? 4 : exr.getResult().ordinal());
+			}*/
+			if (tmp > max) {
+				max = tmp; 
+				minEl=el;
+				}
+		}
+		return minEl;
+	}
+	
 	private void calcPercentage(String colid, int rowid) {
-		float total;
+		float total=0;
 		switch (rowid) {
-		case 1: case 2: case 3: case 4:{
-			total = table1.getCellAsFloat("newcases", "row"+rowid)+table1.getCellAsFloat("relapses", "row"+rowid)+table1.getCellAsFloat("others", "row"+rowid);
+		case 2: case 4:case 5:{
+			total = table1.getCellAsFloat(colid, "row"+(rowid-1));//+table1.getCellAsFloat("relapses", "row"+rowid)+table1.getCellAsFloat("others", "row"+rowid);
 			break;}
 		default: {
-			total = numcases;
+			if (colid=="newcases") total = numcases1;	
+			if (colid=="relapses") total = numcases2;
+			if (colid=="others") total = numcases3;
+			}
 			break;}
-		}
+		
 		if (total == 0)
 			return;
 		
@@ -537,34 +511,6 @@ public class ReportTB11 extends Indicator2D {
 			colkey = "others";
 		}
 		table1.addIdValue(colkey, "row"+rowid, 1F);
-		// no culture or microscopy to the case ?
-		/*if (noexam)
-			
-		else {
-			// is negative ?
-			if ((dtCult != null) && (dtMicro != null)) {
-				int negativeMonth = 0;
-				// calculate month of negativation
-				int m1 = DateUtils.monthsBetween(dtIniTreat, dtCult);
-				int m2 = DateUtils.monthsBetween(dtIniTreat, dtMicro);
-				negativeMonth = (m1 > m2? m1: m2);
-				
-				if (negativeMonth <= 2)
-					table1.addIdValue("month2", rowkey, 1F);
-				
-				if (negativeMonth <= 3)
-					table1.addIdValue("month3", rowkey, 1F);
-				
-				if (negativeMonth <= 4)
-					table1.addIdValue("month4", rowkey, 1F);
-				
-				if (negativeMonth > 4)
-					table1.addIdValue("others", rowkey, 1F);
-			}
-			else table1.addIdValue("others", rowkey, 1F);
-		}
-		
-		table1.addIdValue("numcases", rowkey, 1F);*/
 	}
 
 	/* (non-Javadoc)
@@ -608,7 +554,7 @@ public class ReportTB11 extends Indicator2D {
 			table.addIdValue("all", rowid, val.floatValue());
 		}		
 	}
-
+*/
 	@Override
 	protected String getHQLInfectionSite() {
 		IndicatorFilters filters = getIndicatorFilters();
@@ -617,7 +563,7 @@ public class ReportTB11 extends Indicator2D {
 		else return super.getHQLInfectionSite();
 	}
 	
-	
+	/*
 	private String getPatientTypeKey(PatientType patientType) {
 		if (PatientType.NEW.equals(patientType))
 			return "newcases";
