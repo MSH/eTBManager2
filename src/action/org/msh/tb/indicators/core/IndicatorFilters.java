@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
@@ -37,6 +36,14 @@ import org.msh.tb.tbunits.TBUnitSelection;
 @BypassInterceptors
 public class IndicatorFilters {
 	private static final HIVResult[] hivResults = {HIVResult.NOTDONE, HIVResult.ONGOING, HIVResult.NEGATIVE, HIVResult.POSITIVE };
+	
+	private int numcases;
+	public int getNumcases(){
+		return numcases;
+	}
+	public void setNumcases(int n){
+		this.numcases = n;
+	}
 	
 	private Integer iniMonth;
 	private Integer iniYear;
