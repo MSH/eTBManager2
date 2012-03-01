@@ -25,7 +25,16 @@ public class ReportTB07 extends Indicator2D {
 	private IndicatorTable table4000;
 	private IndicatorTable table5000;
 	
+//	private int numcases;
+	
 	private String txtNewCases, txtRelapses, txtOther, txtAll, txtMale, txtFemale;
+	
+	/*public int getNumcases(){
+		return numcases;
+	}
+	public void setNumcases(int n){
+		this.numcases = n;
+	}*/
 	
 	@Override
 	protected void createIndicators() {
@@ -285,7 +294,12 @@ public class ReportTB07 extends Indicator2D {
 		String condition = "c.registrationDate > (select min(exam.dateCollected) from ExamMicroscopy exam where exam.tbcase.id = c.id)"; 
 		
 		float num = calcNumberOfCases(condition);
+		
+		int numcases = filters.getNumcases();
 		table.setValue("col2", rowid, num);
+		table.setValue("col1", rowid, (float)numcases);
+		if (numcases != 0)
+			table.addIdValue("col3", rowid, num*100/numcases);
 	}
 
 

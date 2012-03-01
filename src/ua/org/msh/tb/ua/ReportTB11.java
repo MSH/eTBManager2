@@ -20,16 +20,12 @@ import org.msh.tb.indicators.core.IndicatorTable;
 public class ReportTB11 extends Indicator2D {
 	private static final long serialVersionUID = -8510290531301762778L;
 	private String extraSubQuery = "";
-	String cols[] = {"newcases", "relapses", "others"};
-	
-	//private /*static final*/ String rowid;// = "row";
+	String [] cols = {"newcases", "relapses", "others"};
 	
 	/**
 	 * Total number of cases in the indicator 
 	 */
-	private float numcases1;
-	private float numcases2;
-	private float numcases3;
+	private float [] numcases = new float [3];
 	
 	private IndicatorTable table1;
 	/* (non-Javadoc)
@@ -52,8 +48,11 @@ public class ReportTB11 extends Indicator2D {
 
 	protected void initTable1() {
 		IndicatorTable table = getTable1();
+		table.addColumn(getMessage("uk_UA.reports.tb11.1.headerN"), "N");
+		
 		for (int i = 1; i < 31; i++) {
 			table.addRow(getMessage("uk_UA.reports.tb11.1.rowheader"+i), "row"+i);
+			table.setValue("N", "row"+i, (float) i);
 		}
 		String total = getMessage("uk_UA.reports.tb11.1.total");
 		
@@ -65,29 +64,31 @@ public class ReportTB11 extends Indicator2D {
 
 		table.addColumn(total, "others");
 		table.addColumn("%", "others_perc");
-		//table.getRows().get(0).get
-			
 	}
 	
 	protected void generateTable1() {
 		// calculate the number of cases
 		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
-		numcases1 = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.NEW.ordinal());
-		numcases2 = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.RELAPSE.ordinal());
-		numcases3 = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.OTHER.ordinal());
-		
+		numcases[0] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.NEW.ordinal());
+		numcases[1] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.RELAPSE.ordinal());
+		numcases[2] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal());
+		numcases[2] -= numcases[0]+numcases[1];
 		List<TbCase> lst;
 		
 		String res = "";
 		String resdst = "";
 		String dstQuery = "";
+		
+		/**
+		 * Necessary order of substances 
+		 */
 		String [] sub = {"H","R","E","S"};
 		
 		String examMethod = "ExamDST";
 		res = ".result = 1"; 
 		resdst = " in ('H','R','E','S')";
 		
-		if (numcases1+numcases2+numcases3 == 0)
+		if (numcases[0]+numcases[1]+numcases[2] == 0)
 			return;
 		setConsolidated(false);
 		for (int i = 1; i < 31; i++){
@@ -114,7 +115,7 @@ public class ReportTB11 extends Indicator2D {
 				break;}
 			case 5: {
 				examMethod = "ExamDST";
-				resdst = " in ('H','R','E','S')"; //ex"+res+" and
+				resdst = " in ('H','R','E','S')"; //without ex"+res+" and
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
 			case 6: {
@@ -123,13 +124,6 @@ public class ReportTB11 extends Indicator2D {
 				resdst = " in ('H','R','E','S')"; 
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
-			case 7: {
-				examMethod = "ExamDST";
-				res = ".result = 1"; // 1 ~ Resistant!
-				resdst = " in ('H','R','E','S')";
-				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
-				break;}
-
 			case 9: case 14:case 15: case 17:{
 				sub[0] = "H";
 				sub[1] = "R"; 
@@ -240,7 +234,6 @@ public class ReportTB11 extends Indicator2D {
 				resdst = " in ('H','R','E','S')";
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex"+res+" and ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
 				break;}
-			
 			default: 
 				break;
 			}
@@ -264,9 +257,11 @@ public class ReportTB11 extends Indicator2D {
 			res2=0;
 			res3=0;
 			switch (i) {
+			// culture and microscopy
 				case 1:case 2:case 3:case 4:case 5:{
 					addValueTable(tc.getPatientType(),i);
 					break;}
+			//DST-tests without summary fields
 				case 6:case 9:case 10:case 11:case 12:case 14:case 19:case 20:case 23:case 24:case 26:case 15:case 16:case 21:case 25:case 17:{
 					ExamDST ex = rightTest(tc);
 					if (ex != null){
@@ -278,26 +273,27 @@ public class ReportTB11 extends Indicator2D {
 							if (exr.getSubstance().getAbbrevName().getName1().equals(sub[3])) res3 = exr.getResult().ordinal();	
 						}					
 						switch (i){
+		//				    all susceptible
 							case 6:{
 								if (res0 == 2 && res1 == 2 && res2 == 2 && res3 == 2) 
 									addValueTable(tc.getPatientType(),i); 	
 								break;}
-		//					Cases, when 3 substances must be resistant and 1 other must be not resistant 			
+		//					3 substances must be resistant and 1 other must be not resistant 			
 							case 9:case 10:case 11:case 12:{
 								if (res0 == 1 && res1 !=1 && res2 !=1 && res3 !=1) 
 									addValueTable(tc.getPatientType(),i); 	
 								break;}
-		//					Cases, when 2 substances must be resistant and 2 other must be not resistant 
+		//					2 substances must be resistant and 2 other must be not resistant 
 							case 14:case 19:case 20:case 23:case 24:case 26:{
 								if (res0 == 1 && res1 ==1 && res2 !=1 && res3 !=1) 
 									addValueTable(tc.getPatientType(),i); 
 								break;}
-		//					Cases, when 1 substances must be resistant and 3 other must be not resistant 			
+		//					1 substances must be resistant and 3 other must be not resistant 			
 							case 15:case 16:case 21:case 25:{
 								if (res0 == 1 && res1 ==1 && res2 ==1 && res3 !=1) 
 									addValueTable(tc.getPatientType(),i); 
 								break;}
-		//					Case when 4 substances must be resistant 			
+		//					4 substances must be resistant 			
 							case 17:{
 								if (res0 == 1 && res1 ==1 && res2 !=1 && res3 ==1) 
 									addValueTable(tc.getPatientType(),i); 
@@ -308,31 +304,19 @@ public class ReportTB11 extends Indicator2D {
 		}
 		}
 		}
-		float gr5 = table1.getCellAsFloat("newcases", "row5")+table1.getCellAsFloat("relapses", "row5")+table1.getCellAsFloat("others", "row5");
-		//numcases += gr5;
 		calcSummaryFields();
 		for (int i = 1; i < 31; i++)
 			for (String colid: cols) 
 				calcPercentage(colid,i);	
 }
 
-	
+	/**
+	 * Calculate fields, which must be sums of some other fields
+	*/
 	private void calcSummaryFields() {
 		float total;
 		for (int i = 1; i < 31; i++)
 			switch (i){
-			case 7:{
-				for (String colid: cols){
-					total = table1.getCellAsFloat(colid, "row8");
-					total += table1.getCellAsFloat(colid, "row13");
-					total += table1.getCellAsFloat(colid, "row18");
-					total += table1.getCellAsFloat(colid, "row22");
-					total += table1.getCellAsFloat(colid, "row26");
-					
-					table1.addIdValue(colid, "row"+i, total);			
-				}
-				break;
-			}
 			case 8:case 13:case 18:case 22:{
 				calcSum4next(i);
 				break;
@@ -386,11 +370,24 @@ public class ReportTB11 extends Indicator2D {
 					table1.addIdValue(colid, "row"+i, total);			
 				}
 				break;
+			}	
 			}
-				
-			}
+		//Row 7
+		for (String colid: cols){
+			total = table1.getCellAsFloat(colid, "row8");
+			total += table1.getCellAsFloat(colid, "row13");
+			total += table1.getCellAsFloat(colid, "row18");
+			total += table1.getCellAsFloat(colid, "row22");
+			total += table1.getCellAsFloat(colid, "row26");
+			
+			table1.addIdValue(colid, "row7", total);			
+		}
+		
 	}
 	
+	/**
+	 * Calculate sum of 4 next down located fields 
+	*/
 	private void calcSum4next(int i) {
 		float total;
 		for (String colid: cols){
@@ -401,6 +398,10 @@ public class ReportTB11 extends Indicator2D {
 			table1.addIdValue(colid, "row"+i, total);			
 		}	
 	}
+	
+	/**
+	 * @return DST-test, which is up to quality, namely first month of treatment and worst test from several 
+	*/
 	
 	private ExamDST rightTest(TbCase tc){
 		Calendar dateTest = Calendar.getInstance();
@@ -428,7 +429,9 @@ public class ReportTB11 extends Indicator2D {
 			return WorstRes(lst);
 		}
 	}
-	
+	/**
+	 * @return worst DST-test from several 
+	*/
 	private ExamDST WorstRes(List<ExamDST> lst) {
 		int tmp = 0;
 		int max = Integer.MIN_VALUE;
@@ -450,16 +453,18 @@ public class ReportTB11 extends Indicator2D {
 	private void calcPercentage(String colid, int rowid) {
 		float total=0;
 		switch (rowid) {
-		case 2: case 4:case 5:{
-			total = table1.getCellAsFloat(colid, "row"+(rowid-1));//+table1.getCellAsFloat("relapses", "row"+rowid)+table1.getCellAsFloat("others", "row"+rowid);
+		case 2: case 4: case 5:{
+			total = table1.getCellAsFloat(colid, "row"+(rowid-1));
 			break;}
-		default: {
-			if (colid=="newcases") total = numcases1;	
-			if (colid=="relapses") total = numcases2;
-			if (colid=="others") total = numcases3;
-			}
+		case 1: case 3: {
+			if (colid=="newcases") total = numcases[0];	
+			if (colid=="relapses") total = numcases[1];
+			if (colid=="others") total = numcases[2];
 			break;}
-		
+		default:{
+			total = table1.getCellAsFloat(colid, "row5");
+			break;}
+		}
 		if (total == 0)
 			return;
 		
@@ -492,10 +497,9 @@ public class ReportTB11 extends Indicator2D {
 	}
 	
 	/**
-	 * Add a value to a specific cell in the table based on the dates of the case
-	 * @param dtIniTreat
-	 * @param dtCult
-	 * @param dtMicro
+	 * Add a value to a specific cell in the table
+	 * @param dtPType
+	 * @param rowId
 	 */
 	protected void addValueTable(PatientType ptype, int rowid) {
 		// select row id
@@ -521,69 +525,19 @@ public class ReportTB11 extends Indicator2D {
 	}
 	
 	/**
-	 * Return table 1000 report, from the original table object from {@link IndicatorTable}
+	 * Return table 1 report, from the original table object from {@link IndicatorTable}
 	 * @return
 	 */
 	public IndicatorTable getTable1() {
 		return getTable();
 	}
-	/*
-	private void addTableValues(IndicatorTable table, List<Object[]> lst, IndicatorMicroscopyResult result, InfectionSite infectionSite) {
-		for (Object[] vals: lst) {
-			PatientType patType = (PatientType)vals[0];
-			InfectionSite site = null;
-			if (infectionSite == null)
-				 site = (InfectionSite)vals[1];
-			else site = infectionSite;
-		
-			Gender gender = (Gender)vals[2];
-			Long val = (Long)vals[3];
-
-			String key = null;
-			if (result == null) {
-				key = "negative_";
-				addTableValue(table, key, patType, val.floatValue());	
-			}
-			
-			key = "positive_";
-			addTableValue(table, key, patType, val.floatValue());
-				
-			if (gender == Gender.MALE)
-				 table.addIdValue("male", rowid, val.floatValue());
-			else table.addIdValue("female", rowid, val.floatValue());
-			table.addIdValue("all", rowid, val.floatValue());
-		}		
-	}
-*/
-	@Override
+	
+	/*@Override
 	protected String getHQLInfectionSite() {
 		IndicatorFilters filters = getIndicatorFilters();
 		if  (filters.getInfectionSite() == InfectionSite.PULMONARY)
 			 return "c.infectionSite in (" + InfectionSite.PULMONARY.ordinal() + "," + InfectionSite.BOTH.ordinal() + ")";
 		else return super.getHQLInfectionSite();
-	}
-	
-	/*
-	private String getPatientTypeKey(PatientType patientType) {
-		if (PatientType.NEW.equals(patientType))
-			return "newcases";
-		else
-		if (PatientType.RELAPSE.equals(patientType))
-			return "relapses";
-		else return "other";
-	}
-
-	*
-	 * Add a value to a table
-	 * @param table Table to include a value 
-	 * @param prefix Prefix of the column name
-	 * @param patientType type of patient to compose the column name with the prefix
-	 * @param value value to include
-	 
-	private void addTableValue(IndicatorTable table, String prefix, PatientType patientType, Float value) {
-		String key = prefix + getPatientTypeKey(patientType);
-		
-		table.addIdValue(key, rowid, value);
-		table.addIdValue(prefix + "all", rowid, value);
 	}*/
+	
 }
