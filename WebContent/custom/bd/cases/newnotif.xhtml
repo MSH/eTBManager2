@@ -96,6 +96,15 @@
 
 	<h:column>
 		<f:facet name="header">
+			<s:link value="#{messages['Patient.fatherName']}" styleClass="collh">
+  			<f:param name="order" value="p.fatherName#{patientsbd.order=='p.fatherName'?' desc':''}" />
+			</s:link>
+		</f:facet>
+		#{it.patient.fatherName}
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
 			<s:link value="#{messages['Patient.birthDate']}" >
   			<f:param name="order" value="p.birthDate#{patientsbd.order=='p.birthDate'?' desc':''}" />
 			</s:link>

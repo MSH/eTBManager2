@@ -38,7 +38,7 @@
 	
 	</td></tr>
 	
-	<ui:include src="/layout/editbirthdate.xhtml" />
+	<ui:include src="/custom/bd/layout/editbirthdate.xhtml" />
 	
 	<tr><td>
 	<s:decorate template="/layout/edit.xhtml">
@@ -145,16 +145,28 @@
     	</s:decorate>	
     
     </td></tr>
-    <tr><td>
-    	<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['Patient.salary']}:</ui:define>
-	    	<h:selectOneMenu value="#{tbcasebd.patient.salary}">
-	    		<s:selectItems value="#{salaryRangeList}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
-	    		<s:convertEnum />
-	    	</h:selectOneMenu>
-    	</s:decorate>	
-    
-    </td></tr>
+    <tr>
+		<td>
+	    	<s:decorate template="/layout/edit.xhtml">
+	    		<ui:define name="label">#{messages['Patient.occupation']}:</ui:define>
+		    	<h:selectOneMenu value="#{tbcasebd.occupation}">
+		    		<s:selectItems value="#{occupationList}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
+		    		<s:convertEnum />
+		    	</h:selectOneMenu>
+	    	</s:decorate>	
+	    
+	    </td>    
+	    <td>
+	    	<s:decorate template="/layout/edit.xhtml">
+	    		<ui:define name="label">#{messages['Patient.salary']}:</ui:define>
+		    	<h:selectOneMenu value="#{tbcasebd.patient.salary}">
+		    		<s:selectItems value="#{salaryRangeList}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
+		    		<s:convertEnum />
+		    	</h:selectOneMenu>
+	    	</s:decorate>	
+	    
+	    </td>
+	  </tr>
     </table>
 	</div>
 

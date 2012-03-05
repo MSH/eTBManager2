@@ -69,12 +69,20 @@
     		#{tbcasebd.patient.motherName}
     	</s:decorate>    
     </td></tr>
-    <tr><td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcasebd.patient.salary}">
-    		<ui:define name="label">#{messages['Patient.salary']}:</ui:define>
-    		#{messages[tbcase.patient.salary.key]}
-    	</s:decorate>    
-    </td></tr>
+    <tr>
+		<td>
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcasebd.occupation}">
+	    		<ui:define name="label">#{messages['Patient.occupation']}:</ui:define>
+	    		#{messages[tbcasebd.occupation.key]}
+	    	</s:decorate>    
+	    </td>    
+	    <td>
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcasebd.patient.salary}">
+	    		<ui:define name="label">#{messages['Patient.salary']}:</ui:define>
+	    		#{messages[tbcase.patient.salary.key]}
+	    	</s:decorate>    
+	    </td>
+    </tr>
     <s:fragment rendered="#{not tbcase.notifAddress.emptyy}">
     <tr><td colspan="2">
     	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
@@ -90,7 +98,7 @@
 		</s:decorate>
 	</td></tr>
 	<tr><td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.phoneNumber}">
     		<ui:define name="label">#{messages['tbcase.phoneNumber']}:</ui:define>
     		#{tbcase.phoneNumber}
 		</s:decorate>
@@ -146,7 +154,7 @@
 	</td></tr>
 	<tr><td>
 	<s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['tbcase.registrationDate']}:</ui:define>
+    	<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
     	<h:outputText id="dt" value="#{tbcase.registrationDate}" converter="localeDateConverter"/>
 	</s:decorate>
 	
