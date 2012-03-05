@@ -8,7 +8,6 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator2D;
-import org.msh.tb.indicators.core.IndicatorCultureResult;
 import org.msh.tb.indicators.core.IndicatorFilters;
 import org.msh.tb.indicators.core.IndicatorMicroscopyResult;
 import org.msh.tb.indicators.core.IndicatorTable;
@@ -37,10 +36,11 @@ public class ReportTB10 extends Indicator2D {
 		IndicatorFilters filters = getIndicatorFilters();
 		filters.setPatientType(null);
 		filters.setMicroscopyResult(null);
-		filters.setCultureResult(null);
+		//filters.setCultureResult(null);
 		
 		setConsolidated(true);
-		generateTable();
+		generateTable1000();
+		//generateTable2000();
 	}
 
 
@@ -91,41 +91,74 @@ public class ReportTB10 extends Indicator2D {
 		table.addRow(getMessage("uk_UA.reports.other"), "others");
 	}
 
-
+	/* (non-Javadoc)
+	 * @see org.msh.tb.indicators.core.CaseHQLBase#getHQLInfectionSite()
+	 */
+	@Override
+	protected String getHQLInfectionSite() {
+		IndicatorFilters filters = getIndicatorFilters();
+		if  (filters.getInfectionSite() == InfectionSite.PULMONARY)
+			return "c.infectionSite in (" + InfectionSite.PULMONARY.ordinal() + "," + InfectionSite.BOTH.ordinal() + ")";
+		else return super.getHQLInfectionSite();
+	}
+	
 	/**
 	 * Generate values of table 1000 querying the database based on the user filters 
 	 */
-	protected void generateTable() {
+	protected void generateTable1000() {
 		// calculate the number of cases
 		numcases = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal());
 		
 		if (numcases == 0)
 			return;
 
-		String hqlCulture = "(select min(e.dateCollected) from ExamCulture e " +
-				"where e.tbcase.id = c.id and e.result " + getHQLCultureResultCondition(IndicatorCultureResult.NEGATIVE) + ")";
 		String hqlMicroscopy = "(select min(e.dateCollected) from ExamMicroscopy e " +
-				"where e.tbcase.id = c.id and e.result " + getHQLMicroscopyResultCondition(IndicatorMicroscopyResult.NEGATIVE) + ")";
-		// check if it has culture or microscopy
-		String hasCult = "(select min(e.dateCollected) from ExamCulture e where e.tbcase.id = c.id)";
+				"where e.tbcase.id = c.id and e.result " + getHQLMicroscopyResultCondition(IndicatorMicroscopyResult.NEGATIVE)+")";
+		// check if it has microscopy
 		String hasMicr = "(select min(e.dateCollected) from ExamMicroscopy e where e.tbcase.id = c.id)";
 		
 		setGroupFields(null);
 		setConsolidated(false);
 		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
-		setHQLSelect("select c.treatmentPeriod.iniDate, c.patientType, c.state, " + 
-				hqlCulture + ", " + 
+		setHQLSelect("select c.treatmentPeriod.iniDate, c.diagnosisDate, c.patientType, c.state, " + 
 				hqlMicroscopy +	", " + 
-				hasCult + ", " + 
 				hasMicr);
-		setCondition("c.state >= " + CaseState.ONTREATMENT.ordinal());
+		setCondition("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType in (0,1,2,3,4,5) and exists(select e.id from ExamMicroscopy e where e.result in (1,2,3,4) and e.tbcase.id = c.id and e.dateCollected = (select min(sp.dateCollected) from ExamMicroscopy sp where sp.tbcase.id = c.id))");
 		
 		List<Object[]> lst = createQuery()
 			.getResultList();
 
 		for (Object[] vals: lst) {
-			boolean noexam = vals[5] == null && vals[6] == null;
-			addValueTable((Date)vals[0], (PatientType)vals[1], (CaseState)vals[2], (Date)vals[3], (Date)vals[4], noexam);
+			boolean noexam = vals[5] == null;
+			addValueTable((Date)vals[0], (Date)vals[1], (PatientType)vals[2], (CaseState)vals[3], (Date)vals[4], noexam);
+		}
+		
+		String rows[] = {"newcases", "relapses", "others"};
+		String cols[] = {"month2", "month3", "month4"};
+		
+		for (String rowid: rows)
+			for (String colid: cols) {
+				calcPercentage(colid, rowid);
+			}
+	}
+
+	/**
+	 * Generate values of table 2000 querying the database based on the user filters 
+	 */
+	protected void generateTable2000() {
+		
+		// check if it has microscopy
+		String hasMicr = "(select min(e.dateCollected) from ExamMicroscopy e where e.tbcase.id = c.id and e.result in (1,2,3,4))";
+		String hasMicr2 = "(select max(e.dateCollected) from ExamMicroscopy e where e.tbcase.id = c.id), ";
+		
+		setConsolidated(true);
+		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
+		
+		List<Object[]> lst = generateValuesByField("c.patientType, c.state, "+hasMicr2, "c.patientType in (0,1,2,3,4,5) and exists"+hasMicr);
+		
+
+		for (Object[] vals: lst) {
+			addValueTable((PatientType)vals[0], (CaseState)vals[1], (Long) vals[3]);
 		}
 		
 		String rows[] = {"newcases", "relapses", "others"};
@@ -152,12 +185,12 @@ public class ReportTB10 extends Indicator2D {
 	/**
 	 * Add a value to a specific cell in the table based on the dates of the case
 	 * @param dtIniTreat
-	 * @param dtCult
+	 * @param dtDiagnos
 	 * @param dtMicro
 	 */
-	protected void addValueTable(Date dtIniTreat, PatientType ptype, CaseState state, Date dtCult, Date dtMicro, boolean noexam) {
+	protected void addValueTable(Date dtIniTreat, Date dtDiagnos, PatientType ptype, CaseState state, Date dtMicro, boolean noexam) {
 		if (dtIniTreat == null)
-			return;
+			dtIniTreat = dtDiagnos;
 
 		// select row id
 		String rowkey;
@@ -177,12 +210,9 @@ public class ReportTB10 extends Indicator2D {
 			table1000.addIdValue("noexams", rowkey, 1F);
 		else {
 			// is negative ?
-			if ((dtCult != null) && (dtMicro != null)) {
-				int negativeMonth = 0;
+			if (dtMicro != null) {
 				// calculate month of negativation
-				int m1 = DateUtils.monthsBetween(dtIniTreat, dtCult);
-				int m2 = DateUtils.monthsBetween(dtIniTreat, dtMicro);
-				negativeMonth = (m1 > m2? m1: m2);
+				int negativeMonth = DateUtils.monthsBetween(dtIniTreat, dtMicro);
 				
 				if (negativeMonth <= 2)
 					table1000.addIdValue("month2", rowkey, 1F);
@@ -202,7 +232,55 @@ public class ReportTB10 extends Indicator2D {
 		table1000.addIdValue("numcases", rowkey, 1F);
 	}
 
-
+	/**
+	 * Add a value to a specific cell in the table based on the dates of the case
+	 * @param dtIniTreat
+	 * @param dtDiagnos
+	 * @param dtMicro
+	 */
+	protected void addValueTable(PatientType ptype, CaseState state, Long val) {
+		// select row id
+		String rowkey;
+		String colkey;
+		switch (ptype) {
+		case NEW: 
+			rowkey = "newcases";
+			break;
+		case RELAPSE: 
+			rowkey = "relapses";
+			break;
+		default: 
+			rowkey = "others";
+		}
+		
+		switch (state) {
+		case DIED:
+			colkey = "1";
+			break;
+		case DIED_NOTTB:
+			colkey = "2";
+			break;
+		case TREATMENT_INTERRUPTION:
+			colkey = "3";
+			break;
+		case TRANSFERRED_OUT: case TRANSFERRING:
+			colkey = "4";
+			break;
+		case DIAGNOSTIC_CHANGED_TO_NOT_DRTB: case DIAGNOSTIC_CHANGED:
+			colkey = "5";
+			break;
+		case OTHER:
+			colkey = "6";
+			break;
+		default:
+			colkey = "7";
+			break;
+		}
+		table2000.addIdValue(colkey, rowkey, val.floatValue());
+		
+	}
+	
+	
 	/* (non-Javadoc)
 	 * @see org.msh.tb.indicators.core.CaseHQLBase#getHQLJoin()
 	 */
@@ -211,14 +289,7 @@ public class ReportTB10 extends Indicator2D {
 	}
 
 
-	/**
-	 * Generate values of table 2000 
-	 */
-	protected void generateTable2000() {
-		
-	}
-	
-	/**
+		/**
 	 * Create all tables of the report and generate indicators
 	 */
 	@Override

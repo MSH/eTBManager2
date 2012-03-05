@@ -5,6 +5,7 @@ import java.util.List;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.AgeRange;
+import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.InfectionSite;
@@ -75,12 +76,15 @@ public class ReportTB07 extends Indicator2D {
 		// pulmonary positive
 		filters.setMicroscopyResult(IndicatorMicroscopyResult.POSITIVE);
 		filters.setInfectionSite(InfectionSite.PULMONARY);
-		List<Object[]> lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", "c.patientType != null and c.infectionSite != null");
+		
+		
+		//List<Object[]> lst = generateValuesByField(null, "c.patientType != null and c.infectionSite != null and c.state >= " + CaseState.ONTREATMENT.ordinal());
+		List<Object[]> lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", "c.patientType in (0,1,2,3,4,5) and c.infectionSite != null and c.state >= " + CaseState.ONTREATMENT.ordinal());
 		addTableValues(table, lst, IndicatorMicroscopyResult.POSITIVE, InfectionSite.PULMONARY);
 		
 		// pulmonary negative
-		filters.setMicroscopyResult(IndicatorMicroscopyResult.POSITIVE);
-		String condition = "c.patientType != null and c.infectionSite != null and not " + getHQLMicroscopyCondition();
+		filters.setMicroscopyResult(IndicatorMicroscopyResult.NEGATIVE);
+		String condition = " c.patientType in (0,1,2,3,4,5) and c.infectionSite != null and "+ getHQLMicroscopyCondition();
 		filters.setMicroscopyResult(null);
 		filters.setInfectionSite(InfectionSite.PULMONARY);
 		lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", condition);
@@ -89,7 +93,7 @@ public class ReportTB07 extends Indicator2D {
 		// extrapulmonary
 		filters.setMicroscopyResult(null);
 		filters.setInfectionSite(InfectionSite.EXTRAPULMONARY);
-		lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", "c.patientType != null and c.infectionSite != null");
+		lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", "c.patientType in (0,1,2,3,4,5) and c.infectionSite != null");
 		addTableValues(table, lst, null, InfectionSite.EXTRAPULMONARY);
 		addTableValues(getTable3000(), lst, null, InfectionSite.EXTRAPULMONARY);
 
@@ -100,7 +104,6 @@ public class ReportTB07 extends Indicator2D {
 */
 	}
 
-	
 	/* (non-Javadoc)
 	 * @see org.msh.tb.indicators.core.CaseHQLBase#getHQLInfectionSite()
 	 */
@@ -108,7 +111,7 @@ public class ReportTB07 extends Indicator2D {
 	protected String getHQLInfectionSite() {
 		IndicatorFilters filters = getIndicatorFilters();
 		if  (filters.getInfectionSite() == InfectionSite.PULMONARY)
-			 return "c.infectionSite in (" + InfectionSite.PULMONARY.ordinal() + "," + InfectionSite.BOTH.ordinal() + ")";
+			return "c.infectionSite in (" + InfectionSite.PULMONARY.ordinal() + "," + InfectionSite.BOTH.ordinal() + ")";
 		else return super.getHQLInfectionSite();
 	}
 	

@@ -19,7 +19,6 @@ import org.msh.tb.indicators.core.IndicatorTable;
 @Name("reportTB11")
 public class ReportTB11 extends Indicator2D {
 	private static final long serialVersionUID = -8510290531301762778L;
-	private String extraSubQuery = "";
 	String [] cols = {"newcases", "relapses", "others"};
 	
 	/**
@@ -66,9 +65,21 @@ public class ReportTB11 extends Indicator2D {
 		table.addColumn("%", "others_perc");
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.msh.tb.indicators.core.CaseHQLBase#getHQLInfectionSite()
+	 */
+	@Override
+	protected String getHQLInfectionSite() {
+		IndicatorFilters filters = getIndicatorFilters();
+		if  (filters.getInfectionSite() == InfectionSite.PULMONARY)
+			return "c.infectionSite in (" + InfectionSite.PULMONARY.ordinal() + "," + InfectionSite.BOTH.ordinal() + ")";
+		else return super.getHQLInfectionSite();
+	}
+	
 	protected void generateTable1() {
 		// calculate the number of cases
 		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
+		
 		numcases[0] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.NEW.ordinal());
 		numcases[1] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.RELAPSE.ordinal());
 		numcases[2] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal());
@@ -239,8 +250,7 @@ public class ReportTB11 extends Indicator2D {
 			}
 		setHQLSelect("select c");
 		
-		setCondition("c.state >= " + CaseState.ONTREATMENT.ordinal());
-		extraSubQuery = " and c.treatmentPeriod.iniDate != '' and exists(select e.id from "+examMethod+" e where e"+(dstQuery == ""? res : dstQuery)+" and e.tbcase.id = c.id and e.dateCollected = (select min(sp.dateCollected) from "+examMethod+" sp where sp.tbcase.id = c.id)) ";
+		setCondition("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType in (0,1,2,3,4,5) and exists(select e.id from "+examMethod+" e where e"+(dstQuery == ""? res : dstQuery)+" and e.tbcase.id = c.id and e.dateCollected = (select min(sp.dateCollected) from "+examMethod+" sp where sp.tbcase.id = c.id)) ");
 		
 		lst = createQuery().getResultList();
 		Iterator<TbCase> it = lst.iterator();
@@ -410,7 +420,10 @@ public class ReportTB11 extends Indicator2D {
 		ArrayList<ExamDST> lst = new ArrayList<ExamDST>();
 		for (ExamDST ex: tc.getExamsDST()){
 			dateTest.setTime(ex.getDateCollected());
-			dateIniTreat.setTime(tc.getTreatmentPeriod().getIniDate());
+			if (tc.getTreatmentPeriod()!=null)
+				dateIniTreat.setTime(tc.getTreatmentPeriod().getIniDate());
+			else
+				dateIniTreat.setTime(tc.getDiagnosisDate());
 			long testperiod = dateTest.getTimeInMillis()-dateIniTreat.getTimeInMillis();
 			testperiod/=86400000;
 			
@@ -473,28 +486,6 @@ public class ReportTB11 extends Indicator2D {
 		table1.setValue(colid + "_perc", "row"+rowid, num * 100F / total);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.msh.tb.indicators.core.CaseHQLBase#createHQL()
-	 */
-	@Override
-	protected String createHQL() {
-		
-		String s = getHQLSelect();
-		
-		String hql = getHQLFrom() + " ";
-		if (s != null)
-			hql = s + " " + hql;
-		
-		String joins = getHQLJoin();
-		if (joins != null)
-			hql += joins + " ";
-
-		hql += getHQLWhere();
-			
-		hql += extraSubQuery;
-		
-		return hql;		
-	}
 	
 	/**
 	 * Add a value to a specific cell in the table
