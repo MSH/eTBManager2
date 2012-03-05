@@ -17,7 +17,7 @@
 <ui:param name="indicator" value="#{reportTB07}" />
 <ui:param name="useclassification" value="0" />
 <ui:param name="left" value="0" />
-
+<ui:param name="tb07numcases" value="true" />
 
 <ui:define name="naveg">
 	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
@@ -27,11 +27,18 @@
 <ui:define name="content">
 <h:form>
 <table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
-
+<h3>#{messages['manag.ind.periodfilter']}:  
+		<div>
+		<h:outputText value="#{indicatorFilters.iniDate}"/>
+		<h:outputText value=" -    "/>
+		<h:outputText value="#{indicatorFilters.endDate}"/>
+		</div>
+</h3>		
 <tr><td align="center">
 
 <h:panelGroup id="indicator" styleClass="indicator-tables">
 	<s:fragment rendered="#{indicatorController.executing}">
+	
 	<h2>#{messages['uk_UA.reports.tb07.table1']}</h2>
 	<table class="table1" width="100%">
 		<tr>
@@ -212,7 +219,7 @@
 			<ui:repeat value="#{row.cells}" var="val">
 			<td class="colcb">
 				<h:outputText value="#{val.value}" >
-					<f:convertNumber pattern="#,###,##0"/>
+					<f:convertNumber pattern="#,###,##0.##"/>
 				</h:outputText>
 			</td>
 			</ui:repeat>

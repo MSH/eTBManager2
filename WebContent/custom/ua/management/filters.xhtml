@@ -235,6 +235,7 @@ function handleContextClick(comp) {
 			</s:decorate>
 		</td>
 	</tr>
+	
 <s:fragment rendered="#{hideupdtbar == null}">
 	<tr><td colspan="2">
 		<div class="paragraph" >
@@ -254,6 +255,11 @@ function handleContextClick(comp) {
 	<ui:insert name="outputFilter" />
 	</h:panelGroup>
 	
+	<s:decorate template="/layout/edit.xhtml" rendered="#{tb07numcases}">
+		<ui:define name="label">#{messages['cases.numcases']}:</ui:define>
+		<h:inputText value="#{indicatorFilters.numcases}" style="width:80px;"/>
+	</s:decorate>
+		
 	</td>
 	<td align="right" >
 	<a:commandLink reRender="indicator" styleClass="button" 
@@ -267,6 +273,7 @@ function handleContextClick(comp) {
 		<span>#{messages['global.print']}</span>
 	</s:link>
 	</div>
+	
 		<script language="javascript">
 		function showHidePrintFilterBut(show) {
 			//alert("ffff");
