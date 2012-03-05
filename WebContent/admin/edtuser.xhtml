@@ -18,7 +18,7 @@
 <h:form id="main" styleClass="form1">
    
    <div class="form-content">
-    <s:decorate template="/layout/edit.xhtml" rendered="#{user.id != null}">
+    <s:decorate template="/layout/display.xhtml" rendered="#{user.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
     	<h:outputText value="#{user.id}" />
     </s:decorate>
@@ -39,6 +39,10 @@
         	validator="#{userHome.validateUniqueValue}">
         	<f:param id="field" value="email"/>
         </h:inputText>
+    </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml">
+    	<h:selectBooleanCheckbox value="#{user.sendSystemMessages}" />#{messages['User.sendSystemMessages']}
     </s:decorate>
     
     <s:decorate template="/layout/edit.xhtml">

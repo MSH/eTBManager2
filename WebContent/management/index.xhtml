@@ -23,31 +23,33 @@
 
 <ui:define name="content">
 <h1>#{title}</h1>
+
+	<s:fragment rendered="#{s:hasRole('INDICATORS')}">
 	<h2>#{messages['manag.case.reports']}</h2>
 
 	<div class="vertical-menu">
-	<s:link view="/management/incidence.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
+	<s:link view="/management/incidence.xhtml" >
 		<div class="icon-report" />#{messages['manag.ind.incidence']}
 	</s:link>
-	<s:link view="/management/prevalence.xhtml" rendered="#{s:hasRole('INDICATORS')}">
+	<s:link view="/management/prevalence.xhtml" >
 		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.prevalence']}
 	</s:link>
-  	<s:link view="/management/treatoutcome.xhtml" rendered="#{s:hasRole('INDICATORS')}">
+  	<s:link view="/management/treatoutcome.xhtml" >
 		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.treatoutcome']}
   	</s:link>
 	<s:link view="/management/detrate.xhtml" rendered="false">
 		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.detrate']}
 	</s:link>
 	<s:link value="#{messages['manag.ind.perctb']}" view="/management/perctb.xhtml" styleClass="icon-report" rendered="false"/>
-	<s:link view="/management/resist.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
+	<s:link view="/management/resist.xhtml" >
 		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.resist']}
 	</s:link>
 	<!-- enbling DST Resistance profile -->
-	<s:link view="/management/dstprofile.xhtml" rendered="#{s:hasRole('INDICATORS')}">
+	<s:link view="/management/dstprofile.xhtml" >
 		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.dstprofile']}
 	</s:link>
 
-	<s:link view="/management/sideeffects.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
+	<s:link view="/management/sideeffects.xhtml" >
 		<div class="icon-report" style="float:left;"/>#{messages['cases.sideeffects']}
 	</s:link>
 	<s:link view="/management/hivresults.xhtml" rendered="true" >
@@ -67,23 +69,25 @@
 			<f:param name="cla" value="DRTB"/>
 		</s:link>
 -->		
-		<s:link view="/management/starttreat.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
+		<s:link view="/management/starttreat.xhtml" >
 			<div class="icon-report" style="float:left;"/>#{messages['manag.ind.starttreat']}
 		</s:link>
-		<s:link view="/management/interim.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
+		<s:link view="/management/interim.xhtml" >
 			<div class="icon-report" style="float:left;"/>#{messages['manag.ind.interim']}
 		</s:link>
-		<s:link view="/management/confmdrrep.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
+		<s:link view="/management/confmdrrep.xhtml" >
 			<div class="icon-report" style="float:left;"/>#{messages['manag.confmdrrep']}
 		</s:link>
 		<hr/>
-		<s:link view="/management/customind.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
+		<s:link view="/management/customind.xhtml" >
 			<div class="icon-report" style="float:left;"/>#{messages['manag.ind.customind']}
 		</s:link>
 	</div>
 
 	<div class="spacer" />
+	</s:fragment>
 
+	<s:fragment rendered="#{s:hasRole('REP1') or s:hasRole('REP4')}">
 	<h2>#{messages['manag.drug.reports']}</h2>
 
 	<div class="vertical-menu">	
@@ -96,6 +100,7 @@
 	</div>
 
 	<div class="spacer" />
+	</s:fragment>
 
 	<h2>#{messages['manag.forecast']}</h2>
 	<div class="vertical-menu">

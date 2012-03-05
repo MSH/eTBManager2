@@ -25,8 +25,10 @@ public class MovementFilters {
 	
 	private boolean executing;
 	private boolean batchesOutput;
-	private Date date;
+	private Date dateIni;
+	private Date dateEnd;
 	private MovementType type;
+	private String batchNumber;
 
 	
 	/**
@@ -51,8 +53,8 @@ public class MovementFilters {
 	 * Initialize the filters for executing
 	 */
 	public void initialize() {
-		if (date == null)
-			date = new Date();
+		if (dateIni == null)
+			dateIni = new Date();
 	}
 
 
@@ -103,20 +105,6 @@ public class MovementFilters {
 	}
 
 	/**
-	 * @return the date
-	 */
-	public Date getDate() {
-		return date;
-	}
-
-	/**
-	 * @param date the date to set
-	 */
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	/**
 	 * @return the type
 	 */
 	public MovementType getType() {
@@ -128,5 +116,53 @@ public class MovementFilters {
 	 */
 	public void setType(MovementType type) {
 		this.type = type;
+	}
+
+
+	/**
+	 * @return the dateIni
+	 */
+	public Date getDateIni() {
+		return dateIni;
+	}
+
+
+	/**
+	 * @param dateIni the dateIni to set
+	 */
+	public void setDateIni(Date dateIni) {
+		this.dateIni = dateIni;
+	}
+
+
+	/**
+	 * @return the dateEnd
+	 */
+	public Date getDateEnd() {
+		return dateEnd;
+	}
+
+
+	/**
+	 * @param dateEnd the dateEnd to set
+	 */
+	public void setDateEnd(Date dateEnd) {
+		this.dateEnd = dateEnd;
+	}
+
+
+	/**
+	 * @return the batchNumber
+	 */
+	public String getBatchNumber() {
+		return batchNumber;
+	}
+
+
+	/**
+	 * @param batchNumber the batchNumber to set
+	 */
+	public void setBatchNumber(String batchNumber) {
+		this.batchNumber = batchNumber;
 	}
 }

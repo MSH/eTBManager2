@@ -32,9 +32,9 @@
 		#{messages[movementFilters.type.key]}
 	</s:decorate>
 
-    <s:decorate template="/layout/display.xhtml" rendered="#{movementFilters.date != null}">
+    <s:decorate template="/layout/display.xhtml" rendered="#{movementFilters.dateIni != null}">
     	<ui:define name="label">#{messages['meds.movs.refdate']}:</ui:define>
-    	<h:outputText value="#{movementFilters.date}" converter="localeDateConverter" />
+    	<h:outputText value="#{movementFilters.dateIni}" converter="localeDateConverter" />
     </s:decorate>
 
     <s:decorate template="/layout/display.xhtml" rendered="#{movementFilters.batchesOutput}">
@@ -44,8 +44,8 @@
 
 <p/>
 
-<h:outputText value="#{messages['meds.movs.selectfilter']}" style="font-weight:bold;" rendered="#{movementFilters.date==null}"/>
-<h:panelGroup rendered="#{movementFilters.date != null}">
+<h:outputText value="#{messages['meds.movs.selectfilter']}" style="font-weight:bold;" rendered="#{movementFilters.dateIni==null}"/>
+<h:panelGroup rendered="#{movementFilters.dateIni != null}">
 
 <s:fragment rendered="#{not movementFilters.batchesOutput}">
 

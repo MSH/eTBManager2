@@ -102,6 +102,8 @@ public class User implements java.io.Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="THEME_ID")
 	private UITheme theme;
+	
+	private boolean sendSystemMessages;
 
 	
 	/* (non-Javadoc)
@@ -332,6 +334,22 @@ public class User implements java.io.Serializable {
 	 */
 	public void setTheme(UITheme theme) {
 		this.theme = theme;
+	}
+
+
+	/**
+	 * @return the sendSystemMessages
+	 */
+	public boolean isSendSystemMessages() {
+		return sendSystemMessages;
+	}
+
+
+	/**
+	 * @param sendSystemMessages the sendSystemMessages to set
+	 */
+	public void setSendSystemMessages(boolean sendSystemMessages) {
+		this.sendSystemMessages = sendSystemMessages;
 	}
 	
 }

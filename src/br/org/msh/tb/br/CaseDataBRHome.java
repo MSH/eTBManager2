@@ -208,7 +208,9 @@ public class CaseDataBRHome {
 		TbCaseBR tbcase = (TbCaseBR)caseHome.getInstance();
 		if (!tbcase.isNotifAddressChanged())
 			tbcase.setCurrAddressNumber(tbcase.getNotifAddressNumber());
+
 		tbcase.setAdminUnitUsOrigem(getAuselection().getSelectedUnit());
+		tbcase.setDiagnosisDate(tbcase.getRegistrationDate());
 
 		return caseEditingHome.saveEditing();
 	}

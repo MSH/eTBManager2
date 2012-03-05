@@ -19,7 +19,9 @@ import org.msh.utils.RowGroupingItem;
 public class BatchMovementsQuery extends EntityQuery<MovementItem> implements RowGroupingComparator {
 	private static final long serialVersionUID = -5729874123204457562L;
 
-	private static final String[] restrictions = {"m.date <= #{movementFilters.date}",
+	private static final String[] restrictions = {"m.date <= #{movementFilters.dateIni}",
+			"m.date >= #{movementFilters.dateEnd}",
+			"bm.batch.batchNumber = #{movementFilters.batchNumber}",
 			"m.tbunit.id = #{userSession.tbunit.id}",
 			"m.medicine.id = #{medicineHome.id}",
 			"m.source.id = #{sourceHome.id}",

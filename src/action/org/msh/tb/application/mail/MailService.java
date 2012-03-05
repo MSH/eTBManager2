@@ -8,6 +8,7 @@ import java.util.Queue;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.entities.User;
 import org.msh.tb.entities.Workspace;
 
 /**
@@ -66,12 +67,17 @@ public class MailService {
 	 * @param timeZone
 	 * @param locale
 	 */
-	public void addMessageToQueue(String mailPage, String timeZone, String locale, boolean systemMessage) {
+	public void addMessageToQueue(String mailPage, String timeZone, String locale, User user, boolean systemMessage) {
 		// if this is a system message, check if it can be dispatched
 		if (systemMessage) {
 			Workspace workspace = (Workspace)Component.getInstance("defaultWorkspace");
 			if ((workspace != null) && (!workspace.isSendSystemMessages()))
 				return;
+		}
+
+		// check if user must receive messages from the system
+		if ((user != null) && (!user.isSendSystemMessages())) {
+			return;
 		}
 		
 		if (messages == null)
@@ -90,7 +96,7 @@ public class MailService {
 	 * @param mailPage
 	 */
 	public void addMessageToQueue(String mailPage, boolean systemMessage) {
-		addMessageToQueue(mailPage, null, null, systemMessage);
+		addMessageToQueue(mailPage, null, null, null, systemMessage);
 	}
 
 

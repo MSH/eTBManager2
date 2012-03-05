@@ -65,9 +65,20 @@
 	</s:decorate>
 
     <s:decorate template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['meds.movs.refdate']}:</ui:define>
-    	<ui:param name="required" value="true" /> 
-    	<ui:param name="datefield" value="#{movementFilters.date}" /> 
+    	<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="datefield" value="#{movementFilters.dateIni}" /> 
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="datefield" value="#{movementFilters.dateEnd}" /> 
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Batch.batchNumber']}:</ui:define>
+    	<h:inputText value="#{movementFilters.batchNumber}" /> 
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
@@ -81,8 +92,8 @@
    	<span style="color:red;clear:both;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 
 <p/>
-<h:outputText value="#{messages['meds.movs.selectfilter']}" style="font-weight:bold;" rendered="#{movementFilters.date==null}"/>
-<h:panelGroup rendered="#{movementFilters.date != null}">
+<h:outputText value="#{messages['meds.movs.selectfilter']}" style="font-weight:bold;" rendered="#{movementFilters.dateIni==null}"/>
+<h:panelGroup rendered="#{movementFilters.dateIni != null}">
 
 <s:fragment rendered="#{not movementFilters.batchesOutput}">
 

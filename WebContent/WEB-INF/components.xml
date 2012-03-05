@@ -44,9 +44,10 @@
 		</core:bundle-names>
    </core:resource-loader>
 
-   <web:rewrite-filter view-mapping="*.seam"/>
+   <web:rewrite-filter view-mapping="*.seam" />
    
-   <async:quartz-dispatcher />    
+   <async:quartz-dispatcher  />    
+
     
    <persistence:managed-persistence-context name="entityManager"
                                      auto-create="true"
@@ -60,8 +61,8 @@
        <drools:rule-files><value>/security.drl</value></drools:rule-files>
    </drools:rule-base>
  -->
-   <security:identity authenticate-method="#{authenticator.authenticate}"
-                              remember-me="true"/>
+
+   <security:identity authenticate-method="#{authenticator.authenticate}" remember-me="true" />
 
 	<component class="org.jboss.seam.web.MultipartFilter">
 		<property name="createTempFiles">true</property>
@@ -85,7 +86,7 @@
 
 	<framework:entity-query name="allusers" ejbql="from User u" order="u.name"/>
 	
-    <component name="org.jboss.seam.document.documentStore"> 
+    <component name="org.jboss.seam.document.documentStore" > 
         <property name="useExtensions">true</property>
         <property name="errorPage">/pdfMissing.seam</property>
     </component>

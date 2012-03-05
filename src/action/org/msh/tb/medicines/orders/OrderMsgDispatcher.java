@@ -188,7 +188,7 @@ public class OrderMsgDispatcher {
 			srv.addComponent("user", user);
 			srv.addComponent("order", orderHome.getInstance());
 			srv.addComponent("orderHome", orderHome);
-			srv.addMessageToQueue(mailpage, user.getTimeZone(), user.getLanguage(), true);
+			srv.addMessageToQueue(mailpage, user.getTimeZone(), user.getLanguage(), user, true);
 		}
 	}
 
