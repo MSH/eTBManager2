@@ -48,7 +48,7 @@ public class ResistancePatternIndicatorNG extends Indicator2D {
 		newPer = getMessage("manag.ind.dstprofile.nevertreatedpercent");
 		oldp = getMessage("manag.ind.dstprofile.prevtreated");
 		oldPer = getMessage("manag.ind.dstprofile.prevtreatedpercent");
-		tot    = getMessage("global.total ");
+		tot    = getMessage("global.total");
 
 		message[0] = newp;
 		message[1] = newPer;
