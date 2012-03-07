@@ -33,6 +33,11 @@
 	</s:decorate>
 </div>
 
+<a:jsFunction name="deleteRecord" action="#{userHome.remove}" reRender="tablepanel,messages">
+	<a:actionparam name="param1" assignTo="#{userHome.id}" converter="javax.faces.Integer" />
+</a:jsFunction>
+
+
 <s:div id="tablepanel">
 <s:decorate template="/layout/naveg.xhtml">
 	<ui:param name="list" value="#{users}" />
@@ -108,10 +113,9 @@
   </h:column>
   <h:column rendered="#{s:hasRole('USERS_EDT')}">
   	<f:facet name="header">#{messages['form.action']}</f:facet>
-	<a:commandLink action="#{userHome.remove}" value="#{messages['form.remove']}" 
-		onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" 
+	<a:commandLink value="#{messages['form.remove']}" 
+		onclick="if (confirm('#{messages['form.confirm_remove']}')) { deleteRecord(#{it.user.id}) } return false;" 
 		reRender="main,messages">
-		<a:actionparam assignTo="#{userHome.id}" value="#{it.user.id}" name="id" converter="javax.faces.Integer"/>
 	</a:commandLink>
   </h:column>
 </h:dataTable>

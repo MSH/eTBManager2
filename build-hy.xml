@@ -4,10 +4,10 @@
     <property environment="env" />
 	<property file="build.properties" />
 	<property name="war-file-prefix" value="etbmanager" />
-	<property name="implementation-title" value="e-TB Manager for Uzbekistan" />
-	<property name="country-code" value="UZ" />
-	<property name="country-folder" value="uz" />
-	<property name="country" value="Uzbekistan" />
+	<property name="implementation-title" value="e-TB Manager for Armenia" />
+	<property name="country-code" value="HY" />
+	<property name="country-folder" value="hy" />
+	<property name="country" value="Armenia" />
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.6"/>
     <property name="source" value="1.6"/>
@@ -75,9 +75,6 @@
         <copy includeemptydirs="false" todir="${build-classes}">
             <fileset dir="src/model" excludes="**/*.launch, **/*.java"/>
         </copy>
-        <copy includeemptydirs="false" todir="${build-classes}">
-            <fileset dir="src/${country-folder}" excludes="**/*.launch, **/*.java"/>
-        </copy>
     </target>
 
 	
@@ -100,7 +97,6 @@
         <javac debug="false" debuglevel="${debuglevel}" destdir="${build-classes}" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/model"/>
             <src path="src/action"/>
-            <src path="src/${country-folder}"/>
             <classpath refid="mdrtb.classpath"/>
         </javac>
     </target>
@@ -150,11 +146,11 @@
 			</classes>
 			
 			<zipfileset file="src/model/messages_en.properties" fullpath="WEB-INF/classes/messages_en.properties" />
-			<zipfileset file="src/model/messages_uz.properties" fullpath="WEB-INF/classes/messages_uz.properties" />
+			<zipfileset file="src/model/messages_hy_AM.properties" fullpath="WEB-INF/classes/messages_hy_AM.properties" />
 			<zipfileset file="src/model/messages_ru.properties" fullpath="WEB-INF/classes/messages_ru.properties" />
 			<zipfileset file="production/persistence.xml" prefix="WEB-INF/classes/META-INF" />
 			<zipfileset file="production/components.xml" prefix="WEB-INF" />
-			<zipfileset file="production/uz/faces-config.xml" fullpath="WEB-INF/faces-config.xml" />
+			<zipfileset file="production/hy/faces-config.xml" fullpath="WEB-INF/faces-config.xml" />
 		</war>
 	</target>
 </project>

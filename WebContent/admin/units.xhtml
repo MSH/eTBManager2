@@ -46,6 +46,10 @@
 </div>
 
 
+<a:jsFunction name="deleteRecord" action="#{tbunitHome.remove}" reRender="pnlunits,messages">
+	<a:actionparam name="param1" assignTo="#{tbunitHome.id}" converter="javax.faces.Integer" />
+</a:jsFunction>
+
 <h:panelGroup id="pnlunits">
 
 <s:decorate template="/layout/naveg.xhtml">
@@ -108,9 +112,8 @@
 
   <h:column rendered="#{s:hasRole('TBUNITS_EDT') and (not workspaceViewService.printing)}">
   	<f:facet name="header" >#{messages['form.action']}</f:facet>
-	<a:commandLink action="#{tbunitHome.remove}" value="#{messages['form.remove']}" 
-		onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" reRender="main,messages">
-		<a:actionparam assignTo="#{tbunitHome.id}" value="#{r.id}" name="id" converter="javax.faces.Integer"/>
+	<a:commandLink value="#{messages['form.remove']}" 
+		onclick="if (confirm('#{messages['form.confirm_remove']}')) { deleteRecord(#{r.id}) } return false;" >
 	</a:commandLink>
   </h:column>
 </h:dataTable>
