@@ -114,7 +114,7 @@
 		<property name="war-file-name" value="${war-file-prefix}-${implementation-version}-${country-code}.war" />
 		<echo message="war file              :  ${war-file-name}" />
 		<delete file="build/${war-file-name}" />
-		<buildnumber file="build/build.num"/>
+		<buildnumber file="build.num"/>
 		
 		<tstamp>
 			<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />

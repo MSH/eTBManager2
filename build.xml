@@ -118,7 +118,7 @@
 	
 	<target description="Build the .war file" depends="init" name="war">
 		<delete file="build/${war-file-name}" />
-		<buildnumber file="build/build.num"/>
+		<buildnumber file="build.num"/>
 		
 		<tstamp>
 			<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
