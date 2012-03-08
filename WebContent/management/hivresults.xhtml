@@ -17,6 +17,7 @@
 <ui:param name="left" value="0" />
 
 <ui:param name="indicator" value="#{hivIndicator}" />
+<ui:param name="table" value="#{hivArtCptIndicatorNG.table}" />
 
 
 
@@ -110,6 +111,53 @@
 	</div>
 </td></tr>
 </table>
+
+	<s:fragment rendered="#{indicatorController.executing}">
+	<div class="paragraph">
+	#{messages['manag.hivreport.title3']}</div>
+	<table class="table1" width="800px" align="left">
+		<tr>
+			<th>
+				
+			</th>
+		<ui:repeat value="#{table.columns}" var="col">
+			<th>
+				#{col.title}
+			</th>
+		</ui:repeat>
+		</tr>
+		<ui:repeat value="#{table.rows}" var="row">
+		<tr>
+			<td class="colb">
+				#{row.title}
+			</td>
+			<ui:repeat value="#{row.cells}" var="val">
+			<td class="colcb">
+				<h:outputText value="#{val.value}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText><h:outputText value="%" rendered="#{val.column.highlight}" />
+			</td>
+			</ui:repeat>
+		</tr>
+		</ui:repeat>
+		<tr>
+			<td class="colb" bgcolor="#DBFADC">
+				<b>#{messages['global.total']}</b>
+			</td>
+		<ui:repeat value="#{table.columns}" var="col">
+			<td class="colcb" bgcolor="#DBFADC">
+				<b>
+				<h:outputText value="#{col.total}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+				</b>
+			</td>
+		</ui:repeat>
+
+		</tr>
+		</table>
+	</s:fragment>
+	
 </h:panelGroup>
 <rich:jQuery selector="#charttypediv" query="hide()" />
 </h:form>
