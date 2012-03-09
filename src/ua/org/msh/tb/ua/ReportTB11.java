@@ -522,13 +522,4 @@ public class ReportTB11 extends Indicator2D {
 	public IndicatorTable getTable1() {
 		return getTable();
 	}
-	
-	/*@Override
-	protected String getHQLInfectionSite() {
-		IndicatorFilters filters = getIndicatorFilters();
-		if  (filters.getInfectionSite() == InfectionSite.PULMONARY)
-			 return "c.infectionSite in (" + InfectionSite.PULMONARY.ordinal() + "," + InfectionSite.BOTH.ordinal() + ")";
-		else return super.getHQLInfectionSite();
-	}*/
-	
 }

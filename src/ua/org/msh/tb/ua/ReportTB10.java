@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
@@ -23,7 +24,7 @@ public class ReportTB10 extends Indicator2D {
 	/**
 	 * Total number of cases in the indicator 
 	 */
-	private int numcases;
+	private float [] numcases = new float [3];
 	
 
 	@Override
@@ -78,13 +79,13 @@ public class ReportTB10 extends Indicator2D {
 		IndicatorTable table = getTable2000();
 
 		// titles are not used in the displaying of the table
-		table.addColumn("1", "CaseState.DIED.TB");
-		table.addColumn("2", "CaseState.DIED.OTHER_CAUSES");
-		table.addColumn("3", "CaseState.TREATMENT_INTERRUPTION");
-		table.addColumn("4", "CaseState.TRANSFERRED_OUT");
-		table.addColumn("5", "CaseState.DIAGNOSTIC_CHANGED");
-		table.addColumn("6", "CaseState.OTHER");
-		table.addColumn("7", "NOT_DONE");
+		table.addColumn("CaseState.DIED.TB", "1");
+		table.addColumn("CaseState.DIED.OTHER_CAUSES", "2");
+		table.addColumn("CaseState.TREATMENT_INTERRUPTION", "3");
+		table.addColumn("CaseState.TRANSFERRED_OUT", "4");
+		table.addColumn("CaseState.DIAGNOSTIC_CHANGED", "5");
+		table.addColumn("CaseState.OTHER", "6");
+		table.addColumn("NOT_DONE", "7");
 		
 		table.addRow(getMessage("uk_UA.reports.newcases"), "newcases");
 		table.addRow(getMessage("uk_UA.reports.relapses"), "relapses");
@@ -107,20 +108,23 @@ public class ReportTB10 extends Indicator2D {
 	 */
 	protected void generateTable1000() {
 		// calculate the number of cases
-		numcases = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal());
+		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
 		
-		if (numcases == 0)
+		numcases[0] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.NEW.ordinal());
+		numcases[1] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.RELAPSE.ordinal());
+		numcases[2] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal());
+		numcases[2] -= numcases[0]+numcases[1];
+		if (numcases[0]+numcases[1]+numcases[2] == 0)
 			return;
 
 		String hqlMicroscopy = "(select min(e.dateCollected) from ExamMicroscopy e " +
 				"where e.tbcase.id = c.id and e.result " + getHQLMicroscopyResultCondition(IndicatorMicroscopyResult.NEGATIVE)+")";
 		// check if it has microscopy
-		String hasMicr = "(select min(e.dateCollected) from ExamMicroscopy e where e.tbcase.id = c.id)";
+		String hasMicr = "(select max(e.dateCollected) from ExamMicroscopy e where e.tbcase.id = c.id and (e.dateCollected <= c.iniContinuousPhase or c.iniContinuousPhase = null))";
 		
 		setGroupFields(null);
 		setConsolidated(false);
-		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
-		setHQLSelect("select c.treatmentPeriod.iniDate, c.diagnosisDate, c.patientType, c.state, " + 
+		setHQLSelect("select c.treatmentPeriod.iniDate, c.diagnosisDate, c.patientType, c.state, c.regimen, " + 
 				hqlMicroscopy +	", " + 
 				hasMicr);
 		setCondition("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType in (0,1,2,3,4,5) and exists(select e.id from ExamMicroscopy e where e.result in (1,2,3,4) and e.tbcase.id = c.id and e.dateCollected = (select min(sp.dateCollected) from ExamMicroscopy sp where sp.tbcase.id = c.id))");
@@ -129,8 +133,8 @@ public class ReportTB10 extends Indicator2D {
 			.getResultList();
 
 		for (Object[] vals: lst) {
-			boolean noexam = vals[5] == null;
-			addValueTable((Date)vals[0], (Date)vals[1], (PatientType)vals[2], (CaseState)vals[3], (Date)vals[4], noexam);
+			boolean noexam = vals[6] == null;
+			addValueTable((Date)vals[0], (Date)vals[1], (PatientType)vals[2], (CaseState)vals[3], (Regimen)vals[4], (Date)vals[5], noexam);
 		}
 		
 		String rows[] = {"newcases", "relapses", "others"};
@@ -149,30 +153,28 @@ public class ReportTB10 extends Indicator2D {
 		
 		// check if it has microscopy
 		String hasMicr = "(select min(e.dateCollected) from ExamMicroscopy e where e.tbcase.id = c.id and e.result in (1,2,3,4))";
-		String hasMicr2 = "(select max(e.dateCollected) from ExamMicroscopy e where e.tbcase.id = c.id), ";
+		String hasMicr2 = "(select max(e.dateCollected) from ExamMicroscopy e where e.tbcase.id = c.id and (e.dateCollected <= c.iniContinuousPhase or c.iniContinuousPhase = null)) ";
 		
-		setConsolidated(true);
+		setConsolidated(false);
 		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
-		
-		List<Object[]> lst = generateValuesByField("c.patientType, c.state, "+hasMicr2, "c.patientType in (0,1,2,3,4,5) and exists"+hasMicr);
-		
+		setGroupFields(null);
+		setHQLSelect("select c.treatmentPeriod.iniDate, c.diagnosisDate, c.patientType, c.state, c.regimen, "+hasMicr2+", c.iniContinuousPhase");
+		setCondition("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType in (0,1,2,3,4,5) and exists"+hasMicr);//+" and not exists"+hasMicr2);
+		List<Object[]> lst = createQuery().getResultList();
 
 		for (Object[] vals: lst) {
-			addValueTable((PatientType)vals[0], (CaseState)vals[1], (Long) vals[3]);
+			addValueTable((Date)vals[0], (Date)vals[1], (PatientType)vals[2], (CaseState)vals[3], (Regimen) vals[4], (Date)vals[5],(Date)vals[6]);
 		}
 		
-		String rows[] = {"newcases", "relapses", "others"};
-		String cols[] = {"month2", "month3", "month4"};
-		
-		for (String rowid: rows)
-			for (String colid: cols) {
-				calcPercentage(colid, rowid);
-			}
 	}
 
 	
 	private void calcPercentage(String colid, String rowid) {
-		float total = table1000.getCellAsFloat("numcases", rowid);
+		float total = 0;
+		if (rowid=="newcases") total = numcases[0];	
+		if (rowid=="relapses") total = numcases[1];
+		if (rowid=="others") total = numcases[2];
+		
 		if (total == 0)
 			return;
 		
@@ -188,12 +190,13 @@ public class ReportTB10 extends Indicator2D {
 	 * @param dtDiagnos
 	 * @param dtMicro
 	 */
-	protected void addValueTable(Date dtIniTreat, Date dtDiagnos, PatientType ptype, CaseState state, Date dtMicro, boolean noexam) {
+	protected void addValueTable(Date dtIniTreat, Date dtDiagnos, PatientType ptype, CaseState state, Regimen reg, Date dtMicro, boolean noexam) {
 		if (dtIniTreat == null)
 			dtIniTreat = dtDiagnos;
 
 		// select row id
 		String rowkey;
+		String colkey = null;
 		switch (ptype) {
 		case NEW: 
 			rowkey = "newcases";
@@ -204,44 +207,81 @@ public class ReportTB10 extends Indicator2D {
 		default: 
 			rowkey = "others";
 		}
-
-		// no culture or microscopy to the case ?
+		
+				
 		if (noexam)
 			table1000.addIdValue("noexams", rowkey, 1F);
 		else {
 			// is negative ?
-			if (dtMicro != null) {
-				// calculate month of negativation
-				int negativeMonth = DateUtils.monthsBetween(dtIniTreat, dtMicro);
-				
-				if (negativeMonth <= 2)
-					table1000.addIdValue("month2", rowkey, 1F);
-				
-				if (negativeMonth <= 3)
-					table1000.addIdValue("month3", rowkey, 1F);
-				
-				if (negativeMonth <= 4)
-					table1000.addIdValue("month4", rowkey, 1F);
-				
-				if (negativeMonth > 4)
-					table1000.addIdValue("others", rowkey, 1F);
+			if (dtMicro != null){ 
+				if (DateUtils.monthsBetween(dtIniTreat, dtMicro) <= reg.getMonthsIntensivePhase())
+					{
+					// calculate month of negativation
+					int negativeMonth = DateUtils.monthsBetween(dtIniTreat, dtMicro);
+			
+					if (negativeMonth <= 2 && ptype.equals(PatientType.NEW))
+						table1000.addIdValue("month2", rowkey, 1F);
+					
+					if (negativeMonth <= 3)
+						table1000.addIdValue("month3", rowkey, 1F);
+					
+					if (negativeMonth <= 4)
+						if (!ptype.equals(PatientType.NEW))
+							table1000.addIdValue("month4", rowkey, 1F);
+						else
+							if (negativeMonth > 3)
+							table1000.addIdValue("others", rowkey, 1F);	
+					
+					if (negativeMonth > 4)
+						table1000.addIdValue("others", rowkey, 1F);
+					}
+				else 
+					{
+						table1000.addIdValue("noexams", rowkey, 1F);
+						switch (state) {
+						case DIED:
+							colkey = "1";
+							break;
+						case DIED_NOTTB:
+							colkey = "2";
+							break;
+						case TREATMENT_INTERRUPTION: case DEFAULTED: case FAILED:
+							colkey = "3";
+							break;
+						case TRANSFERRED_OUT: case TRANSFERRING:
+							colkey = "4";
+							break;
+						case DIAGNOSTIC_CHANGED_TO_NOT_DRTB: case DIAGNOSTIC_CHANGED: case CURED: case TREATMENT_COMPLETED:
+							colkey = "5";
+							break;
+						default:
+							colkey = "6";
+							break;
+						}
+						if (colkey != null) table2000.addIdValue(colkey, rowkey, 1F);
+						table2000.addIdValue("7",rowkey,1F);
+					}
 			}
 			else table1000.addIdValue("others", rowkey, 1F);
-		}
+			}
 		
 		table1000.addIdValue("numcases", rowkey, 1F);
 	}
 
 	/**
 	 * Add a value to a specific cell in the table based on the dates of the case
-	 * @param dtIniTreat
-	 * @param dtDiagnos
-	 * @param dtMicro
+	 * @param ptype
+	 * @param state
+	 * @param val
 	 */
-	protected void addValueTable(PatientType ptype, CaseState state, Long val) {
+	protected void addValueTable(Date dtIniTreat, Date dtDiagnos, PatientType ptype, CaseState state, Regimen reg, Date dtMicro, Date dtIniContPhase) {
 		// select row id
+		if (dtIniTreat == null)
+			dtIniTreat = dtDiagnos;
+		
 		String rowkey;
-		String colkey;
+		String colkey = null;
+		
 		switch (ptype) {
 		case NEW: 
 			rowkey = "newcases";
@@ -252,31 +292,32 @@ public class ReportTB10 extends Indicator2D {
 		default: 
 			rowkey = "others";
 		}
-		
-		switch (state) {
-		case DIED:
-			colkey = "1";
-			break;
-		case DIED_NOTTB:
-			colkey = "2";
-			break;
-		case TREATMENT_INTERRUPTION:
-			colkey = "3";
-			break;
-		case TRANSFERRED_OUT: case TRANSFERRING:
-			colkey = "4";
-			break;
-		case DIAGNOSTIC_CHANGED_TO_NOT_DRTB: case DIAGNOSTIC_CHANGED:
-			colkey = "5";
-			break;
-		case OTHER:
-			colkey = "6";
-			break;
-		default:
-			colkey = "7";
-			break;
+		//if ((dtIniContPhase == null) || ((dtIniContPhase != null) && (DateUtils.daysBetween(dtMicro, dtIniContPhase)>14))){
+		if (dtMicro != null)
+			if (DateUtils.monthsBetween(dtIniTreat, dtMicro) > reg.getMonthsIntensivePhase()){	
+			switch (state) {
+				case DIED:
+					colkey = "1";
+					break;
+				case DIED_NOTTB:
+					colkey = "2";
+					break;
+				case TREATMENT_INTERRUPTION: case DEFAULTED:
+					colkey = "3";
+					break;
+				case TRANSFERRED_OUT: case TRANSFERRING:
+					colkey = "4";
+					break;
+				case DIAGNOSTIC_CHANGED_TO_NOT_DRTB: case DIAGNOSTIC_CHANGED: case CURED:
+					colkey = "5";
+					break;
+				default:
+					colkey = "6";
+					break;
 		}
-		table2000.addIdValue(colkey, rowkey, val.floatValue());
+		if (colkey != null) table2000.addIdValue(colkey, rowkey, 1F);
+		table2000.addIdValue("7",rowkey,1F);
+		}
 		
 	}
 	

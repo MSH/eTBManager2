@@ -84,7 +84,7 @@ public class ReportTB07 extends Indicator2D {
 		
 		// pulmonary negative
 		filters.setMicroscopyResult(IndicatorMicroscopyResult.NEGATIVE);
-		String condition = " c.patientType in (0,1,2,3,4,5) and c.infectionSite != null and "+ getHQLMicroscopyCondition();
+		String condition = " c.patientType in (0,1,2,3,4,5) and c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.infectionSite != null and "+ getHQLMicroscopyCondition();
 		filters.setMicroscopyResult(null);
 		filters.setInfectionSite(InfectionSite.PULMONARY);
 		lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", condition);
@@ -93,7 +93,7 @@ public class ReportTB07 extends Indicator2D {
 		// extrapulmonary
 		filters.setMicroscopyResult(null);
 		filters.setInfectionSite(InfectionSite.EXTRAPULMONARY);
-		lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", "c.patientType in (0,1,2,3,4,5) and c.infectionSite != null");
+		lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", "c.patientType in (0,1,2,3,4,5) and c.infectionSite != null and c.state >= " + CaseState.ONTREATMENT.ordinal());
 		addTableValues(table, lst, null, InfectionSite.EXTRAPULMONARY);
 		addTableValues(getTable3000(), lst, null, InfectionSite.EXTRAPULMONARY);
 
@@ -176,7 +176,7 @@ public class ReportTB07 extends Indicator2D {
 		
 		filters.setMicroscopyResult(IndicatorMicroscopyResult.POSITIVE);
 		filters.setInfectionSite(InfectionSite.PULMONARY);
-		List<Object[]> lst = generateValuesByField("c.age, c.patient.gender", "c.age != null and c.patient.gender != null");
+		List<Object[]> lst = generateValuesByField("c.age, c.patient.gender", "c.age != null and c.patient.gender != null and c.state >= " + CaseState.ONTREATMENT.ordinal());
 		lst = groupValuesByAreRange(lst, 0, 2);
 		
 		IndicatorTable table = getTable2000();
@@ -211,10 +211,10 @@ public class ReportTB07 extends Indicator2D {
 		addTableValues(table, lst, IndicatorMicroscopyResult.POSITIVE, null);
 
 		// pulmonary negatives
-		filters.setMicroscopyResult(IndicatorMicroscopyResult.POSITIVE);
-		filters.setCultureResult(IndicatorCultureResult.POSITIVE);
-		condition = "c.patientType != null and c.infectionSite != null and not " + getHQLMicroscopyCondition() +
-			" and not " + getHQLCultureCondition();
+		filters.setMicroscopyResult(IndicatorMicroscopyResult.NEGATIVE);
+		filters.setCultureResult(IndicatorCultureResult.NEGATIVE);
+		condition = "c.patientType in (0,1,2,3,4,5) and c.state >= " + CaseState.ONTREATMENT.ordinal() +" and c.infectionSite != null and " + getHQLMicroscopyCondition() +
+			" and " + getHQLCultureCondition();
 		filters.setMicroscopyResult(null);
 		filters.setCultureResult(null);
 		filters.setInfectionSite(InfectionSite.PULMONARY);
@@ -247,7 +247,7 @@ public class ReportTB07 extends Indicator2D {
 		filters.setMicroscopyResult(null);
 		filters.setCultureResult(null);
 		
-		return "c.patientType != null and c.infectionSite != null and " + condition;
+		return "c.patientType in (0,1,2,3,4,5) and c.state >= " + CaseState.ONTREATMENT.ordinal() +" and c.infectionSite != null and " + condition;
 	}
 	
 
@@ -263,7 +263,7 @@ public class ReportTB07 extends Indicator2D {
 		filters.setMicroscopyResult(null);
 		filters.setCultureResult(null);
 		
-		String condition = "c.infectionSite != null and c.patientType != null and " +
+		String condition = "c.infectionSite != null and c.state >= " + CaseState.ONTREATMENT.ordinal() +" and c.patientType in (0,1,2,3,4,5) and " +
 				"exists(select aux.id from ExamHIV aux where aux.tbcase.id=c.id and aux.result = " + HIVResult.POSITIVE.ordinal() + ")";
 		List<Object[]> lst = generateValuesByField("c.patientType, c.infectionSite", condition);
 

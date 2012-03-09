@@ -102,7 +102,7 @@ public class ReportTB08 extends Indicator2D {
 		filters.setMicroscopyResult(IndicatorMicroscopyResult.POSITIVE);
 		filters.setInfectionSite(InfectionSite.PULMONARY);
 		List<Object[]> lst = generateValuesByField("c.patientType, c.state, ua.extraOutcomeInfo", 
-				"c.patientType != null and c.state in " + statesIn);
+				"c.patientType in (0,1,2,3,4,5) and c.state in " + statesIn);
 		addTableValues(table, lst, "_positive");
 
 		filters.setMicroscopyResult(IndicatorMicroscopyResult.POSITIVE);
@@ -110,7 +110,7 @@ public class ReportTB08 extends Indicator2D {
 		filters.setMicroscopyResult(null);
 		filters.setInfectionSite(InfectionSite.PULMONARY);
 		lst = generateValuesByField("c.patientType, c.state, ua.extraOutcomeInfo", 
-				"c.patientType != null and c.state in " + statesIn +
+				"c.patientType in (0,1,2,3,4,5) and c.state in " + statesIn +
 				" and not " + cond);
 		addTableValues(table, lst, "_negative");
 	}
@@ -126,14 +126,14 @@ public class ReportTB08 extends Indicator2D {
 		// pulmonary positives
 		filters.setInfectionSite(InfectionSite.PULMONARY);
 		List<Object[]> lst = generateValuesByField("c.patientType, c.state, ua.extraOutcomeInfo", 
-				"c.patientType != null and c.state in " + statesIn + " and (" +
+				"c.patientType in (0,1,2,3,4,5) and c.state in " + statesIn + " and (" +
 				getHQLMicroscopyOrCultureCondition(IndicatorMicroscopyResult.POSITIVE, IndicatorCultureResult.POSITIVE) +")");
 		addTableValues(table, lst, "_positive");
 
 		// pulmonary negatives
 		filters.setMicroscopyResult(IndicatorMicroscopyResult.POSITIVE);
 		filters.setCultureResult(IndicatorCultureResult.POSITIVE);
-		String condition = "c.patientType != null " +
+		String condition = "c.patientType in (0,1,2,3,4,5) " +
 			" and c.state in " + statesIn +
 			" and not " + getHQLMicroscopyCondition() +
 			" and not " + getHQLCultureCondition();
@@ -158,12 +158,12 @@ public class ReportTB08 extends Indicator2D {
 	
 		// calculate number of cases with pulmonary destruction at notification
 		List<Object[]> lst = generateValuesByField("c.patientType", 
-				"c.patientType != null and ua.pulmonaryDestruction='YES'");
+				"c.patientType in (0,1,2,3,4,5) and ua.pulmonaryDestruction='YES'");
 		addValues(table, "col1", lst);
 
 		// calculate number of cases with pulmonary destruction at notification and where the last exam has no destruction
 		lst = generateValuesByField("c.patientType", 
-			"c.patientType != null and ua.pulmonaryDestruction='YES' " +
+			"c.patientType in (0,1,2,3,4,5) and ua.pulmonaryDestruction='YES' " +
 			"and exists(from ExamXRay exam where exam.tbcase.id=c.id and exam.destruction=true" +
 			" and exam.date = (select max(aux.date) from ExamXRay aux where aux.tbcase.id=c.id))");
 		addValues(table, "col2", lst);
