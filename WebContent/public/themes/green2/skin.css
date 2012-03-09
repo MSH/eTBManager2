@@ -1205,6 +1205,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 
 .tl-table {
 	margin-left:40px;
+	font-size:11px;
 }
 .tl-table td {
 	vertical-align: top;

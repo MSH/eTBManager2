@@ -13,6 +13,7 @@ import javax.faces.validator.ValidatorException;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.international.Messages;
+import org.msh.utils.date.DateUtils;
 
 @Name("futureDateValidator")
 @org.jboss.seam.annotations.faces.Validator(id="futureDateValidator")
@@ -21,14 +22,28 @@ public class FutureDateValidator implements Validator {
 
 	public void validate(FacesContext facesContext, UIComponent comp, Object val)
 			throws ValidatorException {
+		Date dt = (Date)val;
+		
+		if (dt == null)
+			return;
+
+		// limit the minimum value of a date
+		if (dt.before(DateUtils.newDate(1850, 1, 1))) {
+			Map<String,String> messages = Messages.instance();
+			
+			FacesMessage message = new FacesMessage();
+			message.setDetail(messages.get("javax.faces.component.UISelectOne.INVALID"));
+			message.setSummary(messages.get("javax.faces.component.UISelectOne.INVALID"));
+			message.setSeverity(FacesMessage.SEVERITY_ERROR); 
+			throw new ValidatorException(message);
+		}
+		
 		UIParameter param = findParam(comp.getParent(), "validatefuture");
 		if (param != null) {
 			Object p = param.getValue();
 			if ((p == null) || (p.equals("true")))
 				return;
 		}
-		
-		Date dt = (Date)val;
 
 		if (dt.after(new Date())) {
 			Map<String,String> messages = Messages.instance();

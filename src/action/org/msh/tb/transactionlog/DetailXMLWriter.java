@@ -63,7 +63,7 @@ public class DetailXMLWriter {
 		return row;
 	}
 
-
+	
 	/**
 	 * Add a parameter to a tag with the content of the value converted
 	 * @param parent

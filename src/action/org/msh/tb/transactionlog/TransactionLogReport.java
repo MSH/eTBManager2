@@ -39,6 +39,7 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 		"log.action = #{transactionLogReport.action}",
 		"log.role.id = #{userRoleHome.instance.id}",
 		"log.user.name like #{transactionLogReport.userNameLike}",
+		"log.user.id = #{reportSelection.userLog.id}",
 		"log.entityDescription like #{transactionLogReport.searchKeyLike}",
 		"log.transactionDate >= #{transactionLogReport.iniDate}",
 		"log.transactionDate <= #{transactionLogReport.endDate1}",
@@ -49,7 +50,7 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 	private RoleAction action;
 	private ReportSelection reportSelection;
 
-	private String userName;	
+	private String userName;
 	private String searchKey;
 	
 	private Date iniDate;

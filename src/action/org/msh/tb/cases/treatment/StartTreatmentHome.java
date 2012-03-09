@@ -8,6 +8,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.core.Events;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.TbCase;
@@ -79,7 +80,7 @@ public class StartTreatmentHome {
 			caseHome.persist();
 		}
 		
-		
+		Events.instance().raiseEvent("treatment-started");
 		
 		return "treatment-started";
 	}

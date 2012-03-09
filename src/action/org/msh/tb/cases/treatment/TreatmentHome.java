@@ -12,7 +12,9 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.SourcesQuery;
 import org.msh.tb.cases.CaseHome;
@@ -96,6 +98,8 @@ public class TreatmentHome {
 		
 		getTbunitselection().setTbunit(healthUnit.getTbunit());
 		initialized = true;
+		
+		Events.instance().raiseEvent("treatment-init-editing");
 	}
 
 
@@ -115,6 +119,9 @@ public class TreatmentHome {
 		refreshPrescriptionTable();
 
 		caseHome.updateCaseTags();
+		
+		Events.instance().raiseEvent("treatment-persist");
+		
 		return caseHome.persist();
 	}
 	
@@ -149,6 +156,12 @@ public class TreatmentHome {
 		}
 
 		TbCase tbcase = caseHome.getInstance();
+
+		Period p = new Period(iniDate, endDate);
+		if (p.equals(tbcase.getTreatmentPeriod()))
+			return;
+		
+		Events.instance().raiseEvent("treatment-period-change", p, iniContinuousPhase);
 		
 		// case has continuous phase ?
 		if (tbcase.getIniContinuousPhase() != null) {
@@ -164,7 +177,6 @@ public class TreatmentHome {
 			prescribedMedicineHome.splitPeriod(iniContinuousPhase);
 		}
 		
-		Period p = new Period(iniDate, endDate);
 		healthUnit.setPeriod(p);
 		
 		tbcase.setTreatmentPeriod(p);
@@ -200,8 +212,10 @@ public class TreatmentHome {
 		
 		formEditing = FormEditing.NONE;
 		validated = true;
-
+		
 		refreshPrescriptionTable();
+		
+		Events.instance().raiseEvent("treatment-regimen-changed");
 	}
 
 
@@ -316,6 +330,10 @@ public class TreatmentHome {
 		
 		validated = true;
 		formEditing = FormEditing.NONE;
+		
+		if (bNew)
+		 	 Events.instance().raiseEvent("treatment-new-medicine", pm);
+		else Events.instance().raiseEvent("treatment-edit-medicine", pm);
 
 		refreshPrescriptionTable();
 	}
@@ -351,7 +369,8 @@ public class TreatmentHome {
 		
 		PrescribedMedicine pm = (PrescribedMedicine)Contexts.getConversationContext().get("prescribedMedicine");
 
-		if (prescribedMedicineHome.removePeriod(new Period(iniDate, endDate), pm.getMedicine(), null)) {
+		Period p = new Period(iniDate, endDate);
+		if (prescribedMedicineHome.removePeriod(p, pm.getMedicine(), null)) {
 			TbCase tbcase = caseHome.getInstance();
 			tbcase.setRegimen(null);
 		}
@@ -359,6 +378,8 @@ public class TreatmentHome {
 		refreshPrescriptionTable();
 		validated = true;
 		formEditing = FormEditing.NONE;
+		
+		Events.instance().raiseEvent("treatment-remove-period", pm.getMedicine(), p);
 	}
 
 	
@@ -473,8 +494,12 @@ public class TreatmentHome {
 	/**
 	 * Undo the treatment, turning the case to the 'waiting for treatment' state again
 	 */
+	@Transactional
 	public String undoTreatment() {
 		TbCase tbcase = caseHome.getInstance();
+
+		Events.instance().raiseEvent("treatment-undone");
+		
 		tbcase.setState(CaseState.WAITING_TREATMENT);
 		tbcase.setTreatmentPeriod(null);
 		tbcase.setTreatmentUnit(null);

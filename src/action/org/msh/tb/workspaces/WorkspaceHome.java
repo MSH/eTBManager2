@@ -31,7 +31,9 @@ import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.WorkspaceView;
 import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.NameComposition;
+import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.transactionlog.LogInfo;
+import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.EntityQuery;
 
@@ -223,6 +225,8 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		
 		TransactionLogService logService = new TransactionLogService();
 		defaultWorkspace.setUsers(null);
+		logService.recordEntityState(defaultWorkspace, Operation.EDIT);
+		logService.save("SETUPWS", RoleAction.EDIT, getInstance());
 //		logService.saveEntityDifferences(defaultWorkspace, getInstance(), "SETUPWS");
 		
 		defaultWorkspace = getInstance();
