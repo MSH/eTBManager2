@@ -77,9 +77,9 @@
 	    	</s:decorate>    
 	    </td>    
 	    <td>
-			<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcasebd.patient.salary}">
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcasebd.salary}">
 	    		<ui:define name="label">#{messages['Patient.salary']}:</ui:define>
-	    		#{messages[tbcase.patient.salary.key]}
+	    		#{messages[tbcasebd.salary.key]}
 	    	</s:decorate>    
 	    </td>
     </tr>

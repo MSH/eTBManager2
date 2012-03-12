@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.msh.tb.bd.entities.enums.Occupation;
+import org.msh.tb.bd.entities.enums.SalaryRange;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.YesNoType;
 
@@ -20,7 +21,19 @@ public class TbCaseBD extends TbCase{
 	
 	private Occupation occupation;
 	
+	private SalaryRange salary;
 	
+	
+	
+	
+
+	public SalaryRange getSalary() {
+		return salary;
+	}
+
+	public void setSalary(SalaryRange salary) {
+		this.salary = salary;
+	}
 
 	public Occupation getOccupation() {
 		return occupation;

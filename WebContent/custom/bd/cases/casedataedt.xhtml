@@ -159,7 +159,7 @@
 	    <td>
 	    	<s:decorate template="/layout/edit.xhtml">
 	    		<ui:define name="label">#{messages['Patient.salary']}:</ui:define>
-		    	<h:selectOneMenu value="#{tbcasebd.patient.salary}">
+		    	<h:selectOneMenu value="#{tbcasebd.salary}">
 		    		<s:selectItems value="#{salaryRangeList}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
 		    		<s:convertEnum />
 		    	</h:selectOneMenu>
