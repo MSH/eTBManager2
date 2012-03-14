@@ -49,13 +49,17 @@
 	
 	<s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['ExportContent']}:</ui:define>
-		<h:selectOneRadio value="#{caseExportUAHome.exportContent}" layout="pageDirection" >
-			<s:selectItems value="#{caseExportUAHome.contents}" var="it" label="#{messages[it.key]}" />
+		<h:selectOneRadio value="#{indicator.exportContent}" layout="pageDirection" >
+			<s:selectItems value="#{indicator.contents}" var="it" label="#{messages[it.key]}" />
 		</h:selectOneRadio>
 	</s:decorate>
+	
 	<div class="button-bar">
-	<a:commandLink action="#{caseExportUAHome.download}" value="#{messages['global.export']}" styleClass="button" />
+	<h:commandLink styleClass="button" action="#{indicator.download}">
+	<span>#{messages['global.export']}</span>
+	</h:commandLink>
 	</div>
+	
 </s:decorate>
 
 </td></tr></table>
