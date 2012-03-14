@@ -610,6 +610,8 @@ public class ForecastingCalculation {
 		if (totalPerc == 0)
 			return;
 		
+		if (forNewCases.getNumNewCases() > 0)
+			System.out.println("new cases = " + forNewCases.getNumNewCases());
 		float newCases = Math.round( forNewCases.getNumNewCases() * forRegimen.getPercNewCases() / totalPerc );
 		if (newCases == 0)
 			return;

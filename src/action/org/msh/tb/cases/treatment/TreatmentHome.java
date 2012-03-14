@@ -19,11 +19,13 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.SourcesQuery;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.PrescribedMedicine;
+import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.TreatmentHealthUnit;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
@@ -58,6 +60,8 @@ public class TreatmentHome {
 	
 	private TBUnitSelection tbunitselection;
 	private PrescribedMedicine pmcopy;
+	
+	private boolean regimenMovedToIndivid;
 	
 	
 	/**
@@ -98,6 +102,7 @@ public class TreatmentHome {
 		
 		getTbunitselection().setTbunit(healthUnit.getTbunit());
 		initialized = true;
+		regimenMovedToIndivid = false;
 		
 		Events.instance().raiseEvent("treatment-init-editing");
 	}
@@ -119,6 +124,11 @@ public class TreatmentHome {
 		refreshPrescriptionTable();
 
 		caseHome.updateCaseTags();
+
+		// check if regimen moved to an individualized regimen
+		if (checkregimenMovedToIndivid()) {
+			tbcase.setRegimen(null);
+		}
 		
 		Events.instance().raiseEvent("treatment-persist");
 		
@@ -158,8 +168,10 @@ public class TreatmentHome {
 		TbCase tbcase = caseHome.getInstance();
 
 		Period p = new Period(iniDate, endDate);
-		if (p.equals(tbcase.getTreatmentPeriod()))
+		if ((p.equals(tbcase.getTreatmentPeriod())) && (iniContinuousPhase.equals(tbcase.getIniContinuousPhase()))) {
+			validated = true;
 			return;
+		}
 		
 		Events.instance().raiseEvent("treatment-period-change", p, iniContinuousPhase);
 		
@@ -214,6 +226,8 @@ public class TreatmentHome {
 		validated = true;
 		
 		refreshPrescriptionTable();
+		
+		regimenMovedToIndivid = true;
 		
 		Events.instance().raiseEvent("treatment-regimen-changed");
 	}
@@ -323,9 +337,9 @@ public class TreatmentHome {
 			tbcase.getPrescribedMedicines().add(pm);
 		}
 		
-		if (bNew)
-			tbcase.setRegimen(null);
-		
+//		if (bNew) 
+		regimenMovedToIndivid = checkregimenMovedToIndivid();
+			
 		updateTreatmentPeriod();
 		
 		validated = true;
@@ -371,8 +385,7 @@ public class TreatmentHome {
 
 		Period p = new Period(iniDate, endDate);
 		if (prescribedMedicineHome.removePeriod(p, pm.getMedicine(), null)) {
-			TbCase tbcase = caseHome.getInstance();
-			tbcase.setRegimen(null);
+			regimenMovedToIndivid = checkregimenMovedToIndivid();
 		}
 		updateTreatmentPeriod();
 		refreshPrescriptionTable();
@@ -398,7 +411,7 @@ public class TreatmentHome {
 		tbcase.setRegimen(null);
 		updateTreatmentPeriod();
 	}
-	
+
 
 	/**
 	 * Update treatment period based on the periods of the prescribed medicines
@@ -681,4 +694,57 @@ public class TreatmentHome {
 	}
 
 
+	/**
+	 * Check if changes in the medicine turned the regimen to an individualized
+	 */
+	public boolean checkregimenMovedToIndivid() {
+		TbCase tbcase = caseHome.getTbCase();
+		Regimen reg = tbcase.getRegimen();
+		
+		if (reg == null)
+			return true;
+
+		// get list of medicines in the regimen
+		List<Integer> lst = entityManager.createQuery("select s.substance.id from Regimen r, in(r.medicines) med, in(med.medicine.components) s " +
+				"where r.id = :id and med.medicine.line <> :line")
+				.setParameter("id", reg.getId())
+				.setParameter("line", MedicineLine.OTHER)
+				.getResultList();
+
+		// get list of medicines prescribed
+		String s = "";
+		for (PrescribedMedicine pm: tbcase.getPrescribedMedicines()) {
+			if (pm.getMedicine().getLine() != MedicineLine.OTHER) {
+				String sid = pm.getMedicine().getId().toString();
+				if (!s.contains(sid)) {
+					if (!s.isEmpty())
+						s += ",";
+					s += pm.getMedicine().getId().toString();
+				}
+			}
+		}
+		s = "(" + s + ")";
+		List<Integer> subs = entityManager.createQuery("select comp.substance.id from MedicineComponent comp where comp.medicine.id in " + s)
+			.getResultList();
+
+		for (Integer id: subs) {
+			if (!lst.contains(id))
+				return true;
+		}
+		
+		for (Integer id: lst) {
+			if (!subs.contains(id))
+				return true;
+		}
+		
+		return false;
+	}
+
+
+	/**
+	 * @return the regimenMovedToIndivid
+	 */
+	public boolean isRegimenMovedToIndivid() {
+		return regimenMovedToIndivid;
+	}
 }

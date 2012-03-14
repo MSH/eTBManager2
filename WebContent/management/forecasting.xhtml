@@ -180,13 +180,17 @@
 	</s:decorate>
 	
 	<s:fragment rendered="#{not forecasting.casesFromDatabase}">
-	<a:commandLink value="#{messages['form.navprevious']}" 
+	<a:commandLink  
 		action="#{forecastingView.casesRegimenTable.movePreviousPeriod}"
-		reRender="pnlcasesontreat" styleClass="naveg-prev" ajaxSingle="true" process="pnl2"/>
+		reRender="pnlcasesontreat" ajaxSingle="true" process="pnl2">
+		<span class="naveg-prev"  style="float:none"/>#{messages['form.navprevious']}
+	</a:commandLink>
 
-	<a:commandLink value="#{messages['form.navnext']}" 
+	<a:commandLink 
 		action="#{forecastingView.casesRegimenTable.moveNextPeriod}" ajaxSingle="true" process="pnl2"
-		reRender="pnlcasesontreat" styleClass="naveg-next" rendered="#{forecastingView.casesRegimenTable.monthIndexIni != 0}"/>
+		reRender="pnlcasesontreat" rendered="#{forecastingView.casesRegimenTable.monthIndexIni != 0}">
+		<span class="naveg-next" style="float:none"/>#{messages['form.navnext']}
+	</a:commandLink>
 
 	<h:panelGroup id="pnl2">
 	<table width="100%" class="table1">
@@ -258,7 +262,7 @@
 	</h:dataTable>
 	</rich:panel>
 
-	</td><td>
+	</td><td valign="top">
 
 	<rich:dataGrid value="#{forecasting.newCases}" var="it" columns="12" width="100%">
 		<f:facet name="header">

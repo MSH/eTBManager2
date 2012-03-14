@@ -12,7 +12,7 @@
 <tr><td class="header">
 <div>
 	<h:form>
-	<div style="float:right;">
+	<div style="float:right;" class="noprint">
 		<a:region>
 		<a:commandLink value="#{messages['meds.selunit']}" action="#{unitSelection.startSelecting}" reRender="units,unitCount" 
 			onclick="showUnitSelDlg();" rendered="#{selunit=='1'}" ajaxSingle="true" focus="unitname"/>

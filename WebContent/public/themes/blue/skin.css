@@ -58,6 +58,10 @@ input, select {
 input {font-size:1em; }
 select {font-size:1em; }
 
+.printonly {
+	display:none;
+}
+
 .link-small {
 	font-size:0.9em;
 }

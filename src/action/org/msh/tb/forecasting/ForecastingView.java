@@ -117,7 +117,7 @@ public class ForecastingView {
 		forecasting.setIniDate(dt);
 		dt = DateUtils.incDays( DateUtils.incMonths(dt, 12), -1);
 		forecasting.setEndDate(dt);
-		
+
 		forecasting.setLeadTime(3);
 
 		// add listener to list of administrative units when user selects a new one

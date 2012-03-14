@@ -38,7 +38,7 @@
 
 <a:repeat value="#{inventoryReport.sources}" var="s">
 
-<h2><s:link value="#{messages['meds.movs.newadjust']}" view="/medicines/stockadj.xhtml" rendered="#{userSession.canAdjustStock}" style="float:right">
+<h2><s:link value="#{messages['meds.movs.newadjust']}" view="/medicines/stockadj.xhtml" rendered="#{userSession.canAdjustStock}" style="float:right" styleClass="noprint">
 	<f:param name="srcid" value="#{s.source.id}"/>
 </s:link>
 #{s.source.abbrevName}

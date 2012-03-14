@@ -126,7 +126,7 @@
 
 	<h:column>
 		<f:facet name="header"><h:outputText value="#{messages['meds.movs.movqtd']}" styleClass="colrh" /></f:facet>
-		<h:outputText value="#{m.movement.qtdOperation}" style="#{m.movement.qtdOperation > 0? '': 'font-weight:bold;color:red;'}">
+		<h:outputText value="#{m.movement.qtdOperation}" class="#{m.movement.qtdOperation > 0? '':'error'}" >
 			<f:convertNumber pattern="#,###,###"/>
 		</h:outputText>
 	</h:column>

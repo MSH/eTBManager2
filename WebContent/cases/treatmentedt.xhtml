@@ -13,7 +13,6 @@
 <ui:param name="title" value="#{messages['cases.regs']}" />
 
 <ui:param name="topmenu" value="0" />
-
 <ui:param name="labelstyle" value="width:180px" />
 
 <ui:define name="content">
@@ -43,12 +42,20 @@
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['Regimen']}:</ui:define>
 		#{tbcase.regimen!=null ? (tbcase.regimen.name): messages['regimens.individualized']}
-		<a:commandLink value="#{messages['cases.regimens.change']}..."
+		<h:panelGroup id="msgindiv">
+		<s:fragment rendered="#{treatmentHome.regimenMovedToIndivid}">
+			<span class="alert-icon" />
+			<span class="hint">#{messages['cases.treat.regmovedtoindivid']}</span>
+		</s:fragment>
+		</h:panelGroup>
+		<a:commandLink  
 			action="#{treatmentHome.startRegimenChange}"
 			reRender="formregimen"
 			ajaxSingle="true"
-			style="margin-left:10px;" 
-			onclick="showRegimenDlg();" />
+			style="margin-left:10px" 
+			onclick="showRegimenDlg();" >
+			<span>#{messages['cases.regimens.change']}...</span>
+		</a:commandLink>
 	</s:decorate>						
 
 	<div class="paragraph">#{messages['FilterHealthUnit.TREATMENT_UNIT']}</div>	
@@ -119,7 +126,7 @@ function formButtonPost(button) {
 	<h:panelGroup rendered="#{treatmentHome.formEditing=='TREATMENT'}">
 	<h:messages globalOnly="true" styleClass="error" layout="table" />
 
-	<div class="paragraph">#{messages['RegimenPhase.INTENSIVE']}</div>
+	<h2>#{messages['RegimenPhase.INTENSIVE']}</h2>
 	<s:decorate template="/layout/dateedit.xhtml" rendered="#{treatmentHome.canChangeIniTreatmentDate}">
 		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
@@ -131,7 +138,7 @@ function formButtonPost(button) {
 		<h:outputText value="#{treatmentHome.iniDate}" converter="localeDateConverter"/>
 	</s:decorate>
 
-	<div class="paragraph">#{messages['RegimenPhase.CONTINUOUS']}</div>
+	<h2>#{messages['RegimenPhase.CONTINUOUS']}</h2>
 	<s:decorate template="/layout/dateedit.xhtml" rendered="#{treatmentHome.canChangeIniContinuousPhase}">
 		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
@@ -155,7 +162,7 @@ function formButtonPost(button) {
 	<a:commandLink action="#{treatmentHome.endTreatmentPeriodEditing}"
 		data="#{treatmentHome.validated}"
 		styleClass="button" reRender="formperiod"
-		onclick="if (!formButtonPost(this)) return false;" 
+		onclick="if (!formButtonPost(this)) return false;"
 		oncomplete="if (!data) {enableButton(); return false;} Richfaces.hideModalPanel('perioddlg'); updateTreatmentTable();">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink>
@@ -196,7 +203,7 @@ function formButtonPost(button) {
 	<div class="button-bar">
 	<a:commandLink action="#{treatmentHome.endRemovePeriod}"
 		data="#{treatmentHome.validated}"
-		styleClass="button" reRender="formremove"
+		styleClass="button" reRender="formremove,msgindiv"
 		onclick="formButtonPost(this)"
 		oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('removedlg');updateTreatmentTable();">
 		<span>#{messages['form.remove']}</span>
@@ -283,7 +290,7 @@ function formButtonPost(button) {
 		data="#{treatmentHome.validated}"
 		styleClass="button"
 		onclick="formButtonPost(this)" 
-		reRender="formmedicine" 
+		reRender="formmedicine,msgindiv" 
 		oncomplete="enableButton();if (!data) return false;Richfaces.hideModalPanel('medicinedlg');updateTreatmentTable();">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink>

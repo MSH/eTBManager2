@@ -7,11 +7,13 @@ import java.util.Date;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.RegimensQuery;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.entities.Forecasting;
 import org.msh.tb.entities.ForecastingBatch;
@@ -21,6 +23,7 @@ import org.msh.tb.entities.ForecastingNewCases;
 import org.msh.tb.entities.ForecastingOrder;
 import org.msh.tb.entities.ForecastingRegimen;
 import org.msh.tb.entities.ForecastingResult;
+import org.msh.tb.entities.Regimen;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
 
@@ -52,11 +55,30 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 	public void setId(Object id) {
 		super.setId(id);
 		Contexts.getConversationContext().set("forecasting", getInstance());
-		if (isManaged()) {
-			getAdminUnitSelection().setSelectedUnit(getInstance().getAdministrativeUnit());
-			getTbunitSelection().setTbunit(getInstance().getTbunit());
-			newName = getInstance().getName();
-			publicView = getInstance().isPublicView();
+		if (isManaged())
+			initLoading();
+	}
+
+
+	/**
+	 * Initialize forecasting loading
+	 */
+	protected void initLoading() {
+		Forecasting forecasting = getInstance();
+
+		getAdminUnitSelection().setSelectedUnit(forecasting.getAdministrativeUnit());
+		getTbunitSelection().setTbunit(forecasting.getTbunit());
+		newName = getInstance().getName();
+		publicView = getInstance().isPublicView();
+		
+		RegimensQuery regimens = (RegimensQuery)Component.getInstance("regimens");
+		for (Regimen reg: regimens.getResultList()) {
+			if (forecasting.findRegimen(reg) == null) {
+				ForecastingRegimen fr = new ForecastingRegimen();
+				fr.setRegimen(reg);
+				fr.setForecasting(forecasting);
+				forecasting.getRegimens().add(fr);
+			}
 		}
 	}
 

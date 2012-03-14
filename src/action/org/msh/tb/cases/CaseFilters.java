@@ -731,6 +731,9 @@ public class CaseFilters {
 	}
 
 	public void setCaseView(CaseView view) {
+		if (view == null)
+			view = CaseView.DATA;
+
 		switch (view) {
 		case DATA: caseTab = 1;
 			break;

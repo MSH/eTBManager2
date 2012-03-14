@@ -285,11 +285,6 @@ public class UserSession {
 	}
 
 
-	public boolean isCanCheckStockPos() {
-		return Identity.instance().hasRole("STOCKPOS") && (getTbunit().isMedicineStorage());
-	}
-
-
 	public boolean isCanCheckDispensing() {
 		return Identity.instance().hasRole("DISP_PAC") && (getTbunit().isMedicineStorage()) && (getTbunit().isTreatmentHealthUnit());
 	}

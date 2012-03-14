@@ -9,10 +9,10 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
 import org.jboss.seam.international.Messages;
@@ -55,7 +55,6 @@ public class CaseMoveHome extends Controller {
 	 * @return
 	 */
 	@Transactional
-	@RaiseEvent("case.transferout")
 	public String transferOut() {
 		if (!caseHome.isCanTransferOut())
 			return "error";
@@ -94,6 +93,8 @@ public class CaseMoveHome extends Controller {
 
 		if (prescriptionTable != null)
 			prescriptionTable.refresh();
+
+		Events.instance().raiseEvent("case.transferout");
 
 		return "transferred-out";
 	}
@@ -134,7 +135,6 @@ public class CaseMoveHome extends Controller {
 	 * @return
 	 */
 	@Transactional
-	@RaiseEvent("case.transferout.rollback")
 	public String rollbackTransferOut() {
 		TbCase tbcase = caseHome.getInstance();
 		if (tbcase.getHealthUnits().size() <= 1) {
@@ -185,6 +185,8 @@ public class CaseMoveHome extends Controller {
 		Contexts.getEventContext().set("transferdate", tin.getPeriod().getIniDate());
 		Contexts.getEventContext().set("transferunit", tin.getTbunit());
 		
+		Events.instance().raiseEvent("case.transferout.rollback");
+		
 		return "success";
 	}
 	
@@ -226,7 +228,6 @@ public class CaseMoveHome extends Controller {
 	 * @return
 	 */
 	@Transactional
-	@RaiseEvent("case.transferin")
 	public String transferIn() {
 		TreatmentHealthUnit prev = findTransferOutHealthUnit();
 		
@@ -256,6 +257,8 @@ public class CaseMoveHome extends Controller {
 		caseHome.setDisplayMessage(false);
 		caseHome.persist();
 
+		Events.instance().raiseEvent("case.transferin");
+		
 		return "trasnferred-in";
 	}
 	
