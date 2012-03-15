@@ -66,6 +66,18 @@
 				#{messages[r.appointmentType.key]}
 			</s:decorate>		
 		</td></tr>
+		<tr><td>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['MedicalExamination.usingPrescMedicines']}:</ui:define>
+				#{messages[r.usingPrescMedicines.key]}
+			</s:decorate>		
+		</td>
+		<td>
+			<s:decorate template="/layout/display.xhtml" rendered="#{r.usingPrescMedicines=='NO'}">
+				<ui:define name="label">#{messages['MedicalExamination.reasonNotUsingPrescMedicines']}:</ui:define>
+				#{messages[r.reasonNotUsingPrescMedicines]}
+			</s:decorate>
+		</td></tr>
 		<s:fragment rendered="#{not empty r.comments}">
 		<tr><td>
 			<s:decorate template="/layout/display.xhtml">
