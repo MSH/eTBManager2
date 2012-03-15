@@ -20,7 +20,7 @@
 			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" style="display:block;padding:4px"/>
 		</div></s:div>
 		<h:dataTable value="#{tbcase.comorbidities}" var="it" style="margin-top:10px;margin-bottom:10px;"
-			styleClass="tabela4" rowClasses="lin1,lin2" width="100%" rendered="#{not empty tbcase.comorbidities}">
+			styleClass="table1" rowClasses="lin1,lin2" width="100%" rendered="#{not empty tbcase.comorbidities}">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['form.name']}" styleClass="collh"/>
@@ -30,7 +30,7 @@
 			
 			<h:column >
 				<f:facet name="header" >
-					<h:outputText value="#{messages['global.duration']}"  styleClass="collh" />
+					<h:outputText value="#{messages['Regimen.months']}"  styleClass="collh" />
 				</f:facet>
 				#{it.duration}
 			</h:column>
@@ -140,7 +140,7 @@
 		style="float:right;" rendered="#{caseHome.canEditCaseData}" onclick="disableButton(this)">
 		<f:param name="id" value="#{caseHome.id}" />
 		<span>#{messages['form.edit']}</span>
-	</s:link>
+	</s:link>	
 	<h2>#{messages['cases.sideeffects']}</h2>
 	<s:div styleClass="region3" rendered="#{empty tbcase.sideEffects}"><div class="content">
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" style="display:block;padding:4px"/>
