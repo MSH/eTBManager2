@@ -64,7 +64,7 @@
     		<s:selectItems value="#{yesNoList}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
-    	<div id="edtreason">#{messages['Order.cancelReason']}:<br/>
+    	<div id="edtreason">#{messages['MedicalExamination.reasonNotUsingPrescMedicines']}:<br/>
     	<h:inputText value="#{medicalExamination.reasonNotUsingPrescMedicines}" style=" width : 340px;" maxlength="100"/>
     	</div>
     </s:decorate>
