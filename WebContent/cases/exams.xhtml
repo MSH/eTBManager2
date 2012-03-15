@@ -24,7 +24,8 @@
 			width="100%" styleClass="table1" columnClasses="colcb,colcb,colb,colb,colb">
 			<h:column>
 				<f:facet name="header">
-					<h:outputText value="#{messages['global.month']}" styleClass="colch"/>
+					<!-- <h:outputText value="#{messages['global.month']}" styleClass="colch"/>-->
+					<h:outputText value="#{messages['cases.exams.date']}" styleClass="colch"/>
 				</f:facet>
 				<s:link view="/cases/edtexamhiv.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
@@ -33,13 +34,16 @@
 						<f:param value="#{r.monthTreatment}"/>
 					</h:outputFormat>
 				</s:link>
+				<div  style="margin-left:20px;display:block;">
+				<h:outputText value="#{r.date}" converter="localeDateConverter" />
+				</div>
 			</h:column>
-			
+				
 			<h:column>
 				<f:facet name="header">
-					#{messages['cases.exams.date']}
+					<h:outputText value="#{messages['Laboratory']}" styleClass="collh"/>
 				</f:facet>
-				<h:outputText value="#{r.date}" converter="localeDateConverter"/>
+				#{r.laboratory}
 			</h:column>
 			
 			<h:column>
@@ -47,13 +51,6 @@
 					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
 				</f:facet>
 				#{messages[r.result.key]}
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="#{messages['Laboratory']}" styleClass="collh"/>
-				</f:facet>
-				#{r.laboratory}
 			</h:column>
 			
 			<h:column>
@@ -100,7 +97,7 @@
 						<f:param value="#{r.monthTreatment}"/>
 					</h:outputFormat>
 				</s:link>
-				<div style="display:block;">
+				<div style="margin-left:20px;display:block;">
 				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
 				<br/>
 				<h:outputText value="#{r.sampleNumber}" title="#{messages['PatientSample.sampleNumber']}" />
