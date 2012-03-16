@@ -627,9 +627,10 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		
 		String param = '%' + suggestion.toString().toUpperCase() + '%';
 		List<User> lst = getEntityManager().createQuery("from User u where upper(u.name) like :p1" +
-					" or upper(u.login) like :p2 order by u.name")
+					" or upper(u.login) like :p2 or upper(u.email) like :p3 order by u.name")
 					.setParameter("p1", param)
 					.setParameter("p2", param)
+					.setParameter("p3", param)
 					.getResultList();
 		
 		List<UserInfo> results = new ArrayList<UserInfo>();

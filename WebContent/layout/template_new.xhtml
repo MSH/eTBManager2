@@ -115,7 +115,7 @@
 			<rich:menuItem submitMode="none" disabled="true">
 				<h:panelGroup id="pnlwslist">
 					<a:repeat value="#{userSettings.userWorkspaces}" var="it" rendered="#{userWsInited}">
-						<a:commandLink onclick="changeWorkspace(#{it.id});" styleClass="workspace-link">
+						<a:commandLink onclick="changeWorkspace(#{it.id});return false;" styleClass="workspace-link">
 							<h:graphicImage value="#{it.workspace.viewUri}" />
 							<span>#{it.workspace.name}</span>
 						</a:commandLink>
@@ -226,6 +226,11 @@ function enableButton() {
 	jQuery('span',this).html(s);
 	});
 }
+function changeWorkspace(id) {
+	var s='#{request.contextPath}/changeworkspace.seam?id=' + id;
+	location.href=s;
+}
+
 -->
 </script>
 
@@ -235,9 +240,6 @@ function enableButton() {
 	action="#{userSession.initWorkspaceList}"
 	oncomplete="window.wslist=true;" />
 
-<a:jsFunction name="changeWorkspace" ajaxSingle="true" action="#{userSession.changeUserWorkspace}" reRender="wsfuncs">
-	<a:actionparam name="param1" assignTo="#{userSession.userWorkspaceId}" converter="javax.faces.Integer" />
-</a:jsFunction>
 </h:form>
 
 <ui:insert name="dialogs" />

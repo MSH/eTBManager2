@@ -54,6 +54,11 @@
     	<param name="imgName" value="#{workspaceViewService.pictureFile}" />
     	<action execute="#{workspaceViewService.responseImage}"/>
     </page>
+    
+    <page view-id="/changeworkspace.xhtml">
+    	<action execute="#{userSession.changeUserWorkspace}"/>
+    	<param name="id" value="#{userSession.userWorkspaceId}" converterId="javax.faces.Integer" />
+    </page>
 
 
 	<!-- DRUG ORDER -->
