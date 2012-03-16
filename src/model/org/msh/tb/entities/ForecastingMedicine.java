@@ -38,11 +38,6 @@ public class ForecastingMedicine implements Serializable {
 	@JoinColumn(name="MEDICINE_ID")
 	@NotNull
 	private Medicine medicine;
-	
-	/**
-	 * stock on hand in the reference date
-	 */
-	private int stockOnHand;
 
 	/**
 	 * Stock on order during lead time
@@ -89,6 +84,10 @@ public class ForecastingMedicine implements Serializable {
 	 */
 	private float unitPrice;
 
+	/**
+	 * Stock on hand
+	 */
+	private int stockOnHand;
 
 	/**
 	 * Batches to expire during the forecasting period
@@ -213,7 +212,7 @@ public class ForecastingMedicine implements Serializable {
 	 * @return
 	 */
 	public int getStockOnHandAfterLT() {
-		int val = stockOnHand + stockOnOrderLT - getDispensingQuantityLT() - quantityExpiredLT;
+		int val = getStockOnHand() + stockOnOrderLT - getDispensingQuantityLT() - quantityExpiredLT;
 		return (val < 0? 0: val);
 	}
 
@@ -297,6 +296,17 @@ public class ForecastingMedicine implements Serializable {
 
 	
 	/**
+	 * Update the quantity of the stock on hand based on the batches available
+	 */
+	public void updateStockOnHand() {
+		stockOnHand = 0;
+		for (ForecastingBatch batch: batchesToExpire)
+			if (!batch.isBatchOnOrder())
+				stockOnHand += batch.getQuantity();
+	}
+	
+	
+	/**
 	 * Find first batch with available quantity and where expiring date is after the given date
 	 * @param dt
 	 * @return
@@ -311,12 +321,12 @@ public class ForecastingMedicine implements Serializable {
 	}
 
 
+	/**
+	 * Calculate the stock on hand based on the batches informed
+	 * @return
+	 */
 	public int getStockOnHand() {
 		return stockOnHand;
-	}
-
-	public void setStockOnHand(int stockOnHand) {
-		this.stockOnHand = stockOnHand;
 	}
 
 	public Integer getId() {
@@ -507,5 +517,12 @@ public class ForecastingMedicine implements Serializable {
 	 */
 	public List<ForecastingPeriod> getPeriods() {
 		return periods;
+	}
+
+	/**
+	 * @param stockOnHand the stockOnHand to set
+	 */
+	public void setStockOnHand(int stockOnHand) {
+		this.stockOnHand = stockOnHand;
 	}
 }

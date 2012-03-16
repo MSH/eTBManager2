@@ -75,13 +75,6 @@ public class ForecastingCalculation {
 	 */
 	private PrescribedMedicine pm;
 	
-	/**
-	 * month index of the initial date of review period (and end of lead time)
-	 * according to the reference date, starting in 0 and going up to positive values
-	 */
-	private int monthIndexIniDate;
-
-	
 	private Period leadTimePeriod;
 	
 	private Period reviewPeriod;
@@ -122,7 +115,7 @@ public class ForecastingCalculation {
 		leadTimePeriod = new Period(forecasting.getReferenceDate(), DateUtils.incDays(dt, -1));
 		reviewPeriod = new Period(dt, endForecasting);
 		
-		monthIndexIniDate = forecasting.getMonthIndex(forecasting.getIniDateLeadTime());
+		forecasting.getMonthIndex(forecasting.getIniDateLeadTime());
 
 		// cases are from the database ?
 		// if so, load list of prescribed medicines in the period
@@ -209,13 +202,17 @@ public class ForecastingCalculation {
 		calculateCasesOnTreatment();
 		calculateNewCases();
 
+		
 		updateStockQuantities();
 		
 		// update total cases by regimen
-		for (int i = 0; i < forecasting.getTotalIndividualized().size(); i++) {
-			Integer tot1 = forecasting.getTotalRegimens().get(i).getQuantity();
+		for (int i = 0; i < numMonths; i++) {
+			int tot = 0;
+			for (ForecastingRegimen fr: forecasting.getRegimens())
+				tot += fr.getResults().get(i).getTotalCases();
+			forecasting.getTotalRegimens().get(i).setQuantity(tot);
 			Integer tot2 = forecasting.getTotalIndividualized().get(i).getQuantity();
-			int total = (tot1 != null? tot1: 0) + (tot2 != null? tot2: 0); 
+			int total = tot + (tot2 != null? tot2: 0); 
 			forecasting.getTotal().get(i).setQuantity(total);
 		}
 	}
@@ -517,6 +514,7 @@ public class ForecastingCalculation {
 	}
 
 	
+
 	/**
 	 * Calculate the consumption based on the number of cases on treatment entered by the user in the forecasting tool
 	 * @param monthIndex
@@ -536,6 +534,10 @@ public class ForecastingCalculation {
 						calculateConsumptionCasesInForecasting(monthIndex, monthTreat, c, fm);
 					}
 				}
+
+				ForecastingRegimen fr = forecasting.findRegimen(c.getRegimen());
+				ForecastingRegimenResult res = fr.findResultByMonthIndex(monthIndex);
+				res.setNumCasesOnTreatment( res.getNumCasesOnTreatment() + c.getNumCases() );
 			}
 		}
 	}
@@ -556,40 +558,16 @@ public class ForecastingCalculation {
 		Date dtIni = forecasting.getIniDateMonthIndex(monthIndex);
 		Date dtEnd = forecasting.getEndDateMonthIndex(monthIndex);
 		
-		// get consumption of the month
-		int qty = calcQuantityRegimen(reg, new Period(dtIni, dtEnd), monthTreat, fm.getMedicine()) * fcot.getNumCases();
-			
-		if (qty == 0) 
-			return;
-		
-		res.increaseCasesOnTreatment(fcot.getNumCases(), qty);
-		fm.setConsumptionCases(fm.getConsumptionCases() + qty);
-
-		// update dispensing in lead time month
-		int qtdLeadTime = 0;
-		
-		// is in lead time ?
-		if (monthIndex < monthIndexIniDate) {
-			qtdLeadTime = qty;
-		}
-		else
-		if (monthIndex == monthIndexIniDate) {
-			int days = DateUtils.daysBetween(dtIni, forecasting.getIniDate());
-			if (days > 0) {
-				int daysMonth = DateUtils.daysBetween(dtIni, dtEnd);
-				qtdLeadTime = Math.round(daysMonth * qty / days);
+		// calculate the consumption of all periods in the month
+		Period p = new Period(dtIni, dtEnd);
+		for (ForecastingPeriod forper: fm.getPeriods()) {
+			if (forper.getPeriod().isInside(p)) {
+				int qtyperiod = calcQuantityRegimen(reg, forper.getPeriod(), monthTreat, fm.getMedicine()) * fcot.getNumCases();
+				forper.setEstConsumptionCases(qtyperiod);
 			}
 		}
 		
-		if (qtdLeadTime > 0)
-			fm.setConsumptionLT(fm.getConsumptionLT() + qtdLeadTime);
-		
-		// update batches consumption
-		List<ForecastingBatch> lst = res.getBatchesToExpire();
-		for (ForecastingBatch bt: lst) {
-			int qtdBatch = calcQuantityRegimen(reg, new Period(dtIni, bt.getExpiryDate()), monthTreat, fm.getMedicine());
-			bt.setConsumptionInMonth(bt.getConsumptionInMonth() + qtdBatch);
-		}		
+		res.setNumCasesOnTreatment( res.getNumCasesOnTreatment() + fcot.getNumCases());
 	}
 
 
@@ -610,8 +588,6 @@ public class ForecastingCalculation {
 		if (totalPerc == 0)
 			return;
 		
-		if (forNewCases.getNumNewCases() > 0)
-			System.out.println("new cases = " + forNewCases.getNumNewCases());
 		float newCases = Math.round( forNewCases.getNumNewCases() * forRegimen.getPercNewCases() / totalPerc );
 		if (newCases == 0)
 			return;

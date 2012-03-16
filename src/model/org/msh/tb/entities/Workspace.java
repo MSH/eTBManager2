@@ -182,6 +182,13 @@ public class Workspace implements Serializable {
 	public boolean isHasAlternateLocale() {
 		return ((getAlternateLocale() != null) && (!alternateLocale.isEmpty()));
 	}
+
+	public String getViewUri() {
+		WorkspaceView view = getView();
+		if ((view == null) || (view.getPictureURI() == null))
+			 return "/public/images/globe.png";
+		else return view.getPictureURI();
+	}
 	
 	/**
 	 * Returns the name of the language according to the locale

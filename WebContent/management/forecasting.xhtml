@@ -29,7 +29,7 @@
 
 <ui:define name="content">
 <h1>#{title}</h1>
-<h:form id="main" styleClass="form1">
+<a:form id="main" styleClass="form1">
 
 <table width="100%" style="border-collapse: collapse;">
 <tr><td class="header">
@@ -37,10 +37,10 @@
 	<a:commandLink styleClass="button" title="Execute the forecasting (re)calculating the results" 
 		action="#{forecastingCalculation.execute}" reRender="main,messages"
 		onclick="if (!disableButton(this)) return false;"
-		oncomplete="enableButton();RichFaces.switchTab('main:tabPanelForecasting','main:tabresult','tabresult')">
+		oncomplete="enableButton();RichFaces.switchTab('main:tabPanelForecasting','main:tabresult','tabresult');updateEditDeleteLinks();">
 		<span>#{messages['manag.forecast.execute']}</span>
 	</a:commandLink>
-	<s:link view="/management/index.xhtml" styleClass="button-alt" propagation="end">
+	<s:link view="/management/index.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
 		<span>#{messages['form.cancel']}</span>
 	</s:link>
 
@@ -210,9 +210,9 @@
 		<a:repeat value="#{it.months}" var="m">
 			<td>
             <s:validateAll>
-			<h:inputText value="#{m.numCases}" style="width:35px;" />
+			<h:inputText id="numcases" value="#{m.numCases}" style="width:35px;" />
+			<h:message for="numcases" styleClass="error"/>
 			</s:validateAll>
-			<s:message styleClass="error"/>
 			</td>
 		</a:repeat>
 	</tr>
@@ -229,7 +229,7 @@
 	<h2>#{messages['manag.forecast.newcases']}</h2>
 
 	<table width="100%">
-	<tr><td>
+	<tr><td valign="top">
 	<rich:panel>
 		<f:facet name="header">
 			#{messages['manag.forecast.newcasestitle2']}
@@ -264,7 +264,7 @@
 
 	</td><td valign="top">
 
-	<rich:dataGrid value="#{forecasting.newCases}" var="it" columns="12" width="100%">
+	<rich:dataGrid value="#{forecasting.newCases}" var="it" columns="6" width="100%">
 		<f:facet name="header">
 			#{messages['manag.forecast.newcasestitle']}
 		</f:facet>
@@ -283,8 +283,12 @@
 	</div>
 
 	<div class="form-content">
-		<a:commandLink value="#{messages['form.update']}" action="#{forecastingView.initializeStockOnHand}" 
-		   reRender="meds" style="float:right;"/>
+		<a:commandLink action="#{forecastingView.initializeStockOnHand}" reRender="meds" style="float:right;">
+		   	<span class="refresh-icon" />#{messages['manag.forecast.updatedm']}
+		</a:commandLink>
+		<a:commandLink action="#{forecastingView.clearStockOnHand}" reRender="meds" style="float:right;margin-right:20px;">
+			<span id="closewin" style="float:left;margin:0;"/>#{messages['form.clear']}
+		</a:commandLink>
 		<h2>#{messages['admin.medicines']}</h2>
 		
 		<h:panelGroup id="meds">
@@ -302,7 +306,9 @@
 				<f:facet name="header">
 					#{messages['manag.forecast.stockonhand']}
 				</f:facet>
-				<h:inputText value="#{r.stockOnHand}" style="width:60px;" />
+				<h:outputText value="#{r.stockOnHand}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
 			</h:column>
 
 			<h:column>
@@ -318,7 +324,8 @@
 				</f:facet>
 				<div class="link-bar">
 				<a:commandLink action="#{forecastingView.newBatch(r)}" styleClass="button-alt" 
-					reRender="batchpnl" oncomplete="showBatchDlg();">
+					onclick="if (!disableButton(this)) return false" 
+					reRender="batchpnl" oncomplete="showBatchDlg();enableButton();">
 					<span>#{messages['meds.receiving.newbatch']}</span>
 				</a:commandLink>
 				</div>
@@ -329,22 +336,30 @@
 						<f:facet name="header" >
 							#{messages['Batch.expiryDate']}
 						</f:facet>
-						<a:commandLink action="#{forecastingView.editBatch(b)}" reRender="batchpnl" oncomplete="showBatchDlg();" styleClass="small-link">
+						<a:commandLink action="#{forecastingView.editBatch(b)}" reRender="batchpnl" rendered="#{not b.batchOnOrder}"
+							onclick="if (!disableButton(this)) return false"
+							oncomplete="showBatchDlg();enableButton();" styleClass="edit-command" title="#{messages['form.edit']}" >
 							<h:outputText value="#{b.expiryDate}" converter="localeDateConverter" />
 						</a:commandLink>
+						<h:outputText value="#{b.expiryDate}" converter="localeDateConverter" rendered="#{b.batchOnOrder}"/>
 					</h:column>
 
 					<h:column >
 						<f:facet name="header" >
 							#{messages['Movement.quantity']}
 						</f:facet>
-						<a:commandLink action="#{forecastingView.deleteBatch(b)}" style="float:right;" 
-							styleClass="delete-small-icon" 
-							reRender="meds"
-							title="#{messages['form.remove']}"/>
-						<h:outputText value="#{b.quantity}">
-							<f:convertNumber pattern="#,###,##0"/>
-						</h:outputText>
+						<div style="width:100%">
+							<a:commandLink action="#{forecastingView.deleteBatch(b)}" style="float:left;" 
+								reRender="meds" onclick="if (!disableButton(this)) return false;"
+								oncomplete="updateEditDeleteLinks()"
+								rendered="#{not b.batchOnOrder}"
+								title="#{messages['form.remove']}" styleClass="delete-command">
+								<span></span>
+							</a:commandLink>
+							<h:outputText value="#{b.quantity}">
+								<f:convertNumber pattern="#,###,##0"/>
+							</h:outputText>
+						</div>
 					</h:column>
 				</h:dataTable>
 			</h:column>
@@ -355,7 +370,8 @@
 				</f:facet>
 				<div class="link-bar">
 				<a:commandLink action="#{forecastingView.newOrder(r)}" styleClass="button-alt"
-					reRender="orderpnl" oncomplete="showOrderDlg(this); return false;">
+					onclick="if (!disableButton(this)) return false" 
+					reRender="orderpnl" oncomplete="showOrderDlg(); enableButton()">
 					<span>#{messages['manag.forecast.neworder']}</span>
 				</a:commandLink>
 				</div>
@@ -366,8 +382,11 @@
 						<f:facet name="header" >
 							#{messages['Order.receivingDate']}
 						</f:facet>
-						<a:commandLink action="#{forecastingView.editOrder(b)}" reRender="batchpnl" oncomplete="showBatchDlg();" styleClass="small-link">
-						<h:outputText value="#{b.arrivalDate}" converter="localeDateConverter" />
+						<a:commandLink action="#{forecastingView.editOrder(b)}" reRender="orderpnl"
+							onclick="if (!disableButton(this)) return false"
+							oncomplete="showOrderDlg();enableButton();"
+							styleClass="edit-command">
+							<h:outputText value="#{b.arrivalDate}" converter="localeDateConverter" />
 						</a:commandLink>
 					</h:column>
 
@@ -375,13 +394,18 @@
 						<f:facet name="header" >
 							#{messages['Movement.quantity']}
 						</f:facet>
-						<a:commandLink action="#{forecastingView.deleteOrder(b)}" style="float:right;" 
-							styleClass="delete-small-icon" 
-							reRender="meds"
-							title="#{messages['form.remove']}"/>
-						<h:outputText value="#{b.quantity}">
-							<f:convertNumber pattern="#,###,##0"/>
-						</h:outputText>
+						<div style="width:100%">
+							<a:commandLink action="#{forecastingView.deleteOrder(b)}" style="float:left;" 
+								reRender="meds"
+								onclick="if (!disableButton(this)) return false"
+								oncomplete="updateEditDeleteLinks()"
+								title="#{messages['form.remove']}">
+								<span class="delete-icon" />
+							</a:commandLink>
+							<h:outputText value="#{b.quantity}">
+								<f:convertNumber pattern="#,###,##0"/>
+							</h:outputText>
+						</div>
 					</h:column>
 				</h:dataTable>
 			</h:column>
@@ -429,7 +453,7 @@
 	</h:panelGroup> 
 </rich:modalPanel>
 
-</h:form>
+</a:form>
 
 </ui:define>
 
@@ -441,6 +465,8 @@
 
 <script type="text/javascript">
 <!--
+jQuery().ready(function() {updateEditDeleteLinks()});
+
 function showOrderDlg() {
 	showModalAutoTop('orderdlg');
 }
@@ -471,6 +497,20 @@ function validateNewForecasting() {
 
 function showLoadForecastingDlg() {
 	Richfaces.showModalPanel('loadfordlg');	
+}
+
+function updateEditDeleteLinks() {
+	jQuery('.edit-command').each(function() {
+		var s=jQuery(this).removeClass("edit-command").text();
+		s = "<div class='edit-icon'/><span>" + s + "</span>";
+		jQuery(this).html(s);
+	});
+
+	jQuery('.delete-command').each(function() {
+		var s=jQuery(this).removeClass("delete-command").text();
+		s = "<div class='delete-icon'/><span>" + s + "</span>";
+		jQuery(this).html(s);
+	});
 }
 
 -->
@@ -533,11 +573,12 @@ function showLoadForecastingDlg() {
 
 
 
-<rich:modalPanel id="orderdlg" height="200" width="490" zindex="2000" style="background-color:#F2F5F0" trimOverlayedElements="false">
+<rich:modalPanel id="orderdlg" width="490" zindex="2000" autosized="true" style="background-color:#F2F5F0" trimOverlayedElements="false">
 	<f:facet name="header">#{messages['Order']}</f:facet>
 	<ui:param name="labelstyle" value="width:160px;" />
 	<h:panelGroup id="orderpnl">
 	<h:form style="padding:20px;">
+	<h:messages globalOnly="true" styleClass="error"/>
 	<s:decorate template="/layout/dateedit.xhtml">
 		<ui:define name="label">#{messages['Order.receivingDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
@@ -549,11 +590,17 @@ function showLoadForecastingDlg() {
 		<h:inputText value="#{forecastingView.order.quantity}" required="true" style="width:80px;"/>
 	</s:decorate>
 
+	<s:decorate template="/layout/dateedit.xhtml">
+		<ui:define name="label">#{messages['Batch.expiryDate']}:</ui:define>
+    	<ui:param name="datefield" value="#{forecastingView.batch.expiryDate}"/> 
+	</s:decorate>
+
 	<div class="button-bar">
 		<a:commandLink action="#{forecastingView.confirmOrderChanges}"
 			styleClass="button" reRender="orderpnl,meds" 
 			onclick="if (!disableButton(this)) return false;"
-			oncomplete="enableButton();Richfaces.hideModalPanel('orderdlg');">
+			data="#{forecastingView.validated}"
+			oncomplete="enableButton();if (data) {Richfaces.hideModalPanel('orderdlg');updateEditDeleteLinks();}">
 			<span>#{messages['form.ok']}</span>
 		</a:commandLink>
 		<s:link styleClass="button-alt" onclick="Richfaces.hideModalPanel('orderdlg'); return false;">
@@ -587,7 +634,7 @@ function showLoadForecastingDlg() {
 		<a:commandLink action="#{forecastingView.confirmBatchChanges}"
 			styleClass="button" reRender="batchpnl,meds"
 			onclick="if (!disableButton(this)) return false;" 
-			oncomplete="enableButton();Richfaces.hideModalPanel('batchdlg');">
+			oncomplete="enableButton();Richfaces.hideModalPanel('batchdlg');updateEditDeleteLinks();">
 			<span>#{messages['form.ok']}</span>
 		</a:commandLink>
 		<s:link styleClass="button-alt" onclick="Richfaces.hideModalPanel('batchdlg'); return false;">

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,6 +38,10 @@ public class ForecastingOrder implements Serializable{
 	 * Quantity to arrive
 	 */
 	private int quantity;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="BATCH_ID")
+	private ForecastingBatch batch;
 
 	
 
@@ -70,5 +75,19 @@ public class ForecastingOrder implements Serializable{
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	/**
+	 * @return the batch
+	 */
+	public ForecastingBatch getBatch() {
+		return batch;
+	}
+
+	/**
+	 * @param batch the batch to set
+	 */
+	public void setBatch(ForecastingBatch batch) {
+		this.batch = batch;
 	}
 }

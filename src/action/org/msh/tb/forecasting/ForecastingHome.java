@@ -184,7 +184,7 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 
 		if (forecasting.getUser() == null)
 			forecasting.setUser(getUser());
-	
+
 		return super.persist();
 	}
 

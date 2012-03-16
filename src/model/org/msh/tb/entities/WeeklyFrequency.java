@@ -18,6 +18,15 @@ public class WeeklyFrequency {
 	private int value;
 
 
+	public WeeklyFrequency(int value) {
+		super();
+		this.value = value;
+	}
+
+	public WeeklyFrequency() {
+		super();
+	}
+	
 	/**
 	 * Set the week day dispensing information
 	 * @param day - value between 1 and 7

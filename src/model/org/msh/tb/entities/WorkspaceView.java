@@ -38,7 +38,7 @@ public class WorkspaceView {
 	 * @return
 	 */
 	public String getPictureURI() {
-		return (id == null? null: "/workspaceimg/img" + id.toString() + ".gif");
+		return (picture == null? null: "/workspaceimg/img" + id.toString() + ".gif");
 	}
 
 	/**

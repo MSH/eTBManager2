@@ -108,7 +108,7 @@
 			popupWidth="270px" event="onclick">
 			<f:facet name="label">
 				<h:panelGroup>
-					<h:graphicImage value="#{workspaceViewService.view.pictureURI}" rendered="#{not empty workspaceViewService.view.pictureURI}"/>
+					<h:graphicImage value="#{defaultWorkspace.viewUri}" />
 					<span class="workspace-name">#{defaultWorkspace.name}</span>
 				</h:panelGroup>
 			</f:facet>
@@ -116,7 +116,7 @@
 				<h:panelGroup id="pnlwslist">
 					<a:repeat value="#{userSettings.userWorkspaces}" var="it" rendered="#{userWsInited}">
 						<a:commandLink onclick="changeWorkspace(#{it.id});" styleClass="workspace-link">
-							<h:graphicImage value="#{it.workspace.view.pictureURI}" rendered="#{it.workspace.view.pictureURI != null}"/>
+							<h:graphicImage value="#{it.workspace.viewUri}" />
 							<span>#{it.workspace.name}</span>
 						</a:commandLink>
 					</a:repeat>
@@ -229,14 +229,13 @@ function enableButton() {
 -->
 </script>
 
-<h:form>
+<h:form id="wsfuncs">
 <a:jsFunction name="initWorkspaceList" ajaxSingle="true" 
 	reRender="pnlwslist" 
 	action="#{userSession.initWorkspaceList}"
-	oncomplete="window.wslist=true;" 
-	/>
+	oncomplete="window.wslist=true;" />
 
-<a:jsFunction name="changeWorkspace" ajaxSingle="true" action="#{userSession.changeUserWorkspace}" >
+<a:jsFunction name="changeWorkspace" ajaxSingle="true" action="#{userSession.changeUserWorkspace}" reRender="wsfuncs">
 	<a:actionparam name="param1" assignTo="#{userSession.userWorkspaceId}" converter="javax.faces.Integer" />
 </a:jsFunction>
 </h:form>

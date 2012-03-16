@@ -124,4 +124,19 @@ public class ForecastingBatch implements Serializable {
 	public void setQuantityAvailable(int quantityAvailable) {
 		this.quantityAvailable = quantityAvailable;
 	}
+
+	/**
+	 * @return the batchOnOrder
+	 */
+	public boolean isBatchOnOrder() {
+		if (forecastingMedicine == null)
+			return false;
+		
+		for (ForecastingOrder order: forecastingMedicine.getOrders()) {
+			if (order.getBatch() == this)
+				return true;
+		}
+		
+		return false;
+	}
 }

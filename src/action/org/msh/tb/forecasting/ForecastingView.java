@@ -14,6 +14,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.contexts.Contexts;
+import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.MedicinesQuery;
 import org.msh.tb.RegimensQuery;
@@ -156,6 +157,19 @@ public class ForecastingView {
 	
 
 	/**
+	 * Clear the quantity of stock on hand
+	 */
+	public void clearStockOnHand() {
+		Forecasting forecasting = forecastingHome.getInstance();
+		for (ForecastingMedicine fm: forecasting.getMedicines()) {
+			fm.getBatchesToExpire().clear();
+			fm.getOrders().clear();
+			fm.updateStockOnHand();
+		}
+	}
+
+
+	/**
 	 * Initialize quantity in stock at the present moment
 	 */
 	public void initializeStockOnHand() {
@@ -174,7 +188,7 @@ public class ForecastingView {
 
 		// reset values
 		for (ForecastingMedicine fm: forecasting.getMedicines()) {
-			fm.setStockOnHand(0);
+			fm.getBatchesToExpire().clear();
 			fm.setUnitPrice(0);
 			fm.getBatchesToExpire().clear();
 		}
@@ -182,7 +196,7 @@ public class ForecastingView {
 		if (restriction == null)
 			return;
 		
-		String hql = "select s.medicine.id, sum(s.quantity) " +
+/*		String hql = "select s.medicine.id, sum(s.quantity) " +
 				"from StockPosition s " +
 				"where s.medicine.workspace.id = #{defaultWorkspace.id} " +
 				restriction + 
@@ -198,16 +212,16 @@ public class ForecastingView {
 			if (fm != null)
 				fm.setStockOnHand(qtd.intValue());
 		}
-		
+*/		
 		// update unit price
-		hql = "select m.medicine.id, avg(m.totalPrice/m.quantity) " +
+		String hql = "select m.medicine.id, avg(m.totalPrice/m.quantity) " +
 				"from Movement m " +
 				"where m.date = (select max(aux.date) from Movement aux " +
 				"where aux.tbunit = m.tbunit and aux.source = m.source and aux.medicine = m.medicine) " +
 				"and m.medicine.workspace.id = #{defaultWorkspace.id} " +
 				"group by m.medicine.id";
 
-		lst = entityManager.createQuery(hql)
+		List<Object[]> lst = entityManager.createQuery(hql)
 			.getResultList();
 
 		for (Object[] vals: lst) {
@@ -244,6 +258,9 @@ public class ForecastingView {
 				fm.getBatchesToExpire().add(bt);
 			}
 		}
+		
+		for (ForecastingMedicine fm: forecasting.getMedicines())
+			fm.updateStockOnHand();
 	}
 
 	
@@ -353,6 +370,8 @@ public class ForecastingView {
 		List<ForecastingBatch> batches = batch.getForecastingMedicine().getBatchesToExpire();
 		if (!batches.contains(batch))
 			batch.getForecastingMedicine().getBatchesToExpire().add(batch);
+		batch.getForecastingMedicine().updateStockOnHand();
+
 		batch = null;
 		validated = true;
 	}
@@ -364,6 +383,7 @@ public class ForecastingView {
 	 */
 	public void deleteBatch(ForecastingBatch batch) {
 		batch.getForecastingMedicine().getBatchesToExpire().remove(batch);
+		batch.getForecastingMedicine().updateStockOnHand();
 	}
 
 
@@ -374,6 +394,8 @@ public class ForecastingView {
 	public void newOrder(ForecastingMedicine med) {
 		order = new ForecastingOrder();
 		order.setForecastingMedicine(med);
+		batch = new ForecastingBatch();
+		batch.setForecastingMedicine(med);
 		validated = false;
 	}
 
@@ -384,6 +406,9 @@ public class ForecastingView {
 	 */
 	public void editOrder(ForecastingOrder order) {
 		this.order = order;
+		batch = order.getBatch();
+		if (batch == null)
+			batch = new ForecastingBatch();
 		validated = false;
 	}
 
@@ -392,9 +417,26 @@ public class ForecastingView {
 	 * Confirm the changes in the order
 	 */
 	public void confirmOrderChanges() {
-		List<ForecastingOrder> orders = order.getForecastingMedicine().getOrders();
+		if (batch.getExpiryDate() != null) {
+			if (!batch.getExpiryDate().after(order.getArrivalDate())) {
+				FacesMessages.instance().add("manag.forecast.ordererr");
+				return;
+			}
+		}
+		
+		ForecastingMedicine forMed = order.getForecastingMedicine();
+
+		List<ForecastingOrder> orders = forMed.getOrders();
 		if (!orders.contains(order))
 			orders.add(order);
+		
+		if (batch.getExpiryDate() != null) {
+			batch.setQuantity(order.getQuantity());
+			if (!forMed.getBatchesToExpire().contains(batch))
+				forMed.getBatchesToExpire().add(batch);
+			order.setBatch(batch);
+		}
+
 		order = null;
 		validated = true;
 	}
@@ -405,6 +447,16 @@ public class ForecastingView {
 	 */
 	public void deleteOrder(ForecastingOrder order) {
 		order.getForecastingMedicine().getOrders().remove(order);
+
+		ForecastingBatch batch = order.getBatch();
+		if (batch != null) {
+			order.getForecastingMedicine().getBatchesToExpire().remove(batch);
+			if (entityManager.contains(batch))
+				entityManager.remove(batch);
+		}
+		
+		if (entityManager.contains(order))
+			entityManager.remove(order);
 	}
 
 

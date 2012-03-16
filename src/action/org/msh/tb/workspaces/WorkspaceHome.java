@@ -27,8 +27,10 @@ import org.msh.tb.entities.UserPermission;
 import org.msh.tb.entities.UserProfile;
 import org.msh.tb.entities.UserRole;
 import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.WeeklyFrequency;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.WorkspaceView;
+import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.NameComposition;
 import org.msh.tb.entities.enums.RoleAction;
@@ -97,6 +99,15 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		if (ws.getPatientAddrRequiredLevels() == null)
 			ws.setPatientAddrRequiredLevels(1);
 
+		// initialize weekly frequencies
+		ws.setWeekFreq1(new WeeklyFrequency(2));
+		ws.setWeekFreq2(new WeeklyFrequency(18));
+		ws.setWeekFreq3(new WeeklyFrequency(42));
+		ws.setWeekFreq4(new WeeklyFrequency(30));
+		ws.setWeekFreq5(new WeeklyFrequency(62));
+		ws.setWeekFreq6(new WeeklyFrequency(126));
+		ws.setWeekFreq7(new WeeklyFrequency(127));
+		
 		updateNameComposition();
 
 		getInstance().setView(null);
@@ -140,14 +151,13 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 
 		for (UserRole role: roles) {
 			if (!role.isInternalUse()) {
-				UserPermission p = new UserPermission();
-				p.setGrantPermission(true);
-				p.setUserProfile(prof);
-				p.setUserRole(role);
-				p.setCanExecute(true);
-				if (role.isChangeable())
-					p.setCanChange(true);
-				prof.getPermissions().add(p);
+				if (role.isByCaseClassification()) {
+					for (CaseClassification cla: CaseClassification.values()) {
+						UserPermission perm = createPermission(prof, role);
+						perm.setCaseClassification(cla);
+					}
+				}
+				else createPermission(prof, role);
 			}
 		}
 		getEntityManager().persist(prof);
@@ -198,6 +208,24 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		getEntityManager().persist(unit);
 	}
 
+	/**
+	 * Create user permission for the profile and based on the user role informed
+	 * @param prof
+	 * @param role
+	 * @return
+	 */
+	protected UserPermission createPermission(UserProfile prof, UserRole role) {
+		UserPermission p = new UserPermission();
+		p.setGrantPermission(true);
+		p.setUserProfile(prof);
+		p.setUserRole(role);
+		p.setCanExecute(true);
+		if (role.isChangeable())
+			p.setCanChange(true);
+		prof.getPermissions().add(p);
+		
+		return p;
+	}
 
 	/**
 	 * Returns the default workspace for editing

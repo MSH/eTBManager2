@@ -17,11 +17,11 @@ import org.jboss.seam.annotations.Create;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
-import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Synchronized;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserLogin;
@@ -127,7 +127,6 @@ public class UserSession {
      * @param userWorkspace
      */
     @Transactional
-	@RaiseEvent("change-workspace")
     public String changeUserWorkspace() {
     	if (userWorkspace == null)
     		return "error";
@@ -148,6 +147,8 @@ public class UserSession {
     	Contexts.getSessionContext().set("userWorkspace", userWorkspace);
     	
     	getEntityManager().flush();
+
+    	Events.instance().raiseEvent("change-workspace");
     	
     	return "workspacechanged";
     }
