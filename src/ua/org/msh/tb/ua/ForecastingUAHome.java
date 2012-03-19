@@ -186,7 +186,7 @@ public class ForecastingUAHome extends ForecastingCalculation{
 		
 		addTitles();
 		execute();
-		forecasting = getForecasting();
+//		forecasting = getForecasting();
 		int i = 0;
 		for (ForecastingMedicine fm : forecasting.getMedicines()) 
 			if (fm.getMedicine().getLine().ordinal() == MedicineLine.FIRST_LINE.ordinal())
