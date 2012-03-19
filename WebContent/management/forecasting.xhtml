@@ -424,7 +424,7 @@
 </rich:tabPanel>
 
 
-<rich:modalPanel id="saveforecastdlg" height="150" width="450" >
+<rich:modalPanel id="saveforecastdlg" autosized="true" width="500" >
 	<f:facet name="header">
 		#{messages['manag.forecast.new']}: #{messages['form.save']}
 	</f:facet>
@@ -439,8 +439,8 @@
 	<div style="float:right;margin-top:20px;">
 	<a:commandLink styleClass="button" 
 		action="#{forecastingHome.saveAs}" reRender="messages"
-		onclick="if (!validateNewForecasting()) {alert('#{messages['form.name']}: #{messages['javax.faces.component.UIInput.REQUIRED']}'); return false;} " 
-		oncomplete="this.disabled=false;hideForecastDlg();" ignoreDupResponses="true">
+		onclick="if (!disableButton(this)) return false; if (!validateNewForecasting()) {alert('#{messages['form.name']}: #{messages['javax.faces.component.UIInput.REQUIRED']}'); enableButton();return false;} " 
+		oncomplete="enableButton();hideForecastDlg();" >
 		<a:actionparam noEscape="true" assignTo="#{forecastingHome.newName}" value="document.getElementById('main:newfor:edtname').value" />
 		<a:actionparam noEscape="true" assignTo="#{forecastingHome.instance.publicView}" value="document.getElementById('main:newfor:chkpub').checked" converter="javax.faces.Boolean"/>
 		<span>#{messages['form.ok']}</span>

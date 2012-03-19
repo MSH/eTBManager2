@@ -12,6 +12,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
+import org.jboss.seam.core.Events;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.RegimensQuery;
 import org.msh.tb.adminunits.AdminUnitSelection;
@@ -80,6 +81,8 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 				forecasting.getRegimens().add(fr);
 			}
 		}
+		
+		Events.instance().raiseEvent("forecasting-loaded");
 	}
 
 
@@ -144,6 +147,7 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 			newForecasting.setCasesOnTreatment(new ArrayList<ForecastingCasesOnTreat>());
 			for (ForecastingCasesOnTreat fc: getInstance().getCasesOnTreatment()) {
 				ForecastingCasesOnTreat newfc = (ForecastingCasesOnTreat)BeanUtils.cloneBean(fc);
+				newfc.setForecasting(newForecasting);
 				newfc.setId(null);
 				newForecasting.getCasesOnTreatment().add(newfc);
 			}
@@ -153,6 +157,7 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 			for (ForecastingRegimen reg: getInstance().getRegimens()) {
 				ForecastingRegimen newreg = new ForecastingRegimen();
 				BeanUtils.copyProperties(newreg, reg);
+				newreg.setForecasting(newForecasting);
 				newreg.setId(null);
 				newForecasting.getRegimens().add(newreg);
 			}
@@ -164,6 +169,8 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 
 		getInstance().setName(newName);
 		getInstance().setPublicView(publicView);
+		
+		Contexts.getConversationContext().set("forecasting", getInstance());
 		
 		return persist();
 	}

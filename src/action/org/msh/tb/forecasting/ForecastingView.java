@@ -362,6 +362,11 @@ public class ForecastingView {
 		validated = false;
 	}
 	
+	
+	@Observer("forecasting-loaded")
+	public void forecastingLoaded() {
+		casesRegimenTable = null;
+	}
 
 	/**
 	 * Confirm adding a new batch or changing data of an existing batch
