@@ -65,6 +65,16 @@ public class ForecastingCalculation {
 	 */
 	private Forecasting forecasting;
 	
+	public Forecasting getForecasting() {
+		return forecasting;
+	}
+
+
+	public void setForecasting(Forecasting forecasting) {
+		this.forecasting = forecasting;
+	}
+
+
 	/**
 	 * List of cases on treatment, used during calculations if cases are from database
 	 */
