@@ -82,7 +82,7 @@ public class ReportTB11 extends Indicator2D {
 		
 		numcases[0] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.NEW.ordinal());
 		numcases[1] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.RELAPSE.ordinal());
-		numcases[2] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal());
+		numcases[2] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType in (0,1,2,3,4,5)");
 		numcases[2] -= numcases[0]+numcases[1];
 		List<TbCase> lst;
 		

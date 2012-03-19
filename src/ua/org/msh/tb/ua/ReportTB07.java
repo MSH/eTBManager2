@@ -78,7 +78,7 @@ public class ReportTB07 extends Indicator2D {
 		filters.setInfectionSite(InfectionSite.PULMONARY);
 		
 		
-		//List<Object[]> lst = generateValuesByField(null, "c.patientType != null and c.infectionSite != null and c.state >= " + CaseState.ONTREATMENT.ordinal());
+		//List<Object[]> lst = generateValuesByField(null, "c.patientType in (0,1,2,3,4,5) and c.infectionSite != null and c.state >= " + CaseState.ONTREATMENT.ordinal());
 		List<Object[]> lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", "c.patientType in (0,1,2,3,4,5) and c.infectionSite != null and c.state >= " + CaseState.ONTREATMENT.ordinal());
 		addTableValues(table, lst, IndicatorMicroscopyResult.POSITIVE, InfectionSite.PULMONARY);
 		

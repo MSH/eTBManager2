@@ -34,9 +34,9 @@ public class ReportTB10 extends Indicator2D {
 		initTable1000();
 		initTable2000();
 		
-		IndicatorFilters filters = getIndicatorFilters();
-		filters.setPatientType(null);
-		filters.setMicroscopyResult(null);
+		//IndicatorFilters filters = getIndicatorFilters();
+		getIndicatorFilters().setPatientType(null);
+		getIndicatorFilters().setMicroscopyResult(null);
 		//filters.setCultureResult(null);
 		
 		setConsolidated(true);
@@ -109,10 +109,10 @@ public class ReportTB10 extends Indicator2D {
 	protected void generateTable1000() {
 		// calculate the number of cases
 		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
-		
+		getIndicatorFilters().setMicroscopyResult(IndicatorMicroscopyResult.POSITIVE);
 		numcases[0] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.NEW.ordinal());
 		numcases[1] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.RELAPSE.ordinal());
-		numcases[2] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal());
+		numcases[2] = calcNumberOfCases("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType in (0,1,2,3,4,5)");
 		numcases[2] -= numcases[0]+numcases[1];
 		if (numcases[0]+numcases[1]+numcases[2] == 0)
 			return;
@@ -124,7 +124,8 @@ public class ReportTB10 extends Indicator2D {
 		
 		setGroupFields(null);
 		setConsolidated(false);
-		setHQLSelect("select c.treatmentPeriod.iniDate, c.diagnosisDate, c.patientType, c.state, c.regimen, " + 
+		//setHQLSelect("select count(*) ");
+		setHQLSelect("select c.treatmentPeriod.iniDate, c.diagnosisDate, c.patientType, c.state, c.iniContinuousPhase, " + 
 				hqlMicroscopy +	", " + 
 				hasMicr);
 		setCondition("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType in (0,1,2,3,4,5) and exists(select e.id from ExamMicroscopy e where e.result in (1,2,3,4) and e.tbcase.id = c.id and e.dateCollected = (select min(sp.dateCollected) from ExamMicroscopy sp where sp.tbcase.id = c.id))");
@@ -134,7 +135,7 @@ public class ReportTB10 extends Indicator2D {
 
 		for (Object[] vals: lst) {
 			boolean noexam = vals[6] == null;
-			addValueTable((Date)vals[0], (Date)vals[1], (PatientType)vals[2], (CaseState)vals[3], (Regimen)vals[4], (Date)vals[5], noexam);
+			addValueTable((Date)vals[0], (Date)vals[1], (PatientType)vals[2], (CaseState)vals[3], (Date)vals[4], (Date)vals[5], noexam);
 		}
 		
 		String rows[] = {"newcases", "relapses", "others"};
@@ -190,7 +191,7 @@ public class ReportTB10 extends Indicator2D {
 	 * @param dtDiagnos
 	 * @param dtMicro
 	 */
-	protected void addValueTable(Date dtIniTreat, Date dtDiagnos, PatientType ptype, CaseState state, Regimen reg, Date dtMicro, boolean noexam) {
+	protected void addValueTable(Date dtIniTreat, Date dtDiagnos, PatientType ptype, CaseState state, Date iniCont, Date dtMicro, boolean noexam) {
 		if (dtIniTreat == null)
 			dtIniTreat = dtDiagnos;
 
@@ -207,16 +208,16 @@ public class ReportTB10 extends Indicator2D {
 		default: 
 			rowkey = "others";
 		}
-		
-				
-		if (noexam)
-			table1000.addIdValue("noexams", rowkey, 1F);
-		else {
+		if (!noexam){
 			// is negative ?
 			if (dtMicro != null){ 
-				if (DateUtils.monthsBetween(dtIniTreat, dtMicro) <= reg.getMonthsIntensivePhase())
-					{
-					// calculate month of negativation
+				boolean ttt = false;
+				if (iniCont==null) 
+					ttt = true;
+					else 
+						if (dtMicro.before(iniCont)) ttt = true;
+				
+				if (ttt){
 					int negativeMonth = DateUtils.monthsBetween(dtIniTreat, dtMicro);
 			
 					if (negativeMonth <= 2 && ptype.equals(PatientType.NEW))
@@ -236,33 +237,36 @@ public class ReportTB10 extends Indicator2D {
 						table1000.addIdValue("others", rowkey, 1F);
 					}
 				else 
-					{
-						table1000.addIdValue("noexams", rowkey, 1F);
-						switch (state) {
-						case DIED:
-							colkey = "1";
-							break;
-						case DIED_NOTTB:
-							colkey = "2";
-							break;
-						case TREATMENT_INTERRUPTION: case DEFAULTED: case FAILED:
-							colkey = "3";
-							break;
-						case TRANSFERRED_OUT: case TRANSFERRING:
-							colkey = "4";
-							break;
-						case DIAGNOSTIC_CHANGED_TO_NOT_DRTB: case DIAGNOSTIC_CHANGED: case CURED: case TREATMENT_COMPLETED:
-							colkey = "5";
-							break;
-						default:
-							colkey = "6";
-							break;
-						}
-						if (colkey != null) table2000.addIdValue(colkey, rowkey, 1F);
-						table2000.addIdValue("7",rowkey,1F);
-					}
+					noexam = true;
 			}
 			else table1000.addIdValue("others", rowkey, 1F);
+			}
+		
+		if (noexam)
+		{
+			table1000.addIdValue("noexams", rowkey, 1F);
+			switch (state) {
+			case DIED:
+				colkey = "1";
+				break;
+			case DIED_NOTTB:
+				colkey = "2";
+				break;
+			case TREATMENT_INTERRUPTION: case DEFAULTED: case FAILED:
+				colkey = "3";
+				break;
+			case TRANSFERRED_OUT: case TRANSFERRING:
+				colkey = "4";
+				break;
+			case DIAGNOSTIC_CHANGED_TO_NOT_DRTB: case DIAGNOSTIC_CHANGED: case CURED: case TREATMENT_COMPLETED:
+				colkey = "5";
+				break;
+			default:
+				colkey = "6";
+				break;
+			}
+			if (colkey != null) table2000.addIdValue(colkey, rowkey, 1F);
+			table2000.addIdValue("7",rowkey,1F);
 			}
 		
 		table1000.addIdValue("numcases", rowkey, 1F);
@@ -326,7 +330,11 @@ public class ReportTB10 extends Indicator2D {
 	 * @see org.msh.tb.indicators.core.CaseHQLBase#getHQLJoin()
 	 */
 	protected String getHQLJoin() {
-		return null;
+		/*if (numcases[2] != 0)
+			return " join fetch c.regimen ";
+		else */
+			return null;
+		
 	}
 
 
