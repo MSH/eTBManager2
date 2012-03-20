@@ -85,7 +85,7 @@
             <a:commandLink action="#{tbContactHome.persist}" styleClass="button" reRender="formexam" 
             	oncomplete="enableButton()"
             	onclick="if (!disableButton(this)) return false;" >
-            	<span>#{messages['form.ok']}</span>
+            	<span>#{messages['form.save']}</span>
             </a:commandLink>
             <s:link view="/cases/casedata.xhtml" styleClass="button-alt" onclick="disableButton(this);">
             	<f:param name="id" value="#{caseHome.id}"/>
