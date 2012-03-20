@@ -107,7 +107,7 @@ function toggleYesNo(option, divname) {
 			<div style="float:right"><span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}</div>
             <a:commandLink action="#{examHIVHome.persist}" styleClass="button" reRender="formexam" 
             	onclick="if (!disableButton(this)) return false;"  >
-            	<span>#{messages['form.ok']}</span>
+            	<span>#{messages['form.save']}</span>
             </a:commandLink>
             <s:link view="/cases/casedata.xhtml" styleClass="button-alt"
             	onclick="if (!disableButton(this)) return false;">
