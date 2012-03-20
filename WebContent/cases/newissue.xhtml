@@ -35,7 +35,7 @@
 <div class="form-footer">
 	<a:commandLink action="#{caseValidationHome.registerPending}" styleClass="button" 
 		onclick="if (!disableButton(this)) return false;" reRender="main,messages">
-		<span>#{messages['form.ok']}</span>
+		<span>#{messages['form.save']}</span>
 	</a:commandLink> 
     <s:link view="/cases/casedata.xhtml" styleClass="button-alt" onclick="disableButton(this)">
        	<f:param name="id" value="#{caseHome.id}"/>
