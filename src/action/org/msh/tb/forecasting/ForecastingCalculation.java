@@ -539,15 +539,18 @@ public class ForecastingCalculation {
 				int monthTreat = monthIndex - c.getMonthIndex();
 
 				// is month of treatment valid for this regimen ?
+				int qtd = 0;
 				if (monthTreat < numMonths) {
 					for (ForecastingMedicine fm: forecasting.getMedicines()) {
-						calculateConsumptionCasesInForecasting(monthIndex, monthTreat, c, fm);
+						qtd += calculateConsumptionCasesInForecasting(monthIndex, monthTreat, c, fm);
 					}
 				}
 
-				ForecastingRegimen fr = forecasting.findRegimen(c.getRegimen());
-				ForecastingRegimenResult res = fr.findResultByMonthIndex(monthIndex);
-				res.setNumCasesOnTreatment( res.getNumCasesOnTreatment() + c.getNumCases() );
+				if (qtd > 0) {
+					ForecastingRegimen fr = forecasting.findRegimen(c.getRegimen());
+					ForecastingRegimenResult res = fr.findResultByMonthIndex(monthIndex);
+					res.setNumCasesOnTreatment( res.getNumCasesOnTreatment() + c.getNumCases() );
+				}
 			}
 		}
 	}
@@ -557,10 +560,10 @@ public class ForecastingCalculation {
 	 * Calculate the consumption for cases defined in the forecasting.
 	 * It was broke from the original method just to make it simpler
 	 */
-	private void calculateConsumptionCasesInForecasting(int monthIndex, int monthTreat, ForecastingCasesOnTreat fcot, ForecastingMedicine fm) {
+	private int calculateConsumptionCasesInForecasting(int monthIndex, int monthTreat, ForecastingCasesOnTreat fcot, ForecastingMedicine fm) {
 		Regimen reg = fcot.getRegimen();
 		if (!reg.isMedicineInRegimen(fm.getMedicine()))
-			return;
+			return 0;
 		ForecastingResult res = forecasting.findResult(fm.getMedicine(), monthIndex);
 		if (res == null)
 			RaiseResultException(fm.getMedicine(), monthIndex);
@@ -570,14 +573,19 @@ public class ForecastingCalculation {
 		
 		// calculate the consumption of all periods in the month
 		Period p = new Period(dtIni, dtEnd);
+		int qtd = 0;
 		for (ForecastingPeriod forper: fm.getPeriods()) {
 			if (forper.getPeriod().isInside(p)) {
 				int qtyperiod = calcQuantityRegimen(reg, forper.getPeriod(), monthTreat, fm.getMedicine()) * fcot.getNumCases();
-				forper.setEstConsumptionCases(qtyperiod);
+				forper.setEstConsumptionCases( forper.getEstConsumptionCases() + qtyperiod );
+				qtd += qtyperiod;
 			}
 		}
 		
-		res.setNumCasesOnTreatment( res.getNumCasesOnTreatment() + fcot.getNumCases());
+		if (qtd > 0)
+			res.setNumCasesOnTreatment( res.getNumCasesOnTreatment() + fcot.getNumCases());
+		
+		return qtd;
 	}
 
 
