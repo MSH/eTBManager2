@@ -37,7 +37,7 @@
 	<a:commandLink styleClass="button" title="Execute the forecasting (re)calculating the results" 
 		action="#{forecastingCalculation.execute}" reRender="main,messages"
 		onclick="if (!disableButton(this)) return false;"
-		oncomplete="enableButton();RichFaces.switchTab('main:tabPanelForecasting','main:tabresult','tabresult')">
+		oncomplete="enableButton();if (!facesContext.messages.hasNext()) RichFaces.switchTab('main:tabPanelForecasting','main:tabresult','tabresult')"> 
 		<span>#{messages['manag.forecast.execute']}</span>
 	</a:commandLink>
 	<s:link view="/management/index.xhtml" styleClass="button-alt" propagation="end">
@@ -248,8 +248,14 @@
 			<f:facet name="header">
 				#{messages['manag.forecast.percreg']}
 			</f:facet>
+			<s:validateAll>
+			<s:decorate>
 			<h:inputText value="#{r.percNewCases}" style="width:70px;">
+			<f:convertNumber pattern="#,###,##0.##"/>
 			</h:inputText>
+			<s:message styleClass="error"/>
+			</s:decorate>
+			</s:validateAll>
 		</h:column>
 
 		<h:column rendered="false">
@@ -396,7 +402,7 @@
 
 </rich:tab>
 
-<ui:include src="/management/forecastingresults.xhtml" />
+<ui:include src="/management/forecastingresults.xhtml"/>
 
 </rich:tabPanel>
 
