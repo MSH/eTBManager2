@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Date;
 import java.util.Locale;
 
 import javax.faces.context.FacesContext;
@@ -17,8 +16,10 @@ import jxl.format.Border;
 import jxl.format.BorderLineStyle;
 import jxl.format.UnderlineStyle;
 import jxl.format.VerticalAlignment;
+import jxl.write.Formula;
 import jxl.write.Label;
 import jxl.write.Number;
+import jxl.write.NumberFormats;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
@@ -31,10 +32,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.Forecasting;
 import org.msh.tb.entities.ForecastingMedicine;
-import org.msh.tb.entities.enums.MedicineCategory;
-import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.forecasting.ForecastingCalculation;
-import org.msh.tb.forecasting.ForecastingHome;
 import org.msh.utils.date.DateUtils;
 
 /**
@@ -42,13 +40,11 @@ import org.msh.utils.date.DateUtils;
  * @author alexxme
  *
  */
-@Name("forecastingUAHome")
-public class ForecastingUAHome extends ForecastingCalculation{
+@Name("forecastingUAExcel")
+public class ForecastingUAExcel{
 	private static final long serialVersionUID = -3844270483725397280L;
-	@In(create=true) ForecastingHome forecastingHome;
 	@In(create=true) ForecastingCalculation forecastingCalculation;
-	private Date endForecasting;
-	private int numMonths;
+
 	/**
 	 * Creator of the Excel file 
 	 */
@@ -61,12 +57,14 @@ public class ForecastingUAHome extends ForecastingCalculation{
 	public WritableCellFormat times12ptBoldUnderlineFormat;
 	public WritableCellFormat times12ptFormat;
 	public WritableCellFormat times10ptItalicFormat;
+	private WritableCellFormat floatFormat;
 	
 	public Label label;
 	private File excelFile;
 	private int row;
 	private int column;
 	String fileName;
+	private WritableCellFormat floatBoldFormat;
 	
 	public int getRow() {
 		return row;
@@ -139,21 +137,12 @@ public class ForecastingUAHome extends ForecastingCalculation{
 	}
 	
 	private void setCellFormat() throws WriteException{
-		//установка шрифта
 		WritableFont times12ptBold = new WritableFont(WritableFont.TIMES, 12, WritableFont.BOLD);
 		times12ptBoldFormat = new WritableCellFormat(times12ptBold);
-		//выравнивание по центру
 		times12ptBoldFormat.setAlignment(Alignment.CENTRE);
 		times12ptBoldFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
-		
-		//перенос по словам если не помещается
 		times12ptBoldFormat.setWrap(true);
-		//установить цвет
-		//times12ptBoldFormat.setBackground(Colour.GRAY_25);
-		//рисуем рамку
 		times12ptBoldFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
-		//поворот текста
-		//times12ptBoldFormat.setOrientation(Orientation.PLUS_90);
 		
 		WritableFont times12ptBoldUnderline = new WritableFont(WritableFont.TIMES, 12, WritableFont.BOLD,false,UnderlineStyle.SINGLE);
 		times12ptBoldUnderlineFormat = new WritableCellFormat(times12ptBoldUnderline);
@@ -166,6 +155,18 @@ public class ForecastingUAHome extends ForecastingCalculation{
 		times12ptFormat.setWrap(true);
 		times12ptFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
 		times12ptFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+		
+		floatFormat = new WritableCellFormat(times12pt,NumberFormats.FLOAT);
+		floatFormat.setAlignment(Alignment.CENTRE);
+		floatFormat.setWrap(true);
+		floatFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
+		floatFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+		
+		floatBoldFormat = new WritableCellFormat(times12ptBold,NumberFormats.FLOAT);
+		floatBoldFormat.setAlignment(Alignment.CENTRE);
+		floatBoldFormat.setWrap(true);
+		floatBoldFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
+		floatBoldFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
 		
 		
 		WritableFont times10ptItalic = new WritableFont(WritableFont.TIMES, 10, WritableFont.NO_BOLD,true);
@@ -185,87 +186,75 @@ public class ForecastingUAHome extends ForecastingCalculation{
 		}
 		
 		addTitles();
-		execute();
-//		forecasting = getForecasting();
-		int i = 0;
-		for (ForecastingMedicine fm : forecasting.getMedicines()) 
-			if (fm.getMedicine().getLine().ordinal() == MedicineLine.FIRST_LINE.ordinal())
-				fillRow(fm,i++);
-		row++;
-		addTextFromResource("manag.forecast.excel.total1", times12ptBoldFormat);
+		forecastingCalculation.execute();
+		forecasting = forecastingCalculation.getForecasting();
 		
-		/*StringBuffer buf;
+		for (ForecastingMedicine fm : forecasting.getMedicines()) 
+			fillRow(fm);
+		
 		Formula f;
-		
-		for (int j = 2; j < 11; j++) {
+		for (int j = 2; j < 12; j++) {
+			WritableCellFormat tmp;
+			if (j>9) tmp = floatBoldFormat;
+			else tmp = times12ptBoldFormat;
 			setColumn(j);
-			buf = new StringBuffer();
-			buf.append("SUM(R[-"+i+"]C:R[-1]C)");
-			f = new Formula(j, row, buf.toString(),times12ptBoldFormat);
+			workbook.addNameArea("col1_"+j, sheet, j, 5, j, 14);
+			f = new Formula(j, 15, "SUM(col1_"+j+")",tmp);
 			sheet.addCell(f);
-		}*/
-		
-		row++;
-		setColumn(0);
-		addTextFromResource("manag.forecast.excel.colspan2", times12ptBoldFormat);
-		sheet.mergeCells(0,row,11,row);
-		row++;
-		setColumn(1);
-		addTextFromResource("manag.forecast.excel.type1", times12ptBoldUnderlineFormat);
-		
-		for (ForecastingMedicine fm : forecasting.getMedicines()) 
-			if (fm.getMedicine().getLine().ordinal() == MedicineLine.SECOND_LINE.ordinal())
-				if (fm.getMedicine().getCategory().ordinal() == MedicineCategory.INJECTABLE.ordinal())	
-					fillRow(fm,i++);
-
-		row++;
-		addTextFromResource("manag.forecast.excel.colspan3", times12ptBoldUnderlineFormat);
-		sheet.mergeCells(1,row,2,row);
-		for (ForecastingMedicine fm : forecasting.getMedicines()) 
-			if (fm.getMedicine().getLine().ordinal() == MedicineLine.SECOND_LINE.ordinal())
-				if (fm.getMedicine().getCategory().ordinal() == MedicineCategory.ORAL.ordinal())	
-					fillRow(fm,i++);
-		
-		row++;
-		setColumn(0);
-		addTextFromResource("manag.forecast.excel.colspan4", times12ptBoldFormat);
-		sheet.mergeCells(0,row,11,row);
-		for (ForecastingMedicine fm : forecasting.getMedicines()) 
-			if (fm.getMedicine().getLine().ordinal() == MedicineLine.OTHER.ordinal())
-				fillRow(fm,i++);
-		setColumn(1);
-		row++;
-		addTextFromResource("manag.forecast.excel.total2", times12ptBoldFormat);
-		row++;
-		addTextFromResource("manag.forecast.excel.total", times12ptBoldFormat);
-		
+		}
+			
+		for (int j = 2; j < 12; j++) {
+			WritableCellFormat tmp;
+			if (j>9) tmp = floatBoldFormat;
+			else tmp = times12ptBoldFormat;
+			setColumn(j);
+			workbook.addNameArea("col2_"+j, sheet, j, 18, j, 32);
+			f = new Formula(j, 33, "SUM(col2_"+j+")",tmp);
+			sheet.addCell(f);
+			f = new Formula(j, 34, "SUM(col1_"+j+",col2_"+j+")",tmp);
+			sheet.addCell(f);
+		}
 		
 	}
 	
-	private void fillRow(ForecastingMedicine fm, int i) throws RowsExceededException, WriteException{
-		i++;
-		row++;
-		setColumn(0);
-		addText(i+".",null);
-		setColumn(1);
-		addText(fm.getMedicine().toString(),times12ptBoldFormat);
-		setColumn(2);
-		addNumber(fm.getStockOnHand(),null);
-		setColumn(3);
-		addNumber(fm.getForecasting().getNumMonths(),null);
-		setColumn(4);
-		addNumber(fm.getConsumptionCases(),null);
-		setColumn(5);
-		addNumber(fm.getConsumptionNewCases(),null);
-		setColumn(6);
-		addNumber(fm.getForecasting().getBufferStock(),null);
-		setColumn(8);
-		addNumber(fm.getStockOnHandAfterLT(),null);
-		setColumn(10);
-		addNumber(fm.getUnitPrice(),null);
-		setColumn(11);
-		addNumber(fm.getTotalPrice(),times12ptBoldFormat);
-		setColumn(1);
+	private void fillRow(ForecastingMedicine fm) throws RowsExceededException, WriteException{
+		if (fm.getMedicine().getLegacyId()!=null)
+		if (!fm.getMedicine().getLegacyId().equals("")){
+			int i = Integer.parseInt(fm.getMedicine().getLegacyId());
+			if (i<11) setRow(i+4);
+				else if (i<14) setRow(i+7);
+				else if (i<17) setRow(i+8);
+				else if (i<21) setRow(i+9);
+				else setRow(i+10);
+			setColumn(0);
+			addText(i+".",null);
+			setColumn(1);
+			addText(fm.getMedicine().getGenericName().getName2(),times12ptBoldFormat);
+			setColumn(2);
+			int soh = fm.getStockOnHand();
+			addNumber(soh,null);
+			setColumn(3);
+			addNumber(fm.getForecasting().getLeadTime(),null);
+			setColumn(4);
+			int cc = fm.getConsumptionCases();
+			addNumber(cc,null);
+			setColumn(5);
+			int cnc = fm.getConsumptionNewCases();
+			addNumber(cnc,null);
+			setColumn(6);
+			addNumber(fm.getForecasting().getBufferStock(),null);
+			setColumn(7);
+			addNumber(cc+cnc,null);
+			setColumn(8);
+			addNumber(fm.getStockOnHandAfterLT(),null);
+			setColumn(9);
+			addNumber(cc+cnc-soh,null);
+			setColumn(10);
+			addNumber(fm.getUnitPrice(),floatFormat);
+			setColumn(11);
+			addNumber(fm.getTotalPrice(),floatBoldFormat);
+			setColumn(1);
+		}
 	}
 	
 	private void addTitles() throws RowsExceededException, WriteException {		
@@ -285,10 +274,32 @@ public class ForecastingUAHome extends ForecastingCalculation{
 			addTextFromResource(Integer.toString(i), times10ptItalicFormat);			
 		}
 		
-		setRow(4);
 		setColumn(0);
+		setRow(4);
 		addTextFromResource("manag.forecast.excel.colspan1", times12ptBoldFormat);
+		setRow(16);
+		addTextFromResource("manag.forecast.excel.colspan2", times12ptBoldFormat);
+		
+		setColumn(1);
+		setRow(15);
+		addTextFromResource("manag.forecast.excel.total1", times12ptBoldFormat);
+		setRow(33);
+		addTextFromResource("manag.forecast.excel.total", times12ptBoldFormat);
+		setRow(34);
+		addTextFromResource("manag.forecast.excel.total1", times12ptBoldFormat);
+		setRow(17);
+		addTextFromResource("manag.forecast.excel.type1", times12ptBoldUnderlineFormat);
+		setRow(21);
+		addTextFromResource("manag.forecast.excel.type2", times12ptBoldUnderlineFormat);
+		setRow(25);
+		addTextFromResource("manag.forecast.excel.colspan3", times12ptBoldUnderlineFormat);
+		setRow(30);
+		addTextFromResource("manag.forecast.excel.colspan4", times12ptBoldUnderlineFormat);
+		
+		
 		sheet.mergeCells(0,4,11,4);
+		sheet.mergeCells(0,16,11,16);
+		sheet.mergeCells(1,25,2,25);
 	}
 	
 	
@@ -318,6 +329,12 @@ public class ForecastingUAHome extends ForecastingCalculation{
 	public void addNumber(float resourceKey, WritableCellFormat cellFormatName) throws RowsExceededException, WriteException {
 		if (cellFormatName == null)	
 			cellFormatName = times12ptFormat;
+		/*WritableCellFormat floatFormat = new WritableCellFormat(NumberFormats.FLOAT);
+		floatFormat.setAlignment(cellFormatName.getAlignment());
+		floatFormat.setBorder(Border.ALL, BorderLineStyle.THIN); cellFormatName.getFont().
+		floatFormat.setFont(f)*/
+		
+		
 		Number label = new Number(column, row, resourceKey, cellFormatName);
 		try {
 			sheet.addCell(label);	//добавление данных в лист sheet с обработкой исключений

@@ -1,10 +1,10 @@
 package org.msh.tb.ua;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
@@ -12,6 +12,7 @@ import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorFilters;
 import org.msh.tb.indicators.core.IndicatorMicroscopyResult;
 import org.msh.tb.indicators.core.IndicatorTable;
+import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
 import org.msh.utils.date.DateUtils;
 
 @Name("reportTB10")
@@ -20,6 +21,16 @@ public class ReportTB10 extends Indicator2D {
 
 	private IndicatorTable table2000;
 	private IndicatorTable table1000;
+	private List<Integer> num = new ArrayList<Integer>();
+	
+	
+	public List<Integer> getNum() {
+		return num;
+	}
+
+	public void setNum(List<Integer> num) {
+		this.num = num;
+	}
 
 	/**
 	 * Total number of cases in the indicator 
@@ -43,7 +54,15 @@ public class ReportTB10 extends Indicator2D {
 		generateTable1000();
 		//generateTable2000();
 	}
-
+	
+	public void getTotal2000() {
+		List<TableColumn> cols = table2000.getColumns();
+		//cols.remove(0);
+		
+		for (int i = 1; i < cols.size(); i++) {
+			num.add(cols.get(i).getTotal());			
+		}
+	}
 
 	/**
 	 * Initialize structure of table 1000 
@@ -53,7 +72,9 @@ public class ReportTB10 extends Indicator2D {
 		
 		String total = getMessage("uk_UA.reports.tb10.1.total");
 
+		table.addColumn(getMessage("uk_UA.reports.tb11.1.headerN"), "N");
 		table.addColumn(getMessage("uk_UA.reports.tb10.1.header2"), "numcases");
+		
 		table.addColumn(total, "month2");
 		table.addColumn("%", "month2_perc");
 
@@ -66,9 +87,13 @@ public class ReportTB10 extends Indicator2D {
 		table.addColumn(getMessage("uk_UA.reports.tb10.1.header7"), "noexams");
 		table.addColumn(getMessage("uk_UA.reports.tb10.1.header8"), "others");
 		
+		
 		table.addRow(getMessage("uk_UA.reports.newcases"), "newcases");
+		table.setValue("N", "newcases", 1F);
 		table.addRow(getMessage("uk_UA.reports.relapses"), "relapses");
+		table.setValue("N", "relapses", 2F);
 		table.addRow(getMessage("uk_UA.reports.other"), "others");
+		table.setValue("N", "others", 3F);
 	}
 
 
@@ -77,7 +102,8 @@ public class ReportTB10 extends Indicator2D {
 	 */
 	protected void initTable2000() {
 		IndicatorTable table = getTable2000();
-
+		table.addColumn(getMessage("uk_UA.reports.tb11.1.headerN"), "N");
+		
 		// titles are not used in the displaying of the table
 		table.addColumn("CaseState.DIED.TB", "1");
 		table.addColumn("CaseState.DIED.OTHER_CAUSES", "2");
@@ -88,8 +114,11 @@ public class ReportTB10 extends Indicator2D {
 		table.addColumn("NOT_DONE", "7");
 		
 		table.addRow(getMessage("uk_UA.reports.newcases"), "newcases");
+		table.setValue("N", "newcases", 1F);
 		table.addRow(getMessage("uk_UA.reports.relapses"), "relapses");
+		table.setValue("N", "relapses", 2F);
 		table.addRow(getMessage("uk_UA.reports.other"), "others");
+		table.setValue("N", "others", 3F);
 	}
 
 	/* (non-Javadoc)
@@ -145,11 +174,12 @@ public class ReportTB10 extends Indicator2D {
 			for (String colid: cols) {
 				calcPercentage(colid, rowid);
 			}
+		getTotal2000();
 	}
 
 	/**
 	 * Generate values of table 2000 querying the database based on the user filters 
-	 */
+	 *//*
 	protected void generateTable2000() {
 		
 		// check if it has microscopy
@@ -168,7 +198,7 @@ public class ReportTB10 extends Indicator2D {
 		}
 		
 	}
-
+*/
 	
 	private void calcPercentage(String colid, String rowid) {
 		float total = 0;
@@ -211,13 +241,13 @@ public class ReportTB10 extends Indicator2D {
 		if (!noexam){
 			// is negative ?
 			if (dtMicro != null){ 
-				boolean ttt = false;
+				boolean goodMicro = false;
 				if (iniCont==null) 
-					ttt = true;
+					goodMicro = true;
 					else 
-						if (dtMicro.before(iniCont)) ttt = true;
+						if (dtMicro.before(iniCont)) goodMicro = true;
 				
-				if (ttt){
+				if (goodMicro){
 					int negativeMonth = DateUtils.monthsBetween(dtIniTreat, dtMicro);
 			
 					if (negativeMonth <= 2 && ptype.equals(PatientType.NEW))
@@ -252,13 +282,13 @@ public class ReportTB10 extends Indicator2D {
 			case DIED_NOTTB:
 				colkey = "2";
 				break;
-			case TREATMENT_INTERRUPTION: case DEFAULTED: case FAILED:
+			case TREATMENT_INTERRUPTION:
 				colkey = "3";
 				break;
-			case TRANSFERRED_OUT: case TRANSFERRING:
+			case TRANSFERRED_OUT:
 				colkey = "4";
 				break;
-			case DIAGNOSTIC_CHANGED_TO_NOT_DRTB: case DIAGNOSTIC_CHANGED: case CURED: case TREATMENT_COMPLETED:
+			case NOT_CONFIRMED:
 				colkey = "5";
 				break;
 			default:
@@ -277,7 +307,7 @@ public class ReportTB10 extends Indicator2D {
 	 * @param ptype
 	 * @param state
 	 * @param val
-	 */
+	 *//*
 	protected void addValueTable(Date dtIniTreat, Date dtDiagnos, PatientType ptype, CaseState state, Regimen reg, Date dtMicro, Date dtIniContPhase) {
 		// select row id
 		if (dtIniTreat == null)
@@ -325,7 +355,7 @@ public class ReportTB10 extends Indicator2D {
 		
 	}
 	
-	
+	*/
 	/* (non-Javadoc)
 	 * @see org.msh.tb.indicators.core.CaseHQLBase#getHQLJoin()
 	 */
