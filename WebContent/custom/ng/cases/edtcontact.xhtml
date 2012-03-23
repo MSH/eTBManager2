@@ -29,23 +29,20 @@
 	<tr><td>
     <s:decorate id="dt" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.FirstName']}:</ui:define>
-    	<!--<h:inputText value="#{tbContactNG.name}" required="true" style="width:320px;"/>-->
-    	<h:inputText value="#{tbContactNGHome.contactFName}" style="width:150px;"/>
+    	<h:inputText value="#{tbContactNG.name}" required="true" style="width:150px;"/>
     </s:decorate>
     </td>
     <td>
     
     <s:decorate id="dt11" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.Surname']}:</ui:define>
-    	<!--<h:inputText value="#{tbContactNG.name}" required="true" style="width:320px;"/>-->
-    	<h:inputText value="#{tbContactNGHome.contactLName}" style="width:150px;"/>
+    	<h:inputText value="#{tbContactNG.contactLastName}" style="width:150px;"/>
     </s:decorate>
     </td>
     <td>
     <s:decorate id="dt22" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.OtherName']}:</ui:define>
-    	<!--<h:inputText value="#{tbContactNG.name}" required="true" style="width:320px;"/>-->
-    	<h:inputText value="#{tbContactNGHome.contactOtherName}" style="width:150px;"/>
+    	<h:inputText value="#{tbContactNG.contactOtherName}" style="width:150px;"/>
     </s:decorate>
     </td>
     </tr>
