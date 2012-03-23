@@ -19,4 +19,12 @@ public class MedicalExaminationHome extends ExamHome<MedicalExamination>{
 	public String persist() {
 		return super.persist();
 	}
+	
+	@Override
+	public void createdMessage() {
+	}
+
+	@Override
+	public void updatedMessage() {
+	}
 }
