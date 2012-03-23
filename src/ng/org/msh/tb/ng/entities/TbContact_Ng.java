@@ -1,10 +1,15 @@
 package org.msh.tb.ng.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.msh.tb.entities.FieldValue;
@@ -31,13 +36,33 @@ public class TbContact_Ng extends TbContact {
 	@JoinColumn(name="RISK_GROUP")
 	@PropertyLog(key="TbField.RISK_GROUP")
 	private FieldValue riskGroup;
-
+	
+	private String contactLastName;
+	
+	private String contactOtherName;
+	
 	public FieldValue getRiskGroup() {
 		return riskGroup;
 	}
 	
 	public void setRiskGroup(FieldValue riskGroup) {
 		this.riskGroup = riskGroup;
+	}
+
+	public void setContactLastName(String contactLastName) {
+		this.contactLastName = contactLastName;
+	}
+
+	public String getContactLastName() {
+		return contactLastName;
+	}
+
+	public void setContactOtherName(String contactOtherName) {
+		this.contactOtherName = contactOtherName;
+	}
+
+	public String getContactOtherName() {
+		return contactOtherName;
 	}
 
 }
