@@ -38,9 +38,6 @@ public class TbContactNGHome extends EntityHomeEx<TbContact_Ng> {
 	@Override
 	public String persist() {		
 		TbContact_Ng con = getInstance();
-		String strEmpty = "";
-		String contFullName = contactFName+strEmpty+contactLName+strEmpty+contactOtherName;
-		con.setName(contFullName);
 		TbCase tbcase = caseHome.getInstance();
 		
 		con.setTbcase(tbcase);
