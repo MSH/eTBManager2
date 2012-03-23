@@ -12,7 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.TbContact;
 import org.msh.tb.transactionlog.PropertyLog;
 
@@ -23,7 +25,6 @@ import org.msh.tb.transactionlog.PropertyLog;
 * Records information about Risk Group in TB Contacts
 */
 @Entity
-@DiscriminatorValue("ng")
 @Table(name="tbcontactng")
 public class TbContact_Ng extends TbContact {
 
@@ -64,5 +65,8 @@ public class TbContact_Ng extends TbContact {
 	public String getContactOtherName() {
 		return contactOtherName;
 	}
+
+	
+	
 
 }
