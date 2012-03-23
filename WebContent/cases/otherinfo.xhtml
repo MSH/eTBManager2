@@ -43,13 +43,12 @@
 			</h:column>
 		</h:dataTable>
 
+	<s:div id="srcofinfec" rendered="#{tbcase.tbContact}">
     	<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">#{messages['TbCase.tbContact']}:</ui:define>
-    		<h:outputText value="#{tbcase.tbContact?messages['global.yes']:messages['global.no']}" /> 
-    		<s:fragment rendered="#{not empty tbcase.patientContactName}">
-    		<b style="margin-left:30px;">#{messages['TbCase.patientContactName']}:</b> #{tbcase.patientContactName}
-    		</s:fragment>
+    		<ui:define name="label" style="margin-left:30px;">#{messages['TbCase.tbContact']}:</ui:define>
+    		<h:outputText value="#{tbcase.patientContactName}" style="padding-right:4px;" />
     	</s:decorate>
+    </s:div>
 
 	<div class="spacer" />
 
