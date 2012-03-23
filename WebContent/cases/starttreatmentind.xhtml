@@ -188,7 +188,7 @@
 </s:decorate>
 
 <s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
-	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
+	<ui:param name="title" value="#{messages['edtrec.addmed']}" />
 	<a:commandLink styleClass="button" action="#{startTreatmentIndivHome.addMedicines}" 
 		oncomplete="enableButton();hideMedicinesDlg();" 
 		onclick="if (!disableButton(this)) return false;" 
