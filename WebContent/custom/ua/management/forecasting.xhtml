@@ -27,9 +27,17 @@
 	</div>
 </ui:define>
 
+
+
 <ui:define name="content">
 <h1>#{title}</h1>
+
 <h:form id="main" styleClass="form1">
+<center>
+<h:outputText value="#{messages['error.validate']}" rendered="#{forecasting.hasResult and facesContext.messages.hasNext()}" style="font-size: 25px; font-weight: bold; color: Red; " />
+<h:outputText value="#{messages['manag.forecast.execute.ok']}" rendered="#{forecasting.hasResult and !facesContext.messages.hasNext()}" style="font-size: 25px; font-weight: bold;" />
+
+</center>
 
 <table width="100%" style="border-collapse: collapse;">
 <tr><td class="header">
@@ -60,7 +68,7 @@
 			<rich:menuItem value="#{messages['form.save']}" action="#{forecastingHome.persist}"
 	    		reRender="messages" rendered="#{forecastingHome.managed}"/>
 			
-			<rich:menuItem value="#{messages['manag.forecast.toExcel']}" action="#{forecastingUAHome.toExcel}"/>
+			<rich:menuItem value="#{messages['manag.forecast.toExcel']}" action="#{forecastingUAExcel.toExcel}"/>
 
 			<rich:menuItem value="#{forecastingHome.managed? messages['form.saveas']: messages['form.save']}..." 
 				onclick="showForecastDlg();return false;" />
@@ -177,19 +185,20 @@
 	<s:decorate template="/layout/display.xhtml" rendered="#{forecasting.casesFromDatabase}">
 		<ui:define name="label">#{messages['manag.forecast.numcases']}:</ui:define>
 		<h:outputText value="#{forecastingView.numCasesOnTreatment}" >
-			<f:convertNumber pattern="#,###,##0" />
+			<f:convertNumber pattern="#,###,##0.##" />
 		</h:outputText>
 	</s:decorate>
-	
 	<s:fragment rendered="#{not forecasting.casesFromDatabase}">
-	<a:commandLink value="#{messages['form.navprevious']}" 
+	
+	<a:commandLink  
 		action="#{forecastingView.casesRegimenTable.movePreviousPeriod}"
 		reRender="pnlcasesontreat" styleClass="naveg-prev" ajaxSingle="true" process="pnl2"/>
 
-	<a:commandLink value="#{messages['form.navnext']}" 
+	<a:commandLink 
 		action="#{forecastingView.casesRegimenTable.moveNextPeriod}" ajaxSingle="true" process="pnl2"
 		reRender="pnlcasesontreat" styleClass="naveg-next" rendered="#{forecastingView.casesRegimenTable.monthIndexIni != 0}"/>
-
+	
+	<br/>
 	<h:panelGroup id="pnl2">
 	<table width="100%" class="table1">
 	<tr>
@@ -207,13 +216,12 @@
 		</td>
 		<a:repeat value="#{it.months}" var="m">
 			<td>
-            <s:validateAll>
-			<s:decorate>
-			<h:inputText value="#{m.numCases}" style="width:35px;" />
-			<s:message/>
-			</s:decorate>
-			</s:validateAll>
-		    <!-- <s:message styleClass="error"/> -->
+				<s:validateAll>
+					<s:decorate>
+						<h:inputText id="erval" value="#{m.numCases}" style="width:35px;" requiredMessage="#{messages['error.validate']}"/>
+						<s:message styleClass="error"/>
+					</s:decorate>
+				</s:validateAll>
 			</td>
 		</a:repeat>
 	</tr>
@@ -248,14 +256,12 @@
 			<f:facet name="header">
 				#{messages['manag.forecast.percreg']}
 			</f:facet>
-			<s:validateAll>
-			<s:decorate>
-			<h:inputText value="#{r.percNewCases}" style="width:70px;">
-			<f:convertNumber pattern="#,###,##0.##"/>
-			</h:inputText>
-			<s:message styleClass="error"/>
-			</s:decorate>
-			</s:validateAll>
+				<s:validateAll>
+					<s:decorate>
+						<h:inputText id="erval" value="#{r.percNewCases}" style="width:70px;"/>
+						<s:message  styleClass="error"/>
+					</s:decorate>
+				</s:validateAll>
 		</h:column>
 
 		<h:column rendered="false">
@@ -280,7 +286,12 @@
 				<f:convertDateTime pattern="MMM-yyyy" />
 			</h:outputText>
 			<br/>
-			<h:inputText value="#{it.numNewCases}" style="width:50px;"/>
+				<s:validateAll>
+					<s:decorate>
+						<h:inputText id="erval" value="#{it.numNewCases}" style="width:50px;"/>
+						<s:message  styleClass="error"/>
+					</s:decorate>
+				</s:validateAll>
 		</div>
 	</rich:dataGrid>
 	
@@ -309,14 +320,24 @@
 				<f:facet name="header">
 					#{messages['manag.forecast.stockonhand']}
 				</f:facet>
-				<h:inputText value="#{r.stockOnHand}" style="width:60px;" />
+				<s:validateAll>
+					<s:decorate>
+						<h:inputText id="erval" value="#{r.stockOnHand}" style="width:60px;"/>
+						<s:message  styleClass="error"/>
+					</s:decorate>
+				</s:validateAll>
 			</h:column>
 
 			<h:column>
 				<f:facet name="header">
 					#{messages['global.unitPrice']}
 				</f:facet>
-				<h:inputText value="#{r.unitPrice}" style="width:60px;" converter="currencyConverter" />
+				<s:validateAll>
+					<s:decorate>
+						<h:inputText id="erval" value="#{r.unitPrice}" style="width:60px;" converter="currencyConverter"/>
+						<s:message  styleClass="error"/>
+					</s:decorate>
+				</s:validateAll>
 			</h:column>
 			
 			<h:column>
@@ -553,7 +574,12 @@ function showLoadForecastingDlg() {
 
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['Movement.quantity']}:</ui:define>
-		<h:inputText value="#{forecastingView.order.quantity}" required="true" style="width:80px;"/>
+				<s:validateAll>
+					<s:decorate>
+						<h:inputText id="erval" value="#{forecastingView.order.quantity}" required="true"  style="width:80px;"/>
+						<s:message  styleClass="error"/>
+					</s:decorate>
+				</s:validateAll>
 	</s:decorate>
 
 	<div class="button-bar">
@@ -587,7 +613,12 @@ function showLoadForecastingDlg() {
 
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['Movement.quantity']}:</ui:define>
-		<h:inputText value="#{forecastingView.batch.quantity}" required="true" style="width:80px;"/>
+		<s:validateAll>
+					<s:decorate>
+						<h:inputText id="erval" value="#{forecastingView.batch.quantity}" required="true"  style="width:80px;"/>
+						<s:message  styleClass="error"/>
+					</s:decorate>
+				</s:validateAll>
 	</s:decorate>
 	
 	<div class="button-bar">
