@@ -41,16 +41,20 @@
 				</f:facet>
 				#{it.comment}
 			</h:column>
-		</h:dataTable>
+		</h:dataTable>	
+		
+			
 
+	<s:div id="srcofinfec" rendered="#{tbcase.tbContact}">
     	<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">#{messages['TbCase.tbContact']}:</ui:define>
-    		<h:outputText value="#{tbcase.tbContact?messages['global.yes']:messages['global.no']}" /> 
+    		<ui:define name="label" style="margin-left:30px;">#{messages['TbCase.tbContact']}:</ui:define>
     		<s:fragment rendered="#{not empty tbcase.patientContactName}">
-    		<b style="margin-left:30px;">#{messages['TbCase.patientContactName']}:</b> #{tbcase.patientContactName}
+    		<ui:define name="label">#{messages['TbCase.tbContact']}:</ui:define>
+    		<h:outputText value="#{tbcase.patientContactName}" style="padding-right:4px;" />
     		</s:fragment>
     	</s:decorate>
-
+  	</s:div>  
+  	
 	<div class="spacer" />
 
 	<s:link view="/custom/ng/cases/edtcontact.xhtml" styleClass="button-alt" 
@@ -73,7 +77,7 @@
 			<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remContact(#{it.id});return false;" 
 				style="font-size:9px;float:right;">
 			</h:commandLink>
-			<s:link value="#{it.name}" view="/custom/ng/cases/edtcontact.xhtml">
+			<s:link value="#{it.name} #{it.contactLastName} #{it.contactOtherName}" view="/custom/ng/cases/edtcontact.xhtml">
 				<f:param name="conid" value="#{it.id}"/>
 			</s:link>
 		</th>
