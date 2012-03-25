@@ -33,19 +33,16 @@
 <h1>#{title}</h1>
 
 <h:form id="main" styleClass="form1">
-<center>
-<h:outputText value="#{messages['error.validate']}" rendered="#{forecasting.hasResult and facesContext.messages.hasNext()}" style="font-size: 25px; font-weight: bold; color: Red; " />
-<h:outputText value="#{messages['manag.forecast.execute.ok']}" rendered="#{forecasting.hasResult and !facesContext.messages.hasNext()}" style="font-size: 25px; font-weight: bold;" />
 
-</center>
 
 <table width="100%" style="border-collapse: collapse;">
 <tr><td class="header">
 	<div style="float:right" >
 	<a:commandLink styleClass="button" title="Execute the forecasting (re)calculating the results" 
 		action="#{forecastingCalculation.execute}" reRender="main,messages"
+		data="#{!facesContext.messages.hasNext()}"
 		onclick="if (!disableButton(this)) return false;"
-		oncomplete="enableButton();if (!facesContext.messages.hasNext()) RichFaces.switchTab('main:tabPanelForecasting','main:tabresult','tabresult')"> 
+		oncomplete="enableButton();if(data) {RichFaces.switchTab('main:tabPanelForecasting','main:tabresult','tabresult');} else {alert('#{messages['error.validate']}')}"> 
 		<span>#{messages['manag.forecast.execute']}</span>
 	</a:commandLink>
 	<s:link view="/management/index.xhtml" styleClass="button-alt" propagation="end">
