@@ -69,6 +69,9 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 	
 	@Column(length=50)
 	private String legacyId;
+	
+	@Column(length=100)
+	private String phoneNumber;
 
 	// ready to be removed from the system
     private boolean batchControl;
@@ -279,6 +282,16 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 
 	public void setLegacyId(String legacyId) {
 		this.legacyId = legacyId;
+	}
+	
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 	
 	/**

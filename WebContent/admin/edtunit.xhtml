@@ -33,6 +33,11 @@
         </h:inputText>
     </s:decorate>
 
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['Order.shipContactPhone']}:</ui:define>
+        <h:inputText maxlength="100" value="#{tbunit.phoneNumber}" style="width:120px;" />
+    </s:decorate>
+
     <s:decorate template="/layout/edit.xhtml" rendered="#{defaultWorkspace.hasAlternateLocale}">
     	<ui:define name="label">#{messages['form.name']}:
     		<br/><span style="font-weight:normal;">(#{defaultWorkspace.alternateDisplayLocale}):</span>

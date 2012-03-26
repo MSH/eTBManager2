@@ -70,8 +70,10 @@
 		<f:param name="id" value="#{r.id}" />
 	</s:link>
 	<h:outputText value="#{r.name.name2}" rendered="#{defaultWorkspace.hasAlternateLocale}" style="display:block;" />
-	<span class="right-icon"/>#{r.adminUnit.parent.name}
-	<span class="right-icon"/>#{r.adminUnit.name}
+	#{r.adminUnit.fullDisplayName}
+	<s:div rendered="#{not empty r.phoneNumber}">
+		<div class="icon-phone"/>#{r.phoneNumber}
+  	</s:div>
   </h:column>
   
   <h:column>
