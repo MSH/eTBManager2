@@ -9,6 +9,7 @@ import java.util.Locale;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 
+import jxl.CellView;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.format.Alignment;
@@ -174,6 +175,9 @@ public class ForecastingUAExcel{
 		times10ptItalicFormat.setAlignment(Alignment.CENTRE);
 		times10ptItalicFormat.setWrap(true);
 		times10ptItalicFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
+		
+		CellView cv = new CellView();
+		cv.setFormat(times12ptFormat);
 	}
 	
 	public void test() throws RowsExceededException, WriteException 
@@ -193,27 +197,31 @@ public class ForecastingUAExcel{
 			fillRow(fm);
 		
 		Formula f;
-		for (int j = 2; j < 12; j++) {
-			WritableCellFormat tmp;
-			if (j>9) tmp = floatBoldFormat;
-			else tmp = times12ptBoldFormat;
-			setColumn(j);
-			workbook.addNameArea("col1_"+j, sheet, j, 5, j, 14);
-			f = new Formula(j, 15, "SUM(col1_"+j+")",tmp);
-			sheet.addCell(f);
-		}
+		for (int j = 2; j < 12; j++) 
+			if (j!=3 && j!=6 && j!=10) 	
+			{
+				WritableCellFormat tmp;
+				if (j>9) tmp = floatBoldFormat;
+				else tmp = times12ptBoldFormat;
+				setColumn(j);
+				workbook.addNameArea("col1_"+j, sheet, j, 5, j, 14);
+				f = new Formula(j, 15, "SUM(col1_"+j+")",tmp);
+				sheet.addCell(f);
+			}
 			
-		for (int j = 2; j < 12; j++) {
-			WritableCellFormat tmp;
-			if (j>9) tmp = floatBoldFormat;
-			else tmp = times12ptBoldFormat;
-			setColumn(j);
-			workbook.addNameArea("col2_"+j, sheet, j, 18, j, 32);
-			f = new Formula(j, 33, "SUM(col2_"+j+")",tmp);
-			sheet.addCell(f);
-			f = new Formula(j, 34, "SUM(col1_"+j+",col2_"+j+")",tmp);
-			sheet.addCell(f);
-		}
+		for (int j = 2; j < 12; j++) 
+			if (j!=3 && j!=6 && j!=10)	
+			{
+				WritableCellFormat tmp;
+				if (j>9) tmp = floatBoldFormat;
+				else tmp = times12ptBoldFormat;
+				setColumn(j);
+				workbook.addNameArea("col2_"+j, sheet, j, 18, j, 32);
+				f = new Formula(j, 33, "SUM(col2_"+j+")",tmp);
+				sheet.addCell(f);
+				f = new Formula(j, 34, "SUM(col1_"+j+",col2_"+j+")",tmp);
+				sheet.addCell(f);
+			}
 		
 	}
 	
@@ -258,6 +266,13 @@ public class ForecastingUAExcel{
 	}
 	
 	private void addTitles() throws RowsExceededException, WriteException {		
+		for (int i = 0; i < 12; i++) 
+			for (int j = 2; j < 35; j++) {
+				setRow(j);
+				setColumn(i);
+				addText("", null);
+			}
+		
 		setRow(2);
 		setColumn(0);
 		addTextFromResource("manag.forecast.excel.n", times12ptBoldFormat);
