@@ -51,21 +51,18 @@ public class ForecastingUAExcel{
 	 */
 	
 	private Forecasting forecasting;
-	
-	private WritableWorkbook workbook; // переменна€ рабочей книги
-	public WritableSheet sheet;
-	public WritableCellFormat times12ptBoldFormat;
-	public WritableCellFormat times12ptBoldUnderlineFormat;
-	public WritableCellFormat times12ptFormat;
-	public WritableCellFormat times10ptItalicFormat;
+	private WritableWorkbook workbook;
+	private WritableSheet sheet;
+	private WritableCellFormat times12ptBoldFormat;
+	private WritableCellFormat times12ptBoldUnderlineFormat;
+	private WritableCellFormat times12ptFormat;
+	private WritableCellFormat times10ptItalicFormat;
 	private WritableCellFormat floatFormat;
+	private WritableCellFormat floatBoldFormat;
 	
-	public Label label;
 	private File excelFile;
 	private int row;
 	private int column;
-	String fileName;
-	private WritableCellFormat floatBoldFormat;
 	
 	public int getRow() {
 		return row;
@@ -87,13 +84,13 @@ public class ForecastingUAExcel{
 	{
 		WorkbookSettings ws = new WorkbookSettings();
 		ws.setLocale(new Locale("ru", "RU"));
-		fileName = "Medicines_"+DateUtils.getDate().getDate()+"."+DateUtils.getDate().getMonth()+"."+(DateUtils.getDate().getYear()-100);
+		String fileName = "Medicines_"+DateUtils.getDate().getDate()+"."+DateUtils.getDate().getMonth()+"."+(DateUtils.getDate().getYear()-100);
 		excelFile = File.createTempFile("etbmanager", "xls");
 		try {
 			workbook = Workbook.createWorkbook(excelFile, ws);		//им€ и путь файла
 			sheet = workbook.createSheet(fileName, 0);	//название листа
 			setCellFormat();
-			test();
+			fillTable();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -180,14 +177,13 @@ public class ForecastingUAExcel{
 		cv.setFormat(times12ptFormat);
 	}
 	
-	public void test() throws RowsExceededException, WriteException 
+	public void fillTable() throws RowsExceededException, WriteException 
 	{
-    	//пример добавлени€ в €чейки
-    	
 		sheet.setColumnView(1, 25); 
-		for (int i = 2; i < 13; i++) {
+		for (int i = 2; i < 11; i++) {
 			sheet.setColumnView(i, 15);
 		}
+		sheet.setColumnView(11, 18);
 		
 		addTitles();
 		forecastingCalculation.execute();
@@ -222,7 +218,6 @@ public class ForecastingUAExcel{
 				f = new Formula(j, 34, "SUM(col1_"+j+",col2_"+j+")",tmp);
 				sheet.addCell(f);
 			}
-		
 	}
 	
 	private void fillRow(ForecastingMedicine fm) throws RowsExceededException, WriteException{
@@ -260,7 +255,7 @@ public class ForecastingUAExcel{
 			setColumn(10);
 			addNumber(fm.getUnitPrice(),floatFormat);
 			setColumn(11);
-			addNumber(fm.getTotalPrice(),floatBoldFormat);
+			sheet.addCell(new Formula(11, row, "SUM(J"+(row+1)+"*K"+(row+1)+")",floatBoldFormat));
 			setColumn(1);
 		}
 	}
@@ -311,7 +306,6 @@ public class ForecastingUAExcel{
 		setRow(30);
 		addTextFromResource("manag.forecast.excel.colspan4", times12ptBoldUnderlineFormat);
 		
-		
 		sheet.mergeCells(0,4,11,4);
 		sheet.mergeCells(0,16,11,16);
 		sheet.mergeCells(1,25,2,25);
@@ -335,7 +329,7 @@ public class ForecastingUAExcel{
 			cellFormatName = times12ptFormat;
 		Label label = new Label(column, row, resourceKey, cellFormatName);
 		try {
-			sheet.addCell(label);	//добавление данных в лист sheet с обработкой исключений
+			sheet.addCell(label);
 		} catch (RowsExceededException e) {
 			e.printStackTrace();
 		}
@@ -344,15 +338,10 @@ public class ForecastingUAExcel{
 	public void addNumber(float resourceKey, WritableCellFormat cellFormatName) throws RowsExceededException, WriteException {
 		if (cellFormatName == null)	
 			cellFormatName = times12ptFormat;
-		/*WritableCellFormat floatFormat = new WritableCellFormat(NumberFormats.FLOAT);
-		floatFormat.setAlignment(cellFormatName.getAlignment());
-		floatFormat.setBorder(Border.ALL, BorderLineStyle.THIN); cellFormatName.getFont().
-		floatFormat.setFont(f)*/
-		
 		
 		Number label = new Number(column, row, resourceKey, cellFormatName);
 		try {
-			sheet.addCell(label);	//добавление данных в лист sheet с обработкой исключений
+			sheet.addCell(label);
 		} catch (RowsExceededException e) {
 			e.printStackTrace();
 		}
