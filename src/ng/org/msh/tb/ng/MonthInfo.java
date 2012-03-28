@@ -90,6 +90,19 @@ public class MonthInfo {
 	}
 	
 	/**
+	 * Return the number of days of medicine dispensed to the patient in the month/year of treatment
+	 * @return
+	 */
+	public int getTotDispensed() {
+		int nd = 0;
+		for (DayInfo di: days) {
+			if (di.isPrescribed() && (di.getSelected()== Dot.N||di.getSelected()== Dot.X))
+				nd++;
+		}
+		return nd;
+	}
+	
+	/**
 	 * Returns the month of the treatment
 	 * @return month of treatment
 	 */
