@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.msh.tb.ke.entities.enums.Dot;
+import org.msh.tb.ke.DayInfo;
 import org.msh.utils.date.DateUtils;
 
 
@@ -74,7 +75,18 @@ public class MonthInfo {
 		}
 		return nd;
 	}
-
+	/**
+	 * Return the number of days of medicine dispensed to the patient in the month/year of treatment
+	 * @return
+	 */
+	public int getTotDispensed() {
+		int nd = 0;
+		for (DayInfo di: days) {
+			if (di.isPrescribed() && (di.getSelected()== Dot.O||di.getSelected()== Dot.N))
+				nd++;
+		}
+		return nd;
+	}
 
 	/**
 	 * Return the number of days of medicine dispensing to the patient in the month/year of treatment
