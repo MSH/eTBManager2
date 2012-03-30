@@ -33,7 +33,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.Forecasting;
 import org.msh.tb.entities.ForecastingMedicine;
-import org.msh.tb.forecasting.ForecastingCalculation;
+import org.msh.tb.forecasting.ForecastingHome;
 import org.msh.utils.date.DateUtils;
 
 /**
@@ -44,8 +44,8 @@ import org.msh.utils.date.DateUtils;
 @Name("forecastingUAExcel")
 public class ForecastingUAExcel{
 	private static final long serialVersionUID = -3844270483725397280L;
-	@In(create=true) ForecastingCalculation forecastingCalculation;
-
+	@In(create=true) ForecastingHome forecastingHome;
+	
 	/**
 	 * Creator of the Excel file 
 	 */
@@ -63,6 +63,7 @@ public class ForecastingUAExcel{
 	private File excelFile;
 	private int row;
 	private int column;
+	private boolean[] rows = new boolean[21];
 	
 	public int getRow() {
 		return row;
@@ -80,15 +81,15 @@ public class ForecastingUAExcel{
 		this.column = column;
 	}
 
-	public void toExcel() throws WriteException, IOException // метод создает книгу с одной раб страницей
+	public void toExcel() throws WriteException, IOException 
 	{
 		WorkbookSettings ws = new WorkbookSettings();
 		ws.setLocale(new Locale("ru", "RU"));
 		String fileName = "Medicines_"+DateUtils.getDate().getDate()+"."+DateUtils.getDate().getMonth()+"."+(DateUtils.getDate().getYear()-100);
 		excelFile = File.createTempFile("etbmanager", "xls");
 		try {
-			workbook = Workbook.createWorkbook(excelFile, ws);		//имя и путь файла
-			sheet = workbook.createSheet(fileName, 0);	//название листа
+			workbook = Workbook.createWorkbook(excelFile, ws);
+			sheet = workbook.createSheet(fileName, 0);
 			setCellFormat();
 			fillTable();
 			
@@ -186,8 +187,7 @@ public class ForecastingUAExcel{
 		sheet.setColumnView(11, 18);
 		
 		addTitles();
-		forecastingCalculation.execute();
-		forecasting = forecastingCalculation.getForecasting();
+		forecasting = forecastingHome.getForecasting();
 		
 		for (ForecastingMedicine fm : forecasting.getMedicines()) 
 			fillRow(fm);
@@ -224,6 +224,8 @@ public class ForecastingUAExcel{
 		if (fm.getMedicine().getLegacyId()!=null)
 		if (!fm.getMedicine().getLegacyId().equals("")){
 			int i = Integer.parseInt(fm.getMedicine().getLegacyId());
+			if (rows[i-1]) 
+				return;
 			if (i<11) setRow(i+4);
 				else if (i<14) setRow(i+7);
 				else if (i<17) setRow(i+8);
@@ -257,6 +259,7 @@ public class ForecastingUAExcel{
 			setColumn(11);
 			sheet.addCell(new Formula(11, row, "SUM(J"+(row+1)+"*K"+(row+1)+")",floatBoldFormat));
 			setColumn(1);
+			rows[i-1] = true;
 		}
 	}
 	

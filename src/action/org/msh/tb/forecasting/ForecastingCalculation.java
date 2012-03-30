@@ -614,7 +614,7 @@ public class ForecastingCalculation {
 		Date dtini = forecasting.getIniDateMonthIndex(forNewCases.getMonthIndex());
 
 		// initialize number of new cases
-		int months = reg.getMonthsIntensivePhase() + reg.getMonthsIntensivePhase();
+		int months = reg.getMonthsIntensivePhase();// + reg.getMonthsIntensivePhase();
 		for (int i = 0; i < months; i++) {
 			int index = i + forNewCases.getMonthIndex();
 

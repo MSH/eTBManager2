@@ -50,6 +50,18 @@ public class CasesRegimenTable {
 	 */
 	private int numberOfMonths = 12;
 
+	private boolean changeRefDt;
+
+
+	public boolean isChangeRefDt() {
+		return changeRefDt;
+	}
+
+
+	public void setChangeRefDt(boolean changeRefDt) {
+		this.changeRefDt = changeRefDt;
+	}
+
 
 	/**
 	 * Constructor of the class
@@ -70,6 +82,7 @@ public class CasesRegimenTable {
 			monthIndexIni = 0;
 		rows = null;
 		months = null;
+		changeRefDt = false;
 	}
 
 
@@ -80,6 +93,7 @@ public class CasesRegimenTable {
 		monthIndexIni -= numberOfMonths;
 		rows = null;
 		months = null;
+		changeRefDt = false;
 	}
 	
 	/**
@@ -88,11 +102,16 @@ public class CasesRegimenTable {
 	 */
 	public void updateTable() {
 		rows = new ArrayList<ItemRow>();
+		int betwRefDt = 0;
+		if (forecasting.getOldReferenceDate()!=null)
+			betwRefDt = DateUtils.getDatePart(forecasting.getReferenceDate()).getMonth() - DateUtils.getDatePart(forecasting.getOldReferenceDate()).getMonth();
 		
 		// remove unused instances of ForecastingCasesOnTreat objects
 		int i = 0;
 		while (i < forecasting.getCasesOnTreatment().size()) {
 			ForecastingCasesOnTreat c = forecasting.getCasesOnTreatment().get(i);
+			if (isChangeRefDt()) 
+				c.setMonthIndex(c.getMonthIndex()-betwRefDt);
 			if ((c.getNumCases() == null) || (c.getNumCases() <= 0) || (forecasting.findRegimen(c.getRegimen()) == null)) {
 				forecasting.getCasesOnTreatment().remove(c);
 			}

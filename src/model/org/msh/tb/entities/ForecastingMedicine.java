@@ -203,7 +203,7 @@ public class ForecastingMedicine implements Serializable {
 	 * @return
 	 */
 	public int getDispensingQuantityLT() {
-		int qtd = consumptionLT - quantityMissingLT;
+		int qtd = consumptionLT + quantityMissingLT;
 		return qtd < 0 ? 0: qtd;
 	}
 

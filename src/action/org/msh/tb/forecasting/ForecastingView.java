@@ -108,6 +108,7 @@ public class ForecastingView {
 		
 		// default values
 		forecasting.setReferenceDate(DateUtils.getDatePart(new Date()));
+		forecasting.setOldReferenceDate(DateUtils.getDatePart(new Date()));
 		forecasting.setBufferStock(3);
 		forecasting.setName(Messages.instance().get("manag.forecast.new"));
 		
@@ -318,8 +319,27 @@ public class ForecastingView {
 		Forecasting forecasting = forecastingHome.getForecasting();
 		
 		// update new cases info
+		int betwRefDt = DateUtils.getDatePart(forecasting.getReferenceDate()).getMonth() - DateUtils.getDatePart(forecasting.getOldReferenceDate()).getMonth();
 		int num = DateUtils.monthsBetween(forecasting.getReferenceDate(), forecasting.getEndDate()) + forecasting.getBufferStock();
-
+		
+		if (betwRefDt>0)
+		for (ForecastingNewCases c : forecasting.getNewCases()) {
+			int m = c.getMonthIndex()-betwRefDt;
+			if (m>=0)	{		
+				forecasting.getNewCases().get(m).setNumNewCases(c.getNumNewCases());
+			}
+		}
+		else if (betwRefDt<0)
+			for (int i = forecasting.getNewCases().size()-1; i >= 0; i--) {
+				ForecastingNewCases c = forecasting.getNewCases().get(i);
+				int m = c.getMonthIndex()-betwRefDt;
+				if (m<forecasting.getNewCases().size())	{		
+					forecasting.getNewCases().get(m).setNumNewCases(c.getNumNewCases());
+					if (c.getMonthIndex()<=-betwRefDt)
+						c.setNumNewCases(0);
+				}
+			}
+		
 		for (int i = 0; i <= num; i++) {
 			ForecastingNewCases c = forecasting.findNewCasesInfo(i);
 			if (c == null) {
@@ -339,6 +359,8 @@ public class ForecastingView {
 			else i++;
 		}
 		numCasesOnTreatment = null;
+		getCasesRegimenTable().setChangeRefDt(true);
+		getCasesRegimenTable().updateTable();
 	}
 
 
