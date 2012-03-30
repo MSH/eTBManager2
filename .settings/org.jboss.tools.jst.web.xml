@@ -66256,6 +66256,1413 @@ a backing bean</description>
   </FOLDER>
   <FOLDER NAME="META-INF" model-entity="JarFolder"/>
  </file-system>
+ <file-system NAME="lib-generic"
+  location="C:\rmemoria\Projetos\java\eclipse\etbmanager\generic" model-entity="FileSystemFolder"/>
+ <file-system NAME="lib-classes"
+  location="C:\rmemoria\Projetos\java\eclipse\etbmanager\WebContent\WEB-INF\classes" model-entity="FileSystemFolder"/>
+ <file-system NAME="lib-commons-logging.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\lib\commons-logging.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="apache" model-entity="JarFolder">
+    <FOLDER NAME="commons" model-entity="JarFolder">
+     <FOLDER NAME="logging" model-entity="JarFolder">
+      <FOLDER NAME="impl" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-serializer.jar"
+  location="C:\Java\jboss-4.2.3.GA\lib\endorsed\serializer.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="apache" model-entity="JarFolder">
+    <FOLDER NAME="xml" model-entity="JarFolder">
+     <FOLDER NAME="serializer" model-entity="JarFolder">
+      <FOLDER NAME="utils" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-xalan.jar"
+  location="C:\Java\jboss-4.2.3.GA\lib\endorsed\xalan.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="services" model-entity="JarFolder"/>
+  </FOLDER>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="apache" model-entity="JarFolder">
+    <FOLDER NAME="xalan" model-entity="JarFolder">
+     <FOLDER NAME="client" model-entity="JarFolder"/>
+     <FOLDER NAME="extensions" model-entity="JarFolder"/>
+     <FOLDER NAME="lib" model-entity="JarFolder">
+      <FOLDER NAME="sql" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="processor" model-entity="JarFolder"/>
+     <FOLDER NAME="res" model-entity="JarFolder"/>
+     <FOLDER NAME="serialize" model-entity="JarFolder"/>
+     <FOLDER NAME="templates" model-entity="JarFolder"/>
+     <FOLDER NAME="trace" model-entity="JarFolder"/>
+     <FOLDER NAME="transformer" model-entity="JarFolder"/>
+     <FOLDER NAME="xslt" model-entity="JarFolder"/>
+     <FOLDER NAME="xsltc" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="xml" model-entity="JarFolder">
+     <FOLDER NAME="dtm" model-entity="JarFolder">
+      <FOLDER NAME="ref" model-entity="JarFolder">
+       <FOLDER NAME="dom2dtm" model-entity="JarFolder"/>
+       <FOLDER NAME="sax2dtm" model-entity="JarFolder"/>
+      </FOLDER>
+     </FOLDER>
+     <FOLDER NAME="res" model-entity="JarFolder"/>
+     <FOLDER NAME="serializer" model-entity="JarFolder"/>
+     <FOLDER NAME="utils" model-entity="JarFolder">
+      <FOLDER NAME="res" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+    <FOLDER NAME="xpath" model-entity="JarFolder">
+     <FOLDER NAME="axes" model-entity="JarFolder"/>
+     <FOLDER NAME="compiler" model-entity="JarFolder"/>
+     <FOLDER NAME="domapi" model-entity="JarFolder"/>
+     <FOLDER NAME="functions" model-entity="JarFolder"/>
+     <FOLDER NAME="jaxp" model-entity="JarFolder"/>
+     <FOLDER NAME="objects" model-entity="JarFolder"/>
+     <FOLDER NAME="operations" model-entity="JarFolder"/>
+     <FOLDER NAME="patterns" model-entity="JarFolder"/>
+     <FOLDER NAME="res" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-xercesImpl.jar"
+  location="C:\Java\jboss-4.2.3.GA\lib\endorsed\xercesImpl.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="services" model-entity="JarFolder"/>
+  </FOLDER>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="apache" model-entity="JarFolder">
+    <FOLDER NAME="html" model-entity="JarFolder">
+     <FOLDER NAME="dom" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="wml" model-entity="JarFolder">
+     <FOLDER NAME="dom" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="xerces" model-entity="JarFolder">
+     <FOLDER NAME="dom" model-entity="JarFolder">
+      <FOLDER NAME="events" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="dom3" model-entity="JarFolder">
+      <FOLDER NAME="as" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="impl" model-entity="JarFolder">
+      <FOLDER NAME="dtd" model-entity="JarFolder">
+       <FOLDER NAME="models" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="dv" model-entity="JarFolder">
+       <FOLDER NAME="dtd" model-entity="JarFolder"/>
+       <FOLDER NAME="util" model-entity="JarFolder"/>
+       <FOLDER NAME="xs" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="io" model-entity="JarFolder"/>
+      <FOLDER NAME="msg" model-entity="JarFolder"/>
+      <FOLDER NAME="validation" model-entity="JarFolder"/>
+      <FOLDER NAME="xpath" model-entity="JarFolder">
+       <FOLDER NAME="regex" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="xs" model-entity="JarFolder">
+       <FOLDER NAME="identity" model-entity="JarFolder"/>
+       <FOLDER NAME="models" model-entity="JarFolder"/>
+       <FOLDER NAME="opti" model-entity="JarFolder"/>
+       <FOLDER NAME="traversers" model-entity="JarFolder"/>
+       <FOLDER NAME="util" model-entity="JarFolder"/>
+      </FOLDER>
+     </FOLDER>
+     <FOLDER NAME="jaxp" model-entity="JarFolder">
+      <FOLDER NAME="datatype" model-entity="JarFolder"/>
+      <FOLDER NAME="validation" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="parsers" model-entity="JarFolder"/>
+     <FOLDER NAME="util" model-entity="JarFolder"/>
+     <FOLDER NAME="xinclude" model-entity="JarFolder"/>
+     <FOLDER NAME="xni" model-entity="JarFolder">
+      <FOLDER NAME="grammars" model-entity="JarFolder"/>
+      <FOLDER NAME="parser" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="xpointer" model-entity="JarFolder"/>
+     <FOLDER NAME="xs" model-entity="JarFolder">
+      <FOLDER NAME="datatypes" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+    <FOLDER NAME="xml" model-entity="JarFolder">
+     <FOLDER NAME="serialize" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+   <FOLDER NAME="w3c" model-entity="JarFolder">
+    <FOLDER NAME="dom" model-entity="JarFolder">
+     <FOLDER NAME="html" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-jaxb-api.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\lib\jaxb-api.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="xml" model-entity="JarFolder">
+    <FOLDER NAME="bind" model-entity="JarFolder">
+     <FOLDER NAME="annotation" model-entity="JarFolder">
+      <FOLDER NAME="adapters" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="attachment" model-entity="JarFolder"/>
+     <FOLDER NAME="helpers" model-entity="JarFolder"/>
+     <FOLDER NAME="util" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-axis.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\server\default\lib\axis.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="apache" model-entity="JarFolder">
+    <FOLDER NAME="axis" model-entity="JarFolder">
+     <FOLDER NAME="attachments" model-entity="JarFolder"/>
+     <FOLDER NAME="client" model-entity="JarFolder">
+      <FOLDER NAME="async" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="collections" model-entity="JarFolder"/>
+     <FOLDER NAME="components" model-entity="JarFolder">
+      <FOLDER NAME="compiler" model-entity="JarFolder"/>
+      <FOLDER NAME="encoding" model-entity="JarFolder"/>
+      <FOLDER NAME="image" model-entity="JarFolder"/>
+      <FOLDER NAME="jms" model-entity="JarFolder"/>
+      <FOLDER NAME="logger" model-entity="JarFolder"/>
+      <FOLDER NAME="net" model-entity="JarFolder"/>
+      <FOLDER NAME="script" model-entity="JarFolder"/>
+      <FOLDER NAME="threadpool" model-entity="JarFolder"/>
+      <FOLDER NAME="uuid" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="configuration" model-entity="JarFolder"/>
+     <FOLDER NAME="constants" model-entity="JarFolder"/>
+     <FOLDER NAME="deployment" model-entity="JarFolder">
+      <FOLDER NAME="wsdd" model-entity="JarFolder">
+       <FOLDER NAME="providers" model-entity="JarFolder"/>
+      </FOLDER>
+     </FOLDER>
+     <FOLDER NAME="description" model-entity="JarFolder"/>
+     <FOLDER NAME="encoding" model-entity="JarFolder">
+      <FOLDER NAME="ser" model-entity="JarFolder">
+       <FOLDER NAME="castor" model-entity="JarFolder"/>
+      </FOLDER>
+     </FOLDER>
+     <FOLDER NAME="enum" model-entity="JarFolder"/>
+     <FOLDER NAME="handlers" model-entity="JarFolder">
+      <FOLDER NAME="http" model-entity="JarFolder"/>
+      <FOLDER NAME="soap" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="holders" model-entity="JarFolder"/>
+     <FOLDER NAME="i18n" model-entity="JarFolder"/>
+     <FOLDER NAME="management" model-entity="JarFolder">
+      <FOLDER NAME="jmx" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="message" model-entity="JarFolder"/>
+     <FOLDER NAME="monitor" model-entity="JarFolder"/>
+     <FOLDER NAME="providers" model-entity="JarFolder">
+      <FOLDER NAME="java" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="schema" model-entity="JarFolder"/>
+     <FOLDER NAME="security" model-entity="JarFolder">
+      <FOLDER NAME="servlet" model-entity="JarFolder"/>
+      <FOLDER NAME="simple" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="server" model-entity="JarFolder"/>
+     <FOLDER NAME="session" model-entity="JarFolder"/>
+     <FOLDER NAME="soap" model-entity="JarFolder"/>
+     <FOLDER NAME="strategies" model-entity="JarFolder"/>
+     <FOLDER NAME="transport" model-entity="JarFolder">
+      <FOLDER NAME="http" model-entity="JarFolder"/>
+      <FOLDER NAME="java" model-entity="JarFolder"/>
+      <FOLDER NAME="jms" model-entity="JarFolder"/>
+      <FOLDER NAME="local" model-entity="JarFolder"/>
+      <FOLDER NAME="mail" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="types" model-entity="JarFolder"/>
+     <FOLDER NAME="utils" model-entity="JarFolder">
+      <FOLDER NAME="bytecode" model-entity="JarFolder"/>
+      <FOLDER NAME="cache" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="wsdl" model-entity="JarFolder">
+      <FOLDER NAME="fromJava" model-entity="JarFolder"/>
+      <FOLDER NAME="gen" model-entity="JarFolder"/>
+      <FOLDER NAME="symbolTable" model-entity="JarFolder"/>
+      <FOLDER NAME="toJava" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-commons-codec.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\server\default\lib\commons-codec.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="apache" model-entity="JarFolder">
+    <FOLDER NAME="commons" model-entity="JarFolder">
+     <FOLDER NAME="codec" model-entity="JarFolder">
+      <FOLDER NAME="binary" model-entity="JarFolder"/>
+      <FOLDER NAME="digest" model-entity="JarFolder"/>
+      <FOLDER NAME="language" model-entity="JarFolder"/>
+      <FOLDER NAME="net" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-commons-collections.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\server\default\lib\commons-collections.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="apache" model-entity="JarFolder">
+    <FOLDER NAME="commons" model-entity="JarFolder">
+     <FOLDER NAME="collections" model-entity="JarFolder">
+      <FOLDER NAME="bag" model-entity="JarFolder"/>
+      <FOLDER NAME="bidimap" model-entity="JarFolder"/>
+      <FOLDER NAME="buffer" model-entity="JarFolder"/>
+      <FOLDER NAME="collection" model-entity="JarFolder"/>
+      <FOLDER NAME="comparators" model-entity="JarFolder"/>
+      <FOLDER NAME="functors" model-entity="JarFolder"/>
+      <FOLDER NAME="iterators" model-entity="JarFolder"/>
+      <FOLDER NAME="keyvalue" model-entity="JarFolder"/>
+      <FOLDER NAME="list" model-entity="JarFolder"/>
+      <FOLDER NAME="map" model-entity="JarFolder"/>
+      <FOLDER NAME="set" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-commons-httpclient.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\server\default\lib\commons-httpclient.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="apache" model-entity="JarFolder">
+    <FOLDER NAME="commons" model-entity="JarFolder">
+     <FOLDER NAME="httpclient" model-entity="JarFolder">
+      <FOLDER NAME="auth" model-entity="JarFolder"/>
+      <FOLDER NAME="cookie" model-entity="JarFolder"/>
+      <FOLDER NAME="methods" model-entity="JarFolder">
+       <FOLDER NAME="multipart" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="params" model-entity="JarFolder"/>
+      <FOLDER NAME="protocol" model-entity="JarFolder"/>
+      <FOLDER NAME="util" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-commons-logging.jar-2"
+  location="C:\Java\jboss-4.2.3.GA\server\default\lib\commons-logging.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="apache" model-entity="JarFolder">
+    <FOLDER NAME="commons" model-entity="JarFolder">
+     <FOLDER NAME="logging" model-entity="JarFolder">
+      <FOLDER NAME="impl" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-jboss-jaxrpc.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\server\default\lib\jboss-jaxrpc.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="xml" model-entity="JarFolder">
+    <FOLDER NAME="rpc" model-entity="JarFolder">
+     <FOLDER NAME="encoding" model-entity="JarFolder"/>
+     <FOLDER NAME="handler" model-entity="JarFolder">
+      <FOLDER NAME="soap" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="holders" model-entity="JarFolder"/>
+     <FOLDER NAME="server" model-entity="JarFolder"/>
+     <FOLDER NAME="soap" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-jboss-jaxws-ext.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\server\default\lib\jboss-jaxws-ext.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="xml" model-entity="JarFolder">
+    <FOLDER NAME="ws" model-entity="JarFolder">
+     <FOLDER NAME="addressing" model-entity="JarFolder">
+      <FOLDER NAME="soap" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="handler" model-entity="JarFolder"/>
+     <FOLDER NAME="soap" model-entity="JarFolder"/>
+     <FOLDER NAME="spi" model-entity="JarFolder"/>
+     <FOLDER NAME="wsaddressing" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-jboss-jaxws.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\server\default\lib\jboss-jaxws.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="jws" model-entity="JarFolder">
+    <FOLDER NAME="soap" model-entity="JarFolder"/>
+   </FOLDER>
+   <FOLDER NAME="xml" model-entity="JarFolder">
+    <FOLDER NAME="ws" model-entity="JarFolder">
+     <FOLDER NAME="handler" model-entity="JarFolder">
+      <FOLDER NAME="soap" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="http" model-entity="JarFolder"/>
+     <FOLDER NAME="soap" model-entity="JarFolder"/>
+     <FOLDER NAME="spi" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="services" model-entity="JarFolder"/>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-jboss-saaj.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\server\default\lib\jboss-saaj.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="xml" model-entity="JarFolder">
+    <FOLDER NAME="soap" model-entity="JarFolder"/>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="services" model-entity="JarFolder"/>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-activation.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\activation.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="com" model-entity="JarFolder">
+   <FOLDER NAME="sun" model-entity="JarFolder">
+    <FOLDER NAME="activation" model-entity="JarFolder">
+     <FOLDER NAME="registries" model-entity="JarFolder"/>
+     <FOLDER NAME="viewers" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="activation" model-entity="JarFolder"/>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-antlr.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\antlr.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="antlr" model-entity="JarFolder">
+   <FOLDER NAME="actions" model-entity="JarFolder">
+    <FOLDER NAME="cpp" model-entity="JarFolder"/>
+    <FOLDER NAME="csharp" model-entity="JarFolder"/>
+    <FOLDER NAME="java" model-entity="JarFolder"/>
+    <FOLDER NAME="python" model-entity="JarFolder"/>
+   </FOLDER>
+   <FOLDER NAME="ASdebug" model-entity="JarFolder"/>
+   <FOLDER NAME="build" model-entity="JarFolder"/>
+   <FOLDER NAME="collections" model-entity="JarFolder">
+    <FOLDER NAME="impl" model-entity="JarFolder"/>
+   </FOLDER>
+   <FOLDER NAME="debug" model-entity="JarFolder">
+    <FOLDER NAME="misc" model-entity="JarFolder"/>
+   </FOLDER>
+   <FOLDER NAME="preprocessor" model-entity="JarFolder"/>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-axis.jar-2"
+  location="C:\Java\jboss-4.2.3.GA\client\axis.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="apache" model-entity="JarFolder">
+    <FOLDER NAME="axis" model-entity="JarFolder">
+     <FOLDER NAME="attachments" model-entity="JarFolder"/>
+     <FOLDER NAME="client" model-entity="JarFolder">
+      <FOLDER NAME="async" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="collections" model-entity="JarFolder"/>
+     <FOLDER NAME="components" model-entity="JarFolder">
+      <FOLDER NAME="compiler" model-entity="JarFolder"/>
+      <FOLDER NAME="encoding" model-entity="JarFolder"/>
+      <FOLDER NAME="image" model-entity="JarFolder"/>
+      <FOLDER NAME="jms" model-entity="JarFolder"/>
+      <FOLDER NAME="logger" model-entity="JarFolder"/>
+      <FOLDER NAME="net" model-entity="JarFolder"/>
+      <FOLDER NAME="script" model-entity="JarFolder"/>
+      <FOLDER NAME="threadpool" model-entity="JarFolder"/>
+      <FOLDER NAME="uuid" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="configuration" model-entity="JarFolder"/>
+     <FOLDER NAME="constants" model-entity="JarFolder"/>
+     <FOLDER NAME="deployment" model-entity="JarFolder">
+      <FOLDER NAME="wsdd" model-entity="JarFolder">
+       <FOLDER NAME="providers" model-entity="JarFolder"/>
+      </FOLDER>
+     </FOLDER>
+     <FOLDER NAME="description" model-entity="JarFolder"/>
+     <FOLDER NAME="encoding" model-entity="JarFolder">
+      <FOLDER NAME="ser" model-entity="JarFolder">
+       <FOLDER NAME="castor" model-entity="JarFolder"/>
+      </FOLDER>
+     </FOLDER>
+     <FOLDER NAME="enum" model-entity="JarFolder"/>
+     <FOLDER NAME="handlers" model-entity="JarFolder">
+      <FOLDER NAME="http" model-entity="JarFolder"/>
+      <FOLDER NAME="soap" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="holders" model-entity="JarFolder"/>
+     <FOLDER NAME="i18n" model-entity="JarFolder"/>
+     <FOLDER NAME="management" model-entity="JarFolder">
+      <FOLDER NAME="jmx" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="message" model-entity="JarFolder"/>
+     <FOLDER NAME="monitor" model-entity="JarFolder"/>
+     <FOLDER NAME="providers" model-entity="JarFolder">
+      <FOLDER NAME="java" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="schema" model-entity="JarFolder"/>
+     <FOLDER NAME="security" model-entity="JarFolder">
+      <FOLDER NAME="servlet" model-entity="JarFolder"/>
+      <FOLDER NAME="simple" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="server" model-entity="JarFolder"/>
+     <FOLDER NAME="session" model-entity="JarFolder"/>
+     <FOLDER NAME="soap" model-entity="JarFolder"/>
+     <FOLDER NAME="strategies" model-entity="JarFolder"/>
+     <FOLDER NAME="transport" model-entity="JarFolder">
+      <FOLDER NAME="http" model-entity="JarFolder"/>
+      <FOLDER NAME="java" model-entity="JarFolder"/>
+      <FOLDER NAME="jms" model-entity="JarFolder"/>
+      <FOLDER NAME="local" model-entity="JarFolder"/>
+      <FOLDER NAME="mail" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="types" model-entity="JarFolder"/>
+     <FOLDER NAME="utils" model-entity="JarFolder">
+      <FOLDER NAME="bytecode" model-entity="JarFolder"/>
+      <FOLDER NAME="cache" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="wsdl" model-entity="JarFolder">
+      <FOLDER NAME="fromJava" model-entity="JarFolder"/>
+      <FOLDER NAME="gen" model-entity="JarFolder"/>
+      <FOLDER NAME="symbolTable" model-entity="JarFolder"/>
+      <FOLDER NAME="toJava" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-commons-codec.jar-2"
+  location="C:\Java\jboss-4.2.3.GA\client\commons-codec.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="apache" model-entity="JarFolder">
+    <FOLDER NAME="commons" model-entity="JarFolder">
+     <FOLDER NAME="codec" model-entity="JarFolder">
+      <FOLDER NAME="binary" model-entity="JarFolder"/>
+      <FOLDER NAME="digest" model-entity="JarFolder"/>
+      <FOLDER NAME="language" model-entity="JarFolder"/>
+      <FOLDER NAME="net" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-commons-httpclient.jar-2"
+  location="C:\Java\jboss-4.2.3.GA\client\commons-httpclient.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="apache" model-entity="JarFolder">
+    <FOLDER NAME="commons" model-entity="JarFolder">
+     <FOLDER NAME="httpclient" model-entity="JarFolder">
+      <FOLDER NAME="auth" model-entity="JarFolder"/>
+      <FOLDER NAME="cookie" model-entity="JarFolder"/>
+      <FOLDER NAME="methods" model-entity="JarFolder">
+       <FOLDER NAME="multipart" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="params" model-entity="JarFolder"/>
+      <FOLDER NAME="protocol" model-entity="JarFolder"/>
+      <FOLDER NAME="util" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-commons-logging.jar-3"
+  location="C:\Java\jboss-4.2.3.GA\client\commons-logging.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="apache" model-entity="JarFolder">
+    <FOLDER NAME="commons" model-entity="JarFolder">
+     <FOLDER NAME="logging" model-entity="JarFolder">
+      <FOLDER NAME="impl" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-concurrent.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\concurrent.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="EDU" model-entity="JarFolder">
+   <FOLDER NAME="oswego" model-entity="JarFolder">
+    <FOLDER NAME="cs" model-entity="JarFolder">
+     <FOLDER NAME="dl" model-entity="JarFolder">
+      <FOLDER NAME="util" model-entity="JarFolder">
+       <FOLDER NAME="concurrent" model-entity="JarFolder">
+        <FOLDER NAME="misc" model-entity="JarFolder"/>
+       </FOLDER>
+      </FOLDER>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-ejb3-persistence.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\ejb3-persistence.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="persistence" model-entity="JarFolder">
+    <FOLDER NAME="spi" model-entity="JarFolder"/>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-getopt.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\getopt.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="gnu" model-entity="JarFolder">
+   <FOLDER NAME="getopt" model-entity="JarFolder"/>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-hibernate-annotations.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\hibernate-annotations.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="hibernate" model-entity="JarFolder">
+    <FOLDER NAME="annotations" model-entity="JarFolder"/>
+    <FOLDER NAME="cfg" model-entity="JarFolder">
+     <FOLDER NAME="annotations" model-entity="JarFolder">
+      <FOLDER NAME="reflection" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="search" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="ejb" model-entity="JarFolder"/>
+    <FOLDER NAME="mapping" model-entity="JarFolder"/>
+    <FOLDER NAME="type" model-entity="JarFolder"/>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-hibernate-commons-annotations.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\hibernate-commons-annotations.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="hibernate" model-entity="JarFolder">
+    <FOLDER NAME="annotations" model-entity="JarFolder">
+     <FOLDER NAME="common" model-entity="JarFolder">
+      <FOLDER NAME="annotationfactory" model-entity="JarFolder"/>
+      <FOLDER NAME="reflection" model-entity="JarFolder">
+       <FOLDER NAME="java" model-entity="JarFolder">
+        <FOLDER NAME="generics" model-entity="JarFolder"/>
+       </FOLDER>
+      </FOLDER>
+      <FOLDER NAME="util" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-hibernate-core.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\hibernate-core.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="maven" model-entity="JarFolder">
+    <FOLDER NAME="org.hibernate" model-entity="JarFolder">
+     <FOLDER NAME="hibernate-core" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="hibernate" model-entity="JarFolder">
+    <FOLDER NAME="action" model-entity="JarFolder"/>
+    <FOLDER NAME="bytecode" model-entity="JarFolder">
+     <FOLDER NAME="cglib" model-entity="JarFolder"/>
+     <FOLDER NAME="javassist" model-entity="JarFolder"/>
+     <FOLDER NAME="util" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="cache" model-entity="JarFolder">
+     <FOLDER NAME="access" model-entity="JarFolder"/>
+     <FOLDER NAME="entry" model-entity="JarFolder"/>
+     <FOLDER NAME="impl" model-entity="JarFolder">
+      <FOLDER NAME="bridge" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+    <FOLDER NAME="cfg" model-entity="JarFolder"/>
+    <FOLDER NAME="classic" model-entity="JarFolder"/>
+    <FOLDER NAME="collection" model-entity="JarFolder"/>
+    <FOLDER NAME="connection" model-entity="JarFolder"/>
+    <FOLDER NAME="context" model-entity="JarFolder"/>
+    <FOLDER NAME="criterion" model-entity="JarFolder"/>
+    <FOLDER NAME="dialect" model-entity="JarFolder">
+     <FOLDER NAME="function" model-entity="JarFolder"/>
+     <FOLDER NAME="lock" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="engine" model-entity="JarFolder">
+     <FOLDER NAME="loading" model-entity="JarFolder"/>
+     <FOLDER NAME="query" model-entity="JarFolder">
+      <FOLDER NAME="sql" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="transaction" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="event" model-entity="JarFolder">
+     <FOLDER NAME="def" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="exception" model-entity="JarFolder"/>
+    <FOLDER NAME="hql" model-entity="JarFolder">
+     <FOLDER NAME="antlr" model-entity="JarFolder"/>
+     <FOLDER NAME="ast" model-entity="JarFolder">
+      <FOLDER NAME="exec" model-entity="JarFolder"/>
+      <FOLDER NAME="tree" model-entity="JarFolder"/>
+      <FOLDER NAME="util" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="classic" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="id" model-entity="JarFolder">
+     <FOLDER NAME="enhanced" model-entity="JarFolder"/>
+     <FOLDER NAME="insert" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="impl" model-entity="JarFolder"/>
+    <FOLDER NAME="intercept" model-entity="JarFolder">
+     <FOLDER NAME="cglib" model-entity="JarFolder"/>
+     <FOLDER NAME="javassist" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="jdbc" model-entity="JarFolder">
+     <FOLDER NAME="util" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="loader" model-entity="JarFolder">
+     <FOLDER NAME="collection" model-entity="JarFolder"/>
+     <FOLDER NAME="criteria" model-entity="JarFolder"/>
+     <FOLDER NAME="custom" model-entity="JarFolder">
+      <FOLDER NAME="sql" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="entity" model-entity="JarFolder"/>
+     <FOLDER NAME="hql" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="lob" model-entity="JarFolder"/>
+    <FOLDER NAME="mapping" model-entity="JarFolder"/>
+    <FOLDER NAME="metadata" model-entity="JarFolder"/>
+    <FOLDER NAME="param" model-entity="JarFolder"/>
+    <FOLDER NAME="persister" model-entity="JarFolder">
+     <FOLDER NAME="collection" model-entity="JarFolder"/>
+     <FOLDER NAME="entity" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="pretty" model-entity="JarFolder"/>
+    <FOLDER NAME="property" model-entity="JarFolder"/>
+    <FOLDER NAME="proxy" model-entity="JarFolder">
+     <FOLDER NAME="dom4j" model-entity="JarFolder"/>
+     <FOLDER NAME="map" model-entity="JarFolder"/>
+     <FOLDER NAME="pojo" model-entity="JarFolder">
+      <FOLDER NAME="cglib" model-entity="JarFolder"/>
+      <FOLDER NAME="javassist" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+    <FOLDER NAME="secure" model-entity="JarFolder"/>
+    <FOLDER NAME="sql" model-entity="JarFolder"/>
+    <FOLDER NAME="stat" model-entity="JarFolder"/>
+    <FOLDER NAME="tool" model-entity="JarFolder">
+     <FOLDER NAME="hbm2ddl" model-entity="JarFolder"/>
+     <FOLDER NAME="instrument" model-entity="JarFolder">
+      <FOLDER NAME="cglib" model-entity="JarFolder"/>
+      <FOLDER NAME="javassist" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+    <FOLDER NAME="transaction" model-entity="JarFolder"/>
+    <FOLDER NAME="transform" model-entity="JarFolder"/>
+    <FOLDER NAME="tuple" model-entity="JarFolder">
+     <FOLDER NAME="component" model-entity="JarFolder"/>
+     <FOLDER NAME="entity" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="type" model-entity="JarFolder"/>
+    <FOLDER NAME="usertype" model-entity="JarFolder"/>
+    <FOLDER NAME="util" model-entity="JarFolder"/>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-hibernate-entitymanager.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\hibernate-entitymanager.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="services" model-entity="JarFolder"/>
+  </FOLDER>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="hibernate" model-entity="JarFolder">
+    <FOLDER NAME="ejb" model-entity="JarFolder">
+     <FOLDER NAME="connection" model-entity="JarFolder"/>
+     <FOLDER NAME="event" model-entity="JarFolder"/>
+     <FOLDER NAME="instrument" model-entity="JarFolder"/>
+     <FOLDER NAME="packaging" model-entity="JarFolder"/>
+     <FOLDER NAME="transaction" model-entity="JarFolder"/>
+     <FOLDER NAME="util" model-entity="JarFolder"/>
+    </FOLDER>
+    <FOLDER NAME="engine" model-entity="JarFolder"/>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-hibernate-search.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\hibernate-search.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="maven" model-entity="JarFolder">
+    <FOLDER NAME="org.hibernate" model-entity="JarFolder">
+     <FOLDER NAME="hibernate-search" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="hibernate" model-entity="JarFolder">
+    <FOLDER NAME="search" model-entity="JarFolder">
+     <FOLDER NAME="analyzer" model-entity="JarFolder"/>
+     <FOLDER NAME="annotations" model-entity="JarFolder"/>
+     <FOLDER NAME="backend" model-entity="JarFolder">
+      <FOLDER NAME="configuration" model-entity="JarFolder"/>
+      <FOLDER NAME="impl" model-entity="JarFolder">
+       <FOLDER NAME="jms" model-entity="JarFolder"/>
+       <FOLDER NAME="lucene" model-entity="JarFolder">
+        <FOLDER NAME="works" model-entity="JarFolder"/>
+       </FOLDER>
+      </FOLDER>
+     </FOLDER>
+     <FOLDER NAME="bridge" model-entity="JarFolder">
+      <FOLDER NAME="builtin" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="cfg" model-entity="JarFolder"/>
+     <FOLDER NAME="engine" model-entity="JarFolder"/>
+     <FOLDER NAME="event" model-entity="JarFolder"/>
+     <FOLDER NAME="filter" model-entity="JarFolder"/>
+     <FOLDER NAME="impl" model-entity="JarFolder"/>
+     <FOLDER NAME="jpa" model-entity="JarFolder">
+      <FOLDER NAME="impl" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="query" model-entity="JarFolder"/>
+     <FOLDER NAME="reader" model-entity="JarFolder"/>
+     <FOLDER NAME="store" model-entity="JarFolder">
+      <FOLDER NAME="optimization" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="util" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-hibernate-validator.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\hibernate-validator.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="hibernate" model-entity="JarFolder">
+    <FOLDER NAME="validator" model-entity="JarFolder">
+     <FOLDER NAME="event" model-entity="JarFolder"/>
+     <FOLDER NAME="interpolator" model-entity="JarFolder"/>
+     <FOLDER NAME="resources" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-javassist.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\javassist.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javassist" model-entity="JarFolder">
+   <FOLDER NAME="bytecode" model-entity="JarFolder">
+    <FOLDER NAME="analysis" model-entity="JarFolder"/>
+    <FOLDER NAME="annotation" model-entity="JarFolder"/>
+    <FOLDER NAME="stackmap" model-entity="JarFolder"/>
+   </FOLDER>
+   <FOLDER NAME="compiler" model-entity="JarFolder">
+    <FOLDER NAME="ast" model-entity="JarFolder"/>
+   </FOLDER>
+   <FOLDER NAME="convert" model-entity="JarFolder"/>
+   <FOLDER NAME="expr" model-entity="JarFolder"/>
+   <FOLDER NAME="runtime" model-entity="JarFolder"/>
+   <FOLDER NAME="scopedpool" model-entity="JarFolder"/>
+   <FOLDER NAME="tools" model-entity="JarFolder">
+    <FOLDER NAME="reflect" model-entity="JarFolder"/>
+    <FOLDER NAME="rmi" model-entity="JarFolder"/>
+    <FOLDER NAME="web" model-entity="JarFolder"/>
+   </FOLDER>
+   <FOLDER NAME="util" model-entity="JarFolder">
+    <FOLDER NAME="proxy" model-entity="JarFolder"/>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-jaxb-api.jar-2"
+  location="C:\Java\jboss-4.2.3.GA\client\jaxb-api.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="xml" model-entity="JarFolder">
+    <FOLDER NAME="bind" model-entity="JarFolder">
+     <FOLDER NAME="annotation" model-entity="JarFolder">
+      <FOLDER NAME="adapters" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="attachment" model-entity="JarFolder"/>
+     <FOLDER NAME="helpers" model-entity="JarFolder"/>
+     <FOLDER NAME="util" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-jaxb-impl.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\jaxb-impl.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="com" model-entity="JarFolder">
+   <FOLDER NAME="sun" model-entity="JarFolder">
+    <FOLDER NAME="istack" model-entity="JarFolder"/>
+    <FOLDER NAME="xml" model-entity="JarFolder">
+     <FOLDER NAME="bind" model-entity="JarFolder">
+      <FOLDER NAME="annotation" model-entity="JarFolder"/>
+      <FOLDER NAME="api" model-entity="JarFolder">
+       <FOLDER NAME="impl" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="marshaller" model-entity="JarFolder"/>
+      <FOLDER NAME="unmarshaller" model-entity="JarFolder"/>
+      <FOLDER NAME="util" model-entity="JarFolder"/>
+      <FOLDER NAME="v2" model-entity="JarFolder">
+       <FOLDER NAME="bytecode" model-entity="JarFolder"/>
+       <FOLDER NAME="model" model-entity="JarFolder">
+        <FOLDER NAME="annotation" model-entity="JarFolder"/>
+        <FOLDER NAME="core" model-entity="JarFolder"/>
+        <FOLDER NAME="impl" model-entity="JarFolder"/>
+        <FOLDER NAME="nav" model-entity="JarFolder"/>
+        <FOLDER NAME="runtime" model-entity="JarFolder"/>
+       </FOLDER>
+       <FOLDER NAME="runtime" model-entity="JarFolder">
+        <FOLDER NAME="output" model-entity="JarFolder"/>
+        <FOLDER NAME="property" model-entity="JarFolder"/>
+        <FOLDER NAME="reflect" model-entity="JarFolder">
+         <FOLDER NAME="opt" model-entity="JarFolder"/>
+        </FOLDER>
+        <FOLDER NAME="unmarshaller" model-entity="JarFolder"/>
+       </FOLDER>
+       <FOLDER NAME="schemagen" model-entity="JarFolder">
+        <FOLDER NAME="episode" model-entity="JarFolder"/>
+        <FOLDER NAME="xmlschema" model-entity="JarFolder"/>
+       </FOLDER>
+       <FOLDER NAME="util" model-entity="JarFolder"/>
+      </FOLDER>
+     </FOLDER>
+     <FOLDER NAME="txw2" model-entity="JarFolder">
+      <FOLDER NAME="annotation" model-entity="JarFolder"/>
+      <FOLDER NAME="output" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="services" model-entity="JarFolder"/>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-jboss-annotations-ejb3.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\jboss-annotations-ejb3.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="jboss" model-entity="JarFolder">
+    <FOLDER NAME="annotation" model-entity="JarFolder">
+     <FOLDER NAME="ejb" model-entity="JarFolder">
+      <FOLDER NAME="cache" model-entity="JarFolder">
+       <FOLDER NAME="simple" model-entity="JarFolder"/>
+       <FOLDER NAME="tree" model-entity="JarFolder"/>
+      </FOLDER>
+     </FOLDER>
+     <FOLDER NAME="internal" model-entity="JarFolder"/>
+     <FOLDER NAME="security" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-jboss-ejb3x.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\jboss-ejb3x.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="annotation" model-entity="JarFolder">
+    <FOLDER NAME="security" model-entity="JarFolder"/>
+   </FOLDER>
+   <FOLDER NAME="ejb" model-entity="JarFolder"/>
+   <FOLDER NAME="interceptor" model-entity="JarFolder"/>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-jboss-j2ee.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\jboss-j2ee.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="ejb" model-entity="JarFolder">
+    <FOLDER NAME="spi" model-entity="JarFolder"/>
+   </FOLDER>
+   <FOLDER NAME="enterprise" model-entity="JarFolder">
+    <FOLDER NAME="deploy" model-entity="JarFolder">
+     <FOLDER NAME="model" model-entity="JarFolder">
+      <FOLDER NAME="exceptions" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="shared" model-entity="JarFolder">
+      <FOLDER NAME="factories" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="spi" model-entity="JarFolder">
+      <FOLDER NAME="exceptions" model-entity="JarFolder"/>
+      <FOLDER NAME="factories" model-entity="JarFolder"/>
+      <FOLDER NAME="status" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+   <FOLDER NAME="jms" model-entity="JarFolder"/>
+   <FOLDER NAME="management" model-entity="JarFolder">
+    <FOLDER NAME="loading" model-entity="JarFolder"/>
+    <FOLDER NAME="modelmbean" model-entity="JarFolder"/>
+    <FOLDER NAME="monitor" model-entity="JarFolder"/>
+    <FOLDER NAME="openmbean" model-entity="JarFolder"/>
+    <FOLDER NAME="relation" model-entity="JarFolder"/>
+    <FOLDER NAME="timer" model-entity="JarFolder"/>
+   </FOLDER>
+   <FOLDER NAME="resource" model-entity="JarFolder">
+    <FOLDER NAME="cci" model-entity="JarFolder"/>
+    <FOLDER NAME="spi" model-entity="JarFolder">
+     <FOLDER NAME="endpoint" model-entity="JarFolder"/>
+     <FOLDER NAME="security" model-entity="JarFolder"/>
+     <FOLDER NAME="work" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+   <FOLDER NAME="security" model-entity="JarFolder">
+    <FOLDER NAME="jacc" model-entity="JarFolder"/>
+   </FOLDER>
+   <FOLDER NAME="sql" model-entity="JarFolder"/>
+   <FOLDER NAME="transaction" model-entity="JarFolder">
+    <FOLDER NAME="xa" model-entity="JarFolder"/>
+   </FOLDER>
+   <FOLDER NAME="xml" model-entity="JarFolder">
+    <FOLDER NAME="registry" model-entity="JarFolder">
+     <FOLDER NAME="infomodel" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-jboss-jaxrpc.jar-2"
+  location="C:\Java\jboss-4.2.3.GA\client\jboss-jaxrpc.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="xml" model-entity="JarFolder">
+    <FOLDER NAME="rpc" model-entity="JarFolder">
+     <FOLDER NAME="encoding" model-entity="JarFolder"/>
+     <FOLDER NAME="handler" model-entity="JarFolder">
+      <FOLDER NAME="soap" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="holders" model-entity="JarFolder"/>
+     <FOLDER NAME="server" model-entity="JarFolder"/>
+     <FOLDER NAME="soap" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-jboss-jaxws-ext.jar-2"
+  location="C:\Java\jboss-4.2.3.GA\client\jboss-jaxws-ext.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="xml" model-entity="JarFolder">
+    <FOLDER NAME="ws" model-entity="JarFolder">
+     <FOLDER NAME="addressing" model-entity="JarFolder">
+      <FOLDER NAME="soap" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="handler" model-entity="JarFolder"/>
+     <FOLDER NAME="soap" model-entity="JarFolder"/>
+     <FOLDER NAME="spi" model-entity="JarFolder"/>
+     <FOLDER NAME="wsaddressing" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-jboss-jaxws.jar-2"
+  location="C:\Java\jboss-4.2.3.GA\client\jboss-jaxws.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="jws" model-entity="JarFolder">
+    <FOLDER NAME="soap" model-entity="JarFolder"/>
+   </FOLDER>
+   <FOLDER NAME="xml" model-entity="JarFolder">
+    <FOLDER NAME="ws" model-entity="JarFolder">
+     <FOLDER NAME="handler" model-entity="JarFolder">
+      <FOLDER NAME="soap" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="http" model-entity="JarFolder"/>
+     <FOLDER NAME="soap" model-entity="JarFolder"/>
+     <FOLDER NAME="spi" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="services" model-entity="JarFolder"/>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-jboss-remoting.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\jboss-remoting.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="jboss" model-entity="JarFolder">
+    <FOLDER NAME="remoting" model-entity="JarFolder">
+     <FOLDER NAME="callback" model-entity="JarFolder"/>
+     <FOLDER NAME="detection" model-entity="JarFolder">
+      <FOLDER NAME="jndi" model-entity="JarFolder"/>
+      <FOLDER NAME="multicast" model-entity="JarFolder"/>
+      <FOLDER NAME="util" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="ident" model-entity="JarFolder"/>
+     <FOLDER NAME="invocation" model-entity="JarFolder"/>
+     <FOLDER NAME="loading" model-entity="JarFolder"/>
+     <FOLDER NAME="marshal" model-entity="JarFolder">
+      <FOLDER NAME="compress" model-entity="JarFolder"/>
+      <FOLDER NAME="encryption" model-entity="JarFolder"/>
+      <FOLDER NAME="http" model-entity="JarFolder"/>
+      <FOLDER NAME="rmi" model-entity="JarFolder"/>
+      <FOLDER NAME="serializable" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="marshall" model-entity="JarFolder">
+      <FOLDER NAME="encryption" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="network" model-entity="JarFolder">
+      <FOLDER NAME="filter" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="samples" model-entity="JarFolder">
+      <FOLDER NAME="callback" model-entity="JarFolder">
+       <FOLDER NAME="acknowledgement" model-entity="JarFolder"/>
+       <FOLDER NAME="statistics" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="chat" model-entity="JarFolder">
+       <FOLDER NAME="client" model-entity="JarFolder"/>
+       <FOLDER NAME="exceptions" model-entity="JarFolder"/>
+       <FOLDER NAME="server" model-entity="JarFolder"/>
+       <FOLDER NAME="utility" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="config" model-entity="JarFolder">
+       <FOLDER NAME="factories" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="detection" model-entity="JarFolder">
+       <FOLDER NAME="jndi" model-entity="JarFolder">
+        <FOLDER NAME="ssl" model-entity="JarFolder"/>
+       </FOLDER>
+       <FOLDER NAME="multicast" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="http" model-entity="JarFolder"/>
+      <FOLDER NAME="multiplex" model-entity="JarFolder">
+       <FOLDER NAME="invoker" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="oneway" model-entity="JarFolder"/>
+      <FOLDER NAME="serialization" model-entity="JarFolder"/>
+      <FOLDER NAME="simple" model-entity="JarFolder"/>
+      <FOLDER NAME="stream" model-entity="JarFolder"/>
+      <FOLDER NAME="transporter" model-entity="JarFolder">
+       <FOLDER NAME="basic" model-entity="JarFolder">
+        <FOLDER NAME="client" model-entity="JarFolder"/>
+        <FOLDER NAME="server" model-entity="JarFolder"/>
+       </FOLDER>
+       <FOLDER NAME="clustered" model-entity="JarFolder">
+        <FOLDER NAME="client" model-entity="JarFolder"/>
+        <FOLDER NAME="server" model-entity="JarFolder"/>
+       </FOLDER>
+       <FOLDER NAME="complex" model-entity="JarFolder">
+        <FOLDER NAME="client" model-entity="JarFolder"/>
+        <FOLDER NAME="server" model-entity="JarFolder"/>
+       </FOLDER>
+       <FOLDER NAME="custom" model-entity="JarFolder">
+        <FOLDER NAME="client" model-entity="JarFolder"/>
+        <FOLDER NAME="server" model-entity="JarFolder"/>
+       </FOLDER>
+       <FOLDER NAME="multiple" model-entity="JarFolder">
+        <FOLDER NAME="client" model-entity="JarFolder"/>
+        <FOLDER NAME="server" model-entity="JarFolder"/>
+       </FOLDER>
+       <FOLDER NAME="proxy" model-entity="JarFolder">
+        <FOLDER NAME="client" model-entity="JarFolder"/>
+        <FOLDER NAME="server" model-entity="JarFolder"/>
+       </FOLDER>
+       <FOLDER NAME="serialization" model-entity="JarFolder">
+        <FOLDER NAME="client" model-entity="JarFolder"/>
+        <FOLDER NAME="server" model-entity="JarFolder"/>
+       </FOLDER>
+       <FOLDER NAME="simple" model-entity="JarFolder"/>
+      </FOLDER>
+     </FOLDER>
+     <FOLDER NAME="security" model-entity="JarFolder"/>
+     <FOLDER NAME="serialization" model-entity="JarFolder">
+      <FOLDER NAME="impl" model-entity="JarFolder">
+       <FOLDER NAME="java" model-entity="JarFolder"/>
+       <FOLDER NAME="jboss" model-entity="JarFolder"/>
+      </FOLDER>
+     </FOLDER>
+     <FOLDER NAME="socketfactory" model-entity="JarFolder"/>
+     <FOLDER NAME="stream" model-entity="JarFolder"/>
+     <FOLDER NAME="transport" model-entity="JarFolder">
+      <FOLDER NAME="bisocket" model-entity="JarFolder"/>
+      <FOLDER NAME="coyote" model-entity="JarFolder">
+       <FOLDER NAME="ssl" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="http" model-entity="JarFolder">
+       <FOLDER NAME="ssl" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="https" model-entity="JarFolder"/>
+      <FOLDER NAME="local" model-entity="JarFolder"/>
+      <FOLDER NAME="multiplex" model-entity="JarFolder">
+       <FOLDER NAME="utility" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="rmi" model-entity="JarFolder"/>
+      <FOLDER NAME="servlet" model-entity="JarFolder">
+       <FOLDER NAME="web" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="socket" model-entity="JarFolder"/>
+      <FOLDER NAME="sslbisocket" model-entity="JarFolder"/>
+      <FOLDER NAME="sslmultiplex" model-entity="JarFolder"/>
+      <FOLDER NAME="sslrmi" model-entity="JarFolder"/>
+      <FOLDER NAME="sslservlet" model-entity="JarFolder"/>
+      <FOLDER NAME="sslsocket" model-entity="JarFolder"/>
+      <FOLDER NAME="web" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="transporter" model-entity="JarFolder"/>
+     <FOLDER NAME="util" model-entity="JarFolder">
+      <FOLDER NAME="socket" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-jboss-saaj.jar-2"
+  location="C:\Java\jboss-4.2.3.GA\client\jboss-saaj.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="xml" model-entity="JarFolder">
+    <FOLDER NAME="soap" model-entity="JarFolder"/>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="services" model-entity="JarFolder"/>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-jboss-serialization.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\jboss-serialization.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="jboss" model-entity="JarFolder">
+    <FOLDER NAME="serial" model-entity="JarFolder">
+     <FOLDER NAME="classmetamodel" model-entity="JarFolder"/>
+     <FOLDER NAME="exception" model-entity="JarFolder"/>
+     <FOLDER NAME="finalcontainers" model-entity="JarFolder"/>
+     <FOLDER NAME="io" model-entity="JarFolder"/>
+     <FOLDER NAME="objectmetamodel" model-entity="JarFolder">
+      <FOLDER NAME="safecloning" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="persister" model-entity="JarFolder"/>
+     <FOLDER NAME="references" model-entity="JarFolder"/>
+     <FOLDER NAME="util" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-jboss-xml-binding.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\jboss-xml-binding.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="maven" model-entity="JarFolder">
+    <FOLDER NAME="org.jboss" model-entity="JarFolder">
+     <FOLDER NAME="jbossxb" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="jboss" model-entity="JarFolder">
+    <FOLDER NAME="xb" model-entity="JarFolder">
+     <FOLDER NAME="binding" model-entity="JarFolder">
+      <FOLDER NAME="group" model-entity="JarFolder"/>
+      <FOLDER NAME="introspection" model-entity="JarFolder"/>
+      <FOLDER NAME="metadata" model-entity="JarFolder">
+       <FOLDER NAME="unmarshalling" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="parser" model-entity="JarFolder">
+       <FOLDER NAME="sax" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="sunday" model-entity="JarFolder">
+       <FOLDER NAME="marshalling" model-entity="JarFolder"/>
+       <FOLDER NAME="unmarshalling" model-entity="JarFolder">
+        <FOLDER NAME="impl" model-entity="JarFolder">
+         <FOLDER NAME="runtime" model-entity="JarFolder"/>
+        </FOLDER>
+       </FOLDER>
+       <FOLDER NAME="xop" model-entity="JarFolder"/>
+      </FOLDER>
+     </FOLDER>
+     <FOLDER NAME="util" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-jbossws-common.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\jbossws-common.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="jboss" model-entity="JarFolder">
+    <FOLDER NAME="ws" model-entity="JarFolder">
+     <FOLDER NAME="tools" model-entity="JarFolder">
+      <FOLDER NAME="ant" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+    <FOLDER NAME="wsf" model-entity="JarFolder">
+     <FOLDER NAME="common" model-entity="JarFolder">
+      <FOLDER NAME="logging" model-entity="JarFolder"/>
+      <FOLDER NAME="management" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="test" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-jbossws-framework.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\jbossws-framework.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="jboss" model-entity="JarFolder">
+    <FOLDER NAME="wsf" model-entity="JarFolder">
+     <FOLDER NAME="framework" model-entity="JarFolder">
+      <FOLDER NAME="deployment" model-entity="JarFolder"/>
+      <FOLDER NAME="http" model-entity="JarFolder"/>
+      <FOLDER NAME="invocation" model-entity="JarFolder"/>
+      <FOLDER NAME="management" model-entity="JarFolder">
+       <FOLDER NAME="recording" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="serviceref" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-jbossws-jboss42.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\jbossws-jboss42.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder">
+   <FOLDER NAME="services" model-entity="JarFolder"/>
+  </FOLDER>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="jboss" model-entity="JarFolder">
+    <FOLDER NAME="wsf" model-entity="JarFolder">
+     <FOLDER NAME="container" model-entity="JarFolder">
+      <FOLDER NAME="jboss42" model-entity="JarFolder">
+       <FOLDER NAME="serviceref" model-entity="JarFolder"/>
+      </FOLDER>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-jbossws-spi.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\jbossws-spi.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="jboss" model-entity="JarFolder">
+    <FOLDER NAME="wsf" model-entity="JarFolder">
+     <FOLDER NAME="spi" model-entity="JarFolder">
+      <FOLDER NAME="annotation" model-entity="JarFolder"/>
+      <FOLDER NAME="binding" model-entity="JarFolder"/>
+      <FOLDER NAME="deployment" model-entity="JarFolder">
+       <FOLDER NAME="integration" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="http" model-entity="JarFolder"/>
+      <FOLDER NAME="invocation" model-entity="JarFolder">
+       <FOLDER NAME="integration" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="management" model-entity="JarFolder">
+       <FOLDER NAME="recording" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="metadata" model-entity="JarFolder">
+       <FOLDER NAME="j2ee" model-entity="JarFolder">
+        <FOLDER NAME="serviceref" model-entity="JarFolder"/>
+       </FOLDER>
+       <FOLDER NAME="webservices" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="serviceref" model-entity="JarFolder"/>
+      <FOLDER NAME="tools" model-entity="JarFolder">
+       <FOLDER NAME="ant" model-entity="JarFolder"/>
+       <FOLDER NAME="cmd" model-entity="JarFolder"/>
+      </FOLDER>
+      <FOLDER NAME="util" model-entity="JarFolder"/>
+     </FOLDER>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-log4j.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\log4j.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+  <FOLDER NAME="org" model-entity="JarFolder">
+   <FOLDER NAME="apache" model-entity="JarFolder">
+    <FOLDER NAME="log4j" model-entity="JarFolder">
+     <FOLDER NAME="chainsaw" model-entity="JarFolder"/>
+     <FOLDER NAME="config" model-entity="JarFolder"/>
+     <FOLDER NAME="helpers" model-entity="JarFolder"/>
+     <FOLDER NAME="jdbc" model-entity="JarFolder"/>
+     <FOLDER NAME="lf5" model-entity="JarFolder">
+      <FOLDER NAME="config" model-entity="JarFolder"/>
+      <FOLDER NAME="util" model-entity="JarFolder"/>
+      <FOLDER NAME="viewer" model-entity="JarFolder">
+       <FOLDER NAME="categoryexplorer" model-entity="JarFolder"/>
+       <FOLDER NAME="configure" model-entity="JarFolder"/>
+       <FOLDER NAME="images" model-entity="JarFolder"/>
+      </FOLDER>
+     </FOLDER>
+     <FOLDER NAME="net" model-entity="JarFolder"/>
+     <FOLDER NAME="nt" model-entity="JarFolder"/>
+     <FOLDER NAME="or" model-entity="JarFolder">
+      <FOLDER NAME="jms" model-entity="JarFolder"/>
+      <FOLDER NAME="sax" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="spi" model-entity="JarFolder"/>
+     <FOLDER NAME="varia" model-entity="JarFolder"/>
+     <FOLDER NAME="xml" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+ </file-system>
+ <file-system NAME="lib-mail.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\mail.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="com" model-entity="JarFolder">
+   <FOLDER NAME="sun" model-entity="JarFolder">
+    <FOLDER NAME="mail" model-entity="JarFolder">
+     <FOLDER NAME="handlers" model-entity="JarFolder"/>
+     <FOLDER NAME="iap" model-entity="JarFolder"/>
+     <FOLDER NAME="imap" model-entity="JarFolder">
+      <FOLDER NAME="protocol" model-entity="JarFolder"/>
+     </FOLDER>
+     <FOLDER NAME="pop3" model-entity="JarFolder"/>
+     <FOLDER NAME="smtp" model-entity="JarFolder"/>
+     <FOLDER NAME="util" model-entity="JarFolder"/>
+    </FOLDER>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="mail" model-entity="JarFolder">
+    <FOLDER NAME="event" model-entity="JarFolder"/>
+    <FOLDER NAME="internet" model-entity="JarFolder"/>
+    <FOLDER NAME="search" model-entity="JarFolder"/>
+    <FOLDER NAME="util" model-entity="JarFolder"/>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-servlet-api.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\servlet-api.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="javax" model-entity="JarFolder">
+   <FOLDER NAME="servlet" model-entity="JarFolder">
+    <FOLDER NAME="http" model-entity="JarFolder"/>
+    <FOLDER NAME="jsp" model-entity="JarFolder"/>
+    <FOLDER NAME="resources" model-entity="JarFolder"/>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
+ <file-system NAME="lib-trove.jar-1"
+  location="C:\Java\jboss-4.2.3.GA\client\trove.jar" model-entity="FileSystemJar">
+  <FOLDER NAME="gnu" model-entity="JarFolder">
+   <FOLDER NAME="trove" model-entity="JarFolder">
+    <FOLDER NAME="benchmark" model-entity="JarFolder"/>
+    <FOLDER NAME="decorator" model-entity="JarFolder"/>
+   </FOLDER>
+  </FOLDER>
+  <FOLDER NAME="META-INF" model-entity="JarFolder"/>
+ </file-system>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>
