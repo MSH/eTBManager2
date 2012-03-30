@@ -46,8 +46,10 @@
 				#{messages['manag.ind.interim.starttreat']}
 			</th>
 			<th colspan="3">
-				<!-- #{messages['manag.ind.interim.title1']} -->
-				#{messages['manag.ind.interim.title1_part1']} #{indicatorFilters.interimMonths} #{messages['manag.ind.interim.title1_part2']}
+				<!-- #{messages['manag.ind.interim.title1_part1']} #{indicatorFilters.interimMonths} #{messages['manag.ind.interim.title1_part2']}-->
+				<h:outputFormat value="#{messages['manag.ind.interim.title1']}" >
+      				<f:param value="#{indicatorFilters.interimMonths}"/>
+				</h:outputFormat>
 			</th>
 			<th colspan="2">
 				#{messages['manag.ind.interim.title2']}
