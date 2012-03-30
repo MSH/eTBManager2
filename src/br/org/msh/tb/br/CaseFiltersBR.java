@@ -8,6 +8,7 @@ import org.msh.tb.cases.CaseFilters;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.PatientType;
 
 @Name("caseFiltersBR")
@@ -16,34 +17,34 @@ public class CaseFiltersBR {
 	
 	@In(create=true) CaseFilters caseFilters;
 
-	private FieldValue resistanceType;
+	private DrugResistanceType drugResistanceType;
 	
 	private FieldValue schemaChangeType;
 
 	private FieldValue outcomeRegimenChanged;
 
-	private FieldValue outcomeResistanceType;
+	private DrugResistanceType outcomeResistanceType;
 
 	
 	public void clear() {
-		resistanceType = null;
+		drugResistanceType = null;
 		schemaChangeType = null;
 		outcomeRegimenChanged = null;
 		outcomeResistanceType = null;
 	}
 
 	/**
-	 * @return the resistanceType
+	 * @return the drugResistanceType
 	 */
-	public FieldValue getResistanceType() {
-		return (caseFilters.getClassification() == CaseClassification.DRTB? resistanceType: null);
+	public DrugResistanceType getDrugResistanceType() {
+		return this.drugResistanceType;
 	}
 
 	/**
-	 * @param resistanceType the resistanceType to set
+	 * @param drugResistanceType the drugResistanceType to set
 	 */
-	public void setResistanceType(FieldValue resistanceType) {
-		this.resistanceType = resistanceType;
+	public void setDrugResistanceType(DrugResistanceType drugResistanceType) {
+		this.drugResistanceType = drugResistanceType;
 	}
 
 	/**
@@ -75,16 +76,16 @@ public class CaseFiltersBR {
 	}
 
 	/**
-	 * @return the outcomeResistanceType
-	 */
-	public FieldValue getOutcomeResistanceType() {
+	* @return the outcomeResistanceType
+	*/
+	public DrugResistanceType getOutcomeResistanceType() {
 		return (caseFilters.getCaseState() == CaseState.MDR_CASE? outcomeResistanceType : null);
 	}
 
 	/**
 	 * @param outcomeResistanceType the outcomeResistanceType to set
 	 */
-	public void setOutcomeResistanceType(FieldValue outcomeResistanceType) {
+	public void setOutcomeResistanceType(DrugResistanceType outcomeResistanceType) {
 		this.outcomeResistanceType = outcomeResistanceType;
 	}
 }

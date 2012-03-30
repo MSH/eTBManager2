@@ -206,10 +206,10 @@
     		<ui:param name="field" value="#{tbcase.microbacteriose}" />
 	    </s:decorate>
 
-	    <s:decorate template="/layout/displayfield.xhtml" rendered="#{tbcase.classification=='DRTB'}">
-    		<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
-    		<ui:param name="field" value="#{tbcase.resistanceType}" />
-	    </s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.drugResistanceType}">
+			<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
+			#{messages[tbcase.drugResistanceType.key]}
+		</s:decorate>
 		
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.infectionSite}">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
@@ -266,10 +266,10 @@
 		</table>
 		</s:fragment>
 
-    	<s:decorate template="/layout/display.xhtml" style="padding-top:4px;">
-    		<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
-    		#{tbcase.tipoResistencia.message}
-    	</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.drugResistanceType}">
+			<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
+			#{messages[tbcase.drugResistanceType.key]}
+		</s:decorate>
 
 	</td></tr>
 	</table>

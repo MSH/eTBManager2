@@ -48,9 +48,9 @@
 		</h:selectOneMenu>
 
 		<h:panelGroup id="resTypes">
-			<h:selectOneMenu value="#{caseFiltersBR.resistanceType}" rendered="#{caseFilters.classification=='DRTB'}">
-				<s:selectItems value="#{fieldsQuery.resistanceTypes}" var="x" label="#{x}" noSelectionLabel="-" />
-				<s:convertEntity />
+			<h:selectOneMenu value="#{caseFiltersBR.drugResistanceType}" rendered="#{caseFilters.classification=='DRTB'}">
+				<s:selectItems value="#{globalLists.drugResistanceTypes}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+				<s:convertEnum />
 			</h:selectOneMenu>
 		</h:panelGroup>
 	</s:decorate>
@@ -65,9 +65,9 @@
 
 		<h:panelGroup id="pnlOutcome">
 			<h:selectOneMenu value="#{caseFiltersBR.outcomeResistanceType}" rendered="#{caseFilters.caseState=='MDR_CASE'}">
-				<s:selectItems value="#{fieldsQuery.resistanceTypes}" var="x" label="#{x}" noSelectionLabel="-" />
-				<s:convertEntity />
-			</h:selectOneMenu>
+				<s:selectItems value="#{globalLists.drugResistanceTypes}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+				<s:convertEnum />
+			</h:selectOneMenu> 
 
 			<h:selectOneMenu value="#{caseFiltersBR.outcomeRegimenChanged}" rendered="#{caseFilters.caseState=='REGIMEN_CHANGED'}">
 				<s:selectItems value="#{fieldsQuery.schemaTypes}" var="x" label="#{x}" noSelectionLabel="-" />

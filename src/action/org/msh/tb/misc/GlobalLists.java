@@ -168,6 +168,14 @@ public class GlobalLists {
 		DstResult.CONTAMINATED
 	};
 
+	
+	private static final DrugResistanceType drugResistanceTypes[] = {
+		DrugResistanceType.MONO_RESISTANCE,
+		DrugResistanceType.POLY_RESISTANCE,
+		DrugResistanceType.MULTIDRUG_RESISTANCE,
+		DrugResistanceType.EXTENSIVEDRUG_RESISTANCE
+		
+	};
 
 	/**
 	 * Get component according to the workspace in use
@@ -496,9 +504,14 @@ public class GlobalLists {
 		return DiagnosisType.values();
 	}
 	
+	//@Factory("drugResistanceTypes")
+	//public DrugResistanceType[] getDrugResistanceTypes() {
+	//	return DrugResistanceType.values();
+	//}
+	
 	@Factory("drugResistanceTypes")
 	public DrugResistanceType[] getDrugResistanceTypes() {
-		return DrugResistanceType.values();
+		return getComponentValueWorkspace("drugResistanceTypes", DrugResistanceType[].class, drugResistanceTypes);
 	}
 	
 	public DisplayCaseNumber[] getDisplayCaseNumbers() {

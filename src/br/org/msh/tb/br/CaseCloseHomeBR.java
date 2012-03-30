@@ -47,7 +47,7 @@ public class CaseCloseHomeBR extends CaseCloseHome {
 
 		switch (getState()) {
 		case MDR_CASE:
-			logService.addTableRow("TbField.SCHEMA_TYPES", tbcase.getOutcomeResistanceType().toString());
+			logService.addTableRow("TbField.SCHEMA_TYPES", tbcase.getDrugResistanceType().getKey());
 			break;
 		case REGIMEN_CHANGED:
 			logService.addTableRow("TbField.RESISTANCE_TYPES", tbcase.getOutcomeRegimenChanged().toString());

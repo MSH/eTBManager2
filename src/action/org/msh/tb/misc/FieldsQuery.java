@@ -228,10 +228,10 @@ public class FieldsQuery {
 		return getValues();
 	}
 	
-	public List<FieldValue> getResistanceTypes() {
-		field = TbField.RESISTANCE_TYPES;
-		return getValues();
-	}
+	//public List<FieldValue> getResistanceTypes() {
+	//	field = TbField.RESISTANCE_TYPES;
+	//	return getValues();
+	//}
 	
 	public List<FieldValue> getMicobacterioses() {
 		field = TbField.MICOBACTERIOSE;

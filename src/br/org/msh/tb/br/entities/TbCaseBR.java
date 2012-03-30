@@ -18,6 +18,7 @@ import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 
@@ -45,11 +46,11 @@ public class TbCaseBR extends TbCase {
 	@PropertyLog(key="TbField.SCHEMA_TYPES")
 	private FieldValueComponent schemaChangeType = new FieldValueComponent();
 
-	@Embedded
-	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "RESISTANCETYPE")) })
-	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "RESISTANCETYPE_Complement")) })
-	@PropertyLog(key="DrugResistanceType")
-	private FieldValueComponent resistanceType;
+	//@Embedded
+	//@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "RESISTANCETYPE")) })
+	//@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "RESISTANCETYPE_Complement")) })
+	//@PropertyLog(key="DrugResistanceType")
+	//private FieldValueComponent resistanceType;
 
 	@PropertyLog(key="PatientType.FAILURE")
 	private FailureType failureType;
@@ -124,11 +125,10 @@ public class TbCaseBR extends TbCase {
 	@JoinColumn(name = "OUTCOME_REGIMENCHANGED")
 	@PropertyLog(key="TbField.SCHEMA_TYPES")
 	private FieldValue outcomeRegimenChanged;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "OUTCOME_RESISTANCETYPE")
-	@PropertyLog(key="TbField.RESISTANCE_TYPES")
-	private FieldValue outcomeResistanceType;
+	
+	@Column(name = "OUTCOME_RESISTANCETYPE")
+	@PropertyLog(key="OutcomeResistanceType")
+	private DrugResistanceType outcomeResistanceType;
 
 	/**
 	 * @return the adminUnitUsOrigem
@@ -217,7 +217,7 @@ public class TbCaseBR extends TbCase {
 		return outcomeRegimenChanged;
 	}
 
-	public FieldValue getOutcomeResistanceType() {
+	public DrugResistanceType getOutcomeResistanceType() {
 		return outcomeResistanceType;
 	}
 
@@ -251,14 +251,14 @@ public class TbCaseBR extends TbCase {
 		return pregnancePeriod;
 	}
 
-	/**
-	 * @return the resistanceType
-	 */
-	public FieldValueComponent getResistanceType() {
-		if (resistanceType == null)
-			resistanceType = new FieldValueComponent();
-		return resistanceType;
-	}
+	///**
+	// * @return the resistanceType
+	// */
+	//public FieldValueComponent getResistanceType() {
+	//	if (resistanceType == null)
+	//		resistanceType = new FieldValueComponent();
+	//	return resistanceType;
+	//}
 
 	/**
 	 * @return the schemaChangeType
@@ -384,7 +384,7 @@ public class TbCaseBR extends TbCase {
 		this.outcomeRegimenChanged = outcomeRegimenChanged;
 	}
 
-	public void setOutcomeResistanceType(FieldValue outcomeResistanceType) {
+	public void setOutcomeResistanceType(DrugResistanceType outcomeResistanceType) {
 		this.outcomeResistanceType = outcomeResistanceType;
 	}
 
@@ -420,13 +420,13 @@ public class TbCaseBR extends TbCase {
 		this.pregnancePeriod = pregnancePeriod;
 	}
 
-	/**
-	 * @param resistanceType
-	 *            the resistanceType to set
-	 */
-	public void setResistanceType(FieldValueComponent resistanceType) {
-		this.resistanceType = resistanceType;
-	}
+	///**
+	// * @param resistanceType
+	// *            the resistanceType to set
+	// */
+	//public void setResistanceType(FieldValueComponent resistanceType) {
+	//	this.resistanceType = resistanceType;
+	//}
 
 	/**
 	 * @param schemaChangeType

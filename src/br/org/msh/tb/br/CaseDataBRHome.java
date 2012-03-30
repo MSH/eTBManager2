@@ -252,7 +252,7 @@ public class CaseDataBRHome {
 		if (tp != PatientType.SCHEMA_CHANGED)
 			tbcase.setSchemaChangeType(null);
 		if (!CaseClassification.DRTB.equals( tbcase.getClassification() ))
-			tbcase.setResistanceType(null);
+			tbcase.setDrugResistanceType(null);
 
 		if (tp != PatientType.OTHER)
 			tbcase.setPatientTypeOther(null);

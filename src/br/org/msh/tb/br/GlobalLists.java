@@ -6,6 +6,7 @@ import org.msh.tb.br.entities.enums.FailureType;
 import org.msh.tb.br.entities.enums.TipoResistencia;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.ClinicalEvolution;
+import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
@@ -80,6 +81,15 @@ public class GlobalLists {
 		HIVResult.NEGATIVE,
 		HIVResult.POSITIVE
 	};
+	
+	private static final DrugResistanceType drugResistanceTypes[] = {
+		DrugResistanceType.ISONIAZID_MONO_RESISTANCE,
+		DrugResistanceType.RIFAMPICIN_MONO_RESISTANCE,
+		DrugResistanceType.POLY_RESISTANCE,
+		DrugResistanceType.MULTIDRUG_RESISTANCE,
+		DrugResistanceType.EXTENSIVEDRUG_RESISTANCE
+	
+	};
 
 	public TipoResistencia[] getTiposResistencia() {
 		return TipoResistencia.values();
@@ -116,5 +126,9 @@ public class GlobalLists {
 	
 	public CaseState[] getCaseStates() {
 		return caseStates;
+	}
+	
+	public DrugResistanceType[] getDrugResistanceTypes() {
+		return drugResistanceTypes;
 	}
 }

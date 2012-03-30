@@ -17,7 +17,7 @@ public class CasesQueryBR extends CasesQuery {
 		List<String> rest = new ArrayList<String>();
 		for (String s: lst)
 			rest.add(s);
-		rest.add("c.resistanceType.value = #{caseFiltersBR.resistanceType}");
+		rest.add("c.drugResistanceType = #{caseFiltersBR.drugResistanceType}");
 		rest.add("c.schemaChangeType.value = #{caseFiltersBR.schemaChangeType}");
 		rest.add("c.outcomeRegimenChanged = #{caseFiltersBR.outcomeRegimenChanged}");
 		rest.add("c.outcomeResistanceType = #{caseFiltersBR.outcomeResistanceType}");

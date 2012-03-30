@@ -275,12 +275,12 @@
     	<ui:param name="list" value="#{fieldsQuery.micobacterioses}" />
     </s:decorate>
 
-    <s:decorate template="/layout/editfield.xhtml"  rendered="#{tbcase.classification=='DRTB'}">
+    <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
-    	<ui:param name="required" value="true" />
-    	<ui:param name="id" value="mnt" />
-    	<ui:param name="field" value="#{tbcase.resistanceType}" />
-    	<ui:param name="list" value="#{fieldsQuery.resistanceTypes}" />
+    	<h:selectOneMenu value="#{tbcase.drugResistanceType}" >
+    		<s:selectItems var="it" value="#{drugResistanceTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
     </s:decorate>
 
 		<s:decorate template="/layout/edit.xhtml">
