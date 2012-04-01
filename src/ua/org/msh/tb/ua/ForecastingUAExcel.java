@@ -224,6 +224,8 @@ public class ForecastingUAExcel{
 		if (fm.getMedicine().getLegacyId()!=null)
 		if (!fm.getMedicine().getLegacyId().equals("")){
 			int i = Integer.parseInt(fm.getMedicine().getLegacyId());
+			if (i== 0 || i>=rows.length)
+				return;
 			if (rows[i-1]) 
 				return;
 			if (i<11) setRow(i+4);
