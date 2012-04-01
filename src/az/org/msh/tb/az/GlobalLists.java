@@ -3,8 +3,8 @@ package org.msh.tb.az;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.az.entities.enums.CaseFindingStrategy;
-import org.msh.tb.br.entities.enums.FailureType;
-import org.msh.tb.br.entities.enums.TipoResistencia;
+//import org.msh.tb.br.entities.enums.FailureType;
+//import org.msh.tb.br.entities.enums.TipoResistencia;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.ClinicalEvolution;
 import org.msh.tb.entities.enums.DstResult;
@@ -83,11 +83,11 @@ public class GlobalLists {
 		DstResult.BASELINE
 	};
 
-	
+	/* never used, also specific to Brazil - AK
 	public TipoResistencia[] getTiposResistencia() {
 		return TipoResistencia.values();
 	}
-
+*/
 	
 	public CaseFindingStrategy[] getCaseFindingStrategies() {
 		return CaseFindingStrategy.values();
@@ -112,11 +112,11 @@ public class GlobalLists {
 	public PrevTBTreatmentOutcome[] getPrevTBTreatmentOutcomes() {
 		return prevTBTreatmentOutcomes;
 	}
-	
+	/* never used and also specific to Brazil - AK
 	public FailureType[] getFailureTypes() {
 		return FailureType.values();
 	}	
-	
+	*/
 	public ClinicalEvolution[] getClinicalEvolutions() {
 		return ClinicalEvolution.values();
 	}
