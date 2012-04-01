@@ -33,6 +33,7 @@
         <pathelement location="WebContent/WEB-INF/lib/richfaces-ui-3.3.3.Final.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jxl.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/dom4j-1.6.1.jar"/>
+		<pathelement location="WebContent/WEB-INF/lib/gson-2.1.jar"/>
         <pathelement location="WebContent/WEB-INF/classes"/>
     </path>
 
