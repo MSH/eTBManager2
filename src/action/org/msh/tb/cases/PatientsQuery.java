@@ -1,9 +1,12 @@
 package org.msh.tb.cases;
 
 
+import java.text.Collator;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -72,6 +75,7 @@ public class PatientsQuery extends EntityQuery {
 	public List<Item> getPatientList() {
 		if (patientList == null)
 			createPatientList();
+
 		return patientList;
 	}
 	
@@ -116,6 +120,21 @@ public class PatientsQuery extends EntityQuery {
 			Item item = new Item((Patient)vals[0], (TbCase)vals[1]);
 			patientList.add(item);
 		}
+		/**
+		 * Sort {@link patientList} considering locale language
+		 * @author am
+		 */
+		Collections.sort(patientList, new Comparator<Item>() {
+			  public int compare(Item o1, Item o2) {
+				String name1, name2;
+				name1 = o1.patient.getLastName() == null ? o1.patient.getName() : o1.patient.getLastName();
+				name2 = o2.patient.getLastName() == null ? o2.patient.getName() : o2.patient.getLastName();
+				if (name1.equals(name2))
+					name2 = name1+"_"+o2.patient.getId();
+				Collator myCollator = Collator.getInstance();			    
+				return myCollator.compare(name1,name2);
+			  }
+		});
 	}
 
 
