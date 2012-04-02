@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.searchresult']}" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="left" value="0" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['cases']}" view="/cases/index.html" propagation="none"/>
+	<div class="item selected">
+		<s:link value="#{title}" propagation="none" />
+	</div>
+</ui:define>
+
+<ui:define name="left">
+</ui:define>
+
+<ui:define name="content">
+<h1>#{title}</h1>
+	<h:form id="listCases">
+
+	<table width="100%"><tr><td>
+	
+	
+	</td><td>
+		<h:commandLink styleClass="button-alt" onclick="Richfaces.showModalPanel('filtersdlg');return false;" style="float:right;">
+			<span>#{messages['cases.newsearch']}</span>
+		</h:commandLink>	
+	</td></tr></table>
+	
+	<s:decorate template="/layout/naveg.xhtml">
+		<ui:param name="list" value="#{casesUA}" />
+	
+	<h:panelGroup id="res">
+	<table id="tblres" width="100%" class="table1">
+		<tr><th class="searchtitle">
+				<div style="padding:4px;">
+				<a:commandLink value="#{messages['Patient.caseNumber']}" onclick="changeOrder(0); return false;"/>
+				<br/><br/>
+				<a:commandLink value="#{messages['Gender']}" onclick="changeOrder(1); return false;" />
+				</div>
+			</th>
+			<th class="searchtitle">
+				<div style="padding:4px;">
+				<a:commandLink value="#{messages['CaseClassification']}" onclick="changeOrder(2);return false;"/>
+				<br/><br/>
+				<a:commandLink value="#{messages['Patient.name']}" onclick="changeOrder(3);return false;"/>
+				<br/><br/>
+				<a:commandLink value="#{messages['TbCase.patientAge']}" onclick="changeOrder(4);return false;"/>
+				</div>
+			</th>
+			<th class="searchtitle">
+				<div style="padding:4px;">
+				<a:commandLink value="#{messages['TbCase.notificationUnit']}" onclick="changeOrder(5);return false;"/>
+				<br/><br/>
+				<a:commandLink value="#{levelInfo.nameLevel1}" onclick="changeOrder(6);return false;"/>
+				 - 
+				<a:commandLink value="#{levelInfo.nameLevel2}" onclick="changeOrder(7);return false;"/>
+				(#{messages['Address']})
+				<br/><br/>
+				<a:commandLink value="#{messages['CaseState']}" onclick="changeOrder(8);return false;"/>
+				</div>
+			</th>
+			<th class="searchtitle">
+				<div style="padding:4px;">
+				<a:commandLink value="#{messages['TbCase.registrationDate']}" onclick="changeOrder(9);return false;"/>
+				<br/><br/>
+				<a:commandLink value="#{messages['cases.casesearching.treatlen']}" onclick="changeOrder(10);return false;"/>
+				<br/><br/>
+				<a:commandLink value="#{messages['ValidationState']}" onclick="changeOrder(11);return false;"/>
+				</div>
+			</th>
+		</tr>
+	<ui:repeat value="#{casesUA.resultList}" var="it">
+	<tr><td width="90px" align="center">
+			<s:link value="#{it.caseNumber==null?messages['cases.new']:it.displayCaseNumber}" view="/cases/casedata.xhtml">
+				<f:param name="id" value="#{it.caseId}" />
+			</s:link>
+			<br/>
+			<s:link view="/cases/casedata.xhtml" 
+				styleClass="#{it.gender=='MALE'?'male-icon':'female-icon'}"  style="float:none">
+				<f:param name="id" value="#{it.caseId}" />
+			</s:link>
+	</td>
+	<td>
+		<b>#{messages[it.classification.key]}</b>
+		<div style="padding-top:6px;clear:left;">
+		#{it.patientName}
+		<br /> #{it.patientAge} #{messages['global.age']}
+		</div>
+	</td>
+	<td>
+		<b>#{it.healthUnit}</b><br />
+		<h:outputText value="#{it.region} - #{it.locality}" style="font-size:10px;" /> 
+   		<div style="padding-top:6px;clear:left;">
+   		<h:outputText value="#{messages[it.caseState.key]}" style="color:#8DA48F;font-weight:bold;" />
+   		</div>		
+	</td>
+	<td style="border-left:1px solid #E0E0E0;">
+		<h:outputText value="#{it.notificationDate}" converter="localeDateConverter" />
+   		<h:outputText value="#{it.beginningTreatmentDate}" converter="periodConverter" 
+   			rendered="#{it.beginningTreatmentDate!=null}" 
+   			style="padding-top:6px;display:block;">
+   			<f:param name="endDate" value="#{it.endingTreatmentDate}" />
+   			<f:param name="type" value="length" />
+   		</h:outputText>
+   		<h:outputText value="#{messages['cases.details.notreatment']}" rendered="#{it.beginningTreatmentDate==null}"
+   			style="padding-top:6px;display:block;"/>
+   		<h:outputText value="#{messages[it.validationState.key]}" style="color:#8DA48F;font-weight:bold;padding-top:6px;display:block;"/>
+	</td>
+	</tr>
+	</ui:repeat>
+	</table>
+	</h:panelGroup>
+	</s:decorate>
+
+	<rich:jQuery selector="#tblres tr:odd" query="addClass('lin1')" />
+	<rich:jQuery selector="#tblres tr:even" query="addClass('lin2')" />
+
+	<a:jsFunction name="changeOrder" reRender="listCases" ajaxSingle="true" >
+		<a:actionparam name="param1" assignTo="#{caseFilters.newOrder}" converter="javax.faces.Integer" />
+	</a:jsFunction>
+</h:form>	
+
+
+
+<rich:modalPanel id="filtersdlg" width="680" top="100" zindex="2000" autosized="true">
+	<f:facet name="header">
+		#{messages['cases.newsearch']}
+	</f:facet>
+	<h:form>
+	<a:region>
+	
+	<table width="99%">
+	<tr><td colspan="2">
+
+	<ui:include src="searchfilters.xhtml" />
+
+	</td></tr>
+	<tr><td>
+		<ui:include src="/layout/waitstatus.xhtml" />
+
+	</td></tr></table>	
+	
+	<div class="button-bar">
+		<a:commandLink id="btnsearch" action="#{cases.refresh}" 
+			styleClass="button"	reRender="listCases" 
+			onclick="if (!disableButton(this)) return false;if (!validateFilters()) {enableButton();return false}"
+			oncomplete="this.disabled=false;Richfaces.hideModalPanel('filtersdlg');return false;">
+			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
+			<span>#{messages['form.search']}</span>
+		</a:commandLink>
+		<s:link onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-alt">
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+	</a:region>
+	<rich:hotKey selector="#tblfilters input,select" key="return" handler="#{rich:element('btnsearch')}.click();" /> 
+	</h:form>
+</rich:modalPanel>
+
+</ui:define>
+
+</ui:composition>  
