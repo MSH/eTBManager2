@@ -24,7 +24,7 @@ import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.utils.EntityQuery;
 
-
+// 02.04.2012 Change some from public to to protected Alexey Kurasov
 @Name("cases")
 @BypassInterceptors
 public class CasesQuery extends EntityQuery<CaseResultItem> {
@@ -33,7 +33,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	private CaseFilters caseFilters;
 	private Workspace defaultWorkspace;
 	private List<CaseResultItem> resultList;
-	private String hqlCondition;
+	protected String hqlCondition;
 	
 	private static final String[] orderValues = {"p.recordNumber, c.caseNumber", "p.gender,p.name", 
 			"c.classification", "#{cases.namesOrderBy}", "c.age", "upper(nu.name.name1)", "c.notifAddress.adminUnit.parent.name.name1", 
@@ -166,7 +166,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	/**
 	 * Generate HQL instructions for advanced search conditions
 	 */
-	private void mountAdvancedSearchConditions() {
+	protected void mountAdvancedSearchConditions() {
 		CaseFilters caseFilters = getCaseFilters();
 		// include filters by date
 		Date dtIni = caseFilters.getIniDate();
@@ -195,7 +195,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	/**
 	 * Generate HQL instructions for single search by patient name 
 	 */
-	private void mountSingleSearchConditions() {
+	protected void mountSingleSearchConditions() {
 		CaseFilters caseFilters = getCaseFilters();
 		if (caseFilters.getPatient() != null) {
 			String numberCond = generateHQLPatientNumber();
