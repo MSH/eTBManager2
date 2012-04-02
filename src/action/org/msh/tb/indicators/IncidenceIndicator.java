@@ -23,7 +23,8 @@ public class IncidenceIndicator extends Indicator {
 
 	@In(create=true) EntityManager entityManager;
 	private String condition;
-	private PatientType patType;
+
+
 	@Override
 	protected void createIndicators() {
 		setNewCasesOnly(true);
@@ -33,8 +34,6 @@ public class IncidenceIndicator extends Indicator {
 	
 	@Override
 	protected String getHQLWhere() {
-		// TODO Auto-generated method stub
-
 		String hql = "where c.notificationUnit.workspace.id = " + getWorkspace().getId().toString();
 		
 		IndicatorFilters filters = getIndicatorFilters();
@@ -60,11 +59,11 @@ public class IncidenceIndicator extends Indicator {
 			hql += " and c.patientType = #{indicatorFilters.patientType}";
 		
 		// include filter by patient first treatment type
-		if(filters.getPatTypFirstTreat() !=null && (filters.getPatTypFirstTreat() == patType.NEW ||filters.getPatTypFirstTreat() == patType.TRANSFER_IN))
+		if(filters.getPatTypFirstTreat() !=null && (filters.getPatTypFirstTreat() == PatientType.NEW ||filters.getPatTypFirstTreat() == PatientType.TRANSFER_IN))
 			hql += " and c.patientType = #{indicatorFilters.patTypFirstTreat}";
 		
 		// include filter by patient re-treatment type
-		if(filters.getPatTypFirstTreat() !=null && (filters.getPatTypFirstTreat() == patType.ALL_RETREATMENT)){
+		if(filters.getPatTypFirstTreat() !=null && (filters.getPatTypFirstTreat() == PatientType.ALL_RETREATMENT)){
 			if(filters.getPatTypReTreat() != null  )
 			hql += " and c.patientType = #{indicatorFilters.patTypReTreat}";	
 			else{
@@ -133,6 +132,5 @@ public class IncidenceIndicator extends Indicator {
 		
 		return hql + " and " + condition;
 	}
-	
 	
 }
