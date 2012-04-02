@@ -1,6 +1,7 @@
 package org.msh.tb.indicators;
 
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.indicators.core.Indicator;
 
@@ -30,5 +31,14 @@ public class DrugResistanceIndicator extends Indicator {
 
 		createItems(generateValuesByField("c.drugResistanceType", null));
 	}
+
+
+	@Override
+	public CaseClassification getClassification() {
+		// TODO Auto-generated method stub
+		return CaseClassification.DRTB;
+	}
+	
+	
 	
 }
