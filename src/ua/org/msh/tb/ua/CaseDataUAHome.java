@@ -3,10 +3,12 @@ package org.msh.tb.ua;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.cases.CaseCloseHome;
 import org.msh.tb.cases.CaseEditingHome;
@@ -20,6 +22,8 @@ import org.msh.tb.ua.entities.CaseDataUA;
 
 
 @Name("caseDataUAHome")
+@BypassInterceptors
+@AutoCreate
 public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 	private static final long serialVersionUID = -327682679191655122L;
 
@@ -39,7 +43,8 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 				try {
 					setId(id);
 				} catch (Exception e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					System.err.println("CaseDataUa with Id " + id + " not found. New initialised");
 					setId(null);
 				}
 			}
