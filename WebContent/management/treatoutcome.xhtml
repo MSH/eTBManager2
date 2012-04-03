@@ -92,7 +92,7 @@
 		<ui:repeat value="#{table.columns}" var="col">
 			<td class="colcb" bgcolor="#DBFADC">
 				<b>
-				<h:outputText value="#{col.total}" >
+				<h:outputText value="#{col.total}" rendered="#{not col.highlight}">
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 				</b>
