@@ -12,13 +12,13 @@ import org.msh.tb.indicators.core.Indicator2D;
 @Name("drugPrevTreatmentIndicator")
 public class DrugPrevTreatmentIndicator extends Indicator2D {
 	private static final long serialVersionUID = -1249166676563999475L;
-
+	private boolean showPerc;
+	
 	@Override
 	protected void createIndicators() {
 		setNewCasesOnly(true);
 
 		String outcomes = "and c.state >= " + CaseState.WAITING_TREATMENT.ordinal();
-
 		// get new cases
 		List<Object[]> lst = generateValuesByField("c.state", "c.patientType = " + PatientType.NEW.ordinal() + outcomes);
 		addRowValues(getMessage("manag.confmdrrep.new"), null, lst);
@@ -46,6 +46,18 @@ public class DrugPrevTreatmentIndicator extends Indicator2D {
 	@Override
 	public CaseClassification getClassification() {
 		return CaseClassification.DRTB;
+	}
+
+
+
+	public boolean isShowPerc() {
+		return showPerc;
+	}
+
+
+
+	public void setShowPerc(boolean showPerc) {
+		this.showPerc = showPerc;
 	}
 
 
