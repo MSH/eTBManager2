@@ -266,9 +266,9 @@
 		</table>
 		</s:fragment>
 
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.drugResistanceType}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.tipoResistencia}">
 			<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
-			#{messages[tbcase.drugResistanceType.key]}
+			#{messages[tbcase.tipoResistencia.message]}
 		</s:decorate>
 
 	</td></tr>
