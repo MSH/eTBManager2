@@ -6,7 +6,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"      
+      xmlns:c="http://java.sun.com/jstl/core"
       template="/layout/template_new.xhtml">
 
 
@@ -52,6 +53,8 @@
 	<s:link value="#{messages['cases.close']}" view="/cases/closecase.xhtml" rendered="#{caseHome.canClose}">
 		<f:param name="id" value="#{caseHome.id}" />
 	</s:link>
+	
+	<s:link onclick="showModalAutoTop('selclassificationdlg');return false;" value="#{messages['cases.changeNotifClass']}"/>
 
 	<h:commandLink value="#{messages['cases.reopen']}" action="#{caseCloseHome.reopenCase}"
 		rendered="#{caseHome.canReopen}" 
@@ -280,6 +283,33 @@ function updateTab(tabIndex) {
 	</h:panelGroup>
 </rich:modalPanel>
 
+<rich:modalPanel id="selclassificationdlg" width="300" zindex="2000" autosized="true">
+	<f:facet name="header" >
+		#{messages['cases.changeNotifClass']}
+	</f:facet>
+
+	<h:form id="formclassifcation">
+
+	#{messages['cases.newnotif.title']}
+	<div class="vertical-menu">
+	<c:forEach items="#{globalLists.caseClassifications}" var="it">
+		<!--<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
+			<f:param name="classif" value="#{it}"/>
+			<f:param name="type" value="CONFIRMED"/>
+			<div class="new-icon" />#{messages[it.key]}
+		</s:link>-->
+		<a:commandLink onclick="Richfaces.hideModalPanel('selclassificationdlg');" 
+			action="#{caseDataBRHome.changeCaseClassification(it)}" value="#{messages[it.key]}" reRender="main, leftmenu"/>
+	</c:forEach>
+	</div>
+	<div class="button-bar">
+		<s:link onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" 
+			styleClass="button-alt" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+	</h:form>
+</rich:modalPanel>
 
 
 </ui:define>

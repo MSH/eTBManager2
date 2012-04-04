@@ -22,5 +22,10 @@
 				<param name="id" value="#{caseHome.id}"/>
 			</redirect>
 		</rule>
+		<rule if-outcome="classificationModified">
+			<redirect view-id="/cases/casedata.xhtml">
+				<param name="id" value="#{caseHome.id}"/>
+			</redirect>
+		</rule>
 	</navigation>
 </page>

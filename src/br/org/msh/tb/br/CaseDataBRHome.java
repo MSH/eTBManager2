@@ -554,6 +554,21 @@ public class CaseDataBRHome {
 		return auselection;
 	}
 
+	public String changeCaseClassification(CaseClassification it) {
+		
+		TbCaseBR tbcase = (TbCaseBR)caseHome.getInstance();
+		
+		if(tbcase.getClassification().equals(it))
+			return "classificationModified";
+
+		tbcase.setClassification(it);
+		tbcase.setDrugResistanceType(null);
+		tbcase.setTipoResistencia(null);
+
+		caseHome.persist();
+		
+		return "classificationModified";
+	}
 
 	public void setDstRequired(Integer dstRequired) {
 		this.dstRequired = dstRequired;
