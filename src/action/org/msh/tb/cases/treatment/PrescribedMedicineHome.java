@@ -24,7 +24,6 @@ import org.msh.utils.date.Period;
  */
 @Name("prescribedMedicineHome")
 public class PrescribedMedicineHome {
-	private static final long serialVersionUID = 4665192156115818462L;
 
 	@In(required=true) CaseHome caseHome;
 	@In(create=true) CaseRegimenHome caseRegimenHome;

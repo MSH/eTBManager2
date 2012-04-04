@@ -140,6 +140,7 @@ public class LaboratorySelection {
 	public void setAdminUnit(AdministrativeUnit admin) {
 		getAuselection().setUnitLevel1(admin);
 		laboratory = null;
+		options = null;
 	}
 	
 }

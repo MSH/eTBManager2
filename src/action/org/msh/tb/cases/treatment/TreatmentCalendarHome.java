@@ -221,14 +221,13 @@ public class TreatmentCalendarHome {
 			int month = cd.getMonth();
 			int year = cd.getYear();
 			int numdays = DateUtils.daysInAMonth(year, month - 1);
-			int count = 0;
+
 			for (int day = 1; day <= numdays; day++) {
 				if ((cd.getDispensingDays() == null) || (cd.getDispensingDays().isDay(day))) {
 					Calendar c = Calendar.getInstance();
 					c.set(year, month - 1, day);
 					DayInfo di = getDay(c.getTime());
 					if (di != null) {
-						count++;
 						di.setDispensed(true);
 						di.setTreated(true);
 					}

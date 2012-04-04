@@ -286,7 +286,7 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 	public void setId(Object id) {
 		super.setId(id);
 
-		initializeLabselection();
+//		initializeLabselection();
 	}
 	
 	
