@@ -38,8 +38,6 @@
                  conversation-id-parameter="cid"
                  parent-conversation-id-parameter="pid" />
 
-   <async:quartz-dispatcher />    
-    
    <persistence:managed-persistence-context name="entityManager"
                                      auto-create="true"
                           entity-manager-factory="#{mdrtbEntityManagerFactory}"/>

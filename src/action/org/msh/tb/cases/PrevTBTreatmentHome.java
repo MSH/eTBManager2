@@ -30,7 +30,6 @@ import org.msh.utils.date.Period;
 @Name("prevTBTreatmentHome")
 @Scope(ScopeType.CONVERSATION)
 public class PrevTBTreatmentHome {
-	private static final long serialVersionUID = -515608455149323704L;
 
 	@In CaseHome caseHome;
 	@In EntityManager entityManager;
