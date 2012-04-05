@@ -58,7 +58,12 @@ public class LaboratorySelection {
 	 * Create list of laboratories
 	 */
 	protected void createOptions() {
-		AdministrativeUnit adminUnit = getAuselection().getSelectedUnit();
+		AdministrativeUnit adminUnit;
+		
+		if (Component.getInstance("workspaceExtension").equals("ua"))
+			adminUnit = getAuselection().getUnitLevel1();
+		else
+			adminUnit = getAuselection().getSelectedUnit();
 		
 		if (adminUnit == null)
 			return;
