@@ -55,7 +55,6 @@ import org.msh.tb.tbunits.TBUnitSelection;
 @Name("caseDataBRHome")
 @Scope(ScopeType.CONVERSATION)
 public class CaseDataBRHome {
-	private static final long serialVersionUID = 8895495231680746480L;
 
 	@In EntityManager entityManager;
 	@In(create=true) CaseHome caseHome;

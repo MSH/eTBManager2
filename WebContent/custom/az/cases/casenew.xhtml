@@ -23,18 +23,18 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 <a:form id="main" styleClass="form1">
-	<ui:include src="/cases/casedataedt.xhtml" />	
+	<ui:include src="casedataedt.xhtml" />	
 
 	<div class="form-footer">
-	<div class="float:right">
-		<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
-	</div>
-	<a:commandLink action="#{caseAZHome.persist}" styleClass="button" reRender="main,messages" onclick="if (!disableButton(this)) return false;" >
-		<span>#{messages['form.save']}</span>
-	</a:commandLink>
-	<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" >
-		<span>#{messages['form.cancel']}</span>
-	</s:link>
+		<div class="float:right">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+		<a:commandLink action="#{caseAZHome.persist}" styleClass="button" reRender="main,messages" onclick="if (!disableButton(this)) return false;" >
+			<span>#{messages['form.save']}</span>
+		</a:commandLink>
+		<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this);">
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
 	</div>
 
 </a:form>

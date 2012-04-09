@@ -10,9 +10,9 @@ import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.cases.exams.ExamCultureHome;
@@ -76,7 +76,6 @@ public class CaseEditingHome {
 	/**
 	 * Initialize a new notification
 	 */
-	@RaiseEvent("new-notification")
 	public String initializeNewNotification() {
 		if (initialized)
 			return "initialized";
@@ -126,6 +125,8 @@ public class CaseEditingHome {
 
 		// initialize items with previous TB treatments
 //		prevTBTreatmentHome.getTreatments();
+		
+		Events.instance().raiseEvent("new-notification");
 		
 		initialized = true;
 		return "initialized";
