@@ -32,26 +32,26 @@
         <pathelement location="WebContent/WEB-INF/lib/richfaces-impl-3.3.3.Final.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/richfaces-ui-3.3.3.Final.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jxl.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/dom4j-1.6.1.jar"/>
-		<pathelement location="WebContent/WEB-INF/lib/gson-2.1.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/gson-2.1.jar"/>
         <pathelement location="WebContent/WEB-INF/classes"/>
     </path>
 
 
 	<path id="jboss-4.2.3.GA.libraryclasspath">
-        <pathelement location="C:/servers/jboss-4.2.3.GA/client/commons-logging.jar"/>
-        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
-        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
-        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
-        <pathelement location="C:/servers/jboss-4.2.3.GA/client/jboss-j2ee.jar"/>
-        <pathelement location="C:/servers/jboss-4.2.3.GA/client/ejb3-persistence.jar"/>
-        <pathelement location="C:/servers/jboss-4.2.3.GA/client/servlet-api.jar"/>
-        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/lib/hibernate-annotations.jar"/>
-        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/lib/hibernate-entitymanager.jar"/>
-        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/lib/hibernate-core.jar"/>
-        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/lib/lucene-core.jar"/>
-        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/lib/hibernate-search.jar"/>
-        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/lib/hibernate-validator.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/client/commons-logging.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/client/jboss-j2ee.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/client/ejb3-persistence.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/client/servlet-api.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-annotations.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-entitymanager.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-core.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/lucene-core.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-search.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-validator.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/dom4j.jar"/>
     </path>
 
 

@@ -14,6 +14,7 @@
     <property name="build-classes" value="build/classes-country"/>
 
   
+
 	<path id="Web App Libraries.libraryclasspath">
         <pathelement location="WebContent/WEB-INF/lib/commons-beanutils.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/commons-digester.jar"/>
@@ -32,6 +33,7 @@
         <pathelement location="WebContent/WEB-INF/lib/richfaces-impl-3.3.3.Final.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/richfaces-ui-3.3.3.Final.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jxl.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/gson-2.1.jar"/>
         <pathelement location="WebContent/WEB-INF/classes"/>
     </path>
 
@@ -50,6 +52,7 @@
         <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/lucene-core.jar"/>
         <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-search.jar"/>
         <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-validator.jar"/>
+        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/dom4j.jar"/>
     </path>
 
 
@@ -92,7 +95,6 @@
     <target depends="build-project,war" name="build" />
 
 	
-
 	<target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="false" debuglevel="${debuglevel}" destdir="${build-classes}" source="${source}" target="${target}" encoding="8859_1">
