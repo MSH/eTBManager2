@@ -41,7 +41,9 @@ public enum TbField {
 	// Uzbekistan
 	ANOTHERTB,
 	//Nigeria
-	RISK_GROUP
+	RISK_GROUP,
+	//Generic
+	ADJUSTMENT
 	
 	;
 	
