@@ -22,7 +22,8 @@ public class GlobalLists {
 		TbField.CULTURE_METHOD,
 		TbField.PULMONARY_TYPES,
 		TbField.EXTRAPULMONARY_TYPES,
-		TbField.REGISTRATION_CATEGORY
+		TbField.REGISTRATION_CATEGORY,
+		TbField.ADJUSTMENT
 	};
 	
 	private static final CaseState outcomes[] = {
