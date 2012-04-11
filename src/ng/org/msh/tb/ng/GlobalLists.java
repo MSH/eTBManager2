@@ -89,7 +89,8 @@ public class GlobalLists {
 		TbField.PULMONARY_TYPES,
 		TbField.EXTRAPULMONARY_TYPES,
 		TbField.ART_REGIMEN,
-		TbField.RISK_GROUP
+		TbField.RISK_GROUP,
+		TbField.ADJUSTMENT
 	};
 	
 	private int[] comorb_years = {1,2,3,4,5,6,7,8,9,10};

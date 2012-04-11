@@ -40,7 +40,8 @@ public class GlobalLists {
 		TbField.MARITAL_STATUS,
 		TbField.EDUCATIONAL_DEGREE,
 		TbField.SEVERITY_MARKS,
-		TbField.XRAY_LOCALIZATION
+		TbField.XRAY_LOCALIZATION,
+		TbField.ADJUSTMENT
 	};
 
 	private static final PrevTBTreatmentOutcome prevTBTreatmentOutcomes[] = {

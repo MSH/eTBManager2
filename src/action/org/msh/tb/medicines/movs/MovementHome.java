@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
@@ -18,12 +19,14 @@ import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchMovement;
 import org.msh.tb.entities.BatchQuantity;
+import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.MovementType;
+import org.msh.tb.entities.enums.TbField;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.LocaleDateConverter;
 
@@ -319,9 +322,9 @@ public class MovementHome {
 			totalPrice += b.getUnitPrice() * qtdaux;
 		}
 
-		if (qtd == 0)
+		if (qtd == 0){
 			throw new MovementException("No movement to be executed because the quantity is 0");
-
+		}
 		// validates batches quantities
 		for (Batch batch: batches.keySet()) {
 			int newqtd = batches.get(batch) * oper;
@@ -601,7 +604,16 @@ public class MovementHome {
 		}
 	}
 
-
+	public Movement prepareNewAdjustment(Date date, Tbunit unit, Source source, Medicine medicine, 
+			Map<Batch, Integer> batches, FieldValue adjustType, String comment){
+		
+		Movement m = prepareNewMovement(date, unit, source, medicine, MovementType.ADJUSTMENT, batches, comment);
+		
+		if(m!=null)
+			m.setAdjustmentType(adjustType);
+		
+		return m;
+	}
 	/**
 	 * Returned value from removed movements
 	 * @author Ricardo Memoria

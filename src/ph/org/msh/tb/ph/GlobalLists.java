@@ -42,7 +42,8 @@ public class GlobalLists {
 		TbField.SMEAR_METHOD,
 		TbField.SYMPTOMS,
 		TbField.SIDEEFFECT,
-		TbField.XRAYPRESENTATION
+		TbField.XRAYPRESENTATION,
+		TbField.ADJUSTMENT
 	};
 	
 	private static final PrevTBTreatmentOutcome prevTBTreatmentOutcomes[] = {

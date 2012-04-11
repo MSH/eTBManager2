@@ -128,21 +128,26 @@
 
 <s:decorate template="/layout/batchselection.xhtml">
 	<ui:param name="quantitytitle" value="#{messages['meds.movs.newqtty']}" />
+
+	<ui:define name="before-form">
+		<h:inputHidden value="#{stockAdjustmentHome.stockPositionId}" />
+		<s:decorate template="/layout/editfield.xhtml" >
+	   		<ui:define name="label">#{messages['TbField.ADJUSTMENT']}:</ui:define>
+	    	<ui:param name="required" value="true" />
+	    	<ui:param name="id" value="adjInfo" />
+	   		<ui:param name="field" value="#{stockAdjustmentHome.adjustmentInfo}" />
+	   		<ui:param name="list" value="#{fieldsQuery.adjustmentType}" />
+	    </s:decorate>
+	</ui:define>
+
 	<a:commandLink action="#{stockAdjustmentHome.executeBatchAdjustment}"
 		data="#{stockAdjustmentHome.actionExecuted}"  
 		onclick="if (!disableButton(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
 		oncomplete="enableButton();if (!data) return false; hideBatchesSelectionDlg();refreshMedTable();" 
-		reRender="batchselpnl" styleClass="button">
+		reRender="batchselpnl,messages" styleClass="button">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink>
-	
-	<ui:define name="before-form">
-		<h:inputHidden value="#{stockAdjustmentHome.stockPositionId}" />
-		<s:decorate template="/layout/edit.xhtml">
-			<ui:define name="label">#{messages['meds.movs.adjreason']}:</ui:define>
-			<h:inputText value="#{stockAdjustmentHome.reasonAdjustment}" style="width:300px;margin-bottom:10px;" required="true"/>
-		</s:decorate>
-	</ui:define>
+
 </s:decorate>
 
 <script type="text/javascript">
@@ -175,9 +180,6 @@ function initBatchDeleting(batchId) {
 
 -->
 </script>
-
-
-
 
 <rich:modalPanel id="newbatchdlg" width="650" zindex="2000" autosized="true">
 	<f:facet name="header">

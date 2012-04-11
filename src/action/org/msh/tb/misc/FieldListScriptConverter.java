@@ -47,7 +47,7 @@ public class FieldListScriptConverter implements Converter {
 				"n = cbindex.indexOf(n); \n" +
 				"var elem = jQuery(cb).closest('#fieldedt'); \n" +
 				"var inp = elem.find('#divothers'); \n" +
-				"if (n==-1) { inp.hide(ldelay); return; } \n" + 
+				"if (n==-1) { inp.hide(); return; } \n" + 
 				"var name = cbnames[n];\n" +
 				"elem.find('#labelothers').html(cbnames[n]); \n" +
 				"inp.show(ldelay); ";			

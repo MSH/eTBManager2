@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -73,6 +74,22 @@ public class Movement implements Serializable {
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="movement")
 	private List<BatchMovement> batches = new ArrayList<BatchMovement>();
 
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="ADJUSTMENT_ID")
+	FieldValue adjustmentType;
+
+	
+	/**
+	 * Returns adjustment type of the transaction
+	 * @return a FieldValue representing the adjustment type
+	 */
+	public FieldValue getAdjustmentType() {
+		return adjustmentType;
+	}
+
+	public void setAdjustmentType(FieldValue adjustmentType) {
+		this.adjustmentType = adjustmentType;
+	}
 	
 	/**
 	 * Returns the unit price of the transaction

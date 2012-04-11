@@ -14,9 +14,13 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
+import org.jboss.seam.international.StatusMessage.Severity;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchQuantity;
+import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
@@ -45,6 +49,7 @@ public class StockAdjustmentHome extends Controller {
 	private boolean actionExecuted;
 	private BatchQuantity batchQuantity;
 	private Date movementDate;
+	private FieldValueComponent adjustmentInfo = new FieldValueComponent();
 	
 	@In(create=true) EntityManager entityManager;
 	@In(create=true) MovementHome movementHome;
@@ -112,12 +117,14 @@ public class StockAdjustmentHome extends Controller {
 	 */
 	@Transactional
 	public String executeBatchAdjustment() {
-		if ((reasonAdjustment == null) || (reasonAdjustment.isEmpty()))
+		if ((adjustmentInfo == null))
 			return "error";
 		
 		if (stockPosition == null)
 			return "error";
 		
+		facesMessages.clear();
+	
 		MovementType type = MovementType.ADJUSTMENT;
 		
 		Map<BatchQuantity, Integer> sels = batchSelection.getSelectedBatchesQtds();
@@ -134,13 +141,31 @@ public class StockAdjustmentHome extends Controller {
 			}
 		}
 		
-		movementHome.initMovementRecording();
-		movementHome.prepareNewMovement(DateUtils.getDate(), userSession.getTbunit(), source, item.getStockPosition().getMedicine(),
-				type, batches, reasonAdjustment);
-		movementHome.savePreparedMovements();
-		saveLog(RoleAction.EDIT, batches);
+		if(batches.size() == 0){
+			facesMessages.addFromResourceBundle("Batch.cantAdjustBatch");
+			actionExecuted = true;
+			return "batches-adjusted";
+		}
 
-		actionExecuted = true;
+		try{
+			movementHome.initMovementRecording();
+			
+			movementHome.prepareNewAdjustment(DateUtils.getDate(), userSession.getTbunit(), source, item.getStockPosition().getMedicine(), 
+					batches, adjustmentInfo.getValue(), adjustmentInfo.getComplement());
+			
+			movementHome.savePreparedMovements();
+			
+			saveLog(RoleAction.EDIT, batches);
+
+			actionExecuted = true;
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			facesMessages.addFromResourceBundle("Batch.cantAdjustBatch");
+			return "batches-adjusted";
+		}
+		
+		facesMessages.addFromResourceBundle("Batch.adjustBatchSuccess");
 		
 		return "batches-adjusted";
 	}
@@ -279,6 +304,15 @@ public class StockAdjustmentHome extends Controller {
 		if (source == null)
 			 return null;
 		else return source.getId();
+	}
+	public FieldValueComponent getAdjustmentInfo() {
+		if (adjustmentInfo == null)
+			adjustmentInfo = new FieldValueComponent();
+		return adjustmentInfo;
+	}
+
+	public void setAdjustmentInfo(FieldValueComponent adjustmentInfo) {
+		this.adjustmentInfo = adjustmentInfo;
 	}
 
 

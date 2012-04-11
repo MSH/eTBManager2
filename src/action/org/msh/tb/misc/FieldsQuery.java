@@ -283,4 +283,9 @@ public class FieldsQuery {
 		field = TbField.RISK_GROUP;
 		return getValues();
 	}
+	
+	public List<FieldValue> getAdjustmentType() {
+		field = TbField.ADJUSTMENT;
+		return getValues();
+	}
 }

@@ -62,7 +62,8 @@ public class GlobalLists {
 		TbField.CONTACTTYPE,
 		TbField.XRAYPRESENTATION,
 		TbField.PULMONARY_TYPES,
-		TbField.EXTRAPULMONARY_TYPES
+		TbField.EXTRAPULMONARY_TYPES,
+		TbField.ADJUSTMENT
 	};	
 	
 	

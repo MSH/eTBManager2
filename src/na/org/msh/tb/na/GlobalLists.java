@@ -29,7 +29,8 @@ public class GlobalLists {
 		TbField.XRAYPRESENTATION,
 		TbField.PULMONARY_TYPES,
 		TbField.EXTRAPULMONARY_TYPES,
-		TbField.ART_REGIMEN
+		TbField.ART_REGIMEN,
+		TbField.ADJUSTMENT
 	};	
 	
 	private final static Nationality[] nationalityTypes = {

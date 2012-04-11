@@ -15,10 +15,14 @@
         
         <span class="value #{invalid?'fielderror':''}">
             <s:validateAll>
-			<h:selectOneMenu id="#{id}fldoptions" value="#{field.value}" style="margin-bottom:3px;display:block;" rendered="#{field!=null}">
+			<h:selectOneMenu id="#{id}fldoptions" value="#{field.value}" style="margin-bottom:3px;display:block;" rendered="#{field!=null}" required="#{empty required ? false : required}"
+				requiredMessage="#{messages['javax.faces.component.UIInput.REQUIRED ']}">
 				<s:selectItems var="it" value="#{list}" noSelectionLabel="-" label="#{it}" />
 				<s:convertEntity />
 			</h:selectOneMenu>
+			<h:outputText value="#{list}" converter="fieldListScriptConverter" escape="false">
+				<f:param name="id" value="#{id}"/>
+			</h:outputText>
 			<rich:jQuery selector="##{id}fldoptions" query="change(function(){ #{id}checkFieldOthers(this,false); })" />
 			<rich:jQuery selector="##{id}fldoptions" timing="onload" query="each(function(){ #{id}checkFieldOthers(this,true); })" />
             </s:validateAll>
@@ -36,9 +40,6 @@
 			<h:inputText value="#{field.complement}" style="width:250px;"  rendered="#{field!=null}"/>
 		</span>
     </div>
-	<h:outputText value="#{list}" converter="fieldListScriptConverter" escape="false">
-		<f:param name="id" value="#{id}"/>
-	</h:outputText>
 </div>
 
 </ui:composition>
