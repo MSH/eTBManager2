@@ -17,8 +17,9 @@
 
 <ui:param name="indicator" value="#{drugPrevTreatmentIndicator}" />
 <ui:param name="table" value="#{indicator.table}" />
-<ui:param name="useclassification" value="0" />
-<ui:param name="left" value="0" />
+<ui:param name="useclassification" value="-" />
+<ui:param name="useShowPerc" value="1" />
+<ui:param name="left" value="-" />
 
 <ui:define name="head">
 	<script type="text/javascript" src="#{request.contextPath}/js/json2.js"></script>
@@ -36,11 +37,8 @@
 
 	<ui:param name="hideinterimmonth" value="true" />
 	<ui:include src="filters.xhtml" />
-
-<h:selectOneMenu value="#{indicator.showPerc}">
-	<f:selectItem itemLabel="#{messages['manag.absoluteValues']}" itemValue="#{false}"/>
-	<f:selectItem itemLabel="#{messages['manag.percValues']}" itemValue="#{true}"/>
-</h:selectOneMenu>
+	
+<br />
 
 <h:panelGroup id="indicator">
 
@@ -71,7 +69,7 @@
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 				
-				<h:outputText value="0" rendered="#{(not indicator.showPerc) and (empty val.value)}"/>
+				<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty val.value)}"/>
 				
 				<h:outputText value="#{val.value / row.total * 100}" rendered="#{indicator.showPerc}">
 					<f:convertNumber pattern="###.##"/>
@@ -86,7 +84,7 @@
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 				
-				<h:outputText value="0" rendered="#{(not indicator.showPerc) and (empty row.total)}"/>
+				<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty row.total)}"/>
 				
 				<h:outputText value="100%" rendered="#{indicator.showPerc}"/>
 				</b>
@@ -105,7 +103,7 @@
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 				
-				<h:outputText value="0" rendered="#{(not indicator.showPerc) and (empty col.total)}"/>
+				<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty col.total)}"/>
 				
 				<h:outputText value="#{col.total / table.total * 100}" rendered="#{indicator.showPerc}">
 					<f:convertNumber pattern="###.##"/>
@@ -121,7 +119,7 @@
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 				
-				<h:outputText value="0" rendered="#{(not indicator.showPerc) and (empty table.total)}"/>
+				<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty table.total)}"/>
 				
 				<h:outputText value="100%" rendered="#{indicator.showPerc}"/>
 				</b>

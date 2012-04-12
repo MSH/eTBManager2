@@ -16,7 +16,8 @@ import org.msh.tb.indicators.core.Indicator;
 @Name("outcomeIndicator")
 public class OutcomeIndicator extends Indicator {
 	private static final long serialVersionUID = 1L;
-	
+	private boolean showPerc;
+
 	private static final CaseState[] outcomes = { 
 		CaseState.CURED,
 		CaseState.DEFAULTED,
@@ -73,5 +74,15 @@ public class OutcomeIndicator extends Indicator {
 		
 		return successRate;
 	}
+	
+	
+	public boolean isShowPerc() {
+		return showPerc;
+	}
+
+	public void setShowPerc(boolean showPerc) {
+		this.showPerc = showPerc;
+	}
+
 
 }

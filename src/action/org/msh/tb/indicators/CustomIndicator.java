@@ -14,6 +14,8 @@ public class CustomIndicator extends Indicator2D {
 
 	private OutputSelection colSelection;
 	
+	private boolean showPerc;
+
 	@Override
 	protected void createIndicators() {
 		IndicatorFilters filters = getIndicatorFilters();
@@ -91,5 +93,13 @@ public class CustomIndicator extends Indicator2D {
 	
 	public String getDisplayColumnSelection() {
 		return getDisplayOutputSelection(colSelection);
+	}
+
+	
+	public boolean isShowPerc() {
+		return showPerc;
+	}
+	public void setShowPerc(boolean showPerc) {
+		this.showPerc = showPerc;
 	}
 }

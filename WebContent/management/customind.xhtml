@@ -18,6 +18,7 @@
 <ui:param name="indicator" value="#{customIndicator}" />
 <ui:param name="table" value="#{indicator.table}" />
 <ui:param name="useclassification" value="0" />
+<ui:param name="useShowPerc" value="1" />
 <ui:param name="left" value="0" />
 
 
@@ -76,16 +77,31 @@
 			</td>
 			<ui:repeat value="#{row.cells}" var="val">
 			<td class="colcb">
-				<h:outputText value="#{val.value}" >
+
+				<h:outputText value="#{val.value}" rendered="#{not indicator.showPerc}">
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
+				
+				<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty val.value)}"/>
+				
+				<h:outputText value="#{val.value / row.total * 100}" rendered="#{indicator.showPerc}">
+					<f:convertNumber pattern="###.##"/>
+				</h:outputText>
+				
+				<h:outputText value="%" rendered="#{indicator.showPerc}" />	
+				
 			</td>
 			</ui:repeat>
 			<td class="colcb highlight">
 				<b>
-				<h:outputText value="#{row.total}" >
+				<h:outputText value="#{row.total}" rendered="#{not indicator.showPerc}">
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
+				
+				<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty row.total)}"/>
+				
+				<h:outputText value="100%" rendered="#{indicator.showPerc}"/>	
+				
 				</b>
 			</td>
 		</tr>
@@ -98,17 +114,29 @@
 		<ui:repeat value="#{table.columns}" var="col">
 			<td class="colcb highlight">
 				<b>
-				<h:outputText value="#{col.total}" >
+				<h:outputText value="#{col.total}" rendered="#{not indicator.showPerc}">
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
+				
+				<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty col.total)}"/>
+				
+				<h:outputText value="#{col.total / table.total * 100}" rendered="#{indicator.showPerc}">
+					<f:convertNumber pattern="###.##"/>
+				</h:outputText>
+				
+				<h:outputText value="%" rendered="#{indicator.showPerc}" />	
 				</b>
 			</td>
 		</ui:repeat>
 			<td class="colcb highlight">
 				<b>
-				<h:outputText value="#{table.total}" >
+				<h:outputText value="#{table.total}" rendered="#{not indicator.showPerc}">
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
+				
+				<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty table.total)}"/>
+				
+				<h:outputText value="100%" rendered="#{indicator.showPerc}"/>
 				</b>
 			</td>
 		</tr>

@@ -20,6 +20,7 @@
 <ui:param name="resultIndicator" value="#{treatResultIndicator}" />
 <ui:param name="table" value="#{resultIndicator.table}" />
 <ui:param name="useclassification" value="0" />
+<ui:param name="useShowPerc" value="1" />
 
 
 <ui:define name="head">
@@ -43,6 +44,7 @@
 
 <!--  treatment result part -->
 <tr><td align="left">
+<br />
 
 <h:panelGroup id="indicator">
 	<s:fragment rendered="#{indicatorController.executing}">
@@ -54,13 +56,21 @@
 				#{messages['PatientType']}
 			</th>
 		<ui:repeat value="#{table.columns}" var="col">
-			<th>
-				#{col.title}
-			</th>
+			<s:fragment rendered="#{not col.highlight}">
+				<th>
+					#{col.title}
+				</th>
+			</s:fragment>
+			<s:fragment rendered="#{col.highlight}">
+				<th>
+					#{messages['global.total']}
+				</th>
+				<th>
+					#{col.title}
+				</th>
+			</s:fragment>
 		</ui:repeat>
-			<th>
-				#{messages['global.total']}
-			</th>
+
 		</tr>
 		<ui:repeat value="#{table.rows}" var="row">
 		<tr>
@@ -68,20 +78,46 @@
 				#{row.title}
 			</td>
 			<ui:repeat value="#{row.cells}" var="val">
-			<td class="colcb" bgcolor="#{val.column.highlight?'#DBFADC':'transparent'}">
-				<h:outputText value="#{val.value}" >
-					<f:convertNumber pattern="##,###,##0.##"/>
-				</h:outputText>
-				<h:outputText value="%" rendered="#{val.column.highlight}" />
-			</td>
+			<s:fragment rendered="#{not val.column.highlight}">
+				<td class="colcb">
+					<h:outputText value="#{val.value}" rendered="#{not indicator.showPerc}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+					
+					<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty val.value)}"/>
+					
+					<h:outputText value="#{val.value / row.total * 100}" rendered="#{indicator.showPerc}">
+						<f:convertNumber pattern="###.##"/>
+					</h:outputText>
+
+					<h:outputText value="%" rendered="#{indicator.showPerc || val.column.highlight}" />	
+				</td>
+			</s:fragment>
+			
+			<s:fragment rendered="#{val.column.highlight}">
+						
+				<td class="colcb" bgcolor="#DBFADC">
+					<b>
+					<h:outputText value="#{row.total}" rendered="#{not indicator.showPerc}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+					
+					<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty row.total)}"/>
+					
+					<h:outputText value="100%" rendered="#{indicator.showPerc}"/>	
+					</b>
+				</td>
+			
+				<td class="colcb" bgcolor="#BCD2EE">
+					<h:outputText value="#{val.value}">
+						<f:convertNumber pattern="###.##"/>
+					</h:outputText>
+
+					<h:outputText value="%" rendered="#{indicator.showPerc || val.column.highlight}" />	
+				</td>
+			</s:fragment>
 			</ui:repeat>
-			<td class="colcb" bgcolor="#DBFADC">
-				<b>
-				<h:outputText value="#{row.total}" >
-					<f:convertNumber pattern="#,###,##0"/>
-				</h:outputText>
-				</b>
-			</td>
+
 		</tr>
 		</ui:repeat>
 
@@ -90,22 +126,40 @@
 				<b>#{messages['global.total']}</b>
 			</td>
 		<ui:repeat value="#{table.columns}" var="col">
-			<td class="colcb" bgcolor="#DBFADC">
-				<b>
-				<h:outputText value="#{col.total}" rendered="#{not col.highlight}">
-					<f:convertNumber pattern="#,###,##0"/>
-				</h:outputText>
-				</b>
-			</td>
+			<s:fragment rendered="#{not col.highlight}">
+				<td class="colcb" bgcolor="#DBFADC">
+					<b>
+					<h:outputText value="#{col.total}" rendered="#{not indicator.showPerc}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+					
+					<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty col.total)}"/>
+					
+					<h:outputText value="#{col.total / table.total * 100}" rendered="#{indicator.showPerc}">
+						<f:convertNumber pattern="###.##"/>
+					</h:outputText>
+					
+					<h:outputText value="%" rendered="#{indicator.showPerc}" />	
+					</b>
+				</td>
+			</s:fragment>
 		</ui:repeat>
 			<td class="colcb"  bgcolor="#DBFADC">
 				<b>
-				<h:outputText value="#{table.total}" >
+				<h:outputText value="#{table.total}" rendered="#{not indicator.showPerc}">
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
+				
+				<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty table.total)}"/>
+				
+				<h:outputText value="100%" rendered="#{indicator.showPerc}"/>
 				</b>
 			</td>
+			<td class="colcb" bgcolor="#BCD2EE">
+				<h:outputText value="-" />	
+			</td>
 		</tr>
+
 	</table>
 	</s:fragment>
 

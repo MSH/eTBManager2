@@ -12,7 +12,6 @@ import org.msh.tb.indicators.core.Indicator2D;
 @Name("drugPrevTreatmentIndicator")
 public class DrugPrevTreatmentIndicator extends Indicator2D {
 	private static final long serialVersionUID = -1249166676563999475L;
-	private boolean showPerc;
 	
 	@Override
 	protected void createIndicators() {
@@ -47,19 +46,6 @@ public class DrugPrevTreatmentIndicator extends Indicator2D {
 	public CaseClassification getClassification() {
 		return CaseClassification.DRTB;
 	}
-
-
-
-	public boolean isShowPerc() {
-		return showPerc;
-	}
-
-
-
-	public void setShowPerc(boolean showPerc) {
-		this.showPerc = showPerc;
-	}
-
 
 
 	/* (non-Javadoc)

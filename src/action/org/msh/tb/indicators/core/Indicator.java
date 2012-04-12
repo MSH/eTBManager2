@@ -30,7 +30,9 @@ public abstract class Indicator extends CaseHQLBase {
 	private int indexPos;
 	private boolean sortRows = true;
 	private IndicatorTable table;
-
+	private boolean showPerc;
+	
+	
 	private IndicatorSeries series;
 	@In(create=true) EntityManager entityManager;
 	/**
@@ -389,6 +391,21 @@ public abstract class Indicator extends CaseHQLBase {
 	 */
 	public boolean isHasTotal() {
 		return true;
+	}
+	
+	/**
+	 * Check if the indicator must display the values in percent
+	 * @return true if the value has to be shown in percent
+	 */
+	public boolean isShowPerc() {
+		return showPerc;
+	}
+
+	/**
+	 * @param showPerc the sortRows to set
+	 */
+	public void setShowPerc(boolean showPerc) {
+		this.showPerc = showPerc;
 	}
 	
 	

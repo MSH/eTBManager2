@@ -263,7 +263,9 @@ function handleContextClick(comp) {
 		<span>#{messages['form.update']}</span>
 	</a:commandLink>
 	<rich:jQuery name="showpictype" timing="onJScall" selector="#charttypediv" query="show(500)" />
-
+	<s:decorate rendered="#{not empty useShowPerc}">
+		<h:selectBooleanCheckbox id="showPerc" value="#{indicator.showPerc}"/><b>#{messages['manag.percValues']}</b>
+	</s:decorate>
 	</td></tr>
 </s:fragment>
 

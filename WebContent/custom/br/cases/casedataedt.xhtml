@@ -494,7 +494,7 @@ function genderChange(cb) {
 		</h:panelGroup>
 
     	<s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
+    	<ui:define name="label">#{messages['TbField.RESISTANCE_TYPES']}:</ui:define>
     	<h:selectOneMenu value="#{tbcase.tipoResistencia}" required="true">
     		<s:selectItems var="it" value="#{globalLists_br.tiposResistencia}" noSelectionLabel="-" label="#{it.message}"/>
     		<s:convertEnum />
