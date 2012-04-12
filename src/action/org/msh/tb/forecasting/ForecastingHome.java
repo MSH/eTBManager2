@@ -38,7 +38,7 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 	private static final long serialVersionUID = -3844270483725397280L;
 	
 	@In(create=true) EntityManager entityManager;
-	
+	@In(create=true) ForecastingView forecastingView;
 	
 	private AdminUnitSelection adminUnitSelection;
 	private TBUnitSelection tbunitSelection;
@@ -83,6 +83,7 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 		}
 		
 		Events.instance().raiseEvent("forecasting-loaded");
+		forecastingView.initializeStockOnHand();
 	}
 
 

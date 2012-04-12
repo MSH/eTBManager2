@@ -46,6 +46,7 @@ import org.msh.utils.date.Period;
 public class ForecastingCalculation {
 
 	@In(create=true) ForecastingHome forecastingHome;
+	@In(create=true) ForecastingView forecastingView;
 	@In EntityManager entityManager;
 	
 	/**
@@ -108,7 +109,7 @@ public class ForecastingCalculation {
 		finally {
 			finishCalculation();
 		}
-		
+		//forecastingView.initializeStockOnHand();
 		return "executed";
 	}
 
@@ -614,7 +615,7 @@ public class ForecastingCalculation {
 		Date dtini = forecasting.getIniDateMonthIndex(forNewCases.getMonthIndex());
 
 		// initialize number of new cases
-		int months = reg.getMonthsIntensivePhase();// + reg.getMonthsIntensivePhase();
+		int months = reg.getMonthsIntensivePhase() + reg.getMonthsContinuousPhase();
 		for (int i = 0; i < months; i++) {
 			int index = i + forNewCases.getMonthIndex();
 
