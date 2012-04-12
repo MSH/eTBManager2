@@ -255,8 +255,8 @@
 			</f:facet>
 				<s:validateAll>
 					<s:decorate>
-						<h:inputText id="erval" value="#{r.percNewCases}" style="width:70px;">
-							<f:convertNumber pattern="#,###,##0"/>
+						<h:inputText id="erval" value="#{r.percNewCases}" style="width:70px;"  converter="currencyConverter">
+							
 						</h:inputText>
 						<s:message  styleClass="error"/>
 					</s:decorate>
@@ -268,7 +268,7 @@
 				#{messages['manag.forecast.numcasesreg']}
 			</f:facet>
 			<h:outputText value="#{r.percNewCases}" >
-				<f:convertNumber pattern="#,###,##0"/>
+				<f:convertNumber pattern="#,###,##0.0"/>
 			</h:outputText> 
 		</h:column>
 	</h:dataTable>
@@ -651,7 +651,7 @@ function showLoadForecastingDlg() {
 		<s:fragment rendered="#{forecastings.loading}">
 		<h:dataTable value="#{forecastings.resultList}" var="it" width="100%" >
 			<h:column>
-				<s:link view="/management/forecasting.xhtml" value="#{it.name}" styleClass="forecast-icon"  onclick="Richfaces.hideModalPanel('loadfordlg');">
+				<s:link view="/management/forecasting.xhtml" value="#{it.name}" styleClass="forecast-icon"  onclick="Richfaces.hideModalPanel('loadfordlg'); ">
 					<f:param name="id" value="#{it.id}"/>
 				</s:link>
   				<br/>
