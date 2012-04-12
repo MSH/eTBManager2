@@ -63,7 +63,7 @@ public class ForecastingUAExcel{
 	private File excelFile;
 	private int row;
 	private int column;
-	private boolean[] rows = new boolean[21];
+	private boolean[] rows = new boolean[22];
 	
 	public int getRow() {
 		return row;
@@ -224,7 +224,7 @@ public class ForecastingUAExcel{
 		if (fm.getMedicine().getLegacyId()!=null)
 		if (!fm.getMedicine().getLegacyId().equals("")){
 			int i = Integer.parseInt(fm.getMedicine().getLegacyId());
-			if (i== 0 || i>=rows.length)
+			if (i== 0 || i>=rows.length+1)
 				return;
 			if (rows[i-1]) 
 				return;
@@ -255,7 +255,7 @@ public class ForecastingUAExcel{
 			setColumn(8);
 			addNumber(fm.getStockOnHandAfterLT(),null);
 			setColumn(9);
-			addNumber(cc+cnc-soh,null);
+			addNumber(cc+cnc-soh>0 ? cc+cnc-soh : 0,null);
 			setColumn(10);
 			addNumber(fm.getUnitPrice(),floatFormat);
 			setColumn(11);
