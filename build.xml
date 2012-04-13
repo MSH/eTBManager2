@@ -98,6 +98,10 @@
             <src path="src/model"/>
             <classpath refid="mdrtb.classpath"/>
         </javac>
+		 <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
+           <src path="src/br"/>
+           <classpath refid="mdrtb.classpath"/>
+		 </javac>
         <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/ph"/>
             <classpath refid="mdrtb.classpath"/>
@@ -128,10 +132,6 @@
 		 </javac>
 		 <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/ke"/>
-            <classpath refid="mdrtb.classpath"/>
-		 </javac>
-		 <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
-            <src path="src/br"/>
             <classpath refid="mdrtb.classpath"/>
 		 </javac>
 		 <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
