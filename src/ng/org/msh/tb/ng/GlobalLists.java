@@ -9,6 +9,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.entities.enums.DotBy;
+import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.HIVResultNg;
 import org.msh.tb.entities.enums.Nationality;
@@ -19,6 +20,7 @@ import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.ng.entities.enums.Dot;
 import org.msh.tb.ng.entities.enums.HealthFacility;
 import org.msh.tb.ng.entities.enums.Qualification;
+import org.msh.tb.ng.entities.enums.SuspectType;
 
 
 @Name("globalLists_ng")
@@ -93,6 +95,20 @@ public class GlobalLists {
 		TbField.ADJUSTMENT
 	};
 	
+	private static final SuspectType suspectTypes[] = {
+		SuspectType.SUSPECT_TYPE1
+	};
+	
+	private static final DrugResistanceType drugResistanceType[] = {
+		DrugResistanceType.MONO_RESISTANCE,
+		DrugResistanceType.POLY_RESISTANCE,
+		DrugResistanceType.MULTIDRUG_RESISTANCE,
+		DrugResistanceType.EXTENSIVEDRUG_RESISTANCE,
+		DrugResistanceType.RIFAMPICIN_MONO_RESISTANCE,
+		DrugResistanceType.ISONIAZID_MONO_RESISTANCE
+	};
+
+	
 	private int[] comorb_years = {1,2,3,4,5,6,7,8,9,10};
 	
 	@Factory("tbFields.ng")
@@ -137,6 +153,14 @@ public class GlobalLists {
 	
 	public void setComorb_years(int[] comorb_years) {
 		this.comorb_years = comorb_years;
+	}
+
+	public static SuspectType[] getSuspecttypes() {
+		return suspectTypes;
+	}
+
+	public static DrugResistanceType[] getDrugresistancetype() {
+		return drugResistanceType;
 	}
 
 }
