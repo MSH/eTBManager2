@@ -26,17 +26,17 @@
 	<ui:define name="label">#{messages['TbContact.name']}:</ui:define>
 	</s:decorate>
 	</tr>
-	<tr><td>
-    <s:decorate id="dt" template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['TbContact.FirstName']}:</ui:define>
-    	<h:inputText value="#{tbContactNG.name}" required="true" style="width:150px;"/>
-    </s:decorate>
-    </td>
-    <td>
-    
+	<tr>
+    <td> 
     <s:decorate id="dt11" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.Surname']}:</ui:define>
     	<h:inputText value="#{tbContactNG.contactLastName}" style="width:150px;"/>
+    </s:decorate>
+    </td>
+    <td>
+    <s:decorate id="dt" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbContact.FirstName']}:</ui:define>
+    	<h:inputText value="#{tbContactNG.name}" required="true" style="width:150px;"/>
     </s:decorate>
     </td>
     <td>
@@ -68,6 +68,14 @@
     		<s:convertEntity />
     	</h:selectOneMenu>
     </s:decorate>
+    
+     <s:decorate template="/layout/edit.xhtml">
+    <ui:define name="label">#{messages['TbContact.riskGroup']}:</ui:define>
+     <h:selectOneMenu value="#{tbContactNG.riskGroup}" required="false">
+    		<s:selectItems value="#{fieldsQuery.riskGroup}" var="q" noSelectionLabel="-" label="#{q.name}" />
+    		<s:convertEntity />
+    	</h:selectOneMenu> 
+    </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.examined']}:</ui:define>
@@ -93,14 +101,6 @@
     <ui:param name="datefield" value="#{tbContactNG.dateOfExamination}" /> 
     </s:decorate>
     
-    <s:decorate template="/layout/edit.xhtml">
-    <ui:define name="label">#{messages['TbContact.riskGroup']}:</ui:define>
-     <h:selectOneMenu value="#{tbContactNG.riskGroup}" required="false">
-    		<s:selectItems value="#{fieldsQuery.riskGroup}" var="q" noSelectionLabel="-" label="#{q.name}" />
-    		<s:convertEntity />
-    	</h:selectOneMenu> 
-    </s:decorate>
-
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
     	<h:inputTextarea value="#{tbContactNG.comments}" style="width:500px;height:80px;"/>
