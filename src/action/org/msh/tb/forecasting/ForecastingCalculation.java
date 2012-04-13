@@ -531,7 +531,7 @@ public class ForecastingCalculation {
 	 * @param monthIndex
 	 */
 	private void calculateCasesOnTreatmentInForecasting() {
-		for (int monthIndex = 0; monthIndex < numMonths; monthIndex++) {
+		for (int monthIndex = 0; monthIndex <= numMonths; monthIndex++) {
 			for (ForecastingCasesOnTreat c: forecasting.getCasesOnTreatment()) {
 				Regimen reg = c.getRegimen();
 				int numMonths = reg.getMonthsPhase(RegimenPhase.INTENSIVE) + reg.getMonthsPhase(RegimenPhase.CONTINUOUS);
