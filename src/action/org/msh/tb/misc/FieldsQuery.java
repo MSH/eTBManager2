@@ -288,4 +288,10 @@ public class FieldsQuery {
 		field = TbField.ADJUSTMENT;
 		return getValues();
 	}
+	
+	public List<FieldValue> getSuspectTypes() {
+		field = TbField.SUSPECT_TYPE;
+		return getValues();
+	}
 }
+
