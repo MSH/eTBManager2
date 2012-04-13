@@ -1,20 +1,12 @@
 package org.msh.tb.ng.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.FieldValue;
-import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.TbContact;
 import org.msh.tb.transactionlog.PropertyLog;
 
