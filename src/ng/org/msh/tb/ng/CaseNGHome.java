@@ -1,19 +1,13 @@
 package org.msh.tb.ng;
 
 import org.jboss.seam.annotations.Factory;
-import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Logger;
+import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.log.Log;
-import org.jboss.seam.international.StatusMessages;
-import org.msh.tb.br.entities.TbCaseBR;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.treatment.TreatmentHome;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.DiagnosisType;
-import org.msh.tb.ng.MedicalExaminationNGHome;
+import org.msh.tb.na.entities.TbCaseNA;
 import org.msh.tb.ng.entities.TbCaseNG;
 
 
