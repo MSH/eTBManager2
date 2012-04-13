@@ -91,7 +91,7 @@
 			</s:link>
 	</td>
 	<td>
-		<b>#{messages[it.classification.key]}</b>
+		<b>#{it.diagnosisType=='SUSPECT'? messages[it.classification.keySuspect] : messages[it.classification.key]}</b>
 		<div style="padding-top:6px;clear:left;">
 		#{it.patientName}
 		<br /> #{it.patientAge} #{messages['global.age']}

@@ -86,7 +86,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			"c.treatmentPeriod.iniDate, c.registrationDate, nu.name.name1, " +
 			"loc.name.name1, loc.code, c.id, " +
 			"c.treatmentPeriod.endDate, c.state, c.classification, p.middleName, p.lastName, " +
-			"c.validationState, c.registrationCode " +
+			"c.validationState, c.registrationCode, c.diagnosisType " +
 			getFromHQL() + " join c.patient p " +
 		 	   "join c.notificationUnit nu " +
 		 	   "join c.notifAddress.adminUnit loc ".concat(dynamicConditions());
@@ -375,6 +375,8 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 				item.setCaseNumber((Integer)obj[4]);				
 			}
 			
+			item.setDiagnosisType((DiagnosisType)obj[18]);
+
 			// search for administrative unit
 			AdministrativeUnit adm = null;
 			String code = (String)obj[9];
