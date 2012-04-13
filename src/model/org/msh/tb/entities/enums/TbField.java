@@ -42,6 +42,7 @@ public enum TbField {
 	ANOTHERTB,
 	//Nigeria
 	RISK_GROUP,
+	SUSPECT_TYPE,
 	//Generic
 	ADJUSTMENT
 	
