@@ -601,11 +601,16 @@ public class ForecastingCalculation {
 		
 		// calculate total percentage of regimens
 		float totalPerc = 0;
-		for (ForecastingRegimen aux: forecasting.getRegimens())
-			totalPerc += aux.getPercNewCases();
-
-		if (totalPerc == 0)
-			return;
+		
+		if (!forecasting.getWorkspace().getExtension().equals("ua")) {	
+			for (ForecastingRegimen aux: forecasting.getRegimens())
+				totalPerc += aux.getPercNewCases();
+	
+			if (totalPerc == 0)
+				return;
+			}
+		else
+			totalPerc = 100;
 		
 		float newCases = Math.round( forNewCases.getNumNewCases() * forRegimen.getPercNewCases() / totalPerc );
 		if (newCases == 0)
