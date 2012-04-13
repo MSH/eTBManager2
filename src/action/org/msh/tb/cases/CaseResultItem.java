@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.ValidationState;
 
@@ -27,6 +28,7 @@ public class CaseResultItem {
 	private CaseClassification classification;
 	private ValidationState validationState;
 	private String registrationCode;
+	private DiagnosisType diagnosisType;
 
 	public String getDisplayCaseNumber() {
 		if (registrationCode != null)
@@ -164,4 +166,14 @@ public class CaseResultItem {
 	public void setPatientAge(Integer age) {
 		this.patientAge = age;
 	}
+
+	public DiagnosisType getDiagnosisType() {
+		return diagnosisType;
+	}
+
+	public void setDiagnosisType(DiagnosisType diagnosisType) {
+		this.diagnosisType = diagnosisType;
+	}
+	
+	
 }
