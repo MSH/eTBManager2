@@ -92,7 +92,8 @@ public class GlobalLists {
 		TbField.EXTRAPULMONARY_TYPES,
 		TbField.ART_REGIMEN,
 		TbField.RISK_GROUP,
-		TbField.ADJUSTMENT
+		TbField.ADJUSTMENT,
+		TbField.SUSPECT_TYPE
 	};
 	
 	private static final SuspectType suspectTypes[] = {
