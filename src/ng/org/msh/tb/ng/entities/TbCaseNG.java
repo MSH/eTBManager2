@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.ng.entities.enums.SuspectType;
 import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
@@ -30,6 +31,9 @@ public class TbCaseNG extends TbCase{
 	
 	@Column(length=100)
 	private String emailAddress;
+	
+	@Column(length=100)
+	private SuspectType suspectType;
 
 	public List<CaseDispensing_Ng> getDispng() {
 		return dispng;
@@ -54,5 +58,11 @@ public class TbCaseNG extends TbCase{
 		this.emailAddress = emailAddress;
 	}
 
+	public SuspectType getSuspectType() {
+		return suspectType;
+	}
 	
+	public void setSuspectType(SuspectType suspectType) {
+		this.suspectType = suspectType;
+	}	
 }
