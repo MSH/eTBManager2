@@ -34,38 +34,38 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	private Workspace defaultWorkspace;
 	private List<CaseResultItem> resultList;
 	protected String hqlCondition;
-	
+
 	private static final String[] orderValues = {"p.recordNumber, c.caseNumber", "p.gender,p.name", 
-			"c.classification", "#{cases.namesOrderBy}", "c.age", "upper(nu.name.name1)", "c.notifAddress.adminUnit.parent.name.name1", 
-			"c.notifAddress.adminUnit.name.name1", "c.state", "c.registrationDate", "c.treatmentPeriod.iniDate", "c.validationState"};
+		"c.classification", "#{cases.namesOrderBy}", "c.age", "upper(nu.name.name1)", "c.notifAddress.adminUnit.parent.name.name1", 
+		"c.notifAddress.adminUnit.name.name1", "c.state", "c.registrationDate", "c.treatmentPeriod.iniDate", "c.validationState"};
 
 	private static final String[] inverseOrderValues = {"p.recordNumber desc, c.caseNumber", "p.gender desc, upper(p.name) desc, upper(p.middleName) desc, upper(p.lastName) desc", 
 		"c.classification desc", "#{cases.namesOrderBy}", "c.age desc", "upper(nu.name.name1) desc", "c.notifAddress.adminUnit.parent.name.name1 desc", 
 		"c.notifAddress.adminUnit.name.name1 desc", "c.state desc", "c.registrationDate desc", "c.treatmentPeriod.iniDate desc", "c.validationState desc"};
 
 	private static final String[] restrictions = {/*"nu.id = #{caseFilters.tbunit.id}",*/
-				/*"p.recordNumber = #{caseFilters.recordNumber}", */ // just search by recordNumber if workspace.displayCaseNumber = RECORD_NUMBER
-				"p.recordNumber = #{caseFilters.patientRecordNumber}",
-				"c.registrationCode = #{caseFilters.registrationCode}",
-				"c.unitRegCode = #{caseFilters.unitRegCode}",
-				"c.caseNumber = #{caseFilters.caseNumber}",
-				"p.workspace.id = #{defaultWorkspace.id}",
-				"c.state = #{caseFilters.caseState}",
-				"c.notifAddress.adminUnit.code like #{caseFilters.adminUnitLike}",
-				"c.classification = #{caseFilters.classification}",
-				"upper(p.name) like #{caseFilters.nameLike}",
-				"upper(p.middleName) like #{caseFilters.middleNameLike}",
-				"upper(p.lastName) like #{caseFilters.lastNameLike}",
-				"c.patientType = #{caseFilters.patientType}",
-				"c.infectionSite = #{caseFilters.infectionSite}",
-				"c.diagnosisType = #{caseFilters.diagnosisType}",
-				"c.validationState = #{caseFilters.validationState}",
-				"nu.healthSystem.id = #{userWorkspace.healthSystem.id}",
-				"exists(select t.id from c.tags t where t.id = #{caseFilters.tagid})"};
+		/*"p.recordNumber = #{caseFilters.recordNumber}", */ // just search by recordNumber if workspace.displayCaseNumber = RECORD_NUMBER
+		"p.recordNumber = #{caseFilters.patientRecordNumber}",
+		"c.registrationCode = #{caseFilters.registrationCode}",
+		"c.unitRegCode = #{caseFilters.unitRegCode}",
+		"c.caseNumber = #{caseFilters.caseNumber}",
+		"p.workspace.id = #{defaultWorkspace.id}",
+		"c.state = #{caseFilters.caseState}",
+		"c.notifAddress.adminUnit.code like #{caseFilters.adminUnitLike}",
+		"c.classification = #{caseFilters.classification}",
+		"upper(p.name) like #{caseFilters.nameLike}",
+		"upper(p.middleName) like #{caseFilters.middleNameLike}",
+		"upper(p.lastName) like #{caseFilters.lastNameLike}",
+		"c.patientType = #{caseFilters.patientType}",
+		"c.infectionSite = #{caseFilters.infectionSite}",
+		"c.diagnosisType = #{caseFilters.diagnosisType}",
+		"c.validationState = #{caseFilters.validationState}",
+		"nu.healthSystem.id = #{userWorkspace.healthSystem.id}",
+	"exists(select t.id from c.tags t where t.id = #{caseFilters.tagid})"};
 
 	private static final String notifCond = "(nu.id = #{caseFilters.tbunitselection.tbunit.id})";
 	private static final String treatCond = "c.treatmentUnit.id =  #{caseFilters.tbunitselection.tbunit.id}";
-	
+
 	private static final String notifRegCond = "(nu.adminUnit.code like #{caseFilters.tbAdminUnitLike})";
 	private static final String treatRegCond = "c.treatmentUnit.adminUnit.code like #{caseFilters.tbAdminUnitLike}";
 
@@ -74,31 +74,31 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		if (resultList == null)
 		{
 			javax.persistence.Query query = createQuery();
-	        List<Object[]> lst = query==null ? null : query.getResultList();
-	        fillResultList(lst);
-	    }
+			List<Object[]> lst = query==null ? null : query.getResultList();
+			fillResultList(lst);
+		}
 		return resultList;
 	}
 
 	@Override
 	public String getEjbql() {
 		return "select p.name, c.age, p.gender, p.recordNumber, c.caseNumber, " + 
-			"c.treatmentPeriod.iniDate, c.registrationDate, nu.name.name1, " +
-			"loc.name.name1, loc.code, c.id, " +
-			"c.treatmentPeriod.endDate, c.state, c.classification, p.middleName, p.lastName, " +
-			"c.validationState, c.registrationCode, c.diagnosisType " +
-			getFromHQL() + " join c.patient p " +
-		 	   "join c.notificationUnit nu " +
-		 	   "join c.notifAddress.adminUnit loc ".concat(dynamicConditions());
+		"c.treatmentPeriod.iniDate, c.registrationDate, nu.name.name1, " +
+		"loc.name.name1, loc.code, c.id, " +
+		"c.treatmentPeriod.endDate, c.state, c.classification, p.middleName, p.lastName, " +
+		"c.validationState, c.registrationCode, c.diagnosisType " +
+		getFromHQL() + " join c.patient p " +
+		"join c.notificationUnit nu " +
+		"join c.notifAddress.adminUnit loc ".concat(dynamicConditions());
 	}
 
 
 	@Override
 	public String getCountEjbql() {
 		return "select count(*) " + getFromHQL() + 
-			" join c.patient p " +
-	 	   	"join c.notificationUnit nu " + 
-	 	   	dynamicConditions();
+		" join c.patient p " +
+		"join c.notificationUnit nu " + 
+		dynamicConditions();
 	}
 
 
@@ -118,11 +118,11 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	protected String dynamicConditions() {
 		if (hqlCondition != null)
 			return hqlCondition;
-		
+
 		hqlCondition = "";
 
 		FilterHealthUnit filterUnit = getCaseFilters().getFilterHealthUnit();
-		
+
 		// health unit condition
 		if (filterUnit != null) {
 			// health unit was set ?
@@ -139,30 +139,30 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 				}
 			}
 			else // region was set ? 
-			if (getCaseFilters().getTbunitselection().getAdminUnit() != null) {
-				switch (filterUnit) {
-				case NOTIFICATION_UNIT:
-					addCondition(notifRegCond);
-					break;
-				case TREATMENT_UNIT:
-					addCondition(treatRegCond);
-					break;
-				case BOTH:
-					addCondition("(" + treatRegCond + " or " + notifRegCond + ")");
+				if (getCaseFilters().getTbunitselection().getAdminUnit() != null) {
+					switch (filterUnit) {
+					case NOTIFICATION_UNIT:
+						addCondition(notifRegCond);
+						break;
+					case TREATMENT_UNIT:
+						addCondition(treatRegCond);
+						break;
+					case BOTH:
+						addCondition("(" + treatRegCond + " or " + notifRegCond + ")");
+					}
 				}
-			}
 		}
 
 		mountAdvancedSearchConditions();
 		mountSingleSearchConditions();
-				
+
 		if (!hqlCondition.isEmpty())
 			hqlCondition = " where ".concat(hqlCondition);
 
 		return hqlCondition;
 	}
 
-	
+
 	/**
 	 * Generate HQL instructions for advanced search conditions
 	 */
@@ -180,18 +180,18 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 
 			if (caseFilters.isIniTreatmentDate())
 				generateHQLPeriod(dtIni, dtEnd, "c.treatmentPeriod.iniDate");
-			
+
 			if (caseFilters.isRegistrationDate())
 				generateHQLPeriod(dtIni, dtEnd, "c.registrationDate");
 		}
-		
+
 		if (DisplayCaseNumber.REGISTRATION_CODE.equals(getDefaultWorkspace().getDisplayCaseNumber())) {
 			if ((caseFilters.getRecordNumber() != null) && (!caseFilters.getRecordNumber().isEmpty()))
 				addCondition("c.registrationCode = #{casesFilter.recordNumber}");
 		}
 	}
 
-	
+
 	/**
 	 * Generate HQL instructions for single search by patient name 
 	 */
@@ -199,49 +199,49 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		CaseFilters caseFilters = getCaseFilters();
 		if (caseFilters.getPatient() != null) {
 			String numberCond = generateHQLPatientNumber();
-			
+
 			String[] names = caseFilters.getPatient().split(" ");
 			if (names.length == 0) 
 				return;
-			
+
 			String s="(";
 			for (String name: names) {
 				name = name.replaceAll("'", "''");
 				if (s.length() > 1)
 					s += " and ";
 				s += "((upper(p.name) like '%" + name.toUpperCase() + 
-					 "%') or (upper(p.middleName) like '%" + name.toUpperCase() + 
-					 "%') or (upper(p.lastName) like '%" + name.toUpperCase() + "%'))";
+				"%') or (upper(p.middleName) like '%" + name.toUpperCase() + 
+				"%') or (upper(p.lastName) like '%" + name.toUpperCase() + "%'))";
 			}
-			
+
 			addCondition(s + (numberCond == null? ")": " or (" + numberCond + "))"));	
 		}
-		
+
 		Integer stateIndex = caseFilters.getStateIndex();
 		if (stateIndex != null) {
 			String cond;
 			switch (stateIndex) {
 			// CLOSED
 			case 100: cond = "c.state > " + Integer.toString( CaseState.ONTREATMENT.ordinal() );
-				break;
+			break;
 
 			// SUSPECT NOT ON TREATMENT
 			case 200: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal();
-				break;
+			break;
 
 			// WAIT TO START TREATMENT
 			case 0: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType != " + DiagnosisType.SUSPECT.ordinal();
 			break;
 
 			default: cond = "c.state = " + stateIndex.toString();
-				break;
+			break;
 			}
 
 			addCondition(cond);
 		}
 	}
 
-	
+
 	/**
 	 * Convert the number entered by the user and separates patient number and case number
 	 * @return
@@ -250,10 +250,10 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		String pat = getCaseFilters().getPatient();
 		if (pat == null)
 			return null;
-		
+
 		// patient code is generated by the system
 		if (DisplayCaseNumber.REGISTRATION_CODE.equals(getDefaultWorkspace().getDisplayCaseNumber())) {
-				return "c.registrationCode = #{caseFilters.patient}";
+			return "c.registrationCode = #{caseFilters.patient}";
 		}
 		else {
 			Integer patNumber = null;
@@ -271,17 +271,17 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 				} catch (Exception e) {
 					caseNumber = null;
 				}
-			
-			if (patNumber == null)
-				return null;
-			
-			String s = "p.recordNumber = " + patNumber;
-			if (caseNumber != null)
-				s = "(" + s + ") and (c.caseNumber = " + caseNumber + ")";
-			return s;
+
+				if (patNumber == null)
+					return null;
+
+				String s = "p.recordNumber = " + patNumber;
+				if (caseNumber != null)
+					s = "(" + s + ") and (c.caseNumber = " + caseNumber + ")";
+				return s;
 		}
 	}
-	
+
 	/**
 	 * Generates HQL condition to a date field filter
 	 * @param dtIni - Initial date of the filter
@@ -303,10 +303,10 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	 */
 	protected void addCondition(String condition) {
 		if (hqlCondition.isEmpty())
-			 hqlCondition = condition;
+			hqlCondition = condition;
 		else hqlCondition = hqlCondition + " and " + condition;
 	}
-	
+
 	@Override
 	public List<String> getStringRestrictions() {
 		return Arrays.asList(restrictions);
@@ -319,7 +319,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		return s;
 	}
 
-	
+
 	@Override
 	public Integer getMaxResults() {
 		return 50;
@@ -330,13 +330,13 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	 * @param lst
 	 */
 	protected void fillResultList(List<Object[]> lst) {
-	 	List<AdministrativeUnit> adminUnits = getCaseFilters().getAuselection().getOptionsLevel1();
-	 	if (adminUnits == null) {
-	 		adminUnits = new ArrayList<AdministrativeUnit>();
-	 		adminUnits.add(getCaseFilters().getAuselection().getUnitLevel1());
-	 	}
-		
-	 	Patient p = new Patient();
+		List<AdministrativeUnit> adminUnits = getCaseFilters().getAuselection().getOptionsLevel1();
+		if (adminUnits == null) {
+			adminUnits = new ArrayList<AdministrativeUnit>();
+			adminUnits.add(getCaseFilters().getAuselection().getUnitLevel1());
+		}
+
+		Patient p = new Patient();
 		resultList = new ArrayList<CaseResultItem>();
 		for (Object[] obj: lst) {
 			CaseResultItem item = new CaseResultItem();
@@ -344,22 +344,22 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			p.setName((String)obj[0]);
 			p.setMiddleName((String)obj[14]);
 			p.setLastName((String)obj[15]);
-			
-/*			String patname = (String)obj[0];
+
+			/*			String patname = (String)obj[0];
 			if (obj[14] != null)
 				patname += " " + (String)obj[14];
 			if (obj[15] != null)
 				patname += " " + (String)obj[15];
-		
+
 			item.setPatientName(patname);
-*/			
+			 */			
 			item.setPatientName(p.getFullName());
 			item.setPatientAge((Integer)obj[1]);
 			item.setGender((Gender)obj[2]);
 			item.setBeginningTreatmentDate((Date)obj[5]);
 			item.setNotificationDate((Date)obj[6]);
 			item.setHealthUnit((String)obj[7]);
-//			item.setRegion((String)obj[9]);
+			//			item.setRegion((String)obj[9]);
 			item.setLocality((String)obj[8]);
 			item.setCaseId((Integer)obj[10]);
 			item.setEndingTreatmentDate((Date)obj[11]);
@@ -374,8 +374,8 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 				item.setPatientRecordNumber((Integer)obj[3]);
 				item.setCaseNumber((Integer)obj[4]);				
 			}
-			
-			item.setDiagnosisType((DiagnosisType)obj[18]);
+			if(obj.length>18)  // AK prevent index out of bound, if diagnosis type not asks by subclass
+				item.setDiagnosisType((DiagnosisType)obj[18]);
 
 			// search for administrative unit
 			AdministrativeUnit adm = null;
@@ -386,19 +386,19 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 					break;
 				}
 			}
-			
+
 			if (adm != null) {
 				item.setRegion(adm.getName().getDefaultName());
 				if (adm.getCode().equals(code)) {
 					item.setLocality(null);
 				}
 			}
-			
+
 			resultList.add(item);
 		}
 	}
 
-	
+
 	@Override
 	@Transactional
 	public boolean isNextExists()
@@ -406,12 +406,12 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		boolean b = (resultList!=null) && (resultList.size() > getMaxResults());
 		return b;
 	}
-	
+
 	@Override
 	public void refresh() {
 		resultList = null;
 		hqlCondition = null;
-		
+
 		super.refresh();
 	}
 
@@ -429,10 +429,10 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			return "upper(p.middleName) desc, upper(p.name) desc";
 		}
 		// default if FIRST_MIDDLE_LASTNAME
-		
+
 		return descOrder? "upper(p.name) desc, upper(p.middleName) desc, upper(p.lastName) desc": "upper(p.name), upper(p.middleName), upper(p.lastName)";
 	}
-	
+
 	/**
 	 * Return the default workspace in use
 	 * @return
