@@ -23,7 +23,7 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.utils.EntityQuery;
 /**
- * Patient query, special ukrainian edition. Main query changed and working pagination
+ * Patient query, special ukrainian edition. Main query changed and pagination works now
  * @author alexey
  *
  */
