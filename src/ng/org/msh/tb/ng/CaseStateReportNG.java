@@ -13,8 +13,6 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
-import org.msh.tb.cases.CaseStateReport.Item;
-import org.msh.tb.cases.CaseStateReport.ValidationItem;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.Tag.TagType;
@@ -75,7 +73,7 @@ public class CaseStateReportNG {
 		if (userWorkspace.getHealthSystem() != null)
 			hsID = userWorkspace.getHealthSystem().getId();
 		
-		String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
+		/*String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
 				"from tbcase c " +
 				"inner join tbunit u on u.id = c.notification_unit_id " + aucond +
 				"where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
@@ -89,7 +87,24 @@ public class CaseStateReportNG {
 				"where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " + 
 				" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
 				(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
-				" group by c.state, c.validationState";
+				" group by c.state, c.validationState";*/
+		
+		String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
+		"from tbcase c " +
+		"inner join tbunit u on u.id = c.notification_unit_id " + aucond +
+		"where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
+		(hsID != null? "and u.healthSystem_id = " + hsID.toString(): "") +
+		" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
+		" group by c.state, c.validationState, c.diagnosisType " +
+		"union " +
+		"select c.state, c.validationState, c.diagnosisType, count(*) " +
+		"from tbcase c " +
+		"inner join tbunit u on u.id = c.treatment_unit_id " + aucond + 
+		"where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + 
+		" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
+		(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
+		" group by c.state, c.validationState";
+		
 		List<Object[]> lst = entityManager.createNativeQuery(sql).getResultList();
 		
 		total = new Item();
@@ -100,7 +115,8 @@ public class CaseStateReportNG {
 			
 			DiagnosisType diagType;
 			if (val[2] != null)
-				 diagType = DiagnosisType.values()[((BigInteger)val[2]).intValue()];
+				 //diagType = DiagnosisType.values()[((BigInteger)val[2]).intValue()];
+				diagType = DiagnosisType.values()[(Integer)val[2]];
 			else diagType = DiagnosisType.CONFIRMED;
 			ValidationState vs = ValidationState.values()[(Integer)val[1]];
 
@@ -266,7 +282,7 @@ public class CaseStateReportNG {
 	/**
 	 * Search for a specific item based on the state
 	 * @param state
-	 * @return
+	 * @return6
 	 */
 	private Item findItem(CaseState state, DiagnosisType diagType) {
 		int stateIndex = state.ordinal();
@@ -281,7 +297,7 @@ public class CaseStateReportNG {
 			stateIndex = 200;
 			desc = messages.get("CaseState.NOT_ON_TREATMENT");
 		}
-		//VR: adding 3 else-ifs
+		//VR: additional registered-cases categories
 		else
 			if((state == CaseState.ONTREATMENT) && (diagType == DiagnosisType.SUSPECT)){
 				stateIndex = 300;
