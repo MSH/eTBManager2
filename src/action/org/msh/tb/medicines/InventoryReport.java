@@ -25,7 +25,7 @@ public class InventoryReport {
 
 	private SourceMedicineTree<BatchQuantity> root;
 	private Date nextOrderDate;
-	
+
 	/**
 	 * Return list of sources
 	 * @return list of {@link SourceNode} objects
@@ -44,7 +44,7 @@ public class InventoryReport {
 		root = new SourceMedicineTree<BatchQuantity>();
 
 		UserSession userSession = (UserSession)Component.getInstance("userSession", true);
-		
+
 		List<StockPosition> lst = stockPositionList.generate(userSession.getTbunit(), null);
 
 		// mount medicine quantity
@@ -53,7 +53,7 @@ public class InventoryReport {
 			MedicineInfo info = new MedicineInfo(medNode, sp);
 			medNode.setItem(info);
 		}
-		
+
 		// mount batches quantity
 		List<BatchQuantity> batches = stockPositionList.getBatchAvailable(userSession.getTbunit(), null);
 		for (BatchQuantity bq: batches) {
@@ -62,12 +62,13 @@ public class InventoryReport {
 			// check if batch has expired
 			if (bq.getBatch().isExpired()) {
 				MedicineNode node = root.findMedicineNode(bq.getSource(), bq.getBatch().getMedicine());
-				((MedicineInfo)node.getItem()).setHasBatchExpired(true);
+				if ((node != null) && (node.getItem() != null))  //AK maybe null
+					((MedicineInfo)node.getItem()).setHasBatchExpired(true);
 			}
 		}
-		
+
 		loadLastMovement(userSession.getTbunit());
-		
+
 		// calculate stock on hand
 		for (SourceNode node: root.getSources()) {
 			for (Object obj: node.getMedicines()) {
@@ -77,13 +78,14 @@ public class InventoryReport {
 		}
 	}
 
-	
+
 	/**
 	 * Calculate stock on hand
 	 * @param info
 	 */
 	protected void calcAMC(MedicineNode node) {
 		MedicineInfo info = (MedicineInfo)node.getItem();
+		if (info==null) return; //AK may be null
 		StockPosition sp = info.getStockPosition();
 		Integer amc = sp.getAmc();
 		if ((amc == null) || (amc == 0))
@@ -97,20 +99,20 @@ public class InventoryReport {
 				nextOrderDate = DateUtils.getDate();
 			return;
 		}
-		
+
 		float val = (float)qtd / (float)amc;
 		int days = Math.round(val * 30);
 
 		Date dt = DateUtils.incDays(sp.getLastMovement(), days);
-		
+
 		Date dtExpire = info.getLastBatchExpire();
-		
+
 		if ((dtExpire != null) && (dt.after(dtExpire)))
 			dt = dtExpire;
-		
+
 		info.setStockOutDate(dt);
 		info.setNextOrderDate(DateUtils.incMonths(dt, -1));
-		
+
 		if ((nextOrderDate == null) || (nextOrderDate.after( info.getNextOrderDate()))) {
 			nextOrderDate = info.getNextOrderDate();
 		}
@@ -122,13 +124,13 @@ public class InventoryReport {
 	 */
 	protected void loadLastMovement(Tbunit unit) {
 		String hql = "select max(m.date), m.source.id, m.medicine.id " +
-			"from Movement m " +
-			"where m.tbunit.id = :unit " +
-			"group by m.source.id, m.medicine.id";
-		
+		"from Movement m " +
+		"where m.tbunit.id = :unit " +
+		"group by m.source.id, m.medicine.id";
+
 		List<Object[]> lst = entityManager.createQuery(hql)
-			.setParameter("unit", unit.getId())
-			.getResultList();
+		.setParameter("unit", unit.getId())
+		.getResultList();
 
 		for (Object vals[]: lst) {
 			Date dt = (Date)vals[0];
@@ -144,7 +146,7 @@ public class InventoryReport {
 		}
 	}
 
-	
+
 	/**
 	 * @author Ricardo Memoria
 	 *
@@ -156,7 +158,7 @@ public class InventoryReport {
 		private Date stockOutDate;
 		private Date nextOrderDate;
 		private boolean hasBatchExpired;
-		
+
 		public MedicineInfo(MedicineNode node, StockPosition stockPosition) {
 			this.stockPosition = stockPosition;
 			this.node = node;
@@ -171,11 +173,11 @@ public class InventoryReport {
 			}
 			return tot; //stockPosition.getQuantity();
 		}
-		
+
 		public float getUnitPrice() {
 			return stockPosition.getUnitPrice();
 		}
-		
+
 		public float getTotalPrice() {
 			float tot = 0;
 			for (Object obj: node.getBatches()) {
@@ -185,7 +187,7 @@ public class InventoryReport {
 			}
 			return tot; //stockPosition.getQuantity();
 		}
-		
+
 		/**
 		 * Generate a unique row id for the medicine
 		 * @return
@@ -193,7 +195,7 @@ public class InventoryReport {
 		public String getRowId() {
 			return stockPosition.getSource().getId().toString() + "_" + stockPosition.getMedicine().getId().toString();
 		}
-		
+
 		public Date getNextBatchExpire() {
 			Date dt = null;
 			for (Object obj: node.getBatches()) {
@@ -205,7 +207,7 @@ public class InventoryReport {
 			}
 			return dt;
 		}
-		
+
 		public Date getLastBatchExpire() {
 			Date dt = null;
 			for (Object obj: node.getBatches()) {
@@ -217,8 +219,8 @@ public class InventoryReport {
 			}
 			return dt;
 		}
-		
-		
+
+
 		/**
 		 * @return the stockPosition
 		 */
