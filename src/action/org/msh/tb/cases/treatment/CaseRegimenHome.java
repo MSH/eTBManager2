@@ -251,7 +251,7 @@ public class CaseRegimenHome {
 			pm.setMedicine(mr.getMedicine());
 			pm.setSource(mr.getDefaultSource());
 			pm.setFrequency(mr.getDefaultFrequency());
-			if (useDefaultDoseUnit)
+			//if (useDefaultDoseUnit) //VR: removing the check condition to import default dose unit directly to start treatment page
 				pm.setDoseUnit(mr.getDefaultDoseUnit());
 
 			meds.add(pm);
