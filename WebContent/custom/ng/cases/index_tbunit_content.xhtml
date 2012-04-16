@@ -16,7 +16,7 @@
 		<th align="right">#{messages['global.total']}
 		</th>
 	</tr>
-	<a:repeat value="#{caseStateReport.items}" var="it">
+	<a:repeat value="#{caseStateReportng.items}" var="it">
 		<tr><td>
 			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" disabled="#{it.state==null}">
 				<f:param name="stateIndex" value="#{it.stateIndex}"/>
