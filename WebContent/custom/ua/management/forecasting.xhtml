@@ -245,6 +245,7 @@
 		<h:column>
 			<f:facet name="header">
 				#{messages['Regimen']}
+				#{forecastingCalculation.controlTotal}%
 			</f:facet>
 			#{r.regimen.name}
 		</h:column>
@@ -300,10 +301,12 @@
 	</div>
 
 	<div class="form-content">
-		<a:commandLink value="#{messages['form.update']}" action="#{forecastingView.initializeStockOnHand}" 
-		   reRender="meds" style="float:right;"/>
+<!-- Ukraine not use stocks yet AK see rendered=false 16/04/2012 -->
+		<a:commandLink rendered="false" value="#{messages['form.update']}" action="#{forecastingView.initializeStockOnHand}"
+ 		   reRender="meds" style="float:right;"/> 
+
 		<h2>#{messages['admin.medicines']}</h2>
-		
+
 		<h:panelGroup id="meds">
 		<h:dataTable value="#{forecasting.medicines}" var="r" styleClass="table1"  
 			rowClasses="hlcolor" columnClasses="colb,colrb,colrb,colcb,colcb" width="100%">
