@@ -228,6 +228,18 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			// SUSPECT NOT ON TREATMENT
 			case 200: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal();
 			break;
+			
+			// SUSPECT NOT ON TREATMENT
+			case 300: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal();
+				break;
+				
+				// CONFIRMED ON TREATMENT
+			case 400: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.CONFIRMED.ordinal();
+			break;
+			
+			// CONFIRMED NOT ON TREATMENT
+			case 500: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.CONFIRMED.ordinal();
+			break;
 
 			// WAIT TO START TREATMENT
 			case 0: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType != " + DiagnosisType.SUSPECT.ordinal();
