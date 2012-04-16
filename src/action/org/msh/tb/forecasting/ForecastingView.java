@@ -8,6 +8,7 @@ import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -172,9 +173,15 @@ public class ForecastingView {
 
 	/**
 	 * Initialize quantity in stock at the present moment
+	 * in UA not used at all (yet) AK 16.04.2012
 	 */
 	public void initializeStockOnHand() {
 		// apply restriction according to the context
+		// AK 16.04.2012
+		String wsExt = (String)Component.getInstance("workspaceExtension");
+		if ((wsExt!=null) && (wsExt.equalsIgnoreCase("ua"))) return;  
+		//AK
+		
 		String restriction;
 		Forecasting forecasting = forecastingHome.getInstance();
 		if ((forecasting.getView() == UserView.TBUNIT) && (forecastingHome.getTbunitSelection().getTbunit() != null)) 

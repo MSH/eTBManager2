@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.RaiseEvent;
@@ -89,6 +90,7 @@ public class ForecastingCalculation {
 	private Period leadTimePeriod;
 	
 	private Period reviewPeriod;
+	private float controlTotal=0;
 	
 	
 	/**
@@ -601,17 +603,12 @@ public class ForecastingCalculation {
 		
 		// calculate total percentage of regimens
 		float totalPerc = 0;
-		
-		if (!forecasting.getWorkspace().getExtension().equals("ua")) {	
+		String wsExt = (String)Component.getInstance("workspaceExtension");
 			for (ForecastingRegimen aux: forecasting.getRegimens())
 				totalPerc += aux.getPercNewCases();
-	
 			if (totalPerc == 0)
-				return;
-			}
-		else
-			totalPerc = 100;
-		
+				return;		
+		this.controlTotal = totalPerc;
 		float newCases = Math.round( forNewCases.getNumNewCases() * forRegimen.getPercNewCases() / totalPerc );
 		if (newCases == 0)
 			return;
@@ -853,6 +850,11 @@ public class ForecastingCalculation {
 	 */
 	public Period getReviewPeriod() {
 		return reviewPeriod;
+	}
+
+
+	public float getControlTotal() {
+		return controlTotal;
 	}
 	
 }
