@@ -60,7 +60,7 @@
 				rendered="#{prescriptionTable.valid}">
 			</rich:menuItem>
 			<rich:menuItem  rendered="#{caseHome.canTransferOut and prescriptionTable.valid}" submitMode="client">
-				<s:link value="#{messages['cases.move']}" view="/cases/casemove.xhtml" styleClass="rich-menu-item-label">
+				<s:link value="#{messages['cases.move']}" view="/custom/ng/cases/casemove.xhtml" styleClass="rich-menu-item-label">
 					<f:param name="id" value="#{caseHome.id}" />
 				</s:link>
 			</rich:menuItem>
