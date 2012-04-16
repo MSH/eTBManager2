@@ -60,7 +60,7 @@
 	<tr>
 		<th colspan="2">#{messages['cases.registered']}</th>
 	</tr>
-	<ui:repeat value="#{caseStateReport.items}" var="it">
+	<ui:repeat value="#{caseStateReportng.items}" var="it">
 	<tr>
 		<td>
 			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" styleClass="link-small">
@@ -82,7 +82,7 @@
 			<b>#{messages['global.total']}</b>
 		</td>
 		<td align="right">
-			<b><h:outputText value="#{caseStateReport.total.cases}">
+			<b><h:outputText value="#{caseStateReportng.total.cases}">
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText></b>
 		</td>
@@ -95,7 +95,7 @@
 	<tr>
 		<th colspan="2">#{messages['ValidationState']}</th>
 	</tr>
-	<ui:repeat value="#{caseStateReport.validationItems}" var="it">
+	<ui:repeat value="#{caseStateReportng.validationItems}" var="it">
 	<tr>
 		<td>
 			<s:link value="#{messages[it.validationState.key]}"  view="/cases/searchresult.xhtml" styleClass="link-small">
