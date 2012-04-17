@@ -216,12 +216,12 @@
 		
 		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='SUSPECT'}">
     		<ui:define name="label">#{messages['SuspectType']}:</ui:define>
-    		<h:selectOneMenu id="patType" value="#{tbcaseng.suspectType}" required="#{tbcase.validated}">
-    			<s:selectItems var="it" value="#{fieldsQuery.suspectTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
-    			<s:convertEnum />
+    		<h:selectOneMenu id="susType" value="#{tbcaseng.suspectType}" required="#{tbcase.validated}">
+    			<s:selectItems value="#{fieldsQuery.suspectTypes}"  var="q" noSelectionLabel="-" label="#{q.name}" />
+    			<s:convertEntity />
     		</h:selectOneMenu>
 		</s:decorate>
-    
+		    
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
 
     <s:decorate template="/layout/dateedit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
