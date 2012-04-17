@@ -140,13 +140,19 @@
     	<h:outputText id="dt" value="#{tbcase.diagnosisDate}" converter="localeDateConverter"/>
 	</s:decorate>
 	
-	</td><td>
-	
+		</td><td>
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
 		#{messages[tbcase.diagnosisType.key]}
 	</s:decorate>
 	</td></tr>
+	<tr><td>
+	<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcaseng.suspectType}">
+		<ui:define name="label">#{messages['TbCase.SuspectType']}:</ui:define>
+		#{messages[tbcaseng.suspectType.toString()]}
+	</s:decorate>
+	</td></tr>
+	
 	
 <!-- 	<tr><td>
 	<s:decorate template="/layout/display.xhtml">
