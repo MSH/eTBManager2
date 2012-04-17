@@ -100,7 +100,7 @@ public class CaseStateReportNG {
 		"select c.state, c.validationState, c.diagnosisType, count(*) " +
 		"from tbcase c " +
 		"inner join tbunit u on u.id = c.treatment_unit_id " + aucond + 
-		"where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + 
+		"where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ")"+
 		" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
 		(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
 		" group by c.state, c.validationState";
