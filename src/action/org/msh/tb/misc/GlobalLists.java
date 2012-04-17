@@ -531,4 +531,8 @@ public class GlobalLists {
 	public IndicatorDate[] getIndicatorDate() {
 		return IndicatorDate.values();
 	}
+	
+	public static GlobalLists instance(){
+		return (GlobalLists)Component.getInstance("globalLists");
+	}
 }
