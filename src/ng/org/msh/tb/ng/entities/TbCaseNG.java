@@ -6,9 +6,13 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.ng.entities.enums.SuspectType;
 import org.msh.tb.transactionlog.PropertyLog;
@@ -32,9 +36,11 @@ public class TbCaseNG extends TbCase{
 	@Column(length=100)
 	private String emailAddress;
 	
-	@Column(length=100)
-	private SuspectType suspectType;
-
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="SUSPECT_TYPE")
+	@PropertyLog(key="TbField.SUSPECT_TYPE")
+	private FieldValue suspectType;
+	
 	public List<CaseDispensing_Ng> getDispng() {
 		return dispng;
 	}
@@ -58,11 +64,12 @@ public class TbCaseNG extends TbCase{
 		this.emailAddress = emailAddress;
 	}
 
-	public SuspectType getSuspectType() {
+	public FieldValue getSuspectType() {
 		return suspectType;
 	}
 	
-	public void setSuspectType(SuspectType suspectType) {
+	public void setSuspectType(FieldValue suspectType) {
 		this.suspectType = suspectType;
-	}	
+	}
+
 }
