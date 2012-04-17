@@ -1,5 +1,7 @@
 package org.msh.tb.adminunits;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 import org.jboss.seam.annotations.Factory;
@@ -11,6 +13,7 @@ import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.CountryStructure;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
+import org.msh.tb.login.UserSession;
 import org.msh.tb.transactionlog.LogInfo;
 
 
@@ -24,6 +27,7 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 	private List<CountryStructure> structures;
 	
 	@In(required=false) AdminUnitsQuery adminUnits;
+	@In(create=true) UserSession userSession;
 	@In(create=true) FacesMessages facesMessages;
 	
 	@Factory("adminUnit")
@@ -228,10 +232,11 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 	}
 	
 	public void updateCode() {
-		List<Workspace> wslst = getEntityManager().createQuery("from Workspace").getResultList();
-		for (Workspace ws: wslst) {
-			updateCodeWorkspace(ws);
-		}
+		//List<Workspace> wslst = getEntityManager().createQuery("from Workspace").getResultList();
+		//for (Workspace ws: wslst) {
+		//	updateCodeWorkspace(ws);
+		//}
+		updateCodeWorkspace(userSession.getUserWorkspace().getWorkspace());
 	}
 	
 	protected void updateCodeWorkspace(Workspace ws) {
@@ -273,14 +278,15 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 	
 	protected void updateCodeAdminUnit(AdministrativeUnit adm) {
 		String codeprefix = adm.getCode();
-
-		int i = 1;
+		
+		int counter = 1;  
 		for (AdministrativeUnit aux: adm.getUnits()) {
-			String code = codeprefix + intToCode(i);
+			String code = codeprefix + intToCode(counter);
 			aux.setCode(code);
 			getEntityManager().persist(aux);
 			getEntityManager().flush();
 			updateCodeAdminUnit(aux);
+			counter++;
 		}
 	}
 }
