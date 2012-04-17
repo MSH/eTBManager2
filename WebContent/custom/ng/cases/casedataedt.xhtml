@@ -215,7 +215,7 @@
 		</s:decorate>
 		
 		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='SUSPECT'}">
-    		<ui:define name="label">#{messages['SuspectType']}:</ui:define>
+    		<ui:define name="label">#{messages['TbCase.SuspectType']}:</ui:define>
     		<h:selectOneMenu id="susType" value="#{tbcaseng.suspectType}" required="#{tbcase.validated}">
     			<s:selectItems value="#{fieldsQuery.suspectTypes}"  var="q" noSelectionLabel="-" label="#{q.name}" />
     			<s:convertEntity />
