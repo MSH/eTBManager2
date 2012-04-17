@@ -209,9 +209,11 @@
    <script type="text/javascript"> 
     function showconfirmedcasedet(cb) {
   		if (isConfirmed(cb))
-  			jQuery('#showconfcasefields').show(500);
+  			jQuery('#showsustype').hide(500);
+  			jQuery('#showconfcasefields').show(500);		
   		if(isSuspect(cb))
 			jQuery('#showconfcasefields').hide(500);
+  			jQuery('#showsustype').show(500);
   	}
   	function isConfirmed(cb){
   		return ((cb.selectedIndex == 2));
@@ -229,7 +231,16 @@
     		<s:convertEnum />
     	</h:selectOneMenu>
     </s:decorate>
-
+    
+	<div id="showsustype" style="clear:both;">
+	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['SuspectType']}:</ui:define>
+    		<h:selectOneMenu id="susType" value="#{tbcaseng.suspectType}" required="#{tbcase.validated}">
+    			<s:selectItems value="#{fieldsQuery.suspectTypes}"  var="q" noSelectionLabel="-" label="#{q.name}" />
+    			<s:convertEntity />
+    		</h:selectOneMenu>
+		</s:decorate>
+	</div>
 	
 	  <div id="showconfcasefields" style="clear:both;">
 	 <s:decorate template="/layout/dateedit.xhtml">
