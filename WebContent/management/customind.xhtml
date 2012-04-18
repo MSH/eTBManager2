@@ -84,11 +84,10 @@
 				
 				<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty val.value)}"/>
 				
-				<h:outputText value="#{val.value / row.total * 100}" rendered="#{indicator.showPerc}">
-					<f:convertNumber pattern="###.##"/>
-				</h:outputText>
-				
-				<h:outputText value="%" rendered="#{indicator.showPerc}" />	
+				<s:decorate template="/layout/percentagelabel.xhtml" rendered="#{indicator.showPerc}">
+			    	<ui:param name="totalValue" value="#{row.total}" />
+			    	<ui:param name="absoluteValue" value="#{val.value}" />
+			    </s:decorate>		
 				
 			</td>
 			</ui:repeat>
@@ -120,11 +119,10 @@
 				
 				<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty col.total)}"/>
 				
-				<h:outputText value="#{col.total / table.total * 100}" rendered="#{indicator.showPerc}">
-					<f:convertNumber pattern="###.##"/>
-				</h:outputText>
-				
-				<h:outputText value="%" rendered="#{indicator.showPerc}" />	
+			    <s:decorate template="/layout/percentagelabel.xhtml" rendered="#{indicator.showPerc}">
+			    	<ui:param name="totalValue" value="#{table.total}" />
+			    	<ui:param name="absoluteValue" value="#{col.total}" />
+			    </s:decorate>					
 				</b>
 			</td>
 		</ui:repeat>
