@@ -54,7 +54,11 @@ public class CaseExportUA extends CaseExport {
 			"left join fetch c.pulmonaryType " +
 			"left join fetch c.extrapulmonaryType");
 	}
-
+	
+	@Override
+	protected String getHQLValidationState() {
+		return null;
+	}
 
 	public void addTitles() {
 		ExcelCreator excel = getExcel();
