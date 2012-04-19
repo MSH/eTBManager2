@@ -64,7 +64,6 @@ public class User implements java.io.Serializable {
     private String password;
     
     @Column(nullable=false, length=80)
-    @Email
 	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
     private String email;
     
