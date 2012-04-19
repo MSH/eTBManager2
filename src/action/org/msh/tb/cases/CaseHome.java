@@ -262,29 +262,28 @@ public class CaseHome extends WsEntityHome<TbCase>{
 	}
 	
 	public boolean isCanEditCaseData() {
-		return checkRoleBySuffix("CASE_DATA_EDT") && (isWorkingUnit());
+		return (getTbCase().isOpen()) && checkRoleBySuffix("CASE_DATA_EDT") && (isWorkingUnit());
 	}
 	
-		
 	public boolean isCanStartTreatment() {
 		CaseState st = getInstance().getState();
-		return (isManaged()) && (st != null) && (st.ordinal() < CaseState.ONTREATMENT.ordinal()) && (isCanEditTreatment());
+		return getTbCase().isOpen() && (isManaged()) && (st != null) && (st.ordinal() < CaseState.ONTREATMENT.ordinal()) && (isCanEditTreatment());
 	}
 	
 	public boolean isCanEditTreatment() {
-		return (getInstance().isOpen()) && (checkRoleBySuffix("CASE_TREAT_EDT") && (isWorkingUnit()));
+		return getTbCase().isOpen() && (getInstance().isOpen()) && (checkRoleBySuffix("CASE_TREAT_EDT") && (isWorkingUnit()));
 	}
 
 	public boolean isCanEditTreatmentCalendar() {
-		return (getInstance().isOpen()) && (checkRoleBySuffix("CASE_INTAKEMED_EDT") && (isWorkingUnit()));
+		return getTbCase().isOpen() && (getInstance().isOpen()) && (checkRoleBySuffix("CASE_INTAKEMED_EDT") && (isWorkingUnit()));
 	}
 	
 	public boolean isCanEditExams() {
-		return checkRoleBySuffix("CASE_EXAMS_EDT") && isWorkingUnit();
+		return getTbCase().isOpen() && checkRoleBySuffix("CASE_EXAMS_EDT") && isWorkingUnit();
 	}
 	
 	public boolean isCanEditAditionalInfo() {
-		return checkRoleBySuffix("CASE_ADDINFO_EDT") && isWorkingUnit();
+		return getTbCase().isOpen() && checkRoleBySuffix("CASE_ADDINFO_EDT") && isWorkingUnit();
 	}
 	
 	public boolean isCanAddComments() {
