@@ -105,8 +105,6 @@ public class GlobalLists {
 		DrugResistanceType.POLY_RESISTANCE,
 		DrugResistanceType.MULTIDRUG_RESISTANCE,
 		DrugResistanceType.EXTENSIVEDRUG_RESISTANCE,
-		DrugResistanceType.RIFAMPICIN_MONO_RESISTANCE,
-		DrugResistanceType.ISONIAZID_MONO_RESISTANCE
 	};
 
 	
@@ -160,6 +158,7 @@ public class GlobalLists {
 		return suspectTypes;
 	}
 
+	@Factory("drugresisttypes_ng")
 	public static DrugResistanceType[] getDrugresistancetype() {
 		return drugResistanceType;
 	}
