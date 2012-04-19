@@ -40,37 +40,31 @@
 
 	<s:fragment rendered="#{defaultWorkspace.patientNameComposition=='FIRST_MIDDLE_LASTNAME'}">
 			<s:decorate styleClass="label">
-				#{messages['Patient.firstname']}
-				<br/>
+				<s:label value="#{messages['Patient.firstname']}" styleClass="over" />
 				<h:inputText id="name" value="#{patientdata.name}" style="width:120px;margin-right:6px;" required="#{required}"/>
 			</s:decorate>
 			<s:decorate styleClass="label">
-				#{messages['Patient.middleName']}
-				<br/>
-				<h:inputText id="midname" value="#{patientdata.middleName}" style="width:120px;margin-right:6px;" required="#{required}"/>
+				<s:label value="#{messages['Patient.middleName']}" styleClass="over" />
+				<h:inputText id="midname" value="#{patientdata.middleName}" style="width:120px;margin-right:6px;" />
 			</s:decorate>
 			<s:decorate styleClass="label">
-				#{messages['Patient.lastName']}
-				<br/>
-				<h:inputText id="lastname" value="#{patientdata.lastName}" style="width:120px;"  required="#{required}"/>
+				<s:label value="#{messages['Patient.lastName']}" styleClass="over" />
+				<h:inputText id="lastname" value="#{patientdata.lastName}" style="width:120px;" />
 			</s:decorate>
 	</s:fragment>
 
 	<s:fragment rendered="#{defaultWorkspace.patientNameComposition=='LAST_FIRST_MIDDLENAME'}">
 			<s:decorate styleClass="label">
-				#{messages['Patient.lastName']}
-				<br/>
-				<h:inputText id="lastname" value="#{patientdata.lastName}" style="width:120px;"  required="#{required}"/>
+				<s:label value="#{messages['Patient.lastName']}" styleClass="over" />
+				<h:inputText id="lastname" value="#{patientdata.lastName}" style="width:120px;" />
 			</s:decorate>
 			<s:decorate styleClass="label">
-				#{messages['Patient.firstname']}
-				<br/>
+				<s:label value="#{messages['Patient.firstname']}" styleClass="over" />
 				<h:inputText id="name" value="#{patientdata.name}" style="width:120px;margin-right:6px;" required="#{required}"/>
 			</s:decorate>
 			<s:decorate styleClass="label">
-				#{messages['Patient.middleName']}
-				<br/>
-				<h:inputText id="midname" value="#{patientdata.middleName}" style="width:120px;margin-right:6px;"  required="#{required}"/>
+				<s:label value="#{messages['Patient.middleName']}" styleClass="over" />
+				<h:inputText id="midname" value="#{patientdata.middleName}" style="width:120px;margin-right:6px;" />
 			</s:decorate>
 	</s:fragment>
 
