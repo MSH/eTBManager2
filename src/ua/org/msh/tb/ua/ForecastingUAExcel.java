@@ -20,7 +20,7 @@ import jxl.format.VerticalAlignment;
 import jxl.write.Formula;
 import jxl.write.Label;
 import jxl.write.Number;
-import jxl.write.NumberFormats;
+import jxl.write.NumberFormat;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
@@ -155,13 +155,14 @@ public class ForecastingUAExcel{
 		times12ptFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
 		times12ptFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
 		
-		floatFormat = new WritableCellFormat(times12pt,NumberFormats.FLOAT);
+		NumberFormat dp3 = new NumberFormat("#,###,##0.0###");
+		floatFormat = new WritableCellFormat(times12pt,dp3);
 		floatFormat.setAlignment(Alignment.CENTRE);
 		floatFormat.setWrap(true);
 		floatFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
 		floatFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
 		
-		floatBoldFormat = new WritableCellFormat(times12ptBold,NumberFormats.FLOAT);
+		floatBoldFormat = new WritableCellFormat(times12ptBold,dp3);
 		floatBoldFormat.setAlignment(Alignment.CENTRE);
 		floatBoldFormat.setWrap(true);
 		floatBoldFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
@@ -345,6 +346,7 @@ public class ForecastingUAExcel{
 			cellFormatName = times12ptFormat;
 		
 		Number label = new Number(column, row, resourceKey, cellFormatName);
+	
 		try {
 			sheet.addCell(label);
 		} catch (RowsExceededException e) {
