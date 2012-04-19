@@ -4,7 +4,13 @@ public enum DotBy {
 	HCW, 
 	H,
 	CHW,
-	ND;
+	ND,
+	//Cambodia
+	HOSPITAL,
+	AMBULATORY,
+	HOMECARE,
+	COMMUNITY,
+	NONDOT;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
