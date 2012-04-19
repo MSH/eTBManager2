@@ -21,7 +21,13 @@ public enum Nationality {
 	
 	//Namibia
 	NAMIBIA,
-	NON_NAMIBIA;
+	NON_NAMIBIA,
+	
+	//Cambodia
+	CAMBODIA,
+	VIETNAM,
+	THAILAND,
+	LAO;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
