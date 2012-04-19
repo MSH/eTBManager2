@@ -15,9 +15,14 @@ public enum ReferredBy {
 	//Nigeria
 	PUBLIC,
 	PRIVATE_NON_PROFIT,
-	PRIVATE_PROFIT;
+	PRIVATE_PROFIT,
 	
-	
+	//Cambodia
+	HEALTHCENTER,
+	REFERRALHOSPITAL,
+	AIDSPROGRAM,
+	COMMUNITY,
+	OTHER;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
