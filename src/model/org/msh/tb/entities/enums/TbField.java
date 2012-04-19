@@ -44,8 +44,9 @@ public enum TbField {
 	RISK_GROUP,
 	SUSPECT_TYPE,
 	//Generic
-	ADJUSTMENT
-	
+	ADJUSTMENT,
+	//Cambodia
+	IDENTIFICATION
 	;
 	
 	public String getKey() {
