@@ -46,6 +46,8 @@ public class HealthUnitsQueryBR extends HealthUnitsQuery {
 			"where u.workspace_id = " + defaultWorkspace.getId().toString() + generateSQLConditionByUserView() +
 			(hsID != null? " and u.healthsystem_id = " + hsID: "") + casecond +
 			" and med.nextAppointment is not null and med.nextAppointment + 7 < current_date " +
+			" and c.state < 3 " +
+			" and med.EVENT_DATE = (select max(m.EVENT_DATE) from MedicalExamination m where m.case_id = c.id)" +
 			"group by u.id";
 
 		List<Object[]> res = getEntityManager()
