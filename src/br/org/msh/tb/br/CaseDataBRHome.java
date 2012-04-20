@@ -76,6 +76,8 @@ public class CaseDataBRHome {
 	private AdminUnitSelection auselection;
 	private Integer dstRequired;
 
+	
+	
 /*	@Factory("caseDataBR")
 	public TbCaseBR getCaseDataBR() {
 		try {
@@ -286,6 +288,7 @@ public class CaseDataBRHome {
 			return "error";
 
 		adjustMedicalExaminationFields();
+		caseHome.getTbCase().getCurrentAddress().setAdminUnit(auselection.getSelectedUnit());
 		medicalExaminationBRHome.setDisplayMessage(false);
 		return medicalExaminationBRHome.persist();
 	}

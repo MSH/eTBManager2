@@ -112,6 +112,52 @@
 <rich:jQuery selector="#cbsurgproc" query="change(function(){showSurgProc(this); })" />
 <rich:jQuery selector="#cbsurgproc" timing="onload" query="each(function(){ showSurgProc(this,true); })" />
 
+   	<s:fragment rendered="#{caseHome.managed}">
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:param name="labelstyle" value="width:400px;" />
+    		<ui:define name="label">#{messages['TbCase.notifAddressChanged']}:</ui:define>
+    		<h:selectOneMenu id="addrChanged" value="#{tbcase.notifAddressChanged}" >
+    			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
+    			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
+    		</h:selectOneMenu>
+    	</s:decorate>
+<rich:jQuery selector="#addrChanged" query="change(function(){ showCurrAddress(this); })" />
+<rich:jQuery selector="#addrChanged" timing="onload" query="each(function(){ if (this.selectedIndex==0) jQuery('#curraddr').hide(); })" />
+
+    	<div id="curraddr" style="clear:both;">
+    	<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['Address.address']}:</ui:define>
+    		<h:inputText value="#{tbcase.currentAddress.address}" style="width:300px;margin-bottom:2px;" maxlength="100"/>
+    		#{messages['pt_BR.addressNumber']}: <h:inputText value="#{tbcase.currAddressNumber}" style="width:80px;text-transform:uppercase;" maxlength="20"  />
+    	</s:decorate>
+   
+	   	<s:decorate template="/layout/edit.xhtml"> 	
+    		<ui:define name="label">#{messages['Address.complement']}</ui:define>
+    		<h:inputText value="#{tbcase.currentAddress.complement}" style="width:300px" maxlength="100"/>
+    	</s:decorate>
+
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['Address.district']}</ui:define>
+    		<h:inputText value="#{tbcase.currDistrict}" style="width:150px;text-transform:uppercase;" maxlength="100"/>
+    	</s:decorate>
+
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['Address.zipCode']}</ui:define>
+    		<h:inputText value="#{tbcase.currentAddress.zipCode}" maxlength="20" />
+    	</s:decorate>
+    	
+    	<table width="100%" style="border-collapse: collapse;">
+		<tr><td>
+			<s:decorate template="/layout/auselection.xhtml">
+				<ui:param name="auselection" value="#{caseDataBRHome.auselection}" />
+			</s:decorate>
+    	</td></tr>
+    	</table>
+    	<hr/>
+    	</div>
+    </s:fragment>
+    
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
     	<h:inputText value="#{medicalExaminationBR.responsible}"
@@ -184,6 +230,11 @@ function showSurgProc(cb, immediate) {
 		   jQuery('#div_surgproc').show(immediate?0:500)
 	  else jQuery('#div_surgproc').hide(immediate?0:500);
 }
+function showCurrAddress(cb) {
+	  if (cb.selectedIndex == 0)
+	  	   jQuery('#curraddr').hide(500);
+	  else jQuery('#curraddr').show(500);
+	}
 -->
 </script>
 
