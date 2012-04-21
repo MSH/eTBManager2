@@ -64,7 +64,23 @@ public class ReportTB07 extends Indicator2D {
 		generateTable4000();
 		generateTable5000();
 	}
+	@Override
+	protected String getHQLJoin() {
+		return null;
+	}
+	
+	@Override
+	protected String getHQLMicroscopyCondition() {
+		IndicatorFilters filters = getIndicatorFilters();
+		if (filters.getMicroscopyResult() == null)
+			return null;
+		
+		String cond = getHQLMicroscopyResultCondition(filters.getMicroscopyResult());
 
+		return "exists(select ex.id from ExamMicroscopy ex where ex.result " + cond + " and ex.tbcase.id = c.id" +
+		" and ex.dateCollected = (select min(sp.dateCollected) from ExamMicroscopy sp where sp.tbcase.id = c.id)" +
+		" and ex.dateCollected >= c.registrationDate)";// and c.id = 1095798
+	}
 
 	/**
 	 * Generate table 1000 report
@@ -77,8 +93,14 @@ public class ReportTB07 extends Indicator2D {
 		filters.setMicroscopyResult(IndicatorMicroscopyResult.POSITIVE);
 		filters.setInfectionSite(InfectionSite.PULMONARY);
 		
+	/*	List<TbCase> ls;
+		setConsolidated(false);
+		setHQLSelect("select c");
+		setCondition("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType in (0,1,2,3,4,5) and "+getHQLMicroscopyCondition());
+		ls = createQuery().getResultList();
 		
-		//List<Object[]> lst = generateValuesByField(null, "c.patientType in (0,1,2,3,4,5) and c.infectionSite != null and c.state >= " + CaseState.ONTREATMENT.ordinal());
+		*/
+		//List<Object[]> lst = generateValuesByField("c.registrationDate, c.examsMicroscopy", "c.patientType in (0,1,2,3,4,5) and c.infectionSite != null and c.state >= " + CaseState.ONTREATMENT.ordinal());
 		List<Object[]> lst = generateValuesByField("c.patientType, c.infectionSite, c.patient.gender", "c.patientType in (0,1,2,3,4,5) and c.infectionSite != null and c.state >= " + CaseState.ONTREATMENT.ordinal());
 		addTableValues(table, lst, IndicatorMicroscopyResult.POSITIVE, InfectionSite.PULMONARY);
 		
