@@ -128,10 +128,9 @@ public class ResistancePatternIndicatorNG extends Indicator2D {
 			Float oldPer = null;
 			int oldPat = tbCaseList.size() - countNewPatients;
 
-			if (tbCaseList.size() != 0) {
-				newPer = ((float) countNewPatients / (float) tbCaseList
-						.size()) * 100;
-				oldPer = ((float) oldPat / (float) tbCaseList.size()) * 100;
+			if (tbCaseList.size() != 0) {				
+				newPer = ((float) countNewPatients / (float) total) * 100;
+				oldPer = ((float) oldPat / (float) total) * 100;
 			} else {
 				newPer = new Float(0);
 				oldPer = new Float(0);
