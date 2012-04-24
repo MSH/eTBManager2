@@ -135,7 +135,8 @@ public class DSTPrevTreatResistIndicator extends Indicator2D {
 			if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_FT")){
 				countPrevTrtPatFail1 = ++countPrevTrtPatFail1;
 			}
-			if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_RT")
+			//VR: this piece of code to be used once PatientRe-tretment type is finalized.
+			/*if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_RT")
 					&&
 					tbCaseList.get(k).getPatientReTreatType().getKey().equalsIgnoreCase("PatientType.FAILURE_RE_FLD")){
 				countPrevTrtPatFailFLD = ++countPrevTrtPatFailFLD;
@@ -144,7 +145,7 @@ public class DSTPrevTreatResistIndicator extends Indicator2D {
 					&&
 					tbCaseList.get(k).getPatientReTreatType().getKey().equalsIgnoreCase("PatientType.FAILURE_RE_SLD")){
 				countPrevTrtPatFailSLD = ++countPrevTrtPatFailSLD;
-			}
+			}*/
 		}
 	}
 	Float newPer = null;
