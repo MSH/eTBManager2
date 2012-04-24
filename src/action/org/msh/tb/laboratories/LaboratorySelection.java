@@ -60,10 +60,7 @@ public class LaboratorySelection {
 	protected void createOptions() {
 		AdministrativeUnit adminUnit;
 		
-		if (Component.getInstance("workspaceExtension").equals("ua"))
-			adminUnit = getAuselection().getUnitLevel1();
-		else
-			adminUnit = getAuselection().getSelectedUnit();
+		adminUnit = getAuselection().getSelectedUnit();
 		
 		if (adminUnit == null)
 			return;
