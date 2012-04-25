@@ -18,7 +18,6 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.Synchronized;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.core.Events;
@@ -38,7 +37,6 @@ import org.msh.tb.entities.enums.CaseClassification;
  */
 @Name("userSession")
 @Scope(ScopeType.SESSION)
-@Synchronized(timeout=10000L)
 public class UserSession {
 
 	private Tbunit tbunit;
