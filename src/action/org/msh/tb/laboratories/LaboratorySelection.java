@@ -145,4 +145,13 @@ public class LaboratorySelection {
 		options = null;
 	}
 	
+	
+	public void setOptions(List<Laboratory> options) {
+		this.options = options;
+	}
+
+
+	public HealthSystem getHealthSystem() {
+		return healthSystem;
+	}
 }
