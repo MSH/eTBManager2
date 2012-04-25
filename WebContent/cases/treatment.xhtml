@@ -52,7 +52,7 @@
 
 		<div style="float:right">
 		<rich:dropDownMenu rendered="#{(caseHome.canEditTreatment) and (tbcase.state!='TRANSFERRING') and not printing}" 
-			styleClass="dropdown-link" horizontalOffset="100">
+			styleClass="dropdown-link"  direction="bottom-left">
 			
 			<f:facet name="label">#{messages['form.options']}</f:facet>
 			<rich:menuItem submitMode="client"
