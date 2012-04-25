@@ -50,8 +50,9 @@
 
 	<h:panelGroup id="pnltreatment">
 
-		<rich:dropDownMenu style="width:auto;float:right;" rendered="#{(caseHome.canEditTreatment) and (tbcase.state!='TRANSFERRING') and not printing}" 
-			styleClass="dropdown-link" >
+		<div style="float:right">
+		<rich:dropDownMenu style="width:auto;" rendered="#{(caseHome.canEditTreatment) and (tbcase.state!='TRANSFERRING') and not printing}" 
+			styleClass="dropdown-link" direction="top-right">
 			
 			<f:facet name="label">#{messages['form.options']}</f:facet>
 			<rich:menuItem submitMode="client"
@@ -77,6 +78,7 @@
 					reRender="main,messages">
 			</rich:menuItem>
 		</rich:dropDownMenu>
+		</div>
 
 	<s:decorate template="treattable.xhtml">
 		<ui:param name="editing" value="false" />
