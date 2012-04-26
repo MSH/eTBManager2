@@ -31,13 +31,11 @@ public class DSTPrevTreatResistIndicator extends Indicator2D {
 	private int countNewPatients = 0;
 	private int countPrevTrtPatRelapse = 0;
 	private int countPrevTrtPatFail1 = 0;
-	private int countPrevTrtPatFailFLD = 0;
-	private int countPrevTrtPatFailSLD = 0;
+	private int countPrevTrtReTreat = 0;
 
 	private String newp;
 	private String newPer;
 	private String oldp;
-	private String oldPer;
 	private String tot;
 	
 	@Override
@@ -48,15 +46,13 @@ public class DSTPrevTreatResistIndicator extends Indicator2D {
 		String[] message = new String[5];
 		newp = getMessage("manag.ind.dstprofile.prevtreatedRelpase");
 		newPer = getMessage("manag.ind.dstprofile.prevtreatedFail1");
-		oldp = getMessage("manag.ind.dstprofile.prevtreatedFailFLD");
-		oldPer = getMessage("manag.ind.dstprofile.prevtreatedFailSLD");
+		oldp = getMessage("manag.ind.dstprofile.prevtreatedReTreat");
 		tot    = getMessage("global.total");
 
 		message[0] = newp;
 		message[1] = newPer;
 		message[2] = oldp;
-		message[3] = oldPer;
-		message[4] = tot;
+		message[3] = tot;
 
 		calcTotal();
 		if (total == 0)
@@ -107,15 +103,12 @@ public class DSTPrevTreatResistIndicator extends Indicator2D {
 	newPercent.setHighlight(true);
 
 	table.addColumn(oldp, null);
-	TableColumn oldPercent = table.addColumn(oldPer, null);
-	oldPercent.setHighlight(true);
-
+	
 	flag = 2;
 	countNewPatients = 0;
 	countPrevTrtPatRelapse = 0;
 	countPrevTrtPatFail1 = 0;
-	countPrevTrtPatFailFLD = 0;
-	countPrevTrtPatFailSLD = 0;
+	countPrevTrtReTreat = 0;
 
 	setCondition(cond);
 	List<TbCase> tbCaseList = new ArrayList<TbCase>();
@@ -135,17 +128,9 @@ public class DSTPrevTreatResistIndicator extends Indicator2D {
 			if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_FT")){
 				countPrevTrtPatFail1 = ++countPrevTrtPatFail1;
 			}
-			//VR: this piece of code to be used once PatientRe-tretment type is finalized.
-			/*if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_RT")
-					&&
-					tbCaseList.get(k).getPatientReTreatType().getKey().equalsIgnoreCase("PatientType.FAILURE_RE_FLD")){
-				countPrevTrtPatFailFLD = ++countPrevTrtPatFailFLD;
+			if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_RT")){
+				countPrevTrtReTreat = ++countPrevTrtReTreat;
 			}
-			if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_RT")
-					&&
-					tbCaseList.get(k).getPatientReTreatType().getKey().equalsIgnoreCase("PatientType.FAILURE_RE_SLD")){
-				countPrevTrtPatFailSLD = ++countPrevTrtPatFailSLD;
-			}*/
 		}
 	}
 	Float newPer = null;
@@ -153,6 +138,7 @@ public class DSTPrevTreatResistIndicator extends Indicator2D {
 	int oldPat = tbCaseList.size() - countNewPatients;
 
 	if (tbCaseList.size() != 0) {
+		//% is based on total cases with any DST result
 //		newPer = ((float) countNewPatients / (float) tbCaseList
 //				.size()) * 100;
 //		oldPer = ((float) oldPat / (float) tbCaseList.size()) * 100;
@@ -164,15 +150,13 @@ public class DSTPrevTreatResistIndicator extends Indicator2D {
 		oldPer = new Float(0);
 	}
 
-	//int totalPatients = countNewPatients + oldPat;
-	int totalPatients = countPrevTrtPatRelapse + countPrevTrtPatFail1 +countPrevTrtPatFailFLD + countPrevTrtPatFailSLD;
+	int totalPatients = countPrevTrtPatRelapse + countPrevTrtPatFail1 +countPrevTrtReTreat ;
 	
 	String strAnyRes = getMessage("manag.ind.dstprofile.anyresistto");
 	addValue(message[0], strAnyRes + " "+ strPattern, new Float(countPrevTrtPatRelapse));
 	addValue(message[1], strAnyRes + " "+ strPattern, new Float(countPrevTrtPatFail1));
-	addValue(message[2], strAnyRes + " "+ strPattern, new Float(countPrevTrtPatFailFLD));
-	addValue(message[3], strAnyRes + " "+ strPattern, new Float(countPrevTrtPatFailSLD));
-	addValue(message[4], strAnyRes + " "+ strPattern, new Float(totalPatients));
+	addValue(message[2], strAnyRes + " "+ strPattern, new Float(countPrevTrtReTreat));
+	addValue(message[3], strAnyRes + " "+ strPattern, new Float(totalPatients));
 	}
 	}
 	
@@ -201,9 +185,7 @@ public class DSTPrevTreatResistIndicator extends Indicator2D {
 		}
 		if (flag == 2) {
 			flag = 0;
-			// sqlSel = "select c.patientType";
-			sqlSel = "";
-			// setGroupFields("c.patientType");
+			sqlSel = "";	
 		}
 		return sqlSel;
 	}
