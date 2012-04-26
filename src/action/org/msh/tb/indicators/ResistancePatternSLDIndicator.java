@@ -118,23 +118,6 @@ public class ResistancePatternSLDIndicator extends Indicator2D{
 			List<TbCase> tbCaseList = new ArrayList<TbCase>();
 			tbCaseList = createQuery().getResultList();
 			
-			//VR: new query to fetch all patients with DST results (Resistant and susceptible)
-//			String condAllDSTPat = "(select count(*) from ExamDSTResult res "
-//				+ "join res.exam exam "
-//				+ "where exam.tbcase.id = c.id and res.substance.id in ("
-//				+ s
-//				+ ") and res.result = "
-//				+ DstResult.RESISTANT.ordinal()+"or" + DstResult.SUSCEPTIBLE.ordinal()
-//				+ " and exam.dateCollected = (select min(aux.dateCollected) from ExamDST aux "
-//				+ "where aux.tbcase.id = c.id)) = "
-//				+ pattern.getSubstances().size();
-//			
-//			setCondition(condAllDSTPat);
-//			List<TbCase> tbCaseLstAllDSTPat = new ArrayList<TbCase>();
-//			tbCaseLstAllDSTPat = createQuery().getResultList();
-//			System.out.println("All patients with DST result-->" +tbCaseLstAllDSTPat);
-			//
-
 			if (tbCaseList.size() != 0) {
 				for (int k = 0; k < tbCaseList.size(); k++) {
 					if (tbCaseList.get(k).getPatientType().getKey()
@@ -147,11 +130,7 @@ public class ResistancePatternSLDIndicator extends Indicator2D{
 			Float oldPer = null;
 			int oldPat = tbCaseList.size() - countNewPatients;
 
-			if (tbCaseList.size() != 0) {
-//				newPer = ((float) countNewPatients / (float) tbCaseList
-//						.size()) * 100;
-//				oldPer = ((float) oldPat / (float) tbCaseList.size()) * 100;
-				
+			if (tbCaseList.size() != 0) {				
 				newPer = ((float) countNewPatients / (float) total) * 100;
 				oldPer = ((float) oldPat / (float) total) * 100;
 			} else {
@@ -200,9 +179,7 @@ public class ResistancePatternSLDIndicator extends Indicator2D{
 		}
 		if (flag == 2) {
 			flag = 0;
-			// sqlSel = "select c.patientType";
 			sqlSel = "";
-			// setGroupFields("c.patientType");
 		}
 		return sqlSel;
 	}
