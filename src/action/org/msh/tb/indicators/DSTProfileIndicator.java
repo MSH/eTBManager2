@@ -45,10 +45,28 @@ public class DSTProfileIndicator extends ResistProfileIndicatorBase {
 
 	@Override
 	public String getSqlQuery() {
+		//VR: removing count(*) in percentage_new as the percentage is to be taken of all DST results irrespective of resistant / Susceptible
+//		String sqlStat = "select s.ABBREV_NAME1, sum(if(c.patientType=0, 1, 0)) as newp, " +
+//		"		(sum(if(c.patientType=0, 1, 0))/count(*)*100) as percentage_new, " +
+//		"		sum(if(c.patientType>0, 1, 0))as other, " +
+//		"		(sum(if(c.patientType>0, 1, 0))/count(*)*100) as percentage_old, " +
+//		"		count(*) as total " +
+//		" from tbcase c, tbunit u, examdst ed, examdstresult er, substance s" +
+//		" where c.NOTIFICATION_UNIT_ID = u.id" +
+//		"		and u.WORKSPACE_ID = " +defaultWorkspace.getId()+
+//		"		and ed.CASE_ID = c.id " +
+//		"		and er.EXAM_ID = ed.id " +
+//		"		and er.SUBSTANCE_ID = s.id " +
+//		"		and s.ABBREV_NAME1 in ('H', 'R', 'E', 'S') " +
+//		"		and er.result = " + DstResult.RESISTANT.ordinal()+
+//		"		and ed.dateCollected = (select MAX(aux.dateCollected) " +
+//		"								from examdst aux where aux.CASE_ID = c.id) " +
+//		"		group by s.ABBREV_NAME1";
+		
 		String sqlStat = "select s.ABBREV_NAME1, sum(if(c.patientType=0, 1, 0)) as newp, " +
-		"		(sum(if(c.patientType=0, 1, 0))/count(*)*100) as percentage_new, " +
+		"		sum(if(c.patientType=0, 1, 0)) as percentage_new, " +
 		"		sum(if(c.patientType>0, 1, 0))as other, " +
-		"		(sum(if(c.patientType>0, 1, 0))/count(*)*100) as percentage_old, " +
+		"		sum(if(c.patientType>0, 1, 0)) as percentage_old, " +
 		"		count(*) as total " +
 		" from tbcase c, tbunit u, examdst ed, examdstresult er, substance s" +
 		" where c.NOTIFICATION_UNIT_ID = u.id" +
@@ -63,6 +81,5 @@ public class DSTProfileIndicator extends ResistProfileIndicatorBase {
 		"		group by s.ABBREV_NAME1";
 		return sqlStat;
 	}
-
 	
 }
