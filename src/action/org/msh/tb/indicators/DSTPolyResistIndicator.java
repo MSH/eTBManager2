@@ -37,6 +37,7 @@ public class DSTPolyResistIndicator extends Indicator2D {
 	private String oldPer;
 	private String total;
 	private String medicine;
+	private int totalDST;
 
 	
 	
@@ -146,10 +147,11 @@ public class DSTPolyResistIndicator extends Indicator2D {
 			Long newValue = addResistancePattern(pattern, false);
 			Long oldValue = addResistancePattern(pattern, true);
 			Long total = newValue + oldValue;
-			
-			if(total != 0){
-				newCalc = (newValue.floatValue()/total * 100);
-				oldCalc = (oldValue.floatValue()/total * 100);
+			calcTotal();
+			//if(total != 0){//VR: total is taken of entire case count with any DST result, not just with DST Resistant results
+			if(totalDST !=0){
+				newCalc = (newValue.floatValue()/totalDST * 100);
+				oldCalc = (oldValue.floatValue()/totalDST * 100);
 			}else{
 				newCalc = new Float(0);
 				oldCalc = new Float(0);
@@ -205,5 +207,12 @@ public class DSTPolyResistIndicator extends Indicator2D {
 //		addValue(pattern.getName(), val.intValue());
 		return val;
 	}
-	
+	/**
+	 * Calculates total quantity of cases with DST exam
+	 */
+	protected void calcTotal() {
+		String cond = "exists(select exam.id from ExamDST exam where exam.tbcase.id = c.id)";
+		setCondition(cond);
+		totalDST = ((Long) createQuery().getSingleResult()).intValue();
+	}
 }
