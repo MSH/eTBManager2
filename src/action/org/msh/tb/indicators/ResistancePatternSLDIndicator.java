@@ -34,6 +34,7 @@ public class ResistancePatternSLDIndicator extends Indicator2D{
 	private int total;
 	private int flag = 0;
 	private int countNewPatients = 0;
+	private int countTransferCases = 0;
 
 	private String newp;
 	private String newPer;
@@ -113,6 +114,7 @@ public class ResistancePatternSLDIndicator extends Indicator2D{
 
 			flag = 2;
 			countNewPatients = 0;
+			countTransferCases = 0;
 
 			setCondition(cond);
 			List<TbCase> tbCaseList = new ArrayList<TbCase>();
@@ -124,11 +126,16 @@ public class ResistancePatternSLDIndicator extends Indicator2D{
 							.equalsIgnoreCase("PatientType.NEW")) {
 						countNewPatients = ++countNewPatients;
 					}
+					if (tbCaseList.get(k).getPatientType().getKey()
+							.equalsIgnoreCase("PatientType.TRANSFER_IN")) {
+						countTransferCases = ++countTransferCases;
+					}
 				}
 			}
 			Float newPer = null;
 			Float oldPer = null;
-			int oldPat = tbCaseList.size() - countNewPatients;
+			//VR: Exclude new cases and Transferrred in cases to fetch all retreatment type cases
+			int oldPat = tbCaseList.size() - countNewPatients -countTransferCases; 
 
 			if (tbCaseList.size() != 0) {				
 				newPer = ((float) countNewPatients / (float) total) * 100;
