@@ -44,9 +44,13 @@
 	<s:link view="/management/resist.xhtml" >
 		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.resist']}
 	</s:link>
-	<!-- enbling DST Resistance profile -->
-	<s:link view="/management/dstprofile.xhtml" >
+	
+	<s:link view="/management/dstprofile.xhtml" styleClass="optionmenu" rendered="true" >
 		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.dstprofile']}
+	</s:link>
+	
+	<s:link view="/management/dstprofilesecline.xhtml" styleClass="optionmenu" rendered="true" >
+	<div class="icon-report" style="float:left;"/>#{messages['manag.ind.dstprofilesecondline']}
 	</s:link>
 
 	<s:link view="/management/sideeffects.xhtml" >
