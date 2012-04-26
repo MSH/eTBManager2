@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+	xmlns:p="http://jboss.com/products/seam/pdf"
+	template="/layout/template_new.xhtml">
+
+	<ui:param name="title" value="#{messages['manag.ind.dstprofilesecondline']}" />
+
+	<ui:param name="topmenu" value="2" />
+	<ui:param name="labelstyle" value="width:180px;" />
+	<ui:param name="left" value="0" />
+
+	<!--  <ui:param name="indicator" value="#{dstProfileIndicator}" /> -->
+	<ui:param name="indicator" value="#{resistancePatternSLDIndicator}" />
+	<ui:param name="table" value="#{indicator.table}" />
+
+<head>
+<link href="print.css" rel="stylesheet" type="text/css" media="print" />
+</head>
+
+
+	<ui:define name="head">
+		<script type="text/javascript"
+			src="#{facesContext.externalContext.request.contextPath}/js/json2.js"></script>
+		<script type="text/javascript"
+			src="#{facesContext.externalContext.request.contextPath}/js/swfobject.js"></script>
+	</ui:define>
+	<ui:define name="naveg">
+		<s:link value="#{messages['manag']}" view="/management/index.html"
+			propagation="none" />
+	</ui:define>
+
+
+	<ui:define name="content">
+		<h1>#{title}</h1>
+		<h:form styleClass="form1">
+			<table width="100%" cellspacing="4" cellpadding="4">
+				<tr>
+				 <td><ui:param name="hideinterimmonth" value="true" /> <ui:include
+					src="/management/filters.xhtml" />
+				 </td>
+				</tr>
+				<tr>
+				<td>
+					<s:link
+				value="#{messages['manag.ind.dstresist.edt']}"
+			    view="/management/resistlist.xhtml" />
+			</td>
+		</tr>
+			 					
+		 <tr>
+				<td align="left"><h:panelGroup id="indicator">
+					<s:fragment rendered="#{indicatorController.executing}">	
+					<div class="paragraph">
+					#{messages['manag.dstprofile.title.dstresults']}</div>
+				<div class="print">
+				<table class="table1" width="800px" align="left">
+					<tr>
+					<th></th>
+						<ui:repeat
+							value="#{resistancePatternSLDIndicator.table.columns}"
+							var="col">
+						<th>#{col.title}</th>
+						</ui:repeat>
+					</tr>
+						<ui:repeat value="#{resistancePatternSLDIndicator.table.rows}"
+							var="row">
+						 <tr>
+							<td class="colb">#{row.title}</td>
+							<ui:repeat value="#{row.cells}" var="val">
+								<td class="colcb"
+									style="#{val.column.rowTotal?'':'font-weight:bold;'}">
+									<h:outputText value="#{val.value}">
+									<f:convertNumber pattern="#,###,##0" />
+									</h:outputText> <h:outputText value="%" rendered="#{val.column.highlight}" />			
+								</td>
+							</ui:repeat>
+						</tr>
+					</ui:repeat>
+				</table>
+				</div>
+
+								
+								 <div class="paragraph">
+									#{messages['manag.dstprofile.title.prevtreat']}</div>
+								<table class="table1" width="800px" align="left">
+									<tr>
+										<th></th>
+										<ui:repeat value="#{dSTPrevTreatResistIndicator.table.columns}"
+											var="col">
+											<th>#{col.title}</th>
+										</ui:repeat>
+									</tr>
+									<ui:repeat value="#{dSTPrevTreatResistIndicator.table.rows}"
+										var="row">
+										<tr>
+											<td class="colb">#{row.title}</td>
+											<ui:repeat value="#{row.cells}" var="val">
+												<td class="colcb"
+													style="#{val.column.rowTotal?'':'font-weight:bold;'}">
+													<h:outputText value="#{val.value}">
+														<f:convertNumber pattern="#,###,##0" />
+													</h:outputText> 
+													<!-- <h:outputText value="%" rendered="#{val.column.highlight}" /> -->
+												</td>
+											</ui:repeat>
+										</tr>
+									</ui:repeat>
+								</table> 
+								
+							</s:fragment>
+						</h:panelGroup> 
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						<div id="charttypediv">
+							<b>#{messages['charts']}:</b>
+							<h:selectOneMenu value="#{indicatorFilters.chartType}">
+								<f:selectItems value="#{chartTypes}" />
+								<a:support event="onchange" reRender="indicator"
+									action="#{indicator.execute}" ajaxSingle="true" />
+							</h:selectOneMenu>
+						</div> <!-- ***** -->
+					</td>
+				</tr>
+			</table>
+			<rich:jQuery selector="#charttypediv" query="hide()" />
+		</h:form>
+	</ui:define>
+	
+	
+</ui:composition>
