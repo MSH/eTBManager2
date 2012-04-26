@@ -32,10 +32,12 @@ public class DSTPrevTreatResistIndicator extends Indicator2D {
 	private int countPrevTrtPatRelapse = 0;
 	private int countPrevTrtPatFail1 = 0;
 	private int countPrevTrtReTreat = 0;
+	private int countDefaultOthers = 0;
 
-	private String newp;
-	private String newPer;
-	private String oldp;
+	private String relapse;
+	private String failureInitial;
+	private String failureReTreat;
+	private String failureDefaultOthers;
 	private String tot;
 	
 	@Override
@@ -44,16 +46,18 @@ public class DSTPrevTreatResistIndicator extends Indicator2D {
 		setGroupFields(null);
 
 		String[] message = new String[5];
-		newp = getMessage("manag.ind.dstprofile.prevtreatedRelpase");
-		newPer = getMessage("manag.ind.dstprofile.prevtreatedFail1");
-		oldp = getMessage("manag.ind.dstprofile.prevtreatedReTreat");
+		relapse = getMessage("manag.ind.dstprofile.prevtreatedRelpase");
+		failureInitial = getMessage("manag.ind.dstprofile.prevtreatedFail1");
+		failureReTreat = getMessage("manag.ind.dstprofile.prevtreatedReTreat");
+		failureDefaultOthers = getMessage("manag.ind.dstprofile.failureDefaultOthers");
 		tot    = getMessage("global.total");
 
-		message[0] = newp;
-		message[1] = newPer;
-		message[2] = oldp;
-		message[3] = tot;
-
+		message[0] = tot;
+		message[1] = relapse;
+		message[2] = failureInitial;
+		message[3] = failureReTreat;
+		message[4]= failureDefaultOthers;
+		
 		calcTotal();
 		if (total == 0)
 			return;
@@ -98,29 +102,32 @@ public class DSTPrevTreatResistIndicator extends Indicator2D {
 		+ pattern.getSubstances().size();
 
 	IndicatorTable table = getTable();
-	table.addColumn(newp, null);
-	TableColumn newPercent = table.addColumn(newPer, null);
+	table.addColumn(tot,null);
+	table.addColumn(relapse, null);
+	TableColumn newPercent = table.addColumn(failureInitial, null);
 	newPercent.setHighlight(true);
 
-	table.addColumn(oldp, null);
+	table.addColumn(failureReTreat, null);
+	table.addColumn(failureDefaultOthers,null);
 	
 	flag = 2;
 	countNewPatients = 0;
 	countPrevTrtPatRelapse = 0;
 	countPrevTrtPatFail1 = 0;
 	countPrevTrtReTreat = 0;
+	countDefaultOthers = 0;
 
 	setCondition(cond);
 	List<TbCase> tbCaseList = new ArrayList<TbCase>();
 	tbCaseList = createQuery().getResultList();
 	if (tbCaseList.size() != 0) {
 		for (int k = 0; k < tbCaseList.size(); k++) {
-			if (tbCaseList.get(k).getPatientType().getKey()
-					.equalsIgnoreCase("PatientType.NEW")|| tbCaseList.get(k).getPatientType().getKey()
-					.equalsIgnoreCase("PatientType.TRANSFER_IN")) {
-				countNewPatients = ++countNewPatients;
-				
-			}
+//			if (tbCaseList.get(k).getPatientType().getKey()
+//					.equalsIgnoreCase("PatientType.NEW")|| tbCaseList.get(k).getPatientType().getKey()
+//					.equalsIgnoreCase("PatientType.TRANSFER_IN")) {
+//				countNewPatients = ++countNewPatients;
+//				
+//			}
 			
 			if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.RELAPSE")){
 				countPrevTrtPatRelapse = ++countPrevTrtPatRelapse;
@@ -131,32 +138,38 @@ public class DSTPrevTreatResistIndicator extends Indicator2D {
 			if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_RT")){
 				countPrevTrtReTreat = ++countPrevTrtReTreat;
 			}
+			if(tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.AFTER_DEFAULT")||
+					tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.OTHER")){
+				countDefaultOthers = ++countDefaultOthers;
+			}
 		}
 	}
-	Float newPer = null;
-	Float oldPer = null;
-	int oldPat = tbCaseList.size() - countNewPatients;
+//	Float newPer = null;
+//	Float oldPer = null;
+//	int oldPat = tbCaseList.size() - countNewPatients;
 
-	if (tbCaseList.size() != 0) {
+//	if (tbCaseList.size() != 0) {
 		//% is based on total cases with any DST result
 //		newPer = ((float) countNewPatients / (float) tbCaseList
 //				.size()) * 100;
 //		oldPer = ((float) oldPat / (float) tbCaseList.size()) * 100;
 		
-		newPer = ((float) countNewPatients / (float) total) * 100;
-		oldPer = ((float) oldPat / (float) total) * 100;
-	} else {
-		newPer = new Float(0);
-		oldPer = new Float(0);
-	}
+//		newPer = ((float) countNewPatients / (float) total) * 100;
+//		oldPer = ((float) oldPat / (float) total) * 100;
+//	} else {
+//		newPer = new Float(0);
+//		oldPer = new Float(0);
+//	}
 
-	int totalPatients = countPrevTrtPatRelapse + countPrevTrtPatFail1 +countPrevTrtReTreat ;
+	int totalPatients = countPrevTrtPatRelapse + countPrevTrtPatFail1 +countPrevTrtReTreat+countDefaultOthers ;
 	
 	String strAnyRes = getMessage("manag.ind.dstprofile.anyresistto");
-	addValue(message[0], strAnyRes + " "+ strPattern, new Float(countPrevTrtPatRelapse));
-	addValue(message[1], strAnyRes + " "+ strPattern, new Float(countPrevTrtPatFail1));
-	addValue(message[2], strAnyRes + " "+ strPattern, new Float(countPrevTrtReTreat));
-	addValue(message[3], strAnyRes + " "+ strPattern, new Float(totalPatients));
+	addValue(message[0], strAnyRes + " "+ strPattern, new Float(totalPatients));
+	addValue(message[1], strAnyRes + " "+ strPattern, new Float(countPrevTrtPatRelapse));
+	addValue(message[2], strAnyRes + " "+ strPattern, new Float(countPrevTrtPatFail1));
+	addValue(message[3], strAnyRes + " "+ strPattern, new Float(countPrevTrtReTreat));
+	addValue(message[4], strAnyRes + " "+ strPattern, new Float(countDefaultOthers));
+
 	}
 	}
 	
