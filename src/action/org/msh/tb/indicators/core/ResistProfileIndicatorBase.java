@@ -43,7 +43,8 @@ public abstract class ResistProfileIndicatorBase extends Indicator2D {
 	private String medicine;
 	private String resistLabel;
 	private String sqlStat;
-	
+	private int totalDST;
+		
 
 	//Abstract method to get the SQL query needed to run in order to generate the report.
 	public abstract String getSqlQuery();
@@ -51,6 +52,7 @@ public abstract class ResistProfileIndicatorBase extends Indicator2D {
 	//Abstract method to get the message to display for the column title.
 	public abstract String getResistLabel();
 	
+
 	
 	
 	
@@ -63,7 +65,7 @@ public abstract class ResistProfileIndicatorBase extends Indicator2D {
 		oldPer 		= getMessage("manag.ind.dstprofile.prevtreatedpercent");
 		total 		= getMessage("global.total");
 		medicine 	= "";
-		
+		calcTotal();
 		List result = super.getEntityManager().createNativeQuery(getSqlQuery()).getResultList();
 		
 		IndicatorTable table = getTable();
@@ -81,20 +83,29 @@ public abstract class ResistProfileIndicatorBase extends Indicator2D {
 		totalCell.setRowTotal(false);
 		
 		String resistLabel = getResistLabel();
-		
-		
+		Float newPerc = null;
+		Float oldPerc = null;
 		for (int i = 0; i < result.size(); i++) {
 			Object[] object = (Object[]) result.get(i);
 			addValue(newp, getResistLabel()+ " " + object[0].toString(), ((BigDecimal) object[1]).floatValue());
 			//addValue(oldp, resistLabel+ " " + object[0].toString(), ((BigDecimal) object[3]).floatValue());
-			addValue(newPer, resistLabel+ " " + object[0].toString(), ((BigDecimal) object[2]).floatValue());
+			newPerc=(((BigDecimal) object[2]).floatValue()/totalDST*100);
+			addValue(newPer, resistLabel+ " " + object[0].toString(), newPerc);
 			addValue(oldp, resistLabel+ " " + object[0].toString(), ((BigDecimal) object[3]).floatValue());
-			addValue(oldPer, resistLabel+ " " + object[0].toString(), ((BigDecimal) object[4]).floatValue());
+			oldPerc=(((BigDecimal) object[4]).floatValue()/totalDST*100);
+			addValue(oldPer, resistLabel+ " " + object[0].toString(), oldPerc);
 			addValue(total, resistLabel+ " " + object[0].toString(), ((BigInteger) object[5]).floatValue());
 		}	
 		
 	}
 	
-	
+	/**
+	 * Calculates total quantity of cases with DST exam
+	 */
+	protected void calcTotal() {
+		String cond = "exists(select exam.id from ExamDST exam where exam.tbcase.id = c.id)";
+		setCondition(cond);
+		totalDST = ((Long) createQuery().getSingleResult()).intValue();
+	}
 
 }
