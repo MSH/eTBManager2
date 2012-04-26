@@ -15,7 +15,7 @@ import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
 
 /**
- * Generates indicator about DST resistances for previously treated patients with FLD
+ * Generates indicator about DST resistances for previously treated patients
  * @author Vani Rao
  *
  */
@@ -32,15 +32,14 @@ public class DSTPrevTreatFLDIndicator extends Indicator2D{
 	private int countNewPatients = 0;
 	private int countPrevTrtPatRelapse = 0;
 	private int countPrevTrtPatFail1 = 0;
-	private int countPrevTrtPatFailFLD = 0;
-	private int countPrevTrtPatFailSLD = 0;
+	private int countPrevTrtReTreat = 0;
+	
 	
 
 	@In(create=true) List<Substance> substanceList;
 	private String strPrevTrtPatRelapse;
 	private String strPrevTrtPatFail1;
-	private String strPrevTrtPatFailFLD;
-	private String strPrevTrtPatFailSLD;
+	private String strPrevTrtReTreat;
 	private String tot;
 	
 
@@ -49,18 +48,16 @@ public class DSTPrevTreatFLDIndicator extends Indicator2D{
 	protected void createIndicators() {
 		// TODO Auto-generated method stub
 		setGroupFields(null);
-		String[] message = new String[5];
+		String[] message = new String[4];
 		strPrevTrtPatRelapse = getMessage("manag.ind.dstprofile.prevtreatedRelpase");
 		strPrevTrtPatFail1 = getMessage("manag.ind.dstprofile.prevtreatedFail1");
-		strPrevTrtPatFailFLD = getMessage("manag.ind.dstprofile.prevtreatedFailFLD");
-		strPrevTrtPatFailSLD = getMessage("manag.ind.dstprofile.prevtreatedFailSLD");
+		strPrevTrtReTreat = getMessage("manag.ind.dstprofile.prevtreatedReTreat");
 		tot    = getMessage("global.total");
 
 		message[0] = strPrevTrtPatRelapse;
 		message[1] = strPrevTrtPatFail1;
-		message[2] = strPrevTrtPatFailFLD;
-		message[3] = strPrevTrtPatFailSLD;
-		message[4] = tot;
+		message[2] = strPrevTrtReTreat;
+		message[3] = tot;
 
 		List<ResistancePattern> resistancePatterns = new ArrayList<ResistancePattern>();
 		Substance E = substanceList.get(0);
@@ -117,9 +114,9 @@ public class DSTPrevTreatFLDIndicator extends Indicator2D{
 		TableColumn newPercent = table.addColumn(strPrevTrtPatFail1, null);
 		newPercent.setHighlight(true);
 		
-		table.addColumn(strPrevTrtPatFailFLD, null);
-		TableColumn oldPercent = table.addColumn(strPrevTrtPatFailSLD, null);
-		oldPercent.setHighlight(true);
+		table.addColumn(strPrevTrtReTreat, null);
+		//TableColumn oldPercent = table.addColumn(strPrevTrtPatFailSLD, null);
+		//oldPercent.setHighlight(true);
 		
 		TableColumn totalCell = table.addColumn(tot, null);
 		totalCell.setRowTotal(false);
@@ -134,8 +131,7 @@ public class DSTPrevTreatFLDIndicator extends Indicator2D{
 		countNewPatients = 0;
 		countPrevTrtPatRelapse = 0;
 		countPrevTrtPatFail1 = 0;
-		countPrevTrtPatFailFLD = 0;
-		countPrevTrtPatFailSLD = 0;
+		countPrevTrtReTreat = 0;
 		List<TbCase> tbCaseList = new ArrayList<TbCase>();
 		ResistancePattern pattern = resistancePatterns.get(i);
 		
@@ -151,8 +147,7 @@ public class DSTPrevTreatFLDIndicator extends Indicator2D{
 				if (tbCaseList.get(k).getPatientType().getKey()
 						.equalsIgnoreCase("PatientType.NEW")|| tbCaseList.get(k).getPatientType().getKey()
 						.equalsIgnoreCase("PatientType.TRANSFER_IN")) {
-					countNewPatients = ++countNewPatients;
-					
+					countNewPatients = ++countNewPatients;	
 				}
 				
 				if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.RELAPSE")){
@@ -161,26 +156,17 @@ public class DSTPrevTreatFLDIndicator extends Indicator2D{
 				if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_FT")){
 					countPrevTrtPatFail1 = ++countPrevTrtPatFail1;
 				}
-				//VR: this piece of code to be used once PatientRe-tretment type is finalized.
-				/*if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_RT")
-						&&
-						tbCaseList.get(k).getPatientReTreatType().getKey().equalsIgnoreCase("PatientType.FAILURE_RE_FLD")){
-					countPrevTrtPatFailFLD = ++countPrevTrtPatFailFLD;
+				if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_RT")){
+					countPrevTrtReTreat = ++countPrevTrtReTreat;
 				}
-				if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_RT")
-						&&
-						tbCaseList.get(k).getPatientReTreatType().getKey().equalsIgnoreCase("PatientType.FAILURE_RE_SLD")){
-					countPrevTrtPatFailSLD = ++countPrevTrtPatFailSLD;
-				}*/
 			}
 		}
-		int totalPatients = countPrevTrtPatRelapse + countPrevTrtPatFail1 +countPrevTrtPatFailFLD + countPrevTrtPatFailSLD;
+		int totalPatients = countPrevTrtPatRelapse + countPrevTrtPatFail1 +countPrevTrtReTreat;
 		
 		addValue(message[0], pattern.getName(), new Float(countPrevTrtPatRelapse));
 		addValue(message[1], pattern.getName(),  new Float(countPrevTrtPatFail1));
-		addValue(message[2], pattern.getName(), new Float(countPrevTrtPatFailFLD));
-		addValue(message[3], pattern.getName(), new Float(countPrevTrtPatFailSLD));
-		addValue(message[4], pattern.getName(), new Float(totalPatients));
+		addValue(message[2], pattern.getName(), new Float(countPrevTrtReTreat));
+		addValue(message[3], pattern.getName(), new Float(totalPatients));
 		
 	} //end of for
 }
@@ -201,15 +187,6 @@ protected List<TbCase> addResistancePattern(ResistancePattern pattern) {
 		}
 		s = s + sub.getId().toString();
 	}
-	
-	/*String cond;
-		cond = "(select count(*) from ExamDSTResult res " +
-		"join res.exam exam " +
-		"where exam.tbcase.id = c.id and res.substance.id in (" + s +
-		") and res.result = " + DstResult.RESISTANT.ordinal() + 
-		" and exam.numResistant = " + pattern.getSubstances().size() + 
-		" and exam.dateCollected = (select min(aux.dateCollected) from ExamDST aux " +
-		"where aux.tbcase.id = c.id)) = " + pattern.getSubstances().size();*/
 	
 	String cond;
 	cond = "(select count(*) from ExamDSTResult res " +
