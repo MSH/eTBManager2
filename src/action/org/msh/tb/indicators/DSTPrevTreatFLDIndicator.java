@@ -33,13 +33,14 @@ public class DSTPrevTreatFLDIndicator extends Indicator2D{
 	private int countPrevTrtPatRelapse = 0;
 	private int countPrevTrtPatFail1 = 0;
 	private int countPrevTrtReTreat = 0;
-	
+	private int countDefaultOthers = 0;
 	
 
 	@In(create=true) List<Substance> substanceList;
 	private String strPrevTrtPatRelapse;
 	private String strPrevTrtPatFail1;
 	private String strPrevTrtReTreat;
+	private String failureDefaultOthers;
 	private String tot;
 	
 
@@ -48,17 +49,19 @@ public class DSTPrevTreatFLDIndicator extends Indicator2D{
 	protected void createIndicators() {
 		// TODO Auto-generated method stub
 		setGroupFields(null);
-		String[] message = new String[4];
+		String[] message = new String[5];
 		strPrevTrtPatRelapse = getMessage("manag.ind.dstprofile.prevtreatedRelpase");
 		strPrevTrtPatFail1 = getMessage("manag.ind.dstprofile.prevtreatedFail1");
 		strPrevTrtReTreat = getMessage("manag.ind.dstprofile.prevtreatedReTreat");
+		failureDefaultOthers = getMessage("manag.ind.dstprofile.failureDefaultOthers");
 		tot    = getMessage("global.total");
 
-		message[0] = strPrevTrtPatRelapse;
-		message[1] = strPrevTrtPatFail1;
-		message[2] = strPrevTrtReTreat;
-		message[3] = tot;
-
+		message[0] = tot;
+		message[1] = strPrevTrtPatRelapse;
+		message[2] = strPrevTrtPatFail1;
+		message[3] = strPrevTrtReTreat;
+		message[4]= failureDefaultOthers;
+		
 		List<ResistancePattern> resistancePatterns = new ArrayList<ResistancePattern>();
 		Substance E = substanceList.get(0);
 		Substance H = substanceList.get(1);
@@ -109,17 +112,19 @@ public class DSTPrevTreatFLDIndicator extends Indicator2D{
 		resistancePatterns.add(rp4);
 		
 		IndicatorTable table = getTable();
+		table.addColumn(tot, null);
 		table.addColumn(strPrevTrtPatRelapse, null);
 		
 		TableColumn newPercent = table.addColumn(strPrevTrtPatFail1, null);
-		newPercent.setHighlight(true);
+		//newPercent.setHighlight(true);
 		
 		table.addColumn(strPrevTrtReTreat, null);
+		table.addColumn(failureDefaultOthers,null);
 		//TableColumn oldPercent = table.addColumn(strPrevTrtPatFailSLD, null);
 		//oldPercent.setHighlight(true);
 		
-		TableColumn totalCell = table.addColumn(tot, null);
-		totalCell.setRowTotal(false);
+//		TableColumn totalCell = table.addColumn(tot, null);
+//		totalCell.setRowTotal(false);
 	
 
 	Float newCalc = null;
@@ -132,6 +137,7 @@ public class DSTPrevTreatFLDIndicator extends Indicator2D{
 		countPrevTrtPatRelapse = 0;
 		countPrevTrtPatFail1 = 0;
 		countPrevTrtReTreat = 0;
+		countDefaultOthers = 0;
 		List<TbCase> tbCaseList = new ArrayList<TbCase>();
 		ResistancePattern pattern = resistancePatterns.get(i);
 		
@@ -159,14 +165,20 @@ public class DSTPrevTreatFLDIndicator extends Indicator2D{
 				if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_RT")){
 					countPrevTrtReTreat = ++countPrevTrtReTreat;
 				}
+				if(tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.AFTER_DEFAULT")||
+						tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.OTHER")){
+					countDefaultOthers = ++countDefaultOthers;
+				}
 			}
 		}
-		int totalPatients = countPrevTrtPatRelapse + countPrevTrtPatFail1 +countPrevTrtReTreat;
+		int totalPatients = countPrevTrtPatRelapse + countPrevTrtPatFail1 +countPrevTrtReTreat+countDefaultOthers;
 		
-		addValue(message[0], pattern.getName(), new Float(countPrevTrtPatRelapse));
-		addValue(message[1], pattern.getName(),  new Float(countPrevTrtPatFail1));
-		addValue(message[2], pattern.getName(), new Float(countPrevTrtReTreat));
-		addValue(message[3], pattern.getName(), new Float(totalPatients));
+		addValue(message[0], pattern.getName(), new Float(totalPatients));
+		addValue(message[1], pattern.getName(), new Float(countPrevTrtPatRelapse));
+		addValue(message[2], pattern.getName(),  new Float(countPrevTrtPatFail1));
+		addValue(message[3], pattern.getName(), new Float(countPrevTrtReTreat));
+		addValue(message[4], pattern.getName(), new Float(countDefaultOthers));
+		
 		
 	} //end of for
 }
