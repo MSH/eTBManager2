@@ -66,7 +66,7 @@ public class DSTUniqueResistIndicator extends ResistProfileIndicatorBase {
 		
 		String sqlStat = " select s.ABBREV_NAME1, sum(if(c.patientType=0, 1, 0)) as newp, " +
 		"				sum(if(c.patientType=0, 1, 0)) as percentage_new, " +
-		"				sum(if(c.patientType>0, 1, 0))as other, " +
+		"				sum(if(c.patientType>0 and c.patientType<>12, 1, 0))as other, " +
 		"				sum(if(c.patientType>0, 1, 0)) as percentage_old, " +
 		"				count(*) as total " +
 		"			from tbcase c, tbunit u, examdst ed, examdstresult er, substance s " +
