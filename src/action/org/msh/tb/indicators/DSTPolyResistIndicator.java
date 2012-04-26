@@ -200,6 +200,7 @@ public class DSTPolyResistIndicator extends Indicator2D {
 				") and res.result = " + DstResult.RESISTANT.ordinal() + 
 				" and exam.numResistant = " + pattern.getSubstances().size() + 
 				" and c.patientType != " + PatientType.NEW.ordinal() +
+				" and c.patientType != " + PatientType.TRANSFER_IN.ordinal() +
 				" and exam.dateCollected = (select min(aux.dateCollected) from ExamDST aux " +
 				"where aux.tbcase.id = c.id)) = " + pattern.getSubstances().size();		
 		setCondition(cond);
