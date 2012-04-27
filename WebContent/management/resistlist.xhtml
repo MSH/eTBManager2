@@ -30,11 +30,12 @@
 <h:panelGroup id="pnlresistance">
 
 <h:form>
-<a:commandLink value="#{messages['form.new']}"
+<a:commandLink 
 	reRender="resistpnl"
 	action="#{conversation.begin}" 
 	onclick="if (!disableButton(this)) return false;"
 	oncomplete="enableButton();showMedSelectionDlg();return false;" styleClass="button">
+	<span>#{messages['form.new']}</span>
 </a:commandLink>
 	<h:outputText value="#{messages['form.norecordfound']}" styleClass="warn" rendered="#{empty resistancePatterns.resultList}"/>
 	<h:dataTable value="#{resistancePatterns.resultList}" var="p" width="500px" styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty resistancePatterns.resultList}">
@@ -58,6 +59,7 @@
 			</a:commandLink>
 		</h:column>
 	</h:dataTable>
+	<a:jsFunction name="refreshResistTable" reRender="pnlresistance" ajaxSingle="true" />
 </h:form>
 </h:panelGroup>
 
@@ -120,17 +122,20 @@ jQuery("#resistdiv tr:has(:checked)").addClass("activerow");
 			<ui:include src="/layout/waitstatus.xhtml" />
 		</td>
 		<td align="right">
-			<a:commandLink value="#{messages['form.ok']}" 
+			<a:commandLink 
 				action="#{resistancePatternHome.saveAndEnd}"
 				styleClass="button" 
 				reRender="pnlresistance"
 				onclick="if (!disableButton(this)) return false;"
-				oncomplete="enableButton();hideMedSelectionDlg();">
+				oncomplete="enableButton();hideMedSelectionDlg();refreshResistTable();">
+				<span>#{messages['form.ok']}</span>
 			</a:commandLink>
-			<a:commandLink value="#{messages['form.cancel']}"
+			<a:commandLink 
 				action="#{conversation.end}"
 				oncomplete="hideMedSelectionDlg();return false;" 
-				styleClass="button-alt" />
+				styleClass="button-alt" >
+				<span>#{messages['form.cancel']}</span>
+				</a:commandLink>
 		</td>
 	</tr></table>
 	<rich:jQuery selector="#resistdlgs" query="click(function(){this.disabled=true;})" />
