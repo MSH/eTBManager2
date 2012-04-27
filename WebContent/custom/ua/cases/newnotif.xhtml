@@ -26,9 +26,10 @@
 
 	<h2>#{messages['cases.searchpatient']}</h2>
 
-    <s:decorate id="name" template="/layout/editname.xhtml">
+    <s:decorate id="name" template="/custom/ua/layout/editname.xhtml">
     	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
    		<ui:param name="patientdata" value="#{patient}" />
+   		<ui:param name="required" value="false" />
 	</s:decorate>
 		
 	<h:panelGroup id="bd">
