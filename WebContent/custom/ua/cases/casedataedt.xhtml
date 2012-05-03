@@ -21,7 +21,7 @@
 	
 	</td></tr>
 	
-	<ui:include src="/layout/editbirthdate.xhtml" />
+	<ui:include src="/custom/ua/layout/editbirthdate.xhtml" />
 	
 	<tr><td>
 	
@@ -214,7 +214,7 @@
     	<ui:param name="datefield" value="#{tbcase.registrationDate}" /> 
     </s:decorate>
     </div>
-    <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
+    <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChangeUAZ();})" />
 
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['uk_UA.hospitalizationDate']}:</ui:define>
