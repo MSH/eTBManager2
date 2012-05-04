@@ -11,7 +11,7 @@
 	<h2>#{messages['cases.patientdata']}</h2>
 	<table width="100%" style="border-collapse:collapse;">
 	<tr><td colspan="2">
-	<s:decorate template="/layout/editname.xhtml">
+	<s:decorate template="/custom/az/layout/editname.xhtml">
     	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
 		<ui:param name="patientdata" value="#{tbcase.patient}" />
 		<ui:param name="required" value="#{true}" />
@@ -37,7 +37,7 @@
 	
 	</td></tr>
 	
-	<ui:include src="/layout/editbirthdate.xhtml" />
+	<ui:include src="/custom/az/layout/editbirthdate.xhtml" />
 	
 	<tr><td colspan="2">
 	
@@ -199,7 +199,7 @@
 		<ui:param name="required" value="true" />
     </s:decorate>
     </div>
-    <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
+    <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChangeUAZ();})" />
 
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
