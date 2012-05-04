@@ -5,14 +5,13 @@ import java.util.List;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.az.entities.CaseSeverityMark;
-import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 
 @Name("caseAZHome")
 public class CaseAZHome {
 
 	@In CaseHome caseHome;
-	@In(create=true) CaseEditingHome caseEditingHome;
+	@In(create=true) CaseEditingAZHome caseEditingAZHome;
 	@In(create=true) CaseSeverityMarksHome caseSeverityMarksHome;
 
 	
@@ -23,8 +22,8 @@ public class CaseAZHome {
 	public String persist() {
 		String res;
 		if (caseHome.isManaged())
-			 res = caseEditingHome.saveEditing();
-		else res = caseEditingHome.saveNew();
+			 res = caseEditingAZHome.saveEditing();
+		else res = caseEditingAZHome.saveNew();
 		
 		if (!res.equals("persisted"))
 			return res;
@@ -41,4 +40,6 @@ public class CaseAZHome {
 		
 		return caseSeverityMarksHome.getSeverityMarks();
 	}
+	
+	
 }
