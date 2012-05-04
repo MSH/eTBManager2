@@ -1,7 +1,5 @@
 package org.msh.tb.adminunits;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.List;
 
 import org.jboss.seam.annotations.Factory;

@@ -103,13 +103,17 @@ public class TransactionLogService {
 			}
 		}
 
+		UserLog userLog = getUserLog();
+		if (userLog == null)
+			throw new RuntimeException("No user found for transaction log operation");
+		
 		TransactionLog log = new TransactionLog();
 		log.setAction(action);
 		log.setEntityId(entityId);
 		log.setRole(role);
 		log.setEntityDescription(description);
 		log.setTransactionDate(new Date());
-		log.setUser(getUserLog());
+		log.setUser(userLog);
 		log.setWorkspace(getWorkspaceLog());
 		log.setComments(getDetailWriter().asXML());
 		log.setAdminUnit(getAdminUnit());
@@ -120,6 +124,9 @@ public class TransactionLogService {
 		EntityManager em = getEntityManager();
 		em.persist(log);
 		em.flush();
+
+		items = null;
+		detailWriter = null;
 
 		return log;
 	}
@@ -227,7 +234,11 @@ public class TransactionLogService {
 	 * @return
 	 */
 	protected UserLog getUserLog() {
-		UserLog userLog = getEntityManager().find(UserLog.class, getUserLogin().getUser().getId());
+		UserLogin userLogin = getUserLogin();
+		if (userLogin == null)
+			return null;
+		
+		UserLog userLog = getEntityManager().find(UserLog.class, userLogin.getUser().getId());
 		
 		if (userLog == null) {
 			// save new user log information

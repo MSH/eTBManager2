@@ -28,7 +28,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.validator.Email;
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.UserState;
 import org.msh.tb.transactionlog.Operation;

@@ -69,6 +69,20 @@ public class SymetaImportTask extends DbBatchTask {
 
 		addLog("* WEB service URL = " + config.getWebServiceURL());
 		addLog("* Workspace = " + config.getWorkspace().getName().toString());
+
+		// initializing context variables
+		User user = getUser();
+		UserWorkspace ws = (UserWorkspace)getEntityManager().createQuery("from UserWorkspace ws where ws.user.id = :uid and ws.workspace.id = :id")
+			.setParameter("uid", user.getId())
+			.setParameter("id", getWorkspace().getId())
+			.getSingleResult();
+		Contexts.getEventContext().set("userWorkspace", ws);
+		// avoid lazy initialization problems
+		ws.getTbunit().getAdminUnit().getId();
+		UserLogin userLogin = new UserLogin();
+		userLogin.setUser(user);
+		userLogin.setWorkspace(getWorkspace());
+		Contexts.getEventContext().set("userLogin", userLogin);
 	}
 
 
@@ -78,16 +92,6 @@ public class SymetaImportTask extends DbBatchTask {
 	@Override
 	protected void finishing() {
 		beginTransaction();
-		User user = getUser();
-		UserWorkspace ws = (UserWorkspace)getEntityManager().createQuery("from UserWorkspace ws where ws.user.id = :uid and ws.workspace.id = :id")
-			.setParameter("uid", user.getId())
-			.setParameter("id", getWorkspace().getId())
-			.getSingleResult();
-		Contexts.getEventContext().set("userWorkspace", ws);
-		UserLogin userLogin = new UserLogin();
-		userLogin.setUser(user);
-		userLogin.setWorkspace(getWorkspace());
-		Contexts.getEventContext().set("userLogin", userLogin);
 		
 		// save result in a log file
 		TransactionLogService service = new TransactionLogService();
