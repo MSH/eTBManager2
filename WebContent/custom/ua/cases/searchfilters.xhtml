@@ -29,9 +29,10 @@
 
    <h2>#{messages['cases.details.case']}</h2>
 
-	<s:decorate template="/layout/editname.xhtml">
+	<s:decorate template="/custom/ua/layout/editname.xhtml">
 		<ui:define name="label">#{messages['cases.casesearching.patient']}:</ui:define>
 		<ui:param name="patientdata" value="#{caseFilters}" />
+		<ui:param name="required" value="false" />
 	</s:decorate>
 
 	<s:decorate template="/layout/display.xhtml">
