@@ -62,45 +62,35 @@
     	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
 	
 		<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">#{messages['Address.regist']}:</ui:define>
+    		<ui:define name="label">#{messages['Address.address']}:</ui:define>
     		#{tbcase.notifAddress.address}
+    		<br/>
+    		#{tbcase.notifAddress.complement}    		
     	</s:decorate>
     	
-    	<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">#{messages['Address.live']}:</ui:define>
-    		#{tbcase.notifAddress.complement}
-		</s:decorate>
-		<s:decorate template="/layout/audisplay.xhtml">
+ 		<s:decorate template="/layout/audisplay.xhtml">
 			<ui:param name="adminunit" value="#{tbcase.notifAddress.adminUnit}" />
 		</s:decorate>
 	</td></tr>
-	<tr><td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
-    		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
-    		#{tbcase.phoneNumber}
-		</s:decorate>
-	</td>
-	<td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
-    		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
-    		#{tbcase.mobileNumber}
-		</s:decorate>
-	</td></tr>
 	</s:fragment>
-	<s:fragment rendered="#{tbcase.notifAddressChanged}">
-	<tr><td colspan="2">
-		<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
+	
+	 <s:fragment rendered="#{not tbcase.currentAddress.emptyy}">
+    <tr><td colspan="2">
+    	<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
 	
 		<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
+    		<ui:define name="label">#{messages['Address.address']}:</ui:define>
     		#{tbcase.currentAddress.address}
     		<br/>
-    		#{tbcase.currentAddress.complement}
-		</s:decorate>
-		<s:decorate template="/layout/audisplay.xhtml">
+    		#{tbcase.currentAddress.complement}    		
+    	</s:decorate>
+    	
+ 		<s:decorate template="/layout/audisplay.xhtml">
 			<ui:param name="adminunit" value="#{tbcase.currentAddress.adminUnit}" />
 		</s:decorate>
 	</td></tr>
+	</s:fragment>
+	
 	<tr><td>
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
     		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
@@ -113,7 +103,7 @@
     		#{tbcase.mobileNumber}
 		</s:decorate>
 	</td></tr>
-	</s:fragment>
+	
 	<tr>
 		<td>
 		    <s:decorate template="/layout/displayfield.xhtml" >
