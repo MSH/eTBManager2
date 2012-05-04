@@ -9,7 +9,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.newnotif']} - #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect]: messages[tbcase.classification.key]}" />
+<ui:param name="title" value="#{messages['form.new']} - #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect]: messages[tbcase.classification.key]}" />
 
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:140px" />
@@ -74,7 +74,8 @@ function checkfields() {
 
 <h:commandLink id="btnpac" onclick="openWaitDlg();"
     action="#{caseEditingHome.selectPatientData}" styleClass="button" style="display:none;width:160px;" >
-     <span>#{messages['cases.newpatient']}</span>
+     <!-- <span>#{messages['cases.newpatient']}</span> -->
+     <span> #{messages['form.new']} #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect]: messages[tbcase.classification.key]}</span>
 </h:commandLink>
 
 <s:decorate template="/layout/naveg.xhtml" rendered="#{patients.searching}">
