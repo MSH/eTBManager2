@@ -89,11 +89,13 @@ public class OrderLeadTimeReport {
 	 * Calculate the number of average days and percentage
 	 */
 	protected void calculateAverageDays() {
-		float tot = authorizing.getNumDays() + shipping.getNumDays() + receiving.getNumDays();
+		float tot = authorizing.getAverageDays() + shipping.getAverageDays() + receiving.getAverageDays();
 
-		authorizing.setPercentage( (float)authorizing.getNumDays() /  tot * 100);
-		shipping.setPercentage( (float)shipping.getNumDays() /  tot * 100);
-		receiving.setPercentage( (float)receiving.getNumDays() /  tot * 100);
+		if (tot > 0) {
+			authorizing.setPercentage( (float)authorizing.getAverageDays() /  tot * 100);
+			shipping.setPercentage( (float)shipping.getAverageDays() /  tot * 100);
+			receiving.setPercentage( (float)receiving.getAverageDays() /  tot * 100);
+		}
 	}
 
 
