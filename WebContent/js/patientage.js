@@ -16,6 +16,31 @@ function handleCaseDateChange() {
 	jQuery("#divage input[type='text']").val(age);
 }
 
+//Change the algorithm calculating age for Ukraine and Azerbaijan
+function handleCaseDateChangeUAZ() {
+	sBirth = jQuery("#divbirthdate input[type='text']").val();
+	sReg = jQuery("#divregdate input[type='text']").val();
+	if (!(sReg))
+		 dt2 = new Date();
+	else dt2 = convertDate(sReg)
+	var dt1=convertDate(sBirth);
+	if (dt1==null)
+		return;
+	window.formato = jQuery("#formatodata").val();
+	
+	var age=0;
+	if (dt1!=null) {
+		if (dt1<=dt2){
+			age = dt2.getFullYear() - dt1.getFullYear();
+			dt2.setFullYear(dt2.getFullYear()-age);
+			if (dt1>dt2) 
+				age-=1;
+		}
+		else age = "Error date value";
+	}
+	jQuery("#divage input[type='text']").val(age);
+}
+
 function convertDate(s) {
 	dia = s.replace(/_/g," ").substring(0,2);
 	mes = s.replace(/_/g," ").substring(3,5);
