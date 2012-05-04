@@ -26,17 +26,17 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.wst.validation.validationbuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
 			<name>org.hibernate.eclipse.console.hibernateBuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
 			<name>org.jboss.tools.jst.web.kb.kbbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.wst.validation.validationbuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -51,4 +51,16 @@
 		<nature>org.hibernate.eclipse.console.hibernateNature</nature>
 		<nature>org.jboss.tools.jst.web.kb.kbnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>lib-classes</name>
+			<type>2</type>
+			<location>C:/rmemoria/Projetos/java/eclipse2/etbmanager/WebContent/WEB-INF/classes</location>
+		</link>
+		<link>
+			<name>lib-generic</name>
+			<type>2</type>
+			<location>C:/rmemoria/Projetos/java/eclipse2/etbmanager/generic</location>
+		</link>
+	</linkedResources>
 </projectDescription>
