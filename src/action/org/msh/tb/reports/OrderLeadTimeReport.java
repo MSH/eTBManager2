@@ -80,8 +80,27 @@ public class OrderLeadTimeReport {
 			if (receivingDate != null)
 				receiving.addOrder(DateUtils.daysBetween(shippingDate, receivingDate));
 		}
+		
+		calculateAverageDays();
 	}
 
+	
+	/**
+	 * Calculate the number of average days and percentage
+	 */
+	protected void calculateAverageDays() {
+		float tot = authorizing.getNumDays() + shipping.getNumDays() + receiving.getNumDays();
+
+		authorizing.setPercentage( (float)authorizing.getNumDays() /  tot * 100);
+		shipping.setPercentage( (float)shipping.getNumDays() /  tot * 100);
+		receiving.setPercentage( (float)receiving.getNumDays() /  tot * 100);
+	}
+
+
+	/**
+	 * Return information about authorizing
+	 * @return
+	 */
 	public OrderEvent getAuthorizing() {
 		if (authorizing == null)
 			generate();
@@ -127,6 +146,7 @@ public class OrderLeadTimeReport {
 	public class OrderEvent {
 		private int numOrders;
 		private int numDays;
+		private float percentage;
 
 		public void addOrder(long numDays) {
 			this.numDays += numDays;
@@ -140,7 +160,7 @@ public class OrderLeadTimeReport {
 		}
 		public int getAverageDays() {
 			if (numOrders > 0)
-				 return numDays / numOrders;
+				 return Math.round( (float)numDays / (float)numOrders );
 			else return 0;
 		}
 		public int getNumOrders() {
@@ -148,6 +168,18 @@ public class OrderLeadTimeReport {
 		}
 		public void setNumOrders(int numOrders) {
 			this.numOrders = numOrders;
+		}
+		/**
+		 * @return the percentage
+		 */
+		public float getPercentage() {
+			return percentage;
+		}
+		/**
+		 * @param percentage the percentage to set
+		 */
+		public void setPercentage(float percentage) {
+			this.percentage = percentage;
 		}
 	}
 

@@ -67,6 +67,7 @@
 	<th>#{messages['reports.orderEvent']}</th>
 	<th>#{messages['reports.averageDays']}</th>
 	<th>#{messages['reports.orderCount']}</th>
+	<th>%</th>
 </tr>
 <tr><td class="highlight colc">#{messages['reports.authorizing']}</td>
 	<td class="colc">
@@ -75,21 +76,36 @@
 	<td class="colc">
 		#{orderLeadTimeReport.authorizing.numOrders}
 	</td>
+	<td class="colc">
+		<h:outputText value="#{orderLeadTimeReport.authorizing.percentage}" >
+			<f:convertNumber pattern="0.0"/>
+		</h:outputText>
+	</td>
 </tr>
 <tr><td class="highlight colc">#{messages['reports.shipping']}</td>
 	<td class="colc">
-		#{orderLeadTimeReport.shipping.averageDays==0?'-':orderLeadTimeReport.authorizing.averageDays}
+		#{orderLeadTimeReport.shipping.averageDays==0?'-':orderLeadTimeReport.shipping.averageDays}
 	</td>
 	<td class="colc">
 		#{orderLeadTimeReport.shipping.numOrders}
 	</td>
+	<td class="colc">
+		<h:outputText value="#{orderLeadTimeReport.shipping.percentage}" >
+			<f:convertNumber pattern="0.0"/>
+		</h:outputText>
+	</td>
 </tr>
 <tr><td class="highlight colc">#{messages['reports.receiving']}</td>
 	<td class="colc">
-		#{orderLeadTimeReport.receiving.averageDays==0?'-':orderLeadTimeReport.authorizing.averageDays}
+		#{orderLeadTimeReport.receiving.averageDays==0?'-':orderLeadTimeReport.receiving.averageDays}
 	</td>
 	<td class="colc">
 		#{orderLeadTimeReport.receiving.numOrders}
+	</td>
+	<td class="colc">
+		<h:outputText value="#{orderLeadTimeReport.receiving.percentage}" >
+			<f:convertNumber pattern="0.0"/>
+		</h:outputText>
 	</td>
 </tr>
 </table>
