@@ -288,7 +288,7 @@ public class CaseEditingHome {
 		
 		Address notifAddress = tbcase.getNotifAddress();
 		Address curAddress = tbcase.getCurrentAddress();
-		curAddress.copy(notifAddress);
+		//curAddress.copy(notifAddress);
 
 		tbcase.setNotifAddress(notifAddress);
 		tbcase.setCurrentAddress(curAddress);
@@ -400,5 +400,17 @@ public class CaseEditingHome {
 
 	public void setRegimenType(int regimenType) {
 		this.regimenType = regimenType;
+	}
+
+	public PatientHome getPatientHome() {
+		return patientHome;
+	}
+
+	public PrevTBTreatmentHome getPrevTBTreatmentHome() {
+		return prevTBTreatmentHome;
+	}
+
+	public MedicalExaminationHome getMedicalExaminationHome() {
+		return medicalExaminationHome;
 	}
 }
