@@ -30,7 +30,7 @@ public class SymetaImportTask extends DbBatchTask {
 
 	private MoldovaServiceConfig config;
 	private int batchBlock;
-//	private int batchBlockCount;
+	private int batchBlockCount;
 	private ImportingBase importingBase;
 	private StringBuffer log = new StringBuffer();
 
@@ -45,7 +45,7 @@ public class SymetaImportTask extends DbBatchTask {
 	public void execute() {
 		setAutomaticProgress(false);
 		batchBlock = 0;
-//		batchBlockCount = 4;
+		batchBlockCount = 5;
 
 		try {
 			executeRegions();
@@ -221,7 +221,7 @@ public class SymetaImportTask extends DbBatchTask {
 				importingBase.processNode(node);
 
 				int count = nodes.getLength();
-				updateProgress(nodes.getLength(), index, 34);
+				updateProgress(nodes.getLength(), index);
 
 				return getRecordIndex() < count - 1;
 			}
@@ -258,6 +258,7 @@ public class SymetaImportTask extends DbBatchTask {
 
 				MessageElement[] msgs = wscall.getData(tbmis);
 				elem = msgs[1].getAsDOM();
+				batchBlock++;
 				break;
 			} catch (Exception e) {
 				errorCount++;
@@ -279,8 +280,12 @@ public class SymetaImportTask extends DbBatchTask {
 	 * @param index
 	 * @param offset
 	 */
-	protected void updateProgress(int total, int index, int offset) {
-		setProgress(Math.round(offset + ((float)(index * 33)) / (float)total));
+	protected void updateProgress(int total, int index) {
+		float dx = 1F / (float)batchBlockCount;
+		
+		float pos = ((batchBlock - 1) * dx) + ((float)index / (float)total) * dx;
+
+		setProgress(Math.round(pos * 100));
 	}
 	
 	/**
