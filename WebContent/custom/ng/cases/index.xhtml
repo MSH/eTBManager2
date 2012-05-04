@@ -25,7 +25,7 @@
 	<h:commandLink 
 		onclick="showModalAutoTop('selclassificationdlg');return false;" style="width:130px"
 		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button">
-		<span>#{messages['cases.newnotif']} Nigeria</span>
+		<span>#{messages['cases.newcase']} Nigeria</span>
 	</h:commandLink>
 
 	<div class="spacer" />
@@ -41,7 +41,7 @@
 			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}" styleClass="button">
 				<f:param name="classif" value="#{cla}"/>
 				<f:param name="type" value="CONFIRMED"/>
-				<span>#{messages['cases.newnotif']}</span>
+				<span>#{messages['cases.newcase']}</span>
 			</s:link>
 			
 				<div class="spacer" />
@@ -187,7 +187,7 @@
 <s:fragment rendered="#{userSession.canNotifySeveralClassifs}">
 <rich:modalPanel id="selclassificationdlg" width="300" zindex="2000" autosized="true">
 	<f:facet name="header" >
-		#{messages['cases.newnotif']}
+		#{messages['cases.newcase']}
 	</f:facet>
 
 	<a:form>
