@@ -246,7 +246,8 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			break;
 			
 			// ON TREATMENT
-			case 600: cond = "c.state = " + CaseState.ONTREATMENT.ordinal();
+			case 600: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + 
+							 " and c.treatmentUnit.id = " + caseFilters.getUnitId();
 			break;
 			
 			// ON TREATMENT - TRANSFERIN
