@@ -32,10 +32,42 @@
 		<a:repeat value="#{adm.items}" var="it">
 		<tr>
 			<td><div class="icon-hu"/>#{it.unitName}</td>
-			<td align="center">#{it.casesOnTreatment==null?'-':it.casesOnTreatment}</td>
-			<td align="center">#{it.casesTransferIn==null?'-':it.casesTransferIn}</td>
-			<td align="center">#{it.casesTransferOut==null?'-':it.casesTransferOut}</td>
-			<td align="center">#{it.medExamMissing==null?'-':it.medExamMissing}</td>
+			<td align="center">
+				<s:link value="#{it.casesOnTreatment==null?'-':it.casesOnTreatment}"  view="/cases/searchresult.xhtml" styleClass="link-small">
+					<f:param name="stateIndex" value="600"/>
+					<f:param name="unitId" value="#{it.unitId}" />
+					<f:param name="sc" value="CASE_UNIT_STATE"/>
+					<f:param name="vs" />
+					<f:param name="tag" />
+				</s:link>
+			</td>
+			<td align="center">
+				<s:link value="#{it.casesTransferIn==null?'-':it.casesTransferIn}"  view="/cases/searchresult.xhtml" styleClass="link-small">
+					<f:param name="stateIndex" value="601"/>
+					<f:param name="unitId" value="#{it.unitId}" />
+					<f:param name="sc" value="CASE_UNIT_STATE"/>
+					<f:param name="vs" />
+					<f:param name="tag" />
+				</s:link>
+			</td>
+			<td align="center">
+				<s:link value="#{it.casesTransferOut==null?'-':it.casesTransferOut}"  view="/cases/searchresult.xhtml" styleClass="link-small">
+					<f:param name="stateIndex" value="602"/>
+					<f:param name="unitId" value="#{it.unitId}" />
+					<f:param name="sc" value="CASE_UNIT_STATE"/>
+					<f:param name="vs" />
+					<f:param name="tag" />
+				</s:link>
+			</td>
+			<td align="center">
+				<s:link value="#{it.medExamMissing==null?'-':it.medExamMissing}"  view="/cases/searchresult.xhtml" styleClass="link-small">
+					<f:param name="stateIndex" value="603"/>
+					<f:param name="unitId" value="#{it.unitId}" />
+					<f:param name="sc" value="CASE_UNIT_STATE"/>
+					<f:param name="vs" />
+					<f:param name="tag" />
+				</s:link>
+			</td>
 			<td align="center"><s:link value="#{messages['cases.mantreatment']}" view="/cases/treatments.xhtml">
 					<f:param name="huid" value="#{it.unitId}"/>
 				</s:link> 

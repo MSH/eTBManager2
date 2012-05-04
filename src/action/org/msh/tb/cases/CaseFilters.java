@@ -14,6 +14,7 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
@@ -61,6 +62,7 @@ public class CaseFilters {
 	private Integer iniYear;
 	private Integer endMonth;
 	private Integer endYear;
+	private Integer unitId;
 	private FilterHealthUnit filterHealthUnit = FilterHealthUnit.BOTH;
 	// date filters
 	private boolean registrationDate = true;
@@ -134,7 +136,8 @@ public class CaseFilters {
 		iniTreatmentDate = false;
 		patient = null;
 		stateIndex = null;
-
+		unitId = null;
+		
 		tagid = null;
 		
 		order = 0;
@@ -188,6 +191,14 @@ public class CaseFilters {
 				validationState = null;
 				stateIndex = null;
 				tagid = null;
+				break;
+			case CASE_UNIT_STATE:
+				Integer sii = stateIndex;
+				Integer uId = unitId;
+				clearFilters();
+				setFilterHealthUnit(FilterHealthUnit.TREATMENT_UNIT);
+				stateIndex = sii;
+				unitId = uId;
 				break;
 		}
 	}
@@ -625,7 +636,7 @@ public class CaseFilters {
 	}
 
 	public void setSearchCriteria(SearchCriteria searchCriteria) {
-		if (this.searchCriteria == searchCriteria)
+		if ((this.searchCriteria == searchCriteria) && searchCriteria != SearchCriteria.CASE_UNIT_STATE)
 			return;
 		
 		this.searchCriteria = searchCriteria;
@@ -790,6 +801,14 @@ public class CaseFilters {
 		if (defaultWorkspace == null)
 			defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace");
 		return defaultWorkspace;
+	}
+
+	public Integer getUnitId() {
+		return unitId;
+	}
+
+	public void setUnitId(Integer unitId) {
+		this.unitId = unitId;
 	}
 	
 }

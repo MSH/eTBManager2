@@ -11,5 +11,6 @@ public enum SearchCriteria {
 	PATIENT,
 	CASE_STATE,
 	VALIDATION_STATE,
-	CASE_TAG;
+	CASE_TAG,
+	CASE_UNIT_STATE;
 }

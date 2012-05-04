@@ -244,6 +244,43 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			// WAIT TO START TREATMENT
 			case 0: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType != " + DiagnosisType.SUSPECT.ordinal();
 			break;
+			
+			// ON TREATMENT
+			case 600: cond = "c.state = " + CaseState.ONTREATMENT.ordinal();
+			break;
+			
+			// ON TREATMENT - TRANSFERIN
+			case 601: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + 
+							 " and c.treatmentUnit.id = " + caseFilters.getUnitId() +
+							 " and exists(select id from TreatmentHealthUnit t" +
+							 	" where t.period.iniDate > c.treatmentPeriod.iniDate and period.endDate = c.treatmentPeriod.endDate and c.state= " + CaseState.ONTREATMENT.ordinal() +
+							 	" and transferring=false and tbunit.id = "+ caseFilters.getUnitId() +
+							 	" and tbcase.id = c.id)";
+			break;
+			
+			// ON TREATMENT / TRANSFERING - TRANSFEROUT
+			case 602: cond = " exists(select id from TreatmentHealthUnit t" +
+							 " where t.period.endDate < c.treatmentPeriod.endDate" +
+							 " and c.state in (" + CaseState.ONTREATMENT.ordinal() + "," + CaseState.TRANSFERRING.ordinal() + ")" +
+							 " and tbunit.id = "+ caseFilters.getUnitId() +
+							 " and tbcase.id = c.id)";
+			
+			break;
+			
+			// MISSING EXAM CASES
+			case 603: cond = " exists(select tc.id " +
+							 "from TbCase tc, MedicalExamination med " +
+							 "inner join tc.notificationUnit as tu " +
+							 "inner join tu.adminUnit as a " +
+							 "where tu.workspace.id = " + defaultWorkspace.getId().toString() + 
+							 " and med.nextAppointment is not null and med.nextAppointment + 7 < current_date " +
+							 " and tc.state < " + CaseState.CURED.ordinal() +
+							 " and med.date = (select max(m.date) from MedicalExamination m where m.tbcase.id = tc.id)" +
+							 " and tu.id = "+ caseFilters.getUnitId() +
+							 " and med.tbcase.id = tc.id " +
+							 " and tc.id = c.id)";
+			
+			break;
 
 			default: cond = "c.state = " + stateIndex.toString();
 			break;
