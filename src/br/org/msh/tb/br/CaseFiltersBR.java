@@ -6,7 +6,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.msh.tb.cases.CaseFilters;
 import org.msh.tb.entities.FieldValue;
-import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.PatientType;

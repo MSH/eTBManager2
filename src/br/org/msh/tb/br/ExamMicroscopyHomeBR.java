@@ -17,8 +17,7 @@ import org.msh.tb.entities.TbCase;
  */
 @Name("examMicroscopyHomeBR")
 public class ExamMicroscopyHomeBR  {
-	private static final long serialVersionUID = -2214020426707390271L;
-
+	
 	@In(create=true) ExamMicroscopyHome examMicroscopyHome;
 	
 	private AdminUnitSelection auselection;
