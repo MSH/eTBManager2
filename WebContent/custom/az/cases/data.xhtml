@@ -62,9 +62,12 @@
     	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
 	
 		<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
+    		<ui:define name="label">#{messages['Address.regist']}:</ui:define>
     		#{tbcase.notifAddress.address}
-    		<br/>
+    	</s:decorate>
+    	
+    	<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">#{messages['Address.live']}:</ui:define>
     		#{tbcase.notifAddress.complement}
 		</s:decorate>
 		<s:decorate template="/layout/audisplay.xhtml">

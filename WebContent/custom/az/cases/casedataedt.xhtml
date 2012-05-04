@@ -65,7 +65,7 @@
     
     <tr><td colspan="2">
     	<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['Address.address']}:</ui:define>
+    		<ui:define name="label">#{messages['Address.regist']}:</ui:define>
     		<h:inputText value="#{tbcase.notifAddress.address}" style="width:300px" required="true" maxlength="100"/>
     	</s:decorate>
     	
@@ -73,6 +73,7 @@
     
     <tr><td colspan="2">
     	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['Address.live']}:</ui:define>
     		<h:inputText value="#{tbcase.notifAddress.complement}" style="width:300px" maxlength="100"/>
     	</s:decorate>
     </td></tr>
@@ -202,7 +203,7 @@
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChangeUAZ();})" />
 
     <s:decorate template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
+    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:<span style="color:red;">*</span></ui:define>
     	<ui:param name="required" value="#{tbcase.validated}" /> 
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
     </s:decorate>
