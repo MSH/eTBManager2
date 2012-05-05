@@ -18,9 +18,11 @@
 	<h1>#{title}</h1>
 	<h:form styleClass="form1">
 	<div id="pnldata" class="form-content">
+		<s:fragment rendered="#{not symetaIntHome.taskRunning}">
 		<h2>#{messages['ro.admin.symeta.desc']}</h2>
 		<a:commandLink styleClass="button" style="width:190px" 
 			action="#{symetaIntHome.execute}"
+			onclick="if (!disableButton(this)) return false;"
 			oncomplete="jQuery('#pnldata').hide();"
 			reRender="messages,pnltask">
 			<span>#{messages['ro.admin.symeta.run']}</span>
@@ -31,7 +33,7 @@
 		<div class="button-bar">
 		<a:commandLink 
 			action="#{symetaIntHome.eraseCases}" styleClass="button-alt"
-			onclick="if (!confirm('#{messages['ro.admin.symeta.removecases']}')) {return false;}"
+			onclick="if (!disableButton(this)) return false;if (!confirm('#{messages['ro.admin.symeta.removecases']}')) {enableButton();return false;}"
 			reRender="messages">
 			<span>#{messages['ro.admin.symeta.erase']}</span>
 		</a:commandLink>
@@ -42,11 +44,12 @@
 			<span>#{messages['ro.admin.symeta.config']}...</span>
 		</a:commandLink>
 		</div>
+		</s:fragment>
 	</div>
 	
 	<h:panelGroup id="pnltask">
 		<s:fragment rendered="#{symetaIntHome.taskRunning}">
-			<a:poll reRender="pnltask" interval="1500" ajaxSingle="true"/>
+			<a:poll reRender="pnltask" interval="2000" ajaxSingle="true"/>
 
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['form.name']}</ui:define>
@@ -62,7 +65,7 @@
 				<ui:define name="label">#{messages['Progress']}</ui:define>
 				<div style="width:100px;display:block;height:20px;">
 					<div class="progress-icon" style="width:#{symetaIntHome.task.progress}px"/>
-					#{symetaIntHome.task.progress}
+					#{symetaIntHome.task.progress}%
 				</div>
 			</s:decorate>
 		</s:fragment>

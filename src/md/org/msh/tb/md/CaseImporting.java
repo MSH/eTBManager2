@@ -151,11 +151,11 @@ public abstract class CaseImporting extends ImportingBase{
 			tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
 		tbcase.setRegistrationDate(beginTreatmentDate);
 
-		Period treatPeriod = new Period();
+/*		Period treatPeriod = new Period();
 		treatPeriod.setIniDate(beginTreatmentDate);
 		tbcase.setTreatmentPeriod(treatPeriod);
 		tbcase.setTreatmentUnit(treatmentUnit);
-
+*/
 		tbcase.setValidationState(ValidationState.VALIDATED);
 		tbcase.setRegistrationCode(personalNumber);
 		if (tbcase.getNotifAddress() == null)
@@ -225,12 +225,16 @@ public abstract class CaseImporting extends ImportingBase{
 				else monthsTreat = 24;
 				
 				Date endDate = DateUtils.incMonths(beginTreatmentDate, monthsTreat);
+				endDate = DateUtils.incDays(endDate, -1);
+				
 				TreatmentHealthUnit hu = new TreatmentHealthUnit();
 				hu.setPeriod(new Period(beginTreatmentDate, endDate));
 				hu.setTbCase(tbcase);
 				hu.setTbunit(treatmentUnit);
 				hu.setTransferring(false);
 				tbcase.getHealthUnits().add(hu);
+				tbcase.getTreatmentPeriod().set(hu.getPeriod());
+				tbcase.setTreatmentUnit(treatmentUnit);
 			}
 			else {
 				// Update data about current treatment
