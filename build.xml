@@ -139,6 +139,10 @@
           <classpath refid="mdrtb.classpath"/>
 		 </javac>
 		
+		 <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
+         <src path="src/md"/>
+         <classpath refid="mdrtb.classpath"/>
+		 </javac>
     </target>
 
 	
