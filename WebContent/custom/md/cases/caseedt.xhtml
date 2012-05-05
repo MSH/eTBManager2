@@ -30,10 +30,10 @@
 		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-		<a:commandLink action="#{caseEditingHome.saveEditing}" styleClass="button" reRender="main">
+		<a:commandLink action="#{caseEditingHome.saveEditing}" styleClass="button" reRender="main" onclick="if (!disableButton(this)) return false;">
 			<span>#{messages['form.save']}</span>
 		</a:commandLink>
-		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
 			<f:param name="id" value="#{caseHome.id}" />
 			<span>#{messages['form.cancel']}</span>
 		</s:link>
