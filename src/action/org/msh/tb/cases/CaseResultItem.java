@@ -1,11 +1,15 @@
 package org.msh.tb.cases;
 
-import java.text.DecimalFormat;
 import java.util.Date;
 
+import org.jboss.seam.Component;
+import org.jboss.seam.international.Messages;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
+import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.ValidationState;
 
@@ -30,8 +34,30 @@ public class CaseResultItem {
 	private String registrationCode;
 	private DiagnosisType diagnosisType;
 
+
+	/**
+	 * Return the patient number formatted to be displayed  
+	 * @return
+	 */
 	public String getDisplayCaseNumber() {
-		if (registrationCode != null)
+		Workspace ws = (Workspace)Component.getInstance("defaultWorkspace");
+		
+		String displayNumber;
+		
+		if (ws.getDisplayCaseNumber() == DisplayCaseNumber.REGISTRATION_CODE)
+			 displayNumber = registrationCode;
+		else {
+			if ((patientRecordNumber == null) || (caseNumber == null))
+				 displayNumber = null;
+			else displayNumber = TbCase.formatCaseNumber(patientRecordNumber, caseNumber);
+		}
+
+		if (displayNumber == null)
+			displayNumber = Messages.instance().get("cases.new");
+		
+		return displayNumber;
+		
+/*		if (registrationCode != null)
 			return registrationCode;
 		
 		if (caseNumber == null)
@@ -42,7 +68,7 @@ public class CaseResultItem {
 		if (caseNumber > 1)
 			return s + "-" + caseNumber.toString();
 		else return s;
-	}
+*/	}
 
 	public String getRegistrationCode() {
 		return registrationCode;

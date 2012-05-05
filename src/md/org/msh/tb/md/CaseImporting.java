@@ -12,12 +12,14 @@ import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.TreatmentHealthUnit;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.InfectionSite;
+import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.misc.FieldsOptions;
@@ -76,10 +78,11 @@ public abstract class CaseImporting extends ImportingBase{
 		}
 
 		Integer gender = getValueAsInteger(xmlCaseData, "GENDER", false);
+		Integer nationality = getValueAsInteger(xmlCaseData, "NATIONALITY", false);
 		Date birthDate = getValueAsDate(xmlCaseData, "BIRTHDATE_string", false);
 		Date beginTreatmentDate = getValueAsDate(xmlCaseData, "BEGINTREATMENTDATE_string", true);
 		String unitId = getValue(xmlCaseData, "NOTIFICATIONUNIT", false);
-		String personalNumber = getValue(xmlCaseData, "PERSONALNUMBER", false);
+		String personalNumber = getValue(xmlCaseData, "PERSONALIDNUMBER", false);
 		String treatmentUnitId = getValue(xmlCaseData, "TREATMENTUNIT", true);
 		Integer mainLocalization = getValueAsInteger(xmlCaseData, "MAINLOCALIZATION", false);
 		String siteOfDisease = getValue(xmlCaseData, "SITEOFDISEASE", false);
@@ -95,6 +98,7 @@ public abstract class CaseImporting extends ImportingBase{
 		if (isErrorOnCurrentImport())
 			return false;
 
+		
 		tbcase = null;
 		try {
 			List<TbCase> lstcases = entityManager.createQuery("from TbCase c " +
@@ -106,7 +110,6 @@ public abstract class CaseImporting extends ImportingBase{
 
 			if (lstcases.size() == 0) {
 				tbcase = new TbCase();
-				tbcase.setState(CaseState.WAITING_TREATMENT);
 			}
 			else {
 				tbcase = lstcases.get(0);
@@ -114,8 +117,6 @@ public abstract class CaseImporting extends ImportingBase{
 			}
 		} catch (Exception e) {
 			tbcase = new TbCase();
-			tbcase.setClassification(CaseClassification.DRTB);
-			tbcase.setState(CaseState.WAITING_TREATMENT);
 		}
 
 		tbcase.setClassification(getCaseClassification());
@@ -134,6 +135,13 @@ public abstract class CaseImporting extends ImportingBase{
 		if (unit == null) {
 			addError("No unit specified");
 			return false;
+		}
+
+		// handle nationality of the patient
+		if (nationality != null) {
+			if (nationality == 1)
+			 	 tbcase.setNationality(Nationality.NATIVE);
+			else tbcase.setNationality(Nationality.FOREIGN);
 		}
 		
 		tbcase.setNotificationUnit(unit);
@@ -158,6 +166,9 @@ public abstract class CaseImporting extends ImportingBase{
 		tbcase.setPulmonaryType( getPulmonaryType(siteOfDisease) );
 		tbcase.setDrugResistanceType( getDrugResistanceType(typeOfResistance) );
 		tbcase.setPatientType( getPatientType(typeOfPatient) );
+
+		// check if treatment must be included
+		updateCaseState(treatmentUnit, beginTreatmentDate);
 		
 		p = tbcase.getPatient();
 		if (p == null) {
@@ -195,9 +206,44 @@ public abstract class CaseImporting extends ImportingBase{
 		entityManager.persist(tbcase);
 		entityManager.flush();
 
-		return true;
+		return newCase;
 	}
 
+	
+	/**
+	 * Update case state according to the data from the server
+	 */
+	protected void updateCaseState(Tbunit treatmentUnit, Date beginTreatmentDate) {
+		// treatment information was set ?
+		if ((treatmentUnit != null) && (beginTreatmentDate != null)) {
+
+			// there is no information about treatment ?
+			if (tbcase.getHealthUnits().size() == 0) {
+				int monthsTreat;
+				if (tbcase.getClassification() == CaseClassification.TB)
+					monthsTreat = 6;
+				else monthsTreat = 24;
+				
+				Date endDate = DateUtils.incMonths(beginTreatmentDate, monthsTreat);
+				TreatmentHealthUnit hu = new TreatmentHealthUnit();
+				hu.setPeriod(new Period(beginTreatmentDate, endDate));
+				hu.setTbCase(tbcase);
+				hu.setTbunit(treatmentUnit);
+				hu.setTransferring(false);
+				tbcase.getHealthUnits().add(hu);
+			}
+			else {
+				// Update data about current treatment
+				TreatmentHealthUnit hu = tbcase.getHealthUnits().get( tbcase.getHealthUnits().size() - 1 );
+				hu.setTbunit(treatmentUnit);
+				if (hu.getPeriod() != null)
+					hu.getPeriod().setIniDate(beginTreatmentDate);
+			}
+			
+			tbcase.setState(CaseState.ONTREATMENT);
+		}
+		else tbcase.setState(CaseState.WAITING_TREATMENT);
+	}
 	
 	/**
 	 * Return the patient type from symetb

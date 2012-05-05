@@ -258,6 +258,7 @@ public class SymetaImportTask extends DbBatchTask {
 
 				MessageElement[] msgs = wscall.getData(tbmis);
 				elem = msgs[1].getAsDOM();
+
 				batchBlock++;
 				break;
 			} catch (Exception e) {

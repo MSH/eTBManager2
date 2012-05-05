@@ -11,7 +11,7 @@
      <s:link view="/admin/reptransactionlog.xhtml" value="#{messages['userrole.LOGREP']}" propagation="none" rendered="#{s:hasRole('LOGREP')}"/>
      <s:link view="/admin/workspacesetup.xhtml" value="#{messages['admin.setup']} #{defaultWorkspace.name}" propagation="none" rendered="#{s:hasRole('SETUPWS')}" />
      <s:link view="/admin/syssetup.xhtml" value="#{messages['admin.syssetup']}" propagation="none" rendered="#{s:hasRole('SYSSETUP')}"/>
-     <s:link view="/custom/md/admin/symeta.xhtml" value="#{messages['ro.admin.symeta']}" propagation="none" rendered="#{s:hasRole('SETUPWS')}" />
+     <s:link view="/custom/md/admin/symeta.xhtml" value="#{messages['ro.admin.symeta']}" propagation="none" rendered="#{s:hasRole('IMPORT')}" />
      <div style="margin-top:10px;">
      <span style="width:100%;font-weight:bold;text-align:center;color:#a0a0a0;">
      #{messages['tables']}

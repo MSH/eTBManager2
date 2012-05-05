@@ -81,7 +81,7 @@
 		</tr>
 	<ui:repeat value="#{cases.resultList}" var="it">
 	<tr><td width="90px" align="center">
-			<s:link value="#{it.caseNumber==null?messages['cases.new']:it.displayCaseNumber}" view="/cases/casedata.xhtml">
+			<s:link value="#{it.displayCaseNumber}" view="/cases/casedata.xhtml">
 				<f:param name="id" value="#{it.caseId}" />
 			</s:link>
 			<br/>
@@ -104,7 +104,7 @@
    		<h:outputText value="#{messages[it.caseState.key]}" style="color:#8DA48F;font-weight:bold;" />
    		</div>		
 	</td>
-	<td style="border-left:1px solid #E0E0E0;">
+	<td>
 		<h:outputText value="#{it.notificationDate}" converter="localeDateConverter" />
    		<h:outputText value="#{it.beginningTreatmentDate}" converter="periodConverter" 
    			rendered="#{it.beginningTreatmentDate!=null}" 
