@@ -124,11 +124,11 @@ public class ReportTB11 extends Indicator2D {
 				res = ".result in (1,2,3,4)";
 				dstQuery = "";
 				break;}
-			case 5: {
+			/*case 5: {
 				examMethod = "ExamDST";
 				resdst = " in ('H','R','E','S')"; //without ex"+res+" and
 				dstQuery = ".id in (select ex.exam.id from ExamDSTResult ex where ex.substance.id in (select sub.id from Substance sub where sub.abbrevName.name1 "+resdst+"))";
-				break;}
+				break;}*/
 			case 6: {
 				examMethod = "ExamDST";
 				res = ".result = 2"; // 2 ~ Susceptible!
@@ -268,7 +268,7 @@ public class ReportTB11 extends Indicator2D {
 			res3=0;
 			switch (i) {
 			// culture and microscopy
-				case 1:case 2:case 3:case 4:case 5:{
+				case 1:case 2:case 3:case 4:{
 					addValueTable(tc.getPatientType(),i);
 					break;}
 			//DST-tests without summary fields
@@ -391,6 +391,13 @@ public class ReportTB11 extends Indicator2D {
 			total += table1.getCellAsFloat(colid, "row26");
 			
 			table1.addIdValue(colid, "row7", total);			
+		}
+		//Row 5
+		for (String colid: cols){
+			total = table1.getCellAsFloat(colid, "row6");
+			total += table1.getCellAsFloat(colid, "row7");
+			
+			table1.addIdValue(colid, "row5", total);			
 		}
 		
 	}
