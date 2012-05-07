@@ -7,6 +7,8 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
+<ui:param name="indicator" value="#{caseEditingAZHome}" />
+
 	<div class="form-content">
 	<h2>#{messages['cases.patientdata']}</h2>
 	<table width="100%" style="border-collapse:collapse;">
@@ -75,7 +77,7 @@
 
 	<tr><td>
 		<s:decorate template="/layout/auselection.xhtml">
-			<ui:param name="auselection" value="#{caseEditingHome.notifAdminUnit}" />
+			<ui:param name="auselection" value="#{indicator.notifAdminUnit}" />
 			<ui:param name="requiredLevel" value="#{defaultWorkspace.patientAddrRequiredLevels}" />
 		</s:decorate>
     </td></tr>
@@ -113,7 +115,7 @@
     	<table width="100%" style="border-collapse: collapse;">
 		<tr><td>
 			<s:decorate template="/layout/auselection.xhtml">
-				<ui:param name="auselection" value="#{caseEditingHome.currentAdminUnit}" />
+				<ui:param name="auselection" value="#{indicator.currentAdminUnit}" />
 			</s:decorate>
     	</td></tr>
     	</table>
@@ -182,7 +184,7 @@
 
 	<h2>#{messages['TbCase.notificationUnit']}</h2>
 	<s:decorate template="/layout/tbselection.xhtml" >
-		<ui:param name="tbunitselection" value="#{caseEditingHome.tbunitselection}" />
+		<ui:param name="tbunitselection" value="#{indicator.tbunitselection}" />
 		<ui:param name="required" value="true" />
 	</s:decorate>
 

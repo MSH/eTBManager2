@@ -14,6 +14,7 @@
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:140px" />
 <ui:param name="left" value="0" />
+<ui:param name="indicator" value="#{caseEditingAZHome}" />
 
 <ui:param name="waitdlg" value="1" />
 
@@ -61,7 +62,7 @@
 
 <div id="newpacbutton" class="button-bar" style="display:none;" >
 	<a:commandLink onclick="if (!disableButton(this)) return false;"
-    	action="#{caseEditingHome.selectPatientData}" styleClass="button" >
+    	action="#{indicator.selectPatientData}" styleClass="button" >
 	    <span>#{messages['cases.newpatient']}</span>
 	</a:commandLink>
 </div>
