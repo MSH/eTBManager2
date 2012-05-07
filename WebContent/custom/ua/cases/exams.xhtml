@@ -151,7 +151,7 @@
 	<div class="spacer" />
 
 	<h:panelGroup id="pnlculture">
-	<s:link view="/cases/edtexamculture.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" 
+	<s:link view="/cases/edtexamculture.xhtml" style="float:right;" rendered="#{caseHome.canEditExamsInClosedCases}" 
 		styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
@@ -227,7 +227,7 @@
 	<h:panelGroup id="pnldst">	
 
 		<s:link view="/cases/edtexamdst.xhtml" style="float:right;"
-			rendered="#{caseHome.canEditExams}" styleClass="button-alt" onclick="disableButton(this)">
+			rendered="#{caseHome.canEditExamsInClosedCases}" styleClass="button-alt" onclick="disableButton(this)">
 			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>
