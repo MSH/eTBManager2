@@ -136,7 +136,8 @@
 <s:decorate id="bodydiv" template="/layout/casebody.xhtml">
 
 	<ui:define name="state-content">
-		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="icon-hu-big" style="margin-top:6px;font-size:11px;max-width:320px;" >
+		<!--<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="icon-hu-big" style="margin-top:1px;font-size:11px;max-width:500px;" >-->
+		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" style="margin-top:1px;font-size:11px;max-width:500px;" >
 			<b style="padding-right:4px;">#{messages['meds.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
 			<br/>
 			<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
