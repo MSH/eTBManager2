@@ -239,8 +239,7 @@ public class ForecastingUAExcel{
 			setColumn(1);
 			addText(fm.getMedicine().getGenericName().getName2(),times12ptBoldFormat);
 			setColumn(2);
-			int soh = fm.getStockOnHand();
-			addNumber(soh,null);
+			addNumber(fm.getStockOnHand(),null);
 			setColumn(3);
 			addNumber(fm.getForecasting().getLeadTime(),null);
 			setColumn(4);
@@ -254,8 +253,8 @@ public class ForecastingUAExcel{
 			setColumn(7);
 			addNumber(cc+cnc,null);
 			setColumn(8);
-			soh=fm.getStockOnHandAfterLT();  //AK 24.0
-			addNumber(fm.getStockOnHandAfterLT(),null);
+			int soh=fm.getStockOnHandAfterLT();  //AK 24.0
+			addNumber(soh,null);
 			setColumn(9);
 			addNumber(cc+cnc-soh>0 ? cc+cnc-soh : 0,null);
 			setColumn(10);
