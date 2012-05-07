@@ -254,6 +254,7 @@ public class ForecastingUAExcel{
 			setColumn(7);
 			addNumber(cc+cnc,null);
 			setColumn(8);
+			soh=fm.getStockOnHandAfterLT();  //AK 24.0
 			addNumber(fm.getStockOnHandAfterLT(),null);
 			setColumn(9);
 			addNumber(cc+cnc-soh>0 ? cc+cnc-soh : 0,null);
