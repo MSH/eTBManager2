@@ -457,7 +457,7 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 			return;
 		
 		// if the new number of fields is equals or bigger than the current composition, so there is nothing to do
-		if (nameComposition.getNumFields() >= getInstance().getPatientNameComposition().getNumFields()) {
+		if (nameComposition.getNumFields() < getInstance().getPatientNameComposition().getNumFields()) {
 			// update fields to avoid p.name as null when concatenating information
 			entityManager.createQuery("update Patient p set p.middleName = '' where p.middleName is null and p.workspace.id = #{defaultWorkspace.id}").executeUpdate();
 			entityManager.createQuery("update Patient p set p.lastName = '' where p.lastName is null and p.workspace.id = #{defaultWorkspace.id}").executeUpdate();
@@ -465,8 +465,9 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 			String hql;
 			if (nameComposition.getNumFields() == 1)
 				hql = "p.name = p.name || ' ' || p.middleName || ' ' || p.lastName, p.middleName = null, p.lastName = null";
-			else hql = "p.middleName = p.middleName || ' ' || p.lastName, p.lastName = null";
-				
+			else 
+				hql = "p.middleName = p.middleName || ' ' || p.lastName, p.lastName = null";
+			
 			entityManager
 				.createQuery("update Patient p set " + hql + " where p.workspace.id = #{defaultWorkspace.id}")
 				.executeUpdate();
