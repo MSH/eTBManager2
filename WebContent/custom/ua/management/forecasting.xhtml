@@ -336,8 +336,8 @@
 				</f:facet>
 				<s:validateAll>
 					<s:decorate>
-						<h:inputText id="erval" value="#{r.unitPrice}" style="width:60px;" converter="currencyConverter" >
-						
+						<h:inputText id="erval" value="#{r.unitPriceF}" style="width:60px;" converter="currencyConverter" >
+						<f:convertNumber pattern="#,###,##0.0000"/>
 						</h:inputText>
 						<s:message  styleClass="error"/>
 					</s:decorate>
@@ -427,7 +427,7 @@
 
 </rich:tab>
 
-<ui:include src="/management/forecastingresults.xhtml"/>
+<ui:include src="forecastingresults.xhtml"/>
 
 </rich:tabPanel>
 
