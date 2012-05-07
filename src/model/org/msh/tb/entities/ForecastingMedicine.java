@@ -352,7 +352,20 @@ public class ForecastingMedicine implements Serializable {
 	public void setUnitPrice(float unitPrice) {
 		this.unitPrice = unitPrice;
 	}
+	/**
+	 * I'm add this method because of funny Converter bug in JSF
+	 * In primitive types we cannot use converters<br>
+	 * AK 22/04/2012 
+	 * @return
+	 */
+	public Number getUnitPriceF() {
+		return new Float(unitPrice);
+	}
 
+	public void setUnitPriceF(Number unitPrice) {
+		this.unitPrice = unitPrice.floatValue();
+	}
+	
 	/**
 	 * @param forecasting the forecasting to set
 	 */
