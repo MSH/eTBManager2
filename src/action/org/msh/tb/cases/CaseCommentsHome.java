@@ -144,8 +144,8 @@ public class CaseCommentsHome extends EntityHomeEx<CaseComment> {
 	 * @return
 	 */
 	protected CommentWrapper createCommentWrapper(CaseComment caseComment) {
-		boolean canRemove = Identity.instance().hasRole("REM_COMMENTS");
-
+		boolean canRemove = Identity.instance().hasRole(caseComment.getTbcase().getClassification() + "_REM_COMMENTS");
+		
 		// if user has no permission to remove global comments, check if it's its own comment
 		if (!canRemove) {
 			UserLogin userLogin = getUserLogin();
