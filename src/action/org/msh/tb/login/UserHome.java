@@ -22,6 +22,7 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
@@ -184,6 +185,8 @@ public class UserHome extends EntityHomeEx<User> {
 		getUserInstance().setPassword(Passwords.hashPassword(senha));
 		Contexts.getEventContext().set("password", senha);
 
+		getLogService().saveExecuteTransaction("NEWPWD", getUserInstance().getName(), getUserInstance().getId(), User.class.getSimpleName());
+		
 		if (!sendEmail)
 			return "mail.success";
 		
