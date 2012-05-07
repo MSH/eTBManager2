@@ -281,6 +281,14 @@ public class CaseHome extends WsEntityHome<TbCase>{
 	public boolean isCanEditExams() {
 		return getTbCase().isOpen() && checkRoleBySuffix("CASE_EXAMS_EDT") && isWorkingUnit();
 	}
+	/**
+	 * Several exams results may be add to closed cases, because of long term to get such results
+	 * AK - 05/07/2012
+	 * @return
+	 */
+	public boolean isCanEditExamsInClosedCases() {
+		return checkRoleBySuffix("CASE_EXAMS_EDT") && isWorkingUnit();
+	}
 	
 	public boolean isCanEditAditionalInfo() {
 		return getTbCase().isOpen() && checkRoleBySuffix("CASE_ADDINFO_EDT") && isWorkingUnit();
