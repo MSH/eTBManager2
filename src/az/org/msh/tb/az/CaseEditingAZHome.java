@@ -1,6 +1,7 @@
 package org.msh.tb.az;
 
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.entities.Address;
 import org.msh.tb.entities.MedicalExamination;
@@ -10,10 +11,12 @@ import org.msh.tb.entities.enums.MedAppointmentType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.entities.enums.YesNoType;
 
+
 @Name("caseEditingAZHome")
 public class CaseEditingAZHome extends CaseEditingHome{
 	
 	@Override
+	@Transactional
 	public String saveNew() {
 		if (!validateData())
 			return "error";
