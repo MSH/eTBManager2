@@ -8,6 +8,7 @@
    <default-locale>az_AZ</default-locale>
    <supported-locale>az_AZ</supported-locale>
    <supported-locale>en</supported-locale>
+    <supported-locale>ru</supported-locale>
   </locale-config>
  </application>
 </faces-config>
