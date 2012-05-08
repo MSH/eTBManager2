@@ -3,8 +3,10 @@ package org.msh.tb.ua;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.seam.Component;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Laboratory;
+import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.laboratories.LaboratorySelection;
 
 public class LaboratorySelectionUA extends LaboratorySelection {
@@ -29,4 +31,13 @@ public class LaboratorySelectionUA extends LaboratorySelection {
 		setOptions(options);
 	}
 
+	@Override
+	public AdministrativeUnit getAdminUnit() {
+		if (getAuselection().getUnitLevel1()==null){
+			UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
+			if (userWorkspace != null)
+					getAuselection().setUnitLevel1(userWorkspace.getAdminUnit());
+		}
+		return getAuselection().getUnitLevel1();
+	}
 }
