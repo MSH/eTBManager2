@@ -34,9 +34,21 @@ function checkfields() {
 <h:form id="main" styleClass="form1">
 <div class="form-content">
 
-	<h2>#{messages['cases.searchpatient']}</h2>
+	<!-- <h2>#{messages['cases.searchpatient']}</h2> -->
+	 <h2>#{messages['cases.searchfor']} #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect]: messages[tbcase.classification.key]} #{messages['cases.toBeNotified']}</h2>
 
-    <s:decorate id="name" template="/layout/editname.xhtml">
+  <!--   <s:decorate id="name" template="/layout/editname.xhtml">
+    	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
+    	<ui:define name="label">#{messages['global.nameof']} #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect]: messages[tbcase.classification.key]}</ui:define>
+   		<ui:param name="patientdata" value="#{patient}" />
+    </s:decorate> -->
+    
+     <s:decorate id="nameSuspect" template="/layout/editname.xhtml" rendered = "#{tbcase.diagnosisType=='SUSPECT'}">
+    	<ui:define name="label">#{messages['Suspect.name']}:</ui:define>
+   		<ui:param name="patientdata" value="#{patient}" />
+    </s:decorate>
+    
+     <s:decorate id="namePatient" template="/layout/editname.xhtml" rendered = "#{tbcase.diagnosisType=='CONFIRMED'}">
     	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
    		<ui:param name="patientdata" value="#{patient}" />
     </s:decorate>
