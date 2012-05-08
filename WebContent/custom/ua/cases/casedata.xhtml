@@ -30,9 +30,10 @@
 
 <ui:define name="state-content">
 	<s:fragment rendered="#{tbcase.state=='TRANSFERRING'}" > 
-	<div class="icon-hu-big"/>
+	ghfghfgh
 	<div style="margin-top:6px;font-size:11px;max-width:320px;height:60px;" >
-		<b style="padding-right:4px;">#{messages['meds.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
+		<b style="padding-right:4px;">vcb#{messages['meds.movs.destunit']}:</b> 
+		<h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
 		<br/>
 		<span class="right-icon" />
 		<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
