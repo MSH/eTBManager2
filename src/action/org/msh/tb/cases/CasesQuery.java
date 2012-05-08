@@ -270,7 +270,8 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			
 			// MISSING EXAM CASES
 			case 603: cond = " exists(select tc.id " +
-							 "from TbCase tc, MedicalExamination med " +
+					         "from MedicalExamination med " + 
+					         "inner join med.tbcase tc " +
 							 "inner join tc.notificationUnit as tu " +
 							 "inner join tu.adminUnit as a " +
 							 "where tu.workspace.id = " + defaultWorkspace.getId().toString() + 
@@ -278,7 +279,6 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 							 " and tc.state < " + CaseState.CURED.ordinal() +
 							 " and med.date = (select max(m.date) from MedicalExamination m where m.tbcase.id = tc.id)" +
 							 " and tu.id = "+ caseFilters.getUnitId() +
-							 " and med.tbcase.id = tc.id " +
 							 " and tc.id = c.id)";
 			
 			break;
