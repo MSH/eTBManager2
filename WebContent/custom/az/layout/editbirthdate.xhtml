@@ -15,7 +15,7 @@
 		<ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>
 		<span id="divbirthdate">
 		<rich:calendar id="pacbirthdate" enableManualInput="true" value="#{tbcase.patient.birthDate}" 
-			required="#{not empty birthdaterequired}" locale="#{locale}" datePattern="#{messages['locale.datePattern']}" 
+			required="true" locale="#{locale}" datePattern="#{messages['locale.datePattern']}" 
 			timeZone="#{timezones.default}" validator="#{futureDateValidator.validate}" inputStyle="width:100px;" 
 			showWeeksBar="false" onchanged="handleCaseDateChangeUAZ();">
 		</rich:calendar>
@@ -32,7 +32,7 @@
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
     	<div id="divage">
-    	<h:inputText id="edtage" value="#{tbcase.age}" style="width:80px;" required="true">
+    	<h:inputText id="edtage" value="#{tbcase.age}" style="width:80px;">
     		<f:validateLongRange minimum="0" maximum="150"/>
     	</h:inputText>
     	</div>
