@@ -8,9 +8,9 @@ public enum MBTResult {
 
 	public String getKey() {
 		switch (this) {
-		case CULTURE: return "ExtraOutcomeInfo.CULTURE";
-		case MICROSCOPY: return "ExtraOutcomeInfo.SMEAR";
-		case BOTH: return "ExtraOutcomeInfo.CULTURE_SMEAR";
+		case CULTURE: return "uk_UA.ExtraOutcomeInfo.CULTURE";
+		case MICROSCOPY: return "uk_UA.ExtraOutcomeInfo.SMEAR";
+		case BOTH: return "uk_UA.ExtraOutcomeInfo.CULTURE_SMEAR";
 		}
 		return toString();
 	}
