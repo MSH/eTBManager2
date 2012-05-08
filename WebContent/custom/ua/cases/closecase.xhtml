@@ -51,7 +51,7 @@
 	<h:panelGroup id="extrainfo1">
 	<s:fragment rendered="true">
     <s:decorate template="/layout/edit.xhtml" >
-		<ui:define name="label">#{messages['ExtraOutcomeInfo']}:</ui:define>
+		<ui:define name="label">#{messages['uk_UA.ExtraOutcomeInfo']}:</ui:define>
 		<h:selectOneMenu value="#{caseDataUA.extraOutcomeInfo}">
 			<s:selectItems value="#{caseDataUAHome.extraInfo}"  var="v" label="#{messages[v.key]}" noSelectionLabel="-"/>
 		</h:selectOneMenu>
