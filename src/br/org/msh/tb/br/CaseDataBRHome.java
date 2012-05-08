@@ -286,6 +286,16 @@ public class CaseDataBRHome {
 	public String saveMedicalExamination() {
 		if (medicalExaminationBRHome == null)
 			return "error";
+		
+		for(MedicalExamination m : caseHome.getTbCase().getExaminations()){
+			
+			if(medicalExaminationBRHome.getInstance().getId() != m.getId() && 
+					medicalExaminationBRHome.getInstance().getDate().equals(m.getDate())){
+				facesMessages.addToControlFromResourceBundle("date", "form.duplicatedname");
+				return "error";
+			}
+		
+		}
 
 		adjustMedicalExaminationFields();
 		caseHome.getTbCase().getCurrentAddress().setAdminUnit(auselection.getSelectedUnit());
