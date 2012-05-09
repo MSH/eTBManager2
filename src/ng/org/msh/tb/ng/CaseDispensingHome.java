@@ -1,5 +1,9 @@
 package org.msh.tb.ng;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -95,6 +99,56 @@ public class CaseDispensingHome {
 		}
 	}
 
+	public boolean isDispensable(Integer day) {			
+		Date currDate = getCurrentDate();
+		Date dispDate = getDispDate(year,month,day);
+		
+		if(dispDate.before(currDate))
+			return true;
+		if(dispDate.compareTo(currDate)==0)
+			return true;
+		else 
+			return false;		
+	}
+	
+	public Date getCurrentDate(){
+		Calendar cal = Calendar.getInstance();
+		String date_format = "yyyyMMdd";
+		SimpleDateFormat sdf = new SimpleDateFormat(date_format);
+		Date date = null;
+		try {
+			 date = (Date)sdf.parse(sdf.format(cal.getTime()));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return date;
+	}
+	
+	public Date getDispDate(int yr, int mon, int d){
+		String month = null;
+		String day = null;
+		if((mon+1)/10==0){
+			month="0".concat(Integer.toString(mon+1));
+		}
+		else
+			month=Integer.toString(mon+1);
+		if((d/10==0))
+			day="0".concat(Integer.toString(d));
+		else
+			day=Integer.toString(d);
+		String strDate = Integer.toString(yr).concat(month).concat(day);
+		String date_format = "yyyyMMdd";
+		SimpleDateFormat sdf = new SimpleDateFormat(date_format);
+		Date date = null;
+		try {
+			date = (Date)sdf.parse(strDate);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return date;
+	}
 
 	/**
 	 * @return the month
