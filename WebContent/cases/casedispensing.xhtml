@@ -69,7 +69,7 @@
     		<td class="colcb#{item.checked?' activerow':''}">
     			<s:fragment rendered="#{item.available}">
     			   #{item.day}<br/>
-    			   <h:selectBooleanCheckbox value="#{item.checked}" onclick="updateChecks1();updateChecks2();"/>
+    			   <h:selectBooleanCheckbox value="#{item.checked}" onclick="updateChecks1();updateChecks2();" rendered = "#{caseDispensingHome.isDispensable(item.day)}"/>
     			</s:fragment>
     		</td>
     	</a:repeat>
