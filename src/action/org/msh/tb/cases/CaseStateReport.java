@@ -78,7 +78,7 @@ public class CaseStateReport {
 		if (userWorkspace.getHealthSystem() != null)
 			hsID = userWorkspace.getHealthSystem().getId();
 		
-		String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
+		/*String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
 				"from tbcase c " +
 				"inner join tbunit u on u.id = c.notification_unit_id " + aucond +
 				"where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
@@ -92,7 +92,24 @@ public class CaseStateReport {
 				"where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " + 
 				" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
 				(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
-				" group by c.state, c.validationState";
+				" group by c.state, c.validationState";*/
+		
+		String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
+		"from tbcase c " +
+		"inner join tbunit u on u.id = c.notification_unit_id " + aucond +
+		"where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
+		(hsID != null? "and u.healthSystem_id = " + hsID.toString(): "") +
+		" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
+		" group by c.state, c.validationState, c.diagnosisType " +
+		"union " +
+		"select c.state, c.validationState, c.diagnosisType, count(*) " +
+		"from tbcase c " +
+		"inner join tbunit u on u.id = c.treatment_unit_id " + aucond + 
+		"where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ")"+
+		" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
+		(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
+		" group by c.state, c.validationState";
+		
 		List<Object[]> lst = entityManager.createNativeQuery(sql).getResultList();
 		
 		total = new Item();
@@ -103,7 +120,7 @@ public class CaseStateReport {
 			
 			DiagnosisType diagType;
 			if (val[2] != null)
-				 diagType = DiagnosisType.values()[((BigInteger)val[2]).intValue()];
+				diagType = DiagnosisType.values()[(Integer)val[2]];
 			else diagType = DiagnosisType.CONFIRMED;
 			ValidationState vs = ValidationState.values()[(Integer)val[1]];
 
@@ -284,6 +301,28 @@ public class CaseStateReport {
 			stateIndex = 200;
 			desc = messages.get("CaseState.NOT_ON_TREATMENT");
 		}
+		//VR: additional registered-cases categories
+		else
+			if((state == CaseState.ONTREATMENT) && (diagType == DiagnosisType.SUSPECT)){
+				stateIndex = 300;
+				desc = messages.get("cases.suspectOnTreatment");
+			}
+		else
+			if ((state == CaseState.ONTREATMENT) && (diagType == DiagnosisType.CONFIRMED)){
+				stateIndex = 400;	
+				desc = messages.get("cases.confirmedOnTreatment");
+				}
+		else
+			if ((state == CaseState.WAITING_TREATMENT) && (diagType == DiagnosisType.CONFIRMED)){
+				stateIndex = 500;	
+				desc = messages.get("cases.confirmedNotOnTreatment");
+				}
+		else
+			if (state == CaseState.TRANSFERRED_OUT){
+				stateIndex = 600;	
+				desc = messages.get("CaseState.TRANSFERRING");
+					}
+		// END
 		else {
 			desc = messages.get(state.getKey());
 			stateIndex = state.ordinal();
