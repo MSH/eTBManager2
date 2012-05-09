@@ -57,8 +57,8 @@
     		<td class="colcb#{item.selected!=null?' activerow':''}">
     			<s:fragment rendered="#{item.available}">
     			   #{item.day}<br/>
-			    	<h:selectOneMenu value="#{item.selected}" onchange="updateChecks1();updateChecks2();" >
-			    		<s:selectItems value="#{globalLists_ng.dot}" var="it" noSelectionLabel="" label="#{messages[it.key]}" />
+			    	<h:selectOneMenu value="#{item.selected}" onchange="updateChecks1();updateChecks2();" rendered = "#{caseDispensingHome_Ng.isDispensable(item.day)}">
+			    		<s:selectItems value="#{globalLists_ng.dot}" var="it" noSelectionLabel="" label="#{messages[it.key]}"/>
 			    		<s:convertEnum/>
 			    	</h:selectOneMenu>
     			   
