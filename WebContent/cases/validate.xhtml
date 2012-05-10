@@ -50,6 +50,14 @@
     			<s:convertEnum />
     		</h:selectOneMenu>
 		</s:decorate>
+		
+		<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['DrugResistanceTypes']}:</ui:define>
+    		<h:selectOneMenu id="patType" value="#{tbcase.drugResistanceType}" required="true">
+    			<s:selectItems var="it" value="#{drugResistanceTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+    			<s:convertEnum />
+    		</h:selectOneMenu>
+		</s:decorate>
 
 	<rich:jQuery selector="#patType" query="change(function(){ showPatientTypeOther(this); })" />
 
