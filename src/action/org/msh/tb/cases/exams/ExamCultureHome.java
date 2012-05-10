@@ -52,6 +52,28 @@ public class ExamCultureHome extends LaboratoryExamHome<ExamCulture> {
 		}
 		return numColonies;
 	}
+	
+	/**
+	 * Create list of NumColonies of required count
+	 * */
+	
+	public List<SelectItem> getNumColonies(int count) {
+		if (numColonies == null) {
+			numColonies = new ArrayList<SelectItem>();
+			
+			SelectItem item = new SelectItem();
+			item.setLabel("-");
+			numColonies.add(item);
+			
+			for (int i = 1; i <= count; i++) {
+				item = new SelectItem();
+				item.setLabel(Integer.toString(i));
+				item.setValue(i);
+				numColonies.add(item);
+			}
+		}
+		return numColonies;
+	}
 
 	@Override
 	public String getJoinFetchHQL() {
