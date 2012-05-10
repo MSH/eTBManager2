@@ -107,7 +107,15 @@
 			<s:convertEnum />
 		</h:selectOneMenu>
 	</s:decorate>
-
+	
+	<s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">#{messages['PrescribedMedicine']}:</ui:define>
+		<h:selectOneMenu id="prescribedMedicine" value="#{caseFilters.prescribedMedicine}" style="width:490px">
+			<s:selectItems value="#{medicines}" var="x" label="#{x}" noSelectionLabel="-"/>
+			<s:convertEntity />
+		</h:selectOneMenu>
+	</s:decorate>
+	
    <h2>#{messages['cases.casesearching.filterdates']}</h2>
 
    <div id="datesdiv" style="padding:6px;">

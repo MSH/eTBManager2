@@ -68,6 +68,12 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 
 	private static final String notifRegCond = "(nu.adminUnit.code like #{caseFilters.tbAdminUnitLike})";
 	private static final String treatRegCond = "c.treatmentUnit.adminUnit.code like #{caseFilters.tbAdminUnitLike}";
+	
+	private static final String prescribedMedicineCond = "exists(SELECT cs.id, pm.id " + 
+															"FROM " + ETB.getWsClassName(TbCase.class) + " cs " +
+															"INNER JOIN cs.prescribedMedicines pm " + 
+															"WHERE 	pm.medicine.id = #{caseFilters.prescribedMedicine.id} " + 
+															"and c.id = cs.id)";
 
 	@Override
 	public List<CaseResultItem> getResultList() {
@@ -153,9 +159,13 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 				}
 		}
 
+		if(caseFilters.getPrescribedMedicine() != null && caseFilters.getPrescribedMedicine().getId() != 0){
+			addCondition(prescribedMedicineCond);
+		}
+		
 		mountAdvancedSearchConditions();
 		mountSingleSearchConditions();
-
+		
 		if (!hqlCondition.isEmpty())
 			hqlCondition = " where ".concat(hqlCondition);
 

@@ -39,10 +39,19 @@
 			<a:support event="onchange" reRender="pnlorders" />
 		</h:selectOneMenu>
 	</s:decorate>
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['OrderStatus']}:</ui:define>
+		<h:selectOneMenu id="orderStatus" value="#{ordersHistory.os}">
+			<s:selectItems var="v" value="#{ordersHistory.orderStatusList}" label="#{messages[v.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+			<a:support event="onchange" reRender="pnlorders" />
+		</h:selectOneMenu>
+	</s:decorate>
 	</div> 
 
 <h:panelGroup id="pnlorders">
-<s:fragment rendered="#{not empty ordersHistory.resultList}">
+<s:fragment rendered="#{facesContext.renderResponse and not empty ordersHistory.resultList}">
+
 	<h:dataTable value="#{ordersHistory.resultList}" var="it" styleClass="table2" columnClasses="colc,coll,coll,coll,coll,colc">
 	<h:column>
 		<f:facet name="header">
@@ -86,10 +95,9 @@
 
 	<h:column>
 		<f:facet name="header">
-			<h:outputText value="#{messages['global.createdby']}"  styleClass="collh"/>
+			<h:outputText value="#{messages['OrderStatus']}"  styleClass="collh"/>
 		</f:facet>
-		<div class="icon-user" />
-		<h:outputText value="#{it.userCreator.name}" />
+		<h:outputText value="#{messages[it.status.key]}" />
 	</h:column>
 	
 	</h:dataTable>

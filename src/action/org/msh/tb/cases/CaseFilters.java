@@ -3,18 +3,21 @@ package org.msh.tb.cases;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Synchronized;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.jboss.seam.framework.EntityQuery;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
@@ -40,7 +43,7 @@ import org.msh.utils.date.DateUtils;
 @Synchronized(timeout=10000L)
 @BypassInterceptors
 public class CaseFilters {
-
+	
 	private Workspace defaultWorkspace;
 	
 	private String name;
@@ -63,6 +66,7 @@ public class CaseFilters {
 	private Integer endMonth;
 	private Integer endYear;
 	private Integer unitId;
+	private Medicine prescribedMedicine;
 	private FilterHealthUnit filterHealthUnit = FilterHealthUnit.BOTH;
 	// date filters
 	private boolean registrationDate = true;
@@ -83,6 +87,8 @@ public class CaseFilters {
 	private Integer tagid;
 	
 	private ItemSelectList<CaseClassification> classifications;
+	
+	private List<Medicine> medicineList;
 	
 	/**
 	 * Selected view in the detail page of the case
@@ -137,6 +143,7 @@ public class CaseFilters {
 		patient = null;
 		stateIndex = null;
 		unitId = null;
+		prescribedMedicine = null;
 		
 		tagid = null;
 		
@@ -726,7 +733,6 @@ public class CaseFilters {
 		return classifications;
 	}
 
-
 	/**
 	 * @return the caseView
 	 */
@@ -810,5 +816,15 @@ public class CaseFilters {
 	public void setUnitId(Integer unitId) {
 		this.unitId = unitId;
 	}
+
+	public Medicine getPrescribedMedicine() {
+		return prescribedMedicine;
+	}
+
+	public void setPrescribedMedicine(Medicine prescribedMedicine) {
+		this.prescribedMedicine = prescribedMedicine;
+	}
+	
+	
 	
 }

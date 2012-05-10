@@ -1,35 +1,40 @@
 package org.msh.tb.medicines.orders;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.Order;
 import org.msh.tb.entities.enums.OrderStatus;
+import org.msh.tb.login.UserSession;
 import org.msh.utils.EntityQuery;
 
 @Name("ordersHistory")
 public class OrdersHistory extends EntityQuery<Order> {
 	private static final long serialVersionUID = -4180773858607462034L;
 
+	@In(create=true) UserSession userSession;
+	
+	private static final String[] restrictions = {
+		"month(o.orderDate) = #{ordersHistory.month} + 1",
+		"year(o.orderDate) = #{ordersHistory.year}",
+		"o.status = #{ordersHistory.os}"};
+		
 	private Integer month;
 	private Integer year;
-
-	private static final String[] restrictions = {
-		"month(o.orderDate) = #{orders.month} + 1",
-		"year(o.orderDate) = #{orders.year}",
-		"o.status = #{orders.status}"};
+	private OrderStatus os;
 	
-
 	protected String getCondition() {
-		return " where (o.unitTo.id = #{userSession.tbunit.id} and o.status in (" +
+		return " where ((o.unitTo.id = #{userSession.tbunit.id} and o.status in (" +
 				OrderStatus.SHIPPED.ordinal() + "," + OrderStatus.CANCELLED.ordinal() + "," + OrderStatus.RECEIVED.ordinal() + ")) " +
 				" or (o.unitFrom.id = #{userSession.tbunit.id} " +
 				" and o.status in (" +
 				OrderStatus.RECEIVED.ordinal() + "," + OrderStatus.CANCELLED.ordinal() + ")) " +
 				"or (o.unitTo.authorizerUnit.id = #{userSession.tbunit.id} " +
 				" and o.status in (" + OrderStatus.CANCELLED.ordinal() + ", " + OrderStatus.PREPARINGSHIPMENT.ordinal() + ", " + 
-				OrderStatus.RECEIVED.ordinal() + "," + OrderStatus.SHIPPED.ordinal() + "))";
+				OrderStatus.RECEIVED.ordinal() + "," + OrderStatus.SHIPPED.ordinal() + ")))";
 	}
 
 	@Override
@@ -84,4 +89,26 @@ public class OrdersHistory extends EntityQuery<Order> {
 	public OrderStatus getCanceledStatus() {
 		return OrderStatus.CANCELLED;
 	}
+
+	public OrderStatus getOs() {
+		return os;
+	}
+
+	public void setOs(OrderStatus os) {
+		this.os = os;
+	}
+	
+	public List<OrderStatus> getOrderStatusList(){
+		ArrayList<OrderStatus> list = new ArrayList<OrderStatus>();
+		
+		list.add(OrderStatus.RECEIVED);
+		list.add(OrderStatus.CANCELLED);
+		
+		if(userSession.getTbunit().isMedicineSupplier()){
+			list.add(OrderStatus.SHIPPED);
+		}
+		
+		return list;
+	}
+	
 }
