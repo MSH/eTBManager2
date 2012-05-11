@@ -198,4 +198,8 @@ public class LaboratorySelection {
 		}
 		return getAuselection().getUnitLevel1();
 	}
+	
+	public void setAdminUnitDefault(AdministrativeUnit admin) {
+		setAdminUnit(admin);
+	}
 }
