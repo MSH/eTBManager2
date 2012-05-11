@@ -188,8 +188,8 @@
 
 	<div id="divDiagDate" style="#{tbcase.diagnosisType=='CONFIRMED'?'':'display:none;'}">
     <s:decorate id="diagdt" template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['uk_UA.dateCMCCRegistration']}:<span style="color:red;">*</span></ui:define>
-    	<ui:param name="required" value="false" /> 
+    	<ui:define name="label">#{messages['uk_UA.dateCMCCRegistration']}:</ui:define>
+    	<ui:param name="required" value="#{tbcase.diagnosisType=='CONFIRMED'}" /> 
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
     	<h:inputHidden id="reghidden" />
     </s:decorate>
@@ -261,6 +261,7 @@
 		<ui:param name="id" value="diagnosis" />
 		<ui:param name="field" value="#{caseDataUA.diagnosis}" />
 		<ui:param name="list" value="#{fieldsQuery.diagnosis}" />
+		<ui:param name="required" value="true" />
 	</s:decorate>
 
 	<s:decorate template="/layout/editfield.xhtml" >
@@ -268,6 +269,7 @@
 		<ui:param name="id" value="detection" />
 		<ui:param name="field" value="#{caseDataUA.detection}" />
 		<ui:param name="list" value="#{fieldsQuery.detections}" />
+		<ui:param name="required" value="true" />
 	</s:decorate>
 
 	<s:decorate template="/layout/editfield.xhtml" >
@@ -275,6 +277,7 @@
 		<ui:param name="id" value="regcat" />
 		<ui:param name="field" value="#{caseDataUA.registrationCategory}" />
 		<ui:param name="list" value="#{fieldsQuery.registrationCategories}" />
+		<ui:param name="required" value="true" />
 	</s:decorate>
 
 	<s:decorate template="/layout/edit.xhtml">
