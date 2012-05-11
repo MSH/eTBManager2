@@ -9,7 +9,7 @@
 
 <s:decorate template="/layout/edit.xhtml" rendered="#{not labselection.level1ReadOnly}">
 	<ui:define name="label">#{messages['Laboratory']}:</ui:define>
-	<h:selectOneMenu id="cbselau" value="#{labselection.adminUnit}" required="#{required}" >
+	<h:selectOneMenu id="cbselau" value="#{labselection.adminUnitDefault}" required="#{required}" >
 		<s:selectItems var="it" value="#{labselection.adminUnits}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
 		<a:support event="onchange" ajaxSingle="true" reRender="cblabs" focus="cblab"/>
@@ -18,7 +18,7 @@
 	<h:panelGroup id="cblabs">
 	<br/>
 	<h:selectOneMenu id="cblab" value="#{labselection.laboratory}" required="#{required}">
-        <s:selectItems value="#{labselection.options}" var="it" label="#{it.abbrevName} (#{it.name})" noSelectionLabel="-" />
+        <s:selectItems value="#{labselection.optionsWithUnitLevel1}" var="it" label="#{it.abbrevName} (#{it.name})" noSelectionLabel="-" />
       	<s:convertEntity/>
     </h:selectOneMenu>
 	</h:panelGroup>
