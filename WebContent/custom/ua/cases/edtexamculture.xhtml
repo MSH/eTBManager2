@@ -44,7 +44,7 @@
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['ExamCulture.numberOfColonies']}:</ui:define>
     	<h:selectOneMenu value="#{examCulture.numberOfColonies}" >
-    		<f:selectItems value="#{examCultureHome.numColonies}"/>
+    		<f:selectItems value="#{examHome.getNumColonies(20)}"/>
     	</h:selectOneMenu>
     </s:decorate>
 
@@ -68,7 +68,7 @@
 		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandLink action="#{examCultureHome.persist}" styleClass="button" 
+            <a:commandLink action="#{examHome.persist}" styleClass="button" 
             	reRender="formexam,messages" 
             	onclick="disableButton(this)" >
             	<span>#{messages['form.save']}</span>
