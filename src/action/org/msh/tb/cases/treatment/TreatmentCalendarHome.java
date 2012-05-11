@@ -282,6 +282,29 @@ public class TreatmentCalendarHome {
 		public void setRegimenPhase(RegimenPhase regimenPhase) {
 			this.regimenPhase = regimenPhase;
 		}
-
+		
+		/**
+		 * Count total days prescribed to patients for all phase 
+		 * @return total days prescribed to patients for all phase 
+		 */
+		public int getTotalPresc(){
+			int res=0;
+			for (int i = 0; i < getMonths().size(); i++) {
+				res += getMonths().get(i).getTotalPrescribed();
+			}
+			return res;
+		}
+		
+		/**
+		 * Count total medicine dispensing to patients for all phase 
+		 * @return total medicine dispensing to patients for all phase 
+		 */
+		public int getTotalDisp(){
+			int res=0;
+			for (int i = 0; i < getMonths().size(); i++) {
+				res += getMonths().get(i).getTotalDispensed();
+			}
+			return res;
+		}
 	}
 }
