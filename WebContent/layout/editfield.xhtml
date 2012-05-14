@@ -16,7 +16,7 @@
         <span class="value #{invalid?'fielderror':''}">
             <s:validateAll>
 			<h:selectOneMenu id="#{id}fldoptions" value="#{field.value}" style="margin-bottom:3px;display:block;" rendered="#{field!=null}" required="#{empty required ? false : required}"
-				requiredMessage="#{messages['javax.faces.component.UIInput.REQUIRED ']}">
+				requiredMessage="#{messages['javax.faces.component.UIInput.REQUIRED']}">
 				<s:selectItems var="it" value="#{list}" noSelectionLabel="-" label="#{it}" />
 				<s:convertEntity />
 			</h:selectOneMenu>
