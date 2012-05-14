@@ -322,6 +322,16 @@ public class CaseRegimenHome {
 		public void setPhase(RegimenPhase phase) {
 			this.phase = phase;
 		}
+		
+		public void setFrequency(int _frequency) {
+			for (int i = 0; i < medicines.size(); i++) {
+				medicines.get(i).setFrequency(_frequency);
+			}
+		}
+		
+		public int getFrequency() {
+			return 7;
+		}
 	}
 
 
