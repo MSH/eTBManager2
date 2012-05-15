@@ -25,6 +25,15 @@ public class GlobalLists {
 		PatientType.SCHEMA_CHANGED,
 		PatientType.OTHER
 	};
+	
+	private final static PatientType[] patientTypesTB = {
+		PatientType.AFTER_DEFAULT,
+		PatientType.RELAPSE,
+		PatientType.FAILURE_FT,
+		PatientType.FAILURE_RT,
+		PatientType.SCHEMA_CHANGED,
+		PatientType.OTHER
+	};
 
 	private static final TbField tbfields[] = {
 		TbField.COMORBIDITY,
@@ -107,6 +116,10 @@ public class GlobalLists {
 	
 	public PatientType[] getPatientTypes() {
 		return patientTypes;
+	}
+	
+	public PatientType[] getPatientTypesTB() {
+		return patientTypesTB;
 	}
 	
 	public TbField[] getTbFields() {

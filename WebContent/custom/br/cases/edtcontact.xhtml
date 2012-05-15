@@ -143,6 +143,11 @@
     </div>
     </div>
 
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputTextarea value="#{tbContactBR.comments}" style="width:500px;height:80px;"/>
+    </s:decorate>
+
 	</td></tr>
     </table>
 	</div>

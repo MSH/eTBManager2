@@ -185,16 +185,6 @@
 
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.medicine']}" styleClass="collh" />
-			</f:facet>
-			<h:outputText value="#{it.substance.abbrevName}" title="#{it.substance.name}" />
-			<s:fragment rendered="#{not empty it.substance2}">,
-				<h:outputText value="#{it.substance2.abbrevName}" title="#{it.substance2.name}" /> 
-			</s:fragment>
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.month']}" styleClass="collh" />
 			</f:facet>
 			#{it.month}

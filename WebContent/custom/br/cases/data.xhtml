@@ -192,7 +192,7 @@
 
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.patientType!=null}">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
-    		#{messages[tbcase.patientType.key]}
+    		#{messages[tbcase.patientType.key]} de #{messages[tbcase.classification.key2]}
     		<s:fragment rendered="#{not empty tbcase.patientTypeOther}">
     			<h:outputText value="#{tbcase.patientTypeOther}" styleClass="right-icon" style="margin-left:16px;"/>
     		</s:fragment>

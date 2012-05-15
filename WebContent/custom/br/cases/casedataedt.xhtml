@@ -234,8 +234,12 @@
 
 	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
-    		<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="true">
-    			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+    		<h:selectOneMenu id="patTypeTB" value="#{tbcase.patientType}" required="true" rendered="#{tbcase.classification.key2 == 'TB'}">
+    			<s:selectItems var="it" value="#{globalLists_br.patientTypesTB}" noSelectionLabel="-" label="#{messages[it.key]} de #{messages[tbcase.classification.key2]}" />
+    			<s:convertEnum />
+    		</h:selectOneMenu>
+   			<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="true" rendered="#{tbcase.classification.key2 != 'TB'}">
+    			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]} de #{messages[tbcase.classification.key2]}" />
     			<s:convertEnum />
     		</h:selectOneMenu>
 	</s:decorate>
@@ -534,7 +538,7 @@ function genderChange(cb) {
     	<ui:param name="list" value="#{fieldsQuery.educationalDegree}" />
     </s:decorate>
 	
-    <s:decorate template="/layout/editfield.xhtml" >
+    <s:decorate template="/layout/editfield.xhtml" rendered="#{tbcase.classification.key2 != 'NMT'}">
     	<ui:define name="label">#{messages['TbField.CONTAG_PLACE']}:</ui:define>
     	<ui:param name="required" value="true" />
     	<ui:param name="id" value="contagPlace" />

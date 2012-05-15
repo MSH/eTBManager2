@@ -60,12 +60,16 @@
 <a:repeat value="#{orderHome.sources}" var="s">
 	<tr><td>
 		<h2>#{s.source.abbrevName}
-		<a:commandLink value="#{messages['cases.regimens.addmed']}..." 
+
+		<a:commandLink styleClass="button" 
 			action="#{orderHome.initMedicineSelection(s)}" 
 			reRender="main,medpnl" 
 			oncomplete="showMedicinesDlg();" 
-			style="float:right"/>
+			style="float:right">
+				<span>#{messages['cases.regimens.addmed']}...</span>
+			</a:commandLink>
 		<span class="text-small">(#{s.source.name})</span></h2>
+		
 	</td></tr>
 	<tr><td>
 		<h:dataTable value="#{s.items}" var="it" class="table1" columnClasses="colb col1,colrb,colrb,colrb,highlight colrb" rowClasses="lin1" width="100%">

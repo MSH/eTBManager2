@@ -15,6 +15,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.br.entities.MedicalExaminationBR;
 import org.msh.tb.br.entities.MolecularBiology;
 import org.msh.tb.br.entities.TbCaseBR;
 import org.msh.tb.br.entities.enums.MolecularBiologyResult;
@@ -287,16 +288,21 @@ public class CaseDataBRHome {
 		if (medicalExaminationBRHome == null)
 			return "error";
 		
+		MedicalExamination medInst = medicalExaminationBRHome.getInstance();
+		
 		for(MedicalExamination m : caseHome.getTbCase().getExaminations()){
 			
-			if(medicalExaminationBRHome.getInstance().getId() != m.getId() && 
-					medicalExaminationBRHome.getInstance().getDate().equals(m.getDate())){
+			if(medInst.getId() != m.getId() && medInst.getDate().equals(m.getDate())){
 				facesMessages.addToControlFromResourceBundle("date", "form.duplicatedname");
 				return "error";
 			}
+			
+			if((medInst.getTbcase().getAge()>=18) && (medInst.getHeight()!= null)){
+				m.setHeight(medInst.getHeight());
+			}
 		
 		}
-
+	
 		adjustMedicalExaminationFields();
 		caseHome.getTbCase().getCurrentAddress().setAdminUnit(auselection.getSelectedUnit());
 		medicalExaminationBRHome.setDisplayMessage(false);

@@ -18,4 +18,8 @@ public enum CaseClassification {
 	public String getKeySuspect() {
 		return getClass().getSimpleName().concat("." + name() + ".suspect");
 	}
+	
+	public String getKey2() {
+		return name();
+	}
 }

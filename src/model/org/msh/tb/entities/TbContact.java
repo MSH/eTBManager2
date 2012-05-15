@@ -41,7 +41,7 @@ public class TbContact implements Serializable {
 	
 	private Gender gender;
 	
-	private Integer age;
+	private String age;
 	
 	//VR: adding 'date of examination'
 	private Date dateOfExamination;
@@ -104,14 +104,14 @@ public class TbContact implements Serializable {
 	/**
 	 * @return the age
 	 */
-	public Integer getAge() {
+	public String getAge() {
 		return age;
 	}
 
 	/**
 	 * @param age the age to set
 	 */
-	public void setAge(Integer age) {
+	public void setAge(String age) {
 		this.age = age;
 	}
 
