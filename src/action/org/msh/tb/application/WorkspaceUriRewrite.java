@@ -12,6 +12,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.tb.entities.Workspace;
 
 @Name("workspaceUriRewrite")
 @Scope(ScopeType.APPLICATION)
@@ -91,4 +92,22 @@ public class WorkspaceUriRewrite {
 		return exists;
 	}
 	
+	
+	/**
+	 * Return the page according to its corresponding page in the custom folder 
+	 * @param page
+	 * @return
+	 */
+	public String getWorkspacePage(String page) {
+		String ext = getWorkspaceExtension();
+
+		if ((ext == null) || (ext.isEmpty()))
+			return page;
+		
+		String pagePath = "/custom/" + ext + page;
+		
+		if (workspacePageExists(FacesContext.getCurrentInstance(), pagePath))
+			 return pagePath;
+		else return page;
+	}
 }
