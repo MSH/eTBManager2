@@ -71,7 +71,7 @@ public class ExamHome<E> extends WsEntityHome<E> {
 			hql = hql.concat(" and exam.date = (select max(aux.date) " +
 			"from " + getEntityClass().getSimpleName() + " aux where aux.tbcase = exam.tbcase) ");
 		
-		return hql.concat(" order by exam.date");
+		return hql.concat(" order by exam.date desc");
 	}
 	
 	@Override

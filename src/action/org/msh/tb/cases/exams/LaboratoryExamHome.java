@@ -188,7 +188,7 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 			hql = hql.concat(" and s.dateCollected = (select max(aux.dateCollected) " +
 			"from " + entityClass + " aux where aux.tbcase = s.tbcase) ");
 		
-		return hql.concat(" order by exam.dateCollected");
+		return hql.concat(" order by exam.dateCollected desc");
 	}
 
 	

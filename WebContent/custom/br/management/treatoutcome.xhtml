@@ -65,9 +65,7 @@
 				<th>
 					#{messages['global.total']}
 				</th>
-				<th>
-					#{col.title}
-				</th>
+
 			</s:fragment>
 		</ui:repeat>
 
@@ -106,14 +104,7 @@
 					<h:outputText value="100%" rendered="#{indicator.showPerc}"/>	
 					</b>
 				</td>
-			
-				<td class="colcb" bgcolor="#BCD2EE">
-					<h:outputText value="#{val.value}">
-						<f:convertNumber pattern="###.##"/>
-					</h:outputText>
 
-					<h:outputText value="%" rendered="#{indicator.showPerc || val.column.highlight}" />	
-				</td>
 			</s:fragment>
 			</ui:repeat>
 
@@ -154,9 +145,7 @@
 				<h:outputText value="100%" rendered="#{indicator.showPerc}"/>
 				</b>
 			</td>
-			<td class="colcb" bgcolor="#BCD2EE">
-				<h:outputText value="-" />	
-			</td>
+
 		</tr>
 
 	</table>
@@ -165,7 +154,7 @@
 	<br/>
 	<div class="paragraph">#{messages['manag.ind.starttreat.title2']}</div>
 	<br/>
-	<s:decorate template="chartflash.xhtml">
+	<s:decorate template="#{workspaceUriRewrite.getWorkspacePage('/management/chartflash.xhtml')}">
 		<ui:param name="title" value="#{messages['manag.ind.outcome']}" />
 		<ui:param name="series" value="#{indicator.series}" />
 		<ui:param name="seriestitle" value="#{messages['cases.outcome']}" />

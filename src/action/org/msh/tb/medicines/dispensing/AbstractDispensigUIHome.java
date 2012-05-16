@@ -63,7 +63,8 @@ public abstract class AbstractDispensigUIHome {
 	 */
 	public String saveDispensing() {
 		Tbunit unit = getUnit();
-
+		String tipoOperacao;
+		
 		// is dispensing by patient ?
 		TbCase tbcase;
 		if (unit.isPatientDispensing()) {
@@ -90,8 +91,15 @@ public abstract class AbstractDispensigUIHome {
 
 		DispensingHome dispensingHome = getDispensingHome();
 
+		if(dispensingHome.getInstance().getTbunit() == null){
+			tipoOperacao = "new";
+		}else{
+			tipoOperacao = "edt";
+		}
+		
 		dispensingHome.getInstance().setTbunit(unit);
-
+		
+		
 		// inform DispensingHome about the batches to be dispensed
 		for (SourceItem it: getSources())
 			for (DispensingRow row: it.getTable().getRows()) {
@@ -130,7 +138,7 @@ public abstract class AbstractDispensigUIHome {
 		dispensingSel.setMonth(DateUtils.monthOf(dt));
 		dispensingSel.setYear(DateUtils.yearOf(dt));
 		
-		return "persisted";
+		return tipoOperacao + "persisted";
 	}
 
 

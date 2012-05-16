@@ -7,8 +7,13 @@
 	<param name="dispid" value="#{caseDispensingUIHome.medicineDispensingId}" converterId="javax.faces.Integer" />
 
 	<navigation>
-		<rule if-outcome="persisted">
+		<rule if-outcome="edtpersisted">
 			<redirect view-id="/medicines/dispensing.xhtml">
+				<message>#{messages['dispensing.success']}</message>
+			</redirect>
+		</rule>
+		<rule if-outcome="newpersisted">
+			<redirect view-id="/medicines/dispcasenew.xhtml">
 				<message>#{messages['dispensing.success']}</message>
 			</redirect>
 		</rule>
