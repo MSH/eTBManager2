@@ -297,7 +297,7 @@ public class CaseDataBRHome {
 				return "error";
 			}
 			
-			if((medInst.getTbcase().getAge()>=18) && (medInst.getHeight()!= null && medInst.getHeight() != 0)){
+			if( caseHome.getTbCase()!=null && (caseHome.getTbCase().getAge()>=18) && (medInst.getHeight()!= null && medInst.getHeight() != 0)){
 				m.setHeight(medInst.getHeight());
 			}
 		

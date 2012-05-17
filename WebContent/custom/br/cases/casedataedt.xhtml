@@ -537,14 +537,6 @@ function genderChange(cb) {
     	<ui:param name="field" value="#{tbcase.educationalDegree}" />
     	<ui:param name="list" value="#{fieldsQuery.educationalDegree}" />
     </s:decorate>
-	
-    <s:decorate template="/layout/editfield.xhtml" rendered="#{tbcase.classification.key2 != 'NMT'}">
-    	<ui:define name="label">#{messages['TbField.CONTAG_PLACE']}:</ui:define>
-    	<ui:param name="required" value="true" />
-    	<ui:param name="id" value="contagPlace" />
-    	<ui:param name="field" value="#{tbcase.contagPlace}" />
-    	<ui:param name="list" value="#{fieldsQuery.contagPlace}" />
-    </s:decorate>
 
 	<div id="div_pergnant">
     <s:decorate template="/layout/edit.xhtml" >
