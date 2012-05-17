@@ -285,7 +285,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 							 "inner join tc.notificationUnit as tu " +
 							 "inner join tu.adminUnit as a " +
 							 "where tu.workspace.id = " + defaultWorkspace.getId().toString() + 
-							 " and med.nextAppointment is not null and med.nextAppointment + 7 < current_date " +
+							 " and med.nextAppointment is not null and med.nextAppointment + 15 < current_date " +
 							 " and tc.state < " + CaseState.CURED.ordinal() +
 							 " and med.date = (select max(m.date) from MedicalExamination m where m.tbcase.id = tc.id)" +
 							 " and tu.id = "+ caseFilters.getUnitId() +

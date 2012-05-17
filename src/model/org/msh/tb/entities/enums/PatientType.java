@@ -26,8 +26,10 @@ public enum PatientType {
 	ANOTHER_TB,
 	
 // Generic - Incidence Report
-	ALL_RETREATMENT;
-
+	ALL_RETREATMENT,
+//Brasil
+	RESISTANCE_PATTERN_CHANGED;
+	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
 	}	

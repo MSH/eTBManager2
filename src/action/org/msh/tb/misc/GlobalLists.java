@@ -67,6 +67,7 @@ public class GlobalLists {
 		PatientType.AFTER_DEFAULT,
 		PatientType.FAILURE_FT,
 		PatientType.FAILURE_RT,
+		PatientType.RESISTANCE_PATTERN_CHANGED,
 		PatientType.OTHER
 	};
 

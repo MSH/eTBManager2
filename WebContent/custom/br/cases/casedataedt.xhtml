@@ -234,12 +234,8 @@
 
 	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
-    		<h:selectOneMenu id="patTypeTB" value="#{tbcase.patientType}" required="true" rendered="#{tbcase.classification.key2 == 'TB'}">
-    			<s:selectItems var="it" value="#{globalLists_br.patientTypesTB}" noSelectionLabel="-" label="#{messages[it.key]} de #{messages[tbcase.classification.key2]}" />
-    			<s:convertEnum />
-    		</h:selectOneMenu>
-   			<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="true" rendered="#{tbcase.classification.key2 != 'TB'}">
-    			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]} de #{messages[tbcase.classification.key2]}" />
+   			<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="true">
+    			<s:selectItems var="it" value="#{caseDataBRHome.getPatientTypesList(tbcase.classification)}" noSelectionLabel="-" label="#{caseDataBRHome.getClassificationLabel(tbcase.classification, it)}" />
     			<s:convertEnum />
     		</h:selectOneMenu>
 	</s:decorate>
@@ -346,6 +342,7 @@ function nationalityChange(cb, immediate) {
 }
 
 function patientTypeChange(cb, immediate) {
+	alert('entrou');
 	var ldelay = (immediate?0:500);
 	var s = cb.options[cb.selectedIndex].value;
   	bOther=((s=='OTHER') || (s=='NEW_SPECIAL'));

@@ -1,5 +1,6 @@
 package org.msh.tb.br;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,8 +15,8 @@ import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
+import org.jboss.seam.international.Messages;
 import org.msh.tb.adminunits.AdminUnitSelection;
-import org.msh.tb.br.entities.MedicalExaminationBR;
 import org.msh.tb.br.entities.MolecularBiology;
 import org.msh.tb.br.entities.TbCaseBR;
 import org.msh.tb.br.entities.enums.MolecularBiologyResult;
@@ -587,7 +588,45 @@ public class CaseDataBRHome {
 		
 		return "classificationModified";
 	}
-
+	
+	public List<PatientType> getPatientTypesList(CaseClassification cla){
+		List<PatientType> list = new ArrayList<PatientType>();
+		
+		list.add(PatientType.AFTER_DEFAULT);
+		list.add(PatientType.RELAPSE);
+		list.add(PatientType.FAILURE_FT);
+		list.add(PatientType.FAILURE_RT);
+		list.add(PatientType.SCHEMA_CHANGED);
+		list.add(PatientType.OTHER);
+		
+		if(cla.equals(CaseClassification.DRTB)){
+			list.add(0,PatientType.NEW);
+			list.add(list.size()-1, PatientType.RESISTANCE_PATTERN_CHANGED);
+		}
+		
+		if(cla.equals(CaseClassification.NMT)){
+			list.add(0,PatientType.NEW);
+		}
+		
+		return list;
+	}
+	
+	public String getClassificationLabel(CaseClassification cla, PatientType type){
+		if(type.equals(PatientType.OTHER)){
+			return Messages.instance().get(type.getKey());
+		}
+		
+		if(cla.equals(CaseClassification.TB)){
+			if(type.equals(PatientType.AFTER_DEFAULT))
+				return Messages.instance().get(type.getKey()) + " de esquema especial";
+			if(type.equals(PatientType.RELAPSE))
+				return Messages.instance().get(type.getKey()) + " após esquema especial";
+			return Messages.instance().get(type.getKey());
+		}
+		
+		return Messages.instance().get(type.getKey()) + " de " + Messages.instance().get(cla.getKey2());
+	}
+	
 	public void setDstRequired(Integer dstRequired) {
 		this.dstRequired = dstRequired;
 	}
@@ -600,4 +639,5 @@ public class CaseDataBRHome {
 	public TbCaseBR getTbCase() {
 		return (TbCaseBR)caseHome.getInstance();
 	}
+
 }

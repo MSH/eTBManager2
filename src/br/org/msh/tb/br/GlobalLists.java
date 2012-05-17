@@ -23,15 +23,7 @@ public class GlobalLists {
 		PatientType.FAILURE_FT,
 		PatientType.FAILURE_RT,
 		PatientType.SCHEMA_CHANGED,
-		PatientType.OTHER
-	};
-	
-	private final static PatientType[] patientTypesTB = {
-		PatientType.AFTER_DEFAULT,
-		PatientType.RELAPSE,
-		PatientType.FAILURE_FT,
-		PatientType.FAILURE_RT,
-		PatientType.SCHEMA_CHANGED,
+		PatientType.RESISTANCE_PATTERN_CHANGED,
 		PatientType.OTHER
 	};
 
@@ -117,11 +109,7 @@ public class GlobalLists {
 	public PatientType[] getPatientTypes() {
 		return patientTypes;
 	}
-	
-	public PatientType[] getPatientTypesTB() {
-		return patientTypesTB;
-	}
-	
+
 	public TbField[] getTbFields() {
 		return tbfields;
 	}
