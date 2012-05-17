@@ -129,8 +129,18 @@ public class PatientsQuery extends EntityQuery {
 				String name1, name2;
 				name1 = o1.patient.getLastName() == null ? o1.patient.getName() : o1.patient.getLastName();
 				name2 = o2.patient.getLastName() == null ? o2.patient.getName() : o2.patient.getLastName();
-				if (name1.equals(name2))
+				
+				if (name1.equals(name2)){
+					name1 = o1.patient.getName();
+					name2 = o2.patient.getName();
+				}
+				if (name1.equals(name2)){
+					name1 = o1.patient.getMiddleName() == null ? o1.patient.getName() : o1.patient.getMiddleName();
+					name2 = o2.patient.getMiddleName() == null ? o2.patient.getName() : o2.patient.getMiddleName();
+				}
+				if (name1.equals(name2)){
 					name2 = name1+"_"+o2.patient.getId();
+				}
 				Collator myCollator = Collator.getInstance();			    
 				return myCollator.compare(name1,name2);
 			  }
