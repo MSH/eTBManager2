@@ -793,7 +793,7 @@ public class CaseGenerator {
 		
 		for (int i = 0; i < num; i++) {
 			TbContact cont = new TbContact();
-			cont.setAge(random.nextInt(30) + 12);
+			cont.setAge(new Integer(random.nextInt(30) + 12).toString() + " anos");
 			
 			Gender gender = newValue( preferences.getGenders());
 			cont.setGender(gender);
