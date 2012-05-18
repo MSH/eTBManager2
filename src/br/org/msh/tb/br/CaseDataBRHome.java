@@ -600,6 +600,7 @@ public class CaseDataBRHome {
 		list.add(PatientType.OTHER);
 		
 		if(cla.equals(CaseClassification.DRTB)){
+			list.remove(PatientType.SCHEMA_CHANGED);
 			list.add(0,PatientType.NEW);
 			list.add(list.size()-1, PatientType.RESISTANCE_PATTERN_CHANGED);
 		}
