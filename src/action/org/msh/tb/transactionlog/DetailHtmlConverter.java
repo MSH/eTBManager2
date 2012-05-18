@@ -54,7 +54,7 @@ public class DetailHtmlConverter implements javax.faces.convert.Converter {
 			el = DocumentHelper.parseText(xml);
 		} catch (DocumentException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return xml;
 		}
 		return convertToString(el.getRootElement());
 	}
