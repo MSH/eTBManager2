@@ -380,6 +380,18 @@ public class CaseDataBRHome {
 			}
 		}
 		
+		// check diagnosis date and notification date
+		if (tbcase.getDiagnosisDate().after(tbcase.getRegistrationDate())) {
+			facesMessages.addToControlFromResourceBundle("diagdateedt", "cases.details.valerror1");
+			res = false;
+		}
+		
+		// check diagnosis date and the treatment initiation date
+		if (tbcase.getTreatmentPeriod().getIniDate() != null && tbcase.getDiagnosisDate().after(tbcase.getTreatmentPeriod().getIniDate())) {
+			facesMessages.addToControlFromResourceBundle("diagdateedt", "cases.treat.inidatemsg");
+			res = false;
+		}
+		
 //		if ((!caseHome.isManaged()) && (treatmentHealthUnitHome != null) && (treatmentHealthUnitHome.getRegimen() == null))
 //			return false;
 		return res;

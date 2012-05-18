@@ -230,6 +230,14 @@
 		<ui:param name="edtid" value="edtregdate" />
     </s:decorate>
     </div>
+    <div id="diagdate">
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
+    	<ui:param name="edtid" value="diagdateedt" />
+    </s:decorate>
+    </div>
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
 
 	<s:decorate template="/layout/edit.xhtml">
