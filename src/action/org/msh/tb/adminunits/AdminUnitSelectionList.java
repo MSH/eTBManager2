@@ -1,5 +1,8 @@
 package org.msh.tb.adminunits;
 
+import java.text.Collator;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -61,7 +64,23 @@ public class AdminUnitSelectionList {
 	 * @return List of {@link AdministrativeUnit} instances children of the parent
 	 */
 	private List<AdministrativeUnit> createUnits(AdministrativeUnit parent) {
-		return adminListWrapper.getCacheList(parent);
+		List<AdministrativeUnit> alw = adminListWrapper.getCacheList(parent);
+		
+		Collections.sort(alw, new Comparator<AdministrativeUnit>() {
+			  public int compare(AdministrativeUnit o1, AdministrativeUnit o2) {
+				String name1, name2;
+				name1 = o1.getName().getName1();
+				name2 = o2.getName().getName1();
+				
+				if (name1.equals(name2)){
+					name2 = name1+"_"+o2.getCode();
+				}
+				Collator myCollator = Collator.getInstance();			    
+				return myCollator.compare(name1,name2);
+			  }
+		});
+		
+		return alw;
 /*		String hql = "from AdministrativeUnit au join fetch au.countryStructure where au.workspace.id = #{defaultWorkspace.id}";
 
 		if (parent != null)
