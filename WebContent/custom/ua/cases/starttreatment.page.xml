@@ -6,17 +6,17 @@
  <begin-conversation join="true"/>
  <navigation>
   <rule if="#{not caseHome.managed}">
-   <redirect view-id="/index.xhtml"/>
+   <redirect view-id="/custom/ua/cases/index.xhtml"/>
   </rule>
   <rule if="#{not caseHome.canStartTreatment}">
    <end-conversation/>
-   <redirect view-id="/casedata.xhtml">
+   <redirect view-id="/custom/ua/cases/casedata.xhtml">
     <param name="id" value="#{caseHome.id}"/>
    </redirect>
   </rule>
   <rule if-outcome="treatment-started">
    <end-conversation/>
-   <redirect view-id="/casedata.xhtml">
+   <redirect view-id="/custom/ua/cases/casedata.xhtml">
     <param name="id" value="#{caseHome.id}"/>
    </redirect>
   </rule>
