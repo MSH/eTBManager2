@@ -97,6 +97,14 @@ public class GlobalLists {
 		return TipoResistencia.values();
 	}
 
+	
+	private static final ClinicalEvolution clinicalEvolution[] = {
+		ClinicalEvolution.FAVORABLE,
+		ClinicalEvolution.UNCHANGED,
+		ClinicalEvolution.UNFAVORABLE,
+		ClinicalEvolution.FAILED
+		
+	};	
 
 	/**
 	 * Return list of HIV results specific for Brazilian version
@@ -123,7 +131,7 @@ public class GlobalLists {
 	}	
 	
 	public ClinicalEvolution[] getClinicalEvolutions() {
-		return ClinicalEvolution.values();
+		return clinicalEvolution;
 	}
 	
 	public CaseState[] getCaseStates() {

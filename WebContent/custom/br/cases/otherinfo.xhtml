@@ -53,103 +53,22 @@
 	<a:repeat value="#{tbcase.contacts}" var="it">
 	<table class="table1" >
 	<tr>
-		<th colspan="2" align="left">
+		<td colspan="2" align="left">
 			<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remContact(#{it.id});return false;" 
 				style="font-size:9px;float:right;">
 			</h:commandLink>
+			<s:link styleClass="#{it.gender=='MALE'?'male-icon':'female-icon'}" view="/custom/br/cases/edtcontact.xhtml">
+				<f:param name="conid" value="#{it.id}"/>
+			</s:link>
 			<s:link value="#{it.name}" view="/custom/br/cases/edtcontact.xhtml">
 				<f:param name="conid" value="#{it.id}"/>
 			</s:link>
-		</th>
-	</tr>
-	<tr>
-		<td>
-			<s:decorate template="/layout/display.xhtml">
-				<ui:define name="label">#{messages['Gender']}:</ui:define>
-				#{messages[it.gender.key]}
-			</s:decorate>
-		</td>
-		<td>
-			<s:decorate template="/layout/display.xhtml">
-				<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
-				#{it.age}
-			</s:decorate>
+			<br />
+		 	<h:outputText value="#{messages['Gender']}: #{messages[it.gender.key]}" style="font-size:10px"/> | 
+		 	<h:outputText value="#{messages['TbCase.age']}: #{it.age}" style="font-size:10px"/> | 
+		 	<h:outputText value="#{messages['TbContact.examined']}: #{it.examinated?messages['global.yes']: messages['global.no']}" style="font-size:10px"/>
 		</td>
 	</tr>
-	<tr>
-		<td>
-			<s:decorate template="/layout/display.xhtml">
-				<ui:define name="label">#{messages['TbContact.contactType']}:</ui:define>
-				#{it.contactType.name}
-			</s:decorate>
-		</td>
-		<td>
-			<s:decorate template="/layout/display.xhtml">
-				<ui:define name="label">#{messages['TbContact.examined']}:</ui:define>
-				#{it.examinated?messages['global.yes']: messages['global.no']}
-			</s:decorate>
-		</td>
-	</tr>
-	<s:fragment rendered="#{it.examinated}">
-	<tr>
-		<td>
-    		<s:decorate template="/layout/display.xhtml" >
-    			<ui:define name="label">#{messages['pt_BR.contact.tbsymptoms']}:</ui:define>
-    			#{messages[it.tbSymptoms.key]}
-    		</s:decorate>
-		</td>
-		<td>
-    		<s:decorate template="/layout/display.xhtml" >
-    			<ui:define name="label">#{messages['pt_BR.contact.scarBCG']}:</ui:define>
-    			#{messages[it.scarBCG.key]}
-    		</s:decorate>
-		</td>
-	</tr>
-	<tr>
-		<td>
-    		<s:decorate template="/layout/display.xhtml" >
-    			<ui:define name="label">#{messages['pt_BR.contact.tuberculinTest']}:</ui:define>
-    			#{messages[it.tuberculinTest.key]}
-    		</s:decorate>
-    	</td>
-		<td>
-    		<s:decorate template="/layout/display.xhtml" >
-    			<ui:define name="label">#{messages['TbContact.conduct']}:</ui:define>
-    			#{it.conduct}
-    		</s:decorate>
-    	</td>
-	</tr>
-	<tr><td>
-    		<s:decorate template="/layout/display.xhtml" >
-    			<ui:define name="label">#{messages['MicroscopyResult']}:</ui:define>
-    			#{messages[it.microscopyResult.key]}
-    		</s:decorate>
-		</td>
-		<td>
-    		<s:decorate template="/layout/display.xhtml" >
-    			<ui:define name="label">#{messages['CultureResult']}:</ui:define>
-    			#{messages[it.cultureResult.key]}
-    		</s:decorate>
-	</td></tr>
-	<tr><td colspan="2">
-	    <s:decorate template="/layout/displayfield.xhtml" >
-    		<ui:define name="label">#{messages['TbField.XRAY_CONTACT']}:</ui:define>
-    		<ui:param name="field" value="#{it.xrayResult}" />
-    	</s:decorate>
-	</td></tr>
-	<tr><td>
-    		<s:decorate template="/layout/display.xhtml" >
-    			<ui:define name="label">#{messages['pt_BR.contact.dateIniTreat']}:</ui:define>
-    			<h:outputText value="#{it.dateIniTreat}" converter="localeDateConverter"/>
-    		</s:decorate>
-		</td>
-		<td>
-    		<s:decorate template="/layout/display.xhtml" >
-    			<ui:define name="label">#{messages['pt_BR.contact.dateEndTreat']}:</ui:define>
-    			<h:outputText value="#{it.dateEndTreat}" converter="localeDateConverter"/>
-    		</s:decorate>
-	</td></tr>
-	</s:fragment>
 	</table>
 	</a:repeat>
 	</s:fragment>

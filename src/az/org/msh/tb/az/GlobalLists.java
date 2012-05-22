@@ -84,6 +84,14 @@ public class GlobalLists {
 		DstResult.BASELINE
 	};
 
+	
+	private static final ClinicalEvolution clinicalEvolution[] = {
+		ClinicalEvolution.FAVORABLE,
+		ClinicalEvolution.UNCHANGED,
+		ClinicalEvolution.UNFAVORABLE
+		
+	};
+	
 	/* never used, also specific to Brazil - AK
 	public TipoResistencia[] getTiposResistencia() {
 		return TipoResistencia.values();
@@ -119,7 +127,7 @@ public class GlobalLists {
 	}	
 	*/
 	public ClinicalEvolution[] getClinicalEvolutions() {
-		return ClinicalEvolution.values();
+		return clinicalEvolution;
 	}
 	
 	public CaseState[] getCaseStates() {
