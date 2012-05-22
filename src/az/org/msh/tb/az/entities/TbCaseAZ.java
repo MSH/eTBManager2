@@ -45,8 +45,13 @@ public class TbCaseAZ extends TbCase{
 
 	@OneToMany(mappedBy="tbcase", cascade={CascadeType.ALL})
 	private List<CaseSeverityMark> severityMarks = new ArrayList<CaseSeverityMark>();
-
-
+	
+/*	@JoinColumn(name="EIDSSID")
+	private String eidss_id;
+	
+	@JoinColumn(name="EIDSSComment")
+	private String eidss_comment;
+*/
 	/**
 	 * @return the maritalStatus
 	 */
@@ -148,4 +153,20 @@ public class TbCaseAZ extends TbCase{
 	public void setSeverityMarks(List<CaseSeverityMark> severityMarks) {
 		this.severityMarks = severityMarks;
 	}
+
+/*	public String getEidss_id() {
+		return eidss_id;
+	}
+
+	public void setEidss_id(String eidss_id) {
+		this.eidss_id = eidss_id;
+	}
+
+	public String getEidss_comment() {
+		return eidss_comment;
+	}
+
+	public void setEidss_comment(String eidss_comment) {
+		this.eidss_comment = eidss_comment;
+	}*/
 }
