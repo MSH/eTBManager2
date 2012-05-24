@@ -10,7 +10,8 @@
 
 	<div class="spacer" />
 	<div style="float:right">
-		<h:outputText value="#{messages[tbcase.state.key]}" styleClass="status-label" />
+		<h:outputText value="#{messages[tbcase.state.key]}" styleClass="status-label" style="float:right"/><br />
+		<h:outputText value="#{messages[tbcase.caseEvolution]}" style="float:right; color:#292929"/>
 		<s:fragment rendered="#{not tbcase.open}">
 			<div class="status-label"><div class="normal-text">
 			#{messages['TbCase.outcomeDate']}: 

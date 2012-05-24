@@ -1207,4 +1207,13 @@ public class TbCase implements Serializable{
 	public void setRegimenIni(Regimen regimenIni) {
 		this.regimenIni = regimenIni;
 	}
+	
+	/**
+	 * @return the evolution of the case
+	 */
+	public String getCaseEvolution() {
+		if(this.getExaminations().size() > 0)
+			return this.getExaminations().get(getExaminations().size()-1).getClinicalEvolution().getKey();
+		return "";
+	}
 }
