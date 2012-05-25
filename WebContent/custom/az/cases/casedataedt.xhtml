@@ -29,23 +29,23 @@
 	
 	</td>
 	</tr>
-	<ui:remove>
+	
 		<tr>
 		<td>
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.eidss_id!=NULL}">
+		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.EIDSSID!=NULL}">
 	    	<ui:define name="label">#{messages['TbCase.eidssid']}:</ui:define>
-			<h:inputText value="#{tbcase.eidss_id}" style="width:120px;" maxlength="45"/>
+			<h:inputText value="#{tbcase.EIDSSID}" style="width:120px;" maxlength="45" readonly="true"/>
 		</s:decorate>
 		</td>
 		</tr><tr>
 		<td colspan="2">
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.eidss_comment!=NULL}">
+		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.EIDSSComment!=NULL}">
 	    	<ui:define name="label">#{messages['TbCase.eidsscomment']}:</ui:define>
-			<h:inputText value="#{tbcase.eidss_comment}" style="width:400px;"/>
+			<h:inputText value="#{tbcase.EIDSSComment}" style="width:400px;" readonly="true"/>
 		</s:decorate>
 		</td>
 		</tr>
-	</ui:remove>
+	
 	
 	<tr>
 	<td>

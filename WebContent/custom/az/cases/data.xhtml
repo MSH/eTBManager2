@@ -32,23 +32,21 @@
 	
 	</td></tr>
 	
-	<ui:remove>
 		<tr>
 		<td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.eidss_id!=NULL}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.EIDSSID!=NULL}">
 	    	<ui:define name="label">#{messages['TbCase.eidssid']}:</ui:define>
-			#{tbcase.eidss_id}
+			#{tbcase.EIDSSID}
 		</s:decorate>
 		</td>
 		</tr><tr>
 		<td colspan="2">
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.eidss_comment!=NULL}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.EIDSSComment!=NULL}">
 	    	<ui:define name="label">#{messages['TbCase.eidsscomment']}:</ui:define>
-			#{tbcase.eidss_comment}
+			#{tbcase.EIDSSComment}
 		</s:decorate>
 		</td>
 		</tr>
-	</ui:remove>
 	
 	<tr><td>
 	
