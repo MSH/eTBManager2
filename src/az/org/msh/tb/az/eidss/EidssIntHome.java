@@ -3,8 +3,6 @@ package org.msh.tb.az.eidss;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import javax.persistence.EntityManager;
 
@@ -54,6 +52,18 @@ public class EidssIntHome {
 	 * Execute import asynchronously
 	 * @return Success if import ran, or Error otherwise
 	 */
+	public String execute1(){
+		//TODO method body
+		try {
+			taskManager.runTask(EidssTaskImport.class);
+		} catch (Exception e) {
+			facesMessages.add(e.getMessage());
+			return "error";
+		}
+		
+		return "Success";
+	}
+	
 	public String execute(){
 		//TODO method body
 		return "Success";
@@ -212,6 +222,7 @@ public class EidssIntHome {
 		if (p == null) {
 			p = new SystemParam();
 			p.setKey(key);
+			//TODO ?
 			defaultWorkspace = entityManager.merge(defaultWorkspace);
 			p.setWorkspace(defaultWorkspace);
 		}
