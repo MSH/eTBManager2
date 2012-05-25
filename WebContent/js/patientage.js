@@ -22,7 +22,7 @@ function handleCaseDateChangeUAZ() {
 	sReg = jQuery("#divregdate input[type='text']").val();
 	if (!(sReg))
 		 dt2 = new Date();
-	else dt2 = convertDate(sReg)
+	else dt2 = convertDate(sReg);
 	var dt1=convertDate(sBirth);
 	if (dt1==null)
 		return;
