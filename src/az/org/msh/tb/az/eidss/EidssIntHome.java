@@ -68,7 +68,8 @@ public class EidssIntHome {
 	 * @return Success if import ran, or Error otherwise
 	 */
 	public String execute(){
-		//TODO method body
+		EidssImportTask et=new EidssImportTask();
+		et.execute();
 		return "Success";
 	}
 	/**
@@ -77,6 +78,8 @@ public class EidssIntHome {
 	 */
 	public String stop(){
 		//TODO method body
+		AsyncTask task = taskManager.findTaskByClass(EidssTaskImport.class);
+		taskManager.cancelTask(task.getId());
 		return "stopped";
 	}
 	/**

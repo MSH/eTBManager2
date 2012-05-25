@@ -6,39 +6,33 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.BindingProvider;
 
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.msh.tb.application.tasks.AsyncTaskImpl;
-import org.msh.tb.application.tasks.TaskManager;
+import org.jboss.seam.Component;
 
+import org.msh.tb.az.entities.TbCaseAZ;
+import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DiagnosisType;
+import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.ValidationState;
+import org.omg.PortableServer.POAManagerPackage.State;
 
-@Name("eidssTaskImport")
-public class EidssTaskImport extends AsyncTaskImpl {
-	
-	@In EidssIntHome eidssIntHome;
-	@In TaskManager taskManager;
+import javax.xml.ws.Service;
 
-	
-	@Override
-	protected void starting() {
-	
-	}
-	
-
-	
-	/* (non-Javadoc)
-	 * @see org.msh.tb.application.tasks.DbBatchTask#finishing()
-	 */
-	@Override
-	protected void finishing() {
-		
-	}
-	private StringBuffer log = new StringBuffer();
+/**
+ * @author Шэър
+ *
+ */
+public class EidssImportTask {
+	private EntityManager entityManager;
 	//ArrayOfHumanCaseListInfo arrayCaseList;
 	//private static EidssServiceSoap soap;
 	//private List<HumanCaseInfo> caseInfoList;
@@ -46,10 +40,13 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	List<CaseInfo> InfoForExport=new ArrayList<CaseInfo>();
 	CaseImporting ci;
 	
-	@Override
-	public void execute() {	
+	public void execute() {
+		test();	
 	
-		/*Date d=new Date();
+	}
+	/*
+	public void execute1() {	
+		Date d=new Date();
 		d.setDate(5);
 		d.setMonth(0);
 		
@@ -61,9 +58,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		caseInfoList=GetCaseInfoList(soap,cases,"Alive","Refused");
 		InfoForExport=AddAll(caseInfoList);
 		ci.importRecords(InfoForExport);
-	*/
 	}
-	/*
 	private List<CaseInfo> AddAll(List<HumanCaseInfo> caseInfoList) {
 		List<CaseInfo> fe= new ArrayList<CaseInfo>();
 		Iterator<HumanCaseInfo> it=caseInfoList.iterator();
@@ -192,5 +187,45 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		return tmpDate;
 
 	}
-	*/
+*/
+	private void test(){
+		entityManager = (EntityManager)Component.getInstance("entityManager");
+		
+		Date d=new Date();
+		d.setYear(d.getYear()-30);
+		Patient p = new Patient();
+		
+		p.setLastName("lastName3"+d.getSeconds());
+		p.setName("firstName3");
+		p.setMiddleName(d.toLocaleString());
+		p.setWorkspace(getWorkspace());
+		p.setGender(Gender.MALE);
+		
+		TbCaseAZ tbcase = new TbCaseAZ();
+		tbcase.setClassification(CaseClassification.TB);
+	tbcase.setLegacyId("legacy"+d.toString());
+		//tbcase.setLegacyId("legacyId");
+	tbcase.setEIDSSComment("address");	
+	tbcase.setInprisonIniDate(new Date());
+	
+	p.setBirthDate(d);
+	tbcase.setDiagnosisDate(new Date()); //TODO change
+		tbcase.setRegistrationDate(new Date());
+		tbcase.setDiagnosisType(DiagnosisType.CONFIRMED); //TODO change
+		tbcase.setValidationState(ValidationState.WAITING_VALIDATION); //TODO check IT
+		tbcase.setPatient(p);
+		tbcase.setAge(1);
+		tbcase.setState(CaseState.DEFAULTED);
+		tbcase.setNotifAddressChanged(false);
+		entityManager.persist(p);
+		entityManager.persist(tbcase);
+		entityManager.flush();
+	
+	}
+	private Workspace getWorkspace() {
+		return (Workspace)entityManager.find(Workspace.class, 8);
+	}
+	
+	
+
 }
