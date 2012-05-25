@@ -63,7 +63,10 @@ public class EidssIntHome {
 		
 		return "Success";
 	}
-	
+	/**
+	 * Execute import asynchronously
+	 * @return Success if import ran, or Error otherwise
+	 */
 	public String execute(){
 		//TODO method body
 		return "Success";
