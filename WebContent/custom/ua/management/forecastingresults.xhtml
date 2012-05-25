@@ -417,7 +417,7 @@
 
 		<h:column>
 			<f:facet name="header">
-				Estimated consumption<br/> (on-going cases)
+				#{messages['manag.forecast.estcons.ongoing']}
 			</f:facet>
 			<h:outputText value="#{p.estConsumptionCases}" >
 				<f:convertNumber pattern="#,###,##0" />
@@ -426,7 +426,7 @@
 
 		<h:column>
 			<f:facet name="header">
-				Estimated consumption<br/> (new cases)
+				#{messages['manag.forecast.estcons.new']}
 			</f:facet>
 			<h:outputText value="#{p.estConsumptionNewCases}" >
 				<f:convertNumber pattern="#,###,##0" />
@@ -471,7 +471,7 @@
 
 		<h:column>
 			<f:facet name="header">
-				Missing quantities
+				#{messages['manag.forecast.missing']}
 			</f:facet>
 			<h:outputText value="#{p.quantityMissing}" >
 				<f:convertNumber pattern="#,###,##0" />
