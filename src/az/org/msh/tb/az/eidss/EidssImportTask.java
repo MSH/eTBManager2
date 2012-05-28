@@ -1,5 +1,15 @@
 package org.msh.tb.az.eidss;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -41,8 +51,39 @@ public class EidssImportTask {
 	CaseImporting ci;
 	
 	public void execute() {
-		test();	
+		FileInputStream fstream;
+		InputStreamReader ow;
+		try {
+			fstream = new FileInputStream("c:\\temp\\out.txt");
+
+			try {
+				ow = new InputStreamReader(fstream, "UTF-8");
+				BufferedReader in = new BufferedReader(ow);
+				try {
+					String s = in.readLine();
+					while (s!= null){
+						testImport(s);
+						s = in.readLine();
+					}
+					ow.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//test();	
 	
+	}
+	private void testImport(String s) {
+		String[] sa = s.split(";");
+		test(sa);
+		
 	}
 	/*
 	public void execute1() {	
@@ -188,39 +229,61 @@ public class EidssImportTask {
 
 	}
 */
-	private void test(){
+	private void test(String[] all){
 		entityManager = (EntityManager)Component.getInstance("entityManager");
-		
+		Integer i = Integer.valueOf(all[4]);
 		Date d=new Date();
-		d.setYear(d.getYear()-30);
+		d.setYear(d.getYear()-i.intValue());
+		Integer iday=0;
+		Integer imonth=0;
+		Integer iyear=0;
+		String dtArr = all[5];
+		String[] rdate;
+		if (!dtArr.equalsIgnoreCase("")){
+			rdate=dtArr.split("-");
+			iday = Integer.valueOf(rdate[0]);
+			d.setDate(iday.intValue());
+			imonth = Integer.valueOf(rdate[1]);
+			d.setDate(imonth.intValue()-1);
+			iyear=Integer.valueOf(rdate[2]);
+		}
 		Patient p = new Patient();
-		
-		p.setLastName("lastName3"+d.getSeconds());
-		p.setName("firstName3");
-		p.setMiddleName(d.toLocaleString());
+		p.setBirthDate(d);
+		p.setLastName(all[1]);
+		p.setName(all[2]);
+		if(!all[3].equalsIgnoreCase("null"))p.setMiddleName(all[3]);
 		p.setWorkspace(getWorkspace());
+		if(all[7].equalsIgnoreCase("10043001")){
+			p.setGender(Gender.FEMALE);
+		}else{
 		p.setGender(Gender.MALE);
-		
+		}
 		TbCaseAZ tbcase = new TbCaseAZ();
 		tbcase.setClassification(CaseClassification.TB);
-	tbcase.setLegacyId("legacy"+d.toString());
-		//tbcase.setLegacyId("legacyId");
-	tbcase.setEIDSSComment("address");	
-	tbcase.setInprisonIniDate(new Date());
-	
-	p.setBirthDate(d);
-	tbcase.setDiagnosisDate(new Date()); //TODO change
-		tbcase.setRegistrationDate(new Date());
+		tbcase.setLegacyId(all[0]);
+		String comment=all[6].replace("null", "");
+		tbcase.setEIDSSComment(comment);	
+		Date idate=new Date();
+		if (iyear!=0){
+			idate.setYear(iyear.intValue()-1900);
+			idate.setDate(iday.intValue());
+			idate.setMonth(imonth.intValue());
+
+		}
+		tbcase.setDiagnosisDate(idate); //TODO change
+		tbcase.setRegistrationDate(idate);
 		tbcase.setDiagnosisType(DiagnosisType.CONFIRMED); //TODO change
 		tbcase.setValidationState(ValidationState.WAITING_VALIDATION); //TODO check IT
 		tbcase.setPatient(p);
 		tbcase.setAge(1);
-		tbcase.setState(CaseState.DEFAULTED);
-		tbcase.setNotifAddressChanged(false);
+		tbcase.setState(CaseState.WAITING_TREATMENT);
+		tbcase.setNotifAddressChanged(true);
+		
 		entityManager.persist(p);
 		entityManager.persist(tbcase);
 		entityManager.flush();
-	
+		
+
 	}
 	private Workspace getWorkspace() {
 		return (Workspace)entityManager.find(Workspace.class, 8);
