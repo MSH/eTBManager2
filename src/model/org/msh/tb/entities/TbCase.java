@@ -37,6 +37,7 @@ import org.hibernate.validator.NotNull;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.ClinicalEvolution;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.DrugResistanceType;
@@ -1212,8 +1213,11 @@ public class TbCase implements Serializable{
 	 * @return the evolution of the case
 	 */
 	public String getCaseEvolution() {
-		if(this.getExaminations().size() > 0)
-			return this.getExaminations().get(getExaminations().size()-1).getClinicalEvolution().getKey();
+		if(this.getExaminations().size() > 0){
+			ClinicalEvolution eval = this.getExaminations().get(getExaminations().size()-1).getClinicalEvolution(); // for some old cases may be null AK 26/05/2012
+			if (eval != null)return this.getExaminations().get(getExaminations().size()-1).getClinicalEvolution().getKey();
+		}
+			
 		return "";
 	}
 }
