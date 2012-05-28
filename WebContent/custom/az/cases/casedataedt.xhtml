@@ -32,9 +32,9 @@
 	
 		<tr>
 		<td>
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.EIDSSID!=NULL}">
+		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.legacyId!=NULL}">
 	    	<ui:define name="label">#{messages['TbCase.eidssid']}:</ui:define>
-			<h:inputText value="#{tbcase.EIDSSID}" style="width:120px;" maxlength="45" readonly="true"/>
+			<h:inputText value="#{tbcase.legacyId}" style="width:120px;" maxlength="45" readonly="true"/>
 		</s:decorate>
 		</td>
 		</tr><tr>

@@ -9,7 +9,8 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
-
+      
+<ui:param name="tbCase" value="#{caseHome.getInstance()}" />;
 <ui:param name="title" value="#{messages['cases.newnotif']} - #{messages[tbcase.classification.key]}" />
 
 <ui:param name="topmenu" value="0" />
@@ -29,7 +30,7 @@
 		<div class="float:right">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-		<a:commandLink action="#{caseAZHome.persist}" styleClass="button" reRender="main,messages" onclick="if (!disableButton(this)) return false;" >
+		<a:commandLink action="#{caseAZHome.persist()}" styleClass="button" reRender="main,messages" onclick="if (!disableButton(this)) return false;" >
 			<span>#{messages['form.save']}</span>
 		</a:commandLink>
 		<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this);">

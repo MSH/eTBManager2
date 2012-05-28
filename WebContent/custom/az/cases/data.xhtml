@@ -34,9 +34,9 @@
 	
 		<tr>
 		<td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.EIDSSID!=NULL}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.legacyId!=NULL}">
 	    	<ui:define name="label">#{messages['TbCase.eidssid']}:</ui:define>
-			#{tbcase.EIDSSID}
+			#{tbcase.legacyId}
 		</s:decorate>
 		</td>
 		</tr><tr>
