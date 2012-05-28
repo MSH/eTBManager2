@@ -101,7 +101,7 @@ public class PrevTBTreatmentHome {
 		List<PrevTBTreatment> lst;
 
 		// is existing case?
-		if (caseHome.isManaged()) {
+		if (caseHome.isManaged() && caseHome.getId() != null) {  // AK caseHome.getId() == null perfectly possible 26/05/2012
 			lst = entityManager
 				.createQuery("from PrevTBTreatment t where t.tbcase.id = " + caseHome.getId().toString() + " order by t.year, t.month")
 				.getResultList();

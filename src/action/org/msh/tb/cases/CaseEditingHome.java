@@ -45,8 +45,10 @@ import org.msh.utils.date.DateUtils;
 public class CaseEditingHome {
 
 	@In(create=true) protected CaseHome caseHome;
-	@In(create=true) PatientHome patientHome;
-	@In EntityManager entityManager;
+	@In(create=true)
+	protected PatientHome patientHome;
+	@In
+	protected EntityManager entityManager;
 	@In(create=true) protected PrevTBTreatmentHome prevTBTreatmentHome;
 	@In(create=true) MedicalExaminationHome medicalExaminationHome;
 	@In(create=true) FacesMessages facesMessages;
