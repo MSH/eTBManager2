@@ -53,7 +53,7 @@
 			reRender="formregimen"
 			ajaxSingle="true"
 			style="margin-left:10px" 
-			onclick="showRegimenDlg();" >
+			onclick="showRegimenDlg();" rendered = "#{tbcase.regimen !=null}">
 			<span>#{messages['cases.regimens.change']}...</span>
 		</a:commandLink>
 	</s:decorate>						
@@ -306,7 +306,7 @@ function formButtonPost(button) {
 
 
 <rich:modalPanel id="regimendlg" width="550" autosized="true" zindex="2000" trimOverlayedElements="false">
-	<f:facet name="header">#{messages['cases.treat']}</f:facet>
+	<f:facet name="header">#{messages['cases.regs']}</f:facet>
 	<ui:param name="labelstyle" value="width:110px" />
 	<h:form id="formregimen" style="padding:10px;">
 
