@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
+
+	<restrict>#{userSession.canOpenCases}</restrict>
+	<action execute="#{caseHome.initView}"/>
+	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
+	<navigation>
+		<rule if="#{not caseHome.managed}">
+			<redirect view-id="/custom/kh/cases/index.xhtml">
+			</redirect>
+		</rule>
+		<rule if-outcome="removed">
+			<redirect view-id="/custom/kh/cases/index.xhtml">
+			</redirect>
+		</rule>
+		<rule if-outcome="edit">
+			<redirect view-id="/cases/treatmentedt.xhtml">
+				<param name="id" value="#{caseHome.id}" />
+			</redirect>
+		</rule>
+		<rule if-outcome="validated">
+			<redirect view-id="/custom/kh/cases/casedata.xhtml">
+				<message>#{messages['cases.validate.success']}</message>
+				<param name="id" value="#{caseHome.id}"/>
+			</redirect>
+		</rule>
+	</navigation>
+</page>
