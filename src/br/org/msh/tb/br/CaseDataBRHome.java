@@ -213,7 +213,6 @@ public class CaseDataBRHome {
 			tbcase.setCurrAddressNumber(tbcase.getNotifAddressNumber());
 
 		tbcase.setAdminUnitUsOrigem(getAuselection().getSelectedUnit());
-		tbcase.setDiagnosisDate(tbcase.getRegistrationDate());
 
 		return caseEditingHome.saveEditing();
 	}
