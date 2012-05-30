@@ -45,6 +45,7 @@ import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.ValidationState;
+import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 import org.msh.utils.date.DateUtils;
@@ -1215,9 +1216,32 @@ public class TbCase implements Serializable{
 	public String getCaseEvolution() {
 		if(this.getExaminations().size() > 0){
 			ClinicalEvolution eval = this.getExaminations().get(getExaminations().size()-1).getClinicalEvolution(); // for some old cases may be null AK 26/05/2012
-			if (eval != null)return this.getExaminations().get(getExaminations().size()-1).getClinicalEvolution().getKey();
+			if (eval != null)
+				return this.getExaminations().get(getExaminations().size()-1).getClinicalEvolution().getKey();
 		}
 			
 		return "";
+	}
+		
+	/**
+	 * @return the name of the sepervision unit
+	 */
+	public String getSupervisionUnitName() {
+		if(this.getExaminations() != null && this.getExaminations().size() > 0 
+				&& this.getExaminations().get(getExaminations().size()-1).getSupervisedTreatment() != null
+				&& this.getExaminations().get(getExaminations().size()-1).getSupervisedTreatment().equals(YesNoType.YES)
+				&& this.getExaminations().get(getExaminations().size()-1).getSupervisionUnitName() != null)
+			return this.getExaminations().get(getExaminations().size()-1).getSupervisionUnitName();
+		return "";
+	}
+	
+	/**
+	 * @return the name of the sepervision unit
+	 */
+	public YesNoType getSupervised() {
+		if(this.getExaminations() != null && this.getExaminations().size() > 0
+				&& this.getExaminations().get(getExaminations().size()-1).getSupervisedTreatment() != null)
+			return this.getExaminations().get(getExaminations().size()-1).getSupervisedTreatment();
+		return null;
 	}
 }
