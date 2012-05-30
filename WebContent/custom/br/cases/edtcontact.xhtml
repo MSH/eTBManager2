@@ -49,6 +49,14 @@
     	</h:selectOneMenu>
     </s:decorate>
 
+	<s:decorate template="/layout/editfield.xhtml" >
+		<ui:define name="label">#{messages['TbField.TREATMENT_OUTCOME_ILTB']}:</ui:define>
+	   	<ui:param name="required" value="false" />
+	   	<ui:param name="id" value="treatOutILTB" />
+		<ui:param name="field" value="#{tbContactBR.treatmentOutcomeILTB}" />
+		<ui:param name="list" value="#{fieldsQuery.treatOutcomeILTB}" />
+	</s:decorate>
+
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.examined']}:</ui:define>
     	<h:selectOneMenu id="cbexamined" value="#{tbContactBR.examinated}" required="true">

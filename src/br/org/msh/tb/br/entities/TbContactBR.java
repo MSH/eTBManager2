@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import org.msh.tb.br.entities.enums.XRayContactBR;
+import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbContact;
 import org.msh.tb.entities.enums.CultureResult;
@@ -42,6 +43,11 @@ public class TbContactBR extends TbContact {
 	
 	private Date dateEndTreat;
 	
+	@Embedded
+	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "TREATMENT_OUTCOME_ILTB")) })
+	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "TREATMENT_OUTCOME_ILTB_Complement")) })
+	private FieldValueComponent treatmentOutcomeILTB;
+
 	@Embedded
 	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "XRAY_RESULT")) })
 	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "XRAY_RESULT_Complement")) })
@@ -119,6 +125,16 @@ public class TbContactBR extends TbContact {
 
 	public void setTuberculinTestResult(String tuberculinTestResult) {
 		this.tuberculinTestResult = tuberculinTestResult;
+	}
+
+	public FieldValueComponent getTreatmentOutcomeILTB() {
+		if (treatmentOutcomeILTB == null)
+			treatmentOutcomeILTB = new FieldValueComponent();
+		return treatmentOutcomeILTB;
+	}
+
+	public void setTreatmentOutcomeILTB(FieldValueComponent treatmentOutcomeILTB) {
+		this.treatmentOutcomeILTB = treatmentOutcomeILTB;
 	}
 
 	/**

@@ -28,6 +28,7 @@ import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.ValidationState;
+import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
 
@@ -79,6 +80,8 @@ public class IndicatorFilters {
 	private HIVResult hivResult;
 	private List<SelectItem> lstInterimMonths;
 	private PatientType patTypFirstTreat;
+	private YesNoType supervisedTreatment;
+	
 	private final static PatientType[] patTypFirstTreatArr = {
 		PatientType.NEW,
 		PatientType.TRANSFER_IN,
@@ -521,7 +524,13 @@ public class IndicatorFilters {
 	public void setInterimMonths(int interimMonths){
 		this.interimMonths = interimMonths;
 	}
-
+	
+	public YesNoType getSupervisedTreatment() {
+		return supervisedTreatment;
+	}
+	public void setSupervisedTreatment(YesNoType supervisedTreatment) {
+		this.supervisedTreatment = supervisedTreatment;
+	}
 	@Factory("interimMonths")
 	public List<SelectItem> getLstInterimMonths() {
 		lstInterimMonths = new ArrayList<SelectItem>();

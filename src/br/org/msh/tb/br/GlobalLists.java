@@ -47,7 +47,8 @@ public class GlobalLists {
 		TbField.POSITION,
 		TbField.MICOBACTERIOSE,
 		TbField.XRAY_CONTACT,
-		TbField.ADJUSTMENT
+		TbField.ADJUSTMENT,
+		TbField.TREATMENT_OUTCOME_ILTB
 	};
 
 	private static final PrevTBTreatmentOutcome prevTBTreatmentOutcomes[] = {

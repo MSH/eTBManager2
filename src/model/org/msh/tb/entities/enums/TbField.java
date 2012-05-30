@@ -46,7 +46,9 @@ public enum TbField {
 	//Generic
 	ADJUSTMENT,
 	//Cambodia
-	IDENTIFICATION
+	IDENTIFICATION,
+	//Brazil
+	TREATMENT_OUTCOME_ILTB;
 	;
 	
 	public String getKey() {

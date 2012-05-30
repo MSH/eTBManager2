@@ -293,5 +293,10 @@ public class FieldsQuery {
 		field = TbField.SUSPECT_TYPE;
 		return getValues();
 	}
+	
+	public List<FieldValue> getTreatOutcomeILTB() {
+		field = TbField.TREATMENT_OUTCOME_ILTB;
+		return getValues();
+	}
 }
 

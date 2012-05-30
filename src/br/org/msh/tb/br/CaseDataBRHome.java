@@ -135,7 +135,8 @@ public class CaseDataBRHome {
 		TbCaseBR tbcase = (TbCaseBR)caseHome.getInstance();
 		// all cases are confirmed cases
 		tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
-		tbcase.setDiagnosisDate(startTreatmentHome.getIniTreatmentDate());
+		if(tbcase.getDiagnosisDate() == null)
+			tbcase.setDiagnosisDate(startTreatmentHome.getIniTreatmentDate());
 		
 		if (!validateForm())
 			return "error";
@@ -212,6 +213,9 @@ public class CaseDataBRHome {
 		if (!tbcase.isNotifAddressChanged())
 			tbcase.setCurrAddressNumber(tbcase.getNotifAddressNumber());
 
+		if(tbcase.getDiagnosisDate() == null)
+			tbcase.setDiagnosisDate(startTreatmentHome.getIniTreatmentDate());
+		
 		tbcase.setAdminUnitUsOrigem(getAuselection().getSelectedUnit());
 
 		return caseEditingHome.saveEditing();

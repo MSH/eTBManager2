@@ -205,7 +205,16 @@ function handleContextClick(comp) {
 	</s:decorate>
 
 	</td></tr>
-	<tr><td>
+	<tr><!-- 39- <td>
+		<s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages['pt_BR.supervisedTreatment']}:</ui:define>
+    		<ui:param name="labelstyle" value="width:140px;" />
+		<h:selectOneMenu id="cbsuptreatment" value="#{indicatorFilters.supervisedTreatment}">
+			<s:selectItems var="s" value="#{globalLists.yesNoTypeList}" label="#{messages[s.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+		</s:decorate>
+	</td> --><td>
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
     		<ui:param name="labelstyle" value="width:140px;" />

@@ -51,6 +51,7 @@
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['pt_BR.supervisedTreatment']}:</ui:define>
 		<h:selectOneMenu id="cbsuptreatment" value="#{medicalExaminationBR.supervisedTreatment}" required="true">
+			
 			<s:selectItems var="s" value="#{globalLists.yesNoTypeList}" label="#{messages[s.key]}" noSelectionLabel="-" />
 			<s:convertEnum />
 		</h:selectOneMenu>
@@ -58,7 +59,12 @@
 	<div id="div_supunit">
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['pt_BR.supervisionUnit']}:</ui:define>
-		<h:inputText value="#{medicalExaminationBR.supervisionUnitName}" style="width:300px;text-transform:uppercase;" maxlength="100"/>
+		<h:inputText id="supervisionunit" value="#{medicalExaminationBR.supervisionUnitName}" style="width:300px;text-transform:uppercase;" maxlength="100" />
+		<script type="text/javascript">
+			document.getElementById("j_id83:formexam:j_id148:supervisionunit").value='#{tbcase.supervisionUnitName}';
+			if('#{tbcase.supervisionUnitName}' != '')
+				document.getElementById("j_id83:formexam:j_id135:cbsuptreatment")[1].selected = true;
+		</script>
 	</s:decorate>
 	</div>
 <rich:jQuery selector="#cbsuptreatment" query="change(function(){showSupUnit(this); })" />
