@@ -45,8 +45,13 @@ public class PeriodConverter implements Converter{
 		else if (typeName.equals("time-length"))
 			return getAsTimeLength(comp, obj);
 		else if (typeName.equals("elapsed-time"))
-			return getAsElapsedTime();
+			return getAsElapsedTime();		
+		else if(typeName.equals("month"))
+			return getAsMonth(comp, obj);
+		
 		else return null;
+		
+		
 	}
 
 	
@@ -177,6 +182,60 @@ public class PeriodConverter implements Converter{
 			else s = years + " " + messages.get("global.years");
 			dtIni = DateUtils.incYears(dtIni, years);
 		}
+		
+		int months = DateUtils.monthsBetween(dtIni, dtEnd);
+		if (months > 0) {
+			if (!s.isEmpty())
+				s = s + ", ";
+			if (months == 1)
+				 s = s + months + " " + messages.get("global.month");
+			else s = s + months + " " + messages.get("global.months");
+			dtIni = DateUtils.incMonths(dtIni, months);
+		}
+
+		int days = DateUtils.daysBetween(dtIni, dtEnd);
+		
+		if (days > 0) {
+			if (!s.isEmpty())
+				s = s + ", ";
+			if (days == 1)
+				 s = s + days + " " + messages.get("global.day");
+			else s = s + days + " " + messages.get("global.days");
+		}
+	
+		return (s.isEmpty()? "-": s);
+	}
+	
+	/**
+	 * Converts to a string containing the length of two dates or in a number of days
+	 * @param comp - the component containing the value
+	 * @param obj - Can be a Date object indicating the beginning date or an Integer object indicating the number of days to be formated
+	 * @return
+	 */
+	protected String getAsMonth(UIComponent comp, Object obj) {
+		// make adjustment in the final date including 1 more day to count the exactly period of month or year
+		Date dtIni = period.getIniDate();
+		Date dtEnd = period.getEndDate();
+		if ((dtIni == null) || (dtEnd == null))
+			return "<null>";
+		dtEnd = DateUtils.incDays(dtEnd, 1);
+		
+		Map<String, String> messages = Messages.instance();
+		
+		String s = "";
+		/**
+		 * Commmenting code to fetch period in years. Instead the period is fetched in months
+		 */
+
+//		int years = DateUtils.yearsBetween(dtIni, dtEnd);
+//
+//		
+//		if (years > 0) {
+//			if (years == 1)
+//				 s = years + " " + messages.get("global.year");
+//			else s = years + " " + messages.get("global.years");
+//			dtIni = DateUtils.incYears(dtIni, years);
+//		}
 		
 		int months = DateUtils.monthsBetween(dtIni, dtEnd);
 		if (months > 0) {
