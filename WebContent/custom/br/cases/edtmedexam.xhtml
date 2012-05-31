@@ -60,13 +60,13 @@
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['pt_BR.supervisionUnit']}:</ui:define>
 		<h:inputText id="supervisionunit" value="#{medicalExaminationBR.supervisionUnitName}" style="width:300px;text-transform:uppercase;" maxlength="100" />
-		<script type="text/javascript">
-			document.getElementById("j_id83:formexam:j_id148:supervisionunit").value='#{tbcase.supervisionUnitName}';
-			if('#{tbcase.supervisionUnitName}' != '')
-				document.getElementById("j_id83:formexam:j_id135:cbsuptreatment")[1].selected = true;
-		</script>
 	</s:decorate>
 	</div>
+<script type="text/javascript">
+	document.getElementById("j_id83:formexam:j_id149:supervisionunit").value='#{tbcase.supervisionUnitName}';
+	if('#{tbcase.getSupervisionUnitName()}' != '')
+		document.getElementById("j_id83:formexam:j_id136:cbsuptreatment")[1].selected = true;
+</script>
 <rich:jQuery selector="#cbsuptreatment" query="change(function(){showSupUnit(this); })" />
 <rich:jQuery selector="#cbsuptreatment" timing="onload" query="each(function(){ showSupUnit(this,true); })" />
 

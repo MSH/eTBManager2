@@ -1214,7 +1214,7 @@ public class TbCase implements Serializable{
 	 * @return the evolution of the case
 	 */
 	public String getCaseEvolution() {
-		if(this.getExaminations().size() > 0){
+		if(this.getExaminations().size() > 0 && (!this.getState().equals(CaseState.WAITING_TREATMENT))){
 			ClinicalEvolution eval = this.getExaminations().get(getExaminations().size()-1).getClinicalEvolution(); // for some old cases may be null AK 26/05/2012
 			if (eval != null)
 				return this.getExaminations().get(getExaminations().size()-1).getClinicalEvolution().getKey();
