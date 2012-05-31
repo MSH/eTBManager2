@@ -16,8 +16,8 @@
 	<ui:param name="labelstyle" value="width:180px;" />
 	<ui:param name="left" value="0" />
 
-	<!--  <ui:param name="indicator" value="#{dstProfileIndicator}" /> -->
-	<ui:param name="indicator" value="#{resistancePatternIndicatorng}" />
+	<!-- <ui:param name="indicator" value="#{resistancePatternIndicatorng}" /> -->
+	 <ui:param name="indicator" value="#{resistancePatternSLDIndicator}" />
 	<ui:param name="table" value="#{indicator.table}" />
 
 <head>
@@ -65,12 +65,12 @@
 					<tr>
 					<th></th>
 						<ui:repeat
-							value="#{resistancePatternIndicatorng.table.columns}"
+							value="#{resistancePatternSLDIndicator.table.columns}"
 							var="col">
 						<th>#{col.title}</th>
 						</ui:repeat>
 					</tr>
-						<ui:repeat value="#{resistancePatternIndicatorng.table.rows}"
+						<ui:repeat value="#{resistancePatternSLDIndicator.table.rows}"
 							var="row">
 						 <tr>
 							<td class="colb">#{row.title}</td>
@@ -88,7 +88,7 @@
 				</div>
 							
 
-								<div class="paragraph">
+								<!-- <div class="paragraph">
 									#{messages['manag.dstprofile.monoresistance']}</div>
 								<table class="table1" width="800px" align="left">
 									<tr>
@@ -112,7 +112,34 @@
 											</ui:repeat>
 										</tr>
 									</ui:repeat>
-								</table>
+								</table> -->
+								
+								 <div class="paragraph">
+									#{messages['manag.dstprofile.title.prevtreat']}</div>
+								<table class="table1" width="800px" align="left">
+									<tr>
+										<th></th>
+										<ui:repeat value="#{dSTPrevTreatResistIndicator.table.columns}"
+											var="col">
+											<th>#{col.title}</th>
+										</ui:repeat>
+									</tr>
+									<ui:repeat value="#{dSTPrevTreatResistIndicator.table.rows}"
+										var="row">
+										<tr>
+											<td class="colb">#{row.title}</td>
+											<ui:repeat value="#{row.cells}" var="val">
+												<td class="colcb"
+													style="#{val.column.rowTotal?'':'font-weight:bold;'}">
+													<h:outputText value="#{val.value}">
+														<f:convertNumber pattern="#,###,##0" />
+													</h:outputText> 
+													<!-- <h:outputText value="%" rendered="#{val.column.highlight}" /> -->
+												</td>
+											</ui:repeat>
+										</tr>
+									</ui:repeat>
+								</table> 
 								
 							</s:fragment>
 						</h:panelGroup> 
