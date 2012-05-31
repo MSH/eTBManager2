@@ -214,7 +214,36 @@
 		</ui:repeat>
 		</tr> -->
 	</table>
-	</s:fragment>
+	
+	<div class="paragraph">
+			#{messages['manag.dstprofile.mdrresistancePrevTreat']}
+	</div>
+	<table class="table1" width="800px" align="left">
+		<tr>
+		<th></th>
+		<ui:repeat value="#{dSTPrevTreatFLDIndicator.table.columns}" var="col">
+			<th>
+				#{col.title}
+			</th>
+		</ui:repeat>
+		</tr>
+		<ui:repeat value="#{dSTPrevTreatFLDIndicator.table.rows}" var="row">
+		<tr>
+			<td class="colb">
+				#{row.title}
+			</td>
+			<ui:repeat value="#{row.cells}" var="val">
+			<td class="colcb" style="#{val.column.rowTotal?'':'font-weight:bold;'}">
+				<h:outputText value="#{val.value}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+				</td>
+			</ui:repeat>		
+		</tr>		
+		</ui:repeat>
+	</table>
+	
+</s:fragment>
 
 </h:panelGroup>
 
