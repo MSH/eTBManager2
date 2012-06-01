@@ -36,11 +36,6 @@ public class CaseKHHome {
 	private String groupNum;
 	private String villageName;
 	
-//	public CaseKHHome() {
-//		deConcatAddr();
-//		//super();
-//	}
-
 	/**
 	 * Return an instance of a {@link TbCaseKH} class
 	 * 
@@ -61,7 +56,7 @@ public class CaseKHHome {
 	@Transactional
 	public String saveNew() {
 		TbCase tbcase = caseHome.getInstance();
-		String completeAddress = houseNum+";".concat(streetNum)+";".concat(groupNum)+";".concat(villageName);
+		String completeAddress = houseNum+";".concat(streetNum)+";".concat(groupNum)+";".concat(villageName)+";";
 		Address address = new Address();
 		address.setAddress(completeAddress);
 		tbcase.setNotifAddress(address);
@@ -109,7 +104,15 @@ public class CaseKHHome {
 	}
 
 	public String gethouseNum() {
+		String addr = deConcatAddr();
+		if(addr.isEmpty())
+			return "";
+		else{
+		String delimiter = "\\;";
+		String temp[] = addr.split(delimiter);
+		sethouseNum(temp[0]);
 		return houseNum;
+		}
 	}
 
 	public void sethouseNum(String houseNum) {
@@ -117,7 +120,15 @@ public class CaseKHHome {
 	}
 	
 	public String getStreetNum() {
+		String addr = deConcatAddr();
+		if(addr.isEmpty())
+			return "";
+		else{
+		String delimiter = "\\;";
+		String temp[] = addr.split(delimiter);
+		setStreetNum(temp[1]);
 		return streetNum;
+		}
 	}
 	
 	public void setStreetNum(String streetNum) {
@@ -125,7 +136,15 @@ public class CaseKHHome {
 	}
 
 	public String getGroupNum() {
+		String addr = deConcatAddr();
+		if(addr.isEmpty())
+			return "";
+		else{
+		String delimiter = "\\;";
+		String temp[] = addr.split(delimiter);
+		setGroupNum(temp[2]);
 		return groupNum;
+		}
 	}
 	
 	public void setGroupNum(String groupNum) {
@@ -133,22 +152,25 @@ public class CaseKHHome {
 	}
 
 	public String getVillageName() {
+		String addr = deConcatAddr();
+		if(addr.isEmpty())
+			return "";
+		else{
+		String delimiter = "\\;";
+		String temp[] = addr.split(delimiter);
+		setVillageName(temp[3]);
 		return villageName;
+		}
 	}
 
 	public void setVillageName(String villageName) {
 		this.villageName = villageName;
 	}
 
-	public void deConcatAddr(){
+	public String deConcatAddr(){
 		TbCase tbcase = caseHome.getInstance();
-		String addr = tbcase.getNotifAddress().toString();
-		String delimiter = "\\;";
-		String temp[] = addr.split(delimiter);
-		sethouseNum(temp[0]);
-		setStreetNum(temp[1]);
-		setGroupNum(temp[2]);
-		setVillageName(temp[3]);
+		String addr = tbcase.getNotifAddress().getAddress();
+		return addr;
 	}
 	
 }
