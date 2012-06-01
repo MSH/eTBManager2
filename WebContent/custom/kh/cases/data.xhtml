@@ -73,7 +73,8 @@
 	
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
-    		#{tbcase.notifAddress.address}
+    		<!-- #{tbcase.notifAddress.address} -->
+    		#{caseKHHome.houseNum} #{caseKHHome.streetNum} #{caseKHHome.groupNum} #{caseKHHome.villageName}
     		<br/>
     		#{tbcase.notifAddress.complement}
 		</s:decorate>
