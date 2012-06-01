@@ -19,7 +19,7 @@
 
 <a:loadScript src="/js/util.js"/>
 
-<s:decorate template="/layout/casebody.xhtml">
+<s:decorate id="caseBody" template="/layout/casebody.xhtml">
 	<a:form id="formexam" styleClass="form1">
 
 	<div class="form-content">
@@ -48,7 +48,7 @@
 		</h:selectOneMenu>
 	</s:decorate>
 
-	<s:decorate template="/layout/edit.xhtml">
+	<s:decorate id="templatecbsuptreatment" template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['pt_BR.supervisedTreatment']}:</ui:define>
 		<h:selectOneMenu id="cbsuptreatment" forceId="true" value="#{medicalExaminationBR.supervisedTreatment}" required="true">
 			
@@ -57,15 +57,15 @@
 		</h:selectOneMenu>
 	</s:decorate>
 	<div id="div_supunit">
-	<s:decorate template="/layout/edit.xhtml">
+	<s:decorate id="templatesupervisionunit" template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['pt_BR.supervisionUnit']}:</ui:define>
 		<h:inputText id="supervisionunit" value="#{medicalExaminationBR.supervisionUnitName}" style="width:300px;text-transform:uppercase;" maxlength="100" />
 	</s:decorate>
 	</div>
 <script type="text/javascript">
-	document.getElementById("j_id83:formexam:j_id149:supervisionunit").value='#{tbcase.supervisionUnitName}';
+	document.getElementById("caseBody:formexam:templatesupervisionunit:supervisionunit").value='#{tbcase.supervisionUnitName}';
 	if('#{tbcase.getSupervisionUnitName()}' != '')
-		document.getElementById("j_id83:formexam:j_id136:cbsuptreatment")[1].selected = true;
+		document.getElementById("caseBody:formexam:templatecbsuptreatment:cbsuptreatment")[1].selected = true;
 </script>
 <rich:jQuery selector="#cbsuptreatment" query="change(function(){showSupUnit(this); })" />
 <rich:jQuery selector="#cbsuptreatment" timing="onload" query="each(function(){ showSupUnit(this,true); })" />

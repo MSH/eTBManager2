@@ -1227,11 +1227,29 @@ public class TbCase implements Serializable{
 	 * @return the name of the sepervision unit
 	 */
 	public String getSupervisionUnitName() {
-		if(this.getExaminations() != null && this.getExaminations().size() > 0 
-				&& this.getExaminations().get(getExaminations().size()-1).getSupervisedTreatment() != null
-				&& this.getExaminations().get(getExaminations().size()-1).getSupervisedTreatment().equals(YesNoType.YES)
-				&& this.getExaminations().get(getExaminations().size()-1).getSupervisionUnitName() != null)
-			return this.getExaminations().get(getExaminations().size()-1).getSupervisionUnitName();
+		
+		MedicalExamination lastExam = null;
+		
+		if(this.getExaminations() != null && this.getExaminations().size() > 0){
+			lastExam = this.getExaminations().get(0);
+			for(MedicalExamination m : this.getExaminations()){
+				if(m.getDate().after(lastExam.getDate()))
+					lastExam = m;
+			}
+		}
+		if(lastExam != null
+				&& lastExam.getSupervisedTreatment() != null
+				&& lastExam.getSupervisedTreatment().equals(YesNoType.YES)
+				&& lastExam.getSupervisionUnitName() != null){
+			
+			for(MedicalExamination m : this.getExaminations()){
+				if(m.getDate().after(lastExam.getDate()))
+					lastExam = m;
+			}
+			
+			return lastExam.getSupervisionUnitName();
+		}
+		
 		return "";
 	}
 	
