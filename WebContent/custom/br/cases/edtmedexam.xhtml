@@ -50,7 +50,7 @@
 
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['pt_BR.supervisedTreatment']}:</ui:define>
-		<h:selectOneMenu id="cbsuptreatment" value="#{medicalExaminationBR.supervisedTreatment}" required="true">
+		<h:selectOneMenu id="cbsuptreatment" forceId="true" value="#{medicalExaminationBR.supervisedTreatment}" required="true">
 			
 			<s:selectItems var="s" value="#{globalLists.yesNoTypeList}" label="#{messages[s.key]}" noSelectionLabel="-" />
 			<s:convertEnum />
