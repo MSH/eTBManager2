@@ -159,6 +159,11 @@ public class TreatmentHome {
 		
 		if (!checkDateBasicRules(iniDate, endDate))
 			return;
+
+		if (iniDate.before(caseHome.getInstance().getDiagnosisDate())) {
+			facesMessages.addToControlFromResourceBundle("edtIniContPhase", "cases.treat.inidatemsg");
+			return;
+		}
 		
 		if ((!iniDate.before(iniContinuousPhase)) && (!endDate.after(iniContinuousPhase))) {
 			facesMessages.addToControlFromResourceBundle("edtIniContPhase", "cases.treat.contdateerror");

@@ -293,7 +293,7 @@ public class CaseDataBRHome {
 			return "error";
 		
 		MedicalExamination medInst = medicalExaminationBRHome.getInstance();
-		
+		//Start validation
 		for(MedicalExamination m : caseHome.getTbCase().getExaminations()){
 			
 			if(medInst.getId() != m.getId() && medInst.getDate().equals(m.getDate())){
@@ -306,6 +306,12 @@ public class CaseDataBRHome {
 			}
 		
 		}
+		
+		if(medInst.getDate().before(caseHome.getTbCase().getDiagnosisDate())){
+			facesMessages.addToControlFromResourceBundle("date", "cases.medexamdate.val1");
+			return "error";
+		}
+		//Finish Validation
 	
 		adjustMedicalExaminationFields();
 		caseHome.getTbCase().getCurrentAddress().setAdminUnit(auselection.getSelectedUnit());
