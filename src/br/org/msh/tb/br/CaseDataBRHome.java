@@ -390,7 +390,9 @@ public class CaseDataBRHome {
 		}
 		
 		// check diagnosis date and notification date
-		if (tbcase.getDiagnosisDate().after(tbcase.getRegistrationDate())) {
+		if (tbcase.getRegistrationDate()!=null
+				&& tbcase.getDiagnosisDate()!=null
+				&& tbcase.getDiagnosisDate().after(tbcase.getRegistrationDate())) {
 			facesMessages.addToControlFromResourceBundle("diagdateedt", "cases.details.valerror1");
 			res = false;
 		}
