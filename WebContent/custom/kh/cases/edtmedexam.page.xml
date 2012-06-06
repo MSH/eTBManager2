@@ -7,7 +7,7 @@
 		<begin-conversation join="true"/>
 		<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
 		<param name="examid" value="#{medicalExaminationKHHome.id}" converterId="javax.faces.Integer"/>
-		<param name="height" value="#{medicalExamination.height}"/>
+		<param name="height" value="#{medicalExamination_Kh.height}"/>
 		<navigation>
 			<rule if-outcome="persisted">
 				<end-conversation/>
