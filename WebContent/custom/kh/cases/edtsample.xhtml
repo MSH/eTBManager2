@@ -24,7 +24,7 @@
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['PatientSample.sampleType']}:</ui:define>
     	<h:selectOneMenu value="#{examType.sampleType}" required="true">
-    		<s:selectItems value="#{globalLists.sampleTypes}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
+    		<s:selectItems value="#{sampleTypes_kh}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
     </s:decorate>	
