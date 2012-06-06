@@ -28,7 +28,15 @@ public enum PatientType {
 // Generic - Incidence Report
 	ALL_RETREATMENT,
 //Brasil
-	RESISTANCE_PATTERN_CHANGED;
+	RESISTANCE_PATTERN_CHANGED,
+	
+//Cambodia
+	RAD,
+	PREV_MDRTB,
+	MDRTB_CONTACT,
+	TB_HIV
+	
+	;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
