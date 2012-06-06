@@ -14,7 +14,7 @@ import org.msh.tb.kh.entities.enums.SideEffectGrading;
 public class CaseSideEffectKH extends CaseSideEffect{
 	
 	@ManyToOne
-	@JoinColumn(name="CASE_DATA_ID")
+	@JoinColumn(name="CASE_DATA_ID_KH")
 	@NotNull
 	private TbCaseKH tbcasekh;
 	
