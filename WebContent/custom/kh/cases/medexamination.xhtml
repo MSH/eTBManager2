@@ -30,9 +30,10 @@
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 				</s:link>
-				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remMedExam(#{r.id}, #{medicalExaminationKHHome.lastResult});return false;" 
+				 <h:commandLink value="#{messages['form.remove']}" 
+					onclick="if (confirm('#{messages['form.confirm_remove']}')) remMedExam(#{r.id}, #{medicalExaminationKHHome.lastResult});return false;" 
 				      rendered="#{caseHome.canEditCaseData}">
-				</h:commandLink>
+				</h:commandLink> 			
 			</div>
 			<!-- <div class="name2">#{messages['cases.details.date']}: </div> --> 
 			<h2><h:outputText value="#{r.date}" converter="localeDateConverter" /></h2>
@@ -41,11 +42,6 @@
 				<div class="content">
 	
 		<ui:param name="showfooter" value="0" />
-
-		<a:jsFunction name="remMedExam" action="#{medicalExaminationKHHome.remove}" reRender="medexamtbl" ajaxSingle="true" rendered="#{caseHome.canEditCaseData}">
-			<a:actionparam name="param1" assignTo="#{medicalExaminationKHHome.id}" converter="javax.faces.Integer"/>
-		</a:jsFunction>
-
 
 		<table width="100%" style="border-collapse:collapse;">
 		<tr>
@@ -164,6 +160,11 @@
 		</div>
     </ui:repeat>
     </h:panelGroup>
+    
+    <a:jsFunction name="remMedExam" action="#{medicalExaminationKHHome.remove}" reRender="medexamtbl" ajaxSingle="true" rendered="#{caseHome.canEditCaseData}">
+			<a:actionparam name="param1" assignTo="#{medicalExaminationKHHome.id}" converter="javax.faces.Integer"/>
+	</a:jsFunction>
+		
     <s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="data" />
 	</s:decorate>
