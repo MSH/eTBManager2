@@ -230,7 +230,7 @@
 	<div class="spacer" />
 	<h:panelGroup id="pnldst">	
 	
-			<s:link view="/cases/edtexamdst.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
+			<s:link view="/custom/kh/cases/edtexamdst.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
 				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 				<span>#{messages['cases.details.newresult']}</span>
@@ -238,8 +238,8 @@
 			<h2>#{messages['cases.examdst']}</h2>
 		
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examDSTTable.allResults}" />
-		<s:fragment rendered="#{not empty examDSTTable.allResults}">
+		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examDSTTableKh.allResults}" />
+		<s:fragment rendered="#{not empty examDSTTableKh.allResults}">
 		
 		<table class="table1" width="100%">
 		<tr>
@@ -252,7 +252,7 @@
 		<th align="left">
 			#{messages['Laboratory']}
 		</th>
-		<ui:repeat value="#{examDSTTable.substances}" var="m">
+		<ui:repeat value="#{examDSTTableKh.substances}" var="m">
 		<th>
 			#{m.abbrevName}
 		</th>
@@ -262,10 +262,10 @@
 		</th>
 		</s:fragment>
 		</tr>
-		<a:repeat value="#{examDSTTable.allResults}" var="r">
+		<a:repeat value="#{examDSTTableKh.allResults}" var="r">
 		<tr>
 			<td>
-				<s:link view="/cases/edtexamdst.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
+				<s:link view="/custom/kh/cases/edtexamdst.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.examResult.id}"/>
 					<h:outputFormat value="#{messages[r.examResult.monthDisplay]}" >
@@ -312,8 +312,8 @@
 	
 	</h:panelGroup>
 	
-<a:jsFunction name="remExamDST" action="#{examDSTHome.remove}" reRender="pnldst" ajaxSingle="true"  rendered="#{caseHome.canEditExams}">
-	<a:actionparam name="param1" assignTo="#{examDSTHome.id}" converter="javax.faces.Integer"/>
+<a:jsFunction name="remExamDST" action="#{examDSTKHHome.remove}" reRender="pnldst" ajaxSingle="true"  rendered="#{caseHome.canEditExams}">
+	<a:actionparam name="param1" assignTo="#{examDSTKHHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
 	<div class="spacer" />
