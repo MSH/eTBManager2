@@ -56,8 +56,8 @@ public class SideEffectKHHome {
 		items = new ArrayList<ItemSelect<CaseSideEffectKH>>();
 		
 		for (FieldValue sideEffect: sideEffects) {
-			ItemSelect item = new ItemSelect();
-
+			//ItemSelect item = new ItemSelect();
+			ItemSelect<CaseSideEffectKH> item = new ItemSelect<CaseSideEffectKH>();
 			CaseSideEffectKH cse = tbcase.findSideEffectData(sideEffect);
 			if (cse == null) {
 				cse = new CaseSideEffectKH();
