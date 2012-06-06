@@ -141,7 +141,7 @@
 	<div class="spacer" />
                  
 	<s:link view="/custom/kh/cases/sideeffectsedt.xhtml" styleClass="button-alt" 
-		style="float:right;" rendered="#{caseHome.canEditCaseData}" onclick="disableButton(this)">
+		style="float:right;" rendered="#{caseHome.canEditCaseData}">
 		<f:param name="id" value="#{caseHome.id}" />
 		<span>#{messages['form.neworedit']}</span>
 	</s:link>
@@ -149,25 +149,13 @@
 	<s:div styleClass="region3" rendered="#{empty tbcase.sideEffects}"><div class="content">
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" style="display:block;padding:4px"/>
 	</div></s:div>
-	<h:dataTable value="#{tbcase.sideEffects}" var="it" width="100%" styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty tbcase.sideEffects}">
+	<h:dataTable value="#{tbcasekh.sideEffectsKh}" var="it" width="100%" styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty tbcasekh.sideEffectsKh}">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
 			</f:facet>
 			#{it.sideEffect.value.name}
-			<s:fragment rendered="#{not empty it.sideEffect.complement}">
-				<div style="display:inline-block">
-					<span class="naveg-next" />
-					<b>#{it.sideEffect.value.otherDescription} </b>#{it.sideEffect.complement}
-				</div>
-			</s:fragment>
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.medicine']}" styleClass="collh" />
-			</f:facet>
-			#{it.medicines}
+			
 		</h:column>
 
 		<h:column>
@@ -176,13 +164,14 @@
 			</f:facet>
 			#{it.month}
 		</h:column>
-
+		
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.resolved']}" styleClass="collh"/>
+				<h:outputText value="#{messages['cases.sideeffects.month']}" styleClass="collh" />
 			</f:facet>
-			#{messages[it.resolved.key]}
+			#{it.grade.key}
 		</h:column>
+
 	</h:dataTable>
 
 	<s:decorate template="/cases/comments.xhtml">
