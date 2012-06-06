@@ -87,6 +87,7 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
     private boolean mdrHealthUnit;
     private boolean notifHealthUnit;
     private boolean patientDispensing;
+    private boolean ntmHealthUnit;
 
     @PropertyLog(key="EntityState.ACTIVE")
     private boolean active;
@@ -491,5 +492,13 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 	 */
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
+	}
+
+	public boolean isNtmHealthUnit() {
+		return ntmHealthUnit;
+	}
+	
+	public void setNtmHealthUnit(boolean ntmHealthUnit) {
+		this.ntmHealthUnit = ntmHealthUnit;
 	}
 }
