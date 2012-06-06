@@ -31,19 +31,18 @@ function checkClick(obj) {
 }
 
 function updateRows() {
-	jQuery("#tblse tr").removeClass("highlight");
-	jQuery("#tblse tr input[type='text'],select,#tblse tr .divother").hide();
+	jQuery("#tblse tr").removeClass("activerow");
+	jQuery("#tblse tr input[type='text'],select").hide();
 	jQuery("#tblse tr:has(:checked) input[type='text']").show();
 	jQuery("#tblse tr:has(:checked) select").show();
-	jQuery("#tblse tr:has(:checked) .divother").show();
-	jQuery("#tblse tr:has(:checked)").addClass("highlight");
+	jQuery("#tblse tr:has(:checked)").addClass("activerow");
 }
 
 function validateForm() {
 	valOk=true;
-	jQuery("#tblse tr:has(:checked) input[type='text']")
-		.css("background-color", "white")
-		.each(function() { validateMedicine(this); });
+//	jQuery("#tblse tr:has(:checked) input[type='text']")
+		//.css("background-color", "white")
+		//.each(function() { validateMedicine(this); });
 
 	if (valOk)
 		jQuery("#tblse tr:has(:checked) select[class='xpto']")
@@ -89,27 +88,9 @@ function validateYesNo(cb) {
 			</f:facet>
 			<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" />
 			#{it.item.sideEffect.value.name}
-			<s:fragment rendered="#{it.item.sideEffect.value.other}">
-				<div class="divother">
-					<b>#{it.item.sideEffect.value.otherDescription}</b>
-    				<h:inputText value="#{it.item.sideEffect.complement}" style="width:180px"/>
-    			</div>
-			</s:fragment>
+
 		</h:column>
 		
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.medicine']}" styleClass="collh" />
-			</f:facet>
-			<h:selectOneMenu value="#{it.item.substance}">
-				<s:selectItems var="s" value="#{substances}" label="#{s.abbrevName}" noSelectionLabel="-"/>
-				<s:convertEntity />
-			</h:selectOneMenu>
-			<h:selectOneMenu value="#{it.item.substance2}">
-				<s:selectItems var="s" value="#{substances}" label="#{s.abbrevName}" noSelectionLabel="-"/>
-				<s:convertEntity />
-			</h:selectOneMenu>
-		</h:column>
 
 		<h:column>
 			<f:facet name="header">
@@ -119,16 +100,17 @@ function validateYesNo(cb) {
 				<f:selectItems value="#{sideEffectKHHome.months}" />
 			</h:selectOneMenu>
 		</h:column>
-
+		
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.resolved']}" styleClass="collh"/>
+				<h:outputText value="#{messages['cases.sideeffects.grade']}" styleClass="collh" />
 			</f:facet>
-			<h:selectOneMenu value="#{it.item.resolved}" styleClass="xpto">
-				<s:selectItems value="#{yesNoList}" var="v" noSelectionLabel="-" label="#{messages[v.key]}"/>
+			<h:selectOneMenu value="#{it.item.grade}" styleClass="xpto">
+				<s:selectItems value="#{gradeListKh}" var="v" noSelectionLabel="-" label="#{messages[v.key]}"/>
 				<s:convertEnum />
 			</h:selectOneMenu>
 		</h:column>
+		
 	</h:dataTable>
 	</div>
 
@@ -142,7 +124,7 @@ function validateYesNo(cb) {
 		onclick="if (!disableButton(this)) return false;if (!validateForm()) {enableButton();return false;}">
 		<span>#{messages['form.save']}</span>
 	</a:commandLink> 
-    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+    <s:link view="/custom/kh/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
        	<f:param name="id" value="#{caseHome.id}"/>
        	<span>#{messages['form.cancel']}</span>
     </s:link>
