@@ -21,7 +21,11 @@ public enum CaseState {
 	DIAGNOSTIC_CHANGED_TO_MDR,
 	DIAGNOSTIC_CHANGED_TO_MONO,
 	DIAGNOSTIC_CHANGED_TO_POLY,
-	DIAGNOSTIC_CHANGED_TO_XDR;
+	DIAGNOSTIC_CHANGED_TO_XDR,
+	
+	//Cambodia
+	NTM,
+	SUSCEPTIBLE_TB;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
