@@ -10,6 +10,7 @@ import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.ReferredBy;
 import org.msh.tb.entities.enums.ReferredTo;
+import org.msh.tb.entities.enums.SampleType;
 import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.kh.entities.enums.Dot;
 import org.msh.tb.kh.entities.enums.SideEffectGrading;
@@ -113,6 +114,16 @@ public class GlobalLists {
 		PatientType.TB_HIV
 	};
 	
+	private static final SampleType sampleType[] = {
+		SampleType.SPUTUM,
+		SampleType.PUS,
+		SampleType.CSF,
+		SampleType.URINE,
+		SampleType.STOOL,
+		SampleType.TISSUE,
+		SampleType.OTHER
+	};
+	
 	@Factory("gradeListKh")
 	public SideEffectGrading[] getGradeList() {
 		return SideEffectGrading.values();
@@ -159,6 +170,11 @@ public class GlobalLists {
 	@Factory("patientTypes_kh")
 	public static PatientType[] getPatienttypes() {
 		return patientTypes;
+	}
+
+	@Factory("sampleTypes_kh")
+	public static SampleType[] getSampletype() {
+		return sampleType;
 	}
 }
 
