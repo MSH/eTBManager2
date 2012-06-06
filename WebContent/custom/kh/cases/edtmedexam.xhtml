@@ -17,6 +17,7 @@
 <ui:param name="labelstyle" value="width:180px;" />
 <ui:param name="left" value="0" />
 <ui:param name="pagewidth" value="900px" />
+<f:param name="height" value="#{medicalExamination_Kh.height}"/>
 
 
 <ui:define name="content">
@@ -54,7 +55,6 @@
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
     	<h:inputText value="#{medicalExamination_Kh.height}" />
-    	<h:outputText value="#{medicalExamination_Kh.height}" />
     	#{messages['MedicalExamination.height.unit']}
     </s:decorate>
 
