@@ -15,6 +15,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.application.tasks.AsyncTask;
 import org.msh.tb.application.tasks.TaskManager;
+import org.msh.tb.az.eidss.test.EidssImportTask;
 import org.msh.tb.entities.SystemParam;
 import org.msh.tb.entities.Workspace;
 
@@ -39,6 +40,7 @@ public class EidssIntHome {
 	 * Prefix for parameters keys
 	 */
 	private final String prefix = "admin.eidss";
+	EidssImportTask task;
 
 	/**
 	 * Initialize GUI to make changes in the configuration
@@ -49,7 +51,7 @@ public class EidssIntHome {
 	}
 
 	/**
-	 * Execute import asynchronously
+	 * Execute import asynchronously by user
 	 * @return Success if import ran, or Error otherwise
 	 */
 	public String execute1(){
@@ -111,6 +113,7 @@ public class EidssIntHome {
 
 	/**
 	 * Automatically execute by timer event
+	 * @return 
 	 */
 	@Observer("system-timer-event")
 	public void systemTimerListener() {
@@ -234,6 +237,24 @@ public class EidssIntHome {
 		}
 		p.setValue(value.toString());
 		entityManager.persist(p);
+	}
+
+	/**
+	 * Notify user about current operation.
+	 * @return notify message
+	 * @return 
+	 */
+	public String notifyUser() {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * Show any message to UI
+	 * @param message Any message
+	 * @return 
+	 */
+	public void showMessage(String message) {
+		throw new UnsupportedOperationException();
 	}
 
 

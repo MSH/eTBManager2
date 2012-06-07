@@ -17,8 +17,7 @@ import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.ValidationState;
 
 /**
- * Import a single case from EIDSS into etbmanager database 
- *
+ * Import cases from case DTO list. Fully independent from specific EIDSS web services, so, from data structures
  */
 public  class CaseImporting {
 	private static final int workspaceID = 8;
@@ -33,6 +32,7 @@ public  class CaseImporting {
 	private int errorsRecords;
 	private List<String> errors = new ArrayList<String>();
 	private EntityManager entityManager;
+	ArrayList<CaseInfo> caseInfo;
 
 	/*
 	 * add records from list to etb

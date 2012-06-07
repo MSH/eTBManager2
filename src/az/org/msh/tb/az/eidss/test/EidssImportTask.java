@@ -1,4 +1,4 @@
-package org.msh.tb.az.eidss;
+package org.msh.tb.az.eidss.test;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,6 +24,8 @@ import javax.xml.ws.BindingProvider;
 
 import org.jboss.seam.Component;
 
+import org.msh.tb.az.eidss.CaseImporting;
+import org.msh.tb.az.eidss.CaseInfo;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
