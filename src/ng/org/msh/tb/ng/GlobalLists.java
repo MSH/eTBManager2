@@ -16,6 +16,7 @@ import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.tb.entities.enums.ReferredBy;
 import org.msh.tb.entities.enums.ReferredTo;
+import org.msh.tb.entities.enums.SampleType;
 import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.ng.entities.enums.Dot;
 import org.msh.tb.ng.entities.enums.HealthFacility;
@@ -106,6 +107,15 @@ public class GlobalLists {
 		DrugResistanceType.MULTIDRUG_RESISTANCE,
 		DrugResistanceType.EXTENSIVEDRUG_RESISTANCE,
 	};
+	
+	private static final SampleType sampleType[] = {
+		SampleType.SPUTUM,
+		SampleType.PUS,
+		SampleType.CSF,
+		SampleType.URINE,
+		SampleType.STOOL,
+		SampleType.TISSUE,
+	};
 
 	
 	private int[] comorb_years = {1,2,3,4,5,6,7,8,9,10};
@@ -161,6 +171,11 @@ public class GlobalLists {
 	@Factory("drugresisttypes_ng")
 	public static DrugResistanceType[] getDrugresistancetype() {
 		return drugResistanceType;
+	}
+
+	@Factory("sampletypes_ng")
+	public static SampleType[] getSampletype() {
+		return sampleType;
 	}
 
 }
