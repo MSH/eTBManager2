@@ -202,6 +202,7 @@ public class TreatmentHome {
 		formEditing = FormEditing.NONE;
 		validated = true;
 		refreshPrescriptionTable();
+		caseHome.updateCaseTags();
 	}
 
 	
