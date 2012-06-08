@@ -329,4 +329,13 @@ public class TransactionLogService {
 	public void setTitleSuffix(String titleSuffix) {
 		this.titleSuffix = titleSuffix;
 	}
+	
+	
+	/**
+	 * Return the instance of the component
+	 * @return
+	 */
+	public static TransactionLogService instance() {
+		return (TransactionLogService)Component.getInstance("transactionLogService");
+	}
 }

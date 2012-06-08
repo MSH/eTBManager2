@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import javax.sql.rowset.CachedRowSet;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.contexts.Contexts;
 import org.msh.tb.adminunits.AdminUnitHome;
 import org.msh.tb.application.tasks.DbBatchTask;
 import org.msh.tb.application.tasks.TaskStatus;
@@ -48,11 +49,8 @@ import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.TransactionLog;
 import org.msh.tb.entities.TreatmentHealthUnit;
-import org.msh.tb.entities.UserLog;
-import org.msh.tb.entities.UserRole;
-import org.msh.tb.entities.WorkspaceLog;
+import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.CultureResult;
@@ -72,6 +70,7 @@ import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.entities.enums.XRayEvolution;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.misc.FieldsQuery;
+import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
@@ -1422,7 +1421,29 @@ public class ImportTBMRTask extends DbBatchTask {
 
 	
 	protected void registerLog() {
-		UserRole role = entityManager.find(UserRole.class, 168);
+		beginTransaction();
+		try {
+			UserLogin userLogin = new UserLogin();
+			userLogin.setUser(getUser());
+			userLogin.setWorkspace(getWorkspace());
+			
+			Contexts.getEventContext().set("userLogin", userLogin);
+			Contexts.getEventContext().set("defaultWorkspace", getWorkspace());
+			Contexts.getEventContext().set("userWorkspace", getUser().getDefaultWorkspace());
+			
+
+			TransactionLogService srv = TransactionLogService.instance();
+			srv.getDetailWriter().addText("UF: " + uf + "\n Casos importados: " + getRecordCount());
+			srv.save("TASK", RoleAction.EXEC, "Importação de fichas do Sistema TBMR", null, null);
+			
+			commitTransaction();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rollbackTransaction();
+		}
+
+/*		
+ 		UserRole role = entityManager.find(UserRole.class, 168);
 		TransactionLog log = new TransactionLog();
 		log.setAction(RoleAction.EXEC);
 		log.setComments("UF: " + uf + ", Casos importados: " + getRecordCount());
@@ -1444,6 +1465,6 @@ public class ImportTBMRTask extends DbBatchTask {
 			e.printStackTrace();
 			rollbackTransaction();
 		}
-	}
+*/	}
 	
 }
