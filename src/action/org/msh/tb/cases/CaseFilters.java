@@ -7,13 +7,11 @@ import java.util.List;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Synchronized;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.jboss.seam.framework.EntityQuery;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.entities.AdministrativeUnit;
@@ -87,9 +85,8 @@ public class CaseFilters {
 	private Integer tagid;
 	
 	private ItemSelectList<CaseClassification> classifications;
-	
-	private List<Medicine> medicineList;
-	
+
+
 	/**
 	 * Selected view in the detail page of the case
 	 */

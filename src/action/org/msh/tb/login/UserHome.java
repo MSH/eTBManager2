@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
@@ -22,7 +21,6 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
