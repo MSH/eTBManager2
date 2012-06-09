@@ -182,11 +182,11 @@ public class OrderReceivingHome extends Controller {
 			UIComponent table = compQtd.getParent().getParent();
 			List<UIComponent> children = table.getParent().getChildren();
 			int index = children.indexOf(table);
-			UIComponent txt = children.get(index - 2);
+			UIComponent txt = children.get(index - 1).getChildren().get(0);
 
 			// comentário foi definido ?
 			if (((UIInput)txt).getValue().toString().isEmpty()) {
-				((UIInput)compQtd).setValid(false);
+				((UIInput)txt).setValid(false);
 
 				FacesMessage message = new FacesMessage(Messages.instance().get("meds.orders.noobs"));
 				context.addMessage(txt.getClientId(context), message);
