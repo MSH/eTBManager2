@@ -32,7 +32,7 @@
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
     	<div id="divage">
-    	<h:inputText id="edtage" value="#{caseHome.getInstance().age}" style="width:80px;">
+    	<h:inputText id="edtage" value="#{caseHome.getInstance().age}" style="width:80px;" readonly="true">
     		<f:validateLongRange minimum="0" maximum="150"/>
     	</h:inputText>
     	</div>
