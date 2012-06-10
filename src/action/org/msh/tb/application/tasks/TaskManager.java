@@ -137,7 +137,7 @@ public class TaskManager implements TaskListener {
 		break;
 		case FINISHED:
 		case ERROR:
-		case CANCELED:
+		case CANCELING:
 			notifyTaskFinished(task);
 		break;
 		}
