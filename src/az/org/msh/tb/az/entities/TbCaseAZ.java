@@ -12,13 +12,18 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.msh.tb.az.entities.enums.CaseFindingStrategy;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="tbcaseaz")
@@ -49,6 +54,15 @@ public class TbCaseAZ extends TbCase{
 	private String EIDSSID;
 	
 	private String EIDSSComment;
+	
+	private String doctor;
+	
+	private boolean referToOtherTBUnit;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="referToTBUnit_id")
+	@PropertyLog(operations={Operation.ALL})
+	private Tbunit referToTBUnit;
 
 	/**
 	 * @return the maritalStatus
@@ -166,6 +180,30 @@ public class TbCaseAZ extends TbCase{
 
 	public void setEIDSSComment(String eIDSSComment) {
 		EIDSSComment = eIDSSComment;
+	}
+
+	public String getDoctor() {
+		return doctor;
+	}
+
+	public void setDoctor(String doctor) {
+		this.doctor = doctor;
+	}
+
+	public boolean isReferToOtherTBUnit() {
+		return referToOtherTBUnit;
+	}
+
+	public void setReferToOtherTBUnit(boolean referToOtherTBUnit) {
+		this.referToOtherTBUnit = referToOtherTBUnit;
+	}
+
+	public Tbunit getReferToTBUnit() {
+		return referToTBUnit;
+	}
+
+	public void setReferToTBUnit(Tbunit referToTBUnit) {
+		this.referToTBUnit = referToTBUnit;
 	}
 
 
