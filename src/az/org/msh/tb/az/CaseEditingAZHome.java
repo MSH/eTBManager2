@@ -6,6 +6,7 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
+import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.entities.Address;
 import org.msh.tb.entities.AdministrativeUnit;
@@ -18,19 +19,21 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.MedAppointmentType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.tbunits.TBUnitSelection;
 
 
 @Name("caseEditingAZHome")
 public class CaseEditingAZHome extends CaseEditingHome{
-
+	
+	private TBUnitSelection referTBUnit;
+	
 	@Override
 	@Transactional
 	public String saveNew() {
 		if (!validateData())
 			return "error";
 		
-		TbCase tbcase = caseHome.getInstance();
-
+		TbCaseAZ tbcase = getTbCase();
 		// save the patient's data
 		getPatientHome().persist();
 
@@ -44,6 +47,8 @@ public class CaseEditingAZHome extends CaseEditingHome{
 
 		tbcase.setNotifAddress(notifAddress);
 		tbcase.setCurrentAddress(curAddress);
+		
+		tbcase.setReferToTBUnit(getReferTBUnit().getTbunit());
 
 		if (tbcase.getValidationState() == null)
 			tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
@@ -160,5 +165,32 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		}
 		initialized = true;
 		return "initialized";
+	}
+
+	@Override
+	public String saveEditing() {
+		if (!validateData())
+			return "error";
+		TbCaseAZ tbcase = getTbCase();
+		tbcase.setReferToTBUnit(getReferTBUnit().getTbunit());
+		
+		return super.saveEditing();
+	}
+	
+	public TBUnitSelection getReferTBUnit() {
+		if (referTBUnit == null){
+			referTBUnit = new TBUnitSelection();
+			if (caseHome.isManaged())
+				referTBUnit.setTbunit(getTbCase().getReferToTBUnit());
+		}
+		return referTBUnit;
+	}
+
+	public void setReferTBUnit(TBUnitSelection referTBUnit) {
+		this.referTBUnit = referTBUnit;
+	}
+	
+	public TbCaseAZ getTbCase() {
+		return (TbCaseAZ)caseHome.getInstance();
 	}
 }
