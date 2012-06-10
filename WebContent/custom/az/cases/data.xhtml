@@ -91,7 +91,7 @@
 	</td></tr>
 	</s:fragment>
 	
-	 <s:fragment rendered="#{not tbcase.currentAddress.emptyy}">
+	<s:fragment rendered="#{not tbcase.currentAddress.emptyy}">
     <tr><td colspan="2">
     	<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
 	
@@ -153,6 +153,10 @@
     		<ui:define name="label">#{messages['az_AZ.case.inprisonEndDate']}:</ui:define>
     		<h:outputText id="dt" value="#{tbcase.inprisonEndDate}" converter="localeDateConverter"/>
     	</s:decorate>	
+    	<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">#{messages['az_AZ.case.doctor']}:</ui:define>
+    		<h:outputText value="#{tbcase.doctor}"/> 
+    	</s:decorate>
     </td></tr>
 	</td></tr>
 	</table>
@@ -169,6 +173,12 @@
     	#{tbcase.notificationUnit.name}
 	</s:decorate>
 
+	</td></tr>
+	<tr><td>
+	<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.referToTBUnit!=null}">
+    	<ui:define name="label">#{messages['TbCase.referUnit']}:</ui:define>
+    	#{tbcase.referToTBUnit.name}
+	</s:decorate>
 	</td></tr>
 	<tr><td>
 	<s:decorate template="/layout/display.xhtml">

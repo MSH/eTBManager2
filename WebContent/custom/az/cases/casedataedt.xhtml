@@ -190,7 +190,20 @@
     		<ui:param name="datefield" value="#{tbcase.inprisonEndDate}" /> 
 			<ui:param name="required" value="false" />
     	</s:decorate>	
-    </td></tr>
+    		
+    </td>
+    </tr>
+    <tr>
+    <td>
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['az_AZ.case.doctor']}:</ui:define>
+    		<h:inputText value="#{tbcase.doctor}" maxlength="45"/> 
+    	</s:decorate>
+    </td>
+    
+    </tr>
+    
+    
     </table>
     
 	</div>
@@ -208,7 +221,31 @@
 		<ui:param name="required" value="true" />
 	</s:decorate>
 
-	</td></tr><tr><td>
+	</td></tr>
+	
+	<tr><td colspan="2">
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:param name="labelstyle" value="width:400px;" />
+    		<ui:define name="label">#{messages['TbCase.referToOtherTBUnit']}:</ui:define>
+    		<h:selectOneMenu id="otherTbUnit" value="#{tbcase.referToOtherTBUnit}" >
+    			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{false}"/>
+    			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{true}"/>
+    		</h:selectOneMenu>
+    	</s:decorate>
+    	
+    	<div id="referToTbUnit" style="clear:both;">
+    	<h2>#{messages['TbCase.referUnit']}</h2>
+			
+			<s:decorate template="/layout/tbselection.xhtml" >
+				<ui:param name="tbunitselection" value="#{indicator.referTBUnit}" />
+				<ui:param name="required" value="false" />
+			</s:decorate>
+		
+    	<hr/>
+    	</div>
+    </td></tr>
+	
+	<tr><td>
 
 	<div id="divregdate">
     <s:decorate template="/layout/dateedit.xhtml" >
@@ -431,7 +468,17 @@ function showCurrAddress(cb) {
   else jQuery('#curraddr').show(500);
 }
 </script>
-<rich:jQuery selector="#addrChanged" query="each(function(){ if (this.selectedIndex==0) jQuery('#curraddr').hide(); })" />
+<rich:jQuery selector="#addrChanged" query="each(function(){ if (this.selectedIndex==0) jQuery('curraddr').hide(); })" />
+
+<rich:jQuery selector="#otherTbUnit" query="change(function(){ showReferToTbUnit(this); })" />
+<script type="text/javascript">
+function showReferToTbUnit(cb) {
+  if (cb.selectedIndex == 0)
+  	jQuery('#referToTbUnit').hide(500);
+  else jQuery('#referToTbUnit').show(500);
+}
+</script>
+<rich:jQuery selector="#otherTbUnit" query="each(function(){ if (this.selectedIndex==0) jQuery('referToTbUnit').hide(); })" />
 
 		
 </ui:composition>
