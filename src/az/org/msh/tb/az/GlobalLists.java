@@ -3,12 +3,11 @@ package org.msh.tb.az;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.az.entities.enums.CaseFindingStrategy;
-//import org.msh.tb.br.entities.enums.FailureType;
-//import org.msh.tb.br.entities.enums.TipoResistencia;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.ClinicalEvolution;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.entities.enums.HIVResult;
+import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.tb.entities.enums.TbField;
@@ -83,6 +82,16 @@ public class GlobalLists {
 		DstResult.CONTAMINATED,
 		DstResult.BASELINE
 	};
+	
+	private static final MicroscopyResult microscopyResults[] = {
+		MicroscopyResult.NOTDONE,
+		MicroscopyResult.NEGATIVE,
+		MicroscopyResult.POSITIVE,
+		MicroscopyResult.PLUS,
+		MicroscopyResult.PLUS2,
+		MicroscopyResult.PLUS3,
+		MicroscopyResult.PLUS4
+	};
 
 	
 	private static final ClinicalEvolution clinicalEvolution[] = {
@@ -136,6 +145,10 @@ public class GlobalLists {
 	
 	public DstResult[] getDstResults() {
 		return dstResults;
+	}
+	
+	public MicroscopyResult[] getMicroscopyResults() {
+		return microscopyResults;
 	}
 	
 }
