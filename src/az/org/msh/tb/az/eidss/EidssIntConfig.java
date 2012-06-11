@@ -39,9 +39,21 @@ public class EidssIntConfig {
 	 */
 	public Date from;
 	/**
+	 * load cases to this date
+	 */
+	public Date toDate;
+	/**
 	 * if true - turn on auto loading
 	 */
 	public Boolean auto;
+	/**
+	 * language to login
+	 */
+	public String  language;
+	/**
+	 * WS timeout in ms
+	 */
+	public String timeout;
 
 	public String getUrl() {
 		return url;
@@ -79,6 +91,13 @@ public class EidssIntConfig {
 	public void setFrom(Date from) {
 		this.from = from;
 	}
+	
+	public Date getToDate() {
+		return toDate;
+	}
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
+	}
 	public Boolean getAuto() {
 		return auto;
 	}
@@ -90,6 +109,18 @@ public class EidssIntConfig {
 	}
 	public void setOrgName(String orgName) {
 		this.orgName = orgName;
+	}
+	public String getLanguage() {
+		return this.language;
+	}
+	public void setLanguage(String language){
+		this.language = language;
+	}
+	public String getTimeout() {
+		return timeout;
+	}
+	public void setTimeout(String timeout) {
+		this.timeout = timeout;
 	}
 
 }

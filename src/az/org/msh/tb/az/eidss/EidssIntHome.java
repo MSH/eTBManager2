@@ -3,9 +3,12 @@ package org.msh.tb.az.eidss;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.In;
@@ -17,6 +20,7 @@ import org.msh.tb.application.tasks.AsyncTask;
 import org.msh.tb.application.tasks.TaskManager;
 import org.msh.tb.az.eidss.test.EidssImportTask;
 import org.msh.tb.entities.SystemParam;
+import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.Workspace;
 
 /**
@@ -35,12 +39,24 @@ public class EidssIntHome {
 	/**
 	 * import launch configuration
 	 */
-	EidssIntConfig config=null;
+	private EidssIntConfig config=null;
 	/**
 	 * Prefix for parameters keys
 	 */
 	private final String prefix = "admin.eidss";
-	EidssImportTask task;
+	private UserLogin userLogin;
+	private Workspace workspace;
+
+	/**
+	 * Show any message to UI
+	 * @param message Any message
+	 * @return 
+	 */
+	public void showMessage(String message) {
+		//TODO show messages for background execution
+		facesMessages.addFromResourceBundle(message);
+	}
+
 
 	/**
 	 * Initialize GUI to make changes in the configuration
@@ -55,16 +71,27 @@ public class EidssIntHome {
 	 * @return Success if import ran, or Error otherwise
 	 */
 	public String execute1(){
-		//TODO method body
-		try {
-			taskManager.runTask(EidssTaskImport.class);
-		} catch (Exception e) {
-			facesMessages.add(e.getMessage());
-			return "error";
+		saveConfig();
+		loadConfig();
+		setCurrentUser();
+		setDefaultWorkspace();
+		TaskManager manager = (TaskManager)Component.getInstance(TaskManager.class);
+		if (manager != null){
+			Map<String,Object> params = new HashMap<String, Object>();
+			params.put("config", getConfig());
+			params.put("userId", userLogin.getId());
+			AsyncTask task = manager.findTaskByClass(EidssTaskImport.class);
+			if (task == null){
+				manager.runTask(EidssTaskImport.class, params);
+				showMessage("eidss.import.started");
+			}else{
+				showMessage("eidss.import.starting");
+			}
+
 		}
-		
 		return "Success";
 	}
+
 	/**
 	 * Execute import asynchronously
 	 * @return Success if import ran, or Error otherwise
@@ -76,21 +103,26 @@ public class EidssIntHome {
 	}
 	/**
 	 * Stop current async task
-	 * @return
 	 */
-	public String stop(){
-		//TODO method body
-		AsyncTask task = taskManager.findTaskByClass(EidssTaskImport.class);
-		taskManager.cancelTask(task.getId());
-		return "stopped";
+	public void stop(){
+		EidssTaskImport task = (EidssTaskImport) taskManager.findTaskByClass(EidssTaskImport.class);
+		if (task != null){
+			task.cancel();
+			showMessage("eidss.import.canceled");
+		}else{
+			showMessage("eidss.import.idle");
+		}
 	}
 	/**
 	 * check state of the current async task
-	 * @return
 	 */
-	public String check(){
-		//TODO method body
-		return "stopped";
+	public void check(){
+		AsyncTask task = taskManager.findTaskByClass(EidssTaskImport.class);
+		if (task != null){
+			showMessage(EidssTaskImport.getStateMessage());
+		}else{
+			showMessage("eidss.import.idle");
+		}
 	}
 
 	/**
@@ -100,15 +132,6 @@ public class EidssIntHome {
 	public boolean isTaskRunning() {
 		//TODO body
 		return true;
-	}
-
-	/**
-	 * Return the task
-	 * @return
-	 */
-	public AsyncTask getTask() {
-		//TODO body and right return
-		return null;
 	}
 
 	/**
@@ -153,7 +176,7 @@ public class EidssIntHome {
 				try {
 					if (fld.getType().getName().contains("Date")){
 						Date dt = (Date) fld.get(config);
-						 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 						saveParameter(prefix + "." + fld.getName(),sdf.format(dt));
 					}else
 						saveParameter(prefix + "." + fld.getName(),fld.get(config).toString());
@@ -248,13 +271,39 @@ public class EidssIntHome {
 		throw new UnsupportedOperationException();
 	}
 
+
+
 	/**
-	 * Show any message to UI
-	 * @param message Any message
+	 * 
 	 * @return 
 	 */
-	public void showMessage(String message) {
-		throw new UnsupportedOperationException();
+	public void setDefaultWorkspace() {
+		workspace = getEntityManager().find(Workspace.class, getUserLogin().getDefaultWorkspace().getId());
+	}
+
+	public UserLogin getUserLogin() {
+		return userLogin;
+	}
+
+
+	public void setUserLogin(UserLogin userLogin) {
+		this.userLogin = userLogin;
+	}
+
+
+	public EntityManager getEntityManager() {
+		return entityManager;
+	}
+
+
+	/**
+	 * 
+	 * @return 
+	 */
+	public void setCurrentUser() {
+		if (userLogin == null)
+			userLogin = (UserLogin)Component.getInstance("userLogin");
+		//TODO resolve for background task
 	}
 
 
