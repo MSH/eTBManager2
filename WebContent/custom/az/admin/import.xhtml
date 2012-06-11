@@ -87,6 +87,16 @@
 								style="width:400px;" maxlength="100" required="true"></h:inputText>
 						</s:decorate>
 						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.language']}:</ui:define>
+							<h:inputText value="#{eidssIntHome.config.language}"
+								style="width:400px;" maxlength="20" required="true"></h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.timeout']}:</ui:define>
+							<h:inputText value="#{eidssIntHome.config.timeout}"
+								style="width:400px;" maxlength="20" required="true"></h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
 							<ui:define name="label">#{messages['admin.import.eidss.diags']}:</ui:define>
 							<h:inputText value="#{eidssIntHome.config.diagnosis}"
 								style="width:400px;" maxlength="100" required="true"></h:inputText>
@@ -99,6 +109,11 @@
 						<s:decorate template="/layout/dateedit.xhtml">
 							<ui:define name="label">#{messages['admin.import.eidss.from']}:</ui:define>
 							<ui:param name="datefield" value="#{eidssIntHome.config.from}" />
+							<ui:param name="required" value="true" />
+						</s:decorate>
+						<s:decorate template="/layout/dateedit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.toDate']}:</ui:define>
+							<ui:param name="datefield" value="#{eidssIntHome.config.toDate}" />
 							<ui:param name="required" value="true" />
 						</s:decorate>
 						<s:label styleClass="name">
@@ -126,16 +141,17 @@
 							reRender="eidss,messages">
 							<span>#{messages['form.import']}1</span>
 						</a:commandLink>
-						<a:commandLink action="#{eidssIntHome.stop()}" styleClass="button"
-							onclick="if (!disableButton(this)) return false;"
-							reRender="eidss,messages">
-							<span>#{messages['admin.import.eidss.stop']}</span>
-						</a:commandLink>
 						<a:commandLink action="#{eidssIntHome.check()}"
 							styleClass="button"
 							onclick="if (!disableButton(this)) return false;"
 							reRender="eidss,messages">
 							<span>#{messages['admin.import.eidss.check']}</span>
+						</a:commandLink>
+						<a:commandLink action="#{eidssIntHome.stop()}"
+							styleClass="button"
+							onclick="if (!disableButton(this)) return false;"
+							reRender="eidss,messages">
+							<span>#{messages['admin.import.eidss.stop']}</span>
 						</a:commandLink>
 					</div>
 				</h:form>
