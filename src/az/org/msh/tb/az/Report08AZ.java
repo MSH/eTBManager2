@@ -12,6 +12,7 @@ import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
@@ -25,8 +26,6 @@ public class Report08AZ extends Indicator2D {
 	private static final long serialVersionUID = -5703455596815108661L;
 
 	private List<String> ageRange;
-	private List<String> nameRows;
-	private List<String> nameMKB;
 	private static final int[] ar = {0,4,13,14,17,24,29,34,39,44,49,54,59,64};
 
 	private IndicatorTable table1000;
@@ -34,6 +33,9 @@ public class Report08AZ extends Indicator2D {
 	private IndicatorTable table2110;
 	private IndicatorTable table2120;
 	private IndicatorTable table4000;
+	private int[] mas3000;
+	private int[] mas3001;
+	
 
 	private List<TbCaseAZ> lst;
 
@@ -124,6 +126,8 @@ public class Report08AZ extends Indicator2D {
 		Iterator<TbCaseAZ> it = lst.iterator();
 		int rowid;
 		int colid;
+		mas3000 = getMas3000();
+		mas3001 = getMas3001();
 		while(it.hasNext()){
 			TbCaseAZ tc = it.next();
 			rowid = tc.getPatient().getGender().ordinal();
@@ -133,7 +137,7 @@ public class Report08AZ extends Indicator2D {
 				table.addIdValue("col1", "row"+(1+rowid), 1F);
 				table.addIdValue("col"+colid, "row"+(1+rowid), 1F);
 				addToTable2100(1,tc,false);
-
+				
 				if (tc.getInfectionSite().equals(InfectionSite.PULMONARY)){
 					table.addIdValue("col1", "row"+(3+rowid), 1F);
 					table.addIdValue("col"+colid, "row"+(3+rowid), 1F);
@@ -198,14 +202,43 @@ public class Report08AZ extends Indicator2D {
 				if (tc.getAge()>=14 && tc.getAge()<=29)
 					addToTable2100(27,tc,true);
 			}
+			//table 2120
 			addToTable2120(1+rowid, tc);
 			if (posHIVResult(tc))
 				addToTable2120(3+rowid, tc);
 			if (hasART_HIV(tc))
 				addToTable2120(5+rowid, tc);
 			
-			if (exDST("H",tc) == 2 && exDST("R",tc) == 2 && exDST("E",tc) == 2 && exDST("S",tc) == 2) 
+			//table2110
+			if (exDST("H",tc) == 2 && exDST("R",tc) == 2 && exDST("E",tc) == 2 && exDST("S",tc) == 2){ 
 				addToTable2110(2,tc);
+				//table 3000 begin
+				if (tc.getPatientType().equals(PatientType.NEW)){
+					if (rightMcTest(tc)!=null)
+					if (rightMcTest(tc).getResult().isPositive())
+					{
+						mas3000[0]++;
+						if (tc.getState().equals(CaseState.CURED)) mas3000[1]++;
+						else if (tc.getState().equals(CaseState.TREATMENT_COMPLETED)) mas3000[2]++;
+						else if (tc.getState().equals(CaseState.DIED) || tc.getState().equals(CaseState.DIED_NOTTB)) mas3000[3]++;
+						else if (tc.getState().equals(CaseState.FAILED)) mas3000[4]++;
+						else if (tc.getState().equals(CaseState.DEFAULTED)) mas3000[5]++;
+						else if (tc.getState().equals(CaseState.TRANSFERRED_OUT)) mas3000[6]++;	
+					}
+				}
+				//table 3000 end
+				else {
+				//table 3001 begin
+					mas3001[0]++;
+					if (tc.getState().equals(CaseState.CURED)) mas3001[1]++;
+					else if (tc.getState().equals(CaseState.TREATMENT_COMPLETED)) mas3001[2]++;
+					else if (tc.getState().equals(CaseState.DIED) || tc.getState().equals(CaseState.DIED_NOTTB)) mas3001[3]++;
+					else if (tc.getState().equals(CaseState.FAILED)) mas3001[4]++;
+					else if (tc.getState().equals(CaseState.DEFAULTED)) mas3001[5]++;
+					else if (tc.getState().equals(CaseState.TRANSFERRED_OUT)) mas3001[6]++;
+				//table 3001 end
+				}
+			}
 			if (exDST("H",tc) != 1 && exDST("R",tc) != 1 && exDST("E",tc) != 1 && exDST("S",tc) == 1) 
 				addToTable2110(3,tc);
 			if ((exDST("H",tc) == 1 && exDST("R",tc) != 1 && exDST("E",tc) != 1 && exDST("S",tc) != 1) ||
@@ -224,11 +257,10 @@ public class Report08AZ extends Indicator2D {
 				(exDST("H",tc) == 1 && exDST("R",tc) == 1 && exDST("E",tc) == 1 && exDST("S",tc) == 1))
 				{
 					addToTable2110(6,tc);
-					addToTable2110(7,tc);
-					if (exDST("Km",tc) == 1 || exDST("Am",tc) == 1 || exDST("Cm",tc) == 1 || exDST("Ofx",tc) == 1) 
+					if ((exDST("Km",tc) == 1 || exDST("Am",tc) == 1 || exDST("Cm",tc) == 1) && exDST("Ofx",tc) == 1) 
 						addToTable2110(7,tc);
 				}
-			if (exDST("H",tc) == -1 && exDST("R",tc) == -1 && exDST("E",tc) == -1 && exDST("S",tc) == -1)
+			if (exDST("H",tc) == 0 && exDST("R",tc) == 0 && exDST("E",tc) == 0 && exDST("S",tc) == 0)
 				addToTable2110(8,tc);
 		}
 	}
@@ -255,7 +287,7 @@ public class Report08AZ extends Indicator2D {
 	
 	private int exDST(String el,TbCase tc){
 		ExamDST ex = rightDSTTest(tc);
-		int res = -1;
+		int res = 0;
 		if (ex != null){
 			for (ExamDSTResult exr: ex.getResults()) 
 				if (exr.getSubstance().getAbbrevName().getName1().equals(el)) res = exr.getResult().ordinal();	
@@ -510,48 +542,6 @@ public class Report08AZ extends Indicator2D {
 	}
 
 	private void initTable1000() {
-
-
-		nameRows = new ArrayList<String>();
-		nameRows.add(getMessage("manag.form8.table1000.rowheader1"));
-		nameRows.add(getMessage("manag.form8.table1000.rowheader2"));
-		for (int i = 1; i < 10; i++) {
-			nameRows.add(getMessage("manag.form8.pulm"+i));
-		}
-		nameRows.add(getMessage("manag.form8.table1000.rowheader3"));
-		nameRows.add(getMessage("manag.form8.table1000.rowheader4"));
-		for (int i = 1; i < 10; i++) {
-			nameRows.add(getMessage("manag.form8.pulm"+i));
-		}
-		nameRows.add(getMessage("manag.form8.table1000.rowheader5"));
-		nameRows.add(getMessage("manag.form8.table1000.rowheader6"));
-		for (int i = 1; i < 13; i++) {
-			nameRows.add(getMessage("manag.form8.extrapulm"+i));
-		}
-		nameRows.add(getMessage("manag.form8.table1000.rowheader7"));
-
-
-
-		nameMKB = new ArrayList<String>();
-		nameMKB.add(getMessage("manag.form8.mkb.head1"));
-		nameMKB.add(getMessage("manag.form8.mkb.head2"));
-		for (int i = 1; i < 10; i++) {
-			nameMKB.add(getMessage("manag.form8.mkb.pulm"+i));
-		}
-		nameMKB.add("");
-		nameMKB.add(getMessage("manag.form8.mkb.head3"));
-		for (int i = 1; i < 10; i++) {
-			nameMKB.add(getMessage("manag.form8.mkb.pulm.plus"+i));
-		}
-		nameMKB.add("");
-		nameMKB.add(getMessage("manag.form8.mkb.head4"));
-		for (int i = 1; i < 12; i++) {
-			nameMKB.add(getMessage("manag.form8.mkb.extrapulm"+i));
-		}
-		nameMKB.add("");
-		nameMKB.add("");
-
-
 		IndicatorTable table = getTable1000();
 		for (int i = 1; i < 75; i++) {
 			table.addRow(Integer.toString(i), "row"+i);
@@ -625,15 +615,19 @@ public class Report08AZ extends Indicator2D {
 		return table4000;
 	}
 
-	public List<String> getNameRows() {
-		return nameRows;
-	}
-
-	public List<String> getNameMKB() {
-		return nameMKB;
-	}
-
 	public String getIterateMessage(String key, int i){
 		return getMessage(key+i);
+	}
+
+	public int[] getMas3000() {
+		if (mas3000==null)
+			mas3000 = new int[7];
+		return mas3000;
+	}
+
+	public int[] getMas3001() {
+		if (mas3001==null)
+			mas3001 = new int[7];
+		return mas3001;
 	}
 }
