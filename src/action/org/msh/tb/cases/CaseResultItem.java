@@ -33,6 +33,7 @@ public class CaseResultItem {
 	private ValidationState validationState;
 	private String registrationCode;
 	private DiagnosisType diagnosisType;
+	private Date birthDate;
 
 
 	/**
@@ -199,6 +200,20 @@ public class CaseResultItem {
 
 	public void setDiagnosisType(DiagnosisType diagnosisType) {
 		this.diagnosisType = diagnosisType;
+	}
+
+	/**
+	 * @return the birthDate
+	 */
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	/**
+	 * @param birthDate the birthDate to set
+	 */
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
 	}
 	
 	

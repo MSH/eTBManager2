@@ -484,6 +484,7 @@ public class CaseFilters {
 		if (order == this.order)
 			inverseOrder = !inverseOrder;
 		else inverseOrder = false;
+		((CasesQuery)Component.getInstance("cases")).setCurrentPage(1);
 		this.order = order;
 	}
 	

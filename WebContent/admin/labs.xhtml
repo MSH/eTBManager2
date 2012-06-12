@@ -84,7 +84,7 @@
   	#{r.legacyId}
   </h:column>
 
-  <h:column  rendered="#{s:hasRole('LABS_EDT') and (not workspaceViewService.printing)}">
+  <h:column  rendered="#{s:hasRole('LABS_EDT')}">
   	<f:facet name="header">#{messages['form.action']}</f:facet>
 	<a:commandLink action="#{laboratoryHome.remove}" value="#{messages['form.remove']}" 
 		onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" reRender="main,messages">

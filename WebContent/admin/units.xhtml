@@ -112,7 +112,7 @@
 			#{messages['Tbunit.medicineSupplier']}
 	</h:column>
 
-  <h:column rendered="#{s:hasRole('TBUNITS_EDT') and (not workspaceViewService.printing)}">
+  <h:column rendered="#{s:hasRole('TBUNITS_EDT')}">
   	<f:facet name="header" >#{messages['form.action']}</f:facet>
 	<a:commandLink value="#{messages['form.remove']}" 
 		onclick="if (confirm('#{messages['form.confirm_remove']}')) { deleteRecord(#{r.id}) } return false;" >

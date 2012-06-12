@@ -54,7 +54,7 @@
 				<br/><br/>
 				<a:commandLink value="#{messages['Patient.name']}" onclick="changeOrder(3);return false;"/>
 				<br/><br/>
-				<a:commandLink value="#{messages['TbCase.patientAge']}" onclick="changeOrder(4);return false;"/>
+				<a:commandLink value="#{messages['Patient.birthDate']}" onclick="changeOrder(4);return false;"/>
 				</div>
 			</th>
 			<th class="searchtitle">
@@ -94,7 +94,7 @@
 		<b>#{it.diagnosisType=='SUSPECT'? messages[it.classification.keySuspect] : messages[it.classification.key]}</b>
 		<div style="padding-top:6px;clear:left;">
 		#{it.patientName}
-		<br /> #{it.patientAge} #{messages['global.age']}
+		<br /> <h:outputText value="#{it.birthDate}" converter="localeDateConverter"/>
 		</div>
 	</td>
 	<td>

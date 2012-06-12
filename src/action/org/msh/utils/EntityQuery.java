@@ -86,6 +86,11 @@ public class EntityQuery<E> extends org.jboss.seam.framework.EntityQuery<E> {
 		return (num > getResultCount()? getResultCount().intValue(): num);
 	}
 
+
+	/**
+	 * Return the current page of the result set
+	 * @return
+	 */
 	public Integer getCurrentPage() {
 		Integer maxresults = getMaxResults();
 		if (maxresults == null)
@@ -93,7 +98,12 @@ public class EntityQuery<E> extends org.jboss.seam.framework.EntityQuery<E> {
 		Integer firstResult = getFirstResult();
 		return (firstResult != null? Math.round((float)firstResult / (float)maxresults) + 1: 1);
 	}
-	
+
+
+	/**
+	 * Changes the current page of the result set
+	 * @param page
+	 */
 	public void setCurrentPage(Integer page) {
 		Integer maxresults = getMaxResults();
 		if (maxresults != null)
@@ -101,6 +111,10 @@ public class EntityQuery<E> extends org.jboss.seam.framework.EntityQuery<E> {
 	}
 
 
+	/**
+	 * Return the max page allowed
+	 * @return
+	 */
 	public Integer getMaxPage() {
 		Integer maxresults = getMaxResults();
 		if (maxresults == null)

@@ -97,7 +97,7 @@
   	#{messages[r.line.key]}
   </h:column>
 
-  <h:column  rendered="#{s:hasRole('MEDICINES_EDT') and (not workspaceViewService.printing)}">
+  <h:column  rendered="#{s:hasRole('MEDICINES_EDT')}">
   	<f:facet name="header">#{messages['form.action']}</f:facet>
 	<a:commandLink action="#{medicineHome.remove}" value="#{messages['form.remove']}" 
 		onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" 

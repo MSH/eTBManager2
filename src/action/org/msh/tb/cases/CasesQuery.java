@@ -106,7 +106,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		"c.treatmentPeriod.iniDate, c.registrationDate, nu.name.name1, " +
 		"loc.name.name1, loc.code, c.id, " +
 		"c.treatmentPeriod.endDate, c.state, c.classification, p.middleName, p.lastName, " +
-		"c.validationState, c.registrationCode, c.diagnosisType " +
+		"c.validationState, c.registrationCode, c.diagnosisType, p.birthDate " +
 		getFromHQL() + " join c.patient p " +
 		"join c.notificationUnit nu " +
 		"join c.notifAddress.adminUnit loc ".concat(dynamicConditions());
@@ -443,6 +443,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			item.setCaseState((CaseState)obj[12]);
 			item.setClassification((CaseClassification)obj[13]);
 			item.setValidationState((ValidationState)obj[16]);
+			item.setBirthDate((Date)obj[19]);
 
 			if (DisplayCaseNumber.REGISTRATION_CODE.equals(getDefaultWorkspace().getDisplayCaseNumber())) {
 				item.setRegistrationCode((String)obj[17]);
