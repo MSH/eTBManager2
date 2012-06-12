@@ -25,6 +25,11 @@ import org.msh.tb.entities.enums.ValidationState;
 import org.msh.utils.EntityQuery;
 
 // 02.04.2012 Change some from public to to protected Alexey Kurasov
+/**
+ * Return the result search of cases based on the filters defined in {@link CaseFilters} 
+ * @author Ricardo Memoria
+ *
+ */
 @Name("cases")
 @BypassInterceptors
 public class CasesQuery extends EntityQuery<CaseResultItem> {
@@ -43,6 +48,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		"c.classification desc", "#{cases.namesOrderBy}", "c.age desc", "upper(nu.name.name1) desc", "c.notifAddress.adminUnit.parent.name.name1 desc", 
 		"c.notifAddress.adminUnit.name.name1 desc", "c.state desc", "c.registrationDate desc", "c.treatmentPeriod.iniDate desc", "c.validationState desc"};
 
+	// static filters
 	private static final String[] restrictions = {/*"nu.id = #{caseFilters.tbunit.id}",*/
 		/*"p.recordNumber = #{caseFilters.recordNumber}", */ // just search by recordNumber if workspace.displayCaseNumber = RECORD_NUMBER
 		"p.recordNumber = #{caseFilters.patientRecordNumber}",
@@ -61,6 +67,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		"c.diagnosisType = #{caseFilters.diagnosisType}",
 		"c.validationState = #{caseFilters.validationState}",
 		"nu.healthSystem.id = #{userWorkspace.healthSystem.id}",
+		"year(p.birthDate) = #{caseFilters.birthYear}",
 	"exists(select t.id from c.tags t where t.id = #{caseFilters.tagid})"};
 
 	private static final String notifCond = "(nu.id = #{caseFilters.tbunitselection.tbunit.id})";
@@ -75,6 +82,9 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 															"WHERE 	pm.medicine.id = #{caseFilters.prescribedMedicine.id} " + 
 															"and c.id = cs.id)";
 
+	/* (non-Javadoc)
+	 * @see org.jboss.seam.framework.EntityQuery#getResultList()
+	 */
 	@Override
 	public List<CaseResultItem> getResultList() {
 		if (resultList == null)
@@ -86,6 +96,10 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		return resultList;
 	}
 
+
+	/* (non-Javadoc)
+	 * @see org.jboss.seam.framework.Query#getEjbql()
+	 */
 	@Override
 	public String getEjbql() {
 		return "select p.name, c.age, p.gender, p.recordNumber, c.caseNumber, " + 
@@ -99,6 +113,9 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see org.jboss.seam.framework.Query#getCountEjbql()
+	 */
 	@Override
 	public String getCountEjbql() {
 		return "select count(*) " + getFromHQL() + 

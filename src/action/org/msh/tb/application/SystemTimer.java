@@ -4,7 +4,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.jboss.seam.annotations.async.Duration;
 import org.jboss.seam.annotations.async.IntervalDuration;
-import org.jboss.seam.core.Events;
 
 /**
  * System timer responsible for generating events in a regular basis (it's intended to raise events twice a day)

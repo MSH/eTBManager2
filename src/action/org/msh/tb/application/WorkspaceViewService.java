@@ -28,39 +28,8 @@ import org.msh.tb.entities.WorkspaceView;
 public class WorkspaceViewService {
 
 	private List<WorkspaceView> views;
-	
 	private String pictureFile;
 	
-	private boolean printing;
-	private boolean initialized;
-
-
-	/**
-	 * Return the right template page according to the printing status
-	 * @return xhtml template page
-	 */
-	public String getTemplatePage() {
-		return (!isPrinting()? "/layout/template.xhtml": "/layout/report.xhtml");
-	}
-	
-
-	/**
-	 * Return the right template page according to the printing status
-	 * @return xhtml template page
-	 */
-	public String getTemplateCenterPage() {
-		return (!isPrinting()? "/layout/templatecenter.xhtml": "/layout/report.xhtml");
-	}
-
-
-	/**
-	 * Return the right template page according to the printing status
-	 * @return xhtml template page
-	 */
-	public String getTemplateMedPage() {
-		return (!isPrinting()? "/layout/templatemed.xhtml": "/layout/report.xhtml");
-	}
-
 	
 
 	/**
@@ -226,18 +195,6 @@ public class WorkspaceViewService {
 
 
 	/**
-	 * Initialize information about printing
-	 */
-	protected void initializePrintingInfo() {
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		HttpServletRequest request = (HttpServletRequest)facesContext.getExternalContext().getRequest();
-		
-		Object it = request.getParameterMap().get("print");
-		printing = it != null;
-		initialized = true;
-	}
-
-	/**
 	 * @return the pictureFile
 	 */
 	public String getPictureFile() {
@@ -250,12 +207,6 @@ public class WorkspaceViewService {
 	 */
 	public void setPictureFile(String pictureFile) {
 		this.pictureFile = pictureFile;
-	}
-	
-	public boolean isPrinting() {
-		if (!initialized)
-			initializePrintingInfo();
-		return printing;
 	}
 	
 	

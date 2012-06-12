@@ -1,14 +1,18 @@
 package org.msh.tb.application;
 
 import java.io.File;
+import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
@@ -50,7 +54,7 @@ public class WorkspaceUriRewrite {
 		String ext = getWorkspaceExtension(); 
 		if (ext == null)
 			return view;
-		
+
 		if (view.startsWith(customPath)) {
 			// get the index of 3rd slash
 			int pos = view.indexOf('/', customPath.length() + 1);
@@ -108,5 +112,27 @@ public class WorkspaceUriRewrite {
 		if (workspacePageExists(FacesContext.getCurrentInstance(), pagePath))
 			 return pagePath;
 		else return page;
+	}
+	
+	
+	/**
+	 * Factory to return a single instance of a Map to convert page address in custom workspace pages
+	 * @return
+	 */
+	@Factory(value="wspage", autoCreate=true, scope=ScopeType.EVENT)
+	public Map<String, String> getWorkspacePageMap() {
+
+		return new AbstractMap<String, String>() {
+            @Override
+            public String get(Object key) {
+            	return key == null? null: getWorkspacePage(key.toString());
+            }
+
+			@Override
+			public Set<java.util.Map.Entry<String, String>> entrySet() {
+				return new HashSet();
+			}
+			
+		};
 	}
 }

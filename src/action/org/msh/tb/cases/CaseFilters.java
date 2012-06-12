@@ -64,6 +64,7 @@ public class CaseFilters {
 	private Integer endYear;
 	private Integer unitId;
 	private Medicine prescribedMedicine;
+	private Integer birthYear;
 	private FilterHealthUnit filterHealthUnit = FilterHealthUnit.BOTH;
 	// date filters
 	private boolean registrationDate = true;
@@ -131,6 +132,7 @@ public class CaseFilters {
 		iniYear = null;
 		endMonth = null;
 		endYear = null;
+		birthYear = null;
 		filterHealthUnit = FilterHealthUnit.BOTH;
 		registrationDate = true;
 		diagnosisDate = false;
@@ -147,16 +149,6 @@ public class CaseFilters {
 		inverseOrder = false;
 	}
 
-	
-/*	*//**
-	 * Set the execution of case searching using advanced search filers
-	 *//*
-	public String startAdvancedSearch() {
-		advancedSearch = true;
-		return "search";
-	}
-
-*/
 
 	
 	/**
@@ -819,6 +811,20 @@ public class CaseFilters {
 
 	public void setPrescribedMedicine(Medicine prescribedMedicine) {
 		this.prescribedMedicine = prescribedMedicine;
+	}
+
+	/**
+	 * @return the birthYear
+	 */
+	public Integer getBirthYear() {
+		return birthYear;
+	}
+
+	/**
+	 * @param birthYear the birthYear to set
+	 */
+	public void setBirthYear(Integer birthYear) {
+		this.birthYear = birthYear;
 	}
 	
 	

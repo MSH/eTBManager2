@@ -228,18 +228,19 @@ public class SymetaImportTask extends DbBatchTask {
 		});
 		
 		// check if there is something to log
-		if ((importingBase.getNewRecords() > 0) || (importingBase.getErrorsRecords() > 0)) {
-			addLog(title);
-			addLog("* Records read: " + importingBase.getImportedRecords());
-			addLog("* New records : " + importingBase.getNewRecords());
-			addLog("* Errors: " + importingBase.getErrorsRecords());
+//		if ((importingBase.getNewRecords() > 0) || (importingBase.getErrorsRecords() > 0)) {
+			addLog("");
+			addLog(">>" + title);
+			addLog("   * Records read: " + importingBase.getImportedRecords());
+			addLog("   * New records : " + importingBase.getNewRecords());
+			addLog("   * Errors: " + importingBase.getErrorsRecords());
 			addLog("");
 			if (importingBase.getErrors().size() > 0) {
 				for (String msg: importingBase.getErrors()) {
 					addLog(msg);
 				}
 				addLog("");
-			}
+//			}
 		}
 	}
 
