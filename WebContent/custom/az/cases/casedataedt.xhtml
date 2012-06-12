@@ -257,7 +257,11 @@
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChangeUAZ();})" />
 
     <s:decorate template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:<span style="color:red;">*</span></ui:define>
+    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:
+    		<s:fragment rendered="#{!tbcase.validated}">
+    		<span style="color:red;">*</span>
+    		</s:fragment>
+    	</ui:define>
     	<ui:param name="required" value="#{tbcase.validated}" /> 
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
     </s:decorate>
