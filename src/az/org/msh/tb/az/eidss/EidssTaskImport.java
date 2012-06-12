@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
@@ -13,6 +15,8 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
+import org.jboss.seam.international.LocaleSelector;
+import org.jboss.seam.international.Messages;
 import org.jboss.seam.transaction.UserTransaction;
 import org.msh.tb.application.tasks.AsyncTaskImpl;
 import org.msh.tb.application.tasks.TaskManager;
@@ -50,6 +54,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 
 	@Override
 	protected void starting() {
+		initContext();
 		setStateMessage("eidss.import.starting");
 		addLog("Started");
 		Calendar beginExec = GregorianCalendar.getInstance();
@@ -80,7 +85,6 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	public void execute() {	
 		setStateMessage("eidss.import.setting.environment");
 		config = (EidssIntConfig)getParameter("config");
-		initContext();
 		if (config != null ){
 			if (loginEIDSS()){
 				if (notCanceled()){
@@ -240,6 +244,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		userLogin.setUser(user);
 		userLogin.setWorkspace(getWorkspace());
 		Contexts.getEventContext().set("userLogin", userLogin);
+		LocaleSelector.instance().setLocaleString(getWorkspace().getDefaultLocale());
 
 	}
 	/**
