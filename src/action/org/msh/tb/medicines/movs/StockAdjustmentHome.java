@@ -14,13 +14,10 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
-import org.jboss.seam.international.StatusMessage.Severity;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchQuantity;
-import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
@@ -125,7 +122,7 @@ public class StockAdjustmentHome extends Controller {
 		
 		facesMessages.clear();
 	
-		MovementType type = MovementType.ADJUSTMENT;
+//		MovementType type = MovementType.ADJUSTMENT;
 		
 		Map<BatchQuantity, Integer> sels = batchSelection.getSelectedBatchesQtds();
 

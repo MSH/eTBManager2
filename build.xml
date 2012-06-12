@@ -96,55 +96,24 @@
 	
 	<target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/action"/>
             <src path="src/model"/>
             <classpath refid="mdrtb.classpath"/>
         </javac>
-		 <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
+		 <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
            <src path="src/br"/>
+           <src path="src/ph"/>
+           <src path="src/ua"/>
+	       <src path="src/md"/>
+	       <src path="src/uz"/>
+	       <src path="src/ng"/>
+           <src path="src/bd"/>
+           <src path="src/na"/>
+           <src path="src/az"/>
+	       <src path="src/ke"/>
+           <src path="src/in"/>
            <classpath refid="mdrtb.classpath"/>
-		 </javac>
-        <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
-            <src path="src/ph"/>
-            <classpath refid="mdrtb.classpath"/>
-        </javac>
-        <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
-            <src path="src/ua"/>
-            <classpath refid="mdrtb.classpath"/>
-        </javac>
-        <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
-            <src path="src/in"/>
-            <classpath refid="mdrtb.classpath"/>
-        </javac>
-		 <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
-            <src path="src/az"/>
-            <classpath refid="mdrtb.classpath"/>
-		 </javac>
-		 <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
-           <src path="src/ke"/>
-           <classpath refid="mdrtb.classpath"/>
-		 </javac>
-		 <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
-            <src path="src/na"/>
-            <classpath refid="mdrtb.classpath"/>
-		 </javac>
-		 <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
-            <src path="src/bd"/>
-            <classpath refid="mdrtb.classpath"/>
-		 </javac>
-		 <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
-           <src path="src/ng"/>
-           <classpath refid="mdrtb.classpath"/>
-		 </javac>
-		 <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
-          <src path="src/uz"/>
-          <classpath refid="mdrtb.classpath"/>
-		 </javac>
-		
-		 <javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
-         <src path="src/md"/>
-         <classpath refid="mdrtb.classpath"/>
 		 </javac>
     </target>
 

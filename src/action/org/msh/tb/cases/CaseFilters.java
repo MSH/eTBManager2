@@ -3,7 +3,6 @@ package org.msh.tb.cases;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;

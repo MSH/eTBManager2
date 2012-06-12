@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.application.FacesMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
@@ -26,7 +25,6 @@ import org.msh.tb.entities.Source;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.MovementType;
-import org.msh.tb.entities.enums.TbField;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.LocaleDateConverter;
 
@@ -430,7 +428,7 @@ public class MovementHome {
 			return new ReturnedValue(0, new Date());
 
 		int qtd = 0;
-		float price = 0;
+//		float price = 0;
 		Date dtrem = null;
 
 		for (Movement mov: movementsToBeRemoved) {
@@ -442,7 +440,7 @@ public class MovementHome {
 				for (BatchMovement bm: mov.getBatches()) {
 					if (bm.getBatch().equals(batch)) {
 						qtd += bm.getQuantity() * (-mov.getOper());
-						price += bm.getTotalPrice() * (-mov.getOper());
+//						price += bm.getTotalPrice() * (-mov.getOper());
 						if ((dtrem == null) || (dtrem.after(mov.getDate())))
 							dtrem = mov.getDate();
 					}

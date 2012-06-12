@@ -10,7 +10,6 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
-import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.RaiseEvent;
@@ -603,8 +602,8 @@ public class ForecastingCalculation {
 		
 		// calculate total percentage of regimens
 		float totalPerc = 0;
-		String wsExt = (String)Component.getInstance("workspaceExtension");
-			for (ForecastingRegimen aux: forecasting.getRegimens())
+//		String wsExt = (String)Component.getInstance("workspaceExtension");
+		for (ForecastingRegimen aux: forecasting.getRegimens())
 				totalPerc += aux.getPercNewCases();
 			if (totalPerc == 0)
 				return;		
