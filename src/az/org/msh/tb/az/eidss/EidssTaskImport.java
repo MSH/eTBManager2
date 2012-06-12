@@ -54,6 +54,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 
 	@Override
 	protected void starting() {
+		Thread.currentThread().setContextClassLoader(getClass().getClassLoader()); //to avoid JBoss bug
 		initContext();
 		setStateMessage("eidss.import.starting");
 		addLog("Started");
