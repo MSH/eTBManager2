@@ -38,7 +38,11 @@ public class Report08AZ extends Indicator2D {
 	
 
 	private List<TbCaseAZ> lst;
-
+	
+	/*
+	 * Override abstract method createIndicators()
+	 * @see org.msh.tb.indicators.core.Indicator#createIndicators()
+	 */
 	@Override
 	protected void createIndicators() {
 		setGroupFields(null);
@@ -53,6 +57,10 @@ public class Report08AZ extends Indicator2D {
 
 	}
 
+	/**
+	 * Create columns and rows for table2120 
+	 * @see org.msh.tb.indicators.core.Indicator#createIndicators()
+	 */
 	private void initTable2120() {
 		IndicatorTable table = getTable2120();
 		for (int i = 1; i < 7; i++) {
@@ -64,6 +72,10 @@ public class Report08AZ extends Indicator2D {
 		}
 	}
 	
+	/**
+	 * Create columns and rows for table2110 
+	 * @see org.msh.tb.indicators.core.Indicator#createIndicators()
+	 */
 	private void initTable2110() {
 		IndicatorTable table = getTable2110();
 		for (int i = 1; i < 9; i++) {
@@ -75,6 +87,10 @@ public class Report08AZ extends Indicator2D {
 		}
 	}
 	
+	/**
+	 * Create columns and rows for table4000 
+	 * @see org.msh.tb.indicators.core.Indicator#createIndicators()
+	 */
 	private void initTable4000() {
 		IndicatorTable table = getTable4000();
 		for (int i = 1; i < 7; i++) {
@@ -86,6 +102,10 @@ public class Report08AZ extends Indicator2D {
 		}
 	}
 	
+	/**
+	 * Create columns and rows for table2100 
+	 * @see org.msh.tb.indicators.core.Indicator#createIndicators()
+	 */
 	private void initTable2100() {
 		IndicatorTable table = getTable2100();
 		for (int i = 1; i < 30; i++) {
@@ -97,7 +117,7 @@ public class Report08AZ extends Indicator2D {
 		}
 	}
 
-	/* (non-Javadoc)
+	/* 
 	 * @see org.msh.tb.indicators.core.CaseHQLBase#getHQLInfectionSite()
 	 */
 	@Override
@@ -115,10 +135,17 @@ public class Report08AZ extends Indicator2D {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.msh.tb.indicators.core.CaseHQLBase#getHQLValidationState()
+	 */
 	protected String getHQLValidationState() {
 		return "c.validationState = "+ValidationState.VALIDATED.ordinal();
 	}
 
+	
+	/**
+	 * Generate values for all tables
+	 */
 	private void generateTables() {
 		IndicatorTable table = getTable1000();
 		setHQLSelect("select c");
@@ -265,6 +292,9 @@ public class Report08AZ extends Indicator2D {
 		}
 	}
 
+	/**
+	 * Add value to table 2110 in necessary column
+	 */
 	private void addToTable2110(int rowInd,TbCaseAZ tc){
 		int colInd=0;
 		if (tc.getPatientType().equals(PatientType.NEW)){
@@ -284,7 +314,9 @@ public class Report08AZ extends Indicator2D {
 			table2110.addIdValue("col"+colInd, "row"+rowInd, 1F);
 		}
 	}
-	
+	/**
+	 * Return the result of DST-examination for necessary substance 
+	 */
 	private int exDST(String el,TbCase tc){
 		ExamDST ex = rightDSTTest(tc);
 		int res = 0;
@@ -295,6 +327,9 @@ public class Report08AZ extends Indicator2D {
 		return res;
 	}
 	
+	/**
+	 * Add value to table 2100 in necessary column
+	 */
 	private void addToTable2100(int rowInd,TbCaseAZ tc, boolean extra){
 		if (!tc.isReferToOtherTBUnit())
 			if (tc.getAge()<=17)
@@ -308,7 +343,10 @@ public class Report08AZ extends Indicator2D {
 				table2100.addIdValue("col6", "row"+rowInd, 1F);
 			}
 	}
-
+	
+	/**
+	 * Return true, if hiv-result of case is positive
+	 */
 	private boolean posHIVResult(TbCaseAZ tc){
 		for (int i = 0; i < tc.getResHIV().size(); i++) {
 			if (tc.getResHIV().get(i).getResult().equals(HIVResult.POSITIVE))
@@ -316,6 +354,10 @@ public class Report08AZ extends Indicator2D {
 		}
 		return false;
 	}
+	
+	/**
+	 * Return true, if patient was used the art treatment regimen
+	 */
 	private boolean hasART_HIV(TbCaseAZ tc){
 		for (int i = 0; i < tc.getResHIV().size(); i++) {
 			if (tc.getResHIV().get(i).getStartedARTdate()!=null)
@@ -324,6 +366,9 @@ public class Report08AZ extends Indicator2D {
 		return false;
 	}
 	
+	/**
+	 * Add value to table 2120 in necessary column
+	 */
 	private void addToTable2120(int rowInd,TbCaseAZ tc){
 		if (tc.getResHIV().size()!=0){
 			if (tc.getAge()<=17)
@@ -352,7 +397,9 @@ public class Report08AZ extends Indicator2D {
 			}
 		}
 	}
-	
+	/**
+	 * @return the Carvity index from SeverityMarks list of case
+	 */
 	private int indCarvity(TbCaseAZ tc){
 		for (int i = 0; i < tc.getSeverityMarks().size(); i++) {
 			if (tc.getSeverityMarks().get(i).getSeverityMark().getId().intValue() == 939370)
@@ -361,6 +408,9 @@ public class Report08AZ extends Indicator2D {
 		return -1;
 	}
 
+	/**
+	 * @return true, if patient has positive bacterioscopy
+	 */
 	private boolean bkplus(TbCase tc){
 		boolean res = false;
 		if (rightMcTest(tc)!=null)
@@ -374,9 +424,8 @@ public class Report08AZ extends Indicator2D {
 	}
 
 	/**
-	 * @return test, which is up to quality, namely first month of treatment and worst test from several 
+	 * @return microscopy test, which is up to quality, namely first month of treatment and worst test from several 
 	 */
-
 	private ExamMicroscopy rightMcTest(TbCase tc){
 		Calendar dateTest = Calendar.getInstance();
 		Calendar dateIniTreat = Calendar.getInstance();
@@ -408,7 +457,10 @@ public class Report08AZ extends Indicator2D {
 			return WorstMcRes(lst);
 		}
 	}
-
+	
+	/**
+	 * @return culture test, which is up to quality, namely first month of treatment and worst test from several 
+	 */
 	private ExamCulture rightCulTest(TbCase tc){
 		Calendar dateTest = Calendar.getInstance();
 		Calendar dateIniTreat = Calendar.getInstance();
@@ -441,6 +493,9 @@ public class Report08AZ extends Indicator2D {
 		}
 	}
 
+	/**
+	 * @return dst-test, which is up to quality, namely first month of treatment and worst test from several 
+	 */
 	private ExamDST rightDSTTest(TbCase tc){
 		Calendar dateTest = Calendar.getInstance();
 		Calendar dateIniTreat = Calendar.getInstance();
@@ -474,7 +529,7 @@ public class Report08AZ extends Indicator2D {
 	}
 	
 	/**
-	 * @return worst DST-test from several 
+	 * @return worst microscopy-test from several 
 	 */
 	private ExamMicroscopy WorstMcRes(List<ExamMicroscopy> lst) {
 		int tmp = 0;
@@ -493,7 +548,10 @@ public class Report08AZ extends Indicator2D {
 		}
 		return minEl;
 	}
-
+	
+	/**
+	 * @return worst culture-test from several 
+	 */
 	private ExamCulture WorstCulRes(List<ExamCulture> lst) {
 		int tmp = 0;
 		int max = Integer.MIN_VALUE;
@@ -512,6 +570,9 @@ public class Report08AZ extends Indicator2D {
 		return minEl;
 	}
 
+	/**
+	 * @return worst DST-test from several 
+	 */
 	private ExamDST WorstDSTRes(List<ExamDST> lst) {
 		int tmp = 0;
 		int max = Integer.MIN_VALUE;
@@ -530,6 +591,9 @@ public class Report08AZ extends Indicator2D {
 		return minEl;
 	}
 	
+	/**
+	 * @return ind column of necessary age range in table 1000  
+	 */
 	private int idAgeRange(int age){
 		int res = 0;
 		for (int i = 1; i < ar.length; i++) {
@@ -541,6 +605,10 @@ public class Report08AZ extends Indicator2D {
 		return res+2;
 	}
 
+	/**
+	 * Create columns and rows for table1000 
+	 * @see org.msh.tb.indicators.core.Indicator#createIndicators()
+	 */
 	private void initTable1000() {
 		IndicatorTable table = getTable1000();
 		for (int i = 1; i < 75; i++) {
