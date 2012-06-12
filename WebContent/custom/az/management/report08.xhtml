@@ -54,7 +54,7 @@
 		</tr>
 		</ui:remove>
 		<tr>
-			<th colspan="3" rowspan="3" >
+			<th colspan="2" rowspan="3" >
 				#{messages['manag.form8.table1000.name']}
 			</th>
 			<th rowspan="3">
@@ -89,7 +89,7 @@
 		</a:repeat>
 		</tr>
 		<tr>
-			<th colspan="3">
+			<th colspan="2">
 				A
 			</th>
 			<th>
@@ -113,29 +113,40 @@
 		
 		<tr>
 			<s:fragment rendered="#{row.title%2!=0}">
-				
-				<s:fragment rendered="#{((row.title gt 4) and (row.title lt 23)) or ((row.title gt 26) and (row.title lt 45)) or ((row.title gt 48) and (row.title lt 73))}">
+				<s:fragment rendered="#{row.title==1 or row.title==3 or row.title==23 or row.title==25 or row.title==45 or row.title==47 or row.title==73}">
+					<th rowspan="2" colspan="2">
+						<h:outputText value="#{messages['manag.form8.table1000.rowheader1']}" rendered="#{row.title==1}"/>
+						<h:outputText value="#{messages['manag.form8.table1000.rowheader2']}" rendered="#{row.title==3}"/>
+						<h:outputText value="#{messages['manag.form8.table1000.rowheader3']}" rendered="#{row.title==23}"/>
+						<h:outputText value="#{messages['manag.form8.table1000.rowheader4']}" rendered="#{row.title==25}"/>
+						<h:outputText value="#{messages['manag.form8.table1000.rowheader5']}" rendered="#{row.title==45}"/>
+						<h:outputText value="#{messages['manag.form8.table1000.rowheader6']}" rendered="#{row.title==47}"/>
+						<h:outputText value="#{messages['manag.form8.table1000.rowheader7']}" rendered="#{row.title==73}"/>
+					</th>
+					<th rowspan="2">
+						<h:outputText value="#{messages['manag.form8.mkb.head1']}" rendered="#{row.title==1}"/>
+						<h:outputText value="#{messages['manag.form8.mkb.head2']}" rendered="#{row.title==3}"/>
+						<h:outputText value="#{messages['manag.form8.mkb.head3']}" rendered="#{row.title==25}"/>
+						<h:outputText value="#{messages['manag.form8.mkb.head4']}" rendered="#{row.title==47}"/>
+					</th>
+				</s:fragment>
+				<s:fragment rendered="#{!(row.title==1 or row.title==3 or row.title==23 or row.title==25 or row.title==45 or row.title==47 or row.title==73)}">
 					<td rowspan="2">
 				
 					</td>
+					<td rowspan="2">
+						<h:outputText value="#{indicator.getIterateMessage('manag.form8.pulm',(row.title+1)/2-2)}" rendered="#{((row.title gt 4) and (row.title lt 23))}"/>
+						<h:outputText value="#{indicator.getIterateMessage('manag.form8.pulm',(row.title+1)/2-13)}" rendered="#{((row.title gt 26) and (row.title lt 45))}"/>
+						<h:outputText value="#{indicator.getIterateMessage('manag.form8.extrapulm',(row.title+1)/2-24)}" rendered="#{((row.title gt 48) and (row.title lt 73))}"/>
+					</td>
+					<th rowspan="2">
+						<h:outputText value="#{indicator.getIterateMessage('manag.form8.mkb.pulm',(row.title+1)/2-2)}" rendered="#{((row.title gt 4) and (row.title lt 23))}"/>
+						<h:outputText value="#{indicator.getIterateMessage('manag.form8.mkb.pulm.plus',(row.title+1)/2-13)}" rendered="#{((row.title gt 26) and (row.title lt 45))}"/>
+						<h:outputText value="#{indicator.getIterateMessage('manag.form8.mkb.extrapulm',(row.title+1)/2-24)}" rendered="#{((row.title gt 48) and (row.title lt 71))}"/>
+					</th>					
 				</s:fragment>
-			<s:fragment rendered="#{((row.title gt 4) and (row.title lt 23)) or ((row.title gt 26) and (row.title lt 45)) or ((row.title gt 48) and (row.title lt 73))}">
-			<td colspan="2" rowspan="2">
-				#{indicator.nameRows.get((row.title+1)/2-1)}
-			</td>
 			</s:fragment>
-			
-			<s:fragment rendered="#{!(((row.title gt 4) and (row.title lt 23)) or ((row.title gt 26) and (row.title lt 45)) or ((row.title gt 48) and (row.title lt 73)))}">
-			<th colspan="3" rowspan="2">
-				#{indicator.nameRows.get((row.title+1)/2-1)}
-			</th>
-			</s:fragment>
-			
-			<th rowspan="2">
-				#{indicator.nameMKB.get((row.title+1)/2-1)}
-			</th>
-			</s:fragment>
-			
+				
 			<th>
 				<h:outputText value="#{messages['ShortGender.m']}" rendered="#{row.title%2!=0}"/>
 				<h:outputText value="#{messages['ShortGender.f']}" rendered="#{row.title%2==0}"/>
@@ -249,31 +260,45 @@
 				
 				</td>
 				<td>
-					<h:outputText value="#{indicator.getIterateMessage('manag.form8.pulm',(row.title-2))}" rendered="#{((row.title gt 2) and (row.title lt 12))}"/>
-					<h:outputText value="#{indicator.getIterateMessage('manag.form8.extrapulm',(row.title-14))}" rendered="#{((row.title gt 14) and (row.title lt 27))}"/>
+					<h:outputText value="#{messages['manag.form8.pulm'.concat(row.title-2)]}" rendered="#{((row.title gt 2) and (row.title lt 12))}"/>
+					<h:outputText value="#{messages['manag.form8.extrapulm'.concat(row.title-14)]}" rendered="#{((row.title gt 14) and (row.title lt 27))}"/>
 				</td>
 				<th>
-					<h:outputText value="#{indicator.getIterateMessage('manag.form8.mkb.pulm',(row.title-2))}" rendered="#{((row.title gt 2) and (row.title lt 12))}"/>
-					<h:outputText value="#{indicator.getIterateMessage('manag.form8.mkb.extrapulm',(row.title-14))}" rendered="#{((row.title gt 14) and (row.title lt 26))}"/>
+					<h:outputText value="#{messages['manag.form8.mkb.pulm'.concat(row.title-2)]}" rendered="#{((row.title gt 2) and (row.title lt 12))}"/>
+					<h:outputText value="#{messages['manag.form8.mkb.extrapulm'.concat(row.title-14)]}" rendered="#{((row.title gt 14) and (row.title lt 26))}"/>
 				</th>
 			</s:fragment>
 			
 			<ui:repeat value="#{row.cells}" var="val">
-				<s:fragment rendered="#{row.title!=27}">
+				<s:fragment rendered="#{row.title lt 27}">
 					<td class="colcb">
 						<h:outputText value="#{val.value}" >
 							<f:convertNumber pattern="#,###,##0"/>
 						</h:outputText>
 					</td>
 				</s:fragment>
-				<s:fragment rendered="#{(row.title==27) and (col.title%2!=0)}">
+			</ui:repeat>
+			
+			<s:fragment rendered="#{row.title==27}">
+				<c:forEach begin="1" end="4" var="i">
 					<td class="colcb" colspan="2">
+						<h:outputText value="#{indicator.table2100.getCellAsFloat('col'.concat(i*2), 'row27')}" >
+							<f:convertNumber pattern="#,###,##0"/>
+						</h:outputText>
+					</td>
+				</c:forEach>
+			</s:fragment>
+			
+			<ui:repeat value="#{row.cells}" var="val">
+				<s:fragment rendered="#{row.title gt 27}">
+					<td class="colcb">
 						<h:outputText value="#{val.value}" >
 							<f:convertNumber pattern="#,###,##0"/>
 						</h:outputText>
 					</td>
 				</s:fragment>
 			</ui:repeat>
+			
 		</tr>
 		</ui:repeat>
 		
@@ -478,6 +503,24 @@
 		
 	</table>
 	
+<h2>#{messages['manag.form8.table3000']} #{messages['manag.form8.table1000.all']} #{indicator.mas3000[0]},</h2>
+#{messages['including']} 
+#{messages['manag.form8.table3000.cured']} #{indicator.mas3000[1]}, 
+#{messages['manag.form8.table3000.completed']} #{indicator.mas3000[2]}, 
+#{messages['manag.form8.table3000.died']} #{indicator.mas3000[3]}, 
+#{messages['manag.form8.table3000.fail']} #{indicator.mas3000[4]}, 
+#{messages['manag.form8.table3000.default']} #{indicator.mas3000[5]}, 
+#{messages['manag.form8.table3000.transfer']} #{indicator.mas3000[6]}.
+
+<h2>#{messages['manag.form8.table3001']} #{messages['manag.form8.table1000.all']} #{indicator.mas3001[0]},</h2>
+#{messages['including']} 
+#{messages['manag.form8.table3000.cured']} #{indicator.mas3001[1]}, 
+#{messages['manag.form8.table3000.completed']} #{indicator.mas3001[2]}, 
+#{messages['manag.form8.table3000.died']} #{indicator.mas3001[3]}, 
+#{messages['manag.form8.table3000.fail']} #{indicator.mas3001[4]}, 
+#{messages['manag.form8.table3000.default']} #{indicator.mas3001[5]}, 
+#{messages['manag.form8.table3000.transfer']} #{indicator.mas3001[6]}.
+
 
 	</s:fragment>
 
