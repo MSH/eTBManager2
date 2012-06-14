@@ -1,9 +1,12 @@
 package org.msh.tb.ua;
 
- import java.util.List;
+ import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.adminunits.InfoCountryLevels;
+import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.export.CaseExport;
 import org.msh.tb.export.ExcelCreator;
@@ -131,6 +134,9 @@ public class CaseExportUA extends CaseExport {
 		excel.addTextFromResource("uk_UA.migrant", "title");
 		excel.addTextFromResource("uk_UA.refugee", "title");
 		excel.addTextFromResource("uk_UA.prisioner", "title");
+		excel.addTextFromResource("cases.exams.date", "title");
+		excel.addTextFromResource("TbCase.outcomeDate", "title");
+		
 	}
 
 
@@ -214,7 +220,64 @@ public class CaseExportUA extends CaseExport {
 		excel.addValue(translateYesNo( data.isMigrant() ));
 		excel.addValue(translateYesNo( data.isRefugee() ));
 		excel.addValue(translateYesNo( data.isPrisioner() ));
+		excel.addDate(rightDSTTest(tbcase).getDateCollected());
+		excel.addDate(rightDSTTest(tbcase).getDateRelease());
 		return tbcase;
+	}
+
+	
+	/**
+	 * @return DST-test, which is up to quality, namely first month of treatment and worst test from several 
+	*/
+	
+	private ExamDST rightDSTTest(TbCase tc){
+		Calendar dateTest = Calendar.getInstance();
+		Calendar dateIniTreat = Calendar.getInstance();
+		int res=0;
+		ArrayList<ExamDST> lst = new ArrayList<ExamDST>();
+		for (ExamDST ex: tc.getExamsDST()){
+			dateTest.setTime(ex.getDateCollected());
+			if (tc.getTreatmentPeriod()!=null)
+				dateIniTreat.setTime(tc.getTreatmentPeriod().getIniDate());
+			else
+				dateIniTreat.setTime(tc.getDiagnosisDate());
+			long testperiod = dateTest.getTimeInMillis()-dateIniTreat.getTimeInMillis();
+			testperiod/=86400000;
+			
+			if (testperiod<=30) {
+				res++;
+				lst.add(ex);
+			}	
+		}
+		
+		switch (lst.size()) {
+		case 0: 
+			return new ExamDST();
+		case 1: 
+			return lst.get(0);
+		default:
+			return WorstRes(lst);
+		}
+	}
+	/**
+	 * @return worst DST-test from several 
+	*/
+	private ExamDST WorstRes(List<ExamDST> lst) {
+		int tmp = 0;
+		int max = Integer.MIN_VALUE;
+		ExamDST minEl = null;
+		for (ExamDST el:lst){
+			tmp = 0;
+			tmp = el.getNumResistant();
+			/*for (ExamDSTResult exr: el.getResults()){
+				tmp += (exr.getResult().ordinal()==0 ? 4 : exr.getResult().ordinal());
+			}*/
+			if (tmp > max) {
+				max = tmp; 
+				minEl=el;
+				}
+		}
+		return minEl;
 	}
 
 
