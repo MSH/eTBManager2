@@ -273,7 +273,7 @@ public class ReportTB11 extends Indicator2D {
 					break;}
 			//DST-tests without summary fields
 				case 6:case 9:case 10:case 11:case 12:case 14:case 19:case 20:case 23:case 24:case 26:case 15:case 16:case 21:case 25:case 17:{
-					ExamDST ex = rightTest(tc);
+					ExamDST ex = rightDSTTest(tc);
 					if (ex != null){
 						for (ExamDSTResult exr: ex.getResults()) 
 						{
@@ -420,7 +420,7 @@ public class ReportTB11 extends Indicator2D {
 	 * @return DST-test, which is up to quality, namely first month of treatment and worst test from several 
 	*/
 	
-	private ExamDST rightTest(TbCase tc){
+	public ExamDST rightDSTTest(TbCase tc){
 		Calendar dateTest = Calendar.getInstance();
 		Calendar dateIniTreat = Calendar.getInstance();
 		int res=0;
