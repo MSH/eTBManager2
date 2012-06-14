@@ -398,7 +398,9 @@ public class CaseDataBRHome {
 		}
 		
 		// check diagnosis date and the treatment initiation date
-		if (tbcase.getTreatmentPeriod().getIniDate() != null && tbcase.getDiagnosisDate().after(tbcase.getTreatmentPeriod().getIniDate())) {
+		if (tbcase.getRegistrationDate()!=null
+				&& tbcase.getDiagnosisDate()!=null &&
+				tbcase.getTreatmentPeriod().getIniDate() != null && tbcase.getDiagnosisDate().after(tbcase.getTreatmentPeriod().getIniDate())) {
 			facesMessages.addToControlFromResourceBundle("diagdateedt", "cases.treat.inidatemsg");
 			res = false;
 		}
