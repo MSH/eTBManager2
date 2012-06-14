@@ -81,7 +81,7 @@ function agetodob(id) {
 	
 	var dobyr = year - age;
 	
-	if(mon<6){
+	if(mon<=6){
 	var strdob = "01"+"/"+"01"+"/"+dobyr;	
 		}
 		
