@@ -282,7 +282,7 @@
 			<s:fragment rendered="#{row.title==27}">
 				<c:forEach begin="1" end="4" var="i">
 					<td class="colcb" colspan="2">
-						<h:outputText value="#{indicator.table2100.getCellAsFloat('col'.concat(i*2), 'row27')}" >
+						<h:outputText value="#{indicator.table2100.getCellAsFloat('col'.concat((i-1)*2+1), 'row27')+indicator.table2100.getCellAsFloat('col'.concat(i*2), 'row27')}" >
 							<f:convertNumber pattern="#,###,##0"/>
 						</h:outputText>
 					</td>
