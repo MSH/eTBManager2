@@ -452,8 +452,8 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 				item.setPatientRecordNumber((Integer)obj[3]);
 				item.setCaseNumber((Integer)obj[4]);				
 			}
-			if(obj.length>18)  // AK prevent index out of bound, if diagnosis type not asks by subclass
-				item.setDiagnosisType((DiagnosisType)obj[18]);
+			
+			item.setDiagnosisType((DiagnosisType)obj[18]);
 
 			// search for administrative unit
 			AdministrativeUnit adm = null;
