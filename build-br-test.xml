@@ -142,6 +142,9 @@
 				<exclude name="login.page.xml"/>
 				<exclude name="WebContent/custom/br/login.xhtml" />
 				<exclude name="WebContent/custom/br/login.page.xml" />
+				<exclude name="WebContent/themes/blue/images/logo.png" />
+				<exclude name="WebContent/themes/green2/images/logo.png" />
+				<exclude name="WebContent/themes/gray/images/logo.png" />
 			</fileset>
 			
 			<fileset dir="WebContent">
@@ -155,6 +158,9 @@
 			</classes>
 
 			<zipfileset file="production/br/logo.png" fullpath="public/themes/green2/images/logo.png" />
+			<zipfileset file="production/br/themes/blue/logo.png" fullpath="public/themes/blue/images/logo.png" />
+			<zipfileset file="production/br/themes/gray/logo.png" fullpath="public/themes/gray/images/logo.png" />
+
 			<zipfileset file="WebContent/custom/br/login.xhtml" fullpath="login.xhtml" />
 			<zipfileset file="WebContent/custom/br/login.page.xml" fullpath="login.page.xml" />
 			<zipfileset file="src/model/messages_pt_BR.properties" fullpath="WEB-INF/classes/messages_pt_BR.properties" />
