@@ -1,14 +1,17 @@
 package org.msh.tb.az.eidss;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.transaction.UserTransaction;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
@@ -20,7 +23,7 @@ import org.msh.tb.entities.enums.ValidationState;
  * Import cases from case DTO list. Fully independent from specific EIDSS web services, so, from data structures
  */
 public  class CaseImporting {
-	private static final int workspaceID = 8;
+	private static final Integer workspaceID = 8;
 	private boolean newCase;
 
 	private TbCaseAZ tbcase;
@@ -33,53 +36,118 @@ public  class CaseImporting {
 	private List<String> errors = new ArrayList<String>();
 	private EntityManager entityManager;
 	ArrayList<CaseInfo> caseInfo;
+	private UserTransaction transaction;
 
-	/*
-	 * add records from list to etb
-	 */
 
-	public boolean importRecords(List<CaseInfo> cases){
+public void CaseImporting(){
+	entityManager = (EntityManager)Component.getInstance("entityManager");
+	errorOnCurrentImport=true;
+}
+/*
+ * add records from list to etb
+ */	
+public boolean importRecords(CaseInfo oneCase){
+
+	if (entityManager==null){
 		entityManager = (EntityManager)Component.getInstance("entityManager");
+	}
+	List<TbCase> result=isCaseExist(oneCase);
+	if (result.size()==0){
+		errorOnCurrentImport=WriteCase(oneCase);
+	} else {
+		errorOnCurrentImport=UpdateCase(oneCase);
+	}
 
-		Iterator<CaseInfo> it=cases.iterator();
-		while (it.hasNext()){
-			CaseInfo oneCase=it.next();
-			Patient p = new Patient();
-			p.setLastName(oneCase.getLastName());
-			p.setName(oneCase.getFirstName());
-			p.setMiddleName(oneCase.getMiddleName());
-			p.setBirthDate(oneCase.getDateOfBirth());
-			p.setWorkspace(getWorkspace());
-			p.setGender(Gender.MALE); //TODO change
-			TbCaseAZ tbcase = new TbCaseAZ();
-			tbcase.setClassification(CaseClassification.TB); //TODO change
-			tbcase.setLegacyId(oneCase.getCaseID());
-			tbcase.setDiagnosisDate(oneCase.getFinalDiagnosisDate());
-			tbcase.setRegistrationDate(oneCase.getFinalDiagnosisDate());
-			tbcase.setDiagnosisType(DiagnosisType.CONFIRMED); //TODO change
-			tbcase.setValidationState(ValidationState.WAITING_VALIDATION); //TODO check IT
-			tbcase.setPatient(p);
-			tbcase.setAge(50);//mandatory, true value will be calculated automaticaly 
-			tbcase.setState(CaseState.DEFAULTED);
-			tbcase.setNotifAddressChanged(false);
-			tbcase.setEIDSSComment(oneCase.getAdditionalComment());
-			entityManager.persist(p);
-			entityManager.persist(tbcase);
-			entityManager.flush();
+
+
+return errorOnCurrentImport;
+
+}
+
+private boolean UpdateCase(CaseInfo oneCase) {
+	return errorOnCurrentImport;
+	
+}
+private List<TbCase> isCaseExist(CaseInfo oneCase) {
+	List<TbCase> result=new ArrayList<TbCase>();
+	if (entityManager==null){
+		entityManager = (EntityManager)Component.getInstance("entityManager");
+	}
+	try {
+		List<TbCase> lstcases = entityManager.createQuery(" from TbCase c " +
+				"join fetch c.patient p " 
+				+" where c.legacyId = :id "
+				+ " and c.registrationDate= :rd "
+				+" and p.lastName = :ln " 
+				+" and p.middleName = :mn " 
+				//+ "and p.workspace.id = " + s)
+				+ " and p.workspace.id = " + workspaceID.toString())
+				.setParameter("id", oneCase.getCaseID())
+				.setParameter("ln", oneCase.getLastName())
+				.setParameter("mn", oneCase.getMiddleName())
+				.setParameter("rd", oneCase.getFinalDiagnosisDate())
+				.getResultList();
+		if (lstcases.size() != 0) {
+			Iterator <TbCase> it= lstcases.iterator();
+			TbCase etbInfo =it.next();
+			if (etbInfo.getPatient().getBirthDate().getYear()==oneCase.getDateOfBirth().getYear() && etbInfo.getPatient().getName()==oneCase.getFirstName()){
+				result.add(etbInfo);
+			}
+
 		}
-		errorOnCurrentImport=true;
-		return errorOnCurrentImport;
+
+	} catch (Exception e) {
 
 	}
+	return result;
+}
+public boolean WriteCase(CaseInfo oneCase){
+	
+	errorOnCurrentImport=true;
+	Patient p = new Patient();
+	p.setLastName(oneCase.getLastName());
+	p.setName(oneCase.getFirstName());
+	p.setMiddleName(oneCase.getMiddleName());
+	p.setBirthDate(oneCase.getDateOfBirth());
+	p.setWorkspace(getWorkspace());
+	
+	if (oneCase.getPatientGender()!="10043001"){
+		p.setGender(Gender.MALE); 
+	} else {
+		p.setGender(Gender.FEMALE);
+	}
+	TbCaseAZ tbcase = new TbCaseAZ();
+	tbcase.setClassification(CaseClassification.TB); //TODO change
+	tbcase.setLegacyId(oneCase.getCaseID());
+	tbcase.setDiagnosisDate(oneCase.getFinalDiagnosisDate());
+	tbcase.setRegistrationDate(oneCase.getFinalDiagnosisDate());
+	tbcase.setDiagnosisType(DiagnosisType.CONFIRMED); //TODO change
+	tbcase.setValidationState(ValidationState.WAITING_VALIDATION); 
+	tbcase.setPatient(p);
+	tbcase.setAge(50);//mandatory, true value will be calculated automatically 
+	tbcase.setState(CaseState.WAITING_TREATMENT);
+	tbcase.setNotifAddressChanged(true);
+	tbcase.setEIDSSComment(oneCase.getAdditionalComment());
+	beginTransaction();
+	entityManager.persist(p);
+	entityManager.persist(tbcase);
+	entityManager.flush();
+	commitTransaction();
+	return errorOnCurrentImport;
+	
+}
 	public List<String> CheckIfExistInEtb(List<String> allCases){
+		entityManager = (EntityManager)Component.getInstance("entityManager");
+
 		List<String> resCases=new ArrayList<String>();
 		Iterator<String> it= allCases.iterator();
 		while (it.hasNext()){
 			String legacy=it.next();
 			try {
 				List<TbCaseAZ> lstcases = entityManager.createQuery("from TbCase c " +
+						"join fetch c.patient p " +
 						"where c.legacyId = :id " +
-						"and p.workspace.id = " + getWorkspace().getId().toString())
+						"and p.workspace.id = " + workspaceID.toString())
 						.setParameter("id", legacy)
 						.getResultList();
 
@@ -94,13 +162,14 @@ public  class CaseImporting {
 
 	}
 	
-public boolean isNewCase() {
+	
+	public boolean isNewCase() {
 		return newCase;
 	}
 
-	public TbCaseAZ getTbcase() {
-		return tbcase;
-	}
+	//public TbCaseAZ getTbcase() {
+	//	return tbcase;
+	//}
 
 
 
@@ -119,28 +188,35 @@ public boolean isNewCase() {
 
 	protected EntityManager getEntityManager() {
 		return (EntityManager)Component.getInstance("entityManager");
-	}
-	public boolean isErrorOnCurrentImport() {
-		return errorOnCurrentImport;
-	}
+	 }
+
 	
-	
-	public int getImportedRecords() {
-		return importedRecords;
+	public void beginTransaction() {
+		try {
+			getTransaction().begin();
+			getEntityManager().joinTransaction();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
-	public int getNewRecords() {
-		return newRecords;
+	/**
+	 * Commit a transaction that is under progress 
+	 */
+	public void commitTransaction() {
+		try {
+			getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+	protected UserTransaction getTransaction() {
+		if (transaction == null)
+			transaction = (UserTransaction)Component.getInstance("org.jboss.seam.transaction.transaction");
+		return transaction;
 	}
 
-	/**
-	 * @return the errorsRecords
-	 */
-	public int getErrorsRecords() {
-		return errorsRecords;
-	}
-	public List<String> getErrors() {
-		return errors;
-	}
 
 
 

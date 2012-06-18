@@ -9,7 +9,7 @@ public class CaseInfo {
     private String firstName;
     private String middleName;
     private String lastName;
-    private int patientGender;
+    private String patientGender;
    private int caseStatus;
    private Date DateOfBirth;
    private String AdditionalComment;
@@ -43,10 +43,10 @@ public String getLastName() {
 public void setLastName(String lastName) {
 	this.lastName = lastName;
 }
-public int getPatientGender() {
+public String getPatientGender() {
 	return patientGender;
 }
-public void setPatientGender(int patientGender) {
+public void setPatientGender(String patientGender) {
 	this.patientGender = patientGender;
 }
 public int getCaseStatus() {

@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
@@ -28,6 +29,7 @@ import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.LocaleDateConverter;
 
+import com.bv.eidss.AddressInfo;
 import com.bv.eidss.ArrayOfHumanCaseListInfo;
 import com.bv.eidss.HumanCaseInfo;
 import com.bv.eidss.HumanCaseListInfo;
@@ -40,7 +42,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 
 	EidssIntHome eidssIntHome;
 	@In TaskManager taskManager;
-	List<String> cases;
+	
 	List<CaseInfo> infoForExport=new ArrayList<CaseInfo>();
 	CaseImporting ci;
 	private EidssIntConfig config;
@@ -50,7 +52,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	private Loader loader;
 	private static long beginMills;
 	private List<String> caseIds = new ArrayList<String>();
-
+	private List<String> caseIdsClean = new ArrayList<String>();
 
 	@Override
 	protected void starting() {
@@ -84,6 +86,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	 */
 	@Override
 	public void execute() {	
+	 ci=new CaseImporting();
 		setStateMessage("eidss.import.setting.environment");
 		config = (EidssIntConfig)getParameter("config");
 		if (config != null ){
@@ -92,15 +95,20 @@ public class EidssTaskImport extends AsyncTaskImpl {
 					addLog("INFO login to EIDSS successfull");
 					boolean success =loadCasesList();
 					sayAboutLoad(success);
-					if((caseIds.size()>0) && notCanceled()){
+					caseIdsClean=ci.CheckIfExistInEtb(caseIds);
+					sayAboutCheckList();
+					if((caseIdsClean.size()>0) && notCanceled()){
 						addLog("INFO begin load full cases");
-						Iterator<String> it = caseIds.iterator();
+						Iterator<String> it = caseIdsClean.iterator();
 						while (it.hasNext()){
 							String caseId = it.next();
-							setStateMessage("load case " + caseIds.indexOf(caseId) + " total to load " + caseIds.size());
-							loadCaseById(it.next());
+							//setStateMessage("load case " + caseIdsClean.indexOf(caseId) + " total to load " + caseIdsClean.size());
+							
+							loadCaseById(caseId);
 						}
 						if ((infoForExport.size()> 0) && notCanceled()){
+							addLog("INFO begin write cases");
+							
 							exportToDB();
 						}
 					}
@@ -116,8 +124,18 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	 * Export cases to eTBManager
 	 */
 	private void exportToDB() {
-		// TODO Auto-generated method stub
-		
+		Integer i=0;
+		String log="";
+		Iterator<CaseInfo> it=infoForExport.iterator();
+		while (it.hasNext()){
+			CaseInfo c = it.next();
+			if (ci.importRecords(c)){
+				i=i+1;
+				log=log+" "+c.getLastName();
+			}else
+				addLog("Error writing  "+c.getLastName());
+		}
+		addLog(i.toString()+ " cases writed successfully: "+log);
 	}
 
 
@@ -154,8 +172,11 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		}
 		addLog(mess);
 	}
-
-
+	private void sayAboutCheckList(){
+		String mess = "";
+		mess = "not found in etb " + caseIdsClean.size() + " cases ";
+		addLog(mess);
+	}
 
 	@Override
 	public void cancel(){
@@ -306,27 +327,117 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	 * @param id case ID
 	 */
 	public void loadCaseById(String id) {
+	
 		if (notCanceled()){
 			HumanCaseInfo info = getLoader().getFullCase(id);
 			if (info != null){
-				addCase(info);
+				if (suitable(info,config.getCaseStates(),"")) {
+					addCase(info);
+				}
 			}else{
 				addLog("ERROR " + getLoader().getErrorMessage());
 			}
 		}
 	}
+	
+	/* 
+	 * is case suitable for export to etb
+	 */
+	
+	private static boolean suitable(HumanCaseInfo cI,String patStateName, String caseStateName) {
+		   //alive 10035002
+			if (cI.getPatientState()!=null){
+				if (!cI.getPatientState().getId().toString().equalsIgnoreCase(patStateName)) {
+					return false;
+				}
+			}
+			/*
+			//Refused
+			if (cI.getCaseClassification()!=null){
+				if (cI.getCaseClassification().getName().equalsIgnoreCase(caseStateName)) {
+					return false;
+				}
+			}
+			*/
+			return true;
+		}
 	/**
 	 * Convert case info to CaseInfo DTO and add this DTO to the result list
 	 * Convert only info in allowed by config states
 	 * @param info case info from the web service
 	 */
-	private void addCase(HumanCaseInfo info) {
-		// TODO Auto-generated method stub
-
+	private void addCase(HumanCaseInfo EIDSSData) {
+		CaseInfo onecase=new CaseInfo();
+		String firstName = EIDSSData.getFirstName();
+		String lastName = EIDSSData.getLastName();
+		String fatherName="";
+		if (EIDSSData.getMiddleName()!=null) fatherName = EIDSSData.getMiddleName();
+		onecase.setLastName(lastName);
+		onecase.setFirstName(firstName);
+		onecase.setMiddleName(fatherName);
+		if (EIDSSData.getPatientGender()==null){
+			onecase.setPatientGender("1");
+		} else {
+		onecase.setPatientGender(EIDSSData.getPatientGender().getId().toString());
+		}
+		if (EIDSSData.getDateOfBirth()!=null){
+		onecase.setDateOfBirth(ConvertToDate(EIDSSData.getDateOfBirth()));
+		}else{
+			onecase.setDateOfBirth(CalcDateOfBirth(EIDSSData.getTentativeDiagnosisDate(),EIDSSData.getPatientAge(),EIDSSData.getPatientAgeType().getId().toString()));
+		}
+		AddressInfo addr=EIDSSData.getCurrentResidence();
+		onecase.setFinalDiagnosisDate(ConvertToDate(EIDSSData.getTentativeDiagnosisDate()));
+		String country="";
+		if (addr.getCountry()!=null)country=addr.getCountry().getName()+", ";
+		String region="";
+		if (addr.getRegion()!=null)region=addr.getRegion().getName()+", ";
+		String settlement="";
+		if (addr.getSettlement()!=null)settlement=addr.getSettlement().getName()+", ";
+		String rayon="";
+		if (addr.getRayon()!=null)rayon=addr.getRayon().getName()+", ";
+		String addInfo=country+region+settlement+rayon;
+		if 	(addr.getStreet()!=null)
+		addInfo=addInfo+addr.getStreet();
+		onecase.setAdditionalComment(addInfo);	
+		onecase.setCaseID(EIDSSData.getCaseID().toString());	
+		infoForExport.add(onecase);
 	}
+	
+	private Date ConvertToDate(XMLGregorianCalendar param){
 
+		Date tmpDate =new Date();
+	int d=1;
+	int m=0;
+	int y=1;
+	if ( param!=null) {
+		param.getDay();
+		m=param.getMonth();
+		y=param.getYear();
+		tmpDate.setDate(d);
+		tmpDate.setMonth(m-1);
+		tmpDate.setYear(y-1900);
+	}
+	return tmpDate;
 
+}
+	private Date CalcDateOfBirth(XMLGregorianCalendar regDate1,int age, String ageType){
+		String Days = "10042001";
+		String Month = "10042002";
+		String Years = "10042003";
+		Calendar regDate=regDate1.toGregorianCalendar();
+		if (ageType.equalsIgnoreCase(Years)){
+			regDate.add(Calendar.YEAR,-age);
 
+		}
+		if (ageType.equalsIgnoreCase(Month)){
+			regDate.add(Calendar.MONTH,-age);
+		}
+		if (ageType.equalsIgnoreCase(Days)){
+			regDate.set(Calendar.DAY_OF_MONTH,-age);
+		}
+	
+		return regDate.getTime();
+	}
 	/**
 	 * If any real import occurred - rollback by delete imported cases
 	 * @return 
