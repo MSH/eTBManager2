@@ -25,7 +25,7 @@
 </s:decorate>
 
 <s:decorate template="/layout/display.xhtml" rendered="#{userWorkspace.healthSystem == null}">
-	<ui:define name="label">#{messages['HealthSystem']}</ui:define>
+	<ui:define name="label">#{messages['HealthSystem']}:</ui:define>
 	<h:selectOneMenu value="#{unitspg.healthSystem}">
 		<s:selectItems var="it" value="#{healthSystems}" noSelectionLabel="-" label="#{it.name}" />
 		<s:convertEntity />

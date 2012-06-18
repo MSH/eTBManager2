@@ -47,7 +47,7 @@
 				onclick="document.location.href='#{request.contextPath}/others/changepassword.seam'" />
 			<rich:menuItem value="#{messages['main.seltheme']}" submitMode="none" 
 				onclick="document.location.href='#{request.contextPath}/others/seltheme.seam'" />
-			<rich:menuItem value="#{messages['form.exit']}" action="#{authenticator.logout}" submitMode="server"/>
+			<rich:menuItem value="#{messages['form.exit']}" action="#{authenticator.logout}" submitMode="server" ajaxSingle="true"/>
 			<rich:menuSeparator />
 			<rich:menuItem value="#{messages['User.language']}" submitMode="none" disabled="true"/>
 			<rich:menuSeparator />
