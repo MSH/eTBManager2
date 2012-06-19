@@ -17,6 +17,12 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 
+/**
+ * Handle conversion from URI page address to custom workspace pages. It also contains the factory to "wspage" component, which
+ * converts URI to custom workspace pages
+ * @author Ricardo Memoria
+ *
+ */
 @Name("workspaceUriRewrite")
 @Scope(ScopeType.APPLICATION)
 @BypassInterceptors
@@ -69,6 +75,10 @@ public class WorkspaceUriRewrite {
 	}
 
 	
+	/**
+	 * Return the workspace extension in use
+	 * @return
+	 */
 	public String getWorkspaceExtension() {
 		return (String)Component.getInstance("workspaceExtension");
 	}

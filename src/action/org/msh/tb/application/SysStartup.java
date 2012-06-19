@@ -14,6 +14,8 @@ public class SysStartup {
 	
 	@Observer("org.jboss.seam.postInitialization")
 	public void initTimerChecking() {
+		EtbmanagerApp.instance().initializeInstance();
+		
 		System.out.println("Initializing shedulled tasks...");
 		
 		Calendar c = Calendar.getInstance();

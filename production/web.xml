@@ -21,6 +21,10 @@
         <url-pattern>*.seam</url-pattern>
     </filter-mapping>
 
+	<context-param>
+		<param-name>etbmanager.DEVELOPMENT</param-name>
+		<param-value>false</param-value>
+	</context-param>
 
     <!-- Ajax4jsf -->
     

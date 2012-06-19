@@ -4,15 +4,18 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
-import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.jboss.seam.contexts.ServletLifecycle;
+import org.jboss.seam.log.Log;
+import org.jboss.seam.log.Logging;
 import org.msh.tb.entities.SystemConfig;
 
 /**
@@ -23,6 +26,7 @@ import org.msh.tb.entities.SystemConfig;
 @Name("etbmanagerApp")
 @Scope(ScopeType.APPLICATION)
 @BypassInterceptors
+@AutoCreate
 public class EtbmanagerApp {
 
 	/**
@@ -74,6 +78,29 @@ public class EtbmanagerApp {
 	 * Check if version information was loaded
 	 */
 	private boolean versionInfoLoaded = false;
+	
+	// check if eTB Manager is running in development mode
+	private boolean developmentMode;
+
+
+	/**
+	 * Initialize instance of the application object
+	 */
+	public void initializeInstance() {
+		String value = ServletLifecycle.getServletContext().getInitParameter("etbmanager.DEVELOPMENT");
+		developmentMode = ((value != null) && ( ("true".compareToIgnoreCase(value) == 0) || ("1".equals(value)) ));
+		
+		Log log = Logging.getLog(this.getClass());
+		loadConfiguration();
+		loadVersionInfo();
+		log.info("INITIALIZING CONFIGURATION");
+		String key = "eTB Manager Initialization: ";
+		String s = "key + eTB Manager starting in " + (developmentMode? "DEVELOPMENT": "PRODUCTION") + " mode";
+		log.info(s); 
+		log.info(key + "Implementation Version = " + implementationVersion);
+		log.info(key + "Country code = " + countryCode);
+		log.info(key + "Build Date = " + buildDate);
+	}
 
 
 	/**
@@ -98,12 +125,13 @@ public class EtbmanagerApp {
 	/**
 	 * Load version information from the MANIFEST.MF file in the e-TB Manager package war file
 	 */
-	protected void initializeVersionInfo() {
+	protected void loadVersionInfo() {
 		versionInfoLoaded = false;
 		if (versionInfoLoaded)
 			return;
 		
-		ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
+		ServletContext servletContext = ServletLifecycle.getServletContext();
+//		ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
 		
 		Properties prop = new Properties();
 		try {
@@ -151,14 +179,12 @@ public class EtbmanagerApp {
 
 
 	public String getImplementationVersion() {
-		initializeVersionInfo();
 		return implementationVersion;
 	}
 
 
 
 	public String getBuildDate() {
-		initializeVersionInfo();
 		return buildDate;
 	}
 
@@ -196,4 +222,15 @@ public class EtbmanagerApp {
 		return implementationVendor;
 	}
 
+
+	/**
+	 * @return the developmentMode
+	 */
+	public boolean isDevelopmentMode() {
+		return developmentMode;
+	}
+
+	public static EtbmanagerApp instance() {
+		return (EtbmanagerApp)Component.getInstance("etbmanagerApp");
+	}
 }

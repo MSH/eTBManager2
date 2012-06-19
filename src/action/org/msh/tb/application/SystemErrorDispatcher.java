@@ -57,15 +57,18 @@ public class SystemErrorDispatcher {
 		entityManager.persist(errorLog);
 		entityManager.flush();
 
-		SystemConfig systemConfig = etbmanagerApp.getConfiguration();
-		
-		String destMails = systemConfig.getAdminMail();
-		
-		if ((destMails != null) && (!destMails.isEmpty())) {
-			String[] dests = destMails.split("[;,]+");
-			for (String dest: dests) {
-				Contexts.getEventContext().set("adminMail", dest);
-				Renderer.instance().render("/mail/systemerror.xhtml");
+		// check if eTB Manager is in development mode. If so, doesn't send the message
+		if (!etbmanagerApp.isDevelopmentMode()) {
+			SystemConfig systemConfig = etbmanagerApp.getConfiguration();
+			
+			String destMails = systemConfig.getAdminMail();
+			
+			if ((destMails != null) && (!destMails.isEmpty())) {
+				String[] dests = destMails.split("[;,]+");
+				for (String dest: dests) {
+					Contexts.getEventContext().set("adminMail", dest);
+					Renderer.instance().render("/mail/systemerror.xhtml");
+				}
 			}
 		}
 	}
