@@ -1,16 +1,20 @@
 package org.msh.tb.kh;
 
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.cases.WsEntityHome;
 import org.msh.tb.cases.treatment.TreatmentHome;
 import org.msh.tb.entities.Address;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.kh.MedicalExaminationKHHome;
 import org.msh.tb.kh.entities.TbCaseKH;
+import org.msh.tb.transactionlog.LogInfo;
 
 
 
@@ -21,7 +25,11 @@ import org.msh.tb.kh.entities.TbCaseKH;
  * Cambodia - Vani Rao
  */
 @Name("caseKHHome")
-public class CaseKHHome {
+public class CaseKHHome{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6745610319523948621L;
 	@In(create = true)
 	CaseHome caseHome;
 	@In(create = true)
@@ -31,10 +39,10 @@ public class CaseKHHome {
 	@In(required = false)
 	MedicalExaminationKHHome medicalExaminationKHHome;
 	
-	private String houseNum;
-	private String streetNum;
-	private String groupNum;
-	private String villageName;
+	private String houseNum = "";
+	private String streetNum = "";
+	private String groupNum = "";
+	private String villageName = "";
 	
 	/**
 	 * Return an instance of a {@link TbCaseKH} class
@@ -43,7 +51,7 @@ public class CaseKHHome {
 	 */
 	@Factory("tbcasekh")
 	public TbCaseKH getTbCaseKH() {
-		return  (TbCaseKH) caseHome.getTbCase();
+		return  (TbCaseKH)caseHome.getTbCase();
 	}
 
 	/**
@@ -105,8 +113,8 @@ public class CaseKHHome {
 
 	public String gethouseNum() {
 		String addr = deConcatAddr();
-		if(addr.isEmpty())
-			return "";
+		if(addr == null)
+			return houseNum;
 		else{
 		String delimiter = "\\;";
 		String temp[] = addr.split(delimiter);
@@ -121,8 +129,8 @@ public class CaseKHHome {
 	
 	public String getStreetNum() {
 		String addr = deConcatAddr();
-		if(addr.isEmpty())
-			return "";
+		if(addr == null)
+			return streetNum;
 		else{
 		String delimiter = "\\;";
 		String temp[] = addr.split(delimiter);
@@ -137,7 +145,7 @@ public class CaseKHHome {
 
 	public String getGroupNum() {
 		String addr = deConcatAddr();
-		if(addr.isEmpty())
+		if(addr == null)
 			return "";
 		else{
 		String delimiter = "\\;";
@@ -153,7 +161,7 @@ public class CaseKHHome {
 
 	public String getVillageName() {
 		String addr = deConcatAddr();
-		if(addr.isEmpty())
+		if(addr == null)
 			return "";
 		else{
 		String delimiter = "\\;";
