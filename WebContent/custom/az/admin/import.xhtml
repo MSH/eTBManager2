@@ -130,6 +130,7 @@
 							<span>#{messages['form.save']}</span>
 						</a:commandLink>
 						<a:commandLink action="#{eidssIntHome.execute()}"
+							rendered = "false"
 							styleClass="button"
 							onclick="if (!disableButton(this)) return false;"
 							reRender="eidss,messages">
@@ -139,7 +140,7 @@
 							styleClass="button"
 							onclick="if (!disableButton(this)) return false;"
 							reRender="eidss,messages">
-							<span>#{messages['form.import']}1</span>
+							<span>#{messages['form.import']}</span>
 						</a:commandLink>
 						<a:commandLink action="#{eidssIntHome.check()}"
 							styleClass="button"
