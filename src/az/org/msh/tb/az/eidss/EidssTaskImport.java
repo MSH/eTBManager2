@@ -109,7 +109,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 						if ((infoForExport.size()> 0) && notCanceled()){
 							addLog("INFO begin write cases");
 							
-							// TODO exportToDB();
+							exportToDB();
 						}
 					}
 				}
