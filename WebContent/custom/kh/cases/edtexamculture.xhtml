@@ -26,21 +26,21 @@
 	<a:form id="formexam" styleClass="form1">
     
 <div class="form-content">
-	<s:decorate template="/custom/kh/cases/edtsample.xhtml">
-	</s:decorate>
-
+    <s:decorate template="/custom/kh/cases/edtsample.xhtml">
+	</s:decorate> 
+	
 	<div class="paragraph">#{messages['cases.exams.results']}</div>
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
     	<ui:param name="edtid" value="dtrelease" />
     	<ui:param name="required" value="false" /> 
     	<ui:param name="future" value="true" /> 
-    	<ui:param name="datefield" value="#{examCulturekh.dateRelease}" /> 
+    	<ui:param name="datefield" value="#{examCulture_Kh.dateRelease}" /> 
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
-    	<h:selectOneMenu id="cbres" value="#{examCulturekh.result}" required="true">
+    	<h:selectOneMenu id="cbres" value="#{examCulture_Kh.result}" required="true">
     		<s:selectItems value="#{cultureResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
     		<s:convertEnum />
     	</h:selectOneMenu>
@@ -51,35 +51,36 @@
 	<div style="display:block;width:600px;">
 	<div id="pnlrespositive">
 	<!-- hiding the 'number of colonies' -->
-   <!--  <s:decorate template="/layout/edit.xhtml" >
+   <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['ExamCulture.numberOfColonies']}:</ui:define>
-    	<h:selectOneMenu value="#{examCulturekh.numberOfColonies}" >
-    		<f:selectItems value="#{examCultureHome.numColonies}"/>
+    	<h:selectOneMenu value="#{examCulture_Kh.numberOfColonies}" >
+    		<f:selectItems value="#{examCultureKHHome.getNumColonies()}"/>
     	</h:selectOneMenu>
-    </s:decorate> -->
+    </s:decorate>
+    </div>
+    </div>
     
     <s:decorate template="/layout/edit.xhtml">
     <ui:define name="label">#{messages['ExamCulture.identification']}:</ui:define>
-     <h:selectOneMenu value="#{examCulturekh.identification}" required="false">
+     <h:selectOneMenu value="#{examCulture_Kh.identification}" required="false">
     		<s:selectItems value="#{fieldsQuery.identification}" var="q" noSelectionLabel="-" label="#{q.name}" />
     		<s:convertEntity />
     	</h:selectOneMenu> 
-    </s:decorate>
+    </s:decorate> 
     
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
-    	<h:selectOneMenu value="#{examCulturekh.method}" required="false">
+    	<h:selectOneMenu value="#{examCulture_Kh.method}" required="false">
     		<s:selectItems value="#{fieldsQuery.cultureMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
     		<s:convertEntity />
     	</h:selectOneMenu>
     </s:decorate>
     
-     </div>
-    </div>
+     
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	<h:inputText value="#{examCulturekh.comments}" maxlength="200" style="width:350px;"/>
+    	<h:inputText value="#{examCulture_Kh.comments}" maxlength="200" style="width:350px;"/>
     </s:decorate>
 
 	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
@@ -88,7 +89,7 @@
 		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandLink action="#{examCultureHomeKh.persist}" styleClass="button" 
+            <a:commandLink action="#{examCultureKHHome.persist}" styleClass="button" 
             	reRender="formexam,messages" 
             	oncomplete="this.disabled=false;"
             	onclick="this.disabled=true;" >
