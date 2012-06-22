@@ -298,5 +298,10 @@ public class FieldsQuery {
 		field = TbField.TREATMENT_OUTCOME_ILTB;
 		return getValues();
 	}
+	
+	public List<FieldValue> getIdentification() {
+		field = TbField.IDENTIFICATION;
+		return getValues();
+	}
 }
 
