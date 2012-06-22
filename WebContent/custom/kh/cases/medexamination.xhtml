@@ -8,13 +8,7 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 	<div class="spacer" />
-	<s:link view="/custom/kh/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
-		<f:param name="id" value="#{tbcase.id}"/>
-		<f:param name="examid" value="#{null}"/>
-		<f:param name="height" value="#{medicalExamination.height}"/>
-		<span>#{messages['cases.details.newresult']}</span>
-	</s:link>
-
+	
 	<h:panelGroup id="medexamtbl">
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="error" rendered="#{empty medicalExaminationKHHome.allResults}" />
 
@@ -26,6 +20,14 @@
 		<div class="region1">
 			<div class="header">
 			<div style="float:right;">
+			
+			<div class="spacer" />
+			<s:link value="#{messages['cases.details.newresult']}" view="/custom/kh/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
+				<f:param name="id" value="#{tbcase.id}"/>
+				<f:param name="examid" value="#{null}"/>
+				<f:param name="height" value="#{r.height}"/>
+			</s:link>
+			
 				<s:link value="#{messages['form.edit']}" view="/custom/kh/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
@@ -73,6 +75,7 @@
 				<h:outputText value="#{r.height}" >
 					<f:convertNumber pattern="#,###,##0.00"/>
 				</h:outputText>#{messages['MedicalExamination.height.unit']}
+				<f:param name="height" value="#{r.height}"/>
 			</s:decorate>		
 			</td>
 			<td>
