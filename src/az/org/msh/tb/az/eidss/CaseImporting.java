@@ -55,7 +55,8 @@ public boolean importRecords(CaseInfo oneCase){
 	if (result.size()==0){
 		errorOnCurrentImport=WriteCase(oneCase);
 	} else {
-		errorOnCurrentImport=UpdateCase(oneCase);
+		if (result.size()==1)
+		errorOnCurrentImport=UpdateCase(oneCase,result);
 	}
 
 
@@ -64,8 +65,12 @@ return errorOnCurrentImport;
 
 }
 
-private boolean UpdateCase(CaseInfo oneCase) {
-	return errorOnCurrentImport;
+private boolean UpdateCase(CaseInfo oneCase, List<TbCase> result) {
+	Iterator<TbCase> it=result.iterator();
+	TbCase c=it.next();
+	c.setLegacyId(oneCase.getCaseID());
+	entityManager.persist(c);
+	return true;
 	
 }
 private List<TbCase> isCaseExist(CaseInfo oneCase) {
@@ -76,13 +81,13 @@ private List<TbCase> isCaseExist(CaseInfo oneCase) {
 	try {
 		List<TbCase> lstcases = entityManager.createQuery(" from TbCase c " +
 				"join fetch c.patient p " 
-				+" where c.legacyId = :id "
-				+ " and c.registrationDate= :rd "
+		//		+" where c.legacyId = :id "
+				+" where c.registrationDate = :rd "
 				+" and p.lastName = :ln " 
 				+" and p.middleName = :mn " 
 				//+ "and p.workspace.id = " + s)
 				+ " and p.workspace.id = " + workspaceID.toString())
-				.setParameter("id", oneCase.getCaseID())
+			//	.setParameter("id", oneCase.getCaseID())
 				.setParameter("ln", oneCase.getLastName())
 				.setParameter("mn", oneCase.getMiddleName())
 				.setParameter("rd", oneCase.getFinalDiagnosisDate())
@@ -90,7 +95,8 @@ private List<TbCase> isCaseExist(CaseInfo oneCase) {
 		if (lstcases.size() != 0) {
 			Iterator <TbCase> it= lstcases.iterator();
 			TbCase etbInfo =it.next();
-			if (etbInfo.getPatient().getBirthDate().getYear()==oneCase.getDateOfBirth().getYear() && etbInfo.getPatient().getName()==oneCase.getFirstName()){
+			if (etbInfo.getPatient().getBirthDate().getYear()==oneCase.getDateOfBirth().getYear() && 
+					etbInfo.getPatient().getName().equalsIgnoreCase(oneCase.getFirstName())){
 				result.add(etbInfo);
 			}
 
