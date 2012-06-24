@@ -234,10 +234,6 @@
     		#{messages[tbcase.patientType.key]}
 		</s:decorate>
 
-		<s:decorate template="/layout/display.xhtml">
-			<ui:define name="label">#{messages['az_AZ.CaseFindingStrategy']}:</ui:define>
-			#{messages[tbcase.caseFindingStrategy.key]}
-		</s:decorate>
 
 		<h2>#{messages['TbField.SEVERITY_MARKS']}</h2>
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty caseSeverityMarksHome.severityMarks}" />

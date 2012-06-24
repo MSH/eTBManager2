@@ -364,17 +364,7 @@ function isPulmonary(cb) {
 <rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
 		
 		</td></tr>
-		<tr>
-			<td>
-				<s:decorate template="/layout/edit.xhtml">
-					<ui:define name="label">#{messages['az_AZ.CaseFindingStrategy']}:</ui:define>
-    				<h:selectOneMenu value="#{tbcase.caseFindingStrategy}" style="margin-right:4px;">
-		    			<s:selectItems var="it" value="#{globalLists_az.caseFindingStrategies}" noSelectionLabel="-" label="#{messages[it.key]}" />
-		    			<s:convertEnum />
-		    		</h:selectOneMenu>
-				</s:decorate>
-			</td>
-		</tr>
+
 		
 		</table></div>
 
