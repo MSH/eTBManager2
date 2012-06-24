@@ -32,16 +32,17 @@ import org.msh.tb.login.UserSession;
 @Name("caseStateReport")
 public class CaseStateReport {
 
-	@In EntityManager entityManager;
+	@In
+	protected EntityManager entityManager;
 	@In Workspace defaultWorkspace;
 	@In(create=true) UserSession userSession;
 	@In(create=true) UserWorkspace userWorkspace;
 	
 	
-	private List<Item> items;
+	protected List<Item> items;
 	private List<ValidationItem> validationItems;
 	private Item total;
-	private Map<String, String> messages;
+	protected Map<String, String> messages;
 	private List<Item> tags;
 
 

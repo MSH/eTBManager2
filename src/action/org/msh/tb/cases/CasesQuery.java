@@ -35,9 +35,9 @@ import org.msh.utils.EntityQuery;
 public class CasesQuery extends EntityQuery<CaseResultItem> {
 	private static final long serialVersionUID = 7867819205241149388L;
 
-	private CaseFilters caseFilters;
+	protected CaseFilters caseFilters;
 	private Workspace defaultWorkspace;
-	private List<CaseResultItem> resultList;
+	protected List<CaseResultItem> resultList;
 	protected String hqlCondition;
 
 	private static final String[] orderValues = {"p.recordNumber, c.caseNumber", "p.gender,p.name", 
