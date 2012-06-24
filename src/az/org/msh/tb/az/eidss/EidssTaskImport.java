@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -17,7 +15,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.international.LocaleSelector;
-import org.jboss.seam.international.Messages;
 import org.jboss.seam.transaction.UserTransaction;
 import org.msh.tb.application.tasks.AsyncTaskImpl;
 import org.msh.tb.application.tasks.TaskManager;
@@ -29,12 +26,12 @@ import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.LocaleDateConverter;
 
+import ua.com.theta.bv.client.Loader;
+
 import com.bv.eidss.AddressInfo;
 import com.bv.eidss.ArrayOfHumanCaseListInfo;
 import com.bv.eidss.HumanCaseInfo;
 import com.bv.eidss.HumanCaseListInfo;
-
-import ua.com.theta.bv.client.Loader;
 
 
 @Name("eidssTaskImport")
@@ -404,7 +401,8 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	}
 	
 	private Date ConvertToDate(XMLGregorianCalendar param){
-
+		return param.toGregorianCalendar().getTime();
+		/*
 		Date tmpDate =new Date();
 	int d=1;
 	int m=0;
@@ -418,7 +416,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		tmpDate.setYear(y-1900);
 	}
 	return tmpDate;
-
+*/
 }
 	private Date CalcDateOfBirth(XMLGregorianCalendar regDate1,int age, String ageType){
 		String Days = "10042001";
