@@ -34,7 +34,7 @@ public class GlobalLists {
 	};	
 	
 	@Factory("nationalitiesKh")
-	public Nationality[] getNationalitiesNg() {
+	public Nationality[] getNationalitiesKh() {
 		return nationalityTypes;
 	}
 	
