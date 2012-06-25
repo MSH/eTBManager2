@@ -121,18 +121,28 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	 * Export cases to eTBManager
 	 */
 	private void exportToDB() {
-		Integer i=0;
-		String log="";
+		Integer iw=0;
+		Integer ia=0;
+		String logw="";
+		String loga="";
 		Iterator<CaseInfo> it=infoForExport.iterator();
 		while (it.hasNext()){
 			CaseInfo c = it.next();
-			if (ci.importRecords(c)){
-				i=i+1;
-				log=log+" "+c.getLastName();
+			String result=ci.importRecords(c);
+			if (!result.equalsIgnoreCase("error")){
+				if (result.equalsIgnoreCase(CaseImporting.WRITED)){
+					iw=iw+1;
+					logw=logw+", "+c.getLastName();
+				}
+				if (result.equalsIgnoreCase(CaseImporting.UPDATED)){
+					ia=ia+1;
+					loga=loga+", "+c.getLastName();
+				}
 			}else
 				addLog("Error writing  "+c.getLastName());
 		}
-		addLog(i.toString()+ " cases writed successfully: "+log);
+		addLog(iw.toString()+ " cases writed successfully: "+logw);
+		addLog(ia.toString()+ " cases updated successfully: "+loga);
 	}
 
 
@@ -330,6 +340,8 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			if (info != null){
 				if (suitable(info,config.getCaseStates(),"")) {
 					addCase(info);
+				} else{
+					addLog(info.getCaseID().toString()+" - rejected");
 				}
 			}else{
 				addLog("ERROR " + getLoader().getErrorMessage());
@@ -345,6 +357,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		   //alive 10035002
 			if (cI.getPatientState()!=null){
 				if (!cI.getPatientState().getId().toString().equalsIgnoreCase(patStateName)) {
+				
 					return false;
 				}
 			}
@@ -379,9 +392,9 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		}
 		if (EIDSSData.getDateOfBirth()!=null){
 		onecase.setDateOfBirth(ConvertToDate(EIDSSData.getDateOfBirth()));
-		}else{
-			onecase.setDateOfBirth(CalcDateOfBirth(EIDSSData.getTentativeDiagnosisDate(),EIDSSData.getPatientAge(),EIDSSData.getPatientAgeType().getId().toString()));
 		}
+		onecase.setAge(CalcAge(EIDSSData.getPatientAge(),EIDSSData.getPatientAgeType().getId().toString()));
+	
 		AddressInfo addr=EIDSSData.getCurrentResidence();
 		onecase.setFinalDiagnosisDate(ConvertToDate(EIDSSData.getTentativeDiagnosisDate()));
 		String country="";
@@ -418,23 +431,17 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	return tmpDate;
 */
 }
-	private Date CalcDateOfBirth(XMLGregorianCalendar regDate1,int age, String ageType){
+	private int CalcAge(int age, String ageType){
 		String Days = "10042001";
 		String Month = "10042002";
 		String Years = "10042003";
-		Calendar regDate=regDate1.toGregorianCalendar();
 		if (ageType.equalsIgnoreCase(Years)){
-			regDate.add(Calendar.YEAR,-age);
+			return age;
 
-		}
-		if (ageType.equalsIgnoreCase(Month)){
-			regDate.add(Calendar.MONTH,-age);
-		}
-		if (ageType.equalsIgnoreCase(Days)){
-			regDate.set(Calendar.DAY_OF_MONTH,-age);
+		} else {
+			return 0;
 		}
 	
-		return regDate.getTime();
 	}
 	/**
 	 * If any real import occurred - rollback by delete imported cases

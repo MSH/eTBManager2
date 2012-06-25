@@ -13,6 +13,7 @@ public class CaseInfo {
    private int caseStatus;
    private Date DateOfBirth;
    private String AdditionalComment;
+   private int age;
 public String getCaseID() {
 	return caseID;
 }
@@ -66,6 +67,12 @@ public String getAdditionalComment() {
 }
 public void setAdditionalComment(String additionalComment) {
 	AdditionalComment = additionalComment;
+}
+public void setAge(int age) {
+	this.age = age;
+}
+public int getAge() {
+	return age;
 }
   
 
