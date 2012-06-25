@@ -93,7 +93,17 @@
     		<h:inputText value="#{tbcase.notifAddress.complement}" style="width:300px" maxlength="100"/>
     	</s:decorate>
     	
-    </td></tr>
+    </td>
+    <td>
+		<s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages['LocalityType']}:</ui:define>
+			<h:selectOneMenu value="#{tbcase.notifAddress.localityType}" required="true">
+				<s:selectItems var="it" value="#{localityTypes}" label="#{messages[it.key]}" noSelectionLabel="-"/>
+				<s:convertEnum />
+			</h:selectOneMenu>
+		</s:decorate>
+    </td>
+    </tr>
 
 	<tr><td>
 		<s:decorate template="/layout/auselection.xhtml">
@@ -136,6 +146,7 @@
 		<tr><td>
 			<s:decorate template="/layout/auselection.xhtml">
 				<ui:param name="auselection" value="#{indicator.currentAdminUnit}" />
+				<ui:param name="requiredLevel" value="#{defaultWorkspace.patientAddrRequiredLevels}" />
 			</s:decorate>
     	</td></tr>
     	</table>
@@ -472,7 +483,7 @@ function showReferToTbUnit(cb) {
   else jQuery('#referToTbUnit').show(500);
 }
 </script>
-<rich:jQuery selector="#otherTbUnit" query="each(function(){ if (this.selectedIndex==0) jQuery('referToTbUnit').hide(); })" />
-
+<rich:jQuery selector="#otherTbUnit" query="each(function(){ if (this.selectedIndex==0) jQuery('#referToTbUnit').hide(); })" />
+<rich:jQuery selector="#addrChanged" query="each(function(){ if (this.selectedIndex==0) jQuery('#curraddr').hide(); })" />
 		
 </ui:composition>

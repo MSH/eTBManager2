@@ -82,13 +82,14 @@
     		<ui:define name="label">#{messages['Address.address']}:</ui:define>
     		#{tbcase.notifAddress.address}
     		<br/>
-    		#{tbcase.notifAddress.complement}    		
+    		#{tbcase.notifAddress.complement}  
+    		 ( #{messages[tbcase.notifAddress.localityType.key]})	
     	</s:decorate>
-    	
  		<s:decorate template="/layout/audisplay.xhtml">
 			<ui:param name="adminunit" value="#{tbcase.notifAddress.adminUnit}" />
 		</s:decorate>
-	</td></tr>
+	</td>
+	</tr>
 	</s:fragment>
 	
 	<s:fragment rendered="#{not tbcase.currentAddress.emptyy}">
