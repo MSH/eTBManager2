@@ -32,10 +32,12 @@ public class TbCaseKH extends TbCase {
 	@Override
 	public CaseSideEffectKH findSideEffectData(FieldValue sideEffect) {
 		for (CaseSideEffectKH se: getSideEffectsKh()) {
-			if (se.getSideEffect().equals(sideEffect))
+			if (se.getSideEffect().getValue().equals(sideEffect))
 				return se;
+	
 		}
 		return null;
+		
 	}
 
 //	public List<CaseDispensing_Kh> getDispkh() {
