@@ -27,6 +27,7 @@ import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.entities.enums.RegimenPhase;
+import org.msh.tb.login.UserSession;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.date.DateUtils;
@@ -44,6 +45,7 @@ public class TreatmentHome {
 	@In(create=true) PrescribedMedicineHome prescribedMedicineHome;
 	@In(create=true) FacesMessages facesMessages;
 	@In EntityManager entityManager;
+	@In (required=true) UserSession userSession;
 	
 	private Date iniDate;
 	private Date endDate;
@@ -72,6 +74,7 @@ public class TreatmentHome {
 	private TreatmentHealthUnit healthUnit;
 	private FormEditing formEditing;
 	private boolean initialized;
+	private TbCase tbcase;
 	
 
 	/**
@@ -81,8 +84,7 @@ public class TreatmentHome {
 		if (initialized)
 			return;
 
-		// check if there is something to edit
-		TbCase tbcase = caseHome.getInstance();
+		tbcase = caseHome.getInstance();
 		List<TreatmentHealthUnit> lst = tbcase.getSortedTreatmentHealthUnits();
 		if (lst.size() == 0)
 			return;
@@ -160,7 +162,7 @@ public class TreatmentHome {
 		if (!checkDateBasicRules(iniDate, endDate))
 			return;
 
-		if (iniDate.before(caseHome.getInstance().getDiagnosisDate())) {
+		if (iniDate.before(caseHome.getInstance().getDiagnosisDate()) && (!allowBeforeDiagnosis())) {
 			facesMessages.addToControlFromResourceBundle("edtIniContPhase", "cases.treat.inidatemsg");
 			return;
 		}
@@ -205,7 +207,20 @@ public class TreatmentHome {
 		caseHome.updateCaseTags();
 	}
 
-	
+	/**
+	 * Does start treatment date allow before diagnosis date
+	 * AK 06/25/2012
+	 * @return
+	 */
+	private boolean allowBeforeDiagnosis() {
+		boolean isTBAllow = userSession.getUserWorkspace().getWorkspace().isStartTBTreatBeforeValidation();
+		boolean isDRTBAllow = userSession.getUserWorkspace().getWorkspace().isStartDRTBTreatBeforeValidation();
+		boolean isTBCase = tbcase.getClassification().equals(CaseClassification.TB);
+		boolean isDRTBCase = tbcase.getClassification().equals(CaseClassification.DRTB);
+		return ( isTBAllow && isTBCase) || (isDRTBAllow && isDRTBCase);
+	}
+
+
 	/**
 	 * Initialize regimen change 
 	 */
