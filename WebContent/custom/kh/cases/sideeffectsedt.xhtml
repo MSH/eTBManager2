@@ -103,7 +103,7 @@ function validateYesNo(cb) {
 		
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.grade']}" styleClass="collh" />
+				<h:outputText value="#{messages['cases.sideeffects.grading']}" styleClass="collh" />
 			</f:facet>
 			<h:selectOneMenu value="#{it.item.grade}" styleClass="xpto">
 				<s:selectItems value="#{gradeListKh}" var="v" noSelectionLabel="-" label="#{messages[v.key]}"/>
