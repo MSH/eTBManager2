@@ -15,7 +15,7 @@ import org.msh.tb.transactionlog.PropertyLog;
  *
  * Records information about Culture result during the treatment
  */
-@Entity
+//@Entity
 //@DiscriminatorValue("kh")
 public class ExamCulture_Kh extends ExamCulture{
 
