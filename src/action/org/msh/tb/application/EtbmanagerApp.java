@@ -95,7 +95,7 @@ public class EtbmanagerApp {
 		loadVersionInfo();
 		log.info("INITIALIZING CONFIGURATION");
 		String key = "eTB Manager Initialization: ";
-		String s = "key + eTB Manager starting in " + (developmentMode? "DEVELOPMENT": "PRODUCTION") + " mode";
+		String s = key + "eTB Manager starting in " + (developmentMode? "DEVELOPMENT": "PRODUCTION") + " mode";
 		log.info(s); 
 		log.info(key + "Implementation Version = " + implementationVersion);
 		log.info(key + "Country code = " + countryCode);

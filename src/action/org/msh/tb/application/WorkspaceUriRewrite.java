@@ -29,6 +29,7 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 public class WorkspaceUriRewrite {
 
 	private Map<String, Boolean> pages = new HashMap<String, Boolean>();
+	private Boolean developmentMode;
 	private static final String customPath = "/custom/";
 
 	/**
@@ -91,7 +92,12 @@ public class WorkspaceUriRewrite {
 	 */
 	protected boolean workspacePageExists(FacesContext facesContext, String extensionPage) {
 		extensionPage = extensionPage.replaceFirst(".seam", ".xhtml");
-		if (pages.containsKey(extensionPage)) {
+
+		if (developmentMode == null)
+			developmentMode = EtbmanagerApp.instance().isDevelopmentMode();
+
+		// if under development mode, workspace pages address are not cached in memory
+		if ((!developmentMode) && (pages.containsKey(extensionPage))) {
 			return pages.get(extensionPage);
 		}
 
