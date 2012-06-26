@@ -65,13 +65,11 @@ public class ExamHome<E> extends WsEntityHome<E> {
 	 * @return
 	 */
 	public String getResultsHQL() {
-		System.out.println("table == " + getEntityClass().getSimpleName());
 		String hql = "from " + getEntityClass().getSimpleName() + " exam where exam.tbcase.id = #{tbcase.id}";
 		
 		if (lastResult)
 			hql = hql.concat(" and exam.date = (select max(aux.date) " +
 			"from " + getEntityClass().getSimpleName() + " aux where aux.tbcase = exam.tbcase) ");
-		System.out.println("HQL = " + hql);
 		return hql.concat(" order by exam.date desc");
 	}
 	
