@@ -9,8 +9,9 @@ import javax.faces.model.SelectItem;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.cases.FilterHealthUnit;
 import org.msh.tb.entities.Workspace;
@@ -56,9 +57,12 @@ import org.msh.tb.indicators.core.IndicatorSite;
  *  
  */
 @Name("globalLists")
+@BypassInterceptors
 public class GlobalLists {
-	@In(create=true) Map<String, String> messages;
-	@In(required=false) Workspace defaultWorkspace;
+//	@In(create=true) Map<String, String> messages;
+//	@In(required=false) Workspace defaultWorkspace;
+
+	private List<SelectItem> numberOfAFBs;
 	
 	private static final PatientType patientTypes[] = {
 		PatientType.NEW,
@@ -188,6 +192,8 @@ public class GlobalLists {
 	 * @return
 	 */
 	protected <E> E getExtensionComponent(String componentName, Class<E> type, Object result) {
+		Workspace defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace");
+
 		if ((defaultWorkspace == null) || (defaultWorkspace.getExtension() == null))
 			return (E)result;
 		
@@ -205,6 +211,8 @@ public class GlobalLists {
 	 * @return
 	 */
 	protected <E> E getComponentValueWorkspace(String propertyName, Class<E> type, Object result) {
+		Workspace defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace");
+		
 		if ((defaultWorkspace == null) || (defaultWorkspace.getExtension() == null))
 			return (E)result;
 		
@@ -403,7 +411,7 @@ public class GlobalLists {
 	
 	@Factory("cultureResults")
 	public CultureResult[] getCultureResults() {
-		return cultureResults;
+		return getComponentValueWorkspace("cultureResults", CultureResult[].class, cultureResults);
 	}
 	
 	@Factory("xrayResults")
@@ -452,6 +460,8 @@ public class GlobalLists {
 	
 	@Factory("chartTypes")
 	public List<SelectItem> getChartTypes() {
+		Map<String, String> messages = Messages.instance();
+
 		List<SelectItem> lst = new ArrayList<SelectItem>();
 		lst.add(new SelectItem(1, messages.get("charts.hbar")));
 		lst.add(new SelectItem(2, messages.get("charts.pie")));
@@ -532,8 +542,37 @@ public class GlobalLists {
 	public IndicatorDate[] getIndicatorDate() {
 		return IndicatorDate.values();
 	}
+
 	
+	/**
+	 * Return the list of options for the field number of AFBs, from the culture exam
+	 * @return
+	 */
+	@Factory("numberOfAFBs")
+	public List<SelectItem> getNumberOfAFBs() {
+		if (numberOfAFBs == null) {
+			numberOfAFBs = getComponentValueWorkspace("numberOfAFBs", List.class, null);
+			if (numberOfAFBs == null) {
+				numberOfAFBs = new ArrayList<SelectItem>();
+				
+				SelectItem item = new SelectItem();
+				item.setLabel("-");
+				numberOfAFBs.add(item);
+				
+				for (int i = 1; i <= 9; i++) {
+					item = new SelectItem();
+					item.setLabel(Integer.toString(i));
+					item.setValue(i);
+					numberOfAFBs.add(item);
+				}
+			}
+		}
+		return numberOfAFBs;
+	}
+
+
 	public static GlobalLists instance(){
 		return (GlobalLists)Component.getInstance("globalLists");
 	}
+	
 }

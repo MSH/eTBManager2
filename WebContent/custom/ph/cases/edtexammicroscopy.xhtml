@@ -48,7 +48,7 @@
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['cases.exams.afb']}:</ui:define>
     	<h:selectOneMenu value="#{examMicroscopy.numberOfAFB}" >
-    		<f:selectItems value="#{examMicroscopyHome.AFBs}" />
+    		<f:selectItems value="#{numberOfAFBs}" />
     	</h:selectOneMenu>
     </s:decorate>
 	</div>
