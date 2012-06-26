@@ -6,8 +6,8 @@ import javax.persistence.Entity;
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.enums.SampleType;
 
-@Entity
-@DiscriminatorValue("kh")
+//@Entity
+//@DiscriminatorValue("kh")
 public class ExamDST_Kh extends ExamDST{
 
 	/**
