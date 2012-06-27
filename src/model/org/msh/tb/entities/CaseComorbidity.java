@@ -1,6 +1,11 @@
 package org.msh.tb.entities;
 
+import javax.persistence.AssociationOverride;
+import javax.persistence.AssociationOverrides;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -29,6 +34,12 @@ public class CaseComorbidity {
 	@JoinColumn(name="COMORBIDITY_ID")
 	@NotNull
 	FieldValue comorbidity;
+	
+	@Embedded
+	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "COMORB_ID")) })
+	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "otherCaseComorbidity")) })
+	
+	private FieldValueComponent comorb;
 	
 	@Column(length=100)
 	private String duration;
@@ -105,5 +116,15 @@ public class CaseComorbidity {
 	 */
 	public void setDuration(String duration) {
 		this.duration = duration;
+	}
+
+	public FieldValueComponent getComorb() {
+		if (comorb == null)
+			comorb = new FieldValueComponent();
+		return comorb;
 	} 
+	
+	public void setComorb(FieldValueComponent comorb) {
+		this.comorb = comorb;
+	}
 }
