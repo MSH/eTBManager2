@@ -18,6 +18,7 @@ function handleCaseDateChange() {
 
 //Change the algorithm calculating age for Ukraine and Azerbaijan
 function handleCaseDateChangeUAZ() {
+	window.formato = jQuery("#formatodata").val();
 	sBirth = jQuery("#divbirthdate input[type='text']").val();
 	sReg = jQuery("#divregdate input[type='text']").val();
 	if (!(sReg))
@@ -26,8 +27,6 @@ function handleCaseDateChangeUAZ() {
 	var dt1=convertDate(sBirth);
 	if (dt1==null)
 		return;
-	window.formato = jQuery("#formatodata").val();
-	
 	var age=0;
 	if (dt1!=null) {
 		if (dt1<=dt2){
