@@ -92,10 +92,8 @@
     		<br/>
     		<h:inputText value="#{tbcase.notifAddress.complement}" style="width:300px" maxlength="100"/>
     	</s:decorate>
-    	
-    </td>
-    <td>
-		<s:decorate template="/layout/edit.xhtml">
+    	<br/>
+    	<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['LocalityType']}:</ui:define>
 			<h:selectOneMenu value="#{tbcase.notifAddress.localityType}" required="true">
 				<s:selectItems var="it" value="#{localityTypes}" label="#{messages[it.key]}" noSelectionLabel="-"/>
