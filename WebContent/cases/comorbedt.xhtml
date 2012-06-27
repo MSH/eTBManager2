@@ -30,6 +30,12 @@
 				</f:facet>
 				<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows();"/>
 				#{it.item.comorbidity.name}
+				<s:fragment rendered="#{it.item.comorbidity.other}">
+				<div class="divother">
+					<b>#{it.item.comorb.value.otherDescription}</b>
+    				<h:inputText value="#{it.item.comorb.complement}" style="width:180px"/>
+    			</div>
+			</s:fragment>
 			</h:column>
 			
 			<h:column >
