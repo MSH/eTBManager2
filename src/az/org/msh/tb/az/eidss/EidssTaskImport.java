@@ -414,7 +414,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		String addInfo=country+region+settlement+rayon;
 		if 	(addr.getStreet()!=null)
 			
-		addInfo="Notify by: "+notification+" Current residence: "+addInfo+addr.getStreet();
+		addInfo=notification+"/"+addInfo+addr.getStreet();
 		onecase.setAdditionalComment(addInfo);	
 		onecase.setCaseID(EIDSSData.getCaseID().toString());	
 		infoForExport.add(onecase);
