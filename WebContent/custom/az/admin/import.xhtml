@@ -11,6 +11,7 @@
 
 	<ui:param name="title" value="#{messages['admin.import']}" />
 	<ui:param name="submenu" value="0" />
+	<ui:param name="labelstyle" value="text-align:left;width:300px;" />
 
 
 	<ui:define name="content">
@@ -83,8 +84,8 @@
 						</s:decorate>
 						<s:decorate template="/layout/edit.xhtml">
 							<ui:define name="label">#{messages['admin.import.eidss.password']}:</ui:define>
-							<h:inputText value="#{eidssIntHome.config.password}"
-								style="width:400px;" maxlength="100" required="true"></h:inputText>
+							<h:inputSecret value="#{eidssIntHome.config.password}"
+								style="width:400px;" maxlength="100" required="true" redisplay="true"></h:inputSecret>
 						</s:decorate>
 						<s:decorate template="/layout/edit.xhtml">
 							<ui:define name="label">#{messages['admin.import.eidss.language']}:</ui:define>
@@ -116,11 +117,10 @@
 							<ui:param name="datefield" value="#{eidssIntHome.config.toDate}" />
 							<ui:param name="required" value="true" />
 						</s:decorate>
-						<s:label styleClass="name">
-							#{messages['admin.import.eidss.auto']}:
-							</s:label>
+						<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages['admin.import.eidss.auto']}:</ui:define>
 						<h:selectBooleanCheckbox value="#{eidssIntHome.config.auto}" />
-
+						</s:decorate>
 					</div>
 					<div class="form-footer">
 						<a:commandLink action="#{eidssIntHome.saveConfig()}"
