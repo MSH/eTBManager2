@@ -24,7 +24,7 @@ import org.msh.tb.entities.enums.ValidationState;
  * Import cases from case DTO list. Fully independent from specific EIDSS web services, so, from data structures
  */
 public  class CaseImporting {
-	public static String WRITED="WRITED";
+	public static String WRITED="WRITTEN";
 	public static String UPDATED="UPDATED";
 	private static final Integer workspaceID = 8;
 	private boolean newCase;

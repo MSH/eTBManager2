@@ -90,12 +90,15 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			if (loginEIDSS()){
 				if (notCanceled()){
 					addLog("INFO login to EIDSS successfull");
+					addLog("URL: "+config.getUrl());
+					addLog("Diagnosis: "+config.getDiagnosis());
+					addLog("States to ignore: "+config.getCaseStates());
+					addLog("Registration date: from "+ config.getFrom().toString()+" to "+config.getToDate().toString());
 					boolean success =loadCasesList();
 					sayAboutLoad(success);
 					caseIdsClean=ci.CheckIfExistInEtb(caseIds);
 					sayAboutCheckList();
 					if((caseIdsClean.size()>0) && notCanceled()){
-						addLog("INFO begin load full cases");
 						Iterator<String> it = caseIdsClean.iterator();
 						while (it.hasNext()){
 							String caseId = it.next();
@@ -104,8 +107,6 @@ public class EidssTaskImport extends AsyncTaskImpl {
 							loadCaseById(caseId);
 						}
 						if ((infoForExport.size()> 0) && notCanceled()){
-							addLog("INFO begin write cases");
-							
 							exportToDB();
 						}
 					}
@@ -130,19 +131,21 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			CaseInfo c = it.next();
 			String result=ci.importRecords(c);
 			if (!result.equalsIgnoreCase("error")){
+				Integer age=c.getAge();
+				String toLog=c.getLastName()+" "+c.getFirstName()+" "+c.getMiddleName()+" age "+age.toString()+" registration date "+c.getFinalDiagnosisDate().toString()+" "+c.getCaseID()+" "+c.getAdditionalComment();
 				if (result.equalsIgnoreCase(CaseImporting.WRITED)){
 					iw=iw+1;
-					logw=logw+", "+c.getLastName();
+					addLog(CaseImporting.WRITED +": "+toLog);
 				}
 				if (result.equalsIgnoreCase(CaseImporting.UPDATED)){
 					ia=ia+1;
-					loga=loga+", "+c.getLastName();
+					addLog(CaseImporting.UPDATED +": "+toLog);
 				}
 			}else
 				addLog("Error writing  "+c.getLastName());
 		}
-		addLog(iw.toString()+ " cases writed successfully: "+logw);
-		addLog(ia.toString()+ " cases updated successfully: "+loga);
+		addLog(iw.toString()+ " cases written successfully");
+		addLog(ia.toString()+ " cases updated successfully");
 	}
 
 
@@ -210,8 +213,8 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		while(loadDate.before(currentDate)){
 			//load by date and diagnosis, (state only in the full case)
 			String loadMess = getLoadMess(loadDate);
-			setStateMessage(loadMess);
-			addLog(loadMess);
+			//setStateMessage(loadMess);
+			//addLog(loadMess);
 			for(String diag : diagnosis){
 				if (notCanceled()){
 					ArrayOfHumanCaseListInfo caseList = loader.getTBCasesList(loadDate, diag);
@@ -223,9 +226,9 @@ public class EidssTaskImport extends AsyncTaskImpl {
 							caseIds.add(info.getCaseID());
 							i++;
 						}
-						addLog("total - " + i);
+						addLog(loadDate.getTime().toString()+" "+diag + " found " + i+"cases");
 					}else{
-						addLog("total 0");
+						addLog(loadDate.getTime().toString()+" "+diag + " found 0 cases");
 						String errorMess = loader.getErrorMessage();
 						if (errorMess.length() > 0){
 							noError = false;
