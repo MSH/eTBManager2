@@ -6,7 +6,7 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-
+<ui:param name="labelstyle" value="text-align:left;width:200px;" />
 	<div class="form1">
 	<div class="form-content">                 
 	<s:link view="/custom/az/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
@@ -31,19 +31,12 @@
 	</s:decorate>
 	
 	</td></tr>
-	
-		<tr>
-		<td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.legacyId!=NULL}">
-	    	<ui:define name="label">#{messages['TbCase.eidssid']}:</ui:define>
-			#{tbcase.legacyId}
-		</s:decorate>
-		</td>
-		</tr><tr>
+	<tr>
 		<td colspan="2">
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.EIDSSComment!=NULL}">
 	    	<ui:define name="label">#{messages['TbCase.eidsscomment']}:</ui:define>
-			#{tbcase.EIDSSComment}
+			#{tbcase.EIDSSComment} <br/>
+			#{messages['TbCase.eidssid']}: #{tbcase.legacyId}
 		</s:decorate>
 		</td>
 		</tr>
@@ -59,7 +52,7 @@
 	
 	<s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['TbCase.patientAge']}:</ui:define>
-    	<h:outputText value="#{tbcase.patientAge}" style="padding-right:4px;" />#{messages['global.age']}
+    	<h:outputText value="#{tbcase.patientAge}" style="padding-right:4px;" />
 	</s:decorate>
 
 	</td></tr>

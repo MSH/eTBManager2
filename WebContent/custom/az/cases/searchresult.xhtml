@@ -46,23 +46,34 @@
 					<table id="tblres" width="100%" class="table1">
 						<tr>
 							<th class="searchtitle">
+							<ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
 								<div style="padding: 4px;">
 									<a:commandLink value="#{messages['Patient.caseNumber']}"
 										onclick="changeOrder(0); return false;" />
 									<br /> <br />
 									<a:commandLink value="#{messages['Gender']}"
 										onclick="changeOrder(1); return false;" />
-								</div></th>
+								</div>
+								</ui:fragment>
+							<ui:fragment rendered='#{casesAZ.notBindedEIDSS}'>
+								<div style="padding: 4px;">
+									<a:commandLink value="#{messages['Gender']}"
+										onclick="changeOrder(1); return false;" />
+								</div>
+								</ui:fragment>
+								</th>
 							<th class="searchtitle">
 								<div style="padding: 4px;">
 									<a:commandLink value="#{messages['CaseClassification']}"
 										onclick="changeOrder(2);return false;" />
-									<br /> <br />
+									<br /> 
 									<a:commandLink value="#{messages['Patient.name']}"
 										onclick="changeOrder(3);return false;" />
-									<br /> <br />
+									<br />
+									#{messages['az_EIDSS_Year_Of_Birth']}<br/>
 									<a:commandLink value="#{messages['TbCase.patientAge']}"
 										onclick="changeOrder(4);return false;" />
+										
 								</div></th>
 							<th class="searchtitle"><ui:fragment
 									rendered='#{!casesAZ.notBindedEIDSS}'>
@@ -80,7 +91,10 @@
 											onclick="changeOrder(8);return false;" />
 									</div>
 								</ui:fragment> <ui:fragment rendered='#{casesAZ.notBindedEIDSS}'>
-									<div style="padding: 4px;">#{messages['az_EIDSS_Note']}</div>
+									<div style="padding: 4px;"><b>#{messages['az_EIDSS_Note']}</b></div>
+									<div style="padding: 4px;"><b>#{messages['az_EIDSS_Notify_LPU']}/</b></div>
+									<div style="padding: 4px;"><b>#{messages['az_EIDSS_Address']}</b>
+									</div>
 								</ui:fragment></th>
 							<th class="searchtitle"><ui:fragment
 									rendered='#{!casesAZ.notBindedEIDSS}'>
@@ -97,7 +111,7 @@
 									</div>
 								</ui:fragment> <ui:fragment rendered='#{casesAZ.notBindedEIDSS}'>
 									<div style="padding: 4px;">
-										<a:commandLink value="#{messages['TbCase.registrationDate']}"
+										<a:commandLink value="#{messages['az_EIDSS_REGDATE']}"
 											onclick="changeOrder(9);return false;" />
 									</div>
 								</ui:fragment></th>
@@ -115,8 +129,9 @@
 									</s:link></td>
 								<td><b>#{messages[it.classification.key]}</b>
 									<div style="padding-top: 6px; clear: left;">
-										#{it.patientName} <br /> #{it.patientAge}
-										#{messages['global.age']}
+										#{it.patientName} <br />
+										#{messages['az_EIDSS_Year_Of_Birth']} : #{it.yearOfBirth}<br/>
+										#{messages['az_EIDSS_Age']} : #{it.patientAge}
 									</div></td>
 								<td>
 								   <ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>

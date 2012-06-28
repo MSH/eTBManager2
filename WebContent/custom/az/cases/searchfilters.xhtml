@@ -112,6 +112,7 @@
    </div>
 
 	<div id="perioddiv">
+	    	<ui:fragment rendered='#{casesAZ.notBindedEIDSS}' name="label">#{messages['az_EIDSS_REGDATE']}:</ui:fragment>
 	<s:decorate id="ini" template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['global.inimonthyear']}:</ui:define>
 		<h:selectOneMenu id="inimonth" value="#{caseFilters.iniMonth}" onchange="onChangePeriod()">
