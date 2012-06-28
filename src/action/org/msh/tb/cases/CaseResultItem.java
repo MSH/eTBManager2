@@ -34,7 +34,16 @@ public class CaseResultItem {
 	private String registrationCode;
 	private DiagnosisType diagnosisType;
 	private Date birthDate;
-
+	
+	@SuppressWarnings("deprecation")
+	public String getyearOfBirth(){
+		String res = "";
+		if ((getPatientAge() != null) && (getNotificationDate() != null)){
+			Integer resI = getNotificationDate().getYear() - getPatientAge().intValue()  + 1900;
+			res = resI.toString();
+		}
+		return res;
+	}
 
 	/**
 	 * Return the patient number formatted to be displayed  
