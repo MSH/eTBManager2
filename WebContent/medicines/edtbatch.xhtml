@@ -69,7 +69,8 @@ function hideBatchDlg() {
     	<h:inputText id="qtd" value="#{medicineReceivingHome.batch.quantityReceived}" required="true" onkeypress="return numbersOnly(this,event);" onkeyup="changeQtd(this, event);">
     		<f:validateDoubleRange minimum="1"/>
     	</h:inputText>
-    	(#{medicineReceivingHome.batch.medicine.dosageForm})
+    	<!-- (#{medicineReceivingHome.batch.medicine.dosageForm}) -->
+    	<h:outputText value="(#{medicineReceivingHome.batch.medicine.dosageForm})" rendered="#{not empty medicineReceivingHome.batch.medicine.dosageForm}"/>
     </s:decorate>
 
     <s:decorate id="num" template="/layout/edit.xhtml" >
@@ -84,7 +85,8 @@ function hideBatchDlg() {
     	<h:inputText id="qtdcon" value="#{medicineReceivingHome.batch.quantityContainer}" required="true" onkeypress="return numbersOnly(this,event);" onkeyup="changeQtdCon(this, event);">
     		<f:validateDoubleRange minimum="1"/>
     	</h:inputText>
-    	(#{medicineReceivingHome.batch.medicine.dosageForm})
+    	<!-- (#{medicineReceivingHome.batch.medicine.dosageForm}) -->
+    	<h:outputText value="(#{medicineReceivingHome.batch.medicine.dosageForm})" rendered="#{not empty medicineReceivingHome.batch.medicine.dosageForm}"/>
     </s:decorate>
 
     <s:decorate id="uprice" template="/layout/edit.xhtml" >
