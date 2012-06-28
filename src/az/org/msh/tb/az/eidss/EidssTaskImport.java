@@ -397,7 +397,10 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		onecase.setDateOfBirth(ConvertToDate(EIDSSData.getDateOfBirth()));
 		}
 		onecase.setAge(CalcAge(EIDSSData.getPatientAge(),EIDSSData.getPatientAgeType().getId().toString()));
-	
+		String notification="";
+		if (EIDSSData.getNotificationSentBy()!=null) {
+			notification=EIDSSData.getNotificationSentBy().getName();
+		}
 		AddressInfo addr=EIDSSData.getCurrentResidence();
 		onecase.setFinalDiagnosisDate(ConvertToDate(EIDSSData.getTentativeDiagnosisDate()));
 		String country="";
@@ -410,7 +413,8 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		if (addr.getRayon()!=null)rayon=addr.getRayon().getName()+", ";
 		String addInfo=country+region+settlement+rayon;
 		if 	(addr.getStreet()!=null)
-		addInfo=addInfo+addr.getStreet();
+			
+		addInfo="Notify by: "+notification+" Current residence: "+addInfo+addr.getStreet();
 		onecase.setAdditionalComment(addInfo);	
 		onecase.setCaseID(EIDSSData.getCaseID().toString());	
 		infoForExport.add(onecase);
