@@ -15,6 +15,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.InfectionSite;
+import org.msh.tb.entities.enums.LocalityType;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.indicators.core.Indicator2D;
@@ -160,37 +161,48 @@ public class Report08AZ extends Indicator2D {
 			rowid = tc.getPatient().getGender().ordinal();
 			if (tc.getPatientType().equals(PatientType.NEW)){
 				colid = idAgeRange(tc.getAge());
-
 				table.addIdValue("col1", "row"+(1+rowid), 1F);
 				table.addIdValue("col"+colid, "row"+(1+rowid), 1F);
+				if (isRural(tc)){
+					table.addIdValue("col17","row"+(1+rowid) , 1F);
+					table.addIdValue("col17","row"+(73+rowid) , 1F);
+					table.addIdValue("col1", "row"+(73+rowid), 1F);
+					table.addIdValue("col"+colid, "row"+(73+rowid), 1F);
+				}
 				addToTable2100(1,tc,false);
 				
 				if (tc.getInfectionSite().equals(InfectionSite.PULMONARY)){
 					table.addIdValue("col1", "row"+(3+rowid), 1F);
 					table.addIdValue("col"+colid, "row"+(3+rowid), 1F);
+					if (isRural(tc))table.addIdValue("col17","row"+(3+rowid) , 1F);
 					addToTable2100(2,tc,false);
 
 					if (indCarvity(tc)>-1)
 					{
 						table.addIdValue("col1", "row"+(23+rowid), 1F);
 						table.addIdValue("col"+colid, "row"+(23+rowid), 1F);
+						if (isRural(tc))table.addIdValue("col17","row"+(23+rowid) , 1F);
 						addToTable2100(12,tc,false);
 					}
 					if (tc.getPulmonaryType() != null){
 						table.addIdValue("col1", "row"+(3+rowid+tc.getPulmonaryType().getDisplayOrder()*2), 1F);
 						table.addIdValue("col"+colid, "row"+(3+rowid+tc.getPulmonaryType().getDisplayOrder()*2), 1F);
+						if (isRural(tc))table.addIdValue("col17","row"+(3+rowid+tc.getPulmonaryType().getDisplayOrder()*2) , 1F);
 						addToTable2100(2+tc.getPulmonaryType().getDisplayOrder(),tc,false);
 
 						if (bkplus(tc)){
 							table.addIdValue("col1", "row"+(25+rowid), 1F);
 							table.addIdValue("col"+colid, "row"+(25+rowid), 1F);
+							if (isRural(tc))table.addIdValue("col17","row"+(25+rowid), 1F);
 							table.addIdValue("col1", "row"+(25+rowid+tc.getPulmonaryType().getDisplayOrder()*2), 1F);
 							table.addIdValue("col"+colid, "row"+(25+rowid+tc.getPulmonaryType().getDisplayOrder()*2), 1F);
+							if (isRural(tc))table.addIdValue("col17","row"+(25+rowid+tc.getPulmonaryType().getDisplayOrder()*2),1F);
 							addToTable2100(13,tc,false);
 							if (indCarvity(tc)>-1)
 							{
 								table.addIdValue("col1", "row"+(45+rowid), 1F);
 								table.addIdValue("col"+colid, "row"+(45+rowid), 1F);
+								if (isRural(tc))table.addIdValue("col17","row"+(45+rowid), 1F);
 							}
 						}	
 					}
@@ -199,10 +211,12 @@ public class Report08AZ extends Indicator2D {
 				{
 					table.addIdValue("col1", "row"+(47+rowid), 1F);
 					table.addIdValue("col"+colid, "row"+(47+rowid), 1F);
+					if (isRural(tc))table.addIdValue("col17","row"+(47+rowid), 1F);
 					addToTable2100(14,tc,false);
 					if (tc.getExtrapulmonaryType() != null){
 						table.addIdValue("col1", "row"+(47+rowid+tc.getExtrapulmonaryType().getDisplayOrder()*2), 1F);
 						table.addIdValue("col"+colid, "row"+(47+rowid+tc.getExtrapulmonaryType().getDisplayOrder()*2), 1F);
+						if (isRural(tc))table.addIdValue("col17","row"+(47+rowid+tc.getExtrapulmonaryType().getDisplayOrder()*2), 1F);
 						addToTable2100(14+tc.getExtrapulmonaryType().getDisplayOrder(),tc,false);
 					}
 				}
@@ -334,13 +348,23 @@ public class Report08AZ extends Indicator2D {
 		if (!tc.isReferToOtherTBUnit())
 			if (tc.getAge()<=17)
 			{
+				if (isRural(tc)){
+					if (!extra) table2100.addIdValue("col3", "row"+rowInd, 1F);
+					table2100.addIdValue("col7", "row"+rowInd, 1F);
+				}else {
 				if (!extra) table2100.addIdValue("col1", "row"+rowInd, 1F);
 				table2100.addIdValue("col5", "row"+rowInd, 1F);
 			}
+			}
 			else
 			{
+				if (isRural(tc)){
+					if (!extra) table2100.addIdValue("col4", "row"+rowInd, 1F);
+					table2100.addIdValue("col8", "row"+rowInd, 1F);
+				}else{
 				if (!extra) table2100.addIdValue("col2", "row"+rowInd, 1F);
 				table2100.addIdValue("col6", "row"+rowInd, 1F);
+				}
 			}
 	}
 	
@@ -374,26 +398,42 @@ public class Report08AZ extends Indicator2D {
 			if (tc.getAge()<=17)
 			{
 				if (tc.getPatientType().equals(PatientType.NEW))	
-					table2120.addIdValue("col1", "row"+rowInd, 1F);
+					if (isRural(tc)){
+						table2120.addIdValue("col3", "row"+rowInd, 1F);
+					}else{
+						table2120.addIdValue("col1", "row"+rowInd, 1F);
+					}
 				else 
 					if (tc.getPatientType().equals(PatientType.NEW) ||
 							tc.getPatientType().equals(PatientType.AFTER_DEFAULT) ||
 							tc.getPatientType().equals(PatientType.RELAPSE) ||
 							tc.getPatientType().equals(PatientType.FAILURE_FT) ||
 							tc.getPatientType().equals(PatientType.FAILURE_RT))
+						if (isRural(tc)){
+							table2120.addIdValue("col7", "row"+rowInd, 1F);
+						}else{
 						table2120.addIdValue("col5", "row"+rowInd, 1F);
+						}
 			}
 			else 
 			{
 				if (tc.getPatientType().equals(PatientType.NEW))	
+					if (isRural(tc)){
+						table2120.addIdValue("col4", "row"+rowInd, 1F);
+					}else{
 					table2120.addIdValue("col2", "row"+rowInd, 1F);
+					}
 				else 
 					if (tc.getPatientType().equals(PatientType.NEW) ||
 							tc.getPatientType().equals(PatientType.AFTER_DEFAULT) ||
 							tc.getPatientType().equals(PatientType.RELAPSE) ||
 							tc.getPatientType().equals(PatientType.FAILURE_FT) ||
 							tc.getPatientType().equals(PatientType.FAILURE_RT))
+						if (isRural(tc)){
+							table2120.addIdValue("col8", "row"+rowInd, 1F);	
+						}else{
 						table2120.addIdValue("col6", "row"+rowInd, 1F);
+						}
 			}
 		}
 	}
@@ -697,5 +737,15 @@ public class Report08AZ extends Indicator2D {
 		if (mas3001==null)
 			mas3001 = new int[7];
 		return mas3001;
+	}
+	
+	private boolean isRural(TbCase c){
+		//	if 0 -urban, other - rural
+		boolean result=true;
+		if (c.getNotifAddress().getLocalityType()!=null){
+			if (c.getNotifAddress().getLocalityType()==LocalityType.URBAN)result=false;
+		}
+		return result;
+
 	}
 }
