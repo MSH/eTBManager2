@@ -144,7 +144,9 @@
 		<tr><td>
 			<s:decorate template="/layout/auselection.xhtml">
 				<ui:param name="auselection" value="#{indicator.currentAdminUnit}" />
+			<ui:remove>
 				<ui:param name="requiredLevel" value="#{defaultWorkspace.patientAddrRequiredLevels}" />
+				</ui:remove>
 			</s:decorate>
     	</td></tr>
     	</table>
