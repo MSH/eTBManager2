@@ -297,11 +297,15 @@ public class UserHome extends EntityHomeEx<User> {
 			if (unit != null) {
 				List<AdministrativeUnit> lst = unit.getAdminUnit().getParentsTreeList(true);
 
+				AdministrativeUnit admunit = uws.getAdminUnit();
+				if (admunit == null)
+					admunit = unit.getAdminUnit();
+
 				for (AdministrativeUnit au: lst) { 
 					views.add(new SelectItem("A" + au.getId().toString(), au.getCountryStructure().getName().toString() + ": " +
 							au.getName().toString()));
-
-					if ((uv == UserView.ADMINUNIT) && (uws.getAdminUnit().equals(au)))
+		
+					if ((uv == UserView.ADMINUNIT) && (admunit.equals(au)))
 						selectedView = views.get(views.size() - 1).getValue().toString();
 				}
 				

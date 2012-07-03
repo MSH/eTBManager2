@@ -329,6 +329,9 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 			addedUsers = new ArrayList<User>();
 		addedUsers.add(usu);
 		
+		if (ws.getAdminUnit() == null)
+			ws.setAdminUnit(ws.getTbunit().getAdminUnit());
+		
 		ws.setWorkspace(getInstance());
 		
 		getInstance().getUsers().add(ws);
