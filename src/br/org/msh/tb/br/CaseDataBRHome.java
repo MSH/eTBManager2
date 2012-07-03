@@ -306,13 +306,7 @@ public class CaseDataBRHome {
 			}
 		
 		}
-		
-		if(medInst.getDate().before(caseHome.getTbCase().getDiagnosisDate())){
-			facesMessages.addToControlFromResourceBundle("date", "cases.medexamdate.val1");
-			return "error";
-		}
-		//Finish Validation
-	
+
 		adjustMedicalExaminationFields();
 		caseHome.getTbCase().getCurrentAddress().setAdminUnit(auselection.getSelectedUnit());
 		medicalExaminationBRHome.setDisplayMessage(false);
@@ -334,7 +328,7 @@ public class CaseDataBRHome {
 			facesMessages.addToControlFromResourceBundle("cbpulmonary", "javax.faces.component.UIInput.REQUIRED");
 			res = false;
 		}
-		
+
 		if (medicalExaminationBRHome != null) {
 			MedicalExamination medExam = medicalExaminationBRHome.getInstance();
 			if (YesNoType.YES.equals(medExam.getSupervisedTreatment())) {
@@ -343,6 +337,12 @@ public class CaseDataBRHome {
 					res = false;
 				}
 			}
+			
+			if(medExam.getDate().before(caseHome.getTbCase().getDiagnosisDate())){
+				facesMessages.addToControlFromResourceBundle("date", "cases.medexamdate.val1");
+				return false;
+			}
+			//Finish Validation
 		}
 		
 		// check exams
