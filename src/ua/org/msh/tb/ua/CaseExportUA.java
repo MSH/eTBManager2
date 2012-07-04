@@ -1,6 +1,6 @@
 package org.msh.tb.ua;
 
- import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class CaseExportUA extends CaseExport {
 		return cases;
 	}
 
-	
+
 	/**
 	 * Create the list of cases based on the filters in the {@link IndicatorFilters} session variable 
 	 */
@@ -53,11 +53,11 @@ public class CaseExportUA extends CaseExport {
 	@Override
 	protected String getHQLJoin() {
 		return super.getHQLJoin().concat(" join fetch c.notificationUnit nu " +
-			"join fetch nu.adminUnit " +
-			"left join fetch c.pulmonaryType " +
-			"left join fetch c.extrapulmonaryType");
+				"join fetch nu.adminUnit " +
+				"left join fetch c.pulmonaryType " +
+		"left join fetch c.extrapulmonaryType");
 	}
-	
+
 	@Override
 	protected String getHQLValidationState() {
 		return null;
@@ -102,7 +102,7 @@ public class CaseExportUA extends CaseExport {
 		excel.addTextFromResource("DiagnosisType", "title");
 		excel.addTextFromResource("TbCase.iniTreatmentDate", "title");
 		excel.addTextFromResource("TbCase.endTreatmentDate", "title");
-		
+
 		excel.addTextFromResource("uk_UA.dateCMCCRegistration", "title");
 		excel.addTextFromResource("uk_UA.dateFirstVisitGMC", "title");
 		excel.addTextFromResource("uk_UA.firstTBMedExamDate", "title");
@@ -117,7 +117,7 @@ public class CaseExportUA extends CaseExport {
 		excel.addTextFromResource("TbField.PULMONARY_TYPES", "title");
 		excel.addTextFromResource("TbField.EXTRAPULMONARY_TYPES", "title");
 		excel.addTextFromResource("TbField.EXTRAPULMONARY_TYPES", "title");
-		
+
 		excel.addTextFromResource("uk_UA.pulmonaryDestruction", "title");
 		excel.addTextFromResource("uk_UA.pulmonaryMBT", "title");
 		excel.addTextFromResource("cases.examhiv.vct", "title");
@@ -136,7 +136,7 @@ public class CaseExportUA extends CaseExport {
 		excel.addTextFromResource("uk_UA.prisioner", "title");
 		excel.addTextFromResource("cases.exams.date", "title");
 		excel.addTextFromResource("TbCase.outcomeDate", "title");
-		
+
 	}
 
 
@@ -149,11 +149,11 @@ public class CaseExportUA extends CaseExport {
 
 		CaseDataUA data = getCasesUA().get(index);
 		TbCase tbcase = data.getTbcase();
-		
+
 		excel.addText(tbcase.getPatient().getFullName());
 		excel.addTextFromResource(tbcase.getClassification().getKey());
 		excel.addText(tbcase.getDisplayCaseNumber());
-		
+
 		String s = getMessages().get( tbcase.getState().getKey() );
 		if (data.getExtraOutcomeInfo() != null) {
 			String extra = getMessages().get( data.getExtraOutcomeInfo().getKey() );
@@ -225,11 +225,11 @@ public class CaseExportUA extends CaseExport {
 		return tbcase;
 	}
 
-	
+
 	/**
 	 * @return DST-test, which is up to quality, namely first month of treatment and worst test from several 
-	*/
-	
+	 */
+
 	private ExamDST rightDSTTest(TbCase tc){
 		Calendar dateTest = Calendar.getInstance();
 		Calendar dateIniTreat = Calendar.getInstance();
@@ -240,16 +240,20 @@ public class CaseExportUA extends CaseExport {
 			if (tc.getTreatmentPeriod()!=null)
 				dateIniTreat.setTime(tc.getTreatmentPeriod().getIniDate());
 			else
-				dateIniTreat.setTime(tc.getDiagnosisDate());
+				if (tc.getDiagnosisDate() != null){
+					dateIniTreat.setTime(tc.getDiagnosisDate());
+				}else{
+					dateIniTreat.setTime(tc.getRegistrationDate());
+				}
 			long testperiod = dateTest.getTimeInMillis()-dateIniTreat.getTimeInMillis();
 			testperiod/=86400000;
-			
+
 			if (testperiod<=30) {
 				res++;
 				lst.add(ex);
 			}	
 		}
-		
+
 		switch (lst.size()) {
 		case 0: 
 			return new ExamDST();
@@ -261,7 +265,7 @@ public class CaseExportUA extends CaseExport {
 	}
 	/**
 	 * @return worst DST-test from several 
-	*/
+	 */
 	private ExamDST WorstRes(List<ExamDST> lst) {
 		int tmp = 0;
 		int max = Integer.MIN_VALUE;
@@ -275,7 +279,7 @@ public class CaseExportUA extends CaseExport {
 			if (tmp > max) {
 				max = tmp; 
 				minEl=el;
-				}
+			}
 		}
 		return minEl;
 	}
@@ -283,7 +287,7 @@ public class CaseExportUA extends CaseExport {
 
 	protected String translateYesNo(boolean value) {
 		if (value)
-			 return getMessages().get("global.yes");
+			return getMessages().get("global.yes");
 		else return "-";
 	}
 
@@ -291,5 +295,5 @@ public class CaseExportUA extends CaseExport {
 	public int getResultCount() {
 		return getCasesUA().size();
 	}
-	
+
 }
