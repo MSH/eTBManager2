@@ -382,7 +382,7 @@ public class ExcelCreator {
 	/**
 	 * Create a new Excel workbook
 	 */
-	protected void createWorkbook() {
+	public void createWorkbook() {
 		try {
 			if (excelFile != null)
 				excelFile.delete();

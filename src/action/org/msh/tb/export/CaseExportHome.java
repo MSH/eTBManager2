@@ -24,13 +24,13 @@ public class CaseExportHome extends CaseHQLBase {
 	/**
 	 * Selected group of information to be exported
 	 */
-	private ExportContent exportContent = ExportContent.CASEDATA;
+	protected ExportContent exportContent = ExportContent.CASEDATA;
 
 	
 	/**
 	 * Creator of the Excel file 
 	 */
-	private ExcelCreator excel;
+	protected ExcelCreator excel;
 	
 	private CaseIterator caseIterator;
 	
