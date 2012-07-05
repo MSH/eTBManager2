@@ -8,6 +8,8 @@
       xmlns:p="http://jboss.com/products/seam/pdf"
       xmlns:s="http://jboss.com/products/seam/taglib">
 
+<ui:param name="indicatorController" value="#{indicatorControllerUA}" />
+
 	<div class="form-content">
 	<table width="100%" style="border-collapse: collapse;"><tr><td colspan="2">
 	<s:decorate template="/layout/edit.xhtml" rendered="#{empty hideclassification}">
@@ -262,6 +264,12 @@ function handleContextClick(comp) {
 		
 	</td>
 	<td align="right" >
+	<a:commandLink reRender="indicator" styleClass="button" 
+		action="#{indicatorController.verify}"
+		onclick="if (!disableButton(this)) return false;" oncomplete="enableButton();">
+		<span>#{messages['form.verify']}</span>
+	</a:commandLink>
+	
 	<a:commandLink reRender="indicator" styleClass="button" 
 		action="#{indicatorController.execute}"
 		onclick="if (!disableButton(this)) return false;" oncomplete="showHidePrintFilterBut(true);enableButton();showChart();">
