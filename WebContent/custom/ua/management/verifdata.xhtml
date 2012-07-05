@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:p="http://jboss.com/products/seam/pdf"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<div class="form-content">
+	<table width="100%" style="border-collapse: collapse;">
+	
+		<rich:tabPanel switchType="client">
+			<c:forEach var="cat" items="#{list.keySet()}" varStatus="ind">
+				<rich:tab label="#{cat}">
+          		  	<rich:panelBar height="200">
+						<c:forEach var="it" items="#{list.get(cat)}">
+							<rich:panelBarItem label="#{it.title}" rendered="#{it.caseList.size()!=0}">
+								<ui:repeat var="tc" value="#{it.caseList}">
+									<s:link value="#{tc.patient.fullName}" view="/cases/casedata.xhtml" target="_blank">
+										<f:param name="id" value="#{tc.id}" />
+									</s:link>
+									<br/>
+								</ui:repeat>
+							</rich:panelBarItem>
+						</c:forEach>
+					</rich:panelBar>
+					
+        		</rich:tab>
+       		
+			</c:forEach>
+   	 	</rich:tabPanel>
+    	
+		<ui:remove>
+			<rich:panelBar height="400" width="500">
+				<ui:repeat var="it" value="#{list.get(it)}">
+					<rich:panelBarItem label="#{messages['verify.error'.concat(list.indexOf(it))]}">
+						<ui:repeat var="tc" value="#{it}">
+							<h:outputText value="#{tc.caseId}" />
+							
+							<br/>
+						</ui:repeat>
+					</rich:panelBarItem>
+				</ui:repeat>
+			</rich:panelBar>
+		</ui:remove>
+	</table>
+	</div>
+
+</ui:composition>
