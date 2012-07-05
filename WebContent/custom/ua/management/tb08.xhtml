@@ -16,6 +16,7 @@
 <ui:param name="labelstyle" value="width:180px;" />
 
 <ui:param name="indicator" value="#{reportTB08}" />
+<ui:param name="indicatorController" value="#{indicatorControllerUA}" />
 <ui:param name="useclassification" value="0" />
 <ui:param name="left" value="0" />
 
@@ -39,6 +40,10 @@
 <h:panelGroup id="indicator" styleClass="indicator-tables">
 
 	<s:fragment rendered="#{indicatorController.executing}">
+	<s:decorate template="verifdata.xhtml" rendered="#{indicatorController.verifing}">
+		<ui:param name="list" value="#{indicator.verifyList}" />
+	</s:decorate>
+	
 	<h2>#{messages['uk_UA.reports.tb08.1']}</h2>
 	<table class="table1" width="100%">
 		<tr>
