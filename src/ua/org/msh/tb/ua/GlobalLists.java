@@ -26,7 +26,7 @@ public class GlobalLists {
 		TbField.ADJUSTMENT
 	};
 	
-	private static final CaseState outcomes[] = {
+	public static final CaseState outcomes[] = {
 		CaseState.CURED,
 		CaseState.TREATMENT_COMPLETED,
 		CaseState.DIED,
