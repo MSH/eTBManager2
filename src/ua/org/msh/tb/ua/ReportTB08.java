@@ -167,7 +167,13 @@ public class ReportTB08 extends Indicator2D {
 		int ind=0;
 		while(it.hasNext()){
 			TbCase tc = it.next();
-			CaseDataUA cd = (CaseDataUA) getEntityManager().createQuery("select ua from CaseDataUA ua where ua.tbcase.id="+tc.getId()).getSingleResult();
+			//CaseDataUA cd = (CaseDataUA) getEntityManager().createQuery("select ua from CaseDataUA ua where ua.tbcase.id="+tc.getId()).getSingleResult();
+			CaseDataUA cd = (CaseDataUA) getEntityManager().find(CaseDataUA.class, tc.getId());  //AK, previous line will rise exception, if no result
+			if (cd == null){
+				if (!verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().contains(tc))
+					verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().add(tc);
+				continue;
+			}
 			String key;
 			switch (tc.getPatientType()) {
 				case NEW: key = "new"; 
@@ -178,9 +184,9 @@ public class ReportTB08 extends Indicator2D {
 				break;
 				}
 			ind++;
-			System.out.println(ind);
-			if (ind==51)
-				System.out.println("asd");
+			//System.out.println(ind);
+			//if (ind==51)
+				//System.out.println("asd");
 			if (hashSet.contains(tc.getState().ordinal())){
 				if (tc.getExamsMicroscopy()!=null || tc.getExamsCulture()!=null)
 					if (tc.getExamsMicroscopy().size()!=0 || tc.getExamsCulture().size()!=0)
