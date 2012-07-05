@@ -16,7 +16,7 @@ public class EntityLogMapping {
 		this.entityClass = entityClass;
 	}
 
-	
+
 	/**
 	 * Create a list of all properties of the object and its respective values
 	 * @param entity
@@ -25,7 +25,7 @@ public class EntityLogMapping {
 	public List<PropertyValue> describeEntity(Object entity, Operation oper) {
 		if (oper == Operation.ALL)
 			throw new IllegalArgumentException("operation must be specified. ALL is not allowed");
-		
+
 		Map<PropertyMapping, String> lst = getPropertyList();
 		List<PropertyValue> values = new ArrayList<PropertyValue>();
 
@@ -36,17 +36,19 @@ public class EntityLogMapping {
 					Object value = PropertyUtils.getProperty(entity, propname);
 					values.add( new PropertyValue(entity, prop, propname, value) );
 				}
-				
+
 			} catch (Exception e) {
-				e.printStackTrace();
-				new RuntimeException(e);
+				if (!e.getClass().getName().contains("NestedNullException")){ //AK 07/07/12 exclude annoyed error message about treatmentPeriod
+					e.printStackTrace();
+					new RuntimeException(e);
+				}
 			}
 		}
-		
+
 		return values;
 	}
 
-	
+
 	/**
 	 * Return list of properties to be logged (including nested properties of other objects)
 	 * @return
@@ -54,11 +56,11 @@ public class EntityLogMapping {
 	public Map<PropertyMapping, String> getPropertyList() {
 		Map<PropertyMapping, String> map = new HashMap<PropertyMapping, String>();
 		addPropertiesToList(this, null, map);
-		
+
 		return map;
 	}
-	
-	
+
+
 	/**
 	 * Add name of properties to a list of strings. If properties must be nested, 
 	 * @param map
@@ -70,13 +72,13 @@ public class EntityLogMapping {
 			String s = pm.getName();
 			if (prefix != null)
 				s = prefix + s;
-	
+
 			if (pm.isPrimitiveValue())
-				 map.put(pm, s);
+				map.put(pm, s);
 			else addPropertiesToList(pm.getEntityProperty(), s + ".", map);
 		}
 	}
-	
+
 
 	/**
 	 * @return the entityClass
