@@ -12,6 +12,7 @@ public class IndicatorControllerUA extends IndicatorController {
 	
 	public void verify(){
 		verifing = !verifing;
+		super.execute();
 		}
 
 	public boolean isVerifing() {
