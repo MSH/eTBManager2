@@ -10,19 +10,26 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.international.Messages;
-import org.msh.tb.misc.GlobalLists;
+import org.msh.tb.adminunits.AdminUnitGroup;
+import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.cases.HealthUnitInfo;
+import org.msh.tb.cases.HealthUnitsQuery;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.Tag.TagType;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.Tag.TagType;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.login.UserSession;
+import org.msh.tb.misc.GlobalLists;
 
 /**
  * Generate report by case state to be displayed in the main page
@@ -31,6 +38,7 @@ import org.msh.tb.login.UserSession;
  *
  */
 @Name("caseStateReportUA")
+@Scope(ScopeType.SESSION)
 public class CaseStateReport {
 
 	@In EntityManager entityManager;
@@ -44,6 +52,7 @@ public class CaseStateReport {
 	private Item total;
 	private Map<String, String> messages;
 	private List<Item> tags;
+	private AdminUnitSelection selectedAdmUnitSel;
 
 
 	/**
@@ -56,7 +65,46 @@ public class CaseStateReport {
 		return items;
 	}
 
-
+	public List<AdminUnitGroup<HealthUnitInfo>> getAdminUnit(){
+		HealthUnitsQuery healthUnitsQuery = (HealthUnitsQuery)Component.getInstance("healthUnitsQueryUA", true);
+		if (getSelectedAdmUnit()!=null){
+			List<AdminUnitGroup<HealthUnitInfo>> lst2 = new ArrayList<AdminUnitGroup<HealthUnitInfo>>();
+			for (AdminUnitGroup<HealthUnitInfo> adm: healthUnitsQuery.getAdminUnits()) {
+				//if (getSelectedAdmUnitSel().getParentUnits().size()==1){
+					if (adm.getAdminUnit().equals(getSelectedAdmUnit()))
+						lst2.add(adm);
+					/*}else if (getSelectedAdmUnitSel().getParentUnits().size()==2)
+						if (findUnit(adm)!=-1){
+							if (lst2.isEmpty())	
+								{
+								AdminUnitGroup<HealthUnitInfo> ad = new AdminUnitGroup<HealthUnitInfo>();
+								ad.setAdminUnit(adm.getAdminUnit());adm.getAdminUnit().getCountryStructure();
+								lst2.add(ad);
+								}
+							lst2.get(0).getItems().add(adm.getItems().get(findUnit(adm)));
+						}*/
+			}
+			return lst2;
+		}
+		return healthUnitsQuery.getAdminUnits();
+	}
+	
+	/*private void addUnit(List<AdminUnitGroup<HealthUnitInfo>> lst2,adm){
+		for (int i = lst2.size(); i < array.length; i++) {
+			
+		}
+	}*/
+	
+	/*private int findUnit(AdminUnitGroup<HealthUnitInfo> adm){
+		for (int i = 0; i < adm.getItems().size(); i++) {
+			EntityManager em = (EntityManager) Component.getInstance("entityManager");
+			Tbunit tu = (Tbunit) em.find(Tbunit.class, adm.getItems().get(i).getUnitId());
+			if (tu.getAdminUnit().equals(getSelectedAdmUnit()))
+				return i;
+		}
+		return -1;
+	}*/
+	
 	/**
 	 * Create items of the report
 	 */
@@ -163,12 +211,13 @@ public class CaseStateReport {
 	protected String generateSQLConditionByUserView() {
 		switch (userWorkspace.getView()) {
 		case ADMINUNIT: 
-			return " and (a.code like '" + userWorkspace.getAdminUnit().getCode() + "%')"; 
+			return " and (a.code like '" + getSelectedAdmUnit().getCode() + "%')"; 
 		case TBUNIT: 
 			return " and u.id = " + userWorkspace.getTbunit().getId();
 		default: return "";
 		}
 	}
+	
 	
 	/**
 	 * Generate SQL condition to filter cases
@@ -458,5 +507,31 @@ public class CaseStateReport {
 		public void setTagType(TagType tagType) {
 			this.tagType = tagType;
 		}
+	}
+
+
+	public AdministrativeUnit getSelectedAdmUnit() {
+		if (userWorkspace.getView().equals(UserView.ADMINUNIT))
+				userWorkspace.getAdminUnit();
+		return getSelectedAdmUnitSel().getSelectedUnit();
+	}
+
+
+	public void setSelectedAdmUnitSel(AdminUnitSelection selectedAdmUnitSel) {
+		this.selectedAdmUnitSel = selectedAdmUnitSel;
+	}
+
+
+	public AdminUnitSelection getSelectedAdmUnitSel() {
+		if (selectedAdmUnitSel==null)
+			//if (!selectedAdmUnitSel.isAlreadySelected())
+			{
+				selectedAdmUnitSel = new AdminUnitSelection(true);
+				selectedAdmUnitSel.setSelectedUnit(userWorkspace.getAdminUnit());
+			}
+			/*else {
+				selectedAdmUnitSel = new AdminUnitSelection();
+			}*/
+		return selectedAdmUnitSel;
 	}
 }
