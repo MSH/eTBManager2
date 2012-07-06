@@ -13,8 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamMicroscopy;
@@ -35,10 +37,12 @@ import org.msh.tb.ua.entities.CaseDataUA;
 import org.msh.utils.date.Period;
 
 @Name("reportTB08")
+@Scope(ScopeType.CONVERSATION)
 public class ReportTB08 extends Indicator2D {
 	private static final long serialVersionUID = -1617171254497253851L;
 
 	@In(create=true) IndicatorControllerUA indicatorControllerUA;
+	@In(create=true) FacesMessages facesMessages;
 	
 	private IndicatorTable table2000;
 	private IndicatorTable table3000;
@@ -69,8 +73,6 @@ public class ReportTB08 extends Indicator2D {
 	}
 	
 	private HashSet<Integer> hashSet;
-
-	private FacesMessages facesMessages;
 	
 	private static final String statesIn = "(" + 
 		CaseState.CURED.ordinal() + "," + 
@@ -150,6 +152,7 @@ public class ReportTB08 extends Indicator2D {
 	}
 
 	private void generateTables() {
+		//showMessage("verify.busy");
 		verifyList = new LinkedHashMap<String,List<ErrItem>>();
 		for (int i = 1; i < 4; i++) {
 			verifyList.put(getMessage("verify.errorcat"+i),new ArrayList<ErrItem>());
@@ -157,6 +160,7 @@ public class ReportTB08 extends Indicator2D {
 				case 1:{
 					verifyList.get(getMessage("verify.errorcat"+i)).add(new ErrItem(new ArrayList<TbCase>(), getMessage("verify.error11")));
 					verifyList.get(getMessage("verify.errorcat"+i)).add(new ErrItem(new ArrayList<TbCase>(), getMessage("verify.error12")));
+					verifyList.get(getMessage("verify.errorcat"+i)).add(new ErrItem(new ArrayList<TbCase>(), getMessage("verify.error13")));
 					break;
 				}
 				case 2:{
@@ -178,6 +182,7 @@ public class ReportTB08 extends Indicator2D {
 		lst = createQuery().getResultList();
 		Iterator<TbCase> it = lst.iterator();
 		int ind=0;
+		//if (lst.size()<=4000){
 		while(it.hasNext()){
 			TbCase tc = it.next();
 			//CaseDataUA cd = (CaseDataUA) getEntityManager().createQuery("select ua from CaseDataUA ua where ua.tbcase.id="+tc.getId()).getSingleResult();
@@ -233,11 +238,15 @@ public class ReportTB08 extends Indicator2D {
 						if (col != null) {
 							if (micResult!=null)
 								if (!(micResult.equals("_negative") && state.equals(CaseState.CURED)))
-								{
-									getTable1000().addIdValue(col, key + micResult, 1F);
-									getTable1000().addIdValue("TOTAL", key + micResult, 1F);
-									addToAllowing(tc);
-								}
+									if (!state.equals(CaseState.FAILED))
+									{
+										getTable1000().addIdValue(col, key + micResult, 1F);
+										getTable1000().addIdValue("TOTAL", key + micResult, 1F);
+										addToAllowing(tc);
+									}
+									else 
+										if (!verifyList.get(getMessage("verify.errorcat1")).get(2).getCaseList().contains(tc))
+											verifyList.get(getMessage("verify.errorcat1")).get(2).getCaseList().add(tc);
 							if (tc.getExamsCulture()!=null)
 								if (tc.getExamsCulture().size()!=0){
 									if (tc.getExamsCulture().get(0).getResult().isPositive() || micResult=="_positive")
@@ -245,11 +254,16 @@ public class ReportTB08 extends Indicator2D {
 									else micResult = "_negative";
 								}
 							if (micResult!=null)
-								if (!(micResult.equals("_negative") && state.equals(CaseState.CURED)))
-								{
-									getTable2000().addIdValue(col, key + micResult, 1F);
-									getTable2000().addIdValue("TOTAL", key + micResult, 1F);
-									addToAllowing(tc);
+								if (!(micResult.equals("_negative") && state.equals(CaseState.CURED))){
+									if (!state.equals(CaseState.FAILED))
+									{
+										getTable2000().addIdValue(col, key + micResult, 1F);
+										getTable2000().addIdValue("TOTAL", key + micResult, 1F);
+										addToAllowing(tc);
+									}
+									else 
+										if (!verifyList.get(getMessage("verify.errorcat1")).get(2).getCaseList().contains(tc))
+											verifyList.get(getMessage("verify.errorcat1")).get(2).getCaseList().add(tc);
 								}
 								else
 									if (!verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().contains(tc))
@@ -285,6 +299,10 @@ public class ReportTB08 extends Indicator2D {
 				perc = val2 / val1 * 100;
 			getTable3000().addIdValue("col3", row.getId(), perc);
 		}
+		/*}
+		else
+		showMessage("verify.busy");*/
+		
 	}
 
 	private String genRowTitle(TbCase tc, IndicatorTable tab) {
