@@ -388,21 +388,22 @@ public class CaseDataBRHome {
 				res = false;
 			}
 		}
-		
-		// check diagnosis date and notification date
-		if (tbcase.getRegistrationDate()!=null
-				&& tbcase.getDiagnosisDate()!=null
-				&& tbcase.getDiagnosisDate().after(tbcase.getRegistrationDate())) {
-			facesMessages.addToControlFromResourceBundle("diagdateedt", "cases.details.valerror1");
-			res = false;
-		}
-		
-		// check diagnosis date and the treatment initiation date
-		if (tbcase.getRegistrationDate()!=null
-				&& tbcase.getDiagnosisDate()!=null &&
-				tbcase.getTreatmentPeriod().getIniDate() != null && tbcase.getDiagnosisDate().after(tbcase.getTreatmentPeriod().getIniDate())) {
-			facesMessages.addToControlFromResourceBundle("diagdateedt", "cases.treat.inidatemsg");
-			res = false;
+
+		// check if diagnosis and registration dates are not null
+		if ((tbcase.getRegistrationDate() != null) && (tbcase.getDiagnosisDate() != null)) {
+
+			// data do diagnóstico é anterior a data de notificação?
+			if (tbcase.getDiagnosisDate().after(tbcase.getRegistrationDate())) {
+				facesMessages.addToControlFromResourceBundle("diagdateedt", "cases.details.valerror1");
+				res = false;
+			}
+
+			// tratamento foi definido ?
+			Date iniDate = tbcase.getTreatmentPeriod() != null? tbcase.getTreatmentPeriod().getIniDate(): null;
+			if ((iniDate != null) && (tbcase.getDiagnosisDate().after(tbcase.getTreatmentPeriod().getIniDate()))) {
+				facesMessages.addToControlFromResourceBundle("diagdateedt", "cases.treat.inidatemsg");
+				res = false;
+			}
 		}
 		
 //		if ((!caseHome.isManaged()) && (treatmentHealthUnitHome != null) && (treatmentHealthUnitHome.getRegimen() == null))
