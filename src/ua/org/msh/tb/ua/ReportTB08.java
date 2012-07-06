@@ -15,6 +15,7 @@ import java.util.Map;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.TbCase;
@@ -68,6 +69,9 @@ public class ReportTB08 extends Indicator2D {
 	}
 	
 	private HashSet<Integer> hashSet;
+
+	private FacesMessages facesMessages;
+	
 	private static final String statesIn = "(" + 
 		CaseState.CURED.ordinal() + "," + 
 		CaseState.TREATMENT_COMPLETED.ordinal() + "," +
@@ -104,6 +108,15 @@ public class ReportTB08 extends Indicator2D {
 		//generateTable3000();
 	}
 
+	/**
+	 * Show any message to UI
+	 * @param message Any message
+	 * @return 
+	 */
+	public void showMessage(String message) {
+		//show messages for background execution
+		facesMessages.addFromResourceBundle(message);
+	}
 	
 	private void sortAllLists() {
 		for (String key:verifyList.keySet()){
@@ -270,10 +283,6 @@ public class ReportTB08 extends Indicator2D {
 			
 			if ((val1 != null) && (val2 != null))
 				perc = val2 / val1 * 100;
-			else {
-				if (val1 != null)
-					perc = 100;
-			}
 			getTable3000().addIdValue("col3", row.getId(), perc);
 		}
 	}
