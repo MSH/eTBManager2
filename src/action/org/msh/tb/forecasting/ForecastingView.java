@@ -154,6 +154,7 @@ public class ForecastingView {
 		forecastingHome.setId(null);
 		
 		Contexts.getConversationContext().set("forecasting", forecastingHome.getInstance());
+		initialize(); //AK 07/06/12 to avoid potential user inaccuracy while data input and error message about null pointer
 		return "new-forecasting";
 	}
 	
