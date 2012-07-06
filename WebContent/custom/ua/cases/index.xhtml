@@ -152,21 +152,38 @@
 		<span>#{messages['cases.advancedsearch']}</span>
 	</h:commandLink>	
 
-	<h:outputText value="#{messages['Patient']}:"/>
 	
-	<h:inputText id="patname" value="#{caseFilters.patient}" style="width:150px;margin:4px" />
-
-	<a:commandLink id="btnsearchpat" action="search" styleClass="button" onclick="if (!disableButton(this)) return false;" >
-		<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
-		<span>#{messages['form.search']}</span>
-	</a:commandLink>
-
+	<ui:remove>
+		<s:decorate template="/layout/auselection.xhtml">
+			<ui:param name="auselection" value="#{caseFilters.auselection}" />
+			<ui:param name="required" value="false" />
+			<ui:param name="rerender" value="pnlhealthunits" />
+		</s:decorate>
+	</ui:remove>
+	
+	<ui:param name="auselection" value="#{caseStateReportUA.selectedAdmUnitSel}" />
+	<ui:define name="label">#{auselection.labelLevel1}:</ui:define>
+	<h:selectOneMenu id="cbselau1" value="#{auselection.unitLevel1}" rendered="#{userWorkspace.view=='COUNTRY'}">
+		<s:selectItems var="it" value="#{auselection.optionsLevel1}" noSelectionLabel="-" label="#{it.name}"/>
+		<s:convertEntity />
+		<a:support event="onchange" ajaxSingle="true" reRender="pnlhealthunits"/>
+	</h:selectOneMenu>
+	
+	
+		<a:commandLink id="btnsearchpat" action="search" styleClass="button" style="float:right;" onclick="if (!disableButton(this)) return false;">
+			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
+			<span>#{messages['form.search']}</span>
+		</a:commandLink>
+		<h:inputText id="patname" value="#{caseFilters.patient}" style="width:150px;margin:4px;float:right;"/>
+		<h:outputText value="#{messages['Patient']}:" style="margin:5px;float:right;"/>
+	
+	
 	<rich:jQuery timming="onload" selector="#patname" query="focus()" />
 	<rich:hotKey selector="#patname" key="return" handler="disableButton(#{rich:element('btnsearchpat')});execSearch();" /> 
 	<a:jsFunction name="execSearch" action="search" reRender="messages">
 		<a:actionparam name="param1" assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
 	</a:jsFunction>
-
+	
 	<div class="spacer" />
 
 	<h2>#{messages['cases.ongoing']}</h2>
