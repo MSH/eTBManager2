@@ -172,11 +172,15 @@ public abstract class CaseImporting extends ImportingBase{
 		
 		p = tbcase.getPatient();
 		if (p == null) {
-			p = new Patient();
+			p = findPatient(firstName, fatherName, lastName, birthDate);
 			tbcase.setPatient(p);					
 		}
-		p.setName(firstName);
-		p.setLastName(lastName);
+		else {
+			p.setName(firstName);
+			p.setLastName(lastName);
+			p.setMiddleName(fatherName);
+			p.setBirthDate(birthDate);
+		}
 		
 		Gender g = null;
 		if (gender != null) {
@@ -190,10 +194,8 @@ public abstract class CaseImporting extends ImportingBase{
 		}
 		
 		p.setGender(g);
-		p.setBirthDate(birthDate);
 //		p.setSecurityNumber(securityId);
 		p.setWorkspace(getWorkspace());
-		p.setMiddleName(fatherName);
 
 		if (p.getBirthDate() != null) {
 			if (tbcase.getRegistrationDate() != null)
@@ -210,6 +212,37 @@ public abstract class CaseImporting extends ImportingBase{
 	}
 
 	
+	/**
+	 * Search for a patient in a new case. If patient doesn't exist, a new one is returned
+	 * @param firstName
+	 * @param middleName
+	 * @param lastName
+	 * @param birthDate
+	 * @return
+	 */
+	protected Patient findPatient(String firstName, String middleName, String lastName, Date birthDate) {
+		List<Patient> lst = getEntityManager()
+			.createQuery("from Patient where name=:name and middleName=:middleName and lastName=:lastName and birthDate=:dt")
+			.setParameter("name", firstName)
+			.setParameter("middleName", middleName)
+			.setParameter("lastName", lastName)
+			.setParameter("dt", birthDate)
+			.getResultList();
+		
+		Patient p;
+		if (lst.size() == 0) {
+			p = new Patient();
+			p.setName(firstName);
+			p.setMiddleName(middleName);
+			p.setLastName(lastName);
+			p.setBirthDate(birthDate);
+		}
+		else p = lst.get(0);
+		
+		return p;
+	}
+
+
 	/**
 	 * Update case state according to the data from the server
 	 */

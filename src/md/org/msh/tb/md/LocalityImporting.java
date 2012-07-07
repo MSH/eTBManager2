@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jboss.seam.Component;
 import org.msh.tb.adminunits.AdminUnitHome;
+import org.msh.tb.adminunits.CountryStructuresQuery;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.CountryStructure;
 import org.w3c.dom.Element;
@@ -31,30 +32,40 @@ public class LocalityImporting extends ImportingBase {
 			addError("Locality " + nameRo + ": region of id " + regionId + " not found");
 			return false;
 		}
+
+		AdminUnitHome home = (AdminUnitHome)Component.getInstance("adminUnitHome");
 		
 		AdministrativeUnit locality = loadAdminUnit(id);
 		if (locality != null) {
 			locality.getName().setName1(nameRo);
 			locality.getName().setName2(nameRu);
 			locality.setLegacyId(id);
+
+			int level = locality.getLevel();
+			if (locality.getCountryStructure().getLevel() != level) {
+				CountryStructure cs = findCountryStructure(locality);
+				if (cs == null)
+					return false;
+				locality.setCountryStructure(cs);
+			}
+			
 			getEntityManager().persist(locality);
 			getEntityManager().flush();
+
+
 			return false;
 		}
 		else {
-			AdminUnitHome home = (AdminUnitHome)Component.getInstance("adminUnitHome");
 			home.clearInstance();
 			home.setParentId(region.getId());
 			AdministrativeUnit adm = home.getInstance();
 			adm.getName().setName1(nameRo);
 			adm.getName().setName2(nameRu);
 			adm.setLegacyId(id);
-			List<CountryStructure> lst = home.getStructures();
-			if (lst.size() == 0) {
-				addError("No country structure defined for level " + Integer.toString(region.getLevel() + 1));
-				return false;
-			}
-			adm.setCountryStructure(lst.get(0));
+
+			CountryStructure cs = findCountryStructure(adm);
+
+			adm.setCountryStructure(cs);
 			adm.setWorkspace(getWorkspace());
 			
 			home.setCheckSecurityOnOpen(false);
@@ -64,6 +75,28 @@ public class LocalityImporting extends ImportingBase {
 			home.persist();
 			return true;
 		}
+	}
+	
+	
+	protected CountryStructure findCountryStructure(AdministrativeUnit adm) {
+		// find country structure for this locality
+		CountryStructuresQuery qry = (CountryStructuresQuery)Component.getInstance("countryStructures");
+		List<CountryStructure> lst = qry.getResultList();
+
+		int level = (adm.getParent() == null? 1: adm.getParent().getLevel() + 1);
+		CountryStructure cs = null;
+		for (CountryStructure aux: lst)
+			if (aux.getLevel() == level) {
+				cs = aux;
+				break;
+			}
+		
+		if (cs == null) {
+			addError("No country structure defined for level " + Integer.toString(level));
+			return null;
+		}
+		
+		return cs;
 	}
 
 }
