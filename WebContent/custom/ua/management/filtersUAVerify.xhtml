@@ -8,7 +8,7 @@
 	xmlns:p="http://jboss.com/products/seam/pdf"
 	xmlns:s="http://jboss.com/products/seam/taglib">
 	
-	<a:commandLink reRender="indicator" styleClass="button" 
+	<a:commandLink reRender="indicator,messages" styleClass="button" 
 		action="#{indicatorControllerUA.verify}"
 		onclick="if (!disableButton(this)) return false;" oncomplete="enableButton();">
 		<span>#{messages['form.verify']}</span>

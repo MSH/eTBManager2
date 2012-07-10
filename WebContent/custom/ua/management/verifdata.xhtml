@@ -27,25 +27,9 @@
 							</rich:panelBarItem>
 						</c:forEach>
 					</rich:panelBar>
-					
         		</rich:tab>
-       		
 			</c:forEach>
    	 	</rich:tabPanel>
-    	
-		<ui:remove>
-			<rich:panelBar height="400" width="500">
-				<ui:repeat var="it" value="#{list.get(it)}">
-					<rich:panelBarItem label="#{messages['verify.error'.concat(list.indexOf(it))]}">
-						<ui:repeat var="tc" value="#{it}">
-							<h:outputText value="#{tc.caseId}" />
-							
-							<br/>
-						</ui:repeat>
-					</rich:panelBarItem>
-				</ui:repeat>
-			</rich:panelBar>
-		</ui:remove>
 	</table>
 	</div>
 

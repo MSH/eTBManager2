@@ -14,7 +14,6 @@
 
 <ui:param name="topmenu" value="2" />
 <ui:param name="labelstyle" value="width:180px;" />
-<ui:param name="indicatorController" value="#{indicatorControllerUA}" />
 
 <ui:param name="indicator" value="#{reportTB08}" />
 <ui:param name="useclassification" value="0" />
@@ -35,7 +34,8 @@
 	<s:decorate template="filters.xhtml">
 		<ui:param name="showoutputselection" value="false" />
 	</s:decorate>
-	<ui:include src="filtersUAVerify.xhtml" />
+	
+	
 	<ui:include src="filtersUAPrint.xhtml" />
 
 
@@ -46,8 +46,10 @@
 
 	<s:fragment rendered="#{indicatorController.executing}">
 
-	<s:decorate template="verifdata.xhtml" rendered="#{indicatorControllerUA.verifing}">
-		<ui:param name="list" value="#{indicator.verifyList}" />
+	 <h:outputText value="#{messages['verify.busy']}" rendered="#{indicator.overflow}" styleClass="error"/>
+	
+	<s:decorate template="verifdata.xhtml" id="verifpanel">
+		<ui:param name="list" value="#{indicator.list}" />
 	</s:decorate>
 	
 	<h2>#{messages['uk_UA.reports.tb08.1']}</h2>
