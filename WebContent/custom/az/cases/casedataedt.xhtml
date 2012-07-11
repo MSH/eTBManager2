@@ -12,6 +12,23 @@
 	<div class="form-content">
 	<h2>#{messages['cases.patientdata']}</h2>
 	<table width="100%" style="border-collapse:collapse;">
+	
+		
+	<tr>
+		<td colspan="2">
+		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.EIDSSComment!=NULL}">
+	    	<ui:define name="label">#{messages['TbCase.eidsscomment']}:</ui:define>
+			<h:inputText value="#{tbcase.EIDSSComment}" style="width:400px;" readonly="true"/>
+		</s:decorate>
+		</td>
+		
+		</tr>
+		<tr><td>
+		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.legacyId!=NULL}">
+	    	<ui:define name="label">#{messages['TbCase.eidssid']}:</ui:define>
+			<h:inputText value="#{tbcase.legacyId}" style="width:120px;" maxlength="45" readonly="true"/>
+		</s:decorate>
+		</td>	</tr>
 	<tr><td colspan="2">
 	<s:decorate template="/custom/az/layout/editname.xhtml">
     	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
@@ -30,21 +47,7 @@
 	</td>
 	</tr>
 	
-		<tr>
-		<td>
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.legacyId!=NULL}">
-	    	<ui:define name="label">#{messages['TbCase.eidssid']}:</ui:define>
-			<h:inputText value="#{tbcase.legacyId}" style="width:120px;" maxlength="45" readonly="true"/>
-		</s:decorate>
-		</td>
-		</tr><tr>
-		<td colspan="2">
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.EIDSSComment!=NULL}">
-	    	<ui:define name="label">#{messages['TbCase.eidsscomment']}:</ui:define>
-			<h:inputText value="#{tbcase.EIDSSComment}" style="width:400px;" readonly="true"/>
-		</s:decorate>
-		</td>
-		</tr>
+		
 	
 	
 	<tr>

@@ -16,6 +16,18 @@
 	<h2>#{messages['cases.patientdata']}</h2>
 
 	<table style="border-collapse:collapse;width:100%;" >
+	<tr>
+		<td colspan="2"> 
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.EIDSSComment!=NULL}">
+	    	<h2><ui:define name="label">#{messages['TbCase.eidsscomment']}:</ui:define>
+		#{tbcase.EIDSSComment} <br/>
+			#{messages['TbCase.eidssid']}: #{tbcase.legacyId}
+			</h2>
+		</s:decorate>
+		</td>
+		</tr>
+	
+	
 	<tr><td>
 	
 	<s:decorate template="/layout/display.xhtml">
@@ -32,16 +44,7 @@
 	
 	</td></tr>
 	<tr>
-		<td colspan="2">
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.EIDSSComment!=NULL}">
-	    	<ui:define name="label">#{messages['TbCase.eidsscomment']}:</ui:define>
-			#{tbcase.EIDSSComment} <br/>
-			#{messages['TbCase.eidssid']}: #{tbcase.legacyId}
-		</s:decorate>
-		</td>
-		</tr>
-	
-	<tr><td>
+	<td>
 	
 	<s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>
