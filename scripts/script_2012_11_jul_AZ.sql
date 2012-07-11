@@ -1,0 +1,1 @@
+UPDATE `etbmanager`.`countrystructure` SET `name1`='Rayon və şəhər' WHERE `WORKSPACE_ID`='8
