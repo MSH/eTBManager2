@@ -114,6 +114,7 @@
 	       <src path="src/ke"/>
            <src path="src/in"/>
            <src path="src/kh"/>
+	       <src path="src/vi"/>
            <classpath refid="mdrtb.classpath"/>
 		 </javac>
     </target>
