@@ -1,14 +1,21 @@
 package org.msh.tb.ua;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.AgeRange;
+import org.msh.tb.entities.ExamMicroscopy;
+import org.msh.tb.entities.PrevTBTreatment;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.InfectionSite;
+import org.msh.tb.entities.enums.PatientType;
+import org.msh.tb.indicators.core.IndicatorFilters;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.ua.entities.CaseDataUA;
 
@@ -52,24 +59,6 @@ public class ReportTB07 extends IndicatorVerify {
 
 		generateTables();
 		sortAllLists();
-		/*generateTable1000();
-		generateTable2000();
-		generateTable3000();
-		generateTable4000();
-		generateTable5000();*/
-	}
-
-	@Override
-	protected String getHQLFrom() {
-		return "from TbCase c";
-	}
-
-	@Override
-	protected String getHQLSelect() {
-		if (isCounting()) 
-			return "select count(*)";
-		else
-			return "select c";
 	}
 
 	/**
@@ -84,7 +73,27 @@ public class ReportTB07 extends IndicatorVerify {
 		table5000 = new IndicatorTable();
 	}
 
-	private void generateTables() {
+	@Override
+	protected void addToAllowing(TbCase tc){
+		Map<String, List<ErrItem>>  verifyList = getVerifyList();
+		List<PrevTBTreatment> ptb = getEntityManager().createQuery("select t from PrevTBTreatment t where t.tbcase.id="+tc.getId()).getResultList();
+		if (ptb!=null)
+			if (tc.getPatientType().equals(PatientType.RELAPSE) && ptb.size()==0)
+				if (!verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().contains(tc))
+					verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().add(tc);
+		if (tc.getTreatmentPeriod()!=null)
+			if (tc.getState().equals(CaseState.ONTREATMENT))
+				if (tc.getTreatmentPeriod().getEndDate().before(new Date()))
+					if (!verifyList.get(getMessage("verify.errorcat2")).get(1).getCaseList().contains(tc))
+						verifyList.get(getMessage("verify.errorcat2")).get(1).getCaseList().add(tc);
+			
+		if (!verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().contains(tc) && !verifyList.get(getMessage("verify.errorcat2")).get(1).getCaseList().contains(tc))
+			if (!verifyList.get(getMessage("verify.errorcat3")).get(0).getCaseList().contains(tc))
+				verifyList.get(getMessage("verify.errorcat3")).get(0).getCaseList().add(tc);
+	}
+	
+	
+	protected void generateTables() {
 		List<TbCase> lst;
 		setCounting(true);
 		int count = ((Long)createQuery().getSingleResult()).intValue();
@@ -95,7 +104,7 @@ public class ReportTB07 extends IndicatorVerify {
 			lst = createQuery().getResultList();
 			Iterator<TbCase> it = lst.iterator();
 			Map<String, List<ErrItem>>  verifyList = getVerifyList();
-			int ind=0;
+			
 			while(it.hasNext()){
 				TbCase tc = it.next();
 				CaseDataUA cd = (CaseDataUA) getEntityManager().find(CaseDataUA.class, tc.getId());  //AK, previous line will rise exception, if no result
@@ -104,10 +113,7 @@ public class ReportTB07 extends IndicatorVerify {
 						verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().add(tc);
 					continue;
 				}
-				ind++;
-				System.out.println(Integer.toString(ind));
-				if (ind==2711)
-					System.out.println("sda");
+				
 				if (cd.getRegistrationCategory().getValue()==null){
 					if (!verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().contains(tc))
 						verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().add(tc);
@@ -138,13 +144,11 @@ public class ReportTB07 extends IndicatorVerify {
 									verifyList.get(getMessage("verify.errorcat1")).get(4).getCaseList().add(tc);
 
 							if (tc.getInfectionSite().equals(InfectionSite.PULMONARY) || tc.getInfectionSite().equals(InfectionSite.BOTH)){
-								if (tc.getExamsMicroscopy()!=null || tc.getExamsCulture()!=null)
-									if (tc.getExamsMicroscopy().size()!=0 || tc.getExamsCulture().size()!=0){
+								if (!MicroscopyIsNull(tc) || !CultureIsNull(tc)){
 
 										String micResult=null;
-										if (tc.getExamsMicroscopy()!=null)
-											if (tc.getExamsMicroscopy().size()!=0)
-												if (tc.getExamsMicroscopy().get(0).getResult().isPositive())
+										if (!MicroscopyIsNull(tc))
+												if (rightMcTest(tc).getResult().isPositive())
 													micResult = "positive";
 												else micResult = "negative";
 
@@ -153,19 +157,19 @@ public class ReportTB07 extends IndicatorVerify {
 											getTable1000().addIdValue(micResult+"_all",rowid, 1F);
 											getTable1000().addIdValue(tc.getPatient().getGender().toString().toLowerCase(),rowid, 1F);
 											getTable1000().addIdValue("all",rowid, 1F);
-
-											getTable3000().addIdValue(micResult+"_"+key,rowid, 1F);
-											getTable3000().addIdValue(micResult+"_all",rowid, 1F);
-											getTable3000().addIdValue(tc.getPatient().getGender().toString().toLowerCase(),rowid, 1F);
-											getTable3000().addIdValue("all",rowid, 1F);
+											if (micResult.equals("positive")){
+												getTable3000().addIdValue(micResult+"_"+key,rowid, 1F);
+												getTable3000().addIdValue(micResult+"_all",rowid, 1F);
+												getTable3000().addIdValue(tc.getPatient().getGender().toString().toLowerCase(),rowid, 1F);
+												getTable3000().addIdValue("all",rowid, 1F);
+											}
 										}
 										else
 											if (!verifyList.get(getMessage("verify.errorcat1")).get(2).getCaseList().contains(tc))
 												verifyList.get(getMessage("verify.errorcat1")).get(2).getCaseList().add(tc);
 
-										if (tc.getExamsCulture()!=null)
-											if (tc.getExamsCulture().size()!=0){
-												if (tc.getExamsCulture().get(0).getResult().isPositive() || micResult=="positive")
+										if (!CultureIsNull(tc)){
+												if (rightCulTest(tc).getResult().isPositive() || micResult=="positive")
 													micResult = "positive";
 												else micResult = "negative";
 											}
@@ -187,9 +191,10 @@ public class ReportTB07 extends IndicatorVerify {
 											if (tc.getResHIV().get(0).getResult().equals(HIVResult.POSITIVE))
 											{
 												getTable4000().addIdValue("pulmonary_"+key, rowid, 1F);
+												getTable4000().addIdValue("pulmonary_all", rowid, 1F);
 												getTable4000().addIdValue("all",rowid, 1F);
 											}
-
+										addToAllowing(tc);
 									}
 							}
 							else{
@@ -206,17 +211,38 @@ public class ReportTB07 extends IndicatorVerify {
 								if (!verifyList.get(getMessage("verify.errorcat1")).get(4).getCaseList().contains(tc))
 									if (tc.getResHIV().get(0).getResult().equals(HIVResult.POSITIVE)){
 										getTable4000().addIdValue("extrapulmonary_"+key, rowid, 1F);
+										getTable4000().addIdValue("extrapulmonary_all", rowid, 1F);
 										getTable4000().addIdValue("all",rowid, 1F);
 									}
+								addToAllowing(tc);
 							}
+						if (!MicroscopyIsNull(tc))
+							if (tc.getRegistrationDate()!=null && cd.getDateFirstVisitGMC()!=null)
+								if (examGMCpos(tc,cd.getDateFirstVisitGMC()))
+									getTable5000().addIdValue("col2",rowid, 1F);
 						}
 					}
 			}
+			IndicatorFilters filters = (IndicatorFilters)Component.getInstance("indicatorFilters");
+			int numcases = filters.getNumcases();
+			getTable5000().setValue("col1", rowid, (float)numcases);
+			if (numcases != 0)
+				getTable5000().addIdValue("col3", rowid, getTable5000().getValue("col2", rowid)*100/numcases);
 		}
 		else 
 			setOverflow(true);
 	}
 
+	private boolean examGMCpos(TbCase tc, Date gmc){
+		for (ExamMicroscopy res: tc.getExamsMicroscopy()){
+			if (res.getDateCollected().before(tc.getRegistrationDate()) && res.getDateCollected().after(gmc))
+				if (res.getResult().isPositive())
+					return true;
+		}
+		return false;
+	}
+	
+	
 	private int roundToIniDate(int age){
 		List<AgeRange> ageRanges = getAgeRangeHome().getItems();
 

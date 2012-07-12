@@ -1,22 +1,28 @@
 package org.msh.tb.ua;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.entities.ExamMicroscopy;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
-import org.msh.tb.indicators.core.Indicator2D;
-import org.msh.tb.indicators.core.IndicatorFilters;
 import org.msh.tb.indicators.core.IndicatorMicroscopyResult;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
 import org.msh.utils.date.DateUtils;
+import org.msh.utils.date.Period;
 
 @Name("reportTB10")
-public class ReportTB10 extends Indicator2D {
+public class ReportTB10 extends IndicatorVerify {
 	private static final long serialVersionUID = -8510290531301762778L;
 
 	private IndicatorTable table2000;
@@ -40,24 +46,18 @@ public class ReportTB10 extends Indicator2D {
 
 	@Override
 	protected void createIndicators() {
-		table1000 = getTable();
-		
 		initTable1000();
 		initTable2000();
 		
-		//IndicatorFilters filters = getIndicatorFilters();
-		getIndicatorFilters().setPatientType(null);
-		getIndicatorFilters().setMicroscopyResult(null);
-		//filters.setCultureResult(null);
-		
 		setConsolidated(true);
-		generateTable1000();
-		//generateTable2000();
+		generateTables();
+		sortAllLists();
+		getIndicatorFilters().setInfectionSite(null);
 	}
 	
+
 	public void getTotal2000() {
 		List<TableColumn> cols = table2000.getColumns();
-		//cols.remove(0);
 		
 		for (int i = 1; i < cols.size(); i++) {
 			num.add(cols.get(i).getTotal());			
@@ -121,15 +121,93 @@ public class ReportTB10 extends Indicator2D {
 		table.setValue("N", "others", 3F);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.msh.tb.indicators.core.CaseHQLBase#getHQLInfectionSite()
-	 */
-	@Override
-	protected String getHQLInfectionSite() {
-		IndicatorFilters filters = getIndicatorFilters();
-		if  (filters.getInfectionSite() == InfectionSite.PULMONARY)
-			return "c.infectionSite in (" + InfectionSite.PULMONARY.ordinal() + "," + InfectionSite.BOTH.ordinal() + ")";
-		else return super.getHQLInfectionSite();
+	protected void generateTables() {
+		List<TbCase> lst;
+		setCounting(true);
+		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
+		getIndicatorFilters().setMicroscopyResult(IndicatorMicroscopyResult.POSITIVE);
+		setCondition("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.NEW.ordinal());
+		numcases[0] = ((Long)createQuery().getSingleResult()).intValue();
+		setCondition("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.RELAPSE.ordinal());
+		numcases[1] = ((Long)createQuery().getSingleResult()).intValue();
+		setCondition("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType in (0,1,2,3,4,5)");
+		numcases[2] = ((Long)createQuery().getSingleResult()).intValue();
+		numcases[2] -= numcases[0]+numcases[1];
+		if (numcases[0]+numcases[1]+numcases[2] == 0)
+			return;
+		getIndicatorFilters().setMicroscopyResult(null);
+		
+		int count = ((Long)createQuery().getSingleResult()).intValue();
+		if (count<=4000){
+			initVerifList("verify.tb10.error",2,1,1);
+			setCounting(false);
+			setOverflow(false);
+			lst = createQuery().getResultList();
+			Iterator<TbCase> it = lst.iterator();
+			Map<String, List<ErrItem>>  verifyList = getVerifyList();
+			while(it.hasNext()){
+				TbCase tc = it.next();
+				if (MicroscopyIsNull(tc)){
+					if (!verifyList.get(getMessage("verify.errorcat1")).get(1).getCaseList().contains(tc))
+						verifyList.get(getMessage("verify.errorcat1")).get(1).getCaseList().add(tc);
+				}
+				else{
+					if (tc.getTreatmentPeriod()==null){
+						if (!verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().contains(tc))
+							verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().add(tc);
+					}
+					else	
+					if (rightMcTest(tc).getResult().isPositive()){
+						addValueTable(tc.getTreatmentPeriod().getIniDate(), tc.getDiagnosisDate(), tc.getPatientType(), tc.getState(), tc.getIniContinuousPhase(), firstNegMicro(tc), isNoExam(tc));
+						addToAllowing(tc);
+					}
+				}
+			}
+			String rows[] = {"newcases", "relapses", "others"};
+			String cols[] = {"month2", "month3", "month4"};
+			
+			for (String rowid: rows)
+				for (String colid: cols) {
+					calcPercentage(colid, rowid);
+				}
+			getTotal2000();
+		}
+		else 
+			setOverflow(true);
+	}
+	
+	private Date firstNegMicro(TbCase tc){
+		for (ExamMicroscopy ex:tc.getExamsMicroscopy()){
+			if (ex.getResult().isNegative())
+				return ex.getDateCollected();
+		}
+		return null;
+	}
+	
+	private boolean isNoExam(TbCase tc){
+		if (tc.getIniContinuousPhase()==null)
+			return false;
+			
+		List<ExamMicroscopy> lst = new ArrayList<ExamMicroscopy>();
+		for (int i = 0; i < tc.getExamsMicroscopy().size(); i++) {
+			lst.add(null);
+		}
+		Collections.copy(lst, tc.getExamsMicroscopy());
+		Collections.sort(lst, new Comparator<ExamMicroscopy>() {
+			public int compare(ExamMicroscopy o1, ExamMicroscopy o2) {
+				Calendar d1 = Calendar.getInstance();
+				Calendar d2 = Calendar.getInstance();
+				d1.setTime(o1.getDateCollected());
+				d2.setTime(o2.getDateCollected());
+
+				return d2.compareTo(d1);
+			}
+		});
+		for (ExamMicroscopy ex:tc.getExamsMicroscopy()){
+			if (ex.getDateCollected().before(tc.getIniContinuousPhase()) || ex.getDateCollected().equals(tc.getIniContinuousPhase()))
+				return false;
+		}
+		return true;
 	}
 	
 	/**
@@ -177,29 +255,6 @@ public class ReportTB10 extends Indicator2D {
 		getTotal2000();
 	}
 
-	/**
-	 * Generate values of table 2000 querying the database based on the user filters 
-	 *//*
-	protected void generateTable2000() {
-		
-		// check if it has microscopy
-		String hasMicr = "(select min(e.dateCollected) from ExamMicroscopy e where e.tbcase.id = c.id and e.result in (1,2,3,4))";
-		String hasMicr2 = "(select max(e.dateCollected) from ExamMicroscopy e where e.tbcase.id = c.id and (e.dateCollected <= c.iniContinuousPhase or c.iniContinuousPhase = null)) ";
-		
-		setConsolidated(false);
-		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
-		setGroupFields(null);
-		setHQLSelect("select c.treatmentPeriod.iniDate, c.diagnosisDate, c.patientType, c.state, c.regimen, "+hasMicr2+", c.iniContinuousPhase");
-		setCondition("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType in (0,1,2,3,4,5) and exists"+hasMicr);//+" and not exists"+hasMicr2);
-		List<Object[]> lst = createQuery().getResultList();
-
-		for (Object[] vals: lst) {
-			addValueTable((Date)vals[0], (Date)vals[1], (PatientType)vals[2], (CaseState)vals[3], (Regimen) vals[4], (Date)vals[5],(Date)vals[6]);
-		}
-		
-	}
-*/
-	
 	private void calcPercentage(String colid, String rowid) {
 		float total = 0;
 		if (rowid=="newcases") total = numcases[0];	
@@ -209,9 +264,9 @@ public class ReportTB10 extends Indicator2D {
 		if (total == 0)
 			return;
 		
-		float num = table1000.getCellAsFloat(colid, rowid);
+		float num = getTable1000().getCellAsFloat(colid, rowid);
 		
-		table1000.setValue(colid + "_perc", rowid, num * 100F / total);
+		getTable1000().setValue(colid + "_perc", rowid, num * 100F / total);
 	}
 
 	
@@ -303,82 +358,18 @@ public class ReportTB10 extends Indicator2D {
 	}
 
 	/**
-	 * Add a value to a specific cell in the table based on the dates of the case
-	 * @param ptype
-	 * @param state
-	 * @param val
-	 *//*
-	protected void addValueTable(Date dtIniTreat, Date dtDiagnos, PatientType ptype, CaseState state, Regimen reg, Date dtMicro, Date dtIniContPhase) {
-		// select row id
-		if (dtIniTreat == null)
-			dtIniTreat = dtDiagnos;
-		
-		String rowkey;
-		String colkey = null;
-		
-		switch (ptype) {
-		case NEW: 
-			rowkey = "newcases";
-			break;
-		case RELAPSE: 
-			rowkey = "relapses";
-			break;
-		default: 
-			rowkey = "others";
-		}
-		//if ((dtIniContPhase == null) || ((dtIniContPhase != null) && (DateUtils.daysBetween(dtMicro, dtIniContPhase)>14))){
-		if (dtMicro != null)
-			if (DateUtils.monthsBetween(dtIniTreat, dtMicro) > reg.getMonthsIntensivePhase()){	
-			switch (state) {
-				case DIED:
-					colkey = "1";
-					break;
-				case DIED_NOTTB:
-					colkey = "2";
-					break;
-				case TREATMENT_INTERRUPTION: case DEFAULTED:
-					colkey = "3";
-					break;
-				case TRANSFERRED_OUT: case TRANSFERRING:
-					colkey = "4";
-					break;
-				case DIAGNOSTIC_CHANGED_TO_NOT_DRTB: case DIAGNOSTIC_CHANGED: case CURED:
-					colkey = "5";
-					break;
-				default:
-					colkey = "6";
-					break;
-		}
-		if (colkey != null) table2000.addIdValue(colkey, rowkey, 1F);
-		table2000.addIdValue("7",rowkey,1F);
-		}
-		
-	}
-	
-	*/
-	/* (non-Javadoc)
-	 * @see org.msh.tb.indicators.core.CaseHQLBase#getHQLJoin()
-	 */
-	protected String getHQLJoin() {
-		/*if (numcases[2] != 0)
-			return " join fetch c.regimen ";
-		else */
-			return null;
-		
-	}
-
-
-		/**
 	 * Create all tables of the report and generate indicators
 	 */
 	@Override
 	protected void createTable() {
+		table1000 = new IndicatorTable();
 		table2000 = new IndicatorTable();
-		super.createTable();
 	}
 	
 	public IndicatorTable getTable1000() {
-		return getTable();
+		if (table1000 == null)
+			createTable();
+		return table1000;
 	}
 	
 	public IndicatorTable getTable2000() {
@@ -386,4 +377,57 @@ public class ReportTB10 extends Indicator2D {
 			createTable();
 		return table2000;
 	}
+
+	private boolean ExamEveryMonth(TbCase tc){
+		boolean[] em = new boolean[tc.getTreatmentPeriod().getMonths()];
+				
+		Calendar d1 = Calendar.getInstance();
+		d1.setTime(tc.getTreatmentPeriod().getIniDate());
+		d1.add(Calendar.DAY_OF_MONTH, -7);
+		Calendar d2 = Calendar.getInstance();
+		for (int i = 0; i < em.length; i++) {
+			d2 = (Calendar) d1.clone();
+			d2.add(Calendar.MONTH, 1);
+			d2.add(Calendar.DAY_OF_MONTH, 14);
+			
+			Period p = new Period(d1.getTime(), d2.getTime());
+			boolean ttt = false;
+			if (tc.getExamsMicroscopy().size()!=0)
+						for (ExamMicroscopy ex:tc.getExamsMicroscopy()){
+							if (p.isDateInside(ex.getDateCollected())){
+								ttt = true;
+								break;
+							}
+						}
+			if (ttt)
+				em[i] = true;
+			d1.add(Calendar.MONTH, 1);
+			
+		}
+		if (tc.getPatientType().equals(PatientType.NEW)){
+			if (em.length>=3)
+				if (em[1] && em[2])
+					return true;
+		}
+		else 
+			if (em.length>=4)
+				if (em[2] && em[3])
+					return true;
+			
+		return false;
+	}
+	
+	@Override
+	protected void addToAllowing(TbCase tc) {
+		Map<String, List<ErrItem>>  verifyList = getVerifyList();
+		if (!ExamEveryMonth(tc)){
+			if (!verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().contains(tc))
+				verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().add(tc);
+		}
+		if (!verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().contains(tc))
+			if (!verifyList.get(getMessage("verify.errorcat3")).get(0).getCaseList().contains(tc))
+				verifyList.get(getMessage("verify.errorcat3")).get(0).getCaseList().add(tc);
+		
+	}
+
 }

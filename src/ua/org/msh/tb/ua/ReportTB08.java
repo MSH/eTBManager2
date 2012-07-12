@@ -17,7 +17,6 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.ExtraOutcomeInfo;
 import org.msh.tb.entities.enums.InfectionSite;
-import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.indicators.core.IndicatorTable.TableRow;
@@ -66,15 +65,12 @@ public class ReportTB08 extends IndicatorVerify {
 
 		generateTables();
 		sortAllLists();
-		//System.out.println(verifyList.get(0).size()+", "+verifyList.get(1).size()+", "+verifyList.get(2).size()+", "+verifyList.get(3).size()+", "+verifyList.get(4).size());
-		//generateTable1000();
-		//generateTable2000();
-		//generateTable3000();
+		getIndicatorFilters().setInfectionSite(null);
 	}
 
 
-
-	private void addToAllowing(TbCase tc){
+	@Override
+	protected void addToAllowing(TbCase tc){
 		Map<String, List<ErrItem>>  verifyList = getVerifyList();
 		if (!verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().contains(tc))
 			if (tc.getState().equals(CaseState.CURED))
@@ -86,13 +82,12 @@ public class ReportTB08 extends IndicatorVerify {
 	}
 
 
-	private void generateTables(){
+	protected void generateTables(){
 		List<TbCase> lst;
 		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
 		setCondition("c.state in " + statesIn);
 		setConsolidated(true);
 		setCounting(true);
-		int ind=0;
 		int count = ((Long)createQuery().getSingleResult()).intValue();
 		if (count<=4000){
 			initVerifList("verify.tb08.error",3,2,1);
@@ -119,17 +114,10 @@ public class ReportTB08 extends IndicatorVerify {
 				default: key = "other";
 				break;
 				}
-				ind++;
-				//System.out.println(ind);
-				//if (ind==51)
-				//System.out.println("asd");
 				if (hashSet.contains(tc.getState().ordinal())){
-					if (tc.getExamsMicroscopy()!=null || tc.getExamsCulture()!=null)
-						if (tc.getExamsMicroscopy().size()!=0 || tc.getExamsCulture().size()!=0)
-						{
+					if (!MicroscopyIsNull(tc) || !CultureIsNull(tc)){
 							CaseState state = tc.getState();
 							ExtraOutcomeInfo extraOutcome = cd.getExtraOutcomeInfo();
-
 
 							Object col = state;
 
@@ -147,9 +135,8 @@ public class ReportTB08 extends IndicatorVerify {
 							}
 
 							String micResult=null;
-							if (tc.getExamsMicroscopy()!=null)
-								if (tc.getExamsMicroscopy().size()!=0)
-									if (tc.getExamsMicroscopy().get(0).getResult().isPositive())
+							if (!MicroscopyIsNull(tc))
+									if (rightMcTest(tc).getResult().isPositive())
 										micResult = "_positive";
 									else micResult = "_negative";
 
@@ -165,9 +152,8 @@ public class ReportTB08 extends IndicatorVerify {
 										else 
 											if (!verifyList.get(getMessage("verify.errorcat1")).get(2).getCaseList().contains(tc))
 												verifyList.get(getMessage("verify.errorcat1")).get(2).getCaseList().add(tc);
-								if (tc.getExamsCulture()!=null)
-									if (tc.getExamsCulture().size()!=0){
-										if (tc.getExamsCulture().get(0).getResult().isPositive() || micResult=="_positive")
+								if (!CultureIsNull(tc)){
+										if (rightCulTest(tc).getResult().isPositive() || micResult=="_positive")
 											micResult = "_positive";
 										else micResult = "_negative";
 									}
@@ -346,15 +332,7 @@ public class ReportTB08 extends IndicatorVerify {
 
 		return false;	
 	}
-
-
-	/* (non-Javadoc)
-	 * @see org.msh.tb.indicators.core.CaseHQLBase#getHQLValidationState()
-	 */
-	protected String getHQLValidationState() {
-		return "c.validationState = "+ValidationState.VALIDATED.ordinal();
-	}
-
+	
 	/**
 	 * Initialize table layout. Because both table 1000 and table 2000 share the same layout, they use a common
 	 * method to initialize its layout
@@ -439,22 +417,6 @@ public class ReportTB08 extends IndicatorVerify {
 		if (table3000 == null)
 			createTable();
 		return table3000;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.msh.tb.indicators.core.CaseHQLBase#getHQLJoin()
-	 */
-	@Override
-	protected String getHQLFrom() {
-		return "from TbCase c";
-	}
-
-	@Override
-	protected String getHQLSelect() {
-		if (isCounting()) 
-			return "select count(*)";
-		else
-			return "select c";
 	}
 
 }
