@@ -161,6 +161,9 @@ public class CaseStateReport {
 	 * @return
 	 */
 	protected String generateSQLConditionByUserView() {
+		if (userWorkspace.getView() == null)
+			return "";
+
 		switch (userWorkspace.getView()) {
 		case ADMINUNIT: 
 			return " and (a.code like '" + userWorkspace.getAdminUnit().getCode() + "%')"; 

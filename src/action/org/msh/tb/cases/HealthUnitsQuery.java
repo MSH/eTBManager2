@@ -77,6 +77,9 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 	 * @return SQL condition to be used in a WHERE clause
 	 */
 	public String generateSQLConditionByUserView() {
+		if (userWorkspace.getView() == null)
+			return "";
+		
 		String cond;
 		
 		switch (userWorkspace.getView()) {

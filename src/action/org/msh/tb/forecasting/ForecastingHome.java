@@ -54,9 +54,11 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 
 	@Override
 	public void setId(Object id) {
+		boolean changed = id != getId();
+
 		super.setId(id);
 		Contexts.getConversationContext().set("forecasting", getInstance());
-		if (isManaged())
+		if (isManaged() && changed)
 			initLoading();
 	}
 
@@ -83,7 +85,7 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 		}
 		
 		Events.instance().raiseEvent("forecasting-loaded");
-		forecastingView.initializeStockOnHand();
+//		forecastingView.initializeStockOnHand();
 	}
 
 

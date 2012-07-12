@@ -8,7 +8,6 @@ import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -103,6 +102,9 @@ public class ForecastingView {
 	 * @return
 	 */
 	public String initialize() {
+		if (forecastingHome.isManaged())
+			return "initialized";
+
 		Forecasting forecasting = forecastingHome.getInstance();
 		if (forecasting.getMedicines().size() > 0)
 			return "initialized";
@@ -177,12 +179,6 @@ public class ForecastingView {
 	 * in UA not used at all (yet) AK 16.04.2012
 	 */
 	public void initializeStockOnHand() {
-		// apply restriction according to the context
-		// AK 16.04.2012
-		String wsExt = (String)Component.getInstance("workspaceExtension");
-		if ((wsExt!=null) && (wsExt.equalsIgnoreCase("ua"))) return;  
-		//AK
-		
 		String restriction;
 		Forecasting forecasting = forecastingHome.getInstance();
 		if ((forecasting.getView() == UserView.TBUNIT) && (forecastingHome.getTbunitSelection().getTbunit() != null)) 
@@ -327,7 +323,8 @@ public class ForecastingView {
 		Forecasting forecasting = forecastingHome.getForecasting();
 		
 		// update new cases info
-		int betwRefDt = DateUtils.getDatePart(forecasting.getReferenceDate()).getMonth() - DateUtils.getDatePart(forecasting.getOldReferenceDate()).getMonth();
+		int betwRefDt = DateUtils.monthOf( DateUtils.getDatePart(forecasting.getReferenceDate()) ) - 
+						DateUtils.monthOf( DateUtils.getDatePart(forecasting.getOldReferenceDate()) );
 		int num = DateUtils.monthsBetween(forecasting.getReferenceDate(), forecasting.getEndDate()) + forecasting.getBufferStock();
 		
 		if (betwRefDt>0)
@@ -714,13 +711,11 @@ public class ForecastingView {
 	
 	public List<SelectItem> getMedicineItems() {
 		if (medicineItems == null) {
-			int counter = 1;
 			medicineItems = new ArrayList<SelectItem>();
 			List<ForecastingMedicine> lst = forecastingHome.getInstance().getMedicines();
 			medicineItems.add(new SelectItem(null, "-"));
 			for (ForecastingMedicine fm: lst) {
 				medicineItems.add(new SelectItem(lst.indexOf(fm), fm.getMedicine().toString()));
-				counter++;
 			}
 		}
 		
