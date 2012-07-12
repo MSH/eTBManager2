@@ -16,7 +16,6 @@
 <ui:param name="labelstyle" value="width:180px;" />
 
 <ui:param name="indicator" value="#{reportTB10}" />
-<ui:param name="indicatorController" value="#{indicatorControllerUA}" />
 <ui:param name="print" value="/custom/ua/management/tb10print.xhtml"/>
 <ui:param name="useclassification" value="0" />
 <ui:param name="left" value="0" />
@@ -43,6 +42,11 @@
 <h:panelGroup id="indicator" styleClass="indicator-tables">
 
 	<s:fragment rendered="#{indicatorController.executing}">
+	
+	<h:outputText value="#{messages['verify.busy']}" rendered="#{indicator.overflow}" styleClass="error"/>
+	
+	<s:decorate template="verifdata.xhtml" id="verifpanel"/>
+	
 	<h2>#{messages['uk_UA.reports.tb10.1']}</h2>
 	<table class="table1" width="100%">
 		<tr>

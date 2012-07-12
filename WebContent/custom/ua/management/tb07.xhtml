@@ -34,9 +34,12 @@
 <tr><td bgcolor="#f8f8f8">
 	<s:decorate template="filters.xhtml">
 		<ui:param name="showoutputselection" value="false" />
-		<ui:param name="tb07numcases" value="true" />
 	</s:decorate>
 	<ui:include src="filtersUAPrint.xhtml" />
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['cases.numcases']}:</ui:define>
+		<h:inputText value="#{indicatorFilters.numcases}" style="width:80px;"/>
+	</s:decorate>
 </td></tr>
 
 <tr><td align="center">
@@ -47,9 +50,7 @@
 	
 	<h:outputText value="#{messages['verify.busy']}" rendered="#{indicator.overflow}" styleClass="error"/>
 	
-	<s:decorate template="verifdata.xhtml" id="verifpanel">
-		<ui:param name="list" value="#{indicator.list}" />
-	</s:decorate>
+	<s:decorate template="verifdata.xhtml" id="verifpanel"/>
 	
 	<h2>#{messages['uk_UA.reports.tb07.table1']}</h2>
 	<table class="table1" width="100%">
