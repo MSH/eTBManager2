@@ -97,6 +97,11 @@
 	<s:link value="#{messages['manag.forecast.med']}" view="/management/forecasting.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('FORECAST')}" propagation="none">
 		<f:param name="id" value="#{null}"/>
 	</s:link>
+	
+	<s:link value="#{messages['manag.forecast.med']} - UA" view="/custom/ua/management/forecastingUA.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('FORECAST')}" propagation="none">
+		<f:param name="id" value="#{null}"/>
+	</s:link>
+	
 	</div>
 
 </ui:define>
