@@ -135,6 +135,15 @@ public abstract class IndicatorVerify extends Indicator2D {
 	
 	protected abstract void addToAllowing(TbCase tc);
 	
+	protected void addToRepList(TbCase tc){
+		addToAllowing(tc);
+		for (ErrItem ls: verifyList.get(getMessage("verify.errorcat2"))) {
+			if (ls.getCaseList().contains(tc))
+				return;
+		}
+		addToVerList(tc,3,0);
+	}
+	
 	@Override
 	protected String getHQLFrom() {
 		return "from TbCase c";
@@ -187,6 +196,11 @@ public abstract class IndicatorVerify extends Indicator2D {
 			if (tc.getExamsCulture().size()==0) return true;
 		if (rightCulTest(tc)==null) return true;
 		return false;
+	}
+	
+	protected void addToVerList(TbCase tc, int cat,int num_er){
+		if (!getVerifyList().get(getMessage("verify.errorcat"+cat)).get(num_er).getCaseList().contains(tc))
+			getVerifyList().get(getMessage("verify.errorcat"+cat)).get(num_er).getCaseList().add(tc);
 	}
 	
 	/**

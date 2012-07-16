@@ -77,14 +77,9 @@ public class ReportTB08 extends IndicatorVerify {
 
 	@Override
 	protected void addToAllowing(TbCase tc){
-		Map<String, List<ErrItem>>  verifyList = getVerifyList();
-		if (!verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().contains(tc))
-			if (tc.getState().equals(CaseState.CURED))
+		if (tc.getState().equals(CaseState.CURED))
 				if (!curedMc(tc) || !curedMcCul(tc))
-					verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().add(tc);
-		if (!verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().contains(tc))
-			if (!verifyList.get(getMessage("verify.errorcat3")).get(0).getCaseList().contains(tc))
-				verifyList.get(getMessage("verify.errorcat3")).get(0).getCaseList().add(tc);
+					addToVerList(tc,2,0);
 	}
 
 
@@ -96,7 +91,7 @@ public class ReportTB08 extends IndicatorVerify {
 		setCounting(true);
 		int count = ((Long)createQuery().getSingleResult()).intValue();
 		if (count<=4000){
-			initVerifList("verify.tb08.error",5,2,1);
+			initVerifList("verify.tb08.error",6,4,1);
 			setCounting(false);
 			setOverflow(false);
 			lst = createQuery().getResultList();
@@ -107,8 +102,7 @@ public class ReportTB08 extends IndicatorVerify {
 				//CaseDataUA cd = (CaseDataUA) getEntityManager().createQuery("select ua from CaseDataUA ua where ua.tbcase.id="+tc.getId()).getSingleResult();
 				CaseDataUA cd = (CaseDataUA) getEntityManager().find(CaseDataUA.class, tc.getId());  //AK, previous line will rise exception, if no result
 				if (cd == null){
-					if (!verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().contains(tc))
-						verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().add(tc);
+					addToVerList(tc,1,0);
 					continue;
 				}
 				String key;
@@ -137,8 +131,7 @@ public class ReportTB08 extends IndicatorVerify {
 								(extraOutcome == ExtraOutcomeInfo.TRANSFER_CATIV))
 							col = extraOutcome;
 						else {
-							if (!getVerifyList().get(getMessage("verify.errorcat1")).get(2).getCaseList().contains(tc))
-								getVerifyList().get(getMessage("verify.errorcat1")).get(2).getCaseList().add(tc);
+							addToVerList(tc,1,2);
 							continue; // unknown extra outcome if failed !!!!
 						}
 					}
@@ -152,7 +145,9 @@ public class ReportTB08 extends IndicatorVerify {
 					if (tc.getState().equals(CaseState.ONTREATMENT)){
 						if (tc.getTreatmentPeriod()!=null)
 							if (tc.getTreatmentPeriod().getEndDate().before(new Date()))
-								verifyList.get(getMessage("verify.errorcat1")).get(1).getCaseList().add(tc);
+								addToVerList(tc,1,1);
+							else
+								addToVerList(tc,1,5);
 					}
 
 				if (cd.getPulmonaryDestruction()==YesNoType.YES){
@@ -201,20 +196,14 @@ public class ReportTB08 extends IndicatorVerify {
 			culmicResult = micResult;
 		}
 		if (culmicResult!=null){
-			/*if (!(culmicResult.equals(NEGATIVE) && tc.getState().equals(CaseState.CURED))){*/
-				{
-					getTable2000().addIdValue(col, patientType + culmicResult, 1F);
-					getTable2000().addIdValue("TOTAL", patientType + culmicResult, 1F);
-					addToAllowing(tc);
-				}
-			}
-			/*else
-				if (!getVerifyList().get(getMessage("verify.errorcat1")).get(0).getCaseList().contains(tc))
-					getVerifyList().get(getMessage("verify.errorcat1")).get(0).getCaseList().add(tc);*/
-		else{
-			if (!getVerifyList().get(getMessage("verify.errorcat1")).get(4).getCaseList().contains(tc))
-				getVerifyList().get(getMessage("verify.errorcat1")).get(4).getCaseList().add(tc);
+			getTable2000().addIdValue(col, patientType + culmicResult, 1F);
+			getTable2000().addIdValue("TOTAL", patientType + culmicResult, 1F);
+			addToRepList(tc);
+			if ((culmicResult.equals(NEGATIVE) && tc.getState().equals(CaseState.CURED)))
+				addToVerList(tc,2,3);
 		}
+		else
+			addToVerList(tc,1,4);
 	}
 
 	/**
@@ -232,19 +221,14 @@ public class ReportTB08 extends IndicatorVerify {
 			else micResult = NEGATIVE;
 
 		if (micResult!=null){
-			//if (!(micResult.equals(NEGATIVE) && tc.getState().equals(CaseState.CURED)))
-			{
-				getTable1000().addIdValue(col, patientType + micResult, 1F);
-				getTable1000().addIdValue("TOTAL", patientType + micResult, 1F);
-				addToAllowing(tc);
-			}
-/*			else 
-				if (!getVerifyList().get(getMessage("verify.errorcat1")).get(0).getCaseList().contains(tc))
-					getVerifyList().get(getMessage("verify.errorcat1")).get(0).getCaseList().add(tc);*/
-		}else{
-			if (!getVerifyList().get(getMessage("verify.errorcat1")).get(3).getCaseList().contains(tc))
-				getVerifyList().get(getMessage("verify.errorcat1")).get(3).getCaseList().add(tc);
+			getTable1000().addIdValue(col, patientType + micResult, 1F);
+			getTable1000().addIdValue("TOTAL", patientType + micResult, 1F);
+			addToRepList(tc);
+			if ((micResult.equals(NEGATIVE) && tc.getState().equals(CaseState.CURED)))
+				addToVerList(tc,2,2);
 		}
+		else
+			addToVerList(tc,1,3);
 		return micResult;
 	}
 
@@ -282,8 +266,7 @@ public class ReportTB08 extends IndicatorVerify {
 						return true;
 				}
 				else
-					if (!getVerifyList().get(getMessage("verify.errorcat2")).get(1).getCaseList().contains(tc))
-						getVerifyList().get(getMessage("verify.errorcat2")).get(1).getCaseList().add(tc);
+					addToVerList(tc,2,1);
 
 			}
 		return false;
@@ -363,8 +346,7 @@ public class ReportTB08 extends IndicatorVerify {
 					}
 		}
 		else 
-			if (!getVerifyList().get(getMessage("verify.errorcat2")).get(1).getCaseList().contains(tc))
-				getVerifyList().get(getMessage("verify.errorcat2")).get(1).getCaseList().add(tc);
+			addToVerList(tc,2,1);
 
 		return false;	
 	}

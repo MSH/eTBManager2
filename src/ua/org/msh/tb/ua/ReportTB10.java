@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.ExamMicroscopy;
@@ -144,22 +143,19 @@ public class ReportTB10 extends IndicatorVerify {
 			setOverflow(false);
 			lst = createQuery().getResultList();
 			Iterator<TbCase> it = lst.iterator();
-			Map<String, List<ErrItem>>  verifyList = getVerifyList();
 			while(it.hasNext()){
 				TbCase tc = it.next();
 				if (MicroscopyIsNull(tc)){
-					if (!verifyList.get(getMessage("verify.errorcat1")).get(1).getCaseList().contains(tc))
-						verifyList.get(getMessage("verify.errorcat1")).get(1).getCaseList().add(tc);
+					addToVerList(tc,1,1);
 				}
 				else{
 					if (tc.getTreatmentPeriod()==null){
-						if (!verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().contains(tc))
-							verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().add(tc);
+						addToVerList(tc,1,0);
 					}
 					else	
 					if (rightMcTest(tc).getResult().isPositive()){
 						addValueTable(tc.getTreatmentPeriod().getIniDate(), tc.getDiagnosisDate(), tc.getPatientType(), tc.getState(), tc.getIniContinuousPhase(), firstNegMicro(tc), isNoExam(tc));
-						addToAllowing(tc);
+						addToRepList(tc);
 					}
 				}
 			}
@@ -294,13 +290,13 @@ public class ReportTB10 extends IndicatorVerify {
 			rowkey = "others";
 		}
 		if (!noexam){
-			// is negative ?
 			if (dtMicro != null){ 
 				boolean goodMicro = false;
 				if (iniCont==null) 
 					goodMicro = true;
 					else 
-						if (dtMicro.before(iniCont)) goodMicro = true;
+						if (dtMicro.before(iniCont)) 
+							goodMicro = true;
 				
 				if (goodMicro){
 					int negativeMonth = DateUtils.monthsBetween(dtIniTreat, dtMicro);
@@ -314,11 +310,8 @@ public class ReportTB10 extends IndicatorVerify {
 					if (negativeMonth <= 4)
 						if (!ptype.equals(PatientType.NEW))
 							table1000.addIdValue("month4", rowkey, 1F);
-						else
-							if (negativeMonth > 3)
-							table1000.addIdValue("others", rowkey, 1F);	
-					
-					if (negativeMonth > 4)
+						
+					if (negativeMonth > (ptype.equals(PatientType.NEW) ? 3 : 4))
 						table1000.addIdValue("others", rowkey, 1F);
 					}
 				else 
@@ -326,7 +319,7 @@ public class ReportTB10 extends IndicatorVerify {
 			}
 			else table1000.addIdValue("others", rowkey, 1F);
 			}
-		
+		// add to noexam in tab1000 and tab2000
 		if (noexam)
 		{
 			table1000.addIdValue("noexams", rowkey, 1F);
@@ -350,7 +343,7 @@ public class ReportTB10 extends IndicatorVerify {
 				colkey = "6";
 				break;
 			}
-			if (colkey != null) table2000.addIdValue(colkey, rowkey, 1F);
+			table2000.addIdValue(colkey, rowkey, 1F);
 			table2000.addIdValue("7",rowkey,1F);
 			}
 		
@@ -419,15 +412,9 @@ public class ReportTB10 extends IndicatorVerify {
 	
 	@Override
 	protected void addToAllowing(TbCase tc) {
-		Map<String, List<ErrItem>>  verifyList = getVerifyList();
 		if (!ExamEveryMonth(tc)){
-			if (!verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().contains(tc))
-				verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().add(tc);
+			addToVerList(tc,2,0);
 		}
-		if (!verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().contains(tc))
-			if (!verifyList.get(getMessage("verify.errorcat3")).get(0).getCaseList().contains(tc))
-				verifyList.get(getMessage("verify.errorcat3")).get(0).getCaseList().add(tc);
-		
 	}
 
 }

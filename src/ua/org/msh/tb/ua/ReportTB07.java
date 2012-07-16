@@ -79,17 +79,11 @@ public class ReportTB07 extends IndicatorVerify {
 		List<PrevTBTreatment> ptb = getEntityManager().createQuery("select t from PrevTBTreatment t where t.tbcase.id="+tc.getId()).getResultList();
 		if (ptb!=null)
 			if (tc.getPatientType().equals(PatientType.RELAPSE) && ptb.size()==0)
-				if (!verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().contains(tc))
-					verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().add(tc);
+				addToVerList(tc,2,0);
 		if (tc.getTreatmentPeriod()!=null)
 			if (tc.getState().equals(CaseState.ONTREATMENT))
 				if (tc.getTreatmentPeriod().getEndDate().before(new Date()))
-					if (!verifyList.get(getMessage("verify.errorcat2")).get(1).getCaseList().contains(tc))
-						verifyList.get(getMessage("verify.errorcat2")).get(1).getCaseList().add(tc);
-			
-		if (!verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().contains(tc) && !verifyList.get(getMessage("verify.errorcat2")).get(1).getCaseList().contains(tc))
-			if (!verifyList.get(getMessage("verify.errorcat3")).get(0).getCaseList().contains(tc))
-				verifyList.get(getMessage("verify.errorcat3")).get(0).getCaseList().add(tc);
+					addToVerList(tc,2,1);
 	}
 	
 	
@@ -191,7 +185,7 @@ public class ReportTB07 extends IndicatorVerify {
 												getTable4000().addIdValue("pulmonary_all", rowid, 1F);
 												getTable4000().addIdValue("all",rowid, 1F);
 											}
-										addToAllowing(tc);
+										addToRepList(tc);
 									}
 							}
 							else{
@@ -211,7 +205,7 @@ public class ReportTB07 extends IndicatorVerify {
 										getTable4000().addIdValue("extrapulmonary_all", rowid, 1F);
 										getTable4000().addIdValue("all",rowid, 1F);
 									}
-								addToAllowing(tc);
+								addToRepList(tc);
 							}
 						if (!MicroscopyIsNull(tc))
 							if (tc.getRegistrationDate()!=null && cd.getDateFirstVisitGMC()!=null)

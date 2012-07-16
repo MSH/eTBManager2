@@ -2,7 +2,6 @@ package org.msh.tb.ua;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.ExamDST;
@@ -108,29 +107,25 @@ public class ReportTB11 extends IndicatorVerify {
 					colkey = "others";
 				}
 
-				if (MicroscopyIsNull(tc)){
-					if (!getVerifyList().get(getMessage("verify.errorcat1")).get(0).getCaseList().contains(tc))
-						getVerifyList().get(getMessage("verify.errorcat1")).get(0).getCaseList().add(tc);
-				}
+				if (MicroscopyIsNull(tc))
+					addToVerList(tc,1,0);
 				else{
 					table1.addIdValue(colkey, "row1", 1F);
 					if (rightMcTest(tc).getResult().isPositive())
 						table1.addIdValue(colkey, "row2", 1F);
 				}
-				if (CultureIsNull(tc)){
-					if (!getVerifyList().get(getMessage("verify.errorcat1")).get(1).getCaseList().contains(tc))
-						getVerifyList().get(getMessage("verify.errorcat1")).get(1).getCaseList().add(tc);
-				}
+				if (CultureIsNull(tc))
+					addToVerList(tc,1,1);
 				else{
 					table1.addIdValue(colkey, "row3", 1F);
 					if (rightCulTest(tc).getResult().isPositive())
 						table1.addIdValue(colkey, "row4", 1F);
 				}
 				if (!MicroscopyIsNull(tc) || !CultureIsNull(tc)){
-					addToAllowing(tc);
+					addToRepList(tc);
 					ExamDST ex = rightDSTTest(tc);
 					if (ex != null){
-						for (int i = 9; i < 27; i++){
+						for (int i = 6; i < 27; i++){
 							switch (i) {
 							case 9: case 14:case 15: case 17:{
 								sub[0] = "H";
@@ -434,15 +429,9 @@ public class ReportTB11 extends IndicatorVerify {
 	
 	@Override
 	protected void addToAllowing(TbCase tc) {
-		Map<String, List<ErrItem>>  verifyList = getVerifyList();
 		if (!everyDSTSubst(tc)){
-			if (!verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().contains(tc))
-				verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().add(tc);
+			addToVerList(tc,2,0);
 		}
-		if (!verifyList.get(getMessage("verify.errorcat2")).get(0).getCaseList().contains(tc))
-			if (!verifyList.get(getMessage("verify.errorcat3")).get(0).getCaseList().contains(tc))
-				verifyList.get(getMessage("verify.errorcat3")).get(0).getCaseList().add(tc);
-		
 	}
 
 }
