@@ -26,6 +26,12 @@ import org.msh.utils.date.Period;
 @Name("reportTB08")
 
 public class ReportTB08 extends IndicatorVerify {
+	private static final String NEGATIVE = "_negative";
+
+
+	private static final String POSITIVE = "_positive";
+
+
 	private static final long serialVersionUID = -1617171254497253851L;
 
 
@@ -90,7 +96,7 @@ public class ReportTB08 extends IndicatorVerify {
 		setCounting(true);
 		int count = ((Long)createQuery().getSingleResult()).intValue();
 		if (count<=4000){
-			initVerifList("verify.tb08.error",3,2,1);
+			initVerifList("verify.tb08.error",5,2,1);
 			setCounting(false);
 			setOverflow(false);
 			lst = createQuery().getResultList();
@@ -115,67 +121,32 @@ public class ReportTB08 extends IndicatorVerify {
 				break;
 				}
 				if (hashSet.contains(tc.getState().ordinal())){
-					if (!MicroscopyIsNull(tc) || !CultureIsNull(tc)){
-							CaseState state = tc.getState();
-							ExtraOutcomeInfo extraOutcome = cd.getExtraOutcomeInfo();
+					CaseState state = tc.getState();
+					ExtraOutcomeInfo extraOutcome = cd.getExtraOutcomeInfo();
 
-							Object col = state;
+					Object col = state;
 
-							if (state == CaseState.DIED) {
-								if ((extraOutcome == ExtraOutcomeInfo.TB) || (extraOutcome == ExtraOutcomeInfo.OTHER_CAUSES))
-									col = extraOutcome;
-								else col = ExtraOutcomeInfo.OTHER_CAUSES; // default value
-							}
-							else if (state == CaseState.FAILED) {
-								if ((extraOutcome == ExtraOutcomeInfo.CLINICAL_EXAM) ||
-										(extraOutcome == ExtraOutcomeInfo.CULTURE_SMEAR) ||
-										(extraOutcome == ExtraOutcomeInfo.TRANSFER_CATIV))
-									col = extraOutcome;
-								else col = state;
-							}
-
-							String micResult=null;
-							if (!MicroscopyIsNull(tc))
-									if (rightMcTest(tc).getResult().isPositive())
-										micResult = "_positive";
-									else micResult = "_negative";
-
-							if (col != null) {
-								if (micResult!=null)
-									if (!(micResult.equals("_negative") && state.equals(CaseState.CURED)))
-										if (!state.equals(CaseState.FAILED))
-										{
-											getTable1000().addIdValue(col, key + micResult, 1F);
-											getTable1000().addIdValue("TOTAL", key + micResult, 1F);
-											addToAllowing(tc);
-										}
-										else 
-											if (!verifyList.get(getMessage("verify.errorcat1")).get(2).getCaseList().contains(tc))
-												verifyList.get(getMessage("verify.errorcat1")).get(2).getCaseList().add(tc);
-								if (!CultureIsNull(tc)){
-										if (rightCulTest(tc).getResult().isPositive() || micResult=="_positive")
-											micResult = "_positive";
-										else micResult = "_negative";
-									}
-								if (micResult!=null)
-									if (!(micResult.equals("_negative") && state.equals(CaseState.CURED))){
-										if (!state.equals(CaseState.FAILED))
-										{
-											getTable2000().addIdValue(col, key + micResult, 1F);
-											getTable2000().addIdValue("TOTAL", key + micResult, 1F);
-											addToAllowing(tc);
-										}
-										else 
-											if (!verifyList.get(getMessage("verify.errorcat1")).get(2).getCaseList().contains(tc))
-												verifyList.get(getMessage("verify.errorcat1")).get(2).getCaseList().add(tc);
-									}
-									else
-										if (!verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().contains(tc))
-											verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().add(tc);
-							}
-
-
+					if (state == CaseState.DIED) {
+						if ((extraOutcome == ExtraOutcomeInfo.TB) || (extraOutcome == ExtraOutcomeInfo.OTHER_CAUSES))
+							col = extraOutcome;
+						else col = ExtraOutcomeInfo.OTHER_CAUSES; // default value
+					}
+					else if (state == CaseState.FAILED) {
+						if ((extraOutcome == ExtraOutcomeInfo.CLINICAL_EXAM) ||
+								(extraOutcome == ExtraOutcomeInfo.CULTURE_SMEAR) ||
+								(extraOutcome == ExtraOutcomeInfo.TRANSFER_CATIV))
+							col = extraOutcome;
+						else {
+							if (!getVerifyList().get(getMessage("verify.errorcat1")).get(2).getCaseList().contains(tc))
+								getVerifyList().get(getMessage("verify.errorcat1")).get(2).getCaseList().add(tc);
+							continue; // unknown extra outcome if failed !!!!
 						}
+					}
+					if (col != null) {
+						//calculate 1000 and 2000
+						String micResult = addTo1000(tc, key, col);
+						addTo2000(tc, key, col, micResult);
+					}
 				}
 				else 
 					if (tc.getState().equals(CaseState.ONTREATMENT)){
@@ -210,6 +181,71 @@ public class ReportTB08 extends IndicatorVerify {
 			setOverflow(true);
 		}
 
+	}
+
+	/**
+	 * Add case to table 2000
+	 * @param tc case
+	 * @param patientType 
+	 * @param col
+	 * @param micResult microscope result calculated in addTo1000
+	 */
+	private void addTo2000(TbCase tc, String patientType, Object col, String micResult) {
+		String culmicResult = null;
+		// take result by culture
+		if (!CultureIsNull(tc)){
+			if (rightCulTest(tc).getResult().isPositive())
+				culmicResult = POSITIVE;
+			else culmicResult = NEGATIVE;
+		}else{ // no culture, take by microscope
+			culmicResult = micResult;
+		}
+		if (culmicResult!=null){
+			/*if (!(culmicResult.equals(NEGATIVE) && tc.getState().equals(CaseState.CURED))){*/
+				{
+					getTable2000().addIdValue(col, patientType + culmicResult, 1F);
+					getTable2000().addIdValue("TOTAL", patientType + culmicResult, 1F);
+					addToAllowing(tc);
+				}
+			}
+			/*else
+				if (!getVerifyList().get(getMessage("verify.errorcat1")).get(0).getCaseList().contains(tc))
+					getVerifyList().get(getMessage("verify.errorcat1")).get(0).getCaseList().add(tc);*/
+		else{
+			if (!getVerifyList().get(getMessage("verify.errorcat1")).get(4).getCaseList().contains(tc))
+				getVerifyList().get(getMessage("verify.errorcat1")).get(4).getCaseList().add(tc);
+		}
+	}
+
+	/**
+	 * Add case to table 1000
+	 * @param tc case
+	 * @param patientType
+	 * @param col
+	 * @return TODO
+	 */
+	private String addTo1000(TbCase tc, String patientType, Object col) {
+		String micResult=null;
+		if (!MicroscopyIsNull(tc))
+			if (rightMcTest(tc).getResult().isPositive())
+				micResult = POSITIVE;
+			else micResult = NEGATIVE;
+
+		if (micResult!=null){
+			//if (!(micResult.equals(NEGATIVE) && tc.getState().equals(CaseState.CURED)))
+			{
+				getTable1000().addIdValue(col, patientType + micResult, 1F);
+				getTable1000().addIdValue("TOTAL", patientType + micResult, 1F);
+				addToAllowing(tc);
+			}
+/*			else 
+				if (!getVerifyList().get(getMessage("verify.errorcat1")).get(0).getCaseList().contains(tc))
+					getVerifyList().get(getMessage("verify.errorcat1")).get(0).getCaseList().add(tc);*/
+		}else{
+			if (!getVerifyList().get(getMessage("verify.errorcat1")).get(3).getCaseList().contains(tc))
+				getVerifyList().get(getMessage("verify.errorcat1")).get(3).getCaseList().add(tc);
+		}
+		return micResult;
 	}
 
 	private boolean curedMc(TbCase tc) {
@@ -332,7 +368,7 @@ public class ReportTB08 extends IndicatorVerify {
 
 		return false;	
 	}
-	
+
 	/**
 	 * Initialize table layout. Because both table 1000 and table 2000 share the same layout, they use a common
 	 * method to initialize its layout

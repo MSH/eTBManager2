@@ -158,10 +158,9 @@ public class ReportTB07 extends IndicatorVerify {
 											getTable1000().addIdValue(tc.getPatient().getGender().toString().toLowerCase(),rowid, 1F);
 											getTable1000().addIdValue("all",rowid, 1F);
 											if (micResult.equals("positive")){
-												getTable3000().addIdValue(micResult+"_"+key,rowid, 1F);
-												getTable3000().addIdValue(micResult+"_all",rowid, 1F);
-												getTable3000().addIdValue(tc.getPatient().getGender().toString().toLowerCase(),rowid, 1F);
-												getTable3000().addIdValue("all",rowid, 1F);
+												getTable2000().addIdValue(roundToIniDate(tc.getPatientAge())+"_"+tc.getPatient().getGender().toString().toLowerCase(),rowid, 1F);
+												getTable2000().addIdValue(tc.getPatient().getGender().toString().toLowerCase()+"_all",rowid, 1F);
+												getTable2000().addIdValue("all",rowid, 1F);
 											}
 										}
 										else
@@ -183,9 +182,7 @@ public class ReportTB07 extends IndicatorVerify {
 											getTable3000().addIdValue("all",rowid, 1F);
 										}
 
-										getTable2000().addIdValue(roundToIniDate(tc.getPatientAge())+"_"+tc.getPatient().getGender().toString().toLowerCase(),rowid, 1F);
-										getTable2000().addIdValue(tc.getPatient().getGender().toString().toLowerCase()+"_all",rowid, 1F);
-										getTable2000().addIdValue("all",rowid, 1F);
+										
 
 										if (!verifyList.get(getMessage("verify.errorcat1")).get(4).getCaseList().contains(tc))
 											if (tc.getResHIV().get(0).getResult().equals(HIVResult.POSITIVE))
