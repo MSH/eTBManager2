@@ -58,7 +58,7 @@
     </s:decorate>
 
 
-    <s:decorate template="/layout/edit.xhtml" >
+    <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.state=='ONTREATMENT'}">
     	<ui:define name="label">#{messages['MedicalExamination.usingPrescMedicines']}</ui:define>
     	<h:selectOneMenu id="cbpresc" value="#{medicalExamination.usingPrescMedicines}" required="true" style="display:block;" >
     		<s:selectItems value="#{yesNoList}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
