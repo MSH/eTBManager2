@@ -160,7 +160,10 @@
 <ui:include src="/cases/issues.xhtml" />
 
 <div class="spacer" />
-
+	<s:decorate template="/layout/display.xhtml" rendered="#{caseDataUA.extraOutcomeInfo.key.length()>0}">
+    	<ui:define name="label">#{messages['extra.outcome.info']}:</ui:define>
+		#{messages[caseDataUA.extraOutcomeInfo.key]}
+	</s:decorate>
 <rich:tabPanel switchType="client" id="tabCase">
 <rich:tab label="#{messages['cases.details.case']}" id="tab1" ontabenter="updateTab(1)">
 	<h:panelGroup id="pnltab1">
