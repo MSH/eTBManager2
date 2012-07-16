@@ -739,4 +739,13 @@ public class ForecastingView {
 			 medicine = forecastingHome.getInstance().getMedicines().get(medicineItem);
 		else medicine = null;
 	}
+	
+	public float getControlTotal() {
+		float totalPerc =0;
+		if (forecastingHome.getForecasting()!=null){
+			for (ForecastingRegimen aux: forecastingHome.getForecasting().getRegimens())
+						totalPerc += aux.getPercNewCases();	
+			}
+		return totalPerc;
+	}
 }
