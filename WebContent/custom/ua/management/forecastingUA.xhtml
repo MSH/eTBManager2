@@ -7,6 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
  	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:c="http://java.sun.com/jstl/core"
       template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['manag.forecast.med']}" />
@@ -167,37 +168,64 @@
 	</div>
 
 	<div class="form-content">
-	<h2>#{messages['manag.forecast.cases']}</h2>
+	<h2>#{messages['manag.forecast.cases']} + #{messages['manag.forecast.newcasestitle2']}</h2>
 
 	<h:panelGroup id="pnlcasesontreat">
 	<s:fragment>
+	
+	<a:commandLink  
+		action="#{forecastingView.casesRegimenTable.movePreviousPeriod}"
+		reRender="pnlcasesontreat" styleClass="naveg-prev" ajaxSingle="true" process="pnl2"/>
+
+	<a:commandLink 
+		action="#{forecastingView.casesRegimenTable.moveNextPeriod}" ajaxSingle="true" process="pnl2"
+		reRender="pnlcasesontreat" styleClass="naveg-next" rendered="#{forecastingView.casesRegimenTable.monthIndexIni != 0}"/>
+	
+	<br/>
+	
 	<h:panelGroup id="pnl2">
 	<table width="100%" class="table1">
-	<tr>
-		<th>#{messages['Regimen']}</th>
-		<a:repeat value="#{forecastingUAControl.months}" var="it">
+		<tr>
 			<th>
-				#{it}
+			#{messages['Regimen']}
+			#{forecastingView.controlTotal}%
 			</th>
-		</a:repeat>
-	</tr>
-	<a:repeat value="#{forecastingView.casesRegimenTable.rows}" var="it">
-	<tr>
-		<td>
-			#{it.regimen.regimen}
-		</td>
-		<a:repeat value="#{it.months}" var="m">
+			<a:repeat value="#{forecastingUAControl.months}" var="it">
+				<th>
+					#{it}
+				</th>
+			</a:repeat>
+			<th>
+				#{messages['manag.forecast.percreg']}
+			</th>
+		</tr>
+		<c:forEach items="#{forecastingView.casesRegimenTable.rows}" var="it" varStatus="statevarind">
+		<tr>
+			<td>
+				#{it.regimen.regimen}
+			</td>
+			<a:repeat value="#{it.months}" var="m">
+				<s:fragment rendered="#{forecastingUAControl.kvartMonth(m)}">
+				<td>
+					<s:validateAll>
+						<s:decorate>
+							<h:inputText id="erval" value="#{m.numCases}" style="width:35px;" requiredMessage="#{messages['error.validate']}"/>
+							<s:message styleClass="error"/>
+						</s:decorate>
+					</s:validateAll>
+				</td>
+				</s:fragment>
+			</a:repeat>
 			<td>
 				<s:validateAll>
 					<s:decorate>
-						<h:inputText id="erval" value="#{m.numCases}" style="width:35px;" requiredMessage="#{messages['error.validate']}"/>
-						<s:message styleClass="error"/>
+						<h:inputText id="erval" value="#{forecasting.regimens.get(statevarind.index).percNewCases}" style="width:70px;"  converter="currencyConverter"/>
+						<s:message  styleClass="error"/>
 					</s:decorate>
 				</s:validateAll>
 			</td>
-		</a:repeat>
-	</tr>
-	</a:repeat>
+		</tr>
+		</c:forEach>
 	</table>
 	</h:panelGroup>
 	</s:fragment>
@@ -208,50 +236,52 @@
 
 	<div class="form-content">	
 	<h2>#{messages['manag.forecast.newcases']}</h2>
-
 	<table width="100%">
-	<tr><td>
-	<rich:panel>
-		<f:facet name="header">
-			#{messages['manag.forecast.newcasestitle2']}
-		</f:facet>
-	<h:dataTable value="#{forecasting.regimens}" var="r" styleClass="tabela4" 
-		rowClasses="lin1,lin2" columnClasses="col,colr,colr">
-		<h:column>
+	<tr>
+<ui:remove>
+		<td>
+		<rich:panel>
 			<f:facet name="header">
-				#{messages['Regimen']}
-				#{forecastingCalculation.controlTotal}%
+				#{messages['manag.forecast.newcasestitle2']}
 			</f:facet>
-			#{r.regimen.name}
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				#{messages['manag.forecast.percreg']}
-			</f:facet>
-				<s:validateAll>
-					<s:decorate>
-						<h:inputText id="erval" value="#{r.percNewCases}" style="width:70px;"  converter="currencyConverter">
-							
-						</h:inputText>
-						<s:message  styleClass="error"/>
-					</s:decorate>
-				</s:validateAll>
-		</h:column>
-
-		<h:column rendered="false">
-			<f:facet name="header">
-				#{messages['manag.forecast.numcasesreg']}
-			</f:facet>
-			<h:outputText value="#{r.percNewCases}" >
-				<f:convertNumber pattern="#,###,##0.0"/>
-			</h:outputText> 
-		</h:column>
-	</h:dataTable>
-	</rich:panel>
-
-	</td><td>
-
+		<h:dataTable value="#{forecasting.regimens}" var="r" styleClass="tabela4" 
+			rowClasses="lin1,lin2" columnClasses="col,colr,colr">
+			<h:column>
+				<f:facet name="header">
+					#{messages['Regimen']}
+					#{forecastingCalculation.controlTotal}%
+				</f:facet>
+				#{r.regimen.name}
+			</h:column>
+	
+			<h:column>
+				<f:facet name="header">
+					#{messages['manag.forecast.percreg']}
+				</f:facet>
+					<s:validateAll>
+						<s:decorate>
+							<h:inputText id="erval" value="#{r.percNewCases}" style="width:70px;"  converter="currencyConverter">
+								
+							</h:inputText>
+							<s:message  styleClass="error"/>
+						</s:decorate>
+					</s:validateAll>
+			</h:column>
+	
+			<h:column rendered="false">
+				<f:facet name="header">
+					#{messages['manag.forecast.numcasesreg']}
+				</f:facet>
+				<h:outputText value="#{r.percNewCases}" >
+					<f:convertNumber pattern="#,###,##0.0"/>
+				</h:outputText> 
+			</h:column>
+		</h:dataTable>
+		</rich:panel>
+		</td>
+</ui:remove>
+	
+	<td>
 	<rich:dataGrid value="#{forecasting.newCases}" var="it" columns="12" width="100%">
 		<f:facet name="header">
 			#{messages['manag.forecast.newcasestitle']}
@@ -379,7 +409,6 @@ function showBatchDlg() {
 	showModalAutoTop('batchdlg');
 }
 function showDatesDlg() {
-	alert('1111111111111111111111111111111');
 	showModalAutoTop('datesdlg');
 }
 function showLoadForecastingDlg() {
@@ -557,7 +586,7 @@ function showLoadForecastingDlg() {
 		<s:fragment rendered="#{forecastings.loading}">
 		<h:dataTable value="#{forecastings.resultList}" var="it" width="100%" >
 			<h:column>
-				<s:link view="/management/forecasting.xhtml" value="#{it.name}" styleClass="forecast-icon"  onclick="Richfaces.hideModalPanel('loadfordlg'); ">
+				<s:link view="/management/forecastingUA.xhtml" value="#{it.name}" styleClass="forecast-icon"  onclick="Richfaces.hideModalPanel('loadfordlg'); ">
 					<f:param name="id" value="#{it.id}"/>
 				</s:link>
   				<br/>

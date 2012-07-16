@@ -656,7 +656,7 @@ function showLoadForecastingDlg() {
 		<s:fragment rendered="#{forecastings.loading}">
 		<h:dataTable value="#{forecastings.resultList}" var="it" width="100%" >
 			<h:column>
-				<s:link view="/management/forecasting.xhtml" value="#{it.name}" styleClass="forecast-icon"  onclick="Richfaces.hideModalPanel('loadfordlg'); ">
+				<s:link view="/custom/ua/management/forecasting.xhtml" value="#{it.name}" styleClass="forecast-icon"  onclick="Richfaces.hideModalPanel('loadfordlg'); ">
 					<f:param name="id" value="#{it.id}"/>
 				</s:link>
   				<br/>
