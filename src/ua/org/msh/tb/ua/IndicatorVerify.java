@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -271,9 +272,10 @@ public abstract class IndicatorVerify extends Indicator2D {
 	}
 	
 	/**
-	 * @return microscopy test, which is up to quality, namely first month of treatment and worst test from several 
+	 * @return microscope test, which is up to quality, strictly namely first month of treatment and worst test from several
+	 * It is "ideal" period, not maybe for "real life" 
 	 */
-	protected ExamMicroscopy rightMcTest(TbCase tc){
+	protected ExamMicroscopy rightMcTestStrict(TbCase tc){
 		Calendar dateTest = Calendar.getInstance();
 		Calendar dateIniTreat = Calendar.getInstance();
 		int res=0;
@@ -306,9 +308,45 @@ public abstract class IndicatorVerify extends Indicator2D {
 	}
 	
 	/**
-	 * @return culture test, which is up to quality, namely first month of treatment and worst test from several 
+	 * @return worst microscope test between first visit date and diagnosis date
+	 * It is UA specific "real life" - not first month!
 	 */
-	protected ExamCulture rightCulTest(TbCase tc){
+	protected ExamMicroscopy rightMcTest(TbCase tc){
+		Calendar dateTest = Calendar.getInstance();
+		Calendar diagDate = Calendar.getInstance();
+		int res=0;
+		Date diagDt = tc.getDiagnosisDate();
+		if (diagDt == null){
+			diagDate.setTime(new Date());  // today, because no diagnosis
+		}else{
+			diagDate.setTime(diagDt);		// real diagnosis	
+		}
+		ArrayList<ExamMicroscopy> lst = new ArrayList<ExamMicroscopy>();
+		for (ExamMicroscopy ex: tc.getExamsMicroscopy()){
+			dateTest.setTime(ex.getDateCollected());
+			if (diagDate.getTimeInMillis() - dateTest.getTimeInMillis() >= 0) {
+				res++;
+				lst.add(ex);
+			}	
+		}
+
+		switch (lst.size()) {
+		case 0: 
+			return null;
+		case 1: 
+			return lst.get(0);
+		default:
+			return WorstMcRes(lst);
+		}
+	}
+	
+	
+	
+	/**
+	 * @return culture test, which is up to quality, strictly namely first month of treatment and worst test from several 
+	 * not for UA "real life", maybe
+	 */
+	protected ExamCulture rightCulTestStrict(TbCase tc){
 		Calendar dateTest = Calendar.getInstance();
 		Calendar dateIniTreat = Calendar.getInstance();
 		int res=0;
@@ -339,7 +377,38 @@ public abstract class IndicatorVerify extends Indicator2D {
 			return WorstCulRes(lst);
 		}
 	}
+	/**
+	 * @return worst culture test before diagnosis date
+	 * It is UA specific "real life" - not first month!
+	 */
+	protected ExamCulture rightCulTest(TbCase tc){
+		Calendar dateTest = Calendar.getInstance();
+		Calendar diagDate = Calendar.getInstance();
+		int res=0;
+		Date diagDt = tc.getDiagnosisDate();
+		if (diagDt == null){
+			diagDate.setTime(new Date());  // today, because no diagnosis
+		}else{
+			diagDate.setTime(diagDt);		// real diagnosis	
+		}
+		ArrayList<ExamCulture> lst = new ArrayList<ExamCulture>();
+		for (ExamCulture ex: tc.getExamsCulture()){
+			dateTest.setTime(ex.getDateCollected());
+			if (diagDate.getTimeInMillis() - dateTest.getTimeInMillis() >= 0) {
+				res++;
+				lst.add(ex);
+			}	
+		}
 
+		switch (lst.size()) {
+		case 0: 
+			return null;
+		case 1: 
+			return lst.get(0);
+		default:
+			return WorstCulRes(lst);
+		}
+	}
 	/**
 	 * @return dst-test, which is up to quality, namely first month of treatment and worst test from several 
 	 */
