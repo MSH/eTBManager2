@@ -25,28 +25,63 @@ public abstract class IndicatorVerify extends Indicator2D {
 
 	@In(create=true) IndicatorController indicatorController;
 	
+	/**
+	 * List of errors and warnings in TbCase data, allowing in reports 
+	 * Parameters of Map means category and list of types of errors
+	 * */
 	private Map<String,List<ErrItem>> verifyList;
+	
+	/**
+	 * Define what type of SELECT in HQL query we need now
+	 * */
 	private boolean counting;
+	/**
+	 * @true if items in HQL query more than 4000
+	 * */
 	private boolean overflow;
 	
+	/**
+	 * Class of elements of VerifyList
+	 * */
 	public class ErrItem {
 		public ErrItem(List<TbCase> ltc,String t){
 			super();
 			this.caseList = ltc;
 			this.title = t;
 		}
+		/**
+		 * List of TbCase, allowing for current category and type of error
+		 * */
 		private List<TbCase> caseList;
+		/**
+		 * Title of current type of error
+		 * */
 		private String title;
 		
+		/**
+		 * @return the caseList
+		 * */
 		public List<TbCase> getCaseList() {
 			return caseList;
 		}
+		
+		/**
+		 * @param caseList the caseList to set
+		 * */
 		public void setCaseList(List<TbCase> caseList) {
 			this.caseList = caseList;
 		}
+		
+		/**
+		 * @return the title
+		 * */
 		public String getTitle() {
 			return title;
 		}
+		
+		/**
+		 * @param title the title to set
+		 * */
 		public void setTitle(String title) {
 			this.title = title;
 		}
@@ -72,6 +107,9 @@ public abstract class IndicatorVerify extends Indicator2D {
 		return verifyList;
 	}
 	
+	/**
+	 * @return VerifyList or create it, if it null 
+	 * */
 	public Map<String, List<ErrItem>> getList() {
 		if (verifyList==null)
 			if (indicatorController.isExecuting())
@@ -83,6 +121,9 @@ public abstract class IndicatorVerify extends Indicator2D {
 		this.verifyList = verifyList;
 	}
 
+	/**
+	 * Sort all cases in caseList in elements of VerifyList allow for locale
+	 * */
 	protected void sortAllLists() {
 		if (verifyList!=null)
 			for (String key:verifyList.keySet()){
@@ -105,6 +146,12 @@ public abstract class IndicatorVerify extends Indicator2D {
 		
 	}
 	
+	/**
+	 * Create new VerifyList
+	 * @param cat1 set number of types in category1 (not allowing cases)
+	 * @param cat2 set number of types in category2 (allowing cases, but with warnings)
+	 * @param cat3 set number of types in category3 (cases, allowing in report)
+	 * */
 	protected void initVerifList(String errmes, int cat1,int cat2,int cat3){
 		Map<String, List<ErrItem>>  verifyList = new LinkedHashMap<String,List<ErrItem>>();
 		for (int i = 1; i < 4; i++) {
@@ -133,8 +180,14 @@ public abstract class IndicatorVerify extends Indicator2D {
 		setVerifyList(verifyList);
 	}
 	
+	/**
+	 * Add TbCase to category2 (allowing cases, but with warnings)
+	 * */
 	protected abstract void addToAllowing(TbCase tc);
 	
+	/**
+	 * Add TbCase to category3 (allowing cases), if it not contains in all subcategories of category2
+	 * */
 	protected void addToRepList(TbCase tc){
 		addToAllowing(tc);
 		for (ErrItem ls: verifyList.get(getMessage("verify.errorcat2"))) {
@@ -180,8 +233,14 @@ public abstract class IndicatorVerify extends Indicator2D {
 		return "c.validationState = "+ValidationState.VALIDATED.ordinal();
 	}
 	
+	/**
+	 * Fill tables of report by data
+	 * */
 	protected abstract void generateTables();
 	
+	/**
+	 * @return true if case don't have necessary result of microscopy
+	 * */
 	protected boolean MicroscopyIsNull(TbCase tc){
 		if (tc.getExamsMicroscopy()==null)	return true;
 		else
@@ -190,6 +249,9 @@ public abstract class IndicatorVerify extends Indicator2D {
 		return false;
 	}
 	
+	/**
+	 * @return true if case don't have necessary result of culture
+	 * */
 	protected boolean CultureIsNull(TbCase tc){
 		if (tc.getExamsCulture()==null)	return true;
 		else
@@ -198,6 +260,11 @@ public abstract class IndicatorVerify extends Indicator2D {
 		return false;
 	}
 	
+	/**
+	 * Add case in category cat in subcategory num_er
+	 * @param cat key of category
+	 * @param num_er index of subcategory
+	 * */
 	protected void addToVerList(TbCase tc, int cat,int num_er){
 		if (!getVerifyList().get(getMessage("verify.errorcat"+cat)).get(num_er).getCaseList().contains(tc))
 			getVerifyList().get(getMessage("verify.errorcat"+cat)).get(num_er).getCaseList().add(tc);
