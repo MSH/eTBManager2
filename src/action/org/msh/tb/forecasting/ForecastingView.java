@@ -746,6 +746,6 @@ public class ForecastingView {
 			for (ForecastingRegimen aux: forecastingHome.getForecasting().getRegimens())
 						totalPerc += aux.getPercNewCases();	
 			}
-		return totalPerc;
+		return ((float)Math.round(totalPerc*100))/100;
 	}
 }
