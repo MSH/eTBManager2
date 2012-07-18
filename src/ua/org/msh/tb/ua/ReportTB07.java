@@ -141,14 +141,9 @@ public class ReportTB07 extends IndicatorVerify {
 										
 										String gen = tc.getPatient().getGender().toString().toLowerCase();
 										if (micResult!=null){
-											getTable1000().addIdValue(micResult+"_"+key,rowid, 1F);
-											getTable1000().addIdValue(micResult+"_all",rowid, 1F);
-											getTable1000().addIdValue(tc.getPatient().getGender().toString().toLowerCase(),rowid, 1F);
-											getTable1000().addIdValue("all",rowid, 1F);
+											addToTable(getTable1000(), gen, micResult, key);
 											if (micResult.equals("positive") && key.equalsIgnoreCase("newcases")){
-												getTable2000().addIdValue(roundToIniDate(tc.getPatientAge())+"_"+tc.getPatient().getGender().toString().toLowerCase(),rowid, 1F);
-												getTable2000().addIdValue(tc.getPatient().getGender().toString().toLowerCase()+"_all",rowid, 1F);
-												getTable2000().addIdValue("all",rowid, 1F);
+												addToTable(getTable2000(), gen+"_all", Integer.toString(roundToIniDate(tc.getPatientAge())), gen);
 											}
 										}
 										else
@@ -168,10 +163,8 @@ public class ReportTB07 extends IndicatorVerify {
 											if (tc.getResHIV().get(0).getResult().equals(HIVResult.POSITIVE))
 												addToTable(getTable4000(),gen,"pulmonary",key);
 										addToRepList(tc);
-									}else{
-										if (!verifyList.get(getMessage("verify.errorcat1")).get(5).getCaseList().contains(tc))
-											verifyList.get(getMessage("verify.errorcat1")).get(5).getCaseList().add(tc);
-									}
+									}else
+										addToVerList(tc,1,5);
 							}
 							else{
 								String gen = tc.getPatient().getGender().toString().toLowerCase();
@@ -189,14 +182,10 @@ public class ReportTB07 extends IndicatorVerify {
 							if (tc.getRegistrationDate()!=null && cd.getDateFirstVisitGMC()!=null)
 								if (examGMCpos(tc,cd.getDateFirstVisitGMC()))
 									getTable5000().addIdValue("col2",rowid, 1F);
-						}else{
-							if (!verifyList.get(getMessage("verify.errorcat1")).get(1).getCaseList().contains(tc))
-								verifyList.get(getMessage("verify.errorcat1")).get(1).getCaseList().add(tc);
-						}
-					}else{
-						if (!verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().contains(tc))
-							verifyList.get(getMessage("verify.errorcat1")).get(0).getCaseList().add(tc);
-					}
+						}else
+							addToVerList(tc,1,1);
+					}else
+						addToVerList(tc,1,0);
 			}
 			IndicatorFilters filters = (IndicatorFilters)Component.getInstance("indicatorFilters");
 			int numcases = filters.getNumcases();
