@@ -11,7 +11,9 @@
 	<div class="spacer" />
 	<div style="float:right">
 		<h:outputText value="#{messages[tbcase.state.key]}" styleClass="status-label" style="float:right"/><br />
-		<b><h:outputText  value="#{messages[tbcase.getCaseEvolution()]}" style="float:right; color:#292929"/></b>
+		<s:fragment rendered="#{tbcase.open}">
+			<b><h:outputText  value="#{messages[tbcase.getCaseEvolution()]}" style="float:right; color:#292929"/></b><br/>
+		</s:fragment>
 		<s:fragment rendered="#{not tbcase.open}">
 			<div class="status-label"><div class="normal-text">
 			#{messages['TbCase.outcomeDate']}: 

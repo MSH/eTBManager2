@@ -9,6 +9,7 @@
 
 <s:decorate template="/layout/edit.xhtml" rendered="#{not tbunitselection.level1ReadOnly}">
 	<ui:define name="label">#{tbunitselection.labelAdminUnit}:</ui:define>
+	<ui:param name="labelstyle" value="#{labelstyle}" /> 
 	<h:selectOneMenu id="cbselau" value="#{tbunitselection.adminUnit}" required="#{required}" >
 		<s:selectItems var="it" value="#{tbunitselection.adminUnits}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
@@ -18,6 +19,7 @@
 
 <s:decorate template="/layout/display.xhtml" rendered="#{tbunitselection.level1ReadOnly}">
 	<ui:define name="label">#{messages['global.location']}:</ui:define>
+	<ui:param name="labelstyle" value="#{labelstyle}" /> 
 	<ui:repeat value="#{tbunitselection.parentUnits}" var="it">
 		<span class="right-icon"> #{it.name}</span>
 	</ui:repeat>

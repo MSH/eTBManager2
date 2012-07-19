@@ -15,7 +15,7 @@
 		<a:support event="onchange" ajaxSingle="true" reRender="cblabs" focus="cblab"/>
 	</h:selectOneMenu>
 
-	<h:panelGroup id="cblabs">
+	<h:panelGroup id="#{empty edtid?'cblabs':edtid}">
 	<h:selectOneMenu id="cblab" value="#{labselection.laboratory}" required="#{required}">
         <s:selectItems value="#{labselection.options}" var="it" label="#{it.abbrevName}" noSelectionLabel="-" />
       	<s:convertEntity/>

@@ -23,7 +23,7 @@
 				</rich:calendar>
 				<f:param name="validatefuture" value="#{future}" />
 				</h:panelGroup>
-    			(#{messages['locale.displayDatePattern']})
+    			<h:outputText value="(#{messages['locale.displayDatePattern']})" rendered="#{empty showPattern ? true : showPattern}"/>
     			<rich:jQuery selector="#edtdatep .rich-calendar-input" query="mask('#{messages['locale.dateMask']}')" />
     			<ui:insert />
             </s:validateAll>
