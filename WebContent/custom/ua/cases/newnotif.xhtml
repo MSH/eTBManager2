@@ -77,6 +77,7 @@
   			<f:param name="order" value="#{patientsUA.order=='p.name,p.middleName'?'p.name desc,p.middleName desc':''}" />
 			</s:link>
 		</f:facet>
+		<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
 		<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;">
 			<f:param name="pacid" value="#{it.patient.id}" />
 			<f:param name="classif" value="#{tbcase.classification}"/>
@@ -86,6 +87,18 @@
 			<f:param name="classif" value="#{tbcase.classification}"/>
 		</s:link>
 		<br/>
+		</s:fragment>
+		<s:fragment rendered = '#{it.tbcase.outcomeDate == null}'>
+		<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;">
+			<f:param name="pacid" value="#{it.patient.id}" />
+			<f:param name="classif" value="#{tbcase.classification}"/>
+		</s:link>
+		<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml" onclick="openWaitDlg();">
+			<f:param name="pacid" value="#{it.patient.id}" />
+			<f:param name="classif" value="#{tbcase.classification}"/>
+		</s:link>
+		<br/>
+		</s:fragment>
 		#{it.patient.recordNumber}
 	</h:column>
 
