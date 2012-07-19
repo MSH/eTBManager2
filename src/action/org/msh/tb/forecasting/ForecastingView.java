@@ -502,7 +502,7 @@ public class ForecastingView {
 
 		forecasting.getRegimens().clear();
 		forecasting.getMedicines().clear();
-
+		medicineItems = null;
 		// mount list of regimens
 		for (Regimen reg: regimens.getResultList()) {
 			if ((line == null) || 
