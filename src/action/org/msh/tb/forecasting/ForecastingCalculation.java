@@ -659,7 +659,7 @@ public class ForecastingCalculation {
 	 * @param p
 	 * @return
 	 */
-	private int calcEstimatedConsumptionRegimen(Regimen reg, Medicine medicine, Date dtIniTreatment, Period p) {
+	public int calcEstimatedConsumptionRegimen(Regimen reg, Medicine medicine, Date dtIniTreatment, Period p) {
 		int monthsInt = reg.getMonthsIntensivePhase();
 		int result = 0;
 		
@@ -687,7 +687,7 @@ public class ForecastingCalculation {
 	 * @param medicine
 	 * @return
 	 */
-	private int calcQuantityRegimen(Regimen reg, Period p, int monthOfTreatment, Medicine medicine) {
+	public int calcQuantityRegimen(Regimen reg, Period p, int monthOfTreatment, Medicine medicine) {
 		int intPhaseMonths = reg.getMonthsPhase(RegimenPhase.INTENSIVE);
 		RegimenPhase phase = (monthOfTreatment < intPhaseMonths? RegimenPhase.INTENSIVE: RegimenPhase.CONTINUOUS);
 
