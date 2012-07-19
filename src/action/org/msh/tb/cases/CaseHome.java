@@ -302,6 +302,11 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		return checkRoleBySuffix("CASE_TAG") && isWorkingUnit();
 	}
 	
+	public boolean isCanInsertFollowUpForm() {
+		return (isCanEditCaseData() || isCanEditExams() || isCanEditTreatment() || isCanEditTreatmentCalendar()) 
+					&& isWorkingUnit();
+	}
+	
 	@Override
 	public Workspace getInstanceWorkspace() {
 		Patient p = getInstance().getPatient();

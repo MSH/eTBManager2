@@ -3,6 +3,8 @@ package org.msh.tb.cases.exams;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Query;
+
 import org.jboss.seam.annotations.End;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -11,9 +13,9 @@ import org.msh.tb.SubstancesQuery;
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.Substance;
+import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.transactionlog.LogInfo;
-
 
 @Name("examDSTHome")
 @LogInfo(roleName="EXAM_DST")
@@ -65,9 +67,7 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 		}
 	}
 	
-	@Override
-	@End(beforeRedirect=true)
-	public String persist() {
+	public boolean validateAndPrepareFields(){
 		// update exams
 		if (items != null) {
 			ExamDST exam = getInstance();
@@ -102,12 +102,128 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 			}
 			
 			if (exam.getResults().size() == 0)
-				return "error";
+				return false;
+			else
+				return true;
+
 		}
-		
-		return super.persist();
+		return false;	
 	}
 	
+	@Override
+	@End(beforeRedirect=true)
+	public String persist() {
+		
+		if(!validateAndPrepareFields())
+			return "error";
+		
+		String result = super.persist();
+		
+		//Verify the resistance type according to the DST and set it in TBcase.
+		if(setResistanceType())
+			caseHome.persist();
+		
+		return result;
+	}
+	
+	@Override
+	public String remove() {
+		String result = super.remove();
+		
+		//Verify the resistance type according to the DST and set it in TBcase.
+		if(setResistanceType())
+			caseHome.persist();
+		
+		return result;
+	}
+
+	private boolean setResistanceType(){
+		ArrayList<String> abrevNameResistSubstance;
+		
+		//It will consider all the exams before the date that the treatment has been initiated
+		Query query = getEntityManager().createQuery("select distinct a.substance.abbrevName.name1 " +
+														"from ExamDSTResult a " +
+														"where a.exam.tbcase.id = :tbcaseId " +
+														"and a.result = :resistant " +
+														"and a.exam.dateCollected <= :dateIniTreat");
+		
+		query.setParameter("tbcaseId", caseHome.getTbCase().getId());
+		query.setParameter("dateIniTreat", caseHome.getTbCase().getTreatmentPeriod().getIniDate());
+		query.setParameter("resistant", DstResult.RESISTANT);
+		
+		abrevNameResistSubstance = (ArrayList<String>) query.getResultList();
+		
+		//If there is no DST exams before the date that the treatment has been initiated
+		//It will consider the first DST exam after the date that the treatment has been initiated
+		if(abrevNameResistSubstance == null || abrevNameResistSubstance.size() <= 0){
+		
+			query = getEntityManager().createQuery("select distinct a.substance.abbrevName.name1 " +
+													"from ExamDSTResult a " +
+													"where a.exam.tbcase.id = :tbcaseId " +
+													"and a.result = :resistant " +
+													"and a.exam.dateCollected = (select min(b.dateCollected) " +
+																					"from ExamDST b " +
+																					"where b.tbcase.id = a.exam.tbcase.id)");
+			
+			query.setParameter("tbcaseId", caseHome.getTbCase().getId());
+			query.setParameter("resistant", DstResult.RESISTANT);
+			
+			abrevNameResistSubstance = (ArrayList<String>) query.getResultList();
+		
+		}
+		
+		//Now all the resistance substances are in the list above
+		
+		if(abrevNameResistSubstance != null && abrevNameResistSubstance.size() > 0){
+			//Mono-Resistance
+			//The patient has resistance to only one substance
+			if(abrevNameResistSubstance.size() == 1){
+				caseHome.getTbCase().setDrugResistanceType(DrugResistanceType.MONO_RESISTANCE);
+				return true;
+			}
+			
+			//Poli-Resistance
+			//The patient has resistance to tow or more substances and only one of the is R or H.
+			if(abrevNameResistSubstance.size() >= 2 && (
+					(checkIfSubstanceExists(abrevNameResistSubstance, "R") && !checkIfSubstanceExists(abrevNameResistSubstance, "H")) || 
+					(checkIfSubstanceExists(abrevNameResistSubstance, "H") && !checkIfSubstanceExists(abrevNameResistSubstance, "R")) )) {
+				caseHome.getTbCase().setDrugResistanceType(DrugResistanceType.POLY_RESISTANCE);
+				return true;
+			}
+			
+			//Extensive-resistance
+			//The patient has resistance to more than tow substances and tow of them are R and H.
+			if(abrevNameResistSubstance.size() > 2 && checkIfSubstanceExists(abrevNameResistSubstance, "R") && checkIfSubstanceExists(abrevNameResistSubstance, "H")
+					&& (checkIfSubstanceExists(abrevNameResistSubstance, "Ofx") || checkIfSubstanceExists(abrevNameResistSubstance, "Lfx") || checkIfSubstanceExists(abrevNameResistSubstance, "Mfx"))
+					&& (checkIfSubstanceExists(abrevNameResistSubstance, "Am") || checkIfSubstanceExists(abrevNameResistSubstance, "Km") || checkIfSubstanceExists(abrevNameResistSubstance, "Cp")) ){
+				caseHome.getTbCase().setDrugResistanceType(DrugResistanceType.EXTENSIVEDRUG_RESISTANCE);
+				return true;
+			}
+			
+			//Multi-resistance
+			//The patient has resistance to tow or more substances and tow of them are R and H.
+			if(abrevNameResistSubstance.size() >= 2 && 
+					(checkIfSubstanceExists(abrevNameResistSubstance, "R") && checkIfSubstanceExists(abrevNameResistSubstance, "H")) ){
+				caseHome.getTbCase().setDrugResistanceType(DrugResistanceType.MULTIDRUG_RESISTANCE);
+				return true;
+			}
+					
+			
+			caseHome.getTbCase().setDrugResistanceType(null);
+			return true;
+		}else{
+			caseHome.getTbCase().setDrugResistanceType(null);
+			return true;
+		}
+	}
+	
+	private boolean checkIfSubstanceExists(List<String> abbrevNameSubstanceList, String substance){
+		for(String s : abbrevNameSubstanceList){
+			if(s.equalsIgnoreCase(substance))
+				return true;
+		}
+		return false;
+	}
 	
 	@Override
 	public void setId(Object id) {
@@ -118,4 +234,5 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 	public void refreshSubstances() {
 		substances.refresh();
 	}
+	
 }

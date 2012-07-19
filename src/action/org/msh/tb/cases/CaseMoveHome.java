@@ -267,7 +267,7 @@ public class CaseMoveHome extends Controller {
 	 * Returns the treatment health unit that is transferring out 
 	 * @return
 	 */
-	protected TreatmentHealthUnit findTransferOutHealthUnit() {
+	public TreatmentHealthUnit findTransferOutHealthUnit() {
 		TbCase tbcase = caseHome.getInstance();
 		
 		Date dt = null;

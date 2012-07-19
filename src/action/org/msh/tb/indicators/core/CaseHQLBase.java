@@ -174,10 +174,6 @@ public class CaseHQLBase extends Controller {
 		if (s != null)
 			hql += " and " + s;
 		
-		// 39- include filter by supervised
-		//if (filters.getSupervisedTreatment() != null)
-		//	hql += " and c.getSupervised = #{indicatorFilters.supervisedTreatment}";
-		
 		if (filters.getAgeRange() != null) {
 			hql += " and c.age between #{indicatorFilters.ageRange.iniAge} and #{indicatorFilters.ageRange.endAge}";
 		}

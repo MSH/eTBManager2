@@ -299,7 +299,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			case 603: cond = " exists(select tc.id " +
 					         "from MedicalExamination med " + 
 					         "inner join med.tbcase tc " +
-							 "inner join tc.notificationUnit as tu " +
+							 "inner join tc.treatmentUnit as tu " +
 							 "inner join tu.adminUnit as a " +
 							 "where tu.workspace.id = " + defaultWorkspace.getId().toString() + 
 							 " and med.nextAppointment is not null and med.nextAppointment + 15 < current_date " +

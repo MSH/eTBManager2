@@ -25,11 +25,20 @@ public class ExamHIVHome extends ExamHome<ExamHIV> {
 
 	@Override
 	public String persist() {
+		if(!validateForm())
+			return "error";
+		
+		return super.persist();
+	}
+	
+	public boolean validateForm(){
 		ExamHIV exam = getInstance();
+		
 		if ((exam.getDate() == null) && (exam.getResult() != HIVResult.ONGOING)) {
 			facesMessages.addToControlFromResourceBundle("edtdate", "javax.faces.component.UIInput.REQUIRED");
-			return "error";
+			return false;
 		}
-		return super.persist();
+		
+		return true;
 	}
 }
