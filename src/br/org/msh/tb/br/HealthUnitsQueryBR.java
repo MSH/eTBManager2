@@ -40,7 +40,7 @@ public class HealthUnitsQueryBR extends HealthUnitsQuery {
 
 		String hql = "select u.id, count(*) " +
 			"from TbCase c " +
-			"inner join Tbunit u on u.id = c.notification_unit_id " +
+			"inner join Tbunit u on u.id = c.treatment_unit_id " +
 			"inner join AdministrativeUnit a on a.id = u.adminunit_id " +
 			"inner join MedicalExamination med on med.case_id = c.id " +
 			"where u.workspace_id = " + defaultWorkspace.getId().toString() + generateSQLConditionByUserView() +

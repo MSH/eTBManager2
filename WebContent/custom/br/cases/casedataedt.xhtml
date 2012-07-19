@@ -137,7 +137,7 @@
 <rich:jQuery selector="#addrChanged" timing="onload" query="each(function(){ if (this.selectedIndex==0) jQuery('#curraddr').hide(); })" />
     	
     	<div id="curraddr" style="clear:both;">
-    	<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
+    	<h2>#{messages['cases.details.addresscurr']}</h2>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.address']}:</ui:define>
     		<h:inputText value="#{tbcase.currentAddress.address}" style="width:300px;margin-bottom:2px;" maxlength="100"/>
@@ -156,7 +156,7 @@
 
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.zipCode']}</ui:define>
-    		<h:inputText value="#{tbcase.currentAddress.zipCode}" maxlength="20" />
+    		<h:inputText value="#{tbcase.currentAddress.zipCode}" maxlength="8" />
     	</s:decorate>
     	
     	<table width="100%" style="border-collapse: collapse;">
@@ -166,7 +166,7 @@
 			</s:decorate>
     	</td></tr>
     	</table>
-    	<hr/>
+    	
     	</div>
     	</s:fragment>
     </td></tr>
@@ -283,13 +283,21 @@
     	<ui:param name="list" value="#{fieldsQuery.micobacterioses}" />
     </s:decorate>
 
+ 	<!--
     <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
     	<h:selectOneMenu value="#{tbcase.drugResistanceType}" >
     		<s:selectItems var="it" value="#{drugResistanceTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
-    </s:decorate>
+    </s:decorate> 
+     -->
+    
+     <s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
+		<h:outputText value="#{messages[tbcase.drugResistanceType.key]}" rendered="#{not empty tbcase.drugResistanceType}"/>
+		<h:outputText value="Cadastre o teste de sensibilidade para que o sistema possa identificar o #{messages['DrugResistanceType']}." rendered="#{empty tbcase.drugResistanceType}"/>
+	</s:decorate>
 
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>

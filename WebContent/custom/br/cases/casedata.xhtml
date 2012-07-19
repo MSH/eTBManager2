@@ -6,12 +6,13 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      xmlns:rich="http://richfaces.ajax4jsf.org/rich"      
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"   
       xmlns:c="http://java.sun.com/jstl/core"
       template="/layout/template_new.xhtml">
 
 
-<ui:param name="title" value="#{messages['cases.details']} - #{messages[tbcase.classification.key]}" />
+<ui:param name="title" value="#{messages['cases.details']} - #{messages[tbcase.classification.key]}" />
+
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
 
@@ -49,22 +50,27 @@
 		<f:param name="id" value="#{caseHome.id}" />
 	</s:link>
 	
-	<s:link onclick="showModalAutoTop('selclassificationdlg');return false;" value="#{messages['cases.changeNotifClass']}"/>
+	<s:link onclick="showModalAutoTop('selclassificationdlg');return false;" rendered="#{tbcase.state=='WAITING_TREATMENT' or tbcase.state=='ONTREATMENT' or tbcase.state=='TRANSFERRING'}"
+		value="#{messages['cases.changeNotifClass']}"/>
 
 	<h:commandLink value="#{messages['cases.reopen']}" action="#{caseCloseHome.reopenCase}"
 		rendered="#{caseHome.canReopen}" 
 		onclick="if (!confirm('#{messages['cases.reopen.confirm']}')) return false;">
 	</h:commandLink>
-
-	<s:link view="/reports/casedata.xhtml" target="_new">
-		#{messages['cases.print']}
+	
+	<s:link view="/custom/br/reports/casedata.xhtml" target="_new">
+		<div class="print-icon"/>#{messages['global.print']}
 		<f:param name="id" value="#{caseHome.id}" />
 	</s:link>
 
 	<s:link value="#{messages['admin.tags']}" view="/cases/casetagsedt.xhtml" rendered="#{caseHome.canTagCase and empty tbcase.tags}">
 		<f:param name="id" value="#{caseHome.id}" />
 	</s:link>
-
+	
+	<s:link value="#{messages['Boletim de Acompanhamento']}" view="/custom/br/cases/followupformedt.xhtml" rendered="#{caseHome.canInsertFollowUpForm}">
+		<f:param name="id" value="#{caseHome.id}" />
+	</s:link>
+	
 	</h:form>
 	</h:panelGroup>
 
@@ -311,6 +317,33 @@ function updateTab(tabIndex) {
 	</h:form>
 </rich:modalPanel>
 
+<rich:modalPanel id="selclassificationdlg" width="300" zindex="2000" autosized="true">
+	<f:facet name="header" >
+		#{messages['cases.changeNotifClass']}
+	</f:facet>
+
+	<h:form id="formclassifcation">
+
+	#{messages['cases.newnotif.title']}
+	<div class="vertical-menu">
+	<c:forEach items="#{globalLists.caseClassifications}" var="it">
+		<!--<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
+			<f:param name="classif" value="#{it}"/>
+			<f:param name="type" value="CONFIRMED"/>
+			<div class="new-icon" />#{messages[it.key]}
+		</s:link>-->
+		<a:commandLink onclick="Richfaces.hideModalPanel('selclassificationdlg');" 
+			action="#{caseDataBRHome.changeCaseClassification(it)}" value="#{messages[it.key]}" reRender="main, leftmenu"/>
+	</c:forEach>
+	</div>
+	<div class="button-bar">
+		<s:link onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" 
+			styleClass="button-alt" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+	</h:form>
+</rich:modalPanel>
 
 </ui:define>
 

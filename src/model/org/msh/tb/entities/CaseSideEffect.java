@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -66,6 +67,23 @@ public class CaseSideEffect {
 	@JoinColumn(name="SUBSTANCE2_ID")
 	private Substance substance2;
 	
+	@Lob
+	private String comment;
+	
+	/**
+	 * @return the comments
+	 */
+	public String getComment() {
+		return comment;
+	}
+
+	/**
+	 * @param comments the comments to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
 	/**
 	 * @return the resolved
 	 */

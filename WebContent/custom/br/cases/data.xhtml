@@ -97,20 +97,6 @@
 			<ui:param name="adminunit" value="#{tbcase.notifAddress.adminUnit}" />
 		</s:decorate>
 	</td></tr>
-	<tr><td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
-    		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
-    		<h:outputText value="#{tbcase.prefixPhone} - " rendered="#{not empty tbcase.prefixPhone}"/> 
-    		#{tbcase.phoneNumber}
-		</s:decorate>
-	</td>
-	<td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
-    		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
-    		<h:outputText value="#{tbcase.prefixMobile} - " rendered="#{not empty tbcase.prefixMobile}"/> 
-    		#{tbcase.mobileNumber}
-		</s:decorate>
-	</td></tr>
 	</s:fragment>
 	<s:fragment rendered="#{tbcase.notifAddressChanged}">
 	<tr><td colspan="2">
@@ -120,7 +106,7 @@
     		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
     		#{tbcase.currentAddress.address}
     		<s:fragment rendered="#{not empty tbcase.currAddressNumber}">
-    			<b>#{messages['pt_BR.addressNumber']}:</b> <h:outputText value="#{tbcase.currAddressNumber}}" />
+    			<h:outputText value=", #{tbcase.currAddressNumber}}" />
     		</s:fragment> 
     		<br/>
     		#{tbcase.currentAddress.complement}
@@ -138,12 +124,14 @@
 	<tr><td>
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.phoneNumber}">
     		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
+    		<h:outputText value="#{tbcase.prefixPhone} - " rendered="#{not empty tbcase.prefixPhone}"/>
     		#{tbcase.phoneNumber}
 		</s:decorate>
 	</td>
 	<td>
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
     		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
+    		<h:outputText value="#{tbcase.prefixMobile} - " rendered="#{not empty tbcase.prefixMobile}"/>
     		#{tbcase.mobileNumber}
 		</s:decorate>
 	</td></tr>
@@ -212,9 +200,10 @@
     		<ui:param name="field" value="#{tbcase.microbacteriose}" />
 	    </s:decorate>
 
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.drugResistanceType}">
+	     <s:decorate template="/layout/display.xhtml">
 			<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
-			#{messages[tbcase.drugResistanceType.key]}
+			<h:outputText value="#{messages[tbcase.drugResistanceType.key]}" rendered="#{not empty tbcase.drugResistanceType}"/>
+			<h:outputText value="Cadastre o teste de sensibilidade para que o sistema possa identificar o #{messages['DrugResistanceType']}." rendered="#{empty tbcase.drugResistanceType}"/>
 		</s:decorate>
 		
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.infectionSite}">

@@ -283,32 +283,42 @@ public class CaseDataBRHome {
 		setPropertyUpperCase(medExam, "supervisionUnitName");		
 	}
 
+	public boolean validateAndPrepare(){
+		MedicalExamination medInst = medicalExaminationBRHome.getInstance();
+		boolean validForm = true;
+		
+		if(medInst.getSupervisedTreatment().equals(YesNoType.NO))
+			medInst.setSupervisionUnitName("");
+
+		for(MedicalExamination m : caseHome.getTbCase().getExaminations()){
+			if( caseHome.getTbCase()!=null && (caseHome.getTbCase().getAge()>=18) && (medInst.getHeight()!= null && medInst.getHeight() != 0)){
+				m.setHeight(medInst.getHeight());
+			}
+			if(medInst.getId() != m.getId() && medInst.getDate().equals(m.getDate())){
+				facesMessages.addToControlFromResourceBundle("date", "form.duplicatedname");
+				validForm = false;
+			}	
+		}
+		
+		if(medInst.getDate().before(caseHome.getTbCase().getDiagnosisDate())){
+			facesMessages.addToControlFromResourceBundle("date", "cases.medexamdate.val1");
+			validForm = false;
+		}
+		
+		return validForm;
+	}
 
 	/**
 	 * Save medical examination
 	 * @return
 	 */
 	public String saveMedicalExamination() {
-		if (medicalExaminationBRHome == null)
+		if (medicalExaminationBRHome == null || !validateAndPrepare())
 			return "error";
 		
-		MedicalExamination medInst = medicalExaminationBRHome.getInstance();
-		//Start validation
-		for(MedicalExamination m : caseHome.getTbCase().getExaminations()){
-			
-			if(medInst.getId() != m.getId() && medInst.getDate().equals(m.getDate())){
-				facesMessages.addToControlFromResourceBundle("date", "form.duplicatedname");
-				return "error";
-			}
-			
-			if( caseHome.getTbCase()!=null && (caseHome.getTbCase().getAge()>=18) && (medInst.getHeight()!= null && medInst.getHeight() != 0)){
-				m.setHeight(medInst.getHeight());
-			}
-		
-		}
-
 		adjustMedicalExaminationFields();
-		caseHome.getTbCase().getCurrentAddress().setAdminUnit(auselection.getSelectedUnit());
+		if(auselection != null)
+			caseHome.getTbCase().getCurrentAddress().setAdminUnit(auselection.getSelectedUnit());
 		medicalExaminationBRHome.setDisplayMessage(false);
 		return medicalExaminationBRHome.persist();
 	}
@@ -328,7 +338,7 @@ public class CaseDataBRHome {
 			facesMessages.addToControlFromResourceBundle("cbpulmonary", "javax.faces.component.UIInput.REQUIRED");
 			res = false;
 		}
-
+		
 		if (medicalExaminationBRHome != null) {
 			MedicalExamination medExam = medicalExaminationBRHome.getInstance();
 			if (YesNoType.YES.equals(medExam.getSupervisedTreatment())) {
@@ -342,7 +352,6 @@ public class CaseDataBRHome {
 				facesMessages.addToControlFromResourceBundle("date", "cases.medexamdate.val1");
 				return false;
 			}
-			//Finish Validation
 		}
 		
 		// check exams
@@ -388,7 +397,7 @@ public class CaseDataBRHome {
 				res = false;
 			}
 		}
-
+		
 		// check if diagnosis and registration dates are not null
 		if ((tbcase.getRegistrationDate() != null) && (tbcase.getDiagnosisDate() != null)) {
 
@@ -606,6 +615,11 @@ public class CaseDataBRHome {
 		if(tbcase.getClassification().equals(it))
 			return "classificationModified";
 
+		//Change the pacienttype to null according to the new classification
+		if((tbcase.getPatientType().equals(PatientType.RESISTANCE_PATTERN_CHANGED))
+				|| (tbcase.getPatientType().equals(PatientType.NEW) && it.equals(CaseClassification.TB)))
+			tbcase.setPatientType(null);
+		
 		tbcase.setClassification(it);
 		tbcase.setDrugResistanceType(null);
 		tbcase.setTipoResistencia(null);

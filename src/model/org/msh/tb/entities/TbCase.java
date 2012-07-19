@@ -1214,10 +1214,20 @@ public class TbCase implements Serializable{
 	 * @return the evolution of the case
 	 */
 	public String getCaseEvolution() {
-		if(this.getExaminations().size() > 0 && (!this.getState().equals(CaseState.WAITING_TREATMENT))){
-			ClinicalEvolution eval = this.getExaminations().get(getExaminations().size()-1).getClinicalEvolution(); // for some old cases may be null AK 26/05/2012
-			if (eval != null)
-				return this.getExaminations().get(getExaminations().size()-1).getClinicalEvolution().getKey();
+		MedicalExamination lastExam = null;
+		
+		if(this.getExaminations() != null && this.getExaminations().size() > 0){
+			lastExam = this.getExaminations().get(0);
+			for(MedicalExamination m : this.getExaminations()){
+				if(m.getDate().after(lastExam.getDate()))
+					lastExam = m;
+			}
+		}		
+		
+		if(lastExam != null){
+			ClinicalEvolution eval = lastExam.getClinicalEvolution(); // for some old cases may be null AK 26/05/2012
+				if (eval != null)
+					return this.getExaminations().get(getExaminations().size()-1).getClinicalEvolution().getKey();
 		}
 			
 		return "";
@@ -1237,6 +1247,7 @@ public class TbCase implements Serializable{
 					lastExam = m;
 			}
 		}
+		
 		if(lastExam != null
 				&& lastExam.getSupervisedTreatment() != null
 				&& lastExam.getSupervisedTreatment().equals(YesNoType.YES)
@@ -1252,14 +1263,5 @@ public class TbCase implements Serializable{
 		
 		return "";
 	}
-	
-	/**
-	 * @return the name of the sepervision unit
-	 */
-	public YesNoType getSupervised() {
-		if(this.getExaminations() != null && this.getExaminations().size() > 0
-				&& this.getExaminations().get(getExaminations().size()-1).getSupervisedTreatment() != null)
-			return this.getExaminations().get(getExaminations().size()-1).getSupervisedTreatment();
-		return null;
-	}
+
 }

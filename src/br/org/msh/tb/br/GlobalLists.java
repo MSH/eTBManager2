@@ -86,8 +86,7 @@ public class GlobalLists {
 	};
 	
 	private static final DrugResistanceType drugResistanceTypes[] = {
-		DrugResistanceType.ISONIAZID_MONO_RESISTANCE,
-		DrugResistanceType.RIFAMPICIN_MONO_RESISTANCE,
+		DrugResistanceType.MONO_RESISTANCE,
 		DrugResistanceType.POLY_RESISTANCE,
 		DrugResistanceType.MULTIDRUG_RESISTANCE,
 		DrugResistanceType.EXTENSIVEDRUG_RESISTANCE
