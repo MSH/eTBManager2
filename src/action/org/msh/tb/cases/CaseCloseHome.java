@@ -136,9 +136,14 @@ public class CaseCloseHome extends Controller{
 	}
 
 
-
+	/**
+	 * get close date or default value - today
+	 * @return
+	 */
 	public Date getDate() {
-		return date;
+		//return date;
+		if (date== null) return new Date();
+		else return date;
 	}
 
 	public void setDate(Date date) {
