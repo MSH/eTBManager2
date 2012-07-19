@@ -35,7 +35,7 @@
 		<h:selectOneMenu id="selstate" value="#{caseCloseHome.state}" required="true" layout="pageDirection">
 				<s:selectItems value="#{globalLists_ua.outcomes}" var="v" label="#{messages[v.key]}" noSelectionLabel="-"/>
 				<s:convertEnum />
-				<a:support event="onchange" oncomplete="statecheckClick(this);" reRender="outcome, extrainfo1"/>
+				<a:support event="onchange" oncomplete="statecheckClick(this);" reRender="main, outcome, extrainfo1, extrainfo"/>
 		</h:selectOneMenu>
     </s:decorate>
     </h:panelGroup >
