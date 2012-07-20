@@ -14,6 +14,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.misc.FieldsQuery;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
+import org.msh.utils.date.Period;
 
 
 @Name("sideEffectHome")
@@ -110,15 +111,15 @@ public class SideEffectHome {
 	public List<SelectItem> getMonths() {
 		List<SelectItem> lst = new ArrayList<SelectItem>();
 		
-/*		TbCase tbcase = caseHome.getInstance();
+		TbCase tbcase = caseHome.getInstance();
 		Period p = tbcase.getTreatmentPeriod();
 		
 		int numMonths;
 		if ((p == null) || (p.isEmpty()))
 			numMonths = 12;
 		else numMonths = p.getMonths();
-*/		
-		for (int i = 1; i<= 24; i++) {
+		
+		for (int i = 1; i<= numMonths; i++) {
 			SelectItem item = new SelectItem();
 			item.setLabel(Integer.toString(i));
 			item.setValue(i);
