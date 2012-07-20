@@ -8,6 +8,7 @@ import java.util.List;
 import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
@@ -235,10 +236,11 @@ public class PrevTBTreatmentHome {
 				String hql = "from TbCase c where c.patient.id = :id and c.treatmentPeriod.iniDate = " +
 					"(select max(c2.treatmentPeriod.iniDate) from TbCase c2 where c2.patient.id = c.patient.id)";
 
-				previousCase = (TbCase)entityManager
+				Query q = entityManager
 					.createQuery(hql)
-					.setParameter("id", caseHome.getInstance().getPatient().getId())
-					.getSingleResult();
+					.setParameter("id", caseHome.getInstance().getPatient().getId());
+				if (q.getResultList().size()!=0)
+					previousCase = (TbCase)q.getResultList().get(0);
 			} catch (NoResultException e) {
 				return null;
 			}
