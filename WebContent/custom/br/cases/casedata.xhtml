@@ -317,34 +317,6 @@ function updateTab(tabIndex) {
 	</h:form>
 </rich:modalPanel>
 
-<rich:modalPanel id="selclassificationdlg" width="300" zindex="2000" autosized="true">
-	<f:facet name="header" >
-		#{messages['cases.changeNotifClass']}
-	</f:facet>
-
-	<h:form id="formclassifcation">
-
-	#{messages['cases.newnotif.title']}
-	<div class="vertical-menu">
-	<c:forEach items="#{globalLists.caseClassifications}" var="it">
-		<!--<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
-			<f:param name="classif" value="#{it}"/>
-			<f:param name="type" value="CONFIRMED"/>
-			<div class="new-icon" />#{messages[it.key]}
-		</s:link>-->
-		<a:commandLink onclick="Richfaces.hideModalPanel('selclassificationdlg');" 
-			action="#{caseDataBRHome.changeCaseClassification(it)}" value="#{messages[it.key]}" reRender="main, leftmenu"/>
-	</c:forEach>
-	</div>
-	<div class="button-bar">
-		<s:link onclick="Richfaces.hideModalPanel('selclassificationdlg');return false;" 
-			styleClass="button-alt" >
-			<span>#{messages['form.cancel']}</span>
-		</s:link>
-	</div>
-	</h:form>
-</rich:modalPanel>
-
 </ui:define>
 
 
