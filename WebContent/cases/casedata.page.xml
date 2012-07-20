@@ -14,6 +14,11 @@
 			<redirect view-id="/cases/index.xhtml">
 			</redirect>
 		</rule>
+		<rule if-outcome="sideeffectremoved">
+			<redirect view-id="/cases/casedata.xhtml">
+				<param name="id" value="#{caseHome.id}"/>
+			</redirect>
+		</rule>
 		<rule if-outcome="edit">
 			<redirect view-id="/cases/treatmentedt.xhtml">
 				<param name="id" value="#{caseHome.id}" />

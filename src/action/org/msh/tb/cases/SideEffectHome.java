@@ -11,12 +11,8 @@ import org.jboss.seam.annotations.Name;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.entities.CaseSideEffect;
-import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.misc.FieldsQuery;
-import org.msh.utils.ItemSelect;
-import org.msh.utils.ItemSelectHelper;
-import org.msh.utils.date.Period;
 
 
 @Name("sideEffectHome")
@@ -24,7 +20,18 @@ public class SideEffectHome extends EntityHomeEx<CaseSideEffect>{
 
 	@In(required=true) CaseHome caseHome;
 	@In(create=true) FieldsQuery fieldsQuery;
+	private List<CaseSideEffect> results;
+
+	public void setResults(List<CaseSideEffect> results) {
+		this.results = results;
+	}
 	
+	public List<CaseSideEffect> getResults(){
+		if (results == null)
+			results = createResults();
+		return results;
+	}
+
 	@Factory("caseSideEffect")
 	public CaseSideEffect getCaseSideEffect() {
 		return getInstance();
@@ -54,11 +61,11 @@ public class SideEffectHome extends EntityHomeEx<CaseSideEffect>{
 			name += " "+it.getSubstance2().getAbbrevName().getName1();
 		it.setMedicines(name);
 
-		String s = caseHome.persist();
-		if ("persisted".equals(s))
-			TagsCasesHome.instance().updateTags(tbcase);
+		getEntityManager().persist(it);
+
+		TagsCasesHome.instance().updateTags(tbcase);
 		
-		return s;
+		return "persisted";
 	}
 	
 	/**
@@ -93,5 +100,31 @@ public class SideEffectHome extends EntityHomeEx<CaseSideEffect>{
 			lst.add(item);
 		}
 		return lst;
+	}
+	
+	public String getResultsHQL() {
+		String hql = "from CaseSideEffect c where c.tbcase.id = #{tbcase.id}";
+
+		return hql.concat(" order by c.month desc");
+	}
+	
+	/**
+	 * Creates the list of exam results
+	 * @param lastRes
+	 * @return
+	 */
+	protected List<CaseSideEffect> createResults() {
+		return getEntityManager()
+			.createQuery(getResultsHQL())
+			.getResultList();
+	}
+	
+	public String remove(){
+		String s = super.remove();
+		results = createResults();
+		if(s.equals("removed"))
+			return "sideeffectremoved";
+		else
+			return s;
 	}
 }

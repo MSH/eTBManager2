@@ -107,17 +107,21 @@ public class CaseValidationHome {
 		
 		if (caseNum == null)
 			caseNum = 1;
-		else caseNum++;
+		else{
+			caseNum++;
+
+			// update case numbers with notification date after this case
+			entityManager.createQuery("update TbCase c " +
+					"set c.caseNumber = c.caseNumber + 1 " + 
+					"where c.patient.id = :id and c.diagnosisDate > :dt")
+					.setParameter("id", p.getId())
+					.setParameter("dt", tbcase.getDiagnosisDate())
+					.executeUpdate();
+		}
 		
 		tbcase.setCaseNumber(caseNum);
 		
-		// update case numbers with notification date after this case
-		entityManager.createQuery("update TbCase c " +
-				"set c.caseNumber = c.caseNumber + 1 " + 
-				"where c.patient.id = :id and c.diagnosisDate > :dt")
-				.setParameter("id", p.getId())
-				.setParameter("dt", tbcase.getDiagnosisDate())
-				.executeUpdate();
+
 		
 		entityManager.persist(tbcase);
 		entityManager.flush();
