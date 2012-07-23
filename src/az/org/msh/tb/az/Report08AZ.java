@@ -3,7 +3,6 @@ package org.msh.tb.az;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.az.entities.TbCaseAZ;
@@ -131,7 +130,6 @@ public class Report08AZ extends IndicatorVerify {
 			setOverflow(false);
 			lst = createQuery().getResultList();
 			Iterator<TbCaseAZ> it = lst.iterator();
-			Map<String, List<ErrItem>>  verifyList = getVerifyList();
 			int rowid;
 			int colid;
 			mas3000 = getMas3000();
