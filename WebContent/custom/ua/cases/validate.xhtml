@@ -88,10 +88,10 @@ function showExtrapulmonary(cb) {
   else jQuery('#pulmonary').hide(500);
 }
 function isExtrapulmonary(cb) {
-  return ((cb.selectedIndex >=0) && (cb.options[cb.selectedIndex].value == 'EXTRAPULMONARY'));
+  	return ((cb.selectedIndex >=0) && ((cb.options[cb.selectedIndex].value == 'EXTRAPULMONARY') || (cb.options[cb.selectedIndex].value == 'BOTH')));
 }
 function isPulmonary(cb) {
-  return ((cb.selectedIndex >=0) && (cb.options[cb.selectedIndex].value == 'PULMONARY'));
+	return ((cb.selectedIndex >=0) && ((cb.options[cb.selectedIndex].value == 'PULMONARY') || (cb.options[cb.selectedIndex].value == 'BOTH')));
 }
 -->
 </script>
