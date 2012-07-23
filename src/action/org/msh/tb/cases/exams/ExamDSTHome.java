@@ -1,6 +1,7 @@
 package org.msh.tb.cases.exams;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -148,7 +149,12 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 														"and a.exam.dateCollected <= :dateIniTreat");
 		
 		query.setParameter("tbcaseId", caseHome.getTbCase().getId());
-		query.setParameter("dateIniTreat", caseHome.getTbCase().getTreatmentPeriod().getIniDate());
+		Date iniDate;
+		if (caseHome.getTbCase().getTreatmentPeriod()!=null)
+			iniDate = caseHome.getTbCase().getTreatmentPeriod().getIniDate();
+		else
+			iniDate = new Date();
+		query.setParameter("dateIniTreat", iniDate);
 		query.setParameter("resistant", DstResult.RESISTANT);
 		
 		abrevNameResistSubstance = (ArrayList<String>) query.getResultList();
