@@ -15,6 +15,7 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
+import org.msh.tb.indicators.IndicatorVerify;
 import org.msh.tb.indicators.core.IndicatorFilters;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.ua.entities.CaseDataUA;

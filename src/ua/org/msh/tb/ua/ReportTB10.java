@@ -14,6 +14,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
+import org.msh.tb.indicators.IndicatorVerify;
 import org.msh.tb.indicators.core.IndicatorMicroscopyResult;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.indicators.core.IndicatorTable.TableColumn;

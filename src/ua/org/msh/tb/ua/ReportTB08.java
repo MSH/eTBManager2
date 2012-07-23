@@ -18,6 +18,7 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.ExtraOutcomeInfo;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.indicators.IndicatorVerify;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.indicators.core.IndicatorTable.TableRow;
 import org.msh.tb.ua.entities.CaseDataUA;
