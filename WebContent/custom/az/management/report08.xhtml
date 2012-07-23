@@ -41,6 +41,10 @@
 	
 	<s:fragment rendered="#{indicatorController.executing}">
 	
+	<h:outputText value="#{messages['verify.busy']}" rendered="#{indicator.overflow}" styleClass="error"/>
+	
+	<s:decorate template="verifdata.xhtml" id="verifpanel"/>
+	
 	<h2>#{messages['manag.form8.table1000']}</h2>
 	<table class="table1" width="100%">
 		<ui:remove>
