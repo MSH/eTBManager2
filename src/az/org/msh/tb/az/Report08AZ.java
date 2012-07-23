@@ -125,7 +125,7 @@ public class Report08AZ extends IndicatorVerify {
 		setCounting(true);
 		int count = ((Long)createQuery().getSingleResult()).intValue();
 		if (count<=4000){
-			initVerifList("verify.tb08.error",4,4,1);
+			initVerifList("verify.tb08.error",5,4,1);
 			setCounting(false);
 			setOverflow(false);
 			lst = createQuery().getResultList();
@@ -324,7 +324,7 @@ public class Report08AZ extends IndicatorVerify {
 			else if (tc.getPatientType().equals(PatientType.AFTER_DEFAULT)) colInd = 5;
 			else if (tc.getPatientType().equals(PatientType.OTHER)) colInd = 6;
 			else 
-				System.out.println(tc.getPatientType().toString());
+				addToVerList(tc,1,4);
 		}
 		if (colInd!=0){
 			table2110.addIdValue("col"+colInd, "row1", 1F);
