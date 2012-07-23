@@ -134,13 +134,8 @@ public class Report08AZ extends IndicatorVerify {
 			int colid;
 			mas3000 = getMas3000();
 			mas3001 = getMas3001();
-			int ind=0;
 			while(it.hasNext()){
 				TbCaseAZ tc = it.next();
-				ind++;
-				System.out.println(ind);
-				if (ind==419)
-					System.out.println("s");
 				rowid = tc.getPatient().getGender().ordinal();
 				if (tc.getPatientType().equals(PatientType.NEW)){
 					colid = idAgeRange(tc.getAge());
