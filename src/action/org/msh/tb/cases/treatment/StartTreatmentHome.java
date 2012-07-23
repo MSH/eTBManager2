@@ -9,6 +9,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Events;
+import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.TbCase;
@@ -29,6 +30,7 @@ public class StartTreatmentHome {
 	@In(required=true) CaseHome caseHome;
 	@In(create=true) CaseRegimenHome caseRegimenHome;
 	@In EntityManager entityManager;
+	@In(create=true) FacesMessages facesMessages;
 	
 	private TBUnitSelection tbunitselection;
 	private Date iniTreatmentDate;
@@ -60,6 +62,12 @@ public class StartTreatmentHome {
 		if (!CaseState.WAITING_TREATMENT.equals(tbcase.getState()))
 			return "error";
 
+		if (caseRegimenHome.getRegimen().getMonthsIntensivePhase()+
+				caseRegimenHome.getRegimen().getMonthsContinuousPhase() == 0){
+			facesMessages.addFromResourceBundle("starttreatment.emptytreatment");
+			return "error";
+		}
+		
 		entityManager.createQuery("delete from PrescribedMedicine pm where pm.tbcase.id = " + tbcase.getId()).executeUpdate();
 		entityManager.createQuery("delete from TreatmentHealthUnit hu where hu.tbcase.id = " + tbcase.getId()).executeUpdate();
 		
