@@ -78,8 +78,8 @@
 									<s:convertEnum />
 								</h:selectOneMenu>
 							</s:decorate> <rich:jQuery selector="#infectsite"
-								query="change(function(){showExtrapulmonary(this); })" /> <script
-								type="text/javascript">
+								query="change(function(){showExtrapulmonary(this); })" /> 
+								<script	type="text/javascript">
 <!--
 function isPatientTypeOther(cb) {
    return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'OTHER'));
@@ -95,14 +95,15 @@ function showExtrapulmonary(cb) {
   else jQuery('#extrapul').hide(500);
   if (isPulmonary(cb)) 
 	jQuery('#pulmonary').show(500);
-  else jQuery('#pulmonary').hide(500);
+  else jQuery('#pulmonary').hide(500); 
 }
 function isExtrapulmonary(cb) {
-  return ((cb.selectedIndex >=0) && (cb.options[cb.selectedIndex].value == 'EXTRAPULMONARY'));
+	return ((cb.selectedIndex >=0) && ((cb.options[cb.selectedIndex].value == 'EXTRAPULMONARY') || (cb.options[cb.selectedIndex].value == 'BOTH')));
 }
 function isPulmonary(cb) {
-  return ((cb.selectedIndex >=0) && (cb.options[cb.selectedIndex].value == 'PULMONARY'));
+	return ((cb.selectedIndex >=0) && ((cb.options[cb.selectedIndex].value == 'PULMONARY') || (cb.options[cb.selectedIndex].value == 'BOTH')));
 }
+
 -->
 </script>
 
@@ -137,12 +138,10 @@ function isPulmonary(cb) {
 									</h:selectOneMenu>
 								</s:decorate>
 
-							</div> <rich:jQuery selector="#infectsite"
-								query="each(function(){ if (!isExtrapulmonary(this)) {jQuery('#extrapul').hide(); }})" />
-							<rich:jQuery selector="#infectsite"
-								query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary').hide(); }})" />
-							<rich:jQuery selector="#patType"
-								query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
+							</div> 
+			<rich:jQuery selector="#infectsite"	query="each(function(){ if (!isExtrapulmonary(this)) {jQuery('#extrapul').hide(); }})" />
+			<rich:jQuery selector="#infectsite"	query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary').hide(); }})" />
+			<rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
 
 							<div style="clear: both;">
 								<span style="color: red;">*</span> #{messages['form.required']}
