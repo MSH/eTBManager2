@@ -14,21 +14,18 @@
 	<table width="100%" style="border-collapse:collapse;">
 	
 		
-	<tr>
+	<tr> 
 		<td colspan="2">
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.EIDSSComment!=NULL}">
-	    	<ui:define name="label">#{messages['TbCase.eidsscomment']}:</ui:define>
-			<h:inputText value="#{tbcase.EIDSSComment}" style="width:400px;" readonly="true"/>
+	<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.EIDSSComment!=NULL}">
+	    	<h2><ui:define name="label">#{messages['TbCase.eidsscomment']}:</ui:define>
+	    	#{caseAZHome.notifEIDSS} <br/> 	#{caseAZHome.addrEIDSS}
+		 <br/> 
+			#{messages['TbCase.eidssid']}: #{tbcase.legacyId}
+			</h2>
 		</s:decorate>
 		</td>
-		
 		</tr>
-		<tr><td>
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.legacyId!=NULL}">
-	    	<ui:define name="label">#{messages['TbCase.eidssid']}:</ui:define>
-			<h:inputText value="#{tbcase.legacyId}" style="width:120px;" maxlength="45" readonly="true"/>
-		</s:decorate>
-		</td>	</tr>
+		
 	<tr><td colspan="2">
 	<s:decorate template="/custom/az/layout/editname.xhtml">
     	<ui:define name="label">#{messages['Patient.name']}:</ui:define>

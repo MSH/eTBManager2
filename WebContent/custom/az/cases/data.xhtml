@@ -20,7 +20,8 @@
 		<td colspan="2"> 
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.EIDSSComment!=NULL}">
 	    	<h2><ui:define name="label">#{messages['TbCase.eidsscomment']}:</ui:define>
-		#{tbcase.EIDSSComment} <br/>
+	    	#{caseAZHome.notifEIDSS} <br/> 	#{caseAZHome.addrEIDSS}
+		 <br/> 
 			#{messages['TbCase.eidssid']}: #{tbcase.legacyId}
 			</h2>
 		</s:decorate>
