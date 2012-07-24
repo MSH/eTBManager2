@@ -1,6 +1,7 @@
 package org.msh.tb.az;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +33,32 @@ public class CasesQueryAZ extends CasesQuery{
 	private static final String treatCondUA = "tu.id =  #{caseFilters.tbunitselection.tbunit.id}";
 	private static final String notifRegCondUA = "(nu.id in (select id from org.msh.tb.entities.Tbunit tbu where tbu.adminUnit.code like #{caseFilters.tbAdminUnitLike}))";
 	private static final String treatRegCondUA = "(tu.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like #{caseFilters.tbAdminUnitLike}))";
-
+	
+	// static filters
+	private static final String[] restrictions = {
+		"p.recordNumber = #{caseFilters.patientRecordNumber}",
+		"c.registrationCode = #{caseFilters.registrationCode}",
+		"c.unitRegCode = #{caseFilters.unitRegCode}",
+		"c.caseNumber = #{caseFilters.caseNumber}",
+		"p.workspace.id = #{defaultWorkspace.id}",
+		"c.state = #{caseFilters.caseState}",
+		"c.notifAddress.adminUnit.code like #{caseFilters.adminUnitLike}",
+		"c.classification = #{caseFilters.classification}",
+		"upper(p.name) like #{caseFilters.nameLike}",
+		"upper(p.middleName) like #{caseFilters.middleNameLike}",
+		"upper(p.lastName) like #{caseFilters.lastNameLike}",
+		"c.patientType = #{caseFilters.patientType}",
+		"c.infectionSite = #{caseFilters.infectionSite}",
+		"c.diagnosisType = #{caseFilters.diagnosisType}",
+		"c.validationState = #{caseFilters.validationState}",
+		"year(p.birthDate) = #{caseFilters.birthYear}",
+	"exists(select t.id from c.tags t where t.id = #{caseFilters.tagid})"};
+	
+	@Override
+	public List<String> getStringRestrictions() {
+		return Arrays.asList(restrictions);
+	}
+	
 	@Override
 	public String getEjbql() {
 		if (isNotBindedEIDSS()){
@@ -259,7 +285,7 @@ public class CasesQueryAZ extends CasesQuery{
 	 * @param searchCriteria
 	 */
 	public void setSearchCriteria(SearchCriteria searchCriteria) {
-		boolean flag = caseFilters.getStateIndex().equals(getCasesEIDSSnotBindedIndex());
+		boolean flag = getCasesEIDSSnotBindedIndex().equals(caseFilters.getStateIndex());
 		caseFilters.setSearchCriteria(searchCriteria);
 		if (flag)
 			caseFilters.setStateIndex(getCasesEIDSSnotBindedIndex()); // now we are have possibility to use another creiteria from filters
