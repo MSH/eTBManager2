@@ -261,6 +261,7 @@
 		   		<s:decorate template="/layout/labselection.xhtml" >
 			    	<ui:param name="redasterisk" value="true" />
 			    	<ui:param name="edtid" value="examculturelabselection" />
+			    	<ui:param name="edtid2" value="examculturelabselection2" />
 			    	<ui:param name="labselection" value="#{examCultureHome.labselection}" />
 			    </s:decorate>
    			</td>
@@ -294,6 +295,7 @@
 				<s:decorate template="/layout/edit.xhtml" >
 			    	<ui:define name="label">#{messages['pt_BR.MolecularBiology.result']}:</ui:define>
 			    	<ui:param name="redasterisk" value="true" />
+			    	<ui:param name="showPattern" value="false" />
 			    	<h:selectOneMenu id="molecularbiologyresult" value="#{molecularBiology.result}">
 			    		<s:selectItems value="#{molecularBiologyHome.resultOptions}" var="it" noSelectionLabel="-" label="#{messages[it.messageKey]}" />
 			    		<s:convertEnum />
@@ -306,6 +308,7 @@
 				<s:decorate template="/layout/dateedit.xhtml" >
 			    	<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
 			    	<ui:param name="redasterisk" value="true" /> 
+			    	<ui:param name="showPattern" value="false" />
 			    	<ui:param name="future" value="false" /> 
 			    	<ui:param name="datefield" value="#{molecularBiology.date}" /> 
 			    	<ui:param name="edtid" value="molecularbiologydatecollected" />
@@ -323,7 +326,7 @@
 		   	</td>		   	
 	   	</tr>
 	   	<tr>
-		   	<td>
+		   	<td colspan="2">
 			    <s:decorate template="/layout/edit.xhtml" >
 			    	<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
 			    	<ui:param name="redasterisk" value="true" />
@@ -332,15 +335,18 @@
 			    		<s:convertEntity />
 			    	</h:selectOneMenu>
 			    </s:decorate>		   	
-		   	</td>
-		   	<td>
+		   	</td>	   	
+	   	</tr>
+	   	<tr>
+		   	<td colspan="2">
 				<s:decorate template="/layout/labselection.xhtml" >
 					<ui:param name="edtid" value="molecularbiologylabselection" />
+					<ui:param name="edtid2" value="molecularbiologylabselection2" />
 					<ui:param name="redasterisk" value="true" />
 					<ui:param name="labselection" value="#{molecularBiologyHome.labselection}" />
-				</s:decorate>		   	
-		   	</td>		   	
-	   	</tr>	   	
+				</s:decorate>	   	
+		   	</td>
+		</tr>	   	
    	</table>
 
    	</div>	
@@ -361,13 +367,14 @@
 				<h:outputText value="#{it.substance.name} (#{it.substance.abbrevName})" />
 				<div style="display:inline;float:right;margin:0">
 				<h:selectOneMenu id="res" value="#{it.result}" required="true" onchange="dstResultChange(this);">
-	    			<s:selectItems value="#{dstResults}" var="ss" noSelectionLabel="-" label="#{messages[ss.key]}" />
+	    			<s:selectItems value="#{dstResults}" var="ss" label="#{messages[ss.key]}" />
 	    			<s:convertEnum />
 				</h:selectOneMenu>
 				</div>
 			</div>
 		</rich:dataGrid>
-		
+		<h:message for="examdst" styleClass="error"/>
+		<br/><br/>
 		<table>
 			<tr>
 				<td>
@@ -403,6 +410,7 @@
 				    	<ui:param name="redasterisk" value="true" />
 				    	<ui:param name="labselection" value="#{examDSTHome.labselection}" />
 				    	<ui:param name="edtid" value="examdstlabselection" />
+				    	<ui:param name="edtid2" value="examdstlabselection2" />
 				    </s:decorate>
 				</td>				
 			</tr>			
@@ -516,7 +524,7 @@
    	<div id="sideeffectsdiv">
    		<rich:dataGrid value="#{sideEffectBRHome.items}" var="it" columns="4" width="100%">
 			<div style="font-size:12px">
-				<h:selectBooleanCheckbox value="#{it.selected}" onclick="showMonth('month#{it.item.sideEffect.value.id}', this.checked)"/>
+				<h:selectBooleanCheckbox id="sideeffectckbox" value="#{it.selected}" onclick="showMonth('month#{it.item.sideEffect.value.id}', this.checked)"/>
 				<h:outputText value="#{it.item.sideEffect.value.name}" />
 				<s:fragment rendered="#{it.item.sideEffect.value.other}">
 					<div class="divother" style="display:inline">
@@ -526,13 +534,18 @@
 				</s:fragment>
 				<br/>
 				<div id="month#{it.item.sideEffect.value.id}" style="display:none">
-					<b><h:outputText value="#{messages['cases.sideeffects.month']}: " /></b>
-					<h:selectOneMenu value="#{it.item.month}">
-						<f:selectItems value="#{sideEffectHome.months}" />
-					</h:selectOneMenu>
+					<s:decorate template="/layout/edit.xhtml" >
+				    	<ui:define name="label">#{messages['cases.sideeffects.month']}:</ui:define>
+				    	<ui:param name="redasterisk" value="true" />
+				    	<ui:param name="labelstyle" value="width:140px" />
+						<h:selectOneMenu value="#{it.item.month}">
+							<f:selectItems value="#{sideEffectHome.months}" />
+						</h:selectOneMenu>
+				    </s:decorate>
 				</div>
 			</div>
 		</rich:dataGrid>
+		<h:message for="sideeffects" styleClass="error"/>
    	</div>
    	
    	<br/>
@@ -572,6 +585,26 @@
 <rich:jQuery selector="#cbsuptreatment" timing="onload" query="each(function(){ showSupUnit(this,true); })" />
 
 	<br/>
+	
+	<h2 style="display:inline">Alteração no Esquema Terapêutico</h2>
+	
+	<s:decorate id="templatecbschemamod" template="/layout/edit.xhtml">
+		<ui:define name="label">Houve alteração no esquema terapêutico?</ui:define>
+		<ui:param name="labelstyle" value="width:290px" />
+		<h:selectOneMenu id="cbschemamod" forceId="true" value="#{followUpBRHome.schemaModification}" required="true">
+			<s:selectItems var="s" value="#{globalLists.yesNoTypeList}" label="#{messages[s.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	<div id="div_schemamod">
+		<span class="hint">Após salvar este formulário, você será redirecionado para uma página onde poderá realizar as modificações.</span>
+	</div>
+	
+	<rich:jQuery selector="#cbschemamod" query="change(function(){showSchemaMod(this); })" />
+	<rich:jQuery selector="#cbschemamod" timing="onload" query="each(function(){ showSchemaMod(this,true); })" />
+	
+	<br/>
    	
    	<h2>#{messages['cases.move']}</h2>
 	<h:selectBooleanCheckbox id="movecase" value="#{followUpBRHome.moveCase}" style="margin-left:50px"/>
@@ -588,6 +621,8 @@
 	    	<ui:param name="tbunitselection" value="#{caseMoveHome.tbunitselection}" />
 	    	<ui:param name="labelstyle" value="width:160px" /> 
 	    	<ui:param name="redasterisk" value="true" />
+	    	<ui:param name="idcbselau" value="casemovecbselau" />
+	    	<ui:param name="idcbunits" value="casemovecbunits" />
 	    </s:decorate>
 	    
 	    <s:decorate template="/layout/dateedit.xhtml" >
@@ -608,9 +643,10 @@
    
    <s:decorate template="/layout/dateedit.xhtml" >
 		<ui:define name="label">#{messages['TbCase.outcomeDate']}:</ui:define>
-    	<ui:param name="required" value="true" /> 
+    	<ui:param name="redasterisk" value="true" /> 
     	<ui:param name="future" value="false" /> 
     	<ui:param name="datefield" value="#{caseCloseHomeBR.date}" /> 
+    	<ui:param name="edtid" value="casestatedate" /> 
     </s:decorate>
 	
     <s:decorate template="/layout/edit.xhtml" >
@@ -751,6 +787,11 @@ function statecheckClick(elem) {
 		   jQuery('#regchanged').show(500);
 	   else jQuery('#regchanged').hide(500);
 	}
+function showSchemaMod(cb, immediate) {
+	  if (cb.selectedIndex == 1)
+		   jQuery('#div_schemamod').slideDown(immediate?0:500)
+	  else jQuery('#div_schemamod').slideUp(immediate?0:500);
+}
 -->
 </script>
 

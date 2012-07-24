@@ -217,7 +217,7 @@
 					<ui:param name="labelstyle" value="width:40px" />
 					<ui:define name="label">#{it.substance.abbrevName}</ui:define>
 					<h:selectOneMenu id="res" value="#{it.result}"  required="#{caseDataBRHome.dstRequired==1}" onchange="updateDSTResultsView(false);">
-    					<s:selectItems value="#{dstResults}" var="ss" noSelectionLabel="-" label="#{messages[ss.key]}" />
+    					<s:selectItems value="#{dstResults}" var="ss" label="#{messages[ss.key]}" />
     					<s:convertEnum />
 					</h:selectOneMenu>
 				</s:decorate>

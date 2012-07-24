@@ -7,20 +7,19 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-<s:decorate template="/layout/edit.xhtml" rendered="#{not labselection.level1ReadOnly}">
+<s:decorate template="/layout/display.xhtml" rendered="#{not labselection.level1ReadOnly}">
 	<ui:define name="label">#{messages['Laboratory']}:</ui:define>
 	<h:selectOneMenu id="cbselau" value="#{labselection.adminUnit}" required="#{required}" >
 		<s:selectItems var="it" value="#{labselection.adminUnits}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
-		<a:support event="onchange" ajaxSingle="true" reRender="cblabs" focus="cblab"/>
+		<a:support event="onchange" ajaxSingle="true" reRender="#{empty edtid2?'cblabs': edtid2}" focus="cblab"/>
 	</h:selectOneMenu>
 
-	<h:panelGroup id="#{empty edtid?'cblabs':edtid}">
-	<h:selectOneMenu id="cblab" value="#{labselection.laboratory}" required="#{required}">
+	<h:selectOneMenu id="#{empty edtid2?'cblabs': edtid2}" value="#{labselection.laboratory}" required="#{required}">
         <s:selectItems value="#{labselection.options}" var="it" label="#{it.abbrevName}" noSelectionLabel="-" />
       	<s:convertEntity/>
     </h:selectOneMenu>
-	</h:panelGroup>
+    <h:message for="#{empty edtid2?'cblabs': edtid2}" styleClass="error"/>  
 
 	<ui:insert />
 </s:decorate>

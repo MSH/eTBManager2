@@ -64,7 +64,7 @@
 			<span style="width:250px;float:left">
 			<div id="divicon" />
 			<h:selectOneMenu id="res" value="#{it.result}" required="true" onchange="dstResultChange(this);">
-    			<s:selectItems value="#{dstResults}" var="ss" noSelectionLabel="-" label="#{messages[ss.key]}" />
+    			<s:selectItems value="#{dstResults}" var="ss" label="#{messages[ss.key]}" />
     			<s:convertEnum />
 			</h:selectOneMenu>
 			</span>

@@ -8,6 +8,7 @@
     <div class="prop"> 
         <span class="name" style="#{empty labelstyle? '': labelstyle}">
             <ui:insert name="label"/>
+            <s:span style="color:red;" rendered="#{required or redasterisk}">*</s:span>
         </span>
         <span class="readonly-value">
             <ui:insert/>

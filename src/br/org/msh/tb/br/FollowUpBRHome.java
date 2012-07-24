@@ -26,6 +26,8 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.TreatmentHealthUnit;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DstResult;
+import org.msh.tb.entities.enums.YesNoType;
+import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
 
 @Name("followUpBRHome")
@@ -54,7 +56,9 @@ public class FollowUpBRHome {
 	private boolean sideEffects;
 	private boolean moveCase;
 	
+	private YesNoType schemaModification;
 	private CaseState state;
+	
 	private static final CaseState[] caseStates = {
 		CaseState.ONTREATMENT,
 		CaseState.CURED, 
@@ -71,6 +75,12 @@ public class FollowUpBRHome {
 	
 	public boolean isMoveCase() {
 		return moveCase;
+	}
+	public YesNoType getSchemaModification() {
+		return schemaModification;
+	}
+	public void setSchemaModification(YesNoType schemaModification) {
+		this.schemaModification = schemaModification;
 	}
 	public void setMoveCase(boolean moveCase) {
 		this.moveCase = moveCase;
@@ -201,7 +211,10 @@ public class FollowUpBRHome {
 		if(state.equals(CaseState.ONTREATMENT)){
 			caseHome.getTbCase().setState(state);
 		}else{
-			caseCloseHomeBR.setState(state);
+			if(!validCaseState())
+				caseCloseHomeBR.setState(state);
+			else
+				validationError = true;
 		}
 		if(!caseCloseHomeBR.validateClose())
 			validationError = true;
@@ -254,7 +267,13 @@ public class FollowUpBRHome {
 			
 			facesMessages.clear();
 			
-			return caseHome.persist();
+			String s = caseHome.persist();
+			
+			if(schemaModification.equals(YesNoType.YES)){
+				return "modifyschema";
+			}else{
+				return s;
+			}
 		}
 	}
 	
@@ -288,7 +307,7 @@ public class FollowUpBRHome {
 		}
 		
 		if (examCultureHome.getLabselection().getLaboratory() == null) {
-			facesMessages.addToControlFromResourceBundle("examculturelabselection", "javax.faces.component.UIInput.REQUIRED");
+			facesMessages.addToControlFromResourceBundle("examculturelabselection2", "javax.faces.component.UIInput.REQUIRED");
             validationError = true;
 		}
 
@@ -319,7 +338,7 @@ public class FollowUpBRHome {
 		}
 		
 		if (molecularBiologyHome.getLabselection().getLaboratory() == null) {
-			facesMessages.addToControlFromResourceBundle("molecularbiologylabselection", "javax.faces.component.UIInput.REQUIRED");
+			facesMessages.addToControlFromResourceBundle("molecularbiologylabselection2", "javax.faces.component.UIInput.REQUIRED");
             validationError = true;
 		}
 
@@ -336,7 +355,7 @@ public class FollowUpBRHome {
 			}
 		}
 		if (!atLeastOneResult) {
-			facesMessages.addToControlFromResourceBundle("examdstmedicinelist", "javax.faces.component.UIInput.REQUIRED");
+			facesMessages.addToControlFromResourceBundle("examdst", "Adicione pelo menos um resultado para um medicamento ou marque a opção 'Não Realizado'.");
             validationError = true;
 		}
 			
@@ -346,7 +365,7 @@ public class FollowUpBRHome {
 		}
 
 		if (examDSTHome.getLabselection().getLaboratory() == null) {
-			facesMessages.addToControlFromResourceBundle("examdstlabselection", "javax.faces.component.UIInput.REQUIRED");
+			facesMessages.addToControlFromResourceBundle("examdstlabselection2", "javax.faces.component.UIInput.REQUIRED");
             validationError = true;
 		}
 
@@ -387,11 +406,23 @@ public class FollowUpBRHome {
 	
 	private boolean validSideEffectForm(){
 		boolean validationError = false;
+		boolean emptyMonthForSelected = false;
+		
 		List<CaseSideEffect> lst = ItemSelectHelper.getSelectedItems(sideEffectBRHome.getItems(), true);
 		
 		if(lst.size() < 1){
 			validationError = true;
-			facesMessages.addToControlFromResourceBundle("sideeffects", "Selecione pelo menos um efeito adverso ou marque a opção 'Nenhum'.");
+			facesMessages.addToControlFromResourceBundle("sideeffects", "Selecione pelo menos um efeito adverso ou marque a opção 'Nenhuma'.");
+		}
+		
+		for(ItemSelect<CaseSideEffect> c : sideEffectBRHome.getItems()){
+			if(c.isSelected() && c.getItem().getMonth() == 0)
+				emptyMonthForSelected = true;
+		}
+		
+		if(emptyMonthForSelected){
+			validationError = true;
+			facesMessages.addToControlFromResourceBundle("sideeffects", "É obrigatório que você selecione um mês de tratamento para cada efeito adverso que foi marcado.");
 		}
 		
 		return validationError;
@@ -420,12 +451,26 @@ public class FollowUpBRHome {
 			validationError = true;
 		}
 		
-		if (tbunit == null){
-			facesMessages.addToControlFromResourceBundle("cbselau", "javax.faces.component.UIInput.REQUIRED");
+		if(caseMoveHome.getTbunitselection().getAdminUnit() == null){
+			facesMessages.addToControlFromResourceBundle("casemovecbselau", "javax.faces.component.UIInput.REQUIRED");
+			validationError = true;			
+		}else if (tbunit == null){
+			facesMessages.addToControlFromResourceBundle("casemovecbunits", "javax.faces.component.UIInput.REQUIRED");
 			validationError = true;
 		}else if (prev.getTbunit().equals(tbunit)) {
 			facesMessages.addFromResourceBundle("cbselau", "cases.move.errorunit");
 			validationError = true;
+		}
+		
+		return validationError;
+	}
+	
+	private boolean validCaseState(){
+		boolean validationError = false;
+
+		if (caseCloseHomeBR.getDate() == null) {
+			 validationError = true;
+			facesMessages.addToControlFromResourceBundle("casestatedate", "javax.faces.component.UIInput.REQUIRED");
 		}
 		
 		return validationError;
