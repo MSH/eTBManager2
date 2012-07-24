@@ -10,7 +10,7 @@
 <ui:param name="labelstyle" value="width:150px;" />
 
 <table id="tblfilters" style="border-collapse: collapse;width:100%;"><tr><td>
-	<ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>          
+	<s:fragment rendered='#{!casesAZ.notBindedEIDSS}'>          
    <h2>#{messages['cases.details.addressnotif']}</h2>
 	<ui:param name="required" value="false" />
 
@@ -27,14 +27,14 @@
 			<s:convertEnum />
 		</h:selectOneRadio>
 	</s:decorate>
-	</ui:fragment>
+	</s:fragment>
    <h2>#{messages['cases.details.case']}</h2>
 
-	<s:decorate template="/layout/editname.xhtml">
+	<s:decorate template="/custom/az/layout/editname.xhtml">
 		<ui:define name="label">#{messages['cases.casesearching.patient']}:</ui:define>
 		<ui:param name="patientdata" value="#{caseFilters}" />
 	</s:decorate>
-<ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
+<s:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['Patient.recordNumber']}:</ui:define>
 		<h:inputText value="#{caseFilters.recordNumber}" style="width:120px;"></h:inputText>
@@ -96,19 +96,19 @@
 			<s:convertEnum />
 		</h:selectOneMenu>
 	</s:decorate>
-	</ui:fragment>
+	</s:fragment>
 	<!-- End -->
 	
 
    <h2>#{messages['cases.casesearching.filterdates']}</h2>
 
    <div id="datesdiv" style="padding:6px;">
-   	<ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
+   	<s:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
    	<h:selectBooleanCheckbox value="#{caseFilters.registrationDate}" />#{messages['TbCase.registrationDate']}
    	<h:selectBooleanCheckbox value="#{caseFilters.diagnosisDate}" style="margin-left:20px;" />#{messages['TbCase.diagnosisDate']}
    	<h:selectBooleanCheckbox value="#{caseFilters.iniTreatmentDate}" style="margin-left:20px;" />#{messages['TbCase.iniTreatmentDate']}
    	<h:selectBooleanCheckbox value="#{caseFilters.outcomeDate}" style="margin-left:20px;" />#{messages['TbCase.outcomeDate']}
-   </ui:fragment>
+   </s:fragment>
    </div>
 
 	<div id="perioddiv">
