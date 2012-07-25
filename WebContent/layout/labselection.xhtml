@@ -12,14 +12,14 @@
 	<h:selectOneMenu id="cbselau" value="#{labselection.adminUnit}" required="#{required}" >
 		<s:selectItems var="it" value="#{labselection.adminUnits}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
-		<a:support event="onchange" ajaxSingle="true" reRender="#{empty edtid2?'cblabs': edtid2}" focus="cblab"/>
+		<a:support event="onchange" ajaxSingle="true" reRender="#{empty edtid?'cblabs': edtid}" focus="cblab"/>
 	</h:selectOneMenu>
 
-	<h:selectOneMenu id="#{empty edtid2?'cblabs': edtid2}" value="#{labselection.laboratory}" required="#{required}">
+	<h:selectOneMenu id="#{empty edtid?'cblabs': edtid}" value="#{labselection.laboratory}" required="#{required}">
         <s:selectItems value="#{labselection.options}" var="it" label="#{it.abbrevName}" noSelectionLabel="-" />
       	<s:convertEntity/>
     </h:selectOneMenu>
-    <h:message for="#{empty edtid2?'cblabs': edtid2}" styleClass="error"/>  
+    <h:message for="#{empty edtid?'cblabs': edtid}" styleClass="error"/>  
 
 	<ui:insert />
 </s:decorate>
