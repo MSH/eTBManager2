@@ -23,7 +23,7 @@ public class CasesQueryUA extends CasesQuery{
 	@Override
 	public String getEjbql() {
 		return "select p.name, c.age, p.gender, p.recordNumber, c.caseNumber, " + 
-			"c.treatmentPeriod.iniDate, c.registrationDate, nu.name.name1, " +
+			"c.treatmentPeriod.iniDate, c.diagnosisDate, nu.name.name1, " +
 			"loc.name.name1, loc.code, c.id, " +
 			"c.treatmentPeriod.endDate, c.state, c.classification, p.middleName, p.lastName, " +
 			"c.validationState, c.registrationCode, c.diagnosisType, p.birthDate " +
