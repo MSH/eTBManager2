@@ -3,11 +3,13 @@ package org.msh.tb.cases;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.model.SelectItem;
 
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.entities.CaseSideEffect;
@@ -20,6 +22,7 @@ public class SideEffectHome extends EntityHomeEx<CaseSideEffect>{
 
 	@In(required=true) CaseHome caseHome;
 	@In(create=true) FieldsQuery fieldsQuery;
+	@In(create=true) FacesMessages facesMessages;
 	private List<CaseSideEffect> results;
 
 	public void setResults(List<CaseSideEffect> results) {
@@ -42,6 +45,10 @@ public class SideEffectHome extends EntityHomeEx<CaseSideEffect>{
 	 * @return - "persisted" if it was successfully saved
 	 */
 	public String save() {
+		if(!validateForm()){
+			return "error";
+		}
+		
 		TbCase tbcase = caseHome.getInstance();
 
 		CaseSideEffect it = getInstance();
@@ -126,5 +133,24 @@ public class SideEffectHome extends EntityHomeEx<CaseSideEffect>{
 			return "sideeffectremoved";
 		else
 			return s;
+	}
+	
+	public boolean validateForm(){
+		boolean validationError = false;
+		
+		if(getCaseSideEffect().getMonth() == 0){
+			facesMessages.addToControlFromResourceBundle("month", "javax.faces.component.UIInput.REQUIRED");
+			validationError = true;
+		}else if(getCaseSideEffect().getId() == null){ //new sideeffect		
+			for(CaseSideEffect c : caseHome.getTbCase().getSideEffects()){
+				if(c.getSideEffect().getValue().getId().equals(getCaseSideEffect().getSideEffect().getValue().getId()) 
+							&& c.getMonth() == getCaseSideEffect().getMonth()){
+					facesMessages.addToControlFromResourceBundle("month", "cases.sideeffects.samemonth");
+					validationError = true;
+				}
+			}
+		}
+		
+		return !validationError;
 	}
 }

@@ -49,7 +49,7 @@
 			
 			<s:decorate template="/layout/edit.xhtml">
 				<ui:define name="label">#{messages['cases.sideeffects.month']}:</ui:define>
-				<h:selectOneMenu value="#{caseSideEffect.month}" required="true">
+				<h:selectOneMenu id="month" value="#{caseSideEffect.month}" required="true">
 					<f:selectItems value="#{sideEffectHome.months}" />
 				</h:selectOneMenu>
 			</s:decorate>
