@@ -14,6 +14,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.Synchronized;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.adminunits.AdminUnitGroup;
 import org.msh.tb.adminunits.AdminUnitSelection;
@@ -39,6 +40,7 @@ import org.msh.tb.misc.GlobalLists;
  */
 @Name("caseStateReportUA")
 @Scope(ScopeType.SESSION)
+@Synchronized(timeout=20000)
 public class CaseStateReport {
 
 	@In EntityManager entityManager;
