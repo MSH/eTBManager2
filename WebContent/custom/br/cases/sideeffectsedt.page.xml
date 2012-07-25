@@ -8,7 +8,7 @@
 		<param name="idSideEffect" value="#{sideEffectHome.id}" converterId="javax.faces.Integer"/>
 		<navigation>
 			<rule if="#{not caseHome.managed}">
-				<redirect view-id="/case/index.xhtml" />
+				<redirect view-id="/cases/index.xhtml" />
 			</rule>
 
 			<rule if-outcome="persisted">
