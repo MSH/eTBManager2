@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.ExamCulture;
@@ -92,14 +91,18 @@ public class ReportTB08 extends IndicatorVerify {
 		setCounting(true);
 		int count = ((Long)createQuery().getSingleResult()).intValue();
 		if (count<=4000){
-			initVerifList("verify.tb08.error",6,4,1);
+			initVerifList("verify.tb08.error",7,4,1);
 			setCounting(false);
 			setOverflow(false);
 			lst = createQuery().getResultList();
 			Iterator<TbCase> it = lst.iterator();
-			Map<String, List<ErrItem>>  verifyList = getVerifyList();
+			int ind=0;
 			while(it.hasNext()){
 				TbCase tc = it.next();
+				ind++;
+				System.out.println(ind);
+				if (ind==9)
+					System.out.println(ind);
 				//CaseDataUA cd = (CaseDataUA) getEntityManager().createQuery("select ua from CaseDataUA ua where ua.tbcase.id="+tc.getId()).getSingleResult();
 				CaseDataUA cd = (CaseDataUA) getEntityManager().find(CaseDataUA.class, tc.getId());  //AK, previous line will rise exception, if no result
 				if (cd == null){
@@ -155,8 +158,12 @@ public class ReportTB08 extends IndicatorVerify {
 					getTable3000().addIdValue("col1", key, 1F);
 					if (tc.getResXRay()!=null)
 						if (tc.getResXRay().size()!=0)
-							if (!tc.getResXRay().get(tc.getResXRay().size()-1).getDestruction())
-								getTable3000().addIdValue("col2", key, 1F);	
+							if (tc.getResXRay().get(tc.getResXRay().size()-1).getDestruction() != null){
+								if (!tc.getResXRay().get(tc.getResXRay().size()-1).getDestruction())
+									getTable3000().addIdValue("col2", key, 1F);
+							}
+							else
+								addToVerList(tc,1,6);
 				}
 			}
 			// calculate percentage
