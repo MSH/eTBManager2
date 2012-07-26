@@ -141,9 +141,7 @@ public class CaseCloseHome extends Controller{
 	 * @return
 	 */
 	public Date getDate() {
-		//return date;
-		if (date== null) return new Date();
-		else return date;
+		return date;
 	}
 
 	public void setDate(Date date) {
