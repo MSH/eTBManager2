@@ -524,6 +524,17 @@ public class CaseFilters {
 		return adm.getCode() + "%";
 	}
 
+	public String getTbAdminUnitAnyLevelLike() {
+		AdministrativeUnit adm=null;
+		if (getTbunitselection().getAuselection()!=null)
+			adm = getTbunitselection().getAuselection().getSelectedUnit();
+		
+		if (adm == null)
+			return null;
+		
+		return adm.getCode() + "%";
+	}
+	
 	/**
 	 * @return the middleName
 	 */
