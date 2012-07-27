@@ -1,5 +1,6 @@
 package org.msh.tb.cases;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -100,23 +101,35 @@ public class CaseValidationHome {
 		}
 				
 		// generate new case number
+		//Gets the major case number of this patient with diagnosisdate before the case in question.
 		Integer caseNum = (Integer)entityManager.createQuery("select max(c.caseNumber) from TbCase c where c.patient.id = :id and c.diagnosisDate < :dt")
 			.setParameter("id", p.getId())
 			.setParameter("dt", tbcase.getDiagnosisDate())
 			.getSingleResult();
 		
 		if (caseNum == null)
+			//If there is no casenum before this one it sets the digit 1 for this case.
 			caseNum = 1;
 		else{
+			//If there is a casenum before this case it sets this number plus one.
 			caseNum++;
-
-			// update case numbers with notification date after this case
-			entityManager.createQuery("update TbCase c " +
-					"set c.caseNumber = c.caseNumber + 1 " + 
-					"where c.patient.id = :id and c.diagnosisDate > :dt")
-					.setParameter("id", p.getId())
-					.setParameter("dt", tbcase.getDiagnosisDate())
-					.executeUpdate();
+		}
+		
+		// Returns the ids of the cases cronologicaly after the case in memory
+		ArrayList<Integer> lst = (ArrayList<Integer>) entityManager.createQuery("select id from TbCase c " + 
+		        "where c.patient.id = :id and c.diagnosisDate > :dt order by c.diagnosisDate")
+		        .setParameter("dt", tbcase.getDiagnosisDate())
+		        .setParameter("id", p.getId())
+		        .getResultList();
+		
+		// updates caseNums according to the cronological order
+		int num = caseNum + 1;
+		for (Integer id: lst) {
+		   entityManager.createQuery("update TbCase set caseNumber = :num where id=:id")
+		      .setParameter("num", num)
+		      .setParameter("id", id)
+		      .executeUpdate();
+		   num++;
 		}
 		
 		tbcase.setCaseNumber(caseNum);
