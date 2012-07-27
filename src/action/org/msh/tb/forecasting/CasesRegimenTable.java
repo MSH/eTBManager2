@@ -103,8 +103,9 @@ public class CasesRegimenTable {
 	public void updateTable() {
 		rows = new ArrayList<ItemRow>();
 		int betwRefDt = 0;
-		if (forecasting.getOldReferenceDate()!=null)
-			betwRefDt = DateUtils.getDatePart(forecasting.getReferenceDate()).getMonth() - DateUtils.getDatePart(forecasting.getOldReferenceDate()).getMonth();
+		if (forecasting.getOldReferenceDate()!=null) 
+			betwRefDt = DateUtils.monthOf( DateUtils.getDatePart(forecasting.getReferenceDate()) ) - 
+						DateUtils.monthOf( DateUtils.getDatePart(forecasting.getOldReferenceDate()) );
 		
 		// remove unused instances of ForecastingCasesOnTreat objects
 		int i = 0;
