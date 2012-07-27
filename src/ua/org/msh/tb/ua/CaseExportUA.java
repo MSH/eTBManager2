@@ -2,11 +2,13 @@ package org.msh.tb.ua;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.adminunits.InfoCountryLevels;
 import org.msh.tb.entities.ExamDST;
+import org.msh.tb.entities.ExamHIV;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.export.CaseExport;
 import org.msh.tb.export.ExcelCreator;
@@ -136,7 +138,7 @@ public class CaseExportUA extends CaseExport {
 		excel.addTextFromResource("uk_UA.prisioner", "title");
 		excel.addTextFromResource("cases.exams.date", "title");
 		excel.addTextFromResource("TbCase.outcomeDate", "title");
-
+		excel.addTextFromResource("cases.examhiv.art", "title");
 	}
 
 
@@ -222,6 +224,14 @@ public class CaseExportUA extends CaseExport {
 		excel.addValue(translateYesNo( data.isPrisioner() ));
 		excel.addDate(rightDSTTest(tbcase).getDateCollected());
 		excel.addDate(rightDSTTest(tbcase).getDateRelease());
+		Date artDate = null;
+		for (ExamHIV ex:tbcase.getResHIV()){
+			if (ex.getStartedARTdate() != null){
+				artDate = ex.getStartedARTdate();
+				break;
+			}
+		}
+		excel.addDate(artDate);
 		return tbcase;
 	}
 
