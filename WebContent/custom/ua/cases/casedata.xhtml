@@ -28,25 +28,6 @@
 </ui:define>
 
 
-<ui:define name="state-content">
-	<s:fragment rendered="#{tbcase.state=='TRANSFERRING'}" > 
-	<div class="icon-hu-big"/>
-	<div style="margin-top:6px;font-size:11px;max-width:320px;height:60px;" >
-		<b style="padding-right:4px;">#{messages['meds.movs.destunit']}:</b> 
-		<h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
-		<br/>
-		<span class="right-icon" />
-		<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
-			style="position:relative;" propagation="none">
-			<f:param name="id" value="#{caseHome.id}" />
-		</s:link>
-		<s:link value="#{messages['cases.move.cancel']}" 
-			style="position:relative" />
-	</div>
-	</s:fragment>
-</ui:define>
-		
-
 <ui:define name="left">
 
 	<h:panelGroup id="leftmenu" styleClass="vertical-menu">
@@ -101,6 +82,31 @@
 	</s:fragment>
 
 	<div class="spacer" />
+	<h:form id="trans">
+		<s:div styleClass="region1"  rendered="#{tbcase.state=='TRANSFERRING'}">
+			<div class="icon-hu-big"/>
+			<div style="margin-top:6px;font-size:11px;max-width:320px;" >
+				<b style="padding-right:4px;">#{messages['meds.movs.destunit']}:</b> 
+				<br/>
+				<h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
+				<br/>
+				<span class="right-icon" />
+				<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
+					propagation="none">
+					<f:param name="id" value="#{caseHome.id}" />
+				</s:link>
+				<br/>
+				<a:commandLink value="#{messages['cases.move.cancel']}"
+					onclick="if (!confirm('#{caseMoveHome.confirmMsgRollbackTransfer}')) return false"
+					action="#{caseMoveHome.rollbackTransferOut}"
+					reRender="trans,main,leftmenu,messages" 
+					styleClass="right-icon" >
+					<f:param name="name" value="#{caseHome.transferInHealthUnit.tbunit.name}"/>
+				</a:commandLink>
+			</div>
+		</s:div>
+		<div class="spacer" />
+	</h:form>
 
 	<s:div styleClass="region1" rendered="#{not empty caseHome.otherCases}">
 		<div class="header">#{messages['cases.details.others']} #{tbcase.patient.name}</div>
@@ -135,27 +141,6 @@
 <h1>#{title}</h1>
 <h:form id="main">
 <s:decorate id="bodydiv" template="/layout/casebody.xhtml">
-
-	<ui:define name="state-content">
-	<div class="icon-hu-big"/>
-		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" style="margin-top:6px;font-size:11px;max-width:320px;" >
-			<b style="padding-right:4px;">#{messages['meds.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
-			<br/>
-			<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
-				style="position:relative;" propagation="none" 
-				styleClass="right-icon">
-				<f:param name="id" value="#{caseHome.id}" />
-			</s:link>
-			<br/>
-			<a:commandLink value="#{messages['cases.move.cancel']}"
-				onclick="if (!confirm('#{caseMoveHome.confirmMsgRollbackTransfer}')) return false"
-				action="#{caseMoveHome.rollbackTransferOut}"
-				reRender="main,leftmenu,messages" 
-				style="position:relative" styleClass="right-icon" >
-				<f:param name="name" value="#{caseHome.transferInHealthUnit.tbunit.name}"/>
-			</a:commandLink>
-		</s:div>
-	</ui:define>
 
 <ui:include src="/cases/issues.xhtml" />
 
