@@ -161,11 +161,11 @@ function formButtonPost(button) {
 	<div class="button-bar">	
 	<a:commandLink action="#{treatmentHome.endTreatmentPeriodEditing}"
 		data="#{treatmentHome.validated}"
-		styleClass="button" reRender="formperiod"
+		styleClass="button" reRender="formperiod,messages"
 		onclick="if (!formButtonPost(this)) return false;"
 		oncomplete="if (!data) {enableButton(); return false;} Richfaces.hideModalPanel('perioddlg'); updateTreatmentTable();">
 		<span>#{messages['form.ok']}</span>
-	</a:commandLink>
+	</a:commandLink> 
 
 	<a:commandLink styleClass="button-alt" onclick="Richfaces.hideModalPanel('perioddlg'); return false;">
 		<span>#{messages['form.cancel']}</span>
