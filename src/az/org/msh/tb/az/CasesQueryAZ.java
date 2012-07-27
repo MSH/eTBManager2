@@ -5,16 +5,20 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.cases.CaseResultItem;
 import org.msh.tb.cases.CasesQuery;
 import org.msh.tb.cases.FilterHealthUnit;
 import org.msh.tb.cases.SearchCriteria;
+import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.UserView;
 
 
 /**
@@ -31,8 +35,10 @@ public class CasesQueryAZ extends CasesQuery{
 	private final Integer casesEIDSSnotBindedIndex = CaseStateReportAZ.EIDSS_NOT_BINDED;
 	private static final String notifCondUA = "(nu.id = #{caseFilters.tbunitselection.tbunit.id})";
 	private static final String treatCondUA = "tu.id =  #{caseFilters.tbunitselection.tbunit.id}";
-	private static final String notifRegCondUA = "(nu.id in (select id from org.msh.tb.entities.Tbunit tbu where tbu.adminUnit.code like #{caseFilters.tbAdminUnitLike}))";
-	private static final String treatRegCondUA = "(tu.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like #{caseFilters.tbAdminUnitLike}))";
+	private static final String notifRegCondUA = "(nu.id in (select id from org.msh.tb.entities.Tbunit tbu where tbu.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
+	private static final String treatRegCondUA = "(tu.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
+	private static final String notifAdrAdmUnitUA="c.notifAddress.adminUnit.code like ";
+	private static final String notifAdrAdmUnitRegUA="c.notifAddress.adminUnit.code = ";
 	
 	// static filters
 	private static final String[] restrictions = {
@@ -57,6 +63,18 @@ public class CasesQueryAZ extends CasesQuery{
 	@Override
 	public List<String> getStringRestrictions() {
 		return Arrays.asList(restrictions);
+	}
+	
+	public String getAdminUnitLike(AdministrativeUnit adm) {
+		UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
+		if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
+			if (adm == null)
+				return null;
+			if	(adm.getLevel()==1)
+			return "'"+adm.getCode() + "%'";
+			else return "'"+adm.getCode()+"'";
+		}
+		return null;
 	}
 	
 	@Override
@@ -157,8 +175,14 @@ public class CasesQueryAZ extends CasesQuery{
 					case TREATMENT_UNIT:
 						addCondition(treatRegCondUA);
 						break;
-					case BOTH:
-						addCondition("(" + treatRegCondUA + " or " + notifRegCondUA + ")");
+					case BOTH:{
+						addCondition("(" + treatRegCondUA + " or " + notifRegCondUA);
+						UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
+						if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
+							hqlCondition += " or "+(userWorkspace.getAdminUnit().getLevel()==1 ? notifAdrAdmUnitUA : notifAdrAdmUnitRegUA) + getAdminUnitLike(userWorkspace.getAdminUnit());
+						}
+						hqlCondition += ")";
+						}
 					}
 				}
 		}
