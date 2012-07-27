@@ -208,6 +208,7 @@ public class TreatmentHome {
 		validated = true;
 		refreshPrescriptionTable();
 		caseHome.updateCaseTags();
+		facesMessages.addFromResourceBundle("form.clickon.save");
 	}
 
 	/**
