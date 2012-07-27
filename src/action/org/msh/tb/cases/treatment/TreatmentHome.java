@@ -17,6 +17,7 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.SourcesQuery;
+import org.msh.tb.TagsCasesHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.PrescribedMedicine;
 import org.msh.tb.entities.Regimen;
@@ -125,8 +126,6 @@ public class TreatmentHome {
 
 		refreshPrescriptionTable();
 
-		caseHome.updateCaseTags();
-
 		// check if regimen moved to an individualized regimen
 		if (checkregimenMovedToIndivid()) {
 			tbcase.setRegimen(null);
@@ -134,7 +133,11 @@ public class TreatmentHome {
 		
 		Events.instance().raiseEvent("treatment-persist");
 		
-		return caseHome.persist();
+		String s = caseHome.persist();
+		
+		TagsCasesHome.instance().updateTags(tbcase);
+		
+		return s;
 	}
 	
 
