@@ -61,9 +61,11 @@ public class CaseAZHome {
 		TbCaseAZ c=getTbCase();
 		String s=c.getEIDSSComment();
 		if (s!=null){
-			String [] parts=s.split("/", 5);
-			addrEIDSS= parts[1];	
+			if	(s.contains("/")){
+				String [] parts=s.split("/", 5);
+				addrEIDSS= parts[1];	
+			}
 		}
-			return addrEIDSS;
+		return addrEIDSS;
 	}
 }
