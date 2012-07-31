@@ -81,6 +81,26 @@ public  class CaseImporting {
 		return action;
 
 	}
+	public String checkImportRecords(CaseInfo oneCase){
+		String action="";
+		if (entityManager==null){
+			entityManager = (EntityManager)Component.getInstance("entityManager");
+		}
+		TbCase result=isCaseExist(oneCase);
+		if (result==null){
+			
+			action=WRITED;
+		} else {
+			if (result!=null)
+			
+			action=UPDATED;
+		}
+         
+
+
+		return action;
+
+	}
 
 	private boolean UpdateCase(CaseInfo oneCase, TbCase c) {
 		c.setLegacyId(oneCase.getCaseID());
@@ -127,17 +147,21 @@ public  class CaseImporting {
 	private TbCase isCaseExist(CaseInfo oneCase) {
 		TbCase result=null;
 		try{
-			Integer id =  (Integer) entityManager.createNativeQuery(CheckIfExistInEtbStr)
+			List<Integer>  id=  (List<Integer>) entityManager.createNativeQuery(CheckIfExistInEtbStr)
 			.setParameter("ln", oneCase.getLastName())
 			.setParameter("mn", oneCase.getMiddleName())
 			.setParameter("fn", oneCase.getFirstName())
 			.setParameter("a", oneCase.getAge())
 			.setParameter("rd", oneCase.getFinalDiagnosisDate())
-			.getSingleResult();
-
-			if (id.intValue()!=0){
-				result=(TbCase) entityManager.createQuery(" from TbCase c where c.id =  "+id).getSingleResult();
+			.getResultList();
+			if (id!=null){
+				if (id.size()>0){
+					if (id.get(0).intValue()!=0){
+						result=(TbCase) entityManager.createQuery(" from TbCase c where c.id =  "+id.get(0).intValue()).getSingleResult();
+					}
+				}
 			}
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -180,15 +204,11 @@ public  class CaseImporting {
 		return errorOnCurrentImport;
 
 	}
-	public List<String> CheckIfExistInEtb(List<String> allCases){
-		//entityManager = (EntityManager)Component.getInstance("entityManager");
+	public boolean CheckIfExistInEtb(String legacy){
+		boolean ifExist=true;
 		BigInteger count;
-		List<String> resCases=new ArrayList<String>();
-		Iterator<String> it= allCases.iterator();
-		while (it.hasNext()){
-			String legacy=it.next();
-			try {
-				/*
+		try {
+			/*
 				List<TbCaseAZ> lstcases = entityManager.createQuery("from TbCase c " +
 						"join fetch c.patient p " +
 						"where c.legacyId = :id " +
@@ -199,16 +219,15 @@ public  class CaseImporting {
 				if (lstcases.size() == 0) {
 					resCases.add(legacy);
 				}
-				 */
-				count = (BigInteger) entityManager.createNativeQuery(getEIDSSCodeSQL(legacy)).getSingleResult();
-				if (count.intValue() == 0){
-					resCases.add(legacy);
-				}
-			} catch (Exception e) {
-
+			 */
+			count = (BigInteger) entityManager.createNativeQuery(getEIDSSCodeSQL(legacy)).getSingleResult();
+			if (count.intValue() == 0){
+				ifExist=false;
 			}
+		} catch (Exception e) {
+         ifExist=false;
 		}
-		return resCases;
+		 return ifExist;
 
 	}
 	/**

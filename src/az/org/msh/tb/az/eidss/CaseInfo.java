@@ -14,6 +14,15 @@ public class CaseInfo {
    private Date DateOfBirth;
    private String AdditionalComment;
    private int age;
+   private Date EnteringDate;
+   
+   public void setEnteringDate(Date d){
+	   this.EnteringDate=d;
+   }
+   public Date getEnteringDate(){
+	return EnteringDate;
+	   
+   }
 public String getCaseID() {
 	return caseID;
 }
