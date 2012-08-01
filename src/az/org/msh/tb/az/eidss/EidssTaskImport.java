@@ -394,9 +394,10 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	 */
 	
 	private static boolean suitable(HumanCaseInfo cI,String patStateName, String caseStateName) {
-		   //alive 10035002
+		   //reject 10035002
+		
 			if (cI.getPatientState()!=null){
-				if (!cI.getPatientState().getId().toString().equalsIgnoreCase(patStateName)) {
+				if (cI.getPatientState().getId().toString().equalsIgnoreCase(patStateName)) {
 				
 					return false;
 				}
