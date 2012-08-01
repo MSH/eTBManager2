@@ -18,6 +18,7 @@ import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
 import org.msh.utils.date.DateUtils;
@@ -177,6 +178,7 @@ public class OrderEstimation {
 				"join fetch pm.tbcase c join fetch pm.source s join fetch pm.medicine m " +
 				"where pm.tbcase.treatmentUnit.id in (" + s + ") " +
 				"and pm.tbcase.state = :state " +
+				"and pm.tbcase.validationState = :validate " +
 				"and (pm.period.endDate >= :dtini) " +
 				"and (pm.period.iniDate <= :dtend)";
 
@@ -184,6 +186,7 @@ public class OrderEstimation {
 				.setParameter("dtini", iniDate)
 				.setParameter("dtend", endDate)
 				.setParameter("state", CaseState.ONTREATMENT)
+				.setParameter("validate", ValidationState.VALIDATED)
 				.getResultList();
 	}
 
