@@ -123,7 +123,7 @@ public class PulmonaryIndicator extends Indicator2D {
 			}
 		}
 			
-			if(val.getPulmonaryType()==null){
+			if((val.getExtrapulmonaryType() != null || val.getExtrapulmonaryType2() != null)){
 
 				if(val.getPatient().getGender() == Gender.MALE){
 					cntEPM++;
