@@ -7,10 +7,6 @@
 * 
 ****************************************************************/
 UPDATE tbcase
-SET diagnosisdate = NULL
-WHERE diagnosisdate = registrationdate;
-
-UPDATE tbcase
 SET diagnosisdate = (select min(em.dateCollected)
                       FROM exammicroscopy em
                       WHERE em.dateCollected < tbcase.iniTreatmentDate
