@@ -127,8 +127,8 @@ public class TBForm10Block1 extends Indicator{
 		float totM = cntNewM + cntRelM + cntFailM + cntDefM + cntSmearNegM + cntEPM + cntOtherM;
 		float totF = cntNewF + cntRelF + cntFailF + cntDefF + cntSmearNegF + cntEPF + cntOtherF;
 		
-		addValue(messages.get("manag.gender.male7"), messages.get("#"), totM);
-		addValue(messages.get("manag.gender.female7"), messages.get("#"), totF);
+		addValue(messages.get("manag.gender.male8"), messages.get("#"), totM);
+		addValue(messages.get("manag.gender.female8"), messages.get("#"), totF);
 		addValue(messages.get("manag.pulmonary.tot"), messages.get("#"), totM + totF);	
 
 	}
