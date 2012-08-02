@@ -42,18 +42,15 @@ public class PulmonaryTBRetreatIndicator extends Indicator2D{
 	protected void createIndicators() {
 		// TODO Auto-generated method stub
 
-		// TODO Auto-generated method stub
-		//Fetching all confirmed cases of PatientType retreatment and those ontreatment
+		//Fetching all confirmed cases of PatientType retreatment and thru filters page selecting cases based on start treatment dt
 		String cond = " c.patientType <> 0 " ;
 		setCondition(cond);
 		List<TbCase> lst = new ArrayList<TbCase>();
 		flagSelectQuery = 1;
 		 lst = createQuery().getResultList();
 
-		System.out.println("List Size--->" +lst.size());
+		
 		float cntRelM = 0, cntRelF = 0, cntFailM = 0, cntFailF = 0, cntDefM = 0, cntDefF = 0, cntOtherM = 0, cntOtherF = 0;
-		float cntCureRelM = 0, cntCureFailM = 0, cntCureDefM = 0, cntCureOtherM = 0, cntCureRelF = 0,  cntCureFailF = 0, cntCureDefF = 0, cntCureOtherF = 0;
-		float cntTreatCompRelM = 0, cntTreatCompFailM = 0, cntTreatCompDefM = 0, cntTreatCompOtherM = 0, cntTreatCompRelF = 0, cntTreatCompFailF = 0, cntTreatCompDefF = 0,cntTreatCompOtherF = 0; 
 		float cntDiedRelM = 0, cntDiedRelF = 0, cntDiedFailM = 0,cntDiedFailF = 0, cntDiedDefM = 0, cntDiedDefF = 0, cntDiedOtherM = 0, cntDiedOtherF =0; 
 		float cntFailRelM = 0, cntFailFailM = 0, cntFailDefM = 0, cntFailOtherM = 0, cntFailRelF = 0, cntFailFailF = 0, cntFailDefF = 0, cntFailOtherF = 0;
 		float cntDefRelM = 0, cntDefFailM = 0, cntDefDefM = 0, cntDefOtherM = 0, cntDefRelF = 0, cntDefFailF = 0, cntDefDefF = 0,cntDefOtherF = 0;
@@ -72,7 +69,7 @@ public class PulmonaryTBRetreatIndicator extends Indicator2D{
 					
 					val.getTreatmentPeriod().getIniDate();
 					String mres = getMicroscopyResult(val.getId(), val.getTreatmentPeriod().getIniDate());
-					System.out.println("Microscopy Result ----->" +mres);
+					
 					
 					// Checking for all cases with microscopy results still NOT closed
 					if(mres!= null && mres.equalsIgnoreCase("NEGATIVE") && val.getState().ordinal()<3)
@@ -406,17 +403,18 @@ public class PulmonaryTBRetreatIndicator extends Indicator2D{
 		addValue(messages.get("manag.gender.female6"), messages.get("manag.pulmonary.others"), cntTranOtherF);
 		
 		float totRelM = 0, totRelF = 0, totFailM = 0, totFailF = 0, totDefM = 0, totDefF = 0, totOtherM = 0, totOtherF = 0;
-		totRelM = cntCureRelM + cntTreatCompRelM + cntDiedRelM + cntFailRelM + cntDefRelM + cntTranRelM;
-		totRelF = cntCureRelF + cntTreatCompRelF + cntDiedRelF + cntFailRelF + cntDefRelF + cntTranRelF;
 		
-		totFailM = cntCureFailM + cntTreatCompFailM + cntDiedFailM + cntFailFailM + cntDefFailM + cntTranFailM;
-		totFailF = cntCureFailF + cntTreatCompFailF + cntDiedFailF + cntFailFailF + cntDefFailF + cntTranFailF;
+		totRelM = cntRelMNegM + cntRelMPosM + cntDiedRelM + cntFailRelM + cntDefRelM + cntTranRelM;
+		totRelF = cntRelMNegF + cntRelMPosF + cntDiedRelF + cntFailRelF + cntDefRelF + cntTranRelF;
 		
-		totDefM = cntCureDefM + cntTreatCompDefM + cntDiedDefM + cntFailDefM + cntDefDefM + cntTranDefM;
-		totDefF = cntCureDefF + cntTreatCompDefF + cntDiedDefF + cntFailDefF + cntDefDefF + cntTranDefF;
+		totFailM = cntFailMNegM + cntFailMPosM + cntDiedFailM + cntFailFailM + cntDefFailM + cntTranFailM;
+		totFailF = cntFailMNegF + cntFailMPosF + cntDiedFailF + cntFailFailF + cntDefFailF + cntTranFailF;
 		
-		totOtherM = cntCureOtherM + cntTreatCompOtherM + cntDiedOtherM + cntFailOtherM + cntDefOtherM + cntTranOtherM;
-		totOtherF = cntCureOtherF + cntTreatCompOtherF + cntDiedOtherF + cntFailOtherF + cntDefOtherF + cntTranOtherF;
+		totDefM = cntDefMNegM + cntDefMPosM + cntDiedDefM + cntFailDefM + cntDefDefM + cntTranDefM;
+		totDefF = cntDefMNegF + cntDefMPosF + cntDiedDefF + cntFailDefF + cntDefDefF + cntTranDefF;
+		
+		totOtherM = cntOtherMNegM + cntOtherMPosM + cntDiedOtherM + cntFailOtherM + cntDefOtherM + cntTranOtherM;
+		totOtherF = cntOtherMNegF + cntOtherMPosF + cntDiedOtherF + cntFailOtherF + cntDefOtherF + cntTranOtherF;
 		
 		addValue(messages.get("manag.gender.male7"), messages.get("manag.pulmonary.relapse"), totRelM);
 		addValue(messages.get("manag.gender.male7"), messages.get("manag.pulmonary.failures"), totFailM);
