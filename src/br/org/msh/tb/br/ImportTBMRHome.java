@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
@@ -32,6 +33,7 @@ public class ImportTBMRHome {
 	public void execute() {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("uf", uf);
+		params.put("userLogin", Component.getInstance("userLogin"));
 		
 		taskManager.runTask(ImportTBMRTask.class, params);
 		FacesMessages.instance().add("Importação está em andamento... Você pode continuar navegando no sistema");

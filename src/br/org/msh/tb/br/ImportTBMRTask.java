@@ -88,7 +88,7 @@ public class ImportTBMRTask extends DbBatchTask {
 	 */
 	private static final int regimenId = 940665;
 	private static final int sourceId = 22107;
-
+	
 
 //	private CaseDataBRHome caseDataBRHome;
 	private CaseHome caseHome;
@@ -125,6 +125,10 @@ public class ImportTBMRTask extends DbBatchTask {
 		entityManager = getEntityManager();
 		
 		uf = getStringParam("uf");
+		Object userLogin = getParameter("userLogin");
+		if (userLogin != null)
+			Contexts.getEventContext().set("userLogin", userLogin);
+
 		// if UF is not defined, them exit
 		if (uf == null) {
 			cancel();
@@ -202,7 +206,7 @@ public class ImportTBMRTask extends DbBatchTask {
 	@Override
 	protected boolean processBatchRecord() throws Exception {
 		Integer numFicha = fichas.get(getRecordIndex());
-
+		
 		// initialize variables for the next loop
 		structures = null;
 		healthSystem = null;
@@ -289,6 +293,10 @@ public class ImportTBMRTask extends DbBatchTask {
 		System.out.println("FICHA = " + rsCases.getString("NUM_FICHA"));
 		
 		String numFicha = rsCases.getString("COD_CASO");
+
+		if (numFicha == "25845")
+			System.out.println("ok");
+
 		String sql = "select c.id from TbCase c where c.legacyId = :id and c.patient.workspace.id = #{defaultWorkspace.id}";
 		List<Integer> lst = entityManager.createQuery(sql)
 			.setParameter("id", numFicha)
