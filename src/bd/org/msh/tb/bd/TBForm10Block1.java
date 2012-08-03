@@ -92,7 +92,7 @@ public class TBForm10Block1 extends Indicator{
 				
 			}
 			
-			if(isSmearOther(val.getPulmonaryType().getShortName().toString())){
+			if(val.getPulmonaryType() != null && isSmearOther(val.getPulmonaryType().getShortName().toString())){
 				if(isMale(val.getPatient().getGender()))
 					cntOtherM++;
 				
