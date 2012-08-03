@@ -457,23 +457,51 @@ public class PulmonaryTBRetreatIndicator extends Indicator2D{
 		String strMicroscopyResult = "";		
 		String condition = "e.dateCollected in (select max(m.dateCollected) from ExamMicroscopy m where m.tbcase.id = " +tbcaseid + ")" ;
 		setCondition(condition);
-		Object[] o = null;
-		try{
-		o = (Object[]) createQuery().getSingleResult();
+//		Object[] o = null;
+//		try{
+//		o = (Object[]) createQuery().getSingleResult();
+//		
+//		System.out.println("Result ------> " +o[0]);
+//		System.out.println("date Collected ------> " +o[1]);
+//		Date dtCollected = (Date)o[1];
+//		Date dt2Months = addMonthsToDate(ini, 2);
+//		Date dt3Months = addMonthsToDate(ini, 3);
+//			if(dtCollected.after(dt2Months) && dtCollected.before(dt3Months))
+//				strMicroscopyResult = o[0].toString();
+//			else 
+//				strMicroscopyResult = "";
+//		}
+//		catch (NoResultException e){		
+//			return null;
+//			}
+//				return strMicroscopyResult;
 		
-		System.out.println("Result ------> " +o[0]);
-		System.out.println("date Collected ------> " +o[1]);
-		Date dtCollected = (Date)o[1];
-		Date dt2Months = addMonthsToDate(ini, 2);
-		Date dt3Months = addMonthsToDate(ini, 3);
-			if(dtCollected.after(dt2Months) && dtCollected.before(dt3Months))
-				strMicroscopyResult = o[0].toString();
-			else 
-				strMicroscopyResult = "";
-		}
-		catch (NoResultException e){		
-			return null;
+		/*
+		 * Fix for above when and if there is no one single result for a given date
+		 */
+		
+		List<Object[]> lst = new ArrayList<Object[]>();
+		try{
+			lst = createQuery().getResultList();
+			if(lst.size()==1){
+				for(Object[] val: lst){
+				strMicroscopyResult = val[0].toString();
+				}
 			}
+			if(lst.size()>1){
+				List<String> allRes = new ArrayList<String>();
+				for(Object[] val: lst){
+					allRes.add(val[0].toString());
+				}
+				if(allRes.contains("POSITIVE")||allRes.contains("PLUS")||allRes.contains("PLUS2")||allRes.contains("PLUS3")||allRes.contains("PLUS4"))
+					strMicroscopyResult = "POSITIVE";
+				else 
+					strMicroscopyResult = "NEGATIVE";
+			}
+		}
+		catch(NoResultException e){
+			return null;
+		}
 				return strMicroscopyResult;
 	
 	}
