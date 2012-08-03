@@ -96,15 +96,43 @@ public String getMicroscopyResult(int tbcaseid) {
 		String strMicroscopyResult = "";		
 		String condition = "e.dateCollected in (select min(m.dateCollected) from ExamMicroscopy m where m.tbcase.id = " +tbcaseid + ")" ;
 		setCondition(condition);
-		Object o = null;
-		try{
-		o = createQuery().getSingleResult();
+//		Object o = null;
+//		try{
+//		o = createQuery().getSingleResult();
+//		
+//		strMicroscopyResult = o.toString();		
+//		}
+//		catch (NoResultException e){		
+//			return null;
+//			}
+//				return strMicroscopyResult;
 		
-		strMicroscopyResult = o.toString();		
-		}
-		catch (NoResultException e){		
-			return null;
+		/*
+		 * Fix for above when and if there is more than one result for a given date
+		 */
+		
+		List<Object> lst = new ArrayList<Object>();
+		try{
+			lst = createQuery().getResultList();
+			if(lst.size()==1){
+				for(Object val: lst){
+				strMicroscopyResult = val.toString();
+				}
 			}
+			if(lst.size()>1){
+				List<String> allRes = new ArrayList<String>();
+				for(Object val: lst){
+					allRes.add(val.toString());
+				}
+				if(allRes.contains("POSITIVE")||allRes.contains("PLUS")||allRes.contains("PLUS2")||allRes.contains("PLUS3")||allRes.contains("PLUS4"))
+					strMicroscopyResult = "POSITIVE";
+				else 
+					strMicroscopyResult = "NEGATIVE";
+			}
+		}
+		catch(NoResultException e){
+			return null;
+		}
 				return strMicroscopyResult;
 	
 	}
