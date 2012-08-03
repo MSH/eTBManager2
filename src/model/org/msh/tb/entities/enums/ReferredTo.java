@@ -20,7 +20,12 @@ public enum ReferredTo {
 	NON_PP,
 	SS,
 	VD, 
-	CV;	
+	CV,
+	GOV,
+	PRIVATE_HOSP,
+	TB_PATIENT,
+	OTHER
+	;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
