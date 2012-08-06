@@ -21,7 +21,7 @@
 	</td></tr>
 	<tr><td>
 	
-	<s:decorate template="/layout/edit.xhtml">
+	<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
     	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
 		<h:inputText value="#{tbcase.patient.securityNumber}" style="width:120px;" maxlength="50"></h:inputText>
 	</s:decorate>
@@ -245,7 +245,7 @@
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
     		<h:selectOneMenu id="infectsite" value="#{tbcase.infectionSite}" required="#{tbcase.validated}">
-    			<s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="-" label="#{messages[it.key]}" />
+    			<s:selectItems var="it" value="#{infectionSite_bd}" noSelectionLabel="-" label="#{messages[it.key]}" />
     			<s:convertEnum />
     		</h:selectOneMenu>
 		</s:decorate>
