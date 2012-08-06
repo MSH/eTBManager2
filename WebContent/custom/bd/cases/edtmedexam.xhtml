@@ -75,7 +75,9 @@
     		<s:convertEnum />
     	</h:selectOneMenu>
     	<div id="dotProvName">#{messages['MedicalExamination.DOTProviderName']}:<br/>
-    	<h:inputText value="#{medicalExaminationBd.dotProvName}" style=" width : 340px;" maxlength="100"/>
+    	<h:inputText value="#{medicalExaminationBd.dotProvName}" style=" width : 340px;" maxlength="100"/><br/>	
+    	#{messages['MedicalExamination.DOTProviderPhoneNumber']}:<br/>
+    	<h:inputText value="#{medicalExaminationBd.dotPhoneNumber}" style=" width : 340px;" maxlength="100"/><br/>
     	</div>
     </s:decorate>
     
