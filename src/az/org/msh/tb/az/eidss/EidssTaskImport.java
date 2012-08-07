@@ -420,6 +420,14 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	private void addCase(HumanCaseInfo EIDSSData, Date d) {
 		CaseInfo onecase=new CaseInfo();
 		String firstName = EIDSSData.getFirstName();
+		if (firstName==null){
+			addLog(EIDSSData.getCaseID()+" no name - rejected");
+			return;
+		}
+		if (firstName.equalsIgnoreCase("")){
+			addLog(EIDSSData.getCaseID()+"  no name- rejected");
+			return;
+		}
 		String lastName = EIDSSData.getLastName();
 		String fatherName="";
 		if (EIDSSData.getMiddleName()!=null) fatherName = EIDSSData.getMiddleName();
@@ -433,6 +441,14 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		}
 		if (EIDSSData.getDateOfBirth()!=null){
 		onecase.setDateOfBirth(ConvertToDate(EIDSSData.getDateOfBirth()));
+		}
+		if (EIDSSData.getPatientAgeType()==null){
+			addLog(firstName+lastName+"  no age type - rejected");
+			return;
+		}
+		if (EIDSSData.getPatientAge()>100){
+			addLog(firstName+lastName+"  wrong age - rejected");
+			return;
 		}
 		onecase.setAge(CalcAge(EIDSSData.getPatientAge(),EIDSSData.getPatientAgeType().getId().toString()));
 		String notification="";
