@@ -11,7 +11,9 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -53,32 +55,44 @@ public class EidssImportTask {
 	CaseImporting ci;
 	
 	public void execute() {
-		FileInputStream fstream;
-		InputStreamReader ow;
+		 final EntityManager entityManager;
+		String legacy="HAZBA00A120F4W";
+		String firstname="test";
+		String lastname="test";
+		String  middlename="test";
+		Calendar regDate=Calendar.getInstance();
+		Date rd=XMLToDate(regDate,20, "10042003");
+		entityManager = (EntityManager)Component.getInstance("entityManager");
+		//String s=getWorkspace().getId().toString();
+		String s="8";
 		try {
-			fstream = new FileInputStream("c:\\temp\\out.txt");
+			
+			List<TbCase> lstcases = entityManager.createQuery(" from TbCase c " +
+					"join fetch c.patient p " 
+					+" where c.legacyId = :id "
+					+ " and c.registrationDate= :rd "
+					+" and p.lastName = :ln " 
+					//+" and p.PATIENT.name = 'hertherht' " 
+					+" and p.middleName = :mn " 
+				//+ "and p.workspace.id = " + s)
+					+" and p.workspace.id = 8" )
+					.setParameter("id", legacy)
+					.setParameter("ln", lastname)
+					//.setParameter("fn", firstname)
+					.setParameter("mn", middlename)
+					.setParameter("rd", rd)
+					.getResultList();
 
-			try {
-				ow = new InputStreamReader(fstream, "UTF-8");
-				BufferedReader in = new BufferedReader(ow);
-				try {
-					String s = in.readLine();
-					while (s!= null){
-						testImport(s);
-						s = in.readLine();
-					}
-					ow.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (lstcases.size() != 0) {
+				System.out.println("find "+legacy);
 			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			else{
+				System.out.println("empty ");
+			}
+		} catch (Exception e) {
+		
 		}
+		
 		//test();	
 	
 	}
@@ -86,6 +100,25 @@ public class EidssImportTask {
 		String[] sa = s.split(";");
 		test(sa);
 		
+	}
+	private Date XMLToDate(Calendar regDate,int age, String ageType){
+		String Days = "10042001";
+		String Month = "10042002";
+		String Years = "10042003";
+
+		if (ageType.equalsIgnoreCase(Years)){
+			regDate.add(Calendar.YEAR,-age);
+
+		}
+		if (ageType.equalsIgnoreCase(Month)){
+			regDate.add(Calendar.MONTH,-age);
+		}
+		if (ageType.equalsIgnoreCase(Month)){
+			regDate.add(Calendar.DAY_OF_MONTH,-age);
+		}
+	
+		return regDate.getTime();
+
 	}
 	/*
 	public void execute1() {	
@@ -129,6 +162,9 @@ public class EidssImportTask {
 
 
 	private CaseInfo convertRecord(HumanCaseInfo EIDSSData) {
+		Days = 10042001,
+Month = 10042002,
+Years = 10042003
 		CaseInfo onecase=new CaseInfo();
 	
 		String firstName = EIDSSData.getFirstName();
@@ -194,42 +230,10 @@ public class EidssImportTask {
 	return caseInfoList;
 	}
 	
-	/* 
-	 * is case suitable for export to etb
-	 */
-	/*
-	private static boolean suitable(HumanCaseInfo cI,String patStateName, String caseStateName) {
-		   //alive
-			if (cI.getPatientState()!=null){
-				if (!cI.getPatientState().getName().equalsIgnoreCase(patStateName)) {
-					return false;
-				}
-			}
-			//Refused
-			if (cI.getCaseClassification()!=null){
-				if (cI.getCaseClassification().getName().equalsIgnoreCase(caseStateName)) {
-					return false;
-				}
-			}
-			return true;
-		}
 	
-	private Date ConvertToDate(XMLGregorianCalendar param){
-		Date tmpDate =new Date();
-		int d=1;
-		int m=0;
-		int y=1;
-		if ( param!=null) {
-			param.getDay();
-			m=param.getMonth();
-			y=param.getYear();
-			tmpDate.setDate(d);
-			tmpDate.setMonth(m-1);
-			tmpDate.setYear(y-1900);
-		}
-		return tmpDate;
-
-	}
+	
+	
+	
 */
 	private void test(String[] all){
 		entityManager = (EntityManager)Component.getInstance("entityManager");
@@ -291,6 +295,51 @@ public class EidssImportTask {
 		return (Workspace)entityManager.find(Workspace.class, 8);
 	}
 	
-	
+	private void ReadFromFile(){
+		FileInputStream fstream;
+		InputStreamReader ow;
+		try {
+			fstream = new FileInputStream("c:\\temp\\out.txt");
 
+			try {
+				ow = new InputStreamReader(fstream, "UTF-8");
+				BufferedReader in = new BufferedReader(ow);
+				try {
+					String s = in.readLine();
+					while (s!= null){
+						testImport(s);
+						s = in.readLine();
+					}
+					ow.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private Date CalcDateOfBirth(XMLGregorianCalendar regDate1,int age, String ageType){
+		String Days = "10042001";
+		String Month = "10042002";
+		String Years = "10042003";
+		Calendar regDate=regDate1.toGregorianCalendar();
+		if (ageType.equalsIgnoreCase(Years)){
+			regDate.set(Calendar.YEAR,regDate.get(Calendar.YEAR)-age);
+
+		}
+		if (ageType.equalsIgnoreCase(Month)){
+			regDate.set(Calendar.MONTH,regDate.get(Calendar.MONTH)-age);
+		}
+		if (ageType.equalsIgnoreCase(Month)){
+			regDate.set(Calendar.DAY_OF_MONTH,regDate.get(Calendar.DAY_OF_MONTH)-age);
+		}
+	
+		return regDate.getTime();
+	}
 }
