@@ -484,7 +484,13 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			infoForExport.add(onecase);
 		}else{
 			Integer age=onecase.getAge();
-			String toLog=lastName+" "+firstName+" "+fatherName+", age "+age.toString()+", diag "+DateFormat.getDateInstance().format(onecase.getFinalDiagnosisDate())+", "+onecase.getCaseID();
+			String ageStr;
+			if (age==0){
+				ageStr="XX";
+			}else {
+				ageStr=age.toString();
+			}
+			String toLog=lastName+" "+firstName+" "+fatherName+", age "+ageStr+", diag "+DateFormat.getDateInstance().format(onecase.getFinalDiagnosisDate())+", "+onecase.getCaseID();
 			String entDate=DateFormat.getDateInstance().format(d);
 			addLog(entDate+" - "+toLog);
 		
