@@ -60,6 +60,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	}
 	private List<CaseShortInfo> caseIds = new ArrayList<CaseShortInfo>();
 	private List<CaseShortInfo> caseIdsClean = new ArrayList<CaseShortInfo>();
+	private String refList;
 
 	@Override
 	protected void starting() {
@@ -120,22 +121,26 @@ public class EidssTaskImport extends AsyncTaskImpl {
 					sayAboutCheckList();
 					if((caseIdsClean.size()>0) && notCanceled()){
 						Iterator<CaseShortInfo> it = caseIdsClean.iterator();
-						String refList="";
+						 refList="";
 						while (it.hasNext()){
 							CaseShortInfo caseI = it.next();
 							//setStateMessage("load case " + caseIdsClean.indexOf(caseId) + " total to load " + caseIdsClean.size());
-
 							refList=refList+" "+loadCaseById(caseI);
 						}
-						Integer reject=caseIdsClean.size()-infoForExport.size();
-						if (reject>0) {
-							addLog(reject.toString() +" case(s) rejected: "+refList);
-						}
+						
 						
 					}
 					if ((infoForExport.size()> 0) && notCanceled()){
 						exportToDB();
 					}
+				}
+				Integer reject=caseIdsClean.size()-infoForExport.size();
+				if (reject>0) {
+					String slog="Totally "+reject.toString() +" case(s) rejected";
+					if (!refList.trim().equalsIgnoreCase("")) {
+						slog=slog+": "+refList;
+					}
+						addLog(slog);
 				}
 			} else{
 				addLog("Error unable to login EIDSS " + getLoader().getErrorMessage());
@@ -150,8 +155,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	private void exportToDB() {
 		Integer iw=0;
 		Integer ia=0;
-		String logw="";
-		String loga="";
+		
 		Iterator<CaseInfo> it=infoForExport.iterator();
 		while (it.hasNext()){
 			CaseInfo c = it.next();
@@ -163,7 +167,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			}
 			if (!result.equalsIgnoreCase("error")){
 				Integer age=c.getAge();
-				String toLog=c.getLastName()+" "+c.getFirstName()+" "+c.getMiddleName()+", age "+age.toString()+", date "+DateFormat.getDateInstance().format(c.getFinalDiagnosisDate())+", "+c.getCaseID();
+				String toLog=c.getLastName()+" "+c.getFirstName()+" "+c.getMiddleName()+", age "+age.toString()+", diag "+DateFormat.getDateInstance().format(c.getFinalDiagnosisDate())+", "+c.getCaseID();
 				String entDate=DateFormat.getDateInstance().format(c.getEnteringDate());
 				if (result.equalsIgnoreCase(CaseImporting.WRITED)){
 					iw=iw+1;
@@ -418,17 +422,21 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	 * @param info case info from the web service
 	 */
 	private void addCase(HumanCaseInfo EIDSSData, Date d) {
+		boolean noError=true;
 		CaseInfo onecase=new CaseInfo();
 		String firstName = EIDSSData.getFirstName();
 		if (firstName==null){
-			addLog(EIDSSData.getCaseID()+" no name - rejected");
-			return;
+			firstName="XXXXXXXX";
+			noError=false;
 		}
 		if (firstName.equalsIgnoreCase("")){
-			addLog(EIDSSData.getCaseID()+"  no name- rejected");
-			return;
+			firstName="XXXXXXXX";
+			noError=false;
 		}
 		String lastName = EIDSSData.getLastName();
+		if (lastName.startsWith("*")){
+			lastName=lastName.substring(1);
+		}
 		String fatherName="";
 		if (EIDSSData.getMiddleName()!=null) fatherName = EIDSSData.getMiddleName();
 		onecase.setLastName(lastName);
@@ -443,14 +451,16 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		onecase.setDateOfBirth(ConvertToDate(EIDSSData.getDateOfBirth()));
 		}
 		if (EIDSSData.getPatientAgeType()==null){
-			addLog(firstName+lastName+"  no age type - rejected");
-			return;
+			onecase.setAge(0);
+			noError=false;
+		} else {
+			onecase.setAge(CalcAge(EIDSSData.getPatientAge(),EIDSSData.getPatientAgeType().getId().toString()));
+			
 		}
 		if (EIDSSData.getPatientAge()>100){
-			addLog(firstName+lastName+"  wrong age - rejected");
-			return;
+			onecase.setAge(EIDSSData.getPatientAge());
+			noError=false;
 		}
-		onecase.setAge(CalcAge(EIDSSData.getPatientAge(),EIDSSData.getPatientAgeType().getId().toString()));
 		String notification="";
 		if (EIDSSData.getNotificationSentBy()!=null) {
 			notification=EIDSSData.getNotificationSentBy().getName();
@@ -470,7 +480,15 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		onecase.setAdditionalComment(notification+" / "+addInfo);	
 		onecase.setCaseID(EIDSSData.getCaseID().toString());	
 		onecase.setEnteringDate(d);
-		infoForExport.add(onecase);
+		if (noError){
+			infoForExport.add(onecase);
+		}else{
+			Integer age=onecase.getAge();
+			String toLog=lastName+" "+firstName+" "+fatherName+", age "+age.toString()+", diag "+DateFormat.getDateInstance().format(onecase.getFinalDiagnosisDate())+", "+onecase.getCaseID();
+			String entDate=DateFormat.getDateInstance().format(d);
+			addLog(entDate+" - "+toLog);
+		
+		}
 	}
 	
 	private Date ConvertToDate(XMLGregorianCalendar param){
