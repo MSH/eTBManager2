@@ -142,7 +142,7 @@
 			<td>
 				<s:decorate template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['pt_BR.ClinicalEvolution']}:</ui:define>
-					<h:selectOneMenu value="#{medicalExaminationBR.clinicalEvolution}" required="true">
+					<h:selectOneMenu value="#{medicalExamination.clinicalEvolution}" required="true">
 						<s:selectItems var="s" value="#{globalLists_br.clinicalEvolutions}" label="#{messages[s.key]}" noSelectionLabel="-" />
 						<s:convertEnum />
 					</h:selectOneMenu>
@@ -151,7 +151,7 @@
 		    	<s:decorate template="/layout/edit.xhtml" >
 		    		<ui:define name="label">#{messages['MedicalExamination.weight']}: <s:span style="color:red;">*</s:span></ui:define>
 		    		<div id="edtweight">
-		    		<h:inputText value="#{medicalExaminationBR.weight}" converter="localeDoubleConverter" 
+		    		<h:inputText value="#{medicalExamination.weight}" converter="localeDoubleConverter" 
 		    			onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');" 
 		    			onkeyup="updateBMI(this, event);"
 		    			style="width:80px;" >
@@ -557,7 +557,7 @@
 				<s:decorate id="templatecbsuptreatment" template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['pt_BR.supervisedTreatment']}:</ui:define>
 					<ui:param name="labelstyle" value="width:200px" />
-					<h:selectOneMenu id="cbsuptreatment" forceId="true" value="#{medicalExaminationBR.supervisedTreatment}" required="true">
+					<h:selectOneMenu id="cbsuptreatment" forceId="true" value="#{medicalExamination.supervisedTreatment}" required="true">
 						<s:selectItems var="s" value="#{globalLists.yesNoTypeList}" label="#{messages[s.key]}" noSelectionLabel="-" />
 						<s:convertEnum />
 					</h:selectOneMenu>
@@ -568,7 +568,7 @@
 				<s:decorate id="templatesupervisionunit" template="/layout/edit.xhtml">
 					<ui:param name="labelstyle" value="width:160px" />
 					<ui:define name="label">#{messages['pt_BR.supervisionUnit']}:</ui:define>
-					<h:inputText id="supervisionunit" value="#{medicalExaminationBR.supervisionUnitName}" style="width:300px;text-transform:uppercase;" maxlength="100" />
+					<h:inputText id="supervisionunit" value="#{medicalExamination.supervisionUnitName}" style="width:300px;text-transform:uppercase;" maxlength="100" />
 				</s:decorate>
 				</div>			
 			</td>
@@ -692,7 +692,7 @@
 	<h1 style="font-size:16px;coloe:#E47911;margin-bottom:0px">Outras Informações</h1>
 	
     <s:decorate template="/layout/edit.xhtml">
-    	<h:inputTextarea value="#{medicalExaminationBR.comments}" style=" width : 974px;height:80px;" />
+    	<h:inputTextarea value="#{medicalExamination.comments}" style=" width : 974px;height:80px;" />
     </s:decorate>
     <table>
     	<tr>
@@ -701,7 +701,7 @@
 			    	<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
 			    	<ui:param name="required" value="true" /> 
 			    	<ui:param name="future" value="true" /> 
-			    	<ui:param name="datefield" value="#{medicalExaminationBR.date}" /> 
+			    	<ui:param name="datefield" value="#{medicalExamination.date}" /> 
 			    	<ui:param name="edtid" value="date" /> 
 			    </s:decorate>    		
     		</td>
@@ -709,7 +709,7 @@
 			    <s:decorate template="/layout/dateedit.xhtml" >
 			    	<ui:define name="label">#{messages['MedicalExaminationBR.nextAppointment']}:</ui:define>
 			    	<ui:param name="required" value="true" /> 
-			    	<ui:param name="datefield" value="#{medicalExaminationBR.nextAppointment}" /> 
+			    	<ui:param name="datefield" value="#{medicalExamination.nextAppointment}" /> 
 			    </s:decorate>    		
     		</td>    		
     	</tr>
@@ -717,7 +717,7 @@
     
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
-    	<h:inputText value="#{medicalExaminationBR.responsible}"
+    	<h:inputText value="#{medicalExamination.responsible}"
     		required="true" 
     		style=" width : 340px;text-transform:uppercase;" 
     		maxlength="100"/>
@@ -725,7 +725,7 @@
 
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.positionResponsible']}:</ui:define>
-    	<h:inputText value="#{medicalExaminationBR.positionResponsible}"
+    	<h:inputText value="#{medicalExamination.positionResponsible}"
     		required="true" 
     		style=" width : 340px;text-transform:uppercase;" 
     		maxlength="100"/>

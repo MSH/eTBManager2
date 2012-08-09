@@ -228,8 +228,8 @@ public class FollowUpBRHome {
 			}
 		}
 		
-		if(!caseDataBRHome.validateAndPrepare())
-			validationError = true;
+//		if(!caseDataBRHome.validateAndPrepare())
+//			validationError = true;
 			
 		if(validationError){
 			return "validationError";

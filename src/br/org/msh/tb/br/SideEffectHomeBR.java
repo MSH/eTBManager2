@@ -5,14 +5,11 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.jboss.seam.Component;
-import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.SideEffectHome;
-import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
@@ -20,17 +17,9 @@ import org.msh.tb.misc.FieldsQuery;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
 
-import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
-
 
 @Name("sideEffectBRHome")
 public class SideEffectHomeBR {
-
-	/**
-	 * 
-	 */
-	
-	private static final long serialVersionUID = 1L;
 
 	@In(create=true) SideEffectHome sideEffectHome;
 	@In(required=true) private CaseHome caseHome;
@@ -54,8 +43,6 @@ public class SideEffectHomeBR {
 	 */
 	protected void createItems() {
 		List<FieldValue> sideEffects = fieldsQuery.getSideEffects();
-		
-		TbCase tbcase = caseHome.getInstance();
 		
 		items = new ArrayList<ItemSelect<CaseSideEffect>>();
 		

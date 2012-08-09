@@ -2,12 +2,34 @@ package org.msh.utils;
 
 import java.util.StringTokenizer;
 
+import org.apache.commons.beanutils.PropertyUtils;
+
 public class TextUtils {
+
+	/**
+	 * Set the string property of a bean to upper case
+	 * @param bean
+	 * @param property
+	 */
+	public static void setPropertyUpperCase(Object bean, String propName) {
+		try {
+			String value = (String)PropertyUtils.getProperty(bean, propName);
+			if (value != null) {
+				value = value.toUpperCase();
+				PropertyUtils.setProperty(bean, propName, value);
+			}
+			
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 
 	public interface TokenInterpreter {
 		String translate(String token);
 	}
-	
+
+
 	/**
 	 * Recognizes all occurrences of delimited el expressions #{token} and call {@link TokenInterpreter}
 	 * to translate token

@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -53,6 +52,7 @@ import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.misc.FieldsOptions;
 import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.utils.TextUtils;
 
 @Name("caseDataBRHome")
 @Scope(ScopeType.CONVERSATION)
@@ -179,24 +179,6 @@ public class CaseDataBRHome {
 	}
 
 
-	/**
-	 * Change the string property to upper case
-	 * @param obj
-	 * @param propName
-	 */
-	protected void setPropertyUpperCase(Object obj, String propName) {
-		try {
-			String value = (String)PropertyUtils.getProperty(obj, propName);
-			if (value != null) {
-				value = value.toUpperCase();
-				PropertyUtils.setProperty(obj, propName, value);
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Error reading property " + propName + " of class " + obj.getClass().getCanonicalName());
-		}
-	}
 	
 	/**
 	 * Save an existing TB or MDR-TB case of the Brazilian version
@@ -227,32 +209,32 @@ public class CaseDataBRHome {
 	 */
 	protected void adjustFields() {
 		TbCaseBR tbcase = (TbCaseBR)caseHome.getInstance();
-		setPropertyUpperCase(tbcase.getNotifAddress(), "address");
-		setPropertyUpperCase(tbcase.getNotifAddress(), "complement");
-		setPropertyUpperCase(tbcase.getNotifAddress(), "zipCode");
+		TextUtils.setPropertyUpperCase(tbcase.getNotifAddress(), "address");
+		TextUtils.setPropertyUpperCase(tbcase.getNotifAddress(), "complement");
+		TextUtils.setPropertyUpperCase(tbcase.getNotifAddress(), "zipCode");
 
-		setPropertyUpperCase(tbcase.getCurrentAddress(), "address");
-		setPropertyUpperCase(tbcase.getCurrentAddress(), "complement");
-		setPropertyUpperCase(tbcase.getCurrentAddress(), "zipCode");
+		TextUtils.setPropertyUpperCase(tbcase.getCurrentAddress(), "address");
+		TextUtils.setPropertyUpperCase(tbcase.getCurrentAddress(), "complement");
+		TextUtils.setPropertyUpperCase(tbcase.getCurrentAddress(), "zipCode");
 		
 		// set patient fields to upper case
 		Patient p = tbcase.getPatient();
-		setPropertyUpperCase(p, "name");
-		setPropertyUpperCase(p, "middleName");
-		setPropertyUpperCase(p, "lastName");
-		setPropertyUpperCase(p, "motherName");
-		setPropertyUpperCase(p, "securityNumber");
-		setPropertyUpperCase(p, "motherName");
+		TextUtils.setPropertyUpperCase(p, "name");
+		TextUtils.setPropertyUpperCase(p, "middleName");
+		TextUtils.setPropertyUpperCase(p, "lastName");
+		TextUtils.setPropertyUpperCase(p, "motherName");
+		TextUtils.setPropertyUpperCase(p, "securityNumber");
+		TextUtils.setPropertyUpperCase(p, "motherName");
 		
-		setPropertyUpperCase(tbcase, "numSinan");
-		setPropertyUpperCase(tbcase, "usOrigem");
-		setPropertyUpperCase(tbcase, "country");
-		setPropertyUpperCase(tbcase, "currAddressNumber");
-		setPropertyUpperCase(tbcase, "notifAddressNumber");
-		setPropertyUpperCase(tbcase, "prefixMobile");
-		setPropertyUpperCase(tbcase, "prefixPhone");
-		setPropertyUpperCase(tbcase, "notifDistrict");
-		setPropertyUpperCase(tbcase, "currDistrict");
+		TextUtils.setPropertyUpperCase(tbcase, "numSinan");
+		TextUtils.setPropertyUpperCase(tbcase, "usOrigem");
+		TextUtils.setPropertyUpperCase(tbcase, "country");
+		TextUtils.setPropertyUpperCase(tbcase, "currAddressNumber");
+		TextUtils.setPropertyUpperCase(tbcase, "notifAddressNumber");
+		TextUtils.setPropertyUpperCase(tbcase, "prefixMobile");
+		TextUtils.setPropertyUpperCase(tbcase, "prefixPhone");
+		TextUtils.setPropertyUpperCase(tbcase, "notifDistrict");
+		TextUtils.setPropertyUpperCase(tbcase, "currDistrict");
 		
 		PatientType tp = tbcase.getPatientType();
 		if (tp != PatientType.SCHEMA_CHANGED)
@@ -267,23 +249,23 @@ public class CaseDataBRHome {
 			tbcase.setPregnancePeriod(null);
 	}
 
-	
-	/**
+/*	
+	*//**
 	 * Adjust values of the medical examination fields
-	 */
+	 *//*
 	protected void adjustMedicalExaminationFields() {
 		if (medicalExaminationBRHome == null)
 			return;
 
 		MedicalExamination medExam = medicalExaminationBRHome.getInstance();
-		setPropertyUpperCase(medExam, "positionResponsible");
-		setPropertyUpperCase(medExam, "responsible");
+		TextUtils.setPropertyUpperCase(medExam, "positionResponsible");
+		TextUtils.setPropertyUpperCase(medExam, "responsible");
 		if (!YesNoType.YES.equals(medExam.getSupervisedTreatment()))
 			medExam.setSupervisionUnitName(null);
-		setPropertyUpperCase(medExam, "supervisionUnitName");		
+		TextUtils.setPropertyUpperCase(medExam, "supervisionUnitName");		
 	}
-
-	public boolean validateAndPrepare(){
+*/
+/*	public boolean validateAndPrepare(){
 		MedicalExamination medInst = medicalExaminationBRHome.getInstance();
 		boolean validForm = true;
 		
@@ -307,19 +289,19 @@ public class CaseDataBRHome {
 		
 		return validForm;
 	}
-
+*/
 	/**
 	 * Save medical examination
 	 * @return
 	 */
 	public String saveMedicalExamination() {
-		if (medicalExaminationBRHome == null || !validateAndPrepare())
+		if (medicalExaminationBRHome == null || !medicalExaminationBRHome.validate())
 			return "error";
 		
-		adjustMedicalExaminationFields();
+//		adjustMedicalExaminationFields();
 		if(auselection != null)
 			caseHome.getTbCase().getCurrentAddress().setAdminUnit(auselection.getSelectedUnit());
-		medicalExaminationBRHome.setDisplayMessage(false);
+		medicalExaminationBRHome.getHome().setDisplayMessage(false);
 		return medicalExaminationBRHome.persist();
 	}
 

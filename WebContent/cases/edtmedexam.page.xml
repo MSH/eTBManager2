@@ -4,6 +4,7 @@
 
 	<restrict>#{userSession.canEditCases}</restrict>
 
+	<action execute="#{medicalExaminationHome.initialize}" />
 	<begin-conversation join="true" />
 
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />

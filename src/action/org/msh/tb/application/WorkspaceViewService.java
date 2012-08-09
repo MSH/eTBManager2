@@ -188,8 +188,7 @@ public class WorkspaceViewService {
 	        os.close();
 	        fc.responseComplete();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 

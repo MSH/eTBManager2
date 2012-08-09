@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import org.msh.tb.br.entities.enums.XRayContactBR;
-import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbContact;
 import org.msh.tb.entities.enums.CultureResult;

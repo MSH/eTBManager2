@@ -408,7 +408,7 @@ function genderChange(cb) {
     	<s:decorate template="/layout/edit.xhtml" >
     		<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
     		<div id="edtweight">
-    		<h:inputText value="#{medicalExaminationBRHome.instance.weight}" required="true" 
+    		<h:inputText value="#{medicalExaminationHome.instance.weight}" required="true" 
     			onkeypress="return numbersOnly(this,event);" onkeyup="updateBMI(this, event);"
     			style="width:80px;" />#{messages['MedicalExamination.weight.unit']}
     		</div>
@@ -419,7 +419,7 @@ function genderChange(cb) {
     	<s:decorate template="/layout/edit.xhtml" >
     		<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
     		<span id="edtheight">
-    		<h:inputText value="#{medicalExaminationBRHome.instance.height}" style="width:80px;"
+    		<h:inputText value="#{medicalExaminationHome.instance.height}" style="width:80px;"
     			onkeypress="return numbersOnly(this,event);" onkeyup="updateBMI(this, event);"/>
     		#{messages['MedicalExamination.height.unit']}
     		</span>
