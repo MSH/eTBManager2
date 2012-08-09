@@ -209,7 +209,7 @@ public class TbCase implements Serializable{
 		@AssociationOverride(name="adminUnit", joinColumns=@JoinColumn(name="NOTIF_ADMINUNIT_ID"))
 	})
 	@PropertyLog(key="cases.details.addressnotif", operations={Operation.NEW, Operation.EDIT})
-	private Address notifAddress = new Address();
+	private Address notifAddress;
 	
 	@Embedded
 	@AttributeOverrides({
@@ -224,7 +224,7 @@ public class TbCase implements Serializable{
 		@AssociationOverride(name="adminUnit", joinColumns=@JoinColumn(name="CURR_ADMINUNIT_ID"))
 	})
 	@PropertyLog(key="cases.details.addresscurr")
-	private Address currentAddress = new Address();
+	private Address currentAddress;
 	
 	@Column(length=50)
 	private String phoneNumber;
@@ -638,6 +638,8 @@ public class TbCase implements Serializable{
 
 
 	public Address getNotifAddress() {
+		if (notifAddress == null)
+			notifAddress = new Address();
 		return notifAddress;
 	}
 
@@ -648,6 +650,8 @@ public class TbCase implements Serializable{
 
 
 	public Address getCurrentAddress() {
+		if (currentAddress == null)
+			currentAddress = new Address();
 		return currentAddress;
 	}
 
