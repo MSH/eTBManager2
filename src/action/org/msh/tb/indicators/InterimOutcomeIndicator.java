@@ -98,6 +98,10 @@ public class InterimOutcomeIndicator extends Indicator2D {
 		if ((dtCult == null) && (dtMicro == null)) {
 			addValue(unkCol, row, 1F);
 		}
+		if (state == CaseState.TRANSFERRED_OUT) {
+			addValue(transCol, row, 1F);
+			return;
+		}
 		else {
 			boolean negative = false;
 			
