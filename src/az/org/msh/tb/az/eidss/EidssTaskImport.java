@@ -105,10 +105,10 @@ public class EidssTaskImport extends AsyncTaskImpl {
 					addLog("Diagnosis: "+config.getDiagnosis());
 					addLog("States to reject: "+config.getCaseStates());
 					//Calendar c1=Calendar.getInstance();
-					addLog("EIDSS date: from "+ DateFormat.getDateInstance().format(config.getFrom())+
+					addLog("EIDSS entering date(s) to import: from "+ DateFormat.getDateInstance().format(config.getFrom())+
 							" to "+DateFormat.getDateInstance().format(config.getToDate()));
 					boolean success =loadCasesList();
-					sayAboutLoad(success);
+				//	sayAboutLoad(success);
 					if((caseIds.size()>0) && notCanceled()){
 						Iterator<CaseShortInfo> it = caseIds.iterator();
 						while (it.hasNext()){
@@ -118,7 +118,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 							}
 						}
 					}
-					sayAboutCheckList();
+					//sayAboutCheckList();
 					if((caseIdsClean.size()>0) && notCanceled()){
 						Iterator<CaseShortInfo> it = caseIdsClean.iterator();
 						 refList="";
@@ -133,7 +133,10 @@ public class EidssTaskImport extends AsyncTaskImpl {
 					if ((infoForExport.size()> 0) && notCanceled()){
 						exportToDB();
 					}
+					sayAboutLoad(success);
+					sayAboutCheckList();
 				}
+			
 				Integer reject=caseIdsClean.size()-infoForExport.size();
 				if (reject>0) {
 					String slog="Totally "+reject.toString() +" case(s) rejected";
@@ -166,9 +169,19 @@ public class EidssTaskImport extends AsyncTaskImpl {
 				 result=ci.importRecords(c);
 			}
 			if (!result.equalsIgnoreCase("error")){
+				String ad=c.getAdditionalComment();
+				int pos=ad.indexOf("/");
+				if (pos <14){
+					ad=ad.substring(0, pos);
+				} else {
+					ad=ad.substring(0, 14);
+				}
 				Integer age=c.getAge();
-				String toLog=c.getLastName()+" "+c.getFirstName()+" "+c.getMiddleName()+", age "+age.toString()+", diag "+DateFormat.getDateInstance().format(c.getFinalDiagnosisDate())+", "+c.getCaseID();
+				String toLog=c.getLastName()+" "+c.getFirstName()+" "+c.getMiddleName()+
+				", age "+age.toString()+", diag "+DateFormat.getDateInstance().format(c.getFinalDiagnosisDate())+", "+ad+" "+c.getCaseID();
 				String entDate=DateFormat.getDateInstance().format(c.getEnteringDate());
+				
+				
 				if (result.equalsIgnoreCase(CaseImporting.WRITED)){
 					iw=iw+1;
 					addLog(entDate+" + "+toLog);
@@ -207,7 +220,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	private void sayAboutLoad(boolean success) {
 		String mess = "";
 		if (caseIds.size() > 0){
-			mess = "total found " + caseIds.size() + " cases in all states";
+			mess =caseIds.size() + " case(s) totally found  in all states";
 			if (!success)
 				mess = mess + " but some errors occured, see above";
 		}else{
@@ -220,7 +233,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	}
 	private void sayAboutCheckList(){
 		String mess = "";
-		mess = "not found in etb " + caseIdsClean.size() + " cases ";
+		mess = caseIdsClean.size() + " case(s) not found in etb";
 		addLog(mess);
 	}
 
@@ -423,14 +436,15 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	 */
 	private void addCase(HumanCaseInfo EIDSSData, Date d) {
 		boolean noError=true;
+		String diag="";
 		CaseInfo onecase=new CaseInfo();
 		String firstName = EIDSSData.getFirstName();
 		if (firstName==null){
-			firstName="XXXXXXXX";
+			firstName="XXXXX";
 			noError=false;
 		}
 		if (firstName.equalsIgnoreCase("")){
-			firstName="XXXXXXXX";
+			firstName="XXXXX";
 			noError=false;
 		}
 		String lastName = EIDSSData.getLastName();
@@ -466,7 +480,12 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			notification=EIDSSData.getNotificationSentBy().getName();
 		}
 		AddressInfo addr=EIDSSData.getCurrentResidence();
+		if (EIDSSData.getTentativeDiagnosisDate()!=null) {
 		onecase.setFinalDiagnosisDate(ConvertToDate(EIDSSData.getTentativeDiagnosisDate()));
+		}else {
+			noError=false;
+			diag="XXXXXXX";
+		}
 		String country="";
 		if (addr.getCountry()!=null)country=addr.getCountry().getName()+", ";
 		String region="";
@@ -480,17 +499,21 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		onecase.setAdditionalComment(notification+" / "+addInfo);	
 		onecase.setCaseID(EIDSSData.getCaseID().toString());	
 		onecase.setEnteringDate(d);
+		//addLog(lastName+" "+firstName+" "+fatherName);
 		if (noError){
 			infoForExport.add(onecase);
 		}else{
 			Integer age=onecase.getAge();
 			String ageStr;
+			if (diag.equalsIgnoreCase("")){
+				diag=DateFormat.getDateInstance().format(onecase.getFinalDiagnosisDate());
+			}
 			if (age==0){
 				ageStr="XX";
 			}else {
 				ageStr=age.toString();
 			}
-			String toLog=lastName+" "+firstName+" "+fatherName+", age "+ageStr+", diag "+DateFormat.getDateInstance().format(onecase.getFinalDiagnosisDate())+", "+onecase.getCaseID();
+			String toLog=lastName+" "+firstName+" "+fatherName+", age "+ageStr+", diag "+diag+", "+notification.substring(0, 14)+" "+onecase.getCaseID();
 			String entDate=DateFormat.getDateInstance().format(d);
 			addLog(entDate+" - "+toLog);
 		
