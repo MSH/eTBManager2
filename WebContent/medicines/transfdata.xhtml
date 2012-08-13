@@ -24,12 +24,12 @@
 
 
 <ui:define name="left">
-	<h:form>
+	<h:form class="vertical-menu">
 	<s:link view="/medicines/transfrec.xhtml" value="#{messages['meds.transfer.receive']}" rendered="#{(transferHome.canReceive)}">
 		<f:param name="id" value="#{transfer.id}" />
 	</s:link>
 
-	<s:link view="/medicines/transfcancel.xhtml" value="#{messages['meds.transfer.cancel']}" rendered="#{transferHome.canCancel}" >
+	<s:link view="/medicines/transfcancel.xhtml" value="#{messages['meds.transfer.cancel']}" rendered="#{transferHome.canCancel} and #{transfer.status!='DONE'}" >
 		<f:param name="id" value="#{transfer.id}" />
 	</s:link>
 	</h:form>
