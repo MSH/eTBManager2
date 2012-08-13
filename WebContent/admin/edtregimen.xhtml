@@ -179,7 +179,7 @@
 
    
 <s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
-	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
+	<ui:param name="title" value="#{messages['form.selmeds']}" />
    	<a:commandLink action="#{regimenHome.addMedicines}" styleClass="button"
    		onclick="if (!disableButton(this)) return false;"  
    		oncomplete="hideMedicinesDlg();"  reRender="main:tab1" rendered="#{regimenHome.phase=='INTENSIVE'}">
