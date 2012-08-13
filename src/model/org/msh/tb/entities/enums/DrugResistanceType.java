@@ -7,7 +7,11 @@ public enum DrugResistanceType {
 	MULTIDRUG_RESISTANCE,
 	EXTENSIVEDRUG_RESISTANCE,
 	RIFAMPICIN_MONO_RESISTANCE,
-	ISONIAZID_MONO_RESISTANCE;
+	ISONIAZID_MONO_RESISTANCE,
+	//Bangladesh
+	UNKNOWN,
+	;
+	
 
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
