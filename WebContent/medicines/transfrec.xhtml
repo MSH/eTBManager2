@@ -10,6 +10,7 @@
       template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['meds.transfer.detail']}" />
+<ui:param name="title2" value="#{messages['meds.transfer.receive']}" />
 
 <ui:param name="topmenu" value="1" />
 <ui:param name="waitdlg" value="1" />
@@ -23,6 +24,7 @@
 
 
 <ui:define name="content">
+<h1>#{title2}</h1>
 <h:form id="main" styleClass="form1">
 	<div class="form-content">
     <table width="750px" class="tabela3" style="margin-bottom:10px" cellpadding="8">
