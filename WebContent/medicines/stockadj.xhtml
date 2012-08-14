@@ -207,7 +207,7 @@ function initBatchDeleting(batchId) {
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['meds.movs.adjreason']}:</ui:define>
-    	<h:inputText value="#{stockAdjustmentHome.reasonAdjustment}" size="250" style="width:250px"/>
+    	<h:inputText value="#{stockAdjustmentHome.reasonAdjustment}" size="250" style="width:250px" required = "true"/>
     </s:decorate>
 
 	<hr/>
