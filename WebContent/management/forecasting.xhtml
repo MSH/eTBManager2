@@ -81,7 +81,7 @@
 
 
 <rich:tabPanel id="tabPanelForecasting" width="100%" switchType="client">
-<rich:tab id="tabOptions" label="#{messages['form.options']}">
+<rich:tab id="tabOptions" label="#{messages['form.parameters']}">
 
 <table width="100%" style="border-collapse:collapse;">
 <tr><td>
@@ -130,7 +130,7 @@
 		oncomplete="showDatesDlg(); return false;">
 		<span>#{messages['form.edit']}</span>
 	</a:commandLink>
-	<h2>#{messages['form.otheroptions']}</h2>
+	<h2>#{messages['form.otherparameters']}</h2>
 
 	<s:decorate template="/layout/display.xhtml" >
 		<ui:define name="label">#{messages['manag.forecast.refdate']}:</ui:define>
