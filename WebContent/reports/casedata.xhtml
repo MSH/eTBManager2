@@ -10,7 +10,7 @@
       template="/layout/report.xhtml">
 
 <ui:param name="title" value="#{messages['cases.details']} - #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect] : messages[tbcase.classification.key]}" />
-<ui:param name="unit" value="#{caseHome.instance.treatmentUnit}" />
+<ui:param name="unit" value="#{caseHome.instance.ownerUnit}" />
 <ui:param name="labelstyle" value="width:220px" />
 
 <ui:define name="content">

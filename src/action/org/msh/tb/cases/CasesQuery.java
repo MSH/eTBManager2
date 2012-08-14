@@ -71,10 +71,10 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	"exists(select t.id from c.tags t where t.id = #{caseFilters.tagid})"};
 
 	private static final String notifCond = "(nu.id = #{caseFilters.tbunitselection.tbunit.id})";
-	private static final String treatCond = "c.treatmentUnit.id =  #{caseFilters.tbunitselection.tbunit.id}";
+	private static final String treatCond = "c.ownerUnit.id =  #{caseFilters.tbunitselection.tbunit.id}";
 
 	private static final String notifRegCond = "(nu.adminUnit.code like #{caseFilters.tbAdminUnitLike})";
-	private static final String treatRegCond = "c.treatmentUnit.adminUnit.code like #{caseFilters.tbAdminUnitLike}";
+	private static final String treatRegCond = "c.ownerUnit.adminUnit.code like #{caseFilters.tbAdminUnitLike}";
 	
 	private static final String prescribedMedicineCond = "exists(SELECT cs.id, pm.id " + 
 															"FROM " + ETB.getWsClassName(TbCase.class) + " cs " +
@@ -274,12 +274,12 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			
 			// ON TREATMENT
 			case 600: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + 
-							 " and c.treatmentUnit.id = " + caseFilters.getUnitId();
+							 " and c.ownerUnit.id = " + caseFilters.getUnitId();
 			break;
 			
 			// ON TREATMENT - TRANSFERIN
 			case 601: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + 
-							 " and c.treatmentUnit.id = " + caseFilters.getUnitId() +
+							 " and c.ownerUnit.id = " + caseFilters.getUnitId() +
 							 " and exists(select id from TreatmentHealthUnit t" +
 							 	" where t.period.iniDate > c.treatmentPeriod.iniDate and period.endDate = c.treatmentPeriod.endDate and c.state= " + CaseState.ONTREATMENT.ordinal() +
 							 	" and transferring=false and tbunit.id = "+ caseFilters.getUnitId() +
@@ -299,7 +299,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			case 603: cond = " exists(select tc.id " +
 					         "from MedicalExamination med " + 
 					         "inner join med.tbcase tc " +
-							 "inner join tc.treatmentUnit as tu " +
+							 "inner join tc.ownerUnit as tu " +
 							 "inner join tu.adminUnit as a " +
 							 "where tu.workspace.id = " + defaultWorkspace.getId().toString() + 
 							 " and med.nextAppointment is not null and med.nextAppointment + 15 < current_date " +

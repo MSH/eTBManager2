@@ -200,7 +200,7 @@
     		<ui:param name="field" value="#{tbcase.microbacteriose}" />
 	    </s:decorate>
 
-	     <s:decorate template="/layout/display.xhtml">
+	     <s:decorate template="/layout/display.xhtml" rendered="#{tbcase.classification=='DRTB'}">
 			<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
 			<h:outputText value="#{messages[tbcase.drugResistanceType.key]}" rendered="#{not empty tbcase.drugResistanceType}"/>
 			<h:outputText value="Cadastre o teste de sensibilidade para que o sistema possa identificar o #{messages['DrugResistanceType']}." rendered="#{empty tbcase.drugResistanceType}"/>

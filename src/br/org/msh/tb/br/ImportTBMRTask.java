@@ -160,7 +160,7 @@ public class ImportTBMRTask extends DbBatchTask {
 		try {
 			AdministrativeUnit ufobj = loadUF(uf); 
 			entityManager
-				.createQuery("delete from TbCaseBR c where c.treatmentUnit.id in (select aux.id from Tbunit aux where aux.adminUnit.code like :code and aux.workspace.id = :id)")
+				.createQuery("delete from TbCaseBR c where c.ownerUnit.id in (select aux.id from Tbunit aux where aux.adminUnit.code like :code and aux.workspace.id = :id)")
 				.setParameter("code", ufobj.getCode() + "%")
 				.setParameter("id", getWorkspace().getId())
 				.executeUpdate();
@@ -323,7 +323,7 @@ public class ImportTBMRTask extends DbBatchTask {
 
 		refDate = rsCases.getDate("DATA_NOTIFICACAO");
 		tbcase.setRegistrationDate(refDate);
-		tbcase.setDiagnosisDate(refDate);
+		tbcase.setDiagnosisDate(refDate); //TODO data da primeira baciloscopia positiva; -  se baciloscopia negativa, a data da primeira consulta.
 		tbcase.setAge(DateUtils.yearsBetween(tbcase.getRegistrationDate(), p.getBirthDate()));
 		tbcase.setCaseNumber(rsCases.getInt("NUM_CASO"));
 		if (tbcase.getCaseNumber() == 0)
@@ -355,7 +355,7 @@ public class ImportTBMRTask extends DbBatchTask {
 		
 		Tbunit unit = loadTBUnit(rsCases.getInt("COD_US_TRATAMENTO"));
 		tbcase.setNotificationUnit(unit);
-		tbcase.setTreatmentUnit(unit);
+		tbcase.setOwnerUnit(unit);
 		
 		tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
 		

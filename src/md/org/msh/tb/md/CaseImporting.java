@@ -154,7 +154,7 @@ public abstract class CaseImporting extends ImportingBase{
 /*		Period treatPeriod = new Period();
 		treatPeriod.setIniDate(beginTreatmentDate);
 		tbcase.setTreatmentPeriod(treatPeriod);
-		tbcase.setTreatmentUnit(treatmentUnit);
+		tbcase.setOwnerUnit(treatmentUnit);
 */
 		tbcase.setValidationState(ValidationState.VALIDATED);
 		tbcase.setRegistrationCode(personalNumber);
@@ -267,7 +267,7 @@ public abstract class CaseImporting extends ImportingBase{
 				hu.setTransferring(false);
 				tbcase.getHealthUnits().add(hu);
 				tbcase.getTreatmentPeriod().set(hu.getPeriod());
-				tbcase.setTreatmentUnit(treatmentUnit);
+				tbcase.setOwnerUnit(treatmentUnit);
 			}
 			else {
 				// Update data about current treatment

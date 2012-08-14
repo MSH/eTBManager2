@@ -19,6 +19,7 @@ import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchMovement;
 import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.Source;
@@ -603,12 +604,12 @@ public class MovementHome {
 	}
 
 	public Movement prepareNewAdjustment(Date date, Tbunit unit, Source source, Medicine medicine, 
-			Map<Batch, Integer> batches, FieldValue adjustType, String comment){
+			Map<Batch, Integer> batches, FieldValueComponent adjustReason){
 		
-		Movement m = prepareNewMovement(date, unit, source, medicine, MovementType.ADJUSTMENT, batches, comment);
+		Movement m = prepareNewMovement(date, unit, source, medicine, MovementType.ADJUSTMENT, batches, adjustReason.getComplement());
 		
 		if(m!=null)
-			m.setAdjustmentType(adjustType);
+			m.setAdjustmentType(adjustReason.getValue());
 		
 		return m;
 	}

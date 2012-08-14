@@ -11,6 +11,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
+import org.jboss.seam.international.StatusMessage.Severity;
 import org.msh.tb.cases.treatment.TreatmentHome;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseClassification;
@@ -95,6 +96,11 @@ public class CaseCloseHome extends Controller{
 		Date dt = tbcase.getDiagnosisDate();
 		if ((dt != null) && (date.before(dt))) {
 			facesMessages.addFromResourceBundle("cases.close.msg1");
+			return false;
+		}
+		
+		if(this.date.after(tbcase.getTreatmentPeriod().getEndDate())){
+			facesMessages.addFromResourceBundle("cases.close.msg2");
 			return false;
 		}
 		

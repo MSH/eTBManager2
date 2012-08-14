@@ -78,7 +78,7 @@ public class CaseMoveHome extends Controller {
 		newhu.setTbunit(tbunit);
 		
 		// change health unit on treatment
-		tbcase.setTreatmentUnit(tbunit);
+		tbcase.setOwnerUnit(tbunit);
 
 		currentHealthUnit.getPeriod().intersect(prevPeriod);
 		
@@ -174,7 +174,7 @@ public class CaseMoveHome extends Controller {
 			}
 */		}
 
-		tbcase.setTreatmentUnit(tout.getTbunit());
+		tbcase.setOwnerUnit(tout.getTbunit());
 		tbcase.setState(CaseState.ONTREATMENT);
 		caseHome.persist();
 		
@@ -252,7 +252,7 @@ public class CaseMoveHome extends Controller {
 		TbCase tbcase = caseHome.getInstance();
 		
 		tbcase.setState(CaseState.ONTREATMENT);
-		tbcase.setTreatmentUnit(hu.getTbunit());
+		tbcase.setOwnerUnit(hu.getTbunit());
 		
 		caseHome.setDisplayMessage(false);
 		caseHome.persist();

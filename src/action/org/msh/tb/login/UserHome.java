@@ -374,6 +374,8 @@ public class UserHome extends EntityHomeEx<User> {
 	public void validateEmail(FacesContext context, UIComponent comp, Object value) {
 		
 		String email = (String)value;
+		
+		email = email.trim();
 
 		Pattern p = Pattern.compile("^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$");
 		

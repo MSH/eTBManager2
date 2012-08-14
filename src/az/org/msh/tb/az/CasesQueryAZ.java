@@ -107,7 +107,7 @@ public class CasesQueryAZ extends CasesQuery{
 		"c.validationState, c.registrationCode, c.diagnosisType, p.birthDate " +
 		getFromHQL() + " join c.patient p " +
 		"left outer join c.notificationUnit nu " +
-		"left outer join c.treatmentUnit tu " +
+		"left outer join c.ownerUnit tu " +
 		"join c.notifAddress.adminUnit loc ".concat(dynamicConditions());
 	}
 	@Override
@@ -134,7 +134,7 @@ public class CasesQueryAZ extends CasesQuery{
 		return "select count(*) " + getFromHQL() + 
 		" join c.patient p " +
 		"left outer join c.notificationUnit nu " + 
-		"left outer join c.treatmentUnit tu " +
+		"left outer join c.ownerUnit tu " +
 		dynamicConditions();
 	}
 
@@ -202,13 +202,13 @@ public class CasesQueryAZ extends CasesQuery{
 	@Override
 	protected void mountSingleSearchConditions() {
 		if (isNotBindedEIDSS()){
-			addCondition("(not c.legacyId is null) and (c.treatmentUnit is null) and (c.notificationUnit is null)"); 
+			addCondition("(not c.legacyId is null) and (c.ownerUnit is null) and (c.notificationUnit is null)"); 
 			mountPatientNameCondition();  
 			mountRegistrationDatesCondition();
 		}
 		else 
 			if(isBindedEIDSS())
-			addCondition("(not c.legacyId is null) and (not (c.treatmentUnit is null) or (not c.notificationUnit is null))");
+			addCondition("(not c.legacyId is null) and (not (c.ownerUnit is null) or (not c.notificationUnit is null))");
 		else 
 			if (isThirdCat())
 				addCondition("c.toThirdCategory = 1");

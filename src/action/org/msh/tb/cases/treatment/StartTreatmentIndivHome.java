@@ -70,7 +70,7 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 
 		// update case
 		tbcase.setTreatmentPeriod(treatPeriod);
-		tbcase.setTreatmentUnit(getTbunitselection().getTbunit());
+		tbcase.setOwnerUnit(getTbunitselection().getTbunit());
 		tbcase.setState(CaseState.ONTREATMENT);
 		tbcase.setRegimen(null);
 		tbcase.setIniContinuousPhase( DateUtils.incMonths(iniTreatmentDate, monthsIntPhase) );

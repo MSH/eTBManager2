@@ -176,7 +176,7 @@ public class OrderEstimation {
 		
 		String hql = "from PrescribedMedicine pm " +
 				"join fetch pm.tbcase c join fetch pm.source s join fetch pm.medicine m " +
-				"where pm.tbcase.treatmentUnit.id in (" + s + ") " +
+				"where pm.tbcase.ownerUnit.id in (" + s + ") " +
 				"and pm.tbcase.state = :state " +
 				"and pm.tbcase.validationState = :validate " +
 				"and (pm.period.endDate >= :dtini) " +

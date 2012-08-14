@@ -30,9 +30,6 @@ public class Batch implements Serializable {
 	@NotNull
 	@Temporal(TemporalType.DATE)
 	private Date expiryDate;
-
-	@Column(length=80)
-	private String brandName;
 	
 	@Column(length=30)
 	@NotNull
@@ -82,7 +79,6 @@ public class Batch implements Serializable {
 	 */
 /*	public void copyFromBatch(Batch b) {
 		batchNumber = b.getBatchNumber();
-		brandName = b.getBrandName();
 		container = b.getContainer();
 		expiryDate = b.getExpiryDate();
 		manufacturer = b.getManufacturer();
@@ -131,14 +127,6 @@ public class Batch implements Serializable {
 
 	public void setBatchNumber(String batchNumber) {
 		this.batchNumber = batchNumber;
-	}
-
-	public String getBrandName() {
-		return brandName;
-	}
-
-	public void setBrandName(String brandName) {
-		this.brandName = brandName;
 	}
 
 	public Integer getId() {

@@ -157,7 +157,7 @@ public class CaseHome extends WsEntityHome<TbCase>{
 			return true;
 
 		TbCase tbcase = getInstance();
-		Tbunit treatmentUnit = tbcase.getTreatmentUnit();
+		Tbunit treatmentUnit = tbcase.getOwnerUnit();
 
 		if (treatmentUnit != null)
 			return (treatmentUnit.getId().equals(ws.getTbunit().getId()));

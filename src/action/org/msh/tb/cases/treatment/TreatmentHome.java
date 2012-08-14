@@ -121,7 +121,7 @@ public class TreatmentHome {
 		healthUnit.setTbunit( unit );
 		TbCase tbcase = caseHome.getInstance();
 
-		tbcase.setTreatmentUnit(unit);
+		tbcase.setOwnerUnit(unit);
 		caseHome.getInstance().updateDaysTreatPlanned();
 
 		refreshPrescriptionTable();
@@ -540,7 +540,7 @@ public class TreatmentHome {
 		
 		tbcase.setState(CaseState.WAITING_TREATMENT);
 		tbcase.setTreatmentPeriod(null);
-		tbcase.setTreatmentUnit(null);
+		tbcase.setOwnerUnit(null);
 		tbcase.setIniContinuousPhase(null);
 		tbcase.setRegimen(null);
 

@@ -49,7 +49,7 @@ public class CaseDispensingUIHome extends AbstractDispensigUIHome {
 		// load list of cases
 		String hql = "from TbCase c join fetch c.patient p " +
 				"left join fetch c.regimen " +
-				"where c.treatmentUnit.id = #{userSession.tbunit.id} " +
+				"where c.ownerUnit.id = #{userSession.tbunit.id} " +
 				"and c.state = :st";
 		
 		List<TbCase> casesOnTreat = entityManager.createQuery(hql)
@@ -67,7 +67,7 @@ public class CaseDispensingUIHome extends AbstractDispensigUIHome {
 		hql = "select max(b.dispensingDate), a.tbcase.id " +
 				"from MedicineDispensingCase a " +
 				"join a.dispensing b " + 
-				"where a.tbcase.state = :st and a.tbcase.treatmentUnit.id = #{userSession.tbunit.id} " +
+				"where a.tbcase.state = :st and a.tbcase.ownerUnit.id = #{userSession.tbunit.id} " +
 				"group by a.tbcase.id";
 		List<Object[]> lst = entityManager.createQuery(hql)
 			.setParameter("st", CaseState.ONTREATMENT)

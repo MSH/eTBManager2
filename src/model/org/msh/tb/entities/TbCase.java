@@ -121,8 +121,8 @@ public class TbCase implements Serializable{
 	private Regimen regimenIni;
 
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="TREATMENT_UNIT_ID")
-	private Tbunit treatmentUnit;
+	@JoinColumn(name="OWNER_UNIT_ID")
+	private Tbunit ownerUnit ;
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
 	@PropertyLog(ignore=true)
@@ -1168,18 +1168,18 @@ public class TbCase implements Serializable{
 
 
 	/**
-	 * @return the treatmentUnit
+	 * @return the ownerUnit
 	 */
-	public Tbunit getTreatmentUnit() {
-		return treatmentUnit;
+	public Tbunit getOwnerUnit() {
+		return ownerUnit;
 	}
 
-
+	
 	/**
-	 * @param treatmentUnit the treatmentUnit to set
+	 * @param ownerUnit the ownerUnit to set
 	 */
-	public void setTreatmentUnit(Tbunit treatmentUnit) {
-		this.treatmentUnit = treatmentUnit;
+	public void setOwnerUnit(Tbunit ownerUnit) {
+		this.ownerUnit = ownerUnit;
 	}
 
 

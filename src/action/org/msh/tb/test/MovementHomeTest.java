@@ -210,7 +210,6 @@ public class MovementHomeTest {
 	protected void createBatches() {
 		b1 = new Batch();
 		b1.setBatchNumber("1234");
-		b1.setBrandName("MED-1");
 		b1.setContainer(Container.BOX);
 		b1.setExpiryDate(DateUtils.newDate(2012, 6, 1));
 		b1.setManufacturer("MSH LAB");
@@ -223,7 +222,6 @@ public class MovementHomeTest {
 		
 		b2 = new Batch();
 		b2.setBatchNumber("ABCD");
-		b2.setBrandName("MED-2");
 		b2.setContainer(Container.BOX);
 		b2.setExpiryDate(DateUtils.newDate(2012, 1, 1));
 		b2.setManufacturer("RMEMORIA LAB");

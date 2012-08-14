@@ -297,5 +297,12 @@ public class Movement implements Serializable {
 	public void setTotalPrice(float totalPrice) {
 		this.totalPrice = totalPrice;
 	}
+	
+	public boolean isAdjustment() {
+		if(this.type != null)
+			return type.equals(MovementType.ADJUSTMENT);
+		else
+			return false;
+	}
 
 }

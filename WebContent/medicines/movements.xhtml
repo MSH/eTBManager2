@@ -118,9 +118,13 @@
 
 	<h:column>
 		<f:facet name="header"><h:outputText value="#{messages['MovementType']}" styleClass="collh" /></f:facet>
-		#{messages[m.movement.type.key]}
+		#{messages[m.movement.type.key]}<br/>
 		<s:fragment rendered="#{not empty m.movement.comment}">
-			: #{m.movement.comment}
+			<h:outputText value="#{m.movement.comment}" rendered="#{m.movement.adjustmentType == null or (not m.movement.isAdjustment())}" />
+		</s:fragment>
+		<s:fragment rendered="#{m.movement.adjustmentType != null and (m.movement.isAdjustment())}">
+			<h:outputText value="#{m.movement.adjustmentType}" style="font-size:11px"/><br/>
+			<h:outputText value="#{m.movement.comment}" style="font-size:11px" rendered="#{(not empty m.movement.comment)}" />
 		</s:fragment>
 	</h:column>
 

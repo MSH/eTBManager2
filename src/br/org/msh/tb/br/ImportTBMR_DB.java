@@ -284,7 +284,7 @@ public class ImportTBMR_DB extends TransactionalBatchComponent {
 		
 		Tbunit unit = loadTBUnit(rsCases.getInt("COD_US_TRATAMENTO"));
 		tbcase.setNotificationUnit(unit);
-		tbcase.setTreatmentUnit(unit);
+		tbcase.setOwnerUnit(unit);
 		
 		tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
 		

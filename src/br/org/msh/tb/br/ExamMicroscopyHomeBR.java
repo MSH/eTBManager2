@@ -41,8 +41,8 @@ public class ExamMicroscopyHomeBR  {
 				if (caseHome != null) {
 					TbCase tbcase = caseHome.getInstance();
 					AdministrativeUnit adminUnit = null;
-					if (tbcase.getTreatmentUnit() != null)
-						adminUnit = tbcase.getTreatmentUnit().getAdminUnit();
+					if (tbcase.getOwnerUnit() != null)
+						adminUnit = tbcase.getOwnerUnit().getAdminUnit();
 					else adminUnit = tbcase.getNotifAddress().getAdminUnit();
 					
 					if (adminUnit != null)

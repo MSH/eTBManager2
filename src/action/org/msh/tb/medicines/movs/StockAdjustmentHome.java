@@ -6,11 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
@@ -35,6 +38,7 @@ import org.msh.utils.date.DateUtils;
  *
  */
 @Name("stockAdjustmentHome")
+@Scope(ScopeType.CONVERSATION)
 public class StockAdjustmentHome extends Controller {
 	private static final long serialVersionUID = 5670008276682104291L;
 
@@ -42,8 +46,8 @@ public class StockAdjustmentHome extends Controller {
 	private List<StockPositionItem> items;
 	private AdjustmentItem item;
 	private StockPosition stockPosition;
-	private String reasonAdjustment;
 	private boolean actionExecuted;
+	private boolean existingBatchInThisUnit;
 	private BatchQuantity batchQuantity;
 	private Date movementDate;
 	private FieldValueComponent adjustmentInfo = new FieldValueComponent();
@@ -59,6 +63,14 @@ public class StockAdjustmentHome extends Controller {
 	 */
 	public void initialize() {
 		items = null;
+	}
+
+	public boolean isExistingBatchInThisUnit() {
+		return existingBatchInThisUnit;
+	}
+
+	public void setExistingBatchInThisUnit(boolean existingBatchInThisUnit) {
+		this.existingBatchInThisUnit = existingBatchInThisUnit;
 	}
 
 	/**
@@ -146,9 +158,8 @@ public class StockAdjustmentHome extends Controller {
 
 		try{
 			movementHome.initMovementRecording();
-			
-			movementHome.prepareNewAdjustment(DateUtils.getDate(), userSession.getTbunit(), source, item.getStockPosition().getMedicine(), 
-					batches, adjustmentInfo.getValue(), adjustmentInfo.getComplement());
+
+			movementHome.prepareNewAdjustment(DateUtils.getDate(), userSession.getTbunit(), source, item.getStockPosition().getMedicine(), batches, adjustmentInfo);
 			
 			movementHome.savePreparedMovements();
 			
@@ -195,6 +206,9 @@ public class StockAdjustmentHome extends Controller {
 		if (batchQuantity == null)
 			return "error";
 
+		if(existingBatchInThisUnit)
+			return "error";
+			
 		Tbunit unit = userSession.getTbunit();
 		
 		Batch batch = batchQuantity.getBatch();
@@ -211,11 +225,13 @@ public class StockAdjustmentHome extends Controller {
 
 		// generate the new movement
 		movementHome.initMovementRecording();
-		movementHome.prepareNewMovement(movementDate, unit, source, batch.getMedicine(), MovementType.ADJUSTMENT, batches, reasonAdjustment);
+		movementHome.prepareNewAdjustment(movementDate, unit, source, batch.getMedicine(), batches, adjustmentInfo);
 		movementHome.savePreparedMovements();
 		saveLog(RoleAction.NEW, batches);
 		
 		actionExecuted = true;
+		
+		this.items = null;
 		
 		return "new-batch-saved";
 	}
@@ -226,7 +242,7 @@ public class StockAdjustmentHome extends Controller {
 	 * @return
 	 */
 	public String deleteBatch() {
-		if ((batchQuantity == null) || (reasonAdjustment == null) || (reasonAdjustment.isEmpty()) || (movementDate == null))
+		if ((batchQuantity == null) || (adjustmentInfo == null) || (movementDate == null))
 			return "error";
 
 		Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
@@ -234,13 +250,7 @@ public class StockAdjustmentHome extends Controller {
 
 		// generate movement to remove the batch quantity
 		movementHome.initMovementRecording();
-		movementHome.prepareNewMovement(movementDate, 
-				userSession.getTbunit(),
-				source,
-				batchQuantity.getBatch().getMedicine(),
-				MovementType.ADJUSTMENT,
-				batches,
-				reasonAdjustment);
+		movementHome.prepareNewAdjustment(movementDate, userSession.getTbunit(), source, batchQuantity.getBatch().getMedicine(), batches, adjustmentInfo);
 		movementHome.savePreparedMovements();
 		saveLog(RoleAction.DELETE, batches);
 		
@@ -272,6 +282,47 @@ public class StockAdjustmentHome extends Controller {
 		 	 sels.put(b.getBatch(), b.getQuantity());
 		}
 		return sels;
+	}
+	
+	public void verifyBatch(){
+		if(batchQuantity != null && batchQuantity.getBatch() != null && batchQuantity.getBatch().getBatchNumber() != null && 
+					!batchQuantity.getBatch().getBatchNumber().equals("") && batchQuantity.getBatch().getMedicine() != null){	
+			
+			ArrayList<BatchQuantity> bq = (ArrayList<BatchQuantity>) entityManager.createQuery("from BatchQuantity bq " +
+																			  "join bq.batch b " +
+																			  "where bq.tbunit.id = :unitId and " +
+																			  "b.batchNumber = :batchNumber and " +
+																			  "b.manufacturer = :manufacturer and " +
+																			  "b.medicine.id = :medicineId")
+																				.setParameter("unitId", userSession.getTbunit().getId())
+																				.setParameter("batchNumber", batchQuantity.getBatch().getBatchNumber())
+																				.setParameter("manufacturer", batchQuantity.getBatch().getManufacturer())
+																				.setParameter("medicineId", batchQuantity.getBatch().getMedicine().getId())
+																				.getResultList();
+			
+			if(bq != null && bq.size() > 0){
+				existingBatchInThisUnit = true;
+			}else{
+				existingBatchInThisUnit = false;
+				ArrayList<Batch> b = (ArrayList<Batch>) entityManager.createQuery("from Batch b " +
+																				  "where b.batchNumber = :batchNumber and " +
+																				  "b.manufacturer = :manufacturer and " +
+																				  "b.medicine.id = :medicineId")
+																					.setParameter("batchNumber", batchQuantity.getBatch().getBatchNumber())
+																					.setParameter("manufacturer", batchQuantity.getBatch().getManufacturer())
+																					.setParameter("medicineId", batchQuantity.getBatch().getMedicine().getId())
+																					.getResultList();
+	
+				if(b!=null && b.size() > 0){
+					batchQuantity.setBatch(b.get(0));
+				}
+			}
+		}
+	}
+	
+	public void clearBatch(){
+		this.batchQuantity.setBatch(new Batch());
+		this.existingBatchInThisUnit = false;
 	}
 	
 	public List<StockPositionItem> getItems() {
@@ -376,20 +427,6 @@ public class StockAdjustmentHome extends Controller {
 	}
 
 	/**
-	 * @return the reasonAdjustment
-	 */
-	public String getReasonAdjustment() {
-		return reasonAdjustment;
-	}
-
-	/**
-	 * @param reasonAdjustment the reasonAdjustment to set
-	 */
-	public void setReasonAdjustment(String reasonAdjustment) {
-		this.reasonAdjustment = reasonAdjustment;
-	}
-
-	/**
 	 * @return the actionExecuted
 	 */
 	public boolean isActionExecuted() {
@@ -432,4 +469,5 @@ public class StockAdjustmentHome extends Controller {
 			 batchQuantity = null;
 		else batchQuantity = entityManager.find(BatchQuantity.class, id);
 	}
+	
 }

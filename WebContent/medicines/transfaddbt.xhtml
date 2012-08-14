@@ -57,11 +57,6 @@
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['Batch.brandName']}:</ui:define>
-    	<h:inputText value="#{batchTransferHome.batch.brandName}" maxlength="80" required="true" style="width:200px;" />
-    </s:decorate>
-
-    <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Batch.manufacturer']}:</ui:define>
     	<h:inputText value="#{batchTransferHome.batch.manufacturer}" maxlength="80" required="true" style="width:200px;" />
     </s:decorate>
@@ -98,12 +93,6 @@
 	<tr><td>
 		<h:form>
 		<h:dataTable value="#{batchTransferHome.newBatches}" var="b" styleClass="table1" width="100%" columnClasses="coll,coll,colc,colr,colr,colc" rowClasses="lin1,lin2" rendered="#{not empty batchTransferHome.newBatches}">
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="#{messages['Batch.brandName']}" styleClass="collh"/>
-				</f:facet>
-				#{b.batch.brandName}
-			</h:column>
 
 			<h:column>
 				<f:facet name="header">

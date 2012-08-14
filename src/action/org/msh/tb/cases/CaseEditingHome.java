@@ -30,6 +30,7 @@ import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.MedAppointmentType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.login.UserSession;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.date.DateUtils;
@@ -281,6 +282,9 @@ public class CaseEditingHome {
 		
 		TbCase tbcase = caseHome.getInstance();
 
+		if(tbcase.getOwnerUnit() == null)
+			tbcase.setOwnerUnit(tbcase.getNotificationUnit());
+		
 		// save the patient's data
 		patientHome.persist();
 

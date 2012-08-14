@@ -190,7 +190,7 @@ else return false;
 	<a:form id="formbatch">
     <table width="100%" style="border-collapse:collapse;">
     <tr><td colspan="2">
-	<div id="tblsel" style="overflow: auto; width: 505px; height: 270px;border: 1px gray solid; padding:0px; margin: 0px;background-color:#f2f2f2;">	
+	<div id="tblsel" style="overflow: auto; width: 505px; height: 270px; padding:0px; margin: 0px;">	
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['Medicine']}:</ui:define>
     	<h:outputText value="#{medicineManStartHome.medicineInfo.medicine}" />
@@ -201,16 +201,18 @@ else return false;
     	<h:inputText value="#{medicineManStartHome.batchInfo.batch.batchNumber}" size="30" required="true" />
     </s:decorate>
 
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Batch.manufacturer']}:</ui:define>
+    	<h:inputText value="#{medicineManStartHome.batchInfo.batch.manufacturer}" size="80" style="width:250px" />
+    </s:decorate>
+    
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['Batch.expiryDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{medicineManStartHome.batchInfo.batch.expiryDate}" /> 
     </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['Batch.manufacturer']}:</ui:define>
-    	<h:inputText value="#{medicineManStartHome.batchInfo.batch.manufacturer}" size="80" style="width:250px" />
-    </s:decorate>
+	<hr/>
 
     <s:decorate id="qtd" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['meds.movs.availableqtty']}:</ui:define>

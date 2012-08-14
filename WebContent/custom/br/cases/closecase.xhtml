@@ -14,18 +14,23 @@
 <ui:param name="labelstyle" value="width:160px" />
 
 <ui:define name="content">
+
 <h1>#{title}</h1>
 
-<s:decorate template="/layout/casebody.xhtml">
+<s:decorate id="caseBody" template="/layout/casebody.xhtml">
 
 <h:form id="main" styleClass="form1">
 
 	<div class="form-content">
-    <s:decorate template="/layout/dateedit.xhtml" >
+	
+	<h:messages styleClass="error" layout="table" globalOnly="true" />
+		
+    <s:decorate id="outcomedatedecorate" template="/layout/dateedit.xhtml" >
 		<ui:define name="label">#{messages['TbCase.outcomeDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
-    	<ui:param name="future" value="false" /> 
+    	<ui:param name="future" value="false" />
     	<ui:param name="datefield" value="#{caseCloseHomeBR.date}" /> 
+    	<ui:param name="edtid" value="outcomedate" />
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >

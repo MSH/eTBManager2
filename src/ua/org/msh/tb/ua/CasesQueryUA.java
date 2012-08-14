@@ -49,7 +49,7 @@ public class CasesQueryUA extends CasesQuery{
 			"c.validationState, c.registrationCode, c.diagnosisType, p.birthDate " +
 			getFromHQL() + " join c.patient p " +
 		 	   "left outer join c.notificationUnit nu " +
-		 	   "left outer join c.treatmentUnit tu " +
+		 	   "left outer join c.ownerUnit tu " +
 		 	   "join c.notifAddress.adminUnit loc ".concat(dynamicConditions());
 	}
 	@Override
@@ -57,7 +57,7 @@ public class CasesQueryUA extends CasesQuery{
 		return "select count(*) " + getFromHQL() + 
 			" join c.patient p " +
 	 	   	"left outer join c.notificationUnit nu " + 
-	 	   "left outer join c.treatmentUnit tu " +
+	 	   "left outer join c.ownerUnit tu " +
 	 	   	dynamicConditions();
 	}
 	

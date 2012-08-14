@@ -155,7 +155,7 @@
 	</td></tr>
 	
 	<tr><td	colspan="2">
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.drugResistanceType}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{(not empty tbcase.drugResistanceType) and (tbcase.classification=='DRTB')}">
 			<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
 			#{messages[tbcase.drugResistanceType.key]}
 		</s:decorate>

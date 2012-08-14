@@ -83,7 +83,7 @@ public class CaseStateReportNG {
 				"union " +
 				"select c.state, c.validationState, 1, count(*) " +
 				"from tbcase c " +
-				"inner join tbunit u on u.id = c.treatment_unit_id " + aucond + 
+				"inner join tbunit u on u.id = c.owner_unit_id " + aucond + 
 				"where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " + 
 				" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
 				(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
@@ -99,7 +99,7 @@ public class CaseStateReportNG {
 		"union " +
 		"select c.state, c.validationState, c.diagnosisType, count(*) " +
 		"from tbcase c " +
-		"inner join tbunit u on u.id = c.treatment_unit_id " + aucond + 
+		"inner join tbunit u on u.id = c.owner_unit_id " + aucond + 
 		"where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ")"+
 		" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
 		(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
@@ -226,9 +226,9 @@ public class CaseStateReportNG {
 
 		String s;
 		switch (userWorkspace.getView()) {
-		case TBUNIT: s = "inner join tbcase c on c.id=tc.case_id inner join tbunit u on u.id = c.treatment_unit_id ";
+		case TBUNIT: s = "inner join tbcase c on c.id=tc.case_id inner join tbunit u on u.id = c.owner_unit_id ";
 			break;
-		case ADMINUNIT: s = "inner join tbcase c on c.id=tc.case_id inner join tbunit u on u.id = c.treatment_unit_id inner join administrativeunit a on a.id = u.adminunit_id";
+		case ADMINUNIT: s = "inner join tbcase c on c.id=tc.case_id inner join tbunit u on u.id = c.owner_unit_id inner join administrativeunit a on a.id = u.adminunit_id";
 			break;
 		default: s = "";
 		}

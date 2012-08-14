@@ -69,7 +69,7 @@ function validateInput(edt) {
 </script>
 
 <rich:modalPanel id="batchseldlg" minWidth="370" 
-            autosized="true" width="550" zindex="2000">
+            autosized="true" width="590" zindex="2000">
 	<f:facet name="header">
 		<h:outputText id="title1" value="#{messages['meds.selbatches']}" />
 	</f:facet>
@@ -87,7 +87,7 @@ function validateInput(edt) {
 	<input id="qtdover" type="hidden" value="#{batchSelection.qtdOverStockValue}" />
 	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
 
-	<div id="battblsel" style="overflow: auto; width: 525px; height: 270px;border: 1px gray solid; padding:0px; margin: 0px">	
+	<div id="battblsel" style="overflow: auto; width: 590px; height: 270px;border: 1px gray solid; padding:0px; margin: 0px">	
 	<h:dataTable value="#{batchSelection.items}" var="it" width="100%" styleClass="table1" columnClasses="colc,coll,colc,colr,colr,colr">
 		<h:column>
 			<f:facet name="header">
