@@ -24,9 +24,9 @@ public class TransfersHistory extends EntityQuery<Transfer> {
 	private boolean executing;
 	
 	private static final String[] restrictions = {
-			"month(tr.shippingDate) = #{transfers.month} + 1",
-			"year(tr.shippingDate) = #{transfers.year}",
-			"tr.status = #{transfers.status}"};
+			"month(tr.shippingDate) = #{transfersHistory.month} + 1",
+			"year(tr.shippingDate) = #{transfersHistory.year}",
+			"tr.status = #{transfersHistory.status}"};
 	
 	private static final TransferStatus[] statusOptions = {TransferStatus.CANCELLED, TransferStatus.DONE};
 
