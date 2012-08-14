@@ -205,11 +205,25 @@ public class CasesQueryAZ extends CasesQuery{
 			addCondition("(not c.legacyId is null) and (c.treatmentUnit is null) and (c.notificationUnit is null)"); 
 			mountPatientNameCondition();  
 			mountRegistrationDatesCondition();
-		}else if(isBindedEIDSS())
+		}
+		else 
+			if(isBindedEIDSS())
 			addCondition("(not c.legacyId is null) and (not (c.treatmentUnit is null) or (not c.notificationUnit is null))");
-		else super.mountSingleSearchConditions();
+		else 
+			if (isThirdCat())
+				addCondition("c.toThirdCategory = 1");
+		else
+			super.mountSingleSearchConditions();
 
 	}
+	private boolean isThirdCat() {
+		if (caseFilters == null) return false;
+		Integer stateIndex = caseFilters.getStateIndex();
+		if (stateIndex != null) {
+			return stateIndex.equals(CaseStateReportAZ.thirdCat);
+		}	else	return false;
+	}
+
 	/**
 	 * condition by registration time interval, will be mounted together with StateIndex!
 	 */

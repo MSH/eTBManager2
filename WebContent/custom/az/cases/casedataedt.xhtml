@@ -473,7 +473,7 @@ function showCurrAddress(cb) {
   else jQuery('#curraddr').show(500);
 }
 </script>
-<rich:jQuery selector="#addrChanged" query="each(function(){ if (this.selectedIndex==0) jQuery('curraddr').hide(); })" />
+<rich:jQuery selector="#addrChanged" query="each(function(){ if (this.selectedIndex==0) jQuery('#curraddr').hide(); })" />
 
 <rich:jQuery selector="#otherTbUnit" query="change(function(){ showReferToTbUnit(this); })" />
 <script type="text/javascript">

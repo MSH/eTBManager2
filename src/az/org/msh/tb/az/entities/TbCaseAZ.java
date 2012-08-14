@@ -24,6 +24,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
+import org.msh.utils.date.Period;
 
 @Entity
 @Table(name="tbcaseaz")
@@ -64,6 +65,16 @@ public class TbCaseAZ extends TbCase{
 	@PropertyLog(operations={Operation.ALL})
 	private Tbunit referToTBUnit;
 
+	private boolean toThirdCategory;
+	
+	@Embedded
+	@AttributeOverrides({
+		@AttributeOverride(name="iniDate", column=@Column(name="dateIniThirdCat")),
+		@AttributeOverride(name="endDate", column=@Column(name="dateEndThirdCat"))
+	})
+	@PropertyLog(logEntityFields=true)
+	private Period thirdCatPeriod = new Period();
+	
 	/**
 	 * @return the maritalStatus
 	 */
@@ -204,6 +215,24 @@ public class TbCaseAZ extends TbCase{
 
 	public void setReferToTBUnit(Tbunit referToTBUnit) {
 		this.referToTBUnit = referToTBUnit;
+	}
+
+	public boolean isToThirdCategory() {
+		return toThirdCategory;
+	}
+
+	public void setToThirdCategory(boolean toThirdCategory) {
+		this.toThirdCategory = toThirdCategory;
+	}
+
+	public Period getThirdCatPeriod() {
+		if (thirdCatPeriod==null)
+			thirdCatPeriod = new Period();
+		return thirdCatPeriod;
+	}
+
+	public void setThirdCatPeriod(Period thirdCatPeriod) {
+		this.thirdCatPeriod = thirdCatPeriod;
 	}
 
 

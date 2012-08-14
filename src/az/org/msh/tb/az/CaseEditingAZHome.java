@@ -3,9 +3,11 @@ package org.msh.tb.az;
 import java.util.List;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
+import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.entities.Address;
@@ -26,6 +28,7 @@ import org.msh.tb.tbunits.TBUnitSelection;
 public class CaseEditingAZHome extends CaseEditingHome{
 	
 	private TBUnitSelection referTBUnit;
+	@In(create=true) FacesMessages facesMessages;
 	
 	@Override
 	@Transactional
@@ -167,6 +170,17 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		return "initialized";
 	}
 
+	@Override
+	public boolean validateData() {
+		TbCaseAZ tc = getTbCase();
+		if (tc.isToThirdCategory())
+			if (tc.getThirdCatPeriod().getIniDate().before(tc.getOutcomeDate())){
+				facesMessages.addToControlFromResourceBundle("datefieldini", "TbCase.toThirdCategory.error1");
+				return false;
+			}
+		return super.validateData();
+	}
+	
 	@Override
 	public String saveEditing() {
 		if (!validateData())

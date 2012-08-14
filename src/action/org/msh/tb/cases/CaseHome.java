@@ -133,7 +133,7 @@ public class CaseHome extends WsEntityHome<TbCase>{
 	 * @param sufixName
 	 * @return
 	 */
-	protected boolean checkRoleBySuffix(String suffixName) {
+	public boolean checkRoleBySuffix(String suffixName) {
 		TbCase tbcase = getInstance();
 
 		CaseClassification cla = tbcase.getClassification();

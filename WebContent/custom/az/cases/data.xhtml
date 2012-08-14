@@ -8,6 +8,29 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 <ui:param name="labelstyle" value="text-align:left;width:200px;" />
 	<div class="form1">
+	<s:fragment rendered="#{caseAZHome.canEditCloseCaseData}">
+	<div class="form-content">                 
+	<s:link view="/custom/az/cases/caseedt.xhtml" style="float:right;" rendered="#{caseAZHome.canEditCloseCaseData}" styleClass="button-alt">
+		<f:param name="id" value="#{caseHome.id}" />
+		<span>#{messages['form.edit']}</span>
+	</s:link>
+	<h2>#{messages['TbCase.toThirdCategory.edt']}</h2>
+	<h:outputText value="#{messages['TbCase.toThirdCategory.no']}" styleClass="warn" rendered="#{!tbcase.toThirdCategory}" />
+	
+		<s:fragment rendered="#{tbcase.toThirdCategory}">	   	
+			<s:decorate template="/layout/display.xhtml" >
+		    	<ui:define name="label">#{messages['TbCase.toThirdCategory.iniDate']}:</ui:define>
+    			<h:outputText id="dt" value="#{tbcase.thirdCatPeriod.iniDate}" converter="localeDateConverter"/>
+    		</s:decorate>
+		
+			<s:decorate template="/layout/display.xhtml" >
+		    	<ui:define name="label">#{messages['TbCase.toThirdCategory.endDate']}:</ui:define>
+		    	<h:outputText id="dt" value="#{tbcase.thirdCatPeriod.endDate}" converter="localeDateConverter"/> 
+		    </s:decorate>	
+		</s:fragment>
+		
+	</div>
+	</s:fragment>
 	<div class="form-content">                 
 	<s:link view="/custom/az/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
 		<f:param name="id" value="#{caseHome.id}" />
@@ -159,7 +182,7 @@
 	</td></tr>
 	</table>
 	</div>
-	
+		
 
 	<div class="form-content">
 	<h2>#{messages['cases.generaldata']}</h2>

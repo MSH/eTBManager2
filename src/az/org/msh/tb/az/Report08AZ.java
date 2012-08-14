@@ -209,6 +209,8 @@ public class Report08AZ extends IndicatorVerify {
 					}
 					if (tc.getAge()>=14 && tc.getAge()<=29)
 						addToTable2100(27,tc,false);
+					if (tc.isToThirdCategory())
+						addToTable2100(28,tc,false);
 				}
 				else
 				{
@@ -231,6 +233,8 @@ public class Report08AZ extends IndicatorVerify {
 					}
 					if (tc.getAge()>=14 && tc.getAge()<=29)
 						addToTable2100(27,tc,true);
+					if (tc.isToThirdCategory())
+						addToTable2100(28,tc,true);
 				}
 				addToRepList(tc);
 				//table 2120

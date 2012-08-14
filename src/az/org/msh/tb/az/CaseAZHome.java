@@ -1,23 +1,31 @@
 package org.msh.tb.az;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.az.entities.CaseSeverityMark;
 import org.msh.tb.az.entities.TbCaseAZ;
+import org.msh.tb.cases.CaseCloseHome;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.enums.CaseState;
 
 @Name("caseAZHome")
 public class CaseAZHome {
 	private String notifEIDSS="";
 	private String addrEIDSS="";
+	private boolean to3category;
+	private static final CaseState[] outcomes3cat = {
+		CaseState.CURED, 
+		CaseState.TREATMENT_COMPLETED};
+	
 	@In CaseHome caseHome;
 	@In(create=true) CaseEditingAZHome caseEditingAZHome;
 	@In(create=true) CaseEditingHome caseEditingHome;
 	@In(create=true) CaseSeverityMarksHome caseSeverityMarksHome;
-
+	@In(create=true) CaseCloseHome caseCloseHome;
 	
 	/**
 	 * Save case data
@@ -68,4 +76,43 @@ public class CaseAZHome {
 		}
 		return addrEIDSS;
 	}
+	
+	/**
+	 * Outcames in case of third category
+	 * */
+	public CaseState[] getOutcomes() {
+		if (!isTo3category())
+			return caseCloseHome.getOutcomes();
+		return outcomes3cat;
+	}
+
+
+	public boolean isTo3category() {
+		if (!to3category && getTbCase().isToThirdCategory()) 
+			to3category = true;
+		return to3category;
+	}
+
+
+	public void setTo3category(boolean to3category) {
+		this.to3category = to3category;
+	}
+	
+	public String closeCase() {
+		getTbCase().setToThirdCategory(to3category);
+		if (isTo3category()){
+			getTbCase().getThirdCatPeriod().setIniDate(caseCloseHome.getDate());
+		}
+		return caseCloseHome.closeCase();
+	}
+	/**
+	 * Cases, which we can refer to third category
+	 * */
+	public boolean isCanEditCloseCaseData() {
+		return (!getTbCase().isOpen()) && Arrays.asList(outcomes3cat).contains(getTbCase().getState()) && caseHome.checkRoleBySuffix("CASE_DATA_EDT") && (caseHome.isWorkingUnit());
+	}
+	public boolean isCanEditExams() {
+		return ((caseHome.isCanEditExams()) || (getTbCase().isToThirdCategory() && caseHome.checkRoleBySuffix("CASE_EXAMS_EDT") && caseHome.isWorkingUnit()));
+	}
 }
+

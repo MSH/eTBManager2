@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	<div class="form-content">
+	<h2>#{messages['cases.patientdata']}</h2>
+		<s:decorate template="/layout/edit.xhtml" >
+			<h:selectBooleanCheckbox value="#{tbcase.toThirdCategory}" id="isthird">
+				<a:support event="onclick" ajaxSingle="true" reRender="selstate"/>
+			</h:selectBooleanCheckbox>
+			#{messages['TbCase.toThirdCategory']}
+	    </s:decorate>
+	    
+		<div id="datesthirdcat">
+			<s:decorate template="/layout/edit.xhtml" >
+				<ui:define name="label">#{messages['cases.outcome']}:</ui:define>
+				<h:selectOneRadio id="selstate" value="#{tbcase.state}" required="true" layout="pageDirection">
+					<s:selectItems value="#{caseAZHome.outcomes}" var="v" label="#{messages[v.key]}"/>
+					<s:convertEnum />
+				</h:selectOneRadio>
+	   		</s:decorate>	
+	   	
+			<s:decorate template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['TbCase.toThirdCategory.iniDate']}:</ui:define>
+		    	<ui:param name="datefieldini" value="#{tbcase.thirdCatPeriod.iniDate}" /> 
+		    	<ui:param name="required" value="#{tbcase.toThirdCategory}" /> 
+		    </s:decorate>
+		
+			<s:decorate template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['TbCase.toThirdCategory.endDate']}:</ui:define>
+		    	<ui:param name="datefieldend" value="#{tbcase.thirdCatPeriod.endDate}" /> 
+		    </s:decorate>	
+		</div>
+	</div>
+	
+	<rich:jQuery selector="#isthird" query="change(function(){ showThirdCat(this); })" />
+	<script type="text/javascript">
+		function showThirdCat(cb) {
+		  if (cb.checked)
+		  	jQuery('#datesthirdcat').show(500);
+		  else jQuery('#datesthirdcat').hide(500);
+		}
+	</script>
+	<rich:jQuery selector="#isthird" query="each(function(){ if (this.checked==false) jQuery('#datesthirdcat').hide(); })" />
+	
+</ui:composition>

@@ -19,9 +19,12 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 <h:form id="main" styleClass="form1">
-
-	<ui:include src="casedataedt.xhtml" />
-
+	<s:fragment rendered="#{tbcase.open}">
+		<ui:include src="casedataedt.xhtml" />
+	</s:fragment>
+	<s:fragment rendered="#{!tbcase.open}">
+		<ui:include src="closecaseedt.xhtml" />
+	</s:fragment>
 	<div class="form-footer">
 		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}

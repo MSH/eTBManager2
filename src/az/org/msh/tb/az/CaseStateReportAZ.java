@@ -18,6 +18,7 @@ import org.msh.tb.cases.CaseStateReport;
 public class CaseStateReportAZ extends CaseStateReport{
 	public static final int EIDSS_BINDED = 1616;
 	public static final int EIDSS_NOT_BINDED = 1515;
+	public static final int thirdCat = 700;
 	protected List<Item> itemsEIDSS = null;
 
 	/**
@@ -33,6 +34,21 @@ public class CaseStateReportAZ extends CaseStateReport{
 		return items;
 	}
 
+	/**
+	 * Create items of the report
+	 */
+	@Override
+	public void createItems() {
+		super.createItems();
+		Item it = new Item();
+		it.setDescription(messages.get("TbCase.toThirdCategory"));
+		String querySQL = getSQLSelect()+" where cAZ.toThirdCategory = 1";
+		BigInteger col3cat = (BigInteger) entityManager.createNativeQuery(querySQL).getSingleResult();
+		it.add(col3cat.intValue());
+		it.setStateIndex(thirdCat);
+		getItems().add(it);
+	}
+	
 	/**
 	 * Create additional items related to the EIDSS import
 	 */
