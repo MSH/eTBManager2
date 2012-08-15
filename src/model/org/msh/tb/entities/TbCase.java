@@ -1222,21 +1222,23 @@ public class TbCase implements Serializable{
 		
 		if(this.getExaminations() != null && this.getExaminations().size() > 0){
 			lastExam = this.getExaminations().get(0);
+			
 			for(MedicalExamination m : this.getExaminations()){
 				if(m.getDate().after(lastExam.getDate()))
 					lastExam = m;
 			}
-		}		
 		
-		if(lastExam != null){
-			ClinicalEvolution eval = lastExam.getClinicalEvolution(); // for some old cases may be null AK 26/05/2012
-				if (eval != null)
-					return this.getExaminations().get(getExaminations().size()-1).getClinicalEvolution().getKey();
-		}
+			if(lastExam != null){
+				ClinicalEvolution eval = lastExam.getClinicalEvolution(); // for some old cases may be null AK 26/05/2012
+					if (eval != null)
+						return lastExam.getClinicalEvolution().getKey();
+			}
+			
+		}	
 			
 		return "";
 	}
-		
+	
 	/**
 	 * @return the name of the sepervision unit
 	 */
