@@ -12,6 +12,7 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchMovement;
+import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineReceiving;
 import org.msh.tb.entities.Movement;
@@ -257,6 +258,26 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 		batch = null;
 	}
 
+	public void verifyBatch(){
+		if(batch != null && batch.getBatchNumber() != null && 
+					!batch.getBatchNumber().equals("") && batch.getMedicine() != null){	
+		
+			ArrayList<Batch> b = (ArrayList<Batch>) getEntityManager().createQuery("from Batch b " +
+																			  "where b.batchNumber = :batchNumber and " +
+																			  "b.manufacturer = :manufacturer and " +
+																			  "b.medicine.id = :medicineId")
+																				.setParameter("batchNumber", batch.getBatchNumber())
+																				.setParameter("manufacturer", batch.getManufacturer())
+																				.setParameter("medicineId", batch.getMedicine().getId())
+																				.getResultList();
+
+			if(b!=null && b.size() > 0){
+				batch = b.get(0);
+				batch.setQuantityReceived(0);
+			}
+		}
+	}
+	
 
 	/**
 	 * Check if batch is being edited
