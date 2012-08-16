@@ -11,7 +11,7 @@
 	<h2>#{messages['cases.patientdata']}</h2>
 		<s:decorate template="/layout/edit.xhtml" >
 			<h:selectBooleanCheckbox value="#{tbcase.toThirdCategory}" id="isthird">
-				<a:support event="onclick" ajaxSingle="true" reRender="selstate"/>
+				<a:support event="onclick" ajaxSingle="true" reRender="main"/>
 			</h:selectBooleanCheckbox>
 			#{messages['TbCase.toThirdCategory']}
 	    </s:decorate>
@@ -27,13 +27,13 @@
 	   	
 			<s:decorate template="/layout/dateedit.xhtml" >
 		    	<ui:define name="label">#{messages['TbCase.toThirdCategory.iniDate']}:</ui:define>
-		    	<ui:param name="datefieldini" value="#{tbcase.thirdCatPeriod.iniDate}" /> 
+		    	<ui:param name="datefield" value="#{caseAZHome.tbCase.thirdCatPeriod.iniDate}" /> 
 		    	<ui:param name="required" value="#{tbcase.toThirdCategory}" /> 
 		    </s:decorate>
 		
 			<s:decorate template="/layout/dateedit.xhtml" >
 		    	<ui:define name="label">#{messages['TbCase.toThirdCategory.endDate']}:</ui:define>
-		    	<ui:param name="datefieldend" value="#{tbcase.thirdCatPeriod.endDate}" /> 
+		    	<ui:param name="datefield" value="#{tbcase.thirdCatPeriod.endDate}" /> 
 		    </s:decorate>	
 		</div>
 	</div>
