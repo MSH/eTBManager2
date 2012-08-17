@@ -32,14 +32,14 @@ function hideBatchDlg() {
 }
 </script>
 <rich:modalPanel id="batchdlg" autosized="true" width="750" zindex="2000">
-	<f:facet name="header">
+	<!-- <f:facet name="header">
 		<h:outputText id="title1" value="#{messages['form.data_edit']} - #{messages['Batch']}" />
-	</f:facet>
+	</f:facet>  -->
 	<a:form id="formbatch" styleClass="form1">
 
     <h:panelGroup id="batchdlgcontent">
 	<s:div rendered="#{medicineReceivingHome.editingBatch}">
-
+	<h:outputText style="font-weight:bold" value="#{medicineReceivingHome.batch.batchNumber==null? messages['form.new']: messages['form.data_edit']} - #{messages['Batch']}" />
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:param name="labelstyle" value="width:185px" />
     	<ui:define name="label">#{messages['Medicine']}:</ui:define>
