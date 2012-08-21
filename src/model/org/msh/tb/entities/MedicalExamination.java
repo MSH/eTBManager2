@@ -101,6 +101,9 @@ public class MedicalExamination extends CaseData implements Serializable {
 	@Column(length=100)
 	private String dotProvName;
 	
+	@Column(length=50)
+	private String dotPhoneNumber;
+	
 	
 	public String getSurgicalProcedureDesc() {
 		return surgicalProcedureDesc;
@@ -359,6 +362,12 @@ public class MedicalExamination extends CaseData implements Serializable {
 		this.dotProvName = dotProvName;
 	}
 
+	public String getDotPhoneNumber() {
+		return dotPhoneNumber;
+	}
 	
+	public void setDotPhoneNumber(String dotPhoneNumber) {
+		this.dotPhoneNumber = dotPhoneNumber;
+	}
 	
 }
