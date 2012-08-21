@@ -274,6 +274,12 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 			if(b!=null && b.size() > 0){
 				batch = b.get(0);
 				batch.setQuantityReceived(0);
+			}else{
+				Batch ba = new Batch();
+				ba.setMedicine(batch.getMedicine());
+				ba.setManufacturer(batch.getManufacturer());
+				ba.setBatchNumber(batch.getBatchNumber());
+				batch = ba;
 			}
 		}
 	}

@@ -30,6 +30,7 @@ function finishShowBatchDlg() {
 function hideBatchDlg() {
 	Richfaces.hideModalPanel('batchdlg');
 }
+
 </script>
 <rich:modalPanel id="batchdlg" autosized="true" width="750" zindex="2000">
 	<!-- <f:facet name="header">
@@ -92,7 +93,7 @@ function hideBatchDlg() {
     <s:decorate id="num" template="/layout/edit.xhtml" >
     	<ui:param name="labelstyle" value="width:185px" />
     	<ui:define name="label">#{messages['Batch.numContainers']}:</ui:define>
-    	<h:inputText id="num" value="#{medicineReceivingHome.batch.numContainers}" required="true" onkeypress="return numbersOnly(this,event);" onkeyup="changeCon(this, event);">
+    	<h:inputText id="num" value="#{medicineReceivingHome.batch.numContainers}" required="true" onkeypress="return numbersOnly(this,event);" onkeyup="changeCon(this, event);changeUPrice();">
     		<f:validateDoubleRange minimum="1"/>
     	</h:inputText>
     </s:decorate>
