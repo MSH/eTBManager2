@@ -125,13 +125,9 @@ function changeUnitPrice(elem) {
 }
 
 function changeUPrice() {
-	alert('1');
 	unit = strToFloat(document.getElementById("formbatch:uprice:uprice").value);
-	alert('2');
 	tot = parseFloat(document.getElementById("formbatch:qtd:qtd").value);
-	alert('3');
 	totPrice = unit * tot;
-	alert('4');
 	document.getElementById("formbatch:tprice:tprice").value = floatToStr(totPrice, 2);
 }
 
