@@ -14,6 +14,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator2D;
 
@@ -31,17 +32,17 @@ public class PulmonaryIndicator extends Indicator2D {
 	private static final long serialVersionUID = -3656727413285273116L;
 	@In(create=true) EntityManager entityManager;
 	private List<TbCaseBD>  tbcasebdList; 
-	private boolean flag = false;
-
+	
 	@Override
 	protected void createIndicators() {
 		// TODO Auto-generated method stub
 	
 		//Fetching all confirmed cases notified as 'new' and closed
-		String cond = " c.patientType = 0 and c.state > 2";
+		//String cond = " c.patientType = 0 and c.state > 2 and  c.id = e.tbcase.id group by c.id";
+		String cond = " c.patientType = 0 and  c.id = e.tbcase.id group by c.id";
 		setCondition(cond);
-		List<TbCase> lst = new ArrayList<TbCase>();
-		lst = createQuery().getResultList();
+		setOrderByFields("e.tbcase.id, e.dateCollected");
+		List<Object[]> lst = createQuery().getResultList();
 		
 		float cntSmearPosM = 0, cntSmearPosF = 0, cntSmearNegM = 0, cntSmearNegF = 0, cntEPM = 0, cntEPF = 0;
 		float cntDiedPosM = 0,cntDiedPosF = 0, cntDiedNegM = 0, cntDiedNegF = 0;
@@ -52,111 +53,140 @@ public class PulmonaryIndicator extends Indicator2D {
 		float cntTreatedPosM = 0, cntTreatedNegM = 0, cntTreatedPosF = 0, cntTreatedNegF = 0;
 		float cntEPCuredM = 0, cntEPTreatedM = 0, cntEPDiedM = 0, cntEPFailM = 0, cntEPDefaultedM = 0, cntEPTransOutM = 0;
 		float cntEPCuredF = 0, cntEPTreatedF = 0, cntEPDiedF = 0, cntEPFailF = 0, cntEPDefaultedF = 0, cntEPTransOutF = 0;
+		float cntNotEvalPosM = 0, cntNotEvalPosF = 0, cntNotEvalNegM = 0, cntNotEvalNegF = 0, cntNotEvalEPM = 0, cntNotEvalEPF = 0;
 			
-		for(TbCase val:lst){
+for(Object[] val:lst){
+			TbCase tbcase = new TbCase();
+			tbcase = entityManager.find(TbCase.class, val[0]);
 			
-			if(val.getPulmonaryType() != null){
-				if(isSmearPos(val.getPulmonaryType().getShortName().toString())){
-					if(val.getPatient().getGender() == Gender.MALE){
+			/*
+			 * Checking for 1st reported Microscopy result to be Positive
+			 */
+				if(val[5] == MicroscopyResult.PLUS || val[5] == MicroscopyResult.PLUS2 || val[5] == MicroscopyResult.PLUS3 || val[5] == MicroscopyResult.PLUS4) {
+					if(val[1] == Gender.MALE){
 					cntSmearPosM++;
-						if(val.getState() == CaseState.CURED)
+					if(tbcase.getState().ordinal()>2){
+						if(val[2] == CaseState.CURED)
 							cntCuredPosM++;
-						if(val.getState() == CaseState.TREATMENT_COMPLETED)
+						if(val[2] == CaseState.TREATMENT_COMPLETED)
 							cntTreatedPosM++;
-						if(val.getState() == CaseState.DIED)
+						if(val[2] == CaseState.DIED)
 							cntDiedPosM++;
-						if(val.getState() == CaseState.FAILED)
+						if(val[2] == CaseState.FAILED)
 							cntFailPosM++;
-						if(val.getState() == CaseState.DEFAULTED)
+						if(val[2] == CaseState.DEFAULTED)
 							cntDefaultedPosM++;
-						if(val.getState() == CaseState.TRANSFERRED_OUT)
+						if(val[2] == CaseState.TRANSFERRED_OUT)
 							cntTransOutPosM++;
+						}
+					else 
+							cntNotEvalPosM++;	
 					}
-				if(val.getPatient().getGender() == Gender.FEMALE){
+				if(val[1] == Gender.FEMALE){
 					cntSmearPosF++;
-					if(val.getState() == CaseState.CURED)
+					if(tbcase.getState().ordinal()>2){
+					if(val[2] == CaseState.CURED)
 						cntCuredPosF++;
-					if(val.getState() == CaseState.TREATMENT_COMPLETED)
+					if(val[2] == CaseState.TREATMENT_COMPLETED)
 						cntTreatedPosF++;
-					if(val.getState() == CaseState.DIED)
+					if(val[2] == CaseState.DIED)
 						cntDiedPosF++;
-					if(val.getState() == CaseState.FAILED)
+					if(val[2] == CaseState.FAILED)
 						cntFailPosF++;
-					if(val.getState() == CaseState.DEFAULTED)
+					if(val[2] == CaseState.DEFAULTED)
 						cntDefaultedPosF++;
-					if(val.getState() == CaseState.TRANSFERRED_OUT)
+					if(val[2] == CaseState.TRANSFERRED_OUT)
 						cntTransOutPosF++;
+						}
+					else
+						cntNotEvalPosF++;
+					}
 				}
-			}
-			
-			if(isSmearNeg(val.getPulmonaryType().getShortName().toString())){
-				if(val.getPatient().getGender() == Gender.MALE){
+		
+			if(val[5] == MicroscopyResult.NEGATIVE){
+				if(val[1] == Gender.MALE){
 					cntSmearNegM++;
-					if(val.getState() == CaseState.CURED)
+					if(tbcase.getState().ordinal()>2){
+					if(val[2] == CaseState.CURED)
 						cntCuredNegM++;
-					if(val.getState() == CaseState.TREATMENT_COMPLETED)
+					if(val[2] == CaseState.TREATMENT_COMPLETED)
 						cntTreatedNegM++;
-					if(val.getState() == CaseState.DIED)
+					if(val[2] == CaseState.DIED)
 						cntDiedNegM++;
-					if(val.getState() == CaseState.FAILED)
+					if(val[2] == CaseState.FAILED)
 						cntFailNegM++;
-					if(val.getState() == CaseState.DEFAULTED)
+					if(val[2] == CaseState.DEFAULTED)
 						cntDefaultedNegM++;
-					if(val.getState() == CaseState.TRANSFERRED_OUT)
+					if(val[2] == CaseState.TRANSFERRED_OUT)
 						cntTransOutNegM++;
-				}
-				if(val.getPatient().getGender() == Gender.FEMALE){
+						}
+					else
+						cntNotEvalNegM++;
+					}
+				if(val[1] == Gender.FEMALE){
 					cntSmearNegF++;
-					if(val.getState() == CaseState.CURED)
+					if(tbcase.getState().ordinal()>2){
+					if(val[2] == CaseState.CURED)
 						cntCuredNegF++;
-					if(val.getState() == CaseState.TREATMENT_COMPLETED)
+					if(val[2] == CaseState.TREATMENT_COMPLETED)
 						cntTreatedNegF++;
-					if(val.getState() == CaseState.DIED)
+					if(val[2] == CaseState.DIED)
 						cntDiedNegF++;
-					if(val.getState() == CaseState.FAILED)
+					if(val[2] == CaseState.FAILED)
 						cntFailNegF++;
-					if(val.getState() == CaseState.DEFAULTED)
+					if(val[2] == CaseState.DEFAULTED)
 						cntDefaultedNegF++;
-					if(val.getState() == CaseState.TRANSFERRED_OUT)
+					if(val[2] == CaseState.TRANSFERRED_OUT)
 						cntTransOutNegF++;
+					}
+					else
+						cntNotEvalNegF++;
 				}
 			}
-		}
 			
-			if((val.getExtrapulmonaryType() != null || val.getExtrapulmonaryType2() != null)){
+			if(tbcase.getExtrapulmonaryType() != null || tbcase.getExtrapulmonaryType2() != null){
 
-				if(val.getPatient().getGender() == Gender.MALE){
+				if(val[1] == Gender.MALE){
 					cntEPM++;
-					if(val.getState() == CaseState.CURED)
+					if(tbcase.getState().ordinal()>2){
+					if(val[2] == CaseState.CURED)
 						cntEPCuredM++;
-					if(val.getState() == CaseState.TREATMENT_COMPLETED)
+					if(val[2] == CaseState.TREATMENT_COMPLETED)
 						cntEPTreatedM++;
-					if(val.getState() == CaseState.DIED)
+					if(val[2] == CaseState.DIED)
 						cntEPDiedM++;
-					if(val.getState() == CaseState.FAILED)
+					if(val[2] == CaseState.FAILED)
 						cntEPFailM++;
-					if(val.getState() == CaseState.DEFAULTED)
+					if(val[2] == CaseState.DEFAULTED)
 						cntEPDefaultedM++;
-					if(val.getState() == CaseState.TRANSFERRED_OUT)
+					if(val[2] == CaseState.TRANSFERRED_OUT)
 						cntEPTransOutM++;
+					}
+					else
+						cntNotEvalEPM++;
 				}
-				if(val.getPatient().getGender() == Gender.FEMALE){
+				if(val[1] == Gender.FEMALE){
 					cntEPF++;
-					if(val.getState() == CaseState.CURED)
+					if(tbcase.getState().ordinal()>2){
+					if(val[2] == CaseState.CURED)
 						cntEPCuredF++;
-					if(val.getState() == CaseState.TREATMENT_COMPLETED)
+					if(val[2] == CaseState.TREATMENT_COMPLETED)
 						cntEPTreatedF++;
-					if(val.getState() == CaseState.DIED)
+					if(val[2] == CaseState.DIED)
 						cntEPDiedF++;
-					if(val.getState() == CaseState.FAILED)
+					if(val[2] == CaseState.FAILED)
 						cntEPFailF++;
-					if(val.getState() == CaseState.DEFAULTED)
+					if(val[2] == CaseState.DEFAULTED)
 						cntEPDefaultedF++;
-					if(val.getState() == CaseState.TRANSFERRED_OUT)
+					if(val[2] == CaseState.TRANSFERRED_OUT)
 						cntEPTransOutF++;
-				}			
+					}	
+					else
+						cntNotEvalEPF++;
+				}
 			}
-		}
+				
+		} //  end of for
 		
 		Map<String, String> messages = Messages.instance();
 		
@@ -217,19 +247,26 @@ public class PulmonaryIndicator extends Indicator2D {
 		addValue(messages.get("manag.gender.female6"), messages.get("manag.pulmonary.smearnegative"), cntTransOutNegF);
 		addValue(messages.get("manag.gender.female6"), messages.get("manag.pulmonary.extrapulmonary"), cntEPTransOutF);
 		
-		float totPosM = cntCuredPosM + cntTreatedPosM + cntDiedPosM + cntFailPosM + cntDefaultedPosM + cntTransOutPosM;
-		float totNegM = cntCuredNegM + cntTreatedNegM + cntDiedNegM + cntFailNegM + cntDefaultedNegM + cntTransOutNegM;
-		float totPosF = cntCuredPosF + cntTreatedPosF + cntDiedPosF + cntFailPosF + cntDefaultedPosF + cntTransOutPosF;
-		float totNegF = cntCuredNegF + cntTreatedNegF + cntDiedNegF + cntFailNegF + cntDefaultedNegF + cntTransOutNegF;
-		float totEPM = cntEPCuredM + cntEPTreatedM + cntEPDiedM + cntEPFailM + cntEPDefaultedM + cntEPTransOutM;
-		float totEPF = cntEPCuredF + cntEPTreatedF + cntEPDiedF + cntEPFailF + cntEPDefaultedF + cntEPTransOutF;
+		addValue(messages.get("manag.gender.male7"), messages.get("manag.pulmonary.smearpositive"), cntNotEvalPosM);
+		addValue(messages.get("manag.gender.male7"), messages.get("manag.pulmonary.smearnegative"), cntNotEvalNegM);
+		addValue(messages.get("manag.gender.male7"), messages.get("manag.pulmonary.extrapulmonary"), cntNotEvalEPM);
+		addValue(messages.get("manag.gender.female7"), messages.get("manag.pulmonary.smearpositive"), cntNotEvalPosF);
+		addValue(messages.get("manag.gender.female7"), messages.get("manag.pulmonary.smearnegative"), cntNotEvalNegF);
+		addValue(messages.get("manag.gender.female7"), messages.get("manag.pulmonary.extrapulmonary"), cntNotEvalEPF);
 		
-		addValue(messages.get("manag.gender.male7"), messages.get("manag.pulmonary.smearpositive"), totPosM);
-		addValue(messages.get("manag.gender.male7"), messages.get("manag.pulmonary.smearnegative"), totNegM);
-		addValue(messages.get("manag.gender.male7"), messages.get("manag.pulmonary.extrapulmonary"), totEPM);
-		addValue(messages.get("manag.gender.female7"), messages.get("manag.pulmonary.smearpositive"), totPosF);
-		addValue(messages.get("manag.gender.female7"), messages.get("manag.pulmonary.smearnegative"), totNegF);
-		addValue(messages.get("manag.gender.female7"), messages.get("manag.pulmonary.extrapulmonary"), totEPF);
+		float totPosM = cntCuredPosM + cntTreatedPosM + cntDiedPosM + cntFailPosM + cntDefaultedPosM + cntTransOutPosM + cntNotEvalPosM;
+		float totNegM = cntCuredNegM + cntTreatedNegM + cntDiedNegM + cntFailNegM + cntDefaultedNegM + cntTransOutNegM + cntNotEvalNegM;
+		float totPosF = cntCuredPosF + cntTreatedPosF + cntDiedPosF + cntFailPosF + cntDefaultedPosF + cntTransOutPosF + cntNotEvalPosF; 
+		float totNegF = cntCuredNegF + cntTreatedNegF + cntDiedNegF + cntFailNegF + cntDefaultedNegF + cntTransOutNegF + cntNotEvalNegF;
+		float totEPM = cntEPCuredM + cntEPTreatedM + cntEPDiedM + cntEPFailM + cntEPDefaultedM + cntEPTransOutM + cntNotEvalEPM;
+		float totEPF = cntEPCuredF + cntEPTreatedF + cntEPDiedF + cntEPFailF + cntEPDefaultedF + cntEPTransOutF + cntNotEvalEPF;
+		
+		addValue(messages.get("manag.gender.male8"), messages.get("manag.pulmonary.smearpositive"), totPosM);
+		addValue(messages.get("manag.gender.male8"), messages.get("manag.pulmonary.smearnegative"), totNegM);
+		addValue(messages.get("manag.gender.male8"), messages.get("manag.pulmonary.extrapulmonary"), totEPM);
+		addValue(messages.get("manag.gender.female8"), messages.get("manag.pulmonary.smearpositive"), totPosF);
+		addValue(messages.get("manag.gender.female8"), messages.get("manag.pulmonary.smearnegative"), totNegF);
+		addValue(messages.get("manag.gender.female8"), messages.get("manag.pulmonary.extrapulmonary"), totEPF);
 		
 		float totPos = totPosM + totPosF;
 		float totNeg = totNegM + totNegF;
@@ -249,26 +286,18 @@ public class PulmonaryIndicator extends Indicator2D {
 	public void setTbcasebdList(List<TbCaseBD> tbcasebdList) {
 		this.tbcasebdList = tbcasebdList;
 	}
-	
+
 	@Override
 	public String getHQLSelect() {
-		//return "select c.id, c.state, c.patientType, c.pulmonaryType.id, c.pulmonaryType.shortName, c.patient.gender ";
-		return "";
-	}
-
-	public boolean isSmearPos(String strSmear){
-		flag = false;
-		if(strSmear.equalsIgnoreCase("Smear(+)")){
-			flag = true;
-		}
-		return flag;		
+		String strSel = "";
+		strSel = "select c.id, c.patient.gender, c.state, c.outcomeDate, e.dateCollected, e.result ";
+		return strSel;
 	}
 	
-	public boolean isSmearNeg(String strSmear){
-		flag = false;
-		if(strSmear.equalsIgnoreCase("Smear(-)")){
-			flag = true;
-		}
-		return flag;		
-	}	
+	@Override
+	protected String getHQLFrom() {
+		String strFrom = "";
+		strFrom =  " from ExamMicroscopy e join e.tbcase c ";
+		return strFrom;
+	}
 }
