@@ -32,6 +32,7 @@ public class PulmonaryRetreatIndicator extends Indicator2D{
 		//String cond = " c.patientType <> 0 and c.state > 2 ";
 		String cond = " c.patientType <> 0 ";
 		setCondition(cond);
+		setOrderByFields("e.tbcase.id, e.dateCollected");
 		List<TbCase> lst = new ArrayList<TbCase>();
 		 lst = createQuery().getResultList();
 
