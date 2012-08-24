@@ -28,6 +28,7 @@ public class TBForm10Block2 extends Indicator{
 	protected void createIndicators() {
 		// TODO Auto-generated method stub
 		
+		setOrderByFields("e.tbcase.id, e.dateCollected");
 		List<Object[]> lst = createQuery().getResultList();
 		
 		float cntAgeRange1M = 0,cntAgeRange1F = 0, cntAgeRange2M = 0,cntAgeRange2F = 0, cntAgeRange3M = 0, cntAgeRange3F = 0;
