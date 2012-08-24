@@ -24,7 +24,6 @@ public class TBForm10Block1 extends Indicator{
 	 */
 	private static final long serialVersionUID = 7230654297736913859L;
 	@In(create=true) EntityManager entityManager;
-	private String strMicroPos, strSmearNeg, strSmearEP, strOthers;
 	private boolean flag = false;
 	
 
@@ -35,6 +34,7 @@ public class TBForm10Block1 extends Indicator{
 		IndicatorTable table = getTable();
 		Map<String, String> messages = Messages.instance();
 
+		setOrderByFields("e.tbcase.id, e.dateCollected");
 		List<Object[]> lst = createQuery().getResultList();
 		
 		float cntNewM = 0, cntNewF = 0, cntRelM = 0, cntRelF = 0, cntFailM = 0, cntFailF = 0, cntDefM = 0, cntDefF = 0;
@@ -80,10 +80,10 @@ public class TBForm10Block1 extends Indicator{
 					}
 				
 				if(tbcase.getPatientType() == PatientType.NEW && val[5] == MicroscopyResult.NEGATIVE){
-					if(isMale(tbcase.getPatient().getGender()))
+					if(tbcase.getPatient().getGender()==Gender.MALE)
 						cntSmearNegM++;
 					
-					if(isFemale(tbcase.getPatient().getGender()))
+					if(tbcase.getPatient().getGender()==Gender.FEMALE)
 						cntSmearNegF++;
 					}
 		
@@ -96,9 +96,9 @@ public class TBForm10Block1 extends Indicator{
 					}
 			
 				if(tbcase.getPulmonaryType() != null && isSmearOther(tbcase.getPulmonaryType().getShortName().toString())){
-					if(isMale(tbcase.getPatient().getGender()))
+					if(tbcase.getPatient().getGender()==Gender.MALE)
 						cntOtherM++;
-					if(isFemale(tbcase.getPatient().getGender()))
+					if(tbcase.getPatient().getGender()==Gender.FEMALE)
 						cntOtherF++;
 					}
 		
@@ -129,26 +129,10 @@ public class TBForm10Block1 extends Indicator{
 		float totM = cntNewM + cntRelM + cntFailM + cntDefM + cntSmearNegM + cntEPM + cntOtherM;
 		float totF = cntNewF + cntRelF + cntFailF + cntDefF + cntSmearNegF + cntEPF + cntOtherF;
 		
-		addValue(messages.get("manag.gender.male8"), messages.get("#"), totM);
-		addValue(messages.get("manag.gender.female8"), messages.get("#"), totF);
+		addValue(messages.get("Gender.MALE"), messages.get("#"), totM);
+		addValue(messages.get("Gender.FEMALE"), messages.get("#"), totF);
 		addValue(messages.get("manag.pulmonary.tot"), messages.get("#"), totM + totF);	
 
-	}
-	
-	public boolean isSmearPos(String strSmear){
-		flag = false;
-		if(strSmear.equalsIgnoreCase("Smear(+)")){
-			flag = true;
-		}
-		return flag;		
-	}
-	
-	public boolean isSmearNeg(String strSmear){
-		flag = false;
-		if(strSmear.equalsIgnoreCase("Smear(-)")){
-			flag = true;
-		}
-		return flag;		
 	}
 	
 	public boolean isSmearOther(String strSmear){
@@ -167,19 +151,6 @@ public class TBForm10Block1 extends Indicator{
 		return flag;		
 	}
 	
-	public boolean isMale(Gender g){
-		flag = false;
-		if(g == Gender.MALE)
-				flag = true;
-		return flag;
-	}
-	
-	public boolean isFemale(Gender g){
-		flag = false;
-		if(g == Gender.FEMALE)
-				flag = true;
-		return flag;
-	}
 	@Override
 	public String getHQLSelect() {
 		String strSel = "";
