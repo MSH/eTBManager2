@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator;
 import org.msh.tb.indicators.core.IndicatorTable;
@@ -19,6 +23,7 @@ public class TBForm10Block1 extends Indicator{
 	 * 
 	 */
 	private static final long serialVersionUID = 7230654297736913859L;
+	@In(create=true) EntityManager entityManager;
 	private String strMicroPos, strSmearNeg, strSmearEP, strOthers;
 	private boolean flag = false;
 	
@@ -30,77 +35,74 @@ public class TBForm10Block1 extends Indicator{
 		IndicatorTable table = getTable();
 		Map<String, String> messages = Messages.instance();
 
-		List<TbCase> lst = new ArrayList<TbCase>();
-		lst = createQuery().getResultList();
+		List<Object[]> lst = createQuery().getResultList();
 		
 		float cntNewM = 0, cntNewF = 0, cntRelM = 0, cntRelF = 0, cntFailM = 0, cntFailF = 0, cntDefM = 0, cntDefF = 0;
 		float cntSmearNegM = 0, cntSmearNegF = 0, cntEPM = 0, cntEPF = 0;
 		float cntOtherM = 0, cntOtherF = 0;
 		
-		for(TbCase val:lst){
-			System.out.println("TBCase ID ------->" +val.getId());
+		for(Object[] val:lst){
+			TbCase tbcase = new TbCase();
+			tbcase = entityManager.find(TbCase.class, val[0]);
 			
-			if(val.getPulmonaryType() != null){
-			//checking for Smear Positive
-				if(isSmearPos(val.getPulmonaryType().getShortName().toString())){
-					if(val.getPatientType() == PatientType.NEW){
-						if(isMale(val.getPatient().getGender()))
-							cntNewM++;
+			/*
+			 * Checking for 1st reported Microscopy result to be Positive
+			 */
+				if(val[5] == MicroscopyResult.PLUS || val[5] == MicroscopyResult.PLUS2 || val[5] == MicroscopyResult.PLUS3 || val[5] == MicroscopyResult.PLUS4) {
+						if(tbcase.getPatientType() == PatientType.NEW){
+							if(tbcase.getPatient().getGender()==Gender.MALE)
+								cntNewM++;
 						
-						if(isFemale(val.getPatient().getGender()))
-							cntNewF++;
-					}
-					if(val.getPatientType() == PatientType.RELAPSE){
-						if(isMale(val.getPatient().getGender()))
-							cntRelM++;
+							if(tbcase.getPatient().getGender()==Gender.FEMALE)
+								cntNewF++;
+							}
+						if(tbcase.getPatientType() == PatientType.RELAPSE){
+							if(tbcase.getPatient().getGender()==Gender.MALE)
+								cntRelM++;
 						
-						if(isFemale(val.getPatient().getGender()))
-							cntRelF++;
-					}
-					if(val.getPatientType() == PatientType.FAILURE){
-						if(isMale(val.getPatient().getGender()))
-							cntFailM++;
+							if(tbcase.getPatient().getGender()==Gender.FEMALE)
+								cntRelF++;
+							}
+						if(tbcase.getPatientType() == PatientType.FAILURE){
+							if(tbcase.getPatient().getGender()==Gender.MALE)
+								cntFailM++;
 						
-						if(isFemale(val.getPatient().getGender()))
-							cntFailF++;
-					}
-					if(val.getPatientType() == PatientType.AFTER_DEFAULT){
-						if(isMale(val.getPatient().getGender()))
-							cntDefM++;
+							if(tbcase.getPatient().getGender()==Gender.FEMALE)
+								cntFailF++;
+							}
+						if(tbcase.getPatientType() == PatientType.AFTER_DEFAULT){
+							if(tbcase.getPatient().getGender()==Gender.MALE)
+								cntDefM++;
 						
-						if(isFemale(val.getPatient().getGender()))
-							cntDefF++;
+							if(tbcase.getPatient().getGender()==Gender.FEMALE)
+								cntDefF++;
+							}
 					}
-				}
-			
-				if(val.getPatientType() == PatientType.NEW && isSmearNeg(val.getPulmonaryType().getShortName().toString())){
-					if(isMale(val.getPatient().getGender()))
+				
+				if(tbcase.getPatientType() == PatientType.NEW && val[5] == MicroscopyResult.NEGATIVE){
+					if(isMale(tbcase.getPatient().getGender()))
 						cntSmearNegM++;
 					
-					if(isFemale(val.getPatient().getGender()))
+					if(isFemale(tbcase.getPatient().getGender()))
 						cntSmearNegF++;
-				}
-			
-			}
-			
-			if(val.getPatientType() == PatientType.NEW && (val.getExtrapulmonaryType() != null || val.getExtrapulmonaryType2() != null))   {
-				if(isMale(val.getPatient().getGender()))
-					cntEPM++;
-				
-				if(isFemale(val.getPatient().getGender()))
-					cntEPF++;
-				
-			}
-			
-			if(val.getPulmonaryType() != null && isSmearOther(val.getPulmonaryType().getShortName().toString())){
-				if(isMale(val.getPatient().getGender()))
-					cntOtherM++;
-				
-				if(isFemale(val.getPatient().getGender()))
-					cntOtherF++;
-			}
-		}
+					}
 		
+				if(tbcase.getPatientType() == PatientType.NEW && (tbcase.getExtrapulmonaryType() != null || tbcase.getExtrapulmonaryType2() != null))   {
+					if(tbcase.getPatient().getGender()==Gender.MALE)
+						cntEPM++;
+				
+					if(tbcase.getPatient().getGender()==Gender.FEMALE)
+						cntEPF++;
+					}
+			
+				if(tbcase.getPulmonaryType() != null && isSmearOther(tbcase.getPulmonaryType().getShortName().toString())){
+					if(isMale(tbcase.getPatient().getGender()))
+						cntOtherM++;
+					if(isFemale(tbcase.getPatient().getGender()))
+						cntOtherF++;
+					}
+		
+			}
 	
 		addValue(messages.get("manag.gender.male1"), messages.get("#"), cntNewM);
 		addValue(messages.get("manag.gender.female1"), messages.get("#"), cntNewF);
@@ -131,11 +133,6 @@ public class TBForm10Block1 extends Indicator{
 		addValue(messages.get("manag.gender.female8"), messages.get("#"), totF);
 		addValue(messages.get("manag.pulmonary.tot"), messages.get("#"), totM + totF);	
 
-	}
-	
-	@Override
-	public String getHQLSelect() {
-		return "";
 	}
 	
 	public boolean isSmearPos(String strSmear){
@@ -182,6 +179,19 @@ public class TBForm10Block1 extends Indicator{
 		if(g == Gender.FEMALE)
 				flag = true;
 		return flag;
+	}
+	@Override
+	public String getHQLSelect() {
+		String strSel = "";
+		strSel = "select c.id, c.patient.gender, c.state, c.outcomeDate, e.dateCollected, e.result ";
+		return strSel;
+	}
+	
+	@Override
+	protected String getHQLFrom() {
+		String strFrom = "";
+		strFrom =  " from ExamMicroscopy e join e.tbcase c ";
+		return strFrom;
 	}
 	
 	
