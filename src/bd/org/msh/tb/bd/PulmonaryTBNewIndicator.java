@@ -1,30 +1,25 @@
 package org.msh.tb.bd;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
-import org.hibernate.util.CalendarComparator;
+
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
-import org.msh.tb.entities.ExamMicroscopy;
-import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.indicators.core.Indicator2D;
 
-import sun.util.calendar.CalendarUtils;
 
 /**
  * Generate indicator for Pulmonary TB patients for Bangladesh - TB 12 form
@@ -37,179 +32,191 @@ public class PulmonaryTBNewIndicator extends Indicator2D{
 	 * 
 	 */
 	private static final long serialVersionUID = -351439981021805081L;
-	public boolean flagMicroscopyNeg = false;
-	public boolean flagMicroscopyPos = false;
-	public int flagSelectQuery;
-	private boolean flag = false;
+	private int flagSelectQuery = 0;
 	@In(create=true) EntityManager entityManager;
 
 	@Override
 	protected void createIndicators() {
 		// TODO Auto-generated method stub
-		//setNewCasesOnly(true);
-		//List<Object[]> lst = generateValuesByOutputSelection("c.patientType = 0");
 		
-		//Fetching all confirmed cases notified as 'new' and ontreatment
 		flagSelectQuery = 1;
-		String cond = " c.patientType = 0 ";
-		setCondition(cond);
-		//List<Object[]> lst = createQuery().getResultList();
-		List<TbCase> lst = new ArrayList<TbCase>();
-		lst = createQuery().getResultList();
-		System.out.println("--------------->"+lst.size());
+		String cond3 = " c.id = e.tbcase.id and c.patientType = 0 group by c.id";
+		setCondition(cond3);
+		setOrderByFields("e.tbcase.id, e.dateCollected");
+		List<Object[]> lst3 = createQuery().getResultList();
+		flagSelectQuery = 0;
 		
-
-		//System.out.println("List Size--->" +lst.size());
-		float cntSmearPosM = 0, cntSmearPosF = 0, cntSmearNegM = 0, cntSmearNegF = 0, cntEPM = 0, cntEPF = 0;
+		float cntSmearPosM = 0, cntSmearPosF = 0, cntSmearNegM = 0, cntSmearNegF = 0;
 		float cntDiedPosM = 0,cntDiedPosF = 0, cntDiedNegM = 0, cntDiedNegF = 0;
 		float cntFailPosM = 0, cntFailPosF = 0, cntFailNegM = 0, cntFailNegF = 0;
 		float cntDefaultedPosM = 0, cntDefaultedPosF = 0, cntDefaultedNegM = 0, cntDefaultedNegF = 0; 
 		float cntTransOutPosM = 0, cntTransOutPosF = 0, cntTransOutNegM = 0, cntTransOutNegF = 0;
-//		float cntCuredPosM = 0, cntCuredPosF = 0, cntCuredNegM = 0, cntCuredNegF = 0;
-//		float cntTreatedPosM = 0, cntTreatedNegM = 0, cntTreatedPosF = 0, cntTreatedNegF = 0;
-//		float cntEPCuredM = 0, cntEPTreatedM = 0, cntEPDiedM = 0, cntEPFailM = 0, cntEPDefaultedM = 0, cntEPTransOutM = 0;
-//		float cntEPCuredF = 0, cntEPTreatedF = 0, cntEPDiedF = 0, cntEPFailF = 0, cntEPDefaultedF = 0, cntEPTransOutF = 0;
-		float cntSmearPosMNegM = 0, cntSmearPosMNegF = 0, cntSmearNegMNegM = 0, cntSmearNegMNegF = 0, cntSmearPosMPosM = 0, cntSmearPosMPosF = 0, cntSmearNegMPosM = 0, cntSmearNegMPosF = 0;
+		float cntNovEvalPosM = 0, cntNovEvalPosF = 0, cntNovEvalNegM = 0, cntNovEvalNegF = 0;
+		float cntSmearPosMNegM = 0, cntSmearPosMNegF = 0, cntSmearNegMNegM = 0, cntSmearNegMNegF = 0;
+		float cntSmearPosMPosM = 0, cntSmearPosMPosF = 0, cntSmearNegMPosM = 0, cntSmearNegMPosF = 0;
+		Date dtIniTreat = null, dtOutcome = null;
 			
-		for(TbCase val:lst){
-			
-			if(val.getPulmonaryType() != null){
-				if(isSmearPos(val.getPulmonaryType().getShortName().toString())){
-					if(val.getPatient().getGender() == Gender.MALE){
+	
+	for(Object[] val:lst3){	
+					dtIniTreat = (Date)val[1];
+					Date dt2AfterIni = null, dt3AfterIni = null;		 
+						try {
+							dt2AfterIni = addMonthsToDate(dtIniTreat,2);
+							dt3AfterIni = addMonthsToDate(dtIniTreat,3);
+							} catch (ParseException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+				
+				/*
+				 * Checking for 1st reported Microscopy result to be Positive
+				 */
+			if(val[4] == MicroscopyResult.PLUS || val[4] == MicroscopyResult.PLUS2 || val[4] == MicroscopyResult.PLUS3 || val[4] == MicroscopyResult.PLUS4) {
+				if(val[2] == Gender.MALE){
 					cntSmearPosM++;
-//						Date today = new Date(); 
-//						int monthOfTreat = val.getMonthTreatment(today);
-//						System.out.println("Month of Treatemnt-------->" +monthOfTreat);
-						val.getTreatmentPeriod().getIniDate();
-						
-						String mres = getMicroscopyResult(val.getId(), val.getTreatmentPeriod().getIniDate());
-						System.out.println("Microscopy Result ----->" +mres);
-						
-						// Checking for all cases with microscopy results still NOT closed
-						if(mres!= null && mres.equalsIgnoreCase("NEGATIVE") && val.getState().ordinal()<3)
-							cntSmearPosMNegM++;
-						if(mres!= null && (mres.equalsIgnoreCase("POSITIVE") || mres.equalsIgnoreCase("PLUS") 
-								|| mres.equalsIgnoreCase("PLUS2") || mres.equalsIgnoreCase("PLUS3") 
-								|| mres.equalsIgnoreCase("PLUS4"))  && val.getState().ordinal()<3)
-							cntSmearPosMPosM++;
-												
-						Date dt2AfterIni = addMonthsToDate(val.getTreatmentPeriod().getIniDate(),2);
-						Date dt3AfterIni = addMonthsToDate(val.getTreatmentPeriod().getIniDate(),3);
-						
-						// Checking if the case was closed within 2-3 months of start treatment
-						if(val.getOutcomeDate()!= null && val.getOutcomeDate().after(dt2AfterIni) && val.getOutcomeDate().before(dt3AfterIni)) {
-						
-						if(val.getState() == CaseState.DIED)
-							cntDiedPosM++;
-						if(val.getState() == CaseState.FAILED)
-							cntFailPosM++;
-						if(val.getState() == CaseState.DEFAULTED)
-							cntDefaultedPosM++;
-						if(val.getState() == CaseState.TRANSFERRED_OUT)
-							cntTransOutPosM++;
-						}
-						
-					}
-				if(val.getPatient().getGender() == Gender.FEMALE){
-					cntSmearPosF++;
-//					MicroscopyResult mres = getMicroscopyResult(val.getId(), val.getTreatmentPeriod().getIniDate());
-//					if(mres == MicroscopyResult.NEGATIVE)
-//						cntSmearPosMNegF++;
-//					if(mres == MicroscopyResult.POSITIVE || mres == MicroscopyResult.PLUS || mres == MicroscopyResult.PLUS2 || mres == MicroscopyResult.PLUS3 || mres == MicroscopyResult.PLUS4)
-//						cntSmearPosMPosF++;
-					val.getTreatmentPeriod().getIniDate();
+					/*
+					 * Fetches Microscopy results for sample collected within 2-3 months of start treatment
+					 */
+					String mres = getMicroscopyRes((Integer)val[0], dtIniTreat);
 					
-					String mres = getMicroscopyResult(val.getId(), val.getTreatmentPeriod().getIniDate());
+					/*
+					 *  Checking for all cases with microscopy results still NOT closed
+					 */
+					if(mres!= null && mres.equalsIgnoreCase("NEGATIVE") && ((CaseState)val[5]).ordinal()<3)
+						cntSmearPosMNegM++;
+					if(mres!= null && (mres.equalsIgnoreCase("POSITIVE") || mres.equalsIgnoreCase("PLUS") 
+							|| mres.equalsIgnoreCase("PLUS2") || mres.equalsIgnoreCase("PLUS3") 
+							|| mres.equalsIgnoreCase("PLUS4"))  && ((CaseState)val[5]).ordinal()<3)
+						cntSmearPosMPosM++;
+					/*
+					 * Not evaluated cases - no results for sample collected 2-3 months after start treatment							
+					 */
+					if(mres=="")
+						cntNovEvalPosM++;
+					
+					/*
+					 * for cases with an outcome within 2-3 months of start treatment
+					 */
+					if(val[6]!= null) {
+								dtOutcome =  (Date)val[6];
+						if(dtOutcome.after(dt2AfterIni) && dtOutcome.before(dt3AfterIni)) {
+									if(val[5]== CaseState.DIED)
+											cntDiedPosM++;
+									if(val[5] == CaseState.FAILED)
+											cntFailPosM++;
+									if(val[5] == CaseState.DEFAULTED)
+												cntDefaultedPosM++;
+									if(val[5] == CaseState.TRANSFERRED_OUT)
+												cntTransOutPosM++;
+										}
+								}			
+				}
+						
+					
+				if(val[2] == Gender.FEMALE){
+					cntSmearPosF++;
+					String mres = getMicroscopyRes((Integer)val[0], dtIniTreat);
+					
 					
 					// Checking for all cases with microscopy results still NOT closed
-					if(mres!= null && mres.equalsIgnoreCase("NEGATIVE") && val.getState().ordinal()<3)
+					if(mres!= null && mres.equalsIgnoreCase("NEGATIVE") && ((CaseState)val[5]).ordinal()<3)
 						cntSmearPosMNegF++;
 					if(mres!= null && (mres.equalsIgnoreCase("POSITIVE") || mres.equalsIgnoreCase("PLUS") 
 							|| mres.equalsIgnoreCase("PLUS2") || mres.equalsIgnoreCase("PLUS3") 
-							|| mres.equalsIgnoreCase("PLUS4"))  && val.getState().ordinal()<3)
+							|| mres.equalsIgnoreCase("PLUS4"))  && ((CaseState)val[5]).ordinal()<3)
 						cntSmearPosMPosF++;
 					
-					Date dt2AfterIni = addMonthsToDate(val.getTreatmentPeriod().getIniDate(),2);
-					Date dt3AfterIni = addMonthsToDate(val.getTreatmentPeriod().getIniDate(),3);
+					if(mres=="")
+						cntNovEvalPosF++;
+					
 					
 					// Checking if the case was closed within 2-3 months of start treatment
-					if(val.getOutcomeDate()!= null && val.getOutcomeDate().after(dt2AfterIni) && val.getOutcomeDate().before(dt3AfterIni)) {
-						if(val.getState() == CaseState.DIED)
+					if(val[6]!= null) {
+							dtOutcome =  (Date)val[6];
+							if(dtOutcome.after(dt2AfterIni) && dtOutcome.before(dt3AfterIni)) {
+						if(val[5] == CaseState.DIED)
 							cntDiedPosF++;
-						if(val.getState() == CaseState.FAILED)
+						if(val[5] == CaseState.FAILED)
 							cntFailPosF++;
-						if(val.getState() == CaseState.DEFAULTED)
+						if(val[5] == CaseState.DEFAULTED)
 							cntDefaultedPosF++;
-						if(val.getState() == CaseState.TRANSFERRED_OUT)
-							cntTransOutPosF++;
+						if(val[5] == CaseState.TRANSFERRED_OUT)
+							cntTransOutPosF++;		
+							}
 						}
-					}
-			}
-			
-			if(isSmearNeg(val.getPulmonaryType().getShortName().toString())){
-				if(val.getPatient().getGender() == Gender.MALE){
-					cntSmearNegM++;
-					val.getTreatmentPeriod().getIniDate();
 					
-					String mres = getMicroscopyResult(val.getId(), val.getTreatmentPeriod().getIniDate());
-					System.out.println("Microscopy Result ----->" +mres);
+					}
+				
+				}
+			
+			
+			//Checking for 1st reported Microscopy result to be Negative
+			if(val[4] == MicroscopyResult.NEGATIVE){
+				if(val[2] == Gender.MALE){
+					cntSmearNegM++;
+					String mres = getMicroscopyRes((Integer)val[0], dtIniTreat);
+					
 					
 					// Checking for all cases with microscopy results still NOT closed
-					if(mres!= null && mres.equalsIgnoreCase("NEGATIVE") && val.getState().ordinal()<3)
+					if(mres!= null && mres.equalsIgnoreCase("NEGATIVE") && ((CaseState)val[5]).ordinal()<3)
 						cntSmearNegMNegM++;
 					if(mres!= null && (mres.equalsIgnoreCase("POSITIVE") || mres.equalsIgnoreCase("PLUS") 
 							|| mres.equalsIgnoreCase("PLUS2") || mres.equalsIgnoreCase("PLUS3") 
-							|| mres.equalsIgnoreCase("PLUS4"))  && val.getState().ordinal()<3)
+							|| mres.equalsIgnoreCase("PLUS4"))  && ((CaseState)val[5]).ordinal()<3)
 						cntSmearNegMPosM++;
-											
-					Date dt2AfterIni = addMonthsToDate(val.getTreatmentPeriod().getIniDate(),2);
-					Date dt3AfterIni = addMonthsToDate(val.getTreatmentPeriod().getIniDate(),3);
+					if(mres=="")
+						cntNovEvalNegM++;
+										
 					
 					// Checking if the case was closed within 2-3 months of start treatment
-					if(val.getOutcomeDate()!= null && val.getOutcomeDate().after(dt2AfterIni) && val.getOutcomeDate().before(dt3AfterIni)) {
-					if(val.getState() == CaseState.DIED)
-						cntDiedNegM++;
-					if(val.getState() == CaseState.FAILED)
-						cntFailNegM++;
-					if(val.getState() == CaseState.DEFAULTED)
-						cntDefaultedNegM++;
-					if(val.getState() == CaseState.TRANSFERRED_OUT)
-						cntTransOutNegM++;
-					}
-				}
-				if(val.getPatient().getGender() == Gender.FEMALE){
-					cntSmearNegF++;
-					val.getTreatmentPeriod().getIniDate();
+					if(val[6]!= null) {
+						dtOutcome =  (Date)val[6];
+						if(dtOutcome.after(dt2AfterIni) && dtOutcome.before(dt3AfterIni)) {
 					
-					String mres = getMicroscopyResult(val.getId(), val.getTreatmentPeriod().getIniDate());
-					System.out.println("Microscopy Result ----->" +mres);
+							if(val[5]== CaseState.DIED)
+								cntDiedNegM++;
+							if(val[5] == CaseState.FAILED)
+								cntFailNegM++;
+							if(val[5] == CaseState.DEFAULTED)
+								cntDefaultedNegM++;
+							if(val[5] == CaseState.TRANSFERRED_OUT)
+								cntTransOutNegM++;
+							}
+						}
+					
+					}
+				if(val[2]== Gender.FEMALE){
+					cntSmearNegF++;
+					String mres = getMicroscopyRes((Integer)val[0], dtIniTreat);
 					
 					// Checking for all cases with microscopy results still NOT closed
-						if(mres!= null && mres.equalsIgnoreCase("NEGATIVE") && val.getState().ordinal()<3)
+						if(mres!= null && mres.equalsIgnoreCase("NEGATIVE") && ((CaseState)val[5]).ordinal()<3)
 						cntSmearNegMNegF++;
 						if(mres!= null && (mres.equalsIgnoreCase("POSITIVE") || mres.equalsIgnoreCase("PLUS") 
 							|| mres.equalsIgnoreCase("PLUS2") || mres.equalsIgnoreCase("PLUS3") 
-							|| mres.equalsIgnoreCase("PLUS4"))  && val.getState().ordinal()<3)
+							|| mres.equalsIgnoreCase("PLUS4"))  && ((CaseState)val[5]).ordinal()<3)
 						cntSmearNegMPosF++;
-											
-						Date dt2AfterIni = addMonthsToDate(val.getTreatmentPeriod().getIniDate(),2);
-						Date dt3AfterIni = addMonthsToDate(val.getTreatmentPeriod().getIniDate(),3);
-					
+					if(mres=="")
+						cntNovEvalNegF++;
+										
 						// Checking if the case was closed within 2-3 months of start treatment
-						if(val.getOutcomeDate()!= null && val.getOutcomeDate().after(dt2AfterIni) && val.getOutcomeDate().before(dt3AfterIni)) {
-							if(val.getState() == CaseState.DIED)
-								cntDiedNegF++;
-							if(val.getState() == CaseState.FAILED)
-								cntFailNegF++;
-							if(val.getState() == CaseState.DEFAULTED)
-								cntDefaultedNegF++;
-							if(val.getState() == CaseState.TRANSFERRED_OUT)
-								cntTransOutNegF++;
+						if(val[6]!= null) {
+							dtOutcome =  (Date)val[6];
+							if(dtOutcome.after(dt2AfterIni) && dtOutcome.before(dt3AfterIni)) {
+						
+								if(val[5] == CaseState.DIED)
+									cntDiedNegF++;
+								if(val[5] == CaseState.FAILED)
+									cntFailNegF++;
+								if(val[5] == CaseState.DEFAULTED)
+									cntDefaultedNegF++;
+								if(val[5] == CaseState.TRANSFERRED_OUT)
+									cntTransOutNegF++;
 						}
-					}
-				}
+					}		
+				} 
 			}	
-		}
+		} 
 		
 		Map<String, String> messages = Messages.instance();
 		
@@ -258,17 +265,23 @@ public class PulmonaryTBNewIndicator extends Indicator2D{
 		
 		addValue(messages.get("manag.gender.female6"), messages.get("manag.pulmonary.smearpositive"), cntTransOutPosF);
 		addValue(messages.get("manag.gender.female6"), messages.get("manag.pulmonary.smearnegative"), cntTransOutNegF);
+		
+		addValue(messages.get("manag.gender.male7"), messages.get("manag.pulmonary.smearpositive"), cntNovEvalPosM);
+		addValue(messages.get("manag.gender.male7"), messages.get("manag.pulmonary.smearnegative"), cntNovEvalNegM);
+		
+		addValue(messages.get("manag.gender.female7"), messages.get("manag.pulmonary.smearpositive"), cntNovEvalPosF);
+		addValue(messages.get("manag.gender.female7"), messages.get("manag.pulmonary.smearnegative"), cntNovEvalNegF);
 			
-		float totPosM = cntSmearPosMNegM + cntSmearPosMPosM + cntDiedPosM + cntFailPosM + cntDefaultedPosM + cntTransOutPosM;
-		float totNegM = cntSmearNegMNegM + cntSmearNegMPosM + cntDiedNegM + cntFailNegM + cntDefaultedNegM + cntTransOutNegM;
-		float totPosF = cntSmearPosMNegF + cntSmearPosMPosF + cntDiedPosF + cntFailPosF + cntDefaultedPosF + cntTransOutPosF;
-		float totNegF = cntSmearNegMNegF + cntSmearNegMPosF + cntDiedNegF + cntFailNegF + cntDefaultedNegF + cntTransOutNegF;
+		float totPosM = cntSmearPosMNegM + cntSmearPosMPosM + cntDiedPosM + cntFailPosM + cntDefaultedPosM + cntTransOutPosM + cntNovEvalPosM;
+		float totNegM = cntSmearNegMNegM + cntSmearNegMPosM + cntDiedNegM + cntFailNegM + cntDefaultedNegM + cntTransOutNegM + cntNovEvalNegM;
+		float totPosF = cntSmearPosMNegF + cntSmearPosMPosF + cntDiedPosF + cntFailPosF + cntDefaultedPosF + cntTransOutPosF + cntNovEvalPosF;
+		float totNegF = cntSmearNegMNegF + cntSmearNegMPosF + cntDiedNegF + cntFailNegF + cntDefaultedNegF + cntTransOutNegF + cntNovEvalNegF;
 		
-		addValue(messages.get("manag.gender.male7"), messages.get("manag.pulmonary.smearpositive"), totPosM);
-		addValue(messages.get("manag.gender.male7"), messages.get("manag.pulmonary.smearnegative"), totNegM);
+		addValue(messages.get("manag.gender.male8"), messages.get("manag.pulmonary.smearpositive"), totPosM);
+		addValue(messages.get("manag.gender.male8"), messages.get("manag.pulmonary.smearnegative"), totNegM);
 		
-		addValue(messages.get("manag.gender.female7"), messages.get("manag.pulmonary.smearpositive"), totPosF);
-		addValue(messages.get("manag.gender.female7"), messages.get("manag.pulmonary.smearnegative"), totNegF);
+		addValue(messages.get("manag.gender.female8"), messages.get("manag.pulmonary.smearpositive"), totPosF);
+		addValue(messages.get("manag.gender.female8"), messages.get("manag.pulmonary.smearnegative"), totNegF);
 				
 		float totPos = totPosM + totPosF;
 		float totNeg = totNegM + totNegF;
@@ -280,6 +293,8 @@ public class PulmonaryTBNewIndicator extends Indicator2D{
 	@Override
 	public String getHQLSelect() {
 		String strSel = "";
+		if(flagSelectQuery == 1)
+			strSel = "select c.id, c.treatmentPeriod.iniDate, c.patient.gender, e.dateCollected, e.result, c.state, c.outcomeDate";
 		if(flagSelectQuery == 2)
 			strSel = "select e.result, e.dateCollected";
 		return strSel;
@@ -290,88 +305,79 @@ public class PulmonaryTBNewIndicator extends Indicator2D{
 		// TODO Auto-generated method stub
 		String strFrom = "";
 		if(flagSelectQuery == 1)
-			strFrom = "from TbCase c";
+			//strFrom = "from TbCase c";
+			strFrom =  " from ExamMicroscopy e join e.tbcase c ";
 		if(flagSelectQuery ==2)
 			strFrom =  " from ExamMicroscopy e inner join e.tbcase c ";
+		if(flagSelectQuery ==3)
+			strFrom =  " from ExamMicroscopy e join e.tbcase c ";
 		return strFrom;
 		
 	}
-
-	public boolean isSmearPos(String strSmear){
-		flag = false;
-		if(strSmear.equalsIgnoreCase("Smear(+)")){
-			flag = true;
-		}
-		return flag;		
-	}
 	
-	public boolean isSmearNeg(String strSmear){
-		flag = false;
-		if(strSmear.equalsIgnoreCase("Smear(-)")){
-			flag = true;
-		}
-		return flag;		
-	}
+	public String getMicroscopyRes(int tbcaseid, Date dtIniTreat){
+		flagSelectQuery = 2;	
+		String strMicroscopyResult = "" ;
+		Date st;
+		Date end;
+			try {
+				 st = addMonthsToDate(dtIniTreat, 2);
+				 end = addMonthsToDate(dtIniTreat, 3);
+			 							 
+					String hql = " select e.result, e.dateCollected from ExamMicroscopy e inner join e.tbcase c where " +
+					" c.validationState = #{indicatorFilters.validationState} and c.treatmentPeriod.iniDate between #{indicatorFilters.iniDate} and #{indicatorFilters.endDate} " +
+					" and  e.tbcase.id = " +tbcaseid +
+					" and e.dateCollected between :dt1 and :dt2 ";
+		
+			List<Object[]> lst = new ArrayList<Object[]>();
 	
-	public String getMicroscopyResult(int tbcaseid, Date ini) {
-		
-		flagSelectQuery = 2;
-		String strMicroscopyResult = "";		
-		String condition = "e.dateCollected in (select max(m.dateCollected) from ExamMicroscopy m where m.tbcase.id = " +tbcaseid + ")" ;
-		setCondition(condition);
-//		Object[] o = null;
-//		try{
-//		o = (Object[]) createQuery().getSingleResult();
-//		
-//		System.out.println("Result ------> " +o[0]);
-//		System.out.println("date Collected ------> " +o[1]);
-//		Date dtCollected = (Date)o[1];
-//		Date dt2Months = addMonthsToDate(ini, 2);
-//		Date dt3Months = addMonthsToDate(ini, 3);
-//			if(dtCollected.after(dt2Months) && dtCollected.before(dt3Months))
-//				strMicroscopyResult = o[0].toString();
-//			else 
-//				strMicroscopyResult = "";
-//		}
-//		catch (NoResultException e){		
-//			return null;
-//			}
-		
-		/*
-		 * Fix for above when and if there is no one single result for a given date
-		 */
-		
-		List<Object[]> lst = new ArrayList<Object[]>();
-		try{
-			lst = createQuery().getResultList();
-			if(lst.size()==1){
-				for(Object[] val: lst){
-				strMicroscopyResult = val[0].toString();
+				lst = entityManager.createQuery(hql)
+				.setParameter("dt1", st)
+				.setParameter("dt2", end)
+				.getResultList();
+				
+				if(lst.size()==1){
+					for(Object[] val: lst){
+					strMicroscopyResult = val[0].toString();
+					}
+				}
+				//If more than one result exists between 2-3 months
+				if(lst.size()>1){
+					List<String> allRes = new ArrayList<String>();
+					String dtColl = "";
+					List<Date> dtCollList = new ArrayList<Date>();
+					for(Object[] val: lst){
+						allRes.add(val[0].toString());
+						dtCollList.add((Date)val[1]);	
+					}
+					List<Date> dupdtCollList = new ArrayList<Date>();
+					dupdtCollList = dtCollList;
+					Collections.sort(dupdtCollList);
+					Date dtmax = dupdtCollList.get(dupdtCollList.size()-1);
+					int index = dtCollList.indexOf(dtmax);
+					strMicroscopyResult = allRes.get(index);
 				}
 			}
-			if(lst.size()>1){
-				List<String> allRes = new ArrayList<String>();
-				for(Object[] val: lst){
-					allRes.add(val[0].toString());
-				}
-				if(allRes.contains("POSITIVE")||allRes.contains("PLUS")||allRes.contains("PLUS2")||allRes.contains("PLUS3")||allRes.contains("PLUS4"))
-					strMicroscopyResult = "POSITIVE";
-				else 
-					strMicroscopyResult = "NEGATIVE";
+			catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		}
-		catch(NoResultException e){
-			return null;
-		}
-				return strMicroscopyResult;
-	
+			catch(NoResultException e){
+				return null;
+			} 
+			finally{
+				flagSelectQuery = 0;
+			}
+					return strMicroscopyResult;
+		
 	}
 	
-	public Date addMonthsToDate(Date date, int addMon){
+	public Date addMonthsToDate(Date date, int addMon) throws ParseException{		
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		c.add(Calendar.MONTH, addMon);
 		Date dFwd = c.getTime();
-		return dFwd;		
+		return dFwd;	
 	}
+		
 }
