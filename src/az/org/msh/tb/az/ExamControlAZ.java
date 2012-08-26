@@ -24,8 +24,12 @@ public class ExamControlAZ extends ExamControl{
 	public String getMonthDisplay(TbCase tbcase, Date dt) {
 		EntityManager em = (EntityManager)Component.getInstance("entityManager", true);
 		TbCaseAZ tc = (TbCaseAZ) em.find(TbCaseAZ.class, tbcase.getId());
-		if (tc.isToThirdCategory() && !dt.before(tc.getThirdCatPeriod().getIniDate()))
-			return "TbCase.toThirdCategory";
+		try { // I don't know how it is possible!!!!
+			if (tc.isToThirdCategory() && !dt.before(tc.getThirdCatPeriod().getIniDate()))
+				return "TbCase.toThirdCategory";
+		} catch (Exception e) {
+			return super.getMonthDisplay(tbcase, dt);
+		}
 		
 		return super.getMonthDisplay(tbcase, dt);
 	}
