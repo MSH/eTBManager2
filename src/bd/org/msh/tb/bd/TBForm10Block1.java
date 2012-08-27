@@ -11,6 +11,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator;
@@ -34,6 +35,8 @@ public class TBForm10Block1 extends Indicator{
 		IndicatorTable table = getTable();
 		Map<String, String> messages = Messages.instance();
 
+		String cond = " c.id = e.tbcase.id group by c.id ";
+		setCondition(cond);
 		setOrderByFields("e.tbcase.id, e.dateCollected");
 		List<Object[]> lst = createQuery().getResultList();
 		
@@ -48,54 +51,61 @@ public class TBForm10Block1 extends Indicator{
 			/*
 			 * Checking for 1st reported Microscopy result to be Positive
 			 */
-				if(val[5] == MicroscopyResult.PLUS || val[5] == MicroscopyResult.PLUS2 || val[5] == MicroscopyResult.PLUS3 || val[5] == MicroscopyResult.PLUS4) {
-						if(tbcase.getPatientType() == PatientType.NEW){
+			if(((MicroscopyResult)val[5]).isPositive()) {	
+				if(tbcase.getInfectionSite()!=InfectionSite.EXTRAPULMONARY) {
+					if (tbcase.getPatientType()==PatientType.NEW) {
 							if(tbcase.getPatient().getGender()==Gender.MALE)
 								cntNewM++;
 						
 							if(tbcase.getPatient().getGender()==Gender.FEMALE)
 								cntNewF++;
+						}
+					else {
+							if(tbcase.getPatientType() == PatientType.RELAPSE){
+								if(tbcase.getPatient().getGender()==Gender.MALE)
+									cntRelM++;
+								if(tbcase.getPatient().getGender()==Gender.FEMALE)
+									cntRelF++;
+								}
+							
+							if(tbcase.getPatientType() == PatientType.FAILURE){
+								if(tbcase.getPatient().getGender()==Gender.MALE)
+									cntFailM++;
+								if(tbcase.getPatient().getGender()==Gender.FEMALE)
+									cntFailF++;
+								}
+							
+							if(tbcase.getPatientType() == PatientType.AFTER_DEFAULT){
+								if(tbcase.getPatient().getGender()==Gender.MALE)
+									cntDefM++;
+								if(tbcase.getPatient().getGender()==Gender.FEMALE)
+									cntDefF++;
+								}
+							
 							}
-						if(tbcase.getPatientType() == PatientType.RELAPSE){
-							if(tbcase.getPatient().getGender()==Gender.MALE)
-								cntRelM++;
-						
-							if(tbcase.getPatient().getGender()==Gender.FEMALE)
-								cntRelF++;
-							}
-						if(tbcase.getPatientType() == PatientType.FAILURE){
-							if(tbcase.getPatient().getGender()==Gender.MALE)
-								cntFailM++;
-						
-							if(tbcase.getPatient().getGender()==Gender.FEMALE)
-								cntFailF++;
-							}
-						if(tbcase.getPatientType() == PatientType.AFTER_DEFAULT){
-							if(tbcase.getPatient().getGender()==Gender.MALE)
-								cntDefM++;
-						
-							if(tbcase.getPatient().getGender()==Gender.FEMALE)
-								cntDefF++;
-							}
+						}	
 					}
 				
-				if(tbcase.getPatientType() == PatientType.NEW && val[5] == MicroscopyResult.NEGATIVE){
-					if(tbcase.getPatient().getGender()==Gender.MALE)
-						cntSmearNegM++;
-					
-					if(tbcase.getPatient().getGender()==Gender.FEMALE)
-						cntSmearNegF++;
-					}
-		
-				if(tbcase.getPatientType() == PatientType.NEW && (tbcase.getExtrapulmonaryType() != null || tbcase.getExtrapulmonaryType2() != null))   {
+			else if (((MicroscopyResult)val[5]).isNegative()){
+				if(tbcase.getInfectionSite()!=InfectionSite.EXTRAPULMONARY){
+					if (tbcase.getPatientType()==PatientType.NEW) {
+						if(tbcase.getPatient().getGender()==Gender.MALE)
+							cntSmearNegM++;	
+						if(tbcase.getPatient().getGender()==Gender.FEMALE)
+							cntSmearNegF++;
+						}
+					}	
+				}
+						
+				if(tbcase.getPatientType() == PatientType.NEW && (tbcase.getInfectionSite() == InfectionSite.EXTRAPULMONARY ))   {
 					if(tbcase.getPatient().getGender()==Gender.MALE)
 						cntEPM++;
 				
 					if(tbcase.getPatient().getGender()==Gender.FEMALE)
 						cntEPF++;
 					}
-			
-				if(tbcase.getPulmonaryType() != null && isSmearOther(tbcase.getPulmonaryType().getShortName().toString())){
+							
+				if(tbcase.getPatientType()==PatientType.OTHER && val[5] == MicroscopyResult.NEGATIVE){
 					if(tbcase.getPatient().getGender()==Gender.MALE)
 						cntOtherM++;
 					if(tbcase.getPatient().getGender()==Gender.FEMALE)
@@ -106,7 +116,6 @@ public class TBForm10Block1 extends Indicator{
 	
 		addValue(messages.get("manag.gender.male1"), messages.get("#"), cntNewM);
 		addValue(messages.get("manag.gender.female1"), messages.get("#"), cntNewF);
-		
 		
 		addValue(messages.get("manag.gender.male2"), messages.get("#"), cntRelM);
 		addValue(messages.get("manag.gender.female2"), messages.get("#"), cntRelF);
@@ -133,22 +142,6 @@ public class TBForm10Block1 extends Indicator{
 		addValue(messages.get("Gender.FEMALE"), messages.get("#"), totF);
 		addValue(messages.get("manag.pulmonary.tot"), messages.get("#"), totM + totF);	
 
-	}
-	
-	public boolean isSmearOther(String strSmear){
-		flag = false;
-		if(strSmear.equalsIgnoreCase("O")){
-			flag = true;
-		}
-		return flag;		
-	}
-	
-	public boolean isSmearExtraPulmonary(String strSmear){
-		flag = false;
-		if(strSmear.equalsIgnoreCase("Smear(-)")){
-			flag = true;
-		}
-		return flag;		
 	}
 	
 	@Override
