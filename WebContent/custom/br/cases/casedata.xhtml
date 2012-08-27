@@ -41,7 +41,7 @@
 		<div class="delete-icon"/><span>#{messages['form.remove']}</span>
 	</h:commandLink>
 
-	<s:link view="/cases/casehistory.xhtml" rendered="#{s:hasRole('LOGREP')}">
+	<s:link view="/cases/casehistory.xhtml">
 		<f:param name="id" value="#{caseHome.id}" />
 		<div class="icon-report" style="float:none;" /><span>#{messages['form.logreport']}</span>
 	</s:link>

@@ -42,6 +42,8 @@ public class OrderHome extends EntityHomeEx<Order>{
 	private List<SourceOrderItem> sources;
 	private SourceOrderItem item;
 	private AdminUnitSelection auselection;
+	private Date receivingDateModif;
+	private boolean saving;
 	
 	private String cancelReason;
 	
@@ -49,7 +51,6 @@ public class OrderHome extends EntityHomeEx<Order>{
 	public Order getOrder() {
 		return getInstance();
 	}
-
 	
 	/**
 	 * Return list of sources and its medicines selected
@@ -279,6 +280,30 @@ public class OrderHome extends EntityHomeEx<Order>{
 		sources.add(s);
 		return s;
 	}
+	
+	public void modifyReceivingDate(){
+		receivingDateModif = getInstance().getReceivingDate();
+		saving = true;
+	}
+	
+	public void saveReceivingDate(){
+		if(receivingDateModif != null){
+			if(receivingDateModif.before(getInstance().getShippingDate())){
+				facesMessages.addToControlFromResourceBundle("receivingDateModif", "meds.orders.invalidreceivingdate");
+				saving = true;
+				return;
+			}else if(receivingDateModif.after(new Date())){
+				facesMessages.addToControlFromResourceBundle("receivingDateModif", "validator.notfuture");
+				saving = true;
+				return;
+			}else{
+				getInstance().setReceivingDate(receivingDateModif);
+				this.persist();
+				saving = false;
+			}
+		}
+		
+	}
 
 	
 	/**
@@ -394,5 +419,35 @@ public class OrderHome extends EntityHomeEx<Order>{
 	 */
 	public void setCancelReason(String cancelReason) {
 		this.cancelReason = cancelReason;
+	}
+
+	/**
+	 * @return the receivingDateModif
+	 */
+	public Date getReceivingDateModif() {
+		return receivingDateModif;
+	}
+
+	/**
+	 * @param receivingDateModif the receivingDateModif to set
+	 */
+	public void setReceivingDateModif(Date receivingDateModif) {
+		this.receivingDateModif = receivingDateModif;
+	}
+
+
+	/**
+	 * @return the saving
+	 */
+	public boolean isSaving() {
+		return saving;
+	}
+
+
+	/**
+	 * @param saving the saving to set
+	 */
+	public void setSaving(boolean saving) {
+		this.saving = saving;
 	}
 }

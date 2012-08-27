@@ -71,7 +71,7 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 
-<h:form styleClass="form1">
+<h:form id="form1" styleClass="form1">
 
 <div style="float:right">
 	<h:outputText value="#{messages[order.status.key]}"
@@ -133,9 +133,23 @@
     	<h:outputText value="#{order.shippingDate}" converter="localeDateConverter" />
     </s:decorate>
 
-    <s:decorate template="/layout/display.xhtml" rendered="#{order.receivingDate != null}">
+    <s:decorate template="/layout/display.xhtml" rendered="#{order.receivingDate != null}" style="display:#{orderHome.saving ? 'none' : 'block'}">
     	<ui:define name="label">#{messages['Order.receivingDate']}:</ui:define>
     	<h:outputText value="#{order.receivingDate}" converter="localeDateConverter" />
+	    <a:commandLink actionListener="#{orderHome.modifyReceivingDate}" value=" #{messages['meds.modify']}" 
+	    	reRender="form1,messages" rendered="#{s:hasRole('ORDER_DTREC') and order.receivingDate != null}"/>
+    </s:decorate>
+    
+    <s:decorate rendered="#{s:hasRole('ORDER_DTREC') and order.receivingDate != null}" template="/layout/dateedit.xhtml" 
+    	style="display:#{orderHome.saving ? 'block' : 'none'}">
+    	<ui:define name="label">#{messages['Order.receivingDate']}:</ui:define>
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="datefield" value="#{orderHome.receivingDateModif}" /> 
+    	<ui:param name="edtid" value="receivingDateModif" />
+    	<ui:param name="showPattern" value="#{false}" />
+    	<a:commandLink action="#{orderHome.saveReceivingDate}" styleClass="button" reRender="form1,messages">
+        	<span>#{messages['form.save']}</span>
+        </a:commandLink>  
     </s:decorate>
     
     <s:decorate template="/layout/display.xhtml">
