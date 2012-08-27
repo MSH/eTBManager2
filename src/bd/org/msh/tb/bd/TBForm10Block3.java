@@ -11,6 +11,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator;
@@ -30,6 +31,7 @@ public class TBForm10Block3 extends Indicator{
 		
 		String cond = " c.id = e.tbcase.id group by c.id ";
 		setCondition(cond);
+		setOrderByFields("e.tbcase.id, e.dateCollected");
 		List<Object[]> lst = createQuery().getResultList();
 		
 		float cntAgeRange1M = 0,cntAgeRange1F = 0, cntAgeRange2M = 0,cntAgeRange2F = 0, cntAgeRange3M = 0, cntAgeRange3F = 0;
@@ -39,11 +41,11 @@ public class TBForm10Block3 extends Indicator{
 		for(Object[] val:lst){
 			TbCase tbcase = new TbCase();
 			tbcase = entityManager.find(TbCase.class, val[0]);
-			
+		if(tbcase.getPatientType()==PatientType.NEW && tbcase.getInfectionSite()!=InfectionSite.EXTRAPULMONARY) {
 			/*
 			 * Checking for 1st reported Microscopy result to be Negative
 			 */
-				if(val[5] == MicroscopyResult.NEGATIVE) {
+			if(((MicroscopyResult)val[5]).isNegative()) {
 				switch(getAgeRange(tbcase)){
 				case 1 :{
 					if(tbcase.getPatient().getGender()==Gender.MALE)
@@ -102,7 +104,8 @@ public class TBForm10Block3 extends Indicator{
 					break; 
 					}
 				}
-			}			
+			}	
+		}
 		}
 		Map<String, String> messages = Messages.instance();
 		addValue(messages.get("manag.gender.male1"), messages.get("#"), cntAgeRange1M);
