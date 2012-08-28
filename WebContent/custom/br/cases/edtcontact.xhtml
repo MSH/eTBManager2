@@ -25,7 +25,7 @@
 
     <s:decorate id="dt" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.name']}:</ui:define>
-    	<h:inputText value="#{tbContactBR.name}" required="true" style="width:320px;"/>
+    	<h:inputText value="#{tbContactBR.name}" required="true" maxlength="255" style="width:320px;"/>
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
