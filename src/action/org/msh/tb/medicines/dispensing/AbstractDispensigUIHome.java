@@ -10,6 +10,8 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.tb.TagHome;
+import org.msh.tb.TagsCasesHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchQuantity;
@@ -137,6 +139,8 @@ public abstract class AbstractDispensigUIHome {
 		DispensingSelection dispensingSel = (DispensingSelection)Component.getInstance("dispensingSelection", true);
 		dispensingSel.setMonth(DateUtils.monthOf(dt));
 		dispensingSel.setYear(DateUtils.yearOf(dt));
+		
+		TagsCasesHome.instance().updateTags(tbcase);
 		
 		return tipoOperacao + "persisted";
 	}
