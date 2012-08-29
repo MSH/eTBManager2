@@ -552,6 +552,8 @@ public class TreatmentHome {
 		tbcase.getHealthUnits().clear();
 		tbcase.getPrescribedMedicines().clear();
 
+		tbcase.setOwnerUnit(tbcase.getNotificationUnit());
+		
 		caseHome.setDisplayMessage(false);
 		caseHome.persist();
 
