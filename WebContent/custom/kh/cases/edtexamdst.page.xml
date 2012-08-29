@@ -6,7 +6,7 @@
 		<restrict>#{userSession.canEditCases}</restrict>
 		<begin-conversation join="true"/>
 		<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
-		<param name="examid" value="#{examDSTKHHome.idWithLog}" converterId="javax.faces.Integer"/>
+		<param name="examid" value="#{examDSTHome.idWithLog}" converterId="javax.faces.Integer"/>
 		<navigation>
 			<rule if="#{not caseHome.managed}">
 				<end-conversation/>
