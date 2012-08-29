@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.FieldValue;
@@ -15,8 +16,8 @@ import org.msh.tb.transactionlog.PropertyLog;
  *
  * Records information about Culture result during the treatment
  */
-//@Entity
-//@DiscriminatorValue("kh")
+@Entity
+@Table(name="examculture_kh")
 public class ExamCulture_Kh extends ExamCulture{
 
 	/**
