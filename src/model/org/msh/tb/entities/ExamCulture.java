@@ -3,6 +3,8 @@ package org.msh.tb.entities;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 import org.msh.tb.entities.enums.CultureResult;
@@ -11,6 +13,7 @@ import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name="examculture")
 public class ExamCulture extends LaboratoryExamResult implements Serializable {
 	private static final long serialVersionUID = 1470269499087718301L;
