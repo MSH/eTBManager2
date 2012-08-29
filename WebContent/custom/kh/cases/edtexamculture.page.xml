@@ -6,7 +6,7 @@
 		<restrict>#{userSession.canEditCases}</restrict>
 		<begin-conversation join="true"/>
 		<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
-		<param name="examid" value="#{examCultureHome.idWithLog}" converterId="javax.faces.Integer"/>
+		<param name="examid" value="#{examCultureKHHome.idWithLog}" converterId="javax.faces.Integer"/>
 		<navigation>
 			<rule if-outcome="canceled">
 				<end-conversation before-redirect="true"/>
