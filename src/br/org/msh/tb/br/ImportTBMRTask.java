@@ -323,7 +323,29 @@ public class ImportTBMRTask extends DbBatchTask {
 
 		refDate = rsCases.getDate("DATA_NOTIFICACAO");
 		tbcase.setRegistrationDate(refDate);
-		tbcase.setDiagnosisDate(refDate); //TODO data da primeira baciloscopia positiva; -  se baciloscopia negativa, a data da primeira consulta.
+		//data da primeira baciloscopia positiva; -  se baciloscopia negativa, a data da primeira consulta.
+		if(tbcase.getExamsMicroscopy()!=null && tbcase.getExamsMicroscopy().size()!=0){
+			for(ExamMicroscopy em : tbcase.getExamsMicroscopy()){
+				if(em.getResult().equals(MicroscopyResult.PLUS) || em.getResult().equals(MicroscopyResult.PLUS2) || em.getResult().equals(MicroscopyResult.PLUS3)
+						|| em.getResult().equals(MicroscopyResult.PLUS4) || em.getResult().equals(MicroscopyResult.POSITIVE)){
+					if(tbcase.getDiagnosisDate() == null)
+						tbcase.setDiagnosisDate(em.getDateCollected());
+					else if(tbcase.getDiagnosisDate().after(em.getDateCollected()))
+						tbcase.setDiagnosisDate(em.getDateCollected());
+				}
+			}
+		}else if(tbcase.getExaminations()!=null && tbcase.getExaminations().size()!=0){
+			for(MedicalExamination m : tbcase.getExaminations()){
+				if(tbcase.getDiagnosisDate() == null)
+					tbcase.setDiagnosisDate(m.getDate());
+				else if(tbcase.getDiagnosisDate().after(m.getDate()))
+					tbcase.setDiagnosisDate(m.getDate());
+			}
+		}else{
+			tbcase.setDiagnosisDate(refDate); 
+		}
+		
+		
 		tbcase.setAge(DateUtils.yearsBetween(tbcase.getRegistrationDate(), p.getBirthDate()));
 		tbcase.setCaseNumber(rsCases.getInt("NUM_CASO"));
 		if (tbcase.getCaseNumber() == 0)
