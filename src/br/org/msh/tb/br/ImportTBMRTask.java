@@ -1246,7 +1246,7 @@ public class ImportTBMRTask extends DbBatchTask {
 				}
 
 				tbcase.setState(st);
-				if (CaseState.ONTREATMENT.equals(st)) {
+				if (!CaseState.ONTREATMENT.equals(st)) {
 					tbcase.setOutcomeDate(rs.getDate("DATA"));
 				}
 			}
