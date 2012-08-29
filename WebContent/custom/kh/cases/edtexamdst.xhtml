@@ -9,10 +9,11 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.examdst']}" /><ui:param name="left" value="0" />
+<ui:param name="title" value="#{messages['cases.examdst']}" />
+<ui:param name="left" value="0" />
 
 <ui:param name="topmenu" value="0" />
-<ui:param name="examHome" value="#{examDSTKHHome}" />
+<ui:param name="examHome" value="#{examDSTHome}" />
 <ui:param name="labelstyle" value="width:200px;" />
 
 
@@ -21,57 +22,22 @@
 <s:decorate template="/layout/casebody.xhtml">
 	<ui:param name="pagewidth" value="650px" />
 	<h:form id="formexam" styleClass="form1">
-	
+
 	<div class="form-content">
-	
-	<h2>#{messages['PatientSample.identification']}</h2>
-
-    <div id="divdtcollected">
-    <s:decorate template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
-    	<ui:param name="required" value="true" /> 
-    	<ui:param name="future" value="false" /> 
-    	<ui:param name="datefield" value="#{examHome.instance.dateCollected}" /> 
-    </s:decorate>
-    </div>
-
-	<div id="divsample">
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['PatientSample.sampleType']}:</ui:define>
-    	<h:selectOneMenu value="#{examDST_KH.sampleType}" required="true">
-    		<s:selectItems value="#{sampleTypes_kh}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
-    		<s:convertEnum />
-    	</h:selectOneMenu>
-    </s:decorate>
-
-	
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['PatientSample.sampleNumber']}:</ui:define>
-    	<h:inputText value="#{examHome.instance.sampleNumber}" maxlength="50" style="width:200px;"/>
-    </s:decorate>
-    </div>
-
-    <s:decorate template="/layout/labselection.xhtml" >
-    	<ui:param name="required" value="true" />
-    	<ui:param name="labselection" value="#{examHome.labselection}" />
-    </s:decorate>
-    
-
-	
-	<!-- <s:decorate template="/layout/edtsample.xhtml">
-	</s:decorate> -->
+	<s:decorate template="/layout/edtsample.xhtml">
+	</s:decorate>
 
 	<h2>#{messages['cases.exams.results']}</h2>
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
     	<ui:param name="required" value="false" /> 
     	<ui:param name="future" value="false" /> 
-    	<ui:param name="datefield" value="#{examDST_KH.dateRelease}" /> 
+    	<ui:param name="datefield" value="#{examDST.dateRelease}" /> 
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
-    	<h:selectOneMenu value="#{examDST_KH.method}" required="false">
+    	<h:selectOneMenu value="#{examDST.method}" required="false">
     		<s:selectItems value="#{fieldsQuery.DSTMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
     		<s:convertEntity />
     	</h:selectOneMenu>
@@ -79,12 +45,12 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	<h:inputTextarea value="#{examDST_KH.comments}" style="width:500px;height:80px"/>
+    	<h:inputTextarea value="#{examDST.comments}" style="width:500px;height:80px"/>
     </s:decorate>
 
 	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
 
-	<h:dataTable value="#{examDSTKHHome.items}" var="it" styleClass="table2" columnClasses="coll,colr" rowClasses="lin1,lin2">
+	<h:dataTable value="#{examDSTHome.items}" var="it" styleClass="table2" columnClasses="coll,colr" rowClasses="lin1,lin2">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['Medicine']}" styleClass="collh"/>
@@ -99,7 +65,7 @@
 			<span style="width:250px;float:left">
 			<div id="divicon" />
 			<h:selectOneMenu id="res" value="#{it.result}" required="true" onchange="dstResultChange(this);">
-    			<s:selectItems value="#{dstResults}" var="ss" noSelectionLabel="-" label="#{messages[ss.key]}" />
+    			<s:selectItems value="#{dstResults}" var="ss" label="#{messages[ss.key]}" />
     			<s:convertEnum />
 			</h:selectOneMenu>
 			</span>
@@ -133,7 +99,7 @@ function dstResultChange(cb) {
  		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandLink action="#{examDSTKHHome.persist}" styleClass="button" reRender="formexam" 
+            <a:commandLink action="#{examDSTHome.persist}" styleClass="button" reRender="formexam" 
             	onclick="if (!disableButton(this)) return false;"  >
             	<span>#{messages['form.save']}</span>
             </a:commandLink>
