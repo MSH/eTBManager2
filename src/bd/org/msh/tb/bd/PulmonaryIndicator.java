@@ -14,6 +14,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator2D;
@@ -62,7 +63,8 @@ for(Object[] val:lst){
 			/*
 			 * Checking for 1st reported Microscopy result to be Positive
 			 */
-				if(val[5] == MicroscopyResult.PLUS || val[5] == MicroscopyResult.PLUS2 || val[5] == MicroscopyResult.PLUS3 || val[5] == MicroscopyResult.PLUS4) {
+			//	if(val[5] == MicroscopyResult.PLUS || val[5] == MicroscopyResult.PLUS2 || val[5] == MicroscopyResult.PLUS3 || val[5] == MicroscopyResult.PLUS4) {
+			if(((MicroscopyResult)val[5]).isPositive()) {	
 					if(val[1] == Gender.MALE){
 					cntSmearPosM++;
 					if(tbcase.getState().ordinal()>2){
@@ -103,7 +105,8 @@ for(Object[] val:lst){
 					}
 				}
 		
-			if(val[5] == MicroscopyResult.NEGATIVE){
+			//if(val[5] == MicroscopyResult.NEGATIVE){
+			if (((MicroscopyResult)val[5]).isNegative()){
 				if(val[1] == Gender.MALE){
 					cntSmearNegM++;
 					if(tbcase.getState().ordinal()>2){
@@ -144,7 +147,8 @@ for(Object[] val:lst){
 				}
 			}
 			
-			if(tbcase.getExtrapulmonaryType() != null || tbcase.getExtrapulmonaryType2() != null){
+			//if(tbcase.getExtrapulmonaryType() != null || tbcase.getExtrapulmonaryType2() != null){
+			if(tbcase.getInfectionSite()==InfectionSite.EXTRAPULMONARY){
 
 				if(val[1] == Gender.MALE){
 					cntEPM++;
