@@ -71,7 +71,8 @@ public class PulmonaryTBNewIndicator extends Indicator2D{
 				/*
 				 * Checking for 1st reported Microscopy result to be Positive
 				 */
-			if(val[4] == MicroscopyResult.PLUS || val[4] == MicroscopyResult.PLUS2 || val[4] == MicroscopyResult.PLUS3 || val[4] == MicroscopyResult.PLUS4) {
+			//if(val[4] == MicroscopyResult.PLUS || val[4] == MicroscopyResult.PLUS2 || val[4] == MicroscopyResult.PLUS3 || val[4] == MicroscopyResult.PLUS4) {
+			if(((MicroscopyResult)val[4]).isPositive()) {	
 				if(val[2] == Gender.MALE){
 					cntSmearPosM++;
 					/*
@@ -151,7 +152,8 @@ public class PulmonaryTBNewIndicator extends Indicator2D{
 			
 			
 			//Checking for 1st reported Microscopy result to be Negative
-			if(val[4] == MicroscopyResult.NEGATIVE){
+			//if(val[4] == MicroscopyResult.NEGATIVE){
+			if (((MicroscopyResult)val[4]).isNegative()){
 				if(val[2] == Gender.MALE){
 					cntSmearNegM++;
 					String mres = getMicroscopyRes((Integer)val[0], dtIniTreat);
