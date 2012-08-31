@@ -1223,32 +1223,30 @@ public class ImportTBMRTask extends DbBatchTask {
 		
 		if (rs.next()) {
 			CaseState st = CaseState.ONTREATMENT;
-			if (rs.next()) {
-				int val = rs.getInt("COD_RESULTADO_TRATAMENTO");
-				switch (val) {
-				case 2:
-					st = CaseState.FAILED;
-					break;
-				case 3:
-					st = CaseState.CURED;
-					break;
-				case 4:
-					st = CaseState.DEFAULTED;
-					break;
-				case 5:
-					st = CaseState.DIED;
-					break;
-				case 6:
-					st = CaseState.DIED_NOTTB;
-					break;
-				case 8:
-					st = CaseState.OTHER;
-				}
+			int val = rs.getInt("COD_RESULTADO_TRATAMENTO");
+			switch (val) {
+			case 2:
+				st = CaseState.FAILED;
+				break;
+			case 3:
+				st = CaseState.CURED;
+				break;
+			case 4:
+				st = CaseState.DEFAULTED;
+				break;
+			case 5:
+				st = CaseState.DIED;
+				break;
+			case 6:
+				st = CaseState.DIED_NOTTB;
+				break;
+			case 8:
+				st = CaseState.OTHER;
+			}
 
-				tbcase.setState(st);
-				if (!CaseState.ONTREATMENT.equals(st)) {
-					tbcase.setOutcomeDate(rs.getDate("DATA"));
-				}
+			tbcase.setState(st);
+			if (!CaseState.ONTREATMENT.equals(st)) {
+				tbcase.setOutcomeDate(rs.getDate("DATA"));
 			}
 		}
 		
