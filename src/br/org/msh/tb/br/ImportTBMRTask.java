@@ -369,9 +369,9 @@ public class ImportTBMRTask extends DbBatchTask {
 		tbcase.setNotifAddressChanged(false);
 		
 		int numCasosAnt = rsCases.getInt("NUM_TRATAMENTOS_ANTERIORES");
-		if (numCasosAnt == 0)
+//		if (numCasosAnt == 0)
 			 tbcase.setPatientType(PatientType.NEW);
-		else tbcase.setPatientType(PatientType.RELAPSE);
+//		else tbcase.setPatientType(PatientType.RELAPSE);
 		
 		importPatientAddress();
 		

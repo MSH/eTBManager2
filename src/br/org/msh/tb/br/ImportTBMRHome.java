@@ -28,7 +28,7 @@ public class ImportTBMRHome {
 	private String uf;
 
 	/**
-	 * Call assyncronous component to import cases
+	 * Call asynchronous component to import cases
 	 */
 	public void execute() {
 		Map<String, Object> params = new HashMap<String, Object>();
