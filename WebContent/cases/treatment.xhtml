@@ -60,7 +60,7 @@
 				onclick="document.location.href='#{request.contextPath}/cases/treatmentedt.seam?id=#{caseHome.id}'"
 				rendered="#{prescriptionTable.valid}">
 			</rich:menuItem>
-			<rich:menuItem  rendered="#{caseHome.canTransferOut and prescriptionTable.valid}" submitMode="client">
+			<rich:menuItem  rendered="#{caseHome.canTransferOut and prescriptionTable.valid}" submitMode="none">
 				<s:link value="#{messages['cases.move']}" view="/cases/casemove.xhtml" styleClass="rich-menu-item-label">
 					<f:param name="id" value="#{caseHome.id}" />
 				</s:link>

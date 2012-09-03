@@ -58,7 +58,7 @@
 				value="#{messages['form.edit']}" 
 				onclick="document.location.href='#{request.contextPath}/cases/treatmentedt.seam?id=#{caseHome.id}'">
 			</rich:menuItem>
-			<rich:menuItem  rendered="#{caseHome.canTransferOut}" >
+			<rich:menuItem  rendered="#{caseHome.canTransferOut}" submitMode="none">
 				<s:link value="#{messages['cases.move']}" view="/cases/casemove.xhtml" style="width:100%" >
 					<f:param name="id" value="#{caseHome.id}" />
 				</s:link>
