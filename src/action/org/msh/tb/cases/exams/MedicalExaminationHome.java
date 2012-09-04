@@ -2,17 +2,20 @@ package org.msh.tb.cases.exams;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.application.WorkspaceViewService;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.MedicalExamination;
+import org.msh.tb.entities.enums.YesNoType;
 
 
 @Name("medicalExaminationHome")
 public class MedicalExaminationHome extends ExamHome<MedicalExamination>{
 	private static final long serialVersionUID = 4240214890485645788L;
-
+	
+	@In(create=true) FacesMessages facesMessages;
 	
 	@Factory("medicalExamination")
 	public MedicalExamination getMedicalExamination() {
@@ -21,6 +24,10 @@ public class MedicalExaminationHome extends ExamHome<MedicalExamination>{
 	
 	@Override
 	public String persist() {
+		if(getMedicalExamination().getUsingPrescMedicines()==YesNoType.NO && getMedicalExamination().getReasonNotUsingPrescMedicines().isEmpty()){
+			facesMessages.addToControlFromResourceBundle("edtreason", "javax.faces.component.Reason.REQUIRED");
+			return "error";
+		}
 		if (!validate())
 			return "error";
 		return super.persist();
