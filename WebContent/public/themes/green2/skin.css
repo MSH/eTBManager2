@@ -110,6 +110,15 @@ select {font-size:1em; }
 	padding-left:54px;
 }
 
+.page-header-left a {
+	float:left;
+	position: absolute;
+	left: 15em;
+	width:200px;
+	height:42px;
+	padding-left:54px;
+}
+
 .page-header-left h1 {
 	font-size:1.8em;
 	line-height:110%;
