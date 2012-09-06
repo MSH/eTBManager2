@@ -12,7 +12,6 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchMovement;
-import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineReceiving;
 import org.msh.tb.entities.Movement;
