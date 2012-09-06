@@ -442,6 +442,8 @@ public class ForecastingCalculation {
 	 * Calculate the consumption of medicine for each one of the cases registered in the database
 	 */
 	private void calculateCasesOnTreatmentFromDB() {
+		Map<Integer, List<Integer>> caseids = new HashMap<Integer, List<Integer>>();
+
 		Integer prevCaseId = null;
 		Integer prevMedId = null;
 
@@ -476,12 +478,22 @@ public class ForecastingCalculation {
 						ForecastingResult res = fm.findResultByMonthIndex(i);
 						res.setNumCasesOnTreatment( res.getNumCasesOnTreatment() + 1);
 
+						List<Integer> lst = caseids.get(i);
+						if (lst == null) {
+							lst = new ArrayList<Integer>();
+							caseids.put(i, lst);
+						}
+
+						if ((freg != null) && (!lst.contains(caseId))) {
+							ForecastingRegimenResult regres = freg.findResultByMonthIndex(i);
+							regres.setNumCasesOnTreatment( regres.getNumCasesOnTreatment() + 1);
+							lst.add(caseId);
+						}
+
 						// update regimen information
 						if (newcase) {
 							if (freg != null) {
 								// increment quantity of patients in standard regimen
-								ForecastingRegimenResult regres = freg.findResultByMonthIndex(i);
-								regres.setNumCasesOnTreatment( regres.getNumCasesOnTreatment() + 1);
 								ForecastingItem item = forecasting.getTotalRegimens().get(i);
 								item.addQuantity(1);
 							}
