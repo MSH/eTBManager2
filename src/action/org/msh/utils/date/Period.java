@@ -35,8 +35,8 @@ public class Period {
 	 */
 	public Period(Date iniDate, Date endDate) {
 		super();
-		this.iniDate = (Date)iniDate.clone();
-		this.endDate = (Date)endDate.clone();
+		this.iniDate = iniDate != null? (Date)iniDate.clone() : null;
+		this.endDate = endDate != null? (Date)endDate.clone() : null;
 		checkDatesOrder();
 	}
 

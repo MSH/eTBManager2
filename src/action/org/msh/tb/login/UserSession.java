@@ -337,7 +337,7 @@ public class UserSession {
 
 
 	public boolean isCanAdjustStock() {
-		return Identity.instance().hasRole("STOCKPOS_EDT") && (getTbunit().isMedicineStorage()) && (getWorkingTbunit().equals(tbunit));
+		return Identity.instance().hasRole("STOCKPOS") && (getTbunit().isMedicineStorage()) && (getWorkingTbunit().equals(tbunit));
 	}
 
 
