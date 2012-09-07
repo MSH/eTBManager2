@@ -46,7 +46,7 @@ public class CasesQueryUA extends CasesQuery{
 			"c.treatmentPeriod.iniDate, c.diagnosisDate, nu.name.name1, " +
 			"loc.name.name1, loc.code, c.id, " +
 			"c.treatmentPeriod.endDate, c.state, c.classification, p.middleName, p.lastName, " +
-			"c.validationState, c.registrationCode, c.diagnosisType, p.birthDate " +
+			"c.validationState, c.registrationCode, c.diagnosisType, p.birthDate, c.diagnosisDate, c.outcomeDate " +
 			getFromHQL() + " join c.patient p " +
 		 	   "left outer join c.notificationUnit nu " +
 		 	   "left outer join c.ownerUnit tu " +

@@ -473,7 +473,7 @@ public class TbCase implements Serializable{
 		else {
 			Integer number = getCaseNumber();
 			if ((number == null) || (getPatient() == null))
-				return Messages.instance().get("cases.new");
+				return Messages.instance().get("cases.nonumber");
 			
 			return formatCaseNumber(patient.getRecordNumber(), caseNumber);
 		}
@@ -505,6 +505,13 @@ public class TbCase implements Serializable{
 	}
 
 
+	/**
+	 * Is case on treatment ?
+	 * @return
+	 */
+	public boolean isOnTreatment() {
+		return (state == CaseState.ONTREATMENT) || (state == CaseState.TRANSFERRING);
+	}
 
 	/**
 	 * Return the treatment period of the intensive phase

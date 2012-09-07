@@ -3,7 +3,6 @@ package org.msh.tb.cases;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.model.SelectItem;
 
 import org.jboss.seam.annotations.Factory;
@@ -19,6 +18,7 @@ import org.msh.tb.misc.FieldsQuery;
 
 @Name("sideEffectHome")
 public class SideEffectHome extends EntityHomeEx<CaseSideEffect>{
+	private static final long serialVersionUID = 4590228131339634325L;
 
 	@In(required=true) CaseHome caseHome;
 	@In(create=true) FieldsQuery fieldsQuery;

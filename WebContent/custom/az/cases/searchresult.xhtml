@@ -9,9 +9,9 @@
 	xmlns:rich="http://richfaces.ajax4jsf.org/rich"
 	template="/layout/template_new.xhtml">
 
-	<ui:param name="title" value="#{messages['cases.searchresult']}" />
-	<ui:param name="topmenu" value="0" />
-	<ui:param name="left" value="0" />
+<ui:param name="title" value="#{messages['cases.searchresult']}" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="left" value="0" />
 
 	<ui:define name="naveg">
 		<s:link value="#{messages['cases']}" view="/cases/index.html"
@@ -119,48 +119,47 @@
 						<ui:repeat value="#{casesAZ.resultList}" var="it">
 							<tr>
 								<td width="90px" align="center"><s:link
-										value="#{it.caseNumber==null?messages['cases.new']:it.displayCaseNumber}"
+										value="#{it.displayCaseNumber}"
 										view="/cases/casedata.xhtml">
-										<f:param name="id" value="#{it.caseId}" />
+										<f:param name="id" value="#{it.tbcase.id}" />
 									</s:link> <br /> <s:link view="/cases/casedata.xhtml"
-										styleClass="#{it.gender=='MALE'?'male-icon':'female-icon'}"
+										styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}"
 										style="float:none">
-										<f:param name="id" value="#{it.caseId}" />
+										<f:param name="id" value="#{it.tbcase.id}" />
 									</s:link></td>
-								<td><b>#{messages[it.classification.key]}</b>
+								<td><b>#{messages[it.tbcase.classification.key]}</b>
 									<div style="padding-top: 6px; clear: left;">
-										#{it.patientName} <br />
+										#{it.patient.fullName} <br />
 										#{messages['az_EIDSS_Year_Of_Birth']} : #{it.yearOfBirth}<br/>
-										#{messages['az_EIDSS_Age']} : #{it.patientAge}
+										#{messages['az_EIDSS_Age']} : #{it.tbcase.age}
 									</div></td>
 								<td>
 								   <ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
-								     <b>#{it.healthUnit}</b><br /> 
+								     <b>#{it.tbcase.ownerUnit.name}</b><br /> 
 									 <h:outputText
-										value="#{it.region} - #{it.locality}" style="font-size:10px;" />
+										value="#{it.adminUnitDisplay}" style="font-size:10px;" />
 									  <div style="padding-top: 6px; clear: left;">
-										<h:outputText value="#{messages[it.caseState.key]}"
+										<h:outputText value="#{messages[it.tbcase.state.key]}"
 											style="color:#8DA48F;font-weight:bold;" />
 									</div>
 									</ui:fragment>
 									<ui:fragment rendered='#{casesAZ.notBindedEIDSS}'>
-										<h:outputText value="#{it.registrationCode}"
+										<h:outputText value="#{it.tbcase.registrationCode}"
 											style="color:#8DA48F;font-weight:bold;" />
 									</ui:fragment>
 								</td>
 								<td style="border-left: 1px solid #E0E0E0;"><h:outputText
-										value="#{it.notificationDate}" converter="localeDateConverter" />
+										value="#{it.tbcase.registrationDate}" converter="localeDateConverter" />
 									<ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>	
-									<h:outputText value="#{it.beginningTreatmentDate}"
+									<h:outputText value="#{it.tbcase.treatmentPeriod}"
 										converter="periodConverter"
-										rendered="#{it.beginningTreatmentDate!=null}"
+										rendered="#{it.tbcase.treatmentPeriod.iniDate!=null}"
 										style="padding-top:6px;display:block;">
-										<f:param name="endDate" value="#{it.endingTreatmentDate}" />
 										<f:param name="type" value="length" />
 									</h:outputText> <h:outputText value="#{messages['cases.details.notreatment']}"
-										rendered="#{it.beginningTreatmentDate==null}"
+										rendered="#{it.tbcase.treatmentPeriod.iniDate==null}"
 										style="padding-top:6px;display:block;" /> <h:outputText
-										value="#{messages[it.validationState.key]}"
+										value="#{messages[it.tbcase.validationState.key]}"
 										style="color:#8DA48F;font-weight:bold;padding-top:6px;display:block;" />
 										</ui:fragment>
 								</td>

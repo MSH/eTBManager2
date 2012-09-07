@@ -13,6 +13,16 @@
 <ui:param name="topmenu" value="0" />
 <ui:param name="left" value="0" />
 
+<ui:define name="header">
+<style type="text/css">
+.link-header-sr {
+padding:4px;
+display:block;
+}
+
+</style>
+</ui:define>
+
 <ui:define name="naveg">
 	<s:link value="#{messages['cases']}" view="/cases/index.html" propagation="none"/>
 	<div class="item selected">
@@ -42,79 +52,54 @@
 	<h:panelGroup id="res">
 	<table id="tblres" width="100%" class="table1">
 		<tr><th class="searchtitle">
+				<a:commandLink value="#{messages['Patient.name']}" onclick="changeOrder(3);return false;" styleClass="link-header-sr"/>
+				<a:commandLink value="#{messages['Patient.caseNumber']}" onclick="changeOrder(0); return false;" styleClass="link-header-sr"/>
+				<a:commandLink value="#{messages['Gender']}" onclick="changeOrder(1); return false;"  styleClass="link-header-sr"/>
+				<a:commandLink value="#{messages['TbCase.patientAge']}" onclick="changeOrder(4);return false;" styleClass="link-header-sr"/>
+			</th>
+			<th class="searchtitle">
 				<div style="padding:4px;">
-				<a:commandLink value="#{messages['Patient.caseNumber']}" onclick="changeOrder(0); return false;"/>
-				<br/><br/>
-				<a:commandLink value="#{messages['Gender']}" onclick="changeOrder(1); return false;" />
+				<a:commandLink value="#{messages['CaseClassification']}" onclick="changeOrder(2);return false;" styleClass="link-header-sr"/>
+				<a:commandLink value="#{messages['CaseState']}" onclick="changeOrder(8);return false;" styleClass="link-header-sr"/>
 				</div>
 			</th>
 			<th class="searchtitle">
 				<div style="padding:4px;">
-				<a:commandLink value="#{messages['CaseClassification']}" onclick="changeOrder(2);return false;"/>
-				<br/><br/>
-				<a:commandLink value="#{messages['Patient.name']}" onclick="changeOrder(3);return false;"/>
-				<br/><br/>
-				<a:commandLink value="#{messages['TbCase.patientAge']}" onclick="changeOrder(4);return false;"/>
-				</div>
-			</th>
-			<th class="searchtitle">
-				<div style="padding:4px;">
-				<a:commandLink value="#{messages['TbCase.notificationUnit']}" onclick="changeOrder(5);return false;"/>
-				<br/><br/>
-				<a:commandLink value="#{levelInfo.nameLevel1}" onclick="changeOrder(6);return false;"/>
+				<a:commandLink value="#{messages['TbCase.notificationUnit']}" onclick="changeOrder(5);return false;" styleClass="link-header-sr"/>
+				<div class="link-header-sr">
+				<a:commandLink value="#{levelInfo.nameLevel1}" onclick="changeOrder(6);return false;" />
 				 - 
-				<a:commandLink value="#{levelInfo.nameLevel2}" onclick="changeOrder(7);return false;"/>
+				<a:commandLink value="#{levelInfo.nameLevel2}" onclick="changeOrder(7);return false;" />
 				(#{messages['Address']})
-				<br/><br/>
-				<a:commandLink value="#{messages['CaseState']}" onclick="changeOrder(8);return false;"/>
 				</div>
-			</th>
-			<th class="searchtitle">
-				<div style="padding:4px;">
-				<a:commandLink value="#{messages['TbCase.registrationDate']}" onclick="changeOrder(9);return false;"/>
-				<br/><br/>
-				<a:commandLink value="#{messages['cases.casesearching.treatlen']}" onclick="changeOrder(10);return false;"/>
-				<br/><br/>
 				<a:commandLink value="#{messages['ValidationState']}" onclick="changeOrder(11);return false;"/>
 				</div>
 			</th>
 		</tr>
 	<ui:repeat value="#{cases.resultList}" var="it">
-	<tr><td width="90px" align="center">
-			<s:link value="#{it.displayCaseNumber}" view="/cases/casedata.xhtml">
-				<f:param name="id" value="#{it.caseId}" />
-			</s:link>
-			<br/>
-			<s:link view="/cases/casedata.xhtml" 
-				styleClass="#{it.gender=='MALE'?'male-icon':'female-icon'}"  style="float:none">
-				<f:param name="id" value="#{it.caseId}" />
-			</s:link>
+	<tr><td>
+			<div style="height:50px;float:left">
+				<s:link view="/cases/casedata.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" >
+					<f:param name="id" value="#{it.tbcase.id}" />
+				</s:link>
+			</div>
+			<div>
+				<s:link view="/cases/casedata.xhtml" value="#{it.patient.fullName}">
+					<f:param name="id" value="#{it.tbcase.id}" />
+				</s:link>
+				<div>#{it.displayCaseNumber}</div>
+				<div>#{it.tbcase.age} #{messages['global.age']}</div>
+			</div>
 	</td>
 	<td>
-		<b>#{it.diagnosisType=='SUSPECT'? messages[it.classification.keySuspect] : messages[it.classification.key]}</b>
-		<div style="padding-top:6px;clear:left;">
-		#{it.patientName}
-		<br /> #{it.patientAge} #{messages['global.age']}
-		</div>
+		<b>#{it.tbcase.diagnosisType=='SUSPECT'? messages[it.tbcase.classification.keySuspect] : messages[it.tbcase.classification.key]}</b>
+		<div><h:outputText value="#{caseHome.getStatusString(it.tbcase)}" styleClass="#{it.tbcase.onTreatment?'warn':''}"/></div>
+   		<h:outputText value="#{caseHome.getStatusString2(it.tbcase)}" style="color:#8DA48F;font-weight:bold;"/>
 	</td>
 	<td>
-		<b>#{it.healthUnit}</b><br />
-		<h:outputText value="#{it.region} - #{it.locality}" style="font-size:10px;" /> 
-   		<div style="padding-top:6px;clear:left;">
-   		<h:outputText value="#{messages[it.caseState.key]}" style="color:#8DA48F;font-weight:bold;" />
-   		</div>		
-	</td>
-	<td>
-		<h:outputText value="#{it.notificationDate}" converter="localeDateConverter" />
-   		<h:outputText value="#{it.beginningTreatmentDate}" converter="periodConverter" 
-   			rendered="#{it.beginningTreatmentDate!=null}" 
-   			style="padding-top:6px;display:block;">
-   			<f:param name="endDate" value="#{it.endingTreatmentDate}" />
-   			<f:param name="type" value="length" />
-   		</h:outputText>
-   		<h:outputText value="#{messages['cases.details.notreatment']}" rendered="#{it.beginningTreatmentDate==null}"
-   			style="padding-top:6px;display:block;"/>
-   		<h:outputText value="#{messages[it.validationState.key]}" style="color:#8DA48F;font-weight:bold;padding-top:6px;display:block;"/>
+		<b>#{it.tbcase.ownerUnit.name}</b><br />
+		<h:outputText value="#{it.adminUnitDisplay}" /> 
+   		<h:outputText value="#{messages[it.tbcase.validationState.key]}" style="color:#8DA48F;font-weight:bold;display:block;"/>
 	</td>
 	</tr>
 	</ui:repeat>

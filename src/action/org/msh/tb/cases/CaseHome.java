@@ -1,13 +1,17 @@
 package org.msh.tb.cases;
 
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.ETB;
 import org.msh.tb.TagsCasesHome;
@@ -477,4 +481,59 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		return TbCase.class.getSimpleName();
 	}
 	
+	
+	/**
+	 * Return status string to be displayed to the user about the main status of the case
+	 * @param tbcase
+	 * @return
+	 */
+	public String getStatusString(TbCase tbcase) {
+		Map<String, String> msgs = Messages.instance();
+
+		SimpleDateFormat f = new SimpleDateFormat("MMM-yyyy");
+
+		// is suspect and waiting for treatment ?
+		if ((tbcase.getState() == CaseState.WAITING_TREATMENT) && (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT)) {
+			if (tbcase.getRegistrationDate() != null)
+				 return MessageFormat.format(msgs.get("cases.sit.SUSP.date"), f.format(tbcase.getRegistrationDate()));
+			else return null;
+		}
+
+		// is confirmed waiting for treatment ?
+		if (tbcase.getState() == CaseState.WAITING_TREATMENT) {
+			if (tbcase.getDiagnosisDate() != null)
+				return MessageFormat.format(msgs.get("cases.sit.CONF.date"), f.format( tbcase.getDiagnosisDate() ));
+		}
+
+		if ((tbcase.getState() == CaseState.ONTREATMENT) || (tbcase.getState() == CaseState.TRANSFERRING)) {
+			if (tbcase.getTreatmentPeriod().getIniDate() != null)
+				return MessageFormat.format(msgs.get("cases.sit.ONTREAT.date"), f.format( tbcase.getTreatmentPeriod().getIniDate() ));
+		}
+
+		if (tbcase.getState().ordinal() > CaseState.TRANSFERRING.ordinal()) {
+			if (tbcase.getOutcomeDate() != null)
+				return MessageFormat.format(msgs.get("cases.sit.OUTCOME.date"), f.format( tbcase.getOutcomeDate() ));
+		}
+		
+		return null;		
+	}
+	
+	
+	/**
+	 * Return second status string to be displayed to the user about the case
+	 * @param tbcase
+	 * @return
+	 */
+	public String getStatusString2(TbCase tbcase) {
+		if (tbcase.getState() == CaseState.WAITING_TREATMENT) {
+			if (tbcase.getDiagnosisType() == DiagnosisType.CONFIRMED)
+				return Messages.instance().get(CaseState.WAITING_TREATMENT.getKey());
+			else return Messages.instance().get("cases.sit.SUSP");
+		}
+		
+		if (tbcase.getState() == CaseState.ONTREATMENT)
+			return null;
+		
+		return Messages.instance().get(tbcase.getState().getKey());
+	}
 }

@@ -82,39 +82,38 @@
 	<ui:repeat value="#{cases.resultList}" var="it">
 	<tr><td width="90px" align="center">
 			<s:link value="#{it.displayCaseNumber}" view="/cases/casedata.xhtml">
-				<f:param name="id" value="#{it.caseId}" />
+				<f:param name="id" value="#{it.tbcase.id}" />
 			</s:link>
 			<br/>
 			<s:link view="/cases/casedata.xhtml" 
-				styleClass="#{it.gender=='MALE'?'male-icon':'female-icon'}"  style="float:none">
-				<f:param name="id" value="#{it.caseId}" />
+				styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}"  style="float:none">
+				<f:param name="id" value="#{it.tbcase.id}" />
 			</s:link>
 	</td>
 	<td>
-		<b>#{it.diagnosisType=='SUSPECT'? messages[it.classification.keySuspect] : messages[it.classification.key]}</b>
+		<b>#{it.tbcase.diagnosisType=='SUSPECT'? messages[it.tbcase.classification.keySuspect] : messages[it.tbcase.classification.key]}</b>
 		<div style="padding-top:6px;clear:left;">
-		#{it.patientName}
-		<br /> <h:outputText value="#{it.birthDate}" converter="localeDateConverter"/>
+		#{it.patient.fullName}
+		<br /> <h:outputText value="#{it.patient.birthDate}" converter="localeDateConverter"/>
 		</div>
 	</td>
 	<td>
-		<b>#{it.healthUnit}</b><br />
-		<h:outputText value="#{it.region} - #{it.locality}" style="font-size:10px;" /> 
+		<b>#{it.tbcase.ownerUnit.name}</b><br />
+		<h:outputText value="#{it.adminUnitDisplay}" style="font-size:10px;" /> 
    		<div style="padding-top:6px;clear:left;">
-   		<h:outputText value="#{messages[it.caseState.key]}" style="color:#8DA48F;font-weight:bold;" />
+   		<h:outputText value="#{messages[it.tbcase.state.key]}" style="color:#8DA48F;font-weight:bold;" />
    		</div>		
 	</td>
 	<td>
-		<h:outputText value="#{it.notificationDate}" converter="localeDateConverter" />
-   		<h:outputText value="#{it.beginningTreatmentDate}" converter="periodConverter" 
-   			rendered="#{it.beginningTreatmentDate!=null}" 
+		<h:outputText value="#{it.tbcase.registrationDate}" converter="localeDateConverter" />
+   		<h:outputText value="#{it.tbcase.treatmentPeriod}" converter="periodConverter" 
+   			rendered="#{it.tbcase.treatmentPeriod.iniDate!=null}" 
    			style="padding-top:6px;display:block;">
-   			<f:param name="endDate" value="#{it.endingTreatmentDate}" />
    			<f:param name="type" value="length" />
    		</h:outputText>
-   		<h:outputText value="#{messages['cases.details.notreatment']}" rendered="#{it.beginningTreatmentDate==null}"
+   		<h:outputText value="#{messages['cases.details.notreatment']}" rendered="#{it.tbcase.treatmentPeriod.iniDate==null}"
    			style="padding-top:6px;display:block;"/>
-   		<h:outputText value="#{messages[it.validationState.key]}" style="color:#8DA48F;font-weight:bold;padding-top:6px;display:block;"/>
+   		<h:outputText value="#{messages[it.tbcase.validationState.key]}" style="color:#8DA48F;font-weight:bold;padding-top:6px;display:block;"/>
 	</td>
 	</tr>
 	</ui:repeat>

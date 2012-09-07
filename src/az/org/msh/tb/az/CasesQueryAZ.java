@@ -14,6 +14,7 @@ import org.msh.tb.cases.FilterHealthUnit;
 import org.msh.tb.cases.SearchCriteria;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
@@ -104,7 +105,7 @@ public class CasesQueryAZ extends CasesQuery{
 		"c.treatmentPeriod.iniDate, c.registrationDate, nu.name.name1, " +
 		"loc.name.name1, loc.code, c.id, " +
 		"c.treatmentPeriod.endDate, c.state, c.classification, p.middleName, p.lastName, " +
-		"c.validationState, c.registrationCode, c.diagnosisType, p.birthDate " +
+		"c.validationState, c.registrationCode, c.diagnosisType, p.birthDate, c.diagnosisDate, c.outcomeDate " +
 		getFromHQL() + " join c.patient p " +
 		"left outer join c.notificationUnit nu " +
 		"left outer join c.ownerUnit tu " +
@@ -275,15 +276,17 @@ public class CasesQueryAZ extends CasesQuery{
 				p.setName((String)obj[0]);
 				p.setMiddleName((String)obj[9]);
 				p.setLastName((String)obj[10]);
-				item.setPatientName(p.getFullName());
-				item.setPatientAge((Integer)obj[1]);
-				item.setGender((Gender)obj[2]);
-				item.setCaseId((Integer)obj[14]);
-				item.setCaseState((CaseState)obj[7]);
-				item.setClassification((CaseClassification)obj[8]);
-				item.setBirthDate((Date)obj[13]);
-				item.setNotificationDate((Date)obj[5]);
-				item.setRegistrationCode((String)obj[6]);
+
+				TbCase tbcase = item.getTbcase();
+				tbcase.setPatient(p);
+				tbcase.setAge((Integer)obj[1]);
+				p.setGender((Gender)obj[2]);
+				tbcase.setId((Integer)obj[14]);
+				tbcase.setState((CaseState)obj[7]);
+				tbcase.setClassification((CaseClassification)obj[8]);
+				p.setBirthDate((Date)obj[13]);
+				tbcase.setRegistrationDate((Date)obj[5]);
+				tbcase.setRegistrationCode((String)obj[6]);
 				resultList.add(item);
 			}
 		}else super.fillResultList(lst);

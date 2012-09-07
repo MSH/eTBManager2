@@ -15,6 +15,7 @@ import org.msh.tb.ETB;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
@@ -23,6 +24,7 @@ import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.utils.EntityQuery;
+import org.msh.utils.date.Period;
 
 // 02.04.2012 Change some from public to to protected Alexey Kurasov
 /**
@@ -106,7 +108,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		"c.treatmentPeriod.iniDate, c.registrationDate, nu.name.name1, " +
 		"loc.name.name1, loc.code, c.id, " +
 		"c.treatmentPeriod.endDate, c.state, c.classification, p.middleName, p.lastName, " +
-		"c.validationState, c.registrationCode, c.diagnosisType, p.birthDate " +
+		"c.validationState, c.registrationCode, c.diagnosisType, p.birthDate, c.diagnosisDate, c.outcomeDate " +
 		getFromHQL() + " join c.patient p " +
 		"join c.notificationUnit nu " +
 		"join c.notifAddress.adminUnit loc ".concat(dynamicConditions());
@@ -413,64 +415,51 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			adminUnits.add(getCaseFilters().getAuselection().getUnitLevel1());
 		}
 
-		Patient p = new Patient();
 		resultList = new ArrayList<CaseResultItem>();
 		for (Object[] obj: lst) {
 			CaseResultItem item = new CaseResultItem();
 
+			TbCase tbcase = item.getTbcase();
+			Patient p = new Patient();
+			tbcase.setPatient(p);
+
 			p.setName((String)obj[0]);
 			p.setMiddleName((String)obj[14]);
 			p.setLastName((String)obj[15]);
+			p.setGender((Gender)obj[2]);
 
-			/*			String patname = (String)obj[0];
-			if (obj[14] != null)
-				patname += " " + (String)obj[14];
-			if (obj[15] != null)
-				patname += " " + (String)obj[15];
-
-			item.setPatientName(patname);
-			 */			
-			item.setPatientName(p.getFullName());
-			item.setPatientAge((Integer)obj[1]);
-			item.setGender((Gender)obj[2]);
-			item.setBeginningTreatmentDate((Date)obj[5]);
-			item.setNotificationDate((Date)obj[6]);
-			item.setHealthUnit((String)obj[7]);
-			//			item.setRegion((String)obj[9]);
-			item.setLocality((String)obj[8]);
-			item.setCaseId((Integer)obj[10]);
-			item.setEndingTreatmentDate((Date)obj[11]);
-			item.setCaseState((CaseState)obj[12]);
-			item.setClassification((CaseClassification)obj[13]);
-			item.setValidationState((ValidationState)obj[16]);
-			item.setBirthDate((Date)obj[19]);
-
-			if (DisplayCaseNumber.REGISTRATION_CODE.equals(getDefaultWorkspace().getDisplayCaseNumber())) {
-				item.setRegistrationCode((String)obj[17]);
-			}
-			else {
-				item.setPatientRecordNumber((Integer)obj[3]);
-				item.setCaseNumber((Integer)obj[4]);				
-			}
-			
-			item.setDiagnosisType((DiagnosisType)obj[18]);
+			tbcase.setAge((Integer)obj[1]);
+			tbcase.setTreatmentPeriod( new Period((Date)obj[5], (Date)obj[11]) ); 
+			tbcase.setRegistrationDate((Date)obj[6]);
+			Tbunit unit = new Tbunit();
+			unit.getName().setName1((String)obj[7]);
+			tbcase.setOwnerUnit(unit);
+			item.setAdminUnitDisplay((String)obj[8]);
+			tbcase.setId((Integer)obj[10]);
+			tbcase.setState((CaseState)obj[12]);
+			tbcase.setClassification((CaseClassification)obj[13]);
+			tbcase.setValidationState((ValidationState)obj[16]);
+			p.setBirthDate((Date)obj[19]);
+			tbcase.setRegistrationCode((String)obj[17]);
+			p.setRecordNumber((Integer)obj[3]);
+			tbcase.setCaseNumber((Integer)obj[4]);				
+			tbcase.setDiagnosisType((DiagnosisType)obj[18]);
+			tbcase.setDiagnosisDate((Date)obj[20]);
+			tbcase.setOutcomeDate((Date)obj[21]);
 
 			// search for administrative unit
 			AdministrativeUnit adm = null;
 			String code = (String)obj[9];
 			for (AdministrativeUnit aux: adminUnits) {
 				if (aux.isSameOrChildCode(code)) {
-					adm = aux;
+					if (!code.equals(aux.getCode()))
+						adm = aux;
 					break;
 				}
 			}
 
-			if (adm != null) {
-				item.setRegion(adm.getName().getDefaultName());
-				if (adm.getCode().equals(code)) {
-					item.setLocality(null);
-				}
-			}
+			if (adm != null)
+				item.setAdminUnitDisplay(adm.getName().getDefaultName() + ", " + item.getAdminUnitDisplay());
 
 			resultList.add(item);
 		}
