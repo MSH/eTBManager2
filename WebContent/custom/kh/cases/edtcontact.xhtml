@@ -90,8 +90,15 @@
 	<div style="display:block;width:600px;">
 	<div id="pnlresultsent">
 	<s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['TbContact.samplesent']}:</ui:define>
-    	<h:selectOneMenu id="cbtbsymptom" value="#{tbContactKH.sampleSentForTest}" required="false">
+    	<ui:define name="label">#{messages['TbContact.samplesent.culture']}:</ui:define>
+    	<h:selectOneMenu id="cbtbsymptom" value="#{tbContactKH.sampleSentForCultureTest}" required="false">
+    		<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
+			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
+    	</h:selectOneMenu>
+    </s:decorate>
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbContact.samplesent.dst']}:</ui:define>
+    	<h:selectOneMenu id="cbtbsymptom" value="#{tbContactKH.sampleSentForCultureTest}" required="false">
     		<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
 			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
     	</h:selectOneMenu>
