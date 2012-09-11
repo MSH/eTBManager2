@@ -50,7 +50,8 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	<h:inputTextarea value="#{order.comments}" maxlength="200" style="width:400px;height:40px;" />
+    	<ui:param name="redasterisk" value="#{orderHome.requiredObservation}" />
+    	<h:inputTextarea id="ordercomments" value="#{order.comments}" maxlength="200" style="width:400px;height:40px;" />
     </s:decorate>
 
 </div>

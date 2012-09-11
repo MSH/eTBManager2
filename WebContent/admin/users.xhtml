@@ -17,6 +17,15 @@
 <h1>#{title}</h1>
 <h:form id="main">
 
+<s:decorate id="sel" template="/layout/display.xhtml">
+	<ui:define name="label">#{unitspg.auselection.labelLevel1}:</ui:define>
+	<h:selectOneMenu id="cbselau1" value="#{users.auselection.unitLevel1}" >
+		<s:selectItems var="it" value="#{users.auselection.optionsLevel1}" noSelectionLabel="-" label="#{it.name}"/>
+		<s:convertEntity />
+		<a:support event="onchange" reRender="tablepanel"/>
+	</h:selectOneMenu>
+</s:decorate>
+
 <s:link view="/admin/edtuser.xhtml"
 	styleClass="button"  
 	rendered="#{s:hasRole('USERS_EDT')}"
@@ -92,6 +101,7 @@
   		</s:link>
   	</f:facet>
 	<h:outputText value="#{it.tbunit.name}"  />
+	<h:outputText value="(#{it.tbunit.adminUnit.parentLevel1.legacyId})"  />
   </h:column>
   
   <h:column>
@@ -111,6 +121,7 @@
   	</f:facet>
 	<h:outputText value="#{it.profile.name}"  />
   </h:column>
+  
   <h:column rendered="#{s:hasRole('USERS_EDT')}">
   	<f:facet name="header">#{messages['form.action']}</f:facet>
 	<a:commandLink value="#{messages['form.remove']}" 

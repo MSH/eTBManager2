@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.utils.EntityQuery;
@@ -12,9 +14,11 @@ import org.msh.utils.EntityQuery;
 @Name("users")
 public class UsersQuery extends EntityQuery<UserWorkspace>{
 	private static final long serialVersionUID = -8293352124405808033L;
+	private AdminUnitSelection auselection;
 
 	private static final String[] restrictions = {
 		"uw.workspace.id = #{defaultWorkspace.id}",
+		"uw.tbunit.adminUnit.code like #{users.adminUnitCodeLike}",
 		"not exists(select perm.id from UserPermission perm " +
 				"where perm.userProfile.id = uw.profile.id " +
 				"and perm.userRole.id not in (select r.id from UserPermission aux " +
@@ -37,6 +41,7 @@ public class UsersQuery extends EntityQuery<UserWorkspace>{
 	 */
 	@Override
 	public String getEjbql() {
+		
 		return "from UserWorkspace uw join fetch uw.user left join fetch uw.profile join fetch uw.tbunit left join fetch uw.adminUnit ".concat(getStaticConditions());
 	}
 
@@ -48,7 +53,9 @@ public class UsersQuery extends EntityQuery<UserWorkspace>{
 	
 	protected String getStaticConditions() {
 		if (getSearchKeyLike() != null)
-			 return "where (uw.user.name like #{users.searchKeyLike} or uw.user.login like #{users.searchKeyLike} or uw.user.email like #{users.searchKeyLike})";
+			 return "where (uw.user.name like #{users.searchKeyLike} or uw.user.login like #{users.searchKeyLike} or uw.user.email like #{users.searchKeyLike} or uw.tbunit.adminUnit.parent.legacyId like #{users.searchKeyLike})";
+		else if(getSearchKeyLike() != null)
+			 return "where (uw.tbunit.adminUnit.parent.legacyId like #{users.searchKeyLike})";			
 		else return "";
 	}
 	
@@ -95,4 +102,28 @@ public class UsersQuery extends EntityQuery<UserWorkspace>{
 	public void setSearchKey(String searchKey) {
 		this.searchKey = searchKey;
 	}
+	
+	public AdminUnitSelection getAuselection() {
+		if (auselection == null) {
+			auselection = new AdminUnitSelection();
+		}
+		return auselection;
+	}
+
+	/**
+	 * @param auselection the auselection to set
+	 */
+	public void setAuselection(AdminUnitSelection auselection) {
+		this.auselection = auselection;
+	}
+	
+	public String getAdminUnitCodeLike() {
+		AdministrativeUnit adm = getAuselection().getSelectedUnit();
+		if (adm == null)
+			 return null;
+		else return adm.getCode() + "%";
+	}
+	
+	
+	
 }

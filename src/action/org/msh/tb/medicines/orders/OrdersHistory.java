@@ -17,6 +17,8 @@ public class OrdersHistory extends EntityQuery<Order> {
 
 	@In(create=true) UserSession userSession;
 	
+	private boolean diffQuantityReceived;
+	
 	private static final String[] restrictions = {
 		"month(o.orderDate) = #{ordersHistory.month} + 1",
 		"year(o.orderDate) = #{ordersHistory.year}",
@@ -27,19 +29,27 @@ public class OrdersHistory extends EntityQuery<Order> {
 	private OrderStatus os;
 	
 	protected String getCondition() {
-		return " where ((o.unitTo.id = #{userSession.tbunit.id} and o.status in (" +
-				OrderStatus.SHIPPED.ordinal() + "," + OrderStatus.CANCELLED.ordinal() + "," + OrderStatus.RECEIVED.ordinal() + ")) " +
-				" or (o.unitFrom.id = #{userSession.tbunit.id} " +
-				" and o.status in (" +
-				OrderStatus.RECEIVED.ordinal() + "," + OrderStatus.CANCELLED.ordinal() + ")) " +
-				"or (o.unitTo.authorizerUnit.id = #{userSession.tbunit.id} " +
-				" and o.status in (" + OrderStatus.CANCELLED.ordinal() + ", " + OrderStatus.PREPARINGSHIPMENT.ordinal() + ", " + 
-				OrderStatus.RECEIVED.ordinal() + "," + OrderStatus.SHIPPED.ordinal() + ")))";
+		String cond =  " where ((o.unitTo.id = #{userSession.tbunit.id} and o.status in (" +
+						OrderStatus.SHIPPED.ordinal() + "," + OrderStatus.CANCELLED.ordinal() + "," + OrderStatus.RECEIVED.ordinal() + ")) " +
+						" or (o.unitFrom.id = #{userSession.tbunit.id} " +
+						" and o.status in (" +
+						OrderStatus.RECEIVED.ordinal() + "," + OrderStatus.CANCELLED.ordinal() + ")) " +
+						"or (o.unitTo.authorizerUnit.id = #{userSession.tbunit.id} " +
+						" and o.status in (" + OrderStatus.CANCELLED.ordinal() + ", " + OrderStatus.PREPARINGSHIPMENT.ordinal() + ", " + 
+						OrderStatus.RECEIVED.ordinal() + "," + OrderStatus.SHIPPED.ordinal() + ")))";
+	
+		if(diffQuantityReceived){
+			cond += " and i.shippedQuantity > i.receivedQuantity";
+		}
+		
+		return cond;
 	}
 
 	@Override
 	public String getEjbql() {
-		return "from Order o join fetch o.unitFrom".concat(getCondition());
+		return "from Order o" +
+				" join fetch o.unitFrom" + 
+				" join fetch o.items i" .concat(getCondition());
 	}
 
 	@Override
@@ -110,5 +120,20 @@ public class OrdersHistory extends EntityQuery<Order> {
 		
 		return list;
 	}
+
+	/**
+	 * @return the diffQuantityReceived
+	 */
+	public boolean isDiffQuantityReceived() {
+		return diffQuantityReceived;
+	}
+
+	/**
+	 * @param diffQuantityReceived the diffQuantityReceived to set
+	 */
+	public void setDiffQuantityReceived(boolean diffQuantityReceived) {
+		this.diffQuantityReceived = diffQuantityReceived;
+	}
+	
 	
 }

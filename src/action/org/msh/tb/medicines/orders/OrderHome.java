@@ -44,6 +44,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 	private AdminUnitSelection auselection;
 	private Date receivingDateModif;
 	private boolean saving;
+	private boolean requiredObservation;
 	
 	private String cancelReason;
 	
@@ -114,7 +115,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 		if (!ret.equals("persisted"))
 			return ret;
 
-
+		setRequiredObservation(false);
 		Events.instance().raiseEvent("new-medicine-order");
 		
 		return ret;
@@ -129,6 +130,11 @@ public class OrderHome extends EntityHomeEx<Order>{
 		if (sources == null)
 			return "error";
 
+		if(requiredObservation==true && getInstance().getComments().isEmpty()){
+			facesMessages.addToControlFromResourceBundle("ordercomments", "form.required");
+			return "";
+		}
+		
 		// check if there is any medicine to order
 		boolean canMove = false;
 		for (SourceOrderItem it: sources) {
@@ -216,7 +222,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 	 */
 	public void initMedicineSelection(SourceOrderItem item) {
 		MedicineSelection medSel = (MedicineSelection)Component.getInstance("medicineSelection", true);
-
+		
 		medSel.applyFilter(item.getItems(), "item.medicine");
 		this.item = item;
 	}
@@ -232,6 +238,10 @@ public class OrderHome extends EntityHomeEx<Order>{
 		MedicineSelection medSel = (MedicineSelection)Component.getInstance("medicineSelection", true);
 		
 		List<Medicine> meds = medSel.getSelectedMedicines();
+		
+		if(meds != null && meds.size() > 0)
+			requiredObservation = true;
+			
 		for (Medicine med: meds) {
 			// this method automatically includes a new medicine if the medicine is not already in the list
 			item.itemByMedicine(med);
@@ -450,4 +460,19 @@ public class OrderHome extends EntityHomeEx<Order>{
 	public void setSaving(boolean saving) {
 		this.saving = saving;
 	}
+
+	/**
+	 * @return the requiredObservation
+	 */
+	public boolean isRequiredObservation() {
+		return requiredObservation;
+	}
+
+	/**
+	 * @param requiredObservation the requiredObservation to set
+	 */
+	public void setRequiredObservation(boolean requiredObservation) {
+		this.requiredObservation = requiredObservation;
+	}
+	
 }
