@@ -22,7 +22,9 @@ public class TbContact_Kh extends TbContact{
 	
 	private boolean hasTBSymptom;
 	
-	private boolean sampleSentForTest;
+	private boolean sampleSentForCultureTest;
+	
+	private boolean sampleSentForDSTTest;
 
 	public boolean isHasTBSymptom() {
 		return hasTBSymptom;
@@ -32,12 +34,19 @@ public class TbContact_Kh extends TbContact{
 		this.hasTBSymptom = hasTBSymptom;
 	}
 
-	public boolean isSampleSentForTest() {
-		return sampleSentForTest;
-	}
-	
-	public void setSampleSentForTest(boolean sampleSentForTest) {
-		this.sampleSentForTest = sampleSentForTest;
+	public void setSampleSentForCultureTest(boolean sampleSentForCultureTest) {
+		this.sampleSentForCultureTest = sampleSentForCultureTest;
 	}
 
+	public boolean isSampleSentForCultureTest() {
+		return sampleSentForCultureTest;
+	}
+
+	public void setSampleSentForDSTTest(boolean sampleSentForDSTTest) {
+		this.sampleSentForDSTTest = sampleSentForDSTTest;
+	}
+
+	public boolean isSampleSentForDSTTest() {
+		return sampleSentForDSTTest;
+	}
 }
