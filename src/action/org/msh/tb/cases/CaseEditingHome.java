@@ -280,9 +280,6 @@ public class CaseEditingHome {
 			return "error";
 		
 		TbCase tbcase = caseHome.getInstance();
-
-		if(tbcase.getOwnerUnit() == null)
-			tbcase.setOwnerUnit(tbcase.getNotificationUnit());
 		
 		// save the patient's data
 		patientHome.persist();
@@ -290,6 +287,8 @@ public class CaseEditingHome {
 		// get notification unit
 		tbcase.setNotificationUnit(getTbunitselection().getTbunit());
 		tbcase.getNotifAddress().setAdminUnit(notifAdminUnit.getSelectedUnit());
+		
+		tbcase.setOwnerUnit(tbcase.getNotificationUnit());
 		
 		Address notifAddress = tbcase.getNotifAddress();
 		Address curAddress = tbcase.getCurrentAddress();
