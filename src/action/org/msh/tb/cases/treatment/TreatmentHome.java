@@ -134,8 +134,11 @@ public class TreatmentHome {
 		Events.instance().raiseEvent("treatment-persist");
 		
 		String s = caseHome.persist();
-		
+
 		TagsCasesHome.instance().updateTags(tbcase);
+		
+		PrescriptionTable tbl = (PrescriptionTable)Component.getInstance("prescriptionTable");
+		tbl.setEditing(false);
 		
 		return s;
 	}
@@ -176,7 +179,7 @@ public class TreatmentHome {
 		}
 
 		TbCase tbcase = caseHome.getInstance();
-
+		
 		Period p = new Period(iniDate, endDate);
 		if ((p.equals(tbcase.getTreatmentPeriod())) && (iniContinuousPhase.equals(tbcase.getIniContinuousPhase()))) {
 			validated = true;
@@ -199,7 +202,11 @@ public class TreatmentHome {
 			prescribedMedicineHome.splitPeriod(iniContinuousPhase);
 		}
 		
-		healthUnit.setPeriod(p);
+		if(tbcase.getHealthUnits().size() > 1){
+			healthUnit.getPeriod().setEndDate(endDate);
+		}else{
+			healthUnit.setPeriod(p);
+		}
 		
 		tbcase.setTreatmentPeriod(p);
 		tbcase.setIniContinuousPhase(iniContinuousPhase);
@@ -522,6 +529,11 @@ public class TreatmentHome {
 		// check if end date is before the initial date
 		if (endDate.before(iniDate)) {
 			facesMessages.addToControlFromResourceBundle("edtIniDate", "form.inienddate");
+			return false;
+		}
+		
+		if(endDate.before(tbcase.getSortedTreatmentHealthUnits().get(tbcase.getSortedTreatmentHealthUnits().size()-1).getPeriod().getIniDate())){
+			facesMessages.addToControlFromResourceBundle("edtEndContPhase", "tbcase.treat.dates.msg01");
 			return false;
 		}
 		
