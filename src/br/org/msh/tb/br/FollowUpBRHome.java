@@ -44,8 +44,8 @@ public class FollowUpBRHome {
 	@In(create=true) ExamHIVHome examHIVHome;
 	@In(create=true) ExamXRayHome examXRayHome;
 	@In(create=true) SideEffectHomeBR sideEffectBRHome;
-	@In(create=true) CaseCloseHomeBR caseCloseHomeBR;
 	@In(create=true) CaseMoveHome caseMoveHome;
+	@In(create=true) MedicalExaminationBRHome medicalExaminationBRHome;
 	
 	private boolean examMicroscopy;
 	private boolean examCulture;
@@ -57,21 +57,6 @@ public class FollowUpBRHome {
 	private boolean moveCase;
 	
 	private YesNoType schemaModification;
-	private CaseState state;
-	
-	private static final CaseState[] caseStates = {
-		CaseState.ONTREATMENT,
-		CaseState.CURED, 
-		CaseState.TREATMENT_COMPLETED,
-		CaseState.DEFAULTED, 
-		CaseState.FAILED,
-		CaseState.DIED, 
-		CaseState.DIED_NOTTB, 
-		CaseState.TRANSFERRED_OUT,
-		CaseState.REGIMEN_CHANGED,
-		CaseState.MDR_CASE,
-		CaseState.DIAGNOSTIC_CHANGED,
-		CaseState.OTHER};
 	
 	public boolean isMoveCase() {
 		return moveCase;
@@ -84,12 +69,6 @@ public class FollowUpBRHome {
 	}
 	public void setMoveCase(boolean moveCase) {
 		this.moveCase = moveCase;
-	}
-	public CaseState getState() {
-		return state;
-	}
-	public void setState(CaseState state) {
-		this.state = state;
 	}
 	public boolean isSideEffects() {
 		return sideEffects;
@@ -132,10 +111,6 @@ public class FollowUpBRHome {
 	}
 	public void setMolecularBiology(boolean molecularBiology) {
 		this.molecularBiology = molecularBiology;
-	}
-	
-	public CaseState[] getCaseStates() {
-		return caseStates;
 	}
 	
 	public String save(){
@@ -207,19 +182,6 @@ public class FollowUpBRHome {
 			}
 		}
 		
-		//CaseState - BEGIN
-		if(state.equals(CaseState.ONTREATMENT)){
-			caseHome.getTbCase().setState(state);
-		}else{
-			if(!validCaseState())
-				caseCloseHomeBR.setState(state);
-			else
-				validationError = true;
-		}
-		if(!caseCloseHomeBR.validateClose())
-			validationError = true;
-		//CaseState - END
-		
 		if(!moveCase){
 			if(!validCaseMoveForm()){
 				//Some code if needs, just going on in the pattern used before
@@ -254,10 +216,6 @@ public class FollowUpBRHome {
 			
 			if(!sideEffects)
 				sideEffectBRHome.saveSideEffectList();
-			
-			if(!state.equals(CaseState.ONTREATMENT)){
-				caseCloseHomeBR.closeCase();
-			}
 			
 			if(!moveCase){
 				caseMoveHome.transferOut();
@@ -464,17 +422,4 @@ public class FollowUpBRHome {
 		
 		return validationError;
 	}
-	
-	private boolean validCaseState(){
-		boolean validationError = false;
-
-		if (caseCloseHomeBR.getDate() == null) {
-			 validationError = true;
-			facesMessages.addToControlFromResourceBundle("casestatedate", "javax.faces.component.UIInput.REQUIRED");
-		}
-		
-		return validationError;
-	}
-	
-
 }

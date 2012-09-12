@@ -69,7 +69,7 @@ public class CaseDataBRHome {
 	@In(required=false) ExamDSTHome examDSTHome;
 	@In(required=false) ExamHIVHome examHIVHome;
 	@In(required=false) ComorbidityHome comorbidityHome;
-	@In(required=false) MedicalExaminationBRHome medicalExaminationBRHome;
+	@In(create=true) MedicalExaminationBRHome medicalExaminationBRHome;
 	@In(required=false) MolecularBiologyHome molecularBiologyHome;
 	@In(create=true) FacesMessages facesMessages;
 	@In(create=true) ExamXRayHome examXRayHome;
@@ -661,6 +661,10 @@ public class CaseDataBRHome {
 	
 	public TbCaseBR getTbCase() {
 		return (TbCaseBR)caseHome.getInstance();
+	}
+	
+	public void setMedicalExaminationBRHome(MedicalExaminationBRHome medicalExaminationBRHome){
+		this.medicalExaminationBRHome = medicalExaminationBRHome;
 	}
 
 }

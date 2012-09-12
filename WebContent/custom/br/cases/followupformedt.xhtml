@@ -639,56 +639,6 @@
 </div>
 
 <div class="form-content">
-	<h1 style="font-size:16px;coloe:#E47911;margin-bottom:0px">#{messages['CaseState']}</h1>
-   
-   <s:decorate template="/layout/dateedit.xhtml" >
-		<ui:define name="label">#{messages['TbCase.outcomeDate']}:</ui:define>
-    	<ui:param name="redasterisk" value="true" /> 
-    	<ui:param name="future" value="false" /> 
-    	<ui:param name="datefield" value="#{caseCloseHomeBR.date}" /> 
-    	<ui:param name="edtid" value="casestatedate" /> 
-    </s:decorate>
-	
-    <s:decorate template="/layout/edit.xhtml" >
-		<ui:define name="label">#{messages['CaseState']}:</ui:define>
-		<h:selectOneRadio id="selstate" value="#{followUpBRHome.state}" required="true" layout="pageDirection">
-			<s:selectItems value="#{followUpBRHome.caseStates}" var="v" label="#{messages[v.key]}"/>
-			<s:convertEnum />
-		</h:selectOneRadio>
-    </s:decorate>
-    
-<rich:jQuery selector="#selstate input[type=radio]" query="click(function(){statecheckClick(this);})" />
-
-    <div id="regchanged" style="display:none">
-    <s:decorate template="/layout/edit.xhtml" >
-		<ui:define name="label">#{messages['TbField.SCHEMA_TYPES']}:</ui:define>
-		<h:selectOneMenu value="#{tbcase.outcomeRegimenChanged}" >
-			<s:selectItems value="#{fieldsQuery.schemaTypes}" var="v" label="#{v}"/>
-			<s:convertEntity />
-		</h:selectOneMenu>
-    </s:decorate>
-    </div>
-    
-    <div id="restype" style="display:none">
-    <s:decorate template="/layout/edit.xhtml" >
-		<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
-		<h:selectOneMenu value="#{tbcase.outcomeResistanceType}">
-			<s:selectItems value="#{drugResistanceTypes}" var="v" label="#{messages[v.key]}"/>
-			<s:convertEnum />
-		</h:selectOneMenu>
-    </s:decorate>
-    </div>
-
-	<div id="comments" style="display:none;clear:both;" >
-    <s:decorate template="/layout/edit.xhtml" >
-		<ui:define name="label">#{messages['TbCase.otherOutcome']}:</ui:define>
-		<h:inputText value="#{caseCloseHomeBR.comment}" maxlength="100" style="width:300px;"/>
-    </s:decorate>
-    </div>
-
-</div>
-
-<div class="form-content">
 	<h1 style="font-size:16px;coloe:#E47911;margin-bottom:0px">Outras Informações</h1>
 	
     <s:decorate template="/layout/edit.xhtml">
