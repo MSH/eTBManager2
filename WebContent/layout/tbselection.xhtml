@@ -27,7 +27,7 @@
 
 <h:panelGroup id="pnlunits">
 <s:decorate template="/layout/#{required or redasterisk?'edit':'display'}.xhtml" rendered="#{tbunitselection.adminUnit != null}">
-	<ui:define name="label">#{messages['form.name']}:</ui:define>
+	<ui:define name="label">#{empty unitLabel ? messages['form.name'] : unitLabel}:</ui:define>
 	<h:selectOneMenu id="#{empty idcbunits ? 'cbunits' : idcbunits}" value="#{tbunitselection.tbunit}" required="#{required}" rendered="#{!tbunitselection.readOnly}">
         <s:selectItems value="#{tbunitselection.options}" var="it" label="#{it.name}" noSelectionLabel="-" />
       	<s:convertEntity/>
