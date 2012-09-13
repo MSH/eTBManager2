@@ -13,18 +13,15 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.Identity;
-import org.msh.tb.bd.entities.enums.PulmonaryTypesBD;
 import org.msh.tb.cases.FilterHealthUnit;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.BufferStockMeasure;
 import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseDispensingType;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.CultureResult;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.DispensingFrequency;
 import org.msh.tb.entities.enums.DisplayCaseNumber;
-import org.msh.tb.entities.enums.Dot;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.entities.enums.ExtraOutcomeInfo;
@@ -77,7 +74,7 @@ public class GlobalLists {
 		PatientType.RESISTANCE_PATTERN_CHANGED,
 		PatientType.OTHER
 	};
-
+	
 	private static final CaseState caseStates[] = {
 		CaseState.WAITING_TREATMENT,
 		CaseState.ONTREATMENT,
@@ -186,11 +183,6 @@ public class GlobalLists {
 		
 	};
 	
-	private static final CaseDispensingType caseDispensingTypes[] = {
-		CaseDispensingType.DOT,
-		CaseDispensingType.NONDOT	
-	};
-
 	/**
 	 * Get component according to the workspace in use
 	 * @param <E>
@@ -372,12 +364,7 @@ public class GlobalLists {
 	public InfectionSite[] getInfectionSite() {
 		return InfectionSite.values();
 	}
-	
-	@Factory("pulmonaryTypesBD")
-	public PulmonaryTypesBD[]  getPulmonaryTypesBD(){
-		return PulmonaryTypesBD.values();
-	}
-	
+		
 //	@Factory("caseClassifications")
 	public CaseClassification[] getCaseClassifications() {
 		if (caseClassifications == null) {
@@ -586,14 +573,5 @@ public class GlobalLists {
 
 	public static GlobalLists instance(){
 		return (GlobalLists)Component.getInstance("globalLists");
-	}
-
-	@Factory("caseDispensingTypes")
-	public static CaseDispensingType[] getCasedispensingtypes() {
-		return caseDispensingTypes;
-	}
-	
-	public Dot[] getDot() {
-		return Dot.values();
 	}
 }
