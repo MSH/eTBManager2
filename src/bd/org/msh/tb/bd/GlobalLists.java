@@ -8,6 +8,7 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.bd.entities.enums.BiopsyResult;
 import org.msh.tb.bd.entities.enums.DotProvider;
 import org.msh.tb.bd.entities.enums.Occupation;
+import org.msh.tb.bd.entities.enums.PulmonaryTypesBD;
 import org.msh.tb.bd.entities.enums.SalaryRange;
 import org.msh.tb.bd.entities.enums.SkinTestResult;
 import org.msh.tb.entities.enums.DrugResistanceType;
@@ -46,9 +47,13 @@ public class GlobalLists {
 	@Factory("dotProvTypeList")
 	public DotProvider[] getDotProvTypeList() {
 		return DotProvider.values();
-	}		
+	}	
 	
-	
+	@Factory("pulmonaryTypesBD")
+	public PulmonaryTypesBD[]  getPulmonaryTypesBD(){
+		return PulmonaryTypesBD.values();
+	}
+
 	private static final ReferredTo referredToTypes[] = {
 		ReferredTo.PP,
 		ReferredTo.GFS,
