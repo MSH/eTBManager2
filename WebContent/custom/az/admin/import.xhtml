@@ -118,24 +118,45 @@
 							<ui:param name="required" value="true" />
 						</s:decorate>
 						<s:decorate template="/layout/edit.xhtml">
-						<ui:define name="label">#{messages['admin.import.eidss.auto']}:</ui:define>
-						<h:selectBooleanCheckbox value="#{eidssIntHome.config.auto}" />
+							<ui:define name="label">#{messages['admin.import.eidss.default_user']}:</ui:define>
+							<ui:param name="required" value="true" />
+							<h:selectOneMenu value="#{eidssIntHome.config.defaultUser}">
+								<s:selectItems value="#{usersLog}" var="it" label="#{it.name}" noSelectionLabel="-" itemValue="#{it.id}"/>
+							</h:selectOneMenu>	
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.interval_deepdays']}:</ui:define>
+							<ui:param name="required" value="true" />
+							<h:selectOneMenu value="#{eidssIntHome.config.deepdays}">
+								<f:selectItems value="#{eidssIntHome.intervals}"/>
+							</h:selectOneMenu>	
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.interval_timer']}:</ui:define>
+							<ui:param name="required" value="true" />
+							<h:selectOneMenu value="#{eidssIntHome.config.interval}">
+								<f:selectItems value="#{eidssIntHome.intervals}"/>
+							</h:selectOneMenu>	
+						</s:decorate>
+						<s:decorate template="/custom/az/layout/datetimeedit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.srart_date']}:</ui:define>
+							<ui:param name="datefield" value="#{eidssIntHome.config.dateStart}" />
+							<ui:param name="required" value="true" />
+						</s:decorate>
+						
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.auto']}:</ui:define>
+							<h:selectBooleanCheckbox value="#{eidssIntHome.config.auto}" />
 						</s:decorate>
 					</div>
 					<div class="form-footer">
-						<a:commandLink action="#{eidssIntHome.saveConfig()}"
+						<a:commandLink action="#{eidssIntHome.saveAndExecute()}"
 							styleClass="button"
 							onclick="if (!disableButton(this)) return false;"
-							reRender="eidss,messages">
+							reRender="messages">
 							<span>#{messages['form.save']}</span>
 						</a:commandLink>
-						<a:commandLink action="#{eidssIntHome.execute()}"
-							rendered = "false"
-							styleClass="button"
-							onclick="if (!disableButton(this)) return false;"
-							reRender="eidss,messages">
-							<span>#{messages['form.import']}</span>
-						</a:commandLink>
+						
 						<a:commandLink action="#{eidssIntHome.execute1()}"
 							styleClass="button"
 							onclick="if (!disableButton(this)) return false;"
