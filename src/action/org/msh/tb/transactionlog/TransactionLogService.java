@@ -215,16 +215,30 @@ public class TransactionLogService {
 	 * @return
 	 */
 	protected Tbunit getUnit() {
-		UserWorkspace uw = (UserWorkspace)Component.getInstance("userWorkspace");
+		UserWorkspace uw = null;
+		try{
+			uw = (UserWorkspace)Component.getInstance("userWorkspace");
+			uw = getEntityManager().find(UserWorkspace.class, uw.getId());
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 		Tbunit unit = getEntityManager().find(Tbunit.class, uw.getTbunit().getId());
 		return unit;
 	}
-	
+
 	/**
 	 * @return
 	 */
 	protected AdministrativeUnit getAdminUnit() {
-		UserWorkspace uw = (UserWorkspace)Component.getInstance("userWorkspace");
+		UserWorkspace uw = null;
+		try{
+			uw = (UserWorkspace)Component.getInstance("userWorkspace");
+			uw = getEntityManager().find(UserWorkspace.class, uw.getId());
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 		AdministrativeUnit adminUnit = getEntityManager().find(AdministrativeUnit.class, uw.getTbunit().getAdminUnit().getId());
 		return adminUnit;
 	}
