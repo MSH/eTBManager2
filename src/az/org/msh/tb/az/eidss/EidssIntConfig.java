@@ -51,9 +51,25 @@ public class EidssIntConfig {
 	 */
 	public String  language;
 	/**
+	 * user by default (for observer task in timer)
+	 */
+	public Integer  defaultUser;
+	/**
 	 * WS timeout in ms
 	 */
 	public String timeout;
+	/**
+	 * default interval (in hours) for timer
+	 */
+	public Integer interval;
+	/**
+	 * default deep of import (in days) for timer
+	 */
+	public Integer deepdays;
+	/**
+	 * load cases to this date
+	 */
+	public Date dateStart;
 
 	public String getUrl() {
 		return url;
@@ -122,5 +138,31 @@ public class EidssIntConfig {
 	public void setTimeout(String timeout) {
 		this.timeout = timeout;
 	}
+	public Integer getDefaultUser() {
+		return defaultUser;
+	}
+	public void setDefaultUser(Integer defaultUser) {
+		this.defaultUser = defaultUser;
+	}
+	public Integer getInterval() {
+		return interval;
+	}
+	public void setInterval(Integer interval) {
+		this.interval = interval;
+	}
+	public Integer getDeepdays() {
+		return deepdays;
+	}
+	public void setDeepdays(Integer deepdays) {
+		this.deepdays = deepdays;
+	}
+	public Date getDateStart() {
+		return dateStart;
+	}
+	public void setDateStart(Date dateStart) {
+		this.dateStart = dateStart;
+	}
+
+	
 
 }

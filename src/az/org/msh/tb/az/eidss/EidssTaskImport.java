@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.transaction.SystemException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.jboss.seam.Component;
@@ -23,6 +24,7 @@ import org.msh.tb.application.tasks.TaskStatus;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.LocaleDateConverter;
@@ -46,6 +48,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	private EidssIntConfig config;
 	public static String stateMessage;
 	private StringBuffer log = new StringBuffer();
+	private String exportDetails = "";
 	private UserTransaction transaction;
 	private Loader loader;
 	private static long beginMills;
@@ -81,6 +84,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	protected void finishing() {
 		setStateMessage("eidss.import.finished");
 		addTimeLog("Finished");
+		addLog(exportDetails);
 		// save result to log file
 		beginTransaction();
 		TransactionLogService service = new TransactionLogService();
@@ -108,7 +112,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 					addLog("EIDSS entering date(s) to import: from "+ DateFormat.getDateInstance().format(config.getFrom())+
 							" to "+DateFormat.getDateInstance().format(config.getToDate()));
 					boolean success =loadCasesList();
-				//	sayAboutLoad(success);
+					sayAboutLoad(success);
 					if((caseIds.size()>0) && notCanceled()){
 						Iterator<CaseShortInfo> it = caseIds.iterator();
 						while (it.hasNext()){
@@ -118,7 +122,6 @@ public class EidssTaskImport extends AsyncTaskImpl {
 							}
 						}
 					}
-					//sayAboutCheckList();
 					if((caseIdsClean.size()>0) && notCanceled()){
 						Iterator<CaseShortInfo> it = caseIdsClean.iterator();
 						 refList="";
@@ -126,25 +129,20 @@ public class EidssTaskImport extends AsyncTaskImpl {
 							CaseShortInfo caseI = it.next();
 							//setStateMessage("load case " + caseIdsClean.indexOf(caseId) + " total to load " + caseIdsClean.size());
 							refList=refList+" "+loadCaseById(caseI);
-						}
-						
-						
+						}	
 					}
+					
 					if ((infoForExport.size()> 0) && notCanceled()){
 						exportToDB();
 					}
-					sayAboutLoad(success);
 					sayAboutCheckList();
+					sayAboutExport();
+					sayAboutRejected();
+					//sayAboutLoad(success);
+					//sayAboutCheckList();
 				}
-			
-				Integer reject=caseIdsClean.size()-infoForExport.size();
-				if (reject>0) {
-					String slog="Totally "+reject.toString() +" case(s) rejected";
-					if (!refList.trim().equalsIgnoreCase("")) {
-						slog=slog+": "+refList;
-					}
-						addLog(slog);
-				}
+				else 
+					sayAboutRejected();
 			} else{
 				addLog("Error unable to login EIDSS " + getLoader().getErrorMessage());
 			}
@@ -152,22 +150,49 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			addLog("Error wrong parameters");
 		}
 	}
-	/**
-	 * Export cases to eTBManager
-	 */
-	private void exportToDB() {
+	
+	private void sayAboutRejected(){
+		Integer reject=caseIdsClean.size()-infoForExport.size();
+		if (reject>0) {
+			String slog="Totally "+reject.toString() +" case(s) rejected";
+			if (!refList.trim().equalsIgnoreCase("")) {
+				slog=slog+": "+refList;
+			}
+				addLog(slog);
+		}
+	}
+	
+	private void sayAboutExport(){
 		Integer iw=0;
 		Integer ia=0;
 		
 		Iterator<CaseInfo> it=infoForExport.iterator();
 		while (it.hasNext()){
 			CaseInfo c = it.next();
-			String result="";
-			if (config.auto){
+			String result=ci.checkImportRecords(c);
+			if (result.equalsIgnoreCase(CaseImporting.WRITED))
+				iw++;
+			if (result.equalsIgnoreCase(CaseImporting.UPDATED))
+				ia++;
+		}
+		addLog(iw.toString()+ " cases written successfully");
+		addLog(ia.toString()+ " cases updated successfully");
+	}
+	
+	/**
+	 * Export cases to eTBManager
+	 */
+	private void exportToDB() {
+		Iterator<CaseInfo> it=infoForExport.iterator();
+		while (it.hasNext()){
+			CaseInfo c = it.next();
+			String result=ci.importRecords(c);
+			/*if (config.auto){
 				result=ci.checkImportRecords(c);
 			} else {
 				 result=ci.importRecords(c);
-			}
+			}*/
+
 			if (!result.equalsIgnoreCase("error")){
 				String ad=c.getAdditionalComment();
 				int pos=ad.indexOf("/");
@@ -183,20 +208,20 @@ public class EidssTaskImport extends AsyncTaskImpl {
 				
 				
 				if (result.equalsIgnoreCase(CaseImporting.WRITED)){
-					iw=iw+1;
-					addLog(entDate+" + "+toLog);
+					addExportDetails(entDate+" + "+toLog);
 				}
 				if (result.equalsIgnoreCase(CaseImporting.UPDATED)){
-					ia=ia+1;
-					addLog(entDate+" ^ "+toLog);
+					addExportDetails(entDate+" ^ "+toLog);
 				}
 			}else
-				addLog("Error writing  "+c.getLastName());
+				addExportDetails("Error writing  "+c.getLastName());
 		}
-		addLog(iw.toString()+ " cases written successfully");
-		addLog(ia.toString()+ " cases updated successfully");
+		
 	}
 
+	private void addExportDetails(String s){
+		exportDetails += s+'\n';
+	}
 
 
 	/**
@@ -241,9 +266,20 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	public void cancel(){
 		addLog("Canceled");
 		// save result to log file
+		boolean notHaveUser=false;
+		try {
+			if (getTransaction().isNoTransaction())
+				notHaveUser = true;
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		if (notHaveUser)
+			beginTransaction();
 		TransactionLogService service = new TransactionLogService();
 		service.getDetailWriter().addText(log.toString());
 		service.save("TASK", RoleAction.EXEC, "EIDSS Integration", null, null);
+		if (notHaveUser)
+			commitTransaction();
 		super.cancel();
 	}
 	/**
@@ -277,14 +313,14 @@ public class EidssTaskImport extends AsyncTaskImpl {
 							caseIds.add(csi);
 							i++;
 						}
-						addLog(DateFormat.getDateInstance().format(loadDate.getTime())+" "+diag + " found " + i+" case(s)");
+						addExportDetails(DateFormat.getDateInstance().format(loadDate.getTime())+" "+diag + " found " + i+" case(s)");
 
 					}else{
-						addLog(DateFormat.getDateInstance().format(loadDate.getTime())+" "+diag + " found 0 case");
+						addExportDetails(DateFormat.getDateInstance().format(loadDate.getTime())+" "+diag + " found 0 case");
 						String errorMess = loader.getErrorMessage();
 						if (errorMess.length() > 0){
 							noError = false;
-							addLog("ERROR " + errorMess);
+							addExportDetails("ERROR " + errorMess);
 						}
 					}
 					//loadDate.add(Calendar.DATE, 1); //next date
@@ -341,7 +377,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			Integer userId = (Integer) getParameter("userId");
 			if (userId != null){
 				User user = (User)getEntityManager().createQuery("from User u where u.id = :uid")
-				.setParameter("id", userId)
+				.setParameter("uid", userId)
 				.getSingleResult();
 				if (user != null){
 					setUser(user);
@@ -429,6 +465,18 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			*/
 			return true;
 		}
+	
+	private String replaceIfEmptyName(String n){
+		if (n==null){
+			return "XXXXX";
+		}
+		if (n.equalsIgnoreCase("")){
+			return "XXXXX";
+		}
+		return n;
+		
+	}
+	
 	/**
 	 * Convert case info to CaseInfo DTO and add this DTO to the result list
 	 * Convert only info in allowed by config states
@@ -439,20 +487,32 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		String diag="";
 		CaseInfo onecase=new CaseInfo();
 		String firstName = EIDSSData.getFirstName();
-		if (firstName==null){
+		
+		firstName = replaceIfEmptyName(firstName);
+		noError = (firstName.equals("XXXXX") ? false : noError);
+		/*if (firstName==null){
 			firstName="XXXXX";
 			noError=false;
 		}
 		if (firstName.equalsIgnoreCase("")){
 			firstName="XXXXX";
 			noError=false;
-		}
+		}*/
 		String lastName = EIDSSData.getLastName();
 		if (lastName.startsWith("*")){
 			lastName=lastName.substring(1);
 		}
+		
+		lastName = replaceIfEmptyName(lastName);
+		noError = (lastName.equals("XXXXX") ? false : noError);
+		
 		String fatherName="";
-		if (EIDSSData.getMiddleName()!=null) fatherName = EIDSSData.getMiddleName();
+		if (EIDSSData.getMiddleName()!=null) 
+			fatherName = EIDSSData.getMiddleName();
+		
+		fatherName = replaceIfEmptyName(fatherName);
+		noError = (fatherName.equals("XXXXX") ? false : noError);
+		
 		onecase.setLastName(lastName);
 		onecase.setFirstName(firstName);
 		onecase.setMiddleName(fatherName);
@@ -515,7 +575,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			}
 			String toLog=lastName+" "+firstName+" "+fatherName+", age "+ageStr+", diag "+diag+", "+notification.substring(0, 14)+" "+onecase.getCaseID();
 			String entDate=DateFormat.getDateInstance().format(d);
-			addLog(entDate+" - "+toLog);
+			addExportDetails(entDate+" - "+toLog);
 		
 		}
 	}
@@ -637,5 +697,9 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			transaction = (UserTransaction)Component.getInstance("org.jboss.seam.transaction.transaction");
 		return transaction;
 	}
-
+	@Override
+	public Workspace getWorkspace() {
+		EidssIntHome eih = (EidssIntHome)Component.getInstance("eidssIntHome"); 
+		return eih.getWorkspace();
+	}
 }

@@ -1,12 +1,18 @@
 package org.msh.tb.az.eidss;
 
 import java.lang.reflect.Field;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
@@ -15,12 +21,14 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.tb.application.tasks.AsyncTask;
 import org.msh.tb.application.tasks.TaskManager;
-import org.msh.tb.az.eidss.test.EidssImportTask;
+import org.msh.tb.az.eidss.timer.SysStartupAZ;
 import org.msh.tb.entities.SystemParam;
+import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 
 /**
@@ -30,12 +38,13 @@ import org.msh.tb.entities.Workspace;
  *
  */
 @Name("eidssIntHome")
-@Scope(ScopeType.CONVERSATION)
+@Scope(ScopeType.APPLICATION)
 public class EidssIntHome {
 	@In EntityManager entityManager;
 	@In TaskManager taskManager;
 	@In(required=false) Workspace defaultWorkspace;
 	@In(create=true) FacesMessages facesMessages;
+	@In(create=true) SysStartupAZ sysStartupAZ;
 	/**
 	 * import launch configuration
 	 */
@@ -46,6 +55,7 @@ public class EidssIntHome {
 	private final String prefix = "admin.eidss";
 	private UserLogin userLogin;
 	private Workspace workspace;
+	private List<SelectItem> intervals;
 
 	/**
 	 * Show any message to UI
@@ -72,24 +82,7 @@ public class EidssIntHome {
 	 */
 	public String execute1(){
 		saveConfig();
-		loadConfig();
-		setCurrentUser();
-		setDefaultWorkspace();
-		TaskManager manager = (TaskManager)Component.getInstance(TaskManager.class);
-		if (manager != null){
-			Map<String,Object> params = new HashMap<String, Object>();
-			params.put("config", getConfig());
-			params.put("userId", userLogin.getId());
-			AsyncTask task = manager.findTaskByClass(EidssTaskImport.class);
-			if (task == null){
-				manager.runTask(EidssTaskImport.class, params);
-				showMessage("eidss.import.started");
-			}else{
-				showMessage("eidss.import.starting");
-			}
-
-		}
-		return "Success";
+		return execute();
 	}
 
 	/**
@@ -97,31 +90,59 @@ public class EidssIntHome {
 	 * @return Success if import ran, or Error otherwise
 	 */
 	public String execute(){
-		EidssImportTask et=new EidssImportTask();
-		et.execute();
+		setDefaultWorkspace();
+		loadConfig();
+		setCurrentUser();
+		TaskManager manager = (TaskManager)Component.getInstance(TaskManager.class);
+		if (manager != null){
+			Map<String,Object> params = new HashMap<String, Object>();
+			params.put("config", getConfig());
+			params.put("userId", userLogin.getId());
+			if (getTask() == null){
+				manager.runTask(EidssTaskImport.class, params);
+				sysStartupAZ.display("eidss.import.started","on");
+				//showMessage("eidss.import.started");
+			}else{
+				sysStartupAZ.display("eidss.import.starting","on");
+				//showMessage("eidss.import.starting");
+			}
+
+		}
 		return "Success";
 	}
+
+	public EidssTaskImport getTask(){
+		EidssTaskImport task = (EidssTaskImport) taskManager.findTaskByClass(EidssTaskImport.class);
+		return task;
+	}
+
 	/**
 	 * Stop current async task
 	 */
 	public void stop(){
-		EidssTaskImport task = (EidssTaskImport) taskManager.findTaskByClass(EidssTaskImport.class);
+		EidssTaskImport task = getTask();
 		if (task != null){
+			sysStartupAZ.cancel();
 			task.cancel();
-			showMessage("eidss.import.canceled");
+			sysStartupAZ.display("eidss.import.canceled","off");
+			//showMessage("eidss.import.canceled");
 		}else{
-			showMessage("eidss.import.idle");
+			sysStartupAZ.cancel();
+			sysStartupAZ.display("eidss.import.idle","off");
+			//showMessage("eidss.import.idle");
 		}
 	}
+
 	/**
 	 * check state of the current async task
 	 */
 	public void check(){
-		AsyncTask task = taskManager.findTaskByClass(EidssTaskImport.class);
-		if (task != null){
-			showMessage(EidssTaskImport.getStateMessage());
+		if (getTask() != null){
+			sysStartupAZ.display(EidssTaskImport.getStateMessage(),"on");
+			//showMessage(EidssTaskImport.getStateMessage());
 		}else{
-			showMessage("eidss.import.idle");
+			sysStartupAZ.display("eidss.import.idle","off");
+			//showMessage("eidss.import.idle");
 		}
 	}
 
@@ -157,7 +178,7 @@ public class EidssIntHome {
 	 * load configuration from the SysConfig table
 	 * use reflection to determine keys name and fixed prefix for these keys
 	 */
-	private void loadConfig() {
+	public void loadConfig() {
 		config = new EidssIntConfig();
 		Field[] flds = config.getClass().getFields();
 		for(Field fld : flds){
@@ -176,7 +197,11 @@ public class EidssIntHome {
 				try {
 					if (fld.getType().getName().contains("Date")){
 						Date dt = (Date) fld.get(config);
-						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						SimpleDateFormat sdf;
+						if (dt.getHours()==0 && dt.getMinutes()==0)
+							sdf = new SimpleDateFormat("yyyy-MM-dd");
+						else
+							sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						saveParameter(prefix + "." + fld.getName(),sdf.format(dt));
 					}else
 						saveParameter(prefix + "." + fld.getName(),fld.get(config).toString());
@@ -222,10 +247,24 @@ public class EidssIntHome {
 		Object thisValue = null;
 		try {
 			if (fld.getType().getName().contains("Date")){
-				java.sql.Date dt = java.sql.Date.valueOf(value);
-				thisValue = new java.util.Date(dt.getTime());
+				//
+				Date date = null;
+				if (value.length()>10){
+					try {
+						date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(value);
+						thisValue = date;
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				else{
+					java.sql.Date dt = java.sql.Date.valueOf(value);
+					thisValue = new java.util.Date(dt.getTime());
+				}
 			}else if (fld.getType().getName().contains("Boolean")){
 				thisValue = Boolean.valueOf(value);
+			}else if (fld.getType().getName().contains("Integer")){
+				thisValue = Integer.valueOf(value);
 			} else{
 				thisValue = value;
 			}
@@ -278,7 +317,19 @@ public class EidssIntHome {
 	 * @return 
 	 */
 	public void setDefaultWorkspace() {
-		workspace = getEntityManager().find(Workspace.class, getUserLogin().getDefaultWorkspace().getId());
+		if (defaultWorkspace==null)
+			if (userLogin==null)
+				defaultWorkspace = getEntityManager().find(Workspace.class, 8);
+			else{
+				if(getUserLogin().getLoginDate()!=null)
+					workspace = getEntityManager().find(Workspace.class, getUserLogin().getDefaultWorkspace().getId());
+				else
+					defaultWorkspace = getEntityManager().find(Workspace.class, 8);
+			}
+		if (workspace==null){
+			workspace = defaultWorkspace;
+			Contexts.getApplicationContext().set("defaultWorkspace", defaultWorkspace);
+		}
 	}
 
 	public UserLogin getUserLogin() {
@@ -303,8 +354,63 @@ public class EidssIntHome {
 	public void setCurrentUser() {
 		if (userLogin == null)
 			userLogin = (UserLogin)Component.getInstance("userLogin");
-		//TODO resolve for background task
+		if (userLogin == null){
+			userLogin = new UserLogin();
+			userLogin.setWorkspace(defaultWorkspace);
+			User us = (User) getEntityManager().find(User.class, getConfig().getDefaultUser());
+			userLogin.setUser(us);
+			//userLogin.setId(us.getId());
+			Query q = getEntityManager().createQuery("from UserWorkspace uw where uw.workspace.id="+defaultWorkspace.getId()+" and uw.user.id=:uid")
+			.setParameter("uid", us.getId());
+			UserWorkspace uw = (UserWorkspace) q.getResultList().get(0);
+			Contexts.getApplicationContext().set("userWorkspace", uw);
+			Contexts.getApplicationContext().set("userLogin", userLogin);
+		}
 	}
 
 
+	public Workspace getWorkspace() {
+		return workspace;
+	}
+
+	public void saveAndExecute(){
+		saveConfig();
+		if (config.auto)
+			sysStartupAZ.start();
+		else
+			sysStartupAZ.cancel();
+		check();
+	}
+
+	public List<SelectItem> getIntervals() {
+		if (intervals==null){
+			intervals = new ArrayList<SelectItem>();
+			for (int i = 1; i <= 6; i++) {
+				SelectItem si = new SelectItem(i*2, Integer.toString(i*2));
+				intervals.add(si);
+			}
+		}
+		return intervals;
+	}
+
+
+	public void rewriteDatesInConfig() {
+		int deep=0;
+		if (getConfig()!=null){
+			if (config.getDeepdays()!=null)
+				deep = config.getDeepdays();
+			else
+				deep = 2;
+			Date today = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			config.setToDate(today);
+			saveParameter(prefix+".toDate", sdf.format(today));
+
+			Calendar d = Calendar.getInstance();
+			d.setTime(today);
+			d.add(Calendar.DAY_OF_YEAR, -deep);
+			config.setFrom(d.getTime());
+			saveParameter(prefix+".from", sdf.format(d.getTime()));
+		}
+	}
 }
