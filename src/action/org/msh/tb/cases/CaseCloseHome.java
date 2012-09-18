@@ -98,7 +98,7 @@ public class CaseCloseHome extends Controller{
 			return false;
 		}
 		
-		if(this.date.after(tbcase.getTreatmentPeriod().getEndDate())){
+		if(tbcase.getTreatmentPeriod() != null && this.date.after(tbcase.getTreatmentPeriod().getEndDate())){
 			facesMessages.addFromResourceBundle("cases.close.msg2");
 			return false;
 		}
