@@ -20,7 +20,7 @@
 	</span>
 	<span id="lnkDetails">
 	<a:commandLink value="#{messages['form.details']}" action="#{caseValidationHome.displayIssues}" 
-		reRender="pnlIssues" style="padding-left:20px;padding-right:30px;" rendered="#{tbcase.issueCounter > 0}" 
+		reRender="pnlIssues" style="padding-left:20px;padding-right:30px;" rendered="#{tbcase.issueCounter > 0 and (caseValidationHome.last != null)}" 
 		oncomplete="showIssuesCommand(); return false;" />
 	</span>
 
@@ -38,7 +38,7 @@
 	</a:commandLink>
 
 	<s:link value="#{messages['cases.pending.notify']}" view="/cases/newissue.xhtml" 
-		rendered="#{caseHome.canCreateIssue}" style="width:200px;">
+		rendered="#{caseHome.canCreateIssue and (caseValidationHome.last == null || caseValidationHome.last.answer)}" style="width:200px;">
 		<f:param name="id" value="#{caseHome.id}"/>
 	</s:link>
 		
@@ -59,10 +59,38 @@ function hideIssuesCommand() {
 	jQuery("#lnkHideDetails").hide();
 	hideIssues();
 }
+function editLastIssue(){
+	document.getElementById("saveLnk").style.display = 'inline';
+	document.getElementById("cancelLnk").style.display = 'inline';
+	document.getElementById("editLnk").style.display = 'none';
+	document.getElementById("issueDescriptionField").style.display = 'block';
+	document.getElementById("issueDescriptionOutput").style.display = 'none';
+	document.getElementById("deleteLnk").style.display = 'none';
+}
+function cancelEditIssue(){
+	document.getElementById("saveLnk").style.display = 'none';
+	document.getElementById("cancelLnk").style.display = 'none';
+	document.getElementById("editLnk").style.display = 'inline';
+	document.getElementById("issueDescriptionField").style.display = 'none';
+	document.getElementById("issueDescriptionOutput").style.display = 'block';
+	document.getElementById("deleteLnk").style.display = 'inline';
+}
+function saveIssue(){
+	w=document.getElementById("lastIssueEditingTextEdt").value;
+	saveEditingLastIssue(w);
+}
+
 -->
 </script>
 
 <h:panelGroup id="pnlIssues" style="display:none;">
+
+<a:jsFunction name="saveEditingLastIssue" action="#{caseValidationHome.saveEditingLastIssue()}" reRender="main,messages">
+	<a:actionparam name="param1" assignTo="#{caseValidationHome.lastIssueEditingText}"/>
+</a:jsFunction>
+
+<a:jsFunction name="removeLastIssue" action="#{caseValidationHome.removeLastIssue()}" reRender="main,messages" />
+
 <s:fragment rendered="#{caseValidationHome.displayingIssues}">
 
 	<s:link view="/cases/postanswer.xhtml" onclick="disableButton(this)"
@@ -72,7 +100,7 @@ function hideIssuesCommand() {
 	</s:link>
 
 <table width="100%" >
-<a:repeat value="#{caseValidationHome.issues}" var="it">
+<a:repeat value="#{caseValidationHome.issues}" var="it" rowKeyVar="rowNumber">
 <tr>
 	<td style="border-top:1px solid #d0d0d0;">
 		<s:div style="display:block;float:right;min-width:150px" rendered="#{it.tbunit!=null}">
@@ -95,11 +123,43 @@ function hideIssuesCommand() {
 		<br/>
 	</td></tr>
 	<tr><td>
-		<div style="margin-left:30px;margin-bottom:10px;">
-		<h:outputText value="#{it.description}" escape="false" 
-			converter="rmemoria.TextConverter" 
-			style="font-size:12px;font-family:Courier;"/>
-		</div>
+		<s:fragment rendered="#{rowNumber != 0 or userLogin.user.id != it.user.id}">
+			<div style="margin-left:30px;margin-bottom:10px;">
+				<h:outputText value="#{it.description}" escape="false" 
+					converter="rmemoria.TextConverter" 
+					style="font-size:12px;font-family:Courier;"/>
+			</div>
+		</s:fragment>
+		
+		<s:fragment id="editIssue" rendered="#{rowNumber == 0 and userLogin.user.id eq it.user.id}">
+			
+			<div id="issueDescriptionOutput" style="margin-left:30px;margin-bottom:10px;" >
+				<h:outputText value="#{it.description}" escape="false" converter="rmemoria.TextConverter" style="font-size:12px;font-family:Courier;"/>
+			</div>
+			
+			<div id="issueDescriptionField" style="margin-left:30px;margin-bottom:10px;display:none" >
+				<textarea id="lastIssueEditingTextEdt" style="width: 702px;height: 58px;">#{caseValidationHome.last.description}</textarea>
+			</div>	
+				
+			<div>
+	    		<span id="editLnk">
+	    			<s:link value="#{messages['form.edit']}" onclick="editLastIssue();return false;"/>
+	    		</span>
+	    		
+	    		<span id="saveLnk" style="display:none">
+	    			<s:link value="#{messages['form.save']}" onclick="saveIssue();return false;" />
+	    		</span>	
+	    		
+	   			<span id="cancelLnk" style="display:none">
+	    			<s:link value="#{messages['form.cancel']}" onclick="cancelEditIssue();return false;" />
+	    		</span>		
+	    							
+				<span id="deleteLnk">
+					<s:link value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) removeLastIssue();return false;"/>
+				</span>
+			</div>				
+		</s:fragment>
+
 	</td>
 </tr>
 </a:repeat>
@@ -110,5 +170,7 @@ function hideIssuesCommand() {
 </s:decorate>
 
 </div>
-    
+ 
+
+ 
 </ui:composition>

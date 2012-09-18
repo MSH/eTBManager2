@@ -15,6 +15,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.security.Restrict;
 import org.jboss.seam.core.Events;
+import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.entities.CaseIssue;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
@@ -42,12 +43,14 @@ public class CaseValidationHome {
 	protected EntityManager entityManager;
 	@In(create=true)
 	protected SequenceGenerator sequenceGenerator;
-		
+	@In(create=true) FacesMessages facesMessages;
+	
 	private List<CaseIssue> issues;
 	private CaseIssue issue;
 	private User user;
 	private CaseIssue lastIssue;
 	private boolean displayingIssues;
+	private String lastIssueEditingText;
 
 
 	/**
@@ -64,7 +67,7 @@ public class CaseValidationHome {
 	/**
 	 * Create list of issues of the case
 	 */
-	protected void createIssueList() {
+	protected void createIssueList(){	
 		issues = entityManager.createQuery("from CaseIssue c " +
 				"join fetch c.user " +
 				"where c.tbcase.id = #{caseHome.id} " +
@@ -211,6 +214,62 @@ public class CaseValidationHome {
 		
 		return issue;
 	}
+	
+	public void saveEditingLastIssue(){
+		issue = getLast();
+		UserLogin ul = (UserLogin) Component.getInstance("userLogin");
+		
+		if(issue != null){
+			if(!ul.getUser().getId().equals(issue.getUser().getId())){
+				facesMessages.addFromResourceBundle("exceptions.val");
+				return;
+			}
+			
+			issue.setDescription(lastIssueEditingText);
+			
+			entityManager.persist(issue);
+			entityManager.flush();
+			
+			issue = null;
+			issues = null;
+			
+			facesMessages.addFromResourceBundle("default.entity_updated");
+		}
+		
+	}
+	
+	public void removeLastIssue(){
+		issue = getLast();
+		UserLogin ul = (UserLogin) Component.getInstance("userLogin");
+		
+		if(issue != null){	
+			if(!ul.getUser().getId().equals(issue.getUser().getId())){
+				facesMessages.addFromResourceBundle("exceptions.val");
+				return;
+			}
+		
+			entityManager.createQuery("delete from CaseIssue c " +
+					"where c.id = :id")
+					.setParameter("id", issue.getId())
+					.executeUpdate();
+			
+			issue = getLast();
+			if(issue == null)
+				caseHome.getTbCase().setValidationState(ValidationState.WAITING_VALIDATION);		
+			else if(issue.isAnswer())
+				caseHome.getTbCase().setValidationState(ValidationState.PENDING_ANSWERED);
+			else
+				caseHome.getTbCase().setValidationState(ValidationState.PENDING);
+			
+			caseHome.persist();
+			
+			facesMessages.clear();
+			facesMessages.addFromResourceBundle("default.entity_deleted");
+		}
+		
+		issue = null;
+		issues = null;
+	}
 
 	/**
 	 * Return the current user logged in
@@ -246,6 +305,26 @@ public class CaseValidationHome {
 			return null;
 		}
 	}
+	
+	/**
+	 * Return the last posted for the case
+	 * @return
+	 */
+	public CaseIssue getLast() {
+		try {
+			CaseIssue lastCi = (CaseIssue) entityManager.createQuery("from CaseIssue c " +
+					"join fetch c.user " +
+					"where c.tbcase.id = :id " +
+					"and c.date = (select max(aux.date) from CaseIssue aux " +
+					"where aux.tbcase.id=c.tbcase.id)")
+					.setParameter("id", caseHome.getId())
+					.getSingleResult();
+			
+			return lastCi;
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
 
 
 	/**
@@ -263,4 +342,20 @@ public class CaseValidationHome {
 	public boolean isDisplayingIssues() {
 		return displayingIssues;
 	}
+
+	/**
+	 * @return the lastIssueEditingText
+	 */
+	public String getLastIssueEditingText() {
+		return lastIssueEditingText;
+	}
+
+
+	/**
+	 * @param lastIssueEditingText the lastIssueEditingText to set
+	 */
+	public void setLastIssueEditingText(String lastIssueEditingText) {
+		this.lastIssueEditingText = lastIssueEditingText;
+	}
+	
 }
