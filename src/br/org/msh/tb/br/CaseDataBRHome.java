@@ -323,7 +323,7 @@ public class CaseDataBRHome {
 		
 		if (medicalExaminationBRHome != null) {
 			MedicalExamination medExam = medicalExaminationBRHome.getInstance();
-			if(medExam != null){
+			if(medExam.getDate() != null){
 				if (YesNoType.YES.equals(medExam.getSupervisedTreatment())) {
 					if ((medExam.getSupervisionUnitName() == null) || (medExam.getSupervisionUnitName().isEmpty())) {
 						facesMessages.addToControlFromResourceBundle("supUnitName", "javax.faces.component.UIInput.REQUIRED");
@@ -331,7 +331,7 @@ public class CaseDataBRHome {
 					}
 				}
 				
-				if(medExam.getDate().before(caseHome.getTbCase().getDiagnosisDate())){
+				if(medExam.getDate() != null && medExam.getDate().before(caseHome.getTbCase().getDiagnosisDate())){
 					facesMessages.addToControlFromResourceBundle("date", "cases.medexamdate.val1");
 					return false;
 				}
