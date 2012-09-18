@@ -113,10 +113,11 @@ select {font-size:1em; }
 .page-header-left a {
 	float:left;
 	position: absolute;
-	left: 15em;
-	width:200px;
+	left:50%;
+	width:150px;
 	height:42px;
 	padding-left:54px;
+	margin-left:-500px;
 }
 
 .page-header-left h1 {
