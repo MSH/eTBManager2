@@ -229,7 +229,10 @@ public class Report08AZ extends IndicatorVerify {
 					else
 					{
 						addToTable2100(14,tc,true);
-						addToTable2100(14+tc.getExtrapulmonaryType().getDisplayOrder(),tc,true);
+						if (tc.getExtrapulmonaryType()!=null)
+							addToTable2100(14+tc.getExtrapulmonaryType().getDisplayOrder(),tc,true);
+						else
+							addToVerList(tc,1,1);
 					}
 					if (tc.getAge()>=14 && tc.getAge()<=29)
 						addToTable2100(27,tc,true);
