@@ -323,16 +323,18 @@ public class CaseDataBRHome {
 		
 		if (medicalExaminationBRHome != null) {
 			MedicalExamination medExam = medicalExaminationBRHome.getInstance();
-			if (YesNoType.YES.equals(medExam.getSupervisedTreatment())) {
-				if ((medExam.getSupervisionUnitName() == null) || (medExam.getSupervisionUnitName().isEmpty())) {
-					facesMessages.addToControlFromResourceBundle("supUnitName", "javax.faces.component.UIInput.REQUIRED");
-					res = false;
+			if(medExam != null){
+				if (YesNoType.YES.equals(medExam.getSupervisedTreatment())) {
+					if ((medExam.getSupervisionUnitName() == null) || (medExam.getSupervisionUnitName().isEmpty())) {
+						facesMessages.addToControlFromResourceBundle("supUnitName", "javax.faces.component.UIInput.REQUIRED");
+						res = false;
+					}
 				}
-			}
-			
-			if(medExam.getDate().before(caseHome.getTbCase().getDiagnosisDate())){
-				facesMessages.addToControlFromResourceBundle("date", "cases.medexamdate.val1");
-				return false;
+				
+				if(medExam.getDate().before(caseHome.getTbCase().getDiagnosisDate())){
+					facesMessages.addToControlFromResourceBundle("date", "cases.medexamdate.val1");
+					return false;
+				}
 			}
 		}
 		
