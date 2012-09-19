@@ -150,7 +150,7 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 		Tbunit unit = userSession.getTbunit();
 
 		if (getInstance().getReceivingDate().before( unit.getMedManStartDate()) ) {
-			facesMessages.addFromResourceBundle("medicines.movs.datebefore", unit.getMedManStartDate());
+			facesMessages.addFromResourceBundle("meds.movs.datebefore", unit.getMedManStartDate());
 			return false;
 		}
 
