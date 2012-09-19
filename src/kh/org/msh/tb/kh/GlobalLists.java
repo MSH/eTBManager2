@@ -97,6 +97,7 @@ public class GlobalLists {
 		TbField.XRAYPRESENTATION,
 		TbField.PULMONARY_TYPES,
 		TbField.EXTRAPULMONARY_TYPES,
+		TbField.ADJUSTMENT,
 		TbField.ART_REGIMEN,
 		TbField.IDENTIFICATION
 		
