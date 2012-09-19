@@ -50,6 +50,7 @@
         <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/dom4j.jar"/>
         <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/axis.jar"/>
         <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/jboss-jaxrpc.jar"/>
+		<pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/quartz.jar"/>
     </path>
 
 	<path id="mdrtb.classpath">
