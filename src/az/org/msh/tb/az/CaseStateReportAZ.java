@@ -130,8 +130,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 		String res = "select c.state, c.validationState, c.diagnosisType, count(*) " +
 		"from tbcase c " +
 		"inner join tbunit u on u.id = c.notification_unit_id " + aucond +
-		" where c.diagnosisType in (0,1) "+(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
-		" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
+		" where c.diagnosisType in (0,1) and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
 		" group by c.state, c.validationState, c.diagnosisType";
 		return res;
 	}
@@ -150,11 +149,11 @@ public class CaseStateReportAZ extends CaseStateReport{
 		it.add(importedEmpty.intValue());
 		it.setStateIndex(EIDSS_NOT_BINDED);
 		itemsEIDSS.add(it);
-		Item it1 = new Item();
+		/*Item it1 = new Item();
 		it1.setDescription(messages.get("az_EIDSS_Binded"));
 		it1.add(importedBusy.intValue());
 		it1.setStateIndex(EIDSS_BINDED);
-		itemsEIDSS.add(it1);
+		itemsEIDSS.add(it1);*/
 	}
 	/**
 	 * Get quantity of EIDSS imported cases related to the notification or cure unit or both
