@@ -70,6 +70,11 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		Thread.currentThread().setContextClassLoader(getClass().getClassLoader()); //to avoid JBoss bug
 		initContext();
 		setStateMessage("eidss.import.starting");
+		EidssIntHome eih = (EidssIntHome)Component.getInstance("eidssIntHome"); 
+		if (eih!=null)
+			if (eih.getUserLogin()!=null)
+				if (eih.getUserLogin().getLoginDate()==null)
+					addLog("Executing automatic EIDSS integration...");
 		addTimeLog("Started");
 		Calendar beginExec = GregorianCalendar.getInstance();
 		beginMills = beginExec.getTimeInMillis();

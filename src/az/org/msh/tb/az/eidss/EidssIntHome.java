@@ -294,6 +294,8 @@ public class EidssIntHome {
 			p = new SystemParam();
 			p.setKey(key);
 			//TODO ?
+			if (defaultWorkspace==null) 
+				setDefaultWorkspace();
 			defaultWorkspace = entityManager.merge(defaultWorkspace);
 			p.setWorkspace(defaultWorkspace);
 		}
@@ -379,7 +381,7 @@ public class EidssIntHome {
 			sysStartupAZ.start();
 		else
 			sysStartupAZ.cancel();
-		check();
+		//check();
 	}
 
 	public List<SelectItem> getIntervals() {

@@ -32,6 +32,7 @@ public class SysStartupAZ{
 	private Map<String, String> messages;
 	private QuartzTriggerHandle quartz;
 	private Date start;
+	static Date now = new Date();
 
 	static final long hour = 60*60*1000L;
 	@Observer("org.jboss.seam.postInitialization")
@@ -60,17 +61,30 @@ public class SysStartupAZ{
 		}
 	}
 
+	private void changeStartDt(){
+		Date db = eidssIntHome.getConfig().getDateStart();
+		if (!start.equals(db))
+			start = now.before(db) ? db : start;
+	}
+	
 	public void start(){
 		if (quartz==null){
 			eidssIntHome.setDefaultWorkspace();
 			eidssIntHome.loadConfig();
+			changeStartDt();
 			if (eidssIntHome.getConfig().getAuto() == true)
 				quartz = systemTimerAZ.trigger(start, getTimeInterval()*hour);
 		}
 		else
 			try {
-				if(quartz.getTrigger()==null)
+				if(quartz.getTrigger()==null){
+					changeStartDt();
 					quartz = systemTimerAZ.trigger(start, getTimeInterval()*hour);
+				}
+				else{
+					quartz.cancel();
+					start();
+				}
 			} catch (SchedulerException e) {
 				e.printStackTrace();
 			}

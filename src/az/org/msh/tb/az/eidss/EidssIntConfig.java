@@ -157,6 +157,8 @@ public class EidssIntConfig {
 		this.deepdays = deepdays;
 	}
 	public Date getDateStart() {
+		if (dateStart==null)
+			dateStart = new Date();
 		return dateStart;
 	}
 	public void setDateStart(Date dateStart) {
