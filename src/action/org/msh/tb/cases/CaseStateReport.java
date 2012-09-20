@@ -13,16 +13,16 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
-import org.msh.tb.misc.GlobalLists;
+import org.msh.tb.entities.Tag.TagType;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.Tag.TagType;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.login.UserSession;
+import org.msh.tb.misc.GlobalLists;
 
 /**
  * Generate report by case state to be displayed in the main page
@@ -273,7 +273,7 @@ public class CaseStateReport {
 	 * @param state
 	 * @return Instance of {@link ValidationState}
 	 */
-	private ValidationItem findValidationItem(ValidationState state) {
+	protected ValidationItem findValidationItem(ValidationState state) {
 		for (ValidationItem item: validationItems) {
 			if (item.getValidationState().equals(state)) {
 				return item;
@@ -292,7 +292,7 @@ public class CaseStateReport {
 	 * @param state
 	 * @return
 	 */
-	private Item findItem(CaseState state, DiagnosisType diagType) {
+	protected Item findItem(CaseState state, DiagnosisType diagType) {
 		int stateIndex = state.ordinal();
 		String desc = null;
 		
@@ -473,5 +473,15 @@ public class CaseStateReport {
 		public void setTagType(TagType tagType) {
 			this.tagType = tagType;
 		}
+	}
+
+
+	public void setValidationItems(List<ValidationItem> validationItems) {
+		this.validationItems = validationItems;
+	}
+
+
+	public void setTotal(Item total) {
+		this.total = total;
 	}
 }
