@@ -130,8 +130,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 		String res = "select c.state, c.validationState, c.diagnosisType, count(*) " +
 		"from tbcase c " +
 		"inner join tbunit u on u.id = c.notification_unit_id " + aucond +
-		"where "+(hsID != null? "and u.healthSystem_id = " + hsID.toString()+" and ": "") +
-		" c.diagnosisType in (0,1) " +
+		" where c.diagnosisType in (0,1) "+(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
 		" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
 		" group by c.state, c.validationState, c.diagnosisType";
 		return res;
