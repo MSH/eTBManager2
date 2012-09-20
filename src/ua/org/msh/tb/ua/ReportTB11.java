@@ -14,7 +14,7 @@ import org.msh.tb.indicators.IndicatorVerify;
 import org.msh.tb.indicators.core.IndicatorTable;
 
 @Name("reportTB11")
-public class ReportTB11 extends IndicatorVerify {
+public class ReportTB11 extends IndicatorVerify<TbCase> {
 	private static final long serialVersionUID = -8510290531301762778L;
 	String [] cols = {"newcases", "relapses", "others"};
 
@@ -123,7 +123,7 @@ public class ReportTB11 extends IndicatorVerify {
 						table1.addIdValue(colkey, "row4", 1F);
 				}
 				if (!MicroscopyIsNull(tc) || !CultureIsNull(tc)){
-					addToRepList(tc);
+					addToAllowing(tc);
 					ExamDST ex = rightDSTTest(tc);
 					if (ex != null){
 						for (int i = 6; i < 27; i++){
@@ -248,7 +248,8 @@ public class ReportTB11 extends IndicatorVerify {
 			calcSummaryFields();
 			for (int i = 1; i < 31; i++)
 				for (String colid: cols) 
-					calcPercentage(colid,i);	
+					calcPercentage(colid,i);
+			generateRepList(lst);
 		}
 		else 
 			setOverflow(true);

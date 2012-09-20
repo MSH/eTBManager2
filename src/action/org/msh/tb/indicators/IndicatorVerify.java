@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +28,11 @@ import org.msh.tb.indicators.core.IndicatorFilters;
  * A base class must be created and override abstracts methods {@link #createIndicators()}, 
  * {@link #generateTables()}, {@link #addToAllowing(TbCase)}
  * @author am
+ * @param <E>
+ * @param <E>
  *
  */
-public abstract class IndicatorVerify extends Indicator2D {
+public abstract class IndicatorVerify<E> extends Indicator2D {
 	private static final long serialVersionUID = -2348070104654096945L;
 
 	@In(create=true) IndicatorController indicatorController;
@@ -195,15 +198,22 @@ public abstract class IndicatorVerify extends Indicator2D {
 	protected abstract void addToAllowing(TbCase tc);
 	
 	/**
-	 * Add TbCase to category3 (allowing cases), if it not contains in all subcategories of category2
+	 * Add cases to category3 (allowing cases), if it not contains in all subcategories of category2
 	 * */
-	protected void addToRepList(TbCase tc){
-		addToAllowing(tc);
-		for (ErrItem ls: verifyList.get(getMessage("verify.errorcat2"))) {
-			if (ls.getCaseList().contains(tc))
-				return;
+	protected void generateRepList(List<E> lst){
+		Iterator<E> it = lst.iterator();
+		while(it.hasNext()){
+			E tc = it.next();
+			boolean inWarn = false; 
+			for (ErrItem ls: verifyList.get(getMessage("verify.errorcat2"))) {
+				if (ls.getCaseList().contains(tc)){
+					inWarn = true;
+					break;
+				}
+			}
+			if (!inWarn)
+				addToVerList((TbCase)tc,3,0);
 		}
-		addToVerList(tc,3,0);
 	}
 	
 	@Override

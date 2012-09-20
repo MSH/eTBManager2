@@ -22,7 +22,7 @@ import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
 @Name("reportTB10")
-public class ReportTB10 extends IndicatorVerify {
+public class ReportTB10 extends IndicatorVerify<TbCase> {
 	private static final long serialVersionUID = -8510290531301762778L;
 
 	private IndicatorTable table2000;
@@ -156,7 +156,7 @@ public class ReportTB10 extends IndicatorVerify {
 					else	
 					if (rightMcTest(tc).getResult().isPositive()){
 						addValueTable(tc.getTreatmentPeriod().getIniDate(), tc.getDiagnosisDate(), tc.getPatientType(), tc.getState(), tc.getIniContinuousPhase(), firstNegMicro(tc), isNoExam(tc));
-						addToRepList(tc);
+						addToAllowing(tc);
 					}
 				}
 			}
@@ -168,6 +168,7 @@ public class ReportTB10 extends IndicatorVerify {
 					calcPercentage(colid, rowid);
 				}
 			getTotal2000();
+			generateRepList(lst);
 		}
 		else 
 			setOverflow(true);

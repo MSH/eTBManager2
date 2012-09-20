@@ -21,7 +21,7 @@ import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.ua.entities.CaseDataUA;
 
 @Name("reportTB07")
-public class ReportTB07 extends IndicatorVerify {
+public class ReportTB07 extends IndicatorVerify<TbCase> {
 	private static final long serialVersionUID = -8462692609433997419L;
 	private static final String rowid = "row";
 
@@ -163,7 +163,7 @@ public class ReportTB07 extends IndicatorVerify {
 										if (!verifyList.get(getMessage("verify.errorcat1")).get(4).getCaseList().contains(tc))
 											if (tc.getResHIV().get(0).getResult().equals(HIVResult.POSITIVE))
 												addToTable(getTable4000(),gen,"pulmonary",key);
-										addToRepList(tc);
+										addToAllowing(tc);
 									}else
 										addToVerList(tc,1,5);
 							}
@@ -177,7 +177,7 @@ public class ReportTB07 extends IndicatorVerify {
 									if (tc.getResHIV().get(0).getResult().equals(HIVResult.POSITIVE))
 										addToTable(getTable4000(),gen,"extrapulmonary",key);
 								
-								addToRepList(tc);
+								addToAllowing(tc);
 							}
 						if (!MicroscopyIsNull(tc))
 							if (tc.getRegistrationDate()!=null && cd.getDateFirstVisitGMC()!=null)
@@ -193,6 +193,7 @@ public class ReportTB07 extends IndicatorVerify {
 			getTable5000().setValue("col1", rowid, (float)numcases);
 			if (numcases != 0)
 				getTable5000().addIdValue("col3", rowid, getTable5000().getValue("col2", rowid)*100/numcases);
+			generateRepList(lst);
 		}
 		else 
 			setOverflow(true);

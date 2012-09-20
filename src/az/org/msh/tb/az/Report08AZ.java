@@ -20,7 +20,7 @@ import org.msh.tb.indicators.IndicatorVerify;
 import org.msh.tb.indicators.core.IndicatorTable;
 
 @Name("report08az")
-public class Report08AZ extends IndicatorVerify {
+public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 	private static final long serialVersionUID = -5703455596815108661L;
 
 	private List<String> ageRange;
@@ -218,7 +218,12 @@ public class Report08AZ extends IndicatorVerify {
 
 					if (tc.getInfectionSite().equals(InfectionSite.PULMONARY) || tc.getInfectionSite().equals(InfectionSite.BOTH)){
 						addToTable2100(2,tc,true);
-						addToTable2100(2+tc.getPulmonaryType().getDisplayOrder(),tc,true);
+						if (tc.getPulmonaryType() == null)
+							addToVerList(tc,1,0);
+						else if(tc.getPulmonaryType().getDisplayOrder() ==null)
+							addToVerList(tc,1,0);
+						else
+							addToTable2100(2+tc.getPulmonaryType().getDisplayOrder(),tc,true);
 						if (indCarvity(tc)>-1)
 							addToTable2100(12,tc,true);
 						if (bkplus(tc))
@@ -239,7 +244,7 @@ public class Report08AZ extends IndicatorVerify {
 					if (tc.isToThirdCategory())
 						addToTable2100(28,tc,true);
 				}
-				addToRepList(tc);
+				addToAllowing(tc);
 				//table 2120
 				addToTable2120(1+rowid, tc);
 				if (posHIVResult(tc))
@@ -311,6 +316,7 @@ public class Report08AZ extends IndicatorVerify {
 					addToVerList(tc,2,1);
 				}
 			}
+			generateRepList(lst);
 		}
 		else 
 			setOverflow(true);

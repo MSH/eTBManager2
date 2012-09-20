@@ -25,7 +25,7 @@ import org.msh.utils.date.Period;
 
 @Name("reportTB08")
 
-public class ReportTB08 extends IndicatorVerify {
+public class ReportTB08 extends IndicatorVerify<TbCase> {
 	private static final String NEGATIVE = "_negative";
 
 
@@ -177,6 +177,7 @@ public class ReportTB08 extends IndicatorVerify {
 					perc = val2 / val1 * 100;
 				getTable3000().addIdValue("col3", row.getId(), perc);
 			}
+			generateRepList(lst);
 		}
 		else
 		{
@@ -206,7 +207,7 @@ public class ReportTB08 extends IndicatorVerify {
 		if (culmicResult!=null){
 			getTable2000().addIdValue(col, patientType + culmicResult, 1F);
 			getTable2000().addIdValue("TOTAL", patientType + culmicResult, 1F);
-			addToRepList(tc);
+			addToAllowing(tc);
 			if ((culmicResult.equals(NEGATIVE) && tc.getState().equals(CaseState.CURED)))
 				addToVerList(tc,2,3);
 		}
@@ -231,7 +232,7 @@ public class ReportTB08 extends IndicatorVerify {
 		if (micResult!=null){
 			getTable1000().addIdValue(col, patientType + micResult, 1F);
 			getTable1000().addIdValue("TOTAL", patientType + micResult, 1F);
-			addToRepList(tc);
+			addToAllowing(tc);
 			if ((micResult.equals(NEGATIVE) && tc.getState().equals(CaseState.CURED)))
 				addToVerList(tc,2,2);
 		}
