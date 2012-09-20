@@ -294,8 +294,7 @@ public class EidssIntHome {
 			p = new SystemParam();
 			p.setKey(key);
 			//TODO ?
-			if (defaultWorkspace==null) 
-				setDefaultWorkspace();
+			
 			defaultWorkspace = entityManager.merge(defaultWorkspace);
 			p.setWorkspace(defaultWorkspace);
 		}
