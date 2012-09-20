@@ -48,7 +48,7 @@ public class CasesQueryAZ extends CasesQuery{
 		"c.registrationCode = #{caseFilters.registrationCode}",
 		"c.unitRegCode = #{caseFilters.unitRegCode}",
 		"c.caseNumber = #{caseFilters.caseNumber}",
-		"nu.workspace.id = #{defaultWorkspace.id}",
+		"p.workspace.id = #{defaultWorkspace.id}",
 		"c.state = #{caseFilters.caseState}",
 		"c.notifAddress.adminUnit.code like #{caseFilters.adminUnitLike}",
 		"c.classification = #{caseFilters.classification}",

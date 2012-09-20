@@ -162,7 +162,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 	 * @return
 	 */
 	private BigInteger getImportedBinded() {
-		String querySQL = getSQLSelect()+" left outer join tbunit nu on c.NOTIFICATION_UNIT_ID = nu.id " + getSQLEIDSSOnly() + " and " + getSQLHasUnit()+ "and nu.workspace_id="+defaultWorkspace.getId();
+		String querySQL = getSQLSelect()+ " " + getSQLEIDSSOnly() + " and " + getSQLHasUnit();
 		return (BigInteger) entityManager.createNativeQuery(querySQL).getSingleResult();
 	}
 
