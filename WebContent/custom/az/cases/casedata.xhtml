@@ -87,16 +87,16 @@
 
 	<div class="spacer" />
 	<h:form id="trans">
-		<s:div styleClass="region1"  rendered="#{tbcase.state=='TRANSFERRING'}">
+		<s:div styleClass="region1"  rendered="#{tbcase.state=='TRANSFERRING'}" style="width:168px;">
 			<div class="icon-hu-big"/>
-			<div style="margin-top:6px;font-size:11px;max-width:320px;" >
+			<div style="margin-top:6px;font-size:11px;max-width:167px;" >
 				<b style="padding-right:4px;">#{messages['meds.movs.destunit']}:</b> 
 				<br/>
 				<h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
 				<br/>
 				<span class="right-icon" />
 				<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
-					propagation="none">
+					propagation="none" rendered="#{caseHome.canTransferIn}">
 					<f:param name="id" value="#{caseHome.id}" />
 				</s:link>
 				<br/>
@@ -104,7 +104,8 @@
 					onclick="if (!confirm('#{caseMoveHome.confirmMsgRollbackTransfer}')) return false"
 					action="#{caseMoveHome.rollbackTransferOut}"
 					reRender="trans,main,leftmenu,messages" 
-					styleClass="right-icon" >
+					styleClass="right-icon"  
+					rendered="#{caseAZHome.canTransferReturn}">
 					<f:param name="name" value="#{caseHome.transferInHealthUnit.tbunit.name}"/>
 				</a:commandLink>
 			</div>

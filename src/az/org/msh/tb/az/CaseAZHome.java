@@ -3,6 +3,7 @@ package org.msh.tb.az;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.az.entities.CaseSeverityMark;
@@ -10,6 +11,9 @@ import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.cases.CaseCloseHome;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.CaseState;
 
 @Name("caseAZHome")
@@ -113,6 +117,28 @@ public class CaseAZHome {
 	}
 	public boolean isCanEditExams() {
 		return ((caseHome.isCanEditExams()) || (getTbCase().isToThirdCategory() && caseHome.checkRoleBySuffix("CASE_EXAMS_EDT") && caseHome.isWorkingUnit()));
+	}
+	public boolean isCanTransferReturn() {
+		TbCase tbcase = caseHome.getInstance();
+		return (tbcase.isOpen()) && (tbcase.getState() == CaseState.TRANSFERRING) && (caseHome.checkRoleBySuffix("CASE_TRANSFER")) && (isOwnerOrNotifUnit());
+	}
+	
+	public boolean isOwnerOrNotifUnit() {
+		UserWorkspace ws = (UserWorkspace)Component.getInstance("userWorkspace");
+		if (ws.isPlayOtherUnits())
+			return true;
+
+		TbCase tbcase = caseHome.getInstance();
+		Tbunit treatmentUnit = tbcase.getOwnerUnit();
+		boolean owornot = false;
+		if (treatmentUnit != null)
+			owornot = (treatmentUnit.getId().equals(ws.getTbunit().getId()));
+
+		Tbunit unit = tbcase.getNotificationUnit();
+		if (unit != null)
+			owornot = owornot|((unit != null) && (unit.getId().equals(ws.getTbunit().getId())));
+
+		return owornot;
 	}
 }
 
