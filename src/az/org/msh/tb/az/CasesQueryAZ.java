@@ -20,6 +20,7 @@ import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.UserView;
+import org.msh.tb.entities.enums.ValidationState;
 
 
 /**
@@ -47,7 +48,7 @@ public class CasesQueryAZ extends CasesQuery{
 		"c.registrationCode = #{caseFilters.registrationCode}",
 		"c.unitRegCode = #{caseFilters.unitRegCode}",
 		"c.caseNumber = #{caseFilters.caseNumber}",
-		"p.workspace.id = #{defaultWorkspace.id}",
+		"nu.workspace.id = #{defaultWorkspace.id}",
 		"c.state = #{caseFilters.caseState}",
 		"c.notifAddress.adminUnit.code like #{caseFilters.adminUnitLike}",
 		"c.classification = #{caseFilters.classification}",
@@ -66,6 +67,7 @@ public class CasesQueryAZ extends CasesQuery{
 		return Arrays.asList(restrictions);
 	}
 	
+	
 	public String getAdminUnitLike(AdministrativeUnit adm) {
 		UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
 		if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
@@ -77,6 +79,8 @@ public class CasesQueryAZ extends CasesQuery{
 		}
 		return null;
 	}
+	
+	
 	
 	@Override
 	public String getEjbql() {
@@ -213,15 +217,28 @@ public class CasesQueryAZ extends CasesQuery{
 		else 
 			if (isThirdCat())
 				addCondition("c.toThirdCategory = 1");
-		else
-			super.mountSingleSearchConditions();
+		else{
+			addCondition("nu.workspace.id=#{defaultWorkspace.id}");
+			if (ValidationState.WAITING_VALIDATION.equals(getValidationState()))
+				addCondition("c.diagnosisType in (0,1)");
+			if (getStateIndex()==null){
+				super.mountSingleSearchConditions();
+			}
+			else
+				/*if (getStateIndex()==400)
+					hqlCondition += "c.state = " + CaseState.ONTREATMENT.ordinal();
+				else*/ if (getStateIndex()==100)
+					addCondition("c.state > " + CaseState.TRANSFERRING.ordinal());
+				else
+					super.mountSingleSearchConditions();
+				//hqlCondition += " or (c.state = " + CaseState.ONTREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal()+")";
+			
+		}
 
 	}
 	private boolean isThirdCat() {
-		if (caseFilters == null) return false;
-		Integer stateIndex = caseFilters.getStateIndex();
-		if (stateIndex != null) {
-			return stateIndex.equals(CaseStateReportAZ.thirdCat);
+		if (getStateIndex() != null) {
+			return getStateIndex().equals(CaseStateReportAZ.thirdCat);
 		}	else	return false;
 	}
 
@@ -303,10 +320,8 @@ public class CasesQueryAZ extends CasesQuery{
 	 * @return
 	 */
 	public boolean isNotBindedEIDSS(){
-		if (caseFilters == null) return false;
-		Integer stateIndex = caseFilters.getStateIndex();
-		if (stateIndex != null) {
-			return stateIndex.equals(getCasesEIDSSnotBindedIndex());
+		if (getStateIndex() != null) {
+			return getStateIndex().equals(getCasesEIDSSnotBindedIndex());
 		}	else	return false;
 	}
 
@@ -315,10 +330,8 @@ public class CasesQueryAZ extends CasesQuery{
 	 * @return
 	 */
 	public boolean isBindedEIDSS(){
-		if (caseFilters == null) return false;
-		Integer stateIndex = caseFilters.getStateIndex();
-		if (stateIndex != null) {
-			return stateIndex.equals(CaseStateReportAZ.EIDSS_BINDED);
+		if (getStateIndex() != null) {
+			return getStateIndex().equals(CaseStateReportAZ.EIDSS_BINDED);
 		}	else	return false;
 	}
 	/**
@@ -331,5 +344,15 @@ public class CasesQueryAZ extends CasesQuery{
 		if (flag)
 			caseFilters.setStateIndex(getCasesEIDSSnotBindedIndex()); // now we are have possibility to use another creiteria from filters
 
+	}
+	
+	private Integer getStateIndex(){
+		if (caseFilters == null) return null;
+		return caseFilters.getStateIndex();
+	}
+	
+	private ValidationState getValidationState(){
+		if (caseFilters == null) return null;
+		return caseFilters.getValidationState();
 	}
 }
