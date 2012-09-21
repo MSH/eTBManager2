@@ -30,6 +30,7 @@ import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.tb.entities.Address;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.CaseComorbidity;
+import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.CountryStructure;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamDST;
@@ -683,6 +684,95 @@ public class ImportTBMRTask extends DbBatchTask {
 		tbcase.getExaminations().add(medExam);
 	}
 
+	
+	/**
+	 * Import side effects
+	 * @param rs
+	 * @throws Exception
+	 */
+	protected void importSideEffect(ResultSet rs) throws Exception {
+		Date dt = rs.getDate("DATA");
+		int mes = DateUtils.monthsBetween(refDate, dt) + 1;
+		
+		fieldsQuery.getSideEffects();
+
+		if (rs.getInt("EC_HIPER_PIG_CUTANEA") == 1)
+			addSideEffect("1", mes);
+
+		if (rs.getInt("EC_ALTERACAO_PSIQUISMO") == 1)
+			addSideEffect("2", mes);
+
+		if (rs.getInt("EC_INSONIA") == 1)
+			addSideEffect("3", mes);
+
+		if (rs.getInt("EC_INTOLERANCIA_GASTROINT") == 1)
+			addSideEffect("4", mes);
+
+		if (rs.getInt("EC_CEFALEIA") == 1)
+			addSideEffect("5", mes);
+
+		if (rs.getInt("EC_DOR_ARTICULAR") == 1)
+			addSideEffect("6", mes);
+
+		if (rs.getInt("EC_ALTERACAO_AUDITIVA") == 1)
+			addSideEffect("7", mes);
+
+		if (rs.getInt("EC_ALTERACAO_VISUAL") == 1)
+			addSideEffect("8", mes);
+
+		if (rs.getInt("EC_ALTERACAO_FUNC_RENAL") == 1)
+			addSideEffect("9", mes);
+	}
+
+
+	/**
+	 * Include the side effect
+	 * @param customid
+	 * @param month
+	 */
+	protected void addSideEffect(String customid, int month) {
+		// search for side effect with specific custom id
+		FieldValue sideEffect = null;
+		for (FieldValue fld: fieldsQuery.getSideEffects()) {
+			if (fld.getCustomId().equals(customid)) {
+				sideEffect = fld;
+				break;
+			}
+		}
+		
+		if (sideEffect == null)
+			return;
+
+		CaseSideEffect se = findSideEffect(sideEffect);
+		if (se == null) {
+			se = new CaseSideEffect();
+			se.setTbcase(tbcase);
+			se.getSideEffect().setValue(sideEffect);
+			se.setMonth(month);
+			tbcase.getSideEffects().add(se);
+		}
+		else {
+			if (month < se.getMonth())
+				se.setMonth(month);
+		}
+	}
+
+
+	/**
+	 * Search for the {@link CaseSideEffect} by the custom ID
+	 * @param customId
+	 * @return
+	 */
+	protected CaseSideEffect findSideEffect(FieldValue sideEffect) {
+		for (CaseSideEffect se: tbcase.getSideEffects()) {
+			FieldValue fld = se.getSideEffect().getValue();
+			if ((fld != null) && (fld.equals(sideEffect))) {
+				return se;
+			}
+		}
+		return null;
+	}
+
 
 	/**
 	 * Update treatment of the current case
@@ -1278,7 +1368,9 @@ public class ImportTBMRTask extends DbBatchTask {
 			importExams(rs);
 			importXRay(rs, false);
 			importMedicalExamination(rs);
+			importSideEffect(rs);
 		}
+		
 		rs.close();
 	}
 
@@ -1494,5 +1586,5 @@ public class ImportTBMRTask extends DbBatchTask {
 			rollbackTransaction();
 		}
 */	}
-	
+
 }
