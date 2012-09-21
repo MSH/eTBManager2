@@ -3,6 +3,8 @@ package org.msh.tb.az;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -15,6 +17,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.utils.date.DateUtils;
 
 @Name("caseAZHome")
 public class CaseAZHome {
@@ -139,6 +142,31 @@ public class CaseAZHome {
 			owornot = owornot|((unit != null) && (unit.getId().equals(ws.getTbunit().getId())));
 
 		return owornot;
+	}
+	
+	public String getYearOfBirth(TbCase tbcase){
+		String res = "-";
+		EntityManager em = (EntityManager)Component.getInstance("entityManager", true);
+		TbCase tc = (TbCase) em.find(TbCase.class, tbcase.getId());
+		if (tc.getPatient().getBirthDate()!=null)
+			res = Integer.toString(DateUtils.yearOf(tc.getPatient().getBirthDate()));
+		else{
+			if ((tc.getAge() != null) && (tc.getRegistrationDate() != null)){
+				res = Integer.toString(DateUtils.yearOf(tc.getRegistrationDate()) - tc.getPatientAge());
+			}
+		}
+		return res;
+	}
+	
+	public String deleteComas(String name){
+		String res = name.replaceAll(",","");
+		return res;
+	}
+	
+	public String getRightPatientName(TbCase tbcase){
+		EntityManager em = (EntityManager)Component.getInstance("entityManager", true);
+		TbCase tc = (TbCase) em.find(TbCase.class, tbcase.getId());
+		return tc.getPatient().getFullName();
 	}
 }
 

@@ -6,10 +6,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
+import org.msh.tb.adminunits.AdminUnitGroup;
+import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.cases.CaseStateReport;
+import org.msh.tb.cases.HealthUnitInfo;
+import org.msh.tb.cases.HealthUnitsQuery;
+import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseState;
@@ -27,12 +33,13 @@ import org.msh.tb.entities.enums.ValidationState;
 public class CaseStateReportAZ extends CaseStateReport{
 	@In Workspace defaultWorkspace;
 	@In(create=true) UserWorkspace userWorkspace;
-	
+
 	public static final int EIDSS_BINDED = 1616;
 	public static final int EIDSS_NOT_BINDED = 1515;
 	public static final int thirdCat = 700;
 	protected List<Item> itemsEIDSS = null;
-	
+	private AdminUnitSelection selectedAdmUnitSel;
+
 
 	/**
 	 * Return list of consolidated values by case state
@@ -46,75 +53,75 @@ public class CaseStateReportAZ extends CaseStateReport{
 			createEIDSSItems();
 		return items;
 	}
-	
+
 	/**
 	 * Create items of the report
 	 */
 	@Override
 	public void createItems() {
-			messages = Messages.instance();
+		messages = Messages.instance();
 
-			items = new ArrayList<Item>();
-			setValidationItems(new ArrayList<ValidationItem>());
-			
-			String aucond;
-			if (userWorkspace.getView() == UserView.ADMINUNIT)
-				 aucond = "inner join administrativeunit a on a.id = u.adminunit_id ";
-			else aucond = "";
+		items = new ArrayList<Item>();
+		setValidationItems(new ArrayList<ValidationItem>());
 
-			String cond = generateSQLConditionByUserView();
+		String aucond;
+		if (userWorkspace.getView() == UserView.ADMINUNIT)
+			aucond = "inner join administrativeunit a on a.id = u.adminunit_id ";
+		else aucond = "";
 
-			String condByCase = generateSQLConditionByCase();
+		String cond = generateSQLConditionByUserView();
 
-			Integer hsID = null;
-			if (userWorkspace.getHealthSystem() != null)
-				hsID = userWorkspace.getHealthSystem().getId();
-			
-			String sql = generateSQL(aucond, cond, condByCase, hsID);
-			
-			List<Object[]> lst = entityManager.createNativeQuery(sql).getResultList();
-			
-			setTotal(new Item());
-			getTotal().setDescription(messages.get("global.total"));
-			
-			for (Object[] val: lst) {
-				int qty = ((BigInteger)val[3]).intValue();
-				
-				DiagnosisType diagType;
-				if (val[2] != null)
-					diagType = DiagnosisType.values()[(Integer)val[2]];
-				else continue;
-				ValidationState vs = ValidationState.values()[(Integer)val[1]];
+		String condByCase = generateSQLConditionByCase();
 
-				Item item = findItem(CaseState.values()[(Integer)val[0]], diagType);
-				item.add(qty);
-				getTotal().add(qty);
-				
-				if (!ValidationState.VALIDATED.equals(vs)) {
-					ValidationItem valItem = findValidationItem(vs);
-					valItem.addCases(qty);
-				}
+		Integer hsID = null;
+		if (userWorkspace.getHealthSystem() != null)
+			hsID = userWorkspace.getHealthSystem().getId();
+
+		String sql = generateSQL(aucond, cond, condByCase, hsID);
+
+		List<Object[]> lst = entityManager.createNativeQuery(sql).getResultList();
+
+		setTotal(new Item());
+		getTotal().setDescription(messages.get("global.total"));
+
+		for (Object[] val: lst) {
+			int qty = ((BigInteger)val[3]).intValue();
+
+			DiagnosisType diagType;
+			if (val[2] != null)
+				diagType = DiagnosisType.values()[(Integer)val[2]];
+			else continue;
+			ValidationState vs = ValidationState.values()[(Integer)val[1]];
+
+			Item item = findItem(CaseState.values()[(Integer)val[0]], diagType);
+			item.add(qty);
+			getTotal().add(qty);
+
+			if (!ValidationState.VALIDATED.equals(vs)) {
+				ValidationItem valItem = findValidationItem(vs);
+				valItem.addCases(qty);
 			}
-			
-			Collections.sort(items, new Comparator<Item>() {
+		}
 
-				public int compare(Item o1, Item o2) {
-					CaseState cs1 = o1.getState();
-					CaseState cs2 = o2.getState();
-					if (cs1 == null)
-						return 1;
-					if (cs2 == null)
-						return -1;
-					
-					if (cs1.ordinal() > cs2.ordinal())
-						return 1;
-					if (cs1.ordinal() < cs2.ordinal())
-						return -1;
-					return 0;
-				}
-				
-			});
-			
+		Collections.sort(items, new Comparator<Item>() {
+
+			public int compare(Item o1, Item o2) {
+				CaseState cs1 = o1.getState();
+				CaseState cs2 = o2.getState();
+				if (cs1 == null)
+					return 1;
+				if (cs2 == null)
+					return -1;
+
+				if (cs1.ordinal() > cs2.ordinal())
+					return 1;
+				if (cs1.ordinal() < cs2.ordinal())
+					return -1;
+				return 0;
+			}
+
+		});
+
 		//3rd category
 		Item it = new Item();
 		it.setDescription(messages.get("TbCase.toThirdCategory"));
@@ -124,7 +131,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 		it.setStateIndex(thirdCat);
 		getItems().add(it);
 	}
-	
+
 
 	protected String generateSQL(String aucond, String cond, String condByCase, Integer hsID) {
 		String res = "select c.state, c.validationState, c.diagnosisType, count(*) " +
@@ -134,7 +141,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 		" group by c.state, c.validationState, c.diagnosisType";
 		return res;
 	}
-	
+
 	/**
 	 * Create additional items related to the EIDSS import
 	 */
@@ -206,6 +213,36 @@ public class CaseStateReportAZ extends CaseStateReport{
 	public List<Item> getItemsEIDSS() {
 		return itemsEIDSS;
 	}
-	
 
+	public List<AdminUnitGroup<HealthUnitInfo>> getAdminUnit(){
+		HealthUnitsQuery healthUnitsQuery = (HealthUnitsQuery)Component.getInstance("healthUnitsQueryUA", true);
+		if (getSelectedAdmUnit()!=null){
+			List<AdminUnitGroup<HealthUnitInfo>> lst2 = new ArrayList<AdminUnitGroup<HealthUnitInfo>>();
+			for (AdminUnitGroup<HealthUnitInfo> adm: healthUnitsQuery.getAdminUnits()) {
+				if (adm.getAdminUnit().equals(getSelectedAdmUnit()))
+					lst2.add(adm);
+			}
+			return lst2;
+		}
+		return healthUnitsQuery.getAdminUnits();
+	}
+
+	public AdministrativeUnit getSelectedAdmUnit() {
+		if (userWorkspace.getView().equals(UserView.ADMINUNIT))
+			userWorkspace.getAdminUnit();
+		return getSelectedAdmUnitSel().getSelectedUnit();
+	}
+
+	public void setSelectedAdmUnitSel(AdminUnitSelection selectedAdmUnitSel) {
+		this.selectedAdmUnitSel = selectedAdmUnitSel;
+	}
+
+
+	public AdminUnitSelection getSelectedAdmUnitSel() {
+		if (selectedAdmUnitSel==null){
+			selectedAdmUnitSel = new AdminUnitSelection(true);
+			selectedAdmUnitSel.setSelectedUnit(userWorkspace.getAdminUnit());
+		}
+		return selectedAdmUnitSel;
+	}
 }

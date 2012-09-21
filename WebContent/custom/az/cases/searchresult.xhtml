@@ -129,8 +129,8 @@
 									</s:link></td>
 								<td><b>#{messages[it.tbcase.classification.key]}</b>
 									<div style="padding-top: 6px; clear: left;">
-										#{it.patient.fullName} <br />
-										#{messages['az_EIDSS_Year_Of_Birth']} : #{it.yearOfBirth}<br/>
+										#{caseAZHome.getRightPatientName(it.tbcase)} <br />
+										#{messages['az_EIDSS_Year_Of_Birth']} : #{caseAZHome.getYearOfBirth(it.tbcase)}<br/>
 										#{messages['az_EIDSS_Age']} : #{it.tbcase.age}
 									</div></td>
 								<td>
