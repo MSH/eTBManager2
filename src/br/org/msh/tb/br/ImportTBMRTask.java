@@ -113,6 +113,7 @@ public class ImportTBMRTask extends DbBatchTask {
 	private List<Substance> substances;
 	private List<Medicine> medicines;
 	private Date refDate;
+	private Date notifDate;
 	private List<Integer> fichas;
 
 	/* (non-Javadoc)
@@ -295,9 +296,6 @@ public class ImportTBMRTask extends DbBatchTask {
 		
 		String numFicha = rsCases.getString("COD_CASO");
 
-		if (numFicha == "25845")
-			System.out.println("ok");
-
 		String sql = "select c.id from TbCase c where c.legacyId = :id and c.patient.workspace.id = #{defaultWorkspace.id}";
 		List<Integer> lst = entityManager.createQuery(sql)
 			.setParameter("id", numFicha)
@@ -323,6 +321,8 @@ public class ImportTBMRTask extends DbBatchTask {
 		tbcase.setLegacyId(rsCases.getString("COD_CASO"));
 
 		refDate = rsCases.getDate("DATA_NOTIFICACAO");
+		notifDate = refDate;
+
 		tbcase.setRegistrationDate(refDate);
 		//data da primeira baciloscopia positiva; -  se baciloscopia negativa, a data da primeira consulta.
 		if(tbcase.getExamsMicroscopy()!=null && tbcase.getExamsMicroscopy().size()!=0){
@@ -349,6 +349,7 @@ public class ImportTBMRTask extends DbBatchTask {
 		
 		tbcase.setAge(DateUtils.yearsBetween(tbcase.getRegistrationDate(), p.getBirthDate()));
 		tbcase.setCaseNumber(rsCases.getInt("NUM_CASO"));
+		
 		if (tbcase.getCaseNumber() == 0)
 			tbcase.setCaseNumber(null);
 		tbcase.setClassification(CaseClassification.DRTB);
@@ -692,7 +693,7 @@ public class ImportTBMRTask extends DbBatchTask {
 	 */
 	protected void importSideEffect(ResultSet rs) throws Exception {
 		Date dt = rs.getDate("DATA");
-		int mes = DateUtils.monthsBetween(refDate, dt) + 1;
+		int mes = DateUtils.monthsBetween(notifDate, dt) + 1;
 		
 		fieldsQuery.getSideEffects();
 
@@ -838,7 +839,7 @@ public class ImportTBMRTask extends DbBatchTask {
 		String sql = "select p.cod_produto, am.cod_medicamento, am.cod_apresentacao, quantidade, fator_multiplicativo " +
 			"from MEDICAMENTOS_FICHA mf " +
 			"inner join apresentacao_medicamento am on am.cod_medicamento=mf.cod_medicamento and am.cod_apresentacao=mf.cod_apresentacao " +
-			"inner join produto_medicamento p on p.cod_produto=am.cod_produto " +
+			"left join produto_medicamento p on p.cod_produto=am.cod_produto " +
 			"where mf.num_ficha = " + numFicha.toString();
 
 		List<PrescribedMedicine> lst = new ArrayList<PrescribedMedicine>();
@@ -846,6 +847,12 @@ public class ImportTBMRTask extends DbBatchTask {
 		ResultSet rs = connection.createStatement().executeQuery(sql);
 		while (rs.next()) {
 			String codProd = rs.getString("COD_PRODUTO");
+			if ((codProd == null) || (codProd.isEmpty()))
+				codProd = "M" + rs.getString("COD_MEDICAMENTO");
+
+			if (codProd.equals("M7"))
+				System.out.println("ok");
+			
 			Medicine med = findMedicineByLegacyId(codProd);
 			if (med != null) {
 				PrescribedMedicine pm = new PrescribedMedicine();
@@ -1286,6 +1293,8 @@ public class ImportTBMRTask extends DbBatchTask {
 		p.setMotherName(rsCases.getString("NOME_MAE"));
 		p.setSecurityNumber(rsCases.getString("NUM_CARTAO_SUS"));
 		p.setRecordNumber(rsCases.getInt("NUM_TBMR"));
+		if (rsCases.getInt("NUM_TBMR") == 2872)
+			System.out.println("Ok");
 		if (p.getRecordNumber() == 0)
 			p.setRecordNumber(null);
 		
