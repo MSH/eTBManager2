@@ -73,6 +73,9 @@ public class CaseHQLBase extends Controller {
 		String joins = getHQLJoin();
 		if (joins != null)
 			hql += joins + " ";
+		
+		if (s.contains(".regimen"))
+			hql += "left join c.regimen ";
 
 		hql += getHQLWhere();
 			
@@ -132,6 +135,7 @@ public class CaseHQLBase extends Controller {
 		case AGERANGE: return "c.age";
 		case PULMONARY: return "c.pulmonaryType.name";
 		case EXTRAPULMONARY: return "c.extrapulmonaryType.name";
+		case REGIMENS: return "c.regimen.name";
 		}
 		return null;
 	}

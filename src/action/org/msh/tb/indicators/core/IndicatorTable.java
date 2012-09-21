@@ -507,7 +507,7 @@ public class IndicatorTable {
 	public TableRow findRowById(Object id) {
 		for (TableRow row: rows) {
 			Object rid = row.getId();
-			if ((rid != null) && (rid.equals(id)))
+			if ((rid == id) || ((rid != null) && (rid.equals(id))))
 				return row;
 		}
 		return null;
@@ -553,7 +553,7 @@ public class IndicatorTable {
 	public TableColumn findColumnById(Object id) {
 		for (TableColumn col: columns) {
 			Object cid = col.getId();
-			if ((cid != null) && (cid.equals(id)))
+			if ((cid == id) || ((cid != null) && (cid.equals(id))))
 				return col;
 		}
 		return null;		

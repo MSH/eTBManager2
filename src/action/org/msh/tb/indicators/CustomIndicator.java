@@ -42,6 +42,14 @@ public class CustomIndicator extends Indicator2D {
 	 * @return updated list
 	 */
 	protected List<Object[]> handleItems(OutputSelection output, int index, List<Object[]> lst) {
+		if (output == OutputSelection.REGIMENS) {
+			for (Object[] vals: lst) {
+				Object val = vals[index];
+				if (val == null)
+					vals[index] = getMessage("regimens.individualized");
+			}
+		}
+
 		if (output == OutputSelection.AGERANGE)
 			return groupValuesByAreRange(lst, index, 2);
 

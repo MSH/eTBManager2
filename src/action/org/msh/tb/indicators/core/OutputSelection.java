@@ -15,7 +15,8 @@ public enum OutputSelection {
 	NATIONALITY("Nationality"),
 	AGERANGE("AgeRange"),
 	PULMONARY("InfectionSite.PULMONARY"),
-	EXTRAPULMONARY("InfectionSite.EXTRAPULMONARY");
+	EXTRAPULMONARY("InfectionSite.EXTRAPULMONARY"),
+	REGIMENS("Regimen");
 
 	private String key;
 	

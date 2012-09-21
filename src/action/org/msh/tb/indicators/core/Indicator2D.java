@@ -16,7 +16,7 @@ public abstract class Indicator2D extends Indicator {
 	
 	private IndicatorTable table;
 
-	
+
 	/**
 	 * Add a value to the table
 	 * @param columnTitle title of the column

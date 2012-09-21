@@ -275,8 +275,11 @@ public abstract class Indicator extends CaseHQLBase {
 	 * @return String representation of the key
 	 */
 	protected String translateKey(Object key) {
-		if (key == null)
-			return getMessage("global.notdef");
+		if (key == null) {
+			if ((isOutputSelected()) && (getIndicatorFilters().getOutputSelection() == OutputSelection.REGIMENS))
+				 return getMessage("regimens.individualized");
+			else return getMessage("global.notdef");
+		}
 		else {
 			if (key instanceof Enum)
 				 return getEnumDisplayText((Enum)key);
