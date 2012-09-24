@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.async.QuartzTriggerHandle;
 import org.jboss.seam.faces.FacesMessages;
@@ -39,8 +38,6 @@ public class SysStartupAZ{
 	public void initTimerChecking() {
 		EtbmanagerApp.instance().initializeInstance();
 
-		//System.out.println("Initializing shedulled tasks...");
-
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, 2100);
 				
@@ -48,12 +45,12 @@ public class SysStartupAZ{
 		SystemParam st;
 		try {
 			p = entityManager.find(SystemParam.class, "admin.eidss.auto");
+			st = entityManager.find(SystemParam.class, "admin.eidss.dateStart");
+			if (st!=null)
+				start = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(st.getValue());
+			else
+				start = new Date();					
 			if ("true".equals(p.getValue())){
-				st = entityManager.find(SystemParam.class, "admin.eidss.dateStart");
-				if (st!=null)
-					start = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(st.getValue());
-				else
-					start = new Date();					
 				start();
 			}
 		} catch (Exception e) {
