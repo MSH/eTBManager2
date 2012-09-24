@@ -93,20 +93,21 @@ public class EidssIntHome {
 		setDefaultWorkspace();
 		loadConfig();
 		setCurrentUser();
-		TaskManager manager = (TaskManager)Component.getInstance(TaskManager.class);
-		if (manager != null){
-			Map<String,Object> params = new HashMap<String, Object>();
-			params.put("config", getConfig());
-			params.put("userId", userLogin.getId());
-			if (getTask() == null){
-				manager.runTask(EidssTaskImport.class, params);
-				sysStartupAZ.display("eidss.import.started","on");
-				//showMessage("eidss.import.started");
-			}else{
-				sysStartupAZ.display("eidss.import.starting","on");
-				//showMessage("eidss.import.starting");
+		if (userLogin!=null){
+			TaskManager manager = (TaskManager)Component.getInstance(TaskManager.class);
+			if (manager != null){
+				Map<String,Object> params = new HashMap<String, Object>();
+				params.put("config", getConfig());
+				params.put("userId", userLogin.getId());
+				if (getTask() == null){
+					manager.runTask(EidssTaskImport.class, params);
+					sysStartupAZ.display("eidss.import.started","on");
+					//showMessage("eidss.import.started");
+				}else{
+					sysStartupAZ.display("eidss.import.starting","on");
+					//showMessage("eidss.import.starting");
+				}
 			}
-
 		}
 		return "Success";
 	}
@@ -294,7 +295,7 @@ public class EidssIntHome {
 			p = new SystemParam();
 			p.setKey(key);
 			//TODO ?
-			
+
 			defaultWorkspace = entityManager.merge(defaultWorkspace);
 			p.setWorkspace(defaultWorkspace);
 		}
@@ -358,14 +359,18 @@ public class EidssIntHome {
 		if (userLogin == null){
 			userLogin = new UserLogin();
 			userLogin.setWorkspace(defaultWorkspace);
-			User us = (User) getEntityManager().find(User.class, getConfig().getDefaultUser());
-			userLogin.setUser(us);
-			//userLogin.setId(us.getId());
-			Query q = getEntityManager().createQuery("from UserWorkspace uw where uw.workspace.id="+defaultWorkspace.getId()+" and uw.user.id=:uid")
-			.setParameter("uid", us.getId());
-			UserWorkspace uw = (UserWorkspace) q.getResultList().get(0);
-			Contexts.getApplicationContext().set("userWorkspace", uw);
-			Contexts.getApplicationContext().set("userLogin", userLogin);
+			if (getConfig().getDefaultUser()!=null){
+				User us = (User) getEntityManager().find(User.class, getConfig().getDefaultUser());
+				userLogin.setUser(us);
+				//userLogin.setId(us.getId());
+				Query q = getEntityManager().createQuery("from UserWorkspace uw where uw.workspace.id="+defaultWorkspace.getId()+" and uw.user.id=:uid")
+				.setParameter("uid", us.getId());
+				UserWorkspace uw = (UserWorkspace) q.getResultList().get(0);
+				Contexts.getApplicationContext().set("userWorkspace", uw);
+				Contexts.getApplicationContext().set("userLogin", userLogin);
+			}
+			else
+				userLogin = null;
 		}
 	}
 
