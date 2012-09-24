@@ -132,6 +132,8 @@
 </h:form>
 
 <s:decorate template="/layout/batchselection.xhtml" >
+<ui:param name="quantitytitle" value="#{messages['OrderItem.quantityToShip']}" />
+
 	<a:commandLink action="#{orderShippingHome.finishBatchesSelection}"
 		onclick="if (!disableButton(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
 		oncomplete="enableButton();hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button">
