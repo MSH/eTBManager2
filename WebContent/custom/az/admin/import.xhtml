@@ -120,7 +120,7 @@
 						<s:decorate template="/layout/edit.xhtml">
 							<ui:define name="label">#{messages['admin.import.eidss.default_user']}:</ui:define>
 							<ui:param name="required" value="true" />
-							<h:selectOneMenu value="#{eidssIntHome.config.defaultUser}">
+							<h:selectOneMenu value="#{eidssIntHome.config.defaultUser}" required="true">
 								<s:selectItems value="#{usersLog}" var="it" label="#{it.name}" noSelectionLabel="-" itemValue="#{it.id}"/>
 							</h:selectOneMenu>	
 						</s:decorate>
