@@ -29,6 +29,9 @@
  	<page view-id="/custom/*" login-required="true" >
 	</page>
 
+ 	<page view-id="/global/*" login-required="true" >
+	</page>
+
     <page view-id="*" action="#{onlineUsers.update}">
     	<param name="lang" value="#{userSettings.localeString}" />
         <navigation>

@@ -104,6 +104,14 @@ public class User implements java.io.Serializable {
 	private boolean sendSystemMessages;
 
 	
+	/**
+	 * Check if password has expired
+	 * @return
+	 */
+	public boolean isPasswordExpired() {
+		return state == UserState.PASSWD_EXPIRED;
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
