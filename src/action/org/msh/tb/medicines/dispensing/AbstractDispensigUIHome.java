@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.faces.FacesMessages;
@@ -15,6 +16,7 @@ import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.MedicineDispensingCase;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
@@ -64,7 +66,7 @@ public abstract class AbstractDispensigUIHome {
 	 */
 	public String saveDispensing() {
 		Tbunit unit = getUnit();
-		String tipoOperacao;
+		String actionType;
 		
 		// is dispensing by patient ?
 		TbCase tbcase;
@@ -89,17 +91,32 @@ public abstract class AbstractDispensigUIHome {
 			facesMessages.addToControlFromResourceBundle("edtdate", "meds.movs.datebefore", LocaleDateConverter.getDisplayDate( unit.getMedManStartDate(), false ));
 			return "error";
 		}
-
+		
 		DispensingHome dispensingHome = getDispensingHome();
 
+		//Verifies if it is a new dispensing or if the user is editing an existing dispensing.
 		if(dispensingHome.getInstance().getTbunit() == null){
-			tipoOperacao = "new";
+			actionType = "new";
+			//if its a new dispensing for a case it has to verifies if its already exists a dispensing for that date and that case
+			if(tbcase!=null && dispDate != null){
+				EntityManager entityManager = (EntityManager) Component.getInstance("entityManager");
+				int mdc = entityManager.createQuery("from MedicineDispensingCase mdc " +
+													"where mdc.dispensing.dispensingDate = :dispDate " +
+													"and mdc.tbcase.id = :caseId")
+													.setParameter("dispDate", dispDate)
+													.setParameter("caseId", tbcase.getId())
+													.getResultList().size();
+
+				if(mdc > 0){
+					facesMessages.addFromResourceBundle("MedicineDispensing.msg01");
+					return "error";
+				}
+			}
 		}else{
-			tipoOperacao = "edt";
+			actionType = "edt";
 		}
-		
+
 		dispensingHome.getInstance().setTbunit(unit);
-		
 		
 		// inform DispensingHome about the batches to be dispensed
 		for (SourceItem it: getSources())
@@ -141,8 +158,8 @@ public abstract class AbstractDispensigUIHome {
 		
 		if (tbcase != null)
 			TagsCasesHome.instance().updateTags(tbcase);
-		
-		return tipoOperacao + "persisted";
+	
+		return actionType + "persisted";
 	}
 
 

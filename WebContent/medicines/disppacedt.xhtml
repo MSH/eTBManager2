@@ -30,6 +30,8 @@
 
 	<div class="form-content">
 
+	<h:messages styleClass="error" globalOnly="true" layout="table"/>
+
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['meds.dispensing.date']}:</ui:define>
     	<ui:param name="edtid" value="edtdate" />
