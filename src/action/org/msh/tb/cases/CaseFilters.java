@@ -183,7 +183,7 @@ public class CaseFilters {
 				break;
 			case CUSTOM_FILTER:
 				patient = null;
-				validationState = null;
+				//validationState = null;
 				stateIndex = null;
 				tagid = null;
 				break;
