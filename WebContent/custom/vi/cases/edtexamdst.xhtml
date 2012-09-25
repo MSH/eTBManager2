@@ -43,7 +43,7 @@
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['vi.MtbDetection']}:</ui:define>
+    	<ui:define name="label">#{messages['vi.MtbDetected']}:</ui:define>
     	<h:selectOneMenu value="#{examDST.mtbDetected}" required="false">
     		<s:selectItems value="#{globalLists_vi.mtbDetectedOptions}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
     		<s:convertEnum />
