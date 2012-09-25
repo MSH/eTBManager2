@@ -134,4 +134,6 @@
   SHAPE="344,1521,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
  <item ID="#changeworkspace.xhtml" NAME="#xchangeworkspace.xhtml"
   PATH="/changeworkspace.xhtml" SHAPE="664,1753,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#global#*" NAME="#xglobal#x*" PATH="/global/*"
+  SHAPE="344,1857,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
 </diagram>

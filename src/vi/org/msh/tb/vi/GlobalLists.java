@@ -7,6 +7,7 @@ import javax.faces.model.SelectItem;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.enums.CultureResult;
+import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.entities.enums.PatientType;
 
 @Name("globalLists_vi")
@@ -50,7 +51,32 @@ public class GlobalLists {
 		PatientType.CUSTOM15,
 		PatientType.OTHER
 	};
+	
+	private static final DstResult dstResults[] = {
+		DstResult.NOTDONE,
+		DstResult.SUSCEPTIBLE,
+		DstResult.RESISTANT,
+		DstResult.CONTAMINATED,
+		DstResult.INTERMEDIATE,
+		DstResult.ERROR
+	};
 
+	
+	/**
+	 * Return options of {@link MtbDetected}
+	 * @return
+	 */
+	public MtbDetected[] getMtbDetectedOptions() {
+		return MtbDetected.values();
+	}
+	
+	/**
+	 * Return customized DST result options for Rifampicin
+	 * @return
+	 */
+	public DstResult[] getDstResultsRifampicin() {
+		return dstResults;
+	}
 	
 	/**
 	 * Return the results of culture customized to Vietnam

@@ -18,5 +18,9 @@
 		<h:outputText value="C" rendered="#{printing}" />
 	</s:fragment>
 	<h:outputText value="-" rendered="#{result=='NOTDONE'}" title="#{messages[result.key]}"/>
+	<s:fragment  rendered="#{result=='ERROR' or result=='INTERMEDIATE'}">
+		<div class="dst-other noprint" title="#{messages[result.key]}" style="float:none"/>
+		<h:outputText value="X" rendered="#{printing}" />
+	</s:fragment>
     
 </ui:composition>

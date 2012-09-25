@@ -5,7 +5,9 @@ public enum DstResult {
 	RESISTANT,
 	SUSCEPTIBLE,
 	CONTAMINATED,
-	BASELINE;
+	BASELINE,
+	INTERMEDIATE,
+	ERROR;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

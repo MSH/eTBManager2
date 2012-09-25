@@ -5,7 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -13,6 +18,9 @@ import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="examdst")
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="DISCRIMINATOR", discriminatorType=DiscriminatorType.STRING)
+@DiscriminatorValue("gen")
 public class ExamDST extends LaboratoryExamResult implements Serializable {
 	private static final long serialVersionUID = -1911463378908689952L;
 
