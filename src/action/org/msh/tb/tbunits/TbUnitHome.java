@@ -39,7 +39,8 @@ public class TbUnitHome extends EntityHomeEx<Tbunit> {
 		unit.setBatchControl(true);
 
 		AdministrativeUnit au = getAusel().getSelectedUnit();
-		unit.setAdminUnit(au);
+		if (au != null)
+			unit.setAdminUnit(au);
 		
 		// check if it's not a medicine storage unit
 		if (!unit.isMedicineStorage()) {

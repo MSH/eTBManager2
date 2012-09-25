@@ -6,6 +6,10 @@
    <action execute="#{localeSelector.setLocaleString('pt_BR')}" />
 
    <navigation from-action="#{identity.login}">
+   	  <rule if="#{identity.loggedIn and userLogin.user.passwordExpired}">
+   	  	<redirect view-id="/global/updatepassword.xhtml" />
+   	  </rule>
+
       <rule if="#{identity.loggedIn}">
 		<redirect view-id="/home.xhtml"/>
       </rule>

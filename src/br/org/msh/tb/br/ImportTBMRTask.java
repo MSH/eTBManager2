@@ -71,6 +71,7 @@ import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.entities.enums.XRayEvolution;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.misc.FieldsQuery;
+import org.msh.tb.tbunits.TbUnitHome;
 import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
@@ -1086,7 +1087,24 @@ public class ImportTBMRTask extends DbBatchTask {
 				rs.getStatement().close();
 				return null;
 			}
+
+			// try to find it by the name
+			String unitname = rs.getString("NOME");
+			lst = entityManager
+				.createQuery("from Tbunit u where upper(u.name.name1) = :name")
+				.setParameter("name", unitname.trim().toUpperCase())
+				.getResultList();
+
+			// found it?
+			if (lst.size() > 0) {
+				Tbunit unit = lst.get(0);
+				// update legacy id and exit
+				unit.setLegacyId(legacyID.toString());
+				entityManager.persist(unit);
+				return unit;
+			}
 			
+			// this is a new unit
 			Tbunit unit = new Tbunit();
 			
 			unit.getName().setName1(rs.getString("NOME"));
@@ -1096,17 +1114,24 @@ public class ImportTBMRTask extends DbBatchTask {
 			unit.setChangeEstimatedQuantity(true);
 			unit.setAddressCont(rs.getString("COMPLEMENTO"));
 			unit.setLegacyId(legacyID.toString());
+			unit.setTreatmentHealthUnit(true);
 			unit.setMdrHealthUnit(true);
 			unit.setTbHealthUnit(false);
 			unit.setNotifHealthUnit(true);
 			unit.setNumDaysOrder(90);
 			unit.setMedicineStorage(true);
+			unit.setActive(true);
 			AdministrativeUnit adm = loadMunicipio(rs.getString("COD_MUNICIPIO"));
 			unit.setAdminUnit(adm);
 			unit.setWorkspace(getWorkspace());
 			
-			entityManager.persist(unit);
-			entityManager.flush();
+			TbUnitHome home = (TbUnitHome)Component.getInstance("tbunitHome");
+			home.clearInstance();
+			home.setInstance(unit);
+			home.persist();
+			
+//			entityManager.persist(unit);
+//			entityManager.flush();
 			rs.getStatement().close();
 			System.out.println("NOVA UNIDADE: " + unit.getName().toString());
 			
