@@ -9,6 +9,7 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
+import org.jboss.seam.faces.Redirect;
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.TimeZoneSelector;
 import org.jboss.seam.security.Credentials;
@@ -107,6 +108,10 @@ public class AuthenticatorBean {
 
         	userSession.setUserWorkspace(userWorkspace);
             userSession.changeUserWorkspace();
+            
+            if (user.isPasswordExpired()) {
+            	Redirect.instance().setViewId(null);
+            }
             
             // select the user's theme
             selectTheme();

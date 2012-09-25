@@ -76,6 +76,8 @@ public class ChangePasswordService {
 		entityManager.persist(user);
 		userLogin.setUser(user);
 		
+		entityManager.flush();
+		
 		return "pwdchanged";
 	}
 	
