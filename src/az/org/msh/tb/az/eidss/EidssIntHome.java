@@ -90,7 +90,7 @@ public class EidssIntHome {
 	 * @return Success if import ran, or Error otherwise
 	 */
 	public String execute(){
-		setDefaultWorkspace();
+		//setDefaultWorkspace();
 		loadConfig();
 		setCurrentUser();
 		if (userLogin!=null){
@@ -225,7 +225,7 @@ public class EidssIntHome {
 		try {
 			SystemParam sysparam = (SystemParam)entityManager
 			.createQuery("from SystemParam sp where sp.workspace.id = :id and sp.key = :param")
-			.setParameter("id", defaultWorkspace.getId())
+			.setParameter("id", sysStartupAZ.getObservWorkspace().getId())
 			.setParameter("param", prefix+"."+fld.getName())
 			.getSingleResult();
 			s = sysparam.getValue();
@@ -296,8 +296,8 @@ public class EidssIntHome {
 			p.setKey(key);
 			//TODO ?
 
-			defaultWorkspace = entityManager.merge(defaultWorkspace);
-			p.setWorkspace(defaultWorkspace);
+			//defaultWorkspace = entityManager.merge(defaultWorkspace);
+			p.setWorkspace(sysStartupAZ.getObservWorkspace());
 		}
 		p.setValue(value.toString());
 		entityManager.persist(p);
@@ -358,12 +358,12 @@ public class EidssIntHome {
 			userLogin = (UserLogin)Component.getInstance("userLogin");
 		if (userLogin == null){
 			userLogin = new UserLogin();
-			userLogin.setWorkspace(defaultWorkspace);
+			userLogin.setWorkspace(sysStartupAZ.getObservWorkspace());
 			if (getConfig().getDefaultUser()!=null){
 				User us = (User) getEntityManager().find(User.class, getConfig().getDefaultUser());
 				userLogin.setUser(us);
 				//userLogin.setId(us.getId());
-				Query q = getEntityManager().createQuery("from UserWorkspace uw where uw.workspace.id="+defaultWorkspace.getId()+" and uw.user.id=:uid")
+				Query q = getEntityManager().createQuery("from UserWorkspace uw where uw.workspace.id="+sysStartupAZ.getObservWorkspace().getId()+" and uw.user.id=:uid")
 				.setParameter("uid", us.getId());
 				UserWorkspace uw = (UserWorkspace) q.getResultList().get(0);
 				Contexts.getApplicationContext().set("userWorkspace", uw);
@@ -376,6 +376,8 @@ public class EidssIntHome {
 
 
 	public Workspace getWorkspace() {
+		if (workspace == null)
+			return sysStartupAZ.getObservWorkspace();
 		return workspace;
 	}
 
