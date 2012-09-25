@@ -25,11 +25,13 @@ import org.msh.tb.entities.MedicalExamination;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.MedAppointmentType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.login.UserSession;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.date.DateUtils;
@@ -358,6 +360,24 @@ public class CaseEditingHome {
 			return false;
 		}
 		
+		//Checks if the treatment iniDate is before the diagnosis date
+		//Workspace configuration allows it? 
+		
+		if(!allowBeforeDiagnosis()){
+			//treatment has been defined?
+			Date iniTreatmentDate = null;
+			if(tbcase.getTreatmentPeriod() != null)
+				iniTreatmentDate = tbcase.getTreatmentPeriod().getIniDate();
+			else if (startTreatmentHome != null && startTreatmentHome.getIniTreatmentDate() != null)
+				iniTreatmentDate = startTreatmentHome.getIniTreatmentDate();
+		
+			//Validates if defined
+			if ((iniTreatmentDate  != null) && (tbcase.getDiagnosisDate().after(iniTreatmentDate))) {
+				facesMessages.addToControlFromResourceBundle("diagdateedt", "cases.treat.inidatemsg");
+				return false;
+			}
+		}
+		
 		return true;
 	}
 
@@ -416,5 +436,22 @@ public class CaseEditingHome {
 
 	public MedicalExaminationHome getMedicalExaminationHome() {
 		return medicalExaminationHome;
+	}
+	
+	/**
+	 * Does start treatment date allow before diagnosis date
+	 * AK 06/25/2012
+	 * @return
+	 */
+	private boolean allowBeforeDiagnosis() {
+		UserSession userSession = (UserSession) Component.getInstance("userSession");
+		if(userSession != null){
+			boolean isTBAllow = userSession.getUserWorkspace().getWorkspace().isStartTBTreatBeforeValidation();
+			boolean isDRTBAllow = userSession.getUserWorkspace().getWorkspace().isStartDRTBTreatBeforeValidation();
+			boolean isTBCase = caseHome.getInstance().getClassification().equals(CaseClassification.TB);
+			boolean isDRTBCase = caseHome.getInstance().getClassification().equals(CaseClassification.DRTB);
+			return ( isTBAllow && isTBCase) || (isDRTBAllow && isDRTBCase);
+		}
+		return false;
 	}
 }

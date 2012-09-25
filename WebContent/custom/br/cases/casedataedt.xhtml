@@ -574,16 +574,6 @@ function genderChange(cb) {
 			
 			<h:column >
 				<f:facet name="header" >
-					<h:outputText value="#{messages['Regimen.months']}"  styleClass="collh" />
-				</f:facet>
-				<h:selectOneMenu value="#{it.item.duration}">
-					<f:selectItem itemLabel="-" itemValue="#{null}"/>
-					<f:selectItems value="#{sideEffectHome.months}" />
-				</h:selectOneMenu>
-			</h:column>
-			
-			<h:column >
-				<f:facet name="header" >
 					<h:outputText value="#{messages['global.comments']}"  styleClass="collh" style="width:410px"/>
 				</f:facet>
 				<h:inputText value="#{it.item.comment}" style="width:400px;display:none; "/>
