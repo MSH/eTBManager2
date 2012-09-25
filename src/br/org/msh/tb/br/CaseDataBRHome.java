@@ -600,8 +600,9 @@ public class CaseDataBRHome {
 			return "classificationModified";
 
 		//Change the pacienttype to null according to the new classification
-		if((tbcase.getPatientType().equals(PatientType.RESISTANCE_PATTERN_CHANGED))
-				|| (tbcase.getPatientType().equals(PatientType.NEW) && it.equals(CaseClassification.TB)))
+		if(tbcase.getPatientType() != null && 
+				(tbcase.getPatientType().equals(PatientType.RESISTANCE_PATTERN_CHANGED) || tbcase.getPatientType().equals(PatientType.NEW)) && 
+				it.equals(CaseClassification.TB))
 			tbcase.setPatientType(null);
 		
 		tbcase.setClassification(it);
