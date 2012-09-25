@@ -37,7 +37,7 @@ public class SysStartupAZ{
 	static Date now = new Date();
 
 	static final long hour = 60*60*1000L;
-	@Observer("org.jboss.seam.postInitialization")
+	//@Observer("org.jboss.seam.postInitialization")
 	public void initTimerChecking() {
 		EtbmanagerApp.instance().initializeInstance();
 
