@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.async.QuartzTriggerHandle;
 import org.jboss.seam.faces.FacesMessages;
@@ -17,6 +18,7 @@ import org.jboss.seam.international.Messages;
 import org.msh.tb.application.EtbmanagerApp;
 import org.msh.tb.az.eidss.EidssIntHome;
 import org.msh.tb.entities.SystemParam;
+import org.msh.tb.entities.Workspace;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 
@@ -31,10 +33,11 @@ public class SysStartupAZ{
 	private Map<String, String> messages;
 	private QuartzTriggerHandle quartz;
 	private Date start;
+	private Workspace observWorkspace;
 	static Date now = new Date();
 
 	static final long hour = 60*60*1000L;
-	//@Observer("org.jboss.seam.postInitialization")
+	@Observer("org.jboss.seam.postInitialization")
 	public void initTimerChecking() {
 		EtbmanagerApp.instance().initializeInstance();
 
@@ -66,7 +69,7 @@ public class SysStartupAZ{
 	
 	public void start(){
 		if (quartz==null){
-			eidssIntHome.setDefaultWorkspace();
+			//eidssIntHome.setDefaultWorkspace();
 			eidssIntHome.loadConfig();
 			changeStartDt();
 			if (eidssIntHome.getConfig().getAuto() == true)
@@ -146,5 +149,11 @@ public class SysStartupAZ{
 		else
 			res = getMessages().get("admin.import.eidss.nextFT.undef");
 		return res;
+	}
+
+	public Workspace getObservWorkspace() {
+		if (observWorkspace==null)
+			observWorkspace = entityManager.find(Workspace.class, 8);
+		return observWorkspace;
 	}
 }
