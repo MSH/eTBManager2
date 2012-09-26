@@ -141,7 +141,7 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 	
 	@Override
 	public Integer getMaxResults() {
-		return 50;
+		return null;
 	}
 
 	
@@ -169,6 +169,7 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 			info.setUnitId((Integer)vals[0]);
 			info.setUnitName((String)vals[1]);
 			info.setAdminUnitCode((String)vals[2]);
+			
 			info.setCasesNotifs(readLongValue(vals[3]));
 			info.setCasesOnTreatment(readLongValue(vals[4]));
 			info.setCasesTransferIn(readLongValue(vals[5]));
