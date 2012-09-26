@@ -2,12 +2,14 @@ package org.msh.tb.az;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.international.Messages;
 import org.msh.tb.az.entities.CaseSeverityMark;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.cases.CaseCloseHome;
@@ -27,6 +29,7 @@ public class CaseAZHome {
 	private static final CaseState[] outcomes3cat = {
 		CaseState.CURED, 
 		CaseState.TREATMENT_COMPLETED};
+	private Map<String, String> messages;
 	
 	@In CaseHome caseHome;
 	@In(create=true) CaseEditingAZHome caseEditingAZHome;
@@ -167,6 +170,23 @@ public class CaseAZHome {
 		EntityManager em = (EntityManager)Component.getInstance("entityManager", true);
 		TbCase tc = (TbCase) em.find(TbCase.class, tbcase.getId());
 		return tc.getPatient().getFullName();
+	}
+	
+	public String getRightCaseDetailsTitle(){
+		TbCaseAZ tc = getTbCase();
+		if (tc.getNotificationUnit()==null && tc.getLegacyId()!=null)
+			return getMessages().get("cases.detailseidsstitle");
+		return getMessages().get("cases.detailstitle");
+	}
+	
+	/**
+	 * Return the current resource message file
+	 * @return
+	 */
+	protected Map<String, String> getMessages() {
+		if (messages == null)
+			messages = Messages.instance();
+		return messages;
 	}
 }
 
