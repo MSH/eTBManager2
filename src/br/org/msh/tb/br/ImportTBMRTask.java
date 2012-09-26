@@ -855,9 +855,6 @@ public class ImportTBMRTask extends DbBatchTask {
 			if ((codProd == null) || (codProd.isEmpty()))
 				codProd = "M" + rs.getString("COD_MEDICAMENTO");
 
-			if (codProd.equals("M7"))
-				System.out.println("ok");
-			
 			Medicine med = findMedicineByLegacyId(codProd);
 			if (med != null) {
 				PrescribedMedicine pm = new PrescribedMedicine();
