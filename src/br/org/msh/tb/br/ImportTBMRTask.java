@@ -1341,8 +1341,11 @@ public class ImportTBMRTask extends DbBatchTask {
 				"from ficha_trimestral ft " + 
 				"inner join ficha f on f.num_ficha = ft.num_ficha " + 
 				"where f.cod_caso = " + rsCases.getString("COD_CASO") +  
-				" and f.data = (select max(f2.data) from ficha f2 " +
+				" and f.data = (select max(f2.data) from ficha f2 inner join ficha_trimestral f3 on f3.num_ficha = f2.num_ficha " +
 				"where f2.cod_caso = f.cod_caso)";
+		
+		if (rsCases.getInt("COD_CASO") == 201)
+			System.out.println("Ok");
 		
 		ResultSet rs = connection.createStatement().executeQuery(sql);
 		
