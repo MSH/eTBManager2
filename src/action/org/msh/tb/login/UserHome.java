@@ -26,6 +26,7 @@ import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.UserState;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.misc.DmSystemHome;
 import org.msh.tb.tbunits.TBUnitSelection;
@@ -83,6 +84,7 @@ public class UserHome extends EntityHomeEx<User> {
 		if (!isManaged()) {
 			user.setParentUser(getUser());
 			user.setRegistrationDate(new Date());
+			user.setState(UserState.PASSWD_EXPIRED);
 
 			// gera senha para o novo usuário
 			String senha = null;

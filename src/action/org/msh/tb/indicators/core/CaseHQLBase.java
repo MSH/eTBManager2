@@ -74,7 +74,7 @@ public class CaseHQLBase extends Controller {
 		if (joins != null)
 			hql += joins + " ";
 		
-		if (s.contains(".regimen"))
+		if ((s != null) && (s.contains(".regimen")))
 			hql += "left join c.regimen ";
 
 		hql += getHQLWhere();
