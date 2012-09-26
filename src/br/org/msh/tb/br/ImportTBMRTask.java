@@ -131,6 +131,10 @@ public class ImportTBMRTask extends DbBatchTask {
 		Object userLogin = getParameter("userLogin");
 		if (userLogin != null)
 			Contexts.getEventContext().set("userLogin", userLogin);
+		
+		Object userWorkspace = getParameter("userWorkspace");
+		if (userWorkspace != null)
+			Contexts.getEventContext().set("userWorkspace", userWorkspace);
 
 		// if UF is not defined, them exit
 		if (uf == null) {
@@ -1105,7 +1109,9 @@ public class ImportTBMRTask extends DbBatchTask {
 			}
 			
 			// this is a new unit
-			Tbunit unit = new Tbunit();
+			TbUnitHome home = (TbUnitHome)Component.getInstance("tbunitHome");
+			home.clearInstance();
+			Tbunit unit = home.getInstance();
 			
 			unit.getName().setName1(rs.getString("NOME"));
 			unit.setHealthSystem(getHealthSystem());
@@ -1125,8 +1131,6 @@ public class ImportTBMRTask extends DbBatchTask {
 			unit.setAdminUnit(adm);
 			unit.setWorkspace(getWorkspace());
 			
-			TbUnitHome home = (TbUnitHome)Component.getInstance("tbunitHome");
-			home.clearInstance();
 			home.setInstance(unit);
 			home.persist();
 			

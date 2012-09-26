@@ -34,15 +34,11 @@ public class ImportTBMRHome {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("uf", uf);
 		params.put("userLogin", Component.getInstance("userLogin"));
+		params.put("userWorkspace", Component.getInstance("userWorkspace"));
 		
 		taskManager.runTask(ImportTBMRTask.class, params);
 		FacesMessages.instance().add("Importação está em andamento... Você pode continuar navegando no sistema");
-/*		try {
-			importTBMRDB.importCases(uf, defaultWorkspace, userLogin);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-*/	}
+	}
 
 
 	/**

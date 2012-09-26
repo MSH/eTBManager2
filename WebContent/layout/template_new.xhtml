@@ -43,11 +43,11 @@
 			#{userLogin.user.name}
 			</f:facet>
 			<rich:menuItem value="#{messages['usersettings.preferences']}" submitMode="none"
-				onclick="document.location.href='#{request.contextPath}/others/usersettings.seam'" />
+				onclick="document.location.href='#{request.contextPath}/global/usersettings.seam'" />
 			<rich:menuItem value="#{messages['changepwd']}" submitMode="none" 
-				onclick="document.location.href='#{request.contextPath}/others/changepassword.seam'" />
+				onclick="document.location.href='#{request.contextPath}/global/changepassword.seam'" />
 			<rich:menuItem value="#{messages['main.seltheme']}" submitMode="none" 
-				onclick="document.location.href='#{request.contextPath}/others/seltheme.seam'" />
+				onclick="document.location.href='#{request.contextPath}/global/seltheme.seam'" />
 			<rich:menuItem value="#{messages['form.exit']}" action="#{authenticator.logout}" submitMode="server" ajaxSingle="true"/>
 			<rich:menuSeparator />
 			<rich:menuItem value="#{messages['User.language']}" submitMode="none" disabled="true"/>
