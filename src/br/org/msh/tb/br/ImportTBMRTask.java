@@ -163,7 +163,7 @@ public class ImportTBMRTask extends DbBatchTask {
 		
 		
 		// remove previous cases
-		beginTransaction();
+/*		beginTransaction();
 		try {
 			AdministrativeUnit ufobj = loadUF(uf); 
 			entityManager
@@ -177,7 +177,7 @@ public class ImportTBMRTask extends DbBatchTask {
 			rollbackTransaction();
 			throw new RuntimeException(e);
 		}
-		
+*/		
 		fieldsQuery = (FieldsQuery)Component.getInstance("fieldsQuery", true);
 //		caseDataBRHome = (CaseDataBRHome)Component.getInstance("caseDataBRHome", true);
 		caseHome = (CaseHome)Component.getInstance("caseHome", true);
@@ -300,7 +300,7 @@ public class ImportTBMRTask extends DbBatchTask {
 		System.out.println("FICHA = " + rsCases.getString("NUM_FICHA"));
 		
 		String numFicha = rsCases.getString("COD_CASO");
-
+		
 		String sql = "select c.id from TbCase c where c.legacyId = :id and c.patient.workspace.id = #{defaultWorkspace.id}";
 		List<Integer> lst = entityManager.createQuery(sql)
 			.setParameter("id", numFicha)
