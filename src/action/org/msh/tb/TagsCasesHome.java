@@ -1,5 +1,6 @@
 package org.msh.tb;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -75,13 +76,24 @@ public class TagsCasesHome {
 		String sql = "delete from tags_case where tag_id = :id";
 		entityManager.createNativeQuery(sql).setParameter("id", tag.getId()).executeUpdate();
 
-		Integer wsid = ((Workspace)Component.getInstance("defaultWorkspace")).getId();
+		Workspace defaultWorkspace = (Workspace) Component.getInstance("defaultWorkspace");
 		
-		// include new tags
-		sql = "insert into tags_case (case_id, tag_id) " +
-				"select a.id, " + tag.getId() + " from tbcase a join patient p on p.id=a.patient_id " +
-				"where " + tag.getSqlCondition() + " and p.workspace_id = :id";
-		entityManager.createNativeQuery(sql).setParameter("id", wsid).executeUpdate();
+		ArrayList<Integer> wsid = new ArrayList<Integer>();
+		//This method is being used by the application in a scheduled task, so it has to do this verification.
+		if(defaultWorkspace!= null){
+			wsid.add(defaultWorkspace.getId());
+		}else{
+			wsid = (ArrayList<Integer>) entityManager.createNativeQuery("select id from workspace").getResultList();
+		}
+		
+		for(Integer i: wsid){
+			// include new tags
+			sql = "insert into tags_case (case_id, tag_id) " +
+					"select a.id, " + tag.getId() + " from tbcase a join patient p on p.id=a.patient_id " +
+					"where " + tag.getSqlCondition() + " and p.workspace_id = :id";
+			
+			entityManager.createNativeQuery(sql).setParameter("id", i).executeUpdate();
+		}
 
 		return true;
 	}

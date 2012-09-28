@@ -242,8 +242,12 @@ public class CaseStateReport {
 		}
 		
 		String sql = "select t.id, t.tag_name, t.sqlCondition is null, t.consistencyCheck, count(*) " +
-			"from tags_case tc inner join tag t on t.id = tc.tag_id " + s +
-			" where t.workspace_id = :id " + generateSQLConditionByUserView() + 
+			"from tags_case tc " +
+				"inner join tag t on t.id = tc.tag_id " +
+				"inner join tbcase c on c.id = tc.case_id " +
+				"inner join patient p on p.id = c.patient_id " + s +
+			" where t.workspace_id = :id " +
+			" and p.workspace_id = :id " + generateSQLConditionByUserView() + 
 			" group by t.id, t.tag_name order by t.tag_name";
 		
 		List<Object[]> lst = entityManager.createNativeQuery(sql)
