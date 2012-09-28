@@ -215,8 +215,9 @@
     	</h:selectOneMenu>
     </s:decorate>
 
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
-    		<ui:define name="label">#{messages['PatientType']}:</ui:define>
+		<s:decorate template="/layout/edit.xhtml" >
+    		<ui:define name="label" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">#{messages['PatientType']}:</ui:define>
+    		<ui:define name="label" rendered="#{tbcase.diagnosisType=='SUSPECT'}">#{messages['Suspect Type']}:</ui:define>
     		<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="#{tbcase.validated}">
     			<s:selectItems var="it" value="#{patientTypes_kh}" noSelectionLabel="-" label="#{messages[it.key]}" />
     			<s:convertEnum />
