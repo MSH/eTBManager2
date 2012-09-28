@@ -26,6 +26,7 @@ public class ImportTBMRHome {
 
 	private List<SelectItem> ufList;
 	private String uf;
+	private boolean caseOverwrite;
 
 	/**
 	 * Call asynchronous component to import cases
@@ -35,6 +36,7 @@ public class ImportTBMRHome {
 		params.put("uf", uf);
 		params.put("userLogin", Component.getInstance("userLogin"));
 		params.put("userWorkspace", Component.getInstance("userWorkspace"));
+		params.put("caseOverwrite", caseOverwrite);
 		
 		taskManager.runTask(ImportTBMRTask.class, params);
 		FacesMessages.instance().add("Importação está em andamento... Você pode continuar navegando no sistema");
@@ -84,6 +86,22 @@ public class ImportTBMRHome {
 			}
 		}
 		return ufList;
+	}
+
+
+	/**
+	 * @return the caseOverwrite
+	 */
+	public boolean isCaseOverwrite() {
+		return caseOverwrite;
+	}
+
+
+	/**
+	 * @param caseOverwrite the caseOverwrite to set
+	 */
+	public void setCaseOverwrite(boolean caseOverwrite) {
+		this.caseOverwrite = caseOverwrite;
 	}
 	
 

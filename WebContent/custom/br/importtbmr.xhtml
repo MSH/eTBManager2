@@ -28,6 +28,11 @@
 			</h:selectOneMenu>
 		</s:decorate>
 		
+		<s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">Sobrescrever casos:</ui:define>
+			<h:selectBooleanCheckbox value="#{importTBMRHome.caseOverwrite}" />
+		</s:decorate>
+		
 		<s:decorate template="/layout/display.xhtml">
 			<ui:define name="label">#{messages['Workspace']}:</ui:define>
 			#{defaultWorkspace.name}

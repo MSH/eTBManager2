@@ -106,6 +106,7 @@ public class ImportTBMRTask extends DbBatchTask {
 	private Connection connection;
 	private CachedRowSet rsCases;
 	private String uf;
+	private boolean caseOverwrite;
 	private List<CountryStructure> structures;
 	private TbCaseBR tbcase;
 	private HealthSystem healthSystem;
@@ -128,6 +129,7 @@ public class ImportTBMRTask extends DbBatchTask {
 		entityManager = getEntityManager();
 		
 		uf = getStringParam("uf");
+		caseOverwrite = (Boolean)getParameter("caseOverwrite");
 		Object userLogin = getParameter("userLogin");
 		if (userLogin != null)
 			Contexts.getEventContext().set("userLogin", userLogin);
@@ -311,6 +313,10 @@ public class ImportTBMRTask extends DbBatchTask {
 		caseHome.setCheckSecurityOnOpen(false);
 
 		if (lst.size() > 0) {
+			// não  deve sobrescrever caso ?
+			if (!caseOverwrite)
+				return;
+			
 			entityManager.createQuery("delete from TbCase c where c.id = :id").setParameter("id", lst.get(0)).executeUpdate();
 //			caseHome.setId(lst.get(0));
 //			caseHome.remove();
