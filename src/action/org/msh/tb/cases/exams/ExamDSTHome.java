@@ -14,6 +14,7 @@ import org.msh.tb.SubstancesQuery;
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.Substance;
+import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.transactionlog.LogInfo;
@@ -69,6 +70,23 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 	}
 	
 	public boolean validateAndPrepareFields(){
+		//Verifies if a TB case has resistance or if a DRTB case has at leat one resistance
+		int resistantQuantity = 0;
+		for (ExamDSTResult ms: items) {
+			if(getTbCase().getClassification().equals(CaseClassification.TB)
+					&& ms.getResult().equals(DstResult.RESISTANT)){
+				facesMessages.addFromResourceBundle("DSTExam.msg01");
+				return false;
+			}else if(ms.getResult().equals(DstResult.RESISTANT)){
+				resistantQuantity++;
+			}
+		}
+		if(getTbCase().getClassification().equals(CaseClassification.DRTB)
+				&& resistantQuantity <= 0){
+			facesMessages.addFromResourceBundle("DSTExam.msg02");
+			return false;
+		}
+		
 		// update exams
 		if (items != null) {
 			ExamDST exam = getInstance();

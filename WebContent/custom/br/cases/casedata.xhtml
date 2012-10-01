@@ -305,7 +305,7 @@ function updateTab(tabIndex) {
 			<div class="new-icon" />#{messages[it.key]}
 		</s:link>-->
 		<a:commandLink onclick="Richfaces.hideModalPanel('selclassificationdlg');" 
-			action="#{caseDataBRHome.changeCaseClassification(it)}" value="#{messages[it.key]}" reRender="main, leftmenu"/>
+			action="#{caseDataBRHome.changeCaseClassification(it)}" value="#{messages[it.key]}" reRender="main, leftmenu, messages"/>
 	</c:forEach>
 	</div>
 	<div class="button-bar">

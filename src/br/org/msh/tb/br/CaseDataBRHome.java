@@ -31,6 +31,7 @@ import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.cases.treatment.StartTreatmentIndivHome;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.ExamCulture;
+import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.ExamHIV;
 import org.msh.tb.entities.ExamMicroscopy;
@@ -593,7 +594,19 @@ public class CaseDataBRHome {
 		
 		if(tbcase.getClassification().equals(it))
 			return "classificationModified";
-
+		
+		//Verifies medicine resistances in exams
+		for(ExamDST e : tbcase.getExamsDST()){
+			for(ExamDSTResult r : e.getResults()){
+				if(it.equals(CaseClassification.TB)
+						&& r.getResult().equals(DstResult.RESISTANT)){
+					facesMessages.addFromResourceBundle("DSTExam.msg01");
+					facesMessages.addFromResourceBundle("javax.faces.component.UIInput.UPDATE");
+					return "error";
+				}
+			}
+		}	
+		
 		//Change the pacienttype to null according to the new classification
 		if(tbcase.getPatientType() != null && 
 				(tbcase.getPatientType().equals(PatientType.RESISTANCE_PATTERN_CHANGED) || tbcase.getPatientType().equals(PatientType.NEW)) && 
