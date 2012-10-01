@@ -16,26 +16,28 @@
 		</span>
 	</a:repeat>
 	
-	<a:repeat value="#{caseStateReportUA.adminUnit}" var="adm">
+	<a:repeat value="#{caseStateReportUA.adminUnitUA}" var="adm">
 	<table class="table1" width="100%">
 		<tr><th colspan="6">
 			<div class="text-big">#{adm.adminUnit.name}</div>
 		</th></tr>
 		<tr>
 			<th width="250px">#{messages['cases.healthUnit']}</th>
-			<th align="center">#{messages['cases.ongoing.notifs']}</th>
 			<th align="center">#{messages['CaseState.ONTREATMENT']}</th>
-			<th align="center">#{messages['cases.trasnferin']}</th>
-			<th align="center">#{messages['cases.trasnferout']}</th>
+			<th align="center">#{messages['cases.toclose']}</th>
+			<th align="center">#{messages['cases.ongoing.notifs']}</th>
+			<th align="center">#{messages['cases.treatmentHere']}</th>
+			<th align="center">#{messages['cases.details.others']}</th>
 			<th></th>
 		</tr>		
 		<a:repeat value="#{adm.items}" var="it">
 		<tr>
 			<td class="highlight"><div class="icon-hu" />#{it.unitName}</td>
-			<td align="center">#{it.casesNotifs==null?'-':it.casesNotifs}</td>
 			<td align="center">#{it.casesOnTreatment==null?'-':it.casesOnTreatment}</td>
-			<td align="center">#{it.casesTransferIn==null?'-':it.casesTransferIn}</td>
-			<td align="center">#{it.casesTransferOut==null?'-':it.casesTransferOut}</td>
+			<td align="center">#{it.casesNeedClosed==null?'-':it.casesNeedClosed}</td>
+			<td align="center">#{it.casesNotifs==null?'-':it.casesNotifs}</td>
+			<td align="center">#{it.casesHere==null?'-':it.casesHere}</td>
+			<td align="center">#{it.casesOther ==null?'-':it.casesOther}</td>
 			<td align="center"><s:link value="#{messages['cases.mantreatment']}" view="/cases/treatments.xhtml">
 					<f:param name="huid" value="#{it.unitId}"/>
 				</s:link> 
