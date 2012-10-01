@@ -4,7 +4,6 @@ import static org.jboss.seam.ScopeType.APPLICATION;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Create;
