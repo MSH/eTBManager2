@@ -71,7 +71,10 @@
 	</td></tr>    
     
     <tr><td colspan="2">
-    	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
+    	<div class="paragraph">
+    	<!-- #{messages['cases.details.addressnotif']} -->
+    	<h:outputText value="#{tbcase.diagnosisType=='SUSPECT'? messages['cases.suspect.details.addressnotif'] : messages['cases.details.addressnotif']}" />
+    	</div>
     </td></tr>
     
 <tr><td colspan="2">
@@ -124,7 +127,7 @@
     	</s:decorate>
 
     	<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['Address.zipCode']}</ui:define>
+    		<ui:define name="label">#{messages['Address.completeAddress4']}</ui:define>
     		<h:inputText value="#{tbcase.currentAddress.zipCode}" maxlength="20" />
     	</s:decorate>
     	
@@ -309,7 +312,7 @@ function isPulmonary(cb) {
 	</div>
 	
 
-	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+	<s:fragment>
 	<div class="form-content">
 	<h2>#{messages['cases.prevtreat']}</h2>
 
