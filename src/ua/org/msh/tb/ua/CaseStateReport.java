@@ -67,11 +67,11 @@ public class CaseStateReport {
 		return items;
 	}
 
-	public List<AdminUnitGroup<HealthUnitInfo>> getAdminUnit(){
-		HealthUnitsQuery healthUnitsQuery = (HealthUnitsQuery)Component.getInstance("healthUnitsQueryUA", true);
+	public List<AdminUnitGroup<HealthUnitInfoUA>> getAdminUnitUA(){
+		HealthUnitsQueryUA healthUnitsQuery = (HealthUnitsQueryUA)Component.getInstance("healthUnitsQueryUA", true);
 		if (getSelectedAdmUnit()!=null){
-			List<AdminUnitGroup<HealthUnitInfo>> lst2 = new ArrayList<AdminUnitGroup<HealthUnitInfo>>();
-			for (AdminUnitGroup<HealthUnitInfo> adm: healthUnitsQuery.getAdminUnits()) {
+			List<AdminUnitGroup<HealthUnitInfoUA>> lst2 = new ArrayList<AdminUnitGroup<HealthUnitInfoUA>>();
+			for (AdminUnitGroup<HealthUnitInfoUA> adm: healthUnitsQuery.getAdminUnitsUA()) {
 				//if (getSelectedAdmUnitSel().getParentUnits().size()==1){
 					if (adm.getAdminUnit().equals(getSelectedAdmUnit()))
 						lst2.add(adm);
@@ -88,7 +88,7 @@ public class CaseStateReport {
 			}
 			return lst2;
 		}
-		return healthUnitsQuery.getAdminUnits();
+		return healthUnitsQuery.getAdminUnitsUA();
 	}
 	
 	/*private void addUnit(List<AdminUnitGroup<HealthUnitInfo>> lst2,adm){
