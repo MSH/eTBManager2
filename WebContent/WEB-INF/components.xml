@@ -46,7 +46,7 @@
 
    <web:rewrite-filter view-mapping="*.seam" />
    
-   <async:quartz-dispatcher  />    
+   <async:quartz-dispatcher/>    
 
     
    <persistence:managed-persistence-context name="entityManager"
