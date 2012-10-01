@@ -24,10 +24,13 @@ import org.msh.utils.EntityQuery;
 public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 	private static final long serialVersionUID = -1091248707546402475L;
 	
-	@In EntityManager entityManager;
-	@In Workspace defaultWorkspace;
+	@In
+	protected EntityManager entityManager;
+	@In
+	protected Workspace defaultWorkspace;
 	@In(create=true) UserSession userSession;
-	@In(create=true) UserWorkspace userWorkspace;
+	@In(create=true)
+	protected UserWorkspace userWorkspace;
 	@In(create=true) CaseFilters caseFilters;
 	
 	private List<HealthUnitInfo> resultList;
@@ -181,7 +184,7 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 	}
 
 
-	private Long readLongValue(Object val) {
+	protected Long readLongValue(Object val) {
 		if (val == null)
 			return null;
 		
@@ -217,7 +220,7 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 	}
 	
 	
-	private AdminUnitGroup<HealthUnitInfo> findAdminUnitGroup(String adminUnitCode) {
+	protected AdminUnitGroup<HealthUnitInfo> findAdminUnitGroup(String adminUnitCode) {
 		for (AdminUnitGroup<HealthUnitInfo> adm: adminUnits) {
 			if (adm.getAdminUnit().isSameOrChildCode(adminUnitCode)) {
 				return adm;
