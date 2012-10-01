@@ -7,16 +7,15 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.MedicineDispensingCase;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
@@ -29,6 +28,7 @@ public abstract class AbstractDispensigUIHome {
 	private List<SourceItem> sources;
 	private Tbunit unit;
 	private DispensingHome dispensingHome;
+	@In(create=true) FacesMessages facesMessages;
 
 
 	/**
@@ -58,7 +58,50 @@ public abstract class AbstractDispensigUIHome {
 	 */
 	protected abstract void loadSources(List<SourceItem> sources);
 
+	private boolean validateForm(){
+		boolean ret = true;
+		
+		Date dispDate = getDispensingHome().getInstance().getDispensingDate();
+		TbCase tbcase = ((CaseHome)Component.getInstance("caseHome")).getInstance();
+		
+		if (dispDate.before( unit.getMedManStartDate() )) {
+			facesMessages.addToControlFromResourceBundle("edtdate", "meds.movs.datebefore", LocaleDateConverter.getDisplayDate( unit.getMedManStartDate(), false ));
+			ret = false;
+		}
+		
+		//Verifies if it is a new dispensing or if the user is editing an existing dispensing.
+		if(dispensingHome.getInstance().getTbunit() == null){
+			//if its a new dispensing for a case it has to verifies if its already exists a dispensing for that date and that case
+			if(tbcase!=null && dispDate != null){
+				EntityManager entityManager = (EntityManager) Component.getInstance("entityManager");
+				int mdc = entityManager.createQuery("from MedicineDispensingCase mdc " +
+													"where mdc.dispensing.dispensingDate = :dispDate " +
+													"and mdc.tbcase.id = :caseId")
+													.setParameter("dispDate", dispDate)
+													.setParameter("caseId", tbcase.getId())
+													.getResultList().size();
 
+				if(mdc > 0){
+					facesMessages.addFromResourceBundle("MedicineDispensing.msg01");
+					ret = false;
+				}
+			}
+		}
+		
+		//Verifies if it is being dispensed an expired batch
+		for(SourceItem s : getSources()){
+			for(DispensingRow r : s.getTable().getRows()){
+				if(r.getDispensingQuantity() != null 
+						 &&r.getDispensingQuantity() > 0 
+						 && r.getBatch().getExpiryDate().before(dispDate)){
+					facesMessages.addFromResourceBundle("MedicineDispensing.msg02");
+					ret = false;
+				}
+			}	
+		}
+		
+		return ret;
+	}
 
 	/**
 	 * Save the dispensing data
@@ -78,40 +121,19 @@ public abstract class AbstractDispensigUIHome {
 			tbcase = ch.getInstance();
 		}
 		else tbcase = null;
-
-		// validate 
+		
+		if(!validateForm())
+			return "error";
+		
+		//Verifies if this unit has medicine control
 		if (unit.getMedManStartDate() == null)
 			throw new RuntimeException("Unit not in medicine management control");
-
-		FacesMessages facesMessages = FacesMessages.instance();
-
-		Date dispDate = getDispensingHome().getInstance().getDispensingDate();
-		
-		if (dispDate.before( unit.getMedManStartDate() )) {
-			facesMessages.addToControlFromResourceBundle("edtdate", "meds.movs.datebefore", LocaleDateConverter.getDisplayDate( unit.getMedManStartDate(), false ));
-			return "error";
-		}
 		
 		DispensingHome dispensingHome = getDispensingHome();
 
 		//Verifies if it is a new dispensing or if the user is editing an existing dispensing.
 		if(dispensingHome.getInstance().getTbunit() == null){
 			actionType = "new";
-			//if its a new dispensing for a case it has to verifies if its already exists a dispensing for that date and that case
-			if(tbcase!=null && dispDate != null){
-				EntityManager entityManager = (EntityManager) Component.getInstance("entityManager");
-				int mdc = entityManager.createQuery("from MedicineDispensingCase mdc " +
-													"where mdc.dispensing.dispensingDate = :dispDate " +
-													"and mdc.tbcase.id = :caseId")
-													.setParameter("dispDate", dispDate)
-													.setParameter("caseId", tbcase.getId())
-													.getResultList().size();
-
-				if(mdc > 0){
-					facesMessages.addFromResourceBundle("MedicineDispensing.msg01");
-					return "error";
-				}
-			}
 		}else{
 			actionType = "edt";
 		}
