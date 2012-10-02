@@ -56,7 +56,8 @@
 		<td>
 			<a:repeat value="#{prescriptionTable.healthUnits}" var="p">
 				<div class="bar-header"  style="width:#{p.width}%;margin-left:#{p.left}% ">
-				<div class="bar-caption">#{p.item.tbunit.name}</div>
+				<div class="icon-hu" style="margin-top:4px"/>
+				<div class="bar-caption" style="display:#{(p.item.tbunit.name.toString().length()+5) > p.width ? 'none' : 'block'}">#{p.item.tbunit.name}</div>
 				
 				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
 					<div class="icon-hu"/>
@@ -253,6 +254,10 @@ function closePopupHint(jqryElem, isLong) {
 		 jqryElem.animate({opacity: "hide", top: "-250px"}, "fast");
 	else jqryElem.animate({opacity: "hide", top: "-130px"}, "fast");
 	popupTreatment = null;	
+}
+
+function count(x){
+	return x.length;
 }
 
 --></script>
