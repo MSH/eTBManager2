@@ -182,6 +182,16 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			addCondition(prescribedMedicineCond);
 		}
 		
+		if(caseFilters.getClassifications().getSelectedItems().size()>0){
+			String clas = " c.classification in (";
+			for(CaseClassification c : caseFilters.getClassifications().getSelectedItems()){
+				clas = clas + c.ordinal() + ",";
+			}
+			clas = clas.substring(0, clas.length()-1);
+			clas = clas + ")";
+			addCondition(clas);
+		}
+		
 		mountAdvancedSearchConditions();
 		mountSingleSearchConditions();
 		
