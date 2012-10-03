@@ -54,9 +54,11 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	private static long beginMills;
 	//case info in EIDSS system
 	private class CaseShortInfo {
+		public long caseDBId;	// primary DB key
 		public String caseId;   //case id 
 		public Date caseDate;   //case entered date 
-		public CaseShortInfo(String id, Date d){
+		public CaseShortInfo(String id,long dbId, Date d){
+			this.caseDBId = dbId;
 			this.caseId=id;
 			this.caseDate=d;
 		}
@@ -314,7 +316,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 						while(it.hasNext()){
 							HumanCaseListInfo info = it.next();
 							Date d=ConvertToDate(info.getEnteredDate());
-							CaseShortInfo csi=new CaseShortInfo(info.getCaseID(),d);
+							CaseShortInfo csi=new CaseShortInfo(info.getCaseID(),info.getId(),d);
 							caseIds.add(csi);
 							i++;
 						}
@@ -433,7 +435,8 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	public String loadCaseById(CaseShortInfo caseI) {
 		String refusedList="";
 		if (notCanceled()){
-			HumanCaseInfo info = getLoader().getFullCase(caseI.caseId);
+			String dbId = String.valueOf(caseI.caseDBId);
+			HumanCaseInfo info = getLoader().getFullCase(dbId);
 			if (info != null){
 				if (suitable(info,config.getCaseStates(),"")) {
 					addCase(info,caseI.caseDate);
