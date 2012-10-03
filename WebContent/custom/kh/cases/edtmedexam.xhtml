@@ -102,22 +102,18 @@
     	
 	</s:decorate>   
 	
-	<rich:jQuery selector="#cbrefby" query="change( function(){ checkPayRefBy(this); })" />
-	<!-- <rich:jQuery selector="#cbrefby" timing="onload" query="each( function(){ checkPayRefBy(this, true); })" /> -->
-	<rich:jQuery selector="#cbrefby" timing="onload" query="each( function(){ jQuery('#refByUnit').hide(); })" />
 	<rich:jQuery selector="#cbrefby" timing="onload" query="each( function(){ jQuery('#otherPatRefBySrc').hide(); })" />
 		
 	<div id="refByUnit">
 		    <s:decorate template="/layout/edit.xhtml" >
 		    	<ui:define name="label">#{messages['MedicalExamination.RefByUnit']}:</ui:define>
-		    	<h:inputText value="#{medicalExamination_Kh.referredByUnitName}" style=" width : 340px;" maxlength="100"/>
+		    	<h:inputTextarea value="#{medicalExamination_Kh.referredByUnitName}" style=" width : 340px; height :100px;" maxlength="100"/>
 		    </s:decorate>   
-		    <!-- <s:decorate id="dt" template="/layout/dateedit.xhtml" >
-		    	<ui:define name="label">#{messages['MedicalExamination.RefByDate']}:</ui:define>
-		    	<ui:param name="required" value="false" /> 
-		    	<ui:param name="future" value="false" /> 
-		    	<ui:param name="datefield" value="#{medicalExamination_Kh.refByDate}" /> 
-		    </s:decorate>-->	     	
+		     <s:decorate template="/layout/edit.xhtml" >
+		    	<ui:define name="label">#{messages['MedicalExamination.RefByUnit.PhNum']}:</ui:define>
+		    	<h:inputText value="#{medicalExamination_Kh.refByPhoneNum}" style=" width : 340px;" maxlength="100"/>
+		    </s:decorate>   
+		   	     	
   		</div>
   		<div id="otherPatRefBySrc">
   		<s:decorate template="/layout/edit.xhtml" >
@@ -164,7 +160,8 @@
 
 <rich:jQuery selector="#cbpresc" query="change(function(){checkClick(this.selectedIndex==2, '#edtreason');})" />
 <rich:jQuery selector="#cbpresc[selectedIndex!=2]" query="each(function(){jQuery('#edtreason').hide();})" />
-
+<rich:jQuery selector="#cbrefby" query="change( function(){ checkPayRefBy(this); })" />
+<!-- <rich:jQuery selector="#cbrefby" timing="onload" query="each( function(){ jQuery('#refByUnit').hide(); })" /> -->
 
 
 	
