@@ -8,7 +8,11 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 	<div class="spacer" />
-	
+	<s:link view="/custom/kh/cases/edtmedexam.xhtml" style="float:right;" styleClass="button-alt" rendered="#{caseHome.canEditCaseData}" onclick="disableButton(this)">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
 	<h:panelGroup id="medexamtbl">
 	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="error" rendered="#{empty medicalExaminationKHHome.allResults}" />
 
@@ -19,15 +23,7 @@
 		
 		<div class="region1">
 			<div class="header">
-			<div style="float:right;">
-			
-			<div class="spacer" />
-			<s:link value="#{messages['cases.details.newresult']}" view="/custom/kh/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}">
-				<f:param name="id" value="#{tbcase.id}"/>
-				<f:param name="examid" value="#{null}"/>
-				<f:param name="height" value="#{r.height}"/>
-			</s:link>
-			
+			<div style="float:right;">		
 				<s:link value="#{messages['form.edit']}" view="/custom/kh/cases/edtmedexam.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
@@ -139,7 +135,14 @@
 			</td>
 		</tr>
 		<s:fragment rendered="#{not empty r.comments}">
-		<tr><td>
+		<tr>
+		<td>
+			<s:decorate template="/layout/display.xhtml" rendered = "#{not empty r.refByPhoneNum}">
+					<ui:define name="label">#{messages['MedicalExamination.RefByUnit.PhNum']}:</ui:define>
+					<h:outputText value="#{r.refByPhoneNum}"/>
+			</s:decorate>
+		</td>
+		<td>
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['global.comments']}:</ui:define>
 				#{r.comments}
