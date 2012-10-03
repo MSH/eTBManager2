@@ -2,6 +2,7 @@ package org.msh.tb.reportgen;
 
 import java.text.DateFormatSymbols;
 
+import org.jboss.seam.international.LocaleSelector;
 import org.msh.utils.reportgen.ReportQuery;
 import org.msh.utils.reportgen.Variable;
 
@@ -9,7 +10,7 @@ public class MonthVariable implements Variable {
 
 	private final static String[] fields = {"year(transactionDate)", "month(transactionDate)"};
 	
-	private DateFormatSymbols dfs = new DateFormatSymbols();
+	private DateFormatSymbols dfs = new DateFormatSymbols(LocaleSelector.instance().getLocale());
 	private boolean grouped = false;
 	
 	@Override
