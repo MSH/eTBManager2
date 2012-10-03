@@ -53,7 +53,7 @@
 			</s:decorate>
 	</s:fragment>
 
-	<s:fragment rendered="#{defaultWorkspace.patientNameComposition=='LAST_FIRST_MIDDLENAME'}">
+	<s:fragment rendered="#{defaultWorkspace.patientNameComposition=='LAST_FIRST_MIDDLENAME' || defaultWorkspace.patientNameComposition=='LAST_FIRST_MIDDLENAME_WITHOUT_COMMAS'}">
 			<s:decorate styleClass="label">
 				<s:label value="#{messages['Patient.lastName']}" styleClass="over" />
 				<h:inputText id="lastname" value="#{patientdata.lastName}" style="width:120px;" />
