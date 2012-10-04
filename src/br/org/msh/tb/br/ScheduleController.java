@@ -28,6 +28,6 @@ public class ScheduleController implements Serializable {
 	
 	@Create
 	public void scheduleTimer() {
-		processor.updateTagsTrigger(DEFAULT_INI_DATE, MIDNIGHT);
+//		processor.updateTagsTrigger(DEFAULT_INI_DATE, MIDNIGHT);
 	}
 }

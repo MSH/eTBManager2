@@ -26,7 +26,7 @@ public class ScheduleProcessor {
 	
 	@In(create=true) EntityManager entityManager;
 	
-	@Asynchronous
+/*	@Asynchronous
     @Transactional
     public QuartzTriggerHandle updateTagsTrigger(@Expiration Date when, @IntervalCron String interval) {
 		TagsCasesHome tagsCasesHome = (TagsCasesHome)Component.getInstance("tagsCasesHome", true);
@@ -38,5 +38,5 @@ public class ScheduleProcessor {
 		
         return null;
     }
-		
+*/		
 }
