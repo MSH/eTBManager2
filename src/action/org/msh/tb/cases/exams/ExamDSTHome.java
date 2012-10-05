@@ -70,8 +70,11 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 	}
 	
 	public boolean validateAndPrepareFields(){
-		//Verifies if a TB case has resistance or if a DRTB case has at leat one resistance
+		
+		
+		//Verifies if a TB case has resistance or if a DRTB case has at least one resistance
 		int resistantQuantity = 0;
+		int notDoneExams = 0;
 		for (ExamDSTResult ms: items) {
 			if(getTbCase().getClassification().equals(CaseClassification.TB)
 					&& ms.getResult().equals(DstResult.RESISTANT)){
@@ -79,11 +82,17 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 				return false;
 			}else if(ms.getResult().equals(DstResult.RESISTANT)){
 				resistantQuantity++;
+			}else if(ms.getResult().equals(DstResult.NOTDONE)){
+				notDoneExams++;
 			}
 		}
 		if(getTbCase().getClassification().equals(CaseClassification.DRTB)
 				&& resistantQuantity <= 0){
 			facesMessages.addFromResourceBundle("DSTExam.msg02");
+			return false;
+		}
+		if(items.size() == notDoneExams){
+			facesMessages.addFromResourceBundle("DSTExam.msg03");
 			return false;
 		}
 		
