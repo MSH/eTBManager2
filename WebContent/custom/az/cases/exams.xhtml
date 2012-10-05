@@ -6,6 +6,8 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+                
+<ui:param name="examXRayHome" value="#{examXRayAZHome}" />
 
 	<div class="spacer" />
 
@@ -318,7 +320,7 @@
 	<div class="spacer" />
 
 	<h:panelGroup id="pnlXRay">	
-		<s:link view="/cases/edtexamxray.xhtml" style="float:right;" styleClass="button-alt">
+		<s:link view="/custom/az/cases/edtexamxray.xhtml" style="float:right;" styleClass="button-alt">
 			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>
@@ -332,7 +334,7 @@
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colcb">
 			<h:column>
 				<f:facet name="header">#{messages['global.month']}</f:facet>
-				<s:link view="/cases/edtexamxray.xhtml" propagation="none" >
+				<s:link view="/custom/az/cases/edtexamxray.xhtml" propagation="none" >
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >

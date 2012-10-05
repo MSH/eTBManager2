@@ -4,7 +4,7 @@
 
 	<restrict>#{userSession.canEditCases}</restrict>
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
-	<param name="examid" value="#{examXRayHome.idWithLog}" converterId="javax.faces.Integer" />
+	<param name="examid" value="#{examXRayAZHome.idWithLog}" converterId="javax.faces.Integer" />
 
 	<navigation>
 		<rule if="#{not caseHome.managed}">
