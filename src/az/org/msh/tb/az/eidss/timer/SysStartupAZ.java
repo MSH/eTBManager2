@@ -1,5 +1,6 @@
 package org.msh.tb.az.eidss.timer;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,7 +11,6 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.async.QuartzTriggerHandle;
 import org.jboss.seam.faces.FacesMessages;
@@ -45,14 +45,9 @@ public class SysStartupAZ{
 		c.set(Calendar.YEAR, 2100);
 				
 		SystemParam p;
-		SystemParam st;
 		try {
 			p = entityManager.find(SystemParam.class, "admin.eidss.auto");
-			st = entityManager.find(SystemParam.class, "admin.eidss.dateStart");
-			if (st!=null)
-				start = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(st.getValue());
-			else
-				start = new Date();					
+			start = getStart();				
 			if ("true".equals(p.getValue())){
 				start();
 			}
@@ -61,9 +56,25 @@ public class SysStartupAZ{
 		}
 	}
 
+	private Date getStart(){
+		if (start == null){
+			SystemParam st;
+			st = entityManager.find(SystemParam.class, "admin.eidss.dateStart");
+			if (st!=null)
+				try {
+					start = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(st.getValue());
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			else
+				start = new Date();
+		}
+		return start;
+	}
+	
 	private void changeStartDt(){
 		Date db = eidssIntHome.getConfig().getDateStart();
-		if (!start.equals(db))
+		if (!getStart().equals(db))
 			start = now.before(db) ? db : start;
 	}
 	
