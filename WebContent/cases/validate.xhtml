@@ -9,7 +9,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.validate']}" />
+<ui:param name="title" value="#{messages['cases.validate']} - #{tbcase.diagnosisType=='SUSPECT'? messages[it.tbcase.classification.keySuspect] : messages[tbcase.classification.key]}" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:180px;" />
 
@@ -19,6 +19,7 @@
 <h1>#{title}</h1>
 <h:form id="main" rendered="#{caseHome.canValidate}" styleClass="form1">
 
+<s:decorate template="/layout/casebody.xhtml">
 <div class="form-content">
     <table width="100%">
     <tr><td height="30">
@@ -51,7 +52,7 @@
     		</h:selectOneMenu>
 		</s:decorate>
 		
-		<s:decorate template="/layout/edit.xhtml">
+		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
     		<ui:define name="label">#{messages['DrugResistanceTypes']}:</ui:define>
     		<h:selectOneMenu id="patType" value="#{tbcase.drugResistanceType}" required="true">
     			<s:selectItems var="it" value="#{drugResistanceTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
@@ -150,6 +151,7 @@ function isPulmonary(cb) {
     		<span>#{messages['form.cancel']}</span>
     	</s:link>
     </div>
+</s:decorate>
 
 </h:form>
 </ui:define>
