@@ -168,6 +168,10 @@ public class UserSession {
         userLogin = new UserLogin();
         userLogin.setUser(userWorkspace.getUser());
         userLogin.setLoginDate(new java.util.Date());
+
+        if (app == null)
+        	app = "Undefined";
+        else
         if (app.length() > 200)
         	app = app.substring(0, 200);
         userLogin.setApplication(app);
