@@ -42,9 +42,12 @@ public class DelayStartTreatIndicator extends Indicator2D {
 		// calculate number of cases with Resistant DST Results
 		String cond = " exists (select res.exam.id from ExamDSTResult res " +
 					   " join res.exam exam " +
-					   " where exam.tbcase.id = c.id and res.result = " + DstResult.RESISTANT.ordinal() + ")"		
+					   " where exam.tbcase.id = c.id and res.result = " + DstResult.RESISTANT.ordinal() + ")" + " group by c.id"
 			;
-			
+//		String cond = " exists (select res.exam.id from ExamDSTResult res " +
+//		   " join res.exam exam " +
+//		   " where exam.tbcase.id = c.id and res.result = " + DstResult.RESISTANT.ordinal() + ")" + "group by c.id"	
+//;				
 			setCondition(cond);
 			List<Object[]> lst = createQuery().getResultList();
 			List<Integer> delayStartTreatArr = new ArrayList<Integer>();
@@ -55,12 +58,15 @@ public class DelayStartTreatIndicator extends Indicator2D {
 				Date startTrtDt = (Date)val[2];
 				Date dstResDt = (Date)val[3];
 				int daysStart, daysDiag;
-				if(startTrtDt!=null && startTrtDt.after(dstResDt)){
+				
+				//Calculate Delay in MDR-TB start treatment - lag between Start treatment dt and DST Result date(resistant) for a confirmed validated case
+				if(startTrtDt!=null && dstResDt!=null && startTrtDt.after(dstResDt)){
 					daysStart = DateUtils.daysBetween(startTrtDt, dstResDt);
 					delayStartTreatArr.add(daysStart);
 				}
 				
-				if(startTrtDt == null){
+				//Calculate Delay in MDR-TB diagnosis - lag between registration dt and DST Result date(resistant) for a confirmed validated case
+				if(startTrtDt == null && dstResDt!=null){
 					daysDiag = DateUtils.daysBetween(regDt, dstResDt);
 					delayDiagtArr.add(daysDiag);
 				}
