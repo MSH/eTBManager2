@@ -376,7 +376,7 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 	public List<Tbunit> getUnits() {
 		if (units == null)
 			units = getEntityManager()
-				.createQuery("from Tbunit u where u.workspace.id = #{workspace.id}")
+				.createQuery("from Tbunit u where u.workspace.id = #{workspace.id} order by u.name.name1")
 				.getResultList();
 		return units;
 	}
