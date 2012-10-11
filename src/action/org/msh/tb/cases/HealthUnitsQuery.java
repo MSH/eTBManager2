@@ -65,7 +65,7 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 				"from tbunit u inner join administrativeunit a on a.id = u.adminunit_id " +
 				"where u.workspace_id = " + defaultWorkspace.getId().toString() + generateSQLConditionByUserView() +
 				(hsID != null? " and u.healthsystem_id = " + hsID: "") + 
-				" group by u.id, u.name1, a.code having numcases > 0 or ontreat > 0  order by a.code, u.name1";
+				" group by u.id, u.name1, a.code having numcases > 0 or ontreat > 0 or transferin > 0 or transferout > 0 order by a.code, u.name1";
 		
 		Query query = entityManager.createNativeQuery(sql);
 		if ( getFirstResult()!=null) query.setFirstResult( getFirstResult() );
