@@ -42,6 +42,12 @@ public class ChartDataConverter implements Converter{
 		if ((param != null) && (param.getValue() != null))
 			 title = param.getValue().toString();
 		else title = "No title";
+		
+		UIParameter param2 = findParam(comp,"title2");
+		String title2;
+		if ((param2 != null) && (param2.getValue() != null))
+			title2 = param2.getValue().toString();
+		else title2 = "Number of cases";
 	
 		Map<String, String> messages = Messages.instance();
 		IndicatorFilters indicatorFilters = (IndicatorFilters)Component.getInstance("indicatorFilters");
@@ -49,7 +55,8 @@ public class ChartDataConverter implements Converter{
 		JSONDataRender render = new JSONDataRender();
 		render.setChartType(indicatorFilters.getChartType());
 		render.setSeries(series);
-		render.setTopTitle(messages.get("manag.forecast.numcasesreg"));
+		//render.setTopTitle(messages.get("manag.forecast.numcasesreg"));
+		render.setTopTitle(title2);
 		render.setTitle(title);
 		
 		String s = render.render();
