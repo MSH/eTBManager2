@@ -17,7 +17,8 @@
 			#{title}
 		</th>
 		<th align="right">
-			<h:outputText value="#{messages['manag.ind.numc']}" />
+			<!-- <h:outputText value="#{messages['manag.ind.numc']}" />-->
+				 <h:outputText value="#{empty title2? messages['manag.ind.numc']: title2}" />
 		</th>
 		<th align="right">
 			#{messages['global.perc']}
