@@ -191,7 +191,7 @@ public class CaseHome extends WsEntityHome<TbCase>{
 	 * @return
 	 */
 	public boolean isCanCreateIssue() {
-		return ((getInstance().getValidationState() != ValidationState.VALIDATED) && (isWorkingUnit()));
+		return (checkRoleBySuffix("CASE_VALIDATE") && (getInstance().getValidationState() != ValidationState.VALIDATED) && (isWorkingUnit()));
 	}
 
 	
