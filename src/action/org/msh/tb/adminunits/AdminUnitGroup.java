@@ -14,6 +14,7 @@ import org.msh.tb.entities.AdministrativeUnit;
 public class AdminUnitGroup<E> {
 
 	private AdministrativeUnit adminUnit;
+	private Long casesOnTreatment;
 	private List<E> items = new ArrayList<E>();
 
 	/**
@@ -39,6 +40,18 @@ public class AdminUnitGroup<E> {
 	 */
 	public void setItems(List<E> items) {
 		this.items = items;
+	}
+	/**
+	 * @return the casesOnTreatment
+	 */
+	public Long getCasesOnTreatment() {
+		return casesOnTreatment;
+	}
+	/**
+	 * @param casesOnTreatment the casesOnTreatment to set
+	 */
+	public void setCasesOnTreatment(Long casesOnTreatment) {
+		this.casesOnTreatment = casesOnTreatment;
 	}
 	
 }

@@ -16,12 +16,17 @@
 		</span>
 	</a:repeat>
 
-	<a:repeat value="#{healthUnitsQueryBR.adminUnits}" var="adm">
+	<a:repeat value="#{healthUnitsQueryBR.adminUnits}" var="adm" rowKeyVar="x">
 	<table class="table1">
 		<tr><th colspan="6">
-			<div class="text-big">#{adm.adminUnit.name}</div>
+			<div class="text-big">
+				<a href="#" id="show#{adm.adminUnit.id}lnk" onclick="showTableDetails(#{adm.adminUnit.id});">(+)</a>
+				<a id="hide#{adm.adminUnit.id}lnk" onclick="hideTableDetails(#{adm.adminUnit.id})" style="display:none">(-)</a>
+				#{adm.adminUnit.name}
+				<h:outputText value=" - #{adm.casesOnTreatment} #{messages['manag.forecast.cases']}" rendered="#{adm.casesOnTreatment>0}"/>
+			</div>
 		</th></tr>
-		<tr>
+		<tr class="unit#{adm.adminUnit.id}" style="display:none">
 			<th>#{messages['cases.healthUnit']}</th>
 			<th align="center">#{messages['CaseState.ONTREATMENT']}</th>
 			<th align="center">#{messages['cases.trasnferin']}</th>
@@ -30,7 +35,7 @@
 			<th></th>
 		</tr>		
 		<a:repeat value="#{adm.items}" var="it">
-		<tr>
+		<tr class="unit#{adm.adminUnit.id}" style="display:none">
 			<td><div class="icon-hu"/>#{it.unitName}</td>
 			<td align="center">
 				<s:link value="#{it.casesOnTreatment==null?'-':it.casesOnTreatment}"  view="/cases/searchresult.xhtml" styleClass="link-small">
@@ -77,5 +82,36 @@
 	</table>
 	<div class="spacer" />
 	</a:repeat>
+    
+    <script type="text/javascript">
+    <!--
+	function showTableDetails(admUnit){
+		var showLnkName = 'show'+admUnit+'lnk';
+		var hideLnkName = 'hide'+admUnit+'lnk';
+		var rowName = 'unit'+admUnit;
+		var linhas = document.getElementsByClassName(rowName);
+		
+		document.getElementById(showLnkName).style.display = 'none';
+		document.getElementById(hideLnkName).style.display = 'inline';
+
+		for(var i=0; i<linhas.length; i++) { 
+			linhas[i].style.display='table-row';
+		}		
+	}
+	function hideTableDetails(admUnit){
+		var showLnkName = 'show'+admUnit+'lnk';
+		var hideLnkName = 'hide'+admUnit+'lnk';
+		var rowName = 'unit'+admUnit;
+		var linhas = document.getElementsByClassName(rowName);
+		
+		document.getElementById(showLnkName).style.display = 'inline';
+		document.getElementById(hideLnkName).style.display = 'none';
+
+		for(var i=0; i<linhas.length; i++) { 
+			linhas[i].style.display='none';
+		}		
+	}
+	-->
+    </script>
     
 </ui:composition>
