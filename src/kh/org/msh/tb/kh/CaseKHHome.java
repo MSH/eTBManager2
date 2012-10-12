@@ -80,6 +80,11 @@ public class CaseKHHome{
 	 */
 	@Transactional
 	public String saveEditing() {
+		TbCase tbcase = caseHome.getInstance();
+		String completeAddress = houseNum+";".concat(streetNum)+";".concat(groupNum)+";".concat(villageName)+";";
+		Address address = new Address();
+		address.setAddress(completeAddress);
+		tbcase.setNotifAddress(address);
 		return caseEditingHome.saveEditing();
 	}
 
