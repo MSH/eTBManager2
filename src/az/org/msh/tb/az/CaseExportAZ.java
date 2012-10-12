@@ -1,6 +1,8 @@
 package org.msh.tb.az;
 
- import java.util.Date;
+ import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
@@ -82,16 +84,14 @@ public class CaseExportAZ extends CaseExport {
 		excel.addTextFromResource("TbCase.ownerUnit", "title");
 		excel.addTextFromResource("TbCase.ownerUnitAdr", "title");
 		excel.addTextFromResource("excel.dateInEIDSS", "title");
-		excel.addTextFromResource("User.name", "title");
-		excel.addTextFromResource("Patient.lastName", "title");
-		excel.addTextFromResource("Patient.middleName", "title");
-		excel.addTextFromResource("az_EIDSS_Notify_LPU", "title");
-		excel.addTextFromResource("az_EIDSS_Address", "title");
+		excel.addText(getMessages().get("User.name")+" "+getMessages().get("Patient.lastName")+" "+getMessages().get("Patient.middleName")+" "+getMessages().get("excel.fromEIDSS"), "title");
+		excel.addText(getMessages().get("az_EIDSS_Notify_LPU")+" "+getMessages().get("excel.fromEIDSS"), "title");
+		excel.addText(getMessages().get("az_EIDSS_Address")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addTextFromResource("excel.dateRegAfterEIDSS", "title");
-		excel.addTextFromResource("az_EIDSS_Age", "title");
-		excel.addTextFromResource("Patient.birthDate", "title");
+		excel.addText(getMessages().get("az_EIDSS_Age")+" "+getMessages().get("excel.fromEIDSS"), "title");
+		excel.addText(getMessages().get("Patient.birthDate")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		//excel.addTextFromResource("TbCase.eidssid", "title");
-		excel.addTextFromResource("excel.unicID", "title");
+		excel.addText(getMessages().get("az_AZ.case.unicalID")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addTextFromResource("excel.xray.presentation", "title");
 		excel.addTextFromResource("excel.xray.localization", "title");
 		excel.addTextFromResource("excel.dst.s", "title");
@@ -187,20 +187,44 @@ public class CaseExportAZ extends CaseExport {
 			excel.addText(tu.toString());
 			excel.addText(tu.getAdminUnit().getName().getDefaultName());
 		}
-		excel.addText(""); //TODO дата ввода в EIDSS
-		excel.addText(""); //TODO имя из EIDSS
-		excel.addText(""); //TODO фамилия из EIDSS
-		excel.addText(""); //TODO отчество из EIDSS
 		String[] ei = new String[] {"",""}; 
 		if (tbcase.getEIDSSComment()!=null)
 			ei = tbcase.getEIDSSComment().split(" / ");
+		
+		if (ei.length>=3){
+			Date dInEIDSS;//inner date EIDSS
+			try {
+				dInEIDSS = new SimpleDateFormat("dd-MM-yyyy").parse(ei[2]);
+				excel.addDate(dInEIDSS);
+			} catch (ParseException e) {
+				excel.addText(ei[2]);
+			}
+		}
+		else
+			excel.addText("");
+		
+		excel.addText(ei.length>=4 ? ei[3] : ""); // name from EIDSS
 		excel.addText(ei[0]);
 		excel.addText(ei[1]);
 		excel.addText(""); //TODO дата приемки ТБ учреждением
 		//excel.addDate(tbcase.getRegistrationDate());
-		excel.addNumber(tbcase.getPatientAge());
-		excel.addDate(tbcase.getPatient().getBirthDate());
 		
+		if (ei.length>=5)
+			excel.addNumber(Integer.parseInt(ei[4]));
+		else
+			excel.addText("");
+		
+		if (ei.length>=6){
+			Date eidssDBirth;
+			try {
+				eidssDBirth = new SimpleDateFormat("dd-MM-yyyy").parse(ei[5]);
+				excel.addDate(eidssDBirth);
+			} catch (ParseException e) {
+				excel.addText(ei[5]);
+			}
+		}
+		else
+			excel.addText("");
 		excel.addText(""); //TODO unicID
 		ExamXRay x = getFirstXRayExam(tbcase);
 		
