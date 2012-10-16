@@ -75,6 +75,8 @@ public class TbCaseAZ extends TbCase{
 	@PropertyLog(logEntityFields=true)
 	private Period thirdCatPeriod = new Period();
 	
+	private String unicalID;
+	
 	/**
 	 * @return the maritalStatus
 	 */
@@ -233,6 +235,14 @@ public class TbCaseAZ extends TbCase{
 
 	public void setThirdCatPeriod(Period thirdCatPeriod) {
 		this.thirdCatPeriod = thirdCatPeriod;
+	}
+
+	public String getUnicalID() {
+		return unicalID;
+	}
+
+	public void setUnicalID(String unicalID) {
+		this.unicalID = unicalID;
 	}
 
 
