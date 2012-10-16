@@ -27,6 +27,7 @@ import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.transactionlog.TransactionLogService;
+import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.LocaleDateConverter;
 
 import ua.com.theta.bv.client.Loader;
@@ -457,11 +458,11 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	private static boolean suitable(HumanCaseInfo cI,String patStateName, String caseStateName) {
 		   //reject 10035002
 		
-			if (cI.getPatientState()!=null){
-				if (cI.getPatientState().getId().toString().equalsIgnoreCase(patStateName)) {
-				
-					return false;
-				}
+			if (cI.getPatientState()!=null)
+				if (cI.getPatientState().getId()!=null){
+					if (cI.getPatientState().getId().toString().equalsIgnoreCase(patStateName)) {
+						return false;
+					}
 			}
 			/*
 			//Refused
@@ -546,6 +547,8 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		String notification="";
 		if (EIDSSData.getNotificationSentBy()!=null) {
 			notification=EIDSSData.getNotificationSentBy().getName();
+			if (notification.contains("?") || notification.contains("\u0259"))
+				System.out.println(notification);
 		}
 		AddressInfo addr=EIDSSData.getCurrentResidence();
 		if (EIDSSData.getTentativeDiagnosisDate()!=null) {
@@ -563,8 +566,15 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		String rayon="";
 		if (addr.getRayon()!=null)rayon=addr.getRayon().getName()+", ";
 		String addInfo=country+region+settlement+rayon;
-		if 	(addr.getStreet()!=null)					addInfo=addInfo+addr.getStreet();
-		onecase.setAdditionalComment(notification+" / "+addInfo);	
+		if 	(addr.getStreet()!=null)	addInfo=addInfo+addr.getStreet();
+		String comment = notification+" / "+
+						addInfo+ " / "+
+						DateUtils.formatDate(d,"dd-MM-yyyy")+" / "+
+						lastName+" "+firstName+" "+fatherName+" / "+
+						onecase.getAge()+" / "+
+						(onecase.getDateOfBirth()!=null ? DateUtils.formatDate(onecase.getDateOfBirth(),"dd-MM-yyyy") : "")+" / "+
+						DateUtils.formatDate(ConvertToDate(EIDSSData.getNotificationDate()),"dd-MM-yyyy");
+		onecase.setAdditionalComment(comment);	
 		onecase.setCaseID(EIDSSData.getCaseID().toString());	
 		onecase.setEnteringDate(d);
 		//addLog(lastName+" "+firstName+" "+fatherName);
@@ -581,7 +591,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			}else {
 				ageStr=age.toString();
 			}
-			String toLog=lastName+" "+firstName+" "+fatherName+", age "+ageStr+", diag "+diag+", "+notification.substring(0, 14)+" "+onecase.getCaseID();
+			String toLog=lastName+" "+firstName+" "+fatherName+", age "+ageStr+", diag "+diag+", "+(notification.length()>14 ? notification.substring(0, 14) : notification)+" "+onecase.getCaseID();
 			String entDate=DateFormat.getDateInstance().format(d);
 			addExportDetails(entDate+" - "+toLog);
 		

@@ -2,8 +2,6 @@ package org.msh.tb.az.eidss;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -52,7 +50,7 @@ public  class CaseImporting {
 		" p.PATIENT_NAME = :fn and "+
 		" p.lastName = :ln and "+
 		" p.middleName = :mn and "+
-		" c.age = :a and " +
+		//" c.age = :a and " +
 		" c.diagnosisDate = :rd ";
 	
 	}
@@ -151,7 +149,7 @@ public  class CaseImporting {
 			.setParameter("ln", oneCase.getLastName())
 			.setParameter("mn", oneCase.getMiddleName())
 			.setParameter("fn", oneCase.getFirstName())
-			.setParameter("a", oneCase.getAge())
+			//.setParameter("a", oneCase.getAge())
 			.setParameter("rd", oneCase.getFinalDiagnosisDate())
 			.getResultList();
 			if (id!=null){
