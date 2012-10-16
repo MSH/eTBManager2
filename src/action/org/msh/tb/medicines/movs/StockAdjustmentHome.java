@@ -470,4 +470,26 @@ public class StockAdjustmentHome extends Controller {
 		else batchQuantity = entityManager.find(BatchQuantity.class, id);
 	}
 	
+	public boolean checkExpiringBatch(Object o){
+		StockPositionItem item = (StockPositionItem) o;
+		if(item!=null){
+			for(BatchQuantity bq : item.getBatches()){
+				if(userSession.isExpiringBatch(bq))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean checkExpiredBatch(Object o){
+		StockPositionItem item = (StockPositionItem) o;
+		if(item!=null){
+			for(BatchQuantity bq : item.getBatches()){
+				if(bq.getBatch().isExpired())
+					return true;
+			}
+		}
+		return false;
+	}
+	
 }

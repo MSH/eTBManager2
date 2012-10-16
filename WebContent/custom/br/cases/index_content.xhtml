@@ -21,9 +21,9 @@
 		<tr><th colspan="6">
 			<div class="text-big">
 				<a href="#" id="show#{adm.adminUnit.id}lnk" onclick="showTableDetails(#{adm.adminUnit.id});">(+)</a>
-				<a id="hide#{adm.adminUnit.id}lnk" onclick="hideTableDetails(#{adm.adminUnit.id})" style="display:none">(-)</a>
+				<a href="#" id="hide#{adm.adminUnit.id}lnk" onclick="hideTableDetails(#{adm.adminUnit.id})" style="display:none">(-)</a>
 				#{adm.adminUnit.name}
-				<h:outputText value=" - #{adm.casesOnTreatment} #{messages['manag.forecast.cases']}" rendered="#{adm.casesOnTreatment>0}"/>
+				<h:outputText value=" - #{adm.casesOnTreatment} #{messages['CaseState.ONTREATMENT']}" rendered="#{adm.casesOnTreatment>0}"/>
 			</div>
 		</th></tr>
 		<tr class="unit#{adm.adminUnit.id}" style="display:none">

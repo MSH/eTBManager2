@@ -37,41 +37,115 @@
 		</th>
 	</tr>
 <a:repeat value="#{table.rows}" var="row">
-
-	<tr>
-		<s:fragment rendered="#{not row.spanned}">
-		<td rowspan="#{row.rowSpan}">
-			#{row.medicine}
-			<h:outputText value="#{row.errorMessage}" rendered="#{not empty row.errorMessage}" styleClass="error"/>
-		</td>
-		</s:fragment>
-		<td>
-			<s:decorate template="/layout/batch.xhtml">
-				<ui:param name="batch" value="#{row.batch}" />
-			</s:decorate>
-		</td>
-		<td>
-			<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" />
-		</td>
-		<td align="right">
-			<h:outputText value="#{row.quantity}" >
-				<f:convertNumber pattern="#,###,##0"/>
-			</h:outputText>
-		</td>
-		
-		<s:fragment rendered="#{not row.spanned}">
-		<td align="right" rowspan="#{row.rowSpan}">
-			<h:outputText value="#{row.totalQuantity}" >
-				<f:convertNumber pattern="#,###,##0"/>
-			</h:outputText>
-		</td>
-		</s:fragment>
-		<td>
-			<h:inputText value="#{row.dispensingQuantity}" style="width:100px"/>
-			<h:outputText value="#{row.batchErrorMessage}" rendered="#{not empty row.batchErrorMessage}" styleClass="error"/>
-		</td>
-	</tr>
-
+	<s:fragment rendered="#{(not userSession.isExpiringBatch(row.batch)) and (not row.batch.expired)}">
+		<tr>
+			<s:fragment rendered="#{not row.spanned}">
+			<td rowspan="#{row.rowSpan}">
+				#{row.medicine}
+				<h:outputText value="#{row.errorMessage}" rendered="#{not empty row.errorMessage}" styleClass="error"/>
+			</td>
+			</s:fragment>
+			<td>
+				<s:decorate template="/layout/batch.xhtml">
+					<ui:param name="batch" value="#{row.batch}" />
+				</s:decorate>
+			</td>
+			<td>
+				<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" />
+			</td>
+			<td align="right">
+				<h:outputText value="#{row.quantity}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			
+			<s:fragment rendered="#{not row.spanned}">
+			<td align="right" rowspan="#{row.rowSpan}">
+				<h:outputText value="#{row.totalQuantity}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			</s:fragment>
+			<td>
+				<h:inputText value="#{row.dispensingQuantity}" style="width:100px"/>
+				<h:outputText value="#{row.batchErrorMessage}" rendered="#{not empty row.batchErrorMessage}" styleClass="error"/>
+			</td>
+		</tr>
+	</s:fragment>
+	
+	<s:fragment rendered="#{row.batch.expired}">
+		<tr>
+			<s:fragment rendered="#{not row.spanned}">
+			<td rowspan="#{row.rowSpan}">
+				#{row.medicine}
+				<h:outputText value="#{row.errorMessage}" rendered="#{not empty row.errorMessage}" styleClass="error"/>
+			</td>
+			</s:fragment>
+			<td>
+				<s:decorate template="/layout/batch.xhtml">
+					<ui:param name="batch" value="#{row.batch}" />
+				</s:decorate>
+			</td>
+			<td>
+				<span class="icon-error"/>
+				<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" style="color:red"/>
+			</td>
+			<td align="right">
+				<h:outputText value="#{row.quantity}" style="color:red">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			
+			<s:fragment rendered="#{not row.spanned}">
+			<td align="right" rowspan="#{row.rowSpan}">
+				<h:outputText value="#{row.totalQuantity}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			</s:fragment>
+			<td>
+				<h:inputText value="#{row.dispensingQuantity}" style="width:100px"/>
+				<h:outputText value="#{row.batchErrorMessage}" rendered="#{not empty row.batchErrorMessage}" styleClass="error"/>
+			</td>
+		</tr>
+	</s:fragment>
+	
+	<s:fragment rendered="#{userSession.isExpiringBatch(row.batch)}">
+		<tr>
+			<s:fragment rendered="#{not row.spanned}">
+			<td rowspan="#{row.rowSpan}">
+				#{row.medicine}
+				<h:outputText value="#{row.errorMessage}" rendered="#{not empty row.errorMessage}" styleClass="error"/>
+			</td>
+			</s:fragment>
+			<td>
+				<s:decorate template="/layout/batch.xhtml">
+					<ui:param name="batch" value="#{row.batch}" />
+				</s:decorate>
+			</td>
+			<td>
+				<span class="alert-icon"/>
+				<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" style="color:#D7620B"/>
+			</td>
+			<td align="right">
+				<h:outputText value="#{row.quantity}" style="color:#D7620B">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			
+			<s:fragment rendered="#{not row.spanned}">
+			<td align="right" rowspan="#{row.rowSpan}">
+				<h:outputText value="#{row.totalQuantity}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			</s:fragment>
+			<td>
+				<h:inputText value="#{row.dispensingQuantity}" style="width:100px"/>
+				<h:outputText value="#{row.batchErrorMessage}" rendered="#{not empty row.batchErrorMessage}" styleClass="error"/>
+			</td>
+		</tr>
+	</s:fragment>
 </a:repeat>
 </table>
 </s:fragment>

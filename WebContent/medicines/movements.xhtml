@@ -103,6 +103,11 @@
 	columnClasses="colc,#{medicine.id!=null?'':'coll,'}#{source.id!=null?'':'coll,'}coll,colr,colr,colr,colr">
 	<h:column>
 		<f:facet name="header">#{messages['form.date']}</f:facet>
+		<h:outputText value="#{m.movement.id}" style="width:80px" />
+	</h:column>
+	
+	<h:column>
+		<f:facet name="header">#{messages['form.date']}</f:facet>
 		<h:outputText value="#{m.movement.date}" style="width:80px" converter="localeDateConverter" />
 	</h:column>
 

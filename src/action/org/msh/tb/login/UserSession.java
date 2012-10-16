@@ -3,6 +3,7 @@ package org.msh.tb.login;
 import java.security.Principal;
 import java.security.acl.Group;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
@@ -23,6 +24,8 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.security.Identity;
+import org.msh.tb.entities.Batch;
+import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserProfile;
@@ -276,6 +279,51 @@ public class UserSession {
 		this.tbunit = tbunit;
 	}
 
+	/**
+	 * Check if the given batch is in attention period for expiration.
+	 */
+	public boolean isExpiringBatch(Object o){
+		
+		Batch b = null;
+		BatchQuantity bq = null;
+		if(o instanceof Batch)
+			b = (Batch) o;
+		else if (o instanceof BatchQuantity){
+			bq = (BatchQuantity) o;
+			b = bq.getBatch();
+		}
+		
+		if(b != null){
+			Calendar now  = Calendar.getInstance();
+			Calendar batchExpiringDate = Calendar.getInstance();
+			batchExpiringDate.setTime(b.getExpiryDate());
+			
+			long diff = batchExpiringDate.getTimeInMillis() - now.getTimeInMillis();
+			diff = diff / (24*60*60*1000);
+			double diffInDouble = diff;
+			double diffInMonths = diffInDouble / 30.0;
+			
+			if(userLogin != null 
+					&& userLogin.getWorkspace() != null 
+					&& userLogin.getWorkspace().getMonthsToAlertExpiredMedicines() != null){
+				if(diffInMonths < 0 || diffInMonths > userLogin.getWorkspace().getMonthsToAlertExpiredMedicines().longValue())
+					return false;
+				else
+					return true;
+			}
+			
+			if(userWorkspace != null 
+					&& userWorkspace.getWorkspace() != null 
+					&& userWorkspace.getWorkspace().getMonthsToAlertExpiredMedicines() != null){
+				if(diffInMonths < 0 || diffInMonths > userWorkspace.getWorkspace().getMonthsToAlertExpiredMedicines().longValue())
+					return false;
+				else
+					return true;
+			}
+		}
+		
+		return false;
+	}
 	
 	/**
 	 * Check if TB unit has started medicine management 

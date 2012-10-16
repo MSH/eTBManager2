@@ -64,6 +64,8 @@
 			<div style="float:left;width:450px;">
 				<a:commandLink value="#{messages['form.details']}" style="float:right;" onclick="detailsClick(this);return false;" />
 				<div class="medicine-icon" />
+				<s:span styleClass="alert-icon" rendered="#{stockAdjustmentHome.checkExpiringBatch(it)}"/>
+				<s:span styleClass="icon-error" rendered="#{stockAdjustmentHome.checkExpiredBatch(it)}"/>
 				<h:outputText value="#{it.stockPosition.medicine}" />
 			</div>
 			<div style="float:left;width:140px;text-align:right;">
@@ -75,7 +77,7 @@
 
 		<div id="tblbatch" style="display:none;">					
 		<a:repeat value="#{it.batches}" var="b">
-			<div style="clear:both;position:relative;min-height:40px;height:40px;border-top:1px solid #d0d0d0;padding-top:4px;">
+			<div style="clear:both;position:relative;min-height:40px;height:40px;border-top:1px solid #d0d0d0;padding-top:4px;#{b.batch.expired ? 'color:red' : (userSession.isExpiringBatch(b) ? 'color:#D7620B' : '')}">
 				<a:commandLink value="#{messages['meds.movs.delbatch']}" 
 					style="float:right;" 
 					styleClass="right-icon small-link" 

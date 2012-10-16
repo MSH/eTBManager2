@@ -111,7 +111,11 @@ public class Workspace implements Serializable {
 	 * Indicate if system will send e-mail messages to the users in certain system events (like new orders, orders authorized, etc)
 	 */
 	private boolean sendSystemMessages;
-
+	
+	/**
+	 * Setup the quantity of months that the system will consider when it has to alert the user about medicines that will expire.
+	 */
+	private Integer monthsToAlertExpiredMedicines;
 
 	public WeeklyFrequency[] getWeeklyFrequencies() {
 		WeeklyFrequency[] lst = new WeeklyFrequency[7];
@@ -456,4 +460,18 @@ public class Workspace implements Serializable {
 		this.sendSystemMessages = sendSystemMessages;
 	}
 
+	/**
+	 * @return the monthsToAlertExpiredMedicines
+	 */
+	public Integer getMonthsToAlertExpiredMedicines() {
+		return monthsToAlertExpiredMedicines;
+	}
+
+	/**
+	 * @param monthsToAlertExpiredMedicines the monthsToAlertExpiredMedicines to set
+	 */
+	public void setMonthsToAlertExpiredMedicines(
+			Integer monthsToAlertExpiredMedicines) {
+		this.monthsToAlertExpiredMedicines = monthsToAlertExpiredMedicines;
+	}
 }

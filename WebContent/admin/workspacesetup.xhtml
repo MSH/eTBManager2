@@ -86,6 +86,11 @@
            	<s:convertEnum />
       	</h:selectOneMenu>
     </s:decorate>
+    
+     <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.monthsToAlertMedicineExpires']}:</ui:define>
+		<h:inputText required="true" value="#{workspace.monthsToAlertExpiredMedicines}" />
+    </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Workspace.patientAddrRequiredLevels']}:</ui:define>

@@ -65,6 +65,14 @@ public class InventoryReport {
 				if ((node != null) && (node.getItem() != null))  //AK maybe null
 					((MedicineInfo)node.getItem()).setHasBatchExpired(true);
 			}
+			
+			// check if batch is up to expire
+			if (userSession.isExpiringBatch(bq.getBatch())) {
+				MedicineNode node = root.findMedicineNode(bq.getSource(), bq.getBatch().getMedicine());
+				if ((node != null) && (node.getItem() != null))  //AK maybe null
+					((MedicineInfo)node.getItem()).setHasBatchExpiring(true);
+			}
+			
 		}
 
 		loadLastMovement(userSession.getTbunit());
@@ -158,6 +166,7 @@ public class InventoryReport {
 		private Date stockOutDate;
 		private Date nextOrderDate;
 		private boolean hasBatchExpired;
+		private boolean hasBatchExpiring;
 
 		public MedicineInfo(MedicineNode node, StockPosition stockPosition) {
 			this.stockPosition = stockPosition;
@@ -299,6 +308,21 @@ public class InventoryReport {
 		public void setHasBatchExpired(boolean hasBatchExpired) {
 			this.hasBatchExpired = hasBatchExpired;
 		}
+
+		/**
+		 * @return the hasBatchExpiring
+		 */
+		public boolean isHasBatchExpiring() {
+			return hasBatchExpiring;
+		}
+
+		/**
+		 * @param hasBatchExpiring the hasBatchExpiring to set
+		 */
+		public void setHasBatchExpiring(boolean hasBatchExpiring) {
+			this.hasBatchExpiring = hasBatchExpiring;
+		}
+		
 	}
 
 

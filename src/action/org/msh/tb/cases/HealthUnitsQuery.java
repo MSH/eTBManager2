@@ -216,10 +216,12 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 		for (HealthUnitInfo info: getResultList()) {
 			AdminUnitGroup<HealthUnitInfo> adminUnitGroup = findAdminUnitGroup(info.getAdminUnitCode());
 			adminUnitGroup.getItems().add(info);
+			
 			if(adminUnitGroup.getCasesOnTreatment() == null)
 				adminUnitGroup.setCasesOnTreatment(new Long(0));
-			if(info.getCasesNotifs() != null)
-				adminUnitGroup.setCasesOnTreatment(adminUnitGroup.getCasesOnTreatment() + info.getCasesNotifs());
+			
+			if(info.getCasesOnTreatment() != null)
+				adminUnitGroup.setCasesOnTreatment(adminUnitGroup.getCasesOnTreatment() + info.getCasesOnTreatment());
 		}
 	}
 	
