@@ -9,9 +9,11 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
+import org.msh.tb.entities.UserWorkspace;
 
 @Name("userAZControl")
 public class UserAZControl{
@@ -31,5 +33,12 @@ public class UserAZControl{
 		if (messages == null)
 			messages = Messages.instance();
 		return messages;
+	}
+	
+	public boolean canViewJusticeFields(){
+		UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
+		if (userWorkspace.getHealthSystem()==null) return true;
+		if (userWorkspace.getHealthSystem().getId()!=903) return true;
+		return false;
 	}
 }

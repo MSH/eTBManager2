@@ -63,49 +63,62 @@
 								</ui:fragment>
 								</th>
 							<th class="searchtitle">
-								<div style="padding: 4px;">
-									<a:commandLink value="#{messages['CaseClassification']}"
-										onclick="changeOrder(2);return false;" />
-									<br /> 
+							<h:outputText value="#{messages['cases.patientdata']}"/>
+									
+							<br/>
+								<div style="padding: 4px; font-size:10px;">
+									
 									<a:commandLink value="#{messages['Patient.name']}"
 										onclick="changeOrder(3);return false;" />
 									<br />
 									#{messages['az_EIDSS_Year_Of_Birth']}<br/>
 									<a:commandLink value="#{messages['TbCase.patientAge']}"
 										onclick="changeOrder(4);return false;" />
-										
-								</div></th>
-							<th class="searchtitle"><ui:fragment
-									rendered='#{!casesAZ.notBindedEIDSS}'>
-									<div style="padding: 4px;">
-										<a:commandLink value="#{messages['TbCase.notificationUnit']}"
-											onclick="changeOrder(5);return false;" />
-										<br /> <br />
-										<a:commandLink value="#{levelInfo.nameLevel1}"
+										<br/>
+									<a:commandLink value="#{levelInfo.nameLevel1}"
 											onclick="changeOrder(6);return false;" />
 										-
 										<a:commandLink value="#{levelInfo.nameLevel2}"
 											onclick="changeOrder(7);return false;" />
-										(#{messages['Address']}) <br /> <br />
-										<a:commandLink value="#{messages['CaseState']}"
-											onclick="changeOrder(8);return false;" />
-									</div>
-								</ui:fragment> <ui:fragment rendered='#{casesAZ.notBindedEIDSS}'>
-									<div style="padding: 4px;"><b>#{messages['az_EIDSS_Note']}</b></div>
-									<div style="padding: 4px;"><b>#{messages['az_EIDSS_Notify_LPU']}/</b></div>
-									<div style="padding: 4px;"><b>#{messages['az_EIDSS_Address']}</b>
-									</div>
-								</ui:fragment></th>
-							<th class="searchtitle"><ui:fragment
+										(#{messages['Address']}) 
+								</div></th>
+							<s:fragment>
+								<th class="searchtitle">
+								<ui:fragment
+										rendered='#{!casesAZ.notBindedEIDSS}'>
+										<h:outputText value="#{messages['ExportContent.CASEDATA']}"/>
+										<div style="padding: 4px; font-size:10px;">
+											<a:commandLink value="#{messages['CaseClassification']}"
+												onclick="changeOrder(2);return false;" />
+											<br /> 
+											<a:commandLink
+												value="#{messages['cases.casesearching.treatlen']}"
+												onclick="changeOrder(10);return false;" />
+											<br />
+											<a:commandLink value="#{messages['TbCase.notificationUnit']}"
+												onclick="changeOrder(5);return false;" />
+											<br /> 
+											
+											<a:commandLink value="#{messages['CaseState']}"
+												onclick="changeOrder(8);return false;" />
+										</div>
+									</ui:fragment> <ui:fragment rendered='#{casesAZ.notBindedEIDSS}'>
+										<div style="padding: 4px;"><b>#{messages['az_EIDSS_Note']}</b></div>
+										<div style="padding: 4px;"><b>#{messages['az_EIDSS_Notify_LPU']}/</b></div>
+										<div style="padding: 4px;"><b>#{messages['az_EIDSS_Address']}</b>
+										</div>
+									</ui:fragment></th>
+							</s:fragment>
+							<th class="searchtitle">
+								<h:outputText value="#{messages['TbCase.eidsscomment']}"/>
+								 <!-- 
+								<ui:fragment
 									rendered='#{!casesAZ.notBindedEIDSS}'>
+									
 									<div style="padding: 4px;">
 										<a:commandLink value="#{messages['TbCase.registrationDate']}"
 											onclick="changeOrder(9);return false;" />
-										<br /> <br />
-										<a:commandLink
-											value="#{messages['cases.casesearching.treatlen']}"
-											onclick="changeOrder(10);return false;" />
-										<br /> <br />
+										<br /> 
 										<a:commandLink value="#{messages['ValidationState']}"
 											onclick="changeOrder(11);return false;" />
 									</div>
@@ -114,7 +127,9 @@
 										<a:commandLink value="#{messages['az_EIDSS_REGDATE']}"
 											onclick="changeOrder(9);return false;" />
 									</div>
-								</ui:fragment></th>
+								</ui:fragment>
+								 --> 
+								</th>
 						</tr>
 						<ui:repeat value="#{casesAZ.resultList}" var="it">
 							<tr>
@@ -127,41 +142,55 @@
 										style="float:none">
 										<f:param name="id" value="#{it.tbcase.id}" />
 									</s:link></td>
-								<td><b>#{messages[it.tbcase.classification.key]}</b>
-									<div style="padding-top: 6px; clear: left;">
-										#{caseAZHome.getRightPatientName(it.tbcase)} <br />
-										#{messages['az_EIDSS_Year_Of_Birth']} : #{caseAZHome.getYearOfBirth(it.tbcase)}<br/>
-										#{messages['az_EIDSS_Age']} : #{it.tbcase.age}
-									</div></td>
-								<td>
-								   <ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
-								     <b>#{it.tbcase.ownerUnit.name}</b><br /> 
-									 <h:outputText
-										value="#{it.adminUnitDisplay}" style="font-size:10px;" />
-									  <div style="padding-top: 6px; clear: left;">
-										<h:outputText value="#{messages[it.tbcase.state.key]}"
-											style="color:#8DA48F;font-weight:bold;" />
-									</div>
-									</ui:fragment>
-									<ui:fragment rendered='#{casesAZ.notBindedEIDSS}'>
-										<h:outputText value="#{it.tbcase.registrationCode}"
-											style="color:#8DA48F;font-weight:bold;" />
-									</ui:fragment>
-								</td>
-								<td style="border-left: 1px solid #E0E0E0;"><h:outputText
-										value="#{it.tbcase.registrationDate}" converter="localeDateConverter" />
-									<ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>	
-									<h:outputText value="#{it.tbcase.treatmentPeriod}"
-										converter="periodConverter"
-										rendered="#{it.tbcase.treatmentPeriod.iniDate!=null}"
-										style="padding-top:6px;display:block;">
-										<f:param name="type" value="length" />
-									</h:outputText> <h:outputText value="#{messages['cases.details.notreatment']}"
-										rendered="#{it.tbcase.treatmentPeriod.iniDate==null}"
-										style="padding-top:6px;display:block;" /> <h:outputText
-										value="#{messages[it.tbcase.validationState.key]}"
-										style="color:#8DA48F;font-weight:bold;padding-top:6px;display:block;" />
+								<td style="color:#069;">
+										<b>#{caseAZHome.getRightPatientName(it.tbcase)}</b><br/>
+										#{caseAZHome.getYearOfBirth(it.tbcase)} #{messages['az_EIDSS_Year_Of_Birth']} (<h:outputText value="#{it.patient.birthDate}" converter="localeDateConverter"/>), #{it.tbcase.age} #{messages['az_EIDSS_Age']}<br/>
+										<ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
+										<div style="padding-top: 6px;padding-bottom: 6px;">
+										<sub>#{messages['Address.regist']}:</sub><br/>
+										<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).notifAddress.address} #{caseAZHome.reGetTbCase(it.tbcase).notifAddress.complement}" style="padding-left: 10px;" /> <br/>
+										<sub>#{messages['Address.live']}:</sub><br/>
+										<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).currentAddress.address} #{caseAZHome.reGetTbCase(it.tbcase).currentAddress.complement}" style="padding-left: 10px;" />
+										</div>	
 										</ui:fragment>
+										#{messages['az_AZ.case.unicalID']}:
+										<b>#{caseAZHome.reGetTbCase(it.tbcase).unicalID!=null ? caseAZHome.reGetTbCase(it.tbcase).unicalID : 'XXXXXXXX'}</b>
+								</td>
+								<s:fragment>
+									<td>
+									   <ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
+									     <b>#{messages[caseAZHome.reGetTbCase(it.tbcase).classification.key]} -  <h:outputText value=" #{messages[caseAZHome.reGetTbCase(it.tbcase).state.key]}"
+												style="color:SaddleBrown;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).state != 'ONTREATMENT'}"/>
+											<s:fragment rendered="#{caseAZHome.reGetTbCase(it.tbcase).state == 'ONTREATMENT'}">
+											<h:outputText value=" #{messages['CaseState.ONTREATMENT']} #{messages['from']} " style="color:SaddleBrown;"/>
+											
+											<h:outputText value="#{caseAZHome.verifyDateIniTreat(it.tbcase)}"
+												style="color:SaddleBrown;" escape="false"/>
+												
+											</s:fragment>
+										 </b>
+									     <br/>
+									     #{messages['PatientType']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).patientType.key]} <br/>
+									     <h:outputText value="#{messages['TbCase.diagnosisDate']}: "/><h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).diagnosisDate}" converter="localeDateConverter"/> <br/>
+									     #{messages['User.state']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).diagnosisType.key]}<br/>
+									     #{messages['DiagnosisType']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).infectionSite.key]}<br/>
+									     <b>#{it.tbcase.ownerUnit.name}</b><br /> 
+										 <h:outputText
+											value="#{it.adminUnitDisplay}" style="font-size:10px;" />
+										<br/>
+										 <h:outputText value="#{messages['Accept']} XX.XX.XXXX" style="color:Firebrick;" />
+										<br/>
+										  <h:outputText style="color:gray;" 
+											value="#{messages['TbCase.referToOtherTBUnit']}  #{messages[caseAZHome.reGetTbCase(it.tbcase).referToOtherTBUnit?'global.no':'global.yes']}"/>
+										</ui:fragment>
+										<ui:fragment rendered='#{casesAZ.notBindedEIDSS}'>
+											<h:outputText value="#{it.tbcase.registrationCode}"
+												style="color:#8DA48F;font-weight:bold;" />
+										</ui:fragment>
+									</td>
+								</s:fragment>
+								<td style="border-left: 1px solid #E0E0E0;color:#45793D;">
+									<h:outputText value="#{caseAZHome.getEIDSSBlock(it.tbcase)}" escape="false"/>
 								</td>
 							</tr>
 						</ui:repeat>

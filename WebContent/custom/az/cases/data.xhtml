@@ -7,6 +7,10 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 <ui:param name="labelstyle" value="text-align:left;width:200px;" />
+	<s:link view="/custom/az/cases/caseedt.xhtml" style="margin-bottom:-7px;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
+		<f:param name="id" value="#{caseHome.id}" />
+		<span>#{messages['form.edit']}</span>
+	</s:link>
 	<div class="form1">
 	<s:fragment rendered="#{caseAZHome.canEditCloseCaseData}">
 	<div class="form-content">                 
@@ -32,34 +36,31 @@
 	</div>
 	</s:fragment>
 	<div class="form-content">                 
-	<s:link view="/custom/az/cases/caseedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
-		<f:param name="id" value="#{caseHome.id}" />
-		<span>#{messages['form.edit']}</span>
-	</s:link>
+	
 	<h2>#{messages['cases.patientdata']}</h2>
-
+	<div style="position:absolute; width:330px; left:440px;">
+		<table style="border: 1px solid #FFFFFF;">
+		<tr>
+		<th bgcolor="#afcfc1" style="color:#FFFFFF;">
+		#{messages['TbCase.eidsscomment']}
+		</th>
+		</tr>
+		<tr>
+			<td>
+				<h:outputText value="#{caseAZHome.getEIDSSBlock(tbcase)}" escape="false" style="color:#45793D;"/>
+			</td>
+		</tr>
+		</table>
+	</div>
 	<table style="border-collapse:collapse;width:100%;" >
 	<tr>
-		<td colspan="2"> 
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.EIDSSComment!=NULL}">
-	    	<h2><ui:define name="label">#{messages['TbCase.eidsscomment']}:</ui:define>
-	    	#{caseAZHome.notifEIDSS} <br/> 	#{caseAZHome.addrEIDSS}
-		 <br/> 
-			#{messages['TbCase.eidssid']}: #{tbcase.legacyId}
-			</h2>
+	<td>
+		<s:decorate template="/layout/display.xhtml">
+	    	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
+			#{tbcase.patient.securityNumber}
 		</s:decorate>
-		</td>
-		</tr>
-	
-	
+	</td></tr>
 	<tr><td>
-	
-	<s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
-		#{tbcase.patient.securityNumber}
-	</s:decorate>
-	
-	</td><td>
 	
 	<s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['Gender']}:</ui:define>
@@ -75,7 +76,8 @@
     	<h:outputText id="dt" value="#{tbcase.patient.birthDate}" converter="localeDateConverter"/>
 	</s:decorate>
 	
-	</td><td>
+	</td></tr>
+	<tr><td>
 	
 	<s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['TbCase.patientAge']}:</ui:define>
@@ -158,7 +160,7 @@
 		    </s:decorate>
 		</td>
 	</tr>
-	<tr><td>
+	<s:fragment rendered="#{userAZControl.canViewJusticeFields()}">
     <tr><td>
     	<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">#{messages['az_AZ.case.numberOfImprisonments']}:</ui:define>
@@ -179,7 +181,7 @@
     		<h:outputText value="#{tbcase.doctor}"/> 
     	</s:decorate>
     </td></tr>
-	</td></tr>
+	</s:fragment>
 	</table>
 	</div>
 		
