@@ -4,7 +4,7 @@
  <restrict>#{userSession.canEditCases}</restrict>
  <begin-conversation join="true"/>
  <param converterId="javax.faces.Integer" name="id" value="#{caseHome.id}"/>
- <param converterId="javax.faces.Integer" name="examid" value="#{examMicroscopyHome.idWithLog}"/>
+ <param converterId="javax.faces.Integer" name="examid" value="#{examMicroscopyAZHome.idWithLog}"/>
  <navigation>
   <rule if="#{not caseHome.managed}">
    <end-conversation/>
