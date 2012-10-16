@@ -8,6 +8,7 @@
 
 <script src="#{request.contextPath}/js/jquery.overlabel.js" type="text/javascript" />
 <script src="#{request.contextPath}/js/jquery.keyfilter.js" type="text/javascript" />
+<script src="#{request.contextPath}/custom/az/js/patientname.js" type="text/javascript" />
 
     <div id="pacname" class="prop">
                 
@@ -44,21 +45,21 @@
 				<s:decorate styleClass="label">
 					#{messages['Patient.firstname']}
 					<br/>
-					<h:inputText id="name" value="#{patientdata.name}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}"/>
-					<s:message styleClass="error"/>
+					<h:inputText id="name" value="#{patientdata.name}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}" onkeyup="this.value = handleNameChange(this.value)"/>
+					<s:message styleClass="error"/>	
 				</s:decorate>
 				
 				<s:decorate styleClass="label">
 					#{messages['Patient.middleName']}
 					<br/>			
-					<h:inputText id="midname" value="#{patientdata.middleName}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}"/>
+					<h:inputText id="midname" value="#{patientdata.middleName}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}" onkeyup="this.value = handleNameChange(this.value)"/>
 					<s:message styleClass="error"/>
 				</s:decorate>
 				
 				<s:decorate styleClass="label">
 					#{messages['Patient.lastName']}
 					<br/>
-					<h:inputText id="lastname" value="#{patientdata.lastName}" class="mask-az" style="width:120px;" required="#{required}"/>
+					<h:inputText id="lastname" value="#{patientdata.lastName}" class="mask-az" style="width:120px;" required="#{required}" onkeyup="this.value = handleNameChange(this.value)"/>
 					<s:message styleClass="error"/>
 				</s:decorate>	
 			</s:validateAll>
@@ -69,21 +70,22 @@
 				<s:decorate styleClass="label">
 					#{messages['Patient.lastName']}
 					<br/>
-					<h:inputText id="lastname" value="#{patientdata.lastName}" class="mask-az" style="width:120px;" required="#{required}"/>
+					<h:inputText id="lastname" value="#{patientdata.lastName}" class="mask-az" style="width:120px;" required="#{required}" onkeyup="this.value = handleNameChange(this.value)"/>
 					<s:message styleClass="error"/>
+					
 				</s:decorate>
 				
 				<s:decorate styleClass="label">
 					#{messages['Patient.firstname']}
 					<br/>
-					<h:inputText id="name" value="#{patientdata.name}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}"/>
+					<h:inputText id="name" value="#{patientdata.name}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}" onkeyup="this.value = handleNameChange(this.value)"/>
 					<s:message styleClass="error"/>
 				</s:decorate>
 				
 				<s:decorate styleClass="label">
 					#{messages['Patient.middleName']}
 					<br/>			
-					<h:inputText id="midname" value="#{patientdata.middleName}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}"/>
+					<h:inputText id="midname" value="#{patientdata.middleName}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}" onkeyup="this.value = handleNameChange(this.value)"/>
 					<s:message styleClass="error"/>
 				</s:decorate>
 			</s:validateAll>
@@ -110,4 +112,20 @@
     </div>
 	<rich:jQuery selector="#pacname .label > label" query="labelOver('over');" />
     
+    <script type="text/javascript"><!--
+	
+	function handleNameChange(val) {
+		var newVal = "";
+		if (val.length>0)
+			newVal = val.substring(0,1).toLocaleUpperCase()+val.substring(1,val.length).toLocaleLowerCase();
+		while (newVal.search(/\-\-/)>-1)
+			newVal = newVal.replace(/\-\-/, "-");
+		/*if (newVal.search(/\-/)!=newVal.length){
+			var ind=newVal.search(/\-/)+1;
+			newVal = newVal.substring(0, ind)+newVal.substring(ind, ind+1).toLocaleUpperCase()+newVal.substring(ind+1, val.length);
+		}*/
+		return newVal;
+	}
+	
+	--></script>
 </ui:composition>
