@@ -184,6 +184,7 @@
 	    	<ui:param name="list" value="#{fieldsQuery.educationalDegree}" />
 	    </s:decorate>
     </td></tr>
+    <s:fragment rendered="#{userAZControl.canViewJusticeFields()}">
     <tr><td>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['az_AZ.case.numberOfImprisonments']}:</ui:define>
@@ -204,6 +205,7 @@
     		
     </td>
     </tr>
+    </s:fragment>
     <tr>
     <td>
     	<s:decorate template="/layout/edit.xhtml">
@@ -263,6 +265,7 @@
     	<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
     	<ui:param name="datefield" value="#{tbcase.registrationDate}" /> 
 		<ui:param name="required" value="true" />
+		<ui:param name="future" value="false" /> 
     </s:decorate>
     </div>
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChangeUAZ();})" />
@@ -275,6 +278,7 @@
     	</ui:define>
     	<ui:param name="required" value="#{tbcase.validated}" /> 
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
+    	<ui:param name="future" value="false" /> 
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
