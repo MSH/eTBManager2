@@ -6,8 +6,9 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-                
 <ui:param name="examXRayHome" value="#{examXRayAZHome}" />
+<ui:param name="examCultureHome" value="#{examCultureAZHome}" />
+<ui:param name="examMicroscopyHome" value="#{examMicroscopyAZHome}" />
 
 	<div class="spacer" />
 
@@ -82,7 +83,7 @@
 	<div class="spacer" />    
 
 	<h:panelGroup id="pnlmicroscopy">	
-		<s:link view="/cases/edtexammicroscopy.xhtml" 
+		<s:link view="/custom/az/cases/edtexammicroscopy.xhtml" 
 			style="float:right;" rendered="#{caseAZHome.canEditExams}"
 			styleClass="button-alt">
 			<f:param name="id" value="#{tbcase.id}"/>
@@ -100,7 +101,7 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
-				<s:link view="/cases/edtexammicroscopy.xhtml" propagation="none" enabled="#{caseAZHome.canEditExams}" >
+				<s:link view="/custom/az/cases/edtexammicroscopy.xhtml" propagation="none" enabled="#{caseAZHome.canEditExams}" >
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
@@ -155,7 +156,7 @@
 	<div class="spacer" />
 
 	<h:panelGroup id="pnlculture">	
-		<s:link view="/cases/edtexamculture.xhtml" 
+		<s:link view="/custom/az/cases/edtexamculture.xhtml" 
 			style="float:right;" rendered="#{caseAZHome.canEditExams}" styleClass="button-alt">
 			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
@@ -172,7 +173,7 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
-				<s:link view="/cases/edtexamculture.xhtml" propagation="none" enabled="#{caseAZHome.canEditExams}">
+				<s:link view="/custom/az/cases/edtexamculture.xhtml" propagation="none" enabled="#{caseAZHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
