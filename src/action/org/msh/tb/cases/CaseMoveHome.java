@@ -297,6 +297,7 @@ public class CaseMoveHome extends Controller {
 			tbunitselection = new TBUnitSelection(false, TBUnitFilter.HEALTH_UNITS);
 			tbunitselection.setApplyHealthSystemRestrictions(false);
 			tbunitselection.setHealthSystem(null);
+			tbunitselection.setIgnoreReadOnlyRule(true);
 		}
 		return tbunitselection;
 	}

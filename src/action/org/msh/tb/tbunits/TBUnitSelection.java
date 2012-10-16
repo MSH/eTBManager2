@@ -25,9 +25,11 @@ public class TBUnitSelection {
 		setApplyUserRestrictions(applyUserRestrictions);
 		setApplyHealthSystemRestrictions(true);
 		this.filter = filter;
+		ignoreReadOnlyRule = false;
 	}
 	
 	public TBUnitSelection() {
+		ignoreReadOnlyRule = false;
 	}
 
 
@@ -38,6 +40,7 @@ public class TBUnitSelection {
 	private TBUnitFilter filter;
 	private HealthSystem healthSystem;
 	private boolean applyHealthSystemRestrictions;
+	private boolean ignoreReadOnlyRule;
 	
 	private TbunitSelectionList options;
 
@@ -236,6 +239,9 @@ public class TBUnitSelection {
 	}
 	
 	public boolean isReadOnly() {
+		if(ignoreReadOnlyRule)
+			return false;
+		
 		UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
 		return (userWorkspace.getView() == UserView.TBUNIT);
 	}
@@ -259,6 +265,20 @@ public class TBUnitSelection {
 	 */
 	public boolean isApplyHealthSystemRestrictions() {
 		return applyHealthSystemRestrictions;
+	}
+
+	/**
+	 * @return the ignoreReadOnlyRule
+	 */
+	public boolean isIgnoreReadOnlyRule() {
+		return ignoreReadOnlyRule;
+	}
+
+	/**
+	 * @param ignoreReadOnlyRule the ignoreReadOnlyRule to set
+	 */
+	public void setIgnoreReadOnlyRule(boolean ignoreReadOnlyRule) {
+		this.ignoreReadOnlyRule = ignoreReadOnlyRule;
 	}
 
 	/**
