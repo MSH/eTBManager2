@@ -8,7 +8,9 @@ package org.msh.tb.entities.enums;
 public enum XRayEvolution {
 	IMPROVED,
 	PROGRESSED,
-	STABLE;
+	STABLE,
+	//====== ONLY FOR AZERBAIJAN ======
+	NA;
 
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
