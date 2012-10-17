@@ -509,7 +509,7 @@ function genderChange(cb) {
 		</s:fragment>
 		</h:panelGroup>
 
-    	<s:decorate template="/layout/edit.xhtml" >
+    	<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}" >
     	<ui:define name="label">#{messages['TbField.RESISTANCE_TYPES']}:</ui:define>
     	<h:selectOneMenu value="#{tbcase.tipoResistencia}" required="true">
     		<s:selectItems var="it" value="#{globalLists_br.tiposResistencia}" noSelectionLabel="-" label="#{it.message}"/>

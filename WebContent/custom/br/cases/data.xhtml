@@ -261,7 +261,7 @@
 		</table>
 		</s:fragment>
 
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.tipoResistencia}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.tipoResistencia and tbcase.classification=='DRTB'}">
 			<ui:define name="label">#{messages['TbField.RESISTANCE_TYPES']}:</ui:define>
 			#{messages[tbcase.tipoResistencia.message]}
 		</s:decorate>
