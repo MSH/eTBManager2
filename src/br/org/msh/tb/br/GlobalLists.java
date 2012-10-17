@@ -100,7 +100,6 @@ public class GlobalLists {
 	
 	private static final ClinicalEvolution clinicalEvolution[] = {
 		ClinicalEvolution.FAVORABLE,
-		ClinicalEvolution.UNCHANGED,
 		ClinicalEvolution.UNFAVORABLE,
 		ClinicalEvolution.FAILED
 		
