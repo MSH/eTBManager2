@@ -89,7 +89,8 @@
 	
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
-    		#{tbcase.currentAddress.address}
+    		<!-- #{tbcase.currentAddress.address} -->
+    		#{caseKHHome.currHouseNum} #{caseKHHome.currStreetNum} #{caseKHHome.currGroupNum} #{caseKHHome.currVillageName}
     		<br/>
     		#{tbcase.currentAddress.complement}
 		</s:decorate>
