@@ -1,8 +1,11 @@
-/**
+/****************************************************************
+ * 15-10-2012
+ * By A.M.
+ * 
  * ONLY FOR AZERBAIJAN
  * Extends tables examculture and exammicroscopy
  * Add new field to TbCaseAZ
- * */
+ ****************************************************************/
 
 CREATE  TABLE `etbmanager`.`examculture_az` (
   `id` INT(11) NOT NULL ,
