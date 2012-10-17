@@ -44,6 +44,11 @@ public class CaseKHHome{
 	private String groupNum = "";
 	private String villageName = "";
 	
+	private String currHouseNum = "";
+	private String currStreetNum = "";
+	private String currGroupNum = "";
+	private String currVillageName = "";
+	
 	/**
 	 * Return an instance of a {@link TbCaseKH} class
 	 * 
@@ -68,6 +73,12 @@ public class CaseKHHome{
 		Address address = new Address();
 		address.setAddress(completeAddress);
 		tbcase.setNotifAddress(address);
+		
+		String completeCurrAddress = currHouseNum+";".concat(currStreetNum)+";".concat(currGroupNum)+";".concat(currVillageName)+";";
+		Address addressCurr = new Address();
+		addressCurr.setAddress(completeCurrAddress);
+		tbcase.setCurrentAddress(addressCurr);
+		
 		String ret = caseEditingHome.saveNew();
 		saveMedicalExamination();
 		return ret;
@@ -85,6 +96,12 @@ public class CaseKHHome{
 		Address address = new Address();
 		address.setAddress(completeAddress);
 		tbcase.setNotifAddress(address);
+		
+		String completeCurrAddress = currHouseNum+";".concat(currStreetNum)+";".concat(currGroupNum)+";".concat(currVillageName)+";";
+		Address addressCurr = new Address();
+		addressCurr.setAddress(completeCurrAddress);
+		tbcase.setCurrentAddress(addressCurr);
+		
 		return caseEditingHome.saveEditing();
 	}
 
@@ -184,6 +201,76 @@ public class CaseKHHome{
 		TbCase tbcase = caseHome.getInstance();
 		String addr = tbcase.getNotifAddress().getAddress();
 		return addr;
+	}
+	
+	public String deConcatCurrAddr(){
+		TbCase tbcase = caseHome.getInstance();
+		String addr = tbcase.getCurrentAddress().getAddress();
+		return addr;
+	}
+
+	public String getCurrHouseNum() {
+		String addr = deConcatCurrAddr();
+		if(addr == null)
+			return currHouseNum;
+		else{
+		String delimiter = "\\;";
+		String temp[] = addr.split(delimiter);
+		setCurrHouseNum(temp[0]);
+		return currHouseNum;
+		}
+	}
+	
+	public void setCurrHouseNum(String currHouseNum) {
+		this.currHouseNum = currHouseNum;
+	}
+
+	public String getCurrStreetNum() {
+		String addr = deConcatCurrAddr();
+		if(addr == null)
+			return currStreetNum;
+		else{
+		String delimiter = "\\;";
+		String temp[] = addr.split(delimiter);
+		setCurrStreetNum(temp[1]);
+		return currStreetNum;
+		}
+	}
+	
+	public void setCurrStreetNum(String currStreetNum) {
+		this.currStreetNum = currStreetNum;
+	}
+
+	public String getCurrGroupNum() {
+		String addr = deConcatCurrAddr();
+		if(addr == null)
+			return currGroupNum;
+		else{
+		String delimiter = "\\;";
+		String temp[] = addr.split(delimiter);
+		setCurrGroupNum(temp[2]);
+		return currGroupNum;
+		}
+	}
+
+	public void setCurrGroupNum(String currGroupNum) {
+		this.currGroupNum = currGroupNum;
+	}
+
+	public String getCurrVillageName() {
+		String addr = deConcatCurrAddr();
+		if(addr == null)
+			return currVillageName;
+		else{
+		String delimiter = "\\;";
+		String temp[] = addr.split(delimiter);
+		setCurrVillageName(temp[3]);
+		return currVillageName;
+		}
+	}
+	
+	public void setCurrVillageName(String currVillageName) {
+		this.currVillageName = currVillageName;
 	}
 	
 }
