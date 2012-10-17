@@ -1,9 +1,0 @@
-$(document).ready(
-		function(){
-			$('.mask-az').bind('keypress', 
-					function(event){
-						alert("assdsd");
-						}
-					);
-					}
-		);
