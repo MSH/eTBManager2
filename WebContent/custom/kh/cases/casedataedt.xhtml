@@ -121,7 +121,29 @@
     	</s:decorate>
     	
     	<div id="curraddr" style="clear:both;">
+    	
     	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['Address.completeAddress1']}:</ui:define>
+    		<h:inputText value="#{caseKHHome.currHouseNum}" style="width:300px;" maxlength="200"/>
+    	</s:decorate>
+    	
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['Address.completeAddress2']}:</ui:define>
+    		<h:inputText value="#{caseKHHome.currStreetNum}" style="width:300px;" maxlength="200"/>
+    	</s:decorate>
+    	
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['Address.completeAddress3']}:</ui:define>
+    		<h:inputText value="#{caseKHHome.currGroupNum}" style="width:300px;" maxlength="200"/>
+    	</s:decorate>
+    
+     
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['Address.completeAddress4']}:</ui:define>
+    		<h:inputText value="#{caseKHHome.currVillageName}" style="width:300px;" required="true" maxlength="200"/>
+    	</s:decorate>
+    	
+    	<!-- <s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['cases.details.addresscurr']}:</ui:define>
     		<h:inputTextarea value="#{tbcase.currentAddress.address}" style="width:300px;height:100px;margin-bottom:2px;" maxlength="100"/><br/>
     	</s:decorate>
@@ -129,13 +151,13 @@
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['Address.zipCode']}</ui:define>
     		<h:inputText value="#{tbcase.currentAddress.zipCode}" maxlength="20" />
-    	</s:decorate>
+    	</s:decorate> -->
     	
     	<table width="100%" style="border-collapse: collapse;">
 		<tr><td>
 			<s:decorate template="/layout/auselection.xhtml">
 				<ui:param name="auselection" value="#{caseEditingHome.currentAdminUnit}" />
-				<ui:param name="required" value="false" />
+				<ui:param name="required" value="true" />
 			</s:decorate>
     	</td></tr>
     	</table>
