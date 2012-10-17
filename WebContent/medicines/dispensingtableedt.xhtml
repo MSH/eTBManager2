@@ -41,7 +41,8 @@
 		<tr>
 			<s:fragment rendered="#{not row.spanned}">
 			<td rowspan="#{row.rowSpan}">
-				#{row.medicine}
+				<h:outputText value="#{row.medicine}" rendered="#{not caseDispensingUIHome.isPrescribed(row.batch.medicine)}"/>
+				<h:outputText value="#{row.medicine}" style="font-weight:bold" rendered="#{caseDispensingUIHome.isPrescribed(row.batch.medicine)}"/>
 				<h:outputText value="#{row.errorMessage}" rendered="#{not empty row.errorMessage}" styleClass="error"/>
 			</td>
 			</s:fragment>
@@ -77,7 +78,8 @@
 		<tr>
 			<s:fragment rendered="#{not row.spanned}">
 			<td rowspan="#{row.rowSpan}">
-				#{row.medicine}
+				<h:outputText value="#{row.medicine}" rendered="#{not caseDispensingUIHome.isPrescribed(row.batch.medicine)}"/>
+				<h:outputText value="#{row.medicine}" style="font-weight:bold" rendered="#{caseDispensingUIHome.isPrescribed(row.batch.medicine)}"/>
 				<h:outputText value="#{row.errorMessage}" rendered="#{not empty row.errorMessage}" styleClass="error"/>
 			</td>
 			</s:fragment>
@@ -114,7 +116,8 @@
 		<tr>
 			<s:fragment rendered="#{not row.spanned}">
 			<td rowspan="#{row.rowSpan}">
-				#{row.medicine}
+				<h:outputText value="#{row.medicine}" rendered="#{not caseDispensingUIHome.isPrescribed(row.batch.medicine)}"/>
+				<h:outputText value="#{row.medicine}" style="font-weight:bold" rendered="#{caseDispensingUIHome.isPrescribed(row.batch.medicine)}"/>
 				<h:outputText value="#{row.errorMessage}" rendered="#{not empty row.errorMessage}" styleClass="error"/>
 			</td>
 			</s:fragment>

@@ -12,10 +12,13 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.cases.treatment.PrescriptionTable;
 import org.msh.tb.entities.BatchQuantity;
+import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineDispensing;
 import org.msh.tb.entities.MedicineDispensingCase;
 import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.PrescribedMedicine;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.CaseState;
@@ -29,6 +32,7 @@ public class CaseDispensingUIHome extends AbstractDispensigUIHome {
 	@In(create=true) CaseHome caseHome;
 
 	private List<CaseInfo> cases;
+	private List<Medicine> prescribedMedicines;
 
 
 	/**
@@ -147,7 +151,34 @@ public class CaseDispensingUIHome extends AbstractDispensigUIHome {
 		}
 	}
 
-
+	public boolean isPrescribed(Object o){
+		Medicine m = null;
+		if(o instanceof Medicine)
+			m = (Medicine) o;
+		else 
+			return false;
+			
+		if(prescribedMedicines == null)
+			loadPrescibedMedicinesBasedOnCaseTreatment();
+		
+		return prescribedMedicines.contains(m);		
+	}
+	
+	private void loadPrescibedMedicinesBasedOnCaseTreatment(){
+		ArrayList<Medicine> ml = new ArrayList<Medicine>();
+		Date now = new Date();
+		
+		if(caseHome.getTbCase() != null){		
+			for(PrescribedMedicine pm : caseHome.getTbCase().getPrescribedMedicines()){
+				if(now.after(pm.getPeriod().getIniDate()) && now.before(pm.getPeriod().getEndDate())){
+					ml.add(pm.getMedicine());
+				}
+			}
+		}
+		
+		prescribedMedicines = ml;
+	}
+	
 	/**
 	 * Check if medicine is in the list of prescribed medicines
 	 * @param lst
