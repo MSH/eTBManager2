@@ -25,6 +25,9 @@
 	<s:link view="/management/prevalence.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}">
 	<div class="icon-report" style="float:left;"/>#{messages['manag.ind.prevalence']}
 	</s:link>
+	<s:link view="/management/suspectincidence.xhtml" rendered="true" >
+		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.suspectprevalence']}
+	</s:link>
 <!--  	<s:link value="#{messages['manag.ind.outcome']}" view="/management/outcome.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}"/>  --> 
   	<s:link view="/management/treatoutcome.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}">
   	<div class="icon-report" style="float:left;"/>#{messages['manag.ind.treatoutcome']}
