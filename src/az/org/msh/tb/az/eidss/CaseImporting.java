@@ -102,6 +102,8 @@ public  class CaseImporting {
 
 	private boolean UpdateCase(CaseInfo oneCase, TbCase c) {
 		c.setLegacyId(oneCase.getCaseID());
+		TbCaseAZ az = entityManager.find(TbCaseAZ.class, c.getId());
+		az.setInEIDSSDate(oneCase.getEnteringDate());
 		entityManager.persist(c);
 		return true;
 
@@ -194,6 +196,7 @@ public  class CaseImporting {
 		tbcase.setState(CaseState.WAITING_TREATMENT);
 		tbcase.setNotifAddressChanged(true);
 		tbcase.setEIDSSComment(oneCase.getAdditionalComment());
+		tbcase.setInEIDSSDate(oneCase.getEnteringDate());
 		beginTransaction();
 		entityManager.persist(p);
 		entityManager.persist(tbcase);

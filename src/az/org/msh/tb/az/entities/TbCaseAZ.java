@@ -1,5 +1,7 @@
 package org.msh.tb.az.entities;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -77,6 +79,11 @@ public class TbCaseAZ extends TbCase{
 	
 	private String unicalID;
 	
+	private Date systemDate;
+	
+	private Date inEIDSSDate;
+	
+	//===================GETTERS & SETTERS======================
 	/**
 	 * @return the maritalStatus
 	 */
@@ -245,5 +252,25 @@ public class TbCaseAZ extends TbCase{
 		this.unicalID = unicalID;
 	}
 
+	/**
+	 * @param systemDate the systemDate to set
+	 */
+	public void setSystemDate(Date systemDate) {
+		this.systemDate = systemDate;
+	}
 
+	/**
+	 * @return the systemDate
+	 */
+	public Date getSystemDate() {
+		return systemDate;
+	}
+	
+	public void setInEIDSSDate(Date inEIDSSDate) {
+		this.inEIDSSDate = inEIDSSDate;
+	}
+
+	public Date getInEIDSSDate() {
+		return inEIDSSDate;
+	}
 }
