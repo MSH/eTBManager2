@@ -27,8 +27,8 @@ import org.msh.utils.date.DateUtils;
 
 @Name("caseAZHome")
 public class CaseAZHome {
-	private String notifEIDSS="";
-	private String addrEIDSS="";
+//	private String notifEIDSS="";
+//	private String addrEIDSS="";
 	private boolean to3category;
 	private static final CaseState[] outcomes3cat = {
 		CaseState.CURED, 
@@ -153,8 +153,7 @@ public class CaseAZHome {
 	
 	public String getYearOfBirth(TbCase tbcase){
 		String res = "-";
-		EntityManager em = (EntityManager)Component.getInstance("entityManager", true);
-		TbCase tc = (TbCase) em.find(TbCase.class, tbcase.getId());
+		TbCaseAZ tc = reGetTbCase(tbcase);
 		if (tc.getPatient().getBirthDate()!=null)
 			res = Integer.toString(DateUtils.yearOf(tc.getPatient().getBirthDate()));
 		else{
@@ -225,10 +224,15 @@ public class CaseAZHome {
 				}
 			}
 			else
-				res += "XXXX " + getMessages().get("az_EIDSS_Year_Of_Birth") + " (XX.XX.XXXX), ";
+				/*if (existInImport(ec,4)){
+					int y = DateUtils.yearOf(new Date())-Integer.parseInt(ec[4]);
+					res += "\u2248"+y+" "+ getMessages().get("az_EIDSS_Year_Of_Birth.short")+ " (XX.XX."+y+"), ";
+				}
+				else*/
+					res += "XXXX " + getMessages().get("az_EIDSS_Year_Of_Birth.short") + " (XX.XX.XXXX), ";
 			
 			//====AGE====
-			res += (existInImport(ec,4)?ec[4]:"XX")+ " " + getMessages().get("az_EIDSS_Age")+"</br>";
+			res += (existInImport(ec,4)?ec[4]:"XX")+ " " + getMessages().get("az_EIDSS_years")+"</br>";
 			
 			//====NOTIFICATION ADRESS====
 			res += getMessages().get("Address.address")+" "+getMessages().get("excel.fromEIDSS")+": "+(existInImport(ec,1) ? ec[1] : "-")+"<br/>";
