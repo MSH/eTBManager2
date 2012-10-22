@@ -84,13 +84,15 @@ public class CaseExportAZ extends CaseExport {
 		excel.addTextFromResource("TbCase.ownerUnit", "title");
 		excel.addTextFromResource("TbCase.ownerUnitAdr", "title");
 		excel.addTextFromResource("excel.dateInEIDSS", "title");
-		excel.addText(getMessages().get("User.name")+" "+getMessages().get("Patient.lastName")+" "+getMessages().get("Patient.middleName")+" "+getMessages().get("excel.fromEIDSS"), "title");
-		excel.addText(getMessages().get("az_EIDSS_Notify_LPU")+" "+getMessages().get("excel.fromEIDSS"), "title");
+		excel.addText(getMessages().get("User.name")+" "+getMessages().get("excel.fromEIDSS"), "title");
+		excel.addText(getMessages().get("Patient.lastName")+" "+getMessages().get("excel.fromEIDSS"), "title");
+		excel.addText(getMessages().get("Patient.middleName")+" "+getMessages().get("excel.fromEIDSS"), "title");
+		excel.addText(getMessages().get("az_EIDSS_Notify_LPU"), "title");
 		excel.addText(getMessages().get("az_EIDSS_Address")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addTextFromResource("excel.dateRegAfterEIDSS", "title");
 		excel.addText(getMessages().get("az_EIDSS_Age")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addText(getMessages().get("Patient.birthDate")+" "+getMessages().get("excel.fromEIDSS"), "title");
-		//excel.addTextFromResource("TbCase.eidssid", "title");
+		excel.addTextFromResource("TbCase.eidssid", "title");
 		excel.addText(getMessages().get("az_AZ.case.unicalID")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addTextFromResource("excel.xray.presentation", "title");
 		excel.addTextFromResource("excel.xray.localization", "title");
@@ -125,6 +127,7 @@ public class CaseExportAZ extends CaseExport {
 		excel.addTextFromResource("cases.sideeffects", "title");
 		excel.addTextFromResource("excel.treat.alldays", "title");
 		excel.addTextFromResource("excel.treat.reldays", "title");
+		excel.addText("",null);
 	}
 	
 	@Override
@@ -200,14 +203,25 @@ public class CaseExportAZ extends CaseExport {
 				excel.addText(ei[2]);
 			}
 		}
-		else
+		else{
 			excel.addText("");
-		
-		excel.addText(ei.length>=4 ? ei[3] : ""); // name from EIDSS
+			excel.addText("");
+			excel.addText("");
+		}
+		// BEGIN name from EIDSS 
+		if (ei.length>=4){
+			String [] names = ei[3].split(" ");
+			excel.addText(names.length>=1 ? names[0]:"");
+			excel.addText(names.length>=2 ? names[1]:"");
+			excel.addText(names.length>=3 ? names[2]:"");
+		}
+		else
+			excel.addText(""); 
+		// END name from EIDSS 
 		excel.addText(ei[0]);
 		excel.addText(ei[1]);
-		excel.addText(""); //TODO дата приемки ТБ учреждением
-		//excel.addDate(tbcase.getRegistrationDate());
+		
+		excel.addDate(tbcase.getSystemDate());
 		
 		if (ei.length>=5)
 			excel.addNumber(Integer.parseInt(ei[4]));
@@ -225,7 +239,8 @@ public class CaseExportAZ extends CaseExport {
 		}
 		else
 			excel.addText("");
-		excel.addText(""); //TODO unicID
+		excel.addText(tbcase.getLegacyId());
+		excel.addText(tbcase.getUnicalID());
 		ExamXRay x = getFirstXRayExam(tbcase);
 		
 		if (x!=null){
@@ -366,7 +381,7 @@ public class CaseExportAZ extends CaseExport {
 	}
 	@Override
 	protected void createCases() {
-		setNewCasesOnly(true);
+		//setNewCasesOnly(true);
 		cases = createQuery().getResultList();
 	}
 	
@@ -377,6 +392,18 @@ public class CaseExportAZ extends CaseExport {
 	@Override
 	protected String getHQLSelect() {
 		return "select c";
+	}
+	
+	@Override
+	protected String getHQLJoin() {
+		return "join fetch c.patient p";
+	}
+	
+	@Override
+	protected String getHQLWhere() {
+		String w = super.getHQLWhere();
+		w = w.replace("c.notificationUnit.workspace", "p.workspace");
+		return w;
 	}
 	
 	@Override
