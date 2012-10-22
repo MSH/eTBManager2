@@ -144,7 +144,7 @@
 									</s:link></td>
 								<td style="color:#069;">
 										<b>#{caseAZHome.getRightPatientName(it.tbcase)}</b><br/>
-										#{caseAZHome.getYearOfBirth(it.tbcase)} #{messages['az_EIDSS_Year_Of_Birth']} (<h:outputText value="#{it.patient.birthDate}" converter="localeDateConverter"/>), #{it.tbcase.age} #{messages['az_EIDSS_Age']}<br/>
+										#{caseAZHome.getYearOfBirth(it.tbcase)} #{messages['az_EIDSS_Year_Of_Birth.short']} (<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).patient.birthDate}" converter="localeDateConverter"/>), #{caseAZHome.reGetTbCase(it.tbcase).age} #{messages['az_EIDSS_years']}<br/>
 										<ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
 										<div style="padding-top: 6px;padding-bottom: 6px;">
 										<sub>#{messages['Address.regist']}:</sub><br/>
@@ -158,7 +158,7 @@
 								</td>
 								<s:fragment>
 									<td>
-									   <ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
+									  
 									     <b>#{messages[caseAZHome.reGetTbCase(it.tbcase).classification.key]} -  <h:outputText value=" #{messages[caseAZHome.reGetTbCase(it.tbcase).state.key]}"
 												style="color:SaddleBrown;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).state != 'ONTREATMENT'}"/>
 											<s:fragment rendered="#{caseAZHome.reGetTbCase(it.tbcase).state == 'ONTREATMENT'}">
@@ -174,19 +174,18 @@
 									     <h:outputText value="#{messages['TbCase.diagnosisDate']}: "/><h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).diagnosisDate}" converter="localeDateConverter"/> <br/>
 									     #{messages['User.state']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).diagnosisType.key]}<br/>
 									     #{messages['DiagnosisType']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).infectionSite.key]}<br/>
-									     <b>#{it.tbcase.ownerUnit.name}</b><br /> 
+									     <b><h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).ownerUnit.name}" rendered="#{caseAZHome.reGetTbCase(it.tbcase).ownerUnit!=NULL}"/> </b><br /> 
 										 <h:outputText
 											value="#{it.adminUnitDisplay}" style="font-size:10px;" />
 										<br/>
-										 <h:outputText value="#{messages['Accept']} XX.XX.XXXX" style="color:Firebrick;" />
-										<br/>
+										<s:fragment rendered="#{caseAZHome.reGetTbCase(it.tbcase).EIDSSComment!=NULL}">
+										 <h:outputText value="#{messages['Accept']} #{caseAZHome.reGetTbCase(it.tbcase).systemDate==null?'XX.XX.XXXX':''}" style="color:Firebrick;" />
+										 <h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).systemDate}"  style="color:Firebrick;" converter="localeDateConverter" rendered="#{caseAZHome.reGetTbCase(it.tbcase).systemDate!=null}"/>
+										 <br/>
+										</s:fragment>
 										  <h:outputText style="color:gray;" 
 											value="#{messages['TbCase.referToOtherTBUnit']}  #{messages[caseAZHome.reGetTbCase(it.tbcase).referToOtherTBUnit?'global.no':'global.yes']}"/>
-										</ui:fragment>
-										<ui:fragment rendered='#{casesAZ.notBindedEIDSS}'>
-											<h:outputText value="#{it.tbcase.registrationCode}"
-												style="color:#8DA48F;font-weight:bold;" />
-										</ui:fragment>
+										
 									</td>
 								</s:fragment>
 								<td style="border-left: 1px solid #E0E0E0;color:#45793D;">
