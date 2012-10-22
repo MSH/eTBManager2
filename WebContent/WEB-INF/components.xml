@@ -56,12 +56,6 @@
    <persistence:entity-manager-factory name="mdrtbEntityManagerFactory" 
                       persistence-unit-name="mdrtb"/>
    
-<!-- 
-   <drools:rule-base name="securityRules">
-       <drools:rule-files><value>/security.drl</value></drools:rule-files>
-   </drools:rule-base>
- -->
-
    <security:identity authenticate-method="#{authenticator.authenticate}" remember-me="true" />
 
 	<component class="org.jboss.seam.web.MultipartFilter">
@@ -91,19 +85,6 @@
         <property name="errorPage">/pdfMissing.seam</property>
     </component>
 
-<!-- 	<pdf:key-store-config key-store="pdf.keystore"
-		key-store-password="storepass" key-password="keypass"
-		key-alias="pdfKey" />
- -->    
-
 	<international:locale-selector cookie-enabled="true"/>
 
-   <!-- For use with jBPM pageflow or process management -->
-   <!--  
-   <bpm:jbpm>
-      <bpm:process-definitions></bpm:process-definitions>
-      <bpm:pageflow-definitions></bpm:pageflow-definitions>
-   </bpm:jbpm>
-   -->
-   
 </components>

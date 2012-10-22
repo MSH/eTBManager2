@@ -62,7 +62,7 @@
 			</s:link>
 		</td>
 		<td align="right">
-			<h:outputText value="#{it.cases}" >
+			<h:outputText value="#{it.total}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
 		</td>
@@ -73,7 +73,7 @@
 			<b>#{messages['global.total']}</b>
 		</td>
 		<td align="right">
-			<b><h:outputText value="#{caseStateReport.total.cases}">
+			<b><h:outputText value="#{caseStateReport.total.total}">
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText></b>
 		</td>
@@ -97,7 +97,7 @@
 			</s:link>
 		</td>
 		<td align="right">
-			<h:outputText value="#{it.cases}" >
+			<h:outputText value="#{it.total}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
 		</td>
@@ -116,16 +116,16 @@
 	<ui:repeat value="#{caseStateReport.tags}" var="it">
 	<tr>
 		<td>
-			<div class="tag-#{it.tagType}-icon" />
+			<div class="tag-#{it.type}-icon" />
 			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" styleClass="link-small">
-				<f:param name="tag" value="#{it.stateIndex}"/>
+				<f:param name="tag" value="#{it.tagId}"/>
 				<f:param name="sc" value="#{'CASE_TAG'}"/>
 				<f:param name="stateIndex" />
 				<f:param name="vs" />
 			</s:link>
 		</td>
 		<td align="right">
-			<h:outputText value="#{it.cases}" >
+			<h:outputText value="#{it.total}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
 		</td>

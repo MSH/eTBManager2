@@ -13,6 +13,7 @@ import org.jboss.seam.annotations.Synchronized;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Workspace;
@@ -40,6 +41,20 @@ import org.msh.utils.date.DateUtils;
 @Synchronized(timeout=10000L)
 @BypassInterceptors
 public class CaseFilters {
+
+	// filters that may be applied to search for cases (int format to make it easier to extend)
+	public static final int SUSPECT_NOT_ON_TREATMENT = 100;
+	public static final int CONFIRMED_NOT_ON_TREATMENT = 101;
+	public static final int WAIT_FOR_TREATMENT = 102;
+	public static final int ON_TREATMENT = 103;
+	public static final int SUSPECT_ON_TREATMENT = 104;
+	public static final int CONFIRMED_ON_TREATMENT = 105;
+	public static final int TRANSFERRING = 106;
+	public static final int CLOSED = 107;
+	public static final int CLOSED_WITHOUT_TREATMENT = 108;
+	public static final int TRANSFER_IN = 109;
+	public static final int TRANSFER_OUT = 110;
+
 	
 	private Workspace defaultWorkspace;
 	
@@ -112,7 +127,7 @@ public class CaseFilters {
 	/**
 	 * Reinitialize the advanced filters
 	 */
-	protected void clearFilters() {
+	public void clearFilters() {
 		name = null;
 		middleName = null;
 		lastName = null;
@@ -160,35 +175,37 @@ public class CaseFilters {
 		
 		switch (searchCriteria) {
 			case CASE_STATE:
-				Integer si = stateIndex;
-//				CaseState st = caseState;
+				int sc = stateIndex;
 				clearFilters();
-				stateIndex = si;
-//				caseState = st;
+				stateIndex = sc;
 				break;
+
 			case PATIENT:
 				String s = patient;
 				clearFilters();
 				patient = s;
 				break;
+			
 			case VALIDATION_STATE:
 				ValidationState vs = validationState;
 				clearFilters();
 				validationState = vs;
 				break;
+			
 			case CASE_TAG:
 				Integer id = tagid;
 				clearFilters();
 				tagid = id;
 				break;
+			
 			case CUSTOM_FILTER:
 				patient = null;
-				//validationState = null;
 				stateIndex = null;
 				tagid = null;
 				break;
+
 			case CASE_UNIT_STATE:
-				Integer sii = stateIndex;
+				int sii = stateIndex;
 				Integer uId = unitId;
 				clearFilters();
 				setFilterHealthUnit(FilterHealthUnit.TREATMENT_UNIT);
@@ -611,20 +628,6 @@ public class CaseFilters {
 */
 
 	/**
-	 * @return the stateIndex
-	 */
-	public Integer getStateIndex() {
-		return stateIndex;
-	}
-
-	/**
-	 * @param stateIndex the stateIndex to set
-	 */
-	public void setStateIndex(Integer stateIndex) {
-		this.stateIndex = stateIndex;
-	}
-
-	/**
 	 * @return the validationState
 	 */
 	public ValidationState getValidationState() {
@@ -838,7 +841,25 @@ public class CaseFilters {
 	public void setBirthYear(Integer birthYear) {
 		this.birthYear = birthYear;
 	}
+
 	
-	
-	
+
+	public static CaseFilters instance() {
+		return (CaseFilters)App.getComponent("caseFilters");
+	}
+
+	/**
+	 * @return the stateIndex
+	 */
+	public Integer getStateIndex() {
+		return stateIndex;
+	}
+
+	/**
+	 * @param stateIndex the stateIndex to set
+	 */
+	public void setStateIndex(Integer stateIndex) {
+		this.stateIndex = stateIndex;
+	}
+
 }

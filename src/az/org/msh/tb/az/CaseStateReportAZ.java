@@ -12,6 +12,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.adminunits.AdminUnitGroup;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseStateReport;
 import org.msh.tb.cases.HealthUnitInfo;
 import org.msh.tb.cases.HealthUnitsQuery;
@@ -46,7 +47,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 	 * @return
 	 */
 	@Override
-	public List<Item> getItems() {
+	public List<CaseStateItem> getItems() {
 		if (items == null)
 			createItems();
 		if (itemsEIDSS == null)
@@ -61,7 +62,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 	public void createItems() {
 		messages = Messages.instance();
 
-		items = new ArrayList<Item>();
+		items = new ArrayList<CaseStateItem>();
 		setValidationItems(new ArrayList<ValidationItem>());
 
 		String aucond;
@@ -79,10 +80,9 @@ public class CaseStateReportAZ extends CaseStateReport{
 
 		String sql = generateSQL(aucond, cond, condByCase, hsID);
 
-		List<Object[]> lst = entityManager.createNativeQuery(sql).getResultList();
+		List<Object[]> lst = App.getEntityManager().createNativeQuery(sql).getResultList();
 
-		setTotal(new Item());
-		getTotal().setDescription(messages.get("global.total"));
+		setTotal(new Item(messages.get("global.total"), 0));
 
 		for (Object[] val: lst) {
 			int qty = ((BigInteger)val[3]).intValue();
@@ -99,36 +99,31 @@ public class CaseStateReportAZ extends CaseStateReport{
 
 			if (!ValidationState.VALIDATED.equals(vs)) {
 				ValidationItem valItem = findValidationItem(vs);
-				valItem.addCases(qty);
+				valItem.add(qty);
 			}
 		}
 
-		Collections.sort(items, new Comparator<Item>() {
+		Collections.sort(items, new Comparator<CaseStateItem>() {
 
-			public int compare(Item o1, Item o2) {
-				CaseState cs1 = o1.getState();
-				CaseState cs2 = o2.getState();
+			public int compare(CaseStateItem o1, CaseStateItem o2) {
+				Integer cs1 = o1.getStateIndex();
+				Integer cs2 = o2.getStateIndex();
 				if (cs1 == null)
 					return 1;
 				if (cs2 == null)
 					return -1;
 
-				if (cs1.ordinal() > cs2.ordinal())
-					return 1;
-				if (cs1.ordinal() < cs2.ordinal())
-					return -1;
-				return 0;
+				return cs1.compareTo(cs2);
 			}
 
 		});
 
 		//3rd category
-		Item it = new Item();
-		it.setDescription(messages.get("TbCase.toThirdCategory"));
 		String querySQL = getSQLSelect()+" where cAZ.toThirdCategory = 1";
-		BigInteger col3cat = (BigInteger) entityManager.createNativeQuery(querySQL).getSingleResult();
-		it.add(col3cat.intValue());
-		it.setStateIndex(thirdCat);
+		BigInteger col3cat = (BigInteger) App.getEntityManager().createNativeQuery(querySQL).getSingleResult();
+
+		CaseStateItem it = new CaseStateItem(messages.get("TbCase.toThirdCategory"), col3cat.intValue(), thirdCat);
+
 		getItems().add(it);
 	}
 
@@ -151,10 +146,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 		itemsEIDSS = new ArrayList<Item>();
 		BigInteger importedEmpty = getImportedNotBinded();
 		BigInteger importedBusy = getImportedBinded();
-		Item it = new Item();
-		it.setDescription(messages.get("az_EIDSS_Not_Binded"));
-		it.add(importedEmpty.intValue());
-		it.setStateIndex(EIDSS_NOT_BINDED);
+		CaseStateItem it = new CaseStateItem(messages.get("az_EIDSS_Not_Binded"), importedEmpty.longValue(), EIDSS_NOT_BINDED);
 		itemsEIDSS.add(it);
 		/*Item it1 = new Item();
 		it1.setDescription(messages.get("az_EIDSS_Binded"));
@@ -168,7 +160,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 	 */
 	private BigInteger getImportedBinded() {
 		String querySQL = getSQLSelect()+ " " + getSQLEIDSSOnly() + " and " + getSQLHasUnit();
-		return (BigInteger) entityManager.createNativeQuery(querySQL).getSingleResult();
+		return (BigInteger) App.getEntityManager().createNativeQuery(querySQL).getSingleResult();
 	}
 
 
@@ -179,7 +171,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 	 */
 	private BigInteger getImportedNotBinded() {
 		String querySQL = getSQLSelect()+" " + getSQLEIDSSOnly() + " and " + getSQLNoUNITS();
-		return (BigInteger) entityManager.createNativeQuery(querySQL).getSingleResult();
+		return (BigInteger) App.getEntityManager().createNativeQuery(querySQL).getSingleResult();
 	}
 	/**
 	 * no units in this case, so imported, but not used

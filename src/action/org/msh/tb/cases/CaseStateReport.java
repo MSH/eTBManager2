@@ -7,12 +7,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.international.Messages;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.Tag.TagType;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
@@ -25,32 +24,26 @@ import org.msh.tb.login.UserSession;
 import org.msh.tb.misc.GlobalLists;
 
 /**
- * Generate report by case state to be displayed in the main page
+ * Generate a simple consolidated report of number of cases split by different views (case state, validation state, tags)
  * @author Ricardo Memoria
  *
  */
 @Name("caseStateReport")
-public class CaseStateReport {
+@BypassInterceptors
+public class CaseStateReport  {
 
-	@In
-	protected EntityManager entityManager;
-	@In Workspace defaultWorkspace;
-	@In(create=true) UserSession userSession;
-	@In(create=true) UserWorkspace userWorkspace;
-	
-	
-	protected List<Item> items;
+	protected List<CaseStateItem> items;
 	private List<ValidationItem> validationItems;
 	private Item total;
 	protected Map<String, String> messages;
-	private List<Item> tags;
+	private List<TagItem> tags;
 
 
 	/**
 	 * Return list of consolidated values by case state
 	 * @return
 	 */
-	public List<Item> getItems() {
+	public List<CaseStateItem> getItems() {
 		if (items == null)
 			createItems();
 		return items;
@@ -63,11 +56,11 @@ public class CaseStateReport {
 	public void createItems() {
 		messages = Messages.instance();
 
-		items = new ArrayList<Item>();
+		items = new ArrayList<CaseStateItem>();
 		validationItems = new ArrayList<ValidationItem>();
 		
 		String aucond;
-		if (userWorkspace.getView() == UserView.ADMINUNIT)
+		if (App.getUserWorkspace().getView() == UserView.ADMINUNIT)
 			 aucond = "inner join administrativeunit a on a.id = u.adminunit_id ";
 		else aucond = "";
 
@@ -76,25 +69,11 @@ public class CaseStateReport {
 		String condByCase = generateSQLConditionByCase();
 
 		Integer hsID = null;
-		if (userWorkspace.getHealthSystem() != null)
-			hsID = userWorkspace.getHealthSystem().getId();
+		if (App.getUserWorkspace().getHealthSystem() != null)
+			hsID = App.getUserWorkspace().getHealthSystem().getId();
 		
-		/*String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
-				"from tbcase c " +
-				"inner join tbunit u on u.id = c.notification_unit_id " + aucond +
-				"where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
-				(hsID != null? "and u.healthSystem_id = " + hsID.toString(): "") +
-				" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
-				" group by c.state, c.validationState, c.diagnosisType " +
-				"union " +
-				"select c.state, c.validationState, 1, count(*) " +
-				"from tbcase c " +
-				"inner join tbunit u on u.id = c.owner_unit_id " + aucond + 
-				"where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " + 
-				" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
-				(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
-				" group by c.state, c.validationState";*/
-		
+		Workspace defaultWorkspace = App.getDefaultWorkspace();
+
 		String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
 		"from tbcase c " +
 		"inner join tbunit u on u.id = c.notification_unit_id " + aucond +
@@ -109,12 +88,11 @@ public class CaseStateReport {
 		"where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ")"+
 		" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
 		(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
-		" group by c.state, c.validationState";
+		" group by c.state, c.validationState, c.diagnosisType";
 		
-		List<Object[]> lst = entityManager.createNativeQuery(sql).getResultList();
+		List<Object[]> lst = App.getEntityManager().createNativeQuery(sql).getResultList();
 		
-		total = new Item();
-		total.setDescription(messages.get("global.total"));
+		total = new Item( messages.get("global.total"), 0);
 		
 		for (Object[] val: lst) {
 			int qty = ((BigInteger)val[3]).intValue();
@@ -131,27 +109,23 @@ public class CaseStateReport {
 			
 			if (!ValidationState.VALIDATED.equals(vs)) {
 				ValidationItem valItem = findValidationItem(vs);
-				valItem.addCases(qty);
+				valItem.add(qty);
 			}
 		}
 		
-		Collections.sort(items, new Comparator<Item>() {
+		Collections.sort(items, new Comparator<CaseStateItem>() {
 
-			public int compare(Item o1, Item o2) {
-				CaseState cs1 = o1.getState();
-				CaseState cs2 = o2.getState();
+			public int compare(CaseStateItem o1, CaseStateItem o2) {
+				Integer cs1 = o1.getStateIndex();
+				Integer cs2 = o2.getStateIndex();
 				if (cs1 == null)
 					return 1;
 				if (cs2 == null)
 					return -1;
-				
-				if (cs1.ordinal() > cs2.ordinal())
-					return 1;
-				if (cs1.ordinal() < cs2.ordinal())
-					return -1;
-				return 0;
+
+				return cs1.compareTo(cs2);
 			}
-			
+
 		});
 	}
 
@@ -161,10 +135,13 @@ public class CaseStateReport {
 	 * @return
 	 */
 	protected String generateSQLConditionByUserView() {
-		if (userWorkspace.getView() == null)
+		UserWorkspace userWorkspace = App.getUserWorkspace();
+		UserView view = userWorkspace.getView();
+
+		if (view == null)
 			return "";
 
-		switch (userWorkspace.getView()) {
+		switch (view) {
 		case ADMINUNIT: 
 			return " and (a.code like '" + userWorkspace.getAdminUnit().getCode() + "%')"; 
 		case TBUNIT: 
@@ -172,7 +149,8 @@ public class CaseStateReport {
 		default: return "";
 		}
 	}
-	
+
+
 	/**
 	 * Generate SQL condition to filter cases
 	 * @return SQL condition to be used in a where clause
@@ -183,7 +161,7 @@ public class CaseStateReport {
 		String caseCondition = "";
 
 		for (CaseClassification cla: classifs) {
-			boolean hasClassif = userSession.isCanOpenCaseByClassification(cla);
+			boolean hasClassif = UserSession.instance().isCanOpenCaseByClassification(cla);
 			if (hasClassif) {
 				if (!caseCondition.isEmpty())
 					caseCondition += ",";
@@ -211,15 +189,14 @@ public class CaseStateReport {
 			caseCondition = " and (c.classification = " + CaseClassification.DRTB.ordinal() + ")";
 		
 		return caseCondition;
-*/
-	}
+*/	}
 
 	
 	/**
 	 * Return report by tags
 	 * @return
 	 */
-	public List<Item> getTags() {
+	public List<TagItem> getTags() {
 		if (tags == null)
 			createTagsReport();
 		return tags;
@@ -233,7 +210,7 @@ public class CaseStateReport {
 		Workspace workspace = (Workspace)Component.getInstance("defaultWorkspace");
 
 		String s;
-		switch (userWorkspace.getView()) {
+		switch (App.getUserWorkspace().getView()) {
 		case TBUNIT: s = "inner join tbcase c on c.id=tc.case_id inner join tbunit u on u.id = c.owner_unit_id ";
 			break;
 		case ADMINUNIT: s = "inner join tbcase c on c.id=tc.case_id inner join tbunit u on u.id = c.owner_unit_id inner join administrativeunit a on a.id = u.adminunit_id";
@@ -249,24 +226,22 @@ public class CaseStateReport {
 			generateSQLConditionByUserView() + 
 			" group by t.id, t.tag_name order by t.tag_name";
 		
-		List<Object[]> lst = entityManager.createNativeQuery(sql)
+		List<Object[]> lst = App.getEntityManager().createNativeQuery(sql)
 				.setParameter("id", workspace.getId())
 				.getResultList();
 
-		tags = new ArrayList<Item>();
+		tags = new ArrayList<TagItem>();
 		for (Object[] vals: lst) {
-			Item item = new Item();
-			item.setStateIndex((Integer)vals[0]);
-			item.setDescription(vals[1].toString());
+			TagType type = null;
 			if ((Integer)vals[2] == 1) 
-				item.setTagType(TagType.MANUAL);
+				type = TagType.MANUAL;
 			else {
 				if ((Boolean)vals[3] == Boolean.TRUE)
-					 item.setTagType(TagType.AUTOGEN_CONSISTENCY);
-				else item.setTagType(TagType.AUTOGEN);
+					 type = TagType.AUTOGEN_CONSISTENCY;
+				else type = TagType.AUTOGEN;
 			}
-			item.setCases(((BigInteger)vals[4]).intValue());
-			tags.add(item);
+
+			tags.add(new TagItem(vals[1].toString(), ((BigInteger)vals[4]).longValue(), type, (Integer)vals[0]));
 		}
 	}
 	
@@ -283,8 +258,7 @@ public class CaseStateReport {
 			}
 		}
 		
-		ValidationItem item = new ValidationItem();
-		item.setValidationState(state);
+		ValidationItem item = new ValidationItem( Messages.instance().get(state.getKey()), 0, state );
 		validationItems.add(item);
 		return item;
 	}
@@ -296,55 +270,53 @@ public class CaseStateReport {
 	 * @return
 	 */
 	protected Item findItem(CaseState state, DiagnosisType diagType) {
-		int stateIndex = state.ordinal();
+		Integer sc = null;
 		String desc = null;
 		
 		if (state.ordinal() >= CaseState.CURED.ordinal()) {
-			stateIndex = 100;
+			sc = CaseFilters.CLOSED;
 			desc = messages.get("cases.closed");
 		}
 		else
 		if ((state == CaseState.WAITING_TREATMENT) && (diagType == DiagnosisType.SUSPECT)) {
-			stateIndex = 200;
+			sc = CaseFilters.SUSPECT_NOT_ON_TREATMENT; //stateIndex = 200; 
 			desc = messages.get("CaseState.NOT_ON_TREATMENT");
 		}
 		//VR: additional registered-cases categories
 		else
 			if((state == CaseState.ONTREATMENT) && (diagType == DiagnosisType.SUSPECT)){
-				stateIndex = 300;
+				sc = CaseFilters.SUSPECT_ON_TREATMENT;  //stateIndex = 300;
 				desc = messages.get("cases.suspectOnTreatment");
 			}
 		else
 			if ((state == CaseState.ONTREATMENT) && (diagType == DiagnosisType.CONFIRMED)){
-				stateIndex = 400;	
+				sc = CaseFilters.CONFIRMED_ON_TREATMENT; //stateIndex = 400;	
 				desc = messages.get("cases.confirmedOnTreatment");
 				}
 		else
 			if ((state == CaseState.WAITING_TREATMENT) && (diagType == DiagnosisType.CONFIRMED)){
-				stateIndex = 500;	
+				sc = CaseFilters.CONFIRMED_NOT_ON_TREATMENT; //stateIndex = 500;	
 				desc = messages.get("cases.confirmedNotOnTreatment");
 				}
 		else
-			if (state == CaseState.TRANSFERRED_OUT){
-				stateIndex = 600;	
-				desc = messages.get("CaseState.TRANSFERRING");
-					}
-		// END
-		else {
-			desc = messages.get(state.getKey());
-			stateIndex = state.ordinal();
-		}
+			if (state == CaseState.TRANSFERRING) {
+				sc = CaseFilters.TRANSFERRING;
+				desc = messages.get(CaseState.TRANSFERRING.getKey());
+			}
+			else {
+				sc = state.ordinal();
+				desc = messages.get(state.getKey());
+			}
 
-		for (Item item: items) {
-			if (item.getStateIndex() == stateIndex)
+		if (sc == null) 
+			return null; 
+		
+		for (CaseStateItem item: items) {
+			if (item.getStateIndex() == sc)
 				return item;
 		}
 		
-		Item item = new Item();
-		item.setState(state);
-		item.setDescription(desc);
-		item.setStateIndex(stateIndex);
-		
+		CaseStateItem item = new CaseStateItem(desc, 0, sc);
 		items.add(item);
 		
 		return item;
@@ -370,48 +342,24 @@ public class CaseStateReport {
 		return validationItems;
 	}
 	
-
+	
 	/**
-	 * Store consolidated information about cases under validation
-	 * @author Ricardo Memoria
-	 *
-	 */
-	public class ValidationItem {
-		private ValidationState validationState;
-		private long cases;
-
-		public ValidationState getValidationState() {
-			return validationState;
-		}
-		public void setValidationState(ValidationState validationState) {
-			this.validationState = validationState;
-		}
-		public long getCases() {
-			return cases;
-		}
-		public void setCases(long cases) {
-			this.cases = cases;
-		}
-		public void addCases(long num) {
-			cases += num;
-		}
-	}
-
-
-	/**
-	 * Store consolidated information about a case state
+	 * Store total quantity of cases by an specific indicator
 	 * @author Ricardo Memoria
 	 *
 	 */
 	public class Item {
 		private String description;
-		private CaseState state;
-		private int cases;
-		private int stateIndex;
-		private TagType tagType;
+		private long total;
+
+		public Item(String description, long total) {
+			super();
+			this.description = description;
+			this.total = total;
+		}
 
 		public void add(int val) {
-			cases += val;
+			total += val;
 		}
 		/**
 		 * @return the description
@@ -419,62 +367,84 @@ public class CaseStateReport {
 		public String getDescription() {
 			return description;
 		}
+
 		/**
-		 * @param description the description to set
+		 * @return the total
 		 */
-		public void setDescription(String description) {
-			this.description = description;
+		public long getTotal() {
+			return total;
 		}
-		/**
-		 * @return the state
-		 */
-		public CaseState getState() {
-			return state;
+	}
+
+
+	/**
+	 * Store quantity of cases by one specific case state
+	 * @author Ricardo Memoria
+	 *
+	 */
+	public class CaseStateItem extends Item {
+		private int stateIndex;
+
+		public CaseStateItem(String description, long total, int stateIndex) {
+			super(description, total);
+			this.stateIndex = stateIndex;
 		}
-		/**
-		 * @param state the state to set
-		 */
-		public void setState(CaseState state) {
-			this.state = state;
-		}
-		/**
-		 * @return the cases
-		 */
-		public int getCases() {
-			return cases;
-		}
-		/**
-		 * @param cases the cases to set
-		 */
-		public void setCases(int cases) {
-			this.cases = cases;
-		}
+
 		/**
 		 * @return the stateIndex
 		 */
 		public int getStateIndex() {
 			return stateIndex;
 		}
-		/**
-		 * @param stateIndex the stateIndex to set
-		 */
-		public void setStateIndex(int stateIndex) {
-			this.stateIndex = stateIndex;
+	}
+
+
+	/**
+	 * Store consolidated information about cases under validation
+	 * @author Ricardo Memoria
+	 *
+	 */
+	public class ValidationItem extends Item {
+		private ValidationState validationState;
+
+		public ValidationItem(String description, long total, ValidationState validationState) {
+			super(description, total);
+			this.validationState = validationState;
 		}
-		/**
-		 * @return the autoGenerated
-		 */
-		/**
-		 * @return the tagType
-		 */
-		public TagType getTagType() {
-			return tagType;
+
+		public ValidationState getValidationState() {
+			return validationState;
 		}
+	}
+
+	
+	/**
+	 * Information about the quantity of cases for a specific tag
+	 * @author Ricardo Memoria
+	 *
+	 */
+	public class TagItem extends Item {
+		private TagType type;
+		private Integer tagId;
+
+		public TagItem(String description, long total, TagType type, Integer tagId) {
+			super(description, total);
+			this.type = type;
+			this.tagId = tagId;
+		}
+
 		/**
-		 * @param tagType the tagType to set
+		 * @return the type
 		 */
-		public void setTagType(TagType tagType) {
-			this.tagType = tagType;
+		public TagType getType() {
+			return type;
+		}
+
+		/**
+		 * @return the tagId
+		 */
+		public Integer getTagId() {
+			return tagId;
 		}
 	}
 

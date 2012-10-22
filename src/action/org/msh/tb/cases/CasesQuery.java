@@ -6,15 +6,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
-import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.core.Expressions;
 import org.msh.tb.ETB;
-import org.msh.tb.TagsCasesHome;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
@@ -28,8 +25,6 @@ import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.utils.EntityQuery;
 import org.msh.utils.date.Period;
-
-import org.msh.tb.entities.Tag;
 
 // 02.04.2012 Change some from public to to protected Alexey Kurasov
 /**
@@ -46,6 +41,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	private Workspace defaultWorkspace;
 	protected List<CaseResultItem> resultList;
 	protected String hqlCondition;
+
 
 	private static final String[] orderValues = {"p.recordNumber, c.caseNumber", "p.gender,p.name", 
 		"c.classification", "#{cases.namesOrderBy}", "c.age", "upper(nu.name.name1)", "c.notifAddress.adminUnit.parent.name.name1", 
@@ -126,9 +122,9 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	@Override
 	public String getCountEjbql() {
 		return "select count(*) " + getFromHQL() + 
-		" join c.patient p " +
-		"join c.notificationUnit nu " + 
-		dynamicConditions();
+				" join c.patient p " +
+				"join c.notificationUnit nu " + 
+				dynamicConditions();
 	}
 
 
@@ -263,39 +259,40 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 
 		Integer stateIndex = caseFilters.getStateIndex();
 		if (stateIndex != null) {
-			String cond;
+			String cond = null;
+
 			switch (stateIndex) {
 			// CLOSED
-			case 100: cond = "c.state > " + Integer.toString( CaseState.ONTREATMENT.ordinal() );
+			case CaseFilters.CLOSED: cond = "c.state > " + Integer.toString( CaseState.ONTREATMENT.ordinal() );
 			break;
 
 			// SUSPECT NOT ON TREATMENT
-			case 200: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal();
+			case CaseFilters.SUSPECT_NOT_ON_TREATMENT: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal();
 			break;
 			
-			// SUSPECT NOT ON TREATMENT
-			case 300: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal();
+			// SUSPECT ON TREATMENT
+			case CaseFilters.SUSPECT_ON_TREATMENT: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal();
 				break;
 				
 				// CONFIRMED ON TREATMENT
-			case 400: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.CONFIRMED.ordinal();
+			case CaseFilters.CONFIRMED_ON_TREATMENT: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.CONFIRMED.ordinal();
 			break;
 			
 			// CONFIRMED NOT ON TREATMENT
-			case 500: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.CONFIRMED.ordinal();
+			case CaseFilters.CONFIRMED_NOT_ON_TREATMENT: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.CONFIRMED.ordinal();
 			break;
 
 			// WAIT TO START TREATMENT
-			case 0: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType != " + DiagnosisType.SUSPECT.ordinal();
+			case CaseFilters.WAIT_FOR_TREATMENT: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType != " + DiagnosisType.SUSPECT.ordinal();
 			break;
 			
 			// ON TREATMENT
-			case 600: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + 
+			case CaseFilters.ON_TREATMENT: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + 
 							 " and c.ownerUnit.id = " + caseFilters.getUnitId();
 			break;
 			
 			// ON TREATMENT - TRANSFERIN
-			case 601: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + 
+			case CaseFilters.TRANSFER_IN: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + 
 							 " and c.ownerUnit.id = " + caseFilters.getUnitId() +
 							 " and exists(select id from TreatmentHealthUnit t" +
 							 	" where t.period.iniDate > c.treatmentPeriod.iniDate and period.endDate = c.treatmentPeriod.endDate and c.state= " + CaseState.ONTREATMENT.ordinal() +
@@ -304,7 +301,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			break;
 			
 			// ON TREATMENT / TRANSFERING - TRANSFEROUT
-			case 602: cond = " exists(select id from TreatmentHealthUnit t" +
+			case CaseFilters.TRANSFER_OUT: cond = " exists(select id from TreatmentHealthUnit t" +
 							 " where t.period.endDate < c.treatmentPeriod.endDate" +
 							 " and c.state in (" + CaseState.ONTREATMENT.ordinal() + "," + CaseState.TRANSFERRING.ordinal() + ")" +
 							 " and tbunit.id = "+ caseFilters.getUnitId() +
@@ -313,7 +310,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			break;
 			
 			// MISSING EXAM CASES
-			case 603: cond = " exists(select tc.id " +
+/*			case 603: cond = " exists(select tc.id " +
 					         "from MedicalExamination med " + 
 					         "inner join med.tbcase tc " +
 							 "inner join tc.ownerUnit as tu " +
@@ -324,14 +321,17 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 							 " and med.date = (select max(m.date) from MedicalExamination m where m.tbcase.id = tc.id)" +
 							 " and tu.id = "+ caseFilters.getUnitId() +
 							 " and tc.id = c.id)";
+			break;
+*/			
 			
-			break;
+			case CaseFilters.TRANSFERRING: 
+				cond = "c.state = " + CaseState.TRANSFERRING.ordinal();
+				break;
 
-			default: cond = "c.state = " + stateIndex.toString();
-			break;
 			}
 
-			addCondition(cond);
+			if (cond != null)
+				addCondition(cond);
 		}
 	}
 
@@ -521,7 +521,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	 */
 	public Workspace getDefaultWorkspace() {
 		if (defaultWorkspace == null)
-			defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace");
+			defaultWorkspace = App.getDefaultWorkspace();
 		return defaultWorkspace;
 	}
 
@@ -532,7 +532,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	 */
 	public CaseFilters getCaseFilters() {
 		if (caseFilters == null)
-			caseFilters = (CaseFilters)Component.getInstance("caseFilters", true);
+			caseFilters = CaseFilters.instance();
 		return caseFilters;
 	}
 }
