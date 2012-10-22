@@ -18,9 +18,7 @@
 		<td colspan="2">
 	<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.EIDSSComment!=NULL}">
 	    	<h2><ui:define name="label">#{messages['TbCase.eidsscomment']}:</ui:define>
-	    	#{caseAZHome.notifEIDSS} <br/> 	#{caseAZHome.addrEIDSS}
-		 <br/> 
-			#{messages['TbCase.eidssid']}: #{tbcase.legacyId}
+	    	<h:outputText value="#{caseAZHome.getEIDSSBlock(tbcase)}" escape="false" style="color:#45793D;"/>
 			</h2>
 		</s:decorate>
 		</td>
