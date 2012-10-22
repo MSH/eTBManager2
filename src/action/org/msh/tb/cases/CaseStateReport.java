@@ -35,7 +35,6 @@ public class CaseStateReport  {
 	protected List<CaseStateItem> items;
 	private List<ValidationItem> validationItems;
 	private Item total;
-	protected Map<String, String> messages;
 	private List<TagItem> tags;
 
 
@@ -54,13 +53,13 @@ public class CaseStateReport  {
 	 * Create items of the report
 	 */
 	public void createItems() {
-		messages = Messages.instance();
-
 		items = new ArrayList<CaseStateItem>();
 		validationItems = new ArrayList<ValidationItem>();
 		
 		String aucond;
-		if (App.getUserWorkspace().getView() == UserView.ADMINUNIT)
+		UserWorkspace uw = UserSession.getUserWorkspace();
+		
+		if (uw.getView() == UserView.ADMINUNIT)
 			 aucond = "inner join administrativeunit a on a.id = u.adminunit_id ";
 		else aucond = "";
 
@@ -69,10 +68,10 @@ public class CaseStateReport  {
 		String condByCase = generateSQLConditionByCase();
 
 		Integer hsID = null;
-		if (App.getUserWorkspace().getHealthSystem() != null)
-			hsID = App.getUserWorkspace().getHealthSystem().getId();
+		if (uw.getHealthSystem() != null)
+			hsID = uw.getHealthSystem().getId();
 		
-		Workspace defaultWorkspace = App.getDefaultWorkspace();
+		Workspace defaultWorkspace = UserSession.getDefaultWorkspace();
 
 		String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
 		"from tbcase c " +
@@ -92,7 +91,7 @@ public class CaseStateReport  {
 		
 		List<Object[]> lst = App.getEntityManager().createNativeQuery(sql).getResultList();
 		
-		total = new Item( messages.get("global.total"), 0);
+		total = new Item( App.getMessage("global.total"), 0);
 		
 		for (Object[] val: lst) {
 			int qty = ((BigInteger)val[3]).intValue();
@@ -135,7 +134,7 @@ public class CaseStateReport  {
 	 * @return
 	 */
 	protected String generateSQLConditionByUserView() {
-		UserWorkspace userWorkspace = App.getUserWorkspace();
+		UserWorkspace userWorkspace = UserSession.getUserWorkspace();
 		UserView view = userWorkspace.getView();
 
 		if (view == null)
@@ -207,10 +206,10 @@ public class CaseStateReport  {
 	 * Generate the consolidated tag report displayed at the left side of the home page in the case management module
 	 */
 	protected void createTagsReport() {
-		Workspace workspace = (Workspace)Component.getInstance("defaultWorkspace");
+		Workspace workspace = UserSession.getDefaultWorkspace();
 
 		String s;
-		switch (App.getUserWorkspace().getView()) {
+		switch (UserSession.getUserWorkspace().getView()) {
 		case TBUNIT: s = "inner join tbcase c on c.id=tc.case_id inner join tbunit u on u.id = c.owner_unit_id ";
 			break;
 		case ADMINUNIT: s = "inner join tbcase c on c.id=tc.case_id inner join tbunit u on u.id = c.owner_unit_id inner join administrativeunit a on a.id = u.adminunit_id";
@@ -275,37 +274,37 @@ public class CaseStateReport  {
 		
 		if (state.ordinal() >= CaseState.CURED.ordinal()) {
 			sc = CaseFilters.CLOSED;
-			desc = messages.get("cases.closed");
+			desc = App.getMessage("cases.closed");
 		}
 		else
 		if ((state == CaseState.WAITING_TREATMENT) && (diagType == DiagnosisType.SUSPECT)) {
 			sc = CaseFilters.SUSPECT_NOT_ON_TREATMENT; //stateIndex = 200; 
-			desc = messages.get("CaseState.NOT_ON_TREATMENT");
+			desc = App.getMessage("CaseState.NOT_ON_TREATMENT");
 		}
 		//VR: additional registered-cases categories
 		else
 			if((state == CaseState.ONTREATMENT) && (diagType == DiagnosisType.SUSPECT)){
 				sc = CaseFilters.SUSPECT_ON_TREATMENT;  //stateIndex = 300;
-				desc = messages.get("cases.suspectOnTreatment");
+				desc = App.getMessage("cases.suspectOnTreatment");
 			}
 		else
 			if ((state == CaseState.ONTREATMENT) && (diagType == DiagnosisType.CONFIRMED)){
 				sc = CaseFilters.CONFIRMED_ON_TREATMENT; //stateIndex = 400;	
-				desc = messages.get("cases.confirmedOnTreatment");
+				desc = App.getMessage("cases.confirmedOnTreatment");
 				}
 		else
 			if ((state == CaseState.WAITING_TREATMENT) && (diagType == DiagnosisType.CONFIRMED)){
 				sc = CaseFilters.CONFIRMED_NOT_ON_TREATMENT; //stateIndex = 500;	
-				desc = messages.get("cases.confirmedNotOnTreatment");
+				desc = App.getMessage("cases.confirmedNotOnTreatment");
 				}
 		else
 			if (state == CaseState.TRANSFERRING) {
 				sc = CaseFilters.TRANSFERRING;
-				desc = messages.get(CaseState.TRANSFERRING.getKey());
+				desc = App.getMessage(CaseState.TRANSFERRING.getKey());
 			}
 			else {
 				sc = state.ordinal();
-				desc = messages.get(state.getKey());
+				desc = App.getMessage(state.getKey());
 			}
 
 		if (sc == null) 

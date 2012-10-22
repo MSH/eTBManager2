@@ -11,7 +11,6 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.core.Expressions;
 import org.msh.tb.ETB;
-import org.msh.tb.application.App;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
@@ -23,6 +22,7 @@ import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.ValidationState;
+import org.msh.tb.login.UserSession;
 import org.msh.utils.EntityQuery;
 import org.msh.utils.date.Period;
 
@@ -521,7 +521,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	 */
 	public Workspace getDefaultWorkspace() {
 		if (defaultWorkspace == null)
-			defaultWorkspace = App.getDefaultWorkspace();
+			defaultWorkspace = UserSession.getDefaultWorkspace();
 		return defaultWorkspace;
 	}
 

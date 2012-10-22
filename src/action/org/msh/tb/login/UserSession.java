@@ -27,6 +27,7 @@ import org.jboss.seam.security.Identity;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserProfile;
 import org.msh.tb.entities.UserWorkspace;
@@ -57,7 +58,7 @@ public class UserSession {
      * @return {@link Workspace} instance
      */
     @Factory(value="defaultWorkspace", autoCreate=true, scope=ScopeType.EVENT)
-    public Workspace getDefaultWorkspace() {
+    public Workspace createDefaultWorkspace() {
     	if (workspaceId == null)
     		return null;
 
@@ -76,7 +77,7 @@ public class UserSession {
 	 * @return the userLogin
 	 */
 	@Factory("userLogin")
-	public UserLogin getUserLogin() {
+	public UserLogin createUserLogin() {
 		return userLogin;
 	}
 
@@ -85,7 +86,7 @@ public class UserSession {
 	 * @return the userWorkspace
 	 */
 	@Factory("userWorkspace")
-	public UserWorkspace getUserWorkspace() {
+	public UserWorkspace createUserWorkspace() {
 		return userWorkspace;
 	}
 
@@ -102,6 +103,32 @@ public class UserSession {
 		tbunit.getHealthSystem().getName();
 	}
 
+	
+	/**
+	 * Static method to return an instance of the {@link Workspace} in the current session
+	 * @return
+	 */
+	public static Workspace getDefaultWorkspace() {
+		return (Workspace)Component.getInstance("defaultWorkspace");
+	}
+	
+	
+	/**
+	 * Static method to return an instance of the {@link User} in use in the current session
+	 * @return
+	 */
+	public static User getUser() {
+		return ((UserWorkspace)Component.getInstance("userWorkspace")).getUser();
+	}
+	
+	
+	/**
+	 * Static method to return an instance of the {@link UserWorkspace} in the current session
+	 * @return
+	 */
+	public static UserWorkspace getUserWorkspace() {
+		return (UserWorkspace)Component.getInstance("userWorkspace");
+	}
 
     /**
      * Register the logout when the user session is finished by time-out

@@ -60,8 +60,6 @@ public class CaseStateReportAZ extends CaseStateReport{
 	 */
 	@Override
 	public void createItems() {
-		messages = Messages.instance();
-
 		items = new ArrayList<CaseStateItem>();
 		setValidationItems(new ArrayList<ValidationItem>());
 
@@ -82,7 +80,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 
 		List<Object[]> lst = App.getEntityManager().createNativeQuery(sql).getResultList();
 
-		setTotal(new Item(messages.get("global.total"), 0));
+		setTotal(new Item(App.getMessage("global.total"), 0));
 
 		for (Object[] val: lst) {
 			int qty = ((BigInteger)val[3]).intValue();
@@ -122,7 +120,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 		String querySQL = getSQLSelect()+" where cAZ.toThirdCategory = 1";
 		BigInteger col3cat = (BigInteger) App.getEntityManager().createNativeQuery(querySQL).getSingleResult();
 
-		CaseStateItem it = new CaseStateItem(messages.get("TbCase.toThirdCategory"), col3cat.intValue(), thirdCat);
+		CaseStateItem it = new CaseStateItem(App.getMessage("TbCase.toThirdCategory"), col3cat.intValue(), thirdCat);
 
 		getItems().add(it);
 	}
@@ -141,12 +139,10 @@ public class CaseStateReportAZ extends CaseStateReport{
 	 * Create additional items related to the EIDSS import
 	 */
 	private void createEIDSSItems() {
-		if (messages == null) 
-			messages = Messages.instance();
 		itemsEIDSS = new ArrayList<Item>();
 		BigInteger importedEmpty = getImportedNotBinded();
 		BigInteger importedBusy = getImportedBinded();
-		CaseStateItem it = new CaseStateItem(messages.get("az_EIDSS_Not_Binded"), importedEmpty.longValue(), EIDSS_NOT_BINDED);
+		CaseStateItem it = new CaseStateItem(App.getMessage("az_EIDSS_Not_Binded"), importedEmpty.longValue(), EIDSS_NOT_BINDED);
 		itemsEIDSS.add(it);
 		/*Item it1 = new Item();
 		it1.setDescription(messages.get("az_EIDSS_Binded"));
