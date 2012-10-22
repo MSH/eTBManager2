@@ -215,7 +215,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 	}
 
 	public List<AdminUnitGroup<HealthUnitInfo>> getAdminUnit(){
-		HealthUnitsQuery healthUnitsQuery = (HealthUnitsQuery)Component.getInstance("healthUnitsQueryUA", true);
+		HealthUnitsQuery healthUnitsQuery = (HealthUnitsQuery)Component.getInstance("healthUnitsQueryAZ", true);
 		if (getSelectedAdmUnit()!=null){
 			List<AdminUnitGroup<HealthUnitInfo>> lst2 = new ArrayList<AdminUnitGroup<HealthUnitInfo>>();
 			for (AdminUnitGroup<HealthUnitInfo> adm: healthUnitsQuery.getAdminUnits()) {
