@@ -1,5 +1,6 @@
 package org.msh.tb.az;
 
+import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.Component;
@@ -189,7 +190,11 @@ public class CaseEditingAZHome extends CaseEditingHome{
 			return "error";
 		TbCaseAZ tbcase = getTbCase();
 		tbcase.setReferToTBUnit(getReferTBUnit().getTbunit());
-
+		
+		if (tbcase.getLegacyId()!=null && tbcase.getSystemDate()==null){
+			tbcase.setSystemDate(new Date());
+		}
+		
 		return super.saveEditing();
 	}
 
