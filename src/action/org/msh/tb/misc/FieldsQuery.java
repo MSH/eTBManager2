@@ -303,5 +303,10 @@ public class FieldsQuery {
 		field = TbField.IDENTIFICATION;
 		return getValues();
 	}
+	
+	public List<FieldValue> getSuspectCriteria() {
+		field = TbField.SUSPECT_CRITERIA;
+		return getValues();
+	}
 }
 

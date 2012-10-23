@@ -48,8 +48,9 @@ public enum TbField {
 	//Cambodia
 	IDENTIFICATION,
 	//Brazil
-	TREATMENT_OUTCOME_ILTB;
-	;
+	TREATMENT_OUTCOME_ILTB,
+	//Indonesia
+	SUSPECT_CRITERIA;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

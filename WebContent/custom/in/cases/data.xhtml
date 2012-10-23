@@ -118,6 +118,14 @@
 
 	<div class="form-content">
 		<h2>#{messages['cases.generaldata']}</h2>
+		
+		<s:fragment rendered="#{tbcase.diagnosisType=='SUSPECT'}">
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.suspectCriteria}">
+    			<ui:define name="label">#{messages['TbField.SUSPECT_CRITERIA']}:</ui:define>
+    			#{tbcase.suspectCriteria}
+			</s:decorate>
+		</s:fragment>
+		
 		<table style="border-collapse:collapse;width:100%;" cellpadding="1" >
 		<tr><td>
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.notificationUnit!=null}">

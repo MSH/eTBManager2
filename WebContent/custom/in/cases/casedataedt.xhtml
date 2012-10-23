@@ -146,6 +146,16 @@
 	<div class="form-content">
 	<h2>#{messages['cases.generaldata']}</h2>
 
+	<s:fragment rendered="#{tbcase.diagnosisType=='SUSPECT'}">
+		<s:decorate template="/layout/editfield.xhtml">
+			<ui:define name="label">#{messages['TbField.SUSPECT_CRITERIA']}:</ui:define>
+		   	<ui:param name="required" value="true" />
+		   	<ui:param name="id" value="suspectCriteria" />
+			<ui:param name="field" value="#{tbcase.suspectCriteria}" />
+			<ui:param name="list" value="#{fieldsQuery.suspectCriteria}" />
+		</s:decorate>
+	</s:fragment>
+
 	<div><table width="99%" style="border-collapse:collapse;">
 	<tr><td style="padding-bottom:10px;">
 
