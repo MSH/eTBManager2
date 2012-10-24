@@ -10,7 +10,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Synchronized;
-import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.application.App;
@@ -39,7 +38,6 @@ import org.msh.utils.date.DateUtils;
 @Name("caseFilters")
 @Scope(ScopeType.SESSION)
 @Synchronized(timeout=10000L)
-@BypassInterceptors
 public class CaseFilters {
 
 	// filters that may be applied to search for cases (int format to make it easier to extend)

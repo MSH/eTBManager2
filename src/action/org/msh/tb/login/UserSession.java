@@ -108,7 +108,7 @@ public class UserSession {
 	 * Static method to return an instance of the {@link Workspace} in the current session
 	 * @return
 	 */
-	public static Workspace getDefaultWorkspace() {
+	public static Workspace getWorkspace() {
 		return (Workspace)Component.getInstance("defaultWorkspace");
 	}
 	

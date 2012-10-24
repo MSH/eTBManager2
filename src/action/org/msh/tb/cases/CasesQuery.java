@@ -11,6 +11,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.core.Expressions;
 import org.msh.tb.ETB;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
@@ -521,7 +522,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	 */
 	public Workspace getDefaultWorkspace() {
 		if (defaultWorkspace == null)
-			defaultWorkspace = UserSession.getDefaultWorkspace();
+			defaultWorkspace = UserSession.getWorkspace();
 		return defaultWorkspace;
 	}
 
@@ -534,5 +535,9 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		if (caseFilters == null)
 			caseFilters = CaseFilters.instance();
 		return caseFilters;
+	}
+	
+	public static CasesQuery instance() {
+		return (CasesQuery)App.getComponent("casesQuery");
 	}
 }

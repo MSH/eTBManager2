@@ -70,7 +70,7 @@ public class CaseStateReport  {
 		if (uw.getHealthSystem() != null)
 			hsID = uw.getHealthSystem().getId();
 		
-		Workspace defaultWorkspace = UserSession.getDefaultWorkspace();
+		Workspace defaultWorkspace = UserSession.getWorkspace();
 
 		String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
 		"from tbcase c " +
@@ -205,7 +205,7 @@ public class CaseStateReport  {
 	 * Generate the consolidated tag report displayed at the left side of the home page in the case management module
 	 */
 	protected void createTagsReport() {
-		Workspace workspace = UserSession.getDefaultWorkspace();
+		Workspace workspace = UserSession.getWorkspace();
 
 		String s;
 		switch (UserSession.getUserWorkspace().getView()) {
