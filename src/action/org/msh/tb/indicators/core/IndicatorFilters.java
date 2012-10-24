@@ -59,7 +59,7 @@ public class IndicatorFilters {
 	private boolean useDiagnosisDate;
 	private boolean useIniTreatmentDate;
 	
-	private TBUnitSelection tbunitselection = new TBUnitSelection(true, TBUnitFilter.HEALTH_UNITS);
+	private TBUnitSelection tbunitselection = new TBUnitSelection(false, TBUnitFilter.HEALTH_UNITS);
 	private CaseClassification classification;
 	private PatientType patientType;
 	private InfectionSite infectionSite;
