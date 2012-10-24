@@ -50,8 +50,8 @@ public class CaseFilters {
 	public static final int TRANSFERRING = 106;
 	public static final int CLOSED = 107;
 	public static final int CLOSED_WITHOUT_TREATMENT = 108;
-	public static final int TRANSFER_IN = 109;
-	public static final int TRANSFER_OUT = 110;
+	public static final int TRANSFER_IN = 601;
+	public static final int TRANSFER_OUT = 602;
 
 	
 	private Workspace defaultWorkspace;
