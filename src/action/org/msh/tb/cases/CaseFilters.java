@@ -52,6 +52,7 @@ public class CaseFilters {
 	public static final int CLOSED_WITHOUT_TREATMENT = 108;
 	public static final int TRANSFER_IN = 601;
 	public static final int TRANSFER_OUT = 602;
+	public static final int MED_CONSULTATION_MISSING = 603;
 
 	
 	private Workspace defaultWorkspace;

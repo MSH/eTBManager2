@@ -302,7 +302,8 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			break;
 			
 			// ON TREATMENT / TRANSFERING - TRANSFEROUT
-			case CaseFilters.TRANSFER_OUT: cond = " exists(select id from TreatmentHealthUnit t" +
+			case CaseFilters.TRANSFER_OUT: 
+				cond = " exists(select id from TreatmentHealthUnit t" +
 							 " where t.period.endDate < c.treatmentPeriod.endDate" +
 							 " and c.state in (" + CaseState.ONTREATMENT.ordinal() + "," + CaseState.TRANSFERRING.ordinal() + ")" +
 							 " and tbunit.id = "+ caseFilters.getUnitId() +
@@ -311,7 +312,8 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			break;
 			
 			// MISSING EXAM CASES
-/*			case 603: cond = " exists(select tc.id " +
+			case CaseFilters.MED_CONSULTATION_MISSING: 
+				cond = " exists(select tc.id " +
 					         "from MedicalExamination med " + 
 					         "inner join med.tbcase tc " +
 							 "inner join tc.ownerUnit as tu " +
@@ -323,7 +325,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 							 " and tu.id = "+ caseFilters.getUnitId() +
 							 " and tc.id = c.id)";
 			break;
-*/			
+			
 			
 			case CaseFilters.TRANSFERRING: 
 				cond = "c.state = " + CaseState.TRANSFERRING.ordinal();
