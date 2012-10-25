@@ -115,6 +115,21 @@ function handleContextClick(comp) {
 
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">
+			#{messages['ValidationState']}:
+		</ui:define>
+		<h:selectOneMenu value="#{indicatorFilters.validationState}">
+			<s:selectItems var="it" value="#{globalLists.validationState}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+	</td><td>
+	
+	</td></tr>
+	
+	<tr><td>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">
 			#{messages['PatientType']}:
 		</ui:define>
 		<h:selectOneMenu value="#{indicatorFilters.patientType}">
