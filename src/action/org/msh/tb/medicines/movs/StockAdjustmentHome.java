@@ -100,7 +100,8 @@ public class StockAdjustmentHome extends Controller {
 
 		for (BatchQuantity b: batches) {
 			StockPositionItem item = findStockPosition(b.getBatch().getMedicine());
-			item.getBatches().add(b);
+			if(item!=null && item.getBatches()!=null)
+				item.getBatches().add(b);
 		}
 	}
 	
