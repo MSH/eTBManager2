@@ -6,14 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
@@ -24,7 +21,6 @@ import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.BatchSelection;
@@ -38,7 +34,6 @@ import org.msh.utils.date.DateUtils;
  *
  */
 @Name("stockAdjustmentHome")
-@Scope(ScopeType.CONVERSATION)
 public class StockAdjustmentHome extends Controller {
 	private static final long serialVersionUID = 5670008276682104291L;
 
@@ -100,8 +95,20 @@ public class StockAdjustmentHome extends Controller {
 
 		for (BatchQuantity b: batches) {
 			StockPositionItem item = findStockPosition(b.getBatch().getMedicine());
-			if(item!=null && item.getBatches()!=null)
+			if (item != null)
 				item.getBatches().add(b);
+			else {
+				// in this situation the batch has expired
+				// so it'll create a monk StockPosition record
+				StockPosition sp = new StockPosition();
+				sp.setSource(b.getSource());
+				sp.setTbunit(b.getTbunit());
+				sp.setMedicine(b.getBatch().getMedicine());
+				item = new StockPositionItem();
+				item.setStockPosition(sp);
+				items.add(item);
+				item.getBatches().add(b);
+			}
 		}
 	}
 	

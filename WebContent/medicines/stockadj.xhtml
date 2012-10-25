@@ -56,6 +56,7 @@
 			<a:commandLink
 				onclick="openAdjustDlg(#{it.stockPosition.id});return false;" 
 				style="float:right;" 
+				rendered="#{it.stockPosition.quantity != 0}"
 				styleClass="button-alt"	>
 				<span>#{messages['meds.movs.newadjust']}</span>
 			</a:commandLink>
