@@ -42,7 +42,7 @@ import org.msh.tb.entities.enums.CaseClassification;
  */
 @Name("userSession")
 @Scope(ScopeType.SESSION)
-@Synchronized(timeout=20000)
+@Synchronized(timeout=200000)
 public class UserSession {
 
 	private Tbunit tbunit;
