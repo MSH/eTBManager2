@@ -29,7 +29,7 @@
 		<f:param name="id" value="#{transfer.id}" />
 	</s:link>
 
-	<s:link view="/medicines/transfcancel.xhtml" value="#{messages['meds.transfer.cancel']}" rendered="#{transferHome.canCancel} and #{transfer.status!='DONE'}" >
+	<s:link view="/medicines/transfcancel.xhtml" value="#{messages['meds.transfer.cancel']}" rendered="#{transferHome.canCancel and transfer.status!='DONE'}" >
 		<f:param name="id" value="#{transfer.id}" />
 	</s:link>
 	</h:form>
