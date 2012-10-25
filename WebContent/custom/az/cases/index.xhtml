@@ -176,6 +176,13 @@
 		<span>#{messages['cases.advancedsearch']}</span>
 	</h:commandLink>	
 
+	<h:commandLink
+		styleClass="button-alt"  
+		onclick="Richfaces.showModalPanel('eidssfiltersdlg');return false;" 
+		style="float:right;">
+		<span>#{messages['az_EIDSS_Search']}</span>
+	</h:commandLink>
+
 	<ui:param name="auselection" value="#{caseStateReportAZ.selectedAdmUnitSel}" />
 	<ui:define name="label">#{auselection.labelLevel1}:</ui:define>
 	<h:selectOneMenu id="cbselau1" value="#{auselection.unitLevel1}" rendered="#{userWorkspace.view=='COUNTRY'}">
@@ -281,6 +288,7 @@
 	<div class="button-bar">
 		<a:commandLink id="btnsearch" action="search" styleClass="button" onclick="if (!disableButton(this)) return false;" >
 			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
+			<a:actionparam assignTo="#{eidssFilters.search}" value="false"/>
 			<span>#{messages['form.search']}</span>
 		</a:commandLink>
 		<s:link onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-alt">
@@ -289,6 +297,30 @@
 	</div>
 	</a:region>
 	<rich:hotKey selector="#tblfilters input,select" key="return" handler="#{rich:element('btnsearch')}.click();" /> 
+	</h:form>
+</rich:modalPanel>
+
+<rich:modalPanel id="eidssfiltersdlg" width="1000" top="100" zindex="2000" autosized="true">
+	<f:facet name="header">
+		#{messages['az_EIDSS_Search']}
+	</f:facet>
+	<h:form>
+	<a:region>
+	
+	<ui:include src="#{wspage['/cases/eidssfilters.xhtml']}" />
+
+	<div class="button-bar">
+		<a:commandLink id="btnsearch2" action="search" styleClass="button" onclick="if (!disableButton(this)) return false;" >
+			<a:actionparam assignTo="#{eidssFilters.search}" value="true"/>
+			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
+			<span>#{messages['form.search']}</span>
+		</a:commandLink>
+		<s:link onclick="Richfaces.hideModalPanel('eidssfiltersdlg');return false;" styleClass="button-alt">
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+	</a:region>
+	<rich:hotKey selector="#tblfilters input,select" key="return" handler="#{rich:element('btnsearch2')}.click();" /> 
 	</h:form>
 </rich:modalPanel>
 

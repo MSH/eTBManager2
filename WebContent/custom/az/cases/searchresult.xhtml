@@ -31,11 +31,18 @@
 			<table width="100%">
 				<tr>
 					<td></td>
-					<td><h:commandLink styleClass="button-alt"
+					<td>
+						<h:commandLink styleClass="button-alt"
 							onclick="Richfaces.showModalPanel('filtersdlg');return false;"
-							style="float:right;">
+							style="float:right;" rendered="#{casesAZ.eidssSearch != true}">
 							<span>#{messages['cases.newsearch']}</span>
-						</h:commandLink></td>
+						</h:commandLink>
+						<h:commandLink styleClass="button-alt"
+							onclick="Richfaces.showModalPanel('filtersdlgeidss');return false;"
+							style="float:right;" rendered="#{casesAZ.eidssSearch == true}">
+							<span>#{messages['cases.newsearch']}</span>
+						</h:commandLink>
+					</td>
 				</tr>
 			</table>
 
@@ -84,8 +91,7 @@
 								</div></th>
 							<s:fragment>
 								<th class="searchtitle">
-								<ui:fragment
-										rendered='#{!casesAZ.notBindedEIDSS}'>
+								
 										<h:outputText value="#{messages['ExportContent.CASEDATA']}"/>
 										<div style="padding: 4px; font-size:10px;">
 											<a:commandLink value="#{messages['CaseClassification']}"
@@ -102,12 +108,13 @@
 											<a:commandLink value="#{messages['CaseState']}"
 												onclick="changeOrder(8);return false;" />
 										</div>
-									</ui:fragment> <ui:fragment rendered='#{casesAZ.notBindedEIDSS}'>
+									<!--<ui:fragment rendered='#{casesAZ.notBindedEIDSS}'>
 										<div style="padding: 4px;"><b>#{messages['az_EIDSS_Note']}</b></div>
 										<div style="padding: 4px;"><b>#{messages['az_EIDSS_Notify_LPU']}/</b></div>
 										<div style="padding: 4px;"><b>#{messages['az_EIDSS_Address']}</b>
 										</div>
-									</ui:fragment></th>
+									</ui:fragment>-->
+									</th>
 							</s:fragment>
 							<th class="searchtitle">
 								<h:outputText value="#{messages['TbCase.eidsscomment']}"/>
@@ -209,30 +216,31 @@
 
 
 
-		<rich:modalPanel id="filtersdlg" width="680" top="100" zindex="2000"
-			autosized="true">
+		<rich:modalPanel id="filtersdlg" width="680" top="100" zindex="2000" autosized="true">
 			<f:facet name="header">
-		#{messages['cases.newsearch']}
-	</f:facet>
+				#{messages['cases.newsearch']}
+			</f:facet>
 			<h:form>
 				<a:region>
-
 					<table width="99%">
 						<tr>
-							<td colspan="2"><ui:include src="searchfilters.xhtml" /></td>
+							<td colspan="2">
+								<ui:include src="#{wspage['/cases/searchfilters.xhtml']}" />
+							</td>
 						</tr>
 						<tr>
-							<td><ui:include src="/layout/waitstatus.xhtml" /></td>
+							<td>
+								<ui:include src="/layout/waitstatus.xhtml" />
+							</td>
 						</tr>
 					</table>
 
 					<div class="button-bar">
-						<a:commandLink id="btnsearch" action="#{casesAZ.refresh}"
-							styleClass="button" reRender="listCases"
-							onclick="if (!disableButton(this)) return false;if (!validateFilters()) {enableButton();return false}"
-							oncomplete="enableButton();this.disabled=false;Richfaces.hideModalPanel('filtersdlg');return false;">
-							<a:actionparam assignTo="#{casesAZ.searchCriteria}"
-								value="#{'CUSTOM_FILTER'}" />
+						<a:commandLink id="btnsearch" action="#{casesAZ.refresh}" styleClass="button" reRender="listCases" 
+										onclick="if (!disableButton(this)) return false;if (!validateFilters()) {enableButton();return false}"
+										oncomplete="enableButton();this.disabled=false;Richfaces.hideModalPanel('filtersdlg');return false;">
+							<a:actionparam assignTo="#{casesAZ.searchCriteria}"	value="#{'CUSTOM_FILTER'}" />
+							<a:actionparam assignTo="#{eidssFilters.search}" value="false" />
 							<span>#{messages['form.search']}</span>
 						</a:commandLink>
 						<s:link
@@ -247,6 +255,45 @@
 			</h:form>
 		</rich:modalPanel>
 
+
+		<rich:modalPanel id="filtersdlgeidss" width="1000" top="100" zindex="2000" autosized="true">
+			<f:facet name="header">
+				#{messages['cases.newsearch']}
+			</f:facet>
+			<h:form>
+				<a:region>
+					<table width="99%">
+						<tr>
+							<td colspan="2">
+								<ui:include src="#{wspage['/cases/eidssfilters.xhtml']}" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<ui:include src="/layout/waitstatus.xhtml" />
+							</td>
+						</tr>
+					</table>
+
+					<div class="button-bar">
+						<a:commandLink id="btnsearch" action="#{casesAZ.refresh}" styleClass="button" reRender="listCases" 
+										onclick="if (!disableButton(this)) return false;if (!validateFilters()) {enableButton();return false}"
+										oncomplete="enableButton(); this.disabled=false; Richfaces.hideModalPanel('filtersdlgeidss'); return false;">
+							<a:actionparam assignTo="#{casesAZ.searchCriteria}"	value="#{'CUSTOM_FILTER'}" />
+							<a:actionparam assignTo="#{eidssFilters.search}" value="true" />
+							<span>#{messages['form.search']}</span>
+						</a:commandLink>
+						<s:link
+							onclick="enableButton();Richfaces.hideModalPanel('filtersdlgeidss');return false;"
+							styleClass="button-alt">
+							<span>#{messages['form.cancel']}</span>
+						</s:link>
+					</div>
+				</a:region>
+				<rich:hotKey selector="#tblfilters input,select" key="return"
+					handler="#{rich:element('btnsearch')}.click();" />
+			</h:form>
+		</rich:modalPanel>
 	</ui:define>
 
 </ui:composition>

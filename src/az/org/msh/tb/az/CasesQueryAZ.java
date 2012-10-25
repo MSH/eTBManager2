@@ -8,6 +8,7 @@ import java.util.List;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.tb.cases.CaseFilters;
 import org.msh.tb.cases.CaseResultItem;
 import org.msh.tb.cases.CasesQuery;
 import org.msh.tb.cases.FilterHealthUnit;
@@ -21,6 +22,7 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.entities.enums.ValidationState;
+import org.msh.utils.date.Period;
 
 
 /**
@@ -34,6 +36,8 @@ import org.msh.tb.entities.enums.ValidationState;
 @BypassInterceptors
 public class CasesQueryAZ extends CasesQuery{
 	private static final long serialVersionUID = -7293313123644540770L;
+	private Boolean eidssSearch;
+
 	private final Integer casesEIDSSnotBindedIndex = CaseStateReportAZ.EIDSS_NOT_BINDED;
 	private static final String notifCondUA = "(nu.id = #{caseFilters.tbunitselection.tbunit.id})";
 	private static final String treatCondUA = "tu.id =  #{caseFilters.tbunitselection.tbunit.id}";
@@ -41,7 +45,7 @@ public class CasesQueryAZ extends CasesQuery{
 	private static final String treatRegCondUA = "(tu.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
 	private static final String notifAdrAdmUnitUA="c.notifAddress.adminUnit.code like ";
 	private static final String notifAdrAdmUnitRegUA="c.notifAddress.adminUnit.code = ";
-	
+
 	// static filters
 	private static final String[] restrictions = {
 		"p.recordNumber = #{caseFilters.patientRecordNumber}",
@@ -61,30 +65,32 @@ public class CasesQueryAZ extends CasesQuery{
 		"c.validationState = #{caseFilters.validationState}",
 		"year(p.birthDate) = #{caseFilters.birthYear}",
 	"exists(select t.id from c.tags t where t.id = #{caseFilters.tagid})"};
-	
+
 	@Override
 	public List<String> getStringRestrictions() {
+		if (getEidssSearch()) 
+			return null;
 		return Arrays.asList(restrictions);
 	}
-	
-	
+
+
 	public String getAdminUnitLike(AdministrativeUnit adm) {
 		UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
 		if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
 			if (adm == null)
 				return null;
 			if	(adm.getLevel()==1)
-			return "'"+adm.getCode() + "%'";
+				return "'"+adm.getCode() + "%'";
 			else return "'"+adm.getCode()+"'";
 		}
 		return null;
 	}
-	
-	
-	
+
+
+
 	@Override
 	public String getEjbql() {
-		if (isNotBindedEIDSS()){
+		if (isNotBindedEIDSS() || getEidssSearch()){
 			return getNotBindedEIDSSEjb();
 		}else return getGeneralEjbql();
 
@@ -115,9 +121,37 @@ public class CasesQueryAZ extends CasesQuery{
 		"left outer join c.ownerUnit tu " +
 		"join c.notifAddress.adminUnit loc ".concat(dynamicConditions());
 	}
+
+	public Boolean getEidssSearch() {
+		EIDSSFilters eidssFilters = (EIDSSFilters)Component.getInstance("eidssFilters");
+		if (caseFilters!=null)
+			if (getStateIndex()!=null || SearchCriteria.VALIDATION_STATE.equals(caseFilters.getSearchCriteria())){
+				eidssSearch = false;
+				return false;
+			}
+		eidssSearch = eidssFilters.isSearch();
+
+		/*if (eidssSearch==true)
+			super.setRestrictionExpressionStrings(new ArrayList<String>());*/
+		
+		/*if (eidssSearch==null){
+			//eidssFilters.setSearch(false);
+			if (eidssSearch==null)
+				eidssSearch = false;
+		}
+		else
+		if (eidssSearch==false)
+			if (eidssFilters.isSearch()){
+				eidssSearch = true;
+				eidssFilters.setSearch(false);
+			}*/
+		return eidssSearch;
+	}
+
+
 	@Override
 	public String getCountEjbql() {
-		if (isNotBindedEIDSS()){
+		if (isNotBindedEIDSS() || getEidssSearch()){
 			return getNotBindedCountEIDSSEjb();
 		}else return getGeneralCountEjbql();
 
@@ -187,12 +221,13 @@ public class CasesQueryAZ extends CasesQuery{
 							hqlCondition += " or "+(userWorkspace.getAdminUnit().getLevel()==1 ? notifAdrAdmUnitUA : notifAdrAdmUnitRegUA) + getAdminUnitLike(userWorkspace.getAdminUnit());
 						}
 						hqlCondition += ")";
-						}
+					}
 					}
 				}
 		}
 
-		mountAdvancedSearchConditions();
+		if (!getEidssSearch())
+			mountAdvancedSearchConditions();
 		mountSingleSearchConditions();
 
 		if (!hqlCondition.isEmpty())
@@ -200,41 +235,114 @@ public class CasesQueryAZ extends CasesQuery{
 
 		return hqlCondition;
 	}
+
+	private void mountEIDSSCondition() {
+		EIDSSFilters eidssFilters = (EIDSSFilters)Component.getInstance("eidssFilters");
+		if (eidssFilters.getName()!=null){
+			String[] names = eidssFilters.getName().split(" ");
+			if (names.length != 0){
+				String s="";
+				for (String name: names) {
+					if (s.length() > 1)
+						s += " and ";
+					name = name.replaceAll("'", "''");
+					if (!"".equals(name))
+						s += "(((upper(p.name) like '%" + name.toUpperCase() + 
+						"%') or (upper(p.middleName) like '%" + name.toUpperCase() + 
+						"%') or (upper(p.lastName) like '%" + name.toUpperCase() + "%')) or "+
+						"(upper(c.EIDSSComment) like '%"+name.toUpperCase()+"%'))";
+				}
+				addCondition(s);
+			}
+		}
+		if (eidssFilters.getAddress()!=null && !"".equals(eidssFilters.getAddress())){
+			//String s="(c.eidssData.address like '%"+eidssFilters.getAddress()+"%')";
+			String s="(c.EIDSSComment like '%"+eidssFilters.getAddress()+"%')";
+			addCondition(s);
+		}
+		if (eidssFilters.getId()!=null && !"".equals(eidssFilters.getId())){
+			String s="(c.legacyId like '"+eidssFilters.getId()+"')";
+			addCondition(s);
+		}
+		if (eidssFilters.getNotifUnit()!=null && !"".equals(eidssFilters.getNotifUnit())){
+			//String s="(c.eidssData.notifUnit like '%"+eidssFilters.getNotifUnit()+"%')";
+			String s="(c.EIDSSComment like '%"+eidssFilters.getNotifUnit()+"%')";
+			addCondition(s);
+		}
+		if (eidssFilters.getTbunit().getAdminUnit()!=null){
+			String s="";
+			if (eidssFilters.getTbunit().getTbunit()!=null)
+				s += "c.notificationUnit.id = "+eidssFilters.getTbunit().getTbunit().getId();
+			else
+				s += "c.notificationUnit.adminUnit.code like '"+eidssFilters.getTbunit().getAdminUnit().getCode()+"%'";
+			addCondition(s);
+		}
+		if (eidssFilters.getYearBirth()!=null){
+			//String s = "c.eidssData.yearBirth = "+eidssFilters.getYearBirth();
+			String s = "((c.EIDSSComment like '%"+eidssFilters.getYearBirth()+"%') or " +
+			"(year(p.birthDate) = "+eidssFilters.getYearBirth()+"))";
+			addCondition(s);
+		}
+		//=====DATES=====
+		Period d = eidssFilters.getInDate();
+		if ((d.getIniDate()!=null) || (d.getEndDate()!=null)){
+			//generateHQLPeriodEIDSS(d.getIniDate(),d.getEndDate(),"c.eidssData.inDate","inDate");
+			generateHQLPeriodEIDSS(d.getIniDate(),d.getEndDate(),"c.inEIDSSDate","inDate");
+		}
+		d = eidssFilters.getRegDate();
+		if ((d.getIniDate()!=null) || (d.getEndDate()!=null)){
+			generateHQLPeriodEIDSS(d.getIniDate(),d.getEndDate(),"c.registrationDate","regDate");
+		}
+		d = eidssFilters.getSysDate();
+		if ((d.getIniDate()!=null) || (d.getEndDate()!=null)){
+			generateHQLPeriodEIDSS(d.getIniDate(),d.getEndDate(),"c.systemDate","sysDate");
+		}
+	}
+
+
 	/**
 	 * Refine single search condition to help understand EIDSS related queries
 	 * AK
 	 */
 	@Override
 	protected void mountSingleSearchConditions() {
+		if (getEidssSearch()){
+			mountEIDSSCondition();
+			return;
+		}		
 		if (isNotBindedEIDSS()){
 			addCondition("(not c.legacyId is null) and (c.ownerUnit is null) and (c.notificationUnit is null)"); 
 			mountPatientNameCondition();  
 			mountRegistrationDatesCondition();
+			return;
 		}
-		else 
-			if(isBindedEIDSS())
+		if(isBindedEIDSS()){
 			addCondition("(not c.legacyId is null) and (not (c.ownerUnit is null) or (not c.notificationUnit is null))");
-		else 
-			if (isThirdCat())
-				addCondition("c.toThirdCategory = 1");
-		else{
-			addCondition("nu.workspace.id=#{defaultWorkspace.id}");
-			if (ValidationState.WAITING_VALIDATION.equals(getValidationState()))
-				addCondition("c.diagnosisType in (0,1)");
-			if (getStateIndex()==null){
-				super.mountSingleSearchConditions();
-			}
-			else
-				/*if (getStateIndex()==400)
+			return;
+		}
+		if (isThirdCat()){
+			addCondition("c.toThirdCategory = 1");
+			return;
+		}
+
+		addCondition("nu.workspace.id=#{defaultWorkspace.id}");
+		if (getValidationState()!=null){
+			addCondition("c.validationState="+getValidationState().ordinal());
+		}
+		
+		if (ValidationState.WAITING_VALIDATION.equals(getValidationState()))
+			addCondition("c.diagnosisType in (0,1)");
+		if (getStateIndex()==null){
+			super.mountSingleSearchConditions();
+		}
+		else
+			/*if (getStateIndex().equals(CaseFilters.ON_TREATMENT))
 					hqlCondition += "c.state = " + CaseState.ONTREATMENT.ordinal();
-				else*/ if (getStateIndex()==100)
+				else*/ if (getStateIndex().equals(CaseFilters.CLOSED))
 					addCondition("c.state > " + CaseState.TRANSFERRING.ordinal());
 				else
 					super.mountSingleSearchConditions();
-				//hqlCondition += " or (c.state = " + CaseState.ONTREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal()+")";
-			
-		}
-
+		//hqlCondition += " or (c.state = " + CaseState.ONTREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal()+")";
 	}
 	private boolean isThirdCat() {
 		if (getStateIndex() != null) {
@@ -251,8 +359,23 @@ public class CasesQueryAZ extends CasesQuery{
 		if ((dtIni != null) || (dtEnd != null)) {
 			generateHQLPeriod(dtIni, dtEnd, "c.registrationDate");
 		}
-		
+
 	}
+
+	/**
+	 * Generates HQL condition to a date field filter
+	 * @param dtIni - Initial date of the filter
+	 * @param dtEnd - Ending date of the filter
+	 * @param dateFieldCase - Date field name in the HQL query
+	 * @param dateFieldEIDSS - name field in eidssFilters
+	 */
+	protected void generateHQLPeriodEIDSS(Date dtIni, Date dtEnd, String dateFieldCase, String dateFieldEIDSS) {
+		if (dtIni != null)
+			addCondition("(" + dateFieldCase + ">=#{eidssFilters."+dateFieldEIDSS+".iniDate})");
+		if (dtEnd != null)
+			addCondition("(" + dateFieldCase + "<=#{eidssFilters."+dateFieldEIDSS+".endDate})");		
+	}
+
 	/**
 	 * Condition by first or last or middle name, will be mounted together with StateIndex!
 	 */
@@ -276,7 +399,7 @@ public class CasesQueryAZ extends CasesQuery{
 
 			addCondition(s + (numberCond == null? ")": " or (" + numberCond + "))"));	
 		}
-		
+
 	}
 	/**
 	 * Refine result list based on the result query from the database by add capability to display EIDSS imported
@@ -285,7 +408,7 @@ public class CasesQueryAZ extends CasesQuery{
 	 */
 	@Override
 	protected void fillResultList(List<Object[]> lst) {
-		if (isNotBindedEIDSS()){
+		if (isNotBindedEIDSS() || getEidssSearch()){
 			Patient p = new Patient();
 			resultList = new ArrayList<CaseResultItem>();
 			for (Object[] obj: lst) {
@@ -345,12 +468,12 @@ public class CasesQueryAZ extends CasesQuery{
 			caseFilters.setStateIndex(getCasesEIDSSnotBindedIndex()); // now we are have possibility to use another creiteria from filters
 
 	}
-	
+
 	private Integer getStateIndex(){
 		if (caseFilters == null) return null;
 		return caseFilters.getStateIndex();
 	}
-	
+
 	private ValidationState getValidationState(){
 		if (caseFilters == null) return null;
 		return caseFilters.getValidationState();
