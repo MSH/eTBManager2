@@ -55,8 +55,9 @@
     </s:decorate>
 
 </div>
+<rich:tabPanel switchType="ajax">
 
-
+<rich:tab label="#{messages['Order.items']}">
 <table width="100%">
 <a:repeat value="#{orderHome.sources}" var="s">
 	<tr><td>
@@ -111,6 +112,70 @@
 	</td></tr>
 </a:repeat>
 </table>
+</rich:tab>
+
+<rich:tab label="#{messages['Order.cases']}">
+<ui:repeat value="#{orderHome.sources}" var="s">
+<table width="100%">
+	<tr><td>
+		<h2>#{s.source.abbrevName} <span class="text-small">(#{s.source.name})</span></h2>
+	</td></tr>
+<tr><td>
+<table width="100%" class="table1">
+	<tr><th colspan="2">#{messages['Medicine']}
+		</th>
+		<th style="text-align:right;">
+			#{messages['OrderItem.numPatients']}
+		</th>
+		<th style="text-align:right;">
+			#{messages['OrderItem.estimatedQuantity']}
+		</th>
+	</tr>
+	<ui:repeat value="#{s.items}" var="it">
+	<tr class="highlight">
+		<td class="colb" colspan="2">
+		<div class="medicine-icon" style="float:left"/>
+		<h:outputText value="#{it.item.medicine}" />
+		</td>
+		<td class="colrb">
+			<h:outputText value="#{it.item.numPatients}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>		
+		</td>
+		<td class="colrb">
+			<b>
+			<h:outputText value="#{it.item.estimatedQuantity}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+			</b>		
+		</td>
+	</tr>
+		<ui:repeat value="#{it.item.cases}" var="c">
+			<tr>
+				<td class="colb">
+					<s:link value="#{c.tbcase.displayCaseNumber}" view="/cases/casedata.xhtml">
+						<f:param name="id" value="#{c.tbcase.id}"/>
+					</s:link>
+				</td>
+				<td class="colb">
+					#{c.tbcase.patient.fullName}
+				</td>
+				<td class="colb"></td>
+				<td class="colrb">
+					<h:outputText value="#{c.estimatedQuantity}" >
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</td>
+			</tr>
+		</ui:repeat>
+	
+	</ui:repeat>
+</table>
+</td></tr></table>
+</ui:repeat>
+</rich:tab>
+
+</rich:tabPanel>
 
 	<div class="form-footer">
         <a:commandLink action="#{orderHome.updateMedicineSelection}" styleClass="button" 
