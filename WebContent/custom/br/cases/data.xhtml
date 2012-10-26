@@ -121,6 +121,7 @@
 			<ui:param name="adminunit" value="#{tbcase.currentAddress.adminUnit}" />
 		</s:decorate>
 	</td></tr>
+	</s:fragment>
 	<tr><td>
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.phoneNumber}">
     		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
@@ -134,8 +135,7 @@
     		<h:outputText value="#{tbcase.prefixMobile} - " rendered="#{not empty tbcase.prefixMobile}"/>
     		#{tbcase.mobileNumber}
 		</s:decorate>
-	</td></tr>
-	</s:fragment>
+	</td></tr>	
 	</table>
 	</div>
 
