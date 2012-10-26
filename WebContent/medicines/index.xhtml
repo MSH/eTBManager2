@@ -77,16 +77,19 @@
 			</h:outputText>
 		</td>
 		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
-		<td align="right">
-			<h:outputText value="#{it.item.stockPosition.amc}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
-				<f:convertNumber pattern="###,###,##0"/>
-			</h:outputText>
-		</td>
-		<td align="right">
-			<h:outputText value="#{it.item.stockOutDate}" converter="periodConverter" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
-				<f:param name="type" value="time-length"/>
-			</h:outputText>
-		</td>
+			<td align="right">
+				<h:outputText value="#{it.item.stockPosition.amc}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
+					<f:convertNumber pattern="###,###,##0"/>
+				</h:outputText>
+			</td>
+			<td align="right">
+				<h:outputText value="#{it.item.stockOutDate}" converter="periodConverter" rendered="#{it.item.almostStockedOut()}"
+					style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
+					<f:param name="type" value="time-length"/>
+				</h:outputText>
+				<h:outputText value="#{messages['medicine.almostStockedOut']}" rendered="#{not it.item.almostStockedOut()}"
+					style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
+			</td>
 		</s:fragment>
 		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
 		<td align="right">

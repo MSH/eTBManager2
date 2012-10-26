@@ -323,6 +323,14 @@ public class InventoryReport {
 			this.hasBatchExpiring = hasBatchExpiring;
 		}
 		
+		public boolean almostStockedOut(){
+			Date d = DateUtils.getDate();
+			if(stockOutDate != null)
+				return !stockOutDate.before(d);
+			else
+				return false;
+		}
+		
 	}
 
 
