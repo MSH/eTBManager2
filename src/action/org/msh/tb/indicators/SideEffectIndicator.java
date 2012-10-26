@@ -30,6 +30,15 @@ public class SideEffectIndicator extends Indicator {
 	}
 
 	@Override
+	protected String getHQLWhere() {
+		String hql = super.getHQLWhere();
+		if(getIndicatorFilters().getSubstance() != null)
+			hql = hql + " and se.medicines like '%" + getIndicatorFilters().getSubstance().getAbbrevName() + "%'";
+		return hql;
+	}
+
+	
+	@Override
 	public boolean isHasTotal() {
 		return false;
 	}

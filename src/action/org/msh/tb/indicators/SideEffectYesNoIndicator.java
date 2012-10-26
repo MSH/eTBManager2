@@ -18,14 +18,17 @@ public class SideEffectYesNoIndicator extends Indicator {
 	@Override
 	protected void createIndicators() {
 		Map<String, String> messages = Messages.instance();
-
+		int num;
 		// calculate number of cases with side effect
-		int num = calcNumberOfCases("exists(select se.id from CaseSideEffect se where se.tbcase.id = c.id)");
+		if(getIndicatorFilters().getSubstance()!=null)
+			num = calcNumberOfCases("exists(select se.id from CaseSideEffect se where se.tbcase.id = c.id and se.medicines like '%" + getIndicatorFilters().getSubstance().getAbbrevName() + "%')");
+		else
+			num = calcNumberOfCases("exists(select se.id from CaseSideEffect se where se.tbcase.id = c.id)");
+
 		addValue(messages.get("global.yes"), num);
 		
 		// calculate total number of cases and subtract the quantity of cases with side effect
 		num = calcNumberOfCases(null) - num;
 		addValue(messages.get("global.no"), num);
 	}
-
 }

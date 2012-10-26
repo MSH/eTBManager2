@@ -251,6 +251,17 @@ function handleContextClick(comp) {
 			</s:decorate>
 		</td>
 	</tr>
+	<tr>
+		<td colspan="2">
+			<s:decorate template="/layout/edit.xhtml" rendered="#{not empty hideMedicines}">
+				<ui:define name="label">#{messages['Substance']}:</ui:define>
+				<h:selectOneMenu value="#{indicatorFilters.substance}">
+					<s:selectItems value="#{substances}" var="r" label="#{r.name}" noSelectionLabel="#{messages['form.noselection']}" />
+					<s:convertEntity />
+				</h:selectOneMenu>
+			</s:decorate>
+		</td>
+	</tr>
 <s:fragment rendered="#{hideupdtbar == null}">
 	<tr><td colspan="2">
 		<div class="paragraph" >

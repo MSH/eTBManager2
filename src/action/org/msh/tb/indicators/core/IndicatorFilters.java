@@ -19,6 +19,7 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.entities.AgeRange;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.Source;
+import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.DiagnosisType;
@@ -81,6 +82,7 @@ public class IndicatorFilters {
 	private List<SelectItem> lstInterimMonths;
 	private PatientType patTypFirstTreat;
 	private YesNoType supervisedTreatment;
+	private Substance substance;
 	
 	private final static PatientType[] patTypFirstTreatArr = {
 		PatientType.NEW,
@@ -592,4 +594,10 @@ public class IndicatorFilters {
 	public void setPatTypReTreat(PatientType patTypReTreat) {
 		this.patTypReTreat = patTypReTreat;
 	}
+	public Substance getSubstance() {
+		return substance;
+	}
+	public void setSubstance(Substance substance) {
+		this.substance = substance;
+	}	
 }
