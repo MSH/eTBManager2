@@ -38,7 +38,7 @@
 
 	<div class="spacer" />
 
-                 
+    <s:fragment rendered="#{tbcase.classification!='NMT'}">            
 	<s:link view="/custom/br/cases/edtcontact.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" 
 		styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{caseHome.id}" />
@@ -76,7 +76,7 @@
 		<a:actionparam name="param1" assignTo="#{tbContactHome.id}" converter="javax.faces.Integer"/>
 	</a:jsFunction>
 	</h:panelGroup>
-
+	</s:fragment>
 
 	<div class="spacer" />
 
