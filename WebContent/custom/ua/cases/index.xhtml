@@ -263,7 +263,7 @@
 	<h:form>
 	<a:region>
 	
-	<ui:include src="searchfilters.xhtml" />
+	<ui:include src="#{wspage['/cases/searchfilters.xhtml']}" />
 
 	<div class="button-bar">
 		<a:commandLink id="btnsearch" action="search" styleClass="button" onclick="if (!disableButton(this)) return false;" >

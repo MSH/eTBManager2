@@ -141,7 +141,7 @@
 	<table width="99%">
 	<tr><td colspan="2">
 
-	<ui:include src="searchfilters.xhtml" />
+	<ui:include src="#{wspage['/cases/searchfilters.xhtml']}" />
 
 	</td></tr>
 	<tr><td>
@@ -150,10 +150,10 @@
 	</td></tr></table>	
 	
 	<div class="button-bar">
-		<a:commandLink id="btnsearch" action="#{cases.refresh}" 
+		<a:commandLink id="btnsearch" action="#{casesUA.refresh}" 
 			styleClass="button"	reRender="listCases" 
 			onclick="if (!disableButton(this)) return false;if (!validateFilters()) {enableButton();return false}"
-			oncomplete="this.disabled=false;Richfaces.hideModalPanel('filtersdlg');return false;">
+			oncomplete="enableButton();this.disabled=false;Richfaces.hideModalPanel('filtersdlg');return false;">
 			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
 			<span>#{messages['form.search']}</span>
 		</a:commandLink>

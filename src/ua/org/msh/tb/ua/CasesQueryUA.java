@@ -3,10 +3,12 @@ package org.msh.tb.ua;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.tb.cases.CaseFilters;
 import org.msh.tb.cases.CasesQuery;
 import org.msh.tb.cases.FilterHealthUnit;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.UserView;
 
 
@@ -112,12 +114,23 @@ public class CasesQueryUA extends CasesQuery{
 
 		mountAdvancedSearchConditions();
 		mountSingleSearchConditions();
-				
+		
+		if (hqlCondition.contains("c.diagnosisType = 1")){
+			hqlCondition = hqlCondition.replace("c.diagnosisType = 1", "(c.diagnosisType = 1 or c.diagnosisType is NULL)");
+		}
+		
+		if (getStateIndex()!=null)
+			if (getStateIndex().equals(CaseFilters.CLOSED))
+				addCondition("c.state > " + CaseState.TRANSFERRING.ordinal());
+		
 		if (!hqlCondition.isEmpty())
 			hqlCondition = " where ".concat(hqlCondition);
 
 		return hqlCondition;
 	}
 	
-	
+	private Integer getStateIndex(){
+		if (caseFilters == null) return null;
+		return caseFilters.getStateIndex();
+	}
 }
