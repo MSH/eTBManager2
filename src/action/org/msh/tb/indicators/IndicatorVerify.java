@@ -2,7 +2,6 @@ package org.msh.tb.indicators;
 
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -21,6 +20,7 @@ import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorController;
 import org.msh.tb.indicators.core.IndicatorFilters;
+import org.msh.utils.date.DateUtils;
 
 /**
  * Base class supporting TB/MDR-TB indicator generation in a 2-dimension table with possibilities 
@@ -205,6 +205,12 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 		while(it.hasNext()){
 			E tc = it.next();
 			boolean inWarn = false; 
+			for (ErrItem ls: verifyList.get(getMessage("verify.errorcat1"))) {
+				if (ls.getCaseList().contains(tc)){
+					inWarn = true;
+					break;
+				}
+			}
 			for (ErrItem ls: verifyList.get(getMessage("verify.errorcat2"))) {
 				if (ls.getCaseList().contains(tc)){
 					inWarn = true;
@@ -294,21 +300,17 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 	 * It is "ideal" period, not maybe for "real life" 
 	 */
 	protected ExamMicroscopy rightMcTestStrict(TbCase tc){
-		Calendar dateTest = Calendar.getInstance();
-		Calendar dateIniTreat = Calendar.getInstance();
+		Date dateIniTreat = tc.getRegistrationDate();
 		int res=0;
 		ArrayList<ExamMicroscopy> lst = new ArrayList<ExamMicroscopy>();
-		for (ExamMicroscopy ex: tc.getExamsMicroscopy()){
-			dateTest.setTime(ex.getDateCollected());
-			if (tc.getTreatmentPeriod()!=null)
-				dateIniTreat.setTime(tc.getTreatmentPeriod().getIniDate());
-			else
-				dateIniTreat.setTime(tc.getDiagnosisDate());
-			Calendar regDt = Calendar.getInstance();
-			regDt.setTime(tc.getRegistrationDate());
-			long testperiod = dateTest.getTimeInMillis()-regDt.getTimeInMillis();
-			testperiod/=86400000;
+		
+		if (tc.getTreatmentPeriod()!=null)
+			if (tc.getTreatmentPeriod().getIniDate()!=null)
+			dateIniTreat = tc.getTreatmentPeriod().getIniDate();
 
+		for (ExamMicroscopy ex: tc.getExamsMicroscopy()){
+			Date dateTest = ex.getDateCollected();
+			int testperiod = DateUtils.daysBetween(dateTest,dateIniTreat);
 			if (testperiod<=30) {
 				res++;
 				lst.add(ex);
@@ -324,25 +326,20 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 			return WorstMcRes(lst);
 		}
 	}
-	
 	/**
 	 * @return worst microscope test between first visit date and diagnosis date
 	 * It is UA specific "real life" - not first month!
 	 */
 	protected ExamMicroscopy rightMcTest(TbCase tc){
-		Calendar dateTest = Calendar.getInstance();
-		Calendar diagDate = Calendar.getInstance();
+		Date diagDate = new Date(); // today, because no diagnosis
 		int res=0;
-		Date diagDt = tc.getDiagnosisDate();
-		if (diagDt == null){
-			diagDate.setTime(new Date());  // today, because no diagnosis
-		}else{
-			diagDate.setTime(diagDt);		// real diagnosis	
-		}
+		if (tc.getDiagnosisDate()!=null)
+			diagDate = tc.getDiagnosisDate();		// real diagnosis	
+		
 		ArrayList<ExamMicroscopy> lst = new ArrayList<ExamMicroscopy>();
 		for (ExamMicroscopy ex: tc.getExamsMicroscopy()){
-			dateTest.setTime(ex.getDateCollected());
-			if (diagDate.getTimeInMillis() - dateTest.getTimeInMillis() >= 0) {
+			Date dateTest = ex.getDateCollected();
+			if (diagDate.before(dateTest)) {
 				res++;
 				lst.add(ex);
 			}	
@@ -358,6 +355,73 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 		}
 	}
 	
+	/**
+	 * @return culture test, which is up to quality, strictly namely first 14 days of treatment 
+	 * (if no treatment, then all results) and worst test from several 
+	 */
+	protected ExamCulture rightCulTestDuring14daysTreat(TbCase tc){
+		Date dateIniTreat=null;
+		int res=0;
+		ArrayList<ExamCulture> lst = new ArrayList<ExamCulture>();
+		if (tc.getTreatmentPeriod()!=null)
+				dateIniTreat = tc.getTreatmentPeriod().getIniDate();
+		
+		if (dateIniTreat!=null)
+			for (ExamCulture ex: tc.getExamsCulture()){
+				Date dateTest = ex.getDateCollected();
+				int testperiod = DateUtils.daysBetween(dateTest, dateIniTreat);
+				
+				if (testperiod<=14) {
+					res++;
+					lst.add(ex);
+				}	
+			}
+		else
+			lst.addAll(tc.getExamsCulture());
+
+		switch (lst.size()) {
+		case 0: 
+			return null;
+		case 1: 
+			return lst.get(0);
+		default:
+			return WorstCulRes(lst);
+		}
+	}
+	
+	/**
+	 * @return microscopy test, which is up to quality, strictly namely first 14 days of treatment 
+	 * (if no treatment, then all results) and worst test from several 
+	 */
+	protected ExamMicroscopy rightMcTestDuring14daysTreat(TbCase tc){
+		Date dateIniTreat=null;
+		int res=0;
+		ArrayList<ExamMicroscopy> lst = new ArrayList<ExamMicroscopy>();
+		if (tc.getTreatmentPeriod()!=null)
+				dateIniTreat = tc.getTreatmentPeriod().getIniDate();
+		
+		if (dateIniTreat!=null)
+			for (ExamMicroscopy ex: tc.getExamsMicroscopy()){
+				Date dateTest = ex.getDateCollected();
+				int testperiod = DateUtils.daysBetween(dateTest, dateIniTreat);
+				
+				if (testperiod<=14) {
+					res++;
+					lst.add(ex);
+				}	
+			}
+		else
+			lst.addAll(tc.getExamsMicroscopy());
+
+		switch (lst.size()) {
+		case 0: 
+			return null;
+		case 1: 
+			return lst.get(0);
+		default:
+			return WorstMcRes(lst);
+		}
+	}
 	
 	
 	/**
@@ -365,21 +429,17 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 	 * not for UA "real life", maybe
 	 */
 	protected ExamCulture rightCulTestStrict(TbCase tc){
-		Calendar dateTest = Calendar.getInstance();
-		Calendar dateIniTreat = Calendar.getInstance();
+		Date dateIniTreat = tc.getRegistrationDate();
 		int res=0;
 		ArrayList<ExamCulture> lst = new ArrayList<ExamCulture>();
-		for (ExamCulture ex: tc.getExamsCulture()){
-			dateTest.setTime(ex.getDateCollected());
-			if (tc.getTreatmentPeriod()!=null)
-				dateIniTreat.setTime(tc.getTreatmentPeriod().getIniDate());
-			else
-				dateIniTreat.setTime(tc.getDiagnosisDate());
-			Calendar regDt = Calendar.getInstance();
-			regDt.setTime(tc.getRegistrationDate());
-			long testperiod = dateTest.getTimeInMillis()-regDt.getTimeInMillis();
-			testperiod/=86400000;
+		
+		if (tc.getTreatmentPeriod()!=null)
+			if (tc.getTreatmentPeriod().getIniDate()!=null)
+			dateIniTreat = tc.getTreatmentPeriod().getIniDate();
 
+		for (ExamCulture ex: tc.getExamsCulture()){
+			Date dateTest = ex.getDateCollected();
+			int testperiod = DateUtils.daysBetween(dateTest,dateIniTreat);
 			if (testperiod<=30) {
 				res++;
 				lst.add(ex);
@@ -400,19 +460,15 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 	 * It is UA specific "real life" - not first month!
 	 */
 	protected ExamCulture rightCulTest(TbCase tc){
-		Calendar dateTest = Calendar.getInstance();
-		Calendar diagDate = Calendar.getInstance();
+		Date diagDate = new Date(); // today, because no diagnosis
 		int res=0;
-		Date diagDt = tc.getDiagnosisDate();
-		if (diagDt == null){
-			diagDate.setTime(new Date());  // today, because no diagnosis
-		}else{
-			diagDate.setTime(diagDt);		// real diagnosis	
-		}
+		if (tc.getDiagnosisDate()!=null)
+			diagDate = tc.getDiagnosisDate();		// real diagnosis	
+		
 		ArrayList<ExamCulture> lst = new ArrayList<ExamCulture>();
 		for (ExamCulture ex: tc.getExamsCulture()){
-			dateTest.setTime(ex.getDateCollected());
-			if (diagDate.getTimeInMillis() - dateTest.getTimeInMillis() >= 0) {
+			Date dateTest = ex.getDateCollected();
+			if (diagDate.before(dateTest)) {
 				res++;
 				lst.add(ex);
 			}	
@@ -431,25 +487,21 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 	 * @return dst-test, which is up to quality, namely first month of treatment and worst test from several 
 	 */
 	protected ExamDST rightDSTTest(TbCase tc){
-		Calendar dateTest = Calendar.getInstance();
-		Calendar dateIniTreat = Calendar.getInstance();
+		Date dateIniTreat = tc.getDiagnosisDate();
 		int res=0;
 		ArrayList<ExamDST> lst = new ArrayList<ExamDST>();
+		if (tc.getTreatmentPeriod()!=null)
+			if (tc.getTreatmentPeriod().getIniDate()!=null)
+				dateIniTreat = tc.getTreatmentPeriod().getIniDate();
 		for (ExamDST ex: tc.getExamsDST()){
-			dateTest.setTime(ex.getDateCollected());
-			if (tc.getTreatmentPeriod()!=null)
-				dateIniTreat.setTime(tc.getTreatmentPeriod().getIniDate());
-			else
-				dateIniTreat.setTime(tc.getDiagnosisDate());
-			Calendar regDt = Calendar.getInstance();
-			regDt.setTime(tc.getRegistrationDate());
-			long testperiod = dateTest.getTimeInMillis()-regDt.getTimeInMillis();
-			testperiod/=86400000;
-
+			Date dateTest = ex.getDateCollected();
+			Date regDt = tc.getRegistrationDate();
+			int testperiod = DateUtils.daysBetween(dateTest, regDt);
+			
 			if (testperiod<=30) {
 				res++;
 				lst.add(ex);
-			}	
+			}
 		}
 
 		switch (lst.size()) {

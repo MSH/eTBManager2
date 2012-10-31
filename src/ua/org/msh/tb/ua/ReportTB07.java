@@ -8,6 +8,7 @@ import java.util.Map;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.AgeRange;
+import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.PrevTBTreatment;
 import org.msh.tb.entities.TbCase;
@@ -132,40 +133,37 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 								addToVerList(tc,1,4);
 
 							if (tc.getInfectionSite().equals(InfectionSite.PULMONARY) || tc.getInfectionSite().equals(InfectionSite.BOTH)){
-								if (!MicroscopyIsNull(tc) || !CultureIsNull(tc)){
+								if (MicroscopyIsNull(tc) && CultureIsNull(tc)) addToVerList(tc,1,5);
 
-										String micResult=null;
-										if (!MicroscopyIsNull(tc))
-												if (rightMcTest(tc).getResult().isPositive())
-													micResult = "positive";
-												else micResult = "negative";
-										
-										String gen = tc.getPatient().getGender().toString().toLowerCase();
-										if (micResult!=null){
-											addToTable(getTable1000(), gen, micResult, key);
-											if (micResult.equals("positive") && key.equalsIgnoreCase("newcases")){
-												addToTable(getTable2000(), gen+"_all", Integer.toString(roundToIniDate(tc.getPatientAge())), gen);
-											}
-										}
-										else
-											addToVerList(tc,1,2);
+								String micResult=null;
+								if (!MicroscopyIsNull(tc))
+									if (rightMcTest(tc).getResult().isPositive())
+										micResult = "positive";
+									else micResult = "negative";
 
-										if (!CultureIsNull(tc)){
-												if (rightCulTest(tc).getResult().isPositive() || micResult=="positive")
-													micResult = "positive";
-												else micResult = "negative";
-											}
-											else
-												addToVerList(tc,1,3);
-										if (micResult!=null)
-											addToTable(getTable3000(),gen,micResult,key);
+								String gen = tc.getPatient().getGender().toString().toLowerCase();
+								if (micResult==null) addToVerList(tc,1,2);
+								
+									addToTable(getTable1000(), gen, micResult==null ? "negative" : micResult, key);
+									if (micResult!=null)
+										if (micResult.equals("positive") && key.equalsIgnoreCase("newcases")){
+											addToTable(getTable2000(), gen+"_all", Integer.toString(roundToIniDate(tc.getPatientAge())), gen);
+									}
+								
 
-										if (!verifyList.get(getMessage("verify.errorcat1")).get(4).getCaseList().contains(tc))
-											if (tc.getResHIV().get(0).getResult().equals(HIVResult.POSITIVE))
-												addToTable(getTable4000(),gen,"pulmonary",key);
-										addToAllowing(tc);
-									}else
-										addToVerList(tc,1,5);
+								if (!CultureIsNull(tc)){
+									if (rightCulTest(tc).getResult().isPositive() || micResult=="positive")
+										micResult = "positive";
+									else micResult = "negative";
+								}
+								else
+									addToVerList(tc,1,3);
+								addToTable(getTable3000(),gen,micResult==null ? "negative" : micResult,key);
+
+								if (!verifyList.get(getMessage("verify.errorcat1")).get(4).getCaseList().contains(tc))
+									if (tc.getResHIV().get(0).getResult().equals(HIVResult.POSITIVE))
+										addToTable(getTable4000(),gen,"pulmonary",key);
+								addToAllowing(tc);
 							}
 							else{
 								String gen = tc.getPatient().getGender().toString().toLowerCase();
@@ -230,6 +228,15 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 	}
 
 
+	@Override
+	protected ExamMicroscopy rightMcTest(TbCase tc){
+		return rightMcTestDuring14daysTreat(tc);
+	}
+	
+	@Override
+	protected ExamCulture rightCulTest(TbCase tc){
+		return rightCulTestDuring14daysTreat(tc);
+	}
 	/**
 	 * Initialize layout of the table 1000 of the TB07 report
 	 */

@@ -9,12 +9,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.IndicatorVerify;
+import org.msh.tb.indicators.core.IndicatorFilters;
 import org.msh.tb.indicators.core.IndicatorMicroscopyResult;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
@@ -124,7 +126,7 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 	protected void generateTables() {
 		List<TbCase> lst;
 		setCounting(true);
-		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
+		/*getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
 		getIndicatorFilters().setMicroscopyResult(IndicatorMicroscopyResult.POSITIVE);
 		setCondition("c.state >= " + CaseState.ONTREATMENT.ordinal()+" and c.patientType = " + PatientType.NEW.ordinal());
 		numcases[0] = ((Long)createQuery().getSingleResult()).intValue();
@@ -134,10 +136,11 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 		numcases[2] = ((Long)createQuery().getSingleResult()).intValue();
 		numcases[2] -= numcases[0]+numcases[1];
 		if (numcases[0]+numcases[1]+numcases[2] == 0)
-			return;
+			return;*/
 		getIndicatorFilters().setMicroscopyResult(null);
 		
 		int count = ((Long)createQuery().getSingleResult()).intValue();
+		if (count==0) return;
 		if (count<=4000){
 			initVerifList("verify.tb10.error",2,1,1);
 			setCounting(false);
@@ -156,6 +159,7 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 					else	
 					if (rightMcTest(tc).getResult().isPositive()){
 						addValueTable(tc.getTreatmentPeriod().getIniDate(), tc.getDiagnosisDate(), tc.getPatientType(), tc.getState(), tc.getIniContinuousPhase(), firstNegMicro(tc), isNoExam(tc));
+						
 						addToAllowing(tc);
 					}
 				}
@@ -187,10 +191,11 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 			return false;
 			
 		List<ExamMicroscopy> lst = new ArrayList<ExamMicroscopy>();
-		for (int i = 0; i < tc.getExamsMicroscopy().size(); i++) {
+		lst.addAll(tc.getExamsMicroscopy());
+		/*for (int i = 0; i < tc.getExamsMicroscopy().size(); i++) {
 			lst.add(null);
 		}
-		Collections.copy(lst, tc.getExamsMicroscopy());
+		Collections.copy(lst, tc.getExamsMicroscopy());*/
 		Collections.sort(lst, new Comparator<ExamMicroscopy>() {
 			public int compare(ExamMicroscopy o1, ExamMicroscopy o2) {
 				Calendar d1 = Calendar.getInstance();
@@ -208,6 +213,26 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 		return true;
 	}
 	
+	@Override
+	protected ExamMicroscopy rightMcTest(TbCase tc){
+		return rightMcTestDuring14daysTreat(tc);
+	}
+	
+	@Override
+	protected ExamCulture rightCulTest(TbCase tc){
+		return rightCulTestDuring14daysTreat(tc);
+	}
+	
+	@Override
+	protected String getHQLMicroscopyCondition() {
+		IndicatorFilters filters = getIndicatorFilters();
+		if (filters.getMicroscopyResult() == null)
+			return null;
+		
+		String cond = getHQLMicroscopyResultCondition(filters.getMicroscopyResult());
+
+		return "exists(select ex.id from ExamMicroscopy ex where ex.result " + cond + " and ex.tbcase.id = c.id)";
+	}
 	/**
 	 * Generate values of table 1000 querying the database based on the user filters 
 	 */
@@ -284,12 +309,15 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 		switch (ptype) {
 		case NEW: 
 			rowkey = "newcases";
+			numcases[0]++;
 			break;
 		case RELAPSE: 
 			rowkey = "relapses";
+			numcases[1]++;
 			break;
 		default: 
 			rowkey = "others";
+			numcases[2]++;
 		}
 		if (!noexam){
 			if (dtMicro != null){ 
