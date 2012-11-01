@@ -175,14 +175,14 @@
 		style="float:right;">
 		<span>#{messages['cases.advancedsearch']}</span>
 	</h:commandLink>	
-
+<ui:remove>
 	<h:commandLink
 		styleClass="button-alt"  
 		onclick="Richfaces.showModalPanel('eidssfiltersdlg');return false;" 
 		style="float:right;">
 		<span>#{messages['az_EIDSS_Search']}</span>
 	</h:commandLink>
-
+</ui:remove>
 	<ui:param name="auselection" value="#{caseStateReportAZ.selectedAdmUnitSel}" />
 	<ui:define name="label">#{auselection.labelLevel1}:</ui:define>
 	<h:selectOneMenu id="cbselau1" value="#{auselection.unitLevel1}" rendered="#{userWorkspace.view=='COUNTRY'}">

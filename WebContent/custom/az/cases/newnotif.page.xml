@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
-
-	<restrict>#{userSession.canEditCases}</restrict>
-	<param name="classif" value="#{tbcase.classification}" required="true" />
-	<param name="type" value="#{tbcase.diagnosisType}" required="true" />
-	<end-conversation />
-	<navigation>
-		<rule if-outcome="newpatient">
-			<begin-conversation join="true" />
-			<redirect view-id="/custom/az/cases/casenew.xhtml">
-			</redirect>
-		</rule>
-	</navigation>
-
+<page xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
+ <restrict>#{userSession.canEditCases}</restrict>
+ <begin-conversation join="true"/>
+ <param name="classif" required="true" value="#{tbcase.classification}"/>
+ <param name="type" required="true" value="#{tbcase.diagnosisType}"/>
+ <navigation>
+  <rule if-outcome="newpatient">
+   <begin-conversation join="true"/>
+   <redirect view-id="/cases/casenew.xhtml"/>
+  </rule>
+ </navigation>
 </page>

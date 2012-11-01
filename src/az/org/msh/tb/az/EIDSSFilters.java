@@ -13,7 +13,7 @@ import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.date.Period;
 
 @Name("eidssFilters")
-@Scope(ScopeType.SESSION)
+@Scope(ScopeType.PAGE)
 public class EIDSSFilters {
 	private String name = null;
 	private Period regDate;
@@ -45,7 +45,7 @@ public class EIDSSFilters {
 		return lst;
 	}
 
-	private boolean someFieldNotEmpty(){
+	public boolean someFieldNotEmpty(){
 		boolean res = false;
 		if (address!=null && !"".equals(address))
 			res = true;
