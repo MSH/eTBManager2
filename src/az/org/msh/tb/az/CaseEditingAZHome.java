@@ -8,6 +8,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.cases.CaseEditingHome;
@@ -117,9 +118,64 @@ public class CaseEditingAZHome extends CaseEditingHome{
 			Contexts.getConversationContext().set("tbcase", caseHome.getInstance());
 			return ret;
 		}
-		return super.initializeNewNotification();
+		
+		return initSuperNotif();
 	}
+	
+	@Override
+	public String selectPatientData() {
+		initialized = false;
+		if (initializeNewNotification().equals("initialized"))
+			return "/custom/az/cases/casenew.xhtml";
+		return "error";
+	}
+	
+	private String initSuperNotif(){
+		if (initialized)
+			return "initialized";
+		
+		if (caseHome.getInstance().getClassification() == null)
+			return "/cases/index.xhtml";
+				
+		caseHome.getInstance().setPatient(patientHome.getInstance());
+		
+		// initialize default values
+		UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
+		if (userWorkspace != null) {
+			if (userWorkspace.getTbunit().isNotifHealthUnit())
+				getTbunitselection().setTbunit(userWorkspace.getTbunit());
+			
+			AdministrativeUnit au = userWorkspace.getAdminUnit();
+			if (au == null)
+				au = userWorkspace.getTbunit().getAdminUnit();
+			
+			if (au != null) {
+				au = entityManager.find(AdministrativeUnit.class, au.getId());
+				
+				getNotifAdminUnit().setSelectedUnit(au);
 
+				if (getTbunitselection().getTbunit() == null) {
+					List<AdministrativeUnit> lst = getTbunitselection().getAdminUnits();
+					
+					if (lst != null)
+					for (AdministrativeUnit adminUnit: lst) {
+						if (adminUnit.isSameOrChildCode(au.getCode())) {
+							getTbunitselection().setAdminUnit(adminUnit);
+						}
+					}					
+				}
+			}
+		}
+
+		// initialize items with previous TB treatments
+//		prevTBTreatmentHome.getTreatments();
+		
+		Events.instance().raiseEvent("new-notification");
+		
+		initialized = true;
+		return "initialized";
+	}
+	
 	/**
 	 * Initialize a new notification
 	 */
@@ -127,18 +183,8 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		if (initialized)
 			return "initialized";
 
-		Patient p = patientHome.getInstance();
-
 		if (caseHome.getInstance().getClassification() == null)
 			return "/cases/index.xhtml";
-
-		if ((!patientHome.isManaged()) && 
-				(p.getName() == null) && (p.getMiddleName() == null) && (p.getLastName() == null) &&
-				(p.getBirthDate() == null))
-			return "patient-searching";
-
-		if (p.getBirthDate() != null)
-			updatePatientAge();
 
 		// initialize default values
 		UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");

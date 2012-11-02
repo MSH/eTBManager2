@@ -66,21 +66,21 @@
 			</s:link>
 		</f:facet>
 		<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
-			<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;">
+			<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;" target="_blank">
 				<f:param name="pacid" value="#{it.patient.id}" />
 				<f:param name="classif" value="#{tbcase.classification}"/>
 			</s:link>
-			<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml" onclick="openWaitDlg();">
+			<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml" onclick="openWaitDlg();" target="_blank">
 				<f:param name="pacid" value="#{it.patient.id}" />
 				<f:param name="classif" value="#{tbcase.classification}"/>
 			</s:link>
 			<br/>
 		</s:fragment>
 		<s:fragment rendered = '#{it.tbcase.outcomeDate == null}'>
-			<s:link view="/cases/casedata.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;" propagation="none">
+			<s:link view="/cases/casedata.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;" propagation="none" target="_blank">
 				<f:param name="id" value="#{it.tbcase.id}" />
 			</s:link>
-			<s:link value="#{it.patient.fullName}" view="/cases/casedata.xhtml" onclick="openWaitDlg();" propagation="none">
+			<s:link value="#{it.patient.fullName}" view="/cases/casedata.xhtml" onclick="openWaitDlg();" propagation="none" target="_blank">
 				<f:param name="id" value="#{it.tbcase.id}" />
 			</s:link>
 			<br/>
