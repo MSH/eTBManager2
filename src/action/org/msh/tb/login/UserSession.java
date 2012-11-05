@@ -190,9 +190,13 @@ public class UserSession {
     protected void registerLogin() {
     	// get client information
     	FacesContext facesContext = FacesContext.getCurrentInstance();
-       	HttpServletRequest req = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-        String ipAddr = req.getRemoteAddr();
-        String app = req.getHeader("User-Agent");
+    	String ipAddr = null;
+    	String app = null;
+    	if (facesContext != null) {
+           	HttpServletRequest req = (HttpServletRequest) facesContext.getExternalContext().getRequest();
+            ipAddr = req.getRemoteAddr();
+            app = req.getHeader("User-Agent");
+    	}
 
         // register new login        
         userLogin = new UserLogin();

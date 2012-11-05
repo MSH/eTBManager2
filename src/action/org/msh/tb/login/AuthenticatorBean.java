@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
-import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
@@ -17,21 +16,17 @@ import org.jboss.seam.security.Identity;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.UserState;
-import org.msh.tb.uitheme.ThemeManager;
 import org.msh.utils.Passwords;
 
 
 
 /**
- * Handle user autentication
+ * Handle user authentication in the web UI and from a remote connection (web services, for example)
  * @author Ricardo Memoria
  *
  */
 @Name("authenticator")
 public class AuthenticatorBean {
-
-    @In Credentials credentials;
-    @In Identity identity;
 
     @In LocaleSelector localeSelector;
     
@@ -42,7 +37,8 @@ public class AuthenticatorBean {
     private String language;
     private User user;
     private List<UserWorkspace> userWorkspaces;
-    
+
+
     /**
      * Select the workspace user must be logged in
      */
@@ -50,23 +46,26 @@ public class AuthenticatorBean {
     
 
 
-    /* (non-Javadoc)
-	 * @see com.rmemoria.mdrtb.seam.Authenticator#authenticate()
-	 */
-    public boolean authenticate()
+    /**
+     * Authentication method used by WEB UI (login page) 
+     * @return
+     */
+    public boolean webAuthenticate()
     {
+    	Credentials credentials = Identity.instance().getCredentials();
+    	if (credentials == null)
+    		return false;
+
     	String pwd = Passwords.hashPassword(credentials.getPassword());
 
         try {
         	user = (User)entityManager.createQuery("from User u where u.login = :login " +
-        						"and upper(u.password) = :pwd")
+        						"and upper(u.password) = :pwd and u.state <> :blockstate")
         						.setParameter("login", credentials.getUsername().toUpperCase())
         						.setParameter("pwd", pwd.toUpperCase())
+        						.setParameter("blockstate", UserState.BLOCKED)
         						.getSingleResult();
-        	System.out.println("Login de " + user.getLogin());
-        	
-        	if (user.getState() == UserState.BLOCKED)
-        		return false;
+        	System.out.println("Login of " + user.getLogin());
         	
         	// check user workspace
         	loadUserWorkspace();
@@ -100,11 +99,11 @@ public class AuthenticatorBean {
             }
             
         	// adjust the language
-        	user.setLanguage(localeSelector.getLanguage());
-        	localeSelector.select();
+//        	user.setLanguage(localeSelector.getLanguage());
+//      		localeSelector.select();
       
             // registra o usuário
-        	UserSession userSession = getUserSession();
+        	UserSession userSession = UserSession.instance();
 
         	userSession.setUserWorkspace(userWorkspace);
             userSession.changeUserWorkspace();
@@ -112,9 +111,6 @@ public class AuthenticatorBean {
             if (user.isPasswordExpired()) {
             	Redirect.instance().setViewId(null);
             }
-            
-            // select the user's theme
-            selectTheme();
             
             return true;
         }
@@ -125,39 +121,14 @@ public class AuthenticatorBean {
 
     
     /**
-     * Select the user UI theme
+     * Called from the command Exit in the user menu of the web page
+     * @return
      */
-    public void selectTheme() {
-    	ThemeManager themeManager = ThemeManager.instance();
-    	if (user.getTheme() == null) {
-    		user.setTheme( themeManager.getDefaultTheme() );
-    		entityManager.persist(user);
-    	}
-    	
-    	themeManager.setTheme(user.getTheme());
-    	themeManager.selectTheme();
-    }
-    
     public String logout() {
-/*    	Workspace workspace = (Workspace)Component.getInstance("defaultWorkspace");
-    	String url = workspace.getUrl();
-*/    	
-    	identity.logout();
-
-/*    	if ((url != null) && (!url.isEmpty())) {
-        	FacesManager.instance().redirectToExternalURL(url);
-    	}
-*/    	
+    	Identity.instance().logout();
     	return "logged-out";
     }
 
-    /**
-     * return the user session component in the session context
-     * @return instance of the {@link UserSession} component
-     */
-    public UserSession getUserSession() {
-    	return (UserSession)Component.getInstance("userSession", true);
-    }
     
     
    

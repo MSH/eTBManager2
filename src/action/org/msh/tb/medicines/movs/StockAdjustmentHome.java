@@ -329,8 +329,10 @@ public class StockAdjustmentHome extends Controller {
 	}
 	
 	public void clearBatch(){
-		this.batchQuantity.setBatch(new Batch());
-		this.existingBatchInThisUnit = false;
+		existingBatchInThisUnit = false;
+		if (batchQuantity == null)
+			batchQuantity = new BatchQuantity();
+		batchQuantity.setBatch(new Batch());
 	}
 	
 	public List<StockPositionItem> getItems() {

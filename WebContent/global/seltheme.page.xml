@@ -6,7 +6,7 @@
 
 		<navigation>
 			<rule if-outcome="theme-selected">
-				<redirect view-id="/others/seltheme.xhtml">
+				<redirect view-id="/global/seltheme.xhtml">
 				</redirect>
 			</rule>
 		</navigation>

@@ -100,7 +100,7 @@ public class MedicineComponent implements Serializable{
 			return true;
 		if (obj == null)
 			return false;
-		if (obj instanceof MedicineComponent)
+		if (!(obj instanceof MedicineComponent))
 			return false;
 		MedicineComponent other = (MedicineComponent) obj;
 		if (id == null) {

@@ -2,10 +2,14 @@ package org.msh.tb.uitheme;
 
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
+import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
@@ -14,7 +18,7 @@ import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
 
 /**
- * Manages the theme in use by the user
+ * Manages the selection of the UI theme in use by the user logged into the system
  * @author Ricardo Memoria
  *
  */
@@ -40,7 +44,31 @@ public class ThemeManager {
 
 	
 	/**
-	 * Select the user's new theme 
+	 * Factory to return the UI theme URL of the user logged in the system
+	 * @return
+	 */
+	@Factory(value="themeurl", scope=ScopeType.SESSION)
+	public String createThemeUrl() {
+		return getThemeUrl( getTheme() );
+	}
+
+	
+	/**
+	 * Return the URL for the folder with the CSS files and images of the given UI theme 
+	 * @param theme
+	 * @return
+	 */
+	public String getThemeUrl(UITheme theme) {
+		if  (theme.isSystemTheme()) {
+			HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			return request.getContextPath() + "/public/themes/" + theme.getPath();
+		}
+		else return theme.getPath();
+	}
+	
+	
+	/**
+	 * Change the user's UI theme. The new UI theme in use will be the one selected in the theme field. 
 	 * @return "theme-selected" is successfully changed
 	 */
 	public String selectTheme() {
@@ -57,12 +85,16 @@ public class ThemeManager {
 		user.setTheme(theme);
 		entityManager.persist(user);
 		
-		String url = theme.getUrl();
-		Contexts.getSessionContext().set("themeurl", url);
+		Contexts.getSessionContext().remove("themeurl");
 		
 		return "theme-selected";
 	}
-	
+
+
+	/**
+	 * Get the theme in use by the current user
+	 * @return
+	 */
 	public UITheme getTheme() {
 		if (theme == null)
 			restoreUserTheme();
@@ -70,15 +102,19 @@ public class ThemeManager {
 	}
 	
 	/**
-	 * Restore the theme in use by the user 
+	 * Restore the theme in use by the user. If no theme is selected by the user, the default UI theme is selected
+	 * using the getDefaultTheme() method  
 	 */
 	protected void restoreUserTheme() {
-		theme = entityManager.merge( userLogin.getUser().getTheme() );
+		User user = entityManager.merge(userLogin.getUser());
+		theme = user.getTheme();
+		if (theme == null)
+			theme = getDefaultTheme();
 	}
 	
 	
 	/**
-	 * Return the default theme
+	 * Return the default theme. If there is no default theme, the first of the list will be returned
 	 * @return
 	 */
 	public UITheme getDefaultTheme() {

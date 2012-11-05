@@ -25,6 +25,30 @@
 		<param-value>true</param-value>
 	</context-param>
 
+  	<servlet>
+    	<servlet-name>AuthenticatorService</servlet-name>
+		<servlet-class>org.msh.tb.webservices.AuthenticatorService</servlet-class>
+	</servlet>
+
+  	<servlet-mapping>
+    	<servlet-name>AuthenticatorService</servlet-name>
+	    <url-pattern>/services/*</url-pattern>
+  	</servlet-mapping>
+
+
+<!--  
+ 	<servlet>
+    	<servlet-name>WorkspaceService</servlet-name>
+		<servlet-class>org.msh.tb.webservices.WorkspaceServiceImpl</servlet-class>
+	</servlet>
+
+  	<servlet-mapping>
+    	<servlet-name>WorkspaceService</servlet-name>
+	    <url-pattern>/services/*</url-pattern>
+  	</servlet-mapping>
+ -->
+ 
+ 
 	<!-- Ajax4jsf -->
 
 	<context-param>

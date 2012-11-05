@@ -50,7 +50,7 @@
        <drools:rule-files><value>/security.drl</value></drools:rule-files>
    </drools:rule-base>
  -->
-   <security:identity authenticate-method="#{authenticator.authenticate}"
+   <security:identity authenticate-method="#{authenticator.webAuthenticate}"
                               remember-me="true"/>
                  
 	<core:resource-loader>

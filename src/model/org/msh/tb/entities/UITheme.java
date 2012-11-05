@@ -2,17 +2,20 @@ package org.msh.tb.entities;
 
 import java.io.Serializable;
 
-import javax.faces.context.FacesContext;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.validator.NotNull;
 
+/**
+ * Store information about a UI theme selected by the user 
+ * @author Ricardo Memoria
+ *
+ */
 @Entity
 @Table(name="uitheme")
 public class UITheme implements Serializable {
@@ -34,18 +37,6 @@ public class UITheme implements Serializable {
 	
 	private boolean defaultTheme;
 
-	
-	/**
-	 * Return the URL for the folder with the css files and images of the theme
-	 * @return
-	 */
-	public String getUrl() {
-		if (systemTheme) {
-			HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-			return request.getContextPath() + "/public/themes/" + path;
-		}
-		else return path;
-	}
 	
 	@Override
 	public boolean equals(Object obj) {
