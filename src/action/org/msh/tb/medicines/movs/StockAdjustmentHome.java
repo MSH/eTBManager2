@@ -313,13 +313,13 @@ public class StockAdjustmentHome extends Controller {
 			}else{
 				existingBatchInThisUnit = false;
 				ArrayList<Batch> b = (ArrayList<Batch>) entityManager.createQuery("from Batch b " +
-																				  "where b.batchNumber = :batchNumber and " +
-																				  "b.manufacturer = :manufacturer and " +
-																				  "b.medicine.id = :medicineId")
-																					.setParameter("batchNumber", batchQuantity.getBatch().getBatchNumber())
-																					.setParameter("manufacturer", batchQuantity.getBatch().getManufacturer())
-																					.setParameter("medicineId", batchQuantity.getBatch().getMedicine().getId())
-																					.getResultList();
+									  "where b.batchNumber = :batchNumber and " +
+									  "b.manufacturer = :manufacturer and " +
+									  "b.medicine.id = :medicineId")
+									  .setParameter("batchNumber", batchQuantity.getBatch().getBatchNumber())
+									  .setParameter("manufacturer", batchQuantity.getBatch().getManufacturer())
+									  .setParameter("medicineId", batchQuantity.getBatch().getMedicine().getId())
+									  .getResultList();
 	
 				if(b!=null && b.size() > 0){
 					batchQuantity.setBatch(b.get(0));

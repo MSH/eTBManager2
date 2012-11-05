@@ -50,10 +50,10 @@
 	</div>
 	
 	<div class="form-footer">
-	<a:commandLink action="#{importDataHome.execute}" styleClass="button" 
-		onclick="if (!disableButton(this)) return false;" reRender="main,messages">
+	<h:commandLink action="#{importDataHome.execute}" styleClass="button" 
+		onclick="if (!disableButton(this)) return false;" >
 		<span>#{messages['form.import']}</span>
-	</a:commandLink>
+	</h:commandLink>
 	</div>
 </h:form>
 
