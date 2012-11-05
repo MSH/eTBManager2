@@ -15,7 +15,6 @@
 <ui:param name="labelstyle" value="width:140px" />
 <ui:param name="left" value="0" />
 <ui:param name="indicator" value="#{caseEditingAZHome}" />
-<ui:param name="patients" value="#{patientsAZ}" />
 
 <ui:param name="waitdlg" value="1" />
 
@@ -53,67 +52,101 @@
 	</a:commandLink>
 </div>
 
-<s:decorate template="/layout/naveg.xhtml" rendered="#{patients.searching}">
-	<ui:param name="list" value="#{patients}" />
-</s:decorate>
+<s:decorate template="/layout/naveg.xhtml" rendered="#{patientsAZ.searching}">
+	<ui:param name="list" value="#{patientsAZ}" />
 
-<h:dataTable value="#{patients.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
-	rendered="#{patients.searching and (not empty patients.resultList)}" width="680px" columnClasses="coll,colc,colc,coll">
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Patient.name']}" styleClass="collh">
-  			<f:param name="order" value="#{patients.order=='p.name,p.middleName'?'p.name desc,p.middleName desc':''}" />
-			</s:link>
-		</f:facet>
-		<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
-			<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;" target="_blank">
-				<f:param name="pacid" value="#{it.patient.id}" />
-				<f:param name="classif" value="#{tbcase.classification}"/>
-			</s:link>
-			<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml" onclick="openWaitDlg();" target="_blank">
-				<f:param name="pacid" value="#{it.patient.id}" />
-				<f:param name="classif" value="#{tbcase.classification}"/>
-			</s:link>
+	<h:dataTable value="#{patientsAZ.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
+		rendered="#{patientsAZ.searching and (not empty patientsAZ.resultList)}" width="680px" columnClasses="coll,colc,colc,coll" >
+		<h:column>
+			<f:facet name="header">
+				#
+			</f:facet>
+			<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
+				<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" target="_blank">
+					<f:param name="pacid" value="#{it.patient.id}" />
+					<f:param name="classif" value="#{tbcase.classification}"/>
+				</s:link>
+			</s:fragment>
+			<s:fragment rendered = '#{it.tbcase.outcomeDate == null}'>
+				<s:link view="/cases/casedata.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" propagation="none" target="_blank">
+					<f:param name="id" value="#{it.tbcase.id}" />
+				</s:link>	
+			</s:fragment>
 			<br/>
-		</s:fragment>
-		<s:fragment rendered = '#{it.tbcase.outcomeDate == null}'>
-			<s:link view="/cases/casedata.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;" propagation="none" target="_blank">
-				<f:param name="id" value="#{it.tbcase.id}" />
-			</s:link>
-			<s:link value="#{it.patient.fullName}" view="/cases/casedata.xhtml" onclick="openWaitDlg();" propagation="none" target="_blank">
-				<f:param name="id" value="#{it.tbcase.id}" />
-			</s:link>
-			<br/>
-		</s:fragment>
-		<br/>
-		#{it.patient.recordNumber}
-	</h:column>
-
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Patient.birthDate']}" >
-  			<f:param name="order" value="p.birthDate#{patients.order=='p.birthDate'?' desc':''}" />
-			</s:link>
-		</f:facet>
-		<h:outputText value="#{it.patient.birthDate}"  converter="localeDateConverter"/>
-	</h:column>
-
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Patient.securityNumber']}" styleClass="collh">
-  			<f:param name="order" value="p.securityNumber#{patients.order=='p.securityNumber'?' desc':''}" />
-			</s:link>
-		</f:facet>
-		#{it.patient.securityNumber}
-	</h:column>
+			#{it.patient.recordNumber}
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['cases.patientdata']}"/>
+			</f:facet>
+		<div style="float:left;">
+			<b>
+			<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
+				<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml" target="_blank" >
+					<f:param name="pacid" value="#{it.patient.id}" />
+					<f:param name="classif" value="#{tbcase.classification}"/>
+				</s:link>
+			</s:fragment>
+			<s:fragment rendered = '#{it.tbcase.outcomeDate == null}'>
+				<s:link value="#{it.patient.fullName}" view="/cases/casedata.xhtml" propagation="none" target="_blank">
+					<f:param name="id" value="#{it.tbcase.id}" />
+				</s:link>
+			</s:fragment></b><br/>
+			#{caseAZHome.getYearOfBirth(it.tbcase)} #{messages['az_EIDSS_Year_Of_Birth.short']} (<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).patient.birthDate}" converter="localeDateConverter"/>), #{caseAZHome.reGetTbCase(it.tbcase).age} #{messages['az_EIDSS_years']}<br/>
+			
+			<div style="padding-top: 6px;padding-bottom: 6px;">
+			<sub>#{messages['Address.regist']}:</sub><br/>
+			<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).notifAddress.address} #{caseAZHome.reGetTbCase(it.tbcase).notifAddress.complement}" style="padding-left: 10px;" /> <br/>
+			<sub>#{messages['Address.live']}:</sub><br/>
+			<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).currentAddress.address} #{caseAZHome.reGetTbCase(it.tbcase).currentAddress.complement}" style="padding-left: 10px;" />
+			</div>	
+			#{messages['az_AZ.case.unicalID']}:
+			<b>#{caseAZHome.reGetTbCase(it.tbcase).unicalID!=null ? caseAZHome.reGetTbCase(it.tbcase).unicalID : 'XXXXXXXX'}</b>
+		</div>
+		</h:column>
 	
-	<h:column>
-		<f:facet name="header">
-			<h:outputText value="#{messages['cases.sit.current']}" styleClass="collh" />
-		</f:facet>
-		<h:outputText value="#{it.caseStatus}" escape="false" />
-	</h:column>
-</h:dataTable>
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['ExportContent.CASEDATA']}"/>
+			</f:facet>
+			
+			<b>#{messages[caseAZHome.reGetTbCase(it.tbcase).classification.key]} -  <h:outputText value=" #{messages[caseAZHome.reGetTbCase(it.tbcase).state.key]}"
+					style="color:SaddleBrown;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).state != 'ONTREATMENT'}"/>
+				<s:fragment rendered="#{caseAZHome.reGetTbCase(it.tbcase).state == 'ONTREATMENT'}">
+				<h:outputText value=" #{messages['CaseState.ONTREATMENT']} #{messages['from']} " style="color:SaddleBrown;"/>
+				
+				<h:outputText value="#{caseAZHome.verifyDateIniTreat(it.tbcase)}"
+					style="color:SaddleBrown;" escape="false"/>
+					
+				</s:fragment>
+			 </b>
+		     <br/>
+		     #{messages['PatientType']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).patientType.key]} <br/>
+		     <h:outputText value="#{messages['TbCase.diagnosisDate']}: "/><h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).diagnosisDate}" converter="localeDateConverter"/> <br/>
+		     #{messages['User.state']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).diagnosisType.key]}<br/>
+		     #{messages['DiagnosisType']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).infectionSite.key]}<br/>
+		     <b><h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).ownerUnit.name}" rendered="#{caseAZHome.reGetTbCase(it.tbcase).ownerUnit!=NULL}"/> </b><br /> 
+			 <h:outputText
+				value="#{caseAZHome.reGetTbCase(it.tbcase).notifAddress.adminUnit.name.name1}" style="font-size:10px;"  rendered="#{caseAZHome.reGetTbCase(it.tbcase).notifAddress!=NULL}"/>
+			<br/>
+			<s:fragment rendered="#{caseAZHome.reGetTbCase(it.tbcase).EIDSSComment!=NULL}">
+			 <h:outputText value="#{messages['Accept']} #{caseAZHome.reGetTbCase(it.tbcase).systemDate==null?'XX.XX.XXXX':''}" style="color:Firebrick;" />
+			 <h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).systemDate}"  style="color:Firebrick;" converter="localeDateConverter" rendered="#{caseAZHome.reGetTbCase(it.tbcase).systemDate!=null}"/>
+			 <br/>
+			</s:fragment>
+			  <h:outputText style="color:gray;" 
+				value="#{messages['TbCase.referToOtherTBUnit']}  #{messages[caseAZHome.reGetTbCase(it.tbcase).referToOtherTBUnit?'global.no':'global.yes']}"/>
+			
+		</h:column>
+	
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['TbCase.eidsscomment']}"/>
+			</f:facet>
+			<h:outputText value="#{caseAZHome.getEIDSSBlock(it.tbcase)}" escape="false" style="border-left: 1px solid #E0E0E0;color:#45793D;"/>							
+		</h:column>
+	</h:dataTable>
+</s:decorate>
 </h:panelGroup>
 
 <script type="text/javascript">
@@ -125,8 +158,8 @@ function initPatientSearch() {
 </script>
 <a:jsFunction name="searchPatient" reRender="pnlpatients" 
 	oncomplete="if (data) showbutton();enableButton();"
-	action="#{patients.search}"  
-	data="#{patients.searching}" />
+	action="#{patientsAZ.search}"  
+	data="#{patientsAZ.searching}" />
 
 
 
