@@ -102,11 +102,9 @@ public class AuthenticatorBean {
 //        	user.setLanguage(localeSelector.getLanguage());
 //      		localeSelector.select();
       
-            // registra o usuário
+            // register the user login
         	UserSession userSession = UserSession.instance();
-
-        	userSession.setUserWorkspace(userWorkspace);
-            userSession.changeUserWorkspace();
+        	userSession.registerLogin(userWorkspace);
             
             if (user.isPasswordExpired()) {
             	Redirect.instance().setViewId(null);

@@ -18,7 +18,6 @@ import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchMovement;
 import org.msh.tb.entities.BatchQuantity;
-import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Movement;

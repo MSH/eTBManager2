@@ -8,9 +8,11 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.SourceMedicineTree.MedicineNode;
 import org.msh.tb.medicines.SourceMedicineTree.SourceNode;
@@ -34,6 +36,53 @@ public class InventoryReport {
 		if (root == null)
 			createSources();
 		return root.getSources();
+	}
+
+
+	/**
+	 * Check if the given batch is in attention period for expiration.
+	 */
+	public boolean isExpiringBatch(Object o){
+		
+		Batch b = null;
+		BatchQuantity bq = null;
+		if(o instanceof Batch)
+			b = (Batch) o;
+		else if (o instanceof BatchQuantity){
+			bq = (BatchQuantity) o;
+			b = bq.getBatch();
+		}
+		
+		if(b != null){
+/*			Calendar now  = Calendar.getInstance();
+			Calendar batchExpiringDate = Calendar.getInstance();
+			batchExpiringDate.setTime(b.getExpiryDate());
+			
+			long diff = batchExpiringDate.getTimeInMillis() - now.getTimeInMillis();
+			diff = diff / (24*60*60*1000);
+			double diffInDouble = diff;
+			double diffInMonths = diffInDouble / 30.0;
+*/
+			// calculate the number of months between two dates
+			int diffInMonths = DateUtils.monthsBetween(b.getExpiryDate(), new Date());
+		
+			Workspace workspace = UserSession.getWorkspace();
+			if(workspace.getMonthsToAlertExpiredMedicines() != null) {
+				if(diffInMonths < 0 || diffInMonths > workspace.getMonthsToAlertExpiredMedicines())
+					return false;
+				else
+					return true;
+			}
+			
+			if (workspace.getMonthsToAlertExpiredMedicines() != null) {
+				if(diffInMonths < 0 || diffInMonths > workspace.getMonthsToAlertExpiredMedicines())
+					return false;
+				else
+					return true;
+			}
+		}
+		
+		return false;
 	}
 
 
@@ -67,7 +116,7 @@ public class InventoryReport {
 			}
 			
 			// check if batch is up to expire
-			if (userSession.isExpiringBatch(bq.getBatch())) {
+			if (isExpiringBatch(bq.getBatch())) {
 				MedicineNode node = root.findMedicineNode(bq.getSource(), bq.getBatch().getMedicine());
 				if ((node != null) && (node.getItem() != null))  //AK maybe null
 					((MedicineInfo)node.getItem()).setHasBatchExpiring(true);

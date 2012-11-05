@@ -115,7 +115,7 @@
 			</s:decorate>
 		</td>
 
-		<s:fragment rendered="#{(not b.batch.expired) and (not userSession.isExpiringBatch(b))}">
+		<s:fragment rendered="#{(not b.batch.expired) and (not inventoryReport.isExpiringBatch(b))}">
 			<td align="center">
 				<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
 			</td>
@@ -172,7 +172,7 @@
 			</s:fragment>
 		</s:fragment>
 		
-		<s:fragment rendered="#{userSession.isExpiringBatch(b)}">
+		<s:fragment rendered="#{inventoryReport.isExpiringBatch(b)}">
 			<td align="center">
 				<div title="#{messages['manag.forecast.expiredquantity']}">
 					<span class="alert-icon" />

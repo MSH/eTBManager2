@@ -184,7 +184,7 @@ public class UserProfileHome extends EntityHomeEx<UserProfile>{
 			return;
 		
 		UserSession userSession = (UserSession)Component.getInstance("userSession");
-		userSession.updateUserRoleList();
+		userSession.updateUserRoleList( UserSession.getUserWorkspace() );
 	}
 	
 

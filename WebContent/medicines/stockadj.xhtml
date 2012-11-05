@@ -78,7 +78,7 @@
 
 		<div id="tblbatch" style="display:none;">					
 		<a:repeat value="#{it.batches}" var="b">
-			<div style="clear:both;position:relative;min-height:40px;height:40px;border-top:1px solid #d0d0d0;padding-top:4px;#{b.batch.expired ? 'color:red' : (userSession.isExpiringBatch(b) ? 'color:#D7620B' : '')}">
+			<div style="clear:both;position:relative;min-height:40px;height:40px;border-top:1px solid #d0d0d0;padding-top:4px;#{b.batch.expired ? 'color:red' : (inventoryReport.isExpiringBatch(b) ? 'color:#D7620B' : '')}">
 				<a:commandLink value="#{messages['meds.movs.delbatch']}" 
 					style="float:right;" 
 					styleClass="right-icon small-link" 

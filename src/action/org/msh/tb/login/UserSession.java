@@ -3,29 +3,21 @@ package org.msh.tb.login;
 import java.security.Principal;
 import java.security.acl.Group;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.seam.Component;
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Create;
-import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
-import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.Synchronized;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.security.Identity;
-import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.BatchQuantity;
+import org.jboss.seam.web.ServletContexts;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
@@ -36,72 +28,18 @@ import org.msh.tb.entities.enums.CaseClassification;
 
 
 /**
- * Hold information about a user session
+ * Handle common and generic operations of a user session. A user session is defined by
+ * the moment the user logs into the system until the moment he logs out
  * @author Ricardo Memoria
  *
  */
 @Name("userSession")
-@Scope(ScopeType.SESSION)
-@Synchronized(timeout=200000)
 public class UserSession {
 
-	private Tbunit tbunit;
-	private UserLogin userLogin;
-	private UserWorkspace userWorkspace;
-	private Integer workspaceId;
-	private boolean displayMessagesKeys;
 	private boolean initingList;
+	
+	private Integer userWorkspaceId;
 
-
-    /**
-     * Return the workspace in use
-     * @return {@link Workspace} instance
-     */
-    @Factory(value="defaultWorkspace", autoCreate=true, scope=ScopeType.EVENT)
-    public Workspace createDefaultWorkspace() {
-    	if (workspaceId == null)
-    		return null;
-
-		EntityManager entityManager = (EntityManager)Component.getInstance("entityManager");
-		
-		if (entityManager == null)
-			return null;
-		
-		return (Workspace)entityManager.createQuery("from Workspace where id = :id")
-			.setParameter("id", workspaceId)
-			.getSingleResult();
-    }
-
-
-	/**
-	 * @return the userLogin
-	 */
-	@Factory("userLogin")
-	public UserLogin createUserLogin() {
-		return userLogin;
-	}
-
-
-	/**
-	 * @return the userWorkspace
-	 */
-	@Factory("userWorkspace")
-	public UserWorkspace createUserWorkspace() {
-		return userWorkspace;
-	}
-
-
-	/**
-	 * Initialize the user session when the workspace is changed 
-	 */
-	@Create
-	public void initialize() {
-		if (userLogin == null)
-			return;
-		tbunit = getEntityManager().merge(userWorkspace.getTbunit());
-		tbunit.getAdminUnit().getParents();
-		tbunit.getHealthSystem().getName();
-	}
 
 	
 	/**
@@ -129,6 +67,15 @@ public class UserSession {
 	public static UserWorkspace getUserWorkspace() {
 		return (UserWorkspace)Component.getInstance("userWorkspace");
 	}
+	
+	/**
+	 * Static method to return an instance of the {@link UserLogin} in the current session
+	 * @return
+	 */
+	public static UserLogin getUserLogin() {
+		return (UserLogin)Component.getInstance("userLogin");
+	}
+
 
     /**
      * Register the logout when the user session is finished by time-out
@@ -136,9 +83,8 @@ public class UserSession {
     @Observer("org.jboss.seam.preDestroyContext.SESSION")
     @Transactional
     public void logout() {
-    	if (userLogin == null) {
+    	if (getUserLogin() == null)
     		return;
-    	}
 
     	registerLogout();
     }
@@ -158,23 +104,18 @@ public class UserSession {
      */
     @Transactional
     public String changeUserWorkspace() {
-    	if (userWorkspace == null)
+    	if (userWorkspaceId == null)
     		return "error";
 
-    	if (userLogin != null)
-    		registerLogout();
+  		UserWorkspace uw = getEntityManager().find(UserWorkspace.class, userWorkspaceId);
+  		if (uw == null)
+  			return "error";
 
-    	userWorkspace.getUser().setDefaultWorkspace(userWorkspace);
+  		// register the user is leaving the current workspace
+  		registerLogout();
 
-    	registerLogin();
-    	initialize();
-    	updateUserRoleList();
-    	
-    	workspaceId = userLogin.getDefaultWorkspace().getId();
-    	
-    	Contexts.getSessionContext().set("userLogin", userLogin);
-    	Contexts.getSessionContext().set("workspaceExtension", userWorkspace.getWorkspace().getExtension());
-    	Contexts.getSessionContext().set("userWorkspace", userWorkspace);
+  		// register the user is entering a new workspace
+    	registerLogin(uw);
     	
     	getEntityManager().flush();
 
@@ -185,21 +126,22 @@ public class UserSession {
 
     
     /**
-     * Register the user login
+     * Register the user login in the database as an instance of the {@link UserLogin} class.
+     * It also stores in the session information about the workspace
      */
-    protected void registerLogin() {
+    protected UserLogin registerLogin(UserWorkspace userWorkspace) {
     	// get client information
-    	FacesContext facesContext = FacesContext.getCurrentInstance();
+    	ServletContexts servletContexts = ServletContexts.instance();
     	String ipAddr = null;
     	String app = null;
-    	if (facesContext != null) {
-           	HttpServletRequest req = (HttpServletRequest) facesContext.getExternalContext().getRequest();
+    	if (servletContexts != null) {
+           	HttpServletRequest req = (HttpServletRequest) servletContexts.getRequest();
             ipAddr = req.getRemoteAddr();
             app = req.getHeader("User-Agent");
     	}
 
-        // register new login        
-        userLogin = new UserLogin();
+        // register new login
+        UserLogin userLogin = new UserLogin();
         userLogin.setUser(userWorkspace.getUser());
         userLogin.setLoginDate(new java.util.Date());
 
@@ -212,10 +154,32 @@ public class UserSession {
         userLogin.setWorkspace(userWorkspace.getWorkspace());
         userLogin.setIpAddress(ipAddr);
 
+        // change the user workspace
+        userWorkspace.getUser().setDefaultWorkspace( userWorkspace );
+        
+        getEntityManager().persist(userLogin);
+
+        // register user in the list of on-line users
         OnlineUsersHome onlineUsers = (OnlineUsersHome)Component.getInstance("onlineUsers");
         onlineUsers.add(userLogin);
+
+        // avoid lazy initialization (Hibernate)
+        userWorkspace.getTbunit().getId();
+        userWorkspace.getTbunit().getAdminUnit().getId();
+        if (userWorkspace.getAdminUnit() != null)
+        	userWorkspace.getAdminUnit().getId();
         
-        getEntityManager().persist(userLogin);    	
+        // put data in the session scope
+    	Contexts.getSessionContext().set("workspaceId", userWorkspace.getWorkspace().getId());
+    	Contexts.getSessionContext().set("userLogin", userLogin);
+    	Contexts.getSessionContext().set("workspaceExtension", userWorkspace.getWorkspace().getExtension());
+    	Contexts.getSessionContext().set("userWorkspace", userWorkspace);
+    	
+    	setTbunit(userWorkspace.getTbunit());
+
+    	updateUserRoleList(userWorkspace);
+    	
+    	return userLogin;
     }
 
 
@@ -224,8 +188,8 @@ public class UserSession {
      */
     protected void registerLogout() {
     	EntityManager em = getEntityManager();
-    	
-    	userLogin = em.merge(userLogin);
+
+    	UserLogin userLogin = em.find(UserLogin.class, getUserLogin().getId() );
     	userLogin.setLogoutDate(new Date());
 
         OnlineUsersHome onlineUsers = (OnlineUsersHome)Component.getInstance("onlineUsers");
@@ -239,11 +203,11 @@ public class UserSession {
     /**
      * Mount the user permission list
      */
-    public void updateUserRoleList() {
+    public void updateUserRoleList(UserWorkspace uw) {
     	removePermissions();
     	
     	Identity identity = Identity.instance();
-    	UserProfile prof = userWorkspace.getProfile();
+    	UserProfile prof = uw.getProfile();
 
     	List<Object[]> lst = getEntityManager().createQuery("select u.userRole.name, u.canChange, u.caseClassification " +
     			"from UserPermission u where u.userProfile.id = :id and u.canExecute = true")
@@ -291,77 +255,71 @@ public class UserSession {
 
 
 
+    /**
+     * Return the id of the selected TB unit made by the user
+     * @return
+     */
+    public Integer getTbunitId() {
+    	return (Integer)Contexts.getSessionContext().get("tbunitId");
+    }
 
+
+	/**
+	 * Return the selected workspace of the user
+	 * @return
+	 */
 	public Tbunit getWorkingTbunit() {
-		UserWorkspace uw = userLogin.getUser().getDefaultWorkspace();
+//		UserWorkspace uw = userLogin.getUser().getDefaultWorkspace();
+		UserWorkspace uw = (UserWorkspace)Contexts.getSessionContext().get("userWorkspace");
 		if (uw.isPlayOtherUnits())
-			 return tbunit;
+			 return (Tbunit)Component.getInstance("selectedUnit");
 		else return uw.getTbunit();
 	}
 
+	
+	/**
+	 * Check if the user can make transactions in the selected unit
+	 * @return
+	 */
+	public boolean isSelectedUnitTransactional() {
+		UserWorkspace uw = (UserWorkspace)Contexts.getSessionContext().get("userWorkspace");
 
-	public Tbunit getTbunit() {
-		return tbunit;
+		if (uw.isPlayOtherUnits())
+			return true;
+		else {
+			Integer selid = (Integer)Contexts.getSessionContext().get(SessionFactory.selectedUnitId);
+			if (selid == null)
+				throw new IllegalAccessError("There is no information about the selected unit");
+			return uw.getTbunit().getId().equals(selid);
+		}
 	}
 
-
-	public void setTbunit(Tbunit tbunit) {
-		tbunit.getAdminUnit().getParents();
-		this.tbunit = tbunit;
-	}
 
 	/**
-	 * Check if the given batch is in attention period for expiration.
+	 * Return the selected unit of the current user
+	 * @return
 	 */
-	public boolean isExpiringBatch(Object o){
-		
-		Batch b = null;
-		BatchQuantity bq = null;
-		if(o instanceof Batch)
-			b = (Batch) o;
-		else if (o instanceof BatchQuantity){
-			bq = (BatchQuantity) o;
-			b = bq.getBatch();
-		}
-		
-		if(b != null){
-			Calendar now  = Calendar.getInstance();
-			Calendar batchExpiringDate = Calendar.getInstance();
-			batchExpiringDate.setTime(b.getExpiryDate());
-			
-			long diff = batchExpiringDate.getTimeInMillis() - now.getTimeInMillis();
-			diff = diff / (24*60*60*1000);
-			double diffInDouble = diff;
-			double diffInMonths = diffInDouble / 30.0;
-			
-			if(userLogin != null 
-					&& userLogin.getWorkspace() != null 
-					&& userLogin.getWorkspace().getMonthsToAlertExpiredMedicines() != null){
-				if(diffInMonths < 0 || diffInMonths > userLogin.getWorkspace().getMonthsToAlertExpiredMedicines().longValue())
-					return false;
-				else
-					return true;
-			}
-			
-			if(userWorkspace != null 
-					&& userWorkspace.getWorkspace() != null 
-					&& userWorkspace.getWorkspace().getMonthsToAlertExpiredMedicines() != null){
-				if(diffInMonths < 0 || diffInMonths > userWorkspace.getWorkspace().getMonthsToAlertExpiredMedicines().longValue())
-					return false;
-				else
-					return true;
-			}
-		}
-		
-		return false;
+	public Tbunit getTbunit() {
+		return (Tbunit)Component.getInstance("selectedUnit");
 	}
+
+
+	/**
+	 * Change the selected unit of the current user
+	 * @param tbunit
+	 */
+	public void setTbunit(Tbunit tbunit) {
+		Contexts.getSessionContext().set(SessionFactory.selectedUnitId, tbunit.getId());
+	}
+
 	
 	/**
 	 * Check if TB unit has started medicine management 
 	 * @return
 	 */
 	public boolean isMedicineManagementStarted() {
-		return (getTbunit().isMedicineManagementStarted());
+		Tbunit unit = getTbunit();
+		return (unit.isMedicineManagementStarted());
 	}
 
 	public boolean isCanCheckReceiving() {
@@ -419,13 +377,21 @@ public class UserSession {
 	}
 
 
+	/**
+	 * Return true if user can adjust the stock
+	 * @return
+	 */
 	public boolean isCanAdjustStock() {
-		return Identity.instance().hasRole("STOCKPOS") && (getTbunit().isMedicineStorage()) && (getWorkingTbunit().equals(tbunit));
+		return Identity.instance().hasRole("STOCKPOS") && (getTbunit().isMedicineStorage()) && (isSelectedUnitTransactional());
 	}
 
 
+	/**
+	 * Return true if user can include TB unit in medicine management control
+	 * @return
+	 */
 	public boolean isCanSetupUnit() {
-		return Identity.instance().hasRole("UNITSETUP") && (getTbunit().isMedicineStorage()) && (getWorkingTbunit().equals(tbunit));
+		return Identity.instance().hasRole("UNITSETUP") && (getTbunit().isMedicineStorage()) && (isSelectedUnitTransactional());
 	}
 
 
@@ -506,31 +472,6 @@ public class UserSession {
 	}
 	
 	
-	/**
-	 * @param userLogin the userLogin to set
-	 */
-	public void setUserLogin(UserLogin userLogin) {
-		this.userLogin = userLogin;
-	}
-
-	/**
-	 * @param userWorkspace the userWorkspace to set
-	 */
-	public void setUserWorkspace(UserWorkspace userWorkspace) {
-		this.userWorkspace = userWorkspace;
-	}
-
-
-	public boolean isDisplayMessagesKeys() {
-		return displayMessagesKeys;
-	}
-
-
-	public void setDisplayMessagesKeys(boolean displayMessagesKeys) {
-		this.displayMessagesKeys = displayMessagesKeys;
-	}
-	
-	
 	public EntityManager getEntityManager() {
 		return (EntityManager)Component.getInstance("entityManager");
 	}
@@ -541,9 +482,7 @@ public class UserSession {
 	 * @param id
 	 */
 	public void setUserWorkspaceId(Integer id) {
-		if (id == null)
-			 userWorkspace = null;
-		else userWorkspace = getEntityManager().find(UserWorkspace.class, id);
+		userWorkspaceId = id;
 	}
 
 
@@ -552,7 +491,7 @@ public class UserSession {
 	 * @return
 	 */
 	public Integer getUserWorkspaceId() {
-		return (userWorkspace == null? null: userWorkspace.getId());
+		return userWorkspaceId;
 	}
 
 
@@ -569,22 +508,6 @@ public class UserSession {
 	 */
 	public void setInitingList(boolean initingList) {
 		this.initingList = initingList;
-	}
-
-
-	/**
-	 * @return the workspaceId
-	 */
-	public Integer getWorkspaceId() {
-		return workspaceId;
-	}
-
-
-	/**
-	 * @param workspaceId the workspaceId to set
-	 */
-	public void setWorkspaceId(Integer workspaceId) {
-		this.workspaceId = workspaceId;
 	}
 
 	

@@ -37,7 +37,7 @@
 		</th>
 	</tr>
 <a:repeat value="#{table.rows}" var="row">
-	<s:fragment rendered="#{(not userSession.isExpiringBatch(row.batch)) and (not row.batch.expired)}">
+	<s:fragment rendered="#{(not inventoryReport.isExpiringBatch(row.batch)) and (not row.batch.expired)}">
 		<tr>
 			<s:fragment rendered="#{not row.spanned}">
 			<td rowspan="#{row.rowSpan}">
@@ -112,7 +112,7 @@
 		</tr>
 	</s:fragment>
 	
-	<s:fragment rendered="#{userSession.isExpiringBatch(row.batch)}">
+	<s:fragment rendered="#{inventoryReport.isExpiringBatch(row.batch)}">
 		<tr>
 			<s:fragment rendered="#{not row.spanned}">
 			<td rowspan="#{row.rowSpan}">

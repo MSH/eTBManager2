@@ -9,6 +9,7 @@ import org.jboss.seam.annotations.Name;
 import org.msh.tb.adminunits.AdminUnitGroup;
 import org.msh.tb.cases.HealthUnitInfo;
 import org.msh.tb.cases.HealthUnitsQuery;
+import org.msh.tb.login.UserSession;
 
 @Name("healthUnitsQueryUA")
 public class HealthUnitsQueryUA extends HealthUnitsQuery {
@@ -42,7 +43,7 @@ public class HealthUnitsQueryUA extends HealthUnitsQuery {
 				"where c.state <> 1 and c.notification_unit_id = u.id " + casecond + ") as others "  +
 				
 				"from tbunit u inner join administrativeunit a on a.id = u.adminunit_id " +
-				"where u.workspace_id = " + defaultWorkspace.getId().toString() + generateSQLConditionByUserView() +
+				"where u.workspace_id = " + UserSession.getWorkspace().getId().toString() + generateSQLConditionByUserView() +
 				(hsID != null? " and u.healthsystem_id = " + hsID: "") + 
 				" group by u.id, u.name1, a.code having numcases > 0 or ontreat > 0  order by a.code, u.name1";
 		

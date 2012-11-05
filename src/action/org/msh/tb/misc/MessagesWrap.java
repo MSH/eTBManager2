@@ -16,11 +16,16 @@ import org.jboss.seam.core.SeamResourceBundle;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.login.UserSession;
 
-@Name("org.jboss.seam.international.messagesFactory")
-@BypassInterceptors
+//@Name("org.jboss.seam.international.messagesFactory")
+//@BypassInterceptors
+/**
+ * Disabled because nobody really use it
+ * @author Ricardo Memoria
+ *
+ */
 public class MessagesWrap extends Messages {
 
-    @Factory(value = "messages", autoCreate = true, scope = EVENT)
+/*    @Factory(value = "messages", autoCreate = true, scope = EVENT)
 	public Map<String, String> getMessages() {
 		UserSession userSession = (UserSession)Component.getInstance("userSession", false);
 		if ((userSession == null) || (!userSession.isDisplayMessagesKeys()))
@@ -73,4 +78,4 @@ public class MessagesWrap extends Messages {
             }
 		};
 	}
-}
+*/}

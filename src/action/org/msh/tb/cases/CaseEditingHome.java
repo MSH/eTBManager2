@@ -446,8 +446,8 @@ public class CaseEditingHome {
 	private boolean allowBeforeDiagnosis() {
 		UserSession userSession = (UserSession) Component.getInstance("userSession");
 		if(userSession != null){
-			boolean isTBAllow = userSession.getUserWorkspace().getWorkspace().isStartTBTreatBeforeValidation();
-			boolean isDRTBAllow = userSession.getUserWorkspace().getWorkspace().isStartDRTBTreatBeforeValidation();
+			boolean isTBAllow = UserSession.getUserWorkspace().getWorkspace().isStartTBTreatBeforeValidation();
+			boolean isDRTBAllow = UserSession.getUserWorkspace().getWorkspace().isStartDRTBTreatBeforeValidation();
 			boolean isTBCase = caseHome.getInstance().getClassification().equals(CaseClassification.TB);
 			boolean isDRTBCase = caseHome.getInstance().getClassification().equals(CaseClassification.DRTB);
 			return ( isTBAllow && isTBCase) || (isDRTBAllow && isDRTBCase);

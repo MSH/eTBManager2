@@ -26,8 +26,7 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 	
 	@In
 	protected EntityManager entityManager;
-	@In
-	protected Workspace defaultWorkspace;
+	@In(create=true) Workspace defaultWorkspace;
 	@In(create=true) UserSession userSession;
 	@In(create=true)
 	protected UserWorkspace userWorkspace;

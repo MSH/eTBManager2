@@ -24,6 +24,7 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.BatchSelection;
+import org.msh.tb.medicines.InventoryReport;
 import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.DateUtils;
 
@@ -50,6 +51,7 @@ public class StockAdjustmentHome extends Controller {
 	@In(create=true) EntityManager entityManager;
 	@In(create=true) MovementHome movementHome;
 	@In(create=true) UserSession userSession;
+	@In(create=true) InventoryReport inventoryReport;
 	@In(create=true) BatchSelection batchSelection;
 	@In(create=true) FacesMessages facesMessages;
 
@@ -484,7 +486,7 @@ public class StockAdjustmentHome extends Controller {
 		StockPositionItem item = (StockPositionItem) o;
 		if(item!=null){
 			for(BatchQuantity bq : item.getBatches()){
-				if(userSession.isExpiringBatch(bq))
+				if(inventoryReport.isExpiringBatch(bq))
 					return true;
 			}
 		}
