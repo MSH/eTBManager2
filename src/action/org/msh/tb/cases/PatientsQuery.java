@@ -223,4 +223,12 @@ public class PatientsQuery extends EntityQuery {
 			return s;
 		}
 	}
+
+
+	/**
+	 * @param patientList the patientList to set
+	 */
+	public void setPatientList(List<Item> patientList) {
+		this.patientList = patientList;
+	}
 }
