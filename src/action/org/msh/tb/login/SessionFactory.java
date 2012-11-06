@@ -13,8 +13,6 @@ import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 
-import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIConversion.User;
-
 /**
  * Request scope component to serve as a factory of session scoped objects commonly used during user session,
  * like instances of the {@link User} class, {@link UserWorkspace} class, {@link Workspace} class and 
