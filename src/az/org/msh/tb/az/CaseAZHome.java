@@ -164,11 +164,6 @@ public class CaseAZHome {
 		return res;
 	}
 	
-	public String deleteComas(String name){
-		String res = name.replaceAll(",","");
-		return res;
-	}
-	
 	public String getRightPatientName(TbCase tbcase){
 		EntityManager em = (EntityManager)Component.getInstance("entityManager", true);
 		TbCase tc = (TbCase) em.find(TbCase.class, tbcase.getId());
@@ -288,7 +283,8 @@ public class CaseAZHome {
 		boolean exams = false;
 		if (az.getExamsDST()!=null)
 			for (ExamDST ex:az.getExamsDST()){
-				if (!ex.getDateCollected().after(az.getTreatmentPeriod().getIniDate()))
+				Date dt = ex.getDateRelease()!=null?ex.getDateRelease():ex.getDateCollected();
+				if (!dt.after(az.getTreatmentPeriod().getIniDate()))
 					exams = true;
 			}
 		String res = "";
