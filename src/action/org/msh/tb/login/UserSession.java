@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,8 @@ import org.msh.tb.entities.UserProfile;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.utils.Passwords;
+import org.msh.utils.date.DateUtils;
 
 
 /**
@@ -39,6 +42,8 @@ public class UserSession {
 	private boolean initingList;
 	
 	private Integer userWorkspaceId;
+	
+	private String sessionId;
 
 
 	
@@ -115,7 +120,7 @@ public class UserSession {
   		registerLogout();
 
   		// register the user is entering a new workspace
-    	registerLogin(uw);
+    	registerLogin(uw, false);
     	
     	getEntityManager().flush();
 
@@ -129,7 +134,13 @@ public class UserSession {
      * Register the user login in the database as an instance of the {@link UserLogin} class.
      * It also stores in the session information about the workspace
      */
-    protected UserLogin registerLogin(UserWorkspace userWorkspace) {
+    protected UserLogin registerLogin(UserWorkspace userWorkspace, boolean tryRestorePrevSession) {
+    	if (tryRestorePrevSession) {
+    		UserLogin userLogin = tryRestorePreviousSession(userWorkspace);
+    		if (userLogin != null) 
+    			return userLogin;
+    	}
+    	
     	// get client information
     	ServletContexts servletContexts = ServletContexts.instance();
     	String ipAddr = null;
@@ -153,6 +164,8 @@ public class UserSession {
         userLogin.setApplication(app);
         userLogin.setWorkspace(userWorkspace.getWorkspace());
         userLogin.setIpAddress(ipAddr);
+        // this session id must be available to be returned to the client
+        createNewSessionId(userLogin);
 
         // change the user workspace
         userWorkspace.getUser().setDefaultWorkspace( userWorkspace );
@@ -168,6 +181,8 @@ public class UserSession {
         userWorkspace.getTbunit().getAdminUnit().getId();
         if (userWorkspace.getAdminUnit() != null)
         	userWorkspace.getAdminUnit().getId();
+        if (userWorkspace.getHealthSystem() != null)
+        	userWorkspace.getHealthSystem().getId();
         
         // put data in the session scope
     	Contexts.getSessionContext().set("workspaceId", userWorkspace.getWorkspace().getId());
@@ -183,7 +198,50 @@ public class UserSession {
     }
 
 
-    /**
+	/**
+	 * Create a unique new session id to be used by clients application in reference to this session (even when the session is finished)
+	 * @return unique identification 
+	 */
+	private String createNewSessionId(UserLogin userLogin) {
+		UUID uid = UUID.randomUUID();
+		sessionId = uid.toString();
+        userLogin.setSessionId( Passwords.hashPassword(sessionId) );
+
+        return uid.toString();
+	}
+
+
+	/**
+     * Try to restore the previous user session in order to not create a new {@link UserLogin} registration
+     * based on established criterias like: Last login in than 12h, same user and workspace  
+     * @param userWorkspace
+     * @return
+     */
+    private UserLogin tryRestorePreviousSession(UserWorkspace userWorkspace) {
+    	UserLogin userLogin = null; 
+    	try {
+        	userLogin = (UserLogin)getEntityManager()
+            		.createQuery("from UserLogin ul fetch join ul.user u fetch join ul.workspace u " +
+            		"where ul.id = (select max(aux.id) from UserLogin aux " +
+            		"where aux.user.user.id = :userid " +
+            		"and aux.workspace.id = :wsid " +
+            		"and aux.logoutDate >= :dt and aux.sessionId is not null)")
+            		.setParameter("userid", userWorkspace.getUser().getId())
+            		.setParameter("wsid", userWorkspace.getWorkspace().getId())
+            		.setParameter("dt", DateUtils.incHours(new Date(), -12))
+            		.getResultList();
+		} catch (Exception e) {
+			return null;
+		}
+
+    	userLogin.setLogoutDate(new Date());
+    	createNewSessionId(userLogin);
+
+    	return userLogin;
+	}
+
+
+	/**
      * Register the logout of the current user
      */
     protected void registerLogout() {
@@ -269,7 +327,6 @@ public class UserSession {
 	 * @return
 	 */
 	public Tbunit getWorkingTbunit() {
-//		UserWorkspace uw = userLogin.getUser().getDefaultWorkspace();
 		UserWorkspace uw = (UserWorkspace)Contexts.getSessionContext().get("userWorkspace");
 		if (uw.isPlayOtherUnits())
 			 return (Tbunit)Component.getInstance("selectedUnit");
@@ -513,5 +570,13 @@ public class UserSession {
 	
 	public static UserSession instance() {
 		return (UserSession)Component.getInstance("userSession");
+	}
+
+
+	/**
+	 * @return the sessionId
+	 */
+	public String getSessionId() {
+		return sessionId;
 	}
 }

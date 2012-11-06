@@ -26,7 +26,9 @@ public class AuthenticatorService {
 		try {
 			HttpServletRequest req = (HttpServletRequest)ServletContexts.instance().getRequest();
 			AuthenticatorBean authenticator = (AuthenticatorBean)Component.getInstance("authenticator");
-			authenticator.setLoginWorkspaceId(workspaceid);
+			authenticator.setWorkspaceId(workspaceid);
+			authenticator.setTryRestorePrevSession(true);
+
 			Credentials credentials = Identity.instance().getCredentials();
 			credentials.setUsername(username);
 			credentials.setPassword(password);

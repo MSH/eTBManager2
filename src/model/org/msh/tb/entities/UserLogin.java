@@ -64,6 +64,10 @@ public class UserLogin implements java.io.Serializable {
 	@NotNull
     private Workspace workspace;
     
+    @Column(length=32)
+    private String sessionId;
+
+
     public Workspace getDefaultWorkspace() {
     	return (user != null? getUser().getDefaultWorkspace().getWorkspace(): null);
     }
@@ -134,5 +138,19 @@ public class UserLogin implements java.io.Serializable {
 	 */
 	public Workspace getWorkspace() {
 		return workspace;
+	}
+
+	/**
+	 * @return the sessionId
+	 */
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	/**
+	 * @param sessionId the sessionId to set
+	 */
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
 	}
 }

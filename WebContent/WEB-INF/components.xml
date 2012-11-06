@@ -56,7 +56,7 @@
    <persistence:entity-manager-factory name="mdrtbEntityManagerFactory" 
                       persistence-unit-name="mdrtb"/>
    
-   <security:identity authenticate-method="#{authenticator.webAuthenticate}" remember-me="true" />
+   <security:identity authenticate-method="#{authenticator.authenticate}" remember-me="true" />
 
 	<component class="org.jboss.seam.web.MultipartFilter">
 		<property name="createTempFiles">true</property>

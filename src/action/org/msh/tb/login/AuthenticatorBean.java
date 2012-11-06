@@ -3,13 +3,10 @@ package org.msh.tb.login;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 
-import org.jboss.seam.annotations.In;
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.faces.Redirect;
-import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.TimeZoneSelector;
 import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
@@ -21,36 +18,152 @@ import org.msh.utils.Passwords;
 
 
 /**
- * Handle user authentication in the web UI and from a remote connection (web services, for example)
+ * Handle user authentication from the web UI or from a remote connection (web services, for example).
+ * Authentication is required in order to access most of the business classes, and this component
+ * is not accessed directly, but thought the {@link Identity} class.
+ * <p/>
+ * @param workspaceid - not required. Use it if you know the user workspace you want to 
+ * connect to
+ * @param restorePrevSession - If this parameter is true, the authentication will try to use 
+ * the previous session id. This is important if you don't want to register several logins from
+ * the same user (for example, an automatic program connecting through web services) 
  * @author Ricardo Memoria
  *
  */
 @Name("authenticator")
 public class AuthenticatorBean {
 
-    @In LocaleSelector localeSelector;
-    
-    @In(create=true) FacesMessages facesMessages;
-    @In(create=true) TimeZoneSelector timeZoneSelector;
-    @In(create=true) EntityManager entityManager;
-    
-    private String language;
-    private User user;
-    private List<UserWorkspace> userWorkspaces;
+    private Integer workspaceId;
+    private boolean tryRestorePrevSession;
 
 
     /**
-     * Select the workspace user must be logged in
+     * Authenticate a user name, its password, and the workspace he is trying to log into.
+     * If the workspace ID is not informed, the system will authenticate the user and will try
+     * to find a workspace available (which is initially the last workspace logged or the first
+     * in the list of available workspaces).
+     * <p/>
+     * @param username - User name (or login)
+     * @param password - User password
+     * @return
      */
-    private Integer loginWorkspaceId;
-    
+    public boolean authenticate() {
+    	Credentials credentials = Identity.instance().getCredentials();
+
+    	String username = credentials.getUsername();
+    	String password = credentials.getPassword();
+    	
+    	String pwdhash = Passwords.hashPassword(password);
+
+    	// create variable to point to authenticated user in a workspace
+    	UserWorkspace userWorkspace = null;
+    	
+    	// no workspace was defined ?
+    	if (workspaceId == null) {
+    		// authenticate user and password
+        	List<User> lst = getEntityManager().createQuery("from User u where u.login = :login " +
+    				"and upper(u.password) = :pwd and u.state <> :blockstate")
+    				.setParameter("login", username.toUpperCase())
+    				.setParameter("pwd", pwdhash.toUpperCase())
+    				.setParameter("blockstate", UserState.BLOCKED)
+    				.getResultList();
+        	
+        	if (lst.size() == 0)
+        		return false;
+
+        	User user = lst.get(0);
+        	userWorkspace = selectUserWorkspace(user);
+    	}
+    	else {
+    		// authenticate user, password and workspace
+        	List<UserWorkspace> lst = getEntityManager().createQuery("from UserWorkspace uw " +
+        			"fetch join uw.user u " +
+        			"fetch join uw.workspace w " +
+        			"where u.login = :login " +
+    				"and upper(u.password) = :pwd " +
+    				"and u.state <> :blockstate " +
+    				"and w.workspace.id = :wsid")
+    				.setParameter("login", username.toUpperCase())
+    				.setParameter("pwd", pwdhash.toUpperCase())
+    				.setParameter("wsid", workspaceId)
+    				.setParameter("blockstate", UserState.BLOCKED)
+    				.getResultList();
+
+        	if (lst.size() == 0)
+        		return false;
+        	
+        	userWorkspace = lst.get(0);
+    	}
+    	
+    	// no user and its workspace was authenticated ?
+    	if (userWorkspace == null)
+    		return false;
+
+    	selectUserTimeZone(userWorkspace);
+
+    	// register the login
+    	UserSession.instance().registerLogin(userWorkspace, tryRestorePrevSession);
+    	
+    	// if user password is expired, clear information about redirection
+        if (userWorkspace.getUser().isPasswordExpired())
+        	Redirect.instance().setViewId(null);
+    	
+    	return true;
+    }
 
 
     /**
+     * Select the user time zone in order to display properly the date and time in the system.
+     * If no time zone was assigned to the user, the system time zone will be used to the 
+     * user session
+     * @param userWorkspace object containing information about the user and its workspace
+     */
+    private void selectUserTimeZone(UserWorkspace userWorkspace) {
+    	User user = userWorkspace.getUser();
+   
+        // adjust time zone
+    	String tm = user.getTimeZone();
+    	if ((tm == null || (tm.isEmpty())))
+    		tm = userWorkspace.getWorkspace().getDefaultTimeZone();
+
+    	if (tm != null) {
+    		TimeZoneSelector.instance().setTimeZoneId(tm);
+    		TimeZoneSelector.instance().select();
+        }
+	}
+
+
+	/**
+     * Select the best workspace for a user. Initially the user default workspace is selected 
+     * (which is the last one logged in or the one assigned when user is registered).
+     * <p/>
+     * If there is no default workspace, the system will select the first from the list of
+     * workspaces available for the user.
+     * <p/>
+     * @param user instance of {@link User}
+     * @return An instance of {@link UserWorkspace} representing the selected workspace of the user,
+     * or null if no workspace was found.
+     */
+    private UserWorkspace selectUserWorkspace(User user) {
+    	if (user.getDefaultWorkspace() != null)
+    		return user.getDefaultWorkspace();
+
+    	try {
+			return (UserWorkspace)getEntityManager().createQuery("from UserWorkspace where id = (select min(id) " +
+	    			"from UserWorkspace aux where aux.user.id = :userid)")
+	    			.setParameter("userid", user.getId())
+	    			.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+
+	/**
      * Authentication method used by WEB UI (login page) 
      * @return
      */
-    public boolean webAuthenticate()
+/*    public boolean webAuthenticate()
     {
     	Credentials credentials = Identity.instance().getCredentials();
     	if (credentials == null)
@@ -116,7 +229,7 @@ public class AuthenticatorBean {
             return false;        	
         }
     }
-
+*/
     
     /**
      * Called from the command Exit in the user menu of the web page
@@ -133,7 +246,7 @@ public class AuthenticatorBean {
     /**
      * Select the user workspace for using during the session
      */
-    private UserWorkspace selectWorkspace() {
+/*    private UserWorkspace selectWorkspace() {
     	// there is a workspace to be used after authentication?
     	if (loginWorkspaceId != null) {
     		// search for user's workspace for login
@@ -153,12 +266,12 @@ public class AuthenticatorBean {
     	
     	return user.getDefaultWorkspace();
     }
-
+*/
 
     /**
      * Load user's workspaces
      */
-    private void loadUserWorkspace() {
+/*    private void loadUserWorkspace() {
     	userWorkspaces = entityManager.createQuery("from UserWorkspace u " +
     			"join fetch u.workspace " +
     			"join fetch u.tbunit " +
@@ -166,33 +279,74 @@ public class AuthenticatorBean {
     			.setParameter("userid", user.getId())
     			.getResultList();
     }
-    
-    public void changeLanguage() {
+*/    
+/*    public void changeLanguage() {
     	localeSelector.setLocaleString(language);
     	localeSelector.select();
     }
-    
-	public void setLanguage(String language) {
+*/    
+/*	public void setLanguage(String language) {
 		this.language = language;
 	}
 
 	public String getLanguage() {
 		return language;
 	}
-
+*/
 
 	/**
 	 * @return the loginWorkspaceId
 	 */
-	public Integer getLoginWorkspaceId() {
+/*	public Integer getLoginWorkspaceId() {
 		return loginWorkspaceId;
 	}
-
+*/
 
 	/**
 	 * @param loginWorkspaceId the loginWorkspaceId to set
 	 */
-	public void setLoginWorkspaceId(Integer loginWorkspaceId) {
+/*	public void setLoginWorkspaceId(Integer loginWorkspaceId) {
 		this.loginWorkspaceId = loginWorkspaceId;
+	}
+*/
+
+	/**
+	 * @return the workspaceId
+	 */
+	public Integer getWorkspaceId() {
+		return workspaceId;
+	}
+
+
+	/**
+	 * @param workspaceId the workspaceId to set
+	 */
+	public void setWorkspaceId(Integer workspaceId) {
+		this.workspaceId = workspaceId;
+	}
+
+
+	/**
+	 * @return the tryRestorePrevSession
+	 */
+	public boolean isTryRestorePrevSession() {
+		return tryRestorePrevSession;
+	}
+
+
+	/**
+	 * @param tryRestorePrevSession the tryRestorePrevSession to set
+	 */
+	public void setTryRestorePrevSession(boolean tryRestorePrevSession) {
+		this.tryRestorePrevSession = tryRestorePrevSession;
+	}
+	
+	
+	/**
+	 * Return the instance of {@link EntityManager} in use
+	 * @return
+	 */
+	protected EntityManager getEntityManager() {
+		return (EntityManager)Component.getInstance("entityManager");
 	}
 }

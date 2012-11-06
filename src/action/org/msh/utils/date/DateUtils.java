@@ -97,6 +97,19 @@ public class DateUtils {
 	
 	
 	/**
+	 * Increments a date <code>dt</code> in <code>numHours</code> hours
+	 * @param dt
+	 * @param numHours
+	 * @return
+	 */
+	static public Date incHours(Date dt, int numHours) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(dt);
+		c.add(Calendar.HOUR_OF_DAY, numHours);
+		return c.getTime();
+	}
+	
+	/**
 	 * Returns the year part of the date
 	 * @param dt - Date
 	 * @return - year of the date dt
