@@ -140,12 +140,12 @@ public class EidssTaskImport extends AsyncTaskImpl {
 						}	
 					}
 					
-					if ((infoForExport.size()> 0) && notCanceled()){
-						exportToDB();
-					}
 					sayAboutCheckList();
 					sayAboutExport();
 					sayAboutRejected();
+					if ((infoForExport.size()> 0) && notCanceled()){
+						exportToDB();
+					}
 					//sayAboutLoad(success);
 					//sayAboutCheckList();
 				}
@@ -573,7 +573,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 						lastName+" "+firstName+" "+fatherName+" / "+
 						onecase.getAge()+" / "+
 						(onecase.getDateOfBirth()!=null ? DateUtils.formatDate(onecase.getDateOfBirth(),"dd-MM-yyyy") : "")+" / "+
-						DateUtils.formatDate(ConvertToDate(EIDSSData.getNotificationDate()),"dd-MM-yyyy");
+						(EIDSSData.getNotificationDate()!=null ? DateUtils.formatDate(ConvertToDate(EIDSSData.getNotificationDate()),"dd-MM-yyyy"):"");
 		onecase.setAdditionalComment(comment);	
 		onecase.setCaseID(EIDSSData.getCaseID().toString());	
 		onecase.setEnteringDate(d);
