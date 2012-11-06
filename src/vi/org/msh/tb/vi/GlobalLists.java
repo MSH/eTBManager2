@@ -52,32 +52,32 @@ public class GlobalLists {
 		PatientType.OTHER
 	};
 	
-	private static final DstResult dstResults[] = {
-		DstResult.NOTDONE,
-		DstResult.SUSCEPTIBLE,
-		DstResult.RESISTANT,
-		DstResult.CONTAMINATED,
-		DstResult.INTERMEDIATE,
-		DstResult.ERROR
+	private static final MtbDetected mtbDetected[] = {
+		MtbDetected.YES,
+		MtbDetected.NO,
+		MtbDetected.ERROR
 	};
-
+	
+	private static final DstResult dstResultsForMtbYes[] = {
+		DstResult.NOTDONE,
+		DstResult.RESISTANT,
+		DstResult.NOTRESISTANT,
+		DstResult.INTERMEDIATE,
+		DstResult.CONTAMINATED
+	};
+	
+	private static final DstResult dstResultsForMtbNo[] = {
+		DstResult.NOTDONE
+	};
 	
 	/**
 	 * Return options of {@link MtbDetected}
 	 * @return
 	 */
 	public MtbDetected[] getMtbDetectedOptions() {
-		return MtbDetected.values();
+		return mtbDetected;
 	}
-	
-	/**
-	 * Return customized DST result options for Rifampicin
-	 * @return
-	 */
-	public DstResult[] getDstResultsRifampicin() {
-		return dstResults;
-	}
-	
+		
 	/**
 	 * Return the results of culture customized to Vietnam
 	 * @return
@@ -88,6 +88,14 @@ public class GlobalLists {
 	
 	public PatientType[] getPatientTypes() {
 		return patientTypes;
+	}
+	
+	public DstResult[] getDstResultsForMtbYes() {
+		return dstResultsForMtbYes;
+	}
+	
+	public DstResult[] getDstResultsForMtbNo() {
+		return dstResultsForMtbNo;
 	}
 	
 	/**

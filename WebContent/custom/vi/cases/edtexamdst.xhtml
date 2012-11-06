@@ -36,20 +36,22 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
-    	<h:selectOneMenu value="#{examDST.method}" required="false">
-    		<s:selectItems value="#{fieldsQuery.DSTMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
+    	<h:selectOneMenu id="methodField" value="#{examDST.method}" required="false" onchange="verifyGenXpert(this);">
+     		<s:selectItems value="#{fieldsQuery.DSTMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
     		<s:convertEntity />
     	</h:selectOneMenu>
     </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['vi.MtbDetected']}:</ui:define>
-    	<h:selectOneMenu value="#{examDST.mtbDetected}" required="false">
-    		<s:selectItems value="#{globalLists_vi.mtbDetectedOptions}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
-    		<s:convertEnum />
-    	</h:selectOneMenu>
-    </s:decorate>
-
+	<div id="mtbFieldDiv" style="display:none">
+	    <s:decorate template="/layout/edit.xhtml">
+	    	<ui:define name="label">#{messages['vi.MtbDetected']}:</ui:define>
+	    	<h:selectOneMenu id="mtbField" value="#{examDST.mtbDetected}" required="false" onchange="verifyMtbOptions(this);">
+	    		<s:selectItems value="#{globalLists_vi.mtbDetectedOptions}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+	    		<s:convertEnum />
+	    	</h:selectOneMenu>
+	    </s:decorate>
+	</div>
+	
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
     	<h:inputTextarea value="#{examDST.comments}" style="width:500px;height:80px"/>
@@ -75,10 +77,26 @@
     			<s:selectItems value="#{dstResults}" var="ss" label="#{messages[ss.key]}" />
     			<s:convertEnum />
 			</h:selectOneMenu>
-			<h:selectOneMenu id="res2" value="#{it.result}" required="true" onchange="dstResultChange(this);" rendered="#{it.substance.abbrevName=='R'}">
-    			<s:selectItems value="#{globalLists_vi.dstResultsRifampicin}" var="ss" label="#{messages[ss.key]}" />
-    			<s:convertEnum />
-			</h:selectOneMenu>
+			<s:div id="rifField" rendered="#{it.substance.abbrevName=='R'}">
+				<div id="specOptionsDefault">
+				<h:selectOneMenu value="#{it.result}" required="true" onchange="dstResultChange(this);" >
+	    			<s:selectItems value="#{dstResults}" var="ss" label="#{messages[ss.key]}" />
+	    			<s:convertEnum />
+				</h:selectOneMenu>
+				</div>
+				<div id="specOptionsYes" style="display:none">
+				<h:selectOneMenu value="#{it.result}" required="true" onchange="dstResultChange(this);" >
+	    			<s:selectItems value="#{globalLists_vi.dstResultsForMtbYes}" var="ss" label="#{messages[ss.key]}" />
+	    			<s:convertEnum />
+				</h:selectOneMenu>
+				</div>
+				<div id="specOptionsNo" style="display:none">
+				<h:selectOneMenu value="#{it.result}" required="true" onchange="dstResultChange(this);" >
+	    			<s:selectItems value="#{globalLists_vi.dstResultsForMtbNo}" var="ss" label="#{messages[ss.key]}" />
+	    			<s:convertEnum />
+				</h:selectOneMenu>
+				</div>
+			</s:div>
 			</span>
 			<h:message for="res" styleClass="error" style="float:left" />
 		</h:column>
@@ -86,6 +104,35 @@
 
 <script type="text/javascript">
 <!--
+function verifyGenXpert(c){
+	if(c.options[c.selectedIndex].text == 'GeneXpert' 
+		|| c.options[c.selectedIndex].text == 'GENEXPERT' 
+		|| c.options[c.selectedIndex].text == 'genexpert'){
+		document.getElementById('mtbFieldDiv').style.display = 'block';
+	}else{
+		hideAllOptions();
+		document.getElementById('mtbFieldDiv').style.display = 'none';
+		document.getElementById('specOptionsDefault').style.display = 'block';
+	}
+}
+
+function hideAllOptions(){
+	document.getElementById('specOptionsYes').style.display = 'none';
+	document.getElementById('specOptionsNo').style.display = 'none';
+	document.getElementById('specOptionsDefault').style.display = 'none';
+}
+
+function verifyMtbOptions(c){
+	hideAllOptions();
+	if(c.selectedIndex == 1){
+		document.getElementById('specOptionsYes').style.display = 'block';
+	}else if(c.selectedIndex == 2 || c.selectedIndex == 3){
+		document.getElementById('specOptionsNo').style.display = 'block';
+	}else{
+		document.getElementById('specOptionsDefault').style.display = 'block';
+	}
+}
+
 function dstResultChange(cb) {
 	var val=cb.options[cb.selectedIndex].value;
 	var elem = jQuery(cb).prev();

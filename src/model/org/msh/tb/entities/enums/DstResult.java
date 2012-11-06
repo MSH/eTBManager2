@@ -7,7 +7,8 @@ public enum DstResult {
 	CONTAMINATED,
 	BASELINE,
 	INTERMEDIATE,
-	ERROR;
+	ERROR,
+	NOTRESISTANT;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
