@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Transactional;
@@ -37,6 +38,7 @@ import org.msh.utils.date.DateUtils;
  *
  */
 @Name("userSession")
+@AutoCreate
 public class UserSession {
 
 	private boolean initingList;
