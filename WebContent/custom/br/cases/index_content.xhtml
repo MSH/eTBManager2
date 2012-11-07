@@ -18,12 +18,11 @@
 
 	<a:repeat value="#{healthUnitsQueryBR.adminUnits}" var="adm" rowKeyVar="x">
 	<table class="table1">
-		<tr><th colspan="6">
+		<tr><th colspan="6" align="left">
+			<h:outputText value="#{adm.casesOnTreatment} #{messages['CaseState.ONTREATMENT']}" rendered="#{adm.casesOnTreatment>0}" style="float:right"/>
 			<div class="text-big">
-				<a href="#" id="show#{adm.adminUnit.id}lnk" onclick="showTableDetails(#{adm.adminUnit.id});">(+)</a>
-				<a href="#" id="hide#{adm.adminUnit.id}lnk" onclick="hideTableDetails(#{adm.adminUnit.id})" style="display:none">(-)</a>
-				#{adm.adminUnit.name}
-				<h:outputText value=" - #{adm.casesOnTreatment} #{messages['CaseState.ONTREATMENT']}" rendered="#{adm.casesOnTreatment>0}"/>
+				<a href="#" id="show#{adm.adminUnit.id}lnk" onclick="showTableDetails(#{adm.adminUnit.id}); return false;"><div class="plus-icon"/>#{adm.adminUnit.name}</a>
+				<a href="#" id="hide#{adm.adminUnit.id}lnk" onclick="hideTableDetails(#{adm.adminUnit.id}); return false;" style="display:none"><div class="collapse-icon" />#{adm.adminUnit.name}</a>
 			</div>
 		</th></tr>
 		<tr class="unit#{adm.adminUnit.id}" style="display:none">
