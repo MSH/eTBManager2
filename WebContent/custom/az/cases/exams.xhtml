@@ -231,7 +231,7 @@
 	<div class="spacer" />
 
 	<h:panelGroup id="pnldst">	
-		<s:link view="/cases/edtexamdst.xhtml" 
+		<s:link view="/custom/az/cases/edtexamdst.xhtml" 
 			style="float:right;" rendered="#{caseAZHome.canEditExams}"
 			 styleClass="button-alt">
 			<f:param name="id" value="#{tbcase.id}"/>
@@ -268,7 +268,7 @@
 		<a:repeat value="#{examDSTTable.allResults}" var="r">
 		<tr>
 			<td>
-				<s:link view="/cases/edtexamdst.xhtml" propagation="none" enabled="#{caseAZHome.canEditExams}">
+				<s:link view="/custom/az/cases/edtexamdst.xhtml" propagation="none" enabled="#{caseAZHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.examResult.id}"/>
 					<h:outputFormat value="#{messages[r.examResult.monthDisplay]}" >
