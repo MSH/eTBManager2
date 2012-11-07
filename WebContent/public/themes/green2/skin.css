@@ -576,6 +576,10 @@ table {
 	border-right:1px solid white;
 	border-bottom:1px solid white;
 }
+.table1 th a {
+	color:#073d07;
+}
+
 .table1 td {
 	padding:2px;
 	padding:8px 4px 8px 4px;
