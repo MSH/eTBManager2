@@ -208,6 +208,15 @@ public class SourceMedicineTree<E> {
 			this.medicine = medicine;
 			this.parent = parent;
 		}
+		
+		/**
+		 * Return a unique ID for the node 
+		 * @return
+		 */
+		public String getNodeId() {
+			return medicine.getId().toString() + (parent != null? "_" + parent.getSource().getId().toString(): "");
+		}
+		
 		/**
 		 * @return the medicine
 		 */

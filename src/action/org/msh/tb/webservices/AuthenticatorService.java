@@ -4,12 +4,10 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
-import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
-import org.jboss.seam.web.ServletContexts;
 import org.msh.tb.login.AuthenticatorBean;
 
 /**
@@ -24,7 +22,6 @@ public class AuthenticatorService {
 	@WebMethod
 	public String login(String username, String password, int workspaceid) {
 		try {
-			HttpServletRequest req = (HttpServletRequest)ServletContexts.instance().getRequest();
 			AuthenticatorBean authenticator = (AuthenticatorBean)Component.getInstance("authenticator");
 			authenticator.setWorkspaceId(workspaceid);
 			authenticator.setTryRestorePrevSession(true);
@@ -34,9 +31,6 @@ public class AuthenticatorService {
 			credentials.setPassword(password);
 			Identity.instance().login();
 			
-			System.out.println(req.getRemoteAddr());
-			System.out.println(req.getHeader("User-Agent"));
-
 			if (Identity.instance().isLoggedIn()) {
 				return "success";
 			}

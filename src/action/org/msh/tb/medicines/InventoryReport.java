@@ -246,14 +246,6 @@ public class InventoryReport {
 			return tot; //stockPosition.getQuantity();
 		}
 
-		/**
-		 * Generate a unique row id for the medicine
-		 * @return
-		 */
-		public String getRowId() {
-			return stockPosition.getSource().getId().toString() + "_" + stockPosition.getMedicine().getId().toString();
-		}
-
 		public Date getNextBatchExpire() {
 			Date dt = null;
 			for (Object obj: node.getBatches()) {

@@ -63,10 +63,11 @@
 <a:repeat value="#{s.medicines}" var="it">
 	<tr class="highlight">
 		<td>
-			<a:commandLink styleClass="plus-icon" onclick="detailsClick(this, 'med#{it.item.rowId}');return false;" />
+			<a:commandLink styleClass="plus-icon" onclick="detailsClick(this, 'med#{it.nodeId}');return false;" />
 			<s:span styleClass="alert-icon" rendered="#{it.item.hasBatchExpiring}"/>
 			<s:span styleClass="icon-error" rendered="#{it.item.hasBatchExpired}"/>
 			<h:outputText value="#{it.medicine}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
+			<h:outputText value="#{messages['medicine.almostStockedOut']}" rendered="#{not it.item.almostStockedOut()}" style="background-color:#ff8080;color:white;padding:4px;display:block;border:1px solid red;border-radius:4px;" />
 		</td>
 		<td align="center">
 			<h:outputText value="#{it.item.nextBatchExpire}" converter="localeDateConverter" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
@@ -83,12 +84,10 @@
 				</h:outputText>
 			</td>
 			<td align="right">
-				<h:outputText value="#{it.item.stockOutDate}" converter="periodConverter" rendered="#{it.item.almostStockedOut()}"
+				<h:outputText value="#{it.item.stockOutDate}" converter="periodConverter" 
 					style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
 					<f:param name="type" value="time-length"/>
 				</h:outputText>
-				<h:outputText value="#{messages['medicine.almostStockedOut']}" rendered="#{not it.item.almostStockedOut()}"
-					style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
 			</td>
 		</s:fragment>
 		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
@@ -108,7 +107,7 @@
 		</td>
 	</tr>
 	<a:repeat value="#{it.batches}" var="b">
-	<tr id="med#{it.item.rowId}" style="display:none">
+	<tr id="med#{it.nodeId}" style="display:none">
 		<td>
 			<s:decorate template="/layout/batch.xhtml" >
 				<ui:param name="batch" value="#{b.batch}" />

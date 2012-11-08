@@ -7,6 +7,10 @@ package org.msh.tb.webservices;
  */
 public class Response {
 
+	public static final int RESP_SUCCESS = 0;
+	public static final int RESP_AUTHENTICATION_FAIL = 1;
+	public static final int RESP_INVALID_SESSION = 2;
+	
 	private Object result;
 	private int errorno;
 	private String errormsg;
