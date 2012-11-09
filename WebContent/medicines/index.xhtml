@@ -67,7 +67,7 @@
 			<s:span styleClass="alert-icon" rendered="#{it.item.hasBatchExpiring}"/>
 			<s:span styleClass="icon-error" rendered="#{it.item.hasBatchExpired}"/>
 			<h:outputText value="#{it.medicine}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
-			<h:outputText value="#{messages['medicine.almostStockedOut']}" rendered="#{not it.item.almostStockedOut()}" style="background-color:#ff8080;color:white;padding:4px;display:block;border:1px solid red;border-radius:4px;" />
+			<!-- <h:outputText value="#{messages['medicine.almostStockedOut']}" rendered="#{it.item.almostStockedOut()}" style="background-color:#ff8080;color:white;padding:4px;display:block;border:1px solid red;border-radius:4px;" /> -->
 		</td>
 		<td align="center">
 			<h:outputText value="#{it.item.nextBatchExpire}" converter="localeDateConverter" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
