@@ -143,7 +143,13 @@
 										<f:param name="id" value="#{it.tbcase.id}" />
 									</s:link></td>
 								<td style="color:#069;">
-										<b>#{caseAZHome.getRightPatientName(it.tbcase)}</b><br/>
+										<b>
+										<s:link
+										value="#{caseAZHome.getRightPatientName(it.tbcase)}"
+										view="/cases/casedata.xhtml">
+										<f:param name="id" value="#{caseAZHome.getRightPatientName(it.tbcase).id}" />
+										</s:link>
+										</b><br/>
 										#{caseAZHome.getYearOfBirth(it.tbcase)} #{messages['az_EIDSS_Year_Of_Birth.short']} (<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).patient.birthDate}" converter="localeDateConverter"/>), #{caseAZHome.reGetTbCase(it.tbcase).age} #{messages['az_EIDSS_years']}<br/>
 										<ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
 										<div style="padding-top: 6px;padding-bottom: 6px;">
