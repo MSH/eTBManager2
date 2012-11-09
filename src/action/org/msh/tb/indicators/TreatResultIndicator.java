@@ -15,7 +15,7 @@ import org.msh.tb.indicators.core.IndicatorTable.TableRow;
 @Name("treatResultIndicator")
 public class TreatResultIndicator extends Indicator2D {
 	private static final long serialVersionUID = 1488382939742056446L;
-	private static final String successRateID = "SRID";  
+	protected static final String successRateID = "SRID";  
 
 	@In(create=true)
 	OutcomeIndicator outcomeIndicator;
