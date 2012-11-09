@@ -23,8 +23,13 @@
 
 
 <ui:define name="content">
+<h:form id="listCases">
+
+<h:commandLink action="#{casesExport.download()}" style="float:right;margin-right:10px;">
+	<div class="excel-icon">asas</div>
+</h:commandLink>
+
 <h1>#{title}</h1>
-	<h:form id="listCases" >
 
 	<table width="100%"><tr><td>
 	

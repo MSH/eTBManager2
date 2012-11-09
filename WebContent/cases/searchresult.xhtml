@@ -34,8 +34,14 @@ display:block;
 </ui:define>
 
 <ui:define name="content">
+<h:form id="listCases">
+
+<h:commandLink action="#{casesExport.download()}" style="float:right;">
+	<div class="excel-icon"/>
+</h:commandLink>
+
 <h1>#{title}</h1>
-	<h:form id="listCases">
+
 
 	<table width="100%"><tr><td>
 	

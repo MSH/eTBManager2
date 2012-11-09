@@ -985,8 +985,8 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	display:inline-block;
 	float:left;
 }
-.male-icon, .female-icon, .icon-lab-big, .icon-hu-big, .icon-ds-big, .medicine-icon , .print-icon{
-	background-image: url('images/icons.png');
+.male-icon, .female-icon, .icon-lab-big, .icon-hu-big, .icon-ds-big, .medicine-icon , .print-icon, .excel-icon{
+	background-image: url('images/icons2.png');
 	width:32px;
 	height:32px;
 	margin-right:2px;
@@ -1002,6 +1002,8 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .medicine-icon { background-position:-64px -48px; }
 
 .print-icon { background-position:-128px -32px;}
+
+.excel-icon { background-position:-160px -32px;}
 
 .icon-ds {  background-position:-16px -64px; }
 .icon-lab { background-position:-32px -64px; }

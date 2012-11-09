@@ -967,8 +967,8 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .tag-MANUAL-icon, .tag-AUTOGEN-icon, .tag-AUTOGEN_CONSISTENCY-icon, .delete-icon, .new-icon, .edit-icon, .progress-icon, .plus-icon, .minor-icon, .collapse-icon, .icon-unchecked,
 .icon-square, .icon-lab, .icon-hu, .icon-ds, .icon-report, .checked-icon, .unchecked-icon, .refresh-icon,
 .icon-user, .icon-log-NEW, .icon-log-EDIT, .icon-log-DELETE, .icon-log-EXEC, .batch-icon, .bar-comments,
-.naveg-first, .naveg-prev, .naveg-next, .naveg-last, .icon-positive, .icon-negative, .icon-error, .icon-phone, .alert-icon {
-	background-image: url('images/icons2.png');
+.naveg-first, .naveg-prev, .naveg-next, .naveg-last, .icon-positive, .icon-negative, .icon-error, .icon-phone, .alert-icon, .excel-icon {
+	background-image: url('images/icons3.png');
 	width:16px;
 	height:16px;
 	margin-right:2px;
@@ -976,7 +976,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	float:left;
 }
 .male-icon, .female-icon, .icon-lab-big, .icon-hu-big, .icon-ds-big, .medicine-icon {
-	background-image: url('images/icons2.png');
+	background-image: url('images/icons3.png');
 	width:32px;
 	height:32px;
 	margin-right:2px;
@@ -992,6 +992,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .medicine-icon { background-position:-64px -48px; }
 
 .print-icon { background-position:-48px -16px;}
+.excel-icon {background-position:-133px -32px; width:17px;height:17px;}
 
 .icon-ds {  background-position:-16px -64px; }
 .icon-lab { background-position:-32px -64px; }

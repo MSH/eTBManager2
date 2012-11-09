@@ -42,7 +42,8 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	private Workspace defaultWorkspace;
 	protected List<CaseResultItem> resultList;
 	protected String hqlCondition;
-
+	private boolean loadCaseData = false;
+	private List<TbCase> lst2;
 
 	private static final String[] orderValues = {"p.recordNumber, c.caseNumber", "p.gender,p.name", 
 		"c.classification", "#{cases.namesOrderBy}", "c.age", "upper(nu.name.name1)", "c.notifAddress.adminUnit.parent.name.name1", 
@@ -106,14 +107,22 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	 */
 	@Override
 	public String getEjbql() {
-		return "select p.name, c.age, p.gender, p.recordNumber, c.caseNumber, " + 
-		"c.treatmentPeriod.iniDate, c.registrationDate, nu.name.name1, " +
-		"loc.name.name1, loc.code, c.id, " +
-		"c.treatmentPeriod.endDate, c.state, c.classification, p.middleName, p.lastName, " +
-		"c.validationState, c.registrationCode, c.diagnosisType, p.birthDate, c.diagnosisDate, c.outcomeDate " +
-		getFromHQL() + " join c.patient p " +
+		String select;
+		
+		if(loadCaseData)
+			select = "select c, 1 ";
+		else
+			select = "select p.name, c.age, p.gender, p.recordNumber, c.caseNumber, " + 
+					"c.treatmentPeriod.iniDate, c.registrationDate, nu.name.name1, " +
+					"loc.name.name1, loc.code, c.id, " +
+					"c.treatmentPeriod.endDate, c.state, c.classification, p.middleName, p.lastName, " +
+					"c.validationState, c.registrationCode, c.diagnosisType, p.birthDate, c.diagnosisDate, c.outcomeDate ";
+		
+		select = select + getFromHQL() + " join c.patient p " +
 		"join c.notificationUnit nu " +
 		"join c.notifAddress.adminUnit loc ".concat(dynamicConditions());
+		
+		return select;
 	}
 
 
@@ -419,7 +428,11 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 
 	@Override
 	public Integer getMaxResults() {
-		return 50;
+		Integer max = super.getMaxResults();
+		if (max != null)
+			return max;
+		else 
+			return 50;
 	}
 
 	/**
@@ -434,52 +447,62 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		}
 
 		resultList = new ArrayList<CaseResultItem>();
-		for (Object[] obj: lst) {
-			CaseResultItem item = new CaseResultItem();
-
-			TbCase tbcase = item.getTbcase();
-			Patient p = new Patient();
-			tbcase.setPatient(p);
-
-			p.setName((String)obj[0]);
-			p.setMiddleName((String)obj[14]);
-			p.setLastName((String)obj[15]);
-			p.setGender((Gender)obj[2]);
-
-			tbcase.setAge((Integer)obj[1]);
-			tbcase.setTreatmentPeriod( new Period((Date)obj[5], (Date)obj[11]) ); 
-			tbcase.setRegistrationDate((Date)obj[6]);
-			Tbunit unit = new Tbunit();
-			unit.getName().setName1((String)obj[7]);
-			tbcase.setOwnerUnit(unit);
-			item.setAdminUnitDisplay((String)obj[8]);
-			tbcase.setId((Integer)obj[10]);
-			tbcase.setState((CaseState)obj[12]);
-			tbcase.setClassification((CaseClassification)obj[13]);
-			tbcase.setValidationState((ValidationState)obj[16]);
-			p.setBirthDate((Date)obj[19]);
-			tbcase.setRegistrationCode((String)obj[17]);
-			p.setRecordNumber((Integer)obj[3]);
-			tbcase.setCaseNumber((Integer)obj[4]);				
-			tbcase.setDiagnosisType((DiagnosisType)obj[18]);
-			tbcase.setDiagnosisDate((Date)obj[20]);
-			tbcase.setOutcomeDate((Date)obj[21]);
-
-			// search for administrative unit
-			AdministrativeUnit adm = null;
-			String code = (String)obj[9];
-			for (AdministrativeUnit aux: adminUnits) {
-				if (aux.isSameOrChildCode(code)) {
-					if (!code.equals(aux.getCode()))
-						adm = aux;
-					break;
-				}
+		
+		if(loadCaseData){
+			for(Object[] obj: lst){
+				CaseResultItem item = new CaseResultItem();
+				TbCase tbcase = (TbCase)obj[0];
+				item.setTbcase(tbcase);
+				resultList.add(item);
 			}
+		}else{
+			for (Object[] obj: lst) {
+				CaseResultItem item = new CaseResultItem();
+		
+				TbCase tbcase = item.getTbcase();
+				Patient p = new Patient();
+				tbcase.setPatient(p);
 
-			if (adm != null)
-				item.setAdminUnitDisplay(adm.getName().getDefaultName() + ", " + item.getAdminUnitDisplay());
-
-			resultList.add(item);
+				p.setName((String)obj[0]);
+				p.setMiddleName((String)obj[14]);
+				p.setLastName((String)obj[15]);
+				p.setGender((Gender)obj[2]);
+	
+				tbcase.setAge((Integer)obj[1]);
+				tbcase.setTreatmentPeriod( new Period((Date)obj[5], (Date)obj[11]) ); 
+				tbcase.setRegistrationDate((Date)obj[6]);
+				Tbunit unit = new Tbunit();
+				unit.getName().setName1((String)obj[7]);
+				tbcase.setOwnerUnit(unit);
+				item.setAdminUnitDisplay((String)obj[8]);
+				tbcase.setId((Integer)obj[10]);
+				tbcase.setState((CaseState)obj[12]);
+				tbcase.setClassification((CaseClassification)obj[13]);
+				tbcase.setValidationState((ValidationState)obj[16]);
+				p.setBirthDate((Date)obj[19]);
+				tbcase.setRegistrationCode((String)obj[17]);
+				p.setRecordNumber((Integer)obj[3]);
+				tbcase.setCaseNumber((Integer)obj[4]);				
+				tbcase.setDiagnosisType((DiagnosisType)obj[18]);
+				tbcase.setDiagnosisDate((Date)obj[20]);
+				tbcase.setOutcomeDate((Date)obj[21]);
+	
+				// search for administrative unit
+				AdministrativeUnit adm = null;
+				String code = (String)obj[9];
+				for (AdministrativeUnit aux: adminUnits) {
+					if (aux.isSameOrChildCode(code)) {
+						if (!code.equals(aux.getCode()))
+							adm = aux;
+						break;
+					}
+				}
+	
+				if (adm != null)
+					item.setAdminUnitDisplay(adm.getName().getDefaultName() + ", " + item.getAdminUnitDisplay());	
+								
+				resultList.add(item);
+			}
 		}
 	}
 
@@ -542,4 +565,15 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	public static CasesQuery instance() {
 		return (CasesQuery)App.getComponent("casesQuery");
 	}
+
+
+	public boolean isLoadCaseData() {
+		return loadCaseData;
+	}
+
+
+	public void setLoadCaseData(boolean loadCaseData) {
+		this.loadCaseData = loadCaseData;
+	}
+			
 }

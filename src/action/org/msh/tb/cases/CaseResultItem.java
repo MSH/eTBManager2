@@ -69,4 +69,7 @@ public class CaseResultItem {
 		return tbcase.getPatient();
 	}
 	
+	public void setTbcase(TbCase tbcase){
+		this.tbcase = tbcase;
+	}
 }
