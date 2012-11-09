@@ -136,6 +136,7 @@ public class UserSession {
      * Register the user login in the database as an instance of the {@link UserLogin} class.
      * It also stores in the session information about the workspace
      */
+    @Transactional
     protected UserLogin registerLogin(UserWorkspace userWorkspace, boolean tryRestorePrevSession) {
     	if (tryRestorePrevSession) {
     		UserLogin userLogin = tryRestorePreviousSession(userWorkspace);
@@ -223,7 +224,7 @@ public class UserSession {
     	UserLogin userLogin = null; 
     	try {
         	userLogin = (UserLogin)getEntityManager()
-            		.createQuery("from UserLogin ul fetch join ul.user u fetch join ul.workspace u " +
+            		.createQuery("from UserLogin ul join fetch ul.user u join fetch ul.workspace u " +
             		"where ul.id = (select max(aux.id) from UserLogin aux " +
             		"where aux.user.user.id = :userid " +
             		"and aux.workspace.id = :wsid " +

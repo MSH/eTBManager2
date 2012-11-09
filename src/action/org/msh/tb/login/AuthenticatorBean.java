@@ -77,12 +77,12 @@ public class AuthenticatorBean {
     	else {
     		// authenticate user, password and workspace
         	List<UserWorkspace> lst = getEntityManager().createQuery("from UserWorkspace uw " +
-        			"fetch join uw.user u " +
-        			"fetch join uw.workspace w " +
+        			"join fetch uw.user u " +
+        			"join fetch uw.workspace w " +
         			"where u.login = :login " +
     				"and upper(u.password) = :pwd " +
     				"and u.state <> :blockstate " +
-    				"and w.workspace.id = :wsid")
+    				"and w.id = :wsid")
     				.setParameter("login", username.toUpperCase())
     				.setParameter("pwd", pwdhash.toUpperCase())
     				.setParameter("wsid", workspaceId)

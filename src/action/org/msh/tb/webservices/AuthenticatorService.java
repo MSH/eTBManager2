@@ -9,6 +9,7 @@ import org.jboss.seam.Component;
 import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.login.AuthenticatorBean;
+import org.msh.tb.login.UserSession;
 
 /**
  * Web service to provide authentication
@@ -30,11 +31,16 @@ public class AuthenticatorService {
 			credentials.setUsername(username);
 			credentials.setPassword(password);
 			Identity.instance().login();
-			
+
+			Response resp = new Response();
+
 			if (Identity.instance().isLoggedIn()) {
-				return "success";
+				resp.setResult(UserSession.instance().getSessionId());
+				resp.setErrorno(Response.RESP_SUCCESS);
 			}
-			else return "fail";
+			else resp.setErrorno(Response.RESP_AUTHENTICATION_FAIL);
+
+			return ObjectSerializer.serializeToXml(resp);
 
 		} catch (Exception e) {
 			return e.getMessage();
