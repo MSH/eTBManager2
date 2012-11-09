@@ -40,7 +40,7 @@
 		alpha:    /[a-z_]/i,
 		alphanum: /[a-z0-9_]/i,
 		ua:	 	  /[\u0430-\u0449\u044C\u044E\u044F\u0454\u0456\u0457\u0491\u0060\u00B4\'\`\'\-]/i, // à-ùüþÿ+spec_ua+defis+apostrof
-		az:		  /[a-vx-z\u0259\u00FC\u0131\u00E7t\u015F\u00D6\u011F\-\u0060\u00B4\'\`\']/i // a-vx-z+spec_az+defis+apostrof
+		az:		  /[a-vx-z\u0025\u0259\u00FC\u0131\u00E7t\u015F\u00D6\u011F\-\u0060\u00B4\'\`\']/i // a-vx-z%+spec_az+defis+apostrof
 	};
 
 	var Keys = {
