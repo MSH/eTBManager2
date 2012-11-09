@@ -7,11 +7,11 @@
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
 	<navigation>
 		<rule if="#{not caseHome.managed}">
-			<redirect view-id="/custom/kh/cases/index.xhtml">
+			<redirect view-id="/cases/index.xhtml">
 			</redirect>
 		</rule>
 		<rule if-outcome="removed">
-			<redirect view-id="/custom/kh/cases/index.xhtml">
+			<redirect view-id="/cases/index.xhtml">
 			</redirect>
 		</rule>
 		<rule if-outcome="edit">
@@ -20,7 +20,7 @@
 			</redirect>
 		</rule>
 		<rule if-outcome="validated">
-			<redirect view-id="/custom/kh/cases/casedata.xhtml">
+			<redirect view-id="/cases/casedata.xhtml">
 				<message>#{messages['cases.validate.success']}</message>
 				<param name="id" value="#{caseHome.id}"/>
 			</redirect>
