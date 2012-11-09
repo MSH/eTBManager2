@@ -22,7 +22,6 @@ public class GlobalLists {
 		PatientType.RELAPSE,
 		PatientType.FAILURE_FT,
 		PatientType.FAILURE_RT,
-		PatientType.SCHEMA_CHANGED,
 		PatientType.TRANSFER_IN,
 		PatientType.OTHER
 	};
