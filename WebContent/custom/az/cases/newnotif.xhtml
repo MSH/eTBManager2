@@ -56,24 +56,31 @@
 	<ui:param name="list" value="#{patientsAZ}" />
 
 	<h:dataTable value="#{patientsAZ.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
-		rendered="#{patientsAZ.searching and (not empty patientsAZ.resultList)}" width="680px" columnClasses="coll,colc,colc,coll" >
+		rendered="#{patientsAZ.searching and (not empty patientsAZ.resultList)}" width="680px" columnClasses="colc,coll,coll,coll" >
 		<h:column>
 			<f:facet name="header">
 				#
 			</f:facet>
 			<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
-				<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" target="_blank">
+				<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}">
+					<f:param name="pacid" value="#{it.patient.id}" />
+					<f:param name="classif" value="#{tbcase.classification}"/>
+				</s:link>
+				<br/>
+				<s:link view="/cases/casenew.xhtml" value="#{it.tbcase.displayCaseNumber}" >
 					<f:param name="pacid" value="#{it.patient.id}" />
 					<f:param name="classif" value="#{tbcase.classification}"/>
 				</s:link>
 			</s:fragment>
 			<s:fragment rendered = '#{it.tbcase.outcomeDate == null}'>
-				<s:link view="/cases/casedata.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" propagation="none" target="_blank">
+				<s:link view="/cases/casedata.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" propagation="none">
 					<f:param name="id" value="#{it.tbcase.id}" />
-				</s:link>	
+				</s:link>
+				<br/>
+				<s:link view="/cases/casedata.xhtml" propagation="none" value="#{it.tbcase.displayCaseNumber}">
+					<f:param name="id" value="#{it.tbcase.id}" />
+				</s:link>
 			</s:fragment>
-			<br/>
-			#{it.patient.recordNumber}
 		</h:column>
 		<h:column>
 			<f:facet name="header">
@@ -82,13 +89,13 @@
 		<div style="float:left;">
 			<b>
 			<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
-				<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml" target="_blank" >
+				<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml">
 					<f:param name="pacid" value="#{it.patient.id}" />
 					<f:param name="classif" value="#{tbcase.classification}"/>
 				</s:link>
 			</s:fragment>
 			<s:fragment rendered = '#{it.tbcase.outcomeDate == null}'>
-				<s:link value="#{it.patient.fullName}" view="/cases/casedata.xhtml" propagation="none" target="_blank">
+				<s:link value="#{it.patient.fullName}" view="/cases/casedata.xhtml" propagation="none">
 					<f:param name="id" value="#{it.tbcase.id}" />
 				</s:link>
 			</s:fragment></b><br/>
