@@ -19,8 +19,8 @@ import org.msh.utils.EntityQuery;
 public class MovementsQuery extends EntityQuery<MovementItem> {
 	private static final long serialVersionUID = -3122668237591767310L;
 
-	private static final String[] restrictions = {"m.date <= #{movementFilters.dateIni}",
-			"m.date >= #{movementFilters.dateEnd}",
+	private static final String[] restrictions = {"m.date >= #{movementFilters.dateIni}",
+			"m.date <= #{movementFilters.dateEnd}",
 			"exists (select id from BatchMovement b where b.movement.id = m.id and b.batch.batchNumber = #{movementFilters.batchNumber})",
 			"m.tbunit.id = #{userSession.tbunit.id}",
 			"m.source.id = #{sourceHome.id}",
