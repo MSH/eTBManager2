@@ -26,6 +26,27 @@
 		<param-value>false</param-value>
 	</context-param>
 
+  	<servlet>
+    	<servlet-name>AuthenticatorService</servlet-name>
+		<servlet-class>org.msh.tb.webservices.AuthenticatorService</servlet-class>
+	</servlet>
+
+  	<servlet-mapping>
+    	<servlet-name>AuthenticatorService</servlet-name>
+	    <url-pattern>/services/authentication/*</url-pattern>
+  	</servlet-mapping>
+
+  	<servlet>
+    	<servlet-name>DataExchangeService</servlet-name>
+		<servlet-class>org.msh.tb.webservices.DataExchangeService</servlet-class>
+	</servlet>
+
+  	<servlet-mapping>
+    	<servlet-name>DataExchangeService</servlet-name>
+	    <url-pattern>/services/exchange/*</url-pattern>
+  	</servlet-mapping>
+
+
     <!-- Ajax4jsf -->
     
     <context-param>

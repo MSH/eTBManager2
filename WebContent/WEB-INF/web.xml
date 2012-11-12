@@ -32,22 +32,19 @@
 
   	<servlet-mapping>
     	<servlet-name>AuthenticatorService</servlet-name>
-	    <url-pattern>/services/*</url-pattern>
+	    <url-pattern>/services/authentication/*</url-pattern>
   	</servlet-mapping>
 
-
-<!--  
- 	<servlet>
-    	<servlet-name>WorkspaceService</servlet-name>
-		<servlet-class>org.msh.tb.webservices.WorkspaceServiceImpl</servlet-class>
+  	<servlet>
+    	<servlet-name>DataExchangeService</servlet-name>
+		<servlet-class>org.msh.tb.webservices.DataExchangeService</servlet-class>
 	</servlet>
 
   	<servlet-mapping>
-    	<servlet-name>WorkspaceService</servlet-name>
-	    <url-pattern>/services/*</url-pattern>
+    	<servlet-name>DataExchangeService</servlet-name>
+	    <url-pattern>/services/exchange/*</url-pattern>
   	</servlet-mapping>
- -->
- 
+
  
 	<!-- Ajax4jsf -->
 
