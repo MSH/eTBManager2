@@ -78,6 +78,9 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 		//Verifies if a TB case has resistance or if a DRTB case has at least one resistance
 		//int resistantQuantity = 0;
 		int notDoneExams = 0;
+		if (items == null)
+			items = getInstance().getResults();
+
 		for (ExamDSTResult ms: items) {
 			if(getTbCase().getClassification().equals(CaseClassification.TB)
 					&& ms.getResult().equals(DstResult.RESISTANT)){

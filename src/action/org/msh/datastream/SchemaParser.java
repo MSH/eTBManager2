@@ -71,6 +71,10 @@ public class SchemaParser {
 			if (isValidField(field))
 				classSchema.getFields().add( field );
 		}
+		clazz = clazz.getSuperclass();
+
+		if ((clazz != null) && (clazz != Object.class))
+			addFields(clazz);
 	}
 
 
@@ -111,25 +115,31 @@ public class SchemaParser {
 
 
 	protected void parseValue(String key, String value) {
-		if (key.equals("entity")) {
+		if (key.equals("node")) {
 			if (classSchema != null)
 				describeClassProperties(classSchema);
 			classSchema = new ClassSchema();
-			classSchema.setObjectClassName(value);
+			classSchema.setNodeName(value);
 			schemas.add(classSchema);
+			return;
 		}
 
 		if (classSchema == null)
 			return;
 		
-		if (key.equals("alias"))
-			classSchema.setAlias(value);
+		if (key.equals("property-list")) {
+			parsePropertyList(value);
+			return;
+		}
+		
+		if (key.equals("class"))
+			classSchema.setObjectClassName(value);
 		
 		if (key.equals("key"))
 			classSchema.setKeyProperty(value);
 		
-		if (key.equals("parent-property"))
-			classSchema.setParentProperty(value);
+		if (key.equals("object-link"))
+			addObjectLink(value);
 		
 		if (key.equals("ignore-list"))
 			parseIgnoreList(value);
@@ -139,6 +149,67 @@ public class SchemaParser {
 	}
 	
 	
+	/**
+	 * Parse the property link between two objects
+	 * @param value
+	 */
+	private void addObjectLink(String value) {
+		// split by white spaces
+		String s[] = value.split("\\s+");
+		
+		if (s.length != 2)
+			throw new IllegalAccessError("Expected 2 parameters, but found " + value);
+		
+		searchField(s[0]);
+		classSchema.addObjectLink(s[0], s[1]);
+	}
+
+
+	/**
+	 * Parse the list of properties that will be used by the class
+	 * @param value
+	 */
+	private void parsePropertyList(String value) {
+		List<String> lst = parseCommaSeparatedStrings(value);
+		
+		for (String s: lst) {
+			Field f = searchField(s);
+			
+			if (f == null)
+				throw new IllegalAccessError("Field " + s + " was not found");
+			
+			classSchema.getFields().add(f);
+		}
+	}
+
+
+	/**
+	 * Search for a field of name s in the current class schema. If the field is not
+	 * found, an {@link IllegalArgumentException} is thrown
+	 * @param s
+	 * @return
+	 */
+	private Field searchField(String s) {
+		Class clazz = classSchema.getObjectClass();
+		
+		while ((clazz != null) && (clazz != Object.class)) {
+			Field f;
+			try {
+				f = clazz.getDeclaredField(s);
+			} catch (Exception e) {
+				f = null;
+			}
+
+			if ((f != null) && (isValidField(f)))
+				return f;
+			
+			clazz = clazz.getSuperclass();
+		}
+
+		throw new IllegalArgumentException("Field " + s + " was not found in class " + classSchema.getObjectClassName());
+	}
+
+
 	/**
 	 * Parse ignore list
 	 * @param value

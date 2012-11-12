@@ -2,7 +2,9 @@ package org.msh.datastream;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Store information about how to marshal the structure of the classes, like 
@@ -12,13 +14,14 @@ import java.util.List;
  */
 public class ClassSchema {
 
-	private String alias;
+	private String nodeName;
 	private String objectClassName;
 	private String keyProperty;
 	private List<String> ignoreProperties;
 	private List<String> referenceProperties;
-	private String parentProperty;
+//	private String parentProperty;
 	private List<Field> fields = new ArrayList<Field>();
+	private Map<String, String> objectLinks;
 
 
 	/**
@@ -27,15 +30,38 @@ public class ClassSchema {
 	 * @return
 	 */
 	public boolean isFieldSerializable(String name) {
-		if (name.equals(parentProperty))
+/*		if (name.equals(parentProperty))
 			return false;
 		
-		if ((ignoreProperties != null) && (ignoreProperties.contains(name)))
+*/		if ((ignoreProperties != null) && (ignoreProperties.contains(name)))
 			return false;
 		
 		return true;
 	}
 
+	
+	/**
+	 * Define a link between a property childField of an object refereed in the property propertyName. The property childField 
+	 * will be set to the instance of the class schema when reconstructed, and ignored when serialized 
+	 * @param field
+	 * @param childField
+	 */
+	public void addObjectLink(String propertyName, String childField) {
+		if (objectLinks == null)
+			objectLinks = new HashMap<String, String>();
+		
+		objectLinks.put(propertyName, childField);
+	}
+
+	
+	/**
+	 * Return the child field of the object in the property <code>propertyName</code> that links to this class  
+	 * @param propertyName
+	 * @return
+	 */
+	public String getChildPropertyLink(String propertyName) {
+		return objectLinks == null? null : objectLinks.get(propertyName);
+	}
 
 	/**
 	 * Indicate if field must be represented just by its reference
@@ -84,18 +110,6 @@ public class ClassSchema {
 	}
 
 	
-	/**
-	 * @return the alias
-	 */
-	public String getAlias() {
-		return alias;
-	}
-	/**
-	 * @param alias the alias to set
-	 */
-	public void setAlias(String alias) {
-		this.alias = alias;
-	}
 	/**
 	 * @return the objectClassName
 	 */
@@ -146,18 +160,6 @@ public class ClassSchema {
 		this.referenceProperties = referenceProperties;
 	}
 	/**
-	 * @return the parentProperty
-	 */
-	public String getParentProperty() {
-		return parentProperty;
-	}
-	/**
-	 * @param parentProperty the parentProperty to set
-	 */
-	public void setParentProperty(String parentProperty) {
-		this.parentProperty = parentProperty;
-	}
-	/**
 	 * @return the parentMapping
 	 */
 	/**
@@ -183,7 +185,23 @@ public class ClassSchema {
 	 */
 	@Override
 	public String toString() {
-		return "ClassSchema [alias=" + alias + ", objectClassName="
+		return "ClassSchema [node=" + nodeName + ", objectClassName="
 				+ objectClassName + "]";
+	}
+
+
+	/**
+	 * @return the nodeName
+	 */
+	public String getNodeName() {
+		return nodeName;
+	}
+
+
+	/**
+	 * @param nodeName the nodeName to set
+	 */
+	public void setNodeName(String nodeName) {
+		this.nodeName = nodeName;
 	}
 }

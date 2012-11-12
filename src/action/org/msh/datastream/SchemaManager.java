@@ -36,14 +36,14 @@ public class SchemaManager {
 	
 	
 	/**
-	 * Search for a class schema by its alias name, i.e, the name of the node representing the class
+	 * Search for a class schema by its node name, i.e, the name of the node representing the class
 	 * in the serialized document
-	 * @param alias
+	 * @param nome
 	 * @return an instance of {@link ClassSchema}, or null if it was not found
 	 */
-	public ClassSchema findSchemaByAlias(String alias) {
+	public ClassSchema findSchemaByNode(String node) {
 		for (ClassSchema sc: schemas)
-			if (sc.getAlias().equals(alias))
+			if (sc.getNodeName().equals(node))
 				return sc;
 		return null;
 	}

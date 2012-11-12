@@ -33,8 +33,14 @@ import org.msh.utils.Passwords;
 @Name("authenticator")
 public class AuthenticatorBean {
 
+	// indicate the workspace that user will log into. This parameter is not required
     private Integer workspaceId;
+
+    // indicate if the authentication procedure will try to restore the previous 
+    // user login (under certain conditions)
     private boolean tryRestorePrevSession;
+    
+    private String sessionId;
 
 
     /**
@@ -48,16 +54,49 @@ public class AuthenticatorBean {
      * @return
      */
     public boolean authenticate() {
+    	// a session id was informed ?
+    	if (sessionId != null) {
+        	// trying to log using a session Id
+    		return UserSession.instance().registerLogin(sessionId, tryRestorePrevSession) != null;
+    	}
+   
     	Credentials credentials = Identity.instance().getCredentials();
 
     	String username = credentials.getUsername();
     	String password = credentials.getPassword();
     	
+    	// create variable to point to authenticated user in a workspace
+    	UserWorkspace userWorkspace = validateUserPassword(username, password, workspaceId);
+    	    	
+    	// no user and its workspace was authenticated ?
+    	if (userWorkspace == null)
+    		return false;
+
+    	selectUserTimeZone(userWorkspace);
+
+    	// register the login
+    	UserSession.instance().registerLogin(userWorkspace, tryRestorePrevSession);
+    	
+    	// if user password is expired, clear information about redirection
+        if (userWorkspace.getUser().isPasswordExpired())
+        	Redirect.instance().setViewId(null);
+    	
+    	return true;
+    }
+
+
+
+	/**
+     * Validate a user name and its password. Workspace is not required, and if not given, the most appropriate
+     * workspace will be selected 
+     * @param username
+     * @param password
+     * @param workspaceId
+     * @return instance of the {@link UserWorkspace} class representing the validated user, or null if it's not found
+     */
+    public UserWorkspace validateUserPassword(String username, String password, Integer workspaceId) {
     	String pwdhash = Passwords.hashPassword(password);
 
-    	// create variable to point to authenticated user in a workspace
-    	UserWorkspace userWorkspace = null;
-    	
     	// no workspace was defined ?
     	if (workspaceId == null) {
     		// authenticate user and password
@@ -69,10 +108,10 @@ public class AuthenticatorBean {
     				.getResultList();
         	
         	if (lst.size() == 0)
-        		return false;
+        		return null;
 
         	User user = lst.get(0);
-        	userWorkspace = selectUserWorkspace(user);
+        	return selectUserWorkspace(user);
     	}
     	else {
     		// authenticate user, password and workspace
@@ -90,27 +129,11 @@ public class AuthenticatorBean {
     				.getResultList();
 
         	if (lst.size() == 0)
-        		return false;
+        		return null;
         	
-        	userWorkspace = lst.get(0);
+        	return lst.get(0);
     	}
-    	
-    	// no user and its workspace was authenticated ?
-    	if (userWorkspace == null)
-    		return false;
-
-    	selectUserTimeZone(userWorkspace);
-
-    	// register the login
-    	UserSession.instance().registerLogin(userWorkspace, tryRestorePrevSession);
-    	
-    	// if user password is expired, clear information about redirection
-        if (userWorkspace.getUser().isPasswordExpired())
-        	Redirect.instance().setViewId(null);
-    	
-    	return true;
     }
-
 
     /**
      * Select the user time zone in order to display properly the date and time in the system.
@@ -158,78 +181,6 @@ public class AuthenticatorBean {
 		}
 	}
 
-
-	/**
-     * Authentication method used by WEB UI (login page) 
-     * @return
-     */
-/*    public boolean webAuthenticate()
-    {
-    	Credentials credentials = Identity.instance().getCredentials();
-    	if (credentials == null)
-    		return false;
-
-    	String pwd = Passwords.hashPassword(credentials.getPassword());
-
-        try {
-        	user = (User)entityManager.createQuery("from User u where u.login = :login " +
-        						"and upper(u.password) = :pwd and u.state <> :blockstate")
-        						.setParameter("login", credentials.getUsername().toUpperCase())
-        						.setParameter("pwd", pwd.toUpperCase())
-        						.setParameter("blockstate", UserState.BLOCKED)
-        						.getSingleResult();
-        	System.out.println("Login of " + user.getLogin());
-        	
-        	// check user workspace
-        	loadUserWorkspace();
-        	if (userWorkspaces.size() == 0) 
-        		return false;
-
-        	UserWorkspace userWorkspace = selectWorkspace();
-        	if (userWorkspace == null)
-        		return false;
-
-        	if (userWorkspace.getProfile().getPermissions().size() == 0) {
-            	facesMessages.addFromResourceBundle("login.norole");
-        		return false;
-        	}
-
-        	// avoid lazy initialization problem
-        	userWorkspace.getTbunit().getAdminUnit().getParentsTreeList(true);
-        	if (userWorkspace.getAdminUnit() != null)
-        		userWorkspace.getAdminUnit().getId();
-        	if (userWorkspace.getHealthSystem() != null)
-        		userWorkspace.getHealthSystem().getId();
-        			
-            // adjust time zone
-        	String tm = user.getTimeZone();
-        	if ((tm == null || (tm.isEmpty())))
-        		tm = user.getDefaultWorkspace().getWorkspace().getDefaultTimeZone();
-
-        	if (tm != null) {
-            	timeZoneSelector.setTimeZoneId(tm);
-            	timeZoneSelector.select();
-            }
-            
-        	// adjust the language
-//        	user.setLanguage(localeSelector.getLanguage());
-//      		localeSelector.select();
-      
-            // register the user login
-        	UserSession userSession = UserSession.instance();
-        	userSession.registerLogin(userWorkspace);
-            
-            if (user.isPasswordExpired()) {
-            	Redirect.instance().setViewId(null);
-            }
-            
-            return true;
-        }
-        catch (NoResultException e) {
-            return false;        	
-        }
-    }
-*/
     
     /**
      * Called from the command Exit in the user menu of the web page
@@ -242,73 +193,6 @@ public class AuthenticatorBean {
 
     
     
-   
-    /**
-     * Select the user workspace for using during the session
-     */
-/*    private UserWorkspace selectWorkspace() {
-    	// there is a workspace to be used after authentication?
-    	if (loginWorkspaceId != null) {
-    		// search for user's workspace for login
-    		for (UserWorkspace userWorkspace: userWorkspaces) {
-    			if (userWorkspace.getWorkspace().getId().equals(loginWorkspaceId)) {
-    				user.setDefaultWorkspace(userWorkspace);
-    				return userWorkspace;
-    			}
-    		}
-    		return null;
-    	}
-    	
-    	// user has a default workspace ?
-    	if (user.getDefaultWorkspace() == null) {
-   			user.setDefaultWorkspace(user.getWorkspaces().get(0));
-    	}
-    	
-    	return user.getDefaultWorkspace();
-    }
-*/
-
-    /**
-     * Load user's workspaces
-     */
-/*    private void loadUserWorkspace() {
-    	userWorkspaces = entityManager.createQuery("from UserWorkspace u " +
-    			"join fetch u.workspace " +
-    			"join fetch u.tbunit " +
-    			"where u.user.id = :userid")
-    			.setParameter("userid", user.getId())
-    			.getResultList();
-    }
-*/    
-/*    public void changeLanguage() {
-    	localeSelector.setLocaleString(language);
-    	localeSelector.select();
-    }
-*/    
-/*	public void setLanguage(String language) {
-		this.language = language;
-	}
-
-	public String getLanguage() {
-		return language;
-	}
-*/
-
-	/**
-	 * @return the loginWorkspaceId
-	 */
-/*	public Integer getLoginWorkspaceId() {
-		return loginWorkspaceId;
-	}
-*/
-
-	/**
-	 * @param loginWorkspaceId the loginWorkspaceId to set
-	 */
-/*	public void setLoginWorkspaceId(Integer loginWorkspaceId) {
-		this.loginWorkspaceId = loginWorkspaceId;
-	}
-*/
 
 	/**
 	 * @return the workspaceId
@@ -348,5 +232,21 @@ public class AuthenticatorBean {
 	 */
 	protected EntityManager getEntityManager() {
 		return (EntityManager)Component.getInstance("entityManager");
+	}
+
+
+	/**
+	 * @return the sessionId
+	 */
+	public String isSessionId() {
+		return sessionId;
+	}
+
+
+	/**
+	 * @param sessionId the sessionId to set
+	 */
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
 	}
 }

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import org.msh.datastream.SchemaManager;
 import org.msh.datastream.XmlDeserializer;
 import org.msh.datastream.XmlSerializer;
+import org.msh.datastream.XmlDeserializer.ObjectReferenceable;
 
 /**
  * Serialize and deserialize objects to and from XML
@@ -64,9 +65,9 @@ public class ObjectSerializer {
 	 * @param clazz
 	 * @return
 	 */
-	public static <E> E deserializeFromXml(String xml, Class<E> clazz) {
+	public static <E> E deserializeFromXml(String xml, Class<E> clazz, ObjectReferenceable ref) {
 		XmlDeserializer deser = new XmlDeserializer(instance().getSchemaManager());
-		return (E)deser.deserialize(xml);
+		return (E)deser.deserialize(xml, ref);
 	}
 
 	/**

@@ -132,53 +132,99 @@ public class UserSession {
     }
 
     
+    
+    /**
+     * Tries to authenticate and register login using a previous session id given from the client side
+     * @param sessionId
+     * @return
+     */
+    protected UserLogin registerLogin(String sessionId, boolean statelessLogin) {
+    	List<UserLogin> lst = getEntityManager()
+    		.createQuery("from UserLogin ul " +
+    				"join fetch ul.user join fetch ul.workspace " +
+    				"where ul.sessionId = :ses")
+    		.setParameter("ses", Passwords.hashPassword(sessionId))
+    		.getResultList();
+    	
+    	if (lst.size() == 0)
+    		return null;
+    	
+    	UserLogin userLogin = lst.get(0);
+    	
+    	List<UserWorkspace> lst2 = getEntityManager().createQuery("from UserWorkspace us where us.user.id = :userid and us.workspace.id = :wsid")
+    		.setParameter("userid", userLogin.getUser().getId())
+    		.setParameter("wsid", userLogin.getWorkspace().getId())
+    		.getResultList();
+    	
+    	if (lst2.size() == 0)
+    		return null;
+    	
+    	UserWorkspace userWorkspace = lst2.get(0);
+
+    	initializeSession(userWorkspace, userLogin, statelessLogin);
+    	
+    	return userLogin;
+    }
+
+
     /**
      * Register the user login in the database as an instance of the {@link UserLogin} class.
      * It also stores in the session information about the workspace
      */
     @Transactional
-    protected UserLogin registerLogin(UserWorkspace userWorkspace, boolean tryRestorePrevSession) {
-    	if (tryRestorePrevSession) {
-    		UserLogin userLogin = tryRestorePreviousSession(userWorkspace);
-    		if (userLogin != null) 
-    			return userLogin;
+    protected UserLogin registerLogin(UserWorkspace userWorkspace, boolean statelessLogin) {
+    	UserLogin userLogin = null;
+    	if (statelessLogin) {
+    		userLogin = tryRestorePreviousSession(userWorkspace);
     	}
+
+    	if (userLogin == null) {
+        	// get client information
+        	ServletContexts servletContexts = ServletContexts.instance();
+        	String ipAddr = null;
+        	String app = null;
+        	if (servletContexts != null) {
+               	HttpServletRequest req = (HttpServletRequest) servletContexts.getRequest();
+                ipAddr = req.getRemoteAddr();
+                app = req.getHeader("User-Agent");
+        	}
+
+            // register new login
+            userLogin = new UserLogin();
+            userLogin.setUser(userWorkspace.getUser());
+            userLogin.setLoginDate(new java.util.Date());
+
+            if (app == null)
+            	app = "Undefined";
+            else
+            if (app.length() > 200)
+            	app = app.substring(0, 200);
+            userLogin.setApplication(app);
+            userLogin.setWorkspace(userWorkspace.getWorkspace());
+            userLogin.setIpAddress(ipAddr);
+            // this session id must be available to be returned to the client
+            createNewSessionId(userLogin);
+
+            // change the user workspace
+            userWorkspace.getUser().setDefaultWorkspace( userWorkspace );
+            
+            getEntityManager().persist(userLogin);
+    	}
+
+    	initializeSession(userWorkspace, userLogin, statelessLogin);
     	
-    	// get client information
-    	ServletContexts servletContexts = ServletContexts.instance();
-    	String ipAddr = null;
-    	String app = null;
-    	if (servletContexts != null) {
-           	HttpServletRequest req = (HttpServletRequest) servletContexts.getRequest();
-            ipAddr = req.getRemoteAddr();
-            app = req.getHeader("User-Agent");
-    	}
+    	return userLogin;
+    }
 
-        // register new login
-        UserLogin userLogin = new UserLogin();
-        userLogin.setUser(userWorkspace.getUser());
-        userLogin.setLoginDate(new java.util.Date());
-
-        if (app == null)
-        	app = "Undefined";
-        else
-        if (app.length() > 200)
-        	app = app.substring(0, 200);
-        userLogin.setApplication(app);
-        userLogin.setWorkspace(userWorkspace.getWorkspace());
-        userLogin.setIpAddress(ipAddr);
-        // this session id must be available to be returned to the client
-        createNewSessionId(userLogin);
-
-        // change the user workspace
-        userWorkspace.getUser().setDefaultWorkspace( userWorkspace );
-        
-        getEntityManager().persist(userLogin);
-
-        // register user in the list of on-line users
-        OnlineUsersHome onlineUsers = (OnlineUsersHome)Component.getInstance("onlineUsers");
-        onlineUsers.add(userLogin);
-
+    
+    /**
+     * Initialize the user session. This method is called after the login authentication and registration and
+     * initialize some common used session objects and other procedures
+     * @param userWorkspace
+     * @param userLogin
+     * @param statelessLogin
+     */
+    private void initializeSession(UserWorkspace userWorkspace, UserLogin userLogin, boolean statelessLogin) {
         // avoid lazy initialization (Hibernate)
         userWorkspace.getTbunit().getId();
         userWorkspace.getTbunit().getAdminUnit().getId();
@@ -195,11 +241,14 @@ public class UserSession {
     	
     	setTbunit(userWorkspace.getTbunit());
 
-    	updateUserRoleList(userWorkspace);
-    	
-    	return userLogin;
-    }
+    	if (!statelessLogin) {
+            // register user in the list of on-line users
+            OnlineUsersHome onlineUsers = (OnlineUsersHome)Component.getInstance("onlineUsers");
+            onlineUsers.add(userLogin);
 
+    		updateUserRoleList(userWorkspace);
+    	}
+    }
 
 	/**
 	 * Create a unique new session id to be used by clients application in reference to this session (even when the session is finished)
@@ -208,6 +257,7 @@ public class UserSession {
 	private String createNewSessionId(UserLogin userLogin) {
 		UUID uid = UUID.randomUUID();
 		sessionId = uid.toString();
+		sessionId = sessionId.replace("-", "");
         userLogin.setSessionId( Passwords.hashPassword(sessionId) );
 
         return uid.toString();

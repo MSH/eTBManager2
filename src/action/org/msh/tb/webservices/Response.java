@@ -10,6 +10,8 @@ public class Response {
 	public static final int RESP_SUCCESS = 0;
 	public static final int RESP_AUTHENTICATION_FAIL = 1;
 	public static final int RESP_INVALID_SESSION = 2;
+	public static final int RESP_UNEXPECTED_ERROR = 3;
+	public static final int RESP_VALIDATION_ERROR = 4;
 	
 	private Object result;
 	private int errorno;

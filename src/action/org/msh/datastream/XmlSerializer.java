@@ -1,9 +1,9 @@
 package org.msh.datastream;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Stack;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.dom4j.DocumentHelper;
@@ -13,8 +13,11 @@ import org.hibernate.Hibernate;
 public class XmlSerializer {
 
 	private SchemaManager schemaManager;
-	private List parentList = new ArrayList();
-	
+
+	// list of parents as a queue
+	private Stack parents = new Stack();
+
+
 	public XmlSerializer(SchemaManager schemaManager) {
 		this.schemaManager = schemaManager;
 	}
@@ -25,33 +28,46 @@ public class XmlSerializer {
 	 * @return
 	 */
 	public String serializeToXml(Object entity) {
-		parentList.clear();
+		parents.clear();
 		return serialize(entity).asXML();
 	}
 	
+
 	/**
-	 * Serialize the entity to an XML {@link Element}
-	 * @param entity
+	 * Serialize an object to its XML representation based on its schema defined in the <code>schemaManager</code>
+	 * @param object
 	 * @return
 	 */
-	public Element serialize(Object entity) {
-		Class entityClass = Hibernate.getClass(entity);
+	public Element serialize(Object object) {
+		return serialize(object, null);
+	}
+	
+	
+	/**
+	 * Serialize the object to an XML {@link Element}
+	 * @param object is the object to be serialized
+	 * @param parentProperty is the property of the object that is a reference to the parent object, and, in this case
+	 * this property won't be serialized 
+	 * @return
+	 */
+	protected Element serialize(Object object, String parentProperty) {
+		Class entityClass = Hibernate.getClass(object);
 		ClassSchema schema = schemaManager.findSchema(entityClass);
 
 		if (schema == null)
 			throw new IllegalArgumentException("No schema found for class " + entityClass.toString());
 
-		Element elem = DocumentHelper.createElement(schema.getAlias());
+		Element elem = DocumentHelper.createElement(schema.getNodeName());
 
 		// entity was already serialized ?
-		if (isObjectAlreadySeriazlized(entity)) {
-			Object key = getObjectKey(entity, schema);
+		if (isObjectAlreadySeriazlized(object)) {
+			Object key = getObjectKey(object, schema);
 			elem.setText( StringConverter.instance().toString(key) );
 		}
 		else {
-			parentList.add(entity);
-			mountAttributes(entity, elem, schema);
-			parentList.remove(entity);
+			parents.push(object);
+			serializeProperties(object, elem, schema, parentProperty);
+			parents.remove(object);
 		}
 
 		return elem;
@@ -59,17 +75,18 @@ public class XmlSerializer {
 
 
 	/**
+	 * Serialize the attributes of the object
 	 * @param entity
 	 * @param parent
 	 * @param fields
 	 */
-	private void mountAttributes(Object entity, Element parent, ClassSchema schema) {
+	private void serializeProperties(Object entity, Element parentElement, ClassSchema schema, String parentProperty) {
 		List<Field> fields = schema.getFields();
 
 		for (Field fld: fields) {
-			if (schema.isFieldSerializable(fld.getName())) {
-				Element elem = createFieldElement(entity, schema, fld);
-				parent.add(elem);
+			if ((!fld.getName().equals(parentProperty)) && (schema.isFieldSerializable(fld.getName()))) {
+				Element elem = serializeProperty(entity, schema, fld);
+				parentElement.add(elem);
 			}
 		}
 	}
@@ -82,7 +99,7 @@ public class XmlSerializer {
 	 * @param fld
 	 * @return
 	 */
-	private Element createFieldElement(Object entity, ClassSchema schema, Field fld) {
+	private Element serializeProperty(Object entity, ClassSchema schema, Field fld) {
 		String name = fld.getName();
 
 		Element elem = DocumentHelper.createElement(name);
@@ -101,7 +118,7 @@ public class XmlSerializer {
 		
 		// property is a collection of other objects ?
 		if (Collection.class.isAssignableFrom( fld.getType() )) {
-			handleCollection(elem, (Collection)obj);
+			serializeCollection(elem, (Collection)obj, schema.getChildPropertyLink(fld.getName()));
 			return elem;
 		}
 
@@ -122,14 +139,18 @@ public class XmlSerializer {
 		// schema was defined ?
 		if (typeSchema != null) {
 			if (includeTypeAttr)
-				elem.addAttribute("type", typeSchema.getAlias());
+				elem.addAttribute("type", typeSchema.getNodeName());
 
 			// it's a field reference ?
-			if (schema.isFieldReference(name)) {
+			if ((schema.isFieldReference(name)) || (isObjectAlreadySeriazlized(obj))) {
 				Object key = getObjectKey(obj, schema);
 				elem.setText( StringConverter.instance().toString(key) );
 			}
-			else mountAttributes(obj, elem, typeSchema);
+			else {
+				parents.push(obj);
+				serializeProperties(obj, elem, typeSchema, schema.getChildPropertyLink(fld.getName()));
+				parents.pop();
+			}
 		}
 		else {
 			// if schema was not defined, try to serialize it to string
@@ -144,14 +165,14 @@ public class XmlSerializer {
 	 * Handle a collection of objects
 	 * @param lst
 	 */
-	private void handleCollection(Element parent, Collection lst) {
+	private void serializeCollection(Element parent, Collection lst, String parentProperty) {
 		for (Object obj: lst) {
-			Element elem = serialize(obj);
+			Element elem = serialize(obj, parentProperty);
 			parent.add(elem);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Return an entity key value. If the property that holds the key is not defined
 	 * in the class schema, an {@link IllegalAccessError} exception will be thrown.
@@ -179,7 +200,7 @@ public class XmlSerializer {
 	 * @return
 	 */
 	protected boolean isObjectAlreadySeriazlized(Object obj) {
-		for (Object item: parentList) {
+		for (Object item: parents) {
 			if (item == obj)
 				return true;
 			
@@ -190,5 +211,43 @@ public class XmlSerializer {
 		}
 		
 		return false;
+	}
+	
+	
+	/**
+	 * Store object information
+	 * @author Ricardo Memoria
+	 *
+	 */
+	protected class ObjectInfo {
+		private Object parent;
+		private String childProperty;
+		private String parentProperty;
+
+		public ObjectInfo(Object parent, String childProperty,
+				String parentProperty) {
+			super();
+			this.parent = parent;
+			this.childProperty = childProperty;
+			this.parentProperty = parentProperty;
+		}
+		/**
+		 * @return the parent
+		 */
+		public Object getParent() {
+			return parent;
+		}
+		/**
+		 * @return the childProperty
+		 */
+		public String getChildProperty() {
+			return childProperty;
+		}
+		/**
+		 * @return the parentProperty
+		 */
+		public String getParentProperty() {
+			return parentProperty;
+		}
 	}
 }

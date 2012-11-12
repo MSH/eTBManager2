@@ -13,15 +13,29 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+/**
+ * Deserialize an object from its XML representation based on its schema defined in {@link SchemaManager}
+ * @author Ricardo Memoria
+ *
+ */
 public class XmlDeserializer {
 
 	private SchemaManager schemaManager;
-	
+	private ObjectReferenceable objectRef;
+
+
 	public XmlDeserializer(SchemaManager schemaManager) {
 		this.schemaManager = schemaManager;
 	}
 	
-	public Object deserialize(String xml) {
+	/**
+	 * Deserialize an object from its representation in an XML data using its schema from <code>schemaManager</code>
+	 * @param xml
+	 * @param ref
+	 * @return
+	 */
+	public Object deserialize(String xml, ObjectReferenceable ref) {
+		this.objectRef = ref;
 		Document doc;
 		try {
 			doc = DocumentHelper.parseText(xml);
@@ -30,12 +44,12 @@ public class XmlDeserializer {
 		}
 		Element elem = doc.getRootElement();
 
-		ClassSchema schema = schemaManager.findSchemaByAlias(elem.getName());
+		ClassSchema schema = schemaManager.findSchemaByNode(elem.getName());
 		
 		if (schema == null)
 			throw new IllegalArgumentException("No class found for node " + elem.getName());
 
-		return readObject(schema, elem);
+		return readObject(schema, elem, false);
 	}
 
 	/**
@@ -44,7 +58,7 @@ public class XmlDeserializer {
 	 * @param elem
 	 * @return
 	 */
-	private Object readObject(ClassSchema schema, Element elem) {
+	private Object readObject(ClassSchema schema, Element elem, boolean reference) {
 		List<Element> children = elem.elements();
 
 		// retrieve key property
@@ -53,6 +67,7 @@ public class XmlDeserializer {
 		Object entity = null;
 
 		// key was set to object ?
+		// so recovery object by its key
 		if (keyProp != null) {
 			Object keyValue = null;
 			// entity properties were defined ?
@@ -81,7 +96,7 @@ public class XmlDeserializer {
 
 			// avoid reading the key property again
 			if ((keyProp == null) || ((keyProp != null) && (!keyProp.equals(fname))))
-					readField(schema, entity, field, elfield);
+				readField(schema, entity, field, elfield);
 		}
 		
 		return entity;
@@ -99,24 +114,25 @@ public class XmlDeserializer {
 		String name = field.getName();
 
 		if (Collection.class.isAssignableFrom( type )) {
-			readCollection(entity, field, elem);
+			readCollection(entity, field, elem, schema.getChildPropertyLink(field.getName()));
 			return;
 		}
 
 		ClassSchema fieldSchema;
 		String typeAlias = elem.attributeValue("type");
 		if (typeAlias != null)
-			 fieldSchema = schemaManager.findSchemaByAlias(typeAlias);
+			 fieldSchema = schemaManager.findSchemaByNode(typeAlias);
 		else fieldSchema = schemaManager.findSchema(field.getType());
 
 		if (fieldSchema != null) {
-			Object val = readObject(fieldSchema, elem);
+			boolean reference = schema.isFieldReference(field.getName());
+			Object val = readObject(fieldSchema, elem, reference);
 			setValue(entity, name, val);
 			
-			if (fieldSchema.getParentProperty() != null) {
+/*			if (fieldSchema.getParentProperty() != null) {
 				setValue(val, fieldSchema.getParentProperty(), entity);
 			}
-			
+*/			
 			return;
 		}
 		
@@ -130,7 +146,7 @@ public class XmlDeserializer {
 	 * @param field
 	 * @param elem
 	 */
-	private void readCollection(Object entity, Field field, Element elem)  {
+	private void readCollection(Object entity, Field field, Element elem, String childProperty)  {
 		Collection lst = (Collection)getValue(entity, field.getName());
 
 		// collection is null ?
@@ -161,14 +177,17 @@ public class XmlDeserializer {
 
 		// browse the children
 		for (Element childElem: (List<Element>)elem.elements()) {
-			ClassSchema schema = schemaManager.findSchemaByAlias(childElem.getName());
+			ClassSchema schema = schemaManager.findSchemaByNode(childElem.getName());
 			
-			Object child = readObject(schema, childElem);
+			Object child = readObject(schema, childElem, false);
 			
-			if (schema.getParentProperty() != null) {
+			if ((childProperty != null) && (!childProperty.isEmpty()))
+				setValue(child, childProperty, entity);
+			
+/*			if (schema.getParentProperty() != null) {
 				setValue(child, schema.getParentProperty(), entity);
 			}
-			lst.add( child );
+*/			lst.add( child );
 		}
 	}
 	
@@ -212,6 +231,12 @@ public class XmlDeserializer {
 		Object entity = null;
 
 		try {
+			if (objectRef != null)
+				entity = objectRef.objectByKey(schema.getObjectClass(), keyValue);
+			
+			if (entity != null)
+				return entity;
+			
 			// create new instance
 			entity = schema.createObjectInstance();
 			
@@ -260,5 +285,10 @@ public class XmlDeserializer {
 	 */
 	public SchemaManager getSchemaManager() {
 		return schemaManager;
+	}
+
+
+	public interface ObjectReferenceable {
+		Object objectByKey(Class clazz, Object key);
 	}
 }

@@ -292,13 +292,16 @@ public class CaseValidationHome {
 	public CaseIssue getLastIssue() {
 		try {
 			if (lastIssue == null) {
-				lastIssue = (CaseIssue)entityManager.createQuery("from CaseIssue c " +
+				List<CaseIssue> lst = entityManager.createQuery("from CaseIssue c " +
 						"join fetch c.user " +
 						"where c.tbcase.id = :id and c.answer = false " +
 						"and c.date = (select max(aux.date) from CaseIssue aux " +
-						"where aux.tbcase.id=c.tbcase.id and aux.answer=false)")
+						"where aux.tbcase.id=c.tbcase.id and aux.answer=false) " +
+						"order by c.id desc")
 						.setParameter("id", caseHome.getId())
-						.getSingleResult();
+						.getResultList();
+				
+				lastIssue = lst.size() > 0 ? lst.get(0) : null;
 			}
 			return lastIssue;
 		} catch (NoResultException e) {
@@ -312,15 +315,16 @@ public class CaseValidationHome {
 	 */
 	public CaseIssue getLast() {
 		try {
-			CaseIssue lastCi = (CaseIssue) entityManager.createQuery("from CaseIssue c " +
+			List<CaseIssue> lastCi = entityManager.createQuery("from CaseIssue c " +
 					"join fetch c.user " +
 					"where c.tbcase.id = :id " +
 					"and c.date = (select max(aux.date) from CaseIssue aux " +
-					"where aux.tbcase.id=c.tbcase.id)")
+					"where aux.tbcase.id=c.tbcase.id) " +
+					"order by c.id desc")
 					.setParameter("id", caseHome.getId())
-					.getSingleResult();
+					.getResultList();
 			
-			return lastCi;
+			return lastCi.size() > 0 ? lastCi.get(0) : null;
 		} catch (NoResultException e) {
 			return null;
 		}
