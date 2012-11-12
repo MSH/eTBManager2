@@ -181,7 +181,8 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 						addCondition(notifRegCond);
 						break;
 					case TREATMENT_UNIT:
-						addCondition(treatRegCond);
+						if(caseFilters.getStateIndex()!=caseFilters.TRANSFER_OUT)
+							addCondition(treatRegCond);
 						break;
 					case BOTH:
 						addCondition("(" + treatRegCond + " or " + notifRegCond + ")");
