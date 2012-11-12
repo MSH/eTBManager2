@@ -71,26 +71,29 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 	
 	public boolean validateAndPrepareFields(){
 		
-		
+		/*This rule has been changed (commented lines) because it removes the flexibility of inserting dstexams for DRTB cases
+		 * in etbmanager. a tag that select the cases that are DRTB but doesn't have a DSTexam indicating 
+		 * resistance had been created solve that necessity
+		 */
 		//Verifies if a TB case has resistance or if a DRTB case has at least one resistance
-		int resistantQuantity = 0;
+		//int resistantQuantity = 0;
 		int notDoneExams = 0;
 		for (ExamDSTResult ms: items) {
 			if(getTbCase().getClassification().equals(CaseClassification.TB)
 					&& ms.getResult().equals(DstResult.RESISTANT)){
 				facesMessages.addFromResourceBundle("DSTExam.msg01");
 				return false;
-			}else if(ms.getResult().equals(DstResult.RESISTANT)){
-				resistantQuantity++;
+			//}else if(ms.getResult().equals(DstResult.RESISTANT)){
+			//	resistantQuantity++;
 			}else if(ms.getResult().equals(DstResult.NOTDONE)){
 				notDoneExams++;
 			}
 		}
-		if(getTbCase().getClassification().equals(CaseClassification.DRTB)
-				&& resistantQuantity <= 0){
-			facesMessages.addFromResourceBundle("DSTExam.msg02");
-			return false;
-		}
+		//if(getTbCase().getClassification().equals(CaseClassification.DRTB)
+		//		&& resistantQuantity <= 0){
+		//	facesMessages.addFromResourceBundle("DSTExam.msg02");
+		//	return false;
+		//}
 		if(items.size() == notDoneExams){
 			facesMessages.addFromResourceBundle("DSTExam.msg03");
 			return false;
