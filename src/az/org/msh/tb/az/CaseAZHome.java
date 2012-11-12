@@ -174,7 +174,8 @@ public class CaseAZHome {
 		TbCaseAZ tc = getTbCase();
 		if (tc.getNotificationUnit()==null && tc.getLegacyId()!=null)
 			return getMessages().get("cases.detailseidsstitle");
-		return getMessages().get("cases.detailstitle");
+	//return getMessages().get("cases.detailstitle");
+		return getMessages().get("CaseState." + tc.getState());
 	}
 	
 	/**

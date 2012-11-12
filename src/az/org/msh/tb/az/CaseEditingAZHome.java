@@ -102,7 +102,8 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		TbCase caseEIDSS = null;
 		for (TbCase tbCase : cases){
 			if(tbCase.getLegacyId() != null){
-				caseEIDSS = tbCase;
+				if (tbCase.getOutcomeDate() == null) //AK 11/12/2012 may be closed case from EIDSS
+					caseEIDSS = tbCase;
 			}
 		}
 		if (caseEIDSS != null){
@@ -118,10 +119,10 @@ public class CaseEditingAZHome extends CaseEditingHome{
 			Contexts.getConversationContext().set("tbcase", caseHome.getInstance());
 			return ret;
 		}
-		
+
 		return initSuperNotif();
 	}
-	
+
 	@Override
 	public String selectPatientData() {
 		initialized = false;
@@ -129,53 +130,53 @@ public class CaseEditingAZHome extends CaseEditingHome{
 			return "/custom/az/cases/casenew.xhtml";
 		return "error";
 	}
-	
+
 	private String initSuperNotif(){
 		if (initialized)
 			return "initialized";
-		
+
 		if (caseHome.getInstance().getClassification() == null)
 			return "/cases/index.xhtml";
-				
+
 		caseHome.getInstance().setPatient(patientHome.getInstance());
-		
+
 		// initialize default values
 		UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
 		if (userWorkspace != null) {
 			if (userWorkspace.getTbunit().isNotifHealthUnit())
 				getTbunitselection().setTbunit(userWorkspace.getTbunit());
-			
+
 			AdministrativeUnit au = userWorkspace.getAdminUnit();
 			if (au == null)
 				au = userWorkspace.getTbunit().getAdminUnit();
-			
+
 			if (au != null) {
 				au = entityManager.find(AdministrativeUnit.class, au.getId());
-				
+
 				getNotifAdminUnit().setSelectedUnit(au);
 
 				if (getTbunitselection().getTbunit() == null) {
 					List<AdministrativeUnit> lst = getTbunitselection().getAdminUnits();
-					
+
 					if (lst != null)
-					for (AdministrativeUnit adminUnit: lst) {
-						if (adminUnit.isSameOrChildCode(au.getCode())) {
-							getTbunitselection().setAdminUnit(adminUnit);
-						}
-					}					
+						for (AdministrativeUnit adminUnit: lst) {
+							if (adminUnit.isSameOrChildCode(au.getCode())) {
+								getTbunitselection().setAdminUnit(adminUnit);
+							}
+						}					
 				}
 			}
 		}
 
 		// initialize items with previous TB treatments
-//		prevTBTreatmentHome.getTreatments();
-		
+		//		prevTBTreatmentHome.getTreatments();
+
 		Events.instance().raiseEvent("new-notification");
-		
+
 		initialized = true;
 		return "initialized";
 	}
-	
+
 	/**
 	 * Initialize a new notification
 	 */
@@ -236,11 +237,11 @@ public class CaseEditingAZHome extends CaseEditingHome{
 			return "error";
 		TbCaseAZ tbcase = getTbCase();
 		tbcase.setReferToTBUnit(getReferTBUnit().getTbunit());
-		
+
 		if (tbcase.getLegacyId()!=null && tbcase.getSystemDate()==null){
 			tbcase.setSystemDate(new Date());
 		}
-		
+
 		return super.saveEditing();
 	}
 
