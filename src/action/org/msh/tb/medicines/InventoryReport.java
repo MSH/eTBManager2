@@ -367,7 +367,7 @@ public class InventoryReport {
 		public boolean almostStockedOut(){
 			Date d = DateUtils.getDate();
 			if(stockOutDate != null)
-				return !stockOutDate.before(d);
+				return stockOutDate.before(d);
 			else
 				return false;
 		}
