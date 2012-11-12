@@ -269,6 +269,13 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		return (getTbCase().isOpen()) && checkRoleBySuffix("CASE_DATA_EDT") && (isWorkingUnit());
 	}
 	
+	public boolean isCanRemoveCaseData() {
+		if(getTbCase().getValidationState().equals(ValidationState.VALIDATED))
+			return (getTbCase().isOpen()) && checkRoleBySuffix("CASE_DEL_VAL") && (isWorkingUnit());
+		else
+			return (getTbCase().isOpen()) && checkRoleBySuffix("CASE_DATA_EDT") && (isWorkingUnit());
+	}
+	
 	public boolean isCanStartTreatment() {
 		CaseState st = getInstance().getState();
 		return getTbCase().isOpen() && (isManaged()) && (st != null) && (st.ordinal() < CaseState.ONTREATMENT.ordinal()) && (isCanEditTreatment());
