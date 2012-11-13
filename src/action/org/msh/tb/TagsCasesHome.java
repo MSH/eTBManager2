@@ -76,27 +76,17 @@ public class TagsCasesHome {
 		String sql = "delete from tags_case where tag_id = :id";
 		entityManager.createNativeQuery(sql).setParameter("id", tag.getId()).executeUpdate();
 
-		Workspace defaultWorkspace = (Workspace) Component.getInstance("defaultWorkspace");
+		Integer wsid = ((Workspace)Component.getInstance("defaultWorkspace")).getId();
 		
-		ArrayList<Integer> wsid = new ArrayList<Integer>();
-		//This method is being used by the application in a scheduled task, so it has to do this verification.
-		if(defaultWorkspace!= null){
-			wsid.add(defaultWorkspace.getId());
-		}else{
-			wsid = (ArrayList<Integer>) entityManager.createNativeQuery("select id from workspace").getResultList();
-		}
-		
-		for(Integer i: wsid){
-			// include new tags
-			sql = "insert into tags_case (case_id, tag_id) " +
-					"select a.id, " + tag.getId() + " from tbcase a join patient p on p.id=a.patient_id " +
-					"where " + tag.getSqlCondition() + " and p.workspace_id = :id";
-			
-			entityManager.createNativeQuery(sql).setParameter("id", i).executeUpdate();
-		}
+		// include new tags
+		sql = "insert into tags_case (case_id, tag_id) " +
+				"select a.id, " + tag.getId() + " from tbcase a join patient p on p.id=a.patient_id " +
+				"where " + tag.getSqlCondition() + " and p.workspace_id = :id";
+		entityManager.createNativeQuery(sql).setParameter("id", wsid).executeUpdate();
 
 		return true;
 	}
+
 
 	static public TagsCasesHome instance() { 
 		return (TagsCasesHome)Component.getInstance("tagsCasesHome", true);
