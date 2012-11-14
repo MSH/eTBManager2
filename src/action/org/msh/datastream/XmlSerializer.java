@@ -56,7 +56,7 @@ public class XmlSerializer {
 
 		if (schema == null)
 			throw new IllegalArgumentException("No schema found for class " + entityClass.toString());
-
+		
 		Element elem = DocumentHelper.createElement(schema.getNodeName());
 
 		// entity was already serialized ?
@@ -65,6 +65,7 @@ public class XmlSerializer {
 			elem.setText( StringConverter.instance().toString(key) );
 		}
 		else {
+			// property is a collection of other objects ?
 			parents.push(object);
 			serializeProperties(object, elem, schema, parentProperty);
 			parents.remove(object);
@@ -147,9 +148,14 @@ public class XmlSerializer {
 				elem.setText( StringConverter.instance().toString(key) );
 			}
 			else {
-				parents.push(obj);
-				serializeProperties(obj, elem, typeSchema, schema.getChildPropertyLink(fld.getName()));
-				parents.pop();
+				if (obj instanceof Collection) {
+					serializeCollection(elem, (Collection)obj, schema.getChildPropertyLink(fld.getName()));
+				}
+				else {
+					parents.push(obj);
+					serializeProperties(obj, elem, typeSchema, schema.getChildPropertyLink(fld.getName()));
+					parents.pop();
+				}
 			}
 		}
 		else {

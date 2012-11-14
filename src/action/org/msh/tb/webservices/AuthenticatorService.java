@@ -1,5 +1,6 @@
 package org.msh.tb.webservices;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jws.WebMethod;
@@ -13,7 +14,6 @@ import org.jboss.seam.Component;
 import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.entities.Workspace;
 import org.msh.tb.login.AuthenticatorBean;
 import org.msh.tb.login.UserSession;
 
@@ -65,16 +65,22 @@ public class AuthenticatorService {
 			if (userWorkspace == null)
 				resp.setErrorno(Response.RESP_AUTHENTICATION_FAIL);
 
-			EntityManager em = (EntityManager)Component.getInstance("EntityManager");
-			List<Workspace> lst = em.createQuery("select w from UserWorkspace uw join fetch uw.workspace w where uw.user.id = :id")
+			EntityManager em = (EntityManager)Component.getInstance("entityManager");
+			List<UserWorkspace> lst = em.createQuery("from UserWorkspace uw join fetch uw.workspace w where uw.user.id = :id")
 				.setParameter("id", userWorkspace.getUser().getId())
 				.getResultList();
+			
+			List<WorkspaceInfo> res = new ArrayList<WorkspaceInfo>();
+			for (UserWorkspace uw: lst) 
+				res.add(new WorkspaceInfo(uw.getWorkspace().getId(), uw.getWorkspace().getName().getName1(), uw.getWorkspace().getName().getName2()));
+
+			resp.setResult(res);
 			
 			resp.setErrorno(Response.RESP_SUCCESS);
 			
 		} catch (Exception e) {
 			resp.setErrorno(Response.RESP_UNEXPECTED_ERROR);
-			resp.setErrormsg(e.getMessage());
+			resp.setErrormsg(e.toString());
 		}
 		
 		return ObjectSerializer.serializeToXml(resp);

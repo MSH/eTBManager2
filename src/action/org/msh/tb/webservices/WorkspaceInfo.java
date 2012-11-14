@@ -5,7 +5,17 @@ public class WorkspaceInfo {
 	private Integer id;
 	private String name1;
 	private String name2;
+	
+	public WorkspaceInfo() {
+		super();
+	}
 
+	public WorkspaceInfo(Integer id, String name1, String name2) {
+		super();
+		this.id = id;
+		this.name1 = name1;
+		this.name2 = name2;
+	}
 	/**
 	 * @return the id
 	 */
