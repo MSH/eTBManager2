@@ -19,11 +19,13 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.SourcesQuery;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.PrescribedMedicine;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.TreatmentHealthUnit;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.MedicineLine;
@@ -224,10 +226,14 @@ public class TreatmentHome {
 	 * @return
 	 */
 	private boolean allowBeforeDiagnosis() {
-		boolean isTBAllow = userSession.getUserWorkspace().getWorkspace().isStartTBTreatBeforeValidation();
-		boolean isDRTBAllow = userSession.getUserWorkspace().getWorkspace().isStartDRTBTreatBeforeValidation();
+		Workspace ws = UserSession.getWorkspace();
+		
+		boolean isTBAllow = ws.isStartTBTreatBeforeValidation();
+		boolean isDRTBAllow = ws.isStartDRTBTreatBeforeValidation();
+		
 		boolean isTBCase = tbcase.getClassification().equals(CaseClassification.TB);
 		boolean isDRTBCase = tbcase.getClassification().equals(CaseClassification.DRTB);
+		
 		return ( isTBAllow && isTBCase) || (isDRTBAllow && isDRTBCase);
 	}
 
@@ -751,15 +757,24 @@ public class TreatmentHome {
 				.getResultList();
 
 		// get list of medicines prescribed
-		String s = "";
+		List<Medicine> meds = new ArrayList<Medicine>();
 		for (PrescribedMedicine pm: tbcase.getPrescribedMedicines()) {
-			if (pm.getMedicine().getLine() != MedicineLine.OTHER) {
-				String sid = pm.getMedicine().getId().toString();
-				if (!s.contains(sid)) {
-					if (!s.isEmpty())
-						s += ",";
-					s += pm.getMedicine().getId().toString();
-				}
+			if ((pm.getMedicine().getLine() != MedicineLine.OTHER) && (!meds.contains(pm.getMedicine()))) {
+				meds.add(pm.getMedicine());
+			}
+		}
+
+		if (meds.size() == 0)
+			return false;
+		
+		// create query to select substances of the regimen
+		String s = "";
+		for (Medicine med: meds) {
+			String sid = med.getId().toString();
+			if (!s.contains(sid)) {
+				if (!s.isEmpty())
+					s += ",";
+				s += med.getId().toString();
 			}
 		}
 		s = "(" + s + ")";
