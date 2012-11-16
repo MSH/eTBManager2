@@ -84,6 +84,9 @@
         <copy includeemptydirs="false" todir="build/classes">
             <fileset dir="src/in" excludes="**/*.launch, **/*.java, **/*.html"/>
         </copy>
+        <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src/kh" excludes="**/*.launch, **/*.java, **/*.html"/>
+        </copy>
     </target>
     
 	<target name="clean">
@@ -116,6 +119,7 @@
            <src path="src/in"/>
            <src path="src/kh"/>
 	       <src path="src/vi"/>
+	       <src path="src/kh"/>
            <classpath refid="mdrtb.classpath"/>
 		 </javac>
     </target>
