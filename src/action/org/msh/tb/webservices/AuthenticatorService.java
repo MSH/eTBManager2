@@ -27,7 +27,7 @@ import org.msh.tb.login.UserSession;
 public class AuthenticatorService {
 
 	@WebMethod
-	public String login(@WebParam String username, @WebParam String password, @WebParam int workspaceid) {
+	public Response login(@WebParam String username, @WebParam String password, @WebParam int workspaceid) {
 		Response resp = new Response();
 		try {
 			AuthenticatorBean authenticator = (AuthenticatorBean)Component.getInstance("authenticator");
@@ -50,12 +50,12 @@ public class AuthenticatorService {
 			resp.setErrorno(Response.RESP_UNEXPECTED_ERROR);
 		}
 
-		return ObjectSerializer.serializeToXml(resp);
+		return resp;
 	}
 	
 	
 	@WebMethod
-	public String getUserWorkspaces(@WebParam String username, @WebParam String password) {
+	public Response getUserWorkspaces(@WebParam String username, @WebParam String password) {
 		Response resp = new Response();
 
 		try {
@@ -74,7 +74,7 @@ public class AuthenticatorService {
 			for (UserWorkspace uw: lst) 
 				res.add(new WorkspaceInfo(uw.getWorkspace().getId(), uw.getWorkspace().getName().getName1(), uw.getWorkspace().getName().getName2()));
 
-			resp.setResult(res);
+			resp.setResult(ObjectSerializer.serializeToXml(res));
 			
 			resp.setErrorno(Response.RESP_SUCCESS);
 			
@@ -83,7 +83,7 @@ public class AuthenticatorService {
 			resp.setErrormsg(e.toString());
 		}
 		
-		return ObjectSerializer.serializeToXml(resp);
+		return resp;
 	}
 	
 }

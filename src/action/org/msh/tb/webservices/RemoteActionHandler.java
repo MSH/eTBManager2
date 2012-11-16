@@ -75,13 +75,13 @@ public abstract class RemoteActionHandler implements ObjectReferenceable {
 	 * authentication is supported, the system will call the authenticate method before. 
 	 * @return instance of the {@link Response} class already serialized to the client
 	 */
-	public String run() {
+	public Response run() {
 		response = new Response();
 		try {
 			// authenticate first ?
 			if (sessionId != null) {
 				if (!authenticate())
-					return getSerializedResponse();
+					return response;
 			}
 
 			if (transactional)
@@ -93,7 +93,7 @@ public abstract class RemoteActionHandler implements ObjectReferenceable {
 			if (transactional)
 				commitTransaction();
 
-			response.setResult(result);
+			response.setResult( ObjectSerializer.serializeToXml(result) );
 
 		} catch (Exception e) {
 			if (transactional)
@@ -101,7 +101,8 @@ public abstract class RemoteActionHandler implements ObjectReferenceable {
 			setResponseError(Response.RESP_UNEXPECTED_ERROR, e.toString());
 		}
 		
-		return getSerializedResponse();
+		return response;
+//		return getSerializedResponse();
 	}
 
 	/**
@@ -143,7 +144,7 @@ public abstract class RemoteActionHandler implements ObjectReferenceable {
 	 * Create a serialized XML of the response property
 	 * @return
 	 */
-	private String getSerializedResponse() {
+	protected String getSerializedResponse() {
 		return ObjectSerializer.serializeToXml(response);
 	}
 

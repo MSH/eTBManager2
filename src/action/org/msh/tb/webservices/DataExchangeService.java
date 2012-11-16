@@ -15,7 +15,7 @@ import org.msh.tb.entities.ExamDST;
 public class DataExchangeService {
 
 	@WebMethod
-	public String importData(@WebParam String sessionId, @WebParam String xmldata) {
+	public Response importData(@WebParam String sessionId, @WebParam String xmldata) {
 		final String xml = xmldata;
 		return (new RemoteActionHandler(sessionId) {
 			@Override
@@ -46,7 +46,7 @@ public class DataExchangeService {
 			if (handler.checkValidationErrors())
 				return null;
 		}
-		return null;
+		return home.getId();
 	}
 
 }

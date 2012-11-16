@@ -13,20 +13,20 @@ public class Response {
 	public static final int RESP_UNEXPECTED_ERROR = 3;
 	public static final int RESP_VALIDATION_ERROR = 4;
 	
-	private Object result;
+	private String result;
 	private int errorno;
 	private String errormsg;
 
 	/**
 	 * @return the result
 	 */
-	public Object getResult() {
+	public String getResult() {
 		return result;
 	}
 	/**
 	 * @param result the result to set
 	 */
-	public void setResult(Object result) {
+	public void setResult(String result) {
 		this.result = result;
 	}
 	/**

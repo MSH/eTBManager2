@@ -3,6 +3,8 @@ package org.msh.tb.webservices;
 import java.io.InputStream;
 
 import org.msh.datastream.SchemaManager;
+import org.msh.datastream.StringConverter;
+import org.msh.datastream.TypeConverter;
 import org.msh.datastream.XmlDeserializer;
 import org.msh.datastream.XmlSerializer;
 import org.msh.datastream.XmlDeserializer.ObjectReferenceable;
@@ -55,6 +57,10 @@ public class ObjectSerializer {
 	 * @return
 	 */
 	public static String serializeToXml(Object obj) {
+		TypeConverter conv = StringConverter.instance().findConverter(obj.getClass());
+		if (conv != null)
+			return conv.toString(obj);
+
 		XmlSerializer ser = new XmlSerializer(instance().getSchemaManager());
 		return ser.serializeToXml(obj);
 	}
