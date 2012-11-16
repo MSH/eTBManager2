@@ -22,7 +22,7 @@ import org.msh.tb.login.UserSession;
  * @author Ricardo Memoria
  *
  */
-@WebService(name="authenticatorService", serviceName="authenticatorService")
+@WebService(name="authenticatorService", serviceName="authenticatorService", targetNamespace="https://etbmanager.org/etbmanager/services/authentication")
 @SOAPBinding(style=Style.RPC)
 public class AuthenticatorService {
 
