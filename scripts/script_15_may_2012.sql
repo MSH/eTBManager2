@@ -1,1 +1,0 @@
-ALTER TABLE `sitetb`.`tbcontact` MODIFY COLUMN `age` VARCHAR(255) NOT NULL;
