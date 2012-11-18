@@ -22,12 +22,12 @@ import org.msh.tb.login.UserSession;
  * @author Ricardo Memoria
  *
  */
-@WebService(name="authenticatorService", serviceName="authenticatorService", targetNamespace="https://etbmanager.org/etbmanager/services/authentication")
+@WebService(name="authenticatorService", serviceName="authenticatorService", targetNamespace="http://etbmanager.org/authenticator")
 @SOAPBinding(style=Style.RPC)
 public class AuthenticatorService {
 
 	@WebMethod
-	public Response login(@WebParam String username, @WebParam String password, @WebParam int workspaceid) {
+	public Response login(@WebParam(name="username") String username, @WebParam(name="password") String password, @WebParam(name="workspaceId") int workspaceid) {
 		Response resp = new Response();
 		try {
 			AuthenticatorBean authenticator = (AuthenticatorBean)Component.getInstance("authenticator");
@@ -55,7 +55,7 @@ public class AuthenticatorService {
 	
 	
 	@WebMethod
-	public Response getUserWorkspaces(@WebParam String username, @WebParam String password) {
+	public Response getUserWorkspaces(@WebParam(name="username") String username, @WebParam(name="password") String password) {
 		Response resp = new Response();
 
 		try {
