@@ -1,0 +1,2 @@
+ALTER TABLE MedicalExamination MODIFY COLUMN `comments` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
+;
