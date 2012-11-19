@@ -67,7 +67,7 @@ public class GlobalLists {
 	};
 	
 	private static final DstResult dstResultsForMtbNo[] = {
-		DstResult.NOTDONE
+		DstResult.ERROR
 	};
 	
 	/**

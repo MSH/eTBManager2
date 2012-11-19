@@ -1,51 +1,75 @@
 package org.msh.tb.vi;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jboss.seam.Component;
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.msh.tb.cases.exams.ExamDSTHome;
+import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.vi.entities.ExamDSTVI;
 
 @Name("examDSTHomeVI")
 public class ExamDSTHomeVI{
-	/*This class is not being used because of a problem in jsfunction, using this class was a better solution, I had commited it to improve it later*/
 	private static final long serialVersionUID = 423921370976581854L;
 	
 	private DstResult[] dstResultsForRifampcin;
 	
-	private static final String specialMethodsCustomId = "spcMtd-R";
+	private static final String geneXpertName = "GeneXpert";
 	
 	@In(create=true) ExamDSTHome examDSTHome;
+	@In(create=true) GlobalLists globalLists_vi;
+	
+	private boolean geneXpert = false;
 	
 	public DstResult[] getDstResultsForRifampcin(){
-		if(dstResultsForRifampcin == null)
-			dstResultsForRifampcin = (DstResult[]) Component.getInstance("dstResults");
+		updateDstResultsForRifampcin();
 		return dstResultsForRifampcin;
 	}
 	
-	/*A:jsfunction doesn't work properly, after almost 8 hours trying to use a better solution I had displayed all combinations
-	 * on the page and hide/show with javascript according to the options. I tried using a conversation scope too.*/
-	 public void updateDstResultsForRifampcin(){
-		ExamDSTVI exam = (ExamDSTVI) examDSTHome.getInstance();
-		boolean isGeneXpert = false;
-		
-		if(exam.getMethod()!=null)
-			isGeneXpert = exam.getMethod().getCustomId().equals(specialMethodsCustomId);
-		
-		if(exam.getMethod() == null || exam.getMtbDetected() == null || !isGeneXpert ){
-			dstResultsForRifampcin = (DstResult[]) Component.getInstance("dstResults");
-		}else if(exam.getMethod().getName().getName1().equalsIgnoreCase("genexpert") && exam.getMtbDetected().equals(MtbDetected.YES)){
-			/*dstResultsForRifampcin  = rifDstResultsForYes; get from globallists_vi*/
+	public void updateItems(){
+		if(isGeneXpert()){
+			ArrayList<ExamDSTResult> results = new ArrayList<ExamDSTResult> ();
+			for(int i = 0; i < examDSTHome.getItems().size(); i++){
+				if(examDSTHome.getItems().get(i).getSubstance().getAbbrevName().getName1().equalsIgnoreCase("R"))
+					results.add(examDSTHome.getItems().get(i));
+			}
+			examDSTHome.getItems().clear();
+			examDSTHome.getItems().addAll(results);
 		}else{
-			/*dstResultsForRifampcin  = rifDstResultsForOthers; get from globallists_vi*/
+			examDSTHome.createItems();
+		}
+	}
+	
+	public void updateDstResultsForRifampcin(){
+		ExamDSTVI exam = (ExamDSTVI) examDSTHome.getInstance();
+		 
+		//Set rifampcin values 
+		if(exam.getMethod() == null || exam.getMtbDetected() == null || !isGeneXpert() ){
+			dstResultsForRifampcin = (DstResult[]) Component.getInstance("dstResults");
+		}else if(isGeneXpert() && exam.getMtbDetected().equals(MtbDetected.YES)){
+			dstResultsForRifampcin  = globalLists_vi.getDstResultsForMtbYes();
+		}else if(isGeneXpert() && exam.getMtbDetected() == null){
+			dstResultsForRifampcin  = globalLists_vi.getDstResultsForMtbYes();
+		}else{
+			dstResultsForRifampcin  = globalLists_vi.getDstResultsForMtbNo();
 		}
 		
 	}
+	 
+	public boolean isGeneXpert(){
+		ExamDSTVI exam = (ExamDSTVI) examDSTHome.getInstance();
+				
+		if(exam.getMethod()!=null)
+			return geneXpert = exam.getMethod().getName().getName1().equals(geneXpertName);
+		
+		return false;
+	}
 	
-	
-	
-
+	public List<ExamDSTResult> getItems(){
+		updateItems();
+		return examDSTHome.getItems();
+	}
 }

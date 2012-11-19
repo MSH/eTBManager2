@@ -50,7 +50,7 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 		return null;
 	}
 	
-	protected void createItems() {
+	public void createItems() {
 		items = new ArrayList<ExamDSTResult>();
 //		boolean bEdt = isManaged();
 		
