@@ -14,6 +14,7 @@ import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.LocalizedNameComp;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.TransactionLog;
+import org.msh.tb.entities.Transactional;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLog;
 import org.msh.tb.entities.UserLogin;
@@ -80,7 +81,7 @@ public class TransactionLogService {
 			throw new RuntimeException("No property id found in entity " + entity.getClass().toString());
 		}
 
-		return save(eventName, action, entity.toString(), id, entity.getClass().getSimpleName());
+		return save(eventName, action, entity.toString(), id, entity.getClass().getSimpleName(), entity);
 	}
 	
 	/**
@@ -88,9 +89,12 @@ public class TransactionLogService {
 	 * @param eventName is the short name of the event (user role)
 	 * @param action type of action related to this transaction (execution, new, edit, deleted)
 	 */
-	public TransactionLog save(String eventName, RoleAction action, String description, Integer entityId, String entityClass) {
+	public TransactionLog save(String eventName, RoleAction action, String description, Integer entityId, String entityClass, Object entity) {
+		// check if there are changes
+		if ((!checkEntityValues()) && (action == RoleAction.EDIT))
+			return null;
+
 		UserRole role = translateRole(eventName);
-		checkEntityValues();
 
 		if (items != null) {
 			DetailXMLWriter writer = getDetailWriter();
@@ -125,6 +129,14 @@ public class TransactionLogService {
 		em.persist(log);
 		em.flush();
 
+		// update transaction information to the entity
+		if (entity instanceof Transactional) {
+			Transactional t = (Transactional)entity;
+			if (action == RoleAction.NEW)
+				t.setCreateTransaction(log);
+			t.setLastTransaction(log);
+		}
+		
 		items = null;
 		detailWriter = null;
 
@@ -138,8 +150,8 @@ public class TransactionLogService {
 	 * @param description
 	 * @param entityId
 	 */
-	public void saveExecuteTransaction(String userRole, String description, Integer entityId, String entityClass) {
-		save(userRole, RoleAction.EXEC, description, entityId, entityClass);
+	public void saveExecuteTransaction(String userRole, String description, Integer entityId, String entityClass, Object entity) {
+		save(userRole, RoleAction.EXEC, description, entityId, entityClass, entity);
 	}
 
 	/**
@@ -153,10 +165,14 @@ public class TransactionLogService {
 	
 	/**
 	 * Check if entity values changed since last time they were captured by the method <code>captureProperties</code>
+	 * 
+	 * @return true if there are changes, or false if there is no change at all
 	 */
-	protected void checkEntityValues() {
+	protected boolean checkEntityValues() {
 		if (items == null)
-			return;
+			return false;
+
+		boolean result = false;
 
 		int index = 0;
 		while (index < items.size()) {
@@ -166,18 +182,28 @@ public class TransactionLogService {
 			while (counter < item.getValues().size()) {
 				PropertyValue val = item.getValues().get(counter);
 				if (item.getOperation() == Operation.EDIT) {
-					if (!val.isValueChanged())
-						 item.getValues().remove(counter);
-					else counter++;
+					boolean changed = val.isValueChanged();
+
+					if (changed || val.getMapping().isLoggedForOperation(Operation.EDIT))
+						 counter++;
+					else item.getValues().remove(counter);
+
+					if (changed)
+						result = true;
 				}
 				else {
-					if (val.getValue() == null)
+					if (val.getValue() == null) 
 						item.getValues().remove(counter);
-					else counter++;
+					else {
+						counter++;
+						result = true;
+					}
 				}
 			}
 			index++;
 		}
+		
+		return result;
 	}
 	
 

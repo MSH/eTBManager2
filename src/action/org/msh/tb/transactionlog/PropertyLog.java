@@ -28,7 +28,7 @@ public @interface PropertyLog {
 	 * Force log value to use this key when logging value. This key must match a key in the messages file
 	 * @return
 	 */
-	String key() default "";
+	String messageKey() default "";
 
 	/**
 	 * If field is another entity, it indicates if log values of the entity will also be logged (true) or
@@ -42,5 +42,5 @@ public @interface PropertyLog {
 	 * this field will be logged just when the operation is for editing 
 	 * @return
 	 */
-	Operation[] operations() default {Operation.EDIT};
+	Operation[] operations() default {};
 }

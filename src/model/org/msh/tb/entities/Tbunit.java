@@ -31,7 +31,7 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 	private Integer id;
 
 	@Embedded
-	@PropertyLog(key="form.name", operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(messageKey="form.name", operations={Operation.NEW})
 	private LocalizedNameComp name = new LocalizedNameComp();
 	
 	@Column(length=200)
@@ -58,19 +58,21 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ADMINUNIT_ID")
 	@NotNull
-	@PropertyLog(key="UserView.ADMINUNIT", operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(messageKey="UserView.ADMINUNIT", operations={Operation.NEW})
 	private AdministrativeUnit adminUnit;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="HEALTHSYSTEM_ID")
 	@NotNull
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
 	private HealthSystem healthSystem;
 	
 	@Column(length=50)
+	@PropertyLog(messageKey="global.legacyId")
 	private String legacyId;
 	
 	@Column(length=100)
+	@PropertyLog(messageKey="TbCase.phoneNumber")
 	private String phoneNumber;
 
 	// ready to be removed from the system
@@ -89,7 +91,7 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
     private boolean patientDispensing;
     private boolean ntmHealthUnit;
 
-    @PropertyLog(key="EntityState.ACTIVE")
+    @PropertyLog(messageKey="EntityState.ACTIVE")
     private boolean active;
 
     /**

@@ -23,7 +23,7 @@ import org.msh.tb.transactionlog.PropertyLog;
 public class ExamMicroscopy extends LaboratoryExamResult implements Serializable {
 	private static final long serialVersionUID = 1514632458011926044L;
 
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
 	private MicroscopyResult result;
 	
 	private Integer numberOfAFB;

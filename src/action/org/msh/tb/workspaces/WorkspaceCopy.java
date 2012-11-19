@@ -150,7 +150,9 @@ public class WorkspaceCopy {
 		if (profiles)
 			logService.addMessageValue("admin.fields", "admin.workspaces.copy.selcopied");
 */
-		logService.saveExecuteTransaction("WSCOPY", workspaceHome.getInstance().toString(), workspaceHome.getInstance().getId(), workspaceHome.getInstance().getClass().getSimpleName());
+
+		Workspace ws = workspaceHome.getInstance();
+		logService.saveExecuteTransaction("WSCOPY", ws.toString(), ws.getId(), ws.getClass().getSimpleName(), ws);
 	}
 
 

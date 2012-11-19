@@ -23,8 +23,13 @@ import org.msh.tb.transactionlog.PropertyLog;
 import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 
 
+/**
+ * Base class to all laboratory exam results stored 
+ * @author Ricardo Memoria
+ *
+ */
 @MappedSuperclass
-public abstract class LaboratoryExamResult implements Serializable {
+public abstract class LaboratoryExamResult implements Serializable, Transactional {
 	private static final long serialVersionUID = 3229952267481224824L;
 
 	@Id
@@ -33,15 +38,15 @@ public abstract class LaboratoryExamResult implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	@NotNull
-	@PropertyLog(key="PatientSample.dateCollected", operations={Operation.ALL})
+	@PropertyLog(messageKey="PatientSample.dateCollected", operations={Operation.NEW, Operation.DELETE})
 	private Date dateCollected;
 	
 	@Column(length=50)
-	@PropertyLog(key="PatientSample.sampleNumber", operations={Operation.ALL})
+	@PropertyLog(messageKey="PatientSample.sampleNumber", operations={Operation.NEW, Operation.DELETE})
 	private String sampleNumber;
 	
 	@Column(length=250)
-	@PropertyLog(key="global.comments")
+	@PropertyLog(messageKey="global.comments")
 	private String comments;
 
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -51,17 +56,33 @@ public abstract class LaboratoryExamResult implements Serializable {
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="LABORATORY_ID")
-	@PropertyLog(key="Laboratory", operations={Operation.ALL})
+	@PropertyLog(messageKey="Laboratory", operations={Operation.NEW, Operation.DELETE})
 	private Laboratory laboratory;
 
 	@Temporal(TemporalType.DATE)
-	@PropertyLog(key="cases.exams.dateRelease", operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(messageKey="cases.exams.dateRelease", operations={Operation.NEW})
 	private Date dateRelease;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="METHOD_ID")
-	@PropertyLog(key="cases.exams.method", operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(messageKey="cases.exams.method", operations={Operation.NEW})
 	private FieldValue method;
+	
+	/**
+	 * Point to the transaction log that contains information about the last time this entity was changed (updated or created)
+	 */
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="lastTransaction_ID")
+	@PropertyLog(ignore=true)
+	private TransactionLog lastTransaction;
+	
+	/**
+	 * Point to the transaction log that contains information about the creation of this entity
+	 */
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="createTransaction_ID")
+	@PropertyLog(ignore=true)
+	private TransactionLog createTransaction;
 
 	/**
 	 * Return month of treatment based on the start treatment date and the collected date
@@ -201,5 +222,37 @@ public abstract class LaboratoryExamResult implements Serializable {
 
 	public void setSampleNumber(String sampleNumber) {
 		this.sampleNumber = sampleNumber;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.entities.Transactional#getLastTransaction()
+	 */
+	@Override
+	public TransactionLog getLastTransaction() {
+		return lastTransaction;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.entities.Transactional#getCreateTransaction()
+	 */
+	@Override
+	public TransactionLog getCreateTransaction() {
+		return createTransaction;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.entities.Transactional#setLastTransaction(org.msh.tb.entities.TransactionLog)
+	 */
+	@Override
+	public void setLastTransaction(TransactionLog transactionLog) {
+		this.lastTransaction = transactionLog;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.entities.Transactional#setCreateTransaction(org.msh.tb.entities.TransactionLog)
+	 */
+	@Override
+	public void setCreateTransaction(TransactionLog transactionLog) {
+		this.createTransaction = transactionLog;
 	}
 }

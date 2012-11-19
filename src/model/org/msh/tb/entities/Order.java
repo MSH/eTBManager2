@@ -23,6 +23,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.OrderStatus;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="medicineorder")
@@ -79,6 +80,7 @@ public class Order implements Serializable {
 	private List<OrderItem> items = new ArrayList<OrderItem>();
 
 	@Column(length=50)
+	@PropertyLog(messageKey="global.legacyId")
 	private String legacyId;
 	
 	@Column(length=200)

@@ -31,7 +31,7 @@ public class Medicine extends WSObject implements Serializable{
 	private Integer id;
 	
 	@Embedded
-	@PropertyLog(key="form.name")
+	@PropertyLog(messageKey="form.name")
 	private LocalizedNameComp genericName= new LocalizedNameComp();
 	
 	@Column(length=30)
@@ -47,7 +47,7 @@ public class Medicine extends WSObject implements Serializable{
 	private String dosageForm;
 
 	@Column(length=50)
-	@PropertyLog(key="global.legacyId")
+	@PropertyLog(messageKey="global.legacyId")
 	private String legacyId;
 
 	private MedicineCategory category;

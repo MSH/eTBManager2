@@ -32,7 +32,7 @@ public class EntityLogMapping {
 		for (PropertyMapping prop: lst.keySet()) {
 			try {
 				String propname = lst.get(prop);
-				if (prop.isLoggedForOperation(oper)) {
+				if ((oper == Operation.EDIT) || (prop.isLoggedForOperation(oper))) {
 					Object value = PropertyUtils.getProperty(entity, propname);
 					values.add( new PropertyValue(entity, prop, propname, value) );
 				}

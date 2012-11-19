@@ -13,6 +13,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -30,7 +32,7 @@ import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="workspace")
-public class Workspace implements Serializable {
+public class Workspace implements Serializable, Transactional {
 	private static final long serialVersionUID = -7496421288607921489L;
 
 	@Id
@@ -38,7 +40,7 @@ public class Workspace implements Serializable {
 	private Integer id;
 
 	@Embedded
-	@PropertyLog(key="form.name")
+	@PropertyLog(messageKey="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@OneToMany(mappedBy="workspace", cascade={CascadeType.PERSIST, CascadeType.REMOVE})
@@ -80,7 +82,6 @@ public class Workspace implements Serializable {
 	@PrimaryKeyJoinColumn
 	private WorkspaceView view;
 
-
 	/**
 	 * Setup the patient name composition to be used in data entry forms and displaying
 	 */
@@ -117,6 +118,18 @@ public class Workspace implements Serializable {
 	 */
 	private Integer monthsToAlertExpiredMedicines;
 
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="lastTransaction_ID")
+	@PropertyLog(ignore=true)
+	private TransactionLog lastTransaction;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="createTransaction_ID")
+	@PropertyLog(ignore=true)
+	private TransactionLog createTransaction;
+
+	
 	public WeeklyFrequency[] getWeeklyFrequencies() {
 		WeeklyFrequency[] lst = new WeeklyFrequency[7];
 
@@ -473,5 +486,38 @@ public class Workspace implements Serializable {
 	public void setMonthsToAlertExpiredMedicines(
 			Integer monthsToAlertExpiredMedicines) {
 		this.monthsToAlertExpiredMedicines = monthsToAlertExpiredMedicines;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.entities.Transactional#getLastTransaction()
+	 */
+	@Override
+	public TransactionLog getLastTransaction() {
+		return lastTransaction;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.entities.Transactional#getCreateTransaction()
+	 */
+	@Override
+	public TransactionLog getCreateTransaction() {
+		return createTransaction;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.entities.Transactional#setLastTransaction(org.msh.tb.entities.TransactionLog)
+	 */
+	@Override
+	public void setLastTransaction(TransactionLog transactionLog) {
+		this.lastTransaction = transactionLog;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.entities.Transactional#setCreateTransaction(org.msh.tb.entities.TransactionLog)
+	 */
+	@Override
+	public void setCreateTransaction(TransactionLog transactionLog) {
+		this.createTransaction = transactionLog;
 	}
 }

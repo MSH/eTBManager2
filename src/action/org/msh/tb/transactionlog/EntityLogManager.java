@@ -162,7 +162,7 @@ public class EntityLogManager {
 					throw new RuntimeException(e);
 				}
 			}
-			pm.setMessageKey(propertyLog.key());
+			pm.setMessageKey(propertyLog.messageKey());
 			pm.setOperations(propertyLog.operations());
 		}
 		
@@ -176,8 +176,7 @@ public class EntityLogManager {
 
 		// no operation was declared
 		if (pm.getOperations() == null) {
-			Operation oper[] = new Operation[1];
-			oper[0] = Operation.EDIT;
+			Operation oper[] = new Operation[0];
 			pm.setOperations(oper);
 		}
 	}

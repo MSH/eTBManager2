@@ -23,7 +23,7 @@ public class ExamMicroscopyBR extends ExamMicroscopy {
 	private AdministrativeUnit laboratoryAdminUnit;
 	
 	@Column(length=200)
-	@PropertyLog(operations={Operation.ALL}, key="Laboratory")
+	@PropertyLog(operations={Operation.ALL}, messageKey="Laboratory")
 	private String laboratoryName;
 
 

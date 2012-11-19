@@ -24,11 +24,11 @@ public class Laboratory extends WSObject implements Serializable {
     private Integer id;
 	
 	@Column(length=20)
-	@PropertyLog(key="form.abbrevName")
+	@PropertyLog(messageKey="form.abbrevName")
 	private String abbrevName;
 	
 	@Column(length=100)
-	@PropertyLog(key="form.name")
+	@PropertyLog(messageKey="form.name")
 	private String name;
 	
 	@ManyToOne
@@ -41,7 +41,7 @@ public class Laboratory extends WSObject implements Serializable {
 	private HealthSystem healthSystem;
 
 	@Column(length=50)
-	@PropertyLog(key="global.legacyId")
+	@PropertyLog(messageKey="global.legacyId")
 	private String legacyId;
 
 	@Override

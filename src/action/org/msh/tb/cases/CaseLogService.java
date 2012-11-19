@@ -25,7 +25,7 @@ public class CaseLogService {
 	 * @param tbcase
 	 */
 	protected void saveExecuteTransaction(String roleName, TbCase tbcase) {
-		logService.saveExecuteTransaction(roleName, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName());
+		logService.saveExecuteTransaction(roleName, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
 	}
 	
 	/**

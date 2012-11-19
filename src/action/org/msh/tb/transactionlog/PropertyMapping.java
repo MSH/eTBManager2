@@ -23,7 +23,7 @@ public class PropertyMapping {
 	private EntityLogMapping entityProperty;
 	
 	private Operation[] operations;
-
+	
 	public PropertyMapping(EntityLogMapping ent, String name) {
 		this.entity = ent;
 		this.name = name;

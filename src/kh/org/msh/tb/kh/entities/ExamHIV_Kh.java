@@ -33,7 +33,7 @@ public class ExamHIV_Kh extends ExamHIV{
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ART_REGIMEN_ID")
-	@PropertyLog(key="TbField.ART_REGIMEN")
+	@PropertyLog(messageKey="TbField.ART_REGIMEN")
 	private FieldValue artRegimen;	
 	
 	public Date getResultDate() {

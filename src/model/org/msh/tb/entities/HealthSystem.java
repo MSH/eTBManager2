@@ -20,11 +20,11 @@ public class HealthSystem extends WSObject {
     private Integer id;
 
 	@Embedded
-	@PropertyLog(key="form.name")
+	@PropertyLog(messageKey="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@Column(length=50)
-	@PropertyLog(key="global.legacyId")
+	@PropertyLog(messageKey="global.legacyId")
 	private String legacyId;
 	
 	/* (non-Javadoc)

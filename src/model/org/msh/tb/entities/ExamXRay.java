@@ -28,20 +28,20 @@ import org.msh.tb.transactionlog.PropertyLog;
 @Table(name="examxray")
 public class ExamXRay extends CaseData {
 
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
 	private XRayResult result;
 	
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
 	private XRayEvolution evolution;
 	
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
 	private XRayBaseline baseline;
 	
 	private Boolean destruction;
 	
 	@ManyToOne
 	@JoinColumn(name="PRESENTATION_ID")
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT}, key="TbField.XRAYPRESENTATION")
+	@PropertyLog(operations={Operation.NEW}, messageKey="TbField.XRAYPRESENTATION")
 	private FieldValue presentation;
 
 	/**

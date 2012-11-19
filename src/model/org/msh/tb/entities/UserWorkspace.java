@@ -29,13 +29,13 @@ public class UserWorkspace implements Serializable {
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="HEALTHSYSTEM_ID")
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
 	private HealthSystem healthSystem;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="TBUNIT_ID")
 	@NotNull
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
 	private Tbunit tbunit;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -53,17 +53,17 @@ public class UserWorkspace implements Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="PROFILE_ID")
 	@NotNull
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
 	private UserProfile profile;
 	
 	@Column(name="USER_VIEW")
 	@NotNull
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
 	private UserView view;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ADMINUNIT_ID")
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
 	private AdministrativeUnit adminUnit;
     
     private boolean playOtherUnits;

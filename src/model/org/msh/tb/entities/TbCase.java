@@ -61,7 +61,7 @@ import org.msh.utils.date.Period;
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @Table(name="tbcase")
-public class TbCase implements Serializable{
+public class TbCase implements Serializable, Transactional {
 	private static final long serialVersionUID = 7221451624723376561L;
 
 	@Id
@@ -75,7 +75,7 @@ public class TbCase implements Serializable{
 	private Integer caseNumber;
 
 	@Column(length=50)
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private String registrationCode;
 
 	private Integer daysTreatPlanned;
@@ -90,11 +90,11 @@ public class TbCase implements Serializable{
 
 	@NotNull
 	@Temporal(TemporalType.DATE) 
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private Date registrationDate;
 	
 	@Temporal(TemporalType.DATE) 
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private Date diagnosisDate;
 	
 	@Temporal(TemporalType.DATE) 
@@ -138,35 +138,35 @@ public class TbCase implements Serializable{
 	@NotNull
 	private ValidationState validationState;
 	
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private PatientType patientType;
 
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private DiagnosisType diagnosisType;
 	
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private DrugResistanceType drugResistanceType;
 
 	@NotNull
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private CaseClassification classification;
 	
-	@PropertyLog(key="InfectionSite", operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(messageKey="InfectionSite", operations={Operation.NEW})
 	private InfectionSite infectionSite;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="PULMONARY_ID")
-	@PropertyLog(key="TbField.PULMONARY_TYPES")
+	@PropertyLog(messageKey="TbField.PULMONARY_TYPES")
 	private FieldValue pulmonaryType;
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="EXTRAPULMONARY_ID")
-	@PropertyLog(key="TbField.EXTRAPULMONARY_TYPES")
+	@PropertyLog(messageKey="TbField.EXTRAPULMONARY_TYPES")
 	private FieldValue extrapulmonaryType;
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="EXTRAPULMONARY2_ID")
-	@PropertyLog(key="TbField.EXTRAPULMONARY_TYPES")
+	@PropertyLog(messageKey="TbField.EXTRAPULMONARY_TYPES")
 	private FieldValue extrapulmonaryType2;
 	
 	@Column(length=100)
@@ -178,12 +178,12 @@ public class TbCase implements Serializable{
 	private String otherOutcome;
 	
 	@Column(length=50)
-	@PropertyLog(key="global.legacyId")
+	@PropertyLog(messageKey="global.legacyId")
 	private String legacyId;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="NOTIFICATION_UNIT_ID")
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private Tbunit notificationUnit;
 	
 	private boolean notifAddressChanged;
@@ -208,7 +208,7 @@ public class TbCase implements Serializable{
 	@AssociationOverrides({
 		@AssociationOverride(name="adminUnit", joinColumns=@JoinColumn(name="NOTIF_ADMINUNIT_ID"))
 	})
-	@PropertyLog(key="cases.details.addressnotif", operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(messageKey="cases.details.addressnotif", operations={Operation.NEW})
 	private Address notifAddress;
 	
 	@Embedded
@@ -223,7 +223,7 @@ public class TbCase implements Serializable{
 	@AssociationOverrides({
 		@AssociationOverride(name="adminUnit", joinColumns=@JoinColumn(name="CURR_ADMINUNIT_ID"))
 	})
-	@PropertyLog(key="cases.details.addresscurr")
+	@PropertyLog(messageKey="cases.details.addresscurr")
 	private Address currentAddress;
 	
 	@Column(length=50)
@@ -266,12 +266,33 @@ public class TbCase implements Serializable{
 	
 	private int issueCounter;
 
+	/**
+	 * Tags of this case
+	 */
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(name="tags_case", 
 			joinColumns={@JoinColumn(name="CASE_ID")},
 			inverseJoinColumns={@JoinColumn(name="TAG_ID")})
 	private List<Tag> tags = new ArrayList<Tag>();
 
+	
+	/**
+	 * Point to the transaction log that contains information about the last time this entity was changed (updated or created)
+	 */
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="lastTransaction_ID")
+	@PropertyLog(ignore=true)
+	private TransactionLog lastTransaction;
+	
+	/**
+	 * Point to the transaction log that contains information about the creation of this entity
+	 */
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="createTransaction_ID")
+	@PropertyLog(ignore=true)
+	private TransactionLog createTransaction;
+	
+	
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -1277,4 +1298,35 @@ public class TbCase implements Serializable{
 		return "";
 	}
 
+	/* (non-Javadoc)
+	 * @see org.msh.tb.entities.Transactional#getLastTransaction()
+	 */
+	@Override
+	public TransactionLog getLastTransaction() {
+		return lastTransaction;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.entities.Transactional#getCreateTransaction()
+	 */
+	@Override
+	public TransactionLog getCreateTransaction() {
+		return createTransaction;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.entities.Transactional#setLastTransaction(org.msh.tb.entities.TransactionLog)
+	 */
+	@Override
+	public void setLastTransaction(TransactionLog transactionLog) {
+		this.lastTransaction = transactionLog;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.entities.Transactional#setCreateTransaction(org.msh.tb.entities.TransactionLog)
+	 */
+	@Override
+	public void setCreateTransaction(TransactionLog transactionLog) {
+		this.createTransaction = transactionLog;
+	}
 }

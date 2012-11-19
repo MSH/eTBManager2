@@ -4,17 +4,20 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.tb.EntityHomeEx;
 import org.msh.tb.br.entities.TbContactBR;
-import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.TbCase;
+import org.msh.tb.cases.TbContactHome;
 import org.msh.tb.entities.enums.CultureResult;
 import org.msh.tb.entities.enums.MicroscopyResult;
 
+/**
+ * Handle specific rules for the TB contacts of the Brazilian version
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 @Name("tbContactBRHome")
-public class TbContactBRHome extends EntityHomeEx<TbContactBR> {
-	private static final long serialVersionUID = 1515193100467041594L;
-
+public class TbContactBRHome  {
+	
 	private static final MicroscopyResult[] microscopyResults = {
 		MicroscopyResult.NOTDONE,
 		MicroscopyResult.NEGATIVE,
@@ -31,17 +34,25 @@ public class TbContactBRHome extends EntityHomeEx<TbContactBR> {
 		CultureResult.PLUS3
 	};
 	
-	@In(required=true) CaseHome caseHome;
-	@In(create=true) FacesMessages facesMessages;
+
+	@In(create=true) TbContactHome tbContactHome;
 	
+	/**
+	 * Factory that returns an instance of the {@link TbContactBR} entity managed by the {@link TbContactHome} component
+	 * @return
+	 */
 	@Factory("tbContactBR")
 	public TbContactBR getTbContact() {
-		return getInstance();
+		return (TbContactBR)tbContactHome.getInstance();
 	}
-	
-	@Override
+
+
+	/**
+	 * Validate and save a TB contact of the Brazilian version
+	 * @return "persisted" if successfully saved
+	 */
 	public String persist() {
-		TbContactBR con = getInstance();
+		TbContactBR con = getTbContact();
 		
 		if ((con.getConduct() == null) || (con.getConduct().getCustomId().equals("1"))) {
 			con.setDateEndTreat(null);
@@ -51,27 +62,11 @@ public class TbContactBRHome extends EntityHomeEx<TbContactBR> {
 		if ((con.getDateEndTreat() != null) && (con.getDateIniTreat() != null) && 
 			(con.getDateEndTreat().before(con.getDateIniTreat()))) 
 		{
-			facesMessages.add("A data final não pode ser anterior ou igual a data inicial");
+			FacesMessages.instance().add("A data final não pode ser anterior ou igual a data inicial");
 			return "error";
 		}
 		
-		TbCase tbcase = caseHome.getInstance();
-		
-		con.setTbcase(tbcase);
-		tbcase.getContacts().add(con);
-		
-		return super.persist();
-	}
-
-
-	@Override
-	public String remove() {
-		TbCase tbcase = caseHome.getInstance();
-		tbcase.getContacts().remove(getInstance());
-		
-		if (super.remove().equals("removed"))
-			 return "contact-removed";
-		else return "error";
+		return tbContactHome.persist();
 	}
 
 

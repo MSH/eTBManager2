@@ -32,12 +32,12 @@ public class AdministrativeUnit extends WSObject {
 	private Integer id;
 
 	@Embedded
-	@PropertyLog(key="form.name", operations={Operation.ALL})
+	@PropertyLog(messageKey="form.name", operations={Operation.NEW, Operation.DELETE})
 	private LocalizedNameComp name = new LocalizedNameComp();
 	
 	@ManyToOne
 	@JoinColumn(name="PARENT_ID")
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private AdministrativeUnit parent;
 	
 	@OneToMany(mappedBy="parent",fetch=FetchType.LAZY)
@@ -45,7 +45,7 @@ public class AdministrativeUnit extends WSObject {
 	private List<AdministrativeUnit> units = new ArrayList<AdministrativeUnit>();
 
 	@Column(length=50)
-	@PropertyLog(key="global.legacyId")
+	@PropertyLog(messageKey="global.legacyId")
 	private String legacyId;
 	
 	// properties to help dealing with trees

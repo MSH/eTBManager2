@@ -51,7 +51,6 @@ import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.YesNoType;
-import org.msh.tb.login.UserSession;
 import org.msh.tb.misc.FieldsOptions;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.TextUtils;

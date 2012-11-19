@@ -106,7 +106,7 @@ public class TreatmentLogService {
 		}
 
 		if (changed)
-			log.save("CASE_TREAT", RoleAction.EDIT, tbcase);
+			log.save("CASE_TREAT", RoleAction.EDIT, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
 	}
 
 	
@@ -184,7 +184,7 @@ public class TreatmentLogService {
 			transactionLogService.addTableRow("TbCase.endTreatmentDate", p.getEndDate());
 		}
 		
-		transactionLogService.saveExecuteTransaction("TREATMENT_UNDO", caseHome.getInstance());
+		transactionLogService.saveExecuteTransaction("TREATMENT_UNDO", tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
 	}
 
 	
@@ -205,7 +205,7 @@ public class TreatmentLogService {
 			transactionLogService.addTableRow("TbCase.endTreatmentDate", p.getEndDate());
 		}
 		
-		transactionLogService.saveExecuteTransaction("CASE_STARTTREAT", tbcase);
+		transactionLogService.saveExecuteTransaction("CASE_STARTTREAT", tbcase.getPatient().getFullName(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
 	}
 
 

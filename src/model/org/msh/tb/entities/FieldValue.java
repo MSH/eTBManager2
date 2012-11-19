@@ -31,21 +31,21 @@ public class FieldValue extends WSObject implements Serializable {
     private Integer id;
 
 	@Embedded
-	@PropertyLog(key="form.name", operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(messageKey="form.name", operations={Operation.NEW})
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@Embedded
 	@AttributeOverrides({
 		@AttributeOverride(name="name1", column=@Column(name="SHORT_NAME1")),
 		@AttributeOverride(name="name2", column=@Column(name="SHORT_NAME2"))})
-	@PropertyLog(key="form.abbrevName", operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(messageKey="form.abbrevName", operations={Operation.NEW})
 	private LocalizedNameComp shortName = new LocalizedNameComp();
 
 	@Column(length=20)
-	@PropertyLog(key="form.customId")
+	@PropertyLog(messageKey="form.customId")
 	private String customId;
 	
-	@PropertyLog(key="TbField")
+	@PropertyLog(messageKey="TbField")
 	private TbField field;
 	
 	private boolean other;
@@ -53,7 +53,7 @@ public class FieldValue extends WSObject implements Serializable {
 	@Column(length=100)
 	private String otherDescription;
 
-	@PropertyLog(key="form.displayorder")
+	@PropertyLog(messageKey="form.displayorder")
 	private Integer displayOrder;
 	
 

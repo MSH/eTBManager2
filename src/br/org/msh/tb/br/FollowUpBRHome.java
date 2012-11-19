@@ -24,7 +24,6 @@ import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.ExamXRay;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.TreatmentHealthUnit;
-import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.utils.ItemSelect;

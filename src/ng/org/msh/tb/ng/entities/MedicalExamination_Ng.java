@@ -29,7 +29,7 @@ private String otherQualifiedProfessional;
 
 @ManyToOne(fetch=FetchType.LAZY)
 @JoinColumn(name="SIDE_EFFECT")
-@PropertyLog(key="TbField.SIDEEFFECT")
+@PropertyLog(messageKey="TbField.SIDEEFFECT")
 private FieldValue sideeffect;
 
 private YesNoType patientReferred;

@@ -1598,7 +1598,7 @@ public class ImportTBMRTask extends DbBatchTask {
 
 			TransactionLogService srv = TransactionLogService.instance();
 			srv.getDetailWriter().addText("UF: " + uf + "\n Casos importados: " + getRecordCount());
-			srv.save("TASK", RoleAction.EXEC, "Importação de fichas do Sistema TBMR", null, null);
+			srv.save("TASK", RoleAction.EXEC, "Importação de fichas do Sistema TBMR", null, null, null);
 			
 			commitTransaction();
 		} catch (Exception e) {

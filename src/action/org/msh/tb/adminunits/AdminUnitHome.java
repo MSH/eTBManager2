@@ -234,7 +234,7 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 		//for (Workspace ws: wslst) {
 		//	updateCodeWorkspace(ws);
 		//}
-		updateCodeWorkspace(userSession.getUserWorkspace().getWorkspace());
+		updateCodeWorkspace(UserSession.getUserWorkspace().getWorkspace());
 	}
 	
 	protected void updateCodeWorkspace(Workspace ws) {

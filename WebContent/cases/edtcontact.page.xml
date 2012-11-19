@@ -5,7 +5,7 @@
 
 		<restrict>#{userSession.canEditCases}</restrict>
 		<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
-		<param name="conid" value="#{tbContactHome.id}" converterId="javax.faces.Integer"/>
+		<param name="conid" value="#{tbContactHome.idWithLog}" converterId="javax.faces.Integer"/>
 		<navigation>
 			<rule if="#{not caseHome.managed}">
 				<end-conversation/>

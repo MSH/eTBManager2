@@ -29,14 +29,14 @@ public class UserProfile extends WSObject implements Serializable, Comparable<Us
 
 	@Column(length=100)
 	@NotNull
-	@PropertyLog(key="form.name")
+	@PropertyLog(messageKey="form.name")
 	private String name;
 
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="userProfile",cascade={CascadeType.ALL})
     private List<UserPermission> permissions = new ArrayList<UserPermission>();
 
 	@Column(length=50)
-	@PropertyLog(key="global.legacyId")
+	@PropertyLog(messageKey="global.legacyId")
 	private String legacyId;
 
 	@Override

@@ -283,7 +283,7 @@ public class StockAdjustmentHome extends Controller {
 			logSrv.addTableRow("Batch", batch.getBatchNumber());
 			logSrv.addTableRow("Movement.quantity", qtd);
 		}
-		logSrv.save("STOCKPOS", roleAction, null, null, null);
+		logSrv.save("STOCKPOS", roleAction, null, null, null, null);
 	}
 	
 	private Map<Batch, Integer> getBatchesMap(StockPositionItem it, boolean shpippedQtd) {

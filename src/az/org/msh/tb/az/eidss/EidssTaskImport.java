@@ -97,7 +97,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		beginTransaction();
 		TransactionLogService service = new TransactionLogService();
 		service.getDetailWriter().addText(log.toString());
-		service.save("TASK", RoleAction.EXEC, "EIDSS Integration", null, null);
+		service.save("TASK", RoleAction.EXEC, "EIDSS Integration", null, null, null);
 		commitTransaction();
 	}
 
@@ -285,7 +285,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			beginTransaction();
 		TransactionLogService service = new TransactionLogService();
 		service.getDetailWriter().addText(log.toString());
-		service.save("TASK", RoleAction.EXEC, "EIDSS Integration", null, null);
+		service.save("TASK", RoleAction.EXEC, "EIDSS Integration", null, null, null);
 		if (notHaveUser)
 			commitTransaction();
 		super.cancel();

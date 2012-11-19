@@ -43,7 +43,6 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	protected List<CaseResultItem> resultList;
 	protected String hqlCondition;
 	private boolean loadCaseData = false;
-	private List<TbCase> lst2;
 
 	private static final String[] orderValues = {"p.recordNumber, c.caseNumber", "p.gender,p.name", 
 		"c.classification", "#{cases.namesOrderBy}", "c.age", "upper(nu.name.name1)", "c.notifAddress.adminUnit.parent.name.name1", 
@@ -181,7 +180,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 						addCondition(notifRegCond);
 						break;
 					case TREATMENT_UNIT:
-						if(caseFilters.getStateIndex()!=caseFilters.TRANSFER_OUT)
+						if(caseFilters.getStateIndex()!= CaseFilters.TRANSFER_OUT)
 							addCondition(treatRegCond);
 						break;
 					case BOTH:

@@ -58,7 +58,7 @@ public class Xmltest {
 		TransactionLogService srv = (TransactionLogService)Component.getInstance("transactionLogService");
 		srv.recordEntityState(aux, Operation.NEW);
 		aux.setRegistrationDate( DateUtils.incMonths(aux.getRegistrationDate(), 1) ); 
-		srv.save("CASE_DATA", RoleAction.EDIT, aux.toString(), aux.getId(), TbCase.class.getSimpleName());
+		srv.save("CASE_DATA", RoleAction.EDIT, aux.toString(), aux.getId(), TbCase.class.getSimpleName(), aux);
 		
 /*		EntityLogMapping map = EntityLogManager.instance().getEntityMapping(aux);
 		

@@ -434,7 +434,7 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 			for (UserWorkspace uw: removedUsers)
 				logService.addTableRow("admin.workspaces.removeduser", uw.getUser().getLogin() + " - " + uw.getUser().getName());
 		}
-		logService.saveExecuteTransaction("WSADDREMUSER", getInstance().toString(), getInstance().getId(), getInstance().getClass().getSimpleName());
+		logService.saveExecuteTransaction("WSADDREMUSER", getInstance().toString(), getInstance().getId(), getInstance().getClass().getSimpleName(), getInstance());
 		
 		return persist();
 	}

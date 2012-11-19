@@ -185,7 +185,8 @@ public class UserHome extends EntityHomeEx<User> {
 		getUserInstance().setPassword(Passwords.hashPassword(senha));
 		Contexts.getEventContext().set("password", senha);
 
-		getLogService().saveExecuteTransaction("NEWPWD", getUserInstance().getName(), getUserInstance().getId(), User.class.getSimpleName());
+		User user = getUserInstance();
+		getLogService().saveExecuteTransaction("NEWPWD", user.getName(), user.getId(), User.class.getSimpleName(), user);
 		
 		if (!sendEmail)
 			return "mail.success";

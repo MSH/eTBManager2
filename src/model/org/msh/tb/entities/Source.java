@@ -26,7 +26,7 @@ public class Source extends WSObject implements Serializable {
 	private Integer id;
 
 	@Embedded
-	@PropertyLog(key="form.name", operations={Operation.ALL})
+	@PropertyLog(messageKey="form.name", operations={Operation.NEW, Operation.DELETE})
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	@Embedded
@@ -34,11 +34,11 @@ public class Source extends WSObject implements Serializable {
 		@AttributeOverride(name="name1", column=@Column(name="ABBREV_NAME1")),
 		@AttributeOverride(name="name2", column=@Column(name="ABBREV_NAME2"))
 	})
-	@PropertyLog(key="form.abbrevName", operations={Operation.ALL})
+	@PropertyLog(messageKey="form.abbrevName", operations={Operation.NEW, Operation.DELETE})
 	private LocalizedNameComp abbrevName = new LocalizedNameComp();
 
 	@Column(length=50)
-	@PropertyLog(key="global.legacyId", operations={Operation.ALL})
+	@PropertyLog(messageKey="global.legacyId", operations={Operation.NEW, Operation.DELETE})
 	private String legacyId;
 
 	@Override

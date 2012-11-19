@@ -24,7 +24,7 @@ public class AgeRange extends WSObject {
 	private Integer id;
 	
 	@Embedded
-	@PropertyLog(key="form.name")
+	@PropertyLog(messageKey="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 
 	private int iniAge;

@@ -38,7 +38,7 @@ public class TbCaseNG extends TbCase{
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="SUSPECT_TYPE")
-	@PropertyLog(key="TbField.SUSPECT_TYPE")
+	@PropertyLog(messageKey="TbField.SUSPECT_TYPE")
 	private FieldValue suspectType;
 	
 	public List<CaseDispensing_Ng> getDispng() {

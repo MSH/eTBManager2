@@ -23,11 +23,11 @@ public class CountryStructure extends WSObject implements Serializable{
     private Integer id;
 	
 	@Embedded
-	@PropertyLog(key="form.name")
+	@PropertyLog(messageKey="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 	
 	@Column(name="STRUCTURE_LEVEL")
-	@PropertyLog(key="global.level")
+	@PropertyLog(messageKey="global.level")
 	private int level;
 	
 

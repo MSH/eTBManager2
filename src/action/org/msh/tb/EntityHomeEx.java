@@ -240,7 +240,7 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		case NEW: logService.recordEntityState(getInstance(), Operation.NEW);
 		}
 		
-		logService.save(roleName, action, getLogDescription(), getLogEntityId(), getLogEntityClass());
+		logService.save(roleName, action, getLogDescription(), getLogEntityId(), getLogEntityClass(), getInstance());
 	}
 	
 

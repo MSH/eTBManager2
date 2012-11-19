@@ -21,7 +21,11 @@ import org.msh.tb.entities.enums.RoleAction;
 import org.msh.utils.TextUtils;
 
 /**
- * Register a transaction that happened in the system
+ * Register a transaction that happened in the system. A transaction is anything
+ * that changes the actual state of the database caused by the user or 
+ * an external program. In some circumstances, a transaction may also be
+ * recorded to notify data access (for example, user consulted indicators)
+ * 
  * @author Ricardo Memoria
  *
  */

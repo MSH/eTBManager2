@@ -19,6 +19,8 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
@@ -36,11 +38,14 @@ public class TbContact implements Serializable {
 	@JoinColumn(name="CASE_ID")
 	@NotNull
 	private TbCase tbcase;
-	
+
+	@PropertyLog(operations={Operation.ALL})
 	private String name;
 	
+	@PropertyLog(messageKey="Gender")
 	private Gender gender;
 	
+	@PropertyLog(messageKey="TbCase.age", operations={Operation.NEW})
 	private String age;
 	
 	//VR: adding 'date of examination'
@@ -48,6 +53,7 @@ public class TbContact implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name="CONTACTTYPE_ID")
+	@PropertyLog(operations={Operation.NEW})
 	private FieldValue contactType;
 	
 	private boolean examinated;
@@ -57,6 +63,7 @@ public class TbContact implements Serializable {
 	private FieldValue conduct;
 
 	@Lob
+	@PropertyLog(messageKey="global.comments")
 	private String comments;
 	
 	/**

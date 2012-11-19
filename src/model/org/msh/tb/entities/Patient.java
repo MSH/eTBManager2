@@ -38,15 +38,15 @@ public class Patient extends WSObject implements Serializable {
 
 	@Column(length=100, name="PATIENT_NAME")
 	@NotNull
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private String name;
 	
 	@Column(length=100)
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private String middleName;
 	
 	@Column(length=100)
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private String lastName;
 	
 	@Column(length=50)
@@ -56,16 +56,17 @@ public class Patient extends WSObject implements Serializable {
 	private String motherName;
 	
 	@Temporal(TemporalType.DATE)
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
 	private Date birthDate;
 	
 	private Integer recordNumber;
 
 	@NotNull
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
 	private Gender gender;
 	
 	@Column(length=50)
+	@PropertyLog(messageKey="global.legacyId")
 	private String legacyId;
 	
 	@OneToMany(mappedBy="patient")

@@ -27,7 +27,7 @@ public class TbContact_Ng extends TbContact {
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="RISK_GROUP")
-	@PropertyLog(key="TbField.RISK_GROUP")
+	@PropertyLog(messageKey="TbField.RISK_GROUP")
 	private FieldValue riskGroup;
 	
 	private String contactLastName;

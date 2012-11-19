@@ -27,7 +27,7 @@ public class ExamCulture_Kh extends ExamCulture{
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="IDENTIFICATION_ID")
-	@PropertyLog(key="TbField.IDENTIFICATION")
+	@PropertyLog(messageKey="TbField.IDENTIFICATION")
 	private FieldValue identification;
 	
 	

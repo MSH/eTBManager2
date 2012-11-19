@@ -28,7 +28,7 @@ public class Substance extends WSObject implements Serializable {
 
 	@Embedded
 	@NotNull
-	@PropertyLog(key="form.name")
+	@PropertyLog(messageKey="form.name")
 	private LocalizedNameComp name = new LocalizedNameComp();
 	
 	@Embedded
@@ -36,7 +36,7 @@ public class Substance extends WSObject implements Serializable {
 		@AttributeOverride(name="name1", column=@Column(name="ABBREV_NAME1",length=10)),
 		@AttributeOverride(name="name2", column=@Column(name="ABBREV_NAME2",length=10))
 	})
-	@PropertyLog(key="form.abbrevName")
+	@PropertyLog(messageKey="form.abbrevName")
 	private LocalizedNameComp abbrevName = new LocalizedNameComp();
 	
 	private MedicineLine line;
@@ -45,11 +45,11 @@ public class Substance extends WSObject implements Serializable {
 	
 	private boolean dstResultForm;
 	
-	@PropertyLog(key="form.displayorder")
+	@PropertyLog(messageKey="form.displayorder")
 	private Integer prevTreatmentOrder;
 
 	@Column(length=50)
-	@PropertyLog(key="global.legacyId")
+	@PropertyLog(messageKey="global.legacyId")
 	private String legacyId;
 
 	@Override

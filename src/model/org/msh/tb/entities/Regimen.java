@@ -19,6 +19,7 @@ import javax.persistence.Transient;
 
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.RegimenPhase;
+import org.msh.tb.transactionlog.PropertyLog;
 
 
 
@@ -46,6 +47,7 @@ public class Regimen extends WSObject implements Serializable {
 	private List<MedicineRegimen> continuousPhaseMedicines = null;
 
 	@Column(length=50)
+	@PropertyLog(messageKey="global.legacyId")
 	private String legacyId;
 
 

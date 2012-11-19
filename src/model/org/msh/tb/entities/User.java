@@ -49,12 +49,12 @@ public class User implements java.io.Serializable {
     
     @Column(length=30)
 	@NotNull
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
     private String login;
     
     @Column(length=80, name="user_name")
 	@NotNull
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
     private String name;
 
     @Column(length=32, name="user_password")
@@ -63,15 +63,15 @@ public class User implements java.io.Serializable {
     private String password;
     
     @Column(nullable=false, length=80)
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
     private String email;
     
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW})
     private UserState state;
 	
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="DEFAULTWORKSPACE_ID")
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT}, logEntityFields=true)
+	@PropertyLog(operations={Operation.NEW}, logEntityFields=true)
     private UserWorkspace defaultWorkspace;
     
     @Column(length=6)
@@ -94,7 +94,7 @@ public class User implements java.io.Serializable {
 	private Date registrationDate;
 
 	@Column(length=50)
-	@PropertyLog(key="global.legacyId")
+	@PropertyLog(messageKey="global.legacyId")
 	private String legacyId;
 	
 	@ManyToOne(fetch=FetchType.LAZY)

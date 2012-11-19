@@ -32,7 +32,7 @@ import org.msh.tb.transactionlog.PropertyLog;
 public class ExamHIV extends CaseData implements Serializable {
 	private static final long serialVersionUID = 2237957846637585494L;
 
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private HIVResult result;
 	
 	@Temporal(TemporalType.DATE)
@@ -42,7 +42,7 @@ public class ExamHIV extends CaseData implements Serializable {
 	private Date startedCPTdate;
 	
 	@Column(length=100)
-	@PropertyLog(operations={Operation.ALL})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private String laboratory;
 
 	//usrivast
