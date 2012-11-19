@@ -8,7 +8,7 @@
 	<begin-conversation join="true" />
 
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
-	<param name="examid" value="#{medicalExaminationHome.id}"
+	<param name="examid" value="#{medicalExaminationHome.idWithLog}"
 		converterId="javax.faces.Integer" />
 
 	<navigation>

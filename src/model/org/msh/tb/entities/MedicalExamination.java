@@ -20,6 +20,8 @@ import org.msh.tb.entities.enums.MedAppointmentType;
 import org.msh.tb.entities.enums.ReferredBy;
 import org.msh.tb.entities.enums.ReferredTo;
 import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 
 
@@ -38,8 +40,10 @@ import org.msh.tb.entities.enums.YesNoType;
 public class MedicalExamination extends CaseData implements Serializable {
 	private static final long serialVersionUID = 2760727118134685773L;
 
+	@PropertyLog(operations={Operation.NEW})
 	private Double weight;
 	
+	@PropertyLog(operations={Operation.NEW})
 	private Float height;
 	
 	private Float heartRate;
@@ -95,14 +99,15 @@ public class MedicalExamination extends CaseData implements Serializable {
 	private Date refToDate;	
 	
 	private DotBy dotDurinIntPhase;	
-	
-	
-	
+
 	@Column(length=100)
 	private String dotProvName;
 	
 	@Column(length=50)
 	private String dotPhoneNumber;
+
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
+	private ClinicalEvolution clinicalEvolution;
 	
 	
 	public String getSurgicalProcedureDesc() {
@@ -144,8 +149,6 @@ public class MedicalExamination extends CaseData implements Serializable {
 	public void setClinicalEvolution(ClinicalEvolution clinicalEvolution) {
 		this.clinicalEvolution = clinicalEvolution;
 	}
-
-	private ClinicalEvolution clinicalEvolution;
 
 	
 	/**

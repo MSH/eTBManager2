@@ -17,6 +17,8 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.international.LocaleSelector;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 
 @MappedSuperclass
@@ -28,6 +30,7 @@ public class CaseData {
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="EVENT_DATE")
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private Date date;
 	
 	@Lob

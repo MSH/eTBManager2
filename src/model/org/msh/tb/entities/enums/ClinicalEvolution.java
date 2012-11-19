@@ -1,6 +1,6 @@
 package org.msh.tb.entities.enums;
 
-public enum ClinicalEvolution {
+public enum ClinicalEvolution implements MessageKey {
 
 	FAVORABLE,
 	UNCHANGED,
@@ -10,5 +10,10 @@ public enum ClinicalEvolution {
 	
 	public String getKey() {
 		return "pt_BR." + getClass().getSimpleName().concat("." + name());
+	}
+
+	@Override
+	public String getMessageKey() {
+		return getKey();
 	}
 }

@@ -17,7 +17,7 @@ public class MedicalExaminationBR extends MedicalExamination {
 	private static final long serialVersionUID = 7510532907471481516L;
 
 	@Temporal(TemporalType.DATE)
-	@PropertyLog(operations={Operation.NEW, Operation.EDIT})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE}, messageKey="cases.details.date")
 	private Date nextAppointment;
 
 

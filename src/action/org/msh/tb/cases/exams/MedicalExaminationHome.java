@@ -9,19 +9,34 @@ import org.msh.tb.application.WorkspaceViewService;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.MedicalExamination;
 import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.transactionlog.LogInfo;
 
 
+/**
+ * Handle basic operations of a medical examination related to a suspect or confirmed case
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 @Name("medicalExaminationHome")
+@LogInfo(roleName="CASE_MED_EXAM")
 public class MedicalExaminationHome extends ExamHome<MedicalExamination>{
 	private static final long serialVersionUID = 4240214890485645788L;
 	
 	@In(create=true) FacesMessages facesMessages;
 	
+	/**
+	 * Factory method to return the current instance of the {@link MedicalExamination} managed by this home case
+	 * @return
+	 */
 	@Factory("medicalExamination")
 	public MedicalExamination getMedicalExamination() {
 		return getInstance();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.msh.tb.cases.exams.ExamHome#persist()
+	 */
 	@Override
 	public String persist() {
 		if(getMedicalExamination().getUsingPrescMedicines()==YesNoType.NO && getMedicalExamination().getReasonNotUsingPrescMedicines().isEmpty()){
