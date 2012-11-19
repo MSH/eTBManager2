@@ -18,7 +18,7 @@ import org.msh.tb.transactionlog.PropertyLog;
 public class ExamCulture extends LaboratoryExamResult implements Serializable {
 	private static final long serialVersionUID = 1470269499087718301L;
 
-	@PropertyLog(operations={Operation.NEW})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private CultureResult result;
 
 	@PropertyLog(operations={Operation.NEW})

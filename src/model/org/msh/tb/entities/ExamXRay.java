@@ -28,10 +28,10 @@ import org.msh.tb.transactionlog.PropertyLog;
 @Table(name="examxray")
 public class ExamXRay extends CaseData {
 
-	@PropertyLog(operations={Operation.NEW})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private XRayResult result;
 	
-	@PropertyLog(operations={Operation.NEW})
+	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private XRayEvolution evolution;
 	
 	@PropertyLog(operations={Operation.NEW})
