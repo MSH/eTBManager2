@@ -17,10 +17,18 @@
 		<div class="dst-contaminated noprint" title="#{messages[result.key]}" style="float:none"/>
 		<h:outputText value="C" rendered="#{printing}" />
 	</s:fragment>
-	<h:outputText value="-" rendered="#{result=='NOTDONE'}" title="#{messages[result.key]}"/>
-	<s:fragment  rendered="#{result=='ERROR' or result=='INTERMEDIATE'}">
-		<div class="dst-other noprint" title="#{messages[result.key]}" style="float:none"/>
+	<s:fragment  rendered="#{result=='NOTRESISTANT'}">
+		<div class="dst-notresistant noprint" title="#{messages[result.key]}" style="float:none"/>
+		<h:outputText value="NR" rendered="#{printing}" />
+	</s:fragment>
+	<s:fragment  rendered="#{result=='INTERMEDIATE'}">
+		<div class="dst-intermediate noprint" title="#{messages[result.key]}" style="float:none"/>
+		<h:outputText value="I" rendered="#{printing}" />
+	</s:fragment>
+	<s:fragment  rendered="#{result=='ERROR'}">
+		<div class="dst-error noprint" title="#{messages[result.key]}" style="float:none"/>
 		<h:outputText value="X" rendered="#{printing}" />
 	</s:fragment>
+	<h:outputText value="-" rendered="#{result=='NOTDONE'}" title="#{messages[result.key]}"/>
     
 </ui:composition>

@@ -634,7 +634,7 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 
 /* ICONS */
 
-.icon-user-header, .icon-bullet, .icon-bullet-menu, .dst-resistant, .dst-contaminated, .dst-susceptible, .print-icon, 
+.icon-user-header, .icon-bullet, .icon-bullet-menu, .dst-resistant, .dst-contaminated, .dst-susceptible, .print-icon, .dst-notresistant, .dst-intermediate, .dst-error, 
 .tag-MANUAL-icon, .tag-AUTOGEN-icon, .tag-AUTOGEN_CONSISTENCY-icon, .delete-icon, .new-icon, .edit-icon, .progress-icon, .plus-icon, .minor-icon, .collapse-icon, .icon-unchecked,
 .icon-square, .icon-lab, .icon-hu, .icon-ds, .icon-report, .checked-icon, .unchecked-icon,
 .icon-user, .icon-log-NEW, .icon-log-EDIT, .icon-log-DELETE, .icon-log-EXEC, .batch-icon, .bar-comments,

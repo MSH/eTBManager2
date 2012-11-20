@@ -88,6 +88,15 @@ function dstResultChange(cb) {
 		s = 'dst-contaminated';
 	elem.removeClass('dst-resistant dst-susceptible dst-contaminated').addClass(s);	
 }
+
+function updateResultIcons(){
+	var elems = document.getElementsByClassName('substance');
+	for (var i=0;i<elems.length;i++){ 
+		dstResultChange(elems[i]);
+	}
+}
+
+updateResultIcons();
 -->
 </script>
 <rich:jQuery selector="#divicon select" query="each(function(){dstResultChange(this);})" />

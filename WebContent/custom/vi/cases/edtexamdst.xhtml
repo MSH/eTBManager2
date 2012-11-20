@@ -54,7 +54,7 @@
 	    </s:decorate>
 	</div>
 	
-	<a:jsFunction name="verifyMtbOptions" reRender="subsGrid" process="methodField,mtbField" ajaxSingle="true"/>
+	<a:jsFunction name="verifyMtbOptions" reRender="subsGrid" process="methodField,mtbField" ajaxSingle="true" oncomplete="updateResultIcons()"/>
 	
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
@@ -75,16 +75,16 @@
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
 			</f:facet>
-			<span style="width:250px;float:left">
+			<span id="substance#{it.substance.abbrevName}" style="width:250px;float:left">
 			<div id="divicon" />
 			
-			<h:selectOneMenu id="res" value="#{it.result}" required="true" onchange="dstResultChange(this);" rendered="#{it.substance.abbrevName!='R'}">
+			<h:selectOneMenu id="res" styleClass="substance" value="#{it.result}" required="true" onchange="dstResultChange(this);" rendered="#{it.substance.abbrevName!='R'}">
     			<s:selectItems value="#{dstResults}" var="ss" label="#{messages[ss.key]}" />
     			<s:convertEnum />
 			</h:selectOneMenu>
 			
 
-			<h:selectOneMenu value="#{it.result}" required="true" onchange="dstResultChange(this);" rendered="#{it.substance.abbrevName=='R'}">
+			<h:selectOneMenu id="resRif" styleClass="substance" value="#{it.result}" required="true" onchange="dstResultChange(this);" rendered="#{it.substance.abbrevName=='R'}">
     			<s:selectItems value="#{examDSTHomeVI.dstResultsForRifampcin}" var="ss" label="#{messages[ss.key]}" />
     			<s:convertEnum />
 			</h:selectOneMenu>
@@ -121,9 +121,27 @@ function dstResultChange(cb) {
 	if (val == 'CONTAMINATED')
 		s = 'dst-contaminated';
 	else
+	if (val == 'NOTRESISTANT')
+		s = 'dst-notresistant';
+	else
+	if (val == 'INTERMEDIATE')
+		s = 'dst-intermediate';
+	else
+	if (val == 'ERROR')
+		s = 'dst-error';
+	else
 		s = 'dst-other'; 
-	elem.removeClass('dst-resistant dst-susceptible dst-contaminated dst-other').addClass(s);	
+	elem.removeClass('dst-resistant dst-susceptible dst-contaminated dst-notresistant dst-intermediate dst-error dst-other').addClass(s);	
 }
+
+function updateResultIcons(){
+	var elems = document.getElementsByClassName('substance');
+	for (var i=0;i<elems.length;i++){ 
+		dstResultChange(elems[i]);
+	}
+}
+
+updateResultIcons();
 -->
 </script>
 <rich:jQuery selector="#divicon select" query="each(function(){dstResultChange(this);})" />
