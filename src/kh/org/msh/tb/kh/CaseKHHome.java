@@ -211,7 +211,7 @@ public class CaseKHHome{
 
 	public String getCurrHouseNum() {
 		String addr = deConcatCurrAddr();
-		if(addr == null)
+		if(addr == null || addr.equals(";;;;"))
 			return currHouseNum;
 		else{
 		String delimiter = "\\;";
@@ -227,7 +227,7 @@ public class CaseKHHome{
 
 	public String getCurrStreetNum() {
 		String addr = deConcatCurrAddr();
-		if(addr == null)
+		if(addr == null || addr.equals(";;;;"))
 			return currStreetNum;
 		else{
 		String delimiter = "\\;";
@@ -243,7 +243,7 @@ public class CaseKHHome{
 
 	public String getCurrGroupNum() {
 		String addr = deConcatCurrAddr();
-		if(addr == null)
+		if(addr == null || addr.equals(";;;;"))
 			return currGroupNum;
 		else{
 		String delimiter = "\\;";
@@ -259,7 +259,7 @@ public class CaseKHHome{
 
 	public String getCurrVillageName() {
 		String addr = deConcatCurrAddr();
-		if(addr == null)
+		if(addr == null || addr.equals(";;;;"))
 			return currVillageName;
 		else{
 		String delimiter = "\\;";
