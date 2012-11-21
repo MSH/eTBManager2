@@ -22,8 +22,7 @@
 			</div>
 		</th></tr>
 		<tr class="unit#{adm.adminUnit.id}" style="display:#{healthUnitsQuery.adminUnits.size()>1?'none':'table-row'}">
-			<th width="250px">#{messages['cases.healthUnit']}</th>
-			<th align="center">#{messages['cases.ongoing.notifs']}</th>
+			<th width="300px">#{messages['cases.healthUnit']}</th>
 			<th align="center">#{messages['CaseState.ONTREATMENT']}</th>
 			<th align="center">#{messages['cases.trasnferin']}</th>
 			<th align="center">#{messages['cases.trasnferout']}</th>
@@ -37,7 +36,6 @@
 					<div class="icon-hu" />#{it.unitName}
 				</s:link>
 			</td>
-			<td align="center">#{it.casesNotifs==null?'-':it.casesNotifs}</td>
 			<td align="center">
 				<s:link value="#{it.casesOnTreatment==null?'-':it.casesOnTreatment}"  view="/cases/searchresult.xhtml" styleClass="link-small" rendered="#{it.casesOnTreatment > 0}">
 					<f:param name="stateIndex" value="103"/>

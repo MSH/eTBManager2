@@ -83,7 +83,7 @@ public class CasesViewController {
 		return filters == null? null: filters.getUnitId();
 	}
 	
-	public void setFiltersUnidId(Integer id) {
+	public void setFiltersUnitId(Integer id) {
 		CaseFilters filters = (CaseFilters)App.getComponent("caseFilters", true);
 		if (filters != null) {
 			if (id == -1)

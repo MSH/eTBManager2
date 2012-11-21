@@ -167,7 +167,7 @@ public class CaseStateReport  {
 		String unitJoin;
 
 		// conditions to add the TB unit to the query join
-		if ((forceUnitJoin) || (tbunit != null) || (uw.getView() == UserView.TBUNIT) || (uw.getHealthSystem() != null))
+		if ((forceUnitJoin) || (tbunit != null) || (uw.getView() == UserView.TBUNIT) || (uw.getHealthSystem() != null) || (uw.getView() == UserView.ADMINUNIT))
 			 unitJoin = " inner join tbunit u on u.id = c.owner_unit_id";
 		else unitJoin = "";
 
