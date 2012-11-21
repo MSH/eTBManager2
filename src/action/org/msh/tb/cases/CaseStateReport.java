@@ -200,7 +200,7 @@ public class CaseStateReport  {
 		case ADMINUNIT: {
 			String s;
 			if (userWorkspace.getHealthSystem() != null)
-				 s = " and u.healthSystem.id = " + userWorkspace.getHealthSystem().getId();
+				 s = " and u.healthSystem_id = " + userWorkspace.getHealthSystem().getId();
 			else s = "";
 			return " and (a.code like '" + userWorkspace.getAdminUnit().getCode() + "%')" + s; 
 		}
