@@ -38,6 +38,15 @@ public class App {
 	}
 	
 	/**
+	 * Return a component of a specified name 
+	 * @param name
+	 * @return
+	 */
+	public static Object getComponent(String name, boolean create) {
+		return Component.getInstance(name, create);
+	}
+	
+	/**
 	 * Return a component of a specified class
 	 * @param clazz
 	 * @return

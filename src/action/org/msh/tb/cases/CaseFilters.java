@@ -171,12 +171,14 @@ public class CaseFilters {
 	protected void searchCriteriaChanged() {
 		if (searchCriteria == null)
 			searchCriteria = SearchCriteria.CUSTOM_FILTER;
-		
+
+		Integer uid = unitId;
 		switch (searchCriteria) {
 			case CASE_STATE:
 				int sc = stateIndex;
 				clearFilters();
 				stateIndex = sc;
+				unitId = uid;
 				break;
 
 			case PATIENT:
@@ -189,27 +191,29 @@ public class CaseFilters {
 				ValidationState vs = validationState;
 				clearFilters();
 				validationState = vs;
+				unitId = uid;
 				break;
 			
 			case CASE_TAG:
 				Integer id = tagid;
 				clearFilters();
 				tagid = id;
+				unitId = uid;
 				break;
 			
 			case CUSTOM_FILTER:
 				patient = null;
 				stateIndex = null;
 				tagid = null;
+				unitId = null;
 				break;
 
 			case CASE_UNIT_STATE:
 				int sii = stateIndex;
-				Integer uId = unitId;
 				clearFilters();
 				setFilterHealthUnit(FilterHealthUnit.TREATMENT_UNIT);
 				stateIndex = sii;
-				unitId = uId;
+				unitId = uid;
 				break;
 		}
 	}

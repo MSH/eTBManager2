@@ -12,6 +12,7 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.Tag.TagType;
+import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
@@ -23,7 +24,8 @@ import org.msh.tb.login.UserSession;
 import org.msh.tb.misc.GlobalLists;
 
 /**
- * Generate a simple consolidated report of number of cases split by different views (case state, validation state, tags)
+ * Generate a simple consolidated report of number of cases consolidated by different views (case state, validation state, tags)
+ * 
  * @author Ricardo Memoria
  *
  */
@@ -35,6 +37,11 @@ public class CaseStateReport  {
 	private List<ValidationItem> validationItems;
 	private Item total;
 	private List<TagItem> tags;
+	
+	/**
+	 * ID of the TB unit to filter the report
+	 */
+	private Tbunit tbunit;
 
 
 	/**
@@ -55,8 +62,9 @@ public class CaseStateReport  {
 		items = new ArrayList<CaseStateItem>();
 		validationItems = new ArrayList<ValidationItem>();
 		
-		String aucond;
-		UserWorkspace uw = UserSession.getUserWorkspace();
+		String joins = getSqlJoin(true, null);
+		String conds = getSqlCondition();
+/*		UserWorkspace uw = UserSession.getUserWorkspace();
 		
 		if (uw.getView() == UserView.ADMINUNIT)
 			 aucond = "inner join administrativeunit a on a.id = u.adminunit_id ";
@@ -69,23 +77,23 @@ public class CaseStateReport  {
 		Integer hsID = null;
 		if (uw.getHealthSystem() != null)
 			hsID = uw.getHealthSystem().getId();
-		
+*/		
 		Workspace defaultWorkspace = UserSession.getWorkspace();
 
 		String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
 		"from tbcase c " +
-		"inner join tbunit u on u.id = c.notification_unit_id " + aucond +
-		"where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
-		(hsID != null? "and u.healthSystem_id = " + hsID.toString(): "") +
-		" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
+		joins +
+		" where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
+		conds +
+		" and u.workspace_id = " + defaultWorkspace.getId() + 
 		" group by c.state, c.validationState, c.diagnosisType " +
 		"union " +
 		"select c.state, c.validationState, c.diagnosisType, count(*) " +
 		"from tbcase c " +
-		"inner join tbunit u on u.id = c.owner_unit_id " + aucond + 
-		"where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ")"+
-		" and u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase +
-		(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
+		joins +
+		" where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ")"+
+		conds + 
+		" and u.workspace_id = " + defaultWorkspace.getId() + 
 		" group by c.state, c.validationState, c.diagnosisType";
 		
 		List<Object[]> lst = App.getEntityManager().createNativeQuery(sql).getResultList();
@@ -129,6 +137,52 @@ public class CaseStateReport  {
 
 
 	/**
+	 * Get HQL instruction to be included in the WHERE clause
+	 * @return
+	 */
+	private String getSqlCondition() {
+		if (tbunit != null)
+			return "and u.id = " + tbunit.getId().toString();
+
+		String cond = generateSQLConditionByUserView();
+
+		String condByCase = generateSQLConditionByCase();
+		
+		if ((!cond.isEmpty()) && (!condByCase.isEmpty()))
+			cond += " and " + condByCase;
+		else cond = condByCase;
+		
+		return cond;
+	}
+
+
+	/**
+	 * Get HQL instruction to be included in the join declaration
+	 * @return
+	 */
+	private String getSqlJoin(boolean forceUnitJoin, String caseTableJoinAlias) {
+		UserWorkspace uw = UserSession.getUserWorkspace();
+
+		String join;
+		String unitJoin;
+
+		// conditions to add the TB unit to the query join
+		if ((forceUnitJoin) || (tbunit != null) || (uw.getView() == UserView.TBUNIT) || (uw.getHealthSystem() != null))
+			 unitJoin = " inner join tbunit u on u.id = c.owner_unit_id";
+		else unitJoin = "";
+
+		if ((caseTableJoinAlias != null) && ((generateSQLConditionByCase().length() > 0) || (!unitJoin.isEmpty())))
+			 join = "inner join tbcase c on c.id = " + caseTableJoinAlias + ".case_id" + unitJoin;
+		else join = unitJoin;
+		
+		if (uw.getView() == UserView.ADMINUNIT)
+			 join +=  " inner join administrativeunit a on a.id = u.adminunit_id ";
+		
+		return join;
+	}
+
+
+	/**
 	 * Generate SQL condition to filter cases by user view
 	 * @return
 	 */
@@ -140,8 +194,13 @@ public class CaseStateReport  {
 			return "";
 
 		switch (view) {
-		case ADMINUNIT: 
-			return " and (a.code like '" + userWorkspace.getAdminUnit().getCode() + "%')"; 
+		case ADMINUNIT: {
+			String s;
+			if (userWorkspace.getHealthSystem() != null)
+				 s = " and u.healthSystem.id = " + userWorkspace.getHealthSystem().getId();
+			else s = "";
+			return " and (a.code like '" + userWorkspace.getAdminUnit().getCode() + "%')" + s; 
+		}
 		case TBUNIT: 
 			return " and u.id = " + userWorkspace.getTbunit().getId();
 		default: return "";
@@ -157,6 +216,9 @@ public class CaseStateReport  {
 		CaseClassification[] classifs = ((GlobalLists)Component.getInstance("globalLists")).getCaseClassifications();
 		
 		String caseCondition = "";
+		
+		if (classifs.length == CaseClassification.values().length)
+			return "";
 
 		for (CaseClassification cla: classifs) {
 			boolean hasClassif = UserSession.instance().isCanOpenCaseByClassification(cla);
@@ -170,24 +232,7 @@ public class CaseStateReport  {
 		if (!caseCondition.isEmpty())
 			 return " and c.classification in (" + caseCondition + ")";
 		else return caseCondition;
-		
-/*		boolean tbcases = userSession.isCanOpenCaseByClassification(CaseClassification.TB);
-		boolean mdrcases = userSession.isCanOpenMDRTBCases();
-		
-		if (tbcases && mdrcases) {
-			return "";
-		}
-		
-		String caseCondition = "";
-		
-		if (tbcases)
-			 caseCondition = " and (c.classification = " + CaseClassification.TB.ordinal() + ")";
-		else
-		if (mdrcases)
-			caseCondition = " and (c.classification = " + CaseClassification.DRTB.ordinal() + ")";
-		
-		return caseCondition;
-*/	}
+	}
 
 	
 	/**
@@ -207,7 +252,7 @@ public class CaseStateReport  {
 	protected void createTagsReport() {
 		Workspace workspace = UserSession.getWorkspace();
 
-		String s;
+/*		String s;
 		switch (UserSession.getUserWorkspace().getView()) {
 		case TBUNIT: s = "inner join tbcase c on c.id=tc.case_id inner join tbunit u on u.id = c.owner_unit_id ";
 			break;
@@ -215,13 +260,16 @@ public class CaseStateReport  {
 			break;
 		default: s = "";
 		}
+*/
+		String joins = getSqlJoin(false, "tc");
+		String conds = getSqlCondition();
 		
 		String sql = "select t.id, t.tag_name, t.sqlCondition is null, t.consistencyCheck, count(*) " +
 			"from tags_case tc " +
-				"inner join tag t on t.id = tc.tag_id " +
-				s +
+			"inner join tag t on t.id = tc.tag_id " +
+			joins +
 			" where t.workspace_id = :id " +
-			generateSQLConditionByUserView() + 
+			conds +
 			" group by t.id, t.tag_name order by t.tag_name";
 		
 		List<Object[]> lst = App.getEntityManager().createNativeQuery(sql)
@@ -454,5 +502,39 @@ public class CaseStateReport  {
 
 	public void setTotal(Item total) {
 		this.total = total;
+	}
+
+
+	/**
+	 * @return the tbunitId
+	 */
+	public Integer getTbunitId() {
+		return tbunit != null? tbunit.getId(): null;
+	}
+
+
+	/**
+	 * @param tbunitId the tbunitId to set
+	 */
+	public void setTbunitId(Integer tbunitId) {
+		if (tbunitId == null)
+			 tbunit = null;
+		else tbunit = App.getEntityManager().find(Tbunit.class, tbunitId);
+	}
+
+
+	/**
+	 * @return the tbunit
+	 */
+	public Tbunit getTbunit() {
+		return tbunit;
+	}
+
+
+	/**
+	 * @param tbunit the tbunit to set
+	 */
+	public void setTbunit(Tbunit tbunit) {
+		this.tbunit = tbunit;
 	}
 }

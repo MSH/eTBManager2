@@ -72,6 +72,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		"c.validationState = #{caseFilters.validationState}",
 		"nu.healthSystem.id = #{userWorkspace.healthSystem.id}",
 		"year(p.birthDate) = #{caseFilters.birthYear}",
+		"c.ownerUnit.id = #{caseFilters.unitId}",
 	"exists(select t.id from c.tags t where t.id = #{caseFilters.tagid})"};
 
 	private static final String notifCond = "(nu.id = #{caseFilters.tbunitselection.tbunit.id})";
@@ -297,13 +298,11 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			break;
 			
 			// ON TREATMENT
-			case CaseFilters.ON_TREATMENT: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + 
-							 " and c.ownerUnit.id = " + caseFilters.getUnitId();
+			case CaseFilters.ON_TREATMENT: cond = "c.state = " + CaseState.ONTREATMENT.ordinal(); 
 			break;
 			
 			// ON TREATMENT - TRANSFERIN
 			case CaseFilters.TRANSFER_IN: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + 
-							 " and c.ownerUnit.id = " + caseFilters.getUnitId() +
 							 " and exists(select id from TreatmentHealthUnit t" +
 							 	" where t.period.iniDate > c.treatmentPeriod.iniDate and period.endDate = c.treatmentPeriod.endDate and c.state= " + CaseState.ONTREATMENT.ordinal() +
 							 	" and transferring=false and tbunit.id = "+ caseFilters.getUnitId() +

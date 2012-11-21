@@ -4,17 +4,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.tb.application.App;
+import org.msh.tb.cases.CaseStateReport;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.PatientType;
+import org.msh.utils.date.DateUtils;
+import org.msh.utils.date.Period;
 
 /**
  * Return information about cases on treatment
@@ -22,11 +25,11 @@ import org.msh.tb.entities.enums.PatientType;
  *
  */
 @Name("treatmentsInfoHome")
+@BypassInterceptors
 public class TreatmentsInfoHome {
 
-	@In EntityManager entityManager;
-
 	private List<CaseGroup> groups;
+	
 	private Tbunit tbunit;
 
 	
@@ -42,22 +45,29 @@ public class TreatmentsInfoHome {
 
 
 	/**
-	 * Create the list of treatments for the health unit tbunit
+	 * Create the list of treatments for the health unit TB unit
 	 */
 	private void createTreatments() {
-		if (tbunit == null)
+		// get the unit id selected 
+		Integer unitid = null;
+		CaseStateReport rep = (CaseStateReport)App.getComponent("caseStateReport");
+		if (rep != null)
+			unitid = rep.getTbunitId();
+		
+		if (unitid == null)
 			return;
 		
 		groups = new ArrayList<CaseGroup>();
-		
-		List<Object[]> lst = entityManager.createQuery("select c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod.iniDate, " +
-				"c.daysTreatPlanned, sum(disp.totalDays), c.classification, c.patientType " +
+
+		List<Object[]> lst = App.getEntityManager().createQuery("select c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, " +
+				"c.daysTreatPlanned, sum(disp.totalDays), c.classification, c.patientType, p.gender " +
 				"from TbCase c " + 
 				"join c.patient p left join c.dispensing disp " + 
 				"where c.state = " + CaseState.ONTREATMENT.ordinal() +
-				" and exists (select aux.id from TreatmentHealthUnit aux where aux.tbunit.id = " + tbunit.getId().toString() + 
+				" and c.ownerUnit.id = " + unitid + 
+/*				" and exists (select aux.id from TreatmentHealthUnit aux where aux.tbunit.id = " + unitid + 
 				" and aux.tbcase.id = c.id and aux.period.endDate = c.treatmentPeriod.endDate) " +
-				"group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod.iniDate, c.daysTreatPlanned, c.classification " +
+*/				"group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, c.daysTreatPlanned, c.classification " +
 				"order by p.name, p.lastName, p.middleName")
 			.getResultList();
 
@@ -67,6 +77,7 @@ public class TreatmentsInfoHome {
 		for (Object[] vals: lst) {
 			CaseClassification classification = (CaseClassification)vals[7];
 			PatientType pt = (PatientType)vals[8];
+			Gender gender = (Gender)vals[9];
 			CaseGroup grp = findGroup(classification);
 			
 			TreatmentInfo info = new TreatmentInfo();
@@ -75,9 +86,10 @@ public class TreatmentsInfoHome {
 			p.setName((String)vals[1]);
 			p.setMiddleName((String)vals[2]);
 			p.setLastName((String)vals[3]);
+			p.setGender(gender);
 			info.setPatientName(p.compoundName(ws));
 			info.setPatientType(pt);
-			info.setIniTreatmentDate((Date)vals[4]);
+			info.setTreatmentPeriod((Period)vals[4]);
 			if (vals[5] != null)
 				info.setNumDaysPlanned((Integer)vals[5]);
 			if (vals[6] != null)
@@ -110,8 +122,9 @@ public class TreatmentsInfoHome {
 	 */
 	public class TreatmentInfo {
 		private int caseId;
+		private Gender gender;
 		private String patientName;
-		private Date iniTreatmentDate;
+		private Period treatmentPeriod;
 		private int numDaysPlanned;
 		private int numDaysDone;
 		private PatientType patientType;
@@ -139,18 +152,6 @@ public class TreatmentsInfoHome {
 		 */
 		public void setPatientName(String patientName) {
 			this.patientName = patientName;
-		}
-		/**
-		 * @return the iniTreatmentDate
-		 */
-		public Date getIniTreatmentDate() {
-			return iniTreatmentDate;
-		}
-		/**
-		 * @param iniTreatmentDate the iniTreatmentDate to set
-		 */
-		public void setIniTreatmentDate(Date iniTreatmentDate) {
-			this.iniTreatmentDate = iniTreatmentDate;
 		}
 		/**
 		 * @return the numDaysPlanned
@@ -181,12 +182,21 @@ public class TreatmentsInfoHome {
 		 * Return the percentage progress of the treatment
 		 * @return
 		 */
-		public Double getProgress() {
-			return (numDaysPlanned == 0? null: (double)numDaysDone / numDaysPlanned * 100);
+		public Double getPlannedProgress() {
+			if ((treatmentPeriod == null) || (treatmentPeriod.isEmpty()))
+				return null;
+
+			double days = DateUtils.daysBetween(treatmentPeriod.getIniDate(), new Date());
+			int daysPlanned = treatmentPeriod.getDays();
+			Double max = (daysPlanned == 0? null: days / treatmentPeriod.getDays() * 100);
+			if (max == null)
+				return null;
+			
+			return (max > 100)? 100: max;
 		}
 		
 		public Integer getProgressPoints() {
-			Double val = getProgress();
+			Double val = getPlannedProgress();
 			if ((val == null) || (val == 0))
 				return 0;
 			return (val > 100? 100: val.intValue());
@@ -202,6 +212,30 @@ public class TreatmentsInfoHome {
 		 */
 		public void setPatientType(PatientType patientType) {
 			this.patientType = patientType;
+		}
+		/**
+		 * @return the gender
+		 */
+		public Gender getGender() {
+			return gender;
+		}
+		/**
+		 * @param gender the gender to set
+		 */
+		public void setGender(Gender gender) {
+			this.gender = gender;
+		}
+		/**
+		 * @return the treatmentPeriod
+		 */
+		public Period getTreatmentPeriod() {
+			return treatmentPeriod;
+		}
+		/**
+		 * @param treatmentPeriod the treatmentPeriod to set
+		 */
+		public void setTreatmentPeriod(Period treatmentPeriod) {
+			this.treatmentPeriod = treatmentPeriod;
 		}
 	}
 
@@ -240,13 +274,15 @@ public class TreatmentsInfoHome {
 			this.treatments = treatments;
 		}
 	}
-	
+
+
 	/**
 	 * @return the tbunit
 	 */
 	public Tbunit getTbunit() {
 		return tbunit;
 	}
+
 
 	/**
 	 * @param tbunit the tbunit to set
@@ -255,14 +291,4 @@ public class TreatmentsInfoHome {
 		this.tbunit = tbunit;
 	}
 	
-
-	public Integer getTbunitId() {
-		return (tbunit != null? tbunit.getId(): null);
-	}
-	
-	public void setTbunitId(Integer id) {
-		if (id == null)
-			 tbunit = null;
-		else tbunit = entityManager.find(Tbunit.class, id);
-	}
 }
