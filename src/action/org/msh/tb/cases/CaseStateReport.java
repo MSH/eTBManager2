@@ -150,7 +150,10 @@ public class CaseStateReport  {
 		
 		if ((!cond.isEmpty()) && (!condByCase.isEmpty()))
 			cond += " and " + condByCase;
-		else cond = condByCase;
+		else {
+			if (!condByCase.isEmpty())
+				cond = condByCase;
+		}
 		
 		return cond;
 	}
