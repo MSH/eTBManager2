@@ -12,8 +12,7 @@
 	<div class="spacer" />
 	<div class="icon-hu-big" style="float:left;"/>
 	<div class="text-big">#{treatmentsInfoHome.tbunit.name}</div>
-	<h:outputText value="#{treatmentsInfoHome.tbunit.adminUnit.parent.name} - " rendered="#{not empty treatmentsInfoHome.tbunit.adminUnit.parent}" />
-	#{treatmentsInfoHome.tbunit.adminUnit.name}
+	#{treatmentsInfoHome.tbunit.adminUnit.fullDisplayName}" 
 	<div class="spacer" />
 
 	<h2>#{messages['cases.ongoing']}</h2>
