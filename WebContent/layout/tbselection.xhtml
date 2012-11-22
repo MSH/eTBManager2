@@ -9,15 +9,16 @@
 
 <s:decorate template="/layout/edit.xhtml" rendered="#{not tbunitselection.level1ReadOnly}">
 	<ui:define name="label">#{tbunitselection.labelAdminUnit}:</ui:define>
-	<ui:param name="labelstyle" value="#{labelstyle}" /> 
-	<h:selectOneMenu id="#{empty idcbselau ? 'cbselau' : idcbselau}" value="#{tbunitselection.adminUnit}" required="#{required}" >
+	<ui:param name="labelstyle" value="#{labelstyle}" />
+	<h:selectOneMenu id="#{empty idcbselau ? 'cbselau' : idcbselau}" value="#{tbunitselection.adminUnit}" required="#{required}" 
+		binding="#{tbunitselection.component}">
 		<s:selectItems var="it" value="#{tbunitselection.adminUnits}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
-		<a:support event="onchange" ajaxSingle="true" reRender="pnlunits" focus="cbunits"/>
+		<a:support event="onchange" ajaxSingle="true" reRender="pnlunits" focus="cbunits" />
 	</h:selectOneMenu>
 </s:decorate>
 
-<s:decorate template="/layout/display.xhtml" rendered="#{tbunitselection.level1ReadOnly}">
+<s:decorate id="pnlau2" template="/layout/display.xhtml" rendered="#{tbunitselection.level1ReadOnly}">
 	<ui:define name="label">#{messages['global.location']}:</ui:define>
 	<ui:param name="labelstyle" value="#{labelstyle}" /> 
 	<ui:repeat value="#{tbunitselection.parentUnits}" var="it">
