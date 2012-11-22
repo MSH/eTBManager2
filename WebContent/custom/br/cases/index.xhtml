@@ -36,7 +36,7 @@
 	<h:commandLink 
 		onclick="showModalAutoTop('selclassificationdlg');return false;" style="width:130px"
 		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button">
-		<span>#{messages['cases.new']}</span>
+		<span>#{messages['cases.newnotif']}</span>
 	</h:commandLink>
 
 	<div class="spacer" />
@@ -48,7 +48,7 @@
 				<f:param name="classif" value="#{cla}"/>
 				<f:param name="type" value="CONFIRMED"/>
 				<f:param name="unitId" value="#{casesViewController.selectedUnitIdParam}" />
-				<span>#{messages['cases.new']}</span>
+				<span>#{messages['cases.newnotif']}</span>
 			</s:link>
 		</a:repeat>
 	</s:fragment>
