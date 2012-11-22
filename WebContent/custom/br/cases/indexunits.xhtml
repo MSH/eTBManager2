@@ -8,10 +8,10 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 	<h2>#{messages['cases.ongoing']}</h2>
-	<a:repeat value="#{healthUnitsQuery.adminUnits}" var="adm">
+	<a:repeat value="#{healthUnitsQueryBR.adminUnits}" var="adm">
 	<table class="table2" width="100%">
 		<tr><th colspan="6" align="left">
-			<h:outputText value="#{adm.casesOnTreatment} #{messages['CaseState.ONTREATMENT']}" rendered="#{adm.casesOnTreatment>0}" style="float:right"/>
+			<h:outputText id="txt" value="#{adm.casesOnTreatment} #{messages['CaseState.ONTREATMENT']}" rendered="#{adm.casesOnTreatment>0}" style="float:right"/>
 			<div style="font-size:15px;">
 				<a href="#" id="show#{adm.adminUnit.id}lnk" onclick="showTableDetails(#{adm.adminUnit.id}); return false;">
 					<div class="plus-icon"/>#{adm.adminUnit.name}
@@ -21,7 +21,7 @@
 				</a>
 			</div>
 		</th></tr>
-		<tr class="unit#{adm.adminUnit.id}" style="display:#{healthUnitsQuery.adminUnits.size()>1?'none':'table-row'}">
+		<tr class="unit#{adm.adminUnit.id}" style="display:#{healthUnitsQueryBR.adminUnits.size()>1?'none':'table-row'}">
 			<th width="300px">#{messages['cases.healthUnit']}</th>
 			<th align="center">#{messages['CaseState.ONTREATMENT']}</th>
 			<th align="center">#{messages['cases.trasnferin']}</th>
@@ -29,7 +29,7 @@
 			<th align="center">#{messages['cases.medexammissing']}</th>
 		</tr>
 		<a:repeat value="#{adm.items}" var="it">
-		<tr class="unit#{adm.adminUnit.id}" style="display:#{healthUnitsQuery.adminUnits.size()>1?'none':'table-row'}">
+		<tr class="unit#{adm.adminUnit.id}" style="display:#{healthUnitsQueryBR.adminUnits.size()>1?'none':'table-row'}">
 			<td class="highlight">
 				<s:link>
 					<f:param name="id" value="#{it.unitId}" />

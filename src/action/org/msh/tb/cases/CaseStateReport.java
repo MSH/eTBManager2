@@ -149,7 +149,7 @@ public class CaseStateReport  {
 		String condByCase = generateSQLConditionByCase();
 		
 		if ((!cond.isEmpty()) && (!condByCase.isEmpty()))
-			cond += " and " + condByCase;
+			cond += condByCase;
 		else {
 			if (!condByCase.isEmpty())
 				cond = condByCase;

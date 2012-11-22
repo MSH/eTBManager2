@@ -3,6 +3,9 @@ package org.msh.tb.tbunits;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
 import org.jboss.seam.Component;
 import org.msh.tb.adminunits.AdminUnitChangeListener;
 import org.msh.tb.adminunits.AdminUnitSelection;
@@ -19,6 +22,8 @@ import org.msh.tb.entities.enums.UserView;
  *
  */
 public class TBUnitSelection {
+	
+	private UIComponent component;
 
 	public TBUnitSelection(boolean applyUserRestrictions, TBUnitFilter filter) {
 		super();
@@ -174,6 +179,11 @@ public class TBUnitSelection {
 		getAuselection().setUnitLevel1(admin);
 		tbunit = null;
 		options = null;
+
+		if (component != null) {
+			String s = component.getClientId(FacesContext.getCurrentInstance());
+			System.out.println(s);
+		}
 	}
 
 	
@@ -287,5 +297,19 @@ public class TBUnitSelection {
 	public void setApplyHealthSystemRestrictions(
 			boolean applyHealthSystemRestrictions) {
 		this.applyHealthSystemRestrictions = applyHealthSystemRestrictions;
+	}
+	
+	/**
+	 * @return the component
+	 */
+	public UIComponent getComponent() {
+		return component;
+	}
+
+	/**
+	 * @param component the component to set
+	 */
+	public void setComponent(UIComponent component) {
+		this.component = component;
 	}
 }
