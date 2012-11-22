@@ -292,4 +292,17 @@ public class TreatmentsInfoHome {
 		this.tbunit = tbunit;
 	}
 	
+	
+	public Integer getTbunitId() {
+		Tbunit unit = getTbunit();
+		return unit != null? unit.getId(): null;
+	}
+	
+	public void setTbunitId(Integer id) {
+		if (id == null)
+			 tbunit = null;
+		else tbunit = App.getEntityManager().find(Tbunit.class, id);
+	}
+	
+	
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 
 import org.jboss.seam.Component;
 import org.msh.tb.adminunits.AdminUnitChangeListener;
@@ -179,11 +181,11 @@ public class TBUnitSelection {
 		tbunit = null;
 		options = null;
 
-/*		if (component != null) {
+		if (component != null) {
 			String s = component.getClientId(FacesContext.getCurrentInstance());
 			System.out.println(s);
 		}
-*/	}
+	}
 
 	
 	protected void applyUserTBUnitRestriction() {
@@ -302,7 +304,7 @@ public class TBUnitSelection {
 	 * @return the component
 	 */
 	public UIComponent getComponent() {
-		return component;
+		return null;
 	}
 
 	/**
@@ -310,5 +312,9 @@ public class TBUnitSelection {
 	 */
 	public void setComponent(UIComponent component) {
 		this.component = component;
+	}
+	
+	public void changeListener(ValueChangeEvent evt) {
+		System.out.println(evt.getComponent().getId());
 	}
 }
