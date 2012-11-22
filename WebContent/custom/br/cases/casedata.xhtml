@@ -300,7 +300,7 @@ function updateTab(tabIndex) {
 	<div class="vertical-menu">
 	<c:forEach items="#{globalLists.caseClassifications}" var="it">
 		<!--<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
-			<f:param name="classif" value="#{it}"/>
+			<f:param name="cla" value="#{it}"/>
 			<f:param name="type" value="CONFIRMED"/>
 			<div class="new-icon" />#{messages[it.key]}
 		</s:link>-->

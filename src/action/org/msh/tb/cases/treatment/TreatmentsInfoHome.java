@@ -50,11 +50,11 @@ public class TreatmentsInfoHome {
 	 * Create the list of treatments for the health unit TB unit
 	 */
 	private void createTreatments() {
-		// get the unit id selected 
+		// get the unit id selected
 		Tbunit unit = getTbunit();
 		if (unit == null)
 			return;
-		
+
 		groups = new ArrayList<CaseGroup>();
 
 		List<Object[]> lst = App.getEntityManager().createQuery("select c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, " +
@@ -63,9 +63,7 @@ public class TreatmentsInfoHome {
 				"join c.patient p left join c.dispensing disp " + 
 				"where c.state = " + CaseState.ONTREATMENT.ordinal() +
 				" and c.ownerUnit.id = " + unit.getId() + 
-/*				" and exists (select aux.id from TreatmentHealthUnit aux where aux.tbunit.id = " + unitid + 
-				" and aux.tbcase.id = c.id and aux.period.endDate = c.treatmentPeriod.endDate) " +
-*/				"group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, c.daysTreatPlanned, c.classification " +
+				"group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, c.daysTreatPlanned, c.classification " +
 				"order by p.name, p.lastName, p.middleName")
 			.getResultList();
 

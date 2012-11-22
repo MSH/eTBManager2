@@ -41,10 +41,16 @@ public class SystemErrorHandler {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 
 		// mount original URL
-		String url;
+		String url = null;
+		String ipAddress = null;
+		String agent = null;
+
 		if (facesContext != null) {
 			HttpServletRequest req = (HttpServletRequest)facesContext.getExternalContext().getRequest();
+//			HttpServletRequest req = (HttpServletRequest)contexts.getRequest();
 			url = req.getRequestURL().toString();
+            ipAddress = req.getRemoteAddr();
+            agent = req.getHeader("User-Agent");
 
 			// check if it's the seam error page that is generating the error. In this case does nothing
 			if (url.endsWith("errorall.seam"))
@@ -55,6 +61,6 @@ public class SystemErrorHandler {
 		}
 		else url = null;
 
-		systemErrorDispatcher.dispatch(exception, userLogin, url);			
+		systemErrorDispatcher.dispatch(exception, userLogin, url, ipAddress, agent);			
 	}
 }

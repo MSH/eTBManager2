@@ -39,12 +39,12 @@
 	<s:fragment rendered="#{not userSession.canNotifySeveralClassifs}">
 		<a:repeat value="#{globalLists.caseClassifications}" var="cla">
 			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}" styleClass="button" style="width:130px">
-				<f:param name="classif" value="#{cla}"/>
+				<f:param name="cla" value="#{cla}"/>
 				<f:param name="type" value="CONFIRMED"/>
 				<span>#{messages['cases.new']}</span>
 			</s:link>
 			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}" styleClass="button-alt" style="width:130px">
-				<f:param name="classif" value="#{cla}"/>
+				<f:param name="cla" value="#{cla}"/>
 				<f:param name="type" value="SUSPECT"/>
 				<span>#{messages['cases.newsusp']}</span>
 			</s:link>
@@ -211,7 +211,7 @@
 	<c:forEach items="#{globalLists.caseClassifications}" var="it">
 		<tr><td class="vertical-menu">
 			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
-				<f:param name="classif" value="#{it}"/>
+				<f:param name="cla" value="#{it}"/>
 				<f:param name="type" value="CONFIRMED"/>
 				<div class="new-icon" />#{messages[it.key]}
 			</s:link>
@@ -239,7 +239,7 @@
 	<c:forEach items="#{globalLists.caseClassifications}" var="it">
 		<tr><td class="vertical-menu">
 			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
-				<f:param name="classif" value="#{it}"/>
+				<f:param name="cla" value="#{it}"/>
 				<f:param name="type" value="SUSPECT"/>
 				<div class="new-icon" />#{messages[it.keySuspect]}
 			</s:link>

@@ -42,6 +42,12 @@ public class ErrorLog {
 	
 	@Column(length=100)
 	private String workspace;
+	
+	@Column(length=100)
+	private String ipAddress;
+	
+	@Column(length=200)
+	private String userAgent;
 
 	/**
 	 * @return the id
@@ -167,5 +173,33 @@ public class ErrorLog {
 	 */
 	public void setErrorDate(Date errorDate) {
 		this.errorDate = errorDate;
+	}
+
+	/**
+	 * @return the ipAddress
+	 */
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
+	/**
+	 * @param ipAddress the ipAddress to set
+	 */
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
+	}
+
+	/**
+	 * @return the userAgent
+	 */
+	public String getUserAgent() {
+		return userAgent;
+	}
+
+	/**
+	 * @param userAgent the userAgent to set
+	 */
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
 	}
 }

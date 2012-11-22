@@ -29,7 +29,7 @@ public class SystemErrorDispatcher {
 	
 	@Asynchronous
 	@Transactional
-	public void dispatch(Exception exception, UserLogin userLogin, String url) {
+	public void dispatch(Exception exception, UserLogin userLogin, String url, String ipAddress, String agent) {
 
 		EntityManager entityManager = (EntityManager)Component.getInstance("entityManager");
 		
@@ -46,6 +46,10 @@ public class SystemErrorDispatcher {
 		exception.printStackTrace(pw);
 		errorLog.setStackTrace(writer.toString());
 		errorLog.setUrl(url);
+		errorLog.setIpAddress(ipAddress);
+		if (agent.length() > 200)
+			agent = agent.substring(0, 199);
+		errorLog.setUserAgent(agent);
 		
 		if (userLogin != null) {
 			User user = userLogin.getUser();

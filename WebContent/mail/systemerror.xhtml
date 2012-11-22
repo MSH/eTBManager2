@@ -39,6 +39,22 @@
             	</tr>
             	<tr>
             		<td style="background-color: #e0e0e0;font-weight:bold;">
+            			IP Address:
+            		</td>
+            		<td>
+            			<h:outputText value="#{systemErrorDispatcher.errorLog.ipAddress}" />
+            		</td>
+            	</tr>
+            	<tr>
+            		<td style="background-color: #e0e0e0;font-weight:bold;">
+            			Browser:
+            		</td>
+            		<td>
+            			<h:outputText value="#{systemErrorDispatcher.errorLog.userAgent}" />
+            		</td>
+            	</tr>
+            	<tr>
+            		<td style="background-color: #e0e0e0;font-weight:bold;">
             			#{messages['User']}:
             		</td>
             		<td>

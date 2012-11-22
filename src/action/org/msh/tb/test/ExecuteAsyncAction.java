@@ -150,4 +150,7 @@ public class ExecuteAsyncAction {
 		return null;
 	}
 
+	public void throwError() {
+		throw new RuntimeException("Testing error");
+	}
 }

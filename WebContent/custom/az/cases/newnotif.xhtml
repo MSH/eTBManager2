@@ -64,12 +64,12 @@
 			<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
 				<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}">
 					<f:param name="pacid" value="#{it.patient.id}" />
-					<f:param name="classif" value="#{tbcase.classification}"/>
+					<f:param name="cla" value="#{tbcase.classification}"/>
 				</s:link>
 				<br/>
 				<s:link view="/cases/casenew.xhtml" value="#{it.tbcase.displayCaseNumber}" >
 					<f:param name="pacid" value="#{it.patient.id}" />
-					<f:param name="classif" value="#{tbcase.classification}"/>
+					<f:param name="cla" value="#{tbcase.classification}"/>
 				</s:link>
 			</s:fragment>
 			<s:fragment rendered = '#{it.tbcase.outcomeDate == null}'>
@@ -91,7 +91,7 @@
 			<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
 				<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml">
 					<f:param name="pacid" value="#{it.patient.id}" />
-					<f:param name="classif" value="#{tbcase.classification}"/>
+					<f:param name="cla" value="#{tbcase.classification}"/>
 				</s:link>
 			</s:fragment>
 			<s:fragment rendered = '#{it.tbcase.outcomeDate == null}'>
