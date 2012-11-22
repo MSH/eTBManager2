@@ -8,14 +8,16 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.application.App;
-import org.msh.tb.cases.CaseStateReport;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.PatientType;
+import org.msh.tb.entities.enums.UserView;
+import org.msh.tb.login.UserSession;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
@@ -49,12 +51,8 @@ public class TreatmentsInfoHome {
 	 */
 	private void createTreatments() {
 		// get the unit id selected 
-		Integer unitid = null;
-		CaseStateReport rep = (CaseStateReport)App.getComponent("caseStateReport");
-		if (rep != null)
-			unitid = rep.getTbunitId();
-		
-		if (unitid == null)
+		Tbunit unit = getTbunit();
+		if (unit == null)
 			return;
 		
 		groups = new ArrayList<CaseGroup>();
@@ -64,7 +62,7 @@ public class TreatmentsInfoHome {
 				"from TbCase c " + 
 				"join c.patient p left join c.dispensing disp " + 
 				"where c.state = " + CaseState.ONTREATMENT.ordinal() +
-				" and c.ownerUnit.id = " + unitid + 
+				" and c.ownerUnit.id = " + unit.getId() + 
 /*				" and exists (select aux.id from TreatmentHealthUnit aux where aux.tbunit.id = " + unitid + 
 				" and aux.tbcase.id = c.id and aux.period.endDate = c.treatmentPeriod.endDate) " +
 */				"group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, c.daysTreatPlanned, c.classification " +
@@ -280,7 +278,10 @@ public class TreatmentsInfoHome {
 	 * @return the tbunit
 	 */
 	public Tbunit getTbunit() {
-		return tbunit;
+		UserWorkspace uw = UserSession.getUserWorkspace();
+		if (uw.getView() == UserView.TBUNIT)
+			 return uw.getTbunit();
+		else return tbunit;
 	}
 
 
