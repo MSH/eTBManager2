@@ -83,7 +83,7 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['meds.movs.showbatches']}:</ui:define>
-    	<h:selectBooleanCheckbox value="#{movementFilters.batchesOutput}" />
+    	<h:selectBooleanCheckbox value="#{movementFilters.batchesOutput}" style="margin-top:7px" />
     </s:decorate>
     
    	<a:commandLink styleClass="button-alt" action="#{movementFilters.refresh}" style="float:right;" onclick="if (!disableButton(this)) return false;" reRender="main">

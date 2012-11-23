@@ -1,6 +1,7 @@
 package org.msh.tb.cases;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,11 +17,14 @@ import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
 import org.jboss.seam.international.Messages;
+import org.msh.tb.application.mail.MailService;
 import org.msh.tb.cases.treatment.PrescribedMedicineHome;
 import org.msh.tb.cases.treatment.PrescriptionTable;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.TreatmentHealthUnit;
+import org.msh.tb.entities.User;
+import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
@@ -64,6 +68,7 @@ public class CaseMoveHome extends Controller {
 		
 		TbCase tbcase = caseHome.getInstance();
 		Tbunit tbunit = getTbunitselection().getTbunit();
+		Tbunit unitFrom = tbcase.getOwnerUnit();
 
 		// create the period of treatment for the new health unit
 		Period newPeriod = new Period(DateUtils.incDays(moveDate, 1), tbcase.getTreatmentPeriod().getEndDate());
@@ -94,6 +99,8 @@ public class CaseMoveHome extends Controller {
 		if (prescriptionTable != null)
 			prescriptionTable.refresh();
 
+		sendTransferinEmailToUsers(unitFrom);
+		
 		Events.instance().raiseEvent("case.transferout");
 
 		return "transferred-out";
@@ -314,5 +321,24 @@ public class CaseMoveHome extends Controller {
 		String msg = Messages.instance().get("cases.move.cancel-confirm");
 		msg = MessageFormat.format(msg, tu.getTbunit().getName().toString());
 		return msg;
+	}
+	
+	private void sendTransferinEmailToUsers(Tbunit unitFrom){
+		TbCase tbcase = caseHome.getInstance();
+		Tbunit tbunit = getTbunitselection().getTbunit();
+		MailService srv = MailService.instance();
+		
+		List<UserWorkspace> users = (List<UserWorkspace>) entityManager.createQuery("from UserWorkspace uw where uw.tbunit.id = :id")
+											.setParameter("id", tbunit.getId())
+											.getResultList();
+		
+		for (UserWorkspace userW: users) {
+			srv.addComponent("user", userW.getUser());
+			srv.addComponent("unitFrom", unitFrom);
+			srv.addComponent("tbcase", tbcase);
+			srv.addMessageToQueue("/mail/casetransfered.xhtml", userW.getUser().getTimeZone(), userW.getUser().getLanguage(), userW.getUser(), true);
+		}
+		
+		srv.dispatchQueue();
 	}
 }
