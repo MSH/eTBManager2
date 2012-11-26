@@ -6,6 +6,7 @@
 <!-- 	<param name="order" value="#{caseFilters.newOrder}" converterId="javax.faces.Integer" />  -->
 	<param name="firstResult" value="#{cases.firstResult}"	converterId="javax.faces.Integer" />
 	<param name="stateIndex" value="#{caseFilters.stateIndex}" />
+	<param name="unitId" value="#{caseFilters.unitId}" />
 	<param name="sc" value="#{caseFilters.searchCriteria}" />
 	<param name="vs" value="#{caseFilters.validationState}" />
 	<param name="tag" value="#{caseFilters.tagid}" converterId="javax.faces.Integer"/>
