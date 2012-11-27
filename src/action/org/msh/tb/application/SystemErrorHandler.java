@@ -42,15 +42,29 @@ public class SystemErrorHandler {
 
 		// mount original URL
 		String url = null;
-		String ipAddress = null;
-		String agent = null;
 
+		StringBuilder reqdata = new StringBuilder();
+		
 		if (facesContext != null) {
 			HttpServletRequest req = (HttpServletRequest)facesContext.getExternalContext().getRequest();
 //			HttpServletRequest req = (HttpServletRequest)contexts.getRequest();
+			
 			url = req.getRequestURL().toString();
-            ipAddress = req.getRemoteAddr();
-            agent = req.getHeader("User-Agent");
+			reqdata.append("ip address = " + req.getRemoteAddr());
+			reqdata.append("\n* browser = " + req.getHeader("user-Agent"));
+			reqdata.append("\n* method = " + req.getMethod());
+			reqdata.append("\n* auth type = " + req.getAuthType());
+			reqdata.append("\n* context path = " + req.getContextPath());
+			reqdata.append("\n* path info = " + req.getPathInfo());
+			reqdata.append("\n* path translated = " + req.getPathTranslated());
+			reqdata.append("\n* query string = " + req.getQueryString());
+			reqdata.append("\n* remote user = " + req.getRemoteUser());
+			reqdata.append("\n* requested session id = " + req.getRequestedSessionId());
+			reqdata.append("\n* request URI = " + req.getRequestURI());
+			reqdata.append("\n* request URL = " + req.getRequestURL());
+			reqdata.append("\n* servlet path = " + req.getServletPath());
+			reqdata.append("\n* is Request session id valid = " + req.isRequestedSessionIdValid());
+
 
 			// check if it's the seam error page that is generating the error. In this case does nothing
 			if (url.endsWith("errorall.seam"))
@@ -61,6 +75,6 @@ public class SystemErrorHandler {
 		}
 		else url = null;
 
-		systemErrorDispatcher.dispatch(exception, userLogin, url, ipAddress, agent);			
+		systemErrorDispatcher.dispatch(exception, userLogin, url, reqdata.toString());			
 	}
 }

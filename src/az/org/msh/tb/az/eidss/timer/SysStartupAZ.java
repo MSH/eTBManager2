@@ -125,10 +125,11 @@ public class SysStartupAZ{
 	}
 
 	public void display(String mess, String onoff){
-		facesMessages.add(getMessages().get("admin.import.eidss.state")+": "
+		String s = getMessages().get("admin.import.eidss.state")+": "
 				+getMessages().get("admin.import.eidss.state."+onoff)+". "
 				+getMessages().get("admin.import.eidss.nextFT")+": "
-				+getNextFireTime());
+				+getNextFireTime();
+		facesMessages.addFromResourceBundle(s);
 		facesMessages.addFromResourceBundle(mess);
 	}
 	

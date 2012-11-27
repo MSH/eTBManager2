@@ -48,7 +48,7 @@
 
 <b><h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty errorLogReport.resultList}" /></b>
 <h:dataTable id="tbl" value="#{errorLogReport.resultList}" var="it" columnClasses="colb,colb,colb,colcb"
-  styleClass="table1" rowClasses="lin1,lin2" width="100%" rendered="#{not empty errorLogReport.resultList}">
+  styleClass="table2" rowClasses="lin1,lin2" width="100%" rendered="#{not empty errorLogReport.resultList}">
   <h:column>
   	<f:facet name="header">
   		<h:outputText value="#{messages['global.date']}" styleClass="collh" />
@@ -103,9 +103,9 @@ function displayErrorDetails(id) {
 }
 function moveErrorDetail() {
 	var e=jQuery('#diverrodetail');
-	var content=e.text();
+	var content=e.html();
 	var s="#div"+window.errorDetailId;
-	jQuery(s).text(content).slideDown(500);
+	jQuery(s).html(content).slideDown(500);
 	e.text('');
 }
 
@@ -115,7 +115,11 @@ function moveErrorDetail() {
 
 <h:panelGroup id="errordetails">
 	<div id="diverrodetail" style="display:none">
-		#{errorLogReport.errorLog.stackTrace}
+		<h:outputText value="#{errorLogReport.errorLog.request}" 
+      			    converter="rmemoria.TextConverter" escape="false" style="font-family:Courier new"/>
+ 		<p/>
+		<h:outputText value="#{errorLogReport.errorLog.stackTrace}" 
+      			    converter="rmemoria.TextConverter" escape="false" style="font-family:Courier new"/>
 	</div>
 </h:panelGroup>
 
