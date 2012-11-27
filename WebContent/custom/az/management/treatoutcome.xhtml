@@ -157,7 +157,7 @@
 			</td>
 		<ui:repeat value="#{table.columns}" var="col">
 			<s:fragment rendered="#{not col.highlight}">
-				<td class="colcb" bgcolor="#DBFADC">
+				<td class="colcb" bgcolor="#{treatResultIndicatorAZ.getColorColumn(col)}">
 					<b>
 					<h:outputText value="#{col.total}" rendered="#{not indicator.showPerc}">
 						<f:convertNumber pattern="#,###,##0"/>
@@ -176,11 +176,11 @@
 		</ui:repeat>
 			<td class="colcb"  bgcolor="#DBFADC">
 				<b>
-				<h:outputText value="#{table.total}" rendered="#{not indicator.showPerc}">
+				<h:outputText value="#{treatResultIndicatorAZ.getTotal()}" rendered="#{not indicator.showPerc}">
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 				
-				<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty table.total)}"/>
+				<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty treatResultIndicatorAZ.getTotal())}"/>
 				
 				<h:outputText value="100%" rendered="#{indicator.showPerc}"/>
 				</b>
@@ -196,9 +196,9 @@
 	<br/>
 	<div class="paragraph">#{messages['manag.ind.starttreat.title2']}</div>
 	<br/>
-	<s:decorate template="/management/chartflash.xhtml">
+	<s:decorate template="chartflash.xhtml">
 		<ui:param name="title" value="#{messages['manag.ind.treatoutcome']}" />
-		<ui:param name="series" value="#{indicator.series}" />
+		<ui:param name="series" value="#{resultIndicator.series}" />
 		<ui:param name="seriestitle" value="#{messages['cases.outcome']}" />
 	</s:decorate>
 
@@ -206,7 +206,7 @@
 	<div style="float:left;font-size:14px;margin:10px;">
 	<b>
 	<span style="margin-right:10px;" class="status-label">#{messages['manag.ind.successrate']}:</span> 
-	<h:outputText value="#{indicator.successRate}">
+	<h:outputText value="#{treatResultIndicatorAZ.successRate}">
 		<f:convertNumber pattern="#,###,##0.00" />
 	</h:outputText>%
 	</b>

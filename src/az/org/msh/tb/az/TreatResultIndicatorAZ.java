@@ -2,10 +2,14 @@ package org.msh.tb.az;
 
 import java.util.List;
 
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.PatientType;
+import org.msh.tb.indicators.OutcomeIndicator;
 import org.msh.tb.indicators.TreatResultIndicator;
+import org.msh.tb.indicators.core.IndicatorItem;
+import org.msh.tb.indicators.core.IndicatorSeries;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.indicators.core.IndicatorTable.TableCell;
 import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
@@ -15,6 +19,12 @@ import org.msh.tb.indicators.core.IndicatorTable.TableRow;
 public class TreatResultIndicatorAZ extends TreatResultIndicator {
 	private static final long serialVersionUID = -8750402499187749542L;
 
+	@In(create=true)
+	OutcomeIndicator outcomeIndicator;
+	
+	private int total;
+
+	private Float successRate = 0F;
 	
 	@Override
 	public void createItems(List<Object[]> lst) {
@@ -38,13 +48,23 @@ public class TreatResultIndicatorAZ extends TreatResultIndicator {
 		}
 	}
 	
-	public String getColorCell(TableCell cell){
-		if (cell==null) return "#E2EAE2";
-		CaseState id = (CaseState)cell.getColumn().getId();
+	public String getColorColumn(TableColumn col){
+		if (col==null)  return "#E2EAE2";
+		CaseState id = (CaseState)col.getId();
 		if (id.equals(CaseState.WAITING_TREATMENT) || id.equals(CaseState.TRANSFERRING)){
 			return "#E2EAE2";
 		}
 		return "#DBFADC";
+	}
+	
+	public String getColorCell(TableCell cell){
+		if (cell==null) return "#E2EAE2";
+		return getColorColumn(cell.getColumn());
+		/*CaseState id = (CaseState)cell.getColumn().getId();
+		if (id.equals(CaseState.WAITING_TREATMENT) || id.equals(CaseState.TRANSFERRING)){
+			return "#E2EAE2";
+		}
+		return "#DBFADC";*/
 	}
 	
 	public int getTotal(TableRow row){
@@ -79,14 +99,18 @@ public class TreatResultIndicatorAZ extends TreatResultIndicator {
 			Float count = ((Long)vals[2]).floatValue();
 
 			if ((pt != null) && (CaseState.CURED.equals(cs))) {
+				successRate += count;
 				addIdValue(successRateID, pt, count);
 			}
 		}
-		
+			
 		for (TableRow row: table.getRows()) {
 			Float total = Integer.valueOf(getTotal(row)).floatValue();
+			this.total+=total;
 			TableCell cell = row.findCellByColumnId(successRateID);
-
+			if (cell == null) {
+				addIdValue(successRateID, row.getId(), 0F);
+			}
 			if (cell != null) {
 				Float sucRate = cell.getValue();
 				if (sucRate != null) {
@@ -95,6 +119,37 @@ public class TreatResultIndicatorAZ extends TreatResultIndicator {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public IndicatorSeries getSeries() {
+		IndicatorSeries ser = outcomeIndicator.getSeries();
+		ser.setTotal(total);
+		return ser;
+	}
+
+	public float getTotalPerc(){
+		float res = 0;
+		for (IndicatorItem ii: outcomeIndicator.getSeries().getItems()){
+			res += ii.getPerc();
+		}
+		return res;
+	}
+	
+	/**
+	 * @return the total
+	 */
+	public int getTotal() {
+		return total;
+	}
+
+	/**
+	 * @return the successRate
+	 */
+	public Float getSuccessRate() {
+		if (successRate!=null && total !=0)
+			return successRate*100/total;
+		return 0F;
 	}
 	
 }
