@@ -92,4 +92,13 @@ public class IndicatorSeries implements Comparator<IndicatorItem>{
 	public int getChartHeight() {
 		return 80 + (getItems().size() * 16);
 	}
+
+
+
+	/**
+	 * @param total the total to set
+	 */
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
 }
