@@ -67,9 +67,10 @@ public  class CaseImporting {
 			errorOnCurrentImport=WriteCase(oneCase);
 			action=WRITED;
 		} else {
-			if (result!=null)
+			if (result!=null){
 				errorOnCurrentImport=UpdateCase(oneCase,result);
-			action=UPDATED;
+				action=UPDATED;
+			}
 		}
          if (!errorOnCurrentImport) {
         	 action="error";
