@@ -16,6 +16,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.security.Restrict;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.tb.application.mail.MailService;
 import org.msh.tb.entities.CaseIssue;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
@@ -171,6 +172,10 @@ public class CaseValidationHome {
 		caseHome.persist();
 		caseHome.updateCaseTags();
 		
+		notifyIssueByEmail(issue);
+		
+		Events.instance().raiseEvent("pending-registered-answered");
+		
 		return "pending-registered";
 	}
 	
@@ -192,6 +197,8 @@ public class CaseValidationHome {
 		
 		caseHome.persist();
 		caseHome.updateCaseTags();
+		
+		Events.instance().raiseEvent("pending-registered-answered");
 		
 		return "answered";
 	}
@@ -271,6 +278,27 @@ public class CaseValidationHome {
 		issues = null;
 	}
 
+	private void notifyIssueByEmail(CaseIssue issue){
+		TbCase tbcase = caseHome.getInstance();
+				
+		MailService srv = MailService.instance();
+		
+		//Verificar a melhor forma de selecionar os usuarios
+		List<UserWorkspace> users = (List<UserWorkspace>) entityManager.createQuery("from UserWorkspace uw where uw.tbunit.id = :id")
+											.setParameter("id", tbcase.getOwnerUnit().getId())
+											.getResultList();
+		
+		for (UserWorkspace userW: users) {
+			srv.addComponent("user", userW.getUser());
+			srv.addComponent("issue", issue);
+			srv.addComponent("tbcase", tbcase);
+			srv.addComponent("isAnswer", issue.isAnswer());
+			srv.addMessageToQueue("/mail/casetransfered.xhtml", userW.getUser().getTimeZone(), userW.getUser().getLanguage(), userW.getUser(), true);
+		}
+		
+		srv.dispatchQueue();
+	}
+	
 	/**
 	 * Return the current user logged in
 	 * @return

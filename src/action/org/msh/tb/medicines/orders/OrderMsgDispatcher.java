@@ -9,6 +9,7 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
+import org.msh.tb.MsgDispatcher;
 import org.msh.tb.application.mail.MailService;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Order;
@@ -24,7 +25,7 @@ import org.msh.tb.entities.enums.UserView;
  *
  */
 @Name("orderMsgDispatcher")
-public class OrderMsgDispatcher {
+public class OrderMsgDispatcher extends MsgDispatcher{
 
 	@In EntityManager entityManager;
 	@In(required=true) OrderHome orderHome;
@@ -125,50 +126,15 @@ public class OrderMsgDispatcher {
 		if (unit == null)
 			return null;
 
-		return getUsersByRoleAndUnit(13, unit);
+		return getUsersByRoleAndUnit("VAL_ORDER", unit);
 	}
-	
-	
-	/**
-	 * Return the list of users that have permission to a particular role in a unit
-	 * @param roleid
-	 * @param unit
-	 * @return
-	 */
-	protected List<User> getUsersByRoleAndUnit(Integer roleid, Tbunit unit) {
-		String code = unit.getAdminUnit().getCode();
-		String s = "";
-		while (code != null) {
-			if (!s.isEmpty())
-				s += ",";
-			s += "'" + code + "'";
-			code = AdministrativeUnit.getParentCode(code);
-		}
-		
-		String hql = "select u.user from UserWorkspace u where u.profile.id in " +
-				"(select distinct p.id from UserProfile p join p.permissions perm where perm.userRole.id=13 " +
-				"and p.workspace.id = #{defaultWorkspace.id} and perm.canExecute=:p) " +
-				"and (u.view = :viewcountry or (u.view = :viewunit and u.tbunit.id = :unitid) " +
-				"or (u.view = :viewadm and u.tbunit.adminUnit.code in (" + s + ")))";
-
-		List<User> lst = entityManager.createQuery(hql)
-			.setParameter("p", true)
-			.setParameter("viewcountry", UserView.COUNTRY)
-			.setParameter("viewunit", UserView.TBUNIT)
-			.setParameter("unitid", unit.getId())
-			.setParameter("viewadm", UserView.ADMINUNIT)
-			.getResultList();
-		
-		return lst;
-	}
-
 
 	/**
 	 * Return a list of users in charge of authorizing the order
 	 * @return
 	 */
 	public List<User> getUsersToShip() {
-		return getUsersByRoleAndUnit(14, orderHome.getInstance().getUnitTo());
+		return getUsersByRoleAndUnit("SEND_ORDER", orderHome.getInstance().getUnitTo());
 	}
 
 	

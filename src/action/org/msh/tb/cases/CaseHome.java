@@ -130,6 +130,14 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		}
 		return null;
 	}
+	
+	/**
+	 * Return the health unit where patient was being transferred out
+	 * @return
+	 */
+	public TreatmentHealthUnit getTransferOutHealthUnit() {
+		return (getTbCase().getState() == CaseState.TRANSFERRING) && (getTbCase().getHealthUnits().size() > 1) ? getTbCase().getHealthUnits().get(getTbCase().getHealthUnits().size()-2): null;
+	}
 
 	
 	/**

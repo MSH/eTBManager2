@@ -10,6 +10,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.EntityHomeEx;
@@ -124,6 +125,8 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		log.addTableRow(".unitTo", transfer.getUnitTo());
 		log.addTableRow(".shippingDate", transfer.getShippingDate());
 		log.save("NEW_TRANSFER", RoleAction.EXEC, transfer);
+		
+		Events.instance().raiseEvent("medicine-new-transfer");
 		
 		return persist();
 	}

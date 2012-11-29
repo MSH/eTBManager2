@@ -99,8 +99,6 @@ public class CaseMoveHome extends Controller {
 		if (prescriptionTable != null)
 			prescriptionTable.refresh();
 
-		sendTransferinEmailToUsers(unitFrom);
-		
 		Events.instance().raiseEvent("case.transferout");
 
 		return "transferred-out";
@@ -321,24 +319,5 @@ public class CaseMoveHome extends Controller {
 		String msg = Messages.instance().get("cases.move.cancel-confirm");
 		msg = MessageFormat.format(msg, tu.getTbunit().getName().toString());
 		return msg;
-	}
-	
-	private void sendTransferinEmailToUsers(Tbunit unitFrom){
-		TbCase tbcase = caseHome.getInstance();
-		Tbunit tbunit = getTbunitselection().getTbunit();
-		MailService srv = MailService.instance();
-		
-		List<UserWorkspace> users = (List<UserWorkspace>) entityManager.createQuery("from UserWorkspace uw where uw.tbunit.id = :id")
-											.setParameter("id", tbunit.getId())
-											.getResultList();
-		
-		for (UserWorkspace userW: users) {
-			srv.addComponent("user", userW.getUser());
-			srv.addComponent("unitFrom", unitFrom);
-			srv.addComponent("tbcase", tbcase);
-			srv.addMessageToQueue("/mail/casetransfered.xhtml", userW.getUser().getTimeZone(), userW.getUser().getLanguage(), userW.getUser(), true);
-		}
-		
-		srv.dispatchQueue();
 	}
 }
