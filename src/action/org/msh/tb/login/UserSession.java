@@ -27,6 +27,7 @@ import org.msh.tb.entities.UserProfile;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.Passwords;
 import org.msh.utils.date.DateUtils;
 
@@ -47,7 +48,7 @@ public class UserSession {
 	
 	private String sessionId;
 
-
+	private TBUnitSelection tbunitselection;
 	
 	/**
 	 * Static method to return an instance of the {@link Workspace} in the current session
@@ -238,6 +239,7 @@ public class UserSession {
     	Contexts.getSessionContext().set("userLogin", userLogin);
     	Contexts.getSessionContext().set("workspaceExtension", userWorkspace.getWorkspace().getExtension());
     	Contexts.getSessionContext().set("userWorkspace", userWorkspace);
+    	Contexts.getSessionContext().set("tbunitselection", getTbunitselection());
     	
     	setTbunit(userWorkspace.getTbunit());
 
@@ -631,5 +633,13 @@ public class UserSession {
 	 */
 	public String getSessionId() {
 		return sessionId;
+	}
+	
+	public TBUnitSelection getTbunitselection() {
+		tbunitselection = (TBUnitSelection)Component.getInstance("tbunitselection");
+		if (tbunitselection == null) {
+			tbunitselection = new TBUnitSelection();
+		}
+		return tbunitselection;
 	}
 }

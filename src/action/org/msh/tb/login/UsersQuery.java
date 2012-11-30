@@ -3,22 +3,23 @@ package org.msh.tb.login;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
-import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.EntityQuery;
 
 
 @Name("users")
 public class UsersQuery extends EntityQuery<UserWorkspace>{
 	private static final long serialVersionUID = -8293352124405808033L;
-	private AdminUnitSelection auselection;
 
 	private static final String[] restrictions = {
 		"uw.workspace.id = #{defaultWorkspace.id}",
 		"uw.tbunit.adminUnit.code like #{users.adminUnitCodeLike}",
+		"uw.tbunit.id = #{users.tbunitselection.tbunit.id}",
 		"not exists(select perm.id from UserPermission perm " +
 				"where perm.userProfile.id = uw.profile.id " +
 				"and perm.userRole.id not in (select r.id from UserPermission aux " +
@@ -103,27 +104,17 @@ public class UsersQuery extends EntityQuery<UserWorkspace>{
 		this.searchKey = searchKey;
 	}
 	
-	public AdminUnitSelection getAuselection() {
-		if (auselection == null) {
-			auselection = new AdminUnitSelection();
-		}
-		return auselection;
-	}
-
-	/**
-	 * @param auselection the auselection to set
-	 */
-	public void setAuselection(AdminUnitSelection auselection) {
-		this.auselection = auselection;
-	}
-	
 	public String getAdminUnitCodeLike() {
-		AdministrativeUnit adm = getAuselection().getSelectedUnit();
+		AdministrativeUnit adm = getTbunitselection().getAdminUnit();
 		if (adm == null)
 			 return null;
 		else return adm.getCode() + "%";
 	}
 	
+	public TBUnitSelection getTbunitselection(){
+		UserSession us = (UserSession) Component.getInstance("userSession");
+		return us.getTbunitselection();
+	}
 	
 	
 }

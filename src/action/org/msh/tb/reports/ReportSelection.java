@@ -353,5 +353,4 @@ public class ReportSelection {
 		this.roleAction = roleAction;
 	}
 
-
 }

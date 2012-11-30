@@ -43,6 +43,12 @@
 		</h:selectOneMenu>
 	</s:decorate>
 	
+    <s:decorate template="/layout/tbselection.xhtml" >
+    	<ui:define name="label">#{messages['Tbunit']}:</ui:define>
+    	<ui:param name="tbunitselection" value="#{userSession.tbunitselection}" />
+    	<ui:param name="required" value="false" />
+    </s:decorate>
+	
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['User']}:</ui:define>
 		<h:selectOneMenu value="#{reportSelection.userLog}">

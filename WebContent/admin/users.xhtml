@@ -17,30 +17,30 @@
 <h1>#{title}</h1>
 <h:form id="main">
 
-<s:decorate id="sel" template="/layout/display.xhtml">
-	<ui:define name="label">#{unitspg.auselection.labelLevel1}:</ui:define>
-	<h:selectOneMenu id="cbselau1" value="#{users.auselection.unitLevel1}" >
-		<s:selectItems var="it" value="#{users.auselection.optionsLevel1}" noSelectionLabel="-" label="#{it.name}"/>
-		<s:convertEntity />
-		<a:support event="onchange" reRender="tablepanel"/>
-	</h:selectOneMenu>
+<s:decorate template="/layout/tbselection.xhtml" >
+ 	<ui:define name="label">#{messages['Tbunit']}:</ui:define>
+   	<ui:param name="tbunitselection" value="#{userSession.tbunitselection}" />
+   	<ui:param name="required" value="false" />
 </s:decorate>
+
+<div style="margin-left: 80px;font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 11px;color: #505050;font-weight: bold;">
+	<s:decorate template="/layout/searchkey.xhtml">
+		<ui:param name="list" value="#{users}" />
+		<ui:param name="tablepanel" value="tablepanel" />
+		<ui:param name="brButton" value="true" />
+	</s:decorate>
+</div>
+
+<br/><br/>
 
 <s:link view="/admin/edtuser.xhtml"
 	styleClass="button"  
+	style="float:right"
 	rendered="#{s:hasRole('USERS_EDT')}"
 	propagation="none" >
 	<f:param name="id" value="#{null}" />
 	<span>#{messages['form.newf']}</span>
 </s:link>
-
-
-<div style="float:right">
-	<s:decorate template="/layout/searchkey.xhtml">
-		<ui:param name="list" value="#{users}" />
-		<ui:param name="tablepanel" value="tablepanel" />
-	</s:decorate>
-</div>
 
 <a:jsFunction name="deleteRecord" action="#{userHome.remove}" reRender="tablepanel,messages">
 	<a:actionparam name="param1" assignTo="#{userHome.id}" converter="javax.faces.Integer" />

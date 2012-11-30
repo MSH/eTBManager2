@@ -9,7 +9,7 @@
 
 	#{messages['global.searchkey']}:
 	<h:inputText id="edtsearchkey" value="#{list.searchKey}" style="width:70px"/>
-
+	<s:fragment rendered="#{empty brButton ? false : brButton}"><br/><br/></s:fragment>
 	<a:commandLink id="btnsearchkey" styleClass="button-alt" onclick="execSearch()">
 		<span>#{messages['form.search']}</span>
 	</a:commandLink>
