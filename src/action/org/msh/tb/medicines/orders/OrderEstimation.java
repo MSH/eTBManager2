@@ -13,11 +13,13 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.MedicineUnitHome;
 import org.msh.tb.entities.MedicineUnit;
 import org.msh.tb.entities.Order;
+import org.msh.tb.entities.OrderItem;
 import org.msh.tb.entities.PrescribedMedicine;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.OrderStatus;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
@@ -39,6 +41,8 @@ public class OrderEstimation {
 	private List<Tbunit> checkedUnits;
 	private Date iniDate;
 	private Date endDate;
+	private boolean existsPendingOrder;
+	private boolean initializeEditing = false;
 
 	
 	/**
@@ -46,43 +50,70 @@ public class OrderEstimation {
 	 */
 	public void initialize() {
 		Order ord = orderHome.getInstance();
-
-		if (ord.getUnitFrom() != null)
-			return;
+		boolean isNewOrder = (ord.getId() == null || ord.getId().equals(0));
 		
-		Tbunit unit = entityManager.find(Tbunit.class, userSession.getTbunit().getId());
+		if(isNewOrder){
+			existsPendingOrder = verifyPendingOrder();
+			if(existsPendingOrder)
+				return;
+				
+			if (ord.getUnitFrom() != null)
+				return;
+			
+			Tbunit unit = entityManager.find(Tbunit.class, userSession.getTbunit().getId());
 
-		if (unit.getNumDaysOrder() == null) {
-			facesMessages.addFromResourceBundle("meds.orders.initerror");
-			return;
+			if (unit.getNumDaysOrder() == null) {
+				facesMessages.addFromResourceBundle("meds.orders.initerror");
+				return;
+			}
+
+			ord.setUnitFrom(unit);
+			
+			initializeAddress(unit);
+			
+			// get the current date
+			iniDate = DateUtils.getDate();
+			
+			int numEstimatingDays = unit.getNumDaysOrder();
+
+			// calculate the end date
+			Calendar c = Calendar.getInstance(); 
+			c.setTime(iniDate);
+			c.add(Calendar.DAY_OF_YEAR, numEstimatingDays - 1);
+			endDate = c.getTime();
+
+			orderHome.getSources().clear();
+
+			ord.setUnitTo(ord.getUnitFrom().getSecondLineSupplier());
+			
+			loadPrescribedMedicines();
+			
+			// is there any unit to consider ?
+			if (units.size() > 0) {
+				createOrderItems();
+				loadStockPosition();			
+			}
+
+		}else{
+			if (!initializeEditing)
+				return;
+			
+			orderHome.getSources().clear();
+			
+			units = new ArrayList<Tbunit>();
+			checkedUnits = new ArrayList<Tbunit>();
+			mountTbList(ord.getUnitFrom());	
+			
+			initializeAddress(ord.getUnitFrom());
+			
+			if (units.size() > 0) {
+				createOrderItemsForEditing();
+				loadStockPosition();			
+			}
+			
+			initializeEditing = false;
 		}
 
-		ord.setUnitFrom(unit);
-		
-		initializeAddress(unit);
-		
-		// get the current date
-		iniDate = DateUtils.getDate();
-		
-		int numEstimatingDays = unit.getNumDaysOrder();
-
-		// calculate the end date
-		Calendar c = Calendar.getInstance(); 
-		c.setTime(iniDate);
-		c.add(Calendar.DAY_OF_YEAR, numEstimatingDays - 1);
-		endDate = c.getTime();
-
-		orderHome.getSources().clear();
-
-		ord.setUnitTo(ord.getUnitFrom().getSecondLineSupplier());
-		
-		loadPrescribedMedicines();
-		
-		// is there any unit to consider ?
-		if (units.size() > 0) {
-			createOrderItems();
-			loadStockPosition();			
-		}
 	}
 	
 	
@@ -130,7 +161,7 @@ public class OrderEstimation {
 
 	
 	/**
-	 * Create estimated order items from the prescription list
+	 * Create estimated order items for new order from the prescription list
 	 */
 	public void createOrderItems() {
 		for (PrescribedMedicine p: prescmeds) {
@@ -152,6 +183,20 @@ public class OrderEstimation {
 
 			item.getItem().addCase(tbcase, qtd);
 		}
+	}
+	
+	/**
+	 * Create estimated order items for an editing order from the prescription list
+	 */
+	public void createOrderItemsForEditing() {
+		for (OrderItem o: orderHome.getInstance().getItems()) {
+			SourceOrderItem s = orderHome.sourceOrderBySource(o.getSource());
+			
+			OrderItemAux item = s.itemByMedicine(o.getMedicine());
+			
+			item.setItem(o);
+		}
+		
 	}
 
 
@@ -250,4 +295,36 @@ public class OrderEstimation {
 			}
 		}
 	}
-}
+	
+	private boolean verifyPendingOrder(){
+		List<Order> o = (List<Order>) entityManager.createQuery("from Order o where o.unitFrom.id = :id and (o.status != :received and o.status != :cancelled)")
+							.setParameter("id", userSession.getTbunit().getId())
+							.setParameter("received", OrderStatus.RECEIVED)
+							.setParameter("cancelled", OrderStatus.CANCELLED).getResultList();
+		
+		if(o == null || o.size() == 0)
+			return false;
+		else
+			return true;
+	}
+	
+	public boolean isExistsPendingOrder() {
+		return existsPendingOrder;
+	}
+
+
+	public void setExistsPendingOrder(boolean existsPendingOrder) {
+		this.existsPendingOrder = existsPendingOrder;
+	}
+
+
+	public boolean isInitializeEditing() {
+		return initializeEditing;
+	}
+
+
+	public void setInitializeEditing(boolean initializeEditing) {
+		this.initializeEditing = initializeEditing;
+	}
+	
+	}

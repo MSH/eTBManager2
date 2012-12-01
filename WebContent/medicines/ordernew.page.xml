@@ -5,6 +5,8 @@
 	<action execute="#{orderEstimation.initialize}" />
 	<restrict>#{userSession.canCreateOrder}</restrict>
 	<begin-conversation join="true" />
+	<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
+	<param name="initEdt" value="#{orderEstimation.initializeEditing}" />
 	<navigation>
 		<rule if-outcome="medselection-updated">
 			<redirect view-id="/medicines/ordernewaddr.xhtml">

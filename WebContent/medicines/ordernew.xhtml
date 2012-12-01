@@ -27,6 +27,24 @@
 <s:decorate template="/layout/unitsel.xhtml">
 <h:form id="main" styleClass="form1">
 
+<s:fragment rendered="#{orderEstimation.existsPendingOrder}">
+	<div class="error">
+		#{messages['Order.new.pendingOrder']}
+	</div>
+	
+	<br/><br/>
+	
+	<s:link styleClass="button" view="/medicines/orders.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}">
+		<span>#{messages['meds.orders.viewopen']}</span>
+	</s:link>
+        
+    <s:link view="/medicines/index.xhtml" styleClass="button-alt" onclick="disableButton(this);" propagation="end">
+    	<span>#{messages['form.return']}</span>
+    </s:link>
+</s:fragment>
+
+<s:fragment rendered="#{not orderEstimation.existsPendingOrder}">
+
 <s:fragment rendered="#{not empty orderHome.sources}">
 
 <ul class="progress-tab">
@@ -183,6 +201,7 @@
         	onclick="disableButton(this)" >
           	<span>#{messages['form.navnext']}</span>
         </a:commandLink>
+        
         <s:link view="/medicines/index.xhtml" styleClass="button-alt" onclick="disableButton(this)" propagation="end">
           	<span>#{messages['form.cancel']}</span>
         </s:link>
@@ -197,6 +216,8 @@
     <s:link view="/medicines/index.xhtml" styleClass="button-alt" onclick="disableButton(this);" propagation="end">
     	<span>#{messages['form.return']}</span>
     </s:link>	
+</s:fragment>
+
 </s:fragment>
 
 </h:form>

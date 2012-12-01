@@ -246,6 +246,22 @@ public class OrderHome extends EntityHomeEx<Order>{
 			// this method automatically includes a new medicine if the medicine is not already in the list
 			item.itemByMedicine(med);
 		}
+		
+	}
+	
+	/**
+	 * Verifies if an order can be edited
+	 */
+	public boolean isEditableOrder(Object n) {
+		Order o = null;
+		if(n!= null && n instanceof Order)
+			o = (Order) n;
+		else
+			return false;
+		
+		return ( (Identity.instance().hasRole("NEW_ORDER")) // user has to be able to create new orders
+					&& (o.getUnitFrom().equals(userSession.getUserWorkspace().getTbunit()) || userSession.getUserWorkspace().isPlayOtherUnits()) // the user has to be from the unit that he is trying to create/edit the order or he has to be able to play other units.
+					&& (o.getStatus().equals(OrderStatus.WAITAUTHORIZING) || (o.getAuthorizer() == null && o.getStatus().equals(OrderStatus.WAITSHIPMENT)))); // The order has to be waiting for authorization or has to be waiting for shipment if it doens't needs to be authorized.
 	}
 	
 
@@ -473,6 +489,10 @@ public class OrderHome extends EntityHomeEx<Order>{
 	 */
 	public void setRequiredObservation(boolean requiredObservation) {
 		this.requiredObservation = requiredObservation;
+	}	
+		
+	public boolean isEditing(){
+		Order ord = getInstance();
+		return !(ord.getId() == null || ord.getId().equals(0));
 	}
-	
 }
