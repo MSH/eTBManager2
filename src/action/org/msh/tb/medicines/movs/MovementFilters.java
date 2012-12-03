@@ -29,6 +29,7 @@ public class MovementFilters {
 	private Date dateEnd;
 	private MovementType type;
 	private String batchNumber;
+	private Integer selectedMovement;
 
 	
 	/**
@@ -165,4 +166,22 @@ public class MovementFilters {
 	public void setBatchNumber(String batchNumber) {
 		this.batchNumber = batchNumber;
 	}
+
+
+	/**
+	 * @return the selectedMovement
+	 */
+	public Integer getSelectedMovement() {
+		return selectedMovement;
+	}
+
+
+	/**
+	 * @param selectedMovement the selectedMovement to set
+	 */
+	public void setSelectedMovement(Integer selectedMovement) {
+		this.selectedMovement = selectedMovement;
+	}
+	
+	
 }

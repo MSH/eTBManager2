@@ -2,6 +2,7 @@ package org.msh.tb.medicines.movs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.annotations.Factory;
@@ -10,6 +11,7 @@ import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.login.UserSession;
+import org.msh.tb.medicines.movs.DispensingMovementDetail.DispensingPatientDetail;
 import org.msh.utils.EntityQuery;
 
 
@@ -28,7 +30,9 @@ public class MovementsQuery extends EntityQuery<MovementItem> {
 			"m.medicine.id = #{medicineHome.id}"};
 
 	@In(create=true) UserSession userSession;
+	@In(create=true) MovementFilters movementFilters;
 
+	private DispensingMovementDetail dispMovtDetail;
 	private List resultList;
 	
 	@Factory("movementTypes")
@@ -88,6 +92,51 @@ public class MovementsQuery extends EntityQuery<MovementItem> {
 			it.setStockQuantity(val.intValue());
 			resultList.add(it);
 		}
+	}
+
+	public void loadDispMovDetail(){
+		List<Object[]> lst = (List<Object[]>) getEntityManager()
+				.createQuery("select m.date, m.medicine.genericName.name1, m.medicine.dosageForm, m.source.name.name1, m.quantity, p.tbcase.patient.name, " +
+								"p.quantity, p.batch.batchNumber, p.batch.manufacturer, p.tbcase.id " +
+									"from MedicineDispensingCase p " +
+									"inner join p.dispensing.movements m " +
+									"where m.id=:movId")
+				.setParameter("movId", movementFilters.getSelectedMovement())
+				.getResultList();
+		
+		fillDispMovDetails(lst);
+		
+	}
+	
+	private void fillDispMovDetails(List<Object[]> lst){
+		dispMovtDetail = new DispensingMovementDetail();
+		
+		if(lst.size()>0){
+			dispMovtDetail.setMovementDate((Date) lst.get(0)[0]);
+			dispMovtDetail.setMedicineName((String) lst.get(0)[1]);
+			dispMovtDetail.setDosageForm((String) lst.get(0)[2]);
+			dispMovtDetail.setSourceName((String) lst.get(0)[3]);
+			dispMovtDetail.setTotalQuantity((Integer) lst.get(0)[4]);
+			
+			for(Object[] obj : lst){
+				DispensingPatientDetail aux = dispMovtDetail.addDispensingPatientDetail();
+				aux.setPatientName((String) obj[5]);
+				aux.setQuantity((Integer) obj[6]);
+				aux.setBatchNumber((String) obj[7]);
+				aux.setManufacturerName((String) obj[8]);
+				aux.setCaseId((Integer) obj[9]);
+			}
+			
+		}
+	}
+	
+	/**
+	 * @return the dispMovtDetail
+	 */
+	public DispensingMovementDetail getDispMovtDetail() {
+		if(dispMovtDetail == null)
+			return new DispensingMovementDetail();
+		return dispMovtDetail;
 	}
 
 }

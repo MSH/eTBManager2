@@ -304,5 +304,12 @@ public class Movement implements Serializable {
 		else
 			return false;
 	}
+	
+	public boolean isDispensing() {
+		if(this.type != null)
+			return type.equals(MovementType.DISPENSING);
+		else
+			return false;
+	}
 
 }
