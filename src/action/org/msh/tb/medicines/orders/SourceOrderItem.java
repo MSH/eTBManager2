@@ -119,4 +119,15 @@ public class SourceOrderItem {
 		super();
 		this.source = source;
 	}
+	
+	public void clearNonRequestedOrderItemAux(){
+		ArrayList<OrderItemAux> lst = new ArrayList<SourceOrderItem.OrderItemAux>();
+		
+		for(OrderItemAux i : items){
+			if(i.getItem().getRequestedQuantity() > 0)
+				lst.add(i);
+		}
+		
+		this.items = lst;
+	}
 }

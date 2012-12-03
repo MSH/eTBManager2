@@ -75,7 +75,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 		Order order = getOrder();
 		if (sources == null)
 			return "error";
-
+		
 		// monta a lista de itens e casos do pedido
 		for (SourceOrderItem s: sources) {
 			for (OrderItemAux itaux: s.getItems()) {
@@ -85,6 +85,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 					order.getItems().add(it);
 				}
 			}
+			s.clearNonRequestedOrderItemAux();
 		}
 
 		// administrative unit of the institution that will receive the medicines
@@ -110,7 +111,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 		order.setUserCreator(user);
 
 		facesMessages.addFromResourceBundle("default.entity_created");
-		
+				
 		String ret = persist();
 		if (!ret.equals("persisted"))
 			return ret;
