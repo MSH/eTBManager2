@@ -149,8 +149,8 @@ public class MsgDispatcher {
 		}
 		
 		String hql = "select u.user from UserWorkspace u " +
-							"where p.workspace.id = #{defaultWorkspace.id} " + 
-							"(u.view = :viewcountry or (u.view = :viewunit and u.tbunit.id = :unitid) " +
+							"where u.workspace.id = #{defaultWorkspace.id} " + 
+							"and (u.view = :viewcountry or (u.view = :viewunit and u.tbunit.id = :unitid) " +
 							"or (u.view = :viewadm and u.tbunit.adminUnit.code in (" + s + ")))";
 
 		
