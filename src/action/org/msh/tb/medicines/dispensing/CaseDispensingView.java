@@ -11,7 +11,9 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.MedicineDispensing;
 import org.msh.tb.entities.MedicineDispensingCase;
+import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.login.UserSession;
 
 /**
  * Display information about dispensing for patients 
@@ -23,10 +25,12 @@ public class CaseDispensingView {
 
 	private List<DispensingInfo> cases;
 	private List<DispensingInfo> dispensingDays;
+	private List<DispensingInfo> casesSearch;
 	private boolean allCaseDispensing;
 	
 	private Integer caseId;
 	private Integer dispensingId;
+	private String patientNameCondition;
 	
 	@In EntityManager entityManager;
 	@In DispensingSelection dispensingSelection;
@@ -147,21 +151,20 @@ public class CaseDispensingView {
 	 * Create the list of {@link BatchDispensingTable} instances containing dispensing done by day of a case
 	 */
 	protected void createDispensingDays() {
-		if ((!dispensingSelection.isMonthYearSelected()) && (!allCaseDispensing))
-			return;
-
+		boolean considerDate = (dispensingSelection.isMonthYearSelected());
+		
 		String hql = "from MedicineDispensingCase a " +
 			"join fetch a.tbcase join fetch a.dispensing b join fetch a.batch join fetch a.tbcase.patient " +
 			"where a.tbcase.id = #{caseHome.id}";
 
-		if (!allCaseDispensing)
+		if (considerDate)
 			hql += " and b.dispensingDate between :dt1 and :dt2";
 		hql += " order by b.dispensingDate";
 		
 		List<MedicineDispensingCase> lst = null;
 
 		// it is to return just dispensing data of the given month and year ?
-		if (!allCaseDispensing) 
+		if (considerDate) 
 			lst = entityManager.createQuery(hql)
 					.setParameter("dt1", dispensingSelection.getIniDate())
 					.setParameter("dt2", dispensingSelection.getEndDate())
@@ -181,6 +184,71 @@ public class CaseDispensingView {
 		// update layout of the tables
 		for (DispensingInfo info: dispensingDays) {
 			info.getTable().updateLayout();
+		}
+	}
+	
+	/**
+	 * Returns a list of all cases that has a dispensing in the context unit.
+	 * @author Mauricio Santos
+	 *
+	 */
+	public void updateCasesSearch(){
+		Integer patientNumberCond = null;
+		List<Object[]> lst;
+		UserSession s = (UserSession) Component.getInstance("userSession");
+		
+		try{
+			patientNumberCond = new Integer(patientNameCondition);
+		}catch (Exception e){
+			patientNumberCond = null;
+		}
+		
+		String sql = "select distinct c.id, p.recordnumber, p.patient_name, c.registrationcode, c.casenumber " +
+						"from medicinedispensingcase mdc " +
+						"inner join medicinedispensing md on md.id = mdc.dispensing_id " +
+						"inner join tbcase c on mdc.CASE_ID=c.id " +
+						"inner join patient p on p.id = c.patient_id " +
+						"where md.unit_id = :unitId ";
+		
+		if(patientNameCondition != null && patientNameCondition != "" && !patientNameCondition.isEmpty()){
+			sql += "and (p.patient_name like :patientNameCond ";
+			if(patientNumberCond != null){
+				sql += "or p.recordnumber = :patientNumberCond) order by p.patient_name";
+				lst = entityManager.createNativeQuery(sql)
+						.setParameter("patientNameCond", getPatientNameCondition())
+						.setParameter("patientNumberCond", patientNumberCond)
+						.setParameter("unitId", s.getTbunit().getId())
+						.getResultList();
+			}else{
+				sql += ") order by p.patient_name";
+				lst = entityManager.createNativeQuery(sql)
+						.setParameter("patientNameCond", getPatientNameCondition())
+						.setParameter("unitId", s.getTbunit().getId())
+						.getResultList();
+			}	
+		}else{
+			sql += "order by p.patient_name";
+			lst = entityManager.createNativeQuery(sql)
+					.setParameter("unitId", s.getTbunit().getId())
+					.getResultList();
+		}
+		
+		fillCaseSearchList(lst);
+	}
+	
+	public void fillCaseSearchList(List<Object[]> lst){
+		casesSearch = new ArrayList<CaseDispensingView.DispensingInfo>();
+		for(Object[] o : lst){
+			DispensingInfo d = new DispensingInfo();
+			d.setTbcase(new TbCase());
+			d.getTbcase().setId((Integer) o[0]);
+			d.getTbcase().setPatient(new Patient());
+			d.getTbcase().getPatient().setRecordNumber((Integer)o[1]);
+			d.getTbcase().getPatient().setName((String) o[2]);
+			d.getTbcase().setRegistrationCode((String) o[3]);
+			d.getTbcase().setCaseNumber((Integer) o[4]);
+			
+			casesSearch.add(d);
 		}
 	}
 
@@ -291,4 +359,37 @@ public class CaseDispensingView {
 	public void setDispensingId(Integer dispensingId) {
 		this.dispensingId = dispensingId;
 	}
+
+
+	/**
+	 * @return the patientNameCondition
+	 */
+	public String getPatientNameCondition() {
+		return '%'+patientNameCondition+'%';
+	}
+
+
+	/**
+	 * @param patientNameCondition the patientNameCondition to set
+	 */
+	public void setPatientNameCondition(String patientNameCondition) {
+		this.patientNameCondition = patientNameCondition;
+	}
+
+
+	/**
+	 * @return the casesSearch
+	 */
+	public List<DispensingInfo> getCasesSearch() {
+		return casesSearch;
+	}
+
+
+	/**
+	 * @param casesSearch the casesSearch to set
+	 */
+	public void setCasesSearch(List<DispensingInfo> casesSearch) {
+		this.casesSearch = casesSearch;
+	}
+
 }

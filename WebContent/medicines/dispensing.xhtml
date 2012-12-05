@@ -36,6 +36,9 @@
 			<f:selectItems value="#{years}"/>
 			<a:support event="onchange" reRender="pnldisp"/>
 		</h:selectOneMenu>
+		<s:link styleClass="button" onclick="searchPatient(''); showPacientSearch(); return false;" style="margin-left:20px">
+			<span>#{messages['dispensing.searchcase']}</span>
+		</s:link>
 	</s:decorate>
 
 	<h:panelGroup id="pnldisp">
@@ -71,6 +74,60 @@
 	</s:fragment>
 	
 	</h:panelGroup>
+	
+<a:jsFunction name="searchPatient" reRender="patients, tbsel" action="#{caseDispensingView.updateCasesSearch()}">
+	<a:actionparam name="param1" assignTo="#{caseDispensingView.patientNameCondition}"/>
+</a:jsFunction>
+
+<script type="text/javascript">
+function showPacientSearch() {
+	showModalAutoTop('patientSearchDlg');
+}
+function hidePacientSearch() {
+	Richfaces.hideModalPanel('patientSearchDlg');
+}
+</script>
+
+<rich:modalPanel id="patientSearchDlg" autosized="true" width="490" zindex="2000" style="background-color:#F2F5F0">
+	<f:facet name="header">
+		<h:outputText value="#{messages['dispensing.caselist']}" />
+	</f:facet>
+	<a:region>
+	<span id="patientName">
+		<input id="patientname" style="width:70%;margin-bottom:5px;" />
+		<a:commandLink styleClass="button" reRender="patients,tblsel" onclick="searchPatient(document.getElementById('patientname').value)">
+			<span>#{messages['form.search']}</span>
+		</a:commandLink>
+	</span>
+	</a:region>
+	<s:div id="tblsel" style="overflow: auto; width: 98%; height: 290px;border: 1px gray solid;">	
+	<h:dataTable id="patients" styleClass="table1" value="#{caseDispensingView.casesSearch}" var="p" >
+
+		<h:column>
+			<f:facet name="header">
+				#{messages['Patient.recordNumber']}
+			</f:facet>
+			<s:link value="#{p.tbcase.displayCaseNumber}" view="/medicines/disppac.xhtml">
+				<f:param name="id" value="#{p.tbcase.id}" />
+				<f:param name="month" value="#{null}" />
+				<f:param name="year" value="#{null}" />
+			</s:link>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['Patient.fullname']}
+			</f:facet>
+			#{p.tbcase.patient.name}
+		</h:column>
+	</h:dataTable>
+	</s:div>
+	<div class="button-bar">
+		<s:link styleClass="button-alt" onclick="hidePacientSearch(); return false;">
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+</rich:modalPanel>
 </h:form>
 
 <h:panelGroup id="pnlunit">
