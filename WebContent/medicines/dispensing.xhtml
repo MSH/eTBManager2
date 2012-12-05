@@ -25,7 +25,7 @@
 
 <ui:define name="content_unit">
 <h:form>
-	
+	<div style="float:left">
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
 		<h:selectOneMenu value="#{dispensingSelection.month}">
@@ -36,11 +36,15 @@
 			<f:selectItems value="#{years}"/>
 			<a:support event="onchange" reRender="pnldisp"/>
 		</h:selectOneMenu>
-		<s:link styleClass="button" onclick="searchPatient(''); showPacientSearch(); return false;" style="margin-left:20px">
-			<span>#{messages['dispensing.searchcase']}</span>
-		</s:link>
 	</s:decorate>
+	</div>
+	
+	<s:link styleClass="button" onclick="searchPatient(''); showPacientSearch(); return false;" style="float:right">
+		<span>#{messages['dispensing.searchcase']}</span>
+	</s:link>
 
+	<br/><br/><br/>
+	
 	<h:panelGroup id="pnldisp">
 	
 	<s:fragment rendered="#{userSession.tbunit.patientDispensing and facesContext.renderResponse}"> 
