@@ -70,10 +70,10 @@ function editLastIssue(){
 function cancelEditIssue(){
 	document.getElementById("saveLnk").style.display = 'none';
 	document.getElementById("cancelLnk").style.display = 'none';
-	document.getElementById("editLnk").style.display = 'inline';
+	document.getElementById("editLnk").style.display = 'inline-block';
 	document.getElementById("issueDescriptionField").style.display = 'none';
 	document.getElementById("issueDescriptionOutput").style.display = 'block';
-	document.getElementById("deleteLnk").style.display = 'inline';
+	document.getElementById("deleteLnk").style.display = 'inline-block';
 }
 function saveIssue(){
 	w=document.getElementById("lastIssueEditingTextEdt").value;
@@ -142,9 +142,10 @@ function saveIssue(){
 			</div>	
 				
 			<div>
-	    		<span id="editLnk">
+	    		<div id="editLnk" style="display:inline-block">
+	    			<div class="edit-icon"/>
 	    			<s:link value="#{messages['form.edit']}" onclick="editLastIssue();return false;"/>
-	    		</span>
+	    		</div>
 	    		
 	    		<span id="saveLnk" style="display:none">
 	    			<s:link value="#{messages['form.save']}" onclick="saveIssue();return false;" />
@@ -154,9 +155,10 @@ function saveIssue(){
 	    			<s:link value="#{messages['form.cancel']}" onclick="cancelEditIssue();return false;" />
 	    		</span>		
 	    							
-				<span id="deleteLnk">
+				<div id="deleteLnk" style="display:inline-block">
+					<div class="delete-icon"/>
 					<s:link value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) removeLastIssue();return false;"/>
-				</span>
+				</div>
 			</div>				
 		</s:fragment>
 
