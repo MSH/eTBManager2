@@ -6,7 +6,7 @@
       			xmlns:s="http://jboss.com/products/seam/taglib"
                 template="usertemplate.xhtml">
       
-      <ui:param name="subject" value="#{messages['meds.transfer.new']}" />
+      <ui:param name="subject" value="#{tbcase.diagnosisType=='SUSPECT' ? messages[tbcase.classification.keySuspect] : messages[tbcase.classification.key]} - #{messages['meds.transfer.new']}" />
       
       <ui:define name="content">
           
