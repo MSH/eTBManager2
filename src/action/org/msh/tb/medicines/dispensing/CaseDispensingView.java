@@ -365,6 +365,8 @@ public class CaseDispensingView {
 	 * @return the patientNameCondition
 	 */
 	public String getPatientNameCondition() {
+		if (patientNameCondition == null)
+			return patientNameCondition;
 		return '%'+patientNameCondition+'%';
 	}
 

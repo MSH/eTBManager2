@@ -39,7 +39,7 @@
 	</s:decorate>
 	</div>
 	
-	<s:link styleClass="button" onclick="searchPatient(''); showPacientSearch(); return false;" style="float:right">
+	<s:link styleClass="button" onclick="showPacientSearch(); return false;" style="float:right">
 		<span>#{messages['dispensing.searchcase']}</span>
 	</s:link>
 
@@ -98,16 +98,17 @@ function hidePacientSearch() {
 	</f:facet>
 	<a:region>
 	<span id="patientName">
-		<input id="patientname" style="width:70%;margin-bottom:5px;" />
-		<a:commandLink styleClass="button" reRender="patients,tblsel" onclick="searchPatient(document.getElementById('patientname').value)">
-			<span>#{messages['form.search']}</span>
-		</a:commandLink>
+		<h:inputText value="#{caseDispensingView.patientNameCondition}" style="width:98%;margin-bottom:5px;" autocomplete="off">
+			<a:support event="onkeyup" reRender="patients,tblsel" requestDelay="500" ajaxSingle="true" 
+				action="#{caseDispensingView.updateCasesSearch()}" />
+		</h:inputText>
 	</span>
 	</a:region>
-	<s:div id="tblsel" style="overflow: auto; width: 98%; height: 290px;border: 1px gray solid;">	
+	<s:div id="tblsel" style="overflow: auto; width: 98%; height: 290px;border: 1px gray solid;">
+	<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty caseDispensingView.casesSearch}"/>	
 	<h:dataTable id="patients" styleClass="table1" value="#{caseDispensingView.casesSearch}" var="p" >
 
-		<h:column>
+		<h:column rendered="#{not empty caseDispensingView.casesSearch}">
 			<f:facet name="header">
 				#{messages['Patient.recordNumber']}
 			</f:facet>
@@ -118,7 +119,7 @@ function hidePacientSearch() {
 			</s:link>
 		</h:column>
 		
-		<h:column>
+		<h:column rendered="#{not empty caseDispensingView.casesSearch}">
 			<f:facet name="header">
 				#{messages['Patient.fullname']}
 			</f:facet>
