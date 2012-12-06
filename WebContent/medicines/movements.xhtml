@@ -38,7 +38,7 @@
 </ui:define>
 
 
-<ui:define name="content_unit">
+<ui:define name="content_unit" id="content">
 <h:form id="main">
 	<a:jsFunction name="loadMovDetails" action="#{movements.loadDispMovDetail()}" ajaxSingle="true" oncomplete="showModalDetail()" reRender="dispMovDetail">
 		<a:actionparam name="param1" assignTo="#{movementFilters.selectedMovement}" converter="javax.faces.Integer" />
@@ -62,12 +62,22 @@
 
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['MovementType']}:</ui:define>
-		<h:selectOneMenu value="#{movementFilters.type}">
+		<h:selectOneMenu value="#{movementFilters.type}" onchange="hideShowAdjustments(this)">
   		<s:selectItems value="#{movementTypes}" var="r" label="#{messages[r.key]}" noSelectionLabel="-" />
   		<s:convertEnum />
 		</h:selectOneMenu>
 	</s:decorate>
 
+	<div id="adjustmentDiv" style="#{movementFilters.type!='ADJUSTMENT' ? 'display:none' : ''}">
+		<s:decorate template="/layout/editfield.xhtml" id="decadjinfo">
+	   		<ui:define name="label">#{messages['TbField.ADJUSTMENT']}:</ui:define>
+	    	<ui:param name="required" value="false" />
+	    	<ui:param name="id" value="adjInfo" />
+	   		<ui:param name="field" value="#{movementFilters.adjustmentInfo}" />
+	   		<ui:param name="list" value="#{fieldsQuery.adjustmentType}" />
+	    </s:decorate>
+	</div>
+	
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="false" /> 
@@ -271,6 +281,14 @@ function showModalDetail(){
 
 function hideModalDetail(){
 	Richfaces.hideModalPanel('dispMovDetail');
+}
+
+function hideShowAdjustments(comp){
+	if(comp[comp.selectedIndex].value == 'ADJUSTMENT'){
+		jQuery('#adjustmentDiv').show(500);
+	}else{
+		jQuery('#adjustmentDiv').hide(500);
+	}
 }
 -->
 </script>

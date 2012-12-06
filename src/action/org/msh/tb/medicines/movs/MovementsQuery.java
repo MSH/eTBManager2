@@ -27,7 +27,9 @@ public class MovementsQuery extends EntityQuery<MovementItem> {
 			"m.tbunit.id = #{userSession.tbunit.id}",
 			"m.source.id = #{sourceHome.id}",
 			"m.type = #{movementFilters.type}",
-			"m.medicine.id = #{medicineHome.id}"};
+			"m.medicine.id = #{medicineHome.id}",
+			"m.adjustmentType.id = #{movementFilters.adjustmentInfo.value.id}",
+			"m.comment like #{movements.getAdjustmentInfoComplement()}"};
 
 	@In(create=true) UserSession userSession;
 	@In(create=true) MovementFilters movementFilters;
@@ -100,7 +102,7 @@ public class MovementsQuery extends EntityQuery<MovementItem> {
 								"p.quantity, p.batch.batchNumber, p.batch.manufacturer, p.tbcase.id " +
 									"from MedicineDispensingCase p " +
 									"inner join p.dispensing.movements m " +
-									"where m.id=:movId")
+									"where m.id=:movId and m.medicine.id = p.batch.medicine.id")
 				.setParameter("movId", movementFilters.getSelectedMovement())
 				.getResultList();
 		
@@ -137,6 +139,13 @@ public class MovementsQuery extends EntityQuery<MovementItem> {
 		if(dispMovtDetail == null)
 			return new DispensingMovementDetail();
 		return dispMovtDetail;
+	}
+	
+	public String getAdjustmentInfoComplement(){
+		if(movementFilters.getAdjustmentInfo().getComplement() != null && !movementFilters.getAdjustmentInfo().getComplement().isEmpty()){
+			return '%' + movementFilters.getAdjustmentInfo().getComplement() + '%';
+		}
+		return null;
 	}
 
 }

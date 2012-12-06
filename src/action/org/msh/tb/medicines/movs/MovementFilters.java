@@ -9,6 +9,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.enums.MovementType;
 
 /**
@@ -30,6 +31,7 @@ public class MovementFilters {
 	private MovementType type;
 	private String batchNumber;
 	private Integer selectedMovement;
+	private FieldValueComponent adjustmentInfo = new FieldValueComponent();
 
 	
 	/**
@@ -117,6 +119,8 @@ public class MovementFilters {
 	 */
 	public void setType(MovementType type) {
 		this.type = type;
+		if(this.type != MovementType.ADJUSTMENT)
+			this.adjustmentInfo = null;
 	}
 
 
@@ -183,5 +187,14 @@ public class MovementFilters {
 		this.selectedMovement = selectedMovement;
 	}
 	
+	public FieldValueComponent getAdjustmentInfo() {
+		if (adjustmentInfo == null)
+			adjustmentInfo = new FieldValueComponent();
+		return adjustmentInfo;
+	}
+	
+	public void setAdjustmentInfo(FieldValueComponent adjustmentInfo) {
+		this.adjustmentInfo = adjustmentInfo;
+	}
 	
 }
