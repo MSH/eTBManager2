@@ -45,7 +45,7 @@ public class HealthUnitsQueryBR extends HealthUnitsQuery {
 			"inner join MedicalExamination med on med.case_id = c.id " +
 			"where u.workspace_id = " + defaultWorkspace.getId().toString() + generateSQLConditionByUserView() +
 			(hsID != null? " and u.healthsystem_id = " + hsID: "") + casecond +
-			" and med.nextAppointment is not null and med.nextAppointment + 15 < current_date " +
+			" and med.nextAppointment is not null and datediff(current_date, med.nextAppointment) > 15 " +
 			" and c.state < 3 " +
 			" and med.EVENT_DATE = (select max(m.EVENT_DATE) from MedicalExamination m where m.case_id = c.id)" +
 			"group by u.id";
