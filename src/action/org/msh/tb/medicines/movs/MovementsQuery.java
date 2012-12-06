@@ -24,7 +24,7 @@ public class MovementsQuery extends EntityQuery<MovementItem> {
 	private static final String[] restrictions = {"m.date >= #{movementFilters.dateIni}",
 			"m.date <= #{movementFilters.dateEnd}",
 			"exists (select id from BatchMovement b where b.movement.id = m.id and b.batch.batchNumber = #{movementFilters.batchNumber})",
-			"m.tbunit.id = #{userSession.tbunit.id}",
+			"m.tbunit.id = #{movementFilters.showAllUnits ? userSession.tbunitselection.tbunit.id : userSession.tbunit.id}",
 			"m.source.id = #{sourceHome.id}",
 			"m.type = #{movementFilters.type}",
 			"m.medicine.id = #{medicineHome.id}",

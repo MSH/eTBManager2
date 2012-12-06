@@ -24,6 +24,7 @@ public class MovementFilters {
 	@In(create=true) MovementsQuery movements;
 	@In(create=true) BatchMovementsQuery batchMovements;
 	
+	private boolean showAllUnits;
 	private boolean executing;
 	private boolean batchesOutput;
 	private Date dateIni;
@@ -195,6 +196,22 @@ public class MovementFilters {
 	
 	public void setAdjustmentInfo(FieldValueComponent adjustmentInfo) {
 		this.adjustmentInfo = adjustmentInfo;
+	}
+
+
+	/**
+	 * @return the showAllUnits
+	 */
+	public boolean isShowAllUnits() {
+		return showAllUnits;
+	}
+
+
+	/**
+	 * @param showAllUnits the showAllUnits to set
+	 */
+	public void setShowAllUnits(boolean showAllUnits) {
+		this.showAllUnits = showAllUnits;
 	}
 	
 }

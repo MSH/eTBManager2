@@ -5,44 +5,35 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
- 	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="../layout/templatemed.xhtml">
+      template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['meds.movs']}" />
-<ui:param name="topmenu" value="1" />
+<ui:param name="title" value="#{messages['manag.rel6']}" />
 
-<ui:param name="labelstyle" value="width:210px;" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="topmenu" value="2" />
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="left" value="0" />
 
-
-<ui:define name="naveg">
-	<div class="item">
-		<s:link value="#{messages['meds.inventory']}" view="/medicines/index.xhtml" propagation="none"/>
-	</div>
-	<div class="item selected">
-		<s:link value="#{title}" propagation="none" />
-	</div>
+<ui:define name="naveg" >
+	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
 </ui:define>
 
 
-<ui:define name="print">
-	<s:link view="/reports/movements.xhtml" target="_blank">
-		<ui:include src="/layout/print_icon.xhtml" />
-		<f:param name="batch" value="#{stockPosHome.showBatch}"/>
-		<f:param name="firstResult" value="#{movements.firstResult}" />
-		<f:param name="bt" value="#{movementFilters.batchesOutput}" />
-		<f:param name="mt" value="#{movementFilters.type}" />
-		<f:param name="srcid" value="#{sourceHome.id}" />
-		<f:param name="medid" value="#{medicineHome.id}" />
-	</s:link>
-</ui:define>
-
-
-<ui:define name="content_unit" id="content">
+<ui:define name="content">
+<h1>#{title}</h1>
 <h:form id="main">
+
 	<a:jsFunction name="loadMovDetails" action="#{movements.loadDispMovDetail()}" ajaxSingle="true" oncomplete="showModalDetail()" reRender="dispMovDetail">
 		<a:actionparam name="param1" assignTo="#{movementFilters.selectedMovement}" converter="javax.faces.Integer" />
 	</a:jsFunction>
+
+	<s:decorate template="/layout/tbselection.xhtml" >
+	 	<ui:define name="label">#{messages['Tbunit']}:</ui:define>
+	   	<ui:param name="tbunitselection" value="#{userSession.tbunitselection}" />
+	   	<ui:param name="required" value="false" />
+	</s:decorate>
 
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Medicine']}:</ui:define>
@@ -101,7 +92,7 @@
     </s:decorate>
     
    	<a:commandLink styleClass="button-alt" action="#{movementFilters.refresh}" style="float:right;" onclick="if (!disableButton(this)) return false;" reRender="main">
-   		<a:actionparam value="#{false}" assignTo="#{movementFilters.showAllUnits}"/>
+   		<a:actionparam value="#{true}" assignTo="#{movementFilters.showAllUnits}"/>
    		<span>#{messages['form.update']}</span>
    	</a:commandLink>
    	<span style="color:red;clear:both;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
@@ -129,7 +120,12 @@
 
 	<h:column rendered="#{source.id == null}">
 		<f:facet name="header"><h:outputText value="#{messages['Source']}" styleClass="collh" /></f:facet>
-		#{m.movement.source.abbrevName} #{m.movement.tbunit.name.name1}
+		#{m.movement.source.abbrevName}
+	</h:column>
+	
+	<h:column>
+		<f:facet name="header"><h:outputText value="#{messages['Medicine.strengthUnit']}" styleClass="collh" /></f:facet>
+		#{m.movement.tbunit.name.name1}
 	</h:column>
 
 	<h:column>
@@ -375,6 +371,7 @@ function hideShowAdjustments(comp){
 </rich:modalPanel>
 
 </h:form>
+
 </ui:define>
 
 </ui:composition>  
