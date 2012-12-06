@@ -25,6 +25,7 @@ public class MovementsQuery extends EntityQuery<MovementItem> {
 			"m.date <= #{movementFilters.dateEnd}",
 			"exists (select id from BatchMovement b where b.movement.id = m.id and b.batch.batchNumber = #{movementFilters.batchNumber})",
 			"m.tbunit.id = #{movementFilters.showAllUnits ? userSession.tbunitselection.tbunit.id : userSession.tbunit.id}",
+			"m.tbunit.adminUnit.code like #{movementFilters.showAllUnits ? userSession.adminUnitCodeLike : null}",
 			"m.source.id = #{sourceHome.id}",
 			"m.type = #{movementFilters.type}",
 			"m.medicine.id = #{medicineHome.id}",

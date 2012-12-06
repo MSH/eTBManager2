@@ -20,6 +20,7 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.web.ServletContexts;
+import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
@@ -641,5 +642,12 @@ public class UserSession {
 			tbunitselection = new TBUnitSelection();
 		}
 		return tbunitselection;
+	}
+	
+	public String getAdminUnitCodeLike() {
+		AdministrativeUnit adm = tbunitselection.getAdminUnit();
+		if (adm == null)
+			 return null;
+		else return adm.getCode() + "%";
 	}
 }
