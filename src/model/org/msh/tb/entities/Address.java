@@ -25,7 +25,8 @@ public class Address {
 	private AdministrativeUnit adminUnit;
 	
 	private LocalityType localityType;
-	
+
+
 	@Override
 	public String toString() {
 		String s = (address == null? "": address);

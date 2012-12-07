@@ -33,7 +33,9 @@ public class TagsCasesHome {
 			return;
 
 		// get tags
-		List<Tag> tags = entityManager.createQuery("from Tag t where t.sqlCondition is not null and t.workspace.id = #{defaultWorkspace.id}").getResultList();
+		List<Tag> tags = entityManager.createQuery("from Tag t where t.active = true " +
+				"and t.sqlCondition is not null and t.workspace.id = #{defaultWorkspace.id}")
+				.getResultList();
 
 		if (tags.size() == 0)
 			return;
@@ -77,12 +79,15 @@ public class TagsCasesHome {
 		entityManager.createNativeQuery(sql).setParameter("id", tag.getId()).executeUpdate();
 
 		Integer wsid = ((Workspace)Component.getInstance("defaultWorkspace")).getId();
-		
-		// include new tags
-		sql = "insert into tags_case (case_id, tag_id) " +
-				"select a.id, " + tag.getId() + " from tbcase a join patient p on p.id=a.patient_id " +
-				"where " + tag.getSqlCondition() + " and p.workspace_id = :id";
-		entityManager.createNativeQuery(sql).setParameter("id", wsid).executeUpdate();
+
+		// is tag active ?
+		if (tag.isActive()) {
+			// include new tags
+			sql = "insert into tags_case (case_id, tag_id) " +
+					"select a.id, " + tag.getId() + " from tbcase a join patient p on p.id=a.patient_id " +
+					"where " + tag.getSqlCondition() + " and p.workspace_id = :id";
+			entityManager.createNativeQuery(sql).setParameter("id", wsid).executeUpdate();
+		}
 
 		return true;
 	}

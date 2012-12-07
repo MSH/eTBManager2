@@ -455,6 +455,25 @@ public class TbCase implements Serializable, Transactional {
 		return null;
 	}
 
+	
+	/**
+	 * Return the unit that transferred the case in
+	 * @return instance of {@link TreatmentHealthUnit} containing information about the transfer out 
+	 */
+	public TreatmentHealthUnit getTransferInUnit() {
+		return (state == CaseState.TRANSFERRING) && (healthUnits.size() > 1) ? healthUnits.get(healthUnits.size()-1): null;
+	}
+	
+	
+	/**
+	 * Return the unit that transferred the case out
+	 * @return instance of {@link TreatmentHealthUnit} containing information about the transfer in 
+	 */
+	public TreatmentHealthUnit getTransferOutUnit() {
+		return (state == CaseState.TRANSFERRING) && (healthUnits.size() > 1) ? healthUnits.get(healthUnits.size()-2): null;
+	}
+	
+	
 	/**
 	 * @return the sideEffects
 	 */

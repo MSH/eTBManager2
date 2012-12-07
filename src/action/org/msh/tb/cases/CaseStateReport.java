@@ -64,37 +64,24 @@ public class CaseStateReport  {
 		
 		String joins = getSqlJoin(true, null);
 		String conds = getSqlCondition();
-/*		UserWorkspace uw = UserSession.getUserWorkspace();
-		
-		if (uw.getView() == UserView.ADMINUNIT)
-			 aucond = "inner join administrativeunit a on a.id = u.adminunit_id ";
-		else aucond = "";
 
-		String cond = generateSQLConditionByUserView();
-
-		String condByCase = generateSQLConditionByCase();
-
-		Integer hsID = null;
-		if (uw.getHealthSystem() != null)
-			hsID = uw.getHealthSystem().getId();
-*/		
 		Workspace defaultWorkspace = UserSession.getWorkspace();
 
 		String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
-		"from tbcase c " +
-		joins +
-		" where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
-		conds +
-		" and u.workspace_id = " + defaultWorkspace.getId() + 
-		" group by c.state, c.validationState, c.diagnosisType " +
-		"union " +
-		"select c.state, c.validationState, c.diagnosisType, count(*) " +
-		"from tbcase c " +
-		joins +
-		" where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ")"+
-		conds + 
-		" and u.workspace_id = " + defaultWorkspace.getId() + 
-		" group by c.state, c.validationState, c.diagnosisType";
+				"from tbcase c " +
+				joins +
+				" where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
+				conds +
+				" and u.workspace_id = " + defaultWorkspace.getId() + 
+				" group by c.state, c.validationState, c.diagnosisType " +
+				"union " +
+				"select c.state, c.validationState, c.diagnosisType, count(*) " +
+				"from tbcase c " +
+				joins +
+				" where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ")"+
+				conds + 
+				" and u.workspace_id = " + defaultWorkspace.getId() + 
+				" group by c.state, c.validationState, c.diagnosisType";
 		
 		List<Object[]> lst = App.getEntityManager().createNativeQuery(sql).getResultList();
 		
@@ -255,15 +242,6 @@ public class CaseStateReport  {
 	protected void createTagsReport() {
 		Workspace workspace = UserSession.getWorkspace();
 
-/*		String s;
-		switch (UserSession.getUserWorkspace().getView()) {
-		case TBUNIT: s = "inner join tbcase c on c.id=tc.case_id inner join tbunit u on u.id = c.owner_unit_id ";
-			break;
-		case ADMINUNIT: s = "inner join tbcase c on c.id=tc.case_id inner join tbunit u on u.id = c.owner_unit_id inner join administrativeunit a on a.id = u.adminunit_id";
-			break;
-		default: s = "";
-		}
-*/
 		String joins = getSqlJoin(false, "tc");
 		String conds = getSqlCondition();
 		
@@ -271,7 +249,7 @@ public class CaseStateReport  {
 			"from tags_case tc " +
 			"inner join tag t on t.id = tc.tag_id " +
 			joins +
-			" where t.workspace_id = :id " +
+			" where t.workspace_id = :id and t.active = true " +
 			conds +
 			" group by t.id, t.tag_name order by t.tag_name";
 		

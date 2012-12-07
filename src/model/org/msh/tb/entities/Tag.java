@@ -31,6 +31,8 @@ public class Tag extends WSObject implements Serializable {
 	private String sqlCondition; 
 	
 	private boolean consistencyCheck;
+	
+	private boolean active;
 
 	
 	/**
@@ -107,5 +109,21 @@ public class Tag extends WSObject implements Serializable {
 	 */
 	public void setConsistencyCheck(boolean consistencyCheck) {
 		this.consistencyCheck = consistencyCheck;
+	}
+
+
+	/**
+	 * @return the active
+	 */
+	public boolean isActive() {
+		return active;
+	}
+
+
+	/**
+	 * @param active the active to set
+	 */
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 }

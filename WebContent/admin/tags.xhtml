@@ -33,7 +33,7 @@
   		<h:outputText value="#{messages['form.name']}" styleClass="collh" />
   	</f:facet>
   	<h:outputText value="#{r.name}" rendered="#{not s:hasRole('TAGS_EDT')}"/>
-  	<s:link value="#{r.name}" view="/admin/edttag.xhtml" rendered="#{s:hasRole('TAGS_EDT')}">
+  	<s:link value="#{r.name}" view="/admin/edttag.xhtml" rendered="#{s:hasRole('TAGS_EDT')}" styleClass="#{r.active?'':'entity-inactive'}">
   		<span class="tag-#{r.type}-icon" />
 		<f:param name="id" value="#{r.id}" />
   	</s:link>

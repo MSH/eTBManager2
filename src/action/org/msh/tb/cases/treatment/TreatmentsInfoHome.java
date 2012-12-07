@@ -64,7 +64,7 @@ public class TreatmentsInfoHome {
 				"where c.state = " + CaseState.ONTREATMENT.ordinal() +
 				" and c.ownerUnit.id = " + unit.getId() + 
 				"group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, c.daysTreatPlanned, c.classification " +
-				"order by p.name, p.lastName, p.middleName")
+				"order by c.classification, p.name, p.lastName, p.middleName")
 			.getResultList();
 
 		Patient p = new Patient();
