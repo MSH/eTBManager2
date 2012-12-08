@@ -131,6 +131,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	 */
 	@Override
 	public String getCountEjbql() {
+		caseFilters = getCaseFilters();
 		return "select count(*) " + getFromHQL() + 
 				" join c.patient p " +
 				"join c.notificationUnit nu " + 
