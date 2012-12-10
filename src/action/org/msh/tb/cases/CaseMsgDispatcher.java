@@ -32,7 +32,7 @@ public class CaseMsgDispatcher extends MsgDispatcher{
 		TbCase tbcase = caseHome.getInstance();
 		Tbunit unitFrom = caseHome.getTransferOutHealthUnit().getTbunit();
 		
-		List<User> users = getUsersByUnitAndView(tbcase.getOwnerUnit());
+		List<User> users = getUsersByRoleAndUnit("CASE_TRANSFER", tbcase.getOwnerUnit());
 		
 		addComponent("unitFrom", unitFrom);
 		addComponent("tbcase", tbcase);
