@@ -43,7 +43,7 @@ public class CaseMsgDispatcher extends MsgDispatcher{
 	/**
 	 * Send a message to the users notifying about a new pending
 	 */
-	@Observer("pending-registered-answered")
+	//@Observer("pending-registered-answered")
 	public void notifyNewPending(){
 		CaseValidationHome caseValidationHome = (CaseValidationHome) Component.getInstance("caseValidationHome");
 		TbCase tbcase = caseHome.getInstance();
