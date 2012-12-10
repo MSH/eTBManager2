@@ -21,26 +21,28 @@
  	<ui:define name="label">#{messages['Tbunit']}:</ui:define>
    	<ui:param name="tbunitselection" value="#{userSession.tbunitselection}" />
    	<ui:param name="required" value="false" />
+   	<ui:param name="auRerender" value=",tablepanel" />
+	<ui:define name="events">
+		<a:support event="onchange" reRender="tablepanel" ajaxSingle="true" />
+	</ui:define>
 </s:decorate>
-
-<div style="margin-left: 80px;font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 11px;color: #505050;font-weight: bold;">
-	<s:decorate template="/layout/searchkey.xhtml">
-		<ui:param name="list" value="#{users}" />
-		<ui:param name="tablepanel" value="tablepanel" />
-		<ui:param name="brButton" value="true" />
-	</s:decorate>
-</div>
 
 <br/><br/>
 
 <s:link view="/admin/edtuser.xhtml"
-	styleClass="button"  
-	style="float:right"
+	styleClass="button" 
 	rendered="#{s:hasRole('USERS_EDT')}"
 	propagation="none" >
 	<f:param name="id" value="#{null}" />
 	<span>#{messages['form.newf']}</span>
 </s:link>
+
+<div style="float:right">
+	<s:decorate template="/layout/searchkey.xhtml">
+		<ui:param name="list" value="#{users}" />
+		<ui:param name="tablepanel" value="tablepanel" />
+	</s:decorate>
+</div>
 
 <a:jsFunction name="deleteRecord" action="#{userHome.remove}" reRender="tablepanel,messages">
 	<a:actionparam name="param1" assignTo="#{userHome.id}" converter="javax.faces.Integer" />
