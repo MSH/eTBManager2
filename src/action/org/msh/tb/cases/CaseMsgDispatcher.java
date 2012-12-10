@@ -27,7 +27,7 @@ public class CaseMsgDispatcher extends MsgDispatcher{
 	/**
 	 * Send a message to the users notifying about a new case transference
 	 */
-	@Observer("case.transferout")
+	//@Observer("case.transferout")
 	public void notifyTransference(){		
 		TbCase tbcase = caseHome.getInstance();
 		Tbunit unitFrom = caseHome.getTransferOutHealthUnit().getTbunit();
