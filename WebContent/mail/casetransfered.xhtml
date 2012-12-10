@@ -20,14 +20,14 @@
         <br/>
         
         <h:outputFormat value="#{messages['cases.transferin.mail']}:"/><br/>
-        <h4>#{unitFrom}</h4>
-        <h:outputFormat value="#{unitFrom.adminUnit.fullDisplayName}"/><br/>
+        <div style="font-size:16px;font-weight:bold;">#{unitFrom.name}</div>
+        #{unitFrom.adminUnit.fullDisplayName}
 
-		<br/> 
+		<br/><br/>
 		
 		<h:outputFormat value="#{messages['Transfer.unitTo']}:"/><br/>
-        <h4>#{tbcase.ownerUnit}</h4>
-        <h:outputFormat value="#{tbcase.ownerUnit.adminUnit.fullDisplayName}"/><br/>
+		<div style="font-size:16px;font-weight:bold;">#{tbcase.ownerUnit.name}</div>
+        #{tbcase.ownerUnit.adminUnit.fullDisplayName}
         
         <br/><br/>
         
