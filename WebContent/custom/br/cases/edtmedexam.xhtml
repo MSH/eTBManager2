@@ -40,6 +40,7 @@
     	<ui:define name="label">#{messages['MedicalExaminationBR.nextAppointment']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{medicalExamination.nextAppointment}" /> 
+    	<ui:param name="edtid" value="nextexam" />
     </s:decorate>
 
 	<s:decorate template="/layout/edit.xhtml" rendered="#{!medicalExaminationBRHome.isFirstExam(medicalExaminationHome.id)}">
