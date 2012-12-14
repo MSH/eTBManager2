@@ -9,6 +9,7 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.br.entities.MedicalExaminationBR;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.exams.MedicalExaminationHome;
+import org.msh.tb.entities.MedicalExamination;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.utils.TextUtils;
 
@@ -22,7 +23,7 @@ import org.msh.utils.TextUtils;
 public class MedicalExaminationBRHome  {
 
 	@In(required=true) MedicalExaminationHome medicalExaminationHome;
-
+	@In(required=true) CaseHome caseHome;
 
 	/**
 	 * Persist changes of a medical examination
@@ -82,5 +83,21 @@ public class MedicalExaminationBRHome  {
 
 	public MedicalExaminationHome getHome() {
 		return medicalExaminationHome;
+	}
+	
+	public boolean isFirstExam(Integer examId){
+		MedicalExamination firstExam = null;
+		
+		if(examId == null || caseHome.getTbCase().getExaminations() == null || caseHome.getTbCase().getExaminations().size() <= 0){
+			return true;
+		}else{
+			firstExam = caseHome.getInstance().getExaminations().get(caseHome.getInstance().getExaminations().size()-1);
+		}
+		
+		if(firstExam != null && firstExam.getId().equals(examId)){
+			return true;
+		}else{
+			return false;
+		}
 	}
 }

@@ -47,11 +47,13 @@
     		<ui:define name="label">#{messages['MedicalExaminationBR.nextAppointment']}:</ui:define>
 			<h:outputText value="#{r.nextAppointment}" converter="localeDateConverter" />
 		</s:decorate>
-
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty r.clinicalEvolution}">
-    		<ui:define name="label">#{messages['pt_BR.ClinicalEvolution']}:</ui:define>
-    		#{messages[r.clinicalEvolution.key]}
-		</s:decorate>
+		
+		<ui:fragment rendered="#{!medicalExaminationBRHome.isFirstExam(r.id)}">
+			<s:decorate template="/layout/display.xhtml" rendered="#{(not empty r.clinicalEvolution)}">
+	    		<ui:define name="label">#{messages['pt_BR.ClinicalEvolution']}:</ui:define>
+	    		#{messages[r.clinicalEvolution.key]}
+			</s:decorate>
+		</ui:fragment>
 		
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty r.supervisedTreatment}">
     		<ui:define name="label">#{messages['pt_BR.supervisedTreatment']}:</ui:define>
@@ -133,7 +135,7 @@
 	</ui:repeat>
 	</h:panelGroup>
 
-<a:jsFunction name="remMedExamination" action="#{medicalExaminationHome.remove}" reRender="medexams"  rendered="#{caseHome.canEditExams}">
+<a:jsFunction name="remMedExamination" action="#{medicalExaminationHome.remove}" reRender="medexams, main"  rendered="#{caseHome.canEditExams}">
 	<a:actionparam name="param1" assignTo="#{medicalExaminationHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
     

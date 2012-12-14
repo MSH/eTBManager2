@@ -28,6 +28,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -239,6 +240,7 @@ public class TbCase implements Serializable, Transactional {
 	private List<CaseComorbidity> comorbidities = new ArrayList<CaseComorbidity>();
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
+	@OrderBy("date desc")
 	private List<MedicalExamination> examinations = new ArrayList<MedicalExamination>();
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
@@ -1267,14 +1269,9 @@ public class TbCase implements Serializable, Transactional {
 	public String getCaseEvolution() {
 		MedicalExamination lastExam = null;
 		
-		if(this.getExaminations() != null && this.getExaminations().size() > 0){
-			lastExam = this.getExaminations().get(0);
+		if(this.getExaminations() != null && this.getExaminations().size() > 1){//If there is only one examination, the field clinical evolution doesn't make sense
+			lastExam = this.getExaminations().get(0); //the list is selected ordered by exam.event_date desc look at the annotation in TbCase
 			
-			for(MedicalExamination m : this.getExaminations()){
-				if(m.getDate().after(lastExam.getDate()))
-					lastExam = m;
-			}
-		
 			if(lastExam != null){
 				ClinicalEvolution eval = lastExam.getClinicalEvolution(); // for some old cases may be null AK 26/05/2012
 					if (eval != null)
@@ -1293,23 +1290,14 @@ public class TbCase implements Serializable, Transactional {
 		
 		MedicalExamination lastExam = null;
 		
-		if(this.getExaminations() != null && this.getExaminations().size() > 0){
-			lastExam = this.getExaminations().get(0);
-			for(MedicalExamination m : this.getExaminations()){
-				if(m.getDate().after(lastExam.getDate()))
-					lastExam = m;
-			}
+		if(this.getExaminations() != null && this.getExaminations().size() > 1){//If there is only one examination, the field clinical evolution doesn't make sense
+			lastExam = this.getExaminations().get(0); //the list is selected ordered by exam.event_date desc look at the annotation in TbCase
 		}
 		
 		if(lastExam != null
 				&& lastExam.getSupervisedTreatment() != null
 				&& lastExam.getSupervisedTreatment().equals(YesNoType.YES)
 				&& lastExam.getSupervisionUnitName() != null){
-			
-			for(MedicalExamination m : this.getExaminations()){
-				if(m.getDate().after(lastExam.getDate()))
-					lastExam = m;
-			}
 			
 			return lastExam.getSupervisionUnitName();
 		}

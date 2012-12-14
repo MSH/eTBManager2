@@ -1,5 +1,7 @@
 package org.msh.tb.cases.exams;
 
+import java.util.List;
+
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -24,6 +26,7 @@ public class MedicalExaminationHome extends ExamHome<MedicalExamination>{
 	private static final long serialVersionUID = 4240214890485645788L;
 	
 	@In(create=true) FacesMessages facesMessages;
+	@In(required=true) CaseHome caseHome;
 	
 	/**
 	 * Factory method to return the current instance of the {@link MedicalExamination} managed by this home case
@@ -45,7 +48,18 @@ public class MedicalExaminationHome extends ExamHome<MedicalExamination>{
 		}
 		if (!validate())
 			return "error";
-		return super.persist();
+		
+		String s = super.persist();
+		
+		//Update List in caseHome
+		List<MedicalExamination> lst = (List<MedicalExamination>) getEntityManager().createQuery("from MedicalExamination where tbcase.id = :id order by date desc")
+																	.setParameter("id", caseHome.getId())
+																	.getResultList();
+
+		
+		caseHome.getTbCase().setExaminations(lst);
+				
+		return s;
 	}
 
 	
@@ -107,4 +121,12 @@ public class MedicalExaminationHome extends ExamHome<MedicalExamination>{
 	@Override
 	public void updatedMessage() {
 	}
+	
+	public String remove(){
+		getInstance().getTbcase().getExaminations().remove(getInstance());
+		caseHome.getInstance().getExaminations().remove(getInstance());
+
+		return super.remove();
+	}
+
 }
