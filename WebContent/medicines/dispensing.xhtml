@@ -92,38 +92,52 @@ function hidePacientSearch() {
 }
 </script>
 
-<rich:modalPanel id="patientSearchDlg" autosized="true" width="490" zindex="2000" style="background-color:#F2F5F0">
+<rich:modalPanel id="patientSearchDlg" autosized="true" width="900" zindex="2000" style="background-color:#F2F5F0">
 	<f:facet name="header">
 		<h:outputText value="#{messages['dispensing.caselist']}" />
 	</f:facet>
 	<a:region>
 	<span id="patientName">
-		<h:inputText value="#{caseDispensingView.patientNameCondition}" style="width:98%;margin-bottom:5px;" autocomplete="off">
-			<a:support event="onkeyup" reRender="patients,tblsel" requestDelay="500" ajaxSingle="true" 
-				action="#{caseDispensingView.updateCasesSearch()}" />
-		</h:inputText>
+   	<h:outputText value="#{messages['Patient']}:"/>
+	<h:inputText value="#{caseDispensingView.patientNameCondition}" style="width:87%;margin:5px;" autocomplete="off">
+		<a:support event="onkeyup" reRender="patients,tblsel" requestDelay="500" ajaxSingle="true" 
+			action="#{caseDispensingView.updateCasesSearch()}" />
+	</h:inputText>
 	</span>
 	</a:region>
-	<s:div id="tblsel" style="overflow: auto; width: 98%; height: 290px;border: 1px gray solid;">
-	<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty caseDispensingView.casesSearch}"/>	
+	<s:div id="tblsel" style="overflow: auto; width: 98%; height: 400px;border: 1px gray solid;">
+	<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty caseDispensingView.casesSearch and not empty caseDispensingView.patientNameCondition}" style="font-weight:bold;align:center;"/>	
 	<h:dataTable id="patients" styleClass="table1" value="#{caseDispensingView.casesSearch}" var="p" >
 
 		<h:column rendered="#{not empty caseDispensingView.casesSearch}">
 			<f:facet name="header">
-				#{messages['Patient.recordNumber']}
+				#{messages['Patient.fullname']}
 			</f:facet>
-			<s:link value="#{p.tbcase.displayCaseNumber}" view="/medicines/disppac.xhtml">
-				<f:param name="id" value="#{p.tbcase.id}" />
-				<f:param name="month" value="#{null}" />
-				<f:param name="year" value="#{null}" />
-			</s:link>
+			(#{p.tbcase.displayCaseNumber}) #{p.tbcase.patient.name}
 		</h:column>
 		
 		<h:column rendered="#{not empty caseDispensingView.casesSearch}">
 			<f:facet name="header">
-				#{messages['Patient.fullname']}
+				#{messages['CaseState']}
 			</f:facet>
-			#{p.tbcase.patient.name}
+			#{messages[p.tbcase.state.key]}
+		</h:column>
+		
+		<h:column rendered="#{not empty caseDispensingView.casesSearch}">
+			<f:facet name="header">
+				#{messages['Dispensing.last.date']}
+			</f:facet>
+				<h:outputText value="#{p.date}" >
+					<f:convertDateTime timeZone="#{timezones.default}" type="date"/>
+				</h:outputText>
+		</h:column>
+		
+		<h:column rendered="#{not empty caseDispensingView.casesSearch}">
+			<s:link value="#{messages['form.details']}" view="/medicines/disppac.xhtml">
+				<f:param name="id" value="#{p.tbcase.id}" />
+				<f:param name="month" value="#{null}" />
+				<f:param name="year" value="#{null}" />
+			</s:link>
 		</h:column>
 	</h:dataTable>
 	</s:div>

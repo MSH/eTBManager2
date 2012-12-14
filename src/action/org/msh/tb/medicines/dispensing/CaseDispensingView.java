@@ -13,6 +13,7 @@ import org.msh.tb.entities.MedicineDispensing;
 import org.msh.tb.entities.MedicineDispensingCase;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.login.UserSession;
 
 /**
@@ -203,7 +204,7 @@ public class CaseDispensingView {
 			patientNumberCond = null;
 		}
 		
-		String sql = "select distinct c.id, p.recordnumber, p.patient_name, c.registrationcode, c.casenumber " +
+		String sql = "select c.id, p.recordnumber, p.patient_name, c.registrationcode, c.casenumber, c.state, max(md.dispensingdate) " +
 						"from medicinedispensingcase mdc " +
 						"inner join medicinedispensing md on md.id = mdc.dispensing_id " +
 						"inner join tbcase c on mdc.CASE_ID=c.id " +
@@ -213,21 +214,21 @@ public class CaseDispensingView {
 		if(patientNameCondition != null && patientNameCondition != "" && !patientNameCondition.isEmpty()){
 			sql += "and (p.patient_name like :patientNameCond ";
 			if(patientNumberCond != null){
-				sql += "or p.recordnumber = :patientNumberCond) order by p.patient_name";
+				sql += "or p.recordnumber = :patientNumberCond) group by c.id order by c.state, p.patient_name";
 				lst = entityManager.createNativeQuery(sql)
 						.setParameter("patientNameCond", getPatientNameCondition())
 						.setParameter("patientNumberCond", patientNumberCond)
 						.setParameter("unitId", s.getTbunit().getId())
 						.getResultList();
 			}else{
-				sql += ") order by p.patient_name";
+				sql += ")group by c.id order by c.state, p.patient_name";
 				lst = entityManager.createNativeQuery(sql)
 						.setParameter("patientNameCond", getPatientNameCondition())
 						.setParameter("unitId", s.getTbunit().getId())
 						.getResultList();
 			}	
 		}else{
-			sql += "order by p.patient_name";
+			sql += "group by c.id order by c.state, p.patient_name";
 			lst = entityManager.createNativeQuery(sql)
 					.setParameter("unitId", s.getTbunit().getId())
 					.getResultList();
@@ -247,6 +248,8 @@ public class CaseDispensingView {
 			d.getTbcase().getPatient().setName((String) o[2]);
 			d.getTbcase().setRegistrationCode((String) o[3]);
 			d.getTbcase().setCaseNumber((Integer) o[4]);
+			d.getTbcase().setState(CaseState.values()[(Integer) o[5]]);
+			d.setDate((Date) o[6]);
 			
 			casesSearch.add(d);
 		}
