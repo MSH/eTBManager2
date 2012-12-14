@@ -57,8 +57,7 @@ public class MovementFilters {
 	 * Initialize the filters for executing
 	 */
 	public void initialize() {
-		if (dateIni == null)
-			dateIni = new Date();
+
 	}
 
 
