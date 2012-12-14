@@ -111,6 +111,25 @@ function saveIssue(){
 				<span class="right-icon" />#{it.tbunit.adminUnit.parent.name}
 				<span class="right-icon" />#{it.tbunit.adminUnit.name}
 				</span>
+				<div style="margin-top: 8px;">
+		    		<div id="editLnk" style="display:inline-block">
+		    			<div class="edit-icon"/>
+		    			<s:link value="#{messages['form.edit']}" onclick="editLastIssue();return false;"/>
+		    		</div>
+		    		
+		    		<span id="saveLnk" style="display:none">
+		    			<s:link value="#{messages['form.save']}" onclick="saveIssue();return false;" />
+		    		</span>	
+		    		
+		   			<span id="cancelLnk" style="display:none">
+		    			<s:link value="#{messages['form.cancel']}" onclick="cancelEditIssue();return false;" />
+		    		</span>		
+		    							
+					<div id="deleteLnk" style="display:inline-block">
+						<div class="delete-icon"/>
+						<s:link value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) removeLastIssue();return false;"/>
+					</div>
+				</div>
 		</s:div>
 		<div style="float:left;color:#a0a0a0">
 		<div class="#{it.answer? 'replyissue-icon' :'postissue-icon'}" />
@@ -141,25 +160,6 @@ function saveIssue(){
 				<textarea id="lastIssueEditingTextEdt" style="width: 702px;height: 58px;">#{caseValidationHome.last.description}</textarea>
 			</div>	
 				
-			<div>
-	    		<div id="editLnk" style="display:inline-block">
-	    			<div class="edit-icon"/>
-	    			<s:link value="#{messages['form.edit']}" onclick="editLastIssue();return false;"/>
-	    		</div>
-	    		
-	    		<span id="saveLnk" style="display:none">
-	    			<s:link value="#{messages['form.save']}" onclick="saveIssue();return false;" />
-	    		</span>	
-	    		
-	   			<span id="cancelLnk" style="display:none">
-	    			<s:link value="#{messages['form.cancel']}" onclick="cancelEditIssue();return false;" />
-	    		</span>		
-	    							
-				<div id="deleteLnk" style="display:inline-block">
-					<div class="delete-icon"/>
-					<s:link value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) removeLastIssue();return false;"/>
-				</div>
-			</div>				
 		</s:fragment>
 
 	</td>
