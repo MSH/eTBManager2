@@ -36,10 +36,6 @@ width:300px;
 
 <h:form id="main"> 
 
-<a:jsFunction name="remOrder" action="#{orderHome.remove}" reRender="main" ajaxSingle="true" >
-	<a:actionparam name="param1" assignTo="#{orderHome.id}" converter="javax.faces.Integer"/>
-</a:jsFunction>
-
 <s:fragment rendered="#{not empty openOrders.ordersToAuthorize}">
 	<h2>#{messages['meds.orders.openorders.toaut']}</h2>
 	<h:dataTable value="#{openOrders.ordersToAuthorize}" var="it" styleClass="table2" columnClasses="coll col1,coll,coll,colc">
@@ -77,17 +73,6 @@ width:300px;
 		<s:link value="#{messages['form.details']}" view="/medicines/orderdata.xhtml" style="float:right">
 			<f:param name="id" value="#{it.id}" />
 		</s:link>
-		<br/>
-		<s:link view="/medicines/ordernew.xhtml" rendered="#{orderHome.isEditableOrder(it)}" style="float:right">
-			<f:param name="id" value="#{it.id}" />
-			<f:param name="initEdt" value="#{true}" />
-			<span class="edit-icon" />#{messages['form.edit']}
-		</s:link>
-		<br/>
-		<h:commandLink rendered="#{orderHome.isEditableOrder(it)}" style="float:right"
-			onclick="if (confirm('#{messages['form.confirm_remove']}')) remOrder(#{it.id});return false;">
-			<span class="delete-icon" />#{messages['form.remove']}
-		</h:commandLink>
 	</h:column>
 	</h:dataTable>
 	<div class="spacer" />
@@ -131,17 +116,6 @@ width:300px;
 		<s:link value="#{messages['form.details']}" view="/medicines/orderdata.xhtml" style="float:right">
 			<f:param name="id" value="#{it.id}" />
 		</s:link>
-		<br/>
-		<s:link view="/medicines/ordernew.xhtml" rendered="#{orderHome.isEditableOrder(it)}" style="float:right">
-			<f:param name="id" value="#{it.id}" />
-			<f:param name="initEdt" value="#{true}" />
-			<span class="edit-icon" />#{messages['form.edit']}
-		</s:link>
-		<br/>
-		<h:commandLink rendered="#{orderHome.isEditableOrder(it)}" style="float:right"
-			onclick="if (confirm('#{messages['form.confirm_remove']}')) remOrder(#{it.id});return false;">
-			<span class="delete-icon" />#{messages['form.remove']}
-		</h:commandLink>
 	</h:column>
 	</h:dataTable>
 	<div class="spacer" />
@@ -184,17 +158,6 @@ width:300px;
 		<s:link value="#{messages['form.details']}" view="/medicines/orderdata.xhtml" style="float:right">
 			<f:param name="id" value="#{it.id}" />
 		</s:link>
-		<br/>
-		<s:link view="/medicines/ordernew.xhtml" rendered="#{orderHome.isEditableOrder(it)}" style="float:right">
-			<f:param name="id" value="#{it.id}" />
-			<f:param name="initEdt" value="#{true}" />
-			<span class="edit-icon" />#{messages['form.edit']}
-		</s:link>
-		<br/>
-		<h:commandLink rendered="#{orderHome.isEditableOrder(it)}" style="float:right"
-			onclick="if (confirm('#{messages['form.confirm_remove']}')) remOrder(#{it.id});return false;">
-			<span class="delete-icon" />#{messages['form.remove']}
-		</h:commandLink>
 	</h:column>
 	</h:dataTable>
 </s:fragment>

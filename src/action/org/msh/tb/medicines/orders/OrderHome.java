@@ -385,7 +385,9 @@ public class OrderHome extends EntityHomeEx<Order>{
 	@Override
 	public String remove() {
 //		getLogService().save("ORDERS", getInstance().toString(), getInstance().getId());
-		return super.remove();
+		String s = super.remove();
+		this.setId(null);
+		return s;
 	}
 	
 	/**

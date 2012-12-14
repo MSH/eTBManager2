@@ -92,7 +92,11 @@
         	reRender="main">
           	<span>#{messages['form.navnext']}</span>
         </a:commandLink>
-        <s:link view="/medicines/index.xhtml" styleClass="button-alt" onclick="disableButton(this)" propagation="end">
+        <s:link view="/medicines/index.xhtml" styleClass="button-alt" onclick="disableButton(this)" propagation="end" rendered="#{!orderHome.isEditing()}">
+          	<span>#{messages['form.cancel']}</span>
+        </s:link>
+        <s:link view="/medicines/orderdata.xhtml" styleClass="button-alt" onclick="disableButton(this)" propagation="end" rendered="#{orderHome.isEditing()}">
+          	<f:param name="id" value="#{order.id}" />
           	<span>#{messages['form.cancel']}</span>
         </s:link>
 	</div>

@@ -73,6 +73,10 @@
 
 <h:form id="form1" styleClass="form1">
 
+<a:jsFunction name="remOrder" action="#{orderHome.remove}" reRender="main" ajaxSingle="true" >
+	<a:actionparam name="param1" assignTo="#{orderHome.id}" converter="javax.faces.Integer"/>
+</a:jsFunction>
+
 <div style="float:right">
 	<h:outputText value="#{messages[order.status.key]}"
 		styleClass="#{order.status=='CANCELLED'?'status-cancel':'status-label'}" />
@@ -91,6 +95,18 @@
     	</div>
 </td></tr>
 </table>
+
+<s:link view="/medicines/ordernew.xhtml" rendered="#{orderHome.isEditableOrder(order)}">
+	<f:param name="id" value="#{order.id}" />
+	<f:param name="initEdt" value="#{true}" />
+	<span class="edit-icon" />#{messages['form.edit']}
+</s:link>
+
+<h:commandLink rendered="#{orderHome.isEditableOrder(order)}" 
+	onclick="if (confirm('#{messages['form.confirm_remove']}')) remOrder(#{order.id});return false;">
+	<span class="delete-icon" style="float:none" />#{messages['form.remove']}
+</h:commandLink>
+
 <table width="100%">
 <tr><td>
 	<div class="form-content">
