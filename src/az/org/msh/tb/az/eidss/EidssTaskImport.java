@@ -91,8 +91,8 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	@Override
 	protected void finishing() {
 		setStateMessage("eidss.import.finished");
-		addTimeLog("Finished");
 		addLog(exportDetails);
+		addTimeLog("Finished");
 		// save result to log file
 		beginTransaction();
 		TransactionLogService service = new TransactionLogService();
@@ -143,6 +143,8 @@ public class EidssTaskImport extends AsyncTaskImpl {
 					sayAboutCheckList();
 					sayAboutExport();
 					sayAboutRejected();
+					addLog(exportDetails);
+					exportDetails = "";
 					if ((infoForExport.size()> 0) && notCanceled()){
 						exportToDB();
 					}
@@ -210,7 +212,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 					ad=ad.substring(0, 14);
 				}
 				Integer age=c.getAge();
-				String toLog=c.getLastName()+" "+c.getFirstName()+" "+c.getMiddleName()+
+				String toLog=c.getLastName()+"_"+c.getFirstName()+"_"+c.getMiddleName()+
 				", age "+age.toString()+", diag "+DateFormat.getDateInstance().format(c.getFinalDiagnosisDate())+", "+ad+" "+c.getCaseID();
 				String entDate=DateFormat.getDateInstance().format(c.getEnteringDate());
 				
@@ -262,7 +264,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			else
 				mess = "total found 0 cases, check dates and diagnosis";
 		}
-		addTimeLog(mess);
+		addLog(mess);
 	}
 	private void sayAboutCheckList(){
 		String mess = "";
@@ -308,12 +310,12 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			String loadMess = getLoadMess(loadDate);
 			//setStateMessage(loadMess);
 			//addLog(loadMess);
+			int i = 0;
+			if (notCanceled()){
 			for(String diag : diagnosis){
-				if (notCanceled()){
 					ArrayOfHumanCaseListInfo caseList = loader.getTBCasesList(loadDate, diag);
 					if (caseList != null){
 						Iterator<HumanCaseListInfo> it = caseList.getHumanCaseListInfo().iterator();
-						int i = 0;
 						while(it.hasNext()){
 							HumanCaseListInfo info = it.next();
 							Date d=ConvertToDate(info.getEnteredDate());
@@ -321,10 +323,10 @@ public class EidssTaskImport extends AsyncTaskImpl {
 							caseIds.add(csi);
 							i++;
 						}
-						addExportDetails(DateFormat.getDateInstance().format(loadDate.getTime())+" "+diag + " found " + i+" case(s)");
 
 					}else{
-						addExportDetails(DateFormat.getDateInstance().format(loadDate.getTime())+" "+diag + " found 0 case");
+						i=0;
+						//addExportDetails(DateFormat.getDateInstance().format(loadDate.getTime())+" "+diag + " found 0 case");
 						String errorMess = loader.getErrorMessage();
 						if (errorMess.length() > 0){
 							noError = false;
@@ -332,9 +334,10 @@ public class EidssTaskImport extends AsyncTaskImpl {
 						}
 					}
 					//loadDate.add(Calendar.DATE, 1); //next date
+			}
 				}else
 					return noError;
-			}
+			addExportDetails(DateFormat.getDateInstance().format(loadDate.getTime())+" found " + i+" case(s)");
 			loadDate.add(Calendar.DATE, 1); //next date
 		}
 		return noError;
@@ -591,7 +594,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			}else {
 				ageStr=age.toString();
 			}
-			String toLog=lastName+" "+firstName+" "+fatherName+", age "+ageStr+", diag "+diag+", "+(notification.length()>14 ? notification.substring(0, 14) : notification)+" "+onecase.getCaseID();
+			String toLog=lastName+"_"+firstName+"_"+fatherName+", age "+ageStr+", diag "+diag+", "+(notification.length()>14 ? notification.substring(0, 14) : notification)+" "+onecase.getCaseID();
 			String entDate=DateFormat.getDateInstance().format(d);
 			addExportDetails(entDate+" - "+toLog);
 		
@@ -671,8 +674,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		log.append(dateStamp + " " + s);
 		log.append('\n');
 	}
-	public void addLog(String s) {
-		
+	public void addLog(String s) {	
 		log.append(s);
 		log.append('\n');
 	}
