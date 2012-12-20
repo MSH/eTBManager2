@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                 xmlns:s="http://jboss.com/products/seam/taglib"
+                 xmlns:c="http://java.sun.com/jstl/core">
+                 
+ <span style="padding-left: 20px;">
+		<s:validateAll>
+			<h:panelGroup id="edtdatep">
+			<h:outputText value="#{messages['global.date']}:" rendered="#{label}"/>
+				<rich:calendar id="#{empty edtid?'edtdate':edtid}"
+					enableManualInput="true" value="#{datefield}"
+					required="#{required}" locale="#{locale}"
+					datePattern="#{messages['locale.datePattern']}"
+					timeZone="#{timezones.default}"
+					validator="#{futureDateValidator.validate}"
+					inputStyle="width:100px;" showWeeksBar="false">
+				</rich:calendar>
+				<f:param name="validatefuture" value="#{future}" />
+			</h:panelGroup>
+			<h:outputText value="(#{messages['locale.displayDatePattern']})"
+				rendered="#{empty showPattern ? true : showPattern}" />
+			<rich:jQuery selector="#edtdatep .rich-calendar-input"
+				query="mask('#{messages['locale.dateMask']}')" />
+			<ui:insert />
+		</s:validateAll>
+
+		<s:message styleClass="error"/>
+    </span>
+</ui:composition>
