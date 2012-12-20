@@ -10,12 +10,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.InfectionSite;
+import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorController;
@@ -220,6 +223,22 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 			if (!inWarn)
 				addToVerList((TbCase)tc,3,0);
 		}
+	}
+	
+	@Override
+	protected String getHQLWhere() {
+		String hql = super.getHQLWhere();
+		UserWorkspace uw = (UserWorkspace) Component.getInstance("userWorkspace");
+		if (uw!=null){
+			if (UserView.ADMINUNIT.equals(uw.getView())){
+				hql += " and (c.notificationUnit.adminUnit.id = "+uw.getAdminUnit().getId() + " or c.ownerUnit.adminUnit.id = "+uw.getAdminUnit().getId()+")";
+			}
+			else if (UserView.TBUNIT.equals(uw.getView())){
+				hql += " and (c.notificationUnit.id = "+uw.getTbunit().getId() + " or c.ownerUnit.id = "+uw.getTbunit().getId()+")";
+			}
+		}
+		return hql;
+		
 	}
 	
 	@Override
