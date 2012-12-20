@@ -15,6 +15,7 @@ import org.msh.tb.cases.ComorbidityHome;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.ExtraOutcomeInfo;
+import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.ua.entities.CaseDataUA;
 
@@ -22,7 +23,7 @@ import org.msh.tb.ua.entities.CaseDataUA;
 @Name("caseDataUAHome")
 public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 	private static final long serialVersionUID = -327682679191655122L;
-
+	private Nationality nationality;
 	
 	@In EntityManager entityManager;
 	@In(create=true) CaseEditingHome caseEditingHome;
@@ -73,7 +74,7 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 		
 		TbCase tbcase = caseEditingHome.getTbcase();
 		CaseDataUA data = getInstance();
-		
+		tbcase.setNationality(nationality);
 		data.setTbcase(tbcase);
 		data.setId(tbcase.getId());
 		
@@ -100,6 +101,7 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 		
 		CaseDataUA data = getInstance();
 		TbCase tbcase = caseEditingHome.getTbcase();
+		tbcase.setNationality(nationality);
 		
 		if (data.getId() == null)
 			data.setId(tbcase.getId());
@@ -152,4 +154,22 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 		return (ExtraOutcomeInfo[]) ArrayUtils.addAll(GlobalLists.ocDied, GlobalLists.ocCuredFailed);
 
 	}
+
+
+
+	public void setNationality(Nationality nationality) {
+		this.nationality = nationality;
+	}
+
+
+
+	public Nationality getNationality() {
+		if (caseEditingHome.getTbcase().getNationality()== null)
+			nationality = Nationality.NATIVE;
+		else
+			nationality = caseEditingHome.getTbcase().getNationality();
+		return nationality;
+	}
+	
+	
 }
