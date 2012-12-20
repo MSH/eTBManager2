@@ -46,7 +46,7 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Nationality']}:</ui:define>
-    	<h:selectOneMenu value="#{tbcase.nationality}">
+    	<h:selectOneMenu value="#{caseDataUAHome.nationality}">
     		<s:selectItems var="s" value="#{nationalities}" noSelectionLabel="-" label="#{messages[s.key]}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
@@ -219,6 +219,12 @@
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['uk_UA.hospitalizationDate']}:</ui:define>
     	<ui:param name="datefield" value="#{caseDataUA.hospitalizationDate}" /> 
+    	<ui:param name="required" value="false" /> 
+    </s:decorate>
+    
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['uk_UA.dischargeDate']}:</ui:define>
+    	<ui:param name="datefield" value="#{caseDataUA.dischargeDate}" /> 
     	<ui:param name="required" value="false" /> 
     </s:decorate>
 

@@ -110,7 +110,17 @@ public class CaseDataUA {
 	@Temporal(TemporalType.DATE)
 	private Date startedVCTdate;
 
-
+	@Temporal(TemporalType.DATE)
+	private Date testHIVdate;
+	
+	@Temporal(TemporalType.DATE)
+	private Date treatARTdate;
+	
+	@Temporal(TemporalType.DATE)
+	private Date kotrymoksTreatDate;
+	
+	@Temporal(TemporalType.DATE)
+	private Date dischargeDate;
 
 	public boolean isVCTstarted() {
 		return startedVCTdate != null;
@@ -121,7 +131,38 @@ public class CaseDataUA {
 		if (!value)
 			startedVCTdate = null;
 	}
+	
+	public boolean isTestHIVexist() {
+		return testHIVdate != null;
+	}
+	
+	
+	public void setTestHIVexist(boolean value) {
+		if (!value)
+			testHIVdate = null;
+	}
 
+	public boolean isTreatARTstarted() {
+		return treatARTdate != null;
+	}
+	
+	
+	public void setTreatARTstarted(boolean value) {
+		if (!value)
+			treatARTdate = null;
+	}
+	
+	public boolean isTreatKotrymoksStarted() {
+		return kotrymoksTreatDate != null;
+	}
+	
+	
+	public void setTreatKotrymoksStarted(boolean value) {
+		if (!value)
+			kotrymoksTreatDate = null;
+	}
+	
+	//================= GETTERS & SETTERS =================
 	/**
 	 * @return the startedVCTdate
 	 */
@@ -660,5 +701,63 @@ public class CaseDataUA {
 	 */
 	public void setRegistrationCategory(FieldValueComponent registrationCategory) {
 		this.registrationCategory = registrationCategory;
+	}
+
+
+	/**
+	 * @return the testHIVdate
+	 */
+	public Date getTestHIVdate() {
+		return testHIVdate;
+	}
+
+
+	/**
+	 * @param testHIVdate the testHIVdate to set
+	 */
+	public void setTestHIVdate(Date testHIVdate) {
+		this.testHIVdate = testHIVdate;
+	}
+
+
+	/**
+	 * @return the treatARTdate
+	 */
+	public Date getTreatARTdate() {
+		return treatARTdate;
+	}
+
+
+	/**
+	 * @param treatARTdate the treatARTdate to set
+	 */
+	public void setTreatARTdate(Date treatARTdate) {
+		this.treatARTdate = treatARTdate;
+	}
+
+
+	/**
+	 * @return the kotrymoksTreatDate
+	 */
+	public Date getKotrymoksTreatDate() {
+		return kotrymoksTreatDate;
+	}
+
+
+	/**
+	 * @param kotrymoksTreatDate the kotrymoksTreatDate to set
+	 */
+	public void setKotrymoksTreatDate(Date kotrymoksTreatDate) {
+		this.kotrymoksTreatDate = kotrymoksTreatDate;
+	}
+
+
+	public void setDischargeDate(Date dischargeDate) {
+		this.dischargeDate = dischargeDate;
+	}
+
+
+	public Date getDischargeDate() {
+		return dischargeDate;
 	}
 }

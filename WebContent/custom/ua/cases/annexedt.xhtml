@@ -24,36 +24,78 @@
 	<div class="form-content">
 	<table width="100%" >
 	<tr><td>
+	
+	<div class="prop">
+	<h:selectBooleanCheckbox value="#{caseDataUA.hiv}" />
+	#{messages['uk_UA.hiv']}
+	</div>
 
-	<s:decorate template="/layout/edit.xhtml">
-		<ui:param name="labelstyle" value="width:110px" />
-		<ui:define name="label">#{messages['cases.examhiv.vct']}:</ui:define>
-		<h:selectOneMenu value="#{caseDataUA.VCTstarted}" onchange="toggleYesNo(this.selectedIndex, '#vctdiv');">
-			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
-			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
-		</h:selectOneMenu>
+	<div class="prop">
+		<h:selectBooleanCheckbox value="#{caseDataUA.VCTstarted}" onchange="toggleYesNo(this.checked, '#vctdiv');" />
+		#{messages['cases.examhiv.vct']}
 		<span id="vctdiv" style="#{caseDataUA.VCTstarted?'':'display:none'}">
-		<span style="clear:left;display:block;">#{messages['global.date']}:</span>
-				<h:panelGroup id="edtdatep">
-				<rich:calendar id="date2" enableManualInput="true" value="#{caseDataUA.startedVCTdate}" 
-					locale="#{locale}" datePattern="#{messages['locale.datePattern']}" 
-					timeZone="#{timezones.default}" validator="futureDateValidator" inputStyle="width:80px;">
-				</rich:calendar>
-				<f:param name="validatefuture" value="true"/>
-    			(#{messages['locale.displayDatePattern']})
-    			<rich:jQuery selector="#edtdatep .rich-calendar-input" query="mask('#{messages['locale.dateMask']}')" />
-    			</h:panelGroup>
+		
+		<s:decorate template="/custom/ua/layout/dateonlyedit.xhtml" >
+	    	<ui:param name="required" value="false" /> 
+	    	<ui:param name="label" value="true" /> 
+	    	<ui:param name="datefield" value="#{caseDataUA.startedVCTdate}" /> 
+	   		<ui:param name="future" value="true" /> 
+	    </s:decorate>
+				
     	</span>
-	</s:decorate>
+	</div>
+	<div class="prop">
+		<h:selectBooleanCheckbox value="#{caseDataUA.testHIVexist}" onchange="toggleYesNo(this.checked, '#hivtestdiv');" />
+		#{messages['uk_UA.testHIV']}
+		<span id="hivtestdiv" style="#{caseDataUA.testHIVexist?'':'display:none'}">
+		
+		<s:decorate template="/custom/ua/layout/dateonlyedit.xhtml" >
+	    	<ui:param name="required" value="false" /> 
+	    	<ui:param name="label" value="true" /> 
+	    	<ui:param name="datefield" value="#{caseDataUA.testHIVdate}" /> 
+	   		<ui:param name="future" value="true" /> 
+	    </s:decorate>
+				
+    	</span>
+	</div>
+	<div class="prop">
+		<h:selectBooleanCheckbox value="#{caseDataUA.treatARTstarted}" onchange="toggleYesNo(this.checked, '#arttreatdiv');" />
+		#{messages['uk_UA.treatART']}
+		<span id="arttreatdiv" style="#{caseDataUA.treatARTstarted?'':'display:none'}">
+		
+		<s:decorate template="/custom/ua/layout/dateonlyedit.xhtml" >
+	    	<ui:param name="required" value="false" /> 
+	    	<ui:param name="label" value="true" /> 
+	    	<ui:param name="datefield" value="#{caseDataUA.treatARTdate}" /> 
+	   		<ui:param name="future" value="true" /> 
+	    </s:decorate>
+				
+    	</span>
+	</div>
+	<div class="prop">
+		<h:selectBooleanCheckbox value="#{caseDataUA.treatKotrymoksStarted}" onchange="toggleYesNo(this.checked, '#kotrymdiv');" />
+		#{messages['uk_UA.treatKotrymoks']}
+		<span id="kotrymdiv" style="#{caseDataUA.treatKotrymoksStarted?'':'display:none'}">
+		
+		<s:decorate template="/custom/ua/layout/dateonlyedit.xhtml" >
+	    	<ui:param name="required" value="false" /> 
+	    	<ui:param name="label" value="true" /> 
+	    	<ui:param name="datefield" value="#{caseDataUA.kotrymoksTreatDate}" /> 
+	   		<ui:param name="future" value="true" /> 
+	    </s:decorate>
+				
+    	</span>
+	</div>
+	
 <script type="text/javascript">
 <!--
 function toggleYesNo(option, divname) {
 	try {
 		divname = eval(divname);
 	} catch (e) {}
-	if (option == '1')
-		jQuery(divname).hide();
-	else jQuery(divname).show();
+	if (option)
+		jQuery(divname).show();
+	else jQuery(divname).hide();
 }
 -->
 </script>
@@ -63,10 +105,15 @@ function toggleYesNo(option, divname) {
 	</div>
 	
 	<div class="prop">
-	<h:selectBooleanCheckbox value="#{caseDataUA.migrant}" />
-	#{messages['uk_UA.migrant']}
+		<h:selectBooleanCheckbox value="#{caseDataUA.injectableDrugUse}" />
+  			#{messages['uk_UA.injectableDrugUse']}:
 	</div>
 
+	<div class="prop">
+		<h:selectBooleanCheckbox value="#{caseDataUA.tbContact}" />
+  			#{messages['TbCase.tbContact']}:
+	</div>
+		
 	</td>
 	<td valign="top">
 	
@@ -93,35 +140,22 @@ function toggleYesNo(option, divname) {
 		<h:selectBooleanCheckbox value="#{caseDataUA.healthWorkerGMC}" style="margin-left:20px;"/>
 		#{messages['uk_UA.healthWorker.GMC']}
    	</div>
-	
+	<div class="prop">
+		<h:selectBooleanCheckbox value="#{caseDataUA.migrant}" />
+		#{messages['uk_UA.migrant']}
+	</div>
+
+	<div class="prop">
+		<h:selectBooleanCheckbox value="#{caseDataUA.refugee}" />
+  			#{messages['uk_UA.refugee']}:
+	</div>
+	<div class="prop">
+			<h:selectBooleanCheckbox value="#{caseDataUA.prisioner}" />
+   			#{messages['uk_UA.prisioner']}:
+	</div>
 	</td></tr>
-	<tr><td valign="top">
 
-    </td></tr>
-
-	<tr><td valign="top">
-		<div class="prop">
-			<h:selectBooleanCheckbox value="#{caseDataUA.injectableDrugUse}" />
-   			#{messages['uk_UA.injectableDrugUse']}:
-		</div>
-	</td><td valign="top">
-		<div class="prop">
-			<h:selectBooleanCheckbox value="#{caseDataUA.refugee}" />
-   			#{messages['uk_UA.refugee']}:
-		</div>
-    </td></tr>
-
-	<tr><td valign="top">
-		<div class="prop">
-			<h:selectBooleanCheckbox value="#{caseDataUA.tbContact}" />
-   			#{messages['TbCase.tbContact']}:
-		</div>
-	</td><td valign="top">
-		<div class="prop">
-				<h:selectBooleanCheckbox value="#{caseDataUA.prisioner}" />
-    			#{messages['uk_UA.prisioner']}:
-		</div>
-    </td></tr>
+	
     
     <tr><td colspan="2">
 		<s:decorate template="/layout/edit.xhtml">

@@ -33,6 +33,42 @@
 	</s:decorate>
 
 	<div class="prop">
+		<div class="#{caseDataUA.testHIVexist?'checked-icon':'unchecked-icon'}"/>
+		#{messages['uk_UA.testHIV']}
+	</div>	
+	<s:decorate template="/layout/display.xhtml" rendered="#{caseDataUA.testHIVexist}">
+		<ui:param name="labelstyle" value="width:120px;" />
+   		<ui:define name="label">
+   			#{messages['global.date']}:
+   		</ui:define>
+		<h:outputText value="#{caseDataUA.testHIVdate}" converter="localeDateConverter" />		
+	</s:decorate>
+	
+	<div class="prop">
+		<div class="#{caseDataUA.treatARTstarted?'checked-icon':'unchecked-icon'}"/>
+		#{messages['uk_UA.treatART']}
+	</div>	
+	<s:decorate template="/layout/display.xhtml" rendered="#{caseDataUA.treatARTstarted}">
+		<ui:param name="labelstyle" value="width:120px;" />
+   		<ui:define name="label">
+   			#{messages['global.date']}:
+   		</ui:define>
+		<h:outputText value="#{caseDataUA.treatARTdate}" converter="localeDateConverter" />		
+	</s:decorate>
+	
+	<div class="prop">
+		<div class="#{caseDataUA.treatKotrymoksStarted?'checked-icon':'unchecked-icon'}"/>
+		#{messages['uk_UA.treatKotrymoks']}
+	</div>	
+	<s:decorate template="/layout/display.xhtml" rendered="#{caseDataUA.treatKotrymoksStarted}">
+		<ui:param name="labelstyle" value="width:120px;" />
+   		<ui:define name="label">
+   			#{messages['global.date']}:
+   		</ui:define>
+		<h:outputText value="#{caseDataUA.kotrymoksTreatDate}" converter="localeDateConverter" />		
+	</s:decorate>
+
+	<div class="prop">
    			<div class="#{caseDataUA.alcoholAbuse?'checked-icon':'unchecked-icon'}"/>
    			#{messages['uk_UA.alcoholAbuse']}
 	</div>
@@ -78,38 +114,20 @@
 		<div class="#{caseDataUA.healthWorkerGMC?'checked-icon':'unchecked-icon'}" />
    			#{messages['uk_UA.healthWorker.GMC']}
    	</div>
-	
+  		<div class="prop">
+		<div class="#{caseDataUA.migrant?'checked-icon':'unchecked-icon'}" />
+  				#{messages['uk_UA.migrant']}
+	</div>
+	<div class="prop">
+		<div class="#{caseDataUA.refugee?'checked-icon':'unchecked-icon'}" />
+   			#{messages['uk_UA.refugee']}
+	</div>
+	<div class="prop">
+		<div class="#{caseDataUA.prisioner?'checked-icon':'unchecked-icon'}" />
+  			#{messages['uk_UA.prisioner']}
+	</div>
 	</td></tr>
-	<tr><td valign="top">
-	
-	</td><td valign="top">
-	
-   		<div class="prop">
-			<div class="#{caseDataUA.migrant?'checked-icon':'unchecked-icon'}" />
-   				#{messages['uk_UA.migrant']}
-		</div>
 
-    </td></tr>
-
-	<tr><td valign="top">
-	</td><td valign="top">
-		<div class="prop">
-			<div class="#{caseDataUA.refugee?'checked-icon':'unchecked-icon'}" />
-    			#{messages['uk_UA.refugee']}
-		</div>
-    </td></tr>
-
-	<tr><td valign="top">
-	</td><td valign="top">
-		<div class="prop">
-			<div class="#{caseDataUA.prisioner?'checked-icon':'unchecked-icon'}" />
-   			#{messages['uk_UA.prisioner']}
-		</div>
-    </td></tr>
-    
-    <tr><td colspan="2">
-
-    </td></tr>
     <tr><td colspan="2">
     	<div class="paragraph">
     		#{messages['cases.comorbidities']}
