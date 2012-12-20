@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Query;
+
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.adminunits.InfoCountryLevels;
 import org.msh.tb.entities.ExamDST;
@@ -139,6 +141,8 @@ public class CaseExportUA extends CaseExport {
 		excel.addTextFromResource("cases.exams.date", "title");
 		excel.addTextFromResource("TbCase.outcomeDate", "title");
 		excel.addTextFromResource("cases.examhiv.art", "title");
+		excel.addTextFromResource("ExportContent.REGIMENS", "title");
+		excel.addText("");
 	}
 
 
@@ -232,6 +236,7 @@ public class CaseExportUA extends CaseExport {
 			}
 		}
 		excel.addDate(artDate);
+		excel.addValue(tbcase,"regimen.name");
 		return tbcase;
 	}
 
@@ -306,4 +311,12 @@ public class CaseExportUA extends CaseExport {
 		return getCasesUA().size();
 	}
 
+	public int getCount() {
+		String hql= "select count(*) "+ createHQL();
+		//hql = hql.replace(getHQLJoin(), "");
+		hql = hql.replace("fetch ", "");
+		Query q = getEntityManager().createQuery(hql);
+		return ((Long)q.getSingleResult()).intValue();
+		//return getCasesUA().size();
+	}
 }
