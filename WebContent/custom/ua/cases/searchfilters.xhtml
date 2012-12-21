@@ -72,12 +72,13 @@
 		</h:selectOneMenu>
 	</s:decorate>
 
-	<s:decorate template="/layout/display.xhtml">
-		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
-		<h:selectOneMenu value="#{caseFilters.infectionSite}" >
-			<s:selectItems value="#{infectionSites}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
-			<s:convertEnum />
-		</h:selectOneMenu>
+	<s:decorate template="/custom/ua/layout/infSiteWithTypes.xhtml">
+		<ui:param name="infSiteValue" value="#{caseFilters.infectionSite}" />
+		<ui:param name="extrapulTypeValue" value="#{caseFiltersUA.extrapulmonaryType}" />
+		<ui:param name="extrapulType2Value" value="#{caseFiltersUA.extrapulmonaryType2}" />
+		<ui:param name="pulTypeValue" value="#{caseFiltersUA.pulmonaryType}" />
+		<ui:param name="withValidate" value="#{false}" />
+		<ui:param name="destructAndMBT" value="#{false}" />
 	</s:decorate>
 	
 	<!-- VR: To add 'Type of Diagnostic' in the advance search page -->

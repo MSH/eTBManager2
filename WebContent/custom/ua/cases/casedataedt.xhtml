@@ -286,15 +286,15 @@
 		<ui:param name="required" value="true" />
 	</s:decorate>
 
-	<s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
-    	<h:selectOneMenu id="infectsite" value="#{tbcase.infectionSite}">
-    		<s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="-" label="#{messages[it.key]}" />
-    		<s:convertEnum />
-    	</h:selectOneMenu>
+	<s:decorate template="/custom/ua/layout/infSiteWithTypes.xhtml">
+		<ui:param name="infSiteValue" value="#{tbcase.infectionSite}" />
+		<ui:param name="extrapulTypeValue" value="#{tbcase.extrapulmonaryType}" />
+		<ui:param name="extrapulType2Value" value="#{tbcase.extrapulmonaryType2}" />
+		<ui:param name="pulTypeValue" value="#{tbcase.pulmonaryType}" />
+		<ui:param name="withValidate" value="#{true}" />
+		<ui:param name="destructAndMBT" value="#{true}" />
 	</s:decorate>
 
-<rich:jQuery selector="#infectsite" query="change(function(){showExtrapulmonary(this); })" />
 <script type="text/javascript">
 <!--
 function isPatientTypeOther(cb) {
@@ -305,20 +305,7 @@ function showPatientTypeOther(cb) {
   	jQuery('#patientTypeOther').show(500);
   else jQuery('#patientTypeOther').hide(500);
 }
-function showExtrapulmonary(cb) {
-  if (isExtrapulmonary(cb))
-  	jQuery('#extrapul').show(500);
-  else jQuery('#extrapul').hide(500);
-  if (isPulmonary(cb)) 
-	jQuery('#pulmonary').show(500);
-  else jQuery('#pulmonary').hide(500);
-}
-function isExtrapulmonary(cb) {
-  return ((cb.selectedIndex == 2) || (cb.selectedIndex == 3));
-}
-function isPulmonary(cb) {
-  return ((cb.selectedIndex == 1) || (cb.selectedIndex == 3));
-}
+
 function changeDiagType(cb) {
   val = cb.options[cb.selectedIndex].value;
   divdiag = jQuery('#divDiagDate');
@@ -331,55 +318,7 @@ function changeDiagType(cb) {
 -->
 </script>
 
-	<div id="extrapul" style="clear:both;">
-		<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
-    		<h:selectOneMenu value="#{tbcase.extrapulmonaryType}" style="margin-right:4px;">
-    			<s:selectItems var="it" value="#{fieldsQuery.extrapulmonaryTypes}" noSelectionLabel="-" label="#{it.shortName} - #{it.name}" />
-    			<s:convertEntity />
-    		</h:selectOneMenu>
-
-    		<h:selectOneMenu value="#{tbcase.extrapulmonaryType2}">
-    			<s:selectItems var="it" value="#{fieldsQuery.extrapulmonaryTypes}" noSelectionLabel="-" label="#{it.shortName} - #{it.name}" />
-    			<s:convertEntity />
-    		</h:selectOneMenu>
-		</s:decorate>
-	</div>
-
-	<div id="pulmonary" style="clear:both;">
-		<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
-    		<h:selectOneMenu value="#{tbcase.pulmonaryType}" style="margin-right:4px;">
-    			<s:selectItems var="it" value="#{fieldsQuery.pulmonaryTypes}" noSelectionLabel="-" label="#{it.shortName} - #{it.name}" />
-    			<s:convertEntity />
-    		</h:selectOneMenu>
-		</s:decorate>
-
-		<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['uk_UA.pulmonaryDestruction']}:</ui:define>
-    		<h:selectOneMenu value="#{caseDataUA.pulmonaryDestruction}" style="margin-right:4px;">
-    			<s:selectItems var="it" value="#{yesNoList}" noSelectionLabel="-" label="#{messages[it.key]}" />
-    			<s:convertEnum />
-    		</h:selectOneMenu>
-		</s:decorate>
-
-		<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['uk_UA.pulmonaryMBT']}:</ui:define>
-    		<h:selectOneMenu value="#{caseDataUA.pulmonaryMBT}" style="margin-right:4px;" onchange="toggleYesNo(this.selectedIndex, '#mbtdiv');">
-    			<s:selectItems var="it" value="#{yesNoList}" noSelectionLabel="-" label="#{messages[it.key]}" />
-    			<s:convertEnum />
-    		</h:selectOneMenu>
-    		<div id="mbtdiv" style="#{caseDataUA.pulmonaryMBT=='YES'?'':'display:none'}">
-    		#{messages['uk_UA.ExtraOutcomeInfo']}:
-    		<h:selectOneMenu value="#{caseDataUA.mbtResult}">
-    			<s:selectItems var="s" value="#{globalLists_ua.mbtResults}" noSelectionLabel="-" label="#{messages[s.key]}" />
-    			<s:convertEnum />
-    		</h:selectOneMenu>
-    		</div>
-		</s:decorate>
-	</div>
-<rich:jQuery selector="#infectsite" query="each(function(){ if (!isExtrapulmonary(this)) {jQuery('#extrapul').hide(); }})" />
-<rich:jQuery selector="#infectsite" query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary').hide(); }})" />
+	
 <rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
 
 		</td></tr></table>
@@ -462,14 +401,6 @@ function showCurrAddress(cb) {
   if (cb.selectedIndex == 0)
   	jQuery('#curraddr').hide(500);
   else jQuery('#curraddr').show(500);
-}
-function toggleYesNo(option, divname) {
-	try {
-		divname = eval(divname);
-	} catch (e) {}
-	if (option != '1')
-		jQuery(divname).hide();
-	else jQuery(divname).show();
 }
 </script>
 <rich:jQuery selector="#addrChanged" query="each(function(){ if (this.selectedIndex==0) jQuery('#curraddr').hide(); })" />
