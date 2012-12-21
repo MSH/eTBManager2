@@ -9,6 +9,7 @@ import org.msh.tb.cases.FilterHealthUnit;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.UserView;
 
 
@@ -28,7 +29,6 @@ public class CasesQueryUA extends CasesQuery{
 	private static final String treatRegCondUA = "(tu.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
 	private static final String notifAdrAdmUnitUA="c.notifAddress.adminUnit.code like ";
 	private static final String notifAdrAdmUnitRegUA="c.notifAddress.adminUnit.code = ";
-	
 	
 	public String getAdminUnitLike(AdministrativeUnit adm) {
 		UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
@@ -133,4 +133,20 @@ public class CasesQueryUA extends CasesQuery{
 		if (caseFilters == null) return null;
 		return caseFilters.getStateIndex();
 	}
+	
+	@Override
+	protected void mountAdvancedSearchConditions() {
+		super.mountAdvancedSearchConditions();
+		CaseFiltersUA caseFiltersUA = (CaseFiltersUA) Component.getInstance("caseFiltersUA");
+		if (InfectionSite.PULMONARY.equals(caseFilters.getInfectionSite()))
+			if (caseFiltersUA.getPulmonaryType()!=null)
+				addCondition("c.pulmonaryType.id = "+caseFiltersUA.getPulmonaryType().getId());
+		if (InfectionSite.EXTRAPULMONARY.equals(caseFilters.getInfectionSite()) || InfectionSite.BOTH.equals(caseFilters.getInfectionSite())){
+			if (caseFiltersUA.getExtrapulmonaryType()!=null)
+				addCondition("(c.extrapulmonaryType.id = "+caseFiltersUA.getExtrapulmonaryType().getId()+" OR "+"c.extrapulmonaryType2.id = "+caseFiltersUA.getExtrapulmonaryType().getId()+")");
+			if (caseFiltersUA.getExtrapulmonaryType2()!=null)
+				addCondition("(c.extrapulmonaryType.id = "+caseFiltersUA.getExtrapulmonaryType2().getId()+" OR "+"c.extrapulmonaryType2.id = "+caseFiltersUA.getExtrapulmonaryType2().getId()+")");
+		}
+	}
+	
 }
