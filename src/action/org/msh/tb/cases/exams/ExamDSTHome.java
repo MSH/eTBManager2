@@ -160,6 +160,17 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 		return result;
 	}
 	
+	@End(beforeRedirect=true)
+	public String persistWithoutValidation() {
+		String result = super.persist();
+		
+		//Verify the resistance type according to the DST and set it in TBcase.
+		if(setResistanceType())
+			caseHome.persist();
+		
+		return result;
+	}
+	
 	@Override
 	public String remove() {
 		String result = super.remove();
