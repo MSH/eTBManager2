@@ -119,6 +119,9 @@
 
 	<h2>#{messages['manag.forecast']}</h2>
 	<div class="vertical-menu">
+		<s:link view="/management/eidssnotifunits.xhtml" propagation="none">
+			<div class="icon-report" style="float:left;"/>#{messages['manag.notifEIDSS']}
+		</s:link>
 		<s:link view="/management/forecasting.xhtml" rendered="#{s:hasRole('FORECAST')}" propagation="none">
 			<f:param name="id" value="#{null}"/>
 			<div class="icon-report" style="float:left;"/>#{messages['manag.forecast.med']}
