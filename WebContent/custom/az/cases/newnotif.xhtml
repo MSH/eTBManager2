@@ -132,7 +132,10 @@
 		     <h:outputText value="#{messages['TbCase.diagnosisDate']}: "/><h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).diagnosisDate}" converter="localeDateConverter"/> <br/>
 		     #{messages['User.state']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).diagnosisType.key]}<br/>
 		     #{messages['DiagnosisType']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).infectionSite.key]}<br/>
-		     <b><h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).ownerUnit.name}" rendered="#{caseAZHome.reGetTbCase(it.tbcase).ownerUnit!=NULL}"/> </b><br /> 
+		     <b>
+		     <h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).ownerUnit.name}" rendered="#{caseAZHome.reGetTbCase(it.tbcase).ownerUnit!=NULL}"/> 
+		     <h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit.name}" rendered="#{caseAZHome.reGetTbCase(it.tbcase).ownerUnit==NULL and caseAZHome.reGetTbCase(it.tbcase).notificationUnit!=NULL}"/>
+		     </b><br /> 
 			 <h:outputText
 				value="#{caseAZHome.reGetTbCase(it.tbcase).notifAddress.adminUnit.name.name1}" style="font-size:10px;"  rendered="#{caseAZHome.reGetTbCase(it.tbcase).notifAddress!=NULL}"/>
 			<br/>
