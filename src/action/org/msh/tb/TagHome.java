@@ -47,7 +47,7 @@ public class TagHome extends EntityHomeEx<Tag> {
 	 */
 	public boolean testTagCondition() {
 		try {
-			String sql = "select count(*) from tbcase a where " + getInstance().getSqlCondition();
+			String sql = "select count(*) from tbcase a inner join patient p on p.id=a.patient_id where " + getInstance().getSqlCondition();
 			getEntityManager().createNativeQuery(sql).getSingleResult();
 			return true;
 		} catch (Exception e) {
