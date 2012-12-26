@@ -32,28 +32,45 @@
 		<ui:param name="hideinterimmonth" value="true" />
 		<ui:param name="showoutputselection" value="false" />
 	</s:decorate>
+	
 	<table class="table1" width="100%">
-		<tr>
-			<th>
+		<tr >
+			<th rowspan="2">
 				#{messages['az_EIDSS_Notify_LPU']} #{messages['excel.fromEIDSS']}
 			</th>
-			<th>
-				#{messages['az_EIDSS_Not_Binded']}
+			<th colspan="2">
+				#{messages['az_EIDSS_Binded_q']}
 			</th>
-			<th>
-				#{messages['az_EIDSS_Binded']}
+			
+			<th rowspan="2">
+				#{messages['global.all']}
 			</th>
 		</tr>
-				
+		<tr>
+		<th>
+				#{messages['global.yes']}
+			</th>
+			<th>
+				#{messages['global.no']}
+			</th>
+		</tr>		
 		<ui:repeat value="#{reportEIDSSNotifU.list.keySet().toArray()}" var="key">
 		<tr>
-			<td><h:outputText value="#{key}" /></td>
-			<td><h:outputText value="#{reportEIDSSNotifU.list.get(key).get(0)}"/></td>
-			<td><h:outputText value="#{reportEIDSSNotifU.list.get(key).get(1)}"/></td>
+			<td style="padding-left: 25px;"><h:outputText value="#{key}" /></td>
+			<td align="right"><h:outputText value="#{reportEIDSSNotifU.list.get(key).get(1)}"/></td>
+			<td align="right"><h:outputText value="#{reportEIDSSNotifU.list.get(key).get(0)}"/></td>
+			<td align="right"><b><h:outputText value="#{reportEIDSSNotifU.list.get(key).get(2)}"/></b></td>
 		</tr>
-		
 		</ui:repeat>
-		
+		<tr style="text-weight:bold;" align="right">
+			<th align="center">
+				#{messages['manag.form8.table1000.all']}
+			</th>
+			<td><h:outputText value="#{reportEIDSSNotifU.total(1)}"/></td>
+			<td><h:outputText value="#{reportEIDSSNotifU.total(0)}"/></td>
+			<td><h:outputText value="#{reportEIDSSNotifU.total(2)}"/></td>
+			
+		</tr>
 	</table>
 
 </h:form>

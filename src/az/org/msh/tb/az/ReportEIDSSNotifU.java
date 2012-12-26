@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.indicators.core.CaseHQLBase;
+import org.msh.tb.indicators.core.IndicatorFilters;
 
 @Name("reportEIDSSNotifU")
 public class ReportEIDSSNotifU extends CaseHQLBase{
@@ -21,24 +22,34 @@ public class ReportEIDSSNotifU extends CaseHQLBase{
 		for (TbCaseAZ tc: lst){
 			String nu = tc.getEIDSSComment().split(" / ")[0];
 			if ("".equals(nu)) nu = "<empty>";
-			int ind = 0;
-			if (tc.getNotificationUnit()!=null)
+			Integer ind;
+			if (tc.getNotificationUnit()!=null){
 				ind = 1;
+				}else {
+					ind = 0;
+			}
 			if (list.containsKey(nu)){
-				list.get(nu).set(ind,list.get(nu).get(ind)+1);
-				
+				List<Integer> ii=list.get(nu);
+				list.get(nu).set(ind,ii.get(ind)+1);
+				list.get(nu).set(2,ii.get(2)+1);
 			}
 			else{
 				Integer[] ii;
 				if (tc.getNotificationUnit()!=null)
-					ii = new Integer[]{0,1};
+					ii = new Integer[]{0,1,1};
 				else
-					ii = new Integer[]{1,0};
+					ii = new Integer[]{1,0,1};
 				list.put(nu, Arrays.asList(ii));
 			}
 		}
-		//Collections.sort(list,)
 		
+	}
+	
+	public Integer total(int i){
+		int res = 0;
+		for (String key:list.keySet())
+			res += list.get(key).get(i);
+		return res;
 	}
 	
 	@Override
@@ -79,6 +90,12 @@ public class ReportEIDSSNotifU extends CaseHQLBase{
 		return null;
 	}
 
+	@Override
+	protected IndicatorFilters getIndicatorFilters() {
+		if (super.getIndicatorFilters()!=null)
+			return super.getIndicatorFilters();
+		return new IndicatorFilters();
+	}
 	/**
 	 * @return the list
 	 */
