@@ -50,6 +50,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	public static String stateMessage;
 	private StringBuffer log = new StringBuffer();
 	private String exportDetails = "";
+	private String rejectDetails = "";
 	private UserTransaction transaction;
 	private Loader loader;
 	private static long beginMills;
@@ -91,7 +92,10 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	@Override
 	protected void finishing() {
 		setStateMessage("eidss.import.finished");
-		addLog(exportDetails);
+		if (!"".equals(rejectDetails))
+			addLog(rejectDetails);
+		if (!"".equals(exportDetails))
+			addLog(exportDetails);
 		addTimeLog("Finished");
 		// save result to log file
 		beginTransaction();
@@ -141,10 +145,10 @@ public class EidssTaskImport extends AsyncTaskImpl {
 					}
 					
 					sayAboutCheckList();
-					sayAboutExport();
-					sayAboutRejected();
+					//sayAboutExport();
 					addLog(exportDetails);
 					exportDetails = "";
+					sayAboutRejected();
 					if ((infoForExport.size()> 0) && notCanceled()){
 						exportToDB();
 					}
@@ -168,7 +172,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			if (!refList.trim().equalsIgnoreCase("")) {
 				slog=slog+": "+refList;
 			}
-				addLog(slog);
+			addLog(slog);
 		}
 	}
 	
@@ -193,38 +197,51 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	 * Export cases to eTBManager
 	 */
 	private void exportToDB() {
-		Iterator<CaseInfo> it=infoForExport.iterator();
-		while (it.hasNext()){
-			CaseInfo c = it.next();
-			String result=ci.importRecords(c);
-			/*if (config.auto){
-				result=ci.checkImportRecords(c);
-			} else {
-				 result=ci.importRecords(c);
-			}*/
-
-			if (!result.equalsIgnoreCase("error")){
-				String ad=c.getAdditionalComment();
-				int pos=ad.indexOf("/");
-				if (pos <14){
-					ad=ad.substring(0, pos);
+		Integer iw=0;
+		Integer ia=0;
+		try{
+			Iterator<CaseInfo> it=infoForExport.iterator();
+			while (it.hasNext()){
+				CaseInfo c = it.next();
+				String result=ci.importRecords(c);
+				/*if (config.auto){
+					result=ci.checkImportRecords(c);
 				} else {
-					ad=ad.substring(0, 14);
-				}
-				Integer age=c.getAge();
-				String toLog=c.getLastName()+"_"+c.getFirstName()+"_"+c.getMiddleName()+
-				", age "+age.toString()+", diag "+DateFormat.getDateInstance().format(c.getFinalDiagnosisDate())+", "+ad+" "+c.getCaseID();
-				String entDate=DateFormat.getDateInstance().format(c.getEnteringDate());
-				
-				
-				if (result.equalsIgnoreCase(CaseImporting.WRITED)){
-					addExportDetails(entDate+" + "+toLog);
-				}
-				if (result.equalsIgnoreCase(CaseImporting.UPDATED)){
-					addExportDetails(entDate+" ^ "+toLog);
-				}
-			}else
-				addExportDetails("Error writing  "+c.getLastName());
+					 result=ci.importRecords(c);
+				}*/
+	
+				if (!result.equalsIgnoreCase("error")){
+					String ad=c.getAdditionalComment();
+					int pos=ad.indexOf("/");
+					if (pos <14){
+						ad=ad.substring(0, pos);
+					} else {
+						ad=ad.substring(0, 14);
+					}
+					Integer age=c.getAge();
+					String toLog=c.getLastName()+"_"+c.getFirstName()+"_"+c.getMiddleName()+
+					", age "+age.toString()+", diag "+DateFormat.getDateInstance().format(c.getFinalDiagnosisDate())+", "+ad+" "+c.getCaseID();
+					String entDate=DateFormat.getDateInstance().format(c.getEnteringDate());
+					
+					
+					if (result.equalsIgnoreCase(CaseImporting.WRITED)){
+						addExportDetails(entDate+" + "+toLog);
+						iw++;
+					}
+					if (result.equalsIgnoreCase(CaseImporting.UPDATED)){
+						addExportDetails(entDate+" ^ "+toLog);
+						ia++;
+					}
+				}else
+					addExportDetails("Error writing  "+c.getLastName());
+			}
+			addLog(iw.toString()+ " cases written successfully");
+			addLog(ia.toString()+ " cases updated successfully");
+		}
+		catch (Exception e){
+			addLog("ERROR in EidssTaskImport.exportToDB(): " + e.getMessage());
+			addLog(iw.toString()+ " cases written successfully");
+			addLog(ia.toString()+ " cases updated successfully");
 		}
 		
 	}
@@ -297,50 +314,57 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	 * @return
 	 */
 	private boolean loadCasesList() {
-		setStateMessage("eidss.import.load.data");
 		boolean noError = true;
-		// determine dates, diagnosis and states
-		Calendar loadDate = GregorianCalendar.getInstance();
-		Calendar currentDate = GregorianCalendar.getInstance();
-		loadDate.setTime(config.getFrom());
-		currentDate.setTime(config.getToDate());
-		String[] diagnosis = config.getDiagnosis().split(",");
-		while(!loadDate.after(currentDate)){
-			//load by date and diagnosis, (state only in the full case)
-			String loadMess = getLoadMess(loadDate);
-			//setStateMessage(loadMess);
-			//addLog(loadMess);
-			int i = 0;
-			if (notCanceled()){
-			for(String diag : diagnosis){
-					ArrayOfHumanCaseListInfo caseList = loader.getTBCasesList(loadDate, diag);
-					if (caseList != null){
-						Iterator<HumanCaseListInfo> it = caseList.getHumanCaseListInfo().iterator();
-						while(it.hasNext()){
-							HumanCaseListInfo info = it.next();
-							Date d=ConvertToDate(info.getEnteredDate());
-							CaseShortInfo csi=new CaseShortInfo(info.getCaseID(),info.getId(),d);
-							caseIds.add(csi);
-							i++;
+		try{
+			setStateMessage("eidss.import.load.data");
+			// determine dates, diagnosis and states
+			Calendar loadDate = GregorianCalendar.getInstance();
+			Calendar currentDate = GregorianCalendar.getInstance();
+			loadDate.setTime(config.getFrom());
+			currentDate.setTime(config.getToDate());
+			String[] diagnosis = config.getDiagnosis().split(",");
+			while(!loadDate.after(currentDate)){
+				//load by date and diagnosis, (state only in the full case)
+				String loadMess = getLoadMess(loadDate);
+				//setStateMessage(loadMess);
+				//addLog(loadMess);
+				int i = 0;
+				if (notCanceled()){
+				for(String diag : diagnosis){
+						ArrayOfHumanCaseListInfo caseList = loader.getTBCasesList(loadDate, diag);
+						if (caseList != null){
+							Iterator<HumanCaseListInfo> it = caseList.getHumanCaseListInfo().iterator();
+							while(it.hasNext()){
+								HumanCaseListInfo info = it.next();
+								Date d=ConvertToDate(info.getEnteredDate());
+								CaseShortInfo csi=new CaseShortInfo(info.getCaseID(),info.getId(),d);
+								caseIds.add(csi);
+								i++;
+							}
+	
+						}else{
+							i=0;
+							//addExportDetails(DateFormat.getDateInstance().format(loadDate.getTime())+" "+diag + " found 0 case");
+							String errorMess = loader.getErrorMessage();
+							if (errorMess.length() > 0){
+								noError = false;
+								addExportDetails("ERROR " + errorMess);
+							}
 						}
-
-					}else{
-						i=0;
-						//addExportDetails(DateFormat.getDateInstance().format(loadDate.getTime())+" "+diag + " found 0 case");
-						String errorMess = loader.getErrorMessage();
-						if (errorMess.length() > 0){
-							noError = false;
-							addExportDetails("ERROR " + errorMess);
-						}
-					}
-					//loadDate.add(Calendar.DATE, 1); //next date
-			}
-				}else
-					return noError;
-			addExportDetails(DateFormat.getDateInstance().format(loadDate.getTime())+" found " + i+" case(s)");
-			loadDate.add(Calendar.DATE, 1); //next date
+						//loadDate.add(Calendar.DATE, 1); //next date
+				}
+					}else
+						return noError;
+				addExportDetails(DateFormat.getDateInstance().format(loadDate.getTime())+" found " + i+" case(s)");
+				loadDate.add(Calendar.DATE, 1); //next date
+			}			
+			return noError;
 		}
-		return noError;
+		catch(Exception e){
+			noError = false;
+			addLog("ERROR in EidssTaskImport.loadCaseList(): " + e.getMessage());
+			return noError;
+		}
 	}
 
 
@@ -438,17 +462,23 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	 */
 	public String loadCaseById(CaseShortInfo caseI) {
 		String refusedList="";
+		String dbId="";
 		if (notCanceled()){
-			String dbId = String.valueOf(caseI.caseDBId);
-			HumanCaseInfo info = getLoader().getFullCase(dbId);
-			if (info != null){
-				if (suitable(info,config.getCaseStates(),"")) {
-					addCase(info,caseI.caseDate);
-				} else {
-					refusedList=caseI.caseId;
+			try{
+				dbId = String.valueOf(caseI.caseDBId);
+				HumanCaseInfo info = getLoader().getFullCase(dbId);
+				if (info != null){
+					if (suitable(info,config.getCaseStates(),"")) {
+						addCase(info,caseI.caseDate);
+					} else {
+						refusedList=caseI.caseId;
+					}
+				}else{
+					addLog("ERROR " + getLoader().getErrorMessage() + " info by case is null in "+dbId);
 				}
-			}else{
-				addLog("ERROR " + getLoader().getErrorMessage());
+			}
+			catch (Exception e){
+				addLog("ERROR in EidssTaskImport.loadCaseById(): " + e.getMessage()+" in "+dbId);
 			}
 		}
 		return refusedList;
@@ -495,6 +525,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	 * @param info case info from the web service
 	 */
 	private void addCase(HumanCaseInfo EIDSSData, Date d) {
+		try{
 		boolean noError=true;
 		String diag="";
 		CaseInfo onecase=new CaseInfo();
@@ -531,7 +562,10 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		if (EIDSSData.getPatientGender()==null){
 			onecase.setPatientGender("1");
 		} else {
-		onecase.setPatientGender(EIDSSData.getPatientGender().getId().toString());
+			if (EIDSSData.getPatientGender().getId()==null)
+				onecase.setPatientGender("1");
+			else
+				onecase.setPatientGender(EIDSSData.getPatientGender().getId().toString());
 		}
 		if (EIDSSData.getDateOfBirth()!=null){
 		onecase.setDateOfBirth(ConvertToDate(EIDSSData.getDateOfBirth()));
@@ -596,8 +630,12 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			}
 			String toLog=lastName+"_"+firstName+"_"+fatherName+", age "+ageStr+", diag "+diag+", "+(notification.length()>14 ? notification.substring(0, 14) : notification)+" "+onecase.getCaseID();
 			String entDate=DateFormat.getDateInstance().format(d);
-			addExportDetails(entDate+" - "+toLog);
+			rejectDetails += entDate+" - "+toLog+"\n";
 		
+		}
+		}
+		catch (Exception e){
+			addLog("ERROR in EidssTaskImport.addCase(): " + e.getMessage());
 		}
 	}
 	
