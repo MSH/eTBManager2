@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Observer;
 import org.msh.tb.MsgDispatcher;
 import org.msh.tb.entities.CaseIssue;
 import org.msh.tb.entities.TbCase;
@@ -39,7 +38,8 @@ public class CaseMsgDispatcher extends MsgDispatcher{
 		
 		sendMessage(users, "/mail/casetransfered.xhtml");
 	}
-	
+
+
 	/**
 	 * Send a message to the users notifying about a new pending
 	 */

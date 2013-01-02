@@ -22,7 +22,7 @@
 
 <ui:define name="content">
 <h1>#{title}</h1>
-<h:form id="main" prependId="true" styleClass="form1">
+<h:form id="main" styleClass="form1">
 	<div class="form-content">
  		<b style="padding-left:10px;padding-bottom:5px;">#{messages['admin.users']}</b>
 		<div style="padding:10px">
@@ -99,7 +99,7 @@ function processSelectedUser(suggestion) {
 			onclick="if (!disableButton(this)) return false;">
 			<span>#{messages['form.save']}</span> 
 		</a:commandLink>
-		<a:commandLink action="cancel" styleClass="button-alt" immediate="true" onclick="disableButton(this)">
+		<a:commandLink action="cancel" styleClass="button-alt" ajaxSingle="true" onclick="disableButton(this)">
 			<span>#{messages['form.cancel']}</span> 
 		</a:commandLink>
 	</div>

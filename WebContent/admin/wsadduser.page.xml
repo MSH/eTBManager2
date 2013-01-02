@@ -8,7 +8,7 @@
 		<begin-conversation join="true"/>
 		<navigation>
 			<rule if-outcome="persisted">
-				<end-conversation/>
+				<end-conversation before-redirect="true"/>
 				<redirect view-id="/admin/workspacedata.xhtml">
 					<param name="id" value="#{workspaceHome.id}"/>
 				</redirect>

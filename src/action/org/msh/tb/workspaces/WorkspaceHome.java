@@ -9,10 +9,12 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.End;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
+import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.CountryStructuresQuery;
@@ -47,7 +49,7 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 	private static final long serialVersionUID = -5471044065603168728L;
 
 	@In(required=true) UserLogin userLogin;
-	@In(required=false) @Out(required=false, scope=ScopeType.SESSION) Workspace defaultWorkspace;
+	@In(required=false) @Out(required=false, scope=ScopeType.EVENT) Workspace defaultWorkspace;
 	@In(create=true) FacesMessages facesMessages;
 	@In(create=true) EntityManager entityManager;
 	@In(create=true) CountryStructuresQuery countryStructures;
@@ -420,6 +422,8 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 	 * Save users changes (new users and removed users)
 	 * @return
 	 */
+	@Transactional
+	@End
 	public String saveUsers() {
 		removeUsers();
 		

@@ -11,13 +11,11 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.msh.tb.MsgDispatcher;
 import org.msh.tb.application.mail.MailService;
-import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Order;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.enums.OrderStatus;
-import org.msh.tb.entities.enums.UserView;
 
 /**
  * Component responsible to send asynchronous messages to the users based on order events

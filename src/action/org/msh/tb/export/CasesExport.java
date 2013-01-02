@@ -1,6 +1,5 @@
 package org.msh.tb.export;
 
-import java.util.List;
 import java.util.Map;
 
 import org.jboss.seam.Component;
@@ -18,7 +17,6 @@ public class CasesExport {
 	@In(create=true) CasesQuery cases;
 	private ExcelCreator excel;
 	private InfoCountryLevels levelInfo;
-	private List<TbCase> caseList;
 	
 	public CasesExport(){
 		super();

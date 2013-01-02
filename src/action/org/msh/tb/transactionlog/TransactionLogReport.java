@@ -10,7 +10,6 @@ import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.TransactionLog;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.RoleAction;
