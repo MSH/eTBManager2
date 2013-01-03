@@ -31,7 +31,8 @@ public class TransactionLogService {
 	private DetailXMLWriter detailWriter;
 	private List<Item> items;
 	private String titleSuffix;
-	
+
+
 	/**
 	 * Capture the properties of the entity that are to be saved in a transaction
 	 * @param entity
@@ -110,7 +111,7 @@ public class TransactionLogService {
 		UserLog userLog = getUserLog();
 		if (userLog == null)
 			throw new RuntimeException("No user found for transaction log operation");
-		
+
 		TransactionLog log = new TransactionLog();
 		log.setAction(action);
 		log.setEntityId(entityId);
@@ -119,11 +120,11 @@ public class TransactionLogService {
 		log.setTransactionDate(new Date());
 		log.setUser(userLog);
 		log.setWorkspace(getWorkspaceLog());
-		log.setComments(getDetailWriter().asXML());
 		log.setAdminUnit(getAdminUnit());
 		log.setUnit(getUnit());
 		log.setTitleSuffix(titleSuffix);
 		log.setEntityClass(entityClass);
+		log.setComments(getDetailWriter().asXML());
 		
 		EntityManager em = getEntityManager();
 		em.persist(log);
@@ -150,8 +151,8 @@ public class TransactionLogService {
 	 * @param description
 	 * @param entityId
 	 */
-	public void saveExecuteTransaction(String userRole, String description, Integer entityId, String entityClass, Object entity) {
-		save(userRole, RoleAction.EXEC, description, entityId, entityClass, entity);
+	public TransactionLog saveExecuteTransaction(String userRole, String description, Integer entityId, String entityClass, Object entity) {
+		return save(userRole, RoleAction.EXEC, description, entityId, entityClass, entity);
 	}
 
 	/**
@@ -159,8 +160,39 @@ public class TransactionLogService {
 	 * @param userRole
 	 * @param entity
 	 */
-	public void saveExecuteTransaction(String userRole, Object entity) {
-		save(userRole, RoleAction.EXEC, entity);
+	public TransactionLog saveExecuteTransaction(String userRole, Object entity) {
+		return save(userRole, RoleAction.EXEC, entity);
+	}
+
+	
+	/**
+	 * Save the transaction data to an existing transaction. It's useful when you're executing a batch
+	 * processing where a transaction must be available since from the beginning, but more information
+	 * will be included to the transaction later
+	 * @param id
+	 */
+	public TransactionLog appendTransaction(Integer id) {
+		EntityManager em = getEntityManager();
+		
+		TransactionLog log = em.find(TransactionLog.class, id);
+
+		if (items != null) {
+			DetailXMLWriter writer = getDetailWriter();
+			for (Item item: items) {
+				for (PropertyValue val: item.getValues()) {
+					if (item.getOperation() != Operation.EDIT)
+						 writer.addTableRow(val.getMapping().getMessageKey(), val.getValue());
+					else writer.addTableRow(val.getMapping().getMessageKey(), val.getValue(), val.getEntityNewValue());
+				}
+			}
+		}
+
+		log.setComments(getDetailWriter().asXML());
+
+		em.persist(log);
+		em.flush();
+		
+		return log;
 	}
 	
 	/**
@@ -215,17 +247,18 @@ public class TransactionLogService {
 		return (UserLogin)Component.getInstance("userLogin");
 	}
 
+	
 
 	/**
 	 * Return the workspace to be used in log transactions
 	 * @return
 	 */
 	protected WorkspaceLog getWorkspaceLog() {
-		WorkspaceLog wslog = getEntityManager().find(WorkspaceLog.class, getUserLogin().getWorkspace().getId());
+		Workspace ws = (Workspace)Component.getInstance("defaultWorkspace");
+		WorkspaceLog wslog = getEntityManager().find(WorkspaceLog.class, ws.getId());
 		
 		if (wslog == null) {
 			wslog = new WorkspaceLog();
-			Workspace ws = getUserLogin().getDefaultWorkspace();
 			wslog.setId(ws.getId());
 			wslog.setName(new LocalizedNameComp());
 			wslog.getName().setName1(ws.getName().getName1());
@@ -293,6 +326,7 @@ public class TransactionLogService {
 	}
 
 
+	
 	/**
 	 * Translate a event name (role name) into a managed instance of {@link UserRole} class
 	 * @param eventName

@@ -34,7 +34,7 @@ public class AdministrativeUnit extends WSObject {
 	@Embedded
 	@PropertyLog(messageKey="form.name", operations={Operation.NEW, Operation.DELETE})
 	private LocalizedNameComp name = new LocalizedNameComp();
-	
+
 	@ManyToOne
 	@JoinColumn(name="PARENT_ID")
 	@PropertyLog(operations={Operation.NEW, Operation.DELETE})

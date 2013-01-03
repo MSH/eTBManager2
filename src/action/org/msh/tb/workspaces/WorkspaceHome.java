@@ -49,7 +49,7 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 	private static final long serialVersionUID = -5471044065603168728L;
 
 	@In(required=true) UserLogin userLogin;
-	@In(required=false) @Out(required=false, scope=ScopeType.EVENT) Workspace defaultWorkspace;
+	@In(required=false) @Out(required=false, scope=ScopeType.CONVERSATION) Workspace defaultWorkspace;
 	@In(create=true) FacesMessages facesMessages;
 	@In(create=true) EntityManager entityManager;
 	@In(create=true) CountryStructuresQuery countryStructures;

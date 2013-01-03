@@ -44,15 +44,23 @@ public abstract class AsyncTaskImpl implements AsyncTask {
 		if (getWorkspace() != null)
 			Contexts.getEventContext().set("defaultWorkspace", getWorkspace());
 
+		Object userLogin = getParameter("userLogin");
+		if (userLogin != null)
+			Contexts.getEventContext().set("userLogin", userLogin);
+		
+		Object userWorkspace = getParameter("userWorkspace");
+		if (userWorkspace != null)
+			Contexts.getEventContext().set("userWorkspace", userWorkspace);
+		
 		try {
 			changeStatus(TaskStatus.STARTING);
-			starting();
+			callStarting();
 
 			changeStatus(TaskStatus.RUNNING);
-			execute();
+			callExecute();
 
 			changeStatus(TaskStatus.FINISHING);
-			finishing();
+			callFinishing();
 			changeStatus(TaskStatus.FINISHED);
 
 		} catch (Exception e) {
@@ -69,6 +77,27 @@ public abstract class AsyncTaskImpl implements AsyncTask {
 	}
 
 
+	/**
+	 * Wrapper method to call the finishing() method
+	 */
+	protected void callFinishing() {
+		finishing();
+	}
+
+	/**
+	 * Wrapper method to call the execute() method
+	 */
+	protected void callExecute() {
+		execute();
+	}
+
+	/**
+	 * Wrapper method to call the starting() method
+	 */
+	protected void callStarting() {
+		starting();
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.msh.tb.application.tasks.AsyncTask#cancel()
 	 */
@@ -99,6 +128,7 @@ public abstract class AsyncTaskImpl implements AsyncTask {
 	 */
 	protected void exceptionHandler(Exception e) {
 		changeStatus(TaskStatus.CANCELING);
+		e.printStackTrace();
 //		throw new RuntimeException(e);
 	}
 	

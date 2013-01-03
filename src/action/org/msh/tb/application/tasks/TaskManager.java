@@ -48,10 +48,17 @@ public class TaskManager implements TaskListener {
 				task.addParameter(param, params.get(param));
 			}
 		}
-		
+
+		// common variables used by the system
 		UserLogin userLogin = (UserLogin)Component.getInstance("userLogin");
-		if (userLogin != null)
+		if (userLogin != null) {
+			task.addParameter("userLogin", userLogin);
 			task.setUser(userLogin.getUser());
+		}
+		
+		Object userWorkspace = Component.getInstance("userWorkspace");
+		if (userWorkspace != null)
+			task.addParameter("userWorkspace", userWorkspace);
 		
 		Workspace workspace = (Workspace)Component.getInstance("defaultWorkspace");
 		if (workspace != null)

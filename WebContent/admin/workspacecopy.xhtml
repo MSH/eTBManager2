@@ -7,22 +7,17 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="/layout/template_new.xhtml">
+      template="admintemplate.xhtml">
         
 <ui:param name="title" value="#{workspace.name} - #{messages['admin.workspaces.copy']}" />
-<ui:param name="topmenu" value="3" />
-<ui:param name="waitdlg" value="1" />
 <ui:param name="labelstyle" value="width:160px;" />
-
-<ui:define name="naveg">
-	<s:link value="#{messages['admin']}" view="/admin/index.xhtml" />
-	<s:link value="#{messages['Workspace']}" view="/admin/workspaces.xhtml" />
-</ui:define>
+<ui:param name="submenu" value="2" />
 
 
 <ui:define name="content">
+<h1>#{title}</h1>
 <h:form id="main">
-	<table width="500px" class="tab1" ><tr><td>
+	<table><tr><td>
 
 	<h:graphicImage value="#{workspace.view.pictureURI}" rendered="#{workspace.view != null}" style="border:1px solid #d0d0d0;padding:10px;"/>
 	

@@ -230,4 +230,34 @@ public abstract class DbBatchTask extends AsyncTaskImpl {
 		this.recordCount = recordCount;
 	}
 
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.application.tasks.AsyncTaskImpl#callFinishing()
+	 */
+	@Override
+	protected void callFinishing() {
+		beginTransaction();
+		try {
+			super.callFinishing();
+			commitTransaction();
+		} catch (Exception e) {
+			rollbackTransaction();
+		}
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.application.tasks.AsyncTaskImpl#callStarting()
+	 */
+	@Override
+	protected void callStarting() {
+		beginTransaction();
+		try {
+			super.callStarting();
+			commitTransaction();
+		} catch (Exception e) {
+			rollbackTransaction();
+		}
+	}
+
 }
