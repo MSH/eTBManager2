@@ -76,8 +76,8 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		public String log;
 		public char key;
 		public ExportDetails(String s, char c){
-			this.log = s;
-			this.key = c;
+			this.log = s; //string for log
+			this.key = c; //symbol of type - '!','+','^','-' or 'e'(error)
 		}
 	}
 	
