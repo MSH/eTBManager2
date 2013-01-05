@@ -154,14 +154,10 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 		return (ExtraOutcomeInfo[]) ArrayUtils.addAll(GlobalLists.ocDied, GlobalLists.ocCuredFailed);
 
 	}
-
-
-
+	
 	public void setNationality(Nationality nationality) {
 		this.nationality = nationality;
 	}
-
-
 
 	public Nationality getNationality() {
 		if (caseEditingHome.getTbcase().getNationality()== null)
@@ -170,6 +166,4 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 			nationality = caseEditingHome.getTbcase().getNationality();
 		return nationality;
 	}
-	
-	
 }
