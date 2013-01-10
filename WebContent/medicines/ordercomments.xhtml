@@ -38,7 +38,8 @@
 					<h:outputText value="#{it.date}" converter="localeDateConverter" style="padding-right:4px"/>
 					<h:outputText value="#{it.date}">
 						<s:convertDateTime type="time" timeZone="#{timezones.default}"/>
-					</h:outputText>
+					</h:outputText><br/>
+					<h:outputText value="#{messages['med.statusoncomment']}: #{messages[it.statusOnComment.getKey()]}" />
 				</div>
 			</h:column>
 
