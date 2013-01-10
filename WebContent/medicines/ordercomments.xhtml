@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	<h:panelGroup id="#{panel}pnlComments" styleClass="form1" rendered="#{empty printing}">
+	
+	<div class="form-content" style="background-color:white">
+		
+	<h2>#{messages['global.comments']}</h2>
+			<table width="100%">
+			<tr><td>
+			<s:fragment rendered="#{orderHome.canComment()}">
+				<h:inputTextarea value="#{orderComment.comment}" style="width:500px;height:50px;float:left;"/>
+				<a:commandLink style="float:right" 
+					styleClass="button-alt" 
+					action="#{orderCommentsHome.addComment}" 
+					reRender="#{panel}pnlComments" onclick="disableButton(this)">
+					<span>#{messages['cases.comments.add']}</span>
+				</a:commandLink>
+			</s:fragment>
+			</td></tr>
+			</table>
+		
+		<a:jsFunction name="deleteComment" reRender="#{panel}pnlComments,messages" ajaxSingle="true" action="#{orderCommentsHome.remove}">
+			<a:actionparam name="param1" assignTo="#{orderCommentsHome.id}" converter="javax.faces.Integer" />
+		</a:jsFunction>
+		
+		<h:dataTable value="#{orderCommentsHome.comments}" var="it" rendered="#{facesContext.renderResponse}">
+			<h:column >
+				<div class="icon-user" style="float:left;"/>
+				<b>#{it.user.name}</b>
+				<div class="text-small">
+					<h:outputText value="#{it.date}" converter="localeDateConverter" style="padding-right:4px"/>
+					<h:outputText value="#{it.date}">
+						<s:convertDateTime type="time" timeZone="#{timezones.default}"/>
+					</h:outputText>
+				</div>
+			</h:column>
+
+			<h:column >
+				<div style="padding-left:10px;padding-top:10px;">
+				<h:outputText value="#{it.comment}" 
+					escape="false" converter="rmemoria.TextConverter"
+					styleClass="text" />
+				<a:commandLink
+					onclick="disableButton(this);deleteComment(#{it.id});return false;"
+					style="display:table;margin-bottom:10px;"
+					styleClass="small-link">
+					<a:actionparam name="param1" value="#{it.id}" 
+						assignTo="#{orderCommentsHome.id}" 
+						converter="javax.faces.Integer" />
+					<span>#{messages['form.remove']}</span>
+				</a:commandLink>
+				</div>
+			</h:column>
+			
+		</h:dataTable>
+		
+	</div>
+	
+	</h:panelGroup>
+</ui:composition>

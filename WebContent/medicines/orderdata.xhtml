@@ -14,6 +14,7 @@
 <ui:param name="topmenu" value="1" />
 <ui:param name="show_menu" value="#{order.status!='CANCELLED' ? '1': '0'}" />
 <ui:param name="labelstyle" value="width:250px;" />
+<ui:param name="printing" value="true" />
 
 <ui:define name="naveg">
 	<s:link value="#{messages['meds.inventory']}" view="/medicines/index.html" propagation="none" />
@@ -27,10 +28,19 @@
 <ui:define name="left">
 	<h:form>
 	<div class="vertical-menu">
-	<a:commandLink action="#{orderHome.remove}" value="#{messages['meds.orders.remove']}"
+	
+	<s:link view="/medicines/ordernew.xhtml" rendered="#{orderHome.isEditableOrder(order)}">
+		<f:param name="id" value="#{order.id}" />
+		<f:param name="initEdt" value="#{true}" />
+		<span class="edit-icon" />#{messages['form.edit']}
+	</s:link>
+	
+	<a:commandLink action="#{orderHome.remove}"
 		ajaxSingle="true" 
 		rendered="#{orderHome.canRemove}" 
-		onclick="if (!confirm('#{messages['form.confirm_remove']}')) {return false};" />
+		onclick="if (!confirm('#{messages['form.confirm_remove']}')) {return false};">
+		<span class="delete-icon" style="float:none" />#{messages['form.remove']}
+	</a:commandLink>
 
 	<s:link view="/medicines/orderaut.xhtml" value="#{messages['meds.orders.autorize']}" rendered="#{orderHome.canAuthorize}">
 		<f:param name="id" value="#{order.id}" />
@@ -95,17 +105,6 @@
     	</div>
 </td></tr>
 </table>
-
-<s:link view="/medicines/ordernew.xhtml" rendered="#{orderHome.isEditableOrder(order)}">
-	<f:param name="id" value="#{order.id}" />
-	<f:param name="initEdt" value="#{true}" />
-	<span class="edit-icon" />#{messages['form.edit']}
-</s:link>
-
-<h:commandLink rendered="#{orderHome.isEditableOrder(order)}" 
-	onclick="if (confirm('#{messages['form.confirm_remove']}')) remOrder(#{order.id});return false;">
-	<span class="delete-icon" style="float:none" />#{messages['form.remove']}
-</h:commandLink>
 
 <table width="100%">
 <tr><td>
@@ -195,10 +194,9 @@
     
     <h:panelGroup rendered="#{order.unitFrom.treatmentHealthUnit}">
 
-    <s:decorate template="/layout/display.xhtml" rendered="#{not empty order.comments}">
-    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	#{order.comments}
-    </s:decorate>
+    <s:decorate template="/medicines/ordercomments.xhtml">
+		<ui:param name="panel" value="data" />
+	</s:decorate>
 
     </h:panelGroup>
 

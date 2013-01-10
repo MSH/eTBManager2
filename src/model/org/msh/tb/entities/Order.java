@@ -60,9 +60,6 @@ public class Order implements Serializable {
 	@JoinColumn(name="UNIT_TO_ID")
 	@NotNull
 	private Tbunit unitTo;
-
-	@Lob
-	private String comments;
 	
 	@Column(length=200)
 	private String cancelReason;
@@ -193,14 +190,6 @@ public class Order implements Serializable {
 
 	public void setCancelReason(String cancelReason) {
 		this.cancelReason = cancelReason;
-	}
-
-	public String getComments() {
-		return comments;
-	}
-
-	public void setComments(String comments) {
-		this.comments = comments;
 	}
 
 	public Tbunit getUnitFrom() {

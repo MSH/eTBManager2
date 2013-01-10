@@ -38,6 +38,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 	@In(create=true) FacesMessages facesMessages;
 	@In(create=true) MovementHome movementHome;
 	@In(create=true) UserSession userSession;
+	@In(create=true) OrderCommentHome orderCommentsHome;
 	
 	private List<SourceOrderItem> sources;
 	private SourceOrderItem item;
@@ -116,6 +117,10 @@ public class OrderHome extends EntityHomeEx<Order>{
 		if (!ret.equals("persisted"))
 			return ret;
 
+		orderCommentsHome.addComment();
+		orderCommentsHome.setId(null);
+		
+		
 		setRequiredObservation(false);
 		Events.instance().raiseEvent("new-medicine-order");
 		
@@ -131,7 +136,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 		if (sources == null)
 			return "error";
 
-		if(requiredObservation==true && getInstance().getComments().isEmpty()){
+		if(requiredObservation==true && orderCommentsHome.getInstance().getComment().isEmpty()){
 			facesMessages.addToControlFromResourceBundle("ordercomments", "form.required");
 			return "";
 		}
@@ -216,7 +221,18 @@ public class OrderHome extends EntityHomeEx<Order>{
 		else return "error";
 	}
 
-	
+	public String selectOpenOrder(){
+		OpenOrders o = (OpenOrders)Component.getInstance("openOrders");
+		List<Order> lst = o.getUnitOrders();
+		if(lst != null && lst.size() > 0){
+			setId(lst.get(0).getId());
+			return "open-order";
+		}
+		else{
+			setId(null);
+			return "no-open-order";
+		}
+	}
 	/**
 	 * Initialize medicine selection to be included in the order
 	 * @param item specify the source where medicines will be included into
@@ -263,6 +279,13 @@ public class OrderHome extends EntityHomeEx<Order>{
 		return ( (Identity.instance().hasRole("NEW_ORDER")) // user has to be able to create new orders
 					&& (o.getUnitFrom().equals(UserSession.getUserWorkspace().getTbunit()) || UserSession.getUserWorkspace().isPlayOtherUnits()) // the user has to be from the unit that he is trying to create/edit the order or he has to be able to play other units.
 					&& (o.getStatus().equals(OrderStatus.WAITAUTHORIZING) || (o.getAuthorizer() == null && o.getStatus().equals(OrderStatus.WAITSHIPMENT)))); // The order has to be waiting for authorization or has to be waiting for shipment if it doens't needs to be authorized.
+	}
+	
+	/**
+	 * Verifies if user can comment a order
+	 */
+	public boolean canComment() {
+		return (Identity.instance().hasRole("NEW_ORDER"));
 	}
 	
 

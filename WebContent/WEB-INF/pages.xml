@@ -49,6 +49,14 @@
 					<message>#{messages['usersettings.workspacechanged']}</message>
             	</redirect>
             </rule>
+            <rule if-outcome="no-open-order">
+            	<redirect view-id="/medicines/ordershistory.xhtml">
+					<message>#{messages['meds.orders.noopenorder']}</message>
+            	</redirect>
+            </rule>
+            <rule if-outcome="open-order">
+            	<redirect view-id="/medicines/orderdata.xhtml"/>
+            </rule>
         </navigation>
     </page>
     

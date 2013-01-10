@@ -34,7 +34,7 @@
 	
 	<br/><br/>
 	
-	<s:link styleClass="button" view="/medicines/orders.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}">
+	<s:link styleClass="button" action="#{orderHome.selectOpenOrder()}" view="/medicines/openOrder.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}">
 		<span>#{messages['meds.orders.viewopen']}</span>
 	</s:link>
         
@@ -69,7 +69,7 @@
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
     	<ui:param name="redasterisk" value="#{orderHome.requiredObservation}" />
-    	<h:inputTextarea id="ordercomments" value="#{order.comments}" maxlength="200" style="width:400px;height:40px;" />
+    	<h:inputTextarea id="ordercomments" value="#{orderCommentsHome.orderComment.comment}" maxlength="200" style="width:400px;height:40px;" />
     </s:decorate>
 
 </div>

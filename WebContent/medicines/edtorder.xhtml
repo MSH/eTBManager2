@@ -40,11 +40,6 @@
     	<ui:define name="label">#{messages['Tbunit.numDaysOrder']}:</ui:define>
     	#{order.unitFrom.numDaysOrder}
     </s:decorate>
-
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	<h:inputText value="#{order.comments}" maxlength="200" style="width:400px;" />
-    </s:decorate>
     
     <h2>#{messages['meds.orders.shipaddr']}</h2>
 

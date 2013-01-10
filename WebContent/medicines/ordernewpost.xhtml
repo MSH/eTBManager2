@@ -48,9 +48,9 @@
     	#{order.unitFrom.numDaysOrder}
     </s:decorate>
 
-    <s:decorate template="/layout/display.xhtml" rendered="#{not empty order.comments}">
+    <s:decorate template="/layout/display.xhtml" rendered="#{not empty orderCommentsHome.orderComment.comment}">
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	<h:outputText value="#{order.comments}" converter="rmemoria.TextConverter" escape="false" />
+    	<h:outputText value="#{orderCommentsHome.orderComment.comment}" converter="rmemoria.TextConverter" escape="false" />
     </s:decorate>
 
 	<s:decorate template="/layout/display.xhtml">

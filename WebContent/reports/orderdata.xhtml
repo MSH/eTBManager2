@@ -101,10 +101,9 @@
     
     <h:panelGroup rendered="#{order.unitFrom.treatmentHealthUnit}">
 
-    <s:decorate template="/layout/display.xhtml" rendered="#{not empty order.comments}">
-    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	#{order.comments}
-    </s:decorate>
+    <s:decorate template="/medicines/ordercomments.xhtml">
+		<ui:param name="panel" value="data" />
+	</s:decorate>
 
     </h:panelGroup>
 </td></tr></table>

@@ -27,6 +27,12 @@
    PATH="/medicines/index.xhtml" TARGET="#xmedicines#xindex.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
   <output ID="/home.xhtml" NAME="output3" PATH="/home.xhtml"
    TARGET="#xhome.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/medicines/ordershistory.xhtml" NAME="output4"
+   PATH="/medicines/ordershistory.xhtml"
+   TARGET="#xmedicines#xordershistory.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/medicines/orderdata.xhtml" NAME="output5"
+   PATH="/medicines/orderdata.xhtml"
+   TARGET="#xmedicines#xorderdata.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
  </item>
  <item ID="#workspaceimg.xhtml" NAME="#xworkspaceimg.xhtml"
   PATH="/workspaceimg.xhtml" SHAPE="344,1729,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
@@ -136,4 +142,14 @@
   PATH="/changeworkspace.xhtml" SHAPE="664,1753,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
  <item ID="#global#*" NAME="#xglobal#x*" PATH="/global/*"
   SHAPE="344,1857,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item NAME="#xmedicines#xorderdata.xhtml"
+  PATH="/medicines/orderdata.xhtml" SHAPE="472,345,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/*" NAME="output" PATH="/medicines/*"
+   TARGET="#xmedicines#x*" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item NAME="#xmedicines#xordershistory.xhtml"
+  PATH="/medicines/ordershistory.xhtml" SHAPE="472,345,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/medicines/*" NAME="output" PATH="/medicines/*"
+   TARGET="#xmedicines#x*" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
 </diagram>
