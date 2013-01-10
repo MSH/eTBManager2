@@ -76,7 +76,8 @@ public class IndicatorFilters {
 	private IndicatorCultureResult cultureResult;
 	private DrugResistanceType drugResistanceType;
 	private DiagnosisType diagnosisType;
-	private ValidationState validationState = ValidationState.VALIDATED;
+	private ValidationState validationState; //= ValidationState.VALIDATED;
+	
 	private int interimMonths;
 	private HIVResult hivResult;
 	private List<SelectItem> lstInterimMonths;
