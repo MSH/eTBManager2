@@ -24,8 +24,8 @@
 		<s:link view="/medicines/ordernew.xhtml" rendered="#{userSession.canCreateOrder}" >
 			<div class="new-icon" style="float:left;"/>#{messages['meds.orders.new']}
 		</s:link>
-		<!-- <s:link value="#{messages['meds.orders.viewopen']}" view="/medicines/orders.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}"/> -->
-		<s:link value="#{messages['meds.orders.viewopen']}" action="#{orderHome.selectOpenOrder()}" view="/medicines/openOrder.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}"/> 
+		<s:link value="#{messages['meds.orders.viewopen']}" view="/medicines/orders.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}"/>
+		<!-- <s:link value="#{messages['meds.orders.viewopen']}" action="#{orderHome.selectOpenOrder()}" view="/medicines/openOrder.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}"/>  -->
 		<s:link value="#{messages['meds.orders.viewall']}" view="/medicines/ordershistory.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}"/>
 	</s:fragment>
 

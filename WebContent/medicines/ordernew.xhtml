@@ -34,7 +34,7 @@
 	
 	<br/><br/>
 	
-	<s:link styleClass="button" action="#{orderHome.selectOpenOrder()}" view="/medicines/openOrder.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}">
+	<s:link styleClass="button" view="/medicines/orders.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}">
 		<span>#{messages['meds.orders.viewopen']}</span>
 	</s:link>
         
