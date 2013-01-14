@@ -54,9 +54,7 @@ public class UsersQuery extends EntityQuery<UserWorkspace>{
 	
 	protected String getStaticConditions() {
 		if (getSearchKeyLike() != null)
-			 return "where (uw.user.name like #{users.searchKeyLike} or uw.user.login like #{users.searchKeyLike} or uw.user.email like #{users.searchKeyLike} or uw.tbunit.adminUnit.parent.legacyId like #{users.searchKeyLike})";
-		else if(getSearchKeyLike() != null)
-			 return "where (uw.tbunit.adminUnit.parent.legacyId like #{users.searchKeyLike})";			
+			 return "where (uw.user.name like #{users.searchKeyLike} or uw.user.login like #{users.searchKeyLike} or uw.user.email like #{users.searchKeyLike})";		
 		else return "";
 	}
 	
