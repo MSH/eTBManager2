@@ -103,6 +103,7 @@ public class User implements java.io.Serializable {
 	
 	private boolean sendSystemMessages;
 
+	private boolean ulaAccepted;
 	
 	/**
 	 * Check if password has expired
@@ -356,6 +357,14 @@ public class User implements java.io.Serializable {
 	 */
 	public void setSendSystemMessages(boolean sendSystemMessages) {
 		this.sendSystemMessages = sendSystemMessages;
+	}
+
+	public boolean isUlaAccepted() {
+		return ulaAccepted;
+	}
+
+	public void setUlaAccepted(boolean ulaAccepted) {
+		this.ulaAccepted = ulaAccepted;
 	}
 	
 }
