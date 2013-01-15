@@ -50,14 +50,15 @@ public class PatientsQueryAZ extends PatientsQuery {
 				if (names.length != 0){
 					String s="";
 					for (String name: names) {
-						if (s.length() > 1)
-							s += " and ";
-						name = name.replaceAll("'", "''");
-						if (!"".equals(name))
+						if (!"".equals(name)){
+							if (s.length() > 1)
+								s += " and ";
+							name = name.replaceAll("'", "''");
 							s += "(((upper(p.name) like '%" + name.toUpperCase() + 
 							"%') or (upper(p.middleName) like '%" + name.toUpperCase() + 
 							"%') or (upper(p.lastName) like '%" + name.toUpperCase() + "%')) or "+
 							"(upper(az.EIDSSComment) like '%"+name.toUpperCase()+"%'))";
+						}
 					}
 					if (!s.isEmpty())
 						addCondition(s);
