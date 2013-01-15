@@ -650,4 +650,15 @@ public class UserSession {
 			 return null;
 		else return adm.getCode() + "%";
 	}
+	
+	public String acceptULA(){
+		UserLogin userLogin = getUserLogin();
+		User user = userLogin.getUser();
+		user.setUlaAccepted(true);
+		getEntityManager().createQuery("update User set ulaAccepted = :val where id = :id")
+		.setParameter("val", true)
+		.setParameter("id", user.getId())
+		.executeUpdate();
+		return "ulaaccepted";
+	}
 }
