@@ -7,22 +7,53 @@
        login-view-id="/login.xhtml">
 
 
-	<page view-id="/home.xhtml" login-required="true" />
+	<page view-id="/home.xhtml" login-required="true" >
+		<navigation>
+  			<rule if="#{userWorkspace.workspace.ulaActive and not userWorkspace.user.ulaAccepted}" >
+   		 	<redirect view-id="/global/userLicenseAgreement.xhtml" />
+  			</rule>
+  		</navigation>
+	</page>
 	<page view-id="/others/*" login-required="true" />
 	<page view-id="/restricted/*" login-required="true" />
 	<page view-id="/admin/*" login-required="true" >
+		<navigation>
+  			<rule if="#{userWorkspace.workspace.ulaActive and not userWorkspace.user.ulaAccepted}" >
+   		 	<redirect view-id="/global/userLicenseAgreement.xhtml" />
+  			</rule>
+  		</navigation>
 		<restrict>#{s:hasRole('ADMIN')}</restrict>
 	</page>
 	<page view-id="/medicines/*" login-required="true" >
+		<navigation>
+  			<rule if="#{userWorkspace.workspace.ulaActive and not userWorkspace.user.ulaAccepted}" >
+   		 	<redirect view-id="/global/userLicenseAgreement.xhtml" />
+  			</rule>
+  		</navigation>
 		<restrict>#{s:hasRole('MEDMAN')}</restrict>
 	</page>
 	<page view-id="/cases/*" login-required="true" >
+		<navigation>
+  			<rule if="#{userWorkspace.workspace.ulaActive and not userWorkspace.user.ulaAccepted}" >
+   		 	<redirect view-id="/global/userLicenseAgreement.xhtml" />
+  			</rule>
+  		</navigation>
 		<restrict>#{s:hasRole('CASEMAN')}</restrict>
 	</page>
 	<page view-id="/management/*" login-required="true" >
+		<navigation>
+  			<rule if="#{userWorkspace.workspace.ulaActive and not userWorkspace.user.ulaAccepted}" >
+   		 	<redirect view-id="/global/userLicenseAgreement.xhtml" />
+  			</rule>
+  		</navigation>
 		<restrict>#{s:hasRole('MANAGEMENT')}</restrict>
 	</page>
 	<page view-id="/reports/*" login-required="true" >
+		<navigation>
+  			<rule if="#{userWorkspace.workspace.ulaActive and not userWorkspace.user.ulaAccepted}" >
+   		 	<redirect view-id="/global/userLicenseAgreement.xhtml" />
+  			</rule>
+  		</navigation>
 		<restrict>#{s:hasRole('MANAGEMENT')}</restrict>
 	</page>
 
