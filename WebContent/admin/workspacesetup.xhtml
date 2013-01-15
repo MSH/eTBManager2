@@ -117,6 +117,10 @@
     		fileName="#{workspaceHome.pictureFileName}"
     		fileSize="#{workspaceHome.pictureSize}" />
     </s:decorate>
+    
+     <s:decorate template="/layout/edit.xhtml" >
+    	<h:selectBooleanCheckbox value="#{workspace.ulaActive}" /> #{messages['workspace.ulaActive']}
+    </s:decorate>
 
 	</div>
 	
