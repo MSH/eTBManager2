@@ -94,6 +94,8 @@ public class Workspace implements Serializable, Transactional {
 	
 	private boolean startDRTBTreatBeforeValidation;
 	
+	private boolean ulaActive;
+	
 	/**
 	 * Setup the case number to be displayed for the cases
 	 */
@@ -519,5 +521,13 @@ public class Workspace implements Serializable, Transactional {
 	@Override
 	public void setCreateTransaction(TransactionLog transactionLog) {
 		this.createTransaction = transactionLog;
+	}
+
+	public boolean isUlaActive() {
+		return ulaActive;
+	}
+
+	public void setUlaActive(boolean ulaActive) {
+		this.ulaActive = ulaActive;
 	}
 }
