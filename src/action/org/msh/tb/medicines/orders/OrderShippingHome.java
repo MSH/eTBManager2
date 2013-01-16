@@ -27,6 +27,7 @@ import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
 import org.msh.utils.date.DateUtils;
+import org.richfaces.renderkit.html.images.SaveControlIcon;
 
 @Name("orderShippingHome")
 @Scope(ScopeType.CONVERSATION)
@@ -139,6 +140,9 @@ public class OrderShippingHome extends Controller {
 		movementHome.savePreparedMovements();
 		
 		entityManager.persist(order);
+		orderHome.saveComment();
+		
+		facesMessages.clear();
 		
 		Events.instance().raiseEvent("medicine-order-shipped");
 		

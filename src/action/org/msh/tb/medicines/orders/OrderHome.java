@@ -27,6 +27,7 @@ import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.MedicineSelection;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
+import org.msh.tb.test.dbgen.SaveCaseAction;
 
 
 
@@ -111,15 +112,14 @@ public class OrderHome extends EntityHomeEx<Order>{
 		User user = getEntityManager().merge(getUserLogin().getUser());
 		order.setUserCreator(user);
 
-		facesMessages.addFromResourceBundle("default.entity_created");
-				
 		String ret = persist();
 		if (!ret.equals("persisted"))
 			return ret;
 
-		orderCommentsHome.addComment();
-		orderCommentsHome.setId(null);
+		saveComment();
 		
+		facesMessages.clear();
+		facesMessages.addFromResourceBundle("default.entity_created");
 		
 		setRequiredObservation(false);
 		Events.instance().raiseEvent("new-medicine-order");
@@ -244,6 +244,11 @@ public class OrderHome extends EntityHomeEx<Order>{
 		this.item = item;
 	}
 
+	
+	public void saveComment(){
+		orderCommentsHome.addComment();
+		orderCommentsHome.setId(null);
+	}
 
 	/**
 	 * Finish the selection of the medicines to be included in the order
@@ -284,8 +289,19 @@ public class OrderHome extends EntityHomeEx<Order>{
 	/**
 	 * Verifies if user can comment a order
 	 */
-	public boolean canComment() {
-		return (Identity.instance().hasRole("NEW_ORDER"));
+	public boolean isCanComment() {
+		boolean a = (getInstance().getUnitFrom().equals(UserSession.getUserWorkspace().getTbunit()));
+		boolean b = (getInstance().getUnitTo().equals(UserSession.getUserWorkspace().getTbunit()));
+		
+		if( (!UserSession.getUserWorkspace().isPlayOtherUnits()) 
+				&& !( (getInstance().getUnitFrom().equals(UserSession.getUserWorkspace().getTbunit()))
+						|| (getInstance().getUnitTo().equals(UserSession.getUserWorkspace().getTbunit())) ))
+			return false;
+
+		return (Identity.instance().hasRole("NEW_ORDER") || 
+				Identity.instance().hasRole("VAL_ORDER") || 
+				Identity.instance().hasRole("SEND_ORDER") || 
+				Identity.instance().hasRole("RECEIV_ORDER"));
 	}
 	
 

@@ -12,23 +12,28 @@
 	<div class="form-content" style="background-color:white">
 		
 	<h2>#{messages['global.comments']}</h2>
-			<table width="100%">
-			<tr><td>
-			<s:fragment rendered="#{orderHome.canComment()}">
-				<h:inputTextarea value="#{orderComment.comment}" style="width:500px;height:50px;float:left;"/>
-				<a:commandLink style="float:right" 
-					styleClass="button-alt" 
+	
+		<s:fragment rendered="#{orderHome.canComment}">
+			<a:commandLink style="float:right" styleClass="button-alt" onclick="showcommentinput(this)">
+				<span>#{messages['cases.comments.add']}</span>
+			</a:commandLink>
+			<div id="commentInput" style="display:none">
+				<h:inputTextarea value="#{orderComment.comment}" style="width:500px;height:50px;"/>
+				<br/>
+				<a:commandLink styleClass="button-alt" 
 					action="#{orderCommentsHome.addComment}" 
 					reRender="#{panel}pnlComments" onclick="disableButton(this)">
-					<span>#{messages['cases.comments.add']}</span>
+					<span>#{messages['form.save']}</span>
 				</a:commandLink>
-			</s:fragment>
-			</td></tr>
-			</table>
+			</div>
+		</s:fragment>
+
 		
 		<a:jsFunction name="deleteComment" reRender="#{panel}pnlComments,messages" ajaxSingle="true" action="#{orderCommentsHome.remove}">
 			<a:actionparam name="param1" assignTo="#{orderCommentsHome.id}" converter="javax.faces.Integer" />
 		</a:jsFunction>
+		
+		<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty orderCommentsHome.comments}"/>
 		
 		<h:dataTable value="#{orderCommentsHome.comments}" var="it" rendered="#{facesContext.renderResponse}">
 			<h:column >
@@ -63,6 +68,11 @@
 		</h:dataTable>
 		
 	</div>
-	
+	<script>
+		function showcommentinput(button){
+			jQuery('#commentInput').show(500);
+			button.style.display = 'none';
+		}
+	</script>
 	</h:panelGroup>
 </ui:composition>

@@ -59,9 +59,11 @@ public class OrderAuthorizingHome extends Controller {
 				item.getItem().setApprovedQuantity(item.getApprovedQuantity());
 			}
 		
-		facesMessages.addFromResourceBundle("meds.orders.authorized");
-
 		entityManager.persist(order);
+		orderHome.saveComment();
+
+		facesMessages.clear();
+		facesMessages.addFromResourceBundle("meds.orders.authorized");
 		
 		Events.instance().raiseEvent("medicine-order-authorized");
 		

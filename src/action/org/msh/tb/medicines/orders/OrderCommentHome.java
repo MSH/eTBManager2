@@ -70,7 +70,7 @@ public class OrderCommentHome extends EntityHomeEx<OrderComment>{
 		EntityManager em = getEntityManager();
 		List<OrderComment> lst = em.createQuery("from OrderComment c " +
 				"join fetch c.user u " +
-				"where c.order.id = #{order.id} ")
+				"where c.order.id = #{order.id} order by c.date desc")
 			.getResultList();
 
 		return lst;
