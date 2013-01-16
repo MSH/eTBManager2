@@ -19,7 +19,7 @@ import org.jboss.seam.annotations.Name;
 @Name("textFileReader")
 public class TextFileReader {
 	  
-	public String readFile(String path) throws IOException {
+	public String readFile() throws IOException {
     	FileInputStream fileStream = (FileInputStream) getClass().getClassLoader().getResourceAsStream("\\WEB-INF\\classes\\org\\msh\\utils\\ula_en.txt");
     	  try {
     	    FileChannel fc = fileStream.getChannel();
