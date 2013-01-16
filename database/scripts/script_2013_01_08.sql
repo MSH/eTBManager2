@@ -15,7 +15,7 @@ CREATE TABLE  ordercomment (
   PRIMARY KEY (`id`)
 );
 
-ALTER TABLE ordercomment ADD CONSTRAINT `FK_ordercommentmedicineorder` FOREIGN KEY `ordercommentmedicineorder` (`ORDER_ID`)
+ALTER TABLE ordercomment ADD CONSTRAINT `FKA7A3351EA7336F7` FOREIGN KEY `FKA7A3351EA7336F7` (`ORDER_ID`)
     REFERENCES `medicineorder` (`id`)
     ON DELETE CASCADE
     ON UPDATE RESTRICT;
