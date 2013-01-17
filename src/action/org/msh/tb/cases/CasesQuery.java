@@ -182,7 +182,8 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 						addCondition(notifRegCond);
 						break;
 					case TREATMENT_UNIT:
-						if(caseFilters.getStateIndex()!= CaseFilters.TRANSFER_OUT)
+						if((caseFilters.getStateIndex()==null && caseFilters.getSearchCriteria().equals(SearchCriteria.CASE_TAG))
+							|| caseFilters.getStateIndex()!= CaseFilters.TRANSFER_OUT)
 							addCondition(treatRegCond);
 						break;
 					case BOTH:

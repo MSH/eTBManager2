@@ -197,6 +197,7 @@ public class CaseFilters {
 			case CASE_TAG:
 				Integer id = tagid;
 				clearFilters();
+				setFilterHealthUnit(FilterHealthUnit.TREATMENT_UNIT);
 				tagid = id;
 				unitId = uid;
 				break;
