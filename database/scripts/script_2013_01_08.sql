@@ -24,3 +24,5 @@ INSERT INTO ordercomment(comment, date, statusOnComment, order_id, user_creator_
 SELECT comments, orderDate, 0, id, user_creator_id FROM medicineorder;
 
 DELETE FROM ordercomment WHERE comment LIKE '';
+
+ALTER TABLE medicineorder DROP COLUMN comments;

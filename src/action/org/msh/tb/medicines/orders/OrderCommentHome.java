@@ -42,6 +42,9 @@ public class OrderCommentHome extends EntityHomeEx<OrderComment>{
 	public String addComment() {
 		OrderComment comment = getInstance();
 		
+		if(comment.getComment().isEmpty())
+			return "";
+		
 		comment.setUser(getUser());
 		comment.setDate(new Date());
 		comment.setOrder(orderHome.getInstance());
