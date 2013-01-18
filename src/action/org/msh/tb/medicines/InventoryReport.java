@@ -364,11 +364,15 @@ public class InventoryReport {
 			this.hasBatchExpiring = hasBatchExpiring;
 		}
 		
+		/**
+		 * Compares today+30days with sotckoutdate, if sotckoutdate 
+		 * is before today+30 it's time to alert the user.
+		 */
 		public boolean almostStockedOut(){
-			Date d = DateUtils.getDate();
-			if(stockOutDate != null)
+			Date d = DateUtils.incDays(DateUtils.getDate(), 30);
+			if(stockOutDate != null){
 				return stockOutDate.before(d);
-			else
+			}else
 				return false;
 		}
 		
