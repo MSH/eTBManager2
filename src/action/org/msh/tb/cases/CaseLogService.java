@@ -116,6 +116,16 @@ public class CaseLogService {
 		saveExecuteTransaction("CASE_REOPEN", tbcase);
 	}
 	
+	/**
+	 * Register case number changed
+	 */
+	@Observer("case.casenumbermodified")
+	public void logCaseNumberModified() {
+		TbCase tbcase = caseHome.getInstance();
+		
+		saveExecuteTransaction("CASE_CHANGENUMBER", tbcase);
+	}
+	
 	@Observer("case.starttreatment")
 	public void logStartTreatment() {
 		

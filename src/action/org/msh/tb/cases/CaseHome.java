@@ -10,7 +10,9 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.ETB;
@@ -454,6 +456,9 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		
 		getEntityManager().persist(getInstance().getPatient());
 		persist();
+		
+		Events.instance().raiseEvent("case.casenumbermodified");
+		
 		return "number-changed";
 	}
 
