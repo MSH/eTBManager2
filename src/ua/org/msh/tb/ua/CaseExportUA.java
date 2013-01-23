@@ -316,6 +316,7 @@ public class CaseExportUA extends CaseExport {
 		//hql = hql.replace(getHQLJoin(), "");
 		hql = hql.replace("fetch ", "");
 		Query q = getEntityManager().createQuery(hql);
+		setQueryParameters(q);
 		return ((Long)q.getSingleResult()).intValue();
 		//return getCasesUA().size();
 	}
