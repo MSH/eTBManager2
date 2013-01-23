@@ -230,8 +230,14 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 		String hql = super.getHQLWhere();
 		UserWorkspace uw = (UserWorkspace) Component.getInstance("userWorkspace");
 		if (uw!=null){
-			if (UserView.ADMINUNIT.equals(uw.getView())){
+/*			if (UserView.ADMINUNIT.equals(uw.getView())){
 				hql += " and (c.notificationUnit.adminUnit.id = "+uw.getAdminUnit().getId() + " or c.ownerUnit.adminUnit.id = "+uw.getAdminUnit().getId()+")";
+			}
+			else if (UserView.TBUNIT.equals(uw.getView())){
+				hql += " and (c.notificationUnit.id = "+uw.getTbunit().getId() + " or c.ownerUnit.id = "+uw.getTbunit().getId()+")";
+			} AK 23.01.2013 wrong selection by adminunit*/
+			if (UserView.ADMINUNIT.equals(uw.getView())){
+				hql += " and (c.notificationUnit.adminUnit.code like '"+uw.getAdminUnit().getCode() + "%' or c.ownerUnit.adminUnit.code like '"+uw.getAdminUnit().getCode()+"%')";
 			}
 			else if (UserView.TBUNIT.equals(uw.getView())){
 				hql += " and (c.notificationUnit.id = "+uw.getTbunit().getId() + " or c.ownerUnit.id = "+uw.getTbunit().getId()+")";
