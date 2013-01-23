@@ -148,7 +148,7 @@
 
 	<div class="spacer" />
 
-	<h:panelGroup id="pnlculture" rendered="false">
+	<h:panelGroup id="pnlculture">
 	<s:link view="/cases/edtexamculture.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" 
 		styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
@@ -296,7 +296,7 @@
 
 	<div class="spacer" />
 
-	<h:panelGroup id="pnldst" rendered="false">	
+	<h:panelGroup id="pnldst">	
 		<s:link view="/cases/edtexamdst.xhtml" 
 			style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt">
 			<f:param name="id" value="#{tbcase.id}"/>
@@ -305,7 +305,9 @@
 		</s:link>
 		<h2>#{messages['cases.examdst']}</h2>
 		
+		<s:div styleClass="region3" rendered="#{empty examDSTHome.allResults}"><div class="content">
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examDSTTable.allResults}" />
+		</div></s:div>
 		<s:fragment rendered="#{not empty examDSTTable.allResults}">
 		<table class="table1" width="100%">
 		<tr>
