@@ -36,12 +36,12 @@ import org.msh.tb.entities.enums.ValidationState;
 public class CasesQueryAZ extends CasesQuery{
 	private static final long serialVersionUID = -7293313123644540770L;
 	private final Integer casesEIDSSnotBindedIndex = CaseStateReportAZ.EIDSS_NOT_BINDED;
-	private static final String notifCondUA = "(nu.id = #{caseFilters.tbunitselection.tbunit.id})";
-	private static final String treatCondUA = "tu.id =  #{caseFilters.tbunitselection.tbunit.id}";
-	private static final String notifRegCondUA = "(nu.id in (select id from org.msh.tb.entities.Tbunit tbu where tbu.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
-	private static final String treatRegCondUA = "(tu.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
-	private static final String notifAdrAdmUnitUA="c.notifAddress.adminUnit.code like ";
-	private static final String notifAdrAdmUnitRegUA="c.notifAddress.adminUnit.code = ";
+	private static final String notifCondAZ = "(nu.id = #{caseFilters.tbunitselection.tbunit.id})";
+	private static final String treatCondAZ = "tu.id =  #{caseFilters.tbunitselection.tbunit.id}";
+	private static final String notifRegCondAZ = "(nu.id in (select id from org.msh.tb.entities.Tbunit tbu where tbu.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
+	private static final String treatRegCondAZ = "(tu.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
+	private static final String notifAdrAdmUnitAZ="c.notifAddress.adminUnit.code like ";
+	private static final String notifAdrAdmUnitRegAZ="c.notifAddress.adminUnit.code = ";
 	
 	// static filters
 	private static final String[] restrictions = {
@@ -157,42 +157,45 @@ public class CasesQueryAZ extends CasesQuery{
 
 		FilterHealthUnit filterUnit = getCaseFilters().getFilterHealthUnit();
 
-		// health unit condition
-		if (filterUnit != null) {
-			// health unit was set ?
-			if (getCaseFilters().getTbunitselection().getTbunit() != null) {
-				switch (filterUnit) {
-				case NOTIFICATION_UNIT:
-					addCondition(notifCondUA);
-					break;
-				case TREATMENT_UNIT:
-					addCondition(treatCondUA);
-					break;
-				case BOTH:
-					addCondition("(" + treatCondUA + " or " + notifCondUA + ")");
-				}
-			}
-			else // region was set ? 
-				if (getCaseFilters().getTbunitselection().getAdminUnit() != null) {
+		if (!isNotBindedEIDSS()){
+			// health unit condition
+			if (filterUnit != null) {
+				// health unit was set ?
+				if (getCaseFilters().getTbunitselection().getTbunit() != null) {
 					switch (filterUnit) {
 					case NOTIFICATION_UNIT:
-						addCondition(notifRegCondUA);
+						addCondition(notifCondAZ);
 						break;
 					case TREATMENT_UNIT:
-						addCondition(treatRegCondUA);
+						addCondition(treatCondAZ);
 						break;
-					case BOTH:{
-						addCondition("(" + treatRegCondUA + " or " + notifRegCondUA);
-						UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
-						if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
-							hqlCondition += " or "+(userWorkspace.getAdminUnit().getLevel()==1 ? notifAdrAdmUnitUA : notifAdrAdmUnitRegUA) + getAdminUnitLike(userWorkspace.getAdminUnit());
-						}
-						hqlCondition += ")";
-						}
+					case BOTH:
+						addCondition("(" + treatCondAZ + " or " + notifCondAZ + ")");
 					}
 				}
+				else // region was set ? 
+					if (getCaseFilters().getTbunitselection().getAdminUnit() != null) {
+						switch (filterUnit) {
+						case NOTIFICATION_UNIT:
+							addCondition(notifRegCondAZ);
+							break;
+						case TREATMENT_UNIT:
+							if((caseFilters.getStateIndex()==null && caseFilters.getSearchCriteria().equals(SearchCriteria.CASE_TAG))
+									|| caseFilters.getStateIndex()!= CaseFilters.TRANSFER_OUT)
+									addCondition(treatRegCondAZ);
+							break;
+						case BOTH:{
+							addCondition("(" + treatRegCondAZ + " or " + notifRegCondAZ);
+							UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
+							if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
+								hqlCondition += " or "+(userWorkspace.getAdminUnit().getLevel()==1 ? notifAdrAdmUnitAZ : notifAdrAdmUnitRegAZ) + getAdminUnitLike(userWorkspace.getAdminUnit());
+							}
+							hqlCondition += ")";
+							}
+						}
+					}
+			}
 		}
-
 		mountAdvancedSearchConditions();
 		mountSingleSearchConditions();
 

@@ -9,7 +9,6 @@ import java.util.List;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.international.Messages;
 import org.msh.tb.adminunits.AdminUnitGroup;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.application.App;
@@ -19,10 +18,12 @@ import org.msh.tb.cases.HealthUnitsQuery;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.entities.enums.ValidationState;
+import org.msh.tb.misc.GlobalLists;
 
 /**
  * Refine standard report by case state to be displayed in the main page.<br>
@@ -126,6 +127,32 @@ public class CaseStateReportAZ extends CaseStateReport{
 	}
 
 
+	/**
+	 * Generate SQL condition to filter cases
+	 * @return SQL condition to be used in a where clause
+	 */
+	@Override
+	protected String generateSQLConditionByCase() {
+		CaseClassification[] classifs = ((GlobalLists)Component.getInstance("globalLists")).getCaseClassifications();
+		
+		String caseCondition = "";
+		
+		if (classifs.length == CaseClassification.values().length)
+			return "";
+
+		for (CaseClassification cla: classifs) {
+			
+				if (!caseCondition.isEmpty())
+					caseCondition += ",";
+				 caseCondition += cla.ordinal();
+			
+		}
+		
+		if (!caseCondition.isEmpty())
+			 return " and c.classification in (" + caseCondition + ")";
+		else return caseCondition;
+	}
+	
 	protected String generateSQL(String aucond, String cond, String condByCase, Integer hsID) {
 		String res = "select c.state, c.validationState, c.diagnosisType, count(*) " +
 		"from tbcase c " +
