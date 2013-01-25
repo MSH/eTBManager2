@@ -56,37 +56,50 @@
 	<ui:param name="list" value="#{patientsAZ}" />
 
 	<h:dataTable value="#{patientsAZ.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
-		rendered="#{patientsAZ.searching and (not empty patientsAZ.resultList)}" width="680px" columnClasses="colc,coll,coll,coll" >
+		rendered="#{patientsAZ.searching and (not empty patientsAZ.resultList)}" width="680px" columnClasses="colc,coll,coll,coll" style="float:center;">
 		<h:column>
 			<f:facet name="header">
-				#
+				#{messages['Patient.caseNumber']}
+				<br /> <br />
+				#{messages['Gender']}
 			</f:facet>
+			
 			<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
-				<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}">
+				<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:none;">
 					<f:param name="pacid" value="#{it.patient.id}" />
 					<f:param name="cla" value="#{tbcase.classification}"/>
 				</s:link>
 				<br/>
-				<s:link view="/cases/casenew.xhtml" value="#{it.tbcase.displayCaseNumber}" >
+				<s:link view="/cases/casenew.xhtml" value="#{it.tbcase.displayCaseNumber}"  style="float:center;">
 					<f:param name="pacid" value="#{it.patient.id}" />
 					<f:param name="cla" value="#{tbcase.classification}"/>
 				</s:link>
 			</s:fragment>
 			<s:fragment rendered = '#{it.tbcase.outcomeDate == null}'>
-				<s:link view="/cases/casedata.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" propagation="none">
+				<s:link view="/cases/casedata.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:none;" propagation="none">
 					<f:param name="id" value="#{it.tbcase.id}" />
 				</s:link>
 				<br/>
-				<s:link view="/cases/casedata.xhtml" propagation="none" value="#{it.tbcase.displayCaseNumber}">
+				<s:link view="/cases/casedata.xhtml" propagation="none" value="#{it.tbcase.displayCaseNumber}" style="float:center;">
 					<f:param name="id" value="#{it.tbcase.id}" />
 				</s:link>
 			</s:fragment>
 		</h:column>
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['cases.patientdata']}"/>
+				#{messages['cases.patientdata']}
+				<br/>
+				<div style="padding: 4px; font-size:10px;">
+					#{messages['Patient.name']}
+					<br/>
+					#{messages['az_EIDSS_Year_Of_Birth']}<br/>
+					#{messages['TbCase.patientAge']}
+					<br/>
+					#{levelInfo.nameLevel1}	- #{levelInfo.nameLevel2}
+						(#{messages['Address']}) 
+				</div>
 			</f:facet>
-		<div style="float:left;">
+		<div style="float:left;color:#069;">
 			<b>
 			<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
 				<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml">
@@ -114,7 +127,16 @@
 	
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['ExportContent.CASEDATA']}"/>
+				#{messages['ExportContent.CASEDATA']}
+				<div style="padding: 4px; font-size:10px;">
+					#{messages['CaseClassification']}
+					<br /> 
+					#{messages['cases.casesearching.treatlen']}
+					<br />
+					#{messages['TbCase.notificationUnit']}
+					<br /> 
+					#{messages['CaseState']}
+				</div>
 			</f:facet>
 			
 			<b>#{messages[caseAZHome.reGetTbCase(it.tbcase).classification.key]} -  <h:outputText value=" #{messages[caseAZHome.reGetTbCase(it.tbcase).state.key]}"
