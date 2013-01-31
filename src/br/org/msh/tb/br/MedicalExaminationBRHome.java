@@ -54,7 +54,7 @@ public class MedicalExaminationBRHome  {
 		}
 		
 		// check if the nextappointment if before the examination
-		if(getInstance().getNextAppointment().before(getInstance().getDate())){
+		if(getInstance().getNextAppointment() != null && getInstance().getNextAppointment().before(getInstance().getDate())){
 			FacesMessages.instance().addToControlFromResourceBundle("nextexam", "cases.medexamdate.val2");
 			validated = false;
 		}
