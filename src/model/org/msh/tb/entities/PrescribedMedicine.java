@@ -1,6 +1,7 @@
 package org.msh.tb.entities;
 
  import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Embedded;
@@ -16,7 +17,6 @@ import javax.persistence.Table;
 import org.hibernate.validator.NotNull;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
-
 
 /**
  * Store information about a medicine prescribed to a case
@@ -203,8 +203,24 @@ public class PrescribedMedicine implements Serializable {
 				 period.setIniDate(tbcase.getTreatmentPeriod().getIniDate());
 			else period.setIniDate(new Date());
 		}
+		
+		/*Solves a bug that happens every end of January (pay attention in other dates)
+		 * on the creation of a individualized treatment if there is only one month of medicine precription*/
+		Calendar c = Calendar.getInstance();
+		c.setTime(period.getIniDate());
+		if((c.get(Calendar.MONTH) == Calendar.JANUARY && 
+			(c.get(Calendar.DAY_OF_MONTH)==29 || c.get(Calendar.DAY_OF_MONTH)==30 || c.get(Calendar.DAY_OF_MONTH)==31)) &&
+			months == 1){
+			
+			period.setEndDate(DateUtils.incDays(period.getIniDate(), 30));
+			System.out.println(period.getEndDate());
+			return;
+					
+		}
+		
 		Date dt = DateUtils.incMonths(period.getIniDate(), months);
 		dt = DateUtils.incDays(dt, -1);
+		
 		period.setEndDate(dt);
 	}
 	
