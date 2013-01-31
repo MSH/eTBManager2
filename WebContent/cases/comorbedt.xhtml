@@ -33,6 +33,8 @@
 				<s:fragment rendered="#{it.item.comorbidity.other}">
 				<div class="divother">
 					<b>#{it.item.comorb.value.otherDescription}</b>
+					<s:label value="#{messages['global.mandatory']}" styleClass="over" />
+					<h:inputText value="#{it.item.comorbidity.otherDescription}" style="background-color: transparent; border-color:transparent;width:50px;"/>
     				<h:inputText value="#{it.item.comorb.complement}" style="width:180px"/>
     			</div>
 			</s:fragment>
