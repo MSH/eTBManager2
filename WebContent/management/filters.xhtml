@@ -295,7 +295,7 @@ function handleContextClick(comp) {
 	</td></tr>
 </s:fragment>
 
-<s:fragment rendered="#{hideinterimmonth == null}">
+<s:fragment rendered="#{hideinterimmonth != null}">
 
 	<s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['reports.interimMonths']}:	</ui:define>
