@@ -4,6 +4,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.ExtraOutcomeInfo;
+import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.ua.entities.enums.DiagnosisSource;
 import org.msh.tb.ua.entities.enums.HistologyResult;
@@ -12,6 +13,15 @@ import org.msh.tb.ua.entities.enums.MBTResult;
 @Name("globalLists_ua")
 public class GlobalLists {
 
+	private static final PatientType patientTypes[] = {
+		PatientType.NEW,
+		PatientType.RELAPSE,
+		PatientType.AFTER_DEFAULT,
+		PatientType.RESISTANCE_PATTERN_CHANGED,
+		PatientType.TRANSFER_IN,
+		PatientType.OTHER
+	};
+	
 	private static final TbField tbfields[] = {
 		TbField.TBDETECTION,
 		TbField.DIAG_CONFIRMATION,
@@ -88,4 +98,13 @@ public class GlobalLists {
 	public CaseState[] getOutcomes() {
 		return outcomes;
 	}
+
+
+	/**
+	 * @return the patienttypes
+	 */
+	public PatientType[] getPatientTypes() {
+		return patientTypes;
+	}
+	
 }
