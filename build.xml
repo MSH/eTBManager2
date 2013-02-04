@@ -60,6 +60,11 @@
         <path refid="Web App Libraries.libraryclasspath"/> 
         <path refid="jboss-4.2.3.GA.libraryclasspath"/>
     </path>
+	
+	<path id="etbm.sourcepath">
+		<pathelement location="src/action"/>
+		<pathelement location="src/model"/>
+	</path>
 
 
 	<target name="init">
@@ -160,5 +165,15 @@
 			<zipfileset file="production/persistence.xml" prefix="WEB-INF/classes/META-INF" />
 			<zipfileset file="production/components.xml" prefix="WEB-INF" />
 		</war>
+	</target>
+	
+	<target name="doc" depends="init" description="JavaDoc generation">
+		<javadoc destdir="${doc.dir}" sourcepathref="etbm.sourcepath" classpathref="mdrtb.classpath"
+			author="true"
+			version="true">
+
+			<doctitle><![CDATA[<h1>eTB Manager Javadoc</h1>]]></doctitle>
+			<bottom><![CDATA[<i>Copyright &#169; 2005 Management Sciences for Health, Inc. All Rights Reserved.</i>]]></bottom>
+		</javadoc>
 	</target>
 </project>
