@@ -45,21 +45,21 @@
 				<s:decorate styleClass="label">
 					#{messages['Patient.firstname']}
 					<br/>
-					<h:inputText id="name" value="#{patientdata.name}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}" onkeyup="this.value = handleNameChange(this.value)"/>
+					<h:inputText id="name" value="#{patientdata.name}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}" onblur="this.value = handleNameChange(this.value)"/>
 					<s:message styleClass="error"/>	
 				</s:decorate>
 				
 				<s:decorate styleClass="label">
 					#{messages['Patient.middleName']}
 					<br/>			
-					<h:inputText id="midname" value="#{patientdata.middleName}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}" onkeyup="this.value = handleNameChange(this.value)"/>
+					<h:inputText id="midname" value="#{patientdata.middleName}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}" onblur="this.value = handleNameChange(this.value)"/>
 					<s:message styleClass="error"/>
 				</s:decorate>
 				
 				<s:decorate styleClass="label">
 					#{messages['Patient.lastName']}
 					<br/>
-					<h:inputText id="lastname" value="#{patientdata.lastName}" class="mask-az" style="width:120px;" required="#{required}" onkeyup="this.value = handleNameChange(this.value)"/>
+					<h:inputText id="lastname" value="#{patientdata.lastName}" class="mask-az" style="width:120px;" required="#{required}" onblur="this.value = handleNameChange(this.value)"/>
 					<s:message styleClass="error"/>
 				</s:decorate>	
 			</s:validateAll>
@@ -70,7 +70,7 @@
 				<s:decorate styleClass="label">
 					#{messages['Patient.lastName']}
 					<br/>
-					<h:inputText id="lastname" value="#{patientdata.lastName}" class="mask-az" style="width:120px;" required="#{required}" onkeyup="this.value = handleNameChange(this.value)"/>
+					<h:inputText id="lastname" value="#{patientdata.lastName}" class="mask-az" style="width:120px;" required="#{required}" onblur="this.value = handleNameChange(this.value)"/>
 					<s:message styleClass="error"/>
 					
 				</s:decorate>
@@ -78,14 +78,14 @@
 				<s:decorate styleClass="label">
 					#{messages['Patient.firstname']}
 					<br/>
-					<h:inputText id="name" value="#{patientdata.name}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}" onkeyup="this.value = handleNameChange(this.value)"/>
+					<h:inputText id="name" value="#{patientdata.name}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}" onblur="this.value = handleNameChange(this.value)"/>
 					<s:message styleClass="error"/>
 				</s:decorate>
 				
 				<s:decorate styleClass="label">
 					#{messages['Patient.middleName']}
 					<br/>			
-					<h:inputText id="midname" value="#{patientdata.middleName}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}" onkeyup="this.value = handleNameChange(this.value)"/>
+					<h:inputText id="midname" value="#{patientdata.middleName}" class="mask-az" style="width:120px;margin-right:6px;" required="#{required}" onblur="this.value = handleNameChange(this.value)"/>
 					<s:message styleClass="error"/>
 				</s:decorate>
 			</s:validateAll>

@@ -160,8 +160,23 @@
 		    </s:decorate>
 		</td>
 	</tr>
+	<tr>
+		<td>
+	<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">#{messages['az_AZ.case.doctor']}:</ui:define>
+    		<h:outputText value="#{tbcase.doctor}"/> 
+    	</s:decorate>
+    	</td>
+	</tr>
 	<s:fragment rendered="#{userAZControl.canViewJusticeFields()}">
     <tr><td>
+    		<table style="border: 1px solid #FFFFFF;">
+		<tr>
+		<th bgcolor="#afcfc1" style="color:#FFFFFF;">
+		#{messages['cases.details.otherinfo']}
+		</th>
+		</tr>
+		<tr><td>
     	<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">#{messages['az_AZ.case.numberOfImprisonments']}:</ui:define>
     		#{tbcase.numberOfImprisonments}
@@ -176,10 +191,9 @@
     		<ui:define name="label">#{messages['az_AZ.case.inprisonEndDate']}:</ui:define>
     		<h:outputText id="dt" value="#{tbcase.inprisonEndDate}" converter="localeDateConverter"/>
     	</s:decorate>	
-    	<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label">#{messages['az_AZ.case.doctor']}:</ui:define>
-    		<h:outputText value="#{tbcase.doctor}"/> 
-    	</s:decorate>
+    	
+    	</td></tr>
+  </table>
     </td></tr>
 	</s:fragment>
 	</table>

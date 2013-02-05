@@ -12,26 +12,29 @@
 	<div class="form-content">
 	<h2>#{messages['cases.patientdata']}</h2>
 	<table width="100%" style="border-collapse:collapse;">
-	
-		
-	<tr> 
-		<td colspan="2">
-	<s:decorate template="/layout/display.xhtml">
-	    	<h2><ui:define name="label">#{messages['TbCase.eidsscomment']}:</ui:define>
-	    	<h:outputText value="#{caseAZHome.getEIDSSBlock(tbcase)}" escape="false" style="color:#45793D;"/>
-			</h2>
-		</s:decorate>
-		</td>
-		</tr>
-		
-	<tr><td colspan="2">
+		<tr><td >
 	<s:decorate template="/custom/az/layout/editname.xhtml">
     	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
 		<ui:param name="patientdata" value="#{tbcase.patient}" />
 		<ui:param name="required" value="#{true}" />
 	</s:decorate>
 	
-	</td></tr>
+	</td>
+	<td>
+	<table style="border: 1px solid #FFFFFF;">
+		<tr>
+		<th bgcolor="#afcfc1" style="color:#FFFFFF;">
+		#{messages['TbCase.eidsscomment']}
+		</th>
+		</tr>
+		<tr>
+			<td>
+				<h:outputText value="#{caseAZHome.getEIDSSBlock(tbcase)}" escape="false" style="color:#45793D;"/>
+			</td>
+		</tr>
+		</table>
+	</td>
+	</tr>
 	<tr><td>
 	
 	<s:decorate template="/layout/edit.xhtml">
@@ -182,8 +185,24 @@
 	    	<ui:param name="list" value="#{fieldsQuery.educationalDegree}" />
 	    </s:decorate>
     </td></tr>
+    <tr>
+    <td>
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['az_AZ.case.doctor']}:</ui:define>
+    		<h:inputText value="#{tbcase.doctor}" maxlength="45"/> 
+    	</s:decorate>
+    </td>
+    
+    </tr>
     <s:fragment rendered="#{userAZControl.canViewJusticeFields()}">
     <tr><td>
+    <table style="border: 1px solid #FFFFFF;">
+		<tr>
+		<th bgcolor="#afcfc1" style="color:#FFFFFF;">
+		#{messages['cases.details.otherinfo']}
+		</th>
+		</tr>
+		<tr><td>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['az_AZ.case.numberOfImprisonments']}:</ui:define>
     		<h:inputText value="#{tbcase.numberOfImprisonments}" style="width:80px"/>
@@ -200,19 +219,13 @@
     		<ui:param name="datefield" value="#{tbcase.inprisonEndDate}" /> 
 			<ui:param name="required" value="false" />
     	</s:decorate>	
-    		
+    	</td></tr>
+    	  </table>	
     </td>
     </tr>
+   
     </s:fragment>
-    <tr>
-    <td>
-    	<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['az_AZ.case.doctor']}:</ui:define>
-    		<h:inputText value="#{tbcase.doctor}" maxlength="45"/> 
-    	</s:decorate>
-    </td>
     
-    </tr>
     
     
     </table>

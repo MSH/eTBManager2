@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
@@ -42,6 +43,7 @@ public class CasesQueryAZ extends CasesQuery{
 	private static final String treatRegCondAZ = "(tu.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
 	private static final String notifAdrAdmUnitAZ="c.notifAddress.adminUnit.code like ";
 	private static final String notifAdrAdmUnitRegAZ="c.notifAddress.adminUnit.code = ";
+	//private static final Pattern WHERE_PATTERN = Pattern.compile("\\s(where)\\s", Pattern.CASE_INSENSITIVE);
 	
 	// static filters
 	private static final String[] restrictions = {
@@ -85,7 +87,7 @@ public class CasesQueryAZ extends CasesQuery{
 	
 	@Override
 	public String getEjbql() {
-		if (isNotBindedEIDSS()){
+		if (isNotBindedEIDSS() || isTagSearch()){
 			return getNotBindedEIDSSEjb();
 		}else return getGeneralEjbql();
 
@@ -118,7 +120,7 @@ public class CasesQueryAZ extends CasesQuery{
 	}
 	@Override
 	public String getCountEjbql() {
-		if (isNotBindedEIDSS()){
+		if (isNotBindedEIDSS() || isTagSearch()){
 			return getNotBindedCountEIDSSEjb();
 		}else return getGeneralCountEjbql();
 
@@ -144,6 +146,37 @@ public class CasesQueryAZ extends CasesQuery{
 		dynamicConditions();
 	}
 
+/*	@Override
+	protected Query createQuery() {
+      parseEjbql();
+
+      evaluateAllParameters();
+
+      joinTransaction();
+	  
+      String hql = getEjbql();
+		StringBuilder builder = new StringBuilder().append(hql);
+
+		boolean bWhere = WHERE_PATTERN.matcher(builder).find();
+		
+		for (int i = 0; i < getRestrictions().size(); i++) {
+			Object parameterValue = getRestrictionParameters().get(i)
+					.getValue();
+			if (isRestrictionParameterSet(parameterValue)) {
+				if (bWhere) {
+					builder.append(" and ");
+				} else {
+					builder.append(" where ");
+					bWhere = true;
+				}
+				builder.append(getRestrictions().get(i).getExpressionString());
+			}
+		}
+		hql = builder.toString();
+      javax.persistence.Query query = getEntityManager().createQuery( hql );
+      return query;
+	}*/
+	
 	/**
 	 * Generate HQL conditions for filters that cannot be included in the restrictions clause
 	 * @return
@@ -221,7 +254,9 @@ public class CasesQueryAZ extends CasesQuery{
 		else 
 			if (isThirdCat())
 				addCondition("c.toThirdCategory = 1");
-		else{
+		else
+			if (!isTagSearch())
+			{
 			addCondition("nu.workspace.id=#{defaultWorkspace.id}");
 			if (ValidationState.WAITING_VALIDATION.equals(getValidationState()))
 				addCondition("c.diagnosisType in (0,1)");
@@ -289,7 +324,7 @@ public class CasesQueryAZ extends CasesQuery{
 	 */
 	@Override
 	protected void fillResultList(List<Object[]> lst) {
-		if (isNotBindedEIDSS()){
+		if (isNotBindedEIDSS() || isTagSearch()){
 			Patient p = new Patient();
 			resultList = new ArrayList<CaseResultItem>();
 			for (Object[] obj: lst) {
@@ -326,7 +361,15 @@ public class CasesQueryAZ extends CasesQuery{
 	public boolean isNotBindedEIDSS(){
 		if (getStateIndex() != null) {
 			return getStateIndex().equals(getCasesEIDSSnotBindedIndex());
-		}	else	return false;
+		}	
+		else	
+			return false;
+	}
+	
+	public boolean isTagSearch(){
+		if (getSearchCriteria()!=null)
+			return getSearchCriteria().equals(SearchCriteria.CASE_TAG);
+		return false;
 	}
 
 	/**
@@ -353,6 +396,12 @@ public class CasesQueryAZ extends CasesQuery{
 	private Integer getStateIndex(){
 		if (caseFilters == null) return null;
 		return caseFilters.getStateIndex();
+	}
+	
+	private SearchCriteria getSearchCriteria(){
+		if (caseFilters == null) 
+			caseFilters = (CaseFilters)Component.getInstance("caseFilters");
+		return caseFilters.getSearchCriteria();
 	}
 	
 	private ValidationState getValidationState(){

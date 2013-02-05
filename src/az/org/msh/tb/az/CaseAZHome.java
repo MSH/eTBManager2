@@ -12,16 +12,18 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.international.Messages;
+import org.msh.tb.application.App;
 import org.msh.tb.az.entities.CaseSeverityMark;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.cases.CaseCloseHome;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.ExamDST;
+import org.msh.tb.entities.SystemParam;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.utils.date.DateUtils;
 
@@ -30,6 +32,7 @@ public class CaseAZHome {
 //	private String notifEIDSS="";
 //	private String addrEIDSS="";
 	private boolean to3category;
+	private String systemMessage;
 	private static final CaseState[] outcomes3cat = {
 		CaseState.CURED, 
 		CaseState.TREATMENT_COMPLETED};
@@ -165,28 +168,19 @@ public class CaseAZHome {
 	}
 	
 	public String getRightPatientName(TbCase tbcase){
-		EntityManager em = (EntityManager)Component.getInstance("entityManager", true);
-		TbCase tc = (TbCase) em.find(TbCase.class, tbcase.getId());
+		TbCase tc = (TbCase) App.getEntityManager().find(TbCase.class, tbcase.getId());
 		return tc.getPatient().getFullName();
 	}
 	
 	public String getRightCaseDetailsTitle(){
 		TbCaseAZ tc = getTbCase();
 		if (tc.getNotificationUnit()==null && tc.getLegacyId()!=null)
-			return getMessages().get("cases.detailseidsstitle");
+			return App.getMessage("cases.detailseidsstitle");
 	//return getMessages().get("cases.detailstitle");
-		return getMessages().get("CaseState." + tc.getState());
+		return App.getMessage("CaseState." + tc.getState());
 	}
 	
-	/**
-	 * Return the current resource message file
-	 * @return
-	 */
-	protected Map<String, String> getMessages() {
-		if (messages == null)
-			messages = Messages.instance();
-		return messages;
-	}
+	
 	
 	/**
 	 * Return the correct instance of tbcase
@@ -213,8 +207,8 @@ public class CaseAZHome {
 				try {
 					eidssDBirth = new SimpleDateFormat("dd-MM-yyyy").parse(ec[5]);
 					res += DateUtils.yearOf(eidssDBirth)+ " " 
-						+ getMessages().get("az_EIDSS_Year_Of_Birth") + " "
-						+ "("+DateUtils.formatDate(eidssDBirth, getMessages().get("locale.datePattern"))+"), ";
+						+ App.getMessage("az_EIDSS_Year_Of_Birth") + " "
+						+ "("+DateUtils.formatDate(eidssDBirth, App.getMessage("locale.datePattern"))+"), ";
 				} catch (ParseException e) {
 					res += "("+ec[5]+"), ";
 				}
@@ -225,21 +219,21 @@ public class CaseAZHome {
 					res += "\u2248"+y+" "+ getMessages().get("az_EIDSS_Year_Of_Birth.short")+ " (XX.XX."+y+"), ";
 				}
 				else*/
-					res += "XXXX " + getMessages().get("az_EIDSS_Year_Of_Birth.short") + " (XX.XX.XXXX), ";
+					res += "XXXX " + App.getMessage("az_EIDSS_Year_Of_Birth.short") + " (XX.XX.XXXX), ";
 			
 			//====AGE====
-			res += (existInImport(ec,4)?ec[4]:"XX")+ " " + getMessages().get("az_EIDSS_years")+"</br>";
+			res += (existInImport(ec,4)?ec[4]:"XX")+ " " + App.getMessage("az_EIDSS_years")+"</br>";
 			
 			//====NOTIFICATION ADRESS====
-			res += getMessages().get("Address.address")+" "+getMessages().get("excel.fromEIDSS")+": "+(existInImport(ec,1) ? ec[1] : "-")+"<br/>";
+			res += App.getMessage("Address.address")+" "+App.getMessage("excel.fromEIDSS")+": "+(existInImport(ec,1) ? ec[1] : "-")+"<br/>";
 
 			//====NOTIFICATION DATE AND INNER DATE====
 			Date dInEIDSS;
-			res += "<sub>"+getMessages().get("az_EIDSS_InNotifDate")+": ";
+			res += "<sub>"+App.getMessage("az_EIDSS_InNotifDate")+": ";
 			if (existInImport(ec,6)){
 				try {
 					dInEIDSS = new SimpleDateFormat("dd-MM-yyyy").parse(ec[6]);
-					res += DateUtils.formatDate(dInEIDSS, getMessages().get("locale.datePattern"));
+					res += DateUtils.formatDate(dInEIDSS, App.getMessage("locale.datePattern"));
 				} catch (ParseException e) {
 					res += ec[6];
 				}
@@ -249,7 +243,7 @@ public class CaseAZHome {
 			if (existInImport(ec,2)){
 				try {
 					dInEIDSS = new SimpleDateFormat("dd-MM-yyyy").parse(ec[2]);
-					res += DateUtils.formatDate(dInEIDSS, getMessages().get("locale.datePattern"));
+					res += DateUtils.formatDate(dInEIDSS, App.getMessage("locale.datePattern"));
 				} catch (ParseException e) {
 					res += ec[2];
 				}
@@ -258,14 +252,14 @@ public class CaseAZHome {
 			res+="</sub><br/>";
 			
 			//====NOTIFICATION UNIT====
-			res += "<b>"+getMessages().get("az_EIDSS_Notify_LPU")+": "+(existInImport(ec,0)?ec[0]:"-")+"</b><br/>";
+			res += "<b>"+App.getMessage("az_EIDSS_Notify_LPU")+": "+(existInImport(ec,0)?ec[0]:"-")+"</b><br/>";
 			//====EIDSS ID====
-			res += "<b>"+getMessages().get("TbCase.eidssid")+": "+(az.getLegacyId()!=null ? az.getLegacyId() : "-")+"</b><br/>";
+			res += "<b>"+App.getMessage("TbCase.eidssid")+": "+(az.getLegacyId()!=null ? az.getLegacyId() : "-")+"</b><br/>";
 			//====UNICAL ID====
-			res += "<b>"+getMessages().get("az_AZ.case.unicalID")+": </b>"+(az.getUnicalID()!=null ? az.getUnicalID() : "XXXXXXX")+"<br/>";
+			res += "<b>"+App.getMessage("az_AZ.case.unicalID")+": </b>"+(az.getUnicalID()!=null ? az.getUnicalID() : "XXXXXXX")+"<br/>";
 		}
 		else
-			res += "<center>"+getMessages().get("manag.ind.interim.unknown")+"</center>";
+			res += "<center>"+App.getMessage("manag.ind.interim.unknown")+"</center>";
 		return res;
 	}
 	
@@ -291,9 +285,63 @@ public class CaseAZHome {
 		String res = "";
 		if (!exams)
 			res+= "<span class=\"underline\" style=\"border-bottom: 2px solid red;\">";
-		res += DateUtils.formatDate(az.getTreatmentPeriod().getIniDate(), getMessages().get("locale.datePattern"));
+		res += DateUtils.formatDate(az.getTreatmentPeriod().getIniDate(), App.getMessage("locale.datePattern"));
 		if (!exams)
 			res+= "</span>";
+		return res;
+	}
+	
+	public String getSystemMessage(){
+		if (systemMessage==null){
+			String s = null;
+			try {
+				SystemParam sysparam = (SystemParam)App.getEntityManager()
+				.createQuery("from SystemParam sp where sp.workspace.id = :id and sp.key = :param")
+				.setParameter("id", ((Workspace)App.getComponent("defaultWorkspace")).getId())
+				.setParameter("param", "admin.system_message")
+				.getSingleResult();
+				s = sysparam.getValue();
+			} catch (Exception e) {
+				s = null;
+			}
+			systemMessage = s;
+		}
+		return systemMessage;
+	}
+	
+	public void setSystemMessage(String value){
+		this.systemMessage = value;
+	}
+	
+	public void saveSystemMessage(){
+		SystemParam p;
+		try {
+			p = App.getEntityManager().find(SystemParam.class, "admin.system_message");
+		} catch (Exception e) {
+			p = null;
+		}
+
+		if (p == null) {
+			p = new SystemParam();
+			p.setKey("admin.system_message");
+			//defaultWorkspace = entityManager.merge(defaultWorkspace);
+			p.setWorkspace((Workspace)App.getComponent("defaultWorkspace"));
+		}
+		p.setValue(systemMessage.toString());
+		App.getEntityManager().persist(p);
+	}
+	
+	public String convertToHTML(String s){
+		String res = s;
+		if (res!=null)
+			res = res.replaceAll("\n", "<br/>");
+		return res;
+	}
+	
+	public String convertFromHTML(String s){
+		String res = s;
+		if (res!=null)
+			res = res.replaceAll("<br/>", "\n");
 		return res;
 	}
 }

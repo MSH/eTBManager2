@@ -230,7 +230,14 @@
 	</a:jsFunction>
 
 	<div class="spacer" />
-
+	<a:repeat value="#{caseFilters.classifications}" var="it">
+		<span style="margin-right:20px;">
+			<h:selectBooleanCheckbox value="#{it.selected}">
+				<a:support event="onclick" ajaxSingle="true" reRender="pnlhealthunits"/>
+			</h:selectBooleanCheckbox>
+			#{messages[it.item.key]}
+		</span>
+	</a:repeat>
 	<h:panelGroup id="pnlhealthunits">
 		<div id="content">
 			<ui:include src="#{casesViewController.unitView? wspage['/cases/indexcases.xhtml']: wspage['/cases/indexunits.xhtml']}" />
