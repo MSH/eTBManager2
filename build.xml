@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?> 
 
-<project basedir="." default="build" name="etbmanager">
-    <property environment="env" />
+<project basedir="." default="build" name="etbmanager"
+	xmlns:sonar="antlib:org.sonar.ant">
+
+	<property environment="env" />
 	<property file="build.properties" />
 	<property name="war-file-name" value="etbmanager.war" />
 	<property name="implementation-title" value="e-TB Manager" />
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.6"/>
     <property name="source" value="1.6"/>
+
+	<!-- Define the Sonar global properties (the most usual way is to pass these properties via the command line) -->
+	<property name="sonar.jdbc.url" value="jdbc:mysql://localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8" />
+	<property name="sonar.jdbc.username" value="root" />
+	<property name="sonar.jdbc.password" value="admin" />
+	<property name="sonar.host.url" value="http://localhost:9000/sonar" />
+	<property name="sonar.login" value="admin" />
+	<property name="sonar.password" value="admin" />
+	<property name="sonar.forceAuthentication" value="true" />
+
+	<!-- Define the Sonar project properties -->
+	<property name="sonar.projectKey" value="etbmanager" />
+	<property name="sonar.projectName" value="eTB Manager" />
+	<property name="sonar.projectVersion" value="2.0" />
+	<property name="sonar.language" value="java" />
+	<property name="sonar.sources" value="src/action,src/model,src/ng,src/na,src/bd,src/ke,src/br,src/ua,src/az,src/uz" />
+	<property name="sonar.binaries" value="build" />
 
 	<path id="Web App Libraries.libraryclasspath">
         <pathelement location="WebContent/WEB-INF/lib/commons-beanutils.jar"/>
@@ -175,5 +194,14 @@
 			<doctitle><![CDATA[<h1>eTB Manager Javadoc</h1>]]></doctitle>
 			<bottom><![CDATA[<i>Copyright &#169; 2005 Management Sciences for Health, Inc. All Rights Reserved.</i>]]></bottom>
 		</javadoc>
+	</target>
+
+	<!-- Define the Sonar target -->
+	<target name="sonar">
+	    <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+	    </taskdef>
+		 
+	    <!-- Execute Sonar -->
+	    <sonar:sonar />
 	</target>
 </project>
