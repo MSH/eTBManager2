@@ -6,6 +6,7 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.cases.CaseFilters;
 import org.msh.tb.cases.CasesQuery;
 import org.msh.tb.cases.FilterHealthUnit;
+import org.msh.tb.cases.SearchCriteria;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.CaseState;
@@ -98,7 +99,9 @@ public class CasesQueryUA extends CasesQuery{
 					addCondition(notifRegCondUA);
 					break;
 				case TREATMENT_UNIT:
-					addCondition(treatRegCondUA);
+					if((caseFilters.getStateIndex()==null && caseFilters.getSearchCriteria().equals(SearchCriteria.CASE_TAG))
+							|| caseFilters.getStateIndex()!= CaseFilters.TRANSFER_OUT)
+								addCondition(treatRegCondUA);
 					break;
 				case BOTH:{
 					addCondition("(" + treatRegCondUA + " or " + notifRegCondUA);

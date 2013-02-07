@@ -7,11 +7,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.jboss.seam.Component;
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.Synchronized;
 import org.msh.tb.adminunits.AdminUnitGroup;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.application.App;
@@ -23,6 +20,7 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.entities.enums.ValidationState;
+import org.msh.tb.login.UserSession;
 
 /**
  * Generate report by case state to be displayed in the main page
@@ -31,8 +29,6 @@ import org.msh.tb.entities.enums.ValidationState;
  *
  */
 @Name("caseStateReportUA")
-@Scope(ScopeType.SESSION)
-@Synchronized(timeout=20000)
 public class CaseStateReportUA extends CaseStateReport{
 
 	@In Workspace defaultWorkspace;
@@ -81,19 +77,64 @@ public class CaseStateReportUA extends CaseStateReport{
 		return -1;
 	}*/
 	
+	/**
+	 * Get HQL instruction to be included in the join declaration
+	 * @return
+	 */
+	@Override
+	protected String getSqlJoin(boolean forceUnitJoin, String caseTableJoinAlias) {
+		UserWorkspace uw = UserSession.getUserWorkspace();
 
+		String join;
+		String unitJoin;
+
+		// conditions to add the TB unit to the query join
+		if ((forceUnitJoin) || (getTbunit() != null) || (uw.getView() == UserView.TBUNIT) || (uw.getHealthSystem() != null) || (uw.getView() == UserView.ADMINUNIT))
+			 unitJoin = " inner join tbunit u on u.id = c.notification_unit_id";
+		else unitJoin = "";
+
+		if ((caseTableJoinAlias != null) && ((generateSQLConditionByCase().length() > 0) || (!unitJoin.isEmpty())))
+			 join = "inner join tbcase c on c.id = " + caseTableJoinAlias + ".case_id" + unitJoin;
+		else join = unitJoin;
+		
+		if (uw.getView() == UserView.ADMINUNIT)
+			 join +=  " inner join administrativeunit a on a.id = u.adminunit_id ";
+		
+		return join;
+	}
+	
 	/**
 	 * Generate SQL condition to filter cases by user view
 	 * @return
 	 */
+	@Override
 	protected String generateSQLConditionByUserView() {
-		switch (userWorkspace.getView()) {
+		UserWorkspace userWorkspace = UserSession.getUserWorkspace();
+		UserView view = userWorkspace.getView();
+
+		if (view == null)
+			return "";
+
+		String s;
+		if (userWorkspace.getHealthSystem() != null)
+			s = " and u.healthSystem_id = " + userWorkspace.getHealthSystem().getId();
+		else s = "";
+		switch (view) {
+			case ADMINUNIT: {
+				return " and (a.code like '" + userWorkspace.getAdminUnit().getCode() + "%')" + s; 
+			}
+			case TBUNIT: 
+			return " and u.id = " + userWorkspace.getTbunit().getId();
+		default: return s;
+		}
+		
+		/*switch (userWorkspace.getView()) {
 		case ADMINUNIT: 
 			return " and (a.code like '" + getSelectedAdmUnit().getCode() + "%')"; 
 		case TBUNIT: 
 			return " and u.id = " + userWorkspace.getTbunit().getId();
 		default: return "";
-		}
+		}*/
 	}
 	
 	public AdministrativeUnit getSelectedAdmUnit() {
