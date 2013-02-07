@@ -127,7 +127,7 @@ public class CaseStateReport  {
 	 * Get HQL instruction to be included in the WHERE clause
 	 * @return
 	 */
-	private String getSqlCondition() {
+	protected String getSqlCondition() {
 		if (tbunit != null)
 			return "and u.id = " + tbunit.getId().toString();
 
@@ -150,7 +150,7 @@ public class CaseStateReport  {
 	 * Get HQL instruction to be included in the join declaration
 	 * @return
 	 */
-	private String getSqlJoin(boolean forceUnitJoin, String caseTableJoinAlias) {
+	protected String getSqlJoin(boolean forceUnitJoin, String caseTableJoinAlias) {
 		UserWorkspace uw = UserSession.getUserWorkspace();
 
 		String join;
