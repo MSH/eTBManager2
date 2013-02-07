@@ -51,34 +51,34 @@
 	<s:link value="#{messages['admin.tags']}" view="/cases/casetagsedt.xhtml" rendered="#{caseHome.canTagCase and empty tbcase.tags}">
 		<f:param name="id" value="#{caseHome.id}" />
 	</s:link>
-
+	
 	</h:form>
 	</h:panelGroup>
-
-	<s:fragment rendered="#{not empty tbcase.tags}">
-	<table class="table2">
-	<tr>
-		<th>#{messages['admin.tags']}</th>
-	</tr>
-	<tr>
-		<td>
-		<a:repeat value="#{tbcase.tags}" var="it">
-			<div class="tag-#{it.type}-icon"/>#{it.name}<br/>
-		</a:repeat>
-		</td>
-	</tr>
-	<s:fragment rendered="#{caseHome.canTagCase}">
-	<tr>
-		<th>
-		<s:link value="#{messages['form.edit']}" 
-			rendered="#{caseHome.canEditCaseData}" 
-			view="/cases/casetagsedt.xhtml">
-			<f:param name="id" value="#{caseHome.id}"/>
-		</s:link>
-		</th>
-	</tr>
-	</s:fragment>
-	</table>
+	
+		<s:fragment rendered="#{not empty tbcase.tags}">
+		<table class="table2">
+		<tr>
+			<th>#{messages['admin.tags']}</th>
+		</tr>
+		<tr>
+			<td>
+			<a:repeat value="#{tbcase.tags}" var="it">
+				<div class="tag-#{it.type}-icon"/>#{it.name}<br/>
+			</a:repeat>
+			</td>
+		</tr>
+		<s:fragment rendered="#{caseHome.canTagCase}">
+		<tr>
+			<th>
+			<s:link value="#{messages['form.edit']}" 
+				rendered="#{caseHome.canEditCaseData}" 
+				view="/cases/casetagsedt.xhtml">
+				<f:param name="id" value="#{caseHome.id}"/>
+			</s:link>
+			</th>
+		</tr>
+		</s:fragment>
+		</table>
 	</s:fragment>
 
 	<div class="spacer" />
@@ -142,7 +142,16 @@
 <h:form id="main">
 <s:decorate id="bodydiv" template="/layout/casebody.xhtml">
 
-<ui:include src="/cases/issues.xhtml" />
+<s:fragment rendered="#{tbcase.diagnosisType!='SUSPECT'}">
+	<ui:include src="/cases/issues.xhtml" />
+</s:fragment>
+<s:fragment rendered="#{tbcase.diagnosisType=='SUSPECT'}">
+	<s:decorate template="/layout/roundrect.xhtml" style="width:100%;">
+	<ui:param name="showheader" value="0" />
+	<ui:param name="showfooter" value="0" />
+	<h:outputText value="#{messages['validate.notsuspect']}" />
+	</s:decorate>
+</s:fragment>
 
 <div class="spacer" />
 	<s:decorate template="/layout/display.xhtml" rendered="#{caseDataUA.extraOutcomeInfo.key.length()>0}">
