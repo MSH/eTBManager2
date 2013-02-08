@@ -39,7 +39,7 @@ public class EntityLogManager {
 	 * @return
 	 */
 	public EntityLogMapping getEntityMapping(Object obj) {
-		entities.clear(); // <- JUST FOR TESTING
+//		entities.clear(); // <- JUST FOR TESTING
 		// return the true class, and not the hibernate proxy
 		Class entityClass = Hibernate.getClass(obj);
 
@@ -101,7 +101,11 @@ public class EntityLogManager {
 			for (Field f: fields) {
 				String s = f.getName();
 				char ch = Character.toUpperCase( s.charAt(0) );
-				String getname = "get" + ch + s.substring(1);
+				
+				String getname;
+				if ((f.getType() == Boolean.class) || (f.getType() == boolean.class))
+					 getname = "is" + ch + s.substring(1);
+				else getname = "get" + ch + s.substring(1);
 				boolean isProperty = true;
 				
 				try {

@@ -209,11 +209,11 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 	}
 	
 	public String getUserNameLike() {
-		return (userName != null? "%" + userName + "%" : null);
+		return ((userName != null) && (!userName.isEmpty())? "%" + userName + "%" : null);
 	}
 	
 	public String getSearchKeyLike() {
-		return (searchKey != null? "%" + searchKey + "%" : null);
+		return ((searchKey != null) && (!searchKey.isEmpty())? "%" + searchKey + "%" : null);
 	}
 
 	public String getAdminUnitCode(){

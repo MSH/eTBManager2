@@ -11,7 +11,22 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
+import org.msh.tb.transactionlog.PropertyLog;
 
+/**
+ * Store information about a tag. A tag may be assigned to cases. This
+ * assignment may be done automatically or manually according to the
+ * content of the sqlCondition - If null, the tag is assigned manually
+ * by a user to a case, if not null, so the tag is maintained by
+ * the system. Manual tags are represented by the blue tag.
+ * <p/>
+ * The <code>consistencyCheck</code> field is used only in automatic
+ * tags and indicate if the tag is used for checking validation
+ * problems (red tag) or if this is just for grouping cases (green tag) 
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 @Entity
 @Table(name="tag")
 public class Tag extends WSObject implements Serializable {
@@ -25,6 +40,7 @@ public class Tag extends WSObject implements Serializable {
 	
 	@Column(name="tag_name", length=100)
 	@NotNull
+	@PropertyLog(messageKey="form.name")
 	private String name;
 	
 	@Lob
@@ -32,6 +48,7 @@ public class Tag extends WSObject implements Serializable {
 	
 	private boolean consistencyCheck;
 	
+	@PropertyLog(messageKey="UserState.ACTIVE")
 	private boolean active;
 
 	
@@ -125,5 +142,14 @@ public class Tag extends WSObject implements Serializable {
 	 */
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return name;
 	}
 }

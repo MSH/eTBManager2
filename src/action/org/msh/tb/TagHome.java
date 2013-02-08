@@ -4,9 +4,11 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.entities.Tag;
+import org.msh.tb.transactionlog.LogInfo;
 import org.msh.utils.EntityQuery;
 
 @Name("tagHome")
+@LogInfo(roleName="TAGS")
 public class TagHome extends EntityHomeEx<Tag> {
 	private static final long serialVersionUID = 2346498717179017533L;
 
