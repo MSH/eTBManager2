@@ -293,7 +293,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 							ad=ad.substring(0, 14);
 						}
 						Integer age=c.getAge();
-						String toLog=c.getLastName()+"_"+c.getFirstName()+"_"+c.getMiddleName()+
+						String toLog=c.getLastName()+" "+c.getFirstName()+" "+c.getMiddleName()+
 						", age "+age.toString()+", diag "+DateFormat.getDateInstance().format(c.getFinalDiagnosisDate())+", "+ad+" "+c.getCaseID();
 						String entDate=DateFormat.getDateInstance().format(c.getEnteringDate());
 						
@@ -647,7 +647,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			fatherName = EIDSSData.getMiddleName();
 		
 		fatherName = replaceIfEmptyName(fatherName);
-		noError = (fatherName.equals("XXXXX") ? false : noError);
+		//noError = (fatherName.equals("XXXXX") ? false : noError);
 		
 		onecase.setLastName(lastName);
 		onecase.setFirstName(firstName);
@@ -721,7 +721,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			}else {
 				ageStr=age.toString();
 			}
-			String toLog=lastName+"_"+firstName+"_"+fatherName+", age "+ageStr+", diag "+diag+", "+(notification.length()>14 ? notification.substring(0, 14) : notification)+" "+onecase.getCaseID();
+			String toLog=lastName+" "+firstName+" "+fatherName+", age "+ageStr+", diag "+diag+", "+(notification.length()>14 ? notification.substring(0, 14) : notification)+" "+onecase.getCaseID();
 			String entDate=DateFormat.getDateInstance().format(d);
 			addExportDetails(entDate+" - "+toLog, '-', d);
 			//rejectDetails += entDate+" - "+toLog+"\n";

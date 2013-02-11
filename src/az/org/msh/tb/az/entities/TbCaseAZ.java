@@ -1,7 +1,5 @@
 package org.msh.tb.az.entities;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -82,6 +80,8 @@ public class TbCaseAZ extends TbCase{
 	private Date systemDate;
 	
 	private Date inEIDSSDate;
+	
+	private boolean colPrevTreatUnknown;
 	
 	//===================GETTERS & SETTERS======================
 	/**
@@ -272,5 +272,13 @@ public class TbCaseAZ extends TbCase{
 
 	public Date getInEIDSSDate() {
 		return inEIDSSDate;
+	}
+
+	public void setColPrevTreatUnknown(boolean colPrevTreatUnknown) {
+		this.colPrevTreatUnknown = colPrevTreatUnknown;
+	}
+
+	public boolean isColPrevTreatUnknown() {
+		return colPrevTreatUnknown;
 	}
 }

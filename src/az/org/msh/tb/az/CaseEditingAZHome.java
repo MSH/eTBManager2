@@ -20,9 +20,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.MedAppointmentType;
 import org.msh.tb.entities.enums.ValidationState;
-import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.tbunits.TBUnitSelection;
 
 
@@ -77,15 +75,17 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		if (getMedicalExaminationHome() != null) {
 			MedicalExamination medExa = getMedicalExaminationHome().getInstance();
 			if (medExa.getDate() != null) {
-				medExa.setAppointmentType(MedAppointmentType.SCHEDULLED);
-				medExa.setUsingPrescMedicines(YesNoType.YES);
+				//medExa.setAppointmentType(MedAppointmentType.SCHEDULLED);
+				//medExa.setUsingPrescMedicines(YesNoType.YES);
 				getMedicalExaminationHome().persist();			
 			}
 		}
 
 		// save additional information
-		if (getPrevTBTreatmentHome() != null)
-			getPrevTBTreatmentHome().persist();
+		if (!tbcase.isColPrevTreatUnknown()){
+			if (getPrevTBTreatmentHome() != null)
+				getPrevTBTreatmentHome().persist();
+		}
 
 		caseHome.updateCaseTags();
 

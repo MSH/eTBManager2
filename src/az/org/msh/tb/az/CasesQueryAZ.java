@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
@@ -254,6 +253,9 @@ public class CasesQueryAZ extends CasesQuery{
 		else 
 			if (isThirdCat())
 				addCondition("c.toThirdCategory = 1");
+		else 
+			if (isTransferToUserUnit())
+				addCondition("c.state = " + CaseState.TRANSFERRING.ordinal() + " and c.ownerUnit.id = #{userWorkspace.tbunit.id}");
 		else
 			if (!isTagSearch())
 			{
@@ -278,6 +280,12 @@ public class CasesQueryAZ extends CasesQuery{
 	private boolean isThirdCat() {
 		if (getStateIndex() != null) {
 			return getStateIndex().equals(CaseStateReportAZ.thirdCat);
+		}	else	return false;
+	}
+	
+	private boolean isTransferToUserUnit() {
+		if (getStateIndex() != null) {
+			return getStateIndex().equals(CaseStateReportAZ.transferToUserUnit);
 		}	else	return false;
 	}
 

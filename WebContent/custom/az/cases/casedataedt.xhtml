@@ -421,7 +421,8 @@ function isPulmonary(cb) {
 			<ui:define name="label">
 				#{messages['cases.prevtreat.numprev']}:
 			</ui:define>
-			<h:selectOneMenu value="#{prevTBTreatmentHome.numTreatments}">
+			<h:selectOneMenu value="#{caseAZHome.numTreatments}">
+				<f:selectItem value="#{null}" itemLabel="-"/>
 				<f:selectItems value="#{prevTBTreatmentHome.numTreatmentsOptions}"/>
 				<a:support event="onchange" ajaxSingle="true" reRender="prevtreats"/>
 			</h:selectOneMenu>

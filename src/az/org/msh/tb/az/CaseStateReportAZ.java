@@ -16,6 +16,7 @@ import org.msh.tb.cases.CaseStateReport;
 import org.msh.tb.cases.HealthUnitInfo;
 import org.msh.tb.cases.HealthUnitsQuery;
 import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
@@ -39,6 +40,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 	public static final int EIDSS_BINDED = 1616;
 	public static final int EIDSS_NOT_BINDED = 1515;
 	public static final int thirdCat = 700;
+	public static final int transferToUserUnit = 1060;
 	protected List<Item> itemsEIDSS = null;
 	private AdminUnitSelection selectedAdmUnitSel;
 
@@ -122,8 +124,17 @@ public class CaseStateReportAZ extends CaseStateReport{
 		BigInteger col3cat = (BigInteger) App.getEntityManager().createNativeQuery(querySQL).getSingleResult();
 
 		CaseStateItem it = new CaseStateItem(App.getMessage("TbCase.toThirdCategory"), col3cat.intValue(), thirdCat);
-
 		getItems().add(it);
+		
+		//transferring to user TB unit
+		UserWorkspace uw = (UserWorkspace)App.getComponent("userWorkspace");
+		Tbunit userUnit = uw.getTbunit();
+		if (userUnit!=null){
+			querySQL = getSQLSelect()+" where c.state = "+CaseState.TRANSFERRING.ordinal() + " and c.owner_unit_id = " + userUnit.getId();
+			col3cat = (BigInteger) App.getEntityManager().createNativeQuery(querySQL).getSingleResult();
+			it = new CaseStateItem(App.getMessage("TbCase.queryTransf")+userUnit.getName().getName1(), col3cat.intValue(), transferToUserUnit);
+			getItems().add(it);
+		}
 	}
 
 

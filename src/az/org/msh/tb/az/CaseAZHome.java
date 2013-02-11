@@ -18,6 +18,7 @@ import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.cases.CaseCloseHome;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.cases.PrevTBTreatmentHome;
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.SystemParam;
 import org.msh.tb.entities.TbCase;
@@ -344,5 +345,31 @@ public class CaseAZHome {
 			res = res.replaceAll("<br/>", "\n");
 		return res;
 	}
+	
+	/**
+	 * @return the numTreatments
+	 */
+	public Integer getNumTreatments() {
+		TbCaseAZ tc = getTbCase();
+		PrevTBTreatmentHome prev = (PrevTBTreatmentHome)App.getComponent("prevTBTreatmentHome");
+		if (tc.isColPrevTreatUnknown())
+			return null;
+		else
+			return prev.getTreatments().size();
+	}
+
+
+	/**
+	 * @param numTreatments the numTreatments to set
+	 */
+	public void setNumTreatments(Integer numTreatments) {
+		if (numTreatments==null){
+				TbCaseAZ tc = getTbCase();
+				tc.setColPrevTreatUnknown(true);
+			}else{
+				PrevTBTreatmentHome prev = (PrevTBTreatmentHome)App.getComponent("prevTBTreatmentHome");
+				prev.setNumTreatments(numTreatments);
+			}
+		}
 }
 
