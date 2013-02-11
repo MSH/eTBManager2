@@ -122,6 +122,16 @@ public class CaseDataUA {
 	@Temporal(TemporalType.DATE)
 	private Date dischargeDate;
 
+	@Temporal(TemporalType.DATE) private Date hospitalizationDate2;
+	@Temporal(TemporalType.DATE) private Date hospitalizationDate3;
+	@Temporal(TemporalType.DATE) private Date hospitalizationDate4;
+	@Temporal(TemporalType.DATE) private Date hospitalizationDate5;
+	
+	@Temporal(TemporalType.DATE) private Date dischargeDate2;
+	@Temporal(TemporalType.DATE) private Date dischargeDate3;
+	@Temporal(TemporalType.DATE) private Date dischargeDate4;
+	@Temporal(TemporalType.DATE) private Date dischargeDate5;
+	
 	public boolean isVCTstarted() {
 		return startedVCTdate != null;
 	}
@@ -759,5 +769,133 @@ public class CaseDataUA {
 
 	public Date getDischargeDate() {
 		return dischargeDate;
+	}
+
+
+	/**
+	 * @return the dischargeDate5
+	 */
+	public Date getDischargeDate5() {
+		return dischargeDate5;
+	}
+
+
+	/**
+	 * @param dischargeDate5 the dischargeDate5 to set
+	 */
+	public void setDischargeDate5(Date dischargeDate5) {
+		this.dischargeDate5 = dischargeDate5;
+	}
+
+
+	/**
+	 * @return the hospitalizationDate2
+	 */
+	public Date getHospitalizationDate2() {
+		return hospitalizationDate2;
+	}
+
+
+	/**
+	 * @param hospitalizationDate2 the hospitalizationDate2 to set
+	 */
+	public void setHospitalizationDate2(Date hospitalizationDate2) {
+		this.hospitalizationDate2 = hospitalizationDate2;
+	}
+
+
+	/**
+	 * @return the hospitalizationDate3
+	 */
+	public Date getHospitalizationDate3() {
+		return hospitalizationDate3;
+	}
+
+
+	/**
+	 * @param hospitalizationDate3 the hospitalizationDate3 to set
+	 */
+	public void setHospitalizationDate3(Date hospitalizationDate3) {
+		this.hospitalizationDate3 = hospitalizationDate3;
+	}
+
+
+	/**
+	 * @return the hospitalizationDate4
+	 */
+	public Date getHospitalizationDate4() {
+		return hospitalizationDate4;
+	}
+
+
+	/**
+	 * @param hospitalizationDate4 the hospitalizationDate4 to set
+	 */
+	public void setHospitalizationDate4(Date hospitalizationDate4) {
+		this.hospitalizationDate4 = hospitalizationDate4;
+	}
+
+
+	/**
+	 * @return the hospitalizationDate5
+	 */
+	public Date getHospitalizationDate5() {
+		return hospitalizationDate5;
+	}
+
+
+	/**
+	 * @param hospitalizationDate5 the hospitalizationDate5 to set
+	 */
+	public void setHospitalizationDate5(Date hospitalizationDate5) {
+		this.hospitalizationDate5 = hospitalizationDate5;
+	}
+
+
+	/**
+	 * @return the dischargeDate2
+	 */
+	public Date getDischargeDate2() {
+		return dischargeDate2;
+	}
+
+
+	/**
+	 * @param dischargeDate2 the dischargeDate2 to set
+	 */
+	public void setDischargeDate2(Date dischargeDate2) {
+		this.dischargeDate2 = dischargeDate2;
+	}
+
+
+	/**
+	 * @return the dischargeDate3
+	 */
+	public Date getDischargeDate3() {
+		return dischargeDate3;
+	}
+
+
+	/**
+	 * @param dischargeDate3 the dischargeDate3 to set
+	 */
+	public void setDischargeDate3(Date dischargeDate3) {
+		this.dischargeDate3 = dischargeDate3;
+	}
+
+
+	/**
+	 * @return the dischargeDate4
+	 */
+	public Date getDischargeDate4() {
+		return dischargeDate4;
+	}
+
+
+	/**
+	 * @param dischargeDate4 the dischargeDate4 to set
+	 */
+	public void setDischargeDate4(Date dischargeDate4) {
+		this.dischargeDate4 = dischargeDate4;
 	}
 }

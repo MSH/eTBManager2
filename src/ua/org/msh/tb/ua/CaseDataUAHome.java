@@ -24,6 +24,7 @@ import org.msh.tb.ua.entities.CaseDataUA;
 public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 	private static final long serialVersionUID = -327682679191655122L;
 	private Nationality nationality;
+	private Integer colHospView;
 	
 	@In EntityManager entityManager;
 	@In(create=true) CaseEditingHome caseEditingHome;
@@ -165,5 +166,33 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 		else
 			nationality = caseEditingHome.getTbcase().getNationality();
 		return nationality;
+	}
+
+	public Integer getColHospView() {
+		if (colHospView == null){
+			colHospView = 1;
+			CaseDataUA ua = getCaseDataUA();
+			if (ua.getHospitalizationDate2()!=null){
+				colHospView++;
+				if (ua.getHospitalizationDate3()!=null){
+					colHospView++;
+					if (ua.getHospitalizationDate4()!=null){
+						colHospView++;
+						if (ua.getHospitalizationDate5()!=null)
+							colHospView++;
+					}
+				}
+			}
+		}
+		return colHospView;
+	}
+
+
+
+	/**
+	 * @param colHospView the colHospView to set
+	 */
+	public void setColHospView(Integer colHospView) {
+		this.colHospView = colHospView;
 	}
 }

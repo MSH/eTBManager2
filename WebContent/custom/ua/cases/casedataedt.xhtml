@@ -5,6 +5,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:c="http://java.sun.com/jstl/core"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
     <ui:param name="labelstyle" value="width:160px;" />
 
@@ -227,6 +228,76 @@
     	<ui:param name="datefield" value="#{caseDataUA.dischargeDate}" /> 
     	<ui:param name="required" value="false" /> 
     </s:decorate>
+	
+	<h:panelGroup id = "hosp">
+		
+		<s:fragment rendered="#{caseDataUAHome.colHospView >= 2}">
+		<hr/>
+			<s:decorate template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.hospitalizationDate']}:</ui:define>
+		    	<ui:param name="datefield" value="#{caseDataUA.hospitalizationDate2}" /> 
+		    	<ui:param name="required" value="false" /> 
+		    </s:decorate>
+		    
+		    <s:decorate template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.dischargeDate']}:</ui:define>
+		    	<ui:param name="datefield" value="#{caseDataUA.dischargeDate2}" /> 
+		    	<ui:param name="required" value="false" /> 
+		    </s:decorate>
+		</s:fragment>
+		
+		<s:fragment rendered="#{caseDataUAHome.colHospView >= 3}">
+		<hr/>
+			<s:decorate template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.hospitalizationDate']}:</ui:define>
+		    	<ui:param name="datefield" value="#{caseDataUA.hospitalizationDate3}" /> 
+		    	<ui:param name="required" value="false" /> 
+		    </s:decorate>
+		    
+		    <s:decorate template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.dischargeDate']}:</ui:define>
+		    	<ui:param name="datefield" value="#{caseDataUA.dischargeDate3}" /> 
+		    	<ui:param name="required" value="false" /> 
+		    </s:decorate>
+		</s:fragment>
+		
+		<s:fragment rendered="#{caseDataUAHome.colHospView >= 4}">
+		<hr/>
+			<s:decorate template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.hospitalizationDate']}:</ui:define>
+		    	<ui:param name="datefield" value="#{caseDataUA.hospitalizationDate4}" /> 
+		    	<ui:param name="required" value="false" /> 
+		    </s:decorate>
+		    
+		    <s:decorate template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.dischargeDate']}:</ui:define>
+		    	<ui:param name="datefield" value="#{caseDataUA.dischargeDate4}" /> 
+		    	<ui:param name="required" value="false" /> 
+		    </s:decorate>
+		</s:fragment>
+		
+		<s:fragment rendered="#{caseDataUAHome.colHospView == 5}">
+		<hr/>
+			<s:decorate template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.hospitalizationDate']}:</ui:define>
+		    	<ui:param name="datefield" value="#{caseDataUA.hospitalizationDate5}" /> 
+		    	<ui:param name="required" value="false" /> 
+		    </s:decorate>
+		    
+		    <s:decorate template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.dischargeDate']}:</ui:define>
+		    	<ui:param name="datefield" value="#{caseDataUA.dischargeDate5}" /> 
+		    	<ui:param name="required" value="false" /> 
+		    </s:decorate>
+		</s:fragment>
+	</h:panelGroup>
+	
+	<a:commandLink 	
+		onclick="showOtherHosp()"	
+		action="#{caseDataUAHome.setColHospView(caseDataUAHome.colHospView+1)}"
+		 styleClass="button-alt" ajaxSingle="true" reRender="hosp">
+		<span>#{messages['uk_UA.newHospitalization']}...</span>
+	</a:commandLink>
 
 	</td></tr>
 	<tr><td>
@@ -315,6 +386,10 @@ function changeDiagType(cb) {
 	  divdiag.hide(500);
   }
 }
+
+function showOtherHosp() {
+	  jQuery('#hosp').show(500);
+	}
 -->
 </script>
 
