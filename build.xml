@@ -11,23 +11,6 @@
     <property name="target" value="1.6"/>
     <property name="source" value="1.6"/>
 
-	<!-- Define the Sonar global properties (the most usual way is to pass these properties via the command line) -->
-	<property name="sonar.jdbc.url" value="jdbc:mysql://localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8" />
-	<property name="sonar.jdbc.username" value="root" />
-	<property name="sonar.jdbc.password" value="admin" />
-	<property name="sonar.host.url" value="http://localhost:9000/sonar" />
-	<property name="sonar.login" value="admin" />
-	<property name="sonar.password" value="admin" />
-	<property name="sonar.forceAuthentication" value="true" />
-
-	<!-- Define the Sonar project properties -->
-	<property name="sonar.projectKey" value="etbmanager" />
-	<property name="sonar.projectName" value="eTB Manager" />
-	<property name="sonar.projectVersion" value="2.0" />
-	<property name="sonar.language" value="java" />
-	<property name="sonar.sources" value="src/action,src/model,src/ng,src/na,src/bd,src/ke,src/br,src/ua,src/az,src/uz" />
-	<property name="sonar.binaries" value="build" />
-
 	<path id="Web App Libraries.libraryclasspath">
         <pathelement location="WebContent/WEB-INF/lib/commons-beanutils.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/commons-digester.jar"/>
@@ -195,6 +178,34 @@
 			<bottom><![CDATA[<i>Copyright &#169; 2005 Management Sciences for Health, Inc. All Rights Reserved.</i>]]></bottom>
 		</javadoc>
 	</target>
+
+	<!-- Define the Sonar global properties (the most usual way is to pass these properties via the command line) -->
+	<property name="sonar.jdbc.url" value="jdbc:mysql://localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8" />
+	<property name="sonar.jdbc.username" value="root" />
+	<property name="sonar.jdbc.password" value="admin" />
+	<property name="sonar.host.url" value="http://localhost:9000/sonar" />
+	<property name="sonar.login" value="admin" />
+	<property name="sonar.password" value="admin" />
+	<property name="sonar.forceAuthentication" value="true" />
+
+	<!-- Define the Sonar project properties -->
+	<property name="sonar.projectKey" value="etbmanager" />
+	<property name="sonar.projectName" value="eTB Manager" />
+	<property name="sonar.projectVersion" value="2.0" />
+	<property name="sonar.modules" value="java-module,xml-module" />
+	<property name="sonar.sources" value="src/action,src/model,src/ng,src/na,src/bd,src/ke,src/br,src/ua,src/az,src/uz" />
+
+	<property name="java-module.sonar.projectName" value="Java Module" />
+	<property name="java-module.sonar.language" value="java" />
+	<property name="java-module.sonar.sources" value="src/action,src/model,src/ng,src/na,src/bd,src/ke,src/br,src/ua,src/az,src/uz" />
+	<property name="java-module.sonar.binaries" value="build" />
+	<property name="java-module.sonar.projectBaseDir" value="/" />
+
+	<property name="xml-module.sonar.projectName" value="XML Module" />
+	<property name="xml-module.sonar.language" value="xml" />
+	<property name="xml-module.sonar.sources" value="WebContent,resources,production" />
+	<property name="xml-module.sonar.binaries" value="build" />
+	<property name="xml-module.sonar.projectBaseDir" value="/" />
 
 	<!-- Define the Sonar target -->
 	<target name="sonar">
