@@ -76,7 +76,7 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 		 * resistance had been created solve that necessity
 		 */
 		//Verifies if a TB case has resistance or if a DRTB case has at least one resistance
-		//int resistantQuantity = 0;
+		int resistantQuantity = 0;
 		int notDoneExams = 0;
 		if (items == null)
 			items = getInstance().getResults();
@@ -86,17 +86,17 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 					&& ms.getResult().equals(DstResult.RESISTANT)){
 				facesMessages.addFromResourceBundle("DSTExam.msg01");
 				return false;
-			//}else if(ms.getResult().equals(DstResult.RESISTANT)){
-			//	resistantQuantity++;
+			}else if(ms.getResult().equals(DstResult.RESISTANT)){
+				resistantQuantity++;
 			}else if(ms.getResult().equals(DstResult.NOTDONE)){
 				notDoneExams++;
 			}
 		}
-		//if(getTbCase().getClassification().equals(CaseClassification.DRTB)
-		//		&& resistantQuantity <= 0){
-		//	facesMessages.addFromResourceBundle("DSTExam.msg02");
-		//	return false;
-		//}
+		if(getTbCase().getClassification().equals(CaseClassification.DRTB)
+				&& resistantQuantity <= 0){
+			facesMessages.addFromResourceBundle("DSTExam.msg02");
+			return false;
+		}
 		if(items.size() == notDoneExams){
 			facesMessages.addFromResourceBundle("DSTExam.msg03");
 			return false;
