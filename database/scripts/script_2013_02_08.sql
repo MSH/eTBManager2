@@ -6,11 +6,11 @@
  * 
 ****************************************************************/
 ALTER TABLE `etbmanager`.`casedataua` 
-ADD COLUMN `dateHospitalization2` DATE NULL DEFAULT NULL  AFTER `treatARTdate` , 
-ADD COLUMN `dateHospitalization3` DATE NULL DEFAULT NULL  AFTER `dateHospitalization2` , 
-ADD COLUMN `dateHospitalization4` DATE NULL DEFAULT NULL  AFTER `dateHospitalization3` , 
-ADD COLUMN `dateHospitalization5` DATE NULL DEFAULT NULL  AFTER `dateHospitalization4` , 
-ADD COLUMN `dischargeDate2` DATE NULL DEFAULT NULL  AFTER `dateHospitalization5` , 
+ADD COLUMN `hospitalizationDate2` DATE NULL DEFAULT NULL  AFTER `treatARTdate` , 
+ADD COLUMN `hospitalizationDate3` DATE NULL DEFAULT NULL  AFTER `hospitalizationDate2` , 
+ADD COLUMN `hospitalizationDate4` DATE NULL DEFAULT NULL  AFTER `hospitalizationDate3` , 
+ADD COLUMN `hospitalizationDate5` DATE NULL DEFAULT NULL  AFTER `hospitalizationDate4` , 
+ADD COLUMN `dischargeDate2` DATE NULL DEFAULT NULL  AFTER `hospitalizationDate5` , 
 ADD COLUMN `dischargeDate3` DATE NULL DEFAULT NULL  AFTER `dischargeDate2` , 
 ADD COLUMN `dischargeDate4` DATE NULL DEFAULT NULL  AFTER `dischargeDate3` , 
 ADD COLUMN `dischargeDate5` DATE NULL DEFAULT NULL  AFTER `dischargeDate4` ;
