@@ -89,13 +89,14 @@ public class ExamDSTAZHome extends LaboratoryExamHome<ExamDSTAZ>{
 				notDoneExams++;
 			}
 		}
+		if(items.size() == notDoneExams){
+			facesMessages.addFromResourceBundle("DSTExam.msg03");
+			return false;
+		}
+
 		if(getTbCase().getClassification().equals(CaseClassification.DRTB)
 				&& resistantQuantity <= 0){
 			facesMessages.addFromResourceBundle("DSTExam.msg02");
-			return false;
-		}
-		if(items.size() == notDoneExams){
-			facesMessages.addFromResourceBundle("DSTExam.msg03");
 			return false;
 		}
 		

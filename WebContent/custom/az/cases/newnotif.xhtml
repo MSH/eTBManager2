@@ -140,14 +140,14 @@
 			</f:facet>
 			
 			<b>#{messages[caseAZHome.reGetTbCase(it.tbcase).classification.key]} -  <h:outputText value=" #{messages[caseAZHome.reGetTbCase(it.tbcase).state.key]}"
-					style="color:SaddleBrown;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).state != 'ONTREATMENT'}"/>
+					style="color:SaddleBrown;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).state != 'ONTREATMENT' and caseAZHome.reGetTbCase(it.tbcase).notificationUnit != NULL}"/>
 				<s:fragment rendered="#{caseAZHome.reGetTbCase(it.tbcase).state == 'ONTREATMENT'}">
 				<h:outputText value=" #{messages['CaseState.ONTREATMENT']} #{messages['from']} " style="color:SaddleBrown;"/>
 				
 				<h:outputText value="#{caseAZHome.verifyDateIniTreat(it.tbcase)}"
-					style="color:SaddleBrown;" escape="false"/>
-					
+					style="color:SaddleBrown;" escape="false"/>	
 				</s:fragment>
+				<h:outputText value=" #{messages['cases.detailseidsstitle']}" style="color:SaddleBrown;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit == NULL}"/>
 			 </b>
 		     <br/>
 		     #{messages['PatientType']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).patientType.key]} <br/>

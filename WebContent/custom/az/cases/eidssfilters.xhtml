@@ -21,12 +21,6 @@
 			<h2>#{messages['cases.casesearching.filterdates']}</h2>
 			</td>
 			<td>
-				<s:decorate template="/layout/edit.xhtml">
-					<ui:define name="label">#{messages['az_EIDSS_Year_Of_Birth']}:</ui:define>
-					<h:selectOneMenu id="iniyear" value="#{eidssFilters.yearBirth}" style="margin-left:20px;">
-						<f:selectItems value="#{eidssFilters.years}"/>
-					</h:selectOneMenu>
-				</s:decorate>
 			</td>
 		</tr>
 		<tr>
@@ -46,8 +40,10 @@
 			</td>
 			<td>
 				<s:decorate template="/layout/edit.xhtml">
-					<ui:define name="label">#{messages['TbCase.eidssid']}:</ui:define>
-					<h:inputText value="#{eidssFilters.id}" style="width:200px;"></h:inputText>
+					<ui:define name="label">#{messages['az_EIDSS_Year_Of_Birth']}:</ui:define>
+					<h:selectOneMenu id="iniyear" value="#{eidssFilters.yearBirth}" style="margin-left:20px;">
+						<f:selectItems value="#{eidssFilters.years}"/>
+					</h:selectOneMenu>
 				</s:decorate>
 			</td>
 		</tr>
@@ -68,18 +64,12 @@
 			</td>
 			<td>
 				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['TbCase.eidssid']}:</ui:define>
+					<h:inputText value="#{eidssFilters.id}" style="width:200px;"></h:inputText>
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['az_EIDSS_Notify_LPU']}:</ui:define>
 					<h:inputText value="#{eidssFilters.notifUnit}" style="width:200px;"></h:inputText>
-				</s:decorate>
-			</td>
-		</tr>
-		<tr>
-			<td>
-			</td>
-			<td>
-				<s:decorate template="/layout/edit.xhtml">
-					<ui:define name="label">#{messages['Address.address']} #{messages['excel.fromEIDSS']}:</ui:define>
-					<h:inputText value="#{eidssFilters.address}" style="width:200px;"></h:inputText>
 				</s:decorate>
 			</td>
 		</tr>
@@ -98,13 +88,17 @@
 			   	</s:decorate>
 			</td>
 			<td>
-				<h2>#{messages['eidssFiltres.ownerUnit']}:</h2>
-				<s:decorate template="/layout/tbselection.xhtml">
-					<ui:param name="tbunitselection" value="#{eidssFilters.tbunit}" />
-					<ui:param name="unitLabel" value="#{messages['eidssFiltres.ownerUnit']}" />
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['Address.address']} #{messages['excel.fromEIDSS']}:</ui:define>
+					<h:inputText value="#{eidssFilters.address}" style="width:200px;"></h:inputText>
 				</s:decorate>
 			</td>
 		</tr>
 	</table>
+	<h2>#{messages['eidssFiltres.ownerUnit']}:</h2>
+	<s:decorate template="/layout/tbselection.xhtml">
+		<ui:param name="tbunitselection" value="#{eidssFilters.tbunit}" />
+		<ui:param name="unitLabel" value="#{messages['eidssFiltres.ownerUnit']}" />
+	</s:decorate>
     
 </ui:composition>

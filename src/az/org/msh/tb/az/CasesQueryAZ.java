@@ -36,10 +36,10 @@ import org.msh.tb.entities.enums.ValidationState;
 public class CasesQueryAZ extends CasesQuery{
 	private static final long serialVersionUID = -7293313123644540770L;
 	private final Integer casesEIDSSnotBindedIndex = CaseStateReportAZ.EIDSS_NOT_BINDED;
-	private static final String notifCondAZ = "(nu.id = #{caseFilters.tbunitselection.tbunit.id})";
-	private static final String treatCondAZ = "tu.id =  #{caseFilters.tbunitselection.tbunit.id}";
-	private static final String notifRegCondAZ = "(nu.id in (select id from org.msh.tb.entities.Tbunit tbu where tbu.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
-	private static final String treatRegCondAZ = "(tu.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
+	private static final String notifCondAZ = "(c.notificationUnit.id = #{caseFilters.tbunitselection.tbunit.id})";
+	private static final String treatCondAZ = "c.ownerUnit.id =  #{caseFilters.tbunitselection.tbunit.id}";
+	private static final String notifRegCondAZ = "(c.notificationUnit.id in (select id from org.msh.tb.entities.Tbunit tbu where tbu.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
+	private static final String treatRegCondAZ = "(c.ownerUnit.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
 	private static final String notifAdrAdmUnitAZ="c.notifAddress.adminUnit.code like ";
 	private static final String notifAdrAdmUnitRegAZ="c.notifAddress.adminUnit.code = ";
 	//private static final Pattern WHERE_PATTERN = Pattern.compile("\\s(where)\\s", Pattern.CASE_INSENSITIVE);
@@ -367,11 +367,13 @@ public class CasesQueryAZ extends CasesQuery{
 	 * @return
 	 */
 	public boolean isNotBindedEIDSS(){
+		boolean res = false;
+		/*if (getSearchCriteria()!=null)
+			res = getSearchCriteria().equals(SearchCriteria.CUSTOM_FILTER);*/
 		if (getStateIndex() != null) {
-			return getStateIndex().equals(getCasesEIDSSnotBindedIndex());
+			res = res||getStateIndex().equals(getCasesEIDSSnotBindedIndex());
 		}	
-		else	
-			return false;
+		return res;
 	}
 	
 	public boolean isTagSearch(){
