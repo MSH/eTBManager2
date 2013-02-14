@@ -15,6 +15,38 @@
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:180px" />
 
+<ui:define name="left">
+	<div class="spacer" />
+	<div class="spacer" />
+	<div class="spacer" />
+	<div class="spacer" />
+	<div class="spacer" />
+	<div class="spacer" />
+	<div class="spacer" />
+	<h:form id="leftblock">
+		<s:div styleClass="region1" rendered="#{caseDataUA.causeChangeTreat != null}">
+			<div class="header">
+			<table class="table2">
+				<tr>
+					<th align="center">
+						<h:outputText value="#{messages['TbField.CAUSE_OF_CHANGE']}:"/>				
+					</th>
+				</tr>
+				<tr>
+					<td>
+						<div class="content">
+						#{caseDataUA.causeChangeTreat}
+						
+						</div>
+					</td>
+				</tr>
+			</table>
+			
+			</div>
+		</s:div>
+	</h:form>
+</ui:define>
+
 <ui:define name="content">
 <h1>#{title}</h1>
 
@@ -315,7 +347,7 @@ function formButtonPost(button) {
 	<h:panelGroup id="regimenpnl" rendered="#{treatmentHome.formEditing=='REGIMEN'}" >
 	<h:messages styleClass="error" layout="table" globalOnly="true" />
 	<s:decorate template="/layout/display.xhtml" >
-		<ui:define name="label">#{messages['Regimen']}:</ui:define>
+		<ui:define name="label">#{messages['ExportContent.REGIMENS']}:</ui:define>
     	<h:selectOneMenu value="#{caseRegimenHome.regimen}" required="true">
     		<s:selectItems value="#{caseRegimenHome.availableRegimens}" var="it" label="#{it.name}" noSelectionLabel="-"/>
     		<s:convertEntity />
@@ -359,13 +391,24 @@ function formButtonPost(button) {
 		</a:repeat>
 	</s:fragment>
 	</div>
+	
+	
+	<s:decorate template="/layout/edit.xhtml" >
+   		<ui:define name="label">#{messages['TbField.CAUSE_OF_CHANGE']}:</ui:define>
+   		<ui:param name="labelstyle" value="width:221px;"/>
+   		<h:selectOneMenu value="#{caseDataUA.causeChangeTreat}">
+   			<s:selectItems var="it" value="#{fieldsQuery.causeOfChange}" noSelectionLabel="-" label="#{it.shortName} - #{it.name}" />
+   			<s:convertEntity />
+   		</h:selectOneMenu>
+    </s:decorate>
+	
 	</h:panelGroup>
 	</div>
 	
 	<div class="button-bar">
 	<a:commandLink action="#{treatmentHome.endRegimenChange}"
 		data="#{treatmentHome.validated}"
-		styleClass="button" reRender="regimenpnl,main"
+		styleClass="button" reRender="regimenpnl,main,leftblock"
 		oncomplete="if (!data) return false; Richfaces.hideModalPanel('regimendlg');">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink>
