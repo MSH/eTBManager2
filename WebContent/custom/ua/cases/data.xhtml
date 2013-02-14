@@ -241,6 +241,7 @@
 	</td>
 	
 	</tr>
+
 	<tr><td	colspan="2">
 		<s:decorate template="/layout/displayfield.xhtml" rendered="#{caseDataUA.detection!=null}">
     		<ui:define name="label">#{messages['TbField.TBDETECTION']}:</ui:define>
@@ -328,6 +329,73 @@
 		</s:fragment>
 
 	</td></tr>
+	<s:fragment rendered="#{caseDataUAHome.colHospView >= 2}">
+		<tr><td><h2>#{messages['uk_UA.newHospitalization']}:</h2></td></tr>
+		<tr>
+			<td>
+			<s:decorate template="/layout/display.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.hospitalizationDate']}:</ui:define>
+		    	<h:outputText value="#{caseDataUA.hospitalizationDate2}" converter="localeDateConverter" />
+		    </s:decorate>
+		    </td><td>
+		    <s:decorate template="/layout/display.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.dischargeDate']}:</ui:define>
+		    	<h:outputText value="#{caseDataUA.dischargeDate2}" converter="localeDateConverter" />
+		    </s:decorate>
+		    </td>
+		</tr>
+		</s:fragment>
+		
+		<s:fragment rendered="#{caseDataUAHome.colHospView >= 3}">
+		<tr><td><h2>#{messages['uk_UA.newHospitalization']}:</h2></td></tr>
+		<tr>
+			<td>
+			<s:decorate template="/layout/display.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.hospitalizationDate']}:</ui:define>
+		    	<h:outputText value="#{caseDataUA.hospitalizationDate3}" converter="localeDateConverter" />
+		    </s:decorate>
+		    </td><td>
+		    <s:decorate template="/layout/display.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.dischargeDate']}:</ui:define>
+		    	<h:outputText value="#{caseDataUA.dischargeDate3}" converter="localeDateConverter" />
+		    </s:decorate>
+		    </td>
+		</tr>
+		</s:fragment>
+		
+		<s:fragment rendered="#{caseDataUAHome.colHospView >= 4}">
+		<tr><td><h2>#{messages['uk_UA.newHospitalization']}:</h2></td></tr>
+		<tr>
+			<td>
+			<s:decorate template="/layout/display.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.hospitalizationDate']}:</ui:define>
+		    	<h:outputText value="#{caseDataUA.hospitalizationDate4}" converter="localeDateConverter" />
+		    </s:decorate>
+		    </td><td>
+		    <s:decorate template="/layout/display.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.dischargeDate']}:</ui:define>
+		    	<h:outputText value="#{caseDataUA.dischargeDate4}" converter="localeDateConverter" />
+		    </s:decorate>
+		    </td>
+		</tr>
+		</s:fragment>
+		
+		<s:fragment rendered="#{caseDataUAHome.colHospView == 5}">
+		<tr><td><h2>#{messages['uk_UA.newHospitalization']}:</h2></td></tr>
+		<tr>
+			<td>
+			<s:decorate template="/layout/display.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.hospitalizationDate']}:</ui:define>
+		    	<h:outputText value="#{caseDataUA.hospitalizationDate5}" converter="localeDateConverter" />
+		    </s:decorate>
+		    </td><td>
+		    <s:decorate template="/layout/display.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.dischargeDate']}:</ui:define>
+		    	<h:outputText value="#{caseDataUA.dischargeDate5}" converter="localeDateConverter" />
+		    </s:decorate>
+		    </td>
+		</tr>
+		</s:fragment>
 	</table>
 	</div>
 
