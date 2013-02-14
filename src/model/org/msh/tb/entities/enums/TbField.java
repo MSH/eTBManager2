@@ -50,7 +50,9 @@ public enum TbField {
 	//Brazil
 	TREATMENT_OUTCOME_ILTB,
 	//Indonesia
-	SUSPECT_CRITERIA;
+	SUSPECT_CRITERIA,
+	//Ukraine
+	CAUSE_OF_CHANGE;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

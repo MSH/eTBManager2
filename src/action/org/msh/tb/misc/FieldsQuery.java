@@ -308,5 +308,10 @@ public class FieldsQuery {
 		field = TbField.SUSPECT_CRITERIA;
 		return getValues();
 	}
+	
+	public List<FieldValue> getCauseOfChange() {
+		field = TbField.CAUSE_OF_CHANGE;
+		return getValues();
+	}
 }
 

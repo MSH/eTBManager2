@@ -36,7 +36,8 @@ public class GlobalLists {
 		TbField.PULMONARY_TYPES,
 		TbField.EXTRAPULMONARY_TYPES,
 		TbField.REGISTRATION_CATEGORY,
-		TbField.ADJUSTMENT
+		TbField.ADJUSTMENT,
+		TbField.CAUSE_OF_CHANGE
 	};
 	
 	public static final CaseState outcomes[] = {
