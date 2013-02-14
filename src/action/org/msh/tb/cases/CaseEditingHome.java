@@ -454,4 +454,11 @@ public class CaseEditingHome {
 		}
 		return false;
 	}
+
+	/**
+	 * @param tbunitselection the tbunitselection to set
+	 */
+	public void setTbunitselection(TBUnitSelection tbunitselection) {
+		this.tbunitselection = tbunitselection;
+	}
 }
