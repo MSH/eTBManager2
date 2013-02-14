@@ -18,7 +18,6 @@ import org.msh.tb.cases.exams.LaboratoryExamHome;
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.Substance;
-import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.DstResult;
 
@@ -76,16 +75,16 @@ public class ExamDSTAZHome extends LaboratoryExamHome<ExamDSTAZ>{
 		
 		
 		//Verifies if a TB case has resistance or if a DRTB case has at least one resistance
-		int resistantQuantity = 0;
+		//int resistantQuantity = 0;
 		int notDoneExams = 0;
 		for (ExamDSTResult ms: items) {
-			if(getTbCase().getClassification().equals(CaseClassification.TB)
+			/*if(getTbCase().getClassification().equals(CaseClassification.TB)
 					&& ms.getResult().equals(DstResult.RESISTANT)){
 				facesMessages.addFromResourceBundle("DSTExam.msg01");
 				return false;
 			}else if(ms.getResult().equals(DstResult.RESISTANT)){
 				resistantQuantity++;
-			}else if(ms.getResult().equals(DstResult.NOTDONE)){
+			}else */if(ms.getResult().equals(DstResult.NOTDONE)){
 				notDoneExams++;
 			}
 		}
@@ -94,11 +93,11 @@ public class ExamDSTAZHome extends LaboratoryExamHome<ExamDSTAZ>{
 			return false;
 		}
 
-		if(getTbCase().getClassification().equals(CaseClassification.DRTB)
+		/*if(getTbCase().getClassification().equals(CaseClassification.DRTB)
 				&& resistantQuantity <= 0){
 			facesMessages.addFromResourceBundle("DSTExam.msg02");
 			return false;
-		}
+		}*/
 		
 		// update exams
 		if (items != null) {
