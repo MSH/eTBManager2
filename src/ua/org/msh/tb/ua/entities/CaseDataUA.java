@@ -10,14 +10,17 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.ExtraOutcomeInfo;
@@ -131,6 +134,10 @@ public class CaseDataUA {
 	@Temporal(TemporalType.DATE) private Date dischargeDate3;
 	@Temporal(TemporalType.DATE) private Date dischargeDate4;
 	@Temporal(TemporalType.DATE) private Date dischargeDate5;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="causeChangeTreat_id")
+	private FieldValue causeChangeTreat;
 	
 	public boolean isVCTstarted() {
 		return startedVCTdate != null;
@@ -897,5 +904,15 @@ public class CaseDataUA {
 	 */
 	public void setDischargeDate4(Date dischargeDate4) {
 		this.dischargeDate4 = dischargeDate4;
+	}
+
+
+	public void setCauseChangeTreat(FieldValue causeChangeTreat) {
+		this.causeChangeTreat = causeChangeTreat;
+	}
+
+
+	public FieldValue getCauseChangeTreat() {
+		return causeChangeTreat;
 	}
 }
