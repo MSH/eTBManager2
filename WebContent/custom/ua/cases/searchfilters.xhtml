@@ -89,6 +89,14 @@
 			<s:convertEnum />
 		</h:selectOneMenu>
 	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['admin.tags']}:</ui:define>
+		<h:selectOneMenu value="#{caseFiltersUA.tag}" >
+			<s:selectItems value="#{tagsQuery.resultList}" var="x" label="#{x.name}" noSelectionLabel="-" />
+			<s:convertEntity/>
+		</h:selectOneMenu>
+	</s:decorate>
 	<!-- End -->
 	
 

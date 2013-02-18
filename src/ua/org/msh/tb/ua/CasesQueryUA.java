@@ -3,6 +3,7 @@ package org.msh.tb.ua;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseFilters;
 import org.msh.tb.cases.CasesQuery;
 import org.msh.tb.cases.FilterHealthUnit;
@@ -77,6 +78,15 @@ public class CasesQueryUA extends CasesQuery{
 
 		FilterHealthUnit filterUnit = getCaseFilters().getFilterHealthUnit();
 		
+		CaseFiltersUA cfua = (CaseFiltersUA)App.getComponent("caseFiltersUA");
+		if (SearchCriteria.CUSTOM_FILTER.equals(getSearchCriteria())){
+			if (cfua.getTag()!=null)
+				getCaseFilters().setTagid(cfua.getTag().getId());
+		}
+		else{
+			cfua.setTag(null);
+		}
+		
 		// health unit condition
 		if (filterUnit != null) {
 			// health unit was set ?
@@ -135,6 +145,11 @@ public class CasesQueryUA extends CasesQuery{
 	private Integer getStateIndex(){
 		if (caseFilters == null) return null;
 		return caseFilters.getStateIndex();
+	}
+	private SearchCriteria getSearchCriteria(){
+		if (caseFilters == null) 
+			caseFilters = (CaseFilters)Component.getInstance("caseFilters");
+		return caseFilters.getSearchCriteria();
 	}
 	
 	@Override
