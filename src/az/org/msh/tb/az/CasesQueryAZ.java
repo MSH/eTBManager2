@@ -8,6 +8,7 @@ import java.util.List;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseFilters;
 import org.msh.tb.cases.CaseResultItem;
 import org.msh.tb.cases.CasesQuery;
@@ -188,7 +189,15 @@ public class CasesQueryAZ extends CasesQuery{
 		hqlCondition = "";
 
 		FilterHealthUnit filterUnit = getCaseFilters().getFilterHealthUnit();
-
+		
+		CaseFiltersAZ cfaz = (CaseFiltersAZ)App.getComponent("caseFiltersAZ");
+		if (SearchCriteria.CUSTOM_FILTER.equals(getSearchCriteria())){
+			if (cfaz.getTag()!=null)
+				getCaseFilters().setTagid(cfaz.getTag().getId());
+		}
+		else{
+			cfaz.setTag(null);
+		}
 		if (!isNotBindedEIDSS()){
 			// health unit condition
 			if (filterUnit != null) {
@@ -259,7 +268,7 @@ public class CasesQueryAZ extends CasesQuery{
 		else
 			if (!isTagSearch())
 			{
-			addCondition("nu.workspace.id=#{defaultWorkspace.id}");
+			addCondition("c.notificationUnit.workspace.id=#{defaultWorkspace.id}");
 			if (ValidationState.WAITING_VALIDATION.equals(getValidationState()))
 				addCondition("c.diagnosisType in (0,1)");
 			if (getStateIndex()==null){

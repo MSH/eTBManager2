@@ -98,7 +98,13 @@
 	</s:decorate>
 	</s:fragment>
 	<!-- End -->
-	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['admin.tags']}:</ui:define>
+		<h:selectOneMenu value="#{caseFiltersAZ.tag}" >
+			<s:selectItems value="#{tagsQuery.resultList}" var="x" label="#{x.name}" noSelectionLabel="-" />
+			<s:convertEntity/>
+		</h:selectOneMenu>
+	</s:decorate>
 
    <h2>#{messages['cases.casesearching.filterdates']}</h2>
 
