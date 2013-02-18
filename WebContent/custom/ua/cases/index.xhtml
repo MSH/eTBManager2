@@ -14,9 +14,20 @@
 <ui:param name="topmenu" value="0" />
 
 <ui:define name="naveg">
+	<s:fragment rendered="#{empty casesViewController.selectedUnit}">
 	<div class="item selected">
-		<s:link value="#{title}" />
+	<s:link value="#{messages['cases']}" />
 	</div>
+	</s:fragment>
+	<s:fragment rendered="#{not empty casesViewController.selectedUnit}">
+	<s:link value="#{messages['cases']}" >
+		<f:param name="id" value="#{null}" />
+	</s:link>
+	<div class="item selected">
+		<s:link value="#{title}" >
+		</s:link>
+	</div>
+	</s:fragment>
 </ui:define>
 
 <ui:define name="left">
@@ -160,7 +171,7 @@
 			<ui:param name="rerender" value="pnlhealthunits" />
 		</s:decorate>
 	</ui:remove>
-	
+<ui:remove>	
 	<ui:param name="auselection" value="#{caseStateReportUA.selectedAdmUnitSel}" />
 	<ui:define name="label">#{auselection.labelLevel1}:</ui:define>
 	<h:selectOneMenu id="cbselau1" value="#{auselection.unitLevel1}" rendered="#{userWorkspace.view=='COUNTRY'}">
@@ -168,7 +179,7 @@
 		<s:convertEntity />
 		<a:support event="onchange" ajaxSingle="true" reRender="pnlhealthunits"/>
 	</h:selectOneMenu>
-	
+</ui:remove>
 	
 		<a:commandLink id="btnsearchpat" action="search" styleClass="button" style="float:right;" onclick="if (!disableButton(this)) return false;">
 			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
@@ -185,13 +196,33 @@
 	</a:jsFunction>
 	
 	<div class="spacer" />
+	<a:repeat value="#{caseFilters.classifications}" var="it">
+		<span style="margin-right:20px;">
+			<h:selectBooleanCheckbox value="#{it.selected}">
+				<a:support event="onclick" ajaxSingle="true" reRender="pnlhealthunits"/>
+			</h:selectBooleanCheckbox>
+			#{messages[it.item.key]}
+		</span>
+	</a:repeat>
 
+<ui:remove>
 	<h2>#{messages['cases.ongoing']}</h2>
 	<h:panelGroup id="pnlhealthunits">
 		<ui:include src="#{userWorkspace.view=='TBUNIT'?'/cases/index_tbunit_content.xhtml':'index_content.xhtml'}" />
 	</h:panelGroup>
 
 	<ui:include src="/layout/tablerow.xhtml" />
+</ui:remove>
+	
+	<h:panelGroup id="pnlhealthunits">
+		<div id="content">
+			<ui:include src="#{casesViewController.unitView? wspage['/cases/indexcases.xhtml']: wspage['/cases/indexunits.xhtml']}" />
+		</div>
+	</h:panelGroup>
+
+	<ui:include src="/layout/tablerow.xhtml" >
+		<ui:param name="selector" value="#content .table2" />
+	</ui:include>
 
 </h:form>
 </ui:define>
