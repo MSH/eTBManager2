@@ -81,9 +81,9 @@
 		</table>
 	</s:fragment>
 
-	<div class="spacer" />
 	<h:form id="trans">
 		<s:div styleClass="region1"  rendered="#{tbcase.state=='TRANSFERRING'}">
+			<div class="spacer" />
 			<div class="icon-hu-big"/>
 			<div style="margin-top:6px;font-size:11px;max-width:320px;" >
 				<b style="padding-right:4px;">#{messages['meds.movs.destunit']}:</b> 
@@ -104,8 +104,8 @@
 					<f:param name="name" value="#{caseHome.transferInHealthUnit.tbunit.name}"/>
 				</a:commandLink>
 			</div>
-		</s:div>
 		<div class="spacer" />
+		</s:div>
 	</h:form>
 
 	<s:div styleClass="region1" rendered="#{not empty caseHome.otherCases}">
@@ -133,6 +133,35 @@
                 query="mouseout(function(){jQuery(this).removeClass('sel-row')})"/>
 		</div>
 	</s:div>
+		<s:fragment rendered="#{caseDataUA.causeChangeTreat != null}">
+			<div class="spacer" />
+			<table class="table2">
+				<tr>
+					<th align="center">
+						<h:outputText value="#{messages['TbField.CAUSE_OF_CHANGE']}:"/>				
+					</th>
+				</tr>
+				<tr>
+					<td>
+						<div class="content">
+						#{caseDataUA.causeChangeTreat}
+						</div>
+					</td>
+				</tr>
+			</table>
+		</s:fragment>
+		
+		<s:fragment rendered="#{caseDataUA.refuse2line}">
+		<div class="spacer" />	
+			<table class="table2">
+				<tr>
+					<td align="center">
+						<h:outputText value="#{messages['cases.treatment.refusemed2line']}"/>				
+					</td>
+				</tr>
+				
+			</table>
+		</s:fragment>
 </ui:define>
 
 

@@ -24,8 +24,7 @@
 	<div class="spacer" />
 	<div class="spacer" />
 	<h:form id="leftblock">
-		<s:div styleClass="region1" rendered="#{caseDataUA.causeChangeTreat != null}">
-			<div class="header">
+		<s:fragment rendered="#{caseDataUA.causeChangeTreat != null}">
 			<table class="table2">
 				<tr>
 					<th align="center">
@@ -41,9 +40,19 @@
 					</td>
 				</tr>
 			</table>
-			
-			</div>
-		</s:div>
+		</s:fragment>
+		<s:fragment rendered="#{caseDataUA.refuse2line}">
+			<div class="spacer" />
+			<table class="table2">
+				<tr>
+					<td align="center">
+						<h:outputText value="#{messages['cases.treatment.refusemed2line']}"/>				
+					</td>
+				</tr>
+				
+			</table>
+		
+		</s:fragment>
 	</h:form>
 </ui:define>
 
@@ -89,6 +98,10 @@
 			<span>#{messages['cases.regimens.change']}...</span>
 		</a:commandLink>
 	</s:decorate>						
+	
+	<h:selectBooleanCheckbox value="#{caseDataUA.refuse2line}"/>
+	#{messages['cases.treatment.refusemed2line']}
+	
 
 	<div class="paragraph">#{messages['FilterHealthUnit.TREATMENT_UNIT']}</div>	
     <s:decorate template="/layout/tbselection.xhtml" >
@@ -401,6 +414,9 @@ function formButtonPost(button) {
    			<s:convertEntity />
    		</h:selectOneMenu>
     </s:decorate>
+	
+	<h:selectBooleanCheckbox value="#{caseDataUA.refuse2line}"/>
+	#{messages['cases.treatment.refusemed2line']}
 	
 	</h:panelGroup>
 	</div>

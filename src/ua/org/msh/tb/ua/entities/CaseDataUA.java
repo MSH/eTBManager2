@@ -139,6 +139,8 @@ public class CaseDataUA {
 	@JoinColumn(name="causeChangeTreat_id")
 	private FieldValue causeChangeTreat;
 	
+	private boolean refuse2line;
+	
 	public boolean isVCTstarted() {
 		return startedVCTdate != null;
 	}
@@ -914,5 +916,15 @@ public class CaseDataUA {
 
 	public FieldValue getCauseChangeTreat() {
 		return causeChangeTreat;
+	}
+
+
+	public void setRefuse2line(boolean refuse2line) {
+		this.refuse2line = refuse2line;
+	}
+
+
+	public boolean isRefuse2line() {
+		return refuse2line;
 	}
 }

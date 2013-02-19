@@ -50,7 +50,10 @@
     		<a:support event="onchange" reRender="pnlregimen" ajaxSingle="true" action="#{startTreatmentHome.updatePhases}"/>
     	</h:selectOneMenu>
 	</s:decorate>
-
+	
+	<h:selectBooleanCheckbox value="#{caseDataUA.refuse2line}"/>
+	#{messages['cases.treatment.refusemed2line']}
+	
 
 	<h:panelGroup id="pnlregimen">
 
