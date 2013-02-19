@@ -25,7 +25,7 @@ public class TBForm10Block1 extends Indicator{
 	 */
 	private static final long serialVersionUID = 7230654297736913859L;
 	@In(create=true) EntityManager entityManager;
-	private boolean flag = false;
+	private int flag = 0;
 	
 
 	@Override
@@ -34,11 +34,19 @@ public class TBForm10Block1 extends Indicator{
 		
 		IndicatorTable table = getTable();
 		Map<String, String> messages = Messages.instance();
+			
+		flag = 2;
+		List<Object[]> obj = createQuery().getResultList();
+		flag = 0;
 
 		String cond = " c.id = e.tbcase.id group by c.id ";
 		setCondition(cond);
 		setOrderByFields("e.tbcase.id, e.dateCollected");
+		flag = 1;
 		List<Object[]> lst = createQuery().getResultList();
+		flag = 0;
+		
+		
 		
 		float cntNewM = 0, cntNewF = 0, cntRelM = 0, cntRelF = 0, cntFailM = 0, cntFailF = 0, cntDefM = 0, cntDefF = 0;
 		float cntSmearNegM = 0, cntSmearNegF = 0, cntEPM = 0, cntEPF = 0;
@@ -96,23 +104,26 @@ public class TBForm10Block1 extends Indicator{
 						}
 					}	
 				}
-						
-				if(tbcase.getPatientType() == PatientType.NEW && (tbcase.getInfectionSite() == InfectionSite.EXTRAPULMONARY ))   {
-					if(tbcase.getPatient().getGender()==Gender.MALE)
-						cntEPM++;
-				
-					if(tbcase.getPatient().getGender()==Gender.FEMALE)
-						cntEPF++;
-					}
-							
-				if(tbcase.getPatientType()==PatientType.OTHER && val[5] == MicroscopyResult.NEGATIVE){
-					if(tbcase.getPatient().getGender()==Gender.MALE)
-						cntOtherM++;
-					if(tbcase.getPatient().getGender()==Gender.FEMALE)
-						cntOtherF++;
-					}
+		}
 		
-			}
+					
+		for(Object[] val :obj) {
+			if(val[1] == PatientType.NEW && (val[3] == InfectionSite.EXTRAPULMONARY ))   {
+				if(val[2]==Gender.MALE)
+					cntEPM++;
+				if(val[2]==Gender.FEMALE)
+					cntEPF++;
+				}
+						
+			if(val[1]==PatientType.OTHER){
+				if(val[2]==Gender.MALE)
+					cntOtherM++;
+				if(val[2]==Gender.FEMALE)
+					cntOtherF++;
+				}
+		}
+		
+			
 	
 		addValue(messages.get("manag.gender.male1"), messages.get("#"), cntNewM);
 		addValue(messages.get("manag.gender.female1"), messages.get("#"), cntNewF);
@@ -147,14 +158,20 @@ public class TBForm10Block1 extends Indicator{
 	@Override
 	public String getHQLSelect() {
 		String strSel = "";
-		strSel = "select c.id, c.patient.gender, c.state, c.outcomeDate, e.dateCollected, e.result ";
+		if(flag==1)
+			strSel = "select c.id, c.patient.gender, c.state, c.outcomeDate, e.dateCollected, e.result ";
+		if(flag==2)
+			strSel = "select c.id, c.patientType, c.patient.gender, c.infectionSite";
 		return strSel;
 	}
 	
 	@Override
 	protected String getHQLFrom() {
 		String strFrom = "";
-		strFrom =  " from ExamMicroscopy e join e.tbcase c ";
+		if(flag==1)
+			strFrom =  " from ExamMicroscopy e join e.tbcase c ";
+		if(flag==2)
+			strFrom =  " from TbCase c ";
 		return strFrom;
 	}
 	
