@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['uk_UA.MolecularBiology']}" /><ui:param name="molecularBiologyHome" value="#{molecularBiologyUAHome}"/>
+<ui:param name="molecularBiology" value="#{molecularBiologyUA}"/>
+<ui:param name="topmenu" value="0" />
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+<s:decorate template="/layout/casebody.xhtml">
+	<a:form id="formexam" styleClass="form1">
+    
+    <div class="form-content">
+    <table width="100%">
+    <tr><td>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="false" /> 
+    	<ui:param name="datefield" value="#{molecularBiology.date}" /> 
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['uk_UA.MolecularBiology.result']}:</ui:define>
+    	<h:selectOneMenu value="#{molecularBiology.result}" required="true">
+    		<s:selectItems value="#{molecularBiologyHome.resultOptions}" var="it" noSelectionLabel="-" label="#{messages[it.messageKey]}" />
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+	<s:decorate template="/layout/labselection.xhtml" >
+		<ui:param name="labselection" value="#{molecularBiologyHome.labselection}" />
+	</s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="true" /> 
+    	<ui:param name="edtid" value="edtMBreleasedate" /> 
+    	<ui:param name="datefield" value="#{molecularBiology.dateRelease}" /> 
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
+    	<h:selectOneMenu value="#{molecularBiology.method}" required="true">
+    		<s:selectItems value="#{fieldsQuery.molecularBiologyMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
+    		<s:convertEntity />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputTextarea value="#{molecularBiology.comments}" maxlength="200" style="width:500px;height:80px;"/>
+    </s:decorate>
+
+	</td></tr>
+    </table>
+
+	</div>
+	
+	<div class="form-footer">
+		<div style="float:right;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+        <a:commandLink action="#{molecularBiologyHome.persist}" styleClass="button" reRender="formexam" 
+        	onclick="if (!disableButton(this)) return false;" >
+        	<span>#{messages['form.save']}</span>
+        </a:commandLink>
+        
+        <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+        	<f:param name="id" value="#{caseHome.id}"/>
+        	<span>#{messages['form.cancel']}</span>
+        </s:link>
+	</div>
+    
+	</a:form>
+</s:decorate>
+
+
+<p/>
+
+
+</ui:define>
+
+</ui:composition>  

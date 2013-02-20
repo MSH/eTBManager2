@@ -7,6 +7,7 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
+<ui:param name="molecularBiologyHome" value="#{molecularBiologyUAHome}"/>
 
 	<h2>
 	<s:link view="/cases/edtexamhiv.xhtml" 
@@ -447,6 +448,68 @@
 	<a:actionparam name="param1" assignTo="#{histologyHome.id}" converter="javax.faces.Integer"/>
 	<a:actionparam name="param2" assignTo="#{histologyHome.lastResult}" converter="javax.faces.Boolean"/>
 </a:jsFunction>
+
+<a:jsFunction name="remMolecularBiology" action="#{molecularBiologyHome.remove}" reRender="pnlMolecularBiology,messages" >
+	<a:actionparam name="param1" assignTo="#{molecularBiologyHome.id}" converter="javax.faces.Integer"/>
+</a:jsFunction>
+
+	<div class="spacer" />
+
+	<s:link view="/custom/ua/cases/edtmolecularbiology.xhtml" style="float:right;" styleClass="button-alt" onclick="disableButton(this)">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h2>#{messages['uk_UA.MolecularBiology']}</h2>
+	<h:panelGroup id="pnlMolecularBiology">	
+		<s:div styleClass="region3" rendered="#{empty molecularBiologyHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" /></div>
+		</s:div>
+		<h:dataTable value="#{molecularBiologyHome.allResults}" var="r" rendered="#{not empty molecularBiologyHome.allResults}" width="100%" 
+			styleClass="table1" columnClasses="colb,colb,colb,colb,colcb">
+			<h:column>
+				<f:facet name="header">#{messages['cases.exams.date']}</f:facet>
+				<s:link view="/custom/ua/cases/edtmolecularbiology.xhtml" propagation="none" >
+					<f:param name="id" value="#{tbcase.id}"/>
+					<f:param name="examid" value="#{r.id}"/>
+					<h:outputFormat value="#{messages[r.monthDisplay]}" >
+						<f:param value="#{r.monthTreatment}"/>
+					</h:outputFormat>
+				</s:link>
+				<br/>
+				<h:outputText value="#{r.date}" converter="localeDateConverter"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['uk_UA.MolecularBiology.result']}" styleClass="collh"/>
+				</f:facet>
+				#{messages[r.result.messageKey]}
+				<s:div rendered="#{not empty r.method}" style="display:block;clear:both;">
+					<h:outputText value="#{messages['cases.exams.method']}"/>: #{r.method}
+				</s:div>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.exams.dateRelease']}" styleClass="collh"/>
+				</f:facet>
+				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" />
+			</h:column>
+						
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
+				</f:facet>
+				#{r.comments}
+			</h:column>
+
+			<h:column rendered="#{caseHome.canEditExams and not printing}">
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remMolecularBiology(#{r.id});return false;" style="font-size:9px;">
+				</h:commandLink>
+			</h:column>			
+		</h:dataTable>
+	</h:panelGroup>
 
 	<s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="exams" />
