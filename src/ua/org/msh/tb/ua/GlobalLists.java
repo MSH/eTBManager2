@@ -37,7 +37,8 @@ public class GlobalLists {
 		TbField.EXTRAPULMONARY_TYPES,
 		TbField.REGISTRATION_CATEGORY,
 		TbField.ADJUSTMENT,
-		TbField.CAUSE_OF_CHANGE
+		TbField.CAUSE_OF_CHANGE,
+		TbField.MOLECULARBIOLOGY_METHOD
 	};
 	
 	public static final CaseState outcomes[] = {
