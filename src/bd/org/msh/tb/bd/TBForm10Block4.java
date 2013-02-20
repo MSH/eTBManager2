@@ -28,9 +28,9 @@ public class TBForm10Block4 extends Indicator{
 	@Override
 	protected void createIndicators() {
 		// TODO Auto-generated method stub
-		String cond = " c.id = e.tbcase.id group by c.id ";
-		setCondition(cond);
-		setOrderByFields("e.tbcase.id, e.dateCollected");
+//		String cond = " c.id = e.tbcase.id group by c.id ";
+//		setCondition(cond);
+//		setOrderByFields("e.tbcase.id, e.dateCollected");
 		List<Object[]> lst = createQuery().getResultList();
 		
 		float cntAgeRange1M = 0,cntAgeRange1F = 0, cntAgeRange2M = 0,cntAgeRange2F = 0, cntAgeRange3M = 0, cntAgeRange3F = 0;
@@ -160,14 +160,16 @@ public class TBForm10Block4 extends Indicator{
 	@Override
 	public String getHQLSelect() {
 		String strSel = "";
-		strSel = "select c.id, c.patient.gender, c.state, c.outcomeDate, e.dateCollected, e.result ";
+		//strSel = "select c.id, c.patient.gender, c.state, c.outcomeDate, e.dateCollected, e.result ";
+		strSel = "select c.id, c.patient.gender, c.state, c.outcomeDate ";
 		return strSel;
 	}
 	
 	@Override
 	protected String getHQLFrom() {
 		String strFrom = "";
-		strFrom =  " from ExamMicroscopy e join e.tbcase c ";
+		//strFrom =  " from ExamMicroscopy e join e.tbcase c ";
+		strFrom =  " from TbCase c ";
 		return strFrom;
 	}
 }
