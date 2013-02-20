@@ -76,7 +76,7 @@ public class TBForm10Block1 extends Indicator{
 									cntRelF++;
 								}
 							
-							if(tbcase.getPatientType() == PatientType.FAILURE){
+							if(tbcase.getPatientType() == PatientType.FAILURE || tbcase.getPatientType() == PatientType.FAILURE_FT || tbcase.getPatientType() == PatientType.FAILURE_RT){
 								if(tbcase.getPatient().getGender()==Gender.MALE)
 									cntFailM++;
 								if(tbcase.getPatient().getGender()==Gender.FEMALE)
