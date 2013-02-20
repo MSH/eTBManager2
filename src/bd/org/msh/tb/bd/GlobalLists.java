@@ -60,7 +60,11 @@ public class GlobalLists {
 		ReferredTo.NON_PP,
 		ReferredTo.SS,
 		ReferredTo.VD, 
-		ReferredTo.CV
+		ReferredTo.CV,
+		ReferredTo.GOV,
+		ReferredTo.PRIVATE_HOSP,
+		ReferredTo.TB_PATIENT,
+		ReferredTo.OTHER
 	};		
 	
 	private static final TbField tbfields[] = {
