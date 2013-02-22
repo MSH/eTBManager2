@@ -245,6 +245,36 @@ public class CasesQueryAZ extends CasesQuery{
 
 		return hqlCondition;
 	}
+	
+	@Override
+	protected void mountAdvancedSearchConditions() {
+		CaseFiltersAZ cf = (CaseFiltersAZ) App.getComponent("caseFiltersAZ");
+		if (!"".equals(cf.getCaseNums()) && cf.getCaseNums() != null){
+			String hql = "p.recordNumber in (";
+			String[] nums = cf.getCaseNums().split(",");
+			for (String num:nums){
+				if (num.contains("-")){
+					String [] range = num.split("-");
+					try{
+						int beg = Integer.parseInt(range[0].trim());
+						int end = Integer.parseInt(range[range.length-1].trim());
+						for (int i = beg; i <= end; i++) {
+							hql += i+",";
+						}
+					} catch (Exception e){
+						
+					}
+				}
+				else{
+					hql += Integer.parseInt(num.trim())+",";
+				}
+			}
+			hql = hql.substring(0, hql.length()-1)+")";
+			addCondition(hql);
+		}
+		super.mountAdvancedSearchConditions();
+	}
+	
 	/**
 	 * Refine single search condition to help understand EIDSS related queries
 	 * AK
