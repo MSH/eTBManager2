@@ -274,8 +274,7 @@
 
 		<h2>#{messages['TbField.SEVERITY_MARKS']}</h2>
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty caseSeverityMarksHome.severityMarks}" />
-		<h:dataTable value="#{caseSeverityMarksHome.severityMarks}" var="it" styleClass="table1"  columnClasses="colb,colb"
-			rowClasses="lin1,lin2" style="clear:left;width:100%;border-collapse:collapse;"
+		<h:dataTable value="#{caseSeverityMarksHome.severityMarks}" var="it" style="clear:left;width:100%;border-collapse:collapse;"
 			rendered="#{not empty caseSeverityMarksHome.severityMarks}" >
 			<h:column>
    				<div class="#{it.checked?'checked-icon':'unchecked-icon'}" />
