@@ -173,10 +173,25 @@
 		<javadoc destdir="${doc.dir}" sourcepathref="etbm.sourcepath" classpathref="mdrtb.classpath"
 			author="true"
 			version="true">
-
+			<doclet name="org.umlgraph.doclet.UmlGraphDoc" path="WebContent/WEB-INF/lib/UMLGraph.jar">
+       	        <param name="-attributes" />
+       	        <param name="-operations" />
+       	        <param name="-qualify" />
+       	        <param name="-types" />
+       	        <param name="-visibility" />
+			</doclet>
+			
 			<doctitle><![CDATA[<h1>eTB Manager Javadoc</h1>]]></doctitle>
 			<bottom><![CDATA[<i>Copyright &#169; 2005 Management Sciences for Health, Inc. All Rights Reserved.</i>]]></bottom>
 		</javadoc>
+		<apply executable="dot" dest="${doc.dir}" parallel="false">
+		    <arg value="-Tpng"/>
+		    <arg value="-o"/>
+		    <targetfile/>
+		    <srcfile/>
+		    <fileset dir="${doc.dir}" includes="*.dot"/>
+		    <mapper type="glob" from="*.dot" to="*.png"/>
+		</apply>
 	</target>
 
 	<!-- Define the Sonar global properties (the most usual way is to pass these properties via the command line) -->
