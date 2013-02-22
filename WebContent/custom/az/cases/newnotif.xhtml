@@ -178,7 +178,16 @@
 			<h:outputText value="#{caseAZHome.getEIDSSBlock(it.tbcase)}" escape="false" style="border-left: 1px solid #E0E0E0;color:#45793D;"/>							
 		</h:column>
 	</h:dataTable>
+
 </s:decorate>
+
+<div id="newpacbutton" class="button-bar" style="display:none;" >
+	<a:commandLink onclick="if (!disableButton(this)) return false;"
+    	action="#{indicator.selectPatientData}" styleClass="button" >
+	    <span>#{messages['cases.newpatient']}</span>
+	</a:commandLink>
+</div>
+
 </h:panelGroup>
 
 <script type="text/javascript">
