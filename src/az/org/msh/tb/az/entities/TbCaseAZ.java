@@ -22,6 +22,7 @@ import org.msh.tb.az.entities.enums.CaseFindingStrategy;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.User;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 import org.msh.utils.date.Period;
@@ -82,6 +83,16 @@ public class TbCaseAZ extends TbCase{
 	private Date inEIDSSDate;
 	
 	private boolean colPrevTreatUnknown;
+	
+	private Date editingDate;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="createUser_id")
+	private User createUser;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="editingUser_id")
+	private User editingUser;
 	
 	//===================GETTERS & SETTERS======================
 	/**
@@ -280,5 +291,47 @@ public class TbCaseAZ extends TbCase{
 
 	public boolean isColPrevTreatUnknown() {
 		return colPrevTreatUnknown;
+	}
+
+	/**
+	 * @return the editingDate
+	 */
+	public Date getEditingDate() {
+		return editingDate;
+	}
+
+	/**
+	 * @param editingDate the editingDate to set
+	 */
+	public void setEditingDate(Date editingDate) {
+		this.editingDate = editingDate;
+	}
+
+	/**
+	 * @return the createUser
+	 */
+	public User getCreateUser() {
+		return createUser;
+	}
+
+	/**
+	 * @param createUser the createUser to set
+	 */
+	public void setCreateUser(User createUser) {
+		this.createUser = createUser;
+	}
+
+	/**
+	 * @return the editingUser
+	 */
+	public User getEditingUser() {
+		return editingUser;
+	}
+
+	/**
+	 * @param editingUser the editingUser to set
+	 */
+	public void setEditingUser(User editingUser) {
+		this.editingUser = editingUser;
 	}
 }

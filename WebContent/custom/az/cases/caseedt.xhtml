@@ -18,6 +18,16 @@
 
 <ui:define name="content">
 <h1>#{title}</h1>
+	<h:outputText value="#{messages['cases.system.create']}: " style="font-weight:bold;"/>
+	<h:outputText value="#{tbcase.systemDate}" converter="localeDateConverter" rendered="#{tbcase.systemDate != null}"/>
+	<h:outputText value="#{messages['cases.date_unknown']}" rendered="#{tbcase.systemDate == null}"/>
+	<h:outputText value=", #{tbcase.createUser!=null ? tbcase.createUser.name : messages['cases.user_unknown']}"/>
+	<br/>
+	<h:outputText value="#{messages['cases.system.edit']}: " style="font-weight:bold;"/>
+	<h:outputText value="#{tbcase.editingDate}" converter="localeDateConverter" rendered="#{tbcase.editingDate != null}"/>
+	<h:outputText value="#{messages['cases.date_unknown']}" rendered="#{tbcase.editingDate == null}"/>
+	<h:outputText value=", #{tbcase.editingUser!=null ? tbcase.editingUser.name : messages['cases.user_unknown']}"/>
+	
 <h:form id="main" styleClass="form1">
 	<s:fragment rendered="#{tbcase.open}">
 		<ui:include src="casedataedt.xhtml" />

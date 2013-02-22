@@ -10,6 +10,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.tb.application.App;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.entities.Address;
@@ -60,7 +61,15 @@ public class CaseEditingAZHome extends CaseEditingHome{
 			tbcase.setState(CaseState.WAITING_TREATMENT);
 
 		updatePatientAge();
-
+		
+		//log info for management
+		tbcase.setSystemDate(new Date());
+		UserWorkspace uw = (UserWorkspace) App.getComponent("userWorkspace");
+		tbcase.setCreateUser(uw.getUser());
+		
+		tbcase.setEditingDate(new Date());
+		tbcase.setEditingUser(uw.getUser());
+		
 		// treatment was defined ?
 		caseHome.setTransactionLogActive(true);
 		if (!caseHome.persist().equals("persisted"))
@@ -86,7 +95,7 @@ public class CaseEditingAZHome extends CaseEditingHome{
 			if (getPrevTBTreatmentHome() != null)
 				getPrevTBTreatmentHome().persist();
 		}
-
+		
 		caseHome.updateCaseTags();
 
 		return (regimenType == 2? "individualized": "persisted");
@@ -238,9 +247,13 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		TbCaseAZ tbcase = getTbCase();
 		tbcase.setReferToTBUnit(getReferTBUnit().getTbunit());
 
+		UserWorkspace uw = (UserWorkspace) App.getComponent("userWorkspace");
 		if (tbcase.getLegacyId()!=null && tbcase.getSystemDate()==null){
 			tbcase.setSystemDate(new Date());
+			tbcase.setCreateUser(uw.getUser());
 		}
+		tbcase.setEditingDate(new Date());
+		tbcase.setEditingUser(uw.getUser());
 
 		return super.saveEditing();
 	}
