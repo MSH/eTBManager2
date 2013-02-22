@@ -13,6 +13,7 @@ import org.msh.tb.entities.Tag;
 @Synchronized(timeout=10000L)
 public class CaseFiltersAZ {
 	private Tag tag;
+	private String caseNums;
 
 	public void setTag(Tag tag) {
 		this.tag = tag;
@@ -24,5 +25,13 @@ public class CaseFiltersAZ {
 			if (cf.getTagid()!=null)
 				tag = (Tag)App.getEntityManager().find(Tag.class, cf.getTagid());
 		return tag;
+	}
+
+	public void setCaseNums(String caseNums) {
+		this.caseNums = caseNums;
+	}
+
+	public String getCaseNums() {
+		return caseNums;
 	}
 }

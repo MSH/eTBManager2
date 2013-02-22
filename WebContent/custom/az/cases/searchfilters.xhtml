@@ -35,9 +35,12 @@
 		<ui:param name="patientdata" value="#{caseFilters}" />
 	</s:decorate>
 <s:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
+	
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['Patient.recordNumber']}:</ui:define>
-		<h:inputText value="#{caseFilters.recordNumber}" style="width:120px;"></h:inputText>
+		<h:inputText value="#{caseFiltersAZ.caseNums}" style="width:120px;"></h:inputText>
+		<br/>
+		<h:outputText value="#{messages['filters.range']}" style="font-size:11px;"/>
 	</s:decorate>
 
 	<s:decorate template="/layout/display.xhtml" >
