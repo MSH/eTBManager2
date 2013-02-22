@@ -100,7 +100,8 @@
 			<f:facet name="header" >
 				<h:outputText value="#{messages['Medicine.strength']}" styleClass="colrh"/>
 			</f:facet>
-			<h:inputText value="#{it.item.strength}" style="width:100px;display:none;"/>
+			<h:inputText id="strength" value="#{it.item.strength}" style="width:100px;#{it.selected?'':'display:none;'} "/>
+			<h:message for="strength" styleClass="error"/>
 		</h:column>
 	</h:dataTable>
 	</div>
@@ -109,7 +110,8 @@
 			<div class="form-footer">	
             <a:commandLink action="#{medicineHome.persist}" styleClass="button" 
             	reRender="main,messages"
-            	onclick="if (!disableButton(this)) return false;" >
+            	onclick="if (!disableButton(this)) return false;" 
+            	oncomplete="updateRows();">
             	<span>#{messages['form.save']}</span>
             </a:commandLink>  
             <s:link view="/admin/medicines.xhtml" styleClass="button-alt" propagation="end" onclick="openWaitDlg();">

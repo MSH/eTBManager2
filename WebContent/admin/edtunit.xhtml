@@ -150,7 +150,7 @@
     	<h:selectBooleanCheckbox value="#{tbunit.changeEstimatedQuantity}" /> #{messages['Tbunit.changeEstimatedQuantity']}
     </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" >
+    <s:decorate template="/layout/edit.xhtml" rendered="false">
     	<h:selectBooleanCheckbox value="#{tbunit.orderOverMinimum}" /> #{messages['Tbunit.orderOverMinimum']}
     </s:decorate>
     <br/>
