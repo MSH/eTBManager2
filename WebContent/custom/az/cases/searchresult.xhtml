@@ -133,16 +133,20 @@
 						</tr>
 						<ui:repeat value="#{casesAZ.resultList}" var="it">
 							<tr>
-								<td width="90px" align="center"><s:link
-										value="#{it.displayCaseNumber}"
-										view="/cases/casedata.xhtml">
-										<f:param name="id" value="#{it.tbcase.id}" />
-									</s:link> <br /> <s:link view="/cases/casedata.xhtml"
+								<td width="10%" align="center">
+									<s:link view="/cases/casedata.xhtml"
 										styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}"
 										style="float:none">
 										<f:param name="id" value="#{it.tbcase.id}" />
-									</s:link></td>
-								<td style="color:#069;">
+									</s:link>
+									<br/> 
+									<s:link
+										value="#{it.displayCaseNumber}"
+										view="/cases/casedata.xhtml">
+										<f:param name="id" value="#{it.tbcase.id}" />
+									</s:link> 
+								</td>
+								<td style="color:#069;" width="30%">
 										<b>
 										<s:link
 										value="#{caseAZHome.getRightPatientName(it.tbcase)}"
@@ -163,8 +167,7 @@
 										<b>#{caseAZHome.reGetTbCase(it.tbcase).unicalID!=null ? caseAZHome.reGetTbCase(it.tbcase).unicalID : 'XXXXXXXX'}</b>
 								</td>
 								<s:fragment>
-									<td>
-									  
+									<td  width="30%">
 									     <b>#{messages[caseAZHome.reGetTbCase(it.tbcase).classification.key]} -  <h:outputText value=" #{messages[caseAZHome.reGetTbCase(it.tbcase).state.key]}"
 												style="color:SaddleBrown;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).state != 'ONTREATMENT' and caseAZHome.reGetTbCase(it.tbcase).notificationUnit != NULL}"/>
 											<s:fragment rendered="#{caseAZHome.reGetTbCase(it.tbcase).state == 'ONTREATMENT'}">
@@ -175,8 +178,6 @@
 												
 											</s:fragment>
 											<h:outputText value=" #{messages['cases.detailseidsstitle']}" style="color:SaddleBrown;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit == NULL}"/>
-											
-											
 										 </b>
 									     <br/>
 									     #{messages['PatientType']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).patientType.key]} <br/>
@@ -198,7 +199,7 @@
 										
 									</td>
 								</s:fragment>
-								<td style="border-left: 1px solid #E0E0E0;color:#45793D;">
+								<td style="border-left: 1px solid #E0E0E0;color:#45793D;"  width="30%">
 									<h:outputText value="#{caseAZHome.getEIDSSBlock(it.tbcase)}" escape="false"/>
 								</td>
 							</tr>
