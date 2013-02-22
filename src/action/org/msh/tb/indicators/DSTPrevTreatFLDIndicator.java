@@ -9,7 +9,6 @@ import org.msh.tb.entities.ResistancePattern;
 import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.DstResult;
-import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
@@ -150,24 +149,26 @@ public class DSTPrevTreatFLDIndicator extends Indicator2D{
 		
 		if (tbCaseList.size() != 0) {
 			for (int k = 0; k < tbCaseList.size(); k++) {
-				if (tbCaseList.get(k).getPatientType().getKey()
-						.equalsIgnoreCase("PatientType.NEW")|| tbCaseList.get(k).getPatientType().getKey()
-						.equalsIgnoreCase("PatientType.TRANSFER_IN")) {
-					countNewPatients = ++countNewPatients;	
-				}
-				
-				if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.RELAPSE")){
-					countPrevTrtPatRelapse = ++countPrevTrtPatRelapse;
-				}
-				if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_FT")){
-					countPrevTrtPatFail1 = ++countPrevTrtPatFail1;
-				}
-				if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_RT")){
-					countPrevTrtReTreat = ++countPrevTrtReTreat;
-				}
-				if(tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.AFTER_DEFAULT")||
-						tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.OTHER")){
-					countDefaultOthers = ++countDefaultOthers;
+				if(tbCaseList.get(k).getPatientType()!=null){
+					if (tbCaseList.get(k).getPatientType().getKey()
+							.equalsIgnoreCase("PatientType.NEW")|| tbCaseList.get(k).getPatientType().getKey()
+							.equalsIgnoreCase("PatientType.TRANSFER_IN")) {
+						countNewPatients = ++countNewPatients;	
+					}
+					
+					if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.RELAPSE")){
+						countPrevTrtPatRelapse = ++countPrevTrtPatRelapse;
+					}
+					if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_FT")){
+						countPrevTrtPatFail1 = ++countPrevTrtPatFail1;
+					}
+					if (tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.FAILURE_RT")){
+						countPrevTrtReTreat = ++countPrevTrtReTreat;
+					}
+					if(tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.AFTER_DEFAULT")||
+							tbCaseList.get(k).getPatientType().getKey().equalsIgnoreCase("PatientType.OTHER")){
+						countDefaultOthers = ++countDefaultOthers;
+					}
 				}
 			}
 		}
