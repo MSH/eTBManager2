@@ -395,6 +395,17 @@ function isPulmonary(cb) {
 		
 		</td></tr>
 
+		<tr>
+			<td>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['az_AZ.CaseFindingStrategy']}:</ui:define>
+    				<h:selectOneMenu value="#{tbcase.caseFindingStrategy}" style="margin-right:4px;">
+		    			<s:selectItems var="it" value="#{globalLists_az.caseFindingStrategies}"  label="#{messages[it.key]}" hideNoSelectionLabel="true"/>
+		    			<s:convertEnum />
+		    		</h:selectOneMenu>
+				</s:decorate>
+			</td>
+		</tr>
 		
 		</table></div>
 
