@@ -532,7 +532,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			return "upper(p.name)" + (descOrder? " desc": "");
 		case FIRSTSURNAME: 
 			return (descOrder? "upper(p.name) desc, upper(p.middleName) desc": "upper(p.name), upper(p.middleName)");
-		case LAST_FIRST_MIDDLENAME: 
+		case LAST_FIRST_MIDDLENAME: case LAST_FIRST_MIDDLENAME_WITHOUT_COMMAS:
 			return (descOrder? "upper(p.lastName) desc, upper(p.name) desc, upper(p.middleName) desc": "upper(p.lastName), upper(p.name), upper(p.middleName)");
 		case SURNAME_FIRSTNAME: 
 			return "upper(p.middleName) desc, upper(p.name) desc";
