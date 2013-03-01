@@ -736,4 +736,12 @@ public class CaseHQLBase extends Controller {
 	public CaseClassification getClassification() {
 		return getIndicatorFilters().getClassification();
 	}
+
+
+	/**
+	 * @param outputSelections the outputSelections to set
+	 */
+	public void setOutputSelections(List<SelectItem> outputSelections) {
+		this.outputSelections = outputSelections;
+	}
 }
