@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.adminunits.InfoCountryLevels;
+import org.msh.tb.application.App;
 import org.msh.tb.az.entities.ExamXRayAZ;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.entities.CaseDispensing;
@@ -44,6 +45,7 @@ public class CaseExportAZ extends CaseExport {
 		excel.addTextFromResource("Patient.name", "title");
 		excel.addTextFromResource("CaseClassification", "title");
 		excel.addTextFromResource("Patient.caseNumber", "title");
+		excel.addTextFromResource("Patient.recordNumber", "title");
 		excel.addTextFromResource("CaseState", "title");
 		excel.addTextFromResource("TbCase.registrationCode", "title");
 		excel.addTextFromResource("Gender", "title");
@@ -83,7 +85,11 @@ public class CaseExportAZ extends CaseExport {
 		excel.addTextFromResource("TbCase.outcomeDate", "title");
 		excel.addTextFromResource("TbCase.ownerUnit", "title");
 		excel.addTextFromResource("TbCase.ownerUnitAdr", "title");
-		excel.addTextFromResource("excel.dateInEIDSS", "title");
+		excel.addTextFromResource("cases.system.create", "title");
+		excel.addText(App.getMessage("cases.system.create")+" ("+App.getMessage("User")+")", "title");
+		excel.addTextFromResource("cases.system.edit", "title");
+		excel.addText(App.getMessage("cases.system.edit")+" ("+App.getMessage("User")+")", "title");
+		
 		excel.addText(getMessages().get("User.name")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addText(getMessages().get("Patient.lastName")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addText(getMessages().get("Patient.middleName")+" "+getMessages().get("excel.fromEIDSS"), "title");
@@ -139,6 +145,7 @@ public class CaseExportAZ extends CaseExport {
 		excel.addText(tbcase.getPatient().getFullName());
 		excel.addTextFromResource(tbcase.getClassification().getKey());
 		excel.addText(tbcase.getDisplayCaseNumber());
+		excel.addValue(tbcase.getPatient(), "recordNumber");
 		excel.addValue(tbcase, "state");
 		excel.addText(tbcase.getRegistrationCode());
 		excel.addValue(tbcase.getPatient(), "gender");
@@ -190,6 +197,13 @@ public class CaseExportAZ extends CaseExport {
 			excel.addText(tu.toString());
 			excel.addText(tu.getAdminUnit().getName().getDefaultName());
 		}
+		
+		excel.addDate(tbcase.getSystemDate());
+		excel.addValue(tbcase,"createUser.name");
+		excel.addDate(tbcase.getEditingDate());
+		excel.addValue(tbcase,"editingUser.name");
+		
+		
 		String[] ei = new String[] {"",""}; 
 		if (tbcase.getEIDSSComment()!=null)
 			ei = tbcase.getEIDSSComment().split(" / ");
@@ -220,8 +234,6 @@ public class CaseExportAZ extends CaseExport {
 		// END name from EIDSS 
 		excel.addText(ei[0]);
 		excel.addText(ei[1]);
-		
-		excel.addDate(tbcase.getSystemDate());
 		
 		if (ei.length>=5)
 			excel.addNumber(Integer.parseInt(ei[4]));
