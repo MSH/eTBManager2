@@ -237,9 +237,18 @@ public class CaseEditingAZHome extends CaseEditingHome{
 					return false;
 				}
 			}
+		
+		MedicalExamination me = (MedicalExamination)App.getComponent("medicalExamination");
+		if (!(me.getDate()==null && me.getResponsible().isEmpty() && me.getHeight()==null && me.getWeight()==null && me.getComments().isEmpty())){
+			if (!(me.getDate()!=null && me.getResponsible()!=null && me.getHeight()!=null && me.getWeight()!=null)){
+				facesMessages.addToControlFromResourceBundle("medexamerror", App.getMessage("MedicalExamination.errorValidate"));
+				return false;
+			}
+		}
+		
 		return super.validateData();
 	}
-
+	
 	@Override
 	public String saveEditing() {
 		if (!validateData())

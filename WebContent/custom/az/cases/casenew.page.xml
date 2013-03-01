@@ -5,6 +5,7 @@
 
 		<restrict>#{userSession.canEditCases}</restrict>
 		<action execute="#{caseEditingAZHome.initializeNewNotification()}"/>
+		<action execute="#{medicalExaminationHome.initialize}" />
 		<param name="pacid" value="#{patientHome.id}" converterId="javax.faces.Integer"/>
 		<param name="cla" value="#{tbcase.classification}" />
 		<begin-conversation join="true"/>
