@@ -15,10 +15,20 @@
 <ui:param name="labelstyle" value="width:140px" />
 <ui:param name="left" value="0" />
 <ui:param name="indicator" value="#{caseEditingAZHome}" />
-
 <ui:param name="waitdlg" value="1" />
-
 <ui:define name="content">
+
+<style type="text/css">
+.colcw10pc {	
+	text-align: center; 
+	width:10%;
+	}
+.collw30pc { 
+	text-align:left; 
+	width:30%;
+	}
+</style>
+
 <h1>#{title}</h1>
 
 <rich:jQuery name="showbutton" selector="#newpacbutton" query="slideDown(500)" />
@@ -45,18 +55,11 @@
 	
 <h:panelGroup id="pnlpatients">
 
-<div id="newpacbutton" class="button-bar" style="display:none;" >
-	<a:commandLink onclick="if (!disableButton(this)) return false;"
-    	action="#{indicator.selectPatientData}" styleClass="button" >
-	    <span>#{messages['cases.newpatient']}</span>
-	</a:commandLink>
-</div>
-
 <s:decorate template="/layout/naveg.xhtml" rendered="#{patientsAZ.searching}">
 	<ui:param name="list" value="#{patientsAZ}" />
 
 	<h:dataTable value="#{patientsAZ.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
-		rendered="#{patientsAZ.searching and (not empty patientsAZ.resultList)}" width="680px" columnClasses="colc,coll,coll,coll" style="float:center;">
+		rendered="#{patientsAZ.searching and (not empty patientsAZ.resultList)}" width="680px" columnClasses="colcw10pc,collw30pc,collw30pc,collw30pc" style="float:center;">
 		<h:column>
 			<f:facet name="header">
 				#{messages['Patient.caseNumber']}
@@ -181,22 +184,23 @@
 
 </s:decorate>
 
-<div id="newpacbutton" class="button-bar" style="display:none;" >
-	<a:commandLink onclick="if (!disableButton(this)) return false;"
-    	action="#{indicator.selectPatientData}" styleClass="button" >
-	    <span>#{messages['cases.newpatient']}</span>
-	</a:commandLink>
-</div>
+<s:fragment rendered="#{(s:hasRole('TB_CASE_NEW_TB') and tbcase.classification=='TB') or tbcase.classification!='TB'}">
+	<div id="newpacbutton" class="button-bar" style="display:none;" >
+		<a:commandLink onclick="if (!disableButton(this)) return false;"
+	    	action="#{indicator.selectPatientData}" styleClass="button" >
+		    <span>#{messages['cases.newpatient']}</span>
+		</a:commandLink>
+	</div>
+</s:fragment>
 
 </h:panelGroup>
 
 <script type="text/javascript">
 function initPatientSearch() {
-
 	searchPatient();
 }
-
 </script>
+
 <a:jsFunction name="searchPatient" reRender="pnlpatients" 
 	oncomplete="if (data) showbutton();enableButton();"
 	action="#{patientsAZ.search}"  
