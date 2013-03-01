@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.async.QuartzTriggerHandle;
 import org.jboss.seam.faces.FacesMessages;
@@ -37,7 +38,8 @@ public class SysStartupAZ{
 	static Date now = new Date();
 
 	static final long hour = 60*60*1000L;
-	//@Observer("org.jboss.seam.postInitialization")
+	
+	@Observer("org.jboss.seam.postInitialization")
 	public void initTimerChecking() {
 		EtbmanagerApp.instance().initializeInstance();
 
