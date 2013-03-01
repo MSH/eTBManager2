@@ -133,35 +133,7 @@
                 query="mouseout(function(){jQuery(this).removeClass('sel-row')})"/>
 		</div>
 	</s:div>
-		<s:fragment rendered="#{caseDataUA.causeChangeTreat != null}">
-			<div class="spacer" />
-			<table class="table2">
-				<tr>
-					<th align="center">
-						<h:outputText value="#{messages['TbField.CAUSE_OF_CHANGE']}:"/>				
-					</th>
-				</tr>
-				<tr>
-					<td>
-						<div class="content">
-						#{caseDataUA.causeChangeTreat}
-						</div>
-					</td>
-				</tr>
-			</table>
-		</s:fragment>
-		
-		<s:fragment rendered="#{caseDataUA.refuse2line}">
-		<div class="spacer" />	
-			<table class="table2">
-				<tr>
-					<td align="center">
-						<h:outputText value="#{messages['cases.treatment.refusemed2line']}"/>				
-					</td>
-				</tr>
-				
-			</table>
-		</s:fragment>
+
 </ui:define>
 
 
