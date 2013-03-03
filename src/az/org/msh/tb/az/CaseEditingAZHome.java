@@ -3,6 +3,8 @@ package org.msh.tb.az;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -36,7 +38,9 @@ public class CaseEditingAZHome extends CaseEditingHome{
 	public String saveNew() {
 		if (!validateData())
 			return "error";
-
+		if (!validateMedExam())
+			return "error";
+		
 		TbCaseAZ tbcase = getTbCase();
 		// save the patient's data
 		getPatientHome().persist();
@@ -238,6 +242,10 @@ public class CaseEditingAZHome extends CaseEditingHome{
 				}
 			}
 		
+		return super.validateData();
+	}
+	
+	public boolean validateMedExam(){
 		MedicalExamination me = (MedicalExamination)App.getComponent("medicalExamination");
 		if (!(me.getDate()==null && me.getResponsible().isEmpty() && me.getHeight()==null && me.getWeight()==null && me.getComments().isEmpty())){
 			if (!(me.getDate()!=null && me.getResponsible()!=null && me.getHeight()!=null && me.getWeight()!=null)){
@@ -245,8 +253,7 @@ public class CaseEditingAZHome extends CaseEditingHome{
 				return false;
 			}
 		}
-		
-		return super.validateData();
+		return true;
 	}
 	
 	@Override
