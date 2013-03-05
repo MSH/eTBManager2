@@ -90,6 +90,7 @@ public class CaseExportAZ extends CaseExport {
 		excel.addTextFromResource("cases.system.edit", "title");
 		excel.addText(App.getMessage("cases.system.edit")+" ("+App.getMessage("User")+")", "title");
 		
+		excel.addTextFromResource("excel.dateInEIDSS", "title");
 		excel.addText(getMessages().get("User.name")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addText(getMessages().get("Patient.lastName")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addText(getMessages().get("Patient.middleName")+" "+getMessages().get("excel.fromEIDSS"), "title");
@@ -234,7 +235,7 @@ public class CaseExportAZ extends CaseExport {
 		// END name from EIDSS 
 		excel.addText(ei[0]);
 		excel.addText(ei[1]);
-		
+		excel.addDate(tbcase.getSystemDate());
 		if (ei.length>=5)
 			excel.addNumber(Integer.parseInt(ei[4]));
 		else
