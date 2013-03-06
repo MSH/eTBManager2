@@ -265,7 +265,7 @@
 	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
 	<c:forEach items="#{globalLists.caseClassifications}" var="it">
 		<tr><td class="vertical-menu">
-			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
+			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it) and (s:hasRole('TB_CASE_NEW_TB') and it == 'TB' or s:hasRole('DRTB_CASE_NEW_TB') and it=='DRTB')}">
 				<f:param name="cla" value="#{it}"/>
 				<f:param name="type" value="CONFIRMED"/>
 				<div class="new-icon" />#{messages[it.key]}
@@ -293,7 +293,7 @@
 	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
 	<c:forEach items="#{globalLists.caseClassifications}" var="it">
 		<tr><td class="vertical-menu">
-			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
+			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it) and (s:hasRole('TB_CASE_NEW_TB') and it == 'TB' or s:hasRole('DRTB_CASE_NEW_TB') and it=='DRTB')}">
 				<f:param name="cla" value="#{it}"/>
 				<f:param name="type" value="SUSPECT"/>
 				<div class="new-icon" />#{messages[it.keySuspect]}

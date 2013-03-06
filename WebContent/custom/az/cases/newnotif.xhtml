@@ -184,7 +184,7 @@
 
 </s:decorate>
 
-<s:fragment rendered="#{(s:hasRole('TB_CASE_NEW_TB') and tbcase.classification=='TB') or tbcase.classification!='TB'}">
+<s:fragment rendered="#{(s:hasRole('TB_CASE_NEW_TB') and tbcase.classification=='TB') or (s:hasRole('DRTB_CASE_NEW_TB') and tbcase.classification=='DRTB')}">
 	<div id="newpacbutton" class="button-bar" style="display:none;" >
 		<a:commandLink onclick="if (!disableButton(this)) return false;"
 	    	action="#{indicator.selectPatientData}" styleClass="button" >
