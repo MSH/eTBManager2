@@ -14,7 +14,6 @@ import org.msh.tb.SubstancesQuery;
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.Substance;
-import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.transactionlog.LogInfo;
@@ -34,6 +33,10 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 	}
 	
 
+	/**
+	 * Return the list of items of DST results to be edited
+	 * @return List of {@link ExamDSTResult} to post results
+	 */
 	public List<ExamDSTResult> getItems() {
 		if (items == null)
 			createItems();
@@ -41,6 +44,12 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 		return items;
 	}
 	
+	/**
+	 * Find an instance of the {@link ExamDSTResult} of the current case 
+	 * by its {@link Substance} instance
+	 * @param s
+	 * @return
+	 */
 	protected ExamDSTResult findResult(Substance s) {
 		for (ExamDSTResult mr: getInstance().getResults()) {
 			if (mr.getSubstance().equals(s)) {
@@ -49,7 +58,11 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 		}
 		return null;
 	}
-	
+
+
+	/**
+	 * Create the items of the DST result to be edited
+	 */
 	public void createItems() {
 		items = new ArrayList<ExamDSTResult>();
 //		boolean bEdt = isManaged();
@@ -68,82 +81,91 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 			res.setExam(getInstance());
 		}
 	}
-	
-	public boolean validateAndPrepareFields(){
-		
-		/*This rule has been changed (commented lines) because it removes the flexibility of inserting dstexams for DRTB cases
-		 * in etbmanager. a tag that select the cases that are DRTB but doesn't have a DSTexam indicating 
-		 * resistance had been created solve that necessity
-		 */
-		//Verifies if a TB case has resistance or if a DRTB case has at least one resistance
-		int resistantQuantity = 0;
-		int notDoneExams = 0;
-		if (items == null)
-			items = getInstance().getResults();
 
-		for (ExamDSTResult ms: items) {
-			if(getTbCase().getClassification().equals(CaseClassification.TB)
-					&& ms.getResult().equals(DstResult.RESISTANT)){
-				facesMessages.addFromResourceBundle("DSTExam.msg01");
-				return false;
-			}else if(ms.getResult().equals(DstResult.RESISTANT)){
-				resistantQuantity++;
-			}else if(ms.getResult().equals(DstResult.NOTDONE)){
-				notDoneExams++;
+
+	/**
+	 * Validate and prepare the fields to be saved
+	 * @return true if validation was successfully done
+	 */
+	public boolean validateAndPrepareFields(){
+		// if there is no item to evaluate, validation fails
+		if (items == null)
+			return false;
+
+		// count the results
+		int numResistants = 0;
+		int numContaminated = 0;
+		int numSusceptibles = 0;
+		int numNotDone = 0;
+		
+		// count the number of items by results
+		for (ExamDSTResult item: items) {
+			switch (item.getResult()) {
+			case RESISTANT:
+				numResistants++;
+				break;
+			case CONTAMINATED:
+				numContaminated++;
+				break;
+			case NOTDONE:
+				numNotDone++;
+				break;
+			case SUSCEPTIBLE:
+				numSusceptibles++;
+				break;
 			}
 		}
-		if(getTbCase().getClassification().equals(CaseClassification.DRTB)
-				&& resistantQuantity <= 0){
+		// check if case is TB and any resistance was notified
+/*		if (getTbCase().getClassification().equals(CaseClassification.TB) && resistantQuantity > 0) {
+			facesMessages.addFromResourceBundle("DSTExam.msg01");
+			return false;
+		}
+*/
+
+		// check if case is DR-TB and there is no resistance in the result 
+/*		if (getTbCase().getClassification().equals(CaseClassification.DRTB) && numResistants <= 0) {
 			facesMessages.addFromResourceBundle("DSTExam.msg02");
 			return false;
 		}
-		if(items.size() == notDoneExams){
+*/
+		if (items.size() == numNotDone) {
 			facesMessages.addFromResourceBundle("DSTExam.msg03");
 			return false;
 		}
-		
-		// update exams
-		if (items != null) {
-			ExamDST exam = getInstance();
-			exam.setNumContaminated(0);
-			exam.setNumResistant(0);
-			exam.setNumSusceptible(0);
-			
-			for (ExamDSTResult ms: items) {
-				// add new results
-				if (ms.getResult() != DstResult.NOTDONE) {
-					if (!exam.getResults().contains(ms))
-						exam.getResults().add(ms);
-					switch (ms.getResult()) {
-					case CONTAMINATED:
-						exam.setNumContaminated(exam.getNumContaminated() + 1);
-						break;
-					case RESISTANT:
-						exam.setNumResistant(exam.getNumResistant() + 1);
-						break;
-					case SUSCEPTIBLE:
-						exam.setNumSusceptible(exam.getNumSusceptible() + 1);
-						break;
-					}
-				}
-				else {
-					// remove undone results
-					if (exam.getResults().contains(ms)) {
-						exam.getResults().remove(ms);
-						getEntityManager().remove(ms);
-					}
+
+		// update results
+		ExamDST exam = getInstance();
+		exam.setNumContaminated(numContaminated);
+		exam.setNumResistant(numResistants);
+		exam.setNumSusceptible(numSusceptibles);
+
+		// remove NOTDONE and include new results
+		for (ExamDSTResult ms: items) {
+			// add new results
+			if (ms.getResult() != DstResult.NOTDONE) {
+				if (!exam.getResults().contains(ms))
+					exam.getResults().add(ms);
+			}
+			else {
+				// remove undone results
+				if (exam.getResults().contains(ms)) {
+					exam.getResults().remove(ms);
+					getEntityManager().remove(ms);
 				}
 			}
-			
-			if (exam.getResults().size() == 0)
-				return false;
-			else
-				return true;
-
 		}
-		return false;	
+
+		// there is no result, so validation fails
+		if (exam.getResults().size() == 0)
+			return false;
+
+		return true;
 	}
-	
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.cases.exams.LaboratoryExamHome#persist()
+	 */
 	@Override
 	@End(beforeRedirect=true)
 	public String persist() {

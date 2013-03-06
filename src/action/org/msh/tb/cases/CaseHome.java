@@ -10,7 +10,6 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.international.Messages;

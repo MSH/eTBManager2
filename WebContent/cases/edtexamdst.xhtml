@@ -21,7 +21,7 @@
 <s:decorate template="/layout/casebody.xhtml">
 	<ui:param name="pagewidth" value="650px" />
 	<h:form id="formexam" styleClass="form1">
-<h:messages layout="table" globalOnly="true" styleClass="error"/>
+	<h:messages layout="table" globalOnly="true" styleClass="error"/>
 	<div class="form-content">
 	<s:decorate template="/layout/edtsample.xhtml">
 	</s:decorate>
@@ -49,6 +49,7 @@
 
 	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
 
+	<div id="resulttable">
 	<h:dataTable value="#{examDSTHome.items}" var="it" styleClass="table2" columnClasses="coll,colr" rowClasses="lin1,lin2">
 		<h:column>
 			<f:facet name="header">
@@ -71,9 +72,14 @@
 			<h:message for="res" styleClass="error" style="float:left" />
 		</h:column>
 	</h:dataTable>
+	</div>
 
 <script type="text/javascript">
 <!--
+window.caseClassification="${caseHome.instance.classification}";
+window.msg1="${messages['DSTExam.msg05']}";
+window.msg2="${messages['DSTExam.msg4']}";
+
 function dstResultChange(cb) {
 	var val=cb.options[cb.selectedIndex].value;
 	var elem = jQuery(cb).prev();
@@ -90,11 +96,33 @@ function dstResultChange(cb) {
 }
 
 function updateResultIcons(){
-	var elems = document.getElementsByClassName('substance');
-	for (var i=0;i<elems.length;i++){ 
-		dstResultChange(elems[i]);
-	}
+	jQuery("#resulttable select").each(function(){ dstResultChange(this) });
 }
+
+function validateResults() {
+	var numResistants = 0;
+	jQuery("#resulttable select").each(function() {
+		var s = jQuery(this).val();
+		if ("RESISTANT" == s)
+			numResistants++;
+	});
+
+	var res=true;
+	if ((window.caseClassification != "DRTB") && (numResistants > 0))
+		res=window.confirm(window.msg1);
+	if ((window.caseClassification == "DRTB") && (numResistants == 0))
+		res=window.confirm(window.msg2);
+	return res;
+}
+
+function canSave(btn) {
+	if (!disableButton(btn))
+		return false;
+	if (!validateResults())
+		return false;
+	return true;
+}
+
 
 updateResultIcons();
 -->
@@ -108,7 +136,8 @@ updateResultIcons();
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
             <a:commandLink action="#{examDSTHome.persist}" styleClass="button" reRender="formexam" 
-            	onclick="if (!disableButton(this)) return false;"  >
+            	onclick="if (!canSave(this)) return false;" 
+                oncomplete="updateResultIcons()" >
             	<span>#{messages['form.save']}</span>
             </a:commandLink>
             <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true"
