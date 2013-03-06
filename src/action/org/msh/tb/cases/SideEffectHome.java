@@ -81,16 +81,16 @@ public class SideEffectHome extends EntityHomeEx<CaseSideEffect>{
 	 */
 	public List<SelectItem> getMonths() {
 		List<SelectItem> lst = new ArrayList<SelectItem>();
+		String[] strMonths = {"1","2","3","4","5","6","7","8","9","10","12", "13", "14","15","16","17","18","19","20","21","22","23","24",">24"};
+//		SelectItem item1 = new SelectItem();
+//		item1.setLabel("-");
+//		item1.setValue(0);
+//		lst.add(item1);
 		
-		SelectItem item1 = new SelectItem();
-		item1.setLabel("-");
-		item1.setValue(0);
-		lst.add(item1);
-		
-		for (int i = 1; i<= 24; i++) {
+		for (int i = 0; i< strMonths.length; i++) {
 			SelectItem item = new SelectItem();
-			item.setLabel(Integer.toString(i));
-			item.setValue(i);
+			item.setLabel(strMonths[i]);
+			item.setValue(strMonths[i]);
 			lst.add(item);
 		}
 		
