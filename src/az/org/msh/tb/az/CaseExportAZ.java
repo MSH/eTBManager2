@@ -99,6 +99,8 @@ public class CaseExportAZ extends CaseExport {
 		excel.addTextFromResource("excel.dateRegAfterEIDSS", "title");
 		excel.addText(getMessages().get("az_EIDSS_Age")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addText(getMessages().get("Patient.birthDate")+" "+getMessages().get("excel.fromEIDSS"), "title");
+		excel.addText(getMessages().get("excel.dateNotifEIDSS")+" "+getMessages().get("excel.fromEIDSS"), "title");
+		
 		excel.addTextFromResource("TbCase.eidssid", "title");
 		excel.addText(getMessages().get("az_AZ.case.unicalID")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addTextFromResource("excel.xray.presentation", "title");
@@ -252,6 +254,19 @@ public class CaseExportAZ extends CaseExport {
 		}
 		else
 			excel.addText("");
+		
+		if (ei.length>=7){
+			Date notifDate;
+			try {
+				notifDate = new SimpleDateFormat("dd-MM-yyyy").parse(ei[6]);
+				excel.addDate(notifDate);
+			} catch (ParseException e) {
+				excel.addText(ei[6]);
+			}
+		}
+		else
+			excel.addText("");
+		
 		excel.addText(tbcase.getLegacyId());
 		excel.addText(tbcase.getUnicalID());
 		ExamXRay x = getFirstXRayExam(tbcase);
