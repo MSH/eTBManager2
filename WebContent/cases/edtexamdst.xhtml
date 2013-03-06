@@ -77,6 +77,7 @@
 <script type="text/javascript">
 <!--
 window.caseClassification="${caseHome.instance.classification}";
+window.diagtype="#{caseHome.instance.diagnosisType}";
 window.msg1="${messages['DSTExam.msg05']}";
 window.msg2="${messages['DSTExam.msg4']}";
 
@@ -108,9 +109,9 @@ function validateResults() {
 	});
 
 	var res=true;
-	if ((window.caseClassification != "DRTB") && (numResistants > 0))
+	if (((window.diagtype=="SUSPECT")||(window.caseClassification != "DRTB")) && (numResistants > 0))
 		res=window.confirm(window.msg1);
-	if ((window.caseClassification == "DRTB") && (numResistants == 0))
+	if ((window.diagtype=="CONFIRMED") && (window.caseClassification == "DRTB") && (numResistants == 0))
 		res=window.confirm(window.msg2);
 	return res;
 }
@@ -118,11 +119,12 @@ function validateResults() {
 function canSave(btn) {
 	if (!disableButton(btn))
 		return false;
-	if (!validateResults())
+	if (!validateResults()) {
+		enableButton();
 		return false;
+	}
 	return true;
 }
-
 
 updateResultIcons();
 -->
