@@ -166,11 +166,13 @@
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
 
 	<tr><td>
+	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
-    	<ui:param name="required" value="#{tbcase.validated}" /> 
+    	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
     </s:decorate>
+    </s:fragment>
     </td></tr>
    
   <tr><td>
@@ -316,7 +318,7 @@ function isPulmonary(cb) {
 	<p/>
 
 
-
+<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<div class="form-content">
 		
 			<h2>#{messages['cases.prevtreat']}</h2>
@@ -390,6 +392,7 @@ function isPulmonary(cb) {
 		</td></tr></table></div>
 
 </div>
+</s:fragment>
 	<p/>
 
 <rich:jQuery selector="#addrChanged" query="change(function(){ showCurrAddress(this); })" />
