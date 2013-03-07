@@ -114,6 +114,19 @@ public class ForecastingMedicine implements Serializable {
 	
 	
 	/**
+	 * Return the list of batches that will expire but are not provenient of a future order
+	 * @return
+	 */
+	public List<ForecastingBatch> getBatchesNotInOrders() {
+		ArrayList<ForecastingBatch> lst = new ArrayList<ForecastingBatch>();
+		for (ForecastingBatch batch: batchesToExpire)
+			if (!batch.isBatchOnOrder())
+				lst.add(batch);
+		
+		return lst;
+	}
+	
+	/**
 	 * Calculate the order date of the current medicine
 	 * @return
 	 */

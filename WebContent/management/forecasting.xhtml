@@ -299,7 +299,7 @@
 					#{messages['Medicine']}
 				</f:facet>
 				<div class="medicine-icon" style="float:left"/>
-				<h:outputText value="#{r.medicine}"  />
+				<h:outputText value="#{r.medicine}"  style="display:block;width:300px"/>
 			</h:column>
 
 			<h:column>
@@ -330,8 +330,8 @@
 				</a:commandLink>
 				</div>
 					
-				<h:dataTable value="#{r.batchesToExpire}" var="b" styleClass="tabela4" width="100%" rowClasses="row-bodybk" 
-					style="font-size:10px;" rendered="#{not empty r.batchesToExpire}" columnClasses="colc,colr">
+				<h:dataTable value="#{r.batchesNotInOrders}" var="b" styleClass="tabela4" width="100%" rowClasses="row-bodybk" 
+					style="font-size:10px;" rendered="#{not empty r.batchesNotInOrders}" columnClasses="colc,colr">
 					<h:column >
 						<f:facet name="header" >
 							#{messages['Batch.expiryDate']}
@@ -406,6 +406,13 @@
 								<f:convertNumber pattern="#,###,##0"/>
 							</h:outputText>
 						</div>
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							#{messages['Batch.expiryDate']}
+						</f:facet>
+						<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
 					</h:column>
 				</h:dataTable>
 			</h:column>
