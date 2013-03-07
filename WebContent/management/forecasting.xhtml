@@ -687,16 +687,16 @@ function updateEditDeleteLinks() {
 </rich:modalPanel>
 
 
-<rich:modalPanel id="resultDetailsDlg" width="500" autosized="true" zindex="2000">
+<rich:modalPanel id="resultDetailsDlg" width="560" autosized="true" zindex="2000">
 	<f:facet name="header">#{messages['manag.forecast.load']}</f:facet>
-	<h:panelGroup id="resultDetailsPnl">
+	<h:panelGroup id="resultDetailsPnl" style="padding:10px">
 	<h:dataTable value="#{forecastingView.result.batchesConsumed}" var="v" width="100%" columnClasses="col,colrb,colrb,colrb"
-		styleClass="tabela4" rendered="#{not empty forecastingView.result.batchesConsumed}">
+		styleClass="table2" rendered="#{not empty forecastingView.result.batchesConsumed}">
 		<h:column >
 			<f:facet name="header">
 				#{messages['Batch.expiryDate']}
 			</f:facet>
-			<h:outputText value="#{v.batch.expiryDate}" converter="localeDateConverter"/>
+			<h:outputText value="#{v.batch.expiryDate}" converter="localeDateConverter" style="display:block;min-width:110px;"/>
 		</h:column>
 
 		<h:column >
@@ -727,6 +727,7 @@ function updateEditDeleteLinks() {
 		</h:column>
 	</h:dataTable>
 	</h:panelGroup>
+	<div class="spacer" />
 	<a:commandLink	styleClass="button" onclick="Richfaces.hideModalPanel('resultDetailsDlg');return false;">
 		<span>#{messages['form.return']}</span>
 	</a:commandLink>

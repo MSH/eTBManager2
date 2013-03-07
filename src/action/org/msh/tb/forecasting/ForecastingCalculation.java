@@ -236,7 +236,26 @@ public class ForecastingCalculation {
 	 */
 	protected void calculateQuantityToBeProcured() {
 		for (ForecastingMedicine med: forecasting.getMedicines()) {
-			
+			int qtdToProcure = 0;
+
+			// clear values to be calculated
+			med.setQuantityToProcure(0);
+			for (ForecastingResult res: med.getResults())
+				res.setQuantityMissing(0);
+
+			for (ForecastingPeriod fp: med.getPeriods()) {
+				int qtdMissing = -fp.getQuantityMissing();
+				// check if it's inside the review period
+				if (!fp.getPeriod().getIniDate().before(getReviewPeriod().getIniDate()))
+					qtdToProcure += qtdMissing;
+
+				// update the quantity missing by medicine
+				int index = forecasting.getMonthIndex(fp.getPeriod().getIniDate());
+				ForecastingResult fr = med.findResultByMonthIndex(index);
+				if (fr != null)
+					fr.setQuantityMissing( fr.getQuantityMissing() + qtdMissing );
+			}
+			med.setQuantityToProcure(qtdToProcure);
 		}
 	}
 

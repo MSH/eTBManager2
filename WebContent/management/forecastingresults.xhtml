@@ -173,21 +173,33 @@
 		<h:outputText value="#{s.stockOnHand}">
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
+		<a:commandLink rendered="#{not empty s.batchesConsumed}" 
+			onclick="showDetailResult(#{s.medicine.id},#{s.monthIndex}); return false;" styleClass="plus-icon" style="display:block;">
+		</a:commandLink>
 	</td>
 	</a:repeat>
 </tr>
 <tr>
 	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
-		<b>#{messages['manag.forecast.batchtoexpire']}</b>
+		<b>Missing quantities</b>
 	</td>
 	<a:repeat value="#{r.results}" var="s">
 	<td class="colrb vl">
-		<h:outputText value="#{s.quantityToExpire}" >
+		<h:outputText value="#{s.quantityMissing}" >
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
-		<a:commandLink rendered="#{not empty s.batchesConsumed}" 
-			onclick="showDetailResult(#{s.medicine.id},#{s.monthIndex}); return false;" styleClass="plus-icon" style="float:right;">
-		</a:commandLink>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
+		<b>#{messages['manag.forecast.tabres2.cell3']}</b>
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb vl">
+		<h:outputText value="#{s.quantityExpired}" rendered="#{s.quantityExpired!=0}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
 	</td>
 	</a:repeat>
 </tr>
@@ -222,18 +234,6 @@
 	<a:repeat value="#{r.results}" var="s">
 	<td class="colrb vl">
 		<h:outputText value="#{s.consumptionNewCases}" rendered="#{s.consumptionNewCases!=0}">
-			<f:convertNumber pattern="#,###,##0" />
-		</h:outputText>
-	</td>
-	</a:repeat>
-</tr>
-<tr>
-	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
-		<b>#{messages['manag.forecast.tabres2.cell3']}</b>
-	</td>
-	<a:repeat value="#{r.results}" var="s">
-	<td class="colrb vl">
-		<h:outputText value="#{s.quantityExpired}" rendered="#{s.quantityExpired!=0}">
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
 	</td>
