@@ -131,7 +131,9 @@
 			<attribute name="Country" value="${country}" />
 		</manifest>
 
-		<war destfile="build/${war-file-name}" webxml="production/web.xml" manifest="WebContent/META-INF/MANIFEST.MF">
+		<copy file="production/web.xml" todir="build" overwrite="true" />
+		<replace file="build/web.xml" token="@liquibase_context@" value="${country-code}" />
+		<war destfile="build/${war-file-name}" webxml="build/web.xml" manifest="WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="WebContent" >
 				<include name="**" />
 				<exclude name="WEB-INF/web.xml"/>

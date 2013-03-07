@@ -114,6 +114,8 @@
 		<echo message="war file              :  ${war-file-name}" />
 		<delete file="build/${war-file-name}" />
 		<buildnumber file="build/build.num"/>
+		<copy file="production/web.xml" todir="/build" overwrite="true" />
+		<replace file="/build/web.xml" token="@liquibase_context@" value="${country-code}" />
 		
 		<tstamp>
 			<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
@@ -130,7 +132,7 @@
 			<attribute name="Country" value="${country}" />
 		</manifest>
 
-		<war destfile="build/${war-file-name}" webxml="production/web.xml" manifest="WebContent/META-INF/MANIFEST.MF">
+		<war destfile="build/${war-file-name}" webxml="build/web.xml" manifest="WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="WebContent" >
 				<include name="**" />
 				<exclude name="WEB-INF/web.xml"/>
@@ -148,7 +150,7 @@
 				<exclude name="/messages*" />
 				<exclude name="/custom_messages*" />
 			</classes>
-			
+
 			<zipfileset file="src/model/messages_en.properties" fullpath="WEB-INF/classes/messages_en.properties" />
 			<zipfileset file="src/model/messages_az.properties" fullpath="WEB-INF/classes/messages_az.properties" />
 			<zipfileset file="src/model/messages_ru.properties" fullpath="WEB-INF/classes/messages_ru.properties" />
