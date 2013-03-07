@@ -125,7 +125,7 @@
 			</h:outputText>
 		</td>
 		<td class="colrb">
-			<h:outputText value="#{m.estimatedQty}" >
+			<h:outputText value="#{m.quantityToProcure}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
 		</td>
@@ -150,24 +150,26 @@
 <rich:tab label="#{messages['manag.forecast.tabres2']}" rendered="#{forecasting.hasResult and facesContext.renderResponse}">
 <table width="100%" class="table1">
 <tr>
-	<th colspan="2">#{messages['Medicine']}
+	<th>#{messages['Medicine']}
 	</th>
 	<a:repeat value="#{forecastingView.resultTable.columns}" var="it">
-	<th>
+	<th class="tt">
 		#{it}
 	</th>
 	</a:repeat>
 </tr>
 <a:repeat value="#{forecastingView.resultTable.rows}" var="r">
 <tr class="highlight">
-	<td rowspan="6" class="colb">
-		#{r.medicine.medicine}
+	<td class="colb" colspan="#{r.results.size + 1}">
+		<b>#{r.medicine.medicine}</b>
 	</td>
-	<td class="colb">
-		#{messages['manag.forecast.stockonhand']}
+</tr>
+<tr>
+	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
+		<b>#{messages['manag.forecast.stockonhand']}</b>
 	</td>
 	<a:repeat value="#{r.results}" var="s">
-	<td class="colrb">
+	<td class="colrb vl">
 		<h:outputText value="#{s.stockOnHand}">
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
@@ -175,11 +177,11 @@
 	</a:repeat>
 </tr>
 <tr>
-	<td class="colb">
-		#{messages['manag.forecast.batchtoexpire']}
+	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
+		<b>#{messages['manag.forecast.batchtoexpire']}</b>
 	</td>
 	<a:repeat value="#{r.results}" var="s">
-	<td class="colrb">
+	<td class="colrb vl">
 		<h:outputText value="#{s.quantityToExpire}" >
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
@@ -190,11 +192,11 @@
 	</a:repeat>
 </tr>
 <tr>
-	<td class="colb">
-		#{messages['manag.forecast.stockonorder']}
+	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
+		<b>#{messages['manag.forecast.stockonorder']}</b>
 	</td>
 	<a:repeat value="#{r.results}" var="s">
-	<td class="colrb">
+	<td class="colrb vl">
 		<h:outputText value="#{s.stockOnOrder}" rendered="#{s.stockOnOrder!=0}">
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
@@ -202,11 +204,11 @@
 	</a:repeat>
 </tr>
 <tr>
-	<td class="colb">
-		#{messages['manag.forecast.tabres2.cell1']}
+	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
+		<b>#{messages['manag.forecast.tabres2.cell1']}</b>
 	</td>
 	<a:repeat value="#{r.results}" var="s">
-	<td class="colrb">
+	<td class="colrb vl">
 		<h:outputText value="#{s.consumptionCases}" rendered="#{s.consumptionCases!=0}">
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
@@ -214,11 +216,11 @@
 	</a:repeat>
 </tr>
 <tr>
-	<td class="colb">
-		#{messages['manag.forecast.tabres2.cell2']}
+	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
+		<b>#{messages['manag.forecast.tabres2.cell2']}</b>
 	</td>
 	<a:repeat value="#{r.results}" var="s">
-	<td class="colrb">
+	<td class="colrb vl">
 		<h:outputText value="#{s.consumptionNewCases}" rendered="#{s.consumptionNewCases!=0}">
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
@@ -226,11 +228,11 @@
 	</a:repeat>
 </tr>
 <tr>
-	<td class="colb">
-		#{messages['manag.forecast.tabres2.cell3']}
+	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
+		<b>#{messages['manag.forecast.tabres2.cell3']}</b>
 	</td>
 	<a:repeat value="#{r.results}" var="s">
-	<td class="colrb">
+	<td class="colrb vl">
 		<h:outputText value="#{s.quantityExpired}" rendered="#{s.quantityExpired!=0}">
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
@@ -240,6 +242,7 @@
 </a:repeat>
 </table>
 </rich:tab>
+
 
 
 

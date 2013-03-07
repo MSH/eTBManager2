@@ -88,6 +88,11 @@ public class ForecastingMedicine implements Serializable {
 	 * Stock on hand
 	 */
 	private int stockOnHand;
+	
+	/**
+	 * The estimated quantity to procure
+	 */
+	private int quantityToProcure;
 
 	/**
 	 * Batches to expire during the forecasting period
@@ -550,5 +555,19 @@ public class ForecastingMedicine implements Serializable {
 	 */
 	public void setStockOnHand(int stockOnHand) {
 		this.stockOnHand = stockOnHand;
+	}
+
+	/**
+	 * @return the quantityToProcure
+	 */
+	public int getQuantityToProcure() {
+		return quantityToProcure;
+	}
+
+	/**
+	 * @param quantityToProcure the quantityToProcure to set
+	 */
+	public void setQuantityToProcure(int quantityToProcure) {
+		this.quantityToProcure = quantityToProcure;
 	}
 }

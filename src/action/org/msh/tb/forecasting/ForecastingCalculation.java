@@ -214,8 +214,9 @@ public class ForecastingCalculation {
 		calculateCasesOnTreatment();
 		calculateNewCases();
 
-		
 		updateStockQuantities();
+		
+		calculateQuantityToBeProcured();
 		
 		// update total cases by regimen
 		for (int i = 0; i < numMonths; i++) {
@@ -226,6 +227,16 @@ public class ForecastingCalculation {
 			Integer tot2 = forecasting.getTotalIndividualized().get(i).getQuantity();
 			int total = tot + (tot2 != null? tot2: 0); 
 			forecasting.getTotal().get(i).setQuantity(total);
+		}
+	}
+
+
+	/**
+	 * Calculate the quantity to be procured
+	 */
+	protected void calculateQuantityToBeProcured() {
+		for (ForecastingMedicine med: forecasting.getMedicines()) {
+			
 		}
 	}
 

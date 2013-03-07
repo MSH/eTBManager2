@@ -82,6 +82,11 @@ public class ForecastingResult implements Serializable {
 	 * Quantity on order to be arrived in the month for the medicine
 	 */
 	private int stockOnOrder;
+	
+	/**
+	 * The quantity missing to supply the consumption in the month
+	 */
+	private int quantityMissing;
 
 	@Transient
 	private List<ForecastingBatch> batchesToExpire;
@@ -368,5 +373,21 @@ public class ForecastingResult implements Serializable {
 	 */
 	public void setConsumptionNewCases(int consumptionNewCases) {
 		this.consumptionNewCases = consumptionNewCases;
+	}
+
+
+	/**
+	 * @return the quantityMissing
+	 */
+	public int getQuantityMissing() {
+		return quantityMissing;
+	}
+
+
+	/**
+	 * @param quantityMissing the quantityMissing to set
+	 */
+	public void setQuantityMissing(int quantityMissing) {
+		this.quantityMissing = quantityMissing;
 	}
 }

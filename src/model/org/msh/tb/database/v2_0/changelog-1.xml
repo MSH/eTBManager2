@@ -13,5 +13,23 @@
     		</column>
     	</addColumn>
     </changeSet>
+    
+    <changeSet id="2" author="rmemoria">
+    	<addColumn tableName="forecastingresult">
+    		<column name="quantityMissing" type="int" remarks="The quantity missing to handle all patients in the month">
+    			<constraints nullable="false" />
+    		</column>
+    	</addColumn>
+    	<update tableName="forecastingresult">
+    		<column name="quantityMissing" value="0"/>
+    		<where>quantityMissing is null</where>
+    	</update>
+    	<update tableName="forecastingmedicine">
+    		<column name="quantityToProcure" value="0"/>
+    		<where>quantityToProcure is null</where>
+    	</update>
+    </changeSet>
+    
+    
  
 </databaseChangeLog>
