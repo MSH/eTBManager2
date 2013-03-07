@@ -558,7 +558,7 @@ function updateEditDeleteLinks() {
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{forecastingView.endDate}"/> 
 	</s:decorate>
-	
+
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['manag.forecast.bufferStock']}:</ui:define>
 		<h:selectOneMenu value="#{forecasting.bufferStock}" required="true">
@@ -693,7 +693,7 @@ function updateEditDeleteLinks() {
 
 
 <rich:modalPanel id="resultDetailsDlg" width="560" autosized="true" zindex="2000">
-	<f:facet name="header">#{messages['manag.forecast.load']}</f:facet>
+	<f:facet name="header">#{messages['manag.forecast.batchdet']}</f:facet>
 	<h:panelGroup id="resultDetailsPnl" style="padding:10px">
 	<h:dataTable value="#{forecastingView.result.batchesConsumed}" var="v" width="100%" columnClasses="col,colrb,colrb,colrb"
 		styleClass="table2" rendered="#{not empty forecastingView.result.batchesConsumed}">

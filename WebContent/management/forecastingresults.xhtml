@@ -35,7 +35,7 @@
 	</tr>
 	<tr>
 		<th>
-			#{messages['manag.forecast.stockonorder']}
+			#{messages['manag.forecast.stockonorder2']}
 		</th>
 		<th>
 			#{messages['manag.forecast.dispensingLeadTime']}
@@ -124,10 +124,12 @@
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
 		</td>
-		<td class="colrb">
+		<td class="colrb highlight">
+			<b>
 			<h:outputText value="#{m.quantityToProcure}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
+			</b>
 		</td>
 		<td class="colrb">
 			<h:outputText value="#{m.unitPrice}" >
@@ -174,7 +176,7 @@
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
 		<a:commandLink rendered="#{not empty s.batchesConsumed}" 
-			onclick="showDetailResult(#{s.medicine.id},#{s.monthIndex}); return false;" styleClass="plus-icon" style="display:block;">
+			onclick="showDetailResult(#{s.medicine.id},#{s.monthIndex}); return false;" styleClass="plus-icon" style="display:block;" title="#{messages['manag.forecast.batchdet']}">
 		</a:commandLink>
 	</td>
 	</a:repeat>

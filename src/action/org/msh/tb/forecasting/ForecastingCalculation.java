@@ -751,7 +751,8 @@ public class ForecastingCalculation {
 
 	
 	/**
-	 * Create periods to be calculated
+	 * Create periods to be calculated. A period must be within a month. It cannot cross
+	 * several months.
 	 */
 	protected void createPeriods() {
 		Map<Date, Integer> dates = new HashMap<Date, Integer>();
