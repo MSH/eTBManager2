@@ -127,6 +127,7 @@
 
 	<a:commandLink style="float:right;" 
 		styleClass="button-alt" reRender="datespnl" 
+		action="#{forecastingView.startDatesEditing}"
 		oncomplete="showDatesDlg(); return false;">
 		<span>#{messages['form.edit']}</span>
 	</a:commandLink>
@@ -532,7 +533,9 @@ function updateEditDeleteLinks() {
 	<s:decorate template="/layout/dateedit.xhtml">
 		<ui:define name="label">#{messages['manag.forecast.refdate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
-    	<ui:param name="datefield" value="#{forecasting.referenceDate}"/> 
+    	<ui:param name="future" value="false" />
+    	<ui:param name="datefield" value="#{forecastingView.referenceDate}"/> 
+    	<ui:param name="edtid" value="refdate" />
 	</s:decorate>
 	
 	<s:decorate template="/layout/display.xhtml">
@@ -546,13 +549,14 @@ function updateEditDeleteLinks() {
 	<s:decorate template="/layout/dateedit.xhtml">
 		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
-    	<ui:param name="datefield" value="#{forecasting.iniDate}"/> 
+    	<ui:param name="datefield" value="#{forecastingView.iniDate}"/> 
+    	<ui:param name="edtid" value="inidate" />
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml">
 		<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
-    	<ui:param name="datefield" value="#{forecasting.endDate}"/> 
+    	<ui:param name="datefield" value="#{forecastingView.endDate}"/> 
 	</s:decorate>
 	
 	<s:decorate template="/layout/edit.xhtml">
@@ -565,8 +569,9 @@ function updateEditDeleteLinks() {
 	<div class="button-bar">
 		<a:commandLink action="#{forecastingView.datesChangeListener}"
 			styleClass="button" reRender="datespnl,main"
-			onclick="if (!disableButton(this)) return false;" 
-			oncomplete="enableButton();Richfaces.hideModalPanel('datesdlg');">
+			onclick="if (!disableButton(this)) return false;"
+			data="#{forecastingView.datesValidated}" 
+			oncomplete="enableButton();if (data) { Richfaces.hideModalPanel('datesdlg'); }">
 			<span>#{messages['form.ok']}</span>
 		</a:commandLink>
 		<s:link styleClass="button-alt" onclick="Richfaces.hideModalPanel('datesdlg'); return false;">

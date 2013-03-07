@@ -58,6 +58,12 @@ public class ForecastingView {
 	
 	private List<SelectItem> medicineItems;
 	
+	private boolean datesValidated;
+	
+	private Date referenceDate;
+	private Date iniDate;
+	private Date endDate;
+	
 	
 	/**
 	 * store in memory number of cases on treatment
@@ -317,10 +323,43 @@ public class ForecastingView {
 
 
 	/**
+	 * Called when the user wants to edit the dates in the forecasting
+	 */
+	public void startDatesEditing() {
+		datesValidated = false;
+		Forecasting forecasting = forecastingHome.getForecasting();
+		iniDate = forecasting.getIniDate();
+		endDate = forecasting.getEndDate();
+		referenceDate = forecasting.getReferenceDate();
+	}
+
+
+	/**
 	 * Called when the user changes the forecasting dates (reference date, review period, lead time)
 	 */
 	public void datesChangeListener() {
 		Forecasting forecasting = forecastingHome.getForecasting();
+		
+		if ((iniDate == null) || (endDate == null) || (referenceDate == null))
+			return;
+		
+		// validate the dates
+		if (!iniDate.before(endDate)) {
+			FacesMessages.instance().addToControlFromResourceBundle("inidate", "form.inienddate");
+			return;
+		}
+		
+		// check if reference date is after or equals the initial date
+		if (!referenceDate.before(iniDate)) {
+			FacesMessages.instance().addToControlFromResourceBundle("refdate", "manag.forecast.refdatemsg1");
+			return;
+		}
+
+		// update the model
+		forecasting.setReferenceDate(referenceDate);
+		forecasting.setIniDate(iniDate);
+		forecasting.setEndDate(endDate);
+		
 		
 		// update new cases info
 		int betwRefDt = DateUtils.monthOf( DateUtils.getDatePart(forecasting.getReferenceDate()) ) - 
@@ -366,6 +405,8 @@ public class ForecastingView {
 		numCasesOnTreatment = null;
 		getCasesRegimenTable().setChangeRefDt(true);
 		getCasesRegimenTable().updateTable();
+		
+		datesValidated = true; 
 	}
 
 
@@ -747,5 +788,69 @@ public class ForecastingView {
 						totalPerc += aux.getPercNewCases();	
 			}
 		return ((float)Math.round(totalPerc*100))/100;
+	}
+
+
+	/**
+	 * @return the datesValidated
+	 */
+	public boolean isDatesValidated() {
+		return datesValidated;
+	}
+
+
+	/**
+	 * @param datesValidated the datesValidated to set
+	 */
+	public void setDatesValidated(boolean datesValidated) {
+		this.datesValidated = datesValidated;
+	}
+
+
+	/**
+	 * @return the referenceDate
+	 */
+	public Date getReferenceDate() {
+		return referenceDate;
+	}
+
+
+	/**
+	 * @param referenceDate the referenceDate to set
+	 */
+	public void setReferenceDate(Date referenceDate) {
+		this.referenceDate = referenceDate;
+	}
+
+
+	/**
+	 * @return the iniDate
+	 */
+	public Date getIniDate() {
+		return iniDate;
+	}
+
+
+	/**
+	 * @param iniDate the iniDate to set
+	 */
+	public void setIniDate(Date iniDate) {
+		this.iniDate = iniDate;
+	}
+
+
+	/**
+	 * @return the endDate
+	 */
+	public Date getEndDate() {
+		return endDate;
+	}
+
+
+	/**
+	 * @param endDate the endDate to set
+	 */
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 }
