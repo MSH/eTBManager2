@@ -17,7 +17,7 @@
 			#{messages['Medicine']}
 		</th>
 		<th rowspan="2">
-			#{messages['manag.forecast.stockonhand']}
+			#{messages['manag.forecast.stockonhand2']}
 		</th>
 		<th rowspan="2">
 			#{messages['manag.forecast.orderDate']}
@@ -35,7 +35,7 @@
 	</tr>
 	<tr>
 		<th>
-			#{messages['manag.forecast.stockonorder2']}
+			#{messages['manag.forecast.stockonorder']}
 		</th>
 		<th>
 			#{messages['manag.forecast.dispensingLeadTime']}
@@ -183,7 +183,7 @@
 </tr>
 <tr>
 	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
-		<b>Missing quantities</b>
+		<b>#{messages['manag.forecast.qtdmissing']}</b>
 	</td>
 	<a:repeat value="#{r.results}" var="s">
 	<td class="colrb vl">
@@ -408,12 +408,12 @@
 			<f:facet name="header">
 				#{messages['global.period']}
 			</f:facet>
-			<h:outputText value="#{p.period}" converter="periodConverter" />
+			<h:outputText value="#{p.period}" converter="periodConverter" style="display:block;width:250px" />
 		</h:column>
 
 		<h:column>
 			<f:facet name="header">
-				#{messages['manag.forecast.stockonhand']}
+				#{messages['manag.forecast.stockonhand2']}
 			</f:facet>
 			<h:outputText value="#{p.stockOnHand}" >
 				<f:convertNumber pattern="#,###,##0" />
@@ -422,7 +422,7 @@
 
 		<h:column>
 			<f:facet name="header">
-				Estimated consumption<br/> (on-going cases)
+				#{messages['manag.forecast.estcases']}
 			</f:facet>
 			<h:outputText value="#{p.estConsumptionCases}" >
 				<f:convertNumber pattern="#,###,##0" />
@@ -431,7 +431,7 @@
 
 		<h:column>
 			<f:facet name="header">
-				Estimated consumption<br/> (new cases)
+				#{messages['manag.forecast.estnewcases']}
 			</f:facet>
 			<h:outputText value="#{p.estConsumptionNewCases}" >
 				<f:convertNumber pattern="#,###,##0" />
@@ -443,15 +443,6 @@
 				#{messages['reports.estimatedcons']} <br/>(#{messages['global.total']})
 			</f:facet>
 			<h:outputText value="#{p.estimatedConsumption}" >
-				<f:convertNumber pattern="#,###,##0" />
-			</h:outputText>
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				#{messages['manag.forecast.batchtoexpire']}
-			</f:facet>
-			<h:outputText value="#{p.quantityToExpire}" >
 				<f:convertNumber pattern="#,###,##0" />
 			</h:outputText>
 		</h:column>
@@ -476,7 +467,7 @@
 
 		<h:column>
 			<f:facet name="header">
-				Missing quantities
+				#{messages['manag.forecast.qtdmissing']}
 			</f:facet>
 			<h:outputText value="#{p.quantityMissing}" >
 				<f:convertNumber pattern="#,###,##0" />
