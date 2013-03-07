@@ -559,7 +559,7 @@ function updateEditDeleteLinks() {
 		<ui:define name="label">#{messages['manag.forecast.bufferStock']}:</ui:define>
 		<h:selectOneMenu value="#{forecasting.bufferStock}" required="true">
 			<f:selectItems value="#{forecastingView.monthsOptions}" />
-		</h:selectOneMenu>
+		</h:selectOneMenu> (#{messages['global.months']})
 	</s:decorate>
 
 	<div class="button-bar">
