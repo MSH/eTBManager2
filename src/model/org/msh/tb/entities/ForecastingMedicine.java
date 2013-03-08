@@ -124,9 +124,10 @@ public class ForecastingMedicine implements Serializable {
 	 */
 	public List<ForecastingBatch> getBatchesNotInOrders() {
 		ArrayList<ForecastingBatch> lst = new ArrayList<ForecastingBatch>();
-		for (ForecastingBatch batch: batchesToExpire)
+		for (ForecastingBatch batch: batchesToExpire) {
 			if (!batch.isBatchOnOrder())
 				lst.add(batch);
+		}
 		
 		return lst;
 	}

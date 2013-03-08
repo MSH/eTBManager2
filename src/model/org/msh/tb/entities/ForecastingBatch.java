@@ -131,7 +131,7 @@ public class ForecastingBatch implements Serializable {
 	public boolean isBatchOnOrder() {
 		if (forecastingMedicine == null)
 			return false;
-		
+
 		for (ForecastingOrder order: forecastingMedicine.getOrders()) {
 			if (order.getBatch() == this)
 				return true;

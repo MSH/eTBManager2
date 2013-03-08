@@ -529,8 +529,10 @@ public class ForecastingView {
 		
 		if (batch.getExpiryDate() != null) {
 			batch.setQuantity(order.getQuantity());
-			if (!forMed.getBatchesToExpire().contains(batch))
+			if (!forMed.getBatchesToExpire().contains(batch)) {
 				forMed.getBatchesToExpire().add(batch);
+				batch.setForecastingMedicine(forMed);
+			}
 			order.setBatch(batch);
 		}
 
