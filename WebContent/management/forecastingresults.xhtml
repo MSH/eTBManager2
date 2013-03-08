@@ -80,7 +80,10 @@
 			</h:outputText>
 		</td>
 		<td class="colrb">
-			<h:outputText value="#{m.orderDate}" converter="localeDateConverter" style="width:80px;display:block;">
+			<h:outputText value="#{m.orderDate}" converter="localeDateConverter" 
+				style="width:80px;display:block;"
+				title="#{m.lateOrder? messages['manag.forecast.lateorder']: ''}" 
+				styleClass="#{m.lateOrder? 'error': ''}">
 			</h:outputText>
 		</td>
 		<td class="colrb highlight">
@@ -187,7 +190,7 @@
 	</td>
 	<a:repeat value="#{r.results}" var="s">
 	<td class="colrb vl">
-		<h:outputText value="#{s.quantityMissing}" >
+		<h:outputText value="#{s.quantityMissing}" style="#{s.quantityMissing==0?'':'color:red;font-weight:bold'}">
 			<f:convertNumber pattern="#,###,##0" />
 		</h:outputText>
 	</td>

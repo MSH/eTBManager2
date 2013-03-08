@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
@@ -93,6 +95,12 @@ public class ForecastingMedicine implements Serializable {
 	 * The estimated quantity to procure
 	 */
 	private int quantityToProcure;
+	
+	/**
+	 * The first date that there will be stock out
+	 */
+	@Temporal(TemporalType.DATE)
+	private Date stockOutDate;
 
 	/**
 	 * Batches to expire during the forecasting period
@@ -131,27 +139,24 @@ public class ForecastingMedicine implements Serializable {
 		
 		return lst;
 	}
+
+	
+	/**
+	 * Check if the order for this medicine should have be done before the procurrement date
+	 * @return
+	 */
+	public boolean isLateOrder() {
+		Date dt = getOrderDate();
+		return dt != null? dt.before(forecasting.getReferenceDate()) : false;
+	}
 	
 	/**
 	 * Calculate the order date of the current medicine
 	 * @return
 	 */
 	public Date getOrderDate() {
-		if ((forecasting == null) || (results == null))
+		if ((forecasting == null) || (stockOutDate == null))
 			return null;
-
-		Date stockOutDate = forecasting.getEndDate();
-		stockOutDate = DateUtils.incMonths(stockOutDate, forecasting.getBufferStock());
-		for (ForecastingPeriod period: periods) {
-			if (period.getQuantityMissing() < 0) {
-				stockOutDate = period.getPeriod().getEndDate();
-				// calculate the number of missing days for the consumption
-				int days = period.getPeriod().getDays() * period.getQuantityMissing() / period.getEstimatedConsumption();
-				// estimate the stock out date
-				stockOutDate = DateUtils.incDays(stockOutDate, days);
-				break;
-			}
-		}
 
 		int num = forecasting.getLeadTime();
 		
@@ -314,7 +319,7 @@ public class ForecastingMedicine implements Serializable {
 	 * @return
 	 */
 	public float getTotalPrice() {
-		return unitPrice * getEstimatedQty();
+		return unitPrice * getQuantityToProcure();
 	}
 
 	
@@ -574,5 +579,19 @@ public class ForecastingMedicine implements Serializable {
 	 */
 	public void setQuantityToProcure(int quantityToProcure) {
 		this.quantityToProcure = quantityToProcure;
+	}
+
+	/**
+	 * @return the stockOutDate
+	 */
+	public Date getStockOutDate() {
+		return stockOutDate;
+	}
+
+	/**
+	 * @param stockOutDate the stockOutDate to set
+	 */
+	public void setStockOutDate(Date stockOutDate) {
+		this.stockOutDate = stockOutDate;
 	}
 }

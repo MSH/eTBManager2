@@ -237,6 +237,31 @@ public class ForecastingCalculation {
 			int total = tot + (tot2 != null? tot2: 0); 
 			forecasting.getTotal().get(i).setQuantity(total);
 		}
+		
+		calculateStockOutDate();
+	}
+
+
+	/**
+	 * Calculate the first stock out date for the medicines
+	 */
+	private void calculateStockOutDate() {
+		for (ForecastingMedicine fm: getForecasting().getMedicines()) {
+			Date stockOutDate = forecasting.getEndDate();
+			stockOutDate = DateUtils.incMonths(stockOutDate, forecasting.getBufferStock());
+			for (ForecastingPeriod period: fm.getPeriods()) {
+				if (period.getQuantityMissing() < 0) {
+					stockOutDate = period.getPeriod().getEndDate();
+					// calculate the number of missing days for the consumption
+					int days = period.getPeriod().getDays() * period.getQuantityMissing() / period.getEstimatedConsumption();
+					// estimate the stock out date
+					stockOutDate = DateUtils.incDays(stockOutDate, days);
+					break;
+				}
+			}
+
+			fm.setStockOutDate(stockOutDate);
+		}
 	}
 
 

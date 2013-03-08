@@ -30,6 +30,12 @@
     	</update>
     </changeSet>
     
-    
+    <changeSet id="3" author="rmemoria">
+    	<addColumn tableName="forecastingmedicine">
+    		<column name="stockOutDate" type="date" remarks="The first date of stock out for this medicine">
+    			<constraints nullable="true" />
+    		</column>
+    	</addColumn>
+    </changeSet>
  
 </databaseChangeLog>
