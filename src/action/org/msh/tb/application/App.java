@@ -24,6 +24,11 @@ public class App {
 	}
 	
 	
+	/**
+	 * Translate a key message to a message in the current locale
+	 * @param key
+	 * @return
+	 */
 	public static String getMessage(String key) {
 		return Messages.instance().get(key);
 	}

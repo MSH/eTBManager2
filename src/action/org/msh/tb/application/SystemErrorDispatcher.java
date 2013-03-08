@@ -19,6 +19,13 @@ import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.misc.DmSystemHome;
 
+/**
+ * Register information about exceptions and its associated user session and
+ * dispatch an e-mail message to the administrators about it. 
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 @Name("systemErrorDispatcher")
 public class SystemErrorDispatcher {
 
@@ -27,6 +34,15 @@ public class SystemErrorDispatcher {
 	
 	private ErrorLog errorLog; 
 	
+	/**
+	 * Register the exception in the database and send an e-mail message to the system administrators
+	 * (registered in the system settings)
+	 * 
+	 * @param exception is the exception thrown
+	 * @param userLogin instance of the {@link UserLogin} containing information about the user session
+	 * @param url is the URL that caused the error
+	 * @param request additional information about the error
+	 */
 	@Asynchronous
 	@Transactional
 	public void dispatch(Exception exception, UserLogin userLogin, String url, String request) {
@@ -74,11 +90,4 @@ public class SystemErrorDispatcher {
 		}
 	}
 
-	
-	/**
-	 * @return the errorLog
-	 */
-	public ErrorLog getErrorLog() {
-		return errorLog;
-	}
 }

@@ -14,24 +14,46 @@ import org.jboss.seam.security.AuthorizationException;
 import org.jboss.seam.security.NotLoggedInException;
 import org.msh.tb.entities.UserLogin;
 
+/**
+ * Exception handler of the application. All exceptions that are not locally handled
+ * (or handled by SEAM) are sent to this component. The exception is analyzed and
+ * if it's necessary to register it, information will be collected about the
+ * current user and its session and sent to the {@link SystemErrorDispatcher} component.
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 @Name("systemErrorHandler")
 public class SystemErrorHandler {
 
 	@In(create=true) SystemErrorDispatcher systemErrorDispatcher;
 	@In(required=false) UserLogin userLogin;
 	
+	/**
+	 * Handle exceptions that are not handled by seam
+	 */
 	@Observer("org.jboss.seam.exceptionNotHandled")
 	public void handleExceptionNotHandled() {
 		registerException();
 	}
 	
+	/**
+	 * Handle exceptions that are handled by seam
+	 */
 	@Observer("org.jboss.seam.exceptionHandled")
 	public void handleExceptionHandled() {
 		registerException();
 	}
 	
+	/**
+	 * Check if the exception in the "org.jboss.seam.handledException" component is eligible 
+	 * for registration and if the current session if valid. If so, get information about the
+	 * user and its session and call the {@link SystemErrorDispatcher} component 
+	 */
 	protected void registerException() {
 		Exception exception = (Exception)Component.getInstance("org.jboss.seam.handledException");
+		
+		// check the exceptions that are not registered
 		if ((exception == null) || (exception instanceof ViewExpiredException) ||
 			(exception instanceof IllegalStateException) || (exception instanceof OptimisticLockException) ||
 			(exception instanceof EntityNotFoundException) || (exception instanceof javax.persistence.EntityNotFoundException) ||
@@ -44,10 +66,14 @@ public class SystemErrorHandler {
 		String url = null;
 
 		StringBuilder reqdata = new StringBuilder();
-		
+
+		// there is a faces context ?
 		if (facesContext != null) {
 			HttpServletRequest req = (HttpServletRequest)facesContext.getExternalContext().getRequest();
-//			HttpServletRequest req = (HttpServletRequest)contexts.getRequest();
+
+			// if there is no session, so doesn't handle error
+			if (!req.isRequestedSessionIdValid())
+				return;
 			
 			url = req.getRequestURL().toString();
 			reqdata.append("ip address = " + req.getRemoteAddr());
@@ -75,6 +101,7 @@ public class SystemErrorHandler {
 		}
 		else url = null;
 
+		// call an asynchronous method to register the exception
 		systemErrorDispatcher.dispatch(exception, userLogin, url, reqdata.toString());			
 	}
 }
