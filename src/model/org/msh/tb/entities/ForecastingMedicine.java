@@ -142,8 +142,12 @@ public class ForecastingMedicine implements Serializable {
 		Date stockOutDate = forecasting.getEndDate();
 		stockOutDate = DateUtils.incMonths(stockOutDate, forecasting.getBufferStock());
 		for (ForecastingPeriod period: periods) {
-			if (period.getStockOnHand() == 0) {
-				stockOutDate = period.getPeriod().getIniDate();
+			if (period.getQuantityMissing() < 0) {
+				stockOutDate = period.getPeriod().getEndDate();
+				// calculate the number of missing days for the consumption
+				int days = period.getPeriod().getDays() * period.getQuantityMissing() / period.getEstimatedConsumption();
+				// estimate the stock out date
+				stockOutDate = DateUtils.incDays(stockOutDate, days);
 				break;
 			}
 		}

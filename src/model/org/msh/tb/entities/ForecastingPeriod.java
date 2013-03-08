@@ -36,7 +36,8 @@ public class ForecastingPeriod {
 	}
 
 	/**
-	 * @return the estimatedConsumption
+	 * Return the sum of the estimated consumption for previous cases and new cases
+	 * @return the total consumption of the period
 	 */
 	public int getEstimatedConsumption() {
 		return estConsumptionCases + estConsumptionNewCases;
