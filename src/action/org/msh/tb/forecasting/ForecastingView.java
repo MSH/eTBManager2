@@ -335,12 +335,11 @@ public class ForecastingView {
 
 
 	/**
-	 * Called when the user changes the forecasting dates (reference date, review period, lead time).
-	 * Validates the dates and adjust the forecasting to the new dates
+	 * Called when the user clicks on the save button of the editing dates window 
 	 */
-	public void datesChangeListener() {
-		Forecasting forecasting = forecastingHome.getForecasting();
-		
+	public void finishDateEditing() {
+		datesValidated = false;
+
 		if ((iniDate == null) || (endDate == null) || (referenceDate == null))
 			return;
 		
@@ -355,12 +354,26 @@ public class ForecastingView {
 			FacesMessages.instance().addToControlFromResourceBundle("refdate", "manag.forecast.refdatemsg1");
 			return;
 		}
+		Forecasting forecasting = forecastingHome.getForecasting();
 
 		// update the model
 		forecasting.setReferenceDate(referenceDate);
 		forecasting.setIniDate(iniDate);
 		forecasting.setEndDate(endDate);
+
+		// update model data
+		datesChangeListener();
 		
+		datesValidated = true; 
+	}
+	
+	
+	/**
+	 * Called when the user changes the forecasting dates (reference date, review period, lead time).
+	 * Validates the dates and adjust the forecasting to the new dates
+	 */
+	public void datesChangeListener() {
+		Forecasting forecasting = forecastingHome.getForecasting();
 		
 		// update new cases info
 		int betwRefDt = DateUtils.monthOf( DateUtils.getDatePart(forecasting.getReferenceDate()) ) - 
@@ -406,8 +419,6 @@ public class ForecastingView {
 		numCasesOnTreatment = null;
 		getCasesRegimenTable().setChangeRefDt(true);
 		getCasesRegimenTable().updateTable();
-		
-		datesValidated = true; 
 	}
 
 

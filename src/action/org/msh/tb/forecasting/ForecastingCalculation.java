@@ -65,15 +65,6 @@ public class ForecastingCalculation {
 	 * The forecasting object being calculated
 	 */
 	private Forecasting forecasting;
-	
-	public Forecasting getForecasting() {
-		return forecasting;
-	}
-
-
-	public void setForecasting(Forecasting forecasting) {
-		this.forecasting = forecasting;
-	}
 
 
 	/**
@@ -110,8 +101,26 @@ public class ForecastingCalculation {
 		finally {
 			finishCalculation();
 		}
-		//forecastingView.initializeStockOnHand();
+
 		return "executed";
+	}
+
+
+	/**
+	 * Return an instance of the {@link Forecasting} object in use for calculation
+	 * @return instance of {@link Forecasting} object
+	 */
+	public Forecasting getForecasting() {
+		return forecasting;
+	}
+
+
+	/**
+	 * Set the {@link Forecasting} object to be used in calculations
+	 * @param forecasting
+	 */
+	public void setForecasting(Forecasting forecasting) {
+		this.forecasting = forecasting;
 	}
 
 
@@ -214,7 +223,7 @@ public class ForecastingCalculation {
 		calculateCasesOnTreatment();
 		calculateNewCases();
 
-		updateStockQuantities();
+		calculatePeriodsQuantities();
 		
 		calculateQuantityToBeProcured();
 		
@@ -261,44 +270,63 @@ public class ForecastingCalculation {
 
 
 	/**
-	 * Calculate the quantity of medicine expired for each month of the medicine
+	 * Calculate the quantity of medicine expired for each period of the medicines
 	 * @param forMedicine
 	 */
-	protected void updateStockQuantities() {
+	protected void calculatePeriodsQuantities() {
 		for (ForecastingMedicine fm: forecasting.getMedicines()) {
 			int stockOnHand = fm.getStockOnHand();
-			
+			ForecastingPeriod prev = null;
+
 			for (ForecastingPeriod p: fm.getPeriods()) {
-				// update stock on hand and missing quantities
-				p.setStockOnHand(stockOnHand);
-				
-				// calculate expired quantities for the given period
-				// and return quantity calculated
-				int qtdExp = calcExpiredQuantity(fm, p);
+				// there is a previous period calculated ?
+				int qtdExp;
+				if (prev != null) {
+					// calculate quantity expired using the last period
+					qtdExp = calcExpiredQuantity(fm, prev);
+				}
+				else qtdExp = 0;
+
 				p.setQuantityExpired(qtdExp);
-				
+
+				// calculate the stock on hand at the beginning of the period
+				stockOnHand += p.getQuantityInOrder() - qtdExp;
+				p.setStockOnHand(stockOnHand);
+
+				// update stock on hand based on estimated consumption
 				int cons = p.getEstimatedConsumption();
 
+				int qtdMissing;
 				if (cons > stockOnHand) {
-					p.setQuantityMissing(stockOnHand - cons);
+					qtdMissing = stockOnHand - cons;
 					stockOnHand = 0;
-
-					stockOnHand += p.getQuantityInOrder() - p.getQuantityExpired();
 				}
 				else {
-					stockOnHand += -cons - qtdExp;
-					stockOnHand += p.getQuantityInOrder();
+					qtdMissing = 0;
+					stockOnHand += -cons;
 				}
-				
+
+				// update quantity missing
+				p.setQuantityMissing(qtdMissing);
+
 				if (stockOnHand < 0)
 					stockOnHand = 0;
 				
 				updateMonthQuantities(fm, p);
+
+				// update previous period
+				prev = p;
 			}
 		}
 	}
 	
 
+	/**
+	 * Update the months quantities based on the given period. Called when the period values 
+	 * are calculated and the month quantities must be updated
+	 * @param fm the instance of {@link ForecastingMedicine} to be updated
+	 * @param p the {@link ForecastingPeriod} that is given with quantities updated
+	 */
 	protected void updateMonthQuantities(ForecastingMedicine fm, ForecastingPeriod p) {
 		int index = forecasting.getMonthIndex(p.getPeriod().getIniDate());
 		ForecastingResult fr = fm.findResultByMonthIndex(index);
@@ -766,7 +794,7 @@ public class ForecastingCalculation {
 			// set forecasting boundaries
 			Date dtini = forecasting.getReferenceDate();
 			dates.put(endForecasting, 0);
-			dates.put(forecasting.getIniDateLeadTime(), 0);
+			dates.put(DateUtils.incDays(forecasting.getIniDateLeadTime(), -1), 0);
 			
 			for (int n = 0; n <= forecasting.getNumMonths(); n++) {
 				Date dt1 = forecasting.getIniDateMonthIndex(n);
@@ -788,7 +816,7 @@ public class ForecastingCalculation {
 			
 			// add dates of orders to arrive
 			for (ForecastingOrder order: fm.getOrders()) {
-				Date dt = DateUtils.getDatePart( order.getArrivalDate() );
+				Date dt = DateUtils.incDays( DateUtils.getDatePart( order.getArrivalDate() ), -1);
 				if (forPeriod.isDateInside(dt)) {
 					if (dates.get(dt) == null)
 						dates.put(dt, 0);
@@ -804,6 +832,7 @@ public class ForecastingCalculation {
 				lst.remove(dtini);
 
 			// create all periods starting by the reference date
+			Integer qtdOrder = null;
 			for (Date dt: lst) {
 				if (!dtini.equals(dt)) {
 					Integer qtd = dates.get(dt);
@@ -823,10 +852,12 @@ public class ForecastingCalculation {
 					mov.setPeriod(p);
 					mov.setQuantityToExpire(qtd);
 
-					Integer qtdOrder = orders.get(dt);
 					if (qtdOrder != null)
 						mov.setQuantityInOrder(qtdOrder);
 					fm.getPeriods().add(mov);
+					
+					// add in the next loop
+					qtdOrder = orders.get(dt);
 //					dtini = dt;
 					if (sameMonth)
 						 dtini = DateUtils.incDays(dt, 1);

@@ -71,7 +71,7 @@
 	</tr>
 	<a:repeat value="#{forecasting.medicines}" var="m">
 	<tr>
-		<td class="colb">
+		<td class="colb highlight">
 			#{m.medicine}
 		</td>
 		<td class="colrb">
@@ -413,7 +413,7 @@
 
 		<h:column>
 			<f:facet name="header">
-				#{messages['manag.forecast.stockonhand2']}
+				#{messages['manag.forecast.stockonhand']}
 			</f:facet>
 			<h:outputText value="#{p.stockOnHand}" >
 				<f:convertNumber pattern="#,###,##0" />
