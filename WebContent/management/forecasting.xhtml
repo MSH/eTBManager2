@@ -352,9 +352,10 @@
 						</f:facet>
 						<div style="width:100%">
 							<a:commandLink action="#{forecastingView.deleteBatch(b)}" style="float:left;" 
-								reRender="meds" onclick="if (!disableButton(this)) return false;"
+								reRender="meds" 
 								oncomplete="updateEditDeleteLinks()"
 								rendered="#{not b.batchOnOrder}"
+								onclick="if (!disableButton(this)) return false;if (!confirm('#{messages['form.confirm_remove']}')) { enableButton();return false;}" 
 								title="#{messages['form.remove']}" styleClass="delete-command">
 								<span></span>
 							</a:commandLink>
@@ -399,7 +400,7 @@
 						<div style="width:100%">
 							<a:commandLink action="#{forecastingView.deleteOrder(b)}" style="float:left;" 
 								reRender="meds"
-								onclick="if (!disableButton(this)) return false"
+								onclick="if (!disableButton(this)) return false;if (!confirm('#{messages['form.confirm_remove']}')) { enableButton();return false;}" 
 								oncomplete="updateEditDeleteLinks()"
 								title="#{messages['form.remove']}">
 								<span class="delete-icon" />
