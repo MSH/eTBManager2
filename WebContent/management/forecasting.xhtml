@@ -287,7 +287,8 @@
 		<a:commandLink action="#{forecastingView.initializeStockOnHand}" reRender="meds" style="float:right;">
 		   	<span class="refresh-icon" />#{messages['manag.forecast.updatedm']}
 		</a:commandLink>
-		<a:commandLink action="#{forecastingView.clearStockOnHand}" reRender="meds" style="float:right;margin-right:20px;">
+		<a:commandLink action="#{forecastingView.clearStockOnHand}" reRender="meds" style="float:right;margin-right:20px;" 
+			onclick="if (!confirm('#{messages['manag.forecast.clearconfirm']}')) return false;">
 			<span id="closewin" style="float:left;margin:0;"/>#{messages['form.clear']}
 		</a:commandLink>
 		<h2>#{messages['admin.medicines']}</h2>
@@ -567,7 +568,7 @@ function updateEditDeleteLinks() {
 	</s:decorate>
 
 	<div class="button-bar">
-		<a:commandLink action="#{forecastingView.datesChangeListener}"
+		<a:commandLink action="#{forecastingView.finishDateEditing()}"
 			styleClass="button" reRender="datespnl,main"
 			onclick="if (!disableButton(this)) return false;"
 			data="#{forecastingView.datesValidated}" 
@@ -599,7 +600,9 @@ function updateEditDeleteLinks() {
 
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['Movement.quantity']}:</ui:define>
-		<h:inputText value="#{forecastingView.order.quantity}" required="true" style="width:80px;"/>
+		<h:inputText value="#{forecastingView.order.quantity}" required="true" style="width:80px;">
+			<f:validateLongRange minimum="1" />
+		</h:inputText>
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml">
@@ -626,7 +629,7 @@ function updateEditDeleteLinks() {
 
 
 
-<rich:modalPanel id="batchdlg" height="200" width="490" zindex="2000" trimOverlayedElements="false">
+<rich:modalPanel id="batchdlg" width="490" autosized="true" zindex="2000" trimOverlayedElements="false">
 	<f:facet name="header">#{messages['Batch']}</f:facet>
 	<ui:param name="labelstyle" value="width:160px;" />
 	<h:panelGroup id="batchpnl">
@@ -639,14 +642,17 @@ function updateEditDeleteLinks() {
 
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['Movement.quantity']}:</ui:define>
-		<h:inputText value="#{forecastingView.batch.quantity}" required="true" style="width:80px;"/>
+		<h:inputText value="#{forecastingView.batch.quantity}" required="true" style="width:80px;">
+			<f:validateLongRange minimum="1" />
+		</h:inputText>
 	</s:decorate>
 	
 	<div class="button-bar">
 		<a:commandLink action="#{forecastingView.confirmBatchChanges}"
 			styleClass="button" reRender="batchpnl,meds"
 			onclick="if (!disableButton(this)) return false;" 
-			oncomplete="enableButton();Richfaces.hideModalPanel('batchdlg');updateEditDeleteLinks();">
+			data="#{forecastingView.validated}"
+			oncomplete="enableButton();if (data) Richfaces.hideModalPanel('batchdlg');updateEditDeleteLinks();">
 			<span>#{messages['form.ok']}</span>
 		</a:commandLink>
 		<s:link styleClass="button-alt" onclick="Richfaces.hideModalPanel('batchdlg'); return false;">

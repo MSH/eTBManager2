@@ -39,6 +39,11 @@ import org.msh.tb.tbunits.TbunitChangeListener;
 import org.msh.utils.date.DateUtils;
 
 
+/**
+ * Class for support in user interface operations.
+ * @author Ricardo Memoria
+ *
+ */
 @Name("forecastingView")
 @Scope(ScopeType.CONVERSATION)
 public class ForecastingView {
@@ -63,6 +68,7 @@ public class ForecastingView {
 	private Date referenceDate;
 	private Date iniDate;
 	private Date endDate;
+	private Date prevReferenceDate;
 	
 	
 	/**
@@ -357,6 +363,7 @@ public class ForecastingView {
 		Forecasting forecasting = forecastingHome.getForecasting();
 
 		// update the model
+		prevReferenceDate = forecasting.getReferenceDate();
 		forecasting.setReferenceDate(referenceDate);
 		forecasting.setIniDate(iniDate);
 		forecasting.setEndDate(endDate);
@@ -375,28 +382,33 @@ public class ForecastingView {
 	public void datesChangeListener() {
 		Forecasting forecasting = forecastingHome.getForecasting();
 		
-		// update new cases info
-		int betwRefDt = DateUtils.monthOf( DateUtils.getDatePart(forecasting.getReferenceDate()) ) - 
-						DateUtils.monthOf( DateUtils.getDatePart(forecasting.getOldReferenceDate()) );
 		int num = DateUtils.monthsBetween(forecasting.getReferenceDate(), forecasting.getEndDate()) + forecasting.getBufferStock();
-		
-		if (betwRefDt>0)
-		for (ForecastingNewCases c : forecasting.getNewCases()) {
-			int m = c.getMonthIndex()-betwRefDt;
-			if (m>=0)	{		
-				forecasting.getNewCases().get(m).setNumNewCases(c.getNumNewCases());
-			}
-		}
-		else if (betwRefDt<0)
-			for (int i = forecasting.getNewCases().size()-1; i >= 0; i--) {
-				ForecastingNewCases c = forecasting.getNewCases().get(i);
+
+		// reference date was changed?
+		if ((prevReferenceDate != null) && (!prevReferenceDate.equals(forecasting.getReferenceDate()))) {
+			// IMPLEMENTED BY OLEKSII
+			// update new cases info
+			int betwRefDt = DateUtils.monthOf( DateUtils.getDatePart(forecasting.getReferenceDate()) ) - 
+							DateUtils.monthOf( DateUtils.getDatePart(forecasting.getOldReferenceDate()) );
+			
+			if (betwRefDt>0)
+			for (ForecastingNewCases c : forecasting.getNewCases()) {
 				int m = c.getMonthIndex()-betwRefDt;
-				if (m<forecasting.getNewCases().size())	{		
+				if (m>=0)	{		
 					forecasting.getNewCases().get(m).setNumNewCases(c.getNumNewCases());
-					if (c.getMonthIndex()<=-betwRefDt)
-						c.setNumNewCases(0);
 				}
 			}
+			else if (betwRefDt<0)
+				for (int i = forecasting.getNewCases().size()-1; i >= 0; i--) {
+					ForecastingNewCases c = forecasting.getNewCases().get(i);
+					int m = c.getMonthIndex()-betwRefDt;
+					if (m<forecasting.getNewCases().size())	{		
+						forecasting.getNewCases().get(m).setNumNewCases(c.getNumNewCases());
+						if (c.getMonthIndex()<=-betwRefDt)
+							c.setNumNewCases(0);
+					}
+				}
+		}
 		
 		for (int i = 0; i <= num; i++) {
 			ForecastingNewCases c = forecasting.findNewCasesInfo(i);
