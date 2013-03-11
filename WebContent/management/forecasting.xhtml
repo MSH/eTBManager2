@@ -597,7 +597,8 @@ function updateEditDeleteLinks() {
 	<s:decorate template="/layout/dateedit.xhtml">
 		<ui:define name="label">#{messages['Order.receivingDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
-    	<ui:param name="datefield" value="#{forecastingView.order.arrivalDate}"/> 
+    	<ui:param name="datefield" value="#{forecastingView.order.arrivalDate}"/>
+    	<ui:param name="edtid" value="recdate" />
 	</s:decorate>
 
 	<s:decorate template="/layout/edit.xhtml">
@@ -610,6 +611,7 @@ function updateEditDeleteLinks() {
 	<s:decorate template="/layout/dateedit.xhtml">
 		<ui:define name="label">#{messages['Batch.expiryDate']}:</ui:define>
     	<ui:param name="datefield" value="#{forecastingView.batch.expiryDate}"/> 
+    	<ui:param name="edtid" value="expiredate" />
 	</s:decorate>
 
 	<div class="button-bar">
@@ -640,6 +642,7 @@ function updateEditDeleteLinks() {
 		<ui:define name="label">#{messages['Batch.expiryDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{forecastingView.batch.expiryDate}"/> 
+    	<ui:param name="edtid" value="batchdate" />
 	</s:decorate>
 
 	<s:decorate template="/layout/edit.xhtml">

@@ -3,6 +3,8 @@ package org.msh.tb.forecasting;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -467,9 +469,25 @@ public class ForecastingView {
 	 * Confirm adding a new batch or changing data of an existing batch
 	 */
 	public void confirmBatchChanges() {
+		Date refDate = forecastingHome.getInstance().getReferenceDate();
+
+		// check if arrival date is after the reference date
+		if ((batch.getExpiryDate() != null) && (refDate != null) && (!batch.getExpiryDate().after(refDate))) {
+			FacesMessages.instance().addToControlFromResourceBundle("batchdate", "manag.forecast.refdateerr");
+			return;
+		}
+
 		List<ForecastingBatch> batches = batch.getForecastingMedicine().getBatchesToExpire();
 		if (!batches.contains(batch))
 			batch.getForecastingMedicine().getBatchesToExpire().add(batch);
+		
+		Collections.sort(batches, new Comparator<ForecastingBatch>() {
+			@Override
+			public int compare(ForecastingBatch o1, ForecastingBatch o2) {
+				return o1.getExpiryDate().compareTo(o2.getExpiryDate());
+			}
+		});
+		
 		batch.getForecastingMedicine().updateStockOnHand();
 
 		batch = null;
@@ -514,15 +532,31 @@ public class ForecastingView {
 
 
 	/**
-	 * Confirm the changes in the order
+	 * Called when the user clicks on the confirmation button when including a new or editing
+	 * an existing order. The method apply some validation rules (not done by JSF) and,
+	 * if validated, save the changes in the order
 	 */
 	public void confirmOrderChanges() {
+		boolean error = false;
+
+		// check the expire date of the batch
 		if (batch.getExpiryDate() != null) {
 			if (!batch.getExpiryDate().after(order.getArrivalDate())) {
-				FacesMessages.instance().add("manag.forecast.ordererr");
-				return;
+				FacesMessages.instance().addToControlFromResourceBundle("expiredate", "manag.forecast.ordererr");
+				error = true;
 			}
 		}
+		
+		Date refDate = forecastingHome.getInstance().getReferenceDate();
+
+		// check if arrival date is after the reference date
+		if ((refDate != null) && (!order.getArrivalDate().after(refDate))) {
+			FacesMessages.instance().addToControlFromResourceBundle("recdate", "manag.forecast.refdateerr");
+			error = true;
+		}
+		
+		if (error)
+			return;
 		
 		ForecastingMedicine forMed = order.getForecastingMedicine();
 
