@@ -145,8 +145,6 @@ public class Forecasting extends WSObject implements Serializable {
 	 */
 	@Transient
 	private List<ForecastingItem> total = new ArrayList<ForecastingItem>();
-
-	private Date oldReferenceDate;
 	
 	/**
 	 * Check if forecasting has results, i.e, if it was executed before
@@ -478,20 +476,8 @@ public class Forecasting extends WSObject implements Serializable {
 	}
 
 	public void setReferenceDate(Date referenceDate) {
-		setOldReferenceDate(getReferenceDate());
 		this.referenceDate = referenceDate;
 	}
-
-	public Date getOldReferenceDate() {
-		return oldReferenceDate;
-	}
-
-
-
-	public void setOldReferenceDate(Date oldReferenceDate) {
-		this.oldReferenceDate = oldReferenceDate;
-	}
-
 
 
 	public boolean isCasesFromDatabase() {

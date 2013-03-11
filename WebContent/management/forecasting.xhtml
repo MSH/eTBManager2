@@ -64,6 +64,7 @@
 				onclick="showForecastDlg();return false;" />
 
 			<rich:menuItem value="#{messages['form.remove']}" submitMode="Ajax" ajaxSingle="true"
+				onclick="if (!confirm('#{messages['form.confirm_remove']}')) { enableButton();return false;}" 
 				action="#{forecastingHome.remove}"
 				rendered="#{forecastingHome.managed}" />
 		</rich:dropDownMenu>

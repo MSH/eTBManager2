@@ -1,5 +1,7 @@
 package org.msh.tb.forecasting;
 
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +10,7 @@ import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -15,6 +18,7 @@ import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
+import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.MedicinesQuery;
 import org.msh.tb.RegimensQuery;
@@ -37,6 +41,7 @@ import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.tb.tbunits.TbunitChangeListener;
 import org.msh.utils.date.DateUtils;
+import org.msh.utils.date.Period;
 
 
 /**
@@ -123,7 +128,6 @@ public class ForecastingView {
 		
 		// default values
 		forecasting.setReferenceDate(DateUtils.getDatePart(new Date()));
-		forecasting.setOldReferenceDate(DateUtils.getDatePart(new Date()));
 		forecasting.setBufferStock(3);
 		forecasting.setName(Messages.instance().get("manag.forecast.new"));
 		
@@ -389,7 +393,7 @@ public class ForecastingView {
 			// IMPLEMENTED BY OLEKSII
 			// update new cases info
 			int betwRefDt = DateUtils.monthOf( DateUtils.getDatePart(forecasting.getReferenceDate()) ) - 
-							DateUtils.monthOf( DateUtils.getDatePart(forecasting.getOldReferenceDate()) );
+							DateUtils.monthOf( DateUtils.getDatePart(prevReferenceDate) );
 			
 			if (betwRefDt>0)
 			for (ForecastingNewCases c : forecasting.getNewCases()) {
@@ -429,8 +433,7 @@ public class ForecastingView {
 			else i++;
 		}
 		numCasesOnTreatment = null;
-		getCasesRegimenTable().setChangeRefDt(true);
-		getCasesRegimenTable().updateTable();
+		getCasesRegimenTable().updateTable(prevReferenceDate);
 	}
 
 
@@ -596,6 +599,29 @@ public class ForecastingView {
 		numCasesOnTreatment = null;
 	}
 
+	
+	/**
+	 * Get the label used to display the date of the review period when the stock-out date is undefined   
+	 * @param fm
+	 * @return
+	 */
+	public String getNoNextProcurrementMessage() {
+		ForecastingCalculation calc = (ForecastingCalculation)Component.getInstance("forecastingCalculation");
+		if (calc == null)
+			return null;
+		
+		Period reviewPeriod = calc.getReviewPeriod();
+
+		if ((reviewPeriod == null) || (reviewPeriod.getEndDate() == null))
+			return null;
+
+		Date dt = reviewPeriod.getEndDate();
+		
+		SimpleDateFormat f = new SimpleDateFormat("MMM-yyyy", LocaleSelector.instance().getLocale());
+
+		String s = f.format(dt);
+		return MessageFormat.format(Messages.instance().get("manag.forecast.nonextproc"), s);
+	}
 	
 	/**
 	 * Called when the context in the forecasting is changed by the user

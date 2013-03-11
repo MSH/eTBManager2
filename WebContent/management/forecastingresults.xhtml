@@ -83,8 +83,9 @@
 			<h:outputText value="#{m.orderDate}" converter="localeDateConverter" 
 				style="width:80px;display:block;"
 				title="#{m.lateOrder? messages['manag.forecast.lateorder']: ''}" 
-				styleClass="#{m.lateOrder? 'error': ''}">
+				styleClass="#{m.lateOrder? 'error': ''}" rendered="#{not empty m.stockOutDate}">
 			</h:outputText>
+			<h:outputText value="#{forecastingView.noNextProcurrementMessage}" rendered="#{empty m.stockOutDate}" />
 		</td>
 		<td class="colrb highlight">
 			<h:outputText value="#{m.stockOnOrderLT}" >

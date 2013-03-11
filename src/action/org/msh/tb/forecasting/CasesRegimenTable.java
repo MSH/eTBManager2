@@ -50,18 +50,6 @@ public class CasesRegimenTable {
 	 */
 	private int numberOfMonths = 12;
 
-	private boolean changeRefDt;
-
-
-	public boolean isChangeRefDt() {
-		return changeRefDt;
-	}
-
-
-	public void setChangeRefDt(boolean changeRefDt) {
-		this.changeRefDt = changeRefDt;
-	}
-
 
 	/**
 	 * Constructor of the class
@@ -82,7 +70,6 @@ public class CasesRegimenTable {
 			monthIndexIni = 0;
 		rows = null;
 		months = null;
-		changeRefDt = false;
 	}
 
 
@@ -93,25 +80,26 @@ public class CasesRegimenTable {
 		monthIndexIni -= numberOfMonths;
 		rows = null;
 		months = null;
-		changeRefDt = false;
 	}
 	
 	/**
-	 * Update the table according to its attributes
-	 * @param num
+	 * Update the regimen table according to the forecasting configuration and
+	 * the previous reference date, 
+	 * @param oldRefDate is the previous reference date, if available, or the
+	 * current reference date, if not available
 	 */
-	public void updateTable() {
+	public void updateTable(Date oldRefDate) {
 		rows = new ArrayList<ItemRow>();
 		int betwRefDt = 0;
-		if (forecasting.getOldReferenceDate()!=null) 
+		if (oldRefDate != null) 
 			betwRefDt = DateUtils.monthOf( DateUtils.getDatePart(forecasting.getReferenceDate()) ) - 
-						DateUtils.monthOf( DateUtils.getDatePart(forecasting.getOldReferenceDate()) );
+						DateUtils.monthOf( DateUtils.getDatePart(oldRefDate) );
 		
 		// remove unused instances of ForecastingCasesOnTreat objects
 		int i = 0;
 		while (i < forecasting.getCasesOnTreatment().size()) {
 			ForecastingCasesOnTreat c = forecasting.getCasesOnTreatment().get(i);
-			if (isChangeRefDt()) 
+			if (betwRefDt != 0) 
 				c.setMonthIndex(c.getMonthIndex()-betwRefDt);
 			if ((c.getNumCases() == null) || (c.getNumCases() <= 0) || (forecasting.findRegimen(c.getRegimen()) == null)) {
 				forecasting.getCasesOnTreatment().remove(c);
@@ -218,13 +206,13 @@ public class CasesRegimenTable {
 	
 	public List<String> getMonths() {
 		if (months == null)
-			updateTable();
+			updateTable(forecasting.getReferenceDate());
 		return months;
 	}
 	
 	public List<ItemRow> getRows() {
 		if (rows == null)
-			updateTable();
+			updateTable(forecasting.getReferenceDate());
 		return rows;
 	}
 

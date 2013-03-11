@@ -237,7 +237,7 @@ public class ForecastingCalculation {
 			int total = tot + (tot2 != null? tot2: 0); 
 			forecasting.getTotal().get(i).setQuantity(total);
 		}
-		
+
 		calculateStockOutDate();
 	}
 
@@ -247,8 +247,10 @@ public class ForecastingCalculation {
 	 */
 	private void calculateStockOutDate() {
 		for (ForecastingMedicine fm: getForecasting().getMedicines()) {
-			Date stockOutDate = forecasting.getEndDate();
-			stockOutDate = DateUtils.incMonths(stockOutDate, forecasting.getBufferStock());
+			// initial value, indicating there is no stock out date
+			Date stockOutDate = null;
+			//stockOutDate = DateUtils.incMonths(stockOutDate, forecasting.getBufferStock());
+
 			for (ForecastingPeriod period: fm.getPeriods()) {
 				if (period.getQuantityMissing() < 0) {
 					stockOutDate = period.getPeriod().getEndDate();
