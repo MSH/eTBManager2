@@ -18,11 +18,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.jboss.seam.international.Messages;
 import org.msh.tb.az.entities.enums.CaseFindingStrategy;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.User;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 import org.msh.utils.date.Period;
@@ -93,6 +96,26 @@ public class TbCaseAZ extends TbCase{
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="editingUser_id")
 	private User editingUser;
+	
+	/**
+	 * Returns the case number in a formated way ready for displaying
+	 * @return
+	 */
+	@Override
+	public String getDisplayCaseNumber() {
+		Workspace ws = (getPatient() != null? getPatient().getWorkspace() : null);
+		if ((ws != null) && (ws.getDisplayCaseNumber() == DisplayCaseNumber.REGISTRATION_CODE))
+			return getRegistrationCode();
+		else {
+			if (getPatient() == null)
+				return Messages.instance().get("cases.nonumber");
+			if (getPatient().getRecordNumber() == null)
+				return Messages.instance().get("cases.nonumber");
+			if (getCaseNumber() == null)
+				return Integer.toString(getPatient().getRecordNumber());
+			return formatCaseNumber(getPatient().getRecordNumber(), getCaseNumber());
+		}
+	}
 	
 	//===================GETTERS & SETTERS======================
 	/**
@@ -334,4 +357,5 @@ public class TbCaseAZ extends TbCase{
 	public void setEditingUser(User editingUser) {
 		this.editingUser = editingUser;
 	}
+
 }
