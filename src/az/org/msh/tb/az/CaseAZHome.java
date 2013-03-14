@@ -5,9 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
-import javax.persistence.EntityManager;
+import javax.swing.JOptionPane;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
@@ -19,6 +18,7 @@ import org.msh.tb.cases.CaseCloseHome;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.PrevTBTreatmentHome;
+import org.msh.tb.cases.treatment.TreatmentHome;
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.SystemParam;
 import org.msh.tb.entities.TbCase;
@@ -37,7 +37,6 @@ public class CaseAZHome {
 	private static final CaseState[] outcomes3cat = {
 		CaseState.CURED, 
 		CaseState.TREATMENT_COMPLETED};
-	private Map<String, String> messages;
 	
 	@In CaseHome caseHome;
 	@In(create=true) CaseEditingAZHome caseEditingAZHome;
@@ -71,6 +70,7 @@ public class CaseAZHome {
 		return caseSeverityMarksHome.getSeverityMarks();
 	}
 	
+
 	public TbCaseAZ getTbCase() {
 		return (TbCaseAZ)caseHome.getInstance();
 	}
@@ -189,8 +189,7 @@ public class CaseAZHome {
 	public TbCaseAZ reGetTbCase(TbCase tbcase){
 		if (tbcase==null) return null;
 		if (tbcase.getId() == null) return (TbCaseAZ) tbcase;
-		EntityManager em = (EntityManager)Component.getInstance("entityManager", true);
-		TbCaseAZ tc = (TbCaseAZ) em.find(TbCaseAZ.class, tbcase.getId());
+		TbCaseAZ tc = (TbCaseAZ) App.getEntityManager().find(TbCaseAZ.class, tbcase.getId());
 		return tc;
 	}
 	
@@ -371,5 +370,41 @@ public class CaseAZHome {
 				prev.setNumTreatments(numTreatments);
 			}
 		}
+	
+	public String saveChangesTreat(){
+		TreatmentHome th = (TreatmentHome)App.getComponent("treatmentHome");
+		
+		Tbunit nTbU = th.getTbunitselection().getTbunit();
+		Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
+		if (nTbU.getId().intValue() != nTbUUser.getId().intValue())
+			if (confirmTbUnit() == JOptionPane.NO_OPTION)
+				th.getTbunitselection().setTbunit(nTbUUser);
+		
+		return th.saveChanges();
+	}
+	
+	public int confirmTbUnit(){
+		Object[] options = {App.getMessage("global.yes"),App.getMessage("global.no")+" "+App.getMessage("global.bydefault")};
+		int res = JOptionPane.showOptionDialog(null,
+				App.getMessage("cases.new.notusertbunit"),
+				App.getMessage("TbCase.ownerUnit"),
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				options,
+				options[1]);
+		return res;
+	}
+	/*public String reopenCase() {
+		CaseCloseHome caseCloseHome = (CaseCloseHome)App.getComponent("caseCloseHome");
+		TbCase tbcase = caseHome.getInstance();
+		if (tbcase.getTreatmentPeriod()!=null){
+			Date realEndTreat = tbcase.getIntensivePhasePeriod().getEndDate();
+			if (tbcase.getContinuousPhasePeriod()!=null)
+				realEndTreat = tbcase.getContinuousPhasePeriod().getEndDate();
+			tbcase.getTreatmentPeriod().setEndDate(realEndTreat);
+		}
+		return caseCloseHome.reopenCase();
+	}*/
 }
 

@@ -46,6 +46,12 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		getPatientHome().persist();
 
 		// get notification unit
+		Tbunit nTbU = getTbunitselection().getTbunit();
+		Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
+		if (nTbU.getId().intValue() != nTbUUser.getId().intValue())
+			if (confirmTbUnit() == JOptionPane.NO_OPTION)
+				getTbunitselection().setTbunit(nTbUUser);
+		
 		tbcase.setNotificationUnit(getTbunitselection().getTbunit());
 		tbcase.getNotifAddress().setAdminUnit(getNotifAdminUnit().getSelectedUnit());
 
@@ -271,6 +277,12 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		tbcase.setEditingDate(new Date());
 		tbcase.setEditingUser(uw.getUser());
 
+		Tbunit nTbU = getTbunitselection().getTbunit();
+		Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
+		if (nTbU.getId().intValue() != nTbUUser.getId().intValue())
+			if (confirmTbUnit() == JOptionPane.NO_OPTION)
+				getTbunitselection().setTbunit(nTbUUser);
+		
 		return super.saveEditing();
 	}
 
@@ -289,5 +301,18 @@ public class CaseEditingAZHome extends CaseEditingHome{
 
 	public TbCaseAZ getTbCase() {
 		return (TbCaseAZ)caseHome.getInstance();
+	}
+	
+	public int confirmTbUnit(){
+		Object[] options = {App.getMessage("global.yes"),App.getMessage("global.no")+" "+App.getMessage("global.bydefault")};
+		int res = JOptionPane.showOptionDialog(null,
+				App.getMessage("cases.new.notusertbunit"),
+				App.getMessage("TbCase.notificationUnit"),
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				options,
+				options[1]);
+		return res;
 	}
 }
