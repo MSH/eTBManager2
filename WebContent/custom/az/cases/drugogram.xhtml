@@ -17,7 +17,7 @@
 			#{messages['TbField.XRAYPRESENTATION']}
 		</th>
 		
-		<a:repeat value="#{drugogramBR.examLabels}" var="it">
+		<a:repeat value="#{drugogramAZ.examLabels}" var="it">
 		<th>
 			#{messages['cases.exammicroscopy']}
 		</th>
@@ -25,13 +25,13 @@
 			#{messages['cases.examculture']}
 		</th>
 		</a:repeat>
-		<a:repeat value="#{drugogramBR.medicines}" var="it">
+		<a:repeat value="#{drugogramAZ.medicines}" var="it">
 		<th>
 			#{it}
 		</th>
 		</a:repeat>
 	</tr>
-<a:repeat value="#{drugogramBR.items}" var="it">
+<a:repeat value="#{drugogramAZ.items}" var="it">
 	<tr><td class="colcb">
 			#{it.monthDisplay}
 		</td>
