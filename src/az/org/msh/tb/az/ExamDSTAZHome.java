@@ -15,7 +15,6 @@ import org.msh.tb.SubstancesQuery;
 import org.msh.tb.az.entities.ExamDSTAZ;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.exams.LaboratoryExamHome;
-import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.enums.DrugResistanceType;
@@ -72,7 +71,17 @@ public class ExamDSTAZHome extends LaboratoryExamHome<ExamDSTAZ>{
 	}
 	
 	public boolean validateAndPrepareFields(){
-		
+		ExamDSTAZ exam = getInstance();
+		if (exam.getDateRelease()!=null)
+			if (exam.getDateRelease().before(exam.getDateCollected())){
+				facesMessages.addFromResourceBundle("DSTExam.msg04");
+				return false;
+			}
+		if (exam.getDatePlating()!=null)
+			if (exam.getDatePlating().before(exam.getDateCollected())){
+				facesMessages.addFromResourceBundle("DSTExam.msg05");
+				return false;
+			}
 		
 		//Verifies if a TB case has resistance or if a DRTB case has at least one resistance
 		//int resistantQuantity = 0;
@@ -101,7 +110,6 @@ public class ExamDSTAZHome extends LaboratoryExamHome<ExamDSTAZ>{
 		
 		// update exams
 		if (items != null) {
-			ExamDST exam = getInstance();
 			exam.setNumContaminated(0);
 			exam.setNumResistant(0);
 			exam.setNumSusceptible(0);
