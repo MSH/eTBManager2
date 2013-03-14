@@ -69,7 +69,6 @@ public class GlobalLists {
 	
 
 	private static final HIVResult hivResults[] = {
-		HIVResult.NOTDONE,
 		HIVResult.ONGOING,
 		HIVResult.NEGATIVE,
 		HIVResult.POSITIVE
@@ -84,7 +83,6 @@ public class GlobalLists {
 	};
 	
 	private static final MicroscopyResult microscopyResults[] = {
-		MicroscopyResult.NOTDONE,
 		MicroscopyResult.NEGATIVE,
 		MicroscopyResult.POSITIVE,
 		MicroscopyResult.PLUS,
@@ -101,7 +99,7 @@ public class GlobalLists {
 		
 	};
 	
-	/* never used, also specific to Brazil - AK
+/* never used, also specific to Brazil - AK
 	public TipoResistencia[] getTiposResistencia() {
 		return TipoResistencia.values();
 	}
@@ -150,5 +148,4 @@ public class GlobalLists {
 	public MicroscopyResult[] getMicroscopyResults() {
 		return microscopyResults;
 	}
-	
 }
