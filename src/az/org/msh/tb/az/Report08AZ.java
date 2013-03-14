@@ -125,7 +125,7 @@ public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 		setCounting(true);
 		int count = ((Long)createQuery().getSingleResult()).intValue();
 		if (count<=4000){
-			initVerifList("verify.tb08.error",5,4,1);
+			initVerifList("verify.tb08.error",6,4,1);
 			setCounting(false);
 			setOverflow(false);
 			lst = createQuery().getResultList();
@@ -257,8 +257,10 @@ public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 				int resR = exDST("R",tc);
 				int resE = exDST("E",tc);
 				int resS = exDST("S",tc);
+				boolean noCatDST = true;
 				if (resH == 2 && resR == 2 && resE == 2 && resS == 2){
-					addToTable2110(2,tc);
+					addToTable2110(2,tc,true);
+					noCatDST = false;
 					//table 3000 begin
 					if (tc.getPatientType().equals(PatientType.NEW)){
 						if (rightMcTest(tc)!=null){
@@ -290,31 +292,42 @@ public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 					}
 				}
 				
-				if (resH != 1 && resR != 1 && resE != 1 && resS == 1) 
-					addToTable2110(3,tc);
+				if (resH != 1 && resR != 1 && resE != 1 && resS == 1) {
+					addToTable2110(3,tc,true);
+					noCatDST = false;
+				}
 				if ((resH == 1 && resR != 1 && resE != 1 && resS != 1) ||
 						(resH == 1 && resR != 1 && resE != 1 && resS == 1) ||	
 						(resH == 1 && resR != 1 && resE == 1 && resS != 1) ||
-						(resH == 1 && resR != 1 && resE == 1 && resS == 1))
-					addToTable2110(4,tc);
+						(resH == 1 && resR != 1 && resE == 1 && resS == 1)){
+					addToTable2110(4,tc,true);
+					noCatDST = false;
+				}
 				if ((resH != 1 && resR == 1 && resE != 1 && resS != 1) ||
 						(resH != 1 && resR == 1 && resE != 1 && resS == 1) ||	
 						(resH != 1 && resR == 1 && resE == 1 && resS != 1) ||
-						(resH != 1 && resR == 1 && resE == 1 && resS == 1))
-					addToTable2110(5,tc);
+						(resH != 1 && resR == 1 && resE == 1 && resS == 1)){
+					addToTable2110(5,tc,true);
+					noCatDST = false;
+				}
 				if ((resH == 1 && resR == 1 && resE != 1 && resS != 1) ||
 						(resH == 1 && resR == 1 && resE != 1 && resS == 1) ||	
 						(resH == 1 && resR == 1 && resE == 1 && resS != 1) ||
 						(resH == 1 && resR == 1 && resE == 1 && resS == 1))
 				{
-					addToTable2110(6,tc);
+					addToTable2110(6,tc,true);
+					noCatDST = false;
 					if ((exDST("Km",tc) == 1 || exDST("Am",tc) == 1 || exDST("Cm",tc) == 1) && exDST("Ofx",tc) == 1) 
-						addToTable2110(7,tc);
+						addToTable2110(7,tc,false);
 				}
 				if (resH == 0 && resR == 0 && resE == 0 && resS == 0){
-					addToTable2110(8,tc);
+					addToTable2110(8,tc,true);
+					noCatDST = false;
 					addToVerList(tc,2,1);
 				}
+				if (noCatDST)
+					addToVerList(tc,1,5);
+					
 			}
 			generateRepList(lst);
 		}
@@ -325,7 +338,7 @@ public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 	/**
 	 * Add value to table 2110 in necessary column
 	 */
-	private void addToTable2110(int rowInd,TbCaseAZ tc){
+	private void addToTable2110(int rowInd,TbCaseAZ tc, boolean toTotal){
 		int colInd=0;
 		if (tc.getPatientType().equals(PatientType.NEW)){
 			if (tc.isPulmonary()) colInd = 1;
@@ -339,7 +352,7 @@ public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 			else 
 				addToVerList(tc,1,4);
 		}
-		if (colInd!=0){
+		if (colInd!=0 && toTotal){
 			table2110.addIdValue("col"+colInd, "row1", 1F);
 			table2110.addIdValue("col"+colInd, "row"+rowInd, 1F);
 		}
