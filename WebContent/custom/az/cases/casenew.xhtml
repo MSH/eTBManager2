@@ -35,7 +35,6 @@
 		<h:form id="medexamerror">
 		    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
 		    	<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
-		    	<ui:param name="redasterisk" value="true" /> 
 		    	<ui:param name="future" value="true" /> 
 		    	<ui:param name="datefield" value="#{medicalExamination.date}" /> 
 		    	<ui:param name="edtid" value="medexamdate" />
@@ -43,20 +42,17 @@
 			
 		    <s:decorate template="/layout/edit.xhtml" >
 		    	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
-		    	<ui:param name="redasterisk" value="true" /> 
 		    	<h:inputText value="#{medicalExamination.responsible}" style=" width : 340px;" maxlength="100" />
 		    </s:decorate>
 		
 		    <s:decorate template="/layout/edit.xhtml" >
 		    	<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
-		    	<ui:param name="redasterisk" value="true" /> 
 		    	<h:inputText value="#{medicalExamination.height}" />
 		    	#{messages['MedicalExamination.height.unit']}
 		    </s:decorate>
 		    
 		     <s:decorate template="/layout/edit.xhtml" >
 		    	<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
-		   		<ui:param name="redasterisk" value="true" /> 
 		   		<h:inputText value="#{medicalExamination.weight}" converter="localeDoubleConverterAZ" 
 		   			onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');"
 		   			onkeyup="updateBMI(this, event);"
