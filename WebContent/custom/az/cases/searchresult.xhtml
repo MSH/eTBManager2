@@ -48,7 +48,7 @@
 							<th class="searchtitle">
 							<ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
 								<div style="padding: 4px;">
-									<a:commandLink value="#{messages['Patient.caseNumber']}"
+									<a:commandLink value="#"
 										onclick="changeOrder(0); return false;" />
 									<br /> <br />
 									<a:commandLink value="#{messages['Gender']}"
@@ -133,25 +133,38 @@
 						</tr>
 						<ui:repeat value="#{casesAZ.resultList}" var="it">
 							<tr>
-								<td width="10%" align="center">
+								<td width="4%" align="center">
 									<s:link view="/cases/casedata.xhtml"
 										styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}"
-										style="float:none">
+										style="float:none"
+										rendered="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit!=null}">
+										<f:param name="id" value="#{it.tbcase.id}" />
+									</s:link>
+									<s:link view="/cases/caseedt.xhtml"
+										styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}"
+										style="float:none"
+										rendered="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit==null}">
 										<f:param name="id" value="#{it.tbcase.id}" />
 									</s:link>
 									<br/> 
-									<s:link
-										value="#{it.displayCaseNumber}"
-										view="/cases/casedata.xhtml">
+									<s:link	value="#{caseAZHome.reGetTbCase(it.tbcase).displayCaseNumber}"
+										view="/cases/casedata.xhtml"
+										rendered="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit!=null}">
+										<f:param name="id" value="#{it.tbcase.id}" />
+									</s:link> 
+									<s:link	value="#{caseAZHome.reGetTbCase(it.tbcase).displayCaseNumber}"
+										view="/cases/caseedt.xhtml"
+										rendered="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit==null}">
 										<f:param name="id" value="#{it.tbcase.id}" />
 									</s:link> 
 								</td>
-								<td style="color:#069;" width="30%">
+								<td style="color:#069;" width="32%">
 										<b>
-										<s:link
-										value="#{caseAZHome.getRightPatientName(it.tbcase)}"
-										view="/cases/casedata.xhtml">
-										<f:param name="id" value="#{caseAZHome.reGetTbCase(it.tbcase).id}" />
+										<s:link	value="#{caseAZHome.getRightPatientName(it.tbcase)}" view="/cases/casedata.xhtml" rendered="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit!=null}">
+											<f:param name="id" value="#{caseAZHome.reGetTbCase(it.tbcase).id}" />
+										</s:link>
+										<s:link	value="#{caseAZHome.getRightPatientName(it.tbcase)}" view="/cases/caseedt.xhtml" rendered="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit==null}">
+											<f:param name="id" value="#{caseAZHome.reGetTbCase(it.tbcase).id}" />
 										</s:link>
 										</b><br/>
 										#{caseAZHome.getYearOfBirth(it.tbcase)} #{messages['az_EIDSS_Year_Of_Birth.short']} (<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).patient.birthDate}" converter="localeDateConverter"/>), #{caseAZHome.reGetTbCase(it.tbcase).age} #{messages['az_EIDSS_years']}<br/>
@@ -167,7 +180,7 @@
 										<b>#{caseAZHome.reGetTbCase(it.tbcase).unicalID!=null ? caseAZHome.reGetTbCase(it.tbcase).unicalID : 'XXXXXXXX'}</b>
 								</td>
 								<s:fragment>
-									<td  width="30%">
+									<td  width="32%">
 									     <b>#{messages[caseAZHome.reGetTbCase(it.tbcase).classification.key]} -  <h:outputText value=" #{messages[caseAZHome.reGetTbCase(it.tbcase).state.key]}"
 												style="color:SaddleBrown;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).state != 'ONTREATMENT' and caseAZHome.reGetTbCase(it.tbcase).notificationUnit != NULL}"/>
 											<s:fragment rendered="#{caseAZHome.reGetTbCase(it.tbcase).state == 'ONTREATMENT'}">
@@ -185,7 +198,7 @@
 									     #{messages['User.state']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).diagnosisType.key]}<br/>
 									     #{messages['DiagnosisType']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).infectionSite.key]}<br/>
 									     <b><h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).ownerUnit.name}" rendered="#{caseAZHome.reGetTbCase(it.tbcase).ownerUnit!=NULL}"/>
-										 <h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit.name}" rendered="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit==NULL}"/> </b><br /> 
+										 <h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit.name}" rendered="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit!=NULL and caseAZHome.reGetTbCase(it.tbcase).ownerUnit==NULL}"/> </b><br /> 
 										 <h:outputText
 											value="#{it.adminUnitDisplay}" style="font-size:10px;" />
 										<br/>
@@ -199,7 +212,7 @@
 										
 									</td>
 								</s:fragment>
-								<td style="border-left: 1px solid #E0E0E0;color:#45793D;"  width="30%">
+								<td style="border-left: 1px solid #E0E0E0;color:#45793D;"  width="32%">
 									<h:outputText value="#{caseAZHome.getEIDSSBlock(it.tbcase)}" escape="false"/>
 								</td>
 							</tr>
