@@ -3,14 +3,12 @@ package org.msh.tb.az;
 import java.util.Date;
 
 import javax.persistence.Query;
-import javax.swing.JOptionPane;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.tb.application.App;
 import org.msh.tb.cases.PatientsQuery;
 import org.msh.utils.date.Period;
 
@@ -142,8 +140,8 @@ public class PatientsQueryAZ extends PatientsQuery {
 				setSearching(true);
 				refresh();
 			}
-			else
-				JOptionPane.showMessageDialog(null,App.getMessage("cases.new.datareq"),"",JOptionPane.WARNING_MESSAGE,null);
+			/*else
+				JOptionPane.showMessageDialog(null,App.getMessage("cases.new.datareq"),"",JOptionPane.WARNING_MESSAGE,null);*/
 		}
 		
 		@Override

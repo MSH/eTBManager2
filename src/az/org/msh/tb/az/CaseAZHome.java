@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -18,7 +16,6 @@ import org.msh.tb.cases.CaseCloseHome;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.PrevTBTreatmentHome;
-import org.msh.tb.cases.treatment.TreatmentHome;
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.SystemParam;
 import org.msh.tb.entities.TbCase;
@@ -371,7 +368,7 @@ public class CaseAZHome {
 			}
 		}
 	
-	public String saveChangesTreat(){
+	/*public String saveChangesTreat(){
 		TreatmentHome th = (TreatmentHome)App.getComponent("treatmentHome");
 		
 		Tbunit nTbU = th.getTbunitselection().getTbunit();
@@ -381,9 +378,9 @@ public class CaseAZHome {
 				th.getTbunitselection().setTbunit(nTbUUser);
 		
 		return th.saveChanges();
-	}
+	}*/
 	
-	public int confirmTbUnit(){
+	/*public int confirmTbUnit(){
 		Object[] options = {App.getMessage("global.yes"),App.getMessage("global.no")+" "+App.getMessage("global.bydefault")};
 		int res = JOptionPane.showOptionDialog(null,
 				App.getMessage("cases.new.notusertbunit"),
@@ -395,6 +392,7 @@ public class CaseAZHome {
 				options[1]);
 		return res;
 	}
+	 */
 	/*public String reopenCase() {
 		CaseCloseHome caseCloseHome = (CaseCloseHome)App.getComponent("caseCloseHome");
 		TbCase tbcase = caseHome.getInstance();

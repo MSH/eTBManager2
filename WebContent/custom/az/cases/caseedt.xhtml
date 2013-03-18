@@ -42,7 +42,7 @@
 		<a:commandLink action="#{caseAZHome.persist}" styleClass="button" reRender="main,messages" onclick="if (!disableButton(this)) return false;">
 			<span>#{messages['form.save']}</span>
 		</a:commandLink>
-		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+		<s:link view="#{tbcase.notificationUnit == null?'/cases/searchresult.xhtml':'/cases/casedata.xhtml'}" styleClass="button-alt" propagation="end">
 			<f:param name="id" value="#{caseHome.id}" />
 			<span>#{messages['form.cancel']}</span>
 		</s:link>

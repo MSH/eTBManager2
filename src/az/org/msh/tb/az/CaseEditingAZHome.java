@@ -3,8 +3,6 @@ package org.msh.tb.az;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -46,12 +44,12 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		getPatientHome().persist();
 
 		// get notification unit
-		Tbunit nTbU = getTbunitselection().getTbunit();
+		/*Tbunit nTbU = getTbunitselection().getTbunit();
 		Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
 		if (nTbU.getId().intValue() != nTbUUser.getId().intValue())
 			if (confirmTbUnit() == JOptionPane.NO_OPTION)
 				getTbunitselection().setTbunit(nTbUUser);
-		
+		*/
 		tbcase.setNotificationUnit(getTbunitselection().getTbunit());
 		tbcase.getNotifAddress().setAdminUnit(getNotifAdminUnit().getSelectedUnit());
 
@@ -277,12 +275,12 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		tbcase.setEditingDate(new Date());
 		tbcase.setEditingUser(uw.getUser());
 
-		Tbunit nTbU = getTbunitselection().getTbunit();
+		/*Tbunit nTbU = getTbunitselection().getTbunit();
 		Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
 		if (nTbU.getId().intValue() != nTbUUser.getId().intValue())
 			if (confirmTbUnit() == JOptionPane.NO_OPTION)
 				getTbunitselection().setTbunit(nTbUUser);
-		
+		*/
 		return super.saveEditing();
 	}
 
@@ -303,7 +301,7 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		return (TbCaseAZ)caseHome.getInstance();
 	}
 	
-	public int confirmTbUnit(){
+/*	public int confirmTbUnit(){
 		Object[] options = {App.getMessage("global.yes"),App.getMessage("global.no")+" "+App.getMessage("global.bydefault")};
 		int res = JOptionPane.showOptionDialog(null,
 				App.getMessage("cases.new.notusertbunit"),
@@ -314,5 +312,5 @@ public class CaseEditingAZHome extends CaseEditingHome{
 				options,
 				options[1]);
 		return res;
-	}
+	}*/
 }
