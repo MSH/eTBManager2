@@ -32,26 +32,29 @@
         <pathelement location="WebContent/WEB-INF/lib/richfaces-impl-3.3.3.Final.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/richfaces-ui-3.3.3.Final.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jxl.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/gson-2.1.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/dom4j-1.6.1.jar"/>
+		<pathelement location="WebContent/WEB-INF/lib/gson-2.1.jar"/>
+		<pathelement location="WebContent/WEB-INF/lib/eidssAZ.jar"/>
         <pathelement location="WebContent/WEB-INF/classes"/>
     </path>
 
 
 	<path id="jboss-4.2.3.GA.libraryclasspath">
-        <pathelement location="C:\Java\jboss-4.2.3.GA/client/commons-logging.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/client/jboss-j2ee.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/client/ejb3-persistence.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/client/servlet-api.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-annotations.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-entitymanager.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-core.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/lucene-core.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-search.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-validator.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/dom4j.jar"/>
+        <pathelement location="C:/servers/jboss-4.2.3.GA/client/commons-logging.jar"/>
+        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
+        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
+        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
+        <pathelement location="C:/servers/jboss-4.2.3.GA/client/jboss-j2ee.jar"/>
+        <pathelement location="C:/servers/jboss-4.2.3.GA/client/ejb3-persistence.jar"/>
+        <pathelement location="C:/servers/jboss-4.2.3.GA/client/servlet-api.jar"/>
+        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/lib/hibernate-annotations.jar"/>
+        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/lib/hibernate-entitymanager.jar"/>
+        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/lib/hibernate-core.jar"/>
+        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/lib/lucene-core.jar"/>
+        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/lib/hibernate-search.jar"/>
+        <pathelement location="C:/servers/jboss-4.2.3.GA/server/default/lib/hibernate-validator.jar"/>
+		<pathelement location="C:/servers/jboss-4.2.3.GA/server/default/lib/quartz.jar"/>
+		
     </path>
 
 
@@ -132,7 +135,7 @@
 			<attribute name="Country" value="${country}" />
 		</manifest>
 
-		<war destfile="build/${war-file-name}" webxml="build/web.xml" manifest="WebContent/META-INF/MANIFEST.MF">
+		<war destfile="build/${war-file-name}" webxml="production/web.xml" manifest="WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="WebContent" >
 				<include name="**" />
 				<exclude name="WEB-INF/web.xml"/>
@@ -150,15 +153,16 @@
 				<exclude name="/messages*" />
 				<exclude name="/custom_messages*" />
 			</classes>
-
+			
 			<zipfileset file="src/model/messages_en.properties" fullpath="WEB-INF/classes/messages_en.properties" />
-			<zipfileset file="src/model/messages_az.properties" fullpath="WEB-INF/classes/messages_az.properties" />
+			<zipfileset file="src/model/messages_az_AZ.properties" fullpath="WEB-INF/classes/messages_az.properties" />
 			<zipfileset file="src/model/messages_ru.properties" fullpath="WEB-INF/classes/messages_ru.properties" />
+			<zipfileset file="src/model/custom_messages_en.properties" fullpath="WEB-INF/classes/custom_messages_en.properties" />
+			<zipfileset file="src/model/custom_messages_az_AZ.properties" fullpath="WEB-INF/classes/custom_messages_az.properties" />
+			<zipfileset file="src/model/custom_messages_ru.properties" fullpath="WEB-INF/classes/custom_messages_ru.properties" />
 			<zipfileset file="production/persistence.xml" prefix="WEB-INF/classes/META-INF" />
 			<zipfileset file="production/components.xml" prefix="WEB-INF" />
 			<zipfileset file="production/az/faces-config.xml" fullpath="WEB-INF/faces-config.xml" />
-			<!-- okurasov 30.01.12 to determine virtual host -->
-			<zipfileset file="production/az/jboss-web.xml" fullpath="WEB-INF/jboss-web.xml" />
 		</war>
 	</target>
 </project>
