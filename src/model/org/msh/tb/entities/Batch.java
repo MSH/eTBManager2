@@ -47,6 +47,15 @@ public class Batch implements Serializable {
 	private int quantityReceived;
 	private int quantityContainer;
 	private float unitPrice;
+	
+	private String brandName;
+	private String registCardNumber;
+	
+	@Temporal(TemporalType.DATE)
+	private Date registCardBeginDate;
+	
+	@Temporal(TemporalType.DATE)
+	private Date registCardEndDate;
 
 
 	/**
@@ -94,11 +103,12 @@ public class Batch implements Serializable {
 	 * @return
 	 */
 	public int getNumContainers() {
-		return (quantityContainer > 0)? quantityReceived / quantityContainer: 0;
+		return (quantityContainer > 0)? (int)Math.ceil((double)quantityReceived/(double)quantityContainer): 0;
 	}
 	
 	public void setNumContainers(int value) {
-		quantityContainer = (value != 0? quantityReceived/value: 0);
+		if (quantityContainer==0)
+			quantityContainer = (value != 0? quantityReceived/value: 0);
 	}
 	
 	public Integer getQuantityContainer() {
@@ -199,4 +209,62 @@ public class Batch implements Serializable {
 	public void setUnitPrice(float unitPrice) {
 		this.unitPrice = unitPrice;
 	}
+
+	/**
+	 * @return the brandName
+	 */
+	public String getBrandName() {
+		return brandName;
+	}
+
+	/**
+	 * @param brandName the brandName to set
+	 */
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
+	}
+
+	/**
+	 * @return the registCardNumber
+	 */
+	public String getRegistCardNumber() {
+		return registCardNumber;
+	}
+
+	/**
+	 * @param registCardNumber the registCardNumber to set
+	 */
+	public void setRegistCardNumber(String registCardNumber) {
+		this.registCardNumber = registCardNumber;
+	}
+
+	/**
+	 * @return the registCardBeginDate
+	 */
+	public Date getRegistCardBeginDate() {
+		return registCardBeginDate;
+	}
+
+	/**
+	 * @param registCardBeginDate the registCardBeginDate to set
+	 */
+	public void setRegistCardBeginDate(Date registCardBeginDate) {
+		this.registCardBeginDate = registCardBeginDate;
+	}
+
+	/**
+	 * @return the registCardEndDate
+	 */
+	public Date getRegistCardEndDate() {
+		return registCardEndDate;
+	}
+
+	/**
+	 * @param registCardEndDate the registCardEndDate to set
+	 */
+	public void setRegistCardEndDate(Date registCardEndDate) {
+		this.registCardEndDate = registCardEndDate;
+	}
+	
+	
 }
