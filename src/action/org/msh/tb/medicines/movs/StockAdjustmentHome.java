@@ -6,14 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.FieldValueComponent;
@@ -35,6 +36,7 @@ import org.msh.utils.date.DateUtils;
  *
  */
 @Name("stockAdjustmentHome")
+@Scope(ScopeType.CONVERSATION)
 public class StockAdjustmentHome extends Controller {
 	private static final long serialVersionUID = 5670008276682104291L;
 
@@ -47,12 +49,11 @@ public class StockAdjustmentHome extends Controller {
 	private BatchQuantity batchQuantity;
 	private Date movementDate;
 	private FieldValueComponent adjustmentInfo = new FieldValueComponent();
+	private BatchSelection batchSelection;
 	
-	@In(create=true) EntityManager entityManager;
 	@In(create=true) MovementHome movementHome;
 	@In(create=true) UserSession userSession;
 	@In(create=true) InventoryReport inventoryReport;
-	@In(create=true) BatchSelection batchSelection;
 	@In(create=true) FacesMessages facesMessages;
 
 	/**
@@ -146,7 +147,7 @@ public class StockAdjustmentHome extends Controller {
 	
 //		MovementType type = MovementType.ADJUSTMENT;
 		
-		Map<BatchQuantity, Integer> sels = batchSelection.getSelectedBatchesQtds();
+		Map<BatchQuantity, Integer> sels = getBatchSelection().getSelectedBatchesQtds();
 
 		// create batch map to be saved with the movement
 		Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
@@ -196,14 +197,14 @@ public class StockAdjustmentHome extends Controller {
 		if (stockPosition == null)
 			return;
 
-		batchSelection.clear();
-		batchSelection.setTbunit(userSession.getTbunit());
-		batchSelection.setMedicine(stockPosition.getMedicine());
-		batchSelection.setSource(source);
-		batchSelection.setAllowQtdOverStock(true);
+		getBatchSelection().clear();
+		getBatchSelection().setTbunit(userSession.getTbunit());
+		getBatchSelection().setMedicine(stockPosition.getMedicine());
+		getBatchSelection().setSource(source);
+		getBatchSelection().setAllowQtdOverStock(true);
 
 		StockPositionItem item = findStockPosition(stockPosition.getMedicine());
-		batchSelection.setSelectedBatches(getBatchesMap(item, true));
+		getBatchSelection().setSelectedBatches(getBatchesMap(item, true));
 		actionExecuted = false;
 	}
 
@@ -226,13 +227,13 @@ public class StockAdjustmentHome extends Controller {
 		batchQuantity.setTbunit(unit);
 		int qtd = batchQuantity.getQuantity();
 		batchQuantity.setQuantity(0);
-		entityManager.persist(batch);
-		entityManager.persist(batchQuantity);
-		entityManager.flush();
+		App.getEntityManager().persist(batch);
+		App.getEntityManager().persist(batchQuantity);
+		App.getEntityManager().flush();
 		
 		Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
 		batches.put(batch, qtd);
-
+		
 		// generate the new movement
 		movementHome.initMovementRecording();
 		movementHome.prepareNewAdjustment(movementDate, unit, source, batch.getMedicine(), batches, adjustmentInfo);
@@ -246,6 +247,52 @@ public class StockAdjustmentHome extends Controller {
 		return "new-batch-saved";
 	}
 	
+	/**
+	 * Persist changes
+	 * @author A.M.
+	 */
+	public String saveEditBatch() {
+		if (batchQuantity == null)
+			return "error";
+
+		if(existingBatchInThisUnit)
+			return "error";
+			
+		Tbunit unit = userSession.getTbunit();
+		
+		Batch batch = batchQuantity.getBatch();
+		batchQuantity.setSource(source);
+		batchQuantity.setTbunit(unit);
+		int qtd = batchQuantity.getQuantity();
+		App.getEntityManager().persist(batch);
+		App.getEntityManager().persist(batchQuantity);
+		App.getEntityManager().flush();
+		
+		// generate the new movement
+		movementHome.initMovementRecording();
+		//movementHome.prepareNewAdjustment(movementDate, unit, source, batch.getMedicine(), batches, adjustmentInfo);
+		movementHome.savePreparedMovements();
+
+		Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
+		batches.put(batch, qtd);
+		saveLog(RoleAction.EDIT, batches);
+		
+		actionExecuted = true;
+		
+		this.items = null;
+		
+		return "edit-batch-finished";
+	}
+	
+	/**
+	 * Save new batch or persist changes
+	 * @author A.M.
+	 */
+	public String saveBatch() {
+		if (stockPosition==null)
+			return saveNewBatch();
+		return saveEditBatch();
+	}
 	
 	/**
 	 * Remove a batch from a unit
@@ -298,7 +345,7 @@ public class StockAdjustmentHome extends Controller {
 		if(batchQuantity != null && batchQuantity.getBatch() != null && batchQuantity.getBatch().getBatchNumber() != null && 
 					!batchQuantity.getBatch().getBatchNumber().equals("") && batchQuantity.getBatch().getMedicine() != null){	
 			
-			ArrayList<BatchQuantity> bq = (ArrayList<BatchQuantity>) entityManager.createQuery("from BatchQuantity bq " +
+			ArrayList<BatchQuantity> bq = (ArrayList<BatchQuantity>) App.getEntityManager().createQuery("from BatchQuantity bq " +
 																			  "join bq.batch b " +
 																			  "where bq.tbunit.id = :unitId and " +
 																			  "b.batchNumber = :batchNumber and " +
@@ -314,7 +361,7 @@ public class StockAdjustmentHome extends Controller {
 				existingBatchInThisUnit = true;
 			}else{
 				existingBatchInThisUnit = false;
-				ArrayList<Batch> b = (ArrayList<Batch>) entityManager.createQuery("from Batch b " +
+				ArrayList<Batch> b = (ArrayList<Batch>) App.getEntityManager().createQuery("from Batch b " +
 									  "where b.batchNumber = :batchNumber and " +
 									  "b.manufacturer = :manufacturer and " +
 									  "b.medicine.id = :medicineId")
@@ -332,14 +379,23 @@ public class StockAdjustmentHome extends Controller {
 	
 	public void clearBatch(){
 		existingBatchInThisUnit = false;
-		if (batchQuantity == null)
-			batchQuantity = new BatchQuantity();
+		batchQuantity = new BatchQuantity();
 		batchQuantity.setBatch(new Batch());
 	}
 	
 	public List<StockPositionItem> getItems() {
 		if (items == null)
 			createItems();
+		//recount summary quantities
+		for (StockPositionItem item:items){
+			int q = 0;
+			for (BatchQuantity b: item.getBatches()){
+				q+=b.getQuantity();
+			}
+			item.stockPosition.setQuantity(q);
+			App.getEntityManager().persist(item.stockPosition);
+		}
+		App.getEntityManager().flush();
 		return items;
 	}
 
@@ -357,7 +413,7 @@ public class StockAdjustmentHome extends Controller {
 	public void setSourceId(Integer id) {
 		if (id == null)
 			 source = null;
-		else source = entityManager.find(Source.class, id); 
+		else source = App.getEntityManager().find(Source.class, id); 
 	}
 	
 	public Integer getSourceId() {
@@ -435,7 +491,7 @@ public class StockAdjustmentHome extends Controller {
 	public void setStockPositionId(Integer val) {
 		if (val == null)
 			 stockPosition = null;
-		else stockPosition = entityManager.find(StockPosition.class, val);
+		else stockPosition = App.getEntityManager().find(StockPosition.class, val);
 	}
 
 	/**
@@ -479,7 +535,7 @@ public class StockAdjustmentHome extends Controller {
 	public void setBatchQuantityId(Integer id) {
 		if (id == null)
 			 batchQuantity = null;
-		else batchQuantity = entityManager.find(BatchQuantity.class, id);
+		else batchQuantity = App.getEntityManager().find(BatchQuantity.class, id);
 	}
 	
 	public boolean checkExpiringBatch(Object o){
@@ -502,6 +558,16 @@ public class StockAdjustmentHome extends Controller {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Get instance of batchSelection
+	 * @return the batchSelection
+	 */
+	public BatchSelection getBatchSelection() {
+		if (batchSelection == null)
+			batchSelection = (BatchSelection) App.getComponent("batchSelection");
+		return batchSelection;
 	}
 	
 }

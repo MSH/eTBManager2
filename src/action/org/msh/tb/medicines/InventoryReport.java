@@ -53,7 +53,8 @@ public class InventoryReport {
 			b = bq.getBatch();
 		}
 		
-		if(b != null){
+		if(b != null)
+			if(b.getExpiryDate()!=null){
 /*			Calendar now  = Calendar.getInstance();
 			Calendar batchExpiringDate = Calendar.getInstance();
 			batchExpiringDate.setTime(b.getExpiryDate());

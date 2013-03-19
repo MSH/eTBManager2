@@ -43,8 +43,7 @@ public class BatchQuantity implements Serializable {
 	private Batch batch;
 
 	private int quantity;
-	
-	
+
 	/**
 	 * @return the id
 	 */
@@ -112,4 +111,12 @@ public class BatchQuantity implements Serializable {
 		Batch batch = getBatch();
 		return (batch != null? batch.getUnitPrice() * quantity: 0);
 	}
+	
+	public float getContainerPrice() {
+		return (batch != null? batch.getUnitPrice()*batch.getQuantityContainer().floatValue():0);
+	}
+	public void setContainerPrice(float containerPrice) {
+		
+	}
+
 }

@@ -319,9 +319,32 @@ public class MedicineManStartHome {
 	public class BatchInfo {
 		private Batch batch;
 		private int quantity;
-
+		private float containerPrice;
+		private int numContainers;
+		
+		
 		public float getTotalPrice() {
 			return quantity * batch.getUnitPrice();
+		}
+		
+		public float getContainerPrice() {
+			if (containerPrice==0)
+				containerPrice = batch.getUnitPrice()*batch.getQuantityContainer();
+			return containerPrice;
+		}
+
+		public void setContainerPrice(float containerPrice) {
+			this.containerPrice = containerPrice;
+		}
+		
+		public int getNumContainers() {
+			if (numContainers==0)
+				numContainers = batch.getNumContainers();
+			return numContainers;
+		}
+		
+		public void setNumContainers(int value) {
+			numContainers = value;
 		}
 		
 		/**
@@ -347,6 +370,7 @@ public class MedicineManStartHome {
 		 */
 		public void setQuantity(int quantity) {
 			this.quantity = quantity;
+			batch.setQuantityReceived(quantity);
 		}
 	}
 
@@ -403,7 +427,7 @@ public class MedicineManStartHome {
 			float qtd = getQuantity();
 			if (qtd == 0)
 				 return null;
-			else return qtd/tot;
+			else return tot/qtd;
 		}
 		
 		public Map<Batch, Integer> getBatchesMap() {

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:s="http://jboss.com/products/seam/taglib">
+
+    <div class="batch-icon" />
+    #{batch.batchNumber}
+    <div class="text-small">#{batch.brandName} 
+	    <s:fragment rendered="#{batch.manufacturer!='' and batch.manufacturer != null}">
+	    	(#{batch.manufacturer})
+	    </s:fragment>
+    </div>
+    
+    <div class="text-small">
+	    #{batch.registCardNumber} 
+	    <s:fragment rendered="#{batch.registCardBeginDate!=null or batch.registCardEndDate != null}">
+		    <h:outputText value=" ("/> 
+			<h:outputText value="#{batch.registCardBeginDate}" converter="localeDateConverter" />
+			<h:outputText value=" / "/> 
+			<h:outputText value="#{batch.registCardEndDate}" converter="localeDateConverter" />
+			<h:outputText value=")"/> 
+	    </s:fragment>
+    </div>
+    
+</ui:composition>
