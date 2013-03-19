@@ -115,7 +115,7 @@ function validateInput(edt) {
 				<h:outputText value="#{messages['global.unitPrice']}" styleClass="colrh"/>
 			</f:facet>
 			<h:outputText value="#{it.item.batch.unitPrice}">
-				<f:convertNumber pattern="#,###,###,##0.0000" />
+				<f:convertNumber pattern="#,###,###,##0.00000" />
 			</h:outputText>
 		</h:column>
 		
