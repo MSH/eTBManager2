@@ -52,7 +52,8 @@ public enum TbField {
 	//Indonesia
 	SUSPECT_CRITERIA,
 	//Ukraine
-	CAUSE_OF_CHANGE;
+	CAUSE_OF_CHANGE,
+	MANUFACTURER;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

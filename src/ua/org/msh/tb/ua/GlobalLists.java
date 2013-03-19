@@ -38,7 +38,8 @@ public class GlobalLists {
 		TbField.REGISTRATION_CATEGORY,
 		TbField.ADJUSTMENT,
 		TbField.CAUSE_OF_CHANGE,
-		TbField.MOLECULARBIOLOGY_METHOD
+		TbField.MOLECULARBIOLOGY_METHOD,
+		TbField.MANUFACTURER
 	};
 	
 	public static final CaseState outcomes[] = {

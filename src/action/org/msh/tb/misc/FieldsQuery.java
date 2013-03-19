@@ -313,5 +313,10 @@ public class FieldsQuery {
 		field = TbField.CAUSE_OF_CHANGE;
 		return getValues();
 	}
+	
+	public List<FieldValue> getManufacturersMed() {
+		field = TbField.MANUFACTURER;
+		return getValues();
+	}
 }
 
