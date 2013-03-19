@@ -2,7 +2,7 @@
  * 13-mar-2013
  * By A.M.
  * 
- * For all countryes. Add new fields
+ * For all countries. Add new fields
  * 
 ****************************************************************/
 
