@@ -215,6 +215,77 @@
 		<a:actionparam name="param1" assignTo="#{examCultureHome.id}" converter="javax.faces.Integer"/>
 	</a:jsFunction>
 
+	<div class="spacer" />
+
+	<h:panelGroup id="pnlgenexpert">
+	<s:link view="/cases/edtexamgenexpert.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" 
+		styleClass="button-alt" onclick="disableButton(this)">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h2>#{messages['cases.examgenexpert']}</h2>
+		<s:div styleClass="region3" rendered="#{empty examGenexpertHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
+		<h:dataTable value="#{examGenexpertHome.allResults}" var="r" rendered="#{not empty examGenexpertHome.allResults}" width="100%" 
+			styleClass="table1" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
+				</f:facet>
+				<s:link view="/cases/edtexamgenexpert.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
+					<f:param name="id" value="#{tbcase.id}"/>
+					<f:param name="examid" value="#{r.id}"/>
+					<h:outputFormat value="#{messages[r.monthDisplay]}" >
+						<f:param value="#{r.monthTreatment}"/>
+					</h:outputFormat>
+				</s:link>
+				<div style="margin-left:20px;display:block;">
+				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
+				<br/>
+				<h:outputText value="#{r.sampleNumber}" title="#{messages['PatientSample.sampleNumber']}" />
+				</div>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['Laboratory']}" styleClass="collh"/>
+				</f:facet>
+				<h:outputText value="#{r.laboratory.abbrevName}" title="#{r.laboratory.name}" />
+				<br/>
+				#{r.laboratory.adminUnit.name}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
+				</f:facet>
+				#{messages[r.result.key]}
+				<div>
+					<h:outputText value="#{messages[r.rifResult.key]}" rendered="#{r.result=='TB_DETECTED'}" />
+				</div>
+			</h:column>
+				
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
+				</f:facet>
+				<h:outputText value="#{r.comments}" converter="rmemoria.TextConverter" escape="false" styleClass="text"/>
+			</h:column>
+
+			<h:column rendered="#{caseHome.canEditExams}">
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamGenexpert(#{r.id});return false;" style="font-size:9px;">
+				</h:commandLink>
+			</h:column>			
+		</h:dataTable>
+	</h:panelGroup>
+
+	<a:jsFunction name="remExamGenexpert" action="#{examGenexpertHome.remove}" reRender="pnlgenexpert" ajaxSingle="true" rendered="#{caseHome.canEditExams}">
+		<a:actionparam name="param1" assignTo="#{examGenexpertHome.id}" converter="javax.faces.Integer"/>
+	</a:jsFunction>
+	
+	
 	<div class="spacer" />	
 
 	<h:panelGroup id="pnldst">	

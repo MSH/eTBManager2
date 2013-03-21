@@ -41,5 +41,5 @@
     <changeSet id="4" author="rmemoria">
     	<dropColumn tableName="forecasting" columnName="oldReferenceDate"/>
     </changeSet>
- 
+  
 </databaseChangeLog>

@@ -118,7 +118,7 @@ public class UserProfileHome extends EntityHomeEx<UserProfile>{
 		
 		nodes = new ArrayList<PermissionNode>();
 		userProfile = getInstance();
-		
+
 		for (UserPermission perm: lst) {
 			UserRole role = perm.getUserRole();
 			if (role.getLevel() == 1) {

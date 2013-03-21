@@ -182,7 +182,8 @@ public class GlobalLists {
 		DrugResistanceType.EXTENSIVEDRUG_RESISTANCE
 		
 	};
-	
+
+
 	/**
 	 * Get component according to the workspace in use
 	 * @param <E>
