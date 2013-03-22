@@ -482,22 +482,28 @@
 			
 			<h:column>
 				<f:facet name="header">
-					<h:outputText value="#{messages['uk_UA.MolecularBiology.result']}" styleClass="collh"/>
+					<h:outputText value="#{messages['cases.exams.method']}" styleClass="collh"/>
 				</f:facet>
 				#{messages[r.result.messageKey]}
-				<s:div rendered="#{not empty r.method}" style="display:block;clear:both;">
-					<h:outputText value="#{messages['cases.exams.method']}"/>: #{r.method}
-				</s:div>
 			</h:column>
 			
 			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['uk_UA.MolecularBiology.result']}" styleClass="collh"/>
+				</f:facet>
+				#{molecularBiologyUAHome.getResult(r)}
+				<br/>
+				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" />
+			</h:column>
+			
+			<h:column rendered="false">
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.exams.dateRelease']}" styleClass="collh"/>
 				</f:facet>
 				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" />
 			</h:column>
 						
-			<h:column>
+			<h:column rendered="false">
 				<f:facet name="header">
 					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
 				</f:facet>

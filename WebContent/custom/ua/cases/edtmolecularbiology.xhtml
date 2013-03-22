@@ -22,7 +22,7 @@
     
     <div class="form-content">
     <table width="100%">
-    <tr><td>
+    <tr><td colspan="6">
 
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
@@ -31,16 +31,9 @@
     	<ui:param name="datefield" value="#{molecularBiology.date}" /> 
     </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['uk_UA.MolecularBiology.result']}:</ui:define>
-    	<h:selectOneMenu value="#{molecularBiology.result}" required="true">
-    		<s:selectItems value="#{molecularBiologyHome.resultOptions}" var="it" noSelectionLabel="-" label="#{messages[it.messageKey]}" />
-    		<s:convertEnum />
-    	</h:selectOneMenu>
-    </s:decorate>
-
-	<s:decorate template="/layout/labselection.xhtml" >
+	<s:decorate template="/custom/ua/layout/labselection.xhtml" >
 		<ui:param name="labselection" value="#{molecularBiologyHome.labselection}" />
+		<ui:param name="required" value="true" />
 	</s:decorate>
 
     <s:decorate template="/layout/dateedit.xhtml" >
@@ -51,13 +44,120 @@
     	<ui:param name="datefield" value="#{molecularBiology.dateRelease}" /> 
     </s:decorate>
 
+    <script type="text/javascript">
+<!--
+
+	function showResultForm(cb) {
+	  if (cb.selectedIndex == 0 || cb.selectedIndex == 1)
+	  	jQuery('#gx').show(500);
+	  else jQuery('#gx').hide(500);
+	  if (cb.selectedIndex == 1)
+	  	jQuery('#gtplus').show(500);
+	  else jQuery('#gtplus').hide(500);
+	  if (cb.selectedIndex == 2)
+	  	jQuery('#gtsl').show(500);
+	  else jQuery('#gtsl').hide(500);
+	}
+	
+-->
+</script>
+
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
-    	<h:selectOneMenu value="#{molecularBiology.method}" required="true">
-    		<s:selectItems value="#{fieldsQuery.molecularBiologyMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
-    		<s:convertEntity />
+    	<h:selectOneMenu value="#{molecularBiology.result}" required="true" id="mbtype">
+    		<s:selectItems value="#{molecularBiologyHome.resultOptions}" var="it" label="#{messages[it.messageKey]}" hideNoSelectionLabel="true"/>
+    		<s:convertEnum />
     	</h:selectOneMenu>
     </s:decorate>
+    <rich:jQuery selector="#mbtype" query="change(function(){showResultForm(this); })" />
+
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">MTB/PCR:</ui:define>
+    	<h:selectOneMenu value="#{molecularBiologyUA.pcr}" required="true">
+    		<f:selectItem itemLabel="+" itemValue="#{true}"/>
+    		<f:selectItem itemLabel="-" itemValue="#{false}"/>
+    	</h:selectOneMenu>
+    </s:decorate>
+    
+   	<table>
+		<tr><td>
+			<div id="gx" style="clear:both;">
+				<s:decorate template="/layout/edit.xhtml" >
+			    	<ui:define name="label">R:</ui:define>
+			    	<h:selectOneMenu value="#{molecularBiologyUA.r}">
+			    		<f:selectItem itemLabel="+" itemValue="#{true}"/>
+			    		<f:selectItem itemLabel="-" itemValue="#{false}"/>
+			    	</h:selectOneMenu>
+		    	</s:decorate>
+			</div>
+		</td><td>
+			
+			<div id="gtplus" style="clear:both;">
+				<s:decorate template="/layout/edit.xhtml" >
+			    	<ui:define name="label">H:</ui:define>
+			    	<ui:param name="labelstyle" value="width:30px;" />
+	    			<h:selectOneMenu value="#{molecularBiologyUA.h}">
+			    		<f:selectItem itemLabel="+" itemValue="#{true}"/>
+			    		<f:selectItem itemLabel="-" itemValue="#{false}"/>
+			    	</h:selectOneMenu>
+		    	</s:decorate>
+			</div>
+		</td></tr>
+	</table>
+	
+	<div id="gtsl" style="clear:both;">
+	<table>
+		<tr><td>
+		<s:decorate template="/layout/edit.xhtml" >
+	    	<ui:define name="label">Km:</ui:define>
+	    	<h:selectOneMenu value="#{molecularBiologyUA.km}">
+	    		<f:selectItem itemLabel="+" itemValue="#{true}"/>
+	    		<f:selectItem itemLabel="-" itemValue="#{false}"/>
+	    	</h:selectOneMenu>
+    	</s:decorate>
+    	</td><td>
+    	<s:decorate template="/layout/edit.xhtml" >
+	    	<ui:define name="label">Cm:</ui:define>
+	    	<ui:param name="labelstyle" value="width:30px;" />
+	    	<h:selectOneMenu value="#{molecularBiologyUA.cm}">
+	    		<f:selectItem itemLabel="+" itemValue="#{true}"/>
+	    		<f:selectItem itemLabel="-" itemValue="#{false}"/>
+	    	</h:selectOneMenu>
+    	</s:decorate>
+    	</td><td>
+    	<s:decorate template="/layout/edit.xhtml" >
+	    	<ui:define name="label">E:</ui:define>
+	    	<ui:param name="labelstyle" value="width:30px;" />
+	    	<h:selectOneMenu value="#{molecularBiologyUA.e}">
+	    		<f:selectItem itemLabel="+" itemValue="#{true}"/>
+	    		<f:selectItem itemLabel="-" itemValue="#{false}"/>
+	    	</h:selectOneMenu>
+    	</s:decorate>
+    	</td><td>
+    	<s:decorate template="/layout/edit.xhtml" >
+	    	<ui:define name="label">Lfx:</ui:define>
+	    	<ui:param name="labelstyle" value="width:30px;" />
+	    	<h:selectOneMenu value="#{molecularBiologyUA.lfx}">
+	    		<f:selectItem itemLabel="+" itemValue="#{true}"/>
+	    		<f:selectItem itemLabel="-" itemValue="#{false}"/>
+	    	</h:selectOneMenu>
+    	</s:decorate>
+    	</td><td>
+    	<s:decorate template="/layout/edit.xhtml" >
+	    	<ui:define name="label">Mfx:</ui:define>
+	    	<ui:param name="labelstyle" value="width:30px;" />
+	    	<h:selectOneMenu value="#{molecularBiologyUA.mfx}">
+	    		<f:selectItem itemLabel="+" itemValue="#{true}"/>
+	    		<f:selectItem itemLabel="-" itemValue="#{false}"/>
+	    	</h:selectOneMenu>
+    	</s:decorate>
+    	</td></tr>
+	</table>
+	</div>
+	<rich:jQuery selector="#mbtype" query="each(function(){ if (this.selectedIndex == 2) {jQuery('#gx').hide(); }})" />
+	<rich:jQuery selector="#mbtype" query="each(function(){ if (this.selectedIndex != 2) {jQuery('#gtsl').hide(); }})" />
+	<rich:jQuery selector="#mbtype" query="each(function(){ if (this.selectedIndex != 1) {jQuery('#gtplus').hide(); }})" />
+
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
@@ -73,7 +173,7 @@
 		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-        <a:commandLink action="#{molecularBiologyHome.persist}" styleClass="button" reRender="formexam" 
+        <a:commandLink action="#{molecularBiologyHome.persist}" styleClass="button" reRender="formexam,messages" 
         	onclick="if (!disableButton(this)) return false;" >
         	<span>#{messages['form.save']}</span>
         </a:commandLink>

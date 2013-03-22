@@ -4,12 +4,11 @@ import org.msh.tb.entities.enums.MessageKey;
 
 public enum MolecularBiologyResult implements MessageKey {
 
-	NOTDONE,
-	MTUBERCULOSIS,
-	MICROBAC_NONTB,
-	NEGATIVE;
+	GeneXpert,
+	GenoTypeMTBDRplus,
+	GenoTypeMTBDRsl;
 	
 	public String getMessageKey() {
-		return "uk_UA." + getClass().getSimpleName() + "." + toString();
+		return toString();
 	}
 }

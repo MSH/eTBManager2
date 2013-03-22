@@ -4,6 +4,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.tb.application.App;
 import org.msh.tb.cases.exams.ExamHome;
 import org.msh.tb.laboratories.LaboratorySelection;
 import org.msh.tb.transactionlog.LogInfo;
@@ -15,12 +16,6 @@ import org.msh.tb.ua.entities.enums.MolecularBiologyResult;
 public class MolecularBiologyHome extends ExamHome<MolecularBiologyUA> {
 	private static final long serialVersionUID = -1149058962516904296L;
 
-	private static final MolecularBiologyResult[] options = {
-		MolecularBiologyResult.MTUBERCULOSIS,
-		MolecularBiologyResult.MICROBAC_NONTB,
-		MolecularBiologyResult.NEGATIVE
-	};
-	
 	@In(create=true) FacesMessages facesMessages;
 	
 	private LaboratorySelection labselection = new LaboratorySelection();
@@ -34,11 +29,12 @@ public class MolecularBiologyHome extends ExamHome<MolecularBiologyUA> {
 
 	@Override
 	public String persist() {
+		if (!validate())
+			return "error";
+
 		MolecularBiologyUA mb = getInstance();
-		
 		if (labselection != null)
 			mb.setLaboratory(labselection.getLaboratory());
-
 		return super.persist();
 	}
 
@@ -56,23 +52,31 @@ public class MolecularBiologyHome extends ExamHome<MolecularBiologyUA> {
 			res = false;
 		}
 
-		if (mb.getMethod() == null) {
+		/*if (mb.getMethod() == null) {
 			facesMessages.addToControlFromResourceBundle("cbMBMethod", "javax.faces.component.UIInput.REQUIRED");
 			res = false;
-		}
+		}*/
 		
+		if ((MolecularBiologyResult.GeneXpert.equals(mb.getResult()) && !mb.isPcr() && mb.getR())
+		|| (MolecularBiologyResult.GenoTypeMTBDRplus.equals(mb.getResult()) && !mb.isPcr() && (mb.getR() || mb.getH()))
+		|| (MolecularBiologyResult.GenoTypeMTBDRsl.equals(mb.getResult()) && !mb.isPcr() && (mb.getKm() || mb.getCm() || mb.getE() || mb.getLfx() || mb.getMfx())))
+			{
+				facesMessages.addFromResourceBundle(App.getMessage("MolecularBiology.error1"));
+				res = false;
+			}
+		/*if (!mb.isPcr() && mb.isResist())
+			{
+				facesMessages.addFromResourceBundle(App.getMessage("MolecularBiology.error1"));
+				res = false;
+			}*/
 		return res;
 	}
 	
-	public MolecularBiologyResult[] getNotifResultOptions() {
+	public MolecularBiologyResult[] getResultOptions() {
 		return MolecularBiologyResult.values();
 	}
 	
 
-	public MolecularBiologyResult[] getResultOptions() {
-		return options;
-	}
-	
 	public LaboratorySelection getLabselection() {
 		return labselection;
 	}
@@ -93,4 +97,32 @@ public class MolecularBiologyHome extends ExamHome<MolecularBiologyUA> {
 			labselection.setLaboratory(getInstance().getLaboratory());
 		}
 	}
+	
+	/**
+	 * Return result of current test in user eye view 
+	 * */
+	public String getResult(MolecularBiologyUA mb){
+		String res = (MolecularBiologyResult.GeneXpert.equals(mb.getResult()) ? "MTB":"MBT")+sign(mb.isPcr())+"(PCR"+sign(mb.isPcr())+"), Resist "+
+		(MolecularBiologyResult.GenoTypeMTBDRsl.equals(mb.getResult()) ? 2:1)+
+		sign(mb.isResistance())+" (PCR\\";
+		if (MolecularBiologyResult.GeneXpert.equals(mb.getResult()))
+			res += "R"+sign(mb.getR());
+		if (MolecularBiologyResult.GenoTypeMTBDRplus.equals(mb.getResult()))
+			res += "R"+sign(mb.getR())+", H"+sign(mb.getH());
+		if (MolecularBiologyResult.GenoTypeMTBDRsl.equals(mb.getResult()))
+			res += "Km"+sign(mb.getKm())+", Cm"+sign(mb.getCm())+", E"+sign(mb.getE())+", Lfx"+sign(mb.getLfx())+", Mfx"+sign(mb.getMfx());
+		res += ")";
+		return res;
+	}
+	
+	/**
+	 * Return "+" or "-" depending on boolean value 
+	 * */
+	 private String sign(Boolean val){
+		 if (val)
+			 return "+";
+		 if (!val)
+			 return "-";
+		 return null;
+	 }
 }
