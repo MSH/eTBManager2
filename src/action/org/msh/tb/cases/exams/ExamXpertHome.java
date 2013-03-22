@@ -10,7 +10,7 @@ import org.msh.tb.entities.enums.XpertResult;
 import org.msh.tb.entities.enums.XpertRifResult;
 import org.msh.tb.transactionlog.LogInfo;
 
-@Name("examGenexpertHome")
+@Name("examXpertHome")
 @LogInfo(roleName="EXAM_XPERT")
 @Scope(ScopeType.CONVERSATION)
 public class ExamXpertHome extends LaboratoryExamHome<ExamXpert> {

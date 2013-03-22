@@ -89,10 +89,10 @@
 		<span>#{messages['cases.details.newresult']}</span>
 	</s:link>
 	<h2>#{messages['cases.examxpert']}</h2>
-		<s:div styleClass="region3" rendered="#{empty examGenexpertHome.allResults}"><div class="content">
+		<s:div styleClass="region3" rendered="#{empty examXpertHome.allResults}"><div class="content">
 			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
 		</div></s:div>
-		<h:dataTable value="#{examGenexpertHome.allResults}" var="r" rendered="#{not empty examGenexpertHome.allResults}" width="100%" 
+		<h:dataTable value="#{examXpertHome.allResults}" var="r" rendered="#{not empty examXpertHome.allResults}" width="100%" 
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
 			<h:column>
 				<f:facet name="header">
@@ -145,8 +145,8 @@
 		</h:dataTable>
 	</h:panelGroup>
 
-	<a:jsFunction name="remExamGenexpert" action="#{examGenexpertHome.remove}" reRender="pnlgenexpert" ajaxSingle="true" rendered="#{caseHome.canEditExams}">
-		<a:actionparam name="param1" assignTo="#{examGenexpertHome.id}" converter="javax.faces.Integer"/>
+	<a:jsFunction name="remExamGenexpert" action="#{examXpertHome.remove}" reRender="pnlgenexpert" ajaxSingle="true" rendered="#{caseHome.canEditExams}">
+		<a:actionparam name="param1" assignTo="#{examXpertHome.id}" converter="javax.faces.Integer"/>
 	</a:jsFunction>
 	</s:fragment>
 	

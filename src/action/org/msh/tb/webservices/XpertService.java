@@ -32,7 +32,7 @@ public class XpertService {
 	 * @return instance of the {@link Response} object containing the result of the operation
 	 */
 	@WebMethod
-	public Response postResult(@WebParam String sessionId, @WebParam XpertData examResult) {
+	public Response postResult(@WebParam(name="sessionId") String sessionId, @WebParam(name="examResult") XpertData examResult) {
 		return (new RemoteActionHandler(sessionId, examResult) {
 			@Override
 			protected Object execute(Object result) {
@@ -86,7 +86,7 @@ public class XpertService {
 		}
 
 		// check for sample id
-		ExamXpertHome examHome = (ExamXpertHome)Component.getInstance("examGenexpertHome", true);
+		ExamXpertHome examHome = (ExamXpertHome)Component.getInstance("examXpertHome", true);
 		if (!examHome.findExamBySampleId(tbcase, result.getSampleId())) {
 			return new Response(Response.RESP_VALIDATION_ERROR, "No sample with id " + result.getSampleId() + " was found to case " + tbcase.getId());
 		}

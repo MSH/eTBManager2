@@ -65,6 +65,16 @@
 	    <url-pattern>/services/exchange/*</url-pattern>
   	</servlet-mapping>
 
+  	<servlet>
+    	<servlet-name>xpertService</servlet-name>
+		<servlet-class>org.msh.tb.webservices.XpertService</servlet-class>
+	</servlet>
+
+  	<servlet-mapping>
+    	<servlet-name>xpertService</servlet-name>
+	    <url-pattern>/services/xpertservice/*</url-pattern>
+  	</servlet-mapping>
+
  
 	<!-- Ajax4jsf -->
 
