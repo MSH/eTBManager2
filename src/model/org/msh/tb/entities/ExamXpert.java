@@ -5,39 +5,40 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.msh.tb.entities.enums.GenexpertResult;
+import org.msh.tb.entities.enums.XpertResult;
+import org.msh.tb.entities.enums.XpertRifResult;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
-@Table(name="examgenexpert")
-public class ExamGenexpert extends LaboratoryExamResult implements Serializable{
+@Table(name="examxpert")
+public class ExamXpert extends LaboratoryExamResult implements Serializable{
 	private static final long serialVersionUID = 7672681749376963359L;
 	
 	@PropertyLog(operations={Operation.ALL})
-	private GenexpertResult result;
+	private XpertResult result;
 	
-	private GenexpertResult rifResult;
+	private XpertRifResult rifResult;
 
-	public GenexpertResult getResult() {
+	public XpertResult getResult() {
 		return result;
 	}
 
-	public void setResult(GenexpertResult result) {
+	public void setResult(XpertResult result) {
 		this.result = result;
 	}
 
 	/**
 	 * @return the rifResult
 	 */
-	public GenexpertResult getRifResult() {
+	public XpertRifResult getRifResult() {
 		return rifResult;
 	}
 
 	/**
 	 * @param rifResult the rifResult to set
 	 */
-	public void setRifResult(GenexpertResult rifResult) {
+	public void setRifResult(XpertRifResult rifResult) {
 		this.rifResult = rifResult;
 	}
 }

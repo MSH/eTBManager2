@@ -17,6 +17,25 @@ public class Response {
 	private int errorno;
 	private String errormsg;
 
+
+	public Response() {
+		super();
+	}
+	
+	public Response(int errorno, String errormsg) {
+		super();
+		this.errorno = errorno;
+		this.errormsg = errormsg;
+	}
+
+
+	public Response(String result) {
+		super();
+		this.result = result;
+		this.errorno = RESP_SUCCESS;
+	}
+
+
 	/**
 	 * @return the result
 	 */

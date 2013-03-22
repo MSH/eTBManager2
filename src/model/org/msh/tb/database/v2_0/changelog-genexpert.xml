@@ -13,14 +13,14 @@
  			<column name="id" valueNumeric="200"/>
  			<column name="changeable" valueBoolean="true"/>
  			<column name="code" value="010403" />
- 			<column name="Role_Name" value="EXAM_GENEXPERT" />
+ 			<column name="Role_Name" value="EXAM_XPERT" />
  			<column name="internalUse" valueBoolean="false" />
  			<column name="byCaseClassification" valueBoolean="false" />
- 			<column name="messageKey" value="cases.genexpert" />
+ 			<column name="messageKey" value="cases.examxpert" />
  		</insert>
  		
  		<!-- Create the table to store GeneXpert results -->
- 		<createTable tableName="examgenexpert">
+ 		<createTable tableName="examxpert">
  			<column name="id" type="int" autoIncrement="true">
  				<constraints primaryKey="true" nullable="false"/>
  			</column>
@@ -48,19 +48,19 @@
  		</createTable>
 
  		<addForeignKeyConstraint constraintName="genex_case_fk" 
- 			baseColumnNames="case_id" baseTableName="examgenexpert" referencedTableName="tbcase" referencedColumnNames="id" 
+ 			baseColumnNames="case_id" baseTableName="examxpert" referencedTableName="tbcase" referencedColumnNames="id" 
  			onDelete="CASCADE" onUpdate="CASCADE"/>
 
  		<addForeignKeyConstraint constraintName="genex_lab_fk" 
- 			baseColumnNames="laboratory_id" baseTableName="examgenexpert" referencedTableName="laboratory" referencedColumnNames="id" 
+ 			baseColumnNames="laboratory_id" baseTableName="examxpert" referencedTableName="laboratory" referencedColumnNames="id" 
  			onDelete="CASCADE" onUpdate="CASCADE"/>
 
  		<addForeignKeyConstraint constraintName="genex_transnew_fk" 
- 			baseColumnNames="createTransaction_id" baseTableName="examgenexpert" referencedTableName="transactionLog" referencedColumnNames="id" 
+ 			baseColumnNames="createTransaction_id" baseTableName="examxpert" referencedTableName="transactionLog" referencedColumnNames="id" 
  			onDelete="CASCADE" onUpdate="CASCADE"/>
 
  		<addForeignKeyConstraint constraintName="genex_transupdt_fk" 
- 			baseColumnNames="lastTransaction_id" baseTableName="examgenexpert" referencedTableName="transactionLog" referencedColumnNames="id" 
+ 			baseColumnNames="lastTransaction_id" baseTableName="examxpert" referencedTableName="transactionLog" referencedColumnNames="id" 
  			onDelete="CASCADE" onUpdate="CASCADE"/>
  
  		<!-- Insert the permission in the administrator profile -->
@@ -69,21 +69,21 @@
 			SELECT false, false, true, id, 200, 0 
 			from userprofile
 			WHERE name like "%administ%"
-			AND NOT EXISTS(SELECT * FROM userpermission WHERE role_id=200 AND profile_id=userprofile.id);
+			AND NOT EXISTS(SELECT * FROM userpermission WHERE role_id=200 AND profile_id=userprofile.id and caseClassification=0);
  		</sql>
  		<sql>
  			INSERT INTO userpermission(canchange, canexecute, grantPermission, profile_id, role_id, caseClassification)
 			SELECT false, false, true, id, 200, 1 
 			from userprofile
 			WHERE name like "%administ%"
-			AND NOT EXISTS(SELECT * FROM userpermission WHERE role_id=200 AND profile_id=userprofile.id);
+			AND NOT EXISTS(SELECT * FROM userpermission WHERE role_id=200 AND profile_id=userprofile.id and caseClassification=1);
  		</sql>
  		<sql>
  			INSERT INTO userpermission(canchange, canexecute, grantPermission, profile_id, role_id, caseClassification)
 			SELECT false, false, true, id, 200, 2 
 			from userprofile
 			WHERE name like "%administ%"
-			AND NOT EXISTS(SELECT * FROM userpermission WHERE role_id=200 AND profile_id=userprofile.id);
+			AND NOT EXISTS(SELECT * FROM userpermission WHERE role_id=200 AND profile_id=userprofile.id and caseClassification=2);
  		</sql>
  	</changeSet>
  

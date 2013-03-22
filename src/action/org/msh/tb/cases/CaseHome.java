@@ -301,6 +301,16 @@ public class CaseHome extends WsEntityHome<TbCase>{
 	public boolean isCanEditExams() {
 		return getTbCase().isOpen() && checkRoleBySuffix("CASE_EXAMS_EDT") && isWorkingUnit();
 	}
+
+	
+	/**
+	 * Return true if the xpert exams are available and user can see the list of exams by case
+	 * @return true if xpert exams are available
+	 */
+	public boolean isGenexpertEnabled() {
+		return checkRoleBySuffix("EXAM_XPERT");
+	}
+	
 	/**
 	 * Several exams results may be add to closed cases, because of long term to get such results
 	 * AK - 05/07/2012

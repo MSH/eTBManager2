@@ -16,11 +16,10 @@ public class DataExchangeService {
 
 	@WebMethod
 	public Response importData(@WebParam String sessionId, @WebParam String xmldata) {
-		final String xml = xmldata;
-		return (new RemoteActionHandler(sessionId) {
+		return (new RemoteActionHandler(sessionId, xmldata) {
 			@Override
-			protected Object execute() {
-				return importSessionData(this, xml);
+			protected Object execute(Object xmlData) {
+				return importSessionData(this, (String)xmlData);
 			}
 		}).run();
 	}

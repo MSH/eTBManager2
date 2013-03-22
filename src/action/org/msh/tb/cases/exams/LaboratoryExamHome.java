@@ -1,12 +1,14 @@
 package org.msh.tb.cases.exams;
 
 import java.util.Date;
+import java.util.List;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Laboratory;
 import org.msh.tb.entities.LaboratoryExamResult;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.laboratories.LaboratorySelection;
 
 /**
@@ -72,6 +74,27 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 			 return false;
 		else return true;
 	}
+	
+	
+	/**
+	 * Search for an instance of the exam by its sample id and case
+	 * @param sampleId
+	 * @return
+	 */
+	public boolean findExamBySampleId(TbCase tbcase, String sampleId) {
+		List lst = getEntityManager()
+			.createQuery("select id from " + getEntityClass().getSimpleName() + " where sampleId = :id  and tbcase.id = :caseid")
+			.setParameter("id", sampleId)
+			.setParameter("caseid", tbcase.getId())
+			.getResultList();
+		
+		if (lst.size() == 0)
+			return false;
+		
+		Integer examId = (Integer)lst.get(0);
+		setId(examId);
+		return true;
+	} 
 	
 /*	*//**
 	 * Adjust the sample associated to the exam

@@ -36,6 +36,7 @@ import org.msh.tb.login.AuthenticatorBean;
 public abstract class RemoteActionHandler implements ObjectReferenceable {
 
 	private String sessionId;
+	private Object data;
 	private Response response;
 	private UserTransaction transaction;
 	private boolean transactional= true;
@@ -49,6 +50,13 @@ public abstract class RemoteActionHandler implements ObjectReferenceable {
 	public RemoteActionHandler(String sessionId) {
 		super();
 		this.sessionId = sessionId;
+	}
+	
+	
+	public RemoteActionHandler(String sessionId, Object data) {
+		super();
+		this.sessionId = sessionId;
+		this.data = data;
 	}
 
 
@@ -67,7 +75,7 @@ public abstract class RemoteActionHandler implements ObjectReferenceable {
 	 * @return The result of the action. This result will be serialized to XML using the {@link XmlSerializer} class
 	 * and make available as a response to the client by the return of the method <code>run()</code>
 	 */
-	protected abstract Object execute();
+	protected abstract Object execute(Object data);
 
 
 	/**
@@ -88,7 +96,7 @@ public abstract class RemoteActionHandler implements ObjectReferenceable {
 				beginTransaction();
 
 			// run the action
-			Object result = execute();
+			Object result = execute(data);
 			
 			if (transactional)
 				commitTransaction();

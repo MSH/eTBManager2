@@ -111,7 +111,7 @@ public class UserProfileHome extends EntityHomeEx<UserProfile>{
 
 	
 	/**
-	 * Create the node tree
+	 * Create the node tree to be displayed in an hierarchical way
 	 */
 	public void createNodes() {
 		List<UserPermission> lst = getRoles();
@@ -163,6 +163,7 @@ public class UserProfileHome extends EntityHomeEx<UserProfile>{
 		for (UserPermission item: lst) {
 			String parentCode = item.getUserRole().getParentCode();
 			String code = node.getPermission().getUserRole().getCode();
+
 			if ((parentCode != null) && (parentCode.equals(code)) && 
 				((classif == null) || ((classif != null)&&(classif == item.getCaseClassification())))) {
 				PermissionNode aux = newNode(node, item.getUserRole(), item.getCaseClassification());
