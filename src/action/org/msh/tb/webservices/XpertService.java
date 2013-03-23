@@ -5,8 +5,10 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
+import javax.xml.bind.ValidationException;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.framework.EntityNotFoundException;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.exams.ExamXpertHome;
 import org.msh.tb.entities.ExamXpert;
@@ -17,16 +19,18 @@ import org.msh.tb.entities.enums.XpertRifResult;
 import org.msh.tb.laboratories.LaboratoryHome;
 
 /**
- * 
+ * Web-service to post new or update xpert exam results.
  * @author Ricardo Memoria
  *
  */
-@WebService(name="xpertService", serviceName="xpertService")
+@WebService(name="xpertService", serviceName="xpertService", targetNamespace="http://etbmanager.org/xpertservice")
 @SOAPBinding(style=Style.RPC)
 public class XpertService {
 
 	/**
-	 * Web service method exposed to the client
+	 * Web service method exposed to the client. Update or post a new exam result. If it's a new exam result,
+	 * the laboratory id and the date when sample was collected are required. If it's not a 
+	 * 
 	 * @param sessionId is the user session id created in the authentication method
 	 * @param examResult is the data containing the result
 	 * @return instance of the {@link Response} object containing the result of the operation
@@ -35,8 +39,8 @@ public class XpertService {
 	public Response postResult(@WebParam(name="sessionId") String sessionId, @WebParam(name="examResult") XpertData examResult) {
 		return (new RemoteActionHandler(sessionId, examResult) {
 			@Override
-			protected Object execute(Object result) {
-				return persistResult((XpertData)result);
+			protected Object execute(Object result) throws ValidationException {
+				return persistResult(this, (XpertData)result);
 			}
 		}).run();
 	}
@@ -48,48 +52,60 @@ public class XpertService {
 	 * 
 	 * @param result
 	 * @return
+	 * @throws ValidationException 
 	 */
-	protected Object persistResult(XpertData result) {
+	protected Object persistResult(RemoteActionHandler handler, XpertData result) throws ValidationException {
 		// validate the data
 		if (result.getCaseId() == null)
-			return new Response(Response.RESP_VALIDATION_ERROR, "Case ID is required");
+			throw new ValidationException("Case ID is required");
 		
 		if (result.getSampleId() == null)
-			return new Response(Response.RESP_VALIDATION_ERROR, "Sample ID is required");
+			throw new ValidationException("Sample ID is required");
 		
 		if (result.getResult() == null)
-			return new Response(Response.RESP_VALIDATION_ERROR, "Result is required");
-		
-		XpertResult res = XpertResult.values()[result.getResult()];
-		XpertRifResult rifRes = XpertRifResult.values()[result.getRifResult()];
+			throw new ValidationException("Result is required");
+
+		// check results
+		XpertResult res =  result.getResult(); 
+		XpertRifResult rifRes = result.getRifResult();
 		
 		if ((res == XpertResult.TB_DETECTED) && (rifRes == null))
-			return new Response(Response.RESP_VALIDATION_ERROR, "RIF Result is required");
+			throw new ValidationException("RIF Result is required");
 
-		// check if case is ok
+		// check if it's a valid case/suspect
 		CaseHome caseHome = (CaseHome)Component.getInstance("caseHome", true);
-		caseHome.setId(result.getCaseId());
+		try {
+			caseHome.setId(result.getCaseId());
+		} catch (EntityNotFoundException e) {
+			throw new ValidationException("No case found with id = " + result.getCaseId());
+		}
 		TbCase tbcase = caseHome.getInstance();
 		
-		if (tbcase == null) {
-			return new Response(Response.RESP_VALIDATION_ERROR, "No case found with id = " + result.getCaseId());
-		}
-
 		// check if laboratory was given
 		Laboratory lab = null;
 		if (result.getLaboratoryId() != null) {
 			LaboratoryHome labHome = (LaboratoryHome)Component.getInstance("laboratoryHome", true);
-			labHome.setId(result.getLaboratoryId());
+			try {
+				labHome.setId(result.getLaboratoryId());
+			} catch (EntityNotFoundException e) {
+				throw new ValidationException("Laboratory with id " + result.getLaboratoryId() + " was not found");
+			}
 			lab = labHome.getInstance();
-			if (lab == null)
-				return new Response(Response.RESP_VALIDATION_ERROR, "Laboratory with id " + result.getLaboratoryId() + " was not found");
 		}
 
 		// check for sample id
 		ExamXpertHome examHome = (ExamXpertHome)Component.getInstance("examXpertHome", true);
-		if (!examHome.findExamBySampleId(tbcase, result.getSampleId())) {
-			return new Response(Response.RESP_VALIDATION_ERROR, "No sample with id " + result.getSampleId() + " was found to case " + tbcase.getId());
-		}
+		Integer examId = examHome.findExamBySampleId(tbcase, result.getSampleId());
+
+		// is a new exam
+		boolean bnew = examId == null;
+
+		// if it's a new exam and the laboratory or date collected is not informed, so it's wrong
+		if ((bnew) && ((lab == null) || (result.getSampleDateCollected() == null)))
+			throw new ValidationException("No sample with id " + result.getSampleId() + " was found for case " + tbcase.getId());
+
+		// loads the exam and save the changes in the transaction log system
+		examHome.setIdWithLog(examId);
 
 		// get the exam and fill the results
 		ExamXpert exam = examHome.getInstance();
@@ -97,17 +113,21 @@ public class XpertService {
 		exam.setComments(result.getComments());
 		if (result.getSampleDateCollected() != null)
 			exam.setDateCollected(result.getSampleDateCollected());
+		if (lab != null)
+			exam.setLaboratory(lab);
 		
 		exam.setDateRelease(result.getReleaseDate());
 		exam.setResult(res);
 		exam.setRifResult(rifRes);
 		exam.setSampleNumber(result.getSampleId());
-		if (lab != null)
-			exam.setLaboratory(lab);
+
+		// tries to save the exam. In case of error, return a value different from persisted
+		if (!("persisted".equals(examHome.persist()))) {
+			handler.checkValidationErrors();
+			return null;
+		}
 		
-		examHome.persist();
-		
-		return new Response(exam.getId().toString());
+		return exam.getId();
 	}
 
 }

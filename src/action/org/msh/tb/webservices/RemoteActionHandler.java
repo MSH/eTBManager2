@@ -3,6 +3,7 @@ package org.msh.tb.webservices;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.xml.bind.ValidationException;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.faces.FacesMessages;
@@ -75,7 +76,7 @@ public abstract class RemoteActionHandler implements ObjectReferenceable {
 	 * @return The result of the action. This result will be serialized to XML using the {@link XmlSerializer} class
 	 * and make available as a response to the client by the return of the method <code>run()</code>
 	 */
-	protected abstract Object execute(Object data);
+	protected abstract Object execute(Object data) throws ValidationException;
 
 
 	/**
@@ -103,7 +104,12 @@ public abstract class RemoteActionHandler implements ObjectReferenceable {
 
 			response.setResult( ObjectSerializer.serializeToXml(result) );
 
-		} catch (Exception e) {
+		} catch (ValidationException ve) {
+			if (transactional)
+				rollbackTransaction();
+			setResponseError(Response.RESP_VALIDATION_ERROR, ve.getMessage());
+		}
+		catch (Exception e) {
 			if (transactional)
 				rollbackTransaction();
 			setResponseError(Response.RESP_UNEXPECTED_ERROR, e.toString());

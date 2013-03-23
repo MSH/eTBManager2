@@ -81,19 +81,18 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 	 * @param sampleId
 	 * @return
 	 */
-	public boolean findExamBySampleId(TbCase tbcase, String sampleId) {
+	public Integer findExamBySampleId(TbCase tbcase, String sampleId) {
 		List lst = getEntityManager()
-			.createQuery("select id from " + getEntityClass().getSimpleName() + " where sampleId = :id  and tbcase.id = :caseid")
+			.createQuery("select id from " + getEntityClass().getSimpleName() + " where sampleNumber = :id  and tbcase.id = :caseid")
 			.setParameter("id", sampleId)
 			.setParameter("caseid", tbcase.getId())
 			.getResultList();
-		
+
 		if (lst.size() == 0)
-			return false;
-		
+			return null;
+
 		Integer examId = (Integer)lst.get(0);
-		setId(examId);
-		return true;
+		return examId;
 	} 
 	
 /*	*//**

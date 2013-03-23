@@ -2,6 +2,9 @@ package org.msh.tb.webservices;
 
 import java.util.Date;
 
+import org.msh.tb.entities.enums.XpertResult;
+import org.msh.tb.entities.enums.XpertRifResult;
+
 /**
  * Store information about an XPert result send from an external application
  * thought web-services
@@ -15,8 +18,8 @@ public class XpertData {
 	private Date sampleDateCollected;
 	private Date releaseDate;
 	private Integer laboratoryId;
-	private Integer result;
-	private Integer rifResult;
+	private XpertResult result;
+	private XpertRifResult rifResult;
 	private String comments;
 
 	/**
@@ -68,30 +71,6 @@ public class XpertData {
 		this.laboratoryId = laboratoryId;
 	}
 	/**
-	 * @return the result
-	 */
-	public Integer getResult() {
-		return result;
-	}
-	/**
-	 * @param result the result to set
-	 */
-	public void setResult(Integer result) {
-		this.result = result;
-	}
-	/**
-	 * @return the rifResult
-	 */
-	public Integer getRifResult() {
-		return rifResult;
-	}
-	/**
-	 * @param rifResult the rifResult to set
-	 */
-	public void setRifResult(Integer rifResult) {
-		this.rifResult = rifResult;
-	}
-	/**
 	 * @return the comments
 	 */
 	public String getComments() {
@@ -114,5 +93,29 @@ public class XpertData {
 	 */
 	public void setSampleDateCollected(Date sampleDateCollected) {
 		this.sampleDateCollected = sampleDateCollected;
+	}
+	/**
+	 * @return the result
+	 */
+	public XpertResult getResult() {
+		return result;
+	}
+	/**
+	 * @param result the result to set
+	 */
+	public void setResult(XpertResult result) {
+		this.result = result;
+	}
+	/**
+	 * @return the rifResult
+	 */
+	public XpertRifResult getRifResult() {
+		return rifResult;
+	}
+	/**
+	 * @param rifResult the rifResult to set
+	 */
+	public void setRifResult(XpertRifResult rifResult) {
+		this.rifResult = rifResult;
 	}
 }
