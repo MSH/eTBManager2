@@ -170,6 +170,9 @@ public class CaseAZHome {
 		return tc.getPatient().getFullName();
 	}
 	
+	/**
+	 * Return state of case, if it close, or "Case from EIDSS", if it has not binded yet
+	 * */
 	public String getRightCaseDetailsTitle(){
 		TbCaseAZ tc = getTbCase();
 		if (tc.getNotificationUnit()==null && tc.getLegacyId()!=null)
@@ -190,6 +193,9 @@ public class CaseAZHome {
 		return tc;
 	}
 	
+	/**
+	 * Generate html-block with EIDSS-information
+	 * */
 	public String getEIDSSBlock(TbCase tbcase){
 		TbCaseAZ az = reGetTbCase(tbcase);
 		String res = "";
@@ -204,7 +210,7 @@ public class CaseAZHome {
 				try {
 					eidssDBirth = new SimpleDateFormat("dd-MM-yyyy").parse(ec[5]);
 					res += DateUtils.yearOf(eidssDBirth)+ " " 
-						+ App.getMessage("az_EIDSS_Year_Of_Birth") + " "
+						+ App.getMessage("az_EIDSS_Year_Of_Birth.short") + " "
 						+ "("+DateUtils.formatDate(eidssDBirth, App.getMessage("locale.datePattern"))+"), ";
 				} catch (ParseException e) {
 					res += "("+ec[5]+"), ";
@@ -359,12 +365,15 @@ public class CaseAZHome {
 	 * @param numTreatments the numTreatments to set
 	 */
 	public void setNumTreatments(Integer numTreatments) {
+		PrevTBTreatmentHome prev = (PrevTBTreatmentHome)App.getComponent("prevTBTreatmentHome");
+		TbCaseAZ tc = getTbCase();
 		if (numTreatments==null){
-				TbCaseAZ tc = getTbCase();
 				tc.setColPrevTreatUnknown(true);
-			}else{
-				PrevTBTreatmentHome prev = (PrevTBTreatmentHome)App.getComponent("prevTBTreatmentHome");
-				prev.setNumTreatments(numTreatments);
+				prev.setNumTreatments(0);
+			}
+		else{
+			tc.setColPrevTreatUnknown(false);
+			prev.setNumTreatments(numTreatments);
 			}
 		}
 	

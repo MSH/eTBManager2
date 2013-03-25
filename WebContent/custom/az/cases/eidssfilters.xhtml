@@ -41,6 +41,7 @@
 			<td>
 				<s:decorate template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['az_EIDSS_Year_Of_Birth']}:</ui:define>
+					<ui:param name="labelstyle" value="width:260px;" />
 					<h:selectOneMenu id="iniyear" value="#{eidssFilters.yearBirth}" style="margin-left:20px;">
 						<f:selectItems value="#{eidssFilters.years}"/>
 					</h:selectOneMenu>
@@ -65,10 +66,12 @@
 			<td>
 				<s:decorate template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['TbCase.eidssid']}:</ui:define>
+					<ui:param name="labelstyle" value="width:260px;" />
 					<h:inputText value="#{eidssFilters.id}" style="width:200px;"></h:inputText>
 				</s:decorate>
 				<s:decorate template="/layout/edit.xhtml">
-					<ui:define name="label">#{messages['az_EIDSS_Notify_LPU']}:</ui:define>
+					<ui:define name="label">#{messages['az_EIDSS_Notify_LPU']} #{messages['excel.fromEIDSS']}:</ui:define>
+					<ui:param name="labelstyle" value="width:260px;" />
 					<h:inputText value="#{eidssFilters.notifUnit}" style="width:200px;"></h:inputText>
 				</s:decorate>
 			</td>
@@ -90,6 +93,7 @@
 			<td>
 				<s:decorate template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['Address.address']} #{messages['excel.fromEIDSS']}:</ui:define>
+					<ui:param name="labelstyle" value="width:260px;" />
 					<h:inputText value="#{eidssFilters.address}" style="width:200px;"></h:inputText>
 				</s:decorate>
 			</td>

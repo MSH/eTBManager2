@@ -1,5 +1,7 @@
 package org.msh.tb.az.entities;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +20,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.jboss.seam.international.Messages;
 import org.msh.tb.az.entities.enums.CaseFindingStrategy;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
@@ -108,15 +109,91 @@ public class TbCaseAZ extends TbCase{
 			return getRegistrationCode();
 		else {
 			if (getPatient() == null)
-				return Messages.instance().get("cases.nonumber");
+				return "NA";
 			if (getPatient().getRecordNumber() == null)
-				return Messages.instance().get("cases.nonumber");
+				return "NA";
 			if (getCaseNumber() == null)
 				return Integer.toString(getPatient().getRecordNumber());
 			return formatCaseNumber(getPatient().getRecordNumber(), getCaseNumber());
 		}
 	}
 	
+	//=========================GETTERS FOR EIDSS COMPONENTS========================
+	private boolean existInImport(int ind){
+		String[] ec = EIDSSComment.split(" / ");
+		if (ec.length<ind+1)
+			return false;
+		if ("".equals(ec[ind]))
+			return false;
+		return true;
+	}
+	
+	public String getEIDSSName(){
+		String[] ec = EIDSSComment.split(" / ");
+		if (existInImport(3))
+			return ec[3];
+		return "";
+	}
+	
+	public Integer getEIDSSAge(){
+		String[] ec = EIDSSComment.split(" / ");
+		if (existInImport(4))
+			return Integer.parseInt(ec[4]);
+		return 0;
+	}
+	
+	public Date getEIDSSBirthDate(){
+		String[] ec = EIDSSComment.split(" / ");
+		Date d = null;
+		if (existInImport(5)){
+			try {
+				d = new SimpleDateFormat("dd-MM-yyyy").parse(ec[5]);
+			} catch (ParseException e) {
+				d = null;
+			}
+		}
+		return d;
+	}
+	
+	public Date getEIDSSNotifDate(){
+		String[] ec = EIDSSComment.split(" / ");
+		Date d = null;
+		if (existInImport(6)){
+			try {
+				d = new SimpleDateFormat("dd-MM-yyyy").parse(ec[6]);
+			} catch (ParseException e) {
+				d = null;
+			}
+		}
+		return d;
+	}
+	
+	public Date getEIDSSInnerDate(){
+		String[] ec = EIDSSComment.split(" / ");
+		Date d = null;
+		if (existInImport(2)){
+			try {
+				d = new SimpleDateFormat("dd-MM-yyyy").parse(ec[2]);
+			} catch (ParseException e) {
+				d = null;
+			}
+		}
+		return d;
+	}
+	
+	public String getEIDSSNotifUnit(){
+		String[] ec = EIDSSComment.split(" / ");
+		if (existInImport(0))
+			return ec[0];
+		return "";
+	}
+	
+	public String getEIDSSNotifAddress(){
+		String[] ec = EIDSSComment.split(" / ");
+		if (existInImport(1))
+			return ec[1];
+		return ""; 
+	}
 	//===================GETTERS & SETTERS======================
 	/**
 	 * @return the maritalStatus

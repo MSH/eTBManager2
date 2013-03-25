@@ -57,14 +57,13 @@
 
 <s:decorate template="/layout/naveg.xhtml" rendered="#{patientsAZ.searching}">
 	<ui:param name="list" value="#{patientsAZ}" />
-
 	<h:dataTable value="#{patientsAZ.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
 		rendered="#{patientsAZ.searching and (not empty patientsAZ.resultList)}" width="680px" columnClasses="colcw10pc,collw30pc,collw30pc,collw30pc" style="float:center;">
 		<h:column>
 			<f:facet name="header">
-				#
+				<a onclick="changeOrder(1); return false;">#{messages['Gender']}</a>
 				<br /> <br />
-				#{messages['Gender']}
+				<a onclick="changeOrder(0); return false;">#</a>
 			</f:facet>
 			
 			<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
@@ -104,12 +103,13 @@
 				#{messages['cases.patientdata']}
 				<br/>
 				<div style="padding: 4px; font-size:10px;">
-					#{messages['Patient.name']}
+					<a onclick="changeOrder(3); return false;">#{messages['Patient.name']}</a>
 					<br/>
 					#{messages['az_EIDSS_Year_Of_Birth']}<br/>
-					#{messages['TbCase.patientAge']}
+					<a onclick="changeOrder(4); return false;">#{messages['TbCase.patientAge']}</a>
 					<br/>
-					#{levelInfo.nameLevel1}	- #{levelInfo.nameLevel2}
+					<a onclick="changeOrder(7); return false;">#{levelInfo.nameLevel1}</a>	- 
+					<a onclick="changeOrder(7); return false;">#{levelInfo.nameLevel2}</a>
 						(#{messages['Address']}) 
 				</div>
 			</f:facet>
@@ -146,13 +146,13 @@
 			<f:facet name="header">
 				#{messages['ExportContent.CASEDATA']}
 				<div style="padding: 4px; font-size:10px;">
-					#{messages['CaseClassification']}
+					<a onclick="changeOrder(2); return false;">#{messages['CaseClassification']}</a>
 					<br /> 
-					#{messages['cases.casesearching.treatlen']}
+					<a onclick="changeOrder(10); return false;">#{messages['cases.casesearching.treatlen']}</a>
 					<br />
-					#{messages['TbCase.notificationUnit']}
+					<a onclick="changeOrder(5); return false;">#{messages['TbCase.notificationUnit']}</a>
 					<br /> 
-					#{messages['CaseState']}
+					<a onclick="changeOrder(8); return false;">#{messages['CaseState']}</a>
 				</div>
 			</f:facet>
 			
@@ -178,11 +178,13 @@
 			 <h:outputText
 				value="#{caseAZHome.reGetTbCase(it.tbcase).notifAddress.adminUnit.name.name1}" style="font-size:10px;"  rendered="#{caseAZHome.reGetTbCase(it.tbcase).notifAddress!=NULL}"/>
 			<br/>
-			<s:fragment rendered="#{caseAZHome.reGetTbCase(it.tbcase).EIDSSComment!=NULL}">
-			 <h:outputText value="#{messages['Accept']} #{caseAZHome.reGetTbCase(it.tbcase).systemDate==null?'XX.XX.XXXX':''}" style="color:Firebrick;" />
-			 <h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).systemDate}"  style="color:Firebrick;" converter="localeDateConverter" rendered="#{caseAZHome.reGetTbCase(it.tbcase).systemDate!=null}"/>
+			
+			 <h:outputText value="#{messages['az_EIDSS_accept']}:" style="color:Firebrick;" />
+			 <h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).systemDate}"  style="color:Firebrick;" converter="localeDateConverterAZ" rendered="#{caseAZHome.reGetTbCase(it.tbcase).systemDate!=null}"/>
+			 <h:outputText value=" XX.XX.XXXX"  style="color:Firebrick;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).systemDate == null}"/>
+			 
 			 <br/>
-			</s:fragment>
+			
 			  <h:outputText style="color:gray;" 
 				value="#{messages['TbCase.referToOtherTBUnit']}  #{messages[caseAZHome.reGetTbCase(it.tbcase).referToOtherTBUnit?'global.no':'global.yes']}"/>
 			
@@ -190,7 +192,23 @@
 	
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['TbCase.eidsscomment']}"/>
+				#{messages['TbCase.eidsscomment']}
+				<br/>
+				<div style="padding: 4px; font-size:10px;">
+					<a onclick="changeOrder(101); return false;">#{messages['Patient.name']}</a>
+					<br /> 
+					<a onclick="changeOrder(102); return false;">#{messages['az_EIDSS_Year_Of_Birth']}</a>
+					<br />
+					<a onclick="changeOrder(103); return false;">#{messages['Address']}</a>
+					<br /> 
+					<a onclick="changeOrder(104); return false;">#{messages['excel.dateNotifEIDSS']}</a>
+					/
+					<a onclick="changeOrder(105); return false;">#{messages['az_EIDSS_InDate']}</a>
+					<br/>
+					<a onclick="changeOrder(106); return false;">#{messages['az_EIDSS_Notify_LPU']}</a>
+					<br/>
+					<a onclick="changeOrder(107); return false;">#{messages['TbCase.eidssid']}</a>
+				</div>
 			</f:facet>
 			<h:outputText value="#{caseAZHome.getEIDSSBlock(it.tbcase)}" escape="false" style="border-left: 1px solid #E0E0E0;color:#45793D;"/>							
 		</h:column>
@@ -220,7 +238,9 @@ function initPatientSearch() {
 	action="#{patientsAZ.search}"  
 	data="#{patientsAZ.searching}" />
 
-
+<a:jsFunction name="changeOrder" action="#{patientsAZ.changeOrder}" reRender="pnlpatients" ajaxSingle="true">
+	<a:actionparam name="param1" assignTo="#{patientsAZ.newOrder}" converter="javax.faces.Integer"/>
+</a:jsFunction>
 
 </h:form>
 </ui:define>

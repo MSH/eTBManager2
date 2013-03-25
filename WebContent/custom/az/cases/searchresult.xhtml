@@ -48,11 +48,11 @@
 							<th class="searchtitle">
 							<ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
 								<div style="padding: 4px;">
-									<a:commandLink value="#"
-										onclick="changeOrder(0); return false;" />
-									<br /> <br />
 									<a:commandLink value="#{messages['Gender']}"
 										onclick="changeOrder(1); return false;" />
+									<br /> <br />
+									<a:commandLink value="#"
+										onclick="changeOrder(0); return false;" />
 								</div>
 								</ui:fragment>
 							<ui:fragment rendered='#{casesAZ.notBindedEIDSS}'>
@@ -168,14 +168,13 @@
 										</s:link>
 										</b><br/>
 										#{caseAZHome.getYearOfBirth(it.tbcase)} #{messages['az_EIDSS_Year_Of_Birth.short']} (<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).patient.birthDate}" converter="localeDateConverter"/>), #{caseAZHome.reGetTbCase(it.tbcase).age} #{messages['az_EIDSS_years']}<br/>
-										<ui:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
 										<div style="padding-top: 6px;padding-bottom: 6px;">
 										<sub>#{messages['Address.regist']}:</sub><br/>
 										<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).notifAddress.address} #{caseAZHome.reGetTbCase(it.tbcase).notifAddress.complement}" style="padding-left: 10px;" /> <br/>
 										<sub>#{messages['Address.live']}:</sub><br/>
 										<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).currentAddress.address} #{caseAZHome.reGetTbCase(it.tbcase).currentAddress.complement}" style="padding-left: 10px;" />
 										</div>	
-										</ui:fragment>
+										
 										#{messages['az_AZ.case.unicalID']}:
 										<b>#{caseAZHome.reGetTbCase(it.tbcase).unicalID!=null ? caseAZHome.reGetTbCase(it.tbcase).unicalID : 'XXXXXXXX'}</b>
 								</td>
@@ -202,11 +201,10 @@
 										 <h:outputText
 											value="#{it.adminUnitDisplay}" style="font-size:10px;" />
 										<br/>
-										<s:fragment rendered="#{caseAZHome.reGetTbCase(it.tbcase).EIDSSComment!=NULL}">
-										 <h:outputText value="#{messages['Accept']} #{caseAZHome.reGetTbCase(it.tbcase).systemDate==null?'XX.XX.XXXX':''}" style="color:Firebrick;" />
-										 <h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).systemDate}"  style="color:Firebrick;" converter="localeDateConverter" rendered="#{caseAZHome.reGetTbCase(it.tbcase).systemDate!=null}"/>
+										<h:outputText value="#{messages['az_EIDSS_accept']}: #{caseAZHome.reGetTbCase(it.tbcase).systemDate==null?'XX.XX.XXXX':''}" style="color:Firebrick;" />
+										 <h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).systemDate}"  style="color:Firebrick;" converter="localeDateConverterAZ" rendered="#{caseAZHome.reGetTbCase(it.tbcase).systemDate!=null}"/>
 										 <br/>
-										</s:fragment>
+										
 										  <h:outputText style="color:gray;" 
 											value="#{messages['TbCase.referToOtherTBUnit']}  #{messages[caseAZHome.reGetTbCase(it.tbcase).referToOtherTBUnit?'global.no':'global.yes']}"/>
 										
