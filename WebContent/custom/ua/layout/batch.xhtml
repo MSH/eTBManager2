@@ -12,9 +12,12 @@
 	    	(#{batch.manufacturer})
 	    </s:fragment>
     </div>
-    
     <div class="text-small">
-	    #{batch.registCardNumber} 
+	    <s:fragment rendered="#{batch.registCardNumber!=''}">
+	    	<b>#{messages['Batch.registCard']}</b>
+	    	<br/>
+		    №#{batch.registCardNumber} 
+	    </s:fragment>
 	    <s:fragment rendered="#{batch.registCardBeginDate!=null or batch.registCardEndDate != null}">
 		    <h:outputText value=" ("/> 
 			<h:outputText value="#{batch.registCardBeginDate}" converter="localeDateConverter" />

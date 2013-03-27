@@ -46,7 +46,19 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 	@In(create=true) FacesMessages facesMessages;
 
 	// structures the items by source
-	public class SourceItem extends SourceGroup<TransferItem> {};
+	public class SourceItem extends SourceGroup<TransferItem> {
+		/**
+		 * Return total price by all medicines in movement
+		 * */
+		public double getTotalBySource(){
+			double res=0;
+			for (TransferItem ti:getItems()){
+				res += ti.getTotalPrice();
+			}
+			return res;
+		}
+		
+	};
 
 	private List<SourceItem> sources;
 	private TransferItem transferItem;
@@ -443,5 +455,15 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 	 */
 	public TBUnitSelection getTbunitSelection() {
 		return tbunitSelection;
+	}
+	/**
+	 * Return total price by all medicines in movements by all sources
+	 * */
+	public double getTotal(){
+		double res = 0;
+		for (SourceItem si:sources){
+			res += si.getTotalBySource();
+		}
+		return res;
 	}
 }

@@ -49,6 +49,7 @@
 			#{messages['Medicine']}
 		</th>
 		<th><h:outputText value="#{messages['StoragePosReport.nextExpirationBatch']}" styleClass="colch" /></th>	
+		<th><h:outputText value="#{messages['Batch.numContainers']}" styleClass="colrh" /></th>	
 		<th><h:outputText value="#{messages['meds.movs.availableqtty']}" styleClass="colrh" /></th>	
 		
 		<th><h:outputText value="#{messages['global.totalPrice']}" styleClass="colch" /></th>
@@ -68,11 +69,13 @@
 			<h:outputText value="#{it.item.nextBatchExpire}" converter="localeDateConverter" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
 		</td>
 		<td align="right">
+			
+		</td>
+		<td align="right">
 			<h:outputText value="#{it.item.quantity}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
 				<f:convertNumber pattern="###,###,###"/>
 			</h:outputText>
 		</td>
-		
 		<td align="right">
 			<h:outputText value="#{it.item.totalPrice}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
 				<f:convertNumber pattern="###,###,##0.00000"/>
@@ -98,6 +101,11 @@
 		<s:fragment rendered="#{(not b.batch.expired) and (not inventoryReport.isExpiringBatch(b))}">
 			<td align="center">
 				<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+			</td>
+			<td align="right">
+				<h:outputText value="#{b.batch.numContainers} (№#{b.batch.quantityContainer})" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
 			</td>
 			<td align="right">
 				<h:outputText value="#{b.quantity}" >

@@ -111,6 +111,22 @@
 							</s:fragment>
 							<th class="searchtitle">
 								<h:outputText value="#{messages['TbCase.eidsscomment']}"/>
+								<br/>
+								<div style="padding: 4px; font-size:10px;">
+									<a onclick="changeOrder(101); return false;">#{messages['Patient.name']}</a>
+									<br /> 
+									<a onclick="changeOrder(102); return false;">#{messages['az_EIDSS_Year_Of_Birth']}</a>
+									<br />
+									<a onclick="changeOrder(103); return false;">#{messages['Address']}</a>
+									<br /> 
+									<a onclick="changeOrder(104); return false;">#{messages['excel.dateNotifEIDSS']}</a>
+									/
+									<a onclick="changeOrder(105); return false;">#{messages['az_EIDSS_InDate']}</a>
+									<br/>
+									<a onclick="changeOrder(106); return false;">#{messages['az_EIDSS_Notify_LPU']}</a>
+									<br/>
+									<a onclick="changeOrder(107); return false;">#{messages['TbCase.eidssid']}</a>
+								</div>
 								 <!-- 
 								<ui:fragment
 									rendered='#{!casesAZ.notBindedEIDSS}'>
@@ -222,10 +238,9 @@
 			<rich:jQuery selector="#tblres tr:odd" query="addClass('lin1')" />
 			<rich:jQuery selector="#tblres tr:even" query="addClass('lin2')" />
 
-			<a:jsFunction name="changeOrder" reRender="listCases"
+			<a:jsFunction name="changeOrder" action="#{casesAZ.changeOrder}" reRender="listCases"
 				ajaxSingle="true">
-				<a:actionparam name="param1" assignTo="#{caseFilters.newOrder}"
-					converter="javax.faces.Integer" />
+				<a:actionparam name="param1" assignTo="#{caseFilters.newOrder}"	converter="javax.faces.Integer" />
 			</a:jsFunction>
 		</h:form>
 

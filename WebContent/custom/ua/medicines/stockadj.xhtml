@@ -51,12 +51,13 @@
 			#{messages['Medicine']}
 		</th>
 		<th width="150px"><h:outputText value="#{messages['Batch.expiryDate']}" styleClass="colch" /></th>	
+		<th width="150px"><h:outputText value="#{messages['Batch.numContainers']}" styleClass="colrh" /></th>	
 		<th width="150px"><h:outputText value="#{messages['meds.movs.availableqtty']}" styleClass="colrh" /></th>	
 		<th width="140px"><h:outputText value="#{messages['form.action']}" styleClass="colch" /></th>
 	</tr>
 <a:repeat value="#{stockAdjustmentHome.items}" var="it">
 	<tr class="med">
-		<td colspan="4">
+		<td colspan="5">
 			<div id="med-row" style="height:30px;min-height:30px;">
 			<div style="float:left;width:450px;">
 				<a:commandLink value="#{messages['form.details']}" style="float:right;" onclick="detailsClick(this);return false;" />
@@ -76,23 +77,27 @@
 		<a:repeat value="#{it.batches}" var="b">
 			<s:fragment rendered="#{b.quantity != 0}">
 				<div style="clear:both;position:relative;min-height:40px;height:40px;border-top:1px solid #d0d0d0;padding-top:4px;#{b.batch.expired ? 'color:red' : (inventoryReport.isExpiringBatch(b) ? 'color:#D7620B' : '')}">
-					<a:commandLink value="#{messages['meds.movs.delbatch']}" 
-						style="float:right;margin-left:5px;" 
-						styleClass="right-icon small-link" 
-						onclick="initBatchDeleting(#{b.id})"/>
-					
-					<a:commandLink value="#{messages['form.edit']}" 
-						style="float:right;" 
-						styleClass="right-icon small-link" 
-						onclick="initBatchEditing(#{b.id},#{it.stockPosition.id})"/>
-					
-					<div style="float:left;width:350px;padding-left:30px;">
+					<div style="float:right;width:107px;">
+						<a:commandLink value="#{messages['form.edit']}" 
+							style="float:right;margin-right:37px;"
+							styleClass="right-icon small-link" 
+							onclick="initBatchEditing(#{b.id},#{it.stockPosition.id})"/>					
+						<br/>
+						<a:commandLink value="#{messages['meds.movs.delbatch']}" 
+							style="float:right;"
+							styleClass="right-icon small-link" 
+							onclick="initBatchDeleting(#{b.id})"/>
+					</div>
+					<div style="float:left;width:230px;padding-left:30px;">
 						<s:decorate template="/custom/ua/layout/batch.xhtml" >
 							<ui:param name="batch" value="#{b.batch}" />
 						</s:decorate>
 					</div>
 					<div style="float:left;width:130px;text-align:center;">
 						<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+					</div>
+					<div style="float:left;width:130px;text-align:right;">
+						<h:outputText value="#{b.batch.numContainers} (№#{b.batch.quantityContainer})"/>
 					</div>
 					<div style="float:left;width:130px;text-align:right;">
 						<h:outputText value="#{b.quantity}">

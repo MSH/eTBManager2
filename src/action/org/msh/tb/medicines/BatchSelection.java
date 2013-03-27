@@ -41,6 +41,7 @@ public class BatchSelection {
 		private Batch batch;
 		private BatchQuantity batchQuantity;
 		private Integer quantity;
+		private Integer numContainers;
 
 		public Integer getQuantity() {
 			return quantity;
@@ -71,6 +72,18 @@ public class BatchSelection {
 		 */
 		public void setBatch(Batch batch) {
 			this.batch = batch;
+		}
+		
+		public void setNumContainers(Integer numContainers) {
+			this.numContainers = numContainers;
+		}
+		/**
+		 * Return quantity of containers
+		 */
+		public Integer getNumContainers() {
+			int quantityContainer = batch.getQuantityContainer();
+			numContainers = (quantityContainer > 0)? (int)Math.ceil((double)quantity/(double)quantityContainer): 0;
+			return numContainers;
 		}
 	}
 	

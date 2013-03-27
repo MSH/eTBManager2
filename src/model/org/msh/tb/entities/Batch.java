@@ -111,6 +111,15 @@ public class Batch implements Serializable {
 			quantityContainer = (value != 0? quantityReceived/value: 0);
 	}
 	
+	public void setContainerPrice(float containerPrice) {
+		return;
+	}
+
+	public float getContainerPrice() {
+		return unitPrice*quantityContainer;
+	}
+	
+	
 	public Integer getQuantityContainer() {
 		return quantityContainer;
 	}
@@ -265,6 +274,5 @@ public class Batch implements Serializable {
 	public void setRegistCardEndDate(Date registCardEndDate) {
 		this.registCardEndDate = registCardEndDate;
 	}
-	
 	
 }

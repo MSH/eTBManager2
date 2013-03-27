@@ -62,7 +62,7 @@
 					
 					
 				</th>
-				<th align="right">#{messages['Batch.numContainers']}</th>
+				<th align="right">#{messages['Batch.numContainers']} (#{messages['Batch.quantityContainer']})</th>
 				<th align="right">#{messages['meds.movs.availableqtty']}</th>
 				<th align="right">#{messages['global.unitPrice']}</th>
 				<th align="right">#{messages['global.totalPrice']}</th>
@@ -118,7 +118,7 @@
 							<h:outputText value="#{b.batch.numContainers}" >
 								<f:convertNumber pattern="#,###,##0"/>
 							</h:outputText>
-							<h:outputText value="(#{b.batch.quantityContainer})" style="margin-left:5px;">
+							<h:outputText value="(№#{b.batch.quantityContainer})" style="margin-left:5px;">
 								<f:convertNumber pattern="#,###,##0"/>
 							</h:outputText>
 						</td>

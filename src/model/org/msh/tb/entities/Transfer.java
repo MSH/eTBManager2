@@ -74,6 +74,7 @@ public class Transfer implements Serializable {
 	@JoinColumn(name="TRANSFER_ID")
 	private List<TransferItem> items = new ArrayList<TransferItem>();
 
+	private String consignmentNumber;
 	
 	@Override
 	public String toString() {
@@ -174,5 +175,13 @@ public class Transfer implements Serializable {
 
 	public void setCancelReason(String cancelReason) {
 		this.cancelReason = cancelReason;
+	}
+
+	public void setConsignmentNumber(String consignmentNumber) {
+		this.consignmentNumber = consignmentNumber;
+	}
+
+	public String getConsignmentNumber() {
+		return consignmentNumber;
 	}
 }

@@ -86,4 +86,11 @@ public class TransferBatch implements Serializable {
 	public void setTransferItem(TransferItem transferItem) {
 		this.transferItem = transferItem;
 	}
+	/**
+	 * Return quantity of containers
+	 */
+	public int getNumContainers(){
+		int quantityContainer = batch.getQuantityContainer();
+		return (quantityContainer > 0)? (int)Math.ceil((double)quantity/(double)quantityContainer): 0;
+	}
 }
