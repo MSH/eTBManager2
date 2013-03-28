@@ -114,6 +114,8 @@ public class MolecularBiologyUA extends CaseData implements Serializable {
 	 * @return the h
 	 */
 	public Boolean getH() {
+		if (h == null)
+			h = false;
 		return h;
 	}
 
@@ -128,6 +130,8 @@ public class MolecularBiologyUA extends CaseData implements Serializable {
 	 * @return the r
 	 */
 	public Boolean getR() {
+		if (r == null)
+			r = false;
 		return r;
 	}
 
@@ -142,6 +146,8 @@ public class MolecularBiologyUA extends CaseData implements Serializable {
 	 * @return the km
 	 */
 	public Boolean getKm() {
+		if (km == null)
+			km = false;
 		return km;
 	}
 
@@ -156,6 +162,8 @@ public class MolecularBiologyUA extends CaseData implements Serializable {
 	 * @return the cm
 	 */
 	public Boolean getCm() {
+		if (cm == null)
+			cm = false;
 		return cm;
 	}
 
@@ -170,6 +178,8 @@ public class MolecularBiologyUA extends CaseData implements Serializable {
 	 * @return the e
 	 */
 	public Boolean getE() {
+		if (e == null)
+			e = false;
 		return e;
 	}
 
@@ -184,6 +194,8 @@ public class MolecularBiologyUA extends CaseData implements Serializable {
 	 * @return the lfx
 	 */
 	public Boolean getLfx() {
+		if (lfx == null)
+			lfx = false;
 		return lfx;
 	}
 
@@ -198,6 +210,8 @@ public class MolecularBiologyUA extends CaseData implements Serializable {
 	 * @return the mfx
 	 */
 	public Boolean getMfx() {
+		if (mfx == null)
+			mfx = false;
 		return mfx;
 	}
 

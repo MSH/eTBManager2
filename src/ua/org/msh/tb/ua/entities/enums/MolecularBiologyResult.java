@@ -9,6 +9,6 @@ public enum MolecularBiologyResult implements MessageKey {
 	GenoTypeMTBDRsl;
 	
 	public String getMessageKey() {
-		return toString();
+		return getClass().getSimpleName().concat("." + name());
 	}
 }

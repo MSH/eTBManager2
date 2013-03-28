@@ -44,8 +44,8 @@
     	<ui:param name="datefield" value="#{molecularBiology.dateRelease}" /> 
     </s:decorate>
 
-    <script type="text/javascript">
-<!--
+    <script type="text/javascript"><!--
+
 
 	function showResultForm(cb) {
 	  if (cb.selectedIndex == 0 || cb.selectedIndex == 1)
@@ -58,9 +58,28 @@
 	  	jQuery('#gtsl').show(500);
 	  else jQuery('#gtsl').hide(500);
 	}
-	
--->
-</script>
+
+	function setSignSubc(cb){
+		if (cb.selectedIndex == 1){
+			jQuery('#gx').find('select').each(
+					function(){
+						this.selectedIndex = 1;
+					}
+				);
+			jQuery('#gtplus').find('select').each(
+					function(){
+						this.selectedIndex = 1;
+					}
+				);
+			jQuery('#gtsl').find('select').each(
+				function(){
+					this.selectedIndex = 1;
+				}
+			);
+			
+		}
+	}
+--></script>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
@@ -73,11 +92,12 @@
 
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">MTB/PCR:</ui:define>
-    	<h:selectOneMenu value="#{molecularBiologyUA.pcr}" required="true">
+    	<h:selectOneMenu value="#{molecularBiologyUA.pcr}" required="true" id="pcr">
     		<f:selectItem itemLabel="+" itemValue="#{true}"/>
     		<f:selectItem itemLabel="-" itemValue="#{false}"/>
     	</h:selectOneMenu>
     </s:decorate>
+     <rich:jQuery selector="#pcr" query="change(function(){setSignSubc(this); })" />
     
    	<table>
 		<tr><td>
