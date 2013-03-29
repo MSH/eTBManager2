@@ -10,9 +10,9 @@
 <ui:param name="examCultureHome" value="#{examCultureAZHome}" />
 <ui:param name="examMicroscopyHome" value="#{examMicroscopyAZHome}" />
 
-	<div class="spacer" />
 
-	<h:panelGroup id="pnlhiv">	
+	<h:panelGroup id="pnlhiv" rendered="#{caseHome.checkRoleBySuffix('EDT_HIV_TB')}">	
+	<div class="spacer" />
 	<s:link view="/cases/edtexamhiv.xhtml" 
 		style="float:right;" rendered="#{caseAZHome.canEditExams}"
 		 styleClass="button-alt">
