@@ -111,6 +111,7 @@
 							</s:fragment>
 							<th class="searchtitle">
 								<h:outputText value="#{messages['TbCase.eidsscomment']}"/>
+								<ui:remove>
 								<br/>
 								<div style="padding: 4px; font-size:10px;">
 									<a onclick="changeOrder(101); return false;">#{messages['Patient.name']}</a>
@@ -127,6 +128,7 @@
 									<br/>
 									<a onclick="changeOrder(107); return false;">#{messages['TbCase.eidssid']}</a>
 								</div>
+								</ui:remove>
 								 <!-- 
 								<ui:fragment
 									rendered='#{!casesAZ.notBindedEIDSS}'>
