@@ -576,5 +576,21 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	public void setLoadCaseData(boolean loadCaseData) {
 		this.loadCaseData = loadCaseData;
 	}
+
+
+	/**
+	 * @return the ordervalues
+	 */
+	public static String[] getOrdervalues() {
+		return orderValues;
+	}
+
+
+	/**
+	 * @return the inverseordervalues
+	 */
+	public static String[] getInverseordervalues() {
+		return inverseOrderValues;
+	}
 			
 }

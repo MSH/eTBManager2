@@ -157,4 +157,12 @@ public class ComorbidityHome {
 //		logService.setCaseClassification(tbcase.getClassification());
 		logService.save("COMORBIDITIES", RoleAction.EDIT, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
 	}
+
+
+	/**
+	 * @param comorbidities the comorbidities to set
+	 */
+	public void setComorbidities(List<ItemSelect<CaseComorbidity>> comorbidities) {
+		this.comorbidities = comorbidities;
+	}
 }

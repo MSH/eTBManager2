@@ -146,7 +146,7 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 	 * Valida os dados do recebimento de medicamento
 	 * @return
 	 */
-	private boolean validateDrugReceiving() {
+	public boolean validateDrugReceiving() {
 		Tbunit unit = userSession.getTbunit();
 
 		if (getInstance().getReceivingDate().before( unit.getMedManStartDate()) ) {
@@ -168,7 +168,7 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 	/**
 	 * Prepara o novo recebimento para ser salvo. Grava novos movimentos 
 	 */
-	private boolean prepareMovements() {
+	public boolean prepareMovements() {
 		MedicineReceiving rec = getInstance();
 		
 		//  prepare to remove movements of medicines removed by the user
@@ -441,5 +441,29 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 	 */
 	public void setMedicine(Medicine medicine) {
 		this.medicine = medicine;
+	}
+
+
+	/**
+	 * @return the sourceTree
+	 */
+	public SourceMedicineTree<Batch> getSourceTree() {
+		return sourceTree;
+	}
+
+
+	/**
+	 * @return the remBatches
+	 */
+	public List<Batch> getRemBatches() {
+		return remBatches;
+	}
+
+
+	/**
+	 * @return the remMovs
+	 */
+	public List<Movement> getRemMovs() {
+		return remMovs;
 	}
 }
