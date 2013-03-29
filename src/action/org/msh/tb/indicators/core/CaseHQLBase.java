@@ -153,7 +153,10 @@ public class CaseHQLBase extends Controller {
 		if (userWorkspace.getHealthSystem() != null)
 			hql += " and c.notificationUnit.healthSystem.id = " + userWorkspace.getHealthSystem().getId();
 //		hql += " and c.notificationUnit.healthSystem.id = #{userWorkspace.tbunit.healthSystem.id}";
-
+		
+		if (filters.getHealthSystem() != null)
+			hql += " and c.notificationUnit.healthSystem.id = " + filters.getHealthSystem().getId();
+		
 		if (getClassification() != null)
 			hql += " and c.classification = :classification";
 

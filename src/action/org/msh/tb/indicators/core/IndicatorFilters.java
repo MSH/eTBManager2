@@ -17,6 +17,7 @@ import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.entities.AgeRange;
+import org.msh.tb.entities.HealthSystem;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Substance;
@@ -84,6 +85,7 @@ public class IndicatorFilters {
 	private PatientType patTypFirstTreat;
 	private YesNoType supervisedTreatment;
 	private Substance substance;
+	private HealthSystem healthSystem;
 	
 	private final static PatientType[] patTypFirstTreatArr = {
 		PatientType.NEW,
@@ -115,6 +117,7 @@ public class IndicatorFilters {
 		gender = null;
 		numPrevTBTreatments = null;
 		drugResistanceType = null;
+		healthSystem = null;
 	}
 
 	
@@ -600,5 +603,11 @@ public class IndicatorFilters {
 	}
 	public void setSubstance(Substance substance) {
 		this.substance = substance;
+	}
+	public void setHealthSystem(HealthSystem healthSystem) {
+		this.healthSystem = healthSystem;
+	}
+	public HealthSystem getHealthSystem() {
+		return healthSystem;
 	}	
 }
