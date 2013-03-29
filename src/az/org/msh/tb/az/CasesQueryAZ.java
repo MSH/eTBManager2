@@ -1,14 +1,19 @@
 package org.msh.tb.az;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.jboss.seam.core.Expressions;
 import org.msh.tb.application.App;
+import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.cases.CaseFilters;
 import org.msh.tb.cases.CaseResultItem;
 import org.msh.tb.cases.CasesQuery;
@@ -364,6 +369,203 @@ public class CasesQueryAZ extends CasesQuery{
 		}
 		
 	}
+	
+	@Override
+	public String getOrder() {
+		if (getCaseFilters().getOrder()>100)
+			return null;
+		String s = getCaseFilters().isInverseOrder()? getInverseordervalues()[getCaseFilters().getOrder()] : getOrdervalues()[getCaseFilters().getOrder()];
+		s = Expressions.instance().createValueExpression(s).getValue().toString();
+		return s;
+	}
+	
+	/**
+	 * Change order sorting patient list
+	 * */
+	public void changeOrder(){
+		int ind = caseFilters.getNewOrder(); 
+		final boolean inverseOrder = caseFilters.isInverseOrder();
+		getResultList();
+		if (ind > 100)
+		switch (ind) {
+			//====================SORT BY EIDSS FIELDS==========================
+			case 101: { //eidss name
+				Collections.sort(resultList, new Comparator<CaseResultItem>() {
+
+					@Override
+					public int compare(CaseResultItem o1, CaseResultItem o2) {
+						TbCaseAZ az1 = (TbCaseAZ) App.getEntityManager().find(TbCaseAZ.class, o1.getTbcase().getId());
+						TbCaseAZ az2 = (TbCaseAZ) App.getEntityManager().find(TbCaseAZ.class, o2.getTbcase().getId());
+						
+						String name1 = az1.getEIDSSName();
+						String name2 = az2.getEIDSSName();
+						
+						if (name1.equals(name2)){
+							name2 = name1+"_"+o2.getPatient().getId();
+						}
+						Collator myCollator = Collator.getInstance();			    
+						return (!inverseOrder ? myCollator.compare(name1,name2) : myCollator.compare(name2,name1));
+					}
+				});
+				break;
+			}
+			case 102: { //eidss date of birth
+				Collections.sort(resultList, new Comparator<CaseResultItem>() {
+
+					@Override
+					public int compare(CaseResultItem o1, CaseResultItem o2) {
+						TbCaseAZ az1 = (TbCaseAZ) App.getEntityManager().find(TbCaseAZ.class, o1.getTbcase().getId());
+						TbCaseAZ az2 = (TbCaseAZ) App.getEntityManager().find(TbCaseAZ.class, o2.getTbcase().getId());
+						
+						Date d1 = az1.getEIDSSBirthDate();
+						Date d2 = az2.getEIDSSBirthDate();
+						
+						if (d1 == null || d2 == null){
+							Integer a1 = az1.getEIDSSAge();
+							Integer a2 = az2.getEIDSSAge();
+							return a2.compareTo(a1);
+						}
+						
+						return compareDates(o1, o2, d1, d2);
+					}
+				});
+				break;
+			}
+			case 103: { //eidss address
+				Collections.sort(resultList, new Comparator<CaseResultItem>() {
+
+					@Override
+					public int compare(CaseResultItem o1, CaseResultItem o2) {
+						TbCaseAZ az1 = (TbCaseAZ) App.getEntityManager().find(TbCaseAZ.class, o1.getTbcase().getId());
+						TbCaseAZ az2 = (TbCaseAZ) App.getEntityManager().find(TbCaseAZ.class, o2.getTbcase().getId());
+						
+						String name1 = az1.getEIDSSNotifAddress();
+						String name2 = az2.getEIDSSNotifAddress();
+						    
+						if (name1.equals(name2)){
+							name2 = name1+"_"+o2.getPatient().getId();
+						}
+						Collator myCollator = Collator.getInstance();		
+						return (!inverseOrder ? myCollator.compare(name1,name2) : myCollator.compare(name2,name1));
+					}
+				});
+				break;
+			}
+			case 104: { //eidss notification date
+				Collections.sort(resultList, new Comparator<CaseResultItem>() {
+
+					@Override
+					public int compare(CaseResultItem o1, CaseResultItem o2) {
+						TbCaseAZ az1 = (TbCaseAZ) App.getEntityManager().find(TbCaseAZ.class, o1.getTbcase().getId());
+						TbCaseAZ az2 = (TbCaseAZ) App.getEntityManager().find(TbCaseAZ.class, o2.getTbcase().getId());
+						
+						Date d1 = az1.getEIDSSNotifDate();
+						Date d2 = az2.getEIDSSNotifDate();
+						
+						return compareDates(o1, o2, d1, d2);
+					}
+				});
+				break;
+			}
+			case 105: { //eidss inner date
+				Collections.sort(resultList, new Comparator<CaseResultItem>() {
+
+					@Override
+					public int compare(CaseResultItem o1, CaseResultItem o2) {
+						TbCaseAZ az1 = (TbCaseAZ) App.getEntityManager().find(TbCaseAZ.class, o1.getTbcase().getId());
+						TbCaseAZ az2 = (TbCaseAZ) App.getEntityManager().find(TbCaseAZ.class, o2.getTbcase().getId());
+						
+						Date d1 = az1.getEIDSSInnerDate();
+						Date d2 = az2.getEIDSSInnerDate();
+						
+						return compareDates(o1, o2, d1, d2);
+					}
+				});
+				break;
+			}
+			case 106: { //eidss notif unit
+				Collections.sort(resultList, new Comparator<CaseResultItem>() {
+
+					@Override
+					public int compare(CaseResultItem o1, CaseResultItem o2) {
+						TbCaseAZ az1 = (TbCaseAZ) App.getEntityManager().find(TbCaseAZ.class, o1.getTbcase().getId());
+						TbCaseAZ az2 = (TbCaseAZ) App.getEntityManager().find(TbCaseAZ.class, o2.getTbcase().getId());
+						
+						String name1 = az1.getEIDSSNotifUnit();
+						String name2 = az2.getEIDSSNotifUnit();
+						    
+						if (name1.equals(name2)){
+							name2 = name1+"_"+o2.getPatient().getId();
+						}
+						
+						Collator myCollator = Collator.getInstance();		
+						return (!inverseOrder ? myCollator.compare(name1,name2) : myCollator.compare(name2,name1));
+					}
+				});
+				break;
+			}
+			case 107: { //eidss id
+				Collections.sort(resultList, new Comparator<CaseResultItem>() {
+
+					@Override
+					public int compare(CaseResultItem o1, CaseResultItem o2) {
+						String name1 = o1.getTbcase().getLegacyId();
+						String name2 = o2.getTbcase().getLegacyId();
+						if (name1 == null)	name1 = "";
+						if (name2 == null)	name2 = "";
+						if (name1.equals(name2)){
+							name2 = name1+"_"+o2.getPatient().getId();
+						}
+						
+						Collator myCollator = Collator.getInstance();		
+						return (!inverseOrder ? myCollator.compare(name1,name2) : myCollator.compare(name2,name1));
+					}
+				});
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * Compare two patients by full names
+	 * */
+	protected int compareNames(CaseResultItem o1, CaseResultItem o2) {
+		String name1, name2;
+		name1 = o1.getPatient().getLastName() == null ? o1.getPatient().getName() : o1.getPatient().getLastName();
+		name2 = o2.getPatient().getLastName() == null ? o2.getPatient().getName() : o2.getPatient().getLastName();
+		
+		if (name1.equals(name2)){
+			name1 = o1.getPatient().getName();
+			name2 = o2.getPatient().getName();
+		}
+		if (name1.equals(name2)){
+			name1 = o1.getPatient().getMiddleName() == null ? o1.getPatient().getName() : o1.getPatient().getMiddleName();
+			name2 = o2.getPatient().getMiddleName() == null ? o2.getPatient().getName() : o2.getPatient().getMiddleName();
+		}
+		if (name1.equals(name2)){
+			name2 = name1+"_"+o2.getPatient().getId();
+		}
+		Collator myCollator = Collator.getInstance();			    
+		return (!caseFilters.isInverseOrder() ? myCollator.compare(name1,name2) : myCollator.compare(name2,name1));
+	}
+
+	/**
+	 * Compare two dates
+	 */
+	protected int compareDates(CaseResultItem o1, CaseResultItem o2, Date d1, Date d2) {
+		if (d1 == null && d2 == null)
+			return compareNames(o1,o2);
+		else{
+			if (d1 == null)
+				return -1;
+			if (d2 == null)
+				return 1;
+		}
+		if (d1.equals(d2))
+			return compareNames(o1, o2);
+		return (!caseFilters.isInverseOrder() ? d1.compareTo(d2) : d2.compareTo(d1));
+	}
+	
 	/**
 	 * Refine result list based on the result query from the database by add capability to display EIDSS imported
 	 * records (without any administration or health unit)

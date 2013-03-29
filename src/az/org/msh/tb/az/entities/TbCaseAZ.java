@@ -120,6 +120,8 @@ public class TbCaseAZ extends TbCase{
 	
 	//=========================GETTERS FOR EIDSS COMPONENTS========================
 	private boolean existInImport(int ind){
+		if (EIDSSComment == null)
+			return false;
 		String[] ec = EIDSSComment.split(" / ");
 		if (ec.length<ind+1)
 			return false;
@@ -129,23 +131,25 @@ public class TbCaseAZ extends TbCase{
 	}
 	
 	public String getEIDSSName(){
-		String[] ec = EIDSSComment.split(" / ");
-		if (existInImport(3))
+		if (existInImport(3)){
+			String[] ec = EIDSSComment.split(" / ");
 			return ec[3];
+		}
 		return "";
 	}
 	
 	public Integer getEIDSSAge(){
-		String[] ec = EIDSSComment.split(" / ");
-		if (existInImport(4))
+		if (existInImport(4)){
+			String[] ec = EIDSSComment.split(" / ");
 			return Integer.parseInt(ec[4]);
+		}
 		return 0;
 	}
 	
 	public Date getEIDSSBirthDate(){
-		String[] ec = EIDSSComment.split(" / ");
 		Date d = null;
 		if (existInImport(5)){
+			String[] ec = EIDSSComment.split(" / ");
 			try {
 				d = new SimpleDateFormat("dd-MM-yyyy").parse(ec[5]);
 			} catch (ParseException e) {
@@ -156,9 +160,9 @@ public class TbCaseAZ extends TbCase{
 	}
 	
 	public Date getEIDSSNotifDate(){
-		String[] ec = EIDSSComment.split(" / ");
 		Date d = null;
 		if (existInImport(6)){
+			String[] ec = EIDSSComment.split(" / ");
 			try {
 				d = new SimpleDateFormat("dd-MM-yyyy").parse(ec[6]);
 			} catch (ParseException e) {
@@ -169,9 +173,9 @@ public class TbCaseAZ extends TbCase{
 	}
 	
 	public Date getEIDSSInnerDate(){
-		String[] ec = EIDSSComment.split(" / ");
 		Date d = null;
 		if (existInImport(2)){
+			String[] ec = EIDSSComment.split(" / ");
 			try {
 				d = new SimpleDateFormat("dd-MM-yyyy").parse(ec[2]);
 			} catch (ParseException e) {
@@ -182,16 +186,18 @@ public class TbCaseAZ extends TbCase{
 	}
 	
 	public String getEIDSSNotifUnit(){
-		String[] ec = EIDSSComment.split(" / ");
-		if (existInImport(0))
+		if (existInImport(0)){
+			String[] ec = EIDSSComment.split(" / ");
 			return ec[0];
+		}
 		return "";
 	}
 	
 	public String getEIDSSNotifAddress(){
-		String[] ec = EIDSSComment.split(" / ");
-		if (existInImport(1))
+		if (existInImport(1)){
+			String[] ec = EIDSSComment.split(" / ");
 			return ec[1];
+		}
 		return ""; 
 	}
 	//===================GETTERS & SETTERS======================
