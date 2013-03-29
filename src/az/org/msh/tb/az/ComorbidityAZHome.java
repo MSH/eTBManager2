@@ -55,7 +55,12 @@ public class ComorbidityAZHome {
 		return comorbidities;
 	}
 	
-	private boolean canViewHIVField(FieldValue value){
+	/**
+	 * Return true if user has enough permissions for view and edit all info about HIV
+	 * */
+	public boolean canViewHIVField(FieldValue value){
+		if (value == null)
+			return true;
 		if (value.getId() == 939229){
 			if (caseHome.checkRoleBySuffix("EDT_HIV_TB"))
 				return true;
