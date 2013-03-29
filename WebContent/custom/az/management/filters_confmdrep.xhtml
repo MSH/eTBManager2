@@ -11,12 +11,18 @@
 	<div class="form-content">
 	<table width="100%" style="border-collapse: collapse;"><tr><td colspan="2">
 
-	<s:decorate template="/layout/edit.xhtml" rendered="#{empty hideclassification}">
+	<!-- <s:decorate template="/layout/edit.xhtml" rendered="#{empty hideclassification}">
 		<ui:define name="label">#{messages['CaseClassification']}:	</ui:define>
 		<h:selectOneMenu value="#{indicatorFilters.classification}">
 			<s:selectItems value="#{globalLists.caseClassifications}" var="r" label="#{messages[r.key]}" noSelectionLabel="#{messages['form.noselection']}" />
 		</h:selectOneMenu>
-	</s:decorate>
+	</s:decorate> -->
+	
+	<s:decorate template="/layout/edit.xhtml" rendered="#{empty hideclassification}">
+		<ui:define name="label">#{messages['CaseClassification']}:	</ui:define>
+		<h:outputText value="#{messages['CaseClassification.DRTB']}" style="width:120px;" maxlength="50"></h:outputText>
+		</s:decorate>
+		
 
 	<div id="selcntxt">
 	<s:decorate template="/layout/edit.xhtml">
@@ -111,21 +117,6 @@ function handleContextClick(comp) {
 	<h2>#{messages['manag.ind.otherfilters']}</h2>
 	
 	</td></tr>
-	<tr><td>
-
-	<s:decorate template="/layout/edit.xhtml">
-		<ui:define name="label">
-			#{messages['ValidationState']}:
-		</ui:define>
-		<h:selectOneMenu value="#{indicatorFilters.validationState}">
-			<s:selectItems var="it" value="#{globalLists.validationState}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
-		</h:selectOneMenu>
-	</s:decorate>
-
-	</td><td>
-	
-	</td></tr>
-	
 	<tr><td>
 
 	<s:decorate template="/layout/edit.xhtml">
@@ -241,7 +232,7 @@ function handleContextClick(comp) {
 		</s:decorate>
 	</td></tr>
 	<tr>
-		<td>
+		<td colspan="2">
 			<s:decorate template="/layout/edit.xhtml" >
 				<ui:define name="label">#{messages['HIVResult']}:</ui:define>
 				<h:selectOneMenu value="#{indicatorFilters.hivResult}">
@@ -260,17 +251,6 @@ function handleContextClick(comp) {
 			</s:decorate>
 		</td>
 	</tr>
-	<tr>
-		<td colspan="2">
-			<s:decorate template="/layout/edit.xhtml" rendered="#{not empty hideMedicines}">
-				<ui:define name="label">#{messages['Substance']}:</ui:define>
-				<h:selectOneMenu value="#{indicatorFilters.substance}">
-					<s:selectItems value="#{substances}" var="r" label="#{r.name}" noSelectionLabel="#{messages['form.noselection']}" />
-					<s:convertEntity />
-				</h:selectOneMenu>
-			</s:decorate>
-		</td>
-	</tr>
 <s:fragment rendered="#{hideupdtbar == null}">
 	<tr><td colspan="2">
 		<div class="paragraph" >
@@ -282,7 +262,7 @@ function handleContextClick(comp) {
 	<h:panelGroup id="pnloutput" rendered="#{showoutputselection}">
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['global.table.rows']}:</ui:define>
-		<h:selectOneMenu value="#{indicatorFiltersAZ.outputSelectionInt}">
+		<h:selectOneMenu value="#{indicatorFilters.outputSelectionInt}">
 			<f:selectItems value="#{indicator.outputSelections}" />
 		</h:selectOneMenu>
 	</s:decorate>
@@ -304,7 +284,7 @@ function handleContextClick(comp) {
 	</td></tr>
 </s:fragment>
 
-<s:fragment rendered="#{!hideinterimmonth}">
+<s:fragment rendered="#{hideinterimmonth == null}">
 
 	<s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['reports.interimMonths']}:	</ui:define>
