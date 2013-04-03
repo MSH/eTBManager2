@@ -117,6 +117,8 @@
         <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
            <src path="src/action"/>
            <src path="src/model"/>
+ 		   <src path="src/reports"/>
+ 		   <src path="src/client"/>
            <src path="src/br"/>
            <src path="src/ph"/>
            <src path="src/ua"/>
@@ -131,8 +133,6 @@
            <src path="src/kh"/>
 	       <src path="src/vi"/>
 	       <src path="src/kh"/>
-		   <src path="src/reports"/>
-		   <src path="src/client"/>
            <classpath refid="mdrtb.classpath"/>
 		 </javac>
     </target>
