@@ -30,30 +30,36 @@
         <pathelement location="WebContent/WEB-INF/lib/richfaces-ui-3.3.3.Final.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jxl.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/gson-2.1.jar"/>
-		 <pathelement location="WebContent/WEB-INF/lib/eidssAz.jar"/>
+		<pathelement location="WebContent/WEB-INF/lib/eidssAz.jar"/>
+	 	<pathelement location="WebContent/WEB-INF/lib/gwt-servlet.jar"/>
         <pathelement location="WebContent/WEB-INF/classes"/>
     </path>
 
 
 	<path id="jboss-4.2.3.GA.libraryclasspath">
-        <pathelement location="C:\Java\jboss-4.2.3.GA/client/commons-logging.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/client/jboss-j2ee.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/client/ejb3-persistence.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/client/servlet-api.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-annotations.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-entitymanager.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-core.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/lucene-core.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-search.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/hibernate-validator.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/dom4j.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/axis.jar"/>
-        <pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/jboss-jaxrpc.jar"/>
-		<pathelement location="C:\Java\jboss-4.2.3.GA/server/default/lib/quartz.jar"/>
+        <pathelement location="${jboss.dir}/client/commons-logging.jar"/>
+        <pathelement location="${jboss.dir}/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
+        <pathelement location="${jboss.dir}/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
+        <pathelement location="${jboss.dir}/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
+        <pathelement location="${jboss.dir}/client/jboss-j2ee.jar"/>
+        <pathelement location="${jboss.dir}/client/ejb3-persistence.jar"/>
+        <pathelement location="${jboss.dir}/client/servlet-api.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-annotations.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-entitymanager.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-core.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/lucene-core.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-search.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-validator.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/dom4j.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/axis.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/jboss-jaxrpc.jar"/>
+		<pathelement location="${jboss.dir}/server/default/lib/quartz.jar"/>
     </path>
+	
+	<path id="gwt.librarypath">
+        <pathelement location="${gwt.dir}/gwt-dev.jar"/>
+        <pathelement location="${gwt.dir}/gwt-user.jar"/>
+	</path>
 
 	<path id="mdrtb.classpath">
         <pathelement location="build/classes"/>
@@ -61,6 +67,7 @@
         <path refid="EAR Libraries.libraryclasspath"/> -->
         <path refid="Web App Libraries.libraryclasspath"/> 
         <path refid="jboss-4.2.3.GA.libraryclasspath"/>
+        <path refid="gwt.librarypath"/>
     </path>
 	
 	<path id="etbm.sourcepath">
@@ -103,9 +110,9 @@
 	<target depends="clean" name="cleanall"/>
 	
 	
-    <target depends="build-project,war" name="build" />
+    <target depends="compile,gwt-compile,war" name="build" />
 	
-	<target depends="init" name="build-project">
+	<target depends="init" name="compile">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/action"/>
@@ -127,6 +134,8 @@
            <src path="src/kh"/>
 	       <src path="src/vi"/>
 	       <src path="src/kh"/>
+		   <src path="src/reports"/>
+		   <src path="src/client"/>
            <classpath refid="mdrtb.classpath"/>
 		 </javac>
     </target>
@@ -158,6 +167,7 @@
 				<exclude name="WEB-INF/web.xml"/>
 				<exclude name="WEB-INF/components.xml" />
 				<exclude name="WEB-INF/classes/META-INF/persistence.xml" />
+				<exclude name="WEB-INF/deploy/**"/>
 			</fileset>
 			
 			<classes dir="build/classes">
@@ -193,6 +203,27 @@
 		    <mapper type="glob" from="*.dot" to="*.png"/>
 		</apply>
 	</target>
+
+
+
+	<target name="gwt-compile" description="Compile java source code in javascript code using GWT">
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler" >
+			<classpath>
+				<pathelement location="src/client" />
+				<path refid="gwt.librarypath" />
+			</classpath>
+			<jvmarg value="-Xmx512M"/>
+			<arg value="-style"/>
+			<arg value="OBFUSCATED" />
+			<arg value="-logLevel"/>
+			<arg value="INFO" />
+			<arg value="-war"/>
+			<arg value="WebContent" />
+			<arg value="org.msh.tb.client.reports"/>
+		</java>
+	</target>
+
+
 
 	<!-- Define the Sonar global properties (the most usual way is to pass these properties via the command line) -->
 	<property name="sonar.jdbc.url" value="jdbc:mysql://localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8" />

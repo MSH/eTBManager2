@@ -111,7 +111,7 @@
     
    <servlet-mapping>
       <servlet-name>Seam Resource Servlet</servlet-name>
-      <url-pattern>/seam/resource/*</url-pattern>
+      <url-pattern>/reportsgwt/seam/resource/*</url-pattern>
    </servlet-mapping>
 
     <servlet>

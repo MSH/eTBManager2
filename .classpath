@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/action"/>
+	<classpathentry kind="src" path="src/client"/>
+	<classpathentry kind="src" path="src/reports"/>
+	<classpathentry kind="src" path="src/vi"/>
+	<classpathentry kind="src" path="src/kh"/>
+	<classpathentry kind="src" path="src/ge"/>
 	<classpathentry kind="src" path="src/ng"/>
 	<classpathentry kind="src" path="src/na"/>
 	<classpathentry kind="src" path="src/bd"/>
@@ -18,5 +23,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/dom4j-1.6.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.jboss.ide.eclipse.as.core.server.runtime.runtimeTarget/JBoss 4.2.3.GA"/>
-	<classpathentry kind="output" path="build/classes"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

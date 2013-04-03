@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='reportsgwt'>
+  <!-- Inherited modules                        -->
+  <inherits name='com.google.gwt.user.User'/>
+  <inherits name="com.google.gwt.json.JSON" />
+  <inherits name="com.google.gwt.i18n.I18N"/>
+
+  <!-- Suported locales -->
+  <extend-property name="locale" values="pt_BR" />
+  <extend-property name="locale" values="en" />
+
+  <public path="client/pub" />
+
+  <!-- Specify the app entry point class.                         -->
+  <entry-point class='org.msh.tb.client.reports.App'/>
+
+  <!-- Specify the paths for translatable code                    -->
+  <source path='reports'/>
+  <source path='shared'/>
+  <source path='commons'/>
+</module>
