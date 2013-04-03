@@ -115,11 +115,8 @@
 	<target depends="init" name="compile">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
-            <src path="src/action"/>
-            <src path="src/model"/>
-            <classpath refid="mdrtb.classpath"/>
-        </javac>
-		 <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
+           <src path="src/action"/>
+           <src path="src/model"/>
            <src path="src/br"/>
            <src path="src/ph"/>
            <src path="src/ua"/>
