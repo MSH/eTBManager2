@@ -11,7 +11,7 @@
     <property name="target" value="1.6"/>
     <property name="source" value="1.6"/>
 
-	<path id="Web App Libraries.libraryclasspath">
+	<path id="project.libraryclasspath">
         <pathelement location="WebContent/WEB-INF/lib/commons-beanutils.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/commons-digester.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/commons-lang.jar"/>
@@ -63,9 +63,7 @@
 
 	<path id="mdrtb.classpath">
         <pathelement location="build/classes"/>
-<!--        <path refid="All JBoss Libraries [JBoss 4.2].libraryclasspath"/> 
-        <path refid="EAR Libraries.libraryclasspath"/> -->
-        <path refid="Web App Libraries.libraryclasspath"/> 
+        <path refid="project.libraryclasspath"/> 
         <path refid="jboss-4.2.3.GA.libraryclasspath"/>
         <path refid="gwt.librarypath"/>
     </path>
@@ -73,6 +71,8 @@
 	<path id="etbm.sourcepath">
 		<pathelement location="src/action"/>
 		<pathelement location="src/model"/>
+		<pathelement location="src/client"/>
+		<pathelement location="src/reports"/>
 	</path>
 
 
