@@ -11,7 +11,7 @@ public class AgeRangeVariable extends VariableImpl {
 	private AgeRangeHome ageRangeHome;
 	
 	public AgeRangeVariable() {
-		super("ageRange", "AgeRange", "tbcase.age", null);
+		super("ageRange", "AgeRange", "tbcase.age");
 	}
 
 	/* (non-Javadoc)

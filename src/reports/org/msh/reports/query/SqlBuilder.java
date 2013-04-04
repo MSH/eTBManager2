@@ -173,7 +173,9 @@ public class SqlBuilder implements SQLDefs {
 	 * @param join
 	 */
 	protected void createSQLJoin(StringBuilder builder, TableJoin join) {
-		builder.append("\ninner join ");
+		if (join.isLeftJoin())
+			 builder.append("\nleft join ");
+		else builder.append("\ninner join ");
 		builder.append(join.getTableName());
 		builder.append(' ');
 		builder.append(join.getAlias());
@@ -357,6 +359,18 @@ public class SqlBuilder implements SQLDefs {
 	 */
 	public List<Variable> getVariables() {
 		return variables;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.reports.query.SQLDefs#addLeftJoin(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public TableJoin addLeftJoin(String table, String field,
+			String parentTable, String parentField) {
+		TableJoin join = addJoin(table, field, parentTable, parentField);
+		join.setLeftJoin(true);
+		return join;
 	}
 	
 	

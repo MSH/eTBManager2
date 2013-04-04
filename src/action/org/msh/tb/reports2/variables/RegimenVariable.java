@@ -14,7 +14,7 @@ public class RegimenVariable extends VariableImpl {
 	private List<Regimen> regimens;
 	
 	public RegimenVariable() {
-		super("regimen", "Regimen", "tbcase.regimen_id", null);
+		super("regimen", "Regimen", "tbcase.regimen_id");
 	}
 
 	/**

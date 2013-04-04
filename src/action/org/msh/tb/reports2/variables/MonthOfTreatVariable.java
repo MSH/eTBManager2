@@ -6,7 +6,7 @@ import org.msh.tb.reports2.VariableImpl;
 public class MonthOfTreatVariable extends VariableImpl {
 
 	public MonthOfTreatVariable() {
-		super("monthTreat", "cases.sideeffects.month", null, null);
+		super("monthTreat", "manag.reportgen.var.monthtreat", null);
 	}
 
 

@@ -14,7 +14,7 @@ public class PrescMedicineVariable extends VariableImpl {
 	private List<Medicine> medicines;
 	
 	public PrescMedicineVariable() {
-		super("prescMed", "PrescribedMedicine", null, null);
+		super("prescMed", "PrescribedMedicine", null);
 	}
 	
 	/**

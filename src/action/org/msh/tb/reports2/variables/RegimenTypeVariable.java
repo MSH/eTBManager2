@@ -7,7 +7,7 @@ import org.msh.tb.reports2.VariableImpl;
 public class RegimenTypeVariable extends VariableImpl {
 
 	public RegimenTypeVariable() {
-		super("reg_type", "regimen.type", null, null);
+		super("reg_type", "regimen.type", null);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -29,9 +29,14 @@ public class RegimenTypeVariable extends VariableImpl {
 		if (key == null)
 			return super.getDisplayText(key);
 
-		if (key.equals("0"))
+		if (key.toString().equals("0"))
 			 return Messages.instance().get("regimens.individualized");
 		else return Messages.instance().get("regimens.standard");
+	}
+
+	@Override
+	public Object createKey(Object values) {
+		return values;
 	}
 
 

@@ -13,7 +13,7 @@ public class DateFieldVariable extends VariableImpl {
 
 
 	public DateFieldVariable(String id, String label, String fieldName, boolean yearOnly) {
-		super(id, label, fieldName, null);
+		super(id, label, fieldName);
 		this.yearOnly = yearOnly;
 	}
 

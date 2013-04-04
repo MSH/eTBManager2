@@ -20,7 +20,7 @@ public class AdminUnitVariable extends VariableImpl {
 	private List<AdministrativeUnit> adminUnits;
 	
 	public AdminUnitVariable(String id, String label, String field) {
-		super(id, label, field, null);
+		super(id, label, field);
 	}
 
 	

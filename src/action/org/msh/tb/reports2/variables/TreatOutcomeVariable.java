@@ -2,12 +2,11 @@ package org.msh.tb.reports2.variables;
 
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.reports2.VariableImpl;
 
-public class TreatOutcomeVariable extends VariableImpl {
+public class TreatOutcomeVariable extends EnumFieldVariable {
 
 	public TreatOutcomeVariable() {
-		super("outcome", "manag.ind.outcome", "tbcase.state", CaseState.values());
+		super("outcome", "manag.ind.outcome", "tbcase.state", CaseState.class);
 	}
 
 	/* (non-Javadoc)

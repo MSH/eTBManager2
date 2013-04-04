@@ -12,6 +12,7 @@ public class TableJoin {
 	private TableJoin parentJoin;
 	private int aliasCounter;	// a unique number used to generate the table alias
 	private List<TableJoin> joins;
+	private boolean leftJoin;
 
 	public TableJoin(String tableName, String tableField, TableJoin parentJoin, String parentField) {
 		super();
@@ -213,5 +214,21 @@ public class TableJoin {
 	 */
 	public String getParentField() {
 		return parentField;
+	}
+
+
+	/**
+	 * @return the leftJoin
+	 */
+	public boolean isLeftJoin() {
+		return leftJoin;
+	}
+
+
+	/**
+	 * @param leftJoin the leftJoin to set
+	 */
+	public void setLeftJoin(boolean leftJoin) {
+		this.leftJoin = leftJoin;
 	}
 }

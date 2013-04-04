@@ -6,55 +6,54 @@ import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.query.SQLDefs;
 import org.msh.reports.variables.Variable;
 
+/**
+ * Default implementation of a variable that stores the id, the
+ * message key and the field name (with optional table alias)
+ *  
+ * @author Ricardo Memoria
+ *
+ */
 public class VariableImpl implements Variable, Filter {
 
 	private String id;
 	private String keylabel;
 	private String fieldName;
-	private Object[] names;
 	
-	public VariableImpl(String id, String keylabel, String fieldName, Object[] names) {
+	public VariableImpl(String id, String keylabel, String fieldName) {
 		this.id = id;
 		this.fieldName = fieldName;
 		this.keylabel = keylabel;
-		this.names = names;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.msh.reports.variables.Variable#getName()
+	 */
 	@Override
 	public String getName() {
 		return fieldName;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.msh.reports.variables.Variable#getLabel()
+	 */
 	@Override
 	public String getLabel() {
 		return Messages.instance().get(keylabel);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.msh.reports.variables.Variable#prepareVariableQuery(org.msh.reports.query.SQLDefs)
+	 */
 	@Override
 	public void prepareVariableQuery(SQLDefs def) {
 		def.addField(fieldName);
 	}
 
-	
-	@Override
-	public Object createKey(Object value) {
-		if (value == null)
-			return null;
-
-		Object[] names = getNames();
-
-		int index;
-		if (value instanceof Long)
-			 index = ((Long)value).intValue();
-		else index = (Integer)value;
-
-		if ((names == null) || (index > names.length))
-			return value.toString();
-		
-		return names[index];
-	}
 
 
+	/* (non-Javadoc)
+	 * @see org.msh.reports.variables.Variable#compareValues(java.lang.Object, java.lang.Object)
+	 */
 	@Override
 	public int compareValues(Object val1, Object val2) {
 		if (val1 instanceof Long)
@@ -64,16 +63,18 @@ public class VariableImpl implements Variable, Filter {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see org.msh.reports.variables.Variable#getDomain()
+	 */
 	@Override
 	public Object[] getDomain() {
 		return null;
 	}
 	
-	
-	protected Object[] getNames() {
-		return names;
-	}
 
+	/* (non-Javadoc)
+	 * @see org.msh.reports.filters.Filter#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
+	 */
 	@Override
 	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
 		String s = fieldName.replace('.', '_');
@@ -96,6 +97,7 @@ public class VariableImpl implements Variable, Filter {
 		def.addParameter(s, value);
 	}
 
+
 	/**
 	 * @return the id
 	 */
@@ -117,17 +119,18 @@ public class VariableImpl implements Variable, Filter {
 		return fieldName;
 	}
 
+
+	/* (non-Javadoc)
+	 * @see org.msh.reports.variables.Variable#getDisplayText(java.lang.Object)
+	 */
 	@Override
 	public String getDisplayText(Object key) {
 		if (key == null)
 			return Messages.instance().get("global.notdef");
 
-		if (key instanceof Enum) {
-			String msgkey = key.getClass().getSimpleName() + "." + key.toString();
-			return Messages.instance().get(msgkey);
-		}
-		else return key.toString();
+		return key.toString();
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.msh.reports.variables.Variable#isGrouped()
@@ -151,5 +154,10 @@ public class VariableImpl implements Variable, Filter {
 	@Override
 	public String getGroupDisplayText(Object key) {
 		return key != null? key.toString(): "";
+	}
+
+	@Override
+	public Object createKey(Object values) {
+		return values;
 	}
 }

@@ -20,13 +20,24 @@ public interface SQLDefs {
 	
 	/**
 	 * Add a table join to the query
-	 * @param table
-	 * @param field
-	 * @param parentTable
-	 * @param parentField
-	 * @return
+	 * @param table is the name of the table
+	 * @param field is the field in the table that joins to the parent table
+	 * @param parentTable is the parent table to where this join will connect
+	 * @param parentField is the field in the parent table where the field of the table is related
+	 * @return instance of the {@link TableJoin} class representing the join
 	 */
 	TableJoin addJoin(String table, String field, String parentTable, String parentField);
+	
+	
+	/**
+	 * Add a table left join to the query
+	 * @param table is the name of the table
+	 * @param field is the field in the table that joins to the parent table
+	 * @param parentTable is the parent table to where this join will connect
+	 * @param parentField is the field in the parent table where the field of the table is related
+	 * @return instance of the {@link TableJoin} class representing the join
+	 */
+	TableJoin addLeftJoin(String table, String field, String parentTable, String parentField);
 
 	/**
 	 * Add a field to be returned by the query
