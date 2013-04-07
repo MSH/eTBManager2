@@ -9,19 +9,19 @@
 		<navigation>
 			<rule if-outcome="persisted">
 				<end-conversation/>
-				<redirect view-id="/medicines/receiving.xhtml">
-					<param name="id" value="#{medicineReceivingHome.id}" converterId="javax.faces.Integer"/>
+				<redirect view-id="/custom/ua/medicines/receiving.xhtml">
+					<param name="id" value="#{medicineReceivingUAHome.id}" converterId="javax.faces.Integer"/>
 				</redirect>
 			</rule>
-			<rule if-outcome="cancel" if="#{medicineReceivingHome.id != null}">
+			<rule if-outcome="cancel" if="#{medicineReceivingUAHome.id != null}">
 				<end-conversation before-redirect="true" />
-				<redirect view-id="/medicines/receiving.xhtml" >
-					<param name="id" value="#{medicineReceivingHome.id}" converterId="javax.faces.Integer" />
+				<redirect view-id="/custom/ua/medicines/receiving.xhtml" >
+					<param name="id" value="#{medicineReceivingUAHome.id}" converterId="javax.faces.Integer" />
 				</redirect>
 			</rule>
-			<rule if-outcome="cancel" if="#{medicineReceivingHome.id == null}">
+			<rule if-outcome="cancel" if="#{medicineReceivingUAHome.id == null}">
 				<end-conversation before-redirect="true" />
-				<redirect view-id="/medicines/receivings.xhtml" />
+				<redirect view-id="/custom/ua/medicines/receivings.xhtml" />
 			</rule>
 		</navigation>
 </page>

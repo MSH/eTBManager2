@@ -10,7 +10,7 @@
       xmlns:c="http://java.sun.com/jstl/core"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{medicineReceiving.id==null? messages['meds.receiving.new'] :messages['meds.receiving.edt']}"/>
+<ui:param name="title" value="#{medicineReceivingUA.id==null? messages['meds.receiving.new'] :messages['meds.receiving.edt']}"/>
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 
@@ -29,6 +29,12 @@
             <s:selectItems value="#{sources.resultList}" var="c" label="#{c.abbrevName} - #{c.name}" noSelectionLabel="-" />
             <s:convertEntity/>
 		</h:selectOneMenu>
+    </s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Transfer.consignmentNumber']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<h:inputText value="#{medicineReceivingUA.consignmentNumber}" />
     </s:decorate>
 
     <s:decorate template="/layout/dateedit.xhtml" >
@@ -129,7 +135,7 @@
 		<div style="float:right">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-        <a:commandLink action="#{medicineReceivingHome.persist}" styleClass="button" 
+        <a:commandLink action="#{medicineReceivingUAHome.persist}" styleClass="button" 
             	onclick="if (!disableButton(this)) return false;" 
             	reRender="messages,main">
             	<span>#{messages['form.save']}</span>

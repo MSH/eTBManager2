@@ -16,7 +16,7 @@
 
 <ui:define name="left">
 	<div class="vertical-menu">
-	<s:link view="/medicines/edtrec.xhtml" >
+	<s:link view="/custom/ua/medicines/edtrec.xhtml" >
 		<f:param name="id" value="#{medicineReceivingHome.id}" />
 		<div class="edit-icon" style="float:left"/>#{messages['form.edit']}
 	</s:link>
@@ -56,14 +56,19 @@
 <h:form id="main">
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
-    	<h:outputText value="#{medicineReceiving.id}" />
+    	<h:outputText value="#{id}" />
     </s:decorate>
 
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['Source']}:</ui:define>
     	<h:outputText value="#{medicineReceiving.source.name}" />
     </s:decorate>
-
+	
+	<s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Transfer.consignmentNumber']}:</ui:define>
+    	<h:outputText value="#{medicineReceivingUA.consignmentNumber}" />
+    </s:decorate>
+	
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['MedicineReceiving.receivingDate']}:</ui:define>
     	<h:outputText value="#{medicineReceiving.receivingDate}"  converter="localeDateConverter" />
