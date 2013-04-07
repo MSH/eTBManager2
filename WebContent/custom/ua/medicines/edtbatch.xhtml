@@ -58,6 +58,12 @@ function hideBatchDlg() {
     </s:decorate>
 
 	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:param name="labelstyle" value="width:185px" />
+    	<ui:define name="label">#{messages['Batch.brandName']}:</ui:define>
+    	<h:inputText id="brandname" value="#{medicineReceivingHome.batch.brandName}" size="30" />
+    </s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml" >
 		<ui:param name="labelstyle" value="width:185px" />
     	<ui:define name="label">#{messages['Batch.manufacturer']}:</ui:define>
 		<h:selectOneMenu  value="#{medicineReceivingHome.batch.manufacturer}" required="false"> 
