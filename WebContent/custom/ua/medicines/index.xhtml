@@ -134,6 +134,11 @@
 				</div>
 			</td>
 			<td align="right">
+				<h:outputText value="#{b.batch.numContainers} (№#{b.batch.quantityContainer})"  styleClass="error">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			<td align="right">
 				<h:outputText value="#{b.quantity}" styleClass="error">
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
@@ -158,6 +163,11 @@
 					<span class="alert-icon" />
 					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" style="color:#D7620B;font-weight:bold"/>
 				</div>
+			</td>
+			<td align="right">
+				<h:outputText value="#{b.batch.numContainers} (№#{b.batch.quantityContainer})"  style="color:#D7620B;font-weight:bold">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
 			</td>
 			<td align="right">
 				<h:outputText value="#{b.quantity}"  style="color:#D7620B;font-weight:bold">
