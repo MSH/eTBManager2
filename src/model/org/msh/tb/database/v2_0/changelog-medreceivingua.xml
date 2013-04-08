@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<changeSet id="1" author="Alexk">
+		<createTable tableName="medicinereceiving_ua">
+ 			<column name="id" type="int" >
+ 				<constraints primaryKey="true" nullable="false"/>
+ 			</column>
+ 			<column name="consignmentNumber" type="varchar(45)">
+ 				<constraints nullable="true"/>
+ 			</column>
+ 		</createTable>
+		
+ 		<addForeignKeyConstraint constraintName="fk_id_medreceveing" 
+ 			baseColumnNames="id" baseTableName="medicinereceiving_ua" referencedTableName="medicinereceiving" referencedColumnNames="id" 
+ 			onDelete="CASCADE" onUpdate="CASCADE"/>
+
+		<createIndex tableName="medicinereceiving_ua" indexName="fk_id_medreceveing" >
+			<column name="id"/>
+		</createIndex>	
+	 	
+		<sql>
+			INSERT INTO `etbmanager`.`medicinereceiving_ua` SELECT id,null FROM `etbmanager`.`medicinereceiving`;
+		</sql>
+	</changeSet>
+
+</databaseChangeLog>

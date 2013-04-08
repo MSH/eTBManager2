@@ -8,4 +8,5 @@
 
   <include file="org/msh/tb/database/v2_0/changelog-1.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-genexpert.xml"/> 
+  <include file="org/msh/tb/database/v2_0/changelog-medreceivingua.xml"/> 
 </databaseChangeLog> 
