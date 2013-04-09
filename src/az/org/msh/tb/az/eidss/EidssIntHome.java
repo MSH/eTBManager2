@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.faces.model.SelectItem;
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.jboss.seam.Component;
@@ -23,6 +22,7 @@ import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.tb.application.App;
 import org.msh.tb.application.tasks.TaskManager;
 import org.msh.tb.az.eidss.timer.SysStartupAZ;
 import org.msh.tb.entities.SystemParam;
@@ -40,7 +40,6 @@ import org.msh.tb.entities.Workspace;
 @Name("eidssIntHome")
 @Scope(ScopeType.APPLICATION)
 public class EidssIntHome {
-	@In EntityManager entityManager;
 	@In TaskManager taskManager;
 	@In(required=false) Workspace defaultWorkspace;
 	@In(create=true) FacesMessages facesMessages;
@@ -223,7 +222,7 @@ public class EidssIntHome {
 	private void loadParameter(Field fld, EidssIntConfig config) {
 		String s = null;
 		try {
-			SystemParam sysparam = (SystemParam)entityManager
+			SystemParam sysparam = (SystemParam)App.getEntityManager()
 			.createQuery("from SystemParam sp where sp.workspace.id = :id and sp.key = :param")
 			.setParameter("id", sysStartupAZ.getObservWorkspace().getId())
 			.setParameter("param", prefix+"."+fld.getName())
@@ -286,7 +285,7 @@ public class EidssIntHome {
 	protected void saveParameter(String key, String value) {
 		SystemParam p;
 		try {
-			p = entityManager.find(SystemParam.class, key);
+			p = App.getEntityManager().find(SystemParam.class, key);
 		} catch (Exception e) {
 			p = null;
 		}
@@ -300,7 +299,7 @@ public class EidssIntHome {
 			p.setWorkspace(sysStartupAZ.getObservWorkspace());
 		}
 		p.setValue(value.toString());
-		entityManager.persist(p);
+		App.getEntityManager().persist(p);
 	}
 
 	/**
@@ -321,12 +320,12 @@ public class EidssIntHome {
 	public void setDefaultWorkspace() {
 		if (defaultWorkspace==null)
 			if (userLogin==null)
-				defaultWorkspace = getEntityManager().find(Workspace.class, 8);
+				defaultWorkspace = App.getEntityManager().find(Workspace.class, 8);
 			else{
 				if(getUserLogin().getLoginDate()!=null)
-					workspace = getEntityManager().find(Workspace.class, getUserLogin().getDefaultWorkspace().getId());
+					workspace = App.getEntityManager().find(Workspace.class, getUserLogin().getDefaultWorkspace().getId());
 				else
-					defaultWorkspace = getEntityManager().find(Workspace.class, 8);
+					defaultWorkspace = App.getEntityManager().find(Workspace.class, 8);
 			}
 		if (workspace==null){
 			workspace = defaultWorkspace;
@@ -343,12 +342,6 @@ public class EidssIntHome {
 		this.userLogin = userLogin;
 	}
 
-
-	public EntityManager getEntityManager() {
-		return entityManager;
-	}
-
-
 	/**
 	 * 
 	 * @return 
@@ -360,10 +353,10 @@ public class EidssIntHome {
 			userLogin = new UserLogin();
 			userLogin.setWorkspace(sysStartupAZ.getObservWorkspace());
 			if (getConfig().getDefaultUser()!=null){
-				User us = (User) getEntityManager().find(User.class, getConfig().getDefaultUser());
+				User us = (User) App.getEntityManager().find(User.class, getConfig().getDefaultUser());
 				userLogin.setUser(us);
 				//userLogin.setId(us.getId());
-				Query q = getEntityManager().createQuery("from UserWorkspace uw where uw.workspace.id="+sysStartupAZ.getObservWorkspace().getId()+" and uw.user.id=:uid")
+				Query q = App.getEntityManager().createQuery("from UserWorkspace uw where uw.workspace.id="+sysStartupAZ.getObservWorkspace().getId()+" and uw.user.id=:uid")
 				.setParameter("uid", us.getId());
 				UserWorkspace uw = (UserWorkspace) q.getResultList().get(0);
 				Contexts.getApplicationContext().set("userWorkspace", uw);

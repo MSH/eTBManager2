@@ -16,6 +16,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.transaction.SystemException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -482,10 +483,10 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	private void initContext() {
 		// initializing context variables
 		User user = getUser();
-		UserWorkspace ws = (UserWorkspace)getEntityManager().createQuery("from UserWorkspace ws where ws.user.id = :uid and ws.workspace.id = :id")
-		.setParameter("uid", user.getId())
-		.setParameter("id", getWorkspace().getId())
-		.getSingleResult();
+		Query q = getEntityManager().createQuery("from UserWorkspace ws where ws.user.id = :uid and ws.workspace.id = :id")
+									.setParameter("uid", user.getId())
+									.setParameter("id", getWorkspace().getId());
+		UserWorkspace ws = (UserWorkspace)q.getResultList().get(0);
 		Contexts.getEventContext().set("userWorkspace", ws);
 		// avoid lazy initialization problems
 		ws.getTbunit().getAdminUnit().getId();
