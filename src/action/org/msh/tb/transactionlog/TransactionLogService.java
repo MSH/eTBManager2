@@ -255,17 +255,20 @@ public class TransactionLogService {
 	 */
 	protected WorkspaceLog getWorkspaceLog() {
 		Workspace ws = (Workspace)Component.getInstance("defaultWorkspace");
-		WorkspaceLog wslog = getEntityManager().find(WorkspaceLog.class, ws.getId());
-		
-		if (wslog == null) {
-			wslog = new WorkspaceLog();
-			wslog.setId(ws.getId());
-			wslog.setName(new LocalizedNameComp());
-			wslog.getName().setName1(ws.getName().getName1());
-			wslog.getName().setName2(ws.getName().getName2());
-			getEntityManager().persist(wslog);
+		if (ws.getId()!=null){
+			WorkspaceLog wslog = getEntityManager().find(WorkspaceLog.class, ws.getId());
+			
+			if (wslog == null) {
+				wslog = new WorkspaceLog();
+				wslog.setId(ws.getId());
+				wslog.setName(new LocalizedNameComp());
+				wslog.getName().setName1(ws.getName().getName1());
+				wslog.getName().setName2(ws.getName().getName2());
+				getEntityManager().persist(wslog);
+			}
+			return wslog;
 		}
-		return wslog;
+		return null;
 	}
 	
 
@@ -337,7 +340,7 @@ public class TransactionLogService {
 		
 		UserRole role = (UserRole) em.createQuery("from UserRole where name = :name")
 			.setParameter("name", eventName)
-			.getSingleResult();
+			.getResultList().get(0);
 		return role;
 	}
 

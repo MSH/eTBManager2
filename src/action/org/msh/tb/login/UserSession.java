@@ -302,15 +302,16 @@ public class UserSession {
      */
     protected void registerLogout() {
     	EntityManager em = getEntityManager();
-
-    	UserLogin userLogin = em.find(UserLogin.class, getUserLogin().getId() );
-    	userLogin.setLogoutDate(new Date());
-
-        OnlineUsersHome onlineUsers = (OnlineUsersHome)Component.getInstance("onlineUsers");
-        onlineUsers.remove(userLogin);
-
-        em.persist(userLogin);
-        em.flush();
+    	if (getUserLogin().getId() !=null){
+	    	UserLogin userLogin = em.find(UserLogin.class, getUserLogin().getId() );
+	    	userLogin.setLogoutDate(new Date());
+	
+	        OnlineUsersHome onlineUsers = (OnlineUsersHome)Component.getInstance("onlineUsers");
+	        onlineUsers.remove(userLogin);
+	
+	        em.persist(userLogin);
+	        em.flush();
+    	}
     }
 
     
