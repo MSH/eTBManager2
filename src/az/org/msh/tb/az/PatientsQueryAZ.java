@@ -1,6 +1,5 @@
 package org.msh.tb.az;
 
-import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -274,8 +273,7 @@ public class PatientsQueryAZ extends PatientsQuery {
 								return compareNames(o1,o2);
 							}
 							else{
-								Collator myCollator = Collator.getInstance();			    
-								return (!inverseOrder ? myCollator.compare(i1,i2) : myCollator.compare(i2,i1));
+								return compare2strings(i1, i2);
 								}
 						}
 					});
@@ -301,8 +299,7 @@ public class PatientsQueryAZ extends PatientsQuery {
 								return compareNames(o1,o2);
 							}
 							else{
-								Collator myCollator = Collator.getInstance();			    
-								return (!inverseOrder ? myCollator.compare(i1,i2) : myCollator.compare(i2,i1));
+								return compare2strings(i1, i2);
 								}
 						}
 					});
@@ -326,8 +323,7 @@ public class PatientsQueryAZ extends PatientsQuery {
 								return compareNames(o1,o2);
 							}
 							else{
-								Collator myCollator = Collator.getInstance();			    
-								return (!inverseOrder ? myCollator.compare(i1,i2) : myCollator.compare(i2,i1));
+								return compare2strings(i1, i2);
 							}
 						}
 					});
@@ -419,10 +415,9 @@ public class PatientsQueryAZ extends PatientsQuery {
 							String name2 = az2.getEIDSSName();
 							
 							if (name1.equals(name2)){
-								name2 = name1+"_"+o2.getPatient().getId();
+								return compareNames(o1, o2);
 							}
-							Collator myCollator = Collator.getInstance();			    
-							return (!inverseOrder ? myCollator.compare(name1,name2) : myCollator.compare(name2,name1));
+							return compare2strings(name1, name2);
 						}
 					});
 					break;
@@ -463,8 +458,7 @@ public class PatientsQueryAZ extends PatientsQuery {
 							if (name1.equals(name2)){
 								name2 = name1+"_"+o2.getPatient().getId();
 							}
-							Collator myCollator = Collator.getInstance();		
-							return (!inverseOrder ? myCollator.compare(name1,name2) : myCollator.compare(name2,name1));
+							return compare2strings(name1, name2);
 						}
 					});
 					break;
@@ -516,8 +510,7 @@ public class PatientsQueryAZ extends PatientsQuery {
 								name2 = name1+"_"+o2.getPatient().getId();
 							}
 							
-							Collator myCollator = Collator.getInstance();		
-							return (!inverseOrder ? myCollator.compare(name1,name2) : myCollator.compare(name2,name1));
+							return compare2strings(name1, name2);
 						}
 					});
 					break;
@@ -529,13 +522,15 @@ public class PatientsQueryAZ extends PatientsQuery {
 						public int compare(Item o1, Item o2) {
 							String name1 = o1.getTbcase().getLegacyId();
 							String name2 = o2.getTbcase().getLegacyId();
-							    
+							
+							if (name1 == null) name1="";
+							if (name2 == null) name2="";
+							
 							if (name1.equals(name2)){
 								name2 = name1+"_"+o2.getPatient().getId();
 							}
 							
-							Collator myCollator = Collator.getInstance();		
-							return (!inverseOrder ? myCollator.compare(name1,name2) : myCollator.compare(name2,name1));
+							return compare2strings(name1, name2);
 						}
 					});
 					break;
@@ -562,8 +557,18 @@ public class PatientsQueryAZ extends PatientsQuery {
 			if (name1.equals(name2)){
 				name2 = name1+"_"+o2.getPatient().getId();
 			}
-			Collator myCollator = Collator.getInstance();			    
-			return (!inverseOrder ? myCollator.compare(name1,name2) : myCollator.compare(name2,name1));
+			return compare2strings(name1, name2);
+		}
+
+		/**
+		 * @param s1
+		 * @param s2
+		 * @return
+		 */
+		protected int compare2strings(String s1, String s2) {
+//			Collator myCollator = Collator.getInstance();			    
+//			return (!inverseOrder ? myCollator.compare(s1,s2) : myCollator.compare(s2,s1));
+			return (!inverseOrder ? s1.compareTo(s2) : s2.compareTo(s1));
 		}
 
 		/**

@@ -50,6 +50,15 @@ public class CasesQueryAZ extends CasesQuery{
 	private static final String notifAdrAdmUnitRegAZ="c.notifAddress.adminUnit.code = ";
 	//private static final Pattern WHERE_PATTERN = Pattern.compile("\\s(where)\\s", Pattern.CASE_INSENSITIVE);
 	
+	private static final String[] orderValues = {"p.recordNumber, c.caseNumber", "p.gender,p.name", 
+		"c.classification", "#{cases.namesOrderBy}", "c.age", "upper(nu.name.name1)", "c.notifAddress.adminUnit.name.name1", 
+		"c.notifAddress.adminUnit.name.name1", "c.state", "c.registrationDate", "c.treatmentPeriod.iniDate", "c.validationState"};
+
+	private static final String[] inverseOrderValues = {"p.recordNumber desc, c.caseNumber", "p.gender desc, upper(p.name) desc, upper(p.middleName) desc, upper(p.lastName) desc", 
+		"c.classification desc", "#{cases.namesOrderBy}", "c.age desc", "upper(nu.name.name1) desc", "c.notifAddress.adminUnit.name.name1 desc", 
+		"c.notifAddress.adminUnit.name.name1 desc", "c.state desc", "c.registrationDate desc", "c.treatmentPeriod.iniDate desc", "c.validationState desc"};
+
+	
 	// static filters
 	private static final String[] restrictions = {
 		"p.recordNumber = #{caseFilters.patientRecordNumber}",
@@ -88,7 +97,15 @@ public class CasesQueryAZ extends CasesQuery{
 		return null;
 	}
 	
-	
+	@Override
+	public String getOrder() {
+		if (getCaseFilters().getOrder()>100)
+			return null;
+		String s = getCaseFilters().isInverseOrder()? inverseOrderValues[getCaseFilters().getOrder()] : orderValues[getCaseFilters().getOrder()];
+		s = Expressions.instance().createValueExpression(s).getValue().toString();
+		return s;
+	}
+
 	
 	@Override
 	public String getEjbql() {
@@ -370,14 +387,6 @@ public class CasesQueryAZ extends CasesQuery{
 		
 	}
 	
-	@Override
-	public String getOrder() {
-		if (getCaseFilters().getOrder()>100)
-			return null;
-		String s = getCaseFilters().isInverseOrder()? getInverseordervalues()[getCaseFilters().getOrder()] : getOrdervalues()[getCaseFilters().getOrder()];
-		s = Expressions.instance().createValueExpression(s).getValue().toString();
-		return s;
-	}
 	
 	/**
 	 * Change order sorting patient list
