@@ -97,4 +97,6 @@
    </bpm:jbpm>
    -->
    
+   <async:quartz-dispatcher/>
+   
 </components>
