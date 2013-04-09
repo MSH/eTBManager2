@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?> 
 
-<project basedir="." default="build" name="etbmanager">
+<project basedir="." default="build" name="etbmanager"
+	xmlns:sonar="antlib:org.sonar.ant">
     <property environment="env" />
 	<property file="build.properties" />
 	<property name="war-file-prefix" value="etbmanager" />
@@ -11,7 +12,7 @@
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.6"/>
     <property name="source" value="1.6"/>
-    <property name="build.dir" value="build/classes-country"/>
+    <property name="build-classes" value="build/classes-country"/>
 
 
 	<path id="project.libraryclasspath">
@@ -32,60 +33,64 @@
         <pathelement location="WebContent/WEB-INF/lib/richfaces-impl-3.3.3.Final.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/richfaces-ui-3.3.3.Final.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jxl.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/dom4j-1.6.1.jar"/>
-		<pathelement location="WebContent/WEB-INF/lib/gson-2.1.jar"/>
-		<pathelement location="WebContent/WEB-INF/lib/eidssAZ.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/gson-2.1.jar"/>
+		<pathelement location="WebContent/WEB-INF/lib/eidssAz.jar"/>
+		<pathelement location="WebContent/WEB-INF/lib/gwt-servlet.jar"/>
         <pathelement location="WebContent/WEB-INF/classes"/>
     </path>
 
 
 	<path id="jboss-4.2.3.GA.libraryclasspath">
-        <pathelement location="${jboss.dir}/client/commons-logging.jar"/>
-        <pathelement location="${jboss.dir}/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
-        <pathelement location="${jboss.dir}/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
-        <pathelement location="${jboss.dir}/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
-        <pathelement location="${jboss.dir}/client/jboss-j2ee.jar"/>
-        <pathelement location="${jboss.dir}/client/ejb3-persistence.jar"/>
-        <pathelement location="${jboss.dir}/client/servlet-api.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/hibernate-annotations.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/hibernate-entitymanager.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/hibernate-core.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/lucene-core.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/hibernate-search.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/hibernate-validator.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/dom4j.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/axis.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/jboss-jaxrpc.jar"/>
-		<pathelement location="${jboss.dir}/server/default/lib/quartz.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/client/commons-logging.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/client/jboss-j2ee.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/client/ejb3-persistence.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/client/servlet-api.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/lib/hibernate-annotations.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/lib/hibernate-entitymanager.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/lib/hibernate-core.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/lib/lucene-core.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/lib/hibernate-search.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/lib/hibernate-validator.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/lib/dom4j.jar"/>
+		<pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/lib/quartz.jar"/>
     </path>
-	
+
 	<path id="gwt.librarypath">
-        <pathelement location="${gwt.dir}/gwt-dev.jar"/>
-        <pathelement location="${gwt.dir}/gwt-user.jar"/>
+        <pathelement location="c:\gwt\gwt-2.4.0/gwt-dev-2.4.0.jar"/>
+        <pathelement location="c:\gwt\gwt-2.4.0/gwt-user-2.4.0.jar"/>
 	</path>
 
 	<path id="mdrtb.classpath">
-        <pathelement location="build/classes"/>
-        <path refid="project.libraryclasspath"/> 
+        <pathelement location="${build-classes}"/>
+		<path refid="project.libraryclasspath"/> 
         <path refid="jboss-4.2.3.GA.libraryclasspath"/>
-        <path refid="gwt.librarypath"/>
+		<path refid="gwt.librarypath"/>
     </path>
 
-
+	<path id="etbm.sourcepath">
+		<pathelement location="src/action"/>
+		<pathelement location="src/model"/>
+		<pathelement location="src/client"/>
+		<pathelement location="src/reports"/>
+	</path>
+	
 	<target name="init">
 		<echo message="Implementation title  :  ${implementation-title}" />
 		<echo message="Implementation version:  ${implementation-version}" />
 		<echo message="Implementation vendor :  ${implementation-vendor}" />
 		
-        <mkdir dir="${build.dir}"/>
-		<delete dir="${build.dir}" />
-        <copy includeemptydirs="false" todir="${build.dir}">
+        <mkdir dir="${build-classes}"/>
+		<delete dir="${build-classes}" />
+        <copy includeemptydirs="false" todir="${build-classes}">
             <fileset dir="src/action" excludes="**/*.launch, **/*.java"/>
         </copy>
-        <copy includeemptydirs="false" todir="${build.dir}">
+        <copy includeemptydirs="false" todir="${build-classes}">
             <fileset dir="src/model" excludes="**/*.launch, **/*.java"/>
         </copy>
-        <copy includeemptydirs="false" todir="${build.dir}">
+        <copy includeemptydirs="false" todir="${build-classes}">
             <fileset dir="src/${country-folder}" excludes="**/*.launch, **/*.java"/>
         </copy>
     </target>
@@ -93,7 +98,7 @@
 	
 
 	<target name="clean">
-        <delete dir="${build.dir}"/>
+        <delete dir="${build-classes}"/>
     </target>
 
 	
@@ -101,15 +106,17 @@
 	<target depends="clean" name="cleanall"/>
 	
 	
-    <target depends="build-project,war" name="build" />
+    <target depends="compile,gwt-compile,war" name="build" />
 
 	
 
-	<target depends="init" name="build-project">
+	<target depends="init" name="compile">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="false" debuglevel="${debuglevel}" destdir="${build.dir}" source="${source}" target="${target}" encoding="8859_1">
+        <javac debug="false" debuglevel="${debuglevel}" destdir="${build-classes}" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/model"/>
             <src path="src/action"/>
+        	<src path="src/reports"/>
+        	<src path="src/client"/>
             <src path="src/${country-folder}"/>
             <classpath refid="mdrtb.classpath"/>
         </javac>
@@ -124,8 +131,6 @@
 		<echo message="war file              :  ${war-file-name}" />
 		<delete file="build/${war-file-name}" />
 		<buildnumber file="build/build.num"/>
-		<copy file="production/web.xml" todir="/build" overwrite="true" />
-		<replace file="/build/web.xml" token="@liquibase_context@" value="${country-code}" />
 		
 		<tstamp>
 			<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
@@ -142,7 +147,7 @@
 			<attribute name="Country" value="${country}" />
 		</manifest>
 
-		<war destfile="build/${war-file-name}" webxml="build/web.xml" manifest="WebContent/META-INF/MANIFEST.MF">
+		<war destfile="build/${war-file-name}" webxml="production/web.xml" manifest="WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="WebContent" >
 				<include name="**" />
 				<exclude name="WEB-INF/web.xml"/>
@@ -155,21 +160,106 @@
 				<include name="custom/${country-folder}/**" />
 			</fileset>
 
-			<classes dir="${build.dir}">
+			<classes dir="${build-classes}">
 				<exclude name="META-INF/persistence.xml"/>
 				<exclude name="/messages*" />
 				<exclude name="/custom_messages*" />
 			</classes>
 			
 			<zipfileset file="src/model/messages_en.properties" fullpath="WEB-INF/classes/messages_en.properties" />
-			<zipfileset file="src/model/messages_az_AZ.properties" fullpath="WEB-INF/classes/messages_az.properties" />
+			<zipfileset file="src/model/messages_az_AZ.properties" fullpath="WEB-INF/classes/messages_az_AZ.properties" />
+			<zipfileset file="src/model/custom_messages_az_AZ.properties" fullpath="WEB-INF/classes/custom_messages_az_AZ.properties" />
 			<zipfileset file="src/model/messages_ru.properties" fullpath="WEB-INF/classes/messages_ru.properties" />
-			<zipfileset file="src/model/custom_messages_en.properties" fullpath="WEB-INF/classes/custom_messages_en.properties" />
-			<zipfileset file="src/model/custom_messages_az_AZ.properties" fullpath="WEB-INF/classes/custom_messages_az.properties" />
-			<zipfileset file="src/model/custom_messages_ru.properties" fullpath="WEB-INF/classes/custom_messages_ru.properties" />
+			<zipfileset file="WebContent/WEB-INF/seam.quartz.properties" fullpath="WEB-INF/classes/seam.quartz.properties" />
 			<zipfileset file="production/persistence.xml" prefix="WEB-INF/classes/META-INF" />
 			<zipfileset file="production/components.xml" prefix="WEB-INF" />
 			<zipfileset file="production/az/faces-config.xml" fullpath="WEB-INF/faces-config.xml" />
+			<!-- okurasov 30.01.12 to determine virtual host -->
+			<zipfileset file="production/az/jboss-web.xml" fullpath="WEB-INF/jboss-web.xml" />
 		</war>
 	</target>
+	
+	<target name="doc" depends="init" description="JavaDoc generation">
+			<javadoc destdir="${doc.dir}" sourcepathref="etbm.sourcepath" classpathref="mdrtb.classpath"
+				author="true"
+				version="true">
+				<doclet name="org.umlgraph.doclet.UmlGraphDoc" path="WebContent/WEB-INF/lib/UMLGraph.jar">
+	       	        <param name="-attributes" />
+	       	        <param name="-operations" />
+	       	        <param name="-qualify" />
+	       	        <param name="-types" />
+	       	        <param name="-visibility" />
+				</doclet>
+				
+				<doctitle><![CDATA[<h1>eTB Manager Javadoc</h1>]]></doctitle>
+				<bottom><![CDATA[<i>Copyright &#169; 2005 Management Sciences for Health, Inc. All Rights Reserved.</i>]]></bottom>
+			</javadoc>
+			<apply executable="dot" dest="${doc.dir}" parallel="false">
+			    <arg value="-Tpng"/>
+			    <arg value="-o"/>
+			    <targetfile/>
+			    <srcfile/>
+			    <fileset dir="${doc.dir}" includes="*.dot"/>
+			    <mapper type="glob" from="*.dot" to="*.png"/>
+			</apply>
+		</target>
+
+
+
+		<target name="gwt-compile" description="Compile java source code in javascript code using GWT">
+			<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler" >
+				<classpath>
+					<pathelement location="src/client" />
+					<path refid="gwt.librarypath" />
+				</classpath>
+				<jvmarg value="-Xmx512M"/>
+				<arg value="-style"/>
+				<arg value="OBFUSCATED" />
+				<arg value="-logLevel"/>
+				<arg value="INFO" />
+				<arg value="-war"/>
+				<arg value="WebContent" />
+				<arg value="org.msh.tb.client.reports"/>
+			</java>
+		</target>
+
+
+
+		<!-- Define the Sonar global properties (the most usual way is to pass these properties via the command line) -->
+		<property name="sonar.jdbc.url" value="jdbc:mysql://localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8" />
+		<property name="sonar.jdbc.username" value="root" />
+		<property name="sonar.jdbc.password" value="admin" />
+		<property name="sonar.host.url" value="http://localhost:9000/sonar" />
+		<property name="sonar.login" value="admin" />
+		<property name="sonar.password" value="admin" />
+		<property name="sonar.forceAuthentication" value="true" />
+
+		<!-- Define the Sonar project properties -->
+		<property name="sonar.projectKey" value="etbmanager" />
+		<property name="sonar.projectName" value="eTB Manager" />
+		<property name="sonar.projectVersion" value="2.0" />
+		<property name="sonar.modules" value="java-module,xml-module" />
+		<property name="sonar.sources" value="src/action,src/model,src/ng,src/na,src/bd,src/ke,src/br,src/ua,src/az,src/uz" />
+
+		<property name="java-module.sonar.projectName" value="Java Module" />
+		<property name="java-module.sonar.language" value="java" />
+		<property name="java-module.sonar.sources" value="src/action,src/model,src/ng,src/na,src/bd,src/ke,src/br,src/ua,src/az,src/uz" />
+		<property name="java-module.sonar.binaries" value="build" />
+		<property name="java-module.sonar.projectBaseDir" value="/" />
+
+		<property name="xml-module.sonar.projectName" value="XML Module" />
+		<property name="xml-module.sonar.language" value="xml" />
+		<property name="xml-module.sonar.sources" value="WebContent,resources,production" />
+		<property name="xml-module.sonar.binaries" value="build" />
+		<property name="xml-module.sonar.projectBaseDir" value="/" />
+
+		<!-- Define the Sonar target -->
+		<target name="sonar">
+		    <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+		    </taskdef>
+			 
+		    <!-- Execute Sonar -->
+		    <sonar:sonar />
+		</target>
+	
 </project>
