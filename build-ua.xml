@@ -38,28 +38,28 @@
 
 
 	<path id="jboss-4.2.3.GA.libraryclasspath">
-        <pathelement location="${jboss.dir}/client/commons-logging.jar"/>
-        <pathelement location="${jboss.dir}/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
-        <pathelement location="${jboss.dir}/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
-        <pathelement location="${jboss.dir}/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
-        <pathelement location="${jboss.dir}/client/jboss-j2ee.jar"/>
-        <pathelement location="${jboss.dir}/client/ejb3-persistence.jar"/>
-        <pathelement location="${jboss.dir}/client/servlet-api.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/hibernate-annotations.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/hibernate-entitymanager.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/hibernate-core.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/lucene-core.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/hibernate-search.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/hibernate-validator.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/dom4j.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/axis.jar"/>
-        <pathelement location="${jboss.dir}/server/default/lib/jboss-jaxrpc.jar"/>
-		<pathelement location="${jboss.dir}/server/default/lib/quartz.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/client/commons-logging.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/client/jboss-j2ee.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/client/ejb3-persistence.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/client/servlet-api.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/hibernate-annotations.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/hibernate-entitymanager.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/hibernate-core.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/lucene-core.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/hibernate-search.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/hibernate-validator.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/dom4j.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/axis.jar"/>
+        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/jboss-jaxrpc.jar"/>
+		<pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/quartz.jar"/>
     </path>
 	
 	<path id="gwt.librarypath">
-        <pathelement location="${gwt.dir}/gwt-dev.jar"/>
-        <pathelement location="${gwt.dir}/gwt-user.jar"/>
+        <pathelement location="C:\gwt\gwt-2.4.0/gwt-dev.jar"/>
+        <pathelement location="C:\gwt\gwt-2.4.0/gwt-user.jar"/>
 	</path>
 
 	<path id="mdrtb.classpath">
@@ -110,6 +110,7 @@
             <src path="src/action"/>
             <src path="src/reports"/>
             <src path="src/client"/>
+        	<src path="src/${country-folder}"/>
             <classpath refid="mdrtb.classpath"/>
         </javac>
     </target>
