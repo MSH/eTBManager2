@@ -258,6 +258,11 @@
     		<ui:param name="field" value="#{caseDataUA.registrationCategory}" />
 		</s:decorate>
 
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty caseDataUA.riskClass}">
+	    	<ui:define name="label">#{messages['RiskClassification']}:</ui:define>
+	    	#{messages[caseDataUA.riskClass.key]}
+		</s:decorate>
+
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.infectionSite}">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
     		#{messages[tbcase.infectionSite.key]}

@@ -27,6 +27,7 @@ import org.msh.tb.entities.enums.ExtraOutcomeInfo;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.ua.entities.enums.DiagnosisSource;
 import org.msh.tb.ua.entities.enums.MBTResult;
+import org.msh.tb.ua.entities.enums.RiskClassification;
 
 @Entity
 @Table(name="casedataua")
@@ -139,7 +140,9 @@ public class CaseDataUA {
 	private FieldValue causeChangeTreat;
 	
 	private boolean refuse2line;
+	private RiskClassification riskClass;
 	
+	//===========================GETTERS & SETTERS==============================
 	/**
 	 * @return the refuse2line
 	 */
@@ -937,6 +940,16 @@ public class CaseDataUA {
 
 	public Date getDischargeDate() {
 		return dischargeDate;
+	}
+
+
+	public void setRiskClass(RiskClassification riskClass) {
+		this.riskClass = riskClass;
+	}
+
+
+	public RiskClassification getRiskClass() {
+		return riskClass;
 	}
 
 	

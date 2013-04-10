@@ -227,4 +227,14 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 			}
 		}
 	}
+	
+	/**
+	 * Return true if case is DRTB-risk case
+	 */
+	public boolean isRiskDRTB(){
+		TbCase tc = caseHome.getTbCase();
+		if (CaseClassification.DRTB.equals(tc.getClassification()) && DiagnosisType.SUSPECT.equals(tc.getDiagnosisType()))
+			return true;
+		return false;
+	}
 }

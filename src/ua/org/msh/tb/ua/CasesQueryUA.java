@@ -128,13 +128,28 @@ public class CasesQueryUA extends CasesQuery{
 		mountAdvancedSearchConditions();
 		mountSingleSearchConditions();
 		
+		if (getStateIndex()!=null){
+			if (getStateIndex().equals(CaseFilters.CLOSED))
+				addCondition("c.state > " + CaseState.TRANSFERRING.ordinal());
+			if (getStateIndex()>=100 && getStateIndex()<200){
+				addCondition("(c.diagnosisType = 1 or c.classification = 0 or c.state>1)");
+				Integer hsID = null;
+				UserWorkspace userWorkspace = (UserWorkspace) App.getComponent("userWorkspace");
+				if (userWorkspace.getHealthSystem() != null)
+					hsID = userWorkspace.getHealthSystem().getId();
+				if (hsID!=null)
+					addCondition("c.notificationUnit.healthSystem.id = #{userWorkspace.healthSystem.id}");
+			}
+			if (getStateIndex()==700)
+				addCondition("c.diagnosisType = 0 and c.classification = 1 and c.state = 0");
+			if (getStateIndex()==701)
+				addCondition("c.diagnosisType = 0 and c.classification = 1 and c.state = 1");
+			
+		}
+		
 		if (hqlCondition.contains("c.diagnosisType = 1")){
 			hqlCondition = hqlCondition.replace("c.diagnosisType = 1", "(c.diagnosisType = 1 or c.diagnosisType is NULL)");
 		}
-		
-		if (getStateIndex()!=null)
-			if (getStateIndex().equals(CaseFilters.CLOSED))
-				addCondition("c.state > " + CaseState.TRANSFERRING.ordinal());
 		
 		if (!hqlCondition.isEmpty())
 			hqlCondition = " where ".concat(hqlCondition);

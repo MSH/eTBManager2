@@ -9,14 +9,13 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
     <ui:param name="labelstyle" value="width:160px;" />
     
-    <s:fragment rendered="#{tbcase.classification=='DRTB' and tbcase.diagnosisType=='SUSPECT'}">
-    <h:commandLink action="#{caseDataUAHome.riskDRTBtoTB()}" styleClass="button" style="width:150px;float:right;">
-    <span>#{messages['TbCase.DRTB.to.TB']}</span>
-    </h:commandLink>
-       <h:commandLink action="#{caseDataUAHome.riskDRTBtoTB()}" styleClass="button" style="width:150px;float:right;">
-    <span>#{messages['TbCase.DRTB.to.TB']}</span>
-    </h:commandLink>
-    
+    <s:fragment rendered="#{caseDataUAHome.riskDRTB}">
+	    <h:commandLink action="#{caseDataUAHome.riskDRTBtoDR()}" styleClass="button" style="width:150px;float:right;">
+	    	<span>#{messages['TbCase.DRTB.to.DRTB']}</span>
+	    </h:commandLink> 
+	    <h:commandLink action="#{caseDataUAHome.riskDRTBtoTB()}" styleClass="button" style="width:150px;float:right;">
+	    	<span>#{messages['TbCase.DRTB.to.TB']}</span>
+	    </h:commandLink>
     </s:fragment>
     
 	<div class="form-content"> 
@@ -369,6 +368,14 @@
 		<ui:param name="field" value="#{caseDataUA.registrationCategory}" />
 		<ui:param name="list" value="#{fieldsQuery.registrationCategories}" />
 		<ui:param name="required" value="true" />
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml" rendered="#{caseDataUAHome.riskDRTB}">
+    	<ui:define name="label">#{messages['RiskClassification']}:</ui:define>
+    	<h:selectOneMenu value="#{caseDataUA.riskClass}" required="#{caseDataUAHome.riskDRTB}">
+    		<s:selectItems var="it" value="#{globalLists_ua.riskClassifications}" noSelectionLabel="-" label="#{messages[it.key]}" />
+    		<s:convertEnum />
+    	</h:selectOneMenu>
 	</s:decorate>
 
 	<s:decorate template="/custom/ua/layout/infSiteWithTypes.xhtml">

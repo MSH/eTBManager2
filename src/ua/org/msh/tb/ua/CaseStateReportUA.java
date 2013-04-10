@@ -30,7 +30,10 @@ import org.msh.tb.login.UserSession;
  */
 @Name("caseStateReportUA")
 public class CaseStateReportUA extends CaseStateReport{
-
+	
+	public static final int riskDRTBnotOnTreat = 700;
+	public static final int riskDRTBOnTreat = 701;
+	
 	@In Workspace defaultWorkspace;
 	@In(create=true) UserWorkspace userWorkspace;
 	
@@ -222,6 +225,32 @@ public class CaseStateReportUA extends CaseStateReport{
 			}
 
 		});
+		
+		//risk DR-TB
+		String querySQL = generateSQLRiskDRTB(hsID,0);
+		BigInteger colRiskDR = (BigInteger) App.getEntityManager().createNativeQuery(querySQL).getResultList().get(0);
+
+		CaseStateItem it = new CaseStateItem(App.getMessage("CaseClassification.DRTB.suspect.notontreat"), colRiskDR.intValue(), riskDRTBnotOnTreat);
+		getItems().add(it);
+		
+		querySQL = generateSQLRiskDRTB(hsID,1);
+		colRiskDR = (BigInteger) App.getEntityManager().createNativeQuery(querySQL).getResultList().get(0);
+
+		it = new CaseStateItem(App.getMessage("CaseClassification.DRTB.suspect.ontreat"), colRiskDR.intValue(), riskDRTBOnTreat);
+		getItems().add(it);
+		
+	}
+
+	/**
+	 * @param hsID
+	 * @return
+	 */
+	protected String generateSQLRiskDRTB(Integer hsID, int state) {
+		return "select count(*) from tbcase c "+
+		"inner join tbunit u on u.id = c.notification_unit_id "+
+		" where u.workspace_id = " + defaultWorkspace.getId() +
+		(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
+		" and c.diagnosisType=0 and c.classification=1 and c.state = "+state;
 	}
 
 
@@ -229,7 +258,7 @@ public class CaseStateReportUA extends CaseStateReport{
 		String res = "select c.state, c.validationState, c.diagnosisType, count(*) " +
 		"from tbcase c " +
 		"inner join tbunit u on u.id = c.notification_unit_id " + aucond +
-		" where u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase + // c.diagnosisType in (0,1) and 
+		" where u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase + " and ((c.diagnosisType=1 or c.diagnosisType is null) or c.classification=0 or c.state>1) "+ 
 		(hsID != null? "and u.healthSystem_id = " + hsID.toString(): "") +
 		" group by c.state, c.validationState, c.diagnosisType";
 		return res;
