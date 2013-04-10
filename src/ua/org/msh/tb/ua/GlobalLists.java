@@ -9,6 +9,7 @@ import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.ua.entities.enums.DiagnosisSource;
 import org.msh.tb.ua.entities.enums.HistologyResult;
 import org.msh.tb.ua.entities.enums.MBTResult;
+import org.msh.tb.ua.entities.enums.RiskClassification;
 
 @Name("globalLists_ua")
 public class GlobalLists {
@@ -17,8 +18,6 @@ public class GlobalLists {
 		PatientType.NEW,
 		PatientType.RELAPSE,
 		PatientType.AFTER_DEFAULT,
-		PatientType.RESISTANCE_PATTERN_CHANGED,
-		PatientType.FAILURE,
 		PatientType.FAILURE_FT,
 		PatientType.FAILURE_RT,
 		PatientType.TRANSFER_IN,
@@ -45,10 +44,9 @@ public class GlobalLists {
 	public static final CaseState outcomes[] = {
 		CaseState.CURED,
 		CaseState.TREATMENT_COMPLETED,
-		CaseState.DIED,
 		CaseState.FAILED,
+		CaseState.DIED,
 		CaseState.TREATMENT_INTERRUPTION,
-		CaseState.NOT_CONFIRMED,
 		CaseState.TRANSFERRED_OUT
 	};
 	
@@ -113,4 +111,7 @@ public class GlobalLists {
 		return patientTypes;
 	}
 	
+	public RiskClassification[] getRiskClassifications(){
+		return RiskClassification.values();
+	}
 }
