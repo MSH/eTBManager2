@@ -13,7 +13,9 @@ import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.ComorbidityHome;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.ExtraOutcomeInfo;
 import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.YesNoType;
@@ -194,5 +196,35 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 	 */
 	public void setColHospView(Integer colHospView) {
 		this.colHospView = colHospView;
+	}
+	/**
+	 * rearrange DRTB risk case to TB case
+	 */
+	public void riskDRTBtoTB(){
+		TbCase tbcase = caseEditingHome.getTbcase();
+		if (tbcase.getClassification() == CaseClassification.DRTB){
+			if (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT){
+				tbcase.setClassification(CaseClassification.TB);
+				tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
+				CaseDataUA data = getInstance();
+				data.setRegistrationCategory(null);
+				//TODO something else
+			}
+		}
+	}
+	/**
+	 * rearrange DRTB risk case to real DRTB
+	 */
+	public void riskDRTBtoDR(){
+		TbCase tbcase = caseEditingHome.getTbcase();
+		if (tbcase.getClassification() == CaseClassification.DRTB){
+			if (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT){
+				tbcase.setClassification(CaseClassification.DRTB);
+				tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
+				CaseDataUA data = getInstance();
+				data.setRegistrationCategory(null);
+				//TODO something else
+			}
+		}
 	}
 }
