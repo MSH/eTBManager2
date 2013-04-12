@@ -187,7 +187,7 @@
 	<tr><td colspan="2">
 	<hr/>
 	
-	<s:fragment rendered="#{tbcase.classification=='TB'}">
+	<s:fragment rendered="#{!caseDataUAHome.riskDRTB}">
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
     	<h:selectOneMenu id="diagtype" value="#{tbcase.diagnosisType}">
