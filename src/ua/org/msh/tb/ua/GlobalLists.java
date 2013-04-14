@@ -47,7 +47,8 @@ public class GlobalLists {
 		CaseState.FAILED,
 		CaseState.DIED,
 		CaseState.TREATMENT_INTERRUPTION,
-		CaseState.TRANSFERRED_OUT
+		CaseState.TRANSFERRED_OUT,
+		CaseState.NOT_CONFIRMED
 	};
 	
 	public static final ExtraOutcomeInfo ocCuredFailed[] = {
