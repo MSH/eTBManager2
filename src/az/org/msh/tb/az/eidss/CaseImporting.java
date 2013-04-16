@@ -149,16 +149,16 @@ public  class CaseImporting {
 		TbCase result=null;
 		try{
 			List<Integer>  id=  (List<Integer>) entityManager.createNativeQuery(CheckIfExistInEtbStr)
-			.setParameter("ln", oneCase.getLastName())
-			.setParameter("mn", oneCase.getMiddleName())
-			.setParameter("fn", oneCase.getFirstName())
-			//.setParameter("a", oneCase.getAge())
-			.setParameter("rd", oneCase.getFinalDiagnosisDate())
-			.getResultList();
+															.setParameter("ln", oneCase.getLastName())
+															.setParameter("mn", oneCase.getMiddleName())
+															.setParameter("fn", oneCase.getFirstName())
+															//.setParameter("a", oneCase.getAge())
+															.setParameter("rd", oneCase.getFinalDiagnosisDate())
+															.getResultList();
 			if (id!=null){
 				if (id.size()>0){
 					if (id.get(0).intValue()!=0){
-						result=(TbCase) entityManager.createQuery(" from TbCase c where c.id =  "+id.get(0).intValue()).getSingleResult();
+						result=(TbCase) entityManager.createQuery(" from TbCase c where c.id =  "+id.get(0).intValue()).getResultList().get(0);
 					}
 				}
 			}
@@ -222,7 +222,7 @@ public  class CaseImporting {
 					resCases.add(legacy);
 				}
 			 */
-			count = (BigInteger) entityManager.createNativeQuery(getEIDSSCodeSQL(legacy)).getSingleResult();
+			count = (BigInteger) entityManager.createNativeQuery(getEIDSSCodeSQL(legacy)).getResultList().get(0);
 			if (count.intValue() == 0){
 				ifExist=false;
 			}

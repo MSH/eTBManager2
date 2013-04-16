@@ -6,8 +6,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -16,6 +14,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.async.QuartzTriggerHandle;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.Messages;
+import org.msh.tb.application.App;
 import org.msh.tb.application.EtbmanagerApp;
 import org.msh.tb.az.eidss.EidssIntHome;
 import org.msh.tb.entities.SystemParam;
@@ -26,10 +25,9 @@ import org.quartz.Trigger;
 @Name("sysStartupAZ")
 @Scope(ScopeType.APPLICATION)
 public class SysStartupAZ{
-	@In EntityManager entityManager;
 	@In(create=true) SystemTimerAZ systemTimerAZ; 
-	@In(create=true) EidssIntHome eidssIntHome;
 	@In(create=true) FacesMessages facesMessages;
+	@In(create=true) EidssIntHome eidssIntHome;
 	
 	private Map<String, String> messages;
 	private QuartzTriggerHandle quartz;
@@ -48,7 +46,7 @@ public class SysStartupAZ{
 				
 		SystemParam p;
 		try {
-			p = entityManager.find(SystemParam.class, "admin.eidss.auto");
+			p = App.getEntityManager().find(SystemParam.class, "admin.eidss.auto");
 			start = getStart();				
 			if ("true".equals(p.getValue())){
 				start();
@@ -61,7 +59,7 @@ public class SysStartupAZ{
 	private Date getStart(){
 		if (start == null){
 			SystemParam st;
-			st = entityManager.find(SystemParam.class, "admin.eidss.dateStart");
+			st = App.getEntityManager().find(SystemParam.class, "admin.eidss.dateStart");
 			if (st!=null)
 				try {
 					start = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(st.getValue());
@@ -82,10 +80,18 @@ public class SysStartupAZ{
 	
 	public void start(){
 		if (quartz==null){
-			//eidssIntHome.setDefaultWorkspace();
-			eidssIntHome.loadConfig();
-			changeStartDt();
-			if (eidssIntHome.getConfig().getAuto() == true)
+			boolean auto = false;
+			try{
+				eidssIntHome.loadConfig();
+				changeStartDt();
+				auto = eidssIntHome.getConfig().getAuto();
+			}
+			catch (Exception e) {
+				String str = App.getEntityManager().find(SystemParam.class, "admin.eidss.auto").getValue();
+				if ("true".equals(str))
+					auto = true;
+			}
+			if (auto)
 				quartz = systemTimerAZ.trigger(start, getTimeInterval()*hour);
 		}
 		else
@@ -167,7 +173,7 @@ public class SysStartupAZ{
 
 	public Workspace getObservWorkspace() {
 		if (observWorkspace==null)
-			observWorkspace = entityManager.find(Workspace.class, 8);
+			observWorkspace = App.getEntityManager().find(Workspace.class, 8);
 		return observWorkspace;
 	}
 }

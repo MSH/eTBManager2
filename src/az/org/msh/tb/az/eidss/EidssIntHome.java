@@ -226,7 +226,7 @@ public class EidssIntHome {
 			.createQuery("from SystemParam sp where sp.workspace.id = :id and sp.key = :param")
 			.setParameter("id", sysStartupAZ.getObservWorkspace().getId())
 			.setParameter("param", prefix+"."+fld.getName())
-			.getSingleResult();
+			.getResultList().get(0);
 			s = sysparam.getValue();
 		} catch (Exception e) {
 			s = null;
@@ -396,6 +396,7 @@ public class EidssIntHome {
 
 
 	public void rewriteDatesInConfig() {
+		setDefaultWorkspace();
 		int deep=0;
 		if (getConfig()!=null){
 			if (config.getDeepdays()!=null)
@@ -413,5 +414,10 @@ public class EidssIntHome {
 			config.setFrom(d.getTime());
 			saveParameter(prefix+".from", sdf.format(d.getTime()));
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return "EidssIntHome";
 	}
 }
