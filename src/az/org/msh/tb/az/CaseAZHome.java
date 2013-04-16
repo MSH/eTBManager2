@@ -2,6 +2,7 @@ package org.msh.tb.az;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -17,12 +18,14 @@ import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.PrevTBTreatmentHome;
 import org.msh.tb.entities.ExamDST;
+import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.SystemParam;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.misc.SequenceGenerator;
 import org.msh.utils.date.DateUtils;
 
 @Name("caseAZHome")
@@ -51,15 +54,69 @@ public class CaseAZHome {
 			 res = caseEditingAZHome.saveEditing();
 		else res = caseEditingAZHome.saveNew();
 		
+		if (caseHome.getTbCase().getCaseNumber()==null)
+			generateCaseNumber();
+		
 		if (!res.equals("persisted"))
 			return res;
 		
 		caseSeverityMarksHome.save();
-		
+			
 		return res;
 	}
 	
+	/**
+	 * Generating a new patient number if it was not generated yet
+	 * @return
+	 */
+	private void generateCaseNumber(){
+		TbCase tbcase = caseHome.getInstance();
+		
+		Patient p = tbcase.getPatient();
+		if (p.getRecordNumber() == null) {
+			SequenceGenerator sequenceGenerator = (SequenceGenerator) App.getComponent("sequenceGenerator");
+			int val = sequenceGenerator.generateNewNumber("CASE_NUMBER");
+			p.setRecordNumber(val);
+		}
+		// generate new case number
+		//Gets the major case number of this patient with diagnosisdate before the case in question.
+		Integer caseNum = (Integer)App.getEntityManager().createQuery("select max(c.caseNumber) from TbCase c where c.patient.id = :id and c.diagnosisDate < :dt")
+			.setParameter("id", p.getId())
+			.setParameter("dt", tbcase.getDiagnosisDate())
+			.getResultList().get(0);
+		
+		if (caseNum == null)
+			//If there is no casenum before this one it sets the digit 1 for this case.
+			caseNum = 1;
+		else{
+			//If there is a casenum before this case it sets this number plus one.
+			caseNum++;
+		}
+		
+		// Returns the ids of the cases cronologicaly after the case in memory
+		ArrayList<Integer> lst = (ArrayList<Integer>) App.getEntityManager().createQuery("select id from TbCase c " + 
+		        "where c.patient.id = :id and c.diagnosisDate > :dt order by c.diagnosisDate")
+		        .setParameter("dt", tbcase.getDiagnosisDate())
+		        .setParameter("id", p.getId())
+		        .getResultList();
+		
+		// updates caseNums according to the cronological order
+		int num = caseNum + 1;
+		for (Integer id: lst) {
+		   App.getEntityManager().createQuery("update TbCase set caseNumber = :num where id=:id")
+		      .setParameter("num", num)
+		      .setParameter("id", id)
+		      .executeUpdate();
+		   num++;
+		}
+		
+		tbcase.setCaseNumber(caseNum);
 
+		App.getEntityManager().persist(tbcase);
+		App.getEntityManager().flush();
+	}
+	
+	
 	public List<CaseSeverityMark> getCaseSeverityMarks() {
 		if (!caseSeverityMarksHome.isEditing())
 			caseSeverityMarksHome.setEditing(true);
@@ -413,5 +470,7 @@ public class CaseAZHome {
 		}
 		return caseCloseHome.reopenCase();
 	}*/
+	
+
 }
 

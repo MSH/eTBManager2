@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<changeSet id="1" author="Alexk">
+		<sql>
+			INSERT INTO `etbmanager`.`userrole` (`id`, `changeable`, `code`, `Role_Name`, `internalUse`, `byCaseClassification`, `messageKey`) VALUES (198, 0, '010416', 'DELETE_EIDSS_NOT_BINDED', 0, 0, 'userrole.DELETE_EIDSS_NOT_BINDED');
+
+			INSERT INTO `etbmanager`.`userpermission`(`canchange`, `canexecute`, `grantPermission`, `profile_id`, `role_id`, `caseClassification`)
+			SELECT false, false, true, id, 198, 0 from `etbmanager`.`userprofile`
+			WHERE workspace_id = 8;
+		</sql>
+	</changeSet>
+
+</databaseChangeLog>
