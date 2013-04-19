@@ -8,6 +8,8 @@
       xmlns:p="http://jboss.com/products/seam/pdf"
       xmlns:s="http://jboss.com/products/seam/taglib">
 
-<ui:include src="/management/filters.xhtml" />
+<ui:include src="/management/filters.xhtml" >
+	<ui:param name="indicatorController" value="#{indicatorControllerUA}" />
+</ui:include>
 
 </ui:composition>

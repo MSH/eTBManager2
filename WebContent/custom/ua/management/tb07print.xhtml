@@ -38,7 +38,8 @@
 
 <h:panelGroup id="indicator" styleClass="indicator-tables">
 	<s:fragment rendered="#{indicatorController.executing}">
-	
+	<h:outputText value="#{messages['verify.busy']}" rendered="#{indicator.overflow}" styleClass="error"/>
+		
 	<h2>#{messages['uk_UA.reports.tb07.table1']}</h2>
 	<table class="table1" width="100%">
 		<tr>

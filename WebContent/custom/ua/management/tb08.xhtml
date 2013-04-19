@@ -35,10 +35,6 @@
 	<s:decorate template="filters.xhtml">
 		<ui:param name="showoutputselection" value="false" />
 	</s:decorate>
-	
-	
-	<ui:include src="filtersUAPrint.xhtml" />
-
 
 </td></tr>
 <tr><td align="center">
@@ -46,11 +42,15 @@
 <h:panelGroup id="indicator" styleClass="indicator-tables">
 
 	<s:fragment rendered="#{indicatorController.executing}">
+	
+	<s:fragment rendered="#{!indicator.overflow}">
+		<ui:include src="filtersUAPrint.xhtml" />
+	</s:fragment>
 
 	 <h:outputText value="#{messages['verify.busy']}" rendered="#{indicator.overflow}" styleClass="error"/>
 	
 	<s:decorate template="verifdata.xhtml" id="verifpanel"/>
-	
+	<br />
 	<h2>#{messages['uk_UA.reports.tb08.1']}</h2>
 	<table class="table1" width="100%">
 		<tr>
