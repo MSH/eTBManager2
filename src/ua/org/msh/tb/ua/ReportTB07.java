@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.msh.tb.entities.AgeRange;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamMicroscopy;
@@ -22,6 +24,7 @@ import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.ua.entities.CaseDataUA;
 
 @Name("reportTB07")
+@Scope(ScopeType.CONVERSATION)
 public class ReportTB07 extends IndicatorVerify<TbCase> {
 	private static final long serialVersionUID = -8462692609433997419L;
 	private static final String rowid = "row";
@@ -90,7 +93,7 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 	protected void generateTables() {
 		List<TbCase> lst;
 		setCounting(true);
-		int count = ((Long)createQuery().getSingleResult()).intValue();
+		int count = ((Long)createQuery().getResultList().get(0)).intValue();
 		if (count<=4000){
 			initVerifList("verify.tb07.error",6,2,1);
 			setCounting(false);
@@ -189,8 +192,11 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 			IndicatorFilters filters = (IndicatorFilters)Component.getInstance("indicatorFilters");
 			int numcases = filters.getNumcases();
 			getTable5000().setValue("col1", rowid, (float)numcases);
-			if (numcases != 0)
-				getTable5000().addIdValue("col3", rowid, getTable5000().getValue("col2", rowid)*100/numcases);
+			if (numcases != 0){
+				Float val = getTable5000().getValue("col2", rowid);
+				if (val==null) val = 0F;
+				getTable5000().addIdValue("col3", rowid, val*100/numcases);
+			}
 			generateRepList(lst);
 		}
 		else 
@@ -396,5 +402,16 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 		if (table5000 == null)
 			createTable();
 		return table5000;
+	}
+	/**
+	 * Clear all tables and verifyList
+	 * */
+	public void clear(){
+		table1000 = null;
+		table2000 = null;
+		table3000 = null;
+		table4000 = null;
+		table5000 = null;
+		setVerifyList(null);
 	}
 }

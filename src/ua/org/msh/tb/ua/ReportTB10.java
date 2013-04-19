@@ -8,7 +8,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.TbCase;
@@ -24,6 +26,7 @@ import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
 @Name("reportTB10")
+@Scope(ScopeType.CONVERSATION)
 public class ReportTB10 extends IndicatorVerify<TbCase> {
 	private static final long serialVersionUID = -8510290531301762778L;
 
@@ -446,5 +449,13 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 			addToVerList(tc,2,0);
 		}
 	}
-
+	/**
+	 * Clear all tables and verifyList
+	 * */
+	public void clear(){
+		table1000 = null;
+		table2000 = null;
+		num.clear();
+		setVerifyList(null);
+	}
 }

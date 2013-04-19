@@ -4,7 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.PrevTBTreatment;
 import org.msh.tb.entities.TbCase;
@@ -16,13 +18,12 @@ import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.ua.entities.CaseDataUA;
 
 @Name("reportTB07mrtb")
+@Scope(ScopeType.CONVERSATION)
 public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 	private static final long serialVersionUID = -8462692609433997419L;
 	
 	private IndicatorTable table1000;
 	private IndicatorTable table2000;
-
-	private String txtNewCases, txtRelapses, txtOther, txtAll, txtMale, txtFemale;
 
 	@Override
 	protected void createIndicators() {
@@ -191,5 +192,13 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 		if (table2000 == null)
 			createTable();
 		return table2000;
+	}
+	/**
+	 * Clear all tables and verifyList
+	 * */
+	public void clear(){
+		table1000 = null;
+		table2000 = null;
+		setVerifyList(null);
 	}
 }

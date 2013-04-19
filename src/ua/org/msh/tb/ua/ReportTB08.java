@@ -9,7 +9,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.TbCase;
@@ -24,16 +26,11 @@ import org.msh.tb.ua.entities.CaseDataUA;
 import org.msh.utils.date.Period;
 
 @Name("reportTB08")
-
+@Scope(ScopeType.CONVERSATION)
 public class ReportTB08 extends IndicatorVerify<TbCase> {
-	private static final String NEGATIVE = "_negative";
-
-
-	private static final String POSITIVE = "_positive";
-
-
 	private static final long serialVersionUID = -1617171254497253851L;
-
+	private static final String NEGATIVE = "_negative";
+	private static final String POSITIVE = "_positive";
 
 	private IndicatorTable table1000;
 	private IndicatorTable table2000;
@@ -100,9 +97,6 @@ public class ReportTB08 extends IndicatorVerify<TbCase> {
 			while(it.hasNext()){
 				TbCase tc = it.next();
 				ind++;
-				System.out.println(ind);
-				if (ind==9)
-					System.out.println(ind);
 				//CaseDataUA cd = (CaseDataUA) getEntityManager().createQuery("select ua from CaseDataUA ua where ua.tbcase.id="+tc.getId()).getSingleResult();
 				CaseDataUA cd = (CaseDataUA) getEntityManager().find(CaseDataUA.class, tc.getId());  //AK, previous line will rise exception, if no result
 				if (cd == null){
@@ -445,5 +439,13 @@ public class ReportTB08 extends IndicatorVerify<TbCase> {
 			createTable();
 		return table3000;
 	}
-
+	/**
+	 * Clear all tables and verifyList
+	 * */
+	public void clear(){
+		table1000 = null;
+		table2000 = null;
+		table3000 = null;
+		setVerifyList(null);
+	}
 }

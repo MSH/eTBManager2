@@ -3,7 +3,9 @@ package org.msh.tb.ua;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.TbCase;
@@ -14,6 +16,7 @@ import org.msh.tb.indicators.IndicatorVerify;
 import org.msh.tb.indicators.core.IndicatorTable;
 
 @Name("reportTB11")
+@Scope(ScopeType.CONVERSATION)
 public class ReportTB11 extends IndicatorVerify<TbCase> {
 	private static final long serialVersionUID = -8510290531301762778L;
 	String [] cols = {"newcases", "relapses", "others"};
@@ -435,5 +438,11 @@ public class ReportTB11 extends IndicatorVerify<TbCase> {
 			addToVerList(tc,2,0);
 		}
 	}
-
+	/**
+	 * Clear all tables and verifyList
+	 * */
+	public void clear(){
+		table1 = null;
+		setVerifyList(null);
+	}
 }
