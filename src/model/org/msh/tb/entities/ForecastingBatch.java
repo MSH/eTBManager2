@@ -126,17 +126,27 @@ public class ForecastingBatch implements Serializable {
 	}
 
 	/**
-	 * @return the batchOnOrder
+	 * Check if this batch is from an stock on order
+	 * @return true if there is a {@link ForecastingOrder} related to this batch
 	 */
 	public boolean isBatchOnOrder() {
+		return getOrder() != null;
+	}
+	
+	
+	/**
+	 * Return the order that will make this batch to be included in the stock on hand
+	 * @return the {@link ForecastingOrder} instance related to this batch 
+	 */
+	public ForecastingOrder getOrder() {
 		if (forecastingMedicine == null)
-			return false;
+			return null;
 
 		for (ForecastingOrder order: forecastingMedicine.getOrders()) {
 			if (order.getBatch() == this)
-				return true;
+				return order;
 		}
 		
-		return false;
+		return null;
 	}
 }

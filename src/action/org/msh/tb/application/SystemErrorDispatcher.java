@@ -90,4 +90,18 @@ public class SystemErrorDispatcher {
 		}
 	}
 
+	/**
+	 * @return the errorLog
+	 */
+	public ErrorLog getErrorLog() {
+		return errorLog;
+	}
+
+	/**
+	 * @param errorLog the errorLog to set
+	 */
+	public void setErrorLog(ErrorLog errorLog) {
+		this.errorLog = errorLog;
+	}
+
 }

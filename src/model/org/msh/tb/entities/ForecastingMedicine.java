@@ -342,7 +342,9 @@ public class ForecastingMedicine implements Serializable {
 	public ForecastingBatch findAvailableBatch(Date dt) {
 		for (ForecastingBatch batch: batchesToExpire) {
 			if ((batch.getQuantityAvailable() > 0) && (!batch.getExpiryDate().before(dt))) {
-				return batch;
+				ForecastingOrder order = batch.getOrder();
+				if ((order == null) || ((order != null) && (!order.getArrivalDate().after(dt))))
+					return batch;
 			}
 		}
 		return null;

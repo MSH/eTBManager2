@@ -387,7 +387,6 @@ public class ForecastingCalculation {
 	 * based on the quantity available for each batch
 	 * @param fm
 	 * @param res
-	 * @param consumptionMonth
 	 * @return
 	 */
 	protected int calcExpiredQuantity(ForecastingMedicine fm, ForecastingPeriod per) {
@@ -399,6 +398,8 @@ public class ForecastingCalculation {
 
 		while (true) {
 			ForecastingBatch batch = fm.findAvailableBatch(dt);
+//			if ((DateUtils.monthOf(dt) == 9) && (batch != null))
+//				System.out.println(dt);
 			if (batch == null)
 				break;
 
@@ -894,30 +895,6 @@ public class ForecastingCalculation {
 		}
 	}
 	
-	
-	/**
-	 * Return batches of a medicine in a specific month of treatment
-	 * @param fm
-	 * @param monthIndex
-	 * @return
-	 */
-/*	private List<ForecastingBatch> getBatchesMonth(ForecastingMedicine fm, int monthIndex) {
-		List<ForecastingBatch> lst = new ArrayList<ForecastingBatch>();
-		for (ForecastingBatch b: fm.getBatchesToExpire()) {
-			if (forecasting.getMonthIndex(b.getExpiryDate()) == monthIndex) {
-				lst.add(b);
-			}
-		}
-		
-		Collections.sort(lst, new Comparator<ForecastingBatch>() {
-			public int compare(ForecastingBatch o1, ForecastingBatch o2) {
-				return o1.getExpiryDate().compareTo(o2.getExpiryDate());
-			}
-			
-		});
-		return lst;
-	}
-*/	
 	/**
 	 * Raise exception if result is not found for an specific medicine and monthIndex (it's always suposed to be found)
 	 * @param med
