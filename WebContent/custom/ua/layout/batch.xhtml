@@ -18,10 +18,8 @@
 	    	<br/>
 		    №#{batch.registCardNumber} 
 	    </s:fragment>
-	    <s:fragment rendered="#{batch.registCardBeginDate!=null or batch.registCardEndDate != null}">
-		    <h:outputText value=" ("/> 
-			<h:outputText value="#{batch.registCardBeginDate}" converter="localeDateConverter" />
-			<h:outputText value=" / "/> 
+	    <s:fragment rendered="#{batch.registCardEndDate != null}">
+		    <h:outputText value=" (#{messages['form.by']} "/> 
 			<h:outputText value="#{batch.registCardEndDate}" converter="localeDateConverter" />
 			<h:outputText value=")"/> 
 	    </s:fragment>
