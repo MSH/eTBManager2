@@ -66,6 +66,10 @@ public class Batch implements Serializable {
 		return (expiryDate != null) && (expiryDate.before(DateUtils.getDate()));
 	}
 
+	public boolean isRegistCardExpired() {
+		return (registCardEndDate != null) && (registCardEndDate.before(DateUtils.getDate()));
+	}
+	
 	@Override
 	public String toString() {
 		return (batchNumber != null? batchNumber: super.toString());
