@@ -86,6 +86,40 @@ public class InventoryReport {
 		return false;
 	}
 
+	/**
+	 * Check if the registration card is in attention period for expiration.
+	 */
+	public boolean isExpiringRegistCard(Object o){
+		
+		Batch b = null;
+		BatchQuantity bq = null;
+		if(o instanceof Batch)
+			b = (Batch) o;
+		else if (o instanceof BatchQuantity){
+			bq = (BatchQuantity) o;
+			b = bq.getBatch();
+		}
+		
+		if(b != null)
+			if(b.getRegistCardEndDate()!=null){
+/*			Calendar now  = Calendar.getInstance();
+			Calendar batchExpiringDate = Calendar.getInstance();
+			batchExpiringDate.setTime(b.getExpiryDate());
+			
+			long diff = batchExpiringDate.getTimeInMillis() - now.getTimeInMillis();
+			diff = diff / (24*60*60*1000);
+			double diffInDouble = diff;
+			double diffInMonths = diffInDouble / 30.0;
+*/
+			// calculate the number of months between two dates
+			int diffInMonths = DateUtils.monthsBetween(b.getRegistCardEndDate(), new Date());
+		
+			if (diffInMonths<2)
+				return true;
+		}
+		
+		return false;
+	}
 
 	/**
 	 * Create the list of sources, i.e, the inventory report
@@ -258,6 +292,18 @@ public class InventoryReport {
 			}
 			return dt;
 		}
+		
+		public Date getNextRegistCardExpire() {
+			Date dt = null;
+			for (Object obj: node.getBatches()) {
+				BatchQuantity bq = (BatchQuantity)obj;
+				if (!bq.getBatch().isRegistCardExpired()) {
+					if ((dt == null) || ((dt.after(bq.getBatch().getRegistCardEndDate()))))
+						dt = bq.getBatch().getRegistCardEndDate();
+				}
+			}
+			return dt;
+		}
 
 		public Date getLastBatchExpire() {
 			Date dt = null;
@@ -375,6 +421,38 @@ public class InventoryReport {
 				return stockOutDate.before(d);
 			}else
 				return false;
+		}
+
+		public void setHasRegistCardExpired(boolean hasRegistCardExpired) {
+			return;
+		}
+
+		public boolean isHasRegistCardExpired() {
+			for (Object o: node.getBatches()){
+				BatchQuantity b = (BatchQuantity)o;
+				if (b.getBatch().getRegistCardEndDate()!=null){
+					if (b.getBatch().isRegistCardExpired())
+						return true;
+				}
+			}
+			return false;
+		}
+
+		public void setHasRegistCardExpiring(boolean hasRegistCardExpiring) {
+			return;
+		}
+
+		public boolean isHasRegistCardExpiring() {
+			for (Object o: node.getBatches()){
+				BatchQuantity b = (BatchQuantity)o;
+				if (b.getBatch().getRegistCardEndDate()!=null){
+					Date today = new Date();
+					int diff = DateUtils.daysBetween(today, b.getBatch().getRegistCardEndDate());
+					if (diff<=30)
+						return true;
+				}
+			}
+			return false;
 		}
 		
 	}
