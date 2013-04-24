@@ -49,6 +49,7 @@
 			#{messages['Medicine']}
 		</th>
 		<th><h:outputText value="#{messages['StoragePosReport.nextExpirationBatch']}" styleClass="colch" /></th>	
+		<th><h:outputText value="#{messages['Batch.registCard.term']}" styleClass="colch" /></th>	
 		<th><h:outputText value="#{messages['Batch.numContainers']}" styleClass="colrh" /></th>	
 		<th><h:outputText value="#{messages['meds.movs.availableqtty']}" styleClass="colrh" /></th>	
 		
@@ -60,34 +61,37 @@
 	<tr class="highlight">
 		<td>
 			<a:commandLink styleClass="plus-icon" onclick="detailsClick(this, 'med#{it.nodeId}');return false;" />
-			<s:span styleClass="alert-icon" rendered="#{it.item.hasBatchExpiring}"/>
-			<s:span styleClass="icon-error" rendered="#{it.item.hasBatchExpired}"/>
-			<h:outputText value="#{it.medicine}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
+			<s:span styleClass="alert-icon" rendered="#{it.item.hasBatchExpiring or it.item.hasRegistCardExpiring}"/>
+			<s:span styleClass="icon-error" rendered="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired}"/>
+			<h:outputText value="#{it.medicine}" style="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired ? 'color:red' : (it.item.hasBatchExpiring or it.item.hasRegistCardExpiring? 'color:#D7620B' : '')}"/>
 			<h:outputText value="#{messages['medicine.almostStockedOut']}" rendered="#{it.item.almostStockedOut()}" style="background-color:#ff8080;color:white;padding:4px;display:block;border:1px solid red;border-radius:4px;" />
 		</td>
 		<td align="center">
-			<h:outputText value="#{it.item.nextBatchExpire}" converter="localeDateConverter" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
+			<h:outputText value="#{it.item.nextRegistCardExpire}" converter="localeDateConverter" style="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired? 'color:red' : (it.item.hasBatchExpiring or it.item.hasRegistCardExpiring? 'color:#D7620B' : '')}"/>
+		</td>
+		<td align="center">
+			<h:outputText value="#{it.item.nextBatchExpire}" converter="localeDateConverter" style="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired? 'color:red' : (it.item.hasBatchExpiring or it.item.hasRegistCardExpiring? 'color:#D7620B' : '')}"/>
 		</td>
 		<td align="right">
 			
 		</td>
 		<td align="right">
-			<h:outputText value="#{it.item.quantity}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
+			<h:outputText value="#{it.item.quantity}" style="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired? 'color:red' : (it.item.hasBatchExpiring or it.item.hasRegistCardExpiring? 'color:#D7620B' : '')}">
 				<f:convertNumber pattern="###,###,###"/>
 			</h:outputText>
 		</td>
 		<td align="right">
-			<h:outputText value="#{it.item.totalPrice}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
+			<h:outputText value="#{it.item.totalPrice}" style="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired? 'color:red' : (it.item.hasBatchExpiring or it.item.hasRegistCardExpiring? 'color:#D7620B' : '')}">
 				<f:convertNumber pattern="###,###,##0.00000"/>
 			</h:outputText>
 		</td>
 		<td align="right">
-			<h:outputText value="#{it.item.unitPrice}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
+			<h:outputText value="#{it.item.unitPrice}" style="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired? 'color:red' : (it.item.hasBatchExpiring or it.item.hasRegistCardExpiring? 'color:#D7620B' : '')}">
 				<f:convertNumber pattern="###,###,##0.00000"/>
 			</h:outputText>
 		</td>
 		<td align="center">
-			<h:outputText value="#{it.item.lastMovement}" converter="localeDateConverter" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
+			<h:outputText value="#{it.item.lastMovement}" converter="localeDateConverter" style="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired? 'color:red' : (it.item.hasBatchExpiring or it.item.hasRegistCardExpiring? 'color:#D7620B' : '')}"/>
 		</td>
 	</tr>
 	<a:repeat value="#{it.batches}" var="b">
@@ -98,9 +102,12 @@
 			</s:decorate>
 		</td>
 
-		<s:fragment rendered="#{(not b.batch.expired) and (not inventoryReport.isExpiringBatch(b))}">
+		<s:fragment rendered="#{(not b.batch.expired) and (not inventoryReport.isExpiringBatch(b)) and (not b.batch.registCardExpired) and (not inventoryReport.isExpiringRegistCard(b))}">
 			<td align="center">
 				<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+			</td>
+			<td align="center">
+				<h:outputText value="#{b.batch.registCardEndDate}" converter="localeDateConverter" />
 			</td>
 			<td align="right">
 				<h:outputText value="#{b.batch.numContainers} (№#{b.batch.quantityContainer})" >
@@ -126,12 +133,23 @@
 			
 		</s:fragment>
 
-		<s:fragment rendered="#{b.batch.expired}">
+		<s:fragment rendered="#{(b.batch.expired) or (b.batch.registCardExpired)}">
 			<td align="center">
-				<div title="#{messages['manag.forecast.expiredquantity']}">
+				<s:fragment rendered="#{b.batch.expired}">
+					<div title="#{messages['manag.forecast.expiredquantity']}">
+						<span class="icon-error" />
+						<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" styleClass="error"/>
+					</div>
+				</s:fragment>
+				<s:fragment rendered="#{!b.batch.expired}">
+						<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" styleClass="error"/>
+				</s:fragment>
+			</td>
+			<td align="center">
+				<s:fragment rendered="#{b.batch.registCardExpired}">
 					<span class="icon-error" />
-					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" styleClass="error"/>
-				</div>
+				</s:fragment>
+				<h:outputText value="#{b.batch.registCardEndDate}" converter="localeDateConverter" styleClass="error"/>
 			</td>
 			<td align="right">
 				<h:outputText value="#{b.batch.numContainers} (№#{b.batch.quantityContainer})"  styleClass="error">
@@ -157,12 +175,26 @@
 			
 		</s:fragment>
 		
-		<s:fragment rendered="#{inventoryReport.isExpiringBatch(b)}">
+		<s:fragment rendered="#{(inventoryReport.isExpiringBatch(b) or inventoryReport.isExpiringRegistCard(b)) and ((not b.batch.expired) and (not b.batch.registCardExpired))}">
 			<td align="center">
-				<div title="#{messages['manag.forecast.expiredquantity']}">
-					<span class="alert-icon" />
+				<s:fragment rendered="#{inventoryReport.isExpiringBatch(b)}">
+					<div title="#{messages['manag.forecast.expiredquantity']}">
+						<span class="alert-icon" />
+						<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" style="color:#D7620B;font-weight:bold"/>
+					</div>
+				</s:fragment>
+				<s:fragment rendered="#{!inventoryReport.isExpiringBatch(b)}">
 					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" style="color:#D7620B;font-weight:bold"/>
-				</div>
+				</s:fragment>
+			</td>
+			<td align="center">
+				<s:fragment rendered="#{inventoryReport.isExpiringRegistCard(b)}">
+					<span class="alert-icon" />
+					<h:outputText value="#{b.batch.registCardEndDate}" converter="localeDateConverter" style="color:#D7620B;font-weight:bold"/>
+				</s:fragment>
+				<s:fragment rendered="#{!inventoryReport.isExpiringRegistCard(b)}">
+					<h:outputText value="#{b.batch.registCardEndDate}" converter="localeDateConverter" style="color:#D7620B;font-weight:bold"/>
+				</s:fragment>
 			</td>
 			<td align="right">
 				<h:outputText value="#{b.batch.numContainers} (№#{b.batch.quantityContainer})"  style="color:#D7620B;font-weight:bold">
