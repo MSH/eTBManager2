@@ -34,6 +34,7 @@
 <h:panelGroup id="indicator" styleClass="indicator-tables">
 	<s:decorate template="standardreport.xhtml">
 		<ui:param name="title" value="#{messages['manag.ind.resist']}" />
+		<ui:param name="title2" value="#{messages['manag.ind.numc']}" />
 		<ui:param name="series" value="#{indicator.series}" />
 		<ui:param name="firstcoltitle" value= "#{indicator.displayOutputSelection}"/>
 		<ui:param name="seriestitle" value="#{indicatorFilters.tbunitselection.tbunit != null? messages['Locality']: messages['Region']}" />
