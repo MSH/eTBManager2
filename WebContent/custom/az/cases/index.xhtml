@@ -32,21 +32,20 @@
 
 <ui:define name="left">
 	<h:form>
-
-	<h:commandLink 
-		onclick="showModalAutoTop('selclassificationdlg');return false;" style="width:130px"
-		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button">
-		<span>#{messages['cases.new']}</span>
-	</h:commandLink>
-
-	<div class="spacer" />
-
-	<h:commandLink 
-		onclick="showModalAutoTop('newsuspectdlg');return false;" style="width:130px"
-		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button-alt">
-		<span>#{messages['cases.newsusp']}</span>
-	</h:commandLink>
-
+		<h:commandLink 
+			onclick="showModalAutoTop('selclassificationdlg');return false;" style="width:130px"
+			rendered="#{userSession.canNotifySeveralClassifs and (s:hasRole('TB_CASE_NEW_TB') or s:hasRole('DRTB_CASE_NEW_TB'))}" styleClass="button">
+			<span>#{messages['cases.new']}</span>
+		</h:commandLink>
+	
+		<div class="spacer" />
+	
+		<h:commandLink 
+			onclick="showModalAutoTop('newsuspectdlg');return false;" style="width:130px"
+			rendered="#{userSession.canNotifySeveralClassifs and (s:hasRole('TB_CASE_NEW_TB') or s:hasRole('DRTB_CASE_NEW_TB'))}" styleClass="button-alt">
+			<span>#{messages['cases.newsusp']}</span>
+		</h:commandLink>
+	
 	<s:fragment rendered="#{not userSession.canNotifySeveralClassifs}">
 		<a:repeat value="#{globalLists.caseClassifications}" var="cla">
 			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}" styleClass="button" style="width:130px">

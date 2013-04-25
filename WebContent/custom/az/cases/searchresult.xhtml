@@ -112,7 +112,7 @@
 												onclick="changeOrder(10);return false;" />
 											<br />
 											<a:commandLink value="#{messages['TbCase.notificationUnit']}"
-												onclick="changeOrder(5);return false;" />
+												onclick="changeOrder(5);return false;" rendered="#{caseFilters.stateIndex!=1515}"/>
 											<br /> 
 											
 											<a:commandLink value="#{messages['CaseState']}"
@@ -269,7 +269,7 @@
 			<a:jsFunction name="toDeleteList" ajaxSingle="true" reRender="delbutton">
 				<a:actionparam name="param1" assignTo="#{casesControlAZ.markToDel}"	converter="javax.faces.Integer" />
 			</a:jsFunction>
-			<a:jsFunction name="allToDeleteList" ajaxSingle="true" action="#{casesControlAZ.fillDeleteList}" reRender="delbutton"/>
+			<a:jsFunction name="allToDeleteList" ajaxSingle="true" action="#{casesControlAZ.fillDeleteListFromCases}" reRender="delbutton"/>
 			
 			<script type="text/javascript">
 				function checkClick(obj) {
