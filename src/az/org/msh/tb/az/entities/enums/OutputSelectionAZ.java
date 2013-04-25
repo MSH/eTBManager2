@@ -7,6 +7,7 @@ package org.msh.tb.az.entities.enums;
  */
 public enum OutputSelectionAZ {
 
+	CLASSIFICATION("CaseClassification"),
 	ADMINUNIT("AdministrativeUnit"),
 	TBUNIT("TbCase.notificationUnit"),
 	GENDER("Gender"),
@@ -23,7 +24,8 @@ public enum OutputSelectionAZ {
 	DIAGNOSIS_TYPE("DiagnosisType"),
 	HIV_RESULT("HIVResult"),
 	//SOURCE_MED("Source"),
-	DRUG_RESIST_TYPE("DrugResistanceType");
+	DRUG_RESIST_TYPE("DrugResistanceType"),
+	PERIOD("global.period");
 
 	private String key;
 	
