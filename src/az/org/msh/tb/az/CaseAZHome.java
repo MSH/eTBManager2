@@ -191,6 +191,13 @@ public class CaseAZHome {
 		return (tbcase.isOpen()) && (tbcase.getState() == CaseState.TRANSFERRING) && (caseHome.checkRoleBySuffix("CASE_TRANSFER")) && (isOwnerOrNotifUnit());
 	}
 	
+	public boolean isCanPlayOtherUnits(){
+		UserWorkspace ws = (UserWorkspace)Component.getInstance("userWorkspace");
+		if (ws.isPlayOtherUnits())
+			return true;
+		return false;
+	}
+	
 	public boolean isOwnerOrNotifUnit() {
 		UserWorkspace ws = (UserWorkspace)Component.getInstance("userWorkspace");
 		if (ws.isPlayOtherUnits())

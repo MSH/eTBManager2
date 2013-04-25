@@ -51,11 +51,11 @@ public class CasesQueryAZ extends CasesQuery{
 	//private static final Pattern WHERE_PATTERN = Pattern.compile("\\s(where)\\s", Pattern.CASE_INSENSITIVE);
 	
 	private static final String[] orderValues = {"p.recordNumber, c.caseNumber", "p.gender,p.name", 
-		"c.classification", "#{cases.namesOrderBy}", "c.age", "upper(nu.name.name1)", "c.notifAddress.adminUnit.name.name1", 
+		"c.classification", "#{cases.namesOrderBy}", "c.age", "upper(c.notificationUnit.name.name1)", "c.notifAddress.adminUnit.name.name1", 
 		"c.notifAddress.adminUnit.name.name1", "c.state", "c.registrationDate", "c.treatmentPeriod.iniDate", "c.validationState"};
 
 	private static final String[] inverseOrderValues = {"p.recordNumber desc, c.caseNumber", "p.gender desc, upper(p.name) desc, upper(p.middleName) desc, upper(p.lastName) desc", 
-		"c.classification desc", "#{cases.namesOrderBy}", "c.age desc", "upper(nu.name.name1) desc", "c.notifAddress.adminUnit.name.name1 desc", 
+		"c.classification desc", "#{cases.namesOrderBy}", "c.age desc", "upper(c.notificationUnit.name.name1) desc", "c.notifAddress.adminUnit.name.name1 desc", 
 		"c.notifAddress.adminUnit.name.name1 desc", "c.state desc", "c.registrationDate desc", "c.treatmentPeriod.iniDate desc", "c.validationState desc"};
 
 	
