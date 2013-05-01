@@ -478,6 +478,16 @@ public class CaseAZHome {
 		return caseCloseHome.reopenCase();
 	}*/
 	
-
+	public boolean isCanCreateNewCases(){
+		return caseHome.checkRoleBySuffix("CASE_NEW_TB");
+	}
+	
+	public boolean isCanCreateNewPatients(){
+		return caseHome.checkRoleBySuffix("PATIENT_NEW_TB");
+	}
+	
+	public boolean isCanBindEIDSSCasesOnly(){
+		return (!isCanCreateNewCases())&&(!isCanCreateNewPatients());
+	}
 }
 
