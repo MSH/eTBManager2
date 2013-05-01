@@ -6,6 +6,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+
+import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -14,7 +17,6 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.async.QuartzTriggerHandle;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.Messages;
-import org.msh.tb.application.App;
 import org.msh.tb.application.EtbmanagerApp;
 import org.msh.tb.az.eidss.EidssIntHome;
 import org.msh.tb.entities.SystemParam;
@@ -27,7 +29,6 @@ import org.quartz.Trigger;
 public class SysStartupAZ{
 	@In(create=true) SystemTimerAZ systemTimerAZ; 
 	@In(create=true) FacesMessages facesMessages;
-	@In(create=true) EidssIntHome eidssIntHome;
 	
 	private Map<String, String> messages;
 	private QuartzTriggerHandle quartz;
@@ -46,7 +47,7 @@ public class SysStartupAZ{
 				
 		SystemParam p;
 		try {
-			p = App.getEntityManager().find(SystemParam.class, "admin.eidss.auto");
+			p = getEntityManager().find(SystemParam.class, "admin.eidss.auto");
 			start = getStart();				
 			if ("true".equals(p.getValue())){
 				start();
@@ -59,7 +60,7 @@ public class SysStartupAZ{
 	private Date getStart(){
 		if (start == null){
 			SystemParam st;
-			st = App.getEntityManager().find(SystemParam.class, "admin.eidss.dateStart");
+			st = getEntityManager().find(SystemParam.class, "admin.eidss.dateStart");
 			if (st!=null)
 				try {
 					start = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(st.getValue());
@@ -72,22 +73,30 @@ public class SysStartupAZ{
 		return start;
 	}
 	
+	private EidssIntHome getEidssIntHome(){
+		return (EidssIntHome)Component.getInstance("eidssIntHome");
+	}
+	
 	private void changeStartDt(){
-		Date db = eidssIntHome.getConfig().getDateStart();
+		Date db = getEidssIntHome().getConfig().getDateStart();
 		if (!getStart().equals(db))
 			start = now.before(db) ? db : start;
+	}
+	
+	private EntityManager getEntityManager(){
+		return (EntityManager)Component.getInstance("entityManager");
 	}
 	
 	public void start(){
 		if (quartz==null){
 			boolean auto = false;
 			try{
-				eidssIntHome.loadConfig();
+				getEidssIntHome().loadConfig();
 				changeStartDt();
-				auto = eidssIntHome.getConfig().getAuto();
+				auto = getEidssIntHome().getConfig().getAuto();
 			}
 			catch (Exception e) {
-				String str = App.getEntityManager().find(SystemParam.class, "admin.eidss.auto").getValue();
+				String str = getEntityManager().find(SystemParam.class, "admin.eidss.auto").getValue();
 				if ("true".equals(str))
 					auto = true;
 			}
@@ -111,7 +120,7 @@ public class SysStartupAZ{
 
 	private long getTimeInterval(){
 		try{
-			return eidssIntHome.getConfig().getInterval();
+			return getEidssIntHome().getConfig().getInterval();
 		}
 		catch (Exception e){
 			return 2;
@@ -173,7 +182,7 @@ public class SysStartupAZ{
 
 	public Workspace getObservWorkspace() {
 		if (observWorkspace==null)
-			observWorkspace = App.getEntityManager().find(Workspace.class, 8);
+			observWorkspace = getEntityManager().find(Workspace.class, 8);
 		return observWorkspace;
 	}
 }

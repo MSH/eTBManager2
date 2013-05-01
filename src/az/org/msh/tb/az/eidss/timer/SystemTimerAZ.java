@@ -2,7 +2,7 @@ package org.msh.tb.az.eidss.timer;
 
 import java.util.Date;
 
-import org.jboss.seam.annotations.In;
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.jboss.seam.annotations.async.Expiration;
@@ -17,7 +17,6 @@ import org.msh.tb.az.eidss.EidssIntHome;
  */
 @Name("systemTimerAZ")
 public class SystemTimerAZ {
-	@In(create=true) EidssIntHome eidssIntHome;
 	/**
 	 * Called asynchronously to trigger system events that must be executed regularly
 	 * @param initDelay
@@ -25,6 +24,7 @@ public class SystemTimerAZ {
 	 */
 	@Asynchronous
 	public QuartzTriggerHandle trigger(@Expiration Date initDelay, @IntervalDuration long interval) {
+		EidssIntHome eidssIntHome = (EidssIntHome) Component.getInstance("eidssIntHome");
 		if (eidssIntHome.getTask()!=null)
 			eidssIntHome.getTask().cancel();
 		eidssIntHome.rewriteDatesInConfig();
