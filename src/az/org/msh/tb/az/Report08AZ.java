@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.application.App;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamDST;
@@ -603,5 +604,14 @@ public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 	protected void addToAllowing(TbCase tc) {
 		if (tc.getNotifAddress().getLocalityType()==null)
 			addToVerList(tc,2,0);
+	}
+	
+	@Override
+	protected String getHQLWhere() {
+		String hql = super.getHQLWhere();
+		IndicatorFiltersAZ filters_az = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
+		if (filters_az.isReferToThisUnit())
+			hql += " and c.referToOtherTBUnit=0";
+		return hql;
 	}
 }
