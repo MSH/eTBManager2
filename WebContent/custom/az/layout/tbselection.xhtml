@@ -35,6 +35,7 @@
       	<ui:insert name="events" />
     </h:selectOneMenu>
     <h:outputText value="#{tbunitselection.tbunit}" rendered="#{tbunitselection.readOnly}" />
+    <a:support event="onchange" ajaxSingle="true" reRender="#{rerender}"/>
     <ui:insert />
 </s:decorate>
 </h:panelGroup>
