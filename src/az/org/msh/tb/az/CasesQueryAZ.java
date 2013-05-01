@@ -9,7 +9,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.core.Expressions;
 import org.msh.tb.application.App;
@@ -39,6 +41,7 @@ import org.msh.tb.entities.enums.ValidationState;
  */
 @Name("casesAZ")
 @BypassInterceptors
+@Scope(ScopeType.CONVERSATION)
 public class CasesQueryAZ extends CasesQuery{
 	private static final long serialVersionUID = -7293313123644540770L;
 	private final Integer casesEIDSSnotBindedIndex = CaseStateReportAZ.EIDSS_NOT_BINDED;
