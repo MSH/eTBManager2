@@ -107,9 +107,10 @@
     		#{tbcase.notifAddress.complement}  
     		 ( #{messages[tbcase.notifAddress.localityType.key]})	
     	</s:decorate>
- 		<s:decorate template="/layout/audisplay.xhtml">
-			<ui:param name="adminunit" value="#{tbcase.notifAddress.adminUnit}" />
-		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" >
+			<ui:define name="label">#{messages['CountryStructure.level1']}:</ui:define>
+			#{tbcase.notifAddress.adminUnit.name}
+		</s:decorate> 
 	</td>
 	</tr>
 	</s:fragment>

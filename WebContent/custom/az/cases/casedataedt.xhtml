@@ -105,7 +105,7 @@
     </tr>
 
 	<tr><td>
-		<s:decorate template="/layout/auselection.xhtml">
+		<s:decorate template="/custom/az/layout/auselection.xhtml">
 			<ui:param name="auselection" value="#{indicator.notifAdminUnit}" />
 			<ui:param name="requiredLevel" value="#{defaultWorkspace.patientAddrRequiredLevels}" />
 		</s:decorate>
@@ -240,9 +240,14 @@
 	<tr><td style="padding-bottom:10px;">
 
 	<h2>#{messages['TbCase.notificationUnit']}</h2>
-	<s:decorate template="/layout/tbselection.xhtml" >
+	<s:decorate template="/custom/az/layout/tbselection.xhtml" rendered="#{caseAZHome.canPlayOtherUnits}">
 		<ui:param name="tbunitselection" value="#{indicator.tbunitselection}" />
-		<ui:param name="required" value="true" />
+		<ui:param name="required" value="#{caseAZHome.canPlayOtherUnits}" />
+	</s:decorate>
+
+	<s:decorate template="/layout/display.xhtml" rendered="#{!caseAZHome.canPlayOtherUnits}">
+		<ui:define name="label">#{tbunitselection.labelAdminUnit}:</ui:define>
+		#{userHome.userWorkspace.tbunit.adminUnit}
 	</s:decorate>
 
 	</td></tr>
@@ -260,7 +265,7 @@
     	<div id="referToTbUnit" style="clear:both;">
     	<h2>#{messages['TbCase.referUnit']}</h2>
 			
-			<s:decorate template="/layout/tbselection.xhtml" >
+			<s:decorate template="/custom/az/layout/tbselection.xhtml" >
 				<ui:param name="tbunitselection" value="#{indicator.referTBUnit}" />
 				<ui:param name="required" value="false" />
 			</s:decorate>

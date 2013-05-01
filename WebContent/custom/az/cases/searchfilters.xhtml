@@ -14,12 +14,12 @@
    <h2>#{messages['cases.details.addressnotif']}</h2>
 	<ui:param name="required" value="false" />
 
-	<s:decorate template="/layout/auselection.xhtml">
+	<s:decorate template="/custom/az/layout/auselection.xhtml">
 		<ui:param name="auselection" value="#{caseFilters.auselection}" />
 	</s:decorate>
 
     <h2>#{messages['cases.healthUnit']}</h2>
-	<s:decorate template="/layout/tbselection.xhtml">
+	<s:decorate template="/custom/az/layout/tbselection.xhtml">
 		<ui:param name="tbunitselection" value="#{caseFilters.tbunitselection}" />
 
 		<h:selectOneRadio value="#{caseFilters.filterHealthUnit}" >
