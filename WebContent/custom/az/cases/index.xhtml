@@ -32,20 +32,21 @@
 
 <ui:define name="left">
 	<h:form>
-		<h:commandLink 
-			onclick="showModalAutoTop('selclassificationdlg');return false;" style="width:130px"
-			rendered="#{userSession.canNotifySeveralClassifs and (s:hasRole('TB_CASE_NEW_TB') or s:hasRole('DRTB_CASE_NEW_TB'))}" styleClass="button">
-			<span>#{messages['cases.new']}</span>
-		</h:commandLink>
-	
-		<div class="spacer" />
-	
-		<h:commandLink 
-			onclick="showModalAutoTop('newsuspectdlg');return false;" style="width:130px"
-			rendered="#{userSession.canNotifySeveralClassifs and (s:hasRole('TB_CASE_NEW_TB') or s:hasRole('DRTB_CASE_NEW_TB'))}" styleClass="button-alt">
-			<span>#{messages['cases.newsusp']}</span>
-		</h:commandLink>
-	
+
+	<h:commandLink 
+		onclick="showModalAutoTop('selclassificationdlg');return false;" style="width:130px"
+		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button">
+		<span>#{messages['cases.new']}</span>
+	</h:commandLink>
+
+	<div class="spacer" />
+
+	<h:commandLink 
+		onclick="showModalAutoTop('newsuspectdlg');return false;" style="width:130px"
+		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button-alt">
+		<span>#{messages['cases.newsusp']}</span>
+	</h:commandLink>
+
 	<s:fragment rendered="#{not userSession.canNotifySeveralClassifs}">
 		<a:repeat value="#{globalLists.caseClassifications}" var="cla">
 			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}" styleClass="button" style="width:130px">
@@ -264,7 +265,7 @@
 	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
 	<c:forEach items="#{globalLists.caseClassifications}" var="it">
 		<tr><td class="vertical-menu">
-			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it) and (s:hasRole('TB_CASE_NEW_TB') and it == 'TB' or s:hasRole('DRTB_CASE_NEW_TB') and it=='DRTB')}">
+			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
 				<f:param name="cla" value="#{it}"/>
 				<f:param name="type" value="CONFIRMED"/>
 				<div class="new-icon" />#{messages[it.key]}
@@ -292,7 +293,7 @@
 	<table id="tblstatus" width="100%" style="font-size:12px;border:2px solid #f0f0f0" cellpadding="4">
 	<c:forEach items="#{globalLists.caseClassifications}" var="it">
 		<tr><td class="vertical-menu">
-			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it) and (s:hasRole('TB_CASE_NEW_TB') and it == 'TB' or s:hasRole('DRTB_CASE_NEW_TB') and it=='DRTB')}">
+			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(it)}">
 				<f:param name="cla" value="#{it}"/>
 				<f:param name="type" value="SUSPECT"/>
 				<div class="new-icon" />#{messages[it.keySuspect]}
