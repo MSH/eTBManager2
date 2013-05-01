@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.application.App;
-import org.msh.tb.cases.CaseFilters;
 import org.msh.tb.cases.CaseResultItem;
 import org.msh.tb.cases.PatientsQuery.Item;
 import org.msh.tb.entities.Patient;
@@ -19,6 +19,8 @@ import org.msh.tb.entities.TbCase;
 @Name("casesControlAZ")
 @Scope(ScopeType.PAGE)
 public class CasesControlAZ {
+	
+	@In(create=true) CaseAZHome caseAZHome;
 	
 	private Set<Integer> deleteList = new HashSet<Integer>();
 	private Integer markToDel;
@@ -29,13 +31,14 @@ public class CasesControlAZ {
 	 * */
 	public Boolean getCanDeleteEIDSS(){
 		if (canDeleteEIDSS==null){
-			canDeleteEIDSS = false;
+			/*canDeleteEIDSS = false;
 			CaseFilters caseFilters = (CaseFilters)App.getComponent("caseFilters");
 			if (caseFilters != null) 
 				if (caseFilters.getStateIndex()!=null)
 					if (caseFilters.getStateIndex()==1515)
 						canDeleteEIDSS = true;
-			canDeleteEIDSS = canDeleteEIDSS&&Identity.instance().hasRole("TB_DELETE_EIDSS_NOT_BINDED");
+			canDeleteEIDSS = canDeleteEIDSS&&Identity.instance().hasRole("TB_DELETE_EIDSS_NOT_BINDED");*/
+			setCanDeleteEIDSSInTrue();
 		}
 		return canDeleteEIDSS;
 	}
@@ -56,11 +59,12 @@ public class CasesControlAZ {
 	public void fillDeleteListFromCases(){
 		CasesQueryAZ cq = (CasesQueryAZ)App.getComponent("casesAZ");
 		List<CaseResultItem> lst = cq.getResultList();
-		if (deleteList.size()>=cq.getMaxResults())
+		if (deleteList.size()>=getCountEIDSSCases())
 			deleteList.clear();
 		else{
 			for (CaseResultItem it:lst)
-				deleteList.add(it.getTbcase().getId());
+				if (caseAZHome.reGetTbCase(it.getTbcase()).getLegacyId()!=null)
+					deleteList.add(it.getTbcase().getId());
 		}
 	}
 
@@ -70,7 +74,7 @@ public class CasesControlAZ {
 	public void fillDeleteListFromPatients(){
 		PatientsQueryAZ cq = (PatientsQueryAZ)App.getComponent("patientsAZ");
 		List<Item> lst = cq.getPatientList();
-		if (deleteList.size()>=getCountEIDSSCases())
+		if (deleteList.size()>=getCountEIDSSPatients())
 			deleteList.clear();
 		else{
 			for (Item it:lst)
@@ -80,10 +84,10 @@ public class CasesControlAZ {
 	}
 
 	/**
-	 * Return count of EIDSS-cases from patientList
+	 * Return count of EIDSS-cases from patientList 
 	 * @return
 	 */
-	public int getCountEIDSSCases() {
+	public int getCountEIDSSPatients() {
 		PatientsQueryAZ cq = (PatientsQueryAZ)App.getComponent("patientsAZ");
 		int eidss_cases = 0;
 		for (Item it:cq.getPatientList()){
@@ -93,7 +97,19 @@ public class CasesControlAZ {
 		return eidss_cases;
 	}
 	
-	
+	/**
+	 * Return count of EIDSS-cases from  casesList
+	 * @return
+	 */
+	public int getCountEIDSSCases() {
+		CasesQueryAZ cq = (CasesQueryAZ)App.getComponent("casesAZ");
+		int eidss_cases = 0;
+		for (CaseResultItem it:cq.getResultList()){
+			if (caseAZHome.reGetTbCase(it.getTbcase()).getLegacyId()!=null)
+				eidss_cases++;
+		}
+		return eidss_cases;
+	}
 	
 	/**
 	 * Remove selected cases
@@ -134,5 +150,4 @@ public class CasesControlAZ {
 	public void setCanDeleteEIDSSInTrue() {
 		canDeleteEIDSS = Identity.instance().hasRole("TB_DELETE_EIDSS_NOT_BINDED");;
 	}
-
 }

@@ -67,7 +67,9 @@
 										onclick="changeOrder(1); return false;" />
 									<br /> <br />
 									<a:commandLink value="#"
-										onclick="changeOrder(0); return false;" />	
+										onclick="changeOrder(0); return false;" />
+									<br/>
+									<h:selectBooleanCheckbox onclick="checkClick(this);" rendered="#{casesControlAZ.canDeleteEIDSS and casesControlAZ.countEIDSSCases>0}"/>
 								</div>
 							</ui:fragment>
 							<ui:fragment rendered='#{casesAZ.notBindedEIDSS}'>
@@ -75,7 +77,7 @@
 									<a:commandLink value="#{messages['Gender']}"
 										onclick="changeOrder(1); return false;" />
 									<br/>
-									<h:selectBooleanCheckbox id="todos" onclick="checkClick(this);" rendered="#{casesControlAZ.canDeleteEIDSS}"/>
+									<h:selectBooleanCheckbox onclick="checkClick(this);" rendered="#{casesControlAZ.canDeleteEIDSS and casesControlAZ.countEIDSSCases>0}"/>
 								</div>
 							</ui:fragment>
 							</th>
@@ -193,7 +195,7 @@
 										<f:param name="id" value="#{it.tbcase.id}" />
 									</s:link> 
 									<br/>
-									<h:selectBooleanCheckbox id="deltbc" onchange="toDeleteList(#{it.tbcase.id}); return false;" rendered="#{casesControlAZ.canDeleteEIDSS}"/>
+									<h:selectBooleanCheckbox id="deltbc" onchange="toDeleteList(#{it.tbcase.id}); return false;" rendered="#{casesControlAZ.canDeleteEIDSS and caseAZHome.reGetTbCase(it.tbcase).legacyId!=null}"/>
 								</td>
 								<td style="color:#069;" width="32%">
 										<b>
