@@ -25,7 +25,12 @@ public enum OutputSelectionAZ {
 	HIV_RESULT("HIVResult"),
 	//SOURCE_MED("Source"),
 	DRUG_RESIST_TYPE("DrugResistanceType"),
-	PERIOD("global.period");
+	YEAR("global.year"),
+	YEAR_MONTH("global.monthyear"),
+	YEAR_WEEK("global.weekyear"),
+	HEALTH_SYSTEM("HealthSystem"),
+	TBUNIT_OWN("admin.tbunits.selected"),
+	CREATOR_USER("User.create");
 
 	private String key;
 	

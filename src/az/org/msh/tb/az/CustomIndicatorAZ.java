@@ -15,6 +15,7 @@ import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.application.App;
 import org.msh.tb.az.entities.enums.OutputSelectionAZ;
 import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorFilters;
@@ -43,12 +44,15 @@ public class CustomIndicatorAZ extends Indicator2D {
 		if (!validatePeriod())
 			return;
 
+		if (!validateTBUnit())
+			return;
+		
 		String rowField = getOutputSelectionField( filters.getOutputSelection() );
 		String colField = getOutputSelectionField( colSelection );
 		List<Object[]> lst;
 
 		if (colExams==0 && !source){
-			lst = generateValuesByField(colField + "," + rowField, "c.state >= " + CaseState.WAITING_TREATMENT.ordinal());
+			lst = generateValuesByField(colField + "," + rowField,condition());
 		}
 		else{
 			String hql = "";
@@ -76,13 +80,47 @@ public class CustomIndicatorAZ extends Indicator2D {
 
 		createItems(lst);
 	}
+	
+	private String condition() {
+		return "c.notificationUnit!=null and c.state >= " + CaseState.WAITING_TREATMENT.ordinal();
+		/*IndicatorFiltersAZ filters_az = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
+		if ((!OutputSelectionAZ.TBUNIT_OWN.equals(filters_az.getOutputSelection()) && !OutputSelectionAZ.TBUNIT_OWN.equals(colSelection)))
+			return "c.state >= " + CaseState.WAITING_TREATMENT.ordinal();
+		IndicatorFilters filters = (IndicatorFilters)App.getComponent("indicatorFilters");
+		Integer id = filters.getTbunitselection().getTbunit().getId();
+		return 	" c.notificationUnit!=null"+
+		 		" or c.ownerUnit.id="+id +
+				" or (c.ownerUnit=null and c.notificationUnit.id="+id +
+				" and c.state="+CaseState.WAITING_TREATMENT.ordinal()+")";*/
+	}
+
+	/**
+	 * Return false if no selected tb-unit in filters, but it is need
+	 */
+	private boolean validateTBUnit() {
+		if (!someSelectionEqualsTo(OutputSelectionAZ.TBUNIT_OWN))
+			return true;
+		IndicatorFiltersAZ filters_az = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
+		if (OutputSelectionAZ.TBUNIT_OWN.equals(filters_az.getOutputSelection()) && OutputSelectionAZ.TBUNIT_OWN.equals(colSelection))
+			return false;
+		
+		//if no selected tb-unit
+		IndicatorFilters filters = (IndicatorFilters)App.getComponent("indicatorFilters");
+		if (filters.getTbunitselection()!=null)
+			if (filters.getTbunitselection().getTbunit()!=null)
+				if (filters.getTbunitselection().getTbunit().getId()!=null)
+					return true;
+					
+		return false;
+	}
 
 	/**
 	 * Return false if one of the outputSelection is PERIOD, but not enough necessary parameters
 	 * */
 	private boolean validatePeriod() {
-		IndicatorFiltersAZ filters_az = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
-		if (!OutputSelectionAZ.PERIOD.equals(filters_az.getOutputSelection()) && !OutputSelectionAZ.PERIOD.equals(colSelection))
+		if (!someSelectionEqualsTo(OutputSelectionAZ.YEAR_MONTH) &&
+			!someSelectionEqualsTo(OutputSelectionAZ.YEAR) &&
+			!someSelectionEqualsTo(OutputSelectionAZ.YEAR_WEEK))
 			return true;
 
 		//if selected date fields more than 1 or no
@@ -156,11 +194,37 @@ public class CustomIndicatorAZ extends Indicator2D {
 		//case SOURCE_MED: source = true; return "";//
 		case DRUG_RESIST_TYPE: return "c.drugResistanceType";
 		case CLASSIFICATION: return "c.classification";
-		case PERIOD: return "year("+getDate()+"),month("+getDate()+")";
+		case YEAR_MONTH: return "year("+getDate()+"),month("+getDate()+")";
+		case YEAR: return "year("+getDate()+")";
+		case YEAR_WEEK: return "year("+getDate()+"),month("+getDate()+"),week("+getDate()+")";
+		case HEALTH_SYSTEM: return "c.notificationUnit.healthSystem";
+		case TBUNIT_OWN: return "c.notificationUnit,c.ownerUnit"; 
+		case CREATOR_USER: return "c.createUser";
 		}
 		return null;
 	}
 
+	@Override
+	protected String getHQLFrom() {
+		String s = "from TbCaseAZ c ";
+		if (!someSelectionEqualsTo(OutputSelectionAZ.TBUNIT_OWN))
+			return s;
+		if (someSelectionEqualsTo(OutputSelectionAZ.GENDER))
+			s+=	"join c.patient p ";
+		if (someSelectionEqualsTo(OutputSelectionAZ.TBUNIT) || someSelectionEqualsTo(OutputSelectionAZ.PULMONARY) || someSelectionEqualsTo(OutputSelectionAZ.EXTRAPULMONARY))
+			s+= "join c.notificationUnit nu ";
+		if (someSelectionEqualsTo(OutputSelectionAZ.PULMONARY) || someSelectionEqualsTo(OutputSelectionAZ.EXTRAPULMONARY) || someSelectionEqualsTo(OutputSelectionAZ.HEALTH_SYSTEM))
+			s+= "join c.ownerUnit ou";
+		return s;
+	}
+	
+	private boolean someSelectionEqualsTo(OutputSelectionAZ sel){
+		IndicatorFiltersAZ filters_az = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
+		if (sel.equals(filters_az.getOutputSelection()) || sel.equals(colSelection))
+			return true;
+		return false;
+	}
+	
 	/**
 	 * Update the values of the result list to be displayed
 	 * @param output - output to be displayed
@@ -187,7 +251,7 @@ public class CustomIndicatorAZ extends Indicator2D {
 			}
 		}
 
-		if (output == OutputSelectionAZ.PERIOD){
+		if (output == OutputSelectionAZ.YEAR_MONTH){
 			DateFormatSymbols symbols = new DateFormatSymbols(locale);
 			String[] values = symbols.getShortMonths();
 			for (Object[] vals: lst) {
@@ -199,11 +263,86 @@ public class CustomIndicatorAZ extends Indicator2D {
 				vals[2] = vals[3];
 			}
 		}
+		
+		if (output == OutputSelectionAZ.YEAR_WEEK){
+			DateFormatSymbols symbols = new DateFormatSymbols(locale);
+			String[] values = symbols.getShortMonths();
+			for (Object[] vals: lst) {
+				//concatenate month and year and shift other fields
+				String m = values[(Integer)vals[index+1]-1];
+				vals[index] = vals[index+2]+"("+m+")/"+vals[index];
+				if (index==0)
+					vals[1] = vals[3];
+				vals[2] = vals[4];
+			}
+		}
+		
+		if (output == OutputSelectionAZ.TBUNIT_OWN){
+			return groupValuesByTbUnit(lst, index, 2);
+		}
 
 		return lst;
 	}
 
+	protected List<Object[]> groupValuesByTbUnit(List<Object[]> lst, int index, int keyCount) {
+		List<Object[]> new_lst = new ArrayList<Object[]>();
+		IndicatorFilters filters = (IndicatorFilters)App.getComponent("indicatorFilters");
+		Integer id = filters.getTbunitselection().getTbunit().getId();
+		for(Object[] vals:lst){
+			Tbunit nU = (Tbunit)vals[index];
+			if (nU.getId()==id){
+				addValueToUnit(App.getMessage("TbCase.notificationUnit"),index, keyCount, new_lst, vals);
+				if (vals[index+1]==null)
+					addValueToUnit(App.getMessage("TbCase.realUnit"),index, keyCount, new_lst, vals);
+			}
+			if (vals[index+1]!=null){
+				Tbunit oU = (Tbunit)vals[index+1];
+				if (oU.getId()==id){
+					addValueToUnit(App.getMessage("TbCase.ownerUnit"),index, keyCount, new_lst, vals);
+					addValueToUnit(App.getMessage("TbCase.realUnit"),index, keyCount, new_lst, vals);
+				}
+			}
+		}
+		return new_lst;
+	}
 
+	/**
+	 * @param index
+	 * @param keyCount
+	 * @param new_lst
+	 * @param vals
+	 */
+	protected void addValueToUnit(String tbu,int index, int keyCount,
+			List<Object[]> new_lst, Object[] vals) {
+		long value = (Long)vals[vals.length - 1];
+		Object[] keys = new Object[2];
+		if (index==0){
+			keys[0]=tbu;
+			keys[1]=vals[keyCount-index*2];
+		}
+		else{
+			keys[0]=vals[keyCount-index*2];
+			keys[1]=tbu;
+		}
+		
+		Object[] newvalues = findRecord(new_lst, keys);
+
+		// record was found ?
+		if (newvalues == null) {
+			// rebuild new values
+			newvalues = new Object[3];
+			int ind = 0;
+			while (ind < 2) {
+				newvalues[ind] = keys[ind];
+				ind++;
+			}
+			newvalues[2] = 0L;
+			new_lst.add(newvalues);
+		}
+		
+		newvalues[newvalues.length - 1] = ((Long)newvalues[newvalues.length - 1]) + value;
+	}
+	
 	/**
 	 * @return the colSelection
 	 */
@@ -332,5 +471,14 @@ public class CustomIndicatorAZ extends Indicator2D {
 
 		}
 		return date;
+	}
+	
+	@Override
+	protected String getHQLWhere() {
+		String hql = super.getHQLWhere();
+		IndicatorFiltersAZ filters_az = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
+		if (filters_az.isReferToThisUnit())
+			hql += " and c.referToOtherTBUnit=0";
+		return hql;
 	}
 }
