@@ -110,7 +110,7 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 		if (!prepareMovements())
 			return "error";
 		
-		float totalPrice = 0;
+		double totalPrice = 0;
 		for (Batch b: sourceTree.getItems())
 				totalPrice += b.getTotalPrice();
 		rec.setTotalPrice(totalPrice);

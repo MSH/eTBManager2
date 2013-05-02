@@ -107,16 +107,16 @@ public class BatchQuantity implements Serializable {
 		this.source = source;
 	}
 	
-	public float getTotalPrice() {
+	public double getTotalPrice() {
 		Batch batch = getBatch();
-		return (batch != null? batch.getUnitPrice() * quantity: 0);
+		return (batch != null? batch.getUnitPrice() * (double)quantity: 0);
 	}
 	
 	public float getContainerPrice() {
 		return (batch != null? batch.getUnitPrice()*batch.getQuantityContainer().floatValue():0);
 	}
 	public void setContainerPrice(float containerPrice) {
-		
+		return;
 	}
 
 }

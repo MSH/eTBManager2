@@ -271,8 +271,8 @@ public class InventoryReport {
 			return stockPosition.getUnitPrice();
 		}
 
-		public float getTotalPrice() {
-			float tot = 0;
+		public double getTotalPrice() {
+			double tot = 0;
 			for (Object obj: node.getBatches()) {
 				BatchQuantity bq = (BatchQuantity)obj;
 				if (!bq.getBatch().isExpired())

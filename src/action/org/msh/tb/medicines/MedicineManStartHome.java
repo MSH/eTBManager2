@@ -323,8 +323,8 @@ public class MedicineManStartHome {
 		private int numContainers;
 		
 		
-		public float getTotalPrice() {
-			return quantity * batch.getUnitPrice();
+		public double getTotalPrice() {
+			return (double)quantity * batch.getUnitPrice();
 		}
 		
 		public float getContainerPrice() {
@@ -410,8 +410,8 @@ public class MedicineManStartHome {
 		 * Return the total price
 		 * @return
 		 */
-		public float getTotalPrice() {
-			float tot = 0;
+		public double getTotalPrice() {
+			double tot = 0;
 			for (BatchInfo batchInfo: batches)
 				tot += batchInfo.getTotalPrice();
 			return tot;
@@ -423,11 +423,11 @@ public class MedicineManStartHome {
 		 * @return
 		 */
 		public Float getUnitPrice() {
-			float tot = getTotalPrice();
-			float qtd = getQuantity();
+			double tot = getTotalPrice();
+			double qtd = getQuantity();
 			if (qtd == 0)
 				 return null;
-			else return tot/qtd;
+			else return (float)(tot/qtd);
 		}
 		
 		public Map<Batch, Integer> getBatchesMap() {

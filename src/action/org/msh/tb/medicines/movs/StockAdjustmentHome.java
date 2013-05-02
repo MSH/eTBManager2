@@ -263,11 +263,20 @@ public class StockAdjustmentHome extends Controller {
 		Batch batch = batchQuantity.getBatch();
 		batchQuantity.setSource(source);
 		batchQuantity.setTbunit(unit);
-		int qtd = batchQuantity.getQuantity();
+		int qtd = batchQuantity.getBatch().getQuantityReceived();
+		batchQuantity.setQuantity(qtd);
 		App.getEntityManager().persist(batch);
 		App.getEntityManager().persist(batchQuantity);
 		App.getEntityManager().flush();
 		
+		/*Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
+		batches.put(batch, qtd);
+		
+		// generate the new movement
+		movementHome.initMovementRecording();
+		movementHome.prepareEditAdjustment(movementDate, unit, source, batch.getMedicine(), batches, adjustmentInfo);
+		movementHome.savePreparedMovements();
+*/
 		// generate the new movement
 		movementHome.initMovementRecording();
 		//movementHome.prepareNewAdjustment(movementDate, unit, source, batch.getMedicine(), batches, adjustmentInfo);

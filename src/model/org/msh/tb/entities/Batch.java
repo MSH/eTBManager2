@@ -168,16 +168,17 @@ public class Batch implements Serializable {
 		this.manufacturer = manufacturer;
 	}
 
-	public float getTotalPrice() {
-		return unitPrice * quantityReceived;
+	public double getTotalPrice() {
+		double tot = (double)(unitPrice*(double)quantityReceived);
+		return tot;
 	}
 
-	public void setTotalPrice(float totalPrice) {
+	public void setTotalPrice(double totalPrice) {
 		if (quantityReceived != 0)
-			unitPrice = totalPrice / quantityReceived;
+			unitPrice = (float)(totalPrice / quantityReceived);
 		else
 		if (unitPrice != 0)
-			quantityReceived = Math.round(totalPrice / unitPrice);
+			quantityReceived = Math.round((float)(totalPrice / unitPrice));
 	}
 
 	public Container getContainer() {
