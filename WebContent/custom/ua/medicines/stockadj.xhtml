@@ -529,7 +529,7 @@ function initBatchDeleting(batchId) {
     
     <s:decorate id="qtd" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['meds.movs.availableqtty']}:</ui:define>
-    	<h:inputText id="qtd" value="#{stockAdjustmentHome.batchQuantity.quantity}" required="true" onkeypress="return numbersOnly(this,event);" 
+    	<h:inputText id="qtd" value="#{stockAdjustmentHome.batchQuantity.batch.quantityReceived}" required="true" onkeypress="return numbersOnly(this,event);" 
     	 onkeyup="return changeQuantity(this);">
     		<f:validateDoubleRange minimum="1"/>
     	</h:inputText>
