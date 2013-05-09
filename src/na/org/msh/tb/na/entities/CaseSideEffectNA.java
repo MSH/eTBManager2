@@ -1,7 +1,6 @@
 package org.msh.tb.na.entities;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -45,7 +44,8 @@ public class CaseSideEffectNA extends CaseSideEffect{
 	
 	public Integer getMonthOfTreatment(){
 		int i = 0;
-		i = DateUtils.monthsBetween(tbcasena.getTreatmentPeriod().getIniDate(), effectSt)+1;
+		if(tbcasena.getTreatmentPeriod() != null && tbcasena.getTreatmentPeriod().getIniDate() != null)
+			i = DateUtils.monthsBetween(tbcasena.getTreatmentPeriod().getIniDate(), effectSt)+1;
 		return i;
 		
 	}

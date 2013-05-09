@@ -57,7 +57,7 @@ public class TbCaseNA extends TbCase{
 	@Override
 	public CaseSideEffectNA findSideEffectData(FieldValue sideEffect) {
 		for (CaseSideEffectNA se: getSideEffectsNa()) {
-			if (se.getSideEffect().equals(sideEffect))
+			if (se.getSideEffect().getValue().getId().equals(sideEffect.getId()))
 				return se;
 		}
 		return null;
