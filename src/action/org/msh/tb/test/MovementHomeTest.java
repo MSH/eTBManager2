@@ -217,7 +217,7 @@ public class MovementHomeTest {
 		b1.setQuantityReceived(200);
 		b1.setQuantityContainer(200);
 		b1.setTotalPrice(1000F);
-		b1.setUnitPrice( b1.getTotalPrice() / b1.getQuantityReceived());
+		b1.setUnitPrice( (float)b1.getTotalPrice() / b1.getQuantityReceived());
 //		entityManager.persist(b1);
 		
 		b2 = new Batch();
@@ -229,7 +229,7 @@ public class MovementHomeTest {
 		b2.setQuantityReceived(300);
 		b2.setQuantityContainer(300);
 		b2.setTotalPrice(1200F);
-		b2.setUnitPrice( b2.getTotalPrice() / b2.getQuantityReceived());
+		b2.setUnitPrice( (float)b2.getTotalPrice() / b2.getQuantityReceived());
 //		entityManager.persist(b2);
 		
 /*		BatchQuantity qtd = new BatchQuantity();
