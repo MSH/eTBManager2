@@ -10,7 +10,7 @@
 
 	<div class="spacer" />
 	<div style="float:right">
-		<h:outputText value="#{messages[tbcase.state.key]}" styleClass="status-label" style="float:right"/><br />
+		<h:outputText value="#{caseHome.getStatusString2(tbcase)}" styleClass="status-label" style="float:right"/><br />
 		<s:fragment rendered="#{tbcase.open}">
 			<b><h:outputText  value="#{messages[tbcase.getCaseEvolution()]}" style="float:right; color:#292929"/></b><br/>
 		</s:fragment>
