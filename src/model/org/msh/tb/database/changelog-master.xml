@@ -11,4 +11,5 @@
   <include file="org/msh/tb/database/v2_0/changelog-medreceivingua.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-riskclassua.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-deleidsscases.xml"/> 
+  <include file="org/msh/tb/database/v2_0/changelog-2.xml"/> 
 </databaseChangeLog> 
