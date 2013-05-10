@@ -159,7 +159,10 @@
 		</manifest>
 		<echo message="Build number          :  ${build.number}" />
 
-		<war destfile="build/${war-file-name}" webxml="production/web.xml" manifest="WebContent/META-INF/MANIFEST.MF">
+		<copy file="production/web.xml" todir="build" overwrite="true" />
+		<replace file="build/web.xml" token="@liquibase_context@" value="" />
+
+		<war destfile="build/${war-file-name}" webxml="build/web.xml" manifest="WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="WebContent" >
 				<exclude name="WEB-INF/web.xml"/>
 				<exclude name="WEB-INF/components.xml" />
