@@ -6,6 +6,11 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
 	<changeSet id="1" author="Alexk">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="batch" columnName="registCardNumber" />
+			</not>
+		</preConditions>
 		<addColumn tableName="batch">
 			<column name="registCardNumber" type="VARCHAR(30)"
 				remarks="The state registration number">
