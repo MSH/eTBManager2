@@ -13,7 +13,7 @@
 <meta http-equiv="cache-control" content="no-cache" />
 <meta http-equiv="expires" content="0" />
 <meta http-equiv="keywords" content="e-TB Manager,TB,Tuberculosis,DR-TB,MSH" />
-<meta http-equiv="description" content="e-TB Manager" />
+<meta http-equiv="description" content="eTB Manager" />
 <a:loadStyle src="/public/themes/green2/skin.css" />  
 </head>
     
@@ -36,11 +36,11 @@
         </tr>
       <tr>
         <td width="80"><div align="left">#{messages['login.user_login']}:</div>          </td>
-        <td width="262"><h:inputText id="nome" value="#{credentials.username}"></h:inputText></td>
+        <td width="262"><h:inputText id="user" value="#{credentials.username}"></h:inputText></td>
       </tr>
       <tr>
         <td width="80"><div align="left">#{messages['User.password']}:</div>          </td>
-        <td><h:inputSecret value="#{credentials.password}"></h:inputSecret></td>
+        <td><h:inputSecret id="pwd" value="#{credentials.password}"></h:inputSecret></td>
       </tr>
       <tr>
         <td colspan="2">
@@ -51,7 +51,7 @@
         	<h:selectBooleanCheckbox id="rememberMe" value="#{rememberMe.enabled}"/>#{messages['login.rememberme']}
         </td>
 			<rich:jQuery timming="onload" selector="#nome" query="focus()" />
-			<a:jsFunction name="execLogin" action="#{identity.login}" reRender="messages" oncomplete="enableButton()"/>
+			<a:jsFunction id="login" name="execLogin" action="#{identity.login}" reRender="messages" oncomplete="enableButton()"/>
 			<rich:hotKey selector="#main input" key="return" handler="execLogin();" /> 
         </tr>
       <tr>
