@@ -18,18 +18,6 @@
 			<type-mapping>mySQL</type-mapping>
 		</metadata>
 
-		<!--
-		<connection-url>jdbc:firebirdsql:localhost:C:\Projetos\MSH\MDR\database\MDRTB.gdb?lc_ctype=UNICODE_FSS</connection-url>
-			<driver-class>org.firebirdsql.jdbc.FBDriver</driver-class>
-			<user-name>sysdba</user-name> <password>masterkey</password>
-		-->
-
-		<!--
-			<exception-sorter-class-name>
-			org.jboss.resource.adapter.jdbc.vendor.MySQLExceptionSorter
-			</exception-sorter-class-name> <metadata>
-			<type-mapping>mySQL</type-mapping> </metadata>
-		-->
 	</local-tx-datasource>
 
 </datasources>
