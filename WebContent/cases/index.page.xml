@@ -4,6 +4,8 @@
 
 	<restrict>#{userSession.canOpenCases}</restrict>
 	
+	<action execute="#{taskTestingHome.raiseError()}" />
+	
 	<param name="id" value="#{casesViewController.selectedUnitId}" converterId="javax.faces.Integer" />
 	
 	<navigation>
