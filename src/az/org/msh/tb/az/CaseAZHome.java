@@ -55,7 +55,7 @@ public class CaseAZHome {
 		else res = caseEditingAZHome.saveNew();
 		
 		if (caseHome.getTbCase().getCaseNumber()==null)
-			generateCaseNumber();
+			generateCaseNumber(caseHome.getInstance());
 		
 		if (!res.equals("persisted"))
 			return res;
@@ -69,9 +69,7 @@ public class CaseAZHome {
 	 * Generating a new patient number if it was not generated yet
 	 * @return
 	 */
-	private void generateCaseNumber(){
-		TbCase tbcase = caseHome.getInstance();
-		
+	public void generateCaseNumber(TbCase tbcase){		
 		Patient p = tbcase.getPatient();
 		if (p.getRecordNumber() == null) {
 			SequenceGenerator sequenceGenerator = (SequenceGenerator) App.getComponent("sequenceGenerator");
