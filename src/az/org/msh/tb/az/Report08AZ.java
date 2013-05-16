@@ -610,8 +610,8 @@ public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 	protected String getHQLWhere() {
 		String hql = super.getHQLWhere();
 		IndicatorFiltersAZ filters_az = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
-		if (filters_az.isReferToThisUnit())
-			hql += " and c.referToOtherTBUnit=0";
+		if (filters_az.getReferToThisUnit()!=null)
+			hql += " and c.referToOtherTBUnit="+(filters_az.getReferToThisUnit()==true ? 0:1);
 		return hql;
 	}
 }
