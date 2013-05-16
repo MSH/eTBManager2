@@ -73,7 +73,7 @@
 		</div>
 		<s:fragment rendered="#{s:hasRole('CASEMAN')}">
 			<div class="item #{topmenu=='0'?'selected':'unselected'}">
-				<s:link view="/cases/index.xhtml" propagation="none">
+				<s:link view="#{workspaceUriRewrite.getWorkspacePage('/cases/index.xhtml')}" propagation="none">
 					<f:param name="id" value="#{null}" />
 					<span>#{messages['cases']}</span>
 				</s:link>
