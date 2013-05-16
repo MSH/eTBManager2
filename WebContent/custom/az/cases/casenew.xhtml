@@ -74,13 +74,7 @@
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
 		<a:commandLink action="#{caseAZHome.persist()}" styleClass="button" reRender="main,messages" 
-			onclick="if (!disableButton(this)) return false;" 
-			rendered="#{!caseAZHome.canPlayOtherUnits}">
-			<span>#{messages['form.save']}</span>
-		</a:commandLink>
-		<a:commandLink action="#{caseAZHome.persist()}" styleClass="button" reRender="main,messages" 
-			onclick="if (!disableButton(this)) return false;" 
-			rendered="#{caseAZHome.canPlayOtherUnits}">
+			onclick="if (!disableButton(this)) return false;">
 			<span>#{messages['form.save']}</span>
 		</a:commandLink>
 		<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this);">
@@ -88,21 +82,6 @@
 		</s:link>
 	</div>
 	
-	<a:jsFunction name="noOwnTbU" ajaxSingle="true" action="#{caseEditingAZHome.notOwnTBUnit()}"  oncomplete="alert('2');"/>
-	<a:jsFunction name="setOwnTbU" ajaxSingle="true" action="#{caseEditingAZHome.setUserTBUnitDefault()}"/>
-	<script type="text/javascript">
-	<!--
-	function persistRightUnit(){
-		noOwnTbU();
-		if (noOwnTbU()){}
-		alert('1');
-			if (!confirm('asa')){
-				setOwnTbU();
-			}
-	}
-		}
-	-->
-	</script>
 </a:form>
 
 </ui:define>
