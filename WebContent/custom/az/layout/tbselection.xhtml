@@ -33,9 +33,9 @@
         <s:selectItems value="#{tbunitselection.options}" var="it" label="#{it.name}" noSelectionLabel="-" />
       	<s:convertEntity/>
       	<ui:insert name="events" />
+    <a:support event="onchange" ajaxSingle="true" reRender="#{rerender}" oncomplete="#{selectOnComplete}"/>
     </h:selectOneMenu>
     <h:outputText value="#{tbunitselection.tbunit}" rendered="#{tbunitselection.readOnly}" />
-    <a:support event="onchange" ajaxSingle="true" reRender="#{rerender}"/>
     <ui:insert />
 </s:decorate>
 </h:panelGroup>
