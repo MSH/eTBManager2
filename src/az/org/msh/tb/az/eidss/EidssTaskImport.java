@@ -36,7 +36,6 @@ import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.DateUtils;
-import org.msh.utils.date.LocaleDateConverter;
 
 import ua.com.theta.bv.client.Loader;
 
@@ -48,7 +47,7 @@ import com.bv.eidss.HumanCaseListInfo;
 
 @Name("eidssTaskImport")
 public class EidssTaskImport extends AsyncTaskImpl {
-
+	private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	EidssIntHome eidssIntHome;
 	@In TaskManager taskManager;
 	
@@ -193,8 +192,8 @@ public class EidssTaskImport extends AsyncTaskImpl {
 					addLog("Diagnosis: "+config.getDiagnosis());
 					addLog("States to reject: "+config.getCaseStates());
 					//Calendar c1=Calendar.getInstance();
-					addLog("EIDSS entering date(s) to import: from "+ DateFormat.getDateInstance().format(config.getFrom())+
-							" to "+DateFormat.getDateInstance().format(config.getToDate()));
+					addLog("EIDSS entering date(s) to import: from "+ dateFormat.format(config.getFrom())+
+							" to "+dateFormat.format(config.getToDate()));
 					boolean success =loadCasesList();
 					sayAboutLoad(success);
 					if((caseIds.size()>0) && notCanceled()){
@@ -206,7 +205,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 							}
 							else{
 								casesExistInEtb.add(caseI);
-								addExportDetails(DateFormat.getDateInstance().format(caseI.caseDate)+" ! "+caseI.caseId, '!', caseI.caseDate);
+								addExportDetails(dateFormat.format(caseI.caseDate)+" ! "+caseI.caseId, '!', caseI.caseDate);
 							}
 						}
 					}
@@ -295,8 +294,8 @@ public class EidssTaskImport extends AsyncTaskImpl {
 						}
 						Integer age=c.getAge();
 						String toLog=c.getLastName()+" "+c.getFirstName()+" "+c.getMiddleName()+
-						", age "+age.toString()+", diag "+DateFormat.getDateInstance().format(c.getFinalDiagnosisDate())+", "+ad+" "+c.getCaseID();
-						String entDate=DateFormat.getDateInstance().format(c.getEnteringDate());
+						", age "+age.toString()+", diag "+dateFormat.format(c.getFinalDiagnosisDate())+", "+ad+" "+c.getCaseID();
+						String entDate=dateFormat.format(c.getEnteringDate());
 						
 						
 						if (result.equalsIgnoreCase(CaseImporting.WRITED)){
@@ -449,7 +448,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 				}
 					}else
 						return noError;
-				colCasesByDates +=DateFormat.getDateInstance().format(loadDate.getTime())+" found " + i+" case(s)"+"\n";
+				colCasesByDates += dateFormat.format(loadDate.getTime())+" found " + i+" case(s)"+"\n";
 				loadDate.add(Calendar.DATE, 1); //next date
 			}			
 			return noError;
@@ -505,9 +504,9 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		if (super.getUser() == null){
 			Integer userId = (Integer) getParameter("userId");
 			if (userId != null){
-				User user = (User)getEntityManager().createQuery("from User u where u.id = :uid")
-				.setParameter("uid", userId)
-				.getResultList().get(0);
+				Query q = getEntityManager().createQuery("from User u where u.id = "+userId);
+				List<Object> lu = q.getResultList();
+				User user = (User)lu.get(0);
 				if (user != null){
 					setUser(user);
 					return user;
@@ -715,7 +714,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			Integer age=onecase.getAge();
 			String ageStr;
 			if (diag.equalsIgnoreCase("")){
-				diag=DateFormat.getDateInstance().format(onecase.getFinalDiagnosisDate());
+				diag=dateFormat.format(onecase.getFinalDiagnosisDate());
 			}
 			if (age==0){
 				ageStr="XX";
@@ -723,7 +722,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 				ageStr=age.toString();
 			}
 			String toLog=lastName+" "+firstName+" "+fatherName+", age "+ageStr+", diag "+diag+", "+(notification.length()>14 ? notification.substring(0, 14) : notification)+" "+onecase.getCaseID();
-			String entDate=DateFormat.getDateInstance().format(d);
+			String entDate=dateFormat.format(d);
 			addExportDetails(entDate+" - "+toLog, '-', d);
 			//rejectDetails += entDate+" - "+toLog+"\n";
 		
@@ -803,7 +802,8 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	public void addTimeLog(String s) {
 		Calendar cal = GregorianCalendar.getInstance();
 		Date dt = cal.getTime();
-		String dateStamp = LocaleDateConverter.getDisplayDate(dt, true);
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		String dateStamp = df.format(dt);
 		log.append(dateStamp + " " + s);
 		log.append('\n');
 	}
