@@ -43,13 +43,6 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		// save the patient's data
 		getPatientHome().persist();
 
-		// get notification unit
-		/*Tbunit nTbU = getTbunitselection().getTbunit();
-		Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
-		if (nTbU.getId().intValue() != nTbUUser.getId().intValue())
-			if (confirmTbUnit() == JOptionPane.NO_OPTION)
-				getTbunitselection().setTbunit(nTbUUser);
-		*/
 		tbcase.setNotificationUnit(getTbunitselection().getTbunit());
 		tbcase.getNotifAddress().setAdminUnit(getNotifAdminUnit().getSelectedUnit());
 
@@ -108,7 +101,25 @@ public class CaseEditingAZHome extends CaseEditingHome{
 
 		return (regimenType == 2? "individualized": "persisted");
 	}
-
+	/**
+	 * Return true, if select tb-unit not where user from
+	 */
+	public boolean notOwnTBUnit(){
+		Tbunit nTbU = getTbunitselection().getTbunit();
+		Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
+		if (nTbU==null || nTbUUser==null) return false;
+		if (nTbU.getId().intValue() != nTbUUser.getId().intValue())
+			return true;
+		return false;
+	}
+	/**
+	 * Set tb-unit where user from
+	 */
+	public void setUserTBUnitDefault(){
+		Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
+		getTbunitselection().setTbunit(nTbUUser);
+	}
+	
 	/**
 	 * Another way to init new notification, if exist one EDIDSS notification
 	 */

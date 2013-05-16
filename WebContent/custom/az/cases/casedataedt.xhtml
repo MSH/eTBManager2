@@ -240,10 +240,13 @@
 	<tr><td style="padding-bottom:10px;">
 
 	<h2>#{messages['TbCase.notificationUnit']}</h2>
-	<s:decorate template="/custom/az/layout/tbselection.xhtml" rendered="#{caseAZHome.canPlayOtherUnits}">
-		<ui:param name="tbunitselection" value="#{indicator.tbunitselection}" />
-		<ui:param name="required" value="#{caseAZHome.canPlayOtherUnits}" />
-	</s:decorate>
+	<h:panelGroup id="notifUnitPanel">
+		<s:decorate template="/custom/az/layout/tbselection.xhtml" rendered="#{caseAZHome.canPlayOtherUnits}">
+			<ui:param name="tbunitselection" value="#{indicator.tbunitselection}" />
+			<ui:param name="required" value="#{caseAZHome.canPlayOtherUnits}" />
+			<ui:param name="selectOnComplete" value="persistRightUnit(#{caseEditingAZHome.notOwnTBUnit()});" />
+		</s:decorate>
+	</h:panelGroup>
 
 	<s:decorate template="/layout/display.xhtml" rendered="#{!caseAZHome.canPlayOtherUnits}">
 		<ui:define name="label">#{tbunitselection.labelAdminUnit}:</ui:define>
@@ -522,4 +525,47 @@ function showReferToTbUnit(cb) {
 <rich:jQuery selector="#otherTbUnit" query="each(function(){ if (this.selectedIndex==0) jQuery('#referToTbUnit').hide(); })" />
 <rich:jQuery selector="#addrChanged" query="each(function(){ if (this.selectedIndex==0) jQuery('#curraddr').hide(); })" />
 		
+		
+<a:jsFunction name="noOwnTbU" ajaxSingle="true" action="#{caseEditingAZHome.notOwnTBUnit()}"  oncomplete="alert('2');"/>
+<a:jsFunction name="setOwnTbU" ajaxSingle="true" action="#{caseEditingAZHome.setUserTBUnitDefault()}" reRender="notifUnitPanel"/>
+	<script type="text/javascript">
+	<!--
+	function persistRightUnit(b){
+		if (b==true){
+			//if (!confirm('#{messages['cases.new.notusertbunit']}'))
+				//setOwnTbU();
+				//Richfaces.showModalPanel('mp');
+			//jQuery("#mp").show();
+			Richfaces.showModalPanel('mp');   
+		}
+		}
+	-->
+	</script>
+	
+	<rich:modalPanel id="mp" autosized="true" zindex="2000" trimOverlayedElements="false" top="1485" width="100">
+		<f:facet name="header">
+			#{messages['TbCase.notificationUnit']}
+		</f:facet>
+		<h:form style="padding:10px;">
+	
+		<div class="form-content">
+			#{messages['cases.new.notusertbunit']}
+		</div>
+		
+		<div class="button-bar">
+		<a:commandLink
+			styleClass="button-alt" reRender="main,messages"
+			onclick="Richfaces.hideModalPanel('mp'); return false;">
+			<span>#{messages['global.yes']}</span>
+		</a:commandLink>
+	
+		<a:commandLink 
+			styleClass="button"  
+			onclick="setOwnTbU(); Richfaces.hideModalPanel('mp'); return false;">
+			<span>#{messages['global.no']}</span>
+		</a:commandLink>
+		</div>
+		</h:form>
+	</rich:modalPanel>
+
 </ui:composition>
