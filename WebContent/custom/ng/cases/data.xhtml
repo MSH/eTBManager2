@@ -82,6 +82,10 @@
 		<s:decorate template="/layout/audisplay.xhtml">
 			<ui:param name="adminunit" value="#{tbcase.notifAddress.adminUnit}" />
 		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.notifAddress.zipCode}">
+    		<ui:define name="label">#{messages['Address.zipCode']}:</ui:define>
+    		<h:outputText value="#{tbcase.notifAddress.zipCode}" maxlength="20" />
+    	</s:decorate>
 	</td></tr>
 	</s:fragment>
 	<s:fragment rendered="#{tbcase.notifAddressChanged}">
@@ -97,20 +101,42 @@
 		<s:decorate template="/layout/audisplay.xhtml">
 			<ui:param name="adminunit" value="#{tbcase.currentAddress.adminUnit}" />
 		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.currentAddress.zipCode}">
+    		<ui:define name="label">#{messages['Address.zipCode']}:</ui:define>
+    		<h:outputText value="#{tbcase.currentAddress.zipCode}" maxlength="20" />
+    	</s:decorate>
 	</td></tr>
 	
-	<tr><td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.phoneNumber}">
+	<tr>
+	<s:fragment rendered="#{not empty tbcase.phoneNumber}">
+	<td>
+		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
     		#{tbcase.phoneNumber}
 		</s:decorate>
 	</td>
+	</s:fragment>
+	
+	<s:fragment rendered="#{not empty tbcase.mobileNumber}">
 	<td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
+		<s:decorate template="/layout/display.xhtml">
+			<ui:param name="labelstyle" value="width:180px" />
     		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
     		#{tbcase.mobileNumber}
 		</s:decorate>
-	</td></tr>
+	</td>
+	</s:fragment>
+	
+	</tr><tr>
+	
+	<td>
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['TbCase.emailAddress']}:</ui:define>
+		<h:outputText value="#{tbcaseng.emailAddress}" />
+	</s:decorate>	
+	</td>
+	
+	</tr>
 	</s:fragment>
 	</table>
 	</div>
@@ -160,6 +186,14 @@
 		#{messages[tbcase.diagnosisType.key]}
 	</s:decorate>
 	</td></tr>
+	<tr><td>
+	    <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcaseng.tbRegistrationNumber}">
+    		<!--<ui:define name="label">#{messages['TbCase.TBRegistrationNumber']}:</ui:define>-->
+    		<ui:define name="label">#{messages['TbCase.LGATBL']}:</ui:define>
+			<h:outputText value="#{tbcaseng.tbRegistrationNumber}" />
+		</s:decorate>
+	</td></tr>
+	
 	<tr><td>
 	<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcaseng.suspectType}">
 		<ui:define name="label">#{messages['TbCase.SuspectType']}:</ui:define>

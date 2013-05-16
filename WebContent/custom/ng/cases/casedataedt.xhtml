@@ -7,10 +7,8 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-<script src="#{request.contextPath}/js/jquery.overlabel.js" type="text/javascript" />
-
 	<div class="form-content">
-	 <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+	<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<h2>#{messages['cases.patientdata']}</h2>
 	</s:decorate>
 	
@@ -20,14 +18,8 @@
 
 	<table width="100%" style="border-collapse:collapse;">
 	<tr><td colspan="2">
-	<s:decorate template="/layout/editname.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+	<s:decorate template="/layout/editname.xhtml">
     	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
-		<ui:param name="patientdata" value="#{tbcase.patient}" />
-		<ui:param name="required" value="#{true}" />
-	</s:decorate>
-	
-	<s:decorate template="/layout/editname.xhtml" rendered="#{tbcase.diagnosisType=='SUSPECT'}">
-    	<ui:define name="label">#{messages['Suspect.name']}:</ui:define>
 		<ui:param name="patientdata" value="#{tbcase.patient}" />
 		<ui:param name="required" value="#{true}" />
 	</s:decorate>
@@ -38,7 +30,7 @@
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
 		<!--<h:inputText value="#{tbCase.patient.securityNumber}" style="width:120px;" maxlength="50"></h:inputText>-->
-		<h:inputText value="#{tbcase.patient.securityNumber}" style="width:120px;" maxlength="50"></h:inputText>
+		<h:inputText value="#{tbcase.patient.securityNumber}" style="width:120px;" maxlength="10"></h:inputText>
 		</s:decorate>
 	
 	</td><td>
@@ -82,16 +74,15 @@
     	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
     </td></tr>
     
-    <tr><td colspan="2">
+     <tr><td colspan="2">
     	<s:decorate template="/layout/edit.xhtml">
-    		<!-- <ui:define name="label">#{messages['Address.address']}:</ui:define>-->
+    		<!--<ui:define name="label">#{messages['Address.address']}:</ui:define> -->
     		<ui:define name="label">#{messages['Address.completeAddress']}:</ui:define>
     		<h:inputTextarea value="#{tbcase.notifAddress.address}" style="width:300px;height:100px" required="true" maxlength="200"/>
-    	</s:decorate>
-    	
-    </td></tr>
-    <!-- address and landmark in a single field -->
-  <!--   <tr><td colspan="2">
+    	</s:decorate>   	
+    </td></tr>  
+    
+    <!-- <tr><td colspan="2">
     	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Address.landmark']}:</ui:define>
     		<h:inputText value="#{tbcase.notifAddress.complement}" style="width:500px" maxlength="100"/>
@@ -148,29 +139,15 @@
     </td></tr>
 
 	<tr><td>
-	
     	<s:decorate template="/layout/edit.xhtml">
-    	<div id="num" class="prop">
     		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
-    		<s:decorate styleClass="label">
-    		<s:label value="#{messages['global.mandatory']}" styleClass="over" />
-    		<h:inputText id="homenum" value="#{tbcase.phoneNumber}" />
-    		</s:decorate>
-    		</div>
-    		<rich:jQuery selector="#num .label > label" query="labelOver('over');" />
-    	</s:decorate>	   	
+    		<h:inputText value="#{tbcase.phoneNumber}" />
+    	</s:decorate>	
 	</td><td>
     	<s:decorate template="/layout/edit.xhtml">
-    	<div id="phnum" class="prop">
     		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
-    		<s:decorate styleClass="label">
-    		<s:label value="#{messages['global.mandatory']}" styleClass="over" />
-    		<h:inputText id="mobnum" value="#{tbcase.mobileNumber}" />
-    		</s:decorate>
-    		</div>
-    		<rich:jQuery selector="#phnum .label > label" query="labelOver('over');" />
+    		<h:inputText value="#{tbcase.mobileNumber}" />
     	</s:decorate>	
-    	
     </td></tr>
     <tr><td>
     	<s:decorate template="/layout/edit.xhtml">
@@ -181,9 +158,7 @@
     
     </table>
     </div>
-    
-
-
+   
 	<div class="form-content">
 	 <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<h2>#{messages['cases.generaldata']}</h2>
@@ -212,39 +187,40 @@
     </s:decorate>
     </div>
  
-    <s:decorate template="/layout/edit.xhtml">
+    <s:decorate template="/layout/edit.xhtml" >
     	<!--<ui:define name="label">#{messages['TbCase.TBRegistrationNumber']}:</ui:define>-->
     	<ui:define name="label">#{messages['TbCase.LGATBL']}:</ui:define>
-		<h:inputText value="#{tbcaseng.tbRegistrationNumber}" style="width:120px;" maxlength="10">	
-			
-		</h:inputText>
-		</s:decorate>
-		
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='SUSPECT'}">
-    		<ui:define name="label">#{messages['TbCase.SuspectType']}:</ui:define>
-    		<h:selectOneMenu id="susType" value="#{tbcaseng.suspectType}" required="#{tbcase.validated}">
-    			<s:selectItems value="#{fieldsQuery.suspectTypes}"  var="q" noSelectionLabel="-" label="#{q.name}" />
-    			<s:convertEntity />
-    		</h:selectOneMenu>
-		</s:decorate>
-		    
+		<h:inputText value="#{tbcaseng.tbRegistrationNumber}" style="width:120px;" maxlength="10"></h:inputText>
+	</s:decorate>
+    
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
 
-    <s:decorate template="/layout/dateedit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
-    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
-    	<ui:param name="required" value="#{tbcase.validated}" /> 
-    	<ui:param name="required" value="true" />
-    	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
-    </s:decorate>
-
-<!-- Nigeria Customization: hiding 'Type of diagnostic' in the new notification page. it is made visible while editing the case -->
-  <!--   <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+    <s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
-    	<h:selectOneMenu value="#{tbcase.diagnosisType}" required="#{tbcase.validated}">
+    	<h:selectOneMenu id="seldiagtype" value="#{tbcase.diagnosisType}" required="#{tbcase.validated}">
     		<s:selectItems var="it" value="#{diagnosisTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
-    </s:decorate> -->
+    </s:decorate>
+    
+     <rich:jQuery selector="#seldiagtype" query="change(function(){showconfirmedcasedet(this); })" />
+   <script type="text/javascript"> 
+    function showconfirmedcasedet(cb) {
+  		if (isConfirmed(cb))
+  			jQuery('#showsustype').hide(500);
+  			jQuery('#showconfcasefields').show(500);		
+  		if(isSuspect(cb))
+			jQuery('#showconfcasefields').hide(500);
+  			jQuery('#showsustype').show(500);
+  	}
+  	function isConfirmed(cb){
+  		return ((cb.selectedIndex == 2));
+  	  	}
+	function isSuspect(cb){
+	  	return ((cb.selectedIndex == 1));
+		  	}
+	  	
+    </script> 
 
     <s:decorate template="/layout/edit.xhtml" rendered="#{tbCase.classification=='MDRTB_DOCUMENTED'}">
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
@@ -253,25 +229,43 @@
     		<s:convertEnum />
     	</h:selectOneMenu>
     </s:decorate>
-
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+    
+	<div id="showsustype" style="clear:both;">
+	<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='SUSPECT'}">
+    		<ui:define name="label">#{messages['SuspectType']}:</ui:define>
+    		<h:selectOneMenu id="susType" value="#{tbcaseng.suspectType}" required="#{tbcase.validated}">
+    			<s:selectItems value="#{fieldsQuery.suspectTypes}"  var="q" noSelectionLabel="-" label="#{q.name}" />
+    			<s:convertEntity />
+    		</h:selectOneMenu>
+		</s:decorate>
+	</div>
+	
+	  <div id="showconfcasefields" style="clear:both;">
+	 <s:decorate template="/layout/dateedit.xhtml">
+    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
+    	<ui:param name="required" value="#{tbcase.validated}" /> 
+    	<!-- <ui:param name="required" value="true" /> -->
+    	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" />	
+    	</s:decorate>
+    	
+		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
     		<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="#{tbcase.validated}">
     			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
     			<s:convertEnum />
     		</h:selectOneMenu>
 		</s:decorate>
-
-<rich:jQuery selector="#patType" query="change(function(){ showPatientTypeOther(this); })" />
+	
+	<rich:jQuery selector="#patType" query="change(function(){ showPatientTypeOther(this); })" />
 
 		<div id="patientTypeOther">
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['TbCase.patientTypeOther']}</ui:define>
     		<h:inputText value="#{tbcase.patientTypeOther}" style="width:200px;" maxlength="100" />
 		</s:decorate>
 		</div>
 
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
     		<h:selectOneMenu id="infectsite" value="#{tbcase.infectionSite}" required="#{tbcase.validated}">
     			<s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="-" label="#{messages[it.key]}" />
@@ -308,7 +302,7 @@ function isPulmonary(cb) {
 </script>
 
 	<div id="extrapul" style="clear:both;">
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
     		<h:selectOneMenu value="#{tbcase.extrapulmonaryType}" style="margin-right:4px;">
     			<s:selectItems var="it" value="#{fieldOptions.extrapulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
@@ -323,7 +317,7 @@ function isPulmonary(cb) {
 	</div>
 
 	<div id="pulmonary" style="clear:both;">
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
     		<h:selectOneMenu value="#{tbcase.pulmonaryType}" style="margin-right:4px;">
     			<s:selectItems var="it" value="#{fieldOptions.pulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
@@ -331,13 +325,16 @@ function isPulmonary(cb) {
     		</h:selectOneMenu>
 		</s:decorate>
 	</div>
+	
 <rich:jQuery selector="#infectsite" query="each(function(){ if (!isExtrapulmonary(this)) {jQuery('#extrapul').hide(); }})" />
 <rich:jQuery selector="#infectsite" query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary').hide(); }})" />
 <rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
+	
+	</div>
+		<rich:jQuery selector="#seldiagtype" query="each(function(){ if (!isConfirmed(this)) {jQuery('#showconfcasefields').hide(); }})" />
 		
 		</td></tr></table>
 	</div>
-	
 
 	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<div class="form-content">
@@ -347,7 +344,6 @@ function isPulmonary(cb) {
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">
 				#{messages['cases.prevtreat.numprev']}:
-				
 			</ui:define>
 			<h:selectOneMenu value="#{prevTBTreatmentHome.numTreatments}">
 				<f:selectItems value="#{prevTBTreatmentHome.numTreatmentsOptions}"/>
