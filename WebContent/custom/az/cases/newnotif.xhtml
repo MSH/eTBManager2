@@ -81,55 +81,45 @@
 				
 				<input onclick="checkClick(this);"  style="#{(casesControlAZ.canDeleteEIDSS and casesControlAZ.countEIDSSPatients>0)?'display:block':'display:none'}" type="checkbox"/>
 			</f:facet>
-			
-			<s:fragment rendered="#{caseAZHome.canCreateNewCases}">
+			<s:fragment rendered = '#{it.tbcase.notificationUnit != null}'>
 				<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
-					<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:none;">
-						<f:param name="pacid" value="#{it.patient.id}" />
-						<f:param name="cla" value="#{tbcase.classification}"/>
-					</s:link>
-					<br/>
-					<s:link view="/cases/casenew.xhtml" value="#{caseAZHome.reGetTbCase(it.tbcase).displayCaseNumber}"  style="float:center;">
-						<f:param name="pacid" value="#{it.patient.id}" />
-						<f:param name="cla" value="#{tbcase.classification}"/>
-					</s:link>
+					<s:fragment rendered="#{caseAZHome.canCreateNewCases}">
+						<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:none;">
+							<f:param name="pacid" value="#{it.patient.id}" />
+							<f:param name="cla" value="#{tbcase.classification}"/>
+						</s:link>
+						<br/>
+						<s:link view="/cases/casenew.xhtml" value="#{caseAZHome.reGetTbCase(it.tbcase).displayCaseNumber}"  style="float:center;">
+							<f:param name="pacid" value="#{it.patient.id}" />
+							<f:param name="cla" value="#{tbcase.classification}"/>
+						</s:link>
+					</s:fragment>
+					<s:fragment rendered="#{!caseAZHome.canCreateNewCases}">
+						<a onclick="alert('#{messages['TbCase.cannotCreateNewCase']}')" style="float:none;cursor:pointer;">
+							<h:outputText styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" />	
+							<br/>
+							#{caseAZHome.reGetTbCase(it.tbcase).displayCaseNumber}
+						</a>
+					</s:fragment>
 				</s:fragment>
 				<s:fragment rendered = '#{it.tbcase.outcomeDate == null}'>
-					<s:fragment rendered = '#{it.tbcase.notificationUnit != null}'>
-						<s:link view="/cases/casedata.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:none;" propagation="none">
-							<f:param name="id" value="#{it.tbcase.id}" />
-						</s:link>
-						<br/>
-						<s:link view="/cases/casedata.xhtml" propagation="none" value="#{it.tbcase.displayCaseNumber}" style="float:center;">
-							<f:param name="id" value="#{it.tbcase.id}" />
-						</s:link>
-					</s:fragment>
-					<s:fragment rendered = '#{it.tbcase.notificationUnit == null}'>
-						<s:link view="/custom/az/cases/caseedt.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:none;" propagation="none">
-							<f:param name="id" value="#{it.tbcase.id}" />
-						</s:link>
-						<br/>
-						<s:link view="/custom/az/cases/caseedt.xhtml" propagation="none" value="#{it.tbcase.displayCaseNumber}" style="float:center;">
-							<f:param name="id" value="#{it.tbcase.id}" />
-						</s:link>
-					</s:fragment>
+					<s:link view="/cases/casedata.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:none;" propagation="none">
+						<f:param name="id" value="#{it.tbcase.id}" />
+					</s:link>
+					<br/>
+					<s:link view="/cases/casedata.xhtml" propagation="none" value="#{it.tbcase.displayCaseNumber}" style="float:center;">
+						<f:param name="id" value="#{it.tbcase.id}" />
+					</s:link>
 				</s:fragment>
 			</s:fragment>
-			<s:fragment rendered="#{caseAZHome.canBindEIDSSCasesOnly}">
-				<s:fragment rendered = '#{it.tbcase.notificationUnit != null}'>
-					<h:outputText styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:none;"/>	
-					<br/>
-					<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).displayCaseNumber}" style="float:center;"/>
-				</s:fragment>
-				<s:fragment rendered = '#{it.tbcase.notificationUnit == null}'>
-					<s:link view="/custom/az/cases/caseedt.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:none;" propagation="none">
-						<f:param name="id" value="#{it.tbcase.id}" />
-					</s:link>
-					<br/>
-					<s:link view="/custom/az/cases/caseedt.xhtml" propagation="none" value="#{it.tbcase.displayCaseNumber}" style="float:center;">
-						<f:param name="id" value="#{it.tbcase.id}" />
-					</s:link>
-				</s:fragment>
+			<s:fragment rendered = '#{it.tbcase.notificationUnit == null}'>
+				<s:link view="/custom/az/cases/caseedt.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:none;" propagation="none">
+					<f:param name="id" value="#{it.tbcase.id}" />
+				</s:link>
+				<br/>
+				<s:link view="/custom/az/cases/caseedt.xhtml" propagation="none" value="#{it.tbcase.displayCaseNumber}" style="float:center;">
+					<f:param name="id" value="#{it.tbcase.id}" />
+				</s:link>
 			</s:fragment>
 			<br/>
 			<h:selectBooleanCheckbox onchange="toDeleteList(#{it.tbcase.id}); return false;" rendered="#{casesControlAZ.canDeleteEIDSS and it.tbcase.legacyId!=null}"/>
@@ -152,28 +142,33 @@
 			</f:facet>
 		<div style="float:left;color:#069;">
 			<b>
-			<s:fragment rendered="#{caseAZHome.canCreateNewCases}">
+			
+			<s:fragment rendered="#{it.tbcase.notificationUnit != null}">
 				<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
-					<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml">
-						<f:param name="pacid" value="#{it.patient.id}" />
-						<f:param name="cla" value="#{tbcase.classification}"/>
-					</s:link>
+					<s:fragment rendered="#{caseAZHome.canCreateNewCases}">
+						<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml">
+							<f:param name="pacid" value="#{it.patient.id}" />
+							<f:param name="cla" value="#{tbcase.classification}"/>
+						</s:link>
+					</s:fragment>
+					<s:fragment rendered="#{!caseAZHome.canCreateNewCases}">
+						<a onclick="alert('#{messages['TbCase.cannotCreateNewCase']}')" style="cursor:pointer;">
+							#{it.patient.fullName}
+						</a>
+					</s:fragment>
 				</s:fragment>
 				<s:fragment rendered = '#{it.tbcase.outcomeDate == null}'>
-					<s:link value="#{it.patient.fullName}" view="/cases/casedata.xhtml" propagation="none" rendered="#{it.tbcase.notificationUnit != null}">
-						<f:param name="id" value="#{it.tbcase.id}" />
-					</s:link>
-					<s:link value="#{it.patient.fullName}" view="/custom/az/cases/caseedt.xhtml" propagation="none" rendered="#{it.tbcase.notificationUnit == null}">
+					<s:link value="#{it.patient.fullName}" view="/cases/casedata.xhtml" propagation="none">
 						<f:param name="id" value="#{it.tbcase.id}" />
 					</s:link>
 				</s:fragment>
 			</s:fragment>
-			<s:fragment rendered="#{caseAZHome.canBindEIDSSCasesOnly}">
-				<h:outputText value="#{it.patient.fullName}" rendered="#{it.tbcase.notificationUnit != null}"/>
-				<s:link value="#{it.patient.fullName}" view="/custom/az/cases/caseedt.xhtml" propagation="none" rendered="#{it.tbcase.notificationUnit == null}">
+			<s:fragment rendered="#{it.tbcase.notificationUnit == null}">
+				<s:link value="#{it.patient.fullName}" view="/custom/az/cases/caseedt.xhtml" propagation="none">
 					<f:param name="id" value="#{it.tbcase.id}" />
 				</s:link>
 			</s:fragment>
+			
 			</b><br/>
 			#{caseAZHome.getYearOfBirth(it.tbcase)} #{messages['az_EIDSS_Year_Of_Birth.short']} (<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).patient.birthDate}" converter="localeDateConverter"/>), #{caseAZHome.reGetTbCase(it.tbcase).age} #{messages['az_EIDSS_years']}<br/>
 			
