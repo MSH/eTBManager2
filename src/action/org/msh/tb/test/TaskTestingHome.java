@@ -41,4 +41,11 @@ public class TaskTestingHome {
 		}
 		System.out.println("finishing procId = " + val);
 	}
+	
+	/**
+	 * Generates an error (testing purposes)
+	 */
+	public void raiseError() {
+		throw new RuntimeException("Error testing");
+	}
 }

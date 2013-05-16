@@ -398,8 +398,6 @@ public class ForecastingCalculation {
 
 		while (true) {
 			ForecastingBatch batch = fm.findAvailableBatch(dt);
-//			if ((DateUtils.monthOf(dt) == 9) && (batch != null))
-//				System.out.println(dt);
 			if (batch == null)
 				break;
 
