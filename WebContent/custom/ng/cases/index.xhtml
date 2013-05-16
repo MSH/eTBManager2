@@ -10,13 +10,24 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases']}" />
+<ui:param name="title" value="#{casesViewController.selectedUnit != null? messages['cases.ongoing'] : messages['cases']}" />
 <ui:param name="topmenu" value="0" />
 
 <ui:define name="naveg">
+	<s:fragment rendered="#{empty casesViewController.selectedUnit}">
 	<div class="item selected">
-		<s:link value="#{title}" />
+	<s:link value="#{messages['cases']}" />
 	</div>
+	</s:fragment>
+	<s:fragment rendered="#{not empty casesViewController.selectedUnit}">
+	<s:link value="#{messages['cases']}" >
+		<f:param name="id" value="#{null}" />
+	</s:link>
+	<div class="item selected">
+		<s:link value="#{title}" >
+		</s:link>
+	</div>
+	</s:fragment>
 </ui:define>
 
 <ui:define name="left">
@@ -27,51 +38,55 @@
 		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button-alt">
 		<span>#{messages['cases.newsusp']}</span>
 	</h:commandLink>
-	
+
 	<div class="spacer" />
-	
+
 	<h:commandLink 
 		onclick="showModalAutoTop('selclassificationdlg');return false;" style="width:130px"
 		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button">
-		<span>#{messages['cases.newcase']} Nigeria</span>
+		<span>#{messages['cases.new']}</span>
 	</h:commandLink>
-
+	
 	<s:fragment rendered="#{not userSession.canNotifySeveralClassifs}">
 		<a:repeat value="#{globalLists.caseClassifications}" var="cla">
 			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}" styleClass="button-alt" style="width:130px">
 				<f:param name="cla" value="#{cla}"/>
 				<f:param name="type" value="SUSPECT"/>
+				<f:param name="unitId" value="#{casesViewController.selectedUnitIdParam}" />
 				<span>#{messages['cases.newsusp']}</span>
 			</s:link>
 			
 			<div class="spacer" />
 			
-			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}" styleClass="button">
+			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}" styleClass="button" style="width:130px">
 				<f:param name="cla" value="#{cla}"/>
 				<f:param name="type" value="CONFIRMED"/>
-				<span>#{messages['cases.newcase']}</span>
+				<f:param name="unitId" value="#{casesViewController.selectedUnitIdParam}" />
+				<span>#{messages['cases.new']}</span>
 			</s:link>
 		</a:repeat>
 	</s:fragment>
 
+	<s:fragment rendered="#{not empty caseStateReport.items}">
 	<div class="spacer" />
 
 	<table class="table2">
 	<tr>
 		<th colspan="2">#{messages['cases.registered']}</th>
 	</tr>
-	<ui:repeat value="#{caseStateReportng.items}" var="it">
+	<ui:repeat value="#{caseStateReport.items}" var="it">
 	<tr>
 		<td>
 			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" styleClass="link-small">
 				<f:param name="stateIndex" value="#{it.stateIndex}"/>
 				<f:param name="sc" value="#{'CASE_STATE'}"/>
+				<f:param name="unitId" value="#{casesViewController.selectedUnitIdParam}" />
 				<f:param name="vs" />
 				<f:param name="tag" />
 			</s:link>
 		</td>
 		<td align="right">
-			<h:outputText value="#{it.cases}" >
+			<h:outputText value="#{it.total}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
 		</td>
@@ -82,41 +97,45 @@
 			<b>#{messages['global.total']}</b>
 		</td>
 		<td align="right">
-			<b><h:outputText value="#{caseStateReportng.total.cases}">
+			<b><h:outputText value="#{caseStateReport.total.total}">
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText></b>
 		</td>
 	</tr>
 	</table>
+	</s:fragment>
 
+	<s:fragment rendered="#{not empty caseStateReport.validationItems}">
 	<div class="spacer"/>
 	
 	<table class="table2">
 	<tr>
 		<th colspan="2">#{messages['ValidationState']}</th>
 	</tr>
-	<ui:repeat value="#{caseStateReportng.validationItems}" var="it">
+	<ui:repeat value="#{caseStateReport.validationItems}" var="it">
 	<tr>
 		<td>
-			<s:link value="#{messages[it.validationState.key]}"  view="/cases/searchresult.xhtml" styleClass="link-small">
+			<s:link value="#{messages[it.description]}"  view="/cases/searchresult.xhtml" styleClass="link-small">
 				<f:param name="vs" value="#{it.validationState}"/>
 				<f:param name="sc" value="#{'VALIDATION_STATE'}"/>
+				<f:param name="unitId" value="#{casesViewController.selectedUnitIdParam}" />
 				<f:param name="stateIndex" />
 				<f:param name="tag" />
 			</s:link>
 		</td>
 		<td align="right">
-			<h:outputText value="#{it.cases}" >
+			<h:outputText value="#{it.total}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
 		</td>
 	</tr>
 	</ui:repeat>
 	</table>
-
-	<div class="spacer"/>
+	</s:fragment>
 	
 	<s:fragment rendered="#{not empty caseStateReport.tags}">
+	<div class="spacer"/>
+
 	<table class="table2">
 	<tr>
 		<th colspan="2">#{messages['admin.tags']}</th>
@@ -127,6 +146,7 @@
 			<div class="tag-#{it.type}-icon" />
 			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" styleClass="link-small">
 				<f:param name="tag" value="#{it.tagId}"/>
+				<f:param name="unitId" value="#{casesViewController.selectedUnitIdParam}" />
 				<f:param name="sc" value="#{'CASE_TAG'}"/>
 				<f:param name="stateIndex" />
 				<f:param name="vs" />
@@ -159,7 +179,7 @@
 	
 	<h:inputText id="patname" value="#{caseFilters.patient}" style="width:150px;margin:4px" />
 
-		<a:commandLink id="btnsearchpat" action="search" styleClass="button" onclick="if (!disableButton(this)) return false;" >
+	<a:commandLink id="btnsearchpat" action="search" styleClass="button" onclick="if (!disableButton(this)) return false;" >
 		<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
 		<span>#{messages['form.search']}</span>
 	</a:commandLink>
@@ -169,15 +189,18 @@
 	<a:jsFunction name="execSearch" action="search" reRender="messages">
 		<a:actionparam name="param1" assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
 	</a:jsFunction>
-	
+
 	<div class="spacer" />
 
-	<h2>#{messages['cases.ongoing']}</h2>
 	<h:panelGroup id="pnlhealthunits">
-		<ui:include src="#{userWorkspace.view=='TBUNIT'?'index_tbunit_content.xhtml':'index_content.xhtml'}" />
+		<div id="content">
+			<ui:include src="#{casesViewController.unitView? wspage['/cases/indexcases.xhtml']: wspage['/cases/indexunits.xhtml']}" />
+		</div>
 	</h:panelGroup>
 
-	<ui:include src="/layout/tablerow.xhtml" />
+	<ui:include src="/layout/tablerow.xhtml" >
+		<ui:param name="selector" value="#content .table2" />
+	</ui:include>
 
 </h:form>
 </ui:define>
@@ -187,7 +210,7 @@
 <s:fragment rendered="#{userSession.canNotifySeveralClassifs}">
 <rich:modalPanel id="selclassificationdlg" width="300" zindex="2000" autosized="true">
 	<f:facet name="header" >
-		#{messages['cases.newcase']}
+		#{messages['cases.new']}
 	</f:facet>
 
 	<a:form>
@@ -242,14 +265,14 @@
 </s:fragment>
 
 
-<rich:modalPanel id="filtersdlg" width="680" top="100" zindex="2000" autosized="true">
+<rich:modalPanel id="filtersdlg" width="750" top="100" zindex="2000" autosized="true">
 	<f:facet name="header">
 		#{messages['cases.newsearch']}
 	</f:facet>
 	<h:form>
 	<a:region>
 	
-	<ui:include src="searchfilters.xhtml" />
+	<ui:include src="#{wspage['/cases/searchfilters.xhtml']}" />
 
 	<div class="button-bar">
 		<a:commandLink id="btnsearch" action="search" styleClass="button" onclick="if (!disableButton(this)) return false;" >
