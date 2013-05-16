@@ -9,23 +9,34 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.application.App;
+import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.CaseResultItem;
 import org.msh.tb.cases.PatientsQuery.Item;
 import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.SequenceInfo;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.misc.SequenceGenerator;
 
 @Name("casesControlAZ")
 @Scope(ScopeType.PAGE)
 public class CasesControlAZ {
 	
 	@In(create=true) CaseAZHome caseAZHome;
+	@In(required=false) Workspace defaultWorkspace;
+	@In(create=true) FacesMessages facesMessages;
 	
 	private Set<Integer> deleteList = new HashSet<Integer>();
 	private Integer markToDel;
 	private Boolean canDeleteEIDSS;
 	
+	private Integer numDefault;
+	private SequenceInfo sequenceInfo;
+	
+	//======================DELETE EIDSS NOT BINDED CASES==========================
 	/**
 	 * Return true if this list of cases is the list of not binded EIDSS-cases and if user have enough permissions 
 	 * */
@@ -143,11 +154,72 @@ public class CasesControlAZ {
 	public Set<Integer> getDeleteList() {
 		return deleteList;
 	}
-
+	
 	/**
 	 * Set canDeleteEIDSS in true if user have enough permissions 
 	 */
 	public void setCanDeleteEIDSSInTrue() {
 		canDeleteEIDSS = Identity.instance().hasRole("TB_DELETE_EIDSS_NOT_BINDED");;
 	}
+	
+	//========================CHANGE PATIENT RECORD NUMBER==========================
+	
+	/**
+	 * Change recordNumber of patient in current instance in numDefault
+	 */
+	public void changeNumber(){
+		String res="";
+		try{
+			CaseHome caseHome = (CaseHome) App.getComponent("caseHome");
+			Patient p = caseHome.getTbCase().getPatient();
+			p.setRecordNumber(numDefault);
+			if (numDefault==getSequenceInfo().getNumber()+1){
+				SequenceGenerator sequenceGenerator = (SequenceGenerator) App.getComponent("sequenceGenerator");
+				sequenceGenerator.generateNewNumber("CASE_NUMBER");
+			}
+			App.getEntityManager().persist(p);
+			App.getEntityManager().flush();
+			res=App.getMessage("default.entity_updated");
+			sequenceInfo = null;
+		}
+		catch (Exception e) {
+			res="ERROR. In train of correcting number arised a problem: "+e.getLocalizedMessage();
+		}
+		facesMessages.add(res);
+	}
+	
+	/**
+	 * Return SequenceInfo with max caseNumber for Azerbaijan
+	 */
+	private SequenceInfo getSequenceInfo() {
+		if (sequenceInfo==null){
+			String seq = "CASE_NUMBER";
+			try {
+				sequenceInfo = (SequenceInfo) App.getEntityManager().createQuery("from SequenceInfo s where s.sequence = :seq and s.workspace.id = :id")
+				.setParameter("seq", seq)
+				.setParameter("id", defaultWorkspace.getId())
+				.getSingleResult();			
+			} catch (Exception e) {
+				sequenceInfo = null;
+				e.printStackTrace();
+			}
+			
+			if (sequenceInfo == null) {
+				sequenceInfo = new SequenceInfo();
+				sequenceInfo.setSequence(seq);
+				sequenceInfo.setWorkspace(defaultWorkspace);
+			}
+		}
+		return sequenceInfo;
+	}
+	
+	public Integer getNumDefault(){
+		numDefault = getSequenceInfo().getNumber()+1;
+		return numDefault;
+	}
+
+	public void setNumDefault(Integer numDefault) {
+		this.numDefault = numDefault;
+	}
+
 }

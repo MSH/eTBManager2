@@ -52,6 +52,11 @@
 		onclick="if (!confirm('#{messages['cases.reopen.confirm']}')) return false;">
 	</h:commandLink>
 
+	<a:commandLink onclick="Richfaces.showModalPanel('changenumdlg');return false;" 
+					rendered="#{userLogin.user.login=='VLAD'}" >
+	<span>#{messages['cases.changeNumber']}</span>
+	</a:commandLink>
+	
 	<s:link value="#{messages['admin.tags']}" view="/cases/casetagsedt.xhtml" rendered="#{caseHome.canTagCase and empty tbcase.tags}">
 		<f:param name="id" value="#{caseHome.id}" />
 	</s:link>
@@ -240,4 +245,36 @@ function updateTab(tabIndex) {
 
 </ui:define>
 
+<ui:define name="dialogs">
+	<rich:modalPanel id="changenumdlg" width="500" autosized="true" zindex="2000" trimOverlayedElements="false">
+		<f:facet name="header">#{messages['cases.changeNumber']}</f:facet>
+		<ui:param name="labelstyle" value="width:150px" />
+		<h:form id="formchangenum" style="padding:10px;">
+	
+		<div class="form-content">
+			<h:panelGroup id="changenumpnl" >
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['Patient.recordNumber']}:</ui:define>
+			    	<ui:param name="required" value="true" /> 
+			    	<h:inputText value="#{casesControlAZ.numDefault}" class="pint"/>
+				</s:decorate>
+			</h:panelGroup>
+		</div>
+		
+		<div class="button-bar">
+		<a:commandLink action="#{casesControlAZ.changeNumber()}"
+			styleClass="button" reRender="main,messages,formchangenum"
+			oncomplete="this.disabled=false;Richfaces.hideModalPanel('changenumdlg');">
+			<span>#{messages['cases.changeNumber']}</span>
+		</a:commandLink>
+	
+		<a:commandLink styleClass="button-alt"  
+			onclick="Richfaces.hideModalPanel('changenumdlg'); return false;">
+			<span>#{messages['form.cancel']}</span>
+		</a:commandLink>
+		</div>
+		</h:form>
+	</rich:modalPanel>
+	<ui:include src="/layout/waitdlg.xhtml" />
+</ui:define>
 </ui:composition>  
