@@ -67,10 +67,15 @@ function handleContextClick(comp) {
 	
 	
 	</h:panelGroup>
-		<!--<h:panelGroup id="referCheckBox" rendered="#{indicatorFilters.tbunitselection.tbunit!=null}">-->
-		<h:panelGroup id="referCheckBox">
-			<h:selectBooleanCheckbox value="#{indicatorFiltersAZ.referToThisUnit}" />#{messages['TbCase.referToOtherTBUnit']}
-		</h:panelGroup>
+		<s:decorate template="/layout/edit.xhtml">
+    		<ui:param name="labelstyle" value="width:400px;" />
+    		<ui:define name="label">#{messages['TbCase.referToOtherTBUnit']}:</ui:define>
+    		<h:selectOneMenu id="otherTbUnit" value="#{indicatorFiltersAZ.referToThisUnit}" >
+    			<f:selectItem itemLabel="-" itemValue="#{null}"/>
+    			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
+    			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
+    		</h:selectOneMenu>
+    	</s:decorate>
 	</div>
 
 	</td></tr>

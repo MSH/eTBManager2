@@ -13,12 +13,12 @@ import org.msh.tb.az.entities.enums.OutputSelectionAZ;
 public class IndicatorFiltersAZ{
 	
 	private OutputSelectionAZ outputSelection = OutputSelectionAZ.ADMINUNIT;
-	private boolean referToThisUnit;
+	private Boolean referToThisUnit;
 	
 	@Observer("change-workspace")
 	public void initializeFilters() {
 		outputSelection = OutputSelectionAZ.ADMINUNIT;
-		setReferToThisUnit(false);
+		setReferToThisUnit(null);
 	}
 
 	/**
@@ -55,11 +55,11 @@ public class IndicatorFiltersAZ{
 		else return null;
 	}
 
-	public void setReferToThisUnit(boolean referToThisUnit) {
+	public void setReferToThisUnit(Boolean referToThisUnit) {
 		this.referToThisUnit = referToThisUnit;
 	}
 
-	public boolean isReferToThisUnit() {
+	public Boolean getReferToThisUnit() {
 		return referToThisUnit;
 	}
 }
