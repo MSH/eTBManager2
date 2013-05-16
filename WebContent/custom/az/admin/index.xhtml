@@ -6,6 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       template="/admin/admintemplate.xhtml">
 
 <ui:param name="title" value="#{messages['admin']}" />
@@ -13,8 +14,19 @@
 <ui:param name="submenu" value="0" />
 
 <ui:define name="content">
-<h1>#{title}</h1>
-<s:link view="/custom/az/admin/edtsysmsg.xhtml" value="#{messages['admin.editsysmes']}" propagation="none"/>
+	<h1>#{title}</h1>
+	<s:link view="/custom/az/admin/edtsysmsg.xhtml" value="#{messages['admin.editsysmes']}" propagation="none"/>
+	<br/>
+	<h:form>
+		<a:commandLink styleClass="button" 
+					   rendered="#{userLogin.user.login=='VLAD'}" 
+					   reRender="main,messages" 
+					   action="#{adminControlAZ.generateCasesNumbersForEmpty}">
+			<span>Correct case numbers</span>
+		</a:commandLink> 
+	
+	
+	</h:form>
 </ui:define>
 
 </ui:composition>  
