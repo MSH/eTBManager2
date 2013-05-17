@@ -147,74 +147,24 @@
 	</table>
 	</a:repeat>
 	
+	<a:jsFunction name="remContact" action="#{tbContactHome.remove}" reRender="pnlcontact"  rendered="#{caseHome.canEditCaseData}">
+		<a:actionparam name="param1" assignTo="#{tbContactHome.id}" converter="javax.faces.Integer"/>
+	</a:jsFunction>
 	
-	<!-- ************ -->
-	<!--  		<f:facet name="header">
-				<h:outputText value="#{messages['TbContact.name']}" styleClass="collh" />
-			</f:facet>
-			<s:link value="#{it.name}" view="/cases/edtcontact.xhtml">
-				<f:param name="conid" value="#{it.id}"/>
-			</s:link>
-		
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['Gender']}" styleClass="collh" />
-			</f:facet>
-			#{messages[it.gender.key]}
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['TbCase.age']}" styleClass="collh" />
-			</f:facet>
-			#{it.age}
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['TbContact.contactType']}" styleClass="collh" />
-			</f:facet>
-			#{it.contactType.name}
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['TbContact.examined']}" styleClass="collh" />
-			</f:facet>
-			#{it.examinated?messages['global.yes']: messages['global.no']}
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['TbContact.conduct']}" styleClass="collh" />
-			</f:facet>
-			#{it.conduct.name}
-		</h:column>
- 
-		<h:column rendered="#{caseHome.canEditCaseData}">
-			<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remContact(#{it.id});return false;" style="font-size:9px;">
-			</h:commandLink>
-		</h:column>			
-	 </h:dataTable> 
-	-->
-		<a:jsFunction name="remContact" action="#{tbContactHome.remove}" reRender="pnlcontact"  rendered="#{caseHome.canEditCaseData}">
-			<a:actionparam name="param1" assignTo="#{tbContactHome.id}" converter="javax.faces.Integer"/>
-		</a:jsFunction>
 	</h:panelGroup>
 
-
-       <div class="spacer" />          
+    <div class="spacer" />          
 	
-			<s:link view="/custom/na/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
-				<f:param name="id" value="#{caseHome.id}" />
-				<span>#{messages['form.newedit']}</span>
-			</s:link>
-			<h2>#{messages['cases.sideeffects']}</h2>
+	<s:link view="/custom/na/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
+		<f:param name="id" value="#{caseHome.id}" />
+		<span>#{messages['form.newedit']}</span>
+	</s:link>
+	
+	<h2>#{messages['cases.sideeffects']}</h2>
 			
-			<s:div styleClass="region3" rendered="#{empty tbcase.sideEffects}"><div class="content">
+	<s:div styleClass="region3" rendered="#{empty tbcase.sideEffects}"><div class="content">
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" style="display:block;padding:4px"/>
-		</div></s:div>
+	</div></s:div>
 		
 	
 	<h:dataTable value="#{tbcasena.sideEffectsNa}" var="it" width="100%" styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty tbcasena.sideEffectsNa}" columnClasses="colcb,colcb,colb,colb,colb">
@@ -254,6 +204,87 @@
 			#{messages[it.outcome.key]}
 		</h:column>
 	</h:dataTable>
+	
+	
+	
+	<h2>#{messages['cases.sideeffects']}</h2>
+                 
+	<h:panelGroup id="sideeffects">
+	
+	<s:div styleClass="region3" rendered="#{empty tbcase.sideEffects}"><div class="content">
+		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" style="display:block;padding:4px"/>
+	</div></s:div>	
+	
+	<s:fragment rendered="#{not empty tbcase.sideEffects}">
+	<ui:repeat var="it" value="#{tbcase.sideEffects}">
+	<table  class="table1" style="margin-top:10px;margin-left:2px;border:1px solid #d0d0d0" cellpadding="0" cellspacing="0">
+		<tr>
+			<th colspan="3" align="left">
+				<h:outputText value="#{it.sideEffect.value.name}" />
+				
+				<s:fragment rendered="#{not empty it.substance or not empty it.substance2}">
+				    <h:outputText value=" - "/> 
+				    <h:outputText value="#{it.substance}" rendered="#{not empty it.substance}"/> 
+				    <h:outputText value=", " rendered="#{not empty it.substance and not empty it.substance2}"/> 
+    				<h:outputText value="#{it.substance2}"  rendered="#{not empty it.substance2}"/> 
+				</s:fragment>
+				
+				<h:outputFormat value=" (#{messages[it.monthDisplay]})" style="font-size:11px">
+					<f:param value="#{it.monthOfTreatment}"/>
+				</h:outputFormat>
+			</th>
+		</tr>
+		<tr>
+			<td style="padding:8px 4px 0px 4px;">
+				<s:decorate template="/layout/display.xhtml">
+    				<ui:define name="label">#{messages['cases.sideeffects.grade']}:</ui:define>
+    				<ui:param name="labelstyle" value="width:auto" />
+    				<h:outputText value="#{messages[it.grade.key]}" /> 
+    			</s:decorate>
+    			<s:decorate template="/layout/display.xhtml">
+    				<ui:param name="labelstyle" value="width:auto" />
+    				<ui:define name="label">#{messages['cases.sideeffects.startdate']}:</ui:define>
+    				<h:outputText value="#{it.effectSt}" converter="localeDateConverter"/>
+    			</s:decorate>			
+			</td>
+			<td style="padding:8px 4px 0px 4px;">
+				<s:decorate template="/layout/display.xhtml">
+					<ui:param name="labelstyle" value="width:auto" />
+    				<ui:define name="label">#{messages['cases.sideeffects.seriousness']}:</ui:define>
+    				<h:outputText value="#{messages[it.seriousness.key]}" /> 
+    			</s:decorate>	
+    			<s:decorate template="/layout/display.xhtml">
+    				<ui:param name="labelstyle" value="width:auto" />
+    				<ui:define name="label">#{messages['cases.sideeffects.statusdate']}:</ui:define>
+    				<h:outputText value="#{it.effectEnd}" converter="localeDateConverter"/>
+    			</s:decorate>
+			</td>
+			<td style="padding:8px 4px 0px 4px;">
+    			<s:decorate template="/layout/display.xhtml">
+    				<ui:param name="labelstyle" value="width:auto" />
+    				<ui:define name="label">#{messages['cases.sideeffects.outcome']}:</ui:define>
+    				<h:outputText value="#{messages[it.outcome.key]}" />
+    			</s:decorate>
+    			<s:decorate template="/layout/display.xhtml">
+    				<ui:param name="labelstyle" value="width:auto" />
+    				<ui:define name="label">#{messages['cases.sideeffects.action']}:</ui:define>
+    				<h:outputText value="#{messages[it.actionTaken.key]}" />
+    			</s:decorate>
+			</td>
+		</tr>
+		<s:fragment rendered="#{not empty it.comment}">
+		<tr>
+			<td colspan="3" style="padding: 0px 4px 0px 4px;">
+    				<h:outputText value="#{it.comment}" />
+			</td>
+		</tr>
+		</s:fragment>
+		
+	</table>
+	</ui:repeat>
+	</s:fragment>
+	
+	</h:panelGroup>
 	
 
 

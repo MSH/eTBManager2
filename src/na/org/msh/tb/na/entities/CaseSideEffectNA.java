@@ -10,6 +10,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
+import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.na.entities.enums.SideEffectAction;
 import org.msh.tb.na.entities.enums.SideEffectGrading;
@@ -46,6 +47,15 @@ public class CaseSideEffectNA extends CaseSideEffect{
 			i = DateUtils.monthsBetween(tbcasena.getTreatmentPeriod().getIniDate(), effectSt)+1;
 		return i;
 		
+	}
+	
+	public String getMonthDisplay() {
+		if (getMonthOfTreatment() == -1)
+			return Messages.instance().get("cases.exams.prevdt");
+		
+		if (getMonthOfTreatment() == 0)
+			 return Messages.instance().get("global.monthth");
+		else return Messages.instance().get("global.monthth");
 	}
 		
 	public SideEffectGrading getGrade() {
