@@ -119,7 +119,13 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="2">
+			<td>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages['TbContact.dateofexamination']}:</ui:define>
+					<h:outputText id="dt" value="#{tbContact.dateOfExamination}" converter="localeDateConverter"/>
+				</s:decorate>
+			</td>
+			<td>
 				<s:decorate template="/layout/display.xhtml">
 					<ui:define name="label">#{messages['TbContact.conduct']}:</ui:define>
 					#{it.conduct.name}
