@@ -161,53 +161,6 @@
 	</s:link>
 	
 	<h2>#{messages['cases.sideeffects']}</h2>
-			
-	<s:div styleClass="region3" rendered="#{empty tbcase.sideEffects}"><div class="content">
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" style="display:block;padding:4px"/>
-	</div></s:div>
-		
-	
-	<h:dataTable value="#{tbcasena.sideEffectsNa}" var="it" width="100%" styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty tbcasena.sideEffectsNa}" columnClasses="colcb,colcb,colb,colb,colb">
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
-			</f:facet>
-			#{it.sideEffect.value.name}
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.medicine']}" styleClass="collh" />
-			</f:facet>
-			#{it.medicines}
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				 <h:outputText value="#{messages['cases.sideeffects.month']}" styleClass="collh" />
-			</f:facet>
-		<!-- #{it.month} -->
-		#{it.monthOfTreatment}
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.action']}" styleClass="collh"/>
-			</f:facet>
-			#{messages[it.actionTaken.key]}
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.outcome']}" styleClass="collh"/>
-			</f:facet>
-			#{messages[it.outcome.key]}
-		</h:column>
-	</h:dataTable>
-	
-	
-	
-	<h2>#{messages['cases.sideeffects']}</h2>
                  
 	<h:panelGroup id="sideeffects">
 	
