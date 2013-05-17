@@ -10,6 +10,7 @@ import org.jboss.seam.core.Events;
 import org.msh.tb.cases.CaseValidationHome;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.ValidationState;
 
 /**
@@ -23,7 +24,11 @@ public class CaseValidationNAHome extends CaseValidationHome {
 
 	@In(create=true, required=true)
 	private TBUnitCaseNumber tbunitcasenumber;
-
+	
+	public void initialize() {
+		caseHome.getTbCase().setDiagnosisType(DiagnosisType.CONFIRMED);
+	}
+	
 	@Override
 	@Transactional
 	@Restrict("#{caseHome.canValidate}")
