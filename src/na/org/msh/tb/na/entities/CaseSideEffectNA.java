@@ -38,9 +38,7 @@ public class CaseSideEffectNA extends CaseSideEffect{
 	private Date effectSt;
 
 	@Temporal(TemporalType.DATE)
-	private Date effectEnd;
-	
-	private String comments;	
+	private Date effectEnd;	
 	
 	public Integer getMonthOfTreatment(){
 		int i = 0;
@@ -88,14 +86,6 @@ public class CaseSideEffectNA extends CaseSideEffect{
 
 	public void setTbcasena(TbCaseNA tbcasena) {
 		this.tbcasena = tbcasena;
-	}
-
-	public String getComments() {
-		return comments;
-	}
-
-	public void setComments(String comments) {
-		this.comments = comments;
 	}
 
 	public Date getEffectSt() {
