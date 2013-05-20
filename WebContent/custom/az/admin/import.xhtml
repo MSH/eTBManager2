@@ -16,6 +16,7 @@
 
 	<ui:define name="content">
 		<h1>#{title}</h1>
+		
 		<rich:tabPanel switchType="client" id="importPane">
 			<rich:tab label="#{messages['admin.import.table']}">
 				<h:form id="main" enctype="multipart/form-data" styleClass="form1">
@@ -64,7 +65,12 @@
 					</div>
 				</h:form>
 			</rich:tab>
-			<rich:tab label="#{messages['admin.import.eidss']}">
+			
+			<h:form>
+			<a:jsFunction name="displayState" action="#{eidssIntHome.check()}" ajaxSingle="true" reRender="main,messages" />
+			</h:form>
+			
+			<rich:tab label="#{messages['admin.import.eidss']}" ontabenter="displayState();">
 				<h:form id="eidss" styleClass="form1">
 					<div class="form-content">
 						<s:decorate template="/layout/edit.xhtml">
@@ -182,5 +188,7 @@
 
 
 		</rich:tabPanel>
+
 	</ui:define>
+	
 </ui:composition>
