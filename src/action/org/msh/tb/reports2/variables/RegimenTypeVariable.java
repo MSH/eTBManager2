@@ -1,6 +1,11 @@
 package org.msh.tb.reports2.variables;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jboss.seam.international.Messages;
+import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.filters.FilterOption;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.reports2.VariableImpl;
 
@@ -8,14 +13,13 @@ public class RegimenTypeVariable extends VariableImpl {
 
 	public RegimenTypeVariable() {
 		super("reg_type", "regimen.type", null);
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#prepareVariableQuery(org.msh.reports.query.SQLDefs)
 	 */
 	@Override
-	public void prepareVariableQuery(SQLDefs def) {
+	public void prepareVariableQuery(SQLDefs def, int iteration) {
 		def.addField("tbcase.regimen_id is not null");
 		def.addRestriction("tbcase.initreatmentdate is not null");
 	}
@@ -37,6 +41,29 @@ public class RegimenTypeVariable extends VariableImpl {
 	@Override
 	public Object createKey(Object values) {
 		return values;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
+	 */
+	@Override
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
+			Object value) {
+		if ("0".equals(value))
+			 def.addRestriction("tbcase.regimen_id is null");
+		else def.addRestriction("tbcase.regimen_id is null");
+		def.addRestriction("tbcase.initreatmentdate is not null");
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#getFilterOptions(java.lang.Object)
+	 */
+	@Override
+	public List<FilterOption> getFilterOptions(Object param) {
+		List<FilterOption> options = new ArrayList<FilterOption>();
+		options.add(new FilterOption("0", Messages.instance().get("regimens.individualized")));
+		options.add(new FilterOption("1", Messages.instance().get("regimens.standard")));
+		return options;
 	}
 
 

@@ -8,7 +8,7 @@ public class CFilter implements IsSerializable {
 
 	private String id;
 	private String name;
-	private CFilterType type;
+	private String type;
 	private ArrayList<CItem> options;
 
 	/**
@@ -38,13 +38,13 @@ public class CFilter implements IsSerializable {
 	/**
 	 * @return the type
 	 */
-	public CFilterType getType() {
+	public String getType() {
 		return type;
 	}
 	/**
 	 * @param type the type to set
 	 */
-	public void setType(CFilterType type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 	/**

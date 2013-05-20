@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.msh.reports.ReportConfiguration;
-import org.msh.reports.datatable.DataTable;
+import org.msh.reports.datatable.impl.DataTableImpl;
 
 public class SQLQuery {
 
@@ -17,12 +17,12 @@ public class SQLQuery {
 	private Map<Integer, Object> parsedParameters = new HashMap<Integer, Object>();
 	
 	/**
-	 * Execute the query and return an instance of the {@link DataTable} with its content
+	 * Execute the query and return an instance of the {@link DataTableImpl} with its content
 	 * @param sql Query to be executed in a SQL format
-	 * @return {@link DataTable} instance containing result of the query
+	 * @return {@link DataTableImpl} instance containing result of the query
 	 */
-	public DataTable execute(String sql) {
-		DataTable tbl = new DataTable();
+	public DataTableQuery execute(String sql) {
+		DataTableQuery tbl = new DataTableQueryImpl();
 
 		ResultSet rs = null;
 		try {
@@ -57,12 +57,12 @@ public class SQLQuery {
 
 
 	/**
-	 * Fill instance of {@link DataTable} with content of {@link ResultSet} from the executed SQL query
+	 * Fill instance of {@link DataTableImpl} with content of {@link ResultSet} from the executed SQL query
 	 * @param tbl
 	 * @param rs
 	 * @throws SQLException
 	 */
-	private void fillDataTable(DataTable tbl, ResultSet rs) throws SQLException {
+	private void fillDataTable(DataTableQuery tbl, ResultSet rs) throws SQLException {
 		// create columns
 		ResultSetMetaData rsmd = rs.getMetaData();
 		
@@ -74,12 +74,12 @@ public class SQLQuery {
 		// create columns keys as name of the columns in the result set
 		for (int i = 0; i < numCols; i++) {
 			String colname = rsmd.getColumnName(i + 1);
-			tbl.getColumns().get(i).setKey(colname);
+			tbl.getQueryColumns().get(i).setFieldName(colname);
 		}
 
 		// fill the data table
 		while (rs.next()) {
-			tbl.insertRow();
+			tbl.addRow();
 			int r = tbl.getRowCount() - 1;
 			for (int c = 0; c < rsmd.getColumnCount(); c++) {
 				Object obj = rs.getObject(c + 1);
@@ -118,7 +118,7 @@ public class SQLQuery {
 				int i = index + 1;
 				i = sql.indexOf(c, i);
 				if (i > index) {
-					String s = sql.substring(index - 1, i);
+					String s = sql.substring(index - 1, i+1);
 					builder.append(s);
 					handled = true;
 					index = i;

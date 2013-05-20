@@ -6,6 +6,12 @@ import org.msh.tb.client.shared.model.CVariable;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+/**
+ * Popup window that displays a list of variables by group to be selected
+ * by the user
+ * @author Ricardo Memoria
+ *
+ */
 public class GroupVariablesPopup extends GroupPopup {
 
 	public GroupVariablesPopup(StandardEventHandler eventHandler) {
@@ -24,6 +30,11 @@ public class GroupVariablesPopup extends GroupPopup {
 		for (CVariable var: grp.getVariables()) {
 			addItem(pnlOptions, var.getName(), var);
 		}
+	}
+
+	@Override
+	protected boolean hasItems(CGroup group) {
+		return (group.getVariables() != null && group.getVariables().length > 0);
 	}
 	
 }

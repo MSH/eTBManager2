@@ -28,8 +28,8 @@ public class LabResultDiagVariable extends EnumFieldVariable {
 	 * @see org.msh.tb.reports2.VariableImpl#prepareVariableQuery(org.msh.reports.query.SQLDefs)
 	 */
 	@Override
-	public void prepareVariableQuery(SQLDefs def) {
-		super.prepareVariableQuery(def);
+	public void prepareVariableQuery(SQLDefs def, int iteration) {
+		super.prepareVariableQuery(def, iteration);
 		
 		String tbcase = def.getMasterTable().getAlias();
 

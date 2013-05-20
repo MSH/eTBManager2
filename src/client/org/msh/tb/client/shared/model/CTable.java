@@ -31,6 +31,18 @@ public class CTable implements IsSerializable {
 	 * Error message in case the report is not properly generated
 	 */
 	private String errorMessage;
+	
+	/**
+	 * Indicate if the table must contain a last row with the
+	 * sum of each column, i.e, the total row
+	 */
+	private boolean rowTotalAvailable;
+	
+	/**
+	 * Indicate if the table must contain a last column with the
+	 * sum of each cell in the row, i.e, the total column
+	 */
+	private boolean colTotalAvailable;
 
 
 
@@ -81,5 +93,29 @@ public class CTable implements IsSerializable {
 	 */
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
+	}
+	/**
+	 * @return the rowTotalAvailable
+	 */
+	public boolean isRowTotalAvailable() {
+		return rowTotalAvailable;
+	}
+	/**
+	 * @param rowTotalAvailable the rowTotalAvailable to set
+	 */
+	public void setRowTotalAvailable(boolean rowTotalAvailable) {
+		this.rowTotalAvailable = rowTotalAvailable;
+	}
+	/**
+	 * @return the colTotalAvailable
+	 */
+	public boolean isColTotalAvailable() {
+		return colTotalAvailable;
+	}
+	/**
+	 * @param colTotalAvailable the colTotalAvailable to set
+	 */
+	public void setColTotalAvailable(boolean colTotalAvailable) {
+		this.colTotalAvailable = colTotalAvailable;
 	}
 }

@@ -1,10 +1,21 @@
 package org.msh.tb.reports2;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.jboss.seam.international.Messages;
 
+/**
+ * Represent a group of variables and filters of a report. A group
+ * may contain several filters and variables that share a common feature
+ * and it's better to organize them in group in order to be displayed
+ * in a way that makes more sense to the user
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 public class ReportGroup {
 
 	private String messageKey;
@@ -14,6 +25,27 @@ public class ReportGroup {
 	public ReportGroup(String messageKey) {
 		super();
 		this.messageKey = messageKey;
+	}
+	
+	/**
+	 * Sort the list of variables and filters by its label
+	 */
+	public void sortItems() {
+		sortList(variables);
+		sortList(filters);
+	}
+	
+	/**
+	 * Sort the names of the variables
+	 * @param lst list to be sorted
+	 */
+	protected void sortList(List<VariableImpl> lst) {
+		Collections.sort(variables, new Comparator<VariableImpl>() {
+			@Override
+			public int compare(VariableImpl v1, VariableImpl v2) {
+				return v1.getLabel().compareTo(v2.getLabel());
+			}
+		});
 	}
 	
 	/**

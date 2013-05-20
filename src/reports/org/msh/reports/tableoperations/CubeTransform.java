@@ -12,6 +12,10 @@ import org.msh.reports.datatable.Column;
 import org.msh.reports.datatable.DataTable;
 import org.msh.reports.datatable.DataTableUtils;
 import org.msh.reports.datatable.Row;
+import org.msh.reports.datatable.impl.DataTableImpl;
+import org.msh.reports.indicator.DataTableIndicator;
+import org.msh.reports.indicator.DataTableIndicatorImpl;
+import org.msh.reports.indicator.IndicatorRow;
 
 
 /**
@@ -36,7 +40,7 @@ public class CubeTransform {
 	/**
 	 * The new data table being created
 	 */
-	private DataTable newdt;
+	private DataTableIndicatorImpl newdt;
 	
 	private int[] newrows;
 	private int[] newcols;
@@ -51,7 +55,7 @@ public class CubeTransform {
 	 */
 	private int valuecol;
 
-	private List<Object[]> colvalues = new ArrayList<Object[]>();
+//	private List<Object[]> colvalues = new ArrayList<Object[]>();
 	private Comparator<RowValues> comparator;
 	// group the rows in a single row by key (single or composed)
 	private boolean rowGroupping;
@@ -66,18 +70,31 @@ public class CubeTransform {
 	/**
 	 * Transform a data table into a cubic data table.
 	 * 
-	 * @param sourcedt is the instance of {@link DataTable} with columns and source of data
+	 * @param sourcedt is the instance of {@link DataTableImpl} with columns and source of data
 	 * @param newrows
 	 * @param newcols
 	 * @return
 	 */
-	public DataTable transform(DataTable sourcedt, int[] newcols, int[] newrows, int colvalue) {
+	public DataTableIndicator transform(DataTable sourcedt, int[] newcols, int[] newrows, int colvalue) {
 		this.newrows = newrows;
 		this.newcols = newcols;
 		this.sourcedt = sourcedt;
 		this.valuecol = colvalue;
 
-		// create a list of unique key-values to compose the columns
+		newdt = new DataTableIndicatorImpl();
+		for (Row row: sourcedt.getRows()) {
+			Long val = (Long)row.getValue(colvalue);
+			if (val != null) {
+				Object[] colkeys = row.getValues(newcols);
+				Object[] rowkeys = row.getValues(newrows);
+
+				newdt.addIndicatorValue(colkeys, rowkeys, val.doubleValue());
+			}
+		}
+
+		return newdt;
+		
+/*		// create a list of unique key-values to compose the columns
 		colvalues = createKeyList(sourcedt, newcols);
 
 		// create a new table considering the number of columns and rows (including titles)
@@ -85,7 +102,7 @@ public class CubeTransform {
 		if (rowGroupping)
 			 colsize += 1;
 		else colsize += newrows.length;
-		newdt = new DataTable(colsize, newcols.length);
+		newdt = new DataTableIndicatorImpl(colsize, newcols.length);
 
 		// Initialize variables to create columns
 		int r;
@@ -113,7 +130,7 @@ public class CubeTransform {
 		else createRowsByKeyColumns();
 		
 		return newdt;
-	}
+*/	}
 
 
 	
@@ -193,17 +210,17 @@ public class CubeTransform {
 	 * @param index
 	 * @return
 	 */
-	private int createRowsFromKeys(Row parentRow, List<Object[]> lst, int keyindex, int index) {
+	private int createRowsFromKeys(IndicatorRow parentRow, List<Object[]> lst, int keyindex, int index) {
 		Object[] keys = lst.get(index);
 
 		/// get parent key
 		Object pk = keyindex > 0? keys[keyindex - 1] : null;
 
 		while (true) {
-			Row row;
+			IndicatorRow row;
 			if (parentRow == null)
-				 row = newdt.insertRow();
-			else row = newdt.insertRow(parentRow);
+				 row = newdt.addIndicatorRow();
+			else row = newdt.addIndicatorRow(parentRow);
 			
 			row.setValue(0, keys[keyindex]);
 			
@@ -249,7 +266,7 @@ public class CubeTransform {
 			int cindex = c.getIndex();
 
 			// update the indicator value of the row and all its parent rows
-			while (r != null) {
+/*			while (r != null) {
 				Long cellvalue = (Long)r.getValue(cindex);
 				if (cellvalue == null)
 					cellvalue = 0L;
@@ -257,7 +274,7 @@ public class CubeTransform {
 				
 				r = r.getParent();
 			}
-		}
+*/		}
 	}
 
 
@@ -282,7 +299,7 @@ public class CubeTransform {
 
 		// create new rows
 		for (Object[] vals: sortedRows) {
-			Row row = newdt.insertRow();
+			Row row = newdt.addRow();
 			row.setValues(rowsindex, vals);
 		}
 
@@ -293,7 +310,7 @@ public class CubeTransform {
 			Object[] rvals = row.getValues(newrows);
 			Row nr = newdt.findRow(rowsindex, rvals, newcols.length);
 			if (nr == null) {
-				nr = newdt.insertRow();
+				nr = newdt.addRow();
 				nr.setValues(rowsindex, rvals);
 			}
 			
@@ -304,7 +321,7 @@ public class CubeTransform {
 	}
 
 	/**
-	 * Create a list of unique values from a set of columns in a {@link DataTable} instance
+	 * Create a list of unique values from a set of columns in a {@link DataTableImpl} instance
 	 * @param dt
 	 * @param cols
 	 * @return

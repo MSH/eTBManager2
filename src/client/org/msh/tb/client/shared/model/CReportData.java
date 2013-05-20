@@ -5,6 +5,12 @@ import java.util.HashMap;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+/**
+ * Contains report data about the report to be requested by the client side
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 public class CReportData implements IsSerializable {
 
 	/**

@@ -1,12 +1,16 @@
 package org.msh.tb.reports2.variables;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
+import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.filters.FilterOption;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.Medicine;
+import org.msh.tb.reports2.FilterType;
 import org.msh.tb.reports2.VariableImpl;
 
 public class PrescMedicineVariable extends VariableImpl {
@@ -14,7 +18,7 @@ public class PrescMedicineVariable extends VariableImpl {
 	private List<Medicine> medicines;
 	
 	public PrescMedicineVariable() {
-		super("prescMed", "PrescribedMedicine", null);
+		super("prescMed", "PrescribedMedicine", "prescribedmedicine.medicine_id");
 	}
 	
 	/**
@@ -34,11 +38,24 @@ public class PrescMedicineVariable extends VariableImpl {
 	 * @see org.msh.tb.reports2.VariableImpl#prepareVariableQuery(org.msh.reports.query.SQLDefs)
 	 */
 	@Override
-	public void prepareVariableQuery(SQLDefs def) {
-		String tbl = def.addJoin("prescribedmedicine", "case_id", "tbcase", "id").getAlias();
-		def.addField(tbl + ".medicine_id");
-//		def.addRestriction("tbcase.initreatmentdate is not null");
+	public void prepareVariableQuery(SQLDefs def, int iteration) {
+		def.addJoin("prescribedmedicine", "case_id", "tbcase", "id");
+		super.prepareVariableQuery(def, iteration);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
+	 */
+	@Override
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+		def.addRestriction("exists(select * from prescribedmedicine pm1 where pm1.medicine_id = :prescmed " +
+				"and pm1.case_id =" + def.getMasterTable().getAlias() + ".id)");
+		Integer id = Integer.parseInt(value.toString());
+		def.addParameter("prescmed", id);
+/*		def.addJoin("prescribedmedicine", "case_id", "tbcase", "id");
+		super.prepareFilterQuery(def, oper, value);
+*/	}
+	
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#getDisplayText(java.lang.Object)
@@ -63,6 +80,26 @@ public class PrescMedicineVariable extends VariableImpl {
 	@Override
 	public Object createKey(Object value) {
 		return value;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#getFilterType()
+	 */
+	@Override
+	public String getFilterType() {
+		return FilterType.REMOTE_OPTIONS;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#getFilterOptions(java.lang.Object)
+	 */
+	@Override
+	public List<FilterOption> getFilterOptions(Object param) {
+		List<FilterOption> lst = new ArrayList<FilterOption>();
+		for (Medicine med: getMedicines()) {
+			lst.add(new FilterOption(med.getId(), med.toString()));
+		}
+		return lst;
 	}
 
 }

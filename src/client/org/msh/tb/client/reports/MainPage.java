@@ -528,5 +528,21 @@ public class MainPage extends Composite implements StandardEventHandler {
 		rowSelected = true;
 		updateChart();
 	}
+
+
+	/**
+	 * @return the service
+	 */
+	public ReportServiceAsync getService() {
+		return service;
+	}
+
+
+	/**
+	 * @return the messages
+	 */
+	public static ReportConstants getMessages() {
+		return messages;
+	}
 	
 }

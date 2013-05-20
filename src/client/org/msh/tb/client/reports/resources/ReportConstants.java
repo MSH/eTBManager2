@@ -33,4 +33,7 @@ public interface ReportConstants extends Constants {
 	
 	@Key("form.generate")
 	String generate();
+	
+	@Key("global.total")
+	String total();
 }

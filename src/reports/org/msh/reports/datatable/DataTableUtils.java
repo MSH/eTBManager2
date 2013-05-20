@@ -1,7 +1,9 @@
 package org.msh.reports.datatable;
 
-public class DataTableUtils {
 
+public class DataTableUtils {
+	
+	
 	/**
 	 * Compare an array of object
 	 * @param vals1

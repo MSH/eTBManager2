@@ -32,7 +32,7 @@
 			<h2><ui:text from="{msg.columns}" /></h2>
 			<g:VerticalPanel ui:field="pnlColVariables"></g:VerticalPanel>
 		</div>
-		<div style="clear:both">
+		<div style="clear:both;height:46px;">
 			<hr/>
 			<div style="float:right">
 				<g:Anchor ui:field="lnkChartType"></g:Anchor>

@@ -1,41 +1,47 @@
 package org.msh.reports.datatable;
 
-public class Column {
-
-	private Object key;
-	private DataTable dataTable;
-
-	public Column(DataTable dataTable) {
-		super();
-		this.dataTable = dataTable;
-	}
+/**
+ * Represent a column of the {@link DataTable} interface
+ * 
+ * @author Ricardo Memoria
+ *
+ */
+public interface Column {
 
 	/**
-	 * @return the index
+	 * Return the value of a given row
+	 * @param index is the 0-based position of the row in the column
+	 * @return the value of the row at the given position
 	 */
-	public int getIndex() {
-		return dataTable.getColumns().indexOf(this);
-	}
+	Object getValue(int index);
 
 	/**
-	 * @return the dataTable
+	 * Set the value of a row in the column
+	 * @param index is the 0-based position of the row
+	 * @param value is the value to be set in the row
 	 */
-	public DataTable getDataTable() {
-		return dataTable;
-	}
+	void setValue(int index, Object value);
+	
+	/**
+	 * Get a sequence of cell values of the column from a list of row positions
+	 * @param rowindexes is an array containing a sequence of row positions (0-based index)
+	 * indicating the rows to return its values
+	 * @return array containing the values of each row
+	 */
+	Object[] getValues(int[] rowindexes);
 
 	/**
-	 * @return the key
+	 * Change the values of a group of rows in the column
+	 * @param rowindexes is an integer array containing the 0-based position of
+	 * the rows to set values
+	 * @param values is an array of objects to set the row values
 	 */
-	public Object getKey() {
-		return key;
-	}
+	void setValues(int[] rowindexes, Object[] values);
 
 	/**
-	 * @param key the key to set
+	 * Return the 0-based position of the column in the list of columns
+	 * @return the index of the column
 	 */
-	public void setKey(Object key) {
-		this.key = key;
-	}
+	int getIndex();
 
 }

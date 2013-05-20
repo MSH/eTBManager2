@@ -1,8 +1,13 @@
 package org.msh.tb.reports2;
 
+import java.text.MessageFormat;
+import java.util.List;
+
+import org.jboss.seam.core.Expressions;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.Filter;
 import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.filters.FilterOption;
 import org.msh.reports.query.SQLDefs;
 import org.msh.reports.variables.Variable;
 
@@ -38,17 +43,19 @@ public class VariableImpl implements Variable, Filter {
 	 */
 	@Override
 	public String getLabel() {
-		return Messages.instance().get(keylabel);
+		// check if key label is an expression
+		if (keylabel.contains("#{"))
+			 return (String)Expressions.instance().createValueExpression(keylabel).getValue();
+		else return Messages.instance().get(keylabel);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.msh.reports.variables.Variable#prepareVariableQuery(org.msh.reports.query.SQLDefs)
 	 */
 	@Override
-	public void prepareVariableQuery(SQLDefs def) {
+	public void prepareVariableQuery(SQLDefs def, int iteration) {
 		def.addField(fieldName);
 	}
-
 
 
 	/* (non-Javadoc)
@@ -56,10 +63,19 @@ public class VariableImpl implements Variable, Filter {
 	 */
 	@Override
 	public int compareValues(Object val1, Object val2) {
-		if (val1 instanceof Long)
-			return ((Long)val1).compareTo((Long)val2);
+		if (val1 == val2)
+			return 0;
 
-		return ((Integer)val1).compareTo((Integer)val2);
+		if (val1 == null)
+			return 1;
+		
+		if (val2 == null)
+			return -1;
+
+		if (val1 instanceof Comparable)
+			return ((Comparable)val1).compareTo(val2);
+		
+		return 0;
 	}
 
 
@@ -97,6 +113,17 @@ public class VariableImpl implements Variable, Filter {
 		def.addParameter(s, value);
 	}
 
+	
+	/**
+	 * Return a localized message by its key message and replace its arguments inside the text 
+	 * @param keymsg the key inside the resource bundle message file
+	 * @param arg the arguments to be replaced inside the messages
+	 * @return the message text in the selected locale
+	 */
+	protected String formatMessage(String keymsg, Object... arg) {
+		String msg = Messages.instance().get(keymsg);
+		return MessageFormat.format(msg, arg);
+	}
 
 	/**
 	 * @return the id
@@ -159,5 +186,85 @@ public class VariableImpl implements Variable, Filter {
 	@Override
 	public Object createKey(Object values) {
 		return values;
+	}
+
+	@Override
+	public int getIteractionCount() {
+		return 1;
+	}
+
+	/**
+	 * @return the keylabel
+	 */
+	public String getKeylabel() {
+		return keylabel;
+	}
+
+	/**
+	 * @param keylabel the keylabel to set
+	 */
+	public void setKeylabel(String keylabel) {
+		this.keylabel = keylabel;
+	}
+
+	/**
+	 * @param fieldName the fieldName to set
+	 */
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.reports.variables.Variable#compareGroupValues(java.lang.Object, java.lang.Object)
+	 */
+	@Override
+	public int compareGroupValues(Object val1, Object val2) {
+		return 0;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.reports.filters.Filter#getFilterType()
+	 */
+	@Override
+	public String getFilterType() {
+		// return the default filter
+		return FilterType.OPTIONS;
+	}
+
+	/**
+	 * Set the value of a filter from a string type
+	 * @param value
+	 */
+	public Object filterValueFromString(String value) {
+		return value;
+	}
+	
+	/**
+	 * Return the value of a filter in a string type
+	 * @return
+	 */
+	public String filterValueToString(Object value) {
+		return (value == null? null: value.toString());
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.msh.reports.filters.Filter#isFilterLazyInitialized()
+	 */
+	@Override
+	public boolean isFilterLazyInitialized() {
+		return (FilterType.REMOTE_OPTIONS != null && FilterType.REMOTE_OPTIONS.equals(getFilterType()));
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.msh.reports.filters.Filter#getFilterOptions(java.lang.Object)
+	 */
+	@Override
+	public List<FilterOption> getFilterOptions(Object param) {
+		return null;
+	}
+
+	@Override
+	public boolean isTotalEnabled() {
+		return true;
 	}
 }

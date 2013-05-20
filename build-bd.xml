@@ -99,7 +99,7 @@
 
 	<target depends="compile,war" name="build" />
 
-	<target depends="init" name="compile">
+	<target depends="init,clean" name="compile">
 		<echo message="${ant.project.name}: ${ant.file}" />
 		<javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
 			<src path="src/action" />

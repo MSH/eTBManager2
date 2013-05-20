@@ -8,19 +8,28 @@ public abstract class FilterWidget extends Composite {
 
 	private CFilter filter;
 
-	public FilterWidget(CFilter filter) {
-		super();
-		this.filter = filter;
+	/**
+	 * Initialize the filter
+	 * @param filterData
+	 */
+	public void initialize(CFilter filterData) {
+		this.filter = filterData;
 	}
 	
 	/**
-	 * Get the value set in the filter
+	 * Set the value selected in the filter
+	 * @param value is the String representation of the filter selection
+	 */
+	public abstract void setValue(String value);
+	
+	/**
+	 * Return the value of the selected filter
 	 * @return
 	 */
 	public abstract String getValue();
 
-
 	/**
+	 * Return the filter assigned to this widget
 	 * @return the filter
 	 */
 	public CFilter getFilter() {

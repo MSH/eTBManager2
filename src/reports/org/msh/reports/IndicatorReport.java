@@ -6,14 +6,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.msh.reports.datatable.DataTable;
+import org.msh.reports.datatable.impl.DataTableImpl;
 import org.msh.reports.filters.Filter;
 import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.indicator.DataTableIndicator;
+import org.msh.reports.indicator.DataTableIndicatorImpl;
 import org.msh.reports.query.SQLQuery;
 import org.msh.reports.query.SqlBuilder;
 import org.msh.reports.query.TableJoin;
-import org.msh.reports.tableoperations.CubeTransform;
+import org.msh.reports.tableoperations.ConcatTables;
+import org.msh.reports.tableoperations.IndicatorTransform;
 import org.msh.reports.tableoperations.KeyConverter;
-import org.msh.reports.tableoperations.TableTitleConverter;
 import org.msh.reports.variables.Variable;
 
 /**
@@ -30,7 +33,7 @@ public class IndicatorReport {
 	private SqlBuilder sqlBuilder;
 
 	private DataTable res1, res2;
-	private DataTable result;
+	private DataTableIndicator result;
 
 	// new size after conversion
 	private int rowsize;
@@ -40,30 +43,25 @@ public class IndicatorReport {
 	/**
 	 * Create the indicator result
 	 */
-	protected void createResult() {
+	public void execute() {
 		DataTable data = loadData();
 		res1 = data;
 
 		// no data was returned from the database ?
 		if (data.getRowCount() == 0) {
 			// return an empty data table
-			result = new DataTable();
+			result = new DataTableIndicatorImpl();
 			return;
 		}
 
 		data = convertData(data);
 		res2 = data;
-//		int colsize = convertData(data, columnVariables);
-//		int rowsize = convertData(data, rowVariables);
 		
 		colsize = calcVariablesSize(columnVariables);
 		rowsize = calcVariablesSize(rowVariables);
-		
-		result = cubeTransform(data, colsize, rowsize);
-		
-		TableTitleConverter conv = new TableTitleConverter();
-		conv.convert(result, columnVariables, rowVariables, true);
-		
+
+		result = indicatorTransform(data, columnVariables, rowVariables);
+
 		rowsize = 1;
 	}
 	
@@ -72,7 +70,7 @@ public class IndicatorReport {
 	 * Load data from the data base
 	 * @return
 	 */
-	protected DataTable loadData() {
+	protected DataTableImpl loadData() {
 		// create SQL instruction
 		SqlBuilder sqlBuilder = getSqlBuilder();
 		
@@ -87,7 +85,56 @@ public class IndicatorReport {
 			FilterValue fvalue = filters.get(filter);
 			filter.prepareFilterQuery(sqlBuilder, fvalue.getComparator(), fvalue.getValue());
 		}
+
+		// create an empty table
+		DataTableImpl tbl = new DataTableImpl();
+
+		// run the iteration over all variables
+		runVariableIteration(tbl, sqlBuilder, 0);
 		
+		return tbl;
+	}
+	
+	
+	/**
+	 * Run recursively the sequence of iteration over the variables that have more than 1 iteration
+	 * @param target
+	 * @param sqlBuilder
+	 * @param varindex
+	 */
+	protected void runVariableIteration(DataTable target, SqlBuilder sqlBuilder, int varindex) {
+		Variable var = sqlBuilder.getVariables().get(varindex);
+		int num = var.getIteractionCount();
+
+		// consider at least 1 iteration for each variable
+		if (num == 0)
+			num = 1;
+
+		for (int i = 0; i < num; i++) {
+			sqlBuilder.setVariableIteration(var, i);
+
+			// is the last item?
+			if (varindex == sqlBuilder.getVariables().size() - 1) {
+				DataTable tbl = createDataTableFromQuery(sqlBuilder);
+				ConcatTables.insertRows(target, tbl);
+			}
+			else runVariableIteration(target, sqlBuilder, varindex + 1);
+		}
+	}
+	
+	
+	/**
+	 * Execute the database query from the SQL builder and loads its result in a {@link DataTableImpl}
+	 * instance. If a variable is defined, it'll be called in the specific iteration. Usually, the
+	 * variable is defined just for iteration bigger than 1, since the iteration 1 is generally
+	 * called to all variables
+	 * 
+	 * @param builder the SQL builder that contains the variables and filters
+	 * @param var the variable to run the specific iteration
+	 * @param iteration
+	 * @return
+	 */
+	protected DataTable createDataTableFromQuery(SqlBuilder builder) {
 		String sql = sqlBuilder.createSql();
 
 		// load data
@@ -97,9 +144,7 @@ public class IndicatorReport {
 		for (String paramname: sqlBuilder.getParameters().keySet())
 			qry.setParameter(paramname, sqlBuilder.getParameters().get(paramname));
 
-		DataTable tbl = qry.execute(sql);
-
-		return tbl;
+		return qry.execute(sql);
 	}
 
 	
@@ -191,32 +236,17 @@ public class IndicatorReport {
 		KeyConverter conv = new KeyConverter();
 		
 		// mount list of variables and columns
-		List<int[]> cols = new ArrayList<int[]>();
 		List<Variable> vars = new ArrayList<Variable>();
+		List<int[]> varcols = new ArrayList<int[]>();
 		
 		SqlBuilder sqlbuilder = getSqlBuilder();
 		for (Variable var: sqlbuilder.getVariables()) {
-			cols.add(sqlbuilder.getColumnsVariable(var));
 			vars.add(var);
+			varcols.add(sqlBuilder.getColumnsVariable(var));
 		}
-		
-		DataTable dt = conv.execute(sourcedt, vars, cols);
-		
-/*		// calculate size of new data table for rows and columns
-		colsize = calcConvertedSize(sourcedt, columnVariables);
-		rowsize = calcConvertedSize(sourcedt, rowVariables);
-		
-		DataTable dt = new DataTable(colsize + rowsize + 1, sourcedt.getRowCount());
 
-		convertVariables(sourcedt, dt, 0, columnVariables);
-		convertVariables(sourcedt, dt, colsize, rowVariables);
-
-		// move column with value
-		int colori = sourcedt.getColumnCount() - 1;
-		int coldst = dt.getColumnCount() - 1;
-		for (int i = 0; i < sourcedt.getRowCount(); i++)
-			dt.setValue(coldst, i, sourcedt.getValue(colori, i));
-*/		
+		DataTable dt = conv.execute(sourcedt, vars, varcols);
+		
 		return dt;
 	}
 
@@ -238,14 +268,14 @@ public class IndicatorReport {
 	 * Transform a data table into a cube using specific columns 
 	 * to generate the new columns and rows.
 	 * @param tbl the table to be transformed
-	 * @param colsize is the number of columns to be used as the 
-	 * new columns, counting from the first column
-	 * @param rowsize is the number of column to be used as the new rows,
-	 * counting from the next column after colsize 
-	 * @return a new instance of the {@link DataTable} transformed in cube
+	 * @param varColumns is the list of variables that compound the columns 
+	 * @param varRows is the list of variables that compound the rows 
+	 * @return a new instance of the {@link DataTableIndicator} 
 	 */
-	protected DataTable cubeTransform(DataTable tbl, int colsize, int rowsize) {
-		CubeTransform trans = new CubeTransform();
+	protected DataTableIndicator indicatorTransform(DataTable tbl, List<Variable> varColumns, List<Variable> varRows) {
+		IndicatorTransform trans = new IndicatorTransform();
+		return trans.excute(tbl, varColumns, varRows, tbl.getColumnCount() - 1);
+/*		CubeTransform trans = new CubeTransform();
 		int cols[] = new int[colsize];
 		int rows[] = new int[rowsize];
 		for (int i = 0; i < colsize; i++)
@@ -256,7 +286,7 @@ public class IndicatorReport {
 		trans.setRowGroupping(true);
 
 		return trans.transform(tbl, cols, rows, colsize + rowsize);
-	}
+*/	}
 
 	
 	/**
@@ -287,9 +317,9 @@ public class IndicatorReport {
 	 * Return the result of the report
 	 * @return
 	 */
-	public DataTable getResult() {
+	public DataTableIndicator getResult() {
 		if (result == null)
-			createResult();
+			execute();
 		return result;
 	}
 

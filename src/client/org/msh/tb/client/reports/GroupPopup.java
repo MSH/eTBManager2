@@ -98,23 +98,35 @@ public abstract class GroupPopup extends PopupPanel {
 		VerticalPanel pnl = new VerticalPanel();
 		pnl.setStyleName("group-panel");
 		for (CGroup group: groups) {
-			VerticalPanel pnlGroup = new VerticalPanel();
-			AnchorData lnk = new AnchorData(group.getName(), group);
-			lnk.setStyleName("group-link");
-			lnk.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					groupClick(event);
-				}
-			});
-			pnlGroup.add(lnk);
-			pnl.add(pnlGroup);
+			if (hasItems(group)) {
+				VerticalPanel pnlGroup = new VerticalPanel();
+				AnchorData lnk = new AnchorData(group.getName(), group);
+				lnk.setStyleName("group-link");
+				lnk.addClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent event) {
+						groupClick(event);
+					}
+				});
+				pnlGroup.add(lnk);
+				pnl.add(pnlGroup);
+			}
 		}
 		
 		pnlContent.add(pnl);
 	}
 
 	
+	/**
+	 * Indicate if the given groups has child items to be included, i.e,
+	 * variables or items, depending on the pop up display
+	 * If the group has no item, it will not be displayed in the 
+	 * list of groups. This method is called internally by the class.
+	 * @param group the instance of {@link CGroup} to be tested
+	 * @return true if the group has items
+	 */
+	protected abstract boolean hasItems(CGroup group);
+
 	/**
 	 * Add a new item to the list of options
 	 * @param parent

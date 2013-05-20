@@ -3,6 +3,7 @@ package org.msh.reports.query;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.msh.reports.variables.Variable;
 
@@ -20,7 +21,9 @@ public class SqlBuilder implements SQLDefs {
 	private Variable currentVariable;
 	private String fieldList;
 	private List<String> restrictions = new ArrayList<String>();
+	private List<String> varRestrictions = new ArrayList<String>();
 	private HashMap<String, Object> parameters = new HashMap<String, Object>();
+	private Map<Variable, Integer> varIteration = new HashMap<Variable, Integer>();
 
 	public SqlBuilder(String tableName) {
 		super();
@@ -43,6 +46,17 @@ public class SqlBuilder implements SQLDefs {
 		currentVariable = null;
 		restrictions.clear();
 		fieldList = null;
+		varIteration.clear();
+	}
+
+	
+	/**
+	 * Select the iteration of the variable to be executed
+	 * @param var the variable that is already available in the list of variables
+	 * @param iteration the iteration index to be executed, starting at 0 index
+	 */
+	public void setVariableIteration(Variable var, Integer iteration) {
+		varIteration.put(var, iteration);
 	}
 
 
@@ -66,16 +80,28 @@ public class SqlBuilder implements SQLDefs {
 	
 	/**
 	 * Create the SQL instruction
-	 * @return
+	 * @return SQL instruction to be executed in the database server in order to return
+	 * the specific fields and its indicators
 	 */
 	public String createSql() {
 		sql = new StringBuilder();
 		fields.clear();
 		fieldList = null;
+		varRestrictions.clear();
 		
-		for (Variable var: variables) {
-			currentVariable = var;
-			var.prepareVariableQuery(this);
+		try{
+			for (Variable var: variables) {
+				currentVariable = var;
+				// get the current variable iteration
+				Integer iteration = varIteration.get(var);
+				if (iteration == null)
+					iteration = 0;
+				// prepare the variable
+				var.prepareVariableQuery(this, iteration);
+			}
+		}
+		finally {
+			currentVariable = null;
 		}
 		
 		createSQLSelect(sql);
@@ -98,8 +124,10 @@ public class SqlBuilder implements SQLDefs {
 	 * Create SQL Where
 	 */
 	protected void createSQLWhere(StringBuilder builder) {
+		boolean first = true;
+
+		// include restrictions defined in the SQL builder
 		if (restrictions.size() > 0) {
-			boolean first = true;
 			for (String s: restrictions) {
 				if (first) {
 					builder.append("\nwhere ");
@@ -111,7 +139,22 @@ public class SqlBuilder implements SQLDefs {
 				builder.append("\n" + s);
 			}
 		}
+
+		// include restrictions defined by the variables
+		if (varRestrictions.size() > 0) {
+			for (String s: varRestrictions) {
+				if (first) {
+					builder.append("\nwhere ");
+					first = false;
+				}
+				else builder.append("\nand ");
+
+				s = parseTableNames(s);
+				builder.append("\n" + s);
+			}
+		}
 	}
+	
 	
 	/**
 	 * Return the list of column for a given variable used to build the query
@@ -332,8 +375,14 @@ public class SqlBuilder implements SQLDefs {
 
 	@Override
 	public void addRestriction(String restriction) {
-		if (!restrictions.contains(restriction))
-			restrictions.add(restriction);
+		List<String> restr;
+		
+		if (currentVariable != null)
+			 restr = varRestrictions;
+		else restr = restrictions;
+
+		if (!restr.contains(restriction))
+				restr.add(restriction);
 	}
 
 

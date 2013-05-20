@@ -13,8 +13,8 @@ public class PeriodFilter extends FilterWidget {
 	
 	private ListBox iniMonth, iniYear, endMonth, endYear;
 	
-	public PeriodFilter(CFilter filter) {
-		super(filter);
+	public PeriodFilter() {
+		super();
 
 		iniMonth = createMonthListbox();
 		panel.add(iniMonth);
@@ -31,6 +31,10 @@ public class PeriodFilter extends FilterWidget {
 		panel.add(endYear);
 
 		initWidget(panel);
+	}
+	
+	public void initialize(CFilter filter) {
+		super.initialize(filter);
 	}
 
 
@@ -78,6 +82,12 @@ public class PeriodFilter extends FilterWidget {
 	
 	protected String getSelectedValue(ListBox lb) {
 		return (lb.getSelectedIndex() > 0?  lb.getValue(lb.getSelectedIndex()) : "");
+	}
+
+	@Override
+	public void setValue(String value) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

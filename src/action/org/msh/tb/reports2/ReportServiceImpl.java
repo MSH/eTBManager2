@@ -8,18 +8,21 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.remoting.WebRemote;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.IndicatorReport;
-import org.msh.reports.datatable.Cell;
-import org.msh.reports.datatable.DataTable;
-import org.msh.reports.datatable.Row;
+import org.msh.reports.datatable.impl.DataTableImpl;
+import org.msh.reports.filters.Filter;
+import org.msh.reports.filters.FilterOption;
+import org.msh.reports.indicator.DataTableIndicator;
 import org.msh.tb.client.shared.ReportService;
 import org.msh.tb.client.shared.model.CFilter;
-import org.msh.tb.client.shared.model.CFilterType;
 import org.msh.tb.client.shared.model.CGroup;
+import org.msh.tb.client.shared.model.CItem;
 import org.msh.tb.client.shared.model.CReportData;
 import org.msh.tb.client.shared.model.CReportUI;
 import org.msh.tb.client.shared.model.CTable;
 import org.msh.tb.client.shared.model.CVariable;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.reports2.variables.DateFieldVariable;
+
 
 /**
  * Implementation of the {@link ReportService} interface, with a set of
@@ -67,7 +70,10 @@ public class ReportServiceImpl implements ReportService {
 					CFilter f = new CFilter();
 					f.setId(filter.getId());
 					f.setName(filter.getLabel());
-					f.setType(CFilterType.OPTIONS);
+					f.setType(filter.getFilterType());
+					// send options if they are not sent remotely
+					if (!filter.isFilterLazyInitialized())
+						f.setOptions(generateFilterOptions(filter, null));
 					filters[index++] = f;
 				}
 				grp.setFilters(filters);
@@ -155,9 +161,21 @@ public class ReportServiceImpl implements ReportService {
 		
 		if (dateVars > 1)
 			return returnError("manag.reportgen.error2");
+
+		// set filter values
+		if (reportData.getFilters() != null) {
+			for (String id: reportData.getFilters().keySet()) {
+				VariableImpl var = res.findVariableById(id);
+				if (var != null) {
+					String value = reportData.getFilters().get(id);
+					rep.addFilter((Filter)var, value);
+				}
+			}
+		}
 		
 		// execute the report
-		DataTable tbl = rep.getResult();
+		rep.execute();
+		DataTableIndicator tbl = rep.getResult();
 
 //		displayTable(tbl);
 		
@@ -177,6 +195,12 @@ public class ReportServiceImpl implements ReportService {
 	 * @return
 	 */
 	protected ReportResources getReportResources() {
+		Workspace ws = (Workspace)Component.getInstance("defaultWorkspace");
+		if (ws.getExtension() != null) {
+			ReportResources res = (ReportResources)Component.getInstance("reportResources." + ws.getExtension());
+			if (res != null)
+				return res;
+		}
 		return (ReportResources)Component.getInstance("reportResources");
 	}
 
@@ -203,8 +227,8 @@ public class ReportServiceImpl implements ReportService {
 	/**
 	 * Show table data
 	 */
-	protected void displayTable(DataTable table) {
-		for (Row row: table.getRows()) {
+	protected void displayTable(DataTableImpl table) {
+/*		for (Row row: table.getRows()) {
 			String s = "|";
 			for (Cell cell: row.getCellsToRender()) {
 				Object value = cell.getValue();
@@ -215,6 +239,38 @@ public class ReportServiceImpl implements ReportService {
 			System.out.println(s);
 		}
 		System.out.println("\n");
+*/	}
+
+	
+	/**
+	 * Generate a list of filter options to be serialized to the client from a {@link Filter} instance
+	 * @param filter instance of the {@link Filter} interface representing the filter
+	 * @param param is a parameter recognized by the filter 
+	 * @return List of {@link CItem} objects to be sent to the client as options to the filter
+	 */
+	protected ArrayList<CItem> generateFilterOptions(VariableImpl filter, String param) {
+		List<FilterOption> options = filter.getFilterOptions(param);
+		if (options == null)
+			return null;
+
+		ArrayList<CItem> lst = new ArrayList<CItem>();
+		for (FilterOption opt: options) {
+			lst.add(new CItem(opt.getValue().toString(), opt.getLabel()));
+		}
+		return lst;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.msh.tb.client.shared.ReportService#getFilterOptions(java.lang.String, java.lang.String)
+	 */
+	@Override
+	@WebRemote
+	public List<CItem> getFilterOptions(String filterid, String param) {
+		ReportResources res = getReportResources();
+		VariableImpl filter = res.findVariableById(filterid);
+		if (filter == null)
+			return null;
+
+		return generateFilterOptions(filter, param);
+	}
 }

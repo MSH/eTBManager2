@@ -1,12 +1,17 @@
 package org.msh.tb.reports2.variables;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.international.Messages;
+import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.filters.FilterOption;
+import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.Regimen;
+import org.msh.tb.reports2.FilterType;
 import org.msh.tb.reports2.VariableImpl;
 
 public class RegimenVariable extends VariableImpl {
@@ -30,11 +35,6 @@ public class RegimenVariable extends VariableImpl {
 		return regimens;
 	}
 
-	@Override
-	public Object createKey(Object values) {
-		return values;
-	}
-
 	
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#getDisplayText(java.lang.Object)
@@ -54,6 +54,39 @@ public class RegimenVariable extends VariableImpl {
 		
 		// if id is not found, return undefined 
 		return super.getDisplayText(key);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#getFilterType()
+	 */
+	@Override
+	public String getFilterType() {
+		return FilterType.REMOTE_OPTIONS;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#getFilterOptions(java.lang.Object)
+	 */
+	@Override
+	public List<FilterOption> getFilterOptions(Object param) {
+		List<FilterOption> lst = new ArrayList<FilterOption>();
+		lst.add(new FilterOption("null", Messages.instance().get("regimens.individualized")));
+
+		for (Regimen reg: getRegimens()) {
+			lst.add(new FilterOption(reg.getId(), reg.getName()));
+		}
+		
+		return lst;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
+	 */
+	@Override
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+		if ("null".equals(value))
+			 def.addRestriction(getFieldName() + " is null");
+		else super.prepareFilterQuery(def, oper, value);
 	}
 	
 }

@@ -24,9 +24,10 @@ public class FilterPanel extends HoverPanel {
 		add(label);
 		
 		// create filter widget
-		filterWidget = FilterFactory.createWidgetFilter(filter);
+		filterWidget = FilterFactory.createFilter(filter.getType());
 		
 		if (filterWidget != null) {
+			filterWidget.initialize(filter);
 			FlowPanel pnl = new FlowPanel();
 			pnl.setStyleName("value");
 			pnl.add(filterWidget);

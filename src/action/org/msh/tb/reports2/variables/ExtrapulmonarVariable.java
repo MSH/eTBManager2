@@ -29,8 +29,8 @@ public class ExtrapulmonarVariable extends FieldValueVariable {
 	 * @see org.msh.tb.reports2.VariableImpl#prepareVariableQuery(org.msh.reports.query.SQLDefs)
 	 */
 	@Override
-	public void prepareVariableQuery(SQLDefs def) {
-		super.prepareVariableQuery(def);
+	public void prepareVariableQuery(SQLDefs def, int iteration) {
+		super.prepareVariableQuery(def, iteration);
 		def.addField("tbcase.extrapulmonary2_id");
 		def.addRestriction("tbcase.infectionSite in (" + InfectionSite.BOTH.ordinal() + "," + InfectionSite.EXTRAPULMONARY.ordinal() + ")");
 	}

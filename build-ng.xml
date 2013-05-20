@@ -3,7 +3,7 @@
 <project basedir="." default="build" name="etbmanager">
 	<property environment="env" />
 	<property file="build.properties" />
-	<property name="war-file-name" value="etbmanager.war" />
+	<property name="war-file-prefix" value="etbmanager" />
 	<property name="implementation-title" value="e-TB Manager" />
 	<property name="country-code" value="NG" />
 	<property name="country-folder" value="ng" />
@@ -14,89 +14,111 @@
 	<property name="build-classes" value="build/classes-country" />
 
 
-	<path id="Web App Libraries.libraryclasspath">
-		<pathelement location="WebContent/WEB-INF/lib/commons-beanutils.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/commons-digester.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/commons-lang.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/drools-compiler.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/drools-core.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/jboss-el.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/jboss-seam-ioc.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/jboss-seam-mail.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/jboss-seam-pdf.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/jboss-seam-remoting.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/jboss-seam-ui.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/jboss-seam.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/jsf-facelets.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/richfaces-api-3.3.3.Final.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/richfaces-impl-3.3.3.Final.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/richfaces-ui-3.3.3.Final.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/jxl.jar" />
-		<pathelement location="WebContent/WEB-INF/classes" />
-	</path>
+
+	<path id="project.libraryclasspath">
+        <pathelement location="WebContent/WEB-INF/lib/commons-beanutils.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-digester.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-lang.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/drools-compiler.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/drools-core.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-el.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-ioc.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-mail.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-pdf.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-remoting.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-ui.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jsf-facelets.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/richfaces-api-3.3.3.Final.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/richfaces-impl-3.3.3.Final.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/richfaces-ui-3.3.3.Final.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jxl.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/gson-2.1.jar"/>
+		<pathelement location="WebContent/WEB-INF/lib/eidssAz.jar"/>
+	 	<pathelement location="WebContent/WEB-INF/lib/gwt-servlet.jar"/>
+        <pathelement location="WebContent/WEB-INF/classes"/>
+    </path>
+
 
 
 	<path id="jboss-4.2.3.GA.libraryclasspath">
-		<pathelement location="C:\Development\Server\jboss-4.2.3.GA/client/commons-logging.jar" />
-		<pathelement location="C:\Development\Server\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar" />
-		<pathelement location="C:\Development\Server\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar" />
-		<pathelement location="C:\Development\Server\jboss-4.2.3.GA/server/default/deploy/ejb3.deployer/jboss-ejb3.jar" />
-		<pathelement location="C:\Development\Server\jboss-4.2.3.GA/client/jboss-j2ee.jar" />
-		<pathelement location="C:\Development\Server\jboss-4.2.3.GA/client/ejb3-persistence.jar" />
-		<pathelement location="C:\Development\Server\jboss-4.2.3.GA/client/servlet-api.jar" />
-		<pathelement location="C:\Development\Server\jboss-4.2.3.GA/server/default/lib/hibernate-annotations.jar" />
-		<pathelement location="C:\Development\Server\jboss-4.2.3.GA/server/default/lib/hibernate-entitymanager.jar" />
-		<pathelement location="C:\Development\Server\jboss-4.2.3.GA/server/default/lib/hibernate-core.jar" />
-		<pathelement location="C:\Development\Server\jboss-4.2.3.GA/server/default/lib/lucene-core.jar" />
-		<pathelement location="C:\Development\Server\jboss-4.2.3.GA/server/default/lib/hibernate-search.jar" />
-		<pathelement location="C:\Development\Server\jboss-4.2.3.GA/server/default/lib/hibernate-validator.jar" />
-		<pathelement location="C:\Development\Server\jboss-4.2.3.GA/server/default/lib/dom4j.jar" />
-		<pathelement location="WebContent/WEB-INF/lib/gson-2.1.jar" />
+        <pathelement location="${jboss.dir}/client/commons-logging.jar"/>
+        <pathelement location="${jboss.dir}/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
+        <pathelement location="${jboss.dir}/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
+        <pathelement location="${jboss.dir}/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
+        <pathelement location="${jboss.dir}/client/jboss-j2ee.jar"/>
+        <pathelement location="${jboss.dir}/client/ejb3-persistence.jar"/>
+        <pathelement location="${jboss.dir}/client/servlet-api.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-annotations.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-entitymanager.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-core.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/lucene-core.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-search.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-validator.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/dom4j.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/axis.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/jboss-jaxrpc.jar"/>
+		<pathelement location="${jboss.dir}/server/default/lib/quartz.jar"/>
+    </path>
+
+	
+	<path id="gwt.librarypath">
+        <pathelement location="${gwt.dir}/gwt-dev.jar"/>
+        <pathelement location="${gwt.dir}/gwt-user.jar"/>
 	</path>
 
-	<path id="mdrtb.classpath">
-		<pathelement location="build/classes" />
-		<!--        <path refid="All JBoss Libraries [JBoss 4.2].libraryclasspath"/> 
-        <path refid="EAR Libraries.libraryclasspath"/> -->
-		<path refid="Web App Libraries.libraryclasspath" />
-		<path refid="jboss-4.2.3.GA.libraryclasspath" />
-	</path>
+	<path id="etbm.classpath">
+        <pathelement location="build/classes"/>
+        <path refid="project.libraryclasspath"/> 
+        <path refid="jboss-4.2.3.GA.libraryclasspath"/>
+        <path refid="gwt.librarypath"/>
+    </path>
 
 
-	<target name="init">
+
+
+	<target name="init" depends="clean">
 		<echo message="Implementation title  :  ${implementation-title}" />
 		<echo message="Implementation version:  ${implementation-version}" />
 		<echo message="Implementation vendor :  ${implementation-vendor}" />
-		<echo message="war file              :  ${war-file-name}" />
+		<echo message="Country               :  ${country-code}" />
 
-		<mkdir dir="build/classes" />
-		<copy includeemptydirs="false" todir="build/classes">
+		<copy includeemptydirs="false" todir="${build-classes}">
 			<fileset dir="src/action" excludes="**/*.launch, **/*.java, **/*.html" />
 		</copy>
-		<copy includeemptydirs="false" todir="build/classes">
+		<copy includeemptydirs="false" todir="${build-classes}">
 			<fileset dir="src/model" excludes="**/*.launch, **/*.java, **/*.html" />
 		</copy>
-		<copy includeemptydirs="false" todir="build/classes">
+		<copy includeemptydirs="false" todir="${build-classes}">
+			<fileset dir="src/reports" excludes="**/*.launch, **/*.java, **/*.html" />
+		</copy>
+		<copy includeemptydirs="false" todir="${build-classes}">
+			<fileset dir="src/client" excludes="**/*.launch, **/*.java, **/*.html" />
+		</copy>
+		<copy includeemptydirs="false" todir="${build-classes}">
 			<fileset dir="src/${country-folder}" excludes="**/*.launch, **/*.java" />
 		</copy>
 	</target>
 
 	<target name="clean">
-		<delete dir="build/classes" />
+        <delete dir="${build-classes}"/>
+		<mkdir dir="${build-classes}" />
 	</target>
 
 	<target depends="clean" name="cleanall" />
 
 
-	<target depends="build-project,war" name="build" />
+	<target depends="compile,war" name="build" />
 
-	<target depends="init" name="build-project">
+	<target depends="init" name="compile">
 		<echo message="${ant.project.name}: ${ant.file}" />
-		<javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
+		<javac debug="false" debuglevel="${debuglevel}" destdir="${build-classes}" source="${source}" target="${target}" encoding="8859_1">
 			<src path="src/action" />
 			<src path="src/model" />
+  		    <src path="src/reports"/>
+	 		<src path="src/client"/>
 			<src path="src/${country-folder}" />
-			<classpath refid="mdrtb.classpath" />
+            <classpath refid="etbm.classpath"/>
 		</javac>
 	</target>
 
@@ -105,6 +127,7 @@
 
 
 	<target description="Build the .war file" depends="init" name="war">
+		<property name="war-file-name" value="${war-file-prefix}-${implementation-version}-${country-code}.war" />
 		<echo message="war file              :  ${war-file-name}" />
 		<delete file="build/${war-file-name}" />
 		<buildnumber file="build.num" />
@@ -133,6 +156,8 @@
 				<exclude name="WEB-INF/web.xml" />
 				<exclude name="WEB-INF/components.xml" />
 				<exclude name="WEB-INF/faces-config.xml" />
+				<exclude name="WEB-INF/deploy/**" />
+				<exclude name="WEB-INF/classes/**" />
 				<exclude name="custom/**" />
 			</fileset>
 
@@ -141,7 +166,7 @@
 			</fileset>
 
 
-			<classes dir="build/classes">
+			<classes dir="${build-classes}">
 				<exclude name="META-INF/persistence.xml" />
 				<exclude name="/messages*" />
 				<exclude name="/custom_messages*" />

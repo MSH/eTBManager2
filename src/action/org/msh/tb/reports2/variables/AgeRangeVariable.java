@@ -1,9 +1,14 @@
 package org.msh.tb.reports2.variables;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jboss.seam.Component;
+import org.msh.reports.filters.FilterOption;
 import org.msh.tb.AgeRangeHome;
 import org.msh.tb.entities.AgeRange;
+import org.msh.tb.reports2.FilterType;
 import org.msh.tb.reports2.VariableImpl;
 
 public class AgeRangeVariable extends VariableImpl {
@@ -63,4 +68,44 @@ public class AgeRangeVariable extends VariableImpl {
 		// if range is not found, return undefined 
 		return super.getDisplayText(null);
 	}
+
+	
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#getFilterType()
+	 */
+	@Override
+	public String getFilterType() {
+		return FilterType.REMOTE_OPTIONS;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#getFilterOptions()
+	 */
+	@Override
+	public List<FilterOption> getFilterOptions(Object param) {
+		AgeRangeHome home = getAgeRangeHome();
+		
+		List<FilterOption> lst = new ArrayList<FilterOption>();
+		for (AgeRange ar: home.getItems()) {
+			lst.add(new FilterOption(ar.getId(), ar.toString()));
+		}
+		
+		return lst;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#compareValues(java.lang.Object, java.lang.Object)
+	 */
+	@Override
+	public int compareValues(Object val1, Object val2) {
+		AgeRange range1 = getAgeRangeHome().findRangeById((Integer)val1);
+		AgeRange range2 = getAgeRangeHome().findRangeById((Integer)val2);
+		
+		if ((range1 != null) && (range2 != null))
+			return ((Integer)range1.getIniAge()).compareTo(range1.getIniAge());
+		
+		return super.compareValues(val1, val2);
+	}
+
 }
