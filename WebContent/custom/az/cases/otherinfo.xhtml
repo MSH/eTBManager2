@@ -144,12 +144,13 @@
 
 	<div class="spacer" />
                  
-	<s:link view="/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" 
+	<s:link view="/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData and tbcase.treatmentPeriod!=null}" 
 		styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{caseHome.id}" />
 		<f:param name="idSideEffect" value="#{null}"/>
 		<span>#{messages['form.new']}</span>
 	</s:link>
+	<h:outputText value="#{messages['cases.sideeffects.blocked']}" style="float:right; color:red;" rendered="#{tbcase.treatmentPeriod==null}"/>
 	<h2>#{messages['cases.sideeffects']}</h2>
                  
 	<h:panelGroup id="sideeffects">
