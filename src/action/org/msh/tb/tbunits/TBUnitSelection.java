@@ -74,6 +74,23 @@ public class TBUnitSelection {
 		this.tbunit = unit;
 		notifyChange();
 	}
+	
+	/**
+	 * Change the TB Unit selected
+	 * @param unit to be selected
+	 */
+	public void setTbunitWithOptions(Tbunit unit) {
+		if (this.tbunit == unit)
+			return;
+		
+		if (unit != null) {
+			getAuselection().setSelectedUnit( unit.getAdminUnit().getParentLevel1() );
+			options = null;
+			getOptions();
+		}
+		this.tbunit = unit;
+		notifyChange();
+	}
 
 	
 	/**

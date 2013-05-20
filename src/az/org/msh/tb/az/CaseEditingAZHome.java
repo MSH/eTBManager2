@@ -117,7 +117,7 @@ public class CaseEditingAZHome extends CaseEditingHome{
 	 */
 	public void setUserTBUnitDefault(){
 		Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
-		getTbunitselection().setTbunit(nTbUUser);
+		getTbunitselection().setTbunitWithOptions(nTbUUser);
 	}
 	
 	/**
@@ -262,11 +262,17 @@ public class CaseEditingAZHome extends CaseEditingHome{
 	
 	public boolean validateMedExam(){
 		MedicalExamination me = (MedicalExamination)App.getComponent("medicalExamination");
-		if (!(me.getDate()==null && me.getResponsible().isEmpty() && me.getHeight()==null && me.getWeight()==null && me.getComments().isEmpty())){
-			if (!(me.getDate()!=null && me.getResponsible()!=null && me.getHeight()!=null && me.getWeight()!=null)){
-				facesMessages.addToControlFromResourceBundle("medexamerror", App.getMessage("MedicalExamination.errorValidate"));
-				return false;
+		try{
+			if (!(me.getDate()==null && me.getResponsible().isEmpty() && me.getHeight()==null && me.getWeight()==null && me.getComments().isEmpty())){
+				if (!(me.getDate()!=null && me.getResponsible()!=null && me.getHeight()!=null && me.getWeight()!=null)){
+					facesMessages.addToControlFromResourceBundle("medexamerror", App.getMessage("MedicalExamination.errorValidate"));
+					return false;
+				}
 			}
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
+			return true;
 		}
 		return true;
 	}
