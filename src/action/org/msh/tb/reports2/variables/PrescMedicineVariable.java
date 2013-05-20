@@ -102,4 +102,12 @@ public class PrescMedicineVariable extends VariableImpl {
 		return lst;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#isTotalEnabled()
+	 */
+	@Override
+	public boolean isTotalEnabled() {
+		return false;
+	}
+
 }

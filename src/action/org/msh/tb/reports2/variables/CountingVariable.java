@@ -26,4 +26,12 @@ public class CountingVariable extends VariableImpl {
 		return Messages.instance().get("global.total");
 	}
 
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#isTotalEnabled()
+	 */
+	@Override
+	public boolean isTotalEnabled() {
+		return false;
+	}
+
 }

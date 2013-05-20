@@ -65,4 +65,12 @@ public class CountingExamsVariable extends CountingVariable {
 		return 4;
 	}
 
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#isTotalEnabled()
+	 */
+	@Override
+	public boolean isTotalEnabled() {
+		return false;
+	}
 }

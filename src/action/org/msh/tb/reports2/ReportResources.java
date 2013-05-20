@@ -18,6 +18,7 @@ import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.reports2.variables.AdminUnitVariable;
 import org.msh.tb.reports2.variables.AgeRangeVariable;
 import org.msh.tb.reports2.variables.CaseItemDateVariable;
+import org.msh.tb.reports2.variables.ComorbiditiesVariable;
 import org.msh.tb.reports2.variables.CountingExamsVariable;
 import org.msh.tb.reports2.variables.CountingVariable;
 import org.msh.tb.reports2.variables.DateFieldVariable;
@@ -53,7 +54,8 @@ public class ReportResources {
 		addMicroscopyExamVariables();
 		addDstExamVariables();
 		addHivExamVariables();
-		addXRayExams();
+		addXRayVariables();
+		addTreatmentVariables();
 		addPrevTreatmentVariables();
 //		addMedExaminationVariables();
 		addOtherVariables();
@@ -71,7 +73,6 @@ public class ReportResources {
 		add(grp, new EnumFieldVariable("nat", "Nationality", "tbcase.nationality", Nationality.class, "#{globalLists.nationalities}"));
 		add(grp, new EnumFieldVariable("classif", "CaseClassification", "tbcase.classification", CaseClassification.class));
 		add(grp, new EnumFieldVariable("state", "CaseState", "tbcase.state", CaseState.class, "#{globalLists.caseStates}"));
-		add(grp, new TreatOutcomeVariable());
 		add(grp, new SuspectConfirmedVariable());
 		add(grp, new EnumFieldVariable("val", "ValidationState", "tbcase.validationState", ValidationState.class));
 		add(grp, new EnumFieldVariable("res", "DrugResistanceType", "tbcase.drugresistancetype", DrugResistanceType.class));
@@ -82,13 +83,26 @@ public class ReportResources {
 		add(grp, new DateFieldVariable("regdate", "TbCase.registrationDate", "tbcase.registrationDate", true));
 		add(grp, new DateFieldVariable("diagdate", "TbCase.diagnosisDate", "tbcase.diagnosisDate", true));
 		add(grp, new DateFieldVariable("outdate", "TbCase.outcomeDate", "tbcase.outcomeDate", true));
+		add(grp, new TreatOutcomeVariable());
 		add(grp, new AgeRangeVariable());
 		add(grp, new AdminUnitVariable("notifaddr", "Address", "tbcase.notif_adminunit_id"));
+		add(grp, new SideEffectVariable("sideeffect"));
+		add(grp, new ComorbiditiesVariable());
+		return grp;
+	}
+
+	/**
+	 * Add variables of the treatment section
+	 * @return instance of {@link ReportGroup} containing the variables of the case data section
+	 */
+	protected ReportGroup addTreatmentVariables() {
+		ReportGroup grp = addGroup("cases.details.treatment");
+		add(grp, new DateFieldVariable("initreat", "TbCase.iniTreatmentDate", "tbcase.initreatmentdate", true));
+		add(grp, new DateFieldVariable("endtreat", "TbCase.endTreatmentDate", "tbcase.endtreatmentdate", true));
 		add(grp, new MonthOfTreatVariable());
 		add(grp, new RegimenVariable());
 		add(grp, new RegimenTypeVariable());
 		add(grp, new PrescMedicineVariable());
-		add(grp, new SideEffectVariable("sideeffect"));
 		return grp;
 	}
 	
@@ -149,7 +163,7 @@ public class ReportResources {
 	 * Add variables of x-ray tests
 	 * @return instance of the {@link ReportGroup} variable containing the group of variables
 	 */
-	protected ReportGroup addXRayExams() {
+	protected ReportGroup addXRayVariables() {
 		ReportGroup grp = addGroup("cases.examxray");
 		return grp;
 	}
