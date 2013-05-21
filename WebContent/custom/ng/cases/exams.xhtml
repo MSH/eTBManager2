@@ -319,7 +319,7 @@
 	<div class="spacer" />
 	<h:panelGroup id="pnlXRay">	
 	
-			<s:link view="/cases/edtexamxray.xhtml" style="float:right;">
+			<s:link view="/cases/edtexamxray.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" >
 				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 				<span>#{messages['cases.details.newresult']}</span>

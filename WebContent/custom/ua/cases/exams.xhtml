@@ -317,7 +317,7 @@
 	<div class="spacer" />
 
 		<s:link view="/custom/ua/cases/edtexamxray.xhtml" onclick="disableButton(this)" 
-			style="float:right;" rendered="#{caseHome.canEditExams}" propagation="none" styleClass="button-alt">
+			style="float:right;" rendered="#{caseHome.canEditExams}" propagation="none" styleClass="button-alt" rendered="#{caseHome.canEditExams}" >
 			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>

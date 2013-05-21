@@ -386,7 +386,7 @@
 
 	<h:panelGroup id="pnlXRay">	
 		<s:link view="/cases/edtexamxray.xhtml" style="float:right;" 
-			styleClass="button-alt" onclick="disableButton(this)">
+			styleClass="button-alt" onclick="disableButton(this)" rendered="#{caseHome.canEditExams}" >
 			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>
