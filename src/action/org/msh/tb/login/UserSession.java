@@ -660,6 +660,7 @@ public class UserSession {
 		.setParameter("val", true)
 		.setParameter("id", user.getId())
 		.executeUpdate();
+		getEntityManager().flush();
 		return "ulaaccepted";
 	}
 }
