@@ -153,6 +153,83 @@
 </a:jsFunction>
 
 	<div class="spacer" />
+	
+	<s:fragment rendered="#{caseHome.genexpertEnabled}">
+	<div class="spacer" />
+
+	<h:panelGroup id="pnlgenexpert">
+	<s:link view="/cases/edtexamgenexpert.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" 
+		styleClass="button-alt" onclick="disableButton(this)">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h2>#{messages['cases.examxpert']}</h2>
+		<s:div styleClass="region3" rendered="#{empty examXpertHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
+		<h:dataTable value="#{examXpertHome.allResults}" var="r" rendered="#{not empty examXpertHome.allResults}" width="100%" 
+			styleClass="table1" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
+				</f:facet>
+				<s:link view="/cases/edtexamgenexpert.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
+					<f:param name="id" value="#{tbcase.id}"/>
+					<f:param name="examid" value="#{r.id}"/>
+					<h:outputFormat value="#{messages[r.monthDisplay]}" >
+						<f:param value="#{r.monthTreatment}"/>
+					</h:outputFormat>
+				</s:link>
+				<div style="margin-left:20px;display:block;">
+				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
+				<br/>
+				<h:outputText value="#{r.sampleNumber}" title="#{messages['PatientSample.sampleNumber']}" />
+				</div>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['Laboratory']}" styleClass="collh"/>
+				</f:facet>
+				<h:outputText value="#{r.laboratory.abbrevName}" title="#{r.laboratory.name}" />
+				<br/>
+				#{r.laboratory.adminUnit.name}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
+				</f:facet>
+				#{messages[r.result.key]}
+				<div>
+					<h:outputText value="#{messages[r.rifResult.key]}" rendered="#{r.result=='TB_DETECTED'}" />
+				</div>
+			</h:column>
+				
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
+				</f:facet>
+				<h:outputText value="#{r.comments}" converter="rmemoria.TextConverter" escape="false" styleClass="text"/>
+			</h:column>
+
+			<h:column rendered="#{caseHome.canEditExams}">
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamGenexpert(#{r.id});return false;" style="font-size:9px;">
+				</h:commandLink>
+			</h:column>			
+		</h:dataTable>
+	</h:panelGroup>
+
+	<a:jsFunction name="remExamGenexpert" action="#{examXpertHome.remove}" reRender="pnlgenexpert" ajaxSingle="true" rendered="#{caseHome.canEditExams}">
+		<a:actionparam name="param1" assignTo="#{examXpertHome.id}" converter="javax.faces.Integer"/>
+	</a:jsFunction>
+	</s:fragment>
+	
+
+	<div class="spacer" />
+	
+	
 	<h:panelGroup id="pnlculture">	
 	
 			<s:link view="/custom/kh/cases/edtexamculture.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
@@ -317,12 +394,13 @@
 	<div class="spacer" />
 	<h:panelGroup id="pnlXRay">	
 	
-			<s:link view="/cases/edtexamxray.xhtml" style="float:right;">
-				<f:param name="id" value="#{tbcase.id}"/>
-				<f:param name="examid" value="#{null}"/>
-				<span>#{messages['cases.details.newresult']}</span>
-			</s:link>
-			<h2>#{messages['cases.examxray']}</h2>
+		<s:link view="/cases/edtexamxray.xhtml" style="float:right;" 
+			styleClass="button-alt" onclick="disableButton(this)">
+			<f:param name="id" value="#{tbcase.id}"/>
+			<f:param name="examid" value="#{null}"/>
+			<span>#{messages['cases.details.newresult']}</span>
+		</s:link>
+		<h2>#{messages['cases.examxray']}</h2>
 		
 		
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examXRayHome.allResults}" />

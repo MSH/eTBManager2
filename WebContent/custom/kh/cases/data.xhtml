@@ -134,11 +134,23 @@
 	</s:decorate>
 
 	</td></tr>
-	<tr><td>
-	<s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
-    	<h:outputText id="dt" value="#{tbcase.diagnosisDate}" converter="localeDateConverter"/>
-	</s:decorate>
+	<tr>
+	<td>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.registrationDate}">
+	   		<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
+	   		<h:outputText id="dt" value="#{tbcase.registrationDate}" converter="localeDateConverter"/>
+		</s:decorate>
+	</td>	
+	
+	<td>
+	<s:fragment rendered="#{not empty tbcase.diagnosisDate}">
+		<td>
+			<s:decorate template="/layout/display.xhtml">
+	    		<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
+	    		<h:outputText id="dt" value="#{tbcase.diagnosisDate}" converter="localeDateConverter"/>
+			</s:decorate>
+		</td>
+	</s:fragment>
 	
 	</td><td>
 	
