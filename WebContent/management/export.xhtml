@@ -45,18 +45,51 @@
 	
 	<s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['ExportContent']}:</ui:define>
-		<h:selectOneRadio value="#{caseExportHome.exportContent}" layout="pageDirection" >
-			<s:selectItems value="#{caseExportHome.contents}" var="it" label="#{messages[it.key]}" />
-		</h:selectOneRadio>
+		<table>
+			<tr>
+				<td>
+					<h:selectBooleanCheckbox value="#{caseDataExport.exportExamHiv}" />
+					<h:outputText value="#{messages['cases.examhiv']}" />
+				</td>
+				<td>
+					<h:selectBooleanCheckbox value="#{caseDataExport.exportExamMicroscopy}" />
+					<h:outputText value="#{messages['cases.exammicroscopy']}" />				
+				</td>
+				<td>
+					<h:selectBooleanCheckbox value="#{caseDataExport.exportExamCulture}" />
+					<h:outputText value="#{messages['cases.examculture']}" />				
+				</td>
+				<td>
+					<h:selectBooleanCheckbox value="#{caseDataExport.exportExamDST}" />
+					<h:outputText value="#{messages['cases.examdst']}" />				
+				</td>											
+			</tr>
+			<tr>
+				<td>
+					<h:selectBooleanCheckbox value="#{caseDataExport.exportExamXRay}" />
+					<h:outputText value="#{messages['cases.examxray']}" />				
+				</td>
+				<td>
+					<h:selectBooleanCheckbox value="#{caseDataExport.exportCasesComorbidity}" />
+					<h:outputText value="#{messages['cases.comorbidities']}" />				
+				</td>
+				<td>
+					<h:selectBooleanCheckbox value="#{caseDataExport.exportCaseSideEffect}" />
+					<h:outputText value="#{messages['cases.sideeffects.desc']}" />				
+				</td>												
+			</tr>			
+		</table>
 	</s:decorate>
 
 </td></tr></table>
 </div>
 
 <div class="form-footer">
-	<h:commandLink action="#{caseExportHome.download}" styleClass="button" >
+	<div id="divexportbutton">
+	<h:commandLink action="#{caseExportHome.download}" styleClass="button" onclick="if (!disableButton(jQuery('#divexportbutton a'))) return false;">
 		<span>#{messages['global.export']}</span>
 	</h:commandLink>
+	</div>
 </div>
 </h:form>
 

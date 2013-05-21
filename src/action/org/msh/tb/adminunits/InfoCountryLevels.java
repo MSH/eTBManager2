@@ -130,4 +130,12 @@ public class InfoCountryLevels {
 	public boolean isHasLevel5() {
 		return (maxLevel >= 5);
 	}
+	
+	/**
+	 * Check if workspace has the level passed as a parameter of the country structure
+	 * @return true if so, false if the country structure doesn't have this level
+	 */
+	public boolean isHasLevel(int level) {
+		return (maxLevel >= level);
+	}
 }

@@ -285,7 +285,32 @@ public class ExcelCreator {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
+	public void addValue(Object[] objs, int position) {
+		try {
+			Object value = objs[position];
+			addValue(value);
+		} catch (NestedNullException e) {
+			addValue(null);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public void addValue(Object[] objs, int position, String property) {
+		try {
+			Object value = PropertyUtils.getProperty(objs[position], property);
+			addValue(value);
+		} catch (NestedNullException e) {
+			addValue(null);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
 	
 	/**
 	 * Add value to the current cell. The value is interpreted according to its right type
