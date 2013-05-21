@@ -131,7 +131,7 @@
 	</tr><tr>
 	
 	<td>
-	<s:decorate template="/layout/display.xhtml">
+	<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcaseng.emailAddress}">
 		<ui:define name="label">#{messages['TbCase.emailAddress']}:</ui:define>
 		<h:outputText value="#{tbcaseng.emailAddress}" />
 	</s:decorate>	
