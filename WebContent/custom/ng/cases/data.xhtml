@@ -106,7 +106,8 @@
     		<h:outputText value="#{tbcase.currentAddress.zipCode}" maxlength="20" />
     	</s:decorate>
 	</td></tr>
-	
+	</s:fragment>
+		
 	<tr>
 	<s:fragment rendered="#{not empty tbcase.phoneNumber}">
 	<td>
@@ -137,12 +138,11 @@
 	</td>
 	
 	</tr>
-	</s:fragment>
 	</table>
 	</div>
 	
 	
- 		<div class="form-content">            
+ 	<div class="form-content">            
 		 <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<h2>#{messages['cases.generaldata']}</h2>
 	</s:decorate>
@@ -169,47 +169,63 @@
 		</s:decorate>
 	</td>
 	</tr>
-	
+
 	<tr>
-	<s:fragment rendered="#{not empty tbcase.diagnosisDate}">
+	<td>
+	    <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcaseng.tbRegistrationNumber}">
+    		<ui:define name="label">#{messages['TbCase.LGATBL']}:</ui:define>
+			<h:outputText value="#{tbcaseng.tbRegistrationNumber}" />
+		</s:decorate>
+	</td>
+	</tr><tr>
+	<s:fragment rendered="#{not empty tbcase.diagnosisType}">
 		<td>
 			<s:decorate template="/layout/display.xhtml">
-	    		<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
-	    		<h:outputText id="dt" value="#{tbcase.diagnosisDate}" converter="localeDateConverter"/>
+				<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
+				#{messages[tbcase.diagnosisType.key]}
 			</s:decorate>
 		</td>
 	</s:fragment>
 	
 	<td>
-	<s:decorate template="/layout/display.xhtml">
-		<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
-		#{messages[tbcase.diagnosisType.key]}
-	</s:decorate>
-	</td></tr>
-	<tr><td>
-	    <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcaseng.tbRegistrationNumber}">
-    		<!--<ui:define name="label">#{messages['TbCase.TBRegistrationNumber']}:</ui:define>-->
-    		<ui:define name="label">#{messages['TbCase.LGATBL']}:</ui:define>
-			<h:outputText value="#{tbcaseng.tbRegistrationNumber}" />
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.diagnosisDate}">
+	   		<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
+	   		<h:outputText id="dt" value="#{tbcase.diagnosisDate}" converter="localeDateConverter"/>
 		</s:decorate>
-	</td></tr>
-	
-	<tr><td>
+	</td>
+	</tr><tr>
+	<td>
 	<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcaseng.suspectType}">
 		<ui:define name="label">#{messages['TbCase.SuspectType']}:</ui:define>
 		#{messages[tbcaseng.suspectType.toString()]}
 	</s:decorate>
-	</td></tr>
-	
-	
-<!-- 	<tr><td>
-	<s:decorate template="/layout/display.xhtml">
-		<ui:define name="label">#{messages['TbCase.LGATBL']}:</ui:define>
-		<h:outputText value="#{tbcaseng.tbRegistrationNumber}" />
-	</s:decorate>
-	</td></tr> -->
-	
-	<tr>
+	</td>
+	</tr><tr>
+	<td>
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.patientType!=null}">
+    		<ui:define name="label">#{messages['PatientType']}:</ui:define>
+    		#{messages[tbcase.patientType.key]}
+		</s:decorate>
+	</td>
+	</tr><tr>
+	<td>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.infectionSite}">
+    		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
+    		#{messages[tbcase.infectionSite.key]}
+		</s:decorate>
+
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.extrapulmonaryType!=null}">
+    		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
+    		#{tbcase.extrapulmonaryType} <h:outputText value="/ #{tbcase.extrapulmonaryType2}" />
+		</s:decorate>
+
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.pulmonaryType!=null}">
+    		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
+    		#{tbcase.pulmonaryType}
+		</s:decorate>
+
+	</td>
+	</tr><tr>
 	<td>
 	<s:decorate id="dt" template="/layout/display.xhtml" rendered="#{not empty tbcase.treatmentPeriod.iniDate}">
     	<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
@@ -223,26 +239,6 @@
 			#{messages[tbcase.drugResistanceType.key]}
 		</s:decorate>
 		
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.infectionSite}">
-    		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
-    		#{messages[tbcase.infectionSite.key]}
-		</s:decorate>
-
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.pulmonaryType!=null}">
-    		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
-    		#{tbcase.pulmonaryType}
-		</s:decorate>
-
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.extrapulmonaryType!=null}">
-    		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
-    		#{tbcase.extrapulmonaryType} <h:outputText value="/ #{tbcase.extrapulmonaryType2}" />
-		</s:decorate>
-
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.patientType!=null}">
-    		<ui:define name="label">#{messages['PatientType']}:</ui:define>
-    		#{messages[tbcase.patientType.key]}
-		</s:decorate>
-
 		<s:fragment rendered="#{not empty prevTBTreatmentHome.treatments}">
 		<h2>#{messages['cases.prevtreat']}</h2>
 		<table width="100%" class="table1">

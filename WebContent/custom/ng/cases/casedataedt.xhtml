@@ -82,13 +82,6 @@
     	</s:decorate>   	
     </td></tr>  
     
-    <!-- <tr><td colspan="2">
-    	<s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['Address.landmark']}:</ui:define>
-    		<h:inputText value="#{tbcase.notifAddress.complement}" style="width:500px" maxlength="100"/>
-    	</s:decorate>
-    </td></tr> -->
-
 	<tr><td>
 		<s:decorate template="/layout/auselection.xhtml">
 			<ui:param name="auselection" value="#{caseEditingHome.notifAdminUnit}" />
@@ -105,8 +98,8 @@
 
     <tr><td colspan="2">
     	<s:decorate template="/layout/edit.xhtml">
-    		<ui:param name="labelstyle" value="width:400px;" />
-    		<ui:define name="label">#{messages['TbCase.notifAddressChanged']}:</ui:define>
+    		<ui:param name="labelstyle" value="width:600px;" />
+    		<ui:define name="label">#{messages['TbCase.notifAddressChanged']}</ui:define>
     		<h:selectOneMenu id="addrChanged" value="#{tbcase.notifAddressChanged}" >
     			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
     			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
