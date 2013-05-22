@@ -1,6 +1,6 @@
 package org.msh.tb.client.reports.filters;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import org.msh.tb.client.commons.StandardCallback;
 import org.msh.tb.client.reports.MainPage;
@@ -19,9 +19,9 @@ public class RemoteOptionsFilter extends OptionsFilter{
 		super.initialize(filter);
 
 		ReportServiceAsync srv = MainPage.instance().getService();
-		srv.getFilterOptions(filter.getId(), null, new StandardCallback<List<CItem>>() {
+		srv.getFilterOptions(filter.getId(), null, new StandardCallback<ArrayList<CItem>>() {
 			@Override
-			public void onSuccess(List<CItem> result) {
+			public void onSuccess(ArrayList<CItem> result) {
 				if (result != null)
 					fillOptions(result);
 			}

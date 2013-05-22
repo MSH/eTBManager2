@@ -11,10 +11,18 @@ import java.util.Map;
 import org.msh.reports.ReportConfiguration;
 import org.msh.reports.datatable.impl.DataTableImpl;
 
+/**
+ * Handle execution of SQL instructions using JDBC
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 public class SQLQuery {
 
 	private Map<String, Object> parameters = new HashMap<String, Object>();
 	private Map<Integer, Object> parsedParameters = new HashMap<Integer, Object>();
+	private Integer maxResults;
+	private Integer iniResult;
 	
 	/**
 	 * Execute the query and return an instance of the {@link DataTableImpl} with its content
@@ -29,6 +37,7 @@ public class SQLQuery {
 			Connection conn = ReportConfiguration.instance().getConnection();
 
 			String parsedSql = parseParameters(sql);
+			parsedSql = applyPagination(parsedSql);
 			System.out.println(parsedSql);
 			PreparedStatement smt = conn.prepareStatement(parsedSql);
 			fillParameters(smt);
@@ -43,6 +52,20 @@ public class SQLQuery {
 	}
 
 	
+	/**
+	 * Apply pagination in the query result
+	 * @param sql instruction to implement pagination
+	 * @return the same SQL instruction with the MySQL pagination instruction implemented
+	 */
+	private String applyPagination(String sql) {
+		if (maxResults == null)
+			return sql;
+
+		sql += " limit " + (iniResult != null? iniResult.toString() + ",": "") + maxResults.toString();
+		return sql;
+	}
+
+
 	/**
 	 * Fill the parameters of the query
 	 * @param smt
@@ -177,5 +200,37 @@ public class SQLQuery {
 	 */
 	protected Object resolveName(String name) {
 		return ReportConfiguration.instance().resolveName(name);
+	}
+
+
+	/**
+	 * @return the maxResults
+	 */
+	public Integer getMaxResults() {
+		return maxResults;
+	}
+
+
+	/**
+	 * @param maxResults the maxResults to set
+	 */
+	public void setMaxResults(Integer maxResults) {
+		this.maxResults = maxResults;
+	}
+
+
+	/**
+	 * @return the iniResult
+	 */
+	public Integer getIniResult() {
+		return iniResult;
+	}
+
+
+	/**
+	 * @param iniResult the iniResult to set
+	 */
+	public void setIniResult(Integer iniResult) {
+		this.iniResult = iniResult;
 	}
 }

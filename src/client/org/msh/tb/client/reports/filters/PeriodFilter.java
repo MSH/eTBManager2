@@ -1,5 +1,6 @@
 package org.msh.tb.client.reports.filters;
 
+import org.msh.tb.client.reports.MainPage;
 import org.msh.tb.client.shared.model.CFilter;
 
 import com.google.gwt.i18n.client.LocaleInfo;
@@ -22,7 +23,7 @@ public class PeriodFilter extends FilterWidget {
 		iniYear = createYearListbox();
 		panel.add(iniYear);
 
-		panel.add(new Label("até"));
+		panel.add(new Label(MainPage.getMessages().until()));
 		
 		endMonth = createMonthListbox();
 		panel.add(endMonth);

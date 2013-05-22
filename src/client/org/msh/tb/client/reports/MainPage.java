@@ -38,6 +38,12 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * Display the main content of the report page
+ *  
+ * @author Ricardo Memoria
+ *
+ */
 public class MainPage extends Composite implements StandardEventHandler {
 
 	private static final Binder binder = GWT.create(Binder.class);
@@ -59,6 +65,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 	private GroupVariablesPopup varsPopup;
 	private CReportUI reportUI;
 	private ChartPopup chartPopup;
+	private PatientListPopup patientListPopup;
 	// selected column and row to draw the chart
 	private int selectedCell;
 	private boolean rowSelected;
@@ -210,13 +217,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 
 		// mount list of filters
 		HashMap<String, String> filters = new HashMap<String, String>();
-		for (int i = 0; i < pnlFilters.getWidgetCount(); i++) {
-			FilterPanel pnl = (FilterPanel)pnlFilters.getWidget(i);
-			String val = pnl.getFilterValue();
-			if (val != null) {
-				filters.put(pnl.getFilter().getId(), val);
-			}
-		}
+		mountFilterValues(filters);
 
 		// just send something if any filter was set
 		if (filters.size() > 0)
@@ -225,6 +226,22 @@ public class MainPage extends Composite implements StandardEventHandler {
 		return data;
 	}
 	
+	
+	/**
+	 * Get the values of each filter on the page and put them in a map with
+	 * its filter id and value
+	 * @param filters the instance of the {@link HashMap} class that will receive 
+	 * the filter values
+	 */
+	protected void mountFilterValues(HashMap<String, String> filters) {
+		for (int i = 0; i < pnlFilters.getWidgetCount(); i++) {
+			FilterPanel pnl = (FilterPanel)pnlFilters.getWidget(i);
+			String val = pnl.getFilterValue();
+			if (val != null) {
+				filters.put(pnl.getFilter().getId(), val);
+			}
+		}
+	}
 	
 	/**
 	 * Return the list of variables declared in the panel
@@ -404,6 +421,50 @@ public class MainPage extends Composite implements StandardEventHandler {
 		});
 	}
 
+	
+	/**
+	 * Show popup window with the list of patients of the clicked cell
+	 * @param c
+	 * @param r
+	 */
+	public void showPatientList(int c, int r) {
+		HashMap<String, String> filters = new HashMap<String, String>();
+		
+		mountFilterValues(filters);
+
+		// get variables from the row
+		int index = r;
+		int level = tableData.getTable().getRows().get(r).getLevel();
+
+		// get key values from rows
+		while (index >= 0) {
+			CTableRow row = tableData.getTable().getRows().get(index);
+			if (row.getLevel() == level) {
+				CVariable var = tableData.getRowVariables().get(row.getVarIndex());
+				filters.put(var.getId(), row.getKey());
+				level--;
+				if (level == -1)
+					break;
+			}
+			index--;
+		}
+		
+		// get key values from columns
+		CTableColumn col = tableData.getHeaderColumns().get(c);
+		while (col != null) {
+			CVariable var = tableData.getColVariables().get(col.getLevel());
+			filters.put(var.getId(), col.getKey());
+			col = col.getParent();
+		}
+
+		// create popup if not available
+		if (patientListPopup == null) {
+			patientListPopup = new PatientListPopup();
+		}
+
+		// show popup window
+		patientListPopup.showPatients(filters);
+	}
 
 	/**
 	 * Add initial variables to the report

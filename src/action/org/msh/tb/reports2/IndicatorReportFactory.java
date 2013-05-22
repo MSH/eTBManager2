@@ -56,6 +56,7 @@ public class IndicatorReportFactory implements ReportResourceProvider {
 		rep.addRestriction("patient.workspace_id = " + ws.getId());
 		return rep;
 	}
+	
 
 	/* (non-Javadoc)
 	 * @see org.msh.reports.ReportResourceProvider#getConnection()

@@ -1,6 +1,7 @@
 package org.msh.tb.reports2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.jboss.seam.Component;
@@ -8,14 +9,18 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.remoting.WebRemote;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.IndicatorReport;
+import org.msh.reports.datatable.Row;
 import org.msh.reports.datatable.impl.DataTableImpl;
 import org.msh.reports.filters.Filter;
 import org.msh.reports.filters.FilterOption;
 import org.msh.reports.indicator.DataTableIndicator;
+import org.msh.reports.query.DataTableQuery;
 import org.msh.tb.client.shared.ReportService;
 import org.msh.tb.client.shared.model.CFilter;
 import org.msh.tb.client.shared.model.CGroup;
 import org.msh.tb.client.shared.model.CItem;
+import org.msh.tb.client.shared.model.CPatient;
+import org.msh.tb.client.shared.model.CPatientList;
 import org.msh.tb.client.shared.model.CReportData;
 import org.msh.tb.client.shared.model.CReportUI;
 import org.msh.tb.client.shared.model.CTable;
@@ -102,6 +107,7 @@ public class ReportServiceImpl implements ReportService {
 		return rep;
 	}
 
+
 	/* (non-Javadoc)
 	 * @see org.msh.tb.client.shared.ReportService#executeReport(org.msh.tb.client.shared.model.CReportData)
 	 */
@@ -112,8 +118,6 @@ public class ReportServiceImpl implements ReportService {
 		if ((reportData == null) || (reportData.getColVariables() == null) || (reportData.getRowVariables() == null) ||
 			(reportData.getColVariables().size() == 0) || (reportData.getRowVariables().size() == 0))
 			return null;
-
-//		int numFixedRows = reportData.getColVariables().size();
 
 		// create indicator report
 		ReportResources res = getReportResources();
@@ -260,17 +264,78 @@ public class ReportServiceImpl implements ReportService {
 		return lst;
 	}
 
+
 	/* (non-Javadoc)
 	 * @see org.msh.tb.client.shared.ReportService#getFilterOptions(java.lang.String, java.lang.String)
 	 */
 	@Override
 	@WebRemote
-	public List<CItem> getFilterOptions(String filterid, String param) {
+	public ArrayList<CItem> getFilterOptions(String filterid, String param) {
 		ReportResources res = getReportResources();
 		VariableImpl filter = res.findVariableById(filterid);
 		if (filter == null)
 			return null;
 
 		return generateFilterOptions(filter, param);
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.client.shared.ReportService#getPatients(java.util.HashMap, java.util.HashMap, java.util.HashMap, int)
+	 */
+	@Override
+	@WebRemote
+	public CPatientList getPatients(HashMap<String, String> filters, int page) {
+
+		IndicatorReport rep = IndicatorReportFactory.instance().createCaseIndicator();
+		ReportResources res = getReportResources();
+
+		int pageSize = 30;
+
+		// set filter values
+		if (filters != null) {
+			for (String id: filters.keySet()) {
+				VariableImpl var = res.findVariableById(id);
+				if (var != null) {
+					String value = filters.get(id);
+					rep.addFilter((Filter)var, var.filterValueFromString( value ));
+				}
+			}
+		}
+
+		DataTableQuery tbl = rep.getDetailedReport("tbcase.id, patient.patient_name, patient.middlename, " +
+				"patient.lastname, patient.gender, patient.recordnumber, tbcase.casenumber, tbcase.registrationCode",
+				"patient_name", page, pageSize);
+
+		ArrayList<CPatient> pacs = new ArrayList<CPatient>();
+		for (Row row: tbl.getRows()) {
+			Integer id = (Integer)row.getValue(0);
+			String name = (String)row.getValue(1);
+			String middlename = (String)row.getValue(2);
+			String lastname = (String)row.getValue(3);
+			Integer gender = (Integer)row.getValue(4);
+			Integer recnumber = (Integer)row.getValue(5);
+			Integer casenumber = (Integer)row.getValue(6);
+			String regcode = (String)row.getValue(7);
+			
+			CPatient pac= new CPatient();
+			pac.setId(id);
+			if ((middlename != null) && (!lastname.trim().isEmpty()))
+				name += " " + middlename;
+			if ((lastname != null) && (!lastname.trim().isEmpty()))
+				name += " " + lastname;
+			
+			pac.setName(name);
+			if ((recnumber != null) && (casenumber != null))
+				pac.setNumber(Integer.toString(recnumber) + "-" + Integer.toString(casenumber));
+			pac.setGender(gender);
+			pacs.add(pac);
+		}
+		
+		CPatientList lst = new CPatientList();
+		lst.setItems(pacs);
+		lst.setRecordCount(rep.getRecordCount());
+		
+		return lst;
 	}
 }

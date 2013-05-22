@@ -30,4 +30,5 @@ public interface DataTableQuery extends DataTable {
 	 * @return
 	 */
 	List<RowQuery> getQueryRows();
+
 }

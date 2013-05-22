@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.jboss.seam.core.Expressions;
 import org.jboss.seam.international.Messages;
+import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.enums.MessageKey;
 import org.msh.tb.reports2.VariableImpl;
 
@@ -44,11 +46,22 @@ public class EnumFieldVariable extends VariableImpl {
 		if (key == null)
 			return Messages.instance().get("global.notdef");
 
-		if (key instanceof Enum) {
-			String msgkey = key.getClass().getSimpleName() + "." + key.toString();
-			return Messages.instance().get(msgkey);
+		Enum val = null;
+		Enum[] options = getEnumClass().getEnumConstants();
+
+		if (key instanceof Number) {
+			int index = ((Number)key).intValue();
+			val = options[index];
 		}
-		else return key.toString();
+		else if (key instanceof Enum) {
+			val = (Enum)key;
+		}
+
+		if (val == null)
+			return key.toString();
+
+		String msgkey = val.getClass().getSimpleName() + "." + val.toString();
+		return Messages.instance().get(msgkey);
 	}
 
 
@@ -60,6 +73,11 @@ public class EnumFieldVariable extends VariableImpl {
 		if (value == null)
 			return null;
 
+		if (value instanceof Number)
+			return ((Number)value).intValue();
+		
+		return super.createKey(value);
+/*		
 		Enum[] names = enumClass.getEnumConstants();
 
 		int index;
@@ -71,7 +89,7 @@ public class EnumFieldVariable extends VariableImpl {
 			return null;
 		
 		return names[index];
-	}
+*/	}
 	
 	/**
 	 * Return the list of enumeration values available
@@ -162,6 +180,20 @@ public class EnumFieldVariable extends VariableImpl {
 		int val = Integer.parseInt(value);
 		
 		return enumClass.getEnumConstants()[val];
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
+	 */
+	@Override
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+		if (value instanceof String)
+			value = filterValueFromString((String)value);
+		if (value instanceof Enum)
+			value = ((Enum)value).ordinal();
+
+		super.prepareFilterQuery(def, oper, value);
 	}
 
 	/* (non-Javadoc)

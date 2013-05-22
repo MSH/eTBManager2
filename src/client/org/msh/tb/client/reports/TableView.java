@@ -204,6 +204,19 @@ public class TableView extends Composite {
 	 * @param rowIndex
 	 */
 	protected void tableCellClick(int col, int row) {
+		int colheadersize = data.getColHeaderSize();
+		// is a total cell
+		int rowcount = data.getTable().getRows().size();
+		int colcount = data.getHeaderColumns().size();
+		if ((row - colheadersize > rowcount) || (col > colcount)) {
+			return;
+		}
+
+		// is cell containing value
+		if ((row > colheadersize) && (col > 0)) {
+			MainPage.instance().showPatientList(col - 1, row - colheadersize - 1);
+		}
+		
 		// row title selection is just available if data is not grouped
 		if ((!data.isRowGrouped()) && (!data.isColumnGrouped())) {
 			// clicked on the row variable title ?
@@ -219,7 +232,6 @@ public class TableView extends Composite {
 			}
 		}
 
-		int colheadersize = data.getColHeaderSize();
 		// row selected ?
 		if (row == colheadersize)
 			MainPage.instance().setSelectedCol(col);
@@ -228,4 +240,49 @@ public class TableView extends Composite {
 					MainPage.instance().setSelectedRow(row - colheadersize - 1);
 	}
 
+
+	/**
+	 * Called when the user clicks on a cell value
+	 * @param col
+	 * @param row
+	 */
+/*	private void cellValueClick(int c, int r) {
+		HashMap<String, String> rowvars = new HashMap<String, String>();
+		HashMap<String, String> colvars = new HashMap<String, String>();
+
+		// get variables from the row
+		int index = r;
+		int level = data.getTable().getRows().get(r).getLevel();
+
+		// get key values from rows
+		while (index >= 0) {
+			CTableRow row = data.getTable().getRows().get(index);
+			if (row.getLevel() == level) {
+				CVariable var = data.getRowVariables().get(row.getVarIndex());
+				rowvars.put(var.getId(), row.getKey());
+				level--;
+				if (level == -1)
+					break;
+			}
+			index--;
+		}
+		
+		// get key values from columns
+		CTableColumn col = data.getHeaderColumns().get(c);
+		while (col != null) {
+			CVariable var = data.getColVariables().get(col.getLevel());
+			colvars.put(var.getId(), col.getKey());
+			col = col.getParent();
+		}
+		
+		String srow = "";
+		for (String key: rowvars.keySet())
+			srow += " (" + key + ", " + rowvars.get(key) + ")";
+		
+		String scol = "";
+		for (String key: colvars.keySet())
+			scol += " (" + key + ", " + colvars.get(key) + ")";
+		Window.alert(scol + " ... " + srow);
+	}
+*/
 }

@@ -11,6 +11,7 @@ import org.msh.reports.filters.Filter;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.indicator.DataTableIndicator;
 import org.msh.reports.indicator.DataTableIndicatorImpl;
+import org.msh.reports.query.DataTableQuery;
 import org.msh.reports.query.SQLQuery;
 import org.msh.reports.query.SqlBuilder;
 import org.msh.reports.query.TableJoin;
@@ -38,6 +39,11 @@ public class IndicatorReport {
 	// new size after conversion
 	private int rowsize;
 	private int colsize;
+	
+	/**
+	 * Number of records contained in the detailed report
+	 */
+	private Long recordCount;
 
 
 	/**
@@ -64,7 +70,40 @@ public class IndicatorReport {
 
 		rowsize = 1;
 	}
-	
+
+
+	/**
+	 * Return an instance of the {@link DataTableQuery} containing detailed list of cases
+	 * @param fields is a list of comma separated fields to be returned
+	 * @return instance of {@link DataTableQuery}
+	 */
+	public DataTableQuery getDetailedReport(String fields, String orderBy, int inipage, int recordsPerPage) {
+		SqlBuilder builder = getSqlBuilder();
+
+
+		for (Filter filter: filters.keySet()) {
+			FilterValue fvalue = filters.get(filter);
+			filter.prepareFilterQuery(builder, fvalue.getComparator(), fvalue.getValue());
+		}
+
+		// prepare to get counting
+		builder.getVariables().clear();
+		builder.setDetailed(false);
+
+		// calculate record count
+		DataTableQuery dt = createDataTableFromQuery(builder, null, null);
+		recordCount = (Long)dt.getValue(0, 0);
+		
+		// prepare to generate detailed report
+		builder.setDetailed(true);
+		for (String fld: fields.split(",")) {
+			builder.addField(fld);
+		}
+
+		builder.setOrderBy(orderBy);
+		
+		return createDataTableFromQuery(builder, inipage * recordsPerPage, recordsPerPage);
+	}
 	
 	/**
 	 * Load data from the data base
@@ -115,7 +154,7 @@ public class IndicatorReport {
 
 			// is the last item?
 			if (varindex == sqlBuilder.getVariables().size() - 1) {
-				DataTable tbl = createDataTableFromQuery(sqlBuilder);
+				DataTable tbl = createDataTableFromQuery(sqlBuilder, null, null);
 				ConcatTables.insertRows(target, tbl);
 			}
 			else runVariableIteration(target, sqlBuilder, varindex + 1);
@@ -130,20 +169,23 @@ public class IndicatorReport {
 	 * called to all variables
 	 * 
 	 * @param builder the SQL builder that contains the variables and filters
-	 * @param var the variable to run the specific iteration
-	 * @param iteration
-	 * @return
+	 * @param iniResult the initial record to be returned, or null if the first record must be returned
+	 * @param maxResults the maximum number of records to be returned, or null if all records should be returned
+	 * @return instance of the {@link DataTableQuery} containing the result of the SQL executed in the server
 	 */
-	protected DataTable createDataTableFromQuery(SqlBuilder builder) {
-		String sql = sqlBuilder.createSql();
+	protected DataTableQuery createDataTableFromQuery(SqlBuilder builder, Integer iniResult, Integer maxResults) {
+		String sql = builder.createSql();
 
 		// load data
 		SQLQuery qry = new SQLQuery();
-		
+
 		// include parameter values
 		for (String paramname: sqlBuilder.getParameters().keySet())
 			qry.setParameter(paramname, sqlBuilder.getParameters().get(paramname));
 
+		qry.setIniResult(iniResult);
+		qry.setMaxResults(maxResults);
+		
 		return qry.execute(sql);
 	}
 
@@ -399,5 +441,13 @@ public class IndicatorReport {
 	 */
 	public int getRowHeaderSize() {
 		return rowsize;
+	}
+
+
+	/**
+	 * @return the recordCount
+	 */
+	public Long getRecordCount() {
+		return recordCount;
 	}
 }

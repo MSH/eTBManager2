@@ -20,7 +20,7 @@ public class FilterPanel extends HoverPanel {
 		setWidth("800px");
 		addStyleName("prop");
 		label = new Label(filter.getName() + ":");
-		label.setStyleName("name");
+		label.setStyleName("filter_name");
 		add(label);
 		
 		// create filter widget
@@ -29,7 +29,7 @@ public class FilterPanel extends HoverPanel {
 		if (filterWidget != null) {
 			filterWidget.initialize(filter);
 			FlowPanel pnl = new FlowPanel();
-			pnl.setStyleName("value");
+			pnl.setStyleName("filter_value");
 			pnl.add(filterWidget);
 			add(pnl);
 		}

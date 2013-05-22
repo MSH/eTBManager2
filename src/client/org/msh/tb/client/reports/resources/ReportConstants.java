@@ -36,4 +36,29 @@ public interface ReportConstants extends Constants {
 	
 	@Key("global.total")
 	String total();
+	
+	@Key("meds.movs.to")
+	String until();
+	
+	@Key("cases.nonumber")
+	String unnumbered();
+	
+	@Key("cases")
+	String casesTitle();
+	
+	@Key("form.result")
+	String resulting();
+	
+	@Key("global.wait")
+	String waitMessage();
+	
+	@Key("form.of")
+	String of();
+	
+	@Key("form.navnext")
+	String navegNext();
+	
+	@Key("form.navprevious")
+	String navegPrevious();
+	
 }

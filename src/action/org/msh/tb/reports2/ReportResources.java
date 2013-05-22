@@ -37,6 +37,12 @@ import org.msh.tb.reports2.variables.SuspectConfirmedVariable;
 import org.msh.tb.reports2.variables.TreatOutcomeVariable;
 
 
+/**
+ * Provide all resources used in a report, i.e, list of available filters and variables.
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 @Name("reportResources")
 @BypassInterceptors
 public class ReportResources {

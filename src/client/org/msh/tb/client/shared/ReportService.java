@@ -1,9 +1,11 @@
 package org.msh.tb.client.shared;
 
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.msh.tb.client.shared.model.CItem;
+import org.msh.tb.client.shared.model.CPatientList;
 import org.msh.tb.client.shared.model.CReportData;
 import org.msh.tb.client.shared.model.CReportUI;
 import org.msh.tb.client.shared.model.CTable;
@@ -49,5 +51,14 @@ public interface ReportService extends RemoteService {
 	 * @param param is an optional parameter specified by the filter
 	 * @return list of options of the {@link CItem} class
 	 */
-	List<CItem> getFilterOptions(String filterid, String param);
+	ArrayList<CItem> getFilterOptions(String filterid, String param);
+
+
+	/**
+	 * Return the list of patients based on the values of variables and filters
+	 * @param filters include all filters that narrows the result, including variables key values
+	 * @param page the initial page of patient list, starting in 0
+	 * @return
+	 */
+	CPatientList getPatients(HashMap<String, String> filters, int page);
 }

@@ -24,6 +24,8 @@ public class SqlBuilder implements SQLDefs {
 	private List<String> varRestrictions = new ArrayList<String>();
 	private HashMap<String, Object> parameters = new HashMap<String, Object>();
 	private Map<Variable, Integer> varIteration = new HashMap<Variable, Integer>();
+	private boolean detailed;
+	private String orderBy;
 
 	public SqlBuilder(String tableName) {
 		super();
@@ -85,23 +87,25 @@ public class SqlBuilder implements SQLDefs {
 	 */
 	public String createSql() {
 		sql = new StringBuilder();
-		fields.clear();
 		fieldList = null;
 		varRestrictions.clear();
-		
-		try{
-			for (Variable var: variables) {
-				currentVariable = var;
-				// get the current variable iteration
-				Integer iteration = varIteration.get(var);
-				if (iteration == null)
-					iteration = 0;
-				// prepare the variable
-				var.prepareVariableQuery(this, iteration);
+
+		if (variables.size() > 0) {
+			fields.clear();
+			try{
+				for (Variable var: variables) {
+					currentVariable = var;
+					// get the current variable iteration
+					Integer iteration = varIteration.get(var);
+					if (iteration == null)
+						iteration = 0;
+					// prepare the variable
+					var.prepareVariableQuery(this, iteration);
+				}
 			}
-		}
-		finally {
-			currentVariable = null;
+			finally {
+				currentVariable = null;
+			}
 		}
 		
 		createSQLSelect(sql);
@@ -186,11 +190,16 @@ public class SqlBuilder implements SQLDefs {
 	protected void createSQLSelect(StringBuilder builder) {
 		builder.append("select ");
 
-		if (variables == null)
-			builder.append("*");
+		if (detailed) {
+			builder.append( getFieldList() );
+		}
 		else {
-			builder.append(getFieldList());
-			builder.append(", count(*)");
+			if (variables.size() == 0)
+				builder.append("count(*)");
+			else {
+				builder.append(getFieldList());
+				builder.append(", count(*)");
+			}
 		}
 	}
 
@@ -236,17 +245,34 @@ public class SqlBuilder implements SQLDefs {
 	 * Create SQL Group By instruction
 	 */
 	protected void createSQLGroupBy(StringBuilder builder) {
+		if ((detailed) || (variables.size() == 0))
+			return;
 		builder.append("\ngroup by ");
 		builder.append(getFieldList());
 	}
 	
 	
+	/**
+	 * Create order by clause. If the query is detailed, so the order by
+	 * will just be included if the <code>orderBy</code> is defined.
+	 * @param builder
+	 */
 	protected void createSQLOrderBy(StringBuilder builder) {
+		if ((detailed && orderBy == null) || ((!detailed) && (variables.size() == 0)))
+			return;
+		
 		builder.append("\norder by ");
-		builder.append(getFieldList());
+		
+		if (orderBy != null)
+			 builder.append(orderBy);
+		else builder.append(getFieldList());
 	}
 
 	
+	/**
+	 * Return the field list separated by commas
+	 * @return
+	 */
 	protected String getFieldList() {
 		if (fieldList == null) {
 			fieldList = "";
@@ -421,6 +447,38 @@ public class SqlBuilder implements SQLDefs {
 		join.setLeftJoin(true);
 		return join;
 	}
-	
+
+
+	/**
+	 * @return the detailed
+	 */
+	public boolean isDetailed() {
+		return detailed;
+	}
+
+
+	/**
+	 * @param detailed the detailed to set
+	 */
+	public void setDetailed(boolean detailed) {
+		this.detailed = detailed;
+	}
+
+
+	/**
+	 * @return the orderBy
+	 */
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+
+	/**
+	 * @param orderBy the orderBy to set
+	 */
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
+
 	
 }
