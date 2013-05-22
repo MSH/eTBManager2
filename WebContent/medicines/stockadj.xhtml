@@ -36,7 +36,7 @@
     	<h:selectOneMenu value="#{stockAdjustmentHome.source}">
     		<s:selectItems var="s" value="#{sources}" label="#{s}" noSelectionLabel="-"/>
     		<s:convertEntity />
-    		<a:support event="onchange" reRender="main" ajaxSingle="true" onsubmit="openWaitDlg();" oncomplete="closeWaitDlg();"/>
+    		<a:support event="onchange" reRender="main" ajaxSingle="true" onsubmit="openWaitDlg();" oncomplete="closeWaitDlg();" action="#{stockAdjustmentHome.sourceChanged()}"/>
     	</h:selectOneMenu>
     </s:decorate>
 
