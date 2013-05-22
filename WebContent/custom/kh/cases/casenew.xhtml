@@ -27,7 +27,7 @@
 
 	<ui:include src="/custom/kh/cases/casedataedt.xhtml" />	
 
-<s:fragment>
+	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<div class="form-content">
 	<h2>#{messages['MedicalExamination']}</h2>
 

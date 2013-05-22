@@ -226,14 +226,14 @@
  		    
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
 
-    <s:decorate template="/layout/dateedit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+    <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
-    	<ui:param name="required" value="#{tbcase.validated}" /> 
-    	<ui:param name="required" value="true" />
+    	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
     </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" rendered="#{tbCase.classification=='MDRTB_DOCUMENTED'}">
+    <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
     	<h:selectOneMenu value="#{tbcase.drugResistanceType}" >
     		<s:selectItems var="it" value="#{drugResistanceTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
@@ -330,12 +330,14 @@ function isPulmonary(cb) {
 <rich:jQuery selector="#infectsite" query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary').hide(); }})" />
 <rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
 <rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeReTreat(this)) {jQuery('#patientTypeReTreat').hide(); }})" />
+
+		</s:fragment>
 		
 		</td></tr></table>
 	</div>
 	
 
-	<s:fragment>
+	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<div class="form-content">
 	<h2>#{messages['cases.prevtreat']}</h2>
 
@@ -408,6 +410,7 @@ function isPulmonary(cb) {
 		</td></tr></table>
 	</div>
 	</s:fragment>
+	
 
 <rich:jQuery selector="#addrChanged" query="change(function(){ showCurrAddress(this); })" />
 <script type="text/javascript">
