@@ -70,6 +70,10 @@ public class StockAdjustmentHome extends Controller {
 	public void setExistingBatchInThisUnit(boolean existingBatchInThisUnit) {
 		this.existingBatchInThisUnit = existingBatchInThisUnit;
 	}
+	
+	public void sourceChanged(){
+		items = null;
+	}
 
 	/**
 	 * Cria os itens para ajuste
