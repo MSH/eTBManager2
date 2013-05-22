@@ -24,9 +24,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * @author Ricardo Memoria
  *
  */
-public class PatientListPopup extends PopupPanel {
+public class CaseListPopup extends PopupPanel {
 
-	interface Binder extends UiBinder<VerticalPanel, PatientListPopup> { }
+	interface Binder extends UiBinder<VerticalPanel, CaseListPopup> { }
 	private static final Binder binder = GWT.create(Binder.class);
 
 	private VerticalPanel panel;
@@ -38,30 +38,17 @@ public class PatientListPopup extends PopupPanel {
 	
 	private int page;
 	private long recordCount;
+	private int pageSize;
 	private HashMap<String, String> filters;
 
 	
-	public PatientListPopup() {
+	public CaseListPopup() {
 		super(true);
 		panel = binder.createAndBindUi(this);
 
-		setStyleName("patientlist-popup");
+		setStyleName("caselist-popup");
 		
-/*		panel = new VerticalPanel();
-		panel.setWidth("550px");
-
-		HorizontalPanel pnlTitle = new HorizontalPanel();
-		panel.add(pnlTitle);
-
-		txtRecordCount = new HTML();
-		pnlTitle.add(txtRecordCount);
-		
-		table = new FlexTable();
-		table.setHeight("200");
-		table.setWidth("100%");
-		panel.add(table);
-		
-*/		add(panel);
+		add(panel);
 	}
 	
 	public void showPatients(HashMap<String, String> filters) {
@@ -82,7 +69,8 @@ public class PatientListPopup extends PopupPanel {
 			@Override
 			public void onSuccess(CPatientList lst) {
 				updatePatientList(lst);
-				center();
+				if (page == 0)
+					center();
 			}
 		});
 	}
@@ -116,13 +104,14 @@ public class PatientListPopup extends PopupPanel {
 			}
 		}
 
-		recordCount = lst.getRecordCount(); 
+		recordCount = lst.getRecordCount();
+		pageSize = lst.getPageSize();
 		NumberFormat nf = NumberFormat.getDecimalFormat();
 		int iniResult = page * 30 + 1;
 		long lastResult = iniResult + 29;
 		if (lastResult > recordCount)
 			lastResult = recordCount;
-		String s = nf.format(iniResult) + " - " + nf.format(iniResult + 29) + 
+		String s = nf.format(iniResult) + " - " + nf.format(lastResult) + 
 				" " + MainPage.getMessages().of() + " <b>" + nf.format(recordCount) + "</b>";
 		
 		txtResult.setHTML(s);
@@ -135,6 +124,8 @@ public class PatientListPopup extends PopupPanel {
 	 */
 	@UiHandler("lnkNext")
 	public void lnkNextClick(ClickEvent event) {
+		if (pageSize * (page + 1) > recordCount)
+			return;
 		page++;
 		updatePageContent();
 	}

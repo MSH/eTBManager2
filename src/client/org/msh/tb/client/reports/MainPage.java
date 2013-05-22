@@ -65,7 +65,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 	private GroupVariablesPopup varsPopup;
 	private CReportUI reportUI;
 	private ChartPopup chartPopup;
-	private PatientListPopup patientListPopup;
+	private CaseListPopup patientListPopup;
 	// selected column and row to draw the chart
 	private int selectedCell;
 	private boolean rowSelected;
@@ -459,7 +459,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 
 		// create popup if not available
 		if (patientListPopup == null) {
-			patientListPopup = new PatientListPopup();
+			patientListPopup = new CaseListPopup();
 		}
 
 		// show popup window

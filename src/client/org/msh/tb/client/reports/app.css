@@ -104,14 +104,15 @@ html {
 	text-align: center;
 }
 
-.patientlist-popup {
+.caselist-popup {
 	background-color:#ffffff;
 	border: 1px solid #7F9DB9;
 	box-shadow:3px 3px 10px #b0b0b0;
 	padding:2px 10px 10px 10px;
+	border-radius:4px;
 }
 
-.patientlist-popup table td{
+.caselist-popup table td{
 	padding:4px;
 }
 
@@ -133,4 +134,15 @@ html {
 	vertical-align: middle;
 	padding:1px;
 	font-size:11px;
+}
+
+.cellhover {
+	padding:1px;
+}
+.cellhover:hover {
+	background-color:#e0f0e0;
+	border-radius: 2px;
+	border:1px solid #d0e0d0;
+	cursor: pointer;
+	padding:0px;
 }

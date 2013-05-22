@@ -69,15 +69,9 @@ public class TableView extends Composite {
 		for (List<CTableColumn> lst: tableData.getRowsHeader()) {
 			int c = 0;
 			for (CTableColumn col: lst) {
-				table.setText(r, c, col.getTitle());
-				setCellStyle(r, c, STYLE_HEADER_TITLE, 1, 1);
-/*				table.getCellFormatter().setStyleName(r, c, STYLE_HEADER_TITLE);
-				table.getCellFormatter().setAlignment(r, c, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
-*/				int span = col.getSpan();
-				if (span > 1) {
-					table.getFlexCellFormatter().setColSpan(r, c, span);
-				}
-
+				setHoverText(r, c, col.getTitle());
+				int span = col.getSpan();
+				setCellStyle(r, c, STYLE_HEADER_TITLE, 1, span);
 				if (r == 1)
 					numCols += span;
 				c++;
@@ -93,10 +87,8 @@ public class TableView extends Composite {
 			headerHtml += var.getName();
 		}
 
-		table.setText(0, 1, headerHtml);
-		table.getFlexCellFormatter().setColSpan(0, 1, numCols);
-		table.getCellFormatter().setStyleName(0, 1, STYLE_HEADER_TITLE);
-		table.getCellFormatter().setAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+		setHoverText(0,1, headerHtml);
+		setCellStyle(0, 1, STYLE_HEADER_TITLE, 1, numCols);
 		
 		int colheadersize = tableData.getColHeaderSize();
 		
@@ -114,7 +106,8 @@ public class TableView extends Composite {
 				headerHtml += "<br/>";
 			headerHtml += var.getName();
 		}
-		table.setHTML(0, 0, headerHtml);
+		setHoverText(0, 0, headerHtml);
+//		table.setHTML(0, 0, headerHtml);
 		setCellStyle(0, 0, STYLE_HEADER_TITLE, colheadersize + 1, 1);
 
 		// get the maximum level of the rows
@@ -126,7 +119,7 @@ public class TableView extends Composite {
 		NumberFormat nf = NumberFormat.getDecimalFormat();
 		r = colheadersize + 1;
 		for (CTableRow row: tableData.getTable().getRows()) {
-			table.setText(r, 0, row.getTitle());
+			setHoverText(r, 0, row.getTitle());
 			String s;
 			if (row.getLevel() != maxlevel)
 				 s = "tt-row-grp";
@@ -141,13 +134,16 @@ public class TableView extends Composite {
 					// calculate the total of each column
 					if ((totRow) && (row.getLevel() == 0))
 						tots[c - 1] += val;
+
+					setHoverText(r, c, nf.format(val));
 				}
-				table.setText(r, c, val != null? nf.format(val): "");
+				else table.setText(r, c, "");
+				
 				if (row.getLevel() != maxlevel)
 					 s = "vl-grp";
 				else s = "vl";
-				table.getCellFormatter().setStyleName(r,  c, s);
-				table.getCellFormatter().setAlignment(r, c, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
+				setCellStyle(r, c, s, 1, 1);
+
 				c++;
 			}
 
@@ -177,7 +173,16 @@ public class TableView extends Composite {
 		}
 	}
 
-	
+
+	/**
+	 * Set a text in a cell of the table around a div tag to display a cell hover effect
+	 * @param row
+	 * @param col
+	 * @param text
+	 */
+	private void setHoverText(int row, int col, String text) {
+		table.setHTML(row, col, "<div class='cellhover'>" + text + "</div>");
+	}
 
 	/**
 	 * Set the standard style of a cell. If there is no span for the row or the column,
@@ -240,49 +245,4 @@ public class TableView extends Composite {
 					MainPage.instance().setSelectedRow(row - colheadersize - 1);
 	}
 
-
-	/**
-	 * Called when the user clicks on a cell value
-	 * @param col
-	 * @param row
-	 */
-/*	private void cellValueClick(int c, int r) {
-		HashMap<String, String> rowvars = new HashMap<String, String>();
-		HashMap<String, String> colvars = new HashMap<String, String>();
-
-		// get variables from the row
-		int index = r;
-		int level = data.getTable().getRows().get(r).getLevel();
-
-		// get key values from rows
-		while (index >= 0) {
-			CTableRow row = data.getTable().getRows().get(index);
-			if (row.getLevel() == level) {
-				CVariable var = data.getRowVariables().get(row.getVarIndex());
-				rowvars.put(var.getId(), row.getKey());
-				level--;
-				if (level == -1)
-					break;
-			}
-			index--;
-		}
-		
-		// get key values from columns
-		CTableColumn col = data.getHeaderColumns().get(c);
-		while (col != null) {
-			CVariable var = data.getColVariables().get(col.getLevel());
-			colvars.put(var.getId(), col.getKey());
-			col = col.getParent();
-		}
-		
-		String srow = "";
-		for (String key: rowvars.keySet())
-			srow += " (" + key + ", " + rowvars.get(key) + ")";
-		
-		String scol = "";
-		for (String key: colvars.keySet())
-			scol += " (" + key + ", " + colvars.get(key) + ")";
-		Window.alert(scol + " ... " + srow);
-	}
-*/
 }

@@ -9,6 +9,8 @@ public class CPatientList implements IsSerializable {
 	private long recordCount;
 
 	private ArrayList<CPatient> items;
+	
+	private int pageSize;
 
 	/**
 	 * @return the recordCount
@@ -36,5 +38,19 @@ public class CPatientList implements IsSerializable {
 	 */
 	public void setItems(ArrayList<CPatient> items) {
 		this.items = items;
+	}
+
+	/**
+	 * @return the pageSize
+	 */
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	/**
+	 * @param pageSize the pageSize to set
+	 */
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
 	}
 }

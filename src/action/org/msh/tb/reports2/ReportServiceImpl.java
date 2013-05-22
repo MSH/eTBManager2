@@ -335,6 +335,7 @@ public class ReportServiceImpl implements ReportService {
 		CPatientList lst = new CPatientList();
 		lst.setItems(pacs);
 		lst.setRecordCount(rep.getRecordCount());
+		lst.setPageSize(pageSize);
 		
 		return lst;
 	}
