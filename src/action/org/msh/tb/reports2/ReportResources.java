@@ -14,6 +14,7 @@ import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.PatientType;
+import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.reports2.variables.AdminUnitVariable;
 import org.msh.tb.reports2.variables.AgeRangeVariable;
@@ -25,6 +26,7 @@ import org.msh.tb.reports2.variables.DateFieldVariable;
 import org.msh.tb.reports2.variables.EnumFieldVariable;
 import org.msh.tb.reports2.variables.ExtrapulmonarVariable;
 import org.msh.tb.reports2.variables.HivResultVariable;
+import org.msh.tb.reports2.variables.LabMethodVariable;
 import org.msh.tb.reports2.variables.LabResultDiagVariable;
 import org.msh.tb.reports2.variables.MonthOfTreatVariable;
 import org.msh.tb.reports2.variables.NegativationMonthVariable;
@@ -123,6 +125,7 @@ public class ReportResources {
 		addVariable(grp, new CaseItemDateVariable("cultcount_y", "manag.reportgen.var.cultureyear", "examculture.dateCollected", true));
 		addFilter(grp, new CaseItemDateVariable("cultcollect", "#{messages['cases.examdst']} - #{messages['PatientSample.dateCollected']}", "examdst.dateCollected", false));
 		add(grp, new NegativationMonthVariable("cultneg", true));
+		add(grp, new LabMethodVariable("cultmethod", "TbField.CULTURE_METHOD", "examculture.method_id", TbField.CULTURE_METHOD));
 		return grp;
 	}
 	
@@ -150,6 +153,7 @@ public class ReportResources {
 		addVariable(grp, new CaseItemDateVariable("dstcount", "manag.reportgen.var.dstmonth", "examdst.dateCollected", false));
 		addVariable(grp, new CaseItemDateVariable("dstcount_y", "manag.reportgen.var.dstyear", "examdst.dateCollected", true));
 		addFilter(grp, new CaseItemDateVariable("dstcollect", "#{messages['cases.examdst']} - #{messages['PatientSample.dateCollected']}", "examdst.dateCollected", false));
+		add(grp, new LabMethodVariable("dstmethod", "TbField.DST_METHOD", "examdst.method_id", TbField.DST_METHOD));
 		return grp;
 	}
 	

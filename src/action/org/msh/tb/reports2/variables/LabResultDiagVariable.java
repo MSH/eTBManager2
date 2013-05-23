@@ -1,5 +1,6 @@
 package org.msh.tb.reports2.variables;
 
+import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.query.SQLDefs;
 
 /**
@@ -30,7 +31,24 @@ public class LabResultDiagVariable extends EnumFieldVariable {
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
 		super.prepareVariableQuery(def, iteration);
-		
+		prepareQuery(def);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.variables.EnumFieldVariable#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
+	 */
+	@Override
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
+			Object value) {
+		super.prepareFilterQuery(def, oper, value);
+		prepareQuery(def);
+	}
+	
+	/**
+	 * Prepare the query with common declarations both in filter and variable
+	 * @param def
+	 */
+	public void prepareQuery(SQLDefs def) {
 		String tbcase = def.getMasterTable().getAlias();
 
 		String s[] = getFieldName().split("\\.");

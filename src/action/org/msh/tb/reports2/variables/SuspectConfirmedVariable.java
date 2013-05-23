@@ -1,11 +1,22 @@
 package org.msh.tb.reports2.variables;
 
 import org.jboss.seam.international.Messages;
+import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.reports2.VariableImpl;
 
+/**
+ * Report variable that calculate number of suspects and confirmed cases
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 public class SuspectConfirmedVariable extends VariableImpl {
 
+	// keys used in suspect and confirmed cases
+	private final Integer KEY_CONFIRMED = 0;
+	private final Integer KEY_SUSPECT = 1;
+	
 	public SuspectConfirmedVariable() {
 		super("diagtype", "DiagnosisType", "diagnosisType");
 	}
@@ -32,8 +43,8 @@ public class SuspectConfirmedVariable extends VariableImpl {
 	@Override
 	public Object createKey(Object values) {
 		if ("susp".equals(values))
-			return Messages.instance().get("DiagnosisType.SUSPECT");
-		else return Messages.instance().get("DiagnosisType.CONFIRMED");
+			 return KEY_SUSPECT;
+		else return KEY_CONFIRMED;
 	}
 
 
@@ -43,6 +54,34 @@ public class SuspectConfirmedVariable extends VariableImpl {
 	@Override
 	public int getIteractionCount() {
 		return 2;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
+	 */
+	@Override
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+		if (KEY_CONFIRMED.equals(value))
+			 def.addRestriction("tbcase.diagnosisDate is not null");
+		else def.addRestriction("(registrationDate < diagnosisDate or diagnosisDate is null)");
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#filterValueFromString(java.lang.String)
+	 */
+	@Override
+	public Object filterValueFromString(String value) {
+		return Integer.parseInt(value);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#getDisplayText(java.lang.Object)
+	 */
+	@Override
+	public String getDisplayText(Object key) {
+		if (KEY_SUSPECT.equals(key)) 
+			 return Messages.instance().get("DiagnosisType.SUSPECT");
+		else return Messages.instance().get("DiagnosisType.CONFIRMED");
 	}
 
 }

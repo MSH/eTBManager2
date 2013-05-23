@@ -320,7 +320,7 @@ public class ReportServiceImpl implements ReportService {
 			
 			CPatient pac= new CPatient();
 			pac.setId(id);
-			if ((middlename != null) && (!lastname.trim().isEmpty()))
+			if ((middlename != null) && (!middlename.trim().isEmpty()))
 				name += " " + middlename;
 			if ((lastname != null) && (!lastname.trim().isEmpty()))
 				name += " " + lastname;

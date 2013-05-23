@@ -108,6 +108,14 @@ public class DateFieldVariable extends VariableImpl {
 	 */
 	@Override
 	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+		if (value instanceof Integer) {
+			int num = (Integer)value;
+			if (num < 9999) {
+				def.addRestriction("year(" + getFieldName() + ") = " + num);
+				return;
+			}
+		}
+		
 		Period p;
 		if (value instanceof String)
 			 p = stringToPeriod((String)value);
@@ -194,7 +202,13 @@ public class DateFieldVariable extends VariableImpl {
 
 	@Override
 	public Object filterValueFromString(String value) {
-		return stringToPeriod(value);
+		if (value == null)
+			return null;
+		
+		if (value.contains(","))
+			return stringToPeriod(value);
+		
+		return Integer.parseInt(value);
 	}
 	
 	/**

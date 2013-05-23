@@ -20,6 +20,8 @@ import org.msh.reports.variables.Variable;
  */
 public class VariableImpl implements Variable, Filter {
 
+	public static final String KEY_NULL = "null";
+
 	private String id;
 	private String keylabel;
 	private String fieldName;
@@ -66,10 +68,10 @@ public class VariableImpl implements Variable, Filter {
 		if (val1 == val2)
 			return 0;
 
-		if (val1 == null)
+		if ((val1 == null) || (KEY_NULL.equals(val1)))
 			return 1;
 		
-		if (val2 == null)
+		if ((val2 == null) || (KEY_NULL.equals(val2)))
 			return -1;
 
 		if (val1 instanceof Comparable)
@@ -93,6 +95,11 @@ public class VariableImpl implements Variable, Filter {
 	 */
 	@Override
 	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+		if ((value == null) || (KEY_NULL.equals(value))) {
+			def.addRestriction(fieldName + " is null");
+			return;
+		}
+		
 		String s = fieldName.replace('.', '_');
 		
 		String soper;
@@ -152,7 +159,7 @@ public class VariableImpl implements Variable, Filter {
 	 */
 	@Override
 	public String getDisplayText(Object key) {
-		if (key == null)
+		if ((key == null) || (KEY_NULL.equals(key)))
 			return Messages.instance().get("global.notdef");
 
 		return key.toString();
@@ -185,6 +192,8 @@ public class VariableImpl implements Variable, Filter {
 
 	@Override
 	public Object createKey(Object values) {
+		if (values == null)
+			return KEY_NULL;
 		return values;
 	}
 

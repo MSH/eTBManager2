@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jboss.seam.Component;
+import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.query.SQLDefs;
 import org.msh.tb.AgeRangeHome;
 import org.msh.tb.entities.AgeRange;
 import org.msh.tb.reports2.FilterType;
@@ -106,6 +108,40 @@ public class AgeRangeVariable extends VariableImpl {
 			return ((Integer)range1.getIniAge()).compareTo(range1.getIniAge());
 		
 		return super.compareValues(val1, val2);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
+	 */
+	@Override
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
+			Object value) {
+		if ((value == null) || (KEY_NULL.equals(value))) {
+			def.addRestriction("tbcase.age is null");
+			return;
+		}
+
+		// search for age range
+		AgeRangeHome home = getAgeRangeHome();
+		AgeRange range = home.findRangeById((Integer)value);
+		if (range == null)
+			throw new IllegalArgumentException("Age range not found: " + value);
+
+		// apply restriction
+		def.addRestriction("tbcase.age between :age1 and :age2");
+		def.addParameter("age1", range.getIniAge());
+		def.addParameter("age2", range.getEndAge());
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#filterValueFromString(java.lang.String)
+	 */
+	@Override
+	public Object filterValueFromString(String value) {
+		if ((KEY_NULL.equals(value)) || (value == null))
+			return null;
+
+		return Integer.parseInt(value);
 	}
 
 }

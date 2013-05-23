@@ -7,9 +7,7 @@ import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.international.Messages;
-import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
-import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.reports2.FilterType;
 import org.msh.tb.reports2.VariableImpl;
@@ -82,11 +80,21 @@ public class RegimenVariable extends VariableImpl {
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
-	@Override
+/*	@Override
 	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
 		if ("null".equals(value))
 			 def.addRestriction(getFieldName() + " is null");
 		else super.prepareFilterQuery(def, oper, value);
+	}
+*/
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#filterValueFromString(java.lang.String)
+	 */
+	@Override
+	public Object filterValueFromString(String value) {
+		if (KEY_NULL.equals(value))
+			return null;
+		return Integer.parseInt(value);
 	}
 	
 }

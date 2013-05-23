@@ -12,8 +12,14 @@ import org.msh.tb.entities.enums.MessageKey;
 import org.msh.tb.reports2.VariableImpl;
 
 
+/**
+ * Variable that handles fields of type enumeration
+ *  
+ * @author Ricardo Memoria
+ *
+ */
 public class EnumFieldVariable extends VariableImpl {
-
+	
 	private Class<? extends Enum> enumClass;
 	private Enum[] options;
 	private String optionsExpression;
@@ -44,6 +50,9 @@ public class EnumFieldVariable extends VariableImpl {
 	@Override
 	public String getDisplayText(Object key) {
 		if (key == null)
+			return "null";
+		
+		if (KEY_NULL.equals(key))
 			return Messages.instance().get("global.notdef");
 
 		Enum val = null;
@@ -71,25 +80,13 @@ public class EnumFieldVariable extends VariableImpl {
 	@Override
 	public Object createKey(Object value) {
 		if (value == null)
-			return null;
+			return KEY_NULL;
 
 		if (value instanceof Number)
 			return ((Number)value).intValue();
 		
 		return super.createKey(value);
-/*		
-		Enum[] names = enumClass.getEnumConstants();
-
-		int index;
-		if (value instanceof Long)
-			 index = ((Long)value).intValue();
-		else index = (Integer)value;
-
-		if ((names == null) || (index > names.length))
-			return null;
-		
-		return names[index];
-*/	}
+	}
 	
 	/**
 	 * Return the list of enumeration values available
@@ -179,6 +176,9 @@ public class EnumFieldVariable extends VariableImpl {
 	public Object filterValueFromString(String value) {
 		int val = Integer.parseInt(value);
 		
+		if (KEY_NULL.equals(val))
+			return KEY_NULL;
+		
 		return enumClass.getEnumConstants()[val];
 	}
 
@@ -192,6 +192,9 @@ public class EnumFieldVariable extends VariableImpl {
 			value = filterValueFromString((String)value);
 		if (value instanceof Enum)
 			value = ((Enum)value).ordinal();
+		
+		if (KEY_NULL.equals(value))
+			value = null;
 
 		super.prepareFilterQuery(def, oper, value);
 	}
@@ -199,9 +202,19 @@ public class EnumFieldVariable extends VariableImpl {
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#compareValues(java.lang.Object, java.lang.Object)
 	 */
-/*	@Override
+	@Override
 	public int compareValues(Object val1, Object val2) {
+		if (val1 == val2)
+			return 0;
+		
+		if (KEY_NULL.equals(val1))
+			return 1;
+		
+		if (KEY_NULL.equals(val2))
+			return -1;
+		
+		return super.compareValues(val1, val2);
 	}
-*/	
+	
 
 }

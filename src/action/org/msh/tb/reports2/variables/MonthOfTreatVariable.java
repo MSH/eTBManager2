@@ -62,7 +62,9 @@ public class MonthOfTreatVariable extends VariableImpl {
 		if (value == null)
 			return;
 		Integer val = Integer.parseInt((String)value) - 1;
-		def.addRestriction("timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate) = " + val.toString());
+		if (val == 36)
+			 def.addRestriction("timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate) > " + val.toString());
+		else def.addRestriction("timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate) = " + val.toString());
 	}
 
 
@@ -82,9 +84,10 @@ public class MonthOfTreatVariable extends VariableImpl {
 	@Override
 	public List<FilterOption> getFilterOptions(Object param) {
 		List<FilterOption> lst = new ArrayList<FilterOption>();
-		for (int i = 1; i < 36; i++) {
+		for (int i = 1; i <= 36; i++) {
 			lst.add(new FilterOption(i, Integer.toString(i)));
 		}
+		lst.add(new FilterOption(37, formatMessage("manag.reportgen.over", 36)));
 		return lst;
 	}
 

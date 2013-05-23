@@ -32,6 +32,9 @@ public class FieldValueVariable extends VariableImpl {
 	 */
 	@Override
 	public String getDisplayText(Object key) {
+		if (KEY_NULL.equals(key))
+			return super.getDisplayText(key);
+
 		Integer id = (Integer)key;
 
 		FieldValue fld = getFieldValue(id);
@@ -93,6 +96,16 @@ public class FieldValueVariable extends VariableImpl {
 	@Override
 	public String getFilterType() {
 		return FilterType.REMOTE_OPTIONS;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#filterValueFromString(java.lang.String)
+	 */
+	@Override
+	public Object filterValueFromString(String value) {
+		if ((value == null) || (KEY_NULL.equals(value)))
+			return null;
+		return Integer.parseInt(value);
 	}
 	
 	
