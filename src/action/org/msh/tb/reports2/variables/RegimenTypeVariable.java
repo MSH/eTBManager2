@@ -51,7 +51,7 @@ public class RegimenTypeVariable extends VariableImpl {
 			Object value) {
 		if ("0".equals(value))
 			 def.addRestriction("tbcase.regimen_id is null");
-		else def.addRestriction("tbcase.regimen_id is null");
+		else def.addRestriction("tbcase.regimen_id is not null");
 		def.addRestriction("tbcase.initreatmentdate is not null");
 	}
 

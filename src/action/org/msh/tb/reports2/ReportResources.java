@@ -36,6 +36,7 @@ import org.msh.tb.reports2.variables.RegimenTypeVariable;
 import org.msh.tb.reports2.variables.RegimenVariable;
 import org.msh.tb.reports2.variables.SideEffectVariable;
 import org.msh.tb.reports2.variables.SuspectConfirmedVariable;
+import org.msh.tb.reports2.variables.TypeTBCaseVariable;
 import org.msh.tb.reports2.variables.TreatOutcomeVariable;
 
 
@@ -185,6 +186,7 @@ public class ReportResources {
 	 */
 	protected ReportGroup addPrevTreatmentVariables() {
 		ReportGroup grp = addGroup("cases.prevtreat");
+		add(grp, new TypeTBCaseVariable());
 		return grp;
 	}
 	

@@ -63,7 +63,7 @@ public class MonthOfTreatVariable extends VariableImpl {
 			return;
 		Integer val = Integer.parseInt((String)value) - 1;
 		if (val == 36)
-			 def.addRestriction("timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate) > " + val.toString());
+			 def.addRestriction("timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate) >= " + val.toString());
 		else def.addRestriction("timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate) = " + val.toString());
 	}
 
