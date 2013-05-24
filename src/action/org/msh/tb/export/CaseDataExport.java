@@ -285,7 +285,7 @@ public class CaseDataExport {
 		excel.addText(messages.get("Address.zipCode") + " (" + messages.get("cases.details.addrresscurr.abbrev") + ")", "title");
 		excel.addTextFromResource("TbCase.phoneNumber", "title");
 		excel.addTextFromResource("TbCase.mobileNumber", "title");
-		excel.addTextFromResource("pt_BR.usOrigem", "title");
+		excel.addTextFromResource("TbCase.notificationUnit", "title");
 		addAdminUnitTitle(messages.get("TbCase.notificationUnit"));
 		excel.addTextFromResource("TbCase.registrationDate", "title");
 		excel.addTextFromResource("Regimen", "title");
@@ -299,7 +299,7 @@ public class CaseDataExport {
 		excel.addTextFromResource("TbField.EXTRAPULMONARY_TYPES", "title");
 		excel.addTextFromResource("TbField.EXTRAPULMONARY_TYPES", "title");
 		excel.addTextFromResource("PatientType", "title");
-		excel.addTextFromResource("pt_BR.supervisedTreatment", "title");
+		excel.addTextFromResource("TbCase.supervisedTreatment", "title");
 		excel.addTextFromResource("case.inicialweight", "title");
 		excel.addTextFromResource("case.currweight", "title");
 		excel.addTextFromResource("cases.prevtreat.numprev", "title");
