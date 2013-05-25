@@ -71,7 +71,6 @@ public class CaseDataExport {
 	private List<Object[]> numPrevTreat;
 	private List<Object[]> inicialWeight;
 	private List<Object[]> currentWeight;
-	private List<Object[]> supervisedCases;
 	private List<Object[]> firstMedExam;
 	
 	private String caseIds;
@@ -140,14 +139,6 @@ public class CaseDataExport {
 				+ "from MedicalExamination me "
 				+ "where me.tbcase.id in " + caseIds + " and me.date = (select max(me1.date) from MedicalExamination me1 where me1.tbcase.id = me.tbcase.id)";
 		currentWeight = executeQuery(q, null);
-		
-		q = "select me.tbcase.id, 0 from MedicalExamination me "
-			+ "where me.tbcase.id in " + caseIds + " and me.supervisedTreatment = :yes "
-			+ "and not exists (select me1.id from MedicalExamination me1 where me.supervisedTreatment = :no and me.tbcase.id = me1.tbcase.id)";
-		parameters.put("yes", YesNoType.YES);
-		parameters.put("no", YesNoType.NO);
-		supervisedCases = executeQuery(q, parameters);
-		parameters.clear();
 		
 		q = "select me.tbcase.id, min(me.date) from MedicalExamination me where me.tbcase.id in " + caseIds + " group by me.tbcase.id";
 		firstMedExam = executeQuery(q, null);
@@ -267,7 +258,7 @@ public class CaseDataExport {
 	public void addCaseDataTitles() {
 		// add title line
 		excel.addColumnMark("casedata");
-		excel.addGroupHeaderFromResource("cases.details.case", 32 + (levelInfo.getMaxLevel() * 2), "title");
+		excel.addGroupHeaderFromResource("cases.details.case", 31 + (levelInfo.getMaxLevel() * 2), "title");
 		
 		excel.addTextFromResource("Patient.caseNumber", "title");
 		excel.addTextFromResource("Patient.securityNumber", "title");
@@ -299,7 +290,6 @@ public class CaseDataExport {
 		excel.addTextFromResource("TbField.EXTRAPULMONARY_TYPES", "title");
 		excel.addTextFromResource("TbField.EXTRAPULMONARY_TYPES", "title");
 		excel.addTextFromResource("PatientType", "title");
-		excel.addTextFromResource("TbCase.supervisedTreatment", "title");
 		excel.addTextFromResource("case.inicialweight", "title");
 		excel.addTextFromResource("case.currweight", "title");
 		excel.addTextFromResource("cases.prevtreat.numprev", "title");
@@ -440,7 +430,6 @@ public class CaseDataExport {
 		excel.addValue(caseData, 28);
 		excel.addValue(caseData, 29);
 		excel.addValue(caseData, 30);
-		addSupervisedTreatment(caseData);
 		addCalculatedValue(caseData, inicialWeight);
 		addCalculatedValue(caseData, currentWeight);
 		addCalculatedValue(caseData, numPrevTreat);
@@ -509,23 +498,7 @@ public class CaseDataExport {
 		else
 			excel.addTextFromResource("regimens.individualized");
 	}
-	
-	public void addSupervisedTreatment(Object[] caseData){
-		boolean isInList = false;
-		Integer idcase = null;
-		for(Object[] o : supervisedCases){
-			idcase = (Integer) o[0];
-			if(idcase.equals((Integer)caseData[0])){
-				excel.addTextFromResource(YesNoType.YES.getKey());
-				isInList = true;
-				break;
-			}
-		}
-		if(!isInList)
-			excel.addTextFromResource(YesNoType.NO.getKey());
-		return;
-	}
-	
+		
 	public void addExamHivContent(Object[] caseData){
 		if(examsHIV == null)
 			return;
