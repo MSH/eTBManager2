@@ -168,8 +168,10 @@
 			
 			<zipfileset file="src/model/messages_en.properties" fullpath="WEB-INF/classes/messages_en.properties" />
 			<zipfileset file="src/model/messages_az_AZ.properties" fullpath="WEB-INF/classes/messages_az_AZ.properties" />
-			<zipfileset file="src/model/custom_messages_az_AZ.properties" fullpath="WEB-INF/classes/custom_messages_az_AZ.properties" />
 			<zipfileset file="src/model/messages_ru.properties" fullpath="WEB-INF/classes/messages_ru.properties" />
+			<zipfileset file="src/model/custom_messages_az_AZ.properties" fullpath="WEB-INF/classes/custom_messages_az_AZ.properties" />
+			<zipfileset file="src/model/custom_messages_en.properties" fullpath="WEB-INF/classes/custom_messages_en.properties" />
+			<zipfileset file="src/model/custom_messages_ru.properties" fullpath="WEB-INF/classes/custom_messages_ru.properties" />
 			<zipfileset file="WebContent/WEB-INF/seam.quartz.properties" fullpath="WEB-INF/classes/seam.quartz.properties" />
 			<zipfileset file="production/persistence.xml" prefix="WEB-INF/classes/META-INF" />
 			<zipfileset file="production/components.xml" prefix="WEB-INF" />
