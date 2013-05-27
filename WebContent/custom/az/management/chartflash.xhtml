@@ -83,6 +83,7 @@ function open_flash_chart_data()
 	var data2 = 
 		<h:outputText value="#{series}" converter="chartDataConverter" escape="false">
 			<f:param name="title" value="#{title}" />
+			<f:param name="title2" value="#{title2}" />
 		</h:outputText>
 	return JSON2.stringify(data2);
 }
