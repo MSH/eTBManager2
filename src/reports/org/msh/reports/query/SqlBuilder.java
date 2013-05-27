@@ -24,6 +24,8 @@ public class SqlBuilder implements SQLDefs {
 	private List<String> varRestrictions = new ArrayList<String>();
 	private HashMap<String, Object> parameters = new HashMap<String, Object>();
 	private Map<Variable, Integer> varIteration = new HashMap<Variable, Integer>();
+	// joins declared by the variable during SQL creation
+	private List<TableJoin> varJoins = new ArrayList<TableJoin>();
 	private boolean detailed;
 	private String orderBy;
 
@@ -89,6 +91,7 @@ public class SqlBuilder implements SQLDefs {
 		sql = new StringBuilder();
 		fieldList = null;
 		varRestrictions.clear();
+		varJoins.clear();
 
 		if (variables.size() > 0) {
 			fields.clear();
@@ -119,6 +122,11 @@ public class SqlBuilder implements SQLDefs {
 		createSQLGroupBy(sql);
 		
 		createSQLOrderBy(sql);
+		
+		// clear joins added by variables during construction
+		for (TableJoin join: varJoins)
+			if (join.getParentJoin() != null)
+				join.getParentJoin().removeJoin(join);
 		
 		return sql.toString();
 	}
@@ -330,16 +338,28 @@ public class SqlBuilder implements SQLDefs {
 		variables.add(var);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.msh.reports.query.SQLDefs#getMasterTable()
+	 */
 	@Override
 	public TableJoin getMasterTable() {
 		return masterTable;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.msh.reports.query.SQLDefs#addJoin(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public TableJoin addJoin(String table, String field, String parentTable, String parentField) {
-		return masterTable.addJoin(table, field, parentTable, parentField);
+		TableJoin join = masterTable.addJoin(table, field, parentTable, parentField);
+		if (currentVariable != null)
+			varJoins.add(join);
+		return join;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.msh.reports.query.SQLDefs#addField(java.lang.String, org.msh.reports.query.TableJoin)
+	 */
 	@Override
 	public void addField(String field, TableJoin table) {
 		Field fld = new Field();

@@ -73,7 +73,7 @@ public class TypeTBCaseVariable extends VariableImpl {
 		
 		// PREVIOUSLY TREATED WITH 2ND LINE DRUGS
 		if (KEY_2LINE.equals(key)) {
-			def.addRestriction("tbcase.patientType != " + PatientType.NEW.ordinal());
+			def.addRestriction("tbcase.patientType <> " + PatientType.NEW.ordinal());
 			def.addRestriction("exists(select * from prevtbtreatment pv " +
 					  "inner join res_prevtbtreatment d1 on d1.prevtbtreatment_id = pv.id " +
 					  "inner join substance c1 on c1.id = d1.substance_id " +
@@ -112,7 +112,7 @@ public class TypeTBCaseVariable extends VariableImpl {
 	 */
 	@Override
 	public Object filterValueFromString(String value) {
-		if ((value == null) || ((!(KEY_1LINE.equals(value))) && (!(KEY_2LINE.equals(value))) && (!(KEY_NEW.equals(value)))) )
+		if ((value == null) || (!((KEY_NEW.equals(value)) || (KEY_1LINE.equals(value)) || (KEY_2LINE.equals(value))) ))
 			throw new IllegalArgumentException("Wrong type for filter value: " + value);
 
 		return value;

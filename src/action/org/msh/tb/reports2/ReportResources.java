@@ -16,6 +16,7 @@ import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.entities.enums.ValidationState;
+import org.msh.tb.entities.enums.XpertResult;
 import org.msh.tb.reports2.variables.AdminUnitVariable;
 import org.msh.tb.reports2.variables.AgeRangeVariable;
 import org.msh.tb.reports2.variables.CaseItemDateVariable;
@@ -62,6 +63,7 @@ public class ReportResources {
 		addCultureExamVariables();
 		addMicroscopyExamVariables();
 		addDstExamVariables();
+		addExpertExamVariables();
 		addHivExamVariables();
 		addXRayVariables();
 		addTreatmentVariables();
@@ -69,6 +71,7 @@ public class ReportResources {
 //		addMedExaminationVariables();
 		addOtherVariables();
 	}
+
 
 
 
@@ -120,11 +123,11 @@ public class ReportResources {
 	 * @return instance of the {@link ReportGroup} variable containing the group of variables
 	 */
 	protected ReportGroup addCultureExamVariables() {
-		ReportGroup grp = addGroup("cases.examculture");
+		ReportGroup grp = addGroup("manag.reportgen.culture");
 		addVariable(grp, new LabResultDiagVariable("cult_resdiag", "manag.reportgen.var.cultdiag", "examculture.result", CultureResult.class));
 		addVariable(grp, new CaseItemDateVariable("cultcount", "manag.reportgen.var.culturemonth", "examculture.dateCollected", false));
 		addVariable(grp, new CaseItemDateVariable("cultcount_y", "manag.reportgen.var.cultureyear", "examculture.dateCollected", true));
-		addFilter(grp, new CaseItemDateVariable("cultcollect", "#{messages['cases.examdst']} - #{messages['PatientSample.dateCollected']}", "examdst.dateCollected", false));
+		addFilter(grp, new CaseItemDateVariable("cultcollect", "#{messages['manag.reportgen.culture']} - #{messages['manag.reportgen.collect']}", "examdst.dateCollected", false));
 		add(grp, new NegativationMonthVariable("cultneg", true));
 		add(grp, new LabMethodVariable("cultmethod", "TbField.CULTURE_METHOD", "examculture.method_id", TbField.CULTURE_METHOD));
 		return grp;
@@ -139,8 +142,20 @@ public class ReportResources {
 		add(grp, new LabResultDiagVariable("mic_resdiag", "manag.reportgen.var.micdiag", "exammicroscopy.result", MicroscopyResult.class));
 		addVariable(grp, new CaseItemDateVariable("miccount", "manag.reportgen.var.micmonth", "exammicroscopy.dateCollected", false));
 		addVariable(grp, new CaseItemDateVariable("miccount_y", "manag.reportgen.var.micyear", "exammicroscopy.dateCollected", true));
-		addFilter(grp, new CaseItemDateVariable("miccollect", "#{messages['cases.exammicroscopy']} - #{messages['PatientSample.dateCollected']}", "exammicroscopy.dateCollected", false));
+		addFilter(grp, new CaseItemDateVariable("miccollect", "#{messages['manag.reportgen.microscopy']} - #{messages['manag.reportgen.collect']}", "exammicroscopy.dateCollected", false));
 		add(grp, new NegativationMonthVariable("micneg", false));
+		return grp;
+	}
+
+
+	/**
+	 * Add specific variables for Expert exams
+	 * @return
+	 */
+	protected ReportGroup addExpertExamVariables() {
+		ReportGroup grp = addGroup("cases.examxpert");
+		add(grp, new LabResultDiagVariable("genx_diag", "manag.reportgen.var.xpertdiag", "examxpert.result", XpertResult.class));
+		addFilter(grp, new CaseItemDateVariable("xp-collect", "#{messages['manag.reportgen.xpert']} - #{messages['manag.reportgen.collect']}", "exammicroscopy.dateCollected", false));
 		return grp;
 	}
 
@@ -150,10 +165,10 @@ public class ReportResources {
 	 * @return instance of the {@link ReportGroup} variable containing the group of variables
 	 */
 	protected ReportGroup addDstExamVariables() {
-		ReportGroup grp = addGroup("cases.examdst");
+		ReportGroup grp = addGroup("manag.reportgen.dst");
 		addVariable(grp, new CaseItemDateVariable("dstcount", "manag.reportgen.var.dstmonth", "examdst.dateCollected", false));
 		addVariable(grp, new CaseItemDateVariable("dstcount_y", "manag.reportgen.var.dstyear", "examdst.dateCollected", true));
-		addFilter(grp, new CaseItemDateVariable("dstcollect", "#{messages['cases.examdst']} - #{messages['PatientSample.dateCollected']}", "examdst.dateCollected", false));
+		addFilter(grp, new CaseItemDateVariable("dstcollect", "#{messages['manag.reportgen.dst']} - #{messages['manag.reportgen.collect']}", "examdst.dateCollected", false));
 		add(grp, new LabMethodVariable("dstmethod", "TbField.DST_METHOD", "examdst.method_id", TbField.DST_METHOD));
 		return grp;
 	}

@@ -61,6 +61,15 @@ public class TableJoin {
 		joins.add(join);
 	}
 
+	/**
+	 * Remove a join from this table 
+	 * @param join instance of the {@link TableJoin} representing the join
+	 */
+	public void removeJoin(TableJoin join) {
+		if (joins.contains(join))
+			joins.remove(join);
+	}
+	
 	
 	/**
 	 * Search for a join table with the arguments
