@@ -23,7 +23,6 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
-import org.msh.tb.misc.SequenceGenerator;
 import org.msh.tb.tbunits.TBUnitSelection;
 
 @Name("casesControlAZ")
@@ -175,13 +174,14 @@ public class CasesControlAZ {
 	public void changeNumber(){
 		String res="";
 		try{
+			if (!validateChange()){
+				return;
+				/*SequenceGenerator sequenceGenerator = (SequenceGenerator) App.getComponent("sequenceGenerator");
+				sequenceGenerator.generateNewNumber("CASE_NUMBER");*/
+			}
 			CaseHome caseHome = (CaseHome) App.getComponent("caseHome");
 			Patient p = caseHome.getTbCase().getPatient();
 			p.setRecordNumber(numDefault);
-			if (numDefault==getSequenceInfo().getNumber()+1){
-				SequenceGenerator sequenceGenerator = (SequenceGenerator) App.getComponent("sequenceGenerator");
-				sequenceGenerator.generateNewNumber("CASE_NUMBER");
-			}
 			App.getEntityManager().persist(p);
 			App.getEntityManager().flush();
 			res=App.getMessage("default.entity_updated");
@@ -192,7 +192,32 @@ public class CasesControlAZ {
 		}
 		facesMessages.add(res);
 	}
-	
+	/**
+	 * Return true if we can change number without problems
+	 * */
+	private boolean validateChange() {
+		CaseHome caseHome = (CaseHome) App.getComponent("caseHome");
+		Patient p = caseHome.getTbCase().getPatient();
+		int num = p.getRecordNumber().intValue();
+		if (num == numDefault)
+			return false;
+		long duplicate = (Long)App.getEntityManager().createQuery("select count(*) from Patient p " +
+											"where p.id != " +p.getId() +
+											  "and p.recordNumber="+numDefault +
+											  "and p.workspace.id=#{defaultWorkspace.id}")
+							  .getResultList().get(0);
+		if (duplicate!=0){
+			facesMessages.add(App.getMessage("az_AZ.changeNumber.alreadyExist"));
+			return false;
+		}
+		if (numDefault>getSequenceInfo().getNumber()){
+			facesMessages.add(App.getMessage("az_AZ.changeNumber.maxOverflow"));
+			return false;
+		}
+		
+		return true;
+	}
+
 	/**
 	 * Return SequenceInfo with max caseNumber for Azerbaijan
 	 */
@@ -219,7 +244,10 @@ public class CasesControlAZ {
 	}
 	
 	public Integer getNumDefault(){
-		numDefault = getSequenceInfo().getNumber()+1;
+		//numDefault = getSequenceInfo().getNumber()+1;
+		CaseHome caseHome = (CaseHome) App.getComponent("caseHome");
+		Patient p = caseHome.getTbCase().getPatient();
+		numDefault = p.getRecordNumber();
 		return numDefault;
 	}
 

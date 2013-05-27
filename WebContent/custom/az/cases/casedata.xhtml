@@ -52,7 +52,7 @@
 		onclick="if (!confirm('#{messages['cases.reopen.confirm']}')) return false;">
 	</h:commandLink>
 
-	<a:commandLink onclick="Richfaces.showModalPanel('changenumdlg');return false;" 
+	<a:commandLink onclick="if (confirm('#{messages['az_AZ.changeNumber.confirm']}')) Richfaces.showModalPanel('changenumdlg');return false;" 
 					rendered="#{userLogin.user.login=='VLAD'}" >
 	<span>#{messages['cases.changeNumber']}</span>
 	</a:commandLink>
@@ -235,6 +235,7 @@ function updateTab(tabIndex) {
 		window.tabLoaded[tabIndex]=1;
 	}
 	else updateTabSelection(tabIndex);
+
 }
 -->
 </script>
@@ -251,12 +252,30 @@ function updateTab(tabIndex) {
 		<ui:param name="labelstyle" value="width:150px" />
 		<h:form id="formchangenum" style="padding:10px;">
 	
+		<script type="text/javascript"><!--
+		function notFirstNull(elem,e){
+			var key = e.which;
+			var keychar = String.fromCharCode(key);
+			// control keys
+			if ((key==null) || (key==0) || (key==8) || 
+				    (key==9) || (key==13) || (key==27) )
+				   return true;
+			 //not first null
+			if (elem.value=='' && key == 48)
+				return false;
+			//only numbers
+			if ((("0123456789").indexOf(keychar) == -1))
+				   return false;	
+			return true;
+		}
+		--></script>
+	
 		<div class="form-content">
 			<h:panelGroup id="changenumpnl" >
 				<s:decorate template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['Patient.recordNumber']}:</ui:define>
 			    	<ui:param name="required" value="true" /> 
-			    	<h:inputText value="#{casesControlAZ.numDefault}" class="pint"/>
+			    	<h:inputText value="#{casesControlAZ.numDefault}" onkeypress="return notFirstNull(this,event);"/>
 				</s:decorate>
 			</h:panelGroup>
 		</div>
@@ -265,12 +284,12 @@ function updateTab(tabIndex) {
 		<a:commandLink action="#{casesControlAZ.changeNumber()}"
 			styleClass="button" reRender="main,messages,formchangenum"
 			oncomplete="this.disabled=false;Richfaces.hideModalPanel('changenumdlg');">
-			<span>#{messages['cases.changeNumber']}</span>
+			<span>Ok</span>
 		</a:commandLink>
 	
 		<a:commandLink styleClass="button-alt"  
 			onclick="Richfaces.hideModalPanel('changenumdlg'); return false;">
-			<span>#{messages['form.cancel']}</span>
+			<span>#{messages['Cancel']}</span>
 		</a:commandLink>
 		</div>
 		</h:form>
