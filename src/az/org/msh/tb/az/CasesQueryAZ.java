@@ -8,6 +8,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.model.SelectItem;
+
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
@@ -670,5 +672,26 @@ public class CasesQueryAZ extends CasesQuery{
 	private ValidationState getValidationState(){
 		if (caseFilters == null) return null;
 		return caseFilters.getValidationState();
+	}
+	
+	@Override
+	public List<SelectItem> getPageOptions() {
+		if (getPageOptionsWithoutCreate() != null)
+			return getPageOptionsWithoutCreate();
+		
+		Integer currentPage = getCurrentPage();
+		if (currentPage == null)
+			return null;
+
+		Integer maxpage = getMaxPage();
+		if (maxpage == null)
+			return null;
+		
+		List<SelectItem> po = new ArrayList<SelectItem>();
+		for (int i = 1; i <= maxpage; i++) {
+			po.add(new SelectItem(i, Integer.toString(i)));
+		}
+		setPageOptions(po);
+		return po;
 	}
 }

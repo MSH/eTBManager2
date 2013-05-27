@@ -186,4 +186,12 @@ public class EntityQuery<E> extends org.jboss.seam.framework.EntityQuery<E> {
 		
 		return pageOptions;
 	}
+	
+	public List<SelectItem> getPageOptionsWithoutCreate() {
+		return pageOptions;
+	}
+
+	public void setPageOptions(List<SelectItem> pageOptions) {
+		this.pageOptions = pageOptions;
+	}
 }
