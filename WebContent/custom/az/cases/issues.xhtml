@@ -36,7 +36,7 @@
 	</s:link>
 
 	<s:link value="#{messages['cases.pending.notify']}" view="/cases/newissue.xhtml" 
-		rendered="#{caseHome.canCreateIssue}" style="width:200px;">
+		rendered="#{caseHome.canCreateIssue and tbcase.ownerUnit!=null}" style="width:200px;">
 		<f:param name="id" value="#{caseHome.id}"/>
 	</s:link>
 		
