@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.msh.tb.application.App;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.entities.ExamCulture;
@@ -21,6 +23,7 @@ import org.msh.tb.indicators.IndicatorVerify;
 import org.msh.tb.indicators.core.IndicatorTable;
 
 @Name("report08az")
+@Scope(ScopeType.CONVERSATION)
 public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 	private static final long serialVersionUID = -5703455596815108661L;
 
@@ -613,5 +616,18 @@ public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 		if (filters_az.getReferToThisUnit()!=null)
 			hql += " and c.referToOtherTBUnit="+(filters_az.getReferToThisUnit()==true ? 0:1);
 		return hql;
+	}
+	
+	/**
+	 * Clear all tables and verifyList
+	 * */
+	public void clear(){
+		table1000 = null;
+		table2100 = null;
+		table2110 = null;
+		table4000 = null;
+		mas3000 = null;
+		mas3001 = null;
+		setVerifyList(null);
 	}
 }
