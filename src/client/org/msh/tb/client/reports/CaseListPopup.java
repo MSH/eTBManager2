@@ -107,8 +107,8 @@ public class CaseListPopup extends PopupPanel {
 		recordCount = lst.getRecordCount();
 		pageSize = lst.getPageSize();
 		NumberFormat nf = NumberFormat.getDecimalFormat();
-		int iniResult = page * 30 + 1;
-		long lastResult = iniResult + 29;
+		int iniResult = page * pageSize + 1;
+		long lastResult = iniResult + (pageSize - 1);
 		if (lastResult > recordCount)
 			lastResult = recordCount;
 		String s = nf.format(iniResult) + " - " + nf.format(lastResult) + 

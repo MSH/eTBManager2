@@ -138,7 +138,7 @@ public class ReportResources {
 	 * @return instance of the {@link ReportGroup} variable containing the group of variables
 	 */
 	protected ReportGroup addMicroscopyExamVariables() {
-		ReportGroup grp = addGroup("cases.exammicroscopy");
+		ReportGroup grp = addGroup("manag.reportgen.microscopy");
 		add(grp, new LabResultDiagVariable("mic_resdiag", "manag.reportgen.var.micdiag", "exammicroscopy.result", MicroscopyResult.class));
 		addVariable(grp, new CaseItemDateVariable("miccount", "manag.reportgen.var.micmonth", "exammicroscopy.dateCollected", false));
 		addVariable(grp, new CaseItemDateVariable("miccount_y", "manag.reportgen.var.micyear", "exammicroscopy.dateCollected", true));

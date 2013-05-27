@@ -290,7 +290,7 @@ public class ReportServiceImpl implements ReportService {
 		IndicatorReport rep = IndicatorReportFactory.instance().createCaseIndicator();
 		ReportResources res = getReportResources();
 
-		int pageSize = 30;
+		int pageSize = 20;
 
 		// set filter values
 		if (filters != null) {
