@@ -504,8 +504,10 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		if (super.getUser() == null){
 			Integer userId = (Integer) getParameter("userId");
 			if (userId != null){
+				beginTransaction();
 				Query q = getEntityManager().createQuery("from User u where u.id = "+userId);
 				List<Object> lu = q.getResultList();
+				commitTransaction();
 				User user = (User)lu.get(0);
 				if (user != null){
 					setUser(user);
