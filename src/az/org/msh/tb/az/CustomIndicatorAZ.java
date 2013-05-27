@@ -1,62 +1,38 @@
 package org.msh.tb.az;
 
 import java.text.DateFormatSymbols;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
-import javax.faces.model.SelectItem;
-
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.international.Messages;
-import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.application.App;
 import org.msh.tb.az.entities.enums.OutputSelectionAZ;
-import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorFilters;
-import org.msh.tb.indicators.core.IndicatorSite;
-import org.msh.tb.indicators.core.OutputSelection;
 
 @Name("customIndicatorAZ")
-public class CustomIndicatorAZ extends Indicator2D {
+public class CustomIndicatorAZ extends OutputSelectionIndicator2D {
 	private static final long serialVersionUID = 5127772756149803047L;
-	@In(create=true) Locale locale;
-
+	
 	private OutputSelectionAZ colSelection;
-	private int colExams = 0;
 	private boolean source = false;
-	private String date = null;
 	private boolean showPerc;
 
 	@Override
 	protected void createIndicators() {
-		IndicatorFiltersAZ filters = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
-		if (filters == null) 
-			return;
-		if ((filters.getOutputSelection() == null) || (colSelection == null))
-			return;
-
-		if (!validatePeriod())
-			return;
-
-		if (!validateTBUnit())
+		if (!validate())
 			return;
 		
-		String rowField = getOutputSelectionField( filters.getOutputSelection() );
-		String colField = getOutputSelectionField( colSelection );
+		IndicatorFiltersAZ filters = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
+		String rowField = getOutputSelectionField(filters.getOutputSelection());
+		String colField = getOutputSelectionField(colSelection);
 		List<Object[]> lst;
 
-		if (colExams==0 && !source){
+		if (getColExams()==0 && !source){
 			lst = generateValuesByField(colField + "," + rowField,condition());
 		}
 		else{
 			String hql = "";
-			if (colExams<2){
+			if (getColExams()<2){
 				String rc = getColRow();
 				hql = "select "+rc+", count(*) ";
 				hql += "from "+getExam()+" ex join ex.tbcase c ";
@@ -97,7 +73,8 @@ public class CustomIndicatorAZ extends Indicator2D {
 	/**
 	 * Return false if no selected tb-unit in filters, but it is need
 	 */
-	private boolean validateTBUnit() {
+	@Override
+	protected boolean validateTBUnit() {
 		if (!someSelectionEqualsTo(OutputSelectionAZ.TBUNIT_OWN))
 			return true;
 		IndicatorFiltersAZ filters_az = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
@@ -117,7 +94,8 @@ public class CustomIndicatorAZ extends Indicator2D {
 	/**
 	 * Return false if one of the outputSelection is PERIOD, but not enough necessary parameters
 	 * */
-	private boolean validatePeriod() {
+	@Override
+	protected boolean validatePeriod() {
 		if (!someSelectionEqualsTo(OutputSelectionAZ.YEAR_MONTH) &&
 			!someSelectionEqualsTo(OutputSelectionAZ.YEAR) &&
 			!someSelectionEqualsTo(OutputSelectionAZ.YEAR_WEEK))
@@ -166,43 +144,7 @@ public class CustomIndicatorAZ extends Indicator2D {
 		return null;
 	}
 
-	/**
-	 * Return the field of the HQL query associated to the output selected
-	 * @param output
-	 * @return
-	 */
-	protected String getOutputSelectionField(OutputSelectionAZ output) {
-		switch (output) {
-		case GENDER: return "c.patient.gender";
-		case INFECTION_SITE: return "c.infectionSite";
-		case PATIENT_TYPE: return "c.patientType";
-		case ADMINUNIT:
-			if (getIndicatorFilters().getIndicatorSite() == IndicatorSite.PATIENTADDRESS)
-				return "c.notifAddress.adminUnit.code";
-			else return "c.notificationUnit.adminUnit.code";
-		case TBUNIT: return "c.notificationUnit.name.name1";
-		case NATIONALITY: return "c.nationality";
-		case AGERANGE: return "c.age";
-		case PULMONARY: return "c.pulmonaryType.name";
-		case EXTRAPULMONARY: return "c.extrapulmonaryType.name";
-		case REGIMENS: return "c.regimen.name";
-		case VALIDATION_STATE: return "c.validationState";
-		case MICROSCOPY_RESULT: colExams++; return "ExamMicroscopy";
-		case CULTURE_RESULT: colExams++; return "ExamCulture";
-		case DIAGNOSIS_TYPE: return "c.diagnosisType";
-		case HIV_RESULT: colExams++; return "ExamHIV";
-		//case SOURCE_MED: source = true; return "";//
-		case DRUG_RESIST_TYPE: return "c.drugResistanceType";
-		case CLASSIFICATION: return "c.classification";
-		case YEAR_MONTH: return "year("+getDate()+"),month("+getDate()+")";
-		case YEAR: return "year("+getDate()+")";
-		case YEAR_WEEK: return "year("+getDate()+"),month("+getDate()+"),week("+getDate()+")";
-		case HEALTH_SYSTEM: return "c.notificationUnit.healthSystem";
-		case TBUNIT_OWN: return "c.notificationUnit,c.ownerUnit"; 
-		case CREATOR_USER: return "c.createUser";
-		}
-		return null;
-	}
+
 
 	@Override
 	protected String getHQLFrom() {
@@ -284,64 +226,8 @@ public class CustomIndicatorAZ extends Indicator2D {
 		return lst;
 	}
 
-	protected List<Object[]> groupValuesByTbUnit(List<Object[]> lst, int index, int keyCount) {
-		List<Object[]> new_lst = new ArrayList<Object[]>();
-		IndicatorFilters filters = (IndicatorFilters)App.getComponent("indicatorFilters");
-		Integer id = filters.getTbunitselection().getTbunit().getId();
-		for(Object[] vals:lst){
-			Tbunit nU = (Tbunit)vals[index];
-			if (nU.getId()==id){
-				addValueToUnit(App.getMessage("TbCase.notificationUnit"),index, keyCount, new_lst, vals);
-				if (vals[index+1]==null)
-					addValueToUnit(App.getMessage("TbCase.realUnit"),index, keyCount, new_lst, vals);
-			}
-			if (vals[index+1]!=null){
-				Tbunit oU = (Tbunit)vals[index+1];
-				if (oU.getId()==id){
-					addValueToUnit(App.getMessage("TbCase.ownerUnit"),index, keyCount, new_lst, vals);
-					addValueToUnit(App.getMessage("TbCase.realUnit"),index, keyCount, new_lst, vals);
-				}
-			}
-		}
-		return new_lst;
-	}
 
-	/**
-	 * @param index
-	 * @param keyCount
-	 * @param new_lst
-	 * @param vals
-	 */
-	protected void addValueToUnit(String tbu,int index, int keyCount,
-			List<Object[]> new_lst, Object[] vals) {
-		long value = (Long)vals[vals.length - 1];
-		Object[] keys = new Object[2];
-		if (index==0){
-			keys[0]=tbu;
-			keys[1]=vals[keyCount-index*2];
-		}
-		else{
-			keys[0]=vals[keyCount-index*2];
-			keys[1]=tbu;
-		}
-		
-		Object[] newvalues = findRecord(new_lst, keys);
 
-		// record was found ?
-		if (newvalues == null) {
-			// rebuild new values
-			newvalues = new Object[3];
-			int ind = 0;
-			while (ind < 2) {
-				newvalues[ind] = keys[ind];
-				ind++;
-			}
-			newvalues[2] = 0L;
-			new_lst.add(newvalues);
-		}
-		
-		newvalues[newvalues.length - 1] = ((Long)newvalues[newvalues.length - 1]) + value;
-	}
 	
 	/**
 	 * @return the colSelection
@@ -382,23 +268,7 @@ public class CustomIndicatorAZ extends Indicator2D {
 		return getDisplayOutputSelection(colSelection);
 	}
 
-	/**
-	 * Return the display value of the {@link OutputSelection} parameter
-	 * @param output
-	 * @return string display representation of the parameter output
-	 */
-	public String getDisplayOutputSelection(OutputSelectionAZ output) {
-		if (output == null)
-			return null;
-
-		for (SelectItem item: getOutputSelections()) {
-			if (item.getValue().equals(output.ordinal())) {
-				return item.getLabel();
-			}
-		}
-		return null;		
-	}
-
+	
 	public boolean isShowPerc() {
 		return showPerc;
 	}
@@ -406,79 +276,10 @@ public class CustomIndicatorAZ extends Indicator2D {
 		this.showPerc = showPerc;
 	}
 
-	/**
-	 * Return the options of output to be selected by the user 
-	 * @return Array of {@link OutputSelection} enumeration
-	 */
-	@Override
-	public List<SelectItem> getOutputSelections() {
-		IndicatorFilters filters = getIndicatorFilters();
-		Map<String, String> messages = Messages.instance();
-
-		List<SelectItem> outputSelections = new ArrayList<SelectItem>();
-
-		// checks administrative unit selection
-		AdminUnitSelection auselection = filters.getTbunitselection().getAuselection();
-		AdministrativeUnit adminUnit = auselection.getSelectedUnit();
-
-		String labelAdminUnit = null;
-		boolean hasAdminUnit = true;
-
-		if (adminUnit != null) {
-			hasAdminUnit = adminUnit.getUnitsCount() > 0;
-			labelAdminUnit = auselection.getLabelLevel(adminUnit.getLevel() + 1);
-		}
-		else labelAdminUnit = auselection.getLabelLevel(1);
-
-		// mount the list of options
-		for (OutputSelectionAZ sel: OutputSelectionAZ.values()) {
-			if ((sel != OutputSelectionAZ.ADMINUNIT) || ((sel == OutputSelectionAZ.ADMINUNIT) && (hasAdminUnit))) {
-				SelectItem item = new SelectItem();
-				item.setValue(sel.ordinal());
-				if (sel == OutputSelectionAZ.ADMINUNIT)
-					item.setLabel(labelAdminUnit);
-				else item.setLabel(messages.get(sel.getKey()));
-				outputSelections.add(item);
-			}
-		}
-		setOutputSelections(outputSelections);
-		return outputSelections;
-	}
-
-
-	@Override
-	public String getDisplayOutputSelection() {
-		IndicatorFiltersAZ filters = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
-		OutputSelectionAZ output = filters.getOutputSelection();
-
-		return getDisplayOutputSelection(output);
-	}
-
-	/**
-	 * Return selected date from filters
-	 * */
-	public String getDate() {
-		if (date==null){
-			IndicatorFilters filters = getIndicatorFilters();
-			if (filters.isUseDiagnosisDate())
-				date = "c.diagnosisDate";
-
-			if (filters.isUseRegistrationDate()) 
-				date = "c.registrationDate";
-
-			if (filters.isUseIniTreatmentDate()) 
-				date = "c.treatmentPeriod.iniDate";
-
-		}
-		return date;
-	}
 	
 	@Override
 	protected String getHQLWhere() {
 		String hql = super.getHQLWhere();
-		IndicatorFiltersAZ filters_az = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
-		if (filters_az.getReferToThisUnit()!=null)
-			hql += " and c.referToOtherTBUnit="+(filters_az.getReferToThisUnit()==true ? 0:1);
-		return hql;
+		return hql+getHQLWhereCond();
 	}
 }

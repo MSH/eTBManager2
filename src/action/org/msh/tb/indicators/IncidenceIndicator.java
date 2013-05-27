@@ -136,4 +136,8 @@ public class IncidenceIndicator extends Indicator {
 		return hql + " and " + condition;
 	}
 	
+	public String getHQLWherePublic(){
+		return getHQLWhere();
+	}
+	
 }
