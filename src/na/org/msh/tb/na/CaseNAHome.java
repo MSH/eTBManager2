@@ -7,7 +7,6 @@ import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.treatment.TreatmentHome;
-import org.msh.tb.entities.TbCase;
 import org.msh.tb.na.entities.TbCaseNA;
 
 

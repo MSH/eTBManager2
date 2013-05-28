@@ -17,7 +17,6 @@ import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator2D;
-import org.msh.tb.na.entities.CaseDispensingNA;
 
 @Name("tBForm10Block7")
 public class TBForm10Block7 extends Indicator2D{

@@ -1,6 +1,5 @@
 package org.msh.tb.medicines.movs;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,9 +9,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.msh.tb.MsgDispatcher;
-import org.msh.tb.SourceGroup;
 import org.msh.tb.entities.Transfer;
-import org.msh.tb.entities.TransferItem;
 import org.msh.tb.entities.User;
 
 /**

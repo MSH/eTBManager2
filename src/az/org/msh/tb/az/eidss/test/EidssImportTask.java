@@ -1,31 +1,20 @@
 package org.msh.tb.az.eidss.test;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.ws.BindingProvider;
 
 import org.jboss.seam.Component;
-
 import org.msh.tb.az.eidss.CaseImporting;
 import org.msh.tb.az.eidss.CaseInfo;
 import org.msh.tb.az.entities.TbCaseAZ;
@@ -37,9 +26,6 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.ValidationState;
-import org.omg.PortableServer.POAManagerPackage.State;
-
-import javax.xml.ws.Service;
 
 /**
  * @author Шэър

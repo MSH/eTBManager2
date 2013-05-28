@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.entities.enums.ReferredTo;
 import org.msh.tb.indicators.core.Indicator;
 

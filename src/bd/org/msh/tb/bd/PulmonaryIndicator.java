@@ -1,6 +1,5 @@
 package org.msh.tb.bd;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,11 +11,9 @@ import org.jboss.seam.international.Messages;
 import org.msh.tb.bd.entities.TbCaseBD;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.MicroscopyResult;
-import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator2D;
 
 /**

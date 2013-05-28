@@ -25,7 +25,6 @@ import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.entities.enums.TbField;
-import org.msh.tb.entities.enums.YesNoType;
 import org.msh.utils.date.DateUtils;
 
 /**

@@ -12,7 +12,6 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.cases.treatment.PrescriptionTable;
 import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineDispensing;

@@ -14,20 +14,18 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.faces.FacesMessages;
+import org.msh.tb.EntityHomeEx;
 import org.msh.tb.TagsCasesHome;
+import org.msh.tb.bd.entities.CaseSideEffectBD;
+import org.msh.tb.bd.entities.TbCaseBD;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.misc.FieldsQuery;
-import org.msh.tb.na.entities.TbCaseNA;
-import org.msh.tb.bd.entities.CaseSideEffectBD;
-import org.msh.tb.bd.entities.TbCaseBD;
 import org.msh.utils.ItemSelect;
-import org.msh.utils.ItemSelectHelper;
 import org.msh.utils.date.Period;
-import org.jboss.seam.faces.FacesMessages;
-import org.msh.tb.EntityHomeEx;
 
 
 @Name("sideEffectBDHome")

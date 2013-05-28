@@ -6,7 +6,6 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.entities.enums.DotBy;
 import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.TbField;
-import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.na.entities.enums.Dot;
 import org.msh.tb.na.entities.enums.DotOptions;
 import org.msh.tb.na.entities.enums.SideEffectAction;

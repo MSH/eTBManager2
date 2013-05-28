@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.msh.tb.entities.OrderItem;
-import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
-
 public class DispensingMovementDetail {
 
 	public class DispensingPatientDetail{

@@ -1,7 +1,5 @@
 package org.msh.tb.bd;
 
-import org.apache.commons.beanutils.PropertyUtils;
-import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
@@ -13,7 +11,6 @@ import org.msh.tb.bd.entities.enums.SalaryRange;
 import org.msh.tb.bd.entities.enums.SkinTestResult;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.InfectionSite;
-import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.ReferredTo;
 import org.msh.tb.entities.enums.SampleType;
 import org.msh.tb.entities.enums.TbField;

@@ -1,6 +1,5 @@
 package org.msh.tb.na;
 
-import java.sql.Date;
 import java.util.Calendar;
 
 import org.msh.utils.date.DateUtils;

@@ -8,7 +8,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.exams.ExamHome;
-import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.na.entities.ExamHIV_NA;
 import org.msh.tb.transactionlog.LogInfo;
 
