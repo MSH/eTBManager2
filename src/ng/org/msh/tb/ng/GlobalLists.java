@@ -1,10 +1,5 @@
 package org.msh.tb.ng;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
@@ -13,7 +8,6 @@ import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.HIVResultNg;
 import org.msh.tb.entities.enums.Nationality;
-import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.tb.entities.enums.ReferredBy;
 import org.msh.tb.entities.enums.ReferredTo;
 import org.msh.tb.entities.enums.SampleType;
