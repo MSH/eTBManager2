@@ -25,6 +25,10 @@ public class EIDSSFilters {
 	private String address = null;
 	private TBUnitSelection tbunit;
 	private boolean search = false;
+	
+	//private Period diagDate;
+	private Integer bindMonth;
+	private Integer bindYear;
 
 	public List<SelectItem> getYears() {
 		List<SelectItem> lst = new ArrayList<SelectItem>();
@@ -195,5 +199,21 @@ public class EIDSSFilters {
 
 	public void cancelSearch(){
 		setSearch(false);
+	}
+	
+	public Integer getBindMonth() {
+		return bindMonth;
+	}
+
+	public void setBindMonth(Integer bindMonth) {
+		this.bindMonth = bindMonth;
+	}
+
+	public Integer getBindYear() {
+		return bindYear;
+	}
+
+	public void setBindYear(Integer bindYear) {
+		this.bindYear = bindYear;
 	}
 }

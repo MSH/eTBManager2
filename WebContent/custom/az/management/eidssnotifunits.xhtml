@@ -26,7 +26,88 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 <h:form styleClass="form1">
+	<div class="form-content">
+	<ui:param name="labelstyle" value="font-weight:bold;font-size:12px;font-family:Verdana;" />
+
+	<table id="tblfilters" style="border-collapse:collapse;width:100%;"  align="center">
+		<tr>
+			<td>
+			<h2>#{messages['cases.casesearching.filterdates']}</h2>
+			</td>
+			<td>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+			<s:label value="#{messages['excel.dateInEIDSS']}:"  style="#{labelstyle}"/>
+			 <br/>
+				<s:decorate template="/layout/dateedit.xhtml">
+			   		<ui:define name="label"> #{messages['from']} </ui:define>
+			   		<ui:param name="datefield" value="#{eidssFilters.inDate.iniDate}" /> 
+					<ui:param name="required" value="false" />
+			   	</s:decorate>
+			   	<s:decorate template="/layout/dateedit.xhtml">
+			   		<ui:define name="label"> #{messages['to']} </ui:define>
+			   		<ui:param name="datefield" value="#{eidssFilters.inDate.endDate}" /> 
+					<ui:param name="required" value="false" />
+			   	</s:decorate>
+			</td>
+			<td>
+			<ui:remove>
+			<s:label value="#{messages['TbCase.diagnosisDate']} #{messages['excel.fromEIDSS']}:"  style="#{labelstyle}"/>
+			 <br/>
+				<s:decorate template="/layout/dateedit.xhtml">
+			   		<ui:define name="label"> #{messages['from']} </ui:define>
+			   		<ui:param name="datefield" value="#{eidssFilters.diagDate.iniDate}" /> 
+					<ui:param name="required" value="false" />
+			   	</s:decorate>
+			   	<s:decorate template="/layout/dateedit.xhtml">
+			   		<ui:define name="label"> #{messages['to']} </ui:define>
+			   		<ui:param name="datefield" value="#{eidssFilters.diagDate.endDate}" /> 
+					<ui:param name="required" value="false" />
+			   	</s:decorate>
+			</ui:remove>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<s:decorate template="/layout/edit.xhtml" >
+					<ui:define name="label">#{messages['excel.dateRegAfterEIDSS']} (#{messages['global.monthyear']}):	</ui:define>
+					<ui:param name="labelstyle" value="width:140px;" />
+					<h:selectOneMenu value="#{eidssFilters.bindMonth}" style="margin-right:4px;">
+						<f:selectItems value="#{months}"/>
+					</h:selectOneMenu>
+					<h:selectOneMenu value="#{eidssFilters.bindYear}">
+						<f:selectItems value="#{years}"/>
+					</h:selectOneMenu>
+				</s:decorate>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<h2>#{messages['eidssFiltres.ownerUnit']}:</h2>
+				<s:decorate template="/custom/az/layout/tbselection.xhtml">
+					<ui:param name="tbunitselection" value="#{eidssFilters.tbunit}" />
+					<ui:param name="unitLabel" value="#{messages['eidssFiltres.ownerUnit']}" />
+				</s:decorate>
+			</td>
+		</tr>
+		<tr>
+			<td align="left" >
+			<a:commandLink reRender="indicator" styleClass="button" 
+				action="#{indicatorControllerAZ.execute}"
+				onclick="if (!disableButton(this)) return false;" oncomplete="enableButton();showChart();">
+				<span>#{messages['form.update']}</span>
+			</a:commandLink>
+			
+			</td>
+		</tr>
+	</table>
 	
+	</div>
+	<h:panelGroup id="indicator">
+	<s:fragment rendered="#{indicatorControllerAZ.executing}">
 	<table  bgcolor="#E2EAE2" style="border-collapse:collapse;">
 		<tr >
 			<th style="font-weight:bold; background-color:#AFCFC1; color:white; border: 1px solid white;  border-bottom: 0px;">
@@ -72,7 +153,8 @@
 			
 		</tr>
 	</table>
-
+	</s:fragment>
+</h:panelGroup>
 </h:form>
 </ui:define>
 
