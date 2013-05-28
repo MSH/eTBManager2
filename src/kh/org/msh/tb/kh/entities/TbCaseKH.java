@@ -10,7 +10,6 @@ import javax.persistence.Table;
 
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
-import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="tbcasekh")

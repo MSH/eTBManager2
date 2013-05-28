@@ -2,7 +2,6 @@ package org.msh.tb.kh.entities;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 import org.msh.tb.entities.TbContact;
 

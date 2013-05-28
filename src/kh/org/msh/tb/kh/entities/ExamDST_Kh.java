@@ -1,8 +1,5 @@
 package org.msh.tb.kh.entities;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.enums.SampleType;
 

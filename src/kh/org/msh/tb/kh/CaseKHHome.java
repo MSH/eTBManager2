@@ -1,20 +1,15 @@
 package org.msh.tb.kh;
 
-import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.cases.WsEntityHome;
 import org.msh.tb.cases.treatment.TreatmentHome;
 import org.msh.tb.entities.Address;
 import org.msh.tb.entities.TbCase;
-import org.msh.tb.kh.MedicalExaminationKHHome;
 import org.msh.tb.kh.entities.TbCaseKH;
-import org.msh.tb.transactionlog.LogInfo;
 
 
 

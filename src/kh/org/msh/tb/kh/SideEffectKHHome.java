@@ -8,13 +8,9 @@ import javax.persistence.EntityManager;
 
 import org.hibernate.validator.InvalidStateException;
 import org.hibernate.validator.InvalidValue;
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
-import org.msh.tb.TagsCasesHome;
 import org.msh.tb.cases.CaseHome;
-
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;

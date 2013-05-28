@@ -2,23 +2,19 @@ package org.msh.tb.kh;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+
+import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
-import org.msh.tb.adminunits.InfoCountryLevels;
 import org.msh.tb.entities.ExamDST;
-import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.DstResult;
-import org.msh.tb.indicators.core.Indicator;
 import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.kh.entities.TbCaseKH;
 import org.msh.utils.date.DateUtils;
-
-import java.util.List;
-
-import javax.persistence.EntityManager;
 /**
  * Generate indicator about delay in MDR-TB diagnosis and start treatment
  * @author Vani Rao
