@@ -2,25 +2,9 @@ package org.msh.tb.indicators.core;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.persistence.ColumnResult;
-import javax.persistence.SqlResultSetMapping;
-
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.msh.tb.entities.ResistancePattern;
-import org.msh.tb.entities.Substance;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.DstResult;
-import org.msh.tb.indicators.core.Indicator;
-import org.msh.tb.indicators.core.Indicator2D;
-import org.msh.tb.indicators.core.IndicatorSeries;
-import org.msh.tb.indicators.core.IndicatorTable;
-import org.msh.tb.indicators.core.IndicatorTable.TableCell;
 import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
-import org.msh.tb.indicators.core.IndicatorTable.TableRow;
 
 /**
  * Generates indicator about DST resistance profile report
