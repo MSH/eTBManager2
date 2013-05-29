@@ -112,8 +112,14 @@ public class DateFieldVariable extends VariableImpl {
 			int num = (Integer)value;
 			if (num < 9999) {
 				def.addRestriction("year(" + getFieldName() + ") = " + num);
-				return;
 			}
+			else {
+				int month = num % 100;
+				int year = num / 100;
+				def.addRestriction("month(" + getFieldName() + ") = " + month);
+				def.addRestriction("year(" + getFieldName() + ") = " + year);
+			}
+			return;
 		}
 		
 		Period p;

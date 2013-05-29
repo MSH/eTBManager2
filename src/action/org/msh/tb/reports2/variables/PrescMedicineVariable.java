@@ -40,6 +40,8 @@ public class PrescMedicineVariable extends VariableImpl {
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
 		def.addJoin("prescribedmedicine", "case_id", "tbcase", "id");
+		def.addRestriction("prescribedmedicine.id = (select min(pm1.id) from prescribedmedicine pm1 where pm1.medicine_id = prescribedmedicine.id " +
+				"and pm1.case_id = " + def.getMasterTable().getAlias() + ".id )");
 		super.prepareVariableQuery(def, iteration);
 	}
 
@@ -52,9 +54,7 @@ public class PrescMedicineVariable extends VariableImpl {
 				"and pm1.case_id =" + def.getMasterTable().getAlias() + ".id)");
 		Integer id = Integer.parseInt(value.toString());
 		def.addParameter("prescmed", id);
-/*		def.addJoin("prescribedmedicine", "case_id", "tbcase", "id");
-		super.prepareFilterQuery(def, oper, value);
-*/	}
+	}
 	
 
 	/* (non-Javadoc)

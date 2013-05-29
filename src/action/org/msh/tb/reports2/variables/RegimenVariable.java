@@ -40,7 +40,7 @@ public class RegimenVariable extends VariableImpl {
 	@Override
 	public String getDisplayText(Object key) {
 		// if it's null, return undefined
-		if (key == null)
+		if ((key == null) || (KEY_NULL.equals(key)))
 			return Messages.instance().get("regimens.individualized");
 
 		Integer id = (Integer)key;

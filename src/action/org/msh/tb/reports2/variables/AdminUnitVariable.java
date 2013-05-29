@@ -55,7 +55,7 @@ public class AdminUnitVariable extends VariableImpl {
 		// search for administrative unit by its code
 		for (AdministrativeUnit au: getAdminUnits()) {
 			if (au.isSameOrChildCode(code))
-				return au.getId();
+				return au.getCode();
 		}
 
 		return null;
@@ -121,7 +121,7 @@ public class AdminUnitVariable extends VariableImpl {
 	 */
 	@Override
 	public Object filterValueFromString(String value) {
-		return Integer.parseInt(value);
+		return value;
 	}
 
 

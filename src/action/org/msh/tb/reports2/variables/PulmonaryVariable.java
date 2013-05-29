@@ -1,5 +1,6 @@
 package org.msh.tb.reports2.variables;
 
+import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.TbField;
@@ -22,6 +23,16 @@ public class PulmonaryVariable extends FieldValueVariable {
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
 		super.prepareVariableQuery(def, iteration);
+		def.addRestriction("tbcase.infectionSite in (" + InfectionSite.BOTH.ordinal() + "," + InfectionSite.PULMONARY.ordinal() + ")");
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
+	 */
+	@Override
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
+			Object value) {
+		super.prepareFilterQuery(def, oper, value);
 		def.addRestriction("tbcase.infectionSite in (" + InfectionSite.BOTH.ordinal() + "," + InfectionSite.PULMONARY.ordinal() + ")");
 	}
 

@@ -44,8 +44,6 @@ public class CTable implements IsSerializable {
 	 */
 	private boolean colTotalAvailable;
 
-
-
 	/**
 	 * @return the rows
 	 */

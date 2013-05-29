@@ -256,7 +256,7 @@ public class SqlBuilder implements SQLDefs {
 		if ((detailed) || (variables.size() == 0))
 			return;
 		builder.append("\ngroup by ");
-		builder.append(getFieldList());
+		builder.append( parseTableNames( getFieldList() ));
 	}
 	
 	
@@ -272,8 +272,8 @@ public class SqlBuilder implements SQLDefs {
 		builder.append("\norder by ");
 		
 		if (orderBy != null)
-			 builder.append(orderBy);
-		else builder.append(getFieldList());
+			 builder.append( parseTableNames( orderBy ) );
+		else builder.append( parseTableNames(getFieldList()));
 	}
 
 	

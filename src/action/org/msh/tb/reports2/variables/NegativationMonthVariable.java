@@ -1,6 +1,7 @@
 package org.msh.tb.reports2.variables;
 
 import org.jboss.seam.international.Messages;
+import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.reports2.VariableImpl;
 
@@ -72,7 +73,45 @@ public class NegativationMonthVariable extends VariableImpl {
 		if (month > 36)
 			month = 37L;
 
-		return month;
+		return month.intValue();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
+	 */
+	@Override
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
+			Object value) {
+		String tbl;
+		if (culture)
+			 tbl = "examculture";
+		else tbl = "exammicroscopy";
+		def.addJoin(tbl, "case_id", "tbcase", "id");
+		def.addRestriction("tbcase.initreatmentdate is not null");
+		
+		String s = "timestampdiff(month, tbcase.initreatmentdate, " + tbl + ".dateCollected) ";
+		
+		if (value == null) {
+			s += " < 0";
+		}
+		else {
+			int num = (Integer)value;
+
+			if (num < 37)
+				 s += " = " + Integer.toString(num - 1);
+			else s += " >= " + Integer.toString(num - 1);
+		}
+		def.addRestriction(s);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#filterValueFromString(java.lang.String)
+	 */
+	@Override
+	public Object filterValueFromString(String value) {
+		if (value == null)
+			return null;
+		return Integer.parseInt(value);
 	}
 
 }
