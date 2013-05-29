@@ -72,7 +72,7 @@ public class AdminUnitVariable extends VariableImpl {
 			return super.getDisplayText(key);
 
 		for (AdministrativeUnit au: getAdminUnits()) {
-			if (au.getId().equals(key))
+			if (au.getCode().equals(key))
 				return au.getName().toString();
 		}
 		

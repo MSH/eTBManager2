@@ -168,8 +168,10 @@ public class TableView extends Composite {
 				sum += val;
 				c++;
 			}
-			table.setText(r, c, nf.format(sum));
-			setCellStyle(r, c, STYLE_VAL_TOTAL, 1, 1);
+			if (totCol) {
+				table.setText(r, c, nf.format(sum));
+				setCellStyle(r, c, STYLE_VAL_TOTAL, 1, 1);
+			}
 		}
 	}
 
