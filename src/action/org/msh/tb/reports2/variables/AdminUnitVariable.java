@@ -15,7 +15,7 @@ import org.msh.tb.reports2.FilterType;
 import org.msh.tb.reports2.VariableImpl;
 
 /**
- * Variable by administrative unit
+ * Variable to handle administrative unit fields
  * @author Ricardo Memoria
  *
  */
@@ -29,7 +29,8 @@ public class AdminUnitVariable extends VariableImpl {
 
 	
 	/**
-	 * @return
+	 * Return the first level list of administrative units
+	 * @return list of {@link AdministrativeUnit} instances
 	 */
 	public List<AdministrativeUnit> getAdminUnits() {
 		if (adminUnits == null) {

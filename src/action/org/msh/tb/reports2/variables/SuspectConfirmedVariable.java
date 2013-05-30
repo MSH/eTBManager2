@@ -1,7 +1,11 @@
 package org.msh.tb.reports2.variables;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.filters.FilterOption;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.reports2.VariableImpl;
 
@@ -82,6 +86,17 @@ public class SuspectConfirmedVariable extends VariableImpl {
 		if (KEY_SUSPECT.equals(key)) 
 			 return Messages.instance().get("DiagnosisType.SUSPECT");
 		else return Messages.instance().get("DiagnosisType.CONFIRMED");
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#getFilterOptions(java.lang.Object)
+	 */
+	@Override
+	public List<FilterOption> getFilterOptions(Object param) {
+		List<FilterOption> lst = new ArrayList<FilterOption>();
+		lst.add(createFilterOption(KEY_CONFIRMED));
+		lst.add(createFilterOption(KEY_SUSPECT));
+		return lst;
 	}
 
 }

@@ -132,6 +132,17 @@ public class VariableImpl implements Variable, Filter {
 		return MessageFormat.format(msg, arg);
 	}
 
+	
+	/**
+	 * Create a new instance of {@link FilterOption} from a key. The label of the
+	 * option will be generated from the method <code>getDisplayText(Object)</code>
+	 * @param key is a variable key
+	 * @return instance of {@link FilterOption} using the key as the value
+	 */
+	public FilterOption createFilterOption(Object key) {
+		return new FilterOption(key, getDisplayText(key));
+	}
+	
 	/**
 	 * @return the id
 	 */

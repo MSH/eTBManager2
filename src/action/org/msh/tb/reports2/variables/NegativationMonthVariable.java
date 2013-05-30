@@ -1,7 +1,11 @@
 package org.msh.tb.reports2.variables;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.filters.FilterOption;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.reports2.VariableImpl;
 
@@ -50,7 +54,7 @@ public class NegativationMonthVariable extends VariableImpl {
 	 */
 	@Override
 	public String getDisplayText(Object key) {
-		if (key == null)
+		if ((key == null) || (KEY_NULL.equals(key)))
 			return Messages.instance().get("manag.reportgen.beforetreat");
 
 		if (key.equals(37L))
@@ -112,6 +116,19 @@ public class NegativationMonthVariable extends VariableImpl {
 		if (value == null)
 			return null;
 		return Integer.parseInt(value);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#getFilterOptions(java.lang.Object)
+	 */
+	@Override
+	public List<FilterOption> getFilterOptions(Object param) {
+		List<FilterOption> opts = new ArrayList<FilterOption>();
+		opts.add(createFilterOption(KEY_NULL));
+		for (int i = 1; i <= 37; i++) {
+			opts.add(createFilterOption(new Long(i)));
+		}
+		return opts;
 	}
 
 }

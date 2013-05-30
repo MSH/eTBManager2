@@ -99,7 +99,7 @@ public class PrescribedMedicine implements Serializable {
 
 	/**
 	 * Calculates the estimated consumption for the period
-	 * @return
+	 * @return integer value containing the estimated quantity to be dispensed in the period
 	 */
 	public int calcEstimatedDispensing(Period p) {
 		int doseUnit = getDoseUnit();
@@ -131,7 +131,7 @@ public class PrescribedMedicine implements Serializable {
 
 	/**
 	 * Return the number of prescribed days for the period
-	 * @return
+	 * @return integer value containing the number of prescribed days
 	 */
 	public int getNumPrescribedDays() {
 		return getWeeklyFrequency().calcNumDays(period);
@@ -139,9 +139,8 @@ public class PrescribedMedicine implements Serializable {
 	
 	/**
 	 * Calculates the number of days of dispensing in the period
-	 * @param dtIni
-	 * @param dtFim
-	 * @return
+	 * @param p is the Period to be calculated
+	 * @return the number of days of dispensing for the given period
 	 */
 	public int calcNumDaysDispensing(Period p) {
 		Period aux = new Period(p);
@@ -154,7 +153,7 @@ public class PrescribedMedicine implements Serializable {
 	
 	/**
 	 * Return the month of treatment according to the beginning of the treatment and the initial date of the period
-	 * @return
+	 * @return month of treatment, from 0 (=January) to 11 (=December)
 	 */
 	public Integer getIniMonth() {
 		if ((period == null) || (period.isEmpty()) || (tbcase == null))
@@ -166,7 +165,7 @@ public class PrescribedMedicine implements Serializable {
 	
 	/**
 	 * Return number of months in the period
-	 * @return
+	 * @return integer value with the number of months between the initial and final dates of the period 
 	 */
 	public Integer getMonths() {
 		return (period != null? period.getMonths(): null);
