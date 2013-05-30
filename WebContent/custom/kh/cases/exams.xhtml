@@ -11,14 +11,16 @@
 
 	<h:panelGroup id="pnlhiv">	
 	
-			<s:link view="/custom/kh/cases/edtexamhiv.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
+			<s:link view="/custom/kh/cases/edtexamhiv.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt" onclick="disableButton(this)">
 				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 				<span>#{messages['cases.details.newresult']}</span>
 			</s:link>
 			<h2>#{messages['cases.examhiv']}</h2>
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examHIVHomeKh.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examMicroscopyHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examHIVHomeKh.allResults}" />
+		</div></s:div>
 		
 		<h:dataTable value="#{examHIVHomeKh.allResults}" var="r" rendered="#{not empty examHIVHomeKh.allResults}" 
 			width="100%" styleClass="table1" columnClasses="colcb,colcb,colb,colb,colb">
@@ -39,7 +41,7 @@
 				<f:facet name="header">
 					#{messages['cases.exams.date']}
 				</f:facet>
-				<h:outputText value="#{r.date}" converter="localeDateConverter"/>
+				<h:outputText value="#{r.date}" converter="localeDateConverter" />
 			</h:column>
 			
 			<h:column>
@@ -83,7 +85,7 @@
 	<h:panelGroup id="pnlmicroscopy">	
 	
 		
-			<s:link view="/custom/kh/cases/edtexammicroscopy.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
+			<s:link view="/custom/kh/cases/edtexammicroscopy.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt" onclick="disableButton(this)">
 				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 				<span>#{messages['cases.details.newresult']}</span>
@@ -91,7 +93,10 @@
 			<h2>#{messages['cases.exammicroscopy']}</h2>
 		
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examMicroscopyHome.allResults}" />
+
+		<s:div styleClass="region3" rendered="#{empty examMicroscopyHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examMicroscopyHome.allResults}" />
+		</div></s:div>
 		
 		<h:dataTable value="#{examMicroscopyHome.allResults}" var="r" rendered="#{not empty examMicroscopyHome.allResults}" 
 			width="100%" styleClass="table1" columnClasses="colb,colb,colb,colb,colb">
@@ -232,14 +237,16 @@
 	
 	<h:panelGroup id="pnlculture">	
 	
-			<s:link view="/custom/kh/cases/edtexamculture.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
+			<s:link view="/custom/kh/cases/edtexamculture.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt" onclick="disableButton(this)">
 				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 				<span>#{messages['cases.details.newresult']}</span>
 			</s:link>
 			<h2>#{messages['cases.examculture']}</h2>
 			
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examCultureKHHome.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examCultureKHHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examCultureKHHome.allResults}" />
+		</div></s:div>
 		
 		<h:dataTable value="#{examCultureKHHome.allResults}" var="r" rendered="#{not empty examCultureKHHome.allResults}" width="100%" 
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
@@ -304,8 +311,10 @@
 	<a:actionparam name="param1" assignTo="#{examCultureKHHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
+	<div class="spacer" />
+
 	<h:panelGroup id="pnldst">	
-		<s:link view="/custom/kh/cases/edtexamdst.xhtml" style="float:right;"
+		<s:link view="/custom/kh/cases/edtexamdst.xhtml" style="float:right;" styleClass="button-alt" onclick="disableButton(this)"
 			rendered="#{caseHome.canEditExams}" >
 			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
@@ -342,7 +351,7 @@
 		<a:repeat value="#{examDSTTable.allResults}" var="r">
 		<tr>
 			<td>
-				<s:link view="/custom/kh/cases/edtexamdst.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
+				<s:link view="/custom/kh/cases/edtexamdst.xhtml" propagation="none" enabled="#{caseHome.canEditExams}" styleClass="button-alt" onclick="disableButton(this)">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.examResult.id}"/>
 					<h:outputFormat value="#{messages[r.examResult.monthDisplay]}" >
@@ -402,8 +411,9 @@
 		</s:link>
 		<h2>#{messages['cases.examxray']}</h2>
 		
-		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examXRayHome.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examXRayHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examXRayHome.allResults}" />
+		</div></s:div>
 		
 		<h:dataTable value="#{examXRayHome.allResults}" var="r" rendered="#{not empty examXRayHome.allResults}" width="100%" 
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colcb">

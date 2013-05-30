@@ -34,6 +34,11 @@
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
     </s:decorate>
+    
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
+    	<h:outputText value="#{messages[tbcase.diagnosisType.key]}" />
+    </s:decorate>    
 
    <!--  <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='SUSPECT'}">
     	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>

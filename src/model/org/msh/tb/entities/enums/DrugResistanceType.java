@@ -10,6 +10,8 @@ public enum DrugResistanceType {
 	ISONIAZID_MONO_RESISTANCE,
 	//Bangladesh
 	UNKNOWN,
+	//Cambodia
+	RIF_RESISTANCE
 	;
 	
 

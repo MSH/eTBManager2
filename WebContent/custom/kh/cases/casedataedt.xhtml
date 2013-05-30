@@ -96,12 +96,6 @@
     		<h:inputText value="#{caseKHHome.groupNum}" style="width:300px;" maxlength="200"/>
     	</s:decorate>
     </td></tr>
-     <tr><td colspan="2">
-    	<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['Address.completeAddress4']}:</ui:define>
-    		<h:inputText value="#{caseKHHome.villageName}" style="width:300px;" required="true" maxlength="200"/>
-    	</s:decorate>
-    </td></tr> 
     
 	<tr><td>
 		<s:decorate template="/layout/auselection.xhtml">
@@ -138,11 +132,6 @@
     	</s:decorate>
     
      
-    	<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['Address.completeAddress4']}:</ui:define>
-    		<h:inputText value="#{caseKHHome.currVillageName}" style="width:300px;"  maxlength="200"/>
-    	</s:decorate>
-    	
     	<!-- <s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['cases.details.addresscurr']}:</ui:define>
     		<h:inputTextarea value="#{tbcase.currentAddress.address}" style="width:300px;height:100px;margin-bottom:2px;" maxlength="100"/><br/>
@@ -207,8 +196,7 @@
 	<table width="100%" style="border-collapse:collapse;">
 	<tr><td style="padding-bottom:10px;">
 
-	<div class="paragraph">#{messages['TbCase.notificationUnit']}<br/>
-	#{messages['TbCase.notificationUnit.add']}</div>
+	<h2>#{messages['TbCase.notificationUnit']}</h2>
 	<s:decorate template="/layout/tbselection.xhtml" >
 		<ui:param name="tbunitselection" value="#{caseEditingHome.tbunitselection}" />
 		<ui:param name="required" value="true" />
@@ -242,8 +230,10 @@
     </s:decorate>
 
 		<s:decorate template="/layout/edit.xhtml" >
-    		<ui:define name="label" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">#{messages['PatientType']}:</ui:define>
-    		<ui:define name="label" rendered="#{tbcase.diagnosisType=='SUSPECT'}">#{messages['Suspect Type']}:</ui:define>
+    		<ui:define name="label">#{messages['PatientType']}:</ui:define>
+<!--   		<ui:define name="label" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">#{messages['PatientType']}:</ui:define>
+    		<ui:define name="label" rendered="#{tbcase.diagnosisType=='SUSPECT'}">#{messages['SuspectType']}:</ui:define>
+-->
     		<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="#{tbcase.validated}">
     			<s:selectItems var="it" value="#{patientTypes_kh}" noSelectionLabel="-" label="#{messages[it.key]}" />
     			<s:convertEnum />

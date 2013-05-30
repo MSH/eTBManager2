@@ -4,6 +4,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.entities.enums.DotBy;
+import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.HIVResultNg;
 import org.msh.tb.entities.enums.Nationality;
@@ -123,6 +124,17 @@ public class GlobalLists {
 		SampleType.STOOL,
 		SampleType.TISSUE,
 		SampleType.OTHER
+	};
+	
+	
+	private static final DrugResistanceType drugResistanceTypes[] = {
+		DrugResistanceType.MONO_RESISTANCE,
+		DrugResistanceType.POLY_RESISTANCE,
+		DrugResistanceType.MULTIDRUG_RESISTANCE,
+		DrugResistanceType.EXTENSIVEDRUG_RESISTANCE,
+		DrugResistanceType.RIF_RESISTANCE
+		
+		
 	};
 	
 	@Factory("gradeListKh")
