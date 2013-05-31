@@ -21,6 +21,13 @@ import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 
+/**
+ * Base entity class where other classes inherit from to store case data
+ * where a date is required as reference
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 @MappedSuperclass
 public class CaseData {
 

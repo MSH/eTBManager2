@@ -56,9 +56,7 @@ public abstract class DbBatchTask extends AsyncTaskImpl {
 	 * Process the record being executed
 	 * @return true to continue with the importing, otherwise return false
 	 */
-	protected boolean processBatchRecord() throws Exception {
-		return false;
-	}
+	protected abstract boolean processBatchRecord() throws Exception;
 
 
 	/* (non-Javadoc)

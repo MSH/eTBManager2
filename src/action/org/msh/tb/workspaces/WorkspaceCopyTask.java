@@ -546,4 +546,14 @@ public class WorkspaceCopyTask extends DbBatchTask {
 //		logService.saveExecuteTransaction("WSCOPY", ws.toString(), ws.getId(), ws.getClass().getSimpleName(), ws);
 	}
 
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.application.tasks.DbBatchTask#processBatchRecord()
+	 */
+	@Override
+	protected boolean processBatchRecord() throws Exception {
+		// This method is not used, just implemented because it's an abstract method in the parent class
+		return false;
+	}
+
 }

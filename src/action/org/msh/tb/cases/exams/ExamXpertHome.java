@@ -1,5 +1,6 @@
 package org.msh.tb.cases.exams;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
@@ -8,6 +9,7 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.entities.ExamXpert;
 import org.msh.tb.entities.enums.XpertResult;
 import org.msh.tb.entities.enums.XpertRifResult;
+import org.msh.tb.resistpattern.ResistancePatternService;
 import org.msh.tb.transactionlog.LogInfo;
 
 @Name("examXpertHome")
@@ -49,6 +51,9 @@ public class ExamXpertHome extends LaboratoryExamHome<ExamXpert> {
 		if (XpertResult.ONGOING.equals(exam.getResult())) {
 			exam.setDateRelease(null);
 		}
+		
+		ResistancePatternService srv = (ResistancePatternService)Component.getInstance("resistancePatternService");
+		srv.updateCase(exam.getTbcase());
 		
 		return super.persist();
 	}

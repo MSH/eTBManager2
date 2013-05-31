@@ -10,10 +10,10 @@ import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.DstResult;
-import org.msh.tb.indicators.ResistancePatternsQuery;
 import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
+import org.msh.tb.resistpattern.ResistancePatternsQuery;
 
 @Name("dstUniqueResistIndicatorNG")
 public class DSTUniqueResistIndicatorNG extends Indicator2D {

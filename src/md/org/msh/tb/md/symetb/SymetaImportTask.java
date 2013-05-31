@@ -317,4 +317,14 @@ public class SymetaImportTask extends DbBatchTask {
 		addLog("Error: " + e.getLocalizedMessage());
 		e.printStackTrace();
 	}
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.application.tasks.DbBatchTask#processBatchRecord()
+	 */
+	@Override
+	protected boolean processBatchRecord() throws Exception {
+		// This method is not used in this class, just implemented because it is abstract in the parent class
+		return false;
+	}
 }

@@ -1,4 +1,4 @@
-package org.msh.tb.indicators;
+package org.msh.tb.resistpattern;
 
 
 import java.util.List;

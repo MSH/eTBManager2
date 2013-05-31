@@ -35,6 +35,7 @@ import org.msh.tb.reports2.variables.PrescMedicineVariable;
 import org.msh.tb.reports2.variables.PulmonaryVariable;
 import org.msh.tb.reports2.variables.RegimenTypeVariable;
 import org.msh.tb.reports2.variables.RegimenVariable;
+import org.msh.tb.reports2.variables.ResistancePatternVariable;
 import org.msh.tb.reports2.variables.SideEffectVariable;
 import org.msh.tb.reports2.variables.SuspectConfirmedVariable;
 import org.msh.tb.reports2.variables.TypeTBCaseVariable;
@@ -170,6 +171,7 @@ public class ReportResources {
 		addVariable(grp, new CaseItemDateVariable("dstcount_y", "manag.reportgen.var.dstyear", "examdst.dateCollected", true));
 		addFilter(grp, new CaseItemDateVariable("dstcollect", "#{messages['manag.reportgen.dst']} - #{messages['manag.reportgen.collect']}", "examdst.dateCollected", false));
 		add(grp, new LabMethodVariable("dstmethod", "TbField.DST_METHOD", "examdst.method_id", TbField.DST_METHOD));
+		add(grp, new ResistancePatternVariable("dstrespatt"));
 		return grp;
 	}
 	

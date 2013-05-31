@@ -14,4 +14,5 @@
   <include file="org/msh/tb/database/v2_0/changelog-transfer.xml"/>
   <include file="org/msh/tb/database/v2_0/changelog-2.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-casesideeffect-comment.xml"/>
+  <include file="org/msh/tb/database/v2_0/changelog-3-resistpattern.xml"/> 
 </databaseChangeLog> 

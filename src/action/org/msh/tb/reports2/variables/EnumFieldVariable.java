@@ -174,6 +174,9 @@ public class EnumFieldVariable extends VariableImpl {
 	 */
 	@Override
 	public Object filterValueFromString(String value) {
+		if ((value == null) || (KEY_NULL.equals(value)))
+			return null;
+
 		int val = Integer.parseInt(value);
 		
 		if (KEY_NULL.equals(val))

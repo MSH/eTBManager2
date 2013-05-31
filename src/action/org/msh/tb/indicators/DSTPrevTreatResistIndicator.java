@@ -13,6 +13,7 @@ import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
+import org.msh.tb.resistpattern.ResistancePatternsQuery;
 /**
  * Generates indicator about DST resistances for previously treated patients with SLD
  * @author Vani Rao

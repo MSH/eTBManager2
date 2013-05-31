@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.End;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -16,6 +17,7 @@ import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.DstResult;
+import org.msh.tb.resistpattern.ResistancePatternService;
 import org.msh.tb.transactionlog.LogInfo;
 
 @Name("examDSTHome")
@@ -173,15 +175,21 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 		if(!validateAndPrepareFields())
 			return "error";
 		
-		String result = super.persist();
+/*		String result = super.persist();
 		
 		//Verify the resistance type according to the DST and set it in TBcase.
 		if(setResistanceType())
 			caseHome.persist();
 		
 		return result;
+*/
+		return persistWithoutValidation();
 	}
 	
+	/**
+	 * Persist the DST result without validation
+	 * @return
+	 */
 	@End(beforeRedirect=true)
 	public String persistWithoutValidation() {
 		String result = super.persist();
@@ -189,6 +197,9 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 		//Verify the resistance type according to the DST and set it in TBcase.
 		if(setResistanceType())
 			caseHome.persist();
+
+		ResistancePatternService srv = (ResistancePatternService)Component.getInstance("resistancePatternService");
+		srv.updateCase(getInstance().getTbcase());
 		
 		return result;
 	}

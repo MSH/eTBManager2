@@ -7,6 +7,7 @@ import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.indicators.core.Indicator;
+import org.msh.tb.resistpattern.ResistancePatternsQuery;
 
 /**
  * Generates indicator about resistance patterns

@@ -1,4 +1,4 @@
-package org.msh.tb.indicators;
+package org.msh.tb.resistpattern;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.ResistancePattern;
