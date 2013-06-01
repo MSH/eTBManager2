@@ -72,4 +72,18 @@ public class ExamXpertHome extends LaboratoryExamHome<ExamXpert> {
 	public XpertRifResult[] getRifResults() {
 		return XpertRifResult.values();
 	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.cases.exams.LaboratoryExamHome#remove()
+	 */
+	@Override
+	public String remove() {
+		String s = super.remove();
+		if ("removed".equals(s)) {
+			ResistancePatternService srv = (ResistancePatternService)Component.getInstance("resistancePatternService");
+			srv.updateCase(getInstance().getTbcase());
+		}
+		
+		return s;
+	}
 }

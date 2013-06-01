@@ -17,7 +17,10 @@ import org.msh.tb.entities.enums.XpertRifResult;
 import org.msh.utils.date.DateUtils;
 
 /**
- * Update the resistance pattern of an specific case
+ * Update the resistance pattern of an specific case. This service must be
+ * called every time a DST result or an Xpert result is posted, updated or deleted.
+ * When the method <code>updateCase</code> is called, the user defined resistance 
+ * patterns will be updated based on the medicine resistances of the case. 
  * 
  * @author Ricardo Memoria
  *
@@ -41,8 +44,9 @@ public class ResistancePatternService {
 			.executeUpdate();
 
 		// get resistances from DST 
-		List<Object[]> lst = entityManager.createQuery("select r.substance.id, r.exam.dateCollected " +
-				"from ExamDSTResult r where r.exam.tbcase.id = :id and result = :res")
+		List<Object[]> lst = entityManager.createQuery("select r.substance.id, min(r.exam.dateCollected) " +
+				"from ExamDSTResult r where r.exam.tbcase.id = :id and result = :res " +
+				"group by r.substance.id")
 				.setParameter("res", DstResult.RESISTANT)
 				.setParameter("id", tbcase.getId())
 				.getResultList();

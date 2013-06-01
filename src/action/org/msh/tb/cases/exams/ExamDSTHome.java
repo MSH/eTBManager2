@@ -20,6 +20,13 @@ import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.resistpattern.ResistancePatternService;
 import org.msh.tb.transactionlog.LogInfo;
 
+/**
+ * Handle basic operations of a DST exam test - New, edit, remove and open the 
+ * data of a DST exam result
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 @Name("examDSTHome")
 @LogInfo(roleName="EXAM_DST")
 public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
@@ -175,14 +182,6 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 		if(!validateAndPrepareFields())
 			return "error";
 		
-/*		String result = super.persist();
-		
-		//Verify the resistance type according to the DST and set it in TBcase.
-		if(setResistanceType())
-			caseHome.persist();
-		
-		return result;
-*/
 		return persistWithoutValidation();
 	}
 	
@@ -198,12 +197,17 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 		if(setResistanceType())
 			caseHome.persist();
 
+		// update the resistance patterns
 		ResistancePatternService srv = (ResistancePatternService)Component.getInstance("resistancePatternService");
 		srv.updateCase(getInstance().getTbcase());
 		
 		return result;
 	}
-	
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.cases.exams.LaboratoryExamHome#remove()
+	 */
 	@Override
 	public String remove() {
 		String result = super.remove();
@@ -211,6 +215,10 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 		//Verify the resistance type according to the DST and set it in TBcase.
 		if(setResistanceType())
 			caseHome.persist();
+
+		// update the resistance patterns
+		ResistancePatternService srv = (ResistancePatternService)Component.getInstance("resistancePatternService");
+		srv.updateCase(getInstance().getTbcase());
 		
 		return result;
 	}
