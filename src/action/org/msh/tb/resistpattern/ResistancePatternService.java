@@ -61,7 +61,8 @@ public class ResistancePatternService {
 
 		// include rifampicin in the list of results
 		if (lstxpert.size() > 0) {
-			Integer subid = (Integer)entityManager.createQuery("select id from Substance where abbrevName = :name")
+			Integer subid = (Integer)entityManager.createQuery("select id from Substance where abbrevName.name1 = :name " +
+					"and workspace.id = #{defaultWorkspace.id}")
 					.setParameter("name", "R")
 					.getSingleResult();
 			for (Date dt: lstxpert) {

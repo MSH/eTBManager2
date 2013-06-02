@@ -52,10 +52,15 @@ public class ExamXpertHome extends LaboratoryExamHome<ExamXpert> {
 			exam.setDateRelease(null);
 		}
 		
-		ResistancePatternService srv = (ResistancePatternService)Component.getInstance("resistancePatternService");
-		srv.updateCase(exam.getTbcase());
+		String s = super.persist();
 		
-		return super.persist();
+		if ("persisted".equals(s)) {
+			// update resistance pattern
+			ResistancePatternService srv = (ResistancePatternService)Component.getInstance("resistancePatternService");
+			srv.updateCase(exam.getTbcase());
+		}
+		
+		return  s;
 	}
 
 	
@@ -79,7 +84,7 @@ public class ExamXpertHome extends LaboratoryExamHome<ExamXpert> {
 	@Override
 	public String remove() {
 		String s = super.remove();
-		if ("removed".equals(s)) {
+		if ("exam-removed".equals(s)) {
 			ResistancePatternService srv = (ResistancePatternService)Component.getInstance("resistancePatternService");
 			srv.updateCase(getInstance().getTbcase());
 		}

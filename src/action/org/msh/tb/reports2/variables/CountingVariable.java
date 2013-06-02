@@ -1,6 +1,7 @@
 package org.msh.tb.reports2.variables;
 
 import org.jboss.seam.international.Messages;
+import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.reports2.VariableImpl;
 
@@ -32,6 +33,14 @@ public class CountingVariable extends VariableImpl {
 	@Override
 	public boolean isTotalEnabled() {
 		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
+	 */
+	@Override
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+		// there is no filter for this variable
 	}
 
 }

@@ -61,7 +61,7 @@
 		where c.result=1 and c.id = (select min(aux.id) from examdstresult aux inner join examdst k on k.id=aux.exam_id
 		  where aux.substance_id=c.substance_id and k.case_id=a.id);
 		</sql>
-		
+
 		<sql>insert into tmp_resistance (case_id, substance_id, exam_date)
 		select a.case_id, (select id from substance where abbrev_name1='R' and workspace_id=c.workspace_id), a.datecollected
 		from examxpert a
@@ -71,7 +71,7 @@
 		and not exists(select * from tmp_resistance where case_id=a.case_id
 		  and substance_id = (select id from substance where abbrev_name1='R' and workspace_id=c.workspace_id));
 		</sql>
-		
+
 		<!-- Create current resistance pattern of the cases -->
 		<sql>insert into caseresistancepattern (case_id, resistpattern_id, diagnosis)
 		select a.id, res.id, false
@@ -100,7 +100,7 @@
 		    where case_id=a.id and tmp_resistance.exam_date &lt;= adddate(a.diagnosisDate, interval 15 day))
 		and a.diagnosisDate is not null
 		</sql>
-	
+
 		<!-- Drop temporary table -->
 		<sql>drop table tmp_resistance</sql>
 	</changeSet>
