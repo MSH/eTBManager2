@@ -37,13 +37,6 @@
                  conversation-id-parameter="cid"
                  parent-conversation-id-parameter="pid" />
                  
-   <core:resource-loader>
-		<core:bundle-names> 
-			<value>messages</value>
-			<value>custom_messages</value>
-		</core:bundle-names>
-   </core:resource-loader>
-
    <web:rewrite-filter view-mapping="*.seam" />
 
    <async:quartz-dispatcher/>
