@@ -396,19 +396,14 @@ public class StockAdjustmentHome extends Controller {
 		batchQuantity.setBatch(new Batch());
 	}
 	
+	/**
+	 * Return the list of medicines and its available quantity to be displayed
+	 * and selected by the user  
+	 * @return List of {@link StockPositionItem} objects
+	 */
 	public List<StockPositionItem> getItems() {
 		if (items == null)
 			createItems();
-		//recount summary quantities
-		for (StockPositionItem item:items){
-			int q = 0;
-			for (BatchQuantity b: item.getBatches()){
-				q+=b.getQuantity();
-			}
-			item.stockPosition.setQuantity(q);
-			App.getEntityManager().persist(item.stockPosition);
-		}
-		App.getEntityManager().flush();
 		return items;
 	}
 
