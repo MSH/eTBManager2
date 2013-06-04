@@ -18,11 +18,12 @@ import org.msh.tb.reports2.VariableImpl;
 public class SuspectConfirmedVariable extends VariableImpl {
 
 	// keys used in suspect and confirmed cases
-	private final Integer KEY_CONFIRMED = 0;
-	private final Integer KEY_SUSPECT = 1;
+	private final Integer KEY_CONFIRMED = 1;
+	private final Integer KEY_SUSPECT = 0;
+	private final Integer KEY_CONFIRMED_SUSPECT = 2;
 	
 	public SuspectConfirmedVariable() {
-		super("diagtype", "DiagnosisType", "diagnosisType");
+		super("diagtype", "DiagnosisType", "registrationDate < diagnosisDate");
 	}
 
 	/* (non-Javadoc)
@@ -30,7 +31,8 @@ public class SuspectConfirmedVariable extends VariableImpl {
 	 */
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
-		if (iteration == 0) {
+		super.prepareVariableQuery(def, iteration);
+/*		if (iteration == 0) {
 			def.addField("'susp'");
 			def.addRestriction("(registrationDate < diagnosisDate or diagnosisDate is null)");
 		}
@@ -38,7 +40,7 @@ public class SuspectConfirmedVariable extends VariableImpl {
 			def.addField("'conf'");
 			def.addRestriction("diagnosisDate is not null");
 		}
-	}
+*/	}
 
 
 	/* (non-Javadoc)
@@ -46,28 +48,32 @@ public class SuspectConfirmedVariable extends VariableImpl {
 	 */
 	@Override
 	public Object createKey(Object values) {
-		if ("susp".equals(values))
-			 return KEY_SUSPECT;
-		else return KEY_CONFIRMED;
+		if (values == null)
+			return KEY_SUSPECT;
+		
+		if (((Integer)values) == 0)
+			return KEY_CONFIRMED;
+		
+		return KEY_CONFIRMED_SUSPECT;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see org.msh.tb.reports2.VariableImpl#getIteractionCount()
-	 */
-	@Override
-	public int getIteractionCount() {
-		return 2;
-	}
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
 	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+		if ((value == null) || (KEY_NULL.equals(value)))
+			return;
+
 		if (KEY_CONFIRMED.equals(value))
-			 def.addRestriction("tbcase.diagnosisDate is not null");
-		else def.addRestriction("(registrationDate < diagnosisDate or diagnosisDate is null)");
+			 def.addRestriction("tbcase.registrationDate >= tbcase.diagnosisDate");
+		else
+		if (KEY_SUSPECT.equals(value))
+			def.addRestriction("tbcase.diagnosisDate is null");
+		else
+		if (KEY_CONFIRMED_SUSPECT.equals(value))
+			def.addRestriction("tbcase.registrationDate < tbcase.diagnosisDate");
 	}
 
 	/* (non-Javadoc)
@@ -85,7 +91,14 @@ public class SuspectConfirmedVariable extends VariableImpl {
 	public String getDisplayText(Object key) {
 		if (KEY_SUSPECT.equals(key)) 
 			 return Messages.instance().get("DiagnosisType.SUSPECT");
-		else return Messages.instance().get("DiagnosisType.CONFIRMED");
+		
+		if (KEY_CONFIRMED.equals(key))
+			return Messages.instance().get("DiagnosisType.CONFIRMED");
+		
+		if (KEY_CONFIRMED_SUSPECT.equals(key))
+			return Messages.instance().get("manag.reportgen.suspconf");
+		
+		return super.getDisplayText(key);
 	}
 
 	/* (non-Javadoc)
@@ -94,8 +107,9 @@ public class SuspectConfirmedVariable extends VariableImpl {
 	@Override
 	public List<FilterOption> getFilterOptions(Object param) {
 		List<FilterOption> lst = new ArrayList<FilterOption>();
-		lst.add(createFilterOption(KEY_CONFIRMED));
 		lst.add(createFilterOption(KEY_SUSPECT));
+		lst.add(createFilterOption(KEY_CONFIRMED_SUSPECT));
+		lst.add(createFilterOption(KEY_CONFIRMED));
 		return lst;
 	}
 

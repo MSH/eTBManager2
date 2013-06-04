@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.msh.tb.client.commons.MessagePanel;
 import org.msh.tb.client.commons.StandardCallback;
 import org.msh.tb.client.commons.StandardEventHandler;
 import org.msh.tb.client.reports.TableData.HeaderLabel;
@@ -34,12 +35,12 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * Display the main content of the report page
+ * Represents the main content of the report page. This class is the entry
+ * point for the execution of the data analysis tool 
  *  
  * @author Ricardo Memoria
  *
@@ -59,7 +60,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 	@UiField Button btnGenerate;
 	@UiField TableView tblResult;
 	@UiField Anchor lnkChartType;
-	@UiField Label txtNoVar;
+	@UiField MessagePanel pnlMessage;
 	
 	private GroupFiltersPopup filtersPopup;
 	private GroupVariablesPopup varsPopup;
@@ -67,8 +68,8 @@ public class MainPage extends Composite implements StandardEventHandler {
 	private ChartPopup chartPopup;
 	private CaseListPopup patientListPopup;
 	// selected column and row to draw the chart
-	private int selectedCell;
-	private boolean rowSelected;
+	private int selectedCell = -1;
+	private boolean rowSelected = true;
 
 	/**
 	 * Contains the data of the table to be rendered
@@ -189,8 +190,8 @@ public class MainPage extends Composite implements StandardEventHandler {
 
 
 	public void showErrorMessage(String msg) {
-		txtNoVar.setVisible(true);
-		txtNoVar.setText(msg);
+		pnlMessage.setVisible(true);
+		pnlMessage.setText(msg);
 	}
 	
 	/**
@@ -209,7 +210,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 			showErrorMessage(messages.noVariableDefined());
 			return null;
 		}
-		else txtNoVar.setVisible(false);
+		else pnlMessage.setVisible(false);
 		
 		CReportData data = new CReportData();
 		data.setRowVariables(rows);

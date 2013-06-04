@@ -2,6 +2,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder' 
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
+	xmlns:c='urn:import:org.msh.tb.client.commons'
 	xmlns:rep='urn:import:org.msh.tb.client.reports'>
 	
 	<ui:with field='msg' type='org.msh.tb.client.reports.resources.ReportConstants'/>
@@ -23,16 +24,24 @@
 		<h2><ui:text from="{msg.filters}" /></h2>
 		<g:VerticalPanel ui:field="pnlFilters"></g:VerticalPanel>
 		<hr/>
-		<g:Label ui:field="txtNoVar" styleName="error" visible="false"/>
-		<div style="width:460px;float:left;margin-right:20px;">
-			<h2><ui:text from="{msg.rows}" /></h2>
-			<g:VerticalPanel ui:field="pnlRowVariables"></g:VerticalPanel>
-		</div>
-		<div style="width:460px;float:left;">
-			<h2><ui:text from="{msg.columns}" /></h2>
-			<g:VerticalPanel ui:field="pnlColVariables"></g:VerticalPanel>
-		</div>
-		<div style="clear:both;height:46px;">
+		<table width="100%" style="border-collapse:collapse">
+		<tr>
+			<td colspan="2">
+				<c:MessagePanel ui:field="pnlMessage" visible="false" />
+			</td>
+		</tr>
+		<tr>
+			<td style="width:460px;margin-right:20px;vertical-align:top">
+				<h2><ui:text from="{msg.rows}" /></h2>
+				<g:VerticalPanel ui:field="pnlRowVariables"></g:VerticalPanel>
+			</td>
+			<td style="width:460px;vertical-align:top">
+				<h2><ui:text from="{msg.columns}" /></h2>
+				<g:VerticalPanel ui:field="pnlColVariables"></g:VerticalPanel>
+			</td>
+		</tr>
+		</table>
+		<div style="clear:both;height:46px">
 			<hr/>
 			<div style="float:right">
 				<g:Anchor ui:field="lnkChartType"></g:Anchor>

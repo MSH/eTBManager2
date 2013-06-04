@@ -172,7 +172,8 @@ public class ReportServiceImpl implements ReportService {
 				VariableImpl var = res.findVariableById(id);
 				if (var != null) {
 					String value = reportData.getFilters().get(id);
-					rep.addFilter((Filter)var, value);
+					Object filterValue = var.filterValueFromString(value);
+					rep.addFilter((Filter)var, filterValue);
 				}
 			}
 		}

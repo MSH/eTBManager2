@@ -145,3 +145,16 @@ html {
 	cursor: pointer;
 	padding:0px;
 }
+
+.messagePanel{
+	border-radius:4px;
+}
+.messagePanel-error {
+	color: #b94a48;
+	background-color: #f2dede;
+	border:1px solid #eed3d7;
+}
+.messagePanel-inner {
+	padding:10px;
+	font-size:13px;
+}
