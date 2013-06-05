@@ -304,5 +304,11 @@ public class ImportTBGeoTask extends DbBatchTask {
 			.getSingleResult();
 		return structure;
 	}
+
+	@Override
+	protected boolean processBatchRecord() throws Exception {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }
