@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
 import org.msh.reports.query.SQLDefs;
@@ -23,8 +24,15 @@ public class ResistancePatternVariable extends VariableImpl {
 
 	private List<ResistancePattern> patterns;
 	
-	public ResistancePatternVariable(String id) {
+	/**
+	 * If true, the variable will select the resistance patterns from diagnosis, 
+	 * otherwise will select the resisance patterns of the whole treatment
+	 */
+	private boolean diagnosis;
+	
+	public ResistancePatternVariable(String id, boolean diagnosis) {
 		super(id, "manag.ind.resist", "caseresistancepattern.resistpattern_id");
+		this.diagnosis = diagnosis;
 	}
 
 	
@@ -49,7 +57,8 @@ public class ResistancePatternVariable extends VariableImpl {
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
 		// condition for the side effect join
 		def.addJoin("caseresistancepattern", "case_id", "tbcase", "id");
-		def.addRestriction("caseresistancepattern.diagnosis = false");
+		def.addRestriction("caseresistancepattern.diagnosis = :" + getId());
+		def.addParameter(getId(), diagnosis);
 		super.prepareVariableQuery(def, iteration);
 	}
 	
@@ -100,10 +109,10 @@ public class ResistancePatternVariable extends VariableImpl {
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
-			Object value) {
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
 		def.addJoin("caseresistancepattern", "case_id", "tbcase", "id");
-		def.addRestriction("caseresistancepattern.diagnosis = false");
+		def.addRestriction("caseresistancepattern.diagnosis = :" + getId());
+		def.addParameter(getId(), diagnosis);
 		super.prepareFilterQuery(def, oper, value);
 	}
 
@@ -123,6 +132,18 @@ public class ResistancePatternVariable extends VariableImpl {
 		if (KEY_NULL.equals(value))
 			return null;
 		return Integer.parseInt(value);
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.reports2.VariableImpl#getLabel()
+	 */
+	@Override
+	public String getLabel() {
+		String s = super.getLabel();
+		if (diagnosis)
+			s += " (" + Messages.instance().get("cases.exams.prevdt") + ")";
+		return s;
 	}
 	
 

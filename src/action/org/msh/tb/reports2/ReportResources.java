@@ -29,6 +29,7 @@ import org.msh.tb.reports2.variables.ExtrapulmonarVariable;
 import org.msh.tb.reports2.variables.HivResultVariable;
 import org.msh.tb.reports2.variables.LabMethodVariable;
 import org.msh.tb.reports2.variables.LabResultDiagVariable;
+import org.msh.tb.reports2.variables.LabResultVariable;
 import org.msh.tb.reports2.variables.MonthOfTreatVariable;
 import org.msh.tb.reports2.variables.NegativationMonthVariable;
 import org.msh.tb.reports2.variables.PrescMedicineVariable;
@@ -61,10 +62,10 @@ public class ReportResources {
 	 */
 	protected void initialize() {
 		addCaseDataVariables();
-		addCultureExamVariables();
 		addMicroscopyExamVariables();
+		addCultureExamVariables();
 		addDstExamVariables();
-		addExpertExamVariables();
+		addXpertExamVariables();
 		addHivExamVariables();
 		addXRayVariables();
 		addTreatmentVariables();
@@ -126,6 +127,7 @@ public class ReportResources {
 	protected ReportGroup addCultureExamVariables() {
 		ReportGroup grp = addGroup("manag.reportgen.culture");
 		addVariable(grp, new LabResultDiagVariable("cult_resdiag", "manag.reportgen.var.cultdiag", "examculture.result", CultureResult.class));
+		addVariable(grp, new LabResultVariable("cult_res", "CultureResult", "examculture.result", CultureResult.class));
 		addVariable(grp, new CaseItemDateVariable("cultcount", "manag.reportgen.var.culturemonth", "examculture.dateCollected", false));
 		addVariable(grp, new CaseItemDateVariable("cultcount_y", "manag.reportgen.var.cultureyear", "examculture.dateCollected", true));
 		addFilter(grp, new CaseItemDateVariable("cultcollect", "#{messages['manag.reportgen.culture']} - #{messages['manag.reportgen.collect']}", "examdst.dateCollected", false));
@@ -141,6 +143,7 @@ public class ReportResources {
 	protected ReportGroup addMicroscopyExamVariables() {
 		ReportGroup grp = addGroup("manag.reportgen.microscopy");
 		add(grp, new LabResultDiagVariable("mic_resdiag", "manag.reportgen.var.micdiag", "exammicroscopy.result", MicroscopyResult.class));
+		add(grp, new LabResultVariable("mic_res", "MicroscopyResult", "exammicroscopy.result", MicroscopyResult.class));
 		addVariable(grp, new CaseItemDateVariable("miccount", "manag.reportgen.var.micmonth", "exammicroscopy.dateCollected", false));
 		addVariable(grp, new CaseItemDateVariable("miccount_y", "manag.reportgen.var.micyear", "exammicroscopy.dateCollected", true));
 		addFilter(grp, new CaseItemDateVariable("miccollect", "#{messages['manag.reportgen.microscopy']} - #{messages['manag.reportgen.collect']}", "exammicroscopy.dateCollected", false));
@@ -153,9 +156,10 @@ public class ReportResources {
 	 * Add specific variables for Expert exams
 	 * @return
 	 */
-	protected ReportGroup addExpertExamVariables() {
+	protected ReportGroup addXpertExamVariables() {
 		ReportGroup grp = addGroup("cases.examxpert");
 		add(grp, new LabResultDiagVariable("genx_diag", "manag.reportgen.var.xpertdiag", "examxpert.result", XpertResult.class));
+		add(grp, new LabResultVariable("genx_res", "XpertResult", "examxpert.result", XpertResult.class));
 		addFilter(grp, new CaseItemDateVariable("xp-collect", "#{messages['manag.reportgen.xpert']} - #{messages['manag.reportgen.collect']}", "exammicroscopy.dateCollected", false));
 		return grp;
 	}
@@ -171,7 +175,8 @@ public class ReportResources {
 		addVariable(grp, new CaseItemDateVariable("dstcount_y", "manag.reportgen.var.dstyear", "examdst.dateCollected", true));
 		addFilter(grp, new CaseItemDateVariable("dstcollect", "#{messages['manag.reportgen.dst']} - #{messages['manag.reportgen.collect']}", "examdst.dateCollected", false));
 		add(grp, new LabMethodVariable("dstmethod", "TbField.DST_METHOD", "examdst.method_id", TbField.DST_METHOD));
-		add(grp, new ResistancePatternVariable("dstrespatt"));
+		add(grp, new ResistancePatternVariable("dstpatt", false));
+		add(grp, new ResistancePatternVariable("dstpatt_diag", true));
 		return grp;
 	}
 	

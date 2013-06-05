@@ -46,7 +46,7 @@ html {
 
 .var-panel .var-name {
 	border:1px solid #8c9b8c;
-	height:18px;
+	min-height:18px;
 	padding:2px;
 	width:270px;
 	background-color:white;

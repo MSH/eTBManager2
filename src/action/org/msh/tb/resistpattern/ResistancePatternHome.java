@@ -78,12 +78,25 @@ public class ResistancePatternHome extends EntityHomeEx<ResistancePattern>{
 		if (respattern.getCriteria() != PatternCriteria.EXACT_RESISTANT)
 			throw new IllegalArgumentException("Only EXACT_RESISTANT patterns are supported");
 		
-		EntityManager em = getEntityManager();
-		
 		// remove this resistance pattern from the cases
-		em.createQuery("delete from CaseResistancePattern where resistancePattern.id = :id")
+		getEntityManager().createQuery("delete from CaseResistancePattern where resistancePattern.id = :id")
 			.setParameter("id", respattern.getId())
 			.executeUpdate();
+		
+		updateCasesResPatternByType(respattern, false);
+		updateCasesResPatternByType(respattern, true);
+	}
+
+	
+	/**
+	 * Update the resistance pattern of the cases considering if it's a pattern of the diagnosis
+	 * or a pattern of the whole treatment
+	 * @param respattern the resistance pattern to be updated
+	 * @param diagnosis true if must create the resistance pattern before the diagnosis or false
+	 * if it should consider the whole treatment 
+	 */
+	protected void updateCasesResPatternByType(ResistancePattern respattern, boolean diagnosis) {
+		EntityManager em = getEntityManager();
 
 		// insert again the resistance patterns
 		// create the resistance pattern for cases with NO Xpert exam with RIF positive
@@ -93,17 +106,24 @@ public class ResistancePatternHome extends EntityHomeEx<ResistancePattern>{
 				subs += ",";
 			subs += sub.getId();
 		}
+		
+		String dstDateCondition = diagnosis? " and examdst.datecollected <= a.diagnosisDate ":"";
+		String xpertDateCondition = diagnosis? " and examxpert.datecollected <= a.diagnosisDate ":"";
+		
 		String sql = "insert into caseresistancepattern (case_id, resistpattern_id, diagnosis) " +
 				"select a.id, " + respattern.getId() + ", false " +
 				"from tbcase a " +
 				"inner join patient b on b.id=a.patient_id " +
 				"where workspace_id= " + respattern.getWorkspace().getId() + 
-				" and not exists(select * from examxpert where examxpert.case_id=a.id and rifresult=" + XpertResult.TB_DETECTED.ordinal() + 
+				" and not exists(select * from examxpert where examxpert.case_id=a.id and rifresult=" + XpertResult.TB_DETECTED.ordinal() +
+				xpertDateCondition +
 				" and result=" + XpertRifResult.RIF_DETECTED.ordinal() + ") " +
-				"and (select count(distinct substance_id) from examdst e inner join examdstresult r on r.exam_id=e.id " +
-				"  where r.result=" + DstResult.RESISTANT.ordinal() + " and r.substance_id in (" + subs + ") and e.case_id=a.id) = " + respattern.getSubstances().size() +
-				" and not exists(select * from examdst e inner join examdstresult r on r.exam_id=e.id " +
-				"where r.result=1 and r.substance_id not in (" + subs + ") and e.case_id=a.id)";
+				"and (select count(distinct substance_id) from examdst inner join examdstresult r on r.exam_id=examdst.id " +
+				"  where r.result=" + DstResult.RESISTANT.ordinal() + dstDateCondition + 
+				" and r.substance_id in (" + subs + ") and examdst.case_id=a.id) = " + respattern.getSubstances().size() +
+				" and not exists(select * from examdst inner join examdstresult r on r.exam_id=examdst.id " +
+				"where r.result=1 and r.substance_id not in (" + subs + ") and examdst.case_id=a.id" +
+				dstDateCondition +	")";
 		em.createNativeQuery(sql).executeUpdate();
 
 		// create the resistance pattern for cases with Xpert exam where RIF is detected
@@ -121,22 +141,28 @@ public class ResistancePatternHome extends EntityHomeEx<ResistancePattern>{
 				subs2 += ",";
 			subs2 += sub.getId();
 		}
+
 		sql = "insert into caseresistancepattern (case_id, resistpattern_id, diagnosis) " +
 				"select a.id, " + respattern.getId() + ", false " +
 				"from tbcase a " +
 				"inner join patient b on b.id=a.patient_id " +
 				"where workspace_id= " + respattern.getWorkspace().getId() + 
 				" and exists(select * from examxpert where examxpert.case_id=a.id and rifresult=" + XpertResult.TB_DETECTED.ordinal() + 
-				" and result=" + XpertRifResult.RIF_DETECTED.ordinal() + ") " +
-				"and (select count(distinct substance_id) from examdst e inner join examdstresult r on r.exam_id=e.id " +
-				"  where r.result=" + DstResult.RESISTANT.ordinal() +
-				(count > 0? "": " and r.substance_id in (" + subs + ") ") + 
-				" and e.case_id=a.id) = " + count +
-				" and not exists(select * from examdst e inner join examdstresult r on r.exam_id=e.id " +
-				"where r.result=1 and r.substance_id not in (" + subs2 + ") and e.case_id=a.id)";
+				" and result=" + XpertRifResult.RIF_DETECTED.ordinal() + xpertDateCondition + ") ";
+
+		// it's not only rifampicin in the pattern?
+		if (!subs.isEmpty()) {
+			sql += "and (select count(distinct substance_id) from examdst inner join examdstresult r on r.exam_id=examdst.id " +
+					"  where r.result=" + DstResult.RESISTANT.ordinal() + dstDateCondition +
+					(count > 0? "": " and r.substance_id in (" + subs + ") ") + 
+					" and examdst.case_id=a.id) = " + count;
+		}
+
+		sql += 	" and not exists(select * from examdst inner join examdstresult r on r.exam_id=examdst.id " +
+				"where r.result=1 and r.substance_id not in (" + subs2 + ") and examdst.case_id=a.id " + dstDateCondition + ")";
 		em.createNativeQuery(sql).executeUpdate();
 	}
-
+	
 	/**
 	 * Return the list of substances to be selected by the user in the UI
 	 * @return

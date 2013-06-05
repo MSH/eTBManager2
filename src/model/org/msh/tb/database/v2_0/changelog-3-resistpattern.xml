@@ -94,10 +94,10 @@
 		  inner join substances_resistpattern c on c.resistancepattern_id = b.id group by b.id)
 		  as res on res.workspace_id=p.workspace_id
 		where res.numres = (select count(*) from tmp_resistance tmp
-		    where tmp.case_id=a.id and tmp.exam_date &lt;= adddate(a.diagnosisDate, interval 15 day)
+		    where tmp.case_id=a.id and tmp.exam_date &lt;= a.diagnosisDate
 		    and tmp.substance_id in (select g.substances_id from substances_resistpattern g where g.resistancepattern_id=res.id))
 		and res.numres = (select count(*) from tmp_resistance
-		    where case_id=a.id and tmp_resistance.exam_date &lt;= adddate(a.diagnosisDate, interval 15 day))
+		    where case_id=a.id and tmp_resistance.exam_date &lt;= a.diagnosisDate)
 		and a.diagnosisDate is not null
 		</sql>
 
