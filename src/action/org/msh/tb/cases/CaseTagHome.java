@@ -86,7 +86,9 @@ public class CaseTagHome {
 	 */
 	private void createItems() {
 		List<Tag> tags = entityManager
-			.createQuery("from Tag where workspace.id = #{defaultWorkspace.id} and sqlCondition is null")
+			.createQuery("from Tag where workspace.id = #{defaultWorkspace.id} " +
+					"and sqlCondition is null " +
+					"order by name")
 			.getResultList();
 
 		TbCase tbcase = caseHome.getInstance();
