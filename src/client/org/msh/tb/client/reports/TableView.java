@@ -95,7 +95,7 @@ public class TableView extends Composite {
 		// include the total column, if necessary
 		if (totCol) {
 			// set the label of the total column
-			table.setText(0, 2, MainPage.getMessages().total());
+			setHoverText(0, 2, MainPage.getMessages().total());
 			setCellStyle(0, 2, STYLE_HEADER_TITLE, colheadersize + 1, 1);
 		}
 		
@@ -113,8 +113,6 @@ public class TableView extends Composite {
 		// get the maximum level of the rows
 		int maxlevel = tableData.getRowMaxLevel();
 
-		double[] tots = new double[tableData.getHeaderColumns().size()];
-		
 		// create rows
 		NumberFormat nf = NumberFormat.getDecimalFormat();
 		r = colheadersize + 1;
@@ -127,16 +125,9 @@ public class TableView extends Composite {
 			table.getCellFormatter().setStyleName(r, 0, s);
 			
 			int c = 1;
-			double sum = 0;
 			for (Double val: row.getValues()) {
-				if (val != null) {
-					sum += val;
-					// calculate the total of each column
-					if ((totRow) && (row.getLevel() == 0))
-						tots[c - 1] += val;
-
-					setHoverText(r, c, nf.format(val));
-				}
+				if (val != null)
+					 setHoverText(r, c, nf.format(val));
 				else table.setText(r, c, "");
 				
 				if (row.getLevel() != maxlevel)
@@ -149,7 +140,7 @@ public class TableView extends Composite {
 
 			// include the total column cell
 			if (totCol) {
-				table.setText(r, c, nf.format(sum));
+				table.setText(r, c, nf.format(tableData.getTotalColumn()[r - colheadersize - 1]));
 				setCellStyle(r, c, STYLE_VAL_TOTAL, 1, 1);
 			}
 			
@@ -158,11 +149,11 @@ public class TableView extends Composite {
 		
 		// include the total row, if available
 		if (totRow) {
-			table.setText(r, 0, MainPage.getMessages().total());
+			setHoverText(r, 0, MainPage.getMessages().total());
 			setCellStyle(r, 0, STYLE_HEADER_TITLE, 1, 1);
-			double sum = 0;
 			int c = 1;
-			for (double val: tots) {
+			double sum = 0;
+			for (double val: tableData.getTotalRow()) {
 				table.setText(r, c, nf.format(val));
 				setCellStyle(r, c, STYLE_VAL_TOTAL, 1, 1);
 				sum += val;
@@ -212,9 +203,22 @@ public class TableView extends Composite {
 	 */
 	protected void tableCellClick(int col, int row) {
 		int colheadersize = data.getColHeaderSize();
-		// is a total cell
-		int rowcount = data.getTable().getRows().size();
+		
+		int rowcount = data.getRowCount();
 		int colcount = data.getHeaderColumns().size();
+		
+		// is total column cell ?
+		if ((row == 0) && (col == 2)) {
+			MainPage.instance().setSelectedCol(TableData.CELL_TOTAL);
+			return;
+		}
+
+		// is total column row ?
+		if ((col == 0) && (row == rowcount + colheadersize + 1)) {
+			MainPage.instance().setSelectedRow(TableData.CELL_TOTAL);
+			return;
+		}
+
 		if ((row - colheadersize > rowcount) || (col > colcount)) {
 			return;
 		}

@@ -68,7 +68,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 	private ChartPopup chartPopup;
 	private CaseListPopup patientListPopup;
 	// selected column and row to draw the chart
-	private int selectedCell = -1;
+	private int selectedCell = TableData.CELL_TITLE;
 	private boolean rowSelected = true;
 
 	/**
@@ -301,7 +301,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 		// is row selected ?
 		if (rowSelected) {
 			// clicked on the position of the table 0,0 ?
-			if (selectedCell == -1) {
+			if (selectedCell == TableData.CELL_TITLE) {
 				chart.setTitle(tableData.getRowVariables().get(0).getName() + " x " + tableData.getColVariables().get(0).getName());
 				chart.setSubTitle(null);
 				
@@ -311,6 +311,15 @@ public class MainPage extends Composite implements StandardEventHandler {
 					for (int i = 0; i < row.getValues().length; i++) {
 						series.addValue(tableData.getColumn(i).getTitle(), row.getValues()[i]);
 					}
+				}
+			}
+			else if (selectedCell == TableData.CELL_TOTAL) {
+				chart.setTitle(tableData.getColVariables().get(0).getName());
+				chart.setSubTitle(messages.total());
+				ChartSeries series = chart.addSeries(messages.total());
+				int index = 0;
+				for (double val: tableData.getTotalRow()) {
+					series.addValue(tableData.getColumn(index++).getTitle(), val);
 				}
 			}
 			else {
@@ -349,7 +358,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 		}
 		else {
 			// clicked on the position of the table 0,0 ?
-			if (selectedCell == -1) {
+			if (selectedCell == TableData.CELL_TITLE) {
 				chart.setTitle(tableData.getRowVariables().get(0).getName() + " x " + tableData.getColVariables().get(0).getName());
 				chart.setSubTitle(null);
 				
@@ -361,6 +370,16 @@ public class MainPage extends Composite implements StandardEventHandler {
 						series.addValue(row.getTitle(), row.getValues()[colindex]);
 					}
 					colindex++;
+				}
+			}
+			else 
+			if (selectedCell == TableData.CELL_TOTAL) {
+				chart.setTitle(tableData.getRowVariables().get(0).getName());
+				chart.setSubTitle(messages.total());
+				ChartSeries series = chart.addSeries(messages.total());
+				int index = 0;
+				for (double val: tableData.getTotalColumn()) {
+					series.addValue(tableData.getTable().getRows().get(index++).getTitle(), val);
 				}
 			}
 			else {

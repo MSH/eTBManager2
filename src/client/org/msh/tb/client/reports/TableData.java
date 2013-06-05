@@ -15,6 +15,9 @@ import org.msh.tb.client.shared.model.CVariable;
  *
  */
 public class TableData {
+	
+	public static int CELL_TOTAL = -2;
+	public static int CELL_TITLE = -1;
 
 	/**
 	 * Table sent from the server
@@ -33,12 +36,18 @@ public class TableData {
 	 * List of columns that compound the header by row
 	 */
 	private List<List<CTableColumn>> rowsHeader;
-	
 	/**
 	 * Indicate the maximum level of the row, i.e, the leaf level
 	 */
 	private int rowMaxLevel;
-
+	/**
+	 * Row containing total values. It's null if there is no total column
+	 */
+	private double[] totalRow;
+	/**
+	 * Column containing total values. It's null if there is no total column
+	 */
+	private double[] totalColumn;
 
 	/**
 	 * Return the variable assigned to the column
@@ -60,6 +69,22 @@ public class TableData {
 		return getHeaderColumns().get(index);
 	}
 
+	/**
+	 * Return the number of columns in the table
+	 * @return integer value
+	 */
+	public int getColumnCount() {
+		return getHeaderColumns().size();
+	}
+	
+	
+	/**
+	 * Return the number of rows in the table
+	 * @return integer value
+	 */
+	public int getRowCount() {
+		return table.getRows().size();
+	}
 	
 	/**
 	 * Return the last level of the columns of the header
@@ -132,8 +157,47 @@ public class TableData {
 		for (CTableRow row: table.getRows())
 			if (row.getLevel() > rowMaxLevel)
 				rowMaxLevel = row.getLevel();
+		
+		// update total
+		updateTotal();
 	}
- 
+	
+	
+	/**
+	 * Update the total values displayed in the table
+	 */
+	protected void updateTotal() {
+		// update column total
+		if (table.isColTotalAvailable()) {
+			totalColumn = new double[table.getRows().size()];
+			int index = 0;
+			for (CTableRow row: table.getRows()) {
+				for (Double val: row.getValues()) {
+					if (val != null)
+						totalColumn[index] += val;
+				}
+				index++;
+			}
+		}
+		else totalColumn = null;
+
+		// update row total
+		if (table.isRowTotalAvailable()) {
+			totalRow = new double[getColumnCount()];
+			for (CTableRow row: table.getRows()) {
+				if (row.getLevel() == 0) {
+					int index = 0;
+					for (Double val: row.getValues()) {
+						if (val != null) 
+							totalRow[index] += val;
+						index++;
+					}
+				}
+			}
+		}
+		else totalRow = null;
+	}
+
 
 	/**
 	 * Update the parent link of the child columns using recursion
@@ -357,6 +421,20 @@ public class TableData {
 	 */
 	public void setRowMaxLevel(int rowMaxLevel) {
 		this.rowMaxLevel = rowMaxLevel;
+	}
+
+	/**
+	 * @return the totalRow
+	 */
+	public double[] getTotalRow() {
+		return totalRow;
+	}
+
+	/**
+	 * @return the totalColumn
+	 */
+	public double[] getTotalColumn() {
+		return totalColumn;
 	}
 
 }

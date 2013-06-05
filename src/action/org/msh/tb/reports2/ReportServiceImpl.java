@@ -7,6 +7,7 @@ import java.util.List;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.remoting.WebRemote;
+import org.jboss.seam.annotations.security.Restrict;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.IndicatorReport;
 import org.msh.reports.datatable.Row;
@@ -37,6 +38,7 @@ import org.msh.tb.reports2.variables.DateFieldVariable;
  *
  */
 @Name("org.msh.tb.client.shared.ReportService")
+@Restrict("#{s:hasRole('DATA_ANALYSIS')}")
 public class ReportServiceImpl implements ReportService {
 
 	/* (non-Javadoc)
