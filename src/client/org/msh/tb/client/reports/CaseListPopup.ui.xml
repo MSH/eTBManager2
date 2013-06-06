@@ -26,12 +26,24 @@
 			float:left;
 			padding-left:4px;
 		}
+		.linkClose {
+			width:16px;
+			height:16px;
+			display:block;
+			float:right;
+			font-size:13px;
+			text-align: center;
+		}
+		.linkClose:hover {
+			text-decoration: none;
+		}
 	</ui:style>
 
 	<g:VerticalPanel width="550px">
 		<g:HTMLPanel ui:field="pnlContent">
 			<div class="{style.header}">
 				<div class="{style.inner-header}">
+					<g:Anchor ui:field="lnkClose" styleName="gwt-Anchor {style.linkClose}">x</g:Anchor>
 					<h2><ui:text from="{msg.casesTitle}" /></h2>
 				</div>
 			</div>

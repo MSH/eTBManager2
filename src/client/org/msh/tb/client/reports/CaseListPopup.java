@@ -51,6 +51,11 @@ public class CaseListPopup extends PopupPanel {
 		add(panel);
 	}
 	
+	/**
+	 * Open the popup window and send a request to the server using the filters
+	 * passed as argument
+	 * @param filters is the list of filter and values to search for the cases
+	 */
 	public void showPatients(HashMap<String, String> filters) {
 		this.filters = filters;
 		page = 0;
@@ -59,6 +64,16 @@ public class CaseListPopup extends PopupPanel {
 		updatePageContent();
 	}
 
+	
+	/**
+	 * Called when the user clicks on the close icon of the pop up window
+	 * @param event the {@link ClickEvent} instance
+	 */
+	@UiHandler("lnkClose")
+	public void lnkCloseClick(ClickEvent event) {
+		hide();
+	}
+	
 	/**
 	 * Update the page content by calling the server
 	 */
