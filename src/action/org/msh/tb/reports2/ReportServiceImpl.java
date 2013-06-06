@@ -1,5 +1,6 @@
 package org.msh.tb.reports2;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -128,7 +129,9 @@ public class ReportServiceImpl implements ReportService {
 		List<VariableImpl> variables = new ArrayList<VariableImpl>();
 		
 		boolean bDuplicated = false;
+		VariableImpl duplvar = null;
 		int dateVars = 0;
+
 		// add variables to the columns of the report
 		for (String varid: reportData.getColVariables()) {
 			VariableImpl var = res.findVariableById(varid);
@@ -137,8 +140,10 @@ public class ReportServiceImpl implements ReportService {
 				if (var instanceof DateFieldVariable)
 					dateVars++;
 				
-				if (variables.contains(var))
+				if (variables.contains(var)) {
 					bDuplicated = true;
+					duplvar = var;
+				}
 
 				rep.addColumnVariable(var);
 				variables.add(var);
@@ -153,17 +158,33 @@ public class ReportServiceImpl implements ReportService {
 				if (var instanceof DateFieldVariable)
 					dateVars++;
 				
-				if (variables.contains(var))
+				if (variables.contains(var)) {
 					bDuplicated = true;
+					duplvar = var;
+				}
 
 				rep.addRowVariable(var);
 				variables.add(var);
 			}
 		}
+
+		// check unit used in the report
+		VariableImpl varUnitRef = null;
+		for (VariableImpl var: variables) {
+			Object unitType = var.getUnitType();
+			if (unitType != null) {
+				if ((varUnitRef != null) && (!varUnitRef.getUnitType().equals(unitType))) {
+					return returnError("manag.reportgen.error3", varUnitRef.getLabel(), var.getLabel());
+				}
+				
+				if (varUnitRef == null)
+					varUnitRef = var;
+			}
+		}
 		
 		// validate variables
 		if (bDuplicated)
-			return returnError("manag.reportgen.error1");
+			return returnError("manag.reportgen.error1", duplvar.getLabel());
 		
 		if (dateVars > 1)
 			return returnError("manag.reportgen.error2");
@@ -192,6 +213,10 @@ public class ReportServiceImpl implements ReportService {
 
 		ClientTableGenerator gen = new ClientTableGenerator();
 		CTable ctable = gen.execute(rep);
+
+		// set the label used in the y-axis of the chart
+		if (varUnitRef != null)
+			ctable.setUnitTypeLabel(varUnitRef.getUnitTypeLabel());
 		
 		return ctable;
 	}
@@ -217,9 +242,12 @@ public class ReportServiceImpl implements ReportService {
 	 * @param errorKey
 	 * @return
 	 */
-	protected CTable returnError(String errorKey) {
+	protected CTable returnError(String errorKey, Object... params) {
 		CTable tbl = new CTable();
-		tbl.setErrorMessage(Messages.instance().get(errorKey));
+		String msg = Messages.instance().get(errorKey);
+		if (params != null) 
+			msg = MessageFormat.format(msg, params);
+		tbl.setErrorMessage(msg);
 		return tbl;
 	}
 

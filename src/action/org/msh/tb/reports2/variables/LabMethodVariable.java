@@ -6,8 +6,9 @@ import org.msh.tb.entities.enums.TbField;
 
 public class LabMethodVariable extends FieldValueVariable {
 
-	public LabMethodVariable(String id, String keylabel, String fieldName, TbField tbfield) {
+	public LabMethodVariable(String id, String keylabel, String fieldName, TbField tbfield, UnitType unitType) {
 		super(id, keylabel, fieldName, tbfield);
+		setUnitType(unitType);
 	}
 
 	/* (non-Javadoc)

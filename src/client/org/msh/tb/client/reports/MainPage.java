@@ -296,7 +296,10 @@ public class MainPage extends Composite implements StandardEventHandler {
 
 		chart.clear();
 
-		chart.setyAxisTitle(messages.numberOfCases());
+		String title = tableData.getTable().getUnitTypeLabel();
+		if (title == null)
+			title = messages.numberOfCases();
+		chart.setyAxisTitle(title);
 
 		// is row selected ?
 		if (rowSelected) {

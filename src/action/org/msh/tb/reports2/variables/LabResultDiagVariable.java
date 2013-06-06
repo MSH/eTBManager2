@@ -13,8 +13,8 @@ import org.msh.reports.query.SQLDefs;
 public class LabResultDiagVariable extends LabResultVariable {
 	
 	public LabResultDiagVariable(String id, String keylabel, String fieldName,
-			Class<? extends Enum> enumClass) {
-		super(id, keylabel, fieldName, enumClass);
+			Class<? extends Enum> enumClass, UnitType unitType) {
+		super(id, keylabel, fieldName, enumClass, unitType);
 	}
 
 	/**

@@ -17,6 +17,7 @@ import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.entities.enums.XpertResult;
+import org.msh.tb.reports2.VariableImpl.UnitType;
 import org.msh.tb.reports2.variables.AdminUnitVariable;
 import org.msh.tb.reports2.variables.AgeRangeVariable;
 import org.msh.tb.reports2.variables.CaseItemDateVariable;
@@ -27,6 +28,7 @@ import org.msh.tb.reports2.variables.DateFieldVariable;
 import org.msh.tb.reports2.variables.EnumFieldVariable;
 import org.msh.tb.reports2.variables.ExtrapulmonarVariable;
 import org.msh.tb.reports2.variables.HivResultVariable;
+import org.msh.tb.reports2.variables.LabExamDateVariable;
 import org.msh.tb.reports2.variables.LabMethodVariable;
 import org.msh.tb.reports2.variables.LabResultDiagVariable;
 import org.msh.tb.reports2.variables.LabResultVariable;
@@ -126,13 +128,13 @@ public class ReportResources {
 	 */
 	protected ReportGroup addCultureExamVariables() {
 		ReportGroup grp = addGroup("manag.reportgen.culture");
-		addVariable(grp, new LabResultDiagVariable("cult_resdiag", "manag.reportgen.var.cultdiag", "examculture.result", CultureResult.class));
-		addVariable(grp, new LabResultVariable("cult_res", "CultureResult", "examculture.result", CultureResult.class));
-		addVariable(grp, new CaseItemDateVariable("cultcount", "manag.reportgen.var.culturemonth", "examculture.dateCollected", false));
-		addVariable(grp, new CaseItemDateVariable("cultcount_y", "manag.reportgen.var.cultureyear", "examculture.dateCollected", true));
+		addVariable(grp, new LabResultDiagVariable("cult_resdiag", "manag.reportgen.var.cultdiag", "examculture.result", CultureResult.class, UnitType.DEFAULT));
+		addVariable(grp, new LabResultVariable("cult_res", "CultureResult", "examculture.result", CultureResult.class, UnitType.EXAM_CULTURE));
+		addVariable(grp, new LabExamDateVariable("cultcount", "manag.reportgen.var.culturemonth", "examculture.dateCollected", false, UnitType.EXAM_CULTURE));
+		addVariable(grp, new LabExamDateVariable("cultcount_y", "manag.reportgen.var.cultureyear", "examculture.dateCollected", true, UnitType.EXAM_CULTURE));
 		addFilter(grp, new CaseItemDateVariable("cultcollect", "#{messages['manag.reportgen.culture']} - #{messages['manag.reportgen.collect']}", "examdst.dateCollected", false));
 		add(grp, new NegativationMonthVariable("cultneg", true));
-		add(grp, new LabMethodVariable("cultmethod", "TbField.CULTURE_METHOD", "examculture.method_id", TbField.CULTURE_METHOD));
+		add(grp, new LabMethodVariable("cultmethod", "TbField.CULTURE_METHOD", "examculture.method_id", TbField.CULTURE_METHOD, UnitType.EXAM_CULTURE));
 		return grp;
 	}
 	
@@ -142,10 +144,10 @@ public class ReportResources {
 	 */
 	protected ReportGroup addMicroscopyExamVariables() {
 		ReportGroup grp = addGroup("manag.reportgen.microscopy");
-		add(grp, new LabResultDiagVariable("mic_resdiag", "manag.reportgen.var.micdiag", "exammicroscopy.result", MicroscopyResult.class));
-		add(grp, new LabResultVariable("mic_res", "MicroscopyResult", "exammicroscopy.result", MicroscopyResult.class));
-		addVariable(grp, new CaseItemDateVariable("miccount", "manag.reportgen.var.micmonth", "exammicroscopy.dateCollected", false));
-		addVariable(grp, new CaseItemDateVariable("miccount_y", "manag.reportgen.var.micyear", "exammicroscopy.dateCollected", true));
+		add(grp, new LabResultDiagVariable("mic_resdiag", "manag.reportgen.var.micdiag", "exammicroscopy.result", MicroscopyResult.class, UnitType.DEFAULT));
+		add(grp, new LabResultVariable("mic_res", "MicroscopyResult", "exammicroscopy.result", MicroscopyResult.class, UnitType.EXAM_MICROSCOPY));
+		addVariable(grp, new LabExamDateVariable("miccount", "manag.reportgen.var.micmonth", "exammicroscopy.dateCollected", false, UnitType.EXAM_MICROSCOPY));
+		addVariable(grp, new LabExamDateVariable("miccount_y", "manag.reportgen.var.micyear", "exammicroscopy.dateCollected", true, UnitType.EXAM_MICROSCOPY));
 		addFilter(grp, new CaseItemDateVariable("miccollect", "#{messages['manag.reportgen.microscopy']} - #{messages['manag.reportgen.collect']}", "exammicroscopy.dateCollected", false));
 		add(grp, new NegativationMonthVariable("micneg", false));
 		return grp;
@@ -158,8 +160,8 @@ public class ReportResources {
 	 */
 	protected ReportGroup addXpertExamVariables() {
 		ReportGroup grp = addGroup("cases.examxpert");
-		add(grp, new LabResultDiagVariable("genx_diag", "manag.reportgen.var.xpertdiag", "examxpert.result", XpertResult.class));
-		add(grp, new LabResultVariable("genx_res", "XpertResult", "examxpert.result", XpertResult.class));
+		add(grp, new LabResultDiagVariable("genx_diag", "manag.reportgen.var.xpertdiag", "examxpert.result", XpertResult.class, UnitType.EXAM_XPERT));
+		add(grp, new LabResultVariable("genx_res", "XpertResult", "examxpert.result", XpertResult.class, UnitType.EXAM_XPERT));
 		addFilter(grp, new CaseItemDateVariable("xp-collect", "#{messages['manag.reportgen.xpert']} - #{messages['manag.reportgen.collect']}", "exammicroscopy.dateCollected", false));
 		return grp;
 	}
@@ -171,10 +173,10 @@ public class ReportResources {
 	 */
 	protected ReportGroup addDstExamVariables() {
 		ReportGroup grp = addGroup("manag.reportgen.dst");
-		addVariable(grp, new CaseItemDateVariable("dstcount", "manag.reportgen.var.dstmonth", "examdst.dateCollected", false));
-		addVariable(grp, new CaseItemDateVariable("dstcount_y", "manag.reportgen.var.dstyear", "examdst.dateCollected", true));
+		addVariable(grp, new LabExamDateVariable("dstcount", "manag.reportgen.var.dstmonth", "examdst.dateCollected", false, UnitType.EXAM_DST));
+		addVariable(grp, new LabExamDateVariable("dstcount_y", "manag.reportgen.var.dstyear", "examdst.dateCollected", true, UnitType.EXAM_DST));
 		addFilter(grp, new CaseItemDateVariable("dstcollect", "#{messages['manag.reportgen.dst']} - #{messages['manag.reportgen.collect']}", "examdst.dateCollected", false));
-		add(grp, new LabMethodVariable("dstmethod", "TbField.DST_METHOD", "examdst.method_id", TbField.DST_METHOD));
+		add(grp, new LabMethodVariable("dstmethod", "TbField.DST_METHOD", "examdst.method_id", TbField.DST_METHOD, UnitType.EXAM_DST));
 		add(grp, new ResistancePatternVariable("dstpatt", false));
 		add(grp, new ResistancePatternVariable("dstpatt_diag", true));
 		return grp;
@@ -225,7 +227,7 @@ public class ReportResources {
 	
 	protected ReportGroup addOtherVariables() {
 		ReportGroup grp = addGroup("manag.reportgen.var.groupothers");
-		addVariable(grp, new CountingVariable("totalcases", "manag.ind.numc"));
+		addVariable(grp, new CountingVariable("totalcases", "manag.ind.numc", UnitType.CASE_ONLY));
 		addVariable(grp, new CountingExamsVariable());
 		return grp;
 	}

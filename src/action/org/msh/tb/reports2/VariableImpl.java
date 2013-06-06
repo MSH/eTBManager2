@@ -22,15 +22,38 @@ public class VariableImpl implements Variable, Filter {
 
 	public static final String KEY_NULL = "null";
 
+	/**
+	 * Available unit types to measure the numbers returned by the indicator
+	 * @author Ricardo Memoria
+	 *
+	 */
+	public enum UnitType { DEFAULT, EXAM_CULTURE, EXAM_MICROSCOPY, EXAM_DST, EXAM_XPERT, EXAM_HIV, EXAMS_ALL, CASE_ONLY };
+	
 	private String id;
 	private String keylabel;
 	private String fieldName;
+	private UnitType unitType;
 	
 	public VariableImpl(String id, String keylabel, String fieldName) {
 		this.id = id;
 		this.fieldName = fieldName;
 		this.keylabel = keylabel;
+		this.unitType = UnitType.DEFAULT;
 	}
+	
+	public VariableImpl() {
+		super();
+	}
+	
+	public VariableImpl(String id, String keyLabel, String fieldName, UnitType unitType) {
+		this.id = id;
+		this.fieldName = fieldName;
+		this.keylabel = keyLabel;
+		this.unitType = unitType;
+	}
+	
+	
+//	public VariableImpl(String id, String keylabel, String fieldName)
 	
 	/* (non-Javadoc)
 	 * @see org.msh.reports.variables.Variable#getName()
@@ -286,5 +309,35 @@ public class VariableImpl implements Variable, Filter {
 	@Override
 	public boolean isTotalEnabled() {
 		return true;
+	}
+	
+	/**
+	 * Return the display text of the units being used to measure the numbers calculated
+	 * by the indicator (example, number of patients, number of tests, etc)
+	 * @return String with the display text of the units used in the variable, or null
+	 * if it is the default unit type label
+	 */
+	public String getUnitTypeLabel() {
+		if ((unitType == UnitType.DEFAULT) || (unitType == null))
+			return null;
+
+		return Messages.instance().get("manag.reportgen.unit.numerexams");
+	}
+	
+	/**
+	 * Return the unit type to measure the numbers returned by the variable. This
+	 * is an object that will be used to compare the units of one variable to
+	 * another
+	 * @return The object identifying the unit type, or null if it's a default unit type
+	 */
+	public UnitType getUnitType() {
+		return (unitType == UnitType.DEFAULT ? null: unitType);
+	}
+
+	/**
+	 * @param unitType the unitType to set
+	 */
+	public void setUnitType(UnitType unitType) {
+		this.unitType = unitType;
 	}
 }

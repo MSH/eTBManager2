@@ -11,10 +11,10 @@ public class CountingExamsVariable extends CountingVariable {
 	private static final int KEY_CULTURE = 3;
 	private static final int KEY_DST = 4;
 	private static final int KEY_HIV = 5;
-
+	
 	
 	public CountingExamsVariable() {
-		super("examcount", "manag.reportgen.var.totalexams");
+		super("examcount", "manag.reportgen.var.totalexams", UnitType.EXAMS_ALL);
 	}
 
 	/* (non-Javadoc)
@@ -110,4 +110,6 @@ public class CountingExamsVariable extends CountingVariable {
 	public Object filterValueFromString(String value) {
 		return Integer.parseInt(value);
 	}
+
+
 }

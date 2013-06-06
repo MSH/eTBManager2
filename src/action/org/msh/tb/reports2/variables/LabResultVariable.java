@@ -4,9 +4,12 @@ import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.query.SQLDefs;
 
 public class LabResultVariable extends EnumFieldVariable {
+	
+	public static int UNIT_EXAMS = 10;
 
-	public LabResultVariable(String id, String keylabel, String fieldName, Class<? extends Enum> enumClass) {
+	public LabResultVariable(String id, String keylabel, String fieldName, Class<? extends Enum> enumClass, UnitType unitType) {
 		super(id, keylabel, fieldName, enumClass);
+		setUnitType(unitType);
 	}
 
 	/* (non-Javadoc)

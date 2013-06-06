@@ -45,6 +45,13 @@ public class CTable implements IsSerializable {
 	private boolean colTotalAvailable;
 
 	/**
+	 * The unit label used to measure the numbers in the table
+	 */
+	private String unitTypeLabel;
+
+
+
+	/**
 	 * @return the rows
 	 */
 	public ArrayList<CTableRow> getRows() {
@@ -115,5 +122,17 @@ public class CTable implements IsSerializable {
 	 */
 	public void setColTotalAvailable(boolean colTotalAvailable) {
 		this.colTotalAvailable = colTotalAvailable;
+	}
+	/**
+	 * @return the unitTypeLabel
+	 */
+	public String getUnitTypeLabel() {
+		return unitTypeLabel;
+	}
+	/**
+	 * @param unitTypeLabel the unitTypeLabel to set
+	 */
+	public void setUnitTypeLabel(String unitTypeLabel) {
+		this.unitTypeLabel = unitTypeLabel;
 	}
 }

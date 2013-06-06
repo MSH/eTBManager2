@@ -7,8 +7,8 @@ import org.msh.tb.reports2.VariableImpl;
 
 public class CountingVariable extends VariableImpl {
 
-	public CountingVariable(String id, String keylabel) {
-		super(id, keylabel, null);
+	public CountingVariable(String id, String keylabel, UnitType unitType) {
+		super(id, keylabel, null, unitType);
 	}
 
 	/* (non-Javadoc)
