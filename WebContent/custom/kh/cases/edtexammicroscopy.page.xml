@@ -15,6 +15,7 @@
 				</redirect>
 			</rule>
 			<rule if-outcome="persisted">
+			    <end-conversation />
 				<redirect view-id="/custom/kh/cases/casedata.xhtml">
 					<param name="id" value="#{caseHome.id}"/>
 				</redirect>
