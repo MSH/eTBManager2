@@ -121,16 +121,18 @@ function changeUnitPrice(elem) {
 	unit = strToFloat(elem.value);
 	tot = parseFloat(document.getElementById("formbatch:qtd:qtd").value);
 	totPrice = unit * tot;
-	document.getElementById("formbatch:tprice:tprice").value = floatToStr(totPrice, 5);
+	document.getElementById("formbatch:tprice:tprice").value = floatToStr(totPrice, 2);
 	quantCont = document.getElementById("formbatch:qtdcon:qtdcon").value;
-	document.getElementById("formbatch:cprice:cprice").value = floatToStr(unit*quantCont,5);
+	document.getElementById("formbatch:cprice:cprice").value = floatToStr(unit*quantCont,3);
 }
 
 function changeUPrice() {
-	unit = strToFloat(document.getElementById("formbatch:uprice:uprice").value);
-	tot = parseFloat(document.getElementById("formbatch:qtd:qtd").value);
-	totPrice = unit * tot;
-	document.getElementById("formbatch:tprice:tprice").value = floatToStr(totPrice, 5);
+	numConts = document.getElementById("formbatch:numcont:numcont").value;
+	cPrice = strToFloat(document.getElementById("formbatch:cprice:cprice").value);
+	//unit = strToFloat(document.getElementById("formbatch:uprice:uprice").value);
+	//tot = parseFloat(document.getElementById("formbatch:qtd:qtd").value);
+	totPrice = numConts * cPrice;
+	document.getElementById("formbatch:tprice:tprice").value = floatToStr(totPrice, 2);
 }
 
 function changeTotalPrice(elem) {
@@ -139,7 +141,7 @@ function changeTotalPrice(elem) {
 	if (tot != 0)
 		unitPrice = totPrice / tot;
 	else unitPrice = 0;
-	document.getElementById("formbatch:uprice:uprice").value = floatToStr(unitPrice, 5);
+	document.getElementById("formbatch:uprice:uprice").value = floatToStr(unitPrice, 3);
 }
 
 function changeQuantityCont() {
@@ -167,7 +169,7 @@ function changeCPrice(elem) {
 		unit = contPrice / quantCont;
 	else
 		unit = 0;
-	document.getElementById("formbatch:uprice:uprice").value = floatToStr(unit, 5);
+	document.getElementById("formbatch:uprice:uprice").value = floatToStr(unit, 3);
 	changeUPrice();
 }
 

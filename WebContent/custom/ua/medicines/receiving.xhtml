@@ -13,6 +13,8 @@
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
 <ui:param name="pagestyle" value="width:700px;" />
+<ui:param name="medicineReceivingHome" value="#{medicineReceivingUAHome}" />
+<ui:param name="medicineReceiving" value="#{medicineReceivingUA}" />
 
 <ui:define name="left">
 	<div class="vertical-menu">
@@ -77,7 +79,7 @@
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
     	<h:outputText value="#{medicineReceiving.totalPrice}" >
-			<f:convertNumber pattern="#,###,##0.00000"/>
+			<f:convertNumber pattern="#,###,##0.00"/>
     	</h:outputText>
     </s:decorate>
 
@@ -85,29 +87,19 @@
 			<tr><th>#{messages['Medicine']}</th>
 				<th>#{messages['Batch.expiryDate']}</th>
 				<th align="right">#{messages['Batch.numContainers']}<br/>(#{messages['Batch.quantityContainer']})</th>
-				<th align="right">#{messages['Batch.quantity']}</th>
-				<th align="right">#{messages['global.unitPrice']}</th>
+				<th align="right">#{messages['Batch.containerPrice']}</th>
 				<th align="right">#{messages['global.totalPrice']}</th>
 			</tr>
 			<a:repeat value="#{medicineReceivingHome.medicines}" var="it">
 				<tr class="highlight">
-				<td class="colb" colspan="3">
+				<td class="colb" colspan="4">
 					<div class="medicine-icon" style="float:left"/>
 					<h:outputText value="#{it.medicine}" />
 					</td>
-					<td class="colrb"> 
-						<h:outputText value="#{it.item.quantity}" >
-							<f:convertNumber pattern="#,###,###,##0"/>
-						</h:outputText>
-						</td>
-					<td class="colrb">
-							<h:outputText value="#{it.item.unitPrice}" >
-								<f:convertNumber pattern="#,###,##0.00000"/>
-							</h:outputText>
-					</td>
+					
 					<td class="colrb"> 
 						<h:outputText value="#{it.item.totalPrice}" >
-							<f:convertNumber pattern="#,###,##0.00000"/>							
+							<f:convertNumber pattern="#,###,##0.00"/>							
 						</h:outputText>
 					</td>
 				</tr>
@@ -123,19 +115,20 @@
 							<h:outputText value="#{b.expiryDate}" converter="localeDateConverter" />
 						</td>
 						<td class="colrb">
-							<h:outputText value="#{b.numContainers}" >
+							<h:outputText value="#{medicineReceivingUAHome.calculateNumContainers(b.quantityContainer,b.quantityReceived)}" >
 								<f:convertNumber pattern="#,###,##0"/>
 							</h:outputText>
 							<h:outputText value="(№#{b.quantityContainer})" style="margin-left:5px;">
 								<f:convertNumber pattern="#,###,##0"/>
 							</h:outputText>
 						</td>
+						
 						<td class="colrb">
-							<h:outputText value="#{b.quantityReceived}"><f:convertNumber pattern="#,###,##0" /></h:outputText></td>
+							<h:outputText value="#{medicineReceivingUAHome.calculateContPrice(b.quantityContainer,b.unitPrice)}">
+								<f:convertNumber pattern="#,###,##0.000" />
+							</h:outputText></td>
 						<td class="colrb">
-							<h:outputText value="#{b.unitPrice}"><f:convertNumber pattern="#,###,##0.00000" /></h:outputText></td>
-						<td class="colrb">
-							<h:outputText value="#{b.totalPrice}"><f:convertNumber pattern="#,###,##0.00000" /></h:outputText></td>
+							<h:outputText value="#{b.totalPrice}"><f:convertNumber pattern="#,###,##0.00" /></h:outputText></td>
 					</tr>
 				</a:repeat>
 			</a:repeat>

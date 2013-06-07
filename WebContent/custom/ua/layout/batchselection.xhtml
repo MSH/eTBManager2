@@ -119,24 +119,6 @@ function changeNumCont(elem,quantCont){
 		
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['global.unitPrice']}" styleClass="colrh"/>
-			</f:facet>
-			<h:outputText value="#{it.item.batch.unitPrice}">
-				<f:convertNumber pattern="#,###,###,##0.00000" />
-			</h:outputText>
-		</h:column>
-		
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['Batch.containerPrice']}" styleClass="colrh"/>
-			</f:facet>
-			<h:outputText value="#{it.item.batch.containerPrice}">
-				<f:convertNumber pattern="#,###,###,##0.00000" />
-			</h:outputText>
-		</h:column>
-		
-		<h:column>
-			<f:facet name="header">
 				<h:outputText value="#{messages['Batch.numContainers']}" styleClass="colrh"/>
 			</f:facet>
 			<h:outputText value="#{it.item.numContainers}">
@@ -155,14 +137,9 @@ function changeNumCont(elem,quantCont){
 			<h:outputText value="#{it.item.batchQuantity.quantity}">
 				<f:convertNumber pattern="#,###,###,##0" />
 			</h:outputText>
-		</h:column>
-		
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{quantitytitle}" styleClass="colrh"/>
-			</f:facet>
-			<h:inputText id="qtd" value="#{it.item.quantity}" style="width:80px;" 
-				onkeypress="return numbersOnly(this,event);" 
+			<br/>
+			<h:inputText id="qtd" value="#{it.item.quantity}" style="width:80px;background-color:#E0E0E0;"
+				onkeypress="return false;" 
 				rendered="#{not it.item.batch.expired}" />
 			<h:outputText value="#{messages['meds.selbatches.expired']}" 
 				rendered="#{it.item.batch.expired}" 
@@ -177,7 +154,7 @@ function changeNumCont(elem,quantCont){
    			<ui:insert />
    		</span>
    		<ui:insert name="cancel">
-   			<s:link onclick="hideBatchesSelectionDlg();return false;" styleClass="button-alt" >
+   			<s:link onclick="if (confirm('#{messages['uk_UA.datawillnotsave']}')) {hideBatchesSelectionDlg();} return false;" styleClass="button-alt" >
    				<span>#{messages['form.cancel']}</span>
 			</s:link>
 		</ui:insert>

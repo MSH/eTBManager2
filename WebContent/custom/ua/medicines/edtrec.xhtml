@@ -13,6 +13,8 @@
 <ui:param name="title" value="#{medicineReceivingUA.id==null? messages['meds.receiving.new'] :messages['meds.receiving.edt']}"/>
 <ui:param name="topmenu" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="medicineReceivingHome" value="#{medicineReceivingUAHome}" />
+<ui:param name="medicineReceiving" value="#{medicineReceivingUA}" />
 
 <ui:param name="left" value="0" />
 
@@ -32,7 +34,7 @@
     </s:decorate>
 
 	<s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['Transfer.consignmentNumber']}:</ui:define>
+    	<ui:define name="label">#{messages['uk_UA.invoiceNumber']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<h:inputText value="#{medicineReceivingUA.consignmentNumber}" />
     </s:decorate>
@@ -46,8 +48,8 @@
 
 	<a:commandLink styleClass="button-alt"
 		style="float:right"
-		onclick="newBatchDlg();return false;" >
-		<span>#{messages['meds.receiving.newbatch']}...</span>
+		onclick="newBatchDlg();return false;">
+		<span>#{messages['form.selmeds']}...</span>
 	</a:commandLink>
 	
 	<h2>#{messages['MedicineReceiving.medicines']}</h2>
@@ -61,30 +63,20 @@
 			<tr><th>#{messages['Medicine']}</th>
 				<th>#{messages['Batch.expiryDate']}</th>
 				<th align="right">#{messages['Batch.numContainers']} <br/>(#{messages['Batch.quantityContainer']})</th>
-				<th align="right">#{messages['Batch.quantity']}</th>
-				<th align="right">#{messages['global.unitPrice']}</th>
+				<th align="right">#{messages['Batch.containerPrice']}</th>
 				<th align="right">#{messages['global.totalPrice']}</th>
 				<th>#{messages['form.action']}</th>
 			</tr>
 			<a:repeat value="#{medicineReceivingHome.medicines}" var="it">
 				<tr class="highlight">
-				<td class="colb" colspan="3">
+				<td class="colb" colspan="4">
 					<div class="medicine-icon" style="float:left"/>
 					<h:outputText value="#{it.medicine}" />
 					</td>
+					
 					<td class="colrb"> 
-						<h:outputText value="#{it.item.quantity}" >
-							<f:convertNumber pattern="#,###,###,##0"/>
-						</h:outputText>
-						</td>
-					<td class="colrb">
-							<h:outputText value="#{it.item.unitPrice}" >
-								<f:convertNumber pattern="#,###,##0.00000"/>
-							</h:outputText>
-					</td>
-					<td class="colrb"> 
-						<h:outputText value="#{it.item.totalPrice}" >
-							<f:convertNumber pattern="#,###,##0.00000"/>							
+						<h:outputText value="#{medicineReceivingUAHome.calculateTotalPrice(it.batches)}" >
+							<f:convertNumber pattern="#,###,##0.00"/>							
 						</h:outputText>
 					</td>
 					<td class="colcb">
@@ -102,7 +94,7 @@
 							<h:outputText value="#{b.expiryDate}" converter="localeDateConverter" />
 						</td>
 						<td class="colrb">
-							<h:outputText value="#{b.numContainers}" >
+							<h:outputText value="#{medicineReceivingUAHome.calculateNumContainers(b.quantityContainer,b.quantityReceived)}" >
 								<f:convertNumber pattern="#,###,##0"/>
 							</h:outputText>
 							<h:outputText value="(№#{b.quantityContainer})" style="margin-left:5px;">
@@ -110,16 +102,17 @@
 							</h:outputText>
 						</td>
 						<td class="colrb">
-							<h:outputText value="#{b.quantityReceived}"><f:convertNumber pattern="#,###,##0" /></h:outputText></td>
+							<h:outputText value="#{medicineReceivingUAHome.calculateContPrice(b.quantityContainer,b.unitPrice)}">
+								<f:convertNumber pattern="#,###,##0.000" />
+							</h:outputText></td>
 						<td class="colrb">
-							<h:outputText value="#{b.unitPrice}"><f:convertNumber pattern="#,###,##0.00000" /></h:outputText></td>
-						<td class="colrb">
-							<h:outputText value="#{b.totalPrice}"><f:convertNumber pattern="#,###,##0.00000" /></h:outputText></td>
+							<h:outputText value="#{medicineReceivingUAHome.calculateTotalPrice(b.quantityReceived,b.quantityContainer,b.unitPrice)}">
+								<f:convertNumber pattern="#,###,##0.00" />
+							</h:outputText></td>
 						<td class="colcb">
 							<a:commandLink action="#{medicineReceivingHome.startBatchEditing(b)}" 
 								value="#{messages['form.edit']}" ajaxSingle="true"
-								reRender="formbatch"
-								onclick="startShowBatchDlg();" />
+								onclick="startShowBatchDlg();" reRender="formbatch"/>
 							<br/>
 							<a:commandLink action="#{medicineReceivingHome.removeBatch(b)}" value="#{messages['form.remove']}" reRender="medicines" ajaxSingle="true" 
 								enableManualInput="true" onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;"/>

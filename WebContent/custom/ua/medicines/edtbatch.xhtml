@@ -12,6 +12,8 @@
 <h:form>
 <a:jsFunction name="initNewBatch" action="#{medicineReceivingHome.startNewBatch(null)}" 
 	reRender="formbatch" ajaxSingle="true" oncomplete="finishShowBatchDlg();"/>
+
+<a:jsFunction name="clearLstRegNumb" ajaxSingle="true" action="#{registrationNumbers.clearList()}"/>
 </h:form>
 <script type="text/javascript">
 function newBatchDlg() {
@@ -26,8 +28,15 @@ function finishShowBatchDlg() {
 	jQuery('#formbatch\\:dt\\:dtInputDate').mask('#{messages['locale.dateMask']}');
 }
 
+function initRegNumb() {
+	jQuery("#formbatch").find("#regNumbSelect").each(function(){
+		alert(this.text);
+		});
+}
 
 function hideBatchDlg() {
+	clearLstRegNumb();
+	cleanB();
 	Richfaces.hideModalPanel('batchdlg');
 }
 
@@ -47,7 +56,7 @@ function hideBatchDlg() {
     	<h:selectOneMenu id="batchmedicine" value="#{medicineReceivingHome.batch.medicine}" required="true">
     		<s:selectItems value="#{medicines}" var="it" label="#{it}" noSelectionLabel="-" />
     		<s:convertEntity />
-    		<a:support event="onchange" reRender="formbatch" ajaxSingle="true" focus="batchnumber"/>
+    		<a:support event="onchange" reRender="formbatch" ajaxSingle="true" focus="batchnumber"  action="#{registrationNumbers.clearList()}" />
     	</h:selectOneMenu>
     </s:decorate>
 
@@ -89,85 +98,135 @@ function hideBatchDlg() {
     </s:decorate>
     
     <hr/>
+<table>
+<tr><td>
+<h2>#{messages['Batch.registCard']}</h2>
+</td><td>
+<h:selectBooleanCheckbox value="#{medicineReceivingHome.newRegCard}">
+	<a:support event="onclick" ajaxSingle="true" reRender="regNumb"/>
+</h:selectBooleanCheckbox>
+#{messages['uk_UA.newedit']}
+</td>
+</tr>
+</table>
+
+<h:panelGroup id="regNumb">
+<s:fragment rendered="#{registrationNumbers.currMedId!=null and !medicineReceivingHome.newRegCard}" >
+	<s:decorate template="/layout/edit.xhtml" >
+		<ui:param name="labelstyle" value="width:185px" />
+    	<ui:define name="label">#{messages['Batch.registCard.number']}:</ui:define>
+		<h:selectOneMenu required="false" onchange="changeDates(this.selectedIndex-1);" id="regNumbSelect"> 
+			<f:selectItem itemLabel="-" itemValue="#{null}"/>
+			<f:selectItems value="#{registrationNumbers.resultList}" />	
+			<a:support event="onchange" ajaxSingle="true" reRender="dates"/>
+		</h:selectOneMenu> 
+    </s:decorate>
+    
+    <h:panelGroup id="dates">
+    <s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">#{messages['Batch.registCard.beginDate']}:</ui:define>
+    	<h:outputText id="dt" value="#{medicineReceivingHome.registCard.iniDate}" converter="localeDateConverter" />
+    	<h:outputText value="-" rendered="#{medicineReceivingHome.registCard == null or medicineReceivingHome.registCard.iniDate == null}" />
+	</s:decorate>
+	 <s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">#{messages['Batch.registCard.endDate']}:</ui:define>
+    	<h:outputText id="dt" value="#{medicineReceivingHome.registCard.endDate}" converter="localeDateConverter" />
+    	<h:outputText value="-" rendered="#{medicineReceivingHome.registCard == null or medicineReceivingHome.registCard.endDate == null}" />
+	</s:decorate>
+    </h:panelGroup>
+</s:fragment>
+
+<s:fragment rendered="#{registrationNumbers.currMedId!=null and medicineReceivingHome.newRegCard}">
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Batch.registCard.number']}:</ui:define>
     	<ui:param name="labelstyle" value="width:185px" />
     	<h:inputText value="#{medicineReceivingHome.batch.registCardNumber}" size="80" style="width:250px" />
     </s:decorate>
-	<s:decorate template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['Batch.registCard.beginDate']}:</ui:define>
-    	<ui:param name="labelstyle" value="width:185px" />
-    	<ui:param name="required" value="false" /> 
-    	<ui:param name="datefield" value="#{medicineReceivingHome.batch.registCardBeginDate}" /> 
-    </s:decorate>
+    
+    <div id="begDateId">
+		<s:decorate template="/layout/dateedit.xhtml" >
+	    	<ui:define name="label">#{messages['Batch.registCard.beginDate']}:</ui:define>
+	    	<ui:param name="labelstyle" value="width:185px" />
+	    	<ui:param name="required" value="false" /> 
+	    	<ui:param name="datefield" value="#{medicineReceivingHome.batch.registCardBeginDate}" /> 
+	    </s:decorate>
+    </div>
+    
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['Batch.registCard.endDate']}:</ui:define>
     	<ui:param name="labelstyle" value="width:185px" />
     	<ui:param name="required" value="false" /> 
     	<ui:param name="datefield" value="#{medicineReceivingHome.batch.registCardEndDate}" /> 
     </s:decorate>
+</s:fragment>
+</h:panelGroup>
+
+
     <hr/>
-
-    <s:decorate id="qtdcon" template="/layout/edit.xhtml" >
-    	<ui:param name="labelstyle" value="width:185px" />
-    	<ui:define name="label">#{messages['Batch.quantityContainer']}:</ui:define>
-    	<h:inputText id="qtdcon" value="#{medicineReceivingHome.batch.quantityContainer}" required="true" 
-    	onkeypress="return numbersOnly(this,event);" 
-    	onkeyup="return changeQuantityCont();">
-    		<f:validateDoubleRange minimum="1"/>
-    	</h:inputText>
-    	<!-- (#{medicineReceivingHome.batch.medicine.dosageForm}) -->
-    	<h:outputText value="(#{medicineReceivingHome.batch.medicine.dosageForm})" rendered="#{not empty medicineReceivingHome.batch.medicine.dosageForm}"/>
-    </s:decorate>
-    
-    <s:decorate id="numcont" template="/layout/edit.xhtml" >
-    	<ui:param name="labelstyle" value="width:185px" />
-    	<ui:define name="label">#{messages['Batch.numContainers']}:</ui:define>
-    	<h:inputText id="numcont" value="#{medicineReceivingHome.batch.numContainers}" required="true" 
-    	onkeypress="return numbersOnly(this,event);" 
-    	onkeyup="return changeQuantityCont();">
-    		<f:validateDoubleRange minimum="1"/>
-    	</h:inputText>
-    </s:decorate>
-
-    <s:decorate id="qtd" template="/layout/edit.xhtml" >
-    	<ui:param name="labelstyle" value="width:185px" />
-    	<ui:define name="label">#{messages['Batch.quantityReceived']}:</ui:define>
-    	<h:inputText id="qtd" value="#{medicineReceivingHome.batch.quantityReceived}" required="true" 
-    	onkeypress="return numbersOnly(this,event);" onkeyup="return changeQuantity(this);">
-    		<f:validateDoubleRange minimum="1"/>
-    	</h:inputText>
-    	<!-- (#{medicineReceivingHome.batch.medicine.dosageForm}) -->
-    	<h:outputText value="(#{medicineReceivingHome.batch.medicine.dosageForm})" rendered="#{not empty medicineReceivingHome.batch.medicine.dosageForm}"/>
-    </s:decorate>
-
-    <s:decorate id="uprice" template="/layout/edit.xhtml" >
-    	<ui:param name="labelstyle" value="width:185px" />
-    	<ui:define name="label">#{messages['global.unitPrice']}:</ui:define>
-    	<h:inputText id="uprice" value="#{medicineReceivingHome.batch.unitPrice}" required="true" 
-    		converter="currencyConverter5D" onkeyup="return changeUnitPrice(this);">
-    		<f:validateDoubleRange minimum="0.00001"/>
-    	</h:inputText>
-    </s:decorate>
-
-	<s:decorate id="cprice" template="/layout/edit.xhtml" >
-		<ui:param name="labelstyle" value="width:185px" />
-    	<ui:define name="label">#{messages['Batch.containerPrice']}:</ui:define>
-    	<h:inputText id="cprice" value="#{medicineReceivingHome.batch.containerPrice}" required="true" 
-    		converter="currencyConverter5D" onkeyup="return changeCPrice(this);">
-    		<f:validateDoubleRange minimum="0.00001"/>
-    	</h:inputText>
-    </s:decorate>
-
-    <s:decorate id="tprice" template="/layout/edit.xhtml" >
-    	<ui:param name="labelstyle" value="width:185px" />
-    	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
-    	<h:inputText id="tprice" value="#{medicineReceivingHome.batch.totalPrice}" required="true" 
-    		converter="currencyConverter5D" onkeyup="return changeTotalPrice(this);">
-    		<f:validateDoubleRange minimum="0.00001"/>
-    	</h:inputText>
-    </s:decorate>
-
+	<table>
+		<tr>
+			<td>
+			    <s:decorate id="qtdcon" template="/layout/edit.xhtml" >
+			    	<ui:param name="labelstyle" value="width:185px" />
+			    	<ui:define name="label">#{messages['Batch.quantityContainer']}:</ui:define>
+			    	<h:inputText id="qtdcon" value="#{medicineReceivingHome.batch.quantityContainer}" required="true" 
+			    	onkeypress="return numbersOnly(this,event);" 
+			    	onkeyup="return changeQuantityCont();" />
+			    	<!-- (#{medicineReceivingHome.batch.medicine.dosageForm}) -->
+			    	<h:outputText value="(#{medicineReceivingHome.batch.medicine.dosageForm})" rendered="#{not empty medicineReceivingHome.batch.medicine.dosageForm}"/>
+			    </s:decorate>
+			</td>
+			<td>
+				<s:decorate id="qtd" template="/layout/edit.xhtml" >
+			    	<ui:param name="labelstyle" value="width:185px" />
+			    	<ui:define name="label">#{messages['Batch.quantityReceived']}:</ui:define>
+			    	<h:inputText id="qtd" value="#{medicineReceivingHome.batch.quantityReceived}" 
+			    	style="background-color:#E0E0E0;" onkeypress="return false;"/>
+	
+			    	<!-- (#{medicineReceivingHome.batch.medicine.dosageForm}) -->
+			    	<h:outputText value="(#{medicineReceivingHome.batch.medicine.dosageForm})" rendered="#{not empty medicineReceivingHome.batch.medicine.dosageForm}"/>
+			    </s:decorate>
+			</td>
+		</tr>
+	    <tr>
+		    <td>
+			    <s:decorate id="numcont" template="/layout/edit.xhtml" >
+			    	<ui:param name="labelstyle" value="width:185px" />
+			    	<ui:define name="label">#{messages['Batch.numContainers']}:</ui:define>
+			    	<h:inputText id="numcont" value="#{medicineReceivingHome.numContainers}" required="true" 
+						    	onkeypress="return numbersOnly(this,event);" 
+						    	onkeyup="return changeQuantityCont();" />
+			    </s:decorate>
+		    </td>
+		    <td>
+			    <s:decorate id="uprice" template="/layout/edit.xhtml" >
+			    	<ui:param name="labelstyle" value="width:185px" />
+			    	<ui:define name="label">#{messages['global.unitPrice']}:</ui:define>
+			    	<h:inputText id="uprice" value="#{medicineReceivingHome.batch.unitPrice}" converter="currencyConverter3D" 
+			    	readonly="true" style="background-color:#E0E0E0;"/>
+			    </s:decorate>
+		    </td>
+	    </tr>
+		<tr>
+			<td>
+				<s:decorate id="cprice" template="/layout/edit.xhtml" >
+					<ui:param name="labelstyle" value="width:185px" />
+			    	<ui:define name="label">#{messages['Batch.containerPrice']}:</ui:define>
+			    	<h:inputText id="cprice" value="#{medicineReceivingHome.containerPrice}" required="true" 
+			    		converter="currencyConverter3D" onkeyup="return changeCPrice(this);" 
+			    		onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');"/>
+			    </s:decorate>
+			</td>
+			<td>
+				 <s:decorate id="tprice" template="/layout/edit.xhtml" >
+			    	<ui:param name="labelstyle" value="width:185px" />
+			    	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
+			    	<h:inputText id="tprice" value="#{medicineReceivingHome.totalPrice}" readonly="true" 
+			    		converter="currencyConverter" style="background-color:#E0E0E0;"/>
+			    </s:decorate>
+			</td>
+		</tr>
+	</table>
 	</s:div>
 	</h:panelGroup>
 
@@ -184,7 +243,11 @@ function hideBatchDlg() {
 				<span>#{messages['form.cancel']}</span>
 		</s:link>
 	</s:decorate>
-    
+	<a:jsFunction name="changeDates" reRender="dates" ajaxSingle="true">
+		<a:actionparam name="param1" assignTo="#{registrationNumbers.indexSelected}" converter="javax.faces.Integer" />
+	</a:jsFunction>
+	<a:jsFunction name="cleanB" ajaxSingle="true" action="#{medicineReceivingUAHome.cleanAll()}"/>
+	
 	</a:form>
 </rich:modalPanel>
 

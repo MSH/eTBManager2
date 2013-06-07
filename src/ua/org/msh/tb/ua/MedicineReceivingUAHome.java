@@ -1,100 +1,129 @@
 package org.msh.tb.ua;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
-import org.msh.tb.application.App;
 import org.msh.tb.entities.Batch;
+import org.msh.tb.entities.BatchMovement;
 import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.Source;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.login.UserSession;
-import org.msh.tb.medicines.MedicineReceivingHome;
+import org.msh.tb.medicines.MedicineSelection;
 import org.msh.tb.medicines.SourceMedicineTree;
+import org.msh.tb.medicines.SourceMedicineTree.MedicineNode;
+import org.msh.tb.medicines.SourceMedicineTree.SourceNode;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.transactionlog.LogInfo;
 import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.ua.RegistrationNumbers.RegistrationCard;
 import org.msh.tb.ua.entities.MedicineReceivingUA;
 
 
 
 @Name("medicineReceivingUAHome")
 @LogInfo(roleName="RECEIV")
+@Scope(ScopeType.CONVERSATION)
 public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 	private static final long serialVersionUID = 28538032481597899L;
 
-	@In(required=false) UserSession userSession;
 	@In(create=true) MovementHome movementHome;
+	@In(create=true) MedicineSelection medicineSelection;
+	@In(required=false) UserSession userSession;
 	@In(create=true) FacesMessages facesMessages;
+	@In(create=true) RegistrationNumbers registrationNumbers;
+		
+	private SourceMedicineTree<Batch> sourceTree;
 	
+	private Batch batch;
+	private List<Movement> remMovs = new ArrayList<Movement>();
+	private List<Batch> remBatches = new ArrayList<Batch>();
+	private Medicine medicine;
+	
+	private int numContainers;
+	private double containerPrice;
+	private double totalPrice;
+	
+	private RegistrationCard registCard;
+	private boolean newRegCard;
+
 	@Factory("medicineReceivingUA")
-	public MedicineReceivingUA getMedicineReceiving() {
-		/*MedicineReceivingHome mrh = (MedicineReceivingHome)App.getComponent("medicineReceivingHome");
-		if (getInstance()!=null)
-		if (getInstance().getId()==null && mrh.getInstance()!=null){
-			MedicineReceivingUA ins = (MedicineReceivingUA)App.getEntityManager().find(MedicineReceivingUA.class, mrh.getInstance().getId());
-			return ins;
-		}*/
-		MedicineReceivingHome mrh = (MedicineReceivingHome)App.getComponent("medicineReceivingHome");
-		MedicineReceivingUA rec = getInstance();
-		//rec.setId(mrh.getInstance().getId());
-		rec.clone(mrh.getInstance());
-		return rec;
-		//return getInstance();
-		/*
-		if (mrh.getInstance().getId() == null) 
-			return (MedicineReceivingUA)super.getInstance();
-		MedicineReceivingUA ins = (MedicineReceivingUA)App.getEntityManager().find(MedicineReceivingUA.class, mrh.getInstance().getId());
-		if (ins == null){
-			ins = (MedicineReceivingUA)super.getInstance();
+	public MedicineReceivingUA getMedicineReceivingUA() {
+		return getInstance();
+	}
+
+	
+	/**
+	 * Return list of medicine nodes
+	 * @return
+	 */
+	public SourceNode getRoot() {
+		if (sourceTree == null) {
+			createSourceTree();
 		}
-		return ins;*/
+		return sourceTree.getSources().get(0);
+	}
+
+	
+	/**
+	 * Create table of medicines and batches
+	 */
+	private void createSourceTree() {
+		sourceTree = new SourceMedicineTree<Batch>();
+		// add an empty source just to make it the root of the tree
+		Source source = new Source();
+		sourceTree.addSource(source);
+
+		List<Movement> movs = getInstance().getMovements();
+		for (Movement mov: movs) {
+			MedicineNode node = sourceTree.addMedicine(source, mov.getMedicine());
+			node.setItem(new MedicineInfo(node, mov));
+			for (BatchMovement bm: mov.getBatches()) {
+				Batch b = bm.getBatch();
+				sourceTree.addItem(source, mov.getMedicine(), b);
+			}
+		}
 	}
 
 	/**
-	 * Valida os dados do recebimento de medicamento
+	 * Return the list of medicines
 	 * @return
 	 */
-	/*public boolean validateDrugReceiving() {
-		Tbunit unit = userSession.getTbunit();
+	public List<MedicineNode> getMedicines() {
+		return (List<MedicineNode>)getRoot().getMedicines();
+	}
 
-		if (getInstance().getReceivingDate().before( unit.getMedManStartDate()) ) {
-			facesMessages.addFromResourceBundle("meds.movs.datebefore", unit.getMedManStartDate());
-			return false;
-		}
-		MedicineReceivingHome mrh = (MedicineReceivingHome)App.getComponent("medicineReceivingHome");
-		SourceNode sourceNode = mrh.getRoot();
-		
-		if (sourceNode.getMedicines().size() == 0) {
-			facesMessages.addFromResourceBundle("meds.receiving.nobatch");
-			return false;
-		}
-		
-		return true;
-	}*/
-
+	/* (non-Javadoc)
+	 * @see org.msh.tb.EntityHomeEx#persist()
+	 */
 	@Override
 	public String persist() {		
-		MedicineReceivingHome mrh = (MedicineReceivingHome)App.getComponent("medicineReceivingHome");
-		if (!mrh.validateDrugReceiving())
+		if (!validateDrugReceiving())
 			return "error";
 		
-		if (mrh.getInstance().getTbunit() == null)
-			mrh.getInstance().setTbunit(userSession.getTbunit());
-		
 		MedicineReceivingUA rec = getInstance();
-		rec.clone(mrh.getInstance());
+
+		if (rec.getTbunit() == null)
+			rec.setTbunit(userSession.getTbunit());
 
 		// if movements can't be saved (because it may be an editing and the quantity was changed to a 
 		// quantity that makes the stock negative) the system will just return an error message
 		movementHome.initMovementRecording();
-		if (!mrh.prepareMovements())
+		if (!prepareMovements())
 			return "error";
 		
-		double totalPrice = 0;
-		for (Batch b: mrh.getSourceTree().getItems())
-				totalPrice += b.getTotalPrice();
+		double totalPrice = MedicineCalculator.calculateTotalPrice(sourceTree.getItems());
 		rec.setTotalPrice(totalPrice);
 
 		// register log
@@ -106,7 +135,7 @@ public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 			getLogService().recordEntityState(getInstance(), Operation.EDIT);
 
 		// save all batches
-		mrh.getSourceTree().traverse(new SourceMedicineTree.ItemTraversing<Batch>() {
+		sourceTree.traverse(new SourceMedicineTree.ItemTraversing<Batch>() {
 			public void traverse(Source source, Medicine medicine, Batch item) {
 				getEntityManager().persist(item);
 			}
@@ -115,7 +144,7 @@ public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 		// save all movements and update stock position
 		movementHome.savePreparedMovements();
 		
-		for (Batch batch: mrh.getRemBatches()) {
+		for (Batch batch: remBatches) {
 			getEntityManager().remove(batch);
 		}
 
@@ -123,15 +152,41 @@ public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 		return super.persist();
 	}
 
-	/*public boolean prepareMovements() {
-		MedicineReceiving rec = getInstance();
-		MedicineReceivingHome mrh = (MedicineReceivingHome)App.getComponent("medicineReceivingHome");
+	/**
+	 * Valida os dados do recebimento de medicamento
+	 * @return
+	 */
+	public boolean validateDrugReceiving() {
+		Tbunit unit = userSession.getTbunit();
+
+		if (getInstance().getReceivingDate().before( unit.getMedManStartDate()) ) {
+			facesMessages.addFromResourceBundle("meds.movs.datebefore", unit.getMedManStartDate());
+			return false;
+		}
+
+		SourceNode sourceNode = getRoot();
+		
+		if (sourceNode.getMedicines().size() == 0) {
+			facesMessages.addFromResourceBundle("meds.receiving.nobatch");
+			return false;
+		}
+		
+		return true;
+	}
+
+
+	/**
+	 * Prepara o novo recebimento para ser salvo. Grava novos movimentos 
+	 */
+	public boolean prepareMovements() {
+		MedicineReceivingUA rec = getInstance();
+		
 		//  prepare to remove movements of medicines removed by the user
-		for (Movement mov: mrh.getRemMovs()) {
+		for (Movement mov: remMovs) {
 			movementHome.prepareMovementsToRemove(mov);
 		}
 		
-		SourceNode node = mrh.getRoot();
+		SourceNode node = getRoot();
 		rec.getMovements().clear();
 
 		// update current movements
@@ -170,39 +225,394 @@ public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 		}
 
 		return true;
-	}*/
-
-	@Override
-	public Object getId() {
-		Object id = super.getId();
-		if (id == null){
-			MedicineReceivingHome mrh = (MedicineReceivingHome)App.getComponent("medicineReceivingHome");
-			id = mrh.getId();
-		}
-		return id;
 	}
 
-	/*@Override
-	public void setId(Object id) {
-		MedicineReceivingHome mrh = (MedicineReceivingHome)App.getComponent("medicineReceivingHome");
-		mrh.setId(id);
-		super.setId(id);
-	}*/
-	
-	/*@Override
-	public void setInstance(MedicineReceivingUA instance) {
-		super.setInstance(instance);
-	}*/
-	
-	/*public String getConsignmentNumber() {
-		String num = getInstance().getConsignmentNumber();
-		if (num == null){
-			MedicineReceivingHome mrh = (MedicineReceivingHome)App.getComponent("medicineReceivingHome");
-			if (mrh.getInstance().getId() != null){
-				MedicineReceivingUA ua = (MedicineReceivingUA)App.getEntityManager().find(MedicineReceivingUA.class, mrh.getInstance().getId());
-				num = ua.getConsignmentNumber();
+
+
+	/**
+	 * Start editing of a new batch for a specific medicine in the receiving
+	 * @param item
+	 */
+	public void startNewBatch(Medicine med) {
+		batch = new Batch();
+		
+		if (med != null)
+			batch.setMedicine(med);
+	}
+
+
+	/**
+	 * Start the editing of a batch 
+	 * @param batch
+	 */
+	public void startBatchEditing(Batch batch) {
+		this.batch = batch;
+		newRegCard = true;
+	}
+
+
+	/**
+	 * Finishing editing of a batch (new or existing one)
+	 */
+	public void finishBatchEditing() {
+		if (!isNewRegCard()){
+			if (getRegistCard()==null) registCard = new RegistrationCard();
+			batch.setRegistCardNumber(registCard.getNumber());
+			batch.setRegistCardBeginDate(registCard.getIniDate());
+			batch.setRegistCardEndDate(registCard.getEndDate());
+		}
+		batch.setUnitPrice(MedicineCalculator.calculateUnitPrice(containerPrice, batch.getQuantityContainer()));
+		
+		MedicineNode node = sourceTree.addMedicine(getRoot().getSource(), batch.getMedicine());
+		
+		if (node.getItem() == null)
+			node.setItem(new MedicineInfo(node, null));
+
+		// is new ?
+		if (!node.getBatches().contains(batch)) {
+			node.getBatches().add(batch);
+		}
+		// clean all components for batch
+		cleanAll();
+	}
+
+
+	/**
+	 * 
+	 */
+	public void cleanAll() {
+		batch = null;
+		numContainers = 0;
+		containerPrice = 0;
+		totalPrice = 0;
+		newRegCard = false;
+		registCard = new RegistrationCard();
+	}
+
+	public void verifyBatch(){
+		if(batch != null && batch.getBatchNumber() != null && 
+					!batch.getBatchNumber().equals("") && batch.getMedicine() != null){	
+		
+			ArrayList<Batch> b = (ArrayList<Batch>) getEntityManager().createQuery("from Batch b " +
+																			  "where b.batchNumber = :batchNumber and " +
+																			  "b.manufacturer = :manufacturer and " +
+																			  "b.medicine.id = :medicineId")
+																				.setParameter("batchNumber", batch.getBatchNumber())
+																				.setParameter("manufacturer", batch.getManufacturer())
+																				.setParameter("medicineId", batch.getMedicine().getId())
+																				.getResultList();
+
+			if(b!=null && b.size() > 0){
+				batch = b.get(0);
+				batch.setQuantityReceived(0);
+			}else{
+				Batch ba = new Batch();
+				ba.setMedicine(batch.getMedicine());
+				ba.setManufacturer(batch.getManufacturer());
+				ba.setBatchNumber(batch.getBatchNumber());
+				batch = ba;
 			}
 		}
-		return num;
+	}
+	
+
+	/**
+	 * Check if batch is being edited
+	 * @return true if is being edited, or false if not editing or if editing is over
+	 */
+	public boolean isEditingBatch() {
+		return (batch != null);
+	}
+
+
+	/**
+	 * Remove a batch from the receiving
+	 * @param batch
+	 */
+	public void removeBatch(Batch batch) {
+		MedicineNode node = getRoot().nodeByMedicine(batch.getMedicine());
+		node.getBatches().remove(batch);
+
+		if (node.getBatches().size() == 0)
+			getRoot().getMedicines().remove(node);
+		
+		if (getEntityManager().contains(batch))
+			remBatches.add(batch);
+	}
+
+
+
+	/**
+	 * Return the batch being edited 
+	 * @return instance of the {@link Batch} class
+	 */
+	public Batch getBatch() {
+		if (batch == null)
+			batch = new Batch();
+	
+		return batch;
+	}
+	
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.EntityHomeEx#remove()
+	 */
+	@Override
+	public String remove() {
+		// check if there are batches already in use
+		String hql = "select count(*) from BatchQuantity where batch.id in (select bm.batch.id from MedicineReceiving mr " +
+				"join mr.movements m join m.batches bm " +
+				"where mr.id = :id) and quantity < batch.quantityReceived";
+
+		Long num = (Long)getEntityManager().createQuery(hql)
+				.setParameter("id", getInstance().getId())
+				.getSingleResult();
+
+		if ((num != null) &&(num > 0)) {
+			facesMessages.addFromResourceBundle("meds.receiving.removeerror");
+			return "error";
+		}
+		
+		// remove os movimentos do recebimento
+		movementHome.initMovementRecording();
+		for (Movement mov: getInstance().getMovements()) {
+			movementHome.prepareMovementsToRemove(mov);
+		}
+		movementHome.savePreparedMovements();
+		
+		return super.remove();
+	}
+	
+
+	/**
+	 * @param batch the batch to set
+	 */
+	public void setBatch(Batch batch) {
+		this.batch = batch;
+	}
+
+	public int getNumContainers() {
+		if (numContainers == 0)
+			numContainers = MedicineCalculator.calculateNumContainers(batch.getQuantityContainer(), batch.getQuantityReceived());
+		return numContainers;
+	}
+	
+	public double getContainerPrice() {
+		if (containerPrice == 0)
+			containerPrice = MedicineCalculator.calculateContPrice(batch.getQuantityContainer(), batch.getUnitPrice());
+		return containerPrice;
+	}
+	
+	public double getTotalPrice() {
+		if (totalPrice == 0)
+			totalPrice = MedicineCalculator.calculateTotalPrice(batch.getQuantityReceived(),batch.getQuantityContainer(), batch.getUnitPrice());
+		return totalPrice;
+	}
+	
+	public void setNumContainers(int numContainers) {
+		this.numContainers = numContainers;
+	}
+	
+	public void setContainerPrice(double containerPrice) {
+		this.containerPrice = containerPrice;
+	}
+	
+	public void setTotalPrice(double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+	
+	public double calculateTotalPrice(List<Batch> lst) {
+		return MedicineCalculator.calculateTotalPrice(lst);
+	}
+	
+	public int calculateNumContainers(int qCont, int qRec) {
+		return MedicineCalculator.calculateNumContainers(qCont, qRec);
+	}
+	
+	public double calculateContPrice(int qCont, double uPrice) {
+		return MedicineCalculator.calculateContPrice(qCont, uPrice);
+	}
+	
+	public double calculateTotalPrice(int qRec, int qCont, double uPrice) {
+		return MedicineCalculator.calculateTotalPrice(qRec, qCont, uPrice);
+	}
+	
+	public void setId(Object id) {
+		if ((id != null) && (getId() != null) && (getId().equals(id)))
+			return;
+		
+		super.setId(id);
+
+		if (isManaged())
+			sourceTree = null;
+	}
+	
+	public void setRegistCard(RegistrationCard registCard) {
+		this.registCard = registCard;
+		registrationNumbers.setSelected(registCard);
+		if (batch!=null)
+		if (registCard!=null){
+				batch.setRegistCardNumber(registCard.getNumber());
+				batch.setRegistCardBeginDate(registCard.getIniDate());
+				batch.setRegistCardEndDate(registCard.getEndDate());
+			}
+		else{
+			batch.setRegistCardNumber(null);
+			batch.setRegistCardBeginDate(null);
+			batch.setRegistCardEndDate(null);
+		}	
+	}
+
+	/*public void setRegistCardInd(Integer registCardind) {
+		if(registCardind!=null)
+		if (!registrationNumbers.getResultList().isEmpty())
+			setRegistCard((RegistrationCard)registrationNumbers.getResultList().get(registCardind).getValue());
+	}
+	
+	public Integer getRegistCardInd(){
+		if (registCard!=null){
+			for (SelectItem it:registrationNumbers.getResultList()){
+				RegistrationCard rc = (RegistrationCard)it.getValue();
+				if (rc.getNumber().equals(registCard.getNumber())){
+					return registrationNumbers.getResultList().indexOf(it);
+				}
+			}
+		}
+		return 0;
+	}
+	
+	public RegistrationCard getRegistCardExist() {
+		if(!newRegCard)
+			if (registCard==null || registCard.getNumber()==null){
+				for (SelectItem it:registrationNumbers.getResultList()){
+					RegistrationCard rc = (RegistrationCard)it.getValue();
+					if (rc.getNumber().equals(batch.getRegistCardNumber())){
+						setRegistCard(rc);
+						break;
+					}
+				}
+		}
+		return registCard;
 	}*/
+	
+	
+	
+	public RegistrationCard getRegistCard() {
+		if ((registCard==null || registCard.getNumber()==null) && batch.getRegistCardNumber()!=null){
+			registCard = new RegistrationCard(batch.getRegistCardNumber(), batch.getRegistCardBeginDate(), batch.getRegistCardEndDate());
+			registrationNumbers.setSelected(registCard);
+		}
+		
+		if(!newRegCard)
+			registCard = registrationNumbers.getSelected();
+		return registCard;
+	}
+	
+	public void setNewRegCard(boolean newRegCard) {
+		this.newRegCard = newRegCard;
+		if (newRegCard){
+			registCard = new RegistrationCard();
+		}
+	}
+
+	public boolean isNewRegCard() {
+		return newRegCard;
+	}
+	/**
+	 * Display information about the medicine and its receiving data
+	 * @author Ricardo Memoria
+	 *
+	 */
+	public class MedicineInfo {
+		private MedicineNode node;
+		private Movement movement;
+
+		public MedicineInfo(MedicineNode node, Movement mov) {
+			this.node = node;
+			this.movement = mov;
+		}
+
+		/**
+		 * Return the quantity
+		 * @return
+		 */
+		public int getQuantity() {
+			int tot = 0;
+			for (Object item: node.getBatches()) {
+				tot += ((Batch)item).getQuantityReceived();
+			}
+			return tot;
+		}
+
+		/**
+		 * Return the total price
+		 * @return
+		 */
+		public float getTotalPrice() {
+			float tot = 0;
+			for (Object item: node.getBatches()) {
+				tot += ((Batch)item).getTotalPrice();
+			}
+			return tot;
+		}
+		
+		public float getUnitPrice() {
+			float tot = getQuantity();
+			return (tot != 0? getTotalPrice()/tot : 0);
+		}
+		
+		/**
+		 * @return the movement
+		 */
+		public Movement getMovement() {
+			return movement;
+		}
+
+		/**
+		 * @param movement the movement to set
+		 */
+		public void setMovement(Movement movement) {
+			this.movement = movement;
+		}
+	}
+
+	/**
+	 * @return the medicine
+	 */
+	public Medicine getMedicine() {
+		return medicine;
+	}
+
+
+	/**
+	 * @param medicine the medicine to set
+	 */
+	public void setMedicine(Medicine medicine) {
+		this.medicine = medicine;
+	}
+
+
+	/**
+	 * @return the sourceTree
+	 */
+	public SourceMedicineTree<Batch> getSourceTree() {
+		return sourceTree;
+	}
+
+
+	/**
+	 * @return the remBatches
+	 */
+	public List<Batch> getRemBatches() {
+		return remBatches;
+	}
+
+
+	/**
+	 * @return the remMovs
+	 */
+	public List<Movement> getRemMovs() {
+		return remMovs;
+	}
+
 }

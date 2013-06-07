@@ -48,7 +48,7 @@
   			<f:param name="order" value="#{medicineReceivings.order=='dr.receivingDate'?'dr.receivingDate desc':'dr.receivingDate'}" />
   		</s:link>
   	</f:facet>
-	<s:link view="/medicines/receiving.xhtml" propagation="none">
+	<s:link view="/custom/ua/medicines/receiving.xhtml" propagation="none">
 		<f:param name="id" value="#{r.id}" />
 		<h:outputText value="#{r.receivingDate}" converter="localeDateConverter" />
 	</s:link>
@@ -71,7 +71,7 @@
   		</s:link>
   	</f:facet>
 	<h:outputText value="#{r.totalPrice}" >
-		<f:convertNumber pattern="#,###,##0.00000"/>
+		<f:convertNumber pattern="#,###,##0.00"/>
 	</h:outputText>
 </h:column>
 
