@@ -14,7 +14,6 @@
 	<property name="build-classes" value="build/classes-country" />
 
 
-
 	<path id="project.libraryclasspath">
         <pathelement location="WebContent/WEB-INF/lib/commons-beanutils.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/commons-digester.jar"/>
@@ -108,7 +107,7 @@
 	<target depends="clean" name="cleanall" />
 
 
-	<target depends="compile,war" name="build" />
+    <target depends="compile,gwt-compile,war" name="build" />
 
 	<target depends="init" name="compile">
 		<echo message="${ant.project.name}: ${ant.file}" />
@@ -179,4 +178,25 @@
 			<zipfileset file="production/ng/faces-config.xml" fullpath="WEB-INF/faces-config.xml" />
 		</war>
 	</target>
+
+
+
+	<target name="gwt-compile" description="Compile java source code in javascript code using GWT">
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler" >
+			<classpath>
+				<pathelement location="src/client" />
+				<path refid="gwt.librarypath" />
+			</classpath>
+			<jvmarg value="-Xmx512M"/>
+			<arg value="-style"/>
+			<arg value="OBFUSCATED" />
+			<arg value="-logLevel"/>
+			<arg value="INFO" />
+			<arg value="-war"/>
+			<arg value="WebContent" />
+			<arg value="org.msh.tb.client.reports"/>
+		</java>
+	</target>
+
+
 </project>
