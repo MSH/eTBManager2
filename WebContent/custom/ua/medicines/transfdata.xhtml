@@ -107,8 +107,6 @@
 		</th><th align="center">#{messages['Batch.expiryDate']}
 		</th><th align="right">#{messages['Batch.numContainers']}
 		</th><th align="right">#{messages['OrderItem.shippedQuantity']}
-		</th><th align="right">#{messages['global.unitPrice']}
-		</th><th align="right">#{messages['global.totalPrice']}
 		</th>
 		<th align="right">#{messages['OrderItem.receivedQuantity']}
 		</th>
@@ -125,18 +123,6 @@
 		<td align="right">
 			<b><h:outputText value="#{it.quantity}">
 				<f:convertNumber pattern="#,###,##0"/>
-			</h:outputText>
-			</b>
-		</td>
-		<td align="right">
-			<b><h:outputText value="#{it.unitPrice}">
-				<f:convertNumber pattern="#,###,##0.00000"/>
-			</h:outputText>
-			</b>
-		</td>
-		<td align="right">
-			<b><h:outputText value="#{it.totalPrice}">
-				<f:convertNumber pattern="#,###,##0.00000"/>
 			</h:outputText>
 			</b>
 		</td>
@@ -168,16 +154,6 @@
 						<f:convertNumber pattern="#,###,##0"/>
 					</h:outputText>
 				</td>
-				<td align="right" class="colb">
-					<h:outputText value="#{b.batch.unitPrice}">
-						<f:convertNumber pattern="#,###,##0.00000"/>
-					</h:outputText>
-				</td>
-				<td align="right" class="colb">
-					<h:outputText value="#{b.totalPrice}">
-						<f:convertNumber pattern="#,###,###,##0.00000"/>
-					</h:outputText>
-				</td>
 				<td class="colb" align="right">
 					<h:outputText value="#{b.quantityReceived}">
 						<f:convertNumber pattern="#,###,##0"/>
@@ -186,24 +162,9 @@
 			</tr>
 		</ui:repeat>
 		</ui:repeat>
-		<tr>
-			<th colspan="7" >
-				<h:outputText value="#{messages['Transfer.totalSource']}: "/>
-				<h:outputText value="#{s.totalBySource}">
-					<f:convertNumber pattern="#,###,###,##0.00000"/>
-				</h:outputText>
-			</th>
-		</tr>
+		
 	</ui:repeat>
-	<tr style="background-color:#EDF7EF;">
-		<td colspan="7" style="border:1px solid #B4E8BB;padding:5px;">
-			<b>
-			<h:outputText value="#{messages['Transfer.total']}: "/> 
-			<h:outputText value="#{transferHome.total}">
-					<f:convertNumber pattern="#,###,###,##0.00000"/>
-				</h:outputText>
-			</b>
-		</td></tr>
+	
 	<!--<tr>
 			<th colspan="5">
 				#{messages['Transfer.total']}
