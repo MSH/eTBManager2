@@ -22,7 +22,7 @@ public class NumberConverter5D implements Converter {
 	public Object getAsObject(FacesContext facesContext, UIComponent comp, String txt) {
 		Locale locale = LocaleSelector.instance().getLocale();
 		NumberFormat df = DecimalFormat.getCurrencyInstance(locale);
-		((DecimalFormat)df).applyPattern("#########0.00000");
+		((DecimalFormat)df).applyPattern("#,###,###,##0.00000");
 
 		Number val;
 		try {
@@ -36,7 +36,7 @@ public class NumberConverter5D implements Converter {
 	public String getAsString(FacesContext facesContext, UIComponent comp, Object obj) {
 		Locale locale = LocaleSelector.instance().getLocale();
 		NumberFormat df = DecimalFormat.getCurrencyInstance(locale);
-		((DecimalFormat)df).applyPattern("#########0.00000");
+		((DecimalFormat)df).applyPattern("#,###,###,##0.00000");
 
 		Number val = (Number)obj;
 		
