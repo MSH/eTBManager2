@@ -33,14 +33,17 @@
 <table width="100%">
 <tr><td>
 	<ui:param name="hideinterimmonth" value="true" />
+	
 	<s:decorate template="filters.xhtml">
 		<ui:param name="showoutputselection" value="true" />
+		
 		<ui:define name="outputFilter">
 			<s:decorate template="/layout/edit.xhtml">
 				<ui:define name="label">#{messages['global.table.columns']}:</ui:define>
 				<h:selectOneMenu value="#{indicator.colSelectionIndex}">
 					<f:selectItems value="#{indicator.outputSelections}" />
 				</h:selectOneMenu>
+				#{filters.tbunitselection.auselection.selectedUnit}
 			</s:decorate>
 		</ui:define>
 	</s:decorate>

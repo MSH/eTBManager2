@@ -41,6 +41,9 @@ public class CaseHQLBase extends Controller {
 	private boolean newCasesOnly = true;
 	private boolean outputSelected = false;
 	private String hqlSelect;
+	// just used to check if the administrative unit in the filter was changed,
+	// so the output selection list will be updated
+	private AdministrativeUnit adminUnitSelected;
 	
 	private List<SelectItem> outputSelections;
 
@@ -516,15 +519,16 @@ public class CaseHQLBase extends Controller {
 	 * @return Array of {@link OutputSelection} enumeration
 	 */
 	public List<SelectItem> getOutputSelections() {
-		if (outputSelections == null) {
+		if ((outputSelections == null) || (adminUnitSelected != getIndicatorFilters().getTbunitselection().getAuselection().getSelectedUnit())) {
 			IndicatorFilters filters = getIndicatorFilters();
 			Map<String, String> messages = Messages.instance();
-			
+
 			outputSelections = new ArrayList<SelectItem>();
-			
+
 			// checks administrative unit selection
 			AdminUnitSelection auselection = filters.getTbunitselection().getAuselection();
 			AdministrativeUnit adminUnit = auselection.getSelectedUnit();
+			adminUnitSelected = adminUnit;
 
 			String labelAdminUnit = null;
 			boolean hasAdminUnit = true;

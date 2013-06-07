@@ -21,7 +21,7 @@
  	<ui:define name="label">#{messages['Tbunit']}:</ui:define>
    	<ui:param name="tbunitselection" value="#{userSession.tbunitselection}" />
    	<ui:param name="required" value="false" />
-   	<ui:param name="auRerender" value=",tablepanel" />
+   	<ui:param name="auRerender" value="tablepanel" />
 	<ui:define name="events">
 		<a:support event="onchange" reRender="tablepanel" ajaxSingle="true" />
 	</ui:define>

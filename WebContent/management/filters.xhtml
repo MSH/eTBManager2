@@ -9,7 +9,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib">
 
 	<div class="form-content">
-	<table width="100%" style="border-collapse: collapse;"><tr><td colspan="2">
+	<table style="width:100%;border-collapse: collapse;"><tr><td colspan="2">
 
 	<s:decorate template="/layout/edit.xhtml" rendered="#{empty hideclassification}">
 		<ui:define name="label">#{messages['CaseClassification']}:	</ui:define>
@@ -63,7 +63,7 @@ function handleContextClick(comp) {
 	<s:decorate template="/layout/tbselection.xhtml" rendered="#{indicatorFilters.indicatorSite=='TREATMENTSITE'}">
 		<ui:param name="tbunitselection" value="#{indicatorFilters.tbunitselection}" />
 		<ui:param name="unitlabel" value="#{messages['Tbunit.treatmentHealthUnit']}" />
-		<ui:param name="rerender" value="pnloutput" />
+		<ui:param name="auRerender" value="pnloutput" />
 		<ui:param name="required" value="false" />
 	</s:decorate>
 	</h:panelGroup>

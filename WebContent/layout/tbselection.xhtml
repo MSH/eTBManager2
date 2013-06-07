@@ -13,7 +13,7 @@
 	<h:selectOneMenu id="#{empty idcbselau ? 'cbselau' : idcbselau}" value="#{tbunitselection.adminUnit}" required="#{required}">
 		<s:selectItems var="it" value="#{tbunitselection.adminUnits}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
-		<a:support event="onchange" ajaxSingle="true" reRender="pnlunits#{auRerender}" focus="cbunits" />
+		<a:support event="onchange" ajaxSingle="true" reRender="pnlunits,#{auRerender}" focus="cbunits" />
 		<ui:insert name="eventsAu" />
 	</h:selectOneMenu>
 </s:decorate>
