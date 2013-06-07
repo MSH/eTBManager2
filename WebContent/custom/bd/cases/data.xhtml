@@ -45,7 +45,7 @@
 	</td><td>
 	
 	<s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['tbcase.patientAge']}:</ui:define>
+    	<ui:define name="label">#{messages['TbCase.patientAge']}:</ui:define>
     	<h:outputText value="#{tbcasebd.patientAge}" style="padding-right:4px;" />#{messages['global.age']}
 	</s:decorate>
 
@@ -161,7 +161,7 @@
 	</td></tr>
 	<tr><td>
 	<s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['tbcase.diagnosisDate']}:</ui:define>
+    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     	<h:outputText id="dt" value="#{tbcase.diagnosisDate}" converter="localeDateConverter"/>
 	</s:decorate>
 	
@@ -175,7 +175,7 @@
 	<tr>
 	<td>
 	<s:decorate id="dt" template="/layout/display.xhtml" rendered="#{not empty tbcase.treatmentPeriod.iniDate}">
-    	<ui:define name="label">#{messages['tbcase.iniTreatmentDate']}:</ui:define>
+    	<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
     	<h:outputText id="dt" value="#{tbcase.treatmentPeriod.iniDate}" converter="localeDateConverter"/>
 	</s:decorate>
 	</td></tr>
