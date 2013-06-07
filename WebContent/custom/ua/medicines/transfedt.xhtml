@@ -62,8 +62,6 @@
 		</th><th align="center">#{messages['Batch.expiryDate']}
 		</th><th align="right">#{messages['Batch.numContainers']}
 		</th><th align="right">#{messages['Batch.quantity']}
-		</th><th align="right">#{messages['global.unitPrice']}
-		</th><th align="right">#{messages['global.totalPrice']}
 		</th><th>
 		</th></tr>
 		<a:repeat value="#{s.items}" var="it">
@@ -78,18 +76,6 @@
 		<td align="right">
 			<b><h:outputText value="#{it.quantity}">
 				<f:convertNumber pattern="#,###,##0"/>
-			</h:outputText>
-			</b>
-		</td>
-		<td align="right">
-			<b><h:outputText value="#{it.unitPrice}">
-				<f:convertNumber pattern="#,###,##0.00000"/>
-			</h:outputText>
-			</b>
-		</td>
-		<td align="right">
-			<b><h:outputText value="#{it.totalPrice}">
-				<f:convertNumber pattern="#,###,##0.00000"/>
 			</h:outputText>
 			</b>
 		</td>
@@ -125,16 +111,6 @@
 				<td class="colb" align="right">
 					<h:outputText value="#{b.quantity}">
 						<f:convertNumber pattern="#,###,##0"/>
-					</h:outputText>
-				</td>
-				<td align="right" class="colb">
-					<h:outputText value="#{b.batch.unitPrice}">
-						<f:convertNumber pattern="#,###,##0.00000"/>
-					</h:outputText>
-				</td>
-				<td align="right" class="colb">
-					<h:outputText value="#{b.totalPrice}">
-						<f:convertNumber pattern="#,###,###,##0.00000"/>
 					</h:outputText>
 				</td>
 				<td class="colb"></td>
