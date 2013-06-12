@@ -9,42 +9,25 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['meds.transfer.detail']}" />
+<ui:param name="title" value="#{messages['meds.transfer.detail']}" />
+<ui:param name="title2" value="#{messages['meds.transfer.receive']}" />
+
 <ui:param name="topmenu" value="1" />
 <ui:param name="waitdlg" value="1" />
+
 <ui:param name="labelstyle" value="width:180px;" />
 
 <ui:define name="naveg">
 	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
-	<s:link view="/medicines/transfer.xhtml" value="#{transfer.status == 'WAITING_RECEIVING'? messages['meds.transfer.viewopen']: messages['meds.transfer.viewhistory']}" propagation="none"/>
-	<div class="item selected">
-		<s:link view="/medicines/transfdata.xhtml" value="##{transfer.id}" propagation="none"/>
-	</div>
+	<s:link view="/medicines/transfer.xhtml" value="#{messages['meds.transfer']}" propagation="none"/>
 </ui:define>
 
-
-<ui:define name="left">
-	<h:form class="vertical-menu">
-	
-	<s:link view="/medicines/transfrec.xhtml" value="#{messages['meds.transfer.receive']}" rendered="#{(transferHome.canReceive)}">
-		<f:param name="id" value="#{transfer.id}" />
-	</s:link>
-
-	<s:link view="/medicines/transfcancel.xhtml" value="#{messages['meds.transfer.cancel']}" rendered="#{transferHome.canCancel and transfer.status!='DONE'}" >
-		<f:param name="id" value="#{transfer.id}" />
-	</s:link>
-	</h:form>
-</ui:define>
-
-
-<ui:define name="print-link">
-	<s:link view="/reports/transfdata.xhtml" value="#{messages['global.print']}" target="_blank" />
-</ui:define>
 
 <ui:define name="content">
-<h1>#{title}</h1>
+<h1>#{title2}</h1>
 <h:form id="main" styleClass="form1">
-    <table width="100%" class="tabela3" style="margin-bottom:10px" cellpadding="8">
+	<div class="form-content">
+    <table width="750px" class="tabela3" style="margin-bottom:10px" cellpadding="8">
     <tr><td class="header">
     	<h2>#{messages['Transfer.unitFrom']}: </h2>
     	<s:decorate template="/layout/unit.xhtml">
@@ -58,42 +41,42 @@
     	</s:decorate>
     </td></tr>
 
-    <tr><td style="font-size:11px;padding-top:5px" class="header">
-    <b>#{messages['Transfer.consignmentDate']}: </b>
+    <tr><td colspan="2">
+    #{messages['Transfer.consignmentDate']}:
+	<span style="color:black;font-weight:bold;"> 
 	<h:outputText value="#{transfer.shippingDate}" converter="localeDateConverter" />
+	</span> 
     <br/>
-    <b>#{messages['form.by']}: </b> 
-    	#{transfer.userFrom.name}
-    </td>
-    <td class="header" style="font-size:11px;">
-    	<s:fragment rendered="#{transfer.status=='DONE'}">
-      		<b>#{messages['Transfer.receivingDate']}: </b>
-	  		<h:outputText value="#{transfer.receivingDate}" converter="localeDateConverter" />
-      		<br/>
-      		<b>#{messages['form.by']}: </b> #{transfer.userFrom.name}
-     	</s:fragment>
-    </td>
-    </tr>
+   	<div class="icon-user" />#{transfer.userFrom.name}
+    </td></tr>
     <tr><td colspan="2">
 
-    <s:decorate template="/layout/display.xhtml" rendered="#{transfer.status!='CANCELLED'}">
+    <s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['TransferStatus']}:</ui:define>
     	<h:outputText value="#{messages[transfer.status.key]}" />
     </s:decorate>
-    
-    <h:outputText value="#{messages[transfer.status.key]}" rendered="#{transfer.status=='CANCELLED'}" style="font-weight:bold;font-size:24px;color:red;padding:10px;"/>
 
     <s:decorate template="/layout/display.xhtml" rendered="#{not empty transfer.commentsFrom}">
     	<ui:define name="label">#{messages['Transfer.commentsFrom']}:</ui:define>
     	<h:outputText value="#{transfer.commentsFrom}" />
     </s:decorate>
 
-    <s:decorate template="/layout/display.xhtml" rendered="#{not empty transfer.commentsTo}">
-    	<ui:define name="label">#{messages['Transfer.commentsTo']}:</ui:define>
-    	<h:outputText value="#{transfer.commentsTo}" />
-    </s:decorate>
+    <s:decorate template="/layout/dateedit.xhtml">
+    	<ui:define name="label">#{messages['Transfer.receivingDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="false" /> 
+    	<ui:param name="datefield" value="#{transfer.receivingDate}" /> 
+	</s:decorate>
 
-	<div  style="margin-top:30px;clear:left;">
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Transfer.commentsTo']}:</ui:define>
+    	<h:inputTextarea value="#{transfer.commentsTo}" style="width:500px;height:60px;"/>
+    </s:decorate>
+	</td></tr>
+    </table>
+	</div>
+
+	<div  style="clear:left;">
 	<b>#{messages['meds.movs.itensmov']}</b><br/>
 	</div>
 	
@@ -104,8 +87,6 @@
 			<b>#{s.source.name}</b>
 		</td></tr>
 		
-		
-		
 		<tr><th align="left">#{messages['Medicine']}
 		</th><th align="left">#{messages['Batch.brandName']}
 		</th><th align="left">#{messages['Batch.manufacturer']}
@@ -115,15 +96,14 @@
 		</th><th align="left">#{messages['Medicine.strengthUnit']}
 		</th><th align="right">#{messages['Batch.numContainers']}
 		</th><th align="right">#{messages['OrderItem.shippedQuantity']}
-		</th>
-		<th align="right">#{messages['OrderItem.receivedQuantity']}
-		</th>
-		</tr>
+		</th><th align="right">#{messages['OrderItem.receivedQuantity']}
+		</th></tr>
 		<ui:repeat value="#{s.items}" var="it">
 		<tr bgcolor="#f3f3f0"><td colspan="8">
-				<div class="medicine-icon" />
-				#{it.medicine}
+			<div class="medicine-icon" style="float:left"/>
+			#{it.medicine}
 		</td>
+		
 		
 		<td align="right">
 			<b><h:outputText value="#{it.quantity}">
@@ -131,11 +111,8 @@
 			</h:outputText>
 			</b>
 		</td>
-		<td align="right">
-			<b><h:outputText value="#{it.quantityReceived}">
-				<f:convertNumber pattern="#,###,##0"/>
-			</h:outputText>
-			</b>
+		
+		<td>
 		</td>
 		</tr>
 		
@@ -173,32 +150,29 @@
 						<f:convertNumber pattern="#,###,##0"/>
 					</h:outputText>
 				</td>
-				<td class="colb" align="right">
-					<h:outputText value="#{b.quantityReceived}">
-						<f:convertNumber pattern="#,###,##0"/>
-					</h:outputText>
+				<td align="right" class="colb" bgcolor="#f3f3f0">
+					<h:inputText id="qtdrec" value="#{b.quantityReceived}" required="true">
+					</h:inputText>
+					<h:message for="qtdrec" styleClass="error"/>
 				</td>
 			</tr>
 		</ui:repeat>
 		</ui:repeat>
-		
 	</ui:repeat>
-	
-	<!--<tr>
-			<th colspan="5">
-				#{messages['Transfer.total']}
-			</th>
-			<td>
-				
-			</td>
-		</tr>
-	--></table>
+	</table>
 	</h:panelGroup>		
 
-    </td></tr>
-    </table>
+	<div class="form-footer">
+        <a:commandLink action="#{transferHome.receiveTransfer}" styleClass="button" reRender="main,messages"
+        	onclick="if (!disableButton(this)) return false;">
+        	<span>#{messages['form.ok']}</span>
+        </a:commandLink>
+        <s:link action="cancel" styleClass="button-alt" onclick="disableButton(this);">
+         	<span>#{messages['form.cancel']}</span>
+        </s:link>
+	</div>
 
 </h:form>
 </ui:define>
 
-</ui:composition>  
+</ui:composition>

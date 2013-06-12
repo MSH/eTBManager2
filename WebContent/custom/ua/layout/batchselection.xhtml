@@ -94,7 +94,7 @@ function changeNumCont(elem,quantCont){
 	<ui:insert name="before-form" />
 	<input id="qtdover" type="hidden" value="#{batchSelection.qtdOverStockValue}" />
 	
-	<div id="battblsel" style="overflow: auto; width: 760px; height: 270px;border: 1px gray solid; padding:0px; margin: 0px">	
+	<div id="battblsel" style="overflow: auto; width: 860px; height: 270px;border: 1px gray solid; padding:0px; margin: 0px">	
 	<h:dataTable value="#{batchSelection.items}" var="it" width="100%" styleClass="table1" columnClasses="colc,coll,colc,colr,colr,colr">
 		<h:column>
 			<f:facet name="header">
@@ -105,11 +105,25 @@ function changeNumCont(elem,quantCont){
 		
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['Batch']}" styleClass="collh"/>
+				<h:outputText value="#{messages['Batch.manufacturer']}" styleClass="collh"/>
 			</f:facet>
-			<s:decorate template="/layout/batch.xhtml">
-				<ui:param name="batch" value="#{it.item.batch}" />
-			</s:decorate>
+			#{it.item.batch.manufacturer}
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Batch.registCard']}" styleClass="collh"/>
+			</f:facet>
+			<h:outputText value="#{it.item.batch.registCardNumber} #{messages['from']} "/>
+			<h:outputText value="#{it.item.batch.registCardBeginDate}" converter="localeDateConverter" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Batch.batchNumber']}" styleClass="collh"/>
+			</f:facet>
+			<div class="batch-icon" />
+			 #{it.item.batch.batchNumber}
 		</h:column>
 
 		<h:column>
