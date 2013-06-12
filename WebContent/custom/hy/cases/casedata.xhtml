@@ -47,7 +47,7 @@
 		<f:param name="id" value="#{caseHome.id}"/>
 	</s:link>
 		
-	<h:commandLink value="#{messages['form.remove']}" action="#{caseHome.remove}" onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" rendered="#{caseHome.canEditCaseData}">
+	<h:commandLink value="#{messages['form.remove']}" action="#{caseHome.remove}" onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" rendered="#{caseHome.canRemoveCaseData}">
 	</h:commandLink>
 
 	<s:link value="#{messages['cases.close']}" view="/cases/closecase.xhtml" rendered="#{caseHome.canClose}">

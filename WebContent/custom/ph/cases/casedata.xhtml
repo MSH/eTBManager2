@@ -57,7 +57,7 @@
 
 	<h:commandLink action="#{caseHome.remove}" 
 		onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" 
-		rendered="#{caseHome.canEditCaseData}">
+		rendered="#{caseHome.canRemoveCaseData}">
 		<div class="delete-icon"/><span>#{messages['form.remove']}</span>
 	</h:commandLink>
 
