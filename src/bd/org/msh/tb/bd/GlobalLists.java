@@ -7,6 +7,7 @@ import org.msh.tb.bd.entities.enums.BiopsyResult;
 import org.msh.tb.bd.entities.enums.DotProvider;
 import org.msh.tb.bd.entities.enums.Occupation;
 import org.msh.tb.bd.entities.enums.PulmonaryTypesBD;
+import org.msh.tb.bd.entities.enums.Quarter;
 import org.msh.tb.bd.entities.enums.SalaryRange;
 import org.msh.tb.bd.entities.enums.SkinTestResult;
 import org.msh.tb.entities.enums.DrugResistanceType;
@@ -96,6 +97,13 @@ public class GlobalLists {
 		DrugResistanceType.UNKNOWN,
 	};
 	
+	private static final Quarter quarter[] = {
+		Quarter.FIRST,
+		Quarter.SECOND,
+		Quarter.THIRD,
+		Quarter.FOURTH,
+	};
+	
 	public TbField[] getTbFields() {
 		return tbfields;
 	}
@@ -125,5 +133,8 @@ public class GlobalLists {
 		return drugResistanceType;
 	}
 	
-	
+	@Factory("quarter")
+	public static Quarter[] getQuarter(){
+		return quarter;
+	}
 }
