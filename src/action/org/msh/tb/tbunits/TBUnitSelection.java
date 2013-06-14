@@ -39,16 +39,16 @@ public class TBUnitSelection {
 	}
 
 
-	private AdminUnitSelection auselection;
+	protected AdminUnitSelection auselection;
 	private Tbunit tbunit;
 	
 	private boolean applyUserRestrictions;
-	private TBUnitFilter filter;
+	protected TBUnitFilter filter;
 	private HealthSystem healthSystem;
-	private boolean applyHealthSystemRestrictions;
-	private boolean ignoreReadOnlyRule;
+	protected boolean applyHealthSystemRestrictions;
+	protected boolean ignoreReadOnlyRule;
 	
-	private TbunitSelectionList options;
+	protected TbunitSelectionList options;
 
 	private List<TbunitChangeListener> listeners;
 	
