@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/templatemed.xhtml">
+      
+	<ui:param name="title" value="#{messages['quarter.report']}" />
+
+	<ui:param name="labelstyle" value="width:210px;" />
+
+	<ui:define name="naveg"><!-- TODO -->
+		<div class="item">
+			<s:link value="#{messages['meds.inventory']}" view="/medicines/index.xhtml" propagation="none"/>
+		</div>
+		<div class="item selected">
+			<s:link value="#{title}" propagation="none" />
+		</div>
+	</ui:define>
+	
+	<ui:define name="content_unit" id="content">
+	<h:form id="main">
+
+	<s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['Quarter']}:</ui:define>
+		<h:selectOneMenu value="#{quarterStockPositionReport.quarter}">
+  			<s:selectItems value="#{quarter}" var="r" label="#{r}" noSelectionLabel="-" />
+  			<s:convertEnum />
+		</h:selectOneMenu>
+		/
+		<h:selectOneMenu value="#{quarterStockPositionReport.year}">
+  			<s:selectItems value="#{quarterStockPositionReport.years}" var="r" label="#{r}" noSelectionLabel="-" />
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	<s:decorate template="/layout/tbselection2.xhtml">
+		<ui:param name="unitlabel" value="#{messages['MedicalExamination.RefToUnit']}" />
+	   	<ui:param name="tbunitselection" value="#{quarterStockPositionReport.tbunitselection}" />
+	</s:decorate>
+
+   	<a:commandLink styleClass="button-alt" action="#{quarterStockPositionReport.refresh}" style="float:right;" onclick="if (!disableButton(this)) return false;" reRender="main">
+   		<span>#{messages['form.update']}</span>
+   	</a:commandLink>
+
+	<h:outputText value="#{messages['quarter.fillinfilters']}" rendered="#{!quarterStockPositionReport.isFiltersFilledIn()}"/>
+
+	<h:dataTable value="#{quarterStockPositionReport.rows}" var="row" rendered="#{quarterStockPositionReport.isFiltersFilledIn()}" styleClass="table1" width="100%" 
+		rowClasses="lin1,lin2" >
+	
+	<h:column>
+		<f:facet name="header">#{messages['Medicine']}</f:facet>
+		<h:outputText value="#{row.medicine.genericName}" />
+	</h:column>
+	
+	<h:column>
+		<f:facet name="header">#{messages['Medicine.strength']}</f:facet>
+		<h:outputText value="#{row.medicine.strength}" />
+	</h:column>
+	
+	<h:column>
+		<f:facet name="header">#{messages['Medicine.strengthUnit']}</f:facet>
+		<h:outputText value="#{row.medicine.strengthUnit}" />
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">#{messages['quarter.openbal']}</f:facet>
+		<h:outputText value="#{row.openingBalance}" />
+	</h:column>
+	
+	<h:column>
+		<f:facet name="header">#{messages['quarter.received']}</f:facet>
+		<h:outputText value="#{row.receivedFromCS}" />
+	</h:column>	
+	
+	<h:column>
+		<f:facet name="header">#{messages['quarter.posadjust']}</f:facet>
+		<h:outputText value="#{row.positiveAdjust}" />
+	</h:column>		
+	
+	<h:column>
+		<f:facet name="header">#{messages['quarter.negadjust']}</f:facet>
+		<h:outputText value="#{row.negativeAdjust}" />
+	</h:column>	
+	
+	<h:column>
+		<f:facet name="header">#{messages['manag.forecast.tabres2']}</f:facet>
+		<h:outputText value="#{row.dispensed}" />
+	</h:column>	
+	
+	<h:column>
+		<f:facet name="header">#{messages['quarter.expired']}</f:facet>
+		<h:outputText value="#{row.expired}" />
+	</h:column>				
+	
+	<h:column>
+		<f:facet name="header">#{messages['quarter.closbal']}</f:facet>
+		<h:outputText value="#{row.closingBalance}" />
+	</h:column>	
+	
+	</h:dataTable>
+
+	</h:form>
+	</ui:define>
+
+</ui:composition>
