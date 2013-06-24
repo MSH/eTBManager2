@@ -240,19 +240,19 @@
 	</td></tr>
 	<tr>
 	<td>
-	<s:decorate id="dt" template="/layout/display.xhtml" rendered="#{not empty tbcase.treatmentPeriod.iniDate}">
+	<s:decorate id="dt" template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
     	<h:outputText id="dt" value="#{tbcase.treatmentPeriod.iniDate}" converter="localeDateConverter"/>
 	</s:decorate>
 	</td></tr>
 	
 	<tr><td	colspan="2">
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.drugResistanceType}">
+		<s:decorate template="/layout/display.xhtml" >
 			<ui:define name="label">#{messages['DrugResistanceType']}</ui:define>
 			#{messages[tbcase.drugResistanceType.key]}
 		</s:decorate>
 		
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.infectionSite}">
+		<s:decorate template="/layout/display.xhtml" >
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
     		#{messages[tbcase.infectionSite.key]}
 		</s:decorate>
@@ -267,7 +267,7 @@
     		#{tbcase.extrapulmonaryType} <h:outputText value="/ #{tbcase.extrapulmonaryType2}" />
 		</s:decorate>
 
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.patientType!=null}">
+		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
     		#{messages[tbcase.patientType.key]}
 		</s:decorate>
