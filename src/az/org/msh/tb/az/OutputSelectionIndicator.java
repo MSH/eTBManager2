@@ -1,10 +1,11 @@
 package org.msh.tb.az;
 
-import java.text.DateFormatSymbols;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.faces.model.SelectItem;
 
@@ -32,6 +33,47 @@ public abstract class OutputSelectionIndicator extends Indicator {
 	private int colExams = 0;
 	private boolean source = false;
 	private String date = null;
+	
+
+	/**
+	 * Return the field of the HQL query associated to the output selected
+	 * @param output
+	 * @return
+	 */
+	protected String getOutputSelectionField(OutputSelectionAZ output) {
+		switch (output) {
+		case GENDER: return "c.patient.gender";
+		case INFECTION_SITE: return "c.infectionSite";
+		case PATIENT_TYPE: return "c.patientType";
+		case ADMINUNIT:
+			if (getIndicatorFilters().getIndicatorSite() == IndicatorSite.PATIENTADDRESS)
+				return "c.notifAddress.adminUnit.code";
+			else return "c.notificationUnit.adminUnit.code";
+		case TBUNIT: return "c.notificationUnit";
+		case OWNER_UNIT: return "c.ownerUnit";
+		case NATIONALITY: return "c.nationality";
+		case AGERANGE: return "c.age";
+		case PULMONARY: return "c.pulmonaryType";
+		case EXTRAPULMONARY: return "c.extrapulmonaryType";
+		case REGIMENS: return "c.regimen.name";
+		case VALIDATION_STATE: return "c.validationState";
+		case MICROSCOPY_RESULT: colExams++; return "ExamMicroscopy";
+		case CULTURE_RESULT: colExams++; return "ExamCulture";
+		case DIAGNOSIS_TYPE: return "c.diagnosisType";
+		case HIV_RESULT: colExams++; return "ExamHIV";
+		//case SOURCE_MED: source = true; return "";//
+		case DRUG_RESIST_TYPE: return "c.drugResistanceType";
+		case CLASSIFICATION: return "c.classification";
+		case YEAR_MONTH: return "year("+getDate()+"),month("+getDate()+")";
+		case YEAR: return "year("+getDate()+")";
+		case YEAR_WEEK: return "year("+getDate()+"),week("+getDate()+")";
+		case HEALTH_SYSTEM: return "c.notificationUnit.healthSystem";
+		case REAL_UNIT: return "c.notificationUnit,c.ownerUnit"; 
+		case CREATOR_USER: return "c.createUser";
+		}
+		return null;
+	}
+
 	
 	@Override
 	protected String createHQLByOutputSelection() {
@@ -62,9 +104,6 @@ public abstract class OutputSelectionIndicator extends Indicator {
 			return false;
 		
 		if (!validatePeriod())
-			return false;
-
-		if (!validateTBUnit())
 			return false;
 		
 		return true;
@@ -117,28 +156,27 @@ public abstract class OutputSelectionIndicator extends Indicator {
 		}
 
 		if (output == OutputSelectionAZ.YEAR_MONTH){
-			DateFormatSymbols symbols = new DateFormatSymbols(locale);
-			String[] values = symbols.getShortMonths();
 			for (Object[] vals: lst) {
 				//concatenate month and year and shift other fields
-				String m = values[(Integer)vals[1]-1];
-				vals[0] = m+"/"+vals[0];
-				vals[1] = vals[2];
+				Object[] n = new Object[vals.length-1];
+				String m = ((Integer)vals[1]<10?"0":"")+vals[1];
+				n[0] = vals[0]+"-"+m;
+				cutLastElement(0, lst, vals, n);
 			}
 		}
 		
 		if (output == OutputSelectionAZ.YEAR_WEEK){
-			DateFormatSymbols symbols = new DateFormatSymbols(locale);
-			String[] values = symbols.getShortMonths();
+			//DateFormatSymbols symbols = new DateFormatSymbols(locale);
+			//String[] values = symbols.getShortMonths();
 			for (Object[] vals: lst) {
-				//concatenate month and year and shift other fields
-				String m = values[(Integer)vals[1]-1];
-				vals[0] = vals[2]+"("+m+")/"+vals[0];
-				vals[1] = vals[3];
+				Object[] n = new Object[vals.length-1];
+				String w = ((Integer)vals[1]<10?"0":"")+vals[1];
+				n[0] = vals[0]+ " \""+w+"\"";
+				cutLastElement(0, lst, vals, n);
 			}
 		}
 		
-		if (output == OutputSelectionAZ.TBUNIT_OWN){
+		if (output == OutputSelectionAZ.REAL_UNIT){
 			lst = groupValuesByTbUnit(lst,0, 2);
 		}
 		
@@ -147,6 +185,21 @@ public abstract class OutputSelectionIndicator extends Indicator {
 			if (val > 0)
 				addValue(translateKey(vals[0]), val);
 		}
+	}
+	
+	/**
+	 * @param index
+	 * @param lst
+	 * @param vals
+	 * @param n
+	 */
+	protected void cutLastElement(int index, List<Object[]> lst, Object[] vals,
+			Object[] n) {
+		for (int i = 0; i < index; i++) 
+			n[i] = vals[i];
+		for (int i = index+1; i < vals.length-1; i++) 
+			n[i] = vals[i+1];
+		lst.set(lst.indexOf(vals),n);
 	}
 	
 	@Override
@@ -168,11 +221,17 @@ public abstract class OutputSelectionIndicator extends Indicator {
 		}
 	}
 	
-	protected boolean validatePeriod() {
+	protected boolean someSelectionEqualsTo(OutputSelectionAZ sel){
 		IndicatorFiltersAZ filters_az = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
-		if (!OutputSelectionAZ.YEAR_MONTH.equals(filters_az.getOutputSelection()) &&
-			!OutputSelectionAZ.YEAR.equals(filters_az.getOutputSelection()) &&
-			!OutputSelectionAZ.YEAR_WEEK.equals(filters_az.getOutputSelection()))
+		if (sel.equals(filters_az.getOutputSelection()))
+			return true;
+		return false;
+	}
+	
+	protected boolean validatePeriod() {
+		if (!someSelectionEqualsTo(OutputSelectionAZ.YEAR_MONTH) &&
+			!someSelectionEqualsTo(OutputSelectionAZ.YEAR) &&
+			!someSelectionEqualsTo(OutputSelectionAZ.YEAR_WEEK))
 			return true;
 
 		//if selected date fields more than 1 or no
@@ -188,30 +247,12 @@ public abstract class OutputSelectionIndicator extends Indicator {
 			return false;
 
 		//if period not full
-		if ((filters.getIniDate() == null) && (filters.getEndDate() == null))
-			return false;
+		//if ((filters.getIniDate() == null) && (filters.getEndDate() == null))
+		//	return false;
 
 		return true;
 	}
 	
-	/**
-	 * Return false if no selected tb-unit in filters, but it is need
-	 */
-	protected boolean validateTBUnit() {
-		IndicatorFiltersAZ filters_az = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
-		if (!OutputSelectionAZ.TBUNIT_OWN.equals(filters_az.getOutputSelection()))
-			return true;
-		
-		//if no selected tb-unit
-		IndicatorFilters filters = (IndicatorFilters)App.getComponent("indicatorFilters");
-		if (filters.getTbunitselection()!=null)
-			if (filters.getTbunitselection().getTbunit()!=null)
-				if (filters.getTbunitselection().getTbunit().getId()!=null)
-					return true;
-					
-		return false;
-	}
-
 	/**
 	 * @param index
 	 * @param keyCount
@@ -221,28 +262,28 @@ public abstract class OutputSelectionIndicator extends Indicator {
 	protected void addValueToUnit(String tbu,int index, int keyCount,
 			List<Object[]> new_lst, Object[] vals) {
 		long value = (Long)vals[vals.length - 1];
-		Object[] keys = new Object[2];
-		if (index==0){
-			keys[0]=tbu;
-			keys[1]=vals[keyCount-index*2];
-		}
-		else{
-			keys[0]=vals[keyCount-index*2];
-			keys[1]=tbu;
-		}
+		Object[] keys = new Object[vals.length-keyCount];
+		keys[index*(keys.length - 1)]=tbu;
 		
+		if (index==1)
+			for (int i = 0; i < vals.length-keys.length-1; i++) 
+				keys[i]=vals[i];
+		else
+			for (int i = keyCount; i < vals.length-1; i++) 
+				keys[i-1]=vals[i];
+
 		Object[] newvalues = findRecord(new_lst, keys);
 
 		// record was found ?
 		if (newvalues == null) {
 			// rebuild new values
-			newvalues = new Object[3];
+			newvalues = new Object[keys.length+1];
 			int ind = 0;
-			while (ind < 2) {
+			while (ind < vals.length-keyCount) {
 				newvalues[ind] = keys[ind];
 				ind++;
 			}
-			newvalues[2] = 0L;
+			newvalues[vals.length-keyCount] = 0L;
 			new_lst.add(newvalues);
 		}
 		
@@ -252,20 +293,24 @@ public abstract class OutputSelectionIndicator extends Indicator {
 	
 	protected List<Object[]> groupValuesByTbUnit(List<Object[]> lst, int index, int keyCount) {
 		List<Object[]> new_lst = new ArrayList<Object[]>();
-		IndicatorFilters filters = (IndicatorFilters)App.getComponent("indicatorFilters");
-		Integer id = filters.getTbunitselection().getTbunit().getId();
+		Set<Tbunit> units = new HashSet<Tbunit>();
+		for(Object[] vals:lst){
+			units.add((Tbunit)vals[index]);
+			units.add((Tbunit)vals[index+1]);
+		}
+		for (Tbunit unit:units)
 		for(Object[] vals:lst){
 			Tbunit nU = (Tbunit)vals[index];
-			if (nU.getId()==id){
-				addValueToUnit(App.getMessage("TbCase.notificationUnit"),index, keyCount, new_lst, vals);
+			if (nU.getId()==unit.getId()){
+				//addValueToUnit(App.getMessage("TbCase.notificationUnit"),index, keyCount, new_lst, vals);
 				if (vals[index+1]==null)
-					addValueToUnit(App.getMessage("TbCase.realUnit"),index, keyCount, new_lst, vals);
+					addValueToUnit(unit.getName().getDefaultName(),index, keyCount, new_lst, vals);
 			}
 			if (vals[index+1]!=null){
 				Tbunit oU = (Tbunit)vals[index+1];
-				if (oU.getId()==id){
-					addValueToUnit(App.getMessage("TbCase.ownerUnit"),index, keyCount, new_lst, vals);
-					addValueToUnit(App.getMessage("TbCase.realUnit"),index, keyCount, new_lst, vals);
+				if (oU.getId()==unit.getId()){
+					//addValueToUnit(App.getMessage("TbCase.ownerUnit"),index, keyCount, new_lst, vals);
+					addValueToUnit(unit.getName().getDefaultName(),index, keyCount, new_lst, vals);
 				}
 			}
 		}
@@ -355,47 +400,17 @@ public abstract class OutputSelectionIndicator extends Indicator {
 		return (IndicatorFilters)Contexts.getSessionContext().get("indicatorFilters");
 	}
 	
-	/**
-	 * Return the field of the HQL query associated to the output selected
-	 * @param output
-	 * @return
-	 */
-	protected String getOutputSelectionField(OutputSelectionAZ output) {
-		
-		switch (output) {
-		case GENDER: return "c.patient.gender";
-		case INFECTION_SITE: return "c.infectionSite";
-		case PATIENT_TYPE: return "c.patientType";
-		case ADMINUNIT:
-			if (getIndicatorFilters().getIndicatorSite() == IndicatorSite.PATIENTADDRESS)
-				return "c.notifAddress.adminUnit.code";
-			else return "c.notificationUnit.adminUnit.code";
-		case TBUNIT: return "c.notificationUnit.name.name1";
-		case NATIONALITY: return "c.nationality";
-		case AGERANGE: return "c.age";
-		case PULMONARY: return "c.pulmonaryType.name";
-		case EXTRAPULMONARY: return "c.extrapulmonaryType.name";
-		case REGIMENS: return "c.regimen.name";
-		case VALIDATION_STATE: return "c.validationState";
-		case MICROSCOPY_RESULT: colExams++; return "ExamMicroscopy";
-		case CULTURE_RESULT: colExams++; return "ExamCulture";
-		case DIAGNOSIS_TYPE: return "c.diagnosisType";
-		case HIV_RESULT: colExams++; return "ExamHIV";
-		//case SOURCE_MED: source = true; return "";//
-		case DRUG_RESIST_TYPE: return "c.drugResistanceType";
-		case CLASSIFICATION: return "c.classification";
-		case YEAR_MONTH: return "year("+getDate()+"),month("+getDate()+")";
-		case YEAR: return "year("+getDate()+")";
-		case YEAR_WEEK: return "year("+getDate()+"),month("+getDate()+"),week("+getDate()+")";
-		case HEALTH_SYSTEM: return "c.notificationUnit.healthSystem";
-		case TBUNIT_OWN: return "c.notificationUnit,c.ownerUnit"; 
-		case CREATOR_USER: return "c.createUser";
-		}
-		return null;
-	}
-
 	public int getColExams() {
 		return colExams;
+	}
+	
+	@Override
+	protected String getHQLWhere() {
+		String hql = super.getHQLWhere();
+		if (someSelectionEqualsTo(OutputSelectionAZ.OWNER_UNIT)){
+			hql = hql.replaceAll("notificationUnit", "ownerUnit");
+		}
+		return hql+getHQLWhereCond();
 	}
 	
 	protected String getHQLWhereCond() {
@@ -403,6 +418,21 @@ public abstract class OutputSelectionIndicator extends Indicator {
 		IndicatorFiltersAZ filters_az = (IndicatorFiltersAZ)App.getComponent("indicatorFiltersAZ");
 		if (filters_az.getReferToThisUnit()!=null)
 			hql += " and c.referToOtherTBUnit="+(filters_az.getReferToThisUnit()==true ? 0:1);
+		
+		if (someSelectionEqualsTo(OutputSelectionAZ.REAL_UNIT)){
+			IndicatorFilters filters = (IndicatorFilters)App.getComponent("indicatorFilters");
+			Tbunit unit = filters.getTbunitselection().getTbunit();
+			if (unit != null)
+				hql += " and ((c.notificationUnit.id = "+unit.getId().toString()+
+					" and c.ownerUnit = null) or c.ownerUnit.id = "+unit.getId().toString()+")";
+			
+			AdministrativeUnit adminUnit = filters.getTbunitselection().getAuselection().getSelectedUnit();
+			if (adminUnit != null) {
+				if (filters.getIndicatorSite() == IndicatorSite.TREATMENTSITE)
+					 hql+= " and ((c.notificationUnit.adminUnit.code like '" + adminUnit.getCode() + "%' and c.ownerUnit = null)  "+
+					 		" or c.ownerUnit.adminUnit.code like '" + adminUnit.getCode() + "%')";
+			}
+		}
 		return hql;
 	}
 }
