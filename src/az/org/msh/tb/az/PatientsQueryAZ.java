@@ -1,9 +1,12 @@
 package org.msh.tb.az;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
+import javax.faces.model.SelectItem;
 import javax.persistence.Query;
 
 import org.jboss.seam.Component;
@@ -152,6 +155,7 @@ public class PatientsQueryAZ extends PatientsQuery {
 		@Override
 		public void refresh(){
 			setPatientList(null);
+			setPageOptions(null);
 			super.refresh();
 		}
 		
@@ -604,4 +608,24 @@ public class PatientsQueryAZ extends PatientsQuery {
 			this.newOrder = newOrder;
 		}
 	
+		@Override
+		public List<SelectItem> getPageOptions() {
+			if (getPageOptionsWithoutCreate() != null)
+				return getPageOptionsWithoutCreate();
+			
+			Integer currentPage = getCurrentPage();
+			if (currentPage == null)
+				return null;
+
+			Integer maxpage = getMaxPage();
+			if (maxpage == null)
+				return null;
+			
+			List<SelectItem> po = new ArrayList<SelectItem>();
+			for (int i = 1; i <= maxpage; i++) {
+				po.add(new SelectItem(i, Integer.toString(i)));
+			}
+			setPageOptions(po);
+			return po;
+		}
 }
