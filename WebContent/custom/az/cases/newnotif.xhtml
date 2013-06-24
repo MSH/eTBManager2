@@ -220,9 +220,9 @@
 				value="#{caseAZHome.reGetTbCase(it.tbcase).notifAddress.adminUnit.name.name1}" style="font-size:10px;"  rendered="#{caseAZHome.reGetTbCase(it.tbcase).notifAddress!=NULL}"/>
 			<br/>
 			
-			 <h:outputText value="#{messages['az_EIDSS_accept']}:" style="color:Firebrick;" />
+			 <h:outputText value="#{messages['az_EIDSS_accept']}: " style="color:Firebrick;" />
 			 <h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).systemDate}"  style="color:Firebrick;" converter="localeDateConverterAZ" rendered="#{caseAZHome.reGetTbCase(it.tbcase).systemDate!=null}"/>
-			 <h:outputText value=" XX.XX.XXXX"  style="color:Firebrick;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).systemDate == null}"/>
+			 <h:outputText value="XX.XX.XXXX"  style="color:Firebrick;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).systemDate == null}"/>
 			 
 			 <br/>
 			
