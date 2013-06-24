@@ -99,6 +99,11 @@ public class GlobalLists {
 		
 	};
 	
+	private static final CaseFindingStrategy caseFindingStrategy[] = {
+		CaseFindingStrategy.ACTIVE,
+		CaseFindingStrategy.PASSIVE
+	};
+	
 /* never used, also specific to Brazil - AK
 	public TipoResistencia[] getTiposResistencia() {
 		return TipoResistencia.values();
@@ -106,7 +111,7 @@ public class GlobalLists {
 */
 	
 	public CaseFindingStrategy[] getCaseFindingStrategies() {
-		return CaseFindingStrategy.values();
+		return caseFindingStrategy;
 	}
 
 	/**
