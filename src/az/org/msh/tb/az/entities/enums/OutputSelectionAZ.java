@@ -9,7 +9,9 @@ public enum OutputSelectionAZ {
 
 	CLASSIFICATION("CaseClassification"),
 	ADMINUNIT("AdministrativeUnit"),
-	TBUNIT("TbCase.notificationUnit"),
+	TBUNIT("az_AZ.custonInd.notifUnit"),
+	OWNER_UNIT("az_AZ.custonInd.ownerUnit"),
+	REAL_UNIT("TbCase.realUnit"),
 	GENDER("Gender"),
 	PATIENT_TYPE("PatientType"),
 	INFECTION_SITE("InfectionSite"),
@@ -25,12 +27,11 @@ public enum OutputSelectionAZ {
 	HIV_RESULT("HIVResult"),
 	//SOURCE_MED("Source"),
 	DRUG_RESIST_TYPE("DrugResistanceType"),
-	YEAR("global.year"),
+	YEAR("global.yearBig"),
 	YEAR_MONTH("global.monthyear"),
 	YEAR_WEEK("global.weekyear"),
 	HEALTH_SYSTEM("HealthSystem"),
-	TBUNIT_OWN("admin.tbunits.selected"),
-	CREATOR_USER("User.create");
+	CREATOR_USER("User");
 
 	private String key;
 	
