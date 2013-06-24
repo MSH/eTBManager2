@@ -75,11 +75,11 @@
 				<s:decorate template="/layout/edit.xhtml" >
 					<ui:define name="label">#{messages['excel.dateRegAfterEIDSS']} (#{messages['global.monthyear']}):	</ui:define>
 					<ui:param name="labelstyle" value="width:140px;" />
-					<h:selectOneMenu value="#{eidssFilters.bindMonth}" style="margin-right:4px;">
-						<f:selectItems value="#{months}"/>
-					</h:selectOneMenu>
 					<h:selectOneMenu value="#{eidssFilters.bindYear}">
 						<f:selectItems value="#{years}"/>
+					</h:selectOneMenu>
+					<h:selectOneMenu value="#{eidssFilters.bindMonth}" style="margin-right:4px;">
+						<f:selectItems value="#{months}"/>
 					</h:selectOneMenu>
 				</s:decorate>
 			</td>
