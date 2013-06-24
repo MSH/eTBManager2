@@ -13,6 +13,7 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.application.App;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.cases.CaseEditingHome;
+import org.msh.tb.cases.exams.MedicalExaminationHome;
 import org.msh.tb.entities.Address;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.MedicalExamination;
@@ -261,7 +262,8 @@ public class CaseEditingAZHome extends CaseEditingHome{
 	}
 	
 	public boolean validateMedExam(){
-		MedicalExamination me = (MedicalExamination)App.getComponent("medicalExamination");
+		MedicalExaminationHome meh = (MedicalExaminationHome)App.getComponent("medicalExaminationHome");
+		MedicalExamination me = meh.getInstance();
 		try{
 			if (!(me.getDate()==null && me.getResponsible().isEmpty() && me.getHeight()==null && me.getWeight()==null && me.getComments().isEmpty())){
 				if (!(me.getDate()!=null && me.getResponsible()!=null && me.getHeight()!=null && me.getWeight()!=null)){
@@ -281,11 +283,16 @@ public class CaseEditingAZHome extends CaseEditingHome{
 	public String saveEditing() {
 		if (!validateData())
 			return "error";
+		
 		TbCaseAZ tbcase = getTbCase();
+		if (tbcase.isFirstEIDSSBind())
+			if (!validateMedExam())
+				return "error";
+		
 		tbcase.setReferToTBUnit(getReferTBUnit().getTbunit());
 
 		UserWorkspace uw = (UserWorkspace) App.getComponent("userWorkspace");
-		if (tbcase.getLegacyId()!=null && tbcase.getSystemDate()==null){
+		if (tbcase.isFirstEIDSSBind()){
 			tbcase.setSystemDate(new Date());
 			tbcase.setCreateUser(uw.getUser());
 		}
@@ -318,6 +325,19 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		return (TbCaseAZ)caseHome.getInstance();
 	}
 	
+	/**
+	 * Case, when user hasn't permissions to select notificationUnit 
+	 * and there is set userUnit as notification unit for TB-case from EIDSS  
+	 * */
+	public Tbunit getNotificationUnitDefault(){
+		Tbunit tbu = getTbunitselection().getTbunit();
+		if (tbu == null){
+			UserWorkspace uw = (UserWorkspace)App.getComponent("userWorkspace");
+			tbu = uw.getTbunit();
+			getTbunitselection().setTbunit(tbu);
+		}
+		return tbu;
+	}
 /*	public int confirmTbUnit(){
 		Object[] options = {App.getMessage("global.yes"),App.getMessage("global.no")+" "+App.getMessage("global.bydefault")};
 		int res = JOptionPane.showOptionDialog(null,
