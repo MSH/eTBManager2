@@ -35,6 +35,11 @@
 	<s:fragment rendered="#{!tbcase.open}">
 		<ui:include src="closecaseedt.xhtml" />
 	</s:fragment>
+	
+	<s:fragment rendered="#{tbcase.notificationUnit == null and tbcase.legacyId!=null}">
+		<ui:include src="medexam.xhtml" />
+	</s:fragment>
+	
 	<div class="form-footer">
 		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
