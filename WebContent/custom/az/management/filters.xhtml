@@ -50,6 +50,16 @@ function handleContextClick(comp) {
 		return;
 	updateContext();
 }
+
+function setOffOthers(cb){
+	if (cb.checked){
+		jQuery("#usedatepanel :checkbox")
+			.each(function() { 
+			if (this != cb)
+				this.checked = false;
+			});
+		}
+}
 </script>
 	
 	<div id="divcntxt" style="display:none;">
@@ -61,14 +71,14 @@ function handleContextClick(comp) {
 	<s:decorate template="/custom/az/layout/tbselection.xhtml" rendered="#{indicatorFilters.indicatorSite=='TREATMENTSITE'}">
 		<ui:param name="tbunitselection" value="#{indicatorFilters.tbunitselection}" />
 		<ui:param name="unitlabel" value="#{messages['Tbunit.treatmentHealthUnit']}" />
-		<ui:param name="rerender" value="referCheckBox" />
+		<ui:param name="rerender" value="pnlcntxt" />
+		<ui:param name="auRerender" value="pnlcntxt" />
 		<ui:param name="required" value="false" />
 	</s:decorate>
 	
 	
-	</h:panelGroup>
-	<h:panelGroup id="referCheckBox">
-		<s:decorate template="/layout/edit.xhtml">
+	<h:panelGroup id="referCheckBox" >
+		<s:decorate template="/layout/edit.xhtml" rendered="#{indicatorFilters.indicatorSite=='TREATMENTSITE' and indicatorFilters.tbunitselection.tbunit!=null}">
     		<ui:param name="labelstyle" value="width:400px;" />
     		<ui:define name="label">#{messages['TbCase.referToOtherTBUnit']}:</ui:define>
     		<h:selectOneMenu id="otherTbUnit" value="#{indicatorFiltersAZ.referToThisUnit}" >
@@ -78,6 +88,7 @@ function handleContextClick(comp) {
     		</h:selectOneMenu>
     	</s:decorate>
 	</h:panelGroup>
+	</h:panelGroup>
 	</div>
 
 	</td></tr>
@@ -86,11 +97,7 @@ function handleContextClick(comp) {
 	<h2>#{messages['manag.ind.periodfilter']}</h2>
 	
 	</td></tr>
-	<tr><td>
-		<h:selectBooleanCheckbox value="#{indicatorFilters.useRegistrationDate}" style="margin-left:20px;"/>#{messages['TbCase.registrationDate']}
-		<h:selectBooleanCheckbox value="#{indicatorFilters.useDiagnosisDate}" style="margin-left:20px;"/>#{messages['TbCase.diagnosisDate']}
-		<h:selectBooleanCheckbox value="#{indicatorFilters.useIniTreatmentDate}" style="margin-left:20px;"/>#{messages['TbCase.iniTreatmentDate']}
-	</td></tr>
+	
 	<tr><td>
 	
 	<s:decorate template="/layout/edit.xhtml" >
@@ -116,6 +123,13 @@ function handleContextClick(comp) {
 		</h:selectOneMenu>
 	</s:decorate>
 
+	</td></tr>
+	<tr><td>
+	<div id="usedatepanel">
+		<h:selectBooleanCheckbox value="#{indicatorFilters.useRegistrationDate}" onclick="setOffOthers(this);" style="margin-left:20px;"/>#{messages['TbCase.registrationDate']}
+		<h:selectBooleanCheckbox value="#{indicatorFilters.useDiagnosisDate}" onclick="setOffOthers(this);" style="margin-left:20px;"/>#{messages['TbCase.diagnosisDate']}
+		<h:selectBooleanCheckbox value="#{indicatorFilters.useIniTreatmentDate}" onclick="setOffOthers(this);" style="margin-left:20px;"/>#{messages['TbCase.iniTreatmentDate']}
+	</div>
 	</td></tr>
 	<tr><td colspan="2">
 
