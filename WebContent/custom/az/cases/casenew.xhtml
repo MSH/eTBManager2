@@ -25,50 +25,7 @@
 <h1>#{title}</h1>
 <a:form id="main" styleClass="form1">
 	<ui:include src="casedataedt.xhtml" />	
-
-	<div class="form-content">
-		<h2>#{messages['cases.details.medexam']} #{messages['MedicalExamination.ifKnown']}</h2>
-	    <table width="100%">
-	    <tr><td>
-		
-		<h:message for="medexamerror" styleClass="error" />
-		<h:form id="medexamerror">
-		    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
-		    	<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
-		    	<ui:param name="future" value="true" /> 
-		    	<ui:param name="datefield" value="#{medicalExamination.date}" /> 
-		    	<ui:param name="edtid" value="medexamdate" />
-		    </s:decorate>
-			
-		    <s:decorate template="/layout/edit.xhtml" >
-		    	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
-		    	<h:inputText value="#{medicalExamination.responsible}" style=" width : 340px;" maxlength="100" />
-		    </s:decorate>
-		
-		    <s:decorate template="/layout/edit.xhtml" >
-		    	<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
-		    	<h:inputText value="#{medicalExamination.height}" />
-		    	#{messages['MedicalExamination.height.unit']}
-		    </s:decorate>
-		    
-		     <s:decorate template="/layout/edit.xhtml" >
-		    	<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
-		   		<h:inputText value="#{medicalExamination.weight}" converter="localeDoubleConverterAZ" 
-		   			onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');"
-		   			onkeyup="updateBMI(this, event);"
-		   			style="width:80px;" >
-		   		</h:inputText>#{messages['MedicalExamination.weight.unit']}
-		    </s:decorate>
-		
-		    <s:decorate template="/layout/edit.xhtml" >
-		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-		    	<h:inputTextarea value="#{medicalExamination.comments}" style="width:500px;height:100px;" />
-		    </s:decorate>
-		</h:form>
-		</td></tr>
-		</table>
-	</div>
-
+	<ui:include src="medexam.xhtml" />
 	<div class="form-footer">
 		<div class="float:right">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}

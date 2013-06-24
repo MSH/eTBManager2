@@ -244,7 +244,7 @@
 		<ui:include src="unitspanelwithconfirm.xhtml" >
 			<ui:param name="askconfirm" value="true" />
 			<ui:param name="msgtitle" value="#{messages['TbCase.notificationUnit']}" />
-			<ui:param name="msgtop" value="145" />
+			<ui:param name="msgtop" value="#{tbcase.legacyId==null?1145:1430}" />
 			<ui:param name="tbunitselection" value="#{indicator.tbunitselection}" />
 			<ui:param name="controller" value="#{caseEditingAZHome}" />
 		</ui:include>
@@ -252,11 +252,7 @@
 	<s:fragment rendered="#{!caseAZHome.canPlayOtherUnits}">
 		<s:decorate template="/layout/display.xhtml">
 			<ui:define name="label">#{messages['CountryStructure.level1']}:</ui:define>
-			#{indicator.tbunitselection.tbunit.adminUnit}, #{indicator.tbunitselection.tbunit}
-		</s:decorate>
-		<s:decorate template="/layout/display.xhtml">
-			<ui:define name="label">#{messages['form.name']}:</ui:define>
-			#{indicator.tbunitselection.tbunit}
+			#{indicator.notificationUnitDefault.adminUnit}, #{indicator.notificationUnitDefault}
 		</s:decorate>
 	</s:fragment>
 
@@ -414,8 +410,8 @@ function isPulmonary(cb) {
 			<td>
 				<s:decorate template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['az_AZ.CaseFindingStrategy']}:</ui:define>
-    				<h:selectOneMenu value="#{tbcase.caseFindingStrategy}" style="margin-right:4px;">
-		    			<s:selectItems var="it" value="#{globalLists_az.caseFindingStrategies}"  label="#{messages[it.key]}" hideNoSelectionLabel="true"/>
+    				<h:selectOneMenu value="#{tbcase.caseFindingStrategy}" style="margin-right:4px;" required="true">
+		    			<s:selectItems var="it" value="#{globalLists_az.caseFindingStrategies}"  label="#{messages[it.key]}" noSelectionLabel="-"/>
 		    			<s:convertEnum />
 		    		</h:selectOneMenu>
 				</s:decorate>
