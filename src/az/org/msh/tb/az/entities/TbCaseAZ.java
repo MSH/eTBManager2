@@ -200,6 +200,15 @@ public class TbCaseAZ extends TbCase{
 		}
 		return ""; 
 	}
+	/**
+	 * Return true if case import from EIDSS, but not binded yet
+	 * @return
+	 */
+	public boolean isFirstEIDSSBind(){
+		if (this.getLegacyId()!=null && this.getSystemDate()==null)
+			return true;
+		return false;
+	}
 	//===================GETTERS & SETTERS======================
 	/**
 	 * @return the maritalStatus
