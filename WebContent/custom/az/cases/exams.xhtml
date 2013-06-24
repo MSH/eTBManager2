@@ -321,7 +321,7 @@
 	<div class="spacer" />
 
 	<h:panelGroup id="pnlXRay">	
-		<s:link view="/custom/az/cases/edtexamxray.xhtml" style="float:right;" styleClass="button-alt" rendered="#{caseHome.canEditExams}" >
+		<s:link view="/custom/az/cases/edtexamxray.xhtml" style="float:right;" styleClass="button-alt" rendered="#{caseAZHome.canEditExams}" >
 			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>
