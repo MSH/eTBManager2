@@ -57,7 +57,7 @@ public class IndicatorFilters {
 //	private IndicatorDate indicatorDate = IndicatorDate.DIAGNOSIS_DATE;
 
 	// indicate which dates to filter
-	private boolean useRegistrationDate;
+	private boolean useRegistrationDate = true;
 	private boolean useDiagnosisDate;
 	private boolean useIniTreatmentDate;
 	

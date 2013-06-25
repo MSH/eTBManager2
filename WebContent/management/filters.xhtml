@@ -50,6 +50,21 @@ function handleContextClick(comp) {
 		return;
 	updateContext();
 }
+
+function validate() {
+	var hasvalue = false;
+	jQuery("#inidate select").each(function() { if (parseInt(jQuery(this).val(),10) > 0) hasvalue = true;  });
+
+	if (!hasvalue) 
+		return true;
+	
+	var num=jQuery("#period_check_filters input:checked").size();
+	if (num > 0)
+		return true;
+
+	alert("#{messages['manag.noperiodsel']}");
+	return false;
+}
 </script>
 	
 	<div id="divcntxt" style="display:none;">
@@ -76,20 +91,24 @@ function handleContextClick(comp) {
 	
 	</td></tr>
 	<tr><td>
-		<h:selectBooleanCheckbox value="#{indicatorFilters.useRegistrationDate}" style="margin-left:20px;"/>#{messages['TbCase.registrationDate']}
-		<h:selectBooleanCheckbox value="#{indicatorFilters.useDiagnosisDate}" style="margin-left:20px;"/>#{messages['TbCase.diagnosisDate']}
-		<h:selectBooleanCheckbox value="#{indicatorFilters.useIniTreatmentDate}" style="margin-left:20px;"/>#{messages['TbCase.iniTreatmentDate']}
+		<div id="period_check_filters">
+			<h:selectBooleanCheckbox value="#{indicatorFilters.useRegistrationDate}" style="margin-left:20px;"/>#{messages['TbCase.registrationDate']}
+			<h:selectBooleanCheckbox value="#{indicatorFilters.useDiagnosisDate}" style="margin-left:20px;"/>#{messages['TbCase.diagnosisDate']}
+			<h:selectBooleanCheckbox value="#{indicatorFilters.useIniTreatmentDate}" style="margin-left:20px;"/>#{messages['TbCase.iniTreatmentDate']}
+		</div>
 	</td></tr>
 	<tr><td>
 	
 	<s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['global.inimonthyear']}:	</ui:define>
+		<div id="inidate">
 		<h:selectOneMenu value="#{indicatorFilters.iniMonth}" style="margin-right:4px;">
 			<f:selectItems value="#{months}"/>
 		</h:selectOneMenu>
 		<h:selectOneMenu value="#{indicatorFilters.iniYear}">
 			<f:selectItems value="#{years}"/>
 		</h:selectOneMenu>
+		</div>
 	</s:decorate>
 
 	</td><td>
@@ -97,12 +116,14 @@ function handleContextClick(comp) {
 	<s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['global.endmonthyear']}:	</ui:define>
 		<ui:param name="labelstyle" value="width:140px;" />
+		<div id="enddate">
 		<h:selectOneMenu value="#{indicatorFilters.endMonth}" style="margin-right:4px;">
 			<f:selectItems value="#{months}"/>
 		</h:selectOneMenu>
 		<h:selectOneMenu value="#{indicatorFilters.endYear}">
 			<f:selectItems value="#{years}"/>
 		</h:selectOneMenu>
+		</div>
 	</s:decorate>
 
 	</td></tr>
@@ -285,7 +306,7 @@ function handleContextClick(comp) {
 	<td align="right" >
 	<a:commandLink reRender="indicator" styleClass="button" 
 		action="#{indicatorController.execute}"
-		onclick="if (!disableButton(this)) return false;" oncomplete="enableButton();showChart();">
+		onclick="if ((!validate()) || (!disableButton(this))) return false;" oncomplete="enableButton();showChart();">
 		<span>#{messages['form.update']}</span>
 	</a:commandLink>
 	<rich:jQuery name="showpictype" timing="onJScall" selector="#charttypediv" query="show(500)" />
