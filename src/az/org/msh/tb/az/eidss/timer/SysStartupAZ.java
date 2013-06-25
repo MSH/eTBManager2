@@ -1,14 +1,9 @@
 package org.msh.tb.az.eidss.timer;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-
-import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -18,9 +13,8 @@ import org.jboss.seam.async.QuartzTriggerHandle;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.application.EtbmanagerApp;
-import org.msh.tb.az.eidss.EidssIntHome;
-import org.msh.tb.entities.SystemParam;
-import org.msh.tb.entities.Workspace;
+import org.msh.tb.az.eidss.EIDSS;
+import org.msh.tb.az.eidss.EidssIntConfig;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 
@@ -32,8 +26,8 @@ public class SysStartupAZ{
 	
 	private Map<String, String> messages;
 	private QuartzTriggerHandle quartz;
+	private EidssIntConfig config;
 	private Date start;
-	private Workspace observWorkspace;
 	static Date now = new Date();
 
 	static final long hour = 60*60*1000L;
@@ -44,63 +38,32 @@ public class SysStartupAZ{
 
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, 2100);
-				
-		SystemParam p;
-		try {
-			p = getEntityManager().find(SystemParam.class, "admin.eidss.auto");
-			start = getStart();				
-			if ("true".equals(p.getValue())){
-				start();
-			}
-		} catch (Exception e) {
-			p = null;
-		}
+
+		start = getStart();				
+		if (getConfig().auto)
+			start();
 	}
 
 	private Date getStart(){
 		if (start == null){
-			SystemParam st;
-			st = getEntityManager().find(SystemParam.class, "admin.eidss.dateStart");
-			if (st!=null)
-				try {
-					start = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(st.getValue());
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-			else
+			start = getConfig().dateStart;
+			if (start == null)
 				start = new Date();
 		}
 		return start;
 	}
-	
-	private EidssIntHome getEidssIntHome(){
-		return (EidssIntHome)Component.getInstance("eidssIntHome");
-	}
-	
+		
 	private void changeStartDt(){
-		Date db = getEidssIntHome().getConfig().getDateStart();
+		config = EIDSS.loadConfig();
+		Date db = getConfig().getDateStart();
 		if (!getStart().equals(db))
 			start = now.before(db) ? db : start;
 	}
-	
-	private EntityManager getEntityManager(){
-		return (EntityManager)Component.getInstance("entityManager");
-	}
-	
+
 	public void start(){
 		if (quartz==null){
-			boolean auto = false;
-			try{
-				getEidssIntHome().loadConfig();
-				changeStartDt();
-				auto = getEidssIntHome().getConfig().getAuto();
-			}
-			catch (Exception e) {
-				String str = getEntityManager().find(SystemParam.class, "admin.eidss.auto").getValue();
-				if ("true".equals(str))
-					auto = true;
-			}
-			if (auto)
+			changeStartDt();	
+			if (getConfig().getAuto())
 				quartz = systemTimerAZ.trigger(start, getTimeInterval()*hour);
 		}
 		else
@@ -120,12 +83,13 @@ public class SysStartupAZ{
 
 	private long getTimeInterval(){
 		try{
-			return getEidssIntHome().getConfig().getInterval();
+			return getConfig().getInterval();
 		}
 		catch (Exception e){
 			return 2;
 		}
 	}
+	
 	public void cancel(){
 		if (quartz!=null)
 			try {
@@ -180,9 +144,10 @@ public class SysStartupAZ{
 		return res;
 	}
 
-	public Workspace getObservWorkspace() {
-		if (observWorkspace==null)
-			observWorkspace = getEntityManager().find(Workspace.class, 8);
-		return observWorkspace;
+	public EidssIntConfig getConfig() {
+		if (config==null)
+			config = EIDSS.loadConfig();
+		return config;
 	}
+
 }

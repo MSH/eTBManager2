@@ -89,7 +89,7 @@ public class EidssIntHome {
 	 */
 	public String execute(){
 		//setDefaultWorkspace();
-		loadConfig();
+		config = EIDSS.loadConfig();
 		setCurrentUser();
 		if (userLogin!=null){
 			TaskManager manager = (TaskManager)Component.getInstance(TaskManager.class);
@@ -170,22 +170,11 @@ public class EidssIntHome {
 	 */
 	public EidssIntConfig getConfig(){
 		if (config == null){
-			loadConfig();
+			config = EIDSS.loadConfig();
 		}
 		return config;
 	}
-	/**
-	 * load configuration from the SysConfig table
-	 * use reflection to determine keys name and fixed prefix for these keys
-	 */
-	public void loadConfig() {
-		config = new EidssIntConfig();
-		Field[] flds = config.getClass().getFields();
-		for(Field fld : flds){
-			loadParameter(fld,config);
-		}
-
-	}
+		
 	/**
 	 * save configuration to the SysConfig table
 	 * use reflection to determine keys name and fixed prefix for these keys
@@ -214,72 +203,12 @@ public class EidssIntHome {
 		}
 
 	}
-	/**
-	 * Load particular parameter from SysConfig
-	 * @param name name of parameter
-	 * @param config object to place parameter
-	 */
-	private void loadParameter(Field fld, EidssIntConfig config) {
-		String s = null;
-		try {
-			SystemParam sysparam = (SystemParam)getEntityManager()
-			.createQuery("from SystemParam sp where sp.workspace.id = :id and sp.key = :param")
-			.setParameter("id", sysStartupAZ.getObservWorkspace().getId())
-			.setParameter("param", prefix+"."+fld.getName())
-			.getResultList().get(0);
-			s = sysparam.getValue();
-		} catch (Exception e) {
-			s = null;
-		}
-		if (s != null) {
-			setValue(fld, s, config);
-		}
-	}
 	
+
 	private EntityManager getEntityManager(){
 		return (EntityManager)Component.getInstance("entityManager");
 	}
 	
-	/**
-	 * set parameter value. If impossible - do nothing i.e. assign default value
-	 * @param fld class field to set value
-	 * @param value field value as string
-	 * @param config EIDSS config
-	 * Only String, Date and Boolean allowed
-	 */
-	private void setValue(Field fld, String value, EidssIntConfig config) {
-		Object thisValue = null;
-		try {
-			if (fld.getType().getName().contains("Date")){
-				//
-				Date date = null;
-				if (value.length()>10){
-					try {
-						date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(value);
-						thisValue = date;
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-				}
-				else{
-					java.sql.Date dt = java.sql.Date.valueOf(value);
-					thisValue = new java.util.Date(dt.getTime());
-				}
-			}else if (fld.getType().getName().contains("Boolean")){
-				thisValue = Boolean.valueOf(value);
-			}else if (fld.getType().getName().contains("Integer")){
-				thisValue = Integer.valueOf(value);
-			} else{
-				thisValue = value;
-			}
-			fld.set(config, thisValue);
-		} catch (IllegalArgumentException e) {
-			// do nothing
-		} catch (IllegalAccessException e) {
-			// do nothing
-		}
-
-	}
 
 	/**
 	 * Save configuration parameter to the common config table
@@ -300,7 +229,7 @@ public class EidssIntHome {
 			//TODO ?
 
 			//defaultWorkspace = entityManager.merge(defaultWorkspace);
-			p.setWorkspace(sysStartupAZ.getObservWorkspace());
+			p.setWorkspace(EIDSS.getObservWorkspace());
 		}
 		p.setValue(value.toString());
 		getEntityManager().persist(p);
@@ -361,12 +290,12 @@ public class EidssIntHome {
 			userLogin = (UserLogin)Component.getInstance("userLogin");
 		if (userLogin == null){
 			userLogin = new UserLogin();
-			userLogin.setWorkspace(sysStartupAZ.getObservWorkspace());
+			userLogin.setWorkspace(EIDSS.getObservWorkspace());
 			if (getConfig().getDefaultUser()!=null){
 				User us = (User) getEntityManager().find(User.class, getConfig().getDefaultUser());
 				userLogin.setUser(us);
 				//userLogin.setId(us.getId());
-				Query q = getEntityManager().createQuery("from UserWorkspace uw where uw.workspace.id="+sysStartupAZ.getObservWorkspace().getId()+" and uw.user.id=:uid")
+				Query q = getEntityManager().createQuery("from UserWorkspace uw where uw.workspace.id="+EIDSS.getObservWorkspace().getId()+" and uw.user.id=:uid")
 				.setParameter("uid", us.getId());
 				UserWorkspace uw = (UserWorkspace) q.getResultList().get(0);
 				Contexts.getApplicationContext().set("userWorkspace", uw);
@@ -380,7 +309,7 @@ public class EidssIntHome {
 
 	public Workspace getWorkspace() {
 		if (workspace == null)
-			return sysStartupAZ.getObservWorkspace();
+			return EIDSS.getObservWorkspace();
 		return workspace;
 	}
 
