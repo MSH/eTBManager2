@@ -24,7 +24,6 @@ import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.Source;
-import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.dispensing.DispensingHome;
@@ -41,7 +40,6 @@ import org.msh.tb.transactionlog.TransactionLogService;
 @Name("quarterStockPositionHome")
 public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetailsBD>{
 
-	
 	private static final long serialVersionUID = 3382653446118482945L;
 
 	@In(create=true) QuarterStockPositionReport quarterStockPositionReport;
