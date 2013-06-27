@@ -20,6 +20,11 @@ public enum Quarter {
 		this.endMonth = endMonth;
 	}
 	
+	/**
+	 * Returns the quarter according to the month passed as parameter.
+	 * @param month
+	 * @return
+	 */
 	public static Quarter getQuarterByMonth(int month){
 		if(month == GregorianCalendar.JANUARY || month == GregorianCalendar.FEBRUARY || month == GregorianCalendar.MARCH)
 			return Quarter.FIRST;
@@ -29,6 +34,24 @@ public enum Quarter {
 			return Quarter.THIRD;
 		if(month == GregorianCalendar.OCTOBER || month == GregorianCalendar.NOVEMBER || month == GregorianCalendar.DECEMBER)
 			return Quarter.FOURTH;
+		
+		return null;
+	}
+	
+	/**
+	 * Returns the next quarter according to the quarter passed as parameter.
+	 * @param quarter
+	 * @return
+	 */
+	public static Quarter getNextQuarter(Quarter quarter){
+		if(quarter.equals(Quarter.FIRST))
+			return Quarter.SECOND;
+		if(quarter.equals(Quarter.SECOND))
+			return Quarter.THIRD;
+		if(quarter.equals(Quarter.THIRD))
+			return Quarter.FOURTH;
+		if(quarter.equals(Quarter.FOURTH))
+			return Quarter.FIRST;
 		
 		return null;
 	}

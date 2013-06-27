@@ -100,11 +100,13 @@ public class QuarterStockPositionReport {
 		String queryString = "select m, " +
 		
 								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
-									" and ((mov.date < :iniDate) or (mov.date >= :iniDate and mov.date <= :endDate " +
-									"and mov.type in (7) )) and mov.medicine.id = m.id " + getSourceClause() + ") as openingBalance, " +
+									" and ( (mov.date < :iniDate) or " +
+									"(mov.date >= :iniDate and mov.date <= :endDate and mov.type in (7)) ) " +
+									"and mov.medicine.id = m.id " + getSourceClause() + ") as openingBalance, " +
 								
 								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
-									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (2,5) and mov.medicine.id = m.id " + getSourceClause() + ") as received, " +
+									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (2,5) " +
+									"and mov.medicine.id = m.id " + getSourceClause() + ") as received, " +
 								
 								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
 									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (4) and (mov.quantity * mov.oper > 0) " +
@@ -112,7 +114,7 @@ public class QuarterStockPositionReport {
 									
 								"(select sum(mov.quantity * mov.oper) from Movement mov left join mov.adjustmentType " + getLocationWhereClause() + 
 									" and mov.date >= :iniDate and mov.date <= :endDate and (mov.quantity * mov.oper) < 0" +
-									" and mov.type in (4)" +
+									" and mov.type in (1,4,6)" +
 									" and (mov.adjustmentType.id <> :workspaceExpiredAdjust or mov.adjustmentType is null)" +
 									" and mov.medicine.id = m.id " + getSourceClause() + ") as negAdjust, " +
 									

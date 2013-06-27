@@ -24,10 +24,12 @@ import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.Source;
+import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.dispensing.DispensingHome;
 import org.msh.tb.medicines.movs.MovementHome;
+import org.msh.tb.tbunits.TbUnitHome;
 import org.msh.tb.transactionlog.TransactionLogService;
 
 /**
@@ -45,7 +47,8 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	@In(required=true) UserSession userSession;
 	@In(required=true) FacesMessages facesMessages;
 	@In(create=true) MovementHome movementHome;
-	@In(create=true) DispensingHome dispensingHome ;
+	@In(create=true) DispensingHome dispensingHome;
+	@In(create=true) TbUnitHome tbunitHome;
 	
 	private QSPEditingMedicine editingMedicine;
 	private Integer medicineId;
@@ -138,6 +141,35 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 			//facesMessages.addMessage
 			return "error";
 		}		
+		
+		facesMessages.clear();
+		facesMessages.addFromResourceBundle("default.entity_updated");
+		return "success";
+	}
+	
+	/**
+	 * Closes the selected quarter
+	 * @return
+	 */
+	public String closeQuarter(){
+		quarter = quarterStockPositionReport.getQuarter();
+		year = quarterStockPositionReport.getYear();
+		
+		if(quarter == null || year == null)
+			return "error";
+		
+		Quarter nextQuarter = Quarter.getNextQuarter(quarter);
+		if(nextQuarter.equals(Quarter.FIRST))
+			year++;
+		
+		GregorianCalendar date = new GregorianCalendar();
+		date.set(GregorianCalendar.YEAR, year);
+		date.set(GregorianCalendar.MONTH, nextQuarter.getIniMonth());
+		date.set(GregorianCalendar.DAY_OF_MONTH, nextQuarter.getIniDay());
+		
+		tbunitHome.setInstance(userSession.getTbunit());
+		tbunitHome.getInstance().setLimitDateMedicineMovement(date.getTime());
+		tbunitHome.persist();
 		
 		facesMessages.clear();
 		facesMessages.addFromResourceBundle("default.entity_updated");
