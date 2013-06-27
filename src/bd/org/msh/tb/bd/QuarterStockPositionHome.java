@@ -413,6 +413,9 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	 * Returns true if the quarter and year selected is editable.
 	 */
 	public boolean isEditableQuarter(){
+		if(userSession.getTbunit().getLimitDateMedicineMovement() == null)
+			return true;
+		
 		quarter = quarterStockPositionReport.getQuarter();
 		year = quarterStockPositionReport.getYear();
 		
