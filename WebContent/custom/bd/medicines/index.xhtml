@@ -36,7 +36,7 @@
 
 <h:panelGroup id="pnlitems">
 <s:link value="#{messages['Quarter.editQuartelyReport']}" view="/custom/bd/medicines/quartelystqpos.xhtml"
-	rendered="#{true}" style="float:right" styleClass="noprint" />
+	rendered="#{userSession.tbunit.treatmentHealthUnit}" style="float:right" styleClass="noprint" />
 <br/>
 
 <a:repeat value="#{inventoryReport.sources}" var="s">

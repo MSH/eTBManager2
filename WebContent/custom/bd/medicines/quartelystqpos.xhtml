@@ -97,6 +97,14 @@
 	</h:column>
 	
 	</h:dataTable>
+	
+	<br/>
+	<h:commandLink styleClass="button" onclick="if (confirm('#{messages['quarter.closequarter']}?')) closeQuarter();return false;"
+		rendered="#{quarterStockPositionReport.isFiltersFilledIn() and quarterStockPositionHome.isEditableQuarter()}">
+		<span>#{messages['quarter.closequarter']}</span>
+	</h:commandLink>
+	
+	<a:jsFunction name="closeQuarter" action="#{quarterStockPositionHome.closeQuarter()}" reRender="main"/>
 
 	</h:form>
 	</ui:define>
