@@ -304,6 +304,10 @@ public class MovementHome {
 			throw new MovementException(s);
 		}
 
+		// checks if the unit has a date limit to create movements
+		if(!unit.canCreateMovement(date))
+			throw new MovementException("Error creating movement. Can't create a movement on or before the selected date: " + date);
+	
 		// create batches
 		if ((batches == null) || (batches.size() == 0)) 
 			throw new MovementException("No batches were specified for movement of " + medicine.toString());
@@ -605,10 +609,10 @@ public class MovementHome {
 	public Movement prepareNewAdjustment(Date date, Tbunit unit, Source source, Medicine medicine, 
 			Map<Batch, Integer> batches, FieldValueComponent adjustReason){
 		
-		Movement m = prepareNewMovement(date, unit, source, medicine, MovementType.ADJUSTMENT, batches, adjustReason.getComplement());
+		Movement m = prepareNewMovement(date, unit, source, medicine, MovementType.ADJUSTMENT, batches, (adjustReason == null ? null : adjustReason.getComplement()));
 		
 		if(m!=null)
-			m.setAdjustmentType(adjustReason.getValue());
+			m.setAdjustmentType((adjustReason == null ? null : adjustReason.getValue()));
 		
 		return m;
 	}

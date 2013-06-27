@@ -42,19 +42,19 @@ import org.msh.tb.transactionlog.TransactionLogService;
 @AutoCreate
 public class MedicineManStartHome {
 
-	@In(create=true) SourcesQuery sources;
-	@In(create=true) MedicinesQuery medicines;
-	@In(create=true) MovementHome movementHome;
-	@In(required=true) UserSession userSession;
-	@In EntityManager entityManager;
+	protected @In(create=true) SourcesQuery sources;
+	protected @In(create=true) MedicinesQuery medicines;
+	protected @In(create=true) MovementHome movementHome;
+	protected @In(required=true) UserSession userSession;
+	protected @In EntityManager entityManager;
 	
-	private Date startDate;
-	private BatchInfo batchInfo;
-	private MedicineInfo medicineInfo;
-	private List<SourceInfo> sourcesInfo;
-	private boolean newBatch;
-	private Tbunit unit;
-	private boolean validated;
+	protected Date startDate;
+	protected BatchInfo batchInfo;
+	protected MedicineInfo medicineInfo;
+	protected List<SourceInfo> sourcesInfo;
+	protected boolean newBatch;
+	protected Tbunit unit;
+	protected boolean validated;
 
 
 	/**
