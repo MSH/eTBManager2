@@ -41,6 +41,7 @@ import org.msh.tb.transactionlog.TransactionLogService;
 @Name("quarterStockPositionHome")
 public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetailsBD>{
 
+	
 	private static final long serialVersionUID = 3382653446118482945L;
 
 	@In(create=true) QuarterStockPositionReport quarterStockPositionReport;
