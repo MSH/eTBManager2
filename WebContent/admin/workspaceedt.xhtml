@@ -66,6 +66,14 @@
            	<f:selectItems value="#{timezones.selectItems}" />
       	</h:selectOneMenu>
     </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['Workspace.ExpiredMedAdjustType']}:</ui:define>
+    	<h:selectOneMenu value="#{workspace.expiredMedicineAdjustmentType}" style="margin-right:4px;">
+    		<s:selectItems var="it" value="#{fieldsQuery.adjustmentType}" noSelectionLabel="-" label="#{it}" />
+    		<s:convertEntity />
+    	</h:selectOneMenu>
+	</s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:param name="labelstyle" value="height:40px;width:170px;" />
