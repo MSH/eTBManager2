@@ -25,35 +25,19 @@
 	<ui:define name="content_unit" id="content">
 	<h:form id="main">
 
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['Source']}:</ui:define>
-		<h:selectOneMenu value="#{quarterStockPositionReport.source}">
-            <s:selectItems value="#{sources.resultList}" var="c" label="#{c.abbrevName} - #{c.name}" noSelectionLabel="-" />
-            <s:convertEntity/>
-		</h:selectOneMenu>
-    </s:decorate>
-
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Quarter']}:</ui:define>
-    	<ui:param name="redasterisk" value="#{true}" />
-		<h:selectOneMenu value="#{quarterStockPositionReport.quarter}">
+		<h:selectOneMenu id="quarter" value="#{quarterStockPositionReport.quarter}">
   			<s:selectItems value="#{quarter}" var="r" label="#{messages[r.key]}" noSelectionLabel="-" />
   			<s:convertEnum />
+  			<a:support event="onchange" reRender="main" process="year,quarter" action="#{quarterStockPositionReport.refresh}" />
 		</h:selectOneMenu>
 		/
-		<h:selectOneMenu value="#{quarterStockPositionReport.year}">
+		<h:selectOneMenu id="year" value="#{quarterStockPositionReport.year}">
   			<s:selectItems value="#{quarterStockPositionReport.years}" var="r" label="#{r}" noSelectionLabel="-" />
+  			<a:support event="onchange" reRender="main" process="year,quarter" action="#{quarterStockPositionReport.refresh}" />
 		</h:selectOneMenu>
 	</s:decorate>
-	
-	<s:decorate template="/layout/tbselection2.xhtml">
-		<ui:param name="unitlabel" value="#{messages['MedicalExamination.RefToUnit']}" />
-	   	<ui:param name="tbunitselection" value="#{quarterStockPositionReport.tbunitselection}" />
-	</s:decorate>
-
-   	<a:commandLink styleClass="button-alt" action="#{quarterStockPositionReport.refresh}" style="float:right;" onclick="if (!disableButton(this)) return false;" reRender="main">
-   		<span>#{messages['form.update']}</span>
-   	</a:commandLink>
 
 	<h:outputText styleClass="error" value="#{messages['quarter.fillinfilters']}" rendered="#{!quarterStockPositionReport.isFiltersFilledIn()}"/>
 
@@ -104,6 +88,13 @@
 		<f:facet name="header">#{messages['quarter.outofstk']}</f:facet>
 		<h:outputText value="#{row.outOfStockDays}" />
 	</h:column>	
+	
+	<h:column rendered="#{quarterStockPositionHome.isEditableQuarter()}">
+		<f:facet name="header">#{messages['form.edit']}</f:facet>
+		<s:link value="#{messages['form.edit']}" view="/custom/bd/medicines/quartelystqposedt.xhtml" styleClass="noprint">
+			<f:param name="selMed" value="#{row.medicine.id}"/>
+		</s:link>
+	</h:column>
 	
 	</h:dataTable>
 

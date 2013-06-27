@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/templatemed.xhtml">
+      
+	<ui:param name="title" value="#{messages['Quarter.editQuartelyReport']}" />
+	<ui:param name="topmenu" value="1" />
+	<ui:param name="labelstyle" value="width:210px;" />
+
+	<ui:define name="head">
+	<style type="text/css">
+		.posAdjust{
+			background-color: white;
+		}
+		.negAdjust{
+			background-color: white;
+		}
+		.expired{
+			background-color: white;
+		}
+  	</style>
+	</ui:define>
+
+	<ui:define name="naveg">
+		<div class="item">
+			<s:link value="#{messages['meds.inventory']}" view="/medicines/index.xhtml" propagation="none"/>
+		</div>
+		<div class="item selected">
+			<s:link value="#{title}" propagation="none" />
+		</div>
+	</ui:define>
+	
+	<ui:define name="content_unit" id="content">
+	<h:form id="main">
+	
+	<div id="tablediv">
+	<table class="table1">
+		<tr>
+			<th colspan="6" align="left"><h2>#{quarterStockPositionHome.editingMedicine.medicine}</h2></th>
+		</tr>
+		<tr>
+			<th>#{messages['Batch']}</th>
+			<th>#{messages['quarter.posadjust']}</th>
+			<th>#{messages['quarter.negadjust']}</th>
+			<th>#{messages['manag.forecast.tabres2']}</th>
+			<th>#{messages['quarter.expired']}</th>
+			<th>#{messages['quarter.outofstk']}</th>
+		</tr>
+		<tr>
+			<td><b>#{messages['global.total']}:</b></td>
+			<td><h:inputText id="posadjust" value="0" readonly="true" style="background-color: lightgray;"/></td>
+			<td><h:inputText id="negadjust" value="0" readonly="true" style="background-color: lightgray;"/></td>
+			<td><h:inputText value="#{quarterStockPositionHome.editingMedicine.consumption}" /></td>
+			<td><h:inputText id="expired" value="0" readonly="true" style="background-color: lightgray;"/></td>
+			<td><h:inputText value="#{quarterStockPositionHome.editingMedicine.outOfStock}" /></td>
+		</tr>
+		<a:repeat value="#{quarterStockPositionHome.editingMedicine.batchList}" var="x">
+			<tr>
+				<td><b>
+					<h:outputText value="#{x.batchQtd.batch.expiryDate}" rendered="#{not empty x.batchQtd.batch.expiryDate}"/> <br/>
+					<h:outputText style="font-size:10px" value="#{x.batchQtd.batch.batchNumber} #{x.batchQtd.batch.manufacturer}" rendered="#{(not empty x.batchQtd.batch.batchNumber) or (not empty x.batchQtd.batch.manufacturer)}"/> 
+				</b></td>
+				
+				<td>
+				   	<h:inputText styleClass="posAdjust" value="#{x.posAdjust}" onkeyup="updatePosAdjustTotal();"
+				   		onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');" />
+				</td>
+				
+				<td>
+					<h:inputText styleClass="negAdjust" value="#{x.negAdjust}" onkeyup="updateNegAdjustTotal();"
+				   		onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');" />
+				</td>
+				
+				<td align="center"><h:outputText value=" - " /></td>
+				
+				<td>
+					<h:inputText styleClass="expired" value="#{x.expired}" onkeyup="updateExpiredTotal();"
+				   		onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');" />
+				</td>
+				
+				<td align="center"><h:outputText value=" - " /></td>
+			</tr>
+		</a:repeat>
+	
+	</table>
+	
+	<a:commandLink action="#{quarterStockPositionHome.save}" styleClass="button" 
+		onclick="if (!disableButton(this)) return false;">
+		<span>#{messages['form.save']}</span>
+	</a:commandLink>
+	
+	</div>
+	
+	</h:form>
+	<script type="text/javascript">
+	<!--
+	function updatePosAdjustTotal(){
+		var num = 0;
+		jQuery('#tablediv .posAdjust').each(function() {
+			num += parseInt(jQuery(this).val(),10);
+		});
+		if(isNaN(num))
+			num = 0;
+		document.getElementById('page:main:posadjust').value = num;
+	}
+	function updateNegAdjustTotal(){
+		var num = 0;
+		jQuery('#tablediv .negAdjust').each(function() {
+			num += parseInt(jQuery(this).val(),10);
+		});
+		if(isNaN(num))
+			num = 0;
+		document.getElementById('page:main:negadjust').value = num;
+	}
+	function updateExpiredTotal(){
+		var num = 0;
+		jQuery('#tablediv .expired').each(function() {
+			num += parseInt(jQuery(this).val(),10);
+		});
+		if(isNaN(num))
+			num = 0;
+		document.getElementById('page:main:expired').value = num;
+	}
+	-->
+	</script>
+	</ui:define>
+</ui:composition>
