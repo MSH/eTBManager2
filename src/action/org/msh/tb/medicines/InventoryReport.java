@@ -43,7 +43,7 @@ public class InventoryReport {
 	 * Check if the given batch is in attention period for expiration.
 	 */
 	public boolean isExpiringBatch(Object o){
-		
+
 		Batch b = null;
 		BatchQuantity bq = null;
 		if(o instanceof Batch)
@@ -52,37 +52,37 @@ public class InventoryReport {
 			bq = (BatchQuantity) o;
 			b = bq.getBatch();
 		}
-		
+
 		if(b != null)
 			if(b.getExpiryDate()!=null){
-/*			Calendar now  = Calendar.getInstance();
+				/*			Calendar now  = Calendar.getInstance();
 			Calendar batchExpiringDate = Calendar.getInstance();
 			batchExpiringDate.setTime(b.getExpiryDate());
-			
+
 			long diff = batchExpiringDate.getTimeInMillis() - now.getTimeInMillis();
 			diff = diff / (24*60*60*1000);
 			double diffInDouble = diff;
 			double diffInMonths = diffInDouble / 30.0;
-*/
-			// calculate the number of months between two dates
-			int diffInMonths = DateUtils.monthsBetween(b.getExpiryDate(), new Date());
-		
-			Workspace workspace = UserSession.getWorkspace();
-			if(workspace.getMonthsToAlertExpiredMedicines() != null) {
-				if(diffInMonths < 0 || diffInMonths > workspace.getMonthsToAlertExpiredMedicines())
-					return false;
-				else
-					return true;
+				 */
+				// calculate the number of months between two dates
+				int diffInMonths = DateUtils.monthsBetween(b.getExpiryDate(), new Date());
+
+				Workspace workspace = UserSession.getWorkspace();
+				if(workspace.getMonthsToAlertExpiredMedicines() != null) {
+					if(diffInMonths < 0 || diffInMonths > workspace.getMonthsToAlertExpiredMedicines())
+						return false;
+					else
+						return true;
+				}
+
+				if (workspace.getMonthsToAlertExpiredMedicines() != null) {
+					if(diffInMonths < 0 || diffInMonths > workspace.getMonthsToAlertExpiredMedicines())
+						return false;
+					else
+						return true;
+				}
 			}
-			
-			if (workspace.getMonthsToAlertExpiredMedicines() != null) {
-				if(diffInMonths < 0 || diffInMonths > workspace.getMonthsToAlertExpiredMedicines())
-					return false;
-				else
-					return true;
-			}
-		}
-		
+
 		return false;
 	}
 
@@ -90,7 +90,7 @@ public class InventoryReport {
 	 * Check if the registration card is in attention period for expiration.
 	 */
 	public boolean isExpiringRegistCard(Object o){
-		
+
 		Batch b = null;
 		BatchQuantity bq = null;
 		if(o instanceof Batch)
@@ -99,25 +99,25 @@ public class InventoryReport {
 			bq = (BatchQuantity) o;
 			b = bq.getBatch();
 		}
-		
+
 		if(b != null)
 			if(b.getRegistCardEndDate()!=null){
-/*			Calendar now  = Calendar.getInstance();
+				/*			Calendar now  = Calendar.getInstance();
 			Calendar batchExpiringDate = Calendar.getInstance();
 			batchExpiringDate.setTime(b.getExpiryDate());
-			
+
 			long diff = batchExpiringDate.getTimeInMillis() - now.getTimeInMillis();
 			diff = diff / (24*60*60*1000);
 			double diffInDouble = diff;
 			double diffInMonths = diffInDouble / 30.0;
-*/
-			// calculate the number of months between two dates
-			int diffInMonths = DateUtils.monthsBetween(b.getRegistCardEndDate(), new Date());
-		
-			if (diffInMonths<2)
-				return true;
-		}
-		
+				 */
+				// calculate the number of months between two dates
+				int diffInMonths = DateUtils.monthsBetween(b.getRegistCardEndDate(), new Date());
+
+				if (diffInMonths<2)
+					return true;
+			}
+
 		return false;
 	}
 
@@ -149,14 +149,14 @@ public class InventoryReport {
 				if ((node != null) && (node.getItem() != null))  //AK maybe null
 					((MedicineInfo)node.getItem()).setHasBatchExpired(true);
 			}
-			
+
 			// check if batch is up to expire
 			if (isExpiringBatch(bq.getBatch())) {
 				MedicineNode node = root.findMedicineNode(bq.getSource(), bq.getBatch().getMedicine());
 				if ((node != null) && (node.getItem() != null))  //AK maybe null
 					((MedicineInfo)node.getItem()).setHasBatchExpiring(true);
 			}
-			
+
 		}
 
 		loadLastMovement(userSession.getTbunit());
@@ -292,14 +292,16 @@ public class InventoryReport {
 			}
 			return dt;
 		}
-		
+
 		public Date getNextRegistCardExpire() {
 			Date dt = null;
 			for (Object obj: node.getBatches()) {
 				BatchQuantity bq = (BatchQuantity)obj;
 				if (!bq.getBatch().isRegistCardExpired()) {
-					if ((dt == null) || ((dt.after(bq.getBatch().getRegistCardEndDate()))))
-						dt = bq.getBatch().getRegistCardEndDate();
+					if (bq.getBatch().getRegistCardEndDate() != null){
+						if ((dt == null) || ((dt.after(bq.getBatch().getRegistCardEndDate()))))
+							dt = bq.getBatch().getRegistCardEndDate();
+					}
 				}
 			}
 			return dt;
@@ -410,7 +412,7 @@ public class InventoryReport {
 		public void setHasBatchExpiring(boolean hasBatchExpiring) {
 			this.hasBatchExpiring = hasBatchExpiring;
 		}
-		
+
 		/**
 		 * Compares today+30days with sotckoutdate, if sotckoutdate 
 		 * is before today+30 it's time to alert the user.
@@ -454,7 +456,7 @@ public class InventoryReport {
 			}
 			return false;
 		}
-		
+
 	}
 
 
