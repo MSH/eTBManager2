@@ -108,6 +108,12 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
     private Date medManStartDate;
 
     /**
+     * Limit date to create movements for this unit. The movement has to equals or after this date. 
+     */
+    @Temporal(TemporalType.DATE)
+    private Date limitDateMedicineMovement;
+    
+    /**
      * Order address
      */
     @Column(length=200)
@@ -502,5 +508,33 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 	
 	public void setNtmHealthUnit(boolean ntmHealthUnit) {
 		this.ntmHealthUnit = ntmHealthUnit;
+	}
+
+	/**
+	 * @return the limitDateMedicineMovement
+	 */
+	public Date getLimitDateMedicineMovement() {
+		return limitDateMedicineMovement;
+	}
+	
+	/**
+	 * @param limitDateMedicineMovement the limitDateMedicineMovement to set
+	 */
+	public void setLimitDateMedicineMovement(Date limitDateMedicineMovement) {
+		this.limitDateMedicineMovement = limitDateMedicineMovement;
+	}
+	
+	/**
+	 * The movement has to be at the same date of limitDateMedicineMovementor after.
+	 * @param movementDate: date of the medicine movement that will be created.
+	 * @return
+	 */
+	public boolean canCreateMovement(Date movementDate){
+		if(limitDateMedicineMovement == null || movementDate == null)
+			return true;
+		else if(movementDate.equals(limitDateMedicineMovement))
+			return true;
+		else
+			return movementDate.after(limitDateMedicineMovement);
 	}
 }

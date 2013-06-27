@@ -120,6 +120,13 @@ public class Workspace implements Serializable, Transactional {
 	 */
 	private Integer monthsToAlertExpiredMedicines;
 
+	/**
+	 * Setup the adjustment type that represents expired medicine movements
+	 */
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="expiredMedicineAdjustmentType_ID")
+	@PropertyLog(messageKey="Workspace.ExpiredMedAdjustType")
+	private FieldValue expiredMedicineAdjustmentType;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="lastTransaction_ID")
@@ -530,4 +537,20 @@ public class Workspace implements Serializable, Transactional {
 	public void setUlaActive(boolean ulaActive) {
 		this.ulaActive = ulaActive;
 	}
+
+	/**
+	 * @return the expiredMedicineAdjustmentType
+	 */
+	public FieldValue getExpiredMedicineAdjustmentType() {
+		return expiredMedicineAdjustmentType;
+	}
+
+	/**
+	 * @param expiredMedicineAdjustmentType the expiredMedicineAdjustmentType to set
+	 */
+	public void setExpiredMedicineAdjustmentType(
+			FieldValue expiredMedicineAdjustmentType) {
+		this.expiredMedicineAdjustmentType = expiredMedicineAdjustmentType;
+	}
+	
 }

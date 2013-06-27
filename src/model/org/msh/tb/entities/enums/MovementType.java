@@ -8,8 +8,7 @@ public enum MovementType {
 	ADJUSTMENT,
 	TRANSFERIN,
 	TRANSFEROUT,
-	INITIALIZE,
-	EXPIREDBATCH; //Only for Bangladesh.
+	INITIALIZE;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
@@ -29,7 +28,6 @@ public enum MovementType {
 		case TRANSFERIN: return 1;
 		case TRANSFEROUT: return -1;
 		case INITIALIZE: return 1;
-		case EXPIREDBATCH: return -1;
 		}
 		
 		return 0;
