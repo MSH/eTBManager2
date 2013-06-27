@@ -14,7 +14,9 @@ import org.jboss.seam.annotations.Scope;
 import org.msh.tb.MedicinesQuery;
 import org.msh.tb.bd.entities.enums.Quarter;
 import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.Source;
 import org.msh.tb.login.UserSession;
+import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection2;
 
 /**
@@ -33,12 +35,12 @@ public class QuarterStockPositionReport {
 	private TBUnitSelection2 tbunitselection;
 	private Quarter quarter;
 	private Integer year;
+	private Source source;
 	
 	private List<QSPMedicineRow> rows;
 	private Date iniQuarterDate;
 	private Date endQuarterDate;
 	private List<Integer> years;
-	private boolean useTbUnitSelection;
 	
 	/**
 	 * Initializes the list of medicines and its stock information.
@@ -96,12 +98,34 @@ public class QuarterStockPositionReport {
 		}
 		
 		String queryString = "select m, " +
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + " and mov.date < :iniDate and mov.medicine.id = m.id) as openingBalance, " +
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + " and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (0,2,5) and mov.medicine.id = m.id) as received, " +
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + " and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (4) and (mov.quantity * mov.oper > 0) and mov.medicine.id = m.id) as posAdjust, " +
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + " and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (4) and (mov.quantity * mov.oper < 0) and mov.medicine.id = m.id) as negAdjust, " +
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + " and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (3) and mov.medicine.id = m.id) as dispensed, " +
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + " and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (8) and mov.medicine.id = m.id) as expired " +
+		
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
+									" and ((mov.date < :iniDate) or (mov.date >= :iniDate and mov.date <= :endDate " +
+									"and mov.type in (7) )) and mov.medicine.id = m.id " + getSourceClause() + ") as openingBalance, " +
+								
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
+									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (2,5) and mov.medicine.id = m.id " + getSourceClause() + ") as received, " +
+								
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
+									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (4) and (mov.quantity * mov.oper > 0) " +
+									" and mov.medicine.id = m.id " + getSourceClause() + ") as posAdjust, " +
+									
+								"(select sum(mov.quantity * mov.oper) from Movement mov left join mov.adjustmentType " + getLocationWhereClause() + 
+									" and mov.date >= :iniDate and mov.date <= :endDate and (mov.quantity * mov.oper) < 0" +
+									" and mov.type in (4)" +
+									" and (mov.adjustmentType.id <> :workspaceExpiredAdjust or mov.adjustmentType is null)" +
+									" and mov.medicine.id = m.id " + getSourceClause() + ") as negAdjust, " +
+									
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
+									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (3) and mov.medicine.id = m.id " + getSourceClause() + ") as dispensed, " +
+								
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
+									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (4) and mov.adjustmentType.id = :workspaceExpiredAdjust " +
+									" and mov.medicine.id = m.id " + getSourceClause() + ") as expired, " +
+								
+								"(select sum(mov.outOfStock) from QuarterlyReportDetailsBD mov " + getLocationWhereClause() + 
+									" and mov.quarter = :quarter and mov.year = :year and mov.medicine.id = m.id) " +
+									
 							  "from Medicine m " +
 							  "where m.workspace.id = :workspaceId " +
 							  "group by m";
@@ -110,6 +134,9 @@ public class QuarterStockPositionReport {
 									.setParameter("iniDate", iniQuarterDate)
 									.setParameter("endDate", endQuarterDate)
 									.setParameter("workspaceId", UserSession.getWorkspace().getId())
+									.setParameter("quarter", quarter)
+									.setParameter("year", year)
+									.setParameter("workspaceExpiredAdjust", UserSession.getWorkspace().getExpiredMedicineAdjustmentType().getId())
 									.getResultList();
 		
 		for(Object[] o : result){
@@ -121,6 +148,7 @@ public class QuarterStockPositionReport {
 					row.setNegativeAdjust((Long) o[4]);
 					row.setDispensed((Long) o[5]);
 					row.setExpired((Long) o[6]);
+					row.setOutOfStockDays((Long) o[7]);
 				}
 			}
 		}
@@ -168,11 +196,21 @@ public class QuarterStockPositionReport {
 	}
 	
 	/**
+	 * Returns where clause depending on the selected source
+	 */
+	public String getSourceClause(){
+		if(source == null)
+			return "";
+		
+		return " and mov.source.id = " + source.getId() + " ";
+	}
+	
+	/**
 	 * @return the tbunitselection2
 	 */
 	public TBUnitSelection2 getTbunitselection() {
 		if (tbunitselection == null)
-			tbunitselection = new TBUnitSelection2();
+			tbunitselection = new TBUnitSelection2(false, TBUnitFilter.HEALTH_UNITS);
 		return tbunitselection;
 	}
 
@@ -265,18 +303,16 @@ public class QuarterStockPositionReport {
 	public void setYears(List<Integer> years) {
 		this.years = years;
 	}
-
 	/**
-	 * @return the useTbUnitSelection
+	 * @return the source
 	 */
-	public boolean isUseTbUnitSelection() {
-		return useTbUnitSelection;
+	public Source getSource() {
+		return source;
 	}
-
 	/**
-	 * @param useTbUnitSelection the useTbUnitSelection to set
+	 * @param source the source to set
 	 */
-	public void setUseTbUnitSelection(boolean useTbUnitSelection) {
-		this.useTbUnitSelection = useTbUnitSelection;
-	}	
+	public void setSource(Source source) {
+		this.source = source;
+	}
 }
