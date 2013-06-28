@@ -4,25 +4,27 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="/layout/templatemed.xhtml">
-      
-	<ui:param name="title" value="#{messages['quarter.report']}" />
-	<ui:param name="topmenu" value="1" />
-	<ui:param name="labelstyle" value="width:210px;" />
+      xmlns:p="http://jboss.com/products/seam/pdf"
+      template="/layout/template_new.xhtml">
 
-	<ui:define name="naveg">
-		<div class="item">
-			<s:link value="#{messages['meds.inventory']}" view="/medicines/index.xhtml" propagation="none"/>
-		</div>
-		<div class="item selected">
-			<s:link value="#{title}" propagation="none" />
-		</div>
-	</ui:define>
-	
-	<ui:define name="content_unit" id="content">
+<ui:param name="title" value="#{messages['manag.rel7']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="left" value="0" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
+	<div class="item selected">
+		<s:link value="#{title}" />
+	</div>
+</ui:define>
+
+<ui:define name="content" id="content">
+	<h1>#{title}</h1>
 	<h:form id="main">
 
     <s:decorate template="/layout/edit.xhtml" >
@@ -107,6 +109,7 @@
 	</h:dataTable>
 
 	</h:form>
-	</ui:define>
+</ui:define>
 
-</ui:composition>
+
+</ui:composition>  

@@ -65,7 +65,7 @@ public class QuarterStockPositionReport {
 		if(years == null || years.size() == 0){
 			Integer currYear = (new GregorianCalendar()).get(GregorianCalendar.YEAR);
 			years = new ArrayList<Integer>();
-			for(int i = currYear ; i > 1999 ; i--){
+			for(int i = currYear ; i >= 2012 ; i--){
 				years.add(i);
 			}
 		}

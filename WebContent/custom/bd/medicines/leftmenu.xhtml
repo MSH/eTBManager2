@@ -50,12 +50,11 @@
 	</s:fragment>
 	
 	<h2>#{messages['meds.reports']}</h2>
+	<s:link value="#{messages['manag.rel7']}" action="#{quarterStockPositionHome.initialize}" view="/custom/bd/medicines/quartelystqpos.xhtml" rendered="#{userSession.tbunit.treatmentHealthUnit}"/>
 	<s:link value="#{messages['meds.movs']}" view="/medicines/movements.xhtml" propagation="none" rendered="#{userSession.canCheckMovements}"/>
 	<s:link value="#{messages['manag.rel2']}" view="/medicines/releststockpos.xhtml" rendered="#{userSession.canViewEstPositionReport}"/>
 	<s:link value="#{messages['manag.rel3']}" view="/medicines/relstockevol.xhtml" rendered="#{userSession.canViewStockEvolutionReport}"/>
 	<s:link value="#{messages['manag.rel5']}" view="/medicines/reltreatcost.xhtml" rendered="false" />
-	<s:link value="#{messages['manag.rel7']}" view="/custom/bd/medicines/relquartelystqpos.xhtml" rendered="#{true}" />
-	
 
 	<s:fragment rendered="#{s:hasRole('MED_INIT_REM')}">
 	<h2>#{messages['form.otheroptions']}</h2>

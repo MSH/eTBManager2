@@ -106,10 +106,13 @@
 	<div class="spacer" />
 	</s:fragment>
 
-	<s:fragment rendered="#{s:hasRole('REP1') or s:hasRole('REP4')}">
+	<s:fragment rendered="#{s:hasRole('REP1') or s:hasRole('REP4') or s:hasRole('REP_QUARTERLY')}">
 	<h2>#{messages['manag.drug.reports']}</h2>
 
 	<div class="vertical-menu">	
+		<s:link view="/custom/bd/management/relquartelystqpos.xhtml" rendered="#{s:hasRole('REP_QUARTERLY')}">
+			<div class="icon-report" style="float:left;"/>#{messages['manag.rel7']}
+		</s:link>
 		<s:link view="/management/rel1.xhtml" rendered="#{s:hasRole('REP1')}">
 			<div class="icon-report" style="float:left;"/>#{messages['manag.rel1']}
 		</s:link>

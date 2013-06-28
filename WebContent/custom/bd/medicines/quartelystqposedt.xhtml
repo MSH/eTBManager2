@@ -14,6 +14,7 @@
 	<ui:param name="labelstyle" value="width:210px;" />
 
 	<ui:define name="head">
+	<a:loadScript src="/js/util.js" />
 	<style type="text/css">
 		.posAdjust{
 			background-color: white;
@@ -56,9 +57,9 @@
 			<td><b>#{messages['global.total']}:</b></td>
 			<td><h:inputText id="posadjust" value="0" readonly="true" style="background-color: lightgray;"/></td>
 			<td><h:inputText id="negadjust" value="0" readonly="true" style="background-color: lightgray;"/></td>
-			<td><h:inputText value="#{quarterStockPositionHome.editingMedicine.consumption}" /></td>
+			<td><h:inputText value="#{quarterStockPositionHome.editingMedicine.consumption}" onkeypress="return numbersOnly(this,event);"/></td>
 			<td><h:inputText id="expired" value="0" readonly="true" style="background-color: lightgray;"/></td>
-			<td><h:inputText value="#{quarterStockPositionHome.editingMedicine.outOfStock}" /></td>
+			<td><h:inputText value="#{quarterStockPositionHome.editingMedicine.outOfStock}" onkeypress="return numbersOnly(this,event);"/></td>
 		</tr>
 		<a:repeat value="#{quarterStockPositionHome.editingMedicine.batchList}" var="x">
 			<tr>
@@ -69,19 +70,19 @@
 				
 				<td>
 				   	<h:inputText styleClass="posAdjust" value="#{x.posAdjust}" onkeyup="updatePosAdjustTotal();"
-				   		onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');" />
+				   		onkeypress="return numbersOnly(this,event);" />
 				</td>
 				
 				<td>
 					<h:inputText styleClass="negAdjust" value="#{x.negAdjust}" onkeyup="updateNegAdjustTotal();"
-				   		onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');" />
+				   		onkeypress="return numbersOnly(this,event);" />
 				</td>
 				
 				<td align="center"><h:outputText value=" - " /></td>
 				
 				<td>
 					<h:inputText styleClass="expired" value="#{x.expired}" onkeyup="updateExpiredTotal();"
-				   		onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');" />
+				   		onkeypress="return numbersOnly(this,event);" />
 				</td>
 				
 				<td align="center"><h:outputText value=" - " /></td>

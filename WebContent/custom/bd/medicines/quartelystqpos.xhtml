@@ -89,7 +89,7 @@
 		<h:outputText value="#{row.outOfStockDays}" />
 	</h:column>	
 	
-	<h:column rendered="#{quarterStockPositionHome.isEditableQuarter()}">
+	<h:column rendered="#{quarterStockPositionHome.canEdit()}">
 		<f:facet name="header">#{messages['form.edit']}</f:facet>
 		<s:link value="#{messages['form.edit']}" view="/custom/bd/medicines/quartelystqposedt.xhtml" styleClass="noprint">
 			<f:param name="selMed" value="#{row.medicine.id}"/>
@@ -100,7 +100,7 @@
 	
 	<br/>
 	<h:commandLink styleClass="button" onclick="if (confirm('#{messages['quarter.closequarter']}?')) closeQuarter();return false;"
-		rendered="#{quarterStockPositionReport.isFiltersFilledIn() and quarterStockPositionHome.isEditableQuarter()}">
+		rendered="#{quarterStockPositionReport.isFiltersFilledIn() and quarterStockPositionHome.canEdit()}" >
 		<span>#{messages['quarter.closequarter']}</span>
 	</h:commandLink>
 	

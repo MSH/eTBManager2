@@ -14,6 +14,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
+import org.jboss.seam.security.Identity;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.bd.QSPEditingMedicine.QSPEditingBatchQuantity;
 import org.msh.tb.bd.entities.QuarterlyReportDetailsBD;
@@ -61,6 +62,18 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	public void initialize(){
 		quarterStockPositionReport.getTbunitselection().setTbunit(userSession.getTbunit());
 		quarterStockPositionReport.setSource(null);
+		
+		if(userSession.getTbunit().getLimitDateMedicineMovement() != null){
+			GregorianCalendar date = new GregorianCalendar();
+			date.setTime(userSession.getTbunit().getLimitDateMedicineMovement());
+			
+			Quarter lastOpenedQuarter = Quarter.getQuarterByMonth(date.get(GregorianCalendar.MONTH));
+			Integer lastOpenedYear = date.get(GregorianCalendar.YEAR);
+			
+			quarterStockPositionReport.setQuarter(lastOpenedQuarter);
+			quarterStockPositionReport.setYear(lastOpenedYear);
+		}
+		
 		quarterStockPositionReport.initialize();
 	}
 	
@@ -168,11 +181,10 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		
 		tbunitHome.setInstance(userSession.getTbunit());
 		tbunitHome.getInstance().setLimitDateMedicineMovement(date.getTime());
-		tbunitHome.persist();
 		
 		facesMessages.clear();
 		facesMessages.addFromResourceBundle("default.entity_updated");
-		return "success";
+		return "success-close";
 	}
 	
 	/**
@@ -412,7 +424,10 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	/**
 	 * Returns true if the quarter and year selected is editable.
 	 */
-	public boolean isEditableQuarter(){
+	public boolean canEdit(){
+		if(!Identity.instance().hasRole("QUARTERLY_EDIT"))
+			return false;
+			
 		if(userSession.getTbunit().getLimitDateMedicineMovement() == null)
 			return true;
 		
