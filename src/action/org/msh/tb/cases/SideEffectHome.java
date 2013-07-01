@@ -9,15 +9,21 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.tb.EntityHomeEx;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.misc.FieldsQuery;
 
 
+/**
+ * Manage the adverse reactions of a case, with the possibility to read an existing
+ * adverse reaction record, including a new one, editing an existing one or deleting one
+ *  
+ * @author Ricardo Memoria
+ *
+ */
 @Name("sideEffectHome")
-public class SideEffectHome extends EntityHomeEx<CaseSideEffect>{
+public class SideEffectHome extends WsEntityHome<CaseSideEffect>{
 	private static final long serialVersionUID = 4590228131339634325L;
 
 	@In(required=true) CaseHome caseHome;
@@ -25,16 +31,21 @@ public class SideEffectHome extends EntityHomeEx<CaseSideEffect>{
 	@In(create=true) FacesMessages facesMessages;
 	private List<CaseSideEffect> results;
 
-	public void setResults(List<CaseSideEffect> results) {
-		this.results = results;
-	}
 	
+	/**
+	 * Return the list of adverse reactions of a case
+	 * @return List of objects of {@link CaseSideEffect} type 
+	 */
 	public List<CaseSideEffect> getResults(){
 		if (results == null)
 			results = createResults();
 		return results;
 	}
 
+	/**
+	 * Factory method to return an instance of {@link CaseSideEffect}
+	 * @return instance of {@link CaseSideEffect} class
+	 */
 	@Factory("caseSideEffect")
 	public CaseSideEffect getCaseSideEffect() {
 		return getInstance();
@@ -97,18 +108,7 @@ public class SideEffectHome extends EntityHomeEx<CaseSideEffect>{
 		return lst;
 	}
 	
-	public List<SelectItem> getYears(){
-		List<SelectItem> lst = new ArrayList<SelectItem>();
-		String[] strYears = {"1","2","3","4","5","6","7","8","9","10",">10"};
-		for (int i = 0; i< strYears.length; i++) {
-			SelectItem item = new SelectItem();
-			item.setLabel(strYears[i]);
-			item.setValue(strYears[i]);
-			lst.add(item);
-		}
-		return lst;
-	}
-	
+
 	public String getResultsHQL() {
 		String hql = "from CaseSideEffect c where c.tbcase.id = #{tbcase.id}";
 
@@ -125,7 +125,11 @@ public class SideEffectHome extends EntityHomeEx<CaseSideEffect>{
 			.createQuery(getResultsHQL())
 			.getResultList();
 	}
-	
+
+
+	/** {@inheritDoc}
+	 */
+	@Override
 	public String remove(){
 		String s = super.remove();
 		results = createResults();

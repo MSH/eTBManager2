@@ -58,17 +58,18 @@
 		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
 		    	<h:inputTextarea value="#{caseSideEffect.comment}" style="width:500px;height:80px;" />
 		    </s:decorate>
-		    
-		<div class="form-footer">
-			<a:commandLink action="#{sideEffectHome.save}" styleClass="button" reRender="main">
-				<span>#{messages['form.save']}</span>
-			</a:commandLink> 
-		    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
-		       	<f:param name="id" value="#{caseHome.id}"/>
-		       	<span>#{messages['form.cancel']}</span>
-		    </s:link>
-		</div>
 	</div>		
+		    
+	<div class="form-footer">
+		<a:commandLink action="#{sideEffectHome.save}" styleClass="button" reRender="main">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink> 
+
+	    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+	       	<f:param name="id" value="#{caseHome.id}"/>
+	       	<span>#{messages['form.cancel']}</span>
+	    </s:link>
+	</div>
 </h:form>
 </s:decorate>
 </ui:define>

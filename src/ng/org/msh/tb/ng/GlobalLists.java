@@ -1,5 +1,10 @@
 package org.msh.tb.ng;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.model.SelectItem;
+
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
@@ -172,4 +177,20 @@ public class GlobalLists {
 		return sampleType;
 	}
 
+	/**
+	 * Return the list of years for the duration of the comorbidity
+	 * @return list of {@link SelectItem} objects
+	 */
+	public List<SelectItem> getYears(){
+		List<SelectItem> lst = new ArrayList<SelectItem>();
+		String[] strYears = {"1","2","3","4","5","6","7","8","9","10",">10"};
+		for (int i = 0; i< strYears.length; i++) {
+			SelectItem item = new SelectItem();
+			item.setLabel(strYears[i]);
+			item.setValue(strYears[i]);
+			lst.add(item);
+		}
+		return lst;
+	}
+	
 }
