@@ -56,16 +56,4 @@
 		<nature>org.jboss.tools.jst.web.kb.kbnature</nature>
 		<nature>com.google.gwt.eclipse.core.gwtNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>lib-classes</name>
-			<type>2</type>
-			<location>C:/rmemoria/Projetos/java/eclipse2/etbmanager/WebContent/WEB-INF/classes</location>
-		</link>
-		<link>
-			<name>lib-generic</name>
-			<type>2</type>
-			<location>C:/rmemoria/Projetos/java/eclipse2/etbmanager/generic</location>
-		</link>
-	</linkedResources>
 </projectDescription>
