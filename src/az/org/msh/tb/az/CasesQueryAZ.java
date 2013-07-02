@@ -82,13 +82,25 @@ public class CasesQueryAZ extends CasesQuery{
 		"c.diagnosisType = #{caseFilters.diagnosisType}",
 		"c.validationState = #{caseFilters.validationState}",
 		"year(p.birthDate) = #{caseFilters.birthYear}",
-	"exists(select t.id from c.tags t where t.id = #{caseFilters.tagid})"};
+		"c.ownerUnit.id = #{caseFilters.unitId}",
+		"exists(select t.id from c.tags t where t.id = #{caseFilters.tagid})"};
 	
 	@Override
 	public List<String> getStringRestrictions() {
 		return Arrays.asList(restrictions);
 	}
 	
+	/*@Override
+	protected Query createQuery() {
+		String hql = getEjbql();
+		CaseFiltersAZ cfaz = (CaseFiltersAZ)App.getComponent("caseFiltersAZ");
+		String cn =  cfaz.getCaseNumbers();
+		if (cn !=null)
+			hql+=" and "+cn;
+		
+		Query q = App.getEntityManager().createQuery(hql);
+		return q;
+	}*/
 	
 	public String getAdminUnitLike(AdministrativeUnit adm) {
 		UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
@@ -200,18 +212,41 @@ public class CasesQueryAZ extends CasesQuery{
 			}
 		}
 		hql = builder.toString();
+		CaseFiltersAZ cfaz = (CaseFiltersAZ)App.getComponent("caseFiltersAZ");
+		String cn =  cfaz.getCaseNumbers();
+		if (cn !=null)
+			hql+=" and "+cn;
+		
       javax.persistence.Query query = getEntityManager().createQuery( hql );
       return query;
 	}*/
 	
+	/*@Override
+	protected Query createCountQuery() {
+      parseEjbql();
+
+      evaluateAllParameters();
+
+      joinTransaction();
+	  
+      String hql = getCountEjbqlWithRestrictions();
+      CaseFiltersAZ cfaz = (CaseFiltersAZ)App.getComponent("caseFiltersAZ");
+		String cn =  cfaz.getCaseNumbers();
+		if (cn !=null)
+			hql+=" and "+cn;
+		
+      javax.persistence.Query query = getEntityManager().createQuery( hql );
+      return query;
+	}
+	*/
 	/**
 	 * Generate HQL conditions for filters that cannot be included in the restrictions clause
 	 * @return
 	 */
 	@Override
 	protected String dynamicConditions() {
-		if (hqlCondition != null)
-			return hqlCondition;
+		/*if (hqlCondition != null)
+			return hqlCondition;*/
 
 		hqlCondition = "";
 
@@ -248,9 +283,12 @@ public class CasesQueryAZ extends CasesQuery{
 							addCondition(notifRegCondAZ);
 							break;
 						case TREATMENT_UNIT:
-							if((caseFilters.getStateIndex()==null && caseFilters.getSearchCriteria().equals(SearchCriteria.CASE_TAG))
-									|| caseFilters.getStateIndex()!= CaseFilters.TRANSFER_OUT)
-									addCondition(treatRegCondAZ);
+							addCondition(treatRegCondAZ);
+							/*if(caseFilters.getStateIndex()==null && caseFilters.getSearchCriteria().equals(SearchCriteria.CASE_TAG))
+								addCondition(treatRegCondAZ);
+							if (caseFilters.getStateIndex()!=null)
+								if (caseFilters.getStateIndex()!= CaseFilters.TRANSFER_OUT)
+									addCondition(treatRegCondAZ);*/
 							break;
 						case BOTH:{
 							addCondition("(" + treatRegCondAZ + " or " + notifRegCondAZ);
@@ -272,33 +310,15 @@ public class CasesQueryAZ extends CasesQuery{
 
 		return hqlCondition;
 	}
+
 	
 	@Override
 	protected void mountAdvancedSearchConditions() {
 		CaseFiltersAZ cf = (CaseFiltersAZ) App.getComponent("caseFiltersAZ");
-		if (!"".equals(cf.getCaseNums()) && cf.getCaseNums() != null){
-			String hql = "p.recordNumber in (";
-			String[] nums = cf.getCaseNums().split(",");
-			for (String num:nums){
-				if (num.contains("-")){
-					String [] range = num.split("-");
-					try{
-						int beg = Integer.parseInt(range[0].trim());
-						int end = Integer.parseInt(range[range.length-1].trim());
-						for (int i = beg; i <= end; i++) {
-							hql += i+",";
-						}
-					} catch (Exception e){
-						
-					}
-				}
-				else{
-					hql += Integer.parseInt(num.trim())+",";
-				}
-			}
-			hql = hql.substring(0, hql.length()-1)+")";
-			addCondition(hql);
-		}
+		String s = cf.getCaseNumbers();
+		if (s!=null)
+			addCondition(s);
+		
 		super.mountAdvancedSearchConditions();
 	}
 	
