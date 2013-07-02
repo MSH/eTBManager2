@@ -182,9 +182,12 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 						addCondition(notifRegCond);
 						break;
 					case TREATMENT_UNIT:
-						if((caseFilters.getStateIndex()==null && caseFilters.getSearchCriteria().equals(SearchCriteria.CASE_TAG))
-							|| caseFilters.getStateIndex()!= CaseFilters.TRANSFER_OUT)
+						//AM: Split condition because of null pointer exception can arise in some cases
+						if(caseFilters.getStateIndex()==null && caseFilters.getSearchCriteria().equals(SearchCriteria.CASE_TAG))
 							addCondition(treatRegCond);
+						if (caseFilters.getStateIndex()!=null)
+							if (caseFilters.getStateIndex()!= CaseFilters.TRANSFER_OUT)
+								addCondition(treatRegCond);
 						break;
 					case BOTH:
 						addCondition("(" + treatRegCond + " or " + notifRegCond + ")");
