@@ -176,7 +176,8 @@ public class CustomIndicatorAZ extends OutputSelectionIndicator2D {
 		if (output == OutputSelectionAZ.YEAR_WEEK){
 			for (Object[] vals: lst) {
 				//concatenate month and year and shift other fields
-				String w = ((Integer)vals[index+1]<10?"0":"")+vals[index+1];
+				Integer week = (Integer)vals[index+1]+1;
+				String w = (week<10?"0":"")+week;
 				Object[] n = new Object[vals.length-1];
 				n[index] = vals[index]+" \""+w+"\"";
 				

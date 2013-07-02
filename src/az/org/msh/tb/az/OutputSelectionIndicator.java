@@ -170,7 +170,8 @@ public abstract class OutputSelectionIndicator extends Indicator {
 			//String[] values = symbols.getShortMonths();
 			for (Object[] vals: lst) {
 				Object[] n = new Object[vals.length-1];
-				String w = ((Integer)vals[1]<10?"0":"")+vals[1];
+				Integer week = (Integer)vals[1]+1;
+				String w = (week<10?"0":"")+week;
 				n[0] = vals[0]+ " \""+w+"\"";
 				cutLastElement(0, lst, vals, n);
 			}
