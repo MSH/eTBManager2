@@ -25,7 +25,7 @@
 
 <ui:define name="content" id="content">
 	<h1>#{title}</h1>
-	<h:form id="main">
+	<h:form id="main" prependId="false">
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Source']}:</ui:define>
@@ -36,18 +36,20 @@
     </s:decorate>
 
 	<s:decorate template="/layout/edit.xhtml">
+		<ui:param name="redasterisk" value="true" />
     	<ui:define name="label">#{messages['Quarter']}:</ui:define>
 		<h:selectOneMenu value="#{quarterStockPositionReport.quarter}">
-  			<s:selectItems value="#{quarter}" var="r" label="#{messages[r.key]}" noSelectionLabel="-" />
+  			<s:selectItems value="#{quarter}" var="r" label="#{messages[r.key]}" />
   			<s:convertEnum />
 		</h:selectOneMenu>
 		/
-		<h:selectOneMenu value="#{quarterStockPositionReport.year}">
-  			<s:selectItems value="#{quarterStockPositionReport.years}" var="r" label="#{r}" noSelectionLabel="-" />
+		<h:selectOneMenu value="#{quarterStockPositionReport.year}" id="year">
+  			<s:selectItems value="#{quarterStockPositionReport.years}" var="r" label="#{r}" />
 		</h:selectOneMenu>
 	</s:decorate>
 	
-	<s:decorate template="/layout/tbselection2.xhtml">
+	<s:decorate template="/layout/tbselection2.xhtml" id="tbseldiv">
+		<ui:param name="redastfirst" value="true" />
 		<ui:param name="unitlabel" value="#{messages['MedicalExamination.RefToUnit']}" />
 	   	<ui:param name="tbunitselection" value="#{quarterStockPositionReport.tbunitselection}" />
 	</s:decorate>
@@ -55,8 +57,6 @@
    	<a:commandLink styleClass="button-alt" action="#{quarterStockPositionReport.refresh}" style="float:right;" onclick="if (!disableButton(this)) return false;" reRender="main">
    		<span>#{messages['form.update']}</span>
    	</a:commandLink>
-
-	<h:outputText styleClass="error" value="#{messages['quarter.fillinfilters']}" rendered="#{!quarterStockPositionReport.isFiltersFilledIn()}"/>
 
 	<h:dataTable value="#{quarterStockPositionReport.rows}" var="row" rendered="#{quarterStockPositionReport.isFiltersFilledIn()}" styleClass="table1" width="100%" 
 		rowClasses="lin1,lin2" >

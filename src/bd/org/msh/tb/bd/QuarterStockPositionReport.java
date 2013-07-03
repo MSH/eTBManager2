@@ -11,6 +11,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.MedicinesQuery;
 import org.msh.tb.bd.entities.enums.Quarter;
 import org.msh.tb.entities.Medicine;
@@ -31,6 +32,7 @@ public class QuarterStockPositionReport {
 
 	@In(create=true) MedicinesQuery medicines;
 	@In(required=true) EntityManager entityManager;
+	@In(required=true) FacesMessages facesMessages;
 	
 	private TBUnitSelection2 tbunitselection;
 	private Quarter quarter;
@@ -48,7 +50,6 @@ public class QuarterStockPositionReport {
 	public void initialize(){
 		loadYears();
 		loadMedicineList(medicines.getResultList());
-		updateValues();
 	}
 	
 	/**
@@ -56,6 +57,10 @@ public class QuarterStockPositionReport {
 	 */
 	public void refresh(){
 		updateValues();
+
+		if(getLocationWhereClause() == null)
+			facesMessages.addToControlFromResourceBundle("cbselau1", "javax.faces.component.UIInput.REQUIRED");
+		
 	}
 	
 	/**
@@ -123,7 +128,7 @@ public class QuarterStockPositionReport {
 								
 								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
 									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (4) and mov.adjustmentType.id = :workspaceExpiredAdjust " +
-									" and mov.medicine.id = m.id " + getSourceClause() + ") as expired, " +
+									" and mov.medicine.id = m.id and (mov.quantity * mov.oper) < 0 " + getSourceClause() + ") as expired, " +
 								
 								"(select sum(mov.outOfStock) from QuarterlyReportDetailsBD mov " + getLocationWhereClause() + 
 									" and mov.quarter = :quarter and mov.year = :year and mov.medicine.id = m.id) " +
@@ -189,6 +194,9 @@ public class QuarterStockPositionReport {
 	 * Returns where clause depending on the tbunitselection filter
 	 */
 	public String getLocationWhereClause(){
+		if(tbunitselection == null)
+			return null;
+		
 		if(tbunitselection.getTbunit()!=null){
 			return "where mov.tbunit.id = " + tbunitselection.getTbunit().getId() + " and mov.tbunit.workspace.id = " + UserSession.getWorkspace().getId();
 		}else if(tbunitselection.getAuselection().getSelectedUnit()!=null){

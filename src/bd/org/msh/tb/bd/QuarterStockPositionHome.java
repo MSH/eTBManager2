@@ -49,6 +49,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	@In(create=true) MovementHome movementHome;
 	@In(create=true) DispensingHome dispensingHome;
 	@In(create=true) TbUnitHome tbunitHome;
+	private boolean initialized;
 	
 	private QSPEditingMedicine editingMedicine;
 	private Integer medicineId;
@@ -62,7 +63,17 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	public void initialize(){
 		quarterStockPositionReport.getTbunitselection().setTbunit(userSession.getTbunit());
 		quarterStockPositionReport.setSource(null);
-		
+		quarterStockPositionReport.initialize();
+		updateQuarterAsTbunit();
+		quarterStockPositionReport.refresh();
+		this.initialized = true;
+	}
+	
+	/**
+	 * Updates the selected quarter according to the last opened quarter of the
+	 * selected tbunit
+	 */
+	public void updateQuarterAsTbunit(){
 		if(userSession.getTbunit().getLimitDateMedicineMovement() != null){
 			GregorianCalendar date = new GregorianCalendar();
 			date.setTime(userSession.getTbunit().getLimitDateMedicineMovement());
@@ -73,12 +84,15 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 			quarterStockPositionReport.setQuarter(lastOpenedQuarter);
 			quarterStockPositionReport.setYear(lastOpenedYear);
 		}
-		
-		quarterStockPositionReport.initialize();
 	}
 	
+	/**
+	 * Loads the QuarterlyReportDetailsBD according to the selected parameters (quarter, year, unit and medicine).
+	 */
 	public void initializeEditing(){
-		checkMainParameters();
+		if(!checkMainParameters())
+			return;
+		
 		QuarterlyReportDetailsBD details;
 		try{
 			details = (QuarterlyReportDetailsBD) getEntityManager().createQuery("from QuarterlyReportDetailsBD q " +
@@ -97,6 +111,9 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		loadMedicineinformation();
 	}
 	
+	/**
+	 * QuarterlyReportDetailsBD
+	 */
 	public void loadMedicineinformation(){
 		if(!checkMainParameters())
 			return;
@@ -139,12 +156,12 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 			return "error";
 		}
 		
-		if(!saveConsumption()){
+		if(!saveExpired()){
 			//facesMessages.addMessage
 			return "error";
 		}
-		
-		if(!saveExpired()){
+
+		if(!saveConsumption()){
 			//facesMessages.addMessage
 			return "error";
 		}
@@ -153,6 +170,8 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 			//facesMessages.addMessage
 			return "error";
 		}		
+		
+		quarterStockPositionReport.refresh();
 		
 		facesMessages.clear();
 		facesMessages.addFromResourceBundle("default.entity_updated");
@@ -464,11 +483,22 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	public Integer getMedicineId() {
 		return medicineId;
 	}
-
 	/**
 	 * @param medicineId the medicineId to set
 	 */
 	public void setMedicineId(Integer medicineId) {
 		this.medicineId = medicineId;
-	}	
+	}
+	/**
+	 * @return the initialized
+	 */
+	public boolean isInitialized() {
+		return initialized;
+	}
+	/**
+	 * @param initialized the initialized to set
+	 */
+	public void setInitialized(boolean initialized) {
+		this.initialized = initialized;
+	}
 }

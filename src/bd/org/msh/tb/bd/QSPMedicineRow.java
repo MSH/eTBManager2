@@ -18,12 +18,27 @@ public class QSPMedicineRow {
 	private Long expired;
 	private Long outOfStockDays;
 	
+	/**
+	 * Calculates the closingBalance according to the values of the others parameters.
+	 * @return
+	 */
 	public Long getClosingBalance(){
 		return getOpeningBalance() + getReceivedFromCS()+ getPositiveAdjust() - getNegativeAdjust() - getDispensed() - getExpired();
 	}
 	
+	/**
+	 * Creates an instance of QSPMedicineRow setting the medicine
+	 * @param medicine
+	 */
 	public QSPMedicineRow(Medicine medicine){
 		this.medicine = medicine;
+	}
+	
+	public boolean isEditableRow(){
+		if((getOpeningBalance() + getReceivedFromCS() + getPositiveAdjust()) <= 0)
+			return false;
+		
+		return true;
 	}
 	
 	/**

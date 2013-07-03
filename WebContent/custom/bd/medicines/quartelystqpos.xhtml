@@ -25,21 +25,20 @@
 	<ui:define name="content_unit" id="content">
 	<h:form id="main">
 
-	<s:decorate template="/layout/edit.xhtml">
+	<s:decorate template="/layout/edit.xhtml" id="quarterdiv">
+	<ui:param name="redasterisk" value="true" />
     	<ui:define name="label">#{messages['Quarter']}:</ui:define>
 		<h:selectOneMenu id="quarter" value="#{quarterStockPositionReport.quarter}">
-  			<s:selectItems value="#{quarter}" var="r" label="#{messages[r.key]}" noSelectionLabel="-" />
+  			<s:selectItems value="#{quarter}" var="r" label="#{messages[r.key]}" />
   			<s:convertEnum />
   			<a:support event="onchange" reRender="main" process="year,quarter" action="#{quarterStockPositionReport.refresh}" />
 		</h:selectOneMenu>
 		/
 		<h:selectOneMenu id="year" value="#{quarterStockPositionReport.year}">
-  			<s:selectItems value="#{quarterStockPositionReport.years}" var="r" label="#{r}" noSelectionLabel="-" />
+  			<s:selectItems value="#{quarterStockPositionReport.years}" var="r" label="#{r}" />
   			<a:support event="onchange" reRender="main" process="year,quarter" action="#{quarterStockPositionReport.refresh}" />
-		</h:selectOneMenu>
+		</h:selectOneMenu> 
 	</s:decorate>
-
-	<h:outputText styleClass="error" value="#{messages['quarter.fillinfilters']}" rendered="#{!quarterStockPositionReport.isFiltersFilledIn()}"/>
 
 	<h:dataTable value="#{quarterStockPositionReport.rows}" var="row" rendered="#{quarterStockPositionReport.isFiltersFilledIn()}" styleClass="table1" width="100%" 
 		rowClasses="lin1,lin2" >
@@ -91,7 +90,7 @@
 	
 	<h:column rendered="#{quarterStockPositionHome.canEdit()}">
 		<f:facet name="header">#{messages['form.edit']}</f:facet>
-		<s:link value="#{messages['form.edit']}" view="/custom/bd/medicines/quartelystqposedt.xhtml" styleClass="noprint">
+		<s:link value="#{messages['form.edit']}" view="/custom/bd/medicines/quartelystqposedt.xhtml" styleClass="noprint" rendered="#{row.isEditableRow()}">
 			<f:param name="selMed" value="#{row.medicine.id}"/>
 		</s:link>
 	</h:column>
@@ -99,7 +98,7 @@
 	</h:dataTable>
 	
 	<br/>
-	<h:commandLink styleClass="button" onclick="if (confirm('#{messages['quarter.closequarter']}?')) closeQuarter();return false;"
+	<h:commandLink styleClass="button" onclick="if (confirm('#{messages['quarter.closequarter.msg']}')) closeQuarter();return false;"
 		rendered="#{quarterStockPositionReport.isFiltersFilledIn() and quarterStockPositionHome.canEdit()}" >
 		<span>#{messages['quarter.closequarter']}</span>
 	</h:commandLink>

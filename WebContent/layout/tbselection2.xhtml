@@ -9,6 +9,7 @@
 
 <s:decorate id="sel" template="/layout/edit.xhtml">
 	<ui:define name="label">#{tbunitselection.auselection.labelLevel1}:</ui:define>
+	<ui:param name="redasterisk" value="#{required or redastfirst}" />
 	<h:selectOneMenu id="cbselau1" value="#{tbunitselection.auselection.unitLevel1}" required="#{required}" rendered="#{not tbunitselection.auselection.level1ReadOnly}">
 		<s:selectItems var="it" value="#{tbunitselection.auselection.optionsLevel1}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
