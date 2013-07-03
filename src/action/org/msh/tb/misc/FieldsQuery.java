@@ -1,5 +1,6 @@
 package org.msh.tb.misc;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.enums.TbField;
+import org.msh.tb.login.UserSession;
 
 /**
  * Class for handle lists of field values for a drop down menu in a TB form
@@ -287,6 +289,22 @@ public class FieldsQuery {
 	public List<FieldValue> getAdjustmentType() {
 		field = TbField.ADJUSTMENT;
 		return getValues();
+	}
+	
+	public List<FieldValue> getPosAdjustmentType() {
+		field = TbField.ADJUSTMENT;
+		if(UserSession.getWorkspace().getExpiredMedicineAdjustmentType() == null)
+			return getValues();
+		
+		ArrayList<FieldValue> lst = (ArrayList<FieldValue>) getValues();
+		ArrayList<FieldValue> ret = new ArrayList<FieldValue>();
+		
+		for(FieldValue field : lst){
+			if(field.getId() != UserSession.getWorkspace().getExpiredMedicineAdjustmentType().getId())
+				ret.add(field);
+		}
+		
+		return ret;
 	}
 	
 	public List<FieldValue> getSuspectTypes() {

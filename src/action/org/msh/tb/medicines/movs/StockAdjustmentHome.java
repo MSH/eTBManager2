@@ -165,6 +165,17 @@ public class StockAdjustmentHome extends Controller {
 			}
 		}
 		
+		//Validates if the user is doing an expired adjustment with a positive difference
+		if(UserSession.getWorkspace().getExpiredMedicineAdjustmentType() != null){
+			for (Batch b: batches.keySet()) {
+				Integer qtd = batches.get(b);
+				if(qtd!=null && qtd > 0){
+					facesMessages.addToControlFromResourceBundle("adjInfofldoptions", "meds.movs.expiredposdjust");
+					return "error-expiredposdjust";
+				}
+			}
+		}
+		
 		if(batches.size() == 0){
 			facesMessages.addFromResourceBundle("Batch.cantAdjustBatch");
 			actionExecuted = true;
