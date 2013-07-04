@@ -47,6 +47,15 @@ public class MedicineCalculator {
 	}
 	
 	/**
+	 * Calculate container price for batch
+	 * @param b
+	 * @return container price
+	 */
+	public static double calculateContPrice(Batch b){
+		return calculateContPrice(b.getQuantityContainer(), b.getUnitPrice());
+	}
+	
+	/**
 	 * Calculate total price by batch
 	 * @param qRec - quantity units, which received in batch 
 	 * @param qCont - quantity units in container

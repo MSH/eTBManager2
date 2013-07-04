@@ -421,21 +421,7 @@ public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 		this.totalPrice = totalPrice;
 	}
 	
-	public double calculateTotalPrice(List<Batch> lst) {
-		return MedicineCalculator.calculateTotalPrice(lst);
-	}
-	
-	public int calculateNumContainers(int qCont, int qRec) {
-		return MedicineCalculator.calculateNumContainers(qCont, qRec);
-	}
-	
-	public double calculateContPrice(int qCont, double uPrice) {
-		return MedicineCalculator.calculateContPrice(qCont, uPrice);
-	}
-	
-	public double calculateTotalPrice(int qRec, int qCont, double uPrice) {
-		return MedicineCalculator.calculateTotalPrice(qRec, qCont, uPrice);
-	}
+
 	
 	public void setId(Object id) {
 		if ((id != null) && (getId() != null) && (getId().equals(id)))
