@@ -110,7 +110,7 @@
 				<h:outputText value="#{b.batch.registCardEndDate}" converter="localeDateConverter" />
 			</td>
 			<td align="right">
-				<h:outputText value="#{b.batch.numContainers} (№#{b.batch.quantityContainer})" >
+				<h:outputText value="#{medCalcCont.calculateNumContainers(b.batch.quantityContainer,b.quantity)} (№#{b.batch.quantityContainer})" >
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 			</td>

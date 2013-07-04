@@ -115,7 +115,7 @@
 							<h:outputText value="#{b.expiryDate}" converter="localeDateConverter" />
 						</td>
 						<td class="colrb">
-							<h:outputText value="#{medicineReceivingUAHome.calculateNumContainers(b.quantityContainer,b.quantityReceived)}" >
+							<h:outputText value="#{medCalcCont.calculateNumContainers(b.quantityContainer,b.quantityReceived)}" >
 								<f:convertNumber pattern="#,###,##0"/>
 							</h:outputText>
 							<h:outputText value="(№#{b.quantityContainer})" style="margin-left:5px;">
@@ -124,7 +124,7 @@
 						</td>
 						
 						<td class="colrb">
-							<h:outputText value="#{medicineReceivingUAHome.calculateContPrice(b.quantityContainer,b.unitPrice)}">
+							<h:outputText value="#{medCalcCont.calculateContPrice(b.quantityContainer,b.unitPrice)}">
 								<f:convertNumber pattern="#,###,##0.000" />
 							</h:outputText></td>
 						<td class="colrb">

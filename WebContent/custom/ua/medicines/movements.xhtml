@@ -251,7 +251,7 @@
 			</h:outputText>
 		</td>
 		<td class="colrb">
-			<h:outputText value="#{m.item.batchMovement.batch.numContainers}" >
+			<h:outputText value="#{medCalcCont.calculateNumContainers(m.item.batchMovement.batch.quantityContainer,m.item.batchMovement.qtdOperation)}" >
 				<f:convertNumber pattern="#,###,##0"/>
 			</h:outputText>
 			<h:outputText value="(№#{m.item.batchMovement.batch.quantityContainer})" style="margin-left:5px;">
