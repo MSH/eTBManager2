@@ -11,5 +11,9 @@
 		<redirect view-id="/custom/bd/medicines/quartelystqpos.xhtml">
 		</redirect>
 	</rule>
+	<rule if-outcome="error">
+		<redirect view-id="/custom/bd/medicines/quartelystqposedt.xhtml">
+		</redirect>
+	</rule>
 </navigation>
 </page>

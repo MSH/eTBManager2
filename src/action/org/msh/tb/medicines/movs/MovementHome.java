@@ -306,7 +306,7 @@ public class MovementHome {
 
 		// checks if the unit has a date limit to create movements
 		if(!unit.canCreateMovement(date))
-			throw new MovementException("Error creating movement. Can't create a movement on or before the selected date: " + date);
+			throw new MovementException("Error creating movement. Can't create a movement before the selected date.");
 	
 		// create batches
 		if ((batches == null) || (batches.size() == 0)) 

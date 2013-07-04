@@ -14,6 +14,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
+import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.bd.QSPEditingMedicine.QSPEditingBatchQuantity;
@@ -25,12 +26,10 @@ import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.Source;
-import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.dispensing.DispensingHome;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.tbunits.TbUnitHome;
-import org.msh.tb.transactionlog.TransactionLogService;
 
 /**
  * Manage all actions needed to edit a medicine row in Quarterly Stock position From Upazilla
@@ -49,7 +48,10 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	@In(create=true) MovementHome movementHome;
 	@In(create=true) DispensingHome dispensingHome;
 	@In(create=true) TbUnitHome tbunitHome;
+	Map<String, String> messages = Messages.instance();
 	private boolean initialized;
+	private HashMap<Batch, String> batchErrorMessages;
+	private ArrayList<String> errorMessages;
 	
 	private QSPEditingMedicine editingMedicine;
 	private Integer medicineId;
@@ -112,7 +114,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	}
 	
 	/**
-	 * QuarterlyReportDetailsBD
+	 * Load the batches and the quantities that will be available for editing for the user.
 	 */
 	public void loadMedicineinformation(){
 		if(!checkMainParameters())
@@ -145,39 +147,6 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		return true;
 	}
 	
-	public String save(){
-		if(!savePositiveAdjustment()){
-			//facesMessages.addMessage
-			return "error";
-		}
-		
-		if(!saveNegativeAdjustment()){
-			//facesMessages.addMessage
-			return "error";
-		}
-		
-		if(!saveExpired()){
-			//facesMessages.addMessage
-			return "error";
-		}
-
-		if(!saveConsumption()){
-			//facesMessages.addMessage
-			return "error";
-		}
-		
-		if(!saveOutOfStockDays()){
-			//facesMessages.addMessage
-			return "error";
-		}		
-		
-		quarterStockPositionReport.refresh();
-		
-		facesMessages.clear();
-		facesMessages.addFromResourceBundle("default.entity_updated");
-		return "success";
-	}
-	
 	/**
 	 * Closes the selected quarter
 	 * @return
@@ -206,32 +175,99 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		return "success-close";
 	}
 	
-	/**
-	 * Save in the transaction log table the adjustments made in the stock position 
-	 * @param roleAction
-	 * @param batches
-	 */
-	private void saveLog(RoleAction roleAction, Map<Batch, Integer> batches) {
-		TransactionLogService logSrv = new TransactionLogService();
-		for (Batch batch: batches.keySet()) {
-			Integer qtd = batches.get(batch);
-			logSrv.addTableRow("Medicine", batch.getMedicine().toString());
-			logSrv.addTableRow("Batch", batch.getBatchNumber());
-			logSrv.addTableRow("Movement.quantity", qtd);
+	public String save(){
+		movementHome.initMovementRecording();
+		
+		if(!deletePreviousMovements()){
+			addValidErrorToClient(null);
+			return "error";
 		}
-		logSrv.save("STOCKPOS", roleAction, null, null, null, null);
+		
+		if(!savePositiveAdjustment()){
+			addValidErrorToClient(messages.get("quarter.posadjust"));
+			return "error";
+		}
+		
+		if(!saveNegativeAdjustment()){
+			addValidErrorToClient(messages.get("quarter.negadjust"));
+			return "error";
+		}
+		
+		if(!saveExpired()){
+			addValidErrorToClient(messages.get("quarter.expired"));
+			return "error";
+		}
+
+		movementHome.savePreparedMovements();
+		
+		if(!saveConsumption()){
+			addValidErrorToClient(messages.get("manag.forecast.tabres2"));
+			return "error";
+		}
+		
+		if(!saveOutOfStockDays()){
+			addValidErrorToClient(null);
+			return "error";
+		}		
+		
+		quarterStockPositionReport.refresh();
+		
+		facesMessages.clear();
+		facesMessages.addFromResourceBundle("default.entity_updated");
+		return "success";
+	}
+
+	/**
+	 * Adds a message to be after added to facesMessages
+	 */
+	private void addValidError(Batch errorBatch, String errorMessage){
+		if(batchErrorMessages == null)
+			batchErrorMessages = new HashMap<Batch, String>();
+		
+		if(errorMessages == null)
+			errorMessages = new ArrayList<String>();
+		
+		if(movementHome.getErrorBatch() != null)
+			batchErrorMessages.put(errorBatch, errorMessage);
+		else
+			errorMessages.add(errorMessage);
 	}
 	
 	/**
-	 * Save positive adjustment movements
+	 * Adds to facesMessages the existing errorMessages 
 	 */
-	public boolean savePositiveAdjustment(){
+	private void addValidErrorToClient(String typeOfmovement){
+		facesMessages.clear();
+		facesMessages.addFromResourceBundle("validator.assertFalse");
+		
+		if(errorMessages != null){
+			for(String message : errorMessages){
+				String s = typeOfmovement + " - " + message;
+				facesMessages.add(s);
+			}
+		}
+		
+		if(batchErrorMessages != null){
+			for(Batch b : batchErrorMessages.keySet()){
+				String s = typeOfmovement + " - " + b.getBatchNumber() + ": " + batchErrorMessages.get(b);
+				facesMessages.add(s);
+			}
+		}
+		
+		errorMessages = null;
+		batchErrorMessages = null;
+	}
+	
+	/**
+	 * Prepare all movements that will be deleted before creating the new ones.
+	 */
+	public boolean deletePreviousMovements(){
 		if(!checkMainParameters())
 			return false;
 		
-		//delete all positive adjustment in the quarter period
+		//delete all positive, negative, expired adjustments and consumptions in the quarter period
 		List<Movement> movs = getEntityManager().createQuery("from Movement mov where mov.tbunit.id = :unitId and mov.date >= :iniDate and mov.date <= :endDate " +
-												"and mov.type in (4) and (mov.quantity * mov.oper > 0) and mov.medicine.id = :medicineId ")
+												"and mov.type in (4,3) and mov.medicine.id = :medicineId ")
 												.setParameter("unitId", userSession.getTbunit().getId())
 												.setParameter("iniDate", iniQuarterDate)
 												.setParameter("endDate", endQuarterDate)
@@ -241,9 +277,19 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		for(Movement m : movs){
 			movementHome.prepareMovementsToRemove(m);
 		}
-		movementHome.savePreparedMovements();
 		
-		//create adjustment movement
+		return true;
+	}
+	
+	/**
+	 * Save positive adjustment movements
+	 */
+	public boolean savePositiveAdjustment(){
+		boolean allOk = true;
+		
+		if(!checkMainParameters())
+			return false;
+		
 		for(QSPEditingBatchQuantity b : editingMedicine.getBatchList()){
 			  
 			if(b.getPosAdjust() > 0){
@@ -251,11 +297,13 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 					HashMap<Batch, Integer> batches = new HashMap<Batch, Integer>();
 					
 					batches.put(b.getBatchQtd().getBatch(), b.getPosAdjust());
-					movementHome.initMovementRecording();
-					movementHome.prepareNewAdjustment(endQuarterDate, userSession.getTbunit(), b.getBatchQtd().getSource(), 
+					Movement m = movementHome.prepareNewAdjustment(endQuarterDate, userSession.getTbunit(), b.getBatchQtd().getSource(), 
 															medicine, batches, null);
-					movementHome.savePreparedMovements();
-					saveLog(RoleAction.EDIT, batches);
+					if(m == null){
+						allOk = false;
+						addValidError(movementHome.getErrorBatch(), movementHome.getErrorMessage());
+					}
+					
 				}catch(Exception e){
 					e.printStackTrace();
 					facesMessages.addFromResourceBundle(e.getMessage());
@@ -263,29 +311,17 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 				}
 			}
 		}
-		return true;
+		return allOk;
 	}
 	
 	/**
 	 * Save negative adjustment movements
 	 */
 	public boolean saveNegativeAdjustment(){
+		boolean allOk = true;
+		
 		if(!checkMainParameters())
 			return false;
-		
-		//delete all negative adjustment in the quarter period
-		List<Movement> movs = getEntityManager().createQuery("from Movement mov where mov.tbunit.id = :unitId and mov.date >= :iniDate and mov.date <= :endDate " +
-												"and mov.type in (4) and (mov.quantity * mov.oper < 0) and mov.medicine.id = :medicineId ")
-												.setParameter("unitId", userSession.getTbunit().getId())
-												.setParameter("iniDate", iniQuarterDate)
-												.setParameter("endDate", endQuarterDate)
-												.setParameter("medicineId", medicine.getId())
-												.getResultList();
-		
-		for(Movement m : movs){
-			movementHome.prepareMovementsToRemove(m);
-		}
-		movementHome.savePreparedMovements();
 		
 		//create adjustment movement
 		for(QSPEditingBatchQuantity b : editingMedicine.getBatchList()){
@@ -295,12 +331,13 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 					HashMap<Batch, Integer> batches = new HashMap<Batch, Integer>();
 					
 					batches.put(b.getBatchQtd().getBatch(), (b.getNegAdjust()>0 ? b.getNegAdjust()*-1 : b.getNegAdjust()));
-					movementHome.initMovementRecording();
-					movementHome.prepareNewAdjustment(endQuarterDate, userSession.getTbunit(), b.getBatchQtd().getSource(), 
-															medicine, batches, null);
-					movementHome.savePreparedMovements();
-					saveLog(RoleAction.EDIT, batches);
 					
+					Movement m = movementHome.prepareNewAdjustment(endQuarterDate, userSession.getTbunit(), b.getBatchQtd().getSource(), 
+																		medicine, batches, null);
+					if(m == null){
+						allOk = false;
+						addValidError(movementHome.getErrorBatch(), movementHome.getErrorMessage());
+					}
 				}catch(Exception e){
 					e.printStackTrace();
 					facesMessages.addFromResourceBundle(e.getMessage());
@@ -308,7 +345,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 				}
 			}
 		}
-		return true;
+		return allOk;
 	}
 	
 	/**
@@ -318,28 +355,24 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		if(!checkMainParameters())
 			return false;
 		
-		//delete all positive adjustment in the quarter period
-		List<Movement> movs = getEntityManager().createQuery("from Movement mov where mov.tbunit.id = :unitId and mov.date >= :iniDate and mov.date <= :endDate " +
-												"and mov.type in (3) and mov.medicine.id = :medicineId ")
-												.setParameter("unitId", userSession.getTbunit().getId())
-												.setParameter("iniDate", iniQuarterDate)
-												.setParameter("endDate", endQuarterDate)
-												.setParameter("medicineId", medicine.getId())
-												.getResultList();
-		
-		for(Movement m : movs){
-			movementHome.prepareMovementsToRemove(m);
-		}
-		movementHome.savePreparedMovements();
-		
-		if(editingMedicine.getConsumption() > 0){
-			
-		}
-		
 		Long totalConsumption = editingMedicine.getConsumption().longValue();
 		
 		if(totalConsumption > 0){
-			//Check if the available quantity to each batch in stock to apply FEFO rule.
+			//validates if the available quantity is enough
+			Long availableQtd = (Long) getEntityManager().createQuery("select sum(m.quantity * m.oper) from Movement m " +
+																	"where m.tbunit.id = :unitId and m.medicine.id = :medicineId " +
+																	"and m.date <= :endQuarterDate ")
+																	.setParameter("unitId", userSession.getTbunit().getId())
+																	.setParameter("medicineId", medicine.getId())
+																	.setParameter("endQuarterDate", endQuarterDate)
+																	.getSingleResult();
+			
+			if(availableQtd < totalConsumption){
+				addValidError(null, messages.get("meds.movs.invalidqtd"));
+				return false;
+			}
+			
+			//Check available quantity to each batch in stock to apply FEFO rule.
 			List<Object[]> lst = getEntityManager().createQuery("select m.source, b, sum(bm.quantity * m.oper) from BatchMovement bm join bm.movement m join bm.batch b " +
 																		"where m.tbunit.id = :unitId and m.medicine.id = :medicineId " +
 																		"and m.date <= :endQuarterDate " +
@@ -384,25 +417,11 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	 * Save expired movements
 	 */
 	public boolean saveExpired(){
+		boolean allOk = true;
+		
 		if(!checkMainParameters())
 			return false;
 		
-		//delete all expired adjustment in the quarter period
-		List<Movement> movs = getEntityManager().createQuery("from Movement mov where mov.tbunit.id = :unitId and mov.date >= :iniDate and mov.date <= :endDate " +
-												"and mov.type in (4) and mov.adjustmentType.id = :workspaceExpiredAdjust and mov.medicine.id = :medicineId ")
-												.setParameter("unitId", userSession.getTbunit().getId())
-												.setParameter("iniDate", iniQuarterDate)
-												.setParameter("endDate", endQuarterDate)
-												.setParameter("medicineId", medicine.getId())
-												.setParameter("workspaceExpiredAdjust", UserSession.getWorkspace().getExpiredMedicineAdjustmentType().getId())
-												.getResultList();
-		
-		for(Movement m : movs){
-			movementHome.prepareMovementsToRemove(m);
-		}
-		movementHome.savePreparedMovements();
-		
-		//create adjustment movement
 		for(QSPEditingBatchQuantity b : editingMedicine.getBatchList()){
 			  
 			if(b.getExpired() > 0){
@@ -412,11 +431,14 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 					expiredFieldValue.setValue(UserSession.getWorkspace().getExpiredMedicineAdjustmentType());
 					
 					batches.put(b.getBatchQtd().getBatch(), (b.getExpired()>0 ? b.getExpired()*-1 : b.getExpired()));
-					movementHome.initMovementRecording();
-					movementHome.prepareNewAdjustment(endQuarterDate, userSession.getTbunit(), b.getBatchQtd().getSource(), 
-															medicine, batches, expiredFieldValue);
-					movementHome.savePreparedMovements();
-					saveLog(RoleAction.EDIT, batches);
+				
+					Movement m = movementHome.prepareNewAdjustment(endQuarterDate, userSession.getTbunit(), b.getBatchQtd().getSource(), 
+							medicine, batches, expiredFieldValue);
+					
+					if(m == null){
+						allOk = false;
+						addValidError(movementHome.getErrorBatch(), movementHome.getErrorMessage());
+					}
 					
 				}catch(Exception e){
 					e.printStackTrace();
@@ -425,7 +447,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 				}
 			}
 		}
-		return true;
+		return allOk;
 	}
 	
 	public boolean saveOutOfStockDays(){
