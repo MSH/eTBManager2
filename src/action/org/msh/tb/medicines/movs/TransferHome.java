@@ -57,7 +57,28 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 			}
 			return res;
 		}
-		
+		/**
+		 * Create duplicate of object SourceItem (copy with other link in memory)
+		 * */
+		public SourceItem copyBatches() {
+			SourceItem res = new SourceItem();
+			res.setSource(this.getSource());
+			res.setItems(new ArrayList<TransferItem>());
+			for (TransferItem ti: this.getItems()){
+				TransferItem resti = new TransferItem();
+				resti.setMedicine(ti.getMedicine());
+				resti.setBatches(new ArrayList<TransferBatch>());
+				for(TransferBatch tb: ti.getBatches()){
+					TransferBatch restb = new TransferBatch();
+					restb.setId(tb.getId());
+					restb.setQuantity(tb.getQuantity());
+					restb.setBatch(tb.getBatch());
+					resti.getBatches().add(restb);
+				}
+				res.getItems().add(resti);
+			}
+			return res;
+		}
 	};
 
 	private List<SourceItem> sources;
@@ -370,7 +391,7 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 	}
 	
 
-	private Map<Batch, Integer> getBatchesMap(TransferItem it, boolean shippedQtd) {
+	public Map<Batch, Integer> getBatchesMap(TransferItem it, boolean shippedQtd) {
 		Map<Batch, Integer> sels = new HashMap<Batch, Integer>();
 		for (TransferBatch b: it.getBatches()) {
 			if (shippedQtd)
@@ -456,6 +477,16 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 	public TBUnitSelection getTbunitSelection() {
 		return tbunitSelection;
 	}
+	
+	public TBUnitSelection getUnitToSelection() {
+		if (tbunitSelection.getTbunit() == null){
+			Transfer transfer = getInstance();
+			tbunitSelection.getAuselection().setSelectedUnit(transfer.getUnitTo().getAdminUnit());
+			tbunitSelection.setTbunit(transfer.getUnitTo());
+		}
+		return tbunitSelection;
+	}
+	
 	/**
 	 * Return total price by all medicines in movements by all sources
 	 * */
@@ -465,5 +496,19 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 			res += si.getTotalBySource();
 		}
 		return res;
+	}
+
+	/**
+	 * @return the transferItem
+	 */
+	public TransferItem getTransferItem() {
+		return transferItem;
+	}
+
+	/**
+	 * @param transferItem the transferItem to set
+	 */
+	public void setTransferItem(TransferItem transferItem) {
+		this.transferItem = transferItem;
 	}
 }
