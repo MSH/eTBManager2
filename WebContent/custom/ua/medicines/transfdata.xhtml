@@ -16,7 +16,8 @@
 
 <ui:define name="naveg">
 	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
-	<s:link view="/medicines/transfer.xhtml" value="#{transfer.status == 'WAITING_RECEIVING'? messages['meds.transfer.viewopen']: messages['meds.transfer.viewhistory']}" propagation="none"/>
+	<s:link view="/medicines/transfer.xhtml" value="#{messages['meds.transfer.viewopen']}" propagation="none" rendered="#{transfer.status == 'WAITING_RECEIVING' or transfer.status == 'CANCELLED'}"/>
+	<s:link view="/medicines/transferhistory.xhtml" value="#{messages['meds.transfer.viewhistory']}" propagation="none" rendered="#{!(transfer.status == 'WAITING_RECEIVING' or transfer.status == 'CANCELLED')}"/>
 	<div class="item selected">
 		<s:link view="/medicines/transfdata.xhtml" value="##{transfer.id}" propagation="none"/>
 	</div>
@@ -25,6 +26,10 @@
 
 <ui:define name="left">
 	<h:form class="vertical-menu">
+	<s:link view="/custom/ua/medicines/transfedt.xhtml" rendered="#{transferHome.canCancel and transfer.status!='DONE'}" >
+		<f:param name="id" value="#{transfer.id}" />
+		<div class="edit-icon" style="float:left"/>#{messages['form.edit']}
+	</s:link>
 	
 	<s:link view="/medicines/transfrec.xhtml" value="#{messages['meds.transfer.receive']}" rendered="#{(transferHome.canReceive)}">
 		<f:param name="id" value="#{transfer.id}" />

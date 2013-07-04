@@ -21,8 +21,13 @@
 
 	<div class="form-content">
 	<h2>#{messages['meds.movs.destunit']}</h2>
-	<s:decorate template="/layout/tbselection.xhtml" >
+	<s:decorate template="/layout/tbselection.xhtml" rendered="#{id == null}">
 		<ui:param name="tbunitselection" value="#{transferHome.tbunitSelection}" />
+		<ui:param name="required" value="true" />
+	</s:decorate>
+	
+	<s:decorate template="/layout/tbselection.xhtml" rendered="#{id != null}">
+		<ui:param name="tbunitselection" value="#{transferHome.unitToSelection}" />
 		<ui:param name="required" value="true" />
 	</s:decorate>
 
@@ -140,7 +145,11 @@
 
 	<div class="form-footer">
         <a:commandLink action="#{transferHome.saveNewTransfer}" styleClass="button" reRender="main,messages"
-        	onclick="if (!disableButton(this)) return false;" >
+        	onclick="if (!disableButton(this)) return false;" rendered="#{id==null}">
+        	<span>#{messages['form.ok']}</span>
+        </a:commandLink>
+        <a:commandLink action="#{transferUAHome.saveEditTransfer}" styleClass="button" reRender="main,messages"
+        	onclick="if (!disableButton(this)) return false;"  rendered="#{id!=null}">
         	<span>#{messages['form.ok']}</span>
         </a:commandLink>
 		<s:link view="/medicines/transfer.xhtml" styleClass="button-alt" propagation="end" >
@@ -163,7 +172,12 @@
 </s:decorate>
 
 <s:decorate template="/custom/ua/layout/batchselection.xhtml" >
-	<a:commandLink action="#{transferHome.selectBatches}" 
+	<a:commandLink action="#{transferHome.selectBatches}" rendered="#{id==null}"
+		onclick="if (!disableButton(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
+		oncomplete="enableButton();hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
+	<a:commandLink action="#{transferUAHome.selectExistBatches}" rendered="#{id!=null}"
 		onclick="if (!disableButton(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
 		oncomplete="enableButton();hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button">
 		<span>#{messages['form.ok']}</span>
