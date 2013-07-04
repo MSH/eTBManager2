@@ -96,11 +96,11 @@ function changeNumCont(elem,quantCont){
 	
 	<div id="battblsel" style="overflow: auto; width: 860px; height: 270px;border: 1px gray solid; padding:0px; margin: 0px">	
 	<h:dataTable value="#{batchSelection.items}" var="it" width="100%" styleClass="table1" columnClasses="colc,coll,colc,colr,colr,colr">
-		<h:column>
+		<h:column> 
 			<f:facet name="header">
-				<h:selectBooleanCheckbox id="todos" onclick="checkClick(this);"/>				
+				<h:selectBooleanCheckbox id="todos" onclick="if (#{id == null}) checkClick(this); else return false;"/>				
 			</f:facet>
-			<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" rendered="#{not it.item.batch.expired}"/>
+			<h:selectBooleanCheckbox value="#{it.selected}" onclick="if (#{id == null}) updateRows(); else return false;" rendered="#{not it.item.batch.expired}"/>
 		</h:column>
 		
 		<h:column>
@@ -135,7 +135,7 @@ function changeNumCont(elem,quantCont){
 			<f:facet name="header">
 				<h:outputText value="#{messages['Batch.numContainers']}" styleClass="colrh"/>
 			</f:facet>
-			<h:outputText value="#{it.item.numContainers}">
+			<h:outputText value="#{medCalcCont.calculateNumContainers(it.item.batch.quantityContainer,it.item.batchQuantity.quantity)}">
 				<f:convertNumber pattern="#,###,###,##0" />
 			</h:outputText>
 			<br/>
