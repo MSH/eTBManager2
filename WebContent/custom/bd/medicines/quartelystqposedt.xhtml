@@ -64,8 +64,9 @@
 		<a:repeat value="#{quarterStockPositionHome.editingMedicine.batchList}" var="x">
 			<tr>
 				<td><b>
-					<h:outputText value="#{x.batchQtd.batch.expiryDate}" rendered="#{not empty x.batchQtd.batch.expiryDate}"/> <br/>
-					<h:outputText style="font-size:10px" value="#{x.batchQtd.batch.batchNumber} #{x.batchQtd.batch.manufacturer}" rendered="#{(not empty x.batchQtd.batch.batchNumber) or (not empty x.batchQtd.batch.manufacturer)}"/> 
+					<h:outputText value="#{x.batch.expiryDate}" rendered="#{not empty x.batch.expiryDate}"/> <br/>
+					<h:outputText style="font-size:10px" value="#{x.batch.batchNumber} #{x.batch.manufacturer}" rendered="#{(not empty x.batch.batchNumber) or (not empty x.batch.manufacturer)}"/> <br/> 
+					<h:outputText style="font-size:10px" value="#{x.source.abbrevName.name1}" rendered="#{not empty x.source}"/> 
 				</b></td>
 				
 				<td>
@@ -105,6 +106,9 @@
 	
 	</h:form>
 	<script type="text/javascript">
+	updatePosAdjustTotal();
+	updateNegAdjustTotal();
+	updateExpiredTotal();
 	<!--
 	function updatePosAdjustTotal(){
 		var num = 0;

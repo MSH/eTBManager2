@@ -17,11 +17,10 @@ import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.EntityHomeEx;
-import org.msh.tb.bd.QSPEditingMedicine.QSPEditingBatchQuantity;
+import org.msh.tb.bd.QSPEditingMedicine.QSPEditingBatchDetails;
 import org.msh.tb.bd.entities.QuarterlyReportDetailsBD;
 import org.msh.tb.bd.entities.enums.Quarter;
 import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Movement;
@@ -123,14 +122,63 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		//Creates editingMedicine using the Medicine that comes from the page
 		editingMedicine = new QSPEditingMedicine(medicine);
 		
-		//Load batch quantity for each Source in List
-		List<BatchQuantity> lst = getEntityManager().createQuery("from BatchQuantity bq where bq.batch.medicine.id = :medicineId and bq.tbunit.id = :unitId")
-										.setParameter("unitId", userSession.getTbunit().getId())
-										.setParameter("medicineId", editingMedicine.getMedicine().getId())
-										.getResultList();
-
-		for(BatchQuantity bq : lst){
-			editingMedicine.getBatchList().add(editingMedicine.createQSPEditingBatch(bq));
+		//Loads the quantity for each type of movement - batch
+		String queryString = "select b, s, " +
+		
+								"(select sum (bm2.quantity * m2.oper) " +
+									"from BatchMovement bm2 join bm2.movement m2 left join m2.adjustmentType " +
+									"where bm2.batch.id = b.id and m2.source.id = s.id and m2.tbunit.id = :unitId and m2.date >= :iniDate and m2.date <= :endDate " +
+									"and m2.type = 4 and (bm2.quantity * m2.oper) > 0 and (m2.adjustmentType.id <> :workspaceExpiredAdjust or m2.adjustmentType is null))," +
+								
+								"(select sum (bm2.quantity * m2.oper) " +
+									"from BatchMovement bm2 join bm2.movement m2 left join m2.adjustmentType " +
+									"where bm2.batch.id = b.id and m2.source.id = s.id and m2.tbunit.id = :unitId and m2.date >= :iniDate and m2.date <= :endDate " +
+									"and m2.type = 4 and (bm2.quantity * m2.oper) < 0 and (m2.adjustmentType.id <> :workspaceExpiredAdjust or m2.adjustmentType is null))," +
+								
+								"(select sum (bm2.quantity * m2.oper) " +
+									"from BatchMovement bm2 join bm2.movement m2 left join m2.adjustmentType " +
+									"where bm2.batch.id = b.id and m2.source.id = s.id and m2.tbunit.id = :unitId and m2.date >= :iniDate and m2.date <= :endDate " +
+									"and m2.type = 4 and (bm2.quantity * m2.oper) < 0 and (m2.adjustmentType.id = :workspaceExpiredAdjust))" +	
+								
+								"from BatchMovement bm join bm.batch b join bm.movement m join m.source s " +
+								"where m.tbunit.id = :unitId and m.medicine.id = :medicineId and ((m.date < :iniDate) or (m.date = :iniDate and m.type = 7)) " +
+								"group by b.id, s.id " +
+								"having sum(bm.quantity * m.oper) > 0";
+		
+		List<Object[]> result = getEntityManager().createQuery(queryString)
+									.setParameter("medicineId", medicine.getId())
+									.setParameter("unitId", userSession.getTbunit().getId())
+									.setParameter("iniDate", iniQuarterDate)
+									.setParameter("endDate", endQuarterDate)
+									.setParameter("workspaceExpiredAdjust", UserSession.getWorkspace().getExpiredMedicineAdjustmentType().getId())
+									.getResultList();
+		
+		for(Object[] o : result){
+			QSPEditingBatchDetails item = editingMedicine.createQSPEditingBatch((Batch)o[0], (Source)o[1]);
+			item.setPosAdjust( (o[2] == null ? null : ((Long)o[2]).intValue()) );
+			item.setNegAdjust( (o[3] == null ? null : (((Long)o[3]).intValue())*-1) );
+			item.setExpired( (o[4] == null ? null : (((Long)o[4]).intValue())*-1) );
+			
+			editingMedicine.getBatchList().add(item);
+		}
+		
+		//Loads the out of stock in days for the selected medicine
+		if(getInstance() != null)
+			editingMedicine.setOutOfStock(getInstance().getOutOfStock());
+		
+		//Loads the total consumption for the medicine in question
+		try{
+			Long qtd = (Long) getEntityManager().createQuery("select sum (mov.quantity * mov.oper) from Movement mov where mov.tbunit.id = :unitId and mov.date >= :iniDate and mov.date <= :endDate " +
+																	"and mov.type in (3) and mov.medicine.id = :medicineId ")
+																	.setParameter("unitId", userSession.getTbunit().getId())
+																	.setParameter("iniDate", iniQuarterDate)
+																	.setParameter("endDate", endQuarterDate)
+																	.setParameter("medicineId", medicine.getId())
+																	.getSingleResult();
+			
+			editingMedicine.setConsumption(qtd == null ? 0 : (qtd.intValue()*-1));
+		}catch(NoResultException e){
+			editingMedicine.setConsumption(0);
 		}
 	}
 	
@@ -290,14 +338,14 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		if(!checkMainParameters())
 			return false;
 		
-		for(QSPEditingBatchQuantity b : editingMedicine.getBatchList()){
+		for(QSPEditingBatchDetails b : editingMedicine.getBatchList()){
 			  
 			if(b.getPosAdjust() > 0){
 				try{
 					HashMap<Batch, Integer> batches = new HashMap<Batch, Integer>();
 					
-					batches.put(b.getBatchQtd().getBatch(), b.getPosAdjust());
-					Movement m = movementHome.prepareNewAdjustment(endQuarterDate, userSession.getTbunit(), b.getBatchQtd().getSource(), 
+					batches.put(b.getBatch(), b.getPosAdjust());
+					Movement m = movementHome.prepareNewAdjustment(endQuarterDate, userSession.getTbunit(), b.getSource(), 
 															medicine, batches, null);
 					if(m == null){
 						allOk = false;
@@ -324,15 +372,15 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 			return false;
 		
 		//create adjustment movement
-		for(QSPEditingBatchQuantity b : editingMedicine.getBatchList()){
+		for(QSPEditingBatchDetails b : editingMedicine.getBatchList()){
 			  
 			if(b.getNegAdjust() > 0){
 				try{
 					HashMap<Batch, Integer> batches = new HashMap<Batch, Integer>();
 					
-					batches.put(b.getBatchQtd().getBatch(), (b.getNegAdjust()>0 ? b.getNegAdjust()*-1 : b.getNegAdjust()));
+					batches.put(b.getBatch(), (b.getNegAdjust()>0 ? b.getNegAdjust()*-1 : b.getNegAdjust()));
 					
-					Movement m = movementHome.prepareNewAdjustment(endQuarterDate, userSession.getTbunit(), b.getBatchQtd().getSource(), 
+					Movement m = movementHome.prepareNewAdjustment(endQuarterDate, userSession.getTbunit(), b.getSource(), 
 																		medicine, batches, null);
 					if(m == null){
 						allOk = false;
@@ -422,7 +470,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		if(!checkMainParameters())
 			return false;
 		
-		for(QSPEditingBatchQuantity b : editingMedicine.getBatchList()){
+		for(QSPEditingBatchDetails b : editingMedicine.getBatchList()){
 			  
 			if(b.getExpired() > 0){
 				try{
@@ -430,9 +478,9 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 					FieldValueComponent expiredFieldValue = new FieldValueComponent();
 					expiredFieldValue.setValue(UserSession.getWorkspace().getExpiredMedicineAdjustmentType());
 					
-					batches.put(b.getBatchQtd().getBatch(), (b.getExpired()>0 ? b.getExpired()*-1 : b.getExpired()));
+					batches.put(b.getBatch(), (b.getExpired()>0 ? b.getExpired()*-1 : b.getExpired()));
 				
-					Movement m = movementHome.prepareNewAdjustment(endQuarterDate, userSession.getTbunit(), b.getBatchQtd().getSource(), 
+					Movement m = movementHome.prepareNewAdjustment(endQuarterDate, userSession.getTbunit(), b.getSource(), 
 							medicine, batches, expiredFieldValue);
 					
 					if(m == null){
