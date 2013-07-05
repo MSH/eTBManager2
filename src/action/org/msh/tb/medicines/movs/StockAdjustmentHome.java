@@ -19,6 +19,7 @@ import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
@@ -166,7 +167,8 @@ public class StockAdjustmentHome extends Controller {
 		}
 		
 		//Validates if the user is doing an expired adjustment with a positive difference
-		if(UserSession.getWorkspace().getExpiredMedicineAdjustmentType() != null){
+		if(UserSession.getWorkspace().getExpiredMedicineAdjustmentType() != null && 
+				UserSession.getWorkspace().getExpiredMedicineAdjustmentType().getId() == adjustmentInfo.getValue().getId()){
 			for (Batch b: batches.keySet()) {
 				Integer qtd = batches.get(b);
 				if(qtd!=null && qtd > 0){
@@ -185,7 +187,14 @@ public class StockAdjustmentHome extends Controller {
 		try{
 			movementHome.initMovementRecording();
 
-			movementHome.prepareNewAdjustment(DateUtils.getDate(), userSession.getTbunit(), source, item.getStockPosition().getMedicine(), batches, adjustmentInfo);
+			Movement m = movementHome.prepareNewAdjustment(DateUtils.getDate(), userSession.getTbunit(), source, item.getStockPosition().getMedicine(), batches, adjustmentInfo);
+			
+			if(m == null){
+				facesMessages.clear();
+				facesMessages.addToControlFromResourceBundle("adjInfofldoptions", movementHome.getErrorMessage());
+				facesMessages.addFromResourceBundle(movementHome.getErrorMessage());
+				return "error";
+			}
 			
 			movementHome.savePreparedMovements();
 			

@@ -217,7 +217,11 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		
 		tbunitHome.setInstance(userSession.getTbunit());
 		tbunitHome.getInstance().setLimitDateMedicineMovement(date.getTime());
+		String s = tbunitHome.persist();
 		
+		if(!s.equalsIgnoreCase("persisted"))
+			return "error";
+			
 		facesMessages.clear();
 		facesMessages.addFromResourceBundle("default.entity_updated");
 		return "success-close";

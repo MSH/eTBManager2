@@ -25,6 +25,7 @@ import org.msh.tb.entities.Source;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.MovementType;
+import org.msh.tb.login.UserSession;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.LocaleDateConverter;
 
@@ -306,7 +307,7 @@ public class MovementHome {
 
 		// checks if the unit has a date limit to create movements
 		if(!unit.canCreateMovement(date))
-			throw new MovementException("Error creating movement. Can't create a movement before the selected date.");
+			throw new MovementException("Error creating movement. Can't create a movement using the selected date. The allowed period if after " + unit.getLimitDateMedicineMovement() + ".");
 	
 		// create batches
 		if ((batches == null) || (batches.size() == 0)) 
