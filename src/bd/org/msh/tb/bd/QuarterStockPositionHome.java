@@ -94,7 +94,9 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		if(!checkMainParameters())
 			return;
 		
-		QuarterlyReportDetailsBD details;
+		this.clearInstance();
+		
+		QuarterlyReportDetailsBD details = null;
 		try{
 			details = (QuarterlyReportDetailsBD) getEntityManager().createQuery("from QuarterlyReportDetailsBD q " +
 																					"where q.quarter = :quarter and q.tbunit.id = :unitId " +
@@ -106,7 +108,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 																					.getSingleResult();
 			setInstance(details);
 		}catch(NoResultException e){
-			setInstance(null);
+			this.clearInstance();
 		}
 		
 		loadMedicineinformation();
@@ -165,6 +167,8 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		//Loads the out of stock in days for the selected medicine
 		if(getInstance() != null)
 			editingMedicine.setOutOfStock(getInstance().getOutOfStock());
+		else
+			editingMedicine.setOutOfStock(0);
 		
 		//Loads the total consumption for the medicine in question
 		try{
