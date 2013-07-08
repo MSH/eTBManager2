@@ -31,7 +31,7 @@ import org.msh.utils.date.DateUtils;
 
 
 /**
- * Define the filters for case searching
+ * Define the filters for case searching in the main page of the case management module
  * @author Ricardo Memoria
  *
  */
@@ -670,48 +670,86 @@ public class CaseFilters {
 	 * Return the patient record number entered in the field recordNumber in the format nnnnn-nn
 	 * @return
 	 */
-	public Integer getPatientRecordNumber() {
+/*	public Integer getPatientRecordNumber() {
 		if (isRecordNumberEmpty())
 			return null;
 		
-//		if (defaultWorkspace == null)
-//			defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace");
 		
 		if (DisplayCaseNumber.REGISTRATION_CODE.equals(getDefaultWorkspace().getDisplayCaseNumber()))
 			return null;
 
 		return getNumberFromString(recordNumber, 0);
 	}
-
+*/
 
 	/**
 	 * If patient search number is by its registration code, then return the record number given by the user
 	 * @return
 	 */
-	public String getRegistrationCode() {
-//		if (defaultWorkspace == null)
-//			defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace");
-
+/*	public String getRegistrationCode() {
 		if (DisplayCaseNumber.REGISTRATION_CODE.equals(getDefaultWorkspace().getDisplayCaseNumber()))
 			 return recordNumber;
 		else return (getNumberFromString(recordNumber, 0) != null? null: recordNumber);
 	}
-
+*/
 
 	/**
 	 * Return the case number being the number after the character '-' entered in the field record number 
 	 * in the format NNNN-NN
 	 * @return
 	 */
-	public Integer getCaseNumber() {
-		if ((isRecordNumberEmpty()) || (DisplayCaseNumber.REGISTRATION_CODE.equals(getDefaultWorkspace().getDisplayCaseNumber())))
+/*	public Integer getCaseDigitNumber() {
+		if (isRecordNumberEmpty())
 			return null;
 
 		return getNumberFromString(recordNumber, 1);
 	}
+*/
+	
+	/**
+	 * Return the value to be used to search for suspect record numbers
+	 * @return record number given by the user, or null if the suspect case number is system generated
+	 */
+	public String getSuspectRecordNumber() {
+		if (getDefaultWorkspace().getSuspectCaseNumber() == DisplayCaseNumber.CASE_ID)
+			return null;
+		else return (recordNumber != null? recordNumber: patient);
+	}
+	
+	/**
+	 * Return the value to be used to search for suspect record numbers
+	 * @return record number given by the user, or null if the suspect case number is system generated
+	 */
+	public String getCondifmedRecordNumber() {
+		if (getDefaultWorkspace().getConfirmedCaseNumber() == DisplayCaseNumber.CASE_ID)
+			return null;
+		else return (recordNumber != null? recordNumber: patient);
+	}
 
+	
+	/**
+	 * Return the system ID number to be used to search for a case by its ID
+	 * @return ID of the case in Integer type, or null if the case number is supposed to be typed by the user
+	 */
+	public Integer getCaseSystemIdNumber() {
+		String s = recordNumber != null? recordNumber: patient;
+		if (s == null)
+			return null;
+	
+		// is the case number typed by the user ?
+		Workspace ws = getDefaultWorkspace();
+		if ((ws.getConfirmedCaseNumber() == DisplayCaseNumber.USER_DEFINED) || (ws.getSuspectCaseNumber() == DisplayCaseNumber.USER_DEFINED))
+			return null;
 
-	protected Integer getNumberFromString(String val, int index) {
+		// parse the string to a number. If it's not a number returns null
+		try {
+			return Integer.parseInt(s);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+/*	protected Integer getNumberFromString(String val, int index) {
 		if (val == null)
 			return null;
 		
@@ -725,7 +763,7 @@ public class CaseFilters {
 		}
 		else return null;		
 	}
-
+*/
 
 	/**
 	 * Return the list of classifications available in the workspace

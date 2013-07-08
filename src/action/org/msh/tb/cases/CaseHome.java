@@ -24,9 +24,11 @@ import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.CaseValidationOption;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.entities.enums.ValidationState;
+import org.msh.tb.login.UserSession;
 import org.msh.tb.transactionlog.LogInfo;
 
 
@@ -119,7 +121,7 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		return treatmentHealthUnits;
 	}
 
-	
+
 	/**
 	 * Return the health unit where patient is being transferred to
 	 * @return
@@ -181,7 +183,27 @@ public class CaseHome extends WsEntityHome<TbCase>{
 
 		return true;
 	}
-	
+
+
+	/**
+	 * Check if validation is enabled for the given case
+	 * @return true if validation is enabled, otherwise return false
+	 */
+	public boolean isValidationEnabled() {
+		Workspace ws = getWorkspace();
+		TbCase tbcase = getInstance();
+
+		switch (tbcase.getClassification()) {
+		case TB:
+			return ws.getCaseValidationTB() != CaseValidationOption.DISABLED;
+		case DRTB:
+			return ws.getCaseValidationDRTB() != CaseValidationOption.DISABLED;
+		case NTM:
+			return ws.getCaseValidationNTM() != CaseValidationOption.DISABLED;
+		default:
+			return false;
+		}
+	}
 
 	/**
 	 * Check if the case can be validated
@@ -285,9 +307,34 @@ public class CaseHome extends WsEntityHome<TbCase>{
 			return (getTbCase().isOpen()) && checkRoleBySuffix("CASE_DATA_EDT") && (isWorkingUnit());
 	}
 	
+	
+	/**
+	 * Check if it is required that the case be validated before starting treatment
+	 * @return true if validation is required before starting treatment
+	 */
+	public boolean isValidationRequiredBeforeTreatment() {
+		Workspace ws = getWorkspace();
+		return ws.getCaseValidationOption(getInstance().getClassification()) == CaseValidationOption.REQUIRED_BEFORE_TREATMENT_START;
+	}
+	
+	/**
+	 * Return true if the user can start the treatment
+	 * @return boolean value
+	 */
 	public boolean isCanStartTreatment() {
 		CaseState st = getInstance().getState();
-		return getTbCase().isOpen() && (isManaged()) && (st != null) && (st.ordinal() < CaseState.ONTREATMENT.ordinal()) && (isCanEditTreatment());
+		if (getTbCase().isOpen() && (isManaged()) && (st != null) && (st.ordinal() < CaseState.ONTREATMENT.ordinal()) && (isCanEditTreatment())) {
+			// check if case can start treatment before validation
+			TbCase tbcase = getInstance();
+			if (tbcase.isValidated())
+				return true;
+
+			Workspace ws = UserSession.getWorkspace();
+
+			return ws.getCaseValidationOption(tbcase.getClassification()) != CaseValidationOption.REQUIRED_BEFORE_TREATMENT_START;
+		}
+
+		return false;
 	}
 	
 	public boolean isCanEditTreatment() {
@@ -565,4 +612,5 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		
 		return Messages.instance().get(tbcase.getState().getKey());
 	}
+
 }

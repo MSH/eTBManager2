@@ -10,7 +10,7 @@ public class ExamControl {
 	 * Returns a key related to the system messages to display the month
 	 * @param tbcase object representing the TB Case
 	 * @param dt reference date for the month display
-	 * @return
+	 * @return String value to be displayed to the user
 	 */
 	public String getMonthDisplay(TbCase tbcase, Date dt) {
 		Integer num = tbcase.getMonthTreatment(dt);
@@ -19,7 +19,7 @@ public class ExamControl {
 			return "global.monthth";  //Integer.toString(num);
 		}
 		
-		Date dtReg = tbcase.getRegistrationDate();
+		Date dtReg = tbcase.getDiagnosisDate();
 		
 		if ((dtReg == null) || (!dt.before(dtReg)))
 			return "cases.exams.zero";

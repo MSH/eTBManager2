@@ -14,7 +14,7 @@
 
 
 <ui:define name="content">
-<h1>#{title}</h1>
+<h1><i class="icon-globe" />#{title}</h1>
 	<s:link view="/admin/workspaceedt.xhtml" styleClass="button" rendered="#{s:hasRole('WORKSPACES_EDT')}">
 		<f:param name="id" value="#{null}"/>
 		<span>#{messages['form.newf']}</span>

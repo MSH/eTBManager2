@@ -25,13 +25,11 @@ import org.msh.tb.entities.MedicalExamination;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.MedAppointmentType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.entities.enums.YesNoType;
-import org.msh.tb.login.UserSession;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.date.DateUtils;
@@ -283,6 +281,11 @@ public class CaseEditingHome {
 		
 		TbCase tbcase = caseHome.getInstance();
 		
+		// is this a suspect case?
+		if (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT) {
+			tbcase.setSuspectClassification(tbcase.getClassification());
+		}
+		
 		// save the patient's data
 		patientHome.persist();
 
@@ -340,7 +343,7 @@ public class CaseEditingHome {
 
 	/**
 	 * Checks if information entered or modified is valid to be recorded
-	 * @return
+	 * @return true if successfully validated, otherwise returns false if fail
 	 */
 	public boolean validateData() {
 		TbCase tbcase = caseHome.getInstance();
@@ -362,8 +365,7 @@ public class CaseEditingHome {
 		
 		//Checks if the treatment iniDate is before the diagnosis date
 		//Workspace configuration allows it? 
-		
-		if(!allowBeforeDiagnosis()){
+		if (tbcase.getDiagnosisDate() != null) {
 			//treatment has been defined?
 			Date iniTreatmentDate = null;
 			if(tbcase.getTreatmentPeriod() != null)
@@ -436,23 +438,6 @@ public class CaseEditingHome {
 
 	public MedicalExaminationHome getMedicalExaminationHome() {
 		return medicalExaminationHome;
-	}
-	
-	/**
-	 * Does start treatment date allow before diagnosis date
-	 * AK 06/25/2012
-	 * @return
-	 */
-	private boolean allowBeforeDiagnosis() {
-		UserSession userSession = (UserSession) Component.getInstance("userSession");
-		if(userSession != null){
-			boolean isTBAllow = UserSession.getUserWorkspace().getWorkspace().isStartTBTreatBeforeValidation();
-			boolean isDRTBAllow = UserSession.getUserWorkspace().getWorkspace().isStartDRTBTreatBeforeValidation();
-			boolean isTBCase = caseHome.getInstance().getClassification().equals(CaseClassification.TB);
-			boolean isDRTBCase = caseHome.getInstance().getClassification().equals(CaseClassification.DRTB);
-			return ( isTBAllow && isTBCase) || (isDRTBAllow && isDRTBCase);
-		}
-		return false;
 	}
 
 	/**

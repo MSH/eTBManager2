@@ -275,7 +275,7 @@
 		</s:decorate>
 	</div>
 
-    <s:decorate template="/layout/editfield.xhtml" rendered="#{tbcase.classification=='NMT'}">
+    <s:decorate template="/layout/editfield.xhtml" rendered="#{tbcase.classification=='NTM'}">
     	<ui:define name="label">#{messages['pt_BR.tipo_mnt']}:</ui:define>
     	<ui:param name="required" value="true" />
     	<ui:param name="id" value="mnt" />
@@ -550,7 +550,7 @@ function genderChange(cb) {
     	<ui:param name="list" value="#{fieldsQuery.educationalDegree}" />
     </s:decorate>
     
-    <s:decorate template="/layout/editfield.xhtml" rendered="#{tbcase.classification.name()!='NMT'}">
+    <s:decorate template="/layout/editfield.xhtml" rendered="#{tbcase.classification.name()!='NTM'}">
     	<ui:define name="label">#{messages['TbField.CONTAG_PLACE']}:</ui:define>
     	<ui:param name="required" value="false" />
     	<ui:param name="id" value="contagPlace" />

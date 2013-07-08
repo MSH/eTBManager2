@@ -12,122 +12,121 @@
 <meta http-equiv="pragma" content="no-cache" />
 <meta http-equiv="cache-control" content="no-cache" />
 <meta http-equiv="expires" content="0" />
-<meta http-equiv="keywords" content="e-TB Manager,TB,Tuberculosis,DR-TB,MSH" />
+<meta http-equiv="keywords" content="e-TB Manager,TB,Tuberculosis,DRTB,MSH" />
 <meta http-equiv="description" content="eTB Manager" />
-<a:loadStyle src="/public/themes/green2/skin.css" />  
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<a:loadStyle src="/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+<a:loadStyle src="/public/font-awesome/css/font-awesome.min.css" />
+
+<style type="text/css">
+body {
+	padding-top:15px;
+	padding-bottom:20px;
+	background-color:#f0f0f0;
+}
+.form-signin {
+        max-width: 430px;
+        padding: 19px 29px 29px;
+        margin: 0 auto 20px;
+        background-color: #fff;
+        border: 1px solid #e5e5e5;
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+.copyright {
+max-width:430px;
+text-align:center;
+font-size:0.8em;
+color:#a0a0a0;
+}
+</style>
 </head>
     
 <body>
 
-<s:decorate template="/layout/wrong_browser.xhtml" rendered="#{not browserInfo.validBrowser}"/>
-<h:panelGroup id="loginpanel" rendered="#{browserInfo.validBrowser}">
-<table width="700" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-top:20px;">
-  <tr style="background-image:url('public/images/toplogin.jpg')">
-    <td height="102" colspan="3" style="vertical-align:middle;"><div style="text-align:center;font-size:16px;"><font color="#FFFFFF"><strong>#{messages['login.enter_system']}</strong></font></div>
-    </td>
-  </tr>
-  <tr>
-    <td width="229px" height="186" style="background:transparent url('public/images/toploginme.jpg') top left no-repeat"></td>
-    <td width="471px" height="186" valign="top" style="background-image:url('public/images/toploginmd.jpg')">
-	<h:form id="main">
-	<table width="471" border="0">
-      <tr>
-        <td colspan="2"><div align="left"><font color="#FFFFFF"><strong>#{messages['login.msg1']}</strong></font></div></td>
-        </tr>
-      <tr>
-        <td width="80"><div align="left">#{messages['login.user_login']}:</div>          </td>
-        <td width="262"><h:inputText id="user" value="#{credentials.username}"></h:inputText></td>
-      </tr>
-      <tr>
-        <td width="80"><div align="left">#{messages['User.password']}:</div>          </td>
-        <td><h:inputSecret id="pwd" value="#{credentials.password}"></h:inputSecret></td>
-      </tr>
-      <tr>
-        <td colspan="2">
-        	<a:commandLink id="btnOk" styleClass="button" 
-        		onclick="if (!disableButton(this)) return false;execLogin(); return false;">
-        		<span>#{messages['login.enter']}</span>
-        	</a:commandLink> 
-        	<h:selectBooleanCheckbox id="rememberMe" value="#{rememberMe.enabled}"/>#{messages['login.rememberme']}
-        </td>
+<f:view>
+<s:decorate template="/layout/wrong_browser.xhtml" rendered="#{not browserInfo.validBrowser}" />
+<s:fragment rendered="#{browserInfo.validBrowser}">
+<h:panelGroup id="loginpanel" >
+<div class="container form-signin">
+	<h:form id="formlogin" class="form-horizontal">
+	<h:graphicImage value="/public/images/logo_64x64.png" style="float:left;padding-right:10px;"/>
+	<h2 style="margin-bottom:2px;">#{messages['mdrtb_system']}</h2>
+	<small>#{messages['mdrtbsys']}</small>
+
+	<hr/>
+	<h4>#{messages['login.msg1']}</h4>
+	<s:div rendered="#{not empty facesMessages.currentMessages}" styleClass="alert alert-error">
+	<h:messages layout="list" />
+	</s:div>
+	<div class="control-group">
+	    <label class="control-label" for="inputEmail">#{messages['login.user_login']}:</label>
+    	<div class="controls">
+	       	<div class="input-prepend">
+       		<span class="add-on"><i class="icon-user" /></span>
+		    <h:inputText id="nome" value="#{credentials.username}" style="width:160px" />
+   		</div>
+    </div>
+  	</div>
+	<div class="control-group">
+    	<label class="control-label" for="inputPassword">#{messages['User.password']}:</label>
+    	<div class="controls">
+       		<div class="input-prepend">
+        		<span class="add-on"><i class="icon-key" /></span>
+      		<h:inputSecret value="#{credentials.password}" style="width:160px" />
+   			</div>
+  		</div>
+	</div>	
+	<div class="control-group">	
+    	<div class="controls">
+       		<label class="checkbox">
+       			<h:selectBooleanCheckbox id="rememberMe" value="#{rememberMe.enabled}"/>#{messages['login.rememberme']}
+       		</label>
+  		</div>
+    	<div class="controls">
+	       	<a:commandButton id="btnOk" styleClass="btn btn-primary" onclick="callLogin(); return false;" value="#{messages['login.enter']}" />
 			<rich:jQuery timming="onload" selector="#nome" query="focus()" />
-			<a:jsFunction id="login" name="execLogin" action="#{identity.login}" reRender="messages" oncomplete="enableButton()"/>
-			<rich:hotKey selector="#main input" key="return" handler="execLogin();" /> 
-        </tr>
-      <tr>
-        <td colspan="2">
-        	<h:panelGroup id="messages">
-        		<h:messages styleClass="warn" layout="table" style="background-color:#fff;margin-top:10px;"/>
-        	</h:panelGroup>
-        </td>
-      </tr>
-    </table>
+			<rich:hotKey selector="input" key="return" handler="callLogin();" />
+			<a:jsFunction name="callLogin" ajaxSingle="false" action="#{identity.login}" reRender="formlogin"/> 
+  		</div>
+  	</div>
 	</h:form>
-	</td>
-  </tr>
-  <tr>
-    <td height="66" colspan="3" >
-    	<img src="public/images/toploginb3.png" style="margin-top:4px;" />
-    </td>
-  </tr>
-  <tr>
-    <td width="229px" height="98" valign="top"> 
-    <h:form>
-      <table width="100%" border="0" cellpadding="3">
-        <tr>
-          <td><strong>International Version</strong></td>
-        </tr>
-        <tr>
-          <td>Language</td>
-        </tr>
-        <tr>
-          <td>
-            <h:selectOneMenu value="#{localeSelector.localeString}" > 
-          		<f:selectItems value="#{localeSelector.supportedLocales}" />
-          		<a:support event="onchange" action="#{localeSelector.select}" onsubmit="openWaitDlg();" oncomplete="closeWaitDlg();" reRender="loginpanel"/>
-          	</h:selectOneMenu></td>
-        </tr>
-      </table>
-    </h:form> 
-    </td>
-    <td colspan="2" valign="top"><table width="100%" border="0" cellpadding="3">
-        <tr>
-          <td><div align="right">
-          	<span style="font-size:12px"> #{messages['login.msg2']}</span>
-          	<br/>
-			<s:link view="/sendpassword.xhtml" value="#{messages['login.click_here']}" />
-          	</div>
-          </td>
-        </tr>
-        <tr>
-          <td align="right"></td>
-        </tr>
-        <tr>
-          <td align="right">
-          	<s:fragment rendered="#{etbmanagerApp.configuration.allowRegPage}">
-          	<span style="font-size:12px"> <img src="public/themes/default/images/user.gif"/> #{messages['login.newuser']}
-          	</span>
-          	<br/>
-          	<s:link view="/newuser.xhtml" value="#{messages['login.click_here']}" />
-          	</s:fragment>
-		  </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td height="20" colspan="3" valign="top" style="border-top:8px solid #e0e0e0">
-    <div align="center" style="color:#909090">
+	<hr/>
+		<h4>#{messages['login.msg2']}</h4>
+		<s:link view="/sendpassword.xhtml" value="#{messages['login.click_here']}" />
+		<h4>#{messages['login.newuser']}</h4>
+		<s:link view="/sendpassword.xhtml" value="#{messages['login.click_here']}" />
+	<hr/>
+	<h:graphicImage value="/public/images/usaid_siaps_440x67.png"/>
+	<div class="copyright">
     e-TB Manager version <s:link value=" #{etbmanagerApp.implementationVersion}" view="/about.xhtml" style="color:#909090;font-weight:normal;"/>
     <br/>
-    #{messages['login.copyright']}</div>
-    </td>
-  </tr>
-</table>
-<div id="corpo" style="text-align:center;padding-top:80px"><f:view>
-  <div style="text-align:center;margin:0 auto;width:750px;">
-   <div style="margin-top:40px;"></div>
-  </div>
+    #{messages['login.copyright']}
+    </div>
+
+	<hr/>
+	
+	<h:form styleClass="form-horizontal">
+	<div class="control-group">
+    	<label class="control-label" for="inputPassword">Language:</label>
+    	<div class="controls">
+       		<div class="input-prepend">
+            <h:selectOneMenu value="#{localeSelector.localeString}" > 
+          		<f:selectItems value="#{localeSelector.supportedLocales}" />
+          		<a:support event="onchange" action="#{localeSelector.select}" oncomplete="document.location.reload(true);"/>
+          	</h:selectOneMenu>
+   			</div>
+  		</div>
+	</div>	
+	</h:form>
+</div>
+
+
+
 
 <ui:include src="/layout/waitdlg.xhtml" />
 <a:status onstart="openWaitDlg();" onstop="closeWaitDlg();"></a:status>
@@ -151,7 +150,9 @@ function enableButton() {
 -->
 </script>
  
-</f:view></div>
-</h:panelGroup> 
+</h:panelGroup>
+</s:fragment>
+</f:view>
+
 </body>
 </html>

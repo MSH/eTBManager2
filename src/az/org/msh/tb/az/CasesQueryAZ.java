@@ -391,7 +391,7 @@ public class CasesQueryAZ extends CasesQuery{
 	 */
 	private void mountPatientNameCondition() {
 		if (caseFilters.getPatient() != null) {
-			String numberCond = generateHQLPatientNumber();
+			String numberCond = generateHQLPatientNumber(caseFilters.getPatient());
 
 			String[] names = caseFilters.getPatient().split(" ");
 			if (names.length == 0) 

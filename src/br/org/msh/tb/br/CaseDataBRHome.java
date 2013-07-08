@@ -637,7 +637,7 @@ public class CaseDataBRHome {
 			list.add(list.size()-1, PatientType.RESISTANCE_PATTERN_CHANGED);
 		}
 		
-		if(cla.equals(CaseClassification.NMT)){
+		if(cla.equals(CaseClassification.NTM)){
 			list.add(0,PatientType.NEW);
 		}
 		

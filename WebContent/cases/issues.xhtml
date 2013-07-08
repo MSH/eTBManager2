@@ -7,7 +7,7 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
                  
-<div style="width:auto;padding:4px;">
+<s:div style="width:auto;padding:4px;" rendered="#{caseHome.validationEnabled}">
 <s:decorate template="/layout/roundrect.xhtml" style="width:100%;">
 	<ui:param name="showheader" value="0" />
 	<ui:param name="showfooter" value="0" />
@@ -18,92 +18,17 @@
 	<span class="status-label"> 
 		#{messages[tbcase.validationState.key]}
 	</span>
-	<span id="lnkDetails">
-	<a:commandLink value="#{messages['form.details']}" action="#{caseValidationHome.displayIssues}" 
-		reRender="pnlIssues" style="padding-left:20px;padding-right:30px;" rendered="#{tbcase.issueCounter > 0}" 
-		oncomplete="showIssuesCommand(); return false;" />
-	</span>
-
-	<span id="lnkHideDetails" style="display:none;">
-	<a:commandLink value="#{messages['form.hidedetails']}"  
-		style="padding-left:20px;padding-right:30px;" 
-		oncomplete="hideIssuesCommand(); return false;"/>
-	</span>
-
-	<s:link value="#{messages['cases.validate']}" view="/cases/validate.xhtml" rendered="#{caseHome.canValidate}"
+	<a:commandLink value="#{messages['cases.validate']}" rendered="#{caseHome.canValidate}"
+		onclick="if (!confirm('#{messages['cases.validate.confirm']}')) {return false;}"
+		action="#{caseValidationHome.validate}"
+		reRender="main" 
 		style="padding-left:20px;padding-right:20px;">
-		<f:param name="id" value="#{caseHome.id}"/>
-	</s:link>
-
-	<s:link value="#{messages['cases.pending.notify']}" view="/cases/newissue.xhtml" 
-		rendered="#{caseHome.canCreateIssue}" style="width:200px;">
-		<f:param name="id" value="#{caseHome.id}"/>
-	</s:link>
-		
+	</a:commandLink>
 </td></tr>
 </table>
 
-<rich:jQuery timing="onJScall" name="showIssues" selector="#pnlIssues" query="show(500)" />
-<rich:jQuery timing="onJScall" name="hideIssues" selector="#pnlIssues" query="hide(500)" />
-<script type="text/javascript">
-<!--
-function showIssuesCommand() {
-	jQuery("#lnkDetails").hide();
-	jQuery("#lnkHideDetails").show();
-	showIssues();
-}
-function hideIssuesCommand() {
-	jQuery("#lnkDetails").show();
-	jQuery("#lnkHideDetails").hide();
-	hideIssues();
-}
--->
-</script>
-
-<h:panelGroup id="pnlIssues" style="display:none;">
-<s:fragment rendered="#{caseValidationHome.displayingIssues}">
-
-	<s:link view="/cases/postanswer.xhtml" 
-		rendered="#{caseHome.canAnswerIssue}" styleClass="button-alt" style="width:200px;">
-		<f:param name="id" value="#{caseHome.id}"/>
-		<span>#{messages['cases.pending.answer']}</span>
-	</s:link>
-
-<table width="100%" >
-<a:repeat value="#{caseValidationHome.issues}" var="it">
-<tr>
-	<td style="border-top:1px solid #d0d0d0;">
-		<s:div style="display:block;float:right;" rendered="#{it.tbunit!=null}">
-			<div class="#{r.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}" style="float:left;"/>
-				#{it.tbunit.name}
-				<br/>
-				<span class="right-icon"/>#{it.tbunit.adminUnit.parent.name}
-				<span class="right-icon"/>#{it.tbunit.adminUnit.name}
-		</s:div>
-		<div class="#{it.answer? 'replyissue-icon' :'postissue-icon'}" style="float:left;color:#a0a0a0">
-		<b style="font-size:12px;">#{it.user.name}</b>
-		<br/>
-		<h:outputText value="#{it.date}" >
-			<f:convertDateTime type="both"/>
-		</h:outputText>
-		</div>
-		<br/>
-	</td></tr>
-	<tr><td>
-		<div style="margin-left:30px;margin-bottom:10px;">
-		<h:outputText value="#{it.description}" escape="false" 
-			converter="rmemoria.TextConverter" 
-			style="font-size:12px;font-family:Courier;"/>
-		</div>
-	</td>
-</tr>
-</a:repeat>
-
-</table>
-</s:fragment>
-</h:panelGroup>
 </s:decorate>
 
-</div>
+</s:div>
     
 </ui:composition>

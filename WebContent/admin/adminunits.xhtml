@@ -14,7 +14,7 @@
 
 
 <ui:define name="content">
-<h1>#{title}</h1>
+<h1><i class="icon-sitemap" />#{title}</h1>
 <h:form id="main">
 <h:panelGroup id="pnltable">
 <s:link view="/admin/edtadminunit.xhtml" styleClass="button" rendered="#{(adminUnitHome.auselection.selectedUnit.level!=5)and(s:hasRole('ADMINUNITS_EDT'))}" >

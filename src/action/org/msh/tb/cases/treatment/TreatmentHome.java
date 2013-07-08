@@ -25,7 +25,6 @@ import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.TreatmentHealthUnit;
-import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.MedicineLine;
@@ -37,6 +36,12 @@ import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
 
+/**
+ * Case treatment editing functions
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 @Name("treatmentHome")
 @Scope(ScopeType.CONVERSATION)
 public class TreatmentHome {
@@ -160,7 +165,6 @@ public class TreatmentHome {
 	}
 	
 
-
 	/**
 	 * Confirm editing of the treatment period
 	 */
@@ -170,7 +174,7 @@ public class TreatmentHome {
 		if (!checkDateBasicRules(iniDate, endDate))
 			return;
 
-		if (iniDate.before(caseHome.getInstance().getDiagnosisDate()) && (!allowBeforeDiagnosis())) {
+		if (iniDate.before(caseHome.getInstance().getDiagnosisDate())) {
 			facesMessages.addToControlFromResourceBundle("edtIniContPhase", "cases.treat.inidatemsg");
 			return;
 		}
@@ -220,22 +224,6 @@ public class TreatmentHome {
 		facesMessages.addFromResourceBundle("form.clickon.save");
 	}
 
-	/**
-	 * Does start treatment date allow before diagnosis date
-	 * AK 06/25/2012
-	 * @return
-	 */
-	private boolean allowBeforeDiagnosis() {
-		Workspace ws = UserSession.getWorkspace();
-		
-		boolean isTBAllow = ws.isStartTBTreatBeforeValidation();
-		boolean isDRTBAllow = ws.isStartDRTBTreatBeforeValidation();
-		
-		boolean isTBCase = tbcase.getClassification().equals(CaseClassification.TB);
-		boolean isDRTBCase = tbcase.getClassification().equals(CaseClassification.DRTB);
-		
-		return ( isTBAllow && isTBCase) || (isDRTBAllow && isDRTBCase);
-	}
 
 
 	/**

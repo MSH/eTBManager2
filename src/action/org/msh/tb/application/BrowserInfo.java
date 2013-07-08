@@ -39,7 +39,13 @@ public class BrowserInfo {
 			return true;
 
 		// is Internet Explorer under version 7? so it's not valid 
-		if ((browserType == BrowserType.MSIE) && (browserVersion < 700))
+		if ((browserType == BrowserType.MSIE) && (browserVersion <= 700))
+			return false;
+		
+		if ((browserType == BrowserType.CHROME) && (browserVersion < 18))
+			return false;
+		
+		if ((browserType == BrowserType.FIREFOX) && (browserVersion < 15))
 			return false;
 		
 		return true;

@@ -1,13 +1,21 @@
 package org.msh.tb.entities.enums;
 
-public enum DisplayCaseNumber {
+/**
+ * Define options of how the system will display the case number of the patient
+ * 
+ * @author Ricardo Memoria
+ *
+ */
+public enum DisplayCaseNumber implements MessageKey {
 
-	SYSTEM_GENERATED,
-	REGISTRATION_CODE;
+	CASE_ID,
+	VALIDATION_NUMBER,
+	USER_DEFINED;
 
-	public String getKey() {
-		if (this == REGISTRATION_CODE) 
-			 return "TbCase.registrationCode";
-		else return getClass().getSimpleName().concat("." + name());
+	/** {@inheritDoc}
+	 */
+	@Override
+	public String getMessageKey() {
+		return getClass().getSimpleName().concat("." + name());
 	}
 }

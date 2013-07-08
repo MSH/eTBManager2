@@ -33,6 +33,7 @@ import org.msh.tb.entities.WeeklyFrequency;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.WorkspaceView;
 import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseValidationOption;
 import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.NameComposition;
 import org.msh.tb.entities.enums.RoleAction;
@@ -96,8 +97,10 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		Workspace ws = getInstance();
 		if (ws.getPatientNameComposition() == null)
 			ws.setPatientNameComposition(NameComposition.FULLNAME);
-		if (ws.getDisplayCaseNumber() == null)
-			ws.setDisplayCaseNumber(DisplayCaseNumber.SYSTEM_GENERATED);
+		if (ws.getSuspectCaseNumber() == null)
+			ws.setSuspectCaseNumber(DisplayCaseNumber.CASE_ID);
+		if (ws.getConfirmedCaseNumber() == null)
+			ws.setConfirmedCaseNumber(DisplayCaseNumber.CASE_ID);
 		if (ws.getPatientAddrRequiredLevels() == null)
 			ws.setPatientAddrRequiredLevels(1);
 
@@ -708,5 +711,14 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+	
+	
+	/**
+	 * Return the options for the configuration of the case validation
+	 * @return List of {@link CaseValidationOption} enumerations
+	 */
+	public CaseValidationOption[] getCaseValidationOptions() {
+		return CaseValidationOption.values();
 	}
 }

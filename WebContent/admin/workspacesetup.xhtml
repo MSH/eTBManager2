@@ -5,17 +5,18 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="admintemplate.xhtml">
         
 <ui:param name="title" value="#{messages['admin.setup']} #{defaultWorkspace.name}" />
 <ui:param name="topmenu" value="3" />
 <ui:param name="submenu" value="2" />
-<ui:param name="labelstyle" value="width:170px" />
+<ui:param name="labelstyle" value="width:230px" />
 
 
 <ui:define name="content">
-<h1>#{title}</h1>
+<h1><i class="icon-wrench" />#{title}</h1>
 <h:form id="main" enctype="multipart/form-data" styleClass="form1">
 
 <div class="form-content">
@@ -62,34 +63,21 @@
     <s:decorate template="/layout/edit.xhtml">
     	<h:selectBooleanCheckbox value="#{workspaceHome.defaultWorkspace.sendSystemMessages}" /> #{messages['Workspace.sendSystemMessages']}
     </s:decorate>
-	
+    
+    <s:decorate template="/layout/edit.xhtml" >
+    	<h:selectBooleanCheckbox value="#{workspace.ulaActive}" /> #{messages['workspace.ulaActive']}
+    </s:decorate>
+
+    </div>
+
+    <div class="form-content">
+	<h2>#{messages['admin.workspaces.cases']}</h2>	
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['NameComposition']}:</ui:define>
 		<h:selectOneMenu value="#{workspaceHome.nameComposition}" required="true">
            	<s:selectItems value="#{namesComposition}" var="it" noSelectionLabel="-" label="#{messages[it.key]}"/>
            	<s:convertEnum />
       	</h:selectOneMenu>
-    </s:decorate>
-	
-    <s:decorate template="/layout/edit.xhtml" >
-    	<h:selectBooleanCheckbox value="#{workspace.startTBTreatBeforeValidation}" /> #{messages['Workspace.startTBTreatBeforeValidation']}
-    </s:decorate>
-	
-    <s:decorate template="/layout/edit.xhtml" >
-    	<h:selectBooleanCheckbox value="#{workspace.startDRTBTreatBeforeValidation}" /> #{messages['Workspace.startDRTBTreatBeforeValidation']}
-    </s:decorate>
-
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['DisplayCaseNumber']}:</ui:define>
-		<h:selectOneMenu value="#{workspace.displayCaseNumber}" required="true">
-           	<s:selectItems value="#{globalLists.displayCaseNumbers}" var="it" noSelectionLabel="-" label="#{messages[it.key]}"/>
-           	<s:convertEnum />
-      	</h:selectOneMenu>
-    </s:decorate>
-    
-     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['Workspace.monthsToAlertMedicineExpires']}:</ui:define>
-		<h:inputText required="true" value="#{workspace.monthsToAlertExpiredMedicines}" />
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
@@ -99,10 +87,74 @@
       	</h:selectOneMenu>
     </s:decorate>
 
+    <h2>
+    	#{messages['DisplayCaseNumber']}
+    </h2>
+    
     <s:decorate template="/layout/edit.xhtml" >
-    	<ui:param name="labelstyle" value="height:40px;width:170px;" />
+    	<ui:define name="label">#{messages['DiagnosisType.SUSPECT']}:</ui:define>
+		<h:selectOneMenu value="#{workspace.suspectCaseNumber}" required="true">
+       		<s:selectItems value="#{globalLists.displayCaseNumbers}" var="it" noSelectionLabel="-" label="#{messages[it.messageKey]}"/>
+       		<s:convertEnum />
+   		</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['DiagnosisType.CONFIRMED']}</ui:define>
+		<h:selectOneMenu value="#{workspace.confirmedCaseNumber}" required="true">
+       		<s:selectItems value="#{globalLists.displayCaseNumbers}" var="it" noSelectionLabel="-" label="#{messages[it.messageKey]}"/>
+       		<s:convertEnum />
+  		</h:selectOneMenu>
+    </s:decorate>
+    
+	<h2>#{messages['admin.workspaces.casevalidation']}</h2>
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['CaseClassification.TB']}:</ui:define>
+    	<h:selectOneMenu value="#{workspace.caseValidationTB}">
+    		<s:selectItems value="#{workspaceHome.caseValidationOptions}" var="it" noSelectionLabel="-" label="#{messages[it.messageKey]}"/>
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['CaseClassification.DRTB']}:</ui:define>
+    	<h:selectOneMenu value="#{workspace.caseValidationDRTB}">
+    		<s:selectItems value="#{workspaceHome.caseValidationOptions}" var="it" noSelectionLabel="-" label="#{messages[it.messageKey]}"/>
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['CaseClassification.NTM']}:</ui:define>
+    	<h:selectOneMenu value="#{workspace.caseValidationNTM}">
+    		<s:selectItems value="#{workspaceHome.caseValidationOptions}" var="it" noSelectionLabel="-" label="#{messages[it.messageKey]}"/>
+    	</h:selectOneMenu>
+    </s:decorate>
+    </div>
+
+	<div class="form-content">
+	<h2>#{messages['admin.workspaces.medicine']}</h2>
+    
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.monthsToAlertMedicineExpires']}:</ui:define>
+		<h:inputText required="true" value="#{workspace.monthsToAlertExpiredMedicines}" style="width:70px" /> (#{messages['global.months']})
+    </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.minStockOnHand']}:</ui:define>
+		<h:inputText required="true" value="#{workspace.minStockOnHand}" style="width:70px" /> (#{messages['global.months']})
+    </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.maxStockOnHand']}:</ui:define>
+		<h:inputText required="true" value="#{workspace.maxStockOnHand}" style="width:70px" /> (#{messages['global.months']})
+    </s:decorate>
+	</div>	
+
+	<div class="form-content">
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:param name="labelstyle" value="height:40px;width:230px;" />
     	<ui:define name="label">#{messages['Workspace.picture']}:</ui:define>
-    	<s:graphicImage value="#{workspaceHome.view.picture}" rendered="#{workspaceHome.view.picture != null}" style="border:1px solid #d0d0d0;padding:4px;"/>
+    	<h:graphicImage value="#{workspaceHome.view.pictureURI}" rendered="#{workspaceHome.view.picture != null}" style="border:1px solid #d0d0d0;padding:4px;"/>
     	<h:outputText value="#{messages['admin.workspaces.noimage']}" rendered="#{workspaceHome.view.picture == null}" />
     	<s:fragment rendered="#{workspaceHome.view.picture != null}">
     		<br/>
@@ -118,17 +170,13 @@
     		fileSize="#{workspaceHome.pictureSize}" />
     </s:decorate>
     
-     <s:decorate template="/layout/edit.xhtml" >
-    	<h:selectBooleanCheckbox value="#{workspace.ulaActive}" /> #{messages['workspace.ulaActive']}
-    </s:decorate>
-
 	</div>
 	
 		<div class="form-footer">
-		<h:commandLink action="#{workspaceHome.saveDefaultworkspace}" styleClass="button" 
+		<a:commandLink action="#{workspaceHome.saveDefaultworkspace}" styleClass="button" 
 			onclick="if (!disableButton(this)) return false;" reRender="main,messages">
 			<span>#{messages['form.save']}</span>
-		</h:commandLink> 
+		</a:commandLink> 
 		
 		<s:link view="/admin/config.xhtml" styleClass="button-alt" onclick="disableButton(this)">
 		<span>#{messages['form.cancel']}</span>

@@ -18,6 +18,7 @@ a {
 a:hover {
 	text-decoration:none;
 }
+a i { padding-right:4px;font-size:16px;}
 
 h1 {
 	font-size:1.6em;

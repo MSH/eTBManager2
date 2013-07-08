@@ -19,6 +19,8 @@ a {
 a:hover {
 	text-decoration:underline;
 }
+a i { padding-right:4px;font-size:16px;color:#d0d0d0; }
+a:hover i {text-decoration:none;}
 
 h1 {
 	font-size:1.8em;

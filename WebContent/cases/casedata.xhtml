@@ -50,33 +50,40 @@
 	<h:panelGroup id="leftmenu" styleClass="vertical-menu">
 	<h:form class="vertical-menu">
 
+	<s:link view="/cases/suspectfollowup.xhtml" rendered="#{tbcase.diagnosisType=='SUSPECT'}">
+		<i class="icon-chevron-right"/>#{messages['cases.suspect.followup']}
+	</s:link>
+
 	<h:commandLink action="#{caseHome.remove}" 
 		onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" 
 		rendered="#{caseHome.canRemoveCaseData}">
-		<div class="delete-icon"/><span>#{messages['form.casedelete']}</span>
+		<i class="icon-trash"/><span>#{messages['form.casedelete']}</span>
 	</h:commandLink>
 
-	<s:link value="#{messages['cases.close']}" view="/cases/closecase.xhtml" rendered="#{caseHome.canClose}">
+	<s:link view="/cases/closecase.xhtml" rendered="#{caseHome.canClose}">
 		<f:param name="id" value="#{caseHome.id}" />
+		<i class="icon-folder-close" />#{messages['cases.close']}
 	</s:link>
 
-	<h:commandLink value="#{messages['cases.reopen']}" action="#{caseCloseHome.reopenCase}"
+	<h:commandLink action="#{caseCloseHome.reopenCase}"
 		rendered="#{caseHome.canReopen}" 
 		onclick="if (!confirm('#{messages['cases.reopen.confirm']}')) return false;">
+		<i class="icon-folder-open" />#{messages['cases.reopen']}
 	</h:commandLink>
 
 	<s:link view="/cases/casehistory.xhtml" >
 		<f:param name="id" value="#{caseHome.id}" />
-		<div class="icon-report" style="float:none;" /><span>#{messages['form.logreport']}</span>
+		<i class="icon-table" /><span>#{messages['form.logreport']}</span>
 	</s:link>
 
 	<s:link view="/reports/casedata.xhtml" target="_new">
-		#{messages['cases.print']}
+		<i class="icon-print" />#{messages['cases.print']}
 		<f:param name="id" value="#{caseHome.id}" />
 	</s:link>
 
-	<s:link value="#{messages['admin.tags']}" view="/cases/casetagsedt.xhtml" rendered="#{caseHome.canTagCase and empty tbcase.tags}">
+	<s:link view="/cases/casetagsedt.xhtml" rendered="#{caseHome.canTagCase and empty tbcase.tags}">
 		<f:param name="id" value="#{caseHome.id}" />
+		<i class="icon-tag" />#{messages['admin.tags']}
 	</s:link>
 
 	</h:form>

@@ -8,7 +8,7 @@ package org.msh.tb.entities.enums;
 public enum CaseClassification {
 	TB,
 	DRTB,
-	NMT;
+	NTM;
 
 
 	public String getKey() {

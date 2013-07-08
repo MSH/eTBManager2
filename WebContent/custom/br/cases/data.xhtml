@@ -195,7 +195,7 @@
     		</s:fragment>
 		</s:decorate>
 
-	    <s:decorate template="/layout/displayfield.xhtml" rendered="#{tbcase.classification=='NMT'}">
+	    <s:decorate template="/layout/displayfield.xhtml" rendered="#{tbcase.classification=='NTM'}">
     		<ui:define name="label">#{messages['pt_BR.tipo_mnt']}:</ui:define>
     		<ui:param name="field" value="#{tbcase.microbacteriose}" />
 	    </s:decorate>
@@ -293,7 +293,7 @@
     	<ui:param name="field" value="#{tbcase.educationalDegree}" />
     </s:decorate>
 	
-	<s:decorate template="/layout/displayfield.xhtml" rendered="#{tbcase.classification.name()!='NMT'}">
+	<s:decorate template="/layout/displayfield.xhtml" rendered="#{tbcase.classification.name()!='NTM'}">
     	<ui:define name="label">#{messages['TbField.CONTAG_PLACE']}:</ui:define>
     	<ui:param name="field" value="#{tbcase.contagPlace}" />
     </s:decorate>

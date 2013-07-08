@@ -14,7 +14,7 @@
 
 
 <ui:define name="content">
-<h1>#{title}</h1>
+<h1><i class="icon-medkit"/>#{title}</h1>
 <h:form id="main">
 <s:link view="/admin/edtregimen.xhtml" styleClass="button" rendered="#{s:hasRole('REGIMENS_EDT')}">
 	<f:param name="id" value="#{null}" />

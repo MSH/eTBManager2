@@ -75,6 +75,12 @@ public class TbCase implements Serializable, Transactional {
 	
 	private Integer caseNumber;
 
+	// specific suspect information
+	@Column(length=50)
+	private String suspectRegistrationCode;
+	@PropertyLog(messageKey="CaseClassification")
+	private CaseClassification suspectClassification;
+	
 	@Column(length=50)
 	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private String registrationCode;
@@ -510,7 +516,35 @@ public class TbCase implements Serializable, Transactional {
 	 */
 	public String getDisplayCaseNumber() {
 		Workspace ws = (patient != null? patient.getWorkspace() : null);
-		if ((ws != null) && (ws.getDisplayCaseNumber() == DisplayCaseNumber.REGISTRATION_CODE))
+
+		if (ws == null)
+			return id != null? id.toString(): "null";
+
+		DisplayCaseNumber dcn;
+		if (diagnosisType == DiagnosisType.SUSPECT)
+			 dcn = ws.getSuspectCaseNumber();
+		else dcn = ws.getConfirmedCaseNumber();
+
+		switch (dcn) {
+		case USER_DEFINED:
+			if (diagnosisType == DiagnosisType.SUSPECT)
+				 return suspectRegistrationCode;
+			else return registrationCode;
+		case VALIDATION_NUMBER:
+			if (getCaseNumber() == null)
+				 return Messages.instance().get("cases.nonumber");
+			else return formatCaseNumber(patient.getRecordNumber(), caseNumber);
+		default:
+			return id != null? id.toString(): Messages.instance().get("cases.nonumber");
+		}
+/*		
+		if (ws != null) {
+			if (diagnosisType == DiagnosisType.SUSPECT)
+				 dcn = ws.getSuspectCaseNumber();
+			else dcn = ws.getConfirmedCaseNumber();
+		}
+		
+		if (dcn == DisplayCaseNumber.USER_DEFINED)
 			return getRegistrationCode();
 		else {
 			Integer number = getCaseNumber();
@@ -519,7 +553,7 @@ public class TbCase implements Serializable, Transactional {
 			
 			return formatCaseNumber(patient.getRecordNumber(), caseNumber);
 		}
-	}
+*/	}
 	
 
 	/**
@@ -1335,5 +1369,37 @@ public class TbCase implements Serializable, Transactional {
 	@Override
 	public void setCreateTransaction(TransactionLog transactionLog) {
 		this.createTransaction = transactionLog;
+	}
+
+
+	/**
+	 * @return the suspectRegistrationCode
+	 */
+	public String getSuspectRegistrationCode() {
+		return suspectRegistrationCode;
+	}
+
+
+	/**
+	 * @param suspectRegistrationCode the suspectRegistrationCode to set
+	 */
+	public void setSuspectRegistrationCode(String suspectRegistrationCode) {
+		this.suspectRegistrationCode = suspectRegistrationCode;
+	}
+
+
+	/**
+	 * @return the suspectClassification
+	 */
+	public CaseClassification getSuspectClassification() {
+		return suspectClassification;
+	}
+
+
+	/**
+	 * @param suspectClassification the suspectClassification to set
+	 */
+	public void setSuspectClassification(CaseClassification suspectClassification) {
+		this.suspectClassification = suspectClassification;
 	}
 }

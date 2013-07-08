@@ -24,6 +24,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.jboss.seam.international.LocaleSelector;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseValidationOption;
 import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.NameComposition;
 import org.msh.tb.transactionlog.PropertyLog;
@@ -88,18 +90,34 @@ public class Workspace implements Serializable, Transactional {
 	private NameComposition patientNameComposition;
 	
 	/**
-	 * Setup if treatment may start before or after validation of the case 
+	 * Configuration of the case validation for TB cases
 	 */
-	private boolean startTBTreatBeforeValidation;
+	private CaseValidationOption caseValidationTB;
 	
-	private boolean startDRTBTreatBeforeValidation;
+	/**
+	 * Configuration of the case validation for DR-TB cases
+	 */
+	private CaseValidationOption caseValidationDRTB;
 	
+	/**
+	 * Configuration of the case validation for MNT cases
+	 */
+	private CaseValidationOption caseValidationNTM;
+
+	/**
+	 * If true, the ULA will be displayed once to the user to be accepted
+	 */
 	private boolean ulaActive;
 	
 	/**
-	 * Setup the case number to be displayed for the cases
+	 * Setup the case number to be displayed for the suspect cases
 	 */
-	private DisplayCaseNumber displayCaseNumber;
+	private DisplayCaseNumber suspectCaseNumber;
+	
+	/**
+	 * Setup the case number to be displayed for the confirmed cases
+	 */
+	private DisplayCaseNumber confirmedCaseNumber;
 	
 	/**
 	 * Required levels of administrative unit for patient address
@@ -108,7 +126,6 @@ public class Workspace implements Serializable, Transactional {
 	
 	@Column(length=200)
 	private String url;
-
 
 	/**
 	 * Indicate if system will send e-mail messages to the users in certain system events (like new orders, orders authorized, etc)
@@ -119,6 +136,18 @@ public class Workspace implements Serializable, Transactional {
 	 * Setup the quantity of months that the system will consider when it has to alert the user about medicines that will expire.
 	 */
 	private Integer monthsToAlertExpiredMedicines;
+	
+	/**
+	 * Minimum stock on-hand in months allowed in the unit. If a medicine is equals or under this level,
+	 * the system will alert about that 
+	 */
+	private Integer minStockOnHand;
+	
+	/**
+	 * Maximum stock on-hand in months allowed in the unit. If a medicine is equals or over this level,
+	 * the system will alert about that 
+	 */
+	private Integer maxStockOnHand;
 
 	/**
 	 * Setup the adjustment type that represents expired medicine movements
@@ -138,7 +167,8 @@ public class Workspace implements Serializable, Transactional {
 	@PropertyLog(ignore=true)
 	private TransactionLog createTransaction;
 
-	
+
+
 	public WeeklyFrequency[] getWeeklyFrequencies() {
 		WeeklyFrequency[] lst = new WeeklyFrequency[7];
 
@@ -185,6 +215,24 @@ public class Workspace implements Serializable, Transactional {
 	}
 
 	
+	/**
+	 * Return the case validation setting of the given case classification
+	 * @param classification is the classification of the case
+	 * @return instance of {@link CaseValidationOption}
+	 */
+	public CaseValidationOption getCaseValidationOption(CaseClassification classification) {
+		switch (classification) {
+		case TB:
+			return caseValidationTB;
+		case DRTB:
+			return caseValidationDRTB;
+		case NTM:
+			return caseValidationNTM;
+		}
+		return null;
+	}
+
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
@@ -382,20 +430,6 @@ public class Workspace implements Serializable, Transactional {
 	}
 
 	/**
-	 * @return the displayCaseNumber
-	 */
-	public DisplayCaseNumber getDisplayCaseNumber() {
-		return displayCaseNumber;
-	}
-
-	/**
-	 * @param displayCaseNumber the displayCaseNumber to set
-	 */
-	public void setDisplayCaseNumber(DisplayCaseNumber displayCaseNumber) {
-		this.displayCaseNumber = displayCaseNumber;
-	}
-
-	/**
 	 * @return the patientAddrRequiredLevels
 	 */
 	public Integer getPatientAddrRequiredLevels() {
@@ -435,23 +469,6 @@ public class Workspace implements Serializable, Transactional {
 	 */
 	public void setView(WorkspaceView view) {
 		this.view = view;
-	}
-
-	public boolean isStartTBTreatBeforeValidation() {
-		return startTBTreatBeforeValidation;
-	}
-
-	public void setStartTBTreatBeforeValidation(boolean startTBTreatBeforeValidation) {
-		this.startTBTreatBeforeValidation = startTBTreatBeforeValidation;
-	}
-
-	public boolean isStartDRTBTreatBeforeValidation() {
-		return startDRTBTreatBeforeValidation;
-	}
-
-	public void setStartDRTBTreatBeforeValidation(
-			boolean startDRTBTreatBeforeValidation) {
-		this.startDRTBTreatBeforeValidation = startDRTBTreatBeforeValidation;
 	}
 
 	/**
@@ -552,5 +569,103 @@ public class Workspace implements Serializable, Transactional {
 			FieldValue expiredMedicineAdjustmentType) {
 		this.expiredMedicineAdjustmentType = expiredMedicineAdjustmentType;
 	}
-	
+
+	/**
+	 * @return the caseValidationTB
+	 */
+	public CaseValidationOption getCaseValidationTB() {
+		return caseValidationTB;
+	}
+
+	/**
+	 * @param caseValidationTB the caseValidationTB to set
+	 */
+	public void setCaseValidationTB(CaseValidationOption caseValidationTB) {
+		this.caseValidationTB = caseValidationTB;
+	}
+
+	/**
+	 * @return the caseValidationDRTB
+	 */
+	public CaseValidationOption getCaseValidationDRTB() {
+		return caseValidationDRTB;
+	}
+
+	/**
+	 * @param caseValidationDRTB the caseValidationDRTB to set
+	 */
+	public void setCaseValidationDRTB(CaseValidationOption caseValidationDRTB) {
+		this.caseValidationDRTB = caseValidationDRTB;
+	}
+
+	/**
+	 * @return the caseValidationNTM
+	 */
+	public CaseValidationOption getCaseValidationNTM() {
+		return caseValidationNTM;
+	}
+
+	/**
+	 * @param caseValidationNTM the caseValidationNTM to set
+	 */
+	public void setCaseValidationNTM(CaseValidationOption caseValidationNTM) {
+		this.caseValidationNTM = caseValidationNTM;
+	}
+
+	/**
+	 * @return the minStockOnHand
+	 */
+	public Integer getMinStockOnHand() {
+		return minStockOnHand;
+	}
+
+	/**
+	 * @param minStockOnHand the minStockOnHand to set
+	 */
+	public void setMinStockOnHand(Integer minStockOnHand) {
+		this.minStockOnHand = minStockOnHand;
+	}
+
+	/**
+	 * @return the maxStockOnHand
+	 */
+	public Integer getMaxStockOnHand() {
+		return maxStockOnHand;
+	}
+
+	/**
+	 * @param maxStockOnHand the maxStockOnHand to set
+	 */
+	public void setMaxStockOnHand(Integer maxStockOnHand) {
+		this.maxStockOnHand = maxStockOnHand;
+	}
+
+	/**
+	 * @return the suspectCaseNumber
+	 */
+	public DisplayCaseNumber getSuspectCaseNumber() {
+		return suspectCaseNumber;
+	}
+
+	/**
+	 * @param suspectCaseNumber the suspectCaseNumber to set
+	 */
+	public void setSuspectCaseNumber(DisplayCaseNumber suspectCaseNumber) {
+		this.suspectCaseNumber = suspectCaseNumber;
+	}
+
+	/**
+	 * @return the confirmedCaseNumber
+	 */
+	public DisplayCaseNumber getConfirmedCaseNumber() {
+		return confirmedCaseNumber;
+	}
+
+	/**
+	 * @param confirmedCaseNumber the confirmedCaseNumber to set
+	 */
+	public void setConfirmedCaseNumber(DisplayCaseNumber confirmedCaseNumber) {
+		this.confirmedCaseNumber = confirmedCaseNumber;
+	}
+
 }

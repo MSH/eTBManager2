@@ -105,7 +105,7 @@ public class TbCaseAZ extends TbCase{
 	@Override
 	public String getDisplayCaseNumber() {
 		Workspace ws = (getPatient() != null? getPatient().getWorkspace() : null);
-		if ((ws != null) && (ws.getDisplayCaseNumber() == DisplayCaseNumber.REGISTRATION_CODE))
+		if ((ws != null) && (ws.getConfirmedCaseNumber() == DisplayCaseNumber.USER_DEFINED))
 			return getRegistrationCode();
 		else {
 			if (getPatient() == null)
