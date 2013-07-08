@@ -53,7 +53,7 @@ color:#a0a0a0;
 <s:fragment rendered="#{browserInfo.validBrowser}">
 <h:panelGroup id="loginpanel" >
 <div class="container form-signin">
-	<h:form id="formlogin" class="form-horizontal">
+	<h:form id="main" class="form-horizontal">
 	<h:graphicImage value="/public/images/logo_64x64.png" style="float:left;padding-right:10px;"/>
 	<h2 style="margin-bottom:2px;">#{messages['mdrtb_system']}</h2>
 	<small>#{messages['mdrtbsys']}</small>
@@ -68,7 +68,7 @@ color:#a0a0a0;
     	<div class="controls">
 	       	<div class="input-prepend">
        		<span class="add-on"><i class="icon-user" /></span>
-		    <h:inputText id="nome" value="#{credentials.username}" style="width:160px" />
+		    <h:inputText id="user" value="#{credentials.username}" style="width:160px" />
    		</div>
     </div>
   	</div>
@@ -77,7 +77,7 @@ color:#a0a0a0;
     	<div class="controls">
        		<div class="input-prepend">
         		<span class="add-on"><i class="icon-key" /></span>
-      		<h:inputSecret value="#{credentials.password}" style="width:160px" />
+      		<h:inputSecret id="pwd" value="#{credentials.password}" style="width:160px" />
    			</div>
   		</div>
 	</div>	
@@ -91,7 +91,7 @@ color:#a0a0a0;
 	       	<a:commandButton id="btnOk" styleClass="btn btn-primary" onclick="callLogin(); return false;" value="#{messages['login.enter']}" />
 			<rich:jQuery timming="onload" selector="#nome" query="focus()" />
 			<rich:hotKey selector="input" key="return" handler="callLogin();" />
-			<a:jsFunction name="callLogin" ajaxSingle="false" action="#{identity.login}" reRender="formlogin"/> 
+			<a:jsFunction id="login" name="callLogin" ajaxSingle="false" action="#{identity.login}" reRender="main"/> 
   		</div>
   	</div>
 	</h:form>
