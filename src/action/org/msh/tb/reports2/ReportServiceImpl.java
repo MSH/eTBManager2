@@ -27,6 +27,8 @@ import org.msh.tb.client.shared.model.CReportData;
 import org.msh.tb.client.shared.model.CReportUI;
 import org.msh.tb.client.shared.model.CTable;
 import org.msh.tb.client.shared.model.CVariable;
+import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.reports2.variables.DateFieldVariable;
 
@@ -335,30 +337,33 @@ public class ReportServiceImpl implements ReportService {
 		}
 
 		DataTableQuery tbl = rep.getDetailedReport("tbcase.id, patient.patient_name, patient.middlename, " +
-				"patient.lastname, patient.gender, patient.recordnumber, tbcase.casenumber, tbcase.registrationCode",
+				"patient.lastname, patient.gender, patient.recordnumber, tbcase.casenumber, tbcase.registrationCode, tbcase.suspectRegistrationCode",
 				"patient_name", page, pageSize);
+
+		// prepare mock tbcase to display the proper name and case number according to the configuration
+		Workspace ws = (Workspace)Component.getInstance("defaultWorkspace");
+		TbCase tbcase = new TbCase();
+		Patient p = new Patient();
+		tbcase.setPatient(p);
+		tbcase.getPatient().setWorkspace(ws);
 
 		ArrayList<CPatient> pacs = new ArrayList<CPatient>();
 		for (Row row: tbl.getRows()) {
 			Integer id = (Integer)row.getValue(0);
-			String name = (String)row.getValue(1);
-			String middlename = (String)row.getValue(2);
-			String lastname = (String)row.getValue(3);
+			p.setName((String)row.getValue(1));
+			p.setMiddleName((String)row.getValue(2));
+			p.setLastName((String)row.getValue(3));
 			Integer gender = (Integer)row.getValue(4);
-			Integer recnumber = (Integer)row.getValue(5);
-			Integer casenumber = (Integer)row.getValue(6);
-			String regcode = (String)row.getValue(7);
-			
+			p.setRecordNumber((Integer)row.getValue(5));
+			tbcase.setCaseNumber((Integer)row.getValue(6));
+			tbcase.setRegistrationCode((String)row.getValue(7));
+			tbcase.setSuspectRegistrationCode((String)row.getValue(8));
+
 			CPatient pac= new CPatient();
 			pac.setId(id);
-			if ((middlename != null) && (!middlename.trim().isEmpty()))
-				name += " " + middlename;
-			if ((lastname != null) && (!lastname.trim().isEmpty()))
-				name += " " + lastname;
 			
-			pac.setName(name);
-			if ((recnumber != null) && (casenumber != null))
-				pac.setNumber(Integer.toString(recnumber) + "-" + Integer.toString(casenumber));
+			pac.setName(p.getFullName());
+			pac.setNumber(tbcase.getDisplayCaseNumber());
 			pac.setGender(gender);
 			pacs.add(pac);
 		}
