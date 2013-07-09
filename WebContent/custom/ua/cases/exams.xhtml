@@ -31,9 +31,7 @@
 				<s:link view="/cases/edtexamhiv.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
-					<h:outputFormat value="#{messages[r.monthDisplay]}" >
-						<f:param value="#{r.monthTreatment}"/>
-					</h:outputFormat>
+					#{r.monthDisplay}
 				</s:link>
 			</h:column>
 			
@@ -99,9 +97,7 @@
 				<s:link view="/cases/edtexammicroscopy.xhtml" propagation="none" enabled="#{caseHome.canEditExams}" >
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
-					<h:outputFormat value="#{messages[r.monthDisplay]}" >
-						<f:param value="#{r.monthTreatment}"/>
-					</h:outputFormat>
+					#{r.monthDisplay}
 				</s:link>
 				<div style="display:block;">
 				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
@@ -171,9 +167,7 @@
 				<s:link view="/cases/edtexamculture.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
-					<h:outputFormat value="#{messages[r.monthDisplay]}" >
-						<f:param value="#{r.monthTreatment}"/>
-					</h:outputFormat>
+					#{r.monthDisplay}
 				</s:link>
 				<div style="margin-left:20px;display:block;">
 				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
@@ -267,9 +261,7 @@
 				<s:link view="/cases/edtexamdst.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.examResult.id}"/>
-					<h:outputFormat value="#{messages[r.examResult.monthDisplay]}" >
-						<f:param value="#{r.examResult.monthTreatment}"/>
-					</h:outputFormat>
+					#{r.examResult.monthDisplay}
 				</s:link>
 				<div style="margin-left:20px;display:block;">
 				<h:outputText value="#{r.examResult.dateCollected}" converter="localeDateConverter" />
@@ -335,9 +327,7 @@
 				<s:link view="/custom/ua/cases/edtexamxray.xhtml" propagation="none" >
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
-					<h:outputFormat value="#{messages[r.monthDisplay]}" >
-						<f:param value="#{r.monthTreatment}"/>
-					</h:outputFormat>
+					#{r.monthDisplay}
 				</s:link>
 			</h:column>
 			
@@ -409,9 +399,7 @@
 				<s:link view="/custom/ua/cases/edthistology.xhtml" propagation="none" >
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
-					<h:outputFormat value="#{messages[r.monthDisplay]}" >
-						<f:param value="#{r.monthTreatment}"/>
-					</h:outputFormat>
+					#{r.monthDisplay}
 				</s:link>
 			</h:column>
 			
@@ -472,9 +460,7 @@
 				<s:link view="/custom/ua/cases/edtmolecularbiology.xhtml" propagation="none" >
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
-					<h:outputFormat value="#{messages[r.monthDisplay]}" >
-						<f:param value="#{r.monthTreatment}"/>
-					</h:outputFormat>
+					#{r.monthDisplay}
 				</s:link>
 				<br/>
 				<h:outputText value="#{r.date}" converter="localeDateConverter"/>
