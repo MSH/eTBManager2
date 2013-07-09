@@ -243,6 +243,15 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		return (tbcase.isOpen()) && (tbcase.getState() == CaseState.ONTREATMENT) && (checkRoleBySuffix("CASE_TRANSFER")) && (isWorkingUnit());
 	}
 	
+	/**
+	 * Return true if the suspect follow-up is available for the current case
+	 * @return true if suspect can be followed-up
+	 */
+	public boolean isSuspectFollowupAvailable() {
+		TbCase tbcase = getInstance();
+		return tbcase.isOpen() && (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT);
+	}
+	
 	public boolean isCanTransferIn() {
 		TbCase tbcase = getInstance();
 		return (tbcase.isOpen()) && (tbcase.getState() == CaseState.TRANSFERRING) && (checkRoleBySuffix("CASE_TRANSFER")) && (isWorkingUnit());

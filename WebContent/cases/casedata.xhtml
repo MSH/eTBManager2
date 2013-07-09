@@ -50,8 +50,8 @@
 	<h:panelGroup id="leftmenu" styleClass="vertical-menu">
 	<h:form class="vertical-menu">
 
-	<s:link view="/cases/suspectfollowup.xhtml" rendered="#{tbcase.diagnosisType=='SUSPECT'}">
-		<i class="icon-chevron-right"/>#{messages['cases.suspect.followup']}
+	<s:link view="/cases/suspectfollowup.xhtml" rendered="#{caseHome.suspectFollowupAvailable}">
+		<i class="icon-double-angle-right"/>#{messages['cases.suspect.followup']}
 	</s:link>
 
 	<h:commandLink action="#{caseHome.remove}" 
@@ -60,7 +60,7 @@
 		<i class="icon-trash"/><span>#{messages['form.casedelete']}</span>
 	</h:commandLink>
 
-	<s:link view="/cases/closecase.xhtml" rendered="#{caseHome.canClose}">
+	<s:link view="/cases/closecase.xhtml" rendered="#{caseHome.canClose and tbcase.diagnosisType != 'SUSPECT'}">
 		<f:param name="id" value="#{caseHome.id}" />
 		<i class="icon-folder-close" />#{messages['cases.close']}
 	</s:link>

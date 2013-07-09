@@ -25,7 +25,8 @@ public enum CaseState {
 	
 	//Cambodia
 	NTM,
-	SUSCEPTIBLE_TB;
+	SUSCEPTIBLE_TB,
+	NOT_TB;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

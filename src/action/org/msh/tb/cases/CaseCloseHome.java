@@ -15,6 +15,7 @@ import org.msh.tb.cases.treatment.TreatmentHome;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.utils.date.Period;
 
 @Name("caseCloseHome")
@@ -51,6 +52,13 @@ public class CaseCloseHome extends Controller{
 		CaseState.DIAGNOSTIC_CHANGED,
 		CaseState.MDR_CASE,
 		CaseState.OTHER};
+	
+	private static final CaseState[] suspectOutcomes = {
+		CaseState.NOT_TB, 
+		CaseState.DIED, 
+		CaseState.DEFAULTED, 
+		CaseState.OTHER};
+	
 
 
 	/**
@@ -135,6 +143,9 @@ public class CaseCloseHome extends Controller{
 	 * @return Array of {@link CaseState} enumerations
 	 */
 	public CaseState[] getOutcomes() {
+		if (caseHome.getInstance().getDiagnosisType() == DiagnosisType.SUSPECT)
+			return suspectOutcomes;
+
 		if (caseHome.getInstance().getClassification() == CaseClassification.DRTB)
 			 return outcomesMDR;
 		else return outcomesTB;

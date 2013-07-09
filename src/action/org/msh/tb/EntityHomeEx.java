@@ -238,6 +238,7 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		case DELETE: logService.recordEntityState(getInstance(), Operation.DELETE);
 			break;
 		case NEW: logService.recordEntityState(getInstance(), Operation.NEW);
+			break;
 		}
 		
 		logService.save(roleName, action, getLogDescription(), getLogEntityId(), getLogEntityClass(), getInstance());
