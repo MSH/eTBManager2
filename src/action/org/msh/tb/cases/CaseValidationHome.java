@@ -24,6 +24,7 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.misc.SequenceGenerator;
 
@@ -54,6 +55,11 @@ public class CaseValidationHome {
 	private String lastIssueEditingText;
 
 
+	public void initialize() {
+		caseHome.getTbCase().setDiagnosisType(DiagnosisType.CONFIRMED);
+	}
+	
+	
 	/**
 	 * Return list of issues
 	 * @return
