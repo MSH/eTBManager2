@@ -64,7 +64,6 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	public void initialize(){
 		quarterStockPositionReport.getTbunitselection().setTbunit(userSession.getTbunit());
 		quarterStockPositionReport.setSource(null);
-		quarterStockPositionReport.initialize();
 		updateQuarterAsTbunit();
 		quarterStockPositionReport.refresh();
 		this.initialized = true;
@@ -81,6 +80,9 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 			
 			Quarter lastOpenedQuarter = Quarter.getQuarterByMonth(date.get(GregorianCalendar.MONTH));
 			Integer lastOpenedYear = date.get(GregorianCalendar.YEAR);
+			
+			//loads if is not loaded
+			quarterStockPositionReport.getYears();
 			
 			quarterStockPositionReport.setQuarter(lastOpenedQuarter);
 			quarterStockPositionReport.setYear(lastOpenedYear);

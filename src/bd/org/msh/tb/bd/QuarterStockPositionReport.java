@@ -3,7 +3,9 @@ package org.msh.tb.bd;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
@@ -14,6 +16,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.MedicinesQuery;
 import org.msh.tb.bd.entities.enums.Quarter;
+import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Source;
 import org.msh.tb.login.UserSession;
@@ -40,27 +43,21 @@ public class QuarterStockPositionReport {
 	private Source source;
 	
 	private List<QSPMedicineRow> rows;
+	private Map<Batch, Long> batchDetails;
 	private Date iniQuarterDate;
 	private Date endQuarterDate;
 	private List<Integer> years;
-	
-	/**
-	 * Initializes the list of medicines and its stock information.
-	 */
-	public void initialize(){
-		loadYears();
-		loadMedicineList(medicines.getResultList());
-	}
-	
+		
 	/**
 	 * Refreshes the rows values according to the filters.
 	 */
 	public void refresh(){
-		updateValues();
-
 		if(getLocationWhereClause() == null)
 			facesMessages.addToControlFromResourceBundle("cbselau1", "javax.faces.component.UIInput.REQUIRED");
-		
+		else{
+			updateQuarterReport();
+			updateBatchList();
+		}
 	}
 	
 	/**
@@ -94,8 +91,9 @@ public class QuarterStockPositionReport {
 	/**
 	 * Update the values of each medicine in the quarterly stock table information
 	 */
-	private void updateValues(){
+	private void updateQuarterReport(){
 		updateQuarterDates();
+		loadMedicineList(medicines.getResultList());
 		
 		if(!isFiltersFilledIn()){
 			loadMedicineList(medicines.getResultList());
@@ -159,7 +157,37 @@ public class QuarterStockPositionReport {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Update the list of batches that will expired with in three months
+	 */
+	private void updateBatchList(){
+		GregorianCalendar endDatePlus90 = new GregorianCalendar();
+		endDatePlus90.setTime(endQuarterDate);
+		endDatePlus90.add(GregorianCalendar.MONTH, 3);
+
+		String queryString = "select b, sum(bm.quantity * mov.oper) " +
+							"from BatchMovement bm join bm.batch b join bm.movement mov " +
+							getLocationWhereClause() + " and mov.date <= :endDate " +
+							"and b.expiryDate <= :endDatePlus90 " +
+							"group by b.id " +
+							"having sum(bm.quantity * mov.oper) > 0 " +
+							"order by b.medicine.genericName.name1 ";
 		
+		List<Object[]> result = entityManager.createQuery(queryString)
+									.setParameter("endDate", endQuarterDate)
+									.setParameter("endDatePlus90", endDatePlus90.getTime())
+									.getResultList();
+
+		if(batchDetails == null)
+			batchDetails = new HashMap<Batch, Long>();
+		else
+			batchDetails.clear();	
+		
+		for(Object[] o : result){
+			batchDetails.put((Batch) o[0], (Long) o[1]);
+		}
 	}
 	
 	/**
@@ -263,6 +291,8 @@ public class QuarterStockPositionReport {
 	 * @return the rows
 	 */
 	public List<QSPMedicineRow> getRows() {
+		if(rows == null || rows.size() == 0)
+			loadMedicineList(medicines.getResultList());
 		return rows;
 	}
 
@@ -304,6 +334,8 @@ public class QuarterStockPositionReport {
 	}
 	
 	public List<Integer> getYears(){
+		if(years == null || years.size() == 0)
+			loadYears();
 		return years;
 	}
 	
@@ -324,5 +356,29 @@ public class QuarterStockPositionReport {
 	 */
 	public void setSource(Source source) {
 		this.source = source;
+	}
+	/**
+	 * @return the batchDetails
+	 */
+	public Map<Batch, Long> getBatchDetails() {
+		return batchDetails;
+	}
+	/**
+	 * @param batchDetails the batchDetails to set
+	 */
+	public void setBatchDetails(Map<Batch, Long> batchDetails) {
+		this.batchDetails = batchDetails;
+	}
+	/**
+	 * @return the batchDetails keyset in a list to use with JSF data table
+	 */
+	public ArrayList<Batch> getBatchDetailsKeySet() {
+		if(batchDetails == null)
+			return null;
+		
+		ArrayList<Batch> ret = new ArrayList<Batch>();
+        for (Batch b : batchDetails.keySet())
+            ret.add(b);
+        return ret;
 	}
 }
