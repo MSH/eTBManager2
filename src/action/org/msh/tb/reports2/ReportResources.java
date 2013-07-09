@@ -173,12 +173,12 @@ public class ReportResources {
 	 */
 	protected ReportGroup addDstExamVariables() {
 		ReportGroup grp = addGroup("manag.reportgen.dst");
+		add(grp, new ResistancePatternVariable("dstpatt", false));
+		add(grp, new ResistancePatternVariable("dstpatt_diag", true));
 		addVariable(grp, new LabExamDateVariable("dstcount", "manag.reportgen.var.dstmonth", "examdst.dateCollected", false, UnitType.EXAM_DST));
 		addVariable(grp, new LabExamDateVariable("dstcount_y", "manag.reportgen.var.dstyear", "examdst.dateCollected", true, UnitType.EXAM_DST));
 		addFilter(grp, new CaseItemDateVariable("dstcollect", "#{messages['manag.reportgen.dst']} - #{messages['manag.reportgen.collect']}", "examdst.dateCollected", false));
 		add(grp, new LabMethodVariable("dstmethod", "TbField.DST_METHOD", "examdst.method_id", TbField.DST_METHOD, UnitType.EXAM_DST));
-		add(grp, new ResistancePatternVariable("dstpatt", false));
-		add(grp, new ResistancePatternVariable("dstpatt_diag", true));
 		return grp;
 	}
 	
