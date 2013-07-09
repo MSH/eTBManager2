@@ -182,9 +182,7 @@
     				<h:outputText value="#{it.substance2}"  rendered="#{not empty it.substance2}"/> 
 				</s:fragment>
 				
-				<h:outputFormat value=" (#{messages[it.monthDisplay]})" style="font-size:11px">
-					<f:param value="#{it.monthOfTreatment}"/>
-				</h:outputFormat>
+				<h:outputText value=" (#{it.monthDisplay})" styleClass="text-small" />
 			</th>
 		</tr>
 		<tr>

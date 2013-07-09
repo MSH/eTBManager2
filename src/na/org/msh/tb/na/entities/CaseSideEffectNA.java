@@ -16,6 +16,7 @@ import org.msh.tb.na.entities.enums.SideEffectAction;
 import org.msh.tb.na.entities.enums.SideEffectGrading;
 import org.msh.tb.na.entities.enums.SideEffectOutcome;
 import org.msh.tb.na.entities.enums.SideEffectSeriousness;
+import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 import org.msh.utils.date.DateUtils;
 
 @Entity
@@ -50,13 +51,16 @@ public class CaseSideEffectNA extends CaseSideEffect{
 	}
 	
 	public String getMonthDisplay() {
+		WorkspaceCustomizationService wsservice = WorkspaceCustomizationService.instance();
+		return wsservice.getExamControl().getMonthDisplay(getTbcase(), DateUtils.incMonths(getTbcase().getDiagnosisDate(), getMonthOfTreatment()));
+/*		
 		if (getMonthOfTreatment() == -1)
 			return Messages.instance().get("cases.exams.prevdt");
 		
 		if (getMonthOfTreatment() == 0)
 			 return Messages.instance().get("global.monthth");
 		else return Messages.instance().get("global.monthth");
-	}
+*/	}
 		
 	public SideEffectGrading getGrade() {
 		return grade;
