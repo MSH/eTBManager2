@@ -64,55 +64,58 @@
 <a:repeat value="#{s.medicines}" var="it">
 	<tr class="highlight">
 		<td>
-			<a:commandLink styleClass="plus-icon" onclick="detailsClick(this, 'med#{it.item.rowId}');return false;" />
-			#{it.medicine}
+			<a:commandLink styleClass="plus-icon" onclick="detailsClick(this, 'med#{it.nodeId}');return false;" />
+			<s:span styleClass="alert-icon" rendered="#{it.item.hasBatchExpiring}"/>
+			<s:span styleClass="icon-error" rendered="#{it.item.hasBatchExpired}"/>
+			<h:outputText value="#{it.medicine}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
+			<h:outputText value="#{messages['medicine.almostStockedOut']}" rendered="#{it.item.almostStockedOut()}" style="background-color:#ff8080;color:white;padding:4px;display:block;border:1px solid red;border-radius:4px;" />
 		</td>
 		<td align="center">
-			<s:span styleClass="alert-icon" rendered="#{it.item.hasBatchExpired}"/>
-			<h:outputText value="#{it.item.nextBatchExpire}" converter="localeDateConverter" />
+			<h:outputText value="#{it.item.nextBatchExpire}" converter="localeDateConverter" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
 		</td>
 		<td align="right">
-			<h:outputText value="#{it.item.quantity}" >
+			<h:outputText value="#{it.item.quantity}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
 				<f:convertNumber pattern="###,###,###"/>
 			</h:outputText>
 		</td>
 		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
-		<!-- <td align="right">
-			<h:outputText value="#{it.item.stockPosition.amc}" >
-				<f:convertNumber pattern="###,###,##0"/>
-			</h:outputText>
-		</td> -->
-		<td align="right">
-			<h:outputText value="#{it.item.stockOutDate}" converter="periodConverter" >
-				<f:param name="type" value="time-length"/>
-			</h:outputText>
-		</td>
+		<!--	<td align="right">
+				<h:outputText value="#{it.item.stockPosition.amc}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
+					<f:convertNumber pattern="###,###,##0"/>
+				</h:outputText>
+			</td> -->
+			<td align="right">
+				<h:outputText value="#{it.item.stockOutDate}" converter="periodConverter" rendered="#{not it.item.almostStockedOut()}"
+					style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
+					<f:param name="type" value="time-length"/>
+				</h:outputText>
+			</td>
 		</s:fragment>
 		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
 		<td align="right">
-			<h:outputText value="#{it.item.totalPrice}" >
+			<h:outputText value="#{it.item.totalPrice}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
 				<f:convertNumber pattern="###,###,##0.00"/>
 			</h:outputText>
 		</td>
 		<td align="right">
-			<h:outputText value="#{it.item.unitPrice}" >
+			<h:outputText value="#{it.item.unitPrice}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
 				<f:convertNumber pattern="###,###,##0.00"/>
 			</h:outputText>
 		</td>
 		</s:fragment>
 		<td align="center">
-			<h:outputText value="#{it.item.lastMovement}" converter="localeDateConverter" />
+			<h:outputText value="#{it.item.lastMovement}" converter="localeDateConverter" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
 		</td>
 	</tr>
 	<a:repeat value="#{it.batches}" var="b">
-	<tr id="med#{it.item.rowId}" style="display:none">
+	<tr id="med#{it.nodeId}" style="display:none">
 		<td>
 			<s:decorate template="/layout/batch.xhtml" >
 				<ui:param name="batch" value="#{b.batch}" />
 			</s:decorate>
 		</td>
 
-		<s:fragment rendered="#{not b.batch.expired}">
+		<s:fragment rendered="#{(not b.batch.expired) and (not inventoryReport.isExpiringBatch(b))}">
 			<td align="center">
 				<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
 			</td>
@@ -163,6 +166,36 @@
 			</td>			
 			<td align="right">
 				<h:outputText value="#{b.batch.unitPrice}" styleClass="error">
+					<f:convertNumber pattern="#,###,##0.00"/>
+				</h:outputText>
+			</td>
+			</s:fragment>
+		</s:fragment>
+		
+		<s:fragment rendered="#{inventoryReport.isExpiringBatch(b)}">
+			<td align="center">
+				<div title="#{messages['manag.forecast.expiredquantity']}">
+					<span class="alert-icon" />
+					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" style="color:#D7620B;font-weight:bold"/>
+				</div>
+			</td>
+			<td align="right">
+				<h:outputText value="#{b.quantity}"  style="color:#D7620B;font-weight:bold">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
+				<td>
+				</td>
+			</s:fragment>
+			<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
+			<td align="right">
+				<h:outputText value="#{b.totalPrice}"  style="color:#D7620B;font-weight:bold">
+					<f:convertNumber pattern="#,###,##0.00"/>
+				</h:outputText>
+			</td>			
+			<td align="right">
+				<h:outputText value="#{b.batch.unitPrice}"  style="color:#D7620B;font-weight:bold">
 					<f:convertNumber pattern="#,###,##0.00"/>
 				</h:outputText>
 			</td>

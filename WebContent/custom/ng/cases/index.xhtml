@@ -34,30 +34,13 @@
 	<h:form>
 	
 	<h:commandLink 
-		onclick="showModalAutoTop('newsuspectdlg');return false;" style="width:130px"
-		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button-alt">
-		<span>#{messages['cases.newsusp']}</span>
-	</h:commandLink>
-
-	<div class="spacer" />
-
-	<h:commandLink 
 		onclick="showModalAutoTop('selclassificationdlg');return false;" style="width:130px"
 		rendered="#{userSession.canNotifySeveralClassifs}" styleClass="button">
 		<span>#{messages['cases.new']}</span>
 	</h:commandLink>
 	
 	<s:fragment rendered="#{not userSession.canNotifySeveralClassifs}">
-		<a:repeat value="#{globalLists.caseClassifications}" var="cla">
-			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}" styleClass="button-alt" style="width:130px">
-				<f:param name="cla" value="#{cla}"/>
-				<f:param name="type" value="SUSPECT"/>
-				<f:param name="unitId" value="#{casesViewController.selectedUnitIdParam}" />
-				<span>#{messages['cases.newsusp']}</span>
-			</s:link>
-			
-			<div class="spacer" />
-			
+		<a:repeat value="#{globalLists.caseClassifications}" var="cla">		
 			<s:link view="/cases/newnotif.xhtml" rendered="#{userSession.isCanEditCaseByClassification(cla)}" styleClass="button" style="width:130px">
 				<f:param name="cla" value="#{cla}"/>
 				<f:param name="type" value="CONFIRMED"/>

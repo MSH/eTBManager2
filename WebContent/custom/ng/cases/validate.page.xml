@@ -3,6 +3,7 @@
 	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
 
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
+	<action execute="#{caseValidationHome.initialize()}" />
 	<navigation>
 		<rule if="#{not caseHome.canValidate}">
 			<end-conversation />
