@@ -10,7 +10,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.validator.NotNull;
-import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.na.entities.enums.SideEffectAction;
 import org.msh.tb.na.entities.enums.SideEffectGrading;
@@ -19,6 +18,12 @@ import org.msh.tb.na.entities.enums.SideEffectSeriousness;
 import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 import org.msh.utils.date.DateUtils;
 
+/**
+ * Implementation of the side effect entity data for Namibia
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 @Entity
 @DiscriminatorValue("na")
 public class CaseSideEffectNA extends CaseSideEffect{
@@ -50,17 +55,15 @@ public class CaseSideEffectNA extends CaseSideEffect{
 		
 	}
 	
+	/**
+	 * Return the display message of the month of treatment of this side effect, following the 
+	 * rules of month displaying for exams and other case data 
+	 * @return String message containing the month of treatment
+	 */
 	public String getMonthDisplay() {
 		WorkspaceCustomizationService wsservice = WorkspaceCustomizationService.instance();
-		return wsservice.getExamControl().getMonthDisplay(getTbcase(), DateUtils.incMonths(getTbcase().getDiagnosisDate(), getMonthOfTreatment()));
-/*		
-		if (getMonthOfTreatment() == -1)
-			return Messages.instance().get("cases.exams.prevdt");
-		
-		if (getMonthOfTreatment() == 0)
-			 return Messages.instance().get("global.monthth");
-		else return Messages.instance().get("global.monthth");
-*/	}
+		return wsservice.getExamControl().getMonthDisplay(getTbcase(), getEffectSt());
+	}
 		
 	public SideEffectGrading getGrade() {
 		return grade;
