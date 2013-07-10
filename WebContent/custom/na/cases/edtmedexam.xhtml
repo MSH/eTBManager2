@@ -64,10 +64,14 @@
     		<s:selectItems value="#{yesNoList}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
-    	<div id="edtreason">#{messages['Order.cancelReason']}:<br/>
-    	<h:inputText value="#{medicalExaminationNA.reasonNotUsingPrescMedicines}" style=" width : 340px;" maxlength="100"/>
-    	</div>
     </s:decorate>
+
+   	<div id="edtreason">
+   	 	<s:decorate template="/layout/edit.xhtml">
+   			<ui:define name="label">#{messages['MedicalExamination.reasonNotUsingPrescMedicines']}:</ui:define>
+	   		<h:inputText id ="edtreason" value="#{medicalExamination.reasonNotUsingPrescMedicines}" style="width:340px" maxlength="100"/>
+    	</s:decorate>
+    </div>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
