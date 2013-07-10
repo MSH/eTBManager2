@@ -110,6 +110,8 @@
 	
 	</table>
 	<br/>
+	<h:outputText value="#{messages['quarter.savingalert']}" styleClass="error"/>
+	<br/>
 	<a:commandLink action="#{quarterStockPositionHome.save}" styleClass="button" 
 		onclick="if (!disableButton(this)) return false;">
 		<span>#{messages['form.save']}</span>
@@ -117,8 +119,6 @@
 	<s:link view="/custom/bd/medicines/quartelystqpos.xhtml" styleClass="button-alt" onclick="disableButton(this)">
     	<span>#{messages['form.cancel']}</span>
 	</s:link>
-	<br/>
-	<h:outputText value="#{messages['quarter.savingalert']}" styleClass="error"/>
 	
 	</div>
 	
