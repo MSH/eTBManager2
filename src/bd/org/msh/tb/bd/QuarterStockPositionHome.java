@@ -186,6 +186,54 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		}catch(NoResultException e){
 			editingMedicine.setConsumption(0);
 		}
+		
+		//Loads the movements consolidated in negative adjustments column that are not negative adjustments (movement type equals 1 or 6)
+		try{
+			Long qtd = (Long) getEntityManager().createQuery("select sum (mov.quantity * mov.oper) from Movement mov " +
+																	"where mov.tbunit.id = :unitId and mov.date >= :iniDate and mov.date <= :endDate " +
+																	"and mov.type in (1,6) and mov.medicine.id = :medicineId ")
+																	.setParameter("unitId", userSession.getTbunit().getId())
+																	.setParameter("iniDate", iniQuarterDate)
+																	.setParameter("endDate", endQuarterDate)
+																	.setParameter("medicineId", medicine.getId())
+																	.getSingleResult();
+			
+			editingMedicine.setNonNegativeAdjustments(qtd == null ? 0 : (qtd.intValue()*-1));
+		}catch(NoResultException e){
+			editingMedicine.setNonNegativeAdjustments(0);
+		}
+		
+		//Loads the opening balance of the selected medicine.
+		try{
+			Long qtd = (Long) getEntityManager().createQuery("select sum (mov.quantity * mov.oper) from Movement mov " +
+																	"where mov.tbunit.id = :unitId and mov.medicine.id = :medicineId " +
+																	"and ( (mov.date < :iniDate) or (mov.date >= :iniDate and mov.date <= :endDate and mov.type in (7)) ) ")
+																	.setParameter("unitId", userSession.getTbunit().getId())
+																	.setParameter("iniDate", iniQuarterDate)
+																	.setParameter("endDate", endQuarterDate)
+																	.setParameter("medicineId", medicine.getId())
+																	.getSingleResult();
+			
+			editingMedicine.setOpeningBalance(qtd == null ? 0 : (qtd.intValue()));
+		}catch(NoResultException e){
+			editingMedicine.setOpeningBalance(0);
+		}
+		
+		//Loads the received of the selected medicine.
+		try{
+			Long qtd = (Long) getEntityManager().createQuery("select sum (mov.quantity * mov.oper) from Movement mov " +
+																"where mov.tbunit.id = :unitId and mov.date >= :iniDate and mov.date <= :endDate " +
+																"and mov.type in (2,5) and mov.medicine.id = :medicineId ")
+																.setParameter("unitId", userSession.getTbunit().getId())
+																.setParameter("iniDate", iniQuarterDate)
+																.setParameter("endDate", endQuarterDate)
+																.setParameter("medicineId", medicine.getId())
+																.getSingleResult();
+			
+			editingMedicine.setReceived(qtd == null ? 0 : (qtd.intValue()));
+		}catch(NoResultException e){
+			editingMedicine.setReceived(0);
+		}
 	}
 	
 	public boolean checkMainParameters(){

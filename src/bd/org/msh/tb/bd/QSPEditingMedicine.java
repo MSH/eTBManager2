@@ -16,12 +16,18 @@ public class QSPEditingMedicine{
 	private List<QSPEditingBatchDetails> batchList;
 	private Integer consumption;
 	private Integer outOfStock;
+	private Integer nonNegativeAdjustments;
+	private Integer openingBalance;
+	private Integer received;
 	
 	public QSPEditingMedicine(Medicine medicine){
 		this.medicine = medicine;
 		batchList = new ArrayList<QSPEditingBatchDetails>();
 		consumption = new Integer(0);
 		outOfStock = new Integer(0);
+		nonNegativeAdjustments = new Integer(0);
+		openingBalance = new Integer(0);
+		received = new Integer(0);
 	}
 	
 	/**
@@ -86,6 +92,48 @@ public class QSPEditingMedicine{
 		return new QSPEditingBatchDetails(batch, source);
 	}
 	
+	/**
+	 * @return the nonNegativeAdjustments
+	 */
+	public Integer getNonNegativeAdjustments() {
+		return nonNegativeAdjustments;
+	}
+
+	/**
+	 * @param nonNegativeAdjustments the nonNegativeAdjustments to set
+	 */
+	public void setNonNegativeAdjustments(Integer nonNegativeAdjustments) {
+		this.nonNegativeAdjustments = nonNegativeAdjustments;
+	}
+
+	/**
+	 * @return the openingBalance
+	 */
+	public Integer getOpeningBalance() {
+		return openingBalance;
+	}
+
+	/**
+	 * @param openingBalance the openingBalance to set
+	 */
+	public void setOpeningBalance(Integer openingBalance) {
+		this.openingBalance = openingBalance;
+	}
+
+	/**
+	 * @return the received
+	 */
+	public Integer getReceived() {
+		return received;
+	}
+
+	/**
+	 * @param received the received to set
+	 */
+	public void setReceived(Integer received) {
+		this.received = received;
+	}
+
 	/**
 	 * Stores information about the batches of the medicine that is being edited.
 	 * @author MSANTOS

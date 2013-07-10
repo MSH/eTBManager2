@@ -307,7 +307,7 @@ public class MovementHome {
 
 		// checks if the unit has a date limit to create movements
 		if(!unit.canCreateMovement(date))
-			throw new MovementException("Error creating movement. Can't create a movement using the selected date. The allowed period if after " + unit.getLimitDateMedicineMovement() + ".");
+			throw new MovementException("Date must be after " + unit.getLimitDateMedicineMovement() + ".");
 	
 		// create batches
 		if ((batches == null) || (batches.size() == 0)) 
