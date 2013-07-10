@@ -100,6 +100,31 @@ public class QuarterStockPositionReport {
 			return;
 		}
 		
+		//Calculates the parameters to amc calc.		
+		GregorianCalendar baseDate = new GregorianCalendar();
+		baseDate.set(GregorianCalendar.HOUR, 0);
+		baseDate.set(GregorianCalendar.MINUTE, 0);
+		baseDate.set(GregorianCalendar.SECOND, 0);
+		baseDate.set(GregorianCalendar.MILLISECOND, 0);
+		
+		if(endQuarterDate.before(baseDate.getTime()))
+			baseDate.setTime(endQuarterDate);
+		
+		System.out.println(baseDate.getTime());
+		
+		GregorianCalendar baseDateMinus1 = new GregorianCalendar();
+		baseDateMinus1.setTime(baseDate.getTime());
+		baseDateMinus1.add(GregorianCalendar.MONTH, -1);
+		
+		GregorianCalendar baseDateMinus2 = new GregorianCalendar();
+		baseDateMinus2.setTime(baseDate.getTime());
+		baseDateMinus2.add(GregorianCalendar.MONTH, -2);
+		
+		GregorianCalendar baseDateMinus3 = new GregorianCalendar();
+		baseDateMinus3.setTime(baseDate.getTime());
+		baseDateMinus3.add(GregorianCalendar.MONTH, -3);
+		baseDateMinus3.add(GregorianCalendar.DAY_OF_YEAR, 2);
+		
 		String queryString = "select m, " +
 		
 								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
@@ -129,8 +154,20 @@ public class QuarterStockPositionReport {
 									" and mov.medicine.id = m.id and (mov.quantity * mov.oper) < 0 " + getSourceClause() + ") as expired, " +
 								
 								"(select sum(mov.outOfStock) from QuarterlyReportDetailsBD mov " + getLocationWhereClause() + 
-									" and mov.quarter = :quarter and mov.year = :year and mov.medicine.id = m.id) " +
-									
+									" and mov.quarter = :quarter and mov.year = :year and mov.medicine.id = m.id), " +
+	
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
+									" and mov.date >= :baseDateMinus3 and mov.date < :baseDateMinus2 and mov.type in (3) " +
+									"and mov.medicine.id = m.id " + getSourceClause() + ") as calcAmcMonth1, " +
+
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
+									" and mov.date >= :baseDateMinus2 and mov.date < :baseDateMinus1 and mov.type in (3) " +
+									"and mov.medicine.id = m.id " + getSourceClause() + ") as calcAmcMonth2, " +
+
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
+									" and mov.date >= :baseDateMinus1 and mov.date <= :baseDate and mov.type in (3) " +
+									"and mov.medicine.id = m.id " + getSourceClause() + ") as calcAmcMonth3 " +
+
 							  "from Medicine m " +
 							  "where m.workspace.id = :workspaceId " +
 							  "group by m";
@@ -142,6 +179,10 @@ public class QuarterStockPositionReport {
 									.setParameter("quarter", quarter)
 									.setParameter("year", year)
 									.setParameter("workspaceExpiredAdjust", UserSession.getWorkspace().getExpiredMedicineAdjustmentType().getId())
+									.setParameter("baseDateMinus3", baseDateMinus3.getTime())
+									.setParameter("baseDateMinus2", baseDateMinus2.getTime())
+									.setParameter("baseDateMinus1", baseDateMinus1.getTime())
+									.setParameter("baseDate", baseDate.getTime())
 									.getResultList();
 		
 		for(Object[] o : result){
@@ -154,6 +195,24 @@ public class QuarterStockPositionReport {
 					row.setDispensed((Long) o[5]);
 					row.setExpired((Long) o[6]);
 					row.setOutOfStockDays((Long) o[7]);
+					
+					//calc amc
+					Long divOp = new Long(3);
+					Long month1 = ((Long) o[8] == null ? 0 : (Long) o[8]);
+					if(month1 == 0)
+						divOp = divOp - 1;
+					Long month2 = ((Long) o[9] == null ? 0 : (Long) o[9]);
+					if(month2 == 0)
+						divOp = divOp - 1;
+					Long month3 = ((Long) o[10] == null ? 0 : (Long) o[10]);
+					if(month3 == 0)
+						divOp = divOp - 1;
+					if(divOp == 0)
+						row.setAmc(new Long(0));
+					else{
+						row.setAmc((month1 + month2 + month3)/divOp);
+					}
+					
 				}
 			}
 		}

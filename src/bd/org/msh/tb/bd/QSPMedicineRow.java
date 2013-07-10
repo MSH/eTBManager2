@@ -5,6 +5,9 @@
  */
 package org.msh.tb.bd;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import org.msh.tb.entities.Medicine;
 
 public class QSPMedicineRow {
@@ -17,6 +20,7 @@ public class QSPMedicineRow {
 	private Long dispensed;
 	private Long expired;
 	private Long outOfStockDays;
+	private Long amc;
 	
 	/**
 	 * Calculates the closingBalance according to the values of the others parameters.
@@ -161,5 +165,36 @@ public class QSPMedicineRow {
 	 */
 	public void setOutOfStockDays(Long outOfStockDays) {
 		this.outOfStockDays = outOfStockDays;
+	}
+	/**
+	 * @return the amc
+	 */
+	public Long getAmc() {
+		if(amc == null) amc = new Long (0);
+		if(amc < 0) amc = amc * -1;
+		return amc;
+	}
+	/**
+	 * @param amc the amc to set
+	 */
+	public void setAmc(Long amc) {
+		this.amc = amc;
+	}
+	/**
+	 * @return the stockOutDate
+	 */
+	public Date getStockOutDate() {
+		if(getClosingBalance() == null  || getClosingBalance() == 0 
+				|| getAmc() == null || getAmc() == 0)
+			return null;
+		
+		int closBal = getClosingBalance().intValue();
+		int amc = getAmc().intValue();
+		int daysAvailable = (closBal/amc)*30;
+		
+		GregorianCalendar currDate = new GregorianCalendar();
+		currDate.add(GregorianCalendar.DAY_OF_YEAR, daysAvailable);
+		
+		return currDate.getTime();
 	}
 }
