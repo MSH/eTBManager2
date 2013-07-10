@@ -318,6 +318,15 @@ public class QuarterStockPositionReport {
 		this.tbunitselection = tbunitselection;
 	}
 
+	public boolean isCurrQuarter(){
+		GregorianCalendar currDate = new GregorianCalendar();
+		Integer currYear = currDate.get(GregorianCalendar.YEAR);
+		Integer currMonth = currDate.get(GregorianCalendar.MONTH);
+		
+		return quarter.equals(Quarter.getQuarterByMonth(currMonth)) && year.equals(currYear);
+		
+	}
+	
 	/**
 	 * @return the quarter
 	 */

@@ -93,7 +93,7 @@
 		<h:outputText value="#{row.amc}" />
 	</h:column>	
 	
-	<h:column>
+	<h:column rendered="#{quarterStockPositionReport.isCurrQuarter()}">
 		<f:facet name="header">#{messages['meds.stockoutdate']}</f:facet>
 		<h:outputText value="#{row.stockOutDate}" converter="periodConverter" rendered="#{row.stockOutDate != null}">
 			<f:param name="type" value="time-length"/>
