@@ -104,19 +104,7 @@ public abstract class LaboratoryExamResult implements Serializable, Transactiona
 	public String getMonthDisplay() {
 		WorkspaceCustomizationService wsservice = WorkspaceCustomizationService.instance();
 		return wsservice.getExamControl().getMonthDisplay(tbcase, getDateCollected());
-/*		Integer num = getMonthTreatment();
-		
-		if (num > 0) {
-			return "global.monthth";  //Integer.toString(num);
-		}
-		
-		Date dt = getDateCollected();
-		Date dtReg = tbcase.getRegistrationDate();
-		
-		if ((dtReg == null) || (!dt.before(dtReg)))
-			return "cases.exams.zero";
-		else return "cases.exams.prevdt";
-*/	}
+	}
 
 
 	/**

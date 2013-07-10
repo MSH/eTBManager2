@@ -21,6 +21,7 @@ public class ExamControl {
 		if (num > 0) {
 			String s = Integer.toString(num);
 
+			// if language is English, so handle it to display the ordinal suffix of the language
 			if ("en".equals(Locale.instance().getLanguage())) {
 				switch (num >= 11 && num <= 13? 0: num % 10) {
 				case 1:

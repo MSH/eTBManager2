@@ -177,9 +177,8 @@
    
   <tr><td>
     <s:decorate template="/layout/display.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
-    		<ui:param name="labelstyle" value="width:250px"/>
-    		<ui:define name="label">#{messages['TbCase.hospitalized']}:</ui:define>
-    		<h:selectBooleanCheckbox id="chkhosp" />
+   		<ui:define name="label">#{messages['TbCase.hospitalized']}:</ui:define>
+   		<h:selectBooleanCheckbox id="chkhosp" />
     </s:decorate>
    </td></tr>
 
@@ -206,13 +205,9 @@
     <rich:jQuery selector="#chkhosp:not(:checked)" query="each(function(){jQuery('#divhosp').hide();})" />
     
     <tr><td>
-	<s:decorate template="/layout/edit.xhtml">
+	<s:decorate template="/layout/display.xhtml">
 	  	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
-	  	<h:selectOneMenu id="diagType" value="#{tbcase.diagnosisType}" required="true">
-	   		<s:selectItems var="it" value="#{diagnosisTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
-	   		<s:convertEnum />
-	   		<a:support event="onchange" reRender="main" ajaxSingle="true" process="diagType"/>
-	   	</h:selectOneMenu>
+	  	#{messages[tbcase.diagnosisType.key]}
 	</s:decorate>
 	</td></tr>
 	<tr><td>
@@ -406,8 +401,8 @@ function showCurrAddress(cb) {
 
 function toggleDivPanel(chk, divname) {
 	if (chk.checked)
-		jQuery(divname).show();
-	else jQuery(divname).hide();
+		jQuery(divname).show(500);
+	else jQuery(divname).hide(500);
 }
 </script>
 <rich:jQuery selector="#addrChanged" query="each(function(){ if (this.selectedIndex==0) jQuery('#curraddr').hide(); })" />

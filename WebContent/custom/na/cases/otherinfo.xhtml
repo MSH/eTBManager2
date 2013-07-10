@@ -96,36 +96,24 @@
 					<ui:define name="label">#{messages['Gender']}:</ui:define>
 					#{messages[it.gender.key]}
 				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages['TbContact.contactType']}:</ui:define>
+					#{it.contactType.name}
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">#{messages['TbContact.dateofexamination']}:</ui:define>
+					<h:outputText id="dt" value="#{it.dateOfExamination}" converter="localeDateConverter"/>
+				</s:decorate>
 			</td>
 			<td>
 				<s:decorate template="/layout/display.xhtml">
 					<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
 					#{it.age}
 				</s:decorate>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<s:decorate template="/layout/display.xhtml">
-					<ui:define name="label">#{messages['TbContact.contactType']}:</ui:define>
-					#{it.contactType.name}
-				</s:decorate>
-			</td>
-			<td>
 				<s:decorate template="/layout/display.xhtml">
 					<ui:define name="label">#{messages['TbContact.examined']}:</ui:define>
 					#{it.examinated?messages['global.yes']: messages['global.no']}
 				</s:decorate>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<s:decorate template="/layout/display.xhtml">
-					<ui:define name="label">#{messages['TbContact.dateofexamination']}:</ui:define>
-					<h:outputText id="dt" value="#{tbContact.dateOfExamination}" converter="localeDateConverter"/>
-				</s:decorate>
-			</td>
-			<td>
 				<s:decorate template="/layout/display.xhtml">
 					<ui:define name="label">#{messages['TbContact.conduct']}:</ui:define>
 					#{it.conduct.name}
