@@ -1,3 +1,85 @@
+
+A4J.AJAX.onError=function(req, status, message) {
+	window.alert(window.errortitle + '... Request=' + req + ', Status=' + status + ', Message=' +  message);
+	closeWaitDlg();
+}
+// change workspace to the given workspace id
+function changeWorkspace(id) {
+	var s=window.appcontextpath + '/changeworkspace.seam?id=' + id;
+	location.href=s;
+}
+function unhoverWorkspace(){jQuery('.workspace-data').removeClass('workspace-data-selected');}
+// change the current language
+function changeLang(lang) {
+	var s=document.location.href;
+	var slang='lang='+lang;
+	if (s.indexOf('lang=')>=0) {
+		var currlang='lang=' + window.etbmlang;
+		document.location.href=s.replace(currlang,slang);
+	}
+	else {
+		s+=(s.indexOf('?')==-1?'?':'&')+slang; 
+		document.location.href=s;
+	}
+}
+function showModalAutoTop(name, val) {
+	val = (windowPosTop()+(val?val:100))+'px';
+	Richfaces.showModalPanel(name, {top:val});
+}
+function windowPosTop() { return jQuery("body").scrollTop(); }
+// disable a specific button
+function disableButton(button) {
+	if (jQuery(button).is(".button-disabled"))	return false;
+	var el=jQuery('span', button);
+	var s=el.text();
+	el.html('<div class="wait-icon2"/>' + s);
+	jQuery(button).addClass("button-disabled");
+	return true;
+}
+// enable all buttons of the page
+function enableButton() { 
+	jQuery('.button-disabled').each(function() {
+	var s=jQuery(this).removeClass("button-disabled").text();
+	jQuery('span',this).html(s);
+	});
+}
+// startup call when document is loaded
+jQuery(document).ready(function() {
+  try {
+    if (jQuery.browser.msie && jQuery.browser.version >= 9) {
+      window.XMLSerializer = function() {};
+      window.XMLSerializer.prototype.serializeToString = function(oNode) {
+        return oNode.xml;
+      };
+    }
+  } catch (exception) {}
+  try {
+      A4J.AJAX.XMLHttpRequest.prototype._copyAttribute = function(src, dst, attr) {
+          var value = src.getAttribute(attr);
+          if (value) {
+            try {
+            dst.setAttribute(attr, value);
+            } catch (err) {}
+          }
+      };
+   } catch (exception) {}
+	 
+    jQuery('.workspace-data').hover(function(){
+    	jQuery(this).addClass('workspace-data-selected');
+    }, function(){
+    	jQuery(this).removeClass('workspace-data-selected');
+    });
+});
+
+// open the wait window when requesting data from server 
+function openWaitDlg() {
+	jQuery('#waitdiv').show();
+}
+// close the wait window when request is complete
+function closeWaitDlg() {
+	jQuery('#waitdiv').hide();
+}
+
 function numbersOnly(myfield, e, dec) {
 var key;
 var keychar;

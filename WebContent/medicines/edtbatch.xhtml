@@ -7,8 +7,6 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
                  
-<script src="../js/util.js" type="text/javascript" />
-
 <h:form>
 <a:jsFunction name="initNewBatch" action="#{medicineReceivingHome.startNewBatch(null)}" 
 	reRender="formbatch" ajaxSingle="true" oncomplete="finishShowBatchDlg();"/>

@@ -17,6 +17,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <a:loadStyle src="/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
 <a:loadStyle src="/public/font-awesome/css/font-awesome.min.css" />
+<a:loadScript src="/public/js/commons.js" />
 
 <style type="text/css">
 body {
@@ -79,9 +80,11 @@ color:#a0a0a0;
 
 	<hr/>
 	<h4>#{messages['login.msg1']}</h4>
+	<h:panelGroup id="msg">
 	<s:div rendered="#{not empty facesMessages.currentMessages}" styleClass="alert alert-error">
 	<h:messages layout="list" />
 	</s:div>
+	</h:panelGroup>
 	<div class="control-group">
 	    <label class="control-label" for="inputEmail">#{messages['login.user_login']}:</label>
     	<div class="controls">
@@ -110,7 +113,7 @@ color:#a0a0a0;
 	       	<a:commandButton id="btnOk" styleClass="btn btn-primary" onclick="callLogin(); return false;" value="#{messages['login.enter']}" />
 			<rich:jQuery timming="onload" selector="#nome" query="focus()" />
 			<rich:hotKey selector="input" key="return" handler="callLogin();" />
-			<a:jsFunction id="login" name="callLogin" ajaxSingle="false" action="#{identity.login}" reRender="main"/> 
+			<a:jsFunction id="login" name="callLogin" ajaxSingle="false" action="#{identity.login}" reRender="main:msg" /> 
   		</div>
   	</div>
 	</h:form>
@@ -152,20 +155,6 @@ color:#a0a0a0;
 
 <script type="text/javascript">
 <!--
-function disableButton(button) {
-	if (jQuery(button).is(".button-disabled"))	return false;
-	var el=jQuery('span', button);
-	var s=el.text();
-	el.html('<div class="wait-icon2"/>' + s);
-	jQuery(button).addClass("button-disabled");
-	return true;
-}
-function enableButton() { 
-	jQuery('.button-disabled').each(function() {
-	var s=jQuery(this).removeClass("button-disabled").text();
-	jQuery('span',this).html(s);
-	});
-}
 -->
 </script>
  
