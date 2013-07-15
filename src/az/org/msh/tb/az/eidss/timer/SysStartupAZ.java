@@ -39,9 +39,10 @@ public class SysStartupAZ{
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, 2100);
 
-		start = getStart();				
-		if (getConfig().auto)
-			start();
+		start = getStart();
+		if (getConfig().auto!=null)
+			if (getConfig().auto)
+				start();
 	}
 
 	private Date getStart(){
