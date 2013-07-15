@@ -148,6 +148,7 @@
 
 <ui:define name="content">
 <h1>#{title}</h1>
+<h:panelGroup id="systemFields">
 	<h:outputText value="#{messages['cases.system.create']}: " style="font-weight:bold;"/>
 	<h:outputText value="#{tbcase.systemDate}" converter="localeDateConverter" rendered="#{tbcase.systemDate != null}"/>
 	<h:outputText value="#{messages['cases.date_unknown']}" rendered="#{tbcase.systemDate == null}"/>
@@ -157,6 +158,10 @@
 	<h:outputText value="#{tbcase.editingDate}" converter="localeDateConverter" rendered="#{tbcase.editingDate != null}"/>
 	<h:outputText value="#{messages['cases.date_unknown']}" rendered="#{tbcase.editingDate == null}"/>
 	<h:outputText value=", #{tbcase.editingUser!=null ? tbcase.editingUser.name : messages['cases.user_unknown']}"/>
+	<br/>
+	<h:outputText value="#{messages['cases.system.lastaction']}: " style="font-weight:bold;"/>
+	<h:outputText value="#{caseAZHome.reGetTbCase(tbcase).lastAction!=null ? messages[caseAZHome.reGetTbCase(tbcase).lastAction.key] : messages['admin.import.eidss.nextFT.undef']}"/>
+</h:panelGroup>
 	
 <h:form id="main">
 <s:decorate id="bodydiv" template="/layout/casebody.xhtml">
@@ -186,7 +191,7 @@
 
 <rich:tab label="#{messages['cases.details.medexam']}" id="tab4" ontabenter="updateTab(4)">
 	<h:panelGroup id="pnltab4">
-		<s:decorate template="/cases/medexamination.xhtml" rendered="#{caseFilters.caseTab==4}"/>
+		<s:decorate template="medexamination.xhtml" rendered="#{caseFilters.caseTab==4}"/>
 	</h:panelGroup>
 </rich:tab>
 
@@ -275,13 +280,13 @@ function updateTab(tabIndex) {
 				<s:decorate template="/layout/edit.xhtml">
 					<ui:define name="label">#{messages['Patient.recordNumber']}:</ui:define>
 			    	<ui:param name="required" value="true" /> 
-			    	<h:inputText value="#{casesControlAZ.numDefault}" onkeypress="return notFirstNull(this,event);"/>
+			    	<h:inputText value="#{patientRecordNumberChangeHome.numDefault}" onkeypress="return notFirstNull(this,event);"/>
 				</s:decorate>
 			</h:panelGroup>
 		</div>
 		
 		<div class="button-bar">
-		<a:commandLink action="#{casesControlAZ.changeNumber()}"
+		<a:commandLink action="#{patientRecordNumberChangeHome.changeNumber()}"
 			styleClass="button" reRender="main,messages,formchangenum"
 			oncomplete="this.disabled=false;Richfaces.hideModalPanel('changenumdlg');">
 			<span>Ok</span>
