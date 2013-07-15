@@ -66,10 +66,10 @@ public class CasesQueryAZ extends CasesQuery{
 	
 	// static filters
 	private static final String[] restrictions = {
-		"p.recordNumber = #{caseFilters.patientRecordNumber}",
-		"c.registrationCode = #{caseFilters.registrationCode}",
+		//"p.recordNumber = #{caseFilters.patientRecordNumber}",
+		//"c.registrationCode = #{caseFilters.registrationCode}",
 		"c.unitRegCode = #{caseFilters.unitRegCode}",
-		"c.caseNumber = #{caseFilters.caseNumber}",
+		//"c.caseNumber = #{caseFilters.caseNumber}",
 		"p.workspace.id = #{defaultWorkspace.id}",
 		"c.state = #{caseFilters.caseState}",
 		"c.notifAddress.adminUnit.code like #{caseFilters.adminUnitLike}",
@@ -258,7 +258,7 @@ public class CasesQueryAZ extends CasesQuery{
 				getCaseFilters().setTagid(cfaz.getTag().getId());
 		}
 		else{
-			cfaz.setTag(null);
+			cfaz.clear();
 		}
 		if (!isNotBindedEIDSS()){
 			// health unit condition

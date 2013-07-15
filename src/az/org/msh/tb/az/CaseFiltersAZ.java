@@ -74,4 +74,12 @@ public class CaseFiltersAZ {
 		}
 		return caseNumbers;
 	}
+	/**
+	 * Reinitialize the advanced filters
+	 */
+	public void clear() {
+		tag = null;
+		caseNumbers = null;
+		caseNums = null;
+	}
 }
