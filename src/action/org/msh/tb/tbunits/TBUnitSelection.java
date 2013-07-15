@@ -78,6 +78,7 @@ public class TBUnitSelection {
 	/**
 	 * Change the TB Unit selected
 	 * @param unit to be selected
+	 * @author A.M.
 	 */
 	public void setTbunitWithOptions(Tbunit unit) {
 		if (this.tbunit == unit)
@@ -87,6 +88,9 @@ public class TBUnitSelection {
 			getAuselection().setSelectedUnit( unit.getAdminUnit().getParentLevel1() );
 			options = null;
 			getOptions();
+		}else{
+			getAuselection().setSelectedUnit(null);
+			options = null;
 		}
 		this.tbunit = unit;
 		notifyChange();
