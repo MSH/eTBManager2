@@ -584,7 +584,7 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 	/**
 	 * @return worst DST-test from several 
 	 */
-	private ExamDST WorstDSTRes(List<ExamDST> lst) {
+	protected ExamDST WorstDSTRes(List<ExamDST> lst) {
 		int tmp = 0;
 		int max = Integer.MIN_VALUE;
 		ExamDST minEl = null;
