@@ -3,6 +3,7 @@ package org.msh.tb.az;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.az.entities.enums.CaseFindingStrategy;
+import org.msh.tb.az.entities.enums.LastAction;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.ClinicalEvolution;
 import org.msh.tb.entities.enums.DstResult;
@@ -99,10 +100,6 @@ public class GlobalLists {
 		
 	};
 	
-	private static final CaseFindingStrategy caseFindingStrategy[] = {
-		CaseFindingStrategy.ACTIVE,
-		CaseFindingStrategy.PASSIVE
-	};
 	
 /* never used, also specific to Brazil - AK
 	public TipoResistencia[] getTiposResistencia() {
@@ -111,7 +108,7 @@ public class GlobalLists {
 */
 	
 	public CaseFindingStrategy[] getCaseFindingStrategies() {
-		return caseFindingStrategy;
+		return CaseFindingStrategy.values();
 	}
 
 	/**
@@ -152,5 +149,9 @@ public class GlobalLists {
 	
 	public MicroscopyResult[] getMicroscopyResults() {
 		return microscopyResults;
+	}
+	
+	public LastAction[] getLastActions() {
+		return LastAction.values();
 	}
 }
