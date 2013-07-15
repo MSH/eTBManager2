@@ -36,9 +36,9 @@
 						<h:panelGroup id="delbutton">
 							<a:commandLink 
 									onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}"
-									rendered="#{casesControlAZ.deleteList.size()!=0}" 
+									rendered="#{deleteCasesHome.deleteList.size()!=0}" 
 									reRender="listCases"  
-									action="#{casesControlAZ.removeCasesFromDeleteList()}"
+									action="#{deleteCasesHome.removeCasesFromDeleteList()}"
 									styleClass="button">
 							<span>#{messages['form.remove']}</span>
 							</a:commandLink>
@@ -69,7 +69,7 @@
 									<a:commandLink value="#"
 										onclick="changeOrder(0); return false;" />
 									<br/>
-									<h:selectBooleanCheckbox onclick="checkClick(this);" rendered="#{casesControlAZ.canDeleteEIDSS and casesControlAZ.countEIDSSCases>0}"/>
+									<h:selectBooleanCheckbox onclick="checkClick(this);" rendered="#{deleteCasesHome.canDeleteEIDSS and deleteCasesHome.countEIDSSCases>0}"/>
 								</div>
 							</ui:fragment>
 							<ui:fragment rendered='#{casesAZ.notBindedEIDSS}'>
@@ -77,7 +77,7 @@
 									<a:commandLink value="#{messages['Gender']}"
 										onclick="changeOrder(1); return false;" />
 									<br/>
-									<h:selectBooleanCheckbox onclick="checkClick(this);" rendered="#{casesControlAZ.canDeleteEIDSS and casesControlAZ.countEIDSSCases>0}"/>
+									<h:selectBooleanCheckbox onclick="checkClick(this);" rendered="#{deleteCasesHome.canDeleteEIDSS and deleteCasesHome.countEIDSSCases>0}"/>
 								</div>
 							</ui:fragment>
 							</th>
@@ -197,7 +197,7 @@
 										<f:param name="id" value="#{it.tbcase.id}" />
 									</s:link> 
 									<br/>
-									<h:selectBooleanCheckbox id="deltbc" onchange="toDeleteList(#{it.tbcase.id}); return false;" rendered="#{casesControlAZ.canDeleteEIDSS and caseAZHome.reGetTbCase(it.tbcase).legacyId!=null}"/>
+									<h:selectBooleanCheckbox id="deltbc" onchange="toDeleteList(#{it.tbcase.id}); return false;" rendered="#{deleteCasesHome.canDeleteEIDSS and caseAZHome.reGetTbCase(it.tbcase).legacyId!=null}"/>
 								</td>
 								<td style="color:#069;" width="32%">
 										<b>
@@ -272,9 +272,9 @@
 				<a:actionparam name="param1" assignTo="#{caseFilters.newOrder}"	converter="javax.faces.Integer" />
 			</a:jsFunction>
 			<a:jsFunction name="toDeleteList" ajaxSingle="true" reRender="delbutton">
-				<a:actionparam name="param1" assignTo="#{casesControlAZ.markToDel}"	converter="javax.faces.Integer" />
+				<a:actionparam name="param1" assignTo="#{deleteCasesHome.markToDel}"	converter="javax.faces.Integer" />
 			</a:jsFunction>
-			<a:jsFunction name="allToDeleteList" ajaxSingle="true" action="#{casesControlAZ.fillDeleteListFromCases}" reRender="delbutton"/>
+			<a:jsFunction name="allToDeleteList" ajaxSingle="true" action="#{deleteCasesHome.fillDeleteListFromCases}" reRender="delbutton"/>
 			
 			<script type="text/javascript">
 				function checkClick(obj) {

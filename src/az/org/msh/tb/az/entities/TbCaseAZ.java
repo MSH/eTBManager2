@@ -21,6 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.msh.tb.az.entities.enums.CaseFindingStrategy;
+import org.msh.tb.az.entities.enums.LastAction;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
@@ -97,6 +98,8 @@ public class TbCaseAZ extends TbCase{
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="editingUser_id")
 	private User editingUser;
+	
+	private LastAction lastAction;
 	
 	/**
 	 * Returns the case number in a formated way ready for displaying
@@ -448,6 +451,14 @@ public class TbCaseAZ extends TbCase{
 	 */
 	public void setEditingUser(User editingUser) {
 		this.editingUser = editingUser;
+	}
+
+	public void setLastAction(LastAction lastAction) {
+		this.lastAction = lastAction;
+	}
+
+	public LastAction getLastAction() {
+		return lastAction;
 	}
 
 }

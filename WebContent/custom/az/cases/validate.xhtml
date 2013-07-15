@@ -154,7 +154,8 @@ function isPulmonary(cb) {
 			<div class="form-footer">
 				<a:commandLink action="#{caseValidationHome.validate}"
 					styleClass="button" reRender="main,messages"
-					onclick="if (!disableButton(this)) return false;">
+					onclick="if (!disableButton(this)) return false; alert('0');" oncomplete="alert('1');" 
+					data="#{casesControlAZ.saveLastAction('VALIDATE_CASE')}">
 					<span>#{messages['cases.validate']}</span>
 				</a:commandLink>
 				<s:link view="/cases/casedata.xhtml" styleClass="button-alt"
@@ -163,6 +164,7 @@ function isPulmonary(cb) {
 					<span>#{messages['form.cancel']}</span>
 				</s:link>
 			</div>
+			<a:jsFunction name="saveLastAction" action="#{casesControlAZ.saveLastAction('VALIDATE_CASE')}" ajaxSingle="true"/>
 
 		</h:form>
 	</ui:define>

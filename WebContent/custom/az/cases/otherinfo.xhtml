@@ -137,9 +137,11 @@
 	</table>
 	</a:repeat>
 
-		<a:jsFunction name="remContact" action="#{tbContactHome.remove}" reRender="pnlcontact"  rendered="#{caseHome.canEditCaseData}">
+		<a:jsFunction name="remContact" action="#{tbContactHome.remove}" reRender="pnlcontact"  
+			rendered="#{caseHome.canEditCaseData}" oncomplete="remContactla();">
 			<a:actionparam name="param1" assignTo="#{tbContactHome.id}" converter="javax.faces.Integer"/>
 		</a:jsFunction>
+		<a:jsFunction name="remContactla" action="#{casesControlAZ.saveLastAction('DELETE_CONTACT')}" reRender="systemFields"/>
 	</h:panelGroup>
 
 	<div class="spacer" />
@@ -200,9 +202,11 @@
 	
 	</h:panelGroup>
 	
-	<a:jsFunction name="remSideEffect" action="#{sideEffectHome.remove}" reRender="sideeffects"  rendered="#{caseHome.canEditExams}">
+	<a:jsFunction name="remSideEffect" action="#{sideEffectHome.remove}" reRender="sideeffects"  
+		rendered="#{caseHome.canEditExams}" oncomplete="remSideEffectla();">
 		<a:actionparam name="param1" assignTo="#{sideEffectHome.id}" converter="javax.faces.Integer"/>
 	</a:jsFunction>
+	<a:jsFunction name="remSideEffectla" action="#{casesControlAZ.saveLastAction('DELETE_SIDE_EFFECT')}" reRender="systemFields"/>
 
 	<s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="other" />

@@ -57,7 +57,7 @@
 		    </s:decorate>
 		    
 		<div class="form-footer">
-			<a:commandLink action="#{sideEffectHome.save}" styleClass="button" reRender="main">
+			<a:commandLink action="#{casesControlAZ.persistActiveHomeObject}" styleClass="button" reRender="main">
 				<span>#{messages['form.save']}</span>
 			</a:commandLink> 
 		    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">

@@ -73,10 +73,12 @@
 	</h:panelGroup>
                  
 	
-<a:jsFunction name="remExamHIV" action="#{examHIVHome.remove}" reRender="pnlhiv"  rendered="#{caseAZHome.canEditExams}">
+<a:jsFunction name="remExamHIV" action="#{examHIVHome.remove}" reRender="pnlhiv"  rendered="#{caseAZHome.canEditExams}" 
+	oncomplete="remExamHIVla();">
 	<a:actionparam name="param1" assignTo="#{examHIVHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
+<a:jsFunction name="remExamHIVla" action="#{casesControlAZ.saveLastAction('DELETE_EXAM_HIV')}" reRender="systemFields"/>
 
 	<div class="spacer" />    
 
@@ -144,10 +146,11 @@
 			</h:column>			
 		</h:dataTable>
 	</h:panelGroup>
-<a:jsFunction name="remExamMicroscopy" action="#{examMicroscopyHome.remove}" reRender="pnlmicroscopy"  rendered="#{caseAZHome.canEditExams}">
+<a:jsFunction name="remExamMicroscopy" action="#{examMicroscopyHome.remove}" reRender="pnlmicroscopy"  
+	rendered="#{caseAZHome.canEditExams}" oncomplete="remExamMicroscopyla();">
 	<a:actionparam name="param1" assignTo="#{examMicroscopyHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
-
+<a:jsFunction name="remExamMicroscopyla" action="#{casesControlAZ.saveLastAction('DELETE_EXAM_MICROSCOPY')}" reRender="systemFields"/>
 
 	<div class="spacer" />
 
@@ -218,9 +221,10 @@
 		</h:dataTable>
 	</h:panelGroup>
 	
-<a:jsFunction name="remExamCulture" action="#{examCultureHome.remove}" reRender="pnlculture" ajaxSingle="true" rendered="#{caseAZHome.canEditExams}">
+<a:jsFunction name="remExamCulture" action="#{examCultureHome.remove}" reRender="pnlculture" ajaxSingle="true" rendered="#{caseAZHome.canEditExams}" oncomplete="remExamCulturela();">
 	<a:actionparam name="param1" assignTo="#{examCultureHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
+<a:jsFunction name="remExamCulturela" action="#{casesControlAZ.saveLastAction('DELETE_EXAM_CULTURE')}" reRender="systemFields"/>
 
 	<div class="spacer" />
 
@@ -306,9 +310,11 @@
 		</s:fragment>
 	</h:panelGroup>
 	
-<a:jsFunction name="remExamDST" action="#{examDSTHome.remove}" reRender="pnldst" ajaxSingle="true"  rendered="#{caseAZHome.canEditExams}">
+<a:jsFunction name="remExamDST" action="#{examDSTHome.remove}" reRender="pnldst" ajaxSingle="true"  
+	rendered="#{caseAZHome.canEditExams}" oncomplete="remExamDSTla();">
 	<a:actionparam name="param1" assignTo="#{examDSTHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
+<a:jsFunction name="remExamDSTla" action="#{casesControlAZ.saveLastAction('DELETE_EXAM_DST')}" reRender="systemFields"/>
 
 	<div class="spacer" />
 
@@ -365,10 +371,12 @@
 		</h:dataTable>
 	</h:panelGroup>
 	
-<a:jsFunction name="remExamXRay" action="#{examXRayHome.remove}" reRender="pnlXRay" >
+<a:jsFunction name="remExamXRay" action="#{examXRayHome.remove}" reRender="pnlXRay" oncomplete="remExamXRayla()">
 	<a:actionparam name="param1" assignTo="#{examXRayHome.id}" converter="javax.faces.Integer"/>
 	<a:actionparam name="param2" assignTo="#{examXRayHome.lastResult}" converter="javax.faces.Boolean"/>
 </a:jsFunction>
+<a:jsFunction name="remExamXRayla" action="#{casesControlAZ.saveLastAction('DELETE_EXAM_XRAY')}" reRender="systemFields"/>
+
 
 	<s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="exams" />

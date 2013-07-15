@@ -81,7 +81,7 @@
     </div>
     
     <div class="form-footer">
-	<a:commandLink action="#{comorbidityHome.save}" styleClass="button" reRender="main"
+	<a:commandLink action="#{casesControlAZ.persistActiveHomeObject}" styleClass="button" reRender="main"
 		onclick="if (!disableButton(this)) return false;" >
 		<span>#{messages['form.save']}</span>
 	</a:commandLink>
