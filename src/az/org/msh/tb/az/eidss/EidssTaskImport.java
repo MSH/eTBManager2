@@ -414,6 +414,9 @@ public class EidssTaskImport extends AsyncTaskImpl {
 			Calendar loadDate = GregorianCalendar.getInstance();
 			Calendar currentDate = GregorianCalendar.getInstance();
 			loadDate.setTime(config.getFrom());
+			loadDate.set(Calendar.HOUR_OF_DAY, 12);
+			loadDate.set(Calendar.MINUTE, 0);
+			loadDate.set(Calendar.SECOND,0);
 			currentDate.setTime(config.getToDate());
 			String[] diagnosis = config.getDiagnosis().split(",");
 			while(!loadDate.after(currentDate)){
