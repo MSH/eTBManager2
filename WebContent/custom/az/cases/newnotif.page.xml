@@ -5,7 +5,7 @@
  <begin-conversation join="true"/>
  <param name="classif" required="true" value="#{tbcase.classification}"/>
  <param name="type" required="true" value="#{tbcase.diagnosisType}"/>
- <action execute="#{casesControlAZ.setCanDeleteEIDSSInTrue()}"/>
+ <action execute="#{deleteCasesHome.setCanDeleteEIDSSInTrue()}"/>
  <navigation>
   <rule if-outcome="newpatient">
    <begin-conversation join="true"/>
