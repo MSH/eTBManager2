@@ -31,7 +31,7 @@ public enum OutputSelectionAZ {
 	YEAR_MONTH("global.monthyear"),
 	YEAR_WEEK("global.weekyear"),
 	HEALTH_SYSTEM("HealthSystem"),
-	CREATOR_USER("User");
+	CREATOR_USER("User.create");
 
 	private String key;
 	
