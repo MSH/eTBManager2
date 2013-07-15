@@ -66,7 +66,7 @@ public abstract class OutputSelectionIndicator extends Indicator {
 		case CLASSIFICATION: return "c.classification";
 		case YEAR_MONTH: return "year("+getDate()+"),month("+getDate()+")";
 		case YEAR: return "year("+getDate()+")";
-		case YEAR_WEEK: return "year("+getDate()+"),week("+getDate()+")";
+		case YEAR_WEEK: return "yearweek("+getDate()+",3)";//ISO 8601
 		case HEALTH_SYSTEM: return "c.notificationUnit.healthSystem";
 		case REAL_UNIT: return "c.notificationUnit,c.ownerUnit"; 
 		case CREATOR_USER: return "c.createUser";
@@ -166,14 +166,11 @@ public abstract class OutputSelectionIndicator extends Indicator {
 		}
 		
 		if (output == OutputSelectionAZ.YEAR_WEEK){
-			//DateFormatSymbols symbols = new DateFormatSymbols(locale);
-			//String[] values = symbols.getShortMonths();
 			for (Object[] vals: lst) {
-				Object[] n = new Object[vals.length-1];
-				Integer week = (Integer)vals[1]+1;
-				String w = (week<10?"0":"")+week;
-				n[0] = vals[0]+ " \""+w+"\"";
-				cutLastElement(0, lst, vals, n);
+				String yw = Integer.toString(((Integer)vals[0]));
+				String y = yw.substring(0, 4).toString();
+				String w = yw.substring(4).toString();
+				vals[0] = y+" ''"+w+"''";
 			}
 		}
 		
@@ -187,6 +184,7 @@ public abstract class OutputSelectionIndicator extends Indicator {
 				addValue(translateKey(vals[0]), val);
 		}
 	}
+	
 	
 	/**
 	 * @param index

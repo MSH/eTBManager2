@@ -175,13 +175,11 @@ public class CustomIndicatorAZ extends OutputSelectionIndicator2D {
 		
 		if (output == OutputSelectionAZ.YEAR_WEEK){
 			for (Object[] vals: lst) {
-				//concatenate month and year and shift other fields
-				Integer week = (Integer)vals[index+1]+1;
-				String w = (week<10?"0":"")+week;
-				Object[] n = new Object[vals.length-1];
-				n[index] = vals[index]+" \""+w+"\"";
-				
-				cutLastElement(index, lst, vals, n);
+				//split year and week to other fields
+				String yw = Integer.toString(((Integer)vals[index]));
+				String y = yw.substring(0, 4).toString();
+				String w = yw.substring(4).toString();
+				vals[index] = y+" \""+w+"\"";
 			}
 		}
 		
@@ -192,6 +190,7 @@ public class CustomIndicatorAZ extends OutputSelectionIndicator2D {
 		return lst;
 	}
 
+	
 	/**
 	 * @return the colSelection
 	 */
