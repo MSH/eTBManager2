@@ -12,6 +12,7 @@ import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.application.App;
 import org.msh.tb.az.entities.TbCaseAZ;
+import org.msh.tb.az.entities.enums.LastAction;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.exams.MedicalExaminationHome;
 import org.msh.tb.entities.Address;
@@ -117,8 +118,8 @@ public class CaseEditingAZHome extends CaseEditingHome{
 	 * Set tb-unit where user from
 	 */
 	public void setUserTBUnitDefault(){
-		Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
-		getTbunitselection().setTbunitWithOptions(nTbUUser);
+		//Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
+		getTbunitselection().setTbunitWithOptions(caseHome.getTbCase().getNotificationUnit());
 	}
 	
 	/**
@@ -262,8 +263,8 @@ public class CaseEditingAZHome extends CaseEditingHome{
 	}
 	
 	public boolean validateMedExam(){
-		MedicalExaminationHome meh = (MedicalExaminationHome)App.getComponent("medicalExaminationHome");
-		MedicalExamination me = meh.getInstance();
+		MedicalExaminationHome medicalExaminationHome = (MedicalExaminationHome)App.getComponent(MedicalExaminationHome.class);
+		MedicalExamination me = medicalExaminationHome.getInstance();
 		try{
 			if (!(me.getDate()==null && me.getResponsible().isEmpty() && me.getHeight()==null && me.getWeight()==null && me.getComments().isEmpty())){
 				if (!(me.getDate()!=null && me.getResponsible()!=null && me.getHeight()!=null && me.getWeight()!=null)){
@@ -296,6 +297,8 @@ public class CaseEditingAZHome extends CaseEditingHome{
 			tbcase.setSystemDate(new Date());
 			tbcase.setCreateUser(uw.getUser());
 		}
+		else
+			CasesControlAZ.saveLastAction(LastAction.EDIT_CASE);
 		tbcase.setEditingDate(new Date());
 		tbcase.setEditingUser(uw.getUser());
 
