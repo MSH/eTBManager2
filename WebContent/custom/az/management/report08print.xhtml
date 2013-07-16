@@ -21,13 +21,16 @@
 
 <ui:define name="content">
 <h:form>
-<ui:remove>
-<iframe src="#{request.contextPath}/custom/az/management/Forma8_titul_az.pdf" width="500" height="300"></iframe>
 
-<object data="#{request.contextPath}/custom/az/management/Forma8_titul_az.pdf" type="application/pdf" width="500" height="300">
-    <a href="#{request.contextPath}/custom/az/management/Forma8_titul_az.pdf">Download file.pdf</a>
+<img src="#{request.contextPath}/custom/az/management/Forma8_titul_#{locale.language}.jpg" width="100%"/>
+<p style='page-break-after:always;'/>
+
+<ui:remove>
+<object data="#{request.contextPath}/custom/az/management/Forma8_ru_titul.html" type="text/html" width="500" height="300">
+    <a href="#{request.contextPath}/custom/az/management/Forma8_ru_titul.html">Download file.pdf</a>
 </object>
 </ui:remove>
+
 
 
 <table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
