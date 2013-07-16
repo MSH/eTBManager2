@@ -118,7 +118,7 @@
 	<target depends="clean" name="cleanall"/>
 	
 	
-    <target depends="compile,gwt-compile,war" name="build" />
+    <target depends="compile,gwt-compile,javascript-compile,war" name="build" />
 	
 	<target depends="init" name="compile">
         <echo message="${ant.project.name}: ${ant.file}"/>
@@ -149,7 +149,7 @@
 	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
 	
 	
-	<target description="Build the .war file" depends="javascript-compile,init" name="war">
+	<target description="Build the .war file" depends="init" name="war">
 		<delete file="build/${war-file-name}" />
 		<buildnumber file="build.num"/>
 		
@@ -184,7 +184,7 @@
 			
 			<zipfileset file="production/persistence.xml" prefix="WEB-INF/classes/META-INF" />
 			<zipfileset file="production/components.xml" prefix="WEB-INF" />
-			<zipfileset file="build/compile/commons.min.${commons.js.checksum}.js" prefix="public/js" />
+			<zipfileset file="build/compiled/commons.min.${commons.js.checksum}.js" prefix="public/js" />
 		</war>
 	</target>
 
