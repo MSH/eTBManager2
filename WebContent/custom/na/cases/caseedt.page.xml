@@ -16,13 +16,13 @@
 		
 			<rule if-outcome="persisted">
 				<end-conversation/>
-				<redirect view-id="/custom/na/cases/casedata.xhtml">
+				<redirect view-id="/cases/casedata.xhtml">
 					<param name="id" value="#{caseHome.id}"/>
 				</redirect>
 			</rule>
 			<rule if-outcome="cancel">
 				<end-conversation before-redirect="true"/>
-				<redirect view-id="/custom/na/cases/casedata.xhtml">
+				<redirect view-id="/cases/casedata.xhtml">
 					<param name="id" value="#{caseHome.id}"/>
 				</redirect>
 			</rule>

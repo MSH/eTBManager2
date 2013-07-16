@@ -11,7 +11,7 @@
 			</rule>
 
 			<rule if-outcome="persisted">
-				<redirect view-id="/custom/na/cases/casedata.xhtml">
+				<redirect view-id="/cases/casedata.xhtml">
 					<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
 				</redirect>
 			</rule>

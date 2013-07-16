@@ -6,6 +6,8 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+<h:form>
 	<div class="spacer" />
 	<s:link view="/custom/na/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
@@ -90,5 +92,6 @@
 	<a:actionparam name="param1" assignTo="#{medicalExaminationNAHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
+</h:form>
     
 </ui:composition>

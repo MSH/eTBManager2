@@ -9,7 +9,7 @@
 	<navigation>
 		<rule if-outcome="newpatient">
 			<begin-conversation join="true" />
-			<redirect view-id="/custom/na/cases/casenew.xhtml">
+			<redirect view-id="/cases/casenew.xhtml">
 			</redirect>
 		</rule>
 	</navigation>

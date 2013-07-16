@@ -1074,6 +1074,15 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 .naveg-next { background-position:-32px -32px; }
 .naveg-last { background-position:-48px -32px; }
 
+.result-positive {
+	color:red;
+	font-weight:bold;
+}
+.result-negative {
+	color:green;
+	font-weight:bold;
+}
+
 /* TREATMENT */
 
 .treattable {

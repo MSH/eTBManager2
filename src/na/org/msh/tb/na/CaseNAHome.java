@@ -19,10 +19,6 @@ import org.msh.tb.na.entities.TbCaseNA;
 @Name("caseNAHome")
 public class CaseNAHome {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6017786643816951651L;
 	@In(create=true) CaseHome caseHome;
 	@In(create=true) CaseEditingHome caseEditingHome;
 	@In(create=true) TreatmentHome treatmentHome;
@@ -55,8 +51,6 @@ public class CaseNAHome {
 		
 		return ret;
 	}
-
-
 
 
 	/**

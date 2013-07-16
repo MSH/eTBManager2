@@ -14,7 +14,6 @@
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
 
-
 <ui:define name="naveg">
 	<div class="item">
 		<s:link value="#{messages['cases']}" view="/cases/index.html" propagation="none"/>
@@ -181,43 +180,43 @@
 <rich:tabPanel switchType="client" id="tabCase">
 <rich:tab label="#{messages['cases.details.case']}" id="tab1" ontabenter="updateTab(1)">
 	<h:panelGroup id="pnltab1">
-		<s:decorate template="/cases/data.xhtml" rendered="#{caseFilters.caseTab==1}"/>
+		<s:decorate template="#{wspage['/cases/data.xhtml']}" rendered="#{caseFilters.caseTab==1}"/>
 	</h:panelGroup>
 </rich:tab>
 
 <rich:tab label="#{messages['cases.details.exams']}" id="tab2" ontabenter="updateTab(2)">
 	<h:panelGroup id="pnltab2">
-		<s:decorate template="/cases/exams.xhtml" rendered="#{caseFilters.caseTab==2}"/>
+		<s:decorate template="#{wspage['/cases/exams.xhtml']}" rendered="#{caseFilters.caseTab==2}"/>
 	</h:panelGroup>
 </rich:tab>
 
 <rich:tab label="#{messages['cases.details.treatment']}" id="tab3" ontabenter="updateTab(3)">
 	<h:panelGroup id="pnltab3">
-		<s:decorate template="/cases/treatment.xhtml" rendered="#{caseFilters.caseTab==3}"/>
+		<s:decorate template="#{wspage['/cases/treatment.xhtml']}" rendered="#{caseFilters.caseTab==3}"/>
 	</h:panelGroup>
 </rich:tab>
 
 <rich:tab label="#{messages['cases.details.medexam']}" id="tab4" ontabenter="updateTab(4)">
 	<h:panelGroup id="pnltab4">
-		<s:decorate template="/cases/medexamination.xhtml" rendered="#{caseFilters.caseTab==4}"/>
+		<s:decorate template="#{wspage['/cases/medexamination.xhtml']}" rendered="#{caseFilters.caseTab==4}"/>
 	</h:panelGroup>
 </rich:tab>
 
 <rich:tab label="#{messages['cases.details.otherinfo']}" id="tab5" ontabenter="updateTab(5)">
 	<h:panelGroup id="pnltab5">
-		<s:decorate template="/cases/otherinfo.xhtml" rendered="#{caseFilters.caseTab==5}"/>
+		<s:decorate template="#{wspage['/cases/otherinfo.xhtml']}" rendered="#{caseFilters.caseTab==5}"/>
 	</h:panelGroup>
 </rich:tab>
 
 <rich:tab label="#{messages['cases.details.report1']}" id="tab6" ontabenter="updateTab(6)">
 	<h:panelGroup id="pnltab6">
-		<s:decorate template="/cases/drugogram.xhtml" rendered="#{caseFilters.caseTab==6}"/>
+		<s:decorate template="#{wspage['/cases/drugogram.xhtml']}" rendered="#{caseFilters.caseTab==6}"/>
 	</h:panelGroup>
 </rich:tab>
 
 <rich:tab label="#{messages['cases.issues']}" id="tab7" ontabenter="updateTab(7)" rendered="#{s:hasRole('ISSUES')}">
 	<h:panelGroup id="pnltab7">
-		<s:decorate template="/cases/casedata_issues.xhtml" rendered="#{caseFilters.caseTab==7}"/>
+		<s:decorate template="#{wspage['/cases/casedata_issues.xhtml']}" rendered="#{caseFilters.caseTab==7}"/>
 	</h:panelGroup>
 </rich:tab>
 

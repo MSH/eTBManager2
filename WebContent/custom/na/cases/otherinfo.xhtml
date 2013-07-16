@@ -6,17 +6,19 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-                
-      <div class="spacer" />
+
+<h:form>
+    <div class="spacer" />
 	<s:link view="/cases/comorbedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt" onclick="disableButton(this)">
-				<f:param name="id" value="#{caseHome.id}" />
-				<span>#{messages['form.newedit']}</span>
-			</s:link>
-    		<h2>#{messages['cases.comorbidities']}</h2>
+		<f:param name="id" value="#{caseHome.id}" />
+		<span>#{messages['form.new']}/#{messages['form.edit']}</span>
+	</s:link>
+    <h2>#{messages['cases.comorbidities']}</h2>
     		
-    		<s:div styleClass="region3" rendered="#{empty tbcase.comorbidities}"><div class="content">
+    <s:div styleClass="region3" rendered="#{empty tbcase.comorbidities}">
+    	<div class="content">
 			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" style="display:block;padding:4px"/>
-		</div></s:div>
+	</div></s:div>
 		
 			<h:dataTable value="#{tbcase.comorbidities}" var="it" style="margin-top:10px;margin-bottom:10px;"
 			styleClass="table1" rowClasses="lin1,lin2" width="100%" rendered="#{not empty tbcase.comorbidities}" columnClasses="colcb,colcb,colb,colb,colb">
@@ -231,5 +233,6 @@
 		<ui:param name="panel" value="other" />
 	</s:decorate> -->
 	
+</h:form>
     
 </ui:composition>

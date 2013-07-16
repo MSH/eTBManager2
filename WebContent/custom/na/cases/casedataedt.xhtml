@@ -20,9 +20,9 @@
 	</td></tr>
 	<tr><td>
 	
-	<s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
-		<h:inputText value="#{tbcase.unitRegCode}" style="width:120px;" maxlength="50"></h:inputText>
+	<s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">#{messages['TbCase.registrationCode']}:</ui:define>
+    	#{tbcase.registrationCode}
 	</s:decorate>
 	
 	</td><td>
