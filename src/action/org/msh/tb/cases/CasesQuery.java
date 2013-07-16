@@ -274,7 +274,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 				"%') or (upper(p.lastName) like '%" + name.toUpperCase() + "%'))";
 			}
 
-			addCondition(s + (numberCond == null? ")": " or (" + numberCond + "))"));	
+			addCondition(s + (numberCond.isEmpty() ? ")": " or (" + numberCond + "))"));	
 		}
 
 		Integer stateIndex = caseFilters.getStateIndex();
