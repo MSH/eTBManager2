@@ -99,7 +99,14 @@ public class CasesControlAZ {
 	 * Next 10 methods - observers of general operations with tbcase  
 	 */
 	
-	@Observer("case.close")
+	// Comments from Ricardo Memoria
+	// 2 HUGE BUGS
+	// * BEING CALLED IN ALL WORKSPACES BUT NOT ONLY AZERBAIJAN
+	// * GENERATING ERROR WHEN CALLED BY OTHER WORKSPACES
+	// Tip: Why don't you use the transaction log system already available in the system, which does exactly what you're trying to achieve ????
+	// See TbCase.lastTransaction property
+	
+/*	@Observer("case.close")
 	public void closeCase(){
 		saveLastAction(LastAction.CLOSE_CASE);
 	}
@@ -114,16 +121,15 @@ public class CasesControlAZ {
 		saveLastAction(LastAction.VALIDATE_CASE);
 	}
 	
-/*	@Observer("pending-registered-answered")
+	@Observer("pending-registered-answered")
 	public void postPendingCase(){
 		CaseHome caseHome = (CaseHome)App.getComponent("caseHome");
 		TbCase cur = caseHome.getInstance();
-// Ricardo Memoria - There is no pending status anymore
 		if (ValidationState.PENDING.equals(cur.getValidationState()))
 			saveLastAction(LastAction.POST_PENDING_CASE);
 		if (ValidationState.PENDING_ANSWERED.equals(cur.getValidationState()))
 			saveLastAction(LastAction.POST_ANSWER_CASE);
-	}*/
+	}
 	
 	@Observer("case.transferout")
 	public void transferOutCase(){
@@ -154,7 +160,7 @@ public class CasesControlAZ {
 	public void treatCancel(){
 		saveLastAction(LastAction.CANCEL_TREAT);
 	}
-	
+*/	
 	/**
 	 * Rewrite {@link CaseDispensingHome.saveDispensing()} with setting last action
 	 * @return result of {@link CaseDispensingHome.saveDispensing()}
