@@ -14,7 +14,6 @@ import org.msh.tb.application.App;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.az.entities.enums.LastAction;
 import org.msh.tb.cases.CaseEditingHome;
-import org.msh.tb.cases.exams.MedicalExaminationHome;
 import org.msh.tb.entities.Address;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.MedicalExamination;
@@ -263,8 +262,7 @@ public class CaseEditingAZHome extends CaseEditingHome{
 	}
 	
 	public boolean validateMedExam(){
-		MedicalExaminationHome medicalExaminationHome = (MedicalExaminationHome)App.getComponent(MedicalExaminationHome.class);
-		MedicalExamination me = medicalExaminationHome.getInstance();
+		MedicalExamination me = getMedicalExaminationHome().getMedicalExamination();
 		try{
 			if (!(me.getDate()==null && me.getResponsible().isEmpty() && me.getHeight()==null && me.getWeight()==null && me.getComments().isEmpty())){
 				if (!(me.getDate()!=null && me.getResponsible()!=null && me.getHeight()!=null && me.getWeight()!=null)){
@@ -302,6 +300,15 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		tbcase.setEditingDate(new Date());
 		tbcase.setEditingUser(uw.getUser());
 
+		if (getMedicalExaminationHome() != null) {
+			MedicalExamination medExa = getMedicalExaminationHome().getInstance();
+			if (medExa.getDate() != null) {
+				//medExa.setAppointmentType(MedAppointmentType.SCHEDULLED);
+				//medExa.setUsingPrescMedicines(YesNoType.YES);
+				getMedicalExaminationHome().persist();			
+			}
+		}
+		
 		/*Tbunit nTbU = getTbunitselection().getTbunit();
 		Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
 		if (nTbU.getId().intValue() != nTbUUser.getId().intValue())

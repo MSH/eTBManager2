@@ -15,7 +15,7 @@
 	    <tr><td>
 		
 		<h:message for="medexamerror" styleClass="error" />
-		<h:form id="medexamerror">
+		<h:panelGroup id="medexamerror">
 		    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
 		    	<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
 		    	<ui:param name="future" value="true" /> 
@@ -47,7 +47,7 @@
 		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
 		    	<h:inputTextarea value="#{medicalExamination.comments}" style="width:500px;height:100px;" />
 		    </s:decorate>
-		</h:form>
+		</h:panelGroup>
 		</td></tr>
 		</table>
 	</div>
