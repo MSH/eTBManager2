@@ -255,6 +255,11 @@ public class CaseAZHome {
 		return tc;
 	}
 	
+	public boolean isCanStartTreatment() {
+		CaseState st = caseHome.getInstance().getState();
+		return getTbCase().isOpen() && (caseHome.isManaged()) && (st != null) && (st.ordinal() < CaseState.ONTREATMENT.ordinal()) && (caseHome.isCanEditTreatment());
+	}
+	
 	/**
 	 * Generate html-block with EIDSS-information
 	 * */
