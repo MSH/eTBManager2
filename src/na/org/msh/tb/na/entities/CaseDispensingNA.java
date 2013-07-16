@@ -36,7 +36,11 @@ public class CaseDispensingNA implements Serializable {
 	@Column(name="DISP_YEAR")
 	private int year;
 
-	private int totalDays;
+	private int totalDaysDot;
+	
+	private int totalDaysSelfAdmin;
+
+	private int totalDaysNotTaken;
 
 	@OneToOne
 	@PrimaryKeyJoinColumn
@@ -45,7 +49,9 @@ public class CaseDispensingNA implements Serializable {
 	public void updateTotalDays() {
 		if (dispensingDays == null)
 			new RuntimeException("No information about days dispensed in CaseInfo");
-		totalDays = dispensingDays.getNumDispensingDays();
+		totalDaysDot = dispensingDays.getNumDispensingDaysDot();
+		totalDaysSelfAdmin = dispensingDays.getNumDispensingDaysNotSupervised();
+		totalDaysNotTaken = dispensingDays.getNumDispensingDaysNotTaken();
 	}
 	
 	/**
@@ -119,16 +125,44 @@ public class CaseDispensingNA implements Serializable {
 	}
 
 	/**
-	 * @return the totalDays
+	 * @return the totalDaysDot
 	 */
-	public int getTotalDays() {
-		return totalDays;
+	public int getTotalDaysDot() {
+		return totalDaysDot;
 	}
 
 	/**
-	 * @param totalDays the totalDays to set
+	 * @param totalDaysDot the totalDaysDot to set
 	 */
-	public void setTotalDays(int totalDays) {
-		this.totalDays = totalDays;
+	public void setTotalDaysDot(int totalDaysDot) {
+		this.totalDaysDot = totalDaysDot;
+	}
+
+	/**
+	 * @return the totalDaysSelfAdmin
+	 */
+	public int getTotalDaysSelfAdmin() {
+		return totalDaysSelfAdmin;
+	}
+
+	/**
+	 * @param totalDaysSelfAdmin the totalDaysSelfAdmin to set
+	 */
+	public void setTotalDaysSelfAdmin(int totalDaysSelfAdmin) {
+		this.totalDaysSelfAdmin = totalDaysSelfAdmin;
+	}
+
+	/**
+	 * @return the totalDaysNotTaken
+	 */
+	public int getTotalDaysNotTaken() {
+		return totalDaysNotTaken;
+	}
+
+	/**
+	 * @param totalDaysNotTaken the totalDaysNotTaken to set
+	 */
+	public void setTotalDaysNotTaken(int totalDaysNotTaken) {
+		this.totalDaysNotTaken = totalDaysNotTaken;
 	}
 }

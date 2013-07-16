@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<!-- Changes in the case dispensing for Namibia -->
+	<changeSet id="12.1" author="rmemoria" context="NA">
+	    <renameColumn tableName="casedispensingna" oldColumnName="totalDays" newColumnName="totalDaysDot" columnDataType="int" />
+	    <addColumn tableName="casedispensingna">
+	        <column name="totalDaysSelfAdmin" type="int" >
+	        </column>
+	        <column name="totalDaysNotTaken" type="int" >
+	        </column>
+	    </addColumn>
+	</changeSet>
+	
+	<changeSet id="12.2" author="rmemoria" context="NA">
+		<sql>update casedispensingna
+		set totalDaysSelfAdmin=(
+		select if(day1=1,1,0)+if(day2=1,1,0)+if(day3=1,1,0)+if(day4=1,1,0)+
+		if(day5=1,1,0)+if(day6=1,1,0)+if(day7=1,1,0)+if(day8=1,1,0)+if(day9=1,1,0)+
+		if(day10=1,1,0)+if(day11=1,1,0)+if(day12=1,1,0)+if(day13=1,1,0)+if(day14=1,1,0)+if(day15=1,1,0)+
+		if(day16=1,1,0)+if(day17=1,1,0)+if(day18=1,1,0)+if(day19=1,1,0)+
+		if(day20=1,1,0)+if(day21=1,1,0)+if(day22=1,1,0)+if(day23=1,1,0)+if(day24=1,1,0)+if(day25=1,1,0)
+		+if(day26=1,1,0)+if(day27=1,1,0)+if(day28=1,1,0)+if(day29=1,1,0)
+		+if(day30=1,1,0)+if(day31=1,1,0)
+		from casedispensingdaysna where casedispensingdaysna.id=casedispensingna.id),
+		totalDaysNotTaken=(
+		select if(day1=2,1,0)+if(day2=2,1,0)+if(day3=2,1,0)+if(day4=2,1,0)+
+		if(day5=2,1,0)+if(day6=2,1,0)+if(day7=2,1,0)+if(day8=2,1,0)+if(day9=2,1,0)+
+		if(day10=2,1,0)+if(day11=2,1,0)+if(day12=2,1,0)+if(day13=2,1,0)+if(day14=2,1,0)+if(day15=2,1,0)+
+		if(day16=2,1,0)+if(day17=2,1,0)+if(day18=2,1,0)+if(day19=2,1,0)+
+		if(day20=2,1,0)+if(day21=2,1,0)+if(day22=2,1,0)+if(day23=2,1,0)+if(day24=2,1,0)+if(day25=2,1,0)
+		+if(day26=2,1,0)+if(day27=2,1,0)+if(day28=2,1,0)+if(day29=2,1,0)
+		+if(day30=2,1,0)+if(day31=2,1,0)
+		from casedispensingdaysna where casedispensingdaysna.id=casedispensingna.id)</sql>
+	</changeSet>
+	
+</databaseChangeLog>
+
+

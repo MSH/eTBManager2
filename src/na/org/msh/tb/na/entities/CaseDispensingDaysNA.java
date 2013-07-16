@@ -69,7 +69,7 @@ public class CaseDispensingDaysNA {
 	}
 	
 	//gets number of days 'taken' only
-	public int getNumDispensingDaysTaken(){
+	public int getNumDispensingDaysDot(){
 		int res = 0;
 		Dot day = null;
 		for(int i = 1; i <=31; i++){

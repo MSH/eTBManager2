@@ -61,7 +61,7 @@ public class DotSupervisionIndicator extends Indicator{
 			presc = null;
 			caseDispensingNA = entityManager.find(CaseDispensingNA.class, finaldOTDispensingList.get(i).getId());
 			dispInfo = getPrescribedDays(caseDispensingNA.getTbcase());
-			dispTaken = (caseDispensingNA.getDispensingDays()!=null?new Float(caseDispensingNA.getDispensingDays().getNumDispensingDaysTaken()):null);
+			dispTaken = (caseDispensingNA.getDispensingDays()!=null?new Float(caseDispensingNA.getDispensingDays().getNumDispensingDaysDot()):null);
 			dispNotTaken = (caseDispensingNA.getDispensingDays()!=null?new Float(caseDispensingNA.getDispensingDays().getNumDispensingDaysNotTaken()):null);
 			dispNotSup = (caseDispensingNA.getDispensingDays()!=null?new Float(caseDispensingNA.getDispensingDays().getNumDispensingDaysNotSupervised()):null);
 			presc = (dispInfo.get("TotalPrescribed")!=null?dispInfo.get("TotalPrescribed"):0F);
