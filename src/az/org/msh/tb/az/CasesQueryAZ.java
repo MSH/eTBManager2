@@ -407,7 +407,7 @@ public class CasesQueryAZ extends CasesQuery{
 				"%') or (upper(p.lastName) like '%" + name.toUpperCase() + "%'))";
 			}
 
-			addCondition(s + (numberCond == null? ")": " or (" + numberCond + "))"));	
+			addCondition(s + ("".equals(numberCond)? ")": " or (" + numberCond + "))"));	
 		}
 		
 	}
