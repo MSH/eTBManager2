@@ -114,16 +114,16 @@ public class CasesControlAZ {
 		saveLastAction(LastAction.VALIDATE_CASE);
 	}
 	
-	@Observer("pending-registered-answered")
+/*	@Observer("pending-registered-answered")
 	public void postPendingCase(){
 		CaseHome caseHome = (CaseHome)App.getComponent("caseHome");
 		TbCase cur = caseHome.getInstance();
 // Ricardo Memoria - There is no pending status anymore
-/*		if (ValidationState.PENDING.equals(cur.getValidationState()))
+		if (ValidationState.PENDING.equals(cur.getValidationState()))
 			saveLastAction(LastAction.POST_PENDING_CASE);
 		if (ValidationState.PENDING_ANSWERED.equals(cur.getValidationState()))
 			saveLastAction(LastAction.POST_ANSWER_CASE);
-*/	}
+	}*/
 	
 	@Observer("case.transferout")
 	public void transferOutCase(){
