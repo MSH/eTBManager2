@@ -11,7 +11,7 @@
 			<redirect view-id="/cases/index.xhtml" />
 		</rule>
 		
-		<rule if="#{not caseHome.canStartTreatment}">
+		<rule if="#{not caseAZHome.canStartTreatment}">
 			<end-conversation/>
 			<redirect view-id="/cases/casedata.xhtml">
 				<param name="id" value="#{caseHome.id}" />

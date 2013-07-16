@@ -31,7 +31,7 @@
 
 	<div class="paragraph">#{messages['cases.healthUnit']}</div>
 	<ui:include src="unitspanelwithconfirm.xhtml" >
-		<ui:param name="askconfirm" value="#{!caseAZHome.canPlayOtherUnits}" />
+		<ui:param name="askconfirm" value="true" />
 		<ui:param name="msgtitle" value="#{messages['TbCase.ownerUnit']}" />
 		<ui:param name="msgtop" value="200" />
 		<ui:param name="tbunitselection" value="#{startTreatmentHome.tbunitselection}" />
