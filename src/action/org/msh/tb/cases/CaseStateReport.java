@@ -9,7 +9,6 @@ import java.util.List;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.jboss.seam.international.Messages;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.Tag.TagType;
 import org.msh.tb.entities.Tbunit;
@@ -34,7 +33,7 @@ import org.msh.tb.misc.GlobalLists;
 public class CaseStateReport  {
 
 	protected List<CaseStateItem> items;
-	private List<ValidationItem> validationItems;
+//	private List<ValidationItem> validationItems;
 	private Item total;
 	private List<TagItem> tags;
 	
@@ -60,14 +59,14 @@ public class CaseStateReport  {
 	 */
 	public void createItems() {
 		items = new ArrayList<CaseStateItem>();
-		validationItems = new ArrayList<ValidationItem>();
+//		validationItems = new ArrayList<ValidationItem>();
 		
 		String joins = getSqlJoin(true, null);
 		String conds = getSqlCondition();
 
 		Workspace defaultWorkspace = UserSession.getWorkspace();
 
-		String sql = "select c.state, c.validationState, c.diagnosisType, count(*) " +
+		String sql = "select c.state, c.diagnosisType, count(*) " +
 				"from tbcase c " +
 				joins +
 				" where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
@@ -75,36 +74,36 @@ public class CaseStateReport  {
 				" and u.workspace_id = " + defaultWorkspace.getId() + 
 				" group by c.state, c.validationState, c.diagnosisType " +
 				"union " +
-				"select c.state, c.validationState, c.diagnosisType, count(*) " +
+				"select c.state, c.diagnosisType, count(*) " +
 				"from tbcase c " +
 				joins +
 				" where c.state in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ")"+
 				conds + 
 				" and u.workspace_id = " + defaultWorkspace.getId() + 
-				" group by c.state, c.validationState, c.diagnosisType";
+				" group by c.state, c.diagnosisType";
 		
 		List<Object[]> lst = App.getEntityManager().createNativeQuery(sql).getResultList();
 		
 		total = new Item( App.getMessage("global.total"), 0);
 		
 		for (Object[] val: lst) {
-			int qty = ((BigInteger)val[3]).intValue();
+			int qty = ((BigInteger)val[2]).intValue();
 			
 			DiagnosisType diagType;
-			if (val[2] != null)
-				diagType = DiagnosisType.values()[(Integer)val[2]];
+			if (val[1] != null)
+				diagType = DiagnosisType.values()[(Integer)val[1]];
 			else diagType = DiagnosisType.CONFIRMED;
-			ValidationState vs = ValidationState.values()[(Integer)val[1]];
+//			ValidationState vs = ValidationState.values()[(Integer)val[1]];
 
 			Item item = findItem(CaseState.values()[(Integer)val[0]], diagType);
 			item.add(qty);
 			total.add(qty);
 			
-			if (!ValidationState.VALIDATED.equals(vs)) {
+/*			if (!ValidationState.VALIDATED.equals(vs)) {
 				ValidationItem valItem = findValidationItem(vs);
 				valItem.add(qty);
 			}
-		}
+*/		}
 		
 		Collections.sort(items, new Comparator<CaseStateItem>() {
 
@@ -278,7 +277,7 @@ public class CaseStateReport  {
 	 * @param state
 	 * @return Instance of {@link ValidationState}
 	 */
-	protected ValidationItem findValidationItem(ValidationState state) {
+/*	protected ValidationItem findValidationItem(ValidationState state) {
 		for (ValidationItem item: validationItems) {
 			if (item.getValidationState().equals(state)) {
 				return item;
@@ -289,7 +288,7 @@ public class CaseStateReport  {
 		validationItems.add(item);
 		return item;
 	}
-
+*/
 
 	/**
 	 * Search for a specific item based on the state
@@ -363,12 +362,12 @@ public class CaseStateReport  {
 	 * Return list of items to be Validated
 	 * @return List of {@link ValidationItem} instances
 	 */
-	public List<ValidationItem> getValidationItems() {
+/*	public List<ValidationItem> getValidationItems() {
 		if (validationItems == null)
 			createItems();
 		return validationItems;
 	}
-	
+*/	
 	
 	/**
 	 * Store total quantity of cases by an specific indicator
@@ -473,11 +472,6 @@ public class CaseStateReport  {
 		public Integer getTagId() {
 			return tagId;
 		}
-	}
-
-
-	public void setValidationItems(List<ValidationItem> validationItems) {
-		this.validationItems = validationItems;
 	}
 
 

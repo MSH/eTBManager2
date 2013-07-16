@@ -19,7 +19,6 @@ import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.UserView;
-import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.login.UserSession;
 
 /**
@@ -171,7 +170,7 @@ public class CaseStateReportUA extends CaseStateReport{
 	@Override
 	public void createItems() {
 		items = new ArrayList<CaseStateItem>();
-		setValidationItems(new ArrayList<ValidationItem>());
+//		setValidationItems(new ArrayList<ValidationItem>());
 
 		String aucond;
 		if (userWorkspace.getView() == UserView.ADMINUNIT)
@@ -199,17 +198,18 @@ public class CaseStateReportUA extends CaseStateReport{
 			if (val[2] != null)
 				diagType = DiagnosisType.values()[(Integer)val[2]];
 			else diagType = DiagnosisType.CONFIRMED;
-			ValidationState vs = ValidationState.values()[(Integer)val[1]];
+//			ValidationState vs = ValidationState.values()[(Integer)val[1]];
 
 			Item item = findItem(CaseState.values()[(Integer)val[0]], diagType);
 			item.add(qty);
 			getTotal().add(qty);
 
-			if (!ValidationState.VALIDATED.equals(vs)) {
+// By Ricardo: Validation report doesn't exist anymore... Tags must be used instead of
+/*			if (!ValidationState.VALIDATED.equals(vs)) {
 				ValidationItem valItem = findValidationItem(vs);
 				valItem.add(qty);
 			}
-		}
+*/		}
 
 		Collections.sort(items, new Comparator<CaseStateItem>() {
 

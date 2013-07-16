@@ -60,6 +60,10 @@
         <pathelement location="${gwt.dir}/gwt-dev.jar"/>
         <pathelement location="${gwt.dir}/gwt-user.jar"/>
 	</path>
+	
+	<path id="google.closure-compiler">
+	    <pathelement location="${google.closure-compiler.dir}/compiler.jar" />
+	</path>
 
 	<path id="mdrtb.classpath">
         <pathelement location="build/classes"/>
@@ -75,6 +79,10 @@
 		<pathelement location="src/reports"/>
 	</path>
 
+	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
+	    classpath="${google.closure-compiler.dir}/compiler.jar" >
+	</taskdef>
+	
 
 	<target name="init">
 		<echo message="Implementation title  :  ${implementation-title}" />
@@ -141,7 +149,7 @@
 	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
 	
 	
-	<target description="Build the .war file" depends="init" name="war">
+	<target description="Build the .war file" depends="javascript-compile,init" name="war">
 		<delete file="build/${war-file-name}" />
 		<buildnumber file="build.num"/>
 		
@@ -176,9 +184,41 @@
 			
 			<zipfileset file="production/persistence.xml" prefix="WEB-INF/classes/META-INF" />
 			<zipfileset file="production/components.xml" prefix="WEB-INF" />
+			<zipfileset file="build/compile/commons.min.${commons.js.checksum}.js" prefix="public/js" />
 		</war>
 	</target>
+
+
+	<target name="javascript-compile" description="Compile static java-script files to reduce its size">
+	    <mkdir dir="build/compiled" /> 
+	    <jscomp compilationLevel="simple" warning="default" debug="false" output="build/compiled/commons.min.js">
+	        <sources dir="${basedir}/WebContent/public/js" >
+	            <file name="commons.js" />
+	        </sources>
+	    </jscomp>
+	    <checksum file="build/compiled/commons.min.js" property="commons.js.checksum" />
+	    <move file="build/compiled/commons.min.js" tofile="build/compiled/commons.min.${commons.js.checksum}.js" />
+	</target> 
 	
+
+	<target name="gwt-compile" description="Compile java source code in javascript code using GWT">
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler" >
+			<classpath>
+				<pathelement location="src/client" />
+				<path refid="gwt.librarypath" />
+			</classpath>
+			<jvmarg value="-Xmx512M"/>
+			<arg value="-style"/>
+			<arg value="OBFUSCATED" />
+			<arg value="-logLevel"/>
+			<arg value="INFO" />
+			<arg value="-war"/>
+			<arg value="WebContent" />
+			<arg value="org.msh.tb.client.reports"/>
+		</java>
+	</target>
+
+		
 	<target name="doc" depends="init" description="JavaDoc generation">
 		<javadoc destdir="${doc.dir}" sourcepathref="etbm.sourcepath" classpathref="mdrtb.classpath"
 			author="true"
@@ -203,26 +243,6 @@
 		    <mapper type="glob" from="*.dot" to="*.png"/>
 		</apply>
 	</target>
-
-
-
-	<target name="gwt-compile" description="Compile java source code in javascript code using GWT">
-		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler" >
-			<classpath>
-				<pathelement location="src/client" />
-				<path refid="gwt.librarypath" />
-			</classpath>
-			<jvmarg value="-Xmx512M"/>
-			<arg value="-style"/>
-			<arg value="OBFUSCATED" />
-			<arg value="-logLevel"/>
-			<arg value="INFO" />
-			<arg value="-war"/>
-			<arg value="WebContent" />
-			<arg value="org.msh.tb.client.reports"/>
-		</java>
-	</target>
-
 
 
 	<!-- Define the Sonar global properties (the most usual way is to pass these properties via the command line) -->

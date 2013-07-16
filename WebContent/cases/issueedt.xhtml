@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	<ui:param name="labelstyle" value="width:120px" />
+	<h:panelGroup id="formnew-content">
+	<div class="form-content" >
+		<h2>#{messages['cases.issues.new']}</h2>
+		<table width="100%">
+		<tr>
+		<td width="650px">
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['Issue.title']}:</ui:define>
+				<h:inputText value="#{caseIssueHome.instance.title}" style="width:400px;" required="true"/>
+			</s:decorate>
+
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['global.description']}:</ui:define>
+				<h:inputTextarea value="#{caseIssueHome.instance.description}" style="width:400px;height:80px;" required="true"/>
+			</s:decorate>
+		</td>
+		<td>
+			<a:commandLink action="#{caseIssueHome.createNewIssue}" styleClass="button" 
+				onclick="if (!disableButton(this)) return false;"
+				data="#{caseIssueHome.action}"
+				oncomplete="if (data=='NEWISSUE') newIssueCreated();" 
+				reRender="formnew-content">
+				<span>#{messages['form.save']}</span>
+			</a:commandLink>
+			<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="btnNewIssueCancelClick();return false;">
+				<f:param name="id" value="#{caseHome.id}" />
+				<span>#{messages['form.cancel']}</span>
+			</s:link>
+			<br/>
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</td>
+		</tr>
+		</table>
+
+	</div>
+	</h:panelGroup>
+
+
+</ui:composition>  

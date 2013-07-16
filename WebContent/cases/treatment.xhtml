@@ -6,6 +6,8 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+<h:form>
 	<s:fragment rendered="#{not caseHome.inTreatment}" >
 		<h:outputText value="#{messages['cases.details.notreatment']}" styleClass="warn" style="display:block;padding:30px;"/>
 
@@ -104,5 +106,7 @@
 	</s:decorate>
 
 	</s:fragment>
+
+</h:form>
 
 </ui:composition>

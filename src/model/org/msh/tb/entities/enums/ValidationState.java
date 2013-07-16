@@ -3,9 +3,7 @@ package org.msh.tb.entities.enums;
 public enum ValidationState {
 
 	WAITING_VALIDATION,
-	VALIDATED,
-	PENDING,
-	PENDING_ANSWERED;
+	VALIDATED;
 
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

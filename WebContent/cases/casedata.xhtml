@@ -150,8 +150,8 @@
 
 <ui:define name="content">
 <h1>#{title}</h1>
-<h:form id="main">
 <s:decorate id="bodydiv" template="/layout/casebody.xhtml">
+<h:form id="main">
 
 	<ui:define name="state-content">
 		<s:div rendered="#{tbcase.state=='TRANSFERRING'}" style="margin-top:6px;font-size:11px;max-width:320px;" >
@@ -173,7 +173,8 @@
 		</s:div>
 	</ui:define>
 
-<ui:include src="/cases/issues.xhtml" />
+	<ui:include src="/cases/issues.xhtml" />
+</h:form>
 
 <div class="spacer" />
 
@@ -214,9 +215,16 @@
 	</h:panelGroup>
 </rich:tab>
 
+<rich:tab label="#{messages['cases.issues']}" id="tab7" ontabenter="updateTab(7)" rendered="#{s:hasRole('ISSUES')}">
+	<h:panelGroup id="pnltab7">
+		<s:decorate template="/cases/casedata_issues.xhtml" rendered="#{caseFilters.caseTab==7}"/>
+	</h:panelGroup>
+</rich:tab>
+
+
 </rich:tabPanel>
 
-
+<h:form>
 <a:jsFunction name="updateTabContent" reRender="pnltab#{caseFilters.caseTab}">
 	<a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
 </a:jsFunction>
@@ -235,8 +243,8 @@ function initTab() {
 	if (updt)
 		window.inicasetab=1;
 	var tabid = 'tab' + window.inicasetab;
-	var dest = 'main:bodydiv:tab' + window.inicasetab;
-	RichFaces.switchTab('main:bodydiv:tabCase', dest, tabid);
+	var dest = 'bodydiv:tab' + window.inicasetab;
+	RichFaces.switchTab('bodydiv:tabCase', dest, tabid);
 	if (updt)
 		updateTab(window.inicasetab);
 }
@@ -250,10 +258,9 @@ function updateTab(tabIndex) {
 }
 -->
 </script>
+</h:form>
 
 </s:decorate>	
-
-</h:form>
 
 </ui:define>
 

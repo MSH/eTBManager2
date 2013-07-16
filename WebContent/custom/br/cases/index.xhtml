@@ -90,34 +90,6 @@
 	</tr>
 	</table>
 	</s:fragment>
-
-	<s:fragment rendered="#{not empty caseStateReport.validationItems}">
-	<div class="spacer"/>
-	
-	<table class="table2">
-	<tr>
-		<th colspan="2">#{messages['ValidationState']}</th>
-	</tr>
-	<ui:repeat value="#{caseStateReport.validationItems}" var="it">
-	<tr>
-		<td>
-			<s:link value="#{messages[it.description]}"  view="/cases/searchresult.xhtml" styleClass="link-small">
-				<f:param name="vs" value="#{it.validationState}"/>
-				<f:param name="sc" value="#{'VALIDATION_STATE'}"/>
-				<f:param name="unitId" value="#{casesViewController.selectedUnitIdParam}" />
-				<f:param name="stateIndex" />
-				<f:param name="tag" />
-			</s:link>
-		</td>
-		<td align="right">
-			<h:outputText value="#{it.total}" >
-				<f:convertNumber pattern="#,###,##0"/>
-			</h:outputText>
-		</td>
-	</tr>
-	</ui:repeat>
-	</table>
-	</s:fragment>
 	
 	<s:fragment rendered="#{not empty caseStateReport.tags}">
 	<div class="spacer"/>

@@ -1,11 +1,8 @@
 package org.msh.tb.cases;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
@@ -16,14 +13,10 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.security.Restrict;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.tb.application.mail.MailService;
-import org.msh.tb.entities.CaseIssue;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
-import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.misc.SequenceGenerator;
@@ -47,10 +40,7 @@ public class CaseValidationHome {
 	protected SequenceGenerator sequenceGenerator;
 	@In(create=true) FacesMessages facesMessages;
 	
-	private List<CaseIssue> issues;
-	private CaseIssue issue;
 	private User user;
-	private CaseIssue lastIssue;
 	private boolean displayingIssues;
 	private String lastIssueEditingText;
 
@@ -60,34 +50,6 @@ public class CaseValidationHome {
 	}
 	
 	
-	/**
-	 * Return list of issues
-	 * @return
-	 */
-	public List<CaseIssue> getIssues() {
-		if (issues == null)
-			createIssueList();
-		return issues;
-	}
-
-
-	/**
-	 * Create list of issues of the case
-	 */
-	protected void createIssueList(){	
-		issues = entityManager.createQuery("from CaseIssue c " +
-				"join fetch c.user " +
-				"where c.tbcase.id = #{caseHome.id} " +
-				"order by c.date desc")
-				.getResultList(); 
-	}
-
-	
-	public CaseIssue getIssue() {
-		if (issue == null)
-			issue = new CaseIssue();
-		return issue;
-	}
 
 
 	/**
@@ -99,7 +61,7 @@ public class CaseValidationHome {
 	public String validate() {
 		TbCase tbcase = caseHome.getInstance();
 		ValidationState vstate = tbcase.getValidationState();
-		if ((vstate != ValidationState.WAITING_VALIDATION) && (vstate != ValidationState.PENDING_ANSWERED))
+		if (vstate != ValidationState.WAITING_VALIDATION) 
 			return "error";
 
 		tbcase.setValidationState(ValidationState.VALIDATED);
@@ -144,7 +106,6 @@ public class CaseValidationHome {
 		
 		tbcase.setCaseNumber(caseNum);
 		
-
 		
 		entityManager.persist(tbcase);
 		entityManager.flush();
@@ -160,7 +121,7 @@ public class CaseValidationHome {
 	 * Register a new pending issue to the case
 	 * @return "pending-registered" if successfully registered
 	 */
-	@Transactional
+/*	@Transactional
 	public String registerPending() {
 		issue = prepareNewIssue();
 		issue.setAnswer(false);
@@ -184,13 +145,13 @@ public class CaseValidationHome {
 		
 		return "pending-registered";
 	}
-	
+*/	
 
 	/**
 	 * Register a new answer to the case
 	 * @return "answered" if successfully answered
 	 */
-	@Transactional
+/*	@Transactional
 	public String answer() {
 		issue = prepareNewIssue();
 		issue.setAnswer(true);
@@ -208,12 +169,12 @@ public class CaseValidationHome {
 		
 		return "answered";
 	}
-	
+*/	
 	/**
 	 * Prepare the new issue to be saved
 	 * @return
 	 */
-	protected CaseIssue prepareNewIssue() {
+/*	protected CaseIssue prepareNewIssue() {
 		TbCase tbcase = caseHome.getInstance();
 		
 		issue.setDate(new Date());
@@ -227,8 +188,8 @@ public class CaseValidationHome {
 		
 		return issue;
 	}
-	
-	public void saveEditingLastIssue(){
+*/	
+/*	public void saveEditingLastIssue(){
 		issue = getLast();
 		UserLogin ul = (UserLogin) Component.getInstance("userLogin");
 		
@@ -250,8 +211,8 @@ public class CaseValidationHome {
 		}
 		
 	}
-	
-	public void removeLastIssue(){
+*/	
+/*	public void removeLastIssue(){
 		issue = getLast();
 		UserLogin ul = (UserLogin) Component.getInstance("userLogin");
 		
@@ -283,8 +244,8 @@ public class CaseValidationHome {
 		issue = null;
 		issues = null;
 	}
-
-	private void notifyIssueByEmail(CaseIssue issue){
+*/
+/*	private void notifyIssueByEmail(CaseIssue issue){
 		TbCase tbcase = caseHome.getInstance();
 				
 		MailService srv = MailService.instance();
@@ -304,7 +265,7 @@ public class CaseValidationHome {
 		
 		srv.dispatchQueue();
 	}
-	
+*/	
 	/**
 	 * Return the current user logged in
 	 * @return
@@ -323,7 +284,7 @@ public class CaseValidationHome {
 	 * Return the last issue posted for the case
 	 * @return
 	 */
-	public CaseIssue getLastIssue() {
+/*	public CaseIssue getLastIssue() {
 		try {
 			if (lastIssue == null) {
 				List<CaseIssue> lst = entityManager.createQuery("from CaseIssue c " +
@@ -342,12 +303,12 @@ public class CaseValidationHome {
 			return null;
 		}
 	}
-	
+*/	
 	/**
 	 * Return the last posted for the case
 	 * @return
 	 */
-	public CaseIssue getLast() {
+/*	public CaseIssue getLast() {
 		try {
 			List<CaseIssue> lastCi = entityManager.createQuery("from CaseIssue c " +
 					"join fetch c.user " +
@@ -363,7 +324,7 @@ public class CaseValidationHome {
 			return null;
 		}
 	}
-
+*/
 
 	/**
 	 * Just to flag JSF that the issues panel must be rendered

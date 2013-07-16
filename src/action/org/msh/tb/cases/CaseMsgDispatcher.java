@@ -8,7 +8,7 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.MsgDispatcher;
-import org.msh.tb.entities.CaseIssue;
+import org.msh.tb.entities.Issue;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.User;
@@ -45,13 +45,13 @@ public class CaseMsgDispatcher extends MsgDispatcher{
 	 */
 	//@Observer("pending-registered-answered")
 	public void notifyNewPending(){
-		CaseValidationHome caseValidationHome = (CaseValidationHome) Component.getInstance("caseValidationHome");
+		CaseIssueHome caseIssueHome = (CaseIssueHome) Component.getInstance("caseIssueHome");
 		TbCase tbcase = caseHome.getInstance();
 		List<User> users;
 		
-		CaseIssue issue = caseValidationHome.getIssue();
+		Issue issue = caseIssueHome.getInstance();
 		
-		if(!issue.isAnswer())
+		if(!issue.isClosed())
 			users = getUsersByRoleAndUnit("CASE_DATA", tbcase.getOwnerUnit());
 		else
 			users = getUsersByRoleAndUnit("CASE_VALIDATE", tbcase.getOwnerUnit());

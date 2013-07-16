@@ -80,6 +80,7 @@ function closeWaitDlg() {
 	jQuery('#waitdiv').hide();
 }
 
+
 function numbersOnly(myfield, e, dec) {
 var key;
 var keychar;
@@ -200,22 +201,23 @@ function floatToStr(val, n) {
 }
 
 function changeUnitPrice(elem) {
-	unit = strToFloat(elem.value);
-	tot = parseFloat(document.getElementById("formbatch:qtd:qtd").value);
-	totPrice = unit * tot;
+	var unit = strToFloat(elem.value);
+	var tot = parseFloat(document.getElementById("formbatch:qtd:qtd").value);
+	var totPrice = unit * tot;
 	document.getElementById("formbatch:tprice:tprice").value = floatToStr(totPrice, 2);
 }
 
 function changeUPrice() {
-	unit = strToFloat(document.getElementById("formbatch:uprice:uprice").value);
-	tot = parseFloat(document.getElementById("formbatch:qtd:qtd").value);
-	totPrice = unit * tot;
+	var unit = strToFloat(document.getElementById("formbatch:uprice:uprice").value);
+	var tot = parseFloat(document.getElementById("formbatch:qtd:qtd").value);
+	var totPrice = unit * tot;
 	document.getElementById("formbatch:tprice:tprice").value = floatToStr(totPrice, 2);
 }
 
 function changeTotalPrice(elem) {
-	totPrice = strToFloat(elem.value);
-	tot = parseFloat(document.getElementById("formbatch:qtd:qtd").value);
+	var totPrice = strToFloat(elem.value);
+	var tot = parseFloat(document.getElementById("formbatch:qtd:qtd").value);
+	var unitPrice;
 	if (tot != 0)
 		unitPrice = totPrice / tot;
 	else unitPrice = 0;
@@ -231,9 +233,9 @@ function changeBMI(elem, e) {
   		return -1;
   	
   	s = jQuery('#edtweight input').val();
-  	weight = strToFloat(s);
+  	var weight = strToFloat(s);
   	s = jQuery('#edtheight input').val();
-	height = strToFloat(s);
+	var height = strToFloat(s);
 	if ((weight == 0) || (height == 0) || (isNaN(weight)) || (isNaN(height)))
 		return 0;
 	height = height / 100;

@@ -93,7 +93,9 @@ public class CaseImport extends ImportBase {
 		tbcase.setAge(age);
 		tbcase.setRegistrationDate(startTreatDate);
 		tbcase.setPatientType(patientType);
-		tbcase.setValidationState(ValidationState.PENDING);
+		// changed by Ricardo Memoria, PENDING state was removed 
+		tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
+//		tbcase.setValidationState(ValidationState.PENDING);
 		tbcase.getNotifAddress().setAddress(address);
 		tbcase.setClassification(CaseClassification.DRTB);
 

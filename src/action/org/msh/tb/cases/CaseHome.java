@@ -213,7 +213,7 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		if (!isManaged())
 			return false;
 		ValidationState vs = getInstance().getValidationState();
-		return ((vs == ValidationState.WAITING_VALIDATION) || (vs == ValidationState.PENDING_ANSWERED)) && (checkRoleBySuffix("CASE_VALIDATE") && (isWorkingUnit()));
+		return ((vs == ValidationState.WAITING_VALIDATION) && checkRoleBySuffix("CASE_VALIDATE") && (isWorkingUnit()));
 	}
 
 	
@@ -225,14 +225,6 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		return (checkRoleBySuffix("CASE_VALIDATE") && (getInstance().getValidationState() != ValidationState.VALIDATED) && (isWorkingUnit()));
 	}
 
-	
-	/**
-	 * Check if user can answer a pending case
-	 * @return
-	 */
-	public boolean isCanAnswerIssue() {
-		return ((isManaged()) && (getInstance().getValidationState() == ValidationState.PENDING) && (isWorkingUnit()));
-	}
 	
 	/**
 	 * Check if the case can be transfered to another health unit

@@ -64,7 +64,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 	@Override
 	public void createItems() {
 		items = new ArrayList<CaseStateItem>();
-		setValidationItems(new ArrayList<ValidationItem>());
+//		setValidationItems(new ArrayList<ValidationItem>());
 
 		String aucond;
 		if (userWorkspace.getView() == UserView.ADMINUNIT)
@@ -98,11 +98,12 @@ public class CaseStateReportAZ extends CaseStateReport{
 			item.add(qty);
 			getTotal().add(qty);
 
-			if (!ValidationState.VALIDATED.equals(vs)) {
+//By Ricardo: Validation report doesn't exist anymore... Replaced by tags
+/*			if (!ValidationState.VALIDATED.equals(vs)) {
 				ValidationItem valItem = findValidationItem(vs);
 				valItem.add(qty);
 			}
-		}
+*/		}
 
 		Collections.sort(items, new Comparator<CaseStateItem>() {
 
