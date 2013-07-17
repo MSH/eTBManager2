@@ -169,6 +169,7 @@ return true;
 <script type="text/javascript">
 window.decSeparator = '#{timezones.decimalSeparator}';
 function showBatchDlg() {
+	document.getElementById('formbatch:qtdcon:qtdcon').value = 1;
 	showModalAutoTop('batchdlg');
 	jQuery('#formbatch\\:dt\\:dtInputDate').mask('#{messages['locale.dateMask']}');
 }
@@ -225,7 +226,8 @@ else return false;
     	(#{medicineManStartHome.medicineInfo.medicine.dosageForm})
     </s:decorate>
 
-    <s:decorate id="qtdcon" template="/layout/edit.xhtml" >
+	<!-- Bangladesh doesn't use this field. It is being set 1 to this field on showBatchDlg() -->
+    <s:decorate id="qtdcon" template="/layout/edit.xhtml" style="display:none">
     	<ui:define name="label">#{messages['Batch.quantityContainer']}:</ui:define>
     	<h:inputText id="qtdcon" value="#{medicineManStartHome.batchInfo.batch.quantityContainer}" required="true" onkeypress="return numbersOnly(this,event);" >
     		<f:validateDoubleRange minimum="1"/>

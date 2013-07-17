@@ -111,12 +111,11 @@
 		<h:outputText value="#{row.amc}" />
 	</h:column>		
 	
-	<h:column rendered="#{quarterStockPositionReport.isCurrQuarter()}">
+	<h:column>
 		<f:facet name="header">#{messages['meds.stockoutdate']}</f:facet>
-		<h:outputText value="#{row.stockOutDate}" converter="periodConverter" rendered="#{row.stockOutDate != null}">
-			<f:param name="type" value="time-length"/>
-		</h:outputText>
-	</h:column>	
+		<h:outputText value="#{row.getEstimatedMonthsOfStock()}" rendered="#{row.getEstimatedMonthsOfStock() != null}"/>
+		<h:outputText value=" #{messages['global']}" rendered="#{row.getEstimatedMonthsOfStock() != null}"/>
+	</h:column>
 	
 	</h:dataTable>
 
