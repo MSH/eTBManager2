@@ -352,6 +352,10 @@
 			</td>
 			<td class="colb">
 				#{r.examResult.laboratory.abbrevName}
+				<s:span rendered="#{not empty r.examResult.dateRelease}" style="clear:both;display:block;">
+					<b>#{messages['cases.exams.dateRelease']}: </b>
+					<h:outputText value="#{r.examResult.dateRelease}" />
+				</s:span>
 			</td>
 			<ui:repeat value="#{r.results}" var="rs">
 			<td class="colcb" rowspan="#{empty r.examResult.comments?'1':'2'}">
