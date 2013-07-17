@@ -83,7 +83,11 @@ public class CaseHQLBase extends Controller {
 		hql += getHQLWhere();
 			
 		if (groupFields != null)
-			hql += " group by " + groupFields + " order by " + groupFields;
+			hql += " group by " + groupFields;
+		
+		if (orderByFields != null)
+			 hql += " order by " + orderByFields;
+		else hql += " order by " + groupFields;
 		
 		return hql;		
 	}

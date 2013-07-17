@@ -1,22 +1,15 @@
 package org.msh.tb.na;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
+
 import javax.persistence.EntityManager;
+
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.indicators.core.Indicator;
-import org.msh.tb.indicators.core.IndicatorFilters;
 import org.msh.tb.indicators.core.IndicatorTable;
-import org.msh.tb.na.TreatmentCalendarHome.PhaseInfo;
-import org.msh.tb.na.entities.CaseDispensingNA;
 import org.msh.utils.date.Period;
 
 @Name("dotSupervisionIndicator")
@@ -30,16 +23,70 @@ public class DotSupervisionIndicator extends Indicator{
 	
 	@In(create=true) EntityManager entityManager;
 	
-	private String groupFields;
+/*	private String groupFields;
 	private List<CaseDispensingNA> dispensingList;
 	private List<CaseDispensingNA> dOTdispensingListG;
-	private static final String successRateID = "SRID";  
-	private static final String prescID = "PID";  
-	private static final String dispID = "DID";  
+*/
+	// identification of the table columns
+	private static final Integer COL_DAYS_PRESC= 1;
+	private static final Integer COL_DAYS_TAKEN = 2;
+	private static final Integer COL_DAYS_NOT_TAKEN = 3;
+	private static final Integer COL_DAYS_SELF_ADMIN = 4;
+	private static final Integer COL_COMPL_RATE = 5;
 
 	@Override
 	protected void createIndicators() {
-		IndicatorFilters filters = getIndicatorFilters();
+		// initialize the selection
+		setOutputSelected(false);
+		setConsolidated(false);
+		setHQLSelect("select c.id, c.patient.name, c.patient.middleName, c.patient.lastName, c.patient.recordNumber, c.caseNumber, "
+				+ "c.treatmentPeriod, sum(d.totalDaysDot), sum(d.totalDaysSelfAdmin), sum(d.totalDaysNotTaken)");
+		setGroupFields("c.id, c.patient.name, c.patient.middleName, c.patient.lastName, c.patient.recordNumber, c.caseNumber, "
+				+ "c.treatmentPeriod");
+		setOrderByFields("c.patient.name, c.patient.middleName, c.patient.lastName");
+		setCondition("c.treatmentPeriod.iniDate is not null");
+
+//		dispensingList = new ArrayList<CaseDispensingNA>();
+		String hql = createHQL();
+		List<Object[]> lst = getQueryResult(hql);
+
+		// initialize the columns of the table
+		IndicatorTable table = getTable();
+		table.addColumn(getMessage("cases.treat.presc"), COL_DAYS_PRESC);
+		table.addColumn(getMessage("cases.treat.disp.taken"), COL_DAYS_TAKEN);
+		table.addColumn(getMessage("cases.treat.disp.nottaken"), COL_DAYS_NOT_TAKEN);
+		table.addColumn(getMessage("cases.treat.disp.selfadmin"), COL_DAYS_SELF_ADMIN);
+		table.addColumn(getMessage("cases.treat.disp.dotCompletionRate"), COL_COMPL_RATE);
+
+		// mock objects to help compose patient name and number
+		TbCase tbcase = new TbCase();
+		Patient pat = new Patient();
+		tbcase.setPatient(pat);
+
+		// populate table
+		for (Object[] vals: lst) {
+			tbcase.setId( (Integer)vals[0] );
+			pat.setName((String)vals[1]);
+			pat.setMiddleName((String)vals[2]);
+			pat.setLastName((String)vals[3]);
+			Period treatPeriod = (Period)vals[6];
+
+			float numDays = treatPeriod.getDays();
+			Long daysDot = (Long)vals[7];
+			Long daysSelfAdmin = (Long)vals[8];
+			Long daysNotTaken = (Long)vals[9];
+
+			table.addRow(pat.getFullName(), tbcase.getId());
+			table.addIdValue(COL_DAYS_PRESC, tbcase.getId(), numDays);
+			if (daysDot != null)
+				table.addIdValue(COL_DAYS_TAKEN, tbcase.getId(), daysDot.floatValue());
+			if (daysSelfAdmin != null)
+				table.addIdValue(COL_DAYS_SELF_ADMIN, tbcase.getId(), daysSelfAdmin.floatValue());
+			if (daysNotTaken != null)
+				table.addIdValue(COL_DAYS_NOT_TAKEN, tbcase.getId(), daysNotTaken.floatValue());
+		}
+		
+/*		IndicatorFilters filters = getIndicatorFilters();
 		List<CaseDispensingNA> dOTDispensingList =getDOTDispensingList("d.id","exists(select hu.id from TreatmentHealthUnit hu where hu.tbcase.id = d.tbcase.id)");
 		List<CaseDispensingNA> finaldOTDispensingList = getDispensingListPeriod(filters.getIniMonth(), filters.getIniYear(), filters.getTbunitselection().getTbunit(),dOTDispensingList);
 		
@@ -75,10 +122,10 @@ public class DotSupervisionIndicator extends Indicator{
 		addValue(getMessage("cases.treat.disp.selfadmin"), caseDispensingNA.getTbcase().getPatient().getName(), dispNotSup);
 		addValue(getMessage("cases.treat.disp.dotCompletionRate"), caseDispensingNA.getTbcase().getPatient().getName(), percentage);
 		}
-	}
+*/	}
 	
 
-	private HashMap<String, Float> getPrescribedDays(TbCase tbcase) {
+/*	private HashMap<String, Float> getPrescribedDays(TbCase tbcase) {
 		TreatmentCalendarHome treatmentCal = new TreatmentCalendarHome(tbcase, entityManager);	
 		List<PhaseInfo> phases = treatmentCal.getPhases();
 		HashMap<String, Float> dispInfo = new HashMap<String, Float>();
@@ -93,7 +140,7 @@ public class DotSupervisionIndicator extends Indicator{
 		}		
 		return null;
 	}
-	
+*/	
 	/**
 	 * Return the list of cases and its dispensing information of a specific month/year
 	 * @param tbunit
@@ -101,7 +148,7 @@ public class DotSupervisionIndicator extends Indicator{
 	 * @param month 
 	 * @return List of {@link CaseDispensingNA} objects
 	 */
-	public List<CaseDispensingNA> getDispensingList(Integer month, Integer year, Tbunit tbunit) {
+/*	public List<CaseDispensingNA> getDispensingList(Integer month, Integer year, Tbunit tbunit) {
 		List<CaseDispensingNA> filteredLst = new ArrayList<CaseDispensingNA>();
 		if (dispensingList == null)
 			createCasesList(month, year, tbunit);
@@ -119,6 +166,8 @@ public class DotSupervisionIndicator extends Indicator{
 		dispensingList = filteredLst;
 		return dispensingList;
 	}
+*/
+
 	/**
 	 * Return the list of cases and its dispensing information of a specific month/year
 	 * @param tbunit
@@ -126,7 +175,7 @@ public class DotSupervisionIndicator extends Indicator{
 	 * @param month 
 	 * @return List of {@link CaseDispensingNA} objects
 	 */
-	public List<CaseDispensingNA> getDispensingListPeriod(Integer month, Integer year, Tbunit tbunit, List<CaseDispensingNA> dOTcasedispensingNA) {
+/*	public List<CaseDispensingNA> getDispensingListPeriod(Integer month, Integer year, Tbunit tbunit, List<CaseDispensingNA> dOTcasedispensingNA) {
 		List<CaseDispensingNA> filteredLst = new ArrayList<CaseDispensingNA>();
 		CaseDispensingNA caseDispensingNA = new CaseDispensingNA();
 		for(int i =0; i < dOTcasedispensingNA.size(); i++){
@@ -144,11 +193,11 @@ public class DotSupervisionIndicator extends Indicator{
 		dispensingList = filteredLst;
 		return dispensingList;
 	}
-
+*/
 	/**
 	 * Create the list of {@link CaseDispensingNA} objects
 	 */
-	protected void createCasesList(Integer month, Integer year, Tbunit tbunit) {
+/*	protected void createCasesList(Integer month, Integer year, Tbunit tbunit) {
 		String tbunitFilter="";
 		
 		if(tbunit!=null)
@@ -202,12 +251,12 @@ public class DotSupervisionIndicator extends Indicator{
 			});
 		}
 	}
-
+*/
 
 	/**
 	 * Create the list of {@link CaseDispensingNA} objects
 	 */
-	public List<CaseDispensingNA> getDOTDispensingList(String fields, String condition) {
+/*	public List<CaseDispensingNA> getDOTDispensingList(String fields, String condition) {
 		setOutputSelected(false);
 		setGroupFields(fields);
 		setCondition(condition);
@@ -227,26 +276,28 @@ public class DotSupervisionIndicator extends Indicator{
 		}
 		return null;
 	}
+*/
 	
-		@Override
+/*	@Override
 	protected String getHQLSelect() {
-		
 		return "select d.id";
-			
-		
 	}	
-	
+*/	
+	/** {@inheritDoc}
+	 */
 	@Override
 	protected String getHQLFrom() {
-		// TODO Auto-generated method stub
 		return "from CaseDispensingNA d";
-		
 	}
-	
+
+	/** {@inheritDoc}
+	 */
 	@Override
 	protected String getHQLJoin() {
-		String joinStr = "join d.tbcase c ";
+		String joinStr = "inner join d.tbcase c ";
+		setConsolidated(true);
 		String s = super.getHQLJoin();
+		setConsolidated(false);
 
 		if (s != null)
 			joinStr = joinStr.concat(s);
@@ -255,7 +306,7 @@ public class DotSupervisionIndicator extends Indicator{
 	
 	@Override
 	protected String getPeriodCondition() {
-		String s = "c.treatmentPeriod.endDate >= #{indicatorFilters.iniDate}";
+		String s = "c.treatmentPeriod.iniDate >= #{indicatorFilters.iniDate}";
 		return s;
 	}
 	
