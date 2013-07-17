@@ -56,6 +56,24 @@ public enum Quarter {
 		return null;
 	}
 	
+	/**
+	 * Returns the next previous according to the quarter passed as parameter.
+	 * @param quarter
+	 * @return
+	 */
+	public static Quarter getPreviousQuarter(Quarter quarter){
+		if(quarter.equals(Quarter.FIRST))
+			return Quarter.FOURTH;
+		if(quarter.equals(Quarter.SECOND))
+			return Quarter.FIRST;
+		if(quarter.equals(Quarter.THIRD))
+			return Quarter.SECOND;
+		if(quarter.equals(Quarter.FOURTH))
+			return Quarter.THIRD;
+		
+		return null;
+	}
+	
 	public String getKey(){
 		return "Quarter." + this.name();
 	}

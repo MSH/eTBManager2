@@ -276,6 +276,8 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		if(!s.equalsIgnoreCase("persisted"))
 			return "error";
 			
+		quarterStockPositionReport.refresh();
+		
 		facesMessages.clear();
 		facesMessages.addFromResourceBundle("default.entity_updated");
 		return "success-close";
@@ -516,6 +518,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 			dispensingHome.getInstance().setDispensingDate(endQuarterDate);
 			dispensingHome.saveDispensing();
 		}
+		dispensingHome.clearInstance();
 		return true;
 	}
 	

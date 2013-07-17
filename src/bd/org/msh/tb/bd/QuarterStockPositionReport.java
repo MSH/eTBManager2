@@ -100,30 +100,33 @@ public class QuarterStockPositionReport {
 			return;
 		}
 		
-		//Calculates the parameters to amc calc.		
-		GregorianCalendar baseDate = new GregorianCalendar();
-		baseDate.set(GregorianCalendar.HOUR, 0);
-		baseDate.set(GregorianCalendar.MINUTE, 0);
-		baseDate.set(GregorianCalendar.SECOND, 0);
-		baseDate.set(GregorianCalendar.MILLISECOND, 0);
-		
-		if(endQuarterDate.before(baseDate.getTime()))
-			baseDate.setTime(endQuarterDate);
-		
-		System.out.println(baseDate.getTime());
-		
-		GregorianCalendar baseDateMinus1 = new GregorianCalendar();
-		baseDateMinus1.setTime(baseDate.getTime());
-		baseDateMinus1.add(GregorianCalendar.MONTH, -1);
-		
-		GregorianCalendar baseDateMinus2 = new GregorianCalendar();
-		baseDateMinus2.setTime(baseDate.getTime());
-		baseDateMinus2.add(GregorianCalendar.MONTH, -2);
-		
-		GregorianCalendar baseDateMinus3 = new GregorianCalendar();
-		baseDateMinus3.setTime(baseDate.getTime());
-		baseDateMinus3.add(GregorianCalendar.MONTH, -3);
-		baseDateMinus3.add(GregorianCalendar.DAY_OF_YEAR, 2);
+		//calc parameters for selecting the number dispensed to use on amc calc
+		Date iniDateAmcCalc = iniQuarterDate;
+		Date endDateAmcCalc = endQuarterDate;
+		//If the selected quarter is opened it has to consider the last consumption of a closed quarter.
+		if(tbunitselection.getTbunit()!=null && tbunitselection.getTbunit().getLimitDateMedicineMovement() != null
+				&& ( tbunitselection.getTbunit().getLimitDateMedicineMovement().equals(iniQuarterDate)
+						|| tbunitselection.getTbunit().getLimitDateMedicineMovement().before(iniQuarterDate) )){
+			
+			GregorianCalendar baseDate = new GregorianCalendar();
+			baseDate.setTime(tbunitselection.getTbunit().getLimitDateMedicineMovement());
+			
+			Integer year = baseDate.get(GregorianCalendar.YEAR);
+			Quarter quarter = Quarter.getPreviousQuarter(Quarter.getQuarterByMonth(baseDate.get(GregorianCalendar.MONTH)));
+			
+			if(quarter.equals(Quarter.FOURTH))
+				year = year -1;
+						
+			GregorianCalendar iniDate = new GregorianCalendar();
+			GregorianCalendar endDate = new GregorianCalendar();
+			
+			iniDate.set(year, quarter.getIniMonth(), quarter.getIniDay());
+			endDate.set(year, quarter.getEndMonth(), quarter.getEndDay());
+			
+			iniDateAmcCalc = iniDate.getTime();
+			endDateAmcCalc = endDate.getTime();
+			
+		}
 		
 		String queryString = "select m, " +
 		
@@ -155,18 +158,9 @@ public class QuarterStockPositionReport {
 								
 								"(select sum(mov.outOfStock) from QuarterlyReportDetailsBD mov " + getLocationWhereClause() + 
 									" and mov.quarter = :quarter and mov.year = :year and mov.medicine.id = m.id), " +
-	
+								
 								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
-									" and mov.date >= :baseDateMinus3 and mov.date < :baseDateMinus2 and mov.type in (3) " +
-									"and mov.medicine.id = m.id " + getSourceClause() + ") as calcAmcMonth1, " +
-
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
-									" and mov.date >= :baseDateMinus2 and mov.date < :baseDateMinus1 and mov.type in (3) " +
-									"and mov.medicine.id = m.id " + getSourceClause() + ") as calcAmcMonth2, " +
-
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
-									" and mov.date >= :baseDateMinus1 and mov.date <= :baseDate and mov.type in (3) " +
-									"and mov.medicine.id = m.id " + getSourceClause() + ") as calcAmcMonth3 " +
+									" and mov.date >= :iniDateAmcCalc and mov.date <= :endDateAmcCalc and mov.type in (3) and mov.medicine.id = m.id " + getSourceClause() + ") as dispensed " +
 
 							  "from Medicine m " +
 							  "where m.workspace.id = :workspaceId " +
@@ -178,11 +172,9 @@ public class QuarterStockPositionReport {
 									.setParameter("workspaceId", UserSession.getWorkspace().getId())
 									.setParameter("quarter", quarter)
 									.setParameter("year", year)
+									.setParameter("iniDateAmcCalc", iniDateAmcCalc)
+									.setParameter("endDateAmcCalc", endDateAmcCalc)									
 									.setParameter("workspaceExpiredAdjust", UserSession.getWorkspace().getExpiredMedicineAdjustmentType().getId())
-									.setParameter("baseDateMinus3", baseDateMinus3.getTime())
-									.setParameter("baseDateMinus2", baseDateMinus2.getTime())
-									.setParameter("baseDateMinus1", baseDateMinus1.getTime())
-									.setParameter("baseDate", baseDate.getTime())
 									.getResultList();
 		
 		for(Object[] o : result){
@@ -195,24 +187,8 @@ public class QuarterStockPositionReport {
 					row.setDispensed((Long) o[5]);
 					row.setExpired((Long) o[6]);
 					row.setOutOfStockDays((Long) o[7]);
-					
-					//calc amc
-					Long divOp = new Long(3);
-					Long month1 = ((Long) o[8] == null ? 0 : (Long) o[8]);
-					if(month1 == 0)
-						divOp = divOp - 1;
-					Long month2 = ((Long) o[9] == null ? 0 : (Long) o[9]);
-					if(month2 == 0)
-						divOp = divOp - 1;
-					Long month3 = ((Long) o[10] == null ? 0 : (Long) o[10]);
-					if(month3 == 0)
-						divOp = divOp - 1;
-					if(divOp == 0)
-						row.setAmc(new Long(0));
-					else{
-						row.setAmc((month1 + month2 + month3)/divOp);
-					}
-					
+					row.setDispensedForAmcCalc((Long) o[8]);
+									
 				}
 			}
 		}
