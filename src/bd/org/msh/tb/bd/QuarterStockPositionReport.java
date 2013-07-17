@@ -19,6 +19,7 @@ import org.msh.tb.bd.entities.enums.Quarter;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Source;
+import org.msh.tb.entities.Tbunit;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection2;
@@ -47,6 +48,7 @@ public class QuarterStockPositionReport {
 	private Date iniQuarterDate;
 	private Date endQuarterDate;
 	private List<Integer> years;
+	private List<Tbunit> pendCloseQuarterUnits;
 		
 	/**
 	 * Refreshes the rows values according to the filters.
@@ -55,8 +57,10 @@ public class QuarterStockPositionReport {
 		if(getLocationWhereClause() == null)
 			facesMessages.addToControlFromResourceBundle("cbselau1", "javax.faces.component.UIInput.REQUIRED");
 		else{
+			updateQuarterDates();
 			updateQuarterReport();
 			updateBatchList();
+			updatePendCloseQuarterUnits();
 		}
 	}
 	
@@ -92,7 +96,6 @@ public class QuarterStockPositionReport {
 	 * Update the values of each medicine in the quarterly stock table information
 	 */
 	private void updateQuarterReport(){
-		updateQuarterDates();
 		loadMedicineList(medicines.getResultList());
 		
 		if(!isFiltersFilledIn()){
@@ -226,6 +229,29 @@ public class QuarterStockPositionReport {
 	}
 	
 	/**
+	 * Update the list of tbunits that haven't closed the selected quarter.
+	 */
+	private void updatePendCloseQuarterUnits(){
+		if(getLocationWhereClause() == null || getTbunitselection().getTbunit() != null){
+			pendCloseQuarterUnits = null;
+			return;
+		}
+		
+		String queryString = "from Tbunit u where u.adminUnit.code like :code and u.workspace.id = :workspaceId " +
+									"and (u.limitDateMedicineMovement is null or u.limitDateMedicineMovement <= :iniQuarterDate) " +
+									"and u.treatmentHealthUnit = :true " +
+									"order by u.adminUnit.code, u.name.name1";
+		
+		pendCloseQuarterUnits = entityManager.createQuery(queryString)
+									.setParameter("code", tbunitselection.getAuselection().getSelectedUnit().getCode()+'%')
+									.setParameter("workspaceId", UserSession.getWorkspace().getId())
+									.setParameter("iniQuarterDate", iniQuarterDate)
+									.setParameter("true", true)
+									.getResultList();
+		
+	}
+	
+	/**
 	 * Updates the iniQuarterDate and endQuarterDate according to the quarter and year in memory.
 	 */
 	private void updateQuarterDates(){
@@ -263,7 +289,8 @@ public class QuarterStockPositionReport {
 		if(tbunitselection.getTbunit()!=null){
 			return "where mov.tbunit.id = " + tbunitselection.getTbunit().getId() + " and mov.tbunit.workspace.id = " + UserSession.getWorkspace().getId();
 		}else if(tbunitselection.getAuselection().getSelectedUnit()!=null){
-			return "where mov.tbunit.adminUnit.code like '" + tbunitselection.getAuselection().getSelectedUnit().getCode() + "%' and mov.tbunit.workspace.id = " + UserSession.getWorkspace().getId();
+			return "where mov.tbunit.adminUnit.code like '" + tbunitselection.getAuselection().getSelectedUnit().getCode() + "%' " +
+					"and mov.tbunit.workspace.id = " + UserSession.getWorkspace().getId() + " and mov.tbunit.treatmentHealthUnit = true";
 		}
 		return null;
 	}
@@ -424,5 +451,17 @@ public class QuarterStockPositionReport {
         for (Batch b : batchDetails.keySet())
             ret.add(b);
         return ret;
+	}
+	/**
+	 * @return the pendCloseQuarterUnits
+	 */
+	public List<Tbunit> getPendCloseQuarterUnits() {
+		return pendCloseQuarterUnits;
+	}
+	/**
+	 * @param pendCloseQuarterUnits the pendCloseQuarterUnits to set
+	 */
+	public void setPendCloseQuarterUnits(List<Tbunit> pendCloseQuarterUnits) {
+		this.pendCloseQuarterUnits = pendCloseQuarterUnits;
 	}
 }

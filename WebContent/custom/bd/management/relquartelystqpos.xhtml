@@ -54,13 +54,21 @@
 	   	<ui:param name="tbunitselection" value="#{quarterStockPositionReport.tbunitselection}" />
 	</s:decorate>
 
-   	<a:commandLink styleClass="button-alt" action="#{quarterStockPositionReport.refresh}" style="float:right;" onclick="if (!disableButton(this)) return false;" reRender="main">
+   	<a:commandLink styleClass="button-alt" action="#{quarterStockPositionReport.refresh}" onclick="if (!disableButton(this)) return false;" reRender="main">
    		<span>#{messages['form.update']}</span>
    	</a:commandLink>
+
+	<br/>
+	<br/>
 	
 	<s:fragment rendered="#{quarterStockPositionReport.isFiltersFilledIn()}">
-	<h:dataTable value="#{quarterStockPositionReport.rows}" var="row" styleClass="table1" width="100%" rowClasses="lin1,lin2" >
+	<!-- Alerts if there are units with the selected quarter opened -->
+	<s:div style="padding:1px;background-color:#ffc3ca;" rendered="#{not empty quarterStockPositionReport.pendCloseQuarterUnits}">
+		<h:outputText styleClass="error" value="#{messages['quarter.openquarterunit']}" />
+		<a:commandLink value="#{messages['global.clicktoseelist']}" onclick="showOpenQuarterunitList();" />
+	</s:div>
 	
+	<h:dataTable value="#{quarterStockPositionReport.rows}" var="row" styleClass="table1" width="100%" rowClasses="lin1,lin2" >
 	<h:column>
 		<f:facet name="header">#{messages['Medicine']}</f:facet>
 		<h:outputText value="#{row.medicine}" />
@@ -119,6 +127,38 @@
 	
 	</h:dataTable>
 
+	<rich:modalPanel id="openQuarterunitList" autosized="true" width="700" zindex="2000" style="background-color:#F2F5F0">
+		<f:facet name="header">
+			<h:outputText value="#{messages['quarter.listopenquarterunit']}" />
+		</f:facet>
+		
+		<h:outputFormat id="unitCount" value="#{messages['meds.unitsfound']}" style="display:block;clear:both;font-weight:bold;">
+			<f:param value="#{quarterStockPositionReport.pendCloseQuarterUnits.size()}" />
+		</h:outputFormat>
+		
+		<div style="overflow:auto;width:98%;max-height:300px;min-height:80px;border: 1px gray solid;padding:6px;margin:0px;background-color:white;">
+			<a:repeat value="#{quarterStockPositionReport.pendCloseQuarterUnits}" var="unit">
+				<div class="#{unit.treatmentHealthUnit?'icon-hu':'icon-ds'}" />
+				<h:outputText value="#{unit.name} - #{unit.adminUnit.fullDisplayName}" /><br/>	
+			</a:repeat>
+		</div>
+		<div class="button-bar">
+			<s:link styleClass="button-alt" onclick="hideOpenQuarterunitList(); return false;">
+				<span>#{messages['form.close']}</span>
+			</s:link>
+		</div>
+	</rich:modalPanel>
+	
+	<script type="text/javascript">
+	function showOpenQuarterunitList() {
+		Richfaces.showModalPanel('openQuarterunitList');
+	}
+	function hideOpenQuarterunitList() {
+		Richfaces.hideModalPanel('openQuarterunitList');
+	}
+	</script>
+
+	<!-- 
 	<br/><br/>
 	<h3>#{messages['quarter.expiringbatchlist']}</h3>
 	<h:outputText styleClass="error" value="#{messages['quarter.expiringbatchlist.noresultmsg']}" rendered="#{quarterStockPositionReport.isFiltersFilledIn() and empty quarterStockPositionReport.batchDetailsKeySet}"/>
@@ -145,7 +185,7 @@
 		<h:outputText value="#{quarterStockPositionReport.batchDetails[selBatch]}" />
 	</h:column>
 	
-	</h:dataTable>
+	</h:dataTable> -->
 	</s:fragment>
 	
 	</h:form>

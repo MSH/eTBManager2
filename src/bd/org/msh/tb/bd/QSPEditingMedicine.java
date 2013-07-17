@@ -61,7 +61,7 @@ public class QSPEditingMedicine{
 	 * @return the consumption
 	 */
 	public Integer getConsumption() {
-		return consumption;
+		return (consumption == null ? 0 : consumption);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class QSPEditingMedicine{
 	 * @return the outOfStock
 	 */
 	public Integer getOutOfStock() {
-		return outOfStock;
+		return (outOfStock == null ? 0 : outOfStock);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class QSPEditingMedicine{
 	 * @return the nonNegativeAdjustments
 	 */
 	public Integer getNonNegativeAdjustments() {
-		return nonNegativeAdjustments;
+		return (nonNegativeAdjustments == null ? 0 : nonNegativeAdjustments);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class QSPEditingMedicine{
 	 * @return the openingBalance
 	 */
 	public Integer getOpeningBalance() {
-		return openingBalance;
+		return (openingBalance == null ? 0 : openingBalance);
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class QSPEditingMedicine{
 	 * @return the received
 	 */
 	public Integer getReceived() {
-		return received;
+		return (received == null ? 0 : received);
 	}
 
 	/**
