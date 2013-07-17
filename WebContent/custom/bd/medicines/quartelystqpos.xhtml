@@ -11,6 +11,7 @@
       
 	<ui:param name="title" value="#{messages['quarter.report']}" />
 	<ui:param name="topmenu" value="1" />
+	<ui:param name="left" value="0" />
 	<ui:param name="labelstyle" value="width:210px;" />
 
 	<ui:define name="naveg">
@@ -141,6 +142,9 @@
 		rendered="#{quarterStockPositionReport.isFiltersFilledIn() and quarterStockPositionHome.canEdit()}" >
 		<span>#{messages['quarter.closequarter']}</span>
 	</h:commandLink>
+	<s:link view="/custom/bd/medicines/index.xhtml" styleClass="button-alt">
+    	<span>#{messages['form.return']}</span>
+	</s:link>
 	
 	<a:jsFunction name="closeQuarter" action="#{quarterStockPositionHome.closeQuarter()}" reRender="main"/>
 
