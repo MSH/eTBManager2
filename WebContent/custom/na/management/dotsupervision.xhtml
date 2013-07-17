@@ -49,8 +49,10 @@
 	<br/>
 	<table class="table1" width="100%">
 		<tr>
-			<th>
+			<th align="left">
 				#{messages['Patient']}
+			</th>
+			<th>#{messages['TbCase.registrationCode']}
 			</th>
 		<ui:repeat value="#{table.columns}" var="col">
 			<th>
@@ -63,13 +65,17 @@
 			<td class="colb">
 				#{row.title}
 			</td>
+			<td>
+				#{row.id.displayCaseNumber}
+			</td>
 			<ui:repeat value="#{row.cells}" var="val">
 			<td class="colcb">
-			<!-- bgcolor="#{val.column.highlight?'#DBFADC':'transparent'}"> -->
-				<h:outputText value="#{val.value}" >
+				<h:outputText value="#{val.value}" rendered="#{val.column.id==5}">
+					<f:convertNumber pattern="0.00"/>
+				</h:outputText>
+				<h:outputText value="#{val.value}" rendered="#{val.column.id!=5}">
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
-				<!-- <h:outputText value="%" rendered="#{val.column.highlight}" /> -->
 			</td>
 			</ui:repeat>
 		</tr>

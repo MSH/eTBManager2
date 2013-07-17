@@ -526,10 +526,15 @@ public class TbCase implements Serializable, Transactional {
 		else dcn = ws.getConfirmedCaseNumber();
 
 		switch (dcn) {
-		case USER_DEFINED:
+		case USER_DEFINED: {
+			String code;
 			if (diagnosisType == DiagnosisType.SUSPECT)
-				 return suspectRegistrationCode;
-			else return registrationCode;
+				 code = suspectRegistrationCode;
+			else code = registrationCode;
+			if ((code == null) || (code.isEmpty()))
+				code = Messages.instance().get("cases.nonumber");
+			return code;
+		}
 		case VALIDATION_NUMBER:
 			if (getCaseNumber() == null)
 				 return Messages.instance().get("cases.nonumber");
@@ -537,23 +542,7 @@ public class TbCase implements Serializable, Transactional {
 		default:
 			return id != null? id.toString(): Messages.instance().get("cases.nonumber");
 		}
-/*		
-		if (ws != null) {
-			if (diagnosisType == DiagnosisType.SUSPECT)
-				 dcn = ws.getSuspectCaseNumber();
-			else dcn = ws.getConfirmedCaseNumber();
-		}
-		
-		if (dcn == DisplayCaseNumber.USER_DEFINED)
-			return getRegistrationCode();
-		else {
-			Integer number = getCaseNumber();
-			if ((number == null) || (getPatient() == null))
-				return Messages.instance().get("cases.nonumber");
-			
-			return formatCaseNumber(patient.getRecordNumber(), caseNumber);
-		}
-*/	}
+	}
 	
 
 	/**
