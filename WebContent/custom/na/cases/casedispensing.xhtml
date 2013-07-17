@@ -27,8 +27,6 @@
 <s:decorate template="/layout/casebody.xhtml">
 	<a:form id="main" styleClass="form1">
 	<div class="form-content">
-    <table width="100%">
-    <tr><td>
 
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
@@ -41,11 +39,23 @@
     		<f:param name="year" value="#{caseDispensingHomeNA.year}"/>
     	</h:outputText>
     </s:decorate>
-    
-	<h:outputText value="#{messages['cases.disp.types']}" />
 
+<script type="text/javascript">
+<!--
+function selectAll(value) {
+	jQuery("#tbldays select").each(function(){ jQuery(this).val(value) });
+}
+-->
+</script>
+
+	<h:outputText value="#{messages['cases.disp.types']}" />
+	<div class="spacer" />
+	<h:outputText value="#{messages['form.selectall']}:" /> 
+		<a href="#" style="background:#f0f0f0;border:1px solid #c0c0c0;padding-left:6px;padding-right:6px;width:50px;margin:1px;" onclick="selectAll('D'); return false;">D</a>
+		<a href="#" style="background:#f0f0f0;border:1px solid #c0c0c0;padding-left:6px;padding-right:6px;width:50px;margin:1px;" onclick="selectAll('S'); return false;">S</a>
+		<a href="#" style="background:#f0f0f0;border:1px solid #c0c0c0;padding-left:6px;padding-right:6px;width:50px;margin:1px;" onclick="selectAll('N'); return false;">N</a>
     <h:panelGroup id="pnlcalend">
-    <table id="tbldays" width="450px" class="tabela4">
+    <table id="tbldays" width="450px" class="table1">
     <tr>
     	<ui:repeat offset="1" value="#{shortWeekNames}" var="w">
     		<th>
@@ -72,16 +82,14 @@
 	</table>
     </h:panelGroup>
 
-	</td></tr>
-	</table>
 	</div>
 	
    <div class="form-footer">
             <a:commandLink action="#{caseDispensingHomeNA.saveDispensing}" styleClass="button"  
-            	reRender="main" >
+            	reRender="main" onclick="if (!disableButton(this)) return false;">
             		<span>#{messages['form.save']}</span>
             		</a:commandLink>
-            <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+            <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
             	<f:param name="id" value="#{caseHome.id}"/>
             	<span>#{messages['form.cancel']}</span>
             </s:link>
