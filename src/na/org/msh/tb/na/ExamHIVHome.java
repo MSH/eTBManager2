@@ -28,7 +28,6 @@ public class ExamHIVHome extends ExamHome<ExamHIV_NA> {
 	
 	@Override
 	public String persist() {
-		// TODO Auto-generated method stub
 		ExamHIV_NA examHivNa = getInstance();
 		
 		examHivNa.setTbcase(caseHome.getInstance());

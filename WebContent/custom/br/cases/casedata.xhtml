@@ -154,14 +154,12 @@
 		<span class="right-icon" />
 		<div class="vertical-menu">
 		<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
-			style="position:relative;" propagation="none">
+			propagation="none">
 			<f:param name="id" value="#{caseHome.id}" />
 		</s:link>
 		<a:commandLink value="#{messages['cases.move.cancel']}"
 			onclick="if (!confirm('#{caseMoveHome.confirmMsgRollbackTransfer}')) return false"
-			action="#{caseMoveHome.rollbackTransferOut}"
-			reRender="main,leftmenu,messages" 
-			style="position:relative" styleClass="right-icon" >
+			action="#{caseMoveHome.rollbackTransferOut()}">
 			<f:param name="name" value="#{caseHome.transferInHealthUnit.tbunit.name}"/>
 		</a:commandLink>
 		</div>

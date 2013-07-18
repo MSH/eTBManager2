@@ -38,6 +38,12 @@
 		from casedispensingdaysna where casedispensingdaysna.id=casedispensingna.id)</sql>
 	</changeSet>
 	
+	<changeSet id="12.3" author="rmemoria" context="NA">
+	    <addColumn tableName="examhiv">
+	        <column name="viralLoad" type="int" />
+	        <column name="viralLoadDateRelease" type="datetime" /> 
+	    </addColumn>
+	</changeSet>
 </databaseChangeLog>
 
 

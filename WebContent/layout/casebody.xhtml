@@ -15,7 +15,7 @@
 			<b><h:outputText  value="#{messages[tbcase.getCaseEvolution()]}" style="float:right; color:#292929"/></b>
 		</s:div>
 		<s:fragment rendered="#{not tbcase.open}">
-			<div class="status-label"><div class="normal-text">
+			<div class="status-label"><div style="font-size:0.8em">
 			#{messages['TbCase.outcomeDate']}: 
 			<h:outputText value="#{tbcase.outcomeDate}" rendered="#{not tbcase.open}" converter="localeDateConverter" style="padding-left:10px;"/>
 			</div></div>

@@ -23,30 +23,57 @@
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examHIVHomeNA.allResults}" />
 	
 		<h:dataTable value="#{examHIVHomeNA.allResults}" var="r" rendered="#{not empty examHIVHomeNA.allResults}" 
-			width="100%" styleClass="table1" columnClasses="colcb,colcb,colb,colb,colb">
+			width="100%" styleClass="table1" columnClasses="collb,colb,colb,colb">
 			<h:column>
 				<f:facet name="header">
-					<h:outputText value="#{messages['global.month']}" styleClass="colch"/>
+					<h:outputText value="#{messages['global.date']}" styleClass="collh"/>
 				</f:facet>
 				<s:link view="/custom/na/cases/edtexamhiv.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					#{r.monthDisplay}
 				</s:link>
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">
-					#{messages['cases.exams.date']}
-				</f:facet>
-				<h:outputText value="#{r.date}" converter="localeDateConverter"/>
+				<h:outputText value="#{r.date}" converter="localeDateConverter" style="clear:both;display:block"/>
 			</h:column>
 			
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
 				</f:facet>
-				#{messages[r.result.key]}
+				<h:outputText value="#{messages[r.result.key]}" styleClass="#{r.result=='POSITIVE'?'result-positive':'result-negative'}" />
+				<s:fragment rendered="#{r.result=='POSITIVE'}">
+					<ul style="margin:0;padding-left:20px;">
+						<s:fragment rendered="#{not empty r.cd4Count}">
+						<li>
+							<b>#{messages['cases.hivexams.cd4']}:</b> #{r.cd4Count} 
+							<s:div style="clear:both" rendered="#{not empty r.cd4StDate}">
+							#{messages['cases.exams.dateRelease']}:	<h:outputText value="#{r.cd4StDate}" converter="localeDateConverter" />
+							</s:div>
+						</li>
+						</s:fragment>
+						<s:fragment rendered="#{not empty r.viralLoad}">
+						<li>
+							<b>#{messages['cases.examhiv.viralLoad']}:</b> #{r.viralLoad} 
+							<s:div style="clear:both" rendered="#{not empty r.viralLoadDateRelease}">
+								#{messages['cases.exams.dateRelease']}:	<h:outputText value="#{r.viralLoadDateRelease}" converter="localeDateConverter" />
+							</s:div>
+						</li>
+						</s:fragment>
+						<s:fragment rendered="#{r.ARTstarted}">
+						<li>
+							<b>#{messages['cases.examhiv.art']}:</b> <h:outputText value="#{r.startedARTdate}" converter="localeDateConverter" />
+							<s:div style="clear:both" rendered="#{not empty r.artRegimen}">
+								#{messages['cases.hivexams.artregimen']}: #{r.artRegimen}
+							</s:div>
+						</li>
+						</s:fragment>
+						<s:fragment rendered="#{r.CPTstarted}">
+						<li>
+							<b>#{messages['cases.examhiv.cpt']}:</b> <h:outputText value="#{r.startedCPTdate}" converter="localeDateConverter" />
+						</li>
+						</s:fragment>
+					</ul>
+				</s:fragment>
 			</h:column>
 			
 			<h:column>

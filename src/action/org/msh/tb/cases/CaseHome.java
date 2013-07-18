@@ -346,6 +346,10 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		return getTbCase().isOpen() && (getInstance().isOpen()) && (checkRoleBySuffix("CASE_INTAKEMED_EDT") && (isWorkingUnit()));
 	}
 	
+	/**
+	 * Return true if the user can post new results, edit or delete exam results 
+	 * @return boolean value
+	 */
 	public boolean isCanEditExams() {
 		return getTbCase().isOpen() && checkRoleBySuffix("CASE_EXAMS_EDT") && isWorkingUnit();
 	}
@@ -609,7 +613,7 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		}
 		
 		if (tbcase.getState() == CaseState.ONTREATMENT)
-			return null;
+			return Messages.instance().get(tbcase.getState().getKey());
 		
 		return Messages.instance().get(tbcase.getState().getKey());
 	}

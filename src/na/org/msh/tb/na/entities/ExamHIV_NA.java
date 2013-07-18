@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -16,18 +15,13 @@ import org.msh.tb.entities.FieldValue;
 import org.msh.tb.transactionlog.PropertyLog;
 
 /**
+ * Records information about an HIV result during the treatment
  * @author Utkarsh Srivastava
  *
- * Records information about an HIV result during the treatment
  */
 @Entity
 @DiscriminatorValue("na")
-@Table(name="examhiv_na")
 public class ExamHIV_NA extends ExamHIV {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8053860831668724183L;
 
 	@Temporal(TemporalType.DATE)
@@ -40,6 +34,11 @@ public class ExamHIV_NA extends ExamHIV {
 	@PropertyLog(messageKey="TbField.ART_REGIMEN")
 	private FieldValue artRegimen;	
 	
+	private Integer viralLoad;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date viralLoadDateRelease;
+
 	public Date getResultDate() {
 		return resultDate;
 	}
@@ -62,6 +61,34 @@ public class ExamHIV_NA extends ExamHIV {
 
 	public void setArtRegimen(FieldValue artRegimen) {
 		this.artRegimen = artRegimen;
+	}
+
+	/**
+	 * @return the viralLoad
+	 */
+	public Integer getViralLoad() {
+		return viralLoad;
+	}
+
+	/**
+	 * @param viralLoad the viralLoad to set
+	 */
+	public void setViralLoad(Integer viralLoad) {
+		this.viralLoad = viralLoad;
+	}
+
+	/**
+	 * @return the viralLoadDateRelease
+	 */
+	public Date getViralLoadDateRelease() {
+		return viralLoadDateRelease;
+	}
+
+	/**
+	 * @param viralLoadDateRelease the viralLoadDateRelease to set
+	 */
+	public void setViralLoadDateRelease(Date viralLoadDateRelease) {
+		this.viralLoadDateRelease = viralLoadDateRelease;
 	}
 
 	

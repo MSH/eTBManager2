@@ -45,16 +45,38 @@
 
 
 	<div id="divpos">
-    <s:decorate template="/layout/edit.xhtml" >
+
+	<hr style="clear:both;"/>
+
+    <s:decorate template="/layout/edit.xhtml" style="float:left">
     	<ui:define name="label">#{messages['cases.hivexams.cd4']}:</ui:define>
-    	<h:inputText value="#{examHIVNA.cd4Count}" maxlength="200" style="width:60px;"/>
-	    <s:decorate id="cd4dt" template="/layout/dateedit.xhtml" >
-	    	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
-	    	<ui:param name="required" value="false" /> 
-	    	<ui:param name="future" value="false" /> 
-	    	<ui:param name="datefield" value="#{examHIVNA.cd4StDate}" /> 
-	 	</s:decorate>
-    </s:decorate>     
+    	<div style="width:250px">
+    		<h:inputText value="#{examHIVNA.cd4Count}" maxlength="200" style="width:60px;"/>
+    	</div>
+    </s:decorate>
+
+    <s:decorate id="cd4dt" template="/layout/dateedit.xhtml" style="float:left">
+    	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="future" value="false" /> 
+    	<ui:param name="datefield" value="#{examHIVNA.cd4StDate}" /> 
+ 	</s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" style="clear:left;float:left">
+    	<ui:define name="label">#{messages['cases.examhiv.viralLoad']}:</ui:define>
+    	<div style="width:250px">
+    		<h:inputText value="#{examHIVNA.viralLoad}" maxlength="30" style="width:60px;"/>#{messages['cases.examhiv.viralLoad.unit']}
+    	</div>
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" style="float:left">
+    	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="future" value="false" /> 
+    	<ui:param name="datefield" value="#{examHIVNA.viralLoadDateRelease}" /> 
+ 	</s:decorate>
+
+	<hr style="clear:both;"/>
 		
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['cases.examhiv.art']}</ui:define>
@@ -135,15 +157,15 @@
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
             <a:commandLink action="#{examHIVHomeNA.persist}" styleClass="button" reRender="formexam" 
-            	oncomplete="this.disabled=false;"
-            	onclick="this.disabled=true;" >
-            	<span>#{messages['form.ok']}</span>
-            	</a:commandLink>
-            <s:link view="/cases/casedata.xhtml" styleClass="button-alt">
+            	onclick="if (!disableButton(this)) return false;"  >
+            	<span>#{messages['form.save']}</span>
+            </a:commandLink>
+            <s:link view="/cases/casedata.xhtml" styleClass="button-alt"
+            	onclick="if (!disableButton(this)) return false;">
             	<f:param name="id" value="#{caseHome.id}"/>
-            		<span>#{messages['form.cancel']}</span>
+            	<span>#{messages['form.cancel']}</span>
             </s:link>
-            </div>
+    </div>
    
     </a:form>
     
