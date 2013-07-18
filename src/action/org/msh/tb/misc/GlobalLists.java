@@ -387,7 +387,8 @@ public class GlobalLists {
 	
 //	@Factory("prevTBTreatmentOutcomes")
 	public PrevTBTreatmentOutcome[] getPrevTBTreatmentOutcomes() {
-		return getExtensionComponent("prevTBTreatmentOutcomes", PrevTBTreatmentOutcome[].class, prevTBTreatmentOutcomes);
+		return getComponentValueWorkspace("prevTBTreatmentOutcomes", PrevTBTreatmentOutcome[].class, prevTBTreatmentOutcomes);
+//		return getExtensionComponent("prevTBTreatmentOutcomes", PrevTBTreatmentOutcome[].class, prevTBTreatmentOutcomes);
 	}
 	
 	@Factory("extraOutcomesInfo")

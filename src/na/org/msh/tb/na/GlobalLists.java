@@ -5,6 +5,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.entities.enums.DotBy;
 import org.msh.tb.entities.enums.Nationality;
+import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.na.entities.enums.Dot;
 import org.msh.tb.na.entities.enums.DotOptions;
@@ -14,6 +15,11 @@ import org.msh.tb.na.entities.enums.SideEffectOutcome;
 import org.msh.tb.na.entities.enums.SideEffectSeriousness;
 
 
+/**
+ * Lists used in several parts for the customization of Namibia
+ * @author Ricardo Memoria
+ *
+ */
 @Name("globalLists_na")
 @BypassInterceptors
 public class GlobalLists {
@@ -40,7 +46,20 @@ public class GlobalLists {
 	public TbField[] getTbFields() {
 		return tbfields;
 	}	
-	
+
+	private static final PrevTBTreatmentOutcome prevTBTreatmentOutcomes[] = {
+		PrevTBTreatmentOutcome.ONGOING,
+		PrevTBTreatmentOutcome.CURED,
+		PrevTBTreatmentOutcome.COMPLETED,
+		PrevTBTreatmentOutcome.FAILURE,
+		PrevTBTreatmentOutcome.DEFAULTED,
+		PrevTBTreatmentOutcome.TRANSFERRED_OUT,
+		PrevTBTreatmentOutcome.SCHEME_CHANGED,
+		PrevTBTreatmentOutcome.DIAGNOSTIC_CHANGED,
+		PrevTBTreatmentOutcome.NO_OUTCOME_YET,
+		PrevTBTreatmentOutcome.UNKNOWN
+	};
+
 	
 	@Factory("dotOptions")
 	public DotOptions[] getDotOptions() {
@@ -80,5 +99,8 @@ public class GlobalLists {
 		return nationalityTypes;
 	}		
 		
+	public PrevTBTreatmentOutcome[] getPrevTBTreatmentOutcomes() {
+		return prevTBTreatmentOutcomes;
+	}
 
 }

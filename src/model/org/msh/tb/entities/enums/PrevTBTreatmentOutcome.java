@@ -11,7 +11,8 @@ public enum PrevTBTreatmentOutcome {
 	SHIFT_CATIV,
 	UNKNOWN,
 	ONGOING,
-	DIAGNOSTIC_CHANGED;
+	DIAGNOSTIC_CHANGED,
+	NO_OUTCOME_YET;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
