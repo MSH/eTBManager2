@@ -51,13 +51,12 @@
 		<a:repeat value="#{medicineManStartHome.sourcesInfo}" var="s">
 		<table width="100%" class="table1">
 			<tr>
-				<td colspan="7" class="highlight">
+				<td colspan="6" class="highlight">
 					#{s.source.name}
 				</td>
 			</tr>
 			<tr><th>#{messages['Medicine']}</th>
 				<th>#{messages['Batch.expiryDate']}</th>
-				<th align="right">#{messages['Batch.numContainers']}</th>
 				<th align="right">#{messages['meds.movs.availableqtty']}</th>
 				<th align="right">#{messages['global.unitPrice']}</th>
 				<th align="right">#{messages['global.totalPrice']}</th>
@@ -65,7 +64,7 @@
 			</tr>
 			<a:repeat value="#{s.items}" var="it">
 				<tr class="lin1">
-				<td class="colb" colspan="3">
+				<td class="colb" colspan="2">
 					<div class="medicine-icon" />
 					<h:outputText value="#{it.medicine}" />
 					</td>
@@ -99,14 +98,6 @@
 						</td>
 						<td class="colcb">
 							<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
-						</td>
-						<td class="colrb">
-							<h:outputText value="#{b.batch.numContainers}" >
-								<f:convertNumber pattern="#,###,##0"/>
-							</h:outputText>
-							<h:outputText value="(#{b.batch.quantityContainer})" style="margin-left:5px;">
-								<f:convertNumber pattern="#,###,##0"/>
-							</h:outputText>
 						</td>
 						<td class="colrb">
 							<h:outputText value="#{b.quantity}"><f:convertNumber pattern="#,###,##0" /></h:outputText></td>
