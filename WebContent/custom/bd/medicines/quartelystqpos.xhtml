@@ -139,7 +139,7 @@
 	
 	<br/>
 	<h:commandLink styleClass="button" onclick="if (confirm('#{messages['quarter.closequarter.msg']}')) closeQuarter();return false;"
-		rendered="#{quarterStockPositionReport.isFiltersFilledIn() and quarterStockPositionHome.canEdit()}" >
+		rendered="#{quarterStockPositionReport.isFiltersFilledIn() and quarterStockPositionHome.canCloseQuarter()}" >
 		<span>#{messages['quarter.closequarter']}</span>
 	</h:commandLink>
 	<s:link view="/custom/bd/medicines/index.xhtml" styleClass="button-alt">

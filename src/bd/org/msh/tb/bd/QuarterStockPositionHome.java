@@ -575,12 +575,35 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	 * Returns true if the quarter and year selected is editable.
 	 */
 	public boolean canEdit(){
+		if(Identity.instance().hasRole("CLOSED_QUARTER_EDIT")  && userSession.getTbunit().getLimitDateMedicineMovement().compareTo(quarterStockPositionReport.getIniQuarterDate()) >= 0)
+			return true;
+			
 		if(!Identity.instance().hasRole("QUARTERLY_EDIT"))
 			return false;
 			
 		if(userSession.getTbunit().getLimitDateMedicineMovement() == null)
 			return true;
 		
+		return isOpenedQuarter();
+	}
+	
+	/**
+	 * Returns true if can close the selected quarter and year.
+	 */
+	public boolean canCloseQuarter(){
+		if(!Identity.instance().hasRole("QUARTERLY_EDIT"))
+			return false;
+			
+		if(userSession.getTbunit().getLimitDateMedicineMovement() == null)
+			return true;
+		
+		return isOpenedQuarter();
+	}
+	
+	/**
+	 * Returns true if the selected quarter is the opened one for the selected unit.
+	 */
+	public boolean isOpenedQuarter(){
 		quarter = quarterStockPositionReport.getQuarter();
 		year = quarterStockPositionReport.getYear();
 		
