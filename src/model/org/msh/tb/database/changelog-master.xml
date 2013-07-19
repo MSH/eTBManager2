@@ -23,7 +23,6 @@
   <include file="org/msh/tb/database/v2_0/changelog-9-suspect.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-10-theme.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-11-suspectfollowup.xml"/> 
-  <include file="org/msh/tb/database/v2_0/changelog-lastaction.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-12-namibia.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-13-bangladesh.xml"/> 
 </databaseChangeLog> 
