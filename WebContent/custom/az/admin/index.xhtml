@@ -16,6 +16,7 @@
 <ui:define name="content">
 	<h1>#{title}</h1>
 	<s:link view="/custom/az/admin/edtsysmsg.xhtml" value="#{messages['admin.editsysmes']}" propagation="none"/>
+	<ui:remove>
 	<br/>
 	<h:form>
 		<a:commandLink styleClass="button" 
@@ -23,10 +24,9 @@
 					   reRender="main,messages" 
 					   action="#{adminControlAZ.generateCasesNumbersForEmpty}">
 			<span>Correct case numbers</span>
-		</a:commandLink> 
-	
-	
+		</a:commandLink> 	
 	</h:form>
+	</ui:remove>
 </ui:define>
 
 </ui:composition>  
