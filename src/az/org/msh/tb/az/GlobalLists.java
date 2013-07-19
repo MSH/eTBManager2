@@ -3,7 +3,6 @@ package org.msh.tb.az;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.az.entities.enums.CaseFindingStrategy;
-import org.msh.tb.az.entities.enums.LastAction;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.ClinicalEvolution;
 import org.msh.tb.entities.enums.DstResult;
@@ -150,8 +149,5 @@ public class GlobalLists {
 	public MicroscopyResult[] getMicroscopyResults() {
 		return microscopyResults;
 	}
-	
-	public LastAction[] getLastActions() {
-		return LastAction.values();
-	}
+
 }
