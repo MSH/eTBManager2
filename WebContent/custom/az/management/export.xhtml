@@ -29,7 +29,7 @@
 <div class="form-content">
 <table width="100%"><tr><td>
 		<h2>#{messages['global.filters']}</h2>
-	<s:decorate template="/management/filters.xhtml">
+	<s:decorate template="#{workspaceUriRewrite.getWorkspacePage('/management/filters.xhtml')}">
 		<ui:param name="hideupdtbar" value="true" />
 		<ui:param name="hideinterimmonth" value="true" />
 	</s:decorate>
