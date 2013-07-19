@@ -381,6 +381,64 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 	}
 	
 	/**
+	 * @return worst microscope test before start treatment
+	 */
+	protected ExamMicroscopy rightMcTestBeforeTreat(TbCase tc){
+		Date iniTreatDate = new Date(); 
+		int res=0;
+		if (tc.getTreatmentPeriod()!=null)
+			if (tc.getTreatmentPeriod().getIniDate()!=null)
+				iniTreatDate = tc.getTreatmentPeriod().getIniDate();		
+		
+		ArrayList<ExamMicroscopy> lst = new ArrayList<ExamMicroscopy>();
+		for (ExamMicroscopy ex: tc.getExamsMicroscopy()){
+			Date dateTest = ex.getDateCollected();
+			if (dateTest.before(iniTreatDate)) {
+				res++;
+				lst.add(ex);
+			}	
+		}
+
+		switch (lst.size()) {
+		case 0: 
+			return null;
+		case 1: 
+			return lst.get(0);
+		default:
+			return WorstMcRes(lst);
+		}
+	}
+	
+	/**
+	 * @return worst culture test before start treatment
+	 */
+	protected ExamCulture rightCulTestBeforeTreat(TbCase tc){
+		Date iniTreatDate = new Date(); 
+		int res=0;
+		if (tc.getTreatmentPeriod()!=null)
+			if (tc.getTreatmentPeriod().getIniDate()!=null)
+				iniTreatDate = tc.getTreatmentPeriod().getIniDate();		
+		
+		ArrayList<ExamCulture> lst = new ArrayList<ExamCulture>();
+		for (ExamCulture ex: tc.getExamsCulture()){
+			Date dateTest = ex.getDateCollected();
+			if (dateTest.before(iniTreatDate)) {
+				res++;
+				lst.add(ex);
+			}	
+		}
+
+		switch (lst.size()) {
+		case 0: 
+			return null;
+		case 1: 
+			return lst.get(0);
+		default:
+			return WorstCulRes(lst);
+		}
+	}
+	
+	/**
 	 * @return culture test, which is up to quality, strictly namely first 14 days of treatment 
 	 * (if no treatment, then all results) and worst test from several 
 	 */

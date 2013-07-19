@@ -118,14 +118,11 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 					{
 						String key=null;
 						switch (tc.getPatientType()) {
-						case NEW: key = "newcases"; 
-						break;
-						case RELAPSE: key = "relapses"; 
-						break;
-						case AFTER_DEFAULT: case FAILURE_FT: case FAILURE_RT: key = "other";
-						break;
-						case OTHER:
-							addToVerList(tc,1,1);
+							case NEW: key = "newcases"; 
+							break;
+							case RELAPSE: key = "relapses"; 
+							break;
+							case AFTER_DEFAULT: case FAILURE_FT: case FAILURE_RT: case OTHER: key = "other";
 							break;
 						}
 						if (key!=null){
@@ -236,12 +233,12 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 
 	@Override
 	protected ExamMicroscopy rightMcTest(TbCase tc){
-		return rightMcTestDuring14daysTreat(tc);
+		return rightMcTestBeforeTreat(tc);
 	}
 	
 	@Override
 	protected ExamCulture rightCulTest(TbCase tc){
-		return rightCulTestDuring14daysTreat(tc);
+		return rightCulTestBeforeTreat(tc);
 	}
 	/**
 	 * Initialize layout of the table 1000 of the TB07 report

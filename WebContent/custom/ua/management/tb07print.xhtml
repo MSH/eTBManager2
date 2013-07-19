@@ -33,6 +33,11 @@
 		<h:outputText value=" -    "/>
 		<h:outputText value="#{indicatorFilters.endDate}"/>
 		</div>
+#{indicatorFilters.tbunitselection.labelAdminUnit}: #{indicatorFilters.tbunitselection.adminUnit}
+	<div>
+		<h:outputText value="#{messages['Tbunit.treatmentHealthUnit']}: #{indicatorFilters.tbunitselection.tbunit}" 
+		rendered="#{indicatorFilters.tbunitselection.tbunit != null}"/>
+	</div>
 </h3>		
 <tr><td align="center">
 
