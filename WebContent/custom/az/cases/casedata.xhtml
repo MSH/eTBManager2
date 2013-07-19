@@ -114,18 +114,21 @@
 						<h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
 						<br/>
 						<span class="right-icon" />
-						<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
+						<s:link view="/cases/casetransferin.xhtml" 
 							propagation="none" rendered="#{caseHome.canTransferIn}">
 							<f:param name="id" value="#{caseHome.id}" />
+							<i class="icon-mail-forward" />#{messages['cases.move.regtransferin']}
 						</s:link>
 						<br/>
-						<a:commandLink value="#{messages['cases.move.cancel']}"
+						
+						<a:commandLink 
 							onclick="if (!confirm('#{caseMoveHome.confirmMsgRollbackTransfer}')) return false"
 							action="#{caseMoveHome.rollbackTransferOut}"
 							reRender="trans,main,leftmenu,messages,systemFields" 
 							styleClass="right-icon"  
 							rendered="#{caseAZHome.canTransferReturn}">
 							<f:param name="name" value="#{caseHome.transferInHealthUnit.tbunit.name}"/>
+							<i class="icon-mail-reply" />#{messages['cases.move.cancel']}
 						</a:commandLink>
 					</div>
 				</s:div>

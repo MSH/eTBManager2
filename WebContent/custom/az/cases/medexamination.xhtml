@@ -93,11 +93,10 @@
 
 	</h:panelGroup>
 
-<a:jsFunction name="remMedExamination" action="#{medicalExaminationHome.remove}" reRender="medexams"  
-	rendered="#{caseHome.canEditExams}" oncomplete="remMedExaminationla();">
+<a:jsFunction name="remMedExamination" action="#{medicalExaminationHome.remove}" reRender="medexams,systemFields"  
+	rendered="#{caseHome.canEditExams}">
 	<a:actionparam name="param1" assignTo="#{medicalExaminationHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
-<a:jsFunction name="remMedExaminationla" action="#{casesControlAZ.saveLastAction('DELETE_MED_EXAM')}" reRender="systemFields"/>
-    
+  
 </h:form>
 </ui:composition>

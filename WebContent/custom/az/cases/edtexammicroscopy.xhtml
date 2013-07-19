@@ -73,7 +73,7 @@
 		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandLink action="#{casesControlAZ.persistActiveHomeObject}" styleClass="button" reRender="formexam,messages" 
+            <a:commandLink action="#{examMicroscopyHome.persist}" styleClass="button" reRender="formexam,messages" 
             	onclick="if (!disableButton(this)) return false;"  
             	>
             	<span>#{messages['form.save']}</span>
