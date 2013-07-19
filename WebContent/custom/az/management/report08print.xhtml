@@ -19,10 +19,13 @@
 <ui:param name="useclassification" value="0" />
 <ui:param name="left" value="0" />
 
+
+
 <ui:define name="content">
 <h:form>
 
-<img src="#{request.contextPath}/custom/az/management/Forma8_titul_#{locale.language}.jpg" width="100%"/>
+<img src="#{request.contextPath}/custom/az/management/Forma8_titul_#{locale.language}_p.jpg" class="printport"/>
+<img src="#{request.contextPath}/custom/az/management/Forma8_titul_#{locale.language}_l.jpg" class="printland"/>
 <p style='page-break-after:always;'/>
 
 <ui:remove>
