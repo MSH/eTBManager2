@@ -6,7 +6,7 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-
+<h:form>
 	<div class="spacer" />
 	<s:link view="/cases/edtmedexam.xhtml" style="float:right;" styleClass="button-alt" rendered="#{caseHome.canEditCaseData}" onclick="disableButton(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
@@ -99,4 +99,5 @@
 </a:jsFunction>
 <a:jsFunction name="remMedExaminationla" action="#{casesControlAZ.saveLastAction('DELETE_MED_EXAM')}" reRender="systemFields"/>
     
+</h:form>
 </ui:composition>
