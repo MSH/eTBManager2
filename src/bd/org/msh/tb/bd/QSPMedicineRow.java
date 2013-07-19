@@ -227,7 +227,7 @@ public class QSPMedicineRow {
 				return result;
 			
 			afterPoint = "0"+afterPoint;
-			beforePoint = beforePoint.substring(0, afterPoint.indexOf("."));
+			beforePoint = beforePoint.substring(0, beforePoint.indexOf("."));
 			
 			//round after point value
 			Double afterPointD = Double.parseDouble(afterPoint);
@@ -235,7 +235,7 @@ public class QSPMedicineRow {
 				result = Double.parseDouble(beforePoint) + afterPointD;
 			if(afterPointD > 0 && afterPointD < 0.5)
 				result = Double.parseDouble(beforePoint);
-			if(afterPointD > 0.5 && afterPointD <= 0.9)
+			if(afterPointD > 0.5 && afterPointD < 1)
 				result = Double.parseDouble(beforePoint) + 0.5;
 				
 		}
