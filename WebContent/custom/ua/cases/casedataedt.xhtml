@@ -199,7 +199,7 @@
 
 	<div id="divDiagDate" style="#{tbcase.diagnosisType=='CONFIRMED'?'':'display:none;'}">
     <s:decorate id="diagdt" template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['uk_UA.dateCMCCRegistration']}:</ui:define>
+    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     	<ui:param name="required" value="#{tbcase.diagnosisType=='CONFIRMED'}" /> 
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
     	<h:inputHidden id="reghidden" />
@@ -223,7 +223,7 @@
 
 	<div id="divregdate">
     <s:decorate template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['uk_UA.firstVisitDate']}:</ui:define>
+    	<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{tbcase.registrationDate}" /> 
     </s:decorate>
@@ -331,7 +331,7 @@
 
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
-    		<h:selectOneMenu id="patType" value="#{tbcase.patientType}">
+    		<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="true">
     			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
     			<s:convertEnum />
     		</h:selectOneMenu>

@@ -107,9 +107,9 @@ public class CaseExportUA extends CaseExport {
 		excel.addTextFromResource("TbCase.iniTreatmentDate", "title");
 		excel.addTextFromResource("TbCase.endTreatmentDate", "title");
 
-		excel.addTextFromResource("uk_UA.dateCMCCRegistration", "title");
+		excel.addTextFromResource("uk_UA.dateFirstSymptoms", "title");
 		excel.addTextFromResource("uk_UA.dateFirstVisitGMC", "title");
-		excel.addTextFromResource("uk_UA.firstTBMedExamDate", "title");
+		excel.addTextFromResource("TbCase.registrationDate", "title");
 		excel.addTextFromResource("uk_UA.hospitalizationDate", "title");
 		excel.addTextFromResource("PatientType", "title");
 		excel.addTextFromResource("TbField.TBDETECTION", "title");
