@@ -498,7 +498,10 @@ public class CaseAZHome {
 	public TransactionLog getLastTransaction(){
 		TransactionLogReport tlr = (TransactionLogReport)App.getComponent("transactionLogReport");
 		tlr.initCaseReport();
-		TransactionLog res = tlr.getResultList().get(0);
+		List<TransactionLog> lst = tlr.getResultList();
+		TransactionLog res = null;
+		if (!lst.isEmpty())
+			res = lst.get(0);
 		return res;
 	}
 }
