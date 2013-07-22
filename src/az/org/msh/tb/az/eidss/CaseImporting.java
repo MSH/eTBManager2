@@ -105,6 +105,7 @@ public  class CaseImporting {
 		c.setLegacyId(oneCase.getCaseID());
 		TbCaseAZ az = entityManager.find(TbCaseAZ.class, c.getId());
 		az.setInEIDSSDate(oneCase.getEnteringDate());
+		az.setEIDSSComment(oneCase.getAdditionalComment());
 		entityManager.persist(c);
 		return true;
 
