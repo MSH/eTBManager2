@@ -424,6 +424,7 @@ public class UserSession {
 	 */
 	public void setTbunit(Tbunit tbunit) {
 		Contexts.getSessionContext().set(SessionFactory.selectedUnitId, tbunit.getId());
+		Contexts.getConversationContext().set("selectedUnit", tbunit);
 	}
 
 	

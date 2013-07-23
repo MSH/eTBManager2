@@ -186,12 +186,13 @@ public class InventoryReport {
 		if ((dtExpire != null) && (dt.after(dtExpire)))
 			dt = dtExpire;
 
-		info.setStockOutDate(dt);
+		if(dt.before(DateUtils.getDate()))
+			info.setStockOutDate(null);
+		else
+			info.setStockOutDate(dt);
+
 		info.setNextOrderDate(DateUtils.incMonths(dt, -1));
 
-		if(info.getStockOutDate().before(DateUtils.getDate()))
-			info.setStockOutDate(null);
-		
 		if ((nextOrderDate == null) || (nextOrderDate.after( info.getNextOrderDate()))) {
 			nextOrderDate = info.getNextOrderDate();
 		}
