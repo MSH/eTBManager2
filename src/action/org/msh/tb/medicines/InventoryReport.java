@@ -12,7 +12,6 @@ import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.Workspace;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.SourceMedicineTree.MedicineNode;
 import org.msh.tb.medicines.SourceMedicineTree.SourceNode;
@@ -55,32 +54,18 @@ public class InventoryReport {
 
 		if(b != null)
 			if(b.getExpiryDate()!=null){
-				/*			Calendar now  = Calendar.getInstance();
-			Calendar batchExpiringDate = Calendar.getInstance();
-			batchExpiringDate.setTime(b.getExpiryDate());
-
-			long diff = batchExpiringDate.getTimeInMillis() - now.getTimeInMillis();
-			diff = diff / (24*60*60*1000);
-			double diffInDouble = diff;
-			double diffInMonths = diffInDouble / 30.0;
-				 */
-				// calculate the number of months between two dates
-				int diffInMonths = DateUtils.monthsBetween(b.getExpiryDate(), new Date());
-
-				Workspace workspace = UserSession.getWorkspace();
-				if(workspace.getMonthsToAlertExpiredMedicines() != null) {
-					if(diffInMonths < 0 || diffInMonths > workspace.getMonthsToAlertExpiredMedicines())
-						return false;
-					else
-						return true;
-				}
-
-				if (workspace.getMonthsToAlertExpiredMedicines() != null) {
-					if(diffInMonths < 0 || diffInMonths > workspace.getMonthsToAlertExpiredMedicines())
-						return false;
-					else
-						return true;
-				}
+				
+				if(b.getExpiryDate().before(new Date()))
+					return false;
+				
+				double diffInMonths = DateUtils.monthsBetween(b.getExpiryDate(), new Date());
+				int monthsToAlert = (UserSession.getWorkspace().getMonthsToAlertExpiredMedicines() == null ? 0 : UserSession.getWorkspace().getMonthsToAlertExpiredMedicines());
+				
+				if(monthsToAlert == 0)
+					return false;
+				
+				if(diffInMonths <= monthsToAlert)
+					return true;				
 			}
 
 		return false;
@@ -156,7 +141,6 @@ public class InventoryReport {
 				if ((node != null) && (node.getItem() != null))  //AK maybe null
 					((MedicineInfo)node.getItem()).setHasBatchExpiring(true);
 			}
-
 		}
 
 		loadLastMovement(userSession.getTbunit());
@@ -196,7 +180,7 @@ public class InventoryReport {
 		int days = Math.round(val * 30);
 
 		Date dt = DateUtils.incDays(sp.getLastMovement(), days);
-
+				
 		Date dtExpire = info.getLastBatchExpire();
 
 		if ((dtExpire != null) && (dt.after(dtExpire)))
@@ -205,6 +189,9 @@ public class InventoryReport {
 		info.setStockOutDate(dt);
 		info.setNextOrderDate(DateUtils.incMonths(dt, -1));
 
+		if(info.getStockOutDate().before(DateUtils.getDate()))
+			info.setStockOutDate(null);
+		
 		if ((nextOrderDate == null) || (nextOrderDate.after( info.getNextOrderDate()))) {
 			nextOrderDate = info.getNextOrderDate();
 		}
@@ -318,8 +305,7 @@ public class InventoryReport {
 			}
 			return dt;
 		}
-
-
+				
 		/**
 		 * @return the stockPosition
 		 */
@@ -413,18 +399,6 @@ public class InventoryReport {
 			this.hasBatchExpiring = hasBatchExpiring;
 		}
 
-		/**
-		 * Compares today+30days with sotckoutdate, if sotckoutdate 
-		 * is before today+30 it's time to alert the user.
-		 */
-		public boolean almostStockedOut(){
-			Date d = DateUtils.incDays(DateUtils.getDate(), 30);
-			if(stockOutDate != null){
-				return stockOutDate.before(d);
-			}else
-				return false;
-		}
-
 		public void setHasRegistCardExpired(boolean hasRegistCardExpired) {
 			return;
 		}
@@ -455,6 +429,45 @@ public class InventoryReport {
 				}
 			}
 			return false;
+		}
+
+		/**
+		 * @return the minOfStock
+		 */
+		public boolean isMinOfStock() {
+			if(stockPosition.getAmc() == null)
+				return false;
+			else if(getStockOutDate() == null && (stockPosition.getAmc() != null && stockPosition.getAmc() != 0))
+				return true;
+			else if(getStockOutDate() == null)
+				return false;
+					
+			int minDays = UserSession.getWorkspace().getMinStockOnHand()*30;
+			int daysOfStock = DateUtils.daysBetween(getStockOutDate(), DateUtils.getDate());
+		
+			//range of error
+			minDays = minDays + 3;
+			
+			if(daysOfStock <= minDays)
+				return true;
+			else
+				return false;
+		}
+
+		/**
+		 * @return the maxOfStock
+		 */
+		public boolean isMaxOfStock() {
+			if(stockPosition.getAmc() == null || getStockOutDate() == null)
+				return false;
+			
+			int maxDays = UserSession.getWorkspace().getMaxStockOnHand()*30;
+			int daysOfStock = DateUtils.daysBetween(getStockOutDate(), DateUtils.getDate());
+		
+			if(daysOfStock >= maxDays)
+				return true;
+			else
+				return false;
 		}
 
 	}

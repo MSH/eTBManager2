@@ -211,8 +211,6 @@ public class DateUtils {
 		return m;
 	}
 
-
-	
 	/**
 	 * Return the number of years between two dates
 	 * @param dt1

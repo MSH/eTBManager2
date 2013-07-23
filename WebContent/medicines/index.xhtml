@@ -48,7 +48,7 @@
 	<tr><th width="40%">
 			#{messages['Medicine']}
 		</th>
-		<th><h:outputText value="#{messages['StoragePosReport.nextExpirationBatch']}" styleClass="colch" /></th>	
+		<th width="110px"><h:outputText value="#{messages['StoragePosReport.nextExpirationBatch']}" styleClass="colch" /></th>	
 		<th><h:outputText value="#{messages['meds.movs.availableqtty']}" styleClass="colrh" /></th>	
 		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
 			<th><h:outputText value="#{messages['meds.amc']}" styleClass="colch" /></th>
@@ -64,46 +64,73 @@
 	<tr class="highlight">
 		<td>
 			<a:commandLink styleClass="plus-icon" onclick="detailsClick(this, 'med#{it.nodeId}');return false;" />
-			<s:span styleClass="alert-icon" rendered="#{it.item.hasBatchExpiring}"/>
-			<s:span styleClass="icon-error" rendered="#{it.item.hasBatchExpired}"/>
-			<h:outputText value="#{it.medicine}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
-			<h:outputText value="#{messages['medicine.almostStockedOut']}" rendered="#{it.item.almostStockedOut()}" style="background-color:#ff8080;color:white;padding:4px;display:block;border:1px solid red;border-radius:4px;" />
+			<h:outputText value="#{it.medicine}"/>
+			
+			<!-- Expired batches message -->
+			<s:div rendered="#{it.item.hasBatchExpired}" styleClass="mederrormsg">
+				<s:span styleClass="icon-error"/>
+				<h:outputText value="#{messages['meds.inventory.expiredmsg']}" />
+			</s:div>
+			
+			<!-- Batches up to expire message -->
+			<s:div rendered="#{it.item.hasBatchExpiring}" styleClass="medalertmsg">
+				<s:span styleClass="alert-icon"/>
+				<h:outputFormat value="#{messages['meds.inventory.expiringmsg']}" >
+					<f:param value="#{userSession.getWorkspace().getMonthsToAlertExpiredMedicines()}" />
+				</h:outputFormat>
+			</s:div>
+			
+			<!-- Minimum months of stock message -->
+			<s:div rendered="#{it.item.isMinOfStock()}" styleClass="mederrormsg">
+				<s:span styleClass="icon-error"/>
+				<h:outputFormat value="#{messages['meds.inventory.minmonthsmsg']}">
+					<f:param value="#{userSession.getWorkspace().getMinStockOnHand()}" />
+				</h:outputFormat>
+			</s:div>
+			
+			<!-- Maximum months of stock message -->
+			<s:div rendered="#{it.item.isMaxOfStock()}" styleClass="medalertmsg">
+				<s:span styleClass="alert-icon"/>
+				<h:outputFormat value="#{messages['meds.inventory.maxmonthsmsg']}">
+					<f:param value="#{userSession.getWorkspace().getMaxStockOnHand()}" />
+				</h:outputFormat>
+			</s:div>
+			
 		</td>
 		<td align="center">
-			<h:outputText value="#{it.item.nextBatchExpire}" converter="localeDateConverter" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
+			<h:outputText value="#{it.item.nextBatchExpire}" converter="localeDateConverter" />
 		</td>
 		<td align="right">
-			<h:outputText value="#{it.item.quantity}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
+			<h:outputText value="#{it.item.quantity}" >
 				<f:convertNumber pattern="###,###,###"/>
 			</h:outputText>
 		</td>
 		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
 			<td align="right">
-				<h:outputText value="#{it.item.stockPosition.amc}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
+				<h:outputText value="#{it.item.stockPosition.amc}" >
 					<f:convertNumber pattern="###,###,##0"/>
 				</h:outputText>
 			</td>
 			<td align="right">
-				<h:outputText value="#{it.item.stockOutDate}" converter="periodConverter" rendered="#{not it.item.almostStockedOut()}"
-					style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
+				<h:outputText value="#{it.item.stockOutDate}" converter="periodConverter">
 					<f:param name="type" value="time-length"/>
 				</h:outputText>
 			</td>
 		</s:fragment>
 		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
 		<td align="right">
-			<h:outputText value="#{it.item.totalPrice}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
+			<h:outputText value="#{it.item.totalPrice}" >
 				<f:convertNumber pattern="###,###,##0.00"/>
 			</h:outputText>
 		</td>
 		<td align="right">
-			<h:outputText value="#{it.item.unitPrice}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
+			<h:outputText value="#{it.item.unitPrice}" >
 				<f:convertNumber pattern="###,###,##0.00"/>
 			</h:outputText>
 		</td>
 		</s:fragment>
 		<td align="center">
-			<h:outputText value="#{it.item.lastMovement}" converter="localeDateConverter" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
+			<h:outputText value="#{it.item.lastMovement}" converter="localeDateConverter" />
 		</td>
 	</tr>
 	<a:repeat value="#{it.batches}" var="b">
@@ -144,8 +171,8 @@
 		<s:fragment rendered="#{b.batch.expired}">
 			<td align="center">
 				<div title="#{messages['manag.forecast.expiredquantity']}">
-					<span class="icon-error" />
-					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" styleClass="error"/>
+					<span class="icon-error"/>
+					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" styleClass="error" />
 				</div>
 			</td>
 			<td align="right">

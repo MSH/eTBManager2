@@ -1002,3 +1002,23 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	font-size:12px;
 	width:100%;
 }
+.mederrormsg{
+	margin-top:3px;
+	background-color:#ffd4d9;
+	color:red;
+	font-weight:bold;
+	display:inline-block;
+	border: 1px solid #fb96a1;
+	width:98%;
+	font-size:11px;
+}
+.medalertmsg{
+	margin-top:3px;
+	background-color:#fdffe5;
+	color:#ff7e00;
+	font-weight:bold;
+	display:inline-block;
+	border: 1px solid #FEC8AE;
+	width:98%;
+	font-size:11px;
+}
