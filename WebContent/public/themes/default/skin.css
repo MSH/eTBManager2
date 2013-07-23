@@ -1021,4 +1021,6 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	border: 1px solid #FEC8AE;
 	width:98%;
 	font-size:11px;
+	border-radius:3px;
+	padding:1px;
 }
