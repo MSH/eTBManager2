@@ -186,11 +186,7 @@ public class InventoryReport {
 		if ((dtExpire != null) && (dt.after(dtExpire)))
 			dt = dtExpire;
 
-		if(dt.before(DateUtils.getDate()))
-			info.setStockOutDate(null);
-		else
-			info.setStockOutDate(dt);
-
+		info.setStockOutDate(dt);
 		info.setNextOrderDate(DateUtils.incMonths(dt, -1));
 
 		if ((nextOrderDate == null) || (nextOrderDate.after( info.getNextOrderDate()))) {
@@ -305,6 +301,17 @@ public class InventoryReport {
 				}
 			}
 			return dt;
+		}
+		
+		public boolean getShowStockOutDate(){
+			Date todayPlus30 = DateUtils.incDays(DateUtils.getDate(), 30);
+			
+			if(getStockOutDate() == null)
+				return false;
+			else if(getStockOutDate().before(todayPlus30))
+				return false;
+			else 
+				return true;
 		}
 				
 		/**

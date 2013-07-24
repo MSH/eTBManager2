@@ -45,10 +45,10 @@
 <span class="text-small">(#{s.source.name})</span></h2>
 
 <table id="tblinv" class="table1 regular">
-	<tr><th width="40%">
+	<tr><th width="48%">
 			#{messages['Medicine']}
 		</th>
-		<th width="110px"><h:outputText value="#{messages['StoragePosReport.nextExpirationBatch']}" styleClass="colch" /></th>	
+		<th width="15%"><h:outputText value="#{messages['StoragePosReport.nextExpirationBatch']}" styleClass="colch" /></th>	
 		<th><h:outputText value="#{messages['meds.movs.availableqtty']}" styleClass="colrh" /></th>	
 		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
 			<th><h:outputText value="#{messages['meds.amc']}" styleClass="colch" /></th>
@@ -110,9 +110,16 @@
 				<h:outputText value="#{it.item.stockPosition.amc}" >
 					<f:convertNumber pattern="###,###,##0"/>
 				</h:outputText>
+				<h:outputText value="0" rendered="#{it.item.stockPosition.amc == null}"/>
 			</td>
 			<td align="right">
-				<h:outputText value="#{it.item.stockOutDate}" converter="periodConverter">
+				<s:fragment rendered="#{not it.item.getShowStockOutDate()}">
+					<h:outputText value="Less than 1 month" rendered="#{it.item.stockPosition.amc > 0}"/>
+					
+					<h:outputText value="undefined" rendered="#{it.item.stockPosition.amc == 0 or it.item.stockPosition.amc == null}"/>
+				</s:fragment>
+				
+				<h:outputText rendered="#{it.item.getShowStockOutDate()}" value="#{it.item.stockOutDate}" converter="periodConverter">
 					<f:param name="type" value="time-length"/>
 				</h:outputText>
 			</td>
