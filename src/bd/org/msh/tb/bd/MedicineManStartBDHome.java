@@ -1,7 +1,6 @@
 package org.msh.tb.bd;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.jboss.seam.ScopeType;
@@ -13,6 +12,7 @@ import org.msh.tb.bd.entities.enums.Quarter;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.medicines.MedicineManStartHome;
 import org.msh.tb.tbunits.TbUnitHome;
+import org.msh.utils.date.DateUtils;
 
  
 /**
@@ -28,8 +28,7 @@ public class MedicineManStartBDHome{
 	@In(required=true) MedicineManStartHome medicineManStartHome;
 	@In(create=true) TbUnitHome tbunitHome;
 	
-	private Quarter quarter;
-	private Integer year;
+	private Quarter selectedQuarter;
 	private List<Integer> years;
 	
 	/**
@@ -39,19 +38,18 @@ public class MedicineManStartBDHome{
 	 * @return
 	 */
 	public String startMedicineManagement() {
-		if(quarter == null || year == null)
+		if(selectedQuarter == null || selectedQuarter.getYear() == 0)
 			return "error";
 		
-		GregorianCalendar date = new GregorianCalendar();
-		date.set(year, quarter.getIniMonth(), quarter.getIniDay());
-		medicineManStartHome.setStartDate(date.getTime());
+		medicineManStartHome.setStartDate(selectedQuarter.getIniDate());
 		
 		String s = medicineManStartHome.startMedicineManagement();
 		
 		Tbunit unit = medicineManStartHome.getUnit();
 		tbunitHome.setInstance(unit);
-		tbunitHome.getInstance().setLimitDateMedicineMovement(date.getTime());
+		tbunitHome.getInstance().setLimitDateMedicineMovement(selectedQuarter.getIniDate());
 		tbunitHome.persist();
+		tbunitHome.clearInstance();
 		
 		return s;
 	}
@@ -59,39 +57,31 @@ public class MedicineManStartBDHome{
 	/**
 	 * Load the list of years that is shown in the selection list
 	 */
-	private void loadYears(){
-		if(years == null)
+	public void loadYears(){
+		if(years == null || years.size() == 0){
+			Integer currYear = DateUtils.yearOf(DateUtils.getDate());
 			years = new ArrayList<Integer>();
-		years.add(2013);
-		years.add(2012);
+			for(int i = currYear ; i >= 2012 ; i--){
+				years.add(i);
+			}
+		}
 	}
 
 	/**
-	 * @return the quarter
+	 * @return the selectedQuarter
 	 */
-	public Quarter getQuarter() {
-		return quarter;
+	public Quarter getSelectedQuarter() {
+		//Solve JSF problem when trying to set year before setting the quarter, the year depends on the quarter.
+		if(this.selectedQuarter == null)
+			return Quarter.FIRST;
+		return selectedQuarter;
 	}
 
 	/**
-	 * @param quarter the quarter to set
+	 * @param selectedQuarter the selectedQuarter to set
 	 */
-	public void setQuarter(Quarter quarter) {
-		this.quarter = quarter;
-	}
-
-	/**
-	 * @return the year
-	 */
-	public Integer getYear() {
-		return year;
-	}
-
-	/**
-	 * @param year the year to set
-	 */
-	public void setYear(Integer year) {
-		this.year = year;
+	public void setSelectedQuarter(Quarter selectedQuarter) {
+		this.selectedQuarter = selectedQuarter;
 	}
 
 	/**

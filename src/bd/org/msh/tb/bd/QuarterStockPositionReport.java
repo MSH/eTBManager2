@@ -1,11 +1,10 @@
 package org.msh.tb.bd;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
 
 import javax.persistence.EntityManager;
 
@@ -23,6 +22,7 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection2;
+import org.msh.utils.date.DateUtils;
 
 /**
  * @author MSANTOS
@@ -39,14 +39,11 @@ public class QuarterStockPositionReport {
 	@In(required=true) FacesMessages facesMessages;
 	
 	private TBUnitSelection2 tbunitselection;
-	private Quarter quarter;
-	private Integer year;
+	private Quarter selectedQuarter;
 	private Source source;
 	
 	private List<QSPMedicineRow> rows;
 	private Map<Batch, Long> batchDetails;
-	private Date iniQuarterDate;
-	private Date endQuarterDate;
 	private List<Integer> years;
 	private List<Tbunit> pendCloseQuarterUnits;
 		
@@ -57,7 +54,6 @@ public class QuarterStockPositionReport {
 		if(getLocationWhereClause() == null)
 			facesMessages.addToControlFromResourceBundle("cbselau1", "javax.faces.component.UIInput.REQUIRED");
 		else{
-			updateQuarterDates();
 			updateQuarterReport();
 			updateBatchList();
 			updatePendCloseQuarterUnits();
@@ -67,9 +63,9 @@ public class QuarterStockPositionReport {
 	/**
 	 * Load the list of years that is shown in the selection list
 	 */
-	private void loadYears(){
+	public void loadYears(){
 		if(years == null || years.size() == 0){
-			Integer currYear = (new GregorianCalendar()).get(GregorianCalendar.YEAR);
+			Integer currYear = DateUtils.yearOf(DateUtils.getDate());
 			years = new ArrayList<Integer>();
 			for(int i = currYear ; i >= 2012 ; i--){
 				years.add(i);
@@ -99,36 +95,18 @@ public class QuarterStockPositionReport {
 		loadMedicineList(medicines.getResultList());
 		
 		if(!isFiltersFilledIn()){
-			loadMedicineList(medicines.getResultList());
 			return;
 		}
 		
 		//calc parameters for selecting the number dispensed to use on amc calc
-		Date iniDateAmcCalc = iniQuarterDate;
-		Date endDateAmcCalc = endQuarterDate;
-		//If the selected quarter is opened it has to consider the last consumption of a closed quarter.
+		Quarter quarterAmcCalc = selectedQuarter.copy();
+		//If the selected quarter is opened it has to consider the last consumption of the last closed quarter.
 		if(tbunitselection.getTbunit()!=null && tbunitselection.getTbunit().getLimitDateMedicineMovement() != null
-				&& ( tbunitselection.getTbunit().getLimitDateMedicineMovement().equals(iniQuarterDate)
-						|| tbunitselection.getTbunit().getLimitDateMedicineMovement().before(iniQuarterDate) )){
+				&& ( tbunitselection.getTbunit().getLimitDateMedicineMovement().equals(quarterAmcCalc.getIniDate())
+						|| tbunitselection.getTbunit().getLimitDateMedicineMovement().before(quarterAmcCalc.getIniDate()) )){
 			
-			GregorianCalendar baseDate = new GregorianCalendar();
-			baseDate.setTime(tbunitselection.getTbunit().getLimitDateMedicineMovement());
-			
-			Integer year = baseDate.get(GregorianCalendar.YEAR);
-			Quarter quarter = Quarter.getPreviousQuarter(Quarter.getQuarterByMonth(baseDate.get(GregorianCalendar.MONTH)));
-			
-			if(quarter.equals(Quarter.FOURTH))
-				year = year -1;
-						
-			GregorianCalendar iniDate = new GregorianCalendar();
-			GregorianCalendar endDate = new GregorianCalendar();
-			
-			iniDate.set(year, quarter.getIniMonth(), quarter.getIniDay());
-			endDate.set(year, quarter.getEndMonth(), quarter.getEndDay());
-			
-			iniDateAmcCalc = iniDate.getTime();
-			endDateAmcCalc = endDate.getTime();
-			
+			Date baseDate = tbunitselection.getTbunit().getLimitDateMedicineMovement();
+			quarterAmcCalc = Quarter.getPreviousQuarter(Quarter.getQuarterByMonth(DateUtils.monthOf(baseDate), DateUtils.yearOf(baseDate)));
 		}
 		
 		String queryString = "select m, " +
@@ -170,13 +148,13 @@ public class QuarterStockPositionReport {
 							  "group by m";
 		
 		List<Object[]> result = entityManager.createQuery(queryString)
-									.setParameter("iniDate", iniQuarterDate)
-									.setParameter("endDate", endQuarterDate)
+									.setParameter("iniDate", selectedQuarter.getIniDate())
+									.setParameter("endDate", selectedQuarter.getEndDate())
 									.setParameter("workspaceId", UserSession.getWorkspace().getId())
-									.setParameter("quarter", quarter)
-									.setParameter("year", year)
-									.setParameter("iniDateAmcCalc", iniDateAmcCalc)
-									.setParameter("endDateAmcCalc", endDateAmcCalc)									
+									.setParameter("quarter", selectedQuarter)
+									.setParameter("year", selectedQuarter.getYear())
+									.setParameter("iniDateAmcCalc", quarterAmcCalc.getIniDate())
+									.setParameter("endDateAmcCalc", quarterAmcCalc.getEndDate())									
 									.setParameter("workspaceExpiredAdjust", UserSession.getWorkspace().getExpiredMedicineAdjustmentType().getId())
 									.getResultList();
 		
@@ -201,9 +179,7 @@ public class QuarterStockPositionReport {
 	 * Update the list of batches that will expired with in three months
 	 */
 	private void updateBatchList(){
-		GregorianCalendar endDatePlus90 = new GregorianCalendar();
-		endDatePlus90.setTime(endQuarterDate);
-		endDatePlus90.add(GregorianCalendar.MONTH, 3);
+		Date endDatePlus90 = DateUtils.incMonths(selectedQuarter.getEndDate(), 3);
 
 		String queryString = "select b, sum(bm.quantity * mov.oper) " +
 							"from BatchMovement bm join bm.batch b join bm.movement mov " +
@@ -214,8 +190,8 @@ public class QuarterStockPositionReport {
 							"order by b.medicine.genericName.name1 ";
 		
 		List<Object[]> result = entityManager.createQuery(queryString)
-									.setParameter("endDate", endQuarterDate)
-									.setParameter("endDatePlus90", endDatePlus90.getTime())
+									.setParameter("endDate", selectedQuarter.getEndDate())
+									.setParameter("endDatePlus90", endDatePlus90)
 									.getResultList();
 
 		if(batchDetails == null)
@@ -245,38 +221,21 @@ public class QuarterStockPositionReport {
 		pendCloseQuarterUnits = entityManager.createQuery(queryString)
 									.setParameter("code", tbunitselection.getAuselection().getSelectedUnit().getCode()+'%')
 									.setParameter("workspaceId", UserSession.getWorkspace().getId())
-									.setParameter("iniQuarterDate", iniQuarterDate)
+									.setParameter("iniQuarterDate", selectedQuarter.getIniDate())
 									.setParameter("true", true)
 									.getResultList();
 		
 	}
 	
 	/**
-	 * Updates the iniQuarterDate and endQuarterDate according to the quarter and year in memory.
-	 */
-	private void updateQuarterDates(){
-		if(year == null || quarter == null){
-			this.iniQuarterDate = null;
-			this.endQuarterDate = null;
-			return;
-		}
-		
-		GregorianCalendar iniDate = new GregorianCalendar();
-		GregorianCalendar endDate = new GregorianCalendar();
-		
-		iniDate.set(year, quarter.getIniMonth(), quarter.getIniDay());
-		endDate.set(year, quarter.getEndMonth(), quarter.getEndDay());
-		
-		this.iniQuarterDate = iniDate.getTime();
-		this.endQuarterDate = endDate.getTime();
-	}
-	
-	/**
 	 * Checks if all the requirements to load the table is attended
 	 */
 	public boolean isFiltersFilledIn(){
-		return !(rows == null || rows.size() == 0 || quarter == null || year == null || getLocationWhereClause() == null 
-					|| iniQuarterDate == null || endQuarterDate == null);
+		if(rows == null || rows.size() == 0){
+			loadMedicineList(medicines.getResultList());
+		}
+		
+		return !(selectedQuarter == null || selectedQuarter.getYear() == 0 || getLocationWhereClause() == null);
 	}
 	
 	/**
@@ -322,40 +281,25 @@ public class QuarterStockPositionReport {
 	}
 
 	public boolean isCurrQuarter(){
-		GregorianCalendar currDate = new GregorianCalendar();
-		Integer currYear = currDate.get(GregorianCalendar.YEAR);
-		Integer currMonth = currDate.get(GregorianCalendar.MONTH);
-		
-		return quarter.equals(Quarter.getQuarterByMonth(currMonth)) && year.equals(currYear);
-		
+		return Quarter.getCurrentQuarter().isTheSame(selectedQuarter);
 	}
 	
 	/**
-	 * @return the quarter
+	 * @return the selectedQuarter
 	 */
-	public Quarter getQuarter() {
-		return quarter;
+	public Quarter getSelectedQuarter() {
+		//Solve JSF problem when trying to set year before setting the quarter, the year depends on the quarter.
+		if(this.selectedQuarter == null)
+			return Quarter.FIRST;
+		
+		return selectedQuarter;
 	}
 
 	/**
-	 * @param quarter the quarter to set
+	 * @param selectedQuarter the selectedQuarter to set
 	 */
-	public void setQuarter(Quarter quarter) {
-		this.quarter = quarter;
-	}
-
-	/**
-	 * @return the year
-	 */
-	public Integer getYear() {
-		return year;
-	}
-
-	/**
-	 * @param year the year to set
-	 */
-	public void setYear(Integer year) {
-		this.year = year;
+	public void setSelectedQuarter(Quarter selectedQuarter) {
+		this.selectedQuarter = selectedQuarter;
 	}
 
 	/**
@@ -372,36 +316,6 @@ public class QuarterStockPositionReport {
 	 */
 	public void setRows(List<QSPMedicineRow> rows) {
 		this.rows = rows;
-	}
-
-	/**
-	 * @return the iniQuarterDate
-	 */
-	public Date getIniQuarterDate() {
-		return iniQuarterDate;
-	}
-
-	/**
-	 * @param iniQuarterDate the iniQuarterDate to set
-	 */
-	public void setIniQuarterDate(Date iniQuarterDate) {
-		this.iniQuarterDate = iniQuarterDate;
-		updateQuarterDates();
-	}
-
-	/**
-	 * @return the endQuarterDate
-	 */
-	public Date getEndQuarterDate() {
-		return endQuarterDate;
-	}
-
-	/**
-	 * @param endQuarterDate the endQuarterDate to set
-	 */
-	public void setEndQuarterDate(Date endQuarterDate) {
-		this.endQuarterDate = endQuarterDate;
-		updateQuarterDates();
 	}
 	
 	public List<Integer> getYears(){

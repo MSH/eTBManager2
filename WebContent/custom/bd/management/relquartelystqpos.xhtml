@@ -38,12 +38,12 @@
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:param name="redasterisk" value="true" />
     	<ui:define name="label">#{messages['Quarter']}:</ui:define>
-		<h:selectOneMenu value="#{quarterStockPositionReport.quarter}">
+		<h:selectOneMenu value="#{quarterStockPositionReport.selectedQuarter}">
   			<s:selectItems value="#{quarter}" var="r" label="#{messages[r.key]}" />
   			<s:convertEnum />
 		</h:selectOneMenu>
 		/
-		<h:selectOneMenu value="#{quarterStockPositionReport.year}" id="year">
+		<h:selectOneMenu value="#{quarterStockPositionReport.selectedQuarter.year}" id="year">
   			<s:selectItems value="#{quarterStockPositionReport.years}" var="r" label="#{r}" />
 		</h:selectOneMenu>
 	</s:decorate>
