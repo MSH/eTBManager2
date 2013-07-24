@@ -192,8 +192,8 @@ public enum Quarter {
 		c.clear();
 		
 		c.set(Calendar.YEAR, this.getYear());
-		c.set(Calendar.MONTH, this.getIniMonth());
-		c.set(Calendar.DAY_OF_MONTH, this.getIniDay());
+		c.set(Calendar.MONTH, this.getEndMonth());
+		c.set(Calendar.DAY_OF_MONTH, this.getEndDay());
 		
 		return c.getTime();
 	}

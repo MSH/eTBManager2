@@ -80,6 +80,32 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 			quarterStockPositionReport.loadYears();
 			
 			quarterStockPositionReport.setSelectedQuarter(openedQuarter);
+		}else{
+			//for units that had the control of medicines started before the quarterly report implementation;
+			Date dt = (Date) getEntityManager().createQuery("select max(date) from Movement m where m.tbunit.id = :unitId")
+								.setParameter("unitId", userSession.getTbunit().getId())
+								.getSingleResult();
+			
+			Quarter openedQuarter;
+				
+			if(dt != null){
+				openedQuarter = Quarter.getQuarterByDate(dt);
+			}else{
+				openedQuarter = Quarter.FIRST;
+				openedQuarter.setYear(2013);
+			}
+			
+			if(openedQuarter == null || openedQuarter.getYear() == 0)
+				return;
+				
+			tbunitHome.setInstance(userSession.getTbunit());
+			tbunitHome.getInstance().setLimitDateMedicineMovement(openedQuarter.getIniDate());
+			tbunitHome.persist();
+			
+			tbunitHome.clearInstance();				
+			facesMessages.clear();
+			
+			quarterStockPositionReport.setSelectedQuarter(openedQuarter);
 		}
 	}
 	
@@ -261,6 +287,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 			
 		quarterStockPositionReport.refresh();
 		
+		tbunitHome.clearInstance();
 		facesMessages.clear();
 		facesMessages.addFromResourceBundle("default.entity_updated");
 		return "success-close";

@@ -67,7 +67,7 @@ public class QuarterStockPositionReport {
 		if(years == null || years.size() == 0){
 			Integer currYear = DateUtils.yearOf(DateUtils.getDate());
 			years = new ArrayList<Integer>();
-			for(int i = currYear ; i >= 2012 ; i--){
+			for(int i = currYear ; i >= 2010 ; i--){
 				years.add(i);
 			}
 		}
@@ -112,8 +112,7 @@ public class QuarterStockPositionReport {
 		String queryString = "select m, " +
 		
 								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
-									" and ( (mov.date < :iniDate) or " +
-									"(mov.date >= :iniDate and mov.date <= :endDate and mov.type in (7)) ) " +
+									" and ( (mov.date < :iniDate) or (mov.date >= :iniDate and mov.date <= :endDate and mov.type in (7)) ) " +
 									"and mov.medicine.id = m.id " + getSourceClause() + ") as openingBalance, " +
 								
 								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 

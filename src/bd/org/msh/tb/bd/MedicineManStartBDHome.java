@@ -61,7 +61,7 @@ public class MedicineManStartBDHome{
 		if(years == null || years.size() == 0){
 			Integer currYear = DateUtils.yearOf(DateUtils.getDate());
 			years = new ArrayList<Integer>();
-			for(int i = currYear ; i >= 2012 ; i--){
+			for(int i = currYear ; i >= 2010 ; i--){
 				years.add(i);
 			}
 		}
