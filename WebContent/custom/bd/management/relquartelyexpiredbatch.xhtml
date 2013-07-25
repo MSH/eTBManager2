@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:p="http://jboss.com/products/seam/pdf"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['quarter.expiringbatchlist']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="left" value="0" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
+	<div class="item selected">
+		<s:link value="#{title}" />
+	</div>
+</ui:define>
+
+<ui:define name="content" id="content">
+	<h1>#{title}</h1>
+	<h:form id="main" prependId="false">
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Source']}:</ui:define>
+		<h:selectOneMenu value="#{quarterBatchExpiringReport.source}">
+            <s:selectItems value="#{sources.resultList}" var="c" label="#{c.abbrevName} - #{c.name}" noSelectionLabel="-" />
+            <s:convertEntity/>
+		</h:selectOneMenu>
+    </s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:param name="redasterisk" value="true" />
+    	<ui:define name="label">#{messages['Quarter']}:</ui:define>
+		<h:selectOneMenu value="#{quarterBatchExpiringReport.selectedQuarter}">
+  			<s:selectItems value="#{quarter}" var="r" label="#{messages[r.key]}" />
+  			<s:convertEnum />
+		</h:selectOneMenu>
+		/
+		<h:selectOneMenu value="#{quarterBatchExpiringReport.selectedQuarter.year}" id="year">
+  			<s:selectItems value="#{quarterYears}" var="r" label="#{r}" />
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	<s:decorate template="/layout/tbselection2.xhtml" id="tbseldiv">
+		<ui:param name="redastfirst" value="true" />
+		<ui:param name="unitlabel" value="#{messages['MedicalExamination.RefToUnit']}" />
+	   	<ui:param name="tbunitselection" value="#{quarterBatchExpiringReport.tbunitselection}" />
+	</s:decorate>
+
+   	<a:commandLink styleClass="button-alt" action="#{quarterBatchExpiringReport.refresh}" onclick="if (!disableButton(this)) return false;" reRender="main">
+   		<span>#{messages['form.update']}</span>
+   	</a:commandLink>
+
+	<br/>
+	<br/>
+	
+	<!-- Message for no units for the administrative unit selected -->
+	<h:outputText styleClass="warn" value="#{messages['global.nounitfound']}" rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and empty quarterBatchExpiringReport.unitBatchDetails}"/>
+	
+	<s:fragment rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and not empty quarterBatchExpiringReport.unitBatchDetails}">
+	<!-- Alerts if there are units with the selected quarter opened -->
+	<s:div style="padding:1px;background-color:#ffc3ca;" rendered="#{not empty quarterBatchExpiringReport.pendCloseQuarterUnits}">
+		<h:outputText styleClass="error" value="#{messages['quarter.openquarterunit']}" />
+		<a:commandLink value="#{messages['global.clicktoseelist']}" onclick="showOpenQuarterunitList();" />
+	</s:div>
+	<br/><br/>
+	<a:repeat value="#{quarterBatchExpiringReport.unitBatchDetails}" var="unitD">
+		<h2>
+			<h:outputText value="#{unitD.unit}" />
+			<h:outputText value=" (#{unitD.unit.adminUnit.getFullDisplayName()})" style="font-size:11px"/>
+		</h2>
+		
+		<!-- Message for no result -->
+		<h:outputText value="#{messages['quarter.expiringbatchlist.noresultmsg']}" styleClass="warn" 
+			rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and empty unitD.getBatchDetailsKeySet()}"/>
+		
+		<!-- Datatable of the result of the unit -->
+		<h:dataTable value="#{unitD.getBatchDetailsKeySet()}" var="selBatch" rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and not empty unitD.getBatchDetailsKeySet()}" styleClass="table1">
+			<h:column>
+				<f:facet name="header">#{messages['Medicine']}</f:facet>
+				<h:outputText value="#{selBatch.medicine}" />
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['Batch']}</f:facet>
+				<h:outputText value="#{selBatch.batchNumber} - #{selBatch.manufacturer}" rendered="#{(not empty selBatch.batchNumber) or (not empty selBatch.manufacturer)}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['Batch.expiryDate']}</f:facet>
+				<h:outputText value="#{selBatch.expiryDate}" />
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['Movement.quantity']}</f:facet>
+				<h:outputText value="#{unitD.batchInfo[selBatch]}" />
+			</h:column>
+		</h:dataTable>
+		<br/><br/>
+	</a:repeat>
+
+
+	<h2>
+		Consolidated
+	</h2>
+	
+	<!-- Message for no result of consolidated -->
+	<h:outputText styleClass="warn" value="#{messages['quarter.expiringbatchlist.noresultmsg']}" 
+		rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and empty quarterBatchExpiringReport.getBatchDetailsConsolidatedKeySet()}"/>
+	
+	<!-- Datatable of the result of the consolidated -->
+	<h:dataTable value="#{quarterBatchExpiringReport.getBatchDetailsConsolidatedKeySet()}" var="selBatch" 
+		rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and not empty quarterBatchExpiringReport.getBatchDetailsConsolidatedKeySet()}" styleClass="table1">
+		
+		<h:column>
+			<f:facet name="header">#{messages['Medicine']}</f:facet>
+			<h:outputText value="#{selBatch.medicine}" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">#{messages['Batch']}</f:facet>
+			<h:outputText value="#{selBatch.batchNumber} - #{selBatch.manufacturer}" rendered="#{(not empty selBatch.batchNumber) or (not empty selBatch.manufacturer)}"/>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">#{messages['Batch.expiryDate']}</f:facet>
+			<h:outputText value="#{selBatch.expiryDate}" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">#{messages['Movement.quantity']}</f:facet>
+			<h:outputText value="#{quarterBatchExpiringReport.batchDetailsConsolidated[selBatch]}" />
+		</h:column>
+	</h:dataTable>
+
+	<!-- Modal panel with the units with no closed quarters -->
+	<rich:modalPanel id="openQuarterunitList" autosized="true" width="700" zindex="2000" style="background-color:#F2F5F0">
+		<f:facet name="header">
+			<h:outputText value="#{messages['quarter.listopenquarterunit']}" />
+		</f:facet>
+		
+		<h:outputFormat id="unitCount" value="#{messages['meds.unitsfound']}" style="display:block;clear:both;font-weight:bold;">
+			<f:param value="#{quarterBatchExpiringReport.pendCloseQuarterUnits.size()}" />
+		</h:outputFormat>
+		
+		<div style="overflow:auto;width:98%;max-height:300px;min-height:80px;border: 1px gray solid;padding:6px;margin:0px;background-color:white;">
+			<a:repeat value="#{quarterBatchExpiringReport.pendCloseQuarterUnits}" var="unit">
+				<div class="#{unit.treatmentHealthUnit?'icon-hu':'icon-ds'}" />
+				<h:outputText value="#{unit.name} - #{unit.adminUnit.fullDisplayName}" /><br/>	
+			</a:repeat>
+		</div>
+		<div class="button-bar">
+			<s:link styleClass="button-alt" onclick="hideOpenQuarterunitList(); return false;">
+				<span>#{messages['form.close']}</span>
+			</s:link>
+		</div>
+	</rich:modalPanel>
+	
+	<script type="text/javascript">
+	function showOpenQuarterunitList() {
+		Richfaces.showModalPanel('openQuarterunitList');
+	}
+	function hideOpenQuarterunitList() {
+		Richfaces.hideModalPanel('openQuarterunitList');
+	}
+	</script>
+
+	</s:fragment>
+	
+	</h:form>
+</ui:define>
+
+
+</ui:composition>  

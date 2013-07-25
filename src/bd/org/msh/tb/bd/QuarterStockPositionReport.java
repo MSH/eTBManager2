@@ -1,10 +1,8 @@
 package org.msh.tb.bd;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
@@ -15,7 +13,6 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.MedicinesQuery;
 import org.msh.tb.bd.entities.enums.Quarter;
-import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Tbunit;
@@ -43,7 +40,6 @@ public class QuarterStockPositionReport {
 	private Source source;
 	
 	private List<QSPMedicineRow> rows;
-	private Map<Batch, Long> batchDetails;
 	private List<Tbunit> pendCloseQuarterUnits;
 		
 	/**
@@ -54,7 +50,6 @@ public class QuarterStockPositionReport {
 			facesMessages.addToControlFromResourceBundle("cbselau1", "javax.faces.component.UIInput.REQUIRED");
 		else{
 			updateQuarterReport();
-			updateBatchList();
 			updatePendCloseQuarterUnits();
 		}
 	}
@@ -157,35 +152,6 @@ public class QuarterStockPositionReport {
 									
 				}
 			}
-		}
-	}
-	
-	/**
-	 * Update the list of batches that will expired with in three months
-	 */
-	private void updateBatchList(){
-		Date endDatePlus90 = DateUtils.incMonths(selectedQuarter.getEndDate(), 3);
-
-		String queryString = "select b, sum(bm.quantity * mov.oper) " +
-							"from BatchMovement bm join bm.batch b join bm.movement mov " +
-							getLocationWhereClause() + " and mov.date <= :endDate " +
-							"and b.expiryDate <= :endDatePlus90 " +
-							"group by b.id " +
-							"having sum(bm.quantity * mov.oper) > 0 " +
-							"order by b.medicine.genericName.name1 ";
-		
-		List<Object[]> result = entityManager.createQuery(queryString)
-									.setParameter("endDate", selectedQuarter.getEndDate())
-									.setParameter("endDatePlus90", endDatePlus90)
-									.getResultList();
-
-		if(batchDetails == null)
-			batchDetails = new HashMap<Batch, Long>();
-		else
-			batchDetails.clear();	
-		
-		for(Object[] o : result){
-			batchDetails.put((Batch) o[0], (Long) o[1]);
 		}
 	}
 	
@@ -314,30 +280,6 @@ public class QuarterStockPositionReport {
 	 */
 	public void setSource(Source source) {
 		this.source = source;
-	}
-	/**
-	 * @return the batchDetails
-	 */
-	public Map<Batch, Long> getBatchDetails() {
-		return batchDetails;
-	}
-	/**
-	 * @param batchDetails the batchDetails to set
-	 */
-	public void setBatchDetails(Map<Batch, Long> batchDetails) {
-		this.batchDetails = batchDetails;
-	}
-	/**
-	 * @return the batchDetails keyset in a list to use with JSF data table
-	 */
-	public ArrayList<Batch> getBatchDetailsKeySet() {
-		if(batchDetails == null)
-			return null;
-		
-		ArrayList<Batch> ret = new ArrayList<Batch>();
-        for (Batch b : batchDetails.keySet())
-            ret.add(b);
-        return ret;
 	}
 	/**
 	 * @return the pendCloseQuarterUnits

@@ -63,7 +63,7 @@
 	
 	<s:fragment rendered="#{quarterStockPositionReport.isFiltersFilledIn()}">
 	<!-- Alerts if there are units with the selected quarter opened -->
-	<s:div style="padding:1px;background-color:#ffc3ca;" rendered="#{not empty quarterStockPositionReport.pendCloseQuarterUnits}">
+	<s:div rendered="#{not empty quarterStockPositionReport.pendCloseQuarterUnits}">
 		<h:outputText styleClass="error" value="#{messages['quarter.openquarterunit']}" />
 		<a:commandLink value="#{messages['global.clicktoseelist']}" onclick="showOpenQuarterunitList();" />
 	</s:div>
@@ -158,34 +158,6 @@
 	}
 	</script>
 
-	<!-- 
-	<br/><br/>
-	<h3>#{messages['quarter.expiringbatchlist']}</h3>
-	<h:outputText styleClass="error" value="#{messages['quarter.expiringbatchlist.noresultmsg']}" rendered="#{quarterStockPositionReport.isFiltersFilledIn() and empty quarterStockPositionReport.batchDetailsKeySet}"/>
-	<h:dataTable value="#{quarterStockPositionReport.batchDetailsKeySet}" var="selBatch" rendered="#{quarterStockPositionReport.isFiltersFilledIn() and not empty quarterStockPositionReport.batchDetailsKeySet}" styleClass="table1" width="100%" 
-		rowClasses="lin1,lin2" >
-	
-	<h:column>
-		<f:facet name="header">#{messages['Medicine']}</f:facet>
-		<h:outputText value="#{selBatch.medicine}" />
-	</h:column>
-	
-	<h:column>
-		<f:facet name="header">#{messages['Batch']}</f:facet>
-		<h:outputText value="#{selBatch.batchNumber} - #{selBatch.manufacturer}" rendered="#{(not empty selBatch.batchNumber) or (not empty selBatch.manufacturer)}"/>
-	</h:column>
-	
-	<h:column>
-		<f:facet name="header">#{messages['Batch.expiryDate']}</f:facet>
-		<h:outputText value="#{selBatch.expiryDate}" />
-	</h:column>
-	
-	<h:column>
-		<f:facet name="header">#{messages['Movement.quantity']}</f:facet>
-		<h:outputText value="#{quarterStockPositionReport.batchDetails[selBatch]}" />
-	</h:column>
-	
-	</h:dataTable> -->
 	</s:fragment>
 	
 	</h:form>

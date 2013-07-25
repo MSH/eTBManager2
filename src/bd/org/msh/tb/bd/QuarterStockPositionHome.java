@@ -42,6 +42,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	private static final long serialVersionUID = 3382653446118482945L;
 
 	@In(create=true) QuarterStockPositionReport quarterStockPositionReport;
+	@In(create=true) QuarterBatchExpiringReport quarterBatchExpiringReport;
 	@In(required=true) UserSession userSession;
 	@In(required=true) FacesMessages facesMessages;
 	@In(create=true) MovementHome movementHome;
@@ -59,11 +60,28 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	private Medicine medicine;
 	
 	public void initialize(){
+		updateQuarterAsTbunit();
+		setParametersOnReports();		
+		refresh();
+		this.initialized = true;
+	}
+	
+	public void setParametersOnReports(){
+		//Set the parameters of the selected unit to generate the report
 		quarterStockPositionReport.getTbunitselection().setTbunit(userSession.getTbunit());
 		quarterStockPositionReport.setSource(null);
-		updateQuarterAsTbunit();
+		quarterStockPositionReport.setSelectedQuarter(selectedQuarter);
+		
+		//Set the parameters of the selected unit to generate the report
+		quarterBatchExpiringReport.getTbunitselection().setTbunit(userSession.getTbunit());
+		quarterBatchExpiringReport.setSource(null);
+		quarterBatchExpiringReport.setSelectedQuarter(selectedQuarter);
+	}
+	
+	public void refresh(){
+		setParametersOnReports();		
 		quarterStockPositionReport.refresh();
-		this.initialized = true;
+		quarterBatchExpiringReport.refresh();
 	}
 	
 	/**
@@ -74,35 +92,29 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		if(userSession.getTbunit().getLimitDateMedicineMovement() != null){
 			Date dt = userSession.getTbunit().getLimitDateMedicineMovement();
 			
-			Quarter openedQuarter = Quarter.getQuarterByMonth(DateUtils.monthOf(dt), DateUtils.yearOf(dt));
-			
-			quarterStockPositionReport.setSelectedQuarter(openedQuarter);
+			selectedQuarter = Quarter.getQuarterByMonth(DateUtils.monthOf(dt), DateUtils.yearOf(dt));
 		}else{
 			//for units that had the control of medicines started before the quarterly report implementation;
 			Date dt = (Date) getEntityManager().createQuery("select max(date) from Movement m where m.tbunit.id = :unitId")
 								.setParameter("unitId", userSession.getTbunit().getId())
 								.getSingleResult();
-			
-			Quarter openedQuarter;
 				
 			if(dt != null){
-				openedQuarter = Quarter.getQuarterByDate(dt);
+				selectedQuarter = Quarter.getQuarterByDate(dt);
 			}else{
-				openedQuarter = Quarter.FIRST;
-				openedQuarter.setYear(2013);
+				selectedQuarter = Quarter.FIRST;
+				selectedQuarter.setYear(2013);
 			}
 			
-			if(openedQuarter == null || openedQuarter.getYear() == 0)
+			if(selectedQuarter == null || selectedQuarter.getYear() == 0)
 				return;
 				
 			tbunitHome.setInstance(userSession.getTbunit());
-			tbunitHome.getInstance().setLimitDateMedicineMovement(openedQuarter.getIniDate());
+			tbunitHome.getInstance().setLimitDateMedicineMovement(selectedQuarter.getIniDate());
 			tbunitHome.persist();
 			
 			tbunitHome.clearInstance();				
 			facesMessages.clear();
-			
-			quarterStockPositionReport.setSelectedQuarter(openedQuarter);
 		}
 	}
 	
@@ -254,7 +266,6 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	}
 	
 	public boolean checkMainParameters(){
-		selectedQuarter = quarterStockPositionReport.getSelectedQuarter();
 		medicine = (Medicine) getEntityManager().createQuery("from Medicine where id = :id").setParameter("id", medicineId).getSingleResult();
 		
 		if(userSession.getTbunit() == null || selectedQuarter == null || selectedQuarter.getYear() == 0 || medicine == null)
@@ -267,9 +278,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	 * Closes the selected quarter
 	 * @return
 	 */
-	public String closeQuarter(){
-		selectedQuarter = quarterStockPositionReport.getSelectedQuarter();
-		
+	public String closeQuarter(){		
 		if(selectedQuarter == null || selectedQuarter.getYear() == 0)
 			return "error";
 		
@@ -582,7 +591,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	 * Returns true if the quarter and year selected is editable.
 	 */
 	public boolean canEdit(){
-		if(Identity.instance().hasRole("CLOSED_QUARTER_EDIT")  && userSession.getTbunit().getLimitDateMedicineMovement().compareTo(quarterStockPositionReport.getSelectedQuarter().getIniDate()) >= 0)
+		if(Identity.instance().hasRole("CLOSED_QUARTER_EDIT")  && userSession.getTbunit().getLimitDateMedicineMovement().compareTo(selectedQuarter.getIniDate()) >= 0)
 			return true;
 			
 		if(!Identity.instance().hasRole("QUARTERLY_EDIT"))
@@ -610,9 +619,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	/**
 	 * Returns true if the selected quarter is the opened one for the selected unit.
 	 */
-	public boolean isOpenedQuarter(){
-		selectedQuarter = quarterStockPositionReport.getSelectedQuarter();
-		
+	public boolean isOpenedQuarter(){		
 		Date dt = userSession.getTbunit().getLimitDateMedicineMovement();
 		Quarter editableQuarter = Quarter.getQuarterByMonth(DateUtils.monthOf(dt), DateUtils.yearOf(dt));
 				
@@ -657,5 +664,17 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	 */
 	public void setInitialized(boolean initialized) {
 		this.initialized = initialized;
+	}
+	/**
+	 * @return the selectedQuarter
+	 */
+	public Quarter getSelectedQuarter() {
+		return selectedQuarter;
+	}
+	/**
+	 * @param selectedQuarter the selectedQuarter to set
+	 */
+	public void setSelectedQuarter(Quarter selectedQuarter) {
+		this.selectedQuarter = selectedQuarter;
 	}
 }

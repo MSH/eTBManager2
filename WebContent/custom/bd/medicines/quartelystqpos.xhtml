@@ -29,15 +29,15 @@
 	<s:decorate template="/layout/edit.xhtml" id="quarterdiv">
 	<ui:param name="redasterisk" value="true" />
     	<ui:define name="label">#{messages['Quarter']}:</ui:define>
-		<h:selectOneMenu id="quarter" value="#{quarterStockPositionReport.selectedQuarter}">
+		<h:selectOneMenu id="quarter" value="#{quarterStockPositionHome.selectedQuarter}">
   			<s:selectItems value="#{quarter}" var="r" label="#{messages[r.key]}" />
   			<s:convertEnum />
-  			<a:support event="onchange" reRender="main" process="year,quarter" action="#{quarterStockPositionReport.refresh}" />
+  			<a:support event="onchange" reRender="main" process="year,quarter" action="#{quarterStockPositionHome.refresh}" />
 		</h:selectOneMenu>
 		/
-		<h:selectOneMenu id="year" value="#{quarterStockPositionReport.selectedQuarter.year}">
+		<h:selectOneMenu id="year" value="#{quarterStockPositionHome.selectedQuarter.year}">
   			<s:selectItems value="#{quarterYears}" var="r" label="#{r}" />
-  			<a:support event="onchange" reRender="main" process="year,quarter" action="#{quarterStockPositionReport.refresh}" />
+  			<a:support event="onchange" reRender="main" process="year,quarter" action="#{quarterStockPositionHome.refresh}" />
 		</h:selectOneMenu> 
 	</s:decorate>
 
@@ -109,35 +109,8 @@
 		
 	</h:dataTable>
 	
-	<br/><br/>
-	<h3>#{messages['quarter.expiringbatchlist']}</h3>
-	<h:outputText styleClass="error" value="#{messages['quarter.expiringbatchlist.noresultmsg']}" rendered="#{quarterStockPositionReport.isFiltersFilledIn() and empty quarterStockPositionReport.batchDetailsKeySet}"/>
-	<h:dataTable value="#{quarterStockPositionReport.batchDetailsKeySet}" var="selBatch" rendered="#{quarterStockPositionReport.isFiltersFilledIn() and not empty quarterStockPositionReport.batchDetailsKeySet}" styleClass="table1" width="100%" 
-		rowClasses="lin1,lin2" >
-	
-	<h:column>
-		<f:facet name="header">#{messages['Medicine']}</f:facet>
-		<h:outputText value="#{selBatch.medicine}" />
-	</h:column>
-	
-	<h:column>
-		<f:facet name="header">#{messages['Batch']}</f:facet>
-		<h:outputText value="#{selBatch.batchNumber} - #{selBatch.manufacturer}" rendered="#{(not empty selBatch.batchNumber) or (not empty selBatch.manufacturer)}"/>
-	</h:column>
-	
-	<h:column>
-		<f:facet name="header">#{messages['Batch.expiryDate']}</f:facet>
-		<h:outputText value="#{selBatch.expiryDate}" />
-	</h:column>
-	
-	<h:column>
-		<f:facet name="header">#{messages['Movement.quantity']}</f:facet>
-		<h:outputText value="#{quarterStockPositionReport.batchDetails[selBatch]}" />
-	</h:column>
-	
-	</h:dataTable>
-	
 	<br/>
+	
 	<h:commandLink styleClass="button" onclick="if (confirm('#{messages['quarter.closequarter.msg']}')) closeQuarter();return false;"
 		rendered="#{quarterStockPositionReport.isFiltersFilledIn() and quarterStockPositionHome.canCloseQuarter()}" >
 		<span>#{messages['quarter.closequarter']}</span>
@@ -147,6 +120,43 @@
 	</s:link>
 	
 	<a:jsFunction name="closeQuarter" action="#{quarterStockPositionHome.closeQuarter()}" reRender="main"/>
+
+	<br/><br/>
+
+	<!-- List of expiring batches -->
+	<a:repeat value="#{quarterBatchExpiringReport.unitBatchDetails}" var="unitD">
+		<h2>
+			#{messages['quarter.expiringbatchlist']}
+		</h2>
+		
+		<!-- Message for no result -->
+		<h:outputText value="#{messages['quarter.expiringbatchlist.noresultmsg']}" styleClass="warn" 
+			rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and empty unitD.getBatchDetailsKeySet()}"/>
+		
+		<!-- Datatable of the result of the unit -->
+		<h:dataTable value="#{unitD.getBatchDetailsKeySet()}" var="selBatch" rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and not empty unitD.getBatchDetailsKeySet()}" styleClass="table1">
+			<h:column>
+				<f:facet name="header">#{messages['Medicine']}</f:facet>
+				<h:outputText value="#{selBatch.medicine}" />
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['Batch']}</f:facet>
+				<h:outputText value="#{selBatch.batchNumber} - #{selBatch.manufacturer}" rendered="#{(not empty selBatch.batchNumber) or (not empty selBatch.manufacturer)}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['Batch.expiryDate']}</f:facet>
+				<h:outputText value="#{selBatch.expiryDate}" />
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['Movement.quantity']}</f:facet>
+				<h:outputText value="#{unitD.batchInfo[selBatch]}" />
+			</h:column>
+		</h:dataTable>
+		<br/><br/>
+	</a:repeat>
 
 	</h:form>
 	</ui:define>

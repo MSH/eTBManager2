@@ -113,6 +113,9 @@
 		<s:link view="/custom/bd/management/relquartelystqpos.xhtml" rendered="#{s:hasRole('REP_QUARTERLY')}">
 			<div class="icon-report" style="float:left;"/>#{messages['manag.rel7']}
 		</s:link>
+		<s:link view="/custom/bd/management/relquartelyexpiredbatch.xhtml" rendered="#{s:hasRole('REP_QUARTERLY')}">
+			<div class="icon-report" style="float:left;"/>#{messages['quarter.expiringbatchlist']}
+		</s:link>
 		<s:link view="/management/rel1.xhtml" rendered="#{s:hasRole('REP1')}">
 			<div class="icon-report" style="float:left;"/>#{messages['manag.rel1']}
 		</s:link>
