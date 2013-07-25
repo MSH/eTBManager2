@@ -1,5 +1,8 @@
 package org.msh.tb.bd;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
@@ -15,12 +18,13 @@ import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.ReferredTo;
 import org.msh.tb.entities.enums.SampleType;
 import org.msh.tb.entities.enums.TbField;
+import org.msh.utils.date.DateUtils;
 
 
 @Name("globalLists_bd")
 @BypassInterceptors
 public class GlobalLists {
-		
+	
 	@Factory("biopsyResults")
 	public BiopsyResult[] getBiopsyResult() {
 		return BiopsyResult.values();
@@ -136,5 +140,18 @@ public class GlobalLists {
 	@Factory("quarter")
 	public static Quarter[] getQuarter(){
 		return quarter;
+	}
+	
+	@Factory("quarterYears")
+	public static List<Integer> getQuarterYears(){
+		int currYear = DateUtils.yearOf(DateUtils.getDate());
+		List<Integer> years;
+		
+		years = new ArrayList<Integer>();
+		for(int i = currYear ; i >= 2010 ; i--){
+			years.add(i);
+		}
+	
+		return years;
 	}
 }

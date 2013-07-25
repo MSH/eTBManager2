@@ -1,8 +1,5 @@
 package org.msh.tb.bd;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.In;
@@ -12,7 +9,6 @@ import org.msh.tb.bd.entities.enums.Quarter;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.medicines.MedicineManStartHome;
 import org.msh.tb.tbunits.TbUnitHome;
-import org.msh.utils.date.DateUtils;
 
  
 /**
@@ -29,7 +25,6 @@ public class MedicineManStartBDHome{
 	@In(create=true) TbUnitHome tbunitHome;
 	
 	private Quarter selectedQuarter;
-	private List<Integer> years;
 	
 	/**
 	 * Start the medicine management control, specifying the starting date of the control
@@ -53,19 +48,6 @@ public class MedicineManStartBDHome{
 		
 		return s;
 	}
-	
-	/**
-	 * Load the list of years that is shown in the selection list
-	 */
-	public void loadYears(){
-		if(years == null || years.size() == 0){
-			Integer currYear = DateUtils.yearOf(DateUtils.getDate());
-			years = new ArrayList<Integer>();
-			for(int i = currYear ; i >= 2010 ; i--){
-				years.add(i);
-			}
-		}
-	}
 
 	/**
 	 * @return the selectedQuarter
@@ -84,19 +66,4 @@ public class MedicineManStartBDHome{
 		this.selectedQuarter = selectedQuarter;
 	}
 
-	/**
-	 * @return the years
-	 */
-	public List<Integer> getYears() {
-		if(years == null || years.size() < 1)
-			loadYears();
-		return years;
-	}
-
-	/**
-	 * @param years the years to set
-	 */
-	public void setYears(List<Integer> years) {
-		this.years = years;
-	}	
 }

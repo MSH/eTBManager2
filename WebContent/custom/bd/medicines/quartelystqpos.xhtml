@@ -36,7 +36,7 @@
 		</h:selectOneMenu>
 		/
 		<h:selectOneMenu id="year" value="#{quarterStockPositionReport.selectedQuarter.year}">
-  			<s:selectItems value="#{quarterStockPositionReport.years}" var="r" label="#{r}" />
+  			<s:selectItems value="#{quarterYears}" var="r" label="#{r}" />
   			<a:support event="onchange" reRender="main" process="year,quarter" action="#{quarterStockPositionReport.refresh}" />
 		</h:selectOneMenu> 
 	</s:decorate>

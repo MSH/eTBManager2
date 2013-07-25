@@ -44,7 +44,6 @@ public class QuarterStockPositionReport {
 	
 	private List<QSPMedicineRow> rows;
 	private Map<Batch, Long> batchDetails;
-	private List<Integer> years;
 	private List<Tbunit> pendCloseQuarterUnits;
 		
 	/**
@@ -57,19 +56,6 @@ public class QuarterStockPositionReport {
 			updateQuarterReport();
 			updateBatchList();
 			updatePendCloseQuarterUnits();
-		}
-	}
-	
-	/**
-	 * Load the list of years that is shown in the selection list
-	 */
-	public void loadYears(){
-		if(years == null || years.size() == 0){
-			Integer currYear = DateUtils.yearOf(DateUtils.getDate());
-			years = new ArrayList<Integer>();
-			for(int i = currYear ; i >= 2010 ; i--){
-				years.add(i);
-			}
 		}
 	}
 	
@@ -316,19 +302,7 @@ public class QuarterStockPositionReport {
 	public void setRows(List<QSPMedicineRow> rows) {
 		this.rows = rows;
 	}
-	
-	public List<Integer> getYears(){
-		if(years == null || years.size() == 0)
-			loadYears();
-		return years;
-	}
-	
-	/**
-	 * @param years the years to set
-	 */
-	public void setYears(List<Integer> years) {
-		this.years = years;
-	}
+
 	/**
 	 * @return the source
 	 */

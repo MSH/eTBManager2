@@ -76,9 +76,6 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 			
 			Quarter openedQuarter = Quarter.getQuarterByMonth(DateUtils.monthOf(dt), DateUtils.yearOf(dt));
 			
-			//loads if is not loaded
-			quarterStockPositionReport.loadYears();
-			
 			quarterStockPositionReport.setSelectedQuarter(openedQuarter);
 		}else{
 			//for units that had the control of medicines started before the quarterly report implementation;
