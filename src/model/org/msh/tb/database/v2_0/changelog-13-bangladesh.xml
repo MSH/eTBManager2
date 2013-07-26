@@ -26,5 +26,34 @@
 		AND NOT EXISTS(SELECT * FROM userpermission WHERE role_id=209 AND profile_id=userprofile.id)
 		</sql>
 	</changeSet>
+	
+	<changeSet id="13.2" author="rmemoria" context="BD">
+ 	    <insert tableName="tag">
+ 	        <column name="tag_name">TB case with no microscopy and culture result</column>
+ 	        <column name="workspace_id">11</column>
+ 	        <column name="sqlcondition">classification=0 and diagnosisType=1 and not exists(select * from examculture cult where cult.case_id=a.id) and not exists(select * from exammicroscopy mic where mic.case_id=a.id)</column>
+ 	        <column name="consistencycheck" type="int">1</column>
+ 	        <column name="active" type="int">1</column>
+ 	    </insert>
+ 	    <insert tableName="tag">
+ 	        <column name="tag_name">DR-TB case with no DST result</column>
+ 	        <column name="workspace_id">11</column>
+ 	        <column name="sqlcondition">classification=1 and diagnosisType=1 and not exists(select * from examdst exam where exam.case_id=a.id)</column>
+ 	        <column name="consistencycheck" type="int">1</column>
+ 	        <column name="active" type="int">1</column>
+ 	    </insert>
+
+	    <sql>insert into tags_case (case_id, tag_id)
+		select a.id, (select max(id) from tag where p.workspace_id=tag.workspace_id and tag_name='TB case with no microscopy and culture result') nv
+		from tbcase a inner join patient p on p.id=a.patient_id and p.workspace_id=11
+		where classification=0 and diagnosisType=1 and not exists(select * from examculture cult where cult.case_id=a.id) and not exists(select * from exammicroscopy mic where mic.case_id=a.id)</sql>
+ 	    
+
+	    <sql>insert into tags_case (case_id, tag_id)
+		select a.id, (select max(id) from tag where p.workspace_id=tag.workspace_id and tag_name='DR-TB case with no DST result') nv
+		from tbcase a inner join patient p on p.id=a.patient_id and p.workspace_id=11 
+		where classification=1 and diagnosisType=1 and not exists(select * from examdst exam where exam.case_id=a.id)</sql>
+	    
+	</changeSet>
 
 </databaseChangeLog>
