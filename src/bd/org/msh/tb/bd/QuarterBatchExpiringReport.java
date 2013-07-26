@@ -62,7 +62,7 @@ public class QuarterBatchExpiringReport {
 		if(unitBatchDetails != null)
 			unitBatchDetails.clear();
 		else
-			unitBatchDetails = new ArrayList<>();
+			unitBatchDetails = new ArrayList<ExpiringBatchDetails>();
 			
 		if(batchDetailsConsolidated != null)
 			batchDetailsConsolidated.clear();
