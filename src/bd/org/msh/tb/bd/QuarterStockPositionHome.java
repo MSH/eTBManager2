@@ -282,6 +282,12 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		if(selectedQuarter == null || selectedQuarter.getYear() == 0)
 			return "error";
 		
+		if(selectedQuarter.getEndDate().compareTo(DateUtils.getDate()) >= 0){
+			facesMessages.addFromResourceBundle("validator.assertFalse");
+			facesMessages.addToControlFromResourceBundle("page:main:quarterdiv:quarter","quarter.closequarter.msg2", DateUtils.formatAsLocale(selectedQuarter.getEndDate(), UserSession.getWorkspace().getDefaultLocale()));
+			return "validation-error";
+		}
+		
 		Quarter nextQuarter = Quarter.getNextQuarter(selectedQuarter);
 				
 		tbunitHome.setInstance(userSession.getTbunit());

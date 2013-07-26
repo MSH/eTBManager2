@@ -32,12 +32,12 @@
 		<h:selectOneMenu id="quarter" value="#{quarterStockPositionHome.selectedQuarter}">
   			<s:selectItems value="#{quarter}" var="r" label="#{messages[r.key]}" />
   			<s:convertEnum />
-  			<a:support event="onchange" reRender="main" process="year,quarter" action="#{quarterStockPositionHome.refresh}" />
+  			<a:support event="onchange" ajaxSingle="true" reRender="main" process="year,quarter" action="#{quarterStockPositionHome.refresh}" />
 		</h:selectOneMenu>
 		/
 		<h:selectOneMenu id="year" value="#{quarterStockPositionHome.selectedQuarter.year}">
   			<s:selectItems value="#{quarterYears}" var="r" label="#{r}" />
-  			<a:support event="onchange" reRender="main" process="year,quarter" action="#{quarterStockPositionHome.refresh}" />
+  			<a:support event="onchange" ajaxSingle="true" reRender="main" process="year,quarter" action="#{quarterStockPositionHome.refresh}" />
 		</h:selectOneMenu> 
 	</s:decorate>
 

@@ -1,8 +1,10 @@
 package org.msh.utils.date;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class DateUtils {
 
@@ -393,6 +395,17 @@ public class DateUtils {
 
 		Calendar c = Calendar.getInstance();
 		return (c.get(Calendar.HOUR) > 0) || (c.get(Calendar.MINUTE) > 0) | (c.get(Calendar.SECOND) > 0) || (c.get(Calendar.MILLISECOND) > 0);
+	}
+	
+	/**
+	 * Returns a string formating the date on the format of a locale
+	 * @param dt1
+	 * @return
+	 */
+	public static String formatAsLocale(Date dt1, String languageTag) {
+		Locale loc = Locale.forLanguageTag(languageTag);
+		DateFormat f = DateFormat.getDateInstance(DateFormat.DEFAULT, loc);
+		return f.format(dt1);
 	}
 	
 }

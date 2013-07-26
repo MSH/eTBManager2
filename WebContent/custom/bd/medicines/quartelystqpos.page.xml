@@ -8,5 +8,9 @@
 		<redirect view-id="/custom/bd/medicines/quartelystqpos.xhtml">
 		</redirect>
 	</rule>
+	<rule if-outcome="validation-error">
+		<redirect view-id="/custom/bd/medicines/quartelystqpos.xhtml">
+		</redirect>
+	</rule>
 </navigation>
 </page>
