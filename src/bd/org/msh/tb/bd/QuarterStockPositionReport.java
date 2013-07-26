@@ -162,7 +162,7 @@ public class QuarterStockPositionReport {
 		if(getLocationWhereClause() == null || getTbunitselection().getTbunit() != null){
 			pendCloseQuarterUnits = null;
 			if(tbunitselection.getTbunit().getLimitDateMedicineMovement().compareTo(selectedQuarter.getIniDate()) <=0){
-				pendCloseQuarterUnits = new ArrayList<>();
+				pendCloseQuarterUnits = new ArrayList<Tbunit>();
 				pendCloseQuarterUnits.add(tbunitselection.getTbunit());
 			}
 		}else{
