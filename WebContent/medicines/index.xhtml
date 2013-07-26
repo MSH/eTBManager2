@@ -114,9 +114,9 @@
 			</td>
 			<td align="right">
 				<s:fragment rendered="#{not it.item.getShowStockOutDate()}">
-					<h:outputText value="Less than 1 month" rendered="#{it.item.stockPosition.amc > 0}"/>
+					<h:outputText value="#{messages['meds.onemonthless']}" rendered="#{it.item.stockPosition.amc > 0}"/>
 					
-					<h:outputText value="undefined" rendered="#{it.item.stockPosition.amc == 0 or it.item.stockPosition.amc == null}"/>
+					<h:outputText value="#{messages['meds.undefined']}" rendered="#{it.item.stockPosition.amc == 0 or it.item.stockPosition.amc == null}"/>
 				</s:fragment>
 				
 				<h:outputText rendered="#{it.item.getShowStockOutDate()}" value="#{it.item.stockOutDate}" converter="periodConverter">

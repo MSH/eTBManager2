@@ -195,21 +195,23 @@ public class QuarterBatchExpiringReport {
 	private void updatePendCloseQuarterUnits(){
 		if(getLocationWhereClause() == null || getTbunitselection().getTbunit() != null){
 			pendCloseQuarterUnits = null;
-			return;
+			if(tbunitselection.getTbunit().getLimitDateMedicineMovement().compareTo(selectedQuarter.getIniDate()) <=0){
+				pendCloseQuarterUnits = new ArrayList<>();
+				pendCloseQuarterUnits.add(tbunitselection.getTbunit());
+			}
+		}else{
+			String queryString = "from Tbunit u where u.adminUnit.code like :code and u.workspace.id = :workspaceId " +
+								"and (u.limitDateMedicineMovement is null or u.limitDateMedicineMovement <= :iniQuarterDate) " +
+								"and u.treatmentHealthUnit = :true " +
+								"order by u.adminUnit.code, u.name.name1";
+			
+			pendCloseQuarterUnits = entityManager.createQuery(queryString)
+								.setParameter("code", tbunitselection.getAuselection().getSelectedUnit().getCode()+'%')
+								.setParameter("workspaceId", UserSession.getWorkspace().getId())
+								.setParameter("iniQuarterDate", selectedQuarter.getIniDate())
+								.setParameter("true", true)
+								.getResultList();
 		}
-		
-		String queryString = "from Tbunit u where u.adminUnit.code like :code and u.workspace.id = :workspaceId " +
-									"and (u.limitDateMedicineMovement is null or u.limitDateMedicineMovement <= :iniQuarterDate) " +
-									"and u.treatmentHealthUnit = :true " +
-									"order by u.adminUnit.code, u.name.name1";
-		
-		pendCloseQuarterUnits = entityManager.createQuery(queryString)
-									.setParameter("code", tbunitselection.getAuselection().getSelectedUnit().getCode()+'%')
-									.setParameter("workspaceId", UserSession.getWorkspace().getId())
-									.setParameter("iniQuarterDate", selectedQuarter.getIniDate())
-									.setParameter("true", true)
-									.getResultList();
-		
 	}
 	
 	/**

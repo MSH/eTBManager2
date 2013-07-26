@@ -41,12 +41,14 @@
 		</h:selectOneMenu> 
 	</s:decorate>
 
-	<h:dataTable value="#{quarterStockPositionReport.rows}" var="row" rendered="#{quarterStockPositionReport.isFiltersFilledIn()}" styleClass="table1" width="100%" 
-		rowClasses="lin1,lin2" >
+	<h:dataTable value="#{quarterStockPositionReport.rows}" var="row" rendered="#{quarterStockPositionReport.isFiltersFilledIn()}" 
+		width="100%" styleClass="table1" rowClasses="lin1,lin2" columnClasses="colb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colcb,colcb">
 	
 	<h:column>
 		<f:facet name="header">#{messages['Medicine']}</f:facet>
+		<div style="text-align:left">
 		<h:outputText value="#{row.medicine}" />
+		</div>
 	</h:column>
 
 	<h:column>
@@ -96,15 +98,28 @@
 	
 	<h:column>
 		<f:facet name="header">#{messages['meds.stockoutdate']}</f:facet>
-		<h:outputText value="#{row.getEstimatedMonthsOfStock()}" rendered="#{row.getEstimatedMonthsOfStock() != null}"/>
-		<h:outputText value=" #{messages['global']}" rendered="#{row.getEstimatedMonthsOfStock() != null}"/>
+		<s:fragment rendered="#{row.getEstimatedMonthsOfStock() != null}">
+			<h:outputText value="#{row.getEstimatedMonthsOfStock()}" />
+			<h:outputText value=" #{messages['global']}" />
+		</s:fragment>
+		
+		<s:fragment rendered="#{row.getEstimatedMonthsOfStock() == null}">
+			<h:outputText value="#{messages['meds.onemonthless']}" rendered="#{row.amc > 0}"/>
+			<h:outputText  value="#{messages['meds.undefined']}" rendered="#{row.amc == 0}"/>
+		</s:fragment>
 	</h:column>	
 	
 	<h:column rendered="#{quarterStockPositionHome.canEdit()}">
 		<f:facet name="header">#{messages['form.edit']}</f:facet>
+		
+		<div style="text-align:center">
+		
 		<s:link value="#{messages['form.edit']}" view="/custom/bd/medicines/quartelystqposedt.xhtml" styleClass="noprint" rendered="#{row.isEditableRow()}">
 			<f:param name="selMed" value="#{row.medicine.id}"/>
 		</s:link>
+		<h:outputText value="-" rendered="#{not row.isEditableRow()}"/>
+		
+		</div>
 	</h:column>
 		
 	</h:dataTable>
@@ -134,7 +149,8 @@
 			rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and empty unitD.getBatchDetailsKeySet()}"/>
 		
 		<!-- Datatable of the result of the unit -->
-		<h:dataTable value="#{unitD.getBatchDetailsKeySet()}" var="selBatch" rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and not empty unitD.getBatchDetailsKeySet()}" styleClass="table1">
+		<h:dataTable value="#{unitD.getBatchDetailsKeySet()}" var="selBatch" rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and not empty unitD.getBatchDetailsKeySet()}" styleClass="table1"
+			columnClasses="colb,collb,colcb,colrb">
 			<h:column>
 				<f:facet name="header">#{messages['Medicine']}</f:facet>
 				<h:outputText value="#{selBatch.medicine}" />
@@ -142,12 +158,14 @@
 			
 			<h:column>
 				<f:facet name="header">#{messages['Batch']}</f:facet>
-				<h:outputText value="#{selBatch.batchNumber} - #{selBatch.manufacturer}" rendered="#{(not empty selBatch.batchNumber) or (not empty selBatch.manufacturer)}"/>
+				<h:outputText value="#{selBatch.batchNumber}" rendered="#{not empty selBatch.batchNumber}"/>
+				<h:outputText value=" - " rendered="#{(not empty selBatch.batchNumber) and (not empty selBatch.manufacturer)}"/>
+				<h:outputText value="#{selBatch.manufacturer}" rendered="#{not empty selBatch.manufacturer}"/>
 			</h:column>
 			
 			<h:column>
 				<f:facet name="header">#{messages['Batch.expiryDate']}</f:facet>
-				<h:outputText value="#{selBatch.expiryDate}" />
+				<h:outputText value="#{selBatch.expiryDate}" converter="localeDateConverter"/>
 			</h:column>
 			
 			<h:column>

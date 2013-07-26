@@ -57,18 +57,23 @@
    	<a:commandLink styleClass="button-alt" action="#{quarterStockPositionReport.refresh}" onclick="if (!disableButton(this)) return false;" reRender="main">
    		<span>#{messages['form.update']}</span>
    	</a:commandLink>
-
-	<br/>
-	<br/>
 	
 	<s:fragment rendered="#{quarterStockPositionReport.isFiltersFilledIn()}">
+	
 	<!-- Alerts if there are units with the selected quarter opened -->
-	<s:div rendered="#{not empty quarterStockPositionReport.pendCloseQuarterUnits}">
-		<h:outputText styleClass="error" value="#{messages['quarter.openquarterunit']}" />
-		<a:commandLink value="#{messages['global.clicktoseelist']}" onclick="showOpenQuarterunitList();" />
+	<s:div style="display:inline" rendered="#{not empty quarterStockPositionReport.pendCloseQuarterUnits}">
+		<!-- When selecting an administrative unit -->
+		<h:outputText styleClass="error" value="#{quarterStockPositionReport.pendCloseQuarterUnits.size()} #{messages['quarter.openquarterunit']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}" />
+		<a:commandLink value=" #{messages['global.clicktoseelist']}" onclick="showOpenQuarterunitList();" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}" />
+	
+		<!-- When selecting a specific unit -->
+		<h:outputText styleClass="error" value="#{messages['quarter.openquarterunit2']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit != null}"/>
 	</s:div>
 	
-	<h:dataTable value="#{quarterStockPositionReport.rows}" var="row" styleClass="table1" width="100%" rowClasses="lin1,lin2" >
+	<br/><br/>
+	
+	<h:dataTable value="#{quarterStockPositionReport.rows}" var="row" styleClass="table1" width="100%" rowClasses="lin1,lin2" 
+		columnClasses="colb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colcb" >
 	<h:column>
 		<f:facet name="header">#{messages['Medicine']}</f:facet>
 		<h:outputText value="#{row.medicine}" />
@@ -121,8 +126,15 @@
 	
 	<h:column>
 		<f:facet name="header">#{messages['meds.stockoutdate']}</f:facet>
-		<h:outputText value="#{row.getEstimatedMonthsOfStock()}" rendered="#{row.getEstimatedMonthsOfStock() != null}"/>
-		<h:outputText value=" #{messages['global']}" rendered="#{row.getEstimatedMonthsOfStock() != null}"/>
+		<s:fragment rendered="#{row.getEstimatedMonthsOfStock() != null}">
+			<h:outputText value="#{row.getEstimatedMonthsOfStock()}" />
+			<h:outputText value=" #{messages['global']}" />
+		</s:fragment>
+		
+		<s:fragment rendered="#{row.getEstimatedMonthsOfStock() == null}">
+			<h:outputText value="#{messages['meds.onemonthless']}" rendered="#{row.amc > 0}"/>
+			<h:outputText  value="#{messages['meds.undefined']}" rendered="#{row.amc == 0}"/>
+		</s:fragment>
 	</h:column>
 	
 	</h:dataTable>

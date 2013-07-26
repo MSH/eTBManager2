@@ -626,6 +626,10 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		return selectedQuarter.isTheSame(editableQuarter);
 	}
 	
+	public Quarter getOpenedQuarter(){
+		return Quarter.getQuarterByDate(userSession.getTbunit().getLimitDateMedicineMovement());
+	}
+	
 	/**
 	 * @return the editingMedicine
 	 */
