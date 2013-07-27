@@ -284,7 +284,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		
 		if(selectedQuarter.getEndDate().compareTo(DateUtils.getDate()) >= 0){
 			facesMessages.addFromResourceBundle("validator.assertFalse");
-			facesMessages.addToControlFromResourceBundle("page:main:quarterdiv:quarter","quarter.closequarter.msg2", DateUtils.formatAsLocale(selectedQuarter.getEndDate(), UserSession.getWorkspace().getDefaultLocale()));
+			facesMessages.addToControlFromResourceBundle("page:main:quarterdiv:quarter","quarter.closequarter.msg2", DateUtils.formatAsLocale(selectedQuarter.getEndDate(), false));
 			return "validation-error";
 		}
 		

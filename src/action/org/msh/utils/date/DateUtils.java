@@ -1,10 +1,12 @@
 package org.msh.utils.date;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import org.jboss.seam.international.LocaleSelector;
+import org.jboss.seam.international.Messages;
 
 public class DateUtils {
 
@@ -402,10 +404,14 @@ public class DateUtils {
 	 * @param dt1
 	 * @return
 	 */
-	public static String formatAsLocale(Date dt1, String languageTag) {
-		Locale loc = Locale.forLanguageTag(languageTag);
-		DateFormat f = DateFormat.getDateInstance(DateFormat.DEFAULT, loc);
-		return f.format(dt1);
+	public static String formatAsLocale(Date dt, boolean includeTime) {
+		String patt = Messages.instance().get("locale.outputDatePattern");
+		if (includeTime)
+			patt += " HH:mm:ss";
+		Locale locale = LocaleSelector.instance().getLocale();
+		SimpleDateFormat df = new SimpleDateFormat(patt, locale);
+		
+		return df.format(dt);
 	}
 	
 }
