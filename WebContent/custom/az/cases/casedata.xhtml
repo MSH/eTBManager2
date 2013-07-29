@@ -44,7 +44,7 @@
 		<i class="icon-trash"/><span>#{messages['form.remove']}</span>
 	</h:commandLink>
 
-	<s:link view="/custom/az/cases/closecase.xhtml" rendered="#{caseHome.canClose and tbcase.diagnosisType != 'SUSPECT'}}">
+	<s:link view="/custom/az/cases/closecase.xhtml" rendered="#{caseHome.canClose and tbcase.diagnosisType != 'SUSPECT'}">
 		<f:param name="id" value="#{caseHome.id}" />
 		<i class="icon-folder-close" />#{messages['cases.close']}
 	</s:link>
