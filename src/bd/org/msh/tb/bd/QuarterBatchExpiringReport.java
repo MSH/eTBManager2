@@ -76,7 +76,7 @@ public class QuarterBatchExpiringReport {
 		}else{
 			List<Tbunit> units = entityManager.createQuery(" from Tbunit u where u.adminUnit.code like :code and u.treatmentHealthUnit = :true " +
 																"and u.workspace.id = :workspaceId " +
-																"order by u.name.name1")
+																"order by u.adminUnit.code, u.name.name1")
 									.setParameter("true", true)
 									.setParameter("code", tbunitselection.getAuselection().getSelectedUnit().getCode()+"%")
 									.setParameter("workspaceId", UserSession.getWorkspace().getId())
