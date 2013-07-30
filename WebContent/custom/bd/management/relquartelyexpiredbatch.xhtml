@@ -114,7 +114,7 @@
 		<hr/><br/>
 	</a:repeat>
 
-	<s:fragment rendered="#{quarterBatchExpiringReport.tbunitselection.tbunit == null}">
+	<s:fragment rendered="#{quarterBatchExpiringReport.tbunitselection.tbunit == null and quarterBatchExpiringReport.tbunitselection.options.size() > 1}">
 	<h2>
 		Consolidated
 	</h2>
