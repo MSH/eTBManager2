@@ -67,7 +67,9 @@
 	<!-- Alerts if there are units with the selected quarter opened -->
 	<s:div style="padding:1px;display:inline" rendered="#{not empty quarterBatchExpiringReport.pendCloseQuarterUnits}">
 		<!-- When selecting an administrative unit -->
-		<h:outputText styleClass="error" value="#{quarterBatchExpiringReport.pendCloseQuarterUnits.size()} #{messages['quarter.openquarterunit']}" rendered="#{quarterBatchExpiringReport.tbunitselection.tbunit == null}"/>
+		<h:outputFormat styleClass="error" value="#{messages['quarter.openquarterunit']}" rendered="#{quarterBatchExpiringReport.tbunitselection.tbunit == null}">
+			<f:param value="#{quarterBatchExpiringReport.pendCloseQuarterUnits.size()}" />
+		</h:outputFormat>
 		<a:commandLink value=" #{messages['global.clicktoseelist']}" onclick="showOpenQuarterunitList();" rendered="#{quarterBatchExpiringReport.tbunitselection.tbunit == null}"/>
 
 		<!-- When selecting a specific unit -->

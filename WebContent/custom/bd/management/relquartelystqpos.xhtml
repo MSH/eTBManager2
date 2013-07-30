@@ -63,7 +63,9 @@
 	<!-- Alerts if there are units with the selected quarter opened -->
 	<s:div style="display:inline" rendered="#{not empty quarterStockPositionReport.pendCloseQuarterUnits}">
 		<!-- When selecting an administrative unit -->
-		<h:outputText styleClass="error" value="#{quarterStockPositionReport.pendCloseQuarterUnits.size()} #{messages['quarter.openquarterunit']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}" />
+		<h:outputFormat styleClass="error" value="#{messages['quarter.openquarterunit']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}">
+			<f:param value="#{quarterStockPositionReport.pendCloseQuarterUnits.size()}" />
+		</h:outputFormat>
 		<a:commandLink value=" #{messages['global.clicktoseelist']}" onclick="showOpenQuarterunitList();" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}" />
 	
 		<!-- When selecting a specific unit -->
