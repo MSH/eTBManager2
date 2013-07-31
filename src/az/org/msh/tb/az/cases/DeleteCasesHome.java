@@ -10,7 +10,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.application.App;
-import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.CaseResultItem;
 import org.msh.tb.cases.PatientsQuery.Item;
 import org.msh.tb.entities.Patient;
@@ -20,8 +19,6 @@ import org.msh.tb.entities.TbCase;
 @Scope(ScopeType.PAGE)
 public class DeleteCasesHome {
 	@In(create=true) CaseAZHome caseAZHome;
-
-	@In(create=true) CaseHome caseHome;
 	
 	private Set<Integer> deleteList = new HashSet<Integer>();
 	private Integer markToDel;
@@ -74,7 +71,7 @@ public class DeleteCasesHome {
 	 * */
 	public void fillDeleteListFromPatients(){
 		PatientsQueryAZ cq = (PatientsQueryAZ)App.getComponent("patientsAZ");
-		List<Item> lst = cq.getPatientList();
+		List<Item> lst = cq.getResultList();
 		if (deleteList.size()>=getCountEIDSSPatients())
 			deleteList.clear();
 		else{
