@@ -148,6 +148,12 @@ public class StockAdjustmentHome extends Controller {
 		if (stockPosition == null)
 			return "error";
 		
+		//Check limit date
+		if(!userSession.isCanGenerateMovements(DateUtils.getDate())){
+			facesMessages.addToControlFromResourceBundle("adjInfofldoptions", "meds.movs.errorlimitdate", DateUtils.formatAsLocale(userSession.getTbunit().getLimitDateMedicineMovement(), false));
+			return "error";
+		}
+		
 		facesMessages.clear();
 	
 //		MovementType type = MovementType.ADJUSTMENT;
@@ -243,6 +249,12 @@ public class StockAdjustmentHome extends Controller {
 
 		if(existingBatchInThisUnit)
 			return "error";
+		
+		//check limit movement date
+		if(!userSession.isCanGenerateMovements(movementDate)){
+			facesMessages.addToControlFromResourceBundle("edtdate", "meds.movs.errorlimitdate", DateUtils.formatAsLocale(userSession.getTbunit().getLimitDateMedicineMovement(), false));
+			return "error";
+		}
 			
 		Tbunit unit = userSession.getTbunit();
 		

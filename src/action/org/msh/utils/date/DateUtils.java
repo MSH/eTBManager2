@@ -405,6 +405,9 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String formatAsLocale(Date dt, boolean includeTime) {
+		if(dt==null)
+			return "";
+		
 		String patt = Messages.instance().get("locale.outputDatePattern");
 		if (includeTime)
 			patt += " HH:mm:ss";

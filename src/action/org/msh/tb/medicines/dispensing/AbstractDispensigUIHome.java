@@ -64,6 +64,12 @@ public abstract class AbstractDispensigUIHome {
 		Date dispDate = getDispensingHome().getInstance().getDispensingDate();
 		TbCase tbcase = ((CaseHome)Component.getInstance("caseHome")).getInstance();
 		
+		UserSession userSession = (UserSession) Component.getInstance("userSession");
+		if(!userSession.isCanGenerateMovements(dispDate)){
+			facesMessages.addToControlFromResourceBundle("edtdate", "meds.movs.errorlimitdate", DateUtils.formatAsLocale(userSession.getTbunit().getLimitDateMedicineMovement(), false));
+			return false;
+		}
+		
 		if (dispDate.before( unit.getMedManStartDate() )) {
 			facesMessages.addToControlFromResourceBundle("edtdate", "meds.movs.datebefore", LocaleDateConverter.getDisplayDate( unit.getMedManStartDate(), false ));
 			ret = false;

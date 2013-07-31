@@ -32,6 +32,7 @@ import org.msh.tb.medicines.MedicineStockSelection;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.tb.transactionlog.TransactionLogService;
+import org.msh.utils.date.DateUtils;
 
 
 
@@ -107,6 +108,11 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 	public String saveNewTransfer() {
 		Transfer transfer = getInstance();
 
+		if(!userSession.isCanGenerateMovements(transfer.getShippingDate())){
+			facesMessages.addToControlFromResourceBundle("edtdate", "meds.movs.errorlimitdate", DateUtils.formatAsLocale(userSession.getTbunit().getLimitDateMedicineMovement(), false));
+			return "error";
+		}
+		
 		// checks if any medicine were selected for transfer
 		if (transfer.getItems().size() == 0) {
 			facesMessages.addFromResourceBundle("edtrec.nomedicine");
@@ -228,6 +234,12 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		Date dt = transfer.getReceivingDate();
 		if (transfer.getShippingDate().after(dt)) {
 			facesMessages.addFromResourceBundle("medicines.transfer.datebefore");
+			return false;
+		}
+		
+		//check limit date to receive
+		if(!userSession.isCanGenerateMovements(transfer.getReceivingDate())){
+			facesMessages.addToControlFromResourceBundle("edtdate", "meds.movs.errorlimitdate", DateUtils.formatAsLocale(userSession.getTbunit().getLimitDateMedicineMovement(), false));
 			return false;
 		}
 		

@@ -608,6 +608,8 @@ public class UserSession {
 	 * @return
 	 */
 	public static boolean isCanGenerateMovements(Date movementDate, Tbunit unit) {
+		return false;
+		/*
 		if(movementDate == null)
 			return false;
 		
@@ -620,7 +622,7 @@ public class UserSession {
 			return true;
 						
 		//Movement date is not equals or after the limit date so the user has to have permission
-		return Identity.instance().hasRole("MED_MOV_EDIT_OUT_PERIOD");
+		return Identity.instance().hasRole("MED_MOV_EDIT_OUT_PERIOD");*/
 	}
 	
 	
