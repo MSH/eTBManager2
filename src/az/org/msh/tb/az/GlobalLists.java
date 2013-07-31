@@ -48,7 +48,7 @@ public class GlobalLists {
 		PrevTBTreatmentOutcome.COMPLETED,
 		PrevTBTreatmentOutcome.DEFAULTED,
 		PrevTBTreatmentOutcome.FAILURE,
-		PrevTBTreatmentOutcome.SCHEME_CHANGED
+		PrevTBTreatmentOutcome.UNKNOWN
 	};
 	
 	private static final CaseState caseStates[] = {
