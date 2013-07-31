@@ -586,6 +586,43 @@ public class UserSession {
 		return Identity.instance().hasRole(classif.toString() + "_CASE_DATA");
 	}
 	
+	/**
+	 * Check if a user can generate movements in the selected unit according to the limit date to generate movements 
+	 * The movement has to be at the same date of limitDateMedicineMovementor or after, or the user has to have
+	 * permission to generate movements before the limit date.
+	 * based on the date passed as parameter.
+	 * @param movementDate 
+	 * @return
+	 */
+	public boolean isCanGenerateMovements(Date movementDate) {
+		return isCanGenerateMovements(movementDate, getTbunit());
+	}
+	
+	/**
+	 * Check if a user can generate movements in the unit passed as param according to the limit date to generate movements 
+	 * The movement has to be at the same date of limitDateMedicineMovementor or after, or the user has to have
+	 * permission to generate movements before the limit date.
+	 * based on the date passed as parameter.
+	 * @param movementDate 
+	 * @param unit 
+	 * @return
+	 */
+	public static boolean isCanGenerateMovements(Date movementDate, Tbunit unit) {
+		if(movementDate == null)
+			return false;
+		
+		//no limit specified
+		if(unit.getLimitDateMedicineMovement() == null)
+			return true;
+		
+		//Movement date is equals or after the limit date
+		if(movementDate.compareTo(unit.getLimitDateMedicineMovement()) >= 0)
+			return true;
+						
+		//Movement date is not equals or after the limit date so the user has to have permission
+		return Identity.instance().hasRole("MED_MOV_EDIT_OUT_PERIOD");
+	}
+	
 	
 	public EntityManager getEntityManager() {
 		return (EntityManager)Component.getInstance("entityManager");

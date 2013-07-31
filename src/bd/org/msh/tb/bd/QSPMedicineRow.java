@@ -182,6 +182,8 @@ public class QSPMedicineRow {
 	 * @return the outOfStockForAmcCalc
 	 */
 	public Long getOutOfStockForAmcCalc() {
+		if(outOfStockForAmcCalc == null) outOfStockForAmcCalc = new Long (0);
+		if(outOfStockForAmcCalc < 0) outOfStockForAmcCalc = outOfStockForAmcCalc * -1;
 		return outOfStockForAmcCalc;
 	}
 	/**

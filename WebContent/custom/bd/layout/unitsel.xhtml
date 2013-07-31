@@ -27,7 +27,7 @@
 	<div>
 		#{userSession.tbunit.adminUnit.name} - #{userSession.tbunit.adminUnit.parent.name}<br/>
 		<h:outputText style="font-size:11px;font-weight:bold" rendered="#{quarterStockPositionHome.getOpenedQuarter() != null}"
-			value="#{messages['quarter.opened']}: #{messages[quarterStockPositionHome.getOpenedQuarter().getKey()]}" />
+			value="#{messages['quarter.opened']}: #{messages[quarterStockPositionHome.getOpenedQuarter().getKey()]}/#{quarterStockPositionHome.getOpenedQuarter().getYear()}" />
 	</div>
 	<div class="separator" />
 </div>

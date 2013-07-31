@@ -597,7 +597,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	 * Returns true if the quarter and year selected is editable.
 	 */
 	public boolean canEdit(){
-		if(Identity.instance().hasRole("CLOSED_QUARTER_EDIT")  && userSession.getTbunit().getLimitDateMedicineMovement().compareTo(selectedQuarter.getIniDate()) >= 0)
+		if(Identity.instance().hasRole("MED_MOV_EDIT_OUT_PERIOD")  && userSession.getTbunit().getLimitDateMedicineMovement().compareTo(selectedQuarter.getIniDate()) >= 0)
 			return true;
 			
 		if(!Identity.instance().hasRole("QUARTERLY_EDIT"))

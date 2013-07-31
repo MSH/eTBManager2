@@ -524,17 +524,4 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 		this.limitDateMedicineMovement = limitDateMedicineMovement;
 	}
 	
-	/**
-	 * The movement has to be at the same date of limitDateMedicineMovementor after.
-	 * @param movementDate: date of the medicine movement that will be created.
-	 * @return
-	 */
-	public boolean canCreateMovement(Date movementDate){
-		if(limitDateMedicineMovement == null || movementDate == null)
-			return true;
-		else if(movementDate.equals(limitDateMedicineMovement))
-			return true;
-		else
-			return movementDate.after(limitDateMedicineMovement);
-	}
 }

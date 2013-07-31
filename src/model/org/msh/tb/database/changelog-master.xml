@@ -25,5 +25,6 @@
   <include file="org/msh/tb/database/v2_0/changelog-11-suspectfollowup.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-12-namibia.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-13-bangladesh.xml"/>
-  <include file="org/msh/tb/database/v2_0/changelog-correctBDRoleErrors.xml"/> 
+  <include file="org/msh/tb/database/v2_0/changelog-correctBDRoleErrors.xml"/>
+  <include file="org/msh/tb/database/v2_0/changelog-14-limitmovementdate.xml"/> 
 </databaseChangeLog> 
