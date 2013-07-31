@@ -121,7 +121,10 @@ public class QuarterStockPositionReport {
 									" and mov.quarter = :quarter and mov.year = :year and mov.medicine.id = m.id), " +
 								
 								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
-									" and mov.date >= :iniDateAmcCalc and mov.date <= :endDateAmcCalc and mov.type in (3) and mov.medicine.id = m.id " + getSourceClause() + ") as dispensed " +
+									" and mov.date >= :iniDateAmcCalc and mov.date <= :endDateAmcCalc and mov.type in (3) and mov.medicine.id = m.id " + getSourceClause() + ") as dispensed, " +
+								
+								"(select sum(mov.outOfStock) from QuarterlyReportDetailsBD mov " + getLocationWhereClause() + 
+									" and mov.quarter = :quarterAmcCalc and mov.year = :yearAmcCalc and mov.medicine.id = m.id) " +
 
 							  "from Medicine m " +
 							  "where m.workspace.id = :workspaceId " +
@@ -134,7 +137,9 @@ public class QuarterStockPositionReport {
 									.setParameter("quarter", selectedQuarter)
 									.setParameter("year", selectedQuarter.getYear())
 									.setParameter("iniDateAmcCalc", quarterAmcCalc.getIniDate())
-									.setParameter("endDateAmcCalc", quarterAmcCalc.getEndDate())									
+									.setParameter("endDateAmcCalc", quarterAmcCalc.getEndDate())
+									.setParameter("quarterAmcCalc", quarterAmcCalc)
+									.setParameter("yearAmcCalc", quarterAmcCalc.getYear())
 									.setParameter("workspaceExpiredAdjust", UserSession.getWorkspace().getExpiredMedicineAdjustmentType().getId())
 									.getResultList();
 		
@@ -149,7 +154,7 @@ public class QuarterStockPositionReport {
 					row.setExpired((Long) o[6]);
 					row.setOutOfStockDays((Long) o[7]);
 					row.setDispensedForAmcCalc((Long) o[8]);
-									
+					row.setOutOfStockForAmcCalc((Long) o[9]);
 				}
 			}
 		}

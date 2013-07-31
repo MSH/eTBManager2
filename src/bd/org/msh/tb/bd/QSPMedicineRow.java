@@ -18,6 +18,7 @@ public class QSPMedicineRow {
 	private Long expired;
 	private Long outOfStockDays;
 	private Long dispensedForAmcCalc;
+	private Long outOfStockForAmcCalc;
 	
 	/**
 	 * Calculates the closingBalance according to the values of the others parameters.
@@ -177,6 +178,18 @@ public class QSPMedicineRow {
 	public void setDispensedForAmcCalc(Long dispensedForAmcCalc) {
 		this.dispensedForAmcCalc = dispensedForAmcCalc;
 	}
+	/**
+	 * @return the outOfStockForAmcCalc
+	 */
+	public Long getOutOfStockForAmcCalc() {
+		return outOfStockForAmcCalc;
+	}
+	/**
+	 * @param outOfStockForAmcCalc the outOfStockForAmcCalc to set
+	 */
+	public void setOutOfStockForAmcCalc(Long outOfStockForAmcCalc) {
+		this.outOfStockForAmcCalc = outOfStockForAmcCalc;
+	}
 
 	/**
 	 * @return the amc
@@ -184,11 +197,11 @@ public class QSPMedicineRow {
 	public Long getAmc() {
 		Long amc = new Long(0);
 		
-		if(getDispensedForAmcCalc() == 0 || getOutOfStockDays() >= 90)
+		if(getDispensedForAmcCalc() == 0 || getOutOfStockForAmcCalc() >= 90)
 			return new Long(0);
 		
 		double disp = getDispensedForAmcCalc();
-		double days = 90 - getOutOfStockDays();
+		double days = 90 - getOutOfStockForAmcCalc();
 		double result = disp / days;
 		
 		result = result * 30;
@@ -216,7 +229,7 @@ public class QSPMedicineRow {
 		months = closBal / amc;		
 		result = months;
 		
-		//Round it down according to the rule. Ex. If 1,1 to 1,4 the result is 1, if 1,6 to 1,9 the result is 1,5.
+		//Round it down according to the rule. Ex. If 1,1 to 1,4 the result is 1, if 1,6 to minus than 1 the result is 1,5.
 		String afterPoint = months.toString();
 		String beforePoint = months.toString();
 		
