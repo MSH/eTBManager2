@@ -74,9 +74,9 @@
 		rendered="#{patientsAZ.searching and (not empty patientsAZ.resultList)}" width="680px" columnClasses="colcw10pc,collw30pc,collw30pc,collw30pc" style="float:center;">
 		<h:column>
 			<f:facet name="header">
-				<a onclick="changeOrder(1); return false;" style="cursor:pointer;">#{messages['Gender']}</a>
+				<a onclick="changeOrder(0); return false;" style="cursor:pointer;">#{messages['Gender']}</a>
 				<br /> <br />
-				<a onclick="changeOrder(0); return false;" style="cursor:pointer;">#</a>
+				<a onclick="changeOrder(1); return false;" style="cursor:pointer;">#</a>
 				<br/>
 				
 				<input onclick="checkClick(this);"  style="#{(deleteCasesHome.canDeleteEIDSS and deleteCasesHome.countEIDSSPatients>0)?'display:block':'display:none'}" type="checkbox"/>
@@ -130,13 +130,13 @@
 				#{messages['cases.patientdata']}
 				<br/>
 				<div style="padding: 4px; font-size:10px;">
-					<a onclick="changeOrder(3); return false;" style="cursor:pointer;">#{messages['Patient.name']}</a>
+					<a onclick="changeOrder(2); return false;" style="cursor:pointer;">#{messages['Patient.name']}</a>
 					<br/>
 					#{messages['az_EIDSS_Year_Of_Birth']}<br/>
-					<a onclick="changeOrder(4); return false;" style="cursor:pointer;">#{messages['TbCase.patientAge']}</a>
+					<a onclick="changeOrder(3); return false;" style="cursor:pointer;">#{messages['TbCase.patientAge']}</a>
 					<br/>
-					<a onclick="changeOrder(7); return false;" style="cursor:pointer;">#{levelInfo.nameLevel1}</a>	- 
-					<a onclick="changeOrder(7); return false;" style="cursor:pointer;">#{levelInfo.nameLevel2}</a>
+					<a onclick="changeOrder(4); return false;" style="cursor:pointer;">#{levelInfo.nameLevel1}</a>	- 
+					<a onclick="changeOrder(4); return false;" style="cursor:pointer;">#{levelInfo.nameLevel2}</a>
 						(#{messages['Address']}) 
 				</div>
 			</f:facet>
@@ -187,11 +187,11 @@
 			<f:facet name="header">
 				#{messages['ExportContent.CASEDATA']}
 				<div style="padding: 4px; font-size:10px;">
-					<a onclick="changeOrder(2); return false;" style="cursor:pointer;">#{messages['CaseClassification']}</a>
+					<a onclick="changeOrder(5); return false;" style="cursor:pointer;">#{messages['CaseClassification']}</a>
 					<br /> 
-					<a onclick="changeOrder(10); return false;" style="cursor:pointer;">#{messages['cases.casesearching.treatlen']}</a>
+					<a onclick="changeOrder(6); return false;" style="cursor:pointer;">#{messages['cases.casesearching.treatlen']}</a>
 					<br />
-					<a onclick="changeOrder(5); return false;" style="cursor:pointer;">#{messages['TbCase.notificationUnit']}</a>
+					<a onclick="changeOrder(7); return false;" style="cursor:pointer;">#{messages['TbCase.notificationUnit']}</a>
 					<br /> 
 					<a onclick="changeOrder(8); return false;" style="cursor:pointer;">#{messages['CaseState']}</a>
 				</div>
@@ -285,7 +285,7 @@ function checkClick(obj) {
 	action="#{patientsAZ.search}"  
 	data="#{patientsAZ.searching}" />
 
-<a:jsFunction name="changeOrder" action="#{patientsAZ.changeOrder}" reRender="pnlpatients,messages" ajaxSingle="true">
+<a:jsFunction name="changeOrder" action="#{patientsAZ.refresh()}" reRender="pnlpatients,messages" ajaxSingle="true" >
 	<a:actionparam name="param1" assignTo="#{patientsAZ.newOrder}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
