@@ -112,7 +112,7 @@ public class PatientsQuery extends EntityQuery {
 	/**
 	 * Create list of patient wrapper in an {@link Item} object
 	 */
-	private void createPatientList() {
+	protected void createPatientList() {
 		patientList = new ArrayList<Item>();
 
 		for (Object obj: getResultList()) {
