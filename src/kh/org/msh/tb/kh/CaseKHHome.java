@@ -152,7 +152,7 @@ public class CaseKHHome{
 		else{
 		String delimiter = "\\;";
 		String temp[] = addr.split(delimiter);
-		if(temp.length>0)
+		if(temp.length>1)
 			setStreetNum(temp[1]);
 		return streetNum;
 		}
@@ -169,7 +169,7 @@ public class CaseKHHome{
 		else{
 		String delimiter = "\\;";
 		String temp[] = addr.split(delimiter);
-		if(temp.length>0)
+		if(temp.length>2)
 			setGroupNum(temp[2]);
 		return groupNum;
 		}
@@ -186,7 +186,7 @@ public class CaseKHHome{
 		else{
 		String delimiter = "\\;";
 		String temp[] = addr.split(delimiter);
-		if(temp.length>0)
+		if(temp.length>3)
 			setVillageName(temp[3]);
 		return villageName;
 		}
@@ -232,7 +232,7 @@ public class CaseKHHome{
 		else{
 		String delimiter = "\\;";
 		String temp[] = addr.split(delimiter);
-		if(temp.length>0)
+		if(temp.length>1)
 			setCurrStreetNum(temp[1]);
 		return currStreetNum;
 		}
@@ -249,7 +249,7 @@ public class CaseKHHome{
 		else{
 		String delimiter = "\\;";
 		String temp[] = addr.split(delimiter);
-		if(temp.length>0)
+		if(temp.length>2)
 			setCurrGroupNum(temp[2]);
 		return currGroupNum;
 		}
@@ -266,7 +266,7 @@ public class CaseKHHome{
 		else{
 		String delimiter = "\\;";
 		String temp[] = addr.split(delimiter);
-		if(temp.length>0)
+		if(temp.length>3)
 			setCurrVillageName(temp[3]);
 		return currVillageName;
 		}
