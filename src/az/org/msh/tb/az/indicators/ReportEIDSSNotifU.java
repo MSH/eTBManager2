@@ -28,7 +28,7 @@ public class ReportEIDSSNotifU extends CaseHQLBase{
 			String nu = tc.getEIDSSNotifUnit();
 			if ("".equals(nu)) nu = "<empty>";
 			Integer ind;
-			if (tc.getNotificationUnit()!=null){
+			if (tc.getNotificationUnit()!=null || tc.getOwnerUnit()!=null){
 				ind = 1;
 				}else {
 					ind = 0;
@@ -40,7 +40,7 @@ public class ReportEIDSSNotifU extends CaseHQLBase{
 			}
 			else{
 				Integer[] ii;
-				if (tc.getNotificationUnit()!=null)
+				if (tc.getNotificationUnit()!=null || tc.getOwnerUnit()!=null)
 					ii = new Integer[]{0,1,1};
 				else
 					ii = new Integer[]{1,0,1};
