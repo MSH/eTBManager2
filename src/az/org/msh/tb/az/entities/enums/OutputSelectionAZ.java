@@ -20,7 +20,7 @@ public enum OutputSelectionAZ {
 	PULMONARY("InfectionSite.PULMONARY"),
 	EXTRAPULMONARY("InfectionSite.EXTRAPULMONARY"),
 	REGIMENS("Regimen"),
-	VALIDATION_STATE("ValidationState"),
+	VALIDATION_STATE("az_AZ.ValidationState"),
 	MICROSCOPY_RESULT("MicroscopyResult"),
 	CULTURE_RESULT("CultureResult"),
 	DIAGNOSIS_TYPE("DiagnosisType"),
