@@ -10,6 +10,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.application.App;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.cases.CaseEditingHome;
@@ -45,6 +46,7 @@ public class CaseEditingAZHome extends CaseEditingHome{
 
 		tbcase.setNotificationUnit(getTbunitselection().getTbunit());
 		tbcase.getNotifAddress().setAdminUnit(getNotifAdminUnit().getSelectedUnit());
+		tbcase.getCurrentAddress().setAdminUnit(getCurrentAdminUnit().getSelectedUnit());
 
 		Address notifAddress = tbcase.getNotifAddress();
 		Address curAddress = tbcase.getCurrentAddress();
@@ -346,16 +348,28 @@ public class CaseEditingAZHome extends CaseEditingHome{
 		}
 		return tbu;
 	}
-/*	public int confirmTbUnit(){
-		Object[] options = {App.getMessage("global.yes"),App.getMessage("global.no")+" "+App.getMessage("global.bydefault")};
-		int res = JOptionPane.showOptionDialog(null,
-				App.getMessage("cases.new.notusertbunit"),
-				App.getMessage("TbCase.notificationUnit"),
-				JOptionPane.YES_NO_OPTION,
-				JOptionPane.QUESTION_MESSAGE,
-				null,
-				options,
-				options[1]);
-		return res;
-	}*/
+
+	@Override
+	public TBUnitSelection getTbunitselection() {
+		TbCase tbcase = caseHome.getInstance();
+		if (super.getTbunitselection().getTbunit() == null) 
+			super.getTbunitselection().setTbunit(tbcase.getNotificationUnit());
+		return super.getTbunitselection();
+	}
+	
+	@Override
+	public AdminUnitSelection getNotifAdminUnit() {
+		TbCase tbcase = caseHome.getInstance();
+		if (super.getNotifAdminUnit().getSelectedUnit() == null)
+			super.getNotifAdminUnit().setSelectedUnit(tbcase.getNotifAddress().getAdminUnit());
+		return super.getNotifAdminUnit();
+	}
+	
+	@Override
+	public AdminUnitSelection getCurrentAdminUnit() {
+		TbCase tbcase = caseHome.getInstance();
+		if (super.getCurrentAdminUnit().getSelectedUnit() == null)
+			super.getCurrentAdminUnit().setSelectedUnit(tbcase.getCurrentAddress().getAdminUnit());
+		return super.getCurrentAdminUnit();
+	}
 }
