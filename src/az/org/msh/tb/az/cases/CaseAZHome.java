@@ -62,7 +62,7 @@ public class CaseAZHome {
 		if (!res.equals("persisted"))
 			return res;
 		
-		caseSeverityMarksHome.save();
+		CasesControlAZ.CaseSeverityMarksHomeSave();
 			
 		return res;
 	}

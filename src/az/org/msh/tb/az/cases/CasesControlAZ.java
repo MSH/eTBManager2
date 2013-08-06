@@ -3,6 +3,7 @@ package org.msh.tb.az.cases;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.App;
+import org.msh.tb.az.entities.CaseSeverityMark;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.cases.treatment.StartTreatmentIndivHome;
@@ -54,5 +55,27 @@ public class CasesControlAZ {
 			nTbUSel = tih.getTbunitselection();
 		}
 		nTbUSel.setTbunitWithOptions(nTbUUser);
+	}
+	
+	/**
+	 * Override the method save() CaseSeverityMarksHome class. Add flush after remove
+	 */
+	public static void CaseSeverityMarksHomeSave() {
+		CaseSeverityMarksHome csmh = (CaseSeverityMarksHome) App.getComponent(CaseSeverityMarksHome.class);
+		if (csmh.getSeverityMarks() == null)
+			return;
+		
+		if (!csmh.isEditing())
+			throw new RuntimeException("SymptomsHome not in edit mode");
+		
+		for (CaseSeverityMark sym: csmh.getSeverityMarks()) {
+			if (!sym.isChecked()) {
+				if (App.getEntityManager().contains(sym)){
+					App.getEntityManager().remove(sym);
+					App.getEntityManager().flush();
+				}
+			}
+			else App.getEntityManager().persist(sym);
+		}
 	}
 }
