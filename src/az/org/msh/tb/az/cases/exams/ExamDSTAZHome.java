@@ -79,11 +79,17 @@ public class ExamDSTAZHome extends LaboratoryExamHome<ExamDSTAZ>{
 				facesMessages.addFromResourceBundle("DSTExam.msg04");
 				return false;
 			}
-		if (exam.getDatePlating()!=null)
+		if (exam.getDatePlating()!=null){
 			if (exam.getDatePlating().before(exam.getDateCollected())){
 				facesMessages.addFromResourceBundle("DSTExam.msg05");
 				return false;
 			}
+			if (exam.getDateRelease()!=null)
+				if (exam.getDateRelease().before(exam.getDatePlating())){
+					facesMessages.addFromResourceBundle("DSTExam.msg06");
+					return false;
+				}
+		}
 		
 		//Verifies if a TB case has resistance or if a DRTB case has at least one resistance
 		//int resistantQuantity = 0;
