@@ -97,7 +97,8 @@ public class ReportEIDSSNotifU extends CaseHQLBase{
 		}
 		hql += " and c.EIDSSComment != null";*/
 		EIDSSFilters filt = (EIDSSFilters) App.getComponent("eidssFilters");
-		String hql = "where c.EIDSSComment != null";
+		//String hql = "where c.EIDSSComment  != null";
+		String hql = "where c.legacyId != null";
 		//Date d = getBindDate();
 		if (filt.getBindYear()!=null)
 			hql += " and year(c.systemDate) = "+ filt.getBindYear();
@@ -115,7 +116,7 @@ public class ReportEIDSSNotifU extends CaseHQLBase{
 	
 	@Override
 	protected String getHQLFrom() {
-		return "from TbCase c";
+		return "from TbCaseAZ c";
 	}
 
 	@Override
