@@ -39,7 +39,7 @@
 	
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
-		<h:inputText value="#{tbcase.patient.securityNumber}" style="width:120px;" maxlength="50"></h:inputText>
+		<h:inputText value="#{tbcase.patient.securityNumber}" style="width:383px;" maxlength="50"></h:inputText>
 	</s:decorate>
 	
 	</td>
@@ -239,11 +239,11 @@
 	<div><table width="99%" style="border-collapse:collapse;">
 	<tr><td style="padding-bottom:10px;">
 
-	<h2>#{messages['TbCase.notificationUnit']}</h2>
+	<h2>#{messages['az_AZ.TbCase.notificationUnit']}</h2>
 	<s:fragment rendered="#{caseAZHome.canPlayOtherUnits}">
 		<ui:include src="unitspanelwithconfirm.xhtml" >
 			<ui:param name="askconfirm" value="true" />
-			<ui:param name="msgtitle" value="#{messages['TbCase.notificationUnit']}" />
+			<ui:param name="msgtitle" value="#{messages['az_AZ.TbCase.notificationUnit']}" />
 			<ui:param name="msgtop" value="#{tbcase.legacyId==null?1145:1430}" />
 			<ui:param name="tbunitselection" value="#{indicator.tbunitselection}" />
 			<ui:param name="controller" value="#{caseEditingAZHome}" />
@@ -520,11 +520,18 @@ function showCurrAddress(cb) {
 <rich:jQuery selector="#otherTbUnit" query="change(function(){ showReferToTbUnit(this); })" />
 <script type="text/javascript">
 function showReferToTbUnit(cb) {
-  if (cb.selectedIndex == 0)
-  	jQuery('#referToTbUnit').hide(500);
+  if (cb.selectedIndex == 0){
+		jQuery('#referToTbUnit').hide(500);
+		//clear referTBUnit selection 
+		jQuery('#referToTbUnit').find("select").get(0).selectedIndex=0;
+		var elem = jQuery('#referToTbUnit').find("select").get(1);
+		elem.selectedIndex=0;
+		jQuery(elem).parent().parent().hide();
+  }
   else jQuery('#referToTbUnit').show(500);
 }
 </script>
+
 <rich:jQuery selector="#otherTbUnit" query="each(function(){ if (this.selectedIndex==0) jQuery('#referToTbUnit').hide(); })" />
 <rich:jQuery selector="#addrChanged" query="each(function(){ if (this.selectedIndex==0) jQuery('#curraddr').hide(); })" />
 		
