@@ -66,9 +66,10 @@ public class CaseExportAZ extends CaseExport {
 //		excel.addTextFromResource("Address.zipCode", "title");
 //		excel.addTextFromResource("TbCase.phoneNumber", "title");
 //		excel.addTextFromResource("TbCase.mobileNumber", "title");
-		excel.addTextFromResource("TbCase.notificationUnit", "title");
+		excel.addTextFromResource("az_AZ.TbCase.notificationUnit", "title");
 		// notification health unit
 		excel.addText(levelInfo.getNameLevel1().toString(), "title");
+		excel.addTextFromResource("TbCase.referToOtherTBUnit", "title");
 		excel.addTextFromResource("TbCase.registrationDate", "title");
 		excel.addTextFromResource("TbCase.diagnosisDate", "title");
 		excel.addTextFromResource("DiagnosisType", "title");
@@ -136,6 +137,7 @@ public class CaseExportAZ extends CaseExport {
 		excel.addTextFromResource("cases.sideeffects", "title");
 		excel.addTextFromResource("excel.treat.alldays", "title");
 		excel.addTextFromResource("excel.treat.reldays", "title");
+		excel.addTextFromResource("az_AZ.ValidationState.title", "title");
 		excel.addText("",null);
 	}
 	
@@ -144,12 +146,14 @@ public class CaseExportAZ extends CaseExport {
 		ExcelCreator excel = getExcel();
 		InfoCountryLevels levelInfo = getLevelInfo();
 		TbCaseAZ tbcase = getCasesAz().get(index);
-		
 		excel.addText(tbcase.getPatient().getFullName());
 		excel.addTextFromResource(tbcase.getClassification().getKey());
 		excel.addText(tbcase.getDisplayCaseNumber());
-		excel.addValue(tbcase.getPatient(), "recordNumber");
-		excel.addValue(tbcase, "state");
+		excel.addText(tbcase.getPatient().getSecurityNumber());
+		if (tbcase.isFirstEIDSSBind())
+			excel.addTextFromResource("cases.detailseidsstitle");
+		else
+			excel.addValue(tbcase, "state");
 		excel.addText(tbcase.getRegistrationCode());
 		excel.addValue(tbcase.getPatient(), "gender");
 		excel.addDate(tbcase.getPatient().getBirthDate());
@@ -171,6 +175,7 @@ public class CaseExportAZ extends CaseExport {
 //		excel.addText(tbcase.getMobileNumber());
 		excel.addValue(tbcase, "notificationUnit.name");
 		excel.addValue(tbcase, "notificationUnit.adminUnit.parentLevel1");
+		excel.addTextFromResource(tbcase.isReferToOtherTBUnit()?"TbCase.referUnit.other":"TbCase.referUnit.own");
 		excel.addDate(tbcase.getRegistrationDate());
 		excel.addDate(tbcase.getDiagnosisDate());
 		excel.addValue(tbcase, "diagnosisType");
@@ -327,6 +332,7 @@ public class CaseExportAZ extends CaseExport {
 		
 		excel.addNumber(mountPlanned(tbcase));
 		excel.addNumber(disp);
+		excel.addTextFromResource("az_AZ."+tbcase.getValidationState().getKey());
 		return tbcase;
 	}
 
