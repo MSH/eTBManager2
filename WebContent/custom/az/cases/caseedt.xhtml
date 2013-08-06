@@ -28,9 +28,11 @@
 	<h:outputText value="#{messages['cases.date_unknown']}" rendered="#{tbcase.editingDate == null}"/>
 	<h:outputText value=", #{tbcase.editingUser!=null ? tbcase.editingUser.name : messages['cases.user_unknown']}"/>
 	<br/>
-<h:outputText value="#{messages['cases.system.lastaction']}: " style="font-weight:bold;"/>
+	<h:outputText value="#{messages['cases.system.lastaction']}: " style="font-weight:bold;"/>
 	<h:outputText value="#{caseAZHome.lastTransaction!=null ? caseAZHome.lastTransaction.title : messages['admin.import.eidss.nextFT.undef']}"/>
-	
+	<br/>
+	<h:outputText value="#{messages['Patient.caseNumber']}: " style="font-weight:bold;"/>
+	#{tbcase.displayCaseNumber}
 <h:form id="main" styleClass="form1">
 	<s:fragment rendered="#{tbcase.open}">
 		<ui:include src="casedataedt.xhtml" />
