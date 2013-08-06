@@ -82,4 +82,15 @@ public class CaseFiltersAZ {
 		caseNumbers = null;
 		caseNums = null;
 	}
+	
+	/**
+	 * Set only useDiagnosisDate to true as default in filters for reports
+	 */
+	public void setUseDiagDateDefaultTrue(){
+		caseFilters.setRegistrationDate(false);
+		caseFilters.setDiagnosisDate(true);
+		caseFilters.setIniTreatmentDate(false);
+		caseFilters.setOutcomeDate(false);
+	}
+	
 }
