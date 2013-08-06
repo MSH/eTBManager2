@@ -8,7 +8,7 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 <ui:param name="labelstyle" value="width:150px;" />
-
+<h:panelGroup id="pnlfilters">
 <table id="tblfilters" style="border-collapse: collapse;width:100%;"><tr><td>
 	<s:fragment rendered='#{!casesAZ.notBindedEIDSS}'>          
    <h2>#{messages['cases.details.addressnotif']}</h2>
@@ -106,6 +106,7 @@
 		<h:selectOneMenu value="#{caseFiltersAZ.tag}" >
 			<s:selectItems value="#{tagsQuery.resultList}" var="x" label="#{x.name}" noSelectionLabel="-" />
 			<s:convertEntity/>
+
 		</h:selectOneMenu>
 	</s:decorate>
 
@@ -113,10 +114,12 @@
 
    <div id="datesdiv" style="padding:6px;">
    	<s:fragment rendered='#{!casesAZ.notBindedEIDSS}'>
-   	<h:selectBooleanCheckbox value="#{caseFilters.registrationDate}" />#{messages['TbCase.registrationDate']}
-   	<h:selectBooleanCheckbox value="#{caseFilters.diagnosisDate}" style="margin-left:20px;" />#{messages['TbCase.diagnosisDate']}
-   	<h:selectBooleanCheckbox value="#{caseFilters.iniTreatmentDate}" style="margin-left:20px;" />#{messages['TbCase.iniTreatmentDate']}
-   	<h:selectBooleanCheckbox value="#{caseFilters.outcomeDate}" style="margin-left:20px;" />#{messages['TbCase.outcomeDate']}
+   	<div id="usedatepanel">
+	   	<h:selectBooleanCheckbox value="#{caseFilters.registrationDate}" onclick="setOffOthers(this);"/>#{messages['TbCase.registrationDate']}
+	   	<h:selectBooleanCheckbox value="#{caseFilters.diagnosisDate}" onclick="setOffOthers(this);" style="margin-left:20px;" />#{messages['TbCase.diagnosisDate']}
+	   	<h:selectBooleanCheckbox value="#{caseFilters.iniTreatmentDate}" onclick="setOffOthers(this);" style="margin-left:20px;" />#{messages['TbCase.iniTreatmentDate']}
+	   	<h:selectBooleanCheckbox value="#{caseFilters.outcomeDate}" onclick="setOffOthers(this);" style="margin-left:20px;" />#{messages['TbCase.outcomeDate']}
+   </div>
    </s:fragment>
    </div>
 
@@ -171,8 +174,20 @@ function validateFilters() {
 	}
 	return true;
 }
+
+function setOffOthers(cb){
+	if (cb.checked){
+		jQuery("#usedatepanel :checkbox")
+			.each(function() { 
+			if (this != cb)
+				this.checked = false;
+			});
+		}
+}
+
 </script>
 
 </td></tr></table>
+</h:panelGroup>
     
 </ui:composition>

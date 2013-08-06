@@ -170,9 +170,10 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 <h:form>
+<a:jsFunction name="defFilt" action="#{caseFiltersAZ.setUseDiagDateDefaultTrue()}" reRender="pnlfilters"/>
 	<h:commandLink
 		styleClass="button-alt"  
-		onclick="Richfaces.showModalPanel('filtersdlg');return false;" 
+		onclick="defFilt();Richfaces.showModalPanel('filtersdlg');return false;" 
 		style="float:right;">
 		<span>#{messages['cases.advancedsearch']}</span>
 	</h:commandLink>	
