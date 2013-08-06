@@ -28,35 +28,35 @@
 	<h2>#{messages['manag.case.reports']}</h2>
 
 	<div class="vertical-menu">
-	<s:link view="/management/incidence.xhtml" >
+	<s:link view="/management/incidence.xhtml" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}">
 		<div class="icon-report" />1. #{messages['manag.ind.incidence']}
 	</s:link>
-	<s:link view="/management/prevalence.xhtml" >
+	<s:link view="/management/prevalence.xhtml" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}">
 		<div class="icon-report" style="float:left;"/>2. #{messages['manag.ind.prevalence']}
 	</s:link>
-  	<s:link view="/management/treatoutcome.xhtml" >
+  	<s:link view="/management/treatoutcome.xhtml" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}">
 		<div class="icon-report" style="float:left;"/>3. #{messages['manag.ind.treatoutcome']}
   	</s:link>
-	<s:link view="/management/detrate.xhtml" rendered="false">
+	<s:link view="/management/detrate.xhtml" rendered="false" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}">
 		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.detrate']}
 	</s:link>
-	<s:link value="#{messages['manag.ind.perctb']}" view="/management/perctb.xhtml" styleClass="icon-report" rendered="false"/>
+	<s:link value="#{messages['manag.ind.perctb']}" view="/management/perctb.xhtml" styleClass="icon-report" rendered="false" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}"/>
 	<s:link view="/management/resist.xhtml" >
 		<div class="icon-report" style="float:left;"/>4. #{messages['manag.ind.resist']}
 	</s:link>
 	
-	<s:link view="/management/dstprofile.xhtml" styleClass="optionmenu" rendered="true" >
+	<s:link view="/management/dstprofile.xhtml" styleClass="optionmenu" rendered="true" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}">
 		<div class="icon-report" style="float:left;"/>5. #{messages['manag.ind.dstprofile']}
 	</s:link>
 	
-	<s:link view="/management/dstprofilesecline.xhtml" styleClass="optionmenu" rendered="true" >
+	<s:link view="/management/dstprofilesecline.xhtml" styleClass="optionmenu" rendered="true" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}">
 	<div class="icon-report" style="float:left;"/>6. #{messages['manag.ind.dstprofilesecondline']}
 	</s:link>
 
-	<s:link view="/management/sideeffects.xhtml" >
+	<s:link view="/management/sideeffects.xhtml" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}">
 		<div class="icon-report" style="float:left;"/>7. #{messages['cases.sideeffects']}
 	</s:link>
-	<s:link view="/management/hivresults.xhtml" rendered="true" >
+	<s:link view="/management/hivresults.xhtml" rendered="true" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}">
 		<div class="icon-report" style="float:left;"/>8. #{messages['manag.hivreport']}
 	</s:link>
 
@@ -75,17 +75,17 @@
 		</s:link>
 -->		
 	</ui:remove>
-		<s:link view="/management/starttreat.xhtml" >
+		<s:link view="/management/starttreat.xhtml" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}">
 			<div class="icon-report" style="float:left;"/>9. #{messages['manag.ind.starttreat']}
 		</s:link>
-		<s:link view="/management/interim.xhtml" >
+		<s:link view="/management/interim.xhtml" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}">
 			<div class="icon-report" style="float:left;"/>10. #{messages['manag.ind.interim']}
 		</s:link>
-		<s:link view="/management/confmdrrep.xhtml" >
+		<s:link view="/management/confmdrrep.xhtml" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}">
 			<div class="icon-report" style="float:left;"/>11. #{messages['manag.confmdrrep']}
 		</s:link>
 		<hr/>
-		<s:link view="/custom/az/management/customind.xhtml" >
+		<s:link view="/custom/az/management/customind.xhtml" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}">
 			<div class="icon-report" style="float:left;"/>#{messages['manag.ind.customind']}
 		</s:link>
 		<hr/>
@@ -94,7 +94,7 @@
 			<div class="icon-report" style="float:left;"/>#{messages['manag.ind.newcaseslog']}
 		</s:link>
 		</ui:remove>
-		<s:link view="/management/report08.xhtml" propagation="begin">
+		<s:link view="/management/report08.xhtml" propagation="begin" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}">
 			<div class="icon-report" style="float:left;"/>#{messages['manag.ind.form8']}
 		</s:link>
 	</div>
@@ -126,7 +126,7 @@
 			<f:param name="id" value="#{null}"/>
 			<div class="icon-report" style="float:left;"/>#{messages['manag.forecast.med']}
 		</s:link>
-		<s:link view="/management/export.xhtml" rendered="#{s:hasRole('EXPORT')}" propagation="none">
+		<s:link view="/management/export.xhtml" rendered="#{s:hasRole('EXPORT')}" propagation="none" action="#{indicatorControllerAZ.setUseDiagDateDefaultTrue()}">
 			<div class="icon-report" style="float:left;"/>#{messages['manag.export']}
 		</s:link>
 	</div>
