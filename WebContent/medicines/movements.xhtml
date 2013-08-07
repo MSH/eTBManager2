@@ -150,7 +150,7 @@
 			<f:convertNumber pattern="#,###,###"/>
 		</h:outputText>
 		<br/>
-		<a:commandLink style="font-size:11px" onclick="loadMovDetails(#{m.movement.id}); return false;" rendered="#{m.movement.isDispensing()}">
+		<a:commandLink style="font-size:11px" onclick="loadMovDetails(#{m.movement.id}); return false;" rendered="#{m.movement.isDispensing() and userSession.tbunit.patientDispensing}">
 			<span>#{messages['form.details']}</span>
 		</a:commandLink>
 	</h:column>
