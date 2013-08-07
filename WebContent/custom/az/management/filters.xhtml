@@ -139,10 +139,10 @@ function setOffOthers(cb){
 
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">
-			#{messages['ValidationState']}:
+			#{messages['az_AZ.ValidationState']}:
 		</ui:define>
 		<h:selectOneMenu value="#{indicatorFilters.validationState}">
-			<s:selectItems var="it" value="#{globalLists.validationState}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+			<s:selectItems var="it" value="#{globalLists.validationState}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages['az_AZ.'.concat(it.key)]}"/>
 		</h:selectOneMenu>
 	</s:decorate>
 

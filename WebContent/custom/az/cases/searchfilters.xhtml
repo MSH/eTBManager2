@@ -60,9 +60,9 @@
 	</s:decorate>
 
 	<s:decorate template="/layout/display.xhtml">
-		<ui:define name="label">#{messages['ValidationState']}:</ui:define>
+		<ui:define name="label">#{messages['az_AZ.ValidationState']}:</ui:define>
 		<h:selectOneMenu value="#{caseFilters.validationState}" >
-			<s:selectItems value="#{globalLists.validationState}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+			<s:selectItems value="#{globalLists.validationState}" var="x" label="#{messages['az_AZ.'.concat(x.key)]}" noSelectionLabel="-" />
 			<s:convertEnum />
 		</h:selectOneMenu>
 	</s:decorate>
