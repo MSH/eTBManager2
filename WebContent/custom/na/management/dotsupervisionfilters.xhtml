@@ -94,16 +94,16 @@ function handleContextClick(comp) {
 
 	</td><td>
 
-<!--    <s:decorate template="/layout/edit.xhtml" >
+    <s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['global.endmonthyear']}:	</ui:define>
 		<ui:param name="labelstyle" value="width:140px;" />
-		<h:selectOneMenu value="#{indicatorFilters.endMonth}" style="margin-right:4px;">
+		<h:selectOneMenu value="#{indicatorFilters.endMonth}" style="margin-right:4px;" required="true">
 			<f:selectItems value="#{months}"/>
 		</h:selectOneMenu>
-		<h:selectOneMenu value="#{indicatorFilters.endYear}">
+		<h:selectOneMenu value="#{indicatorFilters.endYear}" required="true">
 			<f:selectItems value="#{years}"/>
 		</h:selectOneMenu>
-	</s:decorate> -->	
+	</s:decorate>	
 
 	</td></tr>
 	<tr><td colspan="2">
@@ -263,7 +263,7 @@ function handleContextClick(comp) {
 		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>	
-	<a:commandLink reRender="indicator" styleClass="button" 
+	<a:commandLink reRender="indicator,main" styleClass="button" 
 		action="#{indicatorController.execute}"
 		onclick="if (!disableButton(this)) return false;" oncomplete="enableButton();showChart();">
 		<span>#{messages['form.update']}</span>

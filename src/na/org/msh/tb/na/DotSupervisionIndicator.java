@@ -57,8 +57,8 @@ public class DotSupervisionIndicator extends Indicator{
 		IndicatorTable table = getTable();
 		table.addColumn(getMessage("cases.treat.presc"), COL_DAYS_PRESC);
 		table.addColumn(getMessage("cases.treat.disp.taken") + " (" + getMessage("global.days") + ")", COL_DAYS_TAKEN);
-		table.addColumn(getMessage("cases.treat.disp.nottaken") + " (" + getMessage("global.days") + ")", COL_DAYS_NOT_TAKEN);
 		table.addColumn(getMessage("cases.treat.disp.selfadmin") + " (" + getMessage("global.days") + ")", COL_DAYS_SELF_ADMIN);
+		table.addColumn(getMessage("cases.treat.disp.nottaken") + " (" + getMessage("global.days") + ")", COL_DAYS_NOT_TAKEN);
 		table.addColumn(getMessage("cases.treat.disp.dotCompletionRate") + " (%)", COL_COMPL_RATE);
 
 		// populate table

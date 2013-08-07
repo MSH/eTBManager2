@@ -32,7 +32,7 @@
 
 <ui:define name="content">
 <h1>#{title}</h1>
-<h:form>
+<h:form id="main">
 <table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
 <tr><td bgcolor="#f8f8f8">
 	<ui:include src="/custom/na/management/dotsupervisionfilters.xhtml" />
@@ -45,7 +45,7 @@
 
 <h:panelGroup id="indicator">
 	<s:fragment rendered="#{indicatorController.executing}">
-	<div class="paragraph">#{messages['manag.ind.starttreat.title2']}</div>
+	<div class="paragraph">#{messages['manag.ind.starttreat.title3']}</div>
 	<br/>
 	<table class="table1" width="100%">
 		<tr>
