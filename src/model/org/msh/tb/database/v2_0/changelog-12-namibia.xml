@@ -15,7 +15,8 @@
 	        </column>
 	    </addColumn>
 	</changeSet>
-	
+
+
 	<changeSet id="12.2" author="rmemoria" context="NA">
 		<sql>update casedispensingna
 		set totalDaysSelfAdmin=(
@@ -37,13 +38,15 @@
 		+if(day30=2,1,0)+if(day31=2,1,0)
 		from casedispensingdaysna where casedispensingdaysna.id=casedispensingna.id)</sql>
 	</changeSet>
-	
+
+
 	<changeSet id="12.3" author="rmemoria" context="NA">
 	    <addColumn tableName="examhiv">
 	        <column name="viralLoad" type="int" />
 	        <column name="viralLoadDateRelease" type="datetime" /> 
 	    </addColumn>
 	</changeSet>
+
 	
 	<!-- Include new tags to namibia -->
  	<changeSet id="12.4" author="rmemoria" context="NA">
@@ -84,7 +87,47 @@
 		from tbcase a inner join patient p on p.id=a.patient_id and p.workspace_id=24
 		where diagnosisType=0 and state in (1,2) and validationstate=1 and (exists(select * from examdst where case_id=a.id) or exists(select * from examxpert where case_id=a.id))</sql>
 	</changeSet>
-	
+
+
+ 	<!--  Include new tags defined in issue #835 -->
+ 	<changeSet id="12.5" author="rmemoria" context="NA">
+ 	    <insert tableName="tag">
+ 	        <column name="tag_name">Cases without District Registration Number assigned</column>
+ 	        <column name="workspace_id">24</column>
+ 	        <column name="sqlcondition">(a.registrationcode is null or a.registrationcode = '')</column>
+ 	        <column name="consistencycheck" type="int">0</column>
+ 	        <column name="active" type="int">1</column>
+ 	    </insert>
+ 	    <insert tableName="tag">
+ 	        <column name="tag_name">Cases with District Registration Number assigned manually by the user</column>
+ 	        <column name="workspace_id">24</column>
+ 	        <column name="sqlcondition">a.registrationcode is not null and a.registrationcode &lt;&gt; '' and a.registrationcode not like 'TB%'</column>
+ 	        <column name="consistencycheck" type="int">0</column>
+ 	        <column name="active" type="int">1</column>
+ 	    </insert>
+ 	    <insert tableName="tag">
+ 	        <column name="tag_name">Cases with District Registration Number assigned automatically by the system</column>
+ 	        <column name="workspace_id">24</column>
+ 	        <column name="sqlcondition">a.validationstate=1 and a.registrationcode like 'TB%'</column>
+ 	        <column name="consistencycheck" type="int">0</column>
+ 	        <column name="active" type="int">1</column>
+ 	    </insert>
+	    
+	    <sql>insert into tags_case (case_id, tag_id)
+		select a.id, (select max(id) from tag where p.workspace_id=tag.workspace_id and tag_name='Cases without District Registration Number assigned') nv
+		from tbcase a inner join patient p on p.id=a.patient_id and p.workspace_id=24
+		where (a.registrationcode is null or a.registrationcode = '')</sql>
+	    
+	    <sql>insert into tags_case (case_id, tag_id)
+		select a.id, (select max(id) from tag where p.workspace_id=tag.workspace_id and tag_name='Cases with District Registration Number assigned manually by the user') nv
+		from tbcase a inner join patient p on p.id=a.patient_id and p.workspace_id=24
+		where a.registrationcode is not null and a.registrationcode &lt;&gt; '' and a.registrationcode not like 'TB%'</sql>
+	    
+	    <sql>insert into tags_case (case_id, tag_id)
+		select a.id, (select max(id) from tag where p.workspace_id=tag.workspace_id and tag_name='Cases with District Registration Number assigned automatically by the system') nv
+		from tbcase a inner join patient p on p.id=a.patient_id and p.workspace_id=24
+		where a.validationstate=1 and a.registrationcode like 'TB%'</sql>
+ 	</changeSet>
 </databaseChangeLog>
 
 
