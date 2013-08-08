@@ -608,7 +608,7 @@ public class UserSession {
 	 * @return
 	 */
 	public static boolean isCanGenerateMovements(Date movementDate, Tbunit unit) {
-		if(movementDate == null)
+		if(unit == null || movementDate == null)
 			return false;
 		
 		//no limit specified

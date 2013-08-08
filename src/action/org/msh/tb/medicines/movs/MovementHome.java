@@ -25,7 +25,6 @@ import org.msh.tb.entities.Source;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.MovementType;
-import org.msh.tb.login.UserSession;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.LocaleDateConverter;
 
@@ -306,8 +305,8 @@ public class MovementHome {
 		}
 
 		// checks if the unit has a date limit to create movements
-		if(!UserSession.isCanGenerateMovements(date, unit))
-			throw new MovementException("Date must be after " + DateUtils.formatAsLocale(unit.getLimitDateMedicineMovement(), false) + ".");
+		//if(!UserSession.isCanGenerateMovements(date, unit))
+		//	throw new MovementException("Date must be after " + DateUtils.formatAsLocale(unit.getLimitDateMedicineMovement(), false) + ".");
 	
 		// create batches
 		if ((batches == null) || (batches.size() == 0)) 
