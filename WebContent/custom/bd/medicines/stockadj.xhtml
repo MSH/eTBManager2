@@ -27,10 +27,12 @@
 <div style="width:800px">
 <s:decorate template="/layout/unitsel.xhtml">
 <h:form id="main">
+	<!-- Decided with Kyle that it will not be able to bangladesh
 	<a:commandLink onclick="openNewBatchDlg();" style="float:right;" styleClass="button-alt">
 		<span>#{messages['meds.receiving.newbatch']}...</span>
 	</a:commandLink>
-
+ 	-->
+ 	
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['Source']}:</ui:define>
     	<h:selectOneMenu value="#{stockAdjustmentHome.source}">
