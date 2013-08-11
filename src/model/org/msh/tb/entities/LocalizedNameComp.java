@@ -90,6 +90,8 @@ public class LocalizedNameComp implements Serializable {
 	 * @return
 	 */
 	public boolean isAlternateLanguage() {
+		if (Contexts.getSessionContext() == null)
+			return false;
 		UserLogin userLogin = (UserLogin)Contexts.getSessionContext().get("userLogin");
 		Workspace ws = (Workspace)Component.getInstance("defaultWorkspace");
 		
