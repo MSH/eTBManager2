@@ -29,7 +29,7 @@
 	<s:decorate template="/layout/edit.xhtml" id="quarterdiv">
 	<ui:param name="redasterisk" value="true" />
     	<ui:define name="label">#{messages['Quarter']}:</ui:define>
-		<h:selectOneMenu id="quarter" value="#{quarterStockPositionHome.selectedQuarter}">
+		<h:selectOneMenu id="quarter" value="#{quarterStockPositionHome.selectedQuarter.quarter}">
   			<s:selectItems value="#{quarter}" var="r" label="#{messages[r.key]}" />
   			<s:convertEnum />
   			<a:support event="onchange" ajaxSingle="true" reRender="main" process="year,quarter" action="#{quarterStockPositionHome.refresh}" />

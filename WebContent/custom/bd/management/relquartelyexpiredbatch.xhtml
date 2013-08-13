@@ -38,7 +38,7 @@
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:param name="redasterisk" value="true" />
     	<ui:define name="label">#{messages['Quarter']}:</ui:define>
-		<h:selectOneMenu value="#{quarterBatchExpiringReport.selectedQuarter}">
+		<h:selectOneMenu value="#{quarterBatchExpiringReport.selectedQuarter.quarter}">
   			<s:selectItems value="#{quarter}" var="r" label="#{messages[r.key]}" />
   			<s:convertEnum />
 		</h:selectOneMenu>
@@ -81,7 +81,7 @@
 	<a:repeat value="#{quarterBatchExpiringReport.unitBatchDetails}" var="unitD">
 		<h2>
 			<h:outputText value="#{unitD.unit}" />
-			<h:outputText value=" (#{unitD.unit.adminUnit.getFullDisplayName()})" style="font-size:11px"/>
+			<h:outputText value=" (#{unitD.unit.adminUnit.getFullDisplayName2()})" style="font-size:11px"/>
 		</h2>
 		
 		<!-- Message for no result -->

@@ -38,7 +38,7 @@
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:param name="redasterisk" value="true" />
     	<ui:define name="label">#{messages['Quarter']}:</ui:define>
-		<h:selectOneMenu value="#{quarterStockPositionReport.selectedQuarter}">
+		<h:selectOneMenu value="#{quarterStockPositionReport.selectedQuarter.quarter}">
   			<s:selectItems value="#{quarter}" var="r" label="#{messages[r.key]}" />
   			<s:convertEnum />
 		</h:selectOneMenu>
