@@ -5,7 +5,6 @@ import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.msh.tb.bd.entities.enums.Quarter;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.medicines.MedicineManStartHome;
 import org.msh.tb.tbunits.TbUnitHome;
@@ -53,9 +52,8 @@ public class MedicineManStartBDHome{
 	 * @return the selectedQuarter
 	 */
 	public Quarter getSelectedQuarter() {
-		//Solve JSF problem when trying to set year before setting the quarter, the year depends on the quarter.
-		if(this.selectedQuarter == null)
-			return Quarter.FIRST;
+		if(selectedQuarter == null)
+			this.selectedQuarter = new Quarter();
 		return selectedQuarter;
 	}
 

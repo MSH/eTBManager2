@@ -1,5 +1,6 @@
 package org.msh.tb.bd.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.msh.tb.bd.entities.enums.Quarter;
+import org.msh.tb.bd.entities.enums.QuarterMonths;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Tbunit;
 
@@ -26,7 +27,8 @@ public class QuarterlyReportDetailsBD {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
-	private Quarter quarter;
+	@Column(name="quarter")
+	private QuarterMonths quarterMonth;
 	private Integer year;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -56,15 +58,15 @@ public class QuarterlyReportDetailsBD {
 	/**
 	 * @return the quarter
 	 */
-	public Quarter getQuarter() {
-		return quarter;
+	public QuarterMonths getQuarterMonth() {
+		return quarterMonth;
 	}
 
 	/**
-	 * @param quarter the quarter to set
+	 * @param QuarterMonths the QuarterMonths to set
 	 */
-	public void setQuarter(Quarter quarter) {
-		this.quarter = quarter;
+	public void setQuarterMonth(QuarterMonths quarter) {
+		this.quarterMonth = quarter;
 	}
 
 	/**

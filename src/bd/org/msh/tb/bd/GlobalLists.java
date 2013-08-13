@@ -10,7 +10,7 @@ import org.msh.tb.bd.entities.enums.BiopsyResult;
 import org.msh.tb.bd.entities.enums.DotProvider;
 import org.msh.tb.bd.entities.enums.Occupation;
 import org.msh.tb.bd.entities.enums.PulmonaryTypesBD;
-import org.msh.tb.bd.entities.enums.Quarter;
+import org.msh.tb.bd.entities.enums.QuarterMonths;
 import org.msh.tb.bd.entities.enums.SalaryRange;
 import org.msh.tb.bd.entities.enums.SkinTestResult;
 import org.msh.tb.entities.enums.DrugResistanceType;
@@ -101,11 +101,11 @@ public class GlobalLists {
 		DrugResistanceType.UNKNOWN,
 	};
 	
-	private static final Quarter quarter[] = {
-		Quarter.FIRST,
-		Quarter.SECOND,
-		Quarter.THIRD,
-		Quarter.FOURTH,
+	private static final QuarterMonths quarter[] = {
+		QuarterMonths.FIRST,
+		QuarterMonths.SECOND,
+		QuarterMonths.THIRD,
+		QuarterMonths.FOURTH,
 	};
 	
 	public TbField[] getTbFields() {
@@ -138,7 +138,7 @@ public class GlobalLists {
 	}
 	
 	@Factory("quarter")
-	public static Quarter[] getQuarter(){
+	public static QuarterMonths[] getQuarter(){
 		return quarter;
 	}
 	

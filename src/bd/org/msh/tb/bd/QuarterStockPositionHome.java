@@ -18,7 +18,7 @@ import org.jboss.seam.security.Identity;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.bd.QSPEditingMedicine.QSPEditingBatchDetails;
 import org.msh.tb.bd.entities.QuarterlyReportDetailsBD;
-import org.msh.tb.bd.entities.enums.Quarter;
+import org.msh.tb.bd.entities.enums.QuarterMonths;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.Medicine;
@@ -102,8 +102,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 			if(dt != null){
 				selectedQuarter = Quarter.getQuarterByDate(dt);
 			}else{
-				selectedQuarter = Quarter.FIRST;
-				selectedQuarter.setYear(2013);
+				selectedQuarter = new Quarter(QuarterMonths.FIRST, 2013);
 			}
 			
 			if(selectedQuarter == null || selectedQuarter.getYear() == 0)
@@ -130,9 +129,9 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		QuarterlyReportDetailsBD details = null;
 		try{
 			details = (QuarterlyReportDetailsBD) getEntityManager().createQuery("from QuarterlyReportDetailsBD q " +
-																					"where q.quarter = :quarter and q.tbunit.id = :unitId " +
+																					"where q.quarterMonth = :quarterMonth and q.tbunit.id = :unitId " +
 																					"and q.year = :year and q.medicine.id = :medicineId")
-																					.setParameter("quarter", selectedQuarter)
+																					.setParameter("quarterMonth", selectedQuarter.getQuarter())
 																					.setParameter("unitId", userSession.getTbunit().getId())
 																					.setParameter("year", selectedQuarter.getYear())
 																					.setParameter("medicineId", medicine.getId())
@@ -288,7 +287,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 			return "validation-error";
 		}
 		
-		Quarter nextQuarter = Quarter.getNextQuarter(selectedQuarter);
+		Quarter nextQuarter = selectedQuarter.getNextQuarter();
 				
 		tbunitHome.setInstance(userSession.getTbunit());
 		tbunitHome.getInstance().setLimitDateMedicineMovement(nextQuarter.getIniDate());
@@ -583,7 +582,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	
 	public boolean saveOutOfStockDays(){
 		getInstance().setMedicine(medicine);
-		getInstance().setQuarter(selectedQuarter);
+		getInstance().setQuarterMonth(selectedQuarter.getQuarter());
 		getInstance().setTbunit(userSession.getTbunit());
 		getInstance().setYear(selectedQuarter.getYear());
 		getInstance().setOutOfStock(editingMedicine.getOutOfStock());
@@ -679,6 +678,8 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	 * @return the selectedQuarter
 	 */
 	public Quarter getSelectedQuarter() {
+		if(selectedQuarter == null)
+			this.selectedQuarter = new Quarter();
 		return selectedQuarter;
 	}
 	/**

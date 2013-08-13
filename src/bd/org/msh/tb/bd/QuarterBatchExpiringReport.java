@@ -13,7 +13,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.tb.bd.entities.enums.Quarter;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Tbunit;
@@ -87,7 +86,7 @@ public class QuarterBatchExpiringReport {
 			updateConsolidatedBatchList();
 		}
 		
-		updatePendCloseQuarterUnits();
+		pendCloseQuarterUnits = QuarterClosePendUnits.getPendCloseQuarterUnits(selectedQuarter, tbunitselection);
 	}
 	
 	/**
@@ -191,31 +190,6 @@ public class QuarterBatchExpiringReport {
 	}
 	
 	/**
-	 * Update the list of tbunits that haven't closed the selected quarter.
-	 */
-	private void updatePendCloseQuarterUnits(){
-		if(getLocationWhereClause() == null || getTbunitselection().getTbunit() != null){
-			pendCloseQuarterUnits = null;
-			if(tbunitselection.getTbunit().getLimitDateMedicineMovement().compareTo(selectedQuarter.getIniDate()) <=0){
-				pendCloseQuarterUnits = new ArrayList<Tbunit>();
-				pendCloseQuarterUnits.add(tbunitselection.getTbunit());
-			}
-		}else{
-			String queryString = "from Tbunit u where u.adminUnit.code like :code and u.workspace.id = :workspaceId " +
-								"and (u.limitDateMedicineMovement is null or u.limitDateMedicineMovement <= :iniQuarterDate) " +
-								"and u.treatmentHealthUnit = :true " +
-								"order by u.adminUnit.code, u.name.name1";
-			
-			pendCloseQuarterUnits = entityManager.createQuery(queryString)
-								.setParameter("code", tbunitselection.getAuselection().getSelectedUnit().getCode()+'%')
-								.setParameter("workspaceId", UserSession.getWorkspace().getId())
-								.setParameter("iniQuarterDate", selectedQuarter.getIniDate())
-								.setParameter("true", true)
-								.getResultList();
-		}
-	}
-	
-	/**
 	 * @return the tbunitselection
 	 */
 	public TBUnitSelection2 getTbunitselection() {
@@ -235,10 +209,8 @@ public class QuarterBatchExpiringReport {
 	 * @return the selectedQuarter
 	 */
 	public Quarter getSelectedQuarter() {
-		//Solve JSF problem when trying to set year before setting the quarter, the year depends on the quarter.
-		if(this.selectedQuarter == null)
-			return Quarter.FIRST;
-		
+		if(selectedQuarter == null)
+			this.selectedQuarter = new Quarter();
 		return selectedQuarter;
 	}
 
