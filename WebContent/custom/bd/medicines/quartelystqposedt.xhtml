@@ -67,7 +67,11 @@
 					<br/><h:outputText style="font-size:10px" value="#{messages['quarter.nonNegativeAdjustment']}: #{quarterStockPositionHome.editingMedicine.nonNegativeAdjustments}" />
 				</s:fragment>
 			</td>
-			<td><h:inputText id="consumption" value="#{quarterStockPositionHome.editingMedicine.consumption}" onkeyup="updateCloseBalTotal();" onkeypress="return numbersOnly(this,event);"/></td>
+			<td>
+				<!-- if the unit dispense by patient, can't edit a dispensing with this form -->
+				<h:inputText id="consumption" value="#{quarterStockPositionHome.editingMedicine.consumption}"  readonly="#{userSession.tbunit.patientDispensing}" 
+					style="#{userSession.tbunit.patientDispensing ? 'background-color: lightgray;' : ''}" onkeyup="updateCloseBalTotal();" onkeypress="return numbersOnly(this,event);" />
+			</td>
 			<td><h:inputText id="expired" readonly="true" style="background-color: lightgray;"/></td>
 			<td><h:inputText id="closbal" value="0" readonly="true" style="background-color: lightgray;"/></td>
 			<td><h:inputText value="#{quarterStockPositionHome.editingMedicine.outOfStock}" onkeypress="return numbersOnly(this,event);"/></td>
@@ -109,7 +113,10 @@
 	
 	</table>
 	<br/>
-	<h:outputText value="#{messages['quarter.savingalert']}" styleClass="error"/>
+	
+	<h:outputText value="#{messages['quarter.savingalert']}" styleClass="error" rendered="#{not userSession.tbunit.patientDispensing}"/>
+	<h:outputText value="#{messages['quarter.savingalert2']}" styleClass="error" rendered="#{userSession.tbunit.patientDispensing}"/>
+	
 	<br/>
 	<a:commandLink action="#{quarterStockPositionHome.save}" styleClass="button" 
 		onclick="if (!disableButton(this)) return false;">
@@ -122,7 +129,7 @@
 	</div>
 	
 	</h:form>
-	<script type="text/javascript">
+	<script language="JavaScript" type="text/javascript">
 	<!--
 	updatePosAdjustTotal();
 	updateNegAdjustTotal();

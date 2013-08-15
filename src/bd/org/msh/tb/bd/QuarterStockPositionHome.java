@@ -307,7 +307,8 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	public String save(){
 		movementHome.initMovementRecording();
 		
-		if(!deletePreviousMovements()){
+		//Can edit dispensing only if the unit is not configured for patient dispensing
+		if(!deletePreviousMovements(!userSession.getTbunit().isPatientDispensing())){
 			addValidErrorToClient(null);
 			return "error";
 		}
@@ -328,10 +329,12 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		}
 
 		movementHome.savePreparedMovements();
-		
-		if(!saveConsumption()){
-			addValidErrorToClient(messages.get("manag.forecast.tabres2"));
-			return "error";
+		//Can edit dispensing only if the unit is not configured for patient dispensing
+		if(!userSession.getTbunit().isPatientDispensing()){
+			if(!saveConsumption()){
+				addValidErrorToClient(messages.get("manag.forecast.tabres2"));
+				return "error";
+			}
 		}
 		
 		if(!saveOutOfStockDays()){
@@ -390,13 +393,22 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	/**
 	 * Prepare all movements that will be deleted before creating the new ones.
 	 */
-	public boolean deletePreviousMovements(){
+	public boolean deletePreviousMovements(boolean deleteDispensings){
 		if(!checkMainParameters())
 			return false;
 		
+		String query = "";
+		
+		if(deleteDispensings){
+			query = "from Movement mov where mov.tbunit.id = :unitId and mov.date >= :iniDate and mov.date <= :endDate " +
+					"and mov.type in (4,3) and mov.medicine.id = :medicineId ";
+		}else{
+			query = "from Movement mov where mov.tbunit.id = :unitId and mov.date >= :iniDate and mov.date <= :endDate " +
+					"and mov.type in (4) and mov.medicine.id = :medicineId ";
+		}
+		
 		//delete all positive, negative, expired adjustments and consumptions in the quarter period
-		List<Movement> movs = getEntityManager().createQuery("from Movement mov where mov.tbunit.id = :unitId and mov.date >= :iniDate and mov.date <= :endDate " +
-												"and mov.type in (4,3) and mov.medicine.id = :medicineId ")
+		List<Movement> movs = getEntityManager().createQuery(query)
 												.setParameter("unitId", userSession.getTbunit().getId())
 												.setParameter("iniDate", selectedQuarter.getIniDate())
 												.setParameter("endDate", selectedQuarter.getEndDate())
