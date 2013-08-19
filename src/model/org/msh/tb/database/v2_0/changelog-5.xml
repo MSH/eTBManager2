@@ -19,4 +19,11 @@
 		</addColumn>
 	</changeSet>
 
+	<!-- Fix a foreign key problem on movement-->
+	<changeSet id="2" author="msantos">
+		<dropForeignKeyConstraint baseTableName="movement" constraintName="FKF9D200AFAB3243E7"/>
+		<addForeignKeyConstraint constraintName="FKF9D200AFAB3243E7" referencedTableName="fieldvalue" onDelete="SET NULL" onUpdate="CASCADE"
+			baseColumnNames="ADJUSTMENT_ID" baseTableName="movement" referencedColumnNames="id"/>
+	</changeSet>
+
 </databaseChangeLog>
