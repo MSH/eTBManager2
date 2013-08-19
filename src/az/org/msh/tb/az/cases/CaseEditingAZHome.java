@@ -280,6 +280,27 @@ public class CaseEditingAZHome extends CaseEditingHome{
 	}
 	
 	@Override
+	public void initializeEditing() {
+		if (initialized)
+			return;
+		
+		prevTBTreatmentHome.setEditing(true);
+//		prevTBTreatmentHome.setNumItems(prevTBTreatmentHome.getTreatments().size());
+		
+		TbCase tbcase = caseHome.getInstance();
+		Address addr = tbcase.getCurrentAddress();
+		if (addr == null)
+			tbcase.setCurrentAddress(new Address());
+		addr = tbcase.getNotifAddress();
+		if (addr == null)
+			tbcase.setNotifAddress(new Address());
+		
+		updatePatientAge();
+
+		initialized = true;
+	}
+	
+	@Override
 	public String saveEditing() {
 		if (!validateData())
 			return "error";
@@ -352,7 +373,7 @@ public class CaseEditingAZHome extends CaseEditingHome{
 	@Override
 	public TBUnitSelection getTbunitselection() {
 		TbCase tbcase = caseHome.getInstance();
-		if (super.getTbunitselection().getTbunit() == null) 
+		if (tbcase.getNotificationUnit()!=null && super.getTbunitselection().getTbunit() == null && super.getTbunitselection().getAdminUnit() == null) 
 			super.getTbunitselection().setTbunit(tbcase.getNotificationUnit());
 		return super.getTbunitselection();
 	}
