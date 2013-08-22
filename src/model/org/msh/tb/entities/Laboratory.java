@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,12 +32,12 @@ public class Laboratory extends WSObject implements Serializable {
 	@PropertyLog(messageKey="form.name")
 	private String name;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ADMINUNIT_ID")
 	@NotNull
 	private AdministrativeUnit adminUnit;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="HEALTHSYSTEM_ID")
 	private HealthSystem healthSystem;
 

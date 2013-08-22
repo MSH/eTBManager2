@@ -817,7 +817,7 @@ public class ImportTBMRTask extends DbBatchTask {
 		
 		TreatmentHealthUnit hu = new TreatmentHealthUnit();
 		hu.setPeriod(new Period(p));
-		hu.setTbCase(tbcase);
+		hu.setTbcase(tbcase);
 		hu.setTbunit(tbcase.getNotificationUnit());
 		hu.setTransferring(false);
 		tbcase.getHealthUnits().add(hu);

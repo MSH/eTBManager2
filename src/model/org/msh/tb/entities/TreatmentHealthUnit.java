@@ -67,7 +67,7 @@ public class TreatmentHealthUnit implements Serializable {
 		return tbcase;
 	}
 
-	public void setTbCase(TbCase tbcase) {
+	public void setTbcase(TbCase tbcase) {
 		this.tbcase = tbcase;
 	}
 

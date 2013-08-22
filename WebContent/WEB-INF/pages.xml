@@ -62,6 +62,10 @@
 
  	<page view-id="/global/*" login-required="true" >
 	</page>
+	
+ 	<page view-id="/admin/desktopfile.xhtml" action="#{generateDesktopFileHome.generate()}" >
+ 		<param name="id" value="#{generateDesktopFileHome.unitId}" converterId="javax.faces.Integer" />
+ 	</page>
 
     <page view-id="*" action="#{onlineUsers.update}">
     	<param name="lang" value="#{userSettings.localeString}" />

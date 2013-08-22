@@ -262,7 +262,7 @@ public abstract class CaseImporting extends ImportingBase{
 				
 				TreatmentHealthUnit hu = new TreatmentHealthUnit();
 				hu.setPeriod(new Period(beginTreatmentDate, endDate));
-				hu.setTbCase(tbcase);
+				hu.setTbcase(tbcase);
 				hu.setTbunit(treatmentUnit);
 				hu.setTransferring(false);
 				tbcase.getHealthUnits().add(hu);

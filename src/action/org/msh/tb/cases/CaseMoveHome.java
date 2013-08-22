@@ -73,7 +73,7 @@ public class CaseMoveHome extends Controller {
 		// create new treatment health unit
 		TreatmentHealthUnit newhu = new TreatmentHealthUnit();
 		newhu.setPeriod(newPeriod);
-		newhu.setTbCase(caseHome.getInstance());
+		newhu.setTbcase(caseHome.getInstance());
 		newhu.setTransferring(true);
 		tbcase.getHealthUnits().add(newhu);
 		newhu.setTbunit(tbunit);

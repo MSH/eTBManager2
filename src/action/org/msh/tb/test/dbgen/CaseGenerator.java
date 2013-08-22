@@ -828,7 +828,7 @@ public class CaseGenerator {
 		// defines treatment unit
 		TreatmentHealthUnit hu = new TreatmentHealthUnit();
 		hu.getPeriod().set(treatPeriod);
-		hu.setTbCase(tbcase);
+		hu.setTbcase(tbcase);
 		hu.setTbunit(tbcase.getNotificationUnit());
 		tbcase.getHealthUnits().add(hu);
 

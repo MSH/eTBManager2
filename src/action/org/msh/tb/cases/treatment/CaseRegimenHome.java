@@ -109,7 +109,7 @@ public class CaseRegimenHome {
 		
 		TreatmentHealthUnit hu = new TreatmentHealthUnit();
 		hu.setPeriod( new Period(p) );
-		hu.setTbCase(tbcase);
+		hu.setTbcase(tbcase);
 		hu.setTbunit(tbunit);
 		hu.setTransferring(false);
 		tbcase.getHealthUnits().add(hu);

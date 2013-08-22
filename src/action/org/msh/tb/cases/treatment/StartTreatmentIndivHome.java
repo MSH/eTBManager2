@@ -78,7 +78,7 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 		// create treatment health unit
 		TreatmentHealthUnit hu = new TreatmentHealthUnit();
 		hu.setPeriod(new Period(treatPeriod));
-		hu.setTbCase(tbcase);
+		hu.setTbcase(tbcase);
 		hu.setTbunit(getTbunitselection().getTbunit());
 		hu.setTransferring(false);
 		

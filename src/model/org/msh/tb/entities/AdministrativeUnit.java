@@ -55,7 +55,7 @@ public class AdministrativeUnit extends WSObject {
 	@PropertyLog(ignore=true)
 	private String code;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="COUNTRYSTRUCTURE_ID")
 	@PropertyLog(operations={Operation.ALL})
 	private CountryStructure countryStructure;
