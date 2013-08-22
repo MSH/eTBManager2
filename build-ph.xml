@@ -31,6 +31,7 @@
         <pathelement location="WebContent/WEB-INF/lib/richfaces-api-3.3.3.Final.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/richfaces-impl-3.3.3.Final.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/richfaces-ui-3.3.3.Final.jar"/>
+	 	<pathelement location="WebContent/WEB-INF/lib/datastream-1.0.2.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jxl.jar"/>
         <pathelement location="WebContent/WEB-INF/classes"/>
     </path>

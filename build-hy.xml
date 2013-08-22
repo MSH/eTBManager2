@@ -34,7 +34,8 @@
         <pathelement location="WebContent/WEB-INF/lib/richfaces-ui-3.3.3.Final.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jxl.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/gson-2.1.jar"/>
-		<pathelement location="WebContent/WEB-INF/lib/eidssAz.jar"/>
+	 	<pathelement location="WebContent/WEB-INF/lib/datastream-1.0.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/eidssAz.jar"/>
 	 	<pathelement location="WebContent/WEB-INF/lib/gwt-servlet.jar"/>
         <pathelement location="WebContent/WEB-INF/classes"/>
     </path>
