@@ -29,12 +29,19 @@ public class SqlBuilder implements SQLDefs {
 	private boolean detailed;
 	private String orderBy;
 
+	/**
+	 * Constructor using a root table name as argument
+	 * @param tableName the main table of the query
+	 */
 	public SqlBuilder(String tableName) {
 		super();
 		masterTable = new TableJoin(tableName, null, null, null);
 	}
 
 	
+	/**
+	 * Default constructor
+	 */
 	public SqlBuilder() {
 		super();
 	}
@@ -75,7 +82,7 @@ public class SqlBuilder implements SQLDefs {
 	
 	/**
 	 * Return the main table name used in this query
-	 * @return
+	 * @return String value
 	 */
 	public String getTableName() {
 		return masterTable != null? masterTable.getTableName(): null;
@@ -133,7 +140,7 @@ public class SqlBuilder implements SQLDefs {
 
 	
 	/**
-	 * Create SQL Where
+	 * Create SQL Where clause
 	 */
 	protected void createSQLWhere(StringBuilder builder) {
 		boolean first = true;
@@ -170,8 +177,8 @@ public class SqlBuilder implements SQLDefs {
 	
 	/**
 	 * Return the list of column for a given variable used to build the query
-	 * @param var
-	 * @return
+	 * @param var instance of {@link Variable} used to create the query
+	 * @return zero-based index of the fields returned by the query and related to the variable
 	 */
 	public int[] getColumnsVariable(Variable var) {
 		List<Integer> cols = new ArrayList<Integer>();
@@ -295,9 +302,10 @@ public class SqlBuilder implements SQLDefs {
 	}
 	
 	/**
-	 * Replace table names by its alias
-	 * @param s
-	 * @return
+	 * Replace table names by its alias. In the given string, search for declarations of
+	 * the table in the format <code>table.field</code> and replaces by its table alias
+	 * @param s declaration containing the table declarations
+	 * @return parsed String with table names replaced by its alias
 	 */
 	protected String parseTableNames(String s) {
 		int index = 0;
@@ -332,7 +340,7 @@ public class SqlBuilder implements SQLDefs {
 	
 	/**
 	 * Add a variable to the SQL Builder
-	 * @param var
+	 * @param var instance of {@link Variable} to have its values returned by the query
 	 */
 	public void addVariable(Variable var) {
 		variables.add(var);
@@ -346,8 +354,7 @@ public class SqlBuilder implements SQLDefs {
 		return masterTable;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.msh.reports.query.SQLDefs#addJoin(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	/** {@inheritDoc}
 	 */
 	@Override
 	public TableJoin addJoin(String table, String field, String parentTable, String parentField) {
@@ -357,8 +364,7 @@ public class SqlBuilder implements SQLDefs {
 		return join;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.msh.reports.query.SQLDefs#addField(java.lang.String, org.msh.reports.query.TableJoin)
+	/** {@inheritDoc}
 	 */
 	@Override
 	public void addField(String field, TableJoin table) {
@@ -370,12 +376,19 @@ public class SqlBuilder implements SQLDefs {
 	}
 
 
+	/** {@inheritDoc}
+	 */
 	@Override
 	public void addField(String field) {
 		addField(field, masterTable);
 	}
 
 	
+	/**
+	 * Store temporary information about a field of the query
+	 * @author Ricardo Memoria
+	 *
+	 */
 	public class Field {
 		private String name;
 		private TableJoin table;
@@ -419,6 +432,8 @@ public class SqlBuilder implements SQLDefs {
 	}
 
 
+	/** {@inheritDoc}
+	 */
 	@Override
 	public void addRestriction(String restriction) {
 		List<String> restr;
@@ -433,7 +448,8 @@ public class SqlBuilder implements SQLDefs {
 
 
 	/**
-	 * @return the parameters
+	 * Return the list of parameters and its values used in the query
+	 * @return the parameters 
 	 */
 	public HashMap<String, Object> getParameters() {
 		return parameters;
@@ -450,6 +466,7 @@ public class SqlBuilder implements SQLDefs {
 
 
 	/**
+	 * Return list of variables used to build the query
 	 * @return the variables
 	 */
 	public List<Variable> getVariables() {
@@ -470,7 +487,9 @@ public class SqlBuilder implements SQLDefs {
 
 
 	/**
-	 * @return the detailed
+	 * Return true if the builder will generate a detailed query (where other fields may be included)
+	 * or a consolidated query (where just the variable fields will be used with a count(*) declaration)
+	 * @return boolean value
 	 */
 	public boolean isDetailed() {
 		return detailed;
@@ -478,7 +497,8 @@ public class SqlBuilder implements SQLDefs {
 
 
 	/**
-	 * @param detailed the detailed to set
+	 * Set the builder to generate a detailed or consolidated query
+	 * @param boolean value
 	 */
 	public void setDetailed(boolean detailed) {
 		this.detailed = detailed;
@@ -486,6 +506,7 @@ public class SqlBuilder implements SQLDefs {
 
 
 	/**
+	 * Return the SQL order by declaration to be used when generating the SQL
 	 * @return the orderBy
 	 */
 	public String getOrderBy() {
@@ -494,6 +515,7 @@ public class SqlBuilder implements SQLDefs {
 
 
 	/**
+	 * Set the SQL order by declaration to be used when generating the SQL
 	 * @param orderBy the orderBy to set
 	 */
 	public void setOrderBy(String orderBy) {

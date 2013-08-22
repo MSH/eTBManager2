@@ -4,6 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Store temporary information about a join between two tables. This information is primarily
+ * used when generating a SQL declaration where it's necessary to create join between tables.
+ * <p/>
+ * This join structure is similar to a tree, where the root table join represents the main
+ * class in the SQL from declaration
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 public class TableJoin {
 
 	private String tableName;
@@ -14,6 +24,13 @@ public class TableJoin {
 	private List<TableJoin> joins;
 	private boolean leftJoin;
 
+	/**
+	 * Default constructor
+	 * @param tableName the name of the main table in the join
+	 * @param tableField the name of the main field in the join
+	 * @param parentJoin the parent table in the join
+	 * @param parentField the name of the field in the parent table of the join
+	 */
 	public TableJoin(String tableName, String tableField, TableJoin parentJoin, String parentField) {
 		super();
 		this.tableName = tableName;
@@ -52,7 +69,7 @@ public class TableJoin {
 	
 	/**
 	 * Add a new join to this table
-	 * @param join
+	 * @param join instance of the {@link TableJoin} to be included in this main table join
 	 */
 	protected void addJoin(TableJoin join){
 		if (joins == null)
@@ -99,7 +116,7 @@ public class TableJoin {
 	/**
 	 * Find join just by its table name
 	 * @param tableName
-	 * @return
+	 * @return instance of the {@link TableJoin} class, or null if no table is found
 	 */
 	protected TableJoin findJoin(String tableName) {
 		if (this.tableName.equals(tableName))
@@ -115,6 +132,12 @@ public class TableJoin {
 		return null;
 	}
 	
+	/**
+	 * Check if two strings are equals, testing also if they are null
+	 * @param val1 String value 
+	 * @param val2 String value to be compared
+	 * @return true if they are equals, otherwise returns false
+	 */
 	protected boolean equalString(String val1, String val2) {
 		// both are null or pointing to the same string?
 		if (val1 == val2)
