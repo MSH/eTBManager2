@@ -78,8 +78,9 @@
 				<br /> <br />
 				<a onclick="changeOrder(1); return false;" style="cursor:pointer;">#</a>
 				<br/>
-				
+				<ui:remove>
 				<input onclick="checkClick(this);"  style="#{(deleteCasesHome.canDeleteEIDSS and deleteCasesHome.countEIDSSPatients>0)?'display:block':'display:none'}" type="checkbox"/>
+			</ui:remove>
 			</f:facet>
 			<s:fragment rendered = '#{it.tbcase.notificationUnit != null}'>
 				<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
