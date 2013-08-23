@@ -11,25 +11,34 @@ import java.util.List;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.adminunits.InfoCountryLevels;
 import org.msh.tb.application.App;
+import org.msh.tb.az.entities.ExamMicroscopyAZ;
 import org.msh.tb.az.entities.ExamXRayAZ;
 import org.msh.tb.az.entities.TbCaseAZ;
 import org.msh.tb.entities.CaseDispensing;
+import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamDSTResult;
+import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.ExamXRay;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.export.CaseExport;
+import org.msh.tb.export.DstExport;
 import org.msh.tb.export.ExcelCreator;
 import org.msh.utils.date.DateUtils;
 
 @Name("caseExportAZ")
 public class CaseExportAZ extends CaseExport {
 	private static final long serialVersionUID = -6105790013808048231L;
-
+	private String hqlSelect;
+	private String hqlFrom;
 	private List<TbCaseAZ> cases;
 	
+	private List<Object[]> microscopyList;
+	private DstExport dstExport;
+	private List<Object[]> xrayList;
+	ExcelCreator excel;
 	public CaseExportAZ(ExcelCreator excel) {
 		super(excel);
 	}
@@ -42,7 +51,7 @@ public class CaseExportAZ extends CaseExport {
 	@Override
 	public void addTitles() {
 		// add title line
-		ExcelCreator excel = getExcel();
+		 excel = getExcel();
 		InfoCountryLevels levelInfo = getLevelInfo();
 		
 		excel.addTextFromResource("Patient.name", "title");
@@ -106,8 +115,10 @@ public class CaseExportAZ extends CaseExport {
 		
 		excel.addTextFromResource("TbCase.eidssid", "title");
 		excel.addText(getMessages().get("az_AZ.case.unicalID")+" "+getMessages().get("excel.fromEIDSS"), "title");
-		excel.addTextFromResource("excel.xray.presentation", "title");
+		excel.addTextFromResource("excel.xray.presentation"+" 1st", "title");
 		excel.addTextFromResource("excel.xray.localization", "title");
+		excel.addTextFromResource("excel.xray.presentation"+" 2", "title");
+		excel.addText("X-ray result (the last one) - Localization");
 		excel.addTextFromResource("excel.dst.s", "title");
 		excel.addTextFromResource("excel.dst.h", "title");
 		excel.addTextFromResource("excel.dst.r", "title");
@@ -141,12 +152,28 @@ public class CaseExportAZ extends CaseExport {
 		excel.addTextFromResource("excel.treat.reldays", "title");
 		excel.addTextFromResource("TbCase.referToOtherTBUnit", "title");
 		excel.addTextFromResource("az_AZ.ValidationState.title", "title");
+		//culture
+		excel.addColumnMark("culture");
+		excel.addGroupHeaderFromResource("cases.examculture"+" 1", 2, "title");
+		excel.addTextFromResource("PatientSample.dateCollected", "title");
+		excel.addTextFromResource("cases.details.result", "title");
+		excel.addGroupHeaderFromResource("cases.examculture"+" 2", 2, "title");
+		excel.addTextFromResource("PatientSample.dateCollected", "title");
+		excel.addTextFromResource("cases.details.result", "title");
+		// microscopy
+		excel.addColumnMark("microscopy");
+		excel.addGroupHeaderFromResource("cases.exammicroscopy"+" 1"+" 1", 2, "title");
+		excel.addTextFromResource("PatientSample.dateCollected", "title");
+		excel.addTextFromResource("cases.details.result", "title");
+		excel.addGroupHeaderFromResource("cases.exammicroscopy"+" 2", 2, "title");
+		excel.addTextFromResource("PatientSample.dateCollected", "title");
+		excel.addTextFromResource("cases.details.result", "title");
 		excel.addText("",null);
 	}
 	
 	@Override
 	public TbCase exportContent(int index) {
-		ExcelCreator excel = getExcel();
+	
 		InfoCountryLevels levelInfo = getLevelInfo();
 		TbCaseAZ tbcase = getCasesAz().get(index);
 		
@@ -277,17 +304,7 @@ public class CaseExportAZ extends CaseExport {
 		
 		excel.addText(tbcase.getLegacyId());
 		excel.addText(tbcase.getUnicalID());
-		ExamXRay x = getFirstXRayExam(tbcase);
-		
-		if (x!=null){
-			ExamXRayAZ xaz = (ExamXRayAZ) getEntityManager().find(ExamXRayAZ.class, x.getId());
-			excel.addText(xaz.getPresentation()!=null ? xaz.getPresentation().getName().getDefaultName() : "");
-			excel.addText(xaz.getLocalization()!=null ? xaz.getLocalization().getName().getDefaultName() : "");
-		}
-		else{
-			excel.addText("");
-			excel.addText("");
-		}
+		AddXrayData (tbcase);
 		excel.addText(getLastDSTExam(tbcase, "S"));
 		excel.addText(getLastDSTExam(tbcase, "H"));
 		excel.addText(getLastDSTExam(tbcase, "R"));
@@ -337,6 +354,8 @@ public class CaseExportAZ extends CaseExport {
 		excel.addNumber(disp);
 		excel.addTextFromResource(tbcase.isReferToOtherTBUnit()?"TbCase.referUnit.other":"TbCase.referUnit.own");
 		excel.addTextFromResource("az_AZ."+tbcase.getValidationState().getKey());
+		addCultureData(tbcase);
+		addMicroData(tbcase);
 		return tbcase;
 	}
 
@@ -371,8 +390,7 @@ public class CaseExportAZ extends CaseExport {
 	}
 	
 	private ExamXRay getFirstXRayExam(TbCase tc){
-		if (tc.getResXRay() == null) return null;
-		if (tc.getResXRay().size() == 0) return null;
+	
 		ExamXRay res = tc.getResXRay().get(0);
 		for (int i = 1; i < tc.getResXRay().size(); i++) {
 			ExamXRay x = tc.getResXRay().get(i);
@@ -382,6 +400,52 @@ public class CaseExportAZ extends CaseExport {
 		return res;
 	}
 	
+	private ExamXRay getLastXRayExam(TbCase tc){
+		
+		ExamXRay res = tc.getResXRay().get(0);
+		for (int i = 1; i < tc.getResXRay().size(); i++) {
+			ExamXRay x = tc.getResXRay().get(i);
+			if (x.getDate().after(res.getDate()))
+				res = x;
+		}
+		return res;
+	}
+	
+	/**
+	 * @param tbcase
+	 * add x-ray First Result and last result
+	 */
+	private void AddXrayData (TbCase tbcase){
+		if (tbcase.getResXRay() == null) {
+			excel.addText("");
+			excel.addText("");
+			excel.addText("");
+			excel.addText("");
+			return ;
+		}
+		if (tbcase.getResXRay().size() == 0) {
+			excel.addText("");
+			excel.addText("");
+			excel.addText("");
+			excel.addText("");
+			return ;
+		}
+		ExamXRay x = getFirstXRayExam(tbcase);
+		if (x!=null){
+			ExamXRayAZ xaz = (ExamXRayAZ) getEntityManager().find(ExamXRayAZ.class, x.getId());
+			excel.addText(xaz.getPresentation()!=null ? xaz.getPresentation().getName().getDefaultName() : "");
+			excel.addText(xaz.getLocalization()!=null ? xaz.getLocalization().getName().getDefaultName() : "");
+		}
+		if (tbcase.getResXRay().size() > 1){
+			 x = getLastXRayExam(tbcase);
+				ExamXRayAZ xaz = (ExamXRayAZ) getEntityManager().find(ExamXRayAZ.class, x.getId());
+				excel.addText(xaz.getPresentation()!=null ? xaz.getPresentation().getName().getDefaultName() : "");
+				excel.addText(xaz.getLocalization()!=null ? xaz.getLocalization().getName().getDefaultName() : "");
+		} else{
+			excel.addText("");
+			excel.addText("");
+		}
+	}
 	
 	/**
 	 * Get last DST-result
@@ -393,34 +457,8 @@ public class CaseExportAZ extends CaseExport {
 		if (tc.getExamsDST().size() == 0) return "";
 		String res = "";
 		DstResult r = null;
-		List<ExamDST> lstsort = new ArrayList<ExamDST>();
-		lstsort.addAll(tc.getExamsDST());
-		Collections.sort(lstsort, new Comparator<ExamDST>() {
-
-			@Override
-			public int compare(ExamDST o1, ExamDST o2) {
-				Date d1 = o1.getDateCollected();
-				Date d2 = o2.getDateCollected();
-				
-				if (d1.after(d2))
-					return 1;
-				if (d1.before(d2))
-					return -1;
-				
-				int r1 = o1.getNumResistant();
-				int r2 = o2.getNumResistant();
-				
-				if (r1>r2)
-					return -1;
-				if (r1<r2)
-					return 1;
-				
-				return 0;
-			}
-
-		});
-		for (int i = 0; i < lstsort.size(); i++) {
-			ExamDST ex = lstsort.get(i);
+		for (int i = 0; i < tc.getExamsDST().size(); i++) {
+			ExamDST ex = tc.getExamsDST().get(i);
 			for (ExamDSTResult exr: ex.getResults()){
 				if (exr.getSubstance().getAbbrevName().getName1().equals(s))
 					r = exr.getResult();
@@ -429,15 +467,99 @@ public class CaseExportAZ extends CaseExport {
 		if (r == null)	res = "NA";
 		else
 			switch (r){
-				case BASELINE: res = "BL"; break;
-				case CONTAMINATED: res = "C"; break;
-				case NOTDONE: res = "NA"; break;
-				case RESISTANT: res = "R"; break;
-				case SUSCEPTIBLE: res = "S"; break;
+			case BASELINE: res = "BL";
+			case CONTAMINATED: res = "C";
+			case NOTDONE: res = "NA";
+			case RESISTANT: res = "R";
+			case SUSCEPTIBLE: res = "S";
 			}
 		return res;
 	}
+
+	/**
+	 * @param tbcase
+	 * add ExamCulture First Result and last result
+	 */
 	
+	protected void addCultureData(TbCase tbcase) {
+
+		List<ExamCulture> cultureList=null;
+		cultureList = tbcase.getExamsCulture();	
+		if (cultureList.isEmpty()){
+			excel.addText("");
+			excel.addText("");
+			excel.addText("");
+			excel.addText("");
+			return;
+		}
+		int ind=cultureList.size()-1;
+		if (ind==0) {
+			excel.addValue(cultureList.get(0).getDateCollected());
+			excel.addValue(cultureList.get(0).getResult());
+			excel.addText("");
+			excel.addText("");
+			return;
+		}
+		ExamCulture first=cultureList.get(0);
+		for (int i = 1; i < cultureList.size(); i++) {
+			ExamCulture x = cultureList.get(i);
+			if (x.getDateCollected().before(first.getDateCollected()))
+				first = x;
+		}
+		ExamCulture last=cultureList.get(0);
+		for (int i = 1; i < cultureList.size(); i++) {
+			ExamCulture x = cultureList.get(i);
+			if (x.getDateCollected().after(last.getDateCollected()))
+				last = x;
+		}
+		excel.addValue(first.getDateCollected());
+		excel.addValue(first.getResult());
+		excel.addValue(last.getDateCollected());
+		excel.addValue(last.getResult());
+	}
+	
+	/**
+	 * @param tbcase
+	 * add ExamMicroscopy First Result and last result
+	 */
+	
+	protected void addMicroData(TbCase tbcase) {
+
+		List<ExamMicroscopy> mList=null;
+		mList = tbcase.getExamsMicroscopy();
+		if (mList.isEmpty()){
+			excel.addText("");
+			excel.addText("");
+			excel.addText("");
+			excel.addText("");
+			return;
+		}
+		int ind=mList.size()-1;
+		if (ind==0) {
+			excel.addValue(mList.get(0).getDateCollected());
+			excel.addValue(mList.get(0).getResult());
+			excel.addText("");
+			excel.addText("");
+			return;
+		}
+		ExamMicroscopy first=mList.get(0);
+		for (int i = 1; i < mList.size(); i++) {
+			ExamMicroscopy x = mList.get(i);
+			if (x.getDateCollected().before(first.getDateCollected()))
+				first = x;
+		}
+		ExamMicroscopy last=mList.get(0);
+		for (int i = 1; i < mList.size(); i++) {
+			ExamMicroscopy x = mList.get(i);
+			if (x.getDateCollected().after(last.getDateCollected()))
+				last = x;
+		}
+		excel.addValue(first.getDateCollected());
+		excel.addValue(first.getResult());
+		excel.addValue(last.getDateCollected());
+		excel.addValue(last.getResult());
+	}
+
 	public List<TbCaseAZ> getCasesAz() {
 		if (cases == null)
 			createCases();
