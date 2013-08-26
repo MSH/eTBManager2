@@ -81,7 +81,7 @@ public class DesktopIniGeneratorService implements ObjectProvider, DataIntercept
 		hqls.add("from Regimen where workspace.id = #{desktopIniGeneratorService.workspaceId}");
 		hqls.add("from Laboratory where workspace.id = #{desktopIniGeneratorService.workspaceId}");
 		hqls.add("from FieldValue where workspace.id = #{desktopIniGeneratorService.workspaceId}");
-		hqls.add("from UserWorkspace uw join fetch uw.user join fetch uw.adminUnit where uw.tbunit.id = #{desktopIniGeneratorService.unitId}");
+		hqls.add("from UserWorkspace uw join fetch uw.user left join fetch uw.adminUnit where uw.tbunit.id = #{desktopIniGeneratorService.unitId}");
 		hqls.add("from TbCase a join fetch a.patient where a.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
 
 		// case data
