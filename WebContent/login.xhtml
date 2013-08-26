@@ -120,8 +120,10 @@ color:#a0a0a0;
 	<hr/>
 		<h4>#{messages['login.msg2']}</h4>
 		<s:link view="/sendpassword.xhtml" value="#{messages['login.click_here']}" />
-		<h4>#{messages['login.newuser']}</h4>
-		<s:link view="/newuser.xhtml" value="#{messages['login.click_here']}" />
+		<s:fragment rendered="#{etbmanagerApp.configuration.allowRegPage}">
+			<h4>#{messages['login.newuser']}</h4>
+			<s:link view="/newuser.xhtml" value="#{messages['login.click_here']}" />
+		</s:fragment>
 	<hr/>
 	<h:graphicImage value="/public/images/usaid_siaps_440x67.png"/>
 	<div class="copyright">
