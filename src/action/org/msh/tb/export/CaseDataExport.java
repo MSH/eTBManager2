@@ -113,7 +113,7 @@ public class CaseDataExport {
 		commitTransaction();
 		entityManager.clear();
 		
-		q = "select c.id, p.recordNumber, c.caseNumber, p.securityNumber, p.name, p.motherName, c.classification, c.state, p.gender, p.birthDate, c.age, " +
+		q = "select c.id, p.recordNumber, c.caseNumber, p.securityNumber, p.lastName, p.middleName, p.name, p.motherName, c.classification, c.state, p.gender, p.birthDate, c.age, " +
 				"c.nationality, c.currentAddress.address, c.currentAddress.complement, currAddAu, " +
 				"c.currentAddress.zipCode, c.phoneNumber, c.mobileNumber, " +
 				"notifunit.name, notifau, c.registrationDate, r.name, c.diagnosisDate, " +
@@ -261,6 +261,8 @@ public class CaseDataExport {
 		
 		excel.addTextFromResource("Patient.caseNumber", "title");
 		excel.addTextFromResource("Patient.securityNumber", "title");
+		excel.addTextFromResource("Patient.lastName", "title");
+		excel.addTextFromResource("Patient.middleName", "title");
 		excel.addTextFromResource("Patient.name", "title");
 		excel.addTextFromResource("Patient.motherName", "title");
 		excel.addTextFromResource("CaseClassification", "title");
@@ -402,33 +404,35 @@ public class CaseDataExport {
 		excel.addText(parseCaseNumber(caseData));
 		excel.addText(((String)caseData[3]));
 		excel.addText(((String)caseData[4]));
-		excel.addText(((String)caseData[5]));
-		excel.addTextFromResource(((CaseClassification)caseData[6]).getKey());
-		excel.addTextFromResource(((CaseState)caseData[7]).getKey());
-		excel.addTextFromResource(((Gender)caseData[8]).getKey());
-		excel.addDate(((Date)caseData[9]));
-		excel.addNumber(((Integer)caseData[10]));
-		excel.addValue(caseData, 11);
-		excel.addText(((String)caseData[12]));
-		excel.addText(((String)caseData[13]));
-		addAdminUnitsValue((AdministrativeUnit) caseData[14]);
-		excel.addValue(caseData, 15);
-		excel.addValue(caseData, 16);
-		excel.addValue(caseData, 17);		
+		excel.addText((String) caseData[5]); 
+		excel.addText((String) caseData[6]);
+		excel.addText(((String)caseData[7]));
+		excel.addTextFromResource(((CaseClassification)caseData[8]).getKey());
+		excel.addTextFromResource(((CaseState)caseData[9]).getKey());
+		excel.addTextFromResource(((Gender)caseData[10]).getKey());
+		excel.addDate(((Date)caseData[11]));
+		excel.addNumber(((Integer)caseData[12]));
+		excel.addValue(caseData, 13);
+		excel.addText(((String)caseData[14]));
+		excel.addText(((String)caseData[15]));
+		addAdminUnitsValue((AdministrativeUnit) caseData[16]);
+		excel.addValue(caseData, 17);
 		excel.addValue(caseData, 18);
-		addAdminUnitsValue((AdministrativeUnit)caseData[19]);
-		excel.addDate(((Date)caseData[20]));
-		addRegimen(caseData);
+		excel.addValue(caseData, 19);		
+		excel.addValue(caseData, 20);
+		addAdminUnitsValue((AdministrativeUnit)caseData[21]);
 		excel.addDate(((Date)caseData[22]));
+		addRegimen(caseData);
+		excel.addDate(((Date)caseData[24]));
 		addCalculatedValue(caseData, firstMedExam); //don't use casedata position
 		excel.addDate(getIniTreatmentDate(caseData));
-		excel.addValue(caseData, 24);
-		excel.addValue(caseData, 25);
 		excel.addValue(caseData, 26);
 		excel.addValue(caseData, 27);
 		excel.addValue(caseData, 28);
 		excel.addValue(caseData, 29);
 		excel.addValue(caseData, 30);
+		excel.addValue(caseData, 31);
+		excel.addValue(caseData, 32);
 		addCalculatedValue(caseData, inicialWeight);
 		addCalculatedValue(caseData, currentWeight);
 		addCalculatedValue(caseData, numPrevTreat);
@@ -488,12 +492,12 @@ public class CaseDataExport {
 	}
 	
 	private Date getIniTreatmentDate(Object[] caseData){
-		return (Date) caseData[23];
+		return (Date) caseData[25];
 	}
 	
 	public void addRegimen(Object[] caseData){
 		if(caseData[21]!=null)
-			excel.addText(((String)caseData[21]));
+			excel.addText(((String)caseData[23]));
 		else
 			excel.addTextFromResource("regimens.individualized");
 	}
