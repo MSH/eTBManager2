@@ -3,6 +3,7 @@ package org.msh.tb.az.export;
  import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -39,6 +40,7 @@ public class CaseExportAZ extends CaseExport {
 	private DstExport dstExport;
 	private List<Object[]> xrayList;
 	ExcelCreator excel;
+	private Date treatmDate;
 	public CaseExportAZ(ExcelCreator excel) {
 		super(excel);
 	}
@@ -101,8 +103,7 @@ public class CaseExportAZ extends CaseExport {
 		excel.addText(App.getMessage("cases.system.create")+" ("+App.getMessage("User")+")", "title");
 		excel.addTextFromResource("cases.system.edit", "title");
 		excel.addText(App.getMessage("cases.system.edit")+" ("+App.getMessage("User")+")", "title");
-		
-		excel.addTextFromResource("excel.dateInEIDSS", "title");
+				excel.addTextFromResource("excel.dateInEIDSS", "title");
 		excel.addText(getMessages().get("User.name")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addText(getMessages().get("Patient.lastName")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addText(getMessages().get("Patient.middleName")+" "+getMessages().get("excel.fromEIDSS"), "title");
@@ -112,32 +113,29 @@ public class CaseExportAZ extends CaseExport {
 		excel.addText(getMessages().get("az_EIDSS_Age")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addText(getMessages().get("Patient.birthDate")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addText(getMessages().get("excel.dateNotifEIDSS")+" "+getMessages().get("excel.fromEIDSS"), "title");
-		
-		excel.addTextFromResource("TbCase.eidssid", "title");
+				excel.addTextFromResource("TbCase.eidssid", "title");
 		excel.addText(getMessages().get("az_AZ.case.unicalID")+" "+getMessages().get("excel.fromEIDSS"), "title");
-		excel.addTextFromResource("excel.xray.presentation"+" 1st", "title");
-		excel.addTextFromResource("excel.xray.localization", "title");
-		excel.addTextFromResource("excel.xray.presentation"+" 2", "title");
-		excel.addText("X-ray result (the last one) - Localization");
-		excel.addTextFromResource("excel.dst.s", "title");
-		excel.addTextFromResource("excel.dst.h", "title");
-		excel.addTextFromResource("excel.dst.r", "title");
-		excel.addTextFromResource("excel.dst.e", "title");
-		excel.addTextFromResource("excel.dst.z", "title");
-		excel.addTextFromResource("excel.dst.pto", "title");
-		excel.addTextFromResource("excel.dst.ofx", "title");
-		excel.addTextFromResource("excel.dst.cs", "title");
-		excel.addTextFromResource("excel.dst.pas", "title");
-		excel.addTextFromResource("excel.dst.cm", "title");
-		excel.addTextFromResource("excel.dst.am", "title");
-		excel.addTextFromResource("excel.dst.mfx", "title");
-		excel.addTextFromResource("excel.dst.km", "title");
-		excel.addTextFromResource("excel.dst.cfx", "title");
-		excel.addTextFromResource("excel.dst.gati", "title");
-		excel.addTextFromResource("excel.dst.rfb", "title");
-		excel.addTextFromResource("excel.dst.eto", "title");
-		excel.addTextFromResource("excel.dst.lfx", "title");
-		excel.addTextFromResource("excel.dst.trd", "title");
+		excel.addText("(last) X-ray result - Presentation", "title");
+		excel.addText("(last) X-ray result - Localization", "title");
+		excel.addText("(last) DST Type - Streptomycin (S)", "title");
+		excel.addText("(last) DST Type - Isoniazid (H)", "title");
+		excel.addText("(last) DST Type - Rifampicin (R)", "title");
+		excel.addText("(last) DST Type - Ethambutol (E)", "title");
+		excel.addText("(last) DST Type - Pyrazinamide (Z)", "title");
+		excel.addText("(last) DST Type - Protionamide (Pto)", "title");
+		excel.addText("(last) DST Type - Ofloxacin (Ofx)", "title");
+		excel.addText("(last) DST Type - Cycloserine (Cs)", "title");
+		excel.addText("(last) DST Type - P-Aminosalicylic Acid (PAS)", "title");
+		excel.addText("(last) DST Type - Capreomycin (Cm)", "title");
+		excel.addText("(last) DST Type - Amikacin (Am)", "title");
+		excel.addText("(last) DST Type - Moxifloxacin (Mfx)", "title");
+		excel.addText("(last) DST Type - Kanamycin (Km)", "title");
+		excel.addText("(last) DST Type - Ciprofloxacin (Cfx)", "title");
+		excel.addText("(last) DST Type - Gatifloxacin (Gati)", "title");
+		excel.addText("(last) DST Type - Rifabutin (Rfb)", "title");
+		excel.addText("(last) DST Type - Ethionamide (Eto)", "title");
+		excel.addText("(last) DST Type - Levofloxacin (Lfx)", "title");
+		excel.addText("(last) DST Type - Terizidone (Trd)", "title");
 		excel.addTextFromResource("Regimen", "title");
 		excel.addText(getMessages().get("TbField.SEVERITY_MARKS")+" - Cavitation", "title");
 		excel.addText(getMessages().get("excel.counttests")+getMessages().get("cases.exammicroscopy"), "title");
@@ -152,22 +150,57 @@ public class CaseExportAZ extends CaseExport {
 		excel.addTextFromResource("excel.treat.reldays", "title");
 		excel.addTextFromResource("TbCase.referToOtherTBUnit", "title");
 		excel.addTextFromResource("az_AZ.ValidationState.title", "title");
-		//culture
-		excel.addColumnMark("culture");
-		excel.addGroupHeaderFromResource("cases.examculture"+" 1", 2, "title");
-		excel.addTextFromResource("PatientSample.dateCollected", "title");
-		excel.addTextFromResource("cases.details.result", "title");
-		excel.addGroupHeaderFromResource("cases.examculture"+" 2", 2, "title");
-		excel.addTextFromResource("PatientSample.dateCollected", "title");
-		excel.addTextFromResource("cases.details.result", "title");
+		
+		excel.addText("(last) X-ray result - date");
+		excel.addText("(1st) X-ray result - Presentation");
+		excel.addText("(1st) X-ray result - Localization");
+		excel.addText("(1st) X-ray result - date");
 		// microscopy
-		excel.addColumnMark("microscopy");
-		excel.addGroupHeaderFromResource("cases.exammicroscopy"+" 1"+" 1", 2, "title");
-		excel.addTextFromResource("PatientSample.dateCollected", "title");
-		excel.addTextFromResource("cases.details.result", "title");
-		excel.addGroupHeaderFromResource("cases.exammicroscopy"+" 2", 2, "title");
-		excel.addTextFromResource("PatientSample.dateCollected", "title");
-		excel.addTextFromResource("cases.details.result", "title");
+		String examDate=getMessages().get("cases.exammicroscopy")+"-"+getMessages().get("cases.details.date");
+		String examRes=getMessages().get("cases.exammicroscopy")+"-"+getMessages().get("cases.details.result");
+		excel.addText("(last)"+examDate, "title"); 
+		excel.addText("(last)"+examRes, "title"); 
+		excel.addText("(1st)"+examDate, "title"); 
+		excel.addText("(1st)"+examRes, "title"); 
+		excel.addText("(6mth)"+examDate, "title"); 
+		excel.addText("(6mth)"+examRes, "title"); 
+		//culture
+		 examDate=getMessages().get("cases.examculture")+"-"+getMessages().get("cases.details.date");
+		 examRes=getMessages().get("cases.examculture")+"-"+getMessages().get("cases.details.result");
+		 String examMethod=getMessages().get("cases.examculture")+"-method";
+		 excel.addText("(last)"+examDate, "title"); 
+		 excel.addText("(last)"+examRes, "title"); 
+		 excel.addText("(last)"+examMethod, "title"); 
+		 excel.addText("(1st)"+examDate, "title"); 
+		 excel.addText("(1st)"+examRes, "title"); 
+		 excel.addText("(1st)"+examMethod, "title"); 
+		 excel.addText("(6mth)"+examDate, "title"); 
+		 excel.addText("(6mth)"+examRes, "title"); 
+		 excel.addText("(6mth)"+examMethod, "title"); 
+		 //DST
+		 excel.addText(" (last) DST result - date");
+		 excel.addText(" (last) DST result - method");
+		 excel.addText(" (1st) DST result - date");
+		 excel.addText(" (1st) DST result - method");
+			excel.addText("(1st) DST Type - Streptomycin (S)", "title");
+			excel.addText("(1st) DST Type - Isoniazid (H)", "title");
+			excel.addText("(1st) DST Type - Rifampicin (R)", "title");
+			excel.addText("(1st) DST Type - Ethambutol (E)", "title");
+			excel.addText("(1st) DST Type - Pyrazinamide (Z)", "title");
+			excel.addText("(1st) DST Type - Protionamide (Pto)", "title");
+			excel.addText("(1st) DST Type - Ofloxacin (Ofx)", "title");
+			excel.addText("(1st) DST Type - Cycloserine (Cs)", "title");
+			excel.addText("(1st) DST Type - P-Aminosalicylic Acid (PAS)", "title");
+			excel.addText("(1st) DST Type - Capreomycin (Cm)", "title");
+			excel.addText("(1st) DST Type - Amikacin (Am)", "title");
+			excel.addText("(1st) DST Type - Moxifloxacin (Mfx)", "title");
+			excel.addText("(1st) DST Type - Kanamycin (Km)", "title");
+			excel.addText("(1st) DST Type - Ciprofloxacin (Cfx)", "title");
+			excel.addText("(1st) DST Type - Gatifloxacin (Gati)", "title");
+			excel.addText("(1st) DST Type - Rifabutin (Rfb)", "title");
+			excel.addText("(1st) DST Type - Ethionamide (Eto)", "title");
+			excel.addText("(1st) DST Type - Levofloxacin (Lfx)", "title");
+			excel.addText("(1st) DST Type - Terizidone (Trd)", "title");
 		excel.addText("",null);
 	}
 	
@@ -304,26 +337,27 @@ public class CaseExportAZ extends CaseExport {
 		
 		excel.addText(tbcase.getLegacyId());
 		excel.addText(tbcase.getUnicalID());
-		AddXrayData (tbcase);
-		excel.addText(getLastDSTExam(tbcase, "S"));
-		excel.addText(getLastDSTExam(tbcase, "H"));
-		excel.addText(getLastDSTExam(tbcase, "R"));
-		excel.addText(getLastDSTExam(tbcase, "E"));
-		excel.addText(getLastDSTExam(tbcase, "Z"));
-		excel.addText(getLastDSTExam(tbcase, "Pto"));
-		excel.addText(getLastDSTExam(tbcase, "Ofx"));
-		excel.addText(getLastDSTExam(tbcase, "Cs"));
-		excel.addText(getLastDSTExam(tbcase, "PAS"));
-		excel.addText(getLastDSTExam(tbcase, "Cm"));
-		excel.addText(getLastDSTExam(tbcase, "Am"));
-		excel.addText(getLastDSTExam(tbcase, "Mfx"));
-		excel.addText(getLastDSTExam(tbcase, "Km"));
-		excel.addText(getLastDSTExam(tbcase, "Cfx"));
-		excel.addText(getLastDSTExam(tbcase, "Gati"));
-		excel.addText(getLastDSTExam(tbcase, "Rfb"));
-		excel.addText(getLastDSTExam(tbcase, "Eto"));
-		excel.addText(getLastDSTExam(tbcase, "Lfx"));
-		excel.addText(getLastDSTExam(tbcase, "Trd"));
+		AddXrayData (tbcase,"last");
+		ExamDST DSTexam=getLastDST(tbcase);
+		excel.addText(getLastDSTExam(DSTexam, "S"));
+		excel.addText(getLastDSTExam(DSTexam, "H"));
+		excel.addText(getLastDSTExam(DSTexam, "R"));
+		excel.addText(getLastDSTExam(DSTexam, "E"));
+		excel.addText(getLastDSTExam(DSTexam, "Z"));
+		excel.addText(getLastDSTExam(DSTexam, "Pto"));
+		excel.addText(getLastDSTExam(DSTexam, "Ofx"));
+		excel.addText(getLastDSTExam(DSTexam, "Cs"));
+		excel.addText(getLastDSTExam(DSTexam, "PAS"));
+		excel.addText(getLastDSTExam(DSTexam, "Cm"));
+		excel.addText(getLastDSTExam(DSTexam, "Am"));
+		excel.addText(getLastDSTExam(DSTexam, "Mfx"));
+		excel.addText(getLastDSTExam(DSTexam, "Km"));
+		excel.addText(getLastDSTExam(DSTexam, "Cfx"));
+		excel.addText(getLastDSTExam(DSTexam, "Gati"));
+		excel.addText(getLastDSTExam(DSTexam, "Rfb"));
+		excel.addText(getLastDSTExam(DSTexam, "Eto"));
+		excel.addText(getLastDSTExam(DSTexam, "Lfx"));
+		excel.addText(getLastDSTExam(DSTexam, "Trd"));
 
 		excel.addValue(tbcase,"regimen");
 		if (indCarvity(tbcase)>-1)
@@ -354,8 +388,48 @@ public class CaseExportAZ extends CaseExport {
 		excel.addNumber(disp);
 		excel.addTextFromResource(tbcase.isReferToOtherTBUnit()?"TbCase.referUnit.other":"TbCase.referUnit.own");
 		excel.addTextFromResource("az_AZ."+tbcase.getValidationState().getKey());
-		addCultureData(tbcase);
+		AddXrayData (tbcase,"first");
+		if( tbcase.getTreatmentPeriod()!=null){
+			treatmDate=tbcase.getTreatmentPeriod().getIniDate();
+		} else{
+			treatmDate=null;
+		}
 		addMicroData(tbcase);
+		addCultureData(tbcase);
+		if (DSTexam!=null){
+			excel.addValue(DSTexam.getDateRelease()!=null?DSTexam.getDateRelease():DSTexam.getDateCollected());
+			excel.addValue(DSTexam.getMethod());
+		}else{
+			excel.addText("");
+			excel.addText("");
+		}
+		DSTexam=getFirstDST(tbcase);
+		if (DSTexam!=null){
+			excel.addValue(DSTexam.getDateRelease()!=null?DSTexam.getDateRelease():DSTexam.getDateCollected());
+			excel.addValue(DSTexam.getMethod());
+		}else{
+			excel.addText("");
+			excel.addText("");
+		}
+		excel.addText(getLastDSTExam(DSTexam, "S"));
+		excel.addText(getLastDSTExam(DSTexam, "H"));
+		excel.addText(getLastDSTExam(DSTexam, "R"));
+		excel.addText(getLastDSTExam(DSTexam, "E"));
+		excel.addText(getLastDSTExam(DSTexam, "Z"));
+		excel.addText(getLastDSTExam(DSTexam, "Pto"));
+		excel.addText(getLastDSTExam(DSTexam, "Ofx"));
+		excel.addText(getLastDSTExam(DSTexam, "Cs"));
+		excel.addText(getLastDSTExam(DSTexam, "PAS"));
+		excel.addText(getLastDSTExam(DSTexam, "Cm"));
+		excel.addText(getLastDSTExam(DSTexam, "Am"));
+		excel.addText(getLastDSTExam(DSTexam, "Mfx"));
+		excel.addText(getLastDSTExam(DSTexam, "Km"));
+		excel.addText(getLastDSTExam(DSTexam, "Cfx"));
+		excel.addText(getLastDSTExam(DSTexam, "Gati"));
+		excel.addText(getLastDSTExam(DSTexam, "Rfb"));
+		excel.addText(getLastDSTExam(DSTexam, "Eto"));
+		excel.addText(getLastDSTExam(DSTexam, "Lfx"));
+		excel.addText(getLastDSTExam(DSTexam, "Trd"));
 		return tbcase;
 	}
 
@@ -390,8 +464,7 @@ public class CaseExportAZ extends CaseExport {
 	}
 	
 	private ExamXRay getFirstXRayExam(TbCase tc){
-		if (tc.getResXRay() == null) return null;
-		if (tc.getResXRay().size() == 0) return null;
+	
 		ExamXRay res = tc.getResXRay().get(0);
 		for (int i = 1; i < tc.getResXRay().size(); i++) {
 			ExamXRay x = tc.getResXRay().get(i);
@@ -415,77 +488,108 @@ public class CaseExportAZ extends CaseExport {
 	/**
 	 * @param tbcase
 	 * add x-ray First Result and last result
+	 * @param result 
 	 */
-	private void AddXrayData (TbCase tbcase){
-		if (tbcase.getResXRay() == null) {
-			excel.addText("");
-			excel.addText("");
-			excel.addText("");
-			excel.addText("");
-			return ;
+	private void AddXrayData (TbCase tbcase, String result){
+	int count=2;
+	ExamXRayAZ lastX=null;
+	if(result.equalsIgnoreCase("first"))
+		count=4;	
+		if (tbcase.getResXRay() == null){
+			for (int i=0;i<count;i++)excel.addText("");
+			return;
 		}
 		if (tbcase.getResXRay().size() == 0) {
-			excel.addText("");
-			excel.addText("");
-			excel.addText("");
-			excel.addText("");
-			return ;
-		}
-		ExamXRay x = getFirstXRayExam(tbcase);
-		if (x!=null){
-			ExamXRayAZ xaz = (ExamXRayAZ) getEntityManager().find(ExamXRayAZ.class, x.getId());
-			excel.addText(xaz.getPresentation()!=null ? xaz.getPresentation().getName().getDefaultName() : "");
-			excel.addText(xaz.getLocalization()!=null ? xaz.getLocalization().getName().getDefaultName() : "");
+			for (int i=0;i<count;i++)excel.addText("");
+			return;
 		}
 		if (tbcase.getResXRay().size() > 1){
-			 x = getLastXRayExam(tbcase);
+			ExamXRay x = getLastXRayExam(tbcase);
+			lastX = (ExamXRayAZ) getEntityManager().find(ExamXRayAZ.class, x.getId());
+		}
+		if (result.equalsIgnoreCase("last")){
+			if (tbcase.getResXRay().size() > 1){
+						
+				excel.addText(lastX.getPresentation()!=null ? lastX.getPresentation().getName().getDefaultName() : "");
+				excel.addText(lastX.getLocalization()!=null ? lastX.getLocalization().getName().getDefaultName() : "");
+			} else{
+				excel.addText("");
+				excel.addText("");
+			}
+		}
+		if (result.equalsIgnoreCase("first")){
+			ExamXRay x = getFirstXRayExam(tbcase);
+			if (lastX!=null) {
+				excel.addValue(lastX.getDate());
+			} else excel.addText("");
+			
+			if (x!=null){
 				ExamXRayAZ xaz = (ExamXRayAZ) getEntityManager().find(ExamXRayAZ.class, x.getId());
 				excel.addText(xaz.getPresentation()!=null ? xaz.getPresentation().getName().getDefaultName() : "");
 				excel.addText(xaz.getLocalization()!=null ? xaz.getLocalization().getName().getDefaultName() : "");
-		} else{
-			excel.addText("");
-			excel.addText("");
+				excel.addValue(xaz.getDate());
+			}
 		}
 	}
+
 	
 	/**
 	 * Get last DST-result
 	 * @param tc case
 	 * @param s abbrevname of substance, ex. "H"
 	 * */
-	private String getLastDSTExam(TbCase tc, String s){
+	
+	private ExamDST getLastDST(TbCase tc){
+		
+		if (tc.getExamsDST() == null) return null;
+		if (tc.getExamsDST().size() < 2) return null;
+		ExamDST res=tc.getExamsDST().get(0);
+		for (int i = 0; i < tc.getExamsDST().size(); i++) {
+			ExamDST ex = tc.getExamsDST().get(i);
+			if (ex.getDateCollected().after(res.getDateCollected())) res=ex;
+		}
+		return res;
+	}
+private ExamDST getFirstDST(TbCase tc){
+		
+		if (tc.getExamsDST() == null) return null;
+		if (tc.getExamsDST().size() == 0) return null;
+		ExamDST res=tc.getExamsDST().get(0);
+		for (int i = 0; i < tc.getExamsDST().size(); i++) {
+			ExamDST ex = tc.getExamsDST().get(i);
+			if (ex.getDateCollected().before(res.getDateCollected())) res=ex;
+		}
+		return res;
+	}
+	
+private String getLastDSTExam(ExamDST ex, String s){
+	if (ex==null) return "";
+	String res="";
+	DstResult r = null;
+	for (ExamDSTResult exr: ex.getResults()){
+		if (exr.getSubstance().getAbbrevName().getName1().equals(s))
+			r = exr.getResult();
+	}
+
+	if (r == null)	res = "NA";
+	else
+		switch (r){
+		case BASELINE: res = "BL"; break;
+		case CONTAMINATED: res = "C"; break;
+		case NOTDONE: res = "NA";break;
+		case RESISTANT: res = "R";break;
+		case SUSCEPTIBLE: res = "S";break;
+		}
+	return res;
+}
+
+	/*private String getLastDSTExam(TbCase tc, String s){
 		if (tc.getExamsDST() == null) return "";
 		if (tc.getExamsDST().size() == 0) return "";
 		String res = "";
 		DstResult r = null;
-		List<ExamDST> lstsort = new ArrayList<ExamDST>();
-		lstsort.addAll(tc.getExamsDST());
-		Collections.sort(lstsort, new Comparator<ExamDST>() {
-
-			@Override
-			public int compare(ExamDST o1, ExamDST o2) {
-				Date d1 = o1.getDateCollected();
-				Date d2 = o2.getDateCollected();
-				
-				if (d1.after(d2))
-					return 1;
-				if (d1.before(d2))
-					return -1;
-				
-				int r1 = o1.getNumResistant();
-				int r2 = o2.getNumResistant();
-				
-				if (r1>r2)
-					return -1;
-				if (r1<r2)
-					return 1;
-				
-				return 0;
-			}
-
-		});
-		for (int i = 0; i < lstsort.size(); i++) {
-			ExamDST ex = lstsort.get(i);
+		for (int i = 0; i < tc.getExamsDST().size(); i++) {
+			ExamDST ex = tc.getExamsDST().get(i);
 			for (ExamDSTResult exr: ex.getResults()){
 				if (exr.getSubstance().getAbbrevName().getName1().equals(s))
 					r = exr.getResult();
@@ -494,18 +598,18 @@ public class CaseExportAZ extends CaseExport {
 		if (r == null)	res = "NA";
 		else
 			switch (r){
-				case BASELINE: res = "BL"; break;
-				case CONTAMINATED: res = "C"; break;
-				case NOTDONE: res = "NA"; break;
-				case RESISTANT: res = "R"; break;
-				case SUSCEPTIBLE: res = "S"; break;
+			case BASELINE: res = "BL";
+			case CONTAMINATED: res = "C";
+			case NOTDONE: res = "NA";
+			case RESISTANT: res = "R";
+			case SUSCEPTIBLE: res = "S";
 			}
 		return res;
 	}
-
+*/
 	/**
 	 * @param tbcase
-	 * add ExamCulture First Result and last result
+	 * add ExamCulture last result, first result, 6 month result
 	 */
 	
 	protected void addCultureData(TbCase tbcase) {
@@ -513,41 +617,59 @@ public class CaseExportAZ extends CaseExport {
 		List<ExamCulture> cultureList=null;
 		cultureList = tbcase.getExamsCulture();	
 		if (cultureList.isEmpty()){
-			excel.addText("");
-			excel.addText("");
-			excel.addText("");
-			excel.addText("");
+			for (int i=0;i<9;i++)			excel.addText("");
 			return;
 		}
 		int ind=cultureList.size()-1;
 		if (ind==0) {
-			excel.addValue(cultureList.get(0).getDateCollected());
+			excel.addText("");
+			excel.addText("");
+			excel.addText("");
+			excel.addValue(cultureList.get(0).getDateRelease()!=null?cultureList.get(0).getDateRelease():cultureList.get(0).getDateCollected());
 			excel.addValue(cultureList.get(0).getResult());
+			excel.addValue(cultureList.get(0).getMethod());
+			
+		} else {
+			ExamCulture first=cultureList.get(0);
+			for (int i = 1; i < cultureList.size(); i++) {
+				ExamCulture x = cultureList.get(i);
+				if (x.getDateCollected().before(first.getDateCollected()))
+					first = x;
+			}
+			ExamCulture last=cultureList.get(0);
+			for (int i = 1; i < cultureList.size(); i++) {
+				ExamCulture x = cultureList.get(i);
+				if (x.getDateCollected().after(last.getDateCollected()))
+					last = x;
+			}
+			excel.addValue(last.getDateRelease()!=null?last.getDateRelease():last.getDateCollected());
+			excel.addValue(last.getResult());
+			excel.addValue(last.getMethod());
+			excel.addValue(first.getDateRelease()!=null?first.getDateRelease():first.getDateCollected());
+			excel.addValue(first.getResult());
+			excel.addValue(first.getMethod());
+		}
+		ExamCulture exam6=null;
+		if (treatmDate!=null){
+			for (int i = 0; i < cultureList.size(); i++) {
+				Date x = cultureList.get(i).getDateCollected();
+				if (x.after(getStart6mntDay()) & x.before(getEnd6mntDay())) 
+					exam6=cultureList.get(i);
+			}
+		}
+		if (exam6!=null){
+			excel.addValue(exam6.getDateRelease()!=null?exam6.getDateRelease():exam6.getDateCollected());
+			excel.addValue(exam6.getResult());	
+			excel.addValue(exam6.getMethod());
+		} else{
 			excel.addText("");
 			excel.addText("");
-			return;
+			excel.addText("");
 		}
-		ExamCulture first=cultureList.get(0);
-		for (int i = 1; i < cultureList.size(); i++) {
-			ExamCulture x = cultureList.get(i);
-			if (x.getDateCollected().before(first.getDateCollected()))
-				first = x;
-		}
-		ExamCulture last=cultureList.get(0);
-		for (int i = 1; i < cultureList.size(); i++) {
-			ExamCulture x = cultureList.get(i);
-			if (x.getDateCollected().after(last.getDateCollected()))
-				last = x;
-		}
-		excel.addValue(first.getDateCollected());
-		excel.addValue(first.getResult());
-		excel.addValue(last.getDateCollected());
-		excel.addValue(last.getResult());
 	}
-	
 	/**
 	 * @param tbcase
-	 * add ExamMicroscopy First Result and last result
+	 * add ExamMicroscopy last result+data, First Result+data , 6 month result+data
 	 */
 	
 	protected void addMicroData(TbCase tbcase) {
@@ -555,38 +677,73 @@ public class CaseExportAZ extends CaseExport {
 		List<ExamMicroscopy> mList=null;
 		mList = tbcase.getExamsMicroscopy();
 		if (mList.isEmpty()){
-			excel.addText("");
-			excel.addText("");
-			excel.addText("");
-			excel.addText("");
+			for (int i=0;i<6;i++)			excel.addText("");
 			return;
 		}
 		int ind=mList.size()-1;
 		if (ind==0) {
-			excel.addValue(mList.get(0).getDateCollected());
-			excel.addValue(mList.get(0).getResult());
+			excel.addValue(mList.get(0).getDateRelease()!=null?mList.get(0).getDateRelease():mList.get(0).getDateCollected());
+			excel.addValue(mList.get(0).getResult());	
+		
 			excel.addText("");
 			excel.addText("");
-			return;
+		
 		}
-		ExamMicroscopy first=mList.get(0);
-		for (int i = 1; i < mList.size(); i++) {
-			ExamMicroscopy x = mList.get(i);
-			if (x.getDateCollected().before(first.getDateCollected()))
-				first = x;
+		else
+		{
+			ExamMicroscopy first=mList.get(0);
+			for (int i = 1; i < mList.size(); i++) {
+				ExamMicroscopy x = mList.get(i);
+				if (x.getDateCollected().before(first.getDateCollected()))
+					first = x;
+			}
+			ExamMicroscopy last=mList.get(0);
+			for (int i = 1; i < mList.size(); i++) {
+				ExamMicroscopy x = mList.get(i);
+				if (x.getDateCollected().after(last.getDateCollected()))
+					last = x;
+			}
+			excel.addValue(last.getDateRelease()!=null?last.getDateRelease():last.getDateCollected());
+			excel.addValue(last.getResult());
+			excel.addValue(first.getDateRelease()!=null?first.getDateRelease():first.getDateCollected());
+			excel.addValue(first.getResult());
 		}
-		ExamMicroscopy last=mList.get(0);
-		for (int i = 1; i < mList.size(); i++) {
-			ExamMicroscopy x = mList.get(i);
-			if (x.getDateCollected().after(last.getDateCollected()))
-				last = x;
+		//6 month 
+		ExamMicroscopy exam6=null;
+		if (treatmDate!=null){
+			for (int i = 0; i < mList.size(); i++) {
+				Date x = mList.get(i).getDateCollected();
+				if (x.after(getStart6mntDay()) & x.before(getEnd6mntDay())) 
+					exam6=mList.get(i);
+			}
 		}
-		excel.addValue(first.getDateCollected());
-		excel.addValue(first.getResult());
-		excel.addValue(last.getDateCollected());
-		excel.addValue(last.getResult());
+		if (exam6!=null){
+			excel.addValue(exam6.getDateRelease()!=null?exam6.getDateRelease():exam6.getDateCollected());
+			excel.addValue(exam6.getResult());	
+		} else{
+			excel.addText("");
+			excel.addText("");
+		}
 	}
-
+	
+	private Date getStart6mntDay(){
+		Calendar st=Calendar.getInstance();
+		st.setTime(treatmDate);
+		 st.roll(Calendar.MONTH, 5);
+		 st.roll(Calendar.DATE, 14);
+		 return  st.getTime();
+	}
+	
+	
+	private Date getEnd6mntDay(){
+		Calendar st=Calendar.getInstance();
+		st.setTime(treatmDate);
+		 st.roll(Calendar.MONTH, 6);
+		 st.roll(Calendar.DATE, 14);
+		 return  st.getTime();
+	
+	}
+	
 	public List<TbCaseAZ> getCasesAz() {
 		if (cases == null)
 			createCases();
