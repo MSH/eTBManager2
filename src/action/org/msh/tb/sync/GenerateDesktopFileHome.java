@@ -32,7 +32,7 @@ public class GenerateDesktopFileHome {
 	private static final int BUFFER_SIZE = 65535;
 	
 	@In EntityManager entityManager;
-	
+
 	/**
 	 * Generates the initialization file of the unit pointed by the property {@link #unitId} and 
 	 * send it to the response servlet as a downloadable file
