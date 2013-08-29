@@ -457,8 +457,34 @@ public class CaseExportAZ extends CaseExport {
 		if (tc.getExamsDST().size() == 0) return "";
 		String res = "";
 		DstResult r = null;
-		for (int i = 0; i < tc.getExamsDST().size(); i++) {
-			ExamDST ex = tc.getExamsDST().get(i);
+		List<ExamDST> lstsort = new ArrayList<ExamDST>();
+		lstsort.addAll(tc.getExamsDST());
+		Collections.sort(lstsort, new Comparator<ExamDST>() {
+
+			@Override
+			public int compare(ExamDST o1, ExamDST o2) {
+				Date d1 = o1.getDateCollected();
+				Date d2 = o2.getDateCollected();
+				
+				if (d1.after(d2))
+					return 1;
+				if (d1.before(d2))
+					return -1;
+				
+				int r1 = o1.getNumResistant();
+				int r2 = o2.getNumResistant();
+				
+				if (r1>r2)
+					return -1;
+				if (r1<r2)
+					return 1;
+				
+				return 0;
+			}
+
+		});
+		for (int i = 0; i < lstsort.size(); i++) {
+			ExamDST ex = lstsort.get(i);
 			for (ExamDSTResult exr: ex.getResults()){
 				if (exr.getSubstance().getAbbrevName().getName1().equals(s))
 					r = exr.getResult();
@@ -467,11 +493,11 @@ public class CaseExportAZ extends CaseExport {
 		if (r == null)	res = "NA";
 		else
 			switch (r){
-			case BASELINE: res = "BL";
-			case CONTAMINATED: res = "C";
-			case NOTDONE: res = "NA";
-			case RESISTANT: res = "R";
-			case SUSCEPTIBLE: res = "S";
+				case BASELINE: res = "BL"; break;
+				case CONTAMINATED: res = "C"; break;
+				case NOTDONE: res = "NA"; break;
+				case RESISTANT: res = "R"; break;
+				case SUSCEPTIBLE: res = "S"; break;
 			}
 		return res;
 	}
