@@ -390,7 +390,8 @@ public class CaseExportAZ extends CaseExport {
 	}
 	
 	private ExamXRay getFirstXRayExam(TbCase tc){
-	
+		if (tc.getResXRay() == null) return null;
+		if (tc.getResXRay().size() == 0) return null;
 		ExamXRay res = tc.getResXRay().get(0);
 		for (int i = 1; i < tc.getResXRay().size(); i++) {
 			ExamXRay x = tc.getResXRay().get(i);
