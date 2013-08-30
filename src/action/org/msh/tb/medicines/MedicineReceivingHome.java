@@ -28,7 +28,7 @@ import org.msh.tb.transactionlog.Operation;
 
 
 @Name("medicineReceivingHome")
-@LogInfo(roleName="RECEIV")
+@LogInfo(roleName="RECEIV", entityClass=MedicineReceiving.class)
 public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 	private static final long serialVersionUID = -3792901040950537438L;
 

@@ -33,7 +33,8 @@
    <core:init debug="true" jndi-pattern="@jndiPattern@"/>
 
    <core:manager concurrent-request-timeout="500" 
-                 conversation-timeout="120000" 
+                 conversation-timeout="120000"
+                 default-flush-mode="MANUAL" 
                  conversation-id-parameter="cid"
                  parent-conversation-id-parameter="pid" />
                  
@@ -62,10 +63,6 @@
        <action execute="#{redirect.returnToCapturedView}"/>
    </event>
    
-	<event type="org.jboss.seam.beginConversation">
-		<action	execute="#{beginConversationEvent.switchFlushModeManual}" />
-	</event>
-
 	<mail:mail-session session-jndi-name="java:/mail/etbMail" />
 
 

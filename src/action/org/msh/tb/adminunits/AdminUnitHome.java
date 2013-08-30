@@ -17,7 +17,7 @@ import org.msh.tb.transactionlog.LogInfo;
 
 
 @Name("adminUnitHome")
-@LogInfo(roleName="ADMINUNITS")
+@LogInfo(roleName="ADMINUNITS", entityClass=AdministrativeUnit.class)
 public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 	private static final long serialVersionUID = -2648934215804041377L;
 

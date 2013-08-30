@@ -23,7 +23,7 @@ import org.msh.utils.EntityQuery;
 
 
 @Name("profileHome")
-@LogInfo(roleName="PROFILES")
+@LogInfo(roleName="PROFILES", entityClass=UserProfile.class)
 public class UserProfileHome extends EntityHomeEx<UserProfile>{
 	private static final long serialVersionUID = 5248239769157758881L;
 	

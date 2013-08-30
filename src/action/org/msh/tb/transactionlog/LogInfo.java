@@ -13,4 +13,5 @@ import java.lang.annotation.Target;
 public @interface LogInfo {
 	int value() default 0;
 	String roleName();
+	Class entityClass();
 }

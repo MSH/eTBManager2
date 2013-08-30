@@ -37,7 +37,7 @@ import org.msh.utils.Passwords;
 
 
 @Name("userHome")
-@LogInfo(roleName="USERS")
+@LogInfo(roleName="USERS", entityClass=User.class)
 public class UserHome extends EntityHomeEx<User> {
 	private static final long serialVersionUID = -1722666162646162093L;
 	

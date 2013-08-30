@@ -239,6 +239,7 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 			break;
 		case NEW: logService.recordEntityState(getInstance(), Operation.NEW);
 			break;
+		default:
 		}
 		
 		logService.save(roleName, action, getLogDescription(), getLogEntityId(), getLogEntityClass(), getInstance());
@@ -259,15 +260,28 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	 * @return
 	 */
 	public String getLogEntityClass() {
+		LogInfo logInfo = getLogInfo();
+		if ((logInfo != null) && (logInfo.entityClass() != null))
+			return logInfo.entityClass().getSimpleName();
+
 		Class clazz = getEntityClass();
+		
 		return (clazz != null? clazz.getSimpleName(): null);
 	}
 
+	/**
+	 * Return the description of the entity to be stored in the transaction log
+	 * @return String value
+	 */
 	protected String getLogDescription() {
 		return getInstance().toString();
 	}
 	
 	
+	/**
+	 * Return the ID of the entity to be stored in the transaction log
+	 * @return Integer value
+	 */
 	protected Integer getLogEntityId() {
 		return (Integer)getId();
 	}
@@ -281,13 +295,30 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		if (roleName != null)
 			return roleName;
 
-		LogInfo logInfo = getClass().getAnnotation(LogInfo.class);
+		LogInfo logInfo = getLogInfo();
 		if ((logInfo == null) || (logInfo.roleName() == null))
 			return null;
 		
 		return logInfo.roleName();
 	}
 
+	
+	/**
+	 * Return the instance of the {@link LogInfo} annotated in the class
+	 * @return
+	 */
+	public LogInfo getLogInfo() {
+		Class clazz = getClass();
+		
+		while (clazz != null) {
+			LogInfo logInfo = (LogInfo)clazz.getAnnotation(LogInfo.class);
+			if (logInfo != null)
+				return logInfo;
+			clazz = clazz.getSuperclass();
+		}
+		return null;
+	}
+	
 
 	public void setRoleName(String name) {
 		roleName = name;

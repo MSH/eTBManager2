@@ -10,7 +10,7 @@ import org.msh.utils.EntityQuery;
 
 
 @Name("substanceHome")
-@LogInfo(roleName="SUBSTANCES")
+@LogInfo(roleName="SUBSTANCES", entityClass=Substance.class)
 public class SubstanceHome extends EntityHomeEx<Substance> {
 	private static final long serialVersionUID = 8718366857062580485L;
 

@@ -16,7 +16,7 @@ import org.msh.utils.EntityQuery;
 
 @Name("laboratoryHome")
 @Scope(ScopeType.CONVERSATION)
-@LogInfo(roleName="LABS")
+@LogInfo(roleName="LABS", entityClass=Laboratory.class)
 public class LaboratoryHome extends EntityHomeEx<Laboratory>{
 	private static final long serialVersionUID = -4352110924970540613L;
 

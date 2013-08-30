@@ -18,7 +18,7 @@ import org.msh.utils.EntityQuery;
  *
  */
 @Name("healthSystemHome")
-@LogInfo(roleName="HEALTHSYS")
+@LogInfo(roleName="HEALTHSYS", entityClass=HealthSystem.class)
 public class HealthSystemHome extends EntityHomeEx<HealthSystem> {
 	private static final long serialVersionUID = -4524994233700353060L;
 

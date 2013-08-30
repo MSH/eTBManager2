@@ -40,7 +40,7 @@ import org.msh.tb.transactionlog.LogInfo;
  *
  */
 @Name("caseHome")
-@LogInfo(roleName="CASE_DATA")
+@LogInfo(roleName="CASE_DATA", entityClass=TbCase.class)
 @BypassInterceptors
 @AutoCreate
 public class CaseHome extends WsEntityHome<TbCase>{

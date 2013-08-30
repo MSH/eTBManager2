@@ -20,7 +20,7 @@ import org.msh.utils.EntityQuery;
 
 
 @Name("regimenHome")
-@LogInfo(roleName="REGIMENS")
+@LogInfo(roleName="REGIMENS", entityClass=Regimen.class)
 public class RegimenHome extends EntityHomeEx<Regimen> {
 	private static final long serialVersionUID = 6609373789452825016L;
 

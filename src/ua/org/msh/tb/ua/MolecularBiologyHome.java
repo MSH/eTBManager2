@@ -7,12 +7,10 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.exams.ExamHome;
 import org.msh.tb.laboratories.LaboratorySelection;
-import org.msh.tb.transactionlog.LogInfo;
 import org.msh.tb.ua.entities.MolecularBiologyUA;
 import org.msh.tb.ua.entities.enums.MolecularBiologyResult;
 
 @Name("molecularBiologyUAHome")
-@LogInfo(roleName="EXAM_BIOMOL")
 public class MolecularBiologyHome extends ExamHome<MolecularBiologyUA> {
 	private static final long serialVersionUID = -1149058962516904296L;
 

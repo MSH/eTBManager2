@@ -16,7 +16,7 @@ import org.msh.tb.transactionlog.LogInfo;
 
 
 @Name("examMicroscopyHome")
-@LogInfo(roleName="EXAM_MICROSC")
+@LogInfo(roleName="EXAM_MICROSC", entityClass=ExamMicroscopy.class)
 @Scope(ScopeType.CONVERSATION)
 public class ExamMicroscopyHome extends LaboratoryExamHome<ExamMicroscopy> {
 	private static final long serialVersionUID = -7854784222737606292L;

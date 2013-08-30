@@ -17,7 +17,7 @@ import org.msh.tb.transactionlog.LogInfo;
  *
  */
 @Name("ageRangeHome")
-@LogInfo(roleName="AGERANGES")
+@LogInfo(roleName="AGERANGES", entityClass=AgeRange.class)
 public class AgeRangeHome extends EntityHomeEx<AgeRange> {
 	private static final long serialVersionUID = 1L;
 

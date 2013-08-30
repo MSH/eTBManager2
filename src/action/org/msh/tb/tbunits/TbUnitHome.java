@@ -14,7 +14,7 @@ import org.msh.tb.transactionlog.LogInfo;
 
 
 @Name("tbunitHome")
-@LogInfo(roleName="TBUNITS")
+@LogInfo(roleName="TBUNITS", entityClass=Tbunit.class)
 public class TbUnitHome extends EntityHomeEx<Tbunit> {
 	private static final long serialVersionUID = 2457043551352981859L;
 	

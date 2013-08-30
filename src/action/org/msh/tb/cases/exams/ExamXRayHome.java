@@ -7,7 +7,7 @@ import org.msh.tb.transactionlog.LogInfo;
 
 
 @Name("examXRayHome")
-@LogInfo(roleName="EXAM_XRAY")
+@LogInfo(roleName="EXAM_XRAY", entityClass=ExamXRay.class)
 public class ExamXRayHome extends ExamHome<ExamXRay> {
 	private static final long serialVersionUID = 7241763132119792759L;
 

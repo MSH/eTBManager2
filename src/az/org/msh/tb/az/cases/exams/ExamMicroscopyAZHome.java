@@ -10,10 +10,8 @@ import org.jboss.seam.annotations.Name;
 import org.msh.tb.az.entities.ExamMicroscopyAZ;
 import org.msh.tb.cases.exams.LaboratoryExamHome;
 import org.msh.tb.entities.enums.MicroscopyResult;
-import org.msh.tb.transactionlog.LogInfo;
 
 @Name("examMicroscopyAZHome")
-@LogInfo(roleName="EXAM_MICROSC")
 public class ExamMicroscopyAZHome extends LaboratoryExamHome<ExamMicroscopyAZ>{
 	private static final long serialVersionUID = 2244413651346563406L;
 

@@ -12,7 +12,7 @@ import org.msh.utils.EntityQuery;
 
 
 @Name("countryStructureHome")
-@LogInfo(roleName="ADMSTR")
+@LogInfo(roleName="ADMSTR", entityClass=CountryStructure.class)
 public class CountryStructureHome extends EntityHomeEx<CountryStructure> {
 	private static final long serialVersionUID = -3711659526254901707L;
 

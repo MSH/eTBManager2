@@ -25,7 +25,7 @@ import org.msh.utils.ItemSelectHelper;
  *
  */
 @Name("medicineHome")
-@LogInfo(roleName="MEDICINES")
+@LogInfo(roleName="MEDICINES", entityClass=Medicine.class)
 public class MedicineHome extends EntityHomeEx<Medicine> {
 
 	private static final long serialVersionUID = 8518405317117822887L;

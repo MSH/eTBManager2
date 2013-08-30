@@ -162,14 +162,5 @@ public class ExamHome<E> extends WsEntityHome<E> {
 		return getTbCase().getId();
 	}
 
-
-	/* (non-Javadoc)
-	 * @see org.msh.tb.EntityHomeEx#getLogEntityClass()
-	 */
-	@Override
-	public String getLogEntityClass() {
-		return TbCase.class.getSimpleName();
-	}
-	
 	
 }

@@ -15,7 +15,7 @@ import org.msh.tb.transactionlog.LogInfo;
 
 
 @Name("fieldValueHome")
-@LogInfo(roleName="FIELDS")
+@LogInfo(roleName="FIELDS", entityClass=FieldValue.class)
 public class FieldValueHome extends EntityHomeEx<FieldValue> {
 	private static final long serialVersionUID = 3191726641746083855L;
 

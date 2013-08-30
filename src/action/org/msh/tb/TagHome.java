@@ -8,7 +8,7 @@ import org.msh.tb.transactionlog.LogInfo;
 import org.msh.utils.EntityQuery;
 
 @Name("tagHome")
-@LogInfo(roleName="TAGS")
+@LogInfo(roleName="TAGS", entityClass=Tag.class)
 public class TagHome extends EntityHomeEx<Tag> {
 	private static final long serialVersionUID = 2346498717179017533L;
 

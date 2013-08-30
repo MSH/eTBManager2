@@ -84,7 +84,8 @@ public class TransactionLogService {
 
 		return save(eventName, action, entity.toString(), id, entity.getClass().getSimpleName(), entity);
 	}
-	
+
+
 	/**
 	 * Save a new transaction log
 	 * @param eventName is the short name of the event (user role)

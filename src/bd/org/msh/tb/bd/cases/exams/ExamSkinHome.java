@@ -5,11 +5,9 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.msh.tb.cases.exams.LaboratoryExamHome;
-import org.msh.tb.transactionlog.LogInfo;
 
 
 	@Name("examSkinHome")
-	@LogInfo(roleName="EXAM_SKIN")
 	@Scope(ScopeType.CONVERSATION)
 	public class ExamSkinHome extends LaboratoryExamHome<ExamSkin> {
 

@@ -28,7 +28,7 @@ import org.msh.tb.transactionlog.LogInfo;
  *
  */
 @Name("examDSTHome")
-@LogInfo(roleName="EXAM_DST")
+@LogInfo(roleName="EXAM_DST", entityClass=ExamDST.class)
 public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 	private static final long serialVersionUID = 270035993717644991L;
 
@@ -122,6 +122,7 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 			case SUSCEPTIBLE:
 				numSusceptibles++;
 				break;
+			default:
 			}
 		}
 		// check if case is TB and any resistance was notified

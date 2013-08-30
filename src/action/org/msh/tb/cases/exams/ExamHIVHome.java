@@ -11,7 +11,7 @@ import org.msh.tb.transactionlog.LogInfo;
 
 
 @Name("examHIVHome")
-@LogInfo(roleName="EXAM_HIV")
+@LogInfo(roleName="EXAM_HIV", entityClass=ExamHIV.class)
 public class ExamHIVHome extends ExamHome<ExamHIV> {
 	private static final long serialVersionUID = 5431512237255765820L;
 

@@ -13,7 +13,7 @@ import org.msh.tb.resistpattern.ResistancePatternService;
 import org.msh.tb.transactionlog.LogInfo;
 
 @Name("examXpertHome")
-@LogInfo(roleName="EXAM_XPERT")
+@LogInfo(roleName="EXAM_XPERT", entityClass=ExamXpert.class)
 @Scope(ScopeType.CONVERSATION)
 public class ExamXpertHome extends LaboratoryExamHome<ExamXpert> {
 	private static final long serialVersionUID = -1014269108674534236L;

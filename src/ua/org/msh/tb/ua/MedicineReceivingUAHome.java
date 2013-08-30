@@ -25,7 +25,6 @@ import org.msh.tb.medicines.SourceMedicineTree;
 import org.msh.tb.medicines.SourceMedicineTree.MedicineNode;
 import org.msh.tb.medicines.SourceMedicineTree.SourceNode;
 import org.msh.tb.medicines.movs.MovementHome;
-import org.msh.tb.transactionlog.LogInfo;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.ua.RegistrationNumbers.RegistrationCard;
 import org.msh.tb.ua.entities.MedicineReceivingUA;
@@ -33,7 +32,6 @@ import org.msh.tb.ua.entities.MedicineReceivingUA;
 
 
 @Name("medicineReceivingUAHome")
-@LogInfo(roleName="RECEIV")
 @Scope(ScopeType.CONVERSATION)
 public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 	private static final long serialVersionUID = 28538032481597899L;

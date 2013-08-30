@@ -16,7 +16,7 @@ import org.msh.tb.transactionlog.LogInfo;
  *
  */
 @Name("tbContactHome")
-@LogInfo(roleName="TBCONTACT")
+@LogInfo(roleName="TBCONTACT", entityClass=TbContact.class)
 public class TbContactHome extends ExamHome<TbContact> {
 	private static final long serialVersionUID = 1515193100467041594L;
 

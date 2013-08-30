@@ -19,10 +19,9 @@ import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.kh.entities.ExamDST_Kh;
-import org.msh.tb.transactionlog.LogInfo;
+
 
 @Name("examDSTKHHome")
-@LogInfo(roleName="EXAM_DST")
 public class ExamDSTKHHome extends LaboratoryExamHome<ExamDST_Kh>{
 
 	/**

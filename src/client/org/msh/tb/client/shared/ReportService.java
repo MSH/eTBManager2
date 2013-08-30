@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  * @author Ricardo Memoria
  *
  */
-@RemoteServiceRelativePath("seam/resource/gwt2")
+@RemoteServiceRelativePath("../seam/resource/gwtRpc")
 public interface ReportService extends RemoteService {
 
 	/**

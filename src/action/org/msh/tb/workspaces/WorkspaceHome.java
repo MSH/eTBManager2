@@ -45,7 +45,7 @@ import org.msh.utils.EntityQuery;
 
 
 @Name("workspaceHome")
-@LogInfo(roleName="WORKSPACES")
+@LogInfo(roleName="WORKSPACES", entityClass=Workspace.class)
 public class WorkspaceHome extends EntityHomeEx<Workspace> {
 	private static final long serialVersionUID = -5471044065603168728L;
 

@@ -13,7 +13,7 @@ import org.msh.tb.transactionlog.LogInfo;
 
 
 @Name("examCultureHome")
-@LogInfo(roleName="EXAM_CULTURE")
+@LogInfo(roleName="EXAM_CULTURE", entityClass=ExamCulture.class)
 public class ExamCultureHome extends LaboratoryExamHome<ExamCulture> {
 	private static final long serialVersionUID = -5720233346817646475L;
 
@@ -74,6 +74,15 @@ public class ExamCultureHome extends LaboratoryExamHome<ExamCulture> {
 		}
 		return numColonies;
 	}
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.EntityHomeEx#getLogEntityClass()
+	 */
+	@Override
+	public String getLogEntityClass() {
+		return ExamCulture.class.getSimpleName();
+	}
+	
 
 	@Override
 	public String getJoinFetchHQL() {
