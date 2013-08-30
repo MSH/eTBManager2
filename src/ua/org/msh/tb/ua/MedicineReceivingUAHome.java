@@ -35,8 +35,8 @@ import org.msh.tb.ua.entities.MedicineReceivingUA;
 
 
 @Name("medicineReceivingUAHome")
-@LogInfo(roleName="RECEIV")
 @Scope(ScopeType.CONVERSATION)
+@LogInfo(roleName="RECEIV", entityClass=MedicineReceivingUA.class)
 public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 	private static final long serialVersionUID = 28538032481597899L;
 
