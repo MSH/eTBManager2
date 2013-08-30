@@ -15,6 +15,12 @@ import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.transactionlog.LogInfo;
 
 
+/**
+ * Handle operation of the microscopy exam
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 @Name("examMicroscopyHome")
 @LogInfo(roleName="EXAM_MICROSC", entityClass=ExamMicroscopy.class)
 @Scope(ScopeType.CONVERSATION)
@@ -23,12 +29,17 @@ public class ExamMicroscopyHome extends LaboratoryExamHome<ExamMicroscopy> {
 
 	private List<SelectItem> afbs;
 	
+	/**
+	 * @return
+	 */
 	@Factory("examMicroscopy")
 	public ExamMicroscopy getExamMicroscopy() {
 		return (ExamMicroscopy)getInstance();
 	}
 
 	
+	/** {@inheritDoc}
+	 */
 	@Override
 	public String persist() {
 		ExamMicroscopy exam = getInstance();
@@ -39,6 +50,10 @@ public class ExamMicroscopyHome extends LaboratoryExamHome<ExamMicroscopy> {
 	}
 
 
+	/**
+	 * Return options to the AFB field
+	 * @return {@link List} of {@link SelectItem} objects
+	 */
 	public List<SelectItem> getAFBs() {
 		if (afbs == null) {
 			afbs = new ArrayList<SelectItem>();
