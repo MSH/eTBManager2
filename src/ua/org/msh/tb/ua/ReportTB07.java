@@ -10,6 +10,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.msh.tb.entities.AgeRange;
+import org.msh.tb.entities.CaseComorbidity;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.PrevTBTreatment;
@@ -117,14 +118,17 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 					if (cd.getRegistrationCategory().getValue().getId()>=938221 && cd.getRegistrationCategory().getValue().getId()<=938223)
 					{
 						String key=null;
-						switch (tc.getPatientType()) {
-							case NEW: key = "newcases"; 
-							break;
-							case RELAPSE: key = "relapses"; 
-							break;
-							case AFTER_DEFAULT: case FAILURE_FT: case FAILURE_RT: case OTHER: key = "other";
-							break;
-						}
+						if (tc.getPatientType()==null)
+							addToVerList(tc,1,1);
+						else
+							switch (tc.getPatientType()) {
+								case NEW: key = "newcases"; 
+								break;
+								case RELAPSE: key = "relapses"; 
+								break;
+								case AFTER_DEFAULT: case FAILURE_FT: case FAILURE_RT: case OTHER: key = "other";
+								break;
+							}
 						if (key!=null){
 							if (tc.getResHIV()==null){
 								addToVerList(tc,1,4);
@@ -145,6 +149,7 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 								if (micResult==null) addToVerList(tc,1,2);
 								
 									addToTable(getTable1000(), gen, micResult==null ? "negative" : micResult, key);
+									//System.out.println(tc.getDisplayCaseNumber()+"|"+tc.getPatient().getFullName()+"|"+key+(micResult==null ? "negative" : micResult));
 									if (micResult!=null)
 										if (micResult.equals("positive") && key.equalsIgnoreCase("newcases")){
 											addToTable(getTable2000(), gen+"_all", Integer.toString(roundToIniDate(tc.getPatientAge())), gen);
@@ -169,10 +174,12 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 								String gen = tc.getPatient().getGender().toString().toLowerCase();
 								
 								addToTable(getTable1000(),gen,"extrapulmonary",key);
+								//System.out.println(tc.getDisplayCaseNumber()+"|"+tc.getPatient().getFullName()+"|"+key+"extrapulmonary");
+								
 								addToTable(getTable3000(),gen,"extrapulmonary",key);
 								
 								if (!verifyList.get(getMessage("verify.errorcat1")).get(4).getCaseList().contains(tc))
-									if (tc.getResHIV().get(0).getResult().equals(HIVResult.POSITIVE))
+									if (caseHasHIV(tc))
 										addToTable(getTable4000(),gen,"extrapulmonary",key);
 								
 								addToAllowing(tc);
@@ -198,6 +205,22 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 		}
 		else 
 			setOverflow(true);
+	}
+
+	private boolean caseHasHIV(TbCase tc) {
+		/*if (tc.getResHIV().get(0).getResult().equals(HIVResult.POSITIVE))
+			return true;*/
+		boolean res = false;
+		for (CaseComorbidity cc:tc.getComorbidities()){
+			if (cc.getId()==938244){
+				res = true;
+				break;
+			}
+		}
+		if (!res)
+			if (tc.getResHIV().get(0).getResult().equals(HIVResult.POSITIVE))
+				res = true;
+		return res;
 	}
 
 	/**
