@@ -20,7 +20,7 @@
 						<c:forEach var="it" items="#{list.get(cat)}">
 							<rich:panelBarItem label="#{it.title} (#{it.caseList.size()})" rendered="#{it.caseList.size()!=0}">
 								<ui:repeat var="tc" value="#{it.caseList}">
-									<s:link value="#{tc.patient.fullName}" view="/cases/casedata.xhtml" target="_blank">
+									<s:link value="#{tc.patient.fullName}" view="/cases/casedata.xhtml" target="_blank" propagation="begin">
 										<f:param name="id" value="#{tc.id}" />
 									</s:link>
 									<br/>
