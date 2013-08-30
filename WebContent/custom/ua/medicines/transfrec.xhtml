@@ -22,10 +22,34 @@
 	<s:link view="/medicines/transfer.xhtml" value="#{messages['meds.transfer']}" propagation="none"/>
 </ui:define>
 
+<script src="../public/js/commons.js" type="text/javascript" />
 
 <ui:define name="content">
 <h1>#{title2}</h1>
 <h:form id="main" styleClass="form1">
+
+<script type="text/javascript">
+	function changeNumCont(elem,quantCont){
+		numConts = elem.value;
+		sel = elem.parentNode;
+		obj = jQuery("input[type='text']", sel).get(1);
+		document.getElementById(obj.id).value = numConts*quantCont;
+		sel = elem.parentNode.parentNode;
+		cp = strToFloat(jQuery("span:eq(0)",sel).text());
+		tot = floatToStr(numConts*cp,2);
+		jQuery("span:eq(1)",sel).text(tot);
+		updateTotalPrices();
+	}
+
+	function updateTotalPrices(){
+		globtot = 0;
+		jQuery("#transferitemstbl tr :has(input)").each(function() { 
+			globtot += strToFloat(jQuery("span:eq(1)",this.parentNode).text()); 
+		});
+		jQuery("#globtotrec").html(floatToStr(globtot,2));
+	}
+</script>
+
 	<div class="form-content">
     <table width="750px" class="tabela3" style="margin-bottom:10px" cellpadding="8">
     <tr><td class="header">
@@ -81,9 +105,10 @@
 	</div>
 	
 	<h:panelGroup id="pnlitems">
+	<div id="transferitemstbl">
 	<table width="100%" class="table1">
 	<ui:repeat value="#{transferHome.sources}" var="s">
-		<tr style="background-color:#EDF7EF;"><td colspan="10" style="border:1px solid #B4E8BB;padding:5px;">
+		<tr style="background-color:#EDF7EF;"><td colspan="12" style="border:1px solid #B4E8BB;padding:5px;">
 			<b>#{s.source.name}</b>
 		</td></tr>
 		
@@ -94,20 +119,22 @@
 		</th><th align="left">#{messages['Batch.batchNumber']}
 		</th><th align="center">#{messages['Batch.expiryDate']}
 		</th><th align="left">#{messages['Medicine.strengthUnit']}
-		</th><th align="right">#{messages['Batch.numContainers']}
-		</th><th align="right">#{messages['OrderItem.shippedQuantity']}
-		</th><th align="right">#{messages['OrderItem.receivedQuantity']}
+		</th><th align="right">#{messages['uk_UA.order.sent.containers']}
+		</th><th align="right">#{messages['Batch.containerPrice']}
+		</th><th align="right">#{messages['global.totalPrice']}
+		</th><th align="right">#{messages['uk_UA.order.received.containers']}
+		</th><th align="right">#{messages['global.totalPrice']}
 		</th></tr>
 		<ui:repeat value="#{s.items}" var="it">
-		<tr bgcolor="#f3f3f0"><td colspan="8">
+		<tr bgcolor="#f3f3f0"><td colspan="9">
 			<div class="medicine-icon" style="float:left"/>
 			#{it.medicine}
 		</td>
 		
 		
 		<td align="right">
-			<b><h:outputText value="#{it.quantity}">
-				<f:convertNumber pattern="#,###,##0"/>
+			<b><h:outputText value="#{medCalcCont.calculateTotalPrice(it.batches)}">
+				<f:convertNumber pattern="#,###,##0.00"/>
 			</h:outputText>
 			</b>
 		</td>
@@ -141,25 +168,67 @@
 					#{messages['Batch.container']}
 				</td>
 				<td class="colb" align="right">
-					<h:outputText value="#{b.numContainers} (№#{b.batch.quantityContainer})">
+					<h:outputText value="#{medCalcCont.calculateNumContainers(b.batch.quantityContainer,b.quantity)}">
 						<f:convertNumber pattern="#,###,##0"/>
 					</h:outputText>
 				</td>
-				<td class="colb" align="right">
-					<h:outputText value="#{b.quantity}">
-						<f:convertNumber pattern="#,###,##0"/>
+				<td align="right" class="colb">
+					<h:outputText value="#{medCalcCont.calculateContPrice(b.batch.quantityContainer,b.batch.unitPrice)}" id="cprice">
+						<f:convertNumber pattern="#,###,###,##0.00000"/>
+					</h:outputText>
+				</td>
+				<td align="right" class="colb">
+					<h:outputText value="#{medCalcCont.calculateTotalPrice(b.quantity,b.batch.quantityContainer,b.batch.unitPrice)}">
+						<f:convertNumber pattern="#,###,###,##0.00"/>
 					</h:outputText>
 				</td>
 				<td align="right" class="colb" bgcolor="#f3f3f0">
-					<h:inputText id="qtdrec" value="#{b.quantityReceived}" required="true">
+					<h:inputText required="true" 
+						onkeypress="return numbersOnly(this,event);"
+						value="#{b.numContainersRec}" 
+						style="width:64px;">
+						<a:support event="onkeyup" oncomplete="return changeNumCont(this,#{b.batch.quantityContainer});"/>
+					</h:inputText>
+					<h:inputText id="qtdrec" value="#{b.quantityReceived}" required="true" style="display:none;">
 					</h:inputText>
 					<h:message for="qtdrec" styleClass="error"/>
 				</td>
+				
+				<td align="right" class="colb" bgcolor="#f3f3f0">
+					<div id="totPriceRec">
+					<h:outputText value="#{b.totalPriceReceived}" id="totalRec">
+						<f:convertNumber pattern="#0.00"/>
+					</h:outputText>
+					</div>					
+				</td>
+				
 			</tr>
 		</ui:repeat>
 		</ui:repeat>
 	</ui:repeat>
+	<tr>
+		<th colspan="8">
+		</th>
+		<th align="right">
+			#{messages['AtAll']}
+		</th>
+		<th>
+			<h:outputText value="#{transferUAHome.globalTotal}">
+				<f:convertNumber pattern="#,###,###,##0.00"/>
+			</h:outputText>	
+		</th>
+		<th>
+		</th>
+		<th>
+			<div id="globtotrec">
+				<h:outputText value="#{transferUAHome.globalTotalReceived}">
+					<f:convertNumber pattern="#0.00"/>
+				</h:outputText>
+			</div>
+		</th>
+	</tr>
 	</table>
+	</div>
 	</h:panelGroup>		
 
 	<div class="form-footer">

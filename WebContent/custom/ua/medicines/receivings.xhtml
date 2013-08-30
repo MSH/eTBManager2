@@ -70,7 +70,7 @@
   			<f:param name="order" value="#{medicineReceivings.order=='dr.receivingDate'?'dr.receivingDate desc':'dr.receivingDate'}" />
   		</s:link>
   	</f:facet>
-	<h:outputText value="#{r.totalPrice}" >
+	<h:outputText value="#{medCalcCont.calculateTotalPrice(r.movements)}" >
 		<f:convertNumber pattern="#,###,##0.00"/>
 	</h:outputText>
 </h:column>

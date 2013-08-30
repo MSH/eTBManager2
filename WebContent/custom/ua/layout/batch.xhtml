@@ -13,7 +13,7 @@
 	    </s:fragment>
     </div>
     <div class="text-small">
-	    <s:fragment rendered="#{batch.registCardNumber!=''}">
+	    <s:fragment rendered="#{batch.registCardNumber!='' and batch.registCardNumber!=null}">
 	    	<b>#{messages['Batch.registCard']}</b>
 	    	<br/>
 		    №#{batch.registCardNumber} 

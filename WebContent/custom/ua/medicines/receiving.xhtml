@@ -78,7 +78,7 @@
 
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
-    	<h:outputText value="#{medicineReceiving.totalPrice}" >
+    	<h:outputText value="#{medicineReceivingUAHome.globalTotal}" >
 			<f:convertNumber pattern="#,###,##0.00"/>
     	</h:outputText>
     </s:decorate>
@@ -98,7 +98,7 @@
 					</td>
 					
 					<td class="colrb"> 
-						<h:outputText value="#{it.item.totalPrice}" >
+						<h:outputText value="#{medCalcCont.calculateTotalPrice(it.batches)}" >
 							<f:convertNumber pattern="#,###,##0.00"/>							
 						</h:outputText>
 					</td>
@@ -128,7 +128,7 @@
 								<f:convertNumber pattern="#,###,##0.000" />
 							</h:outputText></td>
 						<td class="colrb">
-							<h:outputText value="#{b.totalPrice}"><f:convertNumber pattern="#,###,##0.00" /></h:outputText></td>
+							<h:outputText value="#{medCalcCont.calculateTotalPrice(b.quantityReceived,b.quantityContainer,b.unitPrice)}"><f:convertNumber pattern="#,###,##0.00" /></h:outputText></td>
 					</tr>
 				</a:repeat>
 			</a:repeat>

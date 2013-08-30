@@ -94,9 +94,9 @@ function getElements(elem, e) {
   	window.atual = elem;
   }
 
-  window.edtA = document.getElementById("formbatch:qtd:qtd");
-  window.edtB = document.getElementById("formbatch:num:num");
-  window.edtC = document.getElementById("formbatch:qtdcon:qtdcon");
+  window.edtA = document.getElementById("batchsellayout:formbatch:qtd:qtd");
+  window.edtB = document.getElementById("batchsellayout:formbatch:num:num");
+  window.edtC = document.getElementById("batchsellayout:formbatch:qtdcon:qtdcon");
 
   window.qtdA = parseInt(edtA.value);
   window.qtdB = parseInt(edtB.value);
@@ -119,58 +119,63 @@ function floatToStr(val, n) {
 
 function changeUnitPrice(elem) {
 	unit = strToFloat(elem.value);
-	tot = parseFloat(document.getElementById("formbatch:qtd:qtd").value);
+	tot = parseFloat(document.getElementById("batchsellayout:formbatch:qtd:qtd").value);
 	totPrice = unit * tot;
-	document.getElementById("formbatch:tprice:tprice").value = floatToStr(totPrice, 2);
-	quantCont = document.getElementById("formbatch:qtdcon:qtdcon").value;
-	document.getElementById("formbatch:cprice:cprice").value = floatToStr(unit*quantCont,3);
+	document.getElementById("batchsellayout:formbatch:tprice:tprice").value = floatToStr(totPrice, 2);
+	quantCont = document.getElementById("batchsellayout:formbatch:qtdcon:qtdcon").value;
+	document.getElementById("batchsellayout:formbatch:cprice:cprice").value = floatToStr(unit*quantCont,3);
 }
 
 function changeUPrice() {
-	numConts = document.getElementById("formbatch:numcont:numcont").value;
-	cPrice = strToFloat(document.getElementById("formbatch:cprice:cprice").value);
-	//unit = strToFloat(document.getElementById("formbatch:uprice:uprice").value);
-	//tot = parseFloat(document.getElementById("formbatch:qtd:qtd").value);
+	numConts = document.getElementById("batchsellayout:formbatch:numcont:numcont").value;
+	cPrice = strToFloat(document.getElementById("batchsellayout:formbatch:cprice:cprice").value);
+	//unit = strToFloat(document.getElementById("batchsellayout:formbatch:uprice:uprice").value);
+	//tot = parseFloat(document.getElementById("batchsellayout:formbatch:qtd:qtd").value);
 	totPrice = numConts * cPrice;
-	document.getElementById("formbatch:tprice:tprice").value = floatToStr(totPrice, 2);
+	document.getElementById("batchsellayout:formbatch:tprice:tprice").value = floatToStr(totPrice, 2);
 }
 
 function changeTotalPrice(elem) {
 	totPrice = strToFloat(elem.value);
-	tot = parseFloat(document.getElementById("formbatch:qtd:qtd").value);
+	tot = parseFloat(document.getElementById("batchsellayout:formbatch:qtd:qtd").value);
 	if (tot != 0)
 		unitPrice = totPrice / tot;
 	else unitPrice = 0;
-	document.getElementById("formbatch:uprice:uprice").value = floatToStr(unitPrice, 3);
+	document.getElementById("batchsellayout:formbatch:uprice:uprice").value = floatToStr(unitPrice, 5);
 }
 
 function changeQuantityCont() {
-	numConts = document.getElementById("formbatch:numcont:numcont").value;
-	quantCont = document.getElementById("formbatch:qtdcon:qtdcon").value;
-	document.getElementById("formbatch:qtd:qtd").value = numConts*quantCont;
-	changeUPrice();
+	numConts = document.getElementById("batchsellayout:formbatch:numcont:numcont").value;
+	quantCont = document.getElementById("batchsellayout:formbatch:qtdcon:qtdcon").value;
+	document.getElementById("batchsellayout:formbatch:qtd:qtd").value = numConts*quantCont;
+	changeContPrice();
 }
 
 function changeQuantity(elem) {
 	num = elem.value;
-	quantCont = document.getElementById("formbatch:qtdcon:qtdcon").value;
+	quantCont = document.getElementById("batchsellayout:formbatch:qtdcon:qtdcon").value;
 	if (quantCont != 0)
 		numCont = Math.ceil(num/quantCont);
 	else
 		numCont = 0;
-	document.getElementById("formbatch:numcont:numcont").value = numCont;
+	document.getElementById("batchsellayout:formbatch:numcont:numcont").value = numCont;
 	changeUPrice();
 }
 
 function changeCPrice(elem) {
 	contPrice = strToFloat(elem.value);
-	quantCont = document.getElementById("formbatch:qtdcon:qtdcon").value;
+	quantCont = document.getElementById("batchsellayout:formbatch:qtdcon:qtdcon").value;
 	if (quantCont != 0)
 		unit = contPrice / quantCont;
 	else
 		unit = 0;
-	document.getElementById("formbatch:uprice:uprice").value = floatToStr(unit, 3);
+	document.getElementById("batchsellayout:formbatch:uprice:uprice").value = floatToStr(unit, 5);
 	changeUPrice();
+}
+
+function changeContPrice() {
+	elem = document.getElementById("batchsellayout:formbatch:cprice:cprice");
+	changeCPrice(elem);
 }
 
 function changeBMI(elem, e) {

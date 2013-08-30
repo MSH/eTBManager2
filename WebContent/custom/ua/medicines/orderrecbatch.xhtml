@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:c="http://java.sun.com/jstl/core"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['meds.orders.receive']}" />
+
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<script src="../public/js/commons.js" type="text/javascript" />
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+   
+    <script type="text/javascript">
+		function changeNumCont(elem,quantCont){
+			numConts = elem.value;
+			sel = elem.parentNode;
+			obj = jQuery("input[type='text']", sel).get(1);
+			document.getElementById(obj.id).value = numConts*quantCont;
+		}
+	</script>
+	
+    <table width="90%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse">
+    <tr><td><b>#{messages['Order.unitFrom']}: </b>#{order.unitFrom.name}
+    </td><td><b>#{messages['Order.unitTo']}: </b>#{order.unitTo.name}
+    </td></tr>
+    </table>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Order.orderDate']}:</ui:define>
+	    <h:outputText value="#{order.orderDate}" converter="localeDateConverter" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Order.orderDate']}:</ui:define>
+	    <h:outputText value="#{order.shippingDate}" converter="localeDateConverter" />
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['Order.receivingDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="false" /> 
+    	<ui:param name="datefield" value="#{order.receivingDate}" /> 
+    </s:decorate>
+    <p/>
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+<p/>
+ 
+<b>#{messages['Order.items']}:</b>
+<table width="100%" cellspacing="4">
+	<a:repeat value="#{orderReceivingHome.sources}" var="s">
+	<tr style="background-color:#EDF7EF;"><td colspan="4" style="border:1px solid #B4E8BB;padding:5px;">
+		<b>#{s.source.name}</b>
+	</td></tr>
+
+	<a:repeat value="#{s.items}" var="it">
+		<tr style="background-color:#e0e0e0;">
+			<td>#{messages['Medicine']}</td>
+			<td>#{messages['uk_UA.order.received.containers']}</td>
+		</tr>
+
+		<tr style="font-size:12px;font-weight:bold;">
+			<td>
+				<div class="medicine-batch">#{it.item.medicine}</div>
+			</td>
+			<td>
+			</td>
+		</tr>
+		<tr><td colspan="2">
+			<div>
+			<b>#{messages['global.comments']}: </b> 
+					<s:validateAll>
+						<h:inputText value="#{it.item.comment}" style="width:89%;" size="200" id="comm"/>
+						<br/>
+						<h:message styleClass="error" for="comm"/>
+					</s:validateAll>
+			</div>
+		</td></tr>
+		<tr>
+			<td colspan="5" align="center">
+			<h:dataTable value="#{it.item.batches}" var="b" width="65%" columnClasses="coll,coll" id="btable" >
+			  <h:column>
+			  	<span style="height:100%;vertical-align:middle;">
+					<s:decorate template="/layout/batch.xhtml" >
+						<ui:param name="batch" value="#{b.batch}" />
+					</s:decorate>
+			    <b>#{messages['Batch.expiryDate']}:  </b>  
+			    <h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+			    <br/><b>#{messages['uk_UA.order.sent.containers']}: </b>
+			    #{medCalcCont.calculateNumContainers(b.batch.quantityContainer,b.quantity)}
+			    </span>
+			  </h:column>
+			  
+			  <h:column>
+			    <h:inputText id="qtdcon" required="true" style="width:90px;"
+			    	onkeypress="return numbersOnly(this,event);"
+					onkeyup="return changeNumCont(this,#{b.batch.quantityContainer});" 
+					value="#{b.numContainersRec}" >
+						<f:validateLongRange minimum="0" />
+			    </h:inputText>
+			    <br/>
+			    <h:inputText id="qtd" value="#{b.receivedQuantity}" required="true" style="display:none;" 
+			    	validator="#{orderReceivingHome.validateQuantity}">
+			    		<f:param id="batch" value="#{b}" />
+			    </h:inputText>
+			    <h:message for="qtd" styleClass="error" />
+			  </h:column>
+			</h:dataTable>
+			<p style="height:20px;"/>
+			</td>
+		</tr>	
+	</a:repeat>	
+	</a:repeat>
+	</table>
+	
+	<div class="form-footer">
+    	<a:commandLink action="#{orderReceivingHome.notifyReceiving}" styleClass="button" 
+    		onclick="if (!disableButton(this)) return false;"
+    		oncomplete="enableButton()" reRender="main,messages">
+    		<span>#{messages['form.ok']}</span>
+    	</a:commandLink>
+    	<s:link action="cancel" styleClass="button-alt" >
+    		<span>#{messages['form.cancel']}</span>
+    	</s:link>
+	</div>
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

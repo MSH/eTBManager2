@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
+
+	<!-- UA specific. Only for 'cancel'-outcome -->
+		<navigation>
+			<rule if-outcome="cancel" if="#{medicineReceivingUAHome.id != null}">
+				<end-conversation before-redirect="true" />
+				<redirect view-id="/custom/ua/medicines/receiving.xhtml" >
+					<param name="id" value="#{medicineReceivingUAHome.id}" converterId="javax.faces.Integer" />
+				</redirect>
+			</rule>
+			<rule if-outcome="cancel" if="#{medicineReceivingUAHome.id == null}">
+				<end-conversation before-redirect="true" />
+				<redirect view-id="/custom/ua/medicines/receivings.xhtml" />
+			</rule>
+		</navigation>
+</page>

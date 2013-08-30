@@ -13,6 +13,11 @@
 <ui:param name="topmenu" value="1" />
 <ui:param name="pagestyle" value="width:750px" />
 
+<ui:define name="head">
+	<a:loadScript src="util.js" />
+</ui:define>
+
+
 <ui:define name="left">
 </ui:define>
 
@@ -27,7 +32,7 @@
 <div style="width:800px">
 <s:decorate template="/layout/unitsel.xhtml">
 <h:form id="main">
-	<a:commandLink onclick="openNewBatchDlg();" style="float:right;" styleClass="button-alt">
+	<a:commandLink onclick="startShowBatchDlg();" style="float:right;" styleClass="button-alt">
 		<span>#{messages['meds.receiving.newbatch']}...</span>
 	</a:commandLink>
 
@@ -115,7 +120,7 @@
 </h:panelGroup>
 
 
-<a:jsFunction name="initBatchEditingDlg" reRender="batchpnl" ajaxSingle="true"
+<a:jsFunction name="initBatchEditingDlg" reRender="batchdlgcontent" ajaxSingle="true"
 	action="#{stockAdjustmentHome.initializeBatchAdjustment}" >
 	<a:actionparam name="param1" assignTo="#{stockAdjustmentHome.batchQuantityId}" converter="javax.faces.Integer" />
 	<a:actionparam name="param2" assignTo="#{stockAdjustmentHome.stockPositionId}" converter="javax.faces.Integer" />
@@ -126,9 +131,9 @@
 </a:jsFunction>
 
 <a:jsFunction name="refreshMedTable" reRender="pnlitems" ajaxSingle="true" />
-<a:jsFunction name="refreshNewBatchDlg" reRender="pnlitems,batchpnl" ajaxSingle="true" />
+<a:jsFunction name="refreshNewBatchDlg" reRender="pnlitems,batchdlgcontent" ajaxSingle="true" />
 
-<a:jsFunction name="initNewBatchDlg" reRender="batchpnl"	ajaxSingle="true" action="#{stockAdjustmentHome.clearBatch()}"/>
+<a:jsFunction name="initNewBatchDlg" reRender="batchdlgcontent"	ajaxSingle="true" action="#{stockAdjustmentHome.clearBatch()}"/>
 
 </h:form>
 </s:decorate>
@@ -407,7 +412,7 @@ function initBatchDeleting(batchId) {
     	</td>
     	<td align="right">
             <a:commandLink action="#{stockAdjustmentHome.deleteBatch()}" styleClass="button" 
-            	reRender="batchpnl"
+            	reRender="batchdlgcontent"
             	data="#{stockAdjustmentHome.actionExecuted}"
             	onclick="if (!disableButton(this)) return false;"
             	oncomplete="enableButton();if (!data) return false; Richfaces.hideModalPanel('delbatchdlg');refreshMedTable();">
@@ -427,14 +432,38 @@ function initBatchDeleting(batchId) {
 	</h:panelGroup>
 </rich:modalPanel>
 
-<ui:include src="/layout/waitdlg.xhtml" />
+<ui:remove>
+<s:decorate template="/custom/ua/layout/batchselectionsingle.xhtml" id="batchsellayout">
+	<ui:param name="homeClass" value="#{stockAdjustmentHome}" />
+	<ui:param name="medicine" value="#{stockAdjustmentHome.batchQuantity.batch.medicine}" />
+	<ui:param name="batch" value="#{stockAdjustmentHome.batchQuantity.batch}" />
+	<ui:param name="quantityRec" value="#{stockAdjustmentHome.batchQuantity.batch.quantityReceived}" />
+	<ui:param name="srcAnnexFunc" value="#{stockAdjustmentUAHome}" />
+	<ui:param name="canEditing" value="true" />
+	<ui:param name="canSelectMed" value="#{stockAdjustmentHome.batchQuantity.batch.batchNumber==null}" />
+	<ui:param name="regNumbOnlyAdding" value="true" />
+	
+	<a:jsFunction name="cleanB" ajaxSingle="true"/>
+	<a:commandLink action="#{stockAdjustmentHome.saveBatch()}" styleClass="button" 
+            	reRender="batchdlgcontent,messages"
+            	data="#{stockAdjustmentHome.actionExecuted}"
+            	onclick="if (!disableButton(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}"
+            	oncomplete="enableButton();if (!data) return false; Richfaces.hideModalPanel('batchdlg');refreshMedTable();"
+            	style="display:#{stockAdjustmentHome.existingBatchInThisUnit ? 'none' : 'inline-block'}" >
+            	<span>#{messages['form.ok']}</span>
+    </a:commandLink>
 
+</s:decorate>
+</ui:remove>
+<ui:include src="/layout/waitdlg.xhtml" />
 <rich:modalPanel id="batchdlg" width="530" zindex="2000" autosized="true">
 	<!-- <f:facet name="header">
 		<h:outputText id="title1" value="#{messages['form.data_edit']} - #{messages['Batch']}" />
 	</f:facet> -->
-	<h:panelGroup id="batchpnl">
+	<h:panelGroup id="batchdlgcontent">
 	<a:region>
+	<s:decorate id="batchsellayout">
+	
 	<a:form id="formbatch">
     <table width="100%" style="border-collapse:collapse;">
     <tr><td colspan="2">
@@ -472,18 +501,7 @@ function initBatchDeleting(batchId) {
 			<s:selectItems var="man" value="#{fieldsQuery.manufacturersMed}" noSelectionLabel="-" label="#{man.name}"/>
 		</h:selectOneMenu>    	
     </s:decorate>
-    
 
-<ui:remove>
-   	<s:decorate template="/layout/editfield.xhtml" >
-   		<ui:define name="label">#{messages['Batch.manufacturer']}:</ui:define>
-    	<ui:param name="required" value="false" />
-    	<ui:param name="id" value="manufmed" />
-    	<ui:param name="field" value="#{stockAdjustmentHome.batchQuantity.batch.manufacturer}" />
-    	<ui:param name="list" value="#{fieldsQuery.manufacturersMed}" />
-    </s:decorate>
-</ui:remove>
-    
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['Batch.expiryDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
@@ -565,7 +583,7 @@ function initBatchDeleting(batchId) {
     	
     	<td align="right">
             <a:commandLink action="#{stockAdjustmentHome.saveBatch()}" styleClass="button" 
-            	reRender="batchpnl,messages"
+            	reRender="batchdlgcontent,messages"
             	data="#{stockAdjustmentHome.actionExecuted}"
             	onclick="if (!disableButton(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}"
             	oncomplete="enableButton();if (!data) return false; Richfaces.hideModalPanel('batchdlg');refreshMedTable();"
@@ -582,6 +600,7 @@ function initBatchDeleting(batchId) {
     </table>
     
 	</a:form>
+	</s:decorate>
 	</a:region>
 	</h:panelGroup>
 </rich:modalPanel>

@@ -9,6 +9,7 @@
 
 <rich:jQuery name="selectall" timing="onJScall" selector="#battblsel :checkbox" query="attr('checked', true)" />
 <rich:jQuery name="unselectall" timing="onJScall" selector="#battblsel :checkbox" query="attr('checked', false)" />
+<script src="../public/js/commons.js" type="text/javascript" />
 
 <script type="text/javascript">
 function checkClick(obj) {
@@ -97,9 +98,9 @@ function changeNumCont(elem,quantCont){
 	<h:dataTable value="#{batchSelection.items}" var="it" width="100%" styleClass="table1" columnClasses="colc,coll,colc,colr,colr,colr">
 		<h:column> 
 			<f:facet name="header">
-				<h:selectBooleanCheckbox id="todos" onclick="if (#{id == null}) checkClick(this); else return false;"/>				
+				<h:selectBooleanCheckbox id="todos" onclick="if (#{not empty checkchange}) checkClick(this); else if (#{id == null}) checkClick(this); else return false;"/>				
 			</f:facet>
-			<h:selectBooleanCheckbox value="#{it.selected}" onclick="if (#{id == null}) updateRows(); else return false;" rendered="#{not it.item.batch.expired}"/>
+			<h:selectBooleanCheckbox value="#{it.selected}" onclick="if (#{not empty checkchange}) updateRows(this); else if (#{id == null}) updateRows(); else return false;" rendered="#{not it.item.batch.expired}"/>
 		</h:column>
 		
 		<h:column>
@@ -145,7 +146,7 @@ function changeNumCont(elem,quantCont){
 		
 		<h:column>
 			<f:facet name="header">
-				<h:outputText value="#{messages['Batch.quantity']}" styleClass="colrh"/>
+				<h:outputText value="#{quantitytitle}" styleClass="colrh"/>
 			</f:facet>
 			<h:outputText value="#{it.item.batchQuantity.quantity}">
 				<f:convertNumber pattern="#,###,###,##0" />

@@ -12,14 +12,14 @@
 
 	<s:fragment rendered="#{userSession.canCheckReceiving}">
 		<h2>#{messages['meds.receiving']}</h2>	
-		<s:link view="/medicines/edtrec.xhtml" rendered="#{s:hasRole('RECEIV_EDT')}" >
+		<s:link view="/custom/ua/medicines/edtrec.xhtml" rendered="#{s:hasRole('RECEIV_EDT')}" >
 			<f:param name="id" value="#{null}" />
 			<div class="new-icon" style="float:left"/>#{messages['meds.receiving.new']}
 		</s:link>
-		<s:link value="#{messages['meds.receiving.viewall']}" view="/medicines/receivings.xhtml" propagation="none" rendered="#{userSession.canCheckReceiving}"/>
+		<s:link value="#{messages['meds.receiving.viewall']}" view="/custom/ua/medicines/receivings.xhtml" propagation="none" rendered="#{userSession.canCheckReceiving}"/>
 	</s:fragment>
 
-	<s:fragment rendered="#{s:hasRole('ORDERS')}">
+	<s:fragment rendered="#{s:hasRole('ORDERS') and tbunit.medicineSupplier}">
 		<h2>#{messages['meds.orders']}</h2>	
 		<s:link view="/medicines/ordernew.xhtml" rendered="#{userSession.canCreateOrder}" >
 			<div class="new-icon" style="float:left;"/>#{messages['meds.orders.new']}

@@ -60,7 +60,7 @@
 	<h:panelGroup id="pnlitems">
 	<table width="100%" class="table1" style="clear:right;">
 	<a:repeat value="#{transferHome.sources}" var="s">
-		<tr style="background-color:#EDF7EF;"><td colspan="10" style="border:1px solid #B4E8BB;padding:5px;">
+		<tr style="background-color:#EDF7EF;"><td colspan="12" style="border:1px solid #B4E8BB;padding:5px;">
 			<b>#{s.source.name}</b>
 		</td></tr>
 		
@@ -72,18 +72,19 @@
 		</th><th align="center">#{messages['Batch.expiryDate']}
 		</th><th align="left">#{messages['Medicine.strengthUnit']}
 		</th><th align="right">#{messages['Batch.numContainers']}
-		</th><th align="right">#{messages['Batch.quantity']}
+		</th><th align="right">#{messages['Batch.containerPrice']}
+		</th><th align="right">#{messages['global.totalPrice']}
 		</th><th>
 		</th></tr>
 		<a:repeat value="#{s.items}" var="it">
-		<tr bgcolor="#f3f3f0"><td colspan="8">
+		<tr bgcolor="#f3f3f0"><td colspan="9">
 			<div class="medicine-icon" />
 			#{it.medicine}
 		</td>
 		
 		<td align="right">
-			<b><h:outputText value="#{it.quantity}">
-				<f:convertNumber pattern="#,###,##0"/>
+			<b><h:outputText value="#{medCalcCont.calculateTotalPrice(it.batches)}">
+				<f:convertNumber pattern="#,###,##0.00"/>
 			</h:outputText>
 			</b>
 		</td>
@@ -112,7 +113,8 @@
 					#{b.batch.manufacturer}
 				</td>
 				<td align="center" class="colb">
-					<h:outputText value="#{b.batch.registCardNumber} #{messages['from']} "/>
+					<h:outputText value="#{b.batch.registCardNumber}"/>
+					<h:outputText value=" #{messages['from']} " rendered="#{b.batch.registCardBeginDate!=null}"/>
 					<h:outputText value="#{b.batch.registCardBeginDate}" converter="localeDateConverter" />
 				</td>
 				<td align="center" class="colb">
@@ -126,13 +128,18 @@
 					#{messages['Batch.container']}
 				</td>
 				<td class="colb" align="right">
-					<h:outputText value="#{b.numContainers} (№#{b.batch.quantityContainer})">
+					<h:outputText value="#{medCalcCont.calculateNumContainers(b.batch.quantityContainer,b.quantity)}">
 						<f:convertNumber pattern="#,###,##0"/>
 					</h:outputText>
 				</td>
-				<td class="colb" align="right">
-					<h:outputText value="#{b.quantity}">
-						<f:convertNumber pattern="#,###,##0"/>
+				<td align="right" class="colb">
+					<h:outputText value="#{medCalcCont.calculateContPrice(b.batch.quantityContainer,b.batch.unitPrice)}">
+						<f:convertNumber pattern="#,###,##0.00000"/>
+					</h:outputText>
+				</td>
+				<td align="right" class="colb">
+					<h:outputText value="#{medCalcCont.calculateTotalPrice(b.quantity,b.batch.quantityContainer,b.batch.unitPrice)}">
+						<f:convertNumber pattern="#,###,###,##0.00"/>
 					</h:outputText>
 				</td>
 				<td class="colb"></td>
@@ -140,6 +147,22 @@
 		</a:repeat>
 		</a:repeat>
 	</a:repeat>
+	<s:fragment rendered="#{transferUAHome.globalTotal>0}">
+		<tr>
+			<th colspan="8">
+			</th>
+			<th align="right">
+				#{messages['AtAll']}
+			</th>
+			<th>
+				<h:outputText value="#{transferUAHome.globalTotal}">
+					<f:convertNumber pattern="#,###,###,##0.00"/>
+				</h:outputText>	
+			</th>
+			<th>
+			</th>
+		</tr>
+	</s:fragment>
 	</table>
 	</h:panelGroup>		
 
@@ -172,6 +195,8 @@
 </s:decorate>
 
 <s:decorate template="/custom/ua/layout/batchselection.xhtml" >
+	<ui:param name="quantitytitle" value="#{messages['Batch.quantity']}" />
+	
 	<a:commandLink action="#{transferHome.selectBatches}" rendered="#{id==null}"
 		onclick="if (!disableButton(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
 		oncomplete="enableButton();hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button">
