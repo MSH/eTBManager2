@@ -71,10 +71,11 @@
    <event type="org.jboss.seam.security.loginSuccessful">
        <action execute="#{redirect.returnToCapturedView}"/>
    </event>
-   
+  <!-- 
 	<event type="org.jboss.seam.beginConversation">
 		<action	execute="#{beginConversationEvent.switchFlushModeManual}" />
 	</event>
+ -->
 
 	<mail:mail-session session-jndi-name="java:/mail/etbMail" />
 

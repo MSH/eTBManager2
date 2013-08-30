@@ -15,6 +15,9 @@
             <property name="lastTransaction" use="IGNORE" />
             <property name="expiredMedicineAdjustmentType" use="IGNORE" />
         </objectGraph>
+        
+        <objectGraph name="version" class="org.msh.tb.sync.EntityLastVersion">
+        </objectGraph>
 
         <objectGraph name="userprofile" class="org.msh.tb.entities.UserProfile">
             <property name="id" xmlAttribute="true" use="REQUIRED" />
