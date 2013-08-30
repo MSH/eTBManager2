@@ -339,7 +339,7 @@ public class MedicineManStartHome {
 		
 		public int getNumContainers() {
 			if (numContainers==0)
-				numContainers = batch.getNumContainers();
+				numContainers = (batch.getQuantityContainer() > 0)? (int)Math.ceil((double)quantity/(double)batch.getQuantityContainer()): 0;;
 			return numContainers;
 		}
 		
