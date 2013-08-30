@@ -1,5 +1,7 @@
 package org.msh.tb.ua;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -121,13 +123,13 @@ public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 		if (!prepareMovements())
 			return "error";
 		
-		double totalPrice = MedicineCalculator.calculateTotalPrice(sourceTree.getItems());
+		double totalPrice = getGlobalTotal();
 		rec.setTotalPrice(totalPrice);
 
 		// register log
 		getLogDetailWriter().addTableRow("Source", rec.getSource());
 		getLogDetailWriter().addTableRow(".receivingDate", rec.getReceivingDate());
-		getLogDetailWriter().addTableRow("global.totalPrice", rec.getTotalPrice());
+		getLogDetailWriter().addTableRow("global.totalPrice", totalPrice);
 
 		if (isManaged())
 			getLogService().recordEntityState(getInstance(), Operation.EDIT);
@@ -403,7 +405,7 @@ public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 	
 	public double getTotalPrice() {
 		if (totalPrice == 0)
-			totalPrice = MedicineCalculator.calculateTotalPrice(batch.getQuantityReceived(),batch.getQuantityContainer(), batch.getUnitPrice());
+			totalPrice = MedicineCalculator.calculateTotalPrice(batch.getQuantityReceived(),batch.getQuantityContainer(), batch.getUnitPrice(),3);
 		return totalPrice;
 	}
 	
@@ -532,17 +534,12 @@ public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 		 * Return the total price
 		 * @return
 		 */
-		public float getTotalPrice() {
-			float tot = 0;
-			for (Object item: node.getBatches()) {
-				tot += ((Batch)item).getTotalPrice();
-			}
-			return tot;
+		public double getTotalPrice() {
+			return MedicineCalculator.calculateTotalPrice(node.getBatches(),3);
 		}
 		
-		public float getUnitPrice() {
-			float tot = getQuantity();
-			return (tot != 0? getTotalPrice()/tot : 0);
+		public double getUnitPrice() {
+			return MedicineCalculator.calculateUnitPriceAvg(getTotalPrice(), getQuantity());
 		}
 		
 		/**
@@ -599,4 +596,13 @@ public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 		return remMovs;
 	}
 
+	public double getGlobalTotal() {
+		BigDecimal res = new BigDecimal(0);
+		for (MedicineNode mn:getMedicines()){
+			BigDecimal d = new BigDecimal(MedicineCalculator.calculateTotalPrice(mn.getBatches(),3));
+			d = d.setScale(2,RoundingMode.HALF_UP);
+			res = res.add(d);
+		}
+		return res.doubleValue();
+	}
 }
