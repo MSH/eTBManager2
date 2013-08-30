@@ -9,139 +9,65 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.sideeffects']}" />
-<ui:param name="waitdlg" value="1" />
+<ui:param name="title" value="#{messages['cases.sideeffects']}" />
+
 <ui:param name="topmenu" value="0" />
-<ui:param name="labelstyle" value="width:160px" />
-<ui:param name="sideEffectHome" value="#{sideEffectHomeUA}"/>
+<ui:param name="left" value="0" />
+<ui:param name="labelstyle" value="width:260px" />
+
 
 <ui:define name="content">
 <h1>#{title}</h1>
 
-<rich:jQuery selector="document" query="ready(function() {updateRows();})" />
-
-<script type="text/javascript" >
-function checkClick(obj) {
-  if (obj.checked)
-	  selectall()
-  else unselectall();
-  updateRows();
-}
-
-function updateRows() {
-jQuery("#tblse tr").removeClass("activerow");
-jQuery("#tblse tr input[type='text'],select").hide();
-jQuery("#tblse tr:has(:checked) input[type='text']").show();
-jQuery("#tblse tr:has(:checked) select").show();
-jQuery("#tblse tr:has(:checked)").addClass("activerow");
-}
-
-function validateForm() {
-	valOk=true;
-	jQuery("#tblse tr:has(:checked) input[type='text']")
-		.css("background-color", "white")
-		.each(function() { validateMedicine(this); });
-
-	if (valOk)
-		jQuery("#tblse tr:has(:checked) select[class='xpto']")
-			.css("background-color", "transparent")
-			.each(function() { validateYesNo(this); });
+<s:decorate id="caseBody" template="/layout/casebody.xhtml">
+<h:form id="main" styleClass="form1">
+	<div class="form-content">
 	
-	return valOk;
-}
-
-function validateMedicine(edt) {
-	if ((edt.value == null) || (edt.value.length==0)) {
-			window.alert("#{messages['cases.sideeffects.medicine']}: #{messages['javax.faces.component.UIInput.REQUIRED']}");
-			jQuery(edt).css("background-color", "#FFD2B4");
-			edt.focus();
-			valOk = false;
-			return false;
-	}
-}
-
-function validateYesNo(cb) {
-	if (cb.options[cb.selectedIndex].text == '-') {
-		window.alert("#{messages['cases.sideeffects.resolved']}: #{messages['javax.faces.component.UIInput.REQUIRED']}");
-		jQuery(cb).css("background-color", "#FFD2B4");
-		cb.focus();
-		valOk = false;
-		return false;
-	}
-}
-</script>
-<p/>
-<h:form id="main">
-
-<s:decorate template="/layout/casebody.xhtml">
-
-<table width="100%">
-<tr><td>
-	<div id="tblse">
-	<h:dataTable value="#{sideEffectHome.items}" var="it" width="100%" styleClass="table1">
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
-			</f:facet>
-			<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" />
-			#{it.item.sideEffect.value}
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.medicine']}" styleClass="collh" />
-			</f:facet>
-			<h:selectOneMenu value="#{it.item.substance}">
-				<s:selectItems var="s" value="#{substances}" label="#{s.abbrevName}" noSelectionLabel="-"/>
-				<s:convertEntity />
-			</h:selectOneMenu>
-			<h:selectOneMenu value="#{it.item.substance2}">
-				<s:selectItems var="s" value="#{substances}" label="#{s.abbrevName}" noSelectionLabel="-"/>
-				<s:convertEntity />
-			</h:selectOneMenu>
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.month']}" styleClass="collh" />
-			</f:facet>
-			<h:selectOneMenu value="#{it.item.month}" >
-				<f:selectItems value="#{sideEffectHome.months}" />
-			</h:selectOneMenu>
-		</h:column>
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.resolved']}" styleClass="collh"/>
-			</f:facet>
-			<h:selectOneMenu value="#{it.item.resolved}" styleClass="xpto">
-				<s:selectItems value="#{yesNoList}" var="v" noSelectionLabel="-" label="#{messages[v.key]}"/>
-				<s:convertEnum />
-			</h:selectOneMenu>
-		</h:column>
-	</h:dataTable>
-	</div>
-
-</td></tr>
-</table>
-
-	<div class="form-footer">
-	<a:commandLink action="#{sideEffectHome.save}" styleClass="button" reRender="main,messages" 
-		onclick="if (!validateForm()) {return false;} else disableButton(this);">
-		<span>#{messages['form.save']}</span>
-	</a:commandLink> 
-    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
-       	<f:param name="id" value="#{caseHome.id}"/>
-       	<span>#{messages['form.cancel']}</span>
-    </s:link>
-    </div>
-
-</s:decorate>
-
-<p/>
-
+		    <s:decorate template="/layout/editfield.xhtml" >
+		    	<ui:define name="label">#{messages['cases.sideeffects.desc']}:</ui:define>
+		    	<ui:param name="required" value="true" />
+		    	<ui:param name="id" value="sideEffect" />
+		    	<ui:param name="field" value="#{caseSideEffect.sideEffect}" />
+		    	<ui:param name="list" value="#{fieldsQuery.sideEffects}" />
+	    	</s:decorate>
+			
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['Substance']}:</ui:define>
+				<h:selectOneMenu value="#{caseSideEffect.substance}">
+						<s:selectItems var="s" value="#{substances}" label="#{s.abbrevName}" noSelectionLabel="-"/>
+						<s:convertEntity />
+				</h:selectOneMenu>
+				<h:outputText value="," />
+				<h:selectOneMenu value="#{caseSideEffect.substance2}">
+					<s:selectItems var="s" value="#{substances}" label="#{s.abbrevName}" noSelectionLabel="-"/>
+					<s:convertEntity />
+				</h:selectOneMenu>
+			</s:decorate>
+			
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['cases.sideeffects.month']}:</ui:define>
+				<h:selectOneMenu id="month" value="#{caseSideEffect.month}" required="true">
+					<f:selectItems value="#{sideEffectHome.months}" />
+				</h:selectOneMenu>
+			</s:decorate>
+		
+		    <s:decorate template="/layout/edit.xhtml" >
+		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+		    	<h:inputTextarea value="#{caseSideEffect.comment}" style="width:500px;height:80px;" />
+		    </s:decorate>
+		    
+		<div class="form-footer">
+			<a:commandLink action="#{sideEffectHome.save}" styleClass="button" reRender="main">
+				<span>#{messages['form.save']}</span>
+			</a:commandLink> 
+		    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+		       	<f:param name="id" value="#{caseHome.id}"/>
+		       	<span>#{messages['form.cancel']}</span>
+		    </s:link>
+		</div>
+	</div>		
 </h:form>
-
+</s:decorate>
 </ui:define>
 
 </ui:composition>  
