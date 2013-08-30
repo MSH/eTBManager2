@@ -342,4 +342,19 @@ public class TransferUAHome {
 		transferHome.setTransferItem(null);
 	}
 	
+	public double getGlobalTotal() {
+		double res = 0;
+		for (SourceItem s:transferHome.getSources())
+			for (TransferItem ti:s.getItems())
+					res += MedicineCalculator.calculateTotalPrice(ti.getBatches(),5);
+		return res;
+	}
+	
+	public double getGlobalTotalReceived() {
+		double res = 0;
+		for (SourceItem s:transferHome.getSources())
+			for (TransferItem ti:s.getItems())
+					res += MedicineCalculator.calculateTotalPriceReceived(ti.getBatches(),5);
+		return res;
+	}
 }

@@ -7,7 +7,7 @@ import org.msh.utils.EntityQuery;
 
 /**
  * Maintain a list of transfers that are not open
- * @author Ricardo Memoria
+ * @author A.M.
  *
  */
 @Name("transfersReceived")

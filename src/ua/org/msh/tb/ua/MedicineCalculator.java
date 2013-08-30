@@ -5,6 +5,11 @@ import java.math.RoundingMode;
 import java.util.List;
 
 import org.msh.tb.entities.Batch;
+import org.msh.tb.entities.BatchMovement;
+import org.msh.tb.entities.BatchQuantity;
+import org.msh.tb.entities.Movement;
+import org.msh.tb.entities.TransferBatch;
+import org.msh.tb.medicines.MedicineManStartHome.BatchInfo;
 /**
  * The class is responsible for all high-precision math operations with real numbers in the Medicine-module. 
  * For the calculation uses class {@link java.math.BigDecimal}
@@ -14,7 +19,7 @@ public class MedicineCalculator {
 	/**
 	 * Precision of real value, with which it is saved in database 
 	 */
-	private static int scaleForSave = 6;
+	private static int scaleForSave = 10;
 	
 	/**
 	 * Calculate unit price using by price of container and quantity units in container
@@ -26,8 +31,23 @@ public class MedicineCalculator {
 		BigDecimal cP = new BigDecimal(contPrice);
 		BigDecimal qC = new BigDecimal(quantCont);
 		BigDecimal uPrice = new BigDecimal(0);
-		if (!cP.equals(0))
+		if (!cP.equals(0) && qC.intValue()!=0)
 			uPrice = cP.divide(qC,scaleForSave,RoundingMode.HALF_UP);
+		return uPrice.floatValue();
+	}
+	
+	/**
+	 * Calculate average unit price using total price and total quantity units
+	 * @param totPrice
+	 * @param quantity
+	 * @return  unit price average
+	 */
+	public static float calculateUnitPriceAvg(double totPrice, int quantity) {
+		BigDecimal tP = new BigDecimal(totPrice);
+		BigDecimal q = new BigDecimal(quantity);
+		BigDecimal uPrice = new BigDecimal(0);
+		if (!tP.equals(0) && q.intValue()!=0)
+			uPrice = tP.divide(q,scaleForSave,RoundingMode.HALF_UP);
 		return uPrice.floatValue();
 	}
 	
@@ -42,7 +62,16 @@ public class MedicineCalculator {
 		BigDecimal uP = new BigDecimal(uPrice);
 		uP = uP.setScale(scaleForSave,RoundingMode.HALF_UP);
 		BigDecimal cPrice = uP.multiply(qC);
-		cPrice = cPrice.setScale(5, RoundingMode.HALF_UP);
+		cPrice = cPrice.setScale(3, RoundingMode.HALF_UP);
+		/*for (int i = 0; i < 6; i++) {
+			BigDecimal cPriceRound = cPrice.setScale(i, RoundingMode.HALF_UP);
+			BigDecimal d = cPriceRound.subtract(cPrice).abs();
+			BigDecimal eps = new BigDecimal("0.00001");
+			if (d.compareTo(eps)<=0){
+				cPrice = cPrice.setScale(i-1, RoundingMode.HALF_UP);
+				break; 
+			}
+		}*/
 		return cPrice.doubleValue();
 	}
 	
@@ -62,8 +91,9 @@ public class MedicineCalculator {
 	 * @param uPrice - price of unit
 	 * @return total price by batch
 	 */
-	public static double calculateTotalPrice(int qRec, int qCont, double uPrice){
+	public static double calculateTotalPrice(int qRec, int qCont, double uPrice, int scaleCPrice){
 		BigDecimal cP = new BigDecimal(calculateContPrice(qCont, uPrice));
+		cP = cP.setScale(scaleCPrice, RoundingMode.HALF_UP);
 		BigDecimal nC = new BigDecimal(calculateNumContainers(qCont, qRec));
 		//BigDecimal qR = new BigDecimal(qRec);
 		//BigDecimal uP = new BigDecimal(uPrice);
@@ -76,14 +106,70 @@ public class MedicineCalculator {
 	 * @param lst - list if bathes
 	 * @return total price by list of batches
 	 */
-	public static double calculateTotalPrice(List<Batch> lst){
+	public static double calculateTotalPrice(List lst, int scaleCPrice){
 		BigDecimal res = new BigDecimal(0);
-		for (Batch b:lst){
-			BigDecimal tp = new BigDecimal(calculateTotalPrice(b.getQuantityReceived(), b.getQuantityContainer(), b.getUnitPrice()));
-			res = res.add(tp);
+		if (!lst.isEmpty()){
+			if (lst.get(0) instanceof Batch)
+				for (Batch b:(List<Batch>)lst){
+					BigDecimal tp = new BigDecimal(calculateTotalPrice(b.getQuantityReceived(), b.getQuantityContainer(), b.getUnitPrice(),scaleCPrice));
+					tp = tp.setScale(2,RoundingMode.HALF_UP);
+					res = res.add(tp);
+				}
+			if (lst.get(0) instanceof BatchInfo)
+				for (BatchInfo b:(List<BatchInfo>)lst){
+					BigDecimal tp = new BigDecimal(calculateTotalPrice(b.getQuantity(), b.getBatch().getQuantityContainer(), b.getBatch().getUnitPrice(),scaleCPrice));
+					tp = tp.setScale(2,RoundingMode.HALF_UP);
+					res = res.add(tp);
+				}
+			if (lst.get(0) instanceof TransferBatch)
+				for (TransferBatch b:(List<TransferBatch>)lst){
+					BigDecimal tp = new BigDecimal(calculateTotalPrice(b.getQuantity(), b.getBatch().getQuantityContainer(), b.getBatch().getUnitPrice(),scaleCPrice));
+					tp = tp.setScale(2,RoundingMode.HALF_UP);
+					res = res.add(tp);
+				}
+			if (lst.get(0) instanceof BatchQuantity)
+				for (BatchQuantity b:(List<BatchQuantity>)lst){
+					BigDecimal tp = new BigDecimal(calculateTotalPrice(b.getQuantity(), b.getBatch().getQuantityContainer(), b.getBatch().getUnitPrice(),scaleCPrice));
+					tp = tp.setScale(2,RoundingMode.HALF_UP);
+					res = res.add(tp);
+				}
+			if (lst.get(0) instanceof Movement)
+				for (Movement mov:(List<Movement>)lst)
+					for (BatchMovement bm:mov.getBatches()){
+						BigDecimal tp = new BigDecimal(calculateTotalPrice(bm.getBatch().getQuantityReceived(), bm.getBatch().getQuantityContainer(), bm.getBatch().getUnitPrice(),scaleCPrice));
+						tp = tp.setScale(2,RoundingMode.HALF_UP);
+						res = res.add(tp);
+				}
+			if (lst.get(0) instanceof BatchMovement)
+				for (BatchMovement bm:(List<BatchMovement>)lst){
+					BigDecimal tp = new BigDecimal(calculateTotalPrice(bm.getBatch().getQuantityReceived(), bm.getBatch().getQuantityContainer(), bm.getBatch().getUnitPrice(),scaleCPrice));
+					tp = tp.setScale(2,RoundingMode.HALF_UP);
+					res = res.add(tp);
+				}
+			
 		}
 		return res.doubleValue();
 	}
+	
+	/**
+	 * Calculate total price by list of batches
+	 * @param lst - list if bathes
+	 * @return total price by list of batches
+	 */
+	public static double calculateTotalPriceReceived(List lst, int scaleCPrice){
+		BigDecimal res = new BigDecimal(0);
+		if (!lst.isEmpty()){
+			if (lst.get(0) instanceof TransferBatch)
+				for (TransferBatch b:(List<TransferBatch>)lst){
+					if (b.getQuantityReceived() != null){
+						BigDecimal tp = new BigDecimal(calculateTotalPrice(b.getQuantityReceived(), b.getBatch().getQuantityContainer(), b.getBatch().getUnitPrice(),scaleCPrice));
+						res = res.add(tp);
+					}
+				}
+		}
+		return res.doubleValue();
+	}
+	
 	
 	/**
 	 * Calculate numbers of containers in batch
@@ -96,7 +182,7 @@ public class MedicineCalculator {
 		BigDecimal qR = new BigDecimal(qRec);
 		BigDecimal nC = new BigDecimal(0);
 		if (qC.intValue()!=0)
-			nC = qR.divide(qC);
+			nC = qR.divide(qC,RoundingMode.CEILING);
 		return nC.intValue();
 	}
 }
