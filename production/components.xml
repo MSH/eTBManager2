@@ -36,6 +36,7 @@
    <core:manager concurrent-request-timeout="500" 
                  conversation-timeout="120000" 
                  conversation-id-parameter="cid"
+                 default-flush-mode="MANUAL"
                  parent-conversation-id-parameter="pid" />
 
    <persistence:managed-persistence-context name="entityManager"
