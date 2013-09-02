@@ -27,6 +27,7 @@ import org.msh.tb.reports2.variables.CountingVariable;
 import org.msh.tb.reports2.variables.DateFieldVariable;
 import org.msh.tb.reports2.variables.EnumFieldVariable;
 import org.msh.tb.reports2.variables.ExtrapulmonarVariable;
+import org.msh.tb.reports2.variables.HivCptArtVariable;
 import org.msh.tb.reports2.variables.HivResultVariable;
 import org.msh.tb.reports2.variables.LabExamDateVariable;
 import org.msh.tb.reports2.variables.LabMethodVariable;
@@ -43,6 +44,7 @@ import org.msh.tb.reports2.variables.SideEffectVariable;
 import org.msh.tb.reports2.variables.SuspectConfirmedVariable;
 import org.msh.tb.reports2.variables.TypeTBCaseVariable;
 import org.msh.tb.reports2.variables.TreatOutcomeVariable;
+import org.msh.tb.reports2.variables.HivCptArtVariable.ReportType;
 
 
 /**
@@ -190,6 +192,8 @@ public class ReportResources {
 	protected ReportGroup addHivExamVariables() {
 		ReportGroup grp = addGroup("cases.examhiv");
 		add(grp, new HivResultVariable());
+		add(grp, new HivCptArtVariable(ReportType.ART_REPORT));
+		add(grp, new HivCptArtVariable(ReportType.CPT_REPORT));
 		return grp;
 	}
 
