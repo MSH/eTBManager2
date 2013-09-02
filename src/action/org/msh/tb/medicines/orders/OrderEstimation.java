@@ -299,9 +299,11 @@ public class OrderEstimation {
 		}
 		
 		// remove quantity expired
+		// remove quantity expired
 		hql = "select a.batch.medicine.id, a.source.id, sum(a.quantity) " +
 				"from BatchQuantity a " +
-				"where a.tbunit.id = #{order.unitFrom.id} and a.batch.expiryDate <= :dt";
+				"where a.tbunit.id = #{order.unitFrom.id} and a.batch.expiryDate <= :dt " +
+				"group by a.batch.medicine.id, a.source.id";
 
 		List<Object[]> objs = entityManager
 				.createQuery(hql)
