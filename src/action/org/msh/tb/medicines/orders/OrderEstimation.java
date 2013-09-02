@@ -11,10 +11,10 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.MedicineUnitHome;
-import org.msh.tb.entities.MedicineUnit;
 import org.msh.tb.entities.Order;
 import org.msh.tb.entities.OrderItem;
 import org.msh.tb.entities.PrescribedMedicine;
+import org.msh.tb.entities.Source;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
@@ -259,9 +259,12 @@ public class OrderEstimation {
 	}
 	
 	
+	/**
+	 * Load information about the stock position to be used in the calculation of the order
+	 */
 	protected void loadStockPosition() {
-		Order order = orderHome.getInstance();
-		Tbunit unitFrom = order.getUnitFrom();
+//		Order order = orderHome.getInstance();
+//		Tbunit unitFrom = order.getUnitFrom();
 		
 		// monta instrução HQL IN
 		String hql = "from StockPosition sp join fetch sp.medicine m " +
@@ -276,25 +279,77 @@ public class OrderEstimation {
 				int qtd = sp.getQuantity();
 
 				// order the medicine if quantity is over min buffer stock ?
-				if (!unitFrom.isOrderOverMinimum()) {
+/*				if (!unitFrom.isOrderOverMinimum()) {
 					MedicineUnit mu = medicineUnitHome.searchMedicineUnit(sp.getSource(), sp.getMedicine());
 					if ((mu != null) && (mu.getMinBufferStock() != null) && (qtd > mu.getMinBufferStock())) {
 						s.getItems().remove(it);
 						it = null;
 					}
 				}
-				
+*/				
 				if (it != null) {
-					it.setStockQuantity(qtd);
+/*					it.setStockQuantity(qtd);
 					qtd = it.getItem().getEstimatedQuantity() - qtd;
 					if (qtd < 0)
 						qtd = 0;
 					it.getItem().setRequestedQuantity(qtd);
-					it.getItem().setStockQuantity(sp.getQuantity());
+*/					it.setStockQuantity(qtd);
 				}
 			}
 		}
+		
+		// remove quantity expired
+		hql = "select a.batch.medicine.id, a,source.id, sum(a.quantity) " +
+				"from BatchQuantity a " +
+				"where a.tbunit.id = #{order.unitFrom.id} and a.batch.expiryDate <= :dt";
+
+		List<Object[]> objs = entityManager
+				.createQuery(hql)
+				.setParameter("dt", new Date())
+				.getResultList();
+
+		// update stock quantity based on the quantity expired
+		for (Object[] vals: objs) {
+			Integer medId = (Integer)vals[0];
+			Integer sourceId = (Integer)vals[1];
+			Long qtd = (Long)vals[2];
+			if ((qtd != null) && (qtd > 0)) {
+				SourceOrderItem s = findOrderItemBySourceId(sourceId);
+				if (s != null) {
+					OrderItemAux item = s.findItemByMedicineId(medId);
+					if (item != null) {
+						item.setStockQuantity( item.getStockQuantity() - qtd.intValue() );
+					}
+				}
+			}
+		}
+
+		// calculate estimated quantity
+		for (SourceOrderItem s: orderHome.getSources()) {
+			for (OrderItemAux item: s.getItems()) {
+				int qtd = item.getItem().getEstimatedQuantity() - item.getStockQuantity();
+				if (qtd < 0)
+					qtd = 0;
+				item.getItem().setRequestedQuantity(qtd);
+				item.getItem().setStockQuantity(qtd);
+			}
+		}
 	}
+	
+	
+	/**
+	 * Search for the instance of {@link SourceOrderItem} by its source ID
+	 * @param id is the ID of the {@link Source} assigned to the order item
+	 * @return instance of {@link SourceOrderItem}, or null if it's not found
+	 */
+	private SourceOrderItem findOrderItemBySourceId(Integer id) {
+		for (SourceOrderItem item: orderHome.getSources()) {
+			if (item.getSource().getId().equals(id))
+				return item;
+		}
+		return null;
+	}
+	
 	
 	private boolean verifyPendingOrder(){
 		List<Order> o = (List<Order>) entityManager.createQuery("from Order o where o.unitFrom.id = :id and (o.status != :received and o.status != :cancelled)")

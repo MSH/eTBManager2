@@ -68,6 +68,20 @@ public class SourceOrderItem {
 
 	
 	/**
+	 * Search for order item by its medicine id 
+	 * @param id is the ID of the medicine
+	 * @return instance of {@link OrderItemAux}, or null if item is not found
+	 */
+	public OrderItemAux findItemByMedicineId(Integer id) {
+		for (OrderItemAux it: items) {
+			if (it.getItem().getMedicine().getId().equals(id))
+				return it;
+		}
+		return null;
+	}
+	
+	
+	/**
 	 * Clear information about items with request information forcing it to be recreated again
 	 */
 	public void refreshItemsWithRequest() {

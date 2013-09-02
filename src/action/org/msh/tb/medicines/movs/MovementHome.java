@@ -395,15 +395,20 @@ public class MovementHome {
 			return;
 		
 		// execute quantity validation
-		// verify if, in case of reduction (i.e, dispensing/transfer/etc) if the quantity will be negative from the date to the future 
+		// verify if, in case of reduction (i.e, dispensing/transfer/etc) if the quantity will be negative 
+		// from the (previous movement) date to the future
 		String hql = "select m.date from BatchMovement a join a.movement m " +
 				"where (select sum(b.quantity*b.movement.oper) + :qtd from BatchMovement b " +
 				"join b.movement m2 " +
 				"where b.batch.id=a.batch.id and m2.tbunit.id=m.tbunit.id and m2.source.id=m.source.id " +
-				"and ((m2.date < m.date) or (m2.date = m.date and m2.recordDate <= m.recordDate))) < 0 " +
+				"and ((m2.date > m.date) or (m2.date = m.date and m2.recordDate >= m.recordDate))) < 0 " +
 				"and a.batch.id = :batch and m.tbunit.id=:unit and m.source.id=:source " +
-				"and (m.date > :dt or m.date = (select max(c.movement.date) from BatchMovement c " +
-				"where c.batch.id = a.batch.id and c.movement.tbunit.id=m.tbunit.id and c.movement.source.id=m.source.id and c.movement.date <= :dt))";
+				// check the previous movements and the latest movement before the date (there is a double-check
+				// in a sub-query because in the latest date may have more than 1 movement
+				"and (m.date > :dt or m.id = (select max(c.movement.id) from BatchMovement c " +
+				"where c.batch.id = a.batch.id and c.movement.tbunit.id=m.tbunit.id and c.movement.source.id=m.source.id "
+				+ "and c.movement.date = (select max(date) from Movement m9 where m9.tbunit.id=m.tbunit.id and m9.source.id=m.source.id "
+				+ "and m9.medicine.id=m.medicine.id and m9.date <= :dt)))";
 
 		List<Date> lst = entityManager.createQuery(hql)
 			.setParameter("qtd", (long)qtd)
