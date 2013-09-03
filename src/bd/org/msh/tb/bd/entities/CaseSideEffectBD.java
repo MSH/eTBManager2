@@ -4,29 +4,21 @@ import java.util.Date;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.validator.NotNull;
 import org.jboss.seam.annotations.Name;
-import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.bd.entities.enums.SideEffectAction;
 import org.msh.tb.bd.entities.enums.SideEffectGrading;
 import org.msh.tb.bd.entities.enums.SideEffectOutcome;
 import org.msh.tb.bd.entities.enums.SideEffectSeriousness;
+import org.msh.tb.entities.CaseSideEffect;
 import org.msh.utils.date.DateUtils;
 
 @Entity
 @DiscriminatorValue("bd")
 @Name("caseSideEffectBD")
 public class CaseSideEffectBD extends CaseSideEffect{
-
-	@ManyToOne
-	@JoinColumn(name="CASE_DATA_ID")
-	@NotNull
-	private TbCaseBD tbcasebd;	
 
 	private SideEffectGrading grade;
 	
@@ -46,7 +38,7 @@ public class CaseSideEffectBD extends CaseSideEffect{
 	
 	public Integer getMonthOfTreatment(){
 		int i = 0;
-		i = DateUtils.monthsBetween(tbcasebd.getTreatmentPeriod().getIniDate(), effectSt)+1;
+		i = DateUtils.monthsBetween(getTbcase().getTreatmentPeriod().getIniDate(), effectSt)+1;
 		return i;
 		
 	}
@@ -81,14 +73,6 @@ public class CaseSideEffectBD extends CaseSideEffect{
 
 	public void setSeriousness(SideEffectSeriousness seriousness) {
 		this.seriousness = seriousness;
-	}
-
-	public TbCaseBD getTbcasebd() {
-		return tbcasebd;
-	}
-
-	public void setTbcasebd(TbCaseBD tbcasebd) {
-		this.tbcasebd = tbcasebd;
 	}
 
 //	public String getComments() {

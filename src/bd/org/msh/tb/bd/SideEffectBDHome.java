@@ -144,7 +144,7 @@ public class SideEffectBDHome extends EntityHomeEx<CaseSideEffectBD>{
 		CaseSideEffectBD it = getInstance();
 		
 		it.setTbcase(tbcase);
-		it.setTbcasebd((TbCaseBD)tbcase);
+//		it.setTbcasebd((TbCaseBD)tbcase);
 		if ((it.getSubstance() != null) && (it.getSubstance2() != null) && (it.getSubstance().equals(it.getSubstance2())))
 			it.setSubstance2(null);
 
