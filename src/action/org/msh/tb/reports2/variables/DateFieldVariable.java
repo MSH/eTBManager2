@@ -213,6 +213,13 @@ public class DateFieldVariable extends VariableImpl {
 		
 		if (value.contains(","))
 			return stringToPeriod(value);
+
+		// if it's grouped, so both values from the filter is sent from the table
+		if (isGrouped()) {
+			String[] vals = value.split(";");
+			if (vals.length > 1)
+				value = vals[vals.length - 1];
+		}
 		
 		return Integer.parseInt(value);
 	}

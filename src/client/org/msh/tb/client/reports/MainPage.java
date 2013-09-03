@@ -464,7 +464,10 @@ public class MainPage extends Composite implements StandardEventHandler {
 			CTableRow row = tableData.getTable().getRows().get(index);
 			if (row.getLevel() == level) {
 				CVariable var = tableData.getRowVariables().get(row.getVarIndex());
-				filters.put(var.getId(), row.getKey());
+				String prevkey = filters.get(var.getId());
+				if (prevkey != null)
+					 filters.put(var.getId(), row.getKey() + ";" + prevkey);
+				else filters.put(var.getId(), row.getKey());
 				level--;
 				if (level == -1)
 					break;
