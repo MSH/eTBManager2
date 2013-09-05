@@ -227,14 +227,6 @@ public class UserSession {
      * @param statelessLogin
      */
     private void initializeSession(UserWorkspace userWorkspace, UserLogin userLogin, boolean statelessLogin) {
-        // avoid lazy initialization (Hibernate)
-/*        userWorkspace.getTbunit().getId();
-        userWorkspace.getTbunit().getAdminUnit().getId();
-        if (userWorkspace.getAdminUnit() != null)
-        	userWorkspace.getAdminUnit().getId();
-        if (userWorkspace.getHealthSystem() != null)
-        	userWorkspace.getHealthSystem().getId();
-*/        
         // put data in the session scope
     	Contexts.getSessionContext().set(SessionFactory.workspaceId, userWorkspace.getWorkspace().getId());
     	Contexts.getSessionContext().set(SessionFactory.userWorkspaceId, userWorkspace.getId());
@@ -384,7 +376,7 @@ public class UserSession {
 	 * @return
 	 */
 	public Tbunit getWorkingTbunit() {
-		UserWorkspace uw = (UserWorkspace)Contexts.getSessionContext().get("userWorkspace");
+		UserWorkspace uw = (UserWorkspace)Component.getInstance("userWorkspace");
 		if (uw.isPlayOtherUnits())
 			 return (Tbunit)Component.getInstance("selectedUnit");
 		else return uw.getTbunit();
@@ -396,7 +388,7 @@ public class UserSession {
 	 * @return
 	 */
 	public boolean isSelectedUnitTransactional() {
-		UserWorkspace uw = (UserWorkspace)Contexts.getSessionContext().get("userWorkspace");
+		UserWorkspace uw = (UserWorkspace)Component.getInstance("userWorkspace");
 
 		if (uw.isPlayOtherUnits())
 			return true;
