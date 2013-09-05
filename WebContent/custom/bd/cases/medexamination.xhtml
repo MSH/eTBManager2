@@ -86,7 +86,7 @@
 		</td></tr>
 		</s:fragment>
 		<s:fragment rendered="#{not empty r.comments}">
-		<tr><td>
+		<tr><td colspan="2">
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['global.comments']}:</ui:define>
 				#{r.comments}
