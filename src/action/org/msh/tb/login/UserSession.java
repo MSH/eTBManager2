@@ -228,18 +228,18 @@ public class UserSession {
      */
     private void initializeSession(UserWorkspace userWorkspace, UserLogin userLogin, boolean statelessLogin) {
         // avoid lazy initialization (Hibernate)
-        userWorkspace.getTbunit().getId();
+/*        userWorkspace.getTbunit().getId();
         userWorkspace.getTbunit().getAdminUnit().getId();
         if (userWorkspace.getAdminUnit() != null)
         	userWorkspace.getAdminUnit().getId();
         if (userWorkspace.getHealthSystem() != null)
         	userWorkspace.getHealthSystem().getId();
-        
+*/        
         // put data in the session scope
-    	Contexts.getSessionContext().set("workspaceId", userWorkspace.getWorkspace().getId());
+    	Contexts.getSessionContext().set(SessionFactory.workspaceId, userWorkspace.getWorkspace().getId());
+    	Contexts.getSessionContext().set(SessionFactory.userWorkspaceId, userWorkspace.getId());
     	Contexts.getSessionContext().set("userLogin", userLogin);
     	Contexts.getSessionContext().set("workspaceExtension", userWorkspace.getWorkspace().getExtension());
-    	Contexts.getSessionContext().set("userWorkspace", userWorkspace);
     	Contexts.getSessionContext().set("tbunitselection", getTbunitselection());
     	
     	setTbunit(userWorkspace.getTbunit());

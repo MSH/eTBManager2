@@ -27,6 +27,7 @@ public class SessionFactory {
 
 	public static final String workspaceId = "workspaceId";
 	public static final String selectedUnitId = "selectedUnitId";
+	public static final String userWorkspaceId = "userWorkspaceId";
 	
 	/**
 	 * Factory to create an instance of the {@link Workspace} class in use by the current user
@@ -47,6 +48,12 @@ public class SessionFactory {
 	public Tbunit createSelectedUnit() {
 		Integer id = (Integer)Contexts.getSessionContext().get(selectedUnitId);
 		return id == null? null : getEntityManager().find(Tbunit.class, id);
+	}
+	
+	@Factory(value="userWorkspace", scope=ScopeType.CONVERSATION, autoCreate=true)
+	public UserWorkspace createUserWorkspace() {
+		Integer id = (Integer)Contexts.getSessionContext().get(userWorkspaceId);
+		return id == null? null: getEntityManager().find(UserWorkspace.class, id);
 	}
 	
 	/**
