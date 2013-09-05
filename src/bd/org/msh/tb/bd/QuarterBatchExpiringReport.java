@@ -49,10 +49,8 @@ public class QuarterBatchExpiringReport {
 	 */
 	public void refresh(){
 		//Checks if the user has selected an admin unit or a tbunit.
-		if(getLocationWhereClause() == null){
-			facesMessages.addToControlFromResourceBundle("cbselau1", "javax.faces.component.UIInput.REQUIRED");
+		if(QSPUtils.getLocationWhereClause(tbunitselection) == null)
 			return;
-		}
 		
 		if(!isFiltersFilledIn())
 			return;
@@ -86,30 +84,14 @@ public class QuarterBatchExpiringReport {
 			updateConsolidatedBatchList();
 		}
 		
-		pendCloseQuarterUnits = QuarterClosePendUnits.getPendCloseQuarterUnits(selectedQuarter, tbunitselection);
+		pendCloseQuarterUnits = QSPUtils.getPendCloseQuarterUnits(selectedQuarter, tbunitselection);
 	}
 	
 	/**
 	 * Checks if all the requirements to load the table is attended
 	 */
 	public boolean isFiltersFilledIn(){
-		return !(selectedQuarter == null || selectedQuarter.getYear() == 0 || getLocationWhereClause() == null);
-	}
-	
-	/**
-	 * Returns where clause depending on the tbunitselection filter
-	 */
-	public String getLocationWhereClause(){
-		if(tbunitselection == null)
-			return null;
-		
-		if(tbunitselection.getTbunit()!=null){
-			return "where mov.tbunit.id = " + tbunitselection.getTbunit().getId() + " and mov.tbunit.workspace.id = " + UserSession.getWorkspace().getId();
-		}else if(tbunitselection.getAuselection().getSelectedUnit()!=null){
-			return "where mov.tbunit.adminUnit.code like '" + tbunitselection.getAuselection().getSelectedUnit().getCode() + "%' " +
-					"and mov.tbunit.workspace.id = " + UserSession.getWorkspace().getId() + " and mov.tbunit.treatmentHealthUnit = true";
-		}
-		return null;
+		return !(selectedQuarter == null || selectedQuarter.getYear() == 0 || QSPUtils.getLocationWhereClause(tbunitselection) == null);
 	}
 	
 	/**
@@ -168,7 +150,7 @@ public class QuarterBatchExpiringReport {
 	private void updateConsolidatedBatchList(){
 		String queryString = "select b, sum(bm.quantity * mov.oper) " +
 							"from BatchMovement bm join bm.batch b join bm.movement mov " +
-							getLocationWhereClause() + " and mov.date <= :endQuarterDate " +
+							QSPUtils.getLocationWhereClause(tbunitselection) + " and mov.date <= :endQuarterDate " +
 							"and b.expiryDate <= :exiringLimitDate " + getSourceClause() +
 							"group by b.id " +
 							"having sum(bm.quantity * mov.oper) > 0 " +

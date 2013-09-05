@@ -45,11 +45,11 @@ public class QuarterStockPositionReport {
 	 * Refreshes the rows values according to the filters.
 	 */
 	public void refresh(){
-		if(getLocationWhereClause() == null)
-			facesMessages.addToControlFromResourceBundle("cbselau1", "javax.faces.component.UIInput.REQUIRED");
+		if(QSPUtils.getLocationWhereClause(tbunitselection) == null)
+			return;
 		else{
 			updateQuarterReport();
-			pendCloseQuarterUnits = QuarterClosePendUnits.getPendCloseQuarterUnits(selectedQuarter, tbunitselection);
+			pendCloseQuarterUnits = QSPUtils.getPendCloseQuarterUnits(selectedQuarter, tbunitselection);
 		}
 	}
 	
@@ -91,38 +91,38 @@ public class QuarterStockPositionReport {
 		
 		String queryString = "select m, " +
 		
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
 									" and ( (mov.date < :iniDate) or (mov.date >= :iniDate and mov.date <= :endDate and mov.type in (7)) ) " +
 									"and mov.medicine.id = m.id " + getSourceClause() + ") as openingBalance, " +
 								
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
 									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (2,5) " +
 									"and mov.medicine.id = m.id " + getSourceClause() + ") as received, " +
 								
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
 									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (4) and (mov.quantity * mov.oper > 0) " +
 									" and mov.medicine.id = m.id " + getSourceClause() + ") as posAdjust, " +
 									
-								"(select sum(mov.quantity * mov.oper) from Movement mov left join mov.adjustmentType " + getLocationWhereClause() + 
+								"(select sum(mov.quantity * mov.oper) from Movement mov left join mov.adjustmentType " + QSPUtils.getLocationWhereClause(tbunitselection) + 
 									" and mov.date >= :iniDate and mov.date <= :endDate and (mov.quantity * mov.oper) < 0" +
 									" and mov.type in (1,4,6)" +
 									" and (mov.adjustmentType.id <> :workspaceExpiredAdjust or mov.adjustmentType is null)" +
 									" and mov.medicine.id = m.id " + getSourceClause() + ") as negAdjust, " +
 									
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
 									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (3) and mov.medicine.id = m.id " + getSourceClause() + ") as dispensed, " +
 								
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
 									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (4) and mov.adjustmentType.id = :workspaceExpiredAdjust " +
 									" and mov.medicine.id = m.id and (mov.quantity * mov.oper) < 0 " + getSourceClause() + ") as expired, " +
 								
-								"(select sum(mov.outOfStock) from QuarterlyReportDetailsBD mov " + getLocationWhereClause() + 
+								"(select sum(mov.outOfStock) from QuarterlyReportDetailsBD mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
 									" and mov.quarterMonth = :quarterMonth and mov.year = :year and mov.medicine.id = m.id), " +
 								
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + getLocationWhereClause() + 
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
 									" and mov.date >= :iniDateAmcCalc and mov.date <= :endDateAmcCalc and mov.type in (3) and mov.medicine.id = m.id " + getSourceClause() + ") as dispensed, " +
 								
-								"(select sum(mov.outOfStock) from QuarterlyReportDetailsBD mov " + getLocationWhereClause() + 
+								"(select sum(mov.outOfStock) from QuarterlyReportDetailsBD mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
 									" and mov.quarterMonth = :quarterMonthAmcCalc and mov.year = :yearAmcCalc and mov.medicine.id = m.id) " +
 
 							  "from Medicine m " +
@@ -167,23 +167,7 @@ public class QuarterStockPositionReport {
 			loadMedicineList(medicines.getResultList());
 		}
 		
-		return !(selectedQuarter == null || selectedQuarter.getYear() == 0 || getLocationWhereClause() == null);
-	}
-	
-	/**
-	 * Returns where clause depending on the tbunitselection filter
-	 */
-	public String getLocationWhereClause(){
-		if(tbunitselection == null)
-			return null;
-		
-		if(tbunitselection.getTbunit()!=null){
-			return "where mov.tbunit.id = " + tbunitselection.getTbunit().getId() + " and mov.tbunit.workspace.id = " + UserSession.getWorkspace().getId();
-		}else if(tbunitselection.getAuselection().getSelectedUnit()!=null){
-			return "where mov.tbunit.adminUnit.code like '" + tbunitselection.getAuselection().getSelectedUnit().getCode() + "%' " +
-					"and mov.tbunit.workspace.id = " + UserSession.getWorkspace().getId() + " and mov.tbunit.treatmentHealthUnit = true";
-		}
-		return null;
+		return !(selectedQuarter == null || selectedQuarter.getYear() == 0 || QSPUtils.getLocationWhereClause(tbunitselection) == null);
 	}
 	
 	/**
