@@ -7,8 +7,9 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
                 
-                <div class="spacer" />
+<div class="spacer" />
 
+<h:form>
 	<h:panelGroup id="pnlhiv">	
 	
 			<s:link view="/custom/kh/cases/edtexamhiv.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt" onclick="disableButton(this)">
@@ -458,6 +459,8 @@
 	<s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="data" />
 	</s:decorate>
-	
+
+
+</h:form>	
 
 </ui:composition>

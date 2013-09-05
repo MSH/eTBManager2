@@ -7,6 +7,7 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
+<h:form>
 	<div class="spacer" />
 	<s:link view="/custom/kh/cases/edtmedexam.xhtml" style="float:right;" styleClass="button-alt" rendered="#{caseHome.canEditCaseData}" onclick="disableButton(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
@@ -170,4 +171,6 @@
     <s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="data" />
 	</s:decorate>
+
+</h:form>
 </ui:composition>

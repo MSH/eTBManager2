@@ -29,20 +29,29 @@
 
 
 <ui:define name="state-content">
-	<s:fragment rendered="#{tbcase.state=='TRANSFERRING'}" > 
-	<div class="icon-hu-big"/>
-	<div style="margin-top:6px;font-size:11px;max-width:320px;height:60px;" >
+	<h:form id="form-status">
+	<s:div rendered="#{tbcase.state=='TRANSFERRING'}" style="border:1px solid #d0d0d0;background-color:white;border-radius:4px;padding:4px;max-width:320px;"> 
+	<div style="clear:both">
+		<div class="icon-hu-big"/>
 		<b style="padding-right:4px;">#{messages['meds.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
-		<br/>
-		<span class="right-icon" />
-		<s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml" 
-			style="position:relative;" propagation="none">
-			<f:param name="id" value="#{caseHome.id}" />
-		</s:link>
-		<s:link value="#{messages['cases.move.cancel']}" 
-			style="position:relative" />
 	</div>
-	</s:fragment>
+	<div>
+		<div style="clear:both" class="vertical-menu">
+		<s:link view="/cases/casetransferin.xhtml" propagation="none">
+			<f:param name="id" value="#{caseHome.id}" />
+			<i class="icon-mail-forward" />#{messages['cases.move.regtransferin']}
+		</s:link>
+		<a:commandLink
+			onclick="if (!confirm('#{caseMoveHome.confirmMsgRollbackTransfer}')) return false"
+			action="#{caseMoveHome.rollbackTransferOut()}"
+			reRender="main,leftmenu,messages,form-status" >
+			<f:param name="name" value="#{caseHome.transferInHealthUnit.tbunit.name}"/>
+			<i class="icon-mail-reply" />#{messages['cases.move.cancel']}
+		</a:commandLink>
+		</div>
+	</div>
+	</s:div>
+	</h:form>
 </ui:define>
 		
 
@@ -132,7 +141,6 @@
 
 <ui:define name="content">
 <h1>#{title}</h1>
-<h:form id="main">
 <s:decorate id="bodydiv" template="/layout/casebody.xhtml">
 
 	<ui:define name="state-content">
@@ -155,7 +163,9 @@
 		</s:div>
 	</ui:define>
 
-<ui:include src="/custom/kh/cases/issues.xhtml" />
+<h:form id="main">
+	<ui:include src="/cases/issues.xhtml" />
+</h:form>
 
 <div class="spacer" />
 
@@ -196,9 +206,15 @@
 	</h:panelGroup>
 </rich:tab>
 
+<rich:tab label="#{messages['cases.issues']}" id="tab7" ontabenter="updateTab(7)" rendered="#{s:hasRole('ISSUES')}">
+	<h:panelGroup id="pnltab7">
+		<s:decorate template="#{wspage['/cases/casedata_issues.xhtml']}" rendered="#{caseFilters.caseTab==7}"/>
+	</h:panelGroup>
+</rich:tab>
+
 </rich:tabPanel>
 
-
+<h:form>
 <a:jsFunction name="updateTabContent" reRender="pnltab#{caseFilters.caseTab}">
 	<a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
 </a:jsFunction>
@@ -217,8 +233,8 @@ function initTab() {
 	if (updt)
 		window.inicasetab=1;
 	var tabid = 'tab' + window.inicasetab;
-	var dest = 'main:bodydiv:tab' + window.inicasetab;
-	RichFaces.switchTab('main:bodydiv:tabCase', dest, tabid);
+	var dest = 'bodydiv:tab' + window.inicasetab;
+	RichFaces.switchTab('bodydiv:tabCase', dest, tabid);
 	if (updt)
 		updateTab(window.inicasetab);
 }
@@ -232,10 +248,9 @@ function updateTab(tabIndex) {
 }
 -->
 </script>
+</h:form>
 
 </s:decorate>	
-
-</h:form>
 
 </ui:define>
 
