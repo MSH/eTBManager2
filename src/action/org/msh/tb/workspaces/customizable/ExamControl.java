@@ -16,6 +16,9 @@ public class ExamControl {
 	 * @return String value to be displayed to the user
 	 */
 	public String getMonthDisplay(TbCase tbcase, Date dt) {
+		if (dt == null)
+			return null;
+
 		Integer num = tbcase.getMonthTreatment(dt);
 		
 		if (num > 0) {

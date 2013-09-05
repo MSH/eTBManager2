@@ -378,7 +378,7 @@ public class TbCase implements Serializable, Transactional {
 	 * @return
 	 */
 	public int getMonthTreatment(Date date) {
-		if (treatmentPeriod == null)
+		if ((treatmentPeriod == null) || (date == null))
 			return -1;
 		
 		Date dtTreat = getTreatmentPeriod().getIniDate();
