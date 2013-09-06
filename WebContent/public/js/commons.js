@@ -1,6 +1,7 @@
 
 A4J.AJAX.onError=function(req, status, message) {
-	window.alert(window.errortitle + '... Request=' + req + ', Status=' + status + ', Message=' +  message);
+	//window.alert(window.errortitle + '... Request=' + req + ', Status=' + status + ', Message=' +  message);
+	window.alert(window.errortitle);
 	closeWaitDlg();
 }
 // change workspace to the given workspace id
