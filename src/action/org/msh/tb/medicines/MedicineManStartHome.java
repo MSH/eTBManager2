@@ -327,6 +327,10 @@ public class MedicineManStartHome {
 			return (double)quantity * batch.getUnitPrice();
 		}
 		
+		public void setTotalPrice(double totalPrice) {
+			return;
+		}
+		
 		public float getContainerPrice() {
 			if (containerPrice==0)
 				containerPrice = batch.getUnitPrice()*batch.getQuantityContainer();
