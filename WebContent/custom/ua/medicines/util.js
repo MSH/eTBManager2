@@ -122,6 +122,7 @@ function changeUnitPrice(elem) {
 	tot = parseFloat(document.getElementById("batchsellayout:formbatch:qtd:qtd").value);
 	totPrice = unit * tot;
 	document.getElementById("batchsellayout:formbatch:tprice:tprice").value = floatToStr(totPrice, 2);
+	jQuery("#batchsellayout:formbatch:tprice:tpriceh").value = floatToStr(totPrice, 2);
 	quantCont = document.getElementById("batchsellayout:formbatch:qtdcon:qtdcon").value;
 	document.getElementById("batchsellayout:formbatch:cprice:cprice").value = floatToStr(unit*quantCont,3);
 }
@@ -133,6 +134,8 @@ function changeUPrice() {
 	//tot = parseFloat(document.getElementById("batchsellayout:formbatch:qtd:qtd").value);
 	totPrice = numConts * cPrice;
 	document.getElementById("batchsellayout:formbatch:tprice:tprice").value = floatToStr(totPrice, 2);
+	jQuery("#batchsellayout:formbatch:tprice:tpriceh").value = floatToStr(totPrice, 2);	
+	//alert('changeUPrice');
 }
 
 function changeTotalPrice(elem) {
@@ -142,12 +145,15 @@ function changeTotalPrice(elem) {
 		unitPrice = totPrice / tot;
 	else unitPrice = 0;
 	document.getElementById("batchsellayout:formbatch:uprice:uprice").value = floatToStr(unitPrice, 5);
+	jQuery("#batchsellayout:formbatch:uprice:upriceh").value = floatToStr(unitPrice, 5);
 }
 
 function changeQuantityCont() {
 	numConts = document.getElementById("batchsellayout:formbatch:numcont:numcont").value;
 	quantCont = document.getElementById("batchsellayout:formbatch:qtdcon:qtdcon").value;
 	document.getElementById("batchsellayout:formbatch:qtd:qtd").value = numConts*quantCont;
+	//alert('changeQuantityCont');
+	jQuery("#batchsellayout:formbatch:qtd:qtdh").value = numConts*quantCont;
 	changeContPrice();
 }
 
@@ -164,17 +170,20 @@ function changeQuantity(elem) {
 
 function changeCPrice(elem) {
 	contPrice = strToFloat(elem.value);
+	//alert('changeCPrice');
 	quantCont = document.getElementById("batchsellayout:formbatch:qtdcon:qtdcon").value;
 	if (quantCont != 0)
 		unit = contPrice / quantCont;
 	else
 		unit = 0;
 	document.getElementById("batchsellayout:formbatch:uprice:uprice").value = floatToStr(unit, 5);
+	jQuery("#batchsellayout:formbatch:uprice:upriceh").value = floatToStr(unit, 5);
 	changeUPrice();
 }
 
 function changeContPrice() {
 	elem = document.getElementById("batchsellayout:formbatch:cprice:cprice");
+	//alert('changeContPrice');
 	changeCPrice(elem);
 }
 
