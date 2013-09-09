@@ -127,7 +127,7 @@ public class StockAdjustmentHome extends Controller {
 	 * @param med
 	 * @return
 	 */
-	protected StockPositionItem findStockPosition(Medicine med) {
+	public StockPositionItem findStockPosition(Medicine med) {
 		for (StockPositionItem item: getItems()) {
 			if (item.getStockPosition().getMedicine().equals(med))
 				return item;
@@ -284,6 +284,52 @@ public class StockAdjustmentHome extends Controller {
 	}
 	
 	/**
+	 * Save a new batch without nulling batchQuantity.quantity
+	 * @author A.M.
+	 */
+	public String saveNewBatchWithQtd() {
+		if (batchQuantity == null)
+			return "error";
+
+		if(existingBatchInThisUnit)
+			return "error";
+		
+		//check limit movement date
+		if(!userSession.isCanGenerateMovements(movementDate)){
+			facesMessages.addToControlFromResourceBundle("edtdate", "meds.movs.errorlimitdate", DateUtils.formatAsLocale(userSession.getTbunit().getLimitDateMedicineMovement(), false));
+			return "error";
+		}
+			
+		Tbunit unit = userSession.getTbunit();
+		
+		Batch batch = batchQuantity.getBatch();
+		batchQuantity.setSource(source);
+		batchQuantity.setTbunit(unit);
+		int qtd = batch.getQuantityReceived();
+		batchQuantity.setQuantity(qtd);
+		App.getEntityManager().persist(batch);
+		App.getEntityManager().persist(batchQuantity);
+		App.getEntityManager().flush();
+		
+		Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
+		batches.put(batch, qtd);
+		
+		// generate the new movement
+		movementHome.initMovementRecording();
+		movementHome.prepareNewAdjustment(movementDate, unit, source, batch.getMedicine(), batches, adjustmentInfo);
+		movementHome.savePreparedMovements();
+		saveLog(RoleAction.NEW, batches);
+		
+		batchQuantity.setQuantity(batchQuantity.getQuantity()-qtd);
+		
+		actionExecuted = true;
+		
+		this.items = null;
+		
+		return "new-batch-saved";
+	}
+	
+	/**
 	 * Persist changes
 	 * @author A.M.
 	 */
@@ -300,26 +346,20 @@ public class StockAdjustmentHome extends Controller {
 		batchQuantity.setSource(source);
 		batchQuantity.setTbunit(unit);
 		int qtd = batchQuantity.getBatch().getQuantityReceived();
-		batchQuantity.setQuantity(qtd);
+		
+		Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
+		batches.put(batch, qtd-batchQuantity.getQuantity());
+		//batchQuantity.setQuantity(qtd);
 		App.getEntityManager().persist(batch);
-		App.getEntityManager().persist(batchQuantity);
+		//App.getEntityManager().persist(batchQuantity);
 		App.getEntityManager().flush();
 		
-		/*Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
-		batches.put(batch, qtd);
 		
 		// generate the new movement
 		movementHome.initMovementRecording();
-		movementHome.prepareEditAdjustment(movementDate, unit, source, batch.getMedicine(), batches, adjustmentInfo);
-		movementHome.savePreparedMovements();
-*/
-		// generate the new movement
-		movementHome.initMovementRecording();
-		//movementHome.prepareNewAdjustment(movementDate, unit, source, batch.getMedicine(), batches, adjustmentInfo);
+		movementHome.prepareNewAdjustment(movementDate, userSession.getTbunit(), source, batchQuantity.getBatch().getMedicine(), batches, adjustmentInfo);
 		movementHome.savePreparedMovements();
 
-		Map<Batch, Integer> batches = new HashMap<Batch, Integer>();
-		batches.put(batch, qtd);
 		saveLog(RoleAction.EDIT, batches);
 		
 		actionExecuted = true;
@@ -334,8 +374,8 @@ public class StockAdjustmentHome extends Controller {
 	 * @author A.M.
 	 */
 	public String saveBatch() {
-		if (stockPosition==null)
-			return saveNewBatch();
+		if (batchQuantity.getId()==null)
+			return saveNewBatchWithQtd();
 		return saveEditBatch();
 	}
 	
