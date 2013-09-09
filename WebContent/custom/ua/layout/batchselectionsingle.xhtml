@@ -13,6 +13,7 @@
 <a:jsFunction name="clearLstRegNumb" ajaxSingle="true" action="#{registrationNumbers.clearList()}"/>
 <script type="text/javascript">
 function newBatchDlg() {
+	cleanB();
 	startShowBatchDlg();
 	initNewBatch();
 }
@@ -222,7 +223,7 @@ function hideBatchDlg() {
 			    	<ui:param name="labelstyle" value="width:185px" />
 			    	<ui:define name="label">#{messages['global.unitPrice']}:</ui:define>
 			    	<h:inputText id="uprice" value="#{batch.unitPrice}" converter="currencyConverter5D" 
-			    	readonly="true" style="background-color:#E0E0E0;"/>
+			    	onkeypress="return false;" style="background-color:#E0E0E0;"/>
 			    </s:decorate>
 		    </td>
 	    </tr>
@@ -240,7 +241,7 @@ function hideBatchDlg() {
 				 <s:decorate id="tprice" template="/layout/edit.xhtml" >
 			    	<ui:param name="labelstyle" value="width:185px" />
 			    	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
-			    	<h:inputText id="tprice" value="#{srcAnnexFunc.totalPrice}" readonly="true" 
+			    	<h:inputText id="tprice" value="#{srcAnnexFunc.totalPrice}" onkeypress="return false;" 
 			    		converter="currencyConverter" style="background-color:#E0E0E0;"/>
 			    </s:decorate>
 			</td>
