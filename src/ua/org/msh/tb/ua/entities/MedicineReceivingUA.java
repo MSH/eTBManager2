@@ -21,7 +21,7 @@ public class MedicineReceivingUA extends MedicineReceiving{
 		return consignmentNumber;
 	}
 	
-	
+/*	
 	public void clone(MedicineReceiving mr){
 		this.setComments(mr.getComments());
 		this.setId(mr.getId());
@@ -30,5 +30,5 @@ public class MedicineReceivingUA extends MedicineReceiving{
 		this.setSource(mr.getSource());
 		this.setTbunit(mr.getTbunit());
 		this.setTotalPrice(mr.getTotalPrice());
-	}
+	}*/
 }

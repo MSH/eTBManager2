@@ -1,4 +1,4 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.cases;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;

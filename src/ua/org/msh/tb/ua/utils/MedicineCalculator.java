@@ -1,4 +1,4 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.utils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

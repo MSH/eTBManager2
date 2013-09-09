@@ -1,4 +1,4 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.medicines;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ import org.msh.tb.medicines.orders.OrderHome;
 import org.msh.tb.medicines.orders.OrderShippingHome;
 import org.msh.tb.medicines.orders.SourceOrderItem;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
+import org.msh.tb.ua.utils.MedicineCalculator;
 
 /**
  * Seam component for call methods of {@link MedicineCalculator} from JSF-pages
@@ -50,7 +51,7 @@ public class MedicineCalculatorController {
 	}
 	
 	/**
-	 * Override {@link OrderShippingHome.initialize()}
+	 * Override {@link OrderShippingHome#initialize()}
 	 */
 	public void initializeOrderShippingHome() {
 		OrderShippingHome osh = (OrderShippingHome) App.getComponent("orderShippingHome");

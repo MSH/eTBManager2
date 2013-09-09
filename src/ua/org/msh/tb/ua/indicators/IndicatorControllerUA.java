@@ -1,4 +1,4 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.indicators;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;

@@ -1,4 +1,4 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.medicines;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -29,8 +29,9 @@ import org.msh.tb.medicines.SourceMedicineTree.SourceNode;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.transactionlog.LogInfo;
 import org.msh.tb.transactionlog.Operation;
-import org.msh.tb.ua.RegistrationNumbers.RegistrationCard;
 import org.msh.tb.ua.entities.MedicineReceivingUA;
+import org.msh.tb.ua.medicines.RegistrationNumbers.RegistrationCard;
+import org.msh.tb.ua.utils.MedicineCalculator;
 
 
 

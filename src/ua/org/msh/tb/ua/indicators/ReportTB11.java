@@ -1,4 +1,4 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.indicators;
 
 import java.util.Iterator;
 import java.util.List;

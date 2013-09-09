@@ -61,6 +61,12 @@ public class GlobalLists {
 		ExtraOutcomeInfo.TB,
 		ExtraOutcomeInfo.OTHER_CAUSES
 	};
+	
+	public static final MBTResult mbtResults[] ={
+		MBTResult.CULTURE,
+		MBTResult.MICROSCOPY,
+		MBTResult.BOTH
+	};
 
 
 	/**
@@ -82,6 +88,10 @@ public class GlobalLists {
 	}
 	
 	public MBTResult[] getMbtResults() {
+		return mbtResults;
+	}
+	
+	public MBTResult[] getMbtResultsDRTB() {
 		return MBTResult.values();
 	}
 	

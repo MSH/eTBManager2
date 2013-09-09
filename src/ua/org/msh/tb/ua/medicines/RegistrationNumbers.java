@@ -1,4 +1,4 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.medicines;
 
 import java.util.ArrayList;
 import java.util.Date;

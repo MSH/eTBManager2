@@ -1,4 +1,4 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.medicines;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,7 @@ import org.msh.tb.medicines.BatchSelection.BatchItem;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.movs.TransferHome;
 import org.msh.tb.medicines.movs.TransferHome.SourceItem;
+import org.msh.tb.ua.utils.MedicineCalculator;
 import org.msh.utils.ItemSelect;
 
 @Name("transferUAHome")

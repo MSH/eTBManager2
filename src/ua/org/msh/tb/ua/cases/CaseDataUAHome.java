@@ -1,4 +1,7 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.cases;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
@@ -8,10 +11,12 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseCloseHome;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.ComorbidityHome;
+import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
@@ -19,6 +24,8 @@ import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.ExtraOutcomeInfo;
 import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.misc.FieldsQuery;
+import org.msh.tb.ua.GlobalLists;
 import org.msh.tb.ua.entities.CaseDataUA;
 
 
@@ -201,14 +208,15 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 	 * rearrange DRTB risk case to TB case
 	 */
 	public void riskDRTBtoTB(){
-		TbCase tbcase = caseEditingHome.getTbcase();
+		TbCase tbcase = caseHome.getTbCase();
 		if (tbcase.getClassification() == CaseClassification.DRTB){
 			if (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT){
 				tbcase.setClassification(CaseClassification.TB);
 				tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
 				CaseDataUA data = getInstance();
 				data.setRegistrationCategory(null);
-				//TODO something else
+				App.getEntityManager().persist(tbcase);
+				super.persist();
 			}
 		}
 	}
@@ -216,14 +224,13 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 	 * rearrange DRTB risk case to real DRTB
 	 */
 	public void riskDRTBtoDR(){
-		TbCase tbcase = caseEditingHome.getTbcase();
+		TbCase tbcase = caseHome.getTbCase();
 		if (tbcase.getClassification() == CaseClassification.DRTB){
 			if (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT){
 				tbcase.setClassification(CaseClassification.DRTB);
 				tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
-				CaseDataUA data = getInstance();
-				data.setRegistrationCategory(null);
-				//TODO something else
+				App.getEntityManager().persist(tbcase);
+				super.persist();
 			}
 		}
 	}
@@ -236,5 +243,35 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 		if (CaseClassification.DRTB.equals(tc.getClassification()) && DiagnosisType.SUSPECT.equals(tc.getDiagnosisType()))
 			return true;
 		return false;
+	}
+	
+	public List<FieldValue> getRegistrationCategoriesDRTB(){
+		TbCase tbcase = caseHome.getTbCase();
+		FieldsQuery fq = (FieldsQuery) App.getComponent(FieldsQuery.class);
+		List<FieldValue> cats = fq.getRegistrationCategories();
+		List<FieldValue> res = new ArrayList<FieldValue>();
+		if (tbcase.getClassification() == CaseClassification.DRTB){
+			if (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT){
+				for (FieldValue val:cats)
+					if (val.getName().getName1().contains(" 1 ") || val.getName().getName1().contains(" 2 "))
+						res.add(val);
+			}
+			else{
+				res = getCat4List();
+			}
+		}
+		else
+			return cats;
+		return res;
+	}
+
+	public List<FieldValue> getCat4List() {
+		FieldsQuery fq = (FieldsQuery) App.getComponent(FieldsQuery.class);
+		List<FieldValue> cats = fq.getRegistrationCategories();
+		List<FieldValue> res = new ArrayList<FieldValue>();
+		for (FieldValue val:cats)
+			if (val.getName().getName1().contains(" 4"))
+				res.add(val);
+		return res;
 	}
 }

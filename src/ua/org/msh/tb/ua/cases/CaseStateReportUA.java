@@ -1,4 +1,4 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.cases;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -20,6 +20,8 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.login.UserSession;
+import org.msh.tb.ua.HealthUnitInfoUA;
+import org.msh.tb.ua.HealthUnitsQueryUA;
 
 /**
  * Generate report by case state to be displayed in the main page

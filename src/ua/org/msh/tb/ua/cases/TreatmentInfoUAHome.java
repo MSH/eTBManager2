@@ -1,4 +1,4 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.cases;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.cases.treatment.TreatmentsInfoHome;
@@ -8,7 +8,7 @@ public class TreatmentInfoUAHome {
 	
 	/**
 	 * Return the percentage progress of the treatment
-	 * instead of getPlannedProgress() in {@link TreatmentsInfoHome.TreatmentInfo}
+	 * instead of getPlannedProgress() in {@link TreatmentsInfoHome#TreatmentInfo}
 	 * @return
 	 */
 	public Double getPlannedProgress(TreatmentsInfoHome.TreatmentInfo ti) {
@@ -17,7 +17,7 @@ public class TreatmentInfoUAHome {
 	}
 	
 	/**
-	 * instead of getProgressPoints() in {@link TreatmentsInfoHome.TreatmentInfo}
+	 * instead of getProgressPoints() in {@link TreatmentsInfoHome#TreatmentInfo}
 	 * @return
 	 */
 	public Integer getProgressPoints(TreatmentsInfoHome.TreatmentInfo ti) {

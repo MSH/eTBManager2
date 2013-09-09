@@ -1,4 +1,4 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.medicines;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.Transfer;

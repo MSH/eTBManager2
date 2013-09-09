@@ -1,4 +1,4 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.forecasting;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

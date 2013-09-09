@@ -1,4 +1,4 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.cases;
 
 import java.text.Collator;
 import java.text.MessageFormat;

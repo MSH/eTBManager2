@@ -1,4 +1,4 @@
-package org.msh.tb.ua;
+package org.msh.tb.ua.forecasting;
 
 import java.io.File;
 import java.io.FileInputStream;
