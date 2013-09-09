@@ -85,8 +85,13 @@
 	    		</h:selectOneMenu>
 	    		<div id="mbtdiv" style="#{caseDataUA.pulmonaryMBT=='YES'?'':'display:none'}">
 	    		#{messages['uk_UA.ExtraOutcomeInfo']}:
-	    		<h:selectOneMenu value="#{caseDataUA.mbtResult}">
+	    		<h:selectOneMenu value="#{caseDataUA.mbtResult}" rendered="#{tbcase.classification != 'DRTB'}">
 	    			<s:selectItems var="s" value="#{globalLists_ua.mbtResults}" noSelectionLabel="-" label="#{messages[s.key]}" />
+	    			<s:convertEnum />
+	    		</h:selectOneMenu>
+	    		
+	    		<h:selectOneMenu value="#{caseDataUA.mbtResult}" rendered="#{tbcase.classification == 'DRTB'}">
+	    			<s:selectItems var="s" value="#{globalLists_ua.mbtResultsDRTB}" noSelectionLabel="-" label="#{messages[s.key]}" />
 	    			<s:convertEnum />
 	    		</h:selectOneMenu>
 	    		</div>

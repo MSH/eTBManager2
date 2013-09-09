@@ -8,16 +8,7 @@
                 xmlns:c="http://java.sun.com/jstl/core"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
     <ui:param name="labelstyle" value="width:160px;" />
-    
-    <s:fragment rendered="#{caseDataUAHome.riskDRTB}">
-	    <h:commandLink action="#{caseDataUAHome.riskDRTBtoDR()}" styleClass="button" style="width:150px;float:right;">
-	    	<span>#{messages['TbCase.DRTB.to.DRTB']}</span>
-	    </h:commandLink> 
-	    <h:commandLink action="#{caseDataUAHome.riskDRTBtoTB()}" styleClass="button" style="width:150px;float:right;">
-	    	<span>#{messages['TbCase.DRTB.to.TB']}</span>
-	    </h:commandLink>
-    </s:fragment>
-    
+
 	<div class="form-content"> 
 		<h2>#{messages['cases.patientdata']}</h2>
 
@@ -207,8 +198,6 @@
     </div>
     </s:fragment>
     
-
-
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['uk_UA.dateFirstSymptoms']}:</ui:define>
     	<ui:param name="required" value="false" /> 
@@ -362,11 +351,19 @@
 		<ui:param name="required" value="true" />
 	</s:decorate>
 
-	<s:decorate template="/layout/editfield.xhtml" >
+	<s:decorate template="/layout/editfield.xhtml" rendered="#{tbcase.classification != 'DRTB'}">
 		<ui:define name="label">#{messages['TbField.REGISTRATION_CATEGORY']}:</ui:define>
 		<ui:param name="id" value="regcat" />
 		<ui:param name="field" value="#{caseDataUA.registrationCategory}" />
 		<ui:param name="list" value="#{fieldsQuery.registrationCategories}" />
+		<ui:param name="required" value="true" />
+	</s:decorate>
+	
+	<s:decorate template="/layout/editfield.xhtml" rendered="#{tbcase.classification == 'DRTB'}">
+		<ui:define name="label">#{messages['TbField.REGISTRATION_CATEGORY']}:</ui:define>
+		<ui:param name="id" value="regcat" />
+		<ui:param name="field" value="#{caseDataUA.registrationCategory}" />
+		<ui:param name="list" value="#{caseDataUAHome.registrationCategoriesDRTB}" />
 		<ui:param name="required" value="true" />
 	</s:decorate>
 
