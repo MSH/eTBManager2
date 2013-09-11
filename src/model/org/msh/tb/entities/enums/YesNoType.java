@@ -13,4 +13,12 @@ public enum YesNoType {
 	public String getKey() {
 		return messageKey;
 	}
+	
+	public boolean isNo(){
+		return this.ordinal() == YesNoType.NO.ordinal();
+	}
+	
+	public boolean isYes(){
+		return this.ordinal() == YesNoType.YES.ordinal();
+	}
 }
