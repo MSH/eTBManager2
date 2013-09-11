@@ -58,9 +58,13 @@
     		<s:selectItems value="#{yesNoList}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
-    	<div id="edtreason">#{messages['Order.cancelReason']}:<br/>
-    	<h:inputText value="#{medicalExaminationBd.reasonNotUsingPrescMedicines}" style=" width : 340px;" maxlength="100"/>
-    	</div>
+    	<div id="edtreason">
+	   	    <s:decorate template="/layout/edit.xhtml" >
+	   			<ui:define name="label">#{messages['form.reason']}:</ui:define>
+	   			<ui:param name="labelstyle" value="width:auto; text-align:left" />
+	   			<h:inputText value="#{medicalExaminationBd.reasonNotUsingPrescMedicines}" style=" width : 340px;" maxlength="100"/>
+	  		</s:decorate>
+	  	</div>
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
@@ -74,11 +78,20 @@
     		<s:selectItems value="#{dotProvTypeList}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
-    	<div id="dotProvName">#{messages['MedicalExamination.DOTProviderName']}:<br/>
-    	<h:inputText value="#{medicalExaminationBd.dotProvName}" style=" width : 340px;" maxlength="100"/><br/>	
-    	#{messages['MedicalExamination.DOTProviderPhoneNumber']}:<br/>
-    	<h:inputText value="#{medicalExaminationBd.dotPhoneNumber}" style=" width : 340px;" maxlength="100"/><br/>
-    	</div>
+    	
+   		<div id="dotProvName">
+	   	    <s:decorate template="/layout/edit.xhtml" >
+	   			<ui:define name="label">#{messages['MedicalExamination.DOTProviderName']}:</ui:define>
+	   			<ui:param name="labelstyle" value="width:auto; text-align:left" />
+	   			<h:inputText value="#{medicalExaminationBd.dotProvName}" style=" width : 400px;" maxlength="100"/>
+	  		</s:decorate>
+	   	    <s:decorate template="/layout/edit.xhtml" >
+	   			<ui:define name="label">#{messages['MedicalExamination.DOTProviderPhoneNumber']}:</ui:define>
+	   			<ui:param name="labelstyle" value="width:auto; text-align:left" />
+	   			<h:inputText value="#{medicalExaminationBd.dotPhoneNumber}" style=" width : 340px;" maxlength="100"/>
+	  		</s:decorate>  
+  		</div> 			 
+   			
     </s:decorate>
     
 	<s:decorate template="/layout/edit.xhtml">
@@ -87,14 +100,17 @@
 			<s:selectItems var="s" value="#{globalLists_bd.referredtotypes}" label="#{messages[s.key]}" noSelectionLabel="-" />
 			<s:convertEnum />
 		</h:selectOneMenu>
+		
     	<div id="refToUnit">
 		    <s:decorate template="/layout/edit.xhtml" >
 		    	<ui:define name="label">#{messages['MedicalExamination.RefToUnit']}:</ui:define>
+		    	<ui:param name="labelstyle" value="width:auto; text-align:left" />
 		    	<h:inputText value="#{medicalExaminationBd.referredToUnitName}" style=" width : 340px;" maxlength="100"/>
 		    </s:decorate>    	
 		    
 		    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
 		    	<ui:define name="label">#{messages['MedicalExamination.RefToDate']}:</ui:define>
+		    	<ui:param name="labelstyle" value="width:auto; text-align:left" />
 		    	<ui:param name="required" value="false" /> 
 		    	<ui:param name="future" value="true" /> 
 		    	<ui:param name="datefield" value="#{medicalExaminationBd.refToDate}" /> 

@@ -364,9 +364,6 @@ public class CaseDataExport {
 						excel.addText(au2.getName().getName1());
 				else if(au1 != null && au1.getLevel() == i)
 						excel.addText(au1.getName().getName1());
-				else
-					excel.setColumn(excel.getColumn()+1);
-
 			}
 		}
 	}

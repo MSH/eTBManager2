@@ -88,13 +88,19 @@
     	<div class="paragraph">#{messages['cases.details.addressnotif']}</div>
 	
 		<s:decorate template="/layout/display.xhtml">
-    		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
-    		#{tbcase.notifAddress.address}
-    		<br/>
-    		#{tbcase.notifAddress.complement}
+   			<ui:define name="label">#{messages['Address.address']}:</ui:define>
+   			#{tbcase.notifAddress.address}
+    		<h:outputText value="" rendered="#{not empty tbcase.notifAddress.complement}">
+    			<br/>
+    			#{tbcase.notifAddress.complement}
+    		</h:outputText>
 		</s:decorate>
 		<s:decorate template="/layout/audisplay.xhtml">
 			<ui:param name="adminunit" value="#{tbcase.notifAddress.adminUnit}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml">
+   			<ui:define name="label">#{messages['Address.zipCode']}:</ui:define>
+   			#{tbcase.notifAddress.zipCode}
 		</s:decorate>
 	</td></tr>
 	<tr><td>

@@ -10,7 +10,7 @@
             <ui:insert name="label"/>
             <s:span style="color:red;" rendered="#{required or redasterisk}">*</s:span>
         </span>
-        <span class="readonly-value">
+        <span class="readonly-value" style="#{empty resultlabelstyle? '': resultlabelstyle}">
             <ui:insert/>
         </span>
     </div>

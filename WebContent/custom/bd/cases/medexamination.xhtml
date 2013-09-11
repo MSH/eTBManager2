@@ -65,26 +65,64 @@
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['MedAppointmentType']}:</ui:define>
 				#{messages[r.appointmentType.key]}
-			</s:decorate>		
-		</td><td>
-			<s:decorate template="/layout/display.xhtml">
-				<ui:define name="label">#{messages['MedicalExamination.ReferredTo']}:</ui:define>
-				#{messages[r.patientRefTo.key]}
-			</s:decorate>		
+			</s:decorate>
 		</td></tr>
+		
 		<s:fragment rendered="#{not empty r.dotType}">
-		<tr><td>
+		<tr><td colspan="2">
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['MedicalExamination.DOTProviderType']}:</ui:define>
 				#{messages[r.dotType.key]}
-			</s:decorate>		
-		</td><td>
-			<s:decorate template="/layout/display.xhtml">
-				<ui:define name="label">#{messages['MedicalExamination.DOTProviderName']}:</ui:define>
-				#{r.dotProvName}
+				<h:outputText rendered="#{not empty r.dotProvName}">
+					<br/>
+					<b>#{messages['MedicalExamination.DOTProviderName']}:</b> #{r.dotProvName}
+				</h:outputText>
+				<h:outputText rendered="#{not empty r.dotPhoneNumber}">
+					<br/>
+					<b>#{messages['MedicalExamination.DOTProviderPhoneNumber']}:</b> #{r.dotPhoneNumber}
+				</h:outputText>
+				
 			</s:decorate>		
 		</td></tr>
 		</s:fragment>
+		
+		<s:fragment rendered="#{not empty r.patientRefTo.key}">
+		<tr><td colspan="2">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['MedicalExamination.ReferredTo']}:</ui:define>
+				#{messages[r.patientRefTo.key]}
+				
+				<h:outputText rendered="#{not empty r.referredToUnitName}">
+					<br/>
+					<b>#{messages['MedicalExamination.RefToUnit']}: </b>#{r.referredToUnitName}
+				</h:outputText>
+				<h:outputText rendered="#{not empty r.refToDate}">
+					<br/>
+					<b>#{messages['MedicalExamination.RefToDate']}: </b><h:outputText value="#{r.refToDate}" converter="localeDateConverter"/>
+				</h:outputText>
+			</s:decorate>		
+		</td></tr>
+		</s:fragment>
+		
+		<tr><td colspan="2">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['MedicalExamination.usingPrescMedicines']}:</ui:define>
+				<ui:param name="labelstyle" value="width:360px" />
+				<ui:param name="resultlabelstyle" value="width:400px" />
+				#{messages[r.usingPrescMedicines.key]}
+				<h:outputText rendered="#{r.usingPrescMedicines.isNo() and (not empty r.reasonNotUsingPrescMedicines)}" 
+					value=" - #{r.reasonNotUsingPrescMedicines}"/>
+			</s:decorate>
+		</td></tr>
+		
+		<tr><td colspan="2">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
+				<ui:param name="labelstyle" value="width:360px" />
+				#{r.responsible}
+			</s:decorate>
+		</td></tr>
+		
 		<s:fragment rendered="#{not empty r.comments}">
 		<tr><td colspan="2">
 			<s:decorate template="/layout/display.xhtml">
