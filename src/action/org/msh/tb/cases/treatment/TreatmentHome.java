@@ -58,7 +58,7 @@ public class TreatmentHome {
 	private Date iniDate;
 	private Date endDate;
 	private Date iniContinuousPhase;
-	
+
 	private boolean preservePreviousPeriod;
 	
 	// used for validation. Initial date of treatment cannot be before this date
@@ -173,12 +173,12 @@ public class TreatmentHome {
 		
 		if (!checkDateBasicRules(iniDate, endDate))
 			return;
-		if (caseHome.getInstance().getDiagnosisDate()!=null)
+/*		if (caseHome.getInstance().getDiagnosisDate()!=null)
 			if (iniDate.before(caseHome.getInstance().getDiagnosisDate())) {
 				facesMessages.addToControlFromResourceBundle("edtIniContPhase", "cases.treat.inidatemsg");
 				return;
 			}
-		
+*/		
 		if ((!iniDate.before(iniContinuousPhase)) && (!endDate.after(iniContinuousPhase))) {
 			facesMessages.addToControlFromResourceBundle("edtIniContPhase", "cases.treat.contdateerror");
 			return;
