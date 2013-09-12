@@ -184,7 +184,25 @@
 					</div>
 				</h:form>
 			</rich:tab>
-
+			
+			<rich:tab label="importIMM" rendered="false">
+				<h:form>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages['admin.import.file.xls']}:</ui:define>
+						<s:fileUpload data="#{importIMM.file}" required="true">
+						</s:fileUpload>
+					</s:decorate>
+					
+					<div class="form-footer">
+						<a:commandLink action="#{importIMM.execute}"
+							styleClass="button"
+							onclick="if (!disableButton(this)) return false;"
+							reRender="main,messages">
+							<span>#{messages['form.import']}</span>
+						</a:commandLink>
+					</div>
+				</h:form>
+			</rich:tab>
 
 
 		</rich:tabPanel>
