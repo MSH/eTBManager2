@@ -393,7 +393,7 @@ public abstract class OutputSelectionIndicator extends Indicator {
 	
 	/**
 	 * Return the filters selected by the user
-	 * @return instance of the {@link IndicatorFilters IndicatorFilters} class
+	 * @return instance of the {@link IndicatorFilters} class
 	 */
 	protected IndicatorFilters getIndicatorFilters() {
 		return (IndicatorFilters)Contexts.getSessionContext().get("indicatorFilters");

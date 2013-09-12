@@ -19,8 +19,11 @@ import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.DstResult;
+import org.msh.tb.transactionlog.LogInfo;
+import org.msh.tb.ua.entities.MedicineReceivingUA;
 
 @Name("examDSTAZHome")
+@LogInfo(roleName="EXAM_DST",entityClass=ExamDSTAZ.class)
 public class ExamDSTAZHome extends LaboratoryExamHome<ExamDSTAZ>{
 	private static final long serialVersionUID = 4678646241116862745L;
 	

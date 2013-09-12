@@ -11,8 +11,11 @@ import org.msh.tb.az.entities.ExamCulture_Az;
 import org.msh.tb.cases.exams.LaboratoryExamHome;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.enums.CultureResult;
+import org.msh.tb.transactionlog.LogInfo;
+import org.msh.tb.ua.entities.MedicineReceivingUA;
 
 @Name("examCultureAZHome")
+@LogInfo(roleName="EXAM_CULTURE",entityClass=ExamCulture_Az.class)
 public class ExamCultureAZHome extends LaboratoryExamHome<ExamCulture_Az>{
 	private static final long serialVersionUID = 2244413651346563406L;
 
