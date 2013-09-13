@@ -142,6 +142,8 @@ public class CaseDataUA {
 	private boolean refuse2line;
 	private RiskClassification riskClass;
 	
+	@Temporal(TemporalType.DATE) private Date dateRegTo4Cat;
+	
 	//===========================GETTERS & SETTERS==============================
 	/**
 	 * @return the refuse2line
@@ -950,6 +952,18 @@ public class CaseDataUA {
 
 	public RiskClassification getRiskClass() {
 		return riskClass;
+	}
+
+
+	public void setDateRegTo4Cat(Date dateRegTo4Cat) {
+		this.dateRegTo4Cat = dateRegTo4Cat;
+	}
+
+
+	public Date getDateRegTo4Cat() {
+		if (dateRegTo4Cat==null)
+			dateRegTo4Cat = new Date();
+		return dateRegTo4Cat;
 	}
 
 	

@@ -10,6 +10,8 @@ import org.msh.tb.ua.entities.enums.DiagnosisSource;
 import org.msh.tb.ua.entities.enums.HistologyResult;
 import org.msh.tb.ua.entities.enums.MBTResult;
 import org.msh.tb.ua.entities.enums.RiskClassification;
+import org.msh.tb.ua.entities.enums.SideEffectGrading;
+import org.msh.tb.ua.entities.enums.SideEffectOutcome;
 
 @Name("globalLists_ua")
 public class GlobalLists {
@@ -51,12 +53,6 @@ public class GlobalLists {
 		CaseState.NOT_CONFIRMED
 	};
 	
-	public static final ExtraOutcomeInfo ocCuredFailed[] = {
-		ExtraOutcomeInfo.CULTURE_SMEAR,
-		ExtraOutcomeInfo.CLINICAL_EXAM,
-		ExtraOutcomeInfo.TRANSFER_CATIV
-	};
-
 	public static final ExtraOutcomeInfo ocDied[] = {
 		ExtraOutcomeInfo.TB,
 		ExtraOutcomeInfo.OTHER_CAUSES
@@ -95,10 +91,6 @@ public class GlobalLists {
 		return MBTResult.values();
 	}
 	
-	public ExtraOutcomeInfo[] getCuredFailedExtraInfo() {
-		return ocCuredFailed;
-	}
-	
 	public ExtraOutcomeInfo[] getDeathExtraInfo() {
 		return ocDied;
 	}
@@ -114,7 +106,6 @@ public class GlobalLists {
 		return outcomes;
 	}
 
-
 	/**
 	 * @return the patienttypes
 	 */
@@ -124,5 +115,13 @@ public class GlobalLists {
 	
 	public RiskClassification[] getRiskClassifications(){
 		return RiskClassification.values();
+	}
+	
+	public SideEffectGrading[] getSideEffectGradings(){
+		return SideEffectGrading.values();
+	}
+	
+	public SideEffectOutcome[] getSideEffectOutcomes(){
+		return SideEffectOutcome.values();
 	}
 }

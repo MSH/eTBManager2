@@ -1,11 +1,12 @@
 package org.msh.tb.ua.cases;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -17,15 +18,14 @@ import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.ComorbidityHome;
 import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.PrescribedMedicine;
+import org.msh.tb.entities.Source;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
-import org.msh.tb.entities.enums.ExtraOutcomeInfo;
 import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.misc.FieldsQuery;
-import org.msh.tb.ua.GlobalLists;
 import org.msh.tb.ua.entities.CaseDataUA;
 
 
@@ -155,16 +155,6 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 		return true;
 	}
 	
-	public ExtraOutcomeInfo[] getExtraInfo(){
-		if (caseCloseHome.getState()==CaseState.FAILED){
-			return GlobalLists.ocCuredFailed;
-		}else if (caseCloseHome.getState()==CaseState.DIED){
-			return  GlobalLists.ocDied;
-		}
-		return (ExtraOutcomeInfo[]) ArrayUtils.addAll(GlobalLists.ocDied, GlobalLists.ocCuredFailed);
-
-	}
-	
 	public void setNationality(Nationality nationality) {
 		this.nationality = nationality;
 	}
@@ -245,6 +235,16 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 		return false;
 	}
 	
+	/**
+	 * Return true if case is DRTB case
+	 */
+	public boolean isConfirmedDRTB(){
+		TbCase tc = caseHome.getTbCase();
+		if (CaseClassification.DRTB.equals(tc.getClassification()) && DiagnosisType.CONFIRMED.equals(tc.getDiagnosisType()))
+			return true;
+		return false;
+	}
+	
 	public List<FieldValue> getRegistrationCategoriesDRTB(){
 		TbCase tbcase = caseHome.getTbCase();
 		FieldsQuery fq = (FieldsQuery) App.getComponent(FieldsQuery.class);
@@ -273,5 +273,22 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 			if (val.getName().getName1().contains(" 4"))
 				res.add(val);
 		return res;
+	}
+	
+	public String getSourcesString(){
+		TbCase tc = caseHome.getTbCase();
+		if (tc.getPrescribedMedicines()==null) return null;
+		Set<Source> sources = new HashSet<Source>();
+		for (PrescribedMedicine pm: tc.getPrescribedMedicines()){
+			sources.add(pm.getSource());
+		}
+		if (sources.isEmpty()) return null;
+		String res = "";
+		for (Source s:sources){
+			res += s.getName().getDefaultName()+", ";
+		}
+		res = res.substring(0, res.length()-2);
+		return res;
+		
 	}
 }

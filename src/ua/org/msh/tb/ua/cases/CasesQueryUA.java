@@ -3,12 +3,14 @@ package org.msh.tb.ua.cases;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.tb.ETB;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseFilters;
 import org.msh.tb.cases.CasesQuery;
 import org.msh.tb.cases.FilterHealthUnit;
 import org.msh.tb.cases.SearchCriteria;
 import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.InfectionSite;
@@ -31,7 +33,11 @@ public class CasesQueryUA extends CasesQuery{
 	private static final String treatRegCondUA = "(tu.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
 	private static final String notifAdrAdmUnitUA="c.notifAddress.adminUnit.code like ";
 	private static final String notifAdrAdmUnitRegUA="c.notifAddress.adminUnit.code = ";
-	
+	private static final String sourcesCond = "exists(SELECT cs.id, pm.id " + 
+													"FROM " + ETB.getWsClassName(TbCase.class) + " cs " +
+													"INNER JOIN cs.prescribedMedicines pm " + 
+													"WHERE 	pm.source.id = #{caseFiltersUA.source.id} " + 
+													"and c.id = cs.id)";
 	public String getAdminUnitLike(AdministrativeUnit adm) {
 		UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
 		if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
@@ -125,6 +131,10 @@ public class CasesQueryUA extends CasesQuery{
 			}
 		}
 
+		if(cfua.getSource() != null && cfua.getSource().getId() != 0){
+			addCondition(sourcesCond);
+		}
+		
 		mountAdvancedSearchConditions();
 		mountSingleSearchConditions();
 		

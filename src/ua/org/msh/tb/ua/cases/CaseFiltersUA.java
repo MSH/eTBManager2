@@ -7,6 +7,7 @@ import org.jboss.seam.annotations.Synchronized;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseFilters;
 import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Tag;
 
 @Name("caseFiltersUA")
@@ -17,12 +18,14 @@ public class CaseFiltersUA {
 	private FieldValue extrapulmonaryType;
 	private FieldValue extrapulmonaryType2;
 	private Tag tag;
+	private Source source;
 
 	public void clear(){
 		pulmonaryType = null;
 		extrapulmonaryType = null;
 		extrapulmonaryType2 = null;
 		tag = null;
+		source = null;
 	}
 	
 	//=========GETTERS & SETTERS=========
@@ -55,6 +58,14 @@ public class CaseFiltersUA {
 			if (cf.getTagid()!=null)
 				tag = (Tag)App.getEntityManager().find(Tag.class, cf.getTagid());
 		return tag;
+	}
+
+	public void setSource(Source source) {
+		this.source = source;
+	}
+
+	public Source getSource() {
+		return source;
 	}
 	
 }
