@@ -81,6 +81,22 @@
 		<ui:param name="destructAndMBT" value="#{false}" />
 	</s:decorate>
 	
+	<s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">#{messages['Source']}:</ui:define>
+		<h:selectOneMenu  value="#{caseFiltersUA.source}" style="width:490px">
+			<s:selectItems value="#{sources}" var="x" label="#{x}" noSelectionLabel="-"/>
+			<s:convertEntity />
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">#{messages['PrescribedMedicine']}:</ui:define>
+		<h:selectOneMenu id="prescribedMedicine" value="#{caseFilters.prescribedMedicine}" style="width:490px">
+			<s:selectItems value="#{medicines}" var="x" label="#{x}" noSelectionLabel="-"/>
+			<s:convertEntity />
+		</h:selectOneMenu>
+	</s:decorate>
+	
 	<!-- VR: To add 'Type of Diagnostic' in the advance search page -->
  	 <s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
