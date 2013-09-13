@@ -153,7 +153,7 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 <h:form id="main">
-<s:decorate id="bodydiv" template="/layout/casebody.xhtml">
+<s:decorate id="bodydiv" template="/custom/ua/layout/casebody.xhtml">
 
 <s:fragment rendered="#{tbcase.diagnosisType!='SUSPECT'}">
 	<ui:include src="/cases/issues.xhtml" />
@@ -172,7 +172,7 @@
 		#{messages[caseDataUA.extraOutcomeInfo.key]}
 	</s:decorate>
 	<s:fragment rendered="#{caseDataUAHome.riskDRTB}">
-	    <h:commandLink styleClass="button" style="width:150px;float:right;"  onclick="Richfaces.showModalPanel('cat4dlg');return false;">
+	    <h:commandLink styleClass="button" style="width:150px;float:right;" onclick="Richfaces.showModalPanel('cat4dlg');return false;">
 	    	<span>#{messages['TbCase.DRTB.to.DRTB']}</span>
 	    </h:commandLink> 
 	    <h:commandLink action="#{caseDataUAHome.riskDRTBtoTB()}" styleClass="button" style="width:150px;float:right;">
@@ -200,7 +200,7 @@
 
 <rich:tab label="#{messages['cases.details.medexam']}" id="tab4" ontabenter="updateTab(4)">
 	<h:panelGroup id="pnltab4">
-		<s:decorate template="/cases/medexamination.xhtml" rendered="#{caseFilters.caseTab==4}"/>
+		<s:decorate template="medexamination.xhtml" rendered="#{caseFilters.caseTab==4}"/>
 	</h:panelGroup>
 </rich:tab>
 
@@ -266,6 +266,12 @@ function updateTab(tabIndex) {
 		<h:form id="formchangecat" style="padding:10px;">
 	
 		<div class="form-content">
+			<s:decorate template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.dateRegTo4Cat']}:</ui:define>
+		    	<ui:param name="required" value="true" /> 
+		    	<ui:param name="datefield" value="#{caseDataUA.dateRegTo4Cat}" /> 
+		    </s:decorate>
+		
 			<s:decorate template="/layout/editfield.xhtml">
 				<ui:define name="label">#{messages['TbField.REGISTRATION_CATEGORY']}:</ui:define>
 				<ui:param name="id" value="regcat" />

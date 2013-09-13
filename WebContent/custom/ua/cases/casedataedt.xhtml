@@ -27,7 +27,7 @@
 	<tr><td>
 	
 	<s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
+    	<ui:define name="label">#{(tbcase.classification=='DRTB' and tbcase.diagnosisType=='CONFIRMED')?messages['Patient.recordNumber.cat4']:messages['Patient.securityNumber']}:</ui:define>
 		<h:inputText id="regnumber" value="#{tbcase.registrationCode}" style="width:120px;" maxlength="11"></h:inputText>
 		<rich:jQuery selector="#regnumber" query="mask('99999999999')" />
 	</s:decorate>
@@ -197,6 +197,12 @@
     </s:decorate>
     </div>
     </s:fragment>
+    
+    <s:decorate template="/layout/dateedit.xhtml" rendered="#{caseDataUAHome.confirmedDRTB}">
+    	<ui:define name="label">#{messages['uk_UA.dateRegTo4Cat']}:</ui:define>
+    	<ui:param name="required" value="#{caseDataUAHome.confirmedDRTB}" /> 
+    	<ui:param name="datefield" value="#{caseDataUA.dateRegTo4Cat}" /> 
+    </s:decorate>
     
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['uk_UA.dateFirstSymptoms']}:</ui:define>
@@ -425,33 +431,43 @@ function showOtherHosp() {
 			<ui:define name="label">
 				#{messages['cases.prevtreat.numprev']}:
 			</ui:define>
-			<h:selectOneMenu value="#{prevTBTreatmentHome.numTreatments}">
-				<f:selectItems value="#{prevTBTreatmentHome.numTreatmentsOptions}"/>
+			<h:selectOneMenu value="#{prevTBTreatmentUAHome.numTreatments}">
+				<f:selectItems value="#{prevTBTreatmentUAHome.numTreatmentsOptions}"/>
 				<a:support event="onchange" ajaxSingle="true" reRender="prevtreats"/>
 			</h:selectOneMenu>
 		</s:decorate>
 
 		<h:panelGroup id="prevtreats">
-		<s:fragment rendered="#{prevTBTreatmentHome.numTreatments>0}">
+		<s:fragment rendered="#{prevTBTreatmentUAHome.numTreatments>0}">
 		<table width="98%" class="tabela4">
 			<tr>
 				<th rowspan="2">#{messages['cases.prevtreat.num']}
 				</th>
 				<th rowspan="2">#{messages['cases.prevtreat.date']}
 				</th>
-				<th colspan="#{prevTBTreatmentHome.substances.size}">
+				<th rowspan="2">#{messages['TbCase.registrationDate']}
+				</th>
+				<th rowspan="2">#{messages['Patient.securityNumber']}
+				</th>
+				
+				<th rowspan="2">#{messages['PatientType']}
+				</th>
+				
+				<th colspan="#{prevTBTreatmentUAHome.substances.size}">
 					#{messages['cases.prevtreat.regs']}
+				</th>
+				<th rowspan="2">#{messages['cases.treatment.refusemed2line']}
 				</th>
 				<th rowspan="2">#{messages['PrevTBTreatment.outcome']}
 				</th>
 			</tr>
 			<tr>
-			<a:repeat value="#{prevTBTreatmentHome.substances}" var="s">
+			<a:repeat value="#{prevTBTreatmentUAHome.substances}" var="s">
 				<th>#{s.abbrevName}
 				</th>
 			</a:repeat>
 			</tr>
-		<a:repeat value="#{prevTBTreatmentHome.treatments}" var="it">
+		<a:repeat value="#{prevTBTreatmentUAHome.treatments}" var="it">
 			<tr>
 				<td class="colcb">#{it.index}
 				</td>
@@ -466,11 +482,33 @@ function showOtherHosp() {
 					</s:validateAll>
 					<h:message for="year" styleClass="error"/>
 				</td>
+				<td class="colcb">
+					<s:decorate template="/layout/dateedit.xhtml" >
+						<ui:param name="required" value="false" />
+						<ui:param name="showPattern" value="false" />
+				    	<ui:param name="datefield" value="#{it.prevTBTreatment.registrationDate}" /> 
+				    </s:decorate>
+				</td>
+				<td class="colcb">
+					<h:inputText id="regnumberp" value="#{it.prevTBTreatment.registrationCode}" style="width:120px;" maxlength="11"></h:inputText>
+					<rich:jQuery selector="#regnumberp" query="mask('99999999999')" />
+				</td>
+				
+				<td class="colcb">
+					<h:selectOneMenu value="#{it.prevTBTreatment.patientType}" >
+		    			<s:selectItems var="itt" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[itt.key]}" />
+		    			<s:convertEnum />
+		    		</h:selectOneMenu>
+				</td>
+				
 				<ui:repeat value="#{it.items}" var="sub">
 				<td class="colcb">
 					<h:selectBooleanCheckbox value="#{sub.selected}" />
 				</td>
 				</ui:repeat>
+				<td class="colcb">
+					<h:selectBooleanCheckbox value="#{it.prevTBTreatment.refuse2line}" />
+				</td>
 				<td class="colcb">
 					<s:validateAll>
 					<h:selectOneMenu id="oc" value="#{it.prevTBTreatment.outcome}" required="true">
