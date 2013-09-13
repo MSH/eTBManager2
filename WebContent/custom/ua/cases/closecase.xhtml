@@ -47,13 +47,13 @@
     </s:decorate>
     </div>
     
-    <div id="extrainfo" style="display:block;clear:both;#{(tbcase.state=='DIED' or tbcase.state=='FAILED')?'':'display:none;'}" >  
+    <div id="extrainfo" style="clear:both;#{(tbcase.state=='DIED')?'display:block;':'display:none;'}" >  
 	<h:panelGroup id="extrainfo1">
 	<s:fragment rendered="true">
     <s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['uk_UA.ExtraOutcomeInfo']}:</ui:define>
 		<h:selectOneMenu value="#{caseDataUA.extraOutcomeInfo}">
-			<s:selectItems value="#{caseDataUAHome.extraInfo}"  var="v" label="#{messages[v.key]}" noSelectionLabel="-"/>
+			<s:selectItems value="#{globalLists_ua.deathExtraInfo}"  var="v" label="#{messages[v.key]}" noSelectionLabel="-"/>
 		</h:selectOneMenu>
     </s:decorate>
   </s:fragment>  
@@ -95,7 +95,7 @@ function statecheckClick(elem) {
         jQuery('#comments').show(500);
    else jQuery('#comments').hide(500);
    
-   if (value=='FAILED' || value=='DIED')
+   if (value=='DIED')
 	    jQuery('#extrainfo').show(500);
    else jQuery('#extrainfo').hide(500);
 

@@ -23,7 +23,7 @@
 	<tr><td>
 	
 	<s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
+    	<ui:define name="label">#{caseDataUAHome.confirmedDRTB?messages['Patient.recordNumber.cat4']:messages['Patient.securityNumber']}:</ui:define>
 		#{tbcase.registrationCode}
 	</s:decorate>
 	
@@ -54,6 +54,13 @@
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.nationality != null}">
     		<ui:define name="label">#{messages['Nationality']}:</ui:define>
     		<h:outputText value="#{messages[tbcase.nationality.key]}" />
+		</s:decorate>
+
+    </td></tr>
+    <tr><td colspan="2">
+		<s:decorate template="/layout/display.xhtml" rendered="#{caseDataUAHome.sourcesString != null}">
+    		<ui:define name="label">#{messages['admin.sources']}:</ui:define>
+    		<h:outputText value="#{caseDataUAHome.sourcesString}" />
 		</s:decorate>
 
     </td></tr>
@@ -196,7 +203,13 @@
     		<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     		<h:outputText value="#{tbcase.diagnosisDate}" converter="localeDateConverter" />
 		</s:decorate>
+	</td><td valign="top">
+		<s:decorate template="/layout/display.xhtml" rendered="#{caseDataUA.dateRegTo4Cat!=null}">
+    		<ui:define name="label">#{messages['uk_UA.dateRegTo4Cat']}:</ui:define>
+    		<h:outputText value="#{caseDataUA.dateRegTo4Cat}" converter="localeDateConverter" />
+		</s:decorate>
 	</td>
+	
 	</tr>
 
 	<tr><td valign="top">
@@ -293,7 +306,7 @@
     		</s:fragment>
 		</s:decorate>
 
-		<s:fragment rendered="#{not empty prevTBTreatmentHome.treatments}">
+		<s:fragment rendered="#{not empty prevTBTreatmentUAHome.treatments}">
 		<h2>#{messages['cases.prevtreat']}</h2>
 		<table width="100%" class="table1">
 			<tr>
@@ -301,30 +314,51 @@
 				</th>
 				<th rowspan="2">#{messages['cases.prevtreat.date']}
 				</th>
-				<th colspan="#{prevTBTreatmentHome.substances.size}">
+				<th rowspan="2">#{messages['TbCase.registrationDate']}
+				</th>
+				<th rowspan="2">#{messages['Patient.securityNumber']}
+				</th>
+				<th rowspan="2">#{messages['PatientType']}
+				</th>
+				<th colspan="#{prevTBTreatmentUAHome.substances.size}">
 					#{messages['cases.prevtreat.regs']}
+				</th>
+				<th rowspan="2">#{messages['cases.treatment.refusemed2line']}
 				</th>
 				<th rowspan="2">#{messages['PrevTBTreatment.outcome']}
 				</th>
 			</tr>
 			<tr>
-			<a:repeat value="#{prevTBTreatmentHome.substances}" var="s">
+			<a:repeat value="#{prevTBTreatmentUAHome.substances}" var="s">
 				<th>#{s.abbrevName}
 				</th>
 			</a:repeat>
 			</tr>
-		<a:repeat value="#{prevTBTreatmentHome.treatments}" var="it">
+		<a:repeat value="#{prevTBTreatmentUAHome.treatments}" var="it">
 			<tr>
 				<td class="colcb">#{it.index}
 				</td>
 				<td class="colcb">
 					#{it.prevTBTreatment.month+1}/#{it.prevTBTreatment.year}
 				</td>
+				<td class="colcb">
+					<h:outputText value="#{it.prevTBTreatment.registrationDate}" converter="localeDateConverter" />	
+				</td>
+				<td class="colcb">
+					#{it.prevTBTreatment.registrationCode}
+				</td>
+				
+				<td class="colcb">
+					#{messages[it.prevTBTreatment.patientType.key]}
+				</td>
 				<a:repeat value="#{it.items}" var="sub">
 				<td class="colcb">
 					<h:outputText value="x" rendered="#{sub.selected}" />
 				</td>
 				</a:repeat>
+				<td class="colcb">
+					#{it.prevTBTreatment.refuse2line?messages['global.yes']:messages['global.no']}
+				</td>
 				<td class="colcb">
 					#{messages[it.prevTBTreatment.outcome.key]}
 				</td>
@@ -408,7 +442,7 @@
 	<div class="form-content">
 
 		<h2>                 
-			<s:link view="/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" 
+			<s:link view="/custom/ua/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" 
 				styleClass="button-alt" onclick="disableButton(this)">
 				<f:param name="id" value="#{caseHome.id}" />
 				<f:param name="idSideEffect" value="#{null}"/>
@@ -417,32 +451,64 @@
 			#{messages['cases.sideeffects']}
 		</h2>
 	
-	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty sideEffectHome.results}" />
+	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty sideEffectUAHome.results}" />
 	<h:panelGroup id="sideeffects">
-	<s:div styleClass="region3" rendered="#{empty sideEffectHome.results}"><div class="content">
+	<s:div styleClass="region3" rendered="#{empty sideEffectUAHome.results}"><div class="content">
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" style="display:block;padding:4px"/>
 	</div></s:div>
 	
-	<h:dataTable value="#{sideEffectHome.results}" var="it" styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty sideEffectHome.results}">
+	<h:dataTable value="#{sideEffectUAHome.results}" var="it" styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty sideEffectUAHome.results}">
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Substance']}" styleClass="collh" />
+			</f:facet>
+			#{it.medicines}
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['uk_UA.effectSt']}" styleClass="collh" />
+			</f:facet>
+			#{it.monthOfTreatment}#{messages['global.monthth.2']}
+			<s:fragment rendered="#{it.effectSt!=null}">
+				(<h:outputText value="#{it.effectSt}" converter="localeDateConverter" />)
+			</s:fragment>
+			
+		</h:column>
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
 			</f:facet>
-			<s:link value="#{it.sideEffect.value.name}" view="/cases/sideeffectsedt.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
+			<s:link value="#{it.sideEffect.value.name}" view="/custom/ua/cases/sideeffectsedt.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="idSideEffect" value="#{it.id}"/>
 			</s:link>
-			<s:fragment rendered="#{not empty it.sideEffect.complement}">
-				<div style="display:inline-block">
-					 - #{it.sideEffect.complement}
-				</div>
-			</s:fragment>
-			<br />
-			<b>#{messages['cases.sideeffects.month']}:</b> #{it.month}
-			<br />
-			<b><h:outputText value="#{messages['Substance']}:" rendered="#{not empty it.medicines}"/></b> #{it.medicines}
 		</h:column>
-	
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['SideEffectGrading']}" styleClass="collh" />
+			</f:facet>
+			#{messages[it.grade.key]}
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['uk_UA.symptomTherapy']}" styleClass="collh" />
+			</f:facet>
+			#{it.symptomTherapy}
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['uk_UA.dateChangeReg']}" styleClass="collh" />
+			</f:facet>
+			<h:outputText value="#{it.dateChangeReg}" converter="localeDateConverter" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['SideEffectOutcome']}" styleClass="collh" />
+			</f:facet>
+			#{messages[it.outcome.key]}
+			<br/>
+			<h:outputText value="#{it.effectEnd}" converter="localeDateConverter" />
+		</h:column>
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['global.comments']}" styleClass="collh" />
@@ -464,8 +530,8 @@
 	</h:dataTable>
 	
 	</h:panelGroup>
-	<a:jsFunction name="remSideEffect" action="#{sideEffectHome.remove}" reRender="sideeffects"  rendered="#{caseHome.canEditExams}">
-		<a:actionparam name="param1" assignTo="#{sideEffectHome.id}" converter="javax.faces.Integer"/>
+	<a:jsFunction name="remSideEffect" action="#{sideEffectUAHome.remove}" reRender="sideeffects"  rendered="#{caseHome.canEditExams}">
+		<a:actionparam name="param1" assignTo="#{sideEffectUAHome.id}" converter="javax.faces.Integer"/>
 	</a:jsFunction>
 	</div>
 	
