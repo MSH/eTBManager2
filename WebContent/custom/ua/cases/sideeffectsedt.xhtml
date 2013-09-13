@@ -23,41 +23,73 @@
 <h:form id="main" styleClass="form1">
 	<div class="form-content">
 	
-		    <s:decorate template="/layout/editfield.xhtml" >
-		    	<ui:define name="label">#{messages['cases.sideeffects.desc']}:</ui:define>
-		    	<ui:param name="required" value="true" />
-		    	<ui:param name="id" value="sideEffect" />
-		    	<ui:param name="field" value="#{caseSideEffect.sideEffect}" />
-		    	<ui:param name="list" value="#{fieldsQuery.sideEffects}" />
-	    	</s:decorate>
-			
 			<s:decorate template="/layout/edit.xhtml">
 				<ui:define name="label">#{messages['Substance']}:</ui:define>
-				<h:selectOneMenu value="#{caseSideEffect.substance}">
+				<h:selectOneMenu value="#{caseSideEffectUA.substance}">
 						<s:selectItems var="s" value="#{substances}" label="#{s.abbrevName}" noSelectionLabel="-"/>
 						<s:convertEntity />
 				</h:selectOneMenu>
 				<h:outputText value="," />
-				<h:selectOneMenu value="#{caseSideEffect.substance2}">
+				<h:selectOneMenu value="#{caseSideEffectUA.substance2}">
 					<s:selectItems var="s" value="#{substances}" label="#{s.abbrevName}" noSelectionLabel="-"/>
 					<s:convertEntity />
 				</h:selectOneMenu>
 			</s:decorate>
+		
+			<s:decorate template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.effectSt']}:</ui:define>
+		    	<ui:param name="required" value="true" /> 
+		    	<ui:param name="datefield" value="#{caseSideEffectUA.effectSt}" /> 
+		    </s:decorate>
+			
+		    <s:decorate template="/layout/editfield.xhtml" >
+		    	<ui:define name="label">#{messages['cases.sideeffects.desc']}:</ui:define>
+		    	<ui:param name="required" value="true" />
+		    	<ui:param name="id" value="sideEffect" />
+		    	<ui:param name="field" value="#{caseSideEffectUA.sideEffect}" />
+		    	<ui:param name="list" value="#{fieldsQuery.sideEffects}" />
+	    	</s:decorate>
 			
 			<s:decorate template="/layout/edit.xhtml">
-				<ui:define name="label">#{messages['cases.sideeffects.month']}:</ui:define>
-				<h:selectOneMenu id="month" value="#{caseSideEffect.month}" required="true">
-					<f:selectItems value="#{sideEffectHome.months}" />
-				</h:selectOneMenu>
+	    		<ui:define name="label">#{messages['SideEffectGrading']}:</ui:define>
+	    		<h:selectOneMenu value="#{caseSideEffectUA.grade}">
+	    			<s:selectItems var="it" value="#{globalLists_ua.sideEffectGradings}" noSelectionLabel="-" label="#{messages[it.key]}" />
+	    			<s:convertEnum />
+	    		</h:selectOneMenu>
 			</s:decorate>
-		
+			
+			<s:decorate template="/layout/edit.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.symptomTherapy']}:</ui:define>
+		    	<h:inputText value="#{caseSideEffectUA.symptomTherapy}" style="width:500px;" />
+		    </s:decorate>
+			
+			<s:decorate template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.dateChangeReg']}:</ui:define>
+		    	<ui:param name="required" value="false" /> 
+		    	<ui:param name="datefield" value="#{caseSideEffectUA.dateChangeReg}" /> 
+		    </s:decorate>
+			
+			<s:decorate template="/layout/edit.xhtml">
+	    		<ui:define name="label">#{messages['SideEffectOutcome']}:</ui:define>
+	    		<h:selectOneMenu value="#{caseSideEffectUA.outcome}">
+	    			<s:selectItems var="it" value="#{globalLists_ua.sideEffectOutcomes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+	    			<s:convertEnum />
+	    		</h:selectOneMenu>
+			</s:decorate>
+			
+			<s:decorate template="/layout/dateedit.xhtml" >
+		    	<ui:define name="label">#{messages['uk_UA.effectEnd']}:</ui:define>
+		    	<ui:param name="required" value="false" /> 
+		    	<ui:param name="datefield" value="#{caseSideEffectUA.effectEnd}" /> 
+		    </s:decorate>
+			
 		    <s:decorate template="/layout/edit.xhtml" >
 		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-		    	<h:inputTextarea value="#{caseSideEffect.comment}" style="width:500px;height:80px;" />
+		    	<h:inputTextarea value="#{caseSideEffectUA.comment}" style="width:500px;height:80px;" />
 		    </s:decorate>
 		    
 		<div class="form-footer">
-			<a:commandLink action="#{sideEffectHome.save}" styleClass="button" reRender="main">
+			<a:commandLink action="#{sideEffectUAHome.save}" styleClass="button" reRender="main,messages">
 				<span>#{messages['form.save']}</span>
 			</a:commandLink> 
 		    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
