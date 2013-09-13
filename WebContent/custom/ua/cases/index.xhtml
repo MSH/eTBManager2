@@ -171,6 +171,7 @@
 	</a:jsFunction>
 	
 	<div class="spacer" />
+<ui:remove>
 	<a:repeat value="#{caseFilters.classifications}" var="it">
 		<span style="margin-right:20px;">
 			<h:selectBooleanCheckbox value="#{it.selected}">
@@ -180,7 +181,6 @@
 		</span>
 	</a:repeat>
 
-<ui:remove>
 	<h2>#{messages['cases.ongoing']}</h2>
 	<h:panelGroup id="pnlhealthunits">
 		<ui:include src="#{userWorkspace.view=='TBUNIT'?'/cases/index_tbunit_content.xhtml':'index_content.xhtml'}" />
