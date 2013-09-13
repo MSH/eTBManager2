@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<!-- Changes in the case data for Ukraine -->
+	<changeSet id="15.1" author="Alexk" context="UA">
+	    <addColumn tableName="casedataua">
+	        <column name="dateRegTo4Cat" type="date" >
+	        	<constraints nullable="true" />
+	        </column>
+	    </addColumn>
+	    <sql>
+	    update casedataua d 
+	    set d.dateRegTo4Cat=(select c.diagnosisDate 
+	    	from TbCase c 
+	    	where c.classification=1 and c.diagnosisType=1 and d.id=c.id)
+	    </sql>
+	</changeSet>
+	
+	<changeSet id="15.2" author="Alexk" context="UA">
+	    <sql>
+	    update medicalexamination ex set ex.discriminator='ua' 
+		where exists(select c.id from tbcase c 
+		where exists(select p.id from patient p where p.workspace_id=29107 and c.patient_id=p.id) 
+		and ex.case_id=c.id) and ex.discriminator like 'gen';
+	    </sql>
+	</changeSet>
+	
+	<changeSet id="15.3" author="Alexk" context="UA">
+	    <createTable tableName="prevtbtreatmentua">
+ 			<column name="id" type="int" autoIncrement="false">
+ 				<constraints primaryKey="true" nullable="false"/>
+ 			</column>
+ 			<column name="registrationDate" type="date" >
+ 				<constraints nullable="true" />
+ 			</column>
+ 			<column name="registrationCode" type="varchar(50)" >
+ 				<constraints nullable="true" />
+ 			</column>
+ 			<column name="patientType" type="int" >
+ 				<constraints nullable="true" />
+ 			</column>
+ 			<column name="refuse2line" type="bit(1)" >
+ 				<constraints nullable="false" />
+ 			</column>
+ 		</createTable>
+ 	</changeSet>
+ 	<changeSet id="15.4" author="Alexk" context="UA">
+ 		<sql>
+	 		insert into prevtbtreatmentua (id,registrationDate,registrationCode,patientType,refuse2line)
+			select pt.id,tc.registrationDate,tc.registrationCode,tc.patientType,cd.refuse2line
+			from prevtbtreatment pt
+			inner join TbCase tc on tc.id = pt.case_id
+			inner join CaseDataUA cd on cd.id = pt.case_id
+			where exists(select pt.id from casedataua d where d.id=pt.case_id) 
+			and not exists(select ptua.id from prevtbtreatmentua ptua where pt.id=ptua.id)
+ 		</sql>
+	</changeSet>
+
+	<changeSet id="15.5" author="Alexk" context="UA">
+	    <addColumn tableName="casesideeffect">
+	        <column name="dateChangeReg" type="date" >
+	        	<constraints nullable="true" />
+	        </column>
+	         <column name="symptomTherapy" type="varchar(255)" >
+	        	<constraints nullable="true" />
+	        </column>
+	    </addColumn>
+	    <sql>
+		    update casesideeffect cs set cs.discriminator='ua' 
+			where exists(select c.id from tbcase c 
+			where exists(select p.id from patient p where p.workspace_id=29107 and c.patient_id=p.id) 
+			and cs.case_id=c.id) and cs.discriminator like 'gen';
+	    </sql>
+	</changeSet>
+
+</databaseChangeLog>
+
+
