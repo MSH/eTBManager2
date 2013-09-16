@@ -14,6 +14,7 @@ public class ExamHome<E> extends WsEntityHome<E> {
 	private static final long serialVersionUID = -3507272066511042267L;
 	
 	private boolean lastResult = true;
+	private boolean orderByDateDec = true;
 	private List<E> results;
 	private CaseHome caseHome;
 	
@@ -62,6 +63,8 @@ public class ExamHome<E> extends WsEntityHome<E> {
 	/**
 	 * Generates the HQL expression to retrieve the results
 	 * @param lastRes
+	 * @param orderByDateDec - determines if the result will be ordered by desc date if true or
+	 * ordered by if false
 	 * @return
 	 */
 	public String getResultsHQL() {
@@ -70,7 +73,11 @@ public class ExamHome<E> extends WsEntityHome<E> {
 		if (lastResult)
 			hql = hql.concat(" and exam.date = (select max(aux.date) " +
 			"from " + getEntityClass().getSimpleName() + " aux where aux.tbcase = exam.tbcase) ");
-		return hql.concat(" order by exam.date desc");
+		
+		if(orderByDateDec)
+			return hql.concat(" order by exam.date desc");
+		else
+			return hql.concat(" order by exam.date");
 	}
 	
 	@Override
@@ -134,7 +141,28 @@ public class ExamHome<E> extends WsEntityHome<E> {
 		results = null;
 	}
 
+	/**
+	 * Returns all exams results ordered chronologically reversed
+	 * @return
+	 */
 	public List<E> getAllResults() {
+		if(!isOrderByDateDec() && results != null)
+			results = null;
+		
+		setOrderByDateDec(true);
+		setLastResult(false);
+		return getResults();
+	}
+	
+	/**
+	 * Returns all exams results ordered chronologically
+	 * @return
+	 */
+	public List<E> getAllResultsChronologicallyOrdered() {
+		if(isOrderByDateDec() && results != null)
+			results = null;
+		
+		setOrderByDateDec(false);
 		setLastResult(false);
 		return getResults();
 	}
@@ -142,6 +170,20 @@ public class ExamHome<E> extends WsEntityHome<E> {
 	public List<E> getLastResultList() {
 		setLastResult(true);
 		return getResults();
+	}
+	
+	/**
+	 * @return the orderByDateDec
+	 */
+	public boolean isOrderByDateDec() {
+		return orderByDateDec;
+	}
+
+	/**
+	 * @param orderByDateDec the orderByDateDec to set
+	 */
+	public void setOrderByDateDec(boolean orderByDateDec) {
+		this.orderByDateDec = orderByDateDec;
 	}
 
 

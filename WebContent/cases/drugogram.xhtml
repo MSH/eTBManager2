@@ -16,18 +16,18 @@
 			#{messages['global.month']}
 		</th>
 		<th>
-			#{messages['global.date']}
+			#{messages['drugogram.datetitle']}
 		</th>
 		<th>
-			#{messages['cases.details.report1.sample']}
+			#{messages['drugogram.sampleidtitle']}
 		</th>
 		
-		<a:repeat value="#{drugogram.examLabels}" var="it">
+		<a:repeat value="#{drugogram.examLabels}" var="it" rowKeyVar="i">
 		<th>
-			#{messages['cases.exammicroscopy']}
+			#{i == 0 ? messages['drugogram.firstmicroscopy'] : messages['drugogram.microscopy']}
 		</th>
 		<th>
-			#{messages['cases.examculture']}
+			#{i == 0 ? messages['drugogram.firstculture'] : messages['cases.examculture']}
 		</th>
 		</a:repeat>
 		<a:repeat value="#{drugogram.medicines}" var="it">

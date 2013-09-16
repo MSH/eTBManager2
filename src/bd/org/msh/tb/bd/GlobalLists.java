@@ -12,6 +12,10 @@ import org.msh.tb.bd.entities.enums.Occupation;
 import org.msh.tb.bd.entities.enums.PulmonaryTypesBD;
 import org.msh.tb.bd.entities.enums.QuarterMonths;
 import org.msh.tb.bd.entities.enums.SalaryRange;
+import org.msh.tb.bd.entities.enums.SideEffectAction;
+import org.msh.tb.bd.entities.enums.SideEffectGrading;
+import org.msh.tb.bd.entities.enums.SideEffectOutcome;
+import org.msh.tb.bd.entities.enums.SideEffectSeriousness;
 import org.msh.tb.bd.entities.enums.SkinTestResult;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.InfectionSite;
@@ -108,6 +112,40 @@ public class GlobalLists {
 		QuarterMonths.FOURTH,
 	};
 	
+	private static final SideEffectGrading sideEffectGradings[] = {
+		SideEffectGrading.MILD,
+		SideEffectGrading.MODERATE, 
+		SideEffectGrading.SEVERE,
+	};
+	
+	private static final SideEffectSeriousness sideEffectSeriousnesses[] = {
+		SideEffectSeriousness.NONE,
+		SideEffectSeriousness.HOSPITALIZED,
+		SideEffectSeriousness.DEAD,
+		SideEffectSeriousness.CONGENITAL_ANOMALY,
+		SideEffectSeriousness.DISABILITY,
+		SideEffectSeriousness.LIFE_THREATNING,
+		SideEffectSeriousness.OTHER,
+	};
+	
+	private static final SideEffectAction sideEffectActions[] = {
+		SideEffectAction.NONE,
+		SideEffectAction.DISCONTINUED,
+		SideEffectAction.REDUCED,
+		SideEffectAction.SWITCH,
+		SideEffectAction.RE_CHALLENGE,
+		SideEffectAction.OTHER,
+	};
+	
+	private static final SideEffectOutcome sideEffectOutcomes[] = {
+		SideEffectOutcome.UNKNOWN,
+		SideEffectOutcome.RESOLVED,
+		SideEffectOutcome.RESOLVING,
+		SideEffectOutcome.SEQUEALE,
+		SideEffectOutcome.NOT_RESOLVED,
+		SideEffectOutcome.DEATH,
+	};	
+	
 	public TbField[] getTbFields() {
 		return tbfields;
 	}
@@ -153,5 +191,21 @@ public class GlobalLists {
 		}
 	
 		return years;
+	}
+	
+	public static SideEffectGrading[] getSideEffectGradings(){
+		return sideEffectGradings;
+	}
+	
+	public static SideEffectSeriousness[] getSideEffectSeriousnesses(){
+		return sideEffectSeriousnesses;
+	}
+	
+	public static SideEffectAction[] getSideEffectActions(){
+		return sideEffectActions;
+	}
+	
+	public static SideEffectOutcome[] getSideEffectOutcomes(){
+		return sideEffectOutcomes;
 	}
 }

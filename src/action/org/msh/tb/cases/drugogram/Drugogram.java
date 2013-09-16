@@ -113,7 +113,7 @@ public class Drugogram {
 		
 		numExams = 0;
 		
-		for (ExamCulture examCulture: examCultureHome.getAllResults()) {
+		for (ExamCulture examCulture: examCultureHome.getAllResultsChronologicallyOrdered()) {
 			if (examCulture != null) {
 				Date dt = examCulture.getDateCollected();
 				item = findItemByDate(dt);
@@ -128,7 +128,7 @@ public class Drugogram {
 			}
 		}
 		
-		for (ExamMicroscopy examMicroscopy: examMicroscopyHome.getAllResults()) {
+		for (ExamMicroscopy examMicroscopy: examMicroscopyHome.getAllResultsChronologicallyOrdered()) {
 			if (examMicroscopy != null) {
 				Date dt = examMicroscopy.getDateCollected();
 				item = findItemByDate(dt);
