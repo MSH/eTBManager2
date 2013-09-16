@@ -80,7 +80,7 @@ public class SideEffectKHHome {
 		for (CaseSideEffectKH it: lst) {
 //			it.setCaseData(caseData);
 			it.setTbcase(tbcase);
-			it.setTbcasekh((TbCaseKH)tbcase);
+//			it.setTbcasekh((TbCaseKH)tbcase);
 			if ((it.getSubstance() != null) && (it.getSubstance2() != null) && (it.getSubstance().equals(it.getSubstance2())))
 				it.setSubstance2(null);
 
