@@ -1,13 +1,9 @@
 package org.msh.tb.kh.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 
@@ -24,16 +20,15 @@ public class TbCaseKH extends TbCase {
 	//@PropertyLog(ignore=true)
 	//private List<CaseDispensing_Kh> dispkh = new ArrayList<CaseDispensing_Kh>();
 	
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcasekh")
-	private List<CaseSideEffectKH> sideEffectsKh = new ArrayList<CaseSideEffectKH>();
+//	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcasekh")
+//	private List<CaseSideEffectKH> sideEffectsKh = new ArrayList<CaseSideEffectKH>();
 	
 	
 	@Override
 	public CaseSideEffectKH findSideEffectData(FieldValue sideEffect) {
-		for (CaseSideEffectKH se: getSideEffectsKh()) {
-			if (se.getSideEffect().getValue().equals(sideEffect))
-				return se;
-	
+		CaseSideEffect se = findSideEffectData(sideEffect);
+		if ((se != null) && (se instanceof CaseSideEffectKH)) {
+			return (CaseSideEffectKH)se;
 		}
 		return null;
 		
@@ -47,11 +42,11 @@ public class TbCaseKH extends TbCase {
 //		this.dispkh = dispkh;
 //	}
 
-	public List<CaseSideEffectKH> getSideEffectsKh() {
+/*	public List<CaseSideEffectKH> getSideEffectsKh() {
 		return sideEffectsKh;
 	}
 	
 	public void setSideEffectsKh(List<CaseSideEffectKH> sideEffectsKh) {
 		this.sideEffectsKh = sideEffectsKh;
 	}
-}
+*/}
