@@ -19,6 +19,9 @@
 
 <h:form id="main">
 
+	<s:fragment rendered="#{not empty onlineUsersReport.items}">
+	<b>#{onlineUsersReport.items.size}</b> #{messages['form.resultlist']}.<p/>
+	</s:fragment>
 	<s:decorate template="/layout/display.xhtml" rendered="#{userSettings.multipleUserWorkspaces}">
 		<ui:define name="label">#{messages['Workspace']}:</ui:define>
 		<h:selectOneMenu value="#{reportSelection.userWorkspace}" >

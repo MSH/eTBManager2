@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project basedir="." default="build" name="etbmanager">
+	<property environment="env" />
+	<property file="build.properties" />
+	<property name="war-file-prefix" value="etbmanager" />
+	<property name="implementation-title" value="e-TB Manager" />
+	<property name="country-code" value="NA" />
+	<property name="country-folder" value="na" />
+	<property name="country" value="Namibia" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.6" />
+	<property name="source" value="1.6" />
+	<property name="build-classes" value="build/classes" />
+
+
+
+	<path id="project.libraryclasspath">
+        <pathelement location="WebContent/WEB-INF/lib/commons-beanutils.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-digester.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-lang.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/drools-compiler.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/drools-core.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-el.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-ioc.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-mail.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-pdf.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-remoting.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam-ui.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jboss-seam.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jsf-facelets.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/richfaces-api-3.3.3.Final.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/richfaces-impl-3.3.3.Final.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/richfaces-ui-3.3.3.Final.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jxl.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/gson-2.1.jar"/>
+		<pathelement location="WebContent/WEB-INF/lib/eidssAz.jar"/>
+	 	<pathelement location="WebContent/WEB-INF/lib/gwt-servlet.jar"/>
+	 	<pathelement location="WebContent/WEB-INF/lib/datastream-1.0.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/classes"/>
+    </path>
+
+
+
+	<path id="jboss-4.2.3.GA.libraryclasspath">
+        <pathelement location="${jboss.dir}/client/commons-logging.jar"/>
+        <pathelement location="${jboss.dir}/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
+        <pathelement location="${jboss.dir}/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
+        <pathelement location="${jboss.dir}/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
+        <pathelement location="${jboss.dir}/client/jboss-j2ee.jar"/>
+        <pathelement location="${jboss.dir}/client/ejb3-persistence.jar"/>
+        <pathelement location="${jboss.dir}/client/servlet-api.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-annotations.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-entitymanager.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-core.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/lucene-core.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-search.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/hibernate-validator.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/dom4j.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/axis.jar"/>
+        <pathelement location="${jboss.dir}/server/default/lib/jboss-jaxrpc.jar"/>
+		<pathelement location="${jboss.dir}/server/default/lib/quartz.jar"/>
+    </path>
+
+	
+	<path id="gwt.librarypath">
+        <pathelement location="${gwt.dir}/gwt-dev.jar"/>
+        <pathelement location="${gwt.dir}/gwt-user.jar"/>
+	</path>
+
+	<path id="etbm.classpath">
+        <pathelement location="build/classes"/>
+        <path refid="project.libraryclasspath"/> 
+        <path refid="jboss-4.2.3.GA.libraryclasspath"/>
+        <path refid="gwt.librarypath"/>
+    </path>
+
+
+
+	<target name="init" depends="clean">
+		<echo message="Implementation title  :  ${implementation-title}" />
+		<echo message="Implementation version:  ${implementation-version}" />
+		<echo message="Implementation vendor :  ${implementation-vendor}" />
+		<echo message="Country               :  ${country-code}" />
+
+		<copy includeemptydirs="false" todir="${build-classes}">
+			<fileset dir="src/action" excludes="**/*.launch, **/*.java, **/*.html" />
+		</copy>
+		<copy includeemptydirs="false" todir="${build-classes}">
+			<fileset dir="src/model" excludes="**/*.launch, **/*.java, **/*.html" />
+		</copy>
+		<copy includeemptydirs="false" todir="${build-classes}">
+			<fileset dir="src/reports" excludes="**/*.launch, **/*.java, **/*.html" />
+		</copy>
+		<copy includeemptydirs="false" todir="${build-classes}">
+			<fileset dir="src/client" excludes="**/*.launch, **/*.java, **/*.html" />
+		</copy>
+		<copy includeemptydirs="false" todir="${build-classes}">
+			<fileset dir="src/${country-folder}" excludes="**/*.launch, **/*.java" />
+		</copy>
+	</target>
+
+
+	<target name="clean">
+		<delete dir="${build-classes}" />
+		<mkdir dir="${build-classes}" />
+	</target>
+
+	<target depends="clean" name="cleanall" />
+
+
+    <target depends="compile,gwt-compile,war" name="build" />
+
+	<target depends="init" name="compile">
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="false" debuglevel="${debuglevel}" destdir="build/classes" source="${source}" target="${target}" encoding="8859_1">
+			<src path="src/action" />
+			<src path="src/model" />
+  		    <src path="src/reports"/>
+	 		<src path="src/client"/>
+			<src path="src/${country-folder}" />
+            <classpath refid="etbm.classpath"/>
+		</javac>
+	</target>
+
+
+	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects" />
+
+
+	<target description="Build the .war file" depends="init" name="war">
+		<property name="war-file-name" value="${war-file-prefix}-${implementation-version}-${country-code}.war" />
+		<echo message="war file              :  ${war-file-name}" />
+		<delete file="build/${war-file-name}" />
+		<buildnumber file="build.num" />
+
+		<tstamp>
+			<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+		</tstamp>
+
+		<manifest file="WebContent/META-INF/MANIFEST.MF">
+			<attribute name="Built-By" value="${user.name}" />
+			<attribute name="Implementation-Version" value="${implementation-version}-b${build.number}" />
+			<attribute name="Implementation-Title" value="${implementation-title}" />
+			<attribute name="Implementation-Vendor" value="${implementation-vendor}" />
+			<attribute name="Built-Date" value="${TODAY}" />
+			<attribute name="Build-Jdk" value="${java.version}" />
+			<attribute name="Country-Code" value="${country-code}" />
+			<attribute name="Country" value="${country}" />
+		</manifest>
+		<echo message="Build number          :  ${build.number}" />
+
+		<copy file="production/web.xml" todir="build" overwrite="true" />
+		<replace file="build/web.xml" token="@liquibase_context@" value="${country-code}" />
+
+		<war destfile="build/${war-file-name}" webxml="build/web.xml" manifest="WebContent/META-INF/MANIFEST.MF">
+			<fileset dir="WebContent">
+				<exclude name="WEB-INF/web.xml" />
+				<exclude name="WEB-INF/components.xml" />
+				<exclude name="WEB-INF/faces-config.xml" />
+				<exclude name="WEB-INF/deploy/**" />
+				<exclude name="WEB-INF/classes/**" />
+				<exclude name="custom/**" />
+			</fileset>
+
+			<fileset dir="WebContent">
+				<include name="custom/${country-folder}/**" />
+			</fileset>
+
+			<classes dir="build/classes">
+				<exclude name="META-INF/persistence.xml" />
+				<exclude name="/messages*" />
+				<exclude name="/custom_messages*" />
+			</classes>
+
+			<zipfileset file="src/model/messages_en_NA.properties" fullpath="WEB-INF/classes/messages_en_NA.properties" />
+			<zipfileset file="src/model/messages_en.properties" fullpath="WEB-INF/classes/messages_en.properties" />
+			<zipfileset file="production/persistence.xml" prefix="WEB-INF/classes/META-INF" />
+			<zipfileset file="production/components.xml" prefix="WEB-INF" />
+			<zipfileset file="production/${country-folder}/faces-config.xml" fullpath="WEB-INF/faces-config.xml" />
+		</war>
+	</target>
+
+
+	<target name="gwt-compile" description="Compile java source code in javascript code using GWT">
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler" >
+			<classpath>
+				<pathelement location="src/client" />
+				<path refid="gwt.librarypath" />
+			</classpath>
+			<jvmarg value="-Xmx512M"/>
+			<arg value="-style"/>
+			<arg value="OBFUSCATED" />
+			<arg value="-logLevel"/>
+			<arg value="INFO" />
+			<arg value="-war"/>
+			<arg value="WebContent" />
+			<arg value="org.msh.tb.client.reports"/>
+		</java>
+	</target>
+
+
+</project>

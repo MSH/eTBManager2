@@ -44,6 +44,9 @@
 
 <h:panelGroup id="reportPanel">
 <h2><h:outputText value="#{userSessionReport.date}" converter="localeDateConverter" /></h2>
+<s:fragment rendered="#{not empty userSessionReport.items}">
+<b>#{userSessionReport.items.size}</b> #{messages['form.resultlist']}.<p/>
+</s:fragment>
 <h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty userSessionReport.items}" styleClass="warn"/>
 <h:dataTable value="#{userSessionReport.items}" var="it" styleClass="table1" width="100%" style="margin-top:4px;"
 	rowClasses="lin1,lin2" columnClasses="colc,coll,colc,colc,coll,coll" rendered="#{not empty userSessionReport.items}">
