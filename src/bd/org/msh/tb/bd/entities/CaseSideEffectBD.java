@@ -37,10 +37,16 @@ public class CaseSideEffectBD extends CaseSideEffect{
 	//private String comments;	
 	
 	public Integer getMonthOfTreatment(){
+		//for registers of before the changing of month of treatment to iniDate 
+		if(getMonth() != 0)
+			return getMonth();
+		
+		if(getTbcase().getTreatmentPeriod() == null || effectSt == null)
+			return null;
+
 		int i = 0;
 		i = DateUtils.monthsBetween(getTbcase().getTreatmentPeriod().getIniDate(), effectSt)+1;
 		return i;
-		
 	}
 		
 	public SideEffectGrading getGrade() {
@@ -99,5 +105,4 @@ public class CaseSideEffectBD extends CaseSideEffect{
 		this.effectEnd = effectEnd;
 	}
 
-	
 }
