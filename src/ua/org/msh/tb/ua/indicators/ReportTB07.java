@@ -153,6 +153,7 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 									if (micResult!=null)
 										if (micResult.equals("positive") && key.equalsIgnoreCase("newcases")){
 											addToTable(getTable2000(), gen+"_all", Integer.toString(roundToIniDate(tc.getPatientAge())), gen);
+											//System.out.println(tc.getDisplayCaseNumber()+"|"+tc.getPatient().getFullName()+"|"+gen+"|"+tc.getPatient().getBirthDate()+"|"+tc.getDiagnosisDate()+"|"+tc.getPatientAge());
 									}
 								
 
@@ -163,10 +164,17 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 								}
 								else
 									addToVerList(tc,1,3);
-								addToTable(getTable3000(),gen,micResult==null ? "negative" : micResult,key);
-
+								//if (micResult!=null){
+									addToTable(getTable3000(),gen,micResult==null ? "negative" : micResult,key);
+									//if ("negative".equals(micResult))
+										//System.out.println("|"+tc.getDisplayCaseNumber()+"|"+tc.getPatient().getFullName()+"|"+tc.getPatientType()+"|"+(tc.getTreatmentPeriod()!=null?tc.getTreatmentPeriod().getIniDate():"")+"|"+(rightMcTest(tc)!=null?rightMcTest(tc).getDateCollected():"")+"|"+(rightCulTest(tc)!=null?rightCulTest(tc).getDateCollected():""));
+								//}
+								//else
+									//System.out.println("|"+tc.getDisplayCaseNumber()+"|"+tc.getPatient().getFullName()+"|"+tc.getPatientType()+"|"+(tc.getTreatmentPeriod()!=null?tc.getTreatmentPeriod().getIniDate():"")+"|"+(rightMcTest(tc)!=null?rightMcTest(tc).getDateCollected():"")+"|");
+									
+								
 								if (!verifyList.get(getMessage("verify.errorcat1")).get(4).getCaseList().contains(tc))
-									if (tc.getResHIV().get(0).getResult().equals(HIVResult.POSITIVE))
+									if (caseHasHIV(tc))
 										addToTable(getTable4000(),gen,"pulmonary",key);
 								addToAllowing(tc);
 							}
@@ -220,6 +228,9 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 		if (!res)
 			if (tc.getResHIV().get(0).getResult().equals(HIVResult.POSITIVE))
 				res = true;
+		CaseDataUA cd = (CaseDataUA) getEntityManager().find(CaseDataUA.class, tc.getId());  //AK, previous line will rise exception, if no result
+		if (cd.isHiv())
+			res = true;
 		return res;
 	}
 

@@ -30,7 +30,7 @@ import org.msh.utils.date.DateUtils;
  * <br/> of verifying data in the process of constructing of indicator
  * A base class must be created and override abstracts methods {@link #createIndicators()}, 
  * {@link #generateTables()}, {@link #addToAllowing(TbCase)}
- * @author am
+ * @author A.M.
  * @param <E>
  * @param <E>
  *
@@ -381,9 +381,10 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 	}
 	
 	/**
-	 * @return worst microscope test before start treatment
+	 * @return worst microscope test before start treatment. If it is null - first exist
 	 */
 	protected ExamMicroscopy rightMcTestBeforeTreat(TbCase tc){
+		ExamMicroscopy result = null;;
 		Date iniTreatDate = new Date(); 
 		int res=0;
 		if (tc.getTreatmentPeriod()!=null)
@@ -401,18 +402,26 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 
 		switch (lst.size()) {
 		case 0: 
-			return null;
+			result = null;
+			break;
 		case 1: 
-			return lst.get(0);
+			result = lst.get(0);
+			break;
 		default:
-			return WorstMcRes(lst);
+			result = WorstMcRes(lst);
+			break;
 		}
+		
+		if (result == null)
+			result = firstMcTest(tc);
+		return result;
 	}
 	
 	/**
-	 * @return worst culture test before start treatment
+	 * @return worst culture test before start treatment. If it is null - first exist
 	 */
 	protected ExamCulture rightCulTestBeforeTreat(TbCase tc){
+		ExamCulture result = null;
 		Date iniTreatDate = new Date(); 
 		int res=0;
 		if (tc.getTreatmentPeriod()!=null)
@@ -430,14 +439,48 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 
 		switch (lst.size()) {
 		case 0: 
-			return null;
+			result = null;
+			break;
 		case 1: 
-			return lst.get(0);
+			result = lst.get(0);
+			break;
 		default:
-			return WorstCulRes(lst);
+			result = WorstCulRes(lst);
+			break;
 		}
+		if (result == null)
+			result = firstCulTest(tc);
+		return result;
 	}
 	
+	/**
+	 * Return the most early exam culture in case
+	 */
+	private ExamCulture firstCulTest(TbCase tc) {
+		if (tc.getExamsCulture().size() == 0) return null;
+		Date d = tc.getExamsCulture().get(0).getDateCollected();
+		ExamCulture res = tc.getExamsCulture().get(0);
+		for (ExamCulture ex:tc.getExamsCulture()){
+			if (ex.getDateCollected().before(d))
+				res = ex;
+		}
+		return res;
+	}
+	
+	/**
+	 * Return the most early exam microscopy in case
+	 */
+	private ExamMicroscopy firstMcTest(TbCase tc) {
+		if (tc.getExamsMicroscopy().size() == 0) return null;
+		Date d = tc.getExamsMicroscopy().get(0).getDateCollected();
+		ExamMicroscopy res = tc.getExamsMicroscopy().get(0);
+		for (ExamMicroscopy ex:tc.getExamsMicroscopy()){
+			if (ex.getDateCollected().before(d))
+				res = ex;
+		}
+		return res;
+	}
+
 	/**
 	 * @return culture test, which is up to quality, strictly namely first 14 days of treatment 
 	 * (if no treatment, then all results) and worst test from several 
