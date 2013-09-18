@@ -10,7 +10,7 @@
  <span style="padding-left: 20px;">
 		<s:validateAll>
 			<h:panelGroup id="edtdatep">
-			<h:outputText value="#{messages['global.date']}:" rendered="#{label}"/>
+			<h:outputText value="#{messages['global.date']}: " rendered="#{label}"/>
 				<rich:calendar id="#{empty edtid?'edtdate':edtid}"
 					enableManualInput="true" value="#{datefield}"
 					required="#{required}" locale="#{locale}"
