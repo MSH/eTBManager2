@@ -9,6 +9,8 @@
 	<s:fragment rendered="#{not caseHome.inTreatment}" >
 		<h:outputText value="#{messages['cases.details.notreatment']}" styleClass="warn" style="display:block;padding:30px;"/>
 
+		<h:outputText value="#{messages['cases.treat.validatebefore']}" rendered="#{caseHome.validationRequiredBeforeTreatment and not caseHome.canStartTreatment}" style="padding-left:30px;font-weight:bold"/>
+		<s:fragment rendered="#{caseHome.canStartTreatment}">
 		<div style="display:block;margin-left:30px;marign-bottom:30px;"> 
 		<s:link onclick="showSelRegimenDlg();return false;" 
 			rendered="#{caseHome.canEditTreatment}"
@@ -44,6 +46,7 @@
 				</div>
 			</div>
 		</div>
+		</s:fragment>
 	</s:fragment>
 
 	<s:fragment rendered="#{caseHome.inTreatment}">
