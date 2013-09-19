@@ -66,13 +66,17 @@ public class AuthenticatorService {
 				resp.setErrorno(Response.RESP_AUTHENTICATION_FAIL);
 
 			EntityManager em = (EntityManager)Component.getInstance("entityManager");
-			List<UserWorkspace> lst = em.createQuery("from UserWorkspace uw join fetch uw.workspace w where uw.user.id = :id")
+			List<Object[]> lst = em.createQuery("select w.id, w.name.name1, w.name.name2, uw.tbunit.name.name1 " +
+					"from UserWorkspace uw join fetch uw.workspace w join fetch uw.tbunit where uw.user.id = :id")
 				.setParameter("id", userWorkspace.getUser().getId())
 				.getResultList();
 			
 			List<WorkspaceInfo> res = new ArrayList<WorkspaceInfo>();
-			for (UserWorkspace uw: lst) 
-				res.add(new WorkspaceInfo(uw.getWorkspace().getId(), uw.getWorkspace().getName().getName1(), uw.getWorkspace().getName().getName2()));
+			for (Object[] vals: lst) 
+				res.add(new WorkspaceInfo((Integer)vals[0],
+						(String)vals[1],
+						(String)vals[2],
+						(String)vals[3]));
 
 			resp.setResult(ObjectSerializer.serializeToXml(res));
 			
@@ -81,6 +85,7 @@ public class AuthenticatorService {
 		} catch (Exception e) {
 			resp.setErrorno(Response.RESP_UNEXPECTED_ERROR);
 			resp.setErrormsg(e.toString());
+			e.printStackTrace();
 		}
 		
 		return resp;

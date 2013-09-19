@@ -5,16 +5,18 @@ public class WorkspaceInfo {
 	private Integer id;
 	private String name1;
 	private String name2;
+	private String healthUnitName;
 	
 	public WorkspaceInfo() {
 		super();
 	}
 
-	public WorkspaceInfo(Integer id, String name1, String name2) {
+	public WorkspaceInfo(Integer id, String name1, String name2, String healthUnit) {
 		super();
 		this.id = id;
 		this.name1 = name1;
 		this.name2 = name2;
+		this.healthUnitName = healthUnit;
 	}
 	/**
 	 * @return the id
@@ -51,5 +53,19 @@ public class WorkspaceInfo {
 	 */
 	public void setName2(String name2) {
 		this.name2 = name2;
+	}
+
+	/**
+	 * @return the healthUnitName
+	 */
+	public String getHealthUnitName() {
+		return healthUnitName;
+	}
+
+	/**
+	 * @param healthUnitName the healthUnitName to set
+	 */
+	public void setHealthUnitName(String healthUnitName) {
+		this.healthUnitName = healthUnitName;
 	}
 }

@@ -1,34 +1,38 @@
 package org.msh.tb.webservices;
 
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Map;
 
-import org.msh.datastream.SchemaManager;
-import org.msh.datastream.StringConverter;
-import org.msh.datastream.TypeConverter;
-import org.msh.datastream.XmlDeserializer;
-import org.msh.datastream.XmlSerializer;
-import org.msh.datastream.XmlDeserializer.ObjectReferenceable;
+import javax.persistence.EntityManager;
+
+import org.jboss.seam.Component;
+import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.TbCase;
+import org.msh.utils.DataStreamUtils;
+
+import com.rmemoria.datastream.DataInterceptor;
+import com.rmemoria.datastream.DataMarshaller;
+import com.rmemoria.datastream.DataUnmarshaller;
+import com.rmemoria.datastream.StreamContext;
 
 /**
  * Serialize and deserialize objects to and from XML
  * @author Ricardo Memoria
  *
  */
-public class ObjectSerializer {
+public class ObjectSerializer implements DataInterceptor {
 
 	private static ObjectSerializer _instance;
 
-	// instance of the class schema manager in use
-	private SchemaManager schemaManager;
+	private StreamContext context;
 	
 	/**
 	 * Private constructor of the class
 	 */
 	private ObjectSerializer() {
-		InputStream in = getClass().getClassLoader().getResourceAsStream("\\WEB-INF\\classes\\org\\msh\\tb\\webservices\\objectstream.ini");
-		if (in == null)
-			throw new IllegalAccessError("No stream found containing object mapping");
-		schemaManager = new SchemaManager(in); 
+		context = DataStreamUtils.createContext("webservice-response-schema.xml");
+		context.addInterceptor(this);
 		_instance = this;
 	}
 	
@@ -57,12 +61,10 @@ public class ObjectSerializer {
 	 * @return
 	 */
 	public static String serializeToXml(Object obj) {
-		TypeConverter conv = StringConverter.instance().findConverter(obj.getClass());
-		if (conv != null)
-			return conv.toString(obj);
-
-		XmlSerializer ser = new XmlSerializer(instance().getSchemaManager());
-		return ser.serializeToXml(obj);
+		DataMarshaller dm = DataStreamUtils.createXMLMarshaller("webservice-response-schema.xml");
+		OutputStream out = DataStreamUtils.createStringOutputStream();
+		dm.marshall(obj, out);
+		return out.toString();
 	}
 	
 	
@@ -71,15 +73,43 @@ public class ObjectSerializer {
 	 * @param clazz
 	 * @return
 	 */
-	public static <E> E deserializeFromXml(String xml, Class<E> clazz, ObjectReferenceable ref) {
-		XmlDeserializer deser = new XmlDeserializer(instance().getSchemaManager());
-		return (E)deser.deserialize(xml, ref);
+	public static <E> E deserializeFromXml(String xml, Class<E> clazz) {
+		DataUnmarshaller du = DataStreamUtils.createXMLUnmarshaller(instance().context);
+		InputStream is = DataStreamUtils.createStringInputStream(xml);
+		return (E)du.unmarshall(is);
 	}
 
 	/**
-	 * @return the schemaManager
+	 * @return the context
 	 */
-	public SchemaManager getSchemaManager() {
-		return schemaManager;
+	public StreamContext getContext() {
+		return context;
+	}
+
+	/** {@inheritDoc}
+	 */
+	@Override
+	public Object newObject(Class clazz, Map<String, Object> params) {
+		Integer id = (Integer)params.get("id");
+		if (clazz == TbCase.class) {
+			CaseHome home = (CaseHome)Component.getInstance("caseHome", true);
+			home.setId(id);
+			return home.getInstance();
+		}
+		
+		EntityManager em = (EntityManager)Component.getInstance("entityManager");
+
+		try {
+			return em.find(clazz, id);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	/** {@inheritDoc}
+	 */
+	@Override
+	public Class getObjectClass(Object obj) {
+		return obj.getClass();
 	}
 }

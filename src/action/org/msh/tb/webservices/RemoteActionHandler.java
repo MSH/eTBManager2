@@ -10,12 +10,9 @@ import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.transaction.UserTransaction;
-import org.msh.datastream.XmlSerializer;
-import org.msh.datastream.XmlDeserializer.ObjectReferenceable;
 import org.msh.tb.application.AppFacesMessages;
-import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.TbCase;
 import org.msh.tb.login.AuthenticatorBean;
+
 
 /**
  * Support for remote procedure calls (web services), handling authentication, transaction, error and preparation of response to the client.
@@ -34,7 +31,7 @@ import org.msh.tb.login.AuthenticatorBean;
  * @author Ricardo Memoria
  *
  */
-public abstract class RemoteActionHandler implements ObjectReferenceable {
+public abstract class RemoteActionHandler {
 
 	private String sessionId;
 	private Object data;
@@ -193,14 +190,14 @@ public abstract class RemoteActionHandler implements ObjectReferenceable {
 	 * @return
 	 */
 	public <E> E deserializeFromXml(String xmldata, Class<E> clazz) {
-		return ObjectSerializer.deserializeFromXml(xmldata, clazz, this);
+		return ObjectSerializer.deserializeFromXml(xmldata, clazz);
 	}
 
 
 	/* (non-Javadoc)
 	 * @see org.msh.datastream.XmlDeserializer.ObjectReferenceable#objectByKey(java.lang.Class, java.lang.Object)
 	 */
-	@Override
+/*	@Override
 	public Object objectByKey(Class clazz, Object key) {
 		if (clazz == TbCase.class) {
 			CaseHome home = (CaseHome)Component.getInstance("caseHome", true);
@@ -216,7 +213,7 @@ public abstract class RemoteActionHandler implements ObjectReferenceable {
 			return null;
 		}
 	}
-
+*/
 
 	/**
 	 * Start a new transaction
@@ -291,5 +288,6 @@ public abstract class RemoteActionHandler implements ObjectReferenceable {
 	public void setTransactional(boolean transactional) {
 		this.transactional = transactional;
 	}
+
 
 }

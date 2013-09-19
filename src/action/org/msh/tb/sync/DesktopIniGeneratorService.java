@@ -5,7 +5,6 @@ package org.msh.tb.sync;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,14 +28,13 @@ import org.msh.tb.entities.SystemConfig;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.WeeklyFrequency;
+import org.msh.utils.DataStreamUtils;
 
 import com.rmemoria.datastream.DataConverter;
 import com.rmemoria.datastream.DataInterceptor;
 import com.rmemoria.datastream.DataMarshaller;
 import com.rmemoria.datastream.ObjectProvider;
 import com.rmemoria.datastream.StreamContext;
-import com.rmemoria.datastream.StreamContextFactory;
-import com.rmemoria.datastream.StreamFileTypeXML;
 
 /**
  * @author Ricardo Memoria
@@ -112,11 +110,10 @@ public class DesktopIniGeneratorService implements ObjectProvider, DataIntercept
 		
 		initialized = false;
 
-		URL schema = getClass().getClassLoader().getResource("org/msh/tb/sync/clientinifile-schema.xml");
-		context = StreamContextFactory.createContext(schema);
+		context = DataStreamUtils.createContext("clientinifile-schema.xml");
 		context.addInterceptor(this);
 		addConverter(context);
-		DataMarshaller m = context.createMarshaller(StreamFileTypeXML.class);
+		DataMarshaller m = DataStreamUtils.createXMLMarshaller(context);
 
 		try {
 			// adjust name of the unit
