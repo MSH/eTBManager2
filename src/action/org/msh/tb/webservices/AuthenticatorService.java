@@ -67,7 +67,7 @@ public class AuthenticatorService {
 
 			EntityManager em = (EntityManager)Component.getInstance("entityManager");
 			List<Object[]> lst = em.createQuery("select w.id, w.name.name1, w.name.name2, uw.tbunit.name.name1 " +
-					"from UserWorkspace uw join fetch uw.workspace w join fetch uw.tbunit where uw.user.id = :id")
+					"from UserWorkspace uw join uw.workspace w where uw.user.id = :id")
 				.setParameter("id", userWorkspace.getUser().getId())
 				.getResultList();
 			
