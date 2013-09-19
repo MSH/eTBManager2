@@ -6,7 +6,7 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
 	<!-- Add specific permission to enable allow a user to generate movements out of limit date -->
-	<changeSet id="15.1" author="rmemoria">
+	<changeSet id="15.1" author="rmemoria" context="KH">
 	    <dropForeignKeyConstraint baseTableName="casesideeffect" constraintName="FK9D7338D8F333759C"/>
 	    <dropColumn tableName="casesideeffect" columnName="CASE_DATA_ID_KH"/>
 	</changeSet>
