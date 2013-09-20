@@ -108,7 +108,7 @@
     	<param name="id" value="#{userSession.userWorkspaceId}" converterId="javax.faces.Integer" />
     </page>
     
-    <page view-id="/sync/dowlonadinifile.xhtml">
+    <page view-id="/sync/downloadinifile.xhtml">
         <action execute="#{generateDesktopFileHome.download}"/>
         <param name="tk" value="#{generateDesktopFileHome.userToken}" required="true"/>
     </page>
