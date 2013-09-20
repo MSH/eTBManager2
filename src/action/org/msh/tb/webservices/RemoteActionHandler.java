@@ -99,7 +99,8 @@ public abstract class RemoteActionHandler {
 			if (transactional)
 				commitTransaction();
 
-			response.setResult( ObjectSerializer.serializeToXml(result) );
+			if (result != null)
+				response.setResult( ObjectSerializer.serializeToXml(result) );
 
 		} catch (ValidationException ve) {
 			if (transactional)
@@ -107,6 +108,7 @@ public abstract class RemoteActionHandler {
 			setResponseError(Response.RESP_VALIDATION_ERROR, ve.getMessage());
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			if (transactional)
 				rollbackTransaction();
 			setResponseError(Response.RESP_UNEXPECTED_ERROR, e.toString());
@@ -166,6 +168,8 @@ public abstract class RemoteActionHandler {
 	protected boolean authenticate() {
 		AuthenticatorBean authenticator = (AuthenticatorBean)Component.getInstance("authenticator");
 		authenticator.setSessionId(sessionId);
+		// instantiate credentials, otherwise the authenticator method will not be called
+		Identity.instance().getCredentials();
 		Identity.instance().login();
 
 		if (!Identity.instance().isLoggedIn()) {

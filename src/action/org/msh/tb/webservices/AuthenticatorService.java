@@ -26,6 +26,13 @@ import org.msh.tb.login.UserSession;
 @SOAPBinding(style=Style.RPC)
 public class AuthenticatorService {
 
+	/**
+	 * Validate user and password under the provided workspace, and return a token to be reused in future requests
+	 * @param username the user login
+	 * @param password the user password
+	 * @param workspaceid the ID of the workspace
+	 * @return instance of {@link Response} class containing the result of the operation
+	 */
 	@WebMethod
 	public Response login(@WebParam(name="username") String username, @WebParam(name="password") String password, @WebParam(name="workspaceId") int workspaceid) {
 		Response resp = new Response();
@@ -54,6 +61,13 @@ public class AuthenticatorService {
 	}
 	
 	
+	/**
+	 * Return the list of workspaces available for the given user login
+	 * @param username is the user login
+	 * @param password is the user password
+	 * @return instance of {@link Response} class containing the list of workspaces in the result 
+	 * property as an XML document
+	 */
 	@WebMethod
 	public Response getUserWorkspaces(@WebParam(name="username") String username, @WebParam(name="password") String password) {
 		Response resp = new Response();

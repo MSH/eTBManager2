@@ -13,11 +13,15 @@ import java.io.IOException;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.ValidationException;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.web.Session;
 import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.webservices.RemoteActionHandler;
 
 /**
  * Home class that get information from the UI and send the initialization file
@@ -27,9 +31,17 @@ import org.msh.tb.entities.Tbunit;
  */
 @Name("generateDesktopFileHome")
 public class GenerateDesktopFileHome {
+	/**
+	 * Buffer size used when generating file to the stream
+	 */
+	private static final int BUFFER_SIZE = 65535;
 
 	private Integer unitId;
-	private static final int BUFFER_SIZE = 65535;
+
+	/**
+	 * Used when a client request the initialization file without authenticating using the login page
+	 */
+	private String userToken;
 	
 	@In EntityManager entityManager;
 
@@ -105,6 +117,33 @@ public class GenerateDesktopFileHome {
 		fc.responseComplete();
 	}
 	
+	
+	/**
+	 * Called from the REST API to generate the download file as a request from a client
+	 */
+	public void download() {
+		if (userToken == null)
+			throw new RuntimeException("No user token informed");
+		
+		RemoteActionHandler handler = new RemoteActionHandler(userToken) {
+			@Override
+			protected Object execute(Object data) throws ValidationException {
+				UserWorkspace uw = (UserWorkspace)Component.getInstance("userWorkspace");
+				unitId = uw.getTbunit().getId();
+				try {
+					generate();
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+				return null;
+			}
+		};
+		
+		handler.setTransactional(false);
+		handler.run();
+		Session.instance().invalidate();
+	}
+	
 	/**
 	 * @return the unitId
 	 */
@@ -117,5 +156,21 @@ public class GenerateDesktopFileHome {
 	 */
 	public void setUnitId(Integer unitId) {
 		this.unitId = unitId;
+	}
+
+
+	/**
+	 * @return the userToken
+	 */
+	public String getUserToken() {
+		return userToken;
+	}
+
+
+	/**
+	 * @param userToken the userToken to set
+	 */
+	public void setUserToken(String userToken) {
+		this.userToken = userToken;
 	}
 }
