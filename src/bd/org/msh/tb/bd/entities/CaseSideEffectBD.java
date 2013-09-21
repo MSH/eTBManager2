@@ -13,6 +13,7 @@ import org.msh.tb.bd.entities.enums.SideEffectGrading;
 import org.msh.tb.bd.entities.enums.SideEffectOutcome;
 import org.msh.tb.bd.entities.enums.SideEffectSeriousness;
 import org.msh.tb.entities.CaseSideEffect;
+import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 import org.msh.utils.date.DateUtils;
 
 @Entity
@@ -105,4 +106,32 @@ public class CaseSideEffectBD extends CaseSideEffect{
 		this.effectEnd = effectEnd;
 	}
 
+	/**
+	 * Return month of treatment based on the start date of side effect
+	 * @return
+	 */
+	public String getIniMonthTreatmentDisplay() {
+		if (getEffectSt() == null)
+			return null;
+		WorkspaceCustomizationService wsservice = WorkspaceCustomizationService.instance();
+		return wsservice.getExamControl().getMonthDisplay(getTbcase(), getEffectSt());
+	}
+	
+	/**
+	 * Return month of treatment based on the start treatment date and the collected date
+	 * @return
+	 */
+	public String getEndMonthTreatmentDisplay() {
+		if (getEffectEnd() == null)
+			return null;
+		WorkspaceCustomizationService wsservice = WorkspaceCustomizationService.instance();
+		return wsservice.getExamControl().getMonthDisplay(getTbcase(), getEffectEnd());
+	}
+	
+	public boolean hasAditionalinfo(){
+		return ((getMedicines() != null && !getMedicines().trim().equals("")) 
+				|| getGrade() != null || getSeriousness() != null || getActionTaken() != null || 
+				getOutcome() != null ||	getEffectEnd() != null || (getComment() != null && !getComment().trim().equals("")));
+	}
+	
 }

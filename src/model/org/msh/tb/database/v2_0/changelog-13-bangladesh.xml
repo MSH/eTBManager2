@@ -55,5 +55,14 @@
 		where classification=1 and diagnosisType=1 and not exists(select * from examdst exam where exam.case_id=a.id)</sql>
 	    
 	</changeSet>
+	
+	<changeSet id="13.3" author="MSANTOS">
+	<sql>
+		update casesideeffect cse
+		set effectSt = DATE_ADD((select initreatmentdate from tbcase c1 where cse.case_id = c1.id), INTERVAl cse.se_month-1 MONTH)
+		where cse.se_month is not null and cse.se_month != 0 and cse.effectst is null and
+		cse.case_id in (select c2.id from tbcase c2 inner join patient p on p.id = c2.patient_id inner join workspace w on w.id = p.workspace_id where w.extension like 'bd')
+	</sql>
+	</changeSet>
 
 </databaseChangeLog>
