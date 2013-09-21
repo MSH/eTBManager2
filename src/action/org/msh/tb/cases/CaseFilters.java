@@ -99,6 +99,8 @@ public class CaseFilters {
 	private Integer tagid;
 	
 	private ItemSelectList<CaseClassification> classifications;
+	
+	private ItemSelectList<DiagnosisType> diagnosisTypes;
 
 
 	/**
@@ -179,12 +181,16 @@ public class CaseFilters {
 				clearFilters();
 				stateIndex = sc;
 				unitId = uid;
+				classifications.selectAll();
+				diagnosisTypes.selectAll();
 				break;
 
 			case PATIENT:
 				String s = patient;
 				clearFilters();
 				patient = s;
+				classifications.selectAll();
+				diagnosisTypes.selectAll();
 				break;
 			
 			case VALIDATION_STATE:
@@ -192,6 +198,8 @@ public class CaseFilters {
 				clearFilters();
 				validationState = vs;
 				unitId = uid;
+				classifications.selectAll();
+				diagnosisTypes.selectAll();
 				break;
 			
 			case CASE_TAG:
@@ -200,6 +208,8 @@ public class CaseFilters {
 				setFilterHealthUnit(FilterHealthUnit.TREATMENT_UNIT);
 				tagid = id;
 				unitId = uid;
+				classifications.selectAll();
+				diagnosisTypes.selectAll();
 				break;
 			
 			case CUSTOM_FILTER:
@@ -207,6 +217,8 @@ public class CaseFilters {
 				stateIndex = null;
 				tagid = null;
 				unitId = null;
+				classifications.selectAll();
+				diagnosisTypes.selectAll();
 				break;
 
 			case CASE_UNIT_STATE:
@@ -776,6 +788,19 @@ public class CaseFilters {
 			classifications.selectAll();
 		}
 		return classifications;
+	}
+	
+	/**
+	 * Return the list of diagnosis types available in the workspace
+	 * @return
+	 */
+	public ItemSelectList<DiagnosisType> getDiagnosisTypes() {
+		if (diagnosisTypes == null) {
+			GlobalLists globalLists = (GlobalLists)Component.getInstance("globalLists");
+			diagnosisTypes = new ItemSelectList<DiagnosisType>(globalLists.getDiagnosisTypes());
+			diagnosisTypes.selectAll();
+		}
+		return diagnosisTypes;
 	}
 
 	/**

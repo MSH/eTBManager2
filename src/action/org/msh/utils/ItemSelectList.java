@@ -16,8 +16,18 @@ public class ItemSelectList<E> extends ArrayList<ItemSelect<E>>{
 		super();
 		setItems(items);
 	}
+	
+	public ItemSelectList(E[] items) {
+		super();
+		setItems(items);
+	}
 
 	public void setItems(List<E> items) {
+		for (E item: items)
+			add(new ItemSelect<E>(item));
+	}
+	
+	public void setItems(E[] items) {
 		for (E item: items)
 			add(new ItemSelect<E>(item));
 	}

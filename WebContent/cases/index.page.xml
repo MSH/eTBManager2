@@ -11,6 +11,10 @@
 			<redirect view-id="/cases/searchresult.xhtml">
 			</redirect>
 		</rule>
+		<rule if-outcome="reload">
+			<redirect view-id="/cases/index.xhtml">
+			</redirect>
+		</rule>
 	</navigation>
 
 </page>

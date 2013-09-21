@@ -28,10 +28,9 @@
 		<a:commandLink action="#{caseEditingHome.saveEditing}" styleClass="button" reRender="main,messages">
 			<span>#{messages['form.save']}</span>
 		</a:commandLink>
-		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
-			<f:param name="id" value="#{caseHome.id}" />
+		<a:commandLink  action="cancel" styleClass="button-alt" ajaxSingle="true" >
 			<span>#{messages['form.cancel']}</span>
-		</s:link>
+		</a:commandLink>
 	</div>
 
 </h:form>

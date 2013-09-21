@@ -14,6 +14,7 @@ import org.msh.tb.bd.entities.CaseSideEffectBD;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.misc.FieldsQuery;
 
 
@@ -49,9 +50,10 @@ public class SideEffectBDHome extends EntityHomeEx<CaseSideEffectBD>{
 	 * @return
 	 */
 	protected List<CaseSideEffectBD> createResults() {
-		return getEntityManager()
+		List<CaseSideEffectBD> r = getEntityManager()
 			.createQuery(getResultsHQL())
 			.getResultList();
+		return r;
 	}
 	
 	public String getResultsHQL() {
@@ -111,6 +113,13 @@ public class SideEffectBDHome extends EntityHomeEx<CaseSideEffectBD>{
 		
 		getCaseSideEffectBD().setMonth(0);
 
+		//If the case is not on treatment or is transferin but has no treatment
+		if((!caseHome.getInstance().getState().equals(CaseState.ONTREATMENT)) || 
+				(caseHome.getInstance().getState().equals(CaseState.TRANSFERRING) && (caseHome.getInstance().getTreatmentPeriod() == null || caseHome.getInstance().getTreatmentPeriod().getIniDate() == null))){
+			facesMessages.addToControlFromResourceBundle("sideEffectfldoptions", "cases.sideeffects.errormsg1");
+			validationError = true;
+			return !validationError;
+		}
 		
 		if(getCaseSideEffectBD().getEffectSt() == null){
 			facesMessages.addToControlFromResourceBundle("sideEffect", "javax.faces.component.UIInput.REQUIRED");
@@ -122,18 +131,54 @@ public class SideEffectBDHome extends EntityHomeEx<CaseSideEffectBD>{
 			validationError = true;
 		}
 		
+		if(getCaseSideEffectBD().getEffectEnd() != null && getCaseSideEffectBD().getEffectEnd().compareTo(getCaseSideEffectBD().getEffectSt()) < 0){
+			facesMessages.addToControlFromResourceBundle("inidate", "global.finalinitialdateerror");
+			facesMessages.addToControlFromResourceBundle("enddate", "global.finalinitialdateerror");
+			validationError = true;
+		}
+		
+		//same side effect already recorded for the same initial date
 		List<CaseSideEffectBD> lst = createResults();
 		for(CaseSideEffectBD c : lst){
-			//same side effect already recorded for the same initial date
-			if(getCaseSideEffectBD().getSideEffect().getValue().getId().equals(c.getSideEffect().getValue().getId())
-					&& c.getEffectSt() != null){
-				//if(getCaseSideEffectBD().getEffectSt().compareTo(c.getEffectSt()) == 0){
-				//	facesMessages.addToControlFromResourceBundle("inidate", "cases.sideeffects.samemonth");
-				//	validationError = true;
-				//}
+			//checks if it is a new register of if the editing side effect is not the same as the list object
+			if(getCaseSideEffectBD().getId() == null || !getCaseSideEffectBD().getId().equals(c.getId())){
+			//If it is the same side effect
+			if(getCaseSideEffectBD().getSideEffect().getValue().getId().equals(c.getSideEffect().getValue().getId()))
+				//Same start date.
+				if(c.getEffectSt() != null && getCaseSideEffectBD().getEffectSt().compareTo(c.getEffectSt()) == 0){
+					facesMessages.addToControlFromResourceBundle("inidate", "cases.sideeffects.samemonth");
+					validationError = true;
+				//start date of list object is before the editing object
+				}else if(c.getEffectSt() != null && getCaseSideEffectBD().getEffectSt().compareTo(c.getEffectSt()) < 0){
+					 if(c.getEffectEnd() == null){
+						//exists the same side effect with the period open
+						facesMessages.addToControlFromResourceBundle("inidate", "cases.sideeffects.sameperiod");
+						facesMessages.addToControlFromResourceBundle("enddate", "cases.sideeffects.sameperiod");
+						validationError = true;
+					}else if(getCaseSideEffectBD().getEffectEnd().compareTo(c.getEffectSt()) >= 0){
+						//exists the same side effect with that the period intercedes this one
+						facesMessages.addToControlFromResourceBundle("inidate", "cases.sideeffects.sameperiod");
+						facesMessages.addToControlFromResourceBundle("enddate", "cases.sideeffects.sameperiod");
+						validationError = true;
+					}
+				//start date of list object is after the editing object
+				}else if(c.getEffectSt() != null && getCaseSideEffectBD().getEffectSt().compareTo(c.getEffectSt()) >= 0){
+					if(c.getEffectEnd()== null){
+						//exists the same side effect with the period open
+						facesMessages.addToControlFromResourceBundle("inidate", "cases.sideeffects.sameperiod");
+						facesMessages.addToControlFromResourceBundle("enddate", "cases.sideeffects.sameperiod");
+						validationError = true;
+					}else if(c.getEffectEnd().compareTo(getCaseSideEffectBD().getEffectSt()) >= 0){
+						//exists the same side effect with that the period intercedes this one
+						facesMessages.addToControlFromResourceBundle("inidate", "cases.sideeffects.sameperiod");
+						facesMessages.addToControlFromResourceBundle("enddate", "cases.sideeffects.sameperiod");
+						validationError = true;
+					}
+				}
 			}
 		}
 		
 		return !validationError;
 	}
+		
 }

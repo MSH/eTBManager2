@@ -15,6 +15,7 @@ import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.login.UserSession;
 import org.msh.utils.EntityQuery;
@@ -59,8 +60,11 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 				"and t.transferring=false and t.unit_id = u.id" + casecond + ") as transferin, " +
 				
 				"(select count(*) from treatmenthealthunit t inner join tbcase c on c.id = t.case_id " +
-				"where t.enddate < c.endtreatmentdate and c.state in (1,2) and t.unit_id = u.id" + casecond + ") as transferout " +
+				"where t.enddate < c.endtreatmentdate and c.state in (1,2) and t.unit_id = u.id" + casecond + ") as transferout, " +
 				
+				"(select count(*) from tbcase c " +
+				"where c.state=0 and c.owner_unit_id = u.id " + casecond + ") as notontreat " +
+
 				"from tbunit u inner join administrativeunit a on a.id = u.adminunit_id " +
 				"where u.workspace_id = " + defaultWorkspace.getId().toString() + generateSQLConditionByUserView() +
 				(hsID != null? " and u.healthsystem_id = " + hsID: "") + 
@@ -103,19 +107,42 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 	 * @return SQL condition to be used in a where clause
 	 */
 	protected String generateSQLConditionByCase() {
+		//Classifications selected
 		List<CaseClassification> classifs = caseFilters.getClassifications().getSelectedItems();
-
+		String caseCondition = "";
+		String clasSel = "";
+		String diagTypesSel = "";
+		
 		if (classifs.size() == 0)
 			return "";
+		else{
+			for (CaseClassification cla: classifs) {
+				if (!clasSel.isEmpty())
+					clasSel += ", ";
+				clasSel += cla.ordinal();
+			}
+		}
 		
-		String caseCondition = "";
-		for (CaseClassification cla: classifs) {
-			if (!caseCondition.isEmpty())
-				caseCondition += ", ";
-			caseCondition += cla.ordinal();
+		//diagnosis types selected
+		List<DiagnosisType> diagTypes = caseFilters.getDiagnosisTypes().getSelectedItems();
+
+		if (diagTypes.size() == 0)
+			return "";
+		else{
+			for (DiagnosisType dt: diagTypes) {
+				if (!diagTypesSel.isEmpty())
+					diagTypesSel += ", ";
+				diagTypesSel += dt.ordinal();
+			}
 		}
 
-		return " and (c.classification in (" + caseCondition + "))";
+		if(!clasSel.isEmpty())
+			caseCondition = " and (c.classification in (" + clasSel + "))";
+		
+		if(!diagTypesSel.isEmpty())
+			caseCondition = caseCondition + " and (c.diagnosisType in (" + diagTypesSel + "))";
+		
+		return caseCondition;
 	}
 
 	
@@ -176,6 +203,7 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 			info.setCasesOnTreatment(readLongValue(vals[4]));
 			info.setCasesTransferIn(readLongValue(vals[5]));
 			info.setCasesTransferOut(readLongValue(vals[6]));
+			info.setCasesNotOnTreatment(readLongValue(vals[7]));
 
 			res.add(info);
 		}

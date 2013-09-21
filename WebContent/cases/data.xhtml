@@ -139,13 +139,17 @@
 		</s:decorate>
 	
 		</td></tr>
-		<tr><td>
+		<tr>
+		
+		<s:fragment rendered="#{tbcase.diagnosisType == 'CONFIRMED'}">
+		<td>
 		<s:decorate template="/layout/display.xhtml">
 	    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
 		    <h:outputText id="dt" value="#{tbcase.diagnosisDate}" converter="localeDateConverter"/>
 		</s:decorate>
-	
-		</td><td>
+		</td>
+		</s:fragment>
+		<td>
 	
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
@@ -161,6 +165,7 @@
 	</td></tr>
 	
 	<tr><td	colspan="2">
+		<s:fragment rendered="#{tbcase.diagnosisType == 'CONFIRMED'}">
 		<s:decorate template="/layout/display.xhtml" rendered="#{(not empty tbcase.drugResistanceType) and (tbcase.classification=='DRTB')}">
 			<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
 			#{messages[tbcase.drugResistanceType.key]}
@@ -185,7 +190,8 @@
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
     		#{messages[tbcase.patientType.key]}
 		</s:decorate>
-
+		</s:fragment>
+		
 		<s:fragment rendered="#{not empty prevTBTreatmentHome.treatments}">
 		<h2>#{messages['cases.prevtreat']}</h2>
 		<table width="100%" class="table1">

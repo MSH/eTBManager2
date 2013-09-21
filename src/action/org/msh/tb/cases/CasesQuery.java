@@ -209,6 +209,16 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			addCondition(clas);
 		}
 		
+		if(caseFilters.getDiagnosisTypes().getSelectedItems().size()>0){
+			String diagT = " c.diagnosisType in (";
+			for(DiagnosisType d : caseFilters.getDiagnosisTypes().getSelectedItems()){
+				diagT = diagT + d.ordinal() + ",";
+			}
+			diagT = diagT.substring(0, diagT.length()-1);
+			diagT = diagT + ")";
+			addCondition(diagT);
+		}
+		
 		mountAdvancedSearchConditions();
 		mountSingleSearchConditions();
 		
@@ -294,7 +304,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			case CaseFilters.SUSPECT_ON_TREATMENT: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal();
 				break;
 				
-				// CONFIRMED ON TREATMENT
+			// CONFIRMED ON TREATMENT
 			case CaseFilters.CONFIRMED_ON_TREATMENT: cond = "c.state = " + CaseState.ONTREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.CONFIRMED.ordinal();
 			break;
 			
@@ -303,7 +313,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 			break;
 
 			// WAIT TO START TREATMENT
-			case CaseFilters.WAIT_FOR_TREATMENT: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal() + " and c.diagnosisType != " + DiagnosisType.SUSPECT.ordinal();
+			case CaseFilters.WAIT_FOR_TREATMENT: cond = "c.state = " + CaseState.WAITING_TREATMENT.ordinal();
 			break;
 			
 			// ON TREATMENT

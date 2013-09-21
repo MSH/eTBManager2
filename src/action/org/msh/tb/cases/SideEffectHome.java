@@ -12,6 +12,7 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.misc.FieldsQuery;
 
 
@@ -141,6 +142,13 @@ public class SideEffectHome extends WsEntityHome<CaseSideEffect>{
 	
 	public boolean validateForm(){
 		boolean validationError = false;
+		
+		//If the case is not on treatment or is transferin but has no treatment
+		if((!caseHome.getInstance().getState().equals(CaseState.ONTREATMENT)) || 
+				(caseHome.getInstance().getState().equals(CaseState.TRANSFERRING) && (caseHome.getInstance().getTreatmentPeriod() == null || caseHome.getInstance().getTreatmentPeriod().getIniDate() == null))){
+			facesMessages.addToControlFromResourceBundle("sideEffectfldoptions", "cases.sideeffects.errormsg1");
+			return false;
+		}
 		
 		if(getCaseSideEffect().getMonth() == 0){
 			facesMessages.addToControlFromResourceBundle("month", "javax.faces.component.UIInput.REQUIRED");

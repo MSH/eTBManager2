@@ -14,6 +14,7 @@ public class HealthUnitInfo {
 	private Long casesOnTreatment;
 	private Long casesTransferIn;
 	private Long casesTransferOut;
+	private Long casesNotOnTreatment;
 	private Long medExamMissing;
 
 	
@@ -112,5 +113,17 @@ public class HealthUnitInfo {
 	 */
 	public void setMedExamMissing(Long medExamMissing) {
 		this.medExamMissing = medExamMissing;
+	}
+	/**
+	 * @return the casesNotOnTreatment
+	 */
+	public Long getCasesNotOnTreatment() {
+		return casesNotOnTreatment;
+	}
+	/**
+	 * @param casesNotOnTreatment the casesNotOnTreatment to set
+	 */
+	public void setCasesNotOnTreatment(Long casesNotOnTreatment) {
+		this.casesNotOnTreatment = casesNotOnTreatment;
 	}
 }

@@ -5,6 +5,8 @@
 	<restrict>#{userSession.canOpenCases}</restrict>
 	<action execute="#{caseHome.initView}"/>
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
+	<end-conversation before-redirect="true" />
+	
 	<navigation>
 		<rule if="#{not caseHome.canViewCase}">
 			<redirect view-id="/cases/index.xhtml">
@@ -27,6 +29,11 @@
 		<rule if-outcome="validated">
 			<redirect view-id="/cases/casedata.xhtml">
 				<message>#{messages['cases.validate.success']}</message>
+				<param name="id" value="#{caseHome.id}"/>
+			</redirect>
+		</rule>
+		<rule if-outcome="cancelcaseediting">
+			<redirect view-id="/cases/casedata.xhtml">
 				<param name="id" value="#{caseHome.id}"/>
 			</redirect>
 		</rule>

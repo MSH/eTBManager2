@@ -52,6 +52,7 @@
 				<ui:param name="datefield" value="#{caseSideEffectBD.effectSt}" />
 				<ui:param name="required" value="true" />
 				<ui:param name="edtid" value="inidate" />
+				<ui:param name="future" value="false" />
 			</s:decorate>
 			
 			<s:decorate template="/layout/edit.xhtml">
@@ -90,6 +91,8 @@
 				<ui:define name="label">#{messages['sideeffect.enddate']}:</ui:define>
 				<ui:param name="datefield" value="#{caseSideEffectBD.effectEnd}" />
 				<ui:param name="required" value="false" />
+				<ui:param name="future" value="false" />
+				<ui:param name="edtid" value="enddate" />
 			</s:decorate>
 					    
 		    <s:decorate template="/layout/edit.xhtml" >

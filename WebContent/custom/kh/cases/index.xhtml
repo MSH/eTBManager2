@@ -162,7 +162,25 @@
 		<a:actionparam name="param1" assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>
 	</a:jsFunction>
 
-	<div class="spacer" />
+		<s:div style="padding:2px;margin-top:8px;margin-bottom:8px;border-radius:2px;" rendered="#{!casesViewController.unitView}">
+		<a:repeat value="#{caseFilters.diagnosisTypes}" var="it" rowKeyVar="x">
+			<div style="display:inline;margin-right:20px">
+			<h:selectBooleanCheckbox value="#{it.selected}">
+				<a:support event="onchange" action="reload" ajaxSingle="true"/>
+			</h:selectBooleanCheckbox>#{messages[it.item.key]}
+			</div>
+		</a:repeat>
+		
+		<div style="display:inline;margin-right:15px;"/>
+		
+		<a:repeat value="#{caseFilters.classifications}" var="it" rowKeyVar="x">
+			<div style="display:inline;margin-right:20px">
+			<h:selectBooleanCheckbox value="#{it.selected}">
+				<a:support event="onchange" action="reload" ajaxSingle="true"/>
+			</h:selectBooleanCheckbox>#{messages[it.item.key]}
+			</div>
+		</a:repeat>
+	</s:div>
 
 	<h:panelGroup id="pnlhealthunits">
 		<div id="content">

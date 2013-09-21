@@ -382,6 +382,14 @@ public class CaseEditingHome {
 		
 		return true;
 	}
+	
+	/**
+	 * Solve redirecting problem when the user changes diagnosis type but cancel the form
+	 */
+	public String cancel(){
+		caseHome.setInstance(null);
+		return "cancelcaseediting";
+	}
 
 
 	/**

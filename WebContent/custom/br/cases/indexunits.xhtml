@@ -23,6 +23,7 @@
 		</th></tr>
 		<tr class="unit#{adm.adminUnit.id}" style="display:#{healthUnitsQueryBR.adminUnits.size()>1?'none':'table-row'}">
 			<th width="300px">#{messages['cases.healthUnit']}</th>
+			<th align="center">#{messages['cases.ongoing.notontreat']}</th>
 			<th align="center">#{messages['CaseState.ONTREATMENT']}</th>
 			<th align="center">#{messages['cases.trasnferin']}</th>
 			<th align="center">#{messages['cases.trasnferout']}</th>
@@ -36,6 +37,15 @@
 					<div class="icon-hu" />#{it.unitName}
 				</s:link>
 			</td>
+			<td align="center">
+				<s:link value="#{it.casesNotOnTreatment==null?'-':it.casesNotOnTreatment}"  view="/cases/searchresult.xhtml" styleClass="link-small" rendered="#{it.casesNotOnTreatment > 0}">
+					<f:param name="stateIndex" value="102"/>
+					<f:param name="unitId" value="#{it.unitId}" />
+					<f:param name="sc" value="CASE_UNIT_STATE"/>
+					<f:param name="vs" />
+					<f:param name="tag" />
+				</s:link>
+			</td>			
 			<td align="center">
 				<s:link value="#{it.casesOnTreatment==null?'-':it.casesOnTreatment}"  view="/cases/searchresult.xhtml" styleClass="link-small" rendered="#{it.casesOnTreatment > 0}">
 					<f:param name="stateIndex" value="103"/>
