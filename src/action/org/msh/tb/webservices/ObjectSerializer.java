@@ -1,7 +1,7 @@
 package org.msh.tb.webservices;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
@@ -62,9 +62,18 @@ public class ObjectSerializer implements DataInterceptor {
 	 */
 	public static String serializeToXml(Object obj) {
 		DataMarshaller dm = DataStreamUtils.createXMLMarshaller("webservice-response-schema.xml");
-		OutputStream out = DataStreamUtils.createStringOutputStream();
+//		OutputStream out = DataStreamUtils.createStringOutputStream();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		dm.marshall(obj, out);
-		return out.toString();
+		
+		String s = null;
+		try {
+			s = new String(out.toByteArray(), "UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return s;
 	}
 	
 	
