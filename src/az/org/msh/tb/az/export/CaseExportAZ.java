@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Query;
+
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.adminunits.InfoCountryLevels;
 import org.msh.tb.application.App;
@@ -66,8 +68,9 @@ public class CaseExportAZ extends CaseExport {
 		excel.addTextFromResource("Patient.birthDate", "title");
 		excel.addTextFromResource("TbCase.age", "title");
 		excel.addTextFromResource("Nationality", "title");
-		excel.addTextFromResource("Address", "title");
-		if (levelInfo.isHasLevel1()) 
+		excel.addTextFromResource("excel.address.registration", "title"); //k
+		excel.addTextFromResource("excel.address.registration.region", "title"); //l
+		/*if (levelInfo.isHasLevel1()) //l
 			excel.addText(levelInfo.getNameLevel1().toString(), "title");
 		if (levelInfo.isHasLevel2()) 
 			excel.addText(levelInfo.getNameLevel2().toString(), "title");
@@ -76,13 +79,13 @@ public class CaseExportAZ extends CaseExport {
 		if (levelInfo.isHasLevel4()) 
 			excel.addText(levelInfo.getNameLevel4().toString(), "title");
 		if (levelInfo.isHasLevel5()) 
-			excel.addText(levelInfo.getNameLevel5().toString(), "title");
+			excel.addText(levelInfo.getNameLevel5().toString(), "title");*/
 //		excel.addTextFromResource("Address.zipCode", "title");
 //		excel.addTextFromResource("TbCase.phoneNumber", "title");
 //		excel.addTextFromResource("TbCase.mobileNumber", "title");
-		excel.addTextFromResource("az_AZ.TbCase.notificationUnit", "title");
-		// notification health unit
-		excel.addText(levelInfo.getNameLevel1().toString(), "title");
+		excel.addTextFromResource("az_AZ.TbCase.notificationUnit", "title"); //m
+		// notification health unit - n
+		excel.addTextFromResource("excel.unit", "title"); //n 
 		excel.addTextFromResource("TbCase.registrationDate", "title");
 		excel.addTextFromResource("TbCase.diagnosisDate", "title");
 		excel.addTextFromResource("DiagnosisType", "title");
@@ -95,19 +98,19 @@ public class CaseExportAZ extends CaseExport {
 		excel.addTextFromResource("TbField.EXTRAPULMONARY_TYPES", "title");
 		excel.addTextFromResource("PatientType", "title");
 		
-		excel.addTextFromResource("cases.outcome", "title");
+		excel.addTextFromResource("excel.cases.outcome", "title");  //z
 		excel.addTextFromResource("TbCase.outcomeDate", "title");
 		excel.addTextFromResource("TbCase.ownerUnit", "title");
 		excel.addTextFromResource("TbCase.ownerUnitAdr", "title");
-		excel.addTextFromResource("cases.system.create", "title");
-		excel.addText(App.getMessage("cases.system.create")+" ("+App.getMessage("User")+")", "title");
-		excel.addTextFromResource("cases.system.edit", "title");
-		excel.addText(App.getMessage("cases.system.edit")+" ("+App.getMessage("User")+")", "title");
+		excel.addTextFromResource("excel.cases.create", "title"); //ad
+		excel.addTextFromResource("excel.cases.user", "title");
+		excel.addTextFromResource("excel.cases.modificationDate", "title");
+		excel.addTextFromResource("excel.cases.modificationUser", "title");
 				excel.addTextFromResource("excel.dateInEIDSS", "title");
 		excel.addText(getMessages().get("User.name")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addText(getMessages().get("Patient.lastName")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addText(getMessages().get("Patient.middleName")+" "+getMessages().get("excel.fromEIDSS"), "title");
-		excel.addText(getMessages().get("az_EIDSS_Notify_LPU"), "title");
+		excel.addText(getMessages().get("excel.unitEIDSS"), "title");
 		excel.addText(getMessages().get("az_EIDSS_Address")+" "+getMessages().get("excel.fromEIDSS"), "title");
 		excel.addTextFromResource("excel.dateRegAfterEIDSS", "title");
 		excel.addText(getMessages().get("az_EIDSS_Age")+" "+getMessages().get("excel.fromEIDSS"), "title");
@@ -151,37 +154,37 @@ public class CaseExportAZ extends CaseExport {
 		excel.addTextFromResource("TbCase.referToOtherTBUnit", "title");
 		excel.addTextFromResource("az_AZ.ValidationState.title", "title");
 		
-		excel.addText("(last) X-ray result - date");
-		excel.addText("(1st) X-ray result - Presentation");
-		excel.addText("(1st) X-ray result - Localization");
-		excel.addText("(1st) X-ray result - date");
+		excel.addText("(last) X-ray result - "+getMessages().get("cases.details.date").toLowerCase(), "title");
+		excel.addText("(1st) X-ray result - Presentation", "title");
+		excel.addText("(1st) X-ray result - Localization", "title");
+		excel.addText("(1st) X-ray result - "+getMessages().get("cases.details.date").toLowerCase(), "title");
 		// microscopy
-		String examDate=getMessages().get("cases.exammicroscopy")+"-"+getMessages().get("cases.details.date");
-		String examRes=getMessages().get("cases.exammicroscopy")+"-"+getMessages().get("cases.details.result");
-		excel.addText("(last)"+examDate, "title"); 
-		excel.addText("(last)"+examRes, "title"); 
-		excel.addText("(1st)"+examDate, "title"); 
-		excel.addText("(1st)"+examRes, "title"); 
-		excel.addText("(6mth)"+examDate, "title"); 
-		excel.addText("(6mth)"+examRes, "title"); 
+		String examDate=getMessages().get("cases.exammicroscopy")+" - "+getMessages().get("cases.details.date").toLowerCase();
+		String examRes=getMessages().get("cases.exammicroscopy")+" - "+getMessages().get("cases.details.result").toLowerCase();
+		excel.addText("(last) "+examDate, "title"); 
+		excel.addText("(last) "+examRes, "title"); 
+		excel.addText("(1st) "+examDate, "title"); 
+		excel.addText("(1st) "+examRes, "title"); 
+		excel.addText("(6mth) "+examDate, "title"); 
+		excel.addText("(6mth) "+examRes, "title"); 
 		//culture
-		 examDate=getMessages().get("cases.examculture")+"-"+getMessages().get("cases.details.date");
-		 examRes=getMessages().get("cases.examculture")+"-"+getMessages().get("cases.details.result");
-		 String examMethod=getMessages().get("cases.examculture")+"-method";
-		 excel.addText("(last)"+examDate, "title"); 
-		 excel.addText("(last)"+examRes, "title"); 
-		 excel.addText("(last)"+examMethod, "title"); 
-		 excel.addText("(1st)"+examDate, "title"); 
-		 excel.addText("(1st)"+examRes, "title"); 
-		 excel.addText("(1st)"+examMethod, "title"); 
-		 excel.addText("(6mth)"+examDate, "title"); 
-		 excel.addText("(6mth)"+examRes, "title"); 
-		 excel.addText("(6mth)"+examMethod, "title"); 
+		 examDate=getMessages().get("cases.examculture")+" - "+getMessages().get("cases.details.date").toLowerCase();
+		 examRes=getMessages().get("cases.examculture")+" - "+getMessages().get("cases.details.result").toLowerCase();
+		 String examMethod=getMessages().get("cases.examculture")+" - "+getMessages().get("excel.method");
+		 excel.addText("(last) "+examDate, "title"); 
+		 excel.addText("(last) "+examRes, "title"); 
+		 excel.addText("(last) "+examMethod, "title"); 
+		 excel.addText("(1st) "+examDate, "title"); 
+		 excel.addText("(1st) "+examRes, "title"); 
+		 excel.addText("(1st) "+examMethod, "title"); 
+		 excel.addText("(6mth) "+examDate, "title"); 
+		 excel.addText("(6mth) "+examRes, "title"); 
+		 excel.addText("(6mth) "+examMethod, "title"); 
 		 //DST
-		 excel.addText(" (last) DST result - date");
-		 excel.addText(" (last) DST result - method");
-		 excel.addText(" (1st) DST result - date");
-		 excel.addText(" (1st) DST result - method");
+		 excel.addText("(last) DST result - "+getMessages().get("cases.details.date").toLowerCase(), "title");
+		 excel.addText("(last) DST result - "+getMessages().get("excel.method"),"title");
+		 excel.addText("(1st) DST result - "+getMessages().get("cases.details.date").toLowerCase(), "title");
+		 excel.addText("(1st) DST result - "+getMessages().get("excel.method").toLowerCase(), "title");
 			excel.addText("(1st) DST Type - Streptomycin (S)", "title");
 			excel.addText("(1st) DST Type - Isoniazid (H)", "title");
 			excel.addText("(1st) DST Type - Rifampicin (R)", "title");
@@ -201,6 +204,8 @@ public class CaseExportAZ extends CaseExport {
 			excel.addText("(1st) DST Type - Ethionamide (Eto)", "title");
 			excel.addText("(1st) DST Type - Levofloxacin (Lfx)", "title");
 			excel.addText("(1st) DST Type - Terizidone (Trd)", "title");
+			excel.addText("DST test Line2?","title");
+			excel.addText("Hiv test?","title");
 		excel.addText("",null);
 	}
 	
@@ -359,27 +364,32 @@ public class CaseExportAZ extends CaseExport {
 		excel.addText(getLastDSTExam(DSTexam, "Lfx"));
 		excel.addText(getLastDSTExam(DSTexam, "Trd"));
 
-		excel.addValue(tbcase,"regimen");
+		//excel.addValue(tbcase,"regimen");
+		excel.addValue(tbcase.getRegimen()!=null?tbcase.getRegimen().getName():"");
 		if (indCarvity(tbcase)>-1)
 			excel.addText("Yes");
 		else
 			excel.addText("No");
-		excel.addNumber(tbcase.getExamsMicroscopy().size());
-		excel.addNumber(tbcase.getExamsCulture().size());
+		excel.addNumber(tbcase.getExamsMicroscopy()!=null?tbcase.getExamsMicroscopy().size():0);
+		excel.addNumber(tbcase.getExamsCulture()!=null?tbcase.getExamsCulture().size():0);
 		excel.addNumber(0);//TODO Кол-во тестов: Молекулярные методы
-		excel.addNumber(tbcase.getResXRay().size());
-		excel.addNumber(tbcase.getExamsDST().size());
-		excel.addNumber(tbcase.getExaminations().size());
-		if (tbcase.getComorbidities().size()>0)
-			excel.addText("Some");
-		else
-			excel.addText("No any");
-		if (tbcase.getSideEffects().size()>0)
-			excel.addText("Some");
-		else
-			excel.addText("No any");
-		
+		excel.addNumber(tbcase.getResXRay()!=null?tbcase.getResXRay().size():0);
+		excel.addNumber(tbcase.getExamsDST()!=null?tbcase.getExamsDST().size():0);
+		if (tbcase.getExaminations()!=null) 
+			excel.addNumber(tbcase.getExaminations().size());
+		else excel.addNumber(0);
+		String result="No any";
+		if (tbcase.getComorbidities()!=null)
+			if (tbcase.getComorbidities().size()>0)
+				result="Some";
+		excel.addText(result);
+		result="No any";
+		if (tbcase.getSideEffects()!=null)
+			if (tbcase.getSideEffects().size()>0)
+				result="Some";
+		excel.addText(result);
 		int disp = 0;
+		if (tbcase.getDispensing()!=null)
 		for (CaseDispensing cd:tbcase.getDispensing()){
 			disp += cd.getTotalDays();
 		}
@@ -430,7 +440,13 @@ public class CaseExportAZ extends CaseExport {
 		excel.addText(getLastDSTExam(DSTexam, "Eto"));
 		excel.addText(getLastDSTExam(DSTexam, "Lfx"));
 		excel.addText(getLastDSTExam(DSTexam, "Trd"));
+		if (hasDSTExamLine2(tbcase)) 
+			excel.addText("1"); else excel.addText("0");
+		if (tbcase.getResHIV()!=null){
+		if (tbcase.getResHIV().size()>0) excel.addText("1"); else excel.addText("0");
+		}else excel.addText("0");
 		return tbcase;
+		
 	}
 
 	/**
@@ -495,41 +511,41 @@ public class CaseExportAZ extends CaseExport {
 	ExamXRayAZ lastX=null;
 	if(result.equalsIgnoreCase("first"))
 		count=4;	
-		if (tbcase.getResXRay() == null){
-			for (int i=0;i<count;i++)excel.addText("");
-			return;
-		}
-		if (tbcase.getResXRay().size() == 0) {
-			for (int i=0;i<count;i++)excel.addText("");
-			return;
-		}
+	if (tbcase.getResXRay() == null){
+		for (int i=0;i<count;i++)excel.addText("");
+		return;
+	}
+	if (tbcase.getResXRay().size() == 0) {
+		for (int i=0;i<count;i++)excel.addText("");
+		return;
+	}
+	if (tbcase.getResXRay().size() > 1){
+		ExamXRay x = getLastXRayExam(tbcase);
+		lastX = (ExamXRayAZ) getEntityManager().find(ExamXRayAZ.class, x.getId());
+	}
+	if (result.equalsIgnoreCase("last")){
 		if (tbcase.getResXRay().size() > 1){
-			ExamXRay x = getLastXRayExam(tbcase);
-			lastX = (ExamXRayAZ) getEntityManager().find(ExamXRayAZ.class, x.getId());
+
+			excel.addText(lastX.getPresentation()!=null ? lastX.getPresentation().getName().getDefaultName() : "");
+			excel.addText(lastX.getLocalization()!=null ? lastX.getLocalization().getName().getDefaultName() : "");
+		} else{
+			excel.addText("");
+			excel.addText("");
 		}
-		if (result.equalsIgnoreCase("last")){
-			if (tbcase.getResXRay().size() > 1){
-						
-				excel.addText(lastX.getPresentation()!=null ? lastX.getPresentation().getName().getDefaultName() : "");
-				excel.addText(lastX.getLocalization()!=null ? lastX.getLocalization().getName().getDefaultName() : "");
-			} else{
-				excel.addText("");
-				excel.addText("");
-			}
+	}
+	if (result.equalsIgnoreCase("first")){
+		ExamXRay x = getFirstXRayExam(tbcase);
+		if (lastX!=null) {
+			excel.addValue(lastX.getDate());
+		} else excel.addText("");
+
+		if (x!=null){
+			ExamXRayAZ xaz = (ExamXRayAZ) getEntityManager().find(ExamXRayAZ.class, x.getId());
+			excel.addText(xaz.getPresentation()!=null ? xaz.getPresentation().getName().getDefaultName() : "");
+			excel.addText(xaz.getLocalization()!=null ? xaz.getLocalization().getName().getDefaultName() : "");
+			excel.addValue(xaz.getDate());
 		}
-		if (result.equalsIgnoreCase("first")){
-			ExamXRay x = getFirstXRayExam(tbcase);
-			if (lastX!=null) {
-				excel.addValue(lastX.getDate());
-			} else excel.addText("");
-			
-			if (x!=null){
-				ExamXRayAZ xaz = (ExamXRayAZ) getEntityManager().find(ExamXRayAZ.class, x.getId());
-				excel.addText(xaz.getPresentation()!=null ? xaz.getPresentation().getName().getDefaultName() : "");
-				excel.addText(xaz.getLocalization()!=null ? xaz.getLocalization().getName().getDefaultName() : "");
-				excel.addValue(xaz.getDate());
-			}
-		}
+	}
 	}
 
 	
@@ -583,30 +599,38 @@ private String getLastDSTExam(ExamDST ex, String s){
 	return res;
 }
 
-	/*private String getLastDSTExam(TbCase tc, String s){
-		if (tc.getExamsDST() == null) return "";
-		if (tc.getExamsDST().size() == 0) return "";
-		String res = "";
-		DstResult r = null;
+private boolean hasDSTExamLine2(TbCase tc){
+		Boolean res=false;
+		if (tc.getExamsDST() == null) return res;
+		if (tc.getExamsDST().size() == 0) return res;
+			DstResult r = null;
 		for (int i = 0; i < tc.getExamsDST().size(); i++) {
 			ExamDST ex = tc.getExamsDST().get(i);
 			for (ExamDSTResult exr: ex.getResults()){
-				if (exr.getSubstance().getAbbrevName().getName1().equals(s))
-					r = exr.getResult();
+				String name=exr.getSubstance().getAbbrevName().getName1();
+				r = exr.getResult();
+				if (r!=null){
+					if (name.equalsIgnoreCase("Pto") & r!=DstResult.NOTDONE) res=true;
+					if (name.equalsIgnoreCase("Ofx") & r!=DstResult.NOTDONE) res=true;
+					if (name.equalsIgnoreCase("Cs") & r!=DstResult.NOTDONE) res=true;
+					if (name.equalsIgnoreCase("PAS") & r!=DstResult.NOTDONE) res=true;
+					if (name.equalsIgnoreCase("Cm") & r!=DstResult.NOTDONE) res=true;
+					if (name.equalsIgnoreCase("Am") & r!=DstResult.NOTDONE) res=true;
+					if (name.equalsIgnoreCase("Mfx") & r!=DstResult.NOTDONE) res=true;
+					if (name.equalsIgnoreCase("Km") & r!=DstResult.NOTDONE) res=true;
+					if (name.equalsIgnoreCase("Cfx") & r!=DstResult.NOTDONE) res=true;
+					if (name.equalsIgnoreCase("Gati") & r!=DstResult.NOTDONE) res=true;
+					if (name.equalsIgnoreCase("Rfb") & r!=DstResult.NOTDONE) res=true;
+					if (name.equalsIgnoreCase("Eto") & r!=DstResult.NOTDONE) res=true;
+					if (name.equalsIgnoreCase("Lfx") & r!=DstResult.NOTDONE) res=true;
+					if (name.equalsIgnoreCase("Trd") & r!=DstResult.NOTDONE) res=true;
+				}
 			}
 		}
-		if (r == null)	res = "NA";
-		else
-			switch (r){
-			case BASELINE: res = "BL";
-			case CONTAMINATED: res = "C";
-			case NOTDONE: res = "NA";
-			case RESISTANT: res = "R";
-			case SUSCEPTIBLE: res = "S";
-			}
+		
 		return res;
 	}
-*/
+
 	/**
 	 * @param tbcase
 	 * add ExamCulture last result, first result, 6 month result
@@ -713,7 +737,7 @@ private String getLastDSTExam(ExamDST ex, String s){
 		if (treatmDate!=null){
 			for (int i = 0; i < mList.size(); i++) {
 				Date x = mList.get(i).getDateCollected();
-				if (x.after(getStart6mntDay()) & x.before(getEnd6mntDay())) 
+				if (x.after(getStart6mntDay()) && x.before(getEnd6mntDay())) 
 					exam6=mList.get(i);
 			}
 		}
@@ -729,8 +753,9 @@ private String getLastDSTExam(ExamDST ex, String s){
 	private Date getStart6mntDay(){
 		Calendar st=Calendar.getInstance();
 		st.setTime(treatmDate);
-		 st.roll(Calendar.MONTH, 5);
-		 st.roll(Calendar.DATE, 14);
+		 st.add(Calendar.MONTH, 5);
+		 st.add(Calendar.DATE, 14);
+		System.out.println(st.getTime());
 		 return  st.getTime();
 	}
 	
@@ -738,8 +763,9 @@ private String getLastDSTExam(ExamDST ex, String s){
 	private Date getEnd6mntDay(){
 		Calendar st=Calendar.getInstance();
 		st.setTime(treatmDate);
-		 st.roll(Calendar.MONTH, 6);
-		 st.roll(Calendar.DATE, 14);
+		 st.add(Calendar.MONTH, 6);
+		 st.add(Calendar.DATE, 14);
+		 System.out.println(st.getTime());
 		 return  st.getTime();
 	
 	}
@@ -779,5 +805,15 @@ private String getLastDSTExam(ExamDST ex, String s){
 	@Override
 	public int getResultCount() {
 		return getCasesAz().size();
+	}
+	
+	public int getCount() {
+		String hql= "select count(*) "+ createHQL();
+		//hql = hql.replace(getHQLJoin(), "");
+		hql = hql.replace("fetch ", "");
+		Query q = getEntityManager().createQuery(hql);
+		setQueryParameters(q);
+		return ((Long)q.getSingleResult()).intValue();
+		//return getCasesUA().size();
 	}
 }
