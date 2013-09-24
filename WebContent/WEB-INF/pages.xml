@@ -96,14 +96,12 @@
     </page>
     
     <page view-id="/workspaceimg.xhtml" >
-        <restrict />
     	<rewrite pattern="/workspaceimg/{imgName}"/>
     	<param name="imgName" value="#{workspaceViewService.pictureFile}" />
     	<action execute="#{workspaceViewService.responseImage}"/>
     </page>
     
     <page view-id="/changeworkspace.xhtml">
-        <restrict />
     	<action execute="#{userSession.changeUserWorkspace}"/>
     	<param name="id" value="#{userSession.userWorkspaceId}" converterId="javax.faces.Integer" />
     </page>
