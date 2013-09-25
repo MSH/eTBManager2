@@ -31,7 +31,7 @@
 	<span id="tagspan" style="display:none;">
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['form.name']}:</ui:define>
-		<h:inputText value="#{caseTagHome.tagName}"/>
+		<h:inputText value="#{caseTagHome.tagName}" maxlength="100"/>
 		<a:commandLink
 			styleClass="button" 
 			action="#{caseTagHome.saveNewTag}"
