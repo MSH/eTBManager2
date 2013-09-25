@@ -1,15 +1,13 @@
 package org.msh.tb.login;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
@@ -76,7 +74,9 @@ public class UserRegistrationHome {
 	 * @param value
 	 */
 	public void validaConta(FacesContext context, UIComponent compConta, Object value) {
-		String conta = (String) value;
+		UserValidators validators = (UserValidators)Component.getInstance("userValidators");
+		validators.validateLogin(context, compConta, value, null);
+/*		String conta = (String) value;
 
 		if ((conta.indexOf(" ") >= 0) || (conta.length() < 4)) {
 			((UIInput)compConta).setValid(false);
@@ -96,6 +96,6 @@ public class UserRegistrationHome {
 			FacesMessage message = new FacesMessage(messages.get("admin.users.uniquelogin"));
 			context.addMessage(compConta.getClientId(context), message);
 		}
-	}
+*/	}
 
 }

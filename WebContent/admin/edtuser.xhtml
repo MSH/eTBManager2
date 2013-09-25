@@ -36,7 +36,7 @@
     <s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['User.email']}:</ui:define>
         <h:inputText maxlength="50" value="#{user.email}" style="width : 315px;" required="true" 
-        	validator="#{userHome.validateEmail}">
+        	validator="#{userValidators.validateEmail}">
         	<f:param id="field" value="email"/>
         </h:inputText>
     </s:decorate>

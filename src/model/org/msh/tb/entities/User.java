@@ -28,6 +28,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.validator.Email;
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.UserState;
 import org.msh.tb.transactionlog.Operation;
@@ -64,6 +65,7 @@ public class User implements java.io.Serializable {
     
     @Column(nullable=false, length=80)
 	@PropertyLog(operations={Operation.NEW})
+    @Email
     private String email;
     
 	@PropertyLog(operations={Operation.NEW})

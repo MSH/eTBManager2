@@ -15,6 +15,7 @@
 <meta http-equiv="description" content="TB Management Information System" />
 <a:loadStyle src="/public/themes/green3/skin.css" />  
 <a:loadScript src="resource://org/richfaces/renderkit/html/scripts/jquery/jquery.js"/>
+<a:loadScript src="/public/js/commons.js" />
 <link rel="shortcut icon" href="#{request.contextPath}/public/images/favicon.ico" />
 </head>
 
@@ -62,7 +63,8 @@
 			<ui:define name="label">
 				#{messages['User.email']}:
 			</ui:define>
-			<h:inputText value="#{userRegistrationHome.user.email}" style="width:200px;" maxlength="100" required="true"/> (Ex.: jsmith@msh.org)
+			<h:inputText value="#{userRegistrationHome.user.email}" style="width:200px;" 
+				maxlength="100" required="true" validator="#{userValidators.validateEmail}" /> (Ex.: jsmith@msh.org)
 		</s:decorate>
 
 		<s:decorate template="/layout/edit.xhtml">

@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
@@ -121,6 +117,7 @@ public class UserHome extends EntityHomeEx<User> {
 	}
 	
 
+	
 	/**
 	 * Valida a conta do usuário
 	 * @param context
@@ -128,7 +125,9 @@ public class UserHome extends EntityHomeEx<User> {
 	 * @param value
 	 */
 	public void validaConta(FacesContext context, UIComponent compConta, Object value) {
-		String conta = (String) value;
+		UserValidators validators = (UserValidators)Component.getInstance("userValidators");
+		validators.validateLogin(context, compConta, value, (Integer)getId());
+/*		String conta = (String) value;
 
 		if ((conta.indexOf(" ") >= 0) || (conta.length() < 4)) {
 			((UIInput)compConta).setValid(false);
@@ -149,7 +148,7 @@ public class UserHome extends EntityHomeEx<User> {
 			FacesMessage message = new FacesMessage(messages.get("admin.users.uniquelogin"));
 			context.addMessage(compConta.getClientId(context), message);
 		}
-	}
+*/	}
 
 	@Override
 	public String remove() {
@@ -372,25 +371,6 @@ public class UserHome extends EntityHomeEx<User> {
 	 */
 	public void refreshHealthSystem() {
 		tbunitselection = null;
-	}
-	//return uma string para impedir submit
-	public void validateEmail(FacesContext context, UIComponent comp, Object value) {
-		
-		String email = (String)value;
-		
-		email = email.trim();
-
-		Pattern p = Pattern.compile("^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$");
-		
-		Matcher m = p.matcher(email);
-
-		if (m.matches())
-			validateUniqueValue(context, comp, value);
-		else{
-			context.addMessage(comp.getClientId(context), new FacesMessage(getMessages().get("validator.email")));
-			((UIInput)comp).setValid(false);
-		}
-		
 	}
 	
 
