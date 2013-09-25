@@ -60,11 +60,21 @@ public class CaseTagHome {
 		Tag tag = new Tag();
 		tag.setName(tagName);
 		tag.setWorkspace(entityManager.find (Workspace.class, workspace.getId() ));
+		tag.setActive(true);
 		
 		entityManager.persist(tag);
-		
-		if (items != null)
-			items.add(new ItemSelect<Tag>(tag, true));
+
+		// the list of tags is loaded ?
+		if (items != null) {
+			items = null;
+			getItems();
+			for (ItemSelect<Tag> item: getItems()) {
+				if (item.getItem().getId().equals(tag.getId())) {
+					item.setSelected(true);
+					break;
+				}
+			}
+		}
 		
 		tagName = null;
 
@@ -86,14 +96,14 @@ public class CaseTagHome {
 	 */
 	private void createItems() {
 		List<Tag> tags = entityManager
-			.createQuery("from Tag where workspace.id = #{defaultWorkspace.id} " +
-					"and sqlCondition is null " +
-					"order by name")
-			.getResultList();
+				.createQuery("from Tag where workspace.id = #{defaultWorkspace.id} " +
+						"and sqlCondition is null " +
+						"order by name")
+				.getResultList();
 
 		TbCase tbcase = caseHome.getInstance();
 		items = ItemSelectHelper.createList(tags);
-		
+			
 		ItemSelectHelper.selectItems(items, tbcase.getTags(), true);
 	}
 
