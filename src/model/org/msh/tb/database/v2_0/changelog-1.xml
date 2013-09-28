@@ -49,5 +49,11 @@
 			<column name="OUTCOME_YEAR" type="int(11)" />
 		</addColumn>
 	</changeSet>
+	
+	<changeSet id="6" author="MSANTOS">
+		<update tableName="prevtbtreatment" >
+			<column name="OUTCOME_YEAR" value="0"/>
+		</update>
+	</changeSet>
   
 </databaseChangeLog>
