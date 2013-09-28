@@ -379,6 +379,13 @@ public class PrevTBTreatmentHome {
 		return numTreatmentsOptions;
 	}
 
+	public boolean hasOutcomeDate(){
+		for(Item it : getTreatments()){
+			if(it.getPrevTBTreatment().getOutcomeMonth() != null && it.getPrevTBTreatment().getOutcomeYear() != 0)
+				return true;
+		}
+		return false;
+	}
 	
 /*	private int numItems;
 	private List<SelectItem> numTreatments;

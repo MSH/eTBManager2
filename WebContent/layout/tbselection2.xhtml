@@ -11,7 +11,7 @@
 	<ui:define name="label">#{tbunitselection.auselection.labelLevel1}:</ui:define>
 	<ui:param name="redasterisk" value="#{required or redastfirst}" />
 	<h:selectOneMenu id="cbselau1" value="#{tbunitselection.auselection.unitLevel1}" required="#{required}" rendered="#{not tbunitselection.auselection.level1ReadOnly}">
-		<s:selectItems var="it" value="#{tbunitselection.auselection.optionsLevel1}" noSelectionLabel="-" label="#{it.name}"/>
+		<s:selectItems var="it" value="#{tbunitselection.auselection.optionsLevel1}" noSelectionLabel="#{empty noselectionlabel ? ' - ' : noselectionlabel}" label="#{it.name}"/>
 		<s:convertEntity />
 		<a:support event="onchange" ajaxSingle="true" reRender="aulevels,cbunits,#{rerender}" focus="cbselau2"/>
 	</h:selectOneMenu>
@@ -22,7 +22,7 @@
 <s:decorate template="/layout/edit.xhtml" rendered="#{tbunitselection.auselection.unitLevel1.unitsCount > 0}">
 	<ui:define name="label">#{tbunitselection.auselection.labelLevel2}:</ui:define>
 	<h:selectOneMenu id="cbselau2" value="#{tbunitselection.auselection.unitLevel2}" rendered="#{not tbunitselection.auselection.level2ReadOnly}">
-		<s:selectItems var="it" value="#{tbunitselection.auselection.optionsLevel2}" noSelectionLabel="-" label="#{it.name}"/>
+		<s:selectItems var="it" value="#{tbunitselection.auselection.optionsLevel2}" noSelectionLabel="#{empty noselectionlabel ? ' - ' : noselectionlabel}" label="#{it.name}"/>
 		<s:convertEntity />
 		<a:support event="onchange" ajaxSingle="true" reRender="aulevels,#{rerender}" focus="cbselau3"/>
 	</h:selectOneMenu>
@@ -32,7 +32,7 @@
 <s:decorate template="/layout/edit.xhtml" rendered="#{tbunitselection.auselection.unitLevel2.unitsCount > 0}">
 	<ui:define name="label">#{tbunitselection.auselection.labelLevel3}:</ui:define>
 	<h:selectOneMenu id="cbselau3" value="#{tbunitselection.auselection.unitLevel3}" rendered="#{not tbunitselection.auselection.level3ReadOnly}">
-		<s:selectItems var="it" value="#{tbunitselection.auselection.optionsLevel3}" noSelectionLabel="-" label="#{it.name}"/>
+		<s:selectItems var="it" value="#{tbunitselection.auselection.optionsLevel3}" noSelectionLabel="#{empty noselectionlabel ? ' - ' : noselectionlabel}" label="#{it.name}"/>
 		<s:convertEntity />
 		<a:support event="onchange" ajaxSingle="true" reRender="aulevels,#{rerender}" focus="cbselau4"/>
 	</h:selectOneMenu>
@@ -42,7 +42,7 @@
 <s:decorate template="/layout/edit.xhtml" rendered="#{tbunitselection.auselection.unitLevel3.unitsCount > 0}">
 	<ui:define name="label">#{tbunitselection.auselection.labelLevel4}:</ui:define>
 	<h:selectOneMenu id="cbselau3" value="#{tbunitselection.auselection.unitLevel4}" rendered="#{not tbunitselection.auselection.level4ReadOnly}">
-		<s:selectItems var="it" value="#{tbunitselection.auselection.optionsLevel4}" noSelectionLabel="-" label="#{it.name}"/>
+		<s:selectItems var="it" value="#{tbunitselection.auselection.optionsLevel4}" noSelectionLabel="#{empty noselectionlabel ? ' - ' : noselectionlabel}" label="#{it.name}"/>
 		<s:convertEntity />
 		<a:support event="onchange" ajaxSingle="true" reRender="aulevels,#{rerender}" focus="cbselau5"/>
 	</h:selectOneMenu>
@@ -52,7 +52,7 @@
 <s:decorate template="/layout/edit.xhtml" rendered="#{tbunitselection.auselection.unitLevel4.unitsCount > 0}">
 	<ui:define name="label">#{tbunitselection.auselection.labelLevel5}:</ui:define>
 	<h:selectOneMenu id="cbselau3" value="#{tbunitselection.auselection.unitLevel5}" rendered="#{not tbunitselection.auselection.level5ReadOnly}">
-		<s:selectItems var="it" value="#{tbunitselection.auselection.optionsLevel5}" noSelectionLabel="-" label="#{it.name}"/>
+		<s:selectItems var="it" value="#{tbunitselection.auselection.optionsLevel5}" noSelectionLabel="#{empty noselectionlabel ? ' - ' : noselectionlabel}" label="#{it.name}"/>
 		<s:convertEntity />
 		<a:support event="onchange" ajaxSingle="true" reRender="#{rerender}" focus="cbselau5"/>
 	</h:selectOneMenu>
@@ -62,7 +62,7 @@
 <s:decorate template="/layout/edit.xhtml" rendered="#{not empty tbunitselection.options and tbunitselection.adminUnit != null}">
 	<ui:define name="label">#{unitlabel}:</ui:define>
 	<h:selectOneMenu id="cbunits" value="#{tbunitselection.tbunit}" required="#{required}">
-        <s:selectItems value="#{tbunitselection.options}" var="it" label="#{it.name}" noSelectionLabel="-" />
+        <s:selectItems value="#{tbunitselection.options}" var="it" label="#{it.name}" noSelectionLabel="#{empty noselectionlabel ? ' - ' : noselectionlabel}" />
       	<s:convertEntity/>
     </h:selectOneMenu>
     <ui:insert />

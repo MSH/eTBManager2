@@ -42,6 +42,12 @@ public class PrevTBTreatment implements Serializable {
 	@Column(name="TREATMENT_YEAR")
 	private int year;
 	
+	@Column(name="OUTCOME_MONTH")
+	private Integer outcomeMonth;
+	
+	@Column(name="OUTCOME_YEAR")
+	private int outcomeYear;
+	
 	@NotNull
 	private PrevTBTreatmentOutcome outcome;
 
@@ -101,5 +107,37 @@ public class PrevTBTreatment implements Serializable {
 		this.tbcase = tbcase;
 	}
 
+	/**
+	 * @return the outcomeMonth
+	 */
+	public Integer getOutcomeMonth() {
+		return outcomeMonth;
+	}
 
+	/**
+	 * @param outcomeMonth the outcomeMonth to set
+	 */
+	public void setOutcomeMonth(Integer outcomeMonth) {
+		this.outcomeMonth = outcomeMonth;
+	}
+
+	/**
+	 * @return the outcomeYear
+	 */
+	public int getOutcomeYear() {
+		return outcomeYear;
+	}
+
+	/**
+	 * @param outcomeYear the outcomeYear to set
+	 */
+	public void setOutcomeYear(int outcomeYear) {
+		this.outcomeYear = outcomeYear;
+	}
+	public boolean hasOutcomeDate(){
+		if(getOutcomeMonth() != null && getOutcomeYear() != 0)
+			return true;
+		return false;
+	}
+	
 }

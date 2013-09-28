@@ -348,7 +348,7 @@ else jQuery('#pulmonary2').hide(500);
 
 		<h:panelGroup id="prevtreats">
 		<s:fragment rendered="#{prevTBTreatmentHome.numTreatments>0}">
-		<table width="98%" class="tabela4">
+		<table width="98%" class="table1 small">
 			<tr>
 				<th rowspan="2">#{messages['cases.prevtreat.num']}
 				</th>
@@ -357,7 +357,7 @@ else jQuery('#pulmonary2').hide(500);
 				<th colspan="#{prevTBTreatmentHome.substances.size}">
 					#{messages['cases.prevtreat.regs']}
 				</th>
-				<th rowspan="2">#{messages['PrevTBTreatment.outcome']}
+				<th rowspan="2">#{messages['PrevTBTreatment.outcome']} - #{messages['form.monthyear']}
 				</th>
 			</tr>
 			<tr>
@@ -394,6 +394,16 @@ else jQuery('#pulmonary2').hide(500);
 					</h:selectOneMenu>
 					</s:validateAll>
 					<h:message for="oc" styleClass="error"/>
+					
+					<h:selectOneMenu value="#{it.prevTBTreatment.outcomeMonth}">
+						<f:selectItems value="#{months}"/>
+					</h:selectOneMenu>
+					<s:validateAll>
+						<h:selectOneMenu id="outcomeyear" value="#{it.prevTBTreatment.outcomeYear}" required="true">
+							<f:selectItems value="#{years}"/>
+						</h:selectOneMenu>
+					</s:validateAll>
+					<h:message for="outcomeyear" styleClass="error"/>
 				</td>
 			</tr>
 		</a:repeat>

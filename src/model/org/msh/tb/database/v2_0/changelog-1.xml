@@ -41,5 +41,13 @@
     <changeSet id="4" author="rmemoria">
     	<dropColumn tableName="forecasting" columnName="oldReferenceDate"/>
     </changeSet>
+    
+    	
+	<changeSet id="5" author="MSANTOS">
+		<addColumn tableName="prevtbtreatment" >
+			<column name="OUTCOME_MONTH" type="int(11)" />
+			<column name="OUTCOME_YEAR" type="int(11)" />
+		</addColumn>
+	</changeSet>
   
 </databaseChangeLog>

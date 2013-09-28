@@ -235,7 +235,7 @@
 				<th colspan="#{prevTBTreatmentHome.substances.size}">
 					#{messages['cases.prevtreat.meds']}
 				</th>
-				<th rowspan="2">#{messages['PrevTBTreatment.outcome']}
+				<th rowspan="2">#{messages['PrevTBTreatment.outcome']} <h:outputText value=" - #{messages['form.monthyear']}" rendered="#{prevTBTreatmentHome.hasOutcomeDate()}"/> 
 				</th>
 			</tr>
 			<tr>
@@ -258,6 +258,7 @@
 				</a:repeat>
 				<td class="colcb">
 					#{messages[it.prevTBTreatment.outcome.key]}
+					<h:outputText value=" - #{it.prevTBTreatment.outcomeMonth+1}/#{it.prevTBTreatment.outcomeYear}" rendered="#{it.prevTBTreatment.hasOutcomeDate()}"/>
 				</td>
 			</tr>
 		</a:repeat>

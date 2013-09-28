@@ -30,7 +30,7 @@
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Source']}:</ui:define>
 		<h:selectOneMenu value="#{quarterBatchExpiringReport.source}">
-            <s:selectItems value="#{sources.resultList}" var="c" label="#{c.abbrevName} - #{c.name}" noSelectionLabel="-" />
+            <s:selectItems value="#{sources.resultList}" var="c" label="#{c.abbrevName} - #{c.name}" noSelectionLabel="#{messages['form.noselection']}" />
             <s:convertEntity/>
 		</h:selectOneMenu>
     </s:decorate>
@@ -51,6 +51,7 @@
 	<s:decorate template="/layout/tbselection2.xhtml" id="tbseldiv">
 		<ui:param name="unitlabel" value="#{messages['MedicalExamination.RefToUnit']}" />
 	   	<ui:param name="tbunitselection" value="#{quarterBatchExpiringReport.tbunitselection}" />
+	   	<ui:param name="noselectionlabel" value="#{messages['form.noselection']}" />
 	</s:decorate>
 
    	<a:commandLink styleClass="button-alt" action="#{quarterBatchExpiringReport.refresh}" onclick="if (!disableButton(this)) return false;" reRender="main">

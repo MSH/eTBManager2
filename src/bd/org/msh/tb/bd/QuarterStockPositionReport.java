@@ -15,6 +15,7 @@ import org.msh.tb.MedicinesQuery;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection2;
@@ -62,9 +63,21 @@ public class QuarterStockPositionReport {
 			this.rows = new ArrayList<QSPMedicineRow>();
 		else 
 			this.rows.clear();
-			
-		for(Medicine medicine : medicines){
-			rows.add(new QSPMedicineRow(medicine));
+		
+		//Select witch medicines enters in the list according to medicine line
+		if(tbunitselection.getTbunit() != null){
+			for(Medicine medicine : medicines){
+				if(medicine.getLine().equals(MedicineLine.FIRST_LINE) && tbunitselection.getTbunit().getFirstLineSupplier() != null)
+					rows.add(new QSPMedicineRow(medicine));
+				else if(medicine.getLine().equals(MedicineLine.SECOND_LINE) && tbunitselection.getTbunit().getSecondLineSupplier() != null)
+					rows.add(new QSPMedicineRow(medicine));
+				else if(medicine.getLine().equals(MedicineLine.OTHER))
+					rows.add(new QSPMedicineRow(medicine));
+			}
+		}else{
+			for(Medicine medicine : medicines){
+				rows.add(new QSPMedicineRow(medicine));
+			}
 		}
 	}
 	
