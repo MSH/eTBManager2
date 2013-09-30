@@ -18,10 +18,10 @@
 		<th rowspan="2" align="left" width="150px">
 			#{messages['Batch']}
 		</th>
-		<th rowspan="2" align="left" width="150px">
+		<th rowspan="2" align="left">
 			#{messages['Batch.expiryDate']}
 		</th>
-		<th colspan="2">
+		<th colspan="2" width="150px">
 			#{messages['Batch.remainingQuantity']}
 		</th>
 		<th rowspan="2" align="left">
@@ -52,19 +52,19 @@
 				</s:decorate>
 			</td>
 			<td align="center" style="vertical-align: middle;">
-				<s:fragment rendered="#{inventoryReport.isExpiringBatch(row.batch)}">
+				<s:fragment rendered="#{medCalcCont.isExpiringBatch(row.batch)}">
 					<span class="alert-icon"/>
 					<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" style="color:#D7620B"/>
 				</s:fragment>
-				<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" rendered="#{not inventoryReport.isExpiringBatch(row.batch)}"/>
+				<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" rendered="#{not medCalcCont.isExpiringBatch(row.batch)}"/>
 			</td>
 			<td align="right" style="vertical-align: middle;">
-				<s:fragment rendered="#{not inventoryReport.isExpiringBatch(row.batch)}">
+				<s:fragment rendered="#{not medCalcCont.isExpiringBatch(row.batch)}">
 					<h:outputText value="#{row.quantity}" >
 						<f:convertNumber pattern="#,###,##0"/>
 					</h:outputText>
 				</s:fragment>
-				<s:fragment rendered="#{inventoryReport.isExpiringBatch(row.batch)}">
+				<s:fragment rendered="#{medCalcCont.isExpiringBatch(row.batch)}">
 					<h:outputText value="#{row.quantity}" style="color:#D7620B">
 						<f:convertNumber pattern="#,###,##0"/>
 					</h:outputText>
