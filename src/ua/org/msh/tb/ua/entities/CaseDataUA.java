@@ -961,10 +961,6 @@ public class CaseDataUA {
 
 
 	public Date getDateRegTo4Cat() {
-		if (dateRegTo4Cat==null)
-			dateRegTo4Cat = new Date();
 		return dateRegTo4Cat;
 	}
-
-	
 }

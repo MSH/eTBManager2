@@ -14,13 +14,14 @@ import org.msh.tb.medicines.orders.OrderShippingHome;
 import org.msh.tb.medicines.orders.SourceOrderItem;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
 import org.msh.tb.ua.utils.MedicineCalculator;
+import org.msh.tb.ua.utils.MedicineFunctions;
 
 /**
- * Seam component for call methods of {@link MedicineCalculator} from JSF-pages
+ * Seam component for call static methods and other methods for medicine unit
  * @author A.M.
  * */
 @Name("medCalcCont")
-public class MedicineCalculatorController {
+public class MedicineController {
 	
 	public double calculateTotalPrice(List lst) {
 		if (lst==null) 
@@ -98,5 +99,13 @@ public class MedicineCalculatorController {
 			if (mr.getMedicine().getId().intValue() == row.getBatch().getMedicine().getId().intValue() && mr.getDefaultSource().getId() == row.getSource().getId())
 				return true;
 		return false;
+	}
+	
+	public boolean isExpiringBatch(Object o){
+		return MedicineFunctions.isExpiringBatch(o);
+	}
+	
+	public static boolean isExpiringRegistCard(Object o){
+		return MedicineFunctions.isExpiringRegistCard(o);
 	}
 }
