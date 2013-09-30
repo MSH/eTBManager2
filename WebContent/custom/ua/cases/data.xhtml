@@ -7,7 +7,7 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:c="http://java.sun.com/jstl/core"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-
+<h:form>
 	<div class="form1">
 	<div class="form-content">	
 	<h2>                 
@@ -441,18 +441,15 @@
 
 	<div class="form-content">
 
-		<h2>                 
-			<s:link view="/custom/ua/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" 
-				styleClass="button-alt" onclick="disableButton(this)">
-				<f:param name="id" value="#{caseHome.id}" />
-				<f:param name="idSideEffect" value="#{null}"/>
-				<span>#{messages['form.new']}</span>
-			</s:link>
-			#{messages['cases.sideeffects']}
-		</h2>
+	<s:link view="/custom/ua/cases/sideeffectsedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" 
+		styleClass="button-alt" onclick="disableButton(this)">
+		<f:param name="id" value="#{caseHome.id}" />
+		<f:param name="idSideEffect" value="#{null}"/>
+		<span>#{messages['form.new']}</span>
+	</s:link>
 	
-	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty sideEffectUAHome.results}" />
 	<h:panelGroup id="sideeffects">
+	<h2>#{messages['cases.sideeffects']}</h2>
 	<s:div styleClass="region3" rendered="#{empty sideEffectUAHome.results}"><div class="content">
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" style="display:block;padding:4px"/>
 	</div></s:div>
@@ -568,5 +565,6 @@
 	<s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="data" />
 	</s:decorate>
+</h:form>
     
 </ui:composition>

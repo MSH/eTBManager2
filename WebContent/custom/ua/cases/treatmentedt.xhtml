@@ -81,7 +81,7 @@
 	
 	<div style="padding-left:4px;padding-top:10px;padding-bottom:10px;">
 	<s:decorate template="/layout/display.xhtml">
-		<ui:define name="label">#{messages['Regimen']}:</ui:define>
+		<ui:define name="label">#{messages['ExportContent.REGIMENS']}:</ui:define>
 		#{tbcase.regimen!=null ? (tbcase.regimen.name): messages['regimens.individualized']}
 		<h:panelGroup id="msgindiv">
 		<s:fragment rendered="#{treatmentHome.regimenMovedToIndivid}">

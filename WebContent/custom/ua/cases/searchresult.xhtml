@@ -71,7 +71,7 @@
 			</th>
 			<th class="searchtitle">
 				<div style="padding:4px;">
-				<a:commandLink value="#{messages['uk_UA.dateCMCCRegistration']}" onclick="changeOrder(9);return false;"/>
+				<a:commandLink value="#{messages['TbCase.diagnosisDate']}" onclick="changeOrder(9);return false;"/>
 				<br/><br/>
 				<a:commandLink value="#{messages['cases.casesearching.treatlen']}" onclick="changeOrder(10);return false;"/>
 				<br/><br/>
@@ -105,7 +105,7 @@
    		</div>		
 	</td>
 	<td style="border-left:1px solid #E0E0E0;">
-		<h:outputText value="#{it.tbcase.registrationDate}" converter="localeDateConverter" />
+		<h:outputText value="#{it.tbcase.diagnosisDate}" converter="localeDateConverter" />
    		<h:outputText value="#{it.tbcase.treatmentPeriod}" converter="periodConverter" 
    			rendered="#{it.tbcase.treatmentPeriod.iniDate!=null}" 
    			style="padding-top:6px;display:block;">

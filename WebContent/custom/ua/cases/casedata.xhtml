@@ -152,19 +152,20 @@
 
 <ui:define name="content">
 <h1>#{title}</h1>
-<h:form id="main">
 <s:decorate id="bodydiv" template="/custom/ua/layout/casebody.xhtml">
-
-<s:fragment rendered="#{tbcase.diagnosisType!='SUSPECT'}">
-	<ui:include src="/cases/issues.xhtml" />
-</s:fragment>
-<s:fragment rendered="#{tbcase.diagnosisType=='SUSPECT'}">
-	<s:decorate template="/layout/roundrect.xhtml" style="width:100%;">
-	<ui:param name="showheader" value="0" />
-	<ui:param name="showfooter" value="0" />
-	<h:outputText value="#{messages['validate.notsuspect']}" />
-	</s:decorate>
-</s:fragment>
+<h:form id="main">
+	
+	<s:fragment rendered="#{tbcase.diagnosisType!='SUSPECT'}">
+		<ui:include src="/cases/issues.xhtml" />
+	</s:fragment>
+	<s:fragment rendered="#{tbcase.diagnosisType=='SUSPECT'}">
+		<s:decorate template="/layout/roundrect.xhtml" style="width:100%;">
+		<ui:param name="showheader" value="0" />
+		<ui:param name="showfooter" value="0" />
+		<h:outputText value="#{messages['validate.notsuspect']}" />
+		</s:decorate>
+	</s:fragment>
+</h:form>
 
 <div class="spacer" />
 	<s:decorate template="/layout/display.xhtml" rendered="#{caseDataUA.extraOutcomeInfo.key.length()>0}">
@@ -172,7 +173,8 @@
 		#{messages[caseDataUA.extraOutcomeInfo.key]}
 	</s:decorate>
 	<s:fragment rendered="#{caseDataUAHome.riskDRTB}">
-	    <h:commandLink styleClass="button" style="width:150px;float:right;" onclick="Richfaces.showModalPanel('cat4dlg');return false;">
+	    <h:commandLink styleClass="button" style="width:150px;float:right;" 
+	    onclick="Richfaces.showModalPanel('cat4dlg');return false;">
 	    	<span>#{messages['TbCase.DRTB.to.DRTB']}</span>
 	    </h:commandLink> 
 	    <h:commandLink action="#{caseDataUAHome.riskDRTBtoTB()}" styleClass="button" style="width:150px;float:right;">
@@ -216,46 +218,52 @@
 	</h:panelGroup>
 </rich:tab>
 
+<rich:tab label="#{messages['cases.issues']}" id="tab7" ontabenter="updateTab(7)" rendered="#{s:hasRole('ISSUES')}">
+	<h:panelGroup id="pnltab7">
+		<s:decorate template="#{wspage['/cases/casedata_issues.xhtml']}" rendered="#{caseFilters.caseTab==7}"/>
+	</h:panelGroup>
+</rich:tab>
+
 </rich:tabPanel>
 
-
-<a:jsFunction name="updateTabContent" reRender="pnltab#{caseFilters.caseTab}">
-	<a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
-</a:jsFunction>
-<a:jsFunction name="updateTabSelection">
-	<a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
-</a:jsFunction>
-<script type="text/javascript">
-<!--
-window.tabLoaded = new Array();
-window.inicasetab = #{caseFilters.caseTab};
-jQuery().ready(function() {
-	initTab();
-});
-function initTab() {
-	var updt=window.inicasetab==0;
-	if (updt)
-		window.inicasetab=1;
-	var tabid = 'tab' + window.inicasetab;
-	var dest = 'main:bodydiv:tab' + window.inicasetab;
-	RichFaces.switchTab('main:bodydiv:tabCase', dest, tabid);
-	if (updt)
-		updateTab(window.inicasetab);
-}
-
-function updateTab(tabIndex) {
-	if (window.tabLoaded[tabIndex]==undefined) {
-		window.updateTabContent(tabIndex);
-		window.tabLoaded[tabIndex]=1;
+<h:form>
+	<a:jsFunction name="updateTabContent" reRender="pnltab#{caseFilters.caseTab}">
+		<a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
+	</a:jsFunction>
+	<a:jsFunction name="updateTabSelection">
+		<a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
+	</a:jsFunction>
+	<script type="text/javascript">
+	<!--
+	window.tabLoaded = new Array();
+	window.inicasetab = #{caseFilters.caseTab};
+	jQuery().ready(function() {
+		initTab();
+	});
+	function initTab() {
+		var updt=window.inicasetab==0;
+		if (updt)
+			window.inicasetab=1;
+		var tabid = 'tab' + window.inicasetab;
+		var dest = 'bodydiv:tab' + window.inicasetab;
+		RichFaces.switchTab('bodydiv:tabCase', dest, tabid);
+		if (updt)
+			updateTab(window.inicasetab);
 	}
-	else updateTabSelection(tabIndex);
-}
--->
-</script>
-
+	
+	function updateTab(tabIndex) {
+		if (window.tabLoaded[tabIndex]==undefined) {
+			window.updateTabContent(tabIndex);
+			window.tabLoaded[tabIndex]=1;
+		}
+		else updateTabSelection(tabIndex);
+	}
+	-->
+	</script>
+</h:form>
 </s:decorate>	
 
-</h:form>
+
 
 </ui:define>
 

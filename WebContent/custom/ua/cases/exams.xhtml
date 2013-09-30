@@ -8,8 +8,7 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 <ui:param name="molecularBiologyHome" value="#{molecularBiologyUAHome}"/>
-
-	<h2>
+<h:form>
 	<s:link view="/cases/edtexamhiv.xhtml" 
 		style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt" 
 		onclick="disableButton(this)">
@@ -17,8 +16,8 @@
 		<f:param name="examid" value="#{null}"/>
 		<span>#{messages['cases.details.newresult']}</span>
 	</s:link>
-	#{messages['cases.examhiv']}</h2>
 	<h:panelGroup id="pnlhiv">
+		<h2>#{messages['cases.examhiv']}</h2>
 		<s:div styleClass="region3" rendered="#{empty examHIVHome.allResults}"><div class="content">
 			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
 		</div></s:div>
@@ -506,5 +505,7 @@
 	<s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="exams" />
 	</s:decorate>
+
+</h:form>
 
 </ui:composition>

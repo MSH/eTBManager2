@@ -6,7 +6,7 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-
+<h:form>
 	<h2>                 
 		<s:link view="/custom/ua/cases/annexedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
 			<f:param name="id" value="#{caseHome.id}" />
@@ -145,5 +145,6 @@
     </td></tr>
 
 	</table>
+</h:form>
     
 </ui:composition>
