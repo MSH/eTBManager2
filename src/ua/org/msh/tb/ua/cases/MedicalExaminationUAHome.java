@@ -1,6 +1,5 @@
 package org.msh.tb.ua.cases;
 
-import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -38,19 +37,19 @@ public class MedicalExaminationUAHome  {
 
 	
 	/**
-	 * Validate the data of the medical examination for the Brazilian version
+	 * Validate the data of the medical examination for the Ukrainian version
 	 * @return
 	 */
 	public boolean validate() {
 		boolean validated = true;
 
-		CaseHome caseHome = (CaseHome)Component.getInstance("caseHome");
+		/*CaseHome caseHome = (CaseHome)Component.getInstance("caseHome");
 		
 		MedicalExaminationUA medexam = getInstance();
 		if(medexam.getDate().before(caseHome.getTbCase().getDiagnosisDate())){
 			FacesMessages.instance().addToControlFromResourceBundle("medexamdate", "cases.medexamdate.val1");
 			validated = false;
-		}
+		}*/
 		
 		// check if the nextappointment if before the examination
 		if(getInstance().getNextAppointment() != null && getInstance().getNextAppointment().before(getInstance().getDate())){
