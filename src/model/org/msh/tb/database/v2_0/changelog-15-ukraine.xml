@@ -100,21 +100,21 @@
 		<sql>
 		INSERT INTO userpermission(canchange, canexecute, grantPermission, profile_id, role_id)
 		SELECT false, true, true, id, 206 from userprofile
-		WHERE workspace_id=(SELECT w.id FROM Workspace w WHERE w.extension like 'ua') AND
+		WHERE workspace_id in (SELECT w.id FROM Workspace w WHERE w.extension like 'ua') AND
 		NOT EXISTS(SELECT * FROM userpermission WHERE role_id=206 AND profile_id=userprofile.id)
 		</sql>
 
 		<sql>
 		INSERT INTO userpermission(canchange, canexecute, grantPermission, profile_id, role_id)
 		SELECT false, true, true, id, 207 from userprofile
-		WHERE workspace_id=(SELECT w.id FROM Workspace w WHERE w.extension like 'ua') AND
+		WHERE workspace_id in (SELECT w.id FROM Workspace w WHERE w.extension like 'ua') AND
 		NOT EXISTS(SELECT * FROM userpermission WHERE role_id=207 AND profile_id=userprofile.id)
 		</sql>
 
 		<sql>
 		INSERT INTO userpermission(canchange, canexecute, grantPermission, profile_id, role_id)
 		SELECT false, true, true, id, 208 from userprofile
-		WHERE workspace_id=(SELECT w.id FROM Workspace w WHERE w.extension like 'ua') AND
+		WHERE workspace_id in (SELECT w.id FROM Workspace w WHERE w.extension like 'ua') AND
 		NOT EXISTS(SELECT * FROM userpermission WHERE role_id=208 AND profile_id=userprofile.id)
 		</sql>
 	</changeSet>
