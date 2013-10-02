@@ -8,13 +8,6 @@
     	<param-name>liquibase.changelog</param-name>
 	    <param-value>org/msh/tb/database/changelog-master.xml</param-value>
 	</context-param>
-	
-	<!-- 
-	<context-param>
-    	<param-name>liquibase.contexts</param-name>
-	    <param-value>BD</param-value>
-	</context-param>
- 	 -->
  
 	<context-param>
 	    <param-name>liquibase.datasource</param-name>
