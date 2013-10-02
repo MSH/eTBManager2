@@ -93,7 +93,7 @@
         <sql>
 		INSERT INTO userpermission(canchange, canexecute, grantPermission, profile_id, role_id)
 		SELECT false, true, true, id, 205 from userprofile
-		WHERE workspace_id=(SELECT w.id FROM Workspace w WHERE w.extension like 'ua') AND
+		WHERE workspace_id in (SELECT w.id FROM Workspace w WHERE w.extension like 'ua') AND
 		NOT EXISTS(SELECT * FROM userpermission WHERE role_id=205 AND profile_id=userprofile.id)
 		</sql>
 
