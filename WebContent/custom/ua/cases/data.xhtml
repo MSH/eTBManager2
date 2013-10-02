@@ -77,18 +77,6 @@
     		#{tbcase.notifAddress.complement}
 		</s:decorate>
 	</td></tr>
-	<tr><td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.phoneNumber}">
-    		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
-    		#{tbcase.phoneNumber}
-		</s:decorate>
-	</td>
-	<td>
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
-    		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
-    		#{tbcase.mobileNumber}
-		</s:decorate>
-	</td></tr>
     <tr><td>
 
     	<s:decorate template="/layout/display.xhtml">
@@ -114,6 +102,12 @@
     		<br/>
     		#{tbcase.currentAddress.complement}
 		</s:decorate>
+	</td></tr>
+	<tr><td>
+    	<s:decorate template="/layout/display.xhtml">
+    		<ui:define name="label">#{messages['Address.zipCode']}:</ui:define>
+    		#{tbcase.currentAddress.zipCode}
+    	</s:decorate>
 	</td></tr>
 	</s:fragment>
 	<tr><td>

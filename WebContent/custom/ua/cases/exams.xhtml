@@ -46,6 +46,17 @@
 					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
 				</f:facet>
 				#{messages[r.result.key]}
+				<s:fragment rendered="#{r.ARTstarted}">
+					<br/><b>#{messages['uk_UA.treatART']}</b> 
+					<h:outputText value=" #{messages['form.from']} "/> 
+					<h:outputText value="#{r.startedARTdate}" converter="localeDateConverter"/>
+				</s:fragment>
+				<s:fragment rendered="#{r.CPTstarted}">
+					<br/><b>#{messages['cases.examhiv.cpt']} </b> 
+					<h:outputText value=" #{messages['form.from']} "/>   
+					<h:outputText value="#{r.startedCPTdate}" converter="localeDateConverter"/>
+				</s:fragment>
+				
 			</h:column>
 			
 			<h:column>
@@ -138,7 +149,7 @@
 			</h:column>			
 		</h:dataTable>
 	</h:panelGroup>
-<a:jsFunction name="remexamMicroscopy" action="#{examMicroscopyHome.remove}" reRender="pnlmicroscopy"  rendered="#{caseHome.canEditExams}">
+<a:jsFunction name="remExamMicroscopy" action="#{examMicroscopyHome.remove}" reRender="pnlmicroscopy"  rendered="#{caseHome.canEditExams}">
 	<a:actionparam name="param1" assignTo="#{examMicroscopyHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 

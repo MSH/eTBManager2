@@ -60,9 +60,9 @@
 				</h:outputText>
 			</s:decorate>		
 		</td><td>
-			<s:decorate template="/layout/display.xhtml" rendered="#{not empty r.nextAppointment}">
-	    		<ui:define name="label">#{messages['uk_UA.nextAppointment']}:</ui:define>
-				<h:outputText value="#{r.nextAppointment}" converter="localeDateConverter" />
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty r.responsible}">
+	    		<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
+				<h:outputText value="#{r.responsible}"/>
 			</s:decorate>
 		</td></tr>
 		<tr><td>
@@ -70,6 +70,11 @@
 				<ui:define name="label">#{messages['MedAppointmentType']}:</ui:define>
 				#{messages[r.appointmentType.key]}
 			</s:decorate>		
+		</td><td>
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty r.nextAppointment}">
+	    		<ui:define name="label">#{messages['uk_UA.nextAppointment']}:</ui:define>
+				<h:outputText value="#{r.nextAppointment}" converter="localeDateConverter" />
+			</s:decorate>
 		</td></tr>
 		<tr><td>
 			<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.state=='ONTREATMENT'}">
