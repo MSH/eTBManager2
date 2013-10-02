@@ -62,7 +62,7 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 		setCounting(true);
 		int count = ((Long)createQuery().getSingleResult()).intValue();
 		if (count<=4000){
-			initVerifList("verify.tb07mrtb.error",2,0,1);
+			initVerifList("verify.tb07mrtb.error",3,0,1);
 			setCounting(false);
 			setOverflow(false);
 			lst = createQuery().getResultList();
@@ -96,8 +96,11 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 							getTable1000().addIdValue(tc.getDiagnosisType(), rowid, 1F);
 							
 							//table 2000
+							if(tc.getPatientType() == null){
+								tc.setPatientType(PatientType.NEW);
+							}
 							switch (tc.getPatientType()) {
-							case NEW: case RELAPSE: case AFTER_DEFAULT: case FAILURE_FT: case FAILURE_RT: 
+							case NEW: case RELAPSE: case AFTER_DEFAULT: case FAILURE_FT: case FAILURE_RT: case OTHER:  
 								getTable2000().addIdValue("col", tc.getPatientType(), 1F);
 								getTable2000().addIdValue("col", "total", 1F);
 								break;
@@ -115,12 +118,12 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 									getTable2000().addIdValue("col", "total", 1F);
 								}
 							}
-							List<PrevTBTreatment> ptb = getEntityManager().createQuery("select t from PrevTBTreatment t where t.tbcase.id="+tc.getId()).getResultList();
+/*							List<PrevTBTreatment> ptb = getEntityManager().createQuery("select t from PrevTBTreatment t where t.tbcase.id="+tc.getId()).getResultList();
 							if (ptb.size()>0)
 								if (PrevTBTreatmentOutcome.UNKNOWN.equals(ptb.get(ptb.size()-1).getOutcome())){
 									getTable2000().addIdValue("col", "other", 1F);
 									getTable2000().addIdValue("col", "total", 1F);
-								}
+								}*/
 							
 						}
 					}
@@ -170,8 +173,9 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 		table.addRow(App.getMessage("PatientType.AFTER_DEFAULT"), PatientType.AFTER_DEFAULT);
 		table.addRow(App.getMessage("PatientType.FAILURE_FT"), PatientType.FAILURE_FT);
 		table.addRow(App.getMessage("PatientType.FAILURE_RT"), PatientType.FAILURE_RT);
+		table.addRow(App.getMessage("PatientType.OTHER"), PatientType.OTHER);
 		table.addRow(App.getMessage("uk_UA.reports.tb07.mrtb.2000.row6"), "extrapul");
-		table.addRow(App.getMessage("uk_UA.reports.other"), "other");
+		//table.addRow(App.getMessage("uk_UA.reports.other"), "other");
 		table.addRow(App.getMessage("uk_UA.reports.all"), "total");
 	}
 

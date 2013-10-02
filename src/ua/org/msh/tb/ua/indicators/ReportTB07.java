@@ -126,7 +126,8 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 								break;
 								case RELAPSE: key = "relapses"; 
 								break;
-								case AFTER_DEFAULT: case FAILURE_FT: case FAILURE_RT: case OTHER: key = "other";
+							default:
+								key="other";
 								break;
 							}
 						if (key!=null){

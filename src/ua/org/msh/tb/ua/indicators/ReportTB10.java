@@ -309,6 +309,9 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 		// select row id
 		String rowkey;
 		String colkey = null;
+		if(ptype==null){
+			ptype = PatientType.NEW;
+		}
 		switch (ptype) {
 		case NEW: 
 			rowkey = "newcases";
@@ -429,6 +432,9 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 				em[i] = true;
 			d1.add(Calendar.MONTH, 1);
 			
+		}
+		if(tc.getPatientType() == null){
+			tc.setPatientType(PatientType.NEW);
 		}
 		if (tc.getPatientType().equals(PatientType.NEW)){
 			if (em.length>=3)
