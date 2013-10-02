@@ -98,6 +98,7 @@ public class MedicineCalculator {
 		//BigDecimal qR = new BigDecimal(qRec);
 		//BigDecimal uP = new BigDecimal(uPrice);
 		BigDecimal tPrice = cP.multiply(nC);
+		tPrice = tPrice.setScale(2,RoundingMode.HALF_UP);
 		return tPrice.doubleValue();
 	}
 	
@@ -112,38 +113,32 @@ public class MedicineCalculator {
 			if (lst.get(0) instanceof Batch)
 				for (Batch b:(List<Batch>)lst){
 					BigDecimal tp = new BigDecimal(calculateTotalPrice(b.getQuantityReceived(), b.getQuantityContainer(), b.getUnitPrice(),scaleCPrice));
-					tp = tp.setScale(2,RoundingMode.HALF_UP);
 					res = res.add(tp);
 				}
 			if (lst.get(0) instanceof BatchInfo)
 				for (BatchInfo b:(List<BatchInfo>)lst){
 					BigDecimal tp = new BigDecimal(calculateTotalPrice(b.getQuantity(), b.getBatch().getQuantityContainer(), b.getBatch().getUnitPrice(),scaleCPrice));
-					tp = tp.setScale(2,RoundingMode.HALF_UP);
 					res = res.add(tp);
 				}
 			if (lst.get(0) instanceof TransferBatch)
 				for (TransferBatch b:(List<TransferBatch>)lst){
 					BigDecimal tp = new BigDecimal(calculateTotalPrice(b.getQuantity(), b.getBatch().getQuantityContainer(), b.getBatch().getUnitPrice(),scaleCPrice));
-					tp = tp.setScale(2,RoundingMode.HALF_UP);
 					res = res.add(tp);
 				}
 			if (lst.get(0) instanceof BatchQuantity)
 				for (BatchQuantity b:(List<BatchQuantity>)lst){
 					BigDecimal tp = new BigDecimal(calculateTotalPrice(b.getQuantity(), b.getBatch().getQuantityContainer(), b.getBatch().getUnitPrice(),scaleCPrice));
-					tp = tp.setScale(2,RoundingMode.HALF_UP);
 					res = res.add(tp);
 				}
 			if (lst.get(0) instanceof Movement)
 				for (Movement mov:(List<Movement>)lst)
 					for (BatchMovement bm:mov.getBatches()){
 						BigDecimal tp = new BigDecimal(calculateTotalPrice(bm.getBatch().getQuantityReceived(), bm.getBatch().getQuantityContainer(), bm.getBatch().getUnitPrice(),scaleCPrice));
-						tp = tp.setScale(2,RoundingMode.HALF_UP);
 						res = res.add(tp);
 				}
 			if (lst.get(0) instanceof BatchMovement)
 				for (BatchMovement bm:(List<BatchMovement>)lst){
 					BigDecimal tp = new BigDecimal(calculateTotalPrice(bm.getBatch().getQuantityReceived(), bm.getBatch().getQuantityContainer(), bm.getBatch().getUnitPrice(),scaleCPrice));
-					tp = tp.setScale(2,RoundingMode.HALF_UP);
 					res = res.add(tp);
 				}
 			
