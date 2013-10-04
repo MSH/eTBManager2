@@ -19,7 +19,7 @@
 		<s:link value="#{messages['meds.receiving.viewall']}" view="/custom/ua/medicines/receivings.xhtml" propagation="none" rendered="#{userSession.canCheckReceiving}"/>
 	</s:fragment>
 
-	<s:fragment rendered="#{s:hasRole('ORDERS') and tbunit.medicineSupplier}">
+	<s:fragment rendered="#{s:hasRole('ORDERS') and userSession.tbunit.medicineSupplier}">
 		<h2>#{messages['meds.orders']}</h2>	
 		<s:link view="/medicines/ordernew.xhtml" rendered="#{userSession.canCreateOrder}" >
 			<div class="new-icon" style="float:left;"/>#{messages['meds.orders.new']}
