@@ -76,11 +76,11 @@ function handleContextClick(comp) {
 	
 	</td></tr>
 	<tr><td>
-		<h:selectBooleanCheckbox value="#{indicatorFilters.useRegistrationDate}" rendered="#{showregdate}" style="margin-left:20px;"/>
+		<h:selectBooleanCheckbox value="#{indicatorFilters.useRegistrationDate}" rendered="#{showregdate}" style="margin-left:20px;" disabled="#{readonlyregdate}"/>
 		<h:outputText value="#{messages['TbCase.registrationDate']}" rendered="#{showregdate}" />
 		<!-- <h:selectBooleanCheckbox value="#{indicatorFilters.useDiagnosisDate}" style="margin-left:20px;"/>#{messages['TbCase.diagnosisDate']} -->
-		<h:selectBooleanCheckbox value="#{indicatorFilters.useIniTreatmentDate}" rendered="#{showinitreatdate}" required="true" style="margin-left:20px;"/>
-		<h:outputText value="#{messages['TbCase.iniTreatmentDate']}" rendered="#{showinitreatdate}" />
+		<h:selectBooleanCheckbox value="#{indicatorFilters.useIniTreatmentDate}" rendered="#{showinitreatdate}" required="true" style="margin-left:20px;" disabled="#{readonlyinitreatdate}"/>
+		<h:outputText value="#{messages['TbCase.iniTreatmentDate']}" rendered="#{showinitreatdate}"/>
 	</td></tr>
 	<tr><td>
 	

@@ -85,7 +85,7 @@ public class TBForm10Block7 extends Indicator2D{
 		flag = 2;
 		String cond2 = " c.id = e.tbcase.id group by c.id ";
 		setCondition(cond2);
-		setOrderByFields("e.tbcase.id, e.resultDate");
+		setOrderByFields("e.tbcase.id, e.date");
 		List<Object[]> lst2 = createQuery().getResultList();
 		flag = 0;
 		

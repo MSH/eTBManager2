@@ -61,14 +61,20 @@
 	</s:link>
 	
 	<s:link view="/custom/bd/management/tbform10.xhtml" rendered="true" >
+		<f:param name="useregdate" value="#{true}"/>
+		<f:param name="useinitreatmentdate" value="#{false}"/>
 		<div class="icon-report" style="float:left;"/>#{messages['manag.tbform10']}
 	</s:link>
 	
 	<s:link view="/custom/bd/management/pulmonary.xhtml" rendered="true" >
+		<f:param name="useregdate" value="#{true}"/>
+		<f:param name="useinitreatmentdate" value="#{true}"/>
 		<div class="icon-report" style="float:left;"/>#{messages['manag.pulmonaryreport']}
 	</s:link>
 	
 	<s:link view="/custom/bd/management/pulmonaryontreat.xhtml" rendered="true" >
+		<f:param name="useregdate" value="#{true}"/>
+		<f:param name="useinitreatmentdate" value="#{true}"/>
 		<div class="icon-report" style="float:left;"/>#{messages['manag.pulmonaryontreatreport']}
 	</s:link>
 	

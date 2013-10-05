@@ -38,8 +38,10 @@
 <h:panelGroup id="indicator">
 <ui:param name="hideinterimmonth" value="true" />
 	<ui:include src="/custom/bd/management/filtersbd.xhtml" >
-		<ui:param name="showoutputselection" value="false" />
+		<ui:param name="showregdate" value="true" />
+		<ui:param name="readonlyregdate" value="true" />
 		<ui:param name="showinitreatdate" value="true" />
+		<ui:param name="readonlyinitreatdate" value="true" />
 	</ui:include>
 
 	<!-- adding new table -->
