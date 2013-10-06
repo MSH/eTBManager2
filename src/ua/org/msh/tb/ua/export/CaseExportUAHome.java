@@ -50,9 +50,10 @@ public class CaseExportUAHome extends CaseExportHome {
 		Map<String, String> msgs = Messages.instance();
 
 		excel = new ExcelCreator();
-		excel.setFileName(msgs.get("cases"));
+		//excel.setFileName(msgs.get("cases"));
+		excel.setFileName("cases");
 		excel.createWorkbook();
-		excel.addSheet(msgs.get("cases"), 0);
+		excel.addSheet("cases", 0);
 		excel.setRow(2);		
 		boolean bExams = ExportContent.EXAMS.equals(exportContent);
 
