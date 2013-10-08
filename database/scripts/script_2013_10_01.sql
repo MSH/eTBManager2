@@ -154,5 +154,5 @@ ALTER TABLE `userworkspace`
   ON UPDATE CASCADE;
 
 update workspace set id = 11 where id = 940352;
-ALTER TABLE `etbmanager-bd`.`tag` CHANGE COLUMN `active` `active` TINYINT(1) NULL DEFAULT NULL  ;
+ALTER TABLE tag CHANGE COLUMN active active TINYINT(1) NULL DEFAULT NULL  ;
 
