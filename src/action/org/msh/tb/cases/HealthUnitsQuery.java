@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.adminunits.AdminUnitGroup;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.UserWorkspace;
@@ -19,6 +20,7 @@ import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.login.UserSession;
 import org.msh.utils.EntityQuery;
+import org.msh.utils.ItemSelectHelper;
 
 
 @Name("healthUnitsQuery")
@@ -32,6 +34,7 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 	@In(create=true)
 	protected UserWorkspace userWorkspace;
 	@In(create=true) CaseFilters caseFilters;
+	@In(create=true) FacesMessages facesMessages;
 	
 	private List<HealthUnitInfo> resultList;
 	private List<AdminUnitGroup<HealthUnitInfo>> adminUnits;
@@ -237,8 +240,29 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 		super.refresh();
 	}
 
+	public String checkDiagnosticClassificationFilters(){
+		boolean showMessage = false;
+		
+		List<CaseClassification> c = ItemSelectHelper.getSelectedItems(caseFilters.getClassifications(), true);
+		if(c == null || c.size() == 0){
+			caseFilters.setClassifications(null);
+			showMessage = true;
+		}
+		
+		List<DiagnosisType> d = ItemSelectHelper.getSelectedItems(caseFilters.getDiagnosisTypes(), true);
+		if(d == null || d.size() == 0){
+			caseFilters.setDiagnosisTypes(null);
+			showMessage = true;
+		}
+		
+		if(showMessage)
+			return "reload-message";
+		else
+			return "reload";
+	}
 
 	protected void createAdminUnits() {
+				
 		adminUnits = new ArrayList<AdminUnitGroup<HealthUnitInfo>>();
 		for (HealthUnitInfo info: getResultList()) {
 			AdminUnitGroup<HealthUnitInfo> adminUnitGroup = findAdminUnitGroup(info.getAdminUnitCode());

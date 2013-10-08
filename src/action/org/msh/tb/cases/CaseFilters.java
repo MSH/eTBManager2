@@ -790,6 +790,10 @@ public class CaseFilters {
 		return classifications;
 	}
 	
+	public void setClassifications(ItemSelectList<CaseClassification> classifications) {
+		this.classifications = classifications;
+	}
+	
 	/**
 	 * Return the list of diagnosis types available in the workspace
 	 * @return
@@ -801,6 +805,10 @@ public class CaseFilters {
 			diagnosisTypes.selectAll();
 		}
 		return diagnosisTypes;
+	}
+	
+	public void setDiagnosisTypes(ItemSelectList<DiagnosisType> diagnosisTypes) {
+		this.diagnosisTypes = diagnosisTypes;
 	}
 
 	/**
