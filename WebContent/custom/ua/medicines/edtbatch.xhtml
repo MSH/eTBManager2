@@ -20,7 +20,7 @@
 	<ui:param name="quantityRec" value="#{medicineReceivingHome.batch.quantityReceived}" />
 	<ui:param name="srcAnnexFunc" value="#{medicineReceivingUAHome}" />
 	<ui:param name="canEditing" value="#{medicineReceivingHome.editingBatch}" />
-	<ui:param name="canSelectMed" value="true" />
+	<ui:param name="canSelectMed" value="false" />
 	<ui:param name="regNumbOnlyAdding" value="false" />
 	
 	<a:jsFunction name="cleanB" ajaxSingle="true" action="#{medicineReceivingUAHome.cleanAll()}"/>

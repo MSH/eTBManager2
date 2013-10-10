@@ -48,7 +48,7 @@
 
 	<a:commandLink styleClass="button-alt"
 		style="float:right"
-		onclick="newBatchDlg();return false;">
+		onclick="showMedicinesDlg();return false;">
 		<span>#{messages['form.selmeds']}...</span>
 	</a:commandLink>
 	
@@ -80,6 +80,11 @@
 						</h:outputText>
 					</td>
 					<td class="colcb">
+					<a:commandLink action="#{medicineReceivingUAHome.startNewBatch(it.medicine)}" 
+								value="#{messages['meds.receiving.newbatch']}" 
+								reRender="batchdlgcontent" 
+								oncomplete="startShowBatchDlg()" 
+								ajaxSingle="true"/>
     				</td>
 				</tr>
 				
@@ -150,8 +155,35 @@
 
 </s:decorate>
 
-<ui:include src="edtbatch.xhtml" />
+<s:decorate template="/custom/ua/layout/batchselectionsingle.xhtml" id="batchsellayout">
+	<ui:param name="homeClass" value="#{medicineReceivingHome}" />
+	<ui:param name="medicine" value="#{medicineReceivingHome.batch.medicine}" />
+	<ui:param name="batch" value="#{medicineReceivingHome.batch}" />
+	<ui:param name="quantityRec" value="#{medicineReceivingHome.batch.quantityReceived}" />
+	<ui:param name="srcAnnexFunc" value="#{medicineReceivingUAHome}" />
+	<ui:param name="canEditing" value="#{medicineReceivingHome.editingBatch}" />
+	<ui:param name="canSelectMed" value="false" />
+	<ui:param name="regNumbOnlyAdding" value="false" />
+	
+	<a:jsFunction name="cleanB" ajaxSingle="true" action="#{medicineReceivingUAHome.cleanAll()}"/>
+	<a:commandLink action="#{medicineReceivingHome.finishBatchEditing}" styleClass="button" 
+           	reRender="batchdlgcontent"
+           	rendered="#{medicineReceivingHome.editingBatch}"
+           	onclick="if (!disableButton(this)) return false;"
+               data="#{medicineReceivingHome.editingBatch}" 
+           	oncomplete="enableButton();if (!data) {hideBatchDlg();refreshMedicines();}" >
+           	<span>#{messages['form.ok']}</span>
+	</a:commandLink>
+</s:decorate>
 
+<s:decorate template="/layout/medicineselection.xhtml">
+	<ui:param name="title" value="#{messages['edtrec.addmed']}" />
+   	<a:commandLink action="#{medicineReceivingUAHome.finishMedicineSelection}" styleClass="button"
+   		onclick="if (!disableButton(this)) return false;"  
+   		oncomplete="hideMedicinesDlg();" reRender="main">
+   		<span>#{messages['form.ok']}</span>
+   	</a:commandLink>
+</s:decorate>
 
 <script type="text/javascript">
 <!--

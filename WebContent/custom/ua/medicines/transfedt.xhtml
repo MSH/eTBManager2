@@ -9,7 +9,7 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['meds.transfer.new']}" />
+<ui:param name="title" value="#{transferHome.id==null? messages['meds.transfer.new'] :messages['meds.transfer.edit']}"/>
 
 <ui:param name="topmenu" value="1" />
 <ui:param name="left" value="0" />
