@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -254,6 +255,21 @@ public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 	}
 
 
+	/**
+	 * Finish the selection of the medicines to be included in the order
+	 */
+	public void finishMedicineSelection() {
+		MedicineSelection medSel = (MedicineSelection)Component.getInstance("medicineSelection", true);
+		
+		List<Medicine> meds = medSel.getSelectedMedicines();
+
+		for (Medicine med: meds) {
+			// this method automatically includes a new medicine if the medicine is not already in the list
+			sourceTree.addMedicine(getRoot().getSource(), med);
+		}
+		
+	}
+	
 	/**
 	 * Finishing editing of a batch (new or existing one)
 	 */
