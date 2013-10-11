@@ -181,7 +181,6 @@ function hideBatchDlg() {
 	</s:fragment>
 </h:panelGroup>
 
-
     <hr/>
 	<table>
 		<tr>
@@ -191,10 +190,16 @@ function hideBatchDlg() {
 			    	<ui:define name="label">#{messages['Batch.quantityContainer']}:</ui:define>
 			    	<h:inputText id="qtdcon" value="#{batch.quantityContainer}" required="true" 
 			    	onkeypress="return numbersOnly(this,event);" 
-			    	onkeyup="return changeQuantityCont();" />
+			    	onkeyup="return changeQuantityCont();" >
+			    		<f:validateDoubleRange minimum="1"/>
+			    	</h:inputText>
+			    	<h:message for="qtdcon:qtdcon" styleClass="error"/>
 			    	<!-- (#{medicineReceivingHome.batch.medicine.dosageForm}) -->
-			    	<h:outputText value="(#{medicine.dosageForm})" rendered="#{not empty medicine.dosageForm}"/>
+			    	
+			    		<h:outputText value="(#{medicine.dosageForm})" rendered="#{not empty medicine.dosageForm}"/>
+			    	
 			    </s:decorate>
+			    
 			</td>
 			<td>
 				<s:decorate id="qtd" template="/layout/edit.xhtml" >
@@ -215,7 +220,10 @@ function hideBatchDlg() {
 			    	<ui:define name="label">#{messages['Batch.numContainers']}:</ui:define>
 			    	<h:inputText id="numcont" value="#{srcAnnexFunc.numContainers}" required="true" 
 						    	onkeypress="return numbersOnly(this,event);" 
-						    	onkeyup="changeQuantityCont();" />
+						    	onkeyup="changeQuantityCont();" >
+						<f:validateDoubleRange minimum="1"/>
+					</h:inputText>
+					<h:message for="numcont:numcont" styleClass="error"/>
 			    </s:decorate>
 		    </td>
 		    <td>
@@ -234,7 +242,10 @@ function hideBatchDlg() {
 			    	<ui:define name="label">#{messages['Batch.containerPrice']}:</ui:define>
 			    	<h:inputText id="cprice" value="#{srcAnnexFunc.containerPrice}" required="true" 
 			    		converter="currencyConverter3D" onkeyup="changeCPrice(this);" 
-			    		onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');"/>
+			    		onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');">
+			    		<f:validateDoubleRange minimum="0.001"/>
+			    	</h:inputText>
+			    	<h:message for="cprice:cprice" styleClass="error"/>
 			    </s:decorate>
 			</td>
 			<td>

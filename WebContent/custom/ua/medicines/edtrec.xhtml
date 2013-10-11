@@ -36,7 +36,7 @@
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['uk_UA.invoiceNumber']}:</ui:define>
     	<ui:param name="required" value="true" /> 
-    	<h:inputText value="#{medicineReceivingUA.consignmentNumber}" />
+    	<h:inputText value="#{medicineReceivingUA.consignmentNumber}" required="true"/>
     </s:decorate>
 
     <s:decorate template="/layout/dateedit.xhtml" >
@@ -167,20 +167,21 @@
 	
 	<a:jsFunction name="cleanB" ajaxSingle="true" action="#{medicineReceivingUAHome.cleanAll()}"/>
 	<a:commandLink action="#{medicineReceivingHome.finishBatchEditing}" styleClass="button" 
-           	reRender="batchdlgcontent"
+           	reRender="batchdlgcontent,messages"
            	rendered="#{medicineReceivingHome.editingBatch}"
-           	onclick="if (!disableButton(this)) return false;"
+           	onclick="if (!disableButton(this)) return false; "
                data="#{medicineReceivingHome.editingBatch}" 
-           	oncomplete="enableButton();if (!data) {hideBatchDlg();refreshMedicines();}" >
+           	oncomplete="enableButton();if (!data) {hideBatchDlg();refreshMedicines();}">
            	<span>#{messages['form.ok']}</span>
 	</a:commandLink>
 </s:decorate>
+
 
 <s:decorate template="/layout/medicineselection.xhtml">
 	<ui:param name="title" value="#{messages['edtrec.addmed']}" />
    	<a:commandLink action="#{medicineReceivingUAHome.finishMedicineSelection}" styleClass="button"
    		onclick="if (!disableButton(this)) return false;"  
-   		oncomplete="hideMedicinesDlg();" reRender="main">
+   		oncomplete="hideMedicinesDlg();" reRender="medicines,medpnl">
    		<span>#{messages['form.ok']}</span>
    	</a:commandLink>
 </s:decorate>

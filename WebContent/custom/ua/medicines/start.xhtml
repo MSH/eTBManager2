@@ -215,7 +215,7 @@ function detailsClick(elem, elemName) {
 	<ui:param name="canSelectMed" value="false" />
 	<a:jsFunction name="cleanB" ajaxSingle="true"/>
 	<a:commandLink action="#{medicineManStartHome.finishBatchEditing}" styleClass="button" 
-     	reRender="medicines2"
+     	reRender="medicines2,messages,batchdlgcontent"
      	data="#{medicineManStartHome.validated}"
      	onclick="if (!disableButton(this)) return false;" 
      	oncomplete="enableButton();if (data) hideBatchDlg();">
