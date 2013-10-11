@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -116,6 +117,15 @@ public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 		if (!validateDrugReceiving())
 			return "error";
 		
+		//delete empty medicine nodes
+		Iterator<Object> it = getRoot().getMedicines().iterator();
+		while (it.hasNext()){
+			Object o = it.next();
+			MedicineNode mn = (MedicineNode)o;
+			if (mn.getBatches().size()==0)
+				it.remove();
+		}
+		
 		MedicineReceivingUA rec = getInstance();
 
 		if (rec.getTbunit() == null)
@@ -175,7 +185,17 @@ public class MedicineReceivingUAHome extends EntityHomeEx<MedicineReceivingUA> {
 			return false;
 		}
 		
-		return true;
+		boolean res = false;
+		for (Object o: sourceNode.getMedicines()){
+			MedicineNode mn = (MedicineNode)o;
+			if (mn.getBatches().size()>0)
+				res = true;
+		}
+		
+		if (!res)
+			facesMessages.addFromResourceBundle("meds.receiving.nobatch");
+		
+		return res;
 	}
 
 
