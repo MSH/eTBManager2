@@ -15,7 +15,6 @@ import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.kh.entities.CaseSideEffectKH;
-import org.msh.tb.kh.entities.TbCaseKH;
 import org.msh.tb.misc.FieldsQuery;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
@@ -47,14 +46,14 @@ public class SideEffectKHHome {
 	protected void createItems() {
 		List<FieldValue> sideEffects = fieldsQuery.getSideEffects();
 		
-		TbCaseKH tbcase = (TbCaseKH) caseHome.getInstance();
+		TbCase tbcase = (TbCase) caseHome.getInstance();
 		
 		items = new ArrayList<ItemSelect<CaseSideEffectKH>>();
 		
 		for (FieldValue sideEffect: sideEffects) {
 			//ItemSelect item = new ItemSelect();
 			ItemSelect<CaseSideEffectKH> item = new ItemSelect<CaseSideEffectKH>();
-			CaseSideEffectKH cse = tbcase.findSideEffectData(sideEffect);
+			CaseSideEffectKH cse = (CaseSideEffectKH) tbcase.findSideEffectData(sideEffect);
 			if (cse == null) {
 				cse = new CaseSideEffectKH();
 				cse.getSideEffect().setValue(sideEffect);

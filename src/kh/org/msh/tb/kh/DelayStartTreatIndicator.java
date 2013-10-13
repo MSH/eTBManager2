@@ -11,9 +11,9 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.ExamDST;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.indicators.core.Indicator2D;
-import org.msh.tb.kh.entities.TbCaseKH;
 import org.msh.utils.date.DateUtils;
 /**
  * Generate indicator about delay in MDR-TB diagnosis and start treatment
@@ -27,7 +27,7 @@ public class DelayStartTreatIndicator extends Indicator2D {
 	 */
 	private static final long serialVersionUID = -3795390748763613756L;
 	@In(create=true) EntityManager entityManager;
-	private List<TbCaseKH>  tbcasekhList; 
+	private List<TbCase>  tbcases; 
 	private ExamDST examDST;
 	
 	@Override
