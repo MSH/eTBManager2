@@ -5,9 +5,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
@@ -15,7 +18,9 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
+import org.jboss.seam.international.Messages;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.User;
@@ -78,6 +83,16 @@ public class UserHome extends EntityHomeEx<User> {
 	
 		// is a new user ?
 		if (!isManaged()) {
+			
+			Long count = (Long) getEntityManager().createQuery("select count(*) from User where upper(email) = :email")
+				.setParameter("email", user.getEmail().toUpperCase())
+				.getSingleResult();
+
+			if (count > 0) {
+				facesMessages.addFromResourceBundle("form.duplicatedemail");
+				return "error";
+			}
+			
 			user.setParentUser(getUser());
 			user.setRegistrationDate(new Date());
 			user.setState(UserState.PASSWD_EXPIRED);

@@ -81,16 +81,7 @@ public class UserValidators {
 			((UIInput)comp).setValid(false);
 		}
 
-		EntityManager em = App.getEntityManager();
-		Long count = (Long) em.createQuery("select count(*) from User where upper(email) = :email")
-			.setParameter("email", email.toUpperCase())
-			.getSingleResult();
 
-		if (count > 0) {
-			((UIInput)comp).setValid(false);
-			String msg = Messages.instance().get("form.duplicatedname");
-			context.addMessage(comp.getClientId(context), new FacesMessage(msg));
-		}
 	}
 
 }
