@@ -150,7 +150,7 @@
 	<s:div styleClass="region3" rendered="#{empty tbcase.sideEffects}"><div class="content">
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" style="display:block;padding:4px"/>
 	</div></s:div>
-	<h:dataTable value="#{tbcasekh.sideEffectsKh}" var="it" width="100%" styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty tbcasekh.sideEffectsKh}">
+	<h:dataTable value="#{tbcase.sideEffects}" var="it" width="100%" styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty tbcase.sideEffects}">
 		<h:column>
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
@@ -170,7 +170,7 @@
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.grading']}" styleClass="collh" />
 			</f:facet>
-			#{it.grade.key}
+			#{messages[it.grade.key]}
 		</h:column>
 
 	</h:dataTable>
