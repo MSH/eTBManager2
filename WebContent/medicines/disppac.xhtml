@@ -51,6 +51,7 @@
 		<table width="100%"><tr><td>
 			<h2><h:outputText value="#{it.date}" converter="localeDateConverter" /></h2>
 		</td><td valign="bottom">
+			<s:fragment rendered="#{userSession.tbunit.patientDispensing}">
 			<a:commandLink reRender="pnldisp" style="float:right" 
 				onclick="if (!confirm('#{messages['form.confirm_remove']}')) {return false;} deleteDispensing(#{it.id},#{caseHome.id})" >
 				<span class="delete-icon" />#{messages['form.remove']}
@@ -59,6 +60,7 @@
 				<f:param name="dispid" value="#{it.id}" />
 				<span class="edit-icon" />#{messages['form.edit']}
 			</s:link>
+			</s:fragment>
 		</td></tr></table>
 
 		<s:decorate template="dispensingtable.xhtml">

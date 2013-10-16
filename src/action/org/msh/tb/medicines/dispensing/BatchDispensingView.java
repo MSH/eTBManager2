@@ -40,7 +40,8 @@ public class BatchDispensingView {
 		
 		String hql = "select c from MedicineDispensing a join a.movements b " +
 				"join b.batches c where a.tbunit.id = #{userSession.tbunit.id} " +
-				"and a.dispensingDate between :dt1 and :dt2";
+				"and a.dispensingDate between :dt1 and :dt2 " +
+				"and a.id not in (select mdc.dispensing.id from MedicineDispensingCase mdc where mdc.dispensing.id = a.id)";
 
 		List<BatchMovement> lst = entityManager.createQuery(hql)
 			.setParameter("dt1", dispensingSelection.getIniDate())
@@ -69,6 +70,7 @@ public class BatchDispensingView {
 				"join fetch c.batch join fetch c.movement " +
 				"where a.tbunit.id = #{userSession.tbunit.id} " +
 				"and a.dispensingDate between :dt1 and :dt2 " +
+				"and a.id not in (select mdc.dispensing.id from MedicineDispensingCase mdc where mdc.dispensing.id = a.id) " + 
 				"order by c.movement.date";
 
 		List<Object[]> lst = entityManager.createQuery(hql)

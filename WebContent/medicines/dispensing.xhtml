@@ -47,9 +47,28 @@
 	
 	<h:panelGroup id="pnldisp">
 	
-	<s:fragment rendered="#{userSession.tbunit.patientDispensing and facesContext.renderResponse}"> 
-	<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty caseDispensingView.cases}" styleClass="warn" />
+	<s:fragment rendered="#{facesContext.renderResponse}"> 
+	<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty caseDispensingView.cases and empty batchDispensingView.table.rows}" styleClass="warn" />
+
+	<!-- Consolidated dispensations -->
+	<s:fragment rendered="#{not empty batchDispensingView.table.rows and facesContext.renderResponse}">
+		<h:outputText rendered="#{not empty caseDispensingView.cases and not empty batchDispensingView.table.rows}" >
+		<h2>#{messages['dispensing.consolidated']}</h2>
+		</h:outputText>
+
+		<s:link value="#{messages['meds.dispensing.details']}" view="/medicines/dispbatches.xhtml" 
+			style="float:right" rendered="#{not empty batchDispensingView.table.rows}" />
+		<s:decorate template="dispensingtable.xhtml">
+			<ui:param name="table" value="#{batchDispensingView.table}" /> 
+		</s:decorate>
+	</s:fragment>
+
+	<!-- Dispensings per patient -->
 	<s:fragment rendered="#{not empty caseDispensingView.cases}">
+		<h:outputText rendered="#{not empty caseDispensingView.cases and not empty batchDispensingView.table.rows}" >
+		<h2>#{messages['dispensing.bypatient']}</h2>
+		</h:outputText>
+		
 		<a:repeat value="#{caseDispensingView.cases}" var="it">
 
 		<table width="100%"><tr><td>
@@ -64,17 +83,10 @@
 
 		<s:decorate template="dispensingtable.xhtml">
 			<ui:param name="table" value="#{it.table}" /> 
+			<ui:param name="dontshowemptymsg" value="true"/>
 		</s:decorate>
 		</a:repeat>
 	</s:fragment>
-	</s:fragment>
-	
-	
-	<s:fragment rendered="#{not userSession.tbunit.patientDispensing and facesContext.renderResponse}">
-		<s:link value="#{messages['meds.dispensing.details']}" view="/medicines/dispbatches.xhtml" rendered="#{not empty batchDispensingView.table.rows}" />
-		<s:decorate template="dispensingtable.xhtml">
-			<ui:param name="table" value="#{batchDispensingView.table}" /> 
-		</s:decorate>
 	</s:fragment>
 	
 	</h:panelGroup>

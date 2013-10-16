@@ -48,7 +48,7 @@
 		<table width="100%"><tr><td>
 			<h2><h:outputText value="#{it.date}" converter="localeDateConverter"/></h2>
 		</td><td valign="bottom">
-			<s:link value="#{messages['form.edit']}" view="/medicines/dispedt.xhtml" style="float:right">
+			<s:link value="#{messages['form.edit']}" view="/medicines/dispedt.xhtml" style="float:right" rendered="#{!userSession.tbunit.patientDispensing}">
 				<f:param name="id" value="#{it.medicineDispensingId}" />
 			</s:link>
 		</td></tr></table>

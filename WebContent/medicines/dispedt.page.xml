@@ -11,7 +11,7 @@
 				<message>#{messages['dispensing.success']}</message>
 			</redirect>
 		</rule>
-		<rule if-outcome="editpersisted">
+		<rule if-outcome="edtpersisted">
 			<redirect view-id="/medicines/dispbatches.xhtml">
 				<message>#{messages['dispensing.success']}</message>
 			</redirect>
