@@ -62,11 +62,19 @@
 
  	<page view-id="/global/*" login-required="true" >
 	</page>
-	
+
+ 	
+ 	<!-- Generate the file to be used by the desktop app -->
  	<page view-id="/admin/desktopfile.xhtml" action="#{generateDesktopFileHome.generate()}" >
  		<param name="id" value="#{generateDesktopFileHome.unitId}" converterId="javax.faces.Integer" />
  	</page>
 
+ 	<!-- Receive the sync file from the desktop app -->
+ 	<page view-id="/sync/fileupload.xhtml" action="#{receiveSyncFileAction.execute()}" >
+ 		<param name="tk" value="#{receiveSyncFileAction.userToken}" />
+ 	</page>
+ 		
+ 
     <page view-id="*" action="#{onlineUsers.update}">
     	<param name="lang" value="#{userSettings.localeString}" />
         <navigation>

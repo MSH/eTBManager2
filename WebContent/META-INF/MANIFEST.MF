@@ -2,11 +2,9 @@ Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.6.5
 Created-By: 20.7-b02 (Sun Microsystems Inc.)
 Built-By: Ricardo
-Implementation-Version: 2.0-b756
+Implementation-Version: 2.0-b758
 Implementation-Title: e-TB Manager
 Implementation-Vendor: Management Sciences for Health, Inc.
-Built-Date: 2013-09-16 12:27:35
+Built-Date: 2013-10-17 11:48:09
 Build-Jdk: 1.6.0_32
-Country-Code: NA
-Country: Namibia
 

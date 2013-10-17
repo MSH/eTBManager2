@@ -34,11 +34,12 @@ public class WorkspaceView {
 
 	
 	/**
-	 * Return the URI for the workspace picture
+	 * Return the URI for the workspace picture. Return it as a .seam extension
+	 * because it will be handled by seam when request is fired
 	 * @return
 	 */
 	public String getPictureURI() {
-		return (picture == null? null: "/workspaceimg/img" + id.toString() + ".gif");
+		return (picture == null? null: "/workspaceimg/img" + id.toString() + ".seam");
 	}
 
 	/**
