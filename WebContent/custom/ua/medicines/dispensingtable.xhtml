@@ -7,7 +7,7 @@
 	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty table.rows}" styleClass="warn" />
+<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty table.rows and (empty dontshowemptymsg ? false : true)}" styleClass="warn" />
 
 <s:fragment rendered="#{not empty table.rows}">
 <table class="table1">
@@ -48,7 +48,7 @@
 		</td>
 		</s:fragment>
 		<td>
-			<s:decorate template="/layout/batch.xhtml">
+			<s:decorate template="/custom/ua/layout/batch.xhtml">
 				<ui:param name="batch" value="#{row.batch}" />
 			</s:decorate>
 		</td>
@@ -57,16 +57,25 @@
 				<span class="alert-icon"/>
 				<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" style="color:#D7620B"/>
 			</s:fragment>
-			<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" rendered="#{not medCalcCont.isExpiringBatch(row.batch)}"/>
+			<s:fragment rendered="#{row.batch.expired}">
+				<span class="icon-error"/>
+				<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" styleClass="error"/>
+			</s:fragment>
+			<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" rendered="#{not medCalcCont.isExpiringBatch(row.batch) and not row.batch.expired}"/>
 		</td>
 		<td align="right">
-			<s:fragment rendered="#{not medCalcCont.isExpiringBatch(row.batch)}">
+			<s:fragment rendered="#{not medCalcCont.isExpiringBatch(row.batch) and not row.batch.expired}">
 				<h:outputText value="#{row.quantity}" >
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 			</s:fragment>
 			<s:fragment rendered="#{medCalcCont.isExpiringBatch(row.batch)}">
 				<h:outputText value="#{row.quantity}" style="color:#D7620B">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</s:fragment>
+			<s:fragment rendered="#{row.batch.expired}">
+				<h:outputText value="#{row.quantity}" styleClass="error">
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 			</s:fragment>

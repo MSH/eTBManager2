@@ -156,13 +156,6 @@
 	</h:column>
 		
 	<h:column>
-		<f:facet name="header"><h:outputText value="#{messages['global.unitPrice']}" styleClass="colrh" /></f:facet>
-		<h:outputText value="#{m.movement.unitPrice}">
-			<f:convertNumber pattern="#,###,##0.00000"/>
-		</h:outputText>
-	</h:column>
-
-	<h:column>
 		<f:facet name="header"><h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh" /></f:facet>
 		<h:outputText value="#{m.movement.totalPrice}">
 			<f:convertNumber pattern="#,###,##0.00"/>
@@ -212,8 +205,6 @@
 		</th>
 		<th class="colr">#{messages['Batch.numContainers']} <br/>(#{messages['Batch.quantityContainer']})
 		</th>
-		<th class="colr">#{messages['global.unitPrice']}
-		</th>
 		<th class="colr">#{messages['global.totalPrice']}
 		</th>
 		<th class="colr">#{messages['meds.movs.stockqtty']}
@@ -256,10 +247,6 @@
 			</h:outputText>
 			<h:outputText value="(№#{m.item.batchMovement.batch.quantityContainer})" style="margin-left:5px;">
 				<f:convertNumber pattern="#,###,##0"/>
-			</h:outputText>
-		</td>
-		<td class="colrb"><h:outputText value="#{m.item.batchMovement.batch.unitPrice}">
-				<f:convertNumber pattern="#,###,##0.00000"/>
 			</h:outputText>
 		</td>
 		<td class="colrb"><h:outputText value="#{m.item.batchMovement.totalPrice}">
@@ -306,7 +293,7 @@ function hideShowAdjustments(comp){
 
 <rich:modalPanel id="dispMovDetail" autosized="true" width="540" zindex="2000">
 	<f:facet name="header">
-		<h:outputText value="Detalhes do movimento" />
+		<h:outputText value="#{messages['movements.details']}" />
 	</f:facet>
 	<h:panelGroup id="dispmovpnl">
 		<s:fragment id="dlg" rendered="#{movements.dispMovtDetail != null}">

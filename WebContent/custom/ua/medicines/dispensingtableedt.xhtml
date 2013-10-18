@@ -37,7 +37,7 @@
 		</th>
 	</tr>
 <a:repeat value="#{table.rows}" var="row">
-	<s:fragment rendered="#{(not row.batch.expired) and medCalcCont.containsInRegimen(row,tbcase.regimen)}">
+	<s:fragment rendered="#{medCalcCont.containsInRegimen(row,tbcase)}">
 		<tr>
 			<s:fragment rendered="#{not row.spanned}">
 			<td rowspan="#{row.rowSpan}" style="vertical-align: middle;">
@@ -56,16 +56,25 @@
 					<span class="alert-icon"/>
 					<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" style="color:#D7620B"/>
 				</s:fragment>
-				<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" rendered="#{not medCalcCont.isExpiringBatch(row.batch)}"/>
+				<s:fragment rendered="#{row.batch.expired}">
+					<span class="icon-error"/>
+					<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" styleClass="error"/>
+				</s:fragment>
+				<h:outputText value="#{row.batch.expiryDate}" converter="localeDateConverter" rendered="#{not medCalcCont.isExpiringBatch(row.batch) and not row.batch.expired}"/>
 			</td>
 			<td align="right" style="vertical-align: middle;">
-				<s:fragment rendered="#{not medCalcCont.isExpiringBatch(row.batch)}">
+				<s:fragment rendered="#{not medCalcCont.isExpiringBatch(row.batch) and not row.batch.expired}">
 					<h:outputText value="#{row.quantity}" >
 						<f:convertNumber pattern="#,###,##0"/>
 					</h:outputText>
 				</s:fragment>
 				<s:fragment rendered="#{medCalcCont.isExpiringBatch(row.batch)}">
 					<h:outputText value="#{row.quantity}" style="color:#D7620B">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</s:fragment>
+				<s:fragment rendered="#{row.batch.expired}">
+					<h:outputText value="#{row.quantity}" styleClass="error">
 						<f:convertNumber pattern="#,###,##0"/>
 					</h:outputText>
 				</s:fragment>
@@ -78,7 +87,7 @@
 				</h:outputText>
 			</td>
 			</s:fragment>
-			<td>
+			<td style="vertical-align: middle;">
 				<h:inputText value="#{row.dispensingQuantity}" style="width:100px"/>
 				<h:outputText value="#{row.batchErrorMessage}" rendered="#{not empty row.batchErrorMessage}" styleClass="error"/>
 			</td>
