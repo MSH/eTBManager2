@@ -38,8 +38,12 @@ import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.Laboratory;
 import org.msh.tb.entities.MedicalExamination;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.MedicineRegimen;
 import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.PrescribedMedicine;
 import org.msh.tb.entities.Regimen;
+import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
@@ -55,13 +59,19 @@ import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.entities.enums.PatientType;
-import org.msh.tb.entities.enums.TbField;
+import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.misc.SequenceGenerator;
+import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.Period;
 import org.jboss.seam.international.Messages;
 import org.jboss.seam.transaction.UserTransaction;
+
+/**
+ * @author »нка
+ *
+ */
 @Name("importIMM")
 public class ImportIMM {
 	private EntityManager entityManager;
@@ -76,6 +86,18 @@ public class ImportIMM {
 	private FieldValue method;
 	private FieldValue method2;
 	private Laboratory laboratory;
+	String lastname;
+	String  name;
+	String middlename;
+	Date birstday;
+	Regimen cat1;
+	Regimen cat2;
+		private StringBuffer log = new StringBuffer();
+	private Period treatmPd;
+	private Source source;
+	private TbCaseAZ tc;
+	private int weight;
+	
 	public boolean execute() {
 		try {
 			Workbook workbook = Workbook.getWorkbook(new File("c:/temp/test.xls"));
@@ -88,6 +110,10 @@ public class ImportIMM {
 			method = entityManager.find(FieldValue.class, 939311);   //Levestain-Jensen
 			method2 = entityManager.find(FieldValue.class, 939316);//GeneXpert 
 			laboratory=entityManager.find(Laboratory.class, 942680);  //IMM lab
+			source=entityManager.find(Source.class, 940558);
+			cat1=getRegimen(1);
+			//TODO  add medicines for cat1
+			cat2=getRegimen(2);
 			for (int i = 2; i < sheet.getRows(); i++) {
 				Cell[] r = sheet.getRow(i);
 				importRecord(r);
@@ -100,53 +126,47 @@ public class ImportIMM {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		TransactionLogService service = new TransactionLogService();
+		service.getDetailWriter().addText(log.toString());
+		service.save("TASK", RoleAction.EXEC, "import IMM", null, null, null);
+		
 		return true;
 	}
 
 	private void importRecord(Cell[] r) {
+		String code=r[1].getContents();
+		if	(isCaseExist(code)){
+			addLog(code + "- case already exists");
+			return;
+		}
 		MedicalExamination me=new MedicalExamination();
-		TbCaseAZ tc = new TbCaseAZ();
-		List<MedicalExamination> examinations=tc.getExaminations();
-		me.setTbcase(tc);
-		examinations.add(me);
-		Patient p = new Patient();	
-		tc.setPatient(p);
-		generateCaseNumber(tc);
-		AdministrativeUnit a=entityManager.find(AdministrativeUnit.class, adminunitID);
+		 tc = new TbCaseAZ();
 		
-		Address addr=new Address();
-		addr.setAdminUnit(a);
-		tc.setNotifAddress(addr);
-		tc.setCurrentAddress(addr);
-		p.setWorkspace(getWorkspace());
-		tc.setValidationState(ValidationState.WAITING_VALIDATION);
-		p.setSecurityNumber(r[1].getContents());//b
-		tc.setClassification(CaseClassification.TB);
-		tc.setDiagnosisType(DiagnosisType.CONFIRMED); 
-		Regimen regimen=entityManager.find(Regimen.class, 940744);
-		tc.setRegimen(regimen);
-		tc.setRegimenIni(regimen);
+		Patient p;
 		try {
-			DateCell dc = (DateCell)r[2];//c
-			p.setBirthDate(dc.getDate());
-			
-			dc = (DateCell)r[3];//d
+			//get person data from excel
+			birstday = ((DateCell)r[2]).getDate();//c
+			lastname=r[4].getContents().substring(0, 1)+r[4].getContents().substring(1).toLowerCase();//e
+			name=r[5].getContents().substring(0, 1)+r[5].getContents().substring(1).toLowerCase(); //f
+			middlename=r[6].getContents().substring(0, 1)+r[6].getContents().substring(1).toLowerCase(); //g
+			p=getPatient();
+			if (p==null) p=createNewPatient(r);
+			tc.setPatient(p);
+			generateCaseNumber(tc);
+			AdministrativeUnit a=entityManager.find(AdministrativeUnit.class, adminunitID);
+			Address addr=new Address();
+			addr.setAdminUnit(a);
+			tc.setNotifAddress(addr);
+			tc.setCurrentAddress(addr);
+			tc.setValidationState(ValidationState.VALIDATED);
+			tc.setRegistrationCode(r[1].getContents());
+			tc.setClassification(CaseClassification.TB);
+			tc.setDiagnosisType(DiagnosisType.CONFIRMED); 
+		   DateCell dc = (DateCell)r[3];//d
 			tc.setRegistrationDate(dc.getDate());
 			tc.setDiagnosisDate(dc.getDate());
 			tc.setAge(calculateAge(p.getBirthDate(), tc.getRegistrationDate()));
-			p.setLastName(r[4].getContents());//e
-			p.setName(r[5].getContents()); //f
-			p.setMiddleName(r[6].getContents()); //g
-			
-			p.setMotherName(r[7].getContents());  //h
-			
-			String s = r[8].getContents();
-			if ("M".equals(s))
-				p.setGender(Gender.MALE);
-			if ("F".equals(s))
-				p.setGender(Gender.FEMALE);
-			
-			s = r[9].getContents();
+			String	s = r[9].getContents();
 			if ("N".equals(s))
 				tc.setPatientType(PatientType.NEW);
 			if ("T".equals(s))
@@ -157,17 +177,21 @@ public class ImportIMM {
 				tc.setPatientType(PatientType.FAILURE_FT);
 			if ("O".equals(s))
 				tc.setPatientType(PatientType.OTHER);
-			
+
 			s=r[10].getContents();
 			tc.setNotificationUnit(getTbunitbyName(s));
 			tc.setOwnerUnit(tc.getNotificationUnit());
-					s = r[11].getContents(); 
-			if (s.length() == 2)
+			//set owner unit
+			s = r[11].getContents(); 
+			if (s.length() == 2){  
 				tc.setReferToOtherTBUnit(false);
-			else
+				tc.setReferToTBUnit(getTbunitbyName("3"));
+			}
+			else {
 				tc.setReferToOtherTBUnit(true);
-			s=r[12].getContents();
-			tc.setReferToTBUnit(getTbunitbyName(s));
+				s=r[12].getContents();
+				tc.setReferToTBUnit(getTbunitbyName(s));
+			}
 			List<TreatmentHealthUnit> units=tc.getHealthUnits();
 			TreatmentHealthUnit currunit=new TreatmentHealthUnit();
 			units.add(currunit);
@@ -177,7 +201,7 @@ public class ImportIMM {
 			//  infectionSite  N
 			s = r[13].getContents();
 			if (s.equalsIgnoreCase(getMessages().get("import.infectionSite1")))
-			tc.setInfectionSite(InfectionSite.PULMONARY);
+				tc.setInfectionSite(InfectionSite.PULMONARY);
 			if (s.equalsIgnoreCase(getMessages().get("import.infectionSite2")))
 				tc.setInfectionSite(InfectionSite.EXTRAPULMONARY);
 			if (s.equalsIgnoreCase(getMessages().get("import.infectionSite3")))
@@ -189,11 +213,19 @@ public class ImportIMM {
 			s = r[15].getContents();
 			if (!s.equalsIgnoreCase("")) tc.setExtrapulmonaryType(getExtraPulmonaryType(new Integer(s)));
 			s=r[16].getContents();//q-weight
-			if (!s.equalsIgnoreCase("")) me.setWeight(new Double(s));
-			s=r[17].getContents();//r-height
-			if (!s.equalsIgnoreCase("")) me.setHeight(new Float(s));
-			me.setDate(tc.getDiagnosisDate());
-			me.setUsingPrescMedicines(YesNoType.YES);
+			//add medical examination if weight not empty
+			if (!s.equalsIgnoreCase("")) {
+				List<MedicalExamination> examinations=tc.getExaminations();
+				me.setTbcase(tc);
+				examinations.add(me);
+				me.setWeight(new Double(s));
+				weight=new Integer(s);
+				s=r[17].getContents();//r-height
+				if (!s.equalsIgnoreCase("")) me.setHeight(new Float(s));
+				me.setDate(tc.getDiagnosisDate());
+				me.setUsingPrescMedicines(YesNoType.YES);
+			}
+			else weight=60;
 			s=r[18].getContents();//s-outcome
 			if (!s.equalsIgnoreCase("")){
 				tc.setState(getState(s));
@@ -201,29 +233,75 @@ public class ImportIMM {
 				tc.setState(CaseState.ONTREATMENT);
 			}
 			if (r[19].getType()==CellType.DATE){
-			dc = (DateCell)r[19];
-			tc.setOutcomeDate(dc.getDate());
+				dc = (DateCell)r[19];
+				tc.setOutcomeDate(dc.getDate());
+			} 
+			Calendar datePhase=Calendar.getInstance();
+		//TODO isCat2
+			boolean isCat2=true;
+			isCat2 =(code.indexOf("11721")==-1);
+			if (isCat2){
+				datePhase.setTime(tc.getRegistrationDate());
+				datePhase.add(Calendar.MONTH, 8);
+				datePhase.add(Calendar.DAY_OF_YEAR, -1);
+				treatmPd=new Period (tc.getRegistrationDate(),datePhase.getTime());
+				if (tc.getOutcomeDate()!=null){
+					if (tc.getOutcomeDate().before(datePhase.getTime()) )
+						treatmPd=new Period (tc.getRegistrationDate(),tc.getOutcomeDate());
+				}
+				tc.setRegimen(cat2);
+				tc.setRegimenIni(cat2);
+				tc.setTreatmentPeriod(treatmPd);
+				//TODO Medicine
+				//List<MedicineRegimen> getMedicines()
+				currunit.setPeriod(treatmPd);
+				datePhase.setTime(tc.getRegistrationDate());
+				datePhase.add(Calendar.MONTH, 3);
+				tc.setIniContinuousPhase(datePhase.getTime());
+				List<PrescribedMedicine> mdlist =createPrescribedMedicineList2(tc);
+				tc.setPrescribedMedicines(mdlist);
+			}else{
+				datePhase.setTime(tc.getRegistrationDate());
+				datePhase.add(Calendar.MONTH, 6);
+				datePhase.add(Calendar.DAY_OF_YEAR, -1);
+				treatmPd=new Period (tc.getRegistrationDate(),datePhase.getTime());
+				if (tc.getOutcomeDate()!=null){
+					if (tc.getOutcomeDate().before(datePhase.getTime()) )
+						treatmPd=new Period (tc.getRegistrationDate(),tc.getOutcomeDate());
+				}
+				tc.setRegimen(cat1);
+				tc.setRegimenIni(cat1);
+				tc.setTreatmentPeriod(treatmPd);
+				//TODO Medicine
+				//List<MedicineRegimen> getMedicines()
+				currunit.setPeriod(treatmPd);
+				datePhase.setTime(tc.getRegistrationDate());
+				datePhase.add(Calendar.MONTH, 2);
+				tc.setIniContinuousPhase(datePhase.getTime());
+				List<PrescribedMedicine> mdlist =createPrescribedMedicineList(tc);
+				tc.setPrescribedMedicines(mdlist);
 			}
-			//U - localisation
+				//U - localisation
 			s=r[21].getContents();//V - case finding
 			if (s.equalsIgnoreCase("")) tc.setCaseFindingStrategy(CaseFindingStrategy.NA);
 			if (s.equalsIgnoreCase("ACTIVE")) tc.setCaseFindingStrategy(CaseFindingStrategy.ACTIVE);
 			if (s.equalsIgnoreCase("PASSIV")) tc.setCaseFindingStrategy(CaseFindingStrategy.PASSIVE);
 			s=r[22].getContents();//W - prev. treatment
 			s=r[23].getContents();//x - prison
-			if (s.equalsIgnoreCase("")) {
-				tc.setNumberOfImprisonments(1);
-			} else {
+			if (!s.equalsIgnoreCase(""))  {
 				tc.setNumberOfImprisonments(new Integer(s));
 			}
 			if	(r[24].getType()==CellType.DATE) {
 				dc = (DateCell)r[24];
 				tc.setInprisonIniDate(dc.getDate());
+				
 			}
-			s=r[lastCols].getContents();
-			if (!s.equalsIgnoreCase("")) setComorbidity(tc,s);
+			if (r.length==lastCols){
+				s=r[lastCols].getContents();
+				if (!s.equalsIgnoreCase("")) setComorbidity(tc,s);
+			}
 			//exams
-		//hiv
+			//hiv
 			int hivCol=26;
 			s=r[hivCol].getContents(); 
 			if (!s.equalsIgnoreCase("")){
@@ -238,14 +316,11 @@ public class ImportIMM {
 				if (r[hivCol+3].getType()==CellType.DATE) hiv.setStartedARTdate(((DateCell)r[hivCol+3]).getDate());
 				hiv.setTbcase(tc);
 			}
-		//	Microscopy
+			//	Microscopy
 			int microCol=30;
 			if (r[microCol+2].getType()==CellType.DATE){
 				dc = (DateCell)r[microCol+2];	
-				Period treatmPd=new Period (dc.getDate(),tc.getOutcomeDate());
-				tc.setTreatmentPeriod(treatmPd);
-				me.setDate(dc.getDate());
-				currunit.setPeriod(treatmPd);
+				me.setDate(dc.getDate());	
 			}
 			List<ExamMicroscopy> microExams=tc.getExamsMicroscopy();
 			for (int i=0;i<5; i++){
@@ -275,6 +350,7 @@ public class ImportIMM {
 			entityManager.persist(p);
 			entityManager.persist(tc);
 			entityManager.flush();
+			addLog(code+ " added");
 			//commitTransaction();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -282,8 +358,46 @@ public class ImportIMM {
 		}
 	}
 
+	private Patient createNewPatient(Cell[] r) {
+	
+		Patient p = new Patient();	
+		p.setSecurityNumber(r[1].getContents());
+		p.setBirthDate(birstday);
+		p.setWorkspace(getWorkspace());
+		p.setLastName(lastname);//e
+		p.setName(name); //f
+		p.setMiddleName(middlename); //g
+		p.setMotherName(r[7].getContents());  //h
+		String s = r[8].getContents();
+		if ("M".equals(s))
+			p.setGender(Gender.MALE);
+		if ("F".equals(s))
+			p.setGender(Gender.FEMALE);
+		
+		return p;
+	}
+
+	private Patient getPatient(){
+		Patient existP=null;
+		List<Patient> lst= entityManager.createQuery("from Patient p where lastName=:f and name=:i and middleName=:o and birthDate=:d")
+		.setParameter("f", lastname)
+		.setParameter("i", name)
+		.setParameter("o", middlename)
+		.setParameter("d",birstday)
+		.getResultList();
+		if (lst!=null){
+			if (lst.size()>0)existP=lst.get(0);
+		}
+		return existP;
+	}
+	private boolean isCaseExist(String code){
+		Long i= (Long) entityManager.createQuery("select count (*) from TbCase c where registrationCode=:cd").setParameter("cd", code).getSingleResult();
+		return i>0;
+		
+	}
 	private ExamDST setExamDST(int start, Cell[] r, TbCaseAZ tc,int round) {
 		ExamDSTAZ ed=null;
+		if (r.length>start+1){
 		if (r[start+1].getType()==CellType.DATE) {
 			ed=new ExamDSTAZ();
 			String s=r[start].getContents();
@@ -315,6 +429,7 @@ public class ImportIMM {
 			ed.setResults(le);
 			ed.setTbcase(tc);
 			ed.setLaboratory(laboratory);
+		}
 	}
 		return ed;
 	}
@@ -339,8 +454,7 @@ public class ImportIMM {
 		CaseComorbidity cb=new CaseComorbidity();
 		FieldValue fv=entityManager.find(FieldValue.class, 939235);
 		cb.setComorbidity(fv);
-		String comments;
-		if (s.equalsIgnoreCase("HBCV"))	cb.setComment("Hepatitis BC");
+			if (s.equalsIgnoreCase("HBCV"))	cb.setComment("Hepatitis BC");
 		if (s.equalsIgnoreCase("HBV"))	cb.setComment("Hepatitis B");
 		if (s.equalsIgnoreCase("HCV"))	cb.setComment("Hepatitis C");
 		cb.setTbcase(tc);
@@ -399,6 +513,7 @@ tc.setComorbidities(cbs);
 	 * @return
 	 */
 	private Tbunit getTbunitbyName(String name){
+		
 		Tbunit unit=null;
 		if (units.size() != 0) {
 			Iterator <Tbunit> it= units.iterator();
@@ -417,7 +532,6 @@ tc.setComorbidities(cbs);
 
 			}
 		}
-		System.out.println(unit.getName().getName1());
 		return unit;
 
 	}
@@ -469,8 +583,7 @@ tc.setComorbidities(cbs);
 				}
 			}
 		}
-		System.out.println( result.getName().getName1());
-		return result;
+			return result;
 	}
 	private FieldValue getExtraPulmonaryType(int typeNumber){
 		List<FieldValue> lst=null;
@@ -529,11 +642,11 @@ tc.setComorbidities(cbs);
 				}
 			}
 		}
-		System.out.println( result.getName().getName1());
+		
 		return result;
 	}
 	
-	public Integer calculateAge(Date birthday, Date registrationDate)
+	private Integer calculateAge(Date birthday, Date registrationDate)
 	{
 		Calendar dob = Calendar.getInstance();
 		Calendar today = Calendar.getInstance();
@@ -549,8 +662,9 @@ today.setTime(registrationDate);
 		return age;
 	}
 	
-	public ExamMicroscopy setMicroExam(int start, Cell[] r, TbCase tbcase){
+	private ExamMicroscopy setMicroExam(int start, Cell[] r, TbCase tbcase){
 		ExamMicroscopyAZ emr=null;
+		if (r.length>start+2){
 		if (r[start+2].getType()==CellType.DATE) {
 		emr=new ExamMicroscopyAZ();
 			String s=r[start].getContents();
@@ -570,11 +684,13 @@ today.setTime(registrationDate);
 		emr.setLaboratory(laboratory);
 			//adminunit lab
 		}
+		}
 		return emr;
 		
 	}
-	public ExamCulture setCultureExam(int start, Cell[] r,TbCase tbcase){
+	private ExamCulture setCultureExam(int start, Cell[] r,TbCase tbcase){
 		ExamCulture_Az ec=null;
+		if (r.length>start+1){
 		if (r[start+1].getType()==CellType.DATE) {
 			ec=new ExamCulture_Az();
 			String s=r[start].getContents();
@@ -590,6 +706,7 @@ today.setTime(registrationDate);
 			ec.setTbcase(tbcase);
 			ec.setLaboratory(laboratory);
 		}
+		}
 		return ec;
 
 	}
@@ -598,7 +715,7 @@ today.setTime(registrationDate);
 	 * Generating a new patient number if it was not generated yet
 	 * @return
 	 */
-	public void generateCaseNumber(TbCase tbcase){		
+	private void generateCaseNumber(TbCase tbcase){		
 		Patient p = tbcase.getPatient();
 		if (p.getRecordNumber() == null) {
 			SequenceGenerator sequenceGenerator = (SequenceGenerator) App.getComponent("sequenceGenerator");
@@ -641,13 +758,17 @@ today.setTime(registrationDate);
 
 		
 	}
+	public void addLog(String s) {	
+		log.append(s);
+		log.append('\n');
+	}
 	
 	//---------------------------------
 	protected EntityManager getEntityManager() {
 		return (EntityManager)Component.getInstance("entityManager");
 	}
 	
-	public void beginTransaction() {
+/*	public void beginTransaction() {
 		try {
 			getTransaction().begin();
 			getEntityManager().joinTransaction();
@@ -656,9 +777,9 @@ today.setTime(registrationDate);
 			throw new RuntimeException(e);
 		}
 	}
-	/**
+	*//**
 	 * Commit a transaction that is under progress 
-	 */
+	 *//*
 	public void commitTransaction() {
 		try {
 			getTransaction().commit();
@@ -672,7 +793,156 @@ today.setTime(registrationDate);
 			transaction = (UserTransaction)Component.getInstance("org.jboss.seam.transaction.transaction");
 		return transaction;
 	}
-	public Workspace getWorkspace() {
+*/	public Workspace getWorkspace() {
 		return getEntityManager().find(Workspace.class, workspaceID);
 	}
+
+private PrescribedMedicine getMedicineByShortName(String name,String st){
+	List<Medicine> lst=(List<Medicine>) entityManager.createQuery("from Medicine m where abbrevName=:n and strength=:st and workspace.id =8")
+	.setParameter("n", name)
+		.setParameter("st", st)
+	.getResultList();
+	PrescribedMedicine pm = new PrescribedMedicine();
+	pm.setMedicine(lst.get(0));
+	pm.setFrequency(7);
+	pm.setSource(source);
+	pm.setTbcase(tc);
+	return pm;
+}
+
+private int getDoseUnit(){
+	int w=3;
+	if (weight<51)
+		w=1;
+	else if (weight<60)
+		w=2;
+		int dose=1;
+	//Etambutol (100, 400 mq) таб	25 mq/kq	800-1200 mq	1200-1600 mq	1600-2000 mq
+	//Pirazinamid (500 mq) таб	30-40 mq/kq	1000-1750 mq	1750-2000 mq	2000-2500 mq	
+		switch (w){
+ 		case 1: dose=3;
+ 		break;
+ 		case 2: dose=4;
+ 		break;
+ 		case 3: dose=5;
+ 		break;
+ 		}
+return dose;
+}
+
+/**
+ * Create list of prescribed medicines according to the list of {@link MedicineRegimen} objects
+ * II categoria
+ * @param lst
+ * @return
+ */
+protected List<PrescribedMedicine> createPrescribedMedicineList2( TbCase tbcase) {
+	List<PrescribedMedicine> meds = new ArrayList<PrescribedMedicine>();
+	Calendar endInt=Calendar.getInstance();
+	endInt.setTime(tbcase.getIniContinuousPhase());
+	endInt.add(Calendar.DAY_OF_YEAR, -1);
+	Period intPeriod=new Period(tbcase.getRegistrationDate(),endInt.getTime());
+	Period intConPeriod=new Period(tbcase.getIniContinuousPhase(),treatmPd.getEndDate());
+	Calendar datePhase=Calendar.getInstance();
+	datePhase.setTime(tbcase.getRegistrationDate());
+	datePhase.add(Calendar.MONTH, 2);
+	Period sPeriod=new Period(tbcase.getRegistrationDate(),datePhase.getTime());
+	
+	PrescribedMedicine pm = getMedicineByShortName("S","1000");
+	pm.setPeriod(sPeriod);
+	pm.setDoseUnit(1);
+	meds.add(pm);
+	
+	pm = getMedicineByShortName("H","300");
+	pm.setPeriod(intPeriod);
+	pm.setDoseUnit(1);
+	meds.add(pm);
+	
+	pm = getMedicineByShortName("R","150");
+	pm.setPeriod(intPeriod);
+	pm.setDoseUnit(4);
+	meds.add(pm);
+	
+	pm = getMedicineByShortName("HR","75/150");
+	pm.setPeriod(intConPeriod);
+	pm.setDoseUnit(4);
+	meds.add(pm);
+	
+	pm = getMedicineByShortName("E","400");
+	pm.setPeriod(intPeriod);
+	pm.setDoseUnit(getDoseUnit());
+	meds.add(pm);
+	
+	pm = getMedicineByShortName("E","400");
+	pm.setPeriod(intConPeriod);
+	pm.setDoseUnit(getDoseUnit());
+	meds.add(pm);
+	
+	pm = getMedicineByShortName("Z","500");
+	pm.setPeriod(intPeriod);
+	
+	pm.setDoseUnit(getDoseUnit());
+	meds.add(pm);
+	
+	return meds;
+}
+
+/**
+ *  * I categoria
+ * @param tbcase
+ * @return
+ */
+protected List<PrescribedMedicine> createPrescribedMedicineList( TbCase tbcase) {
+	List<PrescribedMedicine> meds = new ArrayList<PrescribedMedicine>();
+	Calendar endInt=Calendar.getInstance();
+	endInt.setTime(tbcase.getIniContinuousPhase());
+	endInt.add(Calendar.DAY_OF_YEAR, -1);
+		Period sPeriod=new Period(tbcase.getRegistrationDate(),endInt.getTime());
+	Period intConPeriod=new Period(tbcase.getIniContinuousPhase(),treatmPd.getEndDate());
+	//Calendar datePhase=Calendar.getInstance();
+	//datePhase.setTime(tbcase.getRegistrationDate());
+	//datePhase.add(Calendar.MONTH, 2);
+		
+	PrescribedMedicine pm = getMedicineByShortName("H","300");
+	pm.setPeriod(sPeriod);
+	pm.setDoseUnit(1);
+	meds.add(pm);
+	
+	pm = getMedicineByShortName("R","150");
+	pm.setPeriod(sPeriod);
+	pm.setDoseUnit(4);
+	meds.add(pm);
+	
+	pm = getMedicineByShortName("HR","75/150");
+	pm.setPeriod(intConPeriod);
+	pm.setDoseUnit(4);
+	meds.add(pm);
+	
+	pm = getMedicineByShortName("E","400");
+	pm.setPeriod(sPeriod);
+	pm.setDoseUnit(getDoseUnit());
+	meds.add(pm);
+	
+	pm = getMedicineByShortName("E","400");
+	pm.setPeriod(intConPeriod);
+	pm.setDoseUnit(getDoseUnit());
+	meds.add(pm);
+	
+	pm = getMedicineByShortName("Z","500");
+	pm.setPeriod(sPeriod);
+	pm.setDoseUnit(getDoseUnit());
+	meds.add(pm);
+	
+	return meds;
+}
+private Regimen getRegimen(int n){
+	String name;
+	if (n==1)
+	name="Kateqoriya I";
+	 else name="Kateqoriya II";
+	List<Regimen>lst=entityManager.createQuery("from Regimen r where regimen_name=:n  and workspace.id =8")
+	.setParameter("n", name).getResultList();
+	return lst.get(0);
+}
+
 }
