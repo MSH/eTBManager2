@@ -8,13 +8,17 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.msh.tb.application.App;
+import org.msh.tb.cases.PrevTBTreatmentHome;
 import org.msh.tb.entities.PrevTBTreatment;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.DiagnosisType;
+import org.msh.tb.entities.enums.DrugResistanceType;
+import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.tb.indicators.IndicatorVerify;
 import org.msh.tb.indicators.core.IndicatorTable;
+import org.msh.tb.indicators.core.IndicatorTable.TableRow;
 import org.msh.tb.ua.entities.CaseDataUA;
 
 @Name("reportTB07mrtb")
@@ -23,12 +27,10 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 	private static final long serialVersionUID = -8462692609433997419L;
 	
 	private IndicatorTable table1000;
-	private IndicatorTable table2000;
 
 	@Override
 	protected void createIndicators() {
 		initTable1000();
-		initTable2000();
 
 		generateTables();
 		sortAllLists();
@@ -40,7 +42,6 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 	@Override
 	protected void createTable() {
 		table1000 = new IndicatorTable();
-		table2000 = new IndicatorTable();
 	}
 
 	@Override
@@ -76,57 +77,32 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 					addToVerList(tc,1,0);
 					continue;
 				}
-				
-				if (cd.getRegistrationCategory().getValue()==null){
-					addToVerList(tc,1,0);
+				addTo1000(tc,"total");
+				if (tc.getInfectionSite()==null){
+					addToVerList(tc,1,2);
+					continue;
 				}
-				else
-					if (cd.getRegistrationCategory().getValue().getId()==938224) // cat 4
-					{
-						if (tc.getDiagnosisType()==null)
-							addToVerList(tc,1,1);
-						else {
-							//table 1000
-							String rowid = "reg";
-							if (tc.getTreatmentPeriod()!=null)
-								if (tc.getTreatmentPeriod().getIniDate()!=null){
-									getTable1000().addIdValue(tc.getDiagnosisType(), rowid, 1F);
-									rowid = "treat";
-								}
-							getTable1000().addIdValue(tc.getDiagnosisType(), rowid, 1F);
-							
-							//table 2000
+				if (InfectionSite.PULMONARY.equals(tc.getInfectionSite()) || InfectionSite.BOTH.equals(tc.getInfectionSite())){
 							if(tc.getPatientType() == null){
 								tc.setPatientType(PatientType.NEW);
 							}
 							switch (tc.getPatientType()) {
-							case NEW: case RELAPSE: case AFTER_DEFAULT: case FAILURE_FT: case FAILURE_RT: case OTHER:  
-								getTable2000().addIdValue("col", tc.getPatientType(), 1F);
-								getTable2000().addIdValue("col", "total", 1F);
+							case NEW: case RELAPSE: 
+								addTo1000(tc, tc.getPatientType());
 								break;
 							default:
-								addToVerList(tc,1,1);
+								addTo1000(tc, PatientType.OTHER);
+								Integer d = dutationPrevTreats(tc);
+								if (d == null)
+									continue;
+								if (d<12)
+									addTo1000(tc, "prev12");
+								else if (d<24)
+									addTo1000(tc, "prev1224");
+								else
+									addTo1000(tc, "prev24");
 								break;
-							}
-							
-							if (tc.getInfectionSite()==null)
-								addToVerList(tc,1,2);
-							else
-							{
-								if (tc.getExtrapulmonaryType()!=null || tc.getExtrapulmonaryType2()!=null){
-									getTable2000().addIdValue("col", "extrapul", 1F);
-									//TODO may be accounted twice to the TOTAL!!!!
-									getTable2000().addIdValue("col", "total", 1F);
-								}
-							}
-/*							List<PrevTBTreatment> ptb = getEntityManager().createQuery("select t from PrevTBTreatment t where t.tbcase.id="+tc.getId()).getResultList();
-							if (ptb.size()>0)
-								if (PrevTBTreatmentOutcome.UNKNOWN.equals(ptb.get(ptb.size()-1).getOutcome())){
-									getTable2000().addIdValue("col", "other", 1F);
-									getTable2000().addIdValue("col", "total", 1F);
-								}*/
-							
-						}
+							}	
 					}
 			}
 			generateRepList(lst);
@@ -136,6 +112,38 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 	}
 
 
+	private Integer dutationPrevTreats(TbCase tc) {
+		/*String hql = "from PrevTBTreatment p where p.tbcase.id in " +
+		"(select c.id from TbCase c where c.patient.id = :id and c.treatmentPeriod.iniDate = " +
+		"(select max(c2.treatmentPeriod.iniDate) from TbCase c2 where c2.patient.id = c.patient.id))";
+
+		List<PrevTBTreatment> lst = App.getEntityManager()
+										.createQuery(hql)
+										.setParameter("id", tc.getPatient().getId())
+										.getResultList();
+		if (lst.isEmpty())
+			return null;
+		
+		int m = 0;
+		for (PrevTBTreatment pt:lst){
+			m += pt.get //TODO necessary field
+		}*/
+		return null;
+	}
+
+	private void addTo1000(TbCase tc, Object rowId) {
+		if (tc.getDrugResistanceType()==null){
+			addToVerList(tc,1,0);
+			return;
+		}
+		if (DrugResistanceType.MULTIDRUG_RESISTANCE.equals(tc.getDrugResistanceType()))
+			getTable1000().addIdValue("mrtb", rowId, 1F);
+		else if (DrugResistanceType.EXTENSIVEDRUG_RESISTANCE.equals(tc.getDrugResistanceType())){
+			getTable1000().addIdValue("rrtb", rowId, 1F);
+			//TODO rrtb 2nd line
+		}
+	}
+
 	@Override
 	protected String getHQLJoin() {
 		return null;
@@ -144,66 +152,55 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 	@Override
 	protected String getHQLWhere() {
 		String hql = super.getHQLWhere();
-		hql += " and c.classification = 1 ";
+		hql += " and c.classification = 1 and c.diagnosisType=1";
 		return hql;
 	}
 
 	/**
-	 * Initialize layout of the table 1000 of the TB07 report
+	 * Initialize the layout of the table 2000 of the TB07 report
 	 */
 	private void initTable1000() {
 		IndicatorTable table = getTable1000();
-
-		table.addColumn(App.getMessage("DiagnosisType.CONFIRMED"), DiagnosisType.CONFIRMED);
-		table.addColumn(App.getMessage("DiagnosisType.SUSPECT"), DiagnosisType.SUSPECT);
+		table.addColumn(getMessage("uk_UA.reports.tb11.1.headerN"), "N");
 		
-		table.addRow(App.getMessage("uk_UA.reports.tb07.mrtb.1000.row1"), "reg");
-		table.addRow(App.getMessage("uk_UA.reports.tb07.mrtb.1000.row2"), "treat");	
-	}
+		table.addColumn("MR TB", "mrtb");
+		table.addColumn("RR TB", "rrtb");
+		table.addColumn("RR TB treat 2nd line", "rrtb2line");
 
-
-	/**
-	 * Initialize the layout of the table 2000 of the TB07 report
-	 */
-	private void initTable2000() {
-		IndicatorTable table = getTable2000();
-		table.addColumn("Count", "col");
-		
+		table.addRow(App.getMessage("uk_UA.reports.tb07.mrtb.rowtotal"), "total");
+		table.setValue("N","total",1F);
+		table.addRow(App.getMessage("uk_UA.reports.tb07.mrtb.1000.row2"), "pulmonary");
+		table.setValue("N","pulmonary",2F);
 		table.addRow(App.getMessage("PatientType.NEW"), PatientType.NEW);
+		table.addIdValue("N",PatientType.NEW,3F);
+		table.addRow(App.getMessage("uk_UA.reports.tb07.mrtb.1000.row4"), "fail1cat");
+		table.setValue("N","fail1cat",4F);
 		table.addRow(App.getMessage("PatientType.RELAPSE"), PatientType.RELAPSE);
-		table.addRow(App.getMessage("PatientType.AFTER_DEFAULT"), PatientType.AFTER_DEFAULT);
-		table.addRow(App.getMessage("PatientType.FAILURE_FT"), PatientType.FAILURE_FT);
-		table.addRow(App.getMessage("PatientType.FAILURE_RT"), PatientType.FAILURE_RT);
-		table.addRow(App.getMessage("PatientType.OTHER"), PatientType.OTHER);
-		table.addRow(App.getMessage("uk_UA.reports.tb07.mrtb.2000.row6"), "extrapul");
-		//table.addRow(App.getMessage("uk_UA.reports.other"), "other");
-		table.addRow(App.getMessage("uk_UA.reports.all"), "total");
-	}
-
-	/**
-	 * @return the table1000
-	 */
-	public IndicatorTable getTable1000() {
-		if (table1000 == null)
-			createTable();
-		return table1000;
+		table.addIdValue("N",PatientType.RELAPSE,5F);
+		table.addRow(App.getMessage("uk_UA.reports.tb07.mrtb.1000.row6"), PatientType.OTHER);
+		table.addIdValue("N",PatientType.OTHER,6F);
+		table.addRow(App.getMessage("uk_UA.reports.tb07.mrtb.1000.row7"), "prev12");
+		table.setValue("N","prev12",7F);
+		table.addRow(App.getMessage("uk_UA.reports.tb07.mrtb.1000.row8"), "prev1224");
+		table.setValue("N","prev1224",8F);
+		table.addRow(App.getMessage("uk_UA.reports.tb07.mrtb.1000.row9"), "prev24");
+		table.setValue("N","prev24",9F);
 	}
 
 
 	/**
 	 * @return the table2000
 	 */
-	public IndicatorTable getTable2000() {
-		if (table2000 == null)
+	public IndicatorTable getTable1000() {
+		if (table1000 == null)
 			createTable();
-		return table2000;
+		return table1000;
 	}
 	/**
 	 * Clear all tables and verifyList
 	 * */
 	public void clear(){
 		table1000 = null;
-		table2000 = null;
 		setVerifyList(null);
 	}
 }

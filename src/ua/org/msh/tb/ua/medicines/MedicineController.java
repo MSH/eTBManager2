@@ -8,6 +8,7 @@ import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.MedicineRegimen;
 import org.msh.tb.entities.OrderBatch;
 import org.msh.tb.entities.Regimen;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.medicines.dispensing.DispensingRow;
 import org.msh.tb.medicines.orders.OrderHome;
 import org.msh.tb.medicines.orders.OrderShippingHome;
@@ -78,10 +79,12 @@ public class MedicineController {
 	 * @return
 	 */
 	public boolean containsInRegimen(List<DispensingRow> rows) {
-		CaseHome ch = (CaseHome) App.getComponent("caseHome");
-		Regimen reg = ch.getTbCase().getRegimen();
+		CaseHome ch = (CaseHome) App.getComponent("caseHome",false);
+		if (ch==null) return true;
+		if (ch.getTbCase()==null || ch.getTbCase().getId()==null) return true;
+		TbCase tc = ch.getTbCase();
 		for (DispensingRow row:rows){
-			if (containsInRegimen(row, reg))
+			if (containsInRegimen(row, tc))
 				return true;
 		}
 		return false;
@@ -93,9 +96,10 @@ public class MedicineController {
 	 * @param reg - regiment of current tbcase
 	 * @return
 	 */
-	public boolean containsInRegimen(DispensingRow row, Regimen reg) {
+	public boolean containsInRegimen(DispensingRow row, TbCase tc) {
 		if (row==null) return false;
-		for (MedicineRegimen mr:reg.getMedicines())
+		if (tc==null || tc.getId() == null) return true;
+		for (MedicineRegimen mr:tc.getRegimen().getMedicines())
 			if (mr.getMedicine().getId().intValue() == row.getBatch().getMedicine().getId().intValue() && mr.getDefaultSource().getId() == row.getSource().getId())
 				return true;
 		return false;
