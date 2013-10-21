@@ -189,8 +189,7 @@
 				<h:form>
 					<s:decorate template="/layout/edit.xhtml">
 						<ui:define name="label">#{messages['admin.import.file.xls']}:</ui:define>
-						<s:fileUpload data="#{importIMM.file}" required="true">
-						</s:fileUpload>
+						<h:inputText value="#{importIMM.file}" 	style="width:400px;" maxlength="100" required="true"></h:inputText>
 					</s:decorate>
 					
 					<div class="form-footer">
