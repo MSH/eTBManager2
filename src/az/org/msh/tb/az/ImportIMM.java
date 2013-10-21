@@ -75,7 +75,7 @@ import org.jboss.seam.transaction.UserTransaction;
 @Name("importIMM")
 public class ImportIMM {
 	private EntityManager entityManager;
-	private InputStream file;
+	private String file;
 	private Map<String, String> messages;
 	int adminunitID=970579;
 	int tbunitIMM=941203;
@@ -97,46 +97,61 @@ public class ImportIMM {
 	private Source source;
 	private TbCaseAZ tc;
 	private int weight;
+	private int lineNumber;
 	
 	public boolean execute() {
+
 		try {
-			Workbook workbook = Workbook.getWorkbook(new File("c:/temp/test.xls"));
-			Sheet sheet = workbook.getSheet(0);
-			if (entityManager==null){
-				entityManager = (EntityManager)Component.getInstance("entityManager");
+			String s=getFile();
+			if (s.equalsIgnoreCase("")) s="c:/temp/test.xls";
+			Workbook workbook = Workbook.getWorkbook(new File(s));
+			addLog("Import cases from file "+s);
+			if (workbook==null)	addLog("File not found "+s);
+			else{
+				Sheet sheet = workbook.getSheet(0);
+				if (entityManager==null){
+					entityManager = (EntityManager)Component.getInstance("entityManager");
+				}
+				units=getTbunit();
+				lastCols=sheet.getColumns()-1;
+				method = entityManager.find(FieldValue.class, 939311);   //Levestain-Jensen
+				method2 = entityManager.find(FieldValue.class, 939316);//GeneXpert 
+				laboratory=entityManager.find(Laboratory.class, 942680);  //IMM lab
+				source=entityManager.find(Source.class, 940558);
+				cat1=getRegimen(1);
+				//TODO  add medicines for cat1
+				cat2=getRegimen(2);
+				for (int i = 2; i < sheet.getRows(); i++) {
+					Cell[] r = sheet.getRow(i);
+					importRecord(r);
+					getEntityManager().flush();
+					lineNumber++;
+				}
 			}
-			units=getTbunit();
-			lastCols=sheet.getColumns()-1;
-			method = entityManager.find(FieldValue.class, 939311);   //Levestain-Jensen
-			method2 = entityManager.find(FieldValue.class, 939316);//GeneXpert 
-			laboratory=entityManager.find(Laboratory.class, 942680);  //IMM lab
-			source=entityManager.find(Source.class, 940558);
-			cat1=getRegimen(1);
-			//TODO  add medicines for cat1
-			cat2=getRegimen(2);
-			for (int i = 2; i < sheet.getRows(); i++) {
-				Cell[] r = sheet.getRow(i);
-				importRecord(r);
-			}
-	
-		} catch (BiffException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//clearEntityManager();
+		} catch (BiffException e1) {
+			e1.printStackTrace();
+		} catch (IOException e2) {
+
+			e2.printStackTrace();
 		}
+
 		TransactionLogService service = new TransactionLogService();
 		service.getDetailWriter().addText(log.toString());
 		service.save("TASK", RoleAction.EXEC, "import IMM", null, null, null);
-		
 		return true;
 	}
 
-	private void importRecord(Cell[] r) {
+	public void clearEntityManager() {
+		EntityManager em = getEntityManager();
+		em.flush();
+		em.clear();
+	}
+	
+	private void importRecord(Cell[] r ) {
 		String code=r[1].getContents();
 		if	(isCaseExist(code)){
-			addLog(code + "- case already exists");
+			addLog(Integer.toString(lineNumber)+": "+code + "- case already exists");
 			return;
 		}
 		MedicalExamination me=new MedicalExamination();
@@ -145,6 +160,7 @@ public class ImportIMM {
 		Patient p;
 		try {
 			//get person data from excel
+			if (isWrongCase(r, code)) return;
 			birstday = ((DateCell)r[2]).getDate();//c
 			lastname=r[4].getContents().substring(0, 1)+r[4].getContents().substring(1).toLowerCase();//e
 			name=r[5].getContents().substring(0, 1)+r[5].getContents().substring(1).toLowerCase(); //f
@@ -350,12 +366,26 @@ public class ImportIMM {
 			entityManager.persist(p);
 			entityManager.persist(tc);
 			entityManager.flush();
-			addLog(code+ " added");
+			addLog(Integer.toString(lineNumber)+": "+ code+ " added");
+			System.out.println(code);
 			//commitTransaction();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private boolean isWrongCase(Cell[] r, String code) {
+		if (r[2].getType()!=CellType.DATE){
+			addLog(Integer.toString(lineNumber)+": "+code + "- Error. Birstday date is empty");
+			return true;
+		}
+
+		if (r[4].getContents().equalsIgnoreCase("") | r[5].getContents().equalsIgnoreCase("")| r[6].getContents().equalsIgnoreCase("")){
+			addLog(Integer.toString(lineNumber)+": "+code + "- Error. Name is empty");
+			return true;
+		}
+		return false;
 	}
 
 	private Patient createNewPatient(Cell[] r) {
@@ -475,11 +505,11 @@ tc.setComorbidities(cbs);
 		return res;
 	}
 
-	public void setFile(InputStream file) {
+	public void setFile(String file) {
 		this.file = file;
 	}
 
-	public InputStream getFile() {
+	public String getFile() {
 		return file;
 	}
 	protected Map<String, String> getMessages() {
