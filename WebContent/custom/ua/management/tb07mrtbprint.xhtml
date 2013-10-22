@@ -46,23 +46,45 @@
 	<h2>#{messages['uk_UA.reports.tb07.mrtb.1000']}</h2>
 	<table class="table1" width="100%">
 		<tr>
-			<th rowspan="2">
-				#{messages['PatientType']}
+			<th>
 			</th>
-			<th rowspan="2">
-				#{messages['uk_UA.reports.tb07.mrtb.1000.col1']}
+			<th>
+				#{messages['DiagnosisType.CONFIRMED']}
 			</th>
-			<th colspan="2">
-				#{messages['uk_UA.reports.tb07.mrtb.1000.col2']}
+			<th>
+				#{messages['DiagnosisType.SUSPECT']}
 			</th>
 		</tr>
-			<th>
-				#{messages['uk_UA.reports.all']}
-			</th>
-			<th>
-				#{messages['uk_UA.reports.tb07.mrtb.1000.col22']}
-			</th>
+		
+		
 		<ui:repeat value="#{indicator.table1000.rows}" var="row">
+		<tr>
+			<th>
+				#{row.title}
+			</th>
+			<ui:repeat value="#{row.cells}" var="val">
+			<td class="colcb">
+				<h:outputText value="#{val.value}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			</ui:repeat>
+		</tr>
+		</ui:repeat>
+	</table>
+
+
+
+	<h2>#{messages['uk_UA.reports.tb07.mrtb.2000']}</h2>
+	<table class="table1" width="100%">
+		<tr>
+			<th>
+			</th>
+			<th>
+				#{messages['manag.ind.numc']}
+			</th>
+		</tr>
+		<ui:repeat value="#{indicator.table2000.rows}" var="row">
 		<tr>
 			<th>
 				#{row.title}
