@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphSchema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datastream-1.0.xsd">
+
+    <objectCollection name="dataset">
+
+        <objectGraph name="system" class="org.msh.tb.sync.ServerSignature" />
+        
+        <objectGraph name="version" class="org.msh.tb.entities.EntityLastVersion">
+        </objectGraph>
+        
+        <!-- TB CASES -->
+        <objectGraph name="tbcase" class="org.msh.tb.entities.TbCase">
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="version" use="IGNORE" />
+            <property name="patient" >
+                <objectGraph name="patient" class="org.msh.tb.entities.Patient">
+            		<property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            		<property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            		<property name="cases" use="IGNORE" />
+            		<property name="workspace" use="IGNORE" />
+            		<property name="name.name" elementName="name" />
+            		<property name="name.middleName" elementName="middleName" />
+            		<property name="name.lastName" elementName="lastName" />
+            	</objectGraph>
+            </property>
+            <property name="classification" xmlAttribute="true" />
+            <property name="state" xmlAttribute="true" />
+            <property name="patientType" xmlAttribute="true" />
+            <property name="diagnosisType" xmlAttribute="true" />
+            <property name="infectionSite" xmlAttribute="true" />
+            <property name="treatmentPeriod.iniDate" elementName="iniTreatDate"/>
+            <property name="treatmentPeriod.endDate" elementName="endTreatDate"/>
+            <property name="regimen.id" elementName="regimen" />
+            <property name="regimenIni.id" elementName="regimenini" />
+            <property name="ownerUnit.id" elementName="ownerunit" xmlAttribute="true"/>
+            <property name="pulmonaryType.id" elementName="pulmonaryType" />
+            <property name="extrapulmonaryType.id" elementName="extrapulmonaryType" />
+            <property name="extrapulmonaryType2.id" elementName="extrapulmonaryType2" />
+            <property name="notificationUnit.id" elementName="notificationUnit" />
+            <property name="healthUnits" use="IGNORE" />
+            <property name="prescribedMedicines" use="IGNORE" />
+            <property name="sideEffects" use="IGNORE" />
+            <property name="comorbidities" use="IGNORE" />
+            <property name="examinations" use="IGNORE" />
+            <property name="resXRay" use="IGNORE" />
+            <property name="contacts" use="IGNORE" />
+            <property name="dispensing" use="IGNORE" />
+            <property name="resHIV" use="IGNORE" />
+            <property name="examsCulture" use="IGNORE" />
+            <property name="examsMicroscopy" use="IGNORE" />
+            <property name="examsDST" use="IGNORE" />
+            <property name="tags" use="IGNORE" />
+        </objectGraph>
+        
+        <objectGraph name="examdst" class="org.msh.tb.entities.ExamDST">
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
+            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
+            <property name="dateCollected" xmlAttribute="true" />
+            <property name="numResistant" use="IGNORE" />
+            <property name="numContaminated" use="IGNORE" />
+            <property name="numSusceptible" use="IGNORE" />
+            <property name="results" >
+        		<objectGraph name="dstresult" class="org.msh.etbm.entities.ExamDSTResult" parentProperty="exam">
+            		<property name="id" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            		<property name="syncData.serverId" elementName="id" xmlAttribute="true" />
+            		<property name="substance.id" elementName="substance" use="REQUIRED" xmlAttribute="true"/>
+            		<property name="result" use="REQUIRED" xmlAttribute="true"/>
+        		</objectGraph>
+            </property>
+            <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
+            <property name="method.id" elementName="method" xmlAttribute="true"/>
+        </objectGraph>
+        
+        <objectGraph name="dstresult" class="org.msh.tb.entities.ExamDSTResult">
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="exam.id" elementName="exam" xmlAttribute="true" />
+            <property name="exam.clientId" elementName="cl_exam" xmlAttribute="true" use="REQUIRED"/>
+            <property name="substance.id" elementName="substance" use="REQUIRED" xmlAttribute="true"/>
+            <property name="result" use="REQUIRED" xmlAttribute="true"/>
+        </objectGraph>
+        
+        <objectGraph name="exammicroscopy" class="org.msh.tb.entities.ExamMicroscopy">
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
+            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
+            <property name="result" xmlAttribute="true" />
+            <property name="dateCollected" xmlAttribute="true" />
+            <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
+            <property name="method.id" elementName="method" xmlAttribute="true"/>
+        </objectGraph>
+        
+        <objectGraph name="examculture" class="org.msh.tb.entities.ExamCulture" >
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
+            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
+            <property name="dateCollected" xmlAttribute="true" />
+            <property name="result" xmlAttribute="true" />
+            <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
+            <property name="method.id" elementName="method" xmlAttribute="true"/>
+        </objectGraph>
+        
+        <objectGraph name="examhiv" class="org.msh.tb.entities.ExamHIV">
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
+            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
+            <property name="result" xmlAttribute="true" />
+        </objectGraph>
+        
+        <objectGraph name="caseDispensing" class="org.msh.tb.entities.CaseDispensing" >
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
+            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
+            <property name="dispensingDays">
+                 <objectGraph name="caseDispDays" class="org.msh.tb.entities.CaseDispensingDays" parentProperty="caseDispensing">
+                 </objectGraph>
+            </property>
+        </objectGraph>
+        
+        <objectGraph name="healthunit" class="org.msh.tb.entities.TreatmentHealthUnit" >
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
+            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
+            <property name="tbunit.id" elementName="tbunit" use="REQUIRED" xmlAttribute="true"/>
+            <property name="transferring" elementName="transf" xmlAttribute="true" />
+            <property name="period.iniDate" elementName="iniDate" use="REQUIRED" />
+            <property name="period.endDate" elementName="endDate" use="REQUIRED" />
+        </objectGraph>
+        
+        <objectGraph name="presc-med" class="org.msh.tb.entities.PrescribedMedicine" >
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
+            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
+            <property name="medicine.id" elementName="medicine" use="REQUIRED" xmlAttribute="true"/>
+            <property name="period.iniDate" elementName="iniDate" use="REQUIRED" />
+            <property name="period.endDate" elementName="endDate" use="REQUIRED" xmlAttribute="true"/>
+            <property name="source.id" elementName="source" use="REQUIRED" />
+            <property name="doseUnit" use="REQUIRED" xmlAttribute="true"/>
+            <property name="frequency" use="REQUIRED" xmlAttribute="true"/>
+        </objectGraph>
+        
+        <objectGraph name="address" class="org.msh.tb.entities.Address">
+            <property name="adminUnit.id" elementName="adminunit" />
+        </objectGraph>
+        
+        <objectGraph name="contact" class="org.msh.tb.entities.TbContact" >
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
+            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
+            <property name="contactType.id" elementName="contactType" />
+            <property name="conduct.id" elementName="conduct" />
+        </objectGraph>
+        
+        <objectGraph name="examxray" class="org.msh.tb.entities.ExamXRay">
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
+            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
+            <property name="presentation.id" elementName="presentation" />
+        </objectGraph>
+        
+        <objectGraph name="medexam" class="org.msh.tb.entities.MedicalExamination" >
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
+            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
+        </objectGraph>
+        
+        <objectGraph name="sideEffect" class="org.msh.tb.entities.CaseSideEffect" >
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
+            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
+            <property name="sideEffect.value.id" elementName="sideeffect" xmlAttribute="true"/>
+            <property name="sideEffect.complement" elementName="complement" />
+            <property name="substance.id" elementName="substance" />
+            <property name="substance2.id" elementName="substance2" />
+        </objectGraph>
+
+        <objectGraph name="comorbidity" class="org.msh.tb.entities.CaseComorbidity" >
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
+            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
+            <property name="comorbidity.id" elementName="comorbidity" use="REQUIRED" xmlAttribute="true"/>
+        	<property name="duration" xmlAttribute="true" />
+        </objectGraph>
+        
+    </objectCollection>
+</graphSchema>

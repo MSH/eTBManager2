@@ -60,6 +60,9 @@ public class DesktopIniGeneratorService implements ObjectProvider, DataIntercept
 	private boolean initialized;
 	private ServerSignature serverSignature;
 	private int unitLinkIndex = -1;
+	// if defined, the system will generate just differences between the client versions
+	// and the server versions
+	private List<EntityLastVersion> entityVersions;
 	
 	
 	public DesktopIniGeneratorService() {
@@ -208,7 +211,9 @@ public class DesktopIniGeneratorService implements ObjectProvider, DataIntercept
 		}
 
 		em.clear();
-		list = em.createQuery(hqls.get(queryIndex))
+		
+		String hql = hqls.get(queryIndex);
+		list = em.createQuery(hql)
 				.setFirstResult(firstResult)
 				.setMaxResults(MAX_RESULTS)
 				.getResultList();
@@ -305,5 +310,19 @@ public class DesktopIniGeneratorService implements ObjectProvider, DataIntercept
 	 */
 	public Integer getWorkspaceId() {
 		return workspaceId;
+	}
+
+	/**
+	 * @return the entityVersions
+	 */
+	public List<EntityLastVersion> getEntityVersions() {
+		return entityVersions;
+	}
+
+	/**
+	 * @param entityVersions the entityVersions to set
+	 */
+	public void setEntityVersions(List<EntityLastVersion> entityVersions) {
+		this.entityVersions = entityVersions;
 	}
 }

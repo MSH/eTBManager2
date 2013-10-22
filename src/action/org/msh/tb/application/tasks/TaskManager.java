@@ -12,6 +12,12 @@ import org.jboss.seam.annotations.Scope;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.Workspace;
 
+/**
+ * Manage execution of backgroup tasks in the system and allow monitoring of its
+ * execution
+ * @author Ricardo Memoria
+ *
+ */
 @Name("taskManager")
 @Scope(ScopeType.APPLICATION)
 @AutoCreate
@@ -20,10 +26,19 @@ public class TaskManager implements TaskListener {
 	private List<AsyncTask> tasks = new ArrayList<AsyncTask>();
 	private int idCounter;
 
+	/**
+	 * Run an asynchronous task by its class name
+	 * @param taskClazz
+	 */
 	public void runTask(Class taskClazz) {
 		runTask(taskClazz, null);
 	}
 	
+	/**
+	 * Run an asynchronous task by its class name and its parameters
+	 * @param taskClazz
+	 * @param params
+	 */
 	public void runTask(Class taskClazz, Map<String, Object> params) {
 		AsyncTask task = findTaskByClass(taskClazz);
 		if ((task != null) && (task.isUnique()))
@@ -82,7 +97,7 @@ public class TaskManager implements TaskListener {
 		return null;
 	}
 
-
+	
 	/**
 	 * Return the list of tasks under execution
 	 * @return
@@ -137,17 +152,29 @@ public class TaskManager implements TaskListener {
 	}
 
 
+	/** {@inheritDoc}
+	 */
 	public void taskStatusChangeHandler(AsyncTask task) {
 		switch (task.getStatus()) {
-		case STARTING: 
-			notifyTaskStarting(task);
-		break;
-		case FINISHED:
-		case ERROR:
-		case CANCELING:
-			notifyTaskFinished(task);
-		break;
+			case STARTING: 
+				notifyTaskStarting(task);
+				break;
+			case FINISHED:
+			case ERROR:
+			case CANCELING:
+				notifyTaskFinished(task);
+				break;
+			default:
+				break;
 		}
 	}
 
+	
+	/**
+	 * Return the instance of the {@link TaskManager}
+	 * @return
+	 */
+	public static TaskManager instance() {
+		return (TaskManager)Component.getInstance("taskManager");
+	}
 }

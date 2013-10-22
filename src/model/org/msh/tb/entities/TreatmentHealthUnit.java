@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
 import org.msh.utils.date.Period;
@@ -38,6 +39,25 @@ public class TreatmentHealthUnit implements Serializable {
 	@Embedded
 	private Period period = new Period();
 	
+	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
+	// map an XML node to a property in the model
+	@Transient
+	private Integer clientId;
+	
+	/**
+	 * @return
+	 */
+	public Integer getClientId() {
+		return clientId;
+	}
+	
+	/**
+	 * @param clientId
+	 */
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
+	}
+
 	
 	/**
 	 * Indicate if case is being transferred to this health unit

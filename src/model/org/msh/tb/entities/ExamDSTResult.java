@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.msh.tb.entities.enums.DstResult;
 
@@ -31,6 +32,25 @@ public class ExamDSTResult implements Serializable {
 	
 	private DstResult result;
 	
+	@Transient
+	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
+	// map an XML node to a property in the model
+	private Integer clientId;
+	
+	/**
+	 * @return
+	 */
+	public Integer getClientId() {
+		return clientId;
+	}
+	
+	/**
+	 * @param clientId
+	 */
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
+	}
+
 
 	public Substance getSubstance() {
 		return substance;

@@ -64,17 +64,30 @@
 	</page>
 
  	
- 	<!-- Generate the file to be used by the desktop app -->
- 	<page view-id="/admin/desktopfile.xhtml" action="#{generateDesktopFileHome.generate()}" >
- 		<param name="id" value="#{generateDesktopFileHome.unitId}" converterId="javax.faces.Integer" />
+ 	<!-- Synchronization between web and desktop -->
+ 	
+ 	<!-- Generate the file to be used by the desktop app using the user token id -->
+    <page view-id="/sync/downloadinifile.xhtml" action="#{generateDesktopFileAction.download}">
+        <param name="tk" value="#{generateDesktopFileAction.userToken}" required="true"/>
+    </page>
+
+ 	<!-- Generate the desktop file using the unit as a parameter (the user must be logged in) -->
+    <page view-id="/sync/desktopfile.xhtml" action="#{generateDesktopFileAction.generate()}"  login-required="true">
+ 		<param name="id" value="#{generateDesktopFileAction.unitId}" converterId="javax.faces.Integer" />
  	</page>
 
  	<!-- Receive the sync file from the desktop app -->
  	<page view-id="/sync/fileupload.xhtml" action="#{receiveSyncFileAction.execute()}" >
  		<param name="tk" value="#{receiveSyncFileAction.userToken}" />
  	</page>
+ 	
+ 	<!-- Return status information about the processing of the sync file -->
+ 	<page view-id="/sync/syncstatus.xhtml" action="#{syncStatusAction.execute()}" >
+ 		<param name="tk" value="#{syncStatusAction.userToken}" />
+ 	</page>
  		
  
+ 	<!-- Update information about on-line users -->
     <page view-id="*" action="#{onlineUsers.update}">
     	<param name="lang" value="#{userSettings.localeString}" />
         <navigation>
@@ -102,21 +115,18 @@
             </rule>
         </navigation>
     </page>
-    
+
+    <!-- Return image of the workspace to be displayed -->
     <page view-id="/workspaceimg.xhtml" >
     	<rewrite pattern="/workspaceimg/{imgName}"/>
     	<param name="imgName" value="#{workspaceViewService.pictureFile}" />
     	<action execute="#{workspaceViewService.responseImage}"/>
     </page>
-    
+
+    <!-- Change the user workspace -->
     <page view-id="/changeworkspace.xhtml">
     	<action execute="#{userSession.changeUserWorkspace}"/>
     	<param name="id" value="#{userSession.userWorkspaceId}" converterId="javax.faces.Integer" />
-    </page>
-    
-    <page view-id="/sync/downloadinifile.xhtml">
-        <action execute="#{generateDesktopFileHome.download}"/>
-        <param name="tk" value="#{generateDesktopFileHome.userToken}" required="true"/>
     </page>
 
 
@@ -127,28 +137,6 @@
 				<redirect view-id="/medicines/ordersent.xhtml"></redirect>
 			</rule>
 		</navigation>
-	</page>
-	
-
-	<!-- MOVEMENTS -->
-
-	<page view-id="/reports/movements.xhtml" action="#{movementFilters.initialize}">
-		<restrict>#{s:hasRole('MOVS')}</restrict>
-		<param name="firstResult" value="#{movements.firstResult}" />
-<!-- 		<param name="firstResult" value="#{batchMovements.firstResult}" />  -->
-		<param name="bt" value="#{movementFilters.batchesOutput}" converterId="javax.faces.Boolean"/>
-		<param name="dt" value="#{movementFilters.date}" converterId="dateURLConverter" />
-		<param name="mt" value="#{movementFilters.type}" />
-		<param name="srcid" value="#{sourceHome.id}" converterId="javax.faces.Integer" />
-		<param name="medid" value="#{medicineHome.id}" converterId="javax.faces.Integer" />
-	</page>
-
-
-	<!-- TRANSFER -->
-
-	<page view-id="/reports/transfdata.xhtml">
-		<restrict>#{s:hasRole('TRANSFER')}</restrict>
-		<param name="id" value="#{transferHome.id}" converterId="javax.faces.Integer"/>
 	</page>
 	
 
@@ -168,26 +156,8 @@
 	</page>
 
 
-	<!-- REPORTS -->
-	<page view-id="/reports/rel2.xhtml" >
-		<restrict>#{s:hasRole('REP_ESTPOS')}</restrict>
-		<param name="source" value="#{reportSelection.sourceId}" converterId="javax.faces.Integer" />
-		<param name="ds" value="#{reportSelection.tbunitId}" converterId="javax.faces.Integer" />
-	</page>
 
-	<page view-id="/reports/rel3.xhtml">
-		<restrict>#{s:hasRole('REP_STOCKEVOL')}</restrict>
-		<param name="source" value="#{reportSelection.sourceId}" converterId="javax.faces.Integer" />
-		<param name="ds" value="#{reportSelection.tbunitId}" converterId="javax.faces.Integer" />
-		<param name="inimonth" value="#{reportSelection.iniMonth}" converterId="javax.faces.Integer" />
-		<param name="iniyear" value="#{reportSelection.iniYear}" converterId="javax.faces.Integer" />
-		<param name="endmonth" value="#{reportSelection.endMonth}" converterId="javax.faces.Integer" />
-		<param name="endyear" value="#{reportSelection.endYear}" converterId="javax.faces.Integer" />
-	</page>
-
-
-
-    
+	<!-- Exception handling -->
     <exception class="org.jboss.seam.framework.EntityNotFoundException">
         <redirect view-id="/home.xhtml">
             <message>#{messages['error.entityNotFound']}</message>

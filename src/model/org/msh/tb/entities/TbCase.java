@@ -32,6 +32,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import org.hibernate.validator.NotNull;
@@ -273,6 +274,25 @@ public class TbCase implements Serializable, Transactional {
 	private List<ExamDST> examsDST = new ArrayList<ExamDST>();
 	
 	private int issueCounter;
+	
+	@Transient
+	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
+	// map an XML node to a property in the model
+	private Integer clientId;
+	
+	/**
+	 * @return
+	 */
+	public Integer getClientId() {
+		return clientId;
+	}
+	
+	/**
+	 * @param clientId
+	 */
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
+	}
 
 	/**
 	 * Tags of this case

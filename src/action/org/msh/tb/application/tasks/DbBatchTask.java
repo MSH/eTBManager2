@@ -3,7 +3,7 @@ package org.msh.tb.application.tasks;
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
-import org.jboss.seam.transaction.UserTransaction;
+import org.msh.tb.application.TransactionManager;
 
 
 /**
@@ -49,8 +49,9 @@ public abstract class DbBatchTask extends AsyncTaskImpl {
 	private int recordIndex;
 	private int commitCounter = 10;
 	private boolean automaticProgress = true;
-	private UserTransaction transaction;
-	
+	// manage the transaction
+	private TransactionManager transaction;
+
 	
 	/**
 	 * Process the record being executed
@@ -112,18 +113,23 @@ public abstract class DbBatchTask extends AsyncTaskImpl {
 		}
 	}
 
+	
+	/**
+	 * Return the instance of {@link TransactionManager} responsible for
+	 * manually managing the database transaction
+	 * @return {@link TransactionManager} instance
+	 */
+	public TransactionManager getTransaction() {
+		if (transaction == null)
+			transaction = (TransactionManager)Component.getInstance("transactionManager");
+		return transaction;
+	}
 
 	/**
 	 * Start a new transaction
 	 */
 	public void beginTransaction() {
-		try {
-			getTransaction().begin();
-			getEntityManager().joinTransaction();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		getTransaction().begin();
 	}
 	
 
@@ -131,12 +137,7 @@ public abstract class DbBatchTask extends AsyncTaskImpl {
 	 * Commit a transaction that is under progress 
 	 */
 	public void commitTransaction() {
-		try {
-			getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		getTransaction().commit();
 	}
 
 
@@ -144,24 +145,9 @@ public abstract class DbBatchTask extends AsyncTaskImpl {
 	 * Roll back a transaction that is under progress 
 	 */
 	public void rollbackTransaction() {
-		try {
-			getTransaction().rollback();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		getTransaction().rollback();
 	}
-	
 
-	/**
-	 * Return the transaction in use by the task
-	 * @return
-	 */
-	protected UserTransaction getTransaction() {
-		if (transaction == null)
-			transaction = (UserTransaction)Component.getInstance("org.jboss.seam.transaction.transaction");
-		return transaction;
-	}
 
 	/**
 	 * Return the {@link EntityManager} instance in use

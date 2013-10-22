@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.international.LocaleSelector;
@@ -83,6 +84,26 @@ public abstract class LaboratoryExamResult implements Serializable, Transactiona
 	@JoinColumn(name="createTransaction_ID")
 	@PropertyLog(ignore=true)
 	private TransactionLog createTransaction;
+
+	@Transient
+	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
+	// map an XML node to a property in the model
+	private Integer clientId;
+	
+	/**
+	 * @return
+	 */
+	public Integer getClientId() {
+		return clientId;
+	}
+	
+	/**
+	 * @param clientId
+	 */
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
+	}
+
 
 	/**
 	 * Return month of treatment based on the start treatment date and the collected date

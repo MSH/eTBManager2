@@ -52,7 +52,7 @@ public class TBUnitCaseNumber {
 			throw new IllegalAccessError("The legacy code in unit " + unit.getName().toString() + " was not defined");
 
 		int month = DateUtils.monthOf(tbcase.getRegistrationDate()) + 1;
-		int year = DateUtils.monthOf(tbcase.getRegistrationDate());
+		int year = DateUtils.yearOf(tbcase.getRegistrationDate());
 		
 		String codePattern = "TB" + unit.getLegacyId() + "-"; 
 
@@ -71,7 +71,7 @@ public class TBUnitCaseNumber {
 			String[] s = lastRegCode.split("-");
 			if (s.length >= 3) {
 				try {
-					num = Integer.parseInt(s[3]);
+					num = Integer.parseInt(s[2]);
 				} catch (Exception e) {
 					throw new IllegalAccessError("Not expected last registration code with format " + lastRegCode);
 				}
@@ -83,7 +83,7 @@ public class TBUnitCaseNumber {
 		num++;
 
 		// update in the tbcase table
-		String regCode = codePattern + String.format("%02d", month) + String.format("%02d", year) + "-" + String.format("%03d", num);
+		String regCode = codePattern + String.format("%02d", month) + String.format("%02d", year % 100) + "-" + String.format("%03d", num);
 		if (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT)
 			tbcase.setSuspectRegistrationCode(regCode);
 		tbcase.setRegistrationCode(regCode);

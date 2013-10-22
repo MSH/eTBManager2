@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<!-- Create table to store result of the sync between client and server -->
+	<changeSet id="17.1" author="rmemoria" >
+	    <createTable tableName="clientsyncresult">
+	        <column name="id" type="varchar(32)">
+	            <constraints primaryKey="true" nullable="false"/>
+	        </column>
+	        <column name="syncStart" type="datetime">
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="syncEnd" type="datetime">
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="errorMessage" type="varchar(250)"/>
+	        <column name="answerFileName" type="varchar(100)"/>
+	    </createTable>
+	</changeSet>
+
+</databaseChangeLog>

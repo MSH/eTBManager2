@@ -30,12 +30,13 @@ public class SyncFileUploadFilter implements Filter {
 	private static final int maxMemSize = 4 * 1024;
 	
 	private boolean isMultipart;
+	private String token;
 
 	/** {@inheritDoc}
 	 */
 	@Override
 	public void destroy() {
-		
+		// do nothing
 	}
 
 	/** {@inheritDoc}
@@ -43,13 +44,16 @@ public class SyncFileUploadFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp,
 			FilterChain filterChain) throws IOException, ServletException {
+		token = req.getParameter("tk");
+		if (token == null)
+			throw new RuntimeException("No token defined");
+		
 		// check if there is a file attached
 		isMultipart = ServletFileUpload.isMultipartContent((HttpServletRequest)req);
 		PrintWriter out = resp.getWriter();
 
 		if (!isMultipart) {
-			out.print("No file informed");
-			return;
+			throw new RuntimeException("No file informed");
 		}
 
 		DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -60,7 +64,8 @@ public class SyncFileUploadFilter implements Filter {
 		try {
 			List<FileItem> lst = upload.parseRequest((HttpServletRequest)req);
 			for (FileItem item: lst) {
-				System.out.println(item.getFieldName());
+				if (!item.isFormField())
+					processFileUpload(item);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,11 +74,23 @@ public class SyncFileUploadFilter implements Filter {
 		filterChain.doFilter(req, resp);
 	}
 
+	/**
+	 * @param item
+	 */
+	private void processFileUpload(FileItem item) {
+		try {
+			File file = ReceiveSyncFileAction.tempSyncFileName(token);
+			item.write(file);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	/** {@inheritDoc}
 	 */
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-		
+		// do nothing
 	}
 
 }

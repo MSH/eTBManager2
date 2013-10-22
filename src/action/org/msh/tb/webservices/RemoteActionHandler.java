@@ -9,8 +9,8 @@ import org.jboss.seam.Component;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
 import org.jboss.seam.security.Identity;
-import org.jboss.seam.transaction.UserTransaction;
 import org.msh.tb.application.AppFacesMessages;
+import org.msh.tb.application.TransactionManager;
 import org.msh.tb.login.AuthenticatorBean;
 
 
@@ -36,7 +36,7 @@ public abstract class RemoteActionHandler {
 	private String sessionId;
 	private Object data;
 	private Response response;
-	private UserTransaction transaction;
+	private TransactionManager transaction;
 	private boolean transactional= true;
 	
 	/**
@@ -198,38 +198,11 @@ public abstract class RemoteActionHandler {
 	}
 
 
-	/* (non-Javadoc)
-	 * @see org.msh.datastream.XmlDeserializer.ObjectReferenceable#objectByKey(java.lang.Class, java.lang.Object)
-	 */
-/*	@Override
-	public Object objectByKey(Class clazz, Object key) {
-		if (clazz == TbCase.class) {
-			CaseHome home = (CaseHome)Component.getInstance("caseHome", true);
-			home.setId(key);
-			return home.getInstance();
-		}
-		
-		EntityManager em = (EntityManager)Component.getInstance("entityManager");
-
-		try {
-			return em.find(clazz, key);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-*/
-
 	/**
 	 * Start a new transaction
 	 */
 	public void beginTransaction() {
-		try {
-			getTransaction().begin();
-			getEntityManager().joinTransaction();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		getTransaction().begin();
 	}
 	
 
@@ -237,13 +210,7 @@ public abstract class RemoteActionHandler {
 	 * Commit a transaction that is under progress 
 	 */
 	public void commitTransaction() {
-		try {
-			if (transaction != null)
-				transaction.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		getTransaction().commit();
 	}
 
 
@@ -251,13 +218,7 @@ public abstract class RemoteActionHandler {
 	 * Roll back a transaction that is under progress 
 	 */
 	public void rollbackTransaction() {
-		try {
-			if (transaction != null)
-				transaction.rollback();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		getTransaction().rollback();
 	}
 	
 
@@ -265,9 +226,9 @@ public abstract class RemoteActionHandler {
 	 * Return the transaction in use by the task
 	 * @return
 	 */
-	protected UserTransaction getTransaction() {
+	protected TransactionManager getTransaction() {
 		if (transaction == null)
-			transaction = (UserTransaction)Component.getInstance("org.jboss.seam.transaction.transaction");
+			transaction = (TransactionManager)Component.getInstance("transactionManager");
 		return transaction;
 	}
 
@@ -276,7 +237,7 @@ public abstract class RemoteActionHandler {
 	 * @return
 	 */
 	public EntityManager getEntityManager() {
-		return (EntityManager)Component.getInstance("entityManager");
+		return transaction.getEntityManager();
 	}
 
 	/**

@@ -20,7 +20,9 @@
 			<h2>#{messages['cases.examhiv']}</h2>
 	
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examHIVHomeNA.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examHIVHomeNA.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 	
 		<h:dataTable value="#{examHIVHomeNA.allResults}" var="r" rendered="#{not empty examHIVHomeNA.allResults}" 
 			width="100%" styleClass="table1" columnClasses="collb,colb,colb,colb">
@@ -118,7 +120,9 @@
 			<h2>#{messages['cases.exammicroscopy']}</h2>
 		
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examMicroscopyHome.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examMicroscopyHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 		
 		<h:dataTable value="#{examMicroscopyHome.allResults}" var="r" rendered="#{not empty examMicroscopyHome.allResults}" 
 			width="100%" styleClass="table1" columnClasses="colb,colb,colb,colb,colb">
@@ -260,7 +264,9 @@
 			<h2>#{messages['cases.examculture']}</h2>
 	
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examCultureHome.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examCultureHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 		
 		<h:dataTable value="#{examCultureHome.allResults}" var="r" rendered="#{not empty examCultureHome.allResults}" width="100%" 
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
@@ -319,7 +325,6 @@
 
 	</h:panelGroup>
 	
-<!-- ************* -->
 <a:jsFunction name="remExamCulture" action="#{examCultureHome.remove}" reRender="pnlculture" ajaxSingle="true" rendered="#{caseHome.canEditExams}">
 	<a:actionparam name="param1" assignTo="#{examCultureHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
@@ -336,7 +341,9 @@
 			<h2>#{messages['cases.examdst']}</h2>
 		
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examDSTTable.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examDSTTable.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 		<s:fragment rendered="#{not empty examDSTTable.allResults}">
 		
 		<table class="table1" width="100%">
@@ -412,8 +419,6 @@
 	
 	</h:panelGroup>
 	
-	<!-- ***************** -->
-	
 <a:jsFunction name="remExamDST" action="#{examDSTHome.remove}" reRender="pnldst" ajaxSingle="true"  rendered="#{caseHome.canEditExams}">
 	<a:actionparam name="param1" assignTo="#{examDSTHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
@@ -428,7 +433,9 @@
 			<h2>#{messages['cases.examxray']}</h2>
 		
 		
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examXRayHome.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examXRayHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
 	
 		<h:dataTable value="#{examXRayHome.allResults}" var="r" rendered="#{not empty examXRayHome.allResults}" width="100%" 
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colcb">

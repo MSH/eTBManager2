@@ -29,8 +29,8 @@ import org.msh.tb.webservices.RemoteActionHandler;
  * @author Ricardo Memoria
  *
  */
-@Name("generateDesktopFileHome")
-public class GenerateDesktopFileHome {
+@Name("generateDesktopFileAction")
+public class GenerateDesktopFileAction {
 	/**
 	 * Buffer size used when generating file to the stream
 	 */

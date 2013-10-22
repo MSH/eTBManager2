@@ -30,4 +30,5 @@
   <include file="org/msh/tb/database/v2_0/changelog-15-generic.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-15-ukraine.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-16-correctAZForeignKeys.xml"/> 
+  <include file="org/msh/tb/database/v2_0/changelog-17-sync.xml"/> 
 </databaseChangeLog> 
