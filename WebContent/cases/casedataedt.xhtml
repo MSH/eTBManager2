@@ -289,7 +289,6 @@ function isPulmonary(cb) {
 	</div>
 
 
-	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<div class="form-content">
 	<h2>#{messages['cases.prevtreat']}</h2>
 		<table width="100%" style="border-collapse:collapse;"><tr><td>
@@ -360,7 +359,6 @@ function isPulmonary(cb) {
 		
 		</td></tr></table>
 	</div>
-	</s:fragment>
 
 <rich:jQuery selector="#addrChanged" query="change(function(){ showCurrAddress(this); })" />
 <script type="text/javascript">

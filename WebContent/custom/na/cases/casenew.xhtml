@@ -79,7 +79,7 @@
 	<a:commandLink action="#{caseNAHome.saveNew}" styleClass="button" reRender="main,messages">
 	<span>#{messages['form.save']}</span>
 	</a:commandLink>
-	<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" >
+	<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this);" >
 	<span>#{messages['form.cancel']}</span>
 	</s:link>
 	

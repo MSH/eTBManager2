@@ -11,7 +11,8 @@ public enum CultureResult {
 	NOTDONE  ('0'),
 	NTM('0'),
 	POSITIVE_UNKNOWN_SCALE('0'), 
-	NO_GROWTH('0');
+	NO_GROWTH('0'),
+	OTHER    ('0');
 	
 	private char result;
 	

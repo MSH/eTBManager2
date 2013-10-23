@@ -34,7 +34,7 @@
 				<div class="divother">
 					<b>#{it.item.comorb.value.otherDescription}</b>
 					<s:label value="#{messages['global.mandatory']}" styleClass="over" />
-					<h:inputText value="#{it.item.comorbidity.otherDescription}" style="background-color: transparent; border-color:transparent;width:50px;"/>
+					<div>#{it.item.comorbidity.otherDescription}</div>
     				<h:inputText value="#{it.item.comorb.complement}" style="width:180px"/>
     			</div>
 			</s:fragment>
@@ -98,8 +98,9 @@
 <script type="text/javascript">
 function updateRows() {
 	jQuery("#tbldata tr").removeClass("activerow");
-	jQuery("#tbldata tr input[type='text'],select").hide();
-	jQuery("#tbldata tr:has(:checked) input[type='text']").show();
+	jQuery("#tbldata tr .divother").hide();
+	jQuery("#tbldata tr select").hide();
+	jQuery("#tbldata tr:has(:checked) .divother").show(); 
 	jQuery("#tbldata tr:has(:checked) select").show();
 	jQuery("#tbldata tr:has(:checked)").addClass("activerow");
 }

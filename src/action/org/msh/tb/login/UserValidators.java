@@ -10,7 +10,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
-import javax.persistence.EntityManager;
 
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;

@@ -25,7 +25,7 @@ import org.msh.utils.date.DateUtils;
  * <b>MM</b> is the month of the case registration date<br/>
  * <b>YY</b> is the year of the case registration date<br/>
  * <b>SSS</b> is the sequence number generated for the month and year in this unit
- * @author Utkarsh Srivastava
+ * @author Ricardo Memoria
  *
  */
 @Name("tbunitcasenumber")
@@ -47,6 +47,12 @@ public class TBUnitCaseNumber {
 			return;
 
 		TbCase  tbcase = caseHome.getTbCase();
+
+		String regCode = tbcase.getRegistrationCode();
+		// there is already a registration code provided by the user ?
+		if ((regCode != null) && (!regCode.isEmpty()))
+			return;
+		
 		Tbunit unit = tbcase.getOwnerUnit();
 		if ((unit.getLegacyId() == null) || (unit.getLegacyId().isEmpty()))
 			throw new IllegalAccessError("The legacy code in unit " + unit.getName().toString() + " was not defined");
@@ -83,7 +89,7 @@ public class TBUnitCaseNumber {
 		num++;
 
 		// update in the tbcase table
-		String regCode = codePattern + String.format("%02d", month) + String.format("%02d", year % 100) + "-" + String.format("%03d", num);
+		regCode = codePattern + String.format("%02d", month) + String.format("%02d", year % 100) + "-" + String.format("%03d", num);
 		if (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT)
 			tbcase.setSuspectRegistrationCode(regCode);
 		tbcase.setRegistrationCode(regCode);

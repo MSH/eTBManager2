@@ -58,6 +58,12 @@ function getFollowupTextEditor(issueId) {
 }
 function addIssueFollowup(issueId) {
 	var el = getFollowupTextEditor(issueId);
+	if (el.val() == '') {
+		alert('#{messages['Issue.textrequired']}');
+		enableButton();
+		el.focus();
+		return;
+	}
 	registerFollowup(issueId, el.val());
 }
 function showIssueDetails(issueId) {

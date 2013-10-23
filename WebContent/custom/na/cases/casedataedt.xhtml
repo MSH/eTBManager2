@@ -22,7 +22,8 @@
 	
 	<s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['TbCase.registrationCode']}:</ui:define>
-    	#{tbcase.registrationCode}
+    	<h:inputText value="#{tbcase.registrationCode}" style="width:180px" rendered="#{not tbcase.validated}"/>
+    	<h:outputText value="#{tbcase.registrationCode}" rendered="#{tbcase.validated}" />
 	</s:decorate>
 	
 	</td><td>
@@ -313,12 +314,8 @@ function isPulmonary(cb) {
 	</div>
 	<p/>
 
-
-<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
 	<div class="form-content">
-		
-			<h2>#{messages['cases.prevtreat']}</h2>
-		
+		<h2>#{messages['cases.prevtreat']}</h2>
 
 		<div><table width="99%" style="border-collapse:collapse;"><tr><td>
 		<s:decorate template="/layout/edit.xhtml">
@@ -388,7 +385,6 @@ function isPulmonary(cb) {
 		</td></tr></table></div>
 
 </div>
-</s:fragment>
 	<p/>
 
 <rich:jQuery selector="#addrChanged" query="change(function(){ showCurrAddress(this); })" />

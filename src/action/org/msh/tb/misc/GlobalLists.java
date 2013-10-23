@@ -179,8 +179,8 @@ public class GlobalLists {
 		DrugResistanceType.MONO_RESISTANCE,
 		DrugResistanceType.POLY_RESISTANCE,
 		DrugResistanceType.MULTIDRUG_RESISTANCE,
-		DrugResistanceType.EXTENSIVEDRUG_RESISTANCE
-		
+		DrugResistanceType.EXTENSIVEDRUG_RESISTANCE,
+		DrugResistanceType.RIF_RESISTANCE
 	};
 
 

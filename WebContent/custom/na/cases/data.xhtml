@@ -6,7 +6,8 @@
  	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
-                 
+
+<h:form>                 
 		<div class="form1" style="width:100%">
 		<div class="form-content">
 			<s:link view="/custom/na/cases/caseedt.xhtml" styleClass="button-alt" onclick="disableButton(this);" style="float:right;" rendered="#{caseHome.canEditCaseData}">
@@ -268,7 +269,9 @@
 	</div>
 	</div>
 	
-<!-- 	<s:decorate template="/cases/comments.xhtml">
+
+	<s:decorate template="/cases/comments.xhtml">
 		<ui:param name="panel" value="data" />
-	</s:decorate> -->
+	</s:decorate>
+</h:form>
 </ui:composition>

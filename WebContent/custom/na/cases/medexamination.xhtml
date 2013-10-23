@@ -91,6 +91,9 @@
 <a:jsFunction name="remMedExamination" action="#{medicalExaminationNAHome.remove}" reRender="medexams"  rendered="#{caseHome.canEditExams}">
 	<a:actionparam name="param1" assignTo="#{medicalExaminationNAHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
+	<s:decorate template="/cases/comments.xhtml">
+		<ui:param name="panel" value="data" />
+	</s:decorate>
 
 </h:form>
     

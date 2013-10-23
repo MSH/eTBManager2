@@ -3,6 +3,7 @@ package org.msh.tb.na;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.tb.entities.enums.CultureResult;
 import org.msh.tb.entities.enums.DotBy;
 import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
@@ -60,6 +61,13 @@ public class GlobalLists {
 		PrevTBTreatmentOutcome.UNKNOWN
 	};
 
+	private static final CultureResult cultureResults[] = {
+		CultureResult.POSITIVE,
+		CultureResult.NEGATIVE,
+		CultureResult.CONTAMINATED,
+		CultureResult.NTM,
+		CultureResult.OTHER
+	};
 	
 	@Factory("dotOptions")
 	public DotOptions[] getDotOptions() {
@@ -103,4 +111,11 @@ public class GlobalLists {
 		return prevTBTreatmentOutcomes;
 	}
 
+	/**
+	 * Return the options of culture result
+	 * @return array of {@link CultureResult} enumerations
+	 */
+	public CultureResult[] getCultureResults() {
+		return cultureResults;
+	}
 }
