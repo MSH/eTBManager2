@@ -101,7 +101,7 @@
 		<b>#{it.tbcase.ownerUnit.name}</b><br />
 		<h:outputText value="#{it.adminUnitDisplay}" style="font-size:10px;" /> 
    		<div style="padding-top:6px;clear:left;">
-   		<h:outputText value="#{messages[it.tbcase.state.key]}" style="color:#8DA48F;font-weight:bold;" />
+   			<h:outputText value="#{caseHome.getStatusString2(it.tbcase)}" style="color:#8DA48F;font-weight:bold;"/>
    		</div>		
 	</td>
 	<td style="border-left:1px solid #E0E0E0;">
