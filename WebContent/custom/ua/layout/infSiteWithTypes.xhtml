@@ -13,10 +13,16 @@
 	function showExtrapulmonary(cb) {
 	  if (isExtrapulmonary(cb))
 	  	jQuery('#extrapul').show(500);
-	  else jQuery('#extrapul').hide(500);
+	  else {
+		  jQuery('#extrapul').hide(500);
+		  clearField('#extrapul'); 
+	  }
 	  if (isPulmonary(cb)) 
 		jQuery('#pulmonary').show(500);
-	  else jQuery('#pulmonary').hide(500);
+	  else {
+		  jQuery('#pulmonary').hide(500);
+		  clearField('#pulmonary1'); 
+	  }
 	}
 	function isExtrapulmonary(cb) {
 	  	return ((cb.selectedIndex >=0) && ((cb.options[cb.selectedIndex].value == 'EXTRAPULMONARY') || (cb.options[cb.selectedIndex].value == 'BOTH')));
@@ -31,6 +37,11 @@
 		if (option != '1')
 			jQuery(divname).hide();
 		else jQuery(divname).show();
+	}
+	function clearField(divId){
+		jQuery(divId+" select").each(function(){
+				this.selectedIndex = 0;
+			});
 	}
 -->
 </script>
@@ -60,6 +71,7 @@
 	</div>
 
 	<div id="pulmonary" style="clear:both;">
+		<div id="pulmonary1">
 		<s:decorate template="#{withValidate ? '/layout/edit.xhtml' : '/layout/display.xhtml'}">
     		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
     		<h:selectOneMenu value="#{pulTypeValue}" style="margin-right:4px;">
@@ -67,6 +79,7 @@
     			<s:convertEntity />
     		</h:selectOneMenu>
 		</s:decorate>
+		</div>
 		
 		<s:fragment rendered="#{destructAndMBT}">
 			<s:decorate template="#{withValidate ? '/layout/edit.xhtml' : '/layout/display.xhtml'}">
