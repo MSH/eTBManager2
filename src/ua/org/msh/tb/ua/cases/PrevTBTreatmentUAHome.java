@@ -19,6 +19,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.SubstancesQuery;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.cases.PrevTBTreatmentHome;
 import org.msh.tb.entities.MedicineComponent;
 import org.msh.tb.entities.PrescribedMedicine;
 import org.msh.tb.entities.PrevTBTreatment;
@@ -42,7 +43,6 @@ public class PrevTBTreatmentUAHome {
 	// number of previous TB Treatments
 	private List<Item> treatments;
 	private TbCase previousCase;
-	private boolean editing;
 	private List<Substance> substances;
 	private List<SelectItem> numTreatmentsOptions;
 	private List<PrevTBTreatmentUA> removedTreatments;
@@ -74,7 +74,8 @@ public class PrevTBTreatmentUAHome {
 		
 		treatments = null;
 		substances = null;
-		editing = false;
+		PrevTBTreatmentHome prev = (PrevTBTreatmentHome) App.getComponent(PrevTBTreatmentHome.class);
+		prev.setEditing(false);
 		
 		return "persisted";
 	}
@@ -85,7 +86,7 @@ public class PrevTBTreatmentUAHome {
 	 * @param item
 	 */
 	protected void updateSubstances(Item item) {
-		PrevTBTreatment prev = item.getPrevTBTreatment();
+		PrevTBTreatmentUA prev = item.getPrevTBTreatment();
 		for (ItemSelect it: item.getItems()) {
 			Substance sub = (Substance)it.getItem();
 			if (it.isSelected()) {
@@ -179,7 +180,7 @@ public class PrevTBTreatmentUAHome {
 	 * @param lst
 	 */
 	private void createSubstanceList(List<PrevTBTreatmentUA> lst) {
-		if ((editing) || (!caseHome.isManaged()))
+		if ((isEditing()) || (!caseHome.isManaged()))
 			substances = ((SubstancesQuery)Component.getInstance("substances", true)).getPrevTBsubstances();
 		else {
 			substances = new ArrayList<Substance>();
@@ -361,17 +362,8 @@ public class PrevTBTreatmentUAHome {
 	 * @return the editing
 	 */
 	public boolean isEditing() {
-		return editing;
-	}
-
-
-	/**
-	 * @param editing the editing to set
-	 */
-	public void setEditing(boolean editing) {
-		treatments = null;
-		substances = null;
-		this.editing = editing;
+		PrevTBTreatmentHome prev = (PrevTBTreatmentHome) App.getComponent(PrevTBTreatmentHome.class);
+		return prev.isEditing();
 	}
 
 

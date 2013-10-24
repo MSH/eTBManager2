@@ -87,6 +87,8 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 		tbcase.setNationality(nationality);
 		data.setTbcase(tbcase);
 		data.setId(tbcase.getId());
+		PrevTBTreatmentUAHome prev = (PrevTBTreatmentUAHome) App.getComponent(PrevTBTreatmentUAHome.class);
+		prev.persist();
 		
 		if (data.getPulmonaryMBT() == YesNoType.NO) {
 			data.setMbtResult(null);
@@ -112,6 +114,9 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 		CaseDataUA data = getInstance();
 		TbCase tbcase = caseEditingHome.getTbcase();
 		tbcase.setNationality(nationality);
+		
+		PrevTBTreatmentUAHome prev = (PrevTBTreatmentUAHome) App.getComponent(PrevTBTreatmentUAHome.class);
+		prev.persist();
 		
 		if (data.getId() == null)
 			data.setId(tbcase.getId());
