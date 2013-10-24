@@ -257,7 +257,7 @@ public class CaseDataExport {
 	public void addCaseDataTitles() {
 		// add title line
 		excel.addColumnMark("casedata");
-		excel.addGroupHeaderFromResource("cases.details.case", 31 + (levelInfo.getMaxLevel() * 2), "title");
+		excel.addGroupHeaderFromResource("cases.details.case", 33 + (levelInfo.getMaxLevel() * 2), "title");
 		
 		excel.addTextFromResource("Patient.caseNumber", "title");
 		excel.addTextFromResource("Patient.securityNumber", "title");
@@ -336,8 +336,8 @@ public class CaseDataExport {
 			excel.addText(levelInfo.getNameLevel2().toString() + (witchAdmUnit!=null ? " (" + witchAdmUnit + ")" : "") , "title");
 		if (levelInfo.isHasLevel3()) 
 			excel.addText(levelInfo.getNameLevel3().toString() + (witchAdmUnit!=null ? " (" + witchAdmUnit + ")" : "") , "title");
-		if (levelInfo.isHasLevel5()) 
-			excel.addText(levelInfo.getNameLevel5().toString() + (witchAdmUnit!=null ? " (" + witchAdmUnit + ")" : "") , "title");
+		if (levelInfo.isHasLevel4()) 
+			excel.addText(levelInfo.getNameLevel4().toString() + (witchAdmUnit!=null ? " (" + witchAdmUnit + ")" : "") , "title");
 		if (levelInfo.isHasLevel5()) 
 			excel.addText(levelInfo.getNameLevel5().toString() + (witchAdmUnit!=null ? " (" + witchAdmUnit + ")" : "") , "title");
 	}
@@ -346,7 +346,18 @@ public class CaseDataExport {
 	 * Works only when wants to display all levels that workspace supports.
 	 */
 	private void addAdminUnitsValue(AdministrativeUnit au){
-		for(int i = 1; i < 6; i++){
+		int colBefore = excel.getColumn()-1;
+		AdministrativeUnit workingAu = au;
+		
+		while(workingAu != null){
+			excel.setColumn(colBefore + workingAu.getLevel());
+			excel.addText(workingAu.getName().getName1());
+			workingAu = workingAu.getParent();
+		}
+		
+		excel.setColumn(colBefore + levelInfo.getMaxLevel() + 1);
+		
+		/*for(int i = 1; i < 6; i++){
 			if (levelInfo.isHasLevel(i)){
 				AdministrativeUnit au1 = (au != null ? au : null);
 				AdministrativeUnit au2 = (au1 != null ? au1.getParent() : null);
@@ -365,7 +376,7 @@ public class CaseDataExport {
 				else if(au1 != null && au1.getLevel() == i)
 						excel.addText(au1.getName().getName1());
 			}
-		}
+		}*/
 	}
 	
 	/**Start to export the content**/
