@@ -53,6 +53,12 @@ public class GlobalLists {
 		CaseState.NOT_CONFIRMED
 	};
 	
+	public static final ExtraOutcomeInfo ocCuredFailed[] = {
+		ExtraOutcomeInfo.CULTURE_SMEAR,
+		ExtraOutcomeInfo.CLINICAL_EXAM,
+		ExtraOutcomeInfo.TRANSFER_CATIV
+	};
+
 	public static final ExtraOutcomeInfo ocDied[] = {
 		ExtraOutcomeInfo.TB,
 		ExtraOutcomeInfo.OTHER_CAUSES
@@ -91,6 +97,10 @@ public class GlobalLists {
 		return MBTResult.values();
 	}
 	
+	public ExtraOutcomeInfo[] getCuredFailedExtraInfo() {
+		return ocCuredFailed;
+	}
+	
 	public ExtraOutcomeInfo[] getDeathExtraInfo() {
 		return ocDied;
 	}
@@ -105,6 +115,7 @@ public class GlobalLists {
 	public CaseState[] getOutcomes() {
 		return outcomes;
 	}
+
 
 	/**
 	 * @return the patienttypes

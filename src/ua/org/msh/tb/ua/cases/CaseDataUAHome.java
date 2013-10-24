@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -22,10 +23,13 @@ import org.msh.tb.entities.PrescribedMedicine;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
+import org.msh.tb.entities.enums.ExtraOutcomeInfo;
 import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.misc.FieldsQuery;
+import org.msh.tb.ua.GlobalLists;
 import org.msh.tb.ua.entities.CaseDataUA;
 
 
@@ -158,6 +162,20 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 			data.setMbtResult(null);
 		}		
 		return true;
+	}
+	
+	/**
+	 * Return list of extraoutcames for died and failed outcome 
+	 * @return
+	 */
+	public ExtraOutcomeInfo[] getExtraInfo(){
+		if (caseCloseHome.getState()==CaseState.FAILED){
+			return GlobalLists.ocCuredFailed;
+		}else if (caseCloseHome.getState()==CaseState.DIED){
+			return  GlobalLists.ocDied;
+		}
+		return (ExtraOutcomeInfo[]) ArrayUtils.addAll(GlobalLists.ocDied, GlobalLists.ocCuredFailed);
+
 	}
 	
 	public void setNationality(Nationality nationality) {

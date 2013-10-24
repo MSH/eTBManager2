@@ -35,7 +35,7 @@
 		<h:selectOneMenu id="selstate" value="#{caseCloseHome.state}" required="true" layout="pageDirection">
 				<s:selectItems value="#{globalLists_ua.outcomes}" var="v" label="#{messages[v.key]}" noSelectionLabel="-"/>
 				<s:convertEnum />
-				<a:support event="onchange" oncomplete="statecheckClick(this);" reRender="main, outcome, extrainfo1, extrainfo"/>
+				<a:support event="onchange" oncomplete="statecheckClick(this,#{tbcase.classification != 'DRTB'});" reRender="main, outcome, extrainfo1" ajaxSingle="true"/>
 		</h:selectOneMenu>
     </s:decorate>
     </h:panelGroup >
@@ -47,13 +47,13 @@
     </s:decorate>
     </div>
     
-    <div id="extrainfo" style="clear:both;#{(tbcase.state=='DIED')?'display:block;':'display:none;'}" >  
+    <div id="extrainfo" style="display:block;clear:both;#{(tbcase.state=='DIED' or tbcase.state=='FAILED')?'':'display:none;'}" >  
 	<h:panelGroup id="extrainfo1">
 	<s:fragment rendered="true">
     <s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['uk_UA.ExtraOutcomeInfo']}:</ui:define>
 		<h:selectOneMenu value="#{caseDataUA.extraOutcomeInfo}">
-			<s:selectItems value="#{globalLists_ua.deathExtraInfo}"  var="v" label="#{messages[v.key]}" noSelectionLabel="-"/>
+			<s:selectItems value="#{caseDataUAHome.extraInfo}"  var="v" label="#{messages[v.key]}" noSelectionLabel="-"/>
 		</h:selectOneMenu>
     </s:decorate>
   </s:fragment>  
@@ -84,7 +84,7 @@
 <rich:jQuery selector="#comments" query="hide()" />
 <script type="text/javascript">
 <!--
-function statecheckClick(elem) {
+function statecheckClick(elem,yesForFail) {
 	value=elem.value;
 	if (value.length==0){
 		id=elem.id;
@@ -95,7 +95,7 @@ function statecheckClick(elem) {
         jQuery('#comments').show(500);
    else jQuery('#comments').hide(500);
    
-   if (value=='DIED')
+   if ((value=='FAILED' && yesForFail) || value=='DIED')
 	    jQuery('#extrainfo').show(500);
    else jQuery('#extrainfo').hide(500);
 
