@@ -127,7 +127,7 @@
     	
     	<div class="form-footer">
             <a:commandLink action="#{userHome.persist}" styleClass="button" 
-            	reRender="main" 
+            	reRender="main,messages" 
             	onclick="if (!disableButton(this)) return false;" >
               	<span>#{messages['form.save']}</span>
             </a:commandLink>
