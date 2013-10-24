@@ -281,7 +281,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 			return false;
 		
 		return ( (Identity.instance().hasRole("NEW_ORDER")) // user has to be able to create new orders
-					&& (o.getUnitFrom().equals(UserSession.getUserWorkspace().getTbunit()) || UserSession.getUserWorkspace().isPlayOtherUnits()) // the user has to be from the unit that he is trying to create/edit the order or he has to be able to play other units.
+					&& (o.getUnitFrom().getId().equals(userSession.getWorkingTbunit().getId()) || UserSession.getUserWorkspace().isPlayOtherUnits()) // the user has to be from the unit that he is trying to create/edit the order or he has to be able to play other units.
 					&& (o.getStatus().equals(OrderStatus.WAITAUTHORIZING) || (o.getAuthorizer() == null && o.getStatus().equals(OrderStatus.WAITSHIPMENT)))); // The order has to be waiting for authorization or has to be waiting for shipment if it doens't needs to be authorized.
 	}
 	
