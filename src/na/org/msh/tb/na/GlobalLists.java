@@ -66,7 +66,8 @@ public class GlobalLists {
 		CultureResult.NEGATIVE,
 		CultureResult.CONTAMINATED,
 		CultureResult.NTM,
-		CultureResult.OTHER
+		CultureResult.OTHER,
+		CultureResult.PENDING
 	};
 	
 	@Factory("dotOptions")

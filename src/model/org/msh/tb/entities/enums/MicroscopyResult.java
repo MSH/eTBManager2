@@ -8,7 +8,8 @@ public enum MicroscopyResult {
 	PLUS2		('+'),
 	PLUS3		('+'),
 	PLUS4		('+'),
-	NOTDONE		('0');
+	NOTDONE		('0'),
+	PENDING     ('0');
 	
 	private char result;
 	

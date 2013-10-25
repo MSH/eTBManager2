@@ -157,8 +157,7 @@
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
             <a:commandLink action="#{caseNAHome.saveMedicalExamination}" styleClass="button" reRender="formexam" 
-            	oncomplete="this.disabled=false;"
-            	onclick="this.disabled=true;" >
+            	onclick="if (!disableButton(this)) return false;" >
             	<span>#{messages['form.save']}</span>
             	</a:commandLink>
             <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">

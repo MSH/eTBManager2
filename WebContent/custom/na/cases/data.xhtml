@@ -237,6 +237,8 @@
 				</th>
 				<th rowspan="2">#{messages['PrevTBTreatment.outcome']}
 				</th>
+				<th rowspan="2">#{messages['TbCase.outcomeDate']}
+				</th>
 			</tr>
 			<tr>
 			<a:repeat value="#{prevTBTreatmentHome.substances}" var="s">
@@ -258,6 +260,11 @@
 				</a:repeat>
 				<td class="colcb">
 					#{messages[it.prevTBTreatment.outcome.key]}
+				</td>
+				<td class="colcb">
+					<s:fragment rendered="#{not empty it.prevTBTreatment.outcomeYear}">
+						#{it.prevTBTreatment.outcomeMonth+1}/#{it.prevTBTreatment.outcomeYear}
+					</s:fragment>
 				</td>
 			</tr>
 		</a:repeat>

@@ -129,7 +129,8 @@ public class GlobalLists {
 		CultureResult.PLUS,
 		CultureResult.PLUS2,
 		CultureResult.PLUS3,
-		CultureResult.CONTAMINATED
+		CultureResult.CONTAMINATED,
+		CultureResult.PENDING
 	};
 	
 	private static final MicroscopyResult microscopyResults[] = {
@@ -137,7 +138,8 @@ public class GlobalLists {
 		MicroscopyResult.POSITIVE,
 		MicroscopyResult.PLUS,
 		MicroscopyResult.PLUS2,
-		MicroscopyResult.PLUS3
+		MicroscopyResult.PLUS3,
+		MicroscopyResult.PENDING
 	};
 	
 	private static final CultureResult cultureOptionsNotif[] = {

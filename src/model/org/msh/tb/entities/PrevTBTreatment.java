@@ -46,7 +46,7 @@ public class PrevTBTreatment implements Serializable {
 	private Integer outcomeMonth;
 	
 	@Column(name="OUTCOME_YEAR")
-	private int outcomeYear;
+	private Integer outcomeYear;
 	
 	@NotNull
 	private PrevTBTreatmentOutcome outcome;
@@ -124,14 +124,14 @@ public class PrevTBTreatment implements Serializable {
 	/**
 	 * @return the outcomeYear
 	 */
-	public int getOutcomeYear() {
+	public Integer getOutcomeYear() {
 		return outcomeYear;
 	}
 
 	/**
 	 * @param outcomeYear the outcomeYear to set
 	 */
-	public void setOutcomeYear(int outcomeYear) {
+	public void setOutcomeYear(Integer outcomeYear) {
 		this.outcomeYear = outcomeYear;
 	}
 	public boolean hasOutcomeDate(){
