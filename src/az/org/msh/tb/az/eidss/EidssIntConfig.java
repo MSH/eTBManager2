@@ -70,7 +70,18 @@ public class EidssIntConfig {
 	 * load cases to this date
 	 */
 	public Date dateStart;
-
+	
+	/**
+	 * E-mails for sending error by background import
+	 */
+	public String emails;
+	
+	public String getEmails() {
+		return emails;
+	}
+	public void setEmails(String emails) {
+		this.emails = emails;
+	}
 	public String getUrl() {
 		return url;
 	}

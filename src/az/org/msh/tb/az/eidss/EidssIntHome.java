@@ -233,6 +233,7 @@ public class EidssIntHome {
 		}
 		p.setValue(value.toString());
 		getEntityManager().persist(p);
+		getEntityManager().flush();
 	}
 
 	/**

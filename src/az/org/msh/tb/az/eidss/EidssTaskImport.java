@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,11 +25,13 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
+import org.jboss.seam.faces.Renderer;
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.transaction.UserTransaction;
 import org.msh.tb.application.tasks.AsyncTaskImpl;
 import org.msh.tb.application.tasks.TaskManager;
 import org.msh.tb.application.tasks.TaskStatus;
+import org.msh.tb.az.admin.UserAZControl;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserWorkspace;
@@ -86,6 +89,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 	private String refList;
 	private List<CaseShortInfo> casesExistInEtb = new ArrayList<CaseShortInfo>();
 	private Map<Date,List<ExportDetails>> exportDetailsList = new TreeMap<Date,List<ExportDetails>>();
+	private boolean success = false;
 
 	
 	@Override
@@ -114,12 +118,38 @@ public class EidssTaskImport extends AsyncTaskImpl {
 		printExportDetails();
 		addTimeLog("Finished");
 		// save result to log file
+		if (!success)
+			if (!sendSystemEmail())
+				addLog("Sending to email was failed");
+		
 		beginTransaction();
 		TransactionLogService service = new TransactionLogService();
 		service.getDetailWriter().addText(log.toString());
 		service.save("TASK", RoleAction.EXEC, "EIDSS Integration", null, null, null);
 		commitTransaction();
 	}
+
+	private boolean sendSystemEmail() {
+		try {
+			if (config.emails!=null && !config.emails.isEmpty()){
+				List<String> emails = Arrays.asList(config.emails.split(","));
+				if (!emails.isEmpty()){
+					Contexts.getEventContext().set("emails", emails);
+					String info = log.toString().replaceAll("\n", "<br/>");
+					Contexts.getEventContext().set("info", info);
+					Renderer.instance().render("/custom/az/mail/importexception.xhtml");
+					return true;
+				}
+			}
+			return false;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+
 
 	private void printExportDetails() {
 		for (Date d: exportDetailsList.keySet()) {
@@ -232,6 +262,7 @@ public class EidssTaskImport extends AsyncTaskImpl {
 				}
 				else 
 					sayAboutRejected();
+				success  = true;
 			} else{
 				addLog("Error unable to login EIDSS " + getLoader().getErrorMessage());
 			}

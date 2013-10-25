@@ -113,6 +113,11 @@
 							<h:inputText value="#{eidssIntHome.config.caseStates}"
 								style="width:400px;" maxlength="100" required="true"></h:inputText>
 						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.emails']}:</ui:define>
+							<h:inputText value="#{eidssIntHome.config.emails}"
+								style="width:400px;" maxlength="255"></h:inputText>
+						</s:decorate>
 						<s:decorate template="/layout/dateedit.xhtml">
 							<ui:define name="label">#{messages['admin.import.eidss.from']}:</ui:define>
 							<ui:param name="datefield" value="#{eidssIntHome.config.from}" />
