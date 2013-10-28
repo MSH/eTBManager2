@@ -16,6 +16,8 @@ public class ExamCulture_Az extends ExamCulture{
 	
 	@Temporal(TemporalType.DATE)
 	private Date datePlating;
+	@Temporal(TemporalType.DATE)
+	private Date dateTestBegin;
 
 	public void setDatePlating(Date datePlating) {
 		this.datePlating = datePlating;
@@ -23,5 +25,13 @@ public class ExamCulture_Az extends ExamCulture{
 
 	public Date getDatePlating() {
 		return datePlating;
+	}
+
+	public void setDateTestBegin(Date dateTestBegin) {
+		this.dateTestBegin = dateTestBegin;
+	}
+
+	public Date getDateTestBegin() {
+		return dateTestBegin;
 	}
 }

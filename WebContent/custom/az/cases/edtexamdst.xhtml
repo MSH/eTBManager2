@@ -35,6 +35,14 @@
     	<ui:param name="future" value="false" /> 
     	<ui:param name="datefield" value="#{examDST.datePlating}" /> 
     </s:decorate>
+    
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['cases.exams.dateTestBegin']}:</ui:define>
+    	<ui:param name="edtid" value="dtrelease" />
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="future" value="false" /> 
+    	<ui:param name="datefield" value="#{examDSTAZ.dateTestBegin}" /> 
+    </s:decorate>
 	
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
