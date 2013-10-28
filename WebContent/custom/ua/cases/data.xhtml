@@ -314,9 +314,11 @@
 				</th>
 				<th rowspan="2">#{messages['PatientType']}
 				</th>
-				<th colspan="#{prevTBTreatmentUAHome.substances.size}">
-					#{messages['cases.prevtreat.regs']}
-				</th>
+				<s:fragment rendered="#{prevTBTreatmentUAHome.substances.size>0}">
+					<th colspan="#{prevTBTreatmentUAHome.substances.size}">
+						#{messages['cases.prevtreat.regs']}
+					</th>
+				</s:fragment>
 				<th rowspan="2">#{messages['cases.treatment.refusemed2line']}
 				</th>
 				<th rowspan="2">#{messages['PrevTBTreatment.outcome']}
