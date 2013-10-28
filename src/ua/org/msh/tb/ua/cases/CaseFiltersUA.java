@@ -9,6 +9,7 @@ import org.msh.tb.cases.CaseFilters;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Tag;
+import org.msh.tb.ua.entities.enums.TreatmentType;
 
 @Name("caseFiltersUA")
 @Scope(ScopeType.SESSION)
@@ -19,6 +20,7 @@ public class CaseFiltersUA {
 	private FieldValue extrapulmonaryType2;
 	private Tag tag;
 	private Source source;
+	private TreatmentType ttype;
 
 	public void clear(){
 		pulmonaryType = null;
@@ -26,6 +28,7 @@ public class CaseFiltersUA {
 		extrapulmonaryType2 = null;
 		tag = null;
 		source = null;
+		ttype = null;
 	}
 	
 	//=========GETTERS & SETTERS=========
@@ -66,6 +69,14 @@ public class CaseFiltersUA {
 
 	public Source getSource() {
 		return source;
+	}
+
+	public void setTtype(TreatmentType ttype) {
+		this.ttype = ttype;
+	}
+
+	public TreatmentType getTtype() {
+		return ttype;
 	}
 	
 }

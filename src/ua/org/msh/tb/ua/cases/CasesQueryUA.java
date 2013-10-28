@@ -15,6 +15,7 @@ import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.UserView;
+import org.msh.tb.ua.entities.enums.TreatmentType;
 
 
 /**
@@ -38,6 +39,13 @@ public class CasesQueryUA extends CasesQuery{
 													"INNER JOIN cs.prescribedMedicines pm " + 
 													"WHERE 	pm.source.id = #{caseFiltersUA.source.id} " + 
 													"and c.id = cs.id)";
+	private static final String hosp = "(select cd.id from CaseDataUA cd " +
+			"where ((cd.dischargeDate is null) and (cd.hospitalizationDate is not null) " +
+			"or (cd.dischargeDate2 is null) and (cd.hospitalizationDate2 is not null) " +
+			"or (cd.dischargeDate3 is null) and (cd.hospitalizationDate3 is not null) " +
+			"or (cd.dischargeDate4 is null) and (cd.hospitalizationDate4 is not null) " +
+			"or (cd.dischargeDate5 is null) and (cd.hospitalizationDate5 is not null)))";
+	
 	public String getAdminUnitLike(AdministrativeUnit adm) {
 		UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
 		if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
@@ -190,6 +198,11 @@ public class CasesQueryUA extends CasesQuery{
 			if (caseFiltersUA.getExtrapulmonaryType2()!=null)
 				addCondition("(c.extrapulmonaryType.id = "+caseFiltersUA.getExtrapulmonaryType2().getId()+" OR "+"c.extrapulmonaryType2.id = "+caseFiltersUA.getExtrapulmonaryType2().getId()+")");
 		}
+		if (TreatmentType.HOSPITALISATION.equals(caseFiltersUA.getTtype()))
+				addCondition("c.id in "+hosp);
+		else
+			if (TreatmentType.OUTPATIENT.equals(caseFiltersUA.getTtype()))
+				addCondition("c.id not in "+hosp);
 	}
 	
 }

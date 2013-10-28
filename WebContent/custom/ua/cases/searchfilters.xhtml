@@ -107,6 +107,14 @@
 	</s:decorate>
 	
 	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['uk_UA.TreatmentType']}:</ui:define>
+		<h:selectOneMenu value="#{caseFiltersUA.ttype}" >
+			<s:selectItems value="#{globalLists_ua.treatmentTypes}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['admin.tags']}:</ui:define>
 		<h:selectOneMenu value="#{caseFiltersUA.tag}" >
 			<s:selectItems value="#{tagsQuery.resultList}" var="x" label="#{x.name}" noSelectionLabel="-" />

@@ -12,6 +12,7 @@ import org.msh.tb.ua.entities.enums.MBTResult;
 import org.msh.tb.ua.entities.enums.RiskClassification;
 import org.msh.tb.ua.entities.enums.SideEffectGrading;
 import org.msh.tb.ua.entities.enums.SideEffectOutcome;
+import org.msh.tb.ua.entities.enums.TreatmentType;
 
 @Name("globalLists_ua")
 public class GlobalLists {
@@ -134,5 +135,9 @@ public class GlobalLists {
 	
 	public SideEffectOutcome[] getSideEffectOutcomes(){
 		return SideEffectOutcome.values();
+	}
+	
+	public TreatmentType[] getTreatmentTypes(){
+		return TreatmentType.values();
 	}
 }
