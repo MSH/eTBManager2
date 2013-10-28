@@ -43,9 +43,7 @@ public class CaseDataUA {
 
 	@Temporal(TemporalType.DATE) private Date dateFirstVisitGMC;
 	@Temporal(TemporalType.DATE) private Date dateFirstVisitTB;
-	@Temporal(TemporalType.DATE) private Date dateEndHospitalization;
 	@Temporal(TemporalType.DATE) private Date hospitalizationDate;
-	@Temporal(TemporalType.DATE) private Date dateHospitalization;
 	@Temporal(TemporalType.DATE) private Date dateFirstSymptoms;
 	
 	@Column(length=100)
@@ -687,22 +685,6 @@ public class CaseDataUA {
 
 
 	/**
-	 * @return the dateHospitalization
-	 */
-	public Date getDateHospitalization() {
-		return dateHospitalization;
-	}
-
-
-	/**
-	 * @param dateHospitalization the dateHospitalization to set
-	 */
-	public void setDateHospitalization(Date dateHospitalization) {
-		this.dateHospitalization = dateHospitalization;
-	}
-
-
-	/**
 	 * @param closestContact the closestContact to set
 	 */
 	public void setClosestContact(String closestContact) {
@@ -715,22 +697,6 @@ public class CaseDataUA {
 	 */
 	public String getClosestContact() {
 		return closestContact;
-	}
-
-
-	/**
-	 * @param dateEndHospitalization the dateEndHospitalization to set
-	 */
-	public void setDateEndHospitalization(Date dateEndHospitalization) {
-		this.dateEndHospitalization = dateEndHospitalization;
-	}
-
-
-	/**
-	 * @return the dateEndHospitalization
-	 */
-	public Date getDateEndHospitalization() {
-		return dateEndHospitalization;
 	}
 
 
