@@ -181,6 +181,10 @@
 </h:panelGroup>
 	
 <s:decorate id="bodydiv" template="/layout/casebody.xhtml">
+	<ui:define name="state-content">
+		<h:outputText value="#{tbcase.ownerUnit.name.defaultName}" rendered="#{tbcase.ownerUnit != null}" style="color:#960000;font-size:16px;"/>
+		<h:outputText value="#{tbcase.notificationUnit.name.defaultName}" rendered="#{tbcase.ownerUnit == null and tbcase.notificationUnit != null}" style="color:#960000;font-size:16px;"/>	
+	</ui:define>
 
 <h:form id="main">
 	<ui:include src="#{wspage['/cases/issues.xhtml']}" />
