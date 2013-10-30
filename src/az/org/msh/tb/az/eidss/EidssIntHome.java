@@ -200,6 +200,7 @@ public class EidssIntHome {
 					e.printStackTrace();
 				}
 			}
+			getEntityManager().flush();
 		}
 
 	}
@@ -233,7 +234,6 @@ public class EidssIntHome {
 		}
 		p.setValue(value.toString());
 		getEntityManager().persist(p);
-		getEntityManager().flush();
 	}
 
 	/**
