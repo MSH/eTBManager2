@@ -24,11 +24,15 @@
 		reRender="main" 
 		style="padding-left:20px;padding-right:20px;">
 	</a:commandLink>
+	<a:commandLink value="#{messages['az_AZ.ValidationState.revert']}" rendered="#{tbcase.validationState=='VALIDATED'}"
+		onclick="if (confirm('#{messages['az_AZ.ValidationState.revert.confirm']}')) Richfaces.showModalPanel('validrevertdlg');return false; "
+	
+		style="padding-left:20px;padding-right:20px;">
+	</a:commandLink>
 </td></tr>
 </table>
 
 </s:decorate>
 
 </s:div>
-    
 </ui:composition>

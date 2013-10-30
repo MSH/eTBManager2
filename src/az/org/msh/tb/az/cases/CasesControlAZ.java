@@ -1,14 +1,22 @@
 package org.msh.tb.az.cases;
 
 
+import java.util.Date;
+
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.App;
 import org.msh.tb.az.entities.CaseSeverityMark;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.cases.CaseIssueHome;
+import org.msh.tb.cases.CaseIssueHome.Action;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.cases.treatment.StartTreatmentIndivHome;
+import org.msh.tb.entities.Issue;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.tbunits.TBUnitSelection;
 
 /**
@@ -33,7 +41,7 @@ public class CasesControlAZ {
 			nTbUSel = tih.getTbunitselection();
 		}
 		Tbunit nTbU = nTbUSel.getTbunit();
-		Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
+		Tbunit nTbUUser = (Tbunit)Component.getInstance("selectedUnit");
 		if (nTbU==null || nTbUUser==null) return false;
 		if (nTbU.getId().intValue() != nTbUUser.getId().intValue())
 			return true;
@@ -58,7 +66,7 @@ public class CasesControlAZ {
 	}
 	
 	/**
-	 * Override the method save() CaseSeverityMarksHome class. Add flush after remove
+	 * Override the method {@link CaseSeverityMarksHome#save()}. Add flush after remove
 	 */
 	public static void CaseSeverityMarksHomeSave() {
 		CaseSeverityMarksHome csmh = (CaseSeverityMarksHome) App.getComponent(CaseSeverityMarksHome.class);
@@ -77,5 +85,23 @@ public class CasesControlAZ {
 			}
 			else App.getEntityManager().persist(sym);
 		}
+	}
+	
+	public void revertValidation(){
+		CaseIssueHome cih = (CaseIssueHome) App.getComponent(CaseIssueHome.class);
+		Issue issue = cih.getInstance();
+		CaseHome caseHome = (CaseHome) App.getComponent(CaseHome.class);
+		TbCase tbcase = caseHome.getInstance();
+		tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
+		
+		issue.setTitle(App.getMessage("az_AZ.ValidationState.revert"));
+		issue.setCreationDate(new Date());
+		issue.setTbcase(tbcase);
+		issue.setUser(cih.getUser());
+		issue.setClosed(true);
+		issue.setUnit(cih.getUserWorkspace().getTbunit());
+		
+		cih.persist();
+		caseHome.updateCaseTags();
 	}
 }

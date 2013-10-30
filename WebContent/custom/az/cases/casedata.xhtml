@@ -325,6 +325,35 @@
 		</div>
 		</h:form>
 	</rich:modalPanel>
+
+	<rich:modalPanel id="validrevertdlg" width="500" autosized="true" zindex="2000" trimOverlayedElements="false">
+		<f:facet name="header">#{messages['az_AZ.ValidationState.revert']}</f:facet>
+		<h:form id="formvalidrevert" style="padding:10px;">
+		<div class="form-content">
+			<h:panelGroup id="validrevertpnl" >
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:param name="labelstyle" value="width:60px" />
+					<ui:define name="label">#{messages['az_AZ.ValidationState.revert.adj']}:</ui:define>
+			    	<h:inputTextarea value="#{caseIssueHome.instance.description}" style="width:360px; height:80px; margin-left:15px;" required="true"/>
+				</s:decorate>
+			</h:panelGroup>
+		</div>
+		
+		<div class="button-bar">
+		<a:commandLink action="#{casesControlAZ.revertValidation()}"
+			styleClass="button" reRender="main,messages,formvalidrevert,formissues"
+			oncomplete="this.disabled=false;Richfaces.hideModalPanel('validrevertdlg');">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink>
+	
+		<a:commandLink styleClass="button-alt"  
+			onclick="Richfaces.hideModalPanel('validrevertdlg'); return false;">
+			<span>#{messages['form.cancel']}</span>
+		</a:commandLink>
+		</div>
+		</h:form>
+	</rich:modalPanel>
+	
 	<ui:include src="/layout/waitdlg.xhtml" />
 </ui:define>
 </ui:composition>  
