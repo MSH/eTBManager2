@@ -108,7 +108,7 @@ public class CaseEditingAZHome extends CaseEditingHome{
 	 */
 	public boolean notOwnTBUnit(){
 		Tbunit nTbU = getTbunitselection().getTbunit();
-		Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
+		Tbunit nTbUUser = (Tbunit)Component.getInstance("selectedUnit");
 		if (nTbU==null || nTbUUser==null) return false;
 		if (nTbU.getId().intValue() != nTbUUser.getId().intValue())
 			return true;
@@ -258,6 +258,14 @@ public class CaseEditingAZHome extends CaseEditingHome{
 					return false;
 				}
 			}
+		if (tc.getPatient().getBirthDate().after(tc.getRegistrationDate())){
+			facesMessages.addToControlFromResourceBundle("regdate", "az_AZ.case.birthearlyreg");
+			return false;
+		}
+		if (tc.getPatient().getBirthDate().after(tc.getDiagnosisDate())){
+			facesMessages.addToControlFromResourceBundle("diagdate", "az_AZ.case.birthearlydiag");
+			return false;
+		}
 		
 		return super.validateData();
 	}
