@@ -9,6 +9,7 @@ import java.util.List;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.ETB;
 import org.msh.tb.adminunits.AdminUnitGroup;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.application.App;
@@ -127,8 +128,7 @@ public class CaseStateReportAZ extends CaseStateReport{
 		getItems().add(it);
 		
 		//transferring to user TB unit
-		UserWorkspace uw = (UserWorkspace)App.getComponent("userWorkspace");
-		Tbunit userUnit = uw.getTbunit();
+		Tbunit userUnit = (Tbunit)Component.getInstance("selectedUnit");
 		if (userUnit!=null){
 			querySQL = getSQLSelect()+" where c.state = "+CaseState.TRANSFERRING.ordinal() + " and c.owner_unit_id = " + userUnit.getId();
 			col3cat = (BigInteger) App.getEntityManager().createNativeQuery(querySQL).getSingleResult();
