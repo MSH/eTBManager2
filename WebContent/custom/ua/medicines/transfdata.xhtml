@@ -26,10 +26,12 @@
 
 <ui:define name="left">
 	<h:form class="vertical-menu">
-	<s:link view="/custom/ua/medicines/transfedt.xhtml" rendered="#{transferHome.canCancel and transfer.status!='DONE'}" >
-		<f:param name="id" value="#{transfer.id}" />
-		<div class="edit-icon" style="float:left"/>#{messages['form.edit']}
-	</s:link>
+	<ui:remove>
+		<s:link view="/custom/ua/medicines/transfedt.xhtml" rendered="#{transferHome.canCancel and transfer.status!='DONE'}" >
+			<f:param name="id" value="#{transfer.id}" />
+			<div class="edit-icon" style="float:left"/>#{messages['form.edit']}
+		</s:link>
+	</ui:remove>
 	
 	<s:link view="/medicines/transfrec.xhtml" rendered="#{(transferHome.canReceive)}">
 		<f:param name="id" value="#{transfer.id}" />
