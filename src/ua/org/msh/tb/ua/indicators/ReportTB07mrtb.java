@@ -21,7 +21,7 @@ import org.msh.tb.ua.entities.CaseDataUA;
 @Scope(ScopeType.CONVERSATION)
 public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 	private static final long serialVersionUID = -8462692609433997419L;
-	
+
 	private IndicatorTable table1000;
 	private IndicatorTable table2000;
 
@@ -55,8 +55,8 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 				if (tc.getTreatmentPeriod().getEndDate().before(new Date()))
 					addToVerList(tc,2,1);*/
 	}
-	
-	
+
+
 	protected void generateTables() {
 		List<TbCase> lst;
 		setCounting(true);
@@ -68,7 +68,7 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 			lst = createQuery().getResultList();
 			Iterator<TbCase> it = lst.iterator();
 			Map<String, List<ErrItem>>  verifyList = getVerifyList();
-			
+
 			while(it.hasNext()){
 				TbCase tc = it.next();
 				CaseDataUA cd = (CaseDataUA) App.getEntityManager().find(CaseDataUA.class, tc.getId());  //AK, previous line will rise exception, if no result
@@ -76,7 +76,7 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 					addToVerList(tc,1,0);
 					continue;
 				}
-				
+
 				if (cd.getRegistrationCategory().getValue()==null){
 					addToVerList(tc,1,0);
 				}
@@ -94,7 +94,7 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 									rowid = "treat";
 								}
 							getTable1000().addIdValue(tc.getDiagnosisType(), rowid, 1F);
-							
+
 							//table 2000
 							if(tc.getPatientType() == null){
 								tc.setPatientType(PatientType.NEW);
@@ -108,7 +108,7 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 								addToVerList(tc,1,1);
 								break;
 							}
-							
+
 							if (tc.getInfectionSite()==null)
 								addToVerList(tc,1,2);
 							else
@@ -116,16 +116,18 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 								if (tc.getExtrapulmonaryType()!=null || tc.getExtrapulmonaryType2()!=null){
 									getTable2000().addIdValue("col", "extrapul", 1F);
 									//TODO may be accounted twice to the TOTAL!!!!
-									getTable2000().addIdValue("col", "total", 1F);
+									if(tc.getPulmonaryType() == null){
+										getTable2000().addIdValue("col", "total", 1F);
+									}
 								}
 							}
-/*							List<PrevTBTreatment> ptb = getEntityManager().createQuery("select t from PrevTBTreatment t where t.tbcase.id="+tc.getId()).getResultList();
+							/*							List<PrevTBTreatment> ptb = getEntityManager().createQuery("select t from PrevTBTreatment t where t.tbcase.id="+tc.getId()).getResultList();
 							if (ptb.size()>0)
 								if (PrevTBTreatmentOutcome.UNKNOWN.equals(ptb.get(ptb.size()-1).getOutcome())){
 									getTable2000().addIdValue("col", "other", 1F);
 									getTable2000().addIdValue("col", "total", 1F);
 								}*/
-							
+
 						}
 					}
 			}
@@ -140,7 +142,7 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 	protected String getHQLJoin() {
 		return null;
 	}
-	
+
 	@Override
 	protected String getHQLWhere() {
 		String hql = super.getHQLWhere();
@@ -156,7 +158,7 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 
 		table.addColumn(App.getMessage("DiagnosisType.CONFIRMED"), DiagnosisType.CONFIRMED);
 		table.addColumn(App.getMessage("DiagnosisType.SUSPECT"), DiagnosisType.SUSPECT);
-		
+
 		table.addRow(App.getMessage("uk_UA.reports.tb07.mrtb.1000.row1"), "reg");
 		table.addRow(App.getMessage("uk_UA.reports.tb07.mrtb.1000.row2"), "treat");	
 	}
@@ -168,7 +170,7 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 	private void initTable2000() {
 		IndicatorTable table = getTable2000();
 		table.addColumn("Count", "col");
-		
+
 		table.addRow(App.getMessage("PatientType.NEW"), PatientType.NEW);
 		table.addRow(App.getMessage("PatientType.RELAPSE"), PatientType.RELAPSE);
 		table.addRow(App.getMessage("PatientType.AFTER_DEFAULT"), PatientType.AFTER_DEFAULT);

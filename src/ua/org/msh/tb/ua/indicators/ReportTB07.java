@@ -96,7 +96,7 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 		setCounting(true);
 		int count = ((Long)createQuery().getResultList().get(0)).intValue();
 		if (count<=4000){
-			initVerifList("verify.tb07.error",7,2,1);
+			initVerifList("verify.tb07.error",6,2,1);
 			setCounting(false);
 			setOverflow(false);
 			lst = createQuery().getResultList();
@@ -136,9 +136,9 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 							}
 							else if (tc.getResHIV().size()==0)
 								addToVerList(tc,1,4);
-							if (tc.getInfectionSite() == null)
-								addToVerList(tc,1,6);
-							else
+							if(tc.getInfectionSite() == null){
+								tc.setInfectionSite(InfectionSite.PULMONARY);
+							}
 							if (tc.getInfectionSite().equals(InfectionSite.PULMONARY) || tc.getInfectionSite().equals(InfectionSite.BOTH)){
 								if (MicroscopyIsNull(tc) && CultureIsNull(tc)) addToVerList(tc,1,5);
 
@@ -201,9 +201,8 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 									getTable5000().addIdValue("col2",rowid, 1F);
 						}else
 							addToVerList(tc,1,1);
-					}
-					//else
-						//addToVerList(tc,1,0);
+					}else
+						addToVerList(tc,1,0);
 			}
 			IndicatorFilters filters = (IndicatorFilters)Component.getInstance("indicatorFilters");
 			int numcases = filters.getNumcases();
