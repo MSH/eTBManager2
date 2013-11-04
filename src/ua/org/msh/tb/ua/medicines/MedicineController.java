@@ -1,10 +1,12 @@
 package org.msh.tb.ua.medicines;
 
+import java.util.Date;
 import java.util.List;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.MedicineRegimen;
 import org.msh.tb.entities.OrderBatch;
 import org.msh.tb.entities.Regimen;
@@ -111,5 +113,9 @@ public class MedicineController {
 	
 	public static boolean isExpiringRegistCard(Object o){
 		return MedicineFunctions.isExpiringRegistCard(o);
+	}
+	
+	public static boolean isExpiredRelativeToDate(Batch b, Date d){
+		return MedicineFunctions.isExpiredRelativeToDate(b, d);
 	}
 }

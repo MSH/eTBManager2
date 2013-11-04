@@ -30,10 +30,10 @@ public class MedicineFunctions {
 		if(b != null)
 			if(b.getExpiryDate()!=null){
 				
-				if(b.getExpiryDate().before(new Date()))
+				if(b.getExpiryDate().before(DateUtils.getDate()))
 					return false;
 				
-				double diffInMonths = DateUtils.monthsBetween(b.getExpiryDate(), new Date());
+				double diffInMonths = DateUtils.monthsBetween(b.getExpiryDate(), DateUtils.getDate());
 				int monthsToAlert = (UserSession.getWorkspace().getMonthsToAlertExpiredMedicines() == null ? 0 : UserSession.getWorkspace().getMonthsToAlertExpiredMedicines());
 				
 				if(monthsToAlert == 0)
@@ -73,7 +73,7 @@ public class MedicineFunctions {
 			double diffInMonths = diffInDouble / 30.0;
 				 */
 				// calculate the number of months between two dates
-				int diffInMonths = DateUtils.monthsBetween(b.getRegistCardEndDate(), new Date());
+				int diffInMonths = DateUtils.monthsBetween(b.getRegistCardEndDate(), DateUtils.getDate());
 
 				if (diffInMonths<2)
 					return true;
@@ -82,4 +82,17 @@ public class MedicineFunctions {
 		return false;
 	}
 
+	/**
+	 * Check if batch is expired relative to stated date
+	 * @param b - batch object
+	 * @param d - stated date 
+	 * @return
+	 */
+	public static boolean isExpiredRelativeToDate(Batch b, Date d){
+		if (b==null) return false;
+		Date dd = d;
+		if (dd == null) dd = DateUtils.getDate();
+		return (b.getExpiryDate() != null) && (b.getExpiryDate().before(dd));
+	}
+	
 }
