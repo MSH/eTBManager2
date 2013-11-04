@@ -37,11 +37,12 @@
     	<h:inputText value="#{transfer.consignmentNumber}" required="true"/>
 	</s:decorate>
 
-    <s:decorate template="/layout/dateedit.xhtml" style="margin-top:20px">
+    <s:decorate template="/custom/ua/layout/dateedit.xhtml" style="margin-top:20px">
     	<ui:define name="label">#{messages['Transfer.consignmentDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="future" value="false" /> 
     	<ui:param name="datefield" value="#{transfer.shippingDate}" /> 
+    	<ui:param name="immediateSetter" value="true" /> 
 	</s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" style="clear:left;height:70px;">
@@ -50,7 +51,7 @@
     </s:decorate>
 
 	</div>
-	
+<s:fragment rendered="#{id==null}">
 	<a:commandLink ajaxSingle="true" styleClass="button-alt" reRender="medstkpnl" 
 		action="#{transferHome.filterMedicines}" oncomplete="showMedicinesStockDlg()" style="float:right">
 		<span>#{messages['form.selmeds']}</span>
@@ -165,7 +166,7 @@
 	</s:fragment>
 	</table>
 	</h:panelGroup>		
-
+</s:fragment>
 	<div class="form-footer">
         <a:commandLink action="#{transferHome.saveNewTransfer}" styleClass="button" reRender="main,messages"
         	onclick="if (!disableButton(this)) return false;" rendered="#{id==null}">
@@ -196,7 +197,8 @@
 
 <s:decorate template="/custom/ua/layout/batchselection.xhtml" >
 	<ui:param name="quantitytitle" value="#{messages['Batch.quantity']}" />
-	
+	<ui:param name="dateRelativeTo" value="#{transfer.shippingDate}" />
+
 	<a:commandLink action="#{transferHome.selectBatches}" rendered="#{id==null}"
 		onclick="if (!disableButton(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
 		oncomplete="enableButton();hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button">

@@ -98,9 +98,9 @@ function changeNumCont(elem,quantCont){
 	<h:dataTable value="#{batchSelection.items}" var="it" width="100%" styleClass="table1" columnClasses="colc,coll,colc,colr,colr,colr">
 		<h:column> 
 			<f:facet name="header">
-				<h:selectBooleanCheckbox id="todos" onclick="if (#{not empty checkchange}) checkClick(this); else if (#{id == null}) checkClick(this); else return false;"/>				
+				<h:selectBooleanCheckbox id="todos" onclick="checkClick(this);"/>				
 			</f:facet>
-			<h:selectBooleanCheckbox value="#{it.selected}" onclick="if (#{not empty checkchange}) updateRows(this); else if (#{id == null}) updateRows(); else return false;" rendered="#{not it.item.batch.expired}"/>
+			<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" rendered="#{not medCalcCont.isExpiredRelativeToDate(it.item.batch,dateRelativeTo)}"/>
 		</h:column>
 		
 		<h:column>
@@ -114,7 +114,8 @@ function changeNumCont(elem,quantCont){
 			<f:facet name="header">
 				<h:outputText value="#{messages['Batch.registCard']}" styleClass="collh"/>
 			</f:facet>
-			<h:outputText value="#{it.item.batch.registCardNumber} #{messages['from']} "/>
+			<h:outputText value="#{it.item.batch.registCardNumber}"/>
+			<h:outputText value=" #{messages['from']} " rendered="#{it.item.batch.registCardBeginDate != null}"/>
 			<h:outputText value="#{it.item.batch.registCardBeginDate}" converter="localeDateConverter" />
 		</h:column>
 		
@@ -154,9 +155,9 @@ function changeNumCont(elem,quantCont){
 			<br/>
 			<h:inputText id="qtd" value="#{it.item.quantity}" style="width:80px;background-color:#E0E0E0;"
 				onkeypress="return false;" 
-				rendered="#{not it.item.batch.expired}" />
+				rendered="#{not medCalcCont.isExpiredRelativeToDate(it.item.batch,dateRelativeTo)}" />
 			<h:outputText value="#{messages['meds.selbatches.expired']}" 
-				rendered="#{it.item.batch.expired}" 
+				rendered="#{medCalcCont.isExpiredRelativeToDate(it.item.batch,dateRelativeTo)}" 
 				styleClass="warn" />
 			<input type="hidden" value="#{it.item.batchQuantity.quantity}" />
 		</h:column>
