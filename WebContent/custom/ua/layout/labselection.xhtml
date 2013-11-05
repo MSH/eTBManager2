@@ -9,21 +9,22 @@
 
 <s:decorate template="/layout/edit.xhtml" rendered="#{not labselection.level1ReadOnly}">
 	<ui:define name="label">#{messages['Laboratory']}:</ui:define>
-	<h:selectOneMenu id="cbselau" value="#{labselection.adminUnitDefault}" required="#{required}" requiredMessage="#{messages['javax.faces.component.UIInput.REQUIRED']}">
+	<h:selectOneMenu id="cbselau" value="#{labselection.adminUnitDefault}" required="#{required}">
 		<s:selectItems var="it" value="#{labselection.adminUnits}" noSelectionLabel="-" label="#{it.name}"/>
 		<s:convertEntity />
 		<a:support event="onchange" ajaxSingle="true" reRender="cblabs" focus="cblab"/>
 	</h:selectOneMenu>
-
+</s:decorate>
+	
 	<h:panelGroup id="cblabs">
-	<br/>
-	<h:selectOneMenu id="cblab" value="#{labselection.laboratory}" required="#{required}" requiredMessage="#{messages['javax.faces.component.UIInput.REQUIRED']}">
-        <s:selectItems value="#{labselection.optionsWithUnitLevel1}" var="it" label="#{it.abbrevName} (#{it.name})" noSelectionLabel="-" />
-      	<s:convertEntity/>
-    </h:selectOneMenu>
+		<br/>
+		<h:selectOneMenu id="cblab" value="#{labselection.laboratory}" required="#{required}" >
+	        <s:selectItems value="#{labselection.optionsWithUnitLevel1}" var="it" label="#{it.abbrevName} (#{it.name})" noSelectionLabel="-" />
+	      	<s:convertEntity/>
+	    </h:selectOneMenu>
+		<h:message for="cblab" styleClass="error" />
 	</h:panelGroup>
 
 	<ui:insert />
-</s:decorate>
 
 </ui:composition>
