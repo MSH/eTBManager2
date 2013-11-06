@@ -61,7 +61,7 @@ public class ReportSelection {
 		if (userWorkspace != null)
 			return;
 		
-		ViewService srv = (ViewService)Component.getInstance("workspaceViewService", true);
+		ViewService srv = ViewService.instance();
 		if (srv.isFormPost())
 			return;
 		
