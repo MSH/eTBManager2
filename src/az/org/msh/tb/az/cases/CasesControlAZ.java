@@ -51,10 +51,9 @@ public class CasesControlAZ {
 	 * Set tb-unit from database
 	 */
 	public void setUserTBUnitDefault(){
-		//Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
 		TBUnitSelection nTbUSel;
 		CaseHome caseHome = (CaseHome)App.getComponent("caseHome");
-		Tbunit nTbUUser = caseHome.getTbCase().getOwnerUnit();
+		Tbunit ownerUnit = caseHome.getTbCase().getOwnerUnit();
 		StartTreatmentHome th = (StartTreatmentHome)App.getComponent("startTreatmentHome",false);
 		if (th!=null)
 			nTbUSel = th.getTbunitselection();
@@ -62,7 +61,7 @@ public class CasesControlAZ {
 			StartTreatmentIndivHome tih = (StartTreatmentIndivHome)App.getComponent("startTreatmentIndivHome",false);
 			nTbUSel = tih.getTbunitselection();
 		}
-		nTbUSel.setTbunitWithOptions(nTbUUser);
+		nTbUSel.setTbunitWithOptions(ownerUnit);
 	}
 	
 	/**
@@ -99,7 +98,7 @@ public class CasesControlAZ {
 		issue.setTbcase(tbcase);
 		issue.setUser(cih.getUser());
 		issue.setClosed(true);
-		issue.setUnit(cih.getUserWorkspace().getTbunit());
+		issue.setUnit((Tbunit)Component.getInstance("selectedUnit"));
 		
 		cih.persist();
 		caseHome.updateCaseTags();

@@ -172,13 +172,14 @@ public class CaseEditingAZHome extends CaseEditingHome{
 
 		// initialize default values
 		UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
-		if (userWorkspace != null) {
-			if (userWorkspace.getTbunit().isNotifHealthUnit())
-				getTbunitselection().setTbunit(userWorkspace.getTbunit());
+		Tbunit userUnit = (Tbunit)Component.getInstance("selectedUnit");
+		if (userUnit != null) {
+			if (userUnit.isNotifHealthUnit())
+				getTbunitselection().setTbunit(userUnit);
 
 			AdministrativeUnit au = userWorkspace.getAdminUnit();
 			if (au == null)
-				au = userWorkspace.getTbunit().getAdminUnit();
+				au = userUnit.getAdminUnit();
 
 			if (au != null) {
 				au = entityManager.find(AdministrativeUnit.class, au.getId());
@@ -219,13 +220,14 @@ public class CaseEditingAZHome extends CaseEditingHome{
 
 		// initialize default values
 		UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
-		if (userWorkspace != null) {
-			if (userWorkspace.getTbunit().isNotifHealthUnit())
-				getTbunitselection().setTbunit(userWorkspace.getTbunit());
+		Tbunit userUnit = (Tbunit)Component.getInstance("selectedUnit");
+		if (userUnit != null) {
+			if (userUnit.isNotifHealthUnit())
+				getTbunitselection().setTbunit(userUnit);
 
 			AdministrativeUnit au = userWorkspace.getAdminUnit();
 			if (au == null)
-				au = userWorkspace.getTbunit().getAdminUnit();
+				au = userUnit.getAdminUnit();
 
 			if (au != null) {
 				au = entityManager.find(AdministrativeUnit.class, au.getId());
@@ -338,12 +340,6 @@ public class CaseEditingAZHome extends CaseEditingHome{
 			}
 		}
 		
-		/*Tbunit nTbU = getTbunitselection().getTbunit();
-		Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
-		if (nTbU.getId().intValue() != nTbUUser.getId().intValue())
-			if (confirmTbUnit() == JOptionPane.NO_OPTION)
-				getTbunitselection().setTbunit(nTbUUser);
-		*/
 		return super.saveEditing();
 	}
 
@@ -371,8 +367,7 @@ public class CaseEditingAZHome extends CaseEditingHome{
 	public Tbunit getNotificationUnitDefault(){
 		Tbunit tbu = getTbunitselection().getTbunit();
 		if (tbu == null){
-			UserWorkspace uw = (UserWorkspace)App.getComponent("userWorkspace");
-			tbu = uw.getTbunit();
+			tbu = (Tbunit)Component.getInstance("selectedUnit");
 			getTbunitselection().setTbunit(tbu);
 		}
 		return tbu;

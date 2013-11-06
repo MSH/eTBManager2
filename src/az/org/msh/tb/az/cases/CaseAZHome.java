@@ -205,13 +205,14 @@ public class CaseAZHome {
 
 		TbCase tbcase = caseHome.getInstance();
 		Tbunit treatmentUnit = tbcase.getOwnerUnit();
+		Tbunit userUnit = (Tbunit)Component.getInstance("selectedUnit");
 		boolean owornot = false;
 		if (treatmentUnit != null)
-			owornot = (treatmentUnit.getId().equals(ws.getTbunit().getId()));
+			owornot = (treatmentUnit.getId().equals(userUnit.getId()));
 
 		Tbunit unit = tbcase.getNotificationUnit();
 		if (unit != null)
-			owornot = owornot|((unit != null) && (unit.getId().equals(ws.getTbunit().getId())));
+			owornot = owornot|((unit != null) && (unit.getId().equals(userUnit.getId())));
 
 		return owornot;
 	}
