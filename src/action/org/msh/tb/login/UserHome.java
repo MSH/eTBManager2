@@ -67,7 +67,7 @@ public class UserHome extends EntityHomeEx<User> {
 		User user = getInstance();
 		UserWorkspace uw = getUserWorkspace();
 		
-		uw.setTbunit(getTbunitselection().getTbunit());
+		uw.setTbunit(getTbunitselection().getSelected());
 		
 		UserWorkspace loginUserWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
 		if (loginUserWorkspace.getHealthSystem() != null)
@@ -235,7 +235,7 @@ public class UserHome extends EntityHomeEx<User> {
 			userworkspace.setUser(getInstance());
 			userworkspace.setWorkspace(ws);
 		}
-		else getTbunitselection().setTbunit(userworkspace.getTbunit());
+		else getTbunitselection().setSelected(userworkspace.getTbunit());
 	}	
 	
 	/**
@@ -277,8 +277,8 @@ public class UserHome extends EntityHomeEx<User> {
 	
 	public TBUnitSelection getTbunitselection() {
 		if (tbunitselection == null) {
-			tbunitselection = new TBUnitSelection();
-			tbunitselection.setHealthSystem(getUserWorkspace().getHealthSystem());
+			tbunitselection = new TBUnitSelection("unitid");
+//			tbunitselection.setHealthSystem(getUserWorkspace().getHealthSystem());
 			getUserWorkspace();
 		}
 		return tbunitselection;
@@ -305,7 +305,7 @@ public class UserHome extends EntityHomeEx<User> {
 			if (uv == UserView.COUNTRY)
 				selectedView = views.get(views.size() - 1).getValue().toString();
 
-			Tbunit unit = getTbunitselection().getTbunit();
+			Tbunit unit = getTbunitselection().getSelected();
 			if (unit != null) {
 				List<AdministrativeUnit> lst = unit.getAdminUnit().getParentsTreeList(true);
 

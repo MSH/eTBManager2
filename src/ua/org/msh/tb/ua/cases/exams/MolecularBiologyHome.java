@@ -18,7 +18,7 @@ public class MolecularBiologyHome extends ExamHome<MolecularBiologyUA> {
 
 	@In(create=true) FacesMessages facesMessages;
 	
-	private LaboratorySelection labselection = new LaboratorySelection();
+	private LaboratorySelection labselection = new LaboratorySelection("labid");
 
 	
 	@Factory("molecularBiologyUA")

@@ -56,7 +56,10 @@
 				<s:fragment rendered="#{not empty r.numberOfAFB}" style="display:block;clear:both;">
 					<h:outputText value="#{messages['cases.exams.afb']}"/>: #{r.numberOfAFB}
 				</s:fragment>
-				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}" style="display:block;"/>
+				<s:div rendered="#{not empty r.dateRelease}">
+					<b>#{messages['cases.exams.dateRelease']}: </b>
+					<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}"/>
+				</s:div>
 			</h:column>
 			
 			<h:column>
@@ -125,6 +128,10 @@
 				<div>
 					<h:outputText value="#{messages[r.rifResult.key]}" rendered="#{r.result=='TB_DETECTED'}" />
 				</div>
+				<s:div rendered="#{not empty r.dateRelease}">
+				<b>#{messages['cases.exams.dateRelease']}: </b>
+				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}"/>
+				</s:div>
 			</h:column>
 				
 			<h:column>
@@ -195,7 +202,10 @@
 				<s:div rendered="#{not empty r.numberOfColonies}" style="display:block;clear:both;">
 					<h:outputText value="#{messages['ExamCulture.numberOfColonies']}"/>: #{r.numberOfColonies}
 				</s:div>
-				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}" style="display:block;"/>
+				<s:div rendered="#{not empty r.dateRelease}">
+				<b>#{messages['cases.exams.dateRelease']}: </b>
+				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}"/>
+				</s:div>
 				<s:div rendered="#{not empty r.method}" style="display:block;clear:both;">
 					<h:outputText value="#{messages['cases.exams.method']}"/>: #{r.method}
 				</s:div>

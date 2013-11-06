@@ -48,8 +48,8 @@ public class CaseLogService {
 		CaseMoveHome caseMoveHome = (CaseMoveHome)Component.getInstance("caseMoveHome");
 
 		logService.addTableRow("cases.movdate", caseMoveHome.getMoveDate());
-		logService.addTableRow("patients.desthu", caseMoveHome.getTbunitselection().getTbunit().toString());
-		logService.addTableRow("AdministrativeUnit", caseMoveHome.getTbunitselection().getTbunit().getAdminUnit().getFullDisplayName());
+		logService.addTableRow("patients.desthu", caseMoveHome.getTbunitselection().getSelected().toString());
+		logService.addTableRow("AdministrativeUnit", caseMoveHome.getTbunitselection().getSelected().getAdminUnit().getFullDisplayName());
 		
 		saveExecuteTransaction("CASE_TRANSFEROUT", tbcase);
 	}

@@ -355,7 +355,7 @@ public class CaseDataBRHome {
 					res = false;
 				}
 
-				if (examCultureHome.getLabselection().getLaboratory() == null) {
+				if (examCultureHome.getLabselection().getSelected() == null) {
 					facesMessages.addToControlFromResourceBundle("cblabculture", "javax.faces.component.UIInput.REQUIRED");
 					res = false;
 				}
@@ -540,8 +540,8 @@ public class CaseDataBRHome {
 	 */
 	public void initializeIndividualizedRegimen() {
 		TBUnitSelection tbsel = startTreatmentIndivHome.getTbunitselection();
-		if (tbsel.getTbunit() == null) {
-			tbsel.setTbunit(caseHome.getInstance().getNotificationUnit());
+		if (tbsel.getSelected() == null) {
+			tbsel.setSelected(caseHome.getInstance().getNotificationUnit());
 		}
 	}
 

@@ -30,7 +30,7 @@ import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.MedAppointmentType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.entities.enums.YesNoType;
-import org.msh.tb.tbunits.TBUnitFilter;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.date.DateUtils;
 
@@ -101,7 +101,7 @@ public class CaseEditingHome {
 		UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
 		if (userWorkspace != null) {
 			if (userWorkspace.getTbunit().isNotifHealthUnit())
-				getTbunitselection().setTbunit(userWorkspace.getTbunit());
+				getTbunitselection().setSelected(userWorkspace.getTbunit());
 			
 			AdministrativeUnit au = userWorkspace.getAdminUnit();
 			if (au == null)
@@ -112,7 +112,7 @@ public class CaseEditingHome {
 				
 				getNotifAdminUnit().setSelectedUnit(au);
 
-				if (getTbunitselection().getTbunit() == null) {
+				if (getTbunitselection().getSelected() == null) {
 					List<AdministrativeUnit> lst = getTbunitselection().getAdminUnits();
 					
 					if (lst != null)
@@ -171,8 +171,8 @@ public class CaseEditingHome {
 		if (addr == null)
 			tbcase.setNotifAddress(new Address());
 		
-		if (getTbunitselection().getTbunit() == null)
-			tbunitselection.setTbunit(tbcase.getNotificationUnit());
+		if (getTbunitselection().getSelected() == null)
+			tbunitselection.setSelected(tbcase.getNotificationUnit());
 		
 		if (getNotifAdminUnit().getSelectedUnit() == null)
 			notifAdminUnit.setSelectedUnit(tbcase.getNotifAddress().getAdminUnit());
@@ -226,7 +226,7 @@ public class CaseEditingHome {
 		
 		TbCase tbcase = caseHome.getInstance();
 
-		tbcase.setNotificationUnit(tbunitselection.getTbunit());
+		tbcase.setNotificationUnit(tbunitselection.getSelected());
 		tbcase.getNotifAddress().setAdminUnit(notifAdminUnit.getSelectedUnit());
 		tbcase.getCurrentAddress().setAdminUnit(currentAdminUnit.getSelectedUnit());
 		
@@ -261,7 +261,7 @@ public class CaseEditingHome {
 			return;
 		}
 
-		startTreatmentHome.getTbunitselection().setTbunit(tbcase.getNotificationUnit());
+		startTreatmentHome.getTbunitselection().setSelected(tbcase.getNotificationUnit());
 		startTreatmentHome.setUseDefaultDoseUnit(true);
 		startTreatmentHome.updatePhases();
 		startTreatmentHome.startStandardRegimen();		
@@ -290,7 +290,7 @@ public class CaseEditingHome {
 		patientHome.persist();
 
 		// get notification unit
-		tbcase.setNotificationUnit(getTbunitselection().getTbunit());
+		tbcase.setNotificationUnit(getTbunitselection().getSelected());
 		tbcase.getNotifAddress().setAdminUnit(notifAdminUnit.getSelectedUnit());
 		
 		tbcase.setOwnerUnit(tbcase.getNotificationUnit());
@@ -421,7 +421,7 @@ public class CaseEditingHome {
 	
 	public TBUnitSelection getTbunitselection() {
 		if (tbunitselection == null) {
-			tbunitselection = new TBUnitSelection(true, TBUnitFilter.NOTIFICATION_UNITS);
+			tbunitselection = new TBUnitSelection("uaid", true, TBUnitType.NOTIFICATION_UNITS);
 		}
 		return tbunitselection;
 	}

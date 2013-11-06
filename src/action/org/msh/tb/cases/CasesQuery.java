@@ -163,7 +163,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		// health unit condition
 		if (filterUnit != null) {
 			// health unit was set ?
-			if (getCaseFilters().getTbunitselection().getTbunit() != null) {
+			if (getCaseFilters().getTbunitselection().getSelected() != null) {
 				switch (filterUnit) {
 				case NOTIFICATION_UNIT:
 					addCondition(notifCond);

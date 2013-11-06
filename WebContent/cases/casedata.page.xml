@@ -5,7 +5,6 @@
 	<restrict>#{userSession.canOpenCases}</restrict>
 	<action execute="#{caseHome.initView}"/>
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
-	<end-conversation before-redirect="true" />
 	
 	<navigation>
 		<rule if="#{not caseHome.canViewCase}">

@@ -4,9 +4,9 @@
 
 	<restrict>#{userSession.canEditCases}</restrict>
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" required="true" />
+
 	<navigation>
 		<rule if="#{not caseHome.canAnswerIssue}">
-			<end-conversation/>
 			<redirect view-id="/cases/casedata.xhtml">
 				<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
 			</redirect>

@@ -14,7 +14,7 @@ import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.tbunits.TBUnitFilter;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection;
 
 
@@ -54,7 +54,7 @@ public class StartTreatmentHome {
 	 * @return "treatment-started" if successfully started, otherwise return "error"
 	 */
 	public String startStandardRegimen() { 
-		if ((getTbunitselection().getTbunit() == null) || (iniTreatmentDate == null))
+		if ((getTbunitselection().getSelected() == null) || (iniTreatmentDate == null))
 			return "error";
 
 		TbCase tbcase = caseHome.getInstance();
@@ -72,13 +72,13 @@ public class StartTreatmentHome {
 		entityManager.createQuery("delete from TreatmentHealthUnit hu where hu.tbcase.id = " + tbcase.getId()).executeUpdate();
 		
 		caseRegimenHome.setUseDefaultDoseUnit(useDefaultDoseUnit);
-		caseRegimenHome.startNewRegimen(iniTreatmentDate, endTreatmentDate, tbunitselection.getTbunit());
+		caseRegimenHome.startNewRegimen(iniTreatmentDate, endTreatmentDate, tbunitselection.getSelected());
 		
 		// save the initial regimen information
 		tbcase.setRegimenIni(tbcase.getRegimen());
 
 		// save the treatment health unit
-		tbcase.setOwnerUnit(tbunitselection.getTbunit());
+		tbcase.setOwnerUnit(tbunitselection.getSelected());
 
 		// initialize case data
 		tbcase.setState(CaseState.ONTREATMENT);
@@ -100,7 +100,7 @@ public class StartTreatmentHome {
 	 */
 	public TBUnitSelection getTbunitselection() {
 		if (tbunitselection == null)
-			tbunitselection = new TBUnitSelection(true, TBUnitFilter.HEALTH_UNITS);
+			tbunitselection = new TBUnitSelection("unitid", true, TBUnitType.HEALTH_UNITS);
 		return tbunitselection;
 	}
 

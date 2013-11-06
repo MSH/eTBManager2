@@ -70,7 +70,7 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 
 		// update case
 		tbcase.setTreatmentPeriod(treatPeriod);
-		tbcase.setOwnerUnit(getTbunitselection().getTbunit());
+		tbcase.setOwnerUnit(getTbunitselection().getSelected());
 		tbcase.setState(CaseState.ONTREATMENT);
 		tbcase.setRegimen(null);
 		tbcase.setIniContinuousPhase( DateUtils.incMonths(iniTreatmentDate, monthsIntPhase) );
@@ -79,7 +79,7 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 		TreatmentHealthUnit hu = new TreatmentHealthUnit();
 		hu.setPeriod(new Period(treatPeriod));
 		hu.setTbcase(tbcase);
-		hu.setTbunit(getTbunitselection().getTbunit());
+		hu.setTbunit(getTbunitselection().getSelected());
 		hu.setTransferring(false);
 		
 		tbcase.getHealthUnits().clear();

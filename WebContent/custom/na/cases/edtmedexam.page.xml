@@ -4,19 +4,15 @@
 
 	<restrict>#{userSession.canEditCases}</restrict>
 
-	<begin-conversation join="true" />
-
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
 	<param name="examid" value="#{medicalExaminationNAHome.id}"	converterId="javax.faces.Integer" />
 	
 	<navigation>
 		<rule if="#{not caseHome.managed}">
-			<end-conversation />
 			<redirect view-id="/cases/index.xhtml" />
 		</rule>
 
 		<rule if-outcome="persisted">
-			<end-conversation />
 			<redirect view-id="/cases/casedata.xhtml">
 				<param name="id" value="#{caseHome.id}" />
 			</redirect>

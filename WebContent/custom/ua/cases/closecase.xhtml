@@ -32,10 +32,9 @@
     <h:panelGroup id="outcome">
     <s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['cases.outcome']}:</ui:define>
-		<h:selectOneMenu id="selstate" value="#{caseCloseHome.state}" required="true" layout="pageDirection">
+		<h:selectOneMenu id="selstate" value="#{caseCloseHome.state}" required="true" layout="pageDirection" onchange="statecheckClick(this,#{tbcase.classification != 'DRTB'});">
 				<s:selectItems value="#{globalLists_ua.outcomes}" var="v" label="#{messages[v.key]}" noSelectionLabel="-"/>
 				<s:convertEnum />
-				<a:support event="onchange" oncomplete="statecheckClick(this,#{tbcase.classification != 'DRTB'});" reRender="outcome, extrainfo1" ajaxSingle="true"/>
 		</h:selectOneMenu>
     </s:decorate>
     </h:panelGroup >
@@ -67,9 +66,10 @@
     </s:decorate>
     </div>
     
+</div>
 
 	<div class="form-footer">
-	<a:commandLink action="#{caseDataUAHome.closeCase}" styleClass="button" onclick="disableButton(this)" reRender="outcome,main">
+	<a:commandLink action="#{caseDataUAHome.closeCase}" styleClass="button" onclick="disableButton(this)" reRender="messages,main">
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink> 
     <s:link view="/cases/casedata.xhtml" styleClass="button-alt" onclick="disableButton(this)">
@@ -77,11 +77,10 @@
        	<span>#{messages['form.cancel']}</span>
     </s:link>
     </div>
-</div>
 </s:decorate>
 
 <!-- <rich:jQuery selector="#selstate" query="change(function(){statecheckClick(this);})" /> -->  
-<rich:jQuery selector="#comments" query="hide()" />
+<rich:jQuery selector="#comments" query="slideUp()" />
 <script type="text/javascript">
 <!--
 function statecheckClick(elem,yesForFail) {
@@ -92,16 +91,16 @@ function statecheckClick(elem,yesForFail) {
 		value=elem2.value;
 		}	
 	if (value=='OTHER')
-        jQuery('#comments').show(500);
-   else jQuery('#comments').hide(500);
+        jQuery('#comments').slideDown(500);
+   else jQuery('#comments').slideUp(500);
    
    if ((value=='FAILED' && yesForFail) || value=='DIED')
-	    jQuery('#extrainfo').show(500);
-   else jQuery('#extrainfo').hide(500);
+	    jQuery('#extrainfo').slideDown(500);
+   else jQuery('#extrainfo').slideUp(500);
 
    if (value=='TRANSFERRED_OUT')
-	    jQuery('#transferoutdiv').show(500);
- else jQuery('#transferoutdiv').hide(500);
+	    jQuery('#transferoutdiv').slideDown(500);
+ else jQuery('#transferoutdiv').slideUp(500);
 }
 
 -->

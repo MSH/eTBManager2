@@ -6,20 +6,17 @@ import org.msh.tb.entities.Tbunit;
 
 public class TBUnitSelection2 extends TBUnitSelection {
 
-	public TBUnitSelection2(boolean applyUserRestrictions, TBUnitFilter filter) {
-		super();
-		setApplyUserRestrictions(applyUserRestrictions);
-		setApplyHealthSystemRestrictions(true);
-		this.filter = filter;
-		ignoreReadOnlyRule = false;
+	public TBUnitSelection2(String clientId, boolean applyUserRestrictions, TBUnitType filter) {
+		super(clientId, applyUserRestrictions, filter);
 	}
 	
-	public TBUnitSelection2() {
-		ignoreReadOnlyRule = false;
+	public TBUnitSelection2(String clientId) {
+		super(clientId);
 	}
 	
 	public List<Tbunit> getOptions() {
-		if (options == null) {
+		return super.getOptions();
+/*		if (options == null) {
 			options = new TbunitSelectionList();
 			options.setApplyHealthSystemRestrictions(applyHealthSystemRestrictions);
 			options.setRestriction(createHQLUnitFilter());
@@ -39,6 +36,6 @@ public class TBUnitSelection2 extends TBUnitSelection {
 		}
 		
 		return options.getUnits();
-	}
+*/	}
 	
 }

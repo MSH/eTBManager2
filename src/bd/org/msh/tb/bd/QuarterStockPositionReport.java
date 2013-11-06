@@ -17,7 +17,7 @@ import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.login.UserSession;
-import org.msh.tb.tbunits.TBUnitFilter;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection2;
 import org.msh.utils.date.DateUtils;
 
@@ -198,7 +198,7 @@ public class QuarterStockPositionReport {
 	 */
 	public TBUnitSelection2 getTbunitselection() {
 		if (tbunitselection == null)
-			tbunitselection = new TBUnitSelection2(false, TBUnitFilter.HEALTH_UNITS);
+			tbunitselection = new TBUnitSelection2("unitid", false, TBUnitType.HEALTH_UNITS);
 		return tbunitselection;
 	}
 

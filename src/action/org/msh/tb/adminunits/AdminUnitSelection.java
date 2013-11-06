@@ -19,18 +19,6 @@ import org.msh.tb.entities.enums.UserView;
  *
  */
 public class AdminUnitSelection {
-	
-	public AdminUnitSelection(boolean applyUserRestrictions) {
-		super();
-		this.applyUserRestrictions = applyUserRestrictions;
-		if (applyUserRestrictions)
-			selectUserRestrictions();
-		initializeAddrLevel();
-	}
-
-	public AdminUnitSelection() {
-		super();
-	}
 
 	private AdministrativeUnit[] units = new AdministrativeUnit[5];
 	private String[] labelLevel = new String[5];
@@ -39,11 +27,30 @@ public class AdminUnitSelection {
 	private List<AdministrativeUnit> unitsList;
 	
 	private boolean applyUserRestrictions;
-	private UserWorkspace userWorkspace;
+//	private UserWorkspace userWorkspace;
 	private List<AdminUnitChangeListener> listeners;
 	private Integer patientAddrRequiredLevels;
-	private Workspace defaultWorkspace;
+//	private Workspace defaultWorkspace;
 	
+	
+	/**
+	 * Constructor with default argument
+	 * @param applyUserRestrictions if true, the selection will apply the restrictions of user view
+	 */
+	public AdminUnitSelection(boolean applyUserRestrictions) {
+		super();
+		this.applyUserRestrictions = applyUserRestrictions;
+		if (applyUserRestrictions)
+			selectUserRestrictions();
+		initializeAddrLevel();
+	}
+
+	/**
+	 * Default constructor
+	 */
+	public AdminUnitSelection() {
+		super();
+	}
 
 	public AdministrativeUnit checkRequired() {
 		AdministrativeUnit aux = getSelectedUnit();
@@ -69,7 +76,7 @@ public class AdminUnitSelection {
 
 	
 	protected void initializeAddrLevel() {
-		defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace", true);
+		Workspace defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace", true);
 		patientAddrRequiredLevels = defaultWorkspace.getPatientAddrRequiredLevels(); 		
 	}
 
@@ -131,11 +138,12 @@ public class AdminUnitSelection {
 	 * @return {@link UserLogin} instance
 	 */
 	public UserWorkspace getUserWorkspace() {
-		if (userWorkspace == null) {
+		return (UserWorkspace)Component.getInstance("userWorkspace", true);
+/*		if (userWorkspace == null) {
 			userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace", true);
 		}
 		return userWorkspace;
-	}
+*/	}
 
 	/**
 	 * Return the label for first level of the country administrative organization

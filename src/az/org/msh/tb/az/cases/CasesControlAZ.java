@@ -61,7 +61,7 @@ public class CasesControlAZ {
 			StartTreatmentIndivHome tih = (StartTreatmentIndivHome)App.getComponent("startTreatmentIndivHome",false);
 			nTbUSel = tih.getTbunitselection();
 		}
-		nTbUSel.setTbunitWithOptions(ownerUnit);
+		nTbUSel.setTbunit(ownerUnit);
 	}
 	
 	/**

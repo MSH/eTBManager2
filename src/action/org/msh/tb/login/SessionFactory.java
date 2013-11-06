@@ -33,7 +33,7 @@ public class SessionFactory {
 	 * Factory to create an instance of the {@link Workspace} class in use by the current user
 	 * @return
 	 */
-	@Factory(value="defaultWorkspace", scope=ScopeType.CONVERSATION, autoCreate=true)
+	@Factory(value="defaultWorkspace", scope=ScopeType.EVENT, autoCreate=true)
 	public Workspace createDefaultWorkspace() {
 		Integer id = (Integer)Contexts.getSessionContext().get(workspaceId);
 		return id == null? null : getEntityManager().find(Workspace.class, id);
@@ -50,7 +50,7 @@ public class SessionFactory {
 		return id == null? null : getEntityManager().find(Tbunit.class, id);
 	}
 	
-	@Factory(value="userWorkspace", scope=ScopeType.CONVERSATION, autoCreate=true)
+	@Factory(value="userWorkspace", scope=ScopeType.EVENT, autoCreate=true)
 	public UserWorkspace createUserWorkspace() {
 		Integer id = (Integer)Contexts.getSessionContext().get(userWorkspaceId);
 		return id == null? null: getEntityManager().find(UserWorkspace.class, id);

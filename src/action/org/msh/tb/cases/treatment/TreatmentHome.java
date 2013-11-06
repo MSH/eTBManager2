@@ -30,7 +30,7 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.tb.login.UserSession;
-import org.msh.tb.tbunits.TBUnitFilter;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
@@ -110,7 +110,7 @@ public class TreatmentHome {
 			 minIniDate = healthUnit.getPeriod().getIniDate();
 		else minIniDate = null;
 		
-		getTbunitselection().setTbunit(healthUnit.getTbunit());
+		getTbunitselection().setSelected(healthUnit.getTbunit());
 		initialized = true;
 		regimenMovedToIndivid = false;
 		
@@ -123,7 +123,7 @@ public class TreatmentHome {
 	 * @return
 	 */
 	public String saveChanges() {
-		Tbunit unit = getTbunitselection().getTbunit();
+		Tbunit unit = getTbunitselection().getSelected();
 		
 		healthUnit.setTbunit( unit );
 		TbCase tbcase = caseHome.getInstance();
@@ -701,11 +701,11 @@ public class TreatmentHome {
 	public TBUnitSelection getTbunitselection() {
 		if (tbunitselection == null) {
 			TbCase tbcase = caseHome.getInstance();
-			TBUnitFilter filter;
+			TBUnitType filter;
 			if (tbcase.getClassification() == CaseClassification.DRTB)
-				 filter = TBUnitFilter.MDRHEALTH_UNITS;
-			else filter = TBUnitFilter.TBHEALTH_UNITS;
-			tbunitselection= new TBUnitSelection(true, filter);
+				 filter = TBUnitType.MDRHEALTH_UNITS;
+			else filter = TBUnitType.TBHEALTH_UNITS;
+			tbunitselection= new TBUnitSelection("unitid", true, filter);
 		}
 		return tbunitselection;
 	}

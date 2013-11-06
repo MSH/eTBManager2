@@ -20,7 +20,6 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.web.ServletContexts;
-import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
@@ -28,7 +27,6 @@ import org.msh.tb.entities.UserProfile;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.Passwords;
 import org.msh.utils.date.DateUtils;
 
@@ -48,8 +46,8 @@ public class UserSession {
 	private Integer userWorkspaceId;
 	
 	private String sessionId;
-
-	private TBUnitSelection tbunitselection;
+	
+//	private TBUnitSelection tbunitselection;
 	
 	/**
 	 * Static method to return an instance of the {@link Workspace} in the current session
@@ -232,7 +230,7 @@ public class UserSession {
     	Contexts.getSessionContext().set(SessionFactory.userWorkspaceId, userWorkspace.getId());
     	Contexts.getSessionContext().set("userLogin", userLogin);
     	Contexts.getSessionContext().set("workspaceExtension", userWorkspace.getWorkspace().getExtension());
-    	Contexts.getSessionContext().set("tbunitselection", getTbunitselection());
+//    	Contexts.getSessionContext().set("tbunitselection", getTbunitselection());
     	
     	setTbunit(userWorkspace.getTbunit());
 
@@ -667,21 +665,21 @@ public class UserSession {
 		return sessionId;
 	}
 	
-	public TBUnitSelection getTbunitselection() {
+/*	public TBUnitSelection getTbunitselection() {
 		tbunitselection = (TBUnitSelection)Component.getInstance("tbunitselection");
 		if (tbunitselection == null) {
 			tbunitselection = new TBUnitSelection();
 		}
 		return tbunitselection;
 	}
-	
-	public String getAdminUnitCodeLike() {
+*/	
+/*	public String getAdminUnitCodeLike() {
 		AdministrativeUnit adm = tbunitselection.getAdminUnit();
 		if (adm == null)
 			 return null;
 		else return adm.getCode() + "%";
 	}
-	
+*/	
 	public String acceptULA(){
 		UserLogin userLogin = getUserLogin();
 		User user = userLogin.getUser();
@@ -693,4 +691,5 @@ public class UserSession {
 		getEntityManager().flush();
 		return "ulaaccepted";
 	}
+	
 }

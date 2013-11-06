@@ -119,7 +119,7 @@ public class CaseEditingAZHome extends CaseEditingHome{
 	 */
 	public void setUserTBUnitDefault(){
 		//Tbunit nTbUUser = ((UserWorkspace)App.getComponent("userWorkspace")).getTbunit();
-		getTbunitselection().setTbunitWithOptions(caseHome.getTbCase().getNotificationUnit());
+		getTbunitselection().setTbunit(caseHome.getTbCase().getNotificationUnit());
 	}
 	
 	/**
@@ -345,7 +345,7 @@ public class CaseEditingAZHome extends CaseEditingHome{
 
 	public TBUnitSelection getReferTBUnit() {
 		if (referTBUnit == null){
-			referTBUnit = new TBUnitSelection();
+			referTBUnit = new TBUnitSelection("unitid");
 			if (caseHome.isManaged())
 				referTBUnit.setTbunit(getTbCase().getReferToTBUnit());
 		}

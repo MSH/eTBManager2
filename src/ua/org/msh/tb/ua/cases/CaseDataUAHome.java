@@ -153,7 +153,7 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 			persist();
 		}
 
-		return "case-closed";
+		return ret;
 	}
 	
 	private boolean checkConstraints() {

@@ -102,12 +102,12 @@ public class CaseCloseHome extends Controller{
 
 		Date dt = tbcase.getDiagnosisDate();
 		if ((dt != null) && (date.before(dt))) {
-			facesMessages.addFromResourceBundle("cases.close.msg1");
+			facesMessages.addToControlFromResourceBundle("edtdate", "cases.close.msg1");
 			return false;
 		}
 		
 		if(tbcase.getTreatmentPeriod() != null && this.date.after(tbcase.getTreatmentPeriod().getEndDate())){
-			facesMessages.addFromResourceBundle("cases.close.msg2");
+			facesMessages.addToControlFromResourceBundle("edtdate", "cases.close.msg2");
 			return false;
 		}
 		

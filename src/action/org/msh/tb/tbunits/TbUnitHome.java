@@ -20,9 +20,9 @@ public class TbUnitHome extends EntityHomeEx<Tbunit> {
 	
 	private AdminUnitSelection ausel = new AdminUnitSelection();
 	
-	private TBUnitSelection slmSupplier = new TBUnitSelection(false, TBUnitFilter.MEDICINE_SUPPLIERS);
-	private TBUnitSelection flmSupplier = new TBUnitSelection(false, TBUnitFilter.MEDICINE_SUPPLIERS);
-	private TBUnitSelection orderAuthorizer = new TBUnitSelection();
+	private TBUnitSelection slmSupplier = new TBUnitSelection("unitslm", false, TBUnitType.MEDICINE_SUPPLIERS);
+	private TBUnitSelection flmSupplier = new TBUnitSelection("unitflm", false, TBUnitType.MEDICINE_SUPPLIERS);
+	private TBUnitSelection orderAuthorizer = new TBUnitSelection("unitaut");
 
 	@In(create=true) FacesMessages facesMessages;
 	
@@ -52,9 +52,9 @@ public class TbUnitHome extends EntityHomeEx<Tbunit> {
 			unit.setSecondLineSupplier(null);
 		}
 		else {
-			unit.setFirstLineSupplier(flmSupplier.getTbunit());
-			unit.setSecondLineSupplier(slmSupplier.getTbunit());
-			unit.setAuthorizerUnit(orderAuthorizer.getTbunit());
+			unit.setFirstLineSupplier(flmSupplier.getSelected());
+			unit.setSecondLineSupplier(slmSupplier.getSelected());
+			unit.setAuthorizerUnit(orderAuthorizer.getSelected());
 		}
 		
 		if (!unit.isMedicineSupplier())
@@ -132,8 +132,8 @@ public class TbUnitHome extends EntityHomeEx<Tbunit> {
 	
 	public void initializeEditing() {
 		Tbunit unit = getInstance();
-		getFlmSupplier().setTbunit(unit.getFirstLineSupplier());
-		getSlmSupplier().setTbunit(unit.getSecondLineSupplier());
-		getOrderAuthorizer().setTbunit(unit.getAuthorizerUnit());
+		getFlmSupplier().setSelected(unit.getFirstLineSupplier());
+		getSlmSupplier().setSelected(unit.getSecondLineSupplier());
+		getOrderAuthorizer().setSelected(unit.getAuthorizerUnit());
 	}
 }

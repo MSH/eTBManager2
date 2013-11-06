@@ -7,7 +7,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.tb.application.WorkspaceViewService;
+import org.msh.tb.application.ViewService;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.MedicalExamination;
 import org.msh.tb.entities.enums.YesNoType;
@@ -87,10 +87,10 @@ public class MedicalExaminationHome extends ExamHome<MedicalExamination>{
 
 
 	/**
-	 * Initialize a new medical examination for Brazil - The height is automatically imported from the previous
+	 * Initialize a new medical examination - The height is automatically imported from the previous
 	 */
 	public void initialize() {
-		if (WorkspaceViewService.instance().isFormPost())
+		if (ViewService.instance().isFormPost())
 			return;
 		
 		MedicalExamination medInst = getInstance();

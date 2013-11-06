@@ -16,13 +16,14 @@ import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
 import org.jboss.seam.international.Messages;
+import org.msh.tb.application.ViewService;
 import org.msh.tb.cases.treatment.PrescribedMedicineHome;
 import org.msh.tb.cases.treatment.PrescriptionTable;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.TreatmentHealthUnit;
 import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.tbunits.TBUnitFilter;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
@@ -51,6 +52,17 @@ public class CaseMoveHome extends Controller {
 
 
 	/**
+	 * Called when the transfer out form is displayed to the user
+	 */
+	public void initializeTransferOut() {
+		// if it's an HTTP POST, ignore the initialize method
+		if (ViewService.instance().isFormPost())
+			return;
+		
+		getTbunitselection().setAdminUnit(null);
+	}
+	
+	/**
 	 * Execute the transfer of a case to another health unit 
 	 * @return
 	 */
@@ -63,7 +75,7 @@ public class CaseMoveHome extends Controller {
 			return "error";
 		
 		TbCase tbcase = caseHome.getInstance();
-		Tbunit tbunit = getTbunitselection().getTbunit();
+		Tbunit tbunit = getTbunitselection().getSelected();
 //		Tbunit unitFrom = tbcase.getOwnerUnit();
 
 		// create the period of treatment for the new health unit
@@ -106,7 +118,7 @@ public class CaseMoveHome extends Controller {
 	 * @return true if transfer out can be executed
 	 */
 	protected boolean validateTransferOut() {
-		Tbunit tbunit = getTbunitselection().getTbunit();
+		Tbunit tbunit = getTbunitselection().getSelected();
 		if (tbunit == null)
 			return false;
 		
@@ -216,6 +228,10 @@ public class CaseMoveHome extends Controller {
 	 * Initialize the transfer in registration
 	 */
 	public void initializeTransferIn() {
+		// just initialize it if it's an HTTP GET
+		if (ViewService.instance().isFormPost())
+			return;
+
 		if (!caseHome.isCanTransferIn())
 			return;
 
@@ -295,9 +311,9 @@ public class CaseMoveHome extends Controller {
 
 	public TBUnitSelection getTbunitselection() {
 		if (tbunitselection == null) {
-			tbunitselection = new TBUnitSelection(false, TBUnitFilter.HEALTH_UNITS);
+			tbunitselection = new TBUnitSelection("unitid", false, TBUnitType.HEALTH_UNITS);
 			tbunitselection.setApplyHealthSystemRestrictions(false);
-			tbunitselection.setHealthSystem(null);
+//			tbunitselection.setHealthSystem(null);
 			tbunitselection.setIgnoreReadOnlyRule(true);
 		}
 		return tbunitselection;

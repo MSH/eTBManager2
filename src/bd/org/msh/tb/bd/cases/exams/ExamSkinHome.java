@@ -1,15 +1,12 @@
 package org.msh.tb.bd.cases.exams;
 
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.msh.tb.cases.exams.LaboratoryExamHome;
 
 
-	@Name("examSkinHome")
-	@Scope(ScopeType.CONVERSATION)
-	public class ExamSkinHome extends LaboratoryExamHome<ExamSkin> {
+@Name("examSkinHome")
+public class ExamSkinHome extends LaboratoryExamHome<ExamSkin> {
 
 
 		/**
@@ -26,5 +23,5 @@ import org.msh.tb.cases.exams.LaboratoryExamHome;
 		public String getJoinFetchHQL() {
 			return super.getJoinFetchHQL() + " left join fetch exam.method met ";
 		}
-	}
+}
 

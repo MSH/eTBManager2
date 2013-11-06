@@ -25,7 +25,7 @@ import org.msh.tb.entities.ForecastingOrder;
 import org.msh.tb.entities.ForecastingRegimen;
 import org.msh.tb.entities.ForecastingResult;
 import org.msh.tb.entities.Regimen;
-import org.msh.tb.tbunits.TBUnitFilter;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection;
 
 /**
@@ -70,7 +70,7 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 		Forecasting forecasting = getInstance();
 
 		getAdminUnitSelection().setSelectedUnit(forecasting.getAdministrativeUnit());
-		getTbunitSelection().setTbunit(forecasting.getTbunit());
+		getTbunitSelection().setSelected(forecasting.getTbunit());
 		newName = getInstance().getName();
 		publicView = getInstance().isPublicView();
 		
@@ -188,7 +188,7 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 			forecasting.setRecordingDate(new Date());
 		
 		forecasting.setAdministrativeUnit(getAdminUnitSelection().getSelectedUnit());
-		forecasting.setTbunit(getTbunitSelection().getTbunit());
+		forecasting.setTbunit(getTbunitSelection().getSelected());
 
 		forecasting.setWorkspace(getWorkspace());
 
@@ -214,7 +214,7 @@ public class ForecastingHome extends EntityHomeEx<Forecasting> {
 	 */
 	public TBUnitSelection getTbunitSelection() {
 		if (tbunitSelection == null)
-			tbunitSelection = new TBUnitSelection(true, TBUnitFilter.MEDICINE_WAREHOUSES);
+			tbunitSelection = new TBUnitSelection("unitid", true, TBUnitType.MEDICINE_WAREHOUSES);
 		return tbunitSelection;
 	}
 

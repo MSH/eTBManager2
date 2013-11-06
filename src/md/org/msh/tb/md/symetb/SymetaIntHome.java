@@ -108,7 +108,7 @@ public class SymetaIntHome {
 		getAuselection().setSelectedUnit(au);
 		
 		Tbunit unit = getConfig().getDefaultTbunit();
-		getTbunitSelection().setTbunit(unit);
+		getTbunitSelection().setSelected(unit);
 
 		configSaved = false;
 	}
@@ -119,7 +119,7 @@ public class SymetaIntHome {
 	 * @return
 	 */
 	public String saveConfigs() {
-		Tbunit unit = tbunitSelection.getTbunit();
+		Tbunit unit = tbunitSelection.getSelected();
 		AdministrativeUnit au = auselection.getSelectedUnit();
 		
 		if ((unit == null) || (au == null))
@@ -243,7 +243,7 @@ public class SymetaIntHome {
 
 	public TBUnitSelection getTbunitSelection() {
 		if (tbunitSelection == null)
-			tbunitSelection = new TBUnitSelection();
+			tbunitSelection = new TBUnitSelection("unitid");
 		return tbunitSelection;
 	}
 

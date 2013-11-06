@@ -68,7 +68,7 @@ public class TrainingHome {
 			userHome.setPassword(userPrefix.toLowerCase() + i);
 			user.setName("Training user " + i);
 			user.setState(UserState.ACTIVE);
-			userHome.getTbunitselection().setTbunit(tc);
+			userHome.getTbunitselection().setSelected(tc);
 			userHome.getUserWorkspace().setPlayOtherUnits(true);
 			userHome.getUserWorkspace().setProfile(profile);
 //			userHome.getUserWorkspace().setTbunit(tc);
@@ -141,9 +141,9 @@ public class TrainingHome {
 		unit.setMedManStartDate(dtIniMedicine);
 		
 		tbunitHome.getAusel().setSelectedUnit(local);
-		tbunitHome.getFlmSupplier().setTbunit(supplier);
-		tbunitHome.getSlmSupplier().setTbunit(supplier);
-		tbunitHome.getOrderAuthorizer().setTbunit(authorizerUnit);
+		tbunitHome.getFlmSupplier().setSelected(supplier);
+		tbunitHome.getSlmSupplier().setSelected(supplier);
+		tbunitHome.getOrderAuthorizer().setSelected(authorizerUnit);
 
 		tbunitHome.setTransactionLogActive(false);
 		tbunitHome.setDisplayMessage(false);

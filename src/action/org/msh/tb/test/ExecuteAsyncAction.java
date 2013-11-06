@@ -127,7 +127,7 @@ public class ExecuteAsyncAction {
 		startTreatHome.setRegimen(reg);
 		startTreatHome.setIniTreatmentDate(tbcase.getTreatmentPeriod().getIniDate());
 		startTreatHome.setEndTreatmentDate(tbcase.getTreatmentPeriod().getEndDate());
-		startTreatHome.getTbunitselection().setTbunit(tbcase.getNotificationUnit());
+		startTreatHome.getTbunitselection().setSelected(tbcase.getNotificationUnit());
 		startTreatHome.updatePhases();
 		startTreatHome.startStandardRegimen();
 	}

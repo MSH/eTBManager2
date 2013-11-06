@@ -5,9 +5,9 @@
 
 		<restrict>#{userSession.canEditCases}</restrict>
 		<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
+
 		<navigation>
 			<rule if="#{not caseHome.managed}">
-				<end-conversation/>
 				<redirect view-id="/cases/index.xhtml"/>
 			</rule>
 		

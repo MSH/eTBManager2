@@ -9,9 +9,8 @@
 
 <s:decorate template="/layout/display.xhtml" rendered="#{not labselection.level1ReadOnly}">
 	<ui:define name="label">#{messages['Laboratory']}:</ui:define>
-	<h:selectOneMenu id="cbselau" value="#{labselection.adminUnit}" required="#{required}" >
-		<s:selectItems var="it" value="#{labselection.adminUnits}" noSelectionLabel="-" label="#{it.name}"/>
-		<s:convertEntity />
+	<h:selectOneMenu id="cbselau" value="#{labselection.adminUnitId}" required="#{required}" >
+		<f:selectItems value="#{labselection.adminUnitOptions}"/>
 		<a:support event="onchange" ajaxSingle="true" reRender="#{empty edtid?'cblabs': edtid}" focus="cblab"/>
 	</h:selectOneMenu>
 

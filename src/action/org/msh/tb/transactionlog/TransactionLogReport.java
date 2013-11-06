@@ -13,9 +13,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.TransactionLog;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.RoleAction;
-import org.msh.tb.login.UserSession;
 import org.msh.tb.reports.ReportSelection;
-import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.EntityQuery;
 import org.msh.utils.date.DateUtils;
 
@@ -47,8 +45,8 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 		"log.transactionDate <= #{transactionLogReport.endDate1}",
 		"log.entityId = #{transactionLogReport.entityId}",
 		"log.entityClass = #{transactionLogReport.entityClass}",
-		"log.unit.id = #{transactionLogReport.tbunitselection.tbunit.id}",
-		"log.adminUnit.code like #{transactionLogReport.adminUnitCode}"
+		"log.unit.id = #{standardFilters.selectedUnit.id}",
+		"log.adminUnit.code like #{standardFilters.tbunitSelection.adminUnitCodeLike}"
 	};
 
 	private RoleAction action;
@@ -216,9 +214,6 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 		return ((searchKey != null) && (!searchKey.isEmpty())? "%" + searchKey + "%" : null);
 	}
 
-	public String getAdminUnitCode(){
-		return (getTbunitselection().getAdminUnit() != null ? getTbunitselection().getAdminUnit().getCode()+"%" : null);
-	}
 	/**
 	 * @return the iniDate
 	 */
@@ -305,9 +300,4 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 		this.allResults = allResults;
 	}
 	
-
-	public TBUnitSelection getTbunitselection(){
-		UserSession us = (UserSession) Component.getInstance("userSession");
-		return us.getTbunitselection();
-	}
 }

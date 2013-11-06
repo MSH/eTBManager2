@@ -5,7 +5,7 @@ package org.msh.tb.tbunits;
  * @author Ricardo Memoria
  *
  */
-public enum TBUnitFilter {
+public enum TBUnitType {
 	HEALTH_UNITS,
 	NOTIFICATION_UNITS,
 	MDRHEALTH_UNITS,

@@ -18,7 +18,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.CountryStructuresQuery;
-import org.msh.tb.application.WorkspaceViewService;
+import org.msh.tb.application.ViewService;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.CountryStructure;
 import org.msh.tb.entities.HealthSystem;
@@ -54,7 +54,7 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 	@In(create=true) FacesMessages facesMessages;
 	@In(create=true) EntityManager entityManager;
 	@In(create=true) CountryStructuresQuery countryStructures;
-	@In(create=true) WorkspaceViewService workspaceViewService;
+	@In(create=true) ViewService viewService;
 	
 	private UserWorkspace userWorkspace;
 	private List<Tbunit> units;
@@ -131,7 +131,7 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 				createDefaultEntities();
 
 			if (viewChanged)
-				workspaceViewService.updateView(view);			
+				viewService.updateView(view);			
 		}
 		
 		return ret;

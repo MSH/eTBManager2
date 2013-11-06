@@ -7,7 +7,6 @@
 	
 	<navigation>
 		<rule if="#{not caseHome.managed}">
-			<end-conversation />
 			<redirect view-id="/cases/index.xhtml" />
 		</rule>
 		

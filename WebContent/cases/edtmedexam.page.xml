@@ -5,7 +5,6 @@
 	<restrict>#{userSession.canEditCases}</restrict>
 
 	<action execute="#{medicalExaminationHome.initialize}" />
-	<begin-conversation join="true" />
 
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
 	<param name="examid" value="#{medicalExaminationHome.idWithLog}"
@@ -18,7 +17,6 @@
 		</rule>
 
 		<rule if-outcome="persisted">
-			<end-conversation />
 			<redirect view-id="/cases/casedata.xhtml">
 				<param name="id" value="#{caseHome.id}" />
 			</redirect>

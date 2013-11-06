@@ -119,8 +119,8 @@
     <!-- Return image of the workspace to be displayed -->
     <page view-id="/workspaceimg.xhtml" >
     	<rewrite pattern="/workspaceimg/{imgName}"/>
-    	<param name="imgName" value="#{workspaceViewService.pictureFile}" />
-    	<action execute="#{workspaceViewService.responseImage}"/>
+    	<param name="imgName" value="#{viewService.pictureFile}" />
+    	<action execute="#{viewService.responseImage}"/>
     </page>
 
     <!-- Change the user workspace -->

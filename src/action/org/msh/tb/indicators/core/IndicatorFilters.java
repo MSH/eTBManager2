@@ -31,7 +31,7 @@ import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.entities.enums.YesNoType;
-import org.msh.tb.tbunits.TBUnitFilter;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection;
 
 @Name("indicatorFilters")
@@ -61,7 +61,7 @@ public class IndicatorFilters {
 	private boolean useDiagnosisDate;
 	private boolean useIniTreatmentDate;
 	
-	private TBUnitSelection tbunitselection = new TBUnitSelection(false, TBUnitFilter.HEALTH_UNITS);
+	private TBUnitSelection tbunitselection = new TBUnitSelection("unitid", false, TBUnitType.HEALTH_UNITS);
 	private CaseClassification classification;
 	private PatientType patientType;
 	private InfectionSite infectionSite;
@@ -110,7 +110,7 @@ public class IndicatorFilters {
 		iniYear = null;
 		endMonth = null;
 		endYear = null;
-		tbunitselection.setTbunit(null);
+		tbunitselection.setSelected(null);
 		classification = null;
 		patientType =  null;
 		infectionSite = null;

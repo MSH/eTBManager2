@@ -166,7 +166,7 @@ public class EIDSSFilters {
 	 */
 	public TBUnitSelection getTbunit() {
 		if (tbunit==null)
-			tbunit = new TBUnitSelection();
+			tbunit = new TBUnitSelection("unitid");
 		return tbunit;
 	}
 	/**

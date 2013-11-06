@@ -263,7 +263,7 @@ public class FollowUpBRHome {
             validationError = true;
 		}
 		
-		if (examCultureHome.getLabselection().getLaboratory() == null) {
+		if (examCultureHome.getLabselection().getSelected() == null) {
 			facesMessages.addToControlFromResourceBundle("examculturelabselection2", "javax.faces.component.UIInput.REQUIRED");
             validationError = true;
 		}
@@ -294,7 +294,7 @@ public class FollowUpBRHome {
             validationError = true;
 		}
 		
-		if (molecularBiologyHome.getLabselection().getLaboratory() == null) {
+		if (molecularBiologyHome.getLabselection().getSelected() == null) {
 			facesMessages.addToControlFromResourceBundle("molecularbiologylabselection2", "javax.faces.component.UIInput.REQUIRED");
             validationError = true;
 		}
@@ -321,7 +321,7 @@ public class FollowUpBRHome {
             validationError = true;
 		}
 
-		if (examDSTHome.getLabselection().getLaboratory() == null) {
+		if (examDSTHome.getLabselection().getSelected() == null) {
 			facesMessages.addToControlFromResourceBundle("examdstlabselection2", "javax.faces.component.UIInput.REQUIRED");
             validationError = true;
 		}
@@ -392,7 +392,7 @@ public class FollowUpBRHome {
 			validationError = true;
 		
 		//Has to be the same validation of CaseMoveHome.validateTransferOut()
-		Tbunit tbunit = caseMoveHome.getTbunitselection().getTbunit();
+		Tbunit tbunit = caseMoveHome.getTbunitselection().getSelected();
 		
 		// search for previous treatment health unit
 		TreatmentHealthUnit prev = caseMoveHome.findTransferOutHealthUnit();		

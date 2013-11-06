@@ -24,7 +24,7 @@ import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.misc.GlobalLists;
-import org.msh.tb.tbunits.TBUnitFilter;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.ItemSelectList;
 import org.msh.utils.date.DateUtils;
@@ -531,9 +531,9 @@ public class CaseFilters {
 	
 	public TBUnitSelection getTbunitselection() {
 		if (tbunitselection == null) {
-			tbunitselection = new TBUnitSelection();
+			tbunitselection = new TBUnitSelection("uaid");
 			tbunitselection.setApplyUserRestrictions(true);
-			tbunitselection.setFilter(TBUnitFilter.HEALTH_UNITS);
+			tbunitselection.setUnitType(TBUnitType.HEALTH_UNITS);
 		}
 		return tbunitselection;
 	}

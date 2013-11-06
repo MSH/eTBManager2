@@ -3,13 +3,12 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
 
-		<restrict>#{caseHome.canEditExams}</restrict>
-		<begin-conversation join="true"/>
 		<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
 		<param name="examid" value="#{examDSTHome.idWithLog}" converterId="javax.faces.Integer"/>
+		<action execute="#{examDSTHome.initializeForm}" />
+
 		<navigation>
 			<rule if="#{not caseHome.managed}">
-				<end-conversation/>
 				<redirect view-id="/cases/index.xhtml"/>
 			</rule>
 		
@@ -19,7 +18,6 @@
 				</redirect>
 			</rule>
 			<rule if-outcome="canceled">
-				<end-conversation before-redirect="true"/>
 				<redirect view-id="/cases/casedata.xhtml">
 					<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
 				</redirect>

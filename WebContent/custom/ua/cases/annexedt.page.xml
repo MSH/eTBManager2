@@ -5,10 +5,9 @@
 
 		<restrict>#{userSession.canEditCases}</restrict>
 		<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
-		<begin-conversation join="true"/>
+
 		<navigation>
 			<rule if-outcome="persisted">
-				<end-conversation/>
 				<redirect view-id="/cases/casedata.xhtml">
 					<param name="id" value="#{caseHome.id}"/>
 				</redirect>

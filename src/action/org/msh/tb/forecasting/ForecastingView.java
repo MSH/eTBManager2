@@ -26,6 +26,8 @@ import org.msh.tb.MedicinesQuery;
 import org.msh.tb.RegimensQuery;
 import org.msh.tb.adminunits.AdminUnitChangeListener;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.adminunits.AdminUnitSelector;
+import org.msh.tb.adminunits.AdminUnitSelector.ValueChangeListener;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Forecasting;
 import org.msh.tb.entities.ForecastingBatch;
@@ -40,8 +42,6 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.entities.enums.UserView;
-import org.msh.tb.tbunits.TBUnitSelection;
-import org.msh.tb.tbunits.TbunitChangeListener;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
@@ -151,8 +151,9 @@ public class ForecastingView {
 		});
 		
 		// add listener to list of TB units when user selects a new one
-		forecastingHome.getTbunitSelection().addListener(new TbunitChangeListener() {
-			public void notifyTbunitChange(TBUnitSelection tbunitSelection) {
+		forecastingHome.getTbunitSelection().addListener(new ValueChangeListener() {
+			@Override
+			public void notifyChange(AdminUnitSelector selector) {
 				numCasesOnTreatment = null;
 			}
 		});
@@ -199,8 +200,8 @@ public class ForecastingView {
 	public void initializeStockOnHand() {
 		String restriction;
 		Forecasting forecasting = forecastingHome.getInstance();
-		if ((forecasting.getView() == UserView.TBUNIT) && (forecastingHome.getTbunitSelection().getTbunit() != null)) 
-			restriction = "and s.tbunit.medManStartDate is not null and s.tbunit.id = " + forecastingHome.getTbunitSelection().getTbunit().getId().toString();
+		if ((forecasting.getView() == UserView.TBUNIT) && (forecastingHome.getTbunitSelection().getSelected() != null)) 
+			restriction = "and s.tbunit.medManStartDate is not null and s.tbunit.id = " + forecastingHome.getTbunitSelection().getSelected().getId().toString();
 		else
 		if ((forecasting.getView() == UserView.ADMINUNIT) && (forecastingHome.getAdminUnitSelection().getSelectedUnit() != null))
 			restriction = "and s.tbunit.adminUnit.code like '" + forecastingHome.getAdminUnitSelection().getSelectedUnit().getCode() + "%'";
@@ -306,7 +307,7 @@ public class ForecastingView {
 					"and hu.tbunit.adminUnit.code like :aucode)";
 		else admUnit = null;
 		
-		Tbunit unit = forecastingHome.getTbunitSelection().getTbunit();
+		Tbunit unit = forecastingHome.getTbunitSelection().getSelected();
 		if ((view == UserView.TBUNIT) && (unit != null))
 			hql += " and exists(from TreatmentHealthUnit hu where hu.tbcase.id = c.id and hu.period.endDate = c.treatmentPeriod.endDate " +
 					"and hu.tbunit.id = :unitid)";

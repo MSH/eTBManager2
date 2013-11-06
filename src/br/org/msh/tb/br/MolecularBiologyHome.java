@@ -22,7 +22,7 @@ public class MolecularBiologyHome extends ExamHome<MolecularBiology> {
 	
 	@In(create=true) FacesMessages facesMessages;
 	
-	private LaboratorySelection labselection = new LaboratorySelection();
+	private LaboratorySelection labselection = new LaboratorySelection("unitid");
 
 	
 	@Factory("molecularBiology")

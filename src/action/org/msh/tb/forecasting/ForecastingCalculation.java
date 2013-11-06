@@ -165,9 +165,9 @@ public class ForecastingCalculation {
 				hql += " and pm.medicine.line = " + MedicineLine.SECOND_LINE.ordinal();
 
 			// set restriction by view
-			if ((forecasting.getView() == UserView.TBUNIT) && (forecastingHome.getTbunitSelection().getTbunit() != null)) 
+			if ((forecasting.getView() == UserView.TBUNIT) && (forecastingHome.getTbunitSelection().getSelected() != null)) 
 				hql += "and exists(from TreatmentHealthUnit hu where hu.tbcase.id = pm.tbcase.id and hu.period.endDate = pm.tbcase.treatmentPeriod.endDate " +
-					"and hu.tbunit.id = " + forecastingHome.getTbunitSelection().getTbunit().getId().toString() +")";
+					"and hu.tbunit.id = " + forecastingHome.getTbunitSelection().getSelected().getId().toString() +")";
 			else
 			if ((forecasting.getView() == UserView.ADMINUNIT) && (forecastingHome.getAdminUnitSelection().getSelectedUnit() != null))
 				hql += "and exists(from TreatmentHealthUnit hu where hu.tbcase.id = pm.tbcase.id and hu.period.endDate = pm.tbcase.treatmentPeriod.endDate " +

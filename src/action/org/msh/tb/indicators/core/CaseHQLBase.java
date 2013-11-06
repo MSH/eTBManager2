@@ -220,7 +220,7 @@ public class CaseHQLBase extends Controller {
 			hql += " and " + s;
 		
 		// include filter by unit
-		Tbunit unit = filters.getTbunitselection().getTbunit();
+		Tbunit unit = filters.getTbunitselection().getSelected();
 		if (unit != null)
 			hql += " and c.notificationUnit.id = " + unit.getId().toString();
 		

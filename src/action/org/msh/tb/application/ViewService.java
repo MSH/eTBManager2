@@ -23,9 +23,9 @@ import org.msh.tb.entities.WorkspaceView;
  * @author Ricardo Memoria
  *
  */
-@Name("workspaceViewService")
+@Name("viewService")
 @BypassInterceptors
-public class WorkspaceViewService {
+public class ViewService {
 
 	private List<WorkspaceView> views;
 	private String pictureFile;
@@ -213,7 +213,7 @@ public class WorkspaceViewService {
 	 * Return the instance of the component
 	 * @return
 	 */
-	public static WorkspaceViewService instance() {
-		return (WorkspaceViewService)Component.getInstance(WorkspaceViewService.class);
+	public static ViewService instance() {
+		return (ViewService)Component.getInstance(ViewService.class);
 	}
 }

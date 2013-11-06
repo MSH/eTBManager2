@@ -10,7 +10,7 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
-import org.msh.tb.application.WorkspaceViewService;
+import org.msh.tb.application.ViewService;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.reports.ReportSelection;
 import org.msh.utils.date.DateUtils;
@@ -56,7 +56,7 @@ public class TransactionStatsReport {
 		if (rowVariableIndex == null)
 			rowVariableIndex = 3;
 
-		if (!WorkspaceViewService.instance().isFormPost()) {
+		if (!ViewService.instance().isFormPost()) {
 			if (reportSelection.getIniDate() == null) {
 				Date dt = DateUtils.incYears(new Date(), -1);
 				reportSelection.setIniMonth(DateUtils.monthOf(dt));

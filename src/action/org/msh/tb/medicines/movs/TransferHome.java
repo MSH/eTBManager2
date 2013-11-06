@@ -29,7 +29,7 @@ import org.msh.tb.entities.enums.TransferStatus;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.MedicineStockSelection;
-import org.msh.tb.tbunits.TBUnitFilter;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.DateUtils;
@@ -85,7 +85,7 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 	private List<SourceItem> sources;
 	private TransferItem transferItem;
 	
-	private TBUnitSelection tbunitSelection = new TBUnitSelection(false, TBUnitFilter.MEDICINE_WAREHOUSES);
+	private TBUnitSelection tbunitSelection = new TBUnitSelection("unitid", false, TBUnitType.MEDICINE_WAREHOUSES);
 
 
 	@Factory("transfer")
@@ -126,7 +126,7 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 			}
 		}
 		
-		transfer.setUnitTo(tbunitSelection.getTbunit());
+		transfer.setUnitTo(tbunitSelection.getSelected());
 		
 		Tbunit unit = userSession.getTbunit();
 		
@@ -491,10 +491,10 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 	}
 	
 	public TBUnitSelection getUnitToSelection() {
-		if (tbunitSelection.getTbunit() == null){
+		if (tbunitSelection.getSelected() == null){
 			Transfer transfer = getInstance();
 			tbunitSelection.getAuselection().setSelectedUnit(transfer.getUnitTo().getAdminUnit());
-			tbunitSelection.setTbunit(transfer.getUnitTo());
+			tbunitSelection.setSelected(transfer.getUnitTo());
 		}
 		return tbunitSelection;
 	}

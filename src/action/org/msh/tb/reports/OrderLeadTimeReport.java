@@ -9,7 +9,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.msh.tb.tbunits.TBUnitFilter;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.date.DateUtils;
 
@@ -42,8 +42,8 @@ public class OrderLeadTimeReport {
 
 		String s = "";
 		if (unitSelection != null) {
-			if (unitSelection.getTbunit() != null)
-				s = " and d.unitTo.id = " + unitSelection.getTbunit().getId();
+			if (unitSelection.getSelected() != null)
+				s = " and d.unitTo.id = " + unitSelection.getSelected().getId();
 			else
 			if (unitSelection.getAdminUnit() != null)
 				s = " and d.unitTo.adminUnit.code like '" + unitSelection.getAdminUnit().getCode() + "%'";
@@ -136,7 +136,7 @@ public class OrderLeadTimeReport {
 	 */
 	public TBUnitSelection getUnitSelection() {
 		if (unitSelection == null)
-			unitSelection = new TBUnitSelection(true, TBUnitFilter.MEDICINE_SUPPLIERS);
+			unitSelection = new TBUnitSelection("unitid", true, TBUnitType.MEDICINE_SUPPLIERS);
 		return unitSelection;
 	}
 

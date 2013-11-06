@@ -17,9 +17,9 @@
 <h1><i class="icon-user" />#{title}</h1>
 <h:form id="main">
 
-<s:decorate template="/layout/tbselection.xhtml" >
+<s:decorate template="/layout/tbselection_noconv.xhtml" >
  	<ui:define name="label">#{messages['Tbunit']}:</ui:define>
-   	<ui:param name="tbunitselection" value="#{userSession.tbunitselection}" />
+   	<ui:param name="tbunitselection" value="#{standardFilters.tbunitSelection}" />
    	<ui:param name="required" value="false" />
    	<ui:param name="auRerender" value="tablepanel" />
 	<ui:define name="events">

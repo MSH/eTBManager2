@@ -16,7 +16,7 @@ import org.jboss.seam.annotations.RaiseEvent;
 import org.jboss.seam.framework.EntityQuery;
 import org.jboss.seam.security.management.action.RoleAction;
 import org.msh.tb.adminunits.AdminUnitSelection;
-import org.msh.tb.application.WorkspaceViewService;
+import org.msh.tb.application.ViewService;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Tbunit;
@@ -61,7 +61,7 @@ public class ReportSelection {
 		if (userWorkspace != null)
 			return;
 		
-		WorkspaceViewService srv = (WorkspaceViewService)Component.getInstance("workspaceViewService", true);
+		ViewService srv = (ViewService)Component.getInstance("workspaceViewService", true);
 		if (srv.isFormPost())
 			return;
 		
