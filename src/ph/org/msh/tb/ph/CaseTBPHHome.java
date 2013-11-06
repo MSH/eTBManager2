@@ -5,8 +5,8 @@ import org.jboss.seam.annotations.Name;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Regimen;
-import org.msh.tb.tbunits.TBUnitFilter;
 import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.tbunits.TBUnitType;
 
 @Name("caseTBPHHome")
 public class CaseTBPHHome {
@@ -14,7 +14,7 @@ public class CaseTBPHHome {
 	@In(create=true) CaseEditingHome caseEditingHome;
 	@In CaseHome caseHome;
 	
-	private TBUnitSelection healthFacilitySelection = new TBUnitSelection(true, TBUnitFilter.TBHEALTH_UNITS);
+	private TBUnitSelection healthFacilitySelection = new TBUnitSelection("unitid", true, TBUnitType.TBHEALTH_UNITS);
 	private Regimen regimen;
 	
 	public String saveTBCase() {
