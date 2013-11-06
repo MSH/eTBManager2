@@ -17,16 +17,16 @@
         <span class="value #{invalid?'fielderror':''}">
             <s:validateAll>
             	<h:panelGroup id="edtdatep">
-				<rich:calendar id="#{empty edtid?'edtdate':edtid}" enableManualInput="true" value="#{datefield}" 
+				<rich:calendar id="#{empty edtid?'edtdate':edtid}"  value="#{datefield}" 
 					required="#{required}" locale="#{locale}" datePattern="#{messages['locale.datePattern']}" 
 					timeZone="#{timezones.default}" validator="#{futureDateValidator.validate}" inputStyle="width:100px;" 
-					showWeeksBar="false" >
+					showWeeksBar="false" oninputkeypress="return false;">
 					<a:support event="onchanged" ajaxSingle="true" rendered="#{immediateSetter}"/>
 				</rich:calendar>
 				<f:param name="validatefuture" value="#{future}" />
 				</h:panelGroup>
     			<h:outputText value="(#{messages['locale.displayDatePattern']})" rendered="#{empty showPattern ? true : showPattern}"/>
-    			<rich:jQuery selector="#edtdatep .rich-calendar-input" query="mask('#{messages['locale.dateMask']}')" />
+    			
     			<ui:insert />
             </s:validateAll>
         </span>
