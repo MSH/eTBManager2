@@ -153,7 +153,8 @@
 		<a:repeat value="#{caseFilters.diagnosisTypes}" var="it" rowKeyVar="x">
 			<div style="display:inline;margin-right:20px">
 			<h:selectBooleanCheckbox value="#{it.selected}">
-				<a:support event="onchange" action="reload" ajaxSingle="true"/>
+			<a:support event="onchange" onbeforedomupdate="recordVisibleTables()"  action="#{healthUnitsQuery.checkDiagnosticClassificationFilters()}" 
+					ajaxSingle="true" reRender="pnlhealthunits" oncomplete="loadVisibleTables()"/>
 			</h:selectBooleanCheckbox>#{messages[it.item.key]}
 			</div>
 		</a:repeat>
@@ -163,7 +164,8 @@
 		<a:repeat value="#{caseFilters.classifications}" var="it" rowKeyVar="x">
 			<div style="display:inline;margin-right:20px">
 			<h:selectBooleanCheckbox value="#{it.selected}">
-				<a:support event="onchange" action="reload" ajaxSingle="true"/>
+				<a:support event="onchange" onbeforedomupdate="recordVisibleTables()"  action="#{healthUnitsQuery.checkDiagnosticClassificationFilters()}" 
+					ajaxSingle="true" reRender="pnlhealthunits" oncomplete="loadVisibleTables()"/>
 			</h:selectBooleanCheckbox>#{messages[it.item.key]}
 			</div>
 		</a:repeat>
@@ -174,6 +176,79 @@
 			<ui:include src="#{casesViewController.unitView? wspage['/cases/indexcases.xhtml']: wspage['/cases/indexunits.xhtml']}" />
 		</div>
 	</h:panelGroup>
+	
+	
+	<ul id="lista" style="display:none">
+		
+	</ul>
+
+	<script type="text/javascript">
+	<!--
+	function loadVisibleTables(){
+		var lista = document.getElementById('lista');
+		var filhos = lista.childNodes;
+		
+		for(var i=filhos.length-1; i>=0; i = i-1){
+			var trname = filhos[i].innerHTML;
+			if(checkIfExistsTR(trname))
+				showTableDetails2(trname.substring(4));
+			lista.removeChild( filhos[i] );
+		}
+		
+	}
+
+	function checkIfExistsTR(trname2){
+		var trs = document.getElementsByTagName('tr');
+		var n = trname2;
+		
+		for(var j=0; j<trs.length; j++){
+			if(trs[j].attributes["class"] !== undefined){
+				if(trs[j].attributes["class"].value==n)
+					return true;
+			}
+		}
+		return false;
+	}
+
+		function recordVisibleTables(){
+			var linhas = document.getElementsByTagName('tr');
+			var lista = document.getElementById('lista');
+			
+			for(var i=0; i<linhas.length; i++) { 
+				if(linhas[i].style.display=='table-row'){
+					if(!checkIfExists(lista, linhas[i].attributes["class"].value)){					
+						var li = document.createElement('li');
+						li.innerHTML = linhas[i].attributes["class"].value;
+						lista.appendChild(li);
+					}	
+				}
+			}
+		}
+	
+		function checkIfExists(lista2, item){
+			var filhos = lista2.childNodes;
+			for(var i=0; i<filhos.length; i++) {
+				if(filhos[i].innerHTML == item)
+					return true;
+			}
+			return false;
+		}
+
+		function showTableDetails2(admUnit){
+			var showLnkName = 'show'+admUnit+'lnk';
+			var hideLnkName = 'hide'+admUnit+'lnk';
+			var rowName = 'unit'+admUnit;
+			var linhas = document.getElementsByClassName(rowName);
+			
+			document.getElementById(showLnkName).style.display = 'none';
+			document.getElementById(hideLnkName).style.display = 'inline';
+
+			for(var i=0; i<linhas.length; i++) { 
+				linhas[i].style.display='table-row';
+			}		
+		}
+	-->
+	</script>
 
 	<ui:include src="/layout/tablerow.xhtml" >
 		<ui:param name="selector" value="#content .table2" />

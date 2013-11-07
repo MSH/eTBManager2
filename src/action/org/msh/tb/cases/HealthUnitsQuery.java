@@ -258,7 +258,7 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 		if(showMessage)
 			return "reload-message";
 		else
-			return "reload";
+			return null;
 	}
 
 	protected void createAdminUnits() {

@@ -58,13 +58,13 @@ public class InventoryReport {
 				if(b.getExpiryDate().before(new Date()))
 					return false;
 				
-				double diffInMonths = DateUtils.monthsBetween(b.getExpiryDate(), new Date());
 				int monthsToAlert = (UserSession.getWorkspace().getMonthsToAlertExpiredMedicines() == null ? 0 : UserSession.getWorkspace().getMonthsToAlertExpiredMedicines());
-				
 				if(monthsToAlert == 0)
 					return false;
 				
-				if(diffInMonths <= monthsToAlert)
+				Date limitDate = DateUtils.incMonths(new Date(), monthsToAlert);
+				
+				if(b.getExpiryDate().compareTo(limitDate) <= 0)
 					return true;				
 			}
 
