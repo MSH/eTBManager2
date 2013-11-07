@@ -67,6 +67,7 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 			res.setItems(new ArrayList<TransferItem>());
 			for (TransferItem ti: this.getItems()){
 				TransferItem resti = new TransferItem();
+				resti.setId(ti.getId());
 				resti.setMedicine(ti.getMedicine());
 				resti.setBatches(new ArrayList<TransferBatch>());
 				for(TransferBatch tb: ti.getBatches()){
