@@ -127,7 +127,7 @@
 
 <div class="form-footer">
     <a:commandLink action="#{orderShippingHome.registerShipping}" styleClass="button" 
-    	onclick="if (!disableButton(this)) return false;" reRender="main">
+    	onclick="if (!disableButton(this)) return false;" reRender="main, messages">
     	<span>#{messages['form.ok']}</span>
     </a:commandLink>
     <s:link action="cancel" styleClass="button-alt" >

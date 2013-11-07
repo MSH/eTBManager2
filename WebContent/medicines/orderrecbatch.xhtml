@@ -32,7 +32,7 @@
     </s:decorate>
 
     <s:decorate template="/layout/display.xhtml" >
-    	<ui:define name="label">#{messages['Order.orderDate']}:</ui:define>
+    	<ui:define name="label">#{messages['Order.shippingDate']}:</ui:define>
 	    <h:outputText value="#{order.shippingDate}" converter="localeDateConverter" />
     </s:decorate>
 
@@ -61,7 +61,7 @@
 			<td width="200px;">#{messages['OrderItem.receivedQuantity']}</td>
 		</tr>
 
-		<tr style="font-size:12px;font-weight:bold;">
+		<tr style="font-size:12px;font-weight:bold;background-color:#f4f4f4;">
 			<td>
 				<div class="medicine-batch">#{it.item.medicine}</div>
 			</td>
@@ -70,17 +70,17 @@
 			<td>
 			</td>
 		</tr>
-		<tr>
+		<tr style="background-color:#f4f4f4">
 			<td>#{messages['global.comments']}
 			</td>
 			<td colspan="3">
 				<s:validateAll>
-					<h:inputText value="#{it.item.comment}" style="width:300px;" size="200" />
-					<s:message styleClass="error" />
+					<h:inputText id="edtcom" value="#{it.item.comment}" style="width:300px;" size="200" />
+					<h:message for="edtcom" styleClass="error" />
 				</s:validateAll>
 			</td>
 		</tr>
-		<tr>
+		<tr style="background-color:#f4f4f4">
 			<td colspan="5">
 			<h:dataTable value="#{it.item.batches}" var="b" width="100%" columnClasses="col,col" >
 			  <h:column>

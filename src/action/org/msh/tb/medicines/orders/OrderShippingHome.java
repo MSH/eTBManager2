@@ -149,6 +149,37 @@ public class OrderShippingHome extends Controller {
 	}
 
 
+	/**
+	 * Roll back the shipping to the previous state
+	 */
+	public void rollbackShipping() {
+		if (order.getStatus() != OrderStatus.SHIPPED)
+			throw new RuntimeException("Order must be in the shipping status");
+
+		Order order = orderHome.getInstance();
+
+		movementHome.initMovementRecording();
+		for (OrderItem item: order.getItems()) {
+			if (item.getMovementOut() != null) {
+				movementHome.prepareMovementsToRemove(item.getMovementOut());
+				item.setMovementOut(null);
+			}
+			item.setShippedQuantity(null);
+			// remove selected batches
+			for (OrderBatch batch: item.getBatches()) {
+				entityManager.remove(batch);
+			}
+			item.getBatches().clear();
+		}
+		movementHome.savePreparedMovements();
+		
+		order.setShippingDate(null);
+		order.setStatus(OrderStatus.WAITSHIPMENT);
+		entityManager.persist(order);
+		entityManager.flush();
+	}
+	
+
 	
 	/**
 	 * Initialize order shipment, selecting the best batches (using FEFO) to be shipped

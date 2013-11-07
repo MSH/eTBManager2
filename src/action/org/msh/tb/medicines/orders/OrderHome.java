@@ -303,6 +303,24 @@ public class OrderHome extends EntityHomeEx<Order>{
 				Identity.instance().hasRole("RECEIV_ORDER"));
 	}
 	
+	
+	/**
+	 * Check if the order shipment can be rolled back to the waiting for shipment status. The order
+	 * must be in the SHIPPED status, if the user has the permission to roll back and if the unit that
+	 * shipped the order is the user working unit
+	 * @return true if it can be rolled back
+	 */
+	public boolean isCanRollbackShipment() {
+		Order order = getInstance();
+
+		if ((order.getStatus() != OrderStatus.SHIPPED) || (!Identity.instance().hasRole("SEND_ORDER")))
+			return false;
+
+		Tbunit userUnit = userSession.getWorkingTbunit();
+		
+		return userUnit.getId().equals(order.getUnitTo().getId());		
+	}
+
 
 	@Override
 	protected void updatedMessage()

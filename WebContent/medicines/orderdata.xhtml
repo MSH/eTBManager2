@@ -25,7 +25,7 @@
 
 
 <ui:define name="left">
-	<h:form>
+	<h:form id="leftmenu">
 	<div class="vertical-menu">
 	
 	<s:link view="/medicines/ordernew.xhtml" rendered="#{orderHome.isEditableOrder(order)}">
@@ -41,36 +41,47 @@
 		<span class="delete-icon" style="float:none" />#{messages['form.remove']}
 	</a:commandLink>
 
+	<a:commandLink action="#{orderShippingHome.rollbackShipping()}" ajaxSingle="true"
+		rendered="#{orderHome.canRollbackShipment}"
+		reRender="form1,messages,leftmenu" 
+		onclick="if (!confirm('#{messages['meds.orders.shipment.rollback.confirm']}')) {return false}">
+		<i class="icon-mail-reply" />#{messages['meds.orders.shipment.rollback']}
+	</a:commandLink>
+
 	<s:link view="/medicines/orderaut.xhtml" value="#{messages['meds.orders.autorize']}" rendered="#{orderHome.canAuthorize}">
 		<f:param name="id" value="#{order.id}" />
 	</s:link>
 
-	<s:link view="/medicines/ordercancel.xhtml" value="#{messages['meds.orders.cancel']}" rendered="#{orderHome.canCancel}" >
+	<s:link view="/medicines/ordercancel.xhtml" rendered="#{orderHome.canCancel}" >
 		<f:param name="id" value="#{order.id}" />
+		<i class="icon-remove" /> #{messages['meds.orders.cancel']}
 	</s:link>
 
-	<s:link view="/medicines/ordersent.xhtml" value="#{messages['meds.orders.shipment']}" rendered="#{orderHome.canShip}" propagation="none">
+	<s:link view="/medicines/ordersent.xhtml" rendered="#{orderHome.canShip}" propagation="none">
 		<f:param name="id" value="#{order.id}" />
+		<i class="icon-truck"/>#{messages['meds.orders.shipment']}
 	</s:link>
 
-	<s:link view="/medicines/orderrec.xhtml" value="#{messages['meds.orders.receive']}" 
+	<s:link view="/medicines/orderrec.xhtml" 
 		rendered="#{(!order.unitFrom.batchControl) and (orderHome.canReceive)}">
 		<f:param name="id" value="#{order.id}" />
+		<i class="icon-truck"/>#{messages['meds.orders.receive']}
 	</s:link>
 
-	<s:link view="/medicines/orderrecbatch.xhtml" value="#{messages['meds.orders.receive']}" 
+	<s:link view="/medicines/orderrecbatch.xhtml" 
 		rendered="#{(orderHome.canReceive) and (order.unitFrom.batchControl)}" >
 		<f:param name="id" value="#{order.id}" />
+		<i class="icon-truck"/>#{messages['meds.orders.receive']}
 	</s:link>
 
 	<s:link view="/reports/orderdata.xhtml" target="_blank" >
 		<f:param name="id" value="#{order.id}" />
-		<span class="print-icon"/><span>#{messages['meds.orders.print']}</span>
+		<i class="icon-print"/><span>#{messages['meds.orders.print']}</span>
 	</s:link>
 
 	<s:link view="/reports/orderdatapac.xhtml" target="_blank" >
 		<f:param name="id" value="#{order.id}" />
-		<span class="print-icon"/><span>#{messages['meds.orders.printpac']}</span>
+		<i class="icon-print"/><span>#{messages['meds.orders.printpac']}</span>
 	</s:link>
 	</div>
 	</h:form>
