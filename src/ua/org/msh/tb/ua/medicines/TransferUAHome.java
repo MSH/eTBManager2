@@ -1,6 +1,9 @@
 package org.msh.tb.ua.medicines;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -8,19 +11,32 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.core.Events;
+import org.jboss.seam.faces.FacesMessages;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.Batch;
+import org.msh.tb.entities.BatchMovement;
 import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.Movement;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.Transfer;
 import org.msh.tb.entities.TransferBatch;
 import org.msh.tb.entities.TransferItem;
+import org.msh.tb.entities.enums.MovementType;
+import org.msh.tb.entities.enums.RoleAction;
+import org.msh.tb.entities.enums.TransferStatus;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.BatchSelection.BatchItem;
+import org.msh.tb.medicines.movs.BatchMovementsQuery;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.movs.TransferHome;
 import org.msh.tb.medicines.movs.TransferHome.SourceItem;
+import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.tb.ua.utils.MedicineCalculator;
 import org.msh.utils.ItemSelect;
+import org.msh.utils.date.DateUtils;
 
 @Name("transferUAHome")
 @Scope(ScopeType.CONVERSATION)
@@ -29,10 +45,13 @@ public class TransferUAHome {
 	@In(create=true) BatchSelection batchSelection;
 	@In(create=true) MovementHome movementHome;
 	@In(create=true) UserSession userSession;
+	@In(create=true) BatchMovementsQuery batchMovements;
 	
 	private List<SourceItem> sourcesOld;
 	private List<SourceItem> sources;
 	private List<Movement> movementsOld = new ArrayList<Movement>(); 
+	private List<TransferBatch> tbToRemove = new ArrayList<TransferBatch>();
+	private List<TransferItem> tiToRemove = new ArrayList<TransferItem>();
 	
 	/**
 	 * Remember some data from base transfer.
@@ -56,6 +75,15 @@ public class TransferUAHome {
 		}
 	}
 	
+	/**
+	 * Remove a item from the transfer
+	 * @param ti
+	 */
+	public void removeItem(TransferItem ti) {
+		tbToRemove.addAll(ti.getBatches());
+		tiToRemove.add(ti);
+		ti.getBatches().clear();
+	}
 
 	/*
 	private void printTransferItem(List<SourceItem> s){
@@ -73,7 +101,9 @@ public class TransferUAHome {
 	}*/
 	
 	public String saveEditTransfer(){
-		//List<TransferBatch> ltb = compareEditions();
+		if (!validateData())
+			return "error";
+		
 		sources = transferHome.getSources(); //refresh sources
 		for (SourceItem si:sources)
 			for (TransferItem ti:si.getItems()){
@@ -81,24 +111,85 @@ public class TransferUAHome {
 				reCalcFromCurrentTransferBack(ti);
 			}
 
+		Iterator<TransferBatch> iter = tbToRemove.iterator();
+		while (iter.hasNext()){
+			TransferBatch tb = iter.next();
+			App.getEntityManager().createQuery("delete from TransferBatch tb where tb.id="+tb.getId()).executeUpdate();
+			//App.getEntityManager().remove(tb);
+		}
+
+		//App.getEntityManager().flush();
+		
 		movementHome.initMovementRecording();
-		//List<TransferItem> newTransItems = getNewTransferItems();
-		//String ret = createNewMovements(newTransItems);
-		//if ("error".equals(ret))
-		//	return ret;
-		
-		//List<TransferItem> transItemsToremove = getTransferItemsToRemove();
 		removeMovements(movementsOld);
-		
 		movementHome.savePreparedMovements();
-		return transferHome.saveNewTransfer();
+		
+		Transfer transfer = transferHome.getInstance();
+		transfer.setUnitTo(transferHome.getTbunitSelection().getSelected());
+		Tbunit unit = userSession.getTbunit();
+		transfer.setUnitFrom(unit);
+		transfer.setStatus(TransferStatus.WAITING_RECEIVING);
+		transfer.setUserFrom(transferHome.getUser());
+		
+		Date dt = transfer.getShippingDate();
+
+		// creates out movements
+		movementHome.initMovementRecording();
+		boolean bCanTransfer = true;
+		for (TransferItem it: transfer.getItems()) 
+			if (!it.getBatches().isEmpty())	{
+				String comment = transfer.getUnitTo().getName().getDefaultName();
+				
+				Movement movOut = movementHome.prepareNewMovement(dt, unit, it.getSource(), 
+						it.getMedicine(), MovementType.TRANSFEROUT, 
+						transferHome.getBatchesMap(it, true), comment);
+	
+				if (movOut == null) {
+					bCanTransfer = false;
+					it.setData(movementHome.getErrorMessage());
+				}
+				
+				it.setMovementOut(movOut);
+			}
+		
+		if (!bCanTransfer)
+			return "error";
+		movementHome.savePreparedMovements();
+
+		// register transfer in the log system
+		TransactionLogService log = transferHome.getLogService();
+		log.addTableRow(".unitFrom", transfer.getUnitFrom());
+		log.addTableRow(".unitTo", transfer.getUnitTo());
+		log.addTableRow(".shippingDate", transfer.getShippingDate());
+		log.save("NEW_TRANSFER", RoleAction.EXEC, transfer);
+		
+		Events.instance().raiseEvent("medicine-new-transfer");
+		
+		//post-deleting empty transfer item.  because of pre-deleting call the exception
+		Iterator<TransferItem> it2 = transferHome.getInstance().getItems().iterator();
+		while (it2.hasNext()){
+			TransferItem ti = it2.next();
+			if (ti.getBatches().isEmpty())
+				App.getEntityManager().createQuery("delete from TransferItem ti where ti.id="+ti.getId()).executeUpdate();
+		}
+		
+		return transferHome.persist();
+
+		/*if (!"error".equals(res)){
+			Iterator<TransferItem> it2 = transferHome.getInstance().getItems().iterator();
+			while (it2.hasNext()){
+				TransferItem ti = it2.next();
+				if (ti.getBatches().isEmpty())
+					App.getEntityManager().createQuery("delete from TransferItem ti where ti.id="+ti.getId()).executeUpdate();
+			}
+		}
+		return res;*/
 		/*printTransferItem(sourcesOld);
 		System.out.println("--------");
 		printTransferItem(sources);
 		System.out.println("--------");
 		return "persist";*/
 	}
-
 
 	/**
 	 * Check all movements in list to remove
@@ -116,39 +207,6 @@ public class TransferUAHome {
 		}
 	}
 
-
-
-	/*private void removeMovements(List<TransferItem> transItemsToremove) {
-		for (TransferItem it: transItemsToremove) {
-			Movement mov = it.getMovementIn();
-			if (mov != null) {
-				it.setMovementIn(null);
-				movementHome.prepareMovementsToRemove(mov);
-			}
-			
-			mov = it.getMovementOut();
-			if (mov != null) {
-				it.setMovementOut(null);
-				movementHome.prepareMovementsToRemove(mov);
-			}
-		}
-	}*/
-
-
-
-	/*private List<TransferItem> getTransferItemsToRemove() {
-		List<TransferItem> lst = new ArrayList<TransferItem>();
-		for (SourceItem si:sources){
-			for (TransferItem ti:si.getItems())
-				for (TransferBatch tb:ti.getBatches()){
-					if (!findBatch(sourcesOld,tb.getBatch()))
-						lst.add(ti);
-				}
-		}
-		return lst;
-	}*/
-
-
 	/**
 	 * Return TransferBatch, which contains necessary Batch 
 	 * */
@@ -162,82 +220,6 @@ public class TransferUAHome {
 		return null;
 	}
 
-
-
-	/*private String createNewMovements(List<TransferItem> newTransItems) {
-		if (newTransItems.isEmpty())
-			return "";
-		movementHome.initMovementRecording();
-		boolean bCanTransfer = true;
-		for (TransferItem it: newTransItems) {
-			String comment = it.getTransfer().getUnitTo().getName().getDefaultName();
-			
-			Movement movOut = movementHome.prepareNewMovement(it.getTransfer().getShippingDate(), userSession.getTbunit(), it.getSource(), 
-					it.getMedicine(), MovementType.TRANSFEROUT, 
-					transferHome.getBatchesMap(it, true), comment);
-
-			if (movOut == null) {
-				bCanTransfer = false;
-				it.setData(movementHome.getErrorMessage());
-			}
-			
-			it.setMovementOut(movOut);
-		}
-		
-		if (!bCanTransfer)
-			return "error";
-		
-		return "";
-	}
-*/
-
-
-	/*private List<TransferItem> getNewTransferItems() {
-		List<TransferItem> lst = new ArrayList<TransferItem>();
-		for (SourceItem si:sources){
-			for (TransferItem ti:si.getItems()){
-				 If ID of transfer batch is NULL that means, that there is new record. 
-				 * If all IDs of transfer batches are NULLs that means, that is almost new transfer item
-				 * 		and we must CREATE new movementOut for this items.
-				 * If even one transfer batch have already existed before, that means, that 
-				 * 		we must EDIT existing movementOut and create batch movements only for new transfer batch
-				  
-				boolean allNull = true;
-				for (TransferBatch tb:ti.getBatches())
-					if (tb.getId()!=null){
-						allNull = false;
-						break;
-					}
-				if (allNull)
-					lst.add(ti);
-			}
-		}
-		return lst;
-	}
-*/
-
-
-	/*private List<TransferBatch> compareEditions() {
-		List<TransferBatch> lst = new ArrayList<TransferBatch>();
-		for (SourceItem sb: sources){
-			for (TransferItem ti: sb.getItems())
-				for (TransferBatch tb: ti.getBatches()){
-					
-					for (SourceItem sbo: sourcesOld)
-						for (TransferItem tio: sb.getItems(){
-							tio.get
-						}
-					
-				}
-			for (TransferBatch sbo: sourcesOld)
-				if (tb.getId().equals(tbo.getId())){
-					
-				}
-		}
-		return null;
-	}*/
-	
-	
 	/**
 	 * Add quantity from transferItem to batch selection
 	 * */
@@ -267,7 +249,46 @@ public class TransferUAHome {
 			item.setSelected(true);
 			batchSelection.getItems().add(item);
 		}
+/*		for (TransferBatch tb:ti.getBatches()){
+			ItemSelect<BatchItem> is = findBatch(batchSelection, tb.getBatch());
+			if (is!=null){
+				if (is.isSelected()){
+					//wasAllStock = false;
+					int qtd = is.getItem().getQuantity();
+					is.getItem().getBatchQuantity().setQuantity(is.getItem().getBatchQuantity().getQuantity()+qtd);
+				}
+			}
+			else{
+				BatchItem bi = batchSelection.new BatchItem();
+				BatchQuantity bq = new BatchQuantity();
+				bq.setBatch(tb.getBatch());
+				bq.setQuantity(ti.getQuantity());
+				bq.setSource(ti.getSource());	
+				bi.setBatchQuantity(bq);
+				bq.setTbunit((Tbunit)App.getComponent("selectedUnit"));
+				App.getEntityManager().persist(bq);
+				bi.setBatch(tb.getBatch());
+				ItemSelect<BatchItem> item = new ItemSelect<BatchSelection.BatchItem>();
+				item.setItem(bi);
+				//item.getItem().getBatchQuantity().setQuantity(ti.getQuantity());
+				item.getItem().setQuantity(ti.getQuantity());
+				item.setSelected(true);
+				batchSelection.getItems().add(item);
+			}
+		}*/
 	}
+	
+	/**
+	 * Return ItemSelect from BatchSelection, which contains necessary Batch 
+	 * */
+/*	private ItemSelect<BatchItem> findBatch(BatchSelection bs, Batch b) {
+		for (ItemSelect<BatchItem> is: bs.getItems())
+			if (is.getItem().getBatch().getId().intValue() == b.getId().intValue()){
+				return is;
+			}
+		return null;
+	}
+*/
 	
 	/**
 	 * Subtract quantity, which added in process initialize
@@ -303,46 +324,55 @@ public class TransferUAHome {
 				tb.setQuantity(sels.get(b));
 			}
 		}
-		/*
-		Iterator<TransferBatch> it = transferItem.getBatches().iterator();
+		
+		Iterator<TransferBatch> it = transferHome.getTransferItem().getBatches().iterator();
 		while (it.hasNext()){
 			TransferBatch tb = it.next();
-			Batch b = tb.getBatch();
-			if (!sels.keySet().contains(b)){
-				getEntityManager().remove(tb);
+			if (!sels.containsKey(tb.getBatch())){
+				//movementsOld.remove(tb.getTransferItem().getMovementOut());
+				tbToRemove.add(tb);
+				//removeTransfBatchFromSources(tb.getBatch());
 				it.remove();
 			}
 		}
-		 */
-		
-		
-		/*List<TransferBatch> lst = new ArrayList<TransferBatch>();
-		for (TransferBatch tb: transferItem.getBatches()) {
-			Batch b = tb.getBatch();
-			if (sels.keySet().contains(b)){
-				lst.add(tb);
-			}
-			else
-			{
-				for (BatchMovement bm: transferItem.getMovementOut().getBatches()){
-					if (bm.getBatch().getId() == b.getId())
-						getEntityManager().remove(bm);
-				}
-			}
-		}*/
-		
-		
-		/*for (TransferBatch tb: transferItem.getBatches())
-			if (getEntityManager().contains(tb))
-				getEntityManager().remove(tb);
-		transferItem.getBatches().clear();*/
-		//transferItem.setBatches(lst);
 		
 		// free memory space
 		batchSelection.clear();
 		transferHome.setTransferItem(null);
 	}
 	
+/*	private void removeTransfBatchFromSources(Batch batch) {
+		List<List<SourceItem>> ss = new ArrayList<List<SourceItem>>();
+		ss.add(sources);
+		ss.add(sourcesOld);
+		for (List<SourceItem> s:ss)
+			for (SourceItem si:s)
+				for (TransferItem ti:si.getItems())	{
+					Iterator<TransferBatch> it = ti.getBatches().iterator();
+					while (it.hasNext()){
+						TransferBatch tb = it.next();
+						if (batch.equals(tb.getBatch()))
+							it.remove();
+					}
+				}
+	}
+	
+	private void removeTransfItemFromSources(TransferItem item) {
+		List<List<SourceItem>> ss = new ArrayList<List<SourceItem>>();
+		ss.add(sources);
+		ss.add(sourcesOld);
+		for (List<SourceItem> s:ss)
+			for (SourceItem si:s){
+				Iterator<TransferItem> it = si.getItems().iterator();
+				while (it.hasNext()){
+					TransferItem ti = it.next();
+					if (ti.getId().intValue() == item.getId().intValue()){
+						it.remove();
+					}
+				}
+			}
+	}*/
+
 	public double getGlobalTotal() {
 		double res = 0;
 		for (SourceItem s:transferHome.getSources())
@@ -357,5 +387,34 @@ public class TransferUAHome {
 			for (TransferItem ti:s.getItems())
 					res += MedicineCalculator.calculateTotalPriceReceived(ti.getBatches(),5);
 		return res;
+	}
+	
+	private boolean validateData(){
+		boolean res = true;
+		if(!userSession.isCanGenerateMovements(transferHome.getTransfer().getShippingDate())){
+			FacesMessages.instance().addToControlFromResourceBundle("edtdate", "meds.movs.errorlimitdate", DateUtils.formatAsLocale(userSession.getTbunit().getLimitDateMedicineMovement(), false));
+			res = false;
+		}
+		
+		// checks if any medicine were selected for transfer
+		if (transferHome.getTransfer().getItems().size() == 0) {
+			FacesMessages.instance().addFromResourceBundle("edtrec.nomedicine");
+			res = false;
+		}
+
+		// checks if any batch were selected for transfer
+		int totSize = 0;
+		for (TransferItem it: transferHome.getTransfer().getItems()) {
+			totSize += it.getBatches().size();
+		}
+		if (totSize == 0) {
+			FacesMessages.instance().addFromResourceBundle("edtrec.nobatch");
+			res = false;
+		}
+		return res;
+	}
+	
+	public List<TransferItem> getTiToRemove() {
+		return tiToRemove;
 	}
 }

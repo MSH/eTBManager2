@@ -51,7 +51,7 @@
     </s:decorate>
 
 	</div>
-<s:fragment rendered="#{id==null}">
+
 	<a:commandLink ajaxSingle="true" styleClass="button-alt" reRender="medstkpnl" 
 		action="#{transferHome.filterMedicines}" oncomplete="showMedicinesStockDlg()" style="float:right">
 		<span>#{messages['form.selmeds']}</span>
@@ -78,6 +78,7 @@
 		</th><th>
 		</th></tr>
 		<a:repeat value="#{s.items}" var="it">
+		<s:fragment rendered="#{!transferUAHome.tiToRemove.contains(it)}">
 		<tr bgcolor="#f3f3f0"><td colspan="9">
 			<div class="medicine-icon" />
 			#{it.medicine}
@@ -94,7 +95,7 @@
 				action="#{transferHome.initBatchSelection(it)}"
 				reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" 
 				style="width:120px;display:block;"/>
-			<a:commandLink value="#{messages['form.remove']}" ajaxSingle="true" action="#{transferHome.removeItem(it)}" reRender="pnlitems" />
+			<a:commandLink value="#{messages['form.remove']}" ajaxSingle="true" action="#{transferUAHome.removeItem(it)}" reRender="pnlitems" />
 		</td></tr>
 		<s:fragment rendered="#{not empty it.data}">
 		<tr><td colspan="7">
@@ -146,6 +147,7 @@
 				<td class="colb"></td>
 			</tr>
 		</a:repeat>
+		</s:fragment>
 		</a:repeat>
 	</a:repeat>
 	<s:fragment rendered="#{transferUAHome.globalTotal>0}">
@@ -166,7 +168,7 @@
 	</s:fragment>
 	</table>
 	</h:panelGroup>		
-</s:fragment>
+
 	<div class="form-footer">
         <a:commandLink action="#{transferHome.saveNewTransfer}" styleClass="button" reRender="main,messages"
         	onclick="if (!disableButton(this)) return false;" rendered="#{id==null}">
