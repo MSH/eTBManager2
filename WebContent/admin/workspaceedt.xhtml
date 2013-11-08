@@ -88,10 +88,10 @@
 	</div>
 	
 	<div class="form-footer">
-		<a:commandLink action="#{workspaceHome.persist}" styleClass="button"
-			onclick="if (!disableButton(this)) return false;" reRender="main,messages">
+		<h:commandLink action="#{workspaceHome.persist}" styleClass="button"
+			onclick="if (!disableButton(this)) return false;" >
 			<span>#{messages['form.save']}</span>
-		</a:commandLink>
+		</h:commandLink>
 		<s:link view="/admin/workspacedata.xhtml" rendered="#{workspace.id != null}" styleClass="button-alt" onclick="disableButton(this);">
 			<f:param name="id" value="#{workspace.id}" />
 			 <span>#{messages['form.cancel']}</span>

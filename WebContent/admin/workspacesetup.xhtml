@@ -180,16 +180,16 @@
     
 	</div>
 	
-		<div class="form-footer">
-		<a:commandLink action="#{workspaceHome.saveDefaultworkspace}" styleClass="button" 
-			onclick="if (!disableButton(this)) return false;" reRender="main,messages">
+	<div class="form-footer">
+		<h:commandLink action="#{workspaceHome.saveDefaultworkspace}" styleClass="button" 
+			onclick="if (!disableButton(this)) return false;" >
 			<span>#{messages['form.save']}</span>
-		</a:commandLink> 
+		</h:commandLink> 
 		
 		<s:link view="/admin/config.xhtml" styleClass="button-alt" onclick="disableButton(this)">
-		<span>#{messages['form.cancel']}</span>
+			<span>#{messages['form.cancel']}</span>
 		</s:link>
-		</div>
+	</div>
 	
 </h:form>
 </ui:define>
