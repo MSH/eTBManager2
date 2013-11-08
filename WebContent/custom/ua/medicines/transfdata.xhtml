@@ -9,6 +9,9 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       template="/layout/template_new.xhtml">
 
+<ui:param name="transferHome" value="#{transferUAHome}" />
+<ui:param name="transfer" value="#{transferUA}" />
+
 <ui:param name="title" value="#{messages['meds.transfer.detail']}" />
 <ui:param name="topmenu" value="1" />
 <ui:param name="waitdlg" value="1" />
@@ -83,6 +86,16 @@
     </td>
     </tr>
     <tr><td colspan="2">
+
+	<s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Transfer.orderNumber']}:</ui:define>
+    	<h:outputText value="#{transferUA.orderNumber}"/>
+	</s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" style="margin-top:20px">
+    	<ui:define name="label">#{messages['Transfer.orderDate']}:</ui:define>
+    	<h:outputText value="#{transferUA.orderDate}" converter="localeDateConverter" />
+	</s:decorate>
 
     <s:decorate template="/layout/display.xhtml" rendered="#{transfer.status!='CANCELLED'}">
     	<ui:define name="label">#{messages['TransferStatus']}:</ui:define>

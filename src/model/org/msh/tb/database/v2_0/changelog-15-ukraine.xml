@@ -118,6 +118,32 @@
 		NOT EXISTS(SELECT * FROM userpermission WHERE role_id=208 AND profile_id=userprofile.id)
 		</sql>
 	</changeSet>
+	
+	<changeSet id="15.8" author="Alexk" context="UA">
+		<createTable tableName="transfer_ua">
+ 			<column name="id" type="int" >
+ 				<constraints primaryKey="true" nullable="false"/>
+ 			</column>
+ 			<column name="orderNumber" type="varchar(50)">
+ 				<constraints nullable="true"/>
+ 			</column>
+ 			<column name="orderDate" type="date">
+ 				<constraints nullable="true"/>
+ 			</column>
+ 		</createTable>
+		
+ 		<addForeignKeyConstraint constraintName="fk_id_transfer" 
+ 			baseColumnNames="id" baseTableName="transfer_ua" referencedTableName="transfer" referencedColumnNames="id" 
+ 			onDelete="CASCADE" onUpdate="CASCADE"/>
+
+		<createIndex tableName="transfer_ua" indexName="fk_id_transfer" >
+			<column name="id"/>
+		</createIndex>	
+	 	
+		<sql>
+			INSERT INTO `etbmanager`.`transfer_ua` SELECT id,null,null FROM `etbmanager`.`transfer`;
+		</sql>
+	</changeSet>
 </databaseChangeLog>
 
 

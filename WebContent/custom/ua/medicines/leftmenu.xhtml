@@ -31,10 +31,10 @@
 
 	<s:fragment rendered="#{s:hasRole('TRANSFER')}">
 		<h2>#{messages['meds.transfer']}</h2>	
-		<s:link view="/medicines/transfedt.xhtml" rendered="#{s:hasRole('NEW_TRANSFER')}" >
+		<s:link view="/custom/ua/medicines/transfedt.xhtml" rendered="#{s:hasRole('NEW_TRANSFER')}" >
 			<div class="new-icon" style="float:left"/>#{messages['meds.transfer.new']}
 		</s:link>
-		<s:link value="#{messages['meds.transfer.viewopen']}" view="/medicines/transfer.xhtml" propagation="none" rendered="#{userSession.canCheckTransfers}" />
+		<s:link value="#{messages['meds.transfer.viewopen']}" view="/custom/ua/medicines/transfer.xhtml" propagation="none" rendered="#{userSession.canCheckTransfers}" />
 		<s:link value="#{messages['meds.transfer.received']}" view="/medicines/transferreceive.xhtml" propagation="none" rendered="#{userSession.canCheckTransfers}" />
 		<s:link value="#{messages['meds.transfer.viewhistory']}" view="/medicines/transferhistory.xhtml" propagation="none" rendered="#{userSession.canCheckTransfers}" />
 	</s:fragment>

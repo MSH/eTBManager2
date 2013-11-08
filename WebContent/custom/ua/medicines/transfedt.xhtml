@@ -9,6 +9,9 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       template="/layout/template_new.xhtml">
 
+<ui:param name="transferHome" value="#{transferUAHome}" />
+<ui:param name="transfer" value="#{transferUA}" />
+
 <ui:param name="title" value="#{transferHome.id==null? messages['meds.transfer.new'] :messages['meds.transfer.edit']}"/>
 
 <ui:param name="topmenu" value="1" />
@@ -43,6 +46,18 @@
     	<ui:param name="future" value="false" /> 
     	<ui:param name="datefield" value="#{transfer.shippingDate}" /> 
     	<ui:param name="immediateSetter" value="true" /> 
+	</s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Transfer.orderNumber']}:</ui:define>
+    	<h:inputText value="#{transferUA.orderNumber}" required="true"/>
+	</s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" style="margin-top:20px">
+    	<ui:define name="label">#{messages['Transfer.orderDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="false" /> 
+    	<ui:param name="datefield" value="#{transferUA.orderDate}" />
 	</s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" style="clear:left;height:70px;">
@@ -170,7 +185,7 @@
 	</h:panelGroup>		
 
 	<div class="form-footer">
-        <a:commandLink action="#{transferHome.saveNewTransfer}" styleClass="button" reRender="main,messages"
+        <a:commandLink action="#{transferUAHome.saveNewTransfer}" styleClass="button" reRender="main,messages"
         	onclick="if (!disableButton(this)) return false;" rendered="#{id==null}">
         	<span>#{messages['form.ok']}</span>
         </a:commandLink>

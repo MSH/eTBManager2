@@ -5,11 +5,11 @@
 		<restrict>#{s:hasRole('NEW_TRANSFER')}</restrict>
 		<action execute="#{transferUAHome.initialize}"/>
 		<begin-conversation join="true"/>
-		<param name="id" value="#{transferHome.id}" converterId="javax.faces.Integer" />
+		<param name="id" value="#{transferUAHome.id}" converterId="javax.faces.Integer" />
 		<navigation>
 			<rule if-outcome="persisted">
 				<end-conversation/>
-				<redirect view-id="/medicines/transfer.xhtml" />
+				<redirect view-id="/custom/ua/medicines/transfer.xhtml" />
 			</rule>
 		</navigation>
 </page>
