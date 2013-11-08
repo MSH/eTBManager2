@@ -246,6 +246,32 @@ public class CaseEditingHome {
 		return s;
 	}
 
+	/**
+	 * Save changes made to a case
+	 * @return
+	 */
+	public String saveEditingWithoutValidation() {
+		TbCase tbcase = caseHome.getInstance();
+
+		tbcase.setNotificationUnit(tbunitselection.getSelected());
+		tbcase.getNotifAddress().setAdminUnit(notifAdminUnit.getSelectedUnit());
+		tbcase.getCurrentAddress().setAdminUnit(currentAdminUnit.getSelectedUnit());
+		
+		if (!tbcase.isNotifAddressChanged()) {
+			tbcase.getCurrentAddress().copy(tbcase.getNotifAddress());
+		}
+
+		prevTBTreatmentHome.persist();
+		
+		updatePatientAge();
+
+		String s = caseHome.persist();
+		
+		if ("persisted".equals(s))
+			caseHome.updateCaseTags();
+
+		return s;
+	}
 
 
 	/**
@@ -339,7 +365,71 @@ public class CaseEditingHome {
 		return (regimenType == 2? "individualized": "persisted");
 	}
 
+	/**
+	 * Register a new TB or MDR-TB case
+	 * @return "persisted" if successfully registered
+	 */
+	@Transactional
+	public String saveNewWithoutValidation() {
+		TbCase tbcase = caseHome.getInstance();
+		
+		// is this a suspect case?
+		if (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT) {
+			tbcase.setSuspectClassification(tbcase.getClassification());
+		}
+		
+		// save the patient's data
+		patientHome.persist();
 
+		// get notification unit
+		tbcase.setNotificationUnit(getTbunitselection().getSelected());
+		tbcase.getNotifAddress().setAdminUnit(notifAdminUnit.getSelectedUnit());
+		
+		tbcase.setOwnerUnit(tbcase.getNotificationUnit());
+		
+		Address notifAddress = tbcase.getNotifAddress();
+		Address curAddress = tbcase.getCurrentAddress();
+		//curAddress.copy(notifAddress);
+
+		tbcase.setNotifAddress(notifAddress);
+		tbcase.setCurrentAddress(curAddress);
+
+		if (tbcase.getValidationState() == null)
+			tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
+		
+		if (tbcase.getState() == null)
+			tbcase.setState(CaseState.WAITING_TREATMENT);
+		
+		updatePatientAge();
+
+		// treatment was defined ?
+		caseHome.setTransactionLogActive(true);
+		if (!caseHome.persist().equals("persisted"))
+			return "error";
+
+		caseHome.setTransactionLogActive(false);
+
+		// define the treatment regimen if it's not individualized (==2)
+		if (regimenType != 2)
+			startTreatment();
+		
+		if (medicalExaminationHome != null) {
+			MedicalExamination medExa = medicalExaminationHome.getInstance();
+			if (medExa.getDate() != null) {
+				medExa.setAppointmentType(MedAppointmentType.SCHEDULLED);
+				medExa.setUsingPrescMedicines(YesNoType.YES);
+				medicalExaminationHome.persist();			
+			}
+		}
+
+		// save additional information
+		if (prevTBTreatmentHome != null)
+			prevTBTreatmentHome.persist();
+
+		caseHome.updateCaseTags();
+
+		return (regimenType == 2? "individualized": "persisted");
+	}
 
 	/**
 	 * Checks if information entered or modified is valid to be recorded

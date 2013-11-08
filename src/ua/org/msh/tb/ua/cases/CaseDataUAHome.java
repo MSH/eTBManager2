@@ -12,12 +12,14 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseCloseHome;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.ComorbidityHome;
+import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.PrescribedMedicine;
 import org.msh.tb.entities.Source;
@@ -44,6 +46,7 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 	@In(create=true) CaseHome caseHome;
 	@In(create=true) CaseCloseHome caseCloseHome;
 	@In(create=true) ComorbidityHome comorbidityHome;
+	@In(required=false) StartTreatmentHome startTreatmentHome;
 	
 	
 	@Factory("caseDataUA")
@@ -80,13 +83,16 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 	public String saveNew() {
 		if (!checkConstraints())
 			return "error";
-
-		String ret = caseEditingHome.saveNew();
+		
+		if (!validateData())
+			return "error";
+		
+		String ret = caseEditingHome.saveNewWithoutValidation();
 
 		if (!ret.equals("persisted"))
 			return ret;
 		
-		TbCase tbcase = caseEditingHome.getTbcase();
+		TbCase tbcase = caseHome.getInstance();
 		CaseDataUA data = getInstance();
 		tbcase.setNationality(nationality);
 		data.setTbcase(tbcase);
@@ -102,7 +108,26 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 		return persist();
 	}
 
+	public boolean validateData() {
+		TbCase tbcase = caseHome.getInstance();
 
+		if (tbcase.getRegistrationDate() == null) {
+			FacesMessages.instance().addToControlFromResourceBundle("edtregdate", "javax.faces.component.UIInput.REQUIRED");
+			return false;
+		}
+		
+		if ((tbcase.getDiagnosisType() == DiagnosisType.CONFIRMED) && (tbcase.getDiagnosisDate() == null)) {
+			FacesMessages.instance().addToControlFromResourceBundle("reghidden", "javax.faces.component.UIInput.REQUIRED");
+			return false;
+		}
+		
+		if ((caseEditingHome.getRegimenType() == 1) && ((startTreatmentHome != null) && (startTreatmentHome.getRegimen() == null))) {
+			FacesMessages.instance().addToControlFromResourceBundle("cbregimen", "javax.faces.component.UIInput.REQUIRED");
+			return false;
+		}
+
+		return true;
+	}
 	
 	/**
 	 * Save an existing TB or MDR-TB case of the Ukraine version
@@ -112,11 +137,14 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 	public String saveEditing() {
 		if (!checkConstraints())
 			return "error";
-		if (!caseEditingHome.saveEditing().equals("persisted"))
+		if (!validateData())
+			return "error";
+		
+		if (!caseEditingHome.saveEditingWithoutValidation().equals("persisted"))
 			return "error";
 		
 		CaseDataUA data = getInstance();
-		TbCase tbcase = caseEditingHome.getTbcase();
+		TbCase tbcase = caseHome.getInstance();
 		tbcase.setNationality(nationality);
 		
 		PrevTBTreatmentUAHome prev = (PrevTBTreatmentUAHome) App.getComponent(PrevTBTreatmentUAHome.class);
@@ -183,10 +211,10 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 	}
 
 	public Nationality getNationality() {
-		if (caseEditingHome.getTbcase().getNationality()== null)
+		if (caseHome.getInstance().getNationality()== null)
 			nationality = Nationality.NATIVE;
 		else
-			nationality = caseEditingHome.getTbcase().getNationality();
+			nationality = caseHome.getInstance().getNationality();
 		return nationality;
 	}
 
