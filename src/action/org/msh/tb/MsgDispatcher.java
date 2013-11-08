@@ -96,7 +96,7 @@ public class MsgDispatcher {
 	 * @param unit
 	 * @return
 	 */
-	protected List<User> getUsersByRoleAndUnit(String roleName, Tbunit unit, boolean checkPlayOtherUnits) {
+	public List<User> getUsersByRoleAndUnit(String roleName, Tbunit unit, boolean checkPlayOtherUnits) {
 		if(!checkPlayOtherUnits){
 			return getUsersByRoleAndUnit(roleName, unit);
 		}
