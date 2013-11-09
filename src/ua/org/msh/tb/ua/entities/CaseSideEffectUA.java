@@ -15,7 +15,6 @@ import org.msh.utils.date.DateUtils;
 
 @Entity
 @DiscriminatorValue("ua")
-@Name("caseSideEffectUA")
 public class CaseSideEffectUA extends CaseSideEffect {
 	
 	private SideEffectGrading grade;
