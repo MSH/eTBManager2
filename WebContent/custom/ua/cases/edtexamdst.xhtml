@@ -98,7 +98,7 @@ function dstResultChange(cb) {
  		<div style="float:right;">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-            <a:commandLink action="#{examDSTUAHome.persistUA()}" styleClass="button" reRender="formexam" 
+            <a:commandLink action="#{examDSTUAHome.persistUA()}" styleClass="button" reRender="formexam,messages" 
             	onclick="if (!disableButton(this)) return false;"  >
             	<span>#{messages['form.save']}</span>
             </a:commandLink>

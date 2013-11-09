@@ -9,7 +9,6 @@
 	xmlns:rich="http://richfaces.ajax4jsf.org/rich"
 	template="/layout/template_new.xhtml">
 
-
 	<ui:param name="title"
 		value="#{messages['cases.details']} - #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect] : messages[tbcase.classification.key]}" />
 	<ui:param name="topmenu" value="0" />
@@ -37,8 +36,6 @@
 		<h:panelGroup id="leftmenu" styleClass="vertical-menu">
 			<h:form class="vertical-menu">
 
-
-
 				<h:commandLink action="#{caseHome.remove}"
 					onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;"
 					rendered="#{caseHome.canRemoveCaseData}">
@@ -50,13 +47,13 @@
 					rendered="#{caseHome.canClose}">
 					<f:param name="id" value="#{caseHome.id}" />
 					<i class="icon-folder-close" />#{messages['cases.close']}
-	</s:link>
+				</s:link>
 
 				<h:commandLink action="#{caseCloseHome.reopenCase}"
 					rendered="#{caseHome.canReopen}"
 					onclick="if (!confirm('#{messages['cases.reopen.confirm']}')) return false;">
 					<i class="icon-folder-open" />#{messages['cases.reopen']}
-	</h:commandLink>
+				</h:commandLink>
 
 				<s:link view="/cases/casehistory.xhtml">
 					<f:param name="id" value="#{caseHome.id}" />
@@ -68,7 +65,7 @@
 					rendered="#{caseHome.canTagCase and empty tbcase.tags}">
 					<f:param name="id" value="#{caseHome.id}" />
 					<i class="icon-tag" />#{messages['admin.tags']}
-	</s:link>
+				</s:link>
 
 			</h:form>
 		</h:panelGroup>
