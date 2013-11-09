@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.cases.exams.ExamDSTHome;
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamDSTResult;
@@ -50,8 +51,10 @@ public class ExamDSTUAHome{
 				}
 			}
 			
-			if (exam.getResults().size() == 0)
+			if (exam.getResults().size() == 0){
+				FacesMessages.instance().addFromResourceBundle("DSTExam.msg03");
 				return false;
+			}
 			else
 				return true;
 		}
@@ -61,7 +64,7 @@ public class ExamDSTUAHome{
 	public String persistUA(){
 		if (!validateAndPrepareFields())
 			return "error";
-		
+		examDSTHome = (ExamDSTHome)Component.getInstance("examDSTHome");
 		return examDSTHome.persistWithoutValidation();
 	}
 	
