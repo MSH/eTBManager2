@@ -82,35 +82,9 @@ public class CaseStateReportUA extends CaseStateReport{
 	}*/
 	
 	/**
-	 * Get HQL instruction to be included in the join declaration
-	 * @return
-	 */
-	@Override
-	protected String getSqlJoin(boolean forceUnitJoin, String caseTableJoinAlias) {
-		UserWorkspace uw = UserSession.getUserWorkspace();
-
-		String join;
-		String unitJoin;
-
-		// conditions to add the TB unit to the query join
-		if ((forceUnitJoin) || (getTbunit() != null) || (uw.getView() == UserView.TBUNIT) || (uw.getHealthSystem() != null) || (uw.getView() == UserView.ADMINUNIT))
-			 unitJoin = " inner join tbunit u on u.id = c.notification_unit_id";
-		else unitJoin = "";
-
-		if ((caseTableJoinAlias != null) && ((generateSQLConditionByCase().length() > 0) || (!unitJoin.isEmpty())))
-			 join = "inner join tbcase c on c.id = " + caseTableJoinAlias + ".case_id" + unitJoin;
-		else join = unitJoin;
-		
-		if (uw.getView() == UserView.ADMINUNIT)
-			 join +=  " inner join administrativeunit a on a.id = u.adminunit_id ";
-		
-		return join;
-	}
-	
-	/**
 	 * Generate SQL condition to filter cases by user view
 	 * @return
-	 */
+	 **/
 	@Override
 	protected String generateSQLConditionByUserView() {
 		UserWorkspace userWorkspace = UserSession.getUserWorkspace();
@@ -121,24 +95,19 @@ public class CaseStateReportUA extends CaseStateReport{
 
 		String s;
 		if (userWorkspace.getHealthSystem() != null)
-			s = " and u.healthSystem_id = " + userWorkspace.getHealthSystem().getId();
+			s = " and (u.healthSystem_id = " + userWorkspace.getHealthSystem().getId()+" or nu.healthSystem_id = " + userWorkspace.getHealthSystem().getId()+")";
 		else s = "";
 		switch (view) {
 			case ADMINUNIT: {
-				return " and (a.code like '" + userWorkspace.getAdminUnit().getCode() + "%')" + s; 
+				return " and (a.code like '" + userWorkspace.getAdminUnit().getCode() + "%'"+
+				" or na.code like '" + userWorkspace.getAdminUnit().getCode() + "%'"+
+				" or loc.code like '"+ userWorkspace.getAdminUnit().getCode() + "%')"+s; 
 			}
 			case TBUNIT: 
-			return " and u.id = " + userWorkspace.getTbunit().getId();
+			return " and (u.id = " + userWorkspace.getTbunit().getId()+
+					" or nu.id = " + userWorkspace.getTbunit().getId()+")"+s;
 		default: return s;
 		}
-		
-		/*switch (userWorkspace.getView()) {
-		case ADMINUNIT: 
-			return " and (a.code like '" + getSelectedAdmUnit().getCode() + "%')"; 
-		case TBUNIT: 
-			return " and u.id = " + userWorkspace.getTbunit().getId();
-		default: return "";
-		}*/
 	}
 	
 	public AdministrativeUnit getSelectedAdmUnit() {
@@ -171,6 +140,8 @@ public class CaseStateReportUA extends CaseStateReport{
 	 */
 	@Override
 	public void createItems() {
+		/*super.createItems();
+		items = super.getItems();*/
 		items = new ArrayList<CaseStateItem>();
 //		setValidationItems(new ArrayList<ValidationItem>());
 
@@ -210,8 +181,8 @@ public class CaseStateReportUA extends CaseStateReport{
 /*			if (!ValidationState.VALIDATED.equals(vs)) {
 				ValidationItem valItem = findValidationItem(vs);
 				valItem.add(qty);
-			}
-*/		}
+			}*/
+		}
 
 		Collections.sort(items, new Comparator<CaseStateItem>() {
 
@@ -229,29 +200,39 @@ public class CaseStateReportUA extends CaseStateReport{
 		});
 		
 		//risk DR-TB
-		String querySQL = generateSQLRiskDRTB(hsID,0);
+		/*String aucond;
+		if (userWorkspace.getView() == UserView.ADMINUNIT)
+			aucond = "inner join administrativeunit a on a.id = u.adminunit_id ";
+		else aucond = "";
+		
+		Integer hsID = null;
+		if (userWorkspace.getHealthSystem() != null)
+			hsID = userWorkspace.getHealthSystem().getId();
+		*/
+		String querySQL = generateSQLRiskDRTB(aucond,hsID,0);
 		BigInteger colRiskDR = (BigInteger) App.getEntityManager().createNativeQuery(querySQL).getResultList().get(0);
 
-		CaseStateItem it = new CaseStateItem(App.getMessage("CaseClassification.DRTB.suspect.notontreat"), colRiskDR.intValue(), riskDRTBnotOnTreat);
-		getItems().add(it);
-		
-		querySQL = generateSQLRiskDRTB(hsID,1);
+		if (colRiskDR.intValue()!=0){
+			CaseStateItem it = new CaseStateItem(App.getMessage("CaseClassification.DRTB.suspect.notontreat"), colRiskDR.intValue(), riskDRTBnotOnTreat);
+			getItems().add(it);
+		}
+		querySQL = generateSQLRiskDRTB(aucond,hsID,1);
 		colRiskDR = (BigInteger) App.getEntityManager().createNativeQuery(querySQL).getResultList().get(0);
-
-		it = new CaseStateItem(App.getMessage("CaseClassification.DRTB.suspect.ontreat"), colRiskDR.intValue(), riskDRTBOnTreat);
-		getItems().add(it);
 		
+		if (colRiskDR.intValue()!=0){
+			CaseStateItem it = new CaseStateItem(App.getMessage("CaseClassification.DRTB.suspect.ontreat"), colRiskDR.intValue(), riskDRTBOnTreat);
+			getItems().add(it);
+		}
 	}
 
 	/**
 	 * @param hsID
 	 * @return
 	 */
-	protected String generateSQLRiskDRTB(Integer hsID, int state) {
+	protected String generateSQLRiskDRTB(String aucond, Integer hsID, int state) {
 		return "select count(*) from tbcase c "+
-		"inner join tbunit u on u.id = c.notification_unit_id "+
-		" where u.workspace_id = " + defaultWorkspace.getId() +
-		(hsID != null? " and u.healthSystem_id = " + hsID.toString(): "") +
+		getSqlJoin(true, null) +
+		" where p.workspace_id = " + defaultWorkspace.getId() + generateSQLConditionByUserView() +
 		" and c.diagnosisType=0 and c.classification=1 and c.state = "+state;
 	}
 
@@ -259,10 +240,19 @@ public class CaseStateReportUA extends CaseStateReport{
 	protected String generateSQL(String aucond, String cond, String condByCase, Integer hsID) {
 		String res = "select c.state, c.validationState, c.diagnosisType, count(*) " +
 		"from tbcase c " +
-		"inner join tbunit u on u.id = c.notification_unit_id " + aucond +
-		" where u.workspace_id = " + defaultWorkspace.getId() + cond + condByCase + " and ((c.diagnosisType=1 or c.diagnosisType is null) or c.classification=0 or c.state>1) "+ 
-		(hsID != null? "and u.healthSystem_id = " + hsID.toString(): "") +
+		getSqlJoin(true, null) +
+		" where p.workspace_id = " + defaultWorkspace.getId() + cond + condByCase + " and ((c.diagnosisType=1 or c.diagnosisType is null) or c.classification=0 or c.state>1) "+ 
 		" group by c.state, c.validationState, c.diagnosisType";
 		return res;
+	}
+	
+	@Override
+	protected String getSqlJoin(boolean forceUnitJoin, String caseTableJoinAlias) {
+		String sql = super.getSqlJoin(forceUnitJoin, caseTableJoinAlias);
+		sql += " inner join patient p on p.id = c.patient_id " + 
+		"left join tbunit nu on nu.id = c.notification_unit_id "+
+		"join administrativeunit loc on c.notif_adminunit_id = loc.id "+
+		"left join administrativeunit na on na.id = nu.adminunit_id ";
+		return sql;
 	}
 }
