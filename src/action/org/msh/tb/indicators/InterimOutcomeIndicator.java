@@ -105,7 +105,7 @@ public class InterimOutcomeIndicator extends Indicator2D {
 		else {
 			boolean negative = false;
 			
-			if ((dtCult != null) && (dtMicro != null)) {
+			if ((dtCult != null) && (dtMicro != null) && (dtIniTreat!=null)) {
 				int m1 = DateUtils.monthsBetween(dtIniTreat, dtCult);
 				int m2 = DateUtils.monthsBetween(dtIniTreat, dtMicro);
 				negative = (m1 <= intrMonths) && (m2 <= intrMonths);
