@@ -107,34 +107,40 @@ public class CasesQueryUA extends CasesQuery{
 			if (getCaseFilters().getTbunitselection().getTbunit() != null) {
 				switch (filterUnit) {
 				case NOTIFICATION_UNIT:
-					addCondition(notifCondUA);
+					//addCondition(notifCondUA);
+					addCondition(notifCond);
 					break;
 				case TREATMENT_UNIT:
-					addCondition(treatCondUA);
+					//addCondition(treatCondUA);
+					addCondition(treatCond);
 					break;
 				case BOTH:
-					addCondition("(" + treatCondUA + " or " + notifCondUA + ")");
+					//addCondition("(" + treatCondUA + " or " + notifCondUA + ")");
+					addCondition("(" + treatCond + " or " + notifCond + ")");
 				}
 			}
 			else // region was set ? 
 			if (getCaseFilters().getTbunitselection().getAdminUnit() != null) {
 				switch (filterUnit) {
 				case NOTIFICATION_UNIT:
-					addCondition(notifRegCondUA);
+					//addCondition(notifRegCondUA);
+					addCondition(notifRegCond);
 					break;
 				case TREATMENT_UNIT:
 					if((caseFilters.getStateIndex()==null && caseFilters.getSearchCriteria().equals(SearchCriteria.CASE_TAG))
 							|| caseFilters.getStateIndex()!= CaseFilters.TRANSFER_OUT)
-								addCondition(treatRegCondUA);
+								//addCondition(treatRegCondUA);
+						addCondition(treatRegCond);
 					break;
 				case BOTH:{
-					//addCondition("(" + treatRegCondUA + " or " + notifRegCondUA);
+				/*	//addCondition("(" + treatRegCondUA + " or " + notifRegCondUA);
 					addCondition("(" + treatRegCond + " or " + notifRegCond + ")");
 					UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
 					if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
-						hqlCondition += " or "+(userWorkspace.getAdminUnit().getLevel()==1 ? notifAdrAdmUnitUA : notifAdrAdmUnitRegUA) + getAdminUnitLike(userWorkspace.getAdminUnit());
+						//hqlCondition += " or "+(userWorkspace.getAdminUnit().getLevel()==1 ? notifAdrAdmUnitUA : notifAdrAdmUnitRegUA) + getAdminUnitLike(userWorkspace.getAdminUnit());
 					}
-					hqlCondition += ")";
+					hqlCondition += ")";*/
+					addCondition("(" + treatRegCond + " or " + notifRegCond + ")");
 				}
 				}
 			}
