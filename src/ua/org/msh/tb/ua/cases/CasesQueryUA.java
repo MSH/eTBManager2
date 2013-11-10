@@ -128,7 +128,8 @@ public class CasesQueryUA extends CasesQuery{
 								addCondition(treatRegCondUA);
 					break;
 				case BOTH:{
-					addCondition("(" + treatRegCondUA + " or " + notifRegCondUA);
+					//addCondition("(" + treatRegCondUA + " or " + notifRegCondUA);
+					addCondition("(" + treatRegCond + " or " + notifRegCond + ")");
 					UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
 					if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
 						hqlCondition += " or "+(userWorkspace.getAdminUnit().getLevel()==1 ? notifAdrAdmUnitUA : notifAdrAdmUnitRegUA) + getAdminUnitLike(userWorkspace.getAdminUnit());
