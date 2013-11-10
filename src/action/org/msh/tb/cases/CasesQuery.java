@@ -75,8 +75,8 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		"c.ownerUnit.id = #{caseFilters.unitId}",
 	"exists(select t.id from c.tags t where t.id = #{caseFilters.tagid})"};
 
-	private static final String notifCond = "(nu.id = #{caseFilters.tbunitselection.tbunit.id})";
-	private static final String treatCond = "c.ownerUnit.id =  #{caseFilters.tbunitselection.tbunit.id}";
+	protected static final String notifCond = "(nu.id = #{caseFilters.tbunitselection.tbunit.id})";
+	protected static final String treatCond = "c.ownerUnit.id =  #{caseFilters.tbunitselection.tbunit.id}";
 
 	protected static final String notifRegCond = "(nu.adminUnit.code like #{caseFilters.tbAdminUnitLike})";
 	protected static final String treatRegCond = "c.ownerUnit.adminUnit.code like #{caseFilters.tbAdminUnitLike}";
