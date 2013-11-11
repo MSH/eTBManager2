@@ -117,7 +117,7 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 									getTable2000().addIdValue("col", "extrapul", 1F);
 									//TODO may be accounted twice to the TOTAL!!!!
 									if(tc.getPulmonaryType() == null){
-										getTable2000().addIdValue("col", "total", 1F);
+										//getTable2000().addIdValue("col", "total", 1F);
 									}
 								}
 							}
