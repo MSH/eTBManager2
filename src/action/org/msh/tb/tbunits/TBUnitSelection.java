@@ -147,6 +147,7 @@ public class TBUnitSelection extends AdminUnitSelector<Tbunit> {
 	public void setApplyUserRestrictions(boolean applyUserRestrictions) {
 		if (applyUserRestrictions)
 			applyUserTBUnitRestriction();
+		super.setApplyUserRestrictions(applyUserRestrictions);
 	}
 
 
