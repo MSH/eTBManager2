@@ -12,6 +12,7 @@ import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.UserView;
+import org.msh.tb.login.SessionData;
 
 /**
  * Helper class to allow users to select an administrative unit
@@ -22,17 +23,17 @@ public class AdminUnitSelection {
 
 	private AdministrativeUnit[] units = new AdministrativeUnit[5];
 	private String[] labelLevel = new String[5];
-	
+
 	private boolean alreadySelected;
 	private List<AdministrativeUnit> unitsList;
-	
+
 	private boolean applyUserRestrictions;
-//	private UserWorkspace userWorkspace;
+	//	private UserWorkspace userWorkspace;
 	private List<AdminUnitChangeListener> listeners;
 	private Integer patientAddrRequiredLevels;
-//	private Workspace defaultWorkspace;
-	
-	
+	//	private Workspace defaultWorkspace;
+
+
 	/**
 	 * Constructor with default argument
 	 * @param applyUserRestrictions if true, the selection will apply the restrictions of user view
@@ -60,7 +61,7 @@ public class AdminUnitSelection {
 		}
 		return aux;
 	}
-	
+
 	/**
 	 * Get the selected unit, i.e., the unit at the end point of the selected tree
 	 * @return instance of {@link AdministrativeUnit}
@@ -74,7 +75,7 @@ public class AdminUnitSelection {
 		return null;
 	}
 
-	
+
 	protected void initializeAddrLevel() {
 		Workspace defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace", true);
 		patientAddrRequiredLevels = defaultWorkspace.getPatientAddrRequiredLevels(); 		
@@ -86,7 +87,7 @@ public class AdminUnitSelection {
 	 */
 	public void setSelectedUnit(AdministrativeUnit unit) {
 		alreadySelected = true;
-		
+
 		// clear the array  
 		for (int i=0; i < 5; i++) {
 			units[i] = null;
@@ -94,7 +95,7 @@ public class AdminUnitSelection {
 
 		if (unit == null)
 			return;
-		
+
 		// calculates the level of the unit
 		AdministrativeUnit aux = unit;
 		int level = 1;
@@ -102,7 +103,7 @@ public class AdminUnitSelection {
 			aux = aux.getParent();
 			level++;
 		}
-		
+
 		aux = unit;
 		for (int i = level; i > 0; i--) {
 			units[i - 1] = aux;
@@ -119,31 +120,31 @@ public class AdminUnitSelection {
 	public int getUserLevel() {
 		if (!applyUserRestrictions) 
 			return 0;
-		
+
 		UserWorkspace userWorkspace = getUserWorkspace();
 		if (userWorkspace.getView() == UserView.COUNTRY)
 			return 0;
 
 		if (userWorkspace.getView() == UserView.ADMINUNIT) 
 			return userWorkspace.getAdminUnit().getLevel();
-		
+
 		if (userWorkspace.getView() == UserView.TBUNIT)
 			return userWorkspace.getTbunit().getAdminUnit().getLevel();
 		return 0;
 	}
-	
-	
+
+
 	/**
 	 * Return the {@link UserLogin} component instance in the SEAM session context
 	 * @return {@link UserLogin} instance
 	 */
 	public UserWorkspace getUserWorkspace() {
 		return (UserWorkspace)Component.getInstance("userWorkspace", true);
-/*		if (userWorkspace == null) {
+		/*		if (userWorkspace == null) {
 			userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace", true);
 		}
 		return userWorkspace;
-*/	}
+		 */	}
 
 	/**
 	 * Return the label for first level of the country administrative organization
@@ -152,7 +153,7 @@ public class AdminUnitSelection {
 	public String getLabelLevel1() {
 		return getLabelLevel(1);
 	}
-		
+
 
 	/**
 	 * Return the label for second level of the country administrative organization
@@ -161,7 +162,7 @@ public class AdminUnitSelection {
 	public String getLabelLevel2() {
 		return getLabelLevel(2);
 	}
-		
+
 
 	/**
 	 * Return the label for third level of the country administrative organization
@@ -170,7 +171,7 @@ public class AdminUnitSelection {
 	public String getLabelLevel3() {
 		return getLabelLevel(3);
 	}
-		
+
 
 	/**
 	 * Return the label for forth level of the country administrative organization
@@ -188,7 +189,7 @@ public class AdminUnitSelection {
 	public String getLabelLevel5() {
 		return getLabelLevel(5);
 	}
-		
+
 
 
 	/**
@@ -199,7 +200,7 @@ public class AdminUnitSelection {
 	}
 
 
-	
+
 	/**
 	 * @param level1 the level1 to set
 	 */
@@ -209,11 +210,11 @@ public class AdminUnitSelection {
 		notifyChange();
 	}
 
-	
+
 	public Integer getUnitIdLevel1() {
 		return (units[0] != null? units[0].getId(): null);
 	}
-	
+
 	public void setUnitIdLevel1(Integer id) {
 		EntityManager em = getEntityManager();
 		units[0] = em.find(AdministrativeUnit.class, id);
@@ -306,25 +307,25 @@ public class AdminUnitSelection {
 			List<AdministrativeUnit> lst = null;
 			switch (level) {
 			case 1: lst = aulist.getUnitsLevel1();
-				break;
+			break;
 			case 2: lst = aulist.getUnitsLevel2();
-				break;
+			break;
 			case 3: lst = aulist.getUnitsLevel3();
-				break;
+			break;
 			case 4: lst = aulist.getUnitsLevel4();
-				break;
+			break;
 			case 5: lst = aulist.getUnitsLevel5();
-				break;
+			break;
 			}
 
 			if (lst == null)
 				return null;
-			
+
 			List<String> names = new ArrayList<String>();
-			
+
 			for (AdministrativeUnit adm: lst) {
 				String s = adm.getCountryStructure().getName().toString();
-				
+
 				if (!names.contains(s))
 					names.add(s);
 			}
@@ -338,7 +339,7 @@ public class AdminUnitSelection {
 			labelLevel[level-1] = txt;
 		}
 
-		
+
 		return labelLevel[level-1];
 	}
 
@@ -357,7 +358,7 @@ public class AdminUnitSelection {
 			return null;
 		return getAdminUnitSelectionList().getUnitsLevel1();
 	}
-	
+
 
 	/**
 	 * Return the list of {@link AdministrativeUnit} options for level 2 to be selected by the user
@@ -368,7 +369,7 @@ public class AdminUnitSelection {
 			return null;
 		return getAdminUnitSelectionList().getUnitsLevel2();
 	}
-	
+
 
 	/**
 	 * Return the list of {@link AdministrativeUnit} options for level 3 to be selected by the user
@@ -379,7 +380,7 @@ public class AdminUnitSelection {
 			return null;
 		return getAdminUnitSelectionList().getUnitsLevel3();
 	}
-	
+
 
 	/**
 	 * Return the list of {@link AdministrativeUnit} options for level 4 to be selected by the user
@@ -390,7 +391,7 @@ public class AdminUnitSelection {
 			return null;
 		return getAdminUnitSelectionList().getUnitsLevel4();
 	}
-	
+
 
 	/**
 	 * Return the list of {@link AdministrativeUnit} options for level 5 to be selected by the user
@@ -422,11 +423,11 @@ public class AdminUnitSelection {
 		unitsList = null;
 	}
 
-	
+
 	protected EntityManager getEntityManager() {
 		return (EntityManager)Component.getInstance("entityManager");
 	}
-	
+
 	/**
 	 * Return the list of parent units and the selected one
 	 * @return {@link List} of {@link AdministrativeUnit} instances
@@ -441,7 +442,7 @@ public class AdminUnitSelection {
 		return unitsList;
 	}
 
-	
+
 	/**
 	 * Load the list of administrative units based on the user view
 	 */
@@ -449,23 +450,23 @@ public class AdminUnitSelection {
 		UserWorkspace uw = getUserWorkspace();
 		if (uw.getView() == UserView.COUNTRY)
 			return;
-		
+
 		AdministrativeUnit adm = null;
 		if (uw.getView() == UserView.ADMINUNIT)
 			adm = uw.getAdminUnit();
-		
+
 		if (uw.getView() == UserView.TBUNIT)
 			adm = uw.getTbunit().getAdminUnit();
-		
+
 		List<AdministrativeUnit> lst = adm.getParentsTreeList(true);
 		for (int i = 0; i < 5; i++) {
 			if (i < lst.size())
-				 units[i] = lst.get(i);
+				units[i] = lst.get(i);
 			else units[i] = null;
 		}
 	}
-	
-	
+
+
 	/**
 	 * @param applyUserRestriction the applyUserRestriction to set
 	 */
@@ -493,7 +494,7 @@ public class AdminUnitSelection {
 		return userLevel >= level;
 	}
 
-	
+
 	/**
 	 * Check if the administrative unit at level 1 can be changed
 	 * @return true if administrative unit at level 1 is fixed and cannot be changed, otherwise returns false
@@ -520,7 +521,7 @@ public class AdminUnitSelection {
 		return isLevelReadOnly(3);
 	}
 
-	
+
 	/**
 	 * Check if the administrative unit at level 4 can be changed
 	 * @return true if administrative unit at level 4 is fixed and cannot be changed, otherwise returns false
@@ -538,7 +539,7 @@ public class AdminUnitSelection {
 		return isLevelReadOnly(5);
 	}
 
-	
+
 	/**
 	 * Check if the administrative unit in the 1st level is required for the patient address
 	 * @return true if is required
@@ -547,7 +548,7 @@ public class AdminUnitSelection {
 		return ((patientAddrRequiredLevels != null) && (patientAddrRequiredLevels >= 1));
 	}
 
-	
+
 	/**
 	 * Check if the administrative unit in the 2nd level is required for the patient address
 	 * @return true if is required
@@ -556,7 +557,7 @@ public class AdminUnitSelection {
 		return ((patientAddrRequiredLevels != null) && (patientAddrRequiredLevels >= 2));
 	}
 
-	
+
 	/**
 	 * Check if the administrative unit in the 3rd level is required for the patient address
 	 * @return true if is required
@@ -565,7 +566,7 @@ public class AdminUnitSelection {
 		return ((patientAddrRequiredLevels != null) && (patientAddrRequiredLevels >= 3));
 	}
 
-	
+
 	/**
 	 * Check if the administrative unit in the 4th level is required for the patient address
 	 * @return true if is required
@@ -574,7 +575,7 @@ public class AdminUnitSelection {
 		return ((patientAddrRequiredLevels != null) && (patientAddrRequiredLevels >= 4));
 	}
 
-	
+
 	/**
 	 * Check if the administrative unit in the 5th level is required for the patient address
 	 * @return true if is required
@@ -604,7 +605,7 @@ public class AdminUnitSelection {
 		listeners.remove(listener);
 	}
 
-	
+
 	/**
 	 * Notify about selection changing 
 	 */
@@ -624,7 +625,7 @@ public class AdminUnitSelection {
 	public Integer getSelectedUnitId() {
 		AdministrativeUnit adm = getSelectedUnit();
 		if (adm == null)
-			 return null;
+			return null;
 		else return adm.getId();
 	}
 
@@ -634,6 +635,8 @@ public class AdminUnitSelection {
 	 * @param id
 	 */
 	public void setSelectedUnitId(Integer id) {
+		//AK 20131111 set the admin unit id on the session level
+			SessionData.instance().setValue("uaid", id);
 		if (id == null)
 			setSelectedUnit(null);
 		else {
@@ -642,34 +645,34 @@ public class AdminUnitSelection {
 		}
 	}
 
-	
+
 	/**
 	 * Select units based on user restrictions  
 	 */
 	protected void selectUserRestrictions() {
 		if (!applyUserRestrictions)
 			return;
-		
+
 		UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
-		
+
 		if (userWorkspace == null)
 			return;
-		
+
 		UserView view = userWorkspace.getView();
 		if (view == UserView.COUNTRY)
 			return;
 
 		if (view == UserView.ADMINUNIT)
-			 setSelectedUnitId(userWorkspace.getAdminUnit() != null? userWorkspace.getAdminUnit().getId(): null);
+			setSelectedUnitId(userWorkspace.getAdminUnit() != null? userWorkspace.getAdminUnit().getId(): null);
 		else setSelectedUnitId(userWorkspace.getTbunit().getAdminUnit().getId());
 	}
-	
-	
-	
+
+
+
 	public String getSelectedUnitCodeLike() {
 		AdministrativeUnit adm = getSelectedUnit();
 		if (adm == null)
-			 return null;
+			return null;
 		else return adm.getCode() + "%";
 	}
 
