@@ -15,6 +15,7 @@ import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.UserView;
+import org.msh.tb.login.UserSession;
 import org.msh.tb.ua.entities.enums.TreatmentType;
 
 
@@ -30,8 +31,8 @@ public class CasesQueryUA extends CasesQuery{
 	private static final long serialVersionUID = -7293313123644540670L;
 	private static final String notifCondUA = "(nu.id = #{caseFilters.tbunitselection.tbunit.id})";
 	private static final String treatCondUA = "tu.id =  #{caseFilters.tbunitselection.tbunit.id}";
-	private static final String notifRegCondUA = "(nu.id in (select id from org.msh.tb.entities.Tbunit tbu where tbu.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
-	private static final String treatRegCondUA = "(tu.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
+	private static final String notifRegCondUA = "(nu.id in (select id from org.msh.tb.entities.Tbunit tbu where tbu.adminUnit.code like :nuCode))";
+	private static final String treatRegCondUA = "(tu.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like :tuCode))";
 	private static final String notifAdrAdmUnitUA="c.notifAddress.adminUnit.code like ";
 	private static final String notifAdrAdmUnitRegUA="c.notifAddress.adminUnit.code = ";
 	private static final String sourcesCond = "exists(SELECT cs.id, pm.id " + 
@@ -47,7 +48,7 @@ public class CasesQueryUA extends CasesQuery{
 			"or (cd.dischargeDate5 is null) and (cd.hospitalizationDate5 is not null)))";
 	
 	public String getAdminUnitLike(AdministrativeUnit adm) {
-		UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
+		UserWorkspace userWorkspace = UserSession.getUserWorkspace();
 		if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
 			if (adm == null)
 				return null;
@@ -104,43 +105,40 @@ public class CasesQueryUA extends CasesQuery{
 		// health unit condition
 		if (filterUnit != null) {
 			// health unit was set ?
-			if (getCaseFilters().getTbunitselection().getTbunit() != null) {
+			if (getCaseFilters().getTbunitselection().getSelected() != null) {
 				switch (filterUnit) {
 				case NOTIFICATION_UNIT:
-					//addCondition(notifCondUA);
-					addCondition(notifCond);
+					addCondition(notifCondUA);
 					break;
 				case TREATMENT_UNIT:
-					//addCondition(treatCondUA);
-					addCondition(treatCond);
+					addCondition(treatCondUA);
 					break;
 				case BOTH:
-					//addCondition("(" + treatCondUA + " or " + notifCondUA + ")");
-					addCondition("(" + treatCond + " or " + notifCond + ")");
+					addCondition("(" + treatCondUA + " or " + notifCondUA + ")");
 				}
 			}
 			else // region was set ? 
 			if (getCaseFilters().getTbunitselection().getAdminUnit() != null) {
 				switch (filterUnit) {
 				case NOTIFICATION_UNIT:
-					//addCondition(notifRegCondUA);
-					addCondition(notifRegCond);
+					if (caseFilters.getTbAdminUnitAnyLevelLike()!=null)
+						addCondition(notifRegCondUA.replace(":nuCode", "'"+caseFilters.getTbAdminUnitAnyLevelLike()+"'"));
 					break;
 				case TREATMENT_UNIT:
+					if (caseFilters.getTbAdminUnitAnyLevelLike()!=null)
 					if((caseFilters.getStateIndex()==null && caseFilters.getSearchCriteria().equals(SearchCriteria.CASE_TAG))
 							|| caseFilters.getStateIndex()!= CaseFilters.TRANSFER_OUT)
-								//addCondition(treatRegCondUA);
-						addCondition(treatRegCond);
+								addCondition(treatRegCondUA.replace(":tuCode", "'"+caseFilters.getTbAdminUnitAnyLevelLike()+"'"));
 					break;
 				case BOTH:{
-				/*	//addCondition("(" + treatRegCondUA + " or " + notifRegCondUA);
-					addCondition("(" + treatRegCond + " or " + notifRegCond + ")");
-					UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
-					if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
-						//hqlCondition += " or "+(userWorkspace.getAdminUnit().getLevel()==1 ? notifAdrAdmUnitUA : notifAdrAdmUnitRegUA) + getAdminUnitLike(userWorkspace.getAdminUnit());
+					if (caseFilters.getTbAdminUnitAnyLevelLike()!=null){
+						addCondition("(" + treatRegCondUA.replace(":tuCode", "'"+caseFilters.getTbAdminUnitAnyLevelLike()+"'") + " or " + notifRegCondUA.replace(":nuCode", "'"+caseFilters.getTbAdminUnitAnyLevelLike()+"'"));
+						UserWorkspace userWorkspace = UserSession.getUserWorkspace();
+						if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
+							hqlCondition += " or "+(userWorkspace.getAdminUnit().getLevel()==1 ? notifAdrAdmUnitUA : notifAdrAdmUnitRegUA) + getAdminUnitLike(userWorkspace.getAdminUnit());
+						}
+						hqlCondition += ")";
 					}
-					hqlCondition += ")";*/
-					addCondition("(" + treatRegCond + " or " + notifRegCond + ")");
 				}
 				}
 			}
@@ -152,6 +150,7 @@ public class CasesQueryUA extends CasesQuery{
 		
 		mountAdvancedSearchConditions();
 		mountSingleSearchConditions();
+		mountUserView();
 		
 		if (getStateIndex()!=null){
 			if (getStateIndex().equals(CaseFilters.CLOSED))
@@ -159,7 +158,7 @@ public class CasesQueryUA extends CasesQuery{
 			if (getStateIndex()>=100 && getStateIndex()<200){
 				addCondition("(c.diagnosisType = 1 or c.classification = 0 or c.state>1)");
 				Integer hsID = null;
-				UserWorkspace userWorkspace = (UserWorkspace) App.getComponent("userWorkspace");
+				UserWorkspace userWorkspace = UserSession.getUserWorkspace();
 				if (userWorkspace.getHealthSystem() != null)
 					hsID = userWorkspace.getHealthSystem().getId();
 				if (hsID!=null)
@@ -182,6 +181,24 @@ public class CasesQueryUA extends CasesQuery{
 		return hqlCondition;
 	}
 	
+	private void mountUserView() {
+		UserWorkspace userWorkspace = UserSession.getUserWorkspace();
+		switch (userWorkspace.getView()){
+			case ADMINUNIT:{
+				String unitCode = getAdminUnitLike(userWorkspace.getAdminUnit());//userWorkspace.getAdminUnit().getCode()
+				addCondition("("+(userWorkspace.getAdminUnit().getLevel()==1 ? notifAdrAdmUnitUA : notifAdrAdmUnitRegUA) + unitCode+
+						" or (" + treatRegCondUA.replace(":tuCode", unitCode) + 
+						" or " + notifRegCondUA.replace(":nuCode", unitCode)+"))");
+				break;
+			}
+			case TBUNIT:{
+				Integer uid = userWorkspace.getTbunit().getId();
+				addCondition("(nu.id = "+uid+" or c.ownerUnit.id = "+uid+")");
+				break;
+			}
+		}
+	}
+
 	private Integer getStateIndex(){
 		if (caseFilters == null) return null;
 		return caseFilters.getStateIndex();

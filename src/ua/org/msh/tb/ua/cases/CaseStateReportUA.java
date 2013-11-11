@@ -248,7 +248,7 @@ public class CaseStateReportUA extends CaseStateReport{
 	
 	@Override
 	protected String getSqlJoin(boolean forceUnitJoin, String caseTableJoinAlias) {
-		String sql = super.getSqlJoin(forceUnitJoin, caseTableJoinAlias);
+		String sql = super.getSqlJoin(forceUnitJoin, caseTableJoinAlias).replace("inner join tbunit u on u.id = c.owner_unit_id", "left outer join tbunit u on u.id = c.owner_unit_id");
 		sql += " inner join patient p on p.id = c.patient_id " + 
 		"left join tbunit nu on nu.id = c.notification_unit_id "+
 		"join administrativeunit loc on c.notif_adminunit_id = loc.id "+
