@@ -127,7 +127,7 @@ public class CasesQueryUA extends CasesQuery{
 				case TREATMENT_UNIT:
 					if (caseFilters.getTbAdminUnitAnyLevelLike()!=null)
 					if((caseFilters.getStateIndex()==null && caseFilters.getSearchCriteria().equals(SearchCriteria.CASE_TAG))
-							|| caseFilters.getStateIndex()!= CaseFilters.TRANSFER_OUT)
+							|| (caseFilters.getStateIndex()!=null && caseFilters.getStateIndex()!= CaseFilters.TRANSFER_OUT))
 								addCondition(treatRegCondUA.replace(":tuCode", "'"+caseFilters.getTbAdminUnitAnyLevelLike()+"'"));
 					break;
 				case BOTH:{
