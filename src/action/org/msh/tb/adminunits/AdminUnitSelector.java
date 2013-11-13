@@ -41,6 +41,7 @@ public class AdminUnitSelector<E> {
 	public AdminUnitSelector(String clientId) {
 		super();
 		this.clientId = clientId;
+		initialize();
 	}
 	
 	
@@ -53,16 +54,24 @@ public class AdminUnitSelector<E> {
 		super();
 		this.clientId = clientId;
 		this.applyUserRestrictions = applyUserRestrictions;
+		initialize();
 	}
 	
 
+	/**
+	 * Initialize the content of the selection box
+	 */
+	protected void initialize() {
+		AdministrativeUnit adminunit = getAuselection().getUnitLevel1();
+		if (adminunit != null)
+			setAdminUnit(adminunit);
+	}
 	
 	/**
 	 * Return true if the administrative unit is selected
 	 * @return boolean value
 	 */
 	public boolean isAdminUnitSelected() {
-		System.out.println("au = " + getAdminUnitId());
 		return getAdminUnitId() != null;
 	}
 
@@ -275,6 +284,7 @@ public class AdminUnitSelector<E> {
 		this.applyUserRestrictions = applyUserRestrictions;
 		if (auselection != null)
 			auselection.setApplyUserRestrictions(applyUserRestrictions);
+		initialize();
 	}
 
 	/**
