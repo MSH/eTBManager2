@@ -9,6 +9,9 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       template="/layout/template_new.xhtml">
 
+<ui:param name="transferHome" value="#{transferUAHome}" />
+<ui:param name="transfer" value="#{transferUA}" />
+
 <ui:param name="title" value="#{messages['meds.transfer.detail']}" />
 <ui:param name="title2" value="#{messages['meds.transfer.receive']}" />
 
@@ -236,7 +239,7 @@
         	onclick="if (!disableButton(this)) return false;">
         	<span>#{messages['form.ok']}</span>
         </a:commandLink>
-        <s:link action="cancel" styleClass="button-alt" onclick="disableButton(this);">
+        <s:link action="cancel" styleClass="button-alt" onclick="disableButton(this);"  view="/custom/ua/medicines/transfrecua.xhtml">
          	<span>#{messages['form.cancel']}</span>
         </s:link>
 	</div>

@@ -35,7 +35,7 @@
 		<div class="edit-icon" style="float:left"/>#{messages['form.edit']}
 	</s:link>
 
-	<s:link view="/medicines/transfrec.xhtml" rendered="#{(transferHome.canReceive)}">
+	<s:link view="/custom/ua/medicines/transfrec.xhtml" rendered="#{(transferHome.canReceive)}">
 		<f:param name="id" value="#{transfer.id}" />
 		<i class="icon-circle-arrow-right" />#{messages['meds.transfer.receive']}
 	</s:link>

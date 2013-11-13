@@ -2,10 +2,7 @@
 <page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
 
-	<action execute="#{transferUAHome.initializeReceiving}"/>
-		<restrict>#{s:hasRole('TRANSF_REC')}</restrict>
-		<param name="id" value="#{transferUAHome.id}" converterId="javax.faces.Integer"/>
-		<begin-conversation join="true"/>
+	<!-- UA specific. Only for 'cancel'-outcome -->
 		<navigation>
 			<rule if-outcome="received">
 				<end-conversation />
