@@ -636,7 +636,7 @@ public class AdminUnitSelection {
 	 */
 	public void setSelectedUnitId(Integer id) {
 		//AK 20131111 set the admin unit id on the session level
-			SessionData.instance().setValue("uaid", id);
+		//SessionData.instance().setValue("uaid", id);
 		if (id == null)
 			setSelectedUnit(null);
 		else {

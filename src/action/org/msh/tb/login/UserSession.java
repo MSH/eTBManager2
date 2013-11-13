@@ -27,6 +27,7 @@ import org.msh.tb.entities.UserProfile;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.UserView;
 import org.msh.utils.Passwords;
 import org.msh.utils.date.DateUtils;
 
@@ -233,7 +234,18 @@ public class UserSession {
 //    	Contexts.getSessionContext().set("tbunitselection", getTbunitselection());
     	
     	setTbunit(userWorkspace.getTbunit());
-
+    	
+    	//AK 20131111 set the admin unit id on the session level
+    	if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
+    		SessionData.instance().setValue("uaid", (userWorkspace.getAdminUnit() != null? userWorkspace.getAdminUnit().getId(): null));
+    		SessionData.instance().setValue("unitid", (userWorkspace.getAdminUnit() != null? userWorkspace.getAdminUnit().getId(): null));
+        }
+		else 
+			if (UserView.TBUNIT.equals(userWorkspace.getView())){
+				SessionData.instance().setValue("uaid",(userWorkspace.getTbunit().getAdminUnit().getId()));
+				SessionData.instance().setValue("unitid",(userWorkspace.getTbunit().getAdminUnit().getId()));
+			}
+    	
     	if (!statelessLogin) {
             // register user in the list of on-line users
             OnlineUsersHome onlineUsers = (OnlineUsersHome)Component.getInstance("onlineUsers");
