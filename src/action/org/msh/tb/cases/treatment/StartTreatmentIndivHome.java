@@ -38,6 +38,9 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 	 * @return "treatment-started" if successfully started
 	 */
 	public String startIndividualizedRegimen() {
+		if ((getTbunitselection().getSelected() == null) || (getIniTreatmentDate() == null))
+			return "error";
+		
 		TbCase tbcase = caseHome.getInstance();
 
 		int monthsIntPhase = 0;
