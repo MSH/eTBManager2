@@ -168,7 +168,7 @@
 			<div style="display:inline;margin-right:20px">
 			<h:selectBooleanCheckbox value="#{it.selected}">
 				<a:support event="onchange" onbeforedomupdate="recordVisibleTables()"  action="#{healthUnitsQuery.checkDiagnosticClassificationFilters()}" 
-					ajaxSingle="true" reRender="pnlhealthunits" oncomplete="loadVisibleTables()"/>
+					ajaxSingle="true" reRender="pnlhealthunits,messages" oncomplete="loadVisibleTables()"/>
 			</h:selectBooleanCheckbox>#{messages[it.item.key]}
 			</div>
 		</a:repeat>
@@ -179,7 +179,7 @@
 			<div style="display:inline;margin-right:20px">
 			<h:selectBooleanCheckbox value="#{it.selected}">
 				<a:support event="onchange" onbeforedomupdate="recordVisibleTables()"  action="#{healthUnitsQuery.checkDiagnosticClassificationFilters()}" 
-					ajaxSingle="true" reRender="pnlhealthunits" oncomplete="loadVisibleTables()"/>
+					ajaxSingle="true" reRender="pnlhealthunits,messages" oncomplete="loadVisibleTables()"/>
 			</h:selectBooleanCheckbox>#{messages[it.item.key]}
 			</div>
 		</a:repeat>
