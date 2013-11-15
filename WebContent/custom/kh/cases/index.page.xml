@@ -11,6 +11,11 @@
 			<redirect view-id="/cases/searchresult.xhtml">
 			</redirect>
 		</rule>
+		<rule if-outcome="reload-message">
+			<redirect view-id="/cases/index.xhtml">
+				<message>#{messages['cases.filterserror']}</message>
+			</redirect>
+		</rule>
 	</navigation>
 
 </page>
