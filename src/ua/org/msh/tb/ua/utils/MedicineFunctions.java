@@ -16,7 +16,7 @@ public class MedicineFunctions {
 	 * Check if the given batch is in attention period for expiration.
 	 * @param o - object of Batch or BatchQuantity. Else return null
 	 */
-	public static boolean isExpiringBatch(Object o){
+	public static boolean isExpiringBatch(Object o, int monthsToAlert){
 
 		Batch b = null;
 		BatchQuantity bq = null;
@@ -34,7 +34,6 @@ public class MedicineFunctions {
 					return false;
 				
 				double diffInMonths = DateUtils.monthsBetween(b.getExpiryDate(), DateUtils.getDate());
-				int monthsToAlert = (UserSession.getWorkspace().getMonthsToAlertExpiredMedicines() == null ? 0 : UserSession.getWorkspace().getMonthsToAlertExpiredMedicines());
 				
 				if(monthsToAlert == 0)
 					return false;
@@ -47,10 +46,10 @@ public class MedicineFunctions {
 	}
 	
 	/**
-	 * Check if the registration card is in attention period (2 months) for expiration.
+	 * Check if the registration card is in attention period (colMonth months) for expiration.
 	 * @param o - object of Batch or BatchQuantity. Else return null
 	 */
-	public static boolean isExpiringRegistCard(Object o){
+	public static boolean isExpiringRegistCard(Object o,int colMonth){
 
 		Batch b = null;
 		BatchQuantity bq = null;
@@ -75,7 +74,7 @@ public class MedicineFunctions {
 				// calculate the number of months between two dates
 				int diffInMonths = DateUtils.monthsBetween(b.getRegistCardEndDate(), DateUtils.getDate());
 
-				if (diffInMonths<2)
+				if (diffInMonths<colMonth)
 					return true;
 			}
 
