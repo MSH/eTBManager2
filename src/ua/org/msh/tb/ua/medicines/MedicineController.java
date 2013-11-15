@@ -7,10 +7,12 @@ import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Batch;
+import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineRegimen;
 import org.msh.tb.entities.OrderBatch;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.dispensing.DispensingRow;
 import org.msh.tb.medicines.orders.OrderHome;
 import org.msh.tb.medicines.orders.OrderShippingHome;
@@ -101,21 +103,33 @@ public class MedicineController {
 	public boolean containsInRegimen(DispensingRow row, TbCase tc) {
 		if (row==null) return false;
 		if (tc==null || tc.getId() == null) return true;
-		for (MedicineRegimen mr:tc.getRegimen().getMedicines())
-			if (mr.getMedicine().getId().intValue() == row.getBatch().getMedicine().getId().intValue() && mr.getDefaultSource().getId() == row.getSource().getId())
-				return true;
-		return false;
+		
+		List<Object> lst = App.getEntityManager()
+				.createQuery("from PrescribedMedicine pm " +
+				"where pm.tbcase.id="+tc.getId()+
+				" and pm.source.id="+row.getSource().getId()+
+				" and pm.medicine.id="+row.getMedicine().getId())
+				.getResultList();
+		
+		return lst.size()>0;
 	}
 	
 	public boolean isExpiringBatch(Object o){
-		return MedicineFunctions.isExpiringBatch(o);
+		int monthsToAlert = (UserSession.getWorkspace().getMonthsToAlertExpiredMedicines() == null ? 0 : UserSession.getWorkspace().getMonthsToAlertExpiredMedicines());
+		return MedicineFunctions.isExpiringBatch(o, monthsToAlert);
 	}
 	
-	public static boolean isExpiringRegistCard(Object o){
-		return MedicineFunctions.isExpiringRegistCard(o);
+	public boolean isExpiringBatch(Object o,int monthsToAlert){
+		return MedicineFunctions.isExpiringBatch(o, monthsToAlert);
+	}
+	
+	public static boolean isExpiringRegistCard(Object o,int colMonth){
+		return MedicineFunctions.isExpiringRegistCard(o,colMonth);
 	}
 	
 	public static boolean isExpiredRelativeToDate(Batch b, Date d){
 		return MedicineFunctions.isExpiredRelativeToDate(b, d);
 	}
+	
+
 }
