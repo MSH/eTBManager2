@@ -20,7 +20,7 @@ public class SequenceGenerator {
 	 * @return
 	 */
 	@Transactional
-	public synchronized int generateNewNumber(String seq) {
+	public int generateNewNumber(String seq) {
 		if (defaultWorkspace == null)
 			return 0;
 		

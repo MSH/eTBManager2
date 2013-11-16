@@ -64,5 +64,19 @@
 		cse.case_id in (select c2.id from tbcase c2 inner join patient p on p.id = c2.patient_id inner join workspace w on w.id = p.workspace_id where w.extension like 'bd')
 	</sql>
 	</changeSet>
+	
+	<!-- Solve duplicated patient number  reseting existings -->
+	<changeSet id="13.4" author="MSANTOS" context="BD">
+	<sql>
+	update tbcase
+	set validationState = 0,
+	casenumber = null
+	where exists (select * from patient p where tbcase.patient_id = p.id and recordnumber in(11854, 12180, 12413, 17965, 19644, 19651, 20420, 20998));
+		
+	update patient
+	set recordnumber = null
+	where recordnumber in(11854, 12180, 12413, 17965, 19644, 19651, 20420, 20998);	
+	</sql>
+	</changeSet>
 
 </databaseChangeLog>

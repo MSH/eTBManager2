@@ -9,6 +9,7 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.Synchronized;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.security.Restrict;
 import org.jboss.seam.core.Events;
@@ -28,6 +29,7 @@ import org.msh.tb.misc.SequenceGenerator;
  */
 @Name("caseValidationHome")
 @Scope(ScopeType.CONVERSATION)
+@Synchronized
 public class CaseValidationHome {
 
 	public static final String caseGenId = "CASE_NUMBER";
