@@ -1,5 +1,8 @@
 package org.msh.tb.ua.cases;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
@@ -46,6 +49,30 @@ public class CasesQueryUA extends CasesQuery{
 			"or (cd.dischargeDate3 is null) and (cd.hospitalizationDate3 is not null) " +
 			"or (cd.dischargeDate4 is null) and (cd.hospitalizationDate4 is not null) " +
 			"or (cd.dischargeDate5 is null) and (cd.hospitalizationDate5 is not null)))";
+	
+	// static filters
+	private static final String[] restrictions = {
+		"c.unitRegCode = #{caseFilters.unitRegCode}",
+		"p.workspace.id = #{defaultWorkspace.id}",
+		"c.state = #{caseFilters.caseState}",
+		"c.notifAddress.adminUnit.code like #{caseFilters.adminUnitLike}",
+		"c.classification = #{caseFilters.classification}",
+		"upper(p.name) like #{caseFilters.nameLike}",
+		"upper(p.middleName) like #{caseFilters.middleNameLike}",
+		"upper(p.lastName) like #{caseFilters.lastNameLike}",
+		"c.patientType = #{caseFilters.patientType}",
+		"c.infectionSite = #{caseFilters.infectionSite}",
+		"c.diagnosisType = #{caseFilters.diagnosisType}",
+		"c.validationState = #{caseFilters.validationState}",
+		//"nu.healthSystem.id = #{userWorkspace.healthSystem.id}",
+		"year(p.birthDate) = #{caseFilters.birthYear}",
+		"c.ownerUnit.id = #{caseFilters.unitId}",
+	"exists(select t.id from c.tags t where t.id = #{caseFilters.tagid})"};
+	
+	@Override
+	public List<String> getStringRestrictions() {
+		return Arrays.asList(restrictions);
+	}
 	
 	public String getAdminUnitLike(AdministrativeUnit adm) {
 		UserWorkspace userWorkspace = UserSession.getUserWorkspace();
@@ -162,7 +189,7 @@ public class CasesQueryUA extends CasesQuery{
 				if (userWorkspace.getHealthSystem() != null)
 					hsID = userWorkspace.getHealthSystem().getId();
 				if (hsID!=null)
-					addCondition("c.notificationUnit.healthSystem.id = #{userWorkspace.healthSystem.id}");
+					addCondition("(c.notificationUnit.healthSystem.id = #{userWorkspace.healthSystem.id} or c.ownerUnit.healthSystem.id = #{userWorkspace.healthSystem.id})");
 			}
 			if (getStateIndex()==700)
 				addCondition("c.diagnosisType = 0 and c.classification = 1 and c.state = 0");
