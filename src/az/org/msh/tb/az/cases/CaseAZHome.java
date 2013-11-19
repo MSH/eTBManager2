@@ -128,6 +128,15 @@ public class CaseAZHome {
 	public TbCaseAZ getTbCase() {
 		return (TbCaseAZ)caseHome.getInstance();
 	}
+	//#{tbcase.patient.securityNumber}
+	public String getRegistrationNumber(){
+		TbCaseAZ c=getTbCase();
+		String s=c.getRegistrationCode();
+		if (s!=null){
+			return s;
+		}
+		else return c.getPatient().getSecurityNumber();
+	}
 /*	public String getNotifEIDSS(){
 		TbCaseAZ c=getTbCase();
 		String s=c.getEIDSSComment();
