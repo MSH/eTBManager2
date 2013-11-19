@@ -49,8 +49,8 @@ public class CasesQueryAZ extends CasesQuery{
 	private final Integer casesEIDSSnotBindedIndex = CaseStateReportAZ.EIDSS_NOT_BINDED;
 	private static final String notifCondAZ = "(c.notificationUnit.id = #{caseFilters.tbunitselection.tbunit.id})";
 	private static final String treatCondAZ = "c.ownerUnit.id =  #{caseFilters.tbunitselection.tbunit.id}";
-	private static final String notifRegCondAZ = "(c.notificationUnit.id in (select id from org.msh.tb.entities.Tbunit tbu where tbu.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
-	private static final String treatRegCondAZ = "(c.ownerUnit.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like #{caseFilters.tbAdminUnitAnyLevelLike}))";
+	private static final String notifRegCondAZ = "(c.notificationUnit.id in (select id from org.msh.tb.entities.Tbunit tbu where tbu.adminUnit.code like :nuCode))";
+	private static final String treatRegCondAZ = "(c.ownerUnit.id in (select id from org.msh.tb.entities.Tbunit tbu1 where tbu1.adminUnit.code like :tuCode))";
 	private static final String notifAdrAdmUnitAZ="c.notifAddress.adminUnit.code like ";
 	private static final String notifAdrAdmUnitRegAZ="c.notifAddress.adminUnit.code = ";
 	//private static final Pattern WHERE_PATTERN = Pattern.compile("\\s(where)\\s", Pattern.CASE_INSENSITIVE);
@@ -280,10 +280,12 @@ public class CasesQueryAZ extends CasesQuery{
 					if (getCaseFilters().getTbunitselection().getAdminUnit() != null) {
 						switch (filterUnit) {
 						case NOTIFICATION_UNIT:
-							addCondition(notifRegCondAZ);
+							if (caseFilters.getTbAdminUnitAnyLevelLike()!=null)
+								addCondition(notifRegCondAZ.replace(":nuCode", "'"+caseFilters.getTbAdminUnitAnyLevelLike()+"'"));
 							break;
 						case TREATMENT_UNIT:
-							addCondition(treatRegCondAZ);
+							if (caseFilters.getTbAdminUnitAnyLevelLike()!=null)
+								addCondition(treatRegCondAZ.replace(":tuCode", "'"+caseFilters.getTbAdminUnitAnyLevelLike()+"'"));
 							/*if(caseFilters.getStateIndex()==null && caseFilters.getSearchCriteria().equals(SearchCriteria.CASE_TAG))
 								addCondition(treatRegCondAZ);
 							if (caseFilters.getStateIndex()!=null)
@@ -291,13 +293,15 @@ public class CasesQueryAZ extends CasesQuery{
 									addCondition(treatRegCondAZ);*/
 							break;
 						case BOTH:{
-							addCondition("(" + treatRegCondAZ + " or " + notifRegCondAZ);
-							UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
-							if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
-								hqlCondition += " or "+(userWorkspace.getAdminUnit().getLevel()==1 ? notifAdrAdmUnitAZ : notifAdrAdmUnitRegAZ) + getAdminUnitLike(userWorkspace.getAdminUnit());
+							if (caseFilters.getTbAdminUnitAnyLevelLike()!=null){
+								addCondition("(" + treatRegCondAZ.replace(":tuCode", "'"+caseFilters.getTbAdminUnitAnyLevelLike()+"'") + " or " + notifRegCondAZ.replace(":nuCode", "'"+caseFilters.getTbAdminUnitAnyLevelLike()+"'"));
+								UserWorkspace userWorkspace = (UserWorkspace) Component.getInstance("userWorkspace");
+								if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
+									hqlCondition += " or "+(userWorkspace.getAdminUnit().getLevel()==1 ? notifAdrAdmUnitAZ : notifAdrAdmUnitRegAZ) + getAdminUnitLike(userWorkspace.getAdminUnit());
+								}
+								hqlCondition += ")";
 							}
-							hqlCondition += ")";
-							}
+						}
 						}
 					}
 			}
