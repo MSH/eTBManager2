@@ -39,7 +39,8 @@
 	
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
-		<h:inputText value="#{tbcase.patient.securityNumber}" style="width:383px;" maxlength="50"></h:inputText>
+		<h:inputText value="#{tbcase.patient.securityNumber}" style="width:150px;" maxlength="50"></h:inputText>
+		<h:inputText value="#{tbcase.registrationCode}" style="width:150px;" maxlength="50"></h:inputText>
 	</s:decorate>
 	
 	</td>

@@ -58,7 +58,7 @@
 	<td>
 		<s:decorate template="/layout/display.xhtml">
 	    	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
-			#{tbcase.patient.securityNumber}
+			#{caseAZHome.getRegistrationNumber()}
 		</s:decorate>
 	</td></tr>
 	<tr><td>
