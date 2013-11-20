@@ -55,6 +55,7 @@
 	<s:link value="#{messages['manag.rel2']}" view="/medicines/releststockpos.xhtml" rendered="#{userSession.canViewEstPositionReport}"/>
 	<s:link value="#{messages['manag.rel3']}" view="/medicines/relstockevol.xhtml" rendered="#{userSession.canViewStockEvolutionReport}"/>
 	<s:link value="#{messages['manag.rel5']}" view="/medicines/reltreatcost.xhtml" rendered="false" />
+	<s:link value="#{messages['uk_UA.reportMed.title']}" view="/medicines/reportmedicines.xhtml" propagation="begin"/>
 	
 
 	<s:fragment rendered="#{s:hasRole('MED_INIT_REM')}">
