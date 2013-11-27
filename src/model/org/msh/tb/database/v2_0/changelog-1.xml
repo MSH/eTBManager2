@@ -55,5 +55,21 @@
 			<column name="OUTCOME_YEAR" value="0"/>
 		</update>
 	</changeSet>
+	
+	<changeSet id="7" author="MSANTOS">
+		<insert tableName="userrole">
+			<column name="id" valueNumeric="210"/>
+			<column name="changeable" valueBoolean="false" />
+			<column name="code" value="021008"/>
+			<column name="role_name" value="AUTO_TASK" />
+			<column name="internalUse" valueBoolean="false" />
+			<column name="byCaseClassification" valueBoolean="false" />
+			<column name="messageKey" value="autotask" />
+		</insert>
+		
+		<addColumn tableName="tag" >
+			<column name="dailyUpdate" type="boolean" defaultValueBoolean="false"/>
+		</addColumn>
+	</changeSet>
   
 </databaseChangeLog>

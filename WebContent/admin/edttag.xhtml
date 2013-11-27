@@ -48,6 +48,11 @@
     	<h:selectBooleanCheckbox value="#{tagHome.instance.consistencyCheck}" style="float:left;"/>
     	#{messages['Tag.consistencyCheck']}
     </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml">
+    	<h:selectBooleanCheckbox value="#{tagHome.instance.dailyUpdate}" style="float:left;"/>
+    	#{messages['Tag.dailyUpdate']}
+    </s:decorate>    
 
     <s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Tag.sqlCondition']}:</ui:define>

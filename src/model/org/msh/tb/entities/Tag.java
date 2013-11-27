@@ -50,7 +50,8 @@ public class Tag extends WSObject implements Serializable {
 	
 	@PropertyLog(messageKey="UserState.ACTIVE")
 	private boolean active;
-
+	
+	private boolean dailyUpdate;
 	
 	/**
 	 * Return true if tag is auto generated and maintained by the system
@@ -142,6 +143,21 @@ public class Tag extends WSObject implements Serializable {
 	 */
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+	
+	/**
+	 * @return the dailyUpdate
+	 */
+	public boolean isDailyUpdate() {
+		return dailyUpdate;
+	}
+
+
+	/**
+	 * @param dailyUpdate the dailyUpdate to set
+	 */
+	public void setDailyUpdate(boolean dailyUpdate) {
+		this.dailyUpdate = dailyUpdate;
 	}
 
 
