@@ -20,7 +20,7 @@ public class ScheduleController implements Serializable {
  
     private static final long serialVersionUID = 7609983147081676186L;
 
-    private static String CRON_INTERVAL_1 = "0 04 21 * * ?"; //every day at 3 am
+    private static String CRON_INTERVAL_1 = "0 0 3 * * ?"; //every day at 3 am
     
     @In
     TagsUpdaterTask tagsUpdaterTask;
