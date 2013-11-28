@@ -12,7 +12,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Startup;
 
-@Name("controller")
+@Name("taskSchedulerController")
 @Scope(APPLICATION)
 @AutoCreate
 @Startup
