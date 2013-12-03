@@ -71,5 +71,26 @@
 			<column name="dailyUpdate" type="boolean" defaultValueBoolean="false"/>
 		</addColumn>
 	</changeSet>
+	
+	<changeSet id="8" author="MSANTOS">
+		<insert tableName="sys_user">
+			<column name="id" valueNumeric="11"/>
+			<column name="comments" value="System user" />
+			<column name="language" value="en"/>
+			<column name="login" value="system"/>
+			<column name="email" value="rmemoria1@msh.org"/>
+			<column name="user_password" value="etbsystem"/>
+			<column name="user_name" value="System" />
+			<column name="registrationdate" valueDate="2013-12-02"/>
+			<column name="state" valueNumeric="0"/>
+			<column name="timezone" value="US/Michigan"/>
+			<column name="sendSystemMessages" valueBoolean="false"/>
+		</insert>
+		
+		<insert tableName="userlog">
+			<column name="id" valueNumeric="11"/>
+			<column name="name" value="System" />
+		</insert>
+	</changeSet>
   
 </databaseChangeLog>

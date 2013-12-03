@@ -68,7 +68,7 @@ public abstract class Task {
 	
 	private UserLog getUserLog(){
 		if(this.userLog == null)
-			this.userLog = (UserLog) entityManager.createQuery("from UserLog where id = 1") //Ricardo user
+			this.userLog = (UserLog) entityManager.createQuery("from UserLog where id = 11") //System user
 												.getSingleResult();
 		return userLog;
 	}
