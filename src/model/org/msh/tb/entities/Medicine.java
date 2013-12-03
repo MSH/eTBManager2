@@ -213,4 +213,17 @@ public class Medicine extends WSObject implements Serializable{
 		return components;
 	}
 
+	/**
+	 * Return medicine component, which contains stated substance
+	 * @author A.M.
+	 */
+	public MedicineComponent getComponentBySubstance(Substance s) {
+		MedicineComponent res = null;
+		if (components!=null)
+			for (MedicineComponent mc: components)
+				if (mc.getSubstance().equals(s))
+					res = mc;
+		return res;
+	}
+
 }
