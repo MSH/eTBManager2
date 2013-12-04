@@ -61,7 +61,8 @@
 				</h:outputText>#{messages['MedicalExamination.height.unit']}
 			</s:decorate>		
 		</td></tr>
-		<tr><td>
+		<s:fragment rendered="#{r.BMI != 0}">
+		<tr><td colspan="2">
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['MedicalExamination.BMI']}:</ui:define>
 				<h:outputText value="#{r.BMI}" >
@@ -69,42 +70,71 @@
 				</h:outputText>
 			</s:decorate>		
 		</td></tr>
-		<tr><td>
+		</s:fragment>
+		<s:fragment rendered="#{not empty r.appointmentType}">
+		<tr><td colspan="2">
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['MedAppointmentType']}:</ui:define>
 				#{messages[r.appointmentType.key]}
 			</s:decorate>		
 		</td></tr>
+		</s:fragment>
+		<s:fragment rendered="#{not empty r.usingPrescMedicines}">
+		<tr><td colspan="2">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['MedicalExamination.usingPrescMedicines']}:</ui:define>
+				#{messages[r.usingPrescMedicines.key]}
+			</s:decorate>		
+		</td></tr>
+		</s:fragment>
+		<s:fragment rendered="#{not empty r.reasonNotUsingPrescMedicines}">
+		<tr><td colspan="2">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['MedicalExamination.reasonNotUsingPrescMedicines']}:</ui:define>
+				#{messages[r.reasonNotUsingPrescMedicines]}
+			</s:decorate>		
+		</td></tr>
+		</s:fragment>
+		<s:fragment rendered="#{not empty r.responsible}">
 		<tr><td colspan="2">
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
 				#{r.responsible}
 			</s:decorate>		
 		</td></tr>
-		<tr><td>
+		</s:fragment>
+		<s:fragment rendered="#{not empty r.dotIntOptions}">
+		<tr><td colspan="2">
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['MedicalExamination.dotduringintphase']}:</ui:define>
 				#{messages[r.dotIntOptions.key]}
 			</s:decorate>		
 		</td></tr>
-		<tr><td>
+		</s:fragment>
+		<s:fragment rendered="#{not empty r.dotProvName}">
+		<tr><td colspan="2">
 		    <s:decorate template="/layout/edit.xhtml" rendered="#{not empty r.dotProvName}">
     			<ui:define name="label">#{messages['MedicalExamination.dotintprovider']}:</ui:define>
 		    	#{r.dotProvName}
 		    </s:decorate>
 		</td></tr>
-		<tr><td>
+		</s:fragment>
+		<s:fragment rendered="#{not empty r.dotContProvName}">
+		<tr><td colspan="2">
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['MedicalExamination.dotduringcontphase']}:</ui:define>
 				#{messages[r.dotContOptions.key]}
 			</s:decorate>		
 		</td></tr>
-		<tr><td>
+		</s:fragment>
+		<s:fragment rendered="#{not empty r.dotContProvName}">
+		<tr><td colspan="2">
 		    <s:decorate template="/layout/edit.xhtml" rendered="#{not empty r.dotContProvName}">
     			<ui:define name="label">#{messages['MedicalExamination.dotcontprovider']}:</ui:define>
 		    	#{r.dotContProvName}
 		    </s:decorate>
 		</td></tr>
+		</s:fragment>
 		<s:fragment rendered="#{not empty r.comments}">
 		<tr><td colspan="2">
 			<s:decorate template="/layout/display.xhtml">
