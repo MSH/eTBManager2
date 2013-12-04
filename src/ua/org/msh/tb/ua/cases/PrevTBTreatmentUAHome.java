@@ -25,6 +25,7 @@ import org.msh.tb.entities.PrescribedMedicine;
 import org.msh.tb.entities.PrevTBTreatment;
 import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.tb.ua.entities.CaseDataUA;
 import org.msh.tb.ua.entities.PrevTBTreatmentUA;
@@ -129,6 +130,7 @@ public class PrevTBTreatmentUAHome {
 					p.setRefuse2line(prevtt.isRefuse2line());
 					p.setRegistrationCode(prevtt.getRegistrationCode());
 					p.setRegistrationDate(prevtt.getRegistrationDate());
+					p.setPrevTreatCase(prevtt.getPrevTreatCase());
 					List<Substance> subs = new ArrayList<Substance>();
 					for (Substance sub: prevtt.getSubstances())
 						subs.add(sub);
@@ -142,7 +144,7 @@ public class PrevTBTreatmentUAHome {
 			if (prevCase != null) {
 				Period period = prevCase.getTreatmentPeriod();
 				if ((period != null) && (period.getIniDate() != null)) {
-					PrevTBTreatmentOutcome ttoOutcome = PrevTBTreatmentOutcome.convertFromCaseState(prevCase.getState());
+					PrevTBTreatmentOutcome ttoOutcome = convertFromCaseState(prevCase.getState());
 					PrevTBTreatmentUA p = new PrevTBTreatmentUA();
 					p.setOutcome(ttoOutcome);
 					p.setMonth(DateUtils.monthOf(period.getIniDate()) + 1);
@@ -152,6 +154,7 @@ public class PrevTBTreatmentUAHome {
 					p.setRefuse2line(data.isRefuse2line());
 					p.setRegistrationCode(prevCase.getRegistrationCode());
 					p.setRegistrationDate(prevCase.getRegistrationDate());
+					p.setPrevTreatCase(prevCase);
 					List<Substance> subs = new ArrayList<Substance>();
 
 					for (PrescribedMedicine pm: prevCase.getPrescribedMedicines())
@@ -239,6 +242,33 @@ public class PrevTBTreatmentUAHome {
 		return previousTreatsPrevCase;
 	}
 	
+	/**
+	 * Convert from case outcome to previous TB case outcome
+	 * @param state
+	 * @return
+	 */
+	public PrevTBTreatmentOutcome convertFromCaseState(CaseState state) {
+		switch (state) {
+		case CURED: 
+			return PrevTBTreatmentOutcome.CURED;
+		case DEFAULTED: case TREATMENT_INTERRUPTION: 
+			return PrevTBTreatmentOutcome.DEFAULTED;
+		case DIAGNOSTIC_CHANGED:
+			return PrevTBTreatmentOutcome.DIAGNOSTIC_CHANGED;
+		case FAILED:
+			return PrevTBTreatmentOutcome.FAILURE;
+		case MDR_CASE:
+			return PrevTBTreatmentOutcome.SHIFT_CATIV;
+		case NOT_CONFIRMED:
+			return PrevTBTreatmentOutcome.UNKNOWN;
+		case TREATMENT_COMPLETED:
+			return PrevTBTreatmentOutcome.COMPLETED;
+		case TRANSFERRED_OUT:
+			return PrevTBTreatmentOutcome.TRANSFERRED_OUT;
+		default:
+			return PrevTBTreatmentOutcome.UNKNOWN;
+		}
+	}
 
 	/**
 	 * Return the previous TB case of the patient

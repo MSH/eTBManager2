@@ -144,6 +144,19 @@
 			INSERT INTO `etbmanager`.`transfer_ua` SELECT id,null,null FROM `etbmanager`.`transfer`;
 		</sql>
 	</changeSet>
+	<changeSet id="15.9" author="Alexk" context="UA">
+	    <addColumn tableName="prevtbtreatmentua">
+ 			<column name="prevtreat_id" type="int(11)" >
+ 				<constraints nullable="true" />
+ 			</column>
+ 		</addColumn>
+ 	</changeSet>
+ 	
+ 	<changeSet id="15.10" author="Alexk" context="UA">
+ 		<addForeignKeyConstraint constraintName="fk_id_case_prevtreat" 
+ 			baseColumnNames="prevtreat_id" baseTableName="prevtbtreatmentua" referencedTableName="tbcase" referencedColumnNames="id" 
+ 			onDelete="CASCADE" onUpdate="CASCADE"/>
+	</changeSet>
 </databaseChangeLog>
 
 
