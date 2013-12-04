@@ -18,6 +18,7 @@ import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.core.Events;
+import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.web.ServletContexts;
 import org.msh.tb.entities.Tbunit;
@@ -252,6 +253,10 @@ public class UserSession {
             onlineUsers.add(userLogin);
 
     		updateUserRoleList(userWorkspace);
+
+    		// persist user selected language
+    		UserSettings settings = (UserSettings)Component.getInstance("userSettings");
+    		settings.setLocaleString(LocaleSelector.instance().getLocaleString());
     	}
     }
 

@@ -2,6 +2,8 @@ package org.msh.tb.login;
 
 import java.util.List;
 
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 
 import org.jboss.seam.Component;
@@ -31,17 +33,15 @@ public class UserSettings {
 		user.setEmail(userLogin.getUser().getEmail());
 
 		// update locality
-		LocaleSelector localeSelector = LocaleSelector.instance();
+/*		LocaleSelector localeSelector = LocaleSelector.instance();
 		user.setLanguage(localeSelector.getLocaleString());
-		if (localeSelector.getLocaleString().equals("es_DO"))
-			localeSelector.setLocaleString("es");
 		localeSelector.select();
-
+*/
 		// update time-zone
 		TimeZoneSelector timeZoneSelector = TimeZoneSelector.instance();
 		user.setTimeZone(timeZoneSelector.getTimeZoneId());
 		timeZoneSelector.select();
-		
+
 		// update database
 		em.persist(user);
 		
@@ -82,8 +82,8 @@ public class UserSettings {
 	 * @return the localeString
 	 */
 	public String getLocaleString() {
+		// return null just to avoid the parameter to be included in evey page
 		return null;
-//		return LocaleSelector.instance().getLocaleString();
 	}
 
 
@@ -93,8 +93,45 @@ public class UserSettings {
 	public void setLocaleString(String localeString) {
 		LocaleSelector localeSelector = LocaleSelector.instance();
 		if ((localeString != null) && (!localeString.equals(localeSelector.getLocaleString()))) {
-			localeSelector.setLocaleString(localeString);
+			String matchedLocale = null;
+			String closestLocale = null;
+			// check if locale is supported and find the best one in the list
+			for (SelectItem item: localeSelector.getSupportedLocales()) {
+				String loc = (String)item.getValue();
+				if (loc.equals(localeString)) {
+					matchedLocale = loc;
+					break;
+				}
+				if ((loc.startsWith(localeString)) && (closestLocale == null))
+					closestLocale = loc;
+			}
+
+			if ((closestLocale == null) && (matchedLocale == null))
+				matchedLocale = FacesContext.getCurrentInstance().getApplication().getDefaultLocale().toString();
+
+			if (matchedLocale != null)
+				 localeSelector.setLocaleString(matchedLocale);
+			else localeSelector.setLocaleString(closestLocale);
 			localeSelector.select();
 		}
+		updateUserLanguage(localeSelector.getLocaleString());
+	}
+	
+	
+	/**
+	 * Update the user selected language
+	 */
+	private void updateUserLanguage(String lang) {
+		if (lang == null)
+			return;
+		EntityManager em = (EntityManager)Component.getInstance("entityManager");
+		UserLogin userLogin = (UserLogin)Component.getInstance("userLogin", true);
+		
+		User user = em.find(User.class, userLogin.getUser().getId());
+		if (lang.equals(user.getLanguage()))
+			return;
+		user.setLanguage(lang);
+		em.persist(user);
+		em.flush();
 	}
 }
