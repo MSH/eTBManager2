@@ -335,7 +335,7 @@ public class ReportTB01 extends PDFCreator {
 		int emptyLines = maxMonthLines;
 		String totPresc = "";
 		String totDisp = "";
-		if (tc.isOnTreatment()){
+		if (tc.getTreatmentPeriod().getIniDate()!=null){
 			PhaseInfo phaseDisp = treatmentCalendarHome.getPhases().get(phase);
 			emptyLines = maxMonthLines-phaseDisp.getMonths().size();
 			
@@ -691,7 +691,10 @@ public class ReportTB01 extends PDFCreator {
 		
 		char[] regNumb = {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '};
 		if (tc.getRegistrationCode()!=null && !"".equals(tc.getRegistrationCode()))
-			regNumb = tc.getRegistrationCode().toCharArray();
+			for (int i = 0; i < regNumb.length; i++) 
+				if (tc.getRegistrationCode().toCharArray().length>i)
+					regNumb[i] = tc.getRegistrationCode().toCharArray()[i];
+			
 		
 		addCellMiddleCenter(String.valueOf(regNumb[0]),times8,true);
 		addCellMiddleCenter(String.valueOf(regNumb[1]),times8,true);
