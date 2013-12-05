@@ -300,71 +300,7 @@
     		</s:fragment>
 		</s:decorate>
 
-		<s:fragment rendered="#{not empty prevTBTreatmentUAHome.treatments}">
-		<h2>#{messages['cases.prevtreat']}</h2>
-		<table width="100%" class="table1">
-			<tr>
-				<th rowspan="2">#{messages['cases.prevtreat.num']}
-				</th>
-				<th rowspan="2">#{messages['cases.prevtreat.date']}
-				</th>
-				<th rowspan="2">#{messages['TbCase.registrationDate']}
-				</th>
-				<th rowspan="2">#{messages['Patient.securityNumber']}
-				</th>
-				<th rowspan="2">#{messages['PatientType']}
-				</th>
-				<s:fragment rendered="#{prevTBTreatmentUAHome.substances.size>0}">
-					<th colspan="#{prevTBTreatmentUAHome.substances.size}">
-						#{messages['cases.prevtreat.regs']}
-					</th>
-				</s:fragment>
-				<th rowspan="2">#{messages['cases.treatment.refusemed2line']}
-				</th>
-				<th rowspan="2">#{messages['PrevTBTreatment.outcome']}
-				</th>
-			</tr>
-			<tr>
-			<a:repeat value="#{prevTBTreatmentUAHome.substances}" var="s">
-				<th>#{s.abbrevName}
-				</th>
-			</a:repeat>
-			</tr>
-		<a:repeat value="#{prevTBTreatmentUAHome.treatments}" var="it">
-			<tr>
-				<td class="colcb">#{it.index}
-				</td>
-				<td class="colcb">
-					#{it.prevTBTreatment.month+1}/#{it.prevTBTreatment.year}
-				</td>
-				<td class="colcb">
-					<h:outputText value="#{it.prevTBTreatment.registrationDate}" converter="localeDateConverter" />	
-				</td>
-				<td class="colcb">
-					#{it.prevTBTreatment.registrationCode}
-				</td>
-				
-				<td class="colcb">
-					#{messages[it.prevTBTreatment.patientType.key]}
-				</td>
-				<a:repeat value="#{it.items}" var="sub">
-				<td class="colcb">
-					<h:outputText value="x" rendered="#{sub.selected}" />
-				</td>
-				</a:repeat>
-				<td class="colcb">
-					#{it.prevTBTreatment.refuse2line?messages['global.yes']:messages['global.no']}
-				</td>
-				<td class="colcb">
-					#{messages[it.prevTBTreatment.outcome.key]}
-				</td>
-			</tr>
-		</a:repeat>
-		</table>
-		</s:fragment>
-
-	</td></tr>
-	<s:fragment rendered="#{caseDataUAHome.colHospView >= 2}">
+		<s:fragment rendered="#{caseDataUAHome.colHospView >= 2}">
 		<tr><td><h2>#{messages['uk_UA.newHospitalization']}:</h2></td></tr>
 		<tr>
 			<td>
@@ -431,6 +367,91 @@
 		    </td>
 		</tr>
 		</s:fragment>
+	</td></tr>
+	<tr>
+	<td>
+		<h2>#{messages['cases.prevtreat']}</h2>
+	</td>
+	<td>
+		<a:commandLink reRender="prevtreattable" styleClass="button" 
+			action="#{prevTBTreatmentUAHome.refresh()}"
+			onclick="if (!disableButton(this)) return false;" oncomplete="enableButton();" style="float:right;">
+			<span>#{messages['form.refresh']}</span>
+		</a:commandLink>
+	</td>
+	</tr>
+	<tr>
+	<td colspan="2">
+		<h:panelGroup id="prevtreattable">
+		<s:div styleClass="region3" rendered="#{empty prevTBTreatmentUAHome.treatments}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" style="display:block;padding:4px"/>
+		</div></s:div>
+	
+	<s:fragment rendered="#{not empty prevTBTreatmentUAHome.treatments}" >
+		<table width="100%" class="table1">
+			<tr>
+				<th rowspan="2">#{messages['cases.prevtreat.num']}
+				</th>
+				<th rowspan="2">#{messages['cases.prevtreat.date']}
+				</th>
+				<th rowspan="2">#{messages['TbCase.registrationDate']}
+				</th>
+				<th rowspan="2">#{messages['Patient.securityNumber']}
+				</th>
+				<th rowspan="2">#{messages['PatientType']}
+				</th>
+				<s:fragment rendered="#{prevTBTreatmentUAHome.substances.size>0}">
+					<th colspan="#{prevTBTreatmentUAHome.substances.size}">
+						#{messages['cases.prevtreat.regs']}
+					</th>
+				</s:fragment>
+				<th rowspan="2">#{messages['cases.treatment.refusemed2line']}
+				</th>
+				<th rowspan="2">#{messages['PrevTBTreatment.outcome']}
+				</th>
+			</tr>
+			<tr>
+			<a:repeat value="#{prevTBTreatmentUAHome.substances}" var="s">
+				<th>#{s.abbrevName}
+				</th>
+			</a:repeat>
+			</tr>
+		<a:repeat value="#{prevTBTreatmentUAHome.treatments}" var="it">
+			<tr>
+				<td class="colcb">#{it.index}
+				</td>
+				<td class="colcb">
+					#{it.prevTBTreatment.month+1}/#{it.prevTBTreatment.year}
+				</td>
+				<td class="colcb">
+					<h:outputText value="#{it.prevTBTreatment.registrationDate}" converter="localeDateConverter" />	
+				</td>
+				<td class="colcb">
+					#{it.prevTBTreatment.registrationCode}
+				</td>
+				
+				<td class="colcb">
+					#{messages[it.prevTBTreatment.patientType.key]}
+				</td>
+				<a:repeat value="#{it.items}" var="sub">
+				<td class="colcb">
+					<h:outputText value="x" rendered="#{sub.selected}" />
+				</td>
+				</a:repeat>
+				<td class="colcb">
+					#{it.prevTBTreatment.refuse2line?messages['global.yes']:messages['global.no']}
+				</td>
+				<td class="colcb">
+					#{messages[it.prevTBTreatment.outcome.key]}
+				</td>
+			</tr>
+		</a:repeat>
+		</table>
+		</s:fragment>
+		</h:panelGroup>
+
+	</td></tr>
+	
 	</table>
 	</div>
 

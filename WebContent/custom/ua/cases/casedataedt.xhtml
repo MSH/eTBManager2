@@ -425,8 +425,15 @@ function showOtherHosp() {
 	</div>
 
 	<div class="form-content">
-		<h2>#{messages['cases.prevtreat']}</h2>
-
+		<h2>#{messages['cases.prevtreat']}
+		<ui:remove>
+			<a:commandLink reRender="prevtreats" styleClass="button" 
+				action="#{prevTBTreatmentUAHome.refresh()}"
+				onclick="if (!disableButton(this)) return false;" oncomplete="enableButton();" style="float:right;">
+				<span>#{messages['form.refresh']}</span>
+			</a:commandLink>
+		</ui:remove>
+		</h2>
 		<table width="100%" style="border-collapse:collapse;"><tr><td>
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">
@@ -472,53 +479,80 @@ function showOtherHosp() {
 			<tr>
 				<td class="colcb">#{it.index}
 				</td>
-				<td class="colcb">
-					<h:selectOneMenu value="#{it.prevTBTreatment.month}">
-						<f:selectItems value="#{months}"/>
-					</h:selectOneMenu>
-					<s:validateAll>
-						<h:selectOneMenu id="year" value="#{it.prevTBTreatment.year}" required="true">
-							<f:selectItems value="#{years}"/>
+				<s:fragment rendered="#{it.prevTBTreatment.prevTreatCase==null}">
+					<td class="colcb">
+						<h:selectOneMenu value="#{it.prevTBTreatment.month}">
+							<f:selectItems value="#{months}"/>
 						</h:selectOneMenu>
-					</s:validateAll>
-					<h:message for="year" styleClass="error"/>
-				</td>
-				<td class="colcb">
-					<s:decorate template="/layout/dateedit.xhtml" >
-						<ui:param name="required" value="false" />
-						<ui:param name="showPattern" value="false" />
-				    	<ui:param name="datefield" value="#{it.prevTBTreatment.registrationDate}" /> 
-				    </s:decorate>
-				</td>
-				<td class="colcb">
-					<h:inputText id="regnumberp" value="#{it.prevTBTreatment.registrationCode}" style="width:120px;" maxlength="11"></h:inputText>
-					<rich:jQuery selector="#regnumberp" query="mask('99999999999')" />
-				</td>
-				
-				<td class="colcb">
-					<h:selectOneMenu value="#{it.prevTBTreatment.patientType}" >
-		    			<s:selectItems var="itt" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[itt.key]}" />
-		    			<s:convertEnum />
-		    		</h:selectOneMenu>
-				</td>
-				
-				<ui:repeat value="#{it.items}" var="sub">
-				<td class="colcb">
-					<h:selectBooleanCheckbox value="#{sub.selected}" />
-				</td>
-				</ui:repeat>
-				<td class="colcb">
-					<h:selectBooleanCheckbox value="#{it.prevTBTreatment.refuse2line}" />
-				</td>
-				<td class="colcb">
-					<s:validateAll>
-					<h:selectOneMenu id="oc" value="#{it.prevTBTreatment.outcome}" required="true">
-						<s:selectItems var="v" value="#{globalLists.prevTBTreatmentOutcomes}" label="#{messages[v.key]}" noSelectionLabel="-" />
-						<s:convertEnum />
-					</h:selectOneMenu>
-					</s:validateAll>
-					<h:message for="oc" styleClass="error"/>
-				</td>
+						<s:validateAll>
+							<h:selectOneMenu id="year" value="#{it.prevTBTreatment.year}" required="true">
+								<f:selectItems value="#{years}"/>
+							</h:selectOneMenu>
+						</s:validateAll>
+						<h:message for="year" styleClass="error"/>
+					</td>
+					<td class="colcb">
+						<s:decorate template="/layout/dateedit.xhtml" >
+							<ui:param name="required" value="false" />
+							<ui:param name="showPattern" value="false" />
+					    	<ui:param name="datefield" value="#{it.prevTBTreatment.registrationDate}" /> 
+					    </s:decorate>
+					</td>
+					<td class="colcb">
+						<h:inputText value="#{it.prevTBTreatment.registrationCode}" style="width:120px;" maxlength="11"></h:inputText>
+					</td>
+					
+					<td class="colcb">
+						<h:selectOneMenu value="#{it.prevTBTreatment.patientType}" >
+			    			<s:selectItems var="itt" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[itt.key]}" />
+			    			<s:convertEnum />
+			    		</h:selectOneMenu>
+					</td>
+					
+					<ui:repeat value="#{it.items}" var="sub">
+					<td class="colcb">
+						<h:selectBooleanCheckbox value="#{sub.selected}" />
+					</td>
+					</ui:repeat>
+					<td class="colcb">
+						<h:selectBooleanCheckbox value="#{it.prevTBTreatment.refuse2line}" />
+					</td>
+					<td class="colcb">
+						<s:validateAll>
+						<h:selectOneMenu id="oc" value="#{it.prevTBTreatment.outcome}" required="true">
+							<s:selectItems var="v" value="#{globalLists.prevTBTreatmentOutcomes}" label="#{messages[v.key]}" noSelectionLabel="-" />
+							<s:convertEnum />
+						</h:selectOneMenu>
+						</s:validateAll>
+						<h:message for="oc" styleClass="error"/>
+					</td>
+				</s:fragment>
+				<s:fragment rendered="#{it.prevTBTreatment.prevTreatCase!=null}">
+					<td class="colcb">
+						#{it.prevTBTreatment.month+1}/#{it.prevTBTreatment.year}
+					</td>
+					<td class="colcb">
+						<h:outputText value="#{it.prevTBTreatment.registrationDate}" converter="localeDateConverter" />	
+					</td>
+					<td class="colcb">
+						#{it.prevTBTreatment.registrationCode}
+					</td>
+					
+					<td class="colcb">
+						#{messages[it.prevTBTreatment.patientType.key]}
+					</td>
+					<a:repeat value="#{it.items}" var="sub">
+					<td class="colcb">
+						<h:outputText value="x" rendered="#{sub.selected}" />
+					</td>
+					</a:repeat>
+					<td class="colcb">
+						#{it.prevTBTreatment.refuse2line?messages['global.yes']:messages['global.no']}
+					</td>
+					<td class="colcb">
+						#{messages[it.prevTBTreatment.outcome.key]}
+					</td>
+				</s:fragment>
 			</tr>
 		</a:repeat>
 		</table>
