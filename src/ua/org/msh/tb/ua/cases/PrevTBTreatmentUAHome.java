@@ -3,6 +3,7 @@ package org.msh.tb.ua.cases;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
@@ -27,6 +28,7 @@ import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
+import org.msh.tb.ua.cases.PrevTBTreatmentUAHome.Item;
 import org.msh.tb.ua.entities.CaseDataUA;
 import org.msh.tb.ua.entities.PrevTBTreatmentUA;
 import org.msh.utils.ItemSelect;
@@ -114,58 +116,7 @@ public class PrevTBTreatmentUAHome {
 				.getResultList();
 		}
 		else {
-			// it's a new case
-			List<PrevTBTreatmentUA> prevttlist = loadPreviousTreatPrevCase();
-			lst = new ArrayList<PrevTBTreatmentUA>();
-			
-			// include previous TB treatments registered in the previous case
-			if (prevttlist != null) {
-				for (PrevTBTreatmentUA prevtt: prevttlist) {
-					PrevTBTreatmentUA p = new PrevTBTreatmentUA();
-					p.setMonth(prevtt.getMonth());
-					p.setOutcome(prevtt.getOutcome());
-					p.setTbcase(prevtt.getTbcase());
-					p.setYear(prevtt.getYear());
-					p.setPatientType(prevtt.getPatientType());
-					p.setRefuse2line(prevtt.isRefuse2line());
-					p.setRegistrationCode(prevtt.getRegistrationCode());
-					p.setRegistrationDate(prevtt.getRegistrationDate());
-					p.setPrevTreatCase(prevtt.getPrevTreatCase());
-					List<Substance> subs = new ArrayList<Substance>();
-					for (Substance sub: prevtt.getSubstances())
-						subs.add(sub);
-					p.setSubstances(subs);
-					lst.add(p);
-				}
-			}
-
-			// include previous case
-			TbCase prevCase = getPreviousCase();
-			if (prevCase != null) {
-				Period period = prevCase.getTreatmentPeriod();
-				if ((period != null) && (period.getIniDate() != null)) {
-					PrevTBTreatmentOutcome ttoOutcome = convertFromCaseState(prevCase.getState());
-					PrevTBTreatmentUA p = new PrevTBTreatmentUA();
-					p.setOutcome(ttoOutcome);
-					p.setMonth(DateUtils.monthOf(period.getIniDate()) + 1);
-					p.setYear(DateUtils.yearOf(period.getIniDate()));
-					p.setPatientType(prevCase.getPatientType());
-					CaseDataUA data = (CaseDataUA)App.getEntityManager().find(CaseDataUA.class, prevCase.getId());
-					p.setRefuse2line(data.isRefuse2line());
-					p.setRegistrationCode(prevCase.getRegistrationCode());
-					p.setRegistrationDate(prevCase.getRegistrationDate());
-					p.setPrevTreatCase(prevCase);
-					List<Substance> subs = new ArrayList<Substance>();
-
-					for (PrescribedMedicine pm: prevCase.getPrescribedMedicines())
-						for (MedicineComponent mc: pm.getMedicine().getComponents()) {
-							if (!subs.contains(mc.getSubstance()))
-								subs.add(mc.getSubstance());
-						}
-					p.setSubstances(subs);
-					lst.add(p);
-				}
-			}
+			lst = generatePrevTreats();
 		}
 
 		createSubstanceList(lst);
@@ -175,6 +126,63 @@ public class PrevTBTreatmentUAHome {
 		for (PrevTBTreatmentUA prevtto: lst) {
 			addItem(prevtto);
 		}
+	}
+
+
+	private List<PrevTBTreatmentUA> generatePrevTreats() {
+		List<PrevTBTreatmentUA> lst = new ArrayList<PrevTBTreatmentUA>();
+		// it's a new case
+		List<PrevTBTreatmentUA> prevttlist = loadPreviousTreatPrevCase();
+		
+		// include previous TB treatments registered in the previous case
+		if (prevttlist != null) {
+			for (PrevTBTreatmentUA prevtt: prevttlist) {
+				PrevTBTreatmentUA p = new PrevTBTreatmentUA();
+				p.setMonth(prevtt.getMonth());
+				p.setOutcome(prevtt.getOutcome());
+				p.setTbcase(prevtt.getTbcase());
+				p.setYear(prevtt.getYear());
+				p.setPatientType(prevtt.getPatientType());
+				p.setRefuse2line(prevtt.isRefuse2line());
+				p.setRegistrationCode(prevtt.getRegistrationCode());
+				p.setRegistrationDate(prevtt.getRegistrationDate());
+				p.setPrevTreatCase(prevtt.getPrevTreatCase());
+				List<Substance> subs = new ArrayList<Substance>();
+				for (Substance sub: prevtt.getSubstances())
+					subs.add(sub);
+				p.setSubstances(subs);
+				lst.add(p);
+			}
+		}
+
+		// include previous case
+		TbCase prevCase = getPreviousCase();
+		if (prevCase != null) {
+			Period period = prevCase.getTreatmentPeriod();
+			if ((period != null) && (period.getIniDate() != null)) {
+				PrevTBTreatmentOutcome ttoOutcome = convertFromCaseState(prevCase.getState());
+				PrevTBTreatmentUA p = new PrevTBTreatmentUA();
+				p.setOutcome(ttoOutcome);
+				p.setMonth(DateUtils.monthOf(period.getIniDate()) + 1);
+				p.setYear(DateUtils.yearOf(period.getIniDate()));
+				p.setPatientType(prevCase.getPatientType());
+				CaseDataUA data = (CaseDataUA)App.getEntityManager().find(CaseDataUA.class, prevCase.getId());
+				p.setRefuse2line(data.isRefuse2line());
+				p.setRegistrationCode(prevCase.getRegistrationCode());
+				p.setRegistrationDate(prevCase.getRegistrationDate());
+				p.setPrevTreatCase(prevCase);
+				List<Substance> subs = new ArrayList<Substance>();
+
+				for (PrescribedMedicine pm: prevCase.getPrescribedMedicines())
+					for (MedicineComponent mc: pm.getMedicine().getComponents()) {
+						if (!subs.contains(mc.getSubstance()))
+							subs.add(mc.getSubstance());
+					}
+				p.setSubstances(subs);
+				lst.add(p);
+			}
+		}
+		return lst;
 	}
 	
 	
@@ -203,6 +211,27 @@ public class PrevTBTreatmentUAHome {
 		}
 	}
 	
+	private void createSubstanceList() {
+		if ((isEditing()) || (!caseHome.isManaged()))
+			substances = ((SubstancesQuery)Component.getInstance("substances", true)).getPrevTBsubstances();
+		else {
+			substances = new ArrayList<Substance>();
+			for (Item it: treatments) {
+				PrevTBTreatmentUA prevtto = it.prevTBTreatment;
+				for (Substance sub: prevtto.getSubstances())
+					if (!substances.contains(sub))
+						substances.add(sub);
+			}
+			
+			Collections.sort(substances, new Comparator<Substance>() {
+
+				@Override
+				public int compare(Substance sub1, Substance sub2) {
+					return sub1.compare(sub2);
+				}
+			});
+		}
+	}
 	
 	/**
 	 * Add an item to the previous tb treatment list 
@@ -413,5 +442,23 @@ public class PrevTBTreatmentUAHome {
 		}
 		return numTreatmentsOptions;
 	}
-
+	
+	public void refresh() {
+		removedTreatments = new ArrayList<PrevTBTreatmentUA>();
+		
+		Iterator<Item> it = getTreatments().iterator();
+		while (it.hasNext()){
+			PrevTBTreatmentUA pt = it.next().getPrevTBTreatment();
+			if (pt.getPrevTreatCase()!=null)
+				removedTreatments.add(pt);
+		}
+		
+		//createSubstanceList();
+		List<PrevTBTreatmentUA> lst = generatePrevTreats();
+		for (PrevTBTreatmentUA prevtto: lst) {
+			addItem(prevtto);
+		}
+		persist();
+		//substances = ((SubstancesQuery)Component.getInstance("substances", true)).getPrevTBsubstances();
+	}
 }
