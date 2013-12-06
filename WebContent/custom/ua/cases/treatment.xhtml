@@ -31,7 +31,7 @@
 				<div class="content">
 				<div style="display:block;padding:4px;">
 					<div class="linknaveg">
-					<s:link value="#{messages['regimens.standard']}" style="font-size:12px" view="/custom/ua/cases/starttreatment.xhtml">
+					<s:link value="#{messages['regimens.standard']}" style="font-size:12px" view="/custom/ua/cases/starttreatment.xhtml" action="#{globalFunctions.initializeDefaultAdminUnit()}">
 						<f:param name="id" value="#{caseHome.id}"/>
 					</s:link>
 					</div>
@@ -39,7 +39,7 @@
 				<br/>
 				<div style="display:block;padding:4px;">
 					<div class="linknaveg">
-					<s:link value="#{messages['regimens.individualized']}" style="font-size:12px" view="/cases/starttreatmentind.xhtml">
+					<s:link value="#{messages['regimens.individualized']}" style="font-size:12px" view="/cases/starttreatmentind.xhtml" action="#{globalFunctions.initializeDefaultAdminUnit()}">
 						<f:param name="id" value="#{caseHome.id}"/>
 					</s:link>
 					</div>

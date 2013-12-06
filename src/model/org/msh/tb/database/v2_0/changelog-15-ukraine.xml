@@ -157,6 +157,12 @@
  			baseColumnNames="prevtreat_id" baseTableName="prevtbtreatmentua" referencedTableName="tbcase" referencedColumnNames="id" 
  			onDelete="CASCADE" onUpdate="CASCADE"/>
 	</changeSet>
+	
+	<changeSet id="15.11" author="Alexk" context="UA">
+		<createIndex tableName="administrativeunit" indexName="fk_adminunit_code" >
+			<column name="code"/>
+		</createIndex>	
+	</changeSet>
 </databaseChangeLog>
 
 

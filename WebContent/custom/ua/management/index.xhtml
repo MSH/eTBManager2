@@ -20,13 +20,13 @@
 
 	<div class="vertical-menu">
 	
-	<s:link view="/management/incidence.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
+	<s:link view="/management/incidence.xhtml" rendered="#{s:hasRole('INDICATORS')}" action="#{globalFunctions.initializeDefaultAdminUnit()}">
 		<div class="icon-report" />#{messages['manag.ind.incidence']}
 	</s:link>
-	<s:link view="/management/prevalence.xhtml" rendered="#{s:hasRole('INDICATORS')}">
+	<s:link view="/management/prevalence.xhtml" rendered="#{s:hasRole('INDICATORS')}" action="#{globalFunctions.initializeDefaultAdminUnit()}">
 		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.prevalence']}
 	</s:link>
-  	<s:link view="/management/treatoutcome.xhtml" rendered="#{s:hasRole('INDICATORS')}">
+  	<s:link view="/management/treatoutcome.xhtml" rendered="#{s:hasRole('INDICATORS')}" action="#{globalFunctions.initializeDefaultAdminUnit()}">
 		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.treatoutcome']}
   	</s:link>
 	<s:link view="/management/detrate.xhtml" rendered="false">
@@ -40,7 +40,7 @@
 		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.dstprofile']}
 	</s:link>
 
-	<s:link view="/management/sideeffects.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
+	<s:link view="/management/sideeffects.xhtml" rendered="#{s:hasRole('INDICATORS')}"  action="#{globalFunctions.initializeDefaultAdminUnit()}">
 		<div class="icon-report" style="float:left;"/>#{messages['cases.sideeffects']}
 	</s:link>
 	<s:link view="/management/hivresults.xhtml" rendered="false" >
@@ -51,35 +51,35 @@
 			<f:param name="cla" value="DRTB"/>
 		</s:link>
 -->		
-		<s:link view="/management/starttreat.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
+		<s:link view="/management/starttreat.xhtml" rendered="#{s:hasRole('INDICATORS')}"  action="#{globalFunctions.initializeDefaultAdminUnit()}">
 			<div class="icon-report" style="float:left;"/>#{messages['manag.ind.starttreat']}
 		</s:link>
-		<s:link view="/management/interim.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
+		<s:link view="/management/interim.xhtml" rendered="#{s:hasRole('INDICATORS')}"  action="#{globalFunctions.initializeDefaultAdminUnit()}">
 			<div class="icon-report" style="float:left;"/>#{messages['manag.ind.interim']}
 		</s:link>
 		<s:link view="/management/confmdrrep.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
 			<div class="icon-report" style="float:left;"/>#{messages['manag.confmdrrep']}
 		</s:link>
 		<hr/>
-		<s:link view="/management/customind.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" >
+		<s:link view="/management/customind.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}"  action="#{globalFunctions.initializeDefaultAdminUnit()}">
 			<div class="icon-report" />#{messages['manag.ind.customind']}
 		</s:link>
 	
 		<hr/>
 
-		<s:link view="/custom/ua/management/tb07.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin">
+		<s:link view="/custom/ua/management/tb07.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin" action="#{globalFunctions.initializeDefaultAdminUnit()}">
 			<div class="icon-report" />#{messages['uk_UA.reports.tb07']}
 		</s:link>
-		<s:link view="/custom/ua/management/tb07mrtb.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin">
+		<s:link view="/custom/ua/management/tb07mrtb.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin" action="#{globalFunctions.initializeDefaultAdminUnit()}">
 			<div class="icon-report" />#{messages['uk_UA.reports.tb07.mrtb']}
 		</s:link>
-		<s:link view="/custom/ua/management/tb08.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin">
+		<s:link view="/custom/ua/management/tb08.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin" action="#{globalFunctions.initializeDefaultAdminUnit()}">
 			<div class="icon-report" />#{messages['uk_UA.reports.tb08']}
 		</s:link>
-		<s:link view="/custom/ua/management/tb10.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin">
+		<s:link view="/custom/ua/management/tb10.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin" action="#{globalFunctions.initializeDefaultAdminUnit()}">
 			<div class="icon-report" />#{messages['uk_UA.reports.tb10']}
 		</s:link>
-		<s:link view="/custom/ua/management/tb11.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin">
+		<s:link view="/custom/ua/management/tb11.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin" action="#{globalFunctions.initializeDefaultAdminUnit()}">
 			<div class="icon-report" />#{messages['uk_UA.reports.tb11']}
 		</s:link>
 	
@@ -95,7 +95,7 @@
 
 	<div class="spacer" />
 	<h2>#{messages['manag.forecast']}</h2>
-	<s:link value="#{messages['manag.export']}" view="/management/export.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('EXPORT')}" propagation="none"/>
+	<s:link value="#{messages['manag.export']}" view="/management/export.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('EXPORT')}" propagation="none" action="#{globalFunctions.initializeDefaultAdminUnit()}"/>
 
 	<s:link value="#{messages['manag.forecast.med']}" view="/management/forecasting.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('FORECAST')}" propagation="none">
 		<f:param name="id" value="#{null}"/>
