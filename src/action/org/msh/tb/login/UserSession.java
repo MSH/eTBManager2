@@ -237,15 +237,7 @@ public class UserSession {
     	setTbunit(userWorkspace.getTbunit());
     	
     	//AK 20131111 set the admin unit id on the session level
-    	if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
-    		SessionData.instance().setValue("uaid", (userWorkspace.getAdminUnit() != null? userWorkspace.getAdminUnit().getId(): null));
-    		SessionData.instance().setValue("unitid", (userWorkspace.getAdminUnit() != null? userWorkspace.getAdminUnit().getId(): null));
-        }
-		else 
-			if (UserView.TBUNIT.equals(userWorkspace.getView())){
-				SessionData.instance().setValue("uaid",(userWorkspace.getTbunit().getAdminUnit().getId()));
-				SessionData.instance().setValue("unitid",(userWorkspace.getTbunit().getAdminUnit().getId()));
-			}
+    	setDefaultAdminUnit(userWorkspace);
     	
     	if (!statelessLogin) {
             // register user in the list of on-line users
@@ -259,6 +251,22 @@ public class UserSession {
     		settings.setLocaleString(LocaleSelector.instance().getLocaleString());
     	}
     }
+
+    /**
+     * Set the user admin unit id on the session level
+     * @param userWorkspace
+     */
+	public static void setDefaultAdminUnit(UserWorkspace userWorkspace) {
+		if (UserView.ADMINUNIT.equals(userWorkspace.getView())){
+    		SessionData.instance().setValue("uaid", (userWorkspace.getAdminUnit() != null? userWorkspace.getAdminUnit().getId(): null));
+    		SessionData.instance().setValue("unitid", (userWorkspace.getAdminUnit() != null? userWorkspace.getAdminUnit().getId(): null));
+        }
+		else 
+			if (UserView.TBUNIT.equals(userWorkspace.getView())){
+				SessionData.instance().setValue("uaid",(userWorkspace.getTbunit().getAdminUnit().getId()));
+				SessionData.instance().setValue("unitid",(userWorkspace.getTbunit().getAdminUnit().getId()));
+			}
+	}
 
 	/**
 	 * Create a unique new session id to be used by clients application in reference to this session (even when the session is finished)
