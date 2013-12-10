@@ -9,191 +9,111 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.sideeffects']}" />
-<!-- <ui:param name="waitdlg" value="1" /> -->
-<ui:param name="topmenu" value="0" />
+<ui:param name="title" value="#{messages['cases.sideeffects']}" /><ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
 
 
 <ui:define name="content">
 <h1>#{title}</h1>
 
-<rich:jQuery selector="document" query="ready(function() {updateRows();})" />
-
-<script type="text/javascript" >
-function checkClick(obj) {
-  if (obj.checked)
-	  selectall()
-  else unselectall();
-  updateRows();
-}
-
-function updateRows() {
-jQuery("#tblse tr").removeClass("activerow");
-jQuery("#tblse tr input[type='text'],select").hide();
-jQuery("#tblse tr:has(:checked) input[type='text']").show();
-jQuery("#tblse tr:has(:checked) select").show();
-jQuery("#tblse tr:has(:checked)").addClass("activerow");
-}
-
-function validateForm() {
-	valOk=true;
-//	jQuery("#tblse tr:has(:checked) input[type='text']")
-//		.css("background-color", "white")
-//		.each(function() { validateMedicine(this); });
-
-	if (valOk)
-		jQuery("#tblse tr:has(:checked) select[class='xpto']")
-			.css("background-color", "transparent")
-			.each(function() { validateYesNo(this); });
-	
-	return valOk;
-}
-
-function validateMedicine(edt) {
-	if ((edt.value == null) || (edt.value.length==0)) {
-			window.alert("#{messages['cases.sideeffects.medicine']}: #{messages['javax.faces.component.UIInput.REQUIRED']}");
-			jQuery(edt).css("background-color", "#FFD2B4");
-			edt.focus();
-			valOk = false;
-			return false;
-	}
-}
-
-function validateYesNo(cb) {
-	if (cb.options[cb.selectedIndex].text == '-') {
-		window.alert("#{messages['cases.sideeffects.resolved']}: #{messages['javax.faces.component.UIInput.REQUIRED']}");
-		jQuery(cb).css("background-color", "#FFD2B4");
-		cb.focus();
-		valOk = false;
-		return false;
-	}
-}
-</script>
-<p/>
+<s:decorate id="caseBody" template="/layout/casebody.xhtml">
 <h:form id="main" styleClass="form1">
+	<div class="form-content">
+	
+		    <s:decorate template="/layout/editfield.xhtml" >
+		    	<ui:define name="label">#{messages['cases.sideeffects.desc']}:</ui:define>
+		    	<ui:param name="required" value="true" />
+		    	<ui:param name="id" value="sideEffect" />
+		    	<ui:param name="field" value="#{caseSideEffect.sideEffect}" />
+		    	<ui:param name="list" value="#{fieldsQuery.sideEffects}" />
+	    	</s:decorate>
 
-<s:decorate template="/layout/casebody.xhtml">
-<div class="form-content">
-<table width="100%">
-<tr><td>
-	<div id="tblse">
-	<h:dataTable value="#{sideEffectNAHome.items}" var="it" width="100%" styleClass="table1">
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
-			</f:facet>
-			<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" />
-			#{it.item.sideEffect.value.name}
-		</h:column>
-		
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.grade']}" styleClass="collh" />
-			</f:facet>
-			<h:selectOneMenu value="#{it.item.grade}" styleClass="xpto">
-				<s:selectItems value="#{gradeList}" var="v" noSelectionLabel="-" label="#{messages[v.key]}"/>
-				<s:convertEnum />
-			</h:selectOneMenu>
-		</h:column>
-		
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.seriousness']}" styleClass="collh" />
-			</f:facet>
-			<h:selectOneMenu value="#{it.item.seriousness}" styleClass="xpto">
-				<s:selectItems value="#{seriousnessList}" var="v" noSelectionLabel="-" label="#{messages[v.key]}"/>
-				<s:convertEnum />
-			</h:selectOneMenu>
-		</h:column>		
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['cases.sideeffects.grade']}:</ui:define>
+				<h:selectOneMenu value="#{caseSideEffect.grade}">
+					<s:selectItems value="#{gradeList}" var="v" noSelectionLabel="-" label="#{messages[v.key]}"/>
+					<s:convertEnum />
+				</h:selectOneMenu>
+			</s:decorate>
 
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.medicine']}" styleClass="collh" />
-			</f:facet>
-			<h:selectOneMenu value="#{it.item.substance}">
-				<s:selectItems var="s" value="#{substances}" label="#{s.abbrevName}" noSelectionLabel="-"/>
-				<s:convertEntity />
-			</h:selectOneMenu>
-			<h:selectOneMenu value="#{it.item.substance2}">
-				<s:selectItems var="s" value="#{substances}" label="#{s.abbrevName}" noSelectionLabel="-"/>
-				<s:convertEntity />
-			</h:selectOneMenu>
-		</h:column>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">
+					<h:outputText value="#{messages['cases.sideeffects.seriousness']}" />:
+				</ui:define>
+				<h:selectOneMenu value="#{caseSideEffect.seriousness}" styleClass="xpto">
+					<s:selectItems value="#{seriousnessList}" var="v" noSelectionLabel="-" label="#{messages[v.key]}"/>
+					<s:convertEnum />
+				</h:selectOneMenu>
+			</s:decorate>
 
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.startdate']}" styleClass="collh" />
-			</f:facet>
-				<rich:calendar id="date1" enableManualInput="true" value="#{it.item.effectSt}" 
-					locale="#{locale}" datePattern="#{messages['locale.datePattern']}" styleClass="xpto"
-					timeZone="#{timezones.default}" validator="futureDateValidator" inputStyle="width:80px;">
-				</rich:calendar>
-				<f:param name="validatefuture" value="true"/>
-   				(#{messages['locale.displayDatePattern']})
-   				<rich:jQuery selector="#edtdatep .rich-calendar-input" query="mask('#{messages['locale.dateMask']}')" />
-		</h:column>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">
+					#{messages['cases.sideeffects.medicine']}:
+				</ui:define>
+				<h:selectOneMenu value="#{caseSideEffect.substance}">
+					<s:selectItems var="s" value="#{substances}" label="#{s.abbrevName}" noSelectionLabel="-"/>
+					<s:convertEntity />
+				</h:selectOneMenu>
+				<h:selectOneMenu value="#{caseSideEffect.substance2}">
+					<s:selectItems var="s" value="#{substances}" label="#{s.abbrevName}" noSelectionLabel="-"/>
+					<s:convertEntity />
+				</h:selectOneMenu>
+			</s:decorate>
 
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.action']}" styleClass="collh" />
-			</f:facet>
-			<h:selectOneMenu value="#{it.item.actionTaken}" styleClass="xpto">
-				<s:selectItems value="#{actionList}" var="v" noSelectionLabel="-" label="#{messages[v.key]}"/>
-				<s:convertEnum />
-			</h:selectOneMenu>
-		</h:column>
+		    <s:decorate template="/layout/dateedit.xhtml" >
+    			<ui:define name="label">#{messages['cases.sideeffects.startdate']}:</ui:define>
+		    	<ui:param name="required" value="false" /> 
+    			<ui:param name="future" value="true" /> 
+		    	<ui:param name="datefield" value="#{caseSideEffect.effectSt}" /> 
+		    </s:decorate>
 
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.outcome']}" styleClass="collh" />
-			</f:facet>
-			<h:selectOneMenu value="#{it.item.outcome}" >
-				<s:selectItems value="#{outcomeList}" var="v" noSelectionLabel="-" label="#{messages[v.key]}"/>
-				<s:convertEnum />
-			</h:selectOneMenu>
-		</h:column>
-		
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sideeffects.statusdate']}" styleClass="collh" />
-			</f:facet>
-				<rich:calendar id="date2" enableManualInput="true" value="#{it.item.effectEnd}" 
-					locale="#{locale}" datePattern="#{messages['locale.datePattern']}" styleClass="xpto"
-					timeZone="#{timezones.default}" validator="futureDateValidator" inputStyle="width:80px;">
-				</rich:calendar>
-				<f:param name="validatefuture" value="true"/>
-   				(#{messages['locale.displayDatePattern']})
-   				<rich:jQuery selector="#edtdatep .rich-calendar-input" query="mask('#{messages['locale.dateMask']}')" />
-		</h:column>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">
+					#{messages['cases.sideeffects.action']}:
+				</ui:define>
+				<h:selectOneMenu value="#{caseSideEffect.actionTaken}" >
+					<s:selectItems value="#{actionList}" var="v" noSelectionLabel="-" label="#{messages[v.key]}"/>
+					<s:convertEnum />
+				</h:selectOneMenu>
+			</s:decorate>
 
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['global.comments']}" styleClass="collh" />
-			</f:facet>
-			<h:inputTextarea value="#{it.item.comment}" />
-		</h:column>		
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">
+					#{messages['cases.sideeffects.outcome']}:
+				</ui:define>
+				<h:selectOneMenu value="#{caseSideEffect.outcome}" >
+					<s:selectItems value="#{outcomeList}" var="v" noSelectionLabel="-" label="#{messages[v.key]}"/>
+					<s:convertEnum />
+				</h:selectOneMenu>
+			</s:decorate>
 
-	</h:dataTable>
+		    <s:decorate template="/layout/dateedit.xhtml" >
+    			<ui:define name="label">#{messages['cases.sideeffects.statusdate']}:</ui:define>
+		    	<ui:param name="required" value="false" /> 
+    			<ui:param name="future" value="true" /> 
+		    	<ui:param name="datefield" value="#{caseSideEffect.effectEnd}" /> 
+		    </s:decorate>
+				
+		    <s:decorate template="/layout/edit.xhtml" >
+		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+		    	<h:inputTextarea value="#{caseSideEffect.comment}" style="width:500px;height:80px;" />
+		    </s:decorate>
+	</div>		
+		    
+	<div class="form-footer"> 
+		<a:commandLink action="#{sideEffectNAHome.persist}" styleClass="button" reRender="main,messages" onclick="if (!disableButton(this)) return false;">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink> 
+
+	    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+	       	<f:param name="id" value="#{caseHome.id}"/>
+	       	<span>#{messages['form.cancel']}</span>
+	    </s:link>
 	</div>
-	</td></tr>
-</table>
-</div>
-
-<div class="form-footer">
-	<a:commandLink action="#{sideEffectNAHome.save}" styleClass="button" 
-		onclick="if (!disableButton(this)) return false;if (!validateForm()) {enableButton();return false;} " 
-		reRender="main">
-		 <span>#{messages['form.save']}</span>
-	</a:commandLink> 
-    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
-       	<f:param name="id" value="#{caseHome.id}"/>
-       	<span>#{messages['form.cancel']}</span>
-    </s:link>
-</div>
+</h:form>
 </s:decorate>
 
-</h:form>
+
 
 </ui:define>
 

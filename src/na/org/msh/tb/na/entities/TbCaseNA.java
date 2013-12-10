@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 
@@ -45,9 +46,6 @@ public class TbCaseNA extends TbCase{
 	
 	private String comments;
 	
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcasena")
-	private List<CaseSideEffectNA> sideEffectsNa = new ArrayList<CaseSideEffectNA>();
-	
 	
 	/**
 	 * Search for side effect data by the side effect
@@ -56,9 +54,9 @@ public class TbCaseNA extends TbCase{
 	 */
 	@Override
 	public CaseSideEffectNA findSideEffectData(FieldValue sideEffect) {
-		for (CaseSideEffectNA se: getSideEffectsNa()) {
+		for (CaseSideEffect se: getSideEffects()) {
 			if (se.getSideEffect().getValue().getId().equals(sideEffect.getId()))
-				return se;
+				return (CaseSideEffectNA)se;
 		}
 		return null;
 	}	
@@ -71,14 +69,6 @@ public class TbCaseNA extends TbCase{
 
 	public void setDispna(List<CaseDispensingNA> dispna) {
 		this.dispna = dispna;
-	}
-
-	public List<CaseSideEffectNA> getSideEffectsNa() {
-		return sideEffectsNa;
-	}
-
-	public void setSideEffectsNa(List<CaseSideEffectNA> sideEffectsNa) {
-		this.sideEffectsNa = sideEffectsNa;
 	}
 
 	public Date getDate() {

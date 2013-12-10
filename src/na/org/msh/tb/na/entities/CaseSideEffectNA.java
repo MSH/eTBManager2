@@ -4,12 +4,9 @@ import java.util.Date;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.na.entities.enums.SideEffectAction;
 import org.msh.tb.na.entities.enums.SideEffectGrading;
@@ -28,11 +25,6 @@ import org.msh.utils.date.DateUtils;
 @DiscriminatorValue("na")
 public class CaseSideEffectNA extends CaseSideEffect{
 
-	@ManyToOne
-	@JoinColumn(name="CASE_DATA_ID")
-	@NotNull
-	private TbCaseNA tbcasena;	
-
 	private SideEffectGrading grade;
 	
 	private SideEffectAction actionTaken; 
@@ -49,8 +41,8 @@ public class CaseSideEffectNA extends CaseSideEffect{
 	
 	public Integer getMonthOfTreatment(){
 		int i = 0;
-		if(tbcasena.getTreatmentPeriod() != null && tbcasena.getTreatmentPeriod().getIniDate() != null)
-			i = DateUtils.monthsBetween(tbcasena.getTreatmentPeriod().getIniDate(), effectSt)+1;
+		if(getTbcase().getTreatmentPeriod() != null && getTbcase().getTreatmentPeriod().getIniDate() != null)
+			i = DateUtils.monthsBetween(getTbcase().getTreatmentPeriod().getIniDate(), effectSt)+1;
 		return i;
 		
 	}
@@ -95,14 +87,6 @@ public class CaseSideEffectNA extends CaseSideEffect{
 
 	public void setSeriousness(SideEffectSeriousness seriousness) {
 		this.seriousness = seriousness;
-	}
-
-	public TbCaseNA getTbcasena() {
-		return tbcasena;
-	}
-
-	public void setTbcasena(TbCaseNA tbcasena) {
-		this.tbcasena = tbcasena;
 	}
 
 	public Date getEffectSt() {

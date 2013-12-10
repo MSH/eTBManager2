@@ -128,6 +128,11 @@
 		from tbcase a inner join patient p on p.id=a.patient_id and p.workspace_id=24
 		where a.validationstate=1 and a.registrationcode like 'TB%'</sql>
  	</changeSet>
+ 	
+ 	<changeSet id="12.6" author="rmemoria" context="NA">
+ 	    <dropForeignKeyConstraint baseTableName="casesideeffect" constraintName="FK9D7338D869B3B5EE"/>
+ 	    <dropColumn tableName="casesideeffect" columnName="CASE_DATA_ID"/>
+ 	</changeSet>
 </databaseChangeLog>
 
 

@@ -1,35 +1,37 @@
 package org.msh.tb.na;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-import javax.persistence.EntityManager;
-
-import org.hibernate.validator.InvalidStateException;
-import org.hibernate.validator.InvalidValue;
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.CaseSideEffect;
-import org.msh.tb.entities.FieldValue;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.misc.FieldsQuery;
+import org.msh.tb.cases.SideEffectHome;
 import org.msh.tb.na.entities.CaseSideEffectNA;
-import org.msh.tb.na.entities.TbCaseNA;
-import org.msh.utils.ItemSelect;
-import org.msh.utils.ItemSelectHelper;
-import org.msh.utils.date.Period;
 
 
 @Name("sideEffectNAHome")
-@Scope(ScopeType.CONVERSATION)
-public class SideEffectNAHome{
+public class SideEffectNAHome  {
 
-	@In(required=true) CaseHome caseHome;
+	@In SideEffectHome sideEffectHome;
+	@In CaseHome caseHome;
+	
+	/**
+	 * Save persisted data
+	 * @return
+	 */
+	public String persist() {
+		CaseSideEffectNA se = (CaseSideEffectNA)sideEffectHome.getInstance();
+
+		int month = 0;
+		if (se.getEffectSt() != null)
+			month = caseHome.getInstance().getMonthTreatment(se.getEffectSt());
+	
+		sideEffectHome.getInstance().setMonth(month);
+		sideEffectHome.getInstance().setTbcase(caseHome.getInstance());
+		return sideEffectHome.persist();
+	}
+
+	
+	
+/*	@In(required=true) CaseHome caseHome;
 	@In(create=true) FieldsQuery fieldsQuery;
 	@In(create=true) EntityManager entityManager;
 	
@@ -43,9 +45,9 @@ public class SideEffectNAHome{
 	}
 	
 
-	/**
+	*//**
 	 * Create the side effect list to be selected by the user
-	 */
+	 *//*
 	protected void createItems() {
 		List<FieldValue> sideEffects = fieldsQuery.getSideEffects();
 				
@@ -69,10 +71,10 @@ public class SideEffectNAHome{
 	}
 
 
-	/**
+	*//**
 	 * Saves the changes made to the side effects of the case
 	 * @return - "persisted" if it was successfully saved
-	 */
+	 *//*
 	@Transactional
 	public String save() {
 		String result = null;
@@ -122,10 +124,10 @@ public class SideEffectNAHome{
 		return result;
 	}
 	
-	/**
+	*//**
 	 * Returns the list of months to be selected in the field 'month of treatment' in the side effect data of the case
 	 * @return - List of objects<SelectItem> to be used in a selectOneMenu component
-	 */
+	 *//*
 	public List<SelectItem> getMonths() {
 		List<SelectItem> lst = new ArrayList<SelectItem>();
 		
@@ -146,4 +148,4 @@ public class SideEffectNAHome{
 		
 		return lst;
 	}
-}
+*/}

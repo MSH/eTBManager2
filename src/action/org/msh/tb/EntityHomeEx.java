@@ -126,7 +126,7 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		EntityQuery<E> entityQuery = getEntityQuery();
 		if (entityQuery != null)
 			entityQuery.getResultList().remove(getInstance());
-
+		
 		return super.remove();
 	}
 	

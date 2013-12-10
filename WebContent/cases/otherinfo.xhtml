@@ -162,7 +162,7 @@
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
 			</f:facet>
-			<s:link value="#{it.sideEffect.value.name}" view="/custom/br/cases/sideeffectsedt.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
+			<s:link value="#{it.sideEffect.value.name}" view="/cases/sideeffectsedt.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="idSideEffect" value="#{it.id}"/>
 			</s:link>
