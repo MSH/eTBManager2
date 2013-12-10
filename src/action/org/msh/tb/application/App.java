@@ -60,4 +60,11 @@ public class App {
 		return (E)Component.getInstance(clazz);
 	}
 	
+	/**
+	 * Return the temporary directory used by the JVM
+	 * @return String containing the temporary folder
+	 */
+	public static String getTempDir() {
+		return System.getProperty("java.io.tmpdir");
+	}
 }

@@ -101,7 +101,8 @@ public class GlobalLists {
 		PrevTBTreatmentOutcome.DEFAULTED,
 		PrevTBTreatmentOutcome.SCHEME_CHANGED,
 		PrevTBTreatmentOutcome.TRANSFERRED_OUT,
-		PrevTBTreatmentOutcome.UNKNOWN
+		PrevTBTreatmentOutcome.UNKNOWN,
+		PrevTBTreatmentOutcome.OTHER
 	};
 
 	private static final TbField tbfields[] = {

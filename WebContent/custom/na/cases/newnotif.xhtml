@@ -130,6 +130,13 @@ function checkfields() {
 		</f:facet>
 		#{it.patient.securityNumber}
 	</h:column>
+	
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['cases.sit.current']}" styleClass="collh" />
+		</f:facet>
+		<h:outputText value="#{it.caseStatus}" escape="false" />
+	</h:column>
 </h:dataTable>
 </h:panelGroup>
 

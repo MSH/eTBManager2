@@ -28,13 +28,6 @@
 	<div class="form-content">
 	<h2>#{messages['MedicalExamination']}</h2>
 	
-	<s:decorate template="/layout/roundrect.xhtml" style="clear:both;display:block;">
-		<ui:define name="header">
-			<b>#{messages['MedicalExamination']}</b>
-		</ui:define>
-		<ui:param name="showfooter" value="0" />
-
-		
     		<s:decorate template="/layout/dateedit.xhtml" >
     			<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
     			<ui:param name="required" value="true" /> 
@@ -68,7 +61,6 @@
 		    </s:decorate>
 		
 	
-	</s:decorate>
 	</div>
 	</s:fragment>
 	

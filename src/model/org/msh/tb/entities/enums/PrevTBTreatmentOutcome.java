@@ -12,7 +12,8 @@ public enum PrevTBTreatmentOutcome {
 	UNKNOWN,
 	ONGOING,
 	DIAGNOSTIC_CHANGED,
-	NO_OUTCOME_YET;
+	NO_OUTCOME_YET,
+	OTHER;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
@@ -41,6 +42,8 @@ public enum PrevTBTreatmentOutcome {
 			return COMPLETED;
 		case TRANSFERRED_OUT:
 			return TRANSFERRED_OUT;
+		case OTHER:
+			return OTHER;
 		default:
 			return PrevTBTreatmentOutcome.UNKNOWN;
 		}

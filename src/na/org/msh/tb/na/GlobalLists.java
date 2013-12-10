@@ -58,7 +58,8 @@ public class GlobalLists {
 		PrevTBTreatmentOutcome.SCHEME_CHANGED,
 		PrevTBTreatmentOutcome.DIAGNOSTIC_CHANGED,
 		PrevTBTreatmentOutcome.NO_OUTCOME_YET,
-		PrevTBTreatmentOutcome.UNKNOWN
+		PrevTBTreatmentOutcome.UNKNOWN,
+		PrevTBTreatmentOutcome.OTHER
 	};
 
 	private static final CultureResult cultureResults[] = {

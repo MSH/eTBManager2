@@ -511,7 +511,7 @@ public class CaseEditingHome {
 	
 	public TBUnitSelection getTbunitselection() {
 		if (tbunitselection == null) {
-			tbunitselection = new TBUnitSelection("uaid", true, TBUnitType.NOTIFICATION_UNITS);
+			tbunitselection = new TBUnitSelection("newuaid", true, TBUnitType.NOTIFICATION_UNITS);
 		}
 		return tbunitselection;
 	}

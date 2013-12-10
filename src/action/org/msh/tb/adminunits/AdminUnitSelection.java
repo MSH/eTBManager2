@@ -12,7 +12,6 @@ import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.UserView;
-import org.msh.tb.login.SessionData;
 
 /**
  * Helper class to allow users to select an administrative unit

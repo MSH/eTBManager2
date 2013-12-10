@@ -573,6 +573,12 @@ public class CaseHome extends WsEntityHome<TbCase>{
 
 		SimpleDateFormat f = new SimpleDateFormat("MMM-yyyy");
 
+		// case is already with an outcome ?
+		if (tbcase.getState().ordinal() > CaseState.TRANSFERRING.ordinal()) {
+			if (tbcase.getOutcomeDate() != null)
+				return MessageFormat.format(msgs.get("cases.sit.OUTCOME.date"), f.format( tbcase.getOutcomeDate() ));
+		}
+
 		// is suspect and waiting for treatment ?
 		if ((tbcase.getState() == CaseState.WAITING_TREATMENT) && (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT)) {
 			if (tbcase.getRegistrationDate() != null)
@@ -589,11 +595,6 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		if ((tbcase.getState() == CaseState.ONTREATMENT) || (tbcase.getState() == CaseState.TRANSFERRING)) {
 			if (tbcase.getTreatmentPeriod().getIniDate() != null)
 				return MessageFormat.format(msgs.get("cases.sit.ONTREAT.date"), f.format( tbcase.getTreatmentPeriod().getIniDate() ));
-		}
-
-		if (tbcase.getState().ordinal() > CaseState.TRANSFERRING.ordinal()) {
-			if (tbcase.getOutcomeDate() != null)
-				return MessageFormat.format(msgs.get("cases.sit.OUTCOME.date"), f.format( tbcase.getOutcomeDate() ));
 		}
 		
 		return null;		
@@ -613,7 +614,8 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		}
 		
 		if (tbcase.getState() == CaseState.ONTREATMENT)
-			return Messages.instance().get(tbcase.getState().getKey());
+			return null;
+//			return Messages.instance().get(tbcase.getState().getKey());
 		
 		return Messages.instance().get(tbcase.getState().getKey());
 	}

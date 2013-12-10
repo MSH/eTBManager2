@@ -255,7 +255,6 @@ public class WorkspaceCopyTask extends DbBatchTask {
 			if (dest instanceof WSObject) {
 				WSObject wsobj = (WSObject)dest;
 				transactionLog = em.merge(transactionLog);
-				wsobj.setCreateTransaction(transactionLog);
 				wsobj.setLastTransaction(transactionLog);
 			}
 			

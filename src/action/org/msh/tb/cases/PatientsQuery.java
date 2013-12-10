@@ -2,20 +2,18 @@ package org.msh.tb.cases;
 
 
 import java.text.Collator;
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.utils.EntityQuery;
 
@@ -186,6 +184,8 @@ public class PatientsQuery extends EntityQuery {
 			if (tbcase == null)
 				return null;
 			
+			CaseHome home = (CaseHome)Component.getInstance("caseHome");
+			
 			Map<String, String> msgs = Messages.instance();
 
 			String s;
@@ -196,7 +196,11 @@ public class PatientsQuery extends EntityQuery {
 	
 			s = "<b>" + s + "</b><br/>";
 
-			SimpleDateFormat f = new SimpleDateFormat("MMM-yyyy");
+			s += "<div class='warn'>" + home.getStatusString(tbcase) + "</div>";
+			String s2 = home.getStatusString2(tbcase);
+			if (s2 != null)
+				s += "<div>" + s2 + "</div>";
+/*			SimpleDateFormat f = new SimpleDateFormat("MMM-yyyy");
 			
 			if (tbcase.getDiagnosisType() == DiagnosisType.SUSPECT) {
 				if (tbcase.getRegistrationDate() != null)
@@ -219,7 +223,7 @@ public class PatientsQuery extends EntityQuery {
 						msgs.get(tbcase.getState().getKey());
 	
 			}
-			
+*/			
 			return s;
 		}
 	}

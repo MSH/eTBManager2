@@ -40,8 +40,7 @@ public class CaseCloseHome extends Controller{
 		CaseState.TREATMENT_COMPLETED,
 		CaseState.TRANSFERRED_OUT,
 		CaseState.DIAGNOSTIC_CHANGED,
-		CaseState.OTHER,
-		CaseState.TREATMENT_REFUSED};
+		CaseState.OTHER};
 
 	private static final CaseState[] outcomesTB = {
 		CaseState.CURED, 
@@ -52,8 +51,7 @@ public class CaseCloseHome extends Controller{
 		CaseState.TRANSFERRED_OUT,
 		CaseState.DIAGNOSTIC_CHANGED,
 		CaseState.MDR_CASE,
-		CaseState.OTHER,
-		CaseState.TREATMENT_REFUSED};
+		CaseState.OTHER};
 	
 	private static final CaseState[] suspectOutcomes = {
 		CaseState.NOT_TB, 

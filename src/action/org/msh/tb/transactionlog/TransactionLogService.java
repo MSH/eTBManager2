@@ -134,8 +134,6 @@ public class TransactionLogService {
 		// update transaction information to the entity
 		if (entity instanceof Transactional) {
 			Transactional t = (Transactional)entity;
-			if (action == RoleAction.NEW)
-				t.setCreateTransaction(log);
 			t.setLastTransaction(log);
 		}
 		

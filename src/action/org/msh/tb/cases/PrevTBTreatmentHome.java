@@ -22,6 +22,8 @@ import org.msh.tb.entities.PrescribedMedicine;
 import org.msh.tb.entities.PrevTBTreatment;
 import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.date.DateUtils;
@@ -130,13 +132,14 @@ public class PrevTBTreatmentHome {
 
 			// include previous case
 			TbCase prevCase = getPreviousCase();
+			
 			if (prevCase != null) {
 				Period period = prevCase.getTreatmentPeriod();
 				if ((period != null) && (period.getIniDate() != null)) {
 					PrevTBTreatmentOutcome ttoOutcome = PrevTBTreatmentOutcome.convertFromCaseState(prevCase.getState());
 					PrevTBTreatment p = new PrevTBTreatment();
 					p.setOutcome(ttoOutcome);
-					p.setMonth(DateUtils.monthOf(period.getIniDate()) + 1);
+					p.setMonth(DateUtils.monthOf(period.getIniDate()));
 					p.setYear(DateUtils.yearOf(period.getIniDate()));
 					List<Substance> subs = new ArrayList<Substance>();
 
@@ -234,13 +237,27 @@ public class PrevTBTreatmentHome {
 		if (previousCase == null) {			
 			try {
 				String hql = "from TbCase c where c.patient.id = :id and c.treatmentPeriod.iniDate = " +
-					"(select max(c2.treatmentPeriod.iniDate) from TbCase c2 where c2.patient.id = c.patient.id)";
+					"(select max(c2.treatmentPeriod.iniDate) from TbCase c2 where c2.patient.id = c.patient.id) " +
+					"and c.state not in (" + CaseState.WAITING_TREATMENT.ordinal() + ", " + CaseState.DIED.ordinal() + "," + CaseState.DIED_NOTTB.ordinal() + ")";
 
 				Query q = entityManager
 					.createQuery(hql)
 					.setParameter("id", caseHome.getInstance().getPatient().getId());
-				if (q.getResultList().size()!=0)
-					previousCase = (TbCase)q.getResultList().get(0);
+				
+				List<TbCase> lst = q.getResultList();
+				for (TbCase tbcase: lst) {
+					CaseState state = tbcase.getState();
+					if (tbcase.getDiagnosisType() == DiagnosisType.CONFIRMED) {
+						if (state.ordinal() > CaseState.TRANSFERRING.ordinal()) {
+							previousCase = tbcase;
+							break;
+						}
+					}
+					else {
+						previousCase = tbcase;
+						break;
+					}
+				}
 			} catch (NoResultException e) {
 				return null;
 			}

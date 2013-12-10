@@ -41,8 +41,8 @@ public class TBUnitSelection extends AdminUnitSelector<Tbunit> {
 	 */
 	public TBUnitSelection(String clientId, boolean applyUserRestrictions, TBUnitType type) {
 		super(clientId);
-		setApplyUserRestrictions(applyUserRestrictions);
 		setApplyHealthSystemRestrictions(true);
+		setApplyUserRestrictions(applyUserRestrictions);
 		this.type = type;
 	}
 	
@@ -145,9 +145,9 @@ public class TBUnitSelection extends AdminUnitSelector<Tbunit> {
 	 */
 	@Override
 	public void setApplyUserRestrictions(boolean applyUserRestrictions) {
+		super.setApplyUserRestrictions(applyUserRestrictions);
 		if (applyUserRestrictions)
 			applyUserTBUnitRestriction();
-		super.setApplyUserRestrictions(applyUserRestrictions);
 	}
 
 
