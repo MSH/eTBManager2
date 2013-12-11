@@ -32,9 +32,10 @@
     <h:panelGroup id="outcome">
     <s:decorate template="/layout/edit.xhtml" >
 		<ui:define name="label">#{messages['cases.outcome']}:</ui:define>
-		<h:selectOneMenu id="selstate" value="#{caseCloseHome.state}" required="true" layout="pageDirection" onchange="statecheckClick(this,#{tbcase.classification != 'DRTB'});">
+		<h:selectOneMenu id="selstate" value="#{caseCloseHome.state}" required="true" layout="pageDirection">
 				<s:selectItems value="#{globalLists_ua.outcomes}" var="v" label="#{messages[v.key]}" noSelectionLabel="-"/>
 				<s:convertEnum />
+				<a:support event="onchange" oncomplete="statecheckClick(this,#{tbcase.classification != 'DRTB'});" reRender="outcome, extrainfo1" ajaxSingle="true"/>
 		</h:selectOneMenu>
     </s:decorate>
     </h:panelGroup >
