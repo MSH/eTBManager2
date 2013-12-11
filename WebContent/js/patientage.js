@@ -3,7 +3,7 @@ function handleCaseDateChange() {
 	sReg = jQuery("#divregdate input[type='text']").val();
 	if (!(sReg))
 		 dt2 = new Date();
-	else dt2 = convertDate(sReg)
+	else dt2 = convertDate(sReg);
 	var dt1=convertDate(sBirth);
 	if (dt1==null)
 		return;
@@ -71,23 +71,3 @@ function yearsBetween(dt1, dt2) {
 	return Math.floor(milli/milliPerYear);
 }
 
-function agetodob(id) {
-	var age = id.value;
-	var curDt = new Date();
-	
-	var mon   = curDt.getMonth() + 1;
-	var year  = curDt.getFullYear();
-	
-	var dobyr = year - age;
-	
-	if(mon<=6){
-	var strdob = "01"+"/"+"01"+"/"+dobyr;	
-		}
-		
-	if(mon>6){
-	var strdob = "01"+"/"+"07"+"/"+dobyr;
-	}
-	
-	jQuery("#divbirthdate input[type='text']").val(strdob);
-	;
-}
