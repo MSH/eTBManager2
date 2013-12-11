@@ -13,6 +13,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.export.CaseExportHome;
 import org.msh.tb.export.CaseIterator;
 import org.msh.tb.export.ExcelCreator;
+import org.msh.tb.export.CaseExportHome.ExportContent;
 
 @Name("caseExportUAHome")
 public class CaseExportUAHome extends CaseExportHome {
@@ -23,13 +24,30 @@ public class CaseExportUAHome extends CaseExportHome {
 	private static final int MAX = 12000;
 	private static final long serialVersionUID = -1749061457663113197L;
 	private CaseExportUA caseExportUA;
+	private CaseExportUATreatmentInfo caseExportUATreatmentInfo;
 	private boolean excelYes = true;
-
+	
+	static private final ExportContent contents[] = {
+		ExportContent.CASEDATA, ExportContent.EXAMS, ExportContent.REGIMENS
+	};
+	
+	@Override
+	public ExportContent[] getContents() {
+		return contents;
+	}
+	
 	@Override
 	protected CaseIterator getCaseIterator() {
-		if (caseExportUA == null)
-			caseExportUA = new CaseExportUA(getExcel());
-		return caseExportUA;
+		if (!ExportContent.REGIMENS.equals(exportContent)){
+			if (caseExportUA == null)
+				caseExportUA = new CaseExportUA(getExcel());
+			return caseExportUA;
+		}
+		else{
+			if (caseExportUATreatmentInfo == null)
+				caseExportUATreatmentInfo = new CaseExportUATreatmentInfo(getExcel());
+			return caseExportUATreatmentInfo;
+		}
 	}
 
 	/**
@@ -59,43 +77,62 @@ public class CaseExportUAHome extends CaseExportHome {
 
 		// get reference to case iterator
 		CaseIterator ci = getCaseIterator();
-
-		int num = caseExportUA.getCount();
-		if (num<=MAX){
-			ci.addTitles();
-			if (bExams)
-				getExamsExport().addTitles();
-
-			excel.setColumnsAutoside(0, excel.getColumn() - 1);
-
-			num = ci.getResultCount();
-			/*if (num > MAX_ROWS){
-					num=MAX_ROWS;
-					writeWarning();
-				}*/
-			for (int i = 0; i < num; i++) {
-				excel.lineBreak();
-				TbCase tbcase = ci.exportContent(i);
+		if (!ExportContent.REGIMENS.equals(exportContent)){
+			int num = caseExportUA.getCount();
+			if (num<=MAX){
+				ci.addTitles();
 				if (bExams)
-					getExamsExport().addExams(tbcase);
+					getExamsExport().addTitles();
+	
+				excel.setColumnsAutoside(0, excel.getColumn() - 1);
+	
+				num = ci.getResultCount();
+				/*if (num > MAX_ROWS){
+						num=MAX_ROWS;
+						writeWarning();
+					}*/
+				for (int i = 0; i < num; i++) {
+					excel.lineBreak();
+					TbCase tbcase = ci.exportContent(i);
+					if (bExams)
+						getExamsExport().addExams(tbcase);
+				}
+			}
+			else{
+				facesMessages.addFromResourceBundle("export_warning_too_many");
+				excelYes = false;
 			}
 		}
 		else{
-			facesMessages.addFromResourceBundle("export_warning_too_many");
-			excelYes = false;
+			int num = caseExportUATreatmentInfo.getCount();
+			if (num<=MAX){
+				creatingWarningFormat();
+				ci.addTitles();
+				
+				excel.setColumnsAutoside(0, excel.getColumn());
+	
+				num = ci.getResultCount();
+				for (int i = 0; i < num; i++) {
+					excel.lineBreak();
+					TbCase tbcase = ci.exportContent(i);
+				}
+			}
+			else{
+				facesMessages.addFromResourceBundle("export_warning_too_many");
+				excelYes = false;
+			}
 		}
 	}
-	/**
-	 * Write "to many rows" warning on the top of the list
-	 */
-	private void writeWarning() {
+
+
+	private void creatingWarningFormat() {
 		WritableCellFormat format = excel.createCellFormat("warning");
 		try {
 			format.setBackground(jxl.format.Colour.ORANGE);
 		} catch (WriteException e) {
 			e.printStackTrace();
 		}
-		excel.addText(getMessages().get("export_warning_too_many"), 0, 0, "warning");
+		//excel.addText(getMessages().get("export_warning_too_many"), 0, 0, "warning");
 
 	}
 
