@@ -426,13 +426,13 @@ function showOtherHosp() {
 
 	<div class="form-content">
 		<h2>#{messages['cases.prevtreat']}
-		<ui:remove>
+		
 			<a:commandLink reRender="prevtreats" styleClass="button" 
 				action="#{prevTBTreatmentUAHome.refresh()}"
 				onclick="if (!disableButton(this)) return false;" oncomplete="enableButton();" style="float:right;">
 				<span>#{messages['form.refresh']}</span>
 			</a:commandLink>
-		</ui:remove>
+		
 		</h2>
 		<table width="100%" style="border-collapse:collapse;"><tr><td>
 		<s:decorate template="/layout/edit.xhtml">
