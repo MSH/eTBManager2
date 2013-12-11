@@ -115,6 +115,7 @@ public class ReportTB11 extends IndicatorVerify<TbCase> {
 					addToVerList(tc,1,0);
 				else{
 					table1.addIdValue(colkey, "row1", 1F);
+					addToRecordsInReport(tc);
 					if (rightMcTest(tc).getResult().isPositive())
 						table1.addIdValue(colkey, "row2", 1F);
 				}
@@ -122,6 +123,7 @@ public class ReportTB11 extends IndicatorVerify<TbCase> {
 					addToVerList(tc,1,1);
 				else{
 					table1.addIdValue(colkey, "row3", 1F);
+					addToRecordsInReport(tc);
 					if (rightCulTest(tc).getResult().isPositive())
 						table1.addIdValue(colkey, "row4", 1F);
 				}

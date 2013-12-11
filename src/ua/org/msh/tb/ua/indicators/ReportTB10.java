@@ -161,7 +161,7 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 					}
 					else	
 					if (rightMcTest(tc).getResult().isPositive()){
-						addValueTable(tc.getTreatmentPeriod().getIniDate(), tc.getDiagnosisDate(), tc.getPatientType(), tc.getState(), tc.getIniContinuousPhase(), firstNegMicro(tc), isNoExam(tc));
+						addValueTable(tc.getTreatmentPeriod().getIniDate(), tc.getDiagnosisDate(), tc.getPatientType(), tc.getState(), tc.getIniContinuousPhase(), firstNegMicro(tc), isNoExam(tc), tc);
 						
 						addToAllowing(tc);
 					}
@@ -268,7 +268,7 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 
 		for (Object[] vals: lst) {
 			boolean noexam = vals[6] == null;
-			addValueTable((Date)vals[0], (Date)vals[1], (PatientType)vals[2], (CaseState)vals[3], (Date)vals[4], (Date)vals[5], noexam);
+			addValueTable((Date)vals[0], (Date)vals[1], (PatientType)vals[2], (CaseState)vals[3], (Date)vals[4], (Date)vals[5], noexam, null);
 		}
 		
 		String rows[] = {"newcases", "relapses", "others"};
@@ -301,8 +301,9 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 	 * @param dtIniTreat
 	 * @param dtDiagnos
 	 * @param dtMicro
+	 * @param tc TODO
 	 */
-	protected void addValueTable(Date dtIniTreat, Date dtDiagnos, PatientType ptype, CaseState state, Date iniCont, Date dtMicro, boolean noexam) {
+	protected void addValueTable(Date dtIniTreat, Date dtDiagnos, PatientType ptype, CaseState state, Date iniCont, Date dtMicro, boolean noexam, TbCase tc) {
 		if (dtIniTreat == null)
 			dtIniTreat = dtDiagnos;
 
@@ -384,6 +385,7 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 			}
 		
 		table1000.addIdValue("numcases", rowkey, 1F);
+		addToAllowing(tc);
 	}
 
 	/**

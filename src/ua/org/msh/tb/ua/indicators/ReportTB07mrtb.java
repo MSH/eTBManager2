@@ -91,10 +91,12 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 							if (tc.getTreatmentPeriod()!=null)
 								if (tc.getTreatmentPeriod().getIniDate()!=null){
 									getTable1000().addIdValue(tc.getDiagnosisType(), rowid, 1F);
+									addToRecordsInReport(tc);
 									rowid = "treat";
 								}
 							getTable1000().addIdValue(tc.getDiagnosisType(), rowid, 1F);
-
+							addToRecordsInReport(tc);
+							
 							//table 2000
 							if(tc.getPatientType() == null){
 								tc.setPatientType(PatientType.NEW);
@@ -103,6 +105,7 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 							case NEW: case RELAPSE: case AFTER_DEFAULT: case FAILURE_FT: case FAILURE_RT: case OTHER:  
 								getTable2000().addIdValue("col", tc.getPatientType(), 1F);
 								getTable2000().addIdValue("col", "total", 1F);
+								addToRecordsInReport(tc);
 								break;
 							default:
 								addToVerList(tc,1,1);
@@ -115,6 +118,7 @@ public class ReportTB07mrtb extends IndicatorVerify<TbCase> {
 							{
 								if (tc.getExtrapulmonaryType()!=null || tc.getExtrapulmonaryType2()!=null){
 									getTable2000().addIdValue("col", "extrapul", 1F);
+									addToRecordsInReport(tc);
 									//TODO may be accounted twice to the TOTAL!!!!
 									if(tc.getPulmonaryType() == null){
 										//getTable2000().addIdValue("col", "total", 1F);

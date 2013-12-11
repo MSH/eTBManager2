@@ -82,13 +82,15 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 					addToVerList(tc,2,1);
 	}
 	
-	private void addToTable(IndicatorTable tab, String gen, String micResult, String key){
+	private void addToTable(IndicatorTable tab, String gen, String micResult, String key, TbCase tc){
 		tab.addIdValue(micResult+"_"+key,rowid, 1F);
 		if (tab!=getTable2000())
 			tab.addIdValue(micResult+"_all",rowid, 1F);
 		if (tab!=getTable4000())
 			tab.addIdValue(gen,rowid, 1F);
 		tab.addIdValue("all",rowid, 1F);
+		addToRecordsInReport(tc);
+		//System.out.println(tc.toString());
 	}
 	
 	protected void generateTables() {
@@ -151,11 +153,11 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 								String gen = tc.getPatient().getGender().toString().toLowerCase();
 								if (micResult==null) addToVerList(tc,1,2);
 								
-									addToTable(getTable1000(), gen, micResult==null ? "negative" : micResult, key);
+									addToTable(getTable1000(), gen, micResult==null ? "negative" : micResult, key, tc);
 									//System.out.println(tc.getDisplayCaseNumber()+"|"+tc.getPatient().getFullName()+"|"+key+(micResult==null ? "negative" : micResult));
 									if (micResult!=null)
 										if (micResult.equals("positive") && key.equalsIgnoreCase("newcases")){
-											addToTable(getTable2000(), gen+"_all", Integer.toString(roundToIniDate(tc.getPatientAge())), gen);
+											addToTable(getTable2000(), gen+"_all", Integer.toString(roundToIniDate(tc.getPatientAge())), gen, tc);
 											//System.out.println(tc.getDisplayCaseNumber()+"|"+tc.getPatient().getFullName()+"|"+gen+"|"+tc.getPatient().getBirthDate()+"|"+tc.getDiagnosisDate()+"|"+tc.getPatientAge());
 									}
 								
@@ -168,7 +170,7 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 								else
 									addToVerList(tc,1,3);
 								//if (micResult!=null){
-									addToTable(getTable3000(),gen,micResult==null ? "negative" : micResult,key);
+									addToTable(getTable3000(),gen,micResult==null ? "negative" : micResult,key, tc);
 									//if ("negative".equals(micResult))
 										//System.out.println("|"+tc.getDisplayCaseNumber()+"|"+tc.getPatient().getFullName()+"|"+tc.getPatientType()+"|"+(tc.getTreatmentPeriod()!=null?tc.getTreatmentPeriod().getIniDate():"")+"|"+(rightMcTest(tc)!=null?rightMcTest(tc).getDateCollected():"")+"|"+(rightCulTest(tc)!=null?rightCulTest(tc).getDateCollected():""));
 								//}
@@ -178,20 +180,20 @@ public class ReportTB07 extends IndicatorVerify<TbCase> {
 								
 								if (!verifyList.get(getMessage("verify.errorcat1")).get(4).getCaseList().contains(tc))
 									if (caseHasHIV(tc))
-										addToTable(getTable4000(),gen,"pulmonary",key);
+										addToTable(getTable4000(),gen,"pulmonary",key, tc);
 								addToAllowing(tc);
 							}
 							else{
 								String gen = tc.getPatient().getGender().toString().toLowerCase();
 								
-								addToTable(getTable1000(),gen,"extrapulmonary",key);
+								addToTable(getTable1000(),gen,"extrapulmonary",key, tc);
 								//System.out.println(tc.getDisplayCaseNumber()+"|"+tc.getPatient().getFullName()+"|"+key+"extrapulmonary");
 								
-								addToTable(getTable3000(),gen,"extrapulmonary",key);
+								addToTable(getTable3000(),gen,"extrapulmonary",key, tc);
 								
 								if (!verifyList.get(getMessage("verify.errorcat1")).get(4).getCaseList().contains(tc))
 									if (caseHasHIV(tc))
-										addToTable(getTable4000(),gen,"extrapulmonary",key);
+										addToTable(getTable4000(),gen,"extrapulmonary",key, tc);
 								
 								addToAllowing(tc);
 							}

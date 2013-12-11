@@ -145,6 +145,7 @@ public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 					colid = idAgeRange(tc.getAge());
 					table.addIdValue("col1", "row"+(1+rowid), 1F);
 					table.addIdValue("col"+colid, "row"+(1+rowid), 1F);
+					addToRecordsInReport(tc);
 					if (isRural(tc)){
 						table.addIdValue("col17","row"+(1+rowid) , 1F);
 						table.addIdValue("col17","row"+(73+rowid) , 1F);
@@ -359,6 +360,7 @@ public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 		if (colInd!=0 && toTotal){
 			table2110.addIdValue("col"+colInd, "row1", 1F);
 			table2110.addIdValue("col"+colInd, "row"+rowInd, 1F);
+			addToRecordsInReport(tc);
 		}
 	}
 	/**
@@ -381,7 +383,7 @@ public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 		int ifRural = 0;
 		if (isRural(tc)) 
 			ifRural = 2;
-		if (!tc.isReferToOtherTBUnit())
+		if (!tc.isReferToOtherTBUnit()){
 			if (tc.getAge()<=17){
 				if (!extra) table2100.addIdValue("col"+(1+ifRural), "row"+rowInd, 1F);
 				table2100.addIdValue("col"+(5+ifRural), "row"+rowInd, 1F);
@@ -390,6 +392,8 @@ public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 				if (!extra) table2100.addIdValue("col"+(2+ifRural), "row"+rowInd, 1F);
 				table2100.addIdValue("col"+(6+ifRural), "row"+rowInd, 1F);
 			}
+			addToRecordsInReport(tc);
+		}
 	}
 
 	/**
@@ -449,6 +453,7 @@ public class Report08AZ extends IndicatorVerify<TbCaseAZ> {
 							tc.getPatientType().equals(PatientType.FAILURE_RT))
 						table2120.addIdValue("col"+(6+ifRural), "row"+rowInd, 1F);
 			}
+			addToRecordsInReport(tc);
 		}
 		else
 			addToVerList(tc,1,2);

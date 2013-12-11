@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
@@ -32,7 +34,6 @@ import org.msh.utils.date.DateUtils;
  * {@link #generateTables()}, {@link #addToAllowing(TbCase)}
  * @author A.M.
  * @param <E>
- * @param <E>
  *
  */
 public abstract class IndicatorVerify<E> extends Indicator2D {
@@ -45,6 +46,8 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 	 * Parameters of Map means category and list of types of errors
 	 * */
 	private Map<String,List<ErrItem>> verifyList;
+	
+	private Set<E> recordsInReport = new HashSet<E>();
 	
 	/**
 	 * Define what type of SELECT in HQL query we need now
@@ -207,6 +210,8 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 		Iterator<E> it = lst.iterator();
 		while(it.hasNext()){
 			E tc = it.next();
+			if(!recordsInReport.contains(tc))
+				return;
 			boolean inWarn = false; 
 			for (ErrItem ls: verifyList.get(getMessage("verify.errorcat1"))) {
 				if (ls.getCaseList().contains(tc)){
@@ -701,5 +706,9 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 			}
 		}
 		return minEl;
+	}
+
+	protected void addToRecordsInReport(E tc) {
+		recordsInReport.add(tc);
 	}
 }

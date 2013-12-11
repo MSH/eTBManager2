@@ -204,6 +204,7 @@ public class ReportTB08 extends IndicatorVerify<TbCase> {
 		}
 		if (culmicResult!=null){
 			getTable2000().addIdValue(col, patientType + culmicResult, 1F);
+			addToRecordsInReport(tc);
 			getTable2000().addIdValue("TOTAL", patientType + culmicResult, 1F);
 			addToAllowing(tc);
 			if ((culmicResult.equals(NEGATIVE) && tc.getState().equals(CaseState.CURED)))
@@ -229,6 +230,7 @@ public class ReportTB08 extends IndicatorVerify<TbCase> {
 
 		if (micResult!=null){
 			getTable1000().addIdValue(col, patientType + micResult, 1F);
+			addToRecordsInReport(tc);
 			getTable1000().addIdValue("TOTAL", patientType + micResult, 1F);
 			addToAllowing(tc);
 			if ((micResult.equals(NEGATIVE) && tc.getState().equals(CaseState.CURED)))
