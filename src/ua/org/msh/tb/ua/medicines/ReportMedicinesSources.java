@@ -11,7 +11,9 @@ import org.jboss.seam.annotations.Scope;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.Source;
+import org.msh.tb.entities.Tbunit;
 import org.msh.tb.login.UserSession;
+import org.msh.tb.ua.entities.MedicineReceivingUA;
 import org.msh.tb.ua.entities.TransferUA;
 import org.msh.utils.EntityQuery;
 import org.msh.utils.date.DateUtils;
@@ -89,6 +91,14 @@ public class ReportMedicinesSources {
 		return cond;
 	}
 	
+	public boolean isStorehouse() {
+		UserSession us = (UserSession) App.getComponent(UserSession.class);
+		Tbunit workingUnit = us.getWorkingTbunit();
+		if (!workingUnit.isTreatmentHealthUnit() && workingUnit.isMedicineStorage())
+			return true;
+		return false;
+	}
+	
 	public Date getIniDate() {
 		return iniDate;
 	}
@@ -120,11 +130,19 @@ public class ReportMedicinesSources {
 		 */
 		private Long stockInIniDate;
 		
+		private Long sumReceivings;
+		private Long sumTransFromUnits;
 		private Long sumTransFromTreatUnits;
 		private Long sumTransFromNotTreatUnits;
 		
+		/**
+		 * Check necessity displaying row
+		 * @return
+		 */
 		public boolean isRender() {
-			if (stockInIniDate == null && getSumTransFromNotTreatUnits()==null && getSumTransFromTreatUnits()==null)
+			if (isStorehouse() && (stockInIniDate == null || stockInIniDate == 0) && getSumTransFromUnits()==null && getSumReceivings()==null)
+				return false;
+			if (!isStorehouse() && (stockInIniDate == null || stockInIniDate == 0) && getSumTransFromNotTreatUnits()==null && getSumTransFromTreatUnits()==null)
 				return false;
 			return true;
 		}
@@ -160,6 +178,58 @@ public class ReportMedicinesSources {
 			return res;
 		}
 		
+		/**
+		 * Return the list of numbers and dates invoices of medicine receivings, with which received current batch.
+		 * In case of several transfer orders return all
+		 * @return
+		 */
+		public String getInvoiceNumber() {
+			String res="";
+			String hql = "select mr " +
+						"from MedicineReceivingUA mr " +
+						"join mr.movements m join m.batches bm "+
+						"where bm.batch.id = " +batch.getId()+
+						" and mr.tbunit.id=#{userSession.workingTbunit.id} "+
+						"order by mr.receivingDate";
+			List<Object> lst = App.getEntityManager().createQuery(hql).getResultList();
+			if (lst.size()!=0)
+			for (Object o:lst){
+				MedicineReceivingUA mr = (MedicineReceivingUA)o;
+				if (mr.getConsignmentNumber()!=null && !"".equals(mr.getConsignmentNumber()))
+					res += "¹"+mr.getConsignmentNumber();
+				if (mr.getReceivingDate()!=null)
+					res += " "+App.getMessage("from")+" "+DateUtils.formatDate(mr.getReceivingDate(), App.getMessage("locale.datePattern"))+"; ";
+				
+			}
+			return res;
+		}
+		
+		/**
+		 * Return total quantity of medicine from current batch, which 
+		 * received in this period from manufacturer
+		 * @return
+		 */
+		public Long getSumReceivings() {
+			if (sumReceivings==null){
+				String hql = "select sum(bm.quantity) from MedicineReceivingUA mr " +
+							"join mr.movements m join m.batches bm "+
+							"where bm.batch.id = " +batch.getId()+
+							" and mr.tbunit.id=#{userSession.workingTbunit.id} "+
+							getPeriodCondidtion("mr.receivingDate");
+				List<Object> lst = App.getEntityManager().createQuery(hql).getResultList();
+				if (lst.size()!=0){
+					if (lst.get(0)!=null) sumReceivings =(Long)lst.get(0);
+				}			
+			}
+			return sumReceivings;
+		}
+		
+		public Long getSumTransFromUnits() {
+			if (sumTransFromUnits == null)
+				sumTransFromUnits = getSumTransFromUnit(null);
+			return sumTransFromUnits;
+		}
+
 		public Long getSumTransFromTreatUnits() {
 			if (sumTransFromTreatUnits == null)
 				sumTransFromTreatUnits = getSumTransFromUnit(false);
@@ -177,7 +247,7 @@ public class ReportMedicinesSources {
 		 * @param main - if true, than consider only not health tb-units; false - only health tb-units
 		 * @return
 		 */
-		private Long getSumTransFromUnit(boolean main) {
+		private Long getSumTransFromUnit(Boolean main) {
 			Long res = null;
 			String hql = "select sum(bm.quantity) " +
 					"from BatchMovement bm " +
@@ -188,7 +258,7 @@ public class ReportMedicinesSources {
 							"from TransferBatch tb " +
 							"where tb.batch.id="+batch.getId() +
 								" and tb.transferItem.transfer.unitTo.id=#{userSession.workingTbunit.id}" +
-								" and tb.transferItem.transfer.unitFrom.treatmentHealthUnit="+(main?0:1)+
+								(main!=null?" and tb.transferItem.transfer.unitFrom.treatmentHealthUnit="+(main?0:1):"")+
 								" and tb.transferItem.transfer.status = 1)";
 			List<Object> lst = App.getEntityManager().createQuery(hql).getResultList();
 			if (lst.size()!=0){

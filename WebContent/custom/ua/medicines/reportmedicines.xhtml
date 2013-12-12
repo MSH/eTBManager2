@@ -84,7 +84,7 @@
 			#{messages['Batch.expiryDate']}
 		</th>
 		<th rowspan="2">
-			#{messages['uk_UA.reportMed.cols.orderNumber']}
+			#{reportMed.storehouse?messages['uk_UA.reportMed.cols.invoice']:messages['uk_UA.reportMed.cols.orderNumber']}
 		</th>
 		<th rowspan="2">
 			#{messages['uk_UA.reportMed.cols.stockIniDate']}
@@ -98,10 +98,10 @@
 	</tr>
 	<tr>
 		<th>
-			#{messages['uk_UA.reportMed.cols.getInPeriod.receiv']}
+			#{reportMed.storehouse?messages['uk_UA.reportMed.cols.getInPeriod.receiv.fromManufacturer']:messages['uk_UA.reportMed.cols.getInPeriod.receiv']}
 		</th>
 		<th>
-			#{messages['uk_UA.reportMed.cols.getInPeriod.transf']}
+			#{reportMed.storehouse?messages['uk_UA.reportMed.cols.getInPeriod.transf.all']:messages['uk_UA.reportMed.cols.getInPeriod.transf']}
 		</th>
 	</tr>
 	<a:repeat value="#{reportMed.resultList}" var="row">
@@ -135,16 +135,19 @@
 					<h:outputText value="#{row.batch.expiryDate}" converter="#{localeDateConverter}"/>
 				</td>
 				<td>
-					#{row.orderNumber}
+					<h:outputText value="#{row.invoiceNumber}" rendered="#{reportMed.storehouse}"/>
+					<h:outputText value="#{row.orderNumber}" rendered="#{!reportMed.storehouse}" />
 				</td>
 				<td>
 					#{row.stockInIniDate}
 				</td>
 				<td>
-					#{row.sumTransFromNotTreatUnits}
+					<h:outputText value="#{row.sumReceivings}" rendered="#{reportMed.storehouse}"/>
+					<h:outputText value="#{row.sumTransFromNotTreatUnits}" rendered="#{!reportMed.storehouse}" />
 				</td>
 				<td>
-					#{row.sumTransFromTreatUnits}
+					<h:outputText value="#{row.sumTransFromUnits}" rendered="#{reportMed.storehouse}"/>
+					<h:outputText value="#{row.sumTransFromTreatUnits}" rendered="#{!reportMed.storehouse}" />
 				</td>
 				<td>
 					#{row.dispensing}
