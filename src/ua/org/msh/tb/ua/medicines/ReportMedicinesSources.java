@@ -41,7 +41,7 @@ public class ReportMedicinesSources {
 		{
 			if (iniDate==null || endDate==null || source==null)
 				return new ArrayList<ReportMedicinesSources.ExtBatchItem>();
-			String hql="select bm.batch"+stockInIniDateSubQuery() +
+			String hql="select bm.batch"+stockInDateSubQuery(iniDate,false) + stockInDateSubQuery(endDate,true) +
 			" from BatchMovement bm " +
 			" join bm.movement m " +
 			"where bm.movement.id in (" +
@@ -58,13 +58,14 @@ public class ReportMedicinesSources {
 				ExtBatchItem item = new ExtBatchItem();
 				item.setBatch((Batch)vals[0]);
 				item.setStockInIniDate((Long)vals[1]);
+				item.setStockInEndDate((Long)vals[2]);
 				resultList.add(item);
 			}
 		}
 		return resultList;
 	}
 	
-	private String stockInIniDateSubQuery() {
+	/*private String stockInIniDateSubQuery() {
 		if (iniDate == null)
 			return ",0L ";
 		return ", (select sum(b.quantity * a.oper) " +
@@ -75,6 +76,19 @@ public class ReportMedicinesSources {
 					"and a.medicine.id=m.medicine.id " +
 					"and b.batch.id=bm.batch.id " +
 					"and ((a.date < '"+DateUtils.formatDate(iniDate,"yyyy-MM-dd")+"')))";// or (a.date = '"+DateUtils.formatDate(iniDate,"yyyy-MM-dd")+"' and a.recordDate <= m.recordDate)))";
+	}*/
+	
+	private String stockInDateSubQuery(Date d,boolean eq) {
+		if (d == null)
+			return ",0L ";
+		return ", (select sum(b.quantity * a.oper) " +
+				"from BatchMovement b " +
+				"join b.movement a " +
+				"where a.tbunit.id=m.tbunit.id " +
+					"and a.source.id=m.source.id " +
+					"and a.medicine.id=m.medicine.id " +
+					"and b.batch.id=bm.batch.id " +
+					"and ((a.date <"+(eq?"=":"")+" '"+DateUtils.formatDate(d,"yyyy-MM-dd")+"')))";// or (a.date = '"+DateUtils.formatDate(iniDate,"yyyy-MM-dd")+"' and a.recordDate <= m.recordDate)))";
 	}
 
 	/**
@@ -129,6 +143,7 @@ public class ReportMedicinesSources {
 		 * Quantity of this batch in first day of period
 		 */
 		private Long stockInIniDate;
+		private Long stockInEndDate;
 		
 		private Long sumReceivings;
 		private Long sumTransFromUnits;
@@ -305,6 +320,14 @@ public class ReportMedicinesSources {
 
 		public Long getStockInIniDate() {
 			return stockInIniDate;
+		}
+
+		public void setStockInEndDate(Long stockInEndDate) {
+			this.stockInEndDate = stockInEndDate;
+		}
+
+		public Long getStockInEndDate() {
+			return stockInEndDate;
 		}
 	}
 }
