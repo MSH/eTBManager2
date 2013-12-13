@@ -20,13 +20,13 @@
 		</rule>
 		
 		<rule if-outcome="canceled">
-			<redirect view-id="/custom/bd/cases/casedata.xhtml">
+			<redirect view-id="/cases/casedata.xhtml">
 				<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
 			</redirect>
 		</rule>
 
 		<rule if-outcome="persisted">
-			<redirect view-id="/custom/bd/cases/casedata.xhtml">
+			<redirect view-id="/cases/casedata.xhtml">
 				<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
 			</redirect>
 		</rule>

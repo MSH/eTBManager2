@@ -69,7 +69,7 @@ function diagnosisTypeClick(radio) {
 		</s:decorate>
 
 		<div id="div-btncancel">
-		<s:link styleClass="button-alt" style="float:right" view="/cases/casedata.xhtml">
+		<s:link styleClass="button-alt" style="float:right" view="/cases/casedata.xhtml" onclick="disableButton(this)">
 			<f:param name="id" value="#{caseHome.id}" />
 			<span>#{messages['form.cancel']}</span>
 		</s:link>

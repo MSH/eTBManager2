@@ -52,7 +52,7 @@
 		<span>#{messages['form.ok']}</span>
 	</a:commandLink>
  
-    <s:link view="/cases/casedata.xhtml" styleClass="button-alt">
+    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" onclick="disableButton(this)">
        	<f:param name="id" value="#{caseHome.id}"/>
        	<span>#{messages['form.cancel']}</span>
     </s:link>

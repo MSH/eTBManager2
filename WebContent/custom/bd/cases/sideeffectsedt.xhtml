@@ -102,7 +102,7 @@
 	</div>		
 		    
 	<div class="form-footer">
-		<a:commandLink action="#{sideEffectBDHome.save}" styleClass="button" reRender="main">
+		<a:commandLink action="#{sideEffectBDHome.save}" styleClass="button" reRender="main" onclick="if(!disableButton(this))return false;">
 			<span>#{messages['form.save']}</span>
 		</a:commandLink> 
 

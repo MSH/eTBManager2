@@ -68,10 +68,10 @@
         <a:commandLink action="#{examBiopsyHome.persist}"  styleClass="button" 
         	reRender="formexam,messages" 
         	oncomplete="this.disabled=false;"
-        	onclick="this.disabled=true;" >
+        	onclick="if(!disableButton(this))return false;" >
         	<span>#{messages['form.save']}</span>
         </a:commandLink>
-        <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true">
+        <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true" onclick="disableButton(this)">
          <span>#{messages['form.cancel']}</span>
         </a:commandLink>
    	</div>    

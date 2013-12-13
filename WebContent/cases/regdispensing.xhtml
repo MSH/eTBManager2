@@ -90,7 +90,7 @@
 			onclick="if (!disableButton(this)) return false;">
 			<span>#{messages['form.save']}</span>
 		</a:commandLink>
-		<s:link styleClass="button-alt" propagation="end" view="/cases/treatments.xhtml">
+		<s:link styleClass="button-alt" propagation="end" view="/cases/treatments.xhtml" onclick="disableButton(this)">
 			<f:param name="huid" value="#{registerDispensingHome.tbunitId}"/>
 			<span>#{messages['form.cancel']}</span>
 		</s:link>

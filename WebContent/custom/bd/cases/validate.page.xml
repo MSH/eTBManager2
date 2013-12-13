@@ -6,12 +6,12 @@
 
 	<navigation>
 		<rule if="#{not caseHome.canValidate}">
-			<redirect view-id="/custom/bd/cases/casedata.xhtml">
+			<redirect view-id="/cases/casedata.xhtml">
 				<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
 			</redirect>
 		</rule>
 		<rule if-outcome="validated">
-			<redirect view-id="/custom/bd/cases/casedata.xhtml">
+			<redirect view-id="/cases/casedata.xhtml">
 				<message>#{messages['cases.validate.success']}</message>
 				<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
 			</redirect>

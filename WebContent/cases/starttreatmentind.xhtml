@@ -179,7 +179,7 @@
 			reRender="messages,formtreat">
 			<span>#{messages['form.save']}</span>
 		</a:commandLink>
-		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
 			<f:param name="id" value="#{caseHome.id}" />
 			<span>#{messages['form.cancel']}</span>
 		</s:link>

@@ -364,7 +364,7 @@ function formButtonPost(button) {
 	
 	<div class="button-bar">
 	<a:commandLink action="#{treatmentHome.endRegimenChange}"
-		data="#{treatmentHome.validated}"
+		data="#{treatmentHome.validated}" onclick="if (!disableButton(this)) return false;" 
 		styleClass="button" reRender="regimenpnl,main"
 		oncomplete="if (!data) return false; Richfaces.hideModalPanel('regimendlg');">
 		<span>#{messages['form.ok']}</span>
