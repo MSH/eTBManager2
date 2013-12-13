@@ -71,10 +71,20 @@ public class PatientsQuery extends EntityQuery {
 	}
 
 	public List<Item> getPatientList() {
-		if (patientList == null)
-			createPatientList();
+		if(conditions().equals(""))
+			patientList = null;
+		else if (patientList == null)
+				createPatientList();
 
 		return patientList;
+	}
+	
+	@Override
+	public Long getResultCount() {
+		if(conditions().equals(""))
+			return new Long(0);
+		else
+			return super.getResultCount();
 	}
 	
 	@Override
