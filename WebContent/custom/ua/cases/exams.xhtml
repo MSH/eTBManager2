@@ -9,7 +9,7 @@
 
 <ui:param name="molecularBiologyHome" value="#{molecularBiologyUAHome}"/>
 <h:form>
-	<s:link view="/cases/edtexamhiv.xhtml" 
+	<s:link view="/cases/edtexamhiv.xhtml"  propagation="none" 
 		style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt" 
 		onclick="disableButton(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
@@ -88,7 +88,7 @@
     <div class="spacer" />
 
 	<s:link view="/cases/edtexammicroscopy.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" 
-		styleClass="button-alt" onclick="disableButton(this)">
+		 propagation="none" styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 		<span>#{messages['cases.details.newresult']}</span>
@@ -159,7 +159,7 @@
 
 	<h:panelGroup id="pnlculture">
 	<s:link view="/cases/edtexamculture.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" 
-		styleClass="button-alt" onclick="disableButton(this)">
+		 propagation="none" styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 		<span>#{messages['cases.details.newresult']}</span>
@@ -232,7 +232,7 @@
 	<h:panelGroup id="pnldst">	
 
 		<s:link view="/cases/edtexamdst.xhtml" style="float:right;"
-			rendered="#{caseHome.canEditExams}" styleClass="button-alt" onclick="disableButton(this)">
+			rendered="#{caseHome.canEditExams}"  propagation="none" styleClass="button-alt" onclick="disableButton(this)">
 			<f:param name="id" value="#{tbcase.id}"/>
 			<f:param name="examid" value="#{null}"/>
 			<span>#{messages['cases.details.newresult']}</span>
