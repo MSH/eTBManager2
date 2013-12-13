@@ -133,7 +133,7 @@ public class ReportTB01 extends PDFCreator {
 			if (phase.contains(pm.getPeriod()))
 				for (int i = 0; i < colSub; i++) {
 					MedicineComponent mc = pm.getMedicine().getComponentBySubstance(subInUse[i]);
-					if (mc!=null){
+					if (mc!=null && mc.getStrength()!=null){
 						BigDecimal dose = new BigDecimal(pm.getDoseUnit());
 						BigDecimal freq = new BigDecimal(pm.getFrequency());
 						BigDecimal sth = new BigDecimal(mc.getStrength());
@@ -388,7 +388,9 @@ public class ReportTB01 extends PDFCreator {
 		addTableHeader(App.getMessage("uk_UA.tb01pdf.7"),5);
 		
 		// CELL 6.1-3 begin
-			Integer caseCatId = cd.getRegistrationCategory().getValue().getId();
+			Integer caseCatId = 0;
+			if (cd.getRegistrationCategory().getValue()!=null)
+				caseCatId = cd.getRegistrationCategory().getValue().getId();
 			cell = generateCheckBoxTableCell(times10, "6.1.", caseCatId.intValue()==938221, App.getMessage("uk_UA.tb01pdf.6.1"));//cat1
 			cell.setColspan(2);
 			borderCell(true, true, false, false);
@@ -560,7 +562,10 @@ public class ReportTB01 extends PDFCreator {
 		//HEALTH SYSTEM begin
 			LinkedHashMap<String,Font> tmp_map = new LinkedHashMap<String, Font>();
 			tmp_map.put(App.getMessage("uk_UA.tb01pdf.tabhead1.col1.1"), times8);
-			tmp_map.put(tc.getNotificationUnit().getHealthSystem().getName().getDefaultName(), times8b);
+			String hs = getFieldForFill(73);
+			if (tc.getNotificationUnit()!=null && tc.getNotificationUnit().getHealthSystem()!=null)
+				hs = tc.getNotificationUnit().getHealthSystem().getName().getDefaultName();
+			tmp_map.put(hs, times8b);
 			cell = generateTableCell(tmp_map);
 			borderCell(true, true, true, false);
 			formatCell(Element.ALIGN_MIDDLE, Element.ALIGN_LEFT);
@@ -596,8 +601,10 @@ public class ReportTB01 extends PDFCreator {
 		//TBUNIT NAME & ADDRESS begin
 			tmp_map.clear();
 			tmp_map.put(App.getMessage("uk_UA.tb01pdf.tabhead1.col1.2"), times8);
-			tmp_map.put(tc.getNotificationUnit()+",", times8b);
-			tmp_map.put(tc.getNotificationUnit().getAddress(), times8b);
+			String tbu = getFieldForFill(89);
+			if (tc.getNotificationUnit()!=null)
+				tbu = tc.getNotificationUnit()+", "+(tc.getNotificationUnit().getAddress()!=null ? tc.getNotificationUnit().getAddress() : "");
+			tmp_map.put(tbu, times8b);
 			cell = generateTableCell(tmp_map);
 			formatCell(Element.ALIGN_MIDDLE, Element.ALIGN_LEFT);
 			borderCell(true, false, true, false);
@@ -627,7 +634,10 @@ public class ReportTB01 extends PDFCreator {
 			borderCell(false, false, false, true);
 			tab.addCell(cell);
 			
-			cell = generateTableCell(times8b, cd.getRegistrationCategory().getValue().getShortName().getDefaultName());
+			String cat=getFieldForFill(4);
+			if (cd.getRegistrationCategory().getValue()!=null)
+				cat = cd.getRegistrationCategory().getValue().getShortName().getDefaultName();
+			cell = generateTableCell(times8b, cat);
 			formatCell(Element.ALIGN_MIDDLE, Element.ALIGN_LEFT);
 			borderCell(false, false, false, true);
 			tab.addCell(cell);
@@ -823,7 +833,7 @@ public class ReportTB01 extends PDFCreator {
 			
 			addCellMiddleCenter(eb.getXray()!=null?getFieldDate(eb.getXray().getDate()):"",times10,true);
 			addCellMiddleCenter((eb.getXray()!=null&&eb.getXray().getResult()!=null)?String.valueOf(eb.getXray().getResult().ordinal()+1):"0",times10,true);
-			addCellMiddleCenter(eb.getXray()!=null?(eb.getXray().getDestruction()?"+":"-"):"",times10,true);
+			addCellMiddleCenter((eb.getXray()!=null&&eb.getXray().getDestruction()!=null)?(eb.getXray().getDestruction()?"+":"-"):"",times10,true);
 			
 			addCellMiddleCenter(eb.getMedexam()!=null?String.valueOf(eb.getMedexam().getWeight()):"",times10,true);
 		}
