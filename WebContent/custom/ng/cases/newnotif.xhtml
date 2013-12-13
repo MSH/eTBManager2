@@ -90,60 +90,60 @@ function checkfields() {
      <span> #{messages['form.new']} #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect]: messages[tbcase.classification.key]}</span>
 </h:commandLink>
 
-<s:decorate template="/layout/naveg.xhtml" rendered="#{patients.searching}">
+<s:decorate template="/layout/naveg.xhtml">
 	<ui:param name="list" value="#{patients}" />
-	<ui:param name="page" value="/cases/newnotif.xhtml" />
-</s:decorate>
-
+	<h:panelGroup id="res" rendered="#{not empty patientsbd.patientList}">
 
 	<h:dataTable value="#{patients.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
-	rendered="#{patients.searching and (not empty patients.patientList)}" width="680px" columnClasses="coll,colc,colc,coll">
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Patient.name']}" styleClass="collh">
-  			<f:param name="order" value="#{patients.order=='p.name,p.middleName'?'p.name desc,p.middleName desc':''}" />
+		width="680px" columnClasses="coll,colc,colc,coll">
+		<h:column>
+			<f:facet name="header">
+				<s:link value="#{messages['Patient.name']}" styleClass="collh">
+	  			<f:param name="order" value="#{patients.order=='p.name,p.middleName'?'p.name desc,p.middleName desc':''}" />
+				</s:link>
+			</f:facet>
+			
+				<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;">
+				<f:param name="pacid" value="#{it.patient.id}" />
+				<f:param name="cla" value="#{tbcase.classification}"/>
 			</s:link>
-		</f:facet>
 		
-			<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;">
-			<f:param name="pacid" value="#{it.patient.id}" />
-			<f:param name="cla" value="#{tbcase.classification}"/>
-		</s:link>
+			<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml"  
+				onclick="openWaitDlg();">
+				<f:param name="pacid" value="#{it.patient.id}" />
+				<f:param name="cla" value="#{tbcase.classification}"/>
+			</s:link>
+		</h:column>
 	
-		<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml"  
-			onclick="openWaitDlg();">
-			<f:param name="pacid" value="#{it.patient.id}" />
-			<f:param name="cla" value="#{tbcase.classification}"/>
-		</s:link>
-	</h:column>
-
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Patient.birthDate']}" >
-  			<f:param name="order" value="p.birthDate#{patients.order=='p.birthDate'?' desc':''}" />
-			</s:link>
-		</f:facet>
-		<h:outputText value="#{it.patient.birthDate}"  converter="localeDateConverter"/>
-	</h:column>
-
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Patient.recordNumber']}">
-  			<f:param name="order" value="p.recordNumber#{patients.order=='p.recordNumber'?' desc':''}" />
-			</s:link>
-		</f:facet>
-		#{it.patient.recordNumber}
-	</h:column>
-
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Patient.securityNumber']}" styleClass="collh">
-  			<f:param name="order" value="p.securityNumber#{patients.order=='p.securityNumber'?' desc':''}" />
-			</s:link>
-		</f:facet>
-		#{it.patient.securityNumber}
-	</h:column>
-</h:dataTable>
+		<h:column>
+			<f:facet name="header">
+				<s:link value="#{messages['Patient.birthDate']}" >
+	  			<f:param name="order" value="p.birthDate#{patients.order=='p.birthDate'?' desc':''}" />
+				</s:link>
+			</f:facet>
+			<h:outputText value="#{it.patient.birthDate}"  converter="localeDateConverter"/>
+		</h:column>
+	
+		<h:column>
+			<f:facet name="header">
+				<s:link value="#{messages['Patient.recordNumber']}">
+	  			<f:param name="order" value="p.recordNumber#{patients.order=='p.recordNumber'?' desc':''}" />
+				</s:link>
+			</f:facet>
+			#{it.patient.recordNumber}
+		</h:column>
+	
+		<h:column>
+			<f:facet name="header">
+				<s:link value="#{messages['Patient.securityNumber']}" styleClass="collh">
+	  			<f:param name="order" value="p.securityNumber#{patients.order=='p.securityNumber'?' desc':''}" />
+				</s:link>
+			</f:facet>
+			#{it.patient.securityNumber}
+		</h:column>
+	</h:dataTable>
+	</h:panelGroup>
+</s:decorate>
 </h:panelGroup>
 
 </h:form>
