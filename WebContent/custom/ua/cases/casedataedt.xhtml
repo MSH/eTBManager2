@@ -429,7 +429,8 @@ function showOtherHosp() {
 		
 			<a:commandLink reRender="prevtreats" styleClass="button" 
 				action="#{prevTBTreatmentUAHome.refresh()}"
-				onclick="if (!disableButton(this)) return false;" oncomplete="enableButton();" style="float:right;">
+				onclick="if (!disableButton(this)) return false;" oncomplete="enableButton();" style="float:right;" 
+				rendered="#{id!=null}">
 				<span>#{messages['form.refresh']}</span>
 			</a:commandLink>
 		
