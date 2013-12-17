@@ -24,6 +24,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.transactionlog.PropertyLog;
 
 /**
  * Holds information about a side effect of a TB case
@@ -35,7 +36,7 @@ import org.msh.tb.entities.enums.YesNoType;
 @DiscriminatorColumn(name="DISCRIMINATOR", discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue("gen")
 @Table(name="casesideeffect")
-public class CaseSideEffect {
+public class CaseSideEffect implements Transactional, SyncKey {
 
 
 	@Id
@@ -70,7 +71,14 @@ public class CaseSideEffect {
 	
 	@Lob
 	private String comment;
-	
+		
+	/**
+	 * Point to the transaction log that contains information about the last time this entity was changed (updated or created)
+	 */
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="lastTransaction_ID")
+	@PropertyLog(ignore=true)
+	private TransactionLog lastTransaction;
 	
 	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
 	// map an XML node to a property in the model
@@ -217,5 +225,21 @@ public class CaseSideEffect {
 	 */
 	public void setSubstance2(Substance substance2) {
 		this.substance2 = substance2;
+	}
+
+	/**
+	 * @return the lastTransaction
+	 */
+	@Override
+	public TransactionLog getLastTransaction() {
+		return lastTransaction;
+	}
+
+	/**
+	 * @param lastTransaction the lastTransaction to set
+	 */
+	@Override
+	public void setLastTransaction(TransactionLog lastTransaction) {
+		this.lastTransaction = lastTransaction;
 	}
 }

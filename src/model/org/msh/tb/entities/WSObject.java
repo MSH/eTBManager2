@@ -40,14 +40,6 @@ public class WSObject implements Serializable, Transactional {
 	@JoinColumn(name="lastTransaction_ID")
 	@PropertyLog(ignore=true)
 	private TransactionLog lastTransaction;
-	
-	/**
-	 * Point to the transaction log that contains information about the creation of this entity
-	 */
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="createTransaction_ID")
-	@PropertyLog(ignore=true)
-	private TransactionLog createTransaction;
 
 
 	/**
@@ -75,26 +67,10 @@ public class WSObject implements Serializable, Transactional {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.msh.tb.entities.Transactional#getCreateTransaction()
-	 */
-	@Override
-	public TransactionLog getCreateTransaction() {
-		return createTransaction;
-	}
-
-	/* (non-Javadoc)
 	 * @see org.msh.tb.entities.Transactional#setLastTransaction(org.msh.tb.entities.TransactionLog)
 	 */
 	@Override
 	public void setLastTransaction(TransactionLog transactionLog) {
 		this.lastTransaction = transactionLog;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.msh.tb.entities.Transactional#setCreateTransaction(org.msh.tb.entities.TransactionLog)
-	 */
-	@Override
-	public void setCreateTransaction(TransactionLog transactionLog) {
-		this.createTransaction = transactionLog;
 	}
 }

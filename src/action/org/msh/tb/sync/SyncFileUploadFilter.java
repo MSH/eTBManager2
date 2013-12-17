@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.msh.tb.sync.actions.ReceiveSyncFileAction;
 
 /**
  * Receive the file send from the desktop application
@@ -58,7 +59,7 @@ public class SyncFileUploadFilter implements Filter {
 
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		factory.setSizeThreshold(maxMemSize);
-		factory.setRepository(File.createTempFile("etbm", null));
+		factory.setRepository(new File(System.getProperty("java.io.tmpdir")));  //File.createTempFile("etbm", null));
 		
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		try {

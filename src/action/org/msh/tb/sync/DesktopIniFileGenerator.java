@@ -40,8 +40,8 @@ import com.rmemoria.datastream.StreamContext;
  * @author Ricardo Memoria
  *
  */
-@Name("desktopIniGeneratorService")
-public class DesktopIniGeneratorService implements ObjectProvider, DataInterceptor {
+@Name("desktopIniFileGenerator")
+public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor {
 
 	@In EntityManager entityManager;
 
@@ -56,6 +56,7 @@ public class DesktopIniGeneratorService implements ObjectProvider, DataIntercept
 	private int firstResult;
 	private List list;
 	private List<String> hqls;
+	private List<String> sqlversions;
 	private EntityManager em;
 	private boolean initialized;
 	private ServerSignature serverSignature;
@@ -65,42 +66,54 @@ public class DesktopIniGeneratorService implements ObjectProvider, DataIntercept
 	private List<EntityLastVersion> entityVersions;
 	
 	
-	public DesktopIniGeneratorService() {
+	public DesktopIniFileGenerator() {
 //		MAX_RESULTS = 50;
 		hqls = new ArrayList<String>();
+		sqlversions = new ArrayList<String>();
 
-		hqls.add("from UserProfile where workspace.id = #{desktopIniGeneratorService.workspaceId}");
-		hqls.add("from CountryStructure where workspace.id = #{desktopIniGeneratorService.workspaceId}");
-		hqls.add("from AdministrativeUnit where workspace.id = #{desktopIniGeneratorService.workspaceId} order by code");
-		hqls.add("from HealthSystem where workspace.id = #{desktopIniGeneratorService.workspaceId}");
-		hqls.add("from Source where workspace.id = #{desktopIniGeneratorService.workspaceId}");
-		hqls.add("from Tbunit where workspace.id = #{desktopIniGeneratorService.workspaceId}");
-		hqls.add("select id, authorizerUnit.id, firstLineSupplier.id, secondLineSupplier.id from Tbunit where workspace.id = #{desktopIniGeneratorService.workspaceId}");
+		hqls.add("from UserProfile a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
+		hqls.add("from CountryStructure a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
+		hqls.add("from AdministrativeUnit a where a.workspace.id = #{desktopIniFileGenerator.workspaceId} order by code");
+		hqls.add("from HealthSystem a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
+		hqls.add("from Source a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
+		hqls.add("from Tbunit a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
+		hqls.add("select id, authorizerUnit.id, firstLineSupplier.id, secondLineSupplier.id from Tbunit where workspace.id = #{desktopIniFileGenerator.workspaceId}");
 		unitLinkIndex = hqls.size() - 1;
-		hqls.add("from Substance where workspace.id = #{desktopIniGeneratorService.workspaceId}");
-		hqls.add("from Medicine where workspace.id = #{desktopIniGeneratorService.workspaceId}");
-		hqls.add("from Regimen where workspace.id = #{desktopIniGeneratorService.workspaceId}");
-		hqls.add("from Laboratory where workspace.id = #{desktopIniGeneratorService.workspaceId}");
-		hqls.add("from FieldValue where workspace.id = #{desktopIniGeneratorService.workspaceId}");
-		hqls.add("from UserWorkspace uw join fetch uw.user left join fetch uw.adminUnit where uw.tbunit.id = #{desktopIniGeneratorService.unitId}");
-		hqls.add("from TbCase a join fetch a.patient where a.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
+		hqls.add("from Substance a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
+		hqls.add("from Medicine a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
+		hqls.add("from Regimen a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
+		hqls.add("from Laboratory a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
+		hqls.add("from FieldValue a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
+		hqls.add("from UserWorkspace a join fetch a.user left join fetch a.adminUnit where a.tbunit.id = #{desktopIniFileGenerator.unitId}");
+//		hqls.add("from TbCase a join fetch a.patient where a.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 
 		// case data
 		hqls.add("from TbCase a join fetch a.patient left join fetch a.regimen left join fetch a.notifAddress.adminUnit "
-				+ "where a.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
-		hqls.add("from PrescribedMedicine a join fetch a.tbcase join fetch a.medicine join fetch a.source where a.tbcase.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
-		hqls.add("from TreatmentHealthUnit a join fetch a.tbunit join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
-		hqls.add("from ExamCulture a join fetch a.tbcase left join fetch a.method left join fetch a.laboratory where a.tbcase.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
-		hqls.add("from ExamMicroscopy a join fetch a.tbcase left join fetch a.method left join fetch a.laboratory where a.tbcase.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
-		hqls.add("from MedicalExamination a join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
-		hqls.add("from ExamHIV a join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
-		hqls.add("from ExamXRay a join fetch a.tbcase left join fetch a.presentation where a.tbcase.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
-		hqls.add("from ExamDST a join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
-		hqls.add("from ExamDSTResult a join fetch a.substance join fetch a.exam where a.exam.tbcase.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
-		hqls.add("from CaseDispensing a join fetch a.tbcase left join fetch a.dispensingDays where a.tbcase.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
-		hqls.add("from TbContact a join fetch a.tbcase left join fetch a.contactType left join fetch a.conduct where a.tbcase.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
-		hqls.add("from CaseSideEffect a join fetch a.tbcase left join fetch a.substance left join fetch a.substance2 where a.tbcase.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
-		hqls.add("from CaseComorbidity a join fetch a.tbcase left join fetch a.comorbidity where a.tbcase.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
+				+ "where a.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from PrescribedMedicine a join fetch a.tbcase join fetch a.medicine join fetch a.source where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from TreatmentHealthUnit a join fetch a.tbunit join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from ExamCulture a join fetch a.tbcase left join fetch a.method left join fetch a.laboratory where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from ExamMicroscopy a join fetch a.tbcase left join fetch a.method left join fetch a.laboratory where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from MedicalExamination a join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from ExamHIV a join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from ExamXRay a join fetch a.tbcase left join fetch a.presentation where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from ExamDST a join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from ExamDSTResult a join fetch a.substance join fetch a.exam where a.exam.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from CaseDispensing a join fetch a.tbcase left join fetch a.dispensingDays where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from TbContact a join fetch a.tbcase left join fetch a.contactType left join fetch a.conduct where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from CaseSideEffect a join fetch a.tbcase left join fetch a.substance left join fetch a.substance2 where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from CaseComorbidity a join fetch a.tbcase left join fetch a.comorbidity where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+	}
+
+
+	/**
+	 * Add the queries to be executed
+	 * @param hql is the HQL instruction to retrieve the entities
+	 * @param sql is the SQL instruction to retrieve the last entity version
+	 */
+	protected void addQuery(String hql, String sql) {
+		hqls.add(hql);
+		sqlversions.add(sql);
 	}
 	
 	/**
@@ -198,11 +211,17 @@ public class DesktopIniGeneratorService implements ObjectProvider, DataIntercept
 	 * @return
 	 */
 	private List getNextList() {
+		// the entityVersions list is the last one to be processed.
+		// if the current list is equals entityVerions, so it's the last one 
+		// and must return null
+		if (list == entityVersions)
+			return null;
+
 		// is the end of the list ?
 		if (recordIndex < MAX_RESULTS) {
 			queryIndex++;
 			if (queryIndex >= hqls.size())
-				return null;
+				return entityVersions;
 			recordIndex = 0;
 			firstResult = 0;
 		}
@@ -211,8 +230,14 @@ public class DesktopIniGeneratorService implements ObjectProvider, DataIntercept
 		}
 
 		em.clear();
-		
+
 		String hql = hqls.get(queryIndex);
+
+		// is the first list of the entity ?
+		if (firstResult == 0) {
+			processEntityVersion(hql);
+		}
+
 		list = em.createQuery(hql)
 				.setFirstResult(firstResult)
 				.setMaxResults(MAX_RESULTS)
@@ -229,6 +254,37 @@ public class DesktopIniGeneratorService implements ObjectProvider, DataIntercept
 
 		return list;
 	}
+
+	
+	/**
+	 * Process entity
+	 * @param hql is the HQL instruction containing the data
+	 */
+	protected void processEntityVersion(String hql) {
+		String[] s = hql.split(" ");
+		// is an entity query
+		if ((s.length == 0) || (!s[0].equals("from")))
+			return;
+		
+		String entityName = s[1];
+
+		String sql = "select max(id) from transactionlog where entityClass = :ent and workspacelog_id = :id";
+		Integer val = (Integer)em.createNativeQuery(sql)
+				.setParameter("id", workspaceId)
+				.setParameter("ent", entityName)
+				.getSingleResult();
+		if (val == null)
+			return;
+
+		EntityLastVersion  ver = new EntityLastVersion();
+		ver.setEntityClass(entityName);
+		ver.setLastVersion(val);
+
+		if (entityVersions == null)
+			entityVersions = new ArrayList<EntityLastVersion>();
+		entityVersions.add(ver);
+	}
+	
 	
 	/**
 	 * Return object containing the links between units. They can't be represented in the TB Unit object

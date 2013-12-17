@@ -4,12 +4,15 @@
 package org.msh.tb.sync;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Date;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.App;
 import org.msh.tb.application.tasks.AsyncTaskImpl;
 import org.msh.tb.entities.ClientSyncResult;
+import org.msh.tb.entities.UserWorkspace;
 
 /**
  * @author Ricardo Memoria
@@ -21,6 +24,7 @@ public class SyncFileTask extends AsyncTaskImpl {
 	private File file;
 	private String token;
 	private String errorMessage;
+	private UserWorkspace userWorkspace;
 	
 	/** {@inheritDoc}
 	 */
@@ -30,6 +34,8 @@ public class SyncFileTask extends AsyncTaskImpl {
 		if (file == null)
 			throw new RuntimeException("File not informed");
 		token = (String)getParameter("token");
+		
+		userWorkspace = (UserWorkspace)getParameter("userWorkspace");
 	}
 
 	/** {@inheritDoc}
@@ -37,26 +43,38 @@ public class SyncFileTask extends AsyncTaskImpl {
 	@Override
 	protected void execute() {
 		try {
-			for (int i = 1; i <= 10; i++) {
-				System.out.println("Running step " + i + " of 10");
-				Thread.sleep(1000);
-			}
-		} catch (InterruptedException e) {
+			doSync();
+		} catch (Exception e) {
 			e.printStackTrace();
+			errorMessage = e.getMessage();
 		}
-		
-		errorMessage = "This is just a test";
-
-/*		SyncFileImporter importer = new SyncFileImporter();
-		importer.start(file);
-
-		errorMessage = importer.getErrorMessage();
-		if (errorMessage != null)
-			return;
-*/
-		// TODO generate answer file
 	}
 
+	
+	/**
+	 * Import the file sent by the client and generate the answer file
+	 * @throws Exception
+	 */
+	protected void doSync() throws Exception {
+		// import the file sent by the client
+		SyncFileImporter importer = new SyncFileImporter();
+		importer.start(file);
+
+		// generate the answer file to be downloaded by the client
+		DesktopAnswerFileGenerator answerGenerator = (DesktopAnswerFileGenerator)Component.getInstance("desktopAnswerFileGenerator");
+		answerGenerator.setKeyList(importer.getEntityKeys());
+		answerGenerator.setClientEntityVersions(importer.getEntityVersions());
+
+		File outFile = DesktopAnswerFileGenerator.getAnswerFileName(token);
+		System.out.println(outFile);
+		FileOutputStream out = new FileOutputStream(outFile);
+
+		userWorkspace = App.getEntityManager().find(UserWorkspace.class, userWorkspace.getId());
+		answerGenerator.generateFile(userWorkspace.getTbunit(), out);
+		out.close();
+	}
+	
+	
 	/**
 	 * 
 	 */

@@ -21,5 +21,71 @@
 	        <column name="answerFileName" type="varchar(100)"/>
 	    </createTable>
 	</changeSet>
+	
+	<changeSet id="17.2" author="rmemoria" runInTransaction="true">
+	    <addColumn tableName="userworkspace">
+	        <column name="lastTransaction_ID" type="int" />
+	        <column name="createTransaction_ID" type="int" />
+	    </addColumn>
 
+	    <addForeignKeyConstraint constraintName="fkuserworkspace_createtx" 
+		    referencedTableName="transactionlog" referencedColumnNames="id" 
+		    baseTableName="userworkspace" baseColumnNames="createTransaction_ID"  onDelete="CASCADE" onUpdate="CASCADE"/>
+
+	    <addForeignKeyConstraint constraintName="fkuserworkspace_lasttx" 
+		    referencedTableName="transactionlog" referencedColumnNames="id" 
+		    baseTableName="userworkspace" baseColumnNames="lastTransaction_ID"  onDelete="CASCADE" onUpdate="CASCADE"/>
+	</changeSet>
+	
+	<changeSet id="17.3" author="rmemoria" runInTransaction="true">
+	    <createIndex tableName="transactionlog" indexName="IDX_WS_EntityClass">
+	        <column name="workspacelog_id"/>
+	        <column name="entityClass"/>
+	    </createIndex>
+	</changeSet>
+	
+	<changeSet id="17.4" author="rmemoria" runInTransaction="true">
+	    <addColumn tableName="prescribedmedicine">
+	        <column name="lastTransaction_ID" type="int" />
+	    </addColumn>
+
+	    <addForeignKeyConstraint constraintName="fkprescmed_lasttx" 
+		    referencedTableName="transactionlog" referencedColumnNames="id" 
+		    baseTableName="prescribedmedicine" baseColumnNames="lastTransaction_ID"  onDelete="CASCADE" onUpdate="CASCADE"/>
+
+	    <addColumn tableName="treatmenthealthunit">
+	        <column name="lastTransaction_ID" type="int" />
+	    </addColumn>
+
+	    <addForeignKeyConstraint constraintName="fktreathu_lasttx" 
+		    referencedTableName="transactionlog" referencedColumnNames="id" 
+		    baseTableName="treatmenthealthunit" baseColumnNames="lastTransaction_ID"  onDelete="CASCADE" onUpdate="CASCADE"/>
+
+	    <addColumn tableName="casecomorbidity">
+	        <column name="lastTransaction_ID" type="int" />
+	    </addColumn>
+
+	    <addForeignKeyConstraint constraintName="fkcasecom_lasttx" 
+		    referencedTableName="transactionlog" referencedColumnNames="id" 
+		    baseTableName="casecomorbidity" baseColumnNames="lastTransaction_ID"  onDelete="CASCADE" onUpdate="CASCADE"/>
+
+	    <addColumn tableName="casesideeffect">
+	        <column name="lastTransaction_ID" type="int" />
+	    </addColumn>
+
+	    <addForeignKeyConstraint constraintName="fkcasese_lasttx" 
+		    referencedTableName="transactionlog" referencedColumnNames="id" 
+		    baseTableName="casesideeffect" baseColumnNames="lastTransaction_ID"  onDelete="CASCADE" onUpdate="CASCADE"/>
+	</changeSet>
+	
+	<changeSet id="17.5" author="rmemoria" runInTransaction="true">
+	    <addColumn tableName="casedispensing">
+	        <column name="lastTransaction_ID" type="int" />
+	    </addColumn>
+
+	    <addForeignKeyConstraint constraintName="fkcasedisp_lasttx" 
+		    referencedTableName="transactionlog" referencedColumnNames="id" 
+		    baseTableName="casedispensing" baseColumnNames="lastTransaction_ID"  onDelete="CASCADE" onUpdate="CASCADE"/>
+	</changeSet>
+	
 </databaseChangeLog>

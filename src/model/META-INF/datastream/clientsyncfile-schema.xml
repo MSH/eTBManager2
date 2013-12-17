@@ -5,7 +5,9 @@
 
         <objectGraph name="system" class="org.msh.tb.sync.ServerSignature" />
         
-        <objectGraph name="version" class="org.msh.tb.entities.EntityLastVersion">
+        <objectGraph name="version" class="org.msh.tb.sync.EntityLastVersion">
+            <property name="entityClass" elementName="entity" xmlAttribute="true" />
+            <property name="lastVersion" elementName="number" xmlAttribute="true" />
         </objectGraph>
         
         <!-- TB CASES -->
@@ -15,13 +17,11 @@
             <property name="version" use="IGNORE" />
             <property name="patient" >
                 <objectGraph name="patient" class="org.msh.tb.entities.Patient">
+            		<property name="id" xmlAttribute="true" use="REQUIRED" />
             		<property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            		<property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
             		<property name="cases" use="IGNORE" />
+		            <property name="lastTransaction" use="IGNORE" />
             		<property name="workspace" use="IGNORE" />
-            		<property name="name.name" elementName="name" />
-            		<property name="name.middleName" elementName="middleName" />
-            		<property name="name.lastName" elementName="lastName" />
             	</objectGraph>
             </property>
             <property name="classification" xmlAttribute="true" />
@@ -63,9 +63,8 @@
             <property name="numContaminated" use="IGNORE" />
             <property name="numSusceptible" use="IGNORE" />
             <property name="results" >
-        		<objectGraph name="dstresult" class="org.msh.etbm.entities.ExamDSTResult" parentProperty="exam">
+        		<objectGraph name="dstresult" class="org.msh.tb.entities.ExamDSTResult" parentProperty="exam">
             		<property name="id" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
-            		<property name="syncData.serverId" elementName="id" xmlAttribute="true" />
             		<property name="substance.id" elementName="substance" use="REQUIRED" xmlAttribute="true"/>
             		<property name="result" use="REQUIRED" xmlAttribute="true"/>
         		</objectGraph>

@@ -2,8 +2,10 @@ package org.msh.tb.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,10 +17,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="casedispensing")
-public class CaseDispensing implements Serializable {
+public class CaseDispensing implements Serializable, Transactional, SyncKey {
 	private static final long serialVersionUID = -4617800123206697915L;
 
 	@Id
@@ -41,6 +44,14 @@ public class CaseDispensing implements Serializable {
 	@OneToOne
 	@PrimaryKeyJoinColumn
 	private CaseDispensingDays dispensingDays;
+	
+	/**
+	 * Point to the transaction log that contains information about the last time this entity was changed (updated or created)
+	 */
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="lastTransaction_ID")
+	@PropertyLog(ignore=true)
+	private TransactionLog lastTransaction;
 
 	@Transient
 	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
@@ -150,5 +161,19 @@ public class CaseDispensing implements Serializable {
 	 */
 	public void setTotalDays(int totalDays) {
 		this.totalDays = totalDays;
+	}
+
+	/** {@inheritDoc}
+	 */
+	@Override
+	public TransactionLog getLastTransaction() {
+		return lastTransaction;
+	}
+
+	/** {@inheritDoc}
+	 */
+	@Override
+	public void setLastTransaction(TransactionLog transactionLog) {
+		this.lastTransaction = transactionLog;
 	}
 }

@@ -16,20 +16,8 @@ public interface Transactional {
 	public TransactionLog getLastTransaction();
 	
 	/**
-	 * Get the transaction log that created the entity
-	 * @return
-	 */
-	public TransactionLog getCreateTransaction();
-	
-	/**
 	 * Change the last transaction log executed on the entity
 	 * @param transactionLog
 	 */
 	public void setLastTransaction(TransactionLog transactionLog);
-	
-	/**
-	 * Change the transaction log that created the entity
-	 * @param transactionLog
-	 */
-	public void setCreateTransaction(TransactionLog transactionLog);
 }

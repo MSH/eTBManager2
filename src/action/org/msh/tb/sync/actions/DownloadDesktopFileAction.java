@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.msh.tb.sync;
+package org.msh.tb.sync.actions;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
@@ -21,6 +22,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.web.Session;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.sync.DesktopIniFileGenerator;
 import org.msh.tb.webservices.RemoteActionHandler;
 
 /**
@@ -29,8 +31,8 @@ import org.msh.tb.webservices.RemoteActionHandler;
  * @author Ricardo Memoria
  *
  */
-@Name("generateDesktopFileAction")
-public class GenerateDesktopFileAction {
+@Name("downloadDesktopFileAction")
+public class DownloadDesktopFileAction {
 	/**
 	 * Buffer size used when generating file to the stream
 	 */
@@ -55,6 +57,7 @@ public class GenerateDesktopFileAction {
 		if (unitId == null)
 			return;
 
+		Date dt = new Date();
 		// get unit to generate file
 		Tbunit unit = entityManager.find(Tbunit.class, unitId);
 		if (unit == null)
@@ -64,7 +67,7 @@ public class GenerateDesktopFileAction {
 		BufferedOutputStream fout = new BufferedOutputStream( new FileOutputStream(file) );
 		try {
 			// generate the file
-			DesktopIniGeneratorService srv = (DesktopIniGeneratorService)Component.getInstance("desktopIniGeneratorService");
+			DesktopIniFileGenerator srv = (DesktopIniFileGenerator)Component.getInstance("desktopIniFileGenerator");
 			srv.generateFile(unit, fout);
 		} finally {
 			fout.close();
@@ -78,6 +81,10 @@ public class GenerateDesktopFileAction {
     	filename += ".etbm.pkg";
 
 		sendFile(file, filename);
+		
+		// display the time to generate the file
+		Long millis = (new Date()).getTime() - dt.getTime();
+		System.out.println("Desktop gen time = " + (millis / 1000) + "secs " + (millis % 1000) + "z");
 		
 		// generate the file
 //		DesktopIniGeneratorService srv = (DesktopIniGeneratorService)Component.getInstance("desktopIniGeneratorService");

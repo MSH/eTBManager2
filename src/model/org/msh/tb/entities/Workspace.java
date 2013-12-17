@@ -162,11 +162,6 @@ public class Workspace implements Serializable, Transactional {
 	@PropertyLog(ignore=true)
 	private TransactionLog lastTransaction;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="createTransaction_ID")
-	@PropertyLog(ignore=true)
-	private TransactionLog createTransaction;
-
 
 
 	public WeeklyFrequency[] getWeeklyFrequencies() {
@@ -524,27 +519,11 @@ public class Workspace implements Serializable, Transactional {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.msh.tb.entities.Transactional#getCreateTransaction()
-	 */
-	@Override
-	public TransactionLog getCreateTransaction() {
-		return createTransaction;
-	}
-
-	/* (non-Javadoc)
 	 * @see org.msh.tb.entities.Transactional#setLastTransaction(org.msh.tb.entities.TransactionLog)
 	 */
 	@Override
 	public void setLastTransaction(TransactionLog transactionLog) {
 		this.lastTransaction = transactionLog;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.msh.tb.entities.Transactional#setCreateTransaction(org.msh.tb.entities.TransactionLog)
-	 */
-	@Override
-	public void setCreateTransaction(TransactionLog transactionLog) {
-		this.createTransaction = transactionLog;
 	}
 
 	public boolean isUlaActive() {

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.persistence.Column;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,7 +31,7 @@ import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
  *
  */
 @MappedSuperclass
-public class CaseData {
+public class CaseData implements Transactional, SyncKey {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -48,6 +49,16 @@ public class CaseData {
 	@JoinColumn(name="CASE_ID")
 	@NotNull
 	private TbCase tbcase;
+	
+	
+	/**
+	 * Point to the transaction log that contains information about the last time this entity was changed (updated or created)
+	 */
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="lastTransaction_ID")
+	@PropertyLog(ignore=true)
+	private TransactionLog lastTransaction;
+		
 	
 	@Transient
 	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
@@ -151,6 +162,20 @@ public class CaseData {
 		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 		String s = dateFormat.format(getDate());
 		return s + " - " + getTbcase().getPatient().getFullName();
+	}
+
+	/**
+	 * @return the lastTransaction
+	 */
+	public TransactionLog getLastTransaction() {
+		return lastTransaction;
+	}
+
+	/**
+	 * @param lastTransaction the lastTransaction to set
+	 */
+	public void setLastTransaction(TransactionLog lastTransaction) {
+		this.lastTransaction = lastTransaction;
 	}
 
 }

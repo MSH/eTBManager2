@@ -7,6 +7,7 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,7 +29,7 @@ import org.msh.tb.transactionlog.PropertyLog;
 @DiscriminatorColumn(name="DISCRIMINATOR", discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue("gen")
 @Table(name="tbcontact")
-public class TbContact implements Serializable {
+public class TbContact implements Serializable, Transactional, SyncKey {
 	private static final long serialVersionUID = -6862380284209711375L;
 
 	@Id
@@ -66,6 +67,15 @@ public class TbContact implements Serializable {
 	@Lob
 	@PropertyLog(messageKey="global.comments")
 	private String comments;
+	
+	
+	/**
+	 * Point to the transaction log that contains information about the last time this entity was changed (updated or created)
+	 */
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="lastTransaction_ID")
+	@PropertyLog(ignore=true)
+	private TransactionLog lastTransaction;
 	
 	
 	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
@@ -226,4 +236,20 @@ public class TbContact implements Serializable {
 	public void setDateOfExamination(Date dateOfExamination) {
 		this.dateOfExamination = dateOfExamination;
 }
+
+	/**
+	 * @return the lastTransaction
+	 */
+	@Override
+	public TransactionLog getLastTransaction() {
+		return lastTransaction;
+	}
+
+	/**
+	 * @param lastTransaction the lastTransaction to set
+	 */
+	@Override
+	public void setLastTransaction(TransactionLog lastTransaction) {
+		this.lastTransaction = lastTransaction;
+	}
 }

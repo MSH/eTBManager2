@@ -63,7 +63,7 @@ import org.msh.utils.date.Period;
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @Table(name="tbcase")
-public class TbCase implements Serializable, Transactional {
+public class TbCase implements Serializable, Transactional, SyncKey {
 	private static final long serialVersionUID = 7221451624723376561L;
 
 	@Id
@@ -312,15 +312,6 @@ public class TbCase implements Serializable, Transactional {
 	@PropertyLog(ignore=true)
 	private TransactionLog lastTransaction;
 	
-	/**
-	 * Point to the transaction log that contains information about the creation of this entity
-	 */
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="createTransaction_ID")
-	@PropertyLog(ignore=true)
-	private TransactionLog createTransaction;
-	
-	
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -556,7 +547,7 @@ public class TbCase implements Serializable, Transactional {
 			return code;
 		}
 		case VALIDATION_NUMBER:
-			if (getCaseNumber() == null)
+			if ((getCaseNumber() == null) || (getValidationState() == ValidationState.WAITING_VALIDATION))
 				 return Messages.instance().get("cases.nonumber");
 			else return formatCaseNumber(patient.getRecordNumber(), caseNumber);
 		default:
@@ -1357,27 +1348,11 @@ public class TbCase implements Serializable, Transactional {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.msh.tb.entities.Transactional#getCreateTransaction()
-	 */
-	@Override
-	public TransactionLog getCreateTransaction() {
-		return createTransaction;
-	}
-
-	/* (non-Javadoc)
 	 * @see org.msh.tb.entities.Transactional#setLastTransaction(org.msh.tb.entities.TransactionLog)
 	 */
 	@Override
 	public void setLastTransaction(TransactionLog transactionLog) {
 		this.lastTransaction = transactionLog;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.msh.tb.entities.Transactional#setCreateTransaction(org.msh.tb.entities.TransactionLog)
-	 */
-	@Override
-	public void setCreateTransaction(TransactionLog transactionLog) {
-		this.createTransaction = transactionLog;
 	}
 
 

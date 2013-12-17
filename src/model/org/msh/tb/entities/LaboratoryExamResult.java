@@ -30,7 +30,7 @@ import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
  *
  */
 @MappedSuperclass
-public abstract class LaboratoryExamResult implements Serializable, Transactional {
+public abstract class LaboratoryExamResult implements Serializable, Transactional, SyncKey {
 	private static final long serialVersionUID = 3229952267481224824L;
 
 	@Id
@@ -76,14 +76,6 @@ public abstract class LaboratoryExamResult implements Serializable, Transactiona
 	@JoinColumn(name="lastTransaction_ID")
 	@PropertyLog(ignore=true)
 	private TransactionLog lastTransaction;
-	
-	/**
-	 * Point to the transaction log that contains information about the creation of this entity
-	 */
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="createTransaction_ID")
-	@PropertyLog(ignore=true)
-	private TransactionLog createTransaction;
 
 	@Transient
 	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
@@ -242,26 +234,10 @@ public abstract class LaboratoryExamResult implements Serializable, Transactiona
 	}
 
 	/* (non-Javadoc)
-	 * @see org.msh.tb.entities.Transactional#getCreateTransaction()
-	 */
-	@Override
-	public TransactionLog getCreateTransaction() {
-		return createTransaction;
-	}
-
-	/* (non-Javadoc)
 	 * @see org.msh.tb.entities.Transactional#setLastTransaction(org.msh.tb.entities.TransactionLog)
 	 */
 	@Override
 	public void setLastTransaction(TransactionLog transactionLog) {
 		this.lastTransaction = transactionLog;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.msh.tb.entities.Transactional#setCreateTransaction(org.msh.tb.entities.TransactionLog)
-	 */
-	@Override
-	public void setCreateTransaction(TransactionLog transactionLog) {
-		this.createTransaction = transactionLog;
 	}
 }

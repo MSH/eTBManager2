@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.msh.tb.sync;
+package org.msh.tb.sync.actions;
 
 import java.io.PrintWriter;
 
@@ -11,8 +11,8 @@ import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.App;
 import org.msh.tb.application.tasks.AsyncTask;
 import org.msh.tb.application.tasks.TaskManager;
-import org.msh.tb.application.tasks.TaskStatus;
 import org.msh.tb.entities.ClientSyncResult;
+import org.msh.tb.sync.SyncFileTask;
 
 /**
  * Generate response about the status of the processing of the
@@ -24,14 +24,14 @@ import org.msh.tb.entities.ClientSyncResult;
 @Name("syncStatusAction")
 public class SyncStatusAction extends StandardAction {
 
-	private String userToken;
+	private String fileToken;
 		
 	/**
 	 * Generate the response to the client
 	 */
 	@Override
 	protected void generateResponse() {
-		if (userToken == null)
+		if (fileToken == null)
 			throw new RuntimeException("Token was not defined");
 
 		PrintWriter out = getWriter();
@@ -44,7 +44,7 @@ public class SyncStatusAction extends StandardAction {
 		
 		// get information about the sync
 		EntityManager em = App.getEntityManager();
-		ClientSyncResult res = em.find(ClientSyncResult.class, userToken);
+		ClientSyncResult res = em.find(ClientSyncResult.class, fileToken);
 		// an error happened ?
 		if ((res == null) || (res.getErrorMessage() != null)) {
 			String msg = "ERROR:";
@@ -66,11 +66,9 @@ public class SyncStatusAction extends StandardAction {
 		for (AsyncTask task: tm.getTasks()) {
 			if (task instanceof SyncFileTask) {
 				SyncFileTask syncTask = (SyncFileTask)task;
-				if (syncTask.getToken().equals(userToken)) {
-					if (syncTask.getStatus() == TaskStatus.RUNNING)
-						return true;
-					else return false;
-				}
+				// is the task of the file being processed ?
+				if (syncTask.getToken().equals(fileToken))
+					return true;
 			}
 		}
 		return false;
@@ -78,17 +76,17 @@ public class SyncStatusAction extends StandardAction {
 
 
 	/**
-	 * @return the userToken
+	 * @return the fileToken
 	 */
-	public String getUserToken() {
-		return userToken;
+	public String getFileToken() {
+		return fileToken;
 	}
 
 
 	/**
-	 * @param userToken the userToken to set
+	 * @param fileToken the fileToken to set
 	 */
-	public void setUserToken(String userToken) {
-		this.userToken = userToken;
+	public void setFileToken(String fileToken) {
+		this.fileToken = fileToken;
 	}
 }

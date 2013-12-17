@@ -20,7 +20,6 @@
             <property name="results" use="IGNORE" />
             <property name="laboratory.id" elementName="laboratory"/>
             <property name="method.id" elementName="method" />
-            <property name="createTransaction" use="IGNORE" />
 		    <property name="lastTransaction" use="IGNORE" />
         </objectGraph>
 

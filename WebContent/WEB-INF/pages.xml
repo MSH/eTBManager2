@@ -67,13 +67,13 @@
  	<!-- Synchronization between web and desktop -->
  	
  	<!-- Generate the file to be used by the desktop app using the user token id -->
-    <page view-id="/sync/downloadinifile.xhtml" action="#{generateDesktopFileAction.download}">
-        <param name="tk" value="#{generateDesktopFileAction.userToken}" required="true"/>
+    <page view-id="/sync/downloadinifile.xhtml" action="#{downloadDesktopFileAction.download}">
+        <param name="tk" value="#{downloadDesktopFileAction.userToken}" required="true"/>
     </page>
 
  	<!-- Generate the desktop file using the unit as a parameter (the user must be logged in) -->
-    <page view-id="/sync/desktopfile.xhtml" action="#{generateDesktopFileAction.generate()}"  login-required="true">
- 		<param name="id" value="#{generateDesktopFileAction.unitId}" converterId="javax.faces.Integer" />
+    <page view-id="/sync/desktopfile.xhtml" action="#{downloadDesktopFileAction.generate()}"  login-required="true">
+ 		<param name="id" value="#{downloadDesktopFileAction.unitId}" converterId="javax.faces.Integer" />
  	</page>
 
  	<!-- Receive the sync file from the desktop app -->
@@ -83,7 +83,12 @@
  	
  	<!-- Return status information about the processing of the sync file -->
  	<page view-id="/sync/syncstatus.xhtml" action="#{syncStatusAction.execute()}" >
- 		<param name="tk" value="#{syncStatusAction.userToken}" />
+ 		<param name="tk" value="#{syncStatusAction.fileToken}" />
+ 	</page>
+ 	
+ 	<!-- Return status information about the processing of the sync file -->
+ 	<page view-id="/sync/downloadanswerfile.xhtml" action="#{downloadAnswerAction.execute()}" >
+ 		<param name="tk" value="#{downloadAnswerAction.fileToken}" />
  	</page>
  		
  

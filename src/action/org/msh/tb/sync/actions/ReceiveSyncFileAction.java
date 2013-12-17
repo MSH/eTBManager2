@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.msh.tb.sync;
+package org.msh.tb.sync.actions;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -12,9 +12,13 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.ValidationException;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.msh.tb.application.App;
 import org.msh.tb.application.tasks.TaskManager;
+import org.msh.tb.sync.SyncFileTask;
+import org.msh.tb.sync.SyncFileUploadFilter;
 import org.msh.tb.webservices.RemoteActionHandler;
 
 /**
@@ -68,6 +72,7 @@ public class ReceiveSyncFileAction extends StandardAction {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("file", file);
 		params.put("token", fileToken);
+		params.put("userWorkspace", Component.getInstance("userWorkspace"));
 		TaskManager.instance().runTask(SyncFileTask.class, params);
 
 		// send file token back to the client
@@ -109,7 +114,7 @@ public class ReceiveSyncFileAction extends StandardAction {
 	 */
 	public static File tempSyncFileName(String token) {
 		try {
-			String tempFolder = System.getProperty("java.io.tmpdir");
+			String tempFolder = App.getTempDir();
 			File file = new File(tempFolder, "etbm_" + token + ".tmp");
 			return file;
 		} catch (Exception e) {

@@ -12,7 +12,8 @@ package org.msh.tb.sync;
  */
 public class EntityKey {
 
-	
+	private Class entityClass;
+	private String entityName;
 	private int clientId;
 	private Integer serverId;
 	private boolean newServerId;
@@ -22,13 +23,27 @@ public class EntityKey {
 	 * @param clientId
 	 * @param serverId
 	 */
-	public EntityKey(int clientId, Integer serverId) {
+	public EntityKey(Class entityClass, int clientId, Integer serverId) {
 		super();
+		this.entityClass = entityClass;
 		this.clientId = clientId;
 		this.serverId = serverId;
+		this.entityName = entityClass != null? entityClass.getSimpleName(): null;
 		newServerId = serverId == null;
 	}
 
+	/**
+	 * Return the entity class name
+	 * @return String value
+	 */
+	public String getEntityName() {
+		return entityName;
+	}
+	
+	public void setEntityName(String name) {
+		entityName = name;
+	}
+	
 	/**
 	 * @return the clientId
 	 */
@@ -64,6 +79,20 @@ public class EntityKey {
 	 */
 	public void setNewServerId(boolean newServerId) {
 		this.newServerId = newServerId;
+	}
+
+	/**
+	 * @return the entityClass
+	 */
+	public Class getEntityClass() {
+		return entityClass;
+	}
+
+	/**
+	 * @param entityClass the entityClass to set
+	 */
+	public void setEntityClass(Class entityClass) {
+		this.entityClass = entityClass;
 	}
 	
 }

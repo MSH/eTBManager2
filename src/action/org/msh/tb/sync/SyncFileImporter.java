@@ -16,7 +16,7 @@ import javax.persistence.EntityManager;
 
 import org.msh.tb.application.App;
 import org.msh.tb.application.TransactionManager;
-import org.msh.tb.entities.CaseDispensing;
+import org.msh.tb.entities.SyncKey;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.WSObject;
@@ -43,7 +43,6 @@ public class SyncFileImporter {
 	FileInputStream fstream;
 	private Workspace workspace;
 	private TransactionManager transaction;
-	private String errorMessage;
 	// store in-memory list of entity keys (client ID and server ID)
 	private EntityKeyList entityKeys;
 	// list of last versions in use by the client (will be used to generate response file)
@@ -96,7 +95,6 @@ public class SyncFileImporter {
 			
 		} catch (Throwable e) {
 			e.printStackTrace();
-			errorMessage = e.getMessage();
 			throw new RuntimeException(e);
 		}
 	}
@@ -135,7 +133,7 @@ public class SyncFileImporter {
 	 * @param in instance of {@link InputStream}
 	 */
 	private void importData(InputStream in) {
-		StreamContext context = DataStreamUtils.createContext("clientinifile-schema.xml");
+		StreamContext context = DataStreamUtils.createContext("clientsyncfile-schema.xml");
 
 		// add the interceptor
 		context.addInterceptor(interceptor);
@@ -192,6 +190,8 @@ public class SyncFileImporter {
 	 * @return instance of the object class
 	 */
 	protected Object createNewObject(Class objectType, Map<String, Object> params) {
+		System.out.println(objectType + " ... " + params);
+		
 		// is information about the last version used in each entity?
 		if (objectType == EntityLastVersion.class) {
 			// let the library create the instance
@@ -202,9 +202,16 @@ public class SyncFileImporter {
 		Integer id = (Integer)params.get("id");
 
 		// if there is a client ID, so the object is to be sync
-		if (clientId != null) {
-			// register the keys of the object
-			entityKeys.registerEntityKey(objectType, clientId, id);
+		if ((clientId != null) && (id == null)) {
+			EntityKey key = entityKeys.findEntityKey(objectType, clientId);
+			if (key == null) {
+				// register the keys of the object
+				entityKeys.registerEntityKey(objectType, clientId, id);
+			}
+			else {
+				// restore the key already generated in the server side during this synchronization
+				id = key.getServerId();
+			}
 		}
 
 		if (id != null)
@@ -228,6 +235,7 @@ public class SyncFileImporter {
 	protected void saveEntity(Object obj) {
 		if (obj instanceof EntityLastVersion) {
 			entityVersions.add((EntityLastVersion)obj);
+			return;
 		}
 		
 		EntityManager em = App.getEntityManager();
@@ -246,15 +254,21 @@ public class SyncFileImporter {
 			p.setWorkspace(workspace);
 			em.persist(p);
 		}
-		else
-		if (obj instanceof CaseDispensing) {
-			CaseDispensing cd = (CaseDispensing)obj;
-			if (cd.getDispensingDays() != null)
-				em.persist(cd.getDispensingDays());
-		}
+
+		// get information about the keys (id and client id) of the entity being saved
+		SyncKey objKeys = null;
+		if (obj instanceof SyncKey)
+			objKeys = (SyncKey)obj;
+		boolean bNew = (objKeys != null) && (objKeys.getId() == null);
 		
+		// save the entity
 		em.persist(obj);
 		em.flush();
+
+		// if it's a new entity, get the id to be sent back to the client
+		if (bNew)
+			entityKeys.updateServerKey(obj.getClass(), objKeys.getClientId(), objKeys.getId());
+		
 		em.clear();
 	}
 
@@ -270,10 +284,18 @@ public class SyncFileImporter {
 
 
 	/**
-	 * @return the errorMessage
+	 * @return the entityKeys
 	 */
-	public String getErrorMessage() {
-		return errorMessage;
+	public EntityKeyList getEntityKeys() {
+		return entityKeys;
+	}
+
+
+	/**
+	 * @return the entityVersions
+	 */
+	public List<EntityLastVersion> getEntityVersions() {
+		return entityVersions;
 	}
 	
 	

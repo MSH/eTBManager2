@@ -15,7 +15,7 @@ import org.msh.tb.entities.enums.DstResult;
 
 @Entity
 @Table(name="examdstresult")
-public class ExamDSTResult implements Serializable {
+public class ExamDSTResult implements Serializable, SyncKey {
 	private static final long serialVersionUID = -5594762900664251756L;
 
 	@Id

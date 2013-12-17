@@ -20,7 +20,7 @@ import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="userworkspace")
-public class UserWorkspace implements Serializable {
+public class UserWorkspace extends WSObject implements Serializable{
 	private static final long serialVersionUID = 8975350130212905881L;
 	
 	@Id
@@ -37,12 +37,6 @@ public class UserWorkspace implements Serializable {
 	@NotNull
 	@PropertyLog(operations={Operation.NEW})
 	private Tbunit tbunit;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="WORKSPACE_ID")
-	@NotNull
-	@PropertyLog(ignore=true)
-	private Workspace workspace;
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
@@ -111,14 +105,6 @@ public class UserWorkspace implements Serializable {
 
 	public void setTbunit(Tbunit tbunit) {
 		this.tbunit = tbunit;
-	}
-
-	public Workspace getWorkspace() {
-		return workspace;
-	}
-
-	public void setWorkspace(Workspace workspace) {
-		this.workspace = workspace;
 	}
 
 	public User getUser() {

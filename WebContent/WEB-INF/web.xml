@@ -19,11 +19,19 @@
 	    <param-name>liquibase.onerror.fail</param-name>
 	    <param-value>true</param-value>
 	</context-param>
-  
+
+	<!-- 
+	<context-param>
+    	<param-name>liquibase.contexts</param-name>
+	    <param-value>BD</param-value>
+	</context-param>
+	 -->
+ 
 	<listener>
 	    <listener-class>liquibase.integration.servlet.LiquibaseServletListener</listener-class>
 	</listener>
-
+ 
+ 
 	<!-- eTB Manager -->
 
 	<session-config>

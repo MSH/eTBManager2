@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
+import org.msh.tb.transactionlog.PropertyLog;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
@@ -26,7 +28,7 @@ import org.msh.utils.date.Period;
  */
 @Entity
 @Table(name="prescribedmedicine")
-public class PrescribedMedicine implements Serializable {
+public class PrescribedMedicine implements Serializable, Transactional, SyncKey {
 	private static final long serialVersionUID = 7239969189199419487L;
 
 	@Id
@@ -79,6 +81,15 @@ public class PrescribedMedicine implements Serializable {
 	@NotNull
 	private TbCase tbcase;
 
+	
+	/**
+	 * Point to the transaction log that contains information about the last time this entity was changed (updated or created)
+	 */
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="lastTransaction_ID")
+	@PropertyLog(ignore=true)
+	private TransactionLog lastTransaction;
+	
 	
 	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
 	// map an XML node to a property in the model
@@ -315,6 +326,22 @@ public class PrescribedMedicine implements Serializable {
 
 	public void setPeriod(Period period) {
 		this.period = period;
+	}
+
+	/**
+	 * @return the lastTransaction
+	 */
+	@Override
+	public TransactionLog getLastTransaction() {
+		return lastTransaction;
+	}
+
+	/**
+	 * @param lastTransaction the lastTransaction to set
+	 */
+	@Override
+	public void setLastTransaction(TransactionLog lastTransaction) {
+		this.lastTransaction = lastTransaction;
 	}
 
 }

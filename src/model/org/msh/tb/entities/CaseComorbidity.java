@@ -17,10 +17,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.validator.NotNull;
+import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name = "casecomorbidity")
-public class CaseComorbidity {
+public class CaseComorbidity implements Transactional, SyncKey {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -47,7 +48,14 @@ public class CaseComorbidity {
 	
 	@Column(length=200)
 	private String comment;
-
+	
+	/**
+	 * Point to the transaction log that contains information about the last time this entity was changed (updated or created)
+	 */
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="lastTransaction_ID")
+	@PropertyLog(ignore=true)
+	private TransactionLog lastTransaction;
 	
 	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
 	// map an XML node to a property in the model
@@ -147,5 +155,21 @@ public class CaseComorbidity {
 	
 	public void setComorb(FieldValueComponent comorb) {
 		this.comorb = comorb;
+	}
+
+	/**
+	 * @return the lastTransaction
+	 */
+	@Override
+	public TransactionLog getLastTransaction() {
+		return lastTransaction;
+	}
+
+	/**
+	 * @param lastTransaction the lastTransaction to set
+	 */
+	@Override
+	public void setLastTransaction(TransactionLog lastTransaction) {
+		this.lastTransaction = lastTransaction;
 	}
 }

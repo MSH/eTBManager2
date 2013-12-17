@@ -33,7 +33,7 @@ public class EntityKeyList {
 			entityKeys.put(clazz, keys);
 		}
 
-		EntityKey key = new EntityKey(clientId, serverId);
+		EntityKey key = new EntityKey(clazz, clientId, serverId);
 		keys.add(key);
 
 		return key;
@@ -49,6 +49,9 @@ public class EntityKeyList {
 	public EntityKey findEntityKey(Class clazz, int clientId) {
 		// return the list of keys for the given class
 		List<EntityKey> keys = entityKeys.get(clazz);
+		
+		if (keys == null)
+			return null;
 		
 		for (EntityKey key: keys) {
 			if (key.getClientId() == clientId) {
@@ -84,5 +87,26 @@ public class EntityKeyList {
 			return null;
 
 		return entityKeys.get(clazz);
+	}
+	
+	
+	/**
+	 * Return information about client and server keys of all entities that
+	 * generated new server key during synchronization.<br/>
+	 * This list will be sent back to the client 
+	 * @return List of {@link EntityKey} objects
+	 */
+	public List<EntityKey> getNewServerKeys() {
+		if (entityKeys == null)
+			return null;
+
+		List<EntityKey> lst = new ArrayList<EntityKey>();
+		for (Class clazz: entityKeys.keySet()) {
+			for (EntityKey key: entityKeys.get(clazz)) {
+				if (key.isNewServerId())
+					lst.add(key);
+			}
+		}
+		return lst;
 	}
 }

@@ -30,7 +30,7 @@ import org.msh.tb.transactionlog.PropertyLog;
  */
 @Entity
 @Table(name="patient")
-public class Patient extends WSObject implements Serializable {
+public class Patient extends WSObject implements Serializable, SyncKey {
 	private static final long serialVersionUID = 6137777841151141479L;
 	
 	@Id
