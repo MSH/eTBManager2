@@ -90,13 +90,14 @@ public class CaseStateReportUA extends CaseStateReport{
 		UserWorkspace userWorkspace = UserSession.getUserWorkspace();
 		UserView view = userWorkspace.getView();
 
-		if (view == null)
-			return "";
-
 		String s;
 		if (userWorkspace.getHealthSystem() != null)
 			s = " and (u.healthSystem_id = " + userWorkspace.getHealthSystem().getId()+" or nu.healthSystem_id = " + userWorkspace.getHealthSystem().getId()+")";
 		else s = "";
+
+		if (view == null)
+			return s;
+
 		switch (view) {
 			case ADMINUNIT: {
 				return " and (a.code like '" + userWorkspace.getAdminUnit().getCode() + "%'"+
