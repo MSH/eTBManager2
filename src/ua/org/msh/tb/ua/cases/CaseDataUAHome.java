@@ -342,4 +342,23 @@ public class CaseDataUAHome extends EntityHomeEx<CaseDataUA> {
 		return res;
 		
 	}
+	
+	/**
+	 * Change {@link tbcase#classification} to other
+	 */
+	public void changeClassification() {
+		TbCase tc = caseHome.getTbCase();
+		getCaseDataUA();
+		if (CaseClassification.TB.equals(tc.getClassification())){
+			tc.setClassification(CaseClassification.DRTB);
+			App.getEntityManager().persist(tc);
+			super.persist();
+		}
+		else if (CaseClassification.DRTB.equals(tc.getClassification())){
+			tc.setClassification(CaseClassification.TB);
+			App.getEntityManager().persist(tc);
+			super.persist();
+		}
+		
+	}
 }
