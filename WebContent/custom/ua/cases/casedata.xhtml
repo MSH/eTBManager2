@@ -32,7 +32,7 @@
 
 
 	<ui:define name="left">
-
+		<h:panelGroup id="leftmenupanel">
 		<h:panelGroup id="leftmenu" styleClass="vertical-menu">
 			<h:form class="vertical-menu">
 
@@ -60,6 +60,14 @@
 					<i class="icon-table" />
 					<span>#{messages['form.logreport']}</span>
 				</s:link>
+				
+				<a:commandLink action="#{caseDataUAHome.changeClassification()}"
+					rendered="#{caseHome.canTagCase}" reRender="contentpanel,messages,leftmenupanel" style="width: 182px;">
+					<i class="icon-exchange" />
+					<span>
+					<h:outputText value="#{messages['cases.toOtherClassif']} #{tbcase.classification=='TB'?messages[globalLists.caseClassifications[1].key]:messages[globalLists.caseClassifications[0].key]}"/>
+					</span>
+				</a:commandLink>
 
 				<h:commandLink action="#{tb01pdf.create(tbcase.displayCaseNumber)}">
 					<i class="icon-print" />
@@ -154,12 +162,13 @@
 					query="mouseout(function(){jQuery(this).removeClass('sel-row')})" />
 			</div>
 		</s:div>
-
+	</h:panelGroup>
 	</ui:define>
 
 
 
 	<ui:define name="content">
+	<h:panelGroup id="contentpanel">
 		<h1>#{title}</h1>
 		<s:decorate id="bodydiv" template="/custom/ua/layout/casebody.xhtml">
 			<h:form id="main">
@@ -291,6 +300,7 @@
 	</script>
 			</h:form>
 		</s:decorate>
+	</h:panelGroup>
 
 
 
