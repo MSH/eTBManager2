@@ -211,18 +211,18 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 		while(it.hasNext()){
 			E tc = it.next();
 			if(!recordsInReport.contains(tc))
-				return;
+				continue;
 			boolean inWarn = false; 
 			for (ErrItem ls: verifyList.get(getMessage("verify.errorcat1"))) {
 				if (ls.getCaseList().contains(tc)){
 					inWarn = true;
-					break;
+					continue;
 				}
 			}
 			for (ErrItem ls: verifyList.get(getMessage("verify.errorcat2"))) {
 				if (ls.getCaseList().contains(tc)){
 					inWarn = true;
-					break;
+					continue;
 				}
 			}
 			if (!inWarn)
