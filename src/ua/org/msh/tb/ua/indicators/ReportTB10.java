@@ -249,7 +249,7 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 		numcases[2] -= numcases[0]+numcases[1];
 		if (numcases[0]+numcases[1]+numcases[2] == 0)
 			return;
-
+		
 		String hqlMicroscopy = "(select min(e.dateCollected) from ExamMicroscopy e " +
 				"where e.tbcase.id = c.id and e.result " + getHQLMicroscopyResultCondition(IndicatorMicroscopyResult.NEGATIVE)+")";
 		// check if it has microscopy
@@ -282,11 +282,7 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 	}
 
 	private void calcPercentage(String colid, String rowid) {
-		float total = 0;
-		if (rowid=="newcases") total = numcases[0];	
-		if (rowid=="relapses") total = numcases[1];
-		if (rowid=="others") total = numcases[2];
-		
+		float total = getTable1000().getCellAsFloat("numcases", rowid);
 		if (total == 0)
 			return;
 		
@@ -316,15 +312,15 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 		switch (ptype) {
 		case NEW: 
 			rowkey = "newcases";
-			numcases[0]++;
+			//numcases[0]++;
 			break;
 		case RELAPSE: 
 			rowkey = "relapses";
-			numcases[1]++;
+			//numcases[1]++;
 			break;
 		default: 
 			rowkey = "others";
-			numcases[2]++;
+			//numcases[2]++;
 		}
 		if (!noexam){
 			if (dtMicro != null){ 
