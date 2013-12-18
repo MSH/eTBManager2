@@ -42,6 +42,9 @@
 				#{messages['uk_UA.reports.tb10.1.header1']}
 			</th>
 			<th rowspan="2" >
+				#{messages['uk_UA.reports.tb11.1.headerN']}
+			</th>
+			<th rowspan="2" >
 				#{messages['uk_UA.reports.tb10.1.header2']}
 			</th>
 			<th colspan="6">
@@ -74,6 +77,49 @@
 				%
 			</th>
 		</tr>
+		<tr>
+			<th>
+				#{messages['uk_UA.ExtraOutcomeInfo.TB']}
+			</th>
+			<th>
+				#{messages['uk_UA.ExtraOutcomeInfo.OTHER_CAUSES']}
+			</th>
+		</tr>
+		<tr>
+			<th>
+				#{messages['uk_UA.reports.tb10.a']}
+			</th>
+			<th>
+				#{messages['uk_UA.reports.tb10.b']}
+			</th>
+			<th>
+				1
+			</th>
+			<th>
+				2
+			</th>
+			<th>
+				3
+			</th>
+			<th>
+				4
+			</th>
+			<th>
+				5
+			</th>
+			<th>
+				6
+			</th>
+			<th>
+				7
+			</th>	
+			<th>
+				8
+			</th>
+			<th>
+				9
+			</th>		
+		</tr>
 		<ui:repeat value="#{indicator.table1000.rows}" var="row">
 		<tr>
 			<th>
@@ -95,6 +141,9 @@
 		<tr>
 			<th rowspan="2">
 				#{messages['uk_UA.reports.tb10.1.header1']}
+			</th>
+			<th rowspan="2" >
+				#{messages['uk_UA.reports.tb11.1.headerN']}
 			</th>
 			<th colspan="2">
 				#{messages['CaseState.DIED']}
@@ -123,6 +172,43 @@
 				#{messages['uk_UA.ExtraOutcomeInfo.OTHER_CAUSES']}
 			</th>
 		</tr>
+		<tr>
+			<th>
+				#{messages['uk_UA.ExtraOutcomeInfo.TB']}
+			</th>
+			<th>
+				#{messages['uk_UA.ExtraOutcomeInfo.OTHER_CAUSES']}
+			</th>
+		</tr>
+		<tr>
+			<th>
+				#{messages['uk_UA.reports.tb10.a']}
+			</th>
+			<th>
+				#{messages['uk_UA.reports.tb10.b']}
+			</th>
+			<th>
+				1
+			</th>
+			<th>
+				2
+			</th>
+			<th>
+				3
+			</th>
+			<th>
+				4
+			</th>
+			<th>
+				5
+			</th>
+			<th>
+				6
+			</th>
+			<th>
+				7
+			</th>			
+		</tr>
 		<ui:repeat value="#{indicator.table2000.rows}" var="row">
 		<tr>
 			<th>
@@ -141,10 +227,13 @@
 			<th>
 				#{messages['global.total']}
 			</th>
-		<ui:repeat value="#{indicator.table2000.columns}" var="col">
+			<td class="colcb">
+				4
+			</td>
+		<ui:repeat value="#{indicator.num}" var="n">
 			<td class="colcb">
 				<b>
-				<h:outputText value="#{col.total}" >
+				<h:outputText value="#{n}">
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 				</b>
