@@ -11,10 +11,12 @@ import java.util.List;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.ExtraOutcomeInfo;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.IndicatorVerify;
@@ -22,6 +24,7 @@ import org.msh.tb.indicators.core.IndicatorFilters;
 import org.msh.tb.indicators.core.IndicatorMicroscopyResult;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
+import org.msh.tb.ua.entities.CaseDataUA;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
@@ -161,8 +164,17 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 					}
 					else	
 					if (rightMcTest(tc).getResult().isPositive()){
+						Collections.sort(tc.getExamsMicroscopy(), new Comparator<ExamMicroscopy>() {
+							public int compare(ExamMicroscopy o1, ExamMicroscopy o2) {
+								Calendar d1 = Calendar.getInstance();
+								Calendar d2 = Calendar.getInstance();
+								d1.setTime(o1.getDateCollected());
+								d2.setTime(o2.getDateCollected());
+
+								return d1.compareTo(d2);
+							}
+						});
 						addValueTable(tc.getTreatmentPeriod().getIniDate(), tc.getDiagnosisDate(), tc.getPatientType(), tc.getState(), tc.getIniContinuousPhase(), firstNegMicro(tc), isNoExam(tc), tc);
-						
 						addToAllowing(tc);
 					}
 				}
@@ -192,14 +204,14 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 	private boolean isNoExam(TbCase tc){
 		if (tc.getIniContinuousPhase()==null)
 			return false;
-			
+
+		/*if (tc.getOutcomeDate()!=null)
+			if (tc.getOutcomeDate().before(tc.getIniContinuousPhase()))
+				return true;*/
+		
 		List<ExamMicroscopy> lst = new ArrayList<ExamMicroscopy>();
 		lst.addAll(tc.getExamsMicroscopy());
-		/*for (int i = 0; i < tc.getExamsMicroscopy().size(); i++) {
-			lst.add(null);
-		}
-		Collections.copy(lst, tc.getExamsMicroscopy());*/
-		Collections.sort(lst, new Comparator<ExamMicroscopy>() {
+		/*Collections.sort(lst, new Comparator<ExamMicroscopy>() {
 			public int compare(ExamMicroscopy o1, ExamMicroscopy o2) {
 				Calendar d1 = Calendar.getInstance();
 				Calendar d2 = Calendar.getInstance();
@@ -208,7 +220,8 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 
 				return d2.compareTo(d1);
 			}
-		});
+		});*/
+		
 		for (ExamMicroscopy ex:tc.getExamsMicroscopy()){
 			if (ex.getDateCollected().before(tc.getIniContinuousPhase()) || ex.getDateCollected().equals(tc.getIniContinuousPhase()))
 				return false;
@@ -239,7 +252,7 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 	/**
 	 * Generate values of table 1000 querying the database based on the user filters 
 	 */
-	protected void generateTable1000() {
+/*	protected void generateTable1000() {
 		// calculate the number of cases
 		getIndicatorFilters().setInfectionSite(InfectionSite.PULMONARY);
 		getIndicatorFilters().setMicroscopyResult(IndicatorMicroscopyResult.POSITIVE);
@@ -280,7 +293,7 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 			}
 		getTotal2000();
 	}
-
+*/
 	private void calcPercentage(String colid, String rowid) {
 		float total = getTable1000().getCellAsFloat("numcases", rowid);
 		if (total == 0)
@@ -350,7 +363,18 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 				else 
 					noexam = true;
 			}
-			else table1000.addIdValue("others", rowkey, 1F);
+			else{
+				if (!tc.getExamsMicroscopy().isEmpty()){
+					ExamMicroscopy ex = tc.getExamsMicroscopy().get(tc.getExamsMicroscopy().size()-1);
+					int exMonth = DateUtils.monthsBetween(dtIniTreat, ex.getDateCollected());
+					if (exMonth>=(ptype.equals(PatientType.NEW) ? 3 : 4))
+						table1000.addIdValue("others", rowkey, 1F);
+					else
+						noexam = true;
+				}
+				else
+					table1000.addIdValue("others", rowkey, 1F);
+			} 
 			}
 		// add to noexam in tab1000 and tab2000
 		if (noexam)
@@ -358,7 +382,9 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 			table1000.addIdValue("noexams", rowkey, 1F);
 			switch (state) {
 			case DIED:
-				colkey = "1";
+				CaseDataUA cd = App.getEntityManager().find(CaseDataUA.class, tc.getId());
+				if (ExtraOutcomeInfo.TB.equals(cd.getExtraOutcomeInfo())) colkey = "1";
+				else colkey = "2";
 				break;
 			case DIED_NOTTB:
 				colkey = "2";
@@ -381,7 +407,7 @@ public class ReportTB10 extends IndicatorVerify<TbCase> {
 			}
 		
 		table1000.addIdValue("numcases", rowkey, 1F);
-		addToAllowing(tc);
+		addToRecordsInReport(tc);
 	}
 
 	/**
