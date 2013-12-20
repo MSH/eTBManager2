@@ -11,9 +11,9 @@
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.6"/>
     <property name="source" value="1.6"/>
-    <property name="classes.build.dir" value="build/classes-country"/>
+    <property name="build-classes" value="build/classes-country"/>
   
-	<path id="project.libraryclasspath">
+	<path id="Web App Libraries.libraryclasspath">
         <pathelement location="WebContent/WEB-INF/lib/commons-beanutils.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/commons-digester.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/commons-lang.jar"/>
@@ -41,19 +41,19 @@
 
 
 	<path id="jboss-4.2.3.GA.libraryclasspath">
-        <pathelement location="C:\servers\jboss-4.2.3.GA/client/commons-logging.jar"/>
-        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
-        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
-        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
-        <pathelement location="C:\servers\jboss-4.2.3.GA/client/jboss-j2ee.jar"/>
-        <pathelement location="C:\servers\jboss-4.2.3.GA/client/ejb3-persistence.jar"/>
-        <pathelement location="C:\servers\jboss-4.2.3.GA/client/servlet-api.jar"/>
-        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/hibernate-annotations.jar"/>
-        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/hibernate-entitymanager.jar"/>
-        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/hibernate-core.jar"/>
-        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/lucene-core.jar"/>
-        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/hibernate-search.jar"/>
-        <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/hibernate-validator.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/client/commons-logging.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-api.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/deploy/jboss-web.deployer/jsf-libs/jsf-impl.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/client/jboss-j2ee.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/client/ejb3-persistence.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/client/servlet-api.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/lib/hibernate-annotations.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/lib/hibernate-entitymanager.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/lib/hibernate-core.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/lib/lucene-core.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/lib/hibernate-search.jar"/>
+        <pathelement location="C:\JBoss\jboss-4.2.3.GA/server/default/lib/hibernate-validator.jar"/>
         <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/dom4j.jar"/>
         <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/axis.jar"/>
         <pathelement location="C:\servers\jboss-4.2.3.GA/server/default/lib/jboss-jaxrpc.jar"/>
@@ -65,9 +65,10 @@
         <pathelement location="C:\gwt\gwt-2.4.0/gwt-user.jar"/>
 	</path>
 
+
 	<path id="mdrtb.classpath">
-        <pathelement location="build/classes"/>
-        <path refid="project.libraryclasspath"/> 
+        <pathelement location="${build-classes}"/>
+        <path refid="Web App Libraries.libraryclasspath"/> 
         <path refid="jboss-4.2.3.GA.libraryclasspath"/>
         <path refid="gwt.librarypath"/>
     </path>
@@ -78,15 +79,15 @@
 		<echo message="Implementation version:  ${implementation-version}" />
 		<echo message="Implementation vendor :  ${implementation-vendor}" />
 		
-        <mkdir dir="${classes.build.dir}"/>
-		<delete dir="${classes.build.dir}" />
-        <copy includeemptydirs="false" todir="${classes.build.dir}">
+        <mkdir dir="${build-classes}"/>
+		<delete dir="${build-classes}" />
+        <copy includeemptydirs="false" todir="${build-classes}">
             <fileset dir="src/action" excludes="**/*.launch, **/*.java"/>
         </copy>
-        <copy includeemptydirs="false" todir="${classes.build.dir}">
+        <copy includeemptydirs="false" todir="${build-classes}">
             <fileset dir="src/model" excludes="**/*.launch, **/*.java"/>
         </copy>
-        <copy includeemptydirs="false" todir="${classes.build.dir}">
+        <copy includeemptydirs="false" todir="${build-classes}">
             <fileset dir="src/${country-folder}" excludes="**/*.launch, **/*.java"/>
         </copy>
     </target>
@@ -94,7 +95,7 @@
 	
 
 	<target name="clean">
-        <delete dir="${classes.build.dir}"/>
+        <delete dir="${build-classes}"/>
     </target>
 
 	
@@ -102,13 +103,13 @@
 	<target depends="clean" name="cleanall"/>
 	
 	
-    <target depends="compile,war" name="build" />
+    <target depends="build-project,war" name="build" />
 
 	
 
-	<target depends="init" name="compile">
+	<target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="false" debuglevel="${debuglevel}" destdir="${classes.build.dir}" source="${source}" target="${target}" encoding="8859_1">
+        <javac debug="false" debuglevel="${debuglevel}" destdir="${build-classes}" source="${source}" target="${target}" encoding="8859_1">
             <src path="src/model"/>
             <src path="src/action"/>
             <src path="src/reports"/>
@@ -161,7 +162,7 @@
 				<include name="custom/${country-folder}/**" />
 			</fileset>
 			
-			<classes dir="${classes.build.dir}">
+			<classes dir="${build-classes}">
 				<exclude name="META-INF/persistence.xml"/>
 				<exclude name="/messages*" />
 				<exclude name="/custom_messages*" />
