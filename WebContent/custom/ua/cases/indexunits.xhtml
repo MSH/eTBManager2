@@ -7,6 +7,8 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
+<ui:param name="healthUnitsQuery" value="#{healthUnitsQueryUA}" />
+
 	<h2>#{messages['cases.ongoing']}</h2>
 	<a:repeat value="#{healthUnitsQuery.adminUnits}" var="adm">
 	<table class="table2" width="100%">

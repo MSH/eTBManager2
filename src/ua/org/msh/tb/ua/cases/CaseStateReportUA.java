@@ -40,47 +40,6 @@ public class CaseStateReportUA extends CaseStateReport{
 	
 	private AdminUnitSelection selectedAdmUnitSel;
 
-
-	public List<AdminUnitGroup<HealthUnitInfoUA>> getAdminUnitUA(){
-		HealthUnitsQueryUA healthUnitsQuery = (HealthUnitsQueryUA)Component.getInstance("healthUnitsQueryUA", true);
-		if (getSelectedAdmUnit()!=null){
-			List<AdminUnitGroup<HealthUnitInfoUA>> lst2 = new ArrayList<AdminUnitGroup<HealthUnitInfoUA>>();
-			for (AdminUnitGroup<HealthUnitInfoUA> adm: healthUnitsQuery.getAdminUnitsUA()) {
-				//if (getSelectedAdmUnitSel().getParentUnits().size()==1){
-					if (adm.getAdminUnit().equals(getSelectedAdmUnit()))
-						lst2.add(adm);
-					/*}else if (getSelectedAdmUnitSel().getParentUnits().size()==2)
-						if (findUnit(adm)!=-1){
-							if (lst2.isEmpty())	
-								{
-								AdminUnitGroup<HealthUnitInfo> ad = new AdminUnitGroup<HealthUnitInfo>();
-								ad.setAdminUnit(adm.getAdminUnit());adm.getAdminUnit().getCountryStructure();
-								lst2.add(ad);
-								}
-							lst2.get(0).getItems().add(adm.getItems().get(findUnit(adm)));
-						}*/
-			}
-			return lst2;
-		}
-		return healthUnitsQuery.getAdminUnitsUA();
-	}
-	
-	/*private void addUnit(List<AdminUnitGroup<HealthUnitInfo>> lst2,adm){
-		for (int i = lst2.size(); i < array.length; i++) {
-			
-		}
-	}*/
-	
-	/*private int findUnit(AdminUnitGroup<HealthUnitInfo> adm){
-		for (int i = 0; i < adm.getItems().size(); i++) {
-			EntityManager em = (EntityManager) Component.getInstance("entityManager");
-			Tbunit tu = (Tbunit) em.find(Tbunit.class, adm.getItems().get(i).getUnitId());
-			if (tu.getAdminUnit().equals(getSelectedAdmUnit()))
-				return i;
-		}
-		return -1;
-	}*/
-	
 	/**
 	 * Generate SQL condition to filter cases by user view
 	 * @return

@@ -177,23 +177,6 @@
 	</a:jsFunction>
 	
 	<div class="spacer" />
-<ui:remove>
-	<a:repeat value="#{caseFilters.classifications}" var="it">
-		<span style="margin-right:20px;">
-			<h:selectBooleanCheckbox value="#{it.selected}">
-				<a:support event="onclick" ajaxSingle="true" reRender="pnlhealthunits"/>
-			</h:selectBooleanCheckbox>
-			#{messages[it.item.key]}
-		</span>
-	</a:repeat>
-
-	<h2>#{messages['cases.ongoing']}</h2>
-	<h:panelGroup id="pnlhealthunits">
-		<ui:include src="#{userWorkspace.view=='TBUNIT'?'/cases/index_tbunit_content.xhtml':'index_content.xhtml'}" />
-	</h:panelGroup>
-
-	<ui:include src="/layout/tablerow.xhtml" />
-</ui:remove>
 	
 	<h:panelGroup id="pnlhealthunits">
 		<div id="content">

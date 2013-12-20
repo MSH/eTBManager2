@@ -1,6 +1,8 @@
 package org.msh.tb.cases.treatment;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.Patient;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
@@ -45,6 +48,30 @@ public class TreatmentsInfoHome {
 		return groups;
 	}
 
+	/**
+	 * Return the list of treatments for the health unit tbunit. 
+	 * Treatments sorted descending by diagnosis date 
+	 * @return
+	 */
+	public List<CaseGroup> getGroupsWithSort() {
+		if (groups == null){
+			createTreatments();
+			for (CaseGroup cg:groups){
+				Collections.sort(cg.getTreatments(),new Comparator<TreatmentInfo>() {
+		
+					@Override
+					public int compare(TreatmentInfo o1, TreatmentInfo o2) {
+						TbCase tc1 = App.getEntityManager().find(TbCase.class, o1.getCaseId());
+						TbCase tc2 = App.getEntityManager().find(TbCase.class, o2.getCaseId());
+						Date d1 = tc1.getDiagnosisDate();
+						Date d2 = tc2.getDiagnosisDate();
+						return d2.compareTo(d1);
+					}
+				});
+			}
+		}
+		return groups;
+	}
 
 	/**
 	 * Create the list of treatments for the health unit TB unit
