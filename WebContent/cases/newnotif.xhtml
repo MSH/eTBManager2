@@ -82,7 +82,7 @@
 	<h:panelGroup id="res" rendered="#{not empty patientsbd.patientList}">
 
 	<h:dataTable value="#{patients.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
-		rendered="#{patients.searching and (not empty patients.resultList)}" width="680px" columnClasses="coll,colc,colc,coll">
+		width="680px" columnClasses="coll,colc,colc,coll">
 		<h:column>
 			<f:facet name="header">
 				<s:link value="#{messages['Patient.name']}" styleClass="collh">
