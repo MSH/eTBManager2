@@ -32,4 +32,5 @@
   <include file="org/msh/tb/database/v2_0/changelog-16-correctAZForeignKeys.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-17-sync.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-18-azerbaijan.xml"/> 
+  <include file="org/msh/tb/database/v2_0/changelog-19-treatmonitoring.xml"/> 
 </databaseChangeLog> 

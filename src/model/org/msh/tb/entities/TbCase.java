@@ -257,7 +257,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	private List<TbContact> contacts = new ArrayList<TbContact>();
 	
 	@OneToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="tbcase", fetch=FetchType.LAZY)
-	private List<CaseDispensing> dispensing = new ArrayList<CaseDispensing>();
+	private List<TreatmentMonitoring> treatmentMonitoring = new ArrayList<TreatmentMonitoring>();
 	
 
 	/* EXAMS */
@@ -1075,22 +1075,6 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 
 
 	/**
-	 * @return the dispensing
-	 */
-	public List<CaseDispensing> getDispensing() {
-		return dispensing;
-	}
-
-
-	/**
-	 * @param dispensing the dispensing to set
-	 */
-	public void setDispensing(List<CaseDispensing> dispensing) {
-		this.dispensing = dispensing;
-	}
-
-
-	/**
 	 * @return the phoneNumber
 	 */
 	public String getPhoneNumber() {
@@ -1385,5 +1369,19 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	 */
 	public void setSuspectClassification(CaseClassification suspectClassification) {
 		this.suspectClassification = suspectClassification;
+	}
+
+	/**
+	 * @return the treatmentMonitoring
+	 */
+	public List<TreatmentMonitoring> getTreatmentMonitoring() {
+		return treatmentMonitoring;
+	}
+
+	/**
+	 * @param treatmentMonitoring the treatmentMonitoring to set
+	 */
+	public void setTreatmentMonitoring(List<TreatmentMonitoring> treatmentMonitoring) {
+		this.treatmentMonitoring = treatmentMonitoring;
 	}
 }

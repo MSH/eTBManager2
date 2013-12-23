@@ -13,9 +13,9 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
-import org.msh.tb.entities.CaseDispensing;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.TreatmentMonitoring;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.utils.date.DateUtils;
 
@@ -61,11 +61,8 @@ public class RegisterDispensingHome {
 		for (CaseDispensingInfo dispInfo: cases) {
 			dispInfo.updateDispensingDays();
 
-			CaseDispensing caseDisp = dispInfo.getCaseDispensing();
-			entityManager.persist(caseDisp);
-			
-			caseDisp.getDispensingDays().setId(caseDisp.getId());
-			entityManager.persist(caseDisp.getDispensingDays());
+			TreatmentMonitoring treatMon = dispInfo.getTreatmentMonitoring();
+			entityManager.persist(treatMon);
 		}
 		entityManager.flush();
 
@@ -83,14 +80,14 @@ public class RegisterDispensingHome {
 		cases = new ArrayList<CaseDispensingInfo>();
 		
 		// load the dispensing days information recorded in the database
-		List<CaseDispensing> lst = entityManager.createQuery("from CaseDispensing d join fetch d.tbcase c " +
+		List<TreatmentMonitoring> lst = entityManager.createQuery("from TreatmentMonitoring d join fetch d.tbcase c " +
 				"join fetch c.patient p " +
 				"where c.ownerUnit.id = " + tbunit.getId() + 
 				"and d.month = " + (month + 1) + " and d.year = " + year +
 				" and c.state = " + CaseState.ONTREATMENT.ordinal())
 				.getResultList();
 		
-		for (CaseDispensing disp: lst) {
+		for (TreatmentMonitoring disp: lst) {
 			CaseDispensingInfo info = new CaseDispensingInfo(disp);
 			cases.add(info);
 		}
@@ -103,12 +100,12 @@ public class RegisterDispensingHome {
 		for (TbCase tbcase: lstcases) {
 			CaseDispensingInfo info = findCaseDispensingInfo(tbcase);
 			if (info == null) {
-				CaseDispensing caseDispensing = new CaseDispensing();
-				caseDispensing.setTbcase(tbcase);
-				caseDispensing.setMonth(month + 1);
-				caseDispensing.setYear(year);
+				TreatmentMonitoring tm = new TreatmentMonitoring();
+				tm.setTbcase(tbcase);
+				tm.setMonth(month + 1);
+				tm.setYear(year);
 				
-				info = new CaseDispensingInfo(caseDispensing);
+				info = new CaseDispensingInfo(tm);
 				cases.add(info);
 			}
 		}
@@ -118,8 +115,8 @@ public class RegisterDispensingHome {
 			// sort the list of cases by patient name
 			Collections.sort(cases, new Comparator<CaseDispensingInfo>() {
 				public int compare(CaseDispensingInfo o1, CaseDispensingInfo o2) {
-					String name1 = o1.getCaseDispensing().getTbcase().getPatient().getFullName();
-					String name2 = o2.getCaseDispensing().getTbcase().getPatient().getFullName();
+					String name1 = o1.getTreatmentMonitoring().getTbcase().getPatient().getFullName();
+					String name2 = o2.getTreatmentMonitoring().getTbcase().getPatient().getFullName();
 					return name1.compareToIgnoreCase(name2);
 				}				
 			});
@@ -138,7 +135,7 @@ public class RegisterDispensingHome {
 	
 	protected CaseDispensingInfo findCaseDispensingInfo(TbCase tbcase) {
 		for (CaseDispensingInfo info: cases) {
-			if (info.getCaseDispensing().getTbcase().getId().equals(tbcase.getId())) {
+			if (info.getTreatmentMonitoring().getTbcase().getId().equals(tbcase.getId())) {
 				return info;
 			}
 		}

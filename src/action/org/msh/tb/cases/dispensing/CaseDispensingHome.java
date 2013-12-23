@@ -14,7 +14,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.CaseDispensing;
+import org.msh.tb.entities.TreatmentMonitoring;
 
 
 /**
@@ -46,11 +46,8 @@ public class CaseDispensingHome {
 		
 		caseDispensingInfo.updateDispensingDays();
 
-		CaseDispensing caseDisp = caseDispensingInfo.getCaseDispensing();
-		entityManager.persist(caseDisp);
-			
-		caseDisp.getDispensingDays().setId(caseDisp.getId());
-		entityManager.persist(caseDisp.getDispensingDays());
+		TreatmentMonitoring treatMonitoring = caseDispensingInfo.getTreatmentMonitoring();
+		entityManager.persist(treatMonitoring);
 		entityManager.flush();
 
 		return "dispensing-saved";
@@ -77,7 +74,7 @@ public class CaseDispensingHome {
 		if ((month == null) || (year == null))
 			return;
 		
-		List<CaseDispensing> lst = entityManager.createQuery("from CaseDispensing d join fetch d.tbcase c " +
+		List<TreatmentMonitoring> lst = entityManager.createQuery("from TreatmentMonitoring d join fetch d.tbcase c " +
 				"join fetch c.patient p " +
 				"where c.id = #{caseHome.id} " +
 				"and d.month = " + (month + 1) + " and d.year = " + year)
@@ -86,12 +83,12 @@ public class CaseDispensingHome {
 		if (lst.size() > 0)
 			caseDispensingInfo = new CaseDispensingInfo(lst.get(0));
 		else {
-			CaseDispensing caseDispensing = new CaseDispensing();
-			caseDispensing.setTbcase(caseHome.getInstance());
-			caseDispensing.setMonth(month + 1);
-			caseDispensing.setYear(year);
+			TreatmentMonitoring treatMonitoring = new TreatmentMonitoring();
+			treatMonitoring.setTbcase(caseHome.getInstance());
+			treatMonitoring.setMonth(month + 1);
+			treatMonitoring.setYear(year);
 			
-			caseDispensingInfo = new CaseDispensingInfo(caseDispensing);
+			caseDispensingInfo = new CaseDispensingInfo(treatMonitoring);
 		}
 	}
 

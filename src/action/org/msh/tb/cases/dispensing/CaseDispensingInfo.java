@@ -5,8 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.msh.tb.entities.CaseDispensing;
-import org.msh.tb.entities.CaseDispensingDays;
+import org.msh.tb.entities.TreatmentMonitoring;
 import org.msh.utils.date.DateUtils;
 
 
@@ -17,19 +16,15 @@ import org.msh.utils.date.DateUtils;
  */
 public class CaseDispensingInfo {
 
-	private CaseDispensing caseDispensing;
-	private CaseDispensingDays dispensingDays;
+	private TreatmentMonitoring treatmentMonitoring;
 	private List<WeekInfo> weeks = new ArrayList<WeekInfo>();
 	private List<DayInfo> days = new ArrayList<DayInfo>();
 	private WeekInfo selectedWeek;
 
 
-	public CaseDispensingInfo(CaseDispensing caseDispensing) {
+	public CaseDispensingInfo(TreatmentMonitoring treatmentMonitoring) {
 		super();
-		this.caseDispensing = caseDispensing;
-		dispensingDays = caseDispensing.getDispensingDays();
-		if (dispensingDays == null)
-			dispensingDays = new CaseDispensingDays();
+		this.treatmentMonitoring = treatmentMonitoring;
 		mountDispensingDays();
 	}
 	
@@ -37,8 +32,8 @@ public class CaseDispensingInfo {
 	 * Generate the list of treatment days with information about the dispensing days
 	 */
 	protected void mountDispensingDays() {
-		int month = caseDispensing.getMonth() - 1;
-		int year = caseDispensing.getYear();
+		int month = treatmentMonitoring.getMonth() - 1;
+		int year = treatmentMonitoring.getYear();
 		
 		Calendar c = Calendar.getInstance();
 		c.clear();
@@ -48,8 +43,8 @@ public class CaseDispensingInfo {
 		int weekday = c.get(Calendar.DAY_OF_WEEK);
 		int numdays = DateUtils.daysInAMonth(year, month);
 
-		Date iniDate = caseDispensing.getTbcase().getTreatmentPeriod().getIniDate();
-		Date endDate = caseDispensing.getTbcase().getTreatmentPeriod().getEndDate();
+		Date iniDate = treatmentMonitoring.getTbcase().getTreatmentPeriod().getIniDate();
+		Date endDate = treatmentMonitoring.getTbcase().getTreatmentPeriod().getEndDate();
 		
 		int day = 0;
 		int count = 1;
@@ -76,7 +71,7 @@ public class CaseDispensingInfo {
 				dd.setWeekDay(i);
 
 				if ((day > 0) && (day <= numdays)) {
-					dd.setChecked(dispensingDays.isDay(day));
+					dd.setValue(treatmentMonitoring.getDay(day));
 					dd.setDay(day);					
 					weekInfo.setEndDay(day);
 
@@ -106,11 +101,11 @@ public class CaseDispensingInfo {
 		for (WeekInfo weekInfo: weeks) {
 			for (DayInfo day: weekInfo.getDays()) {
 				if (day.isAvailable())
-					dispensingDays.setDay(day.getDay(), day.isChecked());
+					treatmentMonitoring.setDay(day.getDay(), day.getValue());
 			}
 		}
-		caseDispensing.setDispensingDays(dispensingDays);
-		caseDispensing.updateTotalDays();
+//		treatmentMo.setDispensingDays(dispensingDays);
+//		caseDispensing.updateTotalDays();
 	}
 
 
@@ -118,14 +113,14 @@ public class CaseDispensingInfo {
 	/**
 	 * @return the caseDispensing
 	 */
-	public CaseDispensing getCaseDispensing() {
-		return caseDispensing;
+	public TreatmentMonitoring getTreatmentMonitoring() {
+		return treatmentMonitoring;
 	}
 	/**
 	 * @param caseDispensing the caseDispensing to set
 	 */
-	public void setCaseDispensing(CaseDispensing caseDispensing) {
-		this.caseDispensing = caseDispensing;
+	public void setTreatmentMonitoring(TreatmentMonitoring treatmentMonitoring) {
+		this.treatmentMonitoring = treatmentMonitoring;
 	}
 
 

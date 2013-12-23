@@ -1,8 +1,6 @@
 package org.msh.tb.cases.treatment;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +9,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.Patient;
-import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
@@ -48,30 +45,6 @@ public class TreatmentsInfoHome {
 		return groups;
 	}
 
-	/**
-	 * Return the list of treatments for the health unit tbunit. 
-	 * Treatments sorted descending by diagnosis date 
-	 * @return
-	 */
-	public List<CaseGroup> getGroupsWithSort() {
-		if (groups == null){
-			createTreatments();
-			for (CaseGroup cg:groups){
-				Collections.sort(cg.getTreatments(),new Comparator<TreatmentInfo>() {
-		
-					@Override
-					public int compare(TreatmentInfo o1, TreatmentInfo o2) {
-						TbCase tc1 = App.getEntityManager().find(TbCase.class, o1.getCaseId());
-						TbCase tc2 = App.getEntityManager().find(TbCase.class, o2.getCaseId());
-						Date d1 = tc1.getDiagnosisDate();
-						Date d2 = tc2.getDiagnosisDate();
-						return d2.compareTo(d1);
-					}
-				});
-			}
-		}
-		return groups;
-	}
 
 	/**
 	 * Create the list of treatments for the health unit TB unit
@@ -85,9 +58,9 @@ public class TreatmentsInfoHome {
 		groups = new ArrayList<CaseGroup>();
 
 		List<Object[]> lst = App.getEntityManager().createQuery("select c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, " +
-				"c.daysTreatPlanned, sum(disp.totalDays), c.classification, c.patientType, p.gender " +
+				"c.daysTreatPlanned, c.classification, c.patientType, p.gender " +
 				"from TbCase c " + 
-				"join c.patient p left join c.dispensing disp " + 
+				"join c.patient p " + 
 				"where c.state = " + CaseState.ONTREATMENT.ordinal() +
 				" and c.ownerUnit.id = " + unit.getId() + 
 				"group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, c.daysTreatPlanned, c.classification " +
@@ -98,9 +71,9 @@ public class TreatmentsInfoHome {
 		Workspace ws = (Workspace)Component.getInstance("defaultWorkspace", true);
 
 		for (Object[] vals: lst) {
-			CaseClassification classification = (CaseClassification)vals[7];
-			PatientType pt = (PatientType)vals[8];
-			Gender gender = (Gender)vals[9];
+			CaseClassification classification = (CaseClassification)vals[6];
+			PatientType pt = (PatientType)vals[7];
+			Gender gender = (Gender)vals[8];
 			CaseGroup grp = findGroup(classification);
 			
 			TreatmentInfo info = new TreatmentInfo();
@@ -115,8 +88,7 @@ public class TreatmentsInfoHome {
 			info.setTreatmentPeriod((Period)vals[4]);
 			if (vals[5] != null)
 				info.setNumDaysPlanned((Integer)vals[5]);
-			if (vals[6] != null)
-				info.setNumDaysDone(((Long)vals[6]).intValue());
+			info.setNumDaysDone(0);
 
 			grp.getTreatments().add(info);
 		}

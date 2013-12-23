@@ -37,6 +37,7 @@ import org.msh.tb.entities.enums.CaseValidationOption;
 import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.NameComposition;
 import org.msh.tb.entities.enums.RoleAction;
+import org.msh.tb.entities.enums.TreatMonitoringInput;
 import org.msh.tb.transactionlog.LogInfo;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.TransactionLogService;
@@ -396,8 +397,20 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		return profiles;
 	}
 
+	
+	/**
+	 * Return the options for the field {@link Workspace#getTreatMonitoringInput()}
+	 * @return
+	 */
+	public TreatMonitoringInput[] getTreatmentInputOptions() {
+		return TreatMonitoringInput.values();
+	}
 
 
+	/**
+	 * Return the instance of the {@link UserWorkspace} class associated to the current user
+	 * @return instance of {@link UserWorkspace}
+	 */
 	public UserWorkspace getUserWorkspace() {
 		if (userWorkspace == null)
 			userWorkspace = new UserWorkspace();

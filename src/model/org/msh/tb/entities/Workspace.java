@@ -28,6 +28,7 @@ import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseValidationOption;
 import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.NameComposition;
+import org.msh.tb.entities.enums.TreatMonitoringInput;
 import org.msh.tb.transactionlog.PropertyLog;
 
 @TypeDefs({@TypeDef(name="weeklyFrequency", typeClass=WeeklyFrequencyType.class)})
@@ -148,6 +149,13 @@ public class Workspace implements Serializable, Transactional {
 	 * the system will alert about that 
 	 */
 	private Integer maxStockOnHand;
+	
+	/**
+	 * If true, in the medicine in-take monitoring of the case, user will specify if administered the treatment
+	 * in DOTS or if it was self-administered by the patient. If false, the user will just select the day patient 
+	 * received medicine
+	 */
+	private TreatMonitoringInput treatMonitoringInput;
 
 	/**
 	 * Setup the adjustment type that represents expired medicine movements
@@ -645,6 +653,20 @@ public class Workspace implements Serializable, Transactional {
 	 */
 	public void setConfirmedCaseNumber(DisplayCaseNumber confirmedCaseNumber) {
 		this.confirmedCaseNumber = confirmedCaseNumber;
+	}
+
+	/**
+	 * @return the treatMonitoringInput
+	 */
+	public TreatMonitoringInput getTreatMonitoringInput() {
+		return treatMonitoringInput;
+	}
+
+	/**
+	 * @param treatMonitoringInput the treatMonitoringInput to set
+	 */
+	public void setTreatMonitoringInput(TreatMonitoringInput treatMonitoringInput) {
+		this.treatMonitoringInput = treatMonitoringInput;
 	}
 
 }

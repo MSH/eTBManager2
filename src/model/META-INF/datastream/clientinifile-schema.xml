@@ -282,13 +282,9 @@
 		    <property name="lastTransaction" use="IGNORE" />
         </objectGraph>
         
-        <objectGraph name="caseDispensing" class="org.msh.tb.entities.CaseDispensing" >
+        <objectGraph name="treatmonitoring" class="org.msh.tb.entities.TreatmentMonitoring" >
             <property name="id" xmlAttribute="true" use="REQUIRED"/>
             <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
-            <property name="dispensingDays">
-                 <objectGraph name="caseDispDays" class="org.msh.tb.entities.CaseDispensingDays" parentProperty="caseDispensing">
-                 </objectGraph>
-            </property>
 		    <property name="lastTransaction" use="IGNORE" />
         </objectGraph>
         

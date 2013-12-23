@@ -87,6 +87,14 @@
       	</h:selectOneMenu>
     </s:decorate>
 
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.treatMonitoringInput']}:</ui:define>
+		<h:selectOneMenu value="#{workspace.treatMonitoringInput}" required="true">
+           	<s:selectItems value="#{workspaceHome.treatmentInputOptions}" var="it" noSelectionLabel="-" label="#{messages[it.messageKey]}"/>
+           	<s:convertEnum />
+      	</h:selectOneMenu>
+    </s:decorate>
+
     <h2>
     	#{messages['DisplayCaseNumber']}
     </h2>

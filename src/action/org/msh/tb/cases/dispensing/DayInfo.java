@@ -3,6 +3,7 @@ package org.msh.tb.cases.dispensing;
 import java.text.DateFormatSymbols;
 
 import org.jboss.seam.core.Locale;
+import org.msh.tb.entities.enums.TreatmentDayOption;
 
 /**
  * Hold temporary information during editing about a day of treatment 
@@ -10,7 +11,7 @@ import org.jboss.seam.core.Locale;
  *
  */
 public class DayInfo {
-	private boolean checked;
+	private TreatmentDayOption value;
 	private boolean available;
 	private Integer day;
 	private int weekDay;
@@ -29,13 +30,13 @@ public class DayInfo {
 	 * @return the checked
 	 */
 	public boolean isChecked() {
-		return checked;
+		return (value == TreatmentDayOption.DOTS) || (value == TreatmentDayOption.SELF_ADMIN);
 	}
 	/**
 	 * @param checked the checked to set
 	 */
 	public void setChecked(boolean checked) {
-		this.checked = checked;
+		value = checked? TreatmentDayOption.DOTS: TreatmentDayOption.NOT_TAKEN;
 	}
 	/**
 	 * @return the available
@@ -74,6 +75,20 @@ public class DayInfo {
 	 */
 	public void setWeekDay(int weekDay) {
 		this.weekDay = weekDay;
+	}
+
+	/**
+	 * @return the value
+	 */
+	public TreatmentDayOption getValue() {
+		return value;
+	}
+
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(TreatmentDayOption value) {
+		this.value = value;
 	}
 
 }

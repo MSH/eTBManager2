@@ -77,4 +77,12 @@ public class DayInfo {
 	public boolean isTreated() {
 		return treated;
 	}
+
+
+	/**
+	 * @return the monthInfo
+	 */
+	public MonthInfo getMonthInfo() {
+		return monthInfo;
+	}
 }

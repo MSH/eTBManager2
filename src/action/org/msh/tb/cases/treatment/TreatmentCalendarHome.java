@@ -10,9 +10,10 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.CaseDispensing;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.TreatmentMonitoring;
 import org.msh.tb.entities.enums.RegimenPhase;
+import org.msh.tb.entities.enums.TreatmentDayOption;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
@@ -211,19 +212,18 @@ public class TreatmentCalendarHome {
 	 * Fill calendar with dispensing information
 	 */
 	protected void mountDispensing() {
-		List<CaseDispensing> lst = entityManager.createQuery("from CaseDispensing c  " +
-				"left join fetch c.dispensingDays " +
+		List<TreatmentMonitoring> lst = entityManager.createQuery("from TreatmentMonitoring c  " +
 				"where c.tbcase.id = :id ")
 				.setParameter("id", caseHome.getId())
 				.getResultList();
 
-		for (CaseDispensing cd: lst) {
-			int month = cd.getMonth();
-			int year = cd.getYear();
+		for (TreatmentMonitoring tm: lst) {
+			int month = tm.getMonth();
+			int year = tm.getYear();
 			int numdays = DateUtils.daysInAMonth(year, month - 1);
 
 			for (int day = 1; day <= numdays; day++) {
-				if ((cd.getDispensingDays() == null) || (cd.getDispensingDays().isDay(day))) {
+				if (tm.getDay(day) != TreatmentDayOption.NOT_TAKEN) {
 					Calendar c = Calendar.getInstance();
 					c.set(year, month - 1, day);
 					DayInfo di = getDay(c.getTime());
