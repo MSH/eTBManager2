@@ -223,12 +223,14 @@ public class TreatmentCalendarHome {
 			int numdays = DateUtils.daysInAMonth(year, month - 1);
 
 			for (int day = 1; day <= numdays; day++) {
-				if (tm.getDay(day) != TreatmentDayOption.NOT_TAKEN) {
+				TreatmentDayOption val = tm.getDay(day);
+				if (val != TreatmentDayOption.NOT_TAKEN) {
 					Calendar c = Calendar.getInstance();
 					c.set(year, month - 1, day);
 					DayInfo di = getDay(c.getTime());
 					if (di != null) {
-						di.setDispensed(true);
+						di.setValue(val);
+//						di.setDispensed(true);
 						di.setTreated(true);
 					}
 				}

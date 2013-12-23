@@ -1,5 +1,7 @@
 package org.msh.tb.cases.treatment;
 
+import org.msh.tb.entities.enums.TreatmentDayOption;
+
 /**
  * Stores information about an specific treatment day
  * @author Ricardo Lima
@@ -8,9 +10,9 @@ package org.msh.tb.cases.treatment;
 public class DayInfo {
 
 	private boolean prescribed;
-	private boolean dispensed;
 	private boolean notused;
 	private boolean treated;
+	private TreatmentDayOption value;
 	
 	private MonthInfo monthInfo;
 
@@ -28,13 +30,6 @@ public class DayInfo {
 	 */
 	public boolean isNotused() {
 		return notused;
-	}
-
-	/**
-	 * @param notused the notused to set
-	 */
-	public void setNotused(boolean notused) {
-		this.notused = notused;
 	}
 	
 	/**
@@ -54,13 +49,7 @@ public class DayInfo {
 	 * @return true - if it was dispensed medicine
 	 */
 	public boolean isDispensed() {
-		return dispensed;
-	}
-	public void setDispensed(boolean dispensed) {
-		this.dispensed = dispensed;
-		if (dispensed)
-			 monthInfo.setDispensingDays(monthInfo.getDispensingDays() + 1);
-		else monthInfo.setDispensingDays(monthInfo.getDispensingDays() - 1);
+		return (value == TreatmentDayOption.DOTS) || (value == TreatmentDayOption.SELF_ADMIN);
 	}
 
 	/**
@@ -84,5 +73,29 @@ public class DayInfo {
 	 */
 	public MonthInfo getMonthInfo() {
 		return monthInfo;
+	}
+
+
+	/**
+	 * @return the value
+	 */
+	public TreatmentDayOption getValue() {
+		return value;
+	}
+
+
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(TreatmentDayOption value) {
+		this.value = value;
+	}
+
+
+	/**
+	 * @param notused the notused to set
+	 */
+	public void setNotused(boolean notused) {
+		this.notused = notused;
 	}
 }

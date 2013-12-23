@@ -94,7 +94,7 @@
 			<h:outputText value="#{messages['cases.treat.intphase']}" rendered="#{phase.intensivePhase}"/>
 			<h:outputText value="#{messages['cases.treat.contphase']}" rendered="#{phase.continuousPhase}"/>
 		</h3>
-		<ui:decorate template="calendartreat.xhtml" >
+		<ui:decorate template="#{defaultWorkspace.treatMonitoringInput == 'DETAILED'?'calendartreat_detailed.xhtml':'calendartreat.xhtml'}" >
 			<ui:param name="list" value="#{phase.months}" />
 		</ui:decorate>
 	</a:repeat>

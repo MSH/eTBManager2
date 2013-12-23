@@ -15,6 +15,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.TreatmentMonitoring;
+import org.msh.tb.entities.enums.TreatmentDayOption;
 
 
 /**
@@ -149,6 +150,15 @@ public class CaseDispensingHome {
 		return date;
 	}
 
+	
+	/**
+	 * Return the options of each day in the calendar
+	 * @return array of {@link TreatmentDayOption}
+	 */
+	public TreatmentDayOption[] getDayOptions() {
+		return TreatmentDayOption.values();
+	}
+	
 	/**
 	 * @return the month
 	 */

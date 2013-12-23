@@ -13,5 +13,14 @@ public enum TreatmentDayOption {
 
 	NOT_TAKEN,
 	DOTS,
-	SELF_ADMIN
+	SELF_ADMIN;
+	
+	public String getLabel() {
+		switch (this) {
+		case DOTS: return "D";
+		case NOT_TAKEN: return "N";
+		case SELF_ADMIN: return "S";
+		}
+		return null;
+	}
 }
