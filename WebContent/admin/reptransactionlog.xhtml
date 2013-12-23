@@ -108,7 +108,7 @@
 		</td>
 		<td align="right">
 			<h:outputText value="#{it.transactionDate}" styleClass="text-small">
-				<f:convertDateTime type="both" timeZone="#{timezones.default}"/>
+				<f:convertDateTime type="both" timeZone="#{timeZoneSelector.getTimeZoneId()}"/>
 			</h:outputText>
 			<h:outputText value="#{it.transactionDate}" styleClass="hint" converter="periodConverter">
 				<f:param name="type" value="elapsed-time" />

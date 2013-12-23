@@ -54,7 +54,7 @@
 				<f:facet name="header" >
 					<h:outputText value="#{messages['global.comments']}"  styleClass="collh" />
 				</f:facet>
-				<h:inputText value="#{it.item.comment}" style="width:400px;display:none; "/>
+				<h:inputText value="#{it.item.comment}" style="width:400px;display:none; " styleClass="commentinput"/>
 			</h:column>
 		</h:dataTable>
 		</div>		
@@ -100,8 +100,10 @@ function updateRows() {
 	jQuery("#tbldata tr").removeClass("activerow");
 	jQuery("#tbldata tr .divother").hide();
 	jQuery("#tbldata tr select").hide();
+	jQuery("#tbldata tr .commentinput").hide();
 	jQuery("#tbldata tr:has(:checked) .divother").show(); 
 	jQuery("#tbldata tr:has(:checked) select").show();
+	jQuery("#tbldata tr:has(:checked) .commentinput").show();
 	jQuery("#tbldata tr:has(:checked)").addClass("activerow");
 }
 function toggleDivPanel(chk, divname) {

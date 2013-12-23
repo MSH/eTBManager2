@@ -78,5 +78,35 @@
 	where recordnumber in(11854, 12180, 12413, 17965, 19644, 19651, 20420, 20998);	
 	</sql>
 	</changeSet>
+	
+	<!-- Revert last change -->
+	<changeSet id="13.5" author="MSANTOS" context="BD">
+	<sql>
 
+	update patient set recordnumber = '11854' where id = 1077902;
+	update patient set recordnumber = '11854' where id = 1077903;
+	update patient set recordnumber = '12180' where id = 1078298;
+	update patient set recordnumber = '12180' where id = 1078299;
+	update patient set recordnumber = '12413' where id = 1078549;
+	update patient set recordnumber = '12413' where id = 1078550;
+	update patient set recordnumber = '17965' where id = 1084454;
+	update patient set recordnumber = '17965' where id = 1084455;
+	update patient set recordnumber = '19644' where id = 1086213;
+	update patient set recordnumber = '19644' where id = 1086214;
+	update patient set recordnumber = '19651' where id = 1086220;
+	update patient set recordnumber = '19651' where id = 1086221;
+	update patient set recordnumber = '20420' where id = 1087021;
+	update patient set recordnumber = '20420' where id = 1087023;
+	update patient set recordnumber = '20998' where id = 1087625;
+	update patient set recordnumber = '20998' where id = 1087626;
+	
+	update tbcase
+	set validationState = 1,
+	casenumber = 1
+	where tbcase.id in(1105413, 1105414, 1105812, 1105813, 1106065, 1106066, 1112013, 1112014, 1113783, 1113784, 1113790, 1113791, 1114595, 1114597, 1115201, 1115202);
+
+	</sql>
+	</changeSet>
+	
+	
 </databaseChangeLog>

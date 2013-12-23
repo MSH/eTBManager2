@@ -44,6 +44,7 @@ public class UserSettings {
 
 		// update database
 		em.persist(user);
+		em.flush();
 		
 		// reloads the user workspaces
 		user.getWorkspaces().size();
