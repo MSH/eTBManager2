@@ -20,7 +20,7 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 
-<rich:jQuery name="showbutton" selector="#newpacbutton" query="slideDown(500)" />
+<rich:jQuery name="showbutton" selector="#newpacbutton" query="show()" />
 <h:form id="main" styleClass="form1">
 <div class="form-content">
 
@@ -52,9 +52,7 @@
     </h:panelGroup>
 
 	<h:inputHidden value="#{tbcase.classification}" />
-</div>
 
-	<div class="form-footer">
 		<a:commandLink id="btnsearch" styleClass="button"
 			focus="name" onclick="if (!disableButton(this)) return false;initPatientSearch(); return false" >
 			<span>#{messages['form.search']}</span>
@@ -62,72 +60,79 @@
 		<s:link view="/cases/index.xhtml" styleClass="button-alt" onclick="disableButton(this)">
 			<span>#{messages['form.cancel']}</span>
 		</s:link>
+</div>
 
 	<rich:jQuery timming="onload" selector="#main input[type='text']:first" query="focus()" />
 	<rich:hotKey selector="#main input" key="return" handler="initPatientSearch()" />
-	</div>
-	
-<h:panelGroup id="pnlpatients">
+	<a:jsFunction name="newPatientForm" action="#{caseEditingHome.selectPatientData}" />
 
-<div id="newpacbutton" class="button-bar" style="display:none;">
-	<a:commandLink onclick="if (!disableButton(this)) return false;"
-    	action="#{caseEditingHome.selectPatientData}" styleClass="button" >
-	    <!-- <span>#{messages['cases.newcase']}</span>-->
-	   <span> #{messages['form.new']} #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect]: messages[tbcase.classification.key]}</span>
-	</a:commandLink>
-</div>
+<div class="spacer"></div>
+<h:panelGroup id="pnlpatients">
+<div id="newpacbutton" style="display:none;" >
+<h1>#{messages['cases.new.selpatient']}</h1>
 
 <s:decorate template="/layout/naveg.xhtml" >
 	<ui:param name="list" value="#{patients}" />
 	<h:panelGroup id="res" rendered="#{not empty patientsbd.patientList}">
 
-	<h:dataTable value="#{patients.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
-		width="680px" columnClasses="coll,colc,colc,coll">
-		<h:column>
-			<f:facet name="header">
-				<s:link value="#{messages['Patient.name']}" styleClass="collh">
-	  			<f:param name="order" value="#{patients.order=='p.name,p.middleName'?'p.name desc,p.middleName desc':''}" />
-				</s:link>
-			</f:facet>
-			<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;">
-				<f:param name="pacid" value="#{it.patient.id}" />
-				<f:param name="cla" value="#{tbcase.classification}"/>
-			</s:link>
-			<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml" onclick="openWaitDlg();">
-				<f:param name="pacid" value="#{it.patient.id}" />
-				<f:param name="cla" value="#{tbcase.classification}"/>
-			</s:link>
-			<br/>
-			#{it.patient.recordNumber}
-		</h:column>
-	
-		<h:column>
-			<f:facet name="header">
-				<s:link value="#{messages['Patient.birthDate']}" >
-	  			<f:param name="order" value="p.birthDate#{patients.order=='p.birthDate'?' desc':''}" />
-				</s:link>
-			</f:facet>
-			<h:outputText value="#{it.patient.birthDate}"  converter="localeDateConverter"/>
-		</h:column>
-	
-		<h:column>
-			<f:facet name="header">
-				<s:link value="#{messages['Patient.securityNumber']}" styleClass="collh">
-	  			<f:param name="order" value="p.securityNumber#{patients.order=='p.securityNumber'?' desc':''}" />
-				</s:link>
-			</f:facet>
-			#{it.patient.securityNumber}
-		</h:column>
-		
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="#{messages['cases.sit.current']}" styleClass="collh" />
-			</f:facet>
-			<h:outputText value="#{it.caseStatus}" escape="false" />
-		</h:column>
-	</h:dataTable>
+	<table id="tblpats" width="680px" class="table1" >
+		<tr id="pacnew" class="selectable">
+			<td colspan="4">
+				<div style="float:left"><input type="radio" name="sel1" onclick="radioClick(this);"/></div>
+				<b>#{messages['cases.newpatient']}</b>
+				<div class="hint">#{messages['cases.new.msg']}</div>
+				<div id="btn" style="display:none;font-size:11px;">
+					<a onclick="if (!disableButton(this)) return false; else newPatientForm();"
+				    	class="button" >
+				   		<span>#{messages['cases.new.gonotif']}</span>
+					</a>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th>#{messages['Patient.name']}</th>
+			<th>#{messages['Patient.birthDate']}</th>
+			<th>#{messages['Patient.securityNumber']}</th>
+			<th>#{messages['cases.sit.current']}</th>
+		</tr>
+		<a:repeat value="#{patients.patientList}" var="it">
+		<tr id="pac#{it.patient.id}" class="selectable">
+			<td>
+				<div style="float:left"><input type="radio" name="sel1" onclick="radioClick(this);"/></div>
+				<div>
+				<div class="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" />
+				</div>
+				#{it.patient.fullName}
+				<br/>
+				#{it.patient.recordNumber}
+				<div id="btn" style="display:none;clear:both">
+					<s:link view="/cases/casenew.xhtml" onclick="if (!disableButton(this)) return false;" styleClass="button">
+						<f:param name="pacid" value="#{it.patient.id}" />
+						<f:param name="cla" value="#{tbcase.classification}"/>
+						<span>#{messages['cases.new.gonotif']}</span>
+					</s:link>
+				</div>
+			</td>
+			
+			<td>
+				<h:outputText value="#{it.patient.birthDate}"  converter="localeDateConverter"/>
+			</td>
+			
+			<td>
+				#{it.patient.securityNumber}
+			</td>
+			
+			<td>
+				<h:outputText value="#{it.caseStatus}" escape="false" />
+			</td>
+		</tr>
+		</a:repeat>
+	</table>
+
+	<p/>
 	</h:panelGroup>
 </s:decorate>
+</div>
 </h:panelGroup>
 
 <script type="text/javascript">
@@ -145,9 +150,35 @@ function checkfields() {
 	}
 	return true;
 }
+function initPatientTable() {
+	jQuery('#tblpats tr.selectable')
+		.mouseover(function(){ 
+			jQuery(this).addClass('highlight').css('cursor','pointer');
+		})
+		.mouseout(function(){
+			if (jQuery('input:checked', this).length == 0) 
+				jQuery(this).removeClass('highlight').css('cursor','default');
+		})
+		.click(function(){ selectRow(this)});
+}
+function radioClick(radio) {
+	jQuery(radio).attr('checked',false);
+	selectRow(jQuery(radio).parent('tr'));
+}
+
+function selectRow(row) {
+	if (jQuery('input:checked',row).length>0)
+		return;
+	jQuery('#tblpats tr #btn').slideUp(250);
+	jQuery('#btn', row).slideDown(250);
+	jQuery('input[type="radio"]', row).attr('checked', true);
+
+	jQuery('#tblpats tr').removeClass('highlight');
+	jQuery(row).addClass('highlight');
+}
 </script>
 <a:jsFunction name="searchPatient" reRender="pnlpatients,dt" 
-	oncomplete="if (data) showbutton();enableButton();"
+	oncomplete="if (data) {showbutton();enableButton();initPatientTable();}"
 	action="#{patients.search}"  
 	data="#{patients.searching}" />
 
