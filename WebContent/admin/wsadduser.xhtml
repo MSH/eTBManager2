@@ -26,6 +26,8 @@
 	<div class="form-content">
  		<b style="padding-left:10px;padding-bottom:5px;">#{messages['admin.users']}</b>
 		<div style="padding:10px">
+
+		<h:panelGrid id="pnlform">
 		<a:region immediate="true">
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['User']}:</ui:define>
@@ -83,9 +85,10 @@ function processSelectedUser(suggestion) {
 	    </s:decorate>
 		
 		<a:commandLink action="#{workspaceHome.addUser}" styleClass="button" 
-			onclick="if (!disableButton(this)) return false;" reRender="main" >
+			onclick="if (!disableButton(this)) return false;" reRender="pnltable,pnlform" >
 			<span>#{messages['form.add']}</span>
 		</a:commandLink>
+		</h:panelGrid>
 		
 		</div>
  
@@ -104,6 +107,7 @@ function processSelectedUser(suggestion) {
 		</a:commandLink>
 	</div>
 
+	<h:panelGrid id="pnltable">
 	<b style="padding-left:10px;padding-bottom:5px;">#{messages['admin.workspaces.users']}</b>
 	<div style="padding:10px">
 		<h:dataTable value="#{workspace.users}" var="it" width="100%" styleClass="table1">
@@ -129,6 +133,7 @@ function processSelectedUser(suggestion) {
 			</h:column>
 		</h:dataTable>
 	</div>
+	</h:panelGrid>
 
 </h:form>
 </ui:define>
