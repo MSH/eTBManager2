@@ -73,7 +73,7 @@
 
 <s:decorate template="/layout/naveg.xhtml" >
 	<ui:param name="list" value="#{patients}" />
-	<h:panelGroup id="res" rendered="#{not empty patientsbd.patientList}">
+	<h:panelGroup id="res" rendered="#{not empty patients.patientList}">
 
 	<table id="tblpats" width="680px" class="table1" >
 		<tr id="pacnew" class="selectable">
@@ -90,10 +90,16 @@
 			</td>
 		</tr>
 		<tr>
-			<th>#{messages['Patient.name']}</th>
-			<th>#{messages['Patient.birthDate']}</th>
-			<th>#{messages['Patient.securityNumber']}</th>
-			<th>#{messages['cases.sit.current']}</th>
+			<th rowspan="2">#{messages['Patient']}</th>
+			<th rowspan="2">#{messages['Patient.birthDate']}</th>
+			<th colspan="2">#{messages['cases.sit.current']}</th>
+		</tr>
+		<tr>
+			<th>Case status</th>
+			<th>#{messages['TbCase.notificationUnit']}
+				<br/>
+				#{levelInfo.nameLevel1}, #{levelInfo.nameLevel2} (#{messages['Address']})
+			</th>
 		</tr>
 		<a:repeat value="#{patients.patientList}" var="it">
 		<tr id="pac#{it.patient.id}" class="selectable">
@@ -119,11 +125,13 @@
 			</td>
 			
 			<td>
-				#{it.patient.securityNumber}
+				<h:outputText value="#{it.caseStatus}" escape="false" />
 			</td>
 			
 			<td>
-				<h:outputText value="#{it.caseStatus}" escape="false" />
+				#{it.tbcase.notificationUnit.name}
+				<br/>
+				#{it.tbcase.notifAddress.adminUnit.fullDisplayName2}
 			</td>
 		</tr>
 		</a:repeat>

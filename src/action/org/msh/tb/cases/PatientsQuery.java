@@ -33,7 +33,7 @@ public class PatientsQuery extends EntityQuery {
 	 */
 	@Override
 	public String getEjbql() {
-		return "from Patient p left outer join p.cases c " +
+		return "from Patient p left outer join p.cases c join fetch c.notificationUnit " +
 			"where p.workspace.id = #{defaultWorkspace.id} " + conditions() +
 			" and c.registrationDate in (select max(aux.registrationDate) from TbCase aux where aux.patient.id = p.id)";
 	}
