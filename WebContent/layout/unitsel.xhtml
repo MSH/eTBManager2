@@ -15,12 +15,11 @@
 	<div style="float:right;" class="noprint">
 		<a:region id="reg">
 		<a:commandLink id="selunit" value="#{messages['meds.selunit']}" action="#{unitSelection.startSelecting}" reRender="units,unitCount" 
-			onclick="showUnitSelDlg();" rendered="#{selunit=='1'}" ajaxSingle="true" focus="unitname"/>
+			onclick="showUnitSelDlg();" rendered="#{selunit=='1'}" ajaxSingle="true" focus="unitname" ></a:commandLink>
 		</a:region>
 	</div>
 	</h:form>
-	
-	<div class="#{userSession.tbunit.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}" style="float:left;"/>
+	<div class="#{userSession.tbunit.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}" style="float:left;"></div>
 	<div class="text-medium">
 	#{userSession.tbunit.name}
 	</div>
@@ -76,11 +75,13 @@
 			</div>
 			<h:dataTable id="tbl" value="#{it.units}" var="u" >
 			<h:column>
-				<div class="#{u.treatmentHealthUnit?'icon-hu':'icon-ds'}" />
-  				<a:commandLink id="selunit" onclick="selectUnit(#{u.id}); return false;"	style="width:100%;">
-  					<span class="#{u.medicineManagementStarted?'':'icon-error'}" title="#{u.medicineManagementStarted?'':messages['medicines.start.alert']}" />
-					#{u.name}
-  				</a:commandLink>
+				<div style="float:left">
+					<div class="#{u.treatmentHealthUnit?'icon-hu':'icon-ds'}" ></div>
+				</div>
+				<div style="float:left">
+					<s:div rendered="#{not u.medicineManagementStarted}" styleClass="icon-error"></s:div>
+				</div>
+			   	<s:link onclick="selectUnit(#{u.id}); return false;" style="width:100%" value="#{u.name}" title="#{u.medicineManagementStarted?'':messages['meds.start.alert']}" ></s:link>
 			</h:column>
 			</h:dataTable>
 		</a:repeat>
