@@ -73,7 +73,6 @@
 
 <s:decorate template="/layout/naveg.xhtml" >
 	<ui:param name="list" value="#{patients}" />
-	<h:panelGroup id="res" rendered="#{not empty patients.patientList}">
 
 	<table id="tblpats" width="680px" class="table1" >
 		<tr id="pacnew" class="selectable">
@@ -89,6 +88,7 @@
 				</div>
 			</td>
 		</tr>
+		<s:fragment rendered="#{not empty patients.patientList}">
 		<tr>
 			<th rowspan="2" width="250px">#{messages['Patient']}</th>
 			<th rowspan="2">#{messages['Patient.birthDate']}</th>
@@ -135,10 +135,10 @@
 			</td>
 		</tr>
 		</a:repeat>
+		</s:fragment>
 	</table>
 
 	<p/>
-	</h:panelGroup>
 </s:decorate>
 </div>
 </h:panelGroup>
