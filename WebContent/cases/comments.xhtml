@@ -16,11 +16,15 @@
 			<table width="100%">
 			<tr><td>
 			<s:fragment rendered="#{caseHome.canAddComments and not printing}">
-				<h:inputTextarea value="#{caseComment.comment}" style="width:500px;height:50px;float:left;"/>
+				<div id="comtext" style="float:left">
+					<h:inputTextarea value="#{caseComment.comment}" style="width:500px;height:50px;"/>
+					<div id="comvalue" class="error" style="display:none;">#{messages['javax.faces.component.UIInput.REQUIRED']}</div>
+				</div>
 				<a:commandLink style="float:right" 
-					styleClass="button-alt" 
+					styleClass="button-alt"
+					onclick="if (jQuery('#comtext textarea').val()=='') {jQuery('#comvalue').show();return false;} disableButton(this);" 
 					action="#{caseCommentsHome.addComment}" 
-					reRender="#{panel}pnlComments" onclick="disableButton(this)">
+					reRender="#{panel}pnlComments" >
 					<span>#{messages['cases.comments.add']}</span>
 				</a:commandLink>
 			</s:fragment>
@@ -62,7 +66,7 @@
 			</h:column>
 			
 		</h:dataTable>
-		
+	
 	</div>
 	</s:fragment>
 	
