@@ -230,6 +230,9 @@
 				<div>
 					<h:outputText value="#{messages[r.rifResult.key]}" rendered="#{r.result=='TB_DETECTED'}" />
 				</div>
+				<s:div style="clear:both" rendered="#{not empty r.dateRelease}">
+				<b>#{messages['cases.exams.dateRelease']}: </b>	<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" />
+				</s:div>
 			</h:column>
 				
 			<h:column>
