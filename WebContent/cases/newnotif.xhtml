@@ -111,7 +111,7 @@
 				</div>
 				#{it.patient.fullName}
 				<br/>
-				#{it.patient.recordNumber}
+				#{it.tbcase.displayCaseNumber}
 				<div id="btn" style="display:none;clear:both">
 					<s:link view="/cases/casenew.xhtml" onclick="if (!disableButton(this)) return false;" styleClass="button">
 						<f:param name="pacid" value="#{it.patient.id}" />
