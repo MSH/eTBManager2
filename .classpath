@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/action"/>
-	<classpathentry kind="src" path="src/ua"/>
-	<classpathentry kind="src" path="src/md"/>
-	<classpathentry kind="src" path="src/in"/>
+	<classpathentry kind="src" path="src/uz"/>
 	<classpathentry kind="src" path="src/vi"/>
 	<classpathentry kind="src" path="src/kh"/>
-	<classpathentry kind="src" path="src/br"/>
+	<classpathentry kind="src" path="src/ng"/>
 	<classpathentry kind="src" path="src/na"/>
 	<classpathentry kind="src" path="src/ke"/>
 	<classpathentry kind="src" path="src/bd"/>
 	<classpathentry kind="src" path="src/client"/>
 	<classpathentry kind="src" path="src/reports"/>
-	<classpathentry kind="src" path="src/ng"/>
 	<classpathentry kind="src" path="src/model"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/dom4j-1.6.1.jar" sourcepath="C:/Users/Ricardo/.m2/repository/dom4j/dom4j/1.6.1/dom4j-1.6.1-sources.jar"/>
@@ -21,5 +18,6 @@
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.testng.TESTNG_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/gwt-2.4.0"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

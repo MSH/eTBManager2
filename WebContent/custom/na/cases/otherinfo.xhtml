@@ -164,9 +164,9 @@
 		<tr>
 			<th colspan="3" align="left">
 				<div style="float:right;">
-				<s:link view="/custom/na/cases/sideeffectedt.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
+				<s:link view="/custom/na/cases/sideeffectsedt.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 					<f:param name="id" value="#{tbcase.id}"/>
-					<f:param name="seid" value="#{r.id}"/>
+					<f:param name="idSideEffect" value="#{it.id}"/>
 					<i class="icon-edit"/>#{messages['form.edit']}
 				</s:link>
 				<h:commandLink 

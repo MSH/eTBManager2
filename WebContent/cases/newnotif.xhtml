@@ -79,7 +79,8 @@
 			<td colspan="4">
 				<div style="float:left"><input type="radio" name="sel1" onclick="radioClick(this);"/></div>
 				<b>#{messages['cases.newpatient']}</b>
-				<div class="hint">#{messages['cases.new.msg']}</div>
+				#{empty patients.patientList}
+				<s:div styleClass="hint" rendered="#{not empty patients.patientList}">#{messages['cases.new.msg']}</s:div>
 				<div id="btn" style="display:none;font-size:11px;">
 					<a onclick="if (!disableButton(this)) return false; else newPatientForm();"
 				    	class="button" >
