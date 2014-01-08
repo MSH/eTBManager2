@@ -100,7 +100,7 @@ display:block;
 	<td>
 		<b>#{it.tbcase.diagnosisType=='SUSPECT'? messages[it.tbcase.classification.keySuspect] : messages[it.tbcase.classification.key]}</b>
 		<div><h:outputText value="#{caseHome.getStatusString(it.tbcase)}" styleClass="#{it.tbcase.onTreatment?'warn':''}"/></div>
-   		<h:outputText value="#{caseHome.getStatusString2(it.tbcase)}" style="color:#8DA48F;font-weight:bold;"/>
+   		<h:outputText value="#{caseHome.getStatusString2(it.tbcase)}" style="color:#8DA48F;font-weight:bold;" rendered="#{it.tbcase.state!='ONTREATMENT'}"/>
 	</td>
 	<td>
 		<b>#{it.tbcase.ownerUnit.name}</b><br />

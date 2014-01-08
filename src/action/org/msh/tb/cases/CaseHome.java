@@ -614,8 +614,7 @@ public class CaseHome extends WsEntityHome<TbCase>{
 		}
 		
 		if (tbcase.getState() == CaseState.ONTREATMENT)
-			return null;
-//			return Messages.instance().get(tbcase.getState().getKey());
+			return Messages.instance().get(tbcase.getState().getKey());
 		
 		return Messages.instance().get(tbcase.getState().getKey());
 	}

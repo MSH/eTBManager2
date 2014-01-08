@@ -27,6 +27,7 @@
 </ui:define>
 
 
+
 <ui:define name="state-content">
 	<h:form id="form-status">
 	<s:div rendered="#{tbcase.state=='TRANSFERRING'}" style="border:1px solid #d0d0d0;background-color:white;border-radius:4px;padding:4px;max-width:320px;"> 
@@ -158,6 +159,7 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 <s:decorate id="bodydiv" template="/layout/casebody.xhtml">
+
 <h:form id="main">
 
 	<ui:include src="/cases/issues.xhtml" />
