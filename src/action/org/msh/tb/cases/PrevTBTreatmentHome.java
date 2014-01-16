@@ -136,7 +136,9 @@ public class PrevTBTreatmentHome {
 			if (prevCase != null) {
 				Period period = prevCase.getTreatmentPeriod();
 				if ((period != null) && (period.getIniDate() != null)) {
-					PrevTBTreatmentOutcome ttoOutcome = PrevTBTreatmentOutcome.convertFromCaseState(prevCase.getState());
+					PrevTBTreatmentOutcome ttoOutcome = null;
+					if (prevCase.getState() != CaseState.ONTREATMENT)
+						ttoOutcome = PrevTBTreatmentOutcome.convertFromCaseState(prevCase.getState());
 					PrevTBTreatment p = new PrevTBTreatment();
 					p.setOutcome(ttoOutcome);
 					p.setMonth(DateUtils.monthOf(period.getIniDate()));
@@ -238,7 +240,7 @@ public class PrevTBTreatmentHome {
 			try {
 				String hql = "from TbCase c where c.patient.id = :id and c.treatmentPeriod.iniDate = " +
 					"(select max(c2.treatmentPeriod.iniDate) from TbCase c2 where c2.patient.id = c.patient.id) " +
-					"and c.state not in (" + CaseState.WAITING_TREATMENT.ordinal() + ", " + CaseState.DIED.ordinal() + "," + CaseState.DIED_NOTTB.ordinal() + ")";
+					"and c.state not in (" + CaseState.DIED.ordinal() + "," + CaseState.DIED_NOTTB.ordinal() + ")";
 
 				Query q = entityManager
 					.createQuery(hql)
@@ -248,7 +250,7 @@ public class PrevTBTreatmentHome {
 				for (TbCase tbcase: lst) {
 					CaseState state = tbcase.getState();
 					if (tbcase.getDiagnosisType() == DiagnosisType.CONFIRMED) {
-						if (state.ordinal() > CaseState.TRANSFERRING.ordinal()) {
+						if (state.ordinal() >= CaseState.ONTREATMENT.ordinal()) {
 							previousCase = tbcase;
 							break;
 						}

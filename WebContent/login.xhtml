@@ -157,7 +157,7 @@ color:#a0a0a0;
     	<label class="control-label" for="inputPassword">Language:</label>
     	<div class="controls">
        		<div class="input-prepend">
-            <h:selectOneMenu value="#{localeSelector.localeString}" > 
+            <h:selectOneMenu value="#{localeSelector.localeString}" styleClass="form-control"> 
           		<f:selectItems value="#{localeSelector.supportedLocales}" />
           		<a:support event="onchange" action="#{localeSelector.select}" oncomplete="document.location.reload(true);"/>
           	</h:selectOneMenu>
