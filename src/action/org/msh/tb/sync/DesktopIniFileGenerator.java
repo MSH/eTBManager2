@@ -99,7 +99,7 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		hqls.add("from ExamXRay a join fetch a.tbcase left join fetch a.presentation where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from ExamDST a join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from ExamDSTResult a join fetch a.substance join fetch a.exam where a.exam.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
-		hqls.add("from CaseDispensing a join fetch a.tbcase left join fetch a.dispensingDays where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from TreatmentMonitoring a join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from TbContact a join fetch a.tbcase left join fetch a.contactType left join fetch a.conduct where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from CaseSideEffect a join fetch a.tbcase left join fetch a.substance left join fetch a.substance2 where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from CaseComorbidity a join fetch a.tbcase left join fetch a.comorbidity where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
