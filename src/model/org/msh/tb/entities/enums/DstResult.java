@@ -8,7 +8,8 @@ public enum DstResult {
 	BASELINE,
 	INTERMEDIATE,
 	ERROR,
-	NOTRESISTANT;
+	NOTRESISTANT,
+	ONGOING;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

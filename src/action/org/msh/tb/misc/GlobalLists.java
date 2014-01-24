@@ -167,14 +167,16 @@ public class GlobalLists {
 	private static final HIVResult hivResults[] = {
 		HIVResult.ONGOING,
 		HIVResult.NEGATIVE,
-		HIVResult.POSITIVE
+		HIVResult.POSITIVE,
+		HIVResult.ONGOING
 	};
 	
 	private static final DstResult dstResults[] = {
 		DstResult.NOTDONE,
 		DstResult.SUSCEPTIBLE,
 		DstResult.RESISTANT,
-		DstResult.CONTAMINATED
+		DstResult.CONTAMINATED,
+		DstResult.ONGOING
 	};
 
 	
