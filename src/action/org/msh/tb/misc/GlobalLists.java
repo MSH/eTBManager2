@@ -165,7 +165,6 @@ public class GlobalLists {
 	private CaseClassification caseClassifications[];
 
 	private static final HIVResult hivResults[] = {
-		HIVResult.ONGOING,
 		HIVResult.NEGATIVE,
 		HIVResult.POSITIVE,
 		HIVResult.ONGOING
