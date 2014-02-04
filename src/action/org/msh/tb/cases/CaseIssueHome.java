@@ -94,7 +94,7 @@ public class CaseIssueHome extends EntityHomeEx<Issue> {
 	@Transactional
 	public String remove() {
 		if (!isManaged())
-			throw new IllegalAccessError("Issue is not informed");
+			throw new RuntimeException("Issue is not informed");
 
 		// check permission
 		// is not the owner of the user?
@@ -166,7 +166,7 @@ public class CaseIssueHome extends EntityHomeEx<Issue> {
 	@Transactional
 	public void closeIssue() {
 		if ((!isManaged()) || (getInstance().isClosed()))
-			throw new IllegalAccessError("Issue is not informed or it's already closed: " + getId());
+			throw new RuntimeException("Issue is not informed or it's already closed: " + getId());
 
 		// check permission
 		// is not the owner of the user?
@@ -217,7 +217,7 @@ public class CaseIssueHome extends EntityHomeEx<Issue> {
 	@Transactional
 	public void reopenIssue() {
 		if ((!isManaged()) || (!getInstance().isClosed()))
-			throw new IllegalAccessError("Issue is not informed or it's already open: " + getId());
+			throw new RuntimeException("Issue is not informed or it's already open: " + getId());
 
 		// check permission
 		// is not the owner of the user?

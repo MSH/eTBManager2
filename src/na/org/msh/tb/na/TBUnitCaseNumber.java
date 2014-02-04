@@ -55,7 +55,7 @@ public class TBUnitCaseNumber {
 		
 		Tbunit unit = tbcase.getOwnerUnit();
 		if ((unit.getLegacyId() == null) || (unit.getLegacyId().isEmpty()))
-			throw new IllegalAccessError("The legacy code in unit " + unit.getName().toString() + " was not defined");
+			throw new RuntimeException("The legacy code in unit " + unit.getName().toString() + " was not defined");
 
 		int month = DateUtils.monthOf(tbcase.getRegistrationDate()) + 1;
 		int year = DateUtils.yearOf(tbcase.getRegistrationDate());
@@ -79,7 +79,7 @@ public class TBUnitCaseNumber {
 				try {
 					num = Integer.parseInt(s[2]);
 				} catch (Exception e) {
-					throw new IllegalAccessError("Not expected last registration code with format " + lastRegCode);
+					throw new RuntimeException("Not expected last registration code with format " + lastRegCode);
 				}
 			}
 			else num = 0;

@@ -61,7 +61,7 @@ public class DownloadDesktopFileAction {
 		// get unit to generate file
 		Tbunit unit = entityManager.find(Tbunit.class, unitId);
 		if (unit == null)
-			throw new IllegalAccessError("Unit id not valid: " + unitId);
+			throw new RuntimeException("Unit id not valid: " + unitId);
 
 		File file = File.createTempFile("etbm", ".pkg");
 		BufferedOutputStream fout = new BufferedOutputStream( new FileOutputStream(file) );

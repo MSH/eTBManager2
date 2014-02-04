@@ -68,7 +68,7 @@ public class ChangePasswordService {
 		User user = entityManager.find(User.class, userLogin.getUser().getId());
 		
 		if (user.getState() == UserState.BLOCKED)
-			throw new IllegalAccessError("User is blocked");
+			throw new RuntimeException("User is blocked");
 
 		String pwd = Passwords.hashPassword(newPassword1);
 		user.setPassword(pwd);

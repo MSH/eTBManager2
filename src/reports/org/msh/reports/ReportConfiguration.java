@@ -58,7 +58,7 @@ public final class ReportConfiguration {
 	 */
 	private ReportResourceProvider checkResourceProvider() { 
 		if (resourceProvider == null)
-			throw new IllegalAccessError("No NameResolver interface provided to " + getClass().getSimpleName());
+			throw new RuntimeException("No NameResolver interface provided to " + getClass().getSimpleName());
 		return resourceProvider;
 	}
 

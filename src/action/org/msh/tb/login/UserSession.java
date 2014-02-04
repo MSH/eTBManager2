@@ -418,7 +418,7 @@ public class UserSession {
 		else {
 			Integer selid = (Integer)Contexts.getSessionContext().get(SessionFactory.selectedUnitId);
 			if (selid == null)
-				throw new IllegalAccessError("There is no information about the selected unit");
+				throw new RuntimeException("There is no information about the selected unit");
 			return uw.getTbunit().getId().equals(selid);
 		}
 	}
