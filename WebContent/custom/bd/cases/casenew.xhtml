@@ -10,7 +10,7 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.newnotif']} - #{messages[tbcase.classification.key]}" />
+<ui:param name="title" value="#{messages['cases.newnotif']} - #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect]: messages[tbcase.classification.key]}" />
 <ui:param name="left" value="0" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:160px" />
@@ -48,7 +48,7 @@
     
     	<s:decorate template="/layout/edit.xhtml" >
     		<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
-    		<h:inputText value="#{medicalExaminationBd.weight}" required="false"/>#{messages['MedicalExamination.weight.unit']}
+    		<h:inputText value="#{medicalExaminationBd.weight}" required="true"/>#{messages['MedicalExamination.weight.unit']}
     	</s:decorate>
     
 
