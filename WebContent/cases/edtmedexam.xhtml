@@ -58,8 +58,8 @@
     	#{messages['MedicalExamination.height.unit']}
     </s:decorate>
 
-
-    <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.state=='ONTREATMENT'}">
+	<s:fragment rendered="#{tbcase.state=='ONTREATMENT'}">
+    <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.usingPrescMedicines']}</ui:define>
     	<h:selectOneMenu id="cbpresc" value="#{medicalExamination.usingPrescMedicines}" required="true" style="display:block;" >
     		<s:selectItems value="#{yesNoList}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
@@ -76,6 +76,7 @@
 	   		<h:inputText id ="edtreason" value="#{medicalExamination.reasonNotUsingPrescMedicines}" style="width:340px" maxlength="100"/>
     	</s:decorate>
     	</div>
+    </s:fragment>
     
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
