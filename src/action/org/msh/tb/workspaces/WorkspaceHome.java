@@ -104,6 +104,8 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 			ws.setConfirmedCaseNumber(DisplayCaseNumber.CASE_ID);
 		if (ws.getPatientAddrRequiredLevels() == null)
 			ws.setPatientAddrRequiredLevels(1);
+		if (ws.getTreatMonitoringInput() == null)
+			ws.setTreatMonitoringInput(TreatMonitoringInput.SIMPLE);
 
 		// initialize weekly frequencies
 		ws.setWeekFreq1(new WeeklyFrequency(2));
