@@ -10,4 +10,8 @@
 	    <sql>delete from patient where id not in (select patient_id from tbcase)</sql>
 	</changeSet>
 
+	<!-- Fix cases where diagnosisType is null -->
+	<changeSet id="20.2" author="rmemoria">
+	    <sql>update tbcase set diagnosisType = 1 where diagnosisType is null</sql>
+	</changeSet>
 </databaseChangeLog>
