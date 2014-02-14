@@ -154,16 +154,30 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		prof.setWorkspace(workspace);
 		List<UserRole> roles = getEntityManager().createQuery("from UserRole " +
 				"where id in (select a.userRole.id from UserPermission a " +
-				"where a.userProfile.id in (select b.profile.id from UserWorkspace b where b.user.id = #{userLogin.user.id}))")
+				"where a.userProfile.id in (select b.profile.id from UserWorkspace b where b.user.id = #{userLogin.user.id}))"
+				+ "order by code")
 				.getResultList();
+
+		List<UserRole> roleClassifs = new ArrayList<UserRole>();
 
 		for (UserRole role: roles) {
 			if (!role.isInternalUse()) {
-				if (role.isByCaseClassification()) {
+				boolean b = role.isByCaseClassification();
+				if (!b) {
+					for (UserRole r: roleClassifs)
+						if (role.isChildOf(r)) {
+							b = true;
+							break;
+						}
+				}
+
+				// is by case classification ?
+				if (b) {
 					for (CaseClassification cla: CaseClassification.values()) {
 						UserPermission perm = createPermission(prof, role);
 						perm.setCaseClassification(cla);
 					}
+					roleClassifs.add(role);
 				}
 				else createPermission(prof, role);
 			}
