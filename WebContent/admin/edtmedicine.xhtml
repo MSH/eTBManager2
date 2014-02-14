@@ -51,17 +51,21 @@
 
     <s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Medicine.strength']}:</ui:define>
-        <h:inputText value="#{medicine.strength}" maxlength="50" style="width : 200px;" required="true" />
+        <h:inputText value="#{medicine.strength}" maxlength="50" style="width : 150px;" required="true" >
+        	<f:validateLongRange ></f:validateLongRange>
+        </h:inputText> <span class="hint" style="display:inline">(#{messages['form.exampleabbrev']} 500)</span>
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Medicine.strengthUnit']}:</ui:define>
-        <h:inputText value="#{medicine.strengthUnit}" maxlength="50" style="width : 200px;" required="true" />
+        <h:inputText value="#{medicine.strengthUnit}" maxlength="50" style="width : 150px;" required="true" /> 
+		<span class="hint" style="display:inline">(#{messages['form.exampleabbrev']} mg)</span>
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Medicine.dosageForm']}:</ui:define>
         <h:inputText value="#{medicine.dosageForm}" maxlength="50" style="width : 100px;" required="true" />
+		<span class="hint" style="display:inline">(#{messages['form.exampleabbrev']} tablet)</span>
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml">
