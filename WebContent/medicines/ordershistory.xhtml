@@ -64,6 +64,8 @@
 	</div> 
 
 <h:panelGroup id="pnlorders">
+<s:decorate template="/layout/naveg.xhtml">
+	<ui:param name="list" value="#{ordersHistory}" />
 <s:fragment rendered="#{facesContext.renderResponse and not empty ordersHistory.resultList}">
 
 	<h:dataTable id="tbl" value="#{ordersHistory.resultList}" var="it" border="0" columnClasses="colb,colb,colb,colcb"
@@ -120,6 +122,7 @@
 	
 	<div class="spacer" />
 </s:fragment>
+</s:decorate>
 </h:panelGroup>
 
 </h:form>
