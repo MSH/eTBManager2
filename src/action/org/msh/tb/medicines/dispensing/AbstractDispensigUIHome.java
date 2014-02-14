@@ -64,12 +64,6 @@ public abstract class AbstractDispensigUIHome {
 		Date dispDate = getDispensingHome().getInstance().getDispensingDate();
 		TbCase tbcase = ((CaseHome)Component.getInstance("caseHome")).getInstance();
 		
-		UserSession userSession = (UserSession) Component.getInstance("userSession");
-		if(!userSession.isCanGenerateMovements(dispDate)){
-			facesMessages.addToControlFromResourceBundle("edtdate", "meds.movs.errorlimitdate", DateUtils.formatAsLocale(userSession.getTbunit().getLimitDateMedicineMovement(), false));
-			return false;
-		}
-		
 		if (dispDate.before( unit.getMedManStartDate() )) {
 			facesMessages.addToControlFromResourceBundle("edtdate", "meds.movs.datebefore", LocaleDateConverter.getDisplayDate( unit.getMedManStartDate(), false ));
 			ret = false;
@@ -150,7 +144,8 @@ public abstract class AbstractDispensigUIHome {
 		for (SourceItem it: getSources())
 			for (DispensingRow row: it.getTable().getRows()) {
 				Integer qtd = row.getDispensingQuantity();
-				if ((qtd != null) && (qtd > 0)) {
+				qtd = qtd == null? 0: qtd;
+				if ((qtd > 0) || (row.getPrevQuantity() > 0)) {
 					if (tbcase != null)
 						 dispensingHome.addPatientDispensing(tbcase, row.getBatch(), it.getSource(), qtd);
 					else dispensingHome.addDispensing(row.getBatch(), it.getSource(), qtd);

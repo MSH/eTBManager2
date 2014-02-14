@@ -28,6 +28,8 @@ public class DispensingRow {
 	private int quantity;
 	private int totalQuantity;
 	private int rowSpan;
+	// register information about the previous quantity (if editing)
+	private int prevQuantity;
 	
 	// support for editing of dispensing quantity
 	private Integer dispensingQuantity;
@@ -152,5 +154,19 @@ public class DispensingRow {
 	 */
 	public void setBatchErrorMessage(String batchErrorMessage) {
 		this.batchErrorMessage = batchErrorMessage;
+	}
+
+	/**
+	 * @return the prevQuantity
+	 */
+	public int getPrevQuantity() {
+		return prevQuantity;
+	}
+
+	/**
+	 * @param prevQuantity the prevQuantity to set
+	 */
+	public void setPrevQuantity(int prevQuantity) {
+		this.prevQuantity = prevQuantity;
 	}
 }

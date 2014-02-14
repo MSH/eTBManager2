@@ -28,7 +28,9 @@ import org.msh.tb.medicines.MedicineGroup;
 import org.msh.tb.medicines.movs.MovementHome;
 
 /**
- * Standard API to register medicine dispensing (by patient or consolidated by unit) 
+ * Standard API to register medicine dispensing (by patient or consolidated by unit).
+ * <p/>
+ *  It's a statefull component, but executed in a single request.
  * @author Ricardo Memoria
  *
  */
@@ -314,17 +316,22 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 		// prepare new movements to be saved
 		List<Movement> movs = new ArrayList<Movement>();
 		for (MedicineItem it: medicines) {
-			Movement mov = movHome.prepareNewMovement(medicineDispensing.getDispensingDate(), 
-					medicineDispensing.getTbunit(), 
-					it.getSource(),
-					it.getMedicine(),
-					MovementType.DISPENSING, 
-					it.getBatches(),
-					null);
+			Map<Batch, Integer> batches = it.getBatches();
+			// check if there is any positive quantity
+			if (hasQuantity(batches)) {
+				// prepare movement to be saved
+				Movement mov = movHome.prepareNewMovement(medicineDispensing.getDispensingDate(), 
+						medicineDispensing.getTbunit(), 
+						it.getSource(),
+						it.getMedicine(),
+						MovementType.DISPENSING, 
+						it.getBatches(),
+						null);
 
-			if (mov == null)
-				addErrorMessage(it, movHome.getErrorMessage(), movHome.getErrorBatch());
-			movs.add(mov);
+				if (mov == null)
+					addErrorMessage(it, movHome.getErrorMessage(), movHome.getErrorBatch());
+				movs.add(mov);
+			}
 		}
 		
 		// has errors?
@@ -362,9 +369,23 @@ public class DispensingHome extends EntityHomeEx<MedicineDispensing> {
 		return true;
 	}
 
+	
+	/**
+	 * Check if there is any positive quantity to register
+	 * @param batches
+	 * @return
+	 */
+	private boolean hasQuantity(Map<Batch, Integer> batches) {
+		for (Batch batch: batches.keySet()) {
+			Integer qtd = batches.get(batch);
+			if ((qtd != null) && (qtd > 0)) 
+				return true;
+		}
+		return false;
+	}
 
 	/**
-	 * Return true if medicine is being dispensing
+	 * Return true if medicine is being dispensed
 	 * @param med
 	 * @return
 	 */
