@@ -142,7 +142,8 @@ public class ResistancePatternVariable extends VariableImpl {
 	public String getLabel() {
 		String s = super.getLabel();
 		if (diagnosis)
-			s += " (" + Messages.instance().get("cases.exams.prevdt") + ")";
+			s += " (" + Messages.instance().get("global.atdiag") + ")";
+		else s += " (" + Messages.instance().get("global.current") + ")";
 		return s;
 	}
 	
