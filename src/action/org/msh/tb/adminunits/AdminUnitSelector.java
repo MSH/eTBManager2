@@ -300,6 +300,13 @@ public class AdminUnitSelector<E> {
 	public void setSelected(E selected) {
 		this.selected = selected;
 	}
+	
+	/**
+	 * @param selected the selected to set
+	 */
+	public void setSelected2(E selected) {
+		this.selected = selected;
+	}
 
 	/**
 	 * @return the applyHealthSystemRestrictions

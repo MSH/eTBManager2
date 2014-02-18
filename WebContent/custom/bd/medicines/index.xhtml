@@ -50,12 +50,12 @@
 		</th>
 		<th width="15%"><h:outputText value="#{messages['StoragePosReport.nextExpirationBatch']}" styleClass="colch" /></th>	
 		<th><h:outputText value="#{messages['meds.movs.availableqtty']}" styleClass="colrh" /></th>	
-		<!-- Hide those columns because in bangladesh it doesn't make sense as the quarterly report has it's own calculation
-		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
+		
+		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit and userSession.tbunit.secondLineSupplier != null}">
 			<th><h:outputText value="#{messages['meds.amc']}" styleClass="colch" /></th>
 			<th><h:outputText value="#{messages['meds.stockoutdate']}" styleClass="colch" /></th>
 		</s:fragment>
-		 -->
+		
 		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
 		<th><h:outputText value="#{messages['global.totalPrice']}" styleClass="colch" /></th>
 		<th><h:outputText value="#{messages['global.unitPrice']}" styleClass="colch" /></th>
@@ -108,8 +108,7 @@
 				<f:convertNumber pattern="###,###,###"/>
 			</h:outputText>
 		</td>
-		<!-- Hide those columns because in bangladesh it doesn't make sense as the quarterly report has it's own calculation
-		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
+		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit and userSession.tbunit.secondLineSupplier != null}">
 			<td align="right">
 				<h:outputText value="#{it.item.stockPosition.amc}" >
 					<f:convertNumber pattern="###,###,##0"/>
@@ -128,7 +127,6 @@
 				</h:outputText>
 			</td>
 		</s:fragment>
-		-->
 		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
 		<td align="right">
 			<h:outputText value="#{it.item.totalPrice}" >

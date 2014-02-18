@@ -107,15 +107,5 @@
 
 	</sql>
 	</changeSet>
-	
-	<!-- Solve compatibility to etbmanager server
-	<changeSet id="13.6" author="MSANTOS" context="BD">
-		<dropForeignKeyConstraint baseTableName="casedispensing" constraintName="FKE4CB224A8B327BA"/>
-		<addForeignKeyConstraint 
-	        constraintName="FKA9B27A0AA3F04EEB" 
-	        referencedTableName="tbcase" referencedColumnNames="id"
-	        baseColumnNames="case_id" baseTableName="casedispensing" 
-	        onDelete="CASCADE" onUpdate="RESTRICT"/>
-	</changeSet>
-	 -->
+
 </databaseChangeLog>

@@ -41,88 +41,69 @@
 		</h:selectOneMenu> 
 	</s:decorate>
 
-	<h:dataTable value="#{quarterStockPositionReport.rows}" var="row" rendered="#{quarterStockPositionReport.isFiltersFilledIn()}" 
-		width="100%" styleClass="table1" rowClasses="lin1,lin2" columnClasses="colb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colcb,colcb">
-	
-	<h:column>
-		<f:facet name="header">#{messages['Medicine']}</f:facet>
-		<div style="text-align:left">
-		<h:outputText value="#{row.medicine}" />
-		</div>
-	</h:column>
-
-	<h:column>
-		<f:facet name="header">#{messages['quarter.openbal']}</f:facet>
-		<h:outputText value="#{row.openingBalance}" />
-	</h:column>
-	
-	<h:column>
-		<f:facet name="header">#{messages['quarter.received']}</f:facet>
-		<h:outputText value="#{row.receivedFromCS}" />
-	</h:column>	
-	
-	<h:column>
-		<f:facet name="header">#{messages['quarter.posadjust']}</f:facet>
-		<h:outputText value="#{row.positiveAdjust}" />
-	</h:column>		
-	
-	<h:column>
-		<f:facet name="header">#{messages['quarter.negadjust']}</f:facet>
-		<h:outputText value="#{row.negativeAdjust}" />
-	</h:column>	
-	
-	<h:column>
-		<f:facet name="header">#{messages['manag.forecast.tabres2']}</f:facet>
-		<h:outputText value="#{row.dispensed}" />
-	</h:column>	
-	
-	<h:column>
-		<f:facet name="header">#{messages['quarter.expired']}</f:facet>
-		<h:outputText value="#{row.expired}" />
-	</h:column>				
-	
-	<h:column>
-		<f:facet name="header">#{messages['quarter.closbal']}</f:facet>
-		<h:outputText value="#{row.closingBalance}" />
-	</h:column>	
-	
-	<h:column>
-		<f:facet name="header">#{messages['quarter.outofstk']}</f:facet>
-		<h:outputText value="#{row.outOfStockDays}" />
-	</h:column>	
-	
-	<h:column>
-		<f:facet name="header">#{messages['meds.amc']}</f:facet>
-		<h:outputText value="#{row.amc}" />
-	</h:column>	
-	
-	<h:column>
-		<f:facet name="header">#{messages['meds.stockoutdate']}</f:facet>
-		<s:fragment rendered="#{row.getEstimatedMonthsOfStock() != null}">
-			<h:outputText value="#{row.getEstimatedMonthsOfStock()}" />
-			<h:outputText value=" #{messages['global']}" />
+	<table class="table1">
+	<thead>
+	<tr>
+		<th>#{messages['Medicine']}</th>
+		<th>#{messages['quarter.openbal']}</th>
+		<th>#{messages['quarter.received']}</th>
+		<th>#{messages['quarter.posadjust']}</th>
+		<th>#{messages['quarter.negadjust']}</th>
+		<th>#{messages['manag.forecast.tabres2']}</th>
+		<th>#{messages['quarter.expired']}</th>
+		<th>#{messages['quarter.closbal']}</th>
+		<th>#{messages['quarter.outofstk']}</th>
+		<s:fragment rendered="#{userSession.tbunit.secondLineSupplier == null}">
+		<th>#{messages['meds.amc']}</th>
+		<th>#{messages['meds.stockoutdate']}</th>
+		<s:fragment rendered="#{quarterStockPositionHome.canEdit()}">
+			<th>#{messages['form.edit']}</th>
 		</s:fragment>
-		
-		<s:fragment rendered="#{row.getEstimatedMonthsOfStock() == null}">
-			<h:outputText value="#{messages['meds.onemonthless']}" rendered="#{row.amc > 0}"/>
-			<h:outputText  value="#{messages['meds.undefined']}" rendered="#{row.amc == 0}"/>
 		</s:fragment>
-	</h:column>	
-	
-	<h:column rendered="#{quarterStockPositionHome.canEdit()}">
-		<f:facet name="header">#{messages['form.edit']}</f:facet>
+	</tr>
+	</thead>
+	<tbody>
+	<ui:repeat var="row" value="#{quarterStockPositionReport.rows}" varStatus="v">
+		<tr class="#{row.highlight ? 'highlight' : 'lin1'}">
+			<td class="colb"><h:outputText value="#{row.medicine.genericName.name1}" /></td>
+			<td class="colrb"><h:outputText value="#{row.openingBalance}" /></td>
+			<td class="colrb"><h:outputText value="#{row.receivedFromCS}" /></td>
+			<td class="colrb"><h:outputText value="#{row.positiveAdjust}" /></td>
+			<td class="colrb"><h:outputText value="#{row.negativeAdjust}" /></td>
+			<td class="colrb"><h:outputText value="#{row.dispensed}" /></td>
+			<td class="colrb"><h:outputText value="#{row.expired}" /></td>
+			<td class="colrb"><h:outputText value="#{row.closingBalance}" /></td>
+			<td class="colrb"><h:outputText value="#{row.outOfStockDays}" /></td>
+			<s:fragment rendered="#{userSession.tbunit.secondLineSupplier == null}">
+			<td class="colrb"><h:outputText value="#{row.amc}" /></td>
+			<td class="colcb">
+				<s:fragment rendered="#{row.getEstimatedMonthsOfStock() != null}">
+					<h:outputText value="#{row.getEstimatedMonthsOfStock()}" />
+					<h:outputText value=" #{messages['global']}" />
+				</s:fragment>
+				
+				<s:fragment rendered="#{row.getEstimatedMonthsOfStock() == null}">
+					<h:outputText value="#{messages['meds.onemonthless']}" rendered="#{row.amc > 0}"/>
+					<h:outputText  value="#{messages['meds.undefined']}" rendered="#{row.amc == 0}"/>
+				</s:fragment>
+			</td>
+			<s:fragment rendered="#{quarterStockPositionHome.canEdit()}">
+			<td class="colcb">
+				<div style="text-align:center">
 		
-		<div style="text-align:center">
-		
-		<s:link value="#{messages['form.edit']}" view="/custom/bd/medicines/quartelystqposedt.xhtml" styleClass="noprint" rendered="#{row.isEditableRow()}">
-			<f:param name="selMed" value="#{row.medicine.id}"/>
-		</s:link>
-		<h:outputText value="-" rendered="#{not row.isEditableRow()}"/>
-		
-		</div>
-	</h:column>
-		
-	</h:dataTable>
+				<s:link value="#{messages['form.edit']}" view="/custom/bd/medicines/quartelystqposedt.xhtml" styleClass="noprint" rendered="#{row.isEditableRow()}">
+					<f:param name="selMed" value="#{row.medicine.id}"/>
+				</s:link>
+				<h:outputText value="-" rendered="#{not row.isEditableRow()}"/>
+				
+				</div>
+			</td>
+			</s:fragment>
+			</s:fragment>
+		</tr>
+	</ui:repeat>
+	</tbody>
+	</table>
 	
 	<br/>
 	

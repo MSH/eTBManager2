@@ -19,6 +19,7 @@ public class QSPMedicineRow {
 	private Long outOfStockDays;
 	private Long dispensedForAmcCalc;
 	private Long outOfStockForAmcCalc;
+	private boolean highlight;
 	
 	/**
 	 * Calculates the closingBalance according to the values of the others parameters.
@@ -191,6 +192,20 @@ public class QSPMedicineRow {
 	 */
 	public void setOutOfStockForAmcCalc(Long outOfStockForAmcCalc) {
 		this.outOfStockForAmcCalc = outOfStockForAmcCalc;
+	}
+
+	/**
+	 * @return the highlight
+	 */
+	public boolean isHighlight() {
+		return highlight;
+	}
+
+	/**
+	 * @param highlight the highlight to set
+	 */
+	public void setHighlight(boolean highlight) {
+		this.highlight = highlight;
 	}
 
 	/**

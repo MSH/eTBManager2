@@ -64,20 +64,8 @@ public class QuarterStockPositionReport {
 		else 
 			this.rows.clear();
 		
-		//Select witch medicines enters in the list according to medicine line
-		if(tbunitselection.getTbunit() != null){
-			for(Medicine medicine : medicines){
-				if(medicine.getLine().equals(MedicineLine.FIRST_LINE) && tbunitselection.getTbunit().getFirstLineSupplier() != null)
-					rows.add(new QSPMedicineRow(medicine));
-				else if(medicine.getLine().equals(MedicineLine.SECOND_LINE) && tbunitselection.getTbunit().getSecondLineSupplier() != null)
-					rows.add(new QSPMedicineRow(medicine));
-				else if(medicine.getLine().equals(MedicineLine.OTHER))
-					rows.add(new QSPMedicineRow(medicine));
-			}
-		}else{
-			for(Medicine medicine : medicines){
-				rows.add(new QSPMedicineRow(medicine));
-			}
+		for(Medicine medicine : medicines){
+			rows.add(new QSPMedicineRow(medicine));
 		}
 	}
 	
@@ -170,6 +158,30 @@ public class QuarterStockPositionReport {
 				}
 			}
 		}
+		
+		//If it is being selected the results for a specific tbunit filter the medicines according to the rules.
+		if(tbunitselection.getTbunit() != null)
+			selectDisplayableMedicines();
+	}
+	
+	private void selectDisplayableMedicines(){
+		List<QSPMedicineRow> newRows = new ArrayList<QSPMedicineRow>(); 
+		
+		for(QSPMedicineRow row : rows){
+			row.setHighlight(false);
+			if(row.getMedicine().getLine().equals(MedicineLine.FIRST_LINE) && tbunitselection.getTbunit().getFirstLineSupplier() != null)
+				newRows.add(row);
+			else if(row.getMedicine().equals(MedicineLine.SECOND_LINE) && tbunitselection.getTbunit().getSecondLineSupplier() != null)
+				newRows.add(row);
+			else if(row.getMedicine().getLine().equals(MedicineLine.OTHER))
+				newRows.add(row);
+			else if(row.getOpeningBalance() !=0 || row.getClosingBalance() != 0){
+				row.setHighlight(true);
+				newRows.add(row);
+			}
+		}
+		
+		rows = newRows;
 	}
 		
 	/**
