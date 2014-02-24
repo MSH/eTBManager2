@@ -17,8 +17,8 @@ import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.login.UserSession;
-import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection2;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.utils.date.DateUtils;
 
 /**
@@ -41,6 +41,7 @@ public class QuarterBatchExpiringReport {
 	private Map<Batch, Long> batchDetailsConsolidated;
 	private List<ExpiringBatchDetails> unitBatchDetails;
 	private List<Tbunit> pendCloseQuarterUnits;
+	private List<Tbunit> unitsNotInitialized;
 	
 	private static final int PERIOD_ON_MONTHS = 6;
 		
@@ -70,14 +71,25 @@ public class QuarterBatchExpiringReport {
 		if(tbunitselection.getTbunit() != null){
 			unitBatchDetails.add(createBatchDetailedUnit(tbunitselection.getTbunit()));
 			batchDetailsConsolidated = null;
-		}else{
+		}else if(tbunitselection.getAuselection().getSelectedUnit() != null){
 			List<Tbunit> units = entityManager.createQuery(" from Tbunit u where u.adminUnit.code like :code and u.treatmentHealthUnit = :true " +
-																"and u.workspace.id = :workspaceId " +
-																"order by u.adminUnit.code, u.name.name1")
-									.setParameter("true", true)
-									.setParameter("code", tbunitselection.getAuselection().getSelectedUnit().getCode()+"%")
-									.setParameter("workspaceId", UserSession.getWorkspace().getId())
-									.getResultList();
+					"and u.workspace.id = :workspaceId " +
+					"order by u.adminUnit.code, u.name.name1")
+					.setParameter("true", true)
+					.setParameter("code", tbunitselection.getAuselection().getSelectedUnit().getCode()+"%")
+					.setParameter("workspaceId", UserSession.getWorkspace().getId())
+					.getResultList();
+					for(Tbunit u : units){
+					unitBatchDetails.add(createBatchDetailedUnit(u));
+					}			
+					updateConsolidatedBatchList();
+		}else{
+			List<Tbunit> units = entityManager.createQuery(" from Tbunit u where u.treatmentHealthUnit = :true " +
+							"and u.workspace.id = :workspaceId " +
+							"order by u.adminUnit.code, u.name.name1")
+				.setParameter("true", true)
+				.setParameter("workspaceId", UserSession.getWorkspace().getId())
+				.getResultList();
 			for(Tbunit u : units){
 				unitBatchDetails.add(createBatchDetailedUnit(u));
 			}			
@@ -85,6 +97,7 @@ public class QuarterBatchExpiringReport {
 		}
 		
 		pendCloseQuarterUnits = QSPUtils.getPendCloseQuarterUnits(selectedQuarter, tbunitselection);
+		unitsNotInitialized = QSPUtils.getNotInitializedUnits(selectedQuarter, tbunitselection);
 	}
 	
 	/**
@@ -279,6 +292,22 @@ public class QuarterBatchExpiringReport {
 	public static int getPeriodOnMonths() {
 		return PERIOD_ON_MONTHS;
 	}
+
+	/**
+	 * @return the unitsNotInitialized
+	 */
+	public List<Tbunit> getUnitsNotInitialized() {
+		return unitsNotInitialized;
+	}
+
+	/**
+	 * @param unitsNotInitialized the unitsNotInitialized to set
+	 */
+	public void setUnitsNotInitialized(List<Tbunit> unitsNotInitialized) {
+		this.unitsNotInitialized = unitsNotInitialized;
+	}
+
+
 
 	/**
 	 * Class used to storage the expiring batch details by unit

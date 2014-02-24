@@ -61,7 +61,7 @@
 	<s:fragment rendered="#{quarterStockPositionReport.isFiltersFilledIn()}">
 	
 	<!-- Alerts if there are units with the selected quarter opened -->
-	<s:div style="display:inline" rendered="#{not empty quarterStockPositionReport.pendCloseQuarterUnits}">
+	<s:div style="display:block" rendered="#{not empty quarterStockPositionReport.pendCloseQuarterUnits}">
 		<!-- When selecting an administrative unit -->
 		<h:outputFormat styleClass="error" value="#{messages['quarter.openquarterunit']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}">
 			<f:param value="#{quarterStockPositionReport.pendCloseQuarterUnits.size()}" />
@@ -72,7 +72,19 @@
 		<h:outputText styleClass="error" value="#{messages['quarter.openquarterunit2']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit != null}"/>
 	</s:div>
 	
-	<br/><br/>
+	<!-- Alerts if there are units with the medicine control not started -->
+	<s:div style="padding:1px;display:block" rendered="#{not empty quarterStockPositionReport.unitsNotInitialized}">
+		<!-- When selecting an administrative unit -->
+		<h:outputFormat styleClass="error" value="#{messages['quarter.notinitializedunit']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}">
+			<f:param value="#{quarterStockPositionReport.unitsNotInitialized.size()}" />
+		</h:outputFormat>
+		<a:commandLink value=" #{messages['global.clicktoseelist']}" onclick="showNotInitializedUnts();" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}"/>
+
+		<!-- When selecting a specific unit -->
+		<h:outputText styleClass="error" value="#{messages['quarter.notinitializedunit2']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit != null}"/>
+	</s:div>
+	
+	<br/>
 	
 	<h:dataTable value="#{quarterStockPositionReport.rows}" var="row" styleClass="table1" width="100%" rowClasses="lin1,lin2" 
 		columnClasses="colb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colcb" >
@@ -118,7 +130,8 @@
 	
 	<h:column>
 		<f:facet name="header">#{messages['quarter.outofstk']}</f:facet>
-		<h:outputText value="#{row.outOfStockDays}" />
+		<!-- <h:outputText value="#{row.outOfStockDays}" />-->
+		<h:outputText value="#{row.outOfStockForAmcCalc}" />
 	</h:column>
 	
 	<h:column>
@@ -138,15 +151,33 @@
 			<h:outputText  value="#{messages['meds.undefined']}" rendered="#{row.amc == 0}"/>
 		</s:fragment>
 	</h:column>
+	<!-- usefull for amc calc check
+	<h:column>
+		<f:facet name="header">qtd tbunit average calc</f:facet>
+		<h:outputText value="#{row.unitQtdForAmcCalc}" />
+	</h:column>
 	
+	<h:column>
+		<f:facet name="header">out of stock for amc calc</f:facet>
+		<h:outputText value="#{row.outOfStockForAmcCalc}" />
+	</h:column>	
+	
+	<h:column>
+		<f:facet name="header">dispensed for amc calc</f:facet>
+		<h:outputText value="#{row.dispensedForAmcCalc}" />
+	</h:column>	
+	-->
 	</h:dataTable>
+	
+	</s:fragment>
 
+	<!-- Modal panel with the units with no closed quarters -->
 	<rich:modalPanel id="openQuarterunitList" autosized="true" width="700" zindex="2000" style="background-color:#F2F5F0">
 		<f:facet name="header">
 			<h:outputText value="#{messages['quarter.listopenquarterunit']}" />
 		</f:facet>
 		
-		<h:outputFormat id="unitCount" value="#{messages['meds.unitsfound']}" style="display:block;clear:both;font-weight:bold;">
+		<h:outputFormat id="unitCount1" value="#{messages['meds.unitsfound']}" style="display:block;clear:both;font-weight:bold;">
 			<f:param value="#{quarterStockPositionReport.pendCloseQuarterUnits.size()}" />
 		</h:outputFormat>
 		
@@ -163,6 +194,29 @@
 		</div>
 	</rich:modalPanel>
 	
+	<!-- Modal panel with the not initialized units. -->
+	<rich:modalPanel id="notInitializedUnitsList" autosized="true" width="700" zindex="2000" style="background-color:#F2F5F0">
+		<f:facet name="header">
+			<h:outputText value="#{messages['quarter.listnotiniunits']}" />
+		</f:facet>
+		 
+		<h:outputFormat id="unitCount2" value="#{messages['meds.unitsfound']}" style="display:block;clear:both;font-weight:bold;">
+			<f:param value="#{quarterStockPositionReport.unitsNotInitialized.size()}" />
+		</h:outputFormat>
+		
+		<div style="overflow:auto;width:98%;max-height:300px;min-height:80px;border: 1px gray solid;padding:6px;margin:0px;background-color:white;">
+			<a:repeat value="#{quarterStockPositionReport.unitsNotInitialized}" var="unit">
+				<div class="#{unit.treatmentHealthUnit?'icon-hu':'icon-ds'}" />
+				<h:outputText value="#{unit.name} - #{unit.adminUnit.fullDisplayName}" /><br/>	
+			</a:repeat>
+		</div>
+		<div class="button-bar">
+			<s:link styleClass="button-alt" onclick="hideNotInitializedUnts(); return false;">
+				<span>#{messages['form.close']}</span>
+			</s:link>
+		</div>
+	</rich:modalPanel>
+	
 	<script type="text/javascript">
 	function showOpenQuarterunitList() {
 		Richfaces.showModalPanel('openQuarterunitList');
@@ -170,9 +224,13 @@
 	function hideOpenQuarterunitList() {
 		Richfaces.hideModalPanel('openQuarterunitList');
 	}
+	function showNotInitializedUnts() {
+		Richfaces.showModalPanel('notInitializedUnitsList');
+	}
+	function hideNotInitializedUnts() {
+		Richfaces.hideModalPanel('notInitializedUnitsList');
+	}
 	</script>
-
-	</s:fragment>
 	
 	</h:form>
 </ui:define>

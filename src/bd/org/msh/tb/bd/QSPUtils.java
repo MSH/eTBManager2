@@ -13,22 +13,24 @@ import org.msh.tb.tbunits.TBUnitSelection2;
 public class QSPUtils {
 	
 	/**
-	 * Update the list of tbunits that haven't closed the selected quarter according to the passed parameters.
+	 * Returns the list of tbunits that haven't closed the selected quarter according to the passed parameters.
 	 */
 	public static List<Tbunit> getPendCloseQuarterUnits(Quarter selectedQuarter, TBUnitSelection2 tbunitselection){
 		EntityManager entityManager = (EntityManager)Component.getInstance("entityManager");
 		List<Tbunit> ret = null;
- 		
+
 		if(tbunitselection.getTbunit() != null){
 			ret = null;
-			if(tbunitselection.getTbunit().getLimitDateMedicineMovement().compareTo(selectedQuarter.getIniDate()) <=0){
+		
+			if(tbunitselection.getTbunit().getLimitDateMedicineMovement() != null && tbunitselection.getTbunit().getLimitDateMedicineMovement().compareTo(selectedQuarter.getIniDate()) <=0){
 				ret = new ArrayList<Tbunit>();
 				ret.add(tbunitselection.getTbunit());
 			}
+			
 		}else if(tbunitselection.getAuselection().getSelectedUnit()!=null){
 			String queryString = "from Tbunit u where u.adminUnit.code like :code and u.workspace.id = :workspaceId " +
-								"and (u.limitDateMedicineMovement is null or u.limitDateMedicineMovement <= :iniQuarterDate) " +
-								"and u.treatmentHealthUnit = :true and u.medManStartDate != null and u.active = :true " +
+								"and u.limitDateMedicineMovement <= :iniQuarterDate " +
+								"and u.treatmentHealthUnit = :true and u.medManStartDate is not null and u.active = :true " +
 								"order by u.adminUnit.code, u.name.name1";
 			
 			ret = entityManager.createQuery(queryString)
@@ -39,13 +41,54 @@ public class QSPUtils {
 								.getResultList();
 		}else{
 			String queryString = "from Tbunit u where u.workspace.id = :workspaceId " +
-					"and (u.limitDateMedicineMovement is null or u.limitDateMedicineMovement <= :iniQuarterDate) " +
+					"and u.limitDateMedicineMovement <= :iniQuarterDate " +
 					"and u.treatmentHealthUnit = :true and u.medManStartDate is not null and u.active = :true " +
 					"order by u.adminUnit.code, u.name.name1 ";
 
 			ret = entityManager.createQuery(queryString)
 								.setParameter("workspaceId", UserSession.getWorkspace().getId())
 								.setParameter("iniQuarterDate", selectedQuarter.getIniDate())
+								.setParameter("true", true)
+								.getResultList();
+		}
+		
+		return ret;
+	}
+	
+	/**
+	 * Returns the list of tbunits that haven't initialized the medicine module according to the passed parameters.
+	 */
+	public static List<Tbunit> getNotInitializedUnits(Quarter selectedQuarter, TBUnitSelection2 tbunitselection){
+		EntityManager entityManager = (EntityManager)Component.getInstance("entityManager");
+		List<Tbunit> ret = null;
+
+		if(tbunitselection.getTbunit() != null){
+			ret = null;
+		
+			if(tbunitselection.getTbunit().getLimitDateMedicineMovement() == null){
+				ret = new ArrayList<Tbunit>();
+				ret.add(tbunitselection.getTbunit());
+			}
+			
+		}else if(tbunitselection.getAuselection().getSelectedUnit()!=null){
+			String queryString = "from Tbunit u where u.adminUnit.code like :code and u.workspace.id = :workspaceId " +
+								"and u.limitDateMedicineMovement is null " +
+								"and u.treatmentHealthUnit = :true and u.active = :true " +
+								"order by u.adminUnit.code, u.name.name1";
+			
+			ret = entityManager.createQuery(queryString)
+								.setParameter("code", tbunitselection.getAuselection().getSelectedUnit().getCode()+'%')
+								.setParameter("workspaceId", UserSession.getWorkspace().getId())
+								.setParameter("true", true)
+								.getResultList();
+		}else{
+			String queryString = "from Tbunit u where u.workspace.id = :workspaceId " +
+					"and u.limitDateMedicineMovement is null " +
+					"and u.treatmentHealthUnit = :true and u.active = :true " +
+					"order by u.adminUnit.code, u.name.name1 ";
+
+			ret = entityManager.createQuery(queryString)
+								.setParameter("workspaceId", UserSession.getWorkspace().getId())
 								.setParameter("true", true)
 								.getResultList();
 		}

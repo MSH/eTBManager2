@@ -20,6 +20,7 @@ public class QSPMedicineRow {
 	private Long dispensedForAmcCalc;
 	private Long outOfStockForAmcCalc;
 	private boolean highlight;
+	private Long unitQtdForAmcCalc;
 	
 	/**
 	 * Calculates the closingBalance according to the values of the others parameters.
@@ -171,7 +172,11 @@ public class QSPMedicineRow {
 	public Long getDispensedForAmcCalc() {
 		if(dispensedForAmcCalc == null) dispensedForAmcCalc = new Long (0);
 		if(dispensedForAmcCalc < 0) dispensedForAmcCalc = dispensedForAmcCalc * -1;
-		return dispensedForAmcCalc;
+		
+		if(getUnitQtdForAmcCalc() == 0)
+			return new Long(0);
+		
+		return dispensedForAmcCalc/getUnitQtdForAmcCalc();
 	}
 	/**
 	 * @param dispensedForAmcCalc the dispensedForAmcCalc to set
@@ -185,13 +190,33 @@ public class QSPMedicineRow {
 	public Long getOutOfStockForAmcCalc() {
 		if(outOfStockForAmcCalc == null) outOfStockForAmcCalc = new Long (0);
 		if(outOfStockForAmcCalc < 0) outOfStockForAmcCalc = outOfStockForAmcCalc * -1;
-		return outOfStockForAmcCalc;
+		
+		if(getUnitQtdForAmcCalc() == 0)
+			return new Long(0);
+		
+		return outOfStockForAmcCalc/getUnitQtdForAmcCalc();
 	}
 	/**
 	 * @param outOfStockForAmcCalc the outOfStockForAmcCalc to set
 	 */
 	public void setOutOfStockForAmcCalc(Long outOfStockForAmcCalc) {
 		this.outOfStockForAmcCalc = outOfStockForAmcCalc;
+	}
+
+	/**
+	 * @return the unitQtdForAmcCalc
+	 */
+	public Long getUnitQtdForAmcCalc() {
+		if(unitQtdForAmcCalc == null) unitQtdForAmcCalc = new Long (0);
+		if(unitQtdForAmcCalc < 0) unitQtdForAmcCalc = unitQtdForAmcCalc * -1;
+		return unitQtdForAmcCalc;
+	}
+
+	/**
+	 * @param unitQtdForAmcCalc the unitQtdForAmcCalc to set
+	 */
+	public void setUnitQtdForAmcCalc(Long unitQtdForAmcCalc) {
+		this.unitQtdForAmcCalc = unitQtdForAmcCalc;
 	}
 
 	/**
@@ -214,7 +239,7 @@ public class QSPMedicineRow {
 	public Long getAmc() {
 		Long amc = new Long(0);
 		
-		if(getDispensedForAmcCalc() == 0 || getOutOfStockForAmcCalc() >= 90)
+		if(getDispensedForAmcCalc() == 0 || getOutOfStockForAmcCalc() >= 90 || getUnitQtdForAmcCalc() == 0)
 			return new Long(0);
 		
 		double disp = getDispensedForAmcCalc();
@@ -225,8 +250,10 @@ public class QSPMedicineRow {
 		
 		amc = (new Double(result)).longValue();
 		
+		
 		if(amc == null) amc = new Long (0);
 		if(amc < 0) amc = amc * -1;
+		
 		return amc;
 	}
 	

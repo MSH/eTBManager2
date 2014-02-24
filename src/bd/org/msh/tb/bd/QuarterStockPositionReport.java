@@ -17,8 +17,8 @@ import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.login.UserSession;
-import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection2;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.utils.date.DateUtils;
 
 /**
@@ -41,16 +41,18 @@ public class QuarterStockPositionReport {
 	
 	private List<QSPMedicineRow> rows;
 	private List<Tbunit> pendCloseQuarterUnits;
-		
+	private List<Tbunit> unitsNotInitialized;
+	
 	/**
 	 * Refreshes the rows values according to the filters.
 	 */
 	public void refresh(){
-		if(QSPUtils.getLocationWhereClause(tbunitselection) == null)
+		if(QSPUtils.getLocationWhereClause(tbunitselection) == null){
 			return;
-		else{
+		}else{
 			updateQuarterReport();
 			pendCloseQuarterUnits = QSPUtils.getPendCloseQuarterUnits(selectedQuarter, tbunitselection);
+			unitsNotInitialized = QSPUtils.getNotInitializedUnits(selectedQuarter, tbunitselection);
 		}
 	}
 	
@@ -77,17 +79,6 @@ public class QuarterStockPositionReport {
 		
 		if(!isFiltersFilledIn()){
 			return;
-		}
-		
-		//calc parameters for selecting the number dispensed to use on amc calc
-		Quarter quarterAmcCalc = selectedQuarter.clone();
-		//If the selected quarter is opened it has to consider the last consumption of the last closed quarter.
-		if(tbunitselection.getTbunit()!=null && tbunitselection.getTbunit().getLimitDateMedicineMovement() != null
-				&& ( tbunitselection.getTbunit().getLimitDateMedicineMovement().equals(quarterAmcCalc.getIniDate())
-						|| tbunitselection.getTbunit().getLimitDateMedicineMovement().before(quarterAmcCalc.getIniDate()) )){
-			
-			Date baseDate = tbunitselection.getTbunit().getLimitDateMedicineMovement();
-			quarterAmcCalc = Quarter.getQuarterByMonth(DateUtils.monthOf(baseDate), DateUtils.yearOf(baseDate)).getPreviousQuarter();
 		}
 		
 		String queryString = "select m, " +
@@ -118,13 +109,7 @@ public class QuarterStockPositionReport {
 									" and mov.medicine.id = m.id and (mov.quantity * mov.oper) < 0 " + getSourceClause() + ") as expired, " +
 								
 								"(select sum(mov.outOfStock) from QuarterlyReportDetailsBD mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
-									" and mov.quarterMonth = :quarterMonth and mov.year = :year and mov.medicine.id = m.id), " +
-								
-								"(select sum(mov.quantity * mov.oper) from Movement mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
-									" and mov.date >= :iniDateAmcCalc and mov.date <= :endDateAmcCalc and mov.type in (3) and mov.medicine.id = m.id " + getSourceClause() + ") as dispensed, " +
-								
-								"(select sum(mov.outOfStock) from QuarterlyReportDetailsBD mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
-									" and mov.quarterMonth = :quarterMonthAmcCalc and mov.year = :yearAmcCalc and mov.medicine.id = m.id) " +
+									" and mov.quarterMonth = :quarterMonth and mov.year = :year and mov.medicine.id = m.id) " +
 
 							  "from Medicine m " +
 							  "where m.workspace.id = :workspaceId " +
@@ -136,10 +121,6 @@ public class QuarterStockPositionReport {
 									.setParameter("workspaceId", UserSession.getWorkspace().getId())
 									.setParameter("quarterMonth", selectedQuarter.getQuarter())
 									.setParameter("year", selectedQuarter.getYear())
-									.setParameter("iniDateAmcCalc", quarterAmcCalc.getIniDate())
-									.setParameter("endDateAmcCalc", quarterAmcCalc.getEndDate())
-									.setParameter("quarterMonthAmcCalc", quarterAmcCalc.getQuarter())
-									.setParameter("yearAmcCalc", quarterAmcCalc.getYear())
 									.setParameter("workspaceExpiredAdjust", UserSession.getWorkspace().getExpiredMedicineAdjustmentType().getId())
 									.getResultList();
 		
@@ -153,15 +134,91 @@ public class QuarterStockPositionReport {
 					row.setDispensed((Long) o[5]);
 					row.setExpired((Long) o[6]);
 					row.setOutOfStockDays((Long) o[7]);
-					row.setDispensedForAmcCalc((Long) o[8]);
-					row.setOutOfStockForAmcCalc((Long) o[9]);
 				}
 			}
 		}
 		
-		//If it is being selected the results for a specific tbunit filter the medicines according to the rules.
+		searchAmcCalcNums();
+		
+		//If it is being selected the results for a specific tbunit filter the medicines according to the specified rule.
 		if(tbunitselection.getTbunit() != null)
 			selectDisplayableMedicines();
+	}
+	
+	private void searchAmcCalcNums(){
+		String queryString = "";
+		Quarter quarterAmcCalc = selectedQuarter.clone();
+		
+		if(tbunitselection.getSelected() != null){
+			//A certain tbunit is selected
+			
+			//use the last closed quarter if the selected quarter is not closed
+			if(tbunitselection.getTbunit().getLimitDateMedicineMovement() != null
+					&& ( tbunitselection.getTbunit().getLimitDateMedicineMovement().compareTo(quarterAmcCalc.getIniDate()) <= 0 )){
+				Date baseDate = tbunitselection.getTbunit().getLimitDateMedicineMovement();
+				quarterAmcCalc = Quarter.getQuarterByMonth(DateUtils.monthOf(baseDate), DateUtils.yearOf(baseDate)).getPreviousQuarter();
+			}
+			
+			queryString = "select m, " +
+					
+							"(select sum(mov.quantity * mov.oper) from Movement mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
+								" and mov.date >= :iniDateAmcCalc and mov.date <= :endDateAmcCalc and mov.type in (3) and mov.medicine.id = m.id " + getSourceClause() + ") as dispensed, " +
+							
+							"(select sum(mov.outOfStock) from QuarterlyReportDetailsBD mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
+								" and mov.quarterMonth = :quarterMonthAmcCalc and mov.year = :yearAmcCalc and mov.medicine.id = m.id) " +
+							
+							"from Medicine m " +
+							"where m.workspace.id = :workspaceId " +
+							"group by m";
+
+		}else{			
+			String locationWhereClause = "where u.workspace.id = " + UserSession.getWorkspace().getId() + " and u.treatmentHealthUnit = true " +
+							"and u.medManStartDate is not null and u.active = true ";
+			
+			if(tbunitselection.getAuselection().getSelectedUnit()!=null){
+				locationWhereClause = locationWhereClause + "and u.adminUnit.code like '" + tbunitselection.getAuselection().getSelectedUnit().getCode() + "%' ";
+			}			
+			
+			queryString = "select m, " +
+					
+			   				"(select sum(mov.quantity * mov.oper) from Movement mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
+								" and mov.date >= :iniDateAmcCalc and mov.date <= :endDateAmcCalc and mov.type in (3) and mov.medicine.id = m.id " + 
+								" and mov.tbunit.limitDateMedicineMovement is not null and mov.tbunit.limitDateMedicineMovement > :endDateAmcCalc " + 
+								getSourceClause() + ") as dispensedAMC, " +
+								
+							"(select sum(mov.outOfStock) from QuarterlyReportDetailsBD mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
+								" and mov.tbunit.limitDateMedicineMovement is not null and mov.tbunit.limitDateMedicineMovement > :endDateAmcCalc " +
+								" and mov.quarterMonth = :quarterMonthAmcCalc and mov.year = :yearAmcCalc and mov.medicine.id = m.id) as setOutOfStockForAmcCalc, " +
+
+							"(select count(*) from Tbunit u " + locationWhereClause + 
+								" and u.limitDateMedicineMovement is not null and u.limitDateMedicineMovement > :endDateAmcCalc ) as qtdUnit " +
+							 
+							"from Medicine m " +
+							"where m.workspace.id = :workspaceId " +
+							"group by m";
+		}
+		
+		List<Object[]> result = entityManager.createQuery(queryString)
+				.setParameter("workspaceId", UserSession.getWorkspace().getId())
+				.setParameter("iniDateAmcCalc", quarterAmcCalc.getIniDate())
+				.setParameter("endDateAmcCalc", quarterAmcCalc.getEndDate())
+				.setParameter("quarterMonthAmcCalc", quarterAmcCalc.getQuarter())
+				.setParameter("yearAmcCalc", quarterAmcCalc.getYear())
+				.getResultList();
+		
+		for(Object[] o : result){
+			for(QSPMedicineRow row : rows){
+				if(row.getMedicine().getId() == ((Medicine) o[0]).getId()){
+					row.setDispensedForAmcCalc((Long) o[1]);
+					row.setOutOfStockForAmcCalc((Long) o[2]);
+					
+					if(tbunitselection.getSelected() != null)
+						row.setUnitQtdForAmcCalc(new Long(1));
+					else
+						row.setUnitQtdForAmcCalc((Long) o[3]);
+				}
+			}
+		}
 	}
 	
 	private void selectDisplayableMedicines(){
@@ -280,5 +337,19 @@ public class QuarterStockPositionReport {
 	 */
 	public void setPendCloseQuarterUnits(List<Tbunit> pendCloseQuarterUnits) {
 		this.pendCloseQuarterUnits = pendCloseQuarterUnits;
+	}
+
+	/**
+	 * @return the unitsNotInitialized
+	 */
+	public List<Tbunit> getUnitsNotInitialized() {
+		return unitsNotInitialized;
+	}
+
+	/**
+	 * @param unitsNotInitialized the unitsNotInitialized to set
+	 */
+	public void setUnitsNotInitialized(List<Tbunit> unitsNotInitialized) {
+		this.unitsNotInitialized = unitsNotInitialized;
 	}
 }
