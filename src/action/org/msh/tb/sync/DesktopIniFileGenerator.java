@@ -85,6 +85,7 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		hqls.add("from Regimen a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
 		hqls.add("from Laboratory a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
 		hqls.add("from FieldValue a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
+		hqls.add("from Tag a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
 		hqls.add("from UserWorkspace a join fetch a.user left join fetch a.adminUnit where a.tbunit.id = #{desktopIniFileGenerator.unitId}");
 //		hqls.add("from TbCase a join fetch a.patient where a.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 
