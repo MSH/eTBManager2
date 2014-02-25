@@ -157,6 +157,18 @@
             <property name="lastTransaction" use="IGNORE" />
             <property name="workspace" use="IGNORE" />
         </objectGraph>
+        
+        
+        <objectGraph name="tag" class="org.msh.tb.entities.Tag">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="name" elementName="name1" use="REQUIRED" />
+            <property name="sqlCondition" xmlAttribute="true" />
+            <property name="consistencyCheck" xmlAttribute="true" />
+            <property name="active" xmlAttribute="true" />
+            <property name="dailyUpdate" xmlAttribute="true" />
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="workspace" use="IGNORE" />
+        </objectGraph>
 
         <!-- TREATMENT REGIMEN -->
         <objectGraph name="regimen" class="org.msh.tb.entities.Regimen">
@@ -352,6 +364,11 @@
         	<property name="duration" xmlAttribute="true" />
             <property name="comorb" use="IGNORE" />
 		    <property name="lastTransaction" use="IGNORE" />
+        </objectGraph>
+        
+        <objectGraph name="casetag" class="org.msh.tb.sync.CaseTag">
+            <property name="caseId" xmlAttribute="true" use="REQUIRED" />
+            <property name="tagId" xmlAttribute="true" use="REQUIRED" />
         </objectGraph>
         
     </objectCollection>

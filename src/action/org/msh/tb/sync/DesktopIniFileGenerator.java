@@ -61,6 +61,7 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 	private boolean initialized;
 	private ServerSignature serverSignature;
 	private int unitLinkIndex = -1;
+	private int caseTagIndex = -1;
 	// if defined, the system will generate just differences between the client versions
 	// and the server versions
 	private List<EntityLastVersion> entityVersions;
@@ -103,6 +104,9 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		hqls.add("from TbContact a join fetch a.tbcase left join fetch a.contactType left join fetch a.conduct where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from CaseSideEffect a join fetch a.tbcase left join fetch a.substance left join fetch a.substance2 where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from CaseComorbidity a join fetch a.tbcase left join fetch a.comorbidity where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+
+		hqls.add("select a.id, b.id from TbCase a join a.tags b where a.ownerUnit.workspace.id = #{desktopIniFileGenerator.workspaceId}");
+		caseTagIndex = hqls.size() - 1;
 	}
 
 
@@ -251,6 +255,9 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		
 		if (queryIndex == unitLinkIndex)
 			return getUnitLinks((List<Object[]>)list);
+		
+		if (queryIndex == caseTagIndex)
+			return getCaseTags((List<Object[]>)list);
 
 		return list;
 	}
@@ -296,6 +303,21 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		List<TBUnitLinks> res = new ArrayList<TBUnitLinks>();
 		for (Object[] vals: lst) {
 			res.add(new TBUnitLinks((Integer)vals[0], (Integer)vals[1], (Integer)vals[2], (Integer)vals[3]));
+		}
+		return res;
+	}
+	
+	
+	/**
+	 * Return object containing the tags of all cases
+	 * because it may have multiple dependencies
+	 * @param list2
+	 * @return
+	 */
+	private List getCaseTags(List<Object[]> lst) {
+		List<CaseTag> res = new ArrayList<CaseTag>();
+		for (Object[] vals: lst) {
+			res.add(new CaseTag((Integer)vals[0], (Integer)vals[1]));
 		}
 		return res;
 	}
