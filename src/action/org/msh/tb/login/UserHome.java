@@ -113,6 +113,7 @@ public class UserHome extends EntityHomeEx<User> {
 				.executeUpdate();
 		}
 		
+		user.setEmail(user.getEmail().trim());
 		user.setLogin(user.getLogin().toUpperCase());
 		String ret = super.persist();
 
