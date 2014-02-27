@@ -19,7 +19,23 @@
 	        <column name="path" value="gray2" />
 	        <where>id=3</where>
 	    </update>
-	    	</changeSet>
+	 </changeSet>
+	 
+	 <!-- Update the new theme location -->
+	<changeSet id="10.2" author="msantos">
+	    <update tableName="uitheme">
+	        <column name="path" value="green4" />
+	        <where>id=1</where>
+	    </update>
+	    <update tableName="uitheme">
+	        <column name="path" value="blue3" />
+	        <where>id=2</where>
+	    </update>
+	    	    <update tableName="uitheme">
+	        <column name="path" value="gray3" />
+	        <where>id=3</where>
+	    </update>
+	 </changeSet>
 	
 </databaseChangeLog>
 

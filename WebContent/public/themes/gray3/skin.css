@@ -233,7 +233,6 @@ a.user-data:hover, .page-header-right .rich-ddmenu-label-select {
 	font-weight:bold;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
-	min-width:100px;
 }
 .naveg .selected a{
 	color:white;
