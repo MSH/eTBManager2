@@ -33,15 +33,18 @@ display:block;
 <ui:define name="left">
 </ui:define>
 
+<ui:define name="icons">
+<h:form >
+	<h:commandLink action="#{casesExport.download()}" style="float:right;margin-right:10px;">
+		<div class="excel-icon" />
+	</h:commandLink>
+</h:form>
+</ui:define>
+
 <ui:define name="content">
 <h:form id="listCases">
 
-<h:commandLink action="#{casesExport.download()}" style="float:right;">
-	<div class="excel-icon"/>
-</h:commandLink>
-
 <h1>#{title}</h1>
-
 
 	<table width="100%"><tr><td>
 	
