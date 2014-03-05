@@ -209,6 +209,7 @@ public class MedicineManStartHome {
 		removeMovements(unit);
 		
 		unit.setMedManStartDate(null);
+		unit.setLimitDateMedicineMovement(null);
 		entityManager.persist(unit);
 		entityManager.flush();
 		
