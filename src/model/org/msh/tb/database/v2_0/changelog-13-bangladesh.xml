@@ -108,4 +108,10 @@
 	</sql>
 	</changeSet>
 
+	<!-- Solve a possible inconsistence on next version update -->
+	<changeSet id="13.6" author="MSANTOS" context="BD">
+		<sql>
+			update tbunit set limitdatemedicinemovement = null where medmanstartdate is null
+		</sql>
+	</changeSet>
 </databaseChangeLog>
