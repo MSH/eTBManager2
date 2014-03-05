@@ -30,7 +30,7 @@ import org.msh.utils.date.DateUtils;
 @Name("quarterBatchExpiringReport")
 @Scope(ScopeType.CONVERSATION)
 public class QuarterBatchExpiringReport {
-
+ 
 	@In(required=true) EntityManager entityManager;
 	@In(required=true) FacesMessages facesMessages;
 	

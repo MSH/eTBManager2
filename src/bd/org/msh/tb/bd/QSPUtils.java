@@ -11,7 +11,7 @@ import org.msh.tb.login.UserSession;
 import org.msh.tb.tbunits.TBUnitSelection2;
 
 public class QSPUtils {
-	
+	 
 	/**
 	 * Returns the list of tbunits that haven't closed the selected quarter according to the passed parameters.
 	 */

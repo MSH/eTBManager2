@@ -30,7 +30,7 @@ import org.msh.utils.date.DateUtils;
 @Name("quarterStockPositionReport")
 @Scope(ScopeType.CONVERSATION)
 public class QuarterStockPositionReport {
-
+ 
 	@In(create=true) MedicinesQuery medicines;
 	@In(required=true) EntityManager entityManager;
 	@In(required=true) FacesMessages facesMessages;

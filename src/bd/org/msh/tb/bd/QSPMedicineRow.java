@@ -8,7 +8,7 @@ package org.msh.tb.bd;
 import org.msh.tb.entities.Medicine;
 
 public class QSPMedicineRow {
-
+ 
 	private Medicine medicine;
 	private Long openingBalance;
 	private Long receivedFromCS;
