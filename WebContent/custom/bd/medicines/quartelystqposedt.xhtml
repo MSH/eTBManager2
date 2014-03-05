@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="/layout/templatemed.xhtml">
+      template="/layout/template_new.xhtml">
       
 	<ui:param name="title" value="#{messages['Quarter.editQuartelyReport']}" />
 	<ui:param name="topmenu" value="1" />
@@ -37,7 +37,8 @@
 		</div>
 	</ui:define>
 	
-	<ui:define name="content_unit" id="content">
+	<ui:define name="content" id="content">
+	<s:decorate template="/layout/unitsel.xhtml">
 	<h:form id="main">
 	
 	<div id="tablediv">
@@ -129,6 +130,8 @@
 	</div>
 	
 	</h:form>
+	</s:decorate>
+	
 	<script language="JavaScript" type="text/javascript">
 	<!--
 	updatePosAdjustTotal();
