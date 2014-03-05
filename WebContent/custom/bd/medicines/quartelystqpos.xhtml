@@ -65,7 +65,7 @@
 	<tbody>
 	<ui:repeat var="row" value="#{quarterStockPositionReport.rows}" varStatus="v">
 		<tr class="#{row.highlight ? 'highlight' : 'lin1'}">
-			<td class="colb"><h:outputText value="#{row.medicine.genericName.name1}" /></td>
+			<td class="colb"><h:outputText value="#{row.medicine}" /></td>
 			<td class="colrb"><h:outputText value="#{row.openingBalance}" /></td>
 			<td class="colrb"><h:outputText value="#{row.receivedFromCS}" /></td>
 			<td class="colrb"><h:outputText value="#{row.positiveAdjust}" /></td>
