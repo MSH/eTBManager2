@@ -173,7 +173,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 									"and m2.type = 4 and (bm2.quantity * m2.oper) < 0 and (m2.adjustmentType.id = :workspaceExpiredAdjust))" +	
 								
 								"from BatchMovement bm join bm.batch b join bm.movement m join m.source s " +
-								"where m.tbunit.id = :unitId and m.medicine.id = :medicineId and ((m.date < :iniDate) or (m.date = :iniDate and m.type = 7)) " +
+								"where m.tbunit.id = :unitId and m.medicine.id = :medicineId and ((m.date <= :endDate) or (m.date = :iniDate and m.type = 7)) " +
 								"group by b.id, s.id " +
 								"having sum(bm.quantity * m.oper) > 0";
 		
