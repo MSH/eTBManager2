@@ -38,7 +38,7 @@
 	</ui:define>
 	
 	<ui:define name="content" id="content">
-	<s:decorate template="/layout/unitsel.xhtml">
+	<s:decorate template="/layout/unitsel.xhtml" id="a">
 	<h:form id="main">
 	
 	<div id="tablediv">
@@ -147,7 +147,7 @@
 		if(isNaN(num))
 			num = 0;
 
-		document.getElementById('page:main:posadjust').value = num;
+		document.getElementById('a:main:posadjust').value = num;
 
 		updateCloseBalTotal();
 	}
@@ -160,7 +160,7 @@
 		if(isNaN(num))
 			num = #{quarterStockPositionHome.editingMedicine.nonNegativeAdjustments};
 
-		document.getElementById('page:main:negadjust').value = num + #{quarterStockPositionHome.editingMedicine.nonNegativeAdjustments};
+		document.getElementById('a:main:negadjust').value = num + #{quarterStockPositionHome.editingMedicine.nonNegativeAdjustments};
 
 		updateCloseBalTotal();
 	}
@@ -172,24 +172,24 @@
 		if(isNaN(num))
 			num = 0;
 
-		document.getElementById('page:main:expired').value = num;
+		document.getElementById('a:main:expired').value = num;
 
 		updateCloseBalTotal();
 	}
 	function updateCloseBalTotal(){
-		var openbal = parseInt(document.getElementById('page:main:openbal').value);
-		var received = parseInt(document.getElementById('page:main:received').value);
-		var posadjust = parseInt(document.getElementById('page:main:posadjust').value);
-		var negadjust = parseInt(document.getElementById('page:main:negadjust').value);
-		var consumption = parseInt(document.getElementById('page:main:consumption').value);
-		var expired = parseInt(document.getElementById('page:main:expired').value);
+		var openbal = parseInt(document.getElementById('a:main:openbal').value);
+		var received = parseInt(document.getElementById('a:main:received').value);
+		var posadjust = parseInt(document.getElementById('a:main:posadjust').value);
+		var negadjust = parseInt(document.getElementById('a:main:negadjust').value);
+		var consumption = parseInt(document.getElementById('a:main:consumption').value);
+		var expired = parseInt(document.getElementById('a:main:expired').value);
 
 		var num = openbal + received + posadjust - negadjust - consumption - expired;
 
 		if(isNaN(num))
 			num = 0;
 		
-		document.getElementById('page:main:closbal').value = num;
+		document.getElementById('a:main:closbal').value = num;
 	}
 	-->
 	</script>
