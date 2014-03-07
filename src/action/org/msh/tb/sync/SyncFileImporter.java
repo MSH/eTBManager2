@@ -8,12 +8,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 import javax.persistence.EntityManager;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.msh.tb.application.App;
 import org.msh.tb.application.TransactionManager;
 import org.msh.tb.entities.SyncKey;
@@ -199,6 +201,15 @@ public class SyncFileImporter {
 		Integer clientId = (Integer)params.get("clientId");
 		Integer id = (Integer)params.get("id");
 		
+		// handle embedded cases in the object
+		TbCase tbcase = null;
+		if ((id == null) && (params.containsKey("tbcase.id") && (params.containsKey("tbcase.clientId")))) {
+			Map<String, Object> paramsCase = new HashMap<String, Object>();
+			paramsCase.put("id", params.get("tbcase.id"));
+			paramsCase.put("clientId", params.get("tbcase.clientId"));
+			tbcase = (TbCase)createNewObject(TbCase.class, paramsCase);
+		}
+		
 		System.out.println("PREPARE*** " + objectType + "  " + params);
 
 		// if there is a client ID, so the object is to be sync
@@ -216,9 +227,21 @@ public class SyncFileImporter {
 
 		if (id != null) {
 			System.out.println("LOADING ****" + objectType + " = " + id);
-			 return App.getEntityManager().find(objectType, id);
+			return App.getEntityManager().find(objectType, id);
 		}
-		else return null;
+		
+		if (tbcase == null) {
+			return null;
+		}
+
+		// create the object and set the tbcase in the object
+		try {
+			Object obj = objectType.newInstance();
+			PropertyUtils.setProperty(obj, "tbcase", tbcase);
+			return obj;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 	/**
