@@ -114,4 +114,24 @@
 			update tbunit set limitdatemedicinemovement = null where medmanstartdate is null
 		</sql>
 	</changeSet>
+	
+	<changeSet id="13.7" author="msantos">
+		<insert tableName="userrole">
+			<column name="id" valueNumeric="211"/>
+			<column name="changeable" valueBoolean="false" />
+			<column name="code" value="0201001"/>
+			<column name="role_name" value="STOCK_ADJUST_NEW_BATCH" />
+			<column name="internalUse" valueBoolean="false" />
+			<column name="byCaseClassification" valueBoolean="false" />
+			<column name="messageKey" value="meds.mov.newadjust.newbatch" />
+		</insert>
+		
+		<sql>
+		INSERT INTO userpermission(canchange, canexecute, grantPermission, profile_id, role_id)
+		SELECT false, true, true, id, 211 from userprofile
+		WHERE name like "%administ%"
+		AND NOT EXISTS(SELECT * FROM userpermission WHERE role_id=211 AND profile_id=userprofile.id)
+		</sql>
+	</changeSet>
+	
 </databaseChangeLog>
