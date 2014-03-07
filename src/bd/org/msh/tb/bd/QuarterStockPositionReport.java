@@ -232,7 +232,9 @@ public class QuarterStockPositionReport {
 				newRows.add(row);
 			else if(row.getMedicine().getLine().equals(MedicineLine.OTHER))
 				newRows.add(row);
-			else if(row.getOpeningBalance() !=0 || row.getClosingBalance() != 0){
+			else if(row.getOpeningBalance() !=0 || row.getClosingBalance() != 0 || row.getAmc() != 0 || row.getDispensed() != 0
+						|| row.getExpired() != 0 || row.getNegativeAdjust() != 0 || row.getOutOfStockDays() != 0 
+						|| row.getPositiveAdjust() != 0 || row.getReceivedFromCS() != 0){
 				row.setHighlight(true);
 				newRows.add(row);
 			}

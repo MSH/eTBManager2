@@ -132,6 +132,7 @@
 		#{messages['Tbunit.secondLineSupplier']}
 	</div>
 	<s:decorate template="/layout/tbselection.xhtml">
+		<ui:param name="required" value="#{false}" />
 		<ui:param name="tbunitselection" value="#{tbunitHome.slmSupplier}" />
 	</s:decorate>
 
@@ -139,6 +140,7 @@
 		#{messages['Tbunit.firstLineSupplier']}
 	</div>
 	<s:decorate template="/layout/tbselection.xhtml">
+		<ui:param name="required" value="#{false}" />
 		<ui:param name="tbunitselection" value="#{tbunitHome.flmSupplier}" />
 	</s:decorate>
 	

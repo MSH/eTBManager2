@@ -27,7 +27,7 @@
 <div style="width:800px">
 <s:decorate template="/layout/unitsel.xhtml">
 <h:form id="main">
-	<a:commandLink onclick="openNewBatchDlg();" style="float:right;" styleClass="button-alt">
+	<a:commandLink onclick="openNewBatchDlg();" style="float:right;" styleClass="button-alt" rendered="#{s:hasRole('STOCK_ADJUST_NEW_BATCH')}">
 		<span>#{messages['meds.receiving.newbatch']}...</span>
 	</a:commandLink>
 
@@ -61,7 +61,7 @@
 				<span>#{messages['meds.movs.newadjust']}</span>
 			</a:commandLink>
 
-			<div id="med-row" style="height:30px;min-height:30px;cursor: pointer;">
+			<div id="med-row" style="height:30px;min-height:30px;">
 			<div style="float:left;width:450px;">
 				<a:commandLink value="#{messages['form.details']}" style="float:right;" onclick="detailsClick(this);return false;" />
 				<div class="medicine-icon" />
