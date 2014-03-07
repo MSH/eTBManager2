@@ -193,7 +193,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		if (recordIndex >= list.size()) {
 			list = getNextList();
 			recordIndex = 0;
-			if (list == null)
+			if ((list == null) || (list.size() == 0))
 				return null;
 		}
 

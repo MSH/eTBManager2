@@ -81,6 +81,9 @@ public class SyncFileTask extends AsyncTaskImpl {
 	private void saveStatus() {
 		ClientSyncResult resp = new ClientSyncResult();
 		resp.setId(token);
+		if ((errorMessage != null) && (errorMessage.length() > 250)) {
+			errorMessage = errorMessage.substring(0, 249);
+		}
 		resp.setErrorMessage(errorMessage);
 		resp.setSyncStart(getExecutionTimestamp());
 		resp.setSyncEnd(new Date());

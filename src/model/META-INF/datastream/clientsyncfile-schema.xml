@@ -93,6 +93,19 @@
             <property name="method.id" elementName="method" xmlAttribute="true"/>
         </objectGraph>
         
+        
+        <objectGraph name="examxpert" class="org.msh.tb.entities.ExamXpert">
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
+            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
+            <property name="result" xmlAttribute="true" />
+            <property name="rifResult" xmlAttribute="true" />
+            <property name="dateCollected" xmlAttribute="true" />
+            <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
+            <property name="method.id" elementName="method" xmlAttribute="true"/>
+        </objectGraph>
+        
         <objectGraph name="examculture" class="org.msh.tb.entities.ExamCulture" >
             <property name="clientId" elementName="cl_id" xmlAttribute="true" />
             <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />

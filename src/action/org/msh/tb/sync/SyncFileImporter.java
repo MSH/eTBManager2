@@ -190,8 +190,6 @@ public class SyncFileImporter {
 	 * @return instance of the object class
 	 */
 	protected Object createNewObject(Class objectType, Map<String, Object> params) {
-		System.out.println(objectType + " ... " + params);
-		
 		// is information about the last version used in each entity?
 		if (objectType == EntityLastVersion.class) {
 			// let the library create the instance
@@ -200,6 +198,8 @@ public class SyncFileImporter {
 
 		Integer clientId = (Integer)params.get("clientId");
 		Integer id = (Integer)params.get("id");
+		
+		System.out.println("PREPARE*** " + objectType + "  " + params);
 
 		// if there is a client ID, so the object is to be sync
 		if ((clientId != null) && (id == null)) {
@@ -214,8 +214,10 @@ public class SyncFileImporter {
 			}
 		}
 
-		if (id != null)
+		if (id != null) {
+			System.out.println("LOADING ****" + objectType + " = " + id);
 			 return App.getEntityManager().find(objectType, id);
+		}
 		else return null;
 	}
 	
@@ -224,6 +226,11 @@ public class SyncFileImporter {
 	 * @param obj is the object read from the data stream
 	 */
 	protected void handleNewObject(Object obj) {
+		if (obj instanceof EntityLastVersion) {
+			entityVersions.add((EntityLastVersion)obj);
+			return;
+		}
+		
 		saveEntity(obj);
 	}
 
@@ -233,11 +240,6 @@ public class SyncFileImporter {
 	 * @param obj
 	 */
 	protected void saveEntity(Object obj) {
-		if (obj instanceof EntityLastVersion) {
-			entityVersions.add((EntityLastVersion)obj);
-			return;
-		}
-		
 		EntityManager em = App.getEntityManager();
 
 		if (obj instanceof WSObject) {
