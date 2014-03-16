@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.Transfer;
+import org.msh.tb.entities.enums.ShippedReceivedDiffTypes;
 import org.msh.tb.entities.enums.TransferStatus;
 import org.msh.utils.EntityQuery;
 
@@ -22,6 +23,8 @@ public class TransfersHistory extends EntityQuery<Transfer> {
 	private Integer year;
 	private TransferStatus status;
 	private boolean executing;
+	
+	private ShippedReceivedDiffTypes diffType;
 	
 	private static final String[] restrictions = {
 			"month(tr.shippingDate) = #{transfersHistory.month} + 1",
@@ -55,7 +58,19 @@ public class TransfersHistory extends EntityQuery<Transfer> {
 	}
 
 	protected String conditions() {
-		return "where tr.status in (1, 2) and (tr.unitTo.id = #{userSession.tbunit.id} or tr.unitFrom.id = #{userSession.tbunit.id})";
+		String cond = "where tr.status in (1, 2) and (tr.unitTo.id = #{userSession.tbunit.id} or tr.unitFrom.id = #{userSession.tbunit.id})";
+	
+		if(diffType != null){
+			if(diffType.equals(ShippedReceivedDiffTypes.RECEIVED_BT_SHIPPED)){
+				cond += " and exists(from TransferBatch tb where tb.transferItem.transfer.id = tr.id and tb.quantity < tb.quantityReceived)";
+			}else if(diffType.equals(ShippedReceivedDiffTypes.SHIPPED_BT_RECEIVED)){
+				cond += " and exists(from TransferBatch tb where tb.transferItem.transfer.id = tr.id and tb.quantity > tb.quantityReceived)";
+			}else if(diffType.equals(ShippedReceivedDiffTypes.BOTH)){
+				cond += " and exists(from TransferBatch tb where tb.transferItem.transfer.id = tr.id and tb.quantity <> tb.quantityReceived)";
+			}
+		}
+
+		return cond;
 	}
 	
 	@Override
@@ -76,7 +91,7 @@ public class TransfersHistory extends EntityQuery<Transfer> {
 			 return "tr.shippingDate desc";
 		else return s;
 	}
-
+	
 	public Integer getMonth() {
 		return month;
 	}
@@ -104,4 +119,13 @@ public class TransfersHistory extends EntityQuery<Transfer> {
 	public boolean isExecuting() {
 		return executing;
 	}
+
+	public ShippedReceivedDiffTypes getDiffType() {
+		return diffType;
+	}
+
+	public void setDiffType(ShippedReceivedDiffTypes diffType) {
+		this.diffType = diffType;
+	}
+
 }

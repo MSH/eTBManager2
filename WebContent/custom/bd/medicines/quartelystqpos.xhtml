@@ -19,7 +19,7 @@
 			<s:link value="#{messages['meds.inventory']}" view="/medicines/index.xhtml" propagation="none"/>
 		</div>
 		<div class="item selected">
-			<s:link value="#{title}" propagation="none" />
+			<s:link value="#{title}" propagation="none" view="/custom/bd/medicines/quartelystqpos.xhtml" action="#{quarterStockPositionHome.initialize()}"/>
 		</div>
 	</ui:define>
 	
@@ -39,8 +39,14 @@
   			<s:selectItems value="#{quarterYears}" var="r" label="#{r}" />
   			<a:support event="onchange" ajaxSingle="true" reRender="main" process="year,quarter" action="#{quarterStockPositionHome.refresh}" />
 		</h:selectOneMenu> 
+		<h:outputText value="#{messages['quarter.closed']}" rendered="#{not quarterStockPositionHome.isOpenedQuarter()}" styleClass="error"/>
 	</s:decorate>
-
+	
+	<s:decorate rendered="#{empty quarterStockPositionReport.rows}">
+		<h:outputText value="#{messages['form.norecordfound']}" styleClass="warn" />
+	</s:decorate>
+	
+	<s:decorate rendered="#{not empty quarterStockPositionReport.rows}">
 	<table class="table1">
 	<thead>
 	<tr>
@@ -77,15 +83,21 @@
 			<s:fragment rendered="#{userSession.tbunit.secondLineSupplier == null}">
 			<td class="colrb"><h:outputText value="#{row.amc}" /></td>
 			<td class="colcb">
-				<s:fragment rendered="#{row.getEstimatedMonthsOfStock() != null}">
-					<h:outputText value="#{row.getEstimatedMonthsOfStock()}" />
-					<h:outputText value=" #{messages['global']}" />
+				<s:fragment rendered="#{row.amc == 0}">
+					<h:outputText value="#{messages['meds.undefined']}"/>
 				</s:fragment>
 				
-				<s:fragment rendered="#{row.getEstimatedMonthsOfStock() == null}">
-					<h:outputText value="#{messages['meds.onemonthless']}" rendered="#{row.amc > 0}"/>
-					<h:outputText  value="#{messages['meds.undefined']}" rendered="#{row.amc == 0}"/>
+				<s:fragment rendered="#{row.amc != 0}">
+					<s:fragment rendered="#{row.getEstimatedMonthsOfStock() != null and row.getEstimatedMonthsOfStock() gt 1}">
+						<h:outputText value="#{row.getEstimatedMonthsOfStock()}" style="color:#{row.getEstimatedMonthsOfStock() le userSession.getWorkspace().minStockOnHand ? 'red' : (row.getEstimatedMonthsOfStock() ge userSession.getWorkspace().maxStockOnHand ? 'darkgoldenrod' : 'black')}" />
+						<h:outputText value=" #{messages['global']}" style="color:#{row.getEstimatedMonthsOfStock() le userSession.getWorkspace().minStockOnHand ? 'red' : (row.getEstimatedMonthsOfStock() ge userSession.getWorkspace().maxStockOnHand ? 'darkgoldenrod' : 'black')}"/>
+					</s:fragment>
+					
+					<s:fragment rendered="#{(row.getEstimatedMonthsOfStock() != null and row.getEstimatedMonthsOfStock() le 1) or row.getEstimatedMonthsOfStock() == null}">
+						<h:outputText value="#{messages['meds.onemonthless']}" rendered="#{row.amc > 0}" style="color:red"/>
+					</s:fragment>
 				</s:fragment>
+
 			</td>
 			<s:fragment rendered="#{quarterStockPositionHome.canEdit()}">
 			<td class="colcb">
@@ -104,6 +116,7 @@
 	</ui:repeat>
 	</tbody>
 	</table>
+	</s:decorate>
 	
 	<br/>
 	

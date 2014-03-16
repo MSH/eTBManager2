@@ -23,6 +23,14 @@
 	</div>
 </ui:define>
 
+<ui:define name="icons">
+<h:form >
+	<h:commandLink action="#{quarterBatchExpiringReport.downloadExcel()}" style="float:right;margin-right:10px;">
+		<div class="excel-icon" />
+	</h:commandLink>
+</h:form>
+</ui:define>
+
 <ui:define name="content" id="content">
 	<h1>#{title}</h1>
 	<h:form id="main" prependId="false">

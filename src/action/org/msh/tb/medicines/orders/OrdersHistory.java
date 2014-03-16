@@ -8,6 +8,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.Order;
 import org.msh.tb.entities.enums.OrderStatus;
+import org.msh.tb.entities.enums.ShippedReceivedDiffTypes;
 import org.msh.tb.login.UserSession;
 import org.msh.utils.EntityQuery;
 
@@ -17,7 +18,7 @@ public class OrdersHistory extends EntityQuery<Order> {
 
 	@In(create=true) UserSession userSession;
 	
-	private boolean diffQuantityReceived;
+	private ShippedReceivedDiffTypes diffType;
 	
 	private static final String[] restrictions = {
 		"month(o.orderDate) = #{ordersHistory.month} + 1",
@@ -38,8 +39,14 @@ public class OrdersHistory extends EntityQuery<Order> {
 						" and o.status in (" + OrderStatus.CANCELLED.ordinal() + ", " + OrderStatus.PREPARINGSHIPMENT.ordinal() + ", " + 
 						OrderStatus.RECEIVED.ordinal() + "," + OrderStatus.SHIPPED.ordinal() + ")))";
 	
-		if(diffQuantityReceived){
-			cond += " and i.shippedQuantity > i.receivedQuantity";
+		if(diffType != null){
+			if(diffType.equals(ShippedReceivedDiffTypes.RECEIVED_BT_SHIPPED)){
+				cond += " and i.shippedQuantity < i.receivedQuantity";
+			}else if(diffType.equals(ShippedReceivedDiffTypes.SHIPPED_BT_RECEIVED)){
+				cond += " and i.shippedQuantity > i.receivedQuantity";
+			}else if(diffType.equals(ShippedReceivedDiffTypes.BOTH)){
+				cond += " and i.shippedQuantity <> i.receivedQuantity";
+			}
 		}
 		
 		return cond;
@@ -54,7 +61,7 @@ public class OrdersHistory extends EntityQuery<Order> {
 
 	@Override
 	protected String getCountEjbql() {
-		return "select count(*) from Order o".concat(getCondition());
+		return "select count(*) from Order o join o.unitFrom join o.items i".concat(getCondition());
 	}
 
 	@Override
@@ -122,18 +129,17 @@ public class OrdersHistory extends EntityQuery<Order> {
 	}
 
 	/**
-	 * @return the diffQuantityReceived
+	 * @return the diffType
 	 */
-	public boolean isDiffQuantityReceived() {
-		return diffQuantityReceived;
+	public ShippedReceivedDiffTypes getDiffType() {
+		return diffType;
 	}
 
 	/**
-	 * @param diffQuantityReceived the diffQuantityReceived to set
+	 * @param diffType the diffType to set
 	 */
-	public void setDiffQuantityReceived(boolean diffQuantityReceived) {
-		this.diffQuantityReceived = diffQuantityReceived;
+	public void setDiffType(ShippedReceivedDiffTypes diffType) {
+		this.diffType = diffType;
 	}
-	
-	
+
 }

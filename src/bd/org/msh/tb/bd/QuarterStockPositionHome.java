@@ -60,6 +60,9 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	private Medicine medicine;
 	
 	public void initialize(){
+		if(this.initialized == true)
+			return;
+			
 		updateQuarterAsTbunit();
 		setParametersOnReports();		
 		refresh();
@@ -617,7 +620,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		if(userSession.getTbunit().getLimitDateMedicineMovement() == null)
 			return true;
 		
-		return isOpenedQuarter();
+		return isEditableQuarter();
 	}
 	
 	/**
@@ -630,18 +633,26 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		if(userSession.getTbunit().getLimitDateMedicineMovement() == null)
 			return true;
 		
-		return isOpenedQuarter();
+		return isEditableQuarter();
 	}
 	
 	/**
-	 * Returns true if the selected quarter is the opened one for the selected unit.
+	 * Returns true if the selected quarter is the editable one for the selected unit.
 	 */
-	public boolean isOpenedQuarter(){		
+	public boolean isEditableQuarter(){		
 		Date dt = userSession.getTbunit().getLimitDateMedicineMovement();
 		Quarter editableQuarter = Quarter.getQuarterByMonth(DateUtils.monthOf(dt), DateUtils.yearOf(dt));
 				
 		return selectedQuarter.isTheSame(editableQuarter);
 	}
+	
+	/**
+	 * Returns true if the selected quarter is opened.
+	 */
+	public boolean isOpenedQuarter(){		
+		return userSession.getTbunit().getLimitDateMedicineMovement().compareTo(selectedQuarter.getIniDate()) <= 0;
+	}
+	
 	
 	public Quarter getOpenedQuarter(){
 		return Quarter.getQuarterByDate(userSession.getTbunit().getLimitDateMedicineMovement());

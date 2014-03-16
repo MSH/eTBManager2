@@ -196,6 +196,16 @@ public class ExcelCreator {
 		column++;
 	}
 	
+	/**
+	 * Add a number to the current cell and moves cursor to the next cell
+	 * @param value
+	 */
+	public void addNumber(Long value) {
+		Double dval = (value != null? value.doubleValue(): null);
+		addNumber(dval, column, row, null);
+		column++;
+	}
+	
 
 	public void addDate(Date date, int aColumn, int aRow) {
 		if (date == null)

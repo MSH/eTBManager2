@@ -33,6 +33,7 @@ public class QuarterBatchExpiringReport {
  
 	@In(required=true) EntityManager entityManager;
 	@In(required=true) FacesMessages facesMessages;
+	@In(create=true) QSPExcelUtils qspExcelUtils;
 	
 	private TBUnitSelection2 tbunitselection;
 	private Quarter selectedQuarter;
@@ -182,6 +183,15 @@ public class QuarterBatchExpiringReport {
 		for(Object[] o : result){
 			batchDetailsConsolidated.put((Batch) o[0], (Long) o[1]);
 		}
+	}
+	
+	public void downloadExcel(){
+		if(unitBatchDetails == null || unitBatchDetails.size()<1){
+			facesMessages.addFromResourceBundle("cases.details.noresultfound");
+			return;
+		}
+		
+		qspExcelUtils.downloadQuarterlyBatchExpiringReport(source, selectedQuarter, tbunitselection.getAuselection().getSelectedUnit(), tbunitselection.getTbunit(), unitBatchDetails, batchDetailsConsolidated);
 	}
 	
 	/**

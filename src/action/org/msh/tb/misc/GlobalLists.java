@@ -39,6 +39,7 @@ import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.tb.entities.enums.SampleType;
+import org.msh.tb.entities.enums.ShippedReceivedDiffTypes;
 import org.msh.tb.entities.enums.TbCategory;
 import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.entities.enums.UserState;
@@ -186,8 +187,14 @@ public class GlobalLists {
 		DrugResistanceType.EXTENSIVEDRUG_RESISTANCE,
 		DrugResistanceType.RIF_RESISTANCE
 	};
-
-
+	
+	private static final ShippedReceivedDiffTypes shippedReceivedDiffType[] = {
+		ShippedReceivedDiffTypes.NONE,
+		ShippedReceivedDiffTypes.SHIPPED_BT_RECEIVED,
+		ShippedReceivedDiffTypes.RECEIVED_BT_SHIPPED,
+		ShippedReceivedDiffTypes.BOTH
+	};
+	
 	/**
 	 * Get component according to the workspace in use
 	 * @param <E>
@@ -530,6 +537,10 @@ public class GlobalLists {
 	@Factory("drugResistanceTypes")
 	public DrugResistanceType[] getDrugResistanceTypes() {
 		return getComponentValueWorkspace("drugResistanceTypes", DrugResistanceType[].class, drugResistanceTypes);
+	}
+	
+	public ShippedReceivedDiffTypes[] getShippedReceivedDiffType() {
+		return shippedReceivedDiffType;
 	}
 	
 	public DisplayCaseNumber[] getDisplayCaseNumbers() {

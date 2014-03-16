@@ -23,6 +23,14 @@
 	</div>
 </ui:define>
 
+<ui:define name="icons">
+<h:form >
+	<h:commandLink action="#{quarterStockPositionReport.downloadExcel()}" style="float:right;margin-right:10px;">
+		<div class="excel-icon" />
+	</h:commandLink>
+</h:form>
+</ui:define>
+
 <ui:define name="content" id="content">
 	<h1>#{title}</h1>
 	<h:form id="main" prependId="false">
@@ -130,8 +138,7 @@
 	
 	<h:column>
 		<f:facet name="header">#{messages['quarter.outofstk']}</f:facet>
-		<!-- <h:outputText value="#{row.outOfStockDays}" />-->
-		<h:outputText value="#{row.outOfStockForAmcCalc}" />
+		<h:outputText value="#{row.outOfStockDays}" />
 	</h:column>
 	
 	<h:column>
@@ -141,14 +148,20 @@
 	
 	<h:column>
 		<f:facet name="header">#{messages['meds.stockoutdate']}</f:facet>
-		<s:fragment rendered="#{row.getEstimatedMonthsOfStock() != null}">
-			<h:outputText value="#{row.getEstimatedMonthsOfStock()}" />
-			<h:outputText value=" #{messages['global']}" />
+	
+		<s:fragment rendered="#{row.amc == 0}">
+			<h:outputText value="#{messages['meds.undefined']}"/>
 		</s:fragment>
 		
-		<s:fragment rendered="#{row.getEstimatedMonthsOfStock() == null}">
-			<h:outputText value="#{messages['meds.onemonthless']}" rendered="#{row.amc > 0}"/>
-			<h:outputText  value="#{messages['meds.undefined']}" rendered="#{row.amc == 0}"/>
+		<s:fragment rendered="#{row.amc != 0}">
+			<s:fragment rendered="#{row.getEstimatedMonthsOfStock() != null and row.getEstimatedMonthsOfStock() gt 1}">
+				<h:outputText value="#{row.getEstimatedMonthsOfStock()}" style="color:#{row.getEstimatedMonthsOfStock() le userSession.getWorkspace().minStockOnHand ? 'red' : (row.getEstimatedMonthsOfStock() ge userSession.getWorkspace().maxStockOnHand ? 'darkgoldenrod' : 'black')}" />
+				<h:outputText value=" #{messages['global']}" style="color:#{row.getEstimatedMonthsOfStock() le userSession.getWorkspace().minStockOnHand ? 'red' : (row.getEstimatedMonthsOfStock() ge userSession.getWorkspace().maxStockOnHand ? 'darkgoldenrod' : 'black')}"/>
+			</s:fragment>
+			
+			<s:fragment rendered="#{(row.getEstimatedMonthsOfStock() != null and row.getEstimatedMonthsOfStock() le 1) or row.getEstimatedMonthsOfStock() == null}">
+				<h:outputText value="#{messages['meds.onemonthless']}" rendered="#{row.amc > 0}" style="color:red"/>
+			</s:fragment>
 		</s:fragment>
 	</h:column>
 	<!-- usefull for amc calc check

@@ -33,7 +33,7 @@
 			<s:link value="#{messages['meds.inventory']}" view="/medicines/index.xhtml" propagation="none"/>
 		</div>
 		<div class="item selected">
-			<s:link value="#{title}" propagation="none" />
+			<s:link value="#{messages['quarter.report']}" propagation="none" view="/custom/bd/medicines/quartelystqpos.xhtml" action="#{quarterStockPositionHome.initialize()}"/>
 		</div>
 	</ui:define>
 	
@@ -49,7 +49,7 @@
 		<tr>
 			<th>#{messages['Batch']}</th>
 			<th>#{messages['quarter.openbal']}</th>
-			<th>#{messages['quarter.received']}</th>-
+			<th>#{messages['quarter.received']}</th>
 			<th>#{messages['quarter.posadjust']}</th>
 			<th>#{messages['quarter.negadjust']}</th>
 			<th>#{messages['manag.forecast.tabres2']}</th>

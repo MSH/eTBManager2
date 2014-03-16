@@ -28,39 +28,34 @@
 <h:form id="main" styleClass="form1">
 
 	<div class="form-content">
-	<table>
-		<tr>
-			<td>
-				<s:decorate template="/layout/edit.xhtml" >
-			    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
-					<h:selectOneMenu value="#{ordersHistory.month}" id="month">
-						<f:selectItems value="#{months}"/>
-						<a:support event="onchange" reRender="pnlorders" process="difforder,orderStatus,month,year"/>
-					</h:selectOneMenu>
-					<h:selectOneMenu value="#{ordersHistory.year}" style="margin-left:5px; width : 70px;" id="year">
-						<f:selectItems value="#{years}"/>
-						<a:support event="onchange" reRender="pnlorders" process="difforder,orderStatus,month,year"/>
-					</h:selectOneMenu>
-				</s:decorate>
-				<s:decorate template="/layout/edit.xhtml" >
-			    	<ui:define name="label">#{messages['OrderStatus']}:</ui:define>
-					<h:selectOneMenu id="orderStatus" value="#{ordersHistory.os}">
-						<s:selectItems var="v" value="#{ordersHistory.orderStatusList}" label="#{messages[v.key]}" noSelectionLabel="-" />
-						<s:convertEnum />
-						<a:support event="onchange" reRender="pnlorders" process="difforder,orderStatus,month,year"/>
-					</h:selectOneMenu>
-				</s:decorate>
-			</td>
-			<td>
-			   	<span class="name" style="width:330px">
-					<h:selectBooleanCheckbox value="#{ordersHistory.diffQuantityReceived}">
-				    	<a:support event="onclick" reRender="pnlorders" process="difforder,orderStatus,month,year"/>
-				    </h:selectBooleanCheckbox>
-			    	#{messages['meds.orders.diffQuantityReceived']}
-			    </span>
-			</td>
-		</tr>
-	</table>
+		<s:decorate template="/layout/edit.xhtml" >
+	    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
+			<h:selectOneMenu value="#{ordersHistory.month}" id="month">
+				<f:selectItems value="#{months}"/>
+				<a:support event="onchange" reRender="pnlorders" process="difforder,orderStatus,month,year"/>
+			</h:selectOneMenu>
+			<h:selectOneMenu value="#{ordersHistory.year}" style="margin-left:5px; width : 70px;" id="year">
+				<f:selectItems value="#{years}"/>
+				<a:support event="onchange" reRender="pnlorders" process="difforder,orderStatus,month,year"/>
+			</h:selectOneMenu>
+		</s:decorate>
+		<s:decorate template="/layout/edit.xhtml" >
+	    	<ui:define name="label">#{messages['OrderStatus']}:</ui:define>
+			<h:selectOneMenu id="orderStatus" value="#{ordersHistory.os}">
+				<s:selectItems var="v" value="#{ordersHistory.orderStatusList}" label="#{messages[v.key]}" noSelectionLabel="-" />
+				<s:convertEnum />
+				<a:support event="onchange" reRender="pnlorders" process="difforder,orderStatus,month,year"/>
+			</h:selectOneMenu>
+		</s:decorate>
+		
+		<s:decorate template="/layout/edit.xhtml" >
+	    	<ui:define name="label">#{messages['form.qttDiff']}:</ui:define>
+			<h:selectOneMenu id="difforder" value="#{ordersHistory.diffType}">
+				<s:selectItems var="v" value="#{globalLists.getShippedReceivedDiffType()}" label="#{messages[v.key]}" />
+				<s:convertEnum />
+				<a:support event="onchange" reRender="pnlorders" />
+			</h:selectOneMenu>
+		</s:decorate>
 	</div> 
 
 <h:panelGroup id="pnlorders">

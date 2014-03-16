@@ -34,6 +34,7 @@ public class QuarterStockPositionReport {
 	@In(create=true) MedicinesQuery medicines;
 	@In(required=true) EntityManager entityManager;
 	@In(required=true) FacesMessages facesMessages;
+	@In(create=true) QSPExcelUtils qspExcelUtils;
 	
 	private TBUnitSelection2 tbunitselection;
 	private Quarter selectedQuarter;
@@ -226,33 +227,54 @@ public class QuarterStockPositionReport {
 		
 		for(QSPMedicineRow row : rows){
 			row.setHighlight(false);
-			if(row.getMedicine().getLine().equals(MedicineLine.FIRST_LINE) && tbunitselection.getTbunit().getFirstLineSupplier() != null)
+			
+			if(row.getMedicine().getLine().equals(MedicineLine.OTHER) && hasStockMovement(row))
 				newRows.add(row);
-			else if(row.getMedicine().equals(MedicineLine.SECOND_LINE) && tbunitselection.getTbunit().getSecondLineSupplier() != null)
+			else if(row.getMedicine().getLine().equals(MedicineLine.FIRST_LINE) && hasStockMovement(row)){
+				if(tbunitselection.getTbunit().getFirstLineSupplier() == null)
+					row.setHighlight(true);
 				newRows.add(row);
-			else if(row.getMedicine().getLine().equals(MedicineLine.OTHER))
-				newRows.add(row);
-			else if(row.getOpeningBalance() !=0 || row.getClosingBalance() != 0 || row.getAmc() != 0 || row.getDispensed() != 0
-						|| row.getExpired() != 0 || row.getNegativeAdjust() != 0 || row.getOutOfStockDays() != 0 
-						|| row.getPositiveAdjust() != 0 || row.getReceivedFromCS() != 0){
-				row.setHighlight(true);
+			}else if(row.getMedicine().getLine().equals(MedicineLine.SECOND_LINE) && hasStockMovement(row)){
+				if(tbunitselection.getTbunit().getSecondLineSupplier() == null)
+					row.setHighlight(true);
 				newRows.add(row);
 			}
 		}
 		
 		rows = newRows;
 	}
+	
+	private boolean hasStockMovement(QSPMedicineRow row){
+		if(row.getOpeningBalance() !=0 || row.getClosingBalance() != 0 || row.getDispensed() != 0
+				|| row.getExpired() != 0 || row.getNegativeAdjust() != 0
+				|| row.getPositiveAdjust() != 0 || row.getReceivedFromCS() != 0){
+			return true;
+		}
+		return false;
+	}
 		
 	/**
 	 * Checks if all the requirements to load the table is attended
 	 */
 	public boolean isFiltersFilledIn(){
-		if(rows == null || rows.size() == 0){
+		/*if(rows == null || rows.size() == 0){
 			loadMedicineList(medicines.getResultList());
-		}
+		}*/
 		
 		return !(selectedQuarter == null || selectedQuarter.getYear() == 0 || QSPUtils.getLocationWhereClause(tbunitselection) == null);
 	}
+	
+	/**
+	 * Downloads an excel file containing the information of the current state of this class.
+	 */
+	public void downloadExcel(){
+		if(rows == null || rows.size()<1){
+			facesMessages.addFromResourceBundle("cases.details.noresultfound");
+			return;
+		}
+		qspExcelUtils.downloadQuarterlyConsolidatedSP(source, selectedQuarter, tbunitselection.getAuselection().getSelectedUnit(), tbunitselection.getTbunit(), rows);
+	}
+	
 	
 	/**
 	 * Returns where clause depending on the selected source
@@ -304,8 +326,6 @@ public class QuarterStockPositionReport {
 	 * @return the rows
 	 */
 	public List<QSPMedicineRow> getRows() {
-		if(rows == null || rows.size() == 0)
-			loadMedicineList(medicines.getResultList());
 		return rows;
 	}
 
