@@ -209,15 +209,13 @@ public class SyncFileImporter {
 			paramsCase.put("clientId", params.get("tbcase.clientId"));
 			tbcase = (TbCase)createNewObject(TbCase.class, paramsCase);
 		}
-		
-		System.out.println("PREPARE*** " + objectType + "  " + params);
 
 		// if there is a client ID, so the object is to be sync
-		if ((clientId != null) && (id == null)) {
+		if (clientId != null) {
 			EntityKey key = entityKeys.findEntityKey(objectType, clientId);
 			if (key == null) {
 				// register the keys of the object
-				entityKeys.registerEntityKey(objectType, clientId, id);
+				entityKeys.registerUpdatedKey(objectType, clientId, id);
 			}
 			else {
 				// restore the key already generated in the server side during this synchronization
@@ -226,7 +224,6 @@ public class SyncFileImporter {
 		}
 
 		if (id != null) {
-			System.out.println("LOADING ****" + objectType + " = " + id);
 			return App.getEntityManager().find(objectType, id);
 		}
 		

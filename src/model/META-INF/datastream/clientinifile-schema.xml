@@ -24,6 +24,7 @@
             <property name="entityName" elementName="entity" xmlAttribute="true"/>
             <property name="clientId" xmlAttribute="true"/>
             <property name="serverId" xmlAttribute="true"/>
+            <property name="action" xmlAttribute="true" />
             <property name="entityClass" use="IGNORE" />
             <property name="newServerId" use="IGNORE" />
         </objectGraph>

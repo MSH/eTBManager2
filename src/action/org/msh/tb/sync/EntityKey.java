@@ -12,11 +12,32 @@ package org.msh.tb.sync;
  */
 public class EntityKey {
 
+	public enum EntityKeyAction {	
+		UPDATED,		// the entity changed in the client side was updated in the server side
+		CLI_DELETED, 	// the entity deleted in the client side was deleted in the server side
+		SRV_DELETED		// the entity was deleted in the server side, and must be deleted in the client side too 
+	};
+	
 	private Class entityClass;
 	private String entityName;
 	private int clientId;
 	private Integer serverId;
 	private boolean newServerId;
+	private EntityKeyAction action;
+	
+	
+	/**
+	 * Default constructor
+	 * @param entityClass
+	 * @param serverId
+	 */
+	public EntityKey(Class entityClass, Integer serverId) {
+		super();
+		this.entityClass = entityClass;
+		this.serverId = serverId;
+		this.entityName = entityClass != null? entityClass.getSimpleName(): null;
+		newServerId = serverId == null;
+	}
 	
 	/**
 	 * Default constructor
@@ -93,6 +114,20 @@ public class EntityKey {
 	 */
 	public void setEntityClass(Class entityClass) {
 		this.entityClass = entityClass;
+	}
+
+	/**
+	 * @return the action
+	 */
+	public EntityKeyAction getAction() {
+		return action;
+	}
+
+	/**
+	 * @param action the action to set
+	 */
+	public void setAction(EntityKeyAction action) {
+		this.action = action;
 	}
 	
 }

@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.msh.tb.sync.EntityKey.EntityKeyAction;
+
 /**
  * @author Ricardo Memoria
  *
@@ -23,7 +25,60 @@ public class EntityKeyList {
 	 * @param serverId
 	 * @return instance of the {@link EntityKey} containing the keys
 	 */
-	protected EntityKey registerEntityKey(Class clazz, Integer clientId, Integer serverId) {
+	protected EntityKey registerUpdatedKey(Class clazz, Integer clientId, Integer serverId) {
+		// return the list of keys for the given class
+		List<EntityKey> keys = findKeysFromClass(clazz);
+
+		EntityKey key = new EntityKey(clazz, clientId, serverId);
+		key.setAction(EntityKeyAction.UPDATED);
+		keys.add(key);
+
+		return key;
+	}
+
+	
+	/**
+	 * Register a key that was deleted from the client
+	 * @param clazz
+	 * @param clientId
+	 * @param serverId
+	 * @return
+	 */
+	protected EntityKey registerClientDeletedKey(Class clazz, Integer clientId) {
+		// return the list of keys for the given class
+		List<EntityKey> keys = findKeysFromClass(clazz);
+
+		EntityKey key = new EntityKey(clazz, clientId, clientId);
+		// just because constructor doesn't accept null arguments
+		key.setServerId(null);
+		key.setAction(EntityKeyAction.CLI_DELETED);
+		keys.add(key);
+
+		return key;
+	}
+	
+	/**
+	 * Register a deleted key from the server
+	 * @param clazz
+	 * @param serverId
+	 * @return
+	 */
+	protected EntityKey registerDeletedKey(Class clazz, Integer serverId) {
+		List<EntityKey> keys = findKeysFromClass(clazz);
+		
+		EntityKey key = new EntityKey(clazz, serverId);
+		key.setAction(EntityKeyAction.SRV_DELETED);
+		keys.add(key);
+		return key;
+	}
+	
+	
+	/**
+	 * Return the list of keys
+	 * @param clazz
+	 * @return
+	 */
+	private List<EntityKey> findKeysFromClass(Class clazz) {
 		// return the list of keys for the given class
 		List<EntityKey> keys = entityKeys.get(clazz);
 
@@ -32,13 +87,10 @@ public class EntityKeyList {
 			keys = new ArrayList<EntityKey>();
 			entityKeys.put(clazz, keys);
 		}
-
-		EntityKey key = new EntityKey(clazz, clientId, serverId);
-		keys.add(key);
-
-		return key;
+		
+		return keys;
 	}
-
+	
 	
 	/**
 	 * Search for an instance of {@link EntityKey} by its class and client ID
