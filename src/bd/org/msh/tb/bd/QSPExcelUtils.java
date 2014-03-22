@@ -19,7 +19,7 @@ public class QSPExcelUtils {
 	private final static int MAX_CASES_PER_SHEET = 65500; // max: 65536 in excel 2003 or later
 	private final static int TITLE_ROW = 1;
 	
-	public void downloadQuarterlyConsolidatedSP(Source source, Quarter quarter, AdministrativeUnit adminunit, Tbunit unit, List<QSPMedicineRow> rows){
+	public void downloadQuarterlyConsolidatedSP(Source source, Quarter quarter, AdministrativeUnit adminunit, Tbunit unit, List<QSPMedicineRow> rows, List<Tbunit> pendCloseQuarterUnits, List<Tbunit> unitsNotInitialized){
 		int iSheets = 0;
 		excel = new ExcelCreator();
 		excel.setFileName(messages.get("manag.rel7") + " " + (messages.get(quarter.getQuarter().getKey()) + "-" + quarter.getYear()));
@@ -41,13 +41,17 @@ public class QSPExcelUtils {
 		excel.addText(messages.get(quarter.getQuarter().getKey()) + "/" + quarter.getYear());
 		excel.lineBreak();
 		
-		if(adminunit != null){
-			excel.addText(messages.get("AdministrativeUnit") + ":");
-			excel.addText(adminunit.getFullDisplayName());
-			excel.lineBreak();
-		}else if (unit != null){
+		if (unit != null){
 			excel.addText(messages.get("Tbunit") + ":");
-			excel.addText(unit.getName().getName1() + " - " + unit.getAdminUnit().getFullDisplayName());
+			excel.addText(unit.getName().getName1() + " - " + unit.getAdminUnit().getFullDisplayName2());
+			excel.lineBreak();
+		}else if(adminunit != null){
+			excel.addText(messages.get("AdministrativeUnit") + ":");
+			excel.addText(adminunit.getFullDisplayName2());
+			excel.lineBreak();
+		}else if(unit == null && adminunit == null){
+			excel.addText(messages.get("AdministrativeUnit") + ":");
+			excel.addText(messages.get("form.noselection"));
 			excel.lineBreak();
 		}
 		
@@ -66,6 +70,8 @@ public class QSPExcelUtils {
 				addTitlesQuarterlyConsolidatedSP();
 			}
 		}
+		
+		includePendAndNotInitializedUnits(pendCloseQuarterUnits, unitsNotInitialized);
 		
 		excel.sendResponse();
 	}
@@ -106,7 +112,7 @@ public class QSPExcelUtils {
 		}
 	}
 	
-	public void downloadQuarterlyBatchExpiringReport(Source source, Quarter quarter, AdministrativeUnit adminunit, Tbunit unit, List<ExpiringBatchDetails> unitBatchDetails, Map<Batch, Long> batchDetailsConsolidated){
+	public void downloadQuarterlyBatchExpiringReport(Source source, Quarter quarter, AdministrativeUnit adminunit, Tbunit unit, List<ExpiringBatchDetails> unitBatchDetails, Map<Batch, Long> batchDetailsConsolidated, List<Tbunit> pendCloseQuarterUnits, List<Tbunit> unitsNotInitialized){
 		int iSheets = 0;
 		excel = new ExcelCreator();
 		excel.setFileName(messages.get("quarter.expiringbatchlist") + " " + (messages.get(quarter.getQuarter().getKey()) + "-" + quarter.getYear()));
@@ -128,13 +134,17 @@ public class QSPExcelUtils {
 		excel.addText(messages.get(quarter.getQuarter().getKey()) + "/" + quarter.getYear());
 		excel.lineBreak();
 		
-		if(adminunit != null){
-			excel.addText(messages.get("AdministrativeUnit") + ":");
-			excel.addText(adminunit.getFullDisplayName());
-			excel.lineBreak();
-		}else if (unit != null){
+		if (unit != null){
 			excel.addText(messages.get("Tbunit") + ":");
-			excel.addText(unit.getName().getName1() + " - " + unit.getAdminUnit().getFullDisplayName());
+			excel.addText(unit.getName().getName1() + " - " + unit.getAdminUnit().getFullDisplayName2());
+			excel.lineBreak();
+		}else if(adminunit != null){
+			excel.addText(messages.get("AdministrativeUnit") + ":");
+			excel.addText(adminunit.getFullDisplayName2());
+			excel.lineBreak();
+		}else if(unit == null && adminunit == null){
+			excel.addText(messages.get("AdministrativeUnit") + ":");
+			excel.addText(messages.get("form.noselection"));
 			excel.lineBreak();
 		}
 		
@@ -156,6 +166,9 @@ public class QSPExcelUtils {
 		
 		//add Consolidated content
 		addUnitQuarterlyBatchExpiringConsolidatedReport(batchDetailsConsolidated);
+		
+		//Add List of units
+		includePendAndNotInitializedUnits(pendCloseQuarterUnits, unitsNotInitialized);
 		
 		excel.sendResponse();
 	}
@@ -192,7 +205,7 @@ public class QSPExcelUtils {
 		
 		excel.lineBreak();
 		
-		if(batchDetailsConsolidated.size() > 0){
+		if(batchDetailsConsolidated != null && batchDetailsConsolidated.size() > 0){
 			excel.addTextFromResource("Medicine", "title");
 			excel.addTextFromResource("Batch", "title");
 			excel.addTextFromResource("Batch.expiryDate", "title");
@@ -212,6 +225,40 @@ public class QSPExcelUtils {
 			excel.lineBreak();
 		}
 		excel.lineBreak();
+	}
+	
+	private void includePendAndNotInitializedUnits(List<Tbunit> pendCloseQuarterUnits, List<Tbunit> unitsNotInitialized){
+		excel.lineBreak();
+		excel.lineBreak();
+		excel.lineBreak();
+		
+		if(pendCloseQuarterUnits != null && pendCloseQuarterUnits.size() > 0){
+			String m = messages.get("quarter.openquarterunit");
+			m = m.replace("{0}", new Integer(pendCloseQuarterUnits.size()).toString());
+			
+			excel.addTextFromResource(m,"title");
+			excel.lineBreak();
+			for(Tbunit u : pendCloseQuarterUnits){
+				excel.addText(u.getName().getName1());
+				excel.lineBreak();
+			}
+			excel.lineBreak();
+			excel.lineBreak();
+		}
+		
+		if(unitsNotInitialized != null && unitsNotInitialized.size() > 0){
+			String m = messages.get("quarter.notinitializedunit");
+			m = m.replace("{0}", new Integer(unitsNotInitialized.size()).toString());
+			
+			excel.addTextFromResource(m,"title");
+			excel.lineBreak();
+			for(Tbunit u : unitsNotInitialized){
+				excel.addText(u.getName().getName1());
+				excel.lineBreak();
+			}
+			excel.lineBreak();
+			excel.lineBreak();
+		}
 	}
 
 }

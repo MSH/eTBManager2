@@ -24,11 +24,9 @@
 </ui:define>
 
 <ui:define name="icons">
-<h:form >
-	<h:commandLink action="#{quarterBatchExpiringReport.downloadExcel()}" style="float:right;margin-right:10px;">
-		<div class="excel-icon" />
-	</h:commandLink>
-</h:form>
+<s:link onclick="refreshresult();return false;" style="float:right;margin-right:10px;">
+	<div class="excel-icon" />
+</s:link>
 </ui:define>
 
 <ui:define name="content" id="content">
@@ -65,6 +63,11 @@
    	<a:commandLink styleClass="button-alt" action="#{quarterBatchExpiringReport.refresh}" onclick="if (!disableButton(this)) return false;" reRender="main">
    		<span>#{messages['form.update']}</span>
    	</a:commandLink>
+	
+	<!-- Hidden buttons that updates the form before downloading -->
+   	<a:commandLink style="display:none;" id="refreshlink" oncomplete="generateexcel();" action="#{quarterBatchExpiringReport.refresh}" 
+   		onclick="if (!disableButton(this)) return false;" reRender="main" />
+	<h:commandLink style="display:none;" id="excellink" action="#{quarterBatchExpiringReport.downloadExcel()}" />
 	
 	<!-- Message for no units for the administrative unit selected -->
 	<h:outputText styleClass="warn" value="#{messages['global.nounitfound']}" rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and empty quarterBatchExpiringReport.unitBatchDetails}"/>
@@ -215,7 +218,9 @@
 			</s:link>
 		</div>
 	</rich:modalPanel>
-	
+
+	</s:fragment>
+
 	<script type="text/javascript">
 	function showOpenQuarterunitList() {
 		Richfaces.showModalPanel('openQuarterunitList');
@@ -229,9 +234,13 @@
 	function hideNotInitializedUnts() {
 		Richfaces.hideModalPanel('notInitializedUnitsList');
 	}
+	function refreshresult(){
+		document.getElementById('refreshlink').click();
+	}
+	function generateexcel(){
+		document.getElementById('excellink').click();
+	}
 	</script>
-
-	</s:fragment>
 	
 	</h:form>
 </ui:define>

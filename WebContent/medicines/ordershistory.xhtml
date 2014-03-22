@@ -51,7 +51,7 @@
 		<s:decorate template="/layout/edit.xhtml" >
 	    	<ui:define name="label">#{messages['form.qttDiff']}:</ui:define>
 			<h:selectOneMenu id="difforder" value="#{ordersHistory.diffType}">
-				<s:selectItems var="v" value="#{globalLists.getShippedReceivedDiffType()}" label="#{messages[v.key]}" />
+				<s:selectItems var="v" value="#{globalLists.getShippedReceivedDiffType()}" label="#{messages[v.key]}" noSelectionLabel="-" />
 				<s:convertEnum />
 				<a:support event="onchange" reRender="pnlorders" />
 			</h:selectOneMenu>

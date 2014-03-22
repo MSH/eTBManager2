@@ -66,7 +66,9 @@ public class TransfersHistory extends EntityQuery<Transfer> {
 			}else if(diffType.equals(ShippedReceivedDiffTypes.SHIPPED_BT_RECEIVED)){
 				cond += " and exists(from TransferBatch tb where tb.transferItem.transfer.id = tr.id and tb.quantity > tb.quantityReceived)";
 			}else if(diffType.equals(ShippedReceivedDiffTypes.BOTH)){
-				cond += " and exists(from TransferBatch tb where tb.transferItem.transfer.id = tr.id and tb.quantity <> tb.quantityReceived)";
+				cond += " and exists(from TransferBatch tb where tb.transferItem.transfer.id = tr.id and tb.quantity <> tb.quantityReceived and tb.quantityReceived is not null)";
+			}else if(diffType.equals(ShippedReceivedDiffTypes.NONE)){
+				cond += " and exists(from TransferBatch tb where tb.transferItem.transfer.id = tr.id and tb.quantity = tb.quantityReceived)";
 			}
 		}
 

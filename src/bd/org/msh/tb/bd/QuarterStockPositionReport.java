@@ -272,7 +272,7 @@ public class QuarterStockPositionReport {
 			facesMessages.addFromResourceBundle("cases.details.noresultfound");
 			return;
 		}
-		qspExcelUtils.downloadQuarterlyConsolidatedSP(source, selectedQuarter, tbunitselection.getAuselection().getSelectedUnit(), tbunitselection.getTbunit(), rows);
+		qspExcelUtils.downloadQuarterlyConsolidatedSP(source, selectedQuarter, tbunitselection.getAuselection().getSelectedUnit(), tbunitselection.getTbunit(), rows, pendCloseQuarterUnits, unitsNotInitialized);
 	}
 	
 	

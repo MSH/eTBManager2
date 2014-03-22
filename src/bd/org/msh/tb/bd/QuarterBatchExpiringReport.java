@@ -191,7 +191,7 @@ public class QuarterBatchExpiringReport {
 			return;
 		}
 		
-		qspExcelUtils.downloadQuarterlyBatchExpiringReport(source, selectedQuarter, tbunitselection.getAuselection().getSelectedUnit(), tbunitselection.getTbunit(), unitBatchDetails, batchDetailsConsolidated);
+		qspExcelUtils.downloadQuarterlyBatchExpiringReport(source, selectedQuarter, tbunitselection.getAuselection().getSelectedUnit(), tbunitselection.getTbunit(), unitBatchDetails, batchDetailsConsolidated, pendCloseQuarterUnits, unitsNotInitialized);
 	}
 	
 	/**

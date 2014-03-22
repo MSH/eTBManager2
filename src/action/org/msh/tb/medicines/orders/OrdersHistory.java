@@ -45,7 +45,9 @@ public class OrdersHistory extends EntityQuery<Order> {
 			}else if(diffType.equals(ShippedReceivedDiffTypes.SHIPPED_BT_RECEIVED)){
 				cond += " and i.shippedQuantity > i.receivedQuantity";
 			}else if(diffType.equals(ShippedReceivedDiffTypes.BOTH)){
-				cond += " and i.shippedQuantity <> i.receivedQuantity";
+				cond += " and i.shippedQuantity <> i.receivedQuantity and i.receivedQuantity is not null";
+			}else if(diffType.equals(ShippedReceivedDiffTypes.NONE)){
+				cond += " and i.shippedQuantity = i.receivedQuantity";
 			}
 		}
 		
