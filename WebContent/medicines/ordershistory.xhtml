@@ -28,7 +28,7 @@
 <h:form id="main" styleClass="form1">
 
 	<div class="form-content">
-		<s:decorate template="/layout/edit.xhtml" >
+		<s:decorate template="/layout/edit.xhtml" id="datedec">
 	    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
 			<h:selectOneMenu value="#{ordersHistory.month}" id="month">
 				<f:selectItems value="#{months}"/>
@@ -39,7 +39,7 @@
 				<a:support event="onchange" reRender="pnlorders" process="difforder,orderStatus,month,year"/>
 			</h:selectOneMenu>
 		</s:decorate>
-		<s:decorate template="/layout/edit.xhtml" >
+		<s:decorate template="/layout/edit.xhtml" id="orderStatusdec">
 	    	<ui:define name="label">#{messages['OrderStatus']}:</ui:define>
 			<h:selectOneMenu id="orderStatus" value="#{ordersHistory.os}">
 				<s:selectItems var="v" value="#{ordersHistory.orderStatusList}" label="#{messages[v.key]}" noSelectionLabel="-" />
@@ -48,7 +48,7 @@
 			</h:selectOneMenu>
 		</s:decorate>
 		
-		<s:decorate template="/layout/edit.xhtml" >
+		<s:decorate template="/layout/edit.xhtml" id="difforderdec">
 	    	<ui:define name="label">#{messages['form.qttDiff']}:</ui:define>
 			<h:selectOneMenu id="difforder" value="#{ordersHistory.diffType}">
 				<s:selectItems var="v" value="#{globalLists.getShippedReceivedDiffType()}" label="#{messages[v.key]}" noSelectionLabel="-" />
@@ -56,7 +56,17 @@
 				<a:support event="onchange" reRender="pnlorders" />
 			</h:selectOneMenu>
 		</s:decorate>
-	</div> 
+	</div>
+	
+<!-- Solve consistency problem when clicking on back from browser navigation -->
+<script type="text/javascript">
+window.onload = function () {
+	document.getElementById("page:main:datedec:month").selectedIndex=0;
+	document.getElementById("page:main:datedec:year").selectedIndex=0;
+	document.getElementById("page:main:orderStatusdec:orderStatus").selectedIndex=0;
+	document.getElementById("page:main:difforderdec:difforder").selectedIndex=0;
+	}
+</script>
 
 <h:panelGroup id="pnlorders">
 <s:decorate template="/layout/naveg.xhtml">

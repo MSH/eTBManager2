@@ -26,9 +26,9 @@
 <ui:define name="content_unit">
 <h:form id="main" styleClass="form1">
 
-	<div class="form-content">
+	<div class="form-content" id="form-content">
 	
-		<s:decorate template="/layout/edit.xhtml" >
+		<s:decorate template="/layout/edit.xhtml" id="datedec">
 	    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
 			<h:selectOneMenu id="month" value="#{transfersHistory.month}">
 				<f:selectItems value="#{months}"/>
@@ -40,7 +40,7 @@
 			</h:selectOneMenu>
 		</s:decorate>
 	
-		<s:decorate template="/layout/edit.xhtml" >
+		<s:decorate template="/layout/edit.xhtml" id="transferstatusdec">
 	    	<ui:define name="label">#{messages['TransferStatus']}:</ui:define>
 			<h:selectOneMenu id="transferstatus" value="#{transfersHistory.status}">
 	  			<s:selectItems value="#{transfersHistory.transferStatusOptions}" var="r" label="#{messages[r.key]}" noSelectionLabel="#{messages['meds.transfer.all']}" />
@@ -49,7 +49,7 @@
 			</h:selectOneMenu>
 		</s:decorate>
 
-		<s:decorate template="/layout/edit.xhtml" >
+		<s:decorate template="/layout/edit.xhtml" id="difforderdec">
 	    	<ui:define name="label">#{messages['form.qttDiff']}:</ui:define>
 			<h:selectOneMenu id="difforder" value="#{transfersHistory.diffType}">
 				<s:selectItems var="v" value="#{globalLists.getShippedReceivedDiffType()}" label="#{messages[v.key]}" noSelectionLabel="-"/>
@@ -59,6 +59,16 @@
 		</s:decorate>
 	</div>
 	
+<!-- Solve consistency problem when clicking on back from browser navigation -->
+<script type="text/javascript">
+window.onload = function () {
+	document.getElementById("page:main:datedec:month").selectedIndex=0;
+	document.getElementById("page:main:datedec:year").selectedIndex=0;
+	document.getElementById("page:main:transferstatusdec:transferstatus").selectedIndex=0;
+	document.getElementById("page:main:difforderdec:difforder").selectedIndex=0;
+	}
+</script>
+
 <h:panelGroup id="pnltab" >
 
 	<s:fragment rendered="#{facesContext.renderResponse}">

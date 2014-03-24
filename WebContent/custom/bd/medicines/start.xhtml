@@ -193,12 +193,18 @@ else return false;
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Batch.batchNumber']}:</ui:define>
-    	<h:inputText value="#{medicineManStartHome.batchInfo.batch.batchNumber}" size="30" required="true" />
+    	<h:inputText id="batchnumber" value="#{medicineManStartHome.batchInfo.batch.batchNumber}" size="30" required="true">
+    		<a:support event="onchange" reRender="formbatch" action="#{medicineManStartHome.verifyBatch}" ajaxSingle="true"
+				process="batchnumber,batchlabfab" focus="batchlabfab"/>
+    	</h:inputText>
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Batch.manufacturer']}:</ui:define>
-    	<h:inputText value="#{medicineManStartHome.batchInfo.batch.manufacturer}" size="80" style="width:250px" />
+    	<h:inputText id="batchlabfab" value="#{medicineManStartHome.batchInfo.batch.manufacturer}" size="80" style="width:250px">
+    		<a:support event="onchange" reRender="formbatch" action="#{medicineManStartHome.verifyBatch}" ajaxSingle="true"
+				process="batchnumber,batchlabfab" focus="batchlabfab"/>
+    	</h:inputText>
     </s:decorate>
     
     <s:decorate template="/layout/dateedit.xhtml" >

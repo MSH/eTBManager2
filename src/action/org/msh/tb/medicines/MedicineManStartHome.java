@@ -286,6 +286,34 @@ public class MedicineManStartHome {
 
 		logService.saveExecuteTransaction("MED_INIT_REM", unit.toString(), unit.getId(), unit.getClass().getSimpleName(), unit);
 	}
+	
+	public void verifyBatch(){
+		if(batchInfo != null && batchInfo.getBatch() != null && batchInfo.getBatch().getBatchNumber() != null && 
+				!batchInfo.getBatch().getBatchNumber().equals("") && medicineInfo.getMedicine() != null){	
+	
+		ArrayList<Batch> b = (ArrayList<Batch>) entityManager.createQuery("from Batch b " +
+																		  "where b.batchNumber = :batchNumber and " +
+																		  "b.manufacturer = :manufacturer and " +
+																		  "b.medicine.id = :medicineId")
+																			.setParameter("batchNumber", batchInfo.getBatch().getBatchNumber())
+																			.setParameter("manufacturer", batchInfo.getBatch().getManufacturer())
+																			.setParameter("medicineId", medicineInfo.getMedicine().getId())
+																			.getResultList();
+
+		if(b!=null && b.size() > 0){
+			batchInfo.setBatch(b.get(0));
+			batchInfo.setQuantity(0);
+		}else{
+			Batch ba = new Batch();
+			ba.setMedicine(medicineInfo.getMedicine());
+			ba.setManufacturer(batchInfo.getBatch().getManufacturer());
+			ba.setBatchNumber(batchInfo.getBatch().getBatchNumber());
+			batchInfo.setBatch(ba);
+		}
+	}
+}
+	
+	
 
 /*	*//**
 	 * @param med
