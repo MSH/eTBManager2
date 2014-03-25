@@ -8,6 +8,8 @@
  	<rule if-outcome="success">
 		<end-conversation before-redirect="true"/>
 		<redirect view-id="/custom/bd/medicines/quartelystqpos.xhtml">
+			<param name="selQuarter" value="#{quarterStockPositionHome.selectedQuarter.getQuarter()}" />
+			<param name="selYear" value="#{quarterStockPositionHome.selectedQuarter.getYear()}" />
 		</redirect>
 	</rule>
 	<rule if-outcome="error">

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.NoResultException;
 
 import org.jboss.seam.ScopeType;
@@ -92,10 +93,14 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	 * selected tbunit
 	 */
 	public void updateQuarterAsTbunit(){
-		if(userSession.getTbunit().getLimitDateMedicineMovement() != null){
+		String selQuarter = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selQuarter");
+		String selYear = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selYear");
+		
+		if(selQuarter != null && !selQuarter.isEmpty() && selYear != null && !selYear.isEmpty()){
+			selectedQuarter = new Quarter(QuarterMonths.valueOf(selQuarter), Integer.parseInt(selYear));
+		}else if(userSession.getTbunit().getLimitDateMedicineMovement() != null){
 			Date dt = userSession.getTbunit().getLimitDateMedicineMovement();
-			
-			selectedQuarter = Quarter.getQuarterByMonth(DateUtils.monthOf(dt), DateUtils.yearOf(dt));
+			selectedQuarter = Quarter.getQuarterByMonth(DateUtils.monthOf(dt), DateUtils.yearOf(dt));	
 		}else{
 			//for units that had the control of medicines started before the quarterly report implementation;
 			Date dt = (Date) getEntityManager().createQuery("select max(date) from Movement m where m.tbunit.id = :unitId")
