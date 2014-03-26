@@ -7,7 +7,7 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="/layout/templatemed.xhtml">
+      template="/layout/template_new.xhtml">
       
 	<ui:param name="title" value="#{messages['quarter.report']}" />
 	<ui:param name="topmenu" value="1" />
@@ -23,7 +23,8 @@
 		</div>
 	</ui:define>
 	
-	<ui:define name="content_unit" id="content">
+	<ui:define name="content" id="content">
+	<s:decorate template="/custom/bd/layout/unitsel.xhtml">
 	<h:form id="main">
 
 	<s:decorate template="/layout/edit.xhtml" id="quarterdiv">
@@ -171,6 +172,7 @@
 	</a:repeat>
 
 	</h:form>
+	</s:decorate>
 	</ui:define>
 
 </ui:composition>
