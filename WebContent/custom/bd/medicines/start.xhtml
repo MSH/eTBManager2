@@ -185,7 +185,7 @@ else return false;
     <table width="100%" style="border-collapse:collapse;">
     <tr><td colspan="2">
 	<div id="tblsel" style="overflow: auto; width: 505px; height: 270px; padding:0px; margin: 0px;">	
-	 <h:outputText style="font-weight:bold" value="#{medicineManStartHome.batchInfo.batch.batchNumber==null? messages['form.new']: messages['form.data_edit']} - #{messages['Batch']}" />
+	 <h:outputText style="font-weight:bold" value="#{medicineManStartHome.batchInfo.batch.id==null? messages['form.new']: messages['form.data_edit']} - #{messages['Batch']}" />
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['Medicine']}:</ui:define>
     	<h:outputText value="#{medicineManStartHome.medicineInfo.medicine}" />
@@ -195,7 +195,7 @@ else return false;
     	<ui:define name="label">#{messages['Batch.batchNumber']}:</ui:define>
     	<h:inputText id="batchnumber" value="#{medicineManStartHome.batchInfo.batch.batchNumber}" size="30" required="true">
     		<a:support event="onchange" reRender="formbatch" action="#{medicineManStartHome.verifyBatch}" ajaxSingle="true"
-				process="batchnumber,batchlabfab" focus="batchlabfab"/>
+				process="batchnumber,batchlabfab" focus="batchlabfab" oncomplete="document.getElementById('formbatch:qtdcon:qtdcon').value=1"/>
     	</h:inputText>
     </s:decorate>
 
@@ -203,14 +203,15 @@ else return false;
     	<ui:define name="label">#{messages['Batch.manufacturer']}:</ui:define>
     	<h:inputText id="batchlabfab" value="#{medicineManStartHome.batchInfo.batch.manufacturer}" size="80" style="width:250px">
     		<a:support event="onchange" reRender="formbatch" action="#{medicineManStartHome.verifyBatch}" ajaxSingle="true"
-				process="batchnumber,batchlabfab" focus="batchlabfab"/>
+				process="batchnumber,batchlabfab" focus="expirydate" oncomplete="document.getElementById('formbatch:qtdcon:qtdcon').value=1;document.getElementById('formbatch:dateeditdec:expirydateInputDate').focus();"/>
     	</h:inputText>
     </s:decorate>
     
-    <s:decorate template="/layout/dateedit.xhtml" >
+    <s:decorate template="/layout/dateedit.xhtml" id="dateeditdec">
     	<ui:define name="label">#{messages['Batch.expiryDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
-    	<ui:param name="datefield" value="#{medicineManStartHome.batchInfo.batch.expiryDate}" /> 
+    	<ui:param name="datefield" value="#{medicineManStartHome.batchInfo.batch.expiryDate}" />
+    	<ui:param name="edtid" value="expirydate" />
     </s:decorate>
 
 	<hr/>
@@ -223,7 +224,7 @@ else return false;
     	(#{medicineManStartHome.medicineInfo.medicine.dosageForm})
     </s:decorate>
 
-	<!-- Bangladesh doesn't use this field. It is being set 1 to this field on showBatchDlg() -->
+	<!-- Bangladesh doesn't use this field. It is being set 1 to this field on number and manufacturer fill in operation -->
     <s:decorate id="qtdcon" template="/layout/edit.xhtml" style="display:none">
     	<ui:define name="label">#{messages['Batch.quantityContainer']}:</ui:define>
     	<h:inputText id="qtdcon" value="#{medicineManStartHome.batchInfo.batch.quantityContainer}" required="true" onkeypress="return numbersOnly(this,event);" >
