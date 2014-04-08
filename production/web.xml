@@ -34,7 +34,18 @@
    	<session-config>
    		<session-timeout>45</session-timeout>
    	</session-config>
+	
+	<filter>
+		<display-name>syncFileUpload</display-name>
+		<filter-name>syncFileUpload</filter-name>
+		<filter-class>org.msh.tb.sync.SyncFileUploadFilter</filter-class>
+	</filter>
 
+	<filter-mapping>
+		<filter-name>syncFileUpload</filter-name>
+		<url-pattern>/sync/fileupload.seam</url-pattern>
+	</filter-mapping>
+	
     <filter>
         <display-name>nocache</display-name>
         <filter-name>nocache</filter-name>
