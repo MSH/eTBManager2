@@ -13,6 +13,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.UITheme;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
@@ -26,7 +27,6 @@ import org.msh.tb.entities.UserLogin;
 @AutoCreate
 public class ThemeManager {
 
-	@In UserLogin userLogin;
 	@In EntityManager entityManager;
 	
 	private List<UITheme> themes;
@@ -74,6 +74,13 @@ public class ThemeManager {
 	public String selectTheme() {
 		if (theme == null)
 			return "error";
+		
+		UserLogin userLogin = (UserLogin)App.getComponent("userLogin");
+		// user not logged in?
+		if (userLogin == null) {
+			throw new RuntimeException("User not logged in");
+		}
+		
 		theme = entityManager.merge(theme);
 
 		// update in memory
@@ -106,8 +113,14 @@ public class ThemeManager {
 	 * using the getDefaultTheme() method  
 	 */
 	protected void restoreUserTheme() {
-		User user = entityManager.merge(userLogin.getUser());
-		theme = user.getTheme();
+		UserLogin userLogin = (UserLogin)App.getComponent("userLogin");
+		// is user logged in ?
+		if (userLogin != null) {
+			User user = entityManager.merge(userLogin.getUser());
+			theme = user.getTheme();
+		}
+		
+		// if no theme was selected, use the default theme
 		if (theme == null)
 			theme = getDefaultTheme();
 	}
