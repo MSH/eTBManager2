@@ -214,7 +214,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		}
 
 		if ((list != null) && (list == entityVersions)) {
-			newKeys = (keyList != null? keyList.getNewServerKeys(): null);
+			newKeys = (keyList != null? keyList.getAllKeys(): null);
 			return newKeys;
 		}
 		

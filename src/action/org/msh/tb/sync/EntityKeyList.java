@@ -148,14 +148,13 @@ public class EntityKeyList {
 	 * This list will be sent back to the client 
 	 * @return List of {@link EntityKey} objects
 	 */
-	public List<EntityKey> getNewServerKeys() {
+	public List<EntityKey> getAllKeys() {
 		if (entityKeys == null)
 			return null;
 
 		List<EntityKey> lst = new ArrayList<EntityKey>();
 		for (Class clazz: entityKeys.keySet()) {
 			for (EntityKey key: entityKeys.get(clazz)) {
-				if (key.isNewServerId())
 					lst.add(key);
 			}
 		}

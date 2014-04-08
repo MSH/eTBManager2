@@ -103,7 +103,7 @@ public class SyncFileImporter {
 
 	
 	/**
-	 * Uncompress a file compressed with {@link GZIPInputStream}
+	 * Uncompress a file compressed with {@link GZIPInputStream} and generate a new file
 	 * @param gzipfile instance of {@link File} containing the compressed file
 	 * @param destfile instance of {@link File} where uncompressed file will be written to
 	 */
