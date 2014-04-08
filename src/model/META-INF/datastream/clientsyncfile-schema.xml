@@ -206,7 +206,7 @@
         
         <objectGraph name="deleted-entity" class="org.msh.tb.sync.EntityKey">
             <property name="entityName" elementName="entity" xmlAttribute="true" />
-            <property name="id" xmlAttribute="true" />
+            <property name="serverId" elementName="id" xmlAttribute="true" />
         </objectGraph>
 
     </objectCollection>
