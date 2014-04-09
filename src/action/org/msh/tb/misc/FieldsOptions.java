@@ -218,6 +218,15 @@ public class FieldsOptions {
 		return getOptions(TbField.ART_REGIMEN);		
 	}	
 
+	/**
+	 * Return list of Suspect Types.
+	 * Cambodia workspace implementation
+	 * @UT 
+	 * @return
+	 */
+	public List<FieldValue> getSuspectTypes() {
+		return getOptions(TbField.SUSPECT_TYPE);		
+	}	
 	
 	/**
 	 * Return the options of a TB Field
