@@ -17,8 +17,8 @@
             <property name="version" use="IGNORE" />
             <property name="patient" >
                 <objectGraph name="patient" class="org.msh.tb.entities.Patient">
-            		<property name="id" xmlAttribute="true" use="REQUIRED" />
-            		<property name="clientId" elementName="cl_id" xmlAttribute="true" />
+            		<property name="id" xmlAttribute="true" />
+            		<property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
             		<property name="cases" use="IGNORE" />
 		            <property name="lastTransaction" use="IGNORE" />
             		<property name="workspace" use="IGNORE" />
