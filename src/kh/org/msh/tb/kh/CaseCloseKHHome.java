@@ -36,11 +36,7 @@ public class CaseCloseKHHome extends CaseCloseHome{
 		CaseState.TB_RESISTANCE_ES,
 		CaseState.OTHER};
 
-	@Override
-	protected CaseState[] getSuspectOutcomes() {
-		// TODO Auto-generated method stub
-		return suspectOutcomes;
-	}
+
 	
 	
 }
