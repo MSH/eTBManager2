@@ -12,8 +12,8 @@
         
         <!-- TB CASES -->
         <objectGraph name="tbcase" class="org.msh.tb.entities.TbCase">
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="version" use="IGNORE" />
             <property name="patient" >
                 <objectGraph name="patient" class="org.msh.tb.entities.Patient">
@@ -54,8 +54,8 @@
         </objectGraph>
         
         <objectGraph name="examdst" class="org.msh.tb.entities.ExamDST">
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
             <property name="dateCollected" xmlAttribute="true" />
@@ -74,8 +74,8 @@
         </objectGraph>
         
         <objectGraph name="dstresult" class="org.msh.tb.entities.ExamDSTResult">
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="exam.id" elementName="exam" xmlAttribute="true" />
             <property name="exam.clientId" elementName="cl_exam" xmlAttribute="true" use="REQUIRED"/>
             <property name="substance.id" elementName="substance" use="REQUIRED" xmlAttribute="true"/>
@@ -83,8 +83,8 @@
         </objectGraph>
         
         <objectGraph name="exammicroscopy" class="org.msh.tb.entities.ExamMicroscopy">
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
             <property name="result" xmlAttribute="true" />
@@ -95,8 +95,8 @@
         
         
         <objectGraph name="examxpert" class="org.msh.tb.entities.ExamXpert">
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
             <property name="result" xmlAttribute="true" />
@@ -107,8 +107,8 @@
         </objectGraph>
         
         <objectGraph name="examculture" class="org.msh.tb.entities.ExamCulture" >
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
             <property name="dateCollected" xmlAttribute="true" />
@@ -118,23 +118,23 @@
         </objectGraph>
         
         <objectGraph name="examhiv" class="org.msh.tb.entities.ExamHIV">
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
             <property name="result" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="treatmonitoring" class="org.msh.tb.entities.TreatmentMonitoring" >
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
         </objectGraph>
         
         <objectGraph name="healthunit" class="org.msh.tb.entities.TreatmentHealthUnit" >
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
             <property name="tbunit.id" elementName="tbunit" use="REQUIRED" xmlAttribute="true"/>
@@ -144,8 +144,8 @@
         </objectGraph>
         
         <objectGraph name="presc-med" class="org.msh.tb.entities.PrescribedMedicine" >
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
             <property name="medicine.id" elementName="medicine" use="REQUIRED" xmlAttribute="true"/>
@@ -161,8 +161,8 @@
         </objectGraph>
         
         <objectGraph name="contact" class="org.msh.tb.entities.TbContact" >
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
             <property name="contactType.id" elementName="contactType" />
@@ -170,23 +170,23 @@
         </objectGraph>
         
         <objectGraph name="examxray" class="org.msh.tb.entities.ExamXRay">
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
             <property name="presentation.id" elementName="presentation" />
         </objectGraph>
         
         <objectGraph name="medexam" class="org.msh.tb.entities.MedicalExamination" >
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
         </objectGraph>
         
         <objectGraph name="sideEffect" class="org.msh.tb.entities.CaseSideEffect" >
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
             <property name="sideEffect.value.id" elementName="sideeffect" xmlAttribute="true"/>
@@ -196,8 +196,8 @@
         </objectGraph>
 
         <objectGraph name="comorbidity" class="org.msh.tb.entities.CaseComorbidity" >
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" />
-            <property name="id" elementName="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
+            <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
             <property name="comorbidity.id" elementName="comorbidity" use="REQUIRED" xmlAttribute="true"/>
