@@ -22,7 +22,8 @@ import org.msh.utils.date.Period;
 public class CaseCloseHome extends Controller{
 	private static final long serialVersionUID = 805003311511687697L;
 
-	@In(create=true) CaseHome caseHome;
+	@In(create=true)
+	protected CaseHome caseHome;
 	@In(create=true) FacesMessages facesMessages;
 	@In(create=true) TreatmentHome treatmentHome;
 	@In EntityManager entityManager;
@@ -32,7 +33,7 @@ public class CaseCloseHome extends Controller{
 	private CaseState state;
 	private String comment;
 	
-	private static final CaseState[] outcomesMDR = {
+	protected static final CaseState[] outcomesMDR = {
 		CaseState.CURED, 
 		CaseState.DEFAULTED, 
 		CaseState.DIED, 
@@ -42,7 +43,7 @@ public class CaseCloseHome extends Controller{
 		CaseState.DIAGNOSTIC_CHANGED,
 		CaseState.OTHER};
 
-	private static final CaseState[] outcomesTB = {
+	protected static final CaseState[] outcomesTB = {
 		CaseState.CURED, 
 		CaseState.DEFAULTED, 
 		CaseState.DIED, 

@@ -16,6 +16,7 @@ import org.msh.tb.cases.treatment.TreatmentHome;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.utils.date.Period;
 
 @Name("caseCloseKHHome")
@@ -36,7 +37,19 @@ public class CaseCloseKHHome extends CaseCloseHome{
 		CaseState.TB_RESISTANCE_ES,
 		CaseState.OTHER};
 
+	/**
+	 * Return the available outcomes of a case, according to its classification (TB or DR-TB)
+	 * @return Array of {@link CaseState} enumerations
+	 */
+	@Override
+	public CaseState[] getOutcomes() {
+		if (caseHome.getInstance().getDiagnosisType() == DiagnosisType.SUSPECT)
+			return suspectOutcomes;
 
+		if (caseHome.getInstance().getClassification() == CaseClassification.DRTB)
+			 return outcomesMDR;
+		else return outcomesTB;
+	}
 	
 	
 }
