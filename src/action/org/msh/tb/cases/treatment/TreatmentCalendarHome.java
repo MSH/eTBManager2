@@ -26,8 +26,10 @@ import org.msh.utils.date.Period;
 @Name("treatmentCalendarHome")
 public class TreatmentCalendarHome {
 
-	@In(required=true) CaseHome caseHome;
-	@In(create=true) EntityManager entityManager;
+	@In(required=true)
+	protected CaseHome caseHome;
+	@In(create=true)
+	protected EntityManager entityManager;
 
 	private List<PhaseInfo> phases;
 	private List<MonthInfo> months;

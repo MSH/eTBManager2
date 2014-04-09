@@ -27,13 +27,15 @@ import org.msh.tb.entities.enums.TreatmentDayOption;
 @Scope(ScopeType.CONVERSATION)
 public class CaseDispensingHome {
 
-	@In(required=true) CaseHome caseHome;
-	@In EntityManager entityManager;
+	@In(required=true)
+	protected CaseHome caseHome;
+	@In
+	protected EntityManager entityManager;
 	
-	private Integer month;
-	private Integer year;
+	protected Integer month;
+	protected Integer year;
 
-	private CaseDispensingInfo caseDispensingInfo;
+	protected CaseDispensingInfo caseDispensingInfo;
 
 	
 	/**
