@@ -16,7 +16,6 @@ import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.kh.entities.enums.Dot;
 import org.msh.tb.kh.entities.enums.SideEffectGrading;
 
-
 @Name("globalLists_kh")
 @BypassInterceptors
 public class GlobalLists {
@@ -100,8 +99,8 @@ public class GlobalLists {
 		TbField.EXTRAPULMONARY_TYPES,
 		TbField.ADJUSTMENT,
 		TbField.ART_REGIMEN,
-		TbField.IDENTIFICATION
-		
+		TbField.IDENTIFICATION,
+		TbField.SUSPECT_TYPE
 	};
 	
 	private static final PatientType patientTypes[] = {
@@ -189,5 +188,6 @@ public class GlobalLists {
 	public static SampleType[] getSampletype() {
 		return sampleType;
 	}
+	
 }
 

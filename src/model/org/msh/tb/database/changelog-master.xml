@@ -34,4 +34,5 @@
   <include file="org/msh/tb/database/v2_0/changelog-18-azerbaijan.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-19-treatmonitoring.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-20-general.xml"/> 
+  <include file="org/msh/tb/database/v2_0/changelog-21-cambodia.xml"/> 
 </databaseChangeLog> 

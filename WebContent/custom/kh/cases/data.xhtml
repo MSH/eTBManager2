@@ -74,7 +74,7 @@
 		<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
     		<!-- #{tbcase.notifAddress.address} -->
-    		#{caseKHHome.houseNum} #{caseKHHome.streetNum} #{caseKHHome.groupNum} 
+    		#{caseKHHome.houseNum} #{caseKHHome.streetNum} #{caseKHHome.groupNum} #{caseKHHome.villageName} 
     		<br/>
     		#{tbcase.notifAddress.complement}
 		</s:decorate>
@@ -143,6 +143,26 @@
 	</td>	
 	
 	<td>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
+		#{messages[tbcase.diagnosisType.key]}
+	</s:decorate>
+	</td></tr>
+	
+	<tr>
+		<td>
+		<s:fragment rendered="#{not empty tbcasekh.suspectType}">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['TbCase.suspectType']}:</ui:define>
+				#{messages[tbcasekh.suspectType.name.defaultName]}
+			</s:decorate>
+		</s:fragment>			
+		
+		</td>
+	</tr>
+		
+	<tr>
 	<s:fragment rendered="#{not empty tbcase.diagnosisDate}">
 		<td>
 			<s:decorate template="/layout/display.xhtml">
@@ -151,16 +171,6 @@
 			</s:decorate>
 		</td>
 	</s:fragment>
-	
-	</td><td>
-	
-	<s:decorate template="/layout/display.xhtml">
-		<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
-		#{messages[tbcase.diagnosisType.key]}
-	</s:decorate>
-	</td></tr>
-		
-	<tr>
 	<td>
 	<s:decorate id="dt" template="/layout/display.xhtml" rendered="#{not empty tbcase.treatmentPeriod.iniDate}">
     	<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>

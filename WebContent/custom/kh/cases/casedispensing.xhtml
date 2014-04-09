@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.treat.dispedt']}" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:160px;" />
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+<rich:jQuery name="updateChecks1" timing="onJScall" selector="#tbldays td" query="removeClass('activerow')"/>
+<rich:jQuery name="updateChecks2" timing="onJScall" selector="#tbldays td:has(:checked)" query="addClass('activerow')"/>
+
+<ui:param name="pagewidth" value="450px;" />
+<s:decorate template="/layout/casebody.xhtml">
+	<a:form id="main" styleClass="form1">
+	
+	<div class="form-content">
+    <table width="100%">
+    <tr><td>
+
+	<s:decorate id="initreatdt" template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
+		<h:outputText value="#{tbcase.treatmentPeriod.iniDate}" converter="localeDateConverter" />
+	</s:decorate>
+
+    <s:decorate id="dt" template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['global.month']}/#{messages['global.year']}:</ui:define>
+    	<h:outputText value="#{caseDispensingHomeKH.month}" converter="monthYearConverter">
+    		<f:param name="year" value="#{caseDispensingHomeKH.year}"/>
+    	</h:outputText>
+    </s:decorate>
+    
+    <s:decorate id="weightint" template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['case.currweight']}:</ui:define>
+    	<h:inputText value="#{caseDispensingHomeKH.weight}" >
+    		<f:param name="weight" value="#{caseDispensingHomeKH.weight}"/>
+    	</h:inputText>
+    </s:decorate>
+    
+    
+    <input id="chkselall" type="checkbox"/>#{messages['form.selectall']}
+    <rich:jQuery selector="#chkselall" query="click(function() {toggleSelectAll(this);})" />
+	<script type="text/javascript">
+	<!--
+	function toggleSelectAll(chk) {
+		jQuery('#tbldays input').each(function() {
+			this.checked = chk.checked;
+			updateChecks1();
+			updateChecks2();
+		});
+	}
+	-->
+	</script>
+
+    <h:panelGroup id="pnlcalend">
+    <table id="tbldays" style="width:450px" class="table1">
+    <tr>
+    	<ui:repeat offset="1" value="#{shortWeekNames}" var="w">
+    		<th>
+    			#{w}
+    		</th>
+    	</ui:repeat>
+    </tr>
+    <a:repeat value="#{caseDispensingHomeKH.weeks}" var="it">
+    	<tr>
+    	<a:repeat value="#{it.days}" var="item">
+    		<td class="colcb#{item.checked?' activerow':''}">
+    			<s:fragment rendered="#{item.available}">
+    			   #{item.day}<br/>
+    			   <h:selectBooleanCheckbox value="#{item.checked}" onclick="updateChecks1();updateChecks2();" rendered = "#{caseDispensingHomeKH.isDispensable(item.day)}"/>
+    			</s:fragment>
+    		</td>
+    	</a:repeat>
+    	</tr>
+    </a:repeat>
+	</table>
+    </h:panelGroup>
+
+	</td></tr>
+	</table>
+	</div>
+	
+	<div class="form-footer">
+        <a:commandLink action="#{caseDispensingHomeKH.saveDispensing}" styleClass="button"  
+            	reRender="main" onclick="if (!disableButton(this)) return false;" >
+			<span>#{messages['form.save']}</span>
+        </a:commandLink>
+        <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+         	<f:param name="id" value="#{caseHome.id}"/>
+         	<span>#{messages['form.cancel']}</span>
+        </s:link>
+    </div>
+    
+	</a:form>
+</s:decorate>
+
+<p/>
+
+
+</ui:define>
+
+</ui:composition>  

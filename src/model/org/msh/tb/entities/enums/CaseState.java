@@ -27,6 +27,9 @@ public enum CaseState {
 	NTM,
 	SUSCEPTIBLE_TB,
 	NOT_TB,
+	TB_RESISTANCE_ES,
+	TB_NOT_DETECTED,
+	
 	
 	//Vietnam
 	TREATMENT_REFUSED;

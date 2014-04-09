@@ -1,5 +1,6 @@
 package org.msh.tb.kh;
 
+import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
@@ -8,6 +9,8 @@ import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.treatment.TreatmentHome;
 import org.msh.tb.entities.Address;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.kh.entities.TbCaseKH;
+import org.msh.tb.ng.entities.TbCaseNG;
 
 
 
@@ -41,6 +44,17 @@ public class CaseKHHome{
 	private String currStreetNum = "";
 	private String currGroupNum = "";
 	private String currVillageName = "";
+	
+	/**
+	 * Return an instance of a {@link TbCaseNA} class
+	 * 
+	 * @return
+	 */
+	@Factory("tbcasekh")
+	public TbCaseKH getTbCaseKH() {
+		return (TbCaseKH) caseHome.getTbCase();
+	}
+	
 	
 	/**
 	 * Save a new case for the Cambodian workspace. Don't use the class

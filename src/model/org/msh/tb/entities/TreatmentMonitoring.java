@@ -3,12 +3,16 @@
  */
 package org.msh.tb.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -26,9 +30,16 @@ import org.msh.tb.transactionlog.PropertyLog;
  *
  */
 @Entity
+@Inheritance(strategy=InheritanceType.JOINED)
 @Table(name="treatmentmonitoring")
-public class TreatmentMonitoring implements Transactional, SyncKey {
+public class TreatmentMonitoring implements Serializable, Transactional, SyncKey {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2727206025433518040L;
+
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;

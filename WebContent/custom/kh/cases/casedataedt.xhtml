@@ -96,6 +96,12 @@
     		<h:inputText value="#{caseKHHome.groupNum}" style="width:300px;" maxlength="200"/>
     	</s:decorate>
     </td></tr>
+     <tr><td colspan="2">
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['Address.completeAddress4']}:</ui:define>
+    		<h:inputText value="#{caseKHHome.villageName}" style="width:300px;" maxlength="200"/>
+    	</s:decorate>
+    </td></tr>
     
 	<tr><td>
 		<s:decorate template="/layout/auselection.xhtml">
@@ -213,6 +219,14 @@
     </div>
  		    
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbCase.suspectType']}:</ui:define>
+   		<h:selectOneMenu value="#{tbcasekh.suspectType}" style="margin-right:4px;">
+   			<s:selectItems var="it" value="#{fieldOptions.suspectTypes}" noSelectionLabel="-" label="#{it}" />
+   			<s:convertEntity />
+   		</h:selectOneMenu>
+    </s:decorate>
 
 	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
     <s:decorate template="/layout/dateedit.xhtml" >
