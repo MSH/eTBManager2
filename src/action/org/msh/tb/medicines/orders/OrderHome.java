@@ -106,7 +106,12 @@ public class OrderHome extends EntityHomeEx<Order>{
 		order.setStatus(st);
 		order.setOrderDate(new Date());
 		order.setNumDays(order.getUnitFrom().getNumDaysOrder());
-		order.setUnitTo(order.getUnitFrom().getSecondLineSupplier());
+		if (order.getUnitFrom().getSecondLineSupplier() != null) {
+			order.setUnitTo(order.getUnitFrom().getSecondLineSupplier());
+		}
+		else {
+			order.setUnitTo(order.getUnitFrom().getFirstLineSupplier());
+		}
 		
 		User user = getEntityManager().merge(getUserLogin().getUser());
 		order.setUserCreator(user);
