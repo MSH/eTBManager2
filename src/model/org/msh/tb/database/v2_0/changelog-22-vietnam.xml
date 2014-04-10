@@ -6,7 +6,7 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
 	<!-- Add a column to store the nationalidnumber -->
-	<changeSet id="22.1" author="usrivastava" context="VI" >
+	<changeSet id="22.2" author="usrivastava" context="VI" >
 	    <createTable tableName="tbcasevi">
 	        <column name="id" type="int">
 	            <constraints primaryKey="true"/>
@@ -25,7 +25,13 @@
 	</changeSet>
 
 	
-
+	<!-- Update the new treatment monitoring table for Cambodia-->
+	<changeSet id="22.3" author="usrivastava" context="VI" >
+	    <sql>insert into tbcasevi (id, nationalIDNumber) 
+	        SELECT tb.id as id, ' ' 
+	        FROM tbcase tb, patient p where tb.PATIENT_ID = p.id and p.WORKSPACE_ID = 14;
+		</sql>
+	</changeSet>
 	        	        
 	
 

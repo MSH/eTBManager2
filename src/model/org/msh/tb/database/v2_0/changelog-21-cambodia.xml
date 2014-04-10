@@ -18,7 +18,7 @@
 	</changeSet>
 	
 	<!-- Add a column to store the weight for each month the patient is on treatment  -->
-	<changeSet id="22.1" author="usrivastava">
+	<changeSet id="22.1" author="usrivastava" context="KH">
 	    <createTable tableName="treatmentmonitoringKH">
 	        <column name="id" type="int">
 	            <constraints primaryKey="true"/>
@@ -34,7 +34,15 @@
 	        baseColumnNames="id" baseTableName="treatmentmonitoringKH" 
 	        onDelete="CASCADE" onUpdate="CASCADE"/>
 	    
-	 </changeSet>	
+	 </changeSet>
+	 
+	<!-- Update the new treatment monitoring table for Cambodia-->
+	<changeSet id="21.2" author="usrivastava" context="KH" >
+	    <sql>insert into treatmentmonitoringkh (id,weight) SELECT tm.id as id, 
+	        0 AS weight FROM treatmentmonitoring tm, 
+	        tbcase tb, patient p where tm.case_id = tb.id and tb.PATIENT_ID = p.id and p.WORKSPACE_ID = 27;
+		</sql>
+	</changeSet>
 	
 
 	        	        
