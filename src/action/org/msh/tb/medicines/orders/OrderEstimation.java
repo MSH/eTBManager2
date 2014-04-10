@@ -84,7 +84,12 @@ public class OrderEstimation {
 
 			orderHome.getSources().clear();
 
-			ord.setUnitTo(ord.getUnitFrom().getSecondLineSupplier());
+			if (ord.getUnitFrom().getSecondLineSupplier() != null) {
+				ord.setUnitTo(ord.getUnitFrom().getSecondLineSupplier());
+			}
+			else {
+				ord.setUnitTo(ord.getUnitFrom().getFirstLineSupplier());
+			}
 			
 			loadPrescribedMedicines();
 			
