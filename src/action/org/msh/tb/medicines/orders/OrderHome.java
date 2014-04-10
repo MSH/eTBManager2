@@ -98,12 +98,6 @@ public class OrderHome extends EntityHomeEx<Order>{
 			return "error";
 		}
 		
-		OrderStatus st;
-		if (order.getUnitTo().getAuthorizerUnit() != null)
-			 st = OrderStatus.WAITAUTHORIZING;
-		else st = OrderStatus.WAITSHIPMENT;
-
-		order.setStatus(st);
 		order.setOrderDate(new Date());
 		order.setNumDays(order.getUnitFrom().getNumDaysOrder());
 		if (order.getUnitFrom().getSecondLineSupplier() != null) {
@@ -112,6 +106,13 @@ public class OrderHome extends EntityHomeEx<Order>{
 		else {
 			order.setUnitTo(order.getUnitFrom().getFirstLineSupplier());
 		}
+
+		OrderStatus st;
+		if (order.getUnitTo().getAuthorizerUnit() != null)
+			 st = OrderStatus.WAITAUTHORIZING;
+		else st = OrderStatus.WAITSHIPMENT;
+		
+		order.setStatus(st);
 		
 		User user = getEntityManager().merge(getUserLogin().getUser());
 		order.setUserCreator(user);
