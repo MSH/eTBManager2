@@ -183,6 +183,8 @@
             </property>
             <property name="lastTransaction" use="IGNORE" />
             <property name="workspace" use="IGNORE" />
+            <property name="intensivePhaseMedicines" use="IGNORE" />
+            <property name="continuousPhaseMedicines" use="IGNORE" />
         </objectGraph>
         
 		<!-- USERS -->
