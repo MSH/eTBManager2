@@ -54,7 +54,7 @@ public class CaseCloseHome extends Controller{
 		CaseState.MDR_CASE,
 		CaseState.OTHER};
 	
-	private static final CaseState[] suspectOutcomes = {
+	protected static final CaseState[] suspectOutcomes = {
 		CaseState.NOT_TB, 
 		CaseState.DIED, 
 		CaseState.DEFAULTED, 
