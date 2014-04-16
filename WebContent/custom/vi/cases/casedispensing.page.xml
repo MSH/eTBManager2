@@ -3,22 +3,15 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
 
+		<restrict>#{userSession.canEditCases}</restrict>
 		<begin-conversation join="true"/>
 		<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
-		<param name="examid" value="#{examDSTHome.idWithLog}" converterId="javax.faces.Integer"/>
-		<navigation>
-			<rule if="#{not caseHome.managed}">
+		<param name="month" value="#{caseDispensingHomeVI.month}" converterId="javax.faces.Integer"/>
+		<param name="year" value="#{caseDispensingHomeVI.year}" converterId="javax.faces.Integer"/>
+		<param name="weight" value="#{caseDispensingHomeVI.weight}" converterId="javax.faces.Integer"/>
+				<navigation>
+			<rule if-outcome="dispensing-saved">
 				<end-conversation/>
-				<redirect view-id="/cases/index.xhtml"/>
-			</rule>
-		
-			<rule if-outcome="persisted">
-				<redirect view-id="/cases/casedata.xhtml">
-					<param name="id" value="#{caseHome.id}"/>
-				</redirect>
-			</rule>
-			<rule if-outcome="canceled">
-				<end-conversation before-redirect="true"/>
 				<redirect view-id="/cases/casedata.xhtml">
 					<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
 				</redirect>
