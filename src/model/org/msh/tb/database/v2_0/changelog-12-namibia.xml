@@ -133,6 +133,30 @@
  	    <dropForeignKeyConstraint baseTableName="casesideeffect" constraintName="FK9D7338D869B3B5EE"/>
  	    <dropColumn tableName="casesideeffect" columnName="CASE_DATA_ID"/>
  	</changeSet>
+ 	
+ 	<changeSet id="12.7" author="rmemoria" context="NA">
+ 	    <addColumn tableName="tbcasena">
+ 	        <column name="socialDisabilityAwarded" type="boolean"></column>
+ 	        <column name="startDateSocialAward" type="date"></column>
+ 	        <column name="commentSocialAward" type="text"></column>
+
+ 	        <column name="foodPackageAwarded" type="boolean"></column>
+ 	        <column name="startDateFoodPackageAward" type="date"></column>
+ 	        <column name="commentFoodPackageAward" type="text"></column>
+ 	        
+ 	        <column name="transportAssistProvided" type="boolean"></column>
+ 	        <column name="startDateTransportAssist" type="date"></column>
+ 	        <column name="commentTransportAssist" type="text"></column>
+ 	    </addColumn>
+ 	</changeSet>
+
+ 	<changeSet id="12.8" author="rmemoria" context="NA">
+ 	    <update tableName="tbcasena">
+ 	        <column name="socialDisabilityAwarded" valueBoolean="false"/>
+ 	        <column name="foodPackageAwarded" valueBoolean="false"/>
+ 	        <column name="transportAssistProvided" valueBoolean="false"/>
+ 	    </update>
+ 	</changeSet>
 </databaseChangeLog>
 
 

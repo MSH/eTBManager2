@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -46,6 +47,31 @@ public class TbCaseNA extends TbCase{
 	
 	private String comments;
 	
+	
+	private boolean socialDisabilityAwarded;
+	
+	@Temporal(TemporalType.DATE)
+	private Date startDateSocialAward;
+	
+	@Lob
+	private String commentSocialAward;
+	
+	
+	private boolean foodPackageAwarded;
+	
+	@Temporal(TemporalType.DATE)
+	private Date startDateFoodPackageAward;
+	
+	@Lob
+	private String commentFoodPackageAward;
+	
+	private boolean transportAssistProvided;
+	
+	@Temporal(TemporalType.DATE)
+	private Date startDateTransportAssist;
+	
+	@Lob
+	private String commentTransportAssist;
 	
 	/**
 	 * Search for side effect data by the side effect
@@ -117,6 +143,132 @@ public class TbCaseNA extends TbCase{
 
 	public void setDischargeDt(Date dischargeDt) {
 		this.dischargeDt = dischargeDt;
+	}
+
+	/**
+	 * @return the socialDisabilityAwarded
+	 */
+	public boolean isSocialDisabilityAwarded() {
+		return socialDisabilityAwarded;
+	}
+
+	/**
+	 * @param socialDisabilityAwarded the socialDisabilityAwarded to set
+	 */
+	public void setSocialDisabilityAwarded(boolean socialDisabilityAwarded) {
+		this.socialDisabilityAwarded = socialDisabilityAwarded;
+	}
+
+	/**
+	 * @return the startDateSocialAward
+	 */
+	public Date getStartDateSocialAward() {
+		return startDateSocialAward;
+	}
+
+	/**
+	 * @param startDateSocialAward the startDateSocialAward to set
+	 */
+	public void setStartDateSocialAward(Date startDateSocialAward) {
+		this.startDateSocialAward = startDateSocialAward;
+	}
+
+	/**
+	 * @return the commentSocialAward
+	 */
+	public String getCommentSocialAward() {
+		return commentSocialAward;
+	}
+
+	/**
+	 * @param commentSocialAward the commentSocialAward to set
+	 */
+	public void setCommentSocialAward(String commentSocialAward) {
+		this.commentSocialAward = commentSocialAward;
+	}
+
+	/**
+	 * @return the foodPackageAwarded
+	 */
+	public boolean isFoodPackageAwarded() {
+		return foodPackageAwarded;
+	}
+
+	/**
+	 * @param foodPackageAwarded the foodPackageAwarded to set
+	 */
+	public void setFoodPackageAwarded(boolean foodPackageAwarded) {
+		this.foodPackageAwarded = foodPackageAwarded;
+	}
+
+	/**
+	 * @return the startDateFoodPackageAward
+	 */
+	public Date getStartDateFoodPackageAward() {
+		return startDateFoodPackageAward;
+	}
+
+	/**
+	 * @param startDateFoodPackageAward the startDateFoodPackageAward to set
+	 */
+	public void setStartDateFoodPackageAward(Date startDateFoodPackageAward) {
+		this.startDateFoodPackageAward = startDateFoodPackageAward;
+	}
+
+	/**
+	 * @return the commentFoodPackageAward
+	 */
+	public String getCommentFoodPackageAward() {
+		return commentFoodPackageAward;
+	}
+
+	/**
+	 * @param commentFoodPackageAward the commentFoodPackageAward to set
+	 */
+	public void setCommentFoodPackageAward(String commentFoodPackageAward) {
+		this.commentFoodPackageAward = commentFoodPackageAward;
+	}
+
+	/**
+	 * @return the transportAssistProvided
+	 */
+	public boolean isTransportAssistProvided() {
+		return transportAssistProvided;
+	}
+
+	/**
+	 * @param transportAssistProvided the transportAssistProvided to set
+	 */
+	public void setTransportAssistProvided(boolean transportAssistProvided) {
+		this.transportAssistProvided = transportAssistProvided;
+	}
+
+	/**
+	 * @return the startDateTransportAssist
+	 */
+	public Date getStartDateTransportAssist() {
+		return startDateTransportAssist;
+	}
+
+	/**
+	 * @param startDateTransportAssist the startDateTransportAssist to set
+	 */
+	public void setStartDateTransportAssist(Date startDateTransportAssist) {
+		this.startDateTransportAssist = startDateTransportAssist;
+	}
+
+	/**
+	 * @return the commentTransportAssist
+	 */
+	public String getCommentTransportAssist() {
+		return commentTransportAssist;
+	}
+
+	/**
+	 * @param commentTransportAssist the commentTransportAssist to set
+	 */
+	public void setCommentTransportAssist(String commentTransportAssist) {
+		this.commentTransportAssist = commentTransportAssist;
 	}
 
 	

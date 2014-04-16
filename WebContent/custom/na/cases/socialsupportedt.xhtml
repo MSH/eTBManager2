@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.socialsupport']}" /><ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:250px" />
+<ui:param name="left" value="false" />
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+<s:decorate id="caseBody" template="/layout/casebody.xhtml">
+<h:form id="main" styleClass="form1">
+	<div class="form-content">
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['TbCaseNA.socialDisabilityAwarded']}:</ui:define>
+				<h:selectOneMenu value="#{tbcase.socialDisabilityAwarded}" onchange="handleYesNo(this, 'divsocsupport1')">
+					<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="true"/>
+					<f:selectItem itemLabel="#{messages['global.no']}" itemValue="false"/>
+				</h:selectOneMenu>
+			</s:decorate>
+			
+			<div id="divsocsupport1" style="display:#{tbcase.socialDisabilityAwarded?'':'none'}">
+			    <s:decorate template="/layout/dateedit.xhtml" >
+			    	<ui:define name="label">#{messages['PrescribedMedicine.iniDate']}:</ui:define>
+			    	<ui:param name="required" value="false" /> 
+			    	<ui:param name="datefield" value="#{tbcase.startDateSocialAward}" /> 
+		    	</s:decorate>
+
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['global.comments']}:</ui:define>
+					<h:inputTextarea value="#{tbcase.commentSocialAward}" style="width:400px;height:80px;" />
+				</s:decorate>			
+			</div>
+			
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['TbCaseNA.foodPackageAwarded']}:</ui:define>
+				<h:selectOneMenu value="#{tbcase.foodPackageAwarded}" onchange="handleYesNo(this, 'divsocsupport2')">
+					<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="true"/>
+					<f:selectItem itemLabel="#{messages['global.no']}" itemValue="false"/>
+				</h:selectOneMenu>
+			</s:decorate>
+			
+			<div id="divsocsupport2" style="display:#{tbcase.foodPackageAwarded?'':'none'}">
+			    <s:decorate template="/layout/dateedit.xhtml" >
+			    	<ui:define name="label">#{messages['PrescribedMedicine.iniDate']}:</ui:define>
+			    	<ui:param name="required" value="false" /> 
+			    	<ui:param name="datefield" value="#{tbcase.startDateFoodPackageAward}" /> 
+		    	</s:decorate>
+
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['global.comments']}:</ui:define>
+					<h:inputTextarea value="#{tbcase.commentFoodPackageAward}" style="width:400px;height:80px;" />
+				</s:decorate>			
+			</div>
+
+
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['TbCaseNA.transportAssistProvided']}:</ui:define>
+				<h:selectOneMenu value="#{tbcase.transportAssistProvided}" onchange="handleYesNo(this, 'divsocsupport3')">
+					<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="true"/>
+					<f:selectItem itemLabel="#{messages['global.no']}" itemValue="false"/>
+				</h:selectOneMenu>
+			</s:decorate>
+	
+			
+			<div id="divsocsupport3" style="display:#{tbcase.transportAssistProvided?'':'none'}">
+			    <s:decorate template="/layout/dateedit.xhtml" >
+			    	<ui:define name="label">#{messages['PrescribedMedicine.iniDate']}:</ui:define>
+			    	<ui:param name="required" value="false" /> 
+			    	<ui:param name="datefield" value="#{tbcase.startDateTransportAssist}" /> 
+		    	</s:decorate>
+
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['global.comments']}:</ui:define>
+					<h:inputTextarea value="#{tbcase.commentTransportAssist}" style="width:400px;height:80px;" />
+				</s:decorate>			
+			</div>
+
+	</div>		
+		    
+	<div class="form-footer"> 
+		<a:commandLink action="#{socialSupportController.save}" styleClass="button" reRender="main,messages" onclick="if (!disableButton(this)) return false;">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink> 
+
+	    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+	       	<f:param name="id" value="#{caseHome.id}"/>
+	       	<span>#{messages['form.cancel']}</span>
+	    </s:link>
+	</div>
+</h:form>
+</s:decorate>
+
+
+<script type="text/javascript">
+<!--
+function handleYesNo(cb, divname) {
+	if (cb.value == 'false') {
+		jQuery('#' + divname).slideUp(500);
+	}
+	else {
+		jQuery('#' + divname).slideDown(500);
+	}
+}
+-->
+</script>
+
+
+</ui:define>
+
+</ui:composition>  

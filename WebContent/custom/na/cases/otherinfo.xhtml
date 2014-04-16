@@ -43,16 +43,7 @@
 				#{it.comment}
 			</h:column>
 			</h:dataTable>
-    	
-	<!-- 	<ui:param name="showfooter" value="0" />
-    	<ul>
-    	<ui:repeat value="#{tbcase.comorbidities}" var="it">
-    		<li>#{it.comorbidity.name}
-    			<h:outputText value="(#{it.duration})" rendered="#{not empty it.duration}" style="padding-left:12px;"/>
-    			<h:outputText value="(#{it.comment})" rendered="#{not empty it.comment}" style="padding-left:12px;"/>
-    		</li>
-    	</ui:repeat>
-    	</ul> -->
+
     	<s:decorate template="/layout/display.xhtml">
     		<ui:define name="label">#{messages['TbCase.tbContact']}:</ui:define>
     		<h:outputText value="#{tbcase.tbContact?messages['global.yes']:messages['global.no']}" /> 
@@ -61,7 +52,6 @@
     		</s:fragment>
     	</s:decorate>
    
-   <!-- ************* -->              
 		<div class="spacer" />
 			<s:link view="/cases/edtcontact.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
 				<f:param name="id" value="#{caseHome.id}" />
@@ -76,7 +66,6 @@
 	<s:div styleClass="region3" rendered="#{empty tbcase.contacts}">
 		<div class="content">
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" style="display:block;padding:4px" rendered="#{empty tbcase.contacts}" />
-	<!-- <h:dataTable value="#{tbcase.contacts}" var="it" width="100%" styleClass="tabela4" rowClasses="lin1,lin2" rendered="#{not empty tbcase.contacts}"> -->
 		</div>
 	</s:div>
 	
@@ -142,6 +131,86 @@
 	</a:jsFunction>
 	
 	</h:panelGroup>
+
+    <div class="spacer" />
+    
+	<s:link view="/custom/na/cases/socialsupportedt.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt">
+		<f:param name="id" value="#{caseHome.id}" />
+		<span>#{messages['form.edit']}</span>
+	</s:link>
+    <h2>#{messages['cases.socialsupport']}</h2>
+    
+    <div class="region3">
+    	<div class="content">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['TbCaseNA.socialDisabilityAwarded']}:</ui:define>
+				<s:fragment rendered="#{tbcase.socialDisabilityAwarded}">
+					<div class="icon-negative" />#{messages['global.yes']}
+				</s:fragment>
+				<s:fragment rendered="#{not tbcase.socialDisabilityAwarded}">
+					<div class="icon-positive" />#{messages['global.no']}
+				</s:fragment>
+			</s:decorate>
+			<s:fragment rendered="#{tbcase.socialDisabilityAwarded}" >
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['PrescribedMedicine.iniDate']}:</ui:define>
+				<h:outputText value="#{tbcase.startDateSocialAward}" converter="localeDateConverter"/>
+			</s:decorate>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['global.comments']}:</ui:define>
+				<h:outputText value="#{tbcase.commentSocialAward}" converter="rmemoria.TextConverter" escape="false" styleCalss="text"/>
+			</s:decorate>
+			</s:fragment>
+    	</div>
+    </div>          
+    
+    <div class="region3">
+    	<div class="content">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['TbCaseNA.foodPackageAwarded']}:</ui:define>
+				<s:fragment rendered="#{tbcase.foodPackageAwarded}">
+					<div class="icon-negative" />#{messages['global.yes']}
+				</s:fragment>
+				<s:fragment rendered="#{not tbcase.foodPackageAwarded}">
+					<div class="icon-positive" />#{messages['global.no']}
+				</s:fragment>
+			</s:decorate>
+			<s:fragment rendered="#{tbcase.foodPackageAwarded}" >
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['PrescribedMedicine.iniDate']}:</ui:define>
+				<h:outputText value="#{tbcase.startDateFoodPackageAward}" converter="localeDateConverter"/>
+			</s:decorate>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['global.comments']}:</ui:define>
+				<h:outputText value="#{tbcase.commentFoodPackageAward}" converter="rmemoria.TextConverter" escape="false" styleCalss="text"/>
+			</s:decorate>
+			</s:fragment>
+    	</div>
+    </div>   
+    
+    <div class="region3">
+    	<div class="content">
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['TbCaseNA.transportAssistProvided']}:</ui:define>
+				<s:fragment rendered="#{tbcase.transportAssistProvided}">
+					<div class="icon-negative" />#{messages['global.yes']}
+				</s:fragment>
+				<s:fragment rendered="#{not tbcase.transportAssistProvided}">
+					<div class="icon-positive" />#{messages['global.no']}
+				</s:fragment>
+			</s:decorate>
+			<s:fragment rendered="#{tbcase.transportAssistProvided}" >
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['PrescribedMedicine.iniDate']}:</ui:define>
+				<h:outputText value="#{tbcase.startDateTransportAssist}" converter="localeDateConverter"/>
+			</s:decorate>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['global.comments']}:</ui:define>
+				<h:outputText value="#{tbcase.commentTransportAssist}" converter="rmemoria.TextConverter" escape="false" styleCalss="text"/>
+			</s:decorate>
+			</s:fragment>
+    	</div>
+    </div>   
 
     <div class="spacer" />          
 	
