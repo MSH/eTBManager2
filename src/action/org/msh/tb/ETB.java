@@ -36,6 +36,12 @@ public class ETB {
 	}
 	
 	
+	/**
+	 * Return the display name of the sub class implemented for the given class 
+	 * of the current workspace
+	 * @param clazz
+	 * @return
+	 */
 	public static String getWsClassName(Class clazz) {
 		return ETB.getWorkspaceClass(clazz).getName();
 	}

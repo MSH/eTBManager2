@@ -16,6 +16,7 @@ import java.util.zip.GZIPInputStream;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.msh.tb.ETB;
 import org.msh.tb.application.App;
 import org.msh.tb.application.TransactionManager;
 import org.msh.tb.entities.SyncKey;
@@ -226,18 +227,18 @@ public class SyncFileImporter {
 		if (id != null) {
 			return App.getEntityManager().find(objectType, id);
 		}
-		
-		if (tbcase == null) {
-			return null;
-		}
 
-		// create the object and set the tbcase in the object
 		try {
-			Object obj = objectType.newInstance();
-			PropertyUtils.setProperty(obj, "tbcase", tbcase);
+			// create new instance of object by workspace
+			Class wsclazz = ETB.getWorkspaceClass(objectType);
+			Object obj = wsclazz.newInstance();
+
+			if (tbcase != null) {
+				PropertyUtils.setProperty(obj, "tbcase", tbcase);
+			}
 			return obj;
 		} catch (Exception e) {
-			return null;
+			throw new RuntimeException(e);
 		}
 	}
 	

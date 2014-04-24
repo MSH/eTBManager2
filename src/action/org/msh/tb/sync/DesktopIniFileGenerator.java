@@ -26,6 +26,7 @@ import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.MedicalExamination;
 import org.msh.tb.entities.SystemConfig;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.TbContact;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.WeeklyFrequency;
 import org.msh.utils.DataStreamUtils;
@@ -370,6 +371,9 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 			return ExamHIV.class;
 		if (obj instanceof ExamMicroscopy)
 			return ExamMicroscopy.class;
+		
+		if (obj instanceof TbContact)
+			return TbContact.class;
 
 		if (obj instanceof HibernateProxy)
 			return Hibernate.getClass(obj);
