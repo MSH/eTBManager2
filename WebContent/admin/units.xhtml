@@ -46,10 +46,6 @@
 </div>
 
 
-<a:jsFunction name="deleteRecord" action="#{tbunitHome.remove}" reRender="pnlunits,messages">
-	<a:actionparam name="param1" assignTo="#{tbunitHome.id}" converter="javax.faces.Integer" />
-</a:jsFunction>
-
 <h:panelGroup id="pnlunits">
 
 <s:decorate template="/layout/naveg.xhtml">
@@ -65,7 +61,7 @@
   	</f:facet>
   	<div class="#{r.treatmentHealthUnit?'icon-hu-big':'icon-ds-big'}" style="float:left;"/>
 	<h:outputText value="#{r.name.name1}" rendered="#{not s:hasRole('TBUNITS_EDT')}" styleClass="#{r.active?'':'entity-inactive'}"/>
-	<s:link view="/admin/edtunit.xhtml" value="#{r.name.name1}" style="display:block;" rendered="#{s:hasRole('TBUNITS_EDT')}"
+	<s:link view="/admin/unitdata.xhtml" value="#{r.name.name1}" style="display:block;" rendered="#{s:hasRole('TBUNITS_EDT')}"
 		 styleClass="#{r.active?'':'entity-inactive'}">
 		<f:param name="id" value="#{r.id}" />
 	</s:link>
@@ -115,11 +111,6 @@
   <h:column rendered="#{s:hasRole('TBUNITS_EDT')}">
   	<f:facet name="header" >#{messages['form.action']}</f:facet>
   	
-	<a:commandLink  
-		onclick="if (confirm('#{messages['form.confirm_remove']}')) { deleteRecord(#{r.id}) } return false;" >
-		<i class="icon-remove"/>#{messages['form.remove']}
-	</a:commandLink>
-	<br/>
 	<a onclick="downloadFile(#{r.id})" style="cursor:pointer;"><i class="icon-download"/>Download Desktop File</a>
   </h:column>
 </h:dataTable>

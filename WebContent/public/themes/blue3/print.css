@@ -827,3 +827,26 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	width:200px;
 	max-width: 200px;
 }
+
+
+.tile {
+	float:left;
+	min-width:130px;
+	height:100px;
+	padding:6px;
+	text-align: center;
+	margin:5px 20px 15px 0px;
+	border:1px solid black;
+}
+
+.tile .title {
+	margin:4px 4px 16px 4px;
+	min-height:45px;
+	width:120px;
+}
+
+.tile .value {
+	font-size:36px;
+	font-weight:bold;
+	min-width:120px;
+}

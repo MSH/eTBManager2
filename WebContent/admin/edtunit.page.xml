@@ -11,7 +11,7 @@
 	<navigation>
 		<rule if-outcome="persisted">
 			<end-conversation/>
-			<redirect view-id="/admin/units.xhtml" />
+			<redirect view-id="/admin/unitdata.xhtml" />
 		</rule>
 	</navigation>
 </page>
