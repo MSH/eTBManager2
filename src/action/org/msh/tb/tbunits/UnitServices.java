@@ -56,11 +56,6 @@ public class UnitServices {
 			.setParameter("destid", destUnit.getId())
 			.setParameter("oriid", originUnit.getId())
 			.executeUpdate();
-
-		em.createNativeQuery("update caseissue set unit_id = :destid where unit_id = :oriid")
-			.setParameter("destid", destUnit.getId())
-			.setParameter("oriid", originUnit.getId())
-			.executeUpdate();
 		
 		em.createNativeQuery("update transactionlog set unit_id = :destid where unit_id = :oriid " +
 			"and role_id in (select id from userrole where code like '01%')")
