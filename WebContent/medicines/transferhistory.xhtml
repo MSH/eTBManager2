@@ -43,7 +43,7 @@
 		<s:decorate template="/layout/edit.xhtml" id="transferstatusdec">
 	    	<ui:define name="label">#{messages['TransferStatus']}:</ui:define>
 			<h:selectOneMenu id="transferstatus" value="#{transfersHistory.status}">
-	  			<s:selectItems value="#{transfersHistory.transferStatusOptions}" var="r" label="#{messages[r.key]}" noSelectionLabel="#{messages['meds.transfer.all']}" />
+	  			<s:selectItems value="#{transfersHistory.transferStatusOptions}" var="r" label="#{messages[r.key]}" noSelectionLabel="#{messages['form.noselection']}" />
 	  			<s:convertEnum />
 				<a:support event="onchange" reRender="pnltab"/>
 			</h:selectOneMenu>
@@ -52,7 +52,7 @@
 		<s:decorate template="/layout/edit.xhtml" id="difforderdec">
 	    	<ui:define name="label">#{messages['form.qttDiff']}:</ui:define>
 			<h:selectOneMenu id="difforder" value="#{transfersHistory.diffType}">
-				<s:selectItems var="v" value="#{globalLists.getShippedReceivedDiffType()}" label="#{messages[v.key]}" noSelectionLabel="-"/>
+				<s:selectItems var="v" value="#{globalLists.getShippedReceivedDiffType()}" label="#{messages[v.key]}" noSelectionLabel="#{messages['form.noselection']}"/>
 				<s:convertEnum />
 				<a:support event="onchange" reRender="pnltab" />
 			</h:selectOneMenu>

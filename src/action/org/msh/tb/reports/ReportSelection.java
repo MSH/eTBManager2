@@ -24,6 +24,7 @@ import org.msh.tb.entities.UserLog;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserRole;
 import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.utils.date.DateUtils;
 
 
@@ -39,6 +40,7 @@ public class ReportSelection {
 	private UserLog userLog;
 	private UserRole userRole;
 	private RoleAction roleAction;
+	private MedicineLine medicineLine;
 	
 	private String pageToPrint;
 	private UserWorkspace userWorkspace;
@@ -353,4 +355,19 @@ public class ReportSelection {
 		this.roleAction = roleAction;
 	}
 
+
+	/**
+	 * @return the medicineLine
+	 */
+	public MedicineLine getMedicineLine() {
+		return medicineLine;
+	}
+
+
+	/**
+	 * @param medicineLine the medicineLine to set
+	 */
+	public void setMedicineLine(MedicineLine medicineLine) {
+		this.medicineLine = medicineLine;
+	}
 }

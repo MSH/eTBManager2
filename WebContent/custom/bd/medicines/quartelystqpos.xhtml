@@ -40,7 +40,13 @@
   			<s:selectItems value="#{quarterYears}" var="r" label="#{r}" />
   			<a:support event="onchange" ajaxSingle="true" reRender="main" process="year,quarter" action="#{quarterStockPositionHome.refresh}" />
 		</h:selectOneMenu> 
+		
 		<h:outputText value="#{messages['quarter.closed']}" rendered="#{not quarterStockPositionHome.isOpenedQuarter()}" styleClass="error"/>
+		
+		<h:commandLink styleClass="button" onclick="if (confirm('#{messages['quarter.closequarter.msg']}')) closeQuarter();return false;"
+			rendered="#{quarterStockPositionReport.isFiltersFilledIn() and quarterStockPositionHome.canCloseQuarter()}" >
+			<span>#{messages['quarter.closequarter']}</span>
+		</h:commandLink>
 	</s:decorate>
 	
 	<s:decorate rendered="#{empty quarterStockPositionReport.rows}">
@@ -119,19 +125,21 @@
 	</table>
 	</s:decorate>
 	
-	<br/>
 	
+	<!-- 
 	<h:commandLink styleClass="button" onclick="if (confirm('#{messages['quarter.closequarter.msg']}')) closeQuarter();return false;"
 		rendered="#{quarterStockPositionReport.isFiltersFilledIn() and quarterStockPositionHome.canCloseQuarter()}" >
 		<span>#{messages['quarter.closequarter']}</span>
 	</h:commandLink>
+	
 	<s:link view="/medicines/index.xhtml" styleClass="button-alt">
     	<span>#{messages['form.return']}</span>
 	</s:link>
-	
+	 -->
+	 
 	<a:jsFunction name="closeQuarter" action="#{quarterStockPositionHome.closeQuarter()}" reRender="main"/>
 
-	<br/><br/>
+	<br/>
 
 	<!-- List of expiring batches -->
 	<a:repeat value="#{quarterBatchExpiringReport.unitBatchDetails}" var="unitD">

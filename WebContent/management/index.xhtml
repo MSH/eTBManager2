@@ -116,6 +116,7 @@
 	<div class="spacer" />
 	</s:fragment>
 
+	<s:fragment rendered="#{s:hasRole('FORECAST') or s:hasRole('EXPORT')}">
 	<h2>#{messages['manag.forecast']}</h2>
 	<div class="vertical-menu">
 		<s:link view="/management/forecasting.xhtml" rendered="#{s:hasRole('FORECAST')}" propagation="none">
@@ -126,6 +127,7 @@
 			<div class="icon-report" style="float:left;"/>#{messages['manag.export']}
 		</s:link>
 	</div>
+	</s:fragment>
 
 
 </ui:define>

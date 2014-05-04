@@ -39,7 +39,7 @@
 	<s:decorate template="/layout/edit.xhtml" rendered="false">
 		<ui:define name="label">#{messages['ProductGroup']}:</ui:define>
 		<h:selectOneMenu value="#{stockPosHome.productGroup}">
-            <s:selectItems value="#{productGroups.resultList}" var="c" label="#{c.name}" noSelectionLabel="-" />
+            <s:selectItems value="#{productGroups.resultList}" var="c" label="#{c.name}" noSelectionLabel="#{messages['form.noselection']}" />
             <s:convertEntity/>
 		</h:selectOneMenu>
 	</s:decorate>
@@ -47,7 +47,7 @@
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['Source']}:</ui:define>
 		<h:selectOneMenu value="#{stockPosHome.source}">
-            <s:selectItems value="#{sources.resultList}" var="c" label="#{c.name}" noSelectionLabel="-" />
+            <s:selectItems value="#{sources.resultList}" var="c" label="#{c.name}" noSelectionLabel="#{messages['form.noselection']}" />
             <s:convertEntity/>
 		</h:selectOneMenu>
 	</s:decorate>

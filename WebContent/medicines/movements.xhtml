@@ -47,7 +47,7 @@
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Medicine']}:</ui:define>
 		<h:selectOneMenu value="#{medicineHome.medicine}">
-  		<s:selectItems value="#{medicines.resultList}" var="r" label="#{r}" noSelectionLabel="-" />
+  		<s:selectItems value="#{medicines.resultList}" var="r" label="#{r}" noSelectionLabel="#{messages['form.noselection']}" />
   		<s:convertEntity />
 		</h:selectOneMenu>
 	</s:decorate>
@@ -55,7 +55,7 @@
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Source']}:</ui:define>
 		<h:selectOneMenu value="#{sourceHome.source}">
-  		<s:selectItems value="#{sources.resultList}" var="r" label="#{r.abbrevName}" noSelectionLabel="-" />
+  		<s:selectItems value="#{sources.resultList}" var="r" label="#{r.abbrevName}" noSelectionLabel="#{messages['form.noselection']}" />
   		<s:convertEntity />
 		</h:selectOneMenu>
 	</s:decorate>
@@ -63,7 +63,7 @@
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['MovementType']}:</ui:define>
 		<h:selectOneMenu value="#{movementFilters.type}" onchange="hideShowAdjustments(this)">
-  		<s:selectItems value="#{movementTypes}" var="r" label="#{messages[r.key]}" noSelectionLabel="-" />
+  		<s:selectItems value="#{movementTypes}" var="r" label="#{messages[r.key]}" noSelectionLabel="#{messages['form.noselection']}" />
   		<s:convertEnum />
 		</h:selectOneMenu>
 	</s:decorate>

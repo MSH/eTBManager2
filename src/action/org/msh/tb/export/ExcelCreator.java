@@ -200,6 +200,16 @@ public class ExcelCreator {
 	 * Add a number to the current cell and moves cursor to the next cell
 	 * @param value
 	 */
+	public void addNumber(Integer value, String style) {
+		Double dval = (value != null? value.doubleValue(): null);
+		addNumber(dval, column, row, style);
+		column++;
+	}
+	
+	/**
+	 * Add a number to the current cell and moves cursor to the next cell
+	 * @param value
+	 */
 	public void addNumber(Long value) {
 		Double dval = (value != null? value.doubleValue(): null);
 		addNumber(dval, column, row, null);
@@ -425,6 +435,7 @@ public class ExcelCreator {
 			excelFile = File.createTempFile("etbmanager", "xls");
 
 			createTitleFormat();
+			createSubTitleFormat();
 			createDateFormat();
 			
 			workbook = Workbook.createWorkbook(excelFile);
@@ -441,6 +452,16 @@ public class ExcelCreator {
 		font.setColour(Colour.WHITE);
 		cf.setBorder(Border.ALL, BorderLineStyle.THIN);
 		cf.setBackground(Colour.GREY_40_PERCENT);
+		return cf;
+	}
+	
+	public WritableCellFormat createSubTitleFormat() throws WriteException {
+		WritableCellFormat cf = createCellFormat("subtitle");
+		WritableFont font = (WritableFont)cf.getFont();
+//		font.setBoldStyle(WritableFont.BOLD);
+		font.setColour(Colour.BLACK);
+		cf.setBorder(Border.ALL, BorderLineStyle.THIN);
+		cf.setBackground(Colour.GREY_25_PERCENT);
 		return cf;
 	}
 

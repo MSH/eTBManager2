@@ -150,6 +150,9 @@ public class QSPExcelUtils {
 		
 		excel.lineBreak();
 		
+		//add Consolidated content
+		addUnitQuarterlyBatchExpiringConsolidatedReport(batchDetailsConsolidated);
+		
 		//Add units information
 		for(ExpiringBatchDetails d : unitBatchDetails){
 			excel.lineBreak();
@@ -163,9 +166,6 @@ public class QSPExcelUtils {
 		}
 		
 		excel.lineBreak();
-		
-		//add Consolidated content
-		addUnitQuarterlyBatchExpiringConsolidatedReport(batchDetailsConsolidated);
 		
 		//Add List of units
 		includePendAndNotInitializedUnits(pendCloseQuarterUnits, unitsNotInitialized);

@@ -190,9 +190,9 @@ public class GlobalLists {
 	
 	private static final ShippedReceivedDiffTypes shippedReceivedDiffType[] = {
 		ShippedReceivedDiffTypes.NONE,
+		ShippedReceivedDiffTypes.BOTH,
 		ShippedReceivedDiffTypes.SHIPPED_BT_RECEIVED,
-		ShippedReceivedDiffTypes.RECEIVED_BT_SHIPPED,
-		ShippedReceivedDiffTypes.BOTH
+		ShippedReceivedDiffTypes.RECEIVED_BT_SHIPPED		
 	};
 	
 	/**

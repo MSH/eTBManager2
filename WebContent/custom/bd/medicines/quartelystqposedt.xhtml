@@ -47,7 +47,6 @@
 			<th colspan="9" align="left"><h2>#{messages[quarterStockPositionReport.selectedQuarter.quarter.key]}/#{quarterStockPositionReport.selectedQuarter.year} - #{quarterStockPositionHome.editingMedicine.medicine}</h2></th>
 		</tr>
 		<tr>
-			<th>#{messages['Batch']}</th>
 			<th>#{messages['quarter.openbal']}</th>
 			<th>#{messages['quarter.received']}</th>
 			<th>#{messages['quarter.posadjust']}</th>
@@ -58,12 +57,11 @@
 			<th>#{messages['quarter.outofstk']}</th>
 		</tr>
 		<tr>
-			<td><b>#{messages['global.total']}:</b></td>
 			<td><h:inputText id="openbal" value="#{quarterStockPositionHome.editingMedicine.openingBalance}" readonly="true" style="background-color: lightgray;"/></td>
 			<td><h:inputText id="received" value="#{quarterStockPositionHome.editingMedicine.received}" readonly="true" style="background-color: lightgray;"/></td>
-			<td><h:inputText id="posadjust" readonly="true" style="background-color: lightgray;"/></td>
+			<td><h:inputText id="posadjust" value="#{quarterStockPositionHome.editingMedicine.positiveAdjustment}" readonly="true" style="background-color: lightgray;"/></td>
 			<td>
-				<h:inputText id="negadjust" readonly="true" style="background-color: lightgray;"/>
+				<h:inputText id="negadjust" value="#{quarterStockPositionHome.editingMedicine.negativeAdjustment}" readonly="true" style="background-color: lightgray;"/>
 				<s:fragment rendered="#{quarterStockPositionHome.editingMedicine.nonNegativeAdjustments != 0}">
 					<br/><h:outputText style="font-size:10px" value="#{messages['quarter.nonNegativeAdjustment']}: #{quarterStockPositionHome.editingMedicine.nonNegativeAdjustments}" />
 				</s:fragment>
@@ -73,45 +71,11 @@
 				<h:inputText id="consumption" value="#{quarterStockPositionHome.editingMedicine.consumption}"  readonly="#{userSession.tbunit.patientDispensing}" 
 					style="#{userSession.tbunit.patientDispensing ? 'background-color: lightgray;' : ''}" onkeyup="updateCloseBalTotal();" onkeypress="return numbersOnly(this,event);" />
 			</td>
-			<td><h:inputText id="expired" readonly="true" style="background-color: lightgray;"/></td>
+			<td><h:inputText id="expired" value="#{quarterStockPositionHome.editingMedicine.expired}" readonly="true" style="background-color: lightgray;"/></td>
 			<td><h:inputText id="closbal" value="0" readonly="true" style="background-color: lightgray;"/></td>
 			<td><h:inputText value="#{quarterStockPositionHome.editingMedicine.outOfStock}" onkeypress="return numbersOnly(this,event);"/></td>
 		</tr>
-		<a:repeat value="#{quarterStockPositionHome.editingMedicine.batchList}" var="x">
-			<tr>
-				<td><b>
-					<h:outputText value="#{x.batch.expiryDate}" rendered="#{not empty x.batch.expiryDate}"/> <br/>
-					<h:outputText style="font-size:10px" value="#{x.batch.batchNumber} #{x.batch.manufacturer}" rendered="#{(not empty x.batch.batchNumber) or (not empty x.batch.manufacturer)}"/> <br/> 
-					<h:outputText style="font-size:10px" value="#{x.source.abbrevName.name1}" rendered="#{not empty x.source}"/> 
-				</b></td>
-				
-				<td align="center"><h:outputText value=" - " /></td>
-				
-				<td align="center"><h:outputText value=" - " /></td>
-				
-				<td>
-				   	<h:inputText styleClass="posAdjust" value="#{x.posAdjust}" onkeyup="updatePosAdjustTotal();"
-				   		onkeypress="return numbersOnly(this,event);" />
-				</td>
-				
-				<td>
-					<h:inputText styleClass="negAdjust" value="#{x.negAdjust}" onkeyup="updateNegAdjustTotal();"
-				   		onkeypress="return numbersOnly(this,event);" />
-				</td>
-				
-				<td align="center"><h:outputText value=" - " /></td>
-				
-				<td>
-					<h:inputText styleClass="expired" value="#{x.expired}" onkeyup="updateExpiredTotal();"
-				   		onkeypress="return numbersOnly(this,event);" />
-				</td>
-				
-				<td align="center"><h:outputText value=" - " /></td>
-				
-				<td align="center"><h:outputText value=" - " /></td>
-			</tr>
-		</a:repeat>
-	
+			
 	</table>
 	<br/>
 	
@@ -134,55 +98,15 @@
 	
 	<script language="JavaScript" type="text/javascript">
 	<!--
-	updatePosAdjustTotal();
-	updateNegAdjustTotal();
-	updateExpiredTotal();
 	updateCloseBalTotal();
-	
-	function updatePosAdjustTotal(){
-		var num = 0;
-		jQuery('#tablediv .posAdjust').each(function() {
-			num += parseInt(jQuery(this).val(),10);
-		});
-		if(isNaN(num))
-			num = 0;
 
-		document.getElementById('a:main:posadjust').value = num;
-
-		updateCloseBalTotal();
-	}
-	function updateNegAdjustTotal(){
-		var num = 0;
-		jQuery('#tablediv .negAdjust').each(function() {
-			num += parseInt(jQuery(this).val(),10);
-		});
-
-		if(isNaN(num))
-			num = #{quarterStockPositionHome.editingMedicine.nonNegativeAdjustments};
-
-		document.getElementById('a:main:negadjust').value = num + #{quarterStockPositionHome.editingMedicine.nonNegativeAdjustments};
-
-		updateCloseBalTotal();
-	}
-	function updateExpiredTotal(){
-		var num = 0;
-		jQuery('#tablediv .expired').each(function() {
-			num += parseInt(jQuery(this).val(),10);
-		});
-		if(isNaN(num))
-			num = 0;
-
-		document.getElementById('a:main:expired').value = num;
-
-		updateCloseBalTotal();
-	}
 	function updateCloseBalTotal(){
-		var openbal = parseInt(document.getElementById('a:main:openbal').value);
-		var received = parseInt(document.getElementById('a:main:received').value);
-		var posadjust = parseInt(document.getElementById('a:main:posadjust').value);
-		var negadjust = parseInt(document.getElementById('a:main:negadjust').value);
-		var consumption = parseInt(document.getElementById('a:main:consumption').value);
-		var expired = parseInt(document.getElementById('a:main:expired').value);
+		var openbal = parseInt(document.getElementById('a:main:openbal').value); if(isNaN(openbal)) openbal = 0;
+		var received = parseInt(document.getElementById('a:main:received').value); if(isNaN(received)) received = 0;
+		var posadjust = parseInt(document.getElementById('a:main:posadjust').value); if(isNaN(posadjust)) posadjust = 0;
+		var negadjust = parseInt(document.getElementById('a:main:negadjust').value); if(isNaN(negadjust)) negadjust = 0;
+		var consumption = parseInt(document.getElementById('a:main:consumption').value); if(isNaN(consumption)) consumption = 0;
+		var expired = parseInt(document.getElementById('a:main:expired').value); if(isNaN(expired)) expired = 0;
 
 		var num = openbal + received + posadjust - negadjust - consumption - expired;
 

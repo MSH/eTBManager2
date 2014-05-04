@@ -98,8 +98,42 @@
 		<!-- When selecting a specific unit -->
 		<h:outputText styleClass="error" value="#{messages['quarter.notinitializedunit2']}" rendered="#{quarterBatchExpiringReport.tbunitselection.tbunit != null}"/>
 	</s:div>
+		
+	<s:fragment rendered="#{quarterBatchExpiringReport.tbunitselection.tbunit == null and (quarterBatchExpiringReport.tbunitselection.options.size() > 1 or quarterBatchExpiringReport.tbunitselection.getAuselection().getSelectedUnit() == null)}">
+	<h2>
+		Consolidated
+	</h2>
 	
-	<br/>
+	<!-- Message for no result of consolidated -->
+	<h:outputText styleClass="warn" value="#{messages['quarter.expiringbatchlist.noresultmsg']}" 
+			rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and empty quarterBatchExpiringReport.getBatchDetailsConsolidatedKeySet()}"/>
+	
+	<!-- Datatable of the result of the consolidated -->
+	<h:dataTable value="#{quarterBatchExpiringReport.getBatchDetailsConsolidatedKeySet()}" var="selBatch" styleClass="table1" columnClasses="colb,collb,colcb,colrb"
+		rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and not empty quarterBatchExpiringReport.getBatchDetailsConsolidatedKeySet()}">
+		
+		<h:column>
+			<f:facet name="header">#{messages['Medicine']}</f:facet>
+			<h:outputText value="#{selBatch.medicine}" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">#{messages['Batch']}</f:facet>
+			<h:outputText value="#{selBatch.batchNumber} - #{selBatch.manufacturer}" rendered="#{(not empty selBatch.batchNumber) or (not empty selBatch.manufacturer)}"/>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">#{messages['Batch.expiryDate']}</f:facet>
+			<h:outputText value="#{selBatch.expiryDate}" converter="localeDateConverter"/>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">#{messages['Movement.quantity']}</f:facet>
+			<h:outputText value="#{quarterBatchExpiringReport.batchDetailsConsolidated[selBatch]}" />
+		</h:column>
+	</h:dataTable>
+	<hr/><br/>
+	</s:fragment>
 	
 	<a:repeat value="#{quarterBatchExpiringReport.unitBatchDetails}" var="unitD">
 		<h2>
@@ -137,41 +171,6 @@
 		</h:dataTable>
 		<hr/><br/>
 	</a:repeat>
-
-	<s:fragment rendered="#{quarterBatchExpiringReport.tbunitselection.tbunit == null and (quarterBatchExpiringReport.tbunitselection.options.size() > 1 or quarterBatchExpiringReport.tbunitselection.getAuselection().getSelectedUnit() == null)}">
-	<h2>
-		Consolidated
-	</h2>
-	
-	<!-- Message for no result of consolidated -->
-	<h:outputText styleClass="warn" value="#{messages['quarter.expiringbatchlist.noresultmsg']}" 
-			rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and empty quarterBatchExpiringReport.getBatchDetailsConsolidatedKeySet()}"/>
-	
-	<!-- Datatable of the result of the consolidated -->
-	<h:dataTable value="#{quarterBatchExpiringReport.getBatchDetailsConsolidatedKeySet()}" var="selBatch" styleClass="table1" columnClasses="colb,collb,colcb,colrb"
-		rendered="#{quarterBatchExpiringReport.isFiltersFilledIn() and not empty quarterBatchExpiringReport.getBatchDetailsConsolidatedKeySet()}">
-		
-		<h:column>
-			<f:facet name="header">#{messages['Medicine']}</f:facet>
-			<h:outputText value="#{selBatch.medicine}" />
-		</h:column>
-		
-		<h:column>
-			<f:facet name="header">#{messages['Batch']}</f:facet>
-			<h:outputText value="#{selBatch.batchNumber} - #{selBatch.manufacturer}" rendered="#{(not empty selBatch.batchNumber) or (not empty selBatch.manufacturer)}"/>
-		</h:column>
-		
-		<h:column>
-			<f:facet name="header">#{messages['Batch.expiryDate']}</f:facet>
-			<h:outputText value="#{selBatch.expiryDate}" converter="localeDateConverter"/>
-		</h:column>
-		
-		<h:column>
-			<f:facet name="header">#{messages['Movement.quantity']}</f:facet>
-			<h:outputText value="#{quarterBatchExpiringReport.batchDetailsConsolidated[selBatch]}" />
-		</h:column>
-	</h:dataTable>
-	</s:fragment>
 
 	<!-- Modal panel with the units with no closed quarters -->
 	<rich:modalPanel id="openQuarterunitList" autosized="true" width="700" zindex="2000" style="background-color:#F2F5F0">

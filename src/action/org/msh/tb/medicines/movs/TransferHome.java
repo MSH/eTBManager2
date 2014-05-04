@@ -114,6 +114,12 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 			return "error";
 		}
 		
+		//Checks if the destination unit is different than the origin unit.
+		if(tbunitSelection.getSelected().getId().equals(userSession.getTbunit().getId())){
+			facesMessages.addToControlFromResourceBundle(null, "medicines.transfer.validationmsg1");
+			return "error";
+		}
+		
 		// checks if any medicine were selected for transfer
 		if (transfer.getItems().size() == 0) {
 			facesMessages.addFromResourceBundle("edtrec.nomedicine");

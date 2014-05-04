@@ -42,7 +42,7 @@
 		<s:decorate template="/layout/edit.xhtml" id="orderStatusdec">
 	    	<ui:define name="label">#{messages['OrderStatus']}:</ui:define>
 			<h:selectOneMenu id="orderStatus" value="#{ordersHistory.os}">
-				<s:selectItems var="v" value="#{ordersHistory.orderStatusList}" label="#{messages[v.key]}" noSelectionLabel="-" />
+				<s:selectItems var="v" value="#{ordersHistory.orderStatusList}" label="#{messages[v.key]}" noSelectionLabel="#{messages['form.noselection']}" />
 				<s:convertEnum />
 				<a:support event="onchange" reRender="pnlorders" process="difforder,orderStatus,month,year"/>
 			</h:selectOneMenu>
@@ -51,7 +51,7 @@
 		<s:decorate template="/layout/edit.xhtml" id="difforderdec">
 	    	<ui:define name="label">#{messages['form.qttDiff']}:</ui:define>
 			<h:selectOneMenu id="difforder" value="#{ordersHistory.diffType}">
-				<s:selectItems var="v" value="#{globalLists.getShippedReceivedDiffType()}" label="#{messages[v.key]}" noSelectionLabel="-" />
+				<s:selectItems var="v" value="#{globalLists.getShippedReceivedDiffType()}" label="#{messages[v.key]}" noSelectionLabel="#{messages['form.noselection']}"/>
 				<s:convertEnum />
 				<a:support event="onchange" reRender="pnlorders" />
 			</h:selectOneMenu>

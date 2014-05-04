@@ -1,8 +1,5 @@
 package org.msh.tb.bd;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Source;
@@ -13,16 +10,17 @@ import org.msh.tb.entities.Source;
  */
 public class QSPEditingMedicine{
 	private Medicine medicine;
-	private List<QSPEditingBatchDetails> batchList;
 	private Integer consumption;
 	private Integer outOfStock;
+	private Integer negativeAdjustment;
+	private Integer positiveAdjustment;
+	private Integer expired;
 	private Integer nonNegativeAdjustments;
 	private Integer openingBalance;
 	private Integer received;
 	
 	public QSPEditingMedicine(Medicine medicine){
 		this.medicine = medicine;
-		batchList = new ArrayList<QSPEditingBatchDetails>();
 		consumption = new Integer(0);
 		outOfStock = new Integer(0);
 		nonNegativeAdjustments = new Integer(0);
@@ -31,17 +29,45 @@ public class QSPEditingMedicine{
 	}
 	
 	/**
-	 * @return the batchList
+	 * @return the negativeAdjustment
 	 */
-	public List<QSPEditingBatchDetails> getBatchList() {
-		return batchList;
+	public Integer getNegativeAdjustment() {
+		return negativeAdjustment;
 	}
 
 	/**
-	 * @param batchList the batchList to set
+	 * @return the expired
 	 */
-	public void setBatchList(List<QSPEditingBatchDetails> batchList) {
-		this.batchList = batchList;
+	public Integer getExpired() {
+		return expired;
+	}
+
+	/**
+	 * @param expired the expired to set
+	 */
+	public void setExpired(Integer expired) {
+		this.expired = expired;
+	}
+
+	/**
+	 * @param negativeAdjustment the negativeAdjustment to set
+	 */
+	public void setNegativeAdjustment(Integer negativeAdjustment) {
+		this.negativeAdjustment = negativeAdjustment;
+	}
+
+	/**
+	 * @return the positiveAdjustment
+	 */
+	public Integer getPositiveAdjustment() {
+		return positiveAdjustment;
+	}
+
+	/**
+	 * @param positiveAdjustment the positiveAdjustment to set
+	 */
+	public void setPositiveAdjustment(Integer positiveAdjustment) {
+		this.positiveAdjustment = positiveAdjustment;
 	}
 
 	/**

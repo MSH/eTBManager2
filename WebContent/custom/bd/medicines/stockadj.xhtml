@@ -27,7 +27,7 @@
 <div style="width:800px">
 <s:decorate template="/layout/unitsel.xhtml">
 <h:form id="main">
-	<!-- Decided with Kyle that it will not be able to bangladesh -->
+
 	<a:commandLink onclick="openNewBatchDlg();" style="float:right;" styleClass="button-alt" rendered="#{s:hasRole('STOCK_ADJUST_NEW_BATCH')}">
 		<span>#{messages['meds.receiving.newbatch']}...</span>
 	</a:commandLink>
@@ -35,7 +35,7 @@
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['Source']}:</ui:define>
     	<h:selectOneMenu value="#{stockAdjustmentHome.source}">
-    		<s:selectItems var="s" value="#{sources}" label="#{s}" noSelectionLabel="-"/>
+    		<s:selectItems var="s" value="#{sources}" label="#{s}"/>
     		<s:convertEntity />
     		<a:support event="onchange" reRender="main" ajaxSingle="true" onsubmit="openWaitDlg();" oncomplete="closeWaitDlg();" action="#{stockAdjustmentHome.sourceChanged()}"/>
     	</h:selectOneMenu>
@@ -80,10 +80,11 @@
 		<div id="tblbatch" style="display:none;">					
 		<a:repeat value="#{it.batches}" var="b">
 			<div style="clear:both;position:relative;min-height:40px;height:40px;border-top:1px solid #d0d0d0;padding-top:4px;#{b.batch.expired ? 'color:red' : (inventoryReport.isExpiringBatch(b) ? 'color:#D7620B' : '')}">
+				<!-- Decided in Bangladesh that it will not be available
 				<a:commandLink value="#{messages['meds.movs.delbatch']}" 
 					style="float:right;" 
 					styleClass="right-icon small-link" 
-					onclick="initBatchDeleting(#{b.id})"/>
+					onclick="initBatchDeleting(#{b.id})"/> -->
 				<div style="float:left;width:350px;padding-left:30px;">
 					<s:decorate template="/layout/batch.xhtml" >
 						<ui:param name="batch" value="#{b.batch}" />
@@ -132,7 +133,7 @@
 </s:decorate>
 </div>          
 
-<s:decorate template="/layout/batchselection.xhtml">
+<s:decorate template="/custom/bd/layout/batchselection.xhtml">
 	<ui:param name="quantitytitle" value="#{messages['meds.movs.newqtty']}" />
 
 	<ui:define name="before-form">

@@ -21,6 +21,11 @@
 	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
 </ui:define>
 
+<ui:define name="icons">
+<s:link onclick="refreshresult();return false;" style="float:right;margin-right:10px;">
+	<div class="excel-icon" />
+</s:link>
+</ui:define>
 
 <ui:define name="print-link">
 	<h:panelGroup id="pnlPrintLink">
@@ -57,6 +62,13 @@
 		<h:outputText value="#{reportSelection.auselection.unitLevel1.name}" rendered="#{reportSelection.auselection.level1ReadOnly}" />
 	</s:decorate>
 	
+	<s:decorate id="medLine" template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['MedicineLine']}:</ui:define>
+		<h:selectOneMenu id="medicineLine" value="#{reportSelection.medicineLine}">
+            <s:selectItems var="s" value="#{medicineLines}" label="#{messages[s.key]}" noSelectionLabel="-"/>
+            <s:convertEnum/>
+		</h:selectOneMenu>
+	</s:decorate>
 </td></tr>
 <tr><td align="right">
 	<a:commandLink styleClass="button" action="#{stockPosReport.execute}" reRender="pnlresult,pnlPrintLink"
@@ -64,6 +76,12 @@
 		oncomplete="enableButton()">
 		<span>#{messages['form.generate']}</span>
 	</a:commandLink>
+	<a:commandLink id="refreshlink" style="display:none" styleClass="button" action="#{stockPosReport.execute}" reRender="pnlresult,pnlPrintLink"
+		onclick="if (!disableButton(this)) return false;"
+		oncomplete="enableButton();generateexcel();">
+		<span>#{messages['form.generate']}heyhey</span>
+	</a:commandLink>
+	<h:commandLink style="display:none;" id="excellink" action="#{stockPosReport.downloadExcel()}" />
 </td></tr>
 </table>
 
@@ -130,6 +148,14 @@
 
 </h:form>
 
+<script type="text/javascript">
+	function refreshresult(){
+		document.getElementById('main:refreshlink').click();
+	}
+	function generateexcel(){
+		document.getElementById('main:excellink').click();
+	}
+</script>
 
 </ui:define>
 

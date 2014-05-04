@@ -12,6 +12,7 @@ import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.enums.MedicineLine;
 
 
 
@@ -35,6 +36,9 @@ public class StockPosReport {
 	@In(create=true)
 	EntityManager entityManager;
 
+	@In(create=true) 
+	StockPosResportExcel stockPosResportExcel;
+	
 	/**
 	 * Get the root element, i.e, the total quantity
 	 * @return
@@ -63,6 +67,7 @@ public class StockPosReport {
 
 		AdministrativeUnit region = reportSelection.getAuselection().getSelectedUnit();
 		List<AdministrativeUnit> adminUnits = reportSelection.getAuselection().getOptionsLevel1();
+		MedicineLine medLine = reportSelection.getMedicineLine();
 
 		if ((adminUnits == null) && (region == null))
 			return;
@@ -75,6 +80,9 @@ public class StockPosReport {
 		
 		if (region != null)
 			hql = hql.concat(" and sp.tbunit.adminUnit.code like '" + region.getCode() + "%'");
+		
+		if(medLine != null)
+			hql = hql.concat(" and sp.medicine.line = " + medLine.ordinal());
 		
 		hql = hql.concat(" order by sp.tbunit.name");
 		
@@ -131,6 +139,17 @@ public class StockPosReport {
 				medicines.add(prod);
 			}
 		}
+	}
+	
+	/**
+	 * Generates Excel and sends it
+	 * @return
+	 */
+	public void downloadExcel(){
+		StockPosReportItem root = getRoot();
+		if(this.getMedicines() != null && this.getMedicines().size() > 0){
+			stockPosResportExcel.downloadExcel(medicines, reportSelection, root);
+		}		
 	}
 	
 	public List<Medicine> getMedicines() {

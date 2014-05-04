@@ -17,11 +17,9 @@ import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.EntityHomeEx;
-import org.msh.tb.bd.QSPEditingMedicine.QSPEditingBatchDetails;
 import org.msh.tb.bd.entities.QuarterlyReportDetailsBD;
 import org.msh.tb.bd.entities.enums.QuarterMonths;
 import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.Source;
@@ -162,44 +160,53 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		//Creates editingMedicine using the Medicine that comes from the page
 		editingMedicine = new QSPEditingMedicine(medicine);
 		
-		//Loads the quantity for each type of movement - batch
-		String queryString = "select b, s, " +
-		
-								"(select sum (bm2.quantity * m2.oper) " +
-									"from BatchMovement bm2 join bm2.movement m2 left join m2.adjustmentType " +
-									"where bm2.batch.id = b.id and m2.source.id = s.id and m2.tbunit.id = :unitId and m2.date >= :iniDate and m2.date <= :endDate " +
-									"and m2.type = 4 and (bm2.quantity * m2.oper) > 0 and (m2.adjustmentType.id <> :workspaceExpiredAdjust or m2.adjustmentType is null))," +
+		String queryString = "select m, " +
+				
+								"(select sum(mov.quantity * mov.oper) from Movement mov where mov.tbunit.id = :unitId " +
+									" and ( (mov.date < :iniDate) or (mov.date >= :iniDate and mov.date <= :endDate and mov.type in (7)) ) " +
+									"and mov.medicine.id = m.id) as openingBalance, " +
 								
-								"(select sum (bm2.quantity * m2.oper) " +
-									"from BatchMovement bm2 join bm2.movement m2 left join m2.adjustmentType " +
-									"where bm2.batch.id = b.id and m2.source.id = s.id and m2.tbunit.id = :unitId and m2.date >= :iniDate and m2.date <= :endDate " +
-									"and m2.type = 4 and (bm2.quantity * m2.oper) < 0 and (m2.adjustmentType.id <> :workspaceExpiredAdjust or m2.adjustmentType is null))," +
+								"(select sum(mov.quantity * mov.oper) from Movement mov where mov.tbunit.id = :unitId " + 
+									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (2,5) " +
+									"and mov.medicine.id = m.id) as received, " +
 								
-								"(select sum (bm2.quantity * m2.oper) " +
-									"from BatchMovement bm2 join bm2.movement m2 left join m2.adjustmentType " +
-									"where bm2.batch.id = b.id and m2.source.id = s.id and m2.tbunit.id = :unitId and m2.date >= :iniDate and m2.date <= :endDate " +
-									"and m2.type = 4 and (bm2.quantity * m2.oper) < 0 and (m2.adjustmentType.id = :workspaceExpiredAdjust))" +	
+								"(select sum(mov.quantity * mov.oper) from Movement mov where mov.tbunit.id = :unitId " +  
+									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (4) and (mov.quantity * mov.oper > 0) " +
+									" and mov.medicine.id = m.id) as posAdjust, " +
+									
+								"(select sum(mov.quantity * mov.oper) from Movement mov left join mov.adjustmentType where mov.tbunit.id = :unitId " +  
+									" and mov.date >= :iniDate and mov.date <= :endDate and (mov.quantity * mov.oper) < 0" +
+									" and mov.type in (4)" +
+									" and (mov.adjustmentType.id <> :workspaceExpiredAdjust or mov.adjustmentType is null)" +
+									" and mov.medicine.id = m.id) as negAdjust, " +
+									
+								"(select sum(mov.quantity * mov.oper) from Movement mov where mov.tbunit.id = :unitId " + 
+									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (3) and mov.medicine.id = m.id) as dispensed, " +
 								
-								"from BatchMovement bm join bm.batch b join bm.movement m join m.source s " +
-								"where m.tbunit.id = :unitId and m.medicine.id = :medicineId and ((m.date <= :endDate) or (m.date = :iniDate and m.type = 7)) " +
-								"group by b.id, s.id " +
-								"having sum(bm.quantity * m.oper) > 0";
+								"(select sum(mov.quantity * mov.oper) from Movement mov where mov.tbunit.id = :unitId " + 
+									" and mov.date >= :iniDate and mov.date <= :endDate and mov.type in (4) and mov.adjustmentType.id = :workspaceExpiredAdjust " +
+									" and mov.medicine.id = m.id and (mov.quantity * mov.oper) < 0) as expired " +
+
+							  "from Medicine m " +
+							  "where m.workspace.id = :workspaceId and m.id = :medicineId " +
+							  "group by m";
 		
 		List<Object[]> result = getEntityManager().createQuery(queryString)
-									.setParameter("medicineId", medicine.getId())
-									.setParameter("unitId", userSession.getTbunit().getId())
 									.setParameter("iniDate", selectedQuarter.getIniDate())
 									.setParameter("endDate", selectedQuarter.getEndDate())
+									.setParameter("workspaceId", UserSession.getWorkspace().getId())
 									.setParameter("workspaceExpiredAdjust", UserSession.getWorkspace().getExpiredMedicineAdjustmentType().getId())
+									.setParameter("unitId", userSession.getTbunit().getId())
+									.setParameter("medicineId", medicine.getId())
 									.getResultList();
 		
-		for(Object[] o : result){
-			QSPEditingBatchDetails item = editingMedicine.createQSPEditingBatch((Batch)o[0], (Source)o[1]);
-			item.setPosAdjust( (o[2] == null ? null : ((Long)o[2]).intValue()) );
-			item.setNegAdjust( (o[3] == null ? null : (((Long)o[3]).intValue())*-1) );
-			item.setExpired( (o[4] == null ? null : (((Long)o[4]).intValue())*-1) );
-			
-			editingMedicine.getBatchList().add(item);
+		if(result.size() > 0){
+			editingMedicine.setOpeningBalance((result.get(0)[1] == null ? 0 : ((Long)result.get(0)[1]).intValue()));
+			editingMedicine.setReceived((result.get(0)[2] == null ? 0 : ((Long)result.get(0)[2]).intValue()));
+			editingMedicine.setPositiveAdjustment((result.get(0)[3] == null ? 0 : ((Long)result.get(0)[3]).intValue()));
+			editingMedicine.setNegativeAdjustment((result.get(0)[4] == null ? 0 : ((Long)result.get(0)[4]).intValue()*-1));
+			editingMedicine.setConsumption((result.get(0)[5] == null ? 0 : ((Long)result.get(0)[5]).intValue()*-1));
+			editingMedicine.setExpired((result.get(0)[6] == null ? 0 : ((Long)result.get(0)[6]).intValue()*-1));
 		}
 		
 		//Loads the out of stock in days for the selected medicine
@@ -207,21 +214,6 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 			editingMedicine.setOutOfStock(getInstance().getOutOfStock());
 		else
 			editingMedicine.setOutOfStock(0);
-		
-		//Loads the total consumption for the medicine in question
-		try{
-			Long qtd = (Long) getEntityManager().createQuery("select sum (mov.quantity * mov.oper) from Movement mov where mov.tbunit.id = :unitId and mov.date >= :iniDate and mov.date <= :endDate " +
-																	"and mov.type in (3) and mov.medicine.id = :medicineId ")
-																	.setParameter("unitId", userSession.getTbunit().getId())
-																	.setParameter("iniDate", selectedQuarter.getIniDate())
-																	.setParameter("endDate", selectedQuarter.getEndDate())
-																	.setParameter("medicineId", medicine.getId())
-																	.getSingleResult();
-			
-			editingMedicine.setConsumption(qtd == null ? 0 : (qtd.intValue()*-1));
-		}catch(NoResultException e){
-			editingMedicine.setConsumption(0);
-		}
 		
 		//Loads the movements consolidated in negative adjustments column that are not negative adjustments (movement type equals 1 or 6)
 		try{
@@ -239,37 +231,6 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 			editingMedicine.setNonNegativeAdjustments(0);
 		}
 		
-		//Loads the opening balance of the selected medicine.
-		try{
-			Long qtd = (Long) getEntityManager().createQuery("select sum (mov.quantity * mov.oper) from Movement mov " +
-																	"where mov.tbunit.id = :unitId and mov.medicine.id = :medicineId " +
-																	"and ( (mov.date < :iniDate) or (mov.date >= :iniDate and mov.date <= :endDate and mov.type in (7)) ) ")
-																	.setParameter("unitId", userSession.getTbunit().getId())
-																	.setParameter("iniDate", selectedQuarter.getIniDate())
-																	.setParameter("endDate", selectedQuarter.getEndDate())
-																	.setParameter("medicineId", medicine.getId())
-																	.getSingleResult();
-			
-			editingMedicine.setOpeningBalance(qtd == null ? 0 : (qtd.intValue()));
-		}catch(NoResultException e){
-			editingMedicine.setOpeningBalance(0);
-		}
-		
-		//Loads the received of the selected medicine.
-		try{
-			Long qtd = (Long) getEntityManager().createQuery("select sum (mov.quantity * mov.oper) from Movement mov " +
-																"where mov.tbunit.id = :unitId and mov.date >= :iniDate and mov.date <= :endDate " +
-																"and mov.type in (2,5) and mov.medicine.id = :medicineId ")
-																.setParameter("unitId", userSession.getTbunit().getId())
-																	.setParameter("iniDate", selectedQuarter.getIniDate())
-																	.setParameter("endDate", selectedQuarter.getEndDate())
-																.setParameter("medicineId", medicine.getId())
-																.getSingleResult();
-			
-			editingMedicine.setReceived(qtd == null ? 0 : (qtd.intValue()));
-		}catch(NoResultException e){
-			editingMedicine.setReceived(0);
-		}
 	}
 	
 	public boolean checkMainParameters(){
@@ -318,21 +279,6 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		//Can edit dispensing only if the unit is not configured for patient dispensing
 		if(!deletePreviousMovements(!userSession.getTbunit().isPatientDispensing())){
 			addValidErrorToClient(null);
-			return "error";
-		}
-		
-		if(!savePositiveAdjustment()){
-			addValidErrorToClient(messages.get("quarter.posadjust"));
-			return "error";
-		}
-		
-		if(!saveNegativeAdjustment()){
-			addValidErrorToClient(messages.get("quarter.negadjust"));
-			return "error";
-		}
-		
-		if(!saveExpired()){
-			addValidErrorToClient(messages.get("quarter.expired"));
 			return "error";
 		}
 
@@ -409,13 +355,10 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		
 		if(deleteDispensings){
 			query = "from Movement mov where mov.tbunit.id = :unitId and mov.date >= :iniDate and mov.date <= :endDate " +
-					"and mov.type in (4,3) and mov.medicine.id = :medicineId ";
-		}else{
-			query = "from Movement mov where mov.tbunit.id = :unitId and mov.date >= :iniDate and mov.date <= :endDate " +
-					"and mov.type in (4) and mov.medicine.id = :medicineId ";
+					"and mov.type in (3) and mov.medicine.id = :medicineId ";
 		}
 		
-		//delete all positive, negative, expired adjustments and consumptions in the quarter period
+		//delete all consumptions in the quarter period
 		List<Movement> movs = getEntityManager().createQuery(query)
 												.setParameter("unitId", userSession.getTbunit().getId())
 												.setParameter("iniDate", selectedQuarter.getIniDate())
@@ -431,74 +374,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	}
 	
 	/**
-	 * Save positive adjustment movements
-	 */
-	public boolean savePositiveAdjustment(){
-		boolean allOk = true;
-		
-		if(!checkMainParameters())
-			return false;
-		
-		for(QSPEditingBatchDetails b : editingMedicine.getBatchList()){
-			  
-			if(b.getPosAdjust() > 0){
-				try{
-					HashMap<Batch, Integer> batches = new HashMap<Batch, Integer>();
-					
-					batches.put(b.getBatch(), b.getPosAdjust());
-					Movement m = movementHome.prepareNewAdjustment(selectedQuarter.getEndDate(), userSession.getTbunit(), b.getSource(), 
-															medicine, batches, null);
-					if(m == null){
-						allOk = false;
-						addValidError(movementHome.getErrorBatch(), movementHome.getErrorMessage());
-					}
-					
-				}catch(Exception e){
-					e.printStackTrace();
-					facesMessages.addFromResourceBundle(e.getMessage());
-					return false;
-				}
-			}
-		}
-		return allOk;
-	}
-	
-	/**
-	 * Save negative adjustment movements
-	 */
-	public boolean saveNegativeAdjustment(){
-		boolean allOk = true;
-		
-		if(!checkMainParameters())
-			return false;
-		
-		//create adjustment movement
-		for(QSPEditingBatchDetails b : editingMedicine.getBatchList()){
-			  
-			if(b.getNegAdjust() > 0){
-				try{
-					HashMap<Batch, Integer> batches = new HashMap<Batch, Integer>();
-					
-					batches.put(b.getBatch(), (b.getNegAdjust()>0 ? b.getNegAdjust()*-1 : b.getNegAdjust()));
-					
-					Movement m = movementHome.prepareNewAdjustment(selectedQuarter.getEndDate(), userSession.getTbunit(), b.getSource(), 
-																		medicine, batches, null);
-					if(m == null){
-						allOk = false;
-						addValidError(movementHome.getErrorBatch(), movementHome.getErrorMessage());
-					}
-				}catch(Exception e){
-					e.printStackTrace();
-					facesMessages.addFromResourceBundle(e.getMessage());
-					return false;
-				}
-			}
-		}
-		return allOk;
-	}
-	
-	/**
-	 * Save negative adjustment movements
+	 * Save negative dispensing movements
 	 */
 	public boolean saveConsumption(){
 		if(!checkMainParameters())
@@ -561,43 +437,6 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 		}
 		dispensingHome.clearInstance();
 		return true;
-	}
-	
-	/**
-	 * Save expired movements
-	 */
-	public boolean saveExpired(){
-		boolean allOk = true;
-		
-		if(!checkMainParameters())
-			return false;
-		
-		for(QSPEditingBatchDetails b : editingMedicine.getBatchList()){
-			  
-			if(b.getExpired() > 0){
-				try{
-					HashMap<Batch, Integer> batches = new HashMap<Batch, Integer>();
-					FieldValueComponent expiredFieldValue = new FieldValueComponent();
-					expiredFieldValue.setValue(UserSession.getWorkspace().getExpiredMedicineAdjustmentType());
-					
-					batches.put(b.getBatch(), (b.getExpired()>0 ? b.getExpired()*-1 : b.getExpired()));
-				
-					Movement m = movementHome.prepareNewAdjustment(selectedQuarter.getEndDate(), userSession.getTbunit(), b.getSource(), 
-							medicine, batches, expiredFieldValue);
-					
-					if(m == null){
-						allOk = false;
-						addValidError(movementHome.getErrorBatch(), movementHome.getErrorMessage());
-					}
-					
-				}catch(Exception e){
-					e.printStackTrace();
-					facesMessages.addFromResourceBundle(e.getMessage());
-					return false;
-				}
-			}
-		}
-		return allOk;
 	}
 	
 	public boolean saveOutOfStockDays(){

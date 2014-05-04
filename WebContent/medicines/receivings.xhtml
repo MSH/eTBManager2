@@ -28,7 +28,7 @@
 <h:form>
 	<b>#{messages['Source']}: </b>
 	<h:selectOneMenu value="#{medicineReceivings.source}">
-		<s:selectItems value="#{sources.resultList}" var="r" label="#{r.name}" noSelectionLabel="-" />
+		<s:selectItems value="#{sources.resultList}" var="r" label="#{r.name}" noSelectionLabel="#{messages['form.noselection']}" />
 		<s:convertEntity />
 		<a:support event="onchange" reRender="pnlrecs" />
 	</h:selectOneMenu>

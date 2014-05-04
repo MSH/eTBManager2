@@ -28,7 +28,7 @@
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['Source']}:</ui:define>
 		<h:selectOneMenu id="source" value="#{reportSelection.source}">
-            <s:selectItems value="#{sources.resultList}" var="v" label="#{v.abbrevName} - #{v.name}" noSelectionLabel="-"/>
+            <s:selectItems value="#{sources.resultList}" var="v" label="#{v.abbrevName} - #{v.name}" noSelectionLabel="#{messages['form.noselection']}"/>
             <s:convertEntity />
 		</h:selectOneMenu>
 	</s:decorate>
