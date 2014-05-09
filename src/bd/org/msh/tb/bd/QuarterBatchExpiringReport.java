@@ -136,14 +136,13 @@ public class QuarterBatchExpiringReport {
 		String queryString = "select b, sum(bm.quantity * mov.oper) " +
 								"from BatchMovement bm join bm.batch b join bm.movement mov " +
 								"where mov.tbunit.id = :unitId and mov.tbunit.workspace.id = :workspaceId " +
-									"and mov.date <= :endQuarterDate and b.expiryDate <= :expiringLimitDate and b.expiryDate >= :iniQuarterDate " + getSourceClause() +
+									"and mov.date <= :endQuarterDate and b.expiryDate > :endQuarterDate and b.expiryDate < :expiringLimitDate " + getSourceClause() +
 								"group by b.id " +
 								"having sum(bm.quantity * mov.oper) > 0 " +
 								"order by b.medicine.genericName.name1 ";
 		
 		List<Object[]> result = entityManager.createQuery(queryString)
 									.setParameter("endQuarterDate", selectedQuarter.getEndDate())
-									.setParameter("iniQuarterDate", selectedQuarter.getIniDate())
 									.setParameter("expiringLimitDate", getExiringLimitDate())
 									.setParameter("workspaceId", UserSession.getWorkspace().getId())
 									.setParameter("unitId", ret.getUnit().getId())
@@ -166,14 +165,13 @@ public class QuarterBatchExpiringReport {
 		String queryString = "select b, sum(bm.quantity * mov.oper) " +
 							"from BatchMovement bm join bm.batch b join bm.movement mov " +
 							QSPUtils.getLocationWhereClause(tbunitselection) + " and mov.date <= :endQuarterDate " +
-							"and b.expiryDate <= :exiringLimitDate and b.expiryDate >= :iniQuarterDate " + getSourceClause() +
+							"and b.expiryDate > :endQuarterDate and b.expiryDate < :exiringLimitDate " + getSourceClause() +
 							"group by b.id " +
 							"having sum(bm.quantity * mov.oper) > 0 " +
 							"order by b.medicine.genericName.name1 ";
 		
 		List<Object[]> result = entityManager.createQuery(queryString)
 									.setParameter("endQuarterDate", selectedQuarter.getEndDate())
-									.setParameter("iniQuarterDate", selectedQuarter.getIniDate())
 									.setParameter("exiringLimitDate", getExiringLimitDate())
 									.getResultList();
 

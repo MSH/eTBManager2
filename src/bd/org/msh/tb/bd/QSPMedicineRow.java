@@ -21,6 +21,7 @@ public class QSPMedicineRow {
 	private Long outOfStockForAmcCalc;
 	private boolean highlight;
 	private Long unitQtdForAmcCalc;
+	private Long transferedOutQtd;
 	
 	/**
 	 * Calculates the closingBalance according to the values of the others parameters.
@@ -231,6 +232,22 @@ public class QSPMedicineRow {
 	 */
 	public void setHighlight(boolean highlight) {
 		this.highlight = highlight;
+	}
+
+	/**
+	 * @return the transferedOutQtd
+	 */
+	public Long getTransferedOutQtd() {
+		if(transferedOutQtd == null) transferedOutQtd = new Long (0);
+		if(transferedOutQtd < 0) transferedOutQtd = transferedOutQtd * -1;
+		return transferedOutQtd;
+	}
+
+	/**
+	 * @param transferedOutQtd the transferedOutQtd to set
+	 */
+	public void setTransferedOutQtd(Long transferedOutQtd) {
+		this.transferedOutQtd = transferedOutQtd;
 	}
 
 	/**

@@ -62,8 +62,8 @@
 			<td><h:inputText id="posadjust" value="#{quarterStockPositionHome.editingMedicine.positiveAdjustment}" readonly="true" style="background-color: lightgray;"/></td>
 			<td>
 				<h:inputText id="negadjust" value="#{quarterStockPositionHome.editingMedicine.negativeAdjustment}" readonly="true" style="background-color: lightgray;"/>
-				<s:fragment rendered="#{quarterStockPositionHome.editingMedicine.nonNegativeAdjustments != 0}">
-					<br/><h:outputText style="font-size:10px" value="#{messages['quarter.nonNegativeAdjustment']}: #{quarterStockPositionHome.editingMedicine.nonNegativeAdjustments}" />
+				<s:fragment rendered="#{quarterStockPositionHome.editingMedicine.transferedOutQtd != 0}">
+					<br/><h:outputText style="font-size:10px" value="#{messages['quarter.transferout']}: #{quarterStockPositionHome.editingMedicine.transferedOutQtd}" />
 				</s:fragment>
 			</td>
 			<td>

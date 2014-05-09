@@ -45,26 +45,31 @@
 <span class="text-small">(#{s.source.name})</span></h2>
 
 <table id="tblinv" class="table1 regular">
-	<tr><th width="48%">
+	<tr><th width="48%" rowspan="2" colspan="2">
 			#{messages['Medicine']}
 		</th>
-		<th width="15%"><h:outputText value="#{messages['StoragePosReport.nextExpirationBatch']}" styleClass="colch" /></th>	
-		<th><h:outputText value="#{messages['meds.movs.availableqtty']}" styleClass="colrh" /></th>	
+		<th width="15%" rowspan="2" colspan="2"><h:outputText value="#{messages['StoragePosReport.nextExpirationBatch']}" styleClass="colch" /></th>	
+		<th colspan="2"><h:outputText value="#{messages['Movement.quantity']}" styleClass="colch" /></th>	
 		
 		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit and userSession.tbunit.secondLineSupplier != null}">
-			<th><h:outputText value="#{messages['meds.amc']}" styleClass="colch" /></th>
-			<th><h:outputText value="#{messages['meds.stockoutdate']}" styleClass="colch" /></th>
+			<th rowspan="2" colspan="2"><h:outputText value="#{messages['meds.amc']}" styleClass="colch" /></th>
+			<th rowspan="2" colspan="2"><h:outputText value="#{messages['meds.stockoutdate']}" styleClass="colch" /></th>
 		</s:fragment>
 		
 		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
-		<th><h:outputText value="#{messages['global.totalPrice']}" styleClass="colch" /></th>
-		<th><h:outputText value="#{messages['global.unitPrice']}" styleClass="colch" /></th>
+		<th rowspan="2" colspan="2"><h:outputText value="#{messages['global.totalPrice']}" styleClass="colch" /></th>
+		<th rowspan="2" colspan="2"><h:outputText value="#{messages['global.unitPrice']}" styleClass="colch" /></th>
 		</s:fragment>
-		<th><h:outputText value="#{messages['StoragePosReport.lastMovement']}" styleClass="colch" /></th>
+		<th rowspan="2" colspan="2"><h:outputText value="#{messages['StoragePosReport.lastMovement']}" styleClass="colch" /></th>
+	</tr>
+	
+	<tr>
+		<th>#{messages['medicine.usable']}</th>
+		<th>#{messages['quarter.expired']}</th>
 	</tr>
 <a:repeat value="#{s.medicines}" var="it">
 	<tr class="highlight">
-		<td>
+		<td colspan="2">
 			<a:commandLink styleClass="plus-icon" onclick="detailsClick(this, 'med#{it.nodeId}');return false;" />
 			<h:outputText value="#{it.medicine}"/>
 			
@@ -100,7 +105,7 @@
 			</s:div> -->
 			
 		</td>
-		<td align="center">
+		<td align="center" colspan="2">
 			<h:outputText value="#{it.item.nextBatchExpire}" converter="localeDateConverter" />
 		</td>
 		<td align="right">
@@ -108,14 +113,19 @@
 				<f:convertNumber pattern="###,###,###"/>
 			</h:outputText>
 		</td>
+		<td align="right">
+			<h:outputText value="#{it.item.expiredQuantity}" >
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+		</td>
 		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit and userSession.tbunit.secondLineSupplier != null}">
-			<td align="right">
+			<td align="right" colspan="2">
 				<h:outputText value="#{it.item.stockPosition.amc}" >
 					<f:convertNumber pattern="###,###,##0"/>
 				</h:outputText>
 				<h:outputText value="0" rendered="#{it.item.stockPosition.amc == null}"/>
 			</td>
-			<td align="right">
+			<td align="right" colspan="2">
 				<s:fragment rendered="#{not it.item.getShowStockOutDate()}">
 					<h:outputText value="#{messages['meds.onemonthless']}" rendered="#{it.item.stockPosition.amc > 0}"/>
 					
@@ -128,31 +138,31 @@
 			</td>
 		</s:fragment>
 		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
-		<td align="right">
+		<td align="right" colspan="2">
 			<h:outputText value="#{it.item.totalPrice}" >
 				<f:convertNumber pattern="###,###,##0.00"/>
 			</h:outputText>
 		</td>
-		<td align="right">
+		<td align="right" colspan="2">
 			<h:outputText value="#{it.item.unitPrice}" >
 				<f:convertNumber pattern="###,###,##0.00"/>
 			</h:outputText>
 		</td>
 		</s:fragment>
-		<td align="center">
+		<td align="center" colspan="2">
 			<h:outputText value="#{it.item.lastMovement}" converter="localeDateConverter" />
 		</td>
 	</tr>
 	<a:repeat value="#{it.batches}" var="b">
 	<tr id="med#{it.nodeId}" style="display:none">
-		<td>
+		<td colspan="2">
 			<s:decorate template="/layout/batch.xhtml" >
 				<ui:param name="batch" value="#{b.batch}" />
 			</s:decorate>
 		</td>
 
 		<s:fragment rendered="#{(not b.batch.expired) and (not inventoryReport.isExpiringBatch(b))}">
-			<td align="center">
+			<td align="center" colspan="2">
 				<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
 			</td>
 			<td align="right">
@@ -160,17 +170,22 @@
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 			</td>
+			<td align="right">
+				<h:outputText value="#{0}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
 			<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
-				<td>
+				<td colspan="2">
 				</td>
 			</s:fragment>
 			<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
-			<td align="right">
+			<td align="right" colspan="2">
 				<h:outputText value="#{b.totalPrice}" >
 					<f:convertNumber pattern="#,###,##0.00"/>
 				</h:outputText>
 			</td>			
-			<td align="right">
+			<td align="right" colspan="2">
 				<h:outputText value="#{b.batch.unitPrice}" >
 					<f:convertNumber pattern="#,###,##0.00"/>
 				</h:outputText>
@@ -179,11 +194,16 @@
 		</s:fragment>
 
 		<s:fragment rendered="#{b.batch.expired}">
-			<td align="center">
+			<td align="center" colspan="2">
 				<div title="#{messages['manag.forecast.expiredquantity']}">
 					<span class="icon-error"/>
 					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" styleClass="error" />
 				</div>
+			</td>
+			<td align="right">
+				<h:outputText value="#{0}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
 			</td>
 			<td align="right">
 				<h:outputText value="#{b.quantity}" styleClass="error">
@@ -191,16 +211,16 @@
 				</h:outputText>
 			</td>
 			<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
-				<td>
+				<td colspan="2">
 				</td>
 			</s:fragment>
 			<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
-			<td align="right">
+			<td align="right" colspan="2">
 				<h:outputText value="#{b.totalPrice}" styleClass="error">
 					<f:convertNumber pattern="#,###,##0.00"/>
 				</h:outputText>
 			</td>			
-			<td align="right">
+			<td align="right" colspan="2">
 				<h:outputText value="#{b.batch.unitPrice}" styleClass="error">
 					<f:convertNumber pattern="#,###,##0.00"/>
 				</h:outputText>
@@ -209,7 +229,7 @@
 		</s:fragment>
 		
 		<s:fragment rendered="#{inventoryReport.isExpiringBatch(b)}">
-			<td align="center">
+			<td align="center" colspan="2">
 				<div title="#{messages['manag.forecast.expiredquantity']}">
 					<span class="alert-icon" />
 					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" style="color:#D7620B;font-weight:bold"/>
@@ -220,17 +240,22 @@
 					<f:convertNumber pattern="#,###,##0"/>
 				</h:outputText>
 			</td>
+			<td align="right">
+				<h:outputText value="#{0}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
 			<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
-				<td>
+				<td colspan="2">
 				</td>
 			</s:fragment>
 			<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
-			<td align="right">
+			<td align="right" colspan="2">
 				<h:outputText value="#{b.totalPrice}"  style="color:#D7620B;font-weight:bold">
 					<f:convertNumber pattern="#,###,##0.00"/>
 				</h:outputText>
 			</td>			
-			<td align="right">
+			<td align="right" colspan="2">
 				<h:outputText value="#{b.batch.unitPrice}"  style="color:#D7620B;font-weight:bold">
 					<f:convertNumber pattern="#,###,##0.00"/>
 				</h:outputText>

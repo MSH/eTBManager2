@@ -15,7 +15,7 @@ public class QSPEditingMedicine{
 	private Integer negativeAdjustment;
 	private Integer positiveAdjustment;
 	private Integer expired;
-	private Integer nonNegativeAdjustments;
+	private Integer transferedOutQtd;
 	private Integer openingBalance;
 	private Integer received;
 	
@@ -23,7 +23,7 @@ public class QSPEditingMedicine{
 		this.medicine = medicine;
 		consumption = new Integer(0);
 		outOfStock = new Integer(0);
-		nonNegativeAdjustments = new Integer(0);
+		transferedOutQtd = new Integer(0);
 		openingBalance = new Integer(0);
 		received = new Integer(0);
 	}
@@ -117,19 +117,19 @@ public class QSPEditingMedicine{
 	public QSPEditingBatchDetails createQSPEditingBatch(Batch batch, Source source){
 		return new QSPEditingBatchDetails(batch, source);
 	}
-	
+
 	/**
-	 * @return the nonNegativeAdjustments
+	 * @return the transferedOutQtd
 	 */
-	public Integer getNonNegativeAdjustments() {
-		return (nonNegativeAdjustments == null ? 0 : nonNegativeAdjustments);
+	public Integer getTransferedOutQtd() {
+		return transferedOutQtd;
 	}
 
 	/**
-	 * @param nonNegativeAdjustments the nonNegativeAdjustments to set
+	 * @param transferedOutQtd the transferedOutQtd to set
 	 */
-	public void setNonNegativeAdjustments(Integer nonNegativeAdjustments) {
-		this.nonNegativeAdjustments = nonNegativeAdjustments;
+	public void setTransferedOutQtd(Integer transferedOutQtd) {
+		this.transferedOutQtd = transferedOutQtd;
 	}
 
 	/**

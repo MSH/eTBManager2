@@ -82,7 +82,12 @@
 			<td class="colrb"><h:outputText value="#{row.openingBalance}" /></td>
 			<td class="colrb"><h:outputText value="#{row.receivedFromCS}" /></td>
 			<td class="colrb"><h:outputText value="#{row.positiveAdjust}" /></td>
-			<td class="colrb"><h:outputText value="#{row.negativeAdjust}" /></td>
+			<td class="colrb">
+				<h:outputText value="#{row.negativeAdjust}" />
+				<s:fragment rendered="#{row.transferedOutQtd != 0}">
+					<br/><h:outputText style="font-size:10px" value="#{messages['quarter.transferout']}: #{row.transferedOutQtd}" />
+				</s:fragment>
+			</td>
 			<td class="colrb"><h:outputText value="#{row.dispensed}" /></td>
 			<td class="colrb"><h:outputText value="#{row.expired}" /></td>
 			<td class="colrb"><h:outputText value="#{row.closingBalance}" /></td>
@@ -144,7 +149,7 @@
 	<!-- List of expiring batches -->
 	<a:repeat value="#{quarterBatchExpiringReport.unitBatchDetails}" var="unitD">
 		<h2>
-			#{messages['quarter.expiringbatchlist']}
+			#{messages['quarter.expiringbatchlist']} #{messages['quarter.expiringbatchlist.titlecomplement']}
 		</h2>
 		
 		<!-- Message for no result -->

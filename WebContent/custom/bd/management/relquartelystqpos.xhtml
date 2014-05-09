@@ -122,6 +122,9 @@
 	<h:column>
 		<f:facet name="header">#{messages['quarter.negadjust']}</f:facet>
 		<h:outputText value="#{row.negativeAdjust}" />
+		<s:fragment rendered="#{row.transferedOutQtd != 0}">
+			<br/><h:outputText style="font-size:10px" value="#{messages['quarter.transferout']}: #{row.transferedOutQtd}" />
+		</s:fragment>
 	</h:column>	
 	
 	<h:column>

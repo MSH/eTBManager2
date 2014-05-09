@@ -98,7 +98,7 @@ public class QuarterStockPositionReport {
 									
 								"(select sum(mov.quantity * mov.oper) from Movement mov left join mov.adjustmentType " + QSPUtils.getLocationWhereClause(tbunitselection) + 
 									" and mov.date >= :iniDate and mov.date <= :endDate and (mov.quantity * mov.oper) < 0" +
-									" and mov.type in (1,4,6)" +
+									" and mov.type in (4)" +
 									" and (mov.adjustmentType.id <> :workspaceExpiredAdjust or mov.adjustmentType is null)" +
 									" and mov.medicine.id = m.id " + getSourceClause() + ") as negAdjust, " +
 									
@@ -110,7 +110,12 @@ public class QuarterStockPositionReport {
 									" and mov.medicine.id = m.id and (mov.quantity * mov.oper) < 0 " + getSourceClause() + ") as expired, " +
 								
 								"(select sum(mov.outOfStock) from QuarterlyReportDetailsBD mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
-									" and mov.quarterMonth = :quarterMonth and mov.year = :year and mov.medicine.id = m.id) " +
+									" and mov.quarterMonth = :quarterMonth and mov.year = :year and mov.medicine.id = m.id), " +
+								
+								"(select sum(mov.quantity * mov.oper) from Movement mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
+									" and mov.date >= :iniDate and mov.date <= :endDate and (mov.quantity * mov.oper) < 0" +
+									" and mov.type in (6)" +
+									" and mov.medicine.id = m.id " + getSourceClause() + ") as tranferedOutQtd " +
 
 							  "from Medicine m " +
 							  "where m.workspace.id = :workspaceId " +
@@ -135,6 +140,7 @@ public class QuarterStockPositionReport {
 					row.setDispensed((Long) o[5]);
 					row.setExpired((Long) o[6]);
 					row.setOutOfStockDays((Long) o[7]);
+					row.setTransferedOutQtd((Long) o[8]);
 				}
 			}
 		}
