@@ -125,6 +125,17 @@ public class PeriodConverter implements Converter{
 			}
 		}
 		else {
+			//Check if both dates used to calc the period has time, if not returns empty.
+			Calendar c1 = Calendar.getInstance();
+			Calendar c2 = Calendar.getInstance();
+			c1.setTime(period.getIniDate());
+			c2.setTime(period.getEndDate());
+			
+			if((c1.get(Calendar.HOUR_OF_DAY) == 0 && c1.get(Calendar.MINUTE) == 0 && c1.get(Calendar.SECOND) == 0 && c1.get(Calendar.MILLISECOND) == 0) ||
+					(c2.get(Calendar.HOUR_OF_DAY) == 0 && c2.get(Calendar.MINUTE) == 0 && c2.get(Calendar.SECOND) == 0 && c2.get(Calendar.MILLISECOND) == 0)){
+				return s;
+			}
+			
 			int hours = (int)Math.floor((float)len / (1000F * 60F * 60F));
 			if (hours > 0)
 				len %= (hours * 1000 * 60 * 60);

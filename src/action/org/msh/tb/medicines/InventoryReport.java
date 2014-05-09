@@ -250,6 +250,16 @@ public class InventoryReport {
 			}
 			return tot; //stockPosition.getQuantity();
 		}
+		
+		public int getExpiredQuantity() {
+			int tot = 0;
+			for (Object obj: node.getBatches()) {
+				BatchQuantity bq = (BatchQuantity)obj;
+				if (bq.getBatch().isExpired())
+					tot += bq.getQuantity();
+			}
+			return tot; //stockPosition.getQuantity();
+		}
 
 		public float getUnitPrice() {
 			return stockPosition.getUnitPrice();
