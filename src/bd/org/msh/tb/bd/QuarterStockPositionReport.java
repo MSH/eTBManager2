@@ -115,7 +115,7 @@ public class QuarterStockPositionReport {
 								"(select sum(mov.quantity * mov.oper) from Movement mov " + QSPUtils.getLocationWhereClause(tbunitselection) + 
 									" and mov.date >= :iniDate and mov.date <= :endDate and (mov.quantity * mov.oper) < 0" +
 									" and mov.type in (6)" +
-									" and mov.medicine.id = m.id " + getSourceClause() + ") as tranferedOutQtd " +
+									" and mov.medicine.id = m.id " + getSourceClause() + ") as transferedOutQtd " +
 
 							  "from Medicine m " +
 							  "where m.workspace.id = :workspaceId " +

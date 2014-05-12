@@ -15,7 +15,7 @@
 <ui:param name="labelstyle" value="width:180px;" />
 
 <ui:define name="naveg">
-	<s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
+	<s:link value="#{messages['meds.inventory']}" view="/medicines/index.html" propagation="none" />
 	<s:link view="#{transfer.status == 'WAITING_RECEIVING'? '/medicines/transfer.xhtml': '/medicines/transferhistory.xhtml'}" value="#{transfer.status == 'WAITING_RECEIVING'? messages['meds.transfer.viewopen']: messages['meds.transfer.viewhistory']}" propagation="none"/>
 	<div class="item selected">
 		<s:link view="/medicines/transfdata.xhtml" value="##{transfer.id}" propagation="none"/>
