@@ -74,7 +74,7 @@ public class StockPosResportExcel {
 					excel.addText("ERRO");
 				
 				for(int i = 0; i <= medicines.size()-1; i++){
-					excel.addNumber(item.getQuantities()[i]);
+					excel.addNumber(item2.getQuantities()[i]);
 				}
 			}
 			
