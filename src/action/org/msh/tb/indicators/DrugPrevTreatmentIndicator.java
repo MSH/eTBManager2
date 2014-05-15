@@ -17,7 +17,7 @@ public class DrugPrevTreatmentIndicator extends Indicator2D {
 	protected void createIndicators() {
 		setNewCasesOnly(true);
 
-		String outcomes = "and c.state >= " + CaseState.WAITING_TREATMENT.ordinal();
+		String outcomes = " and c.state >= " + CaseState.WAITING_TREATMENT.ordinal();
 		// get new cases
 		List<Object[]> lst = generateValuesByField("c.state", "c.patientType = " + PatientType.NEW.ordinal() + outcomes);
 		addRowValues(getMessage("manag.confmdrrep.new"), null, lst);
@@ -25,6 +25,7 @@ public class DrugPrevTreatmentIndicator extends Indicator2D {
 		// get cases previously treated with 1st line drugs
 		String cond = "not exists(select p.id from PrevTBTreatment p, in(p.substances) s " +
 				"where s.line = " + MedicineLine.SECOND_LINE.ordinal() + " and p.tbcase.id = c.id) " +
+				"and c.patientType <> " + PatientType.NEW.ordinal() +
 				outcomes;
 		lst = generateValuesByField("c.state", cond);
 		addRowValues(getMessage("manag.confmdrrep.prev1line"), null, lst);
@@ -32,6 +33,7 @@ public class DrugPrevTreatmentIndicator extends Indicator2D {
 		// get cases previously treated with 1st and 2nd line drugs
 		cond = "exists(select p.id from PrevTBTreatment p, in(p.substances) s " +
 				"where s.line = " + MedicineLine.SECOND_LINE.ordinal() + " and p.tbcase.id = c.id) " +
+				"and c.patientType <> " + PatientType.NEW.ordinal() + 
 				outcomes;
 		lst = generateValuesByField("c.state", cond);
 		addRowValues(getMessage("manag.confmdrrep.prev12line"), null, lst);
