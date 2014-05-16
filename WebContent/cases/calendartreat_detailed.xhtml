@@ -8,7 +8,7 @@
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<table width="table1 small">
+	<table class="table1 small">
 		<tr><th class="text-small">
 				<span class="small-text">#{messages['global.month']}/#{messages['global.year']}</span>
 			</th>
@@ -44,15 +44,22 @@
 				</s:link>
 			</td>
 			<ui:repeat value="#{it.days}" var="d">
-			<td class="colcb" style="#{d.notused?'background-color:#f0f0f0;': (d.treated? 'background-color:#E6E8D8;border:2px solid #C6C8B8;':'background-color:transparent;')}">
-				<h:outputText value="#{d.value.label}" style="color:#000000;"/>
-			</td>
+			<s:fragment rendered="#{d.treated}">
+				<td class="colcb highlight">
+					<h:outputText value="#{d.value.label}" style="color:#000000;"/>
+				</td>
+			</s:fragment>
+			<s:fragment rendered="#{not d.treated}">
+				<td class="colcb #{d.notused?'inactive': (d.treated? 'highlight': '')}">
+					<h:outputText value="x" rendered="#{d.prescribed}"  style="color:#d0d0d0;"/>
+				</td>
+			</s:fragment>
 			</ui:repeat>
 			<td>
 				#{it.totalPrescribed}
 			</td>
 			<td>
-				#{it.dispensingDays}
+				#{it.totalDispensed}
 			</td>
 		</tr>
 		</ui:repeat>
