@@ -36,20 +36,20 @@
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.inimonthyear']}:</ui:define>
 		<h:selectOneMenu value="#{reportSelection.iniMonth}" required="true">
-		<f:selectItems value="#{months}" required="true"/>
+		<f:selectItems value="#{monthsAll}" required="true"/>
 		</h:selectOneMenu>
 		<h:selectOneMenu value="#{reportSelection.iniYear}" style="margin-left:6px;" required="true">
-			<f:selectItems value="#{years}"/>
+			<f:selectItems value="#{yearsAll}"/>
 		</h:selectOneMenu>
 	</s:decorate>
 
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.endmonthyear']}:</ui:define>
 		<h:selectOneMenu value="#{reportSelection.endMonth}" required="true">
-		<f:selectItems value="#{months}"/>
+		<f:selectItems value="#{monthsAll}"/>
 		</h:selectOneMenu>
 		<h:selectOneMenu value="#{reportSelection.endYear}" style="margin-left:6px;" required="true">
-			<f:selectItems value="#{years}"/>
+			<f:selectItems value="#{yearsAll}"/>
 		</h:selectOneMenu>
 	</s:decorate>
 	<p/>

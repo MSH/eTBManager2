@@ -103,10 +103,10 @@ function validate() {
 		<ui:define name="label">#{messages['global.inimonthyear']}:	</ui:define>
 		<div id="inidate">
 		<h:selectOneMenu value="#{indicatorFilters.iniMonth}" style="margin-right:4px;">
-			<f:selectItems value="#{months}"/>
+			<f:selectItems value="#{monthsAll}"/>
 		</h:selectOneMenu>
 		<h:selectOneMenu value="#{indicatorFilters.iniYear}">
-			<f:selectItems value="#{years}"/>
+			<f:selectItems value="#{yearsAll}"/>
 		</h:selectOneMenu>
 		</div>
 	</s:decorate>
@@ -118,10 +118,10 @@ function validate() {
 		<ui:param name="labelstyle" value="width:140px;" />
 		<div id="enddate">
 		<h:selectOneMenu value="#{indicatorFilters.endMonth}" style="margin-right:4px;">
-			<f:selectItems value="#{months}"/>
+			<f:selectItems value="#{monthsAll}"/>
 		</h:selectOneMenu>
 		<h:selectOneMenu value="#{indicatorFilters.endYear}">
-			<f:selectItems value="#{years}"/>
+			<f:selectItems value="#{yearsAll}"/>
 		</h:selectOneMenu>
 		</div>
 	</s:decorate>

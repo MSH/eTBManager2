@@ -29,11 +29,11 @@
 	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
 		<h:selectOneMenu value="#{dispensingSelection.month}">
-			<f:selectItems value="#{months}"/>
+			<f:selectItems value="#{monthsAll}"/>
 			<a:support event="onchange" reRender="pnldisp" />
 		</h:selectOneMenu>
 		<h:selectOneMenu value="#{dispensingSelection.year}" style="margin-left:5px;">
-			<f:selectItems value="#{years}"/>
+			<f:selectItems value="#{yearsAll}"/>
 			<a:support event="onchange" reRender="pnldisp"/>
 		</h:selectOneMenu>
 	</s:decorate>

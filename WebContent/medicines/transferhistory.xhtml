@@ -31,11 +31,11 @@
 		<s:decorate template="/layout/edit.xhtml" id="datedec">
 	    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
 			<h:selectOneMenu id="month" value="#{transfersHistory.month}">
-				<f:selectItems value="#{months}"/>
+				<f:selectItems value="#{monthsAll}"/>
 				<a:support event="onchange" reRender="pnltab" />
 			</h:selectOneMenu>
 			<h:selectOneMenu id="year" value="#{transfersHistory.year}" style="margin-left:5px; width : 70px;">
-				<f:selectItems value="#{years}"/>
+				<f:selectItems value="#{yearsAll}"/>
 				<a:support event="onchange" reRender="pnltab" />
 			</h:selectOneMenu>
 		</s:decorate>

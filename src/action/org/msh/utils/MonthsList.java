@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.faces.model.SelectItem;
 
@@ -18,6 +19,7 @@ import org.jboss.seam.international.LocaleSelector;
 public class MonthsList {
 
 	@In(create=true) Locale locale;
+	@In(create=true) Map<String, String> messages;
 	
 	@Factory("months")
 	public List<SelectItem> getResultList() {
@@ -46,6 +48,34 @@ public class MonthsList {
 		
 		return lst;
 	}
+	
+	@Factory("monthsAll")
+	public List<SelectItem> getMonthsAll() {
+		List<SelectItem> lst = new ArrayList<SelectItem>();
+		
+		DateFormatSymbols symbols = new DateFormatSymbols(locale);
+		String[] values = symbols.getShortMonths();
+		
+		int numMes = 0;
+		
+		SelectItem si = new SelectItem();
+		si.setLabel(messages.get("form.noselection"));
+		lst.add(si);
+		
+		for (String val: values) {
+			si = new SelectItem(); 
+			String s = StringEscapeUtils.escapeHtml(val);
+			si.setLabel(s);
+			si.setValue(numMes);
+			lst.add(si);
+
+			numMes++;
+			if (numMes >= 12)
+				break;
+		}
+		
+		return lst;
+	}
 
 
 	@Factory("years")
@@ -56,6 +86,26 @@ public class MonthsList {
 		
 		SelectItem si = new SelectItem();
 		si.setLabel("-");
+		lst.add(si);
+		
+		for (int i = ano; i >= ano - 50; i--) {
+			SelectItem it = new SelectItem();
+			it.setLabel(Integer.toString(i));
+			it.setValue(i);
+			lst.add(it);
+		}
+		
+		return lst;
+	}
+	
+	@Factory("yearsAll")
+	public List<SelectItem> getYearsAll() {
+		List<SelectItem> lst = new ArrayList<SelectItem>();
+		Calendar c = Calendar.getInstance();
+		int ano = c.get(Calendar.YEAR);
+		
+		SelectItem si = new SelectItem();
+		si.setLabel(messages.get("form.noselection"));
 		lst.add(si);
 		
 		for (int i = ano; i >= ano - 50; i--) {

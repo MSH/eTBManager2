@@ -34,7 +34,7 @@
 	<s:decorate id="ini" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.inimonthyear']}:</ui:define>
 		<h:selectOneMenu id="inimonth" value="#{reportSelection.iniMonth}" required="true">
-		<f:selectItems value="#{months}" required="true"/>
+		<f:selectItems value="#{monthsAll}" required="true"/>
 		</h:selectOneMenu>
 		<h:inputText id="iniyear" value="#{reportSelection.iniYear}" style="margin-left:5px; width : 70px;"/>
 	</s:decorate>
@@ -42,7 +42,7 @@
 	<s:decorate id="end" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.endmonthyear']}:</ui:define>
 		<h:selectOneMenu id="endmonth" value="#{reportSelection.endMonth}" required="true">
-		<f:selectItems value="#{months}"/>
+		<f:selectItems value="#{monthsAll}"/>
 		</h:selectOneMenu>
 		<h:inputText id="endyear" value="#{reportSelection.endYear}" style="margin-left:5px; width : 70px;" required="true" />
 	</s:decorate>

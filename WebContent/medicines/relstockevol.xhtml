@@ -40,20 +40,20 @@
 	<s:decorate id="ini" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.inimonthyear']}:</ui:define>
 		<h:selectOneMenu id="inimonth" value="#{reportSelection.iniMonth}" required="true">
-		<f:selectItems value="#{months}"/>
+		<f:selectItems value="#{monthsAll}"/>
 		</h:selectOneMenu>
 		<h:selectOneMenu value="#{reportSelection.iniYear}" style="margin-left:6px;" required="true">
-			<f:selectItems value="#{years}"/>
+			<f:selectItems value="#{yearsAll}"/>
 		</h:selectOneMenu>
 	</s:decorate>
 
 	<s:decorate id="end" template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.endmonthyear']}:</ui:define>
 		<h:selectOneMenu id="endmonth" value="#{reportSelection.endMonth}" required="true">
-		<f:selectItems value="#{months}"/>
+		<f:selectItems value="#{monthsAll}"/>
 		</h:selectOneMenu>
 		<h:selectOneMenu value="#{reportSelection.endYear}" style="margin-left:6px;" required="true">
-			<f:selectItems value="#{years}"/>
+			<f:selectItems value="#{yearsAll}"/>
 		</h:selectOneMenu>
 	</s:decorate>
 	<p/>
