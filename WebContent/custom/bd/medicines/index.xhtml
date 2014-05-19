@@ -56,7 +56,7 @@
 			<th rowspan="2" colspan="2"><h:outputText value="#{messages['meds.stockoutdate']}" styleClass="colch" /></th>
 		</s:fragment>
 		
-		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
+		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit and s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<th rowspan="2" colspan="2"><h:outputText value="#{messages['global.totalPrice']}" styleClass="colch" /></th>
 		<th rowspan="2" colspan="2"><h:outputText value="#{messages['global.unitPrice']}" styleClass="colch" /></th>
 		</s:fragment>
@@ -137,7 +137,7 @@
 				</h:outputText>
 			</td>
 		</s:fragment>
-		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
+		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit and s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<td align="right" colspan="2">
 			<h:outputText value="#{it.item.totalPrice}" >
 				<f:convertNumber pattern="###,###,##0.00"/>
@@ -179,7 +179,7 @@
 				<td colspan="2">
 				</td>
 			</s:fragment>
-			<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
+			<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit and s:hasRole('VIEW_MEDICINE_PRICES')}">
 			<td align="right" colspan="2">
 				<h:outputText value="#{b.totalPrice}" >
 					<f:convertNumber pattern="#,###,##0.00"/>
@@ -214,7 +214,7 @@
 				<td colspan="2">
 				</td>
 			</s:fragment>
-			<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
+			<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit and s:hasRole('VIEW_MEDICINE_PRICES')}">
 			<td align="right" colspan="2">
 				<h:outputText value="#{b.totalPrice}" styleClass="error">
 					<f:convertNumber pattern="#,###,##0.00"/>
@@ -249,7 +249,7 @@
 				<td colspan="2">
 				</td>
 			</s:fragment>
-			<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
+			<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit and s:hasRole('VIEW_MEDICINE_PRICES')}">
 			<td align="right" colspan="2">
 				<h:outputText value="#{b.totalPrice}"  style="color:#D7620B;font-weight:bold">
 					<f:convertNumber pattern="#,###,##0.00"/>

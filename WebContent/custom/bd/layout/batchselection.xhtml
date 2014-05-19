@@ -113,7 +113,7 @@ function validateInput(edt) {
 			<h:outputText value="#{it.item.batch.expiryDate}" converter="localeDateConverter" style="#{it.item.batch.expired ? 'color:red' : ''}"/>
 		</h:column>
 		
-		<h:column>
+		<h:column rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 			<f:facet name="header">
 				<h:outputText value="#{messages['global.unitPrice']}" styleClass="colrh"/>
 			</f:facet>

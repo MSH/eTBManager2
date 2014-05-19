@@ -54,13 +54,15 @@
 			<b>#{s.source.name}</b>
 		</td></tr>
 		
-		<tr><th align="left">#{messages['Medicine']}
-		</th><th align="center">#{messages['Batch.expiryDate']}
-		</th><th align="right">#{messages['Movement.quantity']}
-		</th><th align="right">#{messages['global.unitPrice']}
-		</th><th align="right">#{messages['global.totalPrice']}
-		</th><th>
-		</th></tr>
+		<tr><th align="left">#{messages['Medicine']}</th>
+		<th align="center">#{messages['Batch.expiryDate']}</th>
+		<th align="right">#{messages['Movement.quantity']}</th>
+		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
+		<th align="right">#{messages['global.unitPrice']}</th>
+		<th align="right">#{messages['global.totalPrice']}</th>
+		</s:fragment>
+		<th></th>
+		</tr>
 		<a:repeat value="#{s.items}" var="it">
 		<tr bgcolor="#f3f3f0"><td>
 			<div class="medicine-icon" />
@@ -74,6 +76,7 @@
 			</h:outputText>
 			</b>
 		</td>
+		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<td align="right">
 			<b><h:outputText value="#{it.unitPrice}">
 				<f:convertNumber pattern="#,###,##0.0000"/>
@@ -86,6 +89,7 @@
 			</h:outputText>
 			</b>
 		</td>
+		</s:fragment>
 		<td align="center">
 			<a:commandLink value="#{messages['meds.selbatches']}" ajaxSingle="true" 
 				action="#{transferHome.initBatchSelection(it)}"
@@ -115,6 +119,7 @@
 						<f:convertNumber pattern="#,###,##0"/>
 					</h:outputText>
 				</td>
+				<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 				<td align="right" class="colb">
 					<h:outputText value="#{b.batch.unitPrice}">
 						<f:convertNumber pattern="#,###,##0.0000"/>
@@ -125,6 +130,7 @@
 						<f:convertNumber pattern="#,###,###,##0.00"/>
 					</h:outputText>
 				</td>
+				</s:fragment>
 				<td class="colb"></td>
 			</tr>
 		</a:repeat>

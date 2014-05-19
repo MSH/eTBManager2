@@ -195,7 +195,7 @@ public class QSPMedicineRow {
 		if(getUnitQtdForAmcCalc() == 0)
 			return new Long(0);
 		
-		return outOfStockForAmcCalc/getUnitQtdForAmcCalc();
+		return outOfStockForAmcCalc;
 	}
 	/**
 	 * @param outOfStockForAmcCalc the outOfStockForAmcCalc to set
@@ -256,11 +256,11 @@ public class QSPMedicineRow {
 	public Long getAmc() {
 		Long amc = new Long(0);
 		
-		if(getDispensedForAmcCalc() == 0 || getOutOfStockForAmcCalc() >= 90 || getUnitQtdForAmcCalc() == 0)
+		if(getDispensedForAmcCalc() == 0 || getOutOfStockAverage() >= 90 || getUnitQtdForAmcCalc() == 0)
 			return new Long(0);
 		
 		double disp = getDispensedForAmcCalc();
-		double days = 90 - getOutOfStockForAmcCalc();
+		double days = 90 - getOutOfStockAverage();
 		double result = disp / days;
 		
 		result = result * 30;
@@ -281,24 +281,40 @@ public class QSPMedicineRow {
 		Double months = new Double(0);
 		Double amc = new Double(getAmc());
 		Double closBal = new Double(getClosingBalance());
-		Double result;
 		
 		if(amc == 0)
 			return null;
 		
 		//Calculates the amount of months
-		months = closBal / amc;		
-		result = months;
+		months = closBal / amc;
+		months = roundRule(months);
 		
+		return months;
+	}
+	
+	public Double getOutOfStockAverage() {
+		Double out = new Double(getOutOfStockForAmcCalc());
+		Double unitsQtd = new Double(getUnitQtdForAmcCalc());
+		
+		if(unitsQtd == 0)
+			return new Double(0);
+	
+		out = outOfStockForAmcCalc/unitsQtd;
+		out = roundRule(out);
+		
+		return out;
+	}
+	
+	private Double roundRule(Double number){
 		//Round it down according to the rule. Ex. If 1,1 to 1,4 the result is 1, if 1,6 to minus than 1 the result is 1,5.
-		String afterPoint = months.toString();
-		String beforePoint = months.toString();
+		String afterPoint = number.toString();
+		String beforePoint = number.toString();
 		
 		if(afterPoint.indexOf(".") > -1){
 			afterPoint = afterPoint.substring(afterPoint.indexOf("."));
 			
 			if(afterPoint.equalsIgnoreCase(".0"))
-				return result;
+				return number;
 			
 			afterPoint = "0"+afterPoint;
 			beforePoint = beforePoint.substring(0, beforePoint.indexOf("."));
@@ -306,14 +322,14 @@ public class QSPMedicineRow {
 			//round after point value
 			Double afterPointD = Double.parseDouble(afterPoint);
 			if(afterPointD == 0.5)
-				result = Double.parseDouble(beforePoint) + afterPointD;
+				number = Double.parseDouble(beforePoint) + afterPointD;
 			if(afterPointD > 0 && afterPointD < 0.5)
-				result = Double.parseDouble(beforePoint);
+				number = Double.parseDouble(beforePoint);
 			if(afterPointD > 0.5 && afterPointD < 1)
-				result = Double.parseDouble(beforePoint) + 0.5;
+				number = Double.parseDouble(beforePoint) + 0.5;
 				
 		}
 		
-		return result;
+		return number;
 	}
 }
