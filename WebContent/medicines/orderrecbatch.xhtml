@@ -57,7 +57,9 @@
 		<tr style="background-color:#e0e0e0;">
 			<td>#{messages['Medicine']}</td>
 			<td>#{messages['OrderItem.shippedQuantity']}</td>
+			<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 			<td style="text-align:center;">#{messages['global.totalPrice']}</td>
+			</s:fragment>
 			<td width="200px;">#{messages['OrderItem.receivedQuantity']}</td>
 		</tr>
 
@@ -66,7 +68,9 @@
 				<div class="medicine-batch">#{it.item.medicine}</div>
 			</td>
 			<td style="text-align:center;">#{it.item.shippedQuantity}</td>
+			<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 			<td style="text-align:center;"><h:outputText value="#{it.item.totalPrice}"><f:convertNumber pattern="#,###,###,##0.00"/> </h:outputText></td>
+			</s:fragment>
 			<td>
 			</td>
 		</tr>
@@ -93,7 +97,7 @@
 			    </span>
 			  </h:column>
 
-			  <h:column>
+			  <h:column rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 			    #{messages['OrderItem.shippedQuantity']}: #{b.quantity}<br/>
 			    #{messages['global.unitPrice']}: <h:outputText value="#{b.batch.unitPrice}"><f:convertNumber pattern="#,###,###,##0.0000"/> </h:outputText> <br/>
 			    #{messages['global.totalPrice']}: <h:outputText value="#{b.batch.unitPrice * b.quantity}"><f:convertNumber pattern="#,###,###,##0.00"/></h:outputText><br/>

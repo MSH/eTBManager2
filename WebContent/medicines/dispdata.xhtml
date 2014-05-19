@@ -64,12 +64,13 @@
 			<b>#{s.source.name}</b>
 		</td></tr>
 		
-		<tr><th align="left">#{messages['Medicine']}
-		</th><th align="center">#{messages['Batch.expiryDate']}
-		</th><th align="right">#{messages['MedicineDispensing.quantity']}
-		</th><th align="right">#{messages['global.unitPrice']}
-		</th><th align="right">#{messages['global.totalPrice']}
-		</th>
+		<tr><th align="left">#{messages['Medicine']}</th>
+		<th align="center">#{messages['Batch.expiryDate']}</th>
+		<th align="right">#{messages['MedicineDispensing.quantity']}</th>
+		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
+		<th align="right">#{messages['global.unitPrice']}</th>
+		<th align="right">#{messages['global.totalPrice']}</th>
+		</s:fragment>
 		</tr>
 		<ui:repeat value="#{s.items}" var="it">
 		<tr bgcolor="#f3f3f0"><td>
@@ -84,6 +85,7 @@
 			</h:outputText>
 			</b>
 		</td>
+		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<td align="right">
 			<b><h:outputText value="#{it.item.unitPrice}">
 				<f:convertNumber pattern="#,###,##0.0000"/>
@@ -96,6 +98,7 @@
 			</h:outputText>
 			</b>
 		</td>
+		</s:fragment>
 		</tr>
 		
 		<ui:repeat value="#{it.item.batches}" var="b">

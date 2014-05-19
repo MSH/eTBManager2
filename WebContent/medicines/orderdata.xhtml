@@ -182,11 +182,13 @@
     	#{order.numDays}
     </s:decorate>
     
+    <s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
     <s:decorate template="/layout/display.xhtml" rendered="#{(order.status == 'RECEIVED') or (order.status == 'SHIPPED')}">
     	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
     	<h:outputText value="#{order.totalPrice}"><f:convertNumber pattern="#,###,###,##0.00"/> </h:outputText>
     </s:decorate>
-
+	</s:fragment>
+	
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['Order.shipContactName']}:</ui:define>
 		#{order.shipContactName}
@@ -276,7 +278,7 @@
 				</h:outputText>
 			</h:column>
 			
-			<h:column rendered="#{(order.status=='SHIPPED')or(order.status=='RECEIVED')}">
+			<h:column rendered="#{((order.status=='SHIPPED')or(order.status=='RECEIVED')) and s:hasRole('VIEW_MEDICINE_PRICES')}">
 			<f:facet name="header"><h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh" /></f:facet>
 				<h:outputText value="#{it.item.totalPrice}">
 					<f:convertNumber pattern="###,###,##0.00"/>
@@ -365,8 +367,10 @@
 				<th align="right">#{messages['Batch.numContainers']}</th>
 				<th align="right"><h:outputText value="#{messages['OrderItem.shippedQuantity']}" /></th>
 				<th align="right"><h:outputText value="#{messages['OrderItem.receivedQuantity']}" /></th>
+				<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 				<th align="right"><h:outputText value="#{messages['global.unitPrice']}" /></th>
 				<th align="right"><h:outputText value="#{messages['global.totalPrice']}" /></th>
+				</s:fragment>
 			</tr>
 			<a:repeat var="it" value="#{s.items}">
 				<tr class="highlight"><td class="col" style="height:25px;" colspan="3"><b>#{it.item.medicine}</b> <br/>
@@ -377,12 +381,14 @@
 					<td class="colr">
 						<h:outputText value="#{it.item.receivedQuantity}"><f:convertNumber pattern="#,###,###"/></h:outputText>
 					</td>
+					<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 					<td class="colr">
 						<h:outputText value="#{it.item.unitPrice}"><f:convertNumber pattern="#,###,##0.00"/></h:outputText>
 					</td>
 					<td class="colr">
 						<h:outputText value="#{it.item.totalPrice}"><f:convertNumber pattern="#,###,##0.00"/></h:outputText>
 					</td>
+					</s:fragment>
 				</tr>
 				<a:repeat value="#{it.item.batches}" var="b">
 					<tr class="lin2">
@@ -412,6 +418,7 @@
 								<f:convertNumber pattern="#,###,##0"/>
 							</h:outputText>
 						</td>
+						<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 						<td class="colrb">
 							<h:outputText value="#{b.batch.unitPrice}" >
 								<f:convertNumber pattern="#,###,##0.00"/>
@@ -422,6 +429,7 @@
 								<f:convertNumber pattern="#,###,##0.00"/>
 							</h:outputText>
 						</td>
+						</s:fragment>
 					</tr>
 				</a:repeat>
 				

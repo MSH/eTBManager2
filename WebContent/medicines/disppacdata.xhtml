@@ -96,14 +96,14 @@
     		#{r.quantity}
     	</h:column>
 
-    	<h:column>
+    	<h:column rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
     		<f:facet name="header">
     			<h:outputText value="#{messages['DrugDispensing.price']}" styleClass="colrh" />
     		</f:facet>
     		#{r.price}
     	</h:column>
 
-    	<h:column>
+    	<h:column rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
     		<f:facet name="header">
     			<h:outputText value="#{messages['DrugDispensing.totalPrice']}" styleClass="colrh" />
     		</f:facet>

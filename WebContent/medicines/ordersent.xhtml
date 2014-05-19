@@ -109,10 +109,12 @@
 						<td class="col">
 							#{messages['Movement.quantity']} : 
 								<h:outputText value="#{b.quantity}"><f:convertNumber pattern="#,###,###"/></h:outputText><br/>
+							<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 							#{messages['global.unitPrice']} : 
 								<h:outputText value="#{b.batch.unitPrice}"><f:convertNumber pattern="#,###,##0.0000"/></h:outputText><br/>
 							#{messages['global.totalPrice']} : 
 								<h:outputText value="#{b.quantity * b.batch.unitPrice}"><f:convertNumber pattern="#,###,##0.00"/></h:outputText>
+							</s:fragment>
 						</td></tr>
 					</a:repeat>
 					</table>

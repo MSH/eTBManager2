@@ -64,7 +64,7 @@
   	<div class="text-small">#{r.source.name}</div>
 </h:column>
 
-<h:column>
+<h:column rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
   	<f:facet name="header">
   		<s:link value="#{messages['global.totalPrice']}" styleClass="colrh" >
   			<f:param name="order" value="#{medicineReceivings.order=='dr.receivingDate'?'dr.receivingDate desc':'dr.receivingDate'}" />

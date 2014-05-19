@@ -69,20 +69,24 @@
     	<h:outputText value="#{medicineReceiving.receivingDate}"  converter="localeDateConverter" />
     </s:decorate>
 
+	<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
     	<h:outputText value="#{medicineReceiving.totalPrice}" >
 			<f:convertNumber pattern="#,###,##0.00"/>
     	</h:outputText>
     </s:decorate>
-
+	</s:fragment>
+	
 		<table width="100%" class="table1">
 			<tr><th>#{messages['Medicine']}</th>
 				<th>#{messages['Batch.expiryDate']}</th>
 				<th align="right">#{messages['Batch.numContainers']}</th>
 				<th align="right">#{messages['Movement.quantity']}</th>
+				<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 				<th align="right">#{messages['global.unitPrice']}</th>
 				<th align="right">#{messages['global.totalPrice']}</th>
+				</s:fragment>
 			</tr>
 			<a:repeat value="#{medicineReceivingHome.medicines}" var="it">
 				<tr class="highlight">
@@ -95,6 +99,8 @@
 							<f:convertNumber pattern="#,###,###,##0"/>
 						</h:outputText>
 						</td>
+					
+					<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 					<td class="colrb">
 							<h:outputText value="#{it.item.unitPrice}" >
 								<f:convertNumber pattern="#,###,##0.00"/>
@@ -105,6 +111,7 @@
 							<f:convertNumber pattern="#,###,##0.00"/>							
 						</h:outputText>
 					</td>
+					</s:fragment>
 				</tr>
 				
 				<a:repeat value="#{it.batches}" var="b">
@@ -127,10 +134,12 @@
 						</td>
 						<td class="colrb">
 							<h:outputText value="#{b.quantityReceived}"><f:convertNumber pattern="#,###,##0" /></h:outputText></td>
+						<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 						<td class="colrb">
 							<h:outputText value="#{b.unitPrice}"><f:convertNumber pattern="#,###,##0.00" /></h:outputText></td>
 						<td class="colrb">
 							<h:outputText value="#{b.totalPrice}"><f:convertNumber pattern="#,###,##0.00" /></h:outputText></td>
+						</s:fragment>
 					</tr>
 				</a:repeat>
 			</a:repeat>

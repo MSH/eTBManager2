@@ -11,7 +11,7 @@
 	<ui:define name="label">#{tbunitselection.labelAdminUnit}:</ui:define>
 	<ui:param name="labelstyle" value="#{labelstyle}" />
 	<h:selectOneMenu id="#{empty idcbselau ? 'cbselau' : idcbselau}" value="#{tbunitselection.adminUnit}" required="#{required}">
-		<s:selectItems var="it" value="#{tbunitselection.adminUnits}" noSelectionLabel="-" label="#{it.name}"/>
+		<s:selectItems var="it" value="#{tbunitselection.adminUnits}" noSelectionLabel="#{empty noSelUseAll ? '-' : (noSelUseAll ? messages['form.noselection'] : '-')}" label="#{it.name}"/>
 		<s:convertEntity />
 		<a:support event="onchange" ajaxSingle="true" reRender="pnlunits,#{auRerender}" focus="cbunits" />
 		<ui:insert name="eventsAu" />
@@ -30,7 +30,7 @@
 <s:decorate template="/layout/#{required or redasterisk?'edit':'display'}.xhtml" rendered="#{tbunitselection.adminUnit != null}">
 	<ui:define name="label">#{empty unitLabel ? messages['form.name'] : unitLabel}:</ui:define>
 	<h:selectOneMenu id="#{empty idcbunits ? 'cbunits' : idcbunits}" value="#{tbunitselection.tbunit}" required="#{required}" rendered="#{!tbunitselection.readOnly}">
-        <s:selectItems value="#{tbunitselection.options}" var="it" label="#{it.name}" noSelectionLabel="-" />
+        <s:selectItems value="#{tbunitselection.options}" var="it" label="#{it.name}" noSelectionLabel="#{empty noSelUseAll ? '-' : (noSelUseAll ? messages['form.noselection'] : '-')}" />
       	<s:convertEntity/>
       	<ui:insert name="events" />
     </h:selectOneMenu>

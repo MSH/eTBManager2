@@ -87,13 +87,16 @@
 			<b>#{s.source.name}</b>
 		</td></tr>
 		
-		<tr><th align="left">#{messages['Medicine']}
-		</th><th align="center">#{messages['Batch.expiryDate']}
-		</th><th align="right">#{messages['OrderItem.shippedQuantity']}
-		</th><th align="right">#{messages['global.unitPrice']}
-		</th><th align="right">#{messages['global.totalPrice']}
-		</th><th align="right">#{messages['OrderItem.receivedQuantity']}
-		</th></tr>
+		<tr>
+		<th align="left">#{messages['Medicine']}</th>
+		<th align="center">#{messages['Batch.expiryDate']}</th>
+		<th align="right">#{messages['OrderItem.shippedQuantity']}</th>
+		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
+		<th align="right">#{messages['global.unitPrice']}</th>
+		<th align="right">#{messages['global.totalPrice']}</th>
+		</s:fragment>
+		<th align="right">#{messages['OrderItem.receivedQuantity']}</th>
+		</tr>
 		<ui:repeat value="#{s.items}" var="it">
 		<tr bgcolor="#f3f3f0"><td colspan="2">
 			<div class="medicine-icon" style="float:left"/>
@@ -105,6 +108,7 @@
 			</h:outputText>
 			</b>
 		</td>
+		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<td align="right">
 			<b><h:outputText value="#{it.unitPrice}">
 				<f:convertNumber pattern="#,###,##0.0000"/>
@@ -117,6 +121,7 @@
 			</h:outputText>
 			</b>
 		</td>
+		</s:fragment>
 		<td>
 		</td>
 		</tr>
@@ -136,6 +141,7 @@
 						<f:convertNumber pattern="#,###,##0"/>
 					</h:outputText>
 				</td>
+				<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 				<td align="right" class="colb">
 					<h:outputText value="#{b.batch.unitPrice}">
 						<f:convertNumber pattern="#,###,##0.0000"/>
@@ -146,6 +152,7 @@
 						<f:convertNumber pattern="#,###,###,##0.00"/>
 					</h:outputText>
 				</td>
+				</s:fragment>
 				<td align="right" class="colb" bgcolor="#f3f3f0">
 					<h:inputText id="qtdrec" value="#{b.quantityReceived}" required="true">
 					</h:inputText>
