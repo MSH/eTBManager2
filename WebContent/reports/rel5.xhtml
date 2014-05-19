@@ -87,7 +87,7 @@
 	<td class="colb">
 		<h:outputText value="#{it.endTreatmentDate}" converter="localeDateConverter" />
 	</td>
-	<a:repeat var="p" value="#{it.prices}">
+	<a:repeat var="p" value="#{it.prices}" rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<td class="colrb">
 			<h:outputText value="#{p}">
 				<f:convertNumber pattern="#,###,##0.00"/>
@@ -106,7 +106,7 @@
 	<td colspan="4" class="colb" style="font-weight:bold;height:24px;background-color:#f0f0f0;text-transform:uppercase;">
 		#{messages['global.total']}
 	</td>
-	<a:repeat var="p" value="#{treatmentCostReport.total.prices}">
+	<a:repeat var="p" value="#{treatmentCostReport.total.prices}" rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<td class="colrb" style="font-weight:bold;height:24px;background-color:#f0f0f0;">
 			<h:outputText value="#{p}" >
 				<f:convertNumber pattern="#,###,##0.00"/>

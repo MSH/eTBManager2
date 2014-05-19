@@ -88,14 +88,14 @@
 		</h:outputText>
 	</h:column>
 
-	<h:column>
+	<h:column rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<f:facet name="header"><h:outputText value="#{messages['global.unitPrice']}" styleClass="colrh" /></f:facet>
 		<h:outputText value="#{m.unitPrice}">
 			<f:convertNumber pattern="#,###,##0.0000"/>
 		</h:outputText>
 	</h:column>
 
-	<h:column>
+	<h:column rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<f:facet name="header"><h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh" /></f:facet>
 		<h:outputText value="#{m.totalPrice}">
 			<f:convertNumber pattern="#,###,##0.00"/>
@@ -144,10 +144,12 @@
 		</th>
 		<th class="colr">#{messages['meds.movs.movqtd']}
 		</th>
+		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<th class="colr">#{messages['global.unitPrice']}
 		</th>
 		<th class="colr">#{messages['global.totalPrice']}
 		</th>
+		</s:fragment>
 		<th class="colr">#{messages['meds.movs.stockqtty']}
 		</th>
 	</tr>
@@ -182,6 +184,7 @@
 				<f:convertNumber pattern="#,###,###"/>
 			</h:outputText>
 		</td>
+		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<td class="colrb"><h:outputText value="#{m.item.batch.unitPrice}">
 				<f:convertNumber pattern="#,###,##0.0000"/>
 			</h:outputText>
@@ -190,6 +193,7 @@
 				<f:convertNumber pattern="#,###,##0.00"/>
 			</h:outputText>
 		</td>
+		</s:fragment>
 		<s:fragment rendered="#{m.spaned}">
 		<td class="colrb" rowspan="#{m.rowSpan}"><b><h:outputText value="#{m.item.movement.stockQuantity}">
 			<f:convertNumber pattern="#,###,###"/>

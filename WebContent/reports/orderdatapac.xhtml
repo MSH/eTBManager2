@@ -81,10 +81,13 @@
     	#{order.numDays}
     </s:decorate>
     
+    <s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
     <s:decorate template="/layout/display.xhtml" rendered="#{(order.status == 'RECEIVED') or (order.status == 'SHIPPED')}">
     	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
     	<h:outputText value="#{order.totalPrice}"><f:convertNumber pattern="#,###,###,##0.00"/> </h:outputText>
     </s:decorate>
+	</s:fragment>
+	
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['Order.shipContactName']}:</ui:define>
 		#{order.shipContactName}

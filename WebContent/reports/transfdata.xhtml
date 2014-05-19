@@ -75,10 +75,12 @@
 		<tr><th align="left">#{messages['Medicine']}
 		</th><th align="center">#{messages['Batch.manufacturer']}
 		</th><th align="center">#{messages['Batch.expiryDate']}
-		</th><th align="right">#{messages['OrderItem.shippedQuantity']}
-		</th><th align="right">#{messages['global.unitPrice']}
+		</th><th align="right">#{messages['OrderItem.shippedQuantity']}</th>
+		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
+		<th align="right">#{messages['global.unitPrice']}
 		</th><th align="right">#{messages['global.totalPrice']}
 		</th>
+		</s:fragment>
 		<th align="right">#{messages['OrderItem.receivedQuantity']}
 		</th>
 		</tr>
@@ -92,6 +94,7 @@
 			</h:outputText>
 			</b>
 		</td>
+		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<td align="right">
 			<b><h:outputText value="#{it.unitPrice}">
 				<f:convertNumber pattern="#,###,##0.0000"/>
@@ -104,6 +107,7 @@
 			</h:outputText>
 			</b>
 		</td>
+		</s:fragment>
 		<td align="right">
 			<b><h:outputText value="#{it.quantityReceived}">
 				<f:convertNumber pattern="#,###,##0"/>
@@ -128,6 +132,7 @@
 						<f:convertNumber pattern="#,###,##0"/>
 					</h:outputText>
 				</td>
+				<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 				<td align="right" class="colb">
 					<h:outputText value="#{b.batch.unitPrice}">
 						<f:convertNumber pattern="#,###,##0.0000"/>
@@ -138,6 +143,7 @@
 						<f:convertNumber pattern="#,###,###,##0.00"/>
 					</h:outputText>
 				</td>
+				</s:fragment>
 				<td class="colb" align="right">
 					<h:outputText value="#{b.quantityReceived}">
 						<f:convertNumber pattern="#,###,##0"/>

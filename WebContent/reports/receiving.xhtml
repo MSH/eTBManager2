@@ -29,13 +29,15 @@
     	<h:outputText value="#{medicineReceiving.receivingDate}"  converter="localeDateConverter" />
     </s:decorate>
 
+	<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
     	<h:outputText value="#{medicineReceiving.totalPrice}" >
 			<f:convertNumber pattern="#,###,##0.00"/>
     	</h:outputText>
     </s:decorate>
-
+	</s:fragment>
+	
 	<table width="100%" class="table1" >
 		<tr><th align="left">#{messages['Medicine']}/<br/>
 				#{messages['Batch.batchNumber']}</th>
@@ -43,8 +45,10 @@
 				<th><h:outputText value="#{messages['Batch.expiryDate']}" styleClass="colch" /></th>
 				<th align="right">#{messages['Batch.numContainers']}</th>
 				<th><h:outputText value="#{messages['Movement.quantity']}" styleClass="colrh" /></th>
+				<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 				<th><h:outputText value="#{messages['global.unitPrice']}" styleClass="colrh" /></th>
 				<th><h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh" /></th>
+				</s:fragment>
 		</tr>
 		<ui:repeat value="#{medicineReceiving.medicines}" var="it">
 				<tr class="colheader">
@@ -59,6 +63,7 @@
 						</h:outputText>
 						</b>
 					</td>
+					<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 					<td class="colr" >
 						<b>
 						<h:outputText value="#{it.unitPrice}">
@@ -73,6 +78,7 @@
 						</h:outputText>
 						</b>
 					</td>
+					</s:fragment>
 				</tr>
 				<ui:repeat value="#{it.batches}" var="b">
 				<tr class="lin2b">
@@ -96,6 +102,7 @@
 				<td class="colrb">
 					<h:outputText value="#{b.quantityReceived}"><f:convertNumber pattern="###,###,###"/></h:outputText>
 				</td>
+				<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 				<td class="colrb">
 					<h:outputText value="#{b.unitPrice}">
 									<f:convertNumber pattern="#,###,##0.0000"/>
@@ -106,9 +113,11 @@
 						<f:convertNumber pattern="#,###,##0.00"/>
 					</h:outputText>
 				</td>
+				</s:fragment>
 				</tr>
 				</ui:repeat>
 		</ui:repeat>
+		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<tr><th colspan="7" align="left">
 				<b>#{messages['global.totalPrice']}</b>
 		</th>
@@ -117,6 +126,7 @@
 					<f:convertNumber pattern="#,###,##0.00"/>
    			</h:outputText>
 		</th></tr>
+		</s:fragment>
 	</table>
 </ui:define>
 
