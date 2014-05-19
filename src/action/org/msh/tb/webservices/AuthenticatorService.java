@@ -76,8 +76,10 @@ public class AuthenticatorService {
 			AuthenticatorBean authenticator = (AuthenticatorBean)Component.getInstance("authenticator");
 			UserWorkspace userWorkspace = authenticator.validateUserPassword(username, password, null);
 
-			if (userWorkspace == null)
+			if (userWorkspace == null) {
 				resp.setErrorno(Response.RESP_AUTHENTICATION_FAIL);
+				return resp;
+			}
 
 			EntityManager em = (EntityManager)Component.getInstance("entityManager");
 			List<Object[]> lst = em.createQuery("select w.id, w.name.name1, w.name.name2, uw.tbunit.name.name1 " +

@@ -8,6 +8,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.exams.ExamHome;
+import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.na.entities.ExamHIV_NA;
 
 
@@ -29,7 +30,7 @@ public class ExamHIVHome extends ExamHome<ExamHIV_NA> {
 		ExamHIV_NA examHivNa = getInstance();
 		
 		examHivNa.setTbcase(caseHome.getInstance());
-		if(examHivNa.getResult().toString()=="NEGATIVE"){
+		if (examHivNa.getResult() == HIVResult.NEGATIVE) {
 			examHivNa.setCd4Count(null);
 			examHivNa.setCd4StDate(null);
 			examHivNa.setARTstarted(false);
@@ -38,8 +39,8 @@ public class ExamHIVHome extends ExamHome<ExamHIV_NA> {
 			examHivNa.setCPTstarted(false);
 			examHivNa.setStartedCPTdate(null);	
 		}
-		entityManager.persist(examHivNa);
-		return "persisted";
+		
+		return super.persist();
 	}
 	
 }
