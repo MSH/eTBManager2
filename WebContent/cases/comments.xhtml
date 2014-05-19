@@ -22,7 +22,7 @@
 				</div>
 				<a:commandLink style="float:right" 
 					styleClass="button-alt"
-					onclick="if (jQuery('#comtext textarea').val()=='') {jQuery('#comvalue').show();return false;} disableButton(this);" 
+					onclick="if (!validateAddComment(this)) return false;" 
 					action="#{caseCommentsHome.addComment}" 
 					reRender="#{panel}pnlComments" >
 					<span>#{messages['cases.comments.add']}</span>
@@ -30,6 +30,19 @@
 			</s:fragment>
 			</td></tr>
 			</table>
+		
+<script type="text/javascript">
+function validateAddComment(btn) {
+	var el = jQuery(btn).closest('td');
+	if (jQuery('textarea', el).val() == '') {
+		jQuery('#comvalue', el).show();
+		return false;
+	}
+	if (!disableButton(btn)) {return false;}
+	jQuery('#comvalue', el).hide();
+	return true;
+}
+</script>
 		
 		<a:jsFunction name="deleteComment" reRender="#{panel}pnlComments,messages" ajaxSingle="true" action="#{caseCommentsHome.remove}">
 			<a:actionparam name="param1" assignTo="#{caseCommentsHome.id}" converter="javax.faces.Integer" />
