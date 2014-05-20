@@ -7,6 +7,12 @@ import org.msh.tb.client.shared.model.CFilter;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
+/**
+ * Panel where the filter is displayed
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 public class FilterPanel extends HoverPanel {
 
 	private Label label;

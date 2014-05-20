@@ -1,8 +1,11 @@
 package org.msh.tb.client.reports.filters;
 
+import java.util.Date;
+
 import org.msh.tb.client.reports.MainPage;
 import org.msh.tb.client.shared.model.CFilter;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -65,7 +68,9 @@ public class PeriodFilter extends FilterWidget {
 		ListBox lb = new ListBox();
 		lb.setVisibleItemCount(1);
 
-		int year = 2013;
+		Date dt = MainPage.instance().getReportUI().getCurrentDate();
+		String syear = DateTimeFormat.getFormat("yyyy").format(dt);
+		int year = Integer.parseInt(syear);
 		lb.addItem("-", "0");
 		for (int i = year; i > year-20; i--) {
 			String s = Integer.toString(i);

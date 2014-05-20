@@ -632,4 +632,12 @@ public class MainPage extends Composite implements StandardEventHandler {
 		return messages;
 	}
 	
+	
+	/**
+	 * Return information about the report sent from the server
+	 * @return instance of {@link CReportUI} class
+	 */
+	public CReportUI getReportUI() {
+		return reportUI;
+	}
 }

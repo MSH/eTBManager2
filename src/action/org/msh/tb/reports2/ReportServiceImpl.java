@@ -31,6 +31,7 @@ import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.reports2.variables.DateFieldVariable;
+import org.msh.utils.date.DateUtils;
 
 
 /**
@@ -108,6 +109,8 @@ public class ReportServiceImpl implements ReportService {
 
 		CReportUI rep = new CReportUI();
 		rep.setGroups( lst );
+		// send the current date in the server to the client
+		rep.setCurrentDate(DateUtils.getDate());
 
 		return rep;
 	}
