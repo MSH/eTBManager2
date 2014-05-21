@@ -92,6 +92,7 @@ public class ReportResources {
 		add(grp, new EnumFieldVariable("gender", "Gender", "patient.gender", Gender.class));
 		add(grp, new EnumFieldVariable("nat", "Nationality", "tbcase.nationality", Nationality.class, "#{globalLists.nationalities}"));
 		add(grp, new EnumFieldVariable("classif", "CaseClassification", "tbcase.classification", CaseClassification.class));
+		add(grp, new TreatOutcomeVariable());
 		add(grp, new EnumFieldVariable("state", "CaseState", "tbcase.state", CaseState.class, "#{globalLists.caseStates}"));
 		add(grp, new SuspectConfirmedVariable());
 		add(grp, new EnumFieldVariable("val", "ValidationState", "tbcase.validationState", ValidationState.class));
@@ -101,9 +102,11 @@ public class ReportResources {
 		add(grp, new ExtrapulmonarVariable());
 		add(grp, new EnumFieldVariable("pt", "PatientType", "tbcase.patientType", PatientType.class, "#{globalLists.patientTypes}"));
 		add(grp, new DateFieldVariable("regdate", "TbCase.registrationDate", "tbcase.registrationDate", true));
+		add(grp, new DateFieldVariable("regdateM", "#{messages['TbCase.registrationDate']} (#{messages['global.months']})", "tbcase.registrationDate", false));
 		add(grp, new DateFieldVariable("diagdate", "TbCase.diagnosisDate", "tbcase.diagnosisDate", true));
+		add(grp, new DateFieldVariable("diagdateM", "#{messages['TbCase.diagnosisDate']} (#{messages['global.months']})", "tbcase.diagnosisDate", false));
 		add(grp, new DateFieldVariable("outdate", "TbCase.outcomeDate", "tbcase.outcomeDate", true));
-		add(grp, new TreatOutcomeVariable());
+		add(grp, new DateFieldVariable("outdateM", "#{messages['TbCase.outcomeDate']} (#{messages['global.months']})", "tbcase.outcomeDate", false));
 		add(grp, new AgeRangeVariable());
 		add(grp, new AdminUnitVariable("notifaddr", "Address", "tbcase.notif_adminunit_id"));
 		add(grp, new SideEffectVariable("sideeffect"));
