@@ -104,9 +104,11 @@ public class SqlBuilder implements SQLDefs {
 		varJoins.clear();
 
 		// include filters in the SQL
-		for (Filter filter: filters.keySet()) {
-			FilterValue fvalue = filters.get(filter);
-			filter.prepareFilterQuery(this, fvalue.getComparator(), fvalue.getValue());
+		if (filters != null) {
+			for (Filter filter: filters.keySet()) {
+				FilterValue fvalue = filters.get(filter);
+				filter.prepareFilterQuery(this, fvalue.getComparator(), fvalue.getValue());
+			}
 		}
 
 		if (variables.size() > 0) {
