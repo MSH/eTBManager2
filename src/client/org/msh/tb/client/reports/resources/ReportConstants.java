@@ -61,4 +61,18 @@ public interface ReportConstants extends Constants {
 	@Key("form.navprevious")
 	String navegPrevious();
 	
+	@Key("FixedPeriod.LAST_3MONTHS")
+	String fixedPeriodLAST_3MONTHS();
+
+	@Key("FixedPeriod.LAST_6MONTHS")
+	String fixedPeriodLAST_6MONTHS();
+
+	@Key("FixedPeriod.LAST_12MONTHS")
+	String fixedPeriodLAST_12MONTHS();
+
+	@Key("FixedPeriod.PREVIOUS_QUARTER")
+	String fixedPeriodPREVIOUS_QUARTER();
+
+	@Key("FixedPeriod.PREVIOUS_YEAR")
+	String fixedPeriodPREVIOUS_YEAR();
 }
