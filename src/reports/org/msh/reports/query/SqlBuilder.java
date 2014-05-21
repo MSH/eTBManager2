@@ -102,6 +102,7 @@ public class SqlBuilder implements SQLDefs {
 		fieldList = null;
 		varRestrictions.clear();
 		varJoins.clear();
+//		masterTable.removeAllJoins();
 
 		// include filters in the SQL
 		if (filters != null) {

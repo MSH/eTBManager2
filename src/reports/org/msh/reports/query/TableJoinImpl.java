@@ -67,6 +67,14 @@ public class TableJoinImpl implements TableJoin {
 	
 	
 	public TableJoinImpl join(String field, String newTable, String newField) {
+		// check if join is already there
+		if (joins != null) {
+			for (TableJoinImpl join: joins) {
+				if (join.getTableField().equals(newField) && join.getTableName().equals(newTable) && join.getParentField().equals(field)) {
+					return join;
+				}
+			}
+		}
 		TableJoinImpl join = new TableJoinImpl(builder, newTable, newField, this, field);
 		addJoin(join);
 		return join;
@@ -138,6 +146,14 @@ public class TableJoinImpl implements TableJoin {
 			}
 		}
 		return null;
+	}
+	
+	
+	/**
+	 * Remove all joins of the table
+	 */
+	public void removeAllJoins() {
+		joins = null;
 	}
 	
 	

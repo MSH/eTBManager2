@@ -44,6 +44,7 @@ import org.msh.tb.reports2.variables.RegimenVariable;
 import org.msh.tb.reports2.variables.ResistancePatternVariable;
 import org.msh.tb.reports2.variables.SideEffectVariable;
 import org.msh.tb.reports2.variables.SuspectConfirmedVariable;
+import org.msh.tb.reports2.variables.TreatmentSourceVariable;
 import org.msh.tb.reports2.variables.TypeTBCaseVariable;
 import org.msh.tb.reports2.variables.TreatOutcomeVariable;
 import org.msh.tb.reports2.variables.HivCptArtVariable.ReportType;
@@ -121,11 +122,14 @@ public class ReportResources {
 	protected ReportGroup addTreatmentVariables() {
 		ReportGroup grp = addGroup("cases.details.treatment");
 		add(grp, new DateFieldVariable("initreat", "TbCase.iniTreatmentDate", "tbcase.initreatmentdate", true));
+		addVariable(grp, new DateFieldVariable("initreatM", "#{messages['TbCase.iniTreatmentDate']} (#{messages['global.months']})", "tbcase.initreatmentdate", false));
 		add(grp, new DateFieldVariable("endtreat", "TbCase.endTreatmentDate", "tbcase.endtreatmentdate", true));
+		addVariable(grp, new DateFieldVariable("endtreatM", "#{messages['TbCase.endTreatmentDate']} (#{messages['global.months']})", "tbcase.endtreatmentdate", false));
 		add(grp, new MonthOfTreatVariable());
 		add(grp, new RegimenVariable());
 		add(grp, new RegimenTypeVariable());
 		add(grp, new PrescMedicineVariable());
+		add(grp, new TreatmentSourceVariable());
 		return grp;
 	}
 	
