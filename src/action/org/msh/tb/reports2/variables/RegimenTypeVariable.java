@@ -20,7 +20,7 @@ public class RegimenTypeVariable extends VariableImpl {
 	 */
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
-		def.addField("tbcase.regimen_id is not null");
+		def.select("tbcase.regimen_id is not null");
 		def.addRestriction("tbcase.initreatmentdate is not null");
 	}
 

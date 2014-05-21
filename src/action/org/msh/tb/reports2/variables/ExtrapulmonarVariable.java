@@ -32,7 +32,7 @@ public class ExtrapulmonarVariable extends FieldValueVariable {
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
 		super.prepareVariableQuery(def, iteration);
-		def.addField("tbcase.extrapulmonary2_id");
+		def.select("tbcase.extrapulmonary2_id");
 		def.addRestriction("tbcase.infectionSite in (" + InfectionSite.BOTH.ordinal() + "," + InfectionSite.EXTRAPULMONARY.ordinal() + ")");
 	}
 

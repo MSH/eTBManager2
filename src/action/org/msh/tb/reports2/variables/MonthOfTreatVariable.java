@@ -21,7 +21,7 @@ public class MonthOfTreatVariable extends VariableImpl {
 	 */
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
-		def.addField("timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate)");
+		def.select("timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate)");
 		def.addRestriction("tbcase.endtreatmentdate is not null");
 	}
 

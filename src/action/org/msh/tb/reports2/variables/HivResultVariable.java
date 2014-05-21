@@ -40,7 +40,7 @@ public class HivResultVariable extends EnumFieldVariable {
 
 		addCommonRestrictions(def, res);
 		
-		def.addField("'" + Integer.toString(res.ordinal() + 1) + "'");
+		def.select("'" + Integer.toString(res.ordinal() + 1) + "'");
 	}
 
 	

@@ -17,7 +17,7 @@ public class SideEffectVariable extends FieldValueVariable {
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
 		// condition for the side effect join
-		String tbl = def.addJoin("casesideeffect", "case_id", "tbcase", "id").getAlias();
+		String tbl = def.table("tbcase").join("id", "casesideeffect.case_id").getAlias();
 		def.addRestriction(tbl + ".id = (select min(aux.id) from casesideeffect aux " +
 				"where aux.sideeffect_id = " + tbl + ".sideeffect_id and aux.case_id = " + tbl + ".case_id)");
 
@@ -38,7 +38,7 @@ public class SideEffectVariable extends FieldValueVariable {
 	@Override
 	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
 			Object value) {
-		def.addJoin("casesideeffect", "case_id", "tbcase", "id");
+		def.table("tbcase").join("id", "casesideeffect.case_id");
 		super.prepareFilterQuery(def, oper, value);
 	}
 

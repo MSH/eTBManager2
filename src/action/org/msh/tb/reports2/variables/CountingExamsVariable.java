@@ -22,7 +22,7 @@ public class CountingExamsVariable extends CountingVariable {
 	 */
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
-		def.addField("'" + Integer.toString(iteration + 1) + "'");
+		def.select("'" + Integer.toString(iteration + 1) + "'");
 		addCommonRestrictions(def, iteration + 1);
 	}
 
@@ -33,19 +33,19 @@ public class CountingExamsVariable extends CountingVariable {
 	protected void addCommonRestrictions(SQLDefs def, int iteration) {
 		switch (iteration) {
 		case KEY_MICROSCOPY:
-			def.addJoin("exammicroscopy", "case_id", "tbcase", "id");
+			def.join("exammicroscopy.case_id", "tbcase.id");
 			break;
 		case KEY_XPERT:
-			def.addJoin("examxpert", "case_id", "tbcase", "id");
+			def.join("examxpert.case_id", "tbcase.id");
 			break;
 		case KEY_CULTURE:
-			def.addJoin("examculture", "case_id", "tbcase", "id");
+			def.join("examculture.case_id", "tbcase.id");
 			break;
 		case KEY_DST:
-			def.addJoin("examdst", "case_id", "tbcase", "id");
+			def.join("examdst.case_id", "tbcase.id");
 			break;
 		case KEY_HIV:
-			def.addJoin("examhiv", "case_id", "tbcase", "id");
+			def.join("examhiv.case_id", "tbcase.id");
 			break;
 		default:
 			break;

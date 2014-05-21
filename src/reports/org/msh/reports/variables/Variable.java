@@ -1,5 +1,6 @@
 package org.msh.reports.variables;
 
+import org.msh.reports.ReportElement;
 import org.msh.reports.query.SQLDefs;
 
 /**
@@ -9,19 +10,7 @@ import org.msh.reports.query.SQLDefs;
  * @author Ricardo Memoria
  *
  */
-public interface Variable {
-
-	/**
-	 * Internal name of the variable. Usually it's the field name to be returned
-	 * @return
-	 */
-	String getName();
-	
-	/**
-	 * Display name of the variable
-	 * @return
-	 */
-	String getLabel();
+public interface Variable extends ReportElement {
 
 	/**
 	 * Prepare the query to return the data necessary to be handled by the variable. 
@@ -111,4 +100,20 @@ public interface Variable {
 	 * returns false if the total doesn't exist
 	 */
 	boolean isTotalEnabled();
+	
+	
+	/**
+	 * Return the unit of measure returned by the variable. Example, patients, cases, exams, etc.
+	 * Object can be anything that represents this unit. It's basically used to compare
+	 * if a variable is compatible with another variable
+	 * @return unit type
+	 */
+	Object getUnitType();
+	
+	
+	/**
+	 * Return the label of the units used in the variable to measure the numbers returned
+	 * @return display label of the units used by the variable
+	 */
+	String getUnitTypeLabel();
 }

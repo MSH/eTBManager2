@@ -48,7 +48,7 @@ public class TypeTBCaseVariable extends VariableImpl {
 			throw new IllegalArgumentException("Iteration not expected: " + iteration);
 		}
 		
-		def.addField("'" + key + "'");
+		def.select("'" + key + "'");
 		addRestrictions(def, key);
 	}
 

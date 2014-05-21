@@ -18,7 +18,7 @@ public class LabMethodVariable extends FieldValueVariable {
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
 		// add a join with the exam table to the tbcase table
 		String s[] = getFieldName().split("\\.");
-		def.addLeftJoin(s[0], "case_id", "tbcase", "id").getAlias();
+		def.table("tbcase").leftJoin("id", s[0] + ".case_id").getAlias();
 
 		super.prepareVariableQuery(def, iteration);
 	}
@@ -31,7 +31,7 @@ public class LabMethodVariable extends FieldValueVariable {
 			Object value) {
 		// add a join with the exam table to the tbcase table
 		String s[] = getFieldName().split("\\.");
-		def.addLeftJoin(s[0], "case_id", "tbcase", "id").getAlias();
+		def.table("tbcase").leftJoin("id", s[0] + ".case_id").getAlias();
 
 		super.prepareFilterQuery(def, oper, value);
 	}

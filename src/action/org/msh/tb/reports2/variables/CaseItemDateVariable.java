@@ -16,7 +16,8 @@ public class CaseItemDateVariable extends DateFieldVariable {
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
 		String s[] = getFieldName().split("\\.");
-		def.addJoin(s[0], "case_id", "tbcase", "id");
+		
+		def.join(s[0] + ".case_id", "tbcase.id");
 		super.prepareVariableQuery(def, iteration);
 	}
 
@@ -27,7 +28,9 @@ public class CaseItemDateVariable extends DateFieldVariable {
 	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
 			Object value) {
 		String s[] = getFieldName().split("\\.");
-		def.addJoin(s[0], "case_id", "tbcase", "id");
+		
+		def.join(s[0] + ".case_id", "tbcase.id");
+//		def.addJoin(s[0], "case_id", "tbcase", "id");
 		super.prepareFilterQuery(def, oper, value);
 	}
 

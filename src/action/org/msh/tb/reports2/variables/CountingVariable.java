@@ -16,7 +16,7 @@ public class CountingVariable extends VariableImpl {
 	 */
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
-		def.addField("1");
+		def.select("1");
 	}
 
 	/* (non-Javadoc)

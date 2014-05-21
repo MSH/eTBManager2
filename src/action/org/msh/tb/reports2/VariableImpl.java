@@ -56,14 +56,6 @@ public class VariableImpl implements Variable, Filter {
 //	public VariableImpl(String id, String keylabel, String fieldName)
 	
 	/* (non-Javadoc)
-	 * @see org.msh.reports.variables.Variable#getName()
-	 */
-	@Override
-	public String getName() {
-		return fieldName;
-	}
-
-	/* (non-Javadoc)
 	 * @see org.msh.reports.variables.Variable#getLabel()
 	 */
 	@Override
@@ -79,7 +71,7 @@ public class VariableImpl implements Variable, Filter {
 	 */
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
-		def.addField(fieldName);
+		def.select(fieldName);
 	}
 
 

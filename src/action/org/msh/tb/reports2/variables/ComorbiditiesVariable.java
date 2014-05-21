@@ -19,7 +19,8 @@ public class ComorbiditiesVariable extends FieldValueVariable {
 	 */
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
-		def.addJoin("casecomorbidity", "case_id", "tbcase", "id");
+		def.join("casecomorbidity.case_id", "tbcase.id");
+//		def.addJoin("casecomorbidity", "case_id", "tbcase", "id");
 		super.prepareVariableQuery(def, iteration);
 	}
 
@@ -28,7 +29,8 @@ public class ComorbiditiesVariable extends FieldValueVariable {
 	 */
 	@Override
 	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
-		def.addJoin("casecomorbidity", "case_id", "tbcase", "id");
+		def.join("casecomorbidity.case_id", "tbcase.id");
+//		def.addJoin("casecomorbidity", "case_id", "tbcase", "id");
 		super.prepareFilterQuery(def, oper, value);
 	}
 

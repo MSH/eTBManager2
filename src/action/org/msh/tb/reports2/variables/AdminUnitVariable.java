@@ -9,7 +9,6 @@ import org.jboss.seam.Component;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
 import org.msh.reports.query.SQLDefs;
-import org.msh.reports.query.TableJoin;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.reports2.FilterType;
 import org.msh.tb.reports2.VariableImpl;
@@ -88,9 +87,14 @@ public class AdminUnitVariable extends VariableImpl {
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
 		String s[] = getFieldName().split("\\.");
-		TableJoin join = def.addJoin("administrativeunit", "id", s[0], s[1]);
-		def.addField(join.getAlias() + ".code");
-	}
+		
+		def.table(s[0])
+			.join(s[1], "administrativeunit.id")
+			.select("code");
+		
+/*		TableJoin join = def.addJoin("administrativeunit", "id", s[0], s[1]);
+		def.selectField(join.getAlias() + ".code");
+*/	}
 
 
 	/* (non-Javadoc)
@@ -100,12 +104,21 @@ public class AdminUnitVariable extends VariableImpl {
 	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
 			Object value) {
 
-		String s[] = getFieldName().split("\\.");
-		TableJoin join = def.addJoin("administrativeunit", "id", s[0], s[1]);
+//		String s[] = getFieldName().split("\\.");
+
+		String alias = def.join("administrativeunit.id", getFieldName()).getAlias();
+		
+//		String alias = def.table(s[0]).join(s[1], "administrativeunit.id").getAlias();
+		
+		String p = getFieldName().replace('.', '_');
+		def.addRestriction(alias + ".code like :" + p);
+		def.addParameter(p, value + "%");
+		
+/*		TableJoin join = def.addJoin("administrativeunit", "id", s[0], s[1]);
 		String p = getFieldName().replace('.', '_');
 		def.addRestriction(join.getAlias() + ".code  like :" + p);
 		def.addParameter(p, value + "%");
-	}
+*/	}
 
 
 	/* (non-Javadoc)

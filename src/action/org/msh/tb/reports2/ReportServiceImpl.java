@@ -17,6 +17,7 @@ import org.msh.reports.filters.Filter;
 import org.msh.reports.filters.FilterOption;
 import org.msh.reports.indicator.DataTableIndicator;
 import org.msh.reports.query.DataTableQuery;
+import org.msh.reports.variables.Variable;
 import org.msh.tb.client.shared.ReportService;
 import org.msh.tb.client.shared.model.CFilter;
 import org.msh.tb.client.shared.model.CGroup;
@@ -73,11 +74,11 @@ public class ReportServiceImpl implements ReportService {
 			grp.setName(repGroup.getDisplayText());
 
 			// create list of filters
-			List<VariableImpl> repFilters = repGroup.getFilters();
+			List<Filter> repFilters = repGroup.getFilters();
 			if (repFilters.size() > 0) {
 				CFilter[] filters = new CFilter[repFilters.size()];
 				int index = 0;
-				for (VariableImpl filter: repFilters) {
+				for (Filter filter: repFilters) {
 					CFilter f = new CFilter();
 					f.setId(filter.getId());
 					f.setName(filter.getLabel());
@@ -91,11 +92,11 @@ public class ReportServiceImpl implements ReportService {
 			}
 
 			// create list of variables
-			List<VariableImpl> repVars = repGroup.getVariables();
+			List<Variable> repVars = repGroup.getVariables();
 			if (repVars.size() > 0) {
 				CVariable[] vars = new CVariable[repVars.size()];
 				int index = 0;
-				for (VariableImpl var: repVars) {
+				for (Variable var: repVars) {
 					CVariable v = new CVariable();
 					v.setId(var.getId());
 					v.setName(var.getLabel());
@@ -131,15 +132,15 @@ public class ReportServiceImpl implements ReportService {
 		ReportResources res = getReportResources();
 		IndicatorReport rep = IndicatorReportFactory.instance().createCaseIndicator();
 
-		List<VariableImpl> variables = new ArrayList<VariableImpl>();
+		List<Variable> variables = new ArrayList<Variable>();
 		
 		boolean bDuplicated = false;
-		VariableImpl duplvar = null;
+		Variable duplvar = null;
 		int dateVars = 0;
 
 		// add variables to the columns of the report
 		for (String varid: reportData.getColVariables()) {
-			VariableImpl var = res.findVariableById(varid);
+			Variable var = res.findVariableById(varid);
 			
 			if (var != null) {
 				if (var instanceof DateFieldVariable)
@@ -157,7 +158,7 @@ public class ReportServiceImpl implements ReportService {
 
 		// add variables to the rows of the report
 		for (String varid: reportData.getRowVariables()) {
-			VariableImpl var = res.findVariableById(varid);
+			Variable var = res.findVariableById(varid);
 
 			if (var != null) {
 				if (var instanceof DateFieldVariable)
@@ -174,8 +175,8 @@ public class ReportServiceImpl implements ReportService {
 		}
 
 		// check unit used in the report
-		VariableImpl varUnitRef = null;
-		for (VariableImpl var: variables) {
+		Variable varUnitRef = null;
+		for (Variable var: variables) {
 			Object unitType = var.getUnitType();
 			if (unitType != null) {
 				if ((varUnitRef != null) && (!varUnitRef.getUnitType().equals(unitType))) {
@@ -197,11 +198,11 @@ public class ReportServiceImpl implements ReportService {
 		// set filter values
 		if (reportData.getFilters() != null) {
 			for (String id: reportData.getFilters().keySet()) {
-				VariableImpl var = res.findVariableById(id);
-				if (var != null) {
+				Filter filter = res.findFilterById(id);
+				if (filter != null) {
 					String value = reportData.getFilters().get(id);
-					Object filterValue = var.filterValueFromString(value);
-					rep.addFilter((Filter)var, filterValue);
+					Object filterValue = filter.filterValueFromString(value);
+					rep.addFilter(filter, filterValue);
 				}
 			}
 		}
@@ -288,7 +289,7 @@ public class ReportServiceImpl implements ReportService {
 	 * @param param is a parameter recognized by the filter 
 	 * @return List of {@link CItem} objects to be sent to the client as options to the filter
 	 */
-	protected ArrayList<CItem> generateFilterOptions(VariableImpl filter, String param) {
+	protected ArrayList<CItem> generateFilterOptions(Filter filter, String param) {
 		List<FilterOption> options = filter.getFilterOptions(param);
 		if (options == null)
 			return null;
@@ -308,7 +309,7 @@ public class ReportServiceImpl implements ReportService {
 	@WebRemote
 	public ArrayList<CItem> getFilterOptions(String filterid, String param) {
 		ReportResources res = getReportResources();
-		VariableImpl filter = res.findVariableById(filterid);
+		Filter filter = res.findFilterById(filterid);
 		if (filter == null)
 			return null;
 
@@ -331,7 +332,7 @@ public class ReportServiceImpl implements ReportService {
 		// set filter values
 		if (filters != null) {
 			for (String id: filters.keySet()) {
-				VariableImpl var = res.findVariableById(id);
+				Filter var = res.findFilterById(id);
 				if (var != null) {
 					String value = filters.get(id);
 					rep.addFilter((Filter)var, var.filterValueFromString( value ));

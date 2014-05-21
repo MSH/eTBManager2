@@ -97,7 +97,7 @@ public class IndicatorReport {
 		// prepare to generate detailed report
 		builder.setDetailed(true);
 		for (String fld: fields.split(",")) {
-			builder.addField(fld);
+			builder.select(fld);
 		}
 
 		builder.setOrderBy(orderBy);
@@ -119,11 +119,7 @@ public class IndicatorReport {
 		for (Variable v: rowVariables)
 			sqlBuilder.addVariable(v);
 		
-		// include filters in the SQL
-		for (Filter filter: filters.keySet()) {
-			FilterValue fvalue = filters.get(filter);
-			filter.prepareFilterQuery(sqlBuilder, fvalue.getComparator(), fvalue.getValue());
-		}
+		sqlBuilder.setFilters(filters);
 
 		// create an empty table
 		DataTableImpl tbl = new DataTableImpl();
@@ -338,8 +334,8 @@ public class IndicatorReport {
 	 * @param foreignKey
 	 * @return
 	 */
-	public TableJoin addTableJoin(String tableName, String fieldName, String foreignKey) {
-		return getSqlBuilder().addJoin(tableName, fieldName, sqlBuilder.getTableName(), foreignKey);
+	public TableJoin addTableJoin(String tableField, String foreignKey) {
+		return getSqlBuilder().table(sqlBuilder.getTableName()).join(tableField, foreignKey);
 	}
 
 	
@@ -351,10 +347,10 @@ public class IndicatorReport {
 	 * @param parentField
 	 * @return
 	 */
-	public TableJoin addTableJoin(String tableName, String fieldName, String parentTable, String parentField) {
+/*	public TableJoin addTableJoin(String tableName, String fieldName, String parentTable, String parentField) {
 		return getSqlBuilder().addJoin(tableName, fieldName, parentTable, parentField);
 	}
-	
+*/	
 	/**
 	 * Return the result of the report
 	 * @return

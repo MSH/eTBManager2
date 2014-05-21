@@ -1,6 +1,8 @@
 package org.msh.tb.reports2.variables;
 
 import java.text.DateFormatSymbols;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.Messages;
@@ -17,10 +19,32 @@ import org.msh.utils.date.Period;
  */
 public class DateFieldVariable extends VariableImpl {
 
+	public static final String PERIOD_MONTHYEAR = "M";
+	public static final String PERIOD_FIXED = "F";
+	
+	/**
+	 * Possible values for fixed periods
+	 * @author Ricardo Memoria
+	 *
+	 */
+	public enum FixedPeriod {
+		LAST_3MONTHS,
+		LAST_6MONTHS,
+		LAST_12MONTHS,
+		PREVIOUS_QUARTER,
+		PREVIOUS_YEAR;
+	};
+	
 	private boolean yearOnly;
 
 	private DateFormatSymbols dateFormatSymbols;
 
+	/**
+	 * @param id
+	 * @param label
+	 * @param fieldName
+	 * @param yearOnly
+	 */
 	public DateFieldVariable(String id, String label, String fieldName, boolean yearOnly) {
 		super(id, label, fieldName);
 		this.yearOnly = yearOnly;
@@ -44,9 +68,9 @@ public class DateFieldVariable extends VariableImpl {
 	 */
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
-		def.addField("year(" + getFieldName() + ")");
+		def.select("year(" + getFieldName() + ")");
 		if (!yearOnly)
-			def.addField("month(" + getFieldName() + ")");
+			def.select("month(" + getFieldName() + ")");
 		def.addRestriction(getFieldName() + " is not null");
 	}
 
@@ -236,7 +260,11 @@ public class DateFieldVariable extends VariableImpl {
 		
 		Period p = new Period();
 
-		if ("M".equals(s[0])) {
+		if (PERIOD_FIXED.equals(s[0])) {
+			return fixedPeriodStringToPeriod(s[1]);
+		}
+		else
+		if (PERIOD_MONTHYEAR.equals(s[0])) {
 			int month = Integer.parseInt(s[1]) - 1;
 			int year = Integer.parseInt(s[2]);
 			p.setIniDate(DateUtils.newDate(year, month, 1));
@@ -248,6 +276,127 @@ public class DateFieldVariable extends VariableImpl {
 		}
 		else throw new IllegalArgumentException("Not valid value for filter " + getId());
 		
+		return p;
+	}
+	
+	/**
+	 * Convert a string containing the fixed period to its period.
+	 * The string contains an integer indicating the position of the {@link FixedPeriod} enumeration
+	 * @param vals string indicating a 0-index position of the {@link FixedPeriod} enumeration
+	 * @return instance of {@link Period} containing the period
+	 */
+	protected Period fixedPeriodStringToPeriod(String s) {
+		int index = Integer.parseInt(s);
+		FixedPeriod fp = FixedPeriod.values()[index];
+		
+		Period p = new Period();
+		Date dt = DateUtils.getDate();
+		switch (fp) {
+		case LAST_3MONTHS:
+			p.setIniDate(createIniDate(DateUtils.incMonths(dt, -3)));
+			p.setEndDate(createEndDate(dt));
+			return p;
+
+		case LAST_6MONTHS:
+			p.setIniDate(createIniDate(DateUtils.incMonths(dt, -6)));
+			p.setEndDate(createEndDate(dt));
+			return p;
+			
+		case LAST_12MONTHS:
+			p.setIniDate(createIniDate(DateUtils.incMonths(dt, -12)));
+			p.setEndDate(createEndDate(dt));
+			return p;
+		
+		case PREVIOUS_QUARTER:
+			return calcPreviousQuarter(dt);
+			
+		case PREVIOUS_YEAR:
+			return calcPreviousYear(dt);
+		}
+
+		throw new RuntimeException("Fixed period not supported: " + fp);
+	}
+	
+	
+	/**
+	 * Calculate the previous year 
+	 * @param dt is the reference date to calculate the previous year
+	 * @return period within the previous year
+	 */
+	private Period calcPreviousYear(Date dt) {
+		int year = DateUtils.yearOf(dt) - 1;
+		
+		Date ini = DateUtils.newDate(year, 0, 1);
+		Date end = DateUtils.newDate(year, 11, DateUtils.daysInAMonth(year, 11));
+		return new Period(ini, end);
+	}
+
+
+	/**
+	 * Calculate the previous quarter from the given date
+	 * @param dt is the reference date to calculate the previous quarter
+	 * @return period of the previous quarter
+	 */
+	protected Period calcPreviousQuarter(Date dt) {
+		int month = DateUtils.monthOf(dt);
+		int year = DateUtils.yearOf(dt);
+		// calculate the previous quarter
+		int quarter = (month / 4) - 1;
+		if (quarter == -1) {
+			quarter = 3;
+			year--;
+		}
+		// calculate the initial and final date of the quarter
+		Date ini = DateUtils.newDate(year, quarter * 3, 1);
+		Date end = DateUtils.newDate(year, (quarter * 3) + 2, 1);
+		
+		return new Period(ini, createEndDate(end));
+	}
+
+
+	/**
+	 * Return the initial date of a period just setting the day of the month
+	 * of the given date to 1
+	 * @param date date of the initial date
+	 * @return date set its day of month to 1
+	 */
+	protected Date createIniDate(Date date) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		return DateUtils.getDatePart(c.getTime());
+	}
+	
+	/**
+	 * Return the final date of the period. Using the given date, it returns
+	 * the date with the last day of the month 
+	 * @param date
+	 * @return
+	 */
+	protected Date createEndDate(Date date) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.set(Calendar.DAY_OF_MONTH, DateUtils.daysInAMonth(c.get(Calendar.YEAR), c.get(Calendar.MONTH)));
+		return c.getTime();
+	}
+	
+	
+	/**
+	 * Convert a month/year string representation to a period
+	 * @param vals the initial and final month/year, with the following position:
+	 * 	 [1] = initial month, [2] = initial year, [3] = final month, [4] = final year
+	 * @return instance of {@link Period} containing the period
+	 */
+	protected Period monthYearStringToPeriod(String[] vals) {
+		Period p = new Period();
+		int month = Integer.parseInt(vals[1]) - 1;
+		int year = Integer.parseInt(vals[2]);
+		p.setIniDate(DateUtils.newDate(year, month, 1));
+		if (vals.length > 3) {
+			month = Integer.parseInt(vals[3]) - 1;
+			year = Integer.parseInt(vals[4]);
+			p.setEndDate(DateUtils.newDate(year, month, DateUtils.daysInAMonth(year, month)));
+		}
 		return p;
 	}
 

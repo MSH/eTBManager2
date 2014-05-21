@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.reports.filters.Filter;
+import org.msh.reports.variables.Variable;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.CultureResult;
@@ -57,8 +59,8 @@ import org.msh.tb.reports2.variables.HivCptArtVariable.ReportType;
 @BypassInterceptors
 public class ReportResources {
 
-	private List<VariableImpl> variables;
-	private List<VariableImpl> filters;
+	private List<Variable> variables;
+	private List<Filter> filters;
 	private List<ReportGroup> groups;
 	
 	/**
@@ -249,12 +251,28 @@ public class ReportResources {
 	 * @param id
 	 * @return
 	 */
-	public VariableImpl findVariableById(String id) {
-		for (VariableImpl var: getVariables())
+	public Variable findVariableById(String id) {
+		for (Variable var: getVariables())
 			if (var.getId().equals(id))
 				return var;
 		return null;
 	}
+	
+	
+	/**
+	 * Search a filter by its ID
+	 * @param id the ID of the filter
+	 * @return implementation of the {@link Filter} interface or null if filter was not found
+	 */
+	public Filter findFilterById(String id) {
+		for (Filter filter: getFilters()) {
+			if (filter.getId().equals(id)) {
+				return filter;
+			}
+		}
+		return null;
+	}
+	
 	
 	/**
 	 * Add report group
@@ -273,13 +291,13 @@ public class ReportResources {
 	 * Add a new variable
 	 * @param var
 	 */
-	public void addVariable(ReportGroup group, VariableImpl var) {
+	public void addVariable(ReportGroup group, Variable var) {
 		if (variables == null)
-			variables = new ArrayList<VariableImpl>();
+			variables = new ArrayList<Variable>();
 		variables.add(var);
 
 		if (group.getVariables() == null)
-			group.setVariables(new ArrayList<VariableImpl>());
+			group.setVariables(new ArrayList<Variable>());
 
 		group.getVariables().add(var);
 	}
@@ -299,13 +317,13 @@ public class ReportResources {
 	 * Add a new filter
 	 * @param var
 	 */
-	public void addFilter(ReportGroup grp, VariableImpl var) {
+	public void addFilter(ReportGroup grp, Filter var) {
 		if (filters == null)
-			filters = new ArrayList<VariableImpl>();
+			filters = new ArrayList<Filter>();
 		filters.add(var);
 		
 		if (grp.getFilters() == null)
-			grp.setFilters(new ArrayList<VariableImpl>());
+			grp.setFilters(new ArrayList<Filter>());
 
 		grp.getFilters().add(var);
 	}
@@ -313,7 +331,7 @@ public class ReportResources {
 	/**
 	 * @return
 	 */
-	public List<VariableImpl> getVariables() {
+	public List<Variable> getVariables() {
 		if (variables == null)
 			initialize();
 		return variables;
@@ -322,7 +340,7 @@ public class ReportResources {
 	/**
 	 * @return the filters
 	 */
-	public List<VariableImpl> getFilters() {
+	public List<Filter> getFilters() {
 		if (filters == null)
 			initialize();
 		return filters;

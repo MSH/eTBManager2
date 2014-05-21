@@ -56,7 +56,7 @@ public class ResistancePatternVariable extends VariableImpl {
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
 		// condition for the side effect join
-		def.addJoin("caseresistancepattern", "case_id", "tbcase", "id");
+		def.table("tbcase").join("id", "caseresistancepattern.case_id");
 		def.addRestriction("caseresistancepattern.diagnosis = :" + getId());
 		def.addParameter(getId(), diagnosis);
 		super.prepareVariableQuery(def, iteration);
@@ -110,7 +110,7 @@ public class ResistancePatternVariable extends VariableImpl {
 	 */
 	@Override
 	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
-		def.addJoin("caseresistancepattern", "case_id", "tbcase", "id");
+		def.table("tbcase").join("id", "caseresistancepattern.case_id");
 		def.addRestriction("caseresistancepattern.diagnosis = :" + getId());
 		def.addParameter(getId(), diagnosis);
 		super.prepareFilterQuery(def, oper, value);

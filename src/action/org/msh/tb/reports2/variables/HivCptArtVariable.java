@@ -44,9 +44,9 @@ public class HivCptArtVariable extends VariableImpl {
 	 */
 	@Override
 	public void prepareVariableQuery(SQLDefs def, int iteration) {
-		def.addField("dt is not null");
+		def.select("dt is not null");
 		// add a table in the join
-		def.addJoin("(select case_id, max(" + getHivField() + ") dt from examhiv "
+		def.join("(select case_id, max(" + getHivField() + ") dt from examhiv "
 				+ "where result=0 group by case_id)", "case_id", "tbcase", "id");
 	}
 

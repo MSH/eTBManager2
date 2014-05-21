@@ -6,6 +6,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.jboss.seam.international.Messages;
+import org.msh.reports.ReportElement;
+import org.msh.reports.filters.Filter;
+import org.msh.reports.variables.Variable;
 
 /**
  * Represent a group of variables and filters of a report. A group
@@ -19,8 +22,8 @@ import org.jboss.seam.international.Messages;
 public class ReportGroup {
 
 	private String messageKey;
-	private List<VariableImpl> variables = new ArrayList<VariableImpl>();
-	private List<VariableImpl> filters = new ArrayList<VariableImpl>();
+	private List<Variable> variables = new ArrayList<Variable>();
+	private List<Filter> filters = new ArrayList<Filter>();
 
 	public ReportGroup(String messageKey) {
 		super();
@@ -39,10 +42,10 @@ public class ReportGroup {
 	 * Sort the names of the variables
 	 * @param lst list to be sorted
 	 */
-	protected void sortList(List<VariableImpl> lst) {
-		Collections.sort(variables, new Comparator<VariableImpl>() {
+	protected void sortList(List lst) {
+		Collections.sort(variables, new Comparator<ReportElement>() {
 			@Override
-			public int compare(VariableImpl v1, VariableImpl v2) {
+			public int compare(ReportElement v1, ReportElement v2) {
 				return v1.getLabel().compareTo(v2.getLabel());
 			}
 		});
@@ -73,28 +76,28 @@ public class ReportGroup {
 	/**
 	 * @return the variables
 	 */
-	public List<VariableImpl> getVariables() {
+	public List<Variable> getVariables() {
 		return variables;
 	}
 
 	/**
 	 * @param variables the variables to set
 	 */
-	public void setVariables(List<VariableImpl> variables) {
+	public void setVariables(List<Variable> variables) {
 		this.variables = variables;
 	}
 
 	/**
 	 * @return the filters
 	 */
-	public List<VariableImpl> getFilters() {
+	public List<Filter> getFilters() {
 		return filters;
 	}
 
 	/**
 	 * @param filters the filters to set
 	 */
-	public void setFilters(List<VariableImpl> filters) {
+	public void setFilters(List<Filter> filters) {
 		this.filters = filters;
 	}
 	

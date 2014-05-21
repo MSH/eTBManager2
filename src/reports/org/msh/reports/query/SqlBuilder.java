@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.msh.reports.FilterValue;
+import org.msh.reports.filters.Filter;
 import org.msh.reports.variables.Variable;
 
 /**
@@ -14,7 +16,7 @@ import org.msh.reports.variables.Variable;
  */
 public class SqlBuilder implements SQLDefs {
 
-	private TableJoin masterTable;
+	private TableJoinImpl masterTable;
 	private StringBuilder sql;
 	private List<Field> fields = new ArrayList<SqlBuilder.Field>();
 	private List<Variable> variables = new ArrayList<Variable>();
@@ -25,9 +27,10 @@ public class SqlBuilder implements SQLDefs {
 	private HashMap<String, Object> parameters = new HashMap<String, Object>();
 	private Map<Variable, Integer> varIteration = new HashMap<Variable, Integer>();
 	// joins declared by the variable during SQL creation
-	private List<TableJoin> varJoins = new ArrayList<TableJoin>();
+	private List<TableJoinImpl> varJoins = new ArrayList<TableJoinImpl>();
 	private boolean detailed;
 	private String orderBy;
+	private Map<Filter, FilterValue> filters;
 
 	/**
 	 * Constructor using a root table name as argument
@@ -35,7 +38,7 @@ public class SqlBuilder implements SQLDefs {
 	 */
 	public SqlBuilder(String tableName) {
 		super();
-		masterTable = new TableJoin(tableName, null, null, null);
+		masterTable = new TableJoinImpl(this, tableName, null, null, null);
 	}
 
 	
@@ -76,7 +79,7 @@ public class SqlBuilder implements SQLDefs {
 	 * @param tableName
 	 */
 	public void setTableName(String tableName) {
-		masterTable = new TableJoin(tableName, null, null, null);
+		masterTable = new TableJoinImpl(this, tableName, null, null, null);
 	}
 
 	
@@ -99,6 +102,12 @@ public class SqlBuilder implements SQLDefs {
 		fieldList = null;
 		varRestrictions.clear();
 		varJoins.clear();
+
+		// include filters in the SQL
+		for (Filter filter: filters.keySet()) {
+			FilterValue fvalue = filters.get(filter);
+			filter.prepareFilterQuery(this, fvalue.getComparator(), fvalue.getValue());
+		}
 
 		if (variables.size() > 0) {
 			fields.clear();
@@ -131,7 +140,7 @@ public class SqlBuilder implements SQLDefs {
 		createSQLOrderBy(sql);
 		
 		// clear joins added by variables during construction
-		for (TableJoin join: varJoins)
+		for (TableJoinImpl join: varJoins)
 			if (join.getParentJoin() != null)
 				join.getParentJoin().removeJoin(join);
 		
@@ -231,7 +240,7 @@ public class SqlBuilder implements SQLDefs {
 	 */
 	protected void createSQLJoins(StringBuilder builder) {
 		if (masterTable.getJoins() != null)
-			for (TableJoin join: masterTable.getJoins())
+			for (TableJoinImpl join: masterTable.getJoins())
 				createSQLJoin(builder, join);
 	}
 
@@ -239,7 +248,7 @@ public class SqlBuilder implements SQLDefs {
 	 * Create a join of the table and its joins
 	 * @param join
 	 */
-	protected void createSQLJoin(StringBuilder builder, TableJoin join) {
+	protected void createSQLJoin(StringBuilder builder, TableJoinImpl join) {
 		if (join.isLeftJoin())
 			 builder.append("\nleft join ");
 		else builder.append("\ninner join ");
@@ -251,7 +260,7 @@ public class SqlBuilder implements SQLDefs {
 		builder.append(join.getAlias() + "." + join.getTableField() + "=" + p.getAlias() + "." + join.getParentField());
 		
 		if (join.getJoins() != null)
-			for (TableJoin j: join.getJoins())
+			for (TableJoinImpl j: join.getJoins())
 				createSQLJoin(builder, j);
 	}
 
@@ -294,7 +303,12 @@ public class SqlBuilder implements SQLDefs {
 			for (Field field: fields) {
 				if (!fieldList.isEmpty())
 					fieldList += ", ";
-				fieldList += parseTableNames(field.getName());
+				if (field.getTable() == null) {
+					fieldList += parseTableNames(field.getName());
+				}
+				else {
+					fieldList += field.getTable().getAlias() + "." + field.getName();
+				}
 			}
 		}
 		
@@ -356,18 +370,17 @@ public class SqlBuilder implements SQLDefs {
 
 	/** {@inheritDoc}
 	 */
-	@Override
+/*	@Override
 	public TableJoin addJoin(String table, String field, String parentTable, String parentField) {
 		TableJoin join = masterTable.addJoin(table, field, parentTable, parentField);
 		if (currentVariable != null)
 			varJoins.add(join);
 		return join;
 	}
-
+*/
 	/** {@inheritDoc}
 	 */
-	@Override
-	public void addField(String field, TableJoin table) {
+	public void select(String field, TableJoin table) {
 		Field fld = new Field();
 		fld.setName(field);
 		fld.setTable(table);
@@ -375,14 +388,32 @@ public class SqlBuilder implements SQLDefs {
 		fields.add(fld);
 	}
 
-
 	/** {@inheritDoc}
 	 */
 	@Override
-	public void addField(String field) {
-		addField(field, masterTable);
+	public void select(String field) {
+		select(field, null);
 	}
 
+	/**
+	 * Find a table join by its table name or table alias
+	 * @param table is the table name or table alias
+	 * @return instance of the {@link TableJoin} class
+	 */
+	protected TableJoinImpl findTable(String table) {
+		if ((table.equals(masterTable.getTableName())) || (table.equals(masterTable.getAlias()))) {
+			return masterTable;
+		}
+		
+		for (TableJoinImpl join: masterTable.getJoins()) {
+			if ((table.equals(join.getTableName())) || (table.equals(join.getAlias()))) {
+				return join;
+			}
+		}
+		
+		return null;
+	}
+	
 	
 	/**
 	 * Store temporary information about a field of the query
@@ -477,14 +508,14 @@ public class SqlBuilder implements SQLDefs {
 	/* (non-Javadoc)
 	 * @see org.msh.reports.query.SQLDefs#addLeftJoin(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-	@Override
+/*	@Override
 	public TableJoin addLeftJoin(String table, String field,
 			String parentTable, String parentField) {
 		TableJoin join = addJoin(table, field, parentTable, parentField);
 		join.setLeftJoin(true);
 		return join;
 	}
-
+*/
 
 	/**
 	 * Return true if the builder will generate a detailed query (where other fields may be included)
@@ -522,5 +553,68 @@ public class SqlBuilder implements SQLDefs {
 		this.orderBy = orderBy;
 	}
 
+
+	/** {@inheritDoc}
+	 */
+	@Override
+	public FilterValue getFilterValue(String filterid) {
+		// filters were set ?
+		if (filters == null) {
+			return null;
+		}
+
+		// search for the filter by its id
+		for (Filter filter: filters.keySet()) {
+			if (filterid.equals(filter.getId())) {
+				return filters.get(filter);
+			}
+		}
+		// no filter found, return null
+		return null;
+	}
+
+
+	/**
+	 * @return the filters
+	 */
+	public Map<Filter, FilterValue> getFilters() {
+		return filters;
+	}
+
+
+	/**
+	 * @param filters the filters to set
+	 */
+	public void setFilters(Map<Filter, FilterValue> filters) {
+		this.filters = filters;
+	}
+
+
+	/** {@inheritDoc}
+	 */
+	@Override
+	public TableJoin table(String table) {
+		return findTable(table);
+	}
+
+
+	/** {@inheritDoc}
+	 */
+	@Override
+	public TableJoin join(String newTable, String parentTable) {
+		String[] s = parentTable.split("\\.");
+		TableJoin tbl = findTable(s[0]);
+		
+		return tbl.join(s[1], newTable);
+	}
+
+	/** {@inheritDoc}
+	 */
+	@Override
+	public TableJoin join(String newTable, String newField, String parentTable, String parentField) {
+		TableJoinImpl tbl = findTable(parentTable);
+		
+		return tbl.join(parentField, newTable, newField);
+	}
 	
 }

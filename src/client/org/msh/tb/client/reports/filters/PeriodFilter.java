@@ -11,12 +11,22 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
+/**
+ * Filter that enable the user to select a period of initial and final date,
+ * selecting the month and year
+ * 
+ * @author Ricardo Memoria
+ *
+ */
 public class PeriodFilter extends FilterWidget {
 
 	private HorizontalPanel panel = new HorizontalPanel();
 	
 	private ListBox iniMonth, iniYear, endMonth, endYear;
 	
+	/**
+	 * Default constructor
+	 */
 	public PeriodFilter() {
 		super();
 
@@ -37,6 +47,8 @@ public class PeriodFilter extends FilterWidget {
 		initWidget(panel);
 	}
 	
+	/** {@inheritDoc}
+	 */
 	public void initialize(CFilter filter) {
 		super.initialize(filter);
 	}

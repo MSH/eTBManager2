@@ -126,9 +126,9 @@ public class DateUtils {
 	
 	
 	/**
-	 * Returns the year part of the date
+	 * Returns the month part of the date
 	 * @param dt - Date
-	 * @return - year of the date dt
+	 * @return - year of the given date
 	 */
 	static public int monthOf(Date dt) {
 		Calendar c = Calendar.getInstance();
