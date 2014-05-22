@@ -37,13 +37,6 @@ public class FutureDateValidator implements Validator {
 			message.setSeverity(FacesMessage.SEVERITY_ERROR); 
 			throw new ValidatorException(message);
 		}
-		
-		UIParameter param = findParam(comp.getParent(), "validatefuture");
-		if (param != null) {
-			Object p = param.getValue();
-			if ((p == null) || (p.equals("true")))
-				return;
-		}
 
 		if (dt.after(new Date())) {
 			Map<String,String> messages = Messages.instance();

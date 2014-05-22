@@ -18,10 +18,11 @@
             	<h:panelGroup id="edtdatep">
 				<rich:calendar id="#{empty edtid?'edtdate':edtid}" enableManualInput="true" value="#{datefield}" 
 					required="#{required}" locale="#{locale}" datePattern="#{messages['locale.datePattern']}" 
-					timeZone="#{timezones.default}" validator="#{futureDateValidator.validate}" inputStyle="width:100px;" 
+					timeZone="#{timezones.default}" validator="#{dateValidator.validate}" inputStyle="width:100px;" 
 					showWeeksBar="false">
 				</rich:calendar>
-				<f:param name="validatefuture" value="#{future}" />
+				<f:param name="canBeFuture" value="#{future}" />
+				<f:param name="validatePatientDeathDate" value="#{checkDeathDate}" />
 				</h:panelGroup>
     			<h:outputText value="(#{messages['locale.displayDatePattern']})" rendered="#{empty showPattern ? true : showPattern}"/>
     			<rich:jQuery selector="#edtdatep .rich-calendar-input" query="mask('#{messages['locale.dateMask']}')" />
