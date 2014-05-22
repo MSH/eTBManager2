@@ -2,7 +2,9 @@ package org.msh.reports.tableoperations;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.msh.reports.datatable.DataTable;
 import org.msh.reports.datatable.Row;
@@ -30,6 +32,9 @@ public class KeyConverter implements Comparator<Row>{
 	
 	private List<Variable> varsByColumn;
 	
+	// number of column for the variables
+	private int varcolcount;
+	
 	/**
 	 * Convert the values of a database table to a key-valued table based on its variables.
 	 * The method considers that the last column of the <code>tblsource</code> contains 
@@ -38,16 +43,19 @@ public class KeyConverter implements Comparator<Row>{
 	 *  
 	 * @param tblsource the table containing data returned from the database query
 	 * @param variables the list of variables that generated the database table
+	 * @param varcols contain the columns of each variable of the list of variables
 	 * @return instance of the {@link DataTable} containing the new table converted to keys
 	 */
 	public DataTable execute(DataTable tblsource, List<Variable> variables, List<int[]> varcols) {
 		// create the list of positions each variable contains
 		varsByColumn = new ArrayList<Variable>();
-		int index = 0;
+		boolean isMultikey = false;
+
 		for (Variable var: variables) {
 			if (var.isGrouped()) {
 				varsByColumn.add(var);
 				varsByColumn.add(var);
+				isMultikey = true;
 			}
 			else {
 				varsByColumn.add(var);
@@ -55,7 +63,7 @@ public class KeyConverter implements Comparator<Row>{
 		}
 
 		// calculate the number of columns of the new table
-		int varcolcount = varsByColumn.size();
+		varcolcount = varsByColumn.size();
 		
 		if (varcolcount > tblsource.getColumnCount())
 			throw new IllegalArgumentException("Number of columns is not compactible with table");
@@ -63,6 +71,9 @@ public class KeyConverter implements Comparator<Row>{
 		// create the new table
 		// add 1 to include the indicator value
 		resultTable = new DataTableImpl(varcolcount + 1, 0);
+		
+		// check the variable domains and initialize the result table
+		applyVariablesDomain(tblsource, variables, varcols);
 
 		// this is the list of column with keys in the new table
 		colindexes = new int[varcolcount];
@@ -71,42 +82,8 @@ public class KeyConverter implements Comparator<Row>{
 		
 		// loop in each row of the table
 		for (Row row: tblsource.getRows()) {
-			index = 0;
-			boolean isMultikey = false;
-
 			// create temporary row that will store keys
-			Object[] keys = new Object[varcolcount];
-			int rowindex = 0;
-
-			for (Variable var: variables) {
-				// get the values of the columns related to the variable
-				int[] cols = varcols.get(index);
-				Object[] vals = row.getValues(cols);
-
-				// support for key creation
-				if (var.isGrouped()) {
-					Object groupkey;
-					if (vals.length == 1)
-						 groupkey = var.createGroupKey(vals[0]);
-					else groupkey = var.createGroupKey(vals);
-					keys[rowindex] = groupkey;
-					rowindex++;
-				}
-
-				// create the key
-				Object key;
-				if (vals.length == 1)
-					 key = var.createKey(vals[0]);
-				else key = var.createKey(vals);
-
-				// check if there is a multiple key
-				if ((!isMultikey) && (key != null))
-					isMultikey = key.getClass().isArray();
-				keys[rowindex] = key;
-				rowindex++;
-				
-				index++;
-			}
+			Object[] keys = convertRow(row, variables, varcols);
 
 			// get the last column as being the indicator
 			Long val = (Long)row.getValue(tblsource.getColumnCount() - 1);
@@ -120,6 +97,140 @@ public class KeyConverter implements Comparator<Row>{
 		resultTable.sortRows(this);
 		
 		return resultTable;
+	}
+
+	
+	/**
+	 * Create a list of key objects converted from the source row (from source table) based on
+	 * the variables and its position in the row
+	 * @param sourcerow is the row containing the values to be converted from the database
+	 * @param variables is the list of variables that represent the values in the source row
+	 * @param varcols is the position of each variable in the source row
+	 * @return array of object keys
+	 */
+	protected Object[] convertRow(Row sourcerow, List<Variable> variables, List<int[]> varcols) {
+		int index = 0;
+		boolean isMultikey = false;
+
+		// create temporary row that will store keys
+		Object[] keys = new Object[varcolcount];
+		int rowindex = 0;
+
+		for (Variable var: variables) {
+			// get the values of the columns related to the variable
+			int[] cols = varcols.get(index);
+			Object[] vals = sourcerow.getValues(cols);
+
+			// support for key creation
+			if (var.isGrouped()) {
+				Object groupkey;
+				if (vals.length == 1)
+					 groupkey = var.createGroupKey(vals[0]);
+				else groupkey = var.createGroupKey(vals);
+				keys[rowindex] = groupkey;
+				rowindex++;
+			}
+
+			// create the key
+			Object key;
+			if (vals.length == 1)
+				 key = var.createKey(vals[0]);
+			else key = var.createKey(vals);
+
+			// check if there is a multiple key
+			if ((!isMultikey) && (key != null))
+				isMultikey = key.getClass().isArray();
+			keys[rowindex] = key;
+			rowindex++;
+			
+			index++;
+		}
+		
+		return keys;
+	}
+	
+	/**
+	 * Initialize the result table with the domains of the variables
+	 * @param variables
+	 */
+	private void applyVariablesDomain(DataTable tblsource, List<Variable> variables, List<int[]> varcols) {
+		if (tblsource.getRowCount() == 0) {
+			return;
+		}
+		
+		Object[] firstRow = convertRow(tblsource.getRow(0), variables, varcols);
+
+		Map<Variable, Object[]> domains = new HashMap<Variable, Object[]>();
+		int[] colpos = new int[variables.size()];
+
+		// create list of domains and calculate size and its position in the table
+		int size = 0;
+		int index = 0;
+		int pos = 0;
+		for (Variable var: variables) {
+			Object[] lst = var.getDomain();
+			if (lst != null) {
+				domains.put(var, lst);
+				if (lst.length > size) {
+					size = lst.length;
+				}
+			}
+			
+			colpos[index] = pos;
+			if (var.isGrouped()) {
+				pos += 2;
+			}
+			else {
+				pos++;
+			}
+			index++;
+		}
+
+		// fill the table with the domain values
+		for (int i = 0; i < size; i++) {
+			index = 0;
+			Row row = resultTable.addRow();
+			for (Variable var: variables) {
+				Object[] vals = domains.get(var);
+				// will store the key values
+				Object key;
+				// domain exists to this row?
+				if ((vals != null) && (i < vals.length)) {
+					// get key from domain
+					key = vals[i];
+				}
+				else {
+					// no... so get the key from the first row
+					int[] cols = varcols.get(index);
+					if (cols.length > 1) {
+						Object[] tmp = new Object[cols.length];
+						tmp[0] = firstRow[cols[0]];
+						tmp[1] = firstRow[cols[1]];
+						key = tmp;
+					}
+					else {
+						key = firstRow[cols[0]];
+					}
+				}
+
+				// write keys to the row of the table
+				if (key != null) {
+					if (key.getClass().isArray()) {
+						int k = 0;
+						for (Object obj: ((Object[])key)) {
+							row.setValue(colpos[index] + k, obj);
+							k++;
+						}
+					}
+					else {
+						row.setValue(colpos[index], key);
+					}
+				}
+				index++;
+			}
+			// fill it with 0, so it'll be preserved
+			row.setValue(resultTable.getColumnCount() - 1, 0L);
+		}
 	}
 
 	/**

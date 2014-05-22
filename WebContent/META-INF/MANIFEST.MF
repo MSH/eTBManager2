@@ -1,12 +1,12 @@
 Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.6.5
-Created-By: 24.51-b03 (Oracle Corporation)
-Built-By: Ricardo Memoria
+Created-By: 20.7-b02 (Sun Microsystems Inc.)
+Built-By: Ricardo
 Implementation-Version: 2.0-b760
 Implementation-Title: e-TB Manager
 Implementation-Vendor: Management Sciences for Health, Inc.
-Built-Date: 2014-05-13 09:16:18
-Build-Jdk: 1.7.0_51
-Country-Code: NG
-Country: Nigeria
+Built-Date: 2014-05-21 23:16:38
+Build-Jdk: 1.6.0_32
+Country-Code: BD
+Country: Bangladesh
 

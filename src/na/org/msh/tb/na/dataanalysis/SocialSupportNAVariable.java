@@ -12,10 +12,10 @@ import org.msh.tb.reports2.VariableImpl;
  */
 public class SocialSupportNAVariable extends VariableImpl {
 
-	private static final int IT_ALLCASES = 0;
-	private static final int IT_SOCDISABILITY = 1;
-	private static final int IT_FOODPACKAGE = 2;
-	private static final int IT_TRANSPASSIST = 3;
+//	private static final int IT_ALLCASES = 0;
+	private static final int IT_SOCDISABILITY = 0;
+	private static final int IT_FOODPACKAGE = 1;
+	private static final int IT_TRANSPASSIST = 2;
 	
 	public SocialSupportNAVariable() {
 		super("socsupNA", "cases.socialsupport", null);
@@ -48,7 +48,7 @@ public class SocialSupportNAVariable extends VariableImpl {
 	 */
 	@Override
 	public int getIteractionCount() {
-		return 4;
+		return 3;
 	}
 
 	/** {@inheritDoc}
@@ -57,9 +57,9 @@ public class SocialSupportNAVariable extends VariableImpl {
 	public String getDisplayText(Object key) {
 		int iteration = Integer.parseInt(key.toString());
 		switch (iteration) {
-		case IT_ALLCASES:
+/*		case IT_ALLCASES:
 			return formatMessage("cases");
-			
+*/			
 		case IT_FOODPACKAGE:
 			return formatMessage("TbCaseNA.foodPackageAwarded");
 		
@@ -84,7 +84,7 @@ public class SocialSupportNAVariable extends VariableImpl {
 	 */
 	@Override
 	public Object createKey(Object value) {
-		if (value instanceof Integer) {
+		if (!(value instanceof Integer)) {
 			return Integer.parseInt( value.toString() );
 		}
 		
@@ -95,7 +95,7 @@ public class SocialSupportNAVariable extends VariableImpl {
 	 */
 	@Override
 	public Object[] getDomain() {
-		Integer[] vals = new Integer[4];
+		Integer[] vals = new Integer[3];
 		for (int i = 0; i < vals.length; i++) {
 			vals[i] = i;
 		}

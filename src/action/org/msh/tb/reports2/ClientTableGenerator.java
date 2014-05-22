@@ -70,7 +70,10 @@ public class ClientTableGenerator {
 
 			Double[] values = new Double[tbl.getColumnCount()];
 			for (int i = 0; i < tbl.getColumnCount(); i++) {
-				values[i] = (Double)row.getValue(i);
+				Double val = (Double)row.getValue(i);
+				if ((val != null) && (val != 0.0D)) {
+					values[i] = val;
+				}
 			}
 			cr.setValues(values);
 			rows.add(cr);

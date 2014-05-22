@@ -270,6 +270,11 @@ public class IndicatorReport {
 	}
 	
 
+	/**
+	 * Create a new data table already converted to the variable key
+	 * @param sourcedt
+	 * @return
+	 */
 	protected DataTable convertData(DataTable sourcedt) {
 		KeyConverter conv = new KeyConverter();
 		

@@ -218,6 +218,21 @@ public class EnumFieldVariable extends VariableImpl {
 		
 		return super.compareValues(val1, val2);
 	}
+
+
+	/** {@inheritDoc}
+	 */
+	@Override
+	public Object[] getDomain() {
+		return super.getDomain();
+/*		Enum[] enums = getEnumValues();
+		Object[] values = new Object[enums.length];
+		int index = 0;
+		for (Enum it: enums) {
+			values[index++] = it.ordinal();
+		}
+		return values;
+*/	}
 	
 
 }
