@@ -93,6 +93,7 @@ function diagnosisTypeClick(radio) {
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{suspectFollowupHome.dataModel.diagnosisDate}" /> 
+    	<ui:param name="edtid" value="diagdateedt" />
     </s:decorate>
 
 	<div id="div-resistance">
@@ -188,6 +189,7 @@ function diagnosisTypeClick(radio) {
     		<ui:param name="required" value="true" /> 
 	    	<ui:param name="future" value="false" /> 
 	    	<ui:param name="datefield" value="#{caseCloseHome.date}" /> 
+	    	<ui:param name="edtid" value="outcomedateedt" />
 	    </s:decorate>
 
 	    <s:decorate template="/layout/edit.xhtml" >

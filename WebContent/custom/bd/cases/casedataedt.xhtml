@@ -190,6 +190,7 @@
     	<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
     	<ui:param name="datefield" value="#{tbcasebd.registrationDate}" /> 
 		<ui:param name="required" value="true" />
+		<ui:param name="edtid" value="regdateedt" />
     </s:decorate>
     </div>
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
@@ -215,6 +216,7 @@
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{tbcasebd.diagnosisDate}" /> 
+    	<ui:param name="edtid" value="diagdateedt" />
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" rendered="#{tbcasebd.classification=='DRTB'}">
