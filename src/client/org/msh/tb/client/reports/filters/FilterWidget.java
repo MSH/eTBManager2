@@ -1,8 +1,16 @@
 package org.msh.tb.client.reports.filters;
 
-import org.msh.tb.client.shared.model.CFilter;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.msh.tb.client.reports.MainPage;
+import org.msh.tb.client.shared.ReportServiceAsync;
+import org.msh.tb.client.shared.model.CFilter;
+import org.msh.tb.client.shared.model.CItem;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.ListBox;
 
 public abstract class FilterWidget extends Composite {
 
@@ -34,5 +42,29 @@ public abstract class FilterWidget extends Composite {
 	 */
 	public CFilter getFilter() {
 		return filter;
+	}
+	
+	/**
+	 * Fill a {@link ListBox} widget with a given list of options
+	 * @param lb instance of {@link ListBox} to be filled
+	 * @param options list of {@link CItem} options
+	 */
+	protected void fillListOptions(ListBox lb, List<CItem> options) {
+		lb.clear();
+		lb.addItem("-");
+		for (CItem opt: options) {
+			lb.addItem(opt.getLabel(), opt.getValue());
+		}
+	}
+	
+	/**
+	 * Retrieve a list of options from the server. The param argument will be sent to the server
+	 * and depends on the filter type and server interpretation
+	 * @param param is the parameter to be sent to the server
+	 * @param callback {@link AsyncCallback} function that will be called when the server responds
+	 */
+	protected void loadServerOptions(String param, AsyncCallback<ArrayList<CItem>> callback) {
+		ReportServiceAsync srv = MainPage.instance().getService();
+		srv.getFilterOptions(filter.getId(), param, callback);
 	}
 }

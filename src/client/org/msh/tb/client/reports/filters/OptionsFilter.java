@@ -40,12 +40,9 @@ public class OptionsFilter extends FilterWidget {
 	 * @param options
 	 */
 	protected void fillOptions(List<CItem> options) {
-		lbOptions.clear();
-		lbOptions.addItem("-");
-		for (CItem opt: options) {
-			lbOptions.addItem(opt.getLabel(), opt.getValue());
-		}
+		fillListOptions(lbOptions, options);
 	}
+	
 	
 	/* (non-Javadoc)
 	 * @see org.msh.tb.client.reports.filters.FilterWidget#getValue()

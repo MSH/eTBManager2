@@ -44,6 +44,7 @@ import org.msh.tb.reports2.variables.RegimenVariable;
 import org.msh.tb.reports2.variables.ResistancePatternVariable;
 import org.msh.tb.reports2.variables.SideEffectVariable;
 import org.msh.tb.reports2.variables.SuspectConfirmedVariable;
+import org.msh.tb.reports2.variables.TbunitVariable;
 import org.msh.tb.reports2.variables.TreatmentSourceVariable;
 import org.msh.tb.reports2.variables.TypeTBCaseVariable;
 import org.msh.tb.reports2.variables.TreatOutcomeVariable;
@@ -96,6 +97,8 @@ public class ReportResources {
 		add(grp, new TreatOutcomeVariable());
 		add(grp, new EnumFieldVariable("state", "CaseState", "tbcase.state", CaseState.class, "#{globalLists.caseStates}"));
 		add(grp, new SuspectConfirmedVariable());
+		add(grp, new AdminUnitVariable("notifaddr", "Address", "tbcase.notif_adminunit_id"));
+		add(grp, new TbunitVariable("notifunit", "TbCase.notificationUnit", "tbcase.notification_unit_id"));
 		add(grp, new EnumFieldVariable("val", "ValidationState", "tbcase.validationState", ValidationState.class));
 		add(grp, new EnumFieldVariable("res", "DrugResistanceType", "tbcase.drugresistancetype", DrugResistanceType.class));
 		add(grp, new EnumFieldVariable("is", "InfectionSite", "tbcase.infectionSite", InfectionSite.class));
@@ -109,7 +112,6 @@ public class ReportResources {
 		add(grp, new DateFieldVariable("outdate", "TbCase.outcomeDate", "tbcase.outcomeDate", true));
 		addVariable(grp, new DateFieldVariable("outdateM", "#{messages['TbCase.outcomeDate']} (#{messages['global.months']})", "tbcase.outcomeDate", false));
 		add(grp, new AgeRangeVariable());
-		add(grp, new AdminUnitVariable("notifaddr", "Address", "tbcase.notif_adminunit_id"));
 		add(grp, new SideEffectVariable("sideeffect"));
 		add(grp, new ComorbiditiesVariable());
 		return grp;
@@ -121,6 +123,7 @@ public class ReportResources {
 	 */
 	protected ReportGroup addTreatmentVariables() {
 		ReportGroup grp = addGroup("cases.details.treatment");
+		add(grp, new TbunitVariable("treatunit", "TbCase.ownerUnit", "tbcase.owner_unit_id"));
 		add(grp, new DateFieldVariable("initreat", "TbCase.iniTreatmentDate", "tbcase.initreatmentdate", true));
 		addVariable(grp, new DateFieldVariable("initreatM", "#{messages['TbCase.iniTreatmentDate']} (#{messages['global.months']})", "tbcase.initreatmentdate", false));
 		add(grp, new DateFieldVariable("endtreat", "TbCase.endTreatmentDate", "tbcase.endtreatmentdate", true));

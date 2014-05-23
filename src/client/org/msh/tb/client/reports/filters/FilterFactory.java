@@ -16,6 +16,7 @@ public class FilterFactory implements FilterConstructor{
 
 	public final static String FILTER_PERIOD = "period";
 	public final static String FILTER_REMOTE_OPTS = "rem_opts";
+	public final static String FILTER_TBUNIT = "tbunit";
 	
 	private static final FilterFactory instance = new FilterFactory();
 	private Map<String, FilterConstructor> filterConstructors = new HashMap<String, FilterConstructor>();
@@ -26,6 +27,7 @@ public class FilterFactory implements FilterConstructor{
 		defaultFilterConstructor = this;
 		registerFilter(FILTER_PERIOD, this);
 		registerFilter(FILTER_REMOTE_OPTS, this);
+		registerFilter(FILTER_TBUNIT, this);
 	}
 
 	/**
@@ -109,6 +111,10 @@ public class FilterFactory implements FilterConstructor{
 		if (FILTER_REMOTE_OPTS.equals(ftype))
 			return new RemoteOptionsFilter();
 
+		if (FILTER_TBUNIT.equals(ftype)) {
+			return new TbunitFilter();
+		}
+		
 		return null;
 	}
 	
