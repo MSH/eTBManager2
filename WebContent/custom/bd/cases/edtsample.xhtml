@@ -16,7 +16,8 @@
     	<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="future" value="true" /> 
-    	<ui:param name="datefield" value="#{examHome.instance.dateCollected}" /> 
+    	<ui:param name="datefield" value="#{examHome.instance.dateCollected}" />
+    	<ui:param name="checkDeathDate" value="true" />
     </s:decorate>
     </div>
 

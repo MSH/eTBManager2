@@ -33,6 +33,7 @@
 			    	<ui:define name="label">#{messages['PrescribedMedicine.iniDate']}:</ui:define>
 			    	<ui:param name="required" value="false" /> 
 			    	<ui:param name="datefield" value="#{tbcase.startDateSocialAward}" /> 
+			    	<ui:param name="checkDeathDate" value="true" />
 		    	</s:decorate>
 
 				<s:decorate template="/layout/edit.xhtml">
@@ -54,6 +55,7 @@
 			    	<ui:define name="label">#{messages['PrescribedMedicine.iniDate']}:</ui:define>
 			    	<ui:param name="required" value="false" /> 
 			    	<ui:param name="datefield" value="#{tbcase.startDateFoodPackageAward}" /> 
+			    	<ui:param name="checkDeathDate" value="true" />
 		    	</s:decorate>
 
 				<s:decorate template="/layout/edit.xhtml">
@@ -77,6 +79,7 @@
 			    	<ui:define name="label">#{messages['PrescribedMedicine.iniDate']}:</ui:define>
 			    	<ui:param name="required" value="false" /> 
 			    	<ui:param name="datefield" value="#{tbcase.startDateTransportAssist}" /> 
+			    	<ui:param name="checkDeathDate" value="true" />
 		    	</s:decorate>
 
 				<s:decorate template="/layout/edit.xhtml">

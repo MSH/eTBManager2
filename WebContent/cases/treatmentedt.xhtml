@@ -130,7 +130,8 @@ function formButtonPost(button) {
 	<s:decorate template="/layout/dateedit.xhtml" rendered="#{treatmentHome.canChangeIniTreatmentDate}">
 		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
-    	<ui:param name="datefield" value="#{treatmentHome.iniDate}"/> 
+    	<ui:param name="datefield" value="#{treatmentHome.iniDate}"/>
+    	<ui:param name="checkDeathDate" value="true" />
 	</s:decorate>
 	
 	<s:decorate template="/layout/display.xhtml" rendered="#{not treatmentHome.canChangeIniTreatmentDate}">
@@ -142,7 +143,8 @@ function formButtonPost(button) {
 	<s:decorate template="/layout/dateedit.xhtml" rendered="#{treatmentHome.canChangeIniContinuousPhase}">
 		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
-    	<ui:param name="datefield" value="#{treatmentHome.iniContinuousPhase}"/> 
+    	<ui:param name="datefield" value="#{treatmentHome.iniContinuousPhase}"/>
+    	<ui:param name="checkDeathDate" value="true" />
 	</s:decorate>
 	
 	<s:decorate template="/layout/display.xhtml" rendered="#{not treatmentHome.canChangeIniContinuousPhase}">
@@ -190,7 +192,8 @@ function formButtonPost(button) {
 	<s:decorate template="/layout/dateedit.xhtml">
 		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
-    	<ui:param name="datefield" value="#{treatmentHome.iniDate}"/> 
+    	<ui:param name="datefield" value="#{treatmentHome.iniDate}"/>
+    	<ui:param name="checkDeathDate" value="true" />
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml">
@@ -242,7 +245,8 @@ function formButtonPost(button) {
 	<s:decorate template="/layout/dateedit.xhtml">
 		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
-    	<ui:param name="datefield" value="#{prescribedMedicine.period.iniDate}"/> 
+    	<ui:param name="datefield" value="#{prescribedMedicine.period.iniDate}"/>
+    	<ui:param name="checkDeathDate" value="true" />
 	</s:decorate>
 
 	<s:decorate template="/layout/dateedit.xhtml">

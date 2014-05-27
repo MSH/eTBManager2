@@ -16,6 +16,10 @@ import org.msh.tb.application.App;
 public class DateValidator implements Validator {
 
 	public void validate(FacesContext facesContext, UIComponent comp, Object val) throws ValidatorException {
+		//Checks if it is an acceptable date (after 01/01/1900)
+		MinDateValidator minDateValidator = App.getComponent(MinDateValidator.class);
+		minDateValidator.validate(facesContext, comp, val);
+		
 		//Checks if has to validate future
 		UIParameter canBeFuture = findParam(comp.getParent(), "canBeFuture");
 		if (canBeFuture != null) {

@@ -161,6 +161,7 @@
     	<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
     	<ui:param name="datefield" value="#{tbcase.registrationDate}" /> 
 		<ui:param name="required" value="true" />
+		<ui:param name="checkDeathDate" value="true" />
     </s:decorate>
     </div>
     </td></tr>
@@ -172,6 +173,7 @@
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" /> 
+    	<ui:param name="checkDeathDate" value="true" />
     </s:decorate>
     </s:fragment>
     </td></tr>
@@ -190,14 +192,16 @@
     	<ui:param name="required" value="false" /> 
     	<ui:param name="future" value="true" /> 
    		<ui:param name="datefield" value="#{tbcasena.hospitalizedDt}" /> 
+   		<ui:param name="checkDeathDate" value="true" />
     </s:decorate>
     
     
      <s:decorate template="/layout/dateedit.xhtml" rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
      <ui:define name="label">#{messages['TbCase.dateOfDischarge']}:</ui:define>
-    <ui:param name="required" value="false" /> 
+    	<ui:param name="required" value="false" /> 
     	<ui:param name="future" value="true" /> 
-   <ui:param name="datefield" value="#{tbcasena.dischargeDt}" /> 
+   		<ui:param name="datefield" value="#{tbcasena.dischargeDt}" /> 
+   		<ui:param name="checkDeathDate" value="true" />
     </s:decorate>
     </div>
     </td></tr>

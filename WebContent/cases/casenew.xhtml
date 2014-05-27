@@ -28,7 +28,8 @@
     		<s:decorate template="/layout/dateedit.xhtml" >
     			<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
     			<ui:param name="required" value="true" /> 
-    			<ui:param name="datefield" value="#{medicalExamination.date}" /> 
+    			<ui:param name="datefield" value="#{medicalExamination.date}" />
+    			<ui:param name="checkDeathDate" value="true" />
     		</s:decorate>
 		
 		    <s:decorate template="/layout/edit.xhtml" >

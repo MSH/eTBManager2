@@ -1,5 +1,6 @@
 package org.msh.utils;
 
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Map;
 
@@ -49,8 +50,8 @@ public class PatientDateValidator implements Validator {
 			Map<String,String> messages = Messages.instance();
 			
 			FacesMessage message = new FacesMessage();
-			message.setDetail(messages.get("cases.deadbefore") + " " + DateUtils.formatAsLocale(deathDate, false));
-			message.setSummary(messages.get("cases.deadbefore") + " " + DateUtils.formatAsLocale(deathDate, false));
+			message.setDetail(MessageFormat.format(messages.get("cases.deadbefore"), DateUtils.formatAsLocale(deathDate, false)));
+			message.setSummary(MessageFormat.format(messages.get("cases.deadbefore"), DateUtils.formatAsLocale(deathDate, false)));
 			message.setSeverity(FacesMessage.SEVERITY_ERROR); 
 			throw new ValidatorException(message);
 		}

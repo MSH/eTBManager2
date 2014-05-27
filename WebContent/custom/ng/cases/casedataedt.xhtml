@@ -177,6 +177,7 @@
     	<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
     	<ui:param name="datefield" value="#{tbcase.registrationDate}" /> 
 		<ui:param name="required" value="true" />
+		<ui:param name="checkDeathDate" value="true" />
     </s:decorate>
     </div>
  
@@ -239,6 +240,7 @@
     	<ui:param name="required" value="#{tbcase.validated}" /> 
     	<!-- <ui:param name="required" value="true" /> -->
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" />	
+    	<ui:param name="checkDeathDate" value="true" />
     	</s:decorate>
     	
 		<s:decorate template="/layout/edit.xhtml">

@@ -61,6 +61,7 @@
     	<ui:define name="label">#{messages['cases.move.transferin-date']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{caseMoveHome.moveDate}" /> 
+    	<ui:param name="checkDeathDate" value="true" />
     </s:decorate>
 	<span style="color:red;">*</span> #{messages['form.required']}<p/>
     

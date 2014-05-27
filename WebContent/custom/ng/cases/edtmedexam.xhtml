@@ -34,7 +34,8 @@
     	<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="future" value="true" /> 
-    	<ui:param name="datefield" value="#{medicalExamination_Ng.date}" /> 
+    	<ui:param name="datefield" value="#{medicalExamination_Ng.date}" />
+    	<ui:param name="checkDeathDate" value="true" /> 
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
@@ -119,6 +120,7 @@
 		    	<ui:param name="required" value="false" /> 
 		    	<ui:param name="future" value="false" /> 
 		    	<ui:param name="datefield" value="#{medicalExamination_Ng.refByDate}" /> 
+		    	<ui:param name="checkDeathDate" value="true" />
 		    </s:decorate>		     	
   		</div>
 		
@@ -149,6 +151,7 @@
 		    	<ui:param name="required" value="false" /> 
 		    	<ui:param name="future" value="true" /> 
 		    	<ui:param name="datefield" value="#{medicalExamination_Ng.refToDate}" /> 
+		    	<ui:param name="checkDeathDate" value="true" />
 		    </s:decorate>			    
   		</div>
 		
