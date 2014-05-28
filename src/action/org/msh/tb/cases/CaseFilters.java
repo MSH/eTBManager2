@@ -24,8 +24,8 @@ import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.misc.GlobalLists;
+import org.msh.tb.tbunits.TBUnitSelection2;
 import org.msh.tb.tbunits.TBUnitType;
-import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.ItemSelectList;
 import org.msh.utils.date.DateUtils;
 
@@ -87,7 +87,7 @@ public class CaseFilters {
 	private boolean iniTreatmentDate;
 	
 	private AdminUnitSelection auselection;
-	private TBUnitSelection tbunitselection;
+	private TBUnitSelection2 tbunitselection;
 	
 	private String patient;
 	
@@ -529,9 +529,9 @@ public class CaseFilters {
 		return auselection;
 	}
 	
-	public TBUnitSelection getTbunitselection() {
+	public TBUnitSelection2 getTbunitselection() {
 		if (tbunitselection == null) {
-			tbunitselection = new TBUnitSelection("uaid");
+			tbunitselection = new TBUnitSelection2("uaid");
 			tbunitselection.setApplyUserRestrictions(true);
 			tbunitselection.setUnitType(TBUnitType.HEALTH_UNITS);
 		}
@@ -549,7 +549,7 @@ public class CaseFilters {
 
 
 	public String getTbAdminUnitLike() {
-		AdministrativeUnit adm = getTbunitselection().getAdminUnit();
+		AdministrativeUnit adm = getTbunitselection().getAuselection().getSelectedUnit();
 		
 		if (adm == null)
 			return null;

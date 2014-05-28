@@ -18,9 +18,10 @@
 	</s:decorate>
 
     <h2>#{messages['cases.healthUnit']}</h2>
-	<s:decorate template="/layout/tbselection.xhtml">
+	<s:decorate template="/layout/tbselection2.xhtml">
 		<ui:param name="tbunitselection" value="#{caseFilters.tbunitselection}" />
-
+		<ui:param name="unitlabel" value="#{messages['form.name']}" />
+		
 		<h:selectOneRadio value="#{caseFilters.filterHealthUnit}" >
 			<s:selectItems var="v" value="#{filterHealthUnits}" label="#{messages[v.key]}" />
 			<s:convertEnum />
