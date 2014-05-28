@@ -30,11 +30,13 @@
      <s:decorate id="nameSuspect" template="/layout/editname.xhtml" rendered = "#{tbcase.diagnosisType=='SUSPECT'}">
     	<ui:define name="label">#{messages['Suspect.name']}:</ui:define>
    		<ui:param name="patientdata" value="#{patient}" />
+   		<ui:param name="redasterisk" value="true" />
     </s:decorate>
     
      <s:decorate id="namePatient" template="/layout/editname.xhtml" rendered = "#{tbcase.diagnosisType=='CONFIRMED'}">
     	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
    		<ui:param name="patientdata" value="#{patient}" />
+   		<ui:param name="redasterisk" value="true" />
     </s:decorate>
 		
 	<h:panelGroup id="bd">
@@ -55,6 +57,10 @@
 		<s:link view="/cases/index.xhtml" styleClass="button-alt" onclick="disableButton(this)">
 			<span>#{messages['form.cancel']}</span>
 		</s:link>
+		
+		<div style="float:right;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
 </div>
 
 	<rich:jQuery timming="onload" selector="#main input[type='text']:first" query="focus()" />

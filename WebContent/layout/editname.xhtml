@@ -12,7 +12,7 @@
                 
         <s:label styleClass="name" style="#{empty labelstyle? '': labelstyle}">
             <ui:insert name="label"/>
-            <s:span style="color:red;" rendered="#{required}">*</s:span>
+            <s:span style="color:red;" rendered="#{required or redasterisk}">*</s:span>
         </s:label>
         
         <span class="value #{invalid?'fielderror':''}">
