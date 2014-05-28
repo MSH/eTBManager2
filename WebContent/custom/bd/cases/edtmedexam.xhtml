@@ -154,10 +154,10 @@
 <rich:jQuery selector="#cbpresc[selectedIndex!=2]" query="each(function(){jQuery('#edtreason').hide();})" />
 
 <rich:jQuery selector="#cbdotprov" query="change(function(){checkClick(this.selectedIndex!=0, '#dotProvName');})" />
-<rich:jQuery selector="#cbdotprov[selectedIndex!=2]" query="each(function(){jQuery('#dotProvName').hide();})" />
+<rich:jQuery selector="#cbdotprov[selectedIndex==0]" query="each(function(){jQuery('#dotProvName').hide();})" />
 
 <rich:jQuery selector="#cbrefto" query="change(function(){checkClick(this.selectedIndex!=0, '#refToUnit');})" />
-<rich:jQuery selector="#cbrefto[selectedIndex!=2]" query="each(function(){jQuery('#refToUnit').hide();})" />
+<rich:jQuery selector="#cbrefto[selectedIndex==0]" query="each(function(){jQuery('#refToUnit').hide();})" />
 
 
 <script type="text/javascript">
