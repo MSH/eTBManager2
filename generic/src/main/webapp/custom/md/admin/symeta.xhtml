@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+   	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="admintemplate.xhtml">
+
+<ui:param name="title" value="#{messages['ro.admin.symeta']}" />
+<ui:param name="topmenu" value="3" />
+<ui:param name="submenu" value="2" />
+
+
+<ui:define name="content">
+	<h1>#{title}</h1>
+	<h:form styleClass="form1">
+	<div id="pnldata" class="form-content">
+		<s:fragment rendered="#{not symetaIntHome.taskRunning}">
+		<h2>#{messages['ro.admin.symeta.desc']}</h2>
+		<a:commandLink styleClass="button" style="width:190px" 
+			action="#{symetaIntHome.execute}"
+			onclick="if (!disableButton(this)) return false;"
+			oncomplete="jQuery('#pnldata').hide();"
+			reRender="messages,pnltask">
+			<span>#{messages['ro.admin.symeta.run']}</span>
+		</a:commandLink>
+		
+		<div class="spacer" />
+		
+		<div class="button-bar">
+		<a:commandLink 
+			action="#{symetaIntHome.eraseCases}" styleClass="button-alt"
+			onclick="if (!disableButton(this)) return false;if (!confirm('#{messages['ro.admin.symeta.removecases']}')) {enableButton();return false;}"
+			reRender="messages">
+			<span>#{messages['ro.admin.symeta.erase']}</span>
+		</a:commandLink>
+
+		<a:commandLink action="#{symetaIntHome.initConfigEditing}" 
+		    reRender="cfgpnl" styleClass="button-alt"
+			oncomplete="showConfigDlg();">
+			<span>#{messages['ro.admin.symeta.config']}...</span>
+		</a:commandLink>
+		</div>
+		</s:fragment>
+	</div>
+	
+	<h:panelGroup id="pnltask">
+		<s:fragment rendered="#{symetaIntHome.taskRunning}">
+			<a:poll reRender="pnltask" interval="2000" ajaxSingle="true"/>
+
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['form.name']}</ui:define>
+				#{symetaIntHome.task.displayName}
+			</s:decorate>
+
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['Status']}</ui:define>
+				#{symetaIntHome.task.status}
+			</s:decorate>
+
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['Progress']}</ui:define>
+				<div style="width:100px;display:block;height:20px;">
+					<div class="progress-icon" style="width:#{symetaIntHome.task.progress}px"/>
+					#{symetaIntHome.task.progress}%
+				</div>
+			</s:decorate>
+		</s:fragment>
+	</h:panelGroup>
+	</h:form>		
+
+
+<rich:modalPanel id="symetaConfigdlg" width="580" zindex="2000" autosized="true" trimOverlayedElements="false">
+	<f:facet name="header">#{messages['ro.admin.symeta.config']}</f:facet>
+	<ui:param name="labelstyle" value="width:180px" />
+	<h:panelGroup id="cfgpnl" >
+	<h:form style="padding:10px;" >
+
+	<s:decorate template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['ro.admin.symeta.url']}:</ui:define>
+		<h:inputText value="#{symetaIntHome.config.webServiceURL}" style="width:340px"/>
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['ro.admin.symeta.emailReport']}:</ui:define>
+		<h:inputText value="#{symetaIntHome.config.emailReport}" style="width:340px"/>
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['ro.admin.symeta.workspace']}:</ui:define>
+		<h:selectOneMenu id="ws" value="#{symetaIntHome.config.workspace}" required="true">
+       		<s:selectItems value="#{workspacesUser}" var="c" label="#{c.name}" noSelectionLabel="-" />
+       		<s:convertEntity/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<div class="paragraph">
+		#{messages['ro.admin.symeta.default_adminunit']}
+	</div>
+	<h:messages styleClass="error" layout="table" />
+	<s:decorate template="/layout/auselection.xhtml" >
+		<ui:param name="auselection" value="#{symetaIntHome.auselection}" />
+	</s:decorate>
+
+	<div class="paragraph">
+		#{messages['ro.admin.symeta.default_tbunit']}
+	</div>
+	<s:decorate template="/layout/tbselection.xhtml" >
+		<ui:define name="label">#{messages['ro.admin.symeta.default_tbunit']}:</ui:define>
+		<ui:param name="tbunitselection" value="#{symetaIntHome.tbunitSelection}" />
+	</s:decorate>
+
+	<a:commandLink action="#{symetaIntHome.saveConfigs}"
+		data="#{symetaIntHome.configSaved}"
+		styleClass="button" reRender="cfgpnl" 
+		oncomplete="if (!data) return false;Richfaces.hideModalPanel('symetaConfigdlg');">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
+		
+	<a:commandLink styleClass="button-alt"  
+		oncomplete="Richfaces.hideModalPanel('symetaConfigdlg'); return false;"
+		ajaxSingle="true"
+		action="#{conversation.end}" >
+		<span>#{messages['form.cancel']}</span>
+	</a:commandLink>
+	</h:form>
+	</h:panelGroup>
+</rich:modalPanel>
+
+<script type="text/javascript"><!--
+
+function showConfigDlg() {	Richfaces.showModalPanel('symetaConfigdlg'); }
+
+--></script>
+
+</ui:define>
+
+</ui:composition>  

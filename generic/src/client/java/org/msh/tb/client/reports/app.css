@@ -1,0 +1,171 @@
+@CHARSET "ISO-8859-1";
+
+html {
+	overflow: auto;
+}
+
+.gwt-PopupPanel {
+	background-color:#ffffff;
+	border: 1px solid #7F9DB9;
+	box-shadow:3px 3px 10px #b0b0b0;
+}
+
+.gwt-Anchor {
+	cursor: pointer;
+}
+.hover-panel {
+	padding:3px;
+	margin-bottom:4px;
+}
+
+.hover-panel .del-button {
+	border:1px solid #d0d0d0;
+	border-radius:6px;
+	width:18px;
+	height:18px;
+	float:right;
+	text-align: center;
+	color:#a0a0a0;
+	font-size:10px;
+}
+
+.hover-panel-selected {
+	background-color:#f2f2f2;
+	border-radius:2px;
+}
+
+
+.var-panel {
+	width:350px;
+}
+
+.var-panel .options {
+	width:300px;
+	height:25px;
+}
+
+.var-panel .var-name {
+	border:1px solid #8c9b8c;
+	min-height:18px;
+	padding:2px;
+	width:270px;
+	background-color:white;
+}
+
+.var-panel .option-button {
+	float:right;
+	border:1px solid #8c9b8c;
+	width:16px;
+	height:16px;
+	font-size:12px;
+	text-align:center;
+	border-radius:2px;
+	background-color:#e0e0e0;
+	color:black;
+}
+
+/* Custom controls */
+.group-popup {
+	background-color:#ffffff;
+	border: 1px solid #7F9DB9;
+	box-shadow:3px 3px 10px #b0b0b0;
+}
+
+.group-panel {
+	padding:4px;
+}
+
+.group-panel .group-link {
+	color: black;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.group-panel .group-options a {
+	padding-left:20px;
+	padding-bottom:4px;
+	color:black;
+}
+
+.chart-button {
+	border:2px solid white; 
+	width:36px;
+	height:36px;
+	display:block;
+}
+
+.chart-button:hover {
+	border:2px solid #d0d0d0;
+	border-radius: 2px;
+}
+
+
+.chart-popup {
+	text-align: center;
+}
+
+.caselist-popup {
+	background-color:#ffffff;
+	border: 1px solid #7F9DB9;
+	box-shadow:3px 3px 10px #b0b0b0;
+	padding:2px 10px 10px 10px;
+	border-radius:4px;
+}
+
+.caselist-popup table td{
+	padding:4px;
+}
+
+.filter_name {
+	vertical-align: top;
+	font-weight: normal;
+	width: 160px;
+	float: left;
+	padding: 5px 4px 2px 4px;
+	clear: left;
+	text-align: right;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+}
+
+.filter_value {
+	float: left;
+	vertical-align: middle;
+	padding:1px;
+	font-size:11px;
+}
+
+.cellhover {
+	padding:1px;
+}
+.cellhover:hover {
+	background-color:#e0f0e0;
+	border-radius: 2px;
+	border:1px solid #d0e0d0;
+	cursor: pointer;
+	padding:0px;
+}
+
+.messagePanel{
+	border-radius:4px;
+}
+.messagePanel-error {
+	color: #b94a48;
+	background-color: #f2dede;
+	border:1px solid #eed3d7;
+}
+.messagePanel-inner {
+	padding:10px;
+	font-size:13px;
+}
+
+.toggle-button {
+	color:#d0d0d0;
+	position: relative;
+	top: 3px;
+	padding-left:4px;
+}
+.toggle-button:hover {
+	color:#888;
+}
+

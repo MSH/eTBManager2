@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:p="http://jboss.com/products/seam/pdf"
+      template="/custom/ua/layout/report.xhtml">
+     
+<ui:param name="title" value="#{messages['uk_UA.reports.tb10']}" />
+<ui:param name="topmenu" value="2" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:param name="indicator" value="#{reportTB10}" />
+<ui:param name="useclassification" value="0" />
+<ui:param name="left" value="0" />
+
+
+<ui:define name="naveg">
+	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
+</ui:define>
+
+
+<ui:define name="content">
+<h:form>
+<table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
+
+<tr><td align="center">
+
+<h:panelGroup id="indicator" styleClass="indicator-tables">
+
+	<s:fragment rendered="#{indicatorController.executing}">
+	<h:outputText value="#{messages['verify.busy']}" rendered="#{indicator.overflow}" styleClass="error"/>
+	
+	<h2>#{messages['uk_UA.reports.tb10.1']}</h2>
+	<table class="table1" width="100%">
+		<tr>
+			<th rowspan="2">
+				#{messages['uk_UA.reports.tb10.1.header1']}
+			</th>
+			<th rowspan="2" >
+				#{messages['uk_UA.reports.tb11.1.headerN']}
+			</th>
+			<th rowspan="2" >
+				#{messages['uk_UA.reports.tb10.1.header2']}
+			</th>
+			<th colspan="6">
+				#{messages['uk_UA.reports.tb10.1.header3']}
+			</th>
+			<th rowspan="2">
+				#{messages['uk_UA.reports.tb10.1.header7']}
+			</th>
+			<th rowspan="2">
+				#{messages['uk_UA.reports.tb10.1.header8']}
+			</th>
+		</tr>
+		<tr>
+			<th>
+				#{messages['uk_UA.reports.tb10.1.header4']}
+			</th>
+			<th>
+				%
+			</th>
+			<th>
+				#{messages['uk_UA.reports.tb10.1.header5']}
+			</th>
+			<th>
+				%
+			</th>
+			<th>
+				#{messages['uk_UA.reports.tb10.1.header6']}
+			</th>
+			<th>
+				%
+			</th>
+		</tr>
+		<tr>
+			<th>
+				#{messages['uk_UA.ExtraOutcomeInfo.TB']}
+			</th>
+			<th>
+				#{messages['uk_UA.ExtraOutcomeInfo.OTHER_CAUSES']}
+			</th>
+		</tr>
+		<tr>
+			<th>
+				#{messages['uk_UA.reports.tb10.a']}
+			</th>
+			<th>
+				#{messages['uk_UA.reports.tb10.b']}
+			</th>
+			<th>
+				1
+			</th>
+			<th>
+				2
+			</th>
+			<th>
+				3
+			</th>
+			<th>
+				4
+			</th>
+			<th>
+				5
+			</th>
+			<th>
+				6
+			</th>
+			<th>
+				7
+			</th>	
+			<th>
+				8
+			</th>
+			<th>
+				9
+			</th>		
+		</tr>
+		<ui:repeat value="#{indicator.table1000.rows}" var="row">
+		<tr>
+			<th>
+				#{row.title}
+			</th>
+			<ui:repeat value="#{row.cells}" var="val">
+			<td class="colcb">
+				<h:outputText value="#{val.value}" >
+					<f:convertNumber pattern="#,###,##0.##"/>
+				</h:outputText>
+			</td>
+			</ui:repeat>
+		</tr>
+		</ui:repeat>
+	</table>
+
+	<h2>#{messages['uk_UA.reports.tb10.2']}</h2>
+	<table class="table1" width="100%">
+		<tr>
+			<th rowspan="2">
+				#{messages['uk_UA.reports.tb10.1.header1']}
+			</th>
+			<th rowspan="2" >
+				#{messages['uk_UA.reports.tb11.1.headerN']}
+			</th>
+			<th colspan="2">
+				#{messages['CaseState.DIED']}
+			</th>
+			<th rowspan="2">
+				#{messages['CaseState.TREATMENT_INTERRUPTION']}
+			</th>
+			<th rowspan="2">
+				#{messages['CaseState.TRANSFERRED_OUT']}
+			</th>
+			<th rowspan="2">
+				#{messages['CaseState.DIAGNOSTIC_CHANGED']}
+			</th>
+			<th rowspan="2">
+				#{messages['CaseState.OTHER']}
+			</th>
+			<th rowspan="2">
+				#{messages['uk_UA.reports.tb10.2.header1']}
+			</th>
+		</tr>
+		<tr>
+			<th>
+				#{messages['uk_UA.ExtraOutcomeInfo.TB']}
+			</th>
+			<th>
+				#{messages['uk_UA.ExtraOutcomeInfo.OTHER_CAUSES']}
+			</th>
+		</tr>
+		<tr>
+			<th>
+				#{messages['uk_UA.ExtraOutcomeInfo.TB']}
+			</th>
+			<th>
+				#{messages['uk_UA.ExtraOutcomeInfo.OTHER_CAUSES']}
+			</th>
+		</tr>
+		<tr>
+			<th>
+				#{messages['uk_UA.reports.tb10.a']}
+			</th>
+			<th>
+				#{messages['uk_UA.reports.tb10.b']}
+			</th>
+			<th>
+				1
+			</th>
+			<th>
+				2
+			</th>
+			<th>
+				3
+			</th>
+			<th>
+				4
+			</th>
+			<th>
+				5
+			</th>
+			<th>
+				6
+			</th>
+			<th>
+				7
+			</th>			
+		</tr>
+		<ui:repeat value="#{indicator.table2000.rows}" var="row">
+		<tr>
+			<th>
+				#{row.title}
+			</th>
+			<ui:repeat value="#{row.cells}" var="val">
+			<td class="colcb">
+				<h:outputText value="#{val.value}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			</ui:repeat>
+		</tr>
+		</ui:repeat>
+		<tr>
+			<th>
+				#{messages['global.total']}
+			</th>
+			<td class="colcb">
+				4
+			</td>
+		<ui:repeat value="#{indicator.num}" var="n">
+			<td class="colcb">
+				<b>
+				<h:outputText value="#{n}">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+				</b>
+			</td>
+		</ui:repeat>
+		</tr>
+	</table>
+
+
+	</s:fragment>
+
+</h:panelGroup>
+</td></tr>
+</table>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

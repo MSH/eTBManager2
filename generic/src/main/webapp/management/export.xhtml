@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['manag.export']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="indicator" value="#{caseExportHome}" />
+<ui:param name="useclassification" value="0" />
+<ui:param name="waitdlg" value="0" />
+<ui:param name="left" value="0" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
+</ui:define>
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+
+<div class="form-content">
+<table width="100%"><tr><td>
+		<h2>#{messages['global.filters']}</h2>
+	<s:decorate template="filters.xhtml">
+		<ui:param name="hideupdtbar" value="true" />
+		<ui:param name="hideinterimmonth" value="true" />
+	</s:decorate>
+
+<div class="spacer" />
+
+	<h2>#{messages['manag.export.format']}</h2>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['DestinationFormat']}:</ui:define>
+		#{messages['DestinationFormat.EXCEL']}
+	</s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['ExportContent']}:</ui:define>
+		<table>
+			<tr>
+				<td>
+					<h:selectBooleanCheckbox value="#{caseDataExport.exportExamHiv}" />
+					<h:outputText value="#{messages['cases.examhiv']}" />
+				</td>
+				<td>
+					<h:selectBooleanCheckbox value="#{caseDataExport.exportExamMicroscopy}" />
+					<h:outputText value="#{messages['cases.exammicroscopy']}" />				
+				</td>
+				<td>
+					<h:selectBooleanCheckbox value="#{caseDataExport.exportExamCulture}" />
+					<h:outputText value="#{messages['cases.examculture']}" />				
+				</td>
+				<td>
+					<h:selectBooleanCheckbox value="#{caseDataExport.exportExamDST}" />
+					<h:outputText value="#{messages['cases.examdst']}" />				
+				</td>											
+			</tr>
+			<tr>
+				<td>
+					<h:selectBooleanCheckbox value="#{caseDataExport.exportExamXRay}" />
+					<h:outputText value="#{messages['cases.examxray']}" />				
+				</td>
+				<td>
+					<h:selectBooleanCheckbox value="#{caseDataExport.exportCasesComorbidity}" />
+					<h:outputText value="#{messages['cases.comorbidities']}" />				
+				</td>
+				<td>
+					<h:selectBooleanCheckbox value="#{caseDataExport.exportCaseSideEffect}" />
+					<h:outputText value="#{messages['cases.sideeffects.desc']}" />				
+				</td>												
+			</tr>			
+		</table>
+	</s:decorate>
+
+</td></tr></table>
+</div>
+
+<div class="form-footer">
+	<div id="divexportbutton">
+	<h:commandLink action="#{caseExamExportHome.download}" styleClass="button" onclick="if (!disableButton(jQuery('#divexportbutton a'))) return false;">
+		<span>#{messages['global.export']}</span>
+	</h:commandLink>
+	</div>
+</div>
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

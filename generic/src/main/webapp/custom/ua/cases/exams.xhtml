@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+<ui:param name="molecularBiologyHome" value="#{molecularBiologyUAHome}"/>
+<h:form>
+	<s:link view="/cases/edtexamhiv.xhtml"  propagation="none" 
+		style="float:right;" rendered="#{caseHome.canEditExams}" styleClass="button-alt" 
+		onclick="disableButton(this)">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h:panelGroup id="pnlhiv">
+		<h2>#{messages['cases.examhiv']}</h2>
+		<s:div styleClass="region3" rendered="#{empty examHIVHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
+		<h:dataTable value="#{examHIVHome.allResults}" var="r" rendered="#{not empty examHIVHome.allResults}" 
+			width="100%" styleClass="table1" columnClasses="colcb,colcb,colb,colb,colb">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['global.month']}" styleClass="colch"/>
+				</f:facet>
+				<s:link view="/cases/edtexamhiv.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
+					<f:param name="id" value="#{tbcase.id}"/>
+					<f:param name="examid" value="#{r.id}"/>
+					#{r.monthDisplay}
+				</s:link>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					#{messages['cases.exams.date']}
+				</f:facet>
+				<h:outputText value="#{r.date}" converter="localeDateConverter"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
+				</f:facet>
+				#{messages[r.result.key]}
+				<s:fragment rendered="#{r.ARTstarted}">
+					<br/><b>#{messages['uk_UA.treatART']}</b> 
+					<h:outputText value=" #{messages['form.from']} "/> 
+					<h:outputText value="#{r.startedARTdate}" converter="localeDateConverter"/>
+				</s:fragment>
+				<s:fragment rendered="#{r.CPTstarted}">
+					<br/><b>#{messages['cases.examhiv.cpt']} </b> 
+					<h:outputText value=" #{messages['form.from']} "/>   
+					<h:outputText value="#{r.startedCPTdate}" converter="localeDateConverter"/>
+				</s:fragment>
+				
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['Laboratory']}" styleClass="collh"/>
+				</f:facet>
+				#{r.laboratory}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
+				</f:facet>
+				#{r.comments}
+			</h:column>
+
+			<h:column rendered="#{caseHome.canEditExams}">
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamHIV(#{r.id});return false;" style="font-size:9px;">
+				</h:commandLink>
+			</h:column>			
+		</h:dataTable>
+	</h:panelGroup>
+
+<a:jsFunction name="remExamHIV" action="#{examHIVHome.remove}" reRender="pnlhiv"  rendered="#{caseHome.canEditExams}">
+	<a:actionparam name="param1" assignTo="#{examHIVHome.id}" converter="javax.faces.Integer"/>
+</a:jsFunction>
+    
+
+    <div class="spacer" />
+
+	<s:link view="/cases/edtexammicroscopy.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" 
+		 propagation="none" styleClass="button-alt" onclick="disableButton(this)">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h:panelGroup id="pnlmicroscopy">
+	<h2>#{messages['cases.exammicroscopy']}</h2>	
+		<s:div styleClass="region3" rendered="#{empty examMicroscopyHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
+		<h:dataTable value="#{examMicroscopyHome.allResults}" var="r" rendered="#{not empty examMicroscopyHome.allResults}" 
+			width="100%" styleClass="table1" columnClasses="colb,colb,colb,colb,colb">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
+				</f:facet>
+				<s:link view="/cases/edtexammicroscopy.xhtml" propagation="none" enabled="#{caseHome.canEditExams}" >
+					<f:param name="id" value="#{tbcase.id}"/>
+					<f:param name="examid" value="#{r.id}"/>
+					#{r.monthDisplay}
+				</s:link>
+				<div style="display:block;">
+				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
+				<br/>
+				<h:outputText value="#{r.sampleNumber}" title="#{messages['PatientSample.sampleNumber']}" />
+				</div>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['Laboratory']}" styleClass="collh"/>
+				</f:facet>
+				<h:outputText value="#{r.laboratory.abbrevName}" title="#{r.laboratory.name}" />
+				<br/>
+				#{r.laboratory.adminUnit.name}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
+				</f:facet>
+				<div class="#{r.result=='NEGATIVE'? 'result-negative': 'result-positive'}">#{messages[r.result.key]}</div>
+				<s:fragment rendered="#{not empty r.numberOfAFB}" style="display:block;clear:both;">
+					<h:outputText value="#{messages['cases.exams.afb']}"/>: #{r.numberOfAFB}
+				</s:fragment>
+				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}" style="display:block;"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
+				</f:facet>
+				#{r.comments}
+			</h:column>
+
+			<h:column rendered="#{caseHome.canEditExams}">
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamMicroscopy(#{r.id});return false;" style="font-size:9px;">
+				</h:commandLink>
+			</h:column>			
+		</h:dataTable>
+	</h:panelGroup>
+<a:jsFunction name="remExamMicroscopy" action="#{examMicroscopyHome.remove}" reRender="pnlmicroscopy"  rendered="#{caseHome.canEditExams}">
+	<a:actionparam name="param1" assignTo="#{examMicroscopyHome.id}" converter="javax.faces.Integer"/>
+</a:jsFunction>
+
+
+
+	<div class="spacer" />
+
+	<h:panelGroup id="pnlculture">
+	<s:link view="/cases/edtexamculture.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" 
+		 propagation="none" styleClass="button-alt" onclick="disableButton(this)">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h2>#{messages['cases.examculture']}</h2>
+		<s:div styleClass="region3" rendered="#{empty examCultureHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
+		<h:dataTable value="#{examCultureHome.allResults}" var="r" rendered="#{not empty examCultureHome.allResults}" width="100%" 
+			styleClass="table1" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
+				</f:facet>
+				<s:link view="/cases/edtexamculture.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
+					<f:param name="id" value="#{tbcase.id}"/>
+					<f:param name="examid" value="#{r.id}"/>
+					#{r.monthDisplay}
+				</s:link>
+				<div style="margin-left:20px;display:block;">
+				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
+				<br/>
+				<h:outputText value="#{r.sampleNumber}" title="#{messages['PatientSample.sampleNumber']}" />
+				</div>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['Laboratory']}" styleClass="collh"/>
+				</f:facet>
+				<h:outputText value="#{r.laboratory.abbrevName}" title="#{r.laboratory.name}" />
+				<br/>
+				#{r.laboratory.adminUnit.name}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
+				</f:facet>
+				<div class="#{r.result=='NEGATIVE'? 'result-negative': 'result-positive'}">#{messages[r.result.key]}</div>
+				<s:div rendered="#{not empty r.numberOfColonies}" style="display:block;clear:both;">
+					<h:outputText value="#{messages['ExamCulture.numberOfColonies']}"/>: #{r.numberOfColonies}
+				</s:div>
+				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}" style="display:block;"/>
+				<s:div rendered="#{not empty r.method}" style="display:block;clear:both;">
+					<h:outputText value="#{messages['cases.exams.method']}"/>: #{r.method}
+				</s:div>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
+				</f:facet>
+				#{r.comments}
+			</h:column>
+
+			<h:column rendered="#{caseHome.canEditExams}">
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamCulture(#{r.id});return false;" style="font-size:9px;">
+				</h:commandLink>
+			</h:column>			
+		</h:dataTable>
+	</h:panelGroup>
+
+<a:jsFunction name="remExamCulture" action="#{examCultureHome.remove}" reRender="pnlculture" ajaxSingle="true" rendered="#{caseHome.canEditExams}">
+	<a:actionparam name="param1" assignTo="#{examCultureHome.id}" converter="javax.faces.Integer"/>
+</a:jsFunction>
+
+	<div class="spacer" />	
+
+	<h:panelGroup id="pnldst">	
+
+		<s:link view="/cases/edtexamdst.xhtml" style="float:right;"
+			rendered="#{caseHome.canEditExams}"  propagation="none" styleClass="button-alt" onclick="disableButton(this)">
+			<f:param name="id" value="#{tbcase.id}"/>
+			<f:param name="examid" value="#{null}"/>
+			<span>#{messages['cases.details.newresult']}</span>
+		</s:link>
+		<h2>#{messages['cases.examdst']}</h2>
+		
+		<s:div styleClass="region3" rendered="#{empty examDSTTable.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
+		<s:fragment rendered="#{not empty examDSTTable.allResults}">
+		<div>
+		<table class="table1" width="100%">
+		<tr>
+		<th>
+			#{messages['PatientSample.dateCollected']}
+		</th>
+		<th align="left">
+			#{messages['cases.exams.method']}
+		</th>
+		<th align="left">
+			#{messages['Laboratory']}
+		</th>
+		<ui:repeat value="#{examDSTTable.substances}" var="m">
+		<th>
+			#{m.abbrevName}
+		</th>
+		</ui:repeat>
+		<s:fragment rendered="#{caseHome.canEditExams}">
+		<th>
+		</th>
+		</s:fragment>
+		</tr>
+		<a:repeat value="#{examDSTTable.allResults}" var="r">
+		<tr>
+			<td>
+				<s:link view="/cases/edtexamdst.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
+					<f:param name="id" value="#{tbcase.id}"/>
+					<f:param name="examid" value="#{r.examResult.id}"/>
+					#{r.examResult.monthDisplay}
+				</s:link>
+				<div style="margin-left:20px;display:block;">
+				<h:outputText value="#{r.examResult.dateCollected}" converter="localeDateConverter" />
+				<br/>
+				<h:outputText value="#{r.examResult.sampleNumber}" title="#{messages['PatientSample.sampleNumber']}" />
+				</div>
+			</td>
+			<td class="colb">
+				#{r.examResult.method.name}
+			</td>
+			<td class="colb">
+				#{r.examResult.laboratory.abbrevName}
+			</td>
+			<ui:repeat value="#{r.results}" var="rs">
+			<td class="colcb" rowspan="#{empty r.examResult.comments?'1':'2'}">
+				<s:fragment  rendered="#{rs=='RESISTANT'}"><div class="dst-resistant" title="#{messages[rs.key]}" /></s:fragment>
+				<s:fragment  rendered="#{rs=='SUSCEPTIBLE'}"><div class="dst-susceptible" title="#{messages[rs.key]}" /></s:fragment>
+				<s:fragment  rendered="#{rs=='CONTAMINATED'}"><div class="dst-contaminated" title="#{messages[rs.key]}" /></s:fragment>
+				<h:outputText value="x" rendered="#{rs=='NOTDONE'}" title="#{messages[rs.key]}"/>
+			</td>
+			</ui:repeat>
+			<s:fragment rendered="#{caseHome.canEditExams}">
+			<td class="colcb" rowspan="#{empty r.examResult.comments?'1':'2'}"  >
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamDST(#{r.examResult.id});return false;" style="font-size:9px">
+				</h:commandLink>
+			</td>
+			</s:fragment>
+		</tr>
+		<s:fragment rendered="#{not empty r.examResult.comments}">
+			<tr><td colspan="3" class="colb">
+				<b>#{messages['global.comments']} :</b>
+				#{r.examResult.comments}
+			</td></tr>
+		</s:fragment>
+		</a:repeat>
+		</table>
+		</div>
+		</s:fragment>
+	</h:panelGroup>
+	
+<a:jsFunction name="remExamDST" action="#{examDSTHome.remove}" reRender="pnldst" ajaxSingle="true"  rendered="#{caseHome.canEditExams}">
+	<a:actionparam name="param1" assignTo="#{examDSTHome.id}" converter="javax.faces.Integer"/>
+</a:jsFunction>
+
+	<div class="spacer" />
+
+		<s:link view="/custom/ua/cases/edtexamxray.xhtml" onclick="disableButton(this)" 
+			style="float:right;" rendered="#{caseHome.canEditExams}" propagation="none" styleClass="button-alt">
+			<f:param name="id" value="#{tbcase.id}"/>
+			<f:param name="examid" value="#{null}"/>
+			<span>#{messages['cases.details.newresult']}</span>
+		</s:link>
+	<h2>#{messages['cases.examxray']}</h2>
+	<h:panelGroup id="pnlXRay">	
+		
+		<s:div styleClass="region3" rendered="#{empty examXRayHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
+		<h:dataTable value="#{examXRayHome.allResults}" var="r" rendered="#{not empty examXRayHome.allResults}"  
+			styleClass="table1" columnClasses="colcb,colcb,colb,colb,colb,colcb">
+			<h:column>
+				<f:facet name="header">#{messages['global.month']}</f:facet>
+				<s:link view="/custom/ua/cases/edtexamxray.xhtml" propagation="none" >
+					<f:param name="id" value="#{tbcase.id}"/>
+					<f:param name="examid" value="#{r.id}"/>
+					#{r.monthDisplay}
+				</s:link>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					#{messages['cases.details.date']}
+				</f:facet>
+				<h:outputText value="#{r.date}" converter="localeDateConverter">
+				</h:outputText>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
+				</f:facet>
+				#{messages[r.result.key]}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['uk_UA.pulmonaryDestruction']}" styleClass="collh"/>
+				</f:facet>
+				<h:outputText value="#{r.destruction?messages['global.yes']:messages['global.no']}" rendered="#{not empty r.destruction}"/>
+			</h:column>
+						
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
+				</f:facet>
+				#{r.comments}
+			</h:column>
+
+			<h:column>
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamXRay(#{r.id}, #{examXRayHome.lastResult});return false;" style="font-size:9px;">
+				</h:commandLink>
+			</h:column>			
+		</h:dataTable>
+	</h:panelGroup>
+	
+
+	<div class="spacer" />
+
+<a:jsFunction name="remExamXRay" action="#{examXRayHome.remove}" reRender="pnlXRay" >
+	<a:actionparam name="param1" assignTo="#{examXRayHome.id}" converter="javax.faces.Integer"/>
+	<a:actionparam name="param2" assignTo="#{examXRayHome.lastResult}" converter="javax.faces.Boolean"/>
+</a:jsFunction>
+
+
+	<h:panelGroup id="pnlHistology">
+			<s:link view="/custom/ua/cases/edthistology.xhtml" 
+				style="float:right;" rendered="#{caseHome.canEditExams}" propagation="none" styleClass="button-alt"
+				onclick="disableButton(this)">
+				<f:param name="id" value="#{tbcase.id}"/>
+				<f:param name="examid" value="#{null}"/>
+				<span>#{messages['cases.details.newresult']}</span>
+			</s:link>
+		<h2>	
+			#{messages['uk_UA.histology']}
+		</h2>
+		
+		<s:div styleClass="region3" rendered="#{empty histologyHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+		</div></s:div>
+		<h:dataTable value="#{histologyHome.allResults}" var="r" rendered="#{not empty histologyHome.allResults}" width="100%" 
+			styleClass="table1" columnClasses="colcb,colcb,colb,colb,colb,colcb">
+			<h:column>
+				<f:facet name="header">#{messages['global.month']}</f:facet>
+				
+				<s:link view="/custom/ua/cases/edthistology.xhtml" propagation="none" >
+					<f:param name="id" value="#{tbcase.id}"/>
+					<f:param name="examid" value="#{r.id}"/>
+					#{r.monthDisplay}
+				</s:link>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					#{messages['cases.details.date']}
+				</f:facet>
+				<h:outputText value="#{r.date}" converter="localeDateConverter">
+				</h:outputText>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
+				</f:facet>
+				#{r.result.description}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
+				</f:facet>
+				#{r.comments}
+			</h:column>
+
+			<h:column>
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remHistology(#{r.id}, #{histologyHome.lastResult});return false;" style="font-size:9px;">
+				</h:commandLink>
+			</h:column>			
+		</h:dataTable>
+	</h:panelGroup>
+
+<a:jsFunction name="remHistology" action="#{histologyHome.remove}" reRender="pnlHistology" >
+	<a:actionparam name="param1" assignTo="#{histologyHome.id}" converter="javax.faces.Integer"/>
+	<a:actionparam name="param2" assignTo="#{histologyHome.lastResult}" converter="javax.faces.Boolean"/>
+</a:jsFunction>
+
+<a:jsFunction name="remMolecularBiology" action="#{molecularBiologyHome.remove}" reRender="pnlMolecularBiology,messages" >
+	<a:actionparam name="param1" assignTo="#{molecularBiologyHome.id}" converter="javax.faces.Integer"/>
+</a:jsFunction>
+
+	<div class="spacer" />
+
+	<s:link view="/custom/ua/cases/edtmolecularbiology.xhtml" style="float:right;" styleClass="button-alt" onclick="disableButton(this)">
+		<f:param name="id" value="#{tbcase.id}"/>
+		<f:param name="examid" value="#{null}"/>
+		<span>#{messages['cases.details.newresult']}</span>
+	</s:link>
+	<h2>#{messages['uk_UA.MolecularBiology']}</h2>
+	<h:panelGroup id="pnlMolecularBiology">	
+		<s:div styleClass="region3" rendered="#{empty molecularBiologyHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" /></div>
+		</s:div>
+		<h:dataTable value="#{molecularBiologyHome.allResults}" var="r" rendered="#{not empty molecularBiologyHome.allResults}" width="100%" 
+			styleClass="table1" columnClasses="colb,colb,colb,colb,colcb">
+			<h:column>
+				<f:facet name="header">#{messages['cases.exams.date']}</f:facet>
+				<s:link view="/custom/ua/cases/edtmolecularbiology.xhtml" propagation="none" >
+					<f:param name="id" value="#{tbcase.id}"/>
+					<f:param name="examid" value="#{r.id}"/>
+					#{r.monthDisplay}
+				</s:link>
+				<br/>
+				<h:outputText value="#{r.date}" converter="localeDateConverter"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.exams.method']}" styleClass="collh"/>
+				</f:facet>
+				#{messages[r.result.messageKey]}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['uk_UA.MolecularBiology.result']}" styleClass="collh"/>
+				</f:facet>
+				#{molecularBiologyUAHome.getResult(r)}
+				<br/>
+				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" />
+			</h:column>
+			
+			<h:column rendered="false">
+				<f:facet name="header">
+					<h:outputText value="#{messages['cases.exams.dateRelease']}" styleClass="collh"/>
+				</f:facet>
+				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" />
+			</h:column>
+						
+			<h:column rendered="false">
+				<f:facet name="header">
+					<h:outputText value="#{messages['global.comments']}" styleClass="collh"/>
+				</f:facet>
+				#{r.comments}
+			</h:column>
+
+			<h:column rendered="#{caseHome.canEditExams and not printing}">
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remMolecularBiology(#{r.id});return false;" style="font-size:9px;">
+				</h:commandLink>
+			</h:column>			
+		</h:dataTable>
+	</h:panelGroup>
+
+	<s:decorate template="/cases/comments.xhtml">
+		<ui:param name="panel" value="exams" />
+	</s:decorate>
+
+</h:form>
+
+</ui:composition>

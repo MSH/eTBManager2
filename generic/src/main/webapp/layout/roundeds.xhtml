@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:s="http://jboss.com/products/seam/taglib">
+                 
+
+<table style="table-layout:fixed;width:100%;border-collapse: collapse;"><tr><td>
+<b class="rtop" style="background:#{bgcolor};">
+  <b class="r1s" style="background:#{color};"></b> <b class="r2s" style="background:#{color};"></b> 
+</b>
+<div style="padding-left:4px;padding-right:4px;background:#{color};">
+<ui:insert />
+</div>
+<b class="rbottom" style="background:#{bgcolor};">
+  <b class="r2s" style="background:#{color}"></b> <b class="r1s" style="background:#{color}"></b>
+</b>
+</td></tr></table>
+    
+</ui:composition>

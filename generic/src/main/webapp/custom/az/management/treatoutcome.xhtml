@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:p="http://jboss.com/products/seam/pdf"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['manag.ind.treatoutcome']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="left" value="0" />
+
+<ui:param name="indicator" value="#{outcomeIndicator}" />
+<ui:param name="resultIndicator" value="#{treatResultIndicatorAZ}" />
+<ui:param name="table" value="#{resultIndicator.table}" />
+<ui:param name="useclassification" value="0" />
+<ui:param name="useShowPerc" value="1" />
+
+
+<ui:define name="head">
+	<script type="text/javascript" src="#{request.contextPath}/js/json2.js"></script>
+	<script type="text/javascript" src="#{request.contextPath}/js/swfobject.js"></script>
+</ui:define>
+
+<ui:define name="naveg">
+	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
+</ui:define>
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form styleClass="form1">
+<table width="100%" >
+<tr><td>
+	<ui:param name="hideinterimmonth" value="true" />
+	<ui:include src="#{workspaceUriRewrite.getWorkspacePage('/management/filters.xhtml')}" />
+
+</td></tr>
+
+<!--  treatment result part -->
+<tr><td align="left">
+<br />
+
+<h:panelGroup id="indicator">
+	<s:fragment rendered="#{indicatorController.executing}">
+	<div class="paragraph">#{messages['manag.ind.starttreat.title2']}</div>
+	<br/>
+	<table class="table1" width="100%">
+		<tr>
+			<th>
+				#{messages['PatientType']}
+			</th>
+<ui:remove>
+			<th>
+				#{table.columns.get(1).title}
+			</th>
+			<th>
+				#{table.columns.get(3).title}
+			</th>
+			<th>
+				#{table.columns.get(4).title}
+			</th>
+			<th>
+				#{table.columns.get(5).title}
+			</th>
+			<th>
+				#{table.columns.get(6).title}
+			</th>
+			<th>
+				#{table.columns.get(7).title}
+			</th>
+			<th>
+				#{messages['global.total']}
+			</th>
+			<th>
+				#{table.columns.get(8).title}
+			</th>
+			<th>
+				#{table.columns.get(0).title}
+			</th>
+			<th>
+				#{table.columns.get(2).title}
+			</th>
+</ui:remove>
+		<ui:repeat value="#{table.columns}" var="col">
+			<s:fragment rendered="#{not col.highlight}">
+				<th>
+					#{col.title}
+				</th>
+			</s:fragment>
+			<s:fragment rendered="#{col.highlight}">
+				<th>
+					#{messages['global.total']}
+				</th>
+				<th>
+					#{col.title}
+				</th>
+			</s:fragment>
+		</ui:repeat>
+		</tr>
+		<ui:repeat value="#{table.rows}" var="row">
+		<tr>
+			<td class="colb">
+				#{row.title}
+			</td>
+			<ui:repeat value="#{row.cells}" var="val">
+			<s:fragment rendered="#{not val.column.highlight}">
+				<td class="colcb" bgcolor="#{treatResultIndicatorAZ.getColorCell(val)}">
+					<h:outputText value="#{val.value}" rendered="#{not indicator.showPerc}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+					<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty val.value)}"/>
+					
+					
+					<s:decorate template="/layout/percentagelabel.xhtml" rendered="#{indicator.showPerc}">
+			    		<ui:param name="totalValue" value="#{treatResultIndicatorAZ.getTotal(row)}" />
+			    		<ui:param name="absoluteValue" value="#{val.value}" />
+			    	</s:decorate>
+				</td>
+			</s:fragment>
+			
+			<s:fragment rendered="#{val.column.highlight}">
+						
+				<td class="colcb" bgcolor="#DBFADC">
+					<b>
+					<h:outputText value="#{treatResultIndicatorAZ.getTotal(row)}" rendered="#{not indicator.showPerc}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+					
+					<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty treatResultIndicatorAZ.getTotal(row))}"/>
+					
+					<h:outputText value="100%" rendered="#{indicator.showPerc}"/>	
+					</b>
+				</td>
+			
+				<td class="colcb" bgcolor="#BCD2EE">
+					<h:outputText value="#{val.value}">
+						<f:convertNumber pattern="###.##"/>
+					</h:outputText>
+
+					<h:outputText value="%" rendered="#{indicator.showPerc || val.column.highlight}" />	
+				</td>
+			</s:fragment>
+			</ui:repeat>
+
+		</tr>
+		</ui:repeat>
+
+		<tr>
+			<td class="colb" bgcolor="#DBFADC">
+				<b>#{messages['global.total']}</b>
+			</td>
+		<ui:repeat value="#{table.columns}" var="col">
+			<s:fragment rendered="#{not col.highlight}">
+				<td class="colcb" bgcolor="#{treatResultIndicatorAZ.getColorColumn(col)}">
+					<b>
+					<h:outputText value="#{col.total}" rendered="#{not indicator.showPerc}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+					
+					<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty col.total)}"/>
+					
+					
+					<s:decorate template="/layout/percentagelabel.xhtml" rendered="#{indicator.showPerc}">
+			    		<ui:param name="totalValue" value="#{table.total}" />
+			    		<ui:param name="absoluteValue" value="#{col.total}" />
+			    	</s:decorate>
+					</b>
+				</td>
+			</s:fragment>
+		</ui:repeat>
+			<td class="colcb"  bgcolor="#DBFADC">
+				<b>
+				<h:outputText value="#{treatResultIndicatorAZ.getTotal()}" rendered="#{not indicator.showPerc}">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+				
+				<h:outputText value="-" rendered="#{(not indicator.showPerc) and (empty treatResultIndicatorAZ.getTotal())}"/>
+				
+				<h:outputText value="100%" rendered="#{indicator.showPerc}"/>
+				</b>
+			</td>
+			<td class="colcb" bgcolor="#BCD2EE">
+				<h:outputText value="-" />	
+			</td>
+		</tr>
+
+	</table>
+	</s:fragment>
+
+	<br/>
+	<div class="paragraph">#{messages['manag.ind.starttreat.title2']}</div>
+	<br/>
+	<s:decorate template="chartflash.xhtml">
+		<ui:param name="title" value="#{messages['manag.ind.treatoutcome']}" />
+		<ui:param name="series" value="#{resultIndicator.series}" />
+		<ui:param name="seriestitle" value="#{messages['cases.outcome']}" />
+	</s:decorate>
+
+	<s:fragment rendered="#{(indicatorController.executing)}">
+	<div style="float:left;font-size:14px;margin:10px;">
+	<b>
+	<span style="margin-right:10px;" class="status-label">#{messages['manag.ind.successrate']}:</span> 
+	<h:outputText value="#{treatResultIndicatorAZ.successRate}">
+		<f:convertNumber pattern="#,###,##0.00" />
+	</h:outputText>%
+	</b>
+	</div>
+	</s:fragment>
+
+</h:panelGroup>
+
+</td></tr>
+
+<tr><td align="right">
+	<div id="charttypediv">
+	<b>#{messages['charts']}:</b>	
+	<h:selectOneMenu value="#{indicatorFilters.chartType}">
+		<f:selectItems value="#{chartTypes}"/>
+		<a:support event="onchange" reRender="indicator" action="#{indicator.execute}" ajaxSingle="true"/>
+	</h:selectOneMenu>
+	</div>
+</td></tr>
+</table>
+<rich:jQuery selector="#charttypediv" query="hide()" />
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

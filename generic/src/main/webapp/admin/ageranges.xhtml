@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="admintemplate.xhtml">
+
+<ui:param name="title" value="#{messages['admin.ageranges']}" />
+<ui:param name="submenu" value="0" />
+
+<ui:define name="content">
+<h1><i class="icon-tasks" />#{title}</h1>
+<h:form id="main">
+<s:link view="/admin/edtagerange.xhtml" styleClass="button" rendered="#{s:hasRole('AGERANGES_EDT')}">
+	<f:param name="id" value="#{null}" />
+	<span>#{messages['form.newf']}</span>
+</s:link>
+<p/>
+<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty ageRangeHome.items}" styleClass="warn"/>
+<h:dataTable id="tbl" value="#{ageRangeHome.items}" var="r" border="0" columnClasses="colc,colc" width="600px"
+  styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty ageRangeHome.items}">
+  <h:column>
+  	<f:facet name="header">
+  		<h:outputText value="#{messages['AgeRange']}" />
+  	</f:facet>
+  	<s:link value="#{r}" view="/admin/edtagerange.xhtml" disabled="#{not s:hasRole('AGERANGES_EDT')}">
+  		<f:param name="id" value="#{r.id}"/>
+  	</s:link>
+  </h:column>
+
+  <h:column rendered="#{s:hasRole('AGERANGES_EDT')}">
+  	<f:facet name="header">#{messages['form.action']}</f:facet>
+	<a:commandLink action="#{ageRangeHome.remove}" value="#{messages['form.remove']}" onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" reRender="main,messages">
+		<a:actionparam assignTo="#{ageRangeHome.id}" value="#{r.id}" name="id" converter="javax.faces.Integer"/>
+	</a:commandLink>
+  </h:column>
+</h:dataTable>
+
+<ui:include src="/layout/tablerow.xhtml" />
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

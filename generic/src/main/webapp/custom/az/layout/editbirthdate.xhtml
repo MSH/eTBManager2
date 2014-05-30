@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:s="http://jboss.com/products/seam/taglib"
+                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	<tr><td>
+
+	<input type="hidden" id="formatodata" value="#{timezones.dateFormat}"/>
+	<script src="#{request.contextPath}/js/patientage.js" type="text/javascript" />
+	<div id="divbirthdate">
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>
+		<span id="divbirthdate">
+		<rich:calendar id="pacbirthdate" enableManualInput="true" value="#{caseHome.getInstance().patient.birthDate}" 
+			required="true" locale="#{locale}" datePattern="#{messages['locale.datePattern']}" 
+			timeZone="#{timezones.default}" validator="#{futureDateValidator.validate}" inputStyle="width:100px;" 
+			showWeeksBar="false" onchanged="handleCaseDateChangeUAZ();">
+		</rich:calendar>
+		</span>
+		<f:param name="validatefuture" value="false" />
+		(#{messages['locale.displayDatePattern']})
+		<rich:jQuery selector="#divbirthdate .rich-calendar-input" query="mask('#{messages['locale.dateMask']}')" />
+	</s:decorate>
+    <rich:jQuery selector="#divbirthdate input" query="bind('keypress', function() { handleCaseDateChangeUAZ();})" />
+    </div>
+
+	</td><td>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
+    	<div id="divage">
+    	<h:inputText id="edtage" value="#{caseHome.getInstance().age}" style="width:80px;" readonly="true">
+    		<f:validateLongRange minimum="0" maximum="150"/>
+    	</h:inputText>
+    	</div>
+    </s:decorate>
+
+	</td></tr>
+    
+</ui:composition>

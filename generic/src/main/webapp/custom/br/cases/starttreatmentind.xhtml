@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['regimens.individualized']}" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:param name="labelstyle" value="width:140px" />
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+<s:decorate template="/layout/casebody.xhtml">
+	<a:form id="formtreat" styleClass="form1">
+	<table width="100%" style="border-collapse:collapse;"><tr><td>
+
+    <s:decorate template="/layout/display.xhtml" >
+   		<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
+   		<h:outputText value="#{tbcase.registrationDate}" />
+   	</s:decorate>
+
+	<div class="paragraph">#{messages['cases.healthUnit']}</div>
+	<s:decorate template="/layout/tbselection.xhtml" style="margin-bottom:10px;">
+		<ui:param name="tbunitselection" value="#{startTreatmentHome.tbunitselection}" />
+		<ui:param name="required" value="true" />
+	</s:decorate>
+
+
+	<h:panelGroup id="pnltreatment_int">
+
+	<rich:spacer height="10" />
+	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
+		<ui:define name="header">
+			<a:commandLink action="#{startTreatmentIndivHome.initMedicineSelection('INTENSIVE')}"
+				style="float:right;" ajaxSingle="true" 
+				value="#{messages['Regimen.add']}..." 
+				reRender="medpnl" oncomplete="showMedicinesDlg()" />
+			<b>#{messages['RegimenPhase.INTENSIVE']}</b>
+		</ui:define>
+		<ui:param name="showfooter" value="0" />
+
+		<h:outputText value="#{messages['edtrec.nomedicine']}" styleClass="warn" rendered="#{empty startTreatmentIndivHome.medicinesIntPhase}"/>
+		<h:dataTable value="#{startTreatmentIndivHome.medicinesIntPhase}" var="it" styleClass="table1" width="100%" 
+			rendered="#{not empty startTreatmentIndivHome.medicinesIntPhase}" >
+			<h:column>
+				<f:facet name="header">
+					#{messages['Medicine']}
+				</f:facet>
+				<div class="medicine-icon" style="float:left" />#{it.medicine}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['PrescribedMedicine.months']}</f:facet>
+				<h:selectOneMenu id="month" value="#{it.months}" required="true" >
+           			<f:selectItems value="#{treatmentHome.months}" />
+				</h:selectOneMenu>
+				<h:message for="month" styleClass="error" />
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['PrescribedMedicine.doseUnit']}</f:facet>
+				<h:selectOneMenu id="dose" value="#{it.doseUnit}" required="true" >
+           			<f:selectItems value="#{treatmentHome.doses}" />
+				</h:selectOneMenu>
+				<h:message for="dose" styleClass="error" />
+			</h:column>
+		
+			<h:column>
+				<f:facet name="header">#{messages['PrescribedMedicine.frequency']}</f:facet>
+				<h:selectOneMenu id="freq" value="#{it.frequency}" required="true" >
+            		<f:selectItems value="#{frequencies}" />
+				</h:selectOneMenu>
+				<h:message for="freq" styleClass="error" />
+			</h:column>
+		
+			<h:column rendered="#{not sources.singleResult}">
+				<f:facet name="header">#{messages['Source']}</f:facet>
+				<h:selectOneMenu id="sourcei" value="#{it.source}" required="true">
+            		<s:selectItems value="#{sources}" var="c" label="#{c.name}" noSelectionLabel="-" />
+            		<s:convertEntity />
+				</h:selectOneMenu>
+				<h:message for="sourcei" styleClass="error"/>
+			</h:column>
+
+			<h:column>
+				<a:commandLink value="#{messages['form.remove']}" 
+					action="#{startTreatmentIndivHome.removePrescribedMedicine(it)}"
+					ajaxSingle="true" 
+					reRender="pnltreatment_int"/>
+			</h:column>
+		</h:dataTable>
+	</s:decorate>
+	</h:panelGroup>
+	
+	<h:panelGroup id="pnltreatment_cont">
+	<rich:spacer height="10" />
+	<s:decorate template="/layout/roundrect.xhtml" style="margin:4px;">
+		<ui:define name="header">
+			<a:commandLink action="#{startTreatmentIndivHome.initMedicineSelection('CONTINUOUS')}"
+				style="float:right;" ajaxSingle="true"
+				value="#{messages['Regimen.add']}..." 
+				reRender="medpnl" oncomplete="showMedicinesDlg()" />
+			<b>#{messages['RegimenPhase.CONTINUOUS']}</b>
+		</ui:define>
+		<ui:param name="showfooter" value="0" />
+
+		<h:outputText value="#{messages['edtrec.nomedicine']}" styleClass="warn" rendered="#{empty startTreatmentIndivHome.medicinesContPhase}"/>
+		<h:dataTable value="#{startTreatmentIndivHome.medicinesContPhase}" var="it" styleClass="table1" width="100%" 
+			rendered="#{not empty startTreatmentIndivHome.medicinesContPhase}" >
+			<h:column>
+				<f:facet name="header">
+					#{messages['Medicine']}
+				</f:facet>
+				<div class="medicine-icon" style="float:left" />#{it.medicine}
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['PrescribedMedicine.months']}</f:facet>
+				<h:selectOneMenu id="month" value="#{it.months}" required="true" >
+           			<f:selectItems value="#{treatmentHome.months}" />
+				</h:selectOneMenu>
+				<h:message for="month" styleClass="error" />
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['PrescribedMedicine.doseUnit']}</f:facet>
+				<h:selectOneMenu id="dose2" value="#{it.doseUnit}" required="true" >
+           			<f:selectItems value="#{treatmentHome.doses}" />
+				</h:selectOneMenu>
+				<h:message for="dose2" styleClass="error" />
+			</h:column>
+		
+			<h:column>
+				<f:facet name="header">#{messages['PrescribedMedicine.frequency']}</f:facet>
+				<h:selectOneMenu id="freq2" value="#{it.frequency}" required="true">
+            		<f:selectItems value="#{frequencies}" />
+				</h:selectOneMenu>
+				<h:message for="freq2" styleClass="error" />
+			</h:column>
+		
+			<h:column rendered="#{not sources.singleResult}">
+				<f:facet name="header">#{messages['Source']}</f:facet>
+				<h:selectOneMenu id="sourcei" value="#{it.source}" required="true">
+ 	           		<s:selectItems value="#{sources}" var="c" label="#{c.name}" noSelectionLabel="-" />
+            		<s:convertEntity />
+				</h:selectOneMenu>
+				<h:message for="sourcei" styleClass="error"/>
+			</h:column>
+
+			<h:column>
+				<a:commandLink value="#{messages['form.remove']}" 
+					action="#{startTreatmentIndivHome.removePrescribedMedicine(it)}"
+					ajaxSingle="true" 
+					reRender="pnltreatment_cont"/>
+			</h:column>
+		</h:dataTable>
+	</s:decorate>
+	
+	</h:panelGroup>
+
+	</td></tr></table>
+
+	<div class="form-footer">    
+		<a:commandLink action="#{caseDataBRHome.saveTreatmentEditing}" styleClass="button" 
+				reRender="formtreat,messages" 
+            	onclick="if (!disableButton(this)) return false;" >
+            <span>#{messages['form.ok']}</span>
+        </a:commandLink>
+           
+		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+			<f:param name="id" value="#{caseHome.id}"/>
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+
+	</a:form>
+</s:decorate>
+
+
+<s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
+	<ui:param name="title" value="#{messages['edtrec.selmedicines']}" />
+	<a:commandLink styleClass="button" action="#{startTreatmentIndivHome.addMedicines}"
+		onclick="if (!disableButton(this)) return false;"  
+		oncomplete="enableButton();hideMedicinesDlg();" 
+		reRender="#{startTreatmentIndivHome.phase=='INTENSIVE'? 'pnltreatment_int':'pnltreatment_cont'}">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
+</s:decorate>
+
+</ui:define>
+
+</ui:composition>  

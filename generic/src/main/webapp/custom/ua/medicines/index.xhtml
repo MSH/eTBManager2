@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/templatemed.xhtml">
+
+<ui:param name="title" value="#{messages['meds.inventory']}" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:define name="naveg">
+	<div class="item selected">
+		<s:link value="#{title}" />
+	</div>
+</ui:define>
+
+<ui:define name="content_unit">
+<div>
+
+	<h:form>
+	<s:fragment rendered="#{not userSession.medicineManagementStarted}">
+		<h:outputText value="#{messages['meds.start.alert']}" styleClass="warn" />
+		<div class="spacer" />
+		<s:link view="/custom/ua/medicines/start.xhtml" styleClass="button-alt" rendered="#{s:hasRole('MED_INIT')}">
+			<span>#{messages['meds.start']}</span>
+		</s:link>
+	</s:fragment>
+	
+	<s:fragment rendered="#{userSession.medicineManagementStarted}">
+
+<h:panelGroup id="pnlitems">
+
+<a:repeat value="#{inventoryReport.sources}" var="s">
+
+<h2><s:link value="#{messages['meds.movs.newadjust']}" view="/custom/ua/medicines/stockadj.xhtml" rendered="#{userSession.canAdjustStock}" style="float:right" styleClass="noprint">
+	<f:param name="srcid" value="#{s.source.id}"/>
+</s:link>
+#{s.source.abbrevName}
+<span class="text-small">(#{s.source.name})</span></h2>
+
+<table id="tblinv" class="table1 regular">
+	<tr><th width="40%">
+			#{messages['Medicine']}
+		</th>
+		<th><h:outputText value="#{messages['StoragePosReport.nextExpirationBatch']}" styleClass="colch" /></th>	
+		<th><h:outputText value="#{messages['Batch.registCard.term']}" styleClass="colch" /></th>	
+		<th><h:outputText value="#{messages['Batch.numContainers']}" styleClass="colrh" /></th>	
+		<th><h:outputText value="#{messages['meds.movs.availableqtty']}" styleClass="colrh" /></th>	
+		<th><h:outputText value="#{messages['Batch.containerPrice']}" styleClass="colch" /></th>
+		<th><h:outputText value="#{messages['global.totalPrice']}" styleClass="colch" /></th>
+		<th><h:outputText value="#{messages['StoragePosReport.lastMovement']}" styleClass="colch" /></th>
+	</tr>
+<a:repeat value="#{s.medicines}" var="it">
+	<tr class="highlight">
+		<td>
+			<a:commandLink styleClass="plus-icon" onclick="detailsClick(this, 'med#{it.nodeId}');return false;" />
+			<s:span styleClass="alert-icon" rendered="#{it.item.hasBatchExpiring or it.item.hasRegistCardExpiring}"/>
+			<s:span styleClass="icon-error" rendered="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired}"/>
+			<h:outputText value="#{it.medicine}" style="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired ? 'color:red' : (it.item.hasBatchExpiring or it.item.hasRegistCardExpiring? 'color:#D7620B' : '')}"/>
+		</td>
+		<td align="center">
+			<h:outputText value="#{it.item.nextRegistCardExpire}" converter="localeDateConverter" style="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired? 'color:red' : (it.item.hasBatchExpiring or it.item.hasRegistCardExpiring? 'color:#D7620B' : '')}"/>
+		</td>
+		<td align="center">
+			<h:outputText value="#{it.item.nextBatchExpire}" converter="localeDateConverter" style="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired? 'color:red' : (it.item.hasBatchExpiring or it.item.hasRegistCardExpiring? 'color:#D7620B' : '')}"/>
+		</td>
+		<td align="right">
+			
+		</td>
+		<td align="right">
+			<h:outputText value="#{it.item.quantity}" style="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired? 'color:red' : (it.item.hasBatchExpiring or it.item.hasRegistCardExpiring? 'color:#D7620B' : '')}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+		</td>
+		<td>
+			
+		</td>
+		<td align="right">
+			<h:outputText value="#{medCalcCont.calculateTotalPrice(it.item.node.batches)}" style="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired? 'color:red' : (it.item.hasBatchExpiring or it.item.hasRegistCardExpiring? 'color:#D7620B' : '')}">
+				<f:convertNumber pattern="###,###,##0.00"/>
+			</h:outputText>
+		</td>
+		<td align="center">
+			<h:outputText value="#{it.item.lastMovement}" converter="localeDateConverter" style="#{it.item.hasBatchExpired or it.item.hasRegistCardExpired? 'color:red' : (it.item.hasBatchExpiring or it.item.hasRegistCardExpiring? 'color:#D7620B' : '')}"/>
+		</td>
+	</tr>
+	<a:repeat value="#{it.batches}" var="b">
+	<tr id="med#{it.nodeId}" style="display:none">
+		<td>
+			<s:decorate template="/custom/ua/layout/batch.xhtml" >
+				<ui:param name="batch" value="#{b.batch}" />
+			</s:decorate>
+		</td>
+
+		<s:fragment rendered="#{(not b.batch.expired) and (not inventoryReport.isExpiringBatch(b)) and (not b.batch.registCardExpired) and (not inventoryReport.isExpiringRegistCard(b))}">
+			<td align="center">
+				<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+			</td>
+			<td align="center">
+				<h:outputText value="#{b.batch.registCardEndDate}" converter="localeDateConverter" />
+			</td>
+			<td align="right">
+				<h:outputText value="#{medCalcCont.calculateNumContainers(b.batch.quantityContainer,b.quantity)} (№#{b.batch.quantityContainer})" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			<td align="right">
+				<h:outputText value="#{b.quantity}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			
+			<td align="right">
+				<h:outputText value="#{medCalcCont.calculateContPrice(b.batch.quantityContainer,b.batch.unitPrice)}" >
+					<f:convertNumber pattern="#,###,##0.000"/>
+				</h:outputText>
+			</td>			
+			<td align="right">
+				<h:outputText value="#{medCalcCont.calculateTotalPrice(b.quantity,b.batch.quantityContainer,b.batch.unitPrice)}" >
+					<f:convertNumber pattern="#,###,##0.00"/>
+				</h:outputText>
+			</td>
+			
+		</s:fragment>
+
+		<s:fragment rendered="#{(b.batch.expired) or (b.batch.registCardExpired)}">
+			<td align="center">
+				<s:fragment rendered="#{b.batch.expired}">
+					<div title="#{messages['manag.forecast.expiredquantity']}">
+						<span class="icon-error" />
+						<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" styleClass="error"/>
+					</div>
+				</s:fragment>
+				<s:fragment rendered="#{!b.batch.expired}">
+						<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" styleClass="error"/>
+				</s:fragment>
+			</td>
+			<td align="center">
+				<s:fragment rendered="#{b.batch.registCardExpired}">
+					<span class="icon-error" />
+				</s:fragment>
+				<h:outputText value="#{b.batch.registCardEndDate}" converter="localeDateConverter" styleClass="error"/>
+			</td>
+			<td align="right">
+				<h:outputText value="#{medCalcCont.calculateNumContainers(b.batch.quantityContainer,b.quantity)} (№#{b.batch.quantityContainer})"  styleClass="error">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			<td align="right">
+				<h:outputText value="#{b.quantity}" styleClass="error">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			
+			<td align="right">
+				<h:outputText value="#{medCalcCont.calculateContPrice(b.batch.quantityContainer,b.batch.unitPrice)}" styleClass="error">
+					<f:convertNumber pattern="#,###,##0.000"/>
+				</h:outputText>
+			</td>			
+			
+			<td align="right">
+				<h:outputText value="#{medCalcCont.calculateTotalPrice(b.quantity,b.batch.quantityContainer,b.batch.unitPrice)}" styleClass="error">
+					<f:convertNumber pattern="#,###,##0.00"/>
+				</h:outputText>
+			</td>
+			
+		</s:fragment>
+		
+		<s:fragment rendered="#{(inventoryReport.isExpiringBatch(b) or inventoryReport.isExpiringRegistCard(b)) and ((not b.batch.expired) and (not b.batch.registCardExpired))}">
+			<td align="center">
+				<s:fragment rendered="#{inventoryReport.isExpiringBatch(b)}">
+					<div title="#{messages['manag.forecast.expiredquantity']}">
+						<span class="alert-icon" />
+						<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" style="color:#D7620B;font-weight:bold"/>
+					</div>
+				</s:fragment>
+				<s:fragment rendered="#{!inventoryReport.isExpiringBatch(b)}">
+					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" style="color:#D7620B;font-weight:bold"/>
+				</s:fragment>
+			</td>
+			<td align="center">
+				<s:fragment rendered="#{inventoryReport.isExpiringRegistCard(b)}">
+					<span class="alert-icon" />
+					<h:outputText value="#{b.batch.registCardEndDate}" converter="localeDateConverter" style="color:#D7620B;font-weight:bold"/>
+				</s:fragment>
+				<s:fragment rendered="#{!inventoryReport.isExpiringRegistCard(b)}">
+					<h:outputText value="#{b.batch.registCardEndDate}" converter="localeDateConverter" style="color:#D7620B;font-weight:bold"/>
+				</s:fragment>
+			</td>
+			<td align="right">
+				<h:outputText value="#{medCalcCont.calculateNumContainers(b.batch.quantityContainer,b.quantity)} (№#{b.batch.quantityContainer})"  style="color:#D7620B;font-weight:bold">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			<td align="right">
+				<h:outputText value="#{b.quantity}"  style="color:#D7620B;font-weight:bold">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			
+			<td align="right">
+				<h:outputText value="#{medCalcCont.calculateContPrice(b.batch.quantityContainer,b.batch.unitPrice)}"  style="color:#D7620B;font-weight:bold">
+					<f:convertNumber pattern="#,###,##0.000"/>
+				</h:outputText>
+			</td>
+			
+			<td align="right">
+				<h:outputText value="#{medCalcCont.calculateTotalPrice(b.quantity,b.batch.quantityContainer,b.batch.unitPrice)}"  style="color:#D7620B;font-weight:bold">
+					<f:convertNumber pattern="#,###,##0.00"/>
+				</h:outputText>
+			</td>			
+			
+			
+		</s:fragment>
+
+	</tr>
+	</a:repeat>
+</a:repeat>
+</table>
+
+</a:repeat>
+
+
+</h:panelGroup>
+
+
+<script type="text/javascript">
+<!--
+waitdiv = '<div style="float:left" class="wait-icon"/>';
+function detailsClick(elem, elemName) {
+	var s = '#tblinv #' + elemName;
+	try { s = eval(s);} catch(e){ }
+	var row=jQuery(s);
+	var bVisible=jQuery(elem).is(".collapse-icon");
+	if (bVisible) {
+		jQuery(elem).removeClass('collapse-icon').addClass('plus-icon');
+		row.hide();
+	}
+	else {
+		jQuery(elem).removeClass('plus-icon').addClass('collapse-icon');
+		row.show();
+	}
+}
+-->
+</script>
+
+	</s:fragment>
+
+	</h:form>
+</div>
+</ui:define>
+
+</ui:composition>  

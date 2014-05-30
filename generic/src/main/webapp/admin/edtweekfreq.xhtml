@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:c="http://java.sun.com/jstl/core"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['admin.weeklyfreq.edt']}" />
+<ui:param name="topmenu" value="3" />
+
+<ui:define name="left">
+</ui:define>
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main">
+
+<table class="table1" width="400px" >
+	<tr><th>
+			#{messages['admin.weeklyfreq']}
+		</th>
+<ui:repeat value="#{shortWeekNames}" var="w">
+	<th>
+		#{w}
+	</th>
+</ui:repeat>
+	</tr>
+<c:forEach items="#{weeklyFrequencyHome.items}" var="it">
+	<tr><td style="padding:3px;border:2px solid #f0f0f0;text-align:center;" colspan="2">
+			#{it.index}/7
+		</td>
+	<c:forEach items="#{it.days}" var="d">
+		<td style="padding:3px;border:2px solid #f0f0f0">
+			<h:selectBooleanCheckbox value="#{d.selected}"/>
+		</td>
+	</c:forEach>
+	</tr>
+</c:forEach>
+<tr><td align="right">
+	<a:commandLink action="#{weeklyFrequencyHome.save}" styleClass="button"
+		onclick="if (!disableButton(this)) return false;" reRender="main,messages">
+	 <span>#{messages['form.save']}</span> 
+	</a:commandLink>
+	<s:link view="/admin/weekfreqs.xhtml" styleClass="button-alt">
+	  <span>#{messages['form.cancel']}</span>  
+	  </s:link>
+</td></tr>
+</table>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

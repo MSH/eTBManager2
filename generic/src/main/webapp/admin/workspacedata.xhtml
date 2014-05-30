@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+        
+<ui:param name="title" value="#{messages['Workspace']}: #{workspace.name}" />
+<ui:param name="topmenu" value="3" />
+<ui:param name="labelstyle" value="width:200px" />
+
+<ui:define name="naveg">
+	<div class="item">
+		<s:link value="#{messages['admin']}" view="/admin/index.xhtml" />
+	</div>
+	<div class="item selected">
+		<s:link value="#{messages['Workspace']}" view="/admin/workspaces.xhtml" />
+	</div>
+</ui:define>
+
+<ui:define name="left">
+	<h:form styleClass="vertical-menu">
+	<s:link value="#{messages['form.edit']}" view="/admin/workspaceedt.xhtml" rendered="#{s:hasRole('WORKSPACES_EDT')}" >
+		<f:param name="id" value="#{workspace.id}" />
+		<span class="edit-icon"/>
+	</s:link>
+	<h:commandLink value="#{messages['form.remove']}" action="#{workspaceHome.remove}"
+		onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false" rendered="#{s:hasRole('WORKSPACES_EDT')}">
+		<span class="delete-icon"/>
+	</h:commandLink>
+	<s:link value="#{messages['userrole.WSADDREMUSER']}" view="/admin/wsadduser.xhtml" rendered="#{s:hasRole('WORKSPACES_EDT')}" >
+		<f:param name="id" value="#{workspace.id}" />
+	</s:link>
+	
+	<s:link value="#{messages['admin.workspaces.copy']}" view="/admin/workspacecopy.xhtml">
+		<f:param name="id" value="#{workspace.id}" />
+	</s:link>
+	</h:form>
+</ui:define>
+
+<ui:define name="content">
+<h1>
+	<h:graphicImage value="#{workspace.view.pictureURI}" rendered="#{workspace.view != null}" style="float:left;padding-right:8px;"/>
+	#{title}
+</h1>
+<h:form id="main">
+	<table width="500px" class="tab1" ><tr><td>
+
+	
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['form.id']}:</ui:define>
+    	<h:outputText value="#{workspace.id}" />
+    </s:decorate>
+	
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['form.name']}:</ui:define>
+    	<h:outputText value="#{workspace.name}" />
+    </s:decorate>
+	
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['global.description']}:</ui:define>
+    	<h:outputText value="#{workspace.description}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.extension']}:</ui:define>
+    	<h:outputText value="#{workspace.extension}" />
+    </s:decorate>
+	
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.defaultLocale']}:</ui:define>
+    	<h:outputText value="#{workspace.defaultDisplayLocale}" />
+    </s:decorate>
+	
+    <s:decorate template="/layout/display.xhtml" rendered="#{workspace.hasAlternateLocale}">
+    	<ui:define name="label">#{messages['Workspace.alternateLocale']}:</ui:define>
+    	<h:outputText value="#{workspace.alternateDisplayLocale}" />
+    </s:decorate>
+	
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.defaultTimeZone']}:</ui:define>
+    	<h:outputText value="#{workspace.defaultTimeZone}" />
+    </s:decorate>
+    
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Workspace.defaultTimeZone']}:</ui:define>
+    	<h:outputText value="#{workspace.defaultTimeZone}" />
+    </s:decorate>
+
+	</td></tr></table>
+
+	<p/>
+	<table width="500px" class="table1" >
+	<tr><th>#{messages['admin.workspaces.users']}
+	</th></tr>
+	<tr><td>
+    	<ui:repeat value="#{workspace.users}" var="u">
+    		<span style="width:240px;float:left;padding:4px;">
+    			<div class="icon-user" />
+    			#{u.user.name}
+    		</span>
+    	</ui:repeat>
+	</td></tr>
+	</table>
+</h:form>
+</ui:define>
+        
+</ui:composition> 

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+ 	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/templatemed.xhtml">
+
+<ui:param name="title" value="#{messages['meds.transfer.received']}" /><ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:210px;" />
+
+
+<ui:define name="naveg">
+	<div class="item">
+		<s:link value="#{messages['meds.inventory']}" view="/medicines/index.xhtml" propagation="none"/>
+	</div>
+	<div class="item selected">
+		<s:link value="#{title}" view="/medicines/index.html" propagation="none"/>
+	</div>
+</ui:define>
+
+
+<ui:define name="content_unit">
+<h:form id="main" styleClass="form1">
+	
+<h:panelGroup id="pnltab" >
+
+	<s:fragment rendered="#{facesContext.renderResponse}">
+		<h:outputText value="#{messages['meds.transfer.nofound']}" 
+			styleClass="warn" 
+			rendered="#{empty transfersReceived.resultList}"/>
+		
+		<h:dataTable value="#{transfersReceived.resultList}" var="it" styleClass="table2" rendered="#{not empty transfersReceived.resultList}" 
+		  columnClasses="colc,coll,coll,coll,colc" rowClasses="lin1,lin2">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['form.id']}" styleClass="collh" />
+				</f:facet>
+				<s:link value="#{it.id}" view="/custom/ua/medicines/transfdata.xhtml">
+					<f:param name="id" value="#{it.id}" />
+				</s:link>
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['Transfer.consignmentDate']}" />
+				</f:facet>
+				<h:outputText value="#{it.shippingDate}" converter="localeDateConverter" />
+				<div class="hint text-small">
+   					<h:outputText value="#{it.shippingDate}" converter="periodConverter" >
+		   				<f:param name="type" value="elapsed-time" />
+			   		</h:outputText>
+				</div>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['Transfer.unitFrom']}" styleClass="collh"/> 
+				</f:facet>
+				<ui:decorate template="/layout/unit.xhtml">
+					<ui:param name="unit" value="#{it.unitFrom}" />
+				</ui:decorate>
+				<div class="spacer" />
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['Transfer.unitTo']}" styleClass="collh"/> 
+				</f:facet>
+				<ui:decorate template="/layout/unit.xhtml">
+					<ui:param name="unit" value="#{it.unitTo}" />
+				</ui:decorate>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['TransferStatus']}</f:facet>
+				#{messages[it.status.key]}
+			</h:column>
+		</h:dataTable>
+	</s:fragment>
+</h:panelGroup>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

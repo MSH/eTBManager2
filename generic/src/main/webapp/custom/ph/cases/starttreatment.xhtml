@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.regs']}" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:param name="labelstyle" value="width:140px" />
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+<s:decorate template="/layout/casebody.xhtml">
+
+	<a:form id="formtreat" styleClass="form1">
+	<div class="form-content">
+	
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
+    	<h:outputText value="#{tbcase.diagnosisDate}"  converter="localeDateConverter"/>
+    </s:decorate>
+
+	<div class="paragraph">#{messages['cases.healthUnit']}</div>
+	<s:decorate template="/layout/tbselection.xhtml" style="margin-bottom:10px;">
+		<ui:param name="tbunitselection" value="#{startTreatmentHome.tbunitselection}" />
+		<ui:param name="required" value="true" />
+	</s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+   		<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
+   		<ui:param name="required" value="true" /> 
+   		<ui:param name="future" value="true" />
+   		<ui:param name="datefield" value="#{startTreatmentHome.iniTreatmentDate}" /> 
+   	</s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['en_PH.casedata.catIVRegNumber']}:</ui:define>
+		<h:inputText id="cativregnumber" value="#{caseDataPH.catIVRegNumber}" style="width:100px;" />
+		(TC-YY-NNNN)
+		<rich:jQuery selector="#cativregnumber" query="mask('99-99-9999')" />
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['regimens.standard']}:</ui:define>
+    	<h:selectOneMenu value="#{startTreatmentHome.regimen}" required="true">
+    		<s:selectItems value="#{caseRegimenHome.availableRegimens}" var="it" label="#{it.name}" noSelectionLabel="-"/>
+    		<s:convertEntity />
+    		<a:support event="onchange" reRender="pnlregimen" ajaxSingle="true" action="#{startTreatmentHome.updatePhases}"/>
+    	</h:selectOneMenu>
+	</s:decorate>
+
+
+	<h:panelGroup id="pnlregimen">
+
+	<s:fragment rendered="#{not empty startTreatmentHome.regimen}">
+		<a:repeat value="#{caseRegimenHome.phases}" var="p">
+		<table width="100%" cellpadding="2" cellspacing="0" style="margin-top:35px;margin-bottom:1px;border:2px solid #d0d0d0;">
+		<tr><td style="background-color:#e0e0e0" height="30px">
+				<div style="text-transform: uppercase;font-weight:bold;">#{messages[p.phase.key]}</div>
+				<span style="margin-right:10px;"><b>#{messages['global.period']}:</b></span>
+				#{p.months} #{messages['global.months']}
+		</td></tr>
+		<tr><td>
+
+		<h:panelGroup id="meds">
+		<h:outputText value="#{messages['edtrec.nomedicine']}" rendered="#{empty p.medicines}" styleClass="warn"/>
+		<h:dataTable value="#{p.medicines}" var="m" width="100%" styleClass="table1" columnClasses="coll,colc,colc,colc"  
+		   rowClasses="lin1,lin2" style="clear:left;" rendered="#{not empty p.medicines}">
+		<h:column>
+			<f:facet name="header">#{messages['Medicine']}</f:facet>
+			#{m.medicine}
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">#{messages['PrescribedMedicine.doseUnit']}</f:facet>
+			<h:selectOneMenu id="dose" value="#{m.doseUnit}" required="true">
+				<f:selectItems value="#{treatmentHome.doses}" />
+			</h:selectOneMenu>
+			<h:message for="dose" styleClass="error" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">#{messages['PrescribedMedicine.frequency']}</f:facet>
+			<h:selectOneMenu value="#{m.frequency}" required="true" id="freq">
+            	<f:selectItems value="#{frequencies}" />
+			</h:selectOneMenu>
+			<h:message for="freq" styleClass="error" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">#{messages['Source']}</f:facet>
+			<h:selectOneMenu id="sourcei" value="#{m.source}" required="true">
+            	<s:selectItems value="#{sources}" var="c" label="#{c.name}" noSelectionLabel="-" />
+            	<s:convertEntity />
+			</h:selectOneMenu>
+			<h:message for="sourcei" styleClass="error"/>
+		</h:column>
+
+		</h:dataTable>
+		</h:panelGroup>
+		</td>
+		</tr></table>
+		</a:repeat>
+	</s:fragment>
+	</h:panelGroup>
+
+	</div>
+
+
+	<div class="form-footer">    
+		<a:commandLink action="#{startTreatmentHome.startStandardRegimen}" styleClass="button" 
+				reRender="formtreat,messages" 
+            	oncomplete="this.disabled=false;"
+            	onclick="this.disabled=true;" >
+            <span>#{messages['form.ok']}</span>
+        </a:commandLink>
+           
+		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+			<f:param name="id" value="#{caseHome.id}"/>
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+
+	</a:form>
+</s:decorate>
+
+</ui:define>
+
+</ui:composition>  

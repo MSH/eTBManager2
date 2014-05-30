@@ -1,0 +1,1115 @@
+
+; *******************************************************************************
+; * Template file for TB/MDR-TB case generation
+; * e-TB Manager System
+; * Rio de Janeiro, ago-2010
+; * 
+; * Change the values after = to generate your own testing database
+; * 
+; *******************************************************************************
+
+
+
+; *******************************************************************************
+; * Se true, apaga todos os casos pré-existentes nos anos selecionados
+; * Se false, os casos novos serão incluídos e os pré-existentes não serão modificados
+; *******************************************************************************
+remExistingCases= true
+
+
+; *******************************************************************************
+; * Variação em dias do tempo de tratamento
+; * Exemplo= 10 - Indica que o tratamento poderá ser de + ou - 10 dias além do tempo previsto no regime
+; *******************************************************************************
+cohortVarTime = 7
+
+
+; *******************************************************************************
+; * Indique o número de casos de TB e TBMR por ano
+; *******************************************************************************
+cases = [
+	{ year= 2005, numTBCases= 1021,  numMDRTBCases= 80 }
+	{ year= 2006, numTBCases= 1038,  numMDRTBCases= 83 }
+	{ year= 2007, numTBCases= 1062,  numMDRTBCases= 87 }
+	{ year= 2008, numTBCases= 1085,  numMDRTBCases= 91 }
+	{ year= 2009, numTBCases= 1097,  numMDRTBCases= 94 }
+	{ year= 2010, numTBCases= 557,  numMDRTBCases= 46 }
+	]
+
+
+; *******************************************************************************
+; * Número mínimo e máximo de dias que pode variar entre 
+; * a data de registro e a notificação
+; *******************************************************************************
+varDaysRegDiag=1..30
+
+
+
+; *******************************************************************************
+; * Peso para diagnósticos de casos de TBMR 
+; * Exemplo: CONFIRMED=10, SUSPECT=1
+; * Significa que as changes de gerar casos confirmados são 10x maior que para suspeitos 
+; *******************************************************************************
+mdrDiagnosis = [
+	CONFIRMED = 10
+	SUSPECT = 2
+]
+
+
+
+; *******************************************************************************
+; * Peso para geração de casos do sexo masculino e feminino
+; * Exemplo=
+; * MALE= 2, FEMALE= 1 
+; * As changes de gerar casos do sexo masculino são o 
+; * dobro de chances de gerar casos do sexo feminino
+; *******************************************************************************
+genders = [
+	MALE= 2
+	FEMALE= 1
+]
+
+
+; *******************************************************************************
+; * Nacionalidade dos pacientes
+; * Exemplo: NATIVE=100, FOREIGN=5
+; * A quantidade de casos nativos serão 100/5 vezes maior que a quantidade de casos estrangeiros
+; *******************************************************************************
+nationalities = [
+	NATIVE	= 100
+	FOREIGN	= 15
+]
+
+; *******************************************************************************
+; * Peso na geração do tipo de pacientes
+; *******************************************************************************
+patientTypesTB = [
+ 	NEW= 70
+ 	RELAPSE= 7
+ 	AFTER_DEFAULT= 15
+ 	FAILURE_FT= 5
+ 	FAILURE_RT= 3
+	TRANSFER_IN= 2
+ 	OTHER= 1
+]
+
+patientTypesMDR = [
+ 	NEW= 30
+	RELAPSE= 12
+	AFTER_DEFAULT= 18
+	FAILURE_FT= 15
+	FAILURE_RT= 25
+	TRANSFER_IN= 4
+	OTHER= 1
+]
+
+
+; *******************************************************************************
+; * Pesos para geração do tipo pulmonar ou extrapulmonar 
+; *******************************************************************************
+infectionSites = [
+	PULMONARY		= 80
+	EXTRAPULMONARY	        = 15
+	BOTH 			= 5
+]
+
+
+; *******************************************************************************
+; * Pesos para geração de casos pulmonares 
+; *******************************************************************************
+pulmonaryForms = [
+    'Unilateral Cavitary'= 30
+    'Bilateral Cavitary'= 50
+    'Unilateral Infiltrate'= 15
+    'Bilateral Infiltrate'= 20
+    'Destruction'= 13
+    'Normal'= 3
+    'Other'= 1
+]
+
+
+; *******************************************************************************
+; * Pesos para geração de casos extrapulmonares 
+; *******************************************************************************
+extrapulmonaryForms = [
+	'Pleura'= 47
+	'Lymph Nodes'= 30
+	'Abdomen'= 5
+	'Genitourinary Tract'= 7
+	'Skin'= 2
+	'Joints and Bones'= 4
+	'Meninges'= 6
+	'Intrathoracic Lymphadenopathy'= 4
+	'Tuberculous Pleural Effusion'= 5
+	'Other'= 2
+]
+
+
+; *******************************************************************************
+; * Pesos para geração do tipo rural ou urbano 
+; *******************************************************************************
+localityTypes = [
+	RURAL		= 5
+	URBAN		= 100
+]
+
+
+; *******************************************************************************
+; * Fator para geração de regimes padronizados ou individualizados
+; * Exemplo= 10/1 
+; * Indica que a chance do caso gerado usar um regime padronizado é 10 vezes
+; * maior que de um regime individualizado (só para TBMR) 
+; *******************************************************************************
+facRegimenStdInd = 10/2
+
+
+
+; *******************************************************************************
+; * Idade dos pacientes por faixa etária. Indique o peso de cada faixa 
+; * para a geração dos casos
+; *******************************************************************************
+ageRanges = [
+	{ range= '<= 4', weightRange =	3..30 }			= 1
+	{ range= '5 - 14', weightRange = 35..60 } 		= 3
+	{ range= '15 - 24', weightRange = 45..70 }		= 5
+	{ range= '25 - 34', weightRange = 55..90 } 		= 9
+	{ range= '35 - 44', weightRange = 55..90 } 		= 6
+	{ range= '45 - 54', weightRange = 55..90 }	 	= 4
+	{ range= '55 - 64', weightRange = 55..90 }	 	= 4
+	{ range= '>= 65', weightRange = 55..80 } 		= 3
+]
+
+
+; *******************************************************************************
+; * Peso para escolha do regime padronizado para o caso
+; * Coloque o nome do regime como aparece no sistema
+; * Ou caso queira usar o seu código, use um $ antes do código
+; * Exemplo, se o código do regime 'GLC' for 22750, você poderá definir o peso 
+; * desde regime como  
+; *		GLC = 10  
+; * ou 
+; *		$22750 = 10
+; *******************************************************************************
+regimensTB = [
+	'New Patient Regimen' = 85
+	'Retreatment Regimen (1st line)' = 20
+]
+
+regimensMDR = [
+	'MDR Regimen - 1'= 70
+	'MDR Regimen - 2'= 30
+]
+
+
+; *******************************************************************************
+; * Peso para a geração de casos por paciente (só para TBMR)
+; *******************************************************************************
+numTreatments = [
+	ONE_TREATMENT	= 50		; Pacientes com 1 tratamento
+	TWO_TREATMENTS	= 35		; Pacientes com 2 tratamentos
+	THREE_TREATMENTS= 15
+]
+
+
+
+; *******************************************************************************
+; * Peso para a geração dos casos por região (indique todas ou apenas as regiões
+; * para que você quer que sejam gerados casos)
+; *******************************************************************************
+regions = [
+	'Region A'		= 40
+	'Region B'		= 20
+	'Region C'		= 10
+]
+
+
+
+; *******************************************************************************
+; * Percentual de casos que são transferidos (0 = nenhum, 100 = todos)
+; *******************************************************************************
+percTransfCases =	7
+
+
+
+; *******************************************************************************
+; * Peso no resultado do desfecho de cada caso
+; *******************************************************************************
+outcomesTB = [
+	CURED					= 57
+	TREATMENT_COMPLETED			= 15
+	FAILED					= 5
+	DEFAULTED				= 10
+	DIED					= 6
+	TRANSFERRED_OUT				= 2
+	DIAGNOSTIC_CHANGED			= 1
+	OTHER					= 1
+]
+
+outcomesMDR = [
+	CURED					= 48
+	TREATMENT_COMPLETED			= 11
+	FAILED					= 18 
+	DEFAULTED				= 10
+	DIED					= 15
+	TRANSFERRED_OUT				= 2
+	DIAGNOSTIC_CHANGED			= 1
+	OTHER					= 1
+]
+
+
+; *******************************************************************************
+; * Tempo médio em dias para iniciar o tratamento de TB e TBMR a partir da data de diagnóstico
+; * 0..10 significa entre 0 e 10 dias a partir da data de diagnóstico
+; *******************************************************************************
+startTreatmentTB	= 0..7
+startTreatmentMDR	= 0..15
+
+
+
+; *******************************************************************************
+; * Medicines to be used in susceptibility tests
+; *******************************************************************************
+substances = [ R, H, Z, E, S, Eto, Lfx, Mfx, Km, Cm, PAS, Cs ]
+
+
+
+; *******************************************************************************
+; * Número de casos de TB com resistência a algum medicamento (entre 0 e 100)
+; * Exemplo: = 5 
+; * Para cada 100 casos de TB, 5 tem resistência a algum medicamento
+; *******************************************************************************
+resTB = 12
+
+
+; *******************************************************************************
+; * Resistance patterns and its weight-factor
+; *******************************************************************************
+resPatternsTB = [
+	[ R ] 		= 15
+	[ H ] 		= 15
+	[ Z ] 		= 10
+	[ E ] 		= 10
+]
+
+resPatternsMDR = [
+	[ R, H ] 		= 100
+	[ R, H, Z ] 		= 10
+	[ R, H, E ] 		= 20
+	[ R, H, Z, E ] 		= 15
+	[ R, H, Z, E, S ] 	= 10
+	[ R, H, Eto, E ]	= 10
+	[ R, H, Lfx, S]		= 8
+	[ R, H, Lfx, Km ] 	= 4
+]
+
+
+; *******************************************************************************
+; * Pesos para resultados de exames de teste de resistência
+; *******************************************************************************
+dstResultsTB = [
+ NOTDONE = 80
+ RESISTANT = 0
+ SUSCEPTIBLE = 20
+ CONTAMINATED = 2
+] 
+
+dstResultsMDR = [
+ NOTDONE = 0
+ RESISTANT = 60
+ SUSCEPTIBLE = 15
+ CONTAMINATED = 1
+]
+
+
+; *******************************************************************************
+; * Período em que será feito o primeiro exame em relação a 
+; * data de diagnóstico
+; * exemplo:
+; * 	sputumFirst = 20..5
+; * Indica que o exame será feito entre 20 e 5 dias antes da data de diagnóstico
+; *******************************************************************************
+microscopyFirst  = 14..7
+cultureFirst = 60..30
+dstFirst = 90..30
+hivFirst = 90..30
+
+; *******************************************************************************
+; * Frequência em dias para realizar novos exames
+; * Exemplo:
+; * 	sputumFreq = 90
+; * Indica que a cada 90 dias será feito um novo exame de baciloscopia
+; *******************************************************************************
+microscopyFreqTB	= 30
+cultureFreqTB 	= 30
+dstFreqTB 	= 0
+hivFreqTB 	= 0
+
+microscopyFreqMDR  = 30
+cultureFreqMDR = 30
+dstFreqMDR = 0
+hivFreqTB      = 0
+
+
+; *******************************************************************************
+; * Variação máxima percentual na data de realização de um próximo exame
+; * Exemplo:
+; * 	varDateExam = 10
+; * Significa que o próximo exame do caso pode acontecer com uma margem de erro
+; * de 10% (para mais ou menos) da data prevista de realização em relação ao 
+; * exame anterior
+; * Se a frequência de realização de cultura for de 30 dias, então no exemplo acima
+; * ela poderá variar entre 27 e 33 dias (+ ou - 3 dias)
+; *******************************************************************************
+varDateExam = 7
+
+
+; *******************************************************************************
+; * Pesos para resultados de exames de baciloscopia
+; *******************************************************************************
+microscopyResults = [
+	NEGATIVE = 5
+	POSITIVE = 10
+	PLUS	 = 20
+	PLUS2 	 = 25
+	PLUS3 	 = 20
+] 
+
+
+
+; *******************************************************************************
+; * Pesos para resultados de exames de cultura
+; *******************************************************************************
+cultureResults = [
+	NEGATIVE	= 5
+	POSITIVE	= 10
+	PLUS		= 20
+	PLUS2		= 25
+	PLUS3		= 20
+]
+
+; *******************************************************************************
+; * Pesos para resultados de exames de HIV
+; *******************************************************************************
+hivResults = [
+	NEGATIVE	= 80
+	POSITIVE	= 20
+]
+
+
+
+
+
+
+; *******************************************************************************
+; * Pesos para apresentação de x-ray
+; *******************************************************************************
+xrayPresentation = [
+	Cavitary=60
+	Infiltrate=20
+	Normal=1
+	Other=2
+]
+
+; *******************************************************************************
+; *** Próximo Raio-X após o primeiro (que será realizado na data da coleta da cultura) ***
+; *******************************************************************************
+xrayNextResult = 110..130
+
+
+
+
+; *******************************************************************************
+; *** Percentual de casos que tem comorbidades (de 0 a 100%)
+; *******************************************************************************
+percComorbidities = 32
+
+
+; *******************************************************************************
+; *** Peso das comorbidades para casos que possuem comorbidades
+; *******************************************************************************
+comorbidities = [
+	'Diabetes Mellitus'=15
+	'Renal Dysfunction'=2
+	'Cancer Disease'=3
+	'Homeless'=4
+	'Health Care Worker'=10
+	'Refugee/Immigrant'=6
+	'Detained/Imprisoned'=7
+	'Prolonged cortisone therapy'=2
+	'Organ transplant'=1
+	'Alcoholism'=21
+	'Aids'=16
+	'Illicit drugs abuse'=11
+	'Mental disorders'=5
+	'Other'=9
+]
+
+
+
+
+; *******************************************************************************
+; *** Percentual de casos com efeitos colaterais (0 a 100%)
+; *******************************************************************************
+percAdverseReactions=41
+
+; *******************************************************************************
+; *** Peso dos efeitos colaterais para casos (0 a 100% em cada item)
+; *******************************************************************************
+adverseReactions = [
+	'Seizures'=4
+	'Peripheral Neuropathy'=10
+	'Hearing loss and vestibular disturbances'=18
+	'Mental disorder'=13
+	'Hypothyroidism'=8
+	'Other'=3
+	'Gastro-intestinal intolerance'=22
+	'Headache'=16
+	'Visual disturbances'=9
+	'Insomnia'=15
+	'Joint pain'=19
+	'Renal insufficiency'=2
+	'Dizziness'=12
+]
+
+
+
+
+; *******************************************************************************
+; *** Percentual de casos que possuem contatos (entre 0 e 100%)
+; *******************************************************************************
+percContacts=60
+
+; *******************************************************************************
+; *** Número médio de contatos para casos que possuem
+; *******************************************************************************
+contactsRange=1..3
+
+; *******************************************************************************
+; *** Peso para os tipos de contatos
+; *******************************************************************************
+contactType= [
+	'Household'=25
+	'Work/School'=6
+	'Community'=12
+	'Health Care Worker'=11
+	'Nosocomial'=8
+	'Penitentiary'=5
+	'Institutional (asylum, shelter, orphanage, etc.)'=2
+	'Other'=1
+]
+
+
+; *******************************************************************************
+; *** Peso para as condutas dos contatos
+; *******************************************************************************
+contactConduct= [
+'Start TB treatment'=9
+'Start Chemoprophylaxis'=18
+'Guidance/clarification'=43
+]
+
+
+
+
+; *******************************************************************************
+; * Nomes de homens usados para compor o nome do paciente 
+; *******************************************************************************
+firstNamesMale = [
+	Airton
+	Augusto
+	Abu
+	Abdul
+	Albert
+	Antony
+	Anderson
+	Arnaldo
+	Andre
+	Alan
+	Alexandre
+	Alex
+	Aleksey
+	Arin
+	Arnauld
+	Agnaldo
+	Albert
+	Alberto
+	Abaeté
+	Abdão
+	Abdias
+	Abel
+	Ademar
+	Barnabas
+	Barnaby
+	Barton
+	Bernard
+	Bevis
+	Bond
+	Booth
+	Brick
+	Brier
+	Brigham
+	Brinley
+	Baltasar
+	Baren
+	Beto
+	Benedito
+	Bernardo
+	Benjamin
+	Becan
+	Bruno
+	Brandon
+	Biafra
+	Baltazar
+	Bartolomeu
+	Batista
+	Belisario
+	Benjamin
+	Bonifácio
+	Bruce
+	Carter
+	Cecil
+	Cedric
+	Charles
+	Chick
+	Chilton
+	Chip
+	Christian
+	Christopher
+	Cicero
+	Cláudio
+	Clenildo
+	Carlos
+	Caetano
+	Clayton
+	Claude
+	Conrado
+	Constantino
+	Constantin
+	Caio
+	Clarence
+	Clay
+	Clayland
+	Clayton
+	Cleave
+	Clem
+	Clemens
+	Clement
+	Cliff
+	Clifford
+	Clint
+	Clinton
+	Dado
+	Daniel
+	Dilson
+	David
+	Dean
+	Dean
+	Diamond
+	Dixon
+	Duff
+	Ebenezer
+	Edgar
+	Edward
+	Edwin
+	Eliah
+	Eliezer
+	Ellery
+	Ellison
+	Emmanuel
+	Enock
+	Eric
+	Ernes
+	Errol
+	Erv
+	Ethan
+	Eustace
+	Everett
+	Flávio
+	Fábio
+	Fernando
+	Francisco
+	Fernandes
+	Gustavo
+	Glauco
+	Geonory
+	Gabriel
+	Germano
+	Giulio
+	Gardner
+	Garfield
+	Garrick
+	Garrison
+	Garron
+	Garson
+	Garron
+	Garth
+	Gates
+	Gene
+	Gent
+	Geoffrey
+	George
+	Gerald
+	Gibson
+	Gilbert
+	Gomer
+	Gordon
+	Gordy
+	Gore
+	Graham
+	Gram
+	Grayson
+	Gregory
+	Grover
+	Ivo
+	Ivan
+	Ítalo
+	Iuri
+	Yuri
+	Jean
+	Jeremy	
+	Joel
+	Jorge
+	José
+	Jair
+	John
+	Joseph
+	João
+	Jefferson
+	Júlio
+	Jonatas
+	Jonathan
+	Jeremias
+	Jacob
+	Karaman
+	Kurt
+	Kyle
+	Karran
+	Konstantin
+	George
+	Gilberto
+	Gabriel
+	Gregory
+	Garcia
+	Louis
+	Luiz Gustavo
+	Lucas
+	Lean
+	Legolas
+	Marcos
+	Martin
+	Mark
+	Moises
+	Manoel
+	Mohamed
+	Nuno
+	Norberto
+	Nilo
+	Nicholas
+	Noel
+	Osmar
+	Oswald
+	Paulo
+	Pedro
+	Peter
+	Paul
+	Phillip
+	Patrick
+	Raymond
+	Ricardo
+	Ronaldo
+	Roger
+	Rubens
+	Ronald
+	Rivaldo
+	Renan
+	Robson
+	Roosevelt
+	Rennan
+	Renato
+	Raul
+	Ramon
+	Rachid
+	Ringo
+	Sergey
+	Samuel
+	Sandro
+	Silvester
+	Steffano
+	Steve
+	Will
+	Xavier
+	Xisto
+]
+
+; *******************************************************************************
+; * Nomes de mulheres usados para compor o nome do paciente 
+; *******************************************************************************
+firstNamesFemale = [
+	Alynn
+	Aaliyah
+	Aaming
+	Aamy
+	Abbey
+	Aaron
+	Abbie
+	Abbigail
+	Abby
+	Abigail
+	Abigale
+	Abigayle
+	Abilene
+	Abiranna
+	Abril
+	April
+	Ada
+	Adabel
+	Adalyn
+	Addie
+	Addison
+	Addsyn
+	Adela
+	Albertina
+	Agnes
+	Andreia
+	Angela
+	Arinan
+	Ana Maria
+	Ana Lúcia
+	Ana
+	Ameely
+	Alice
+	Aline
+	Arminda
+	Benedita
+	Bruna
+	Beatriz
+	Barbara
+	Bianca
+	Berenice
+	Bruna
+	Clara
+	Célia
+	Carolina
+	Carol
+	Carla
+	Clarice
+	Cleide
+	Cláudia
+	Carmen
+	Denise
+	Daniella
+	Daniele
+	Diana
+	Débora
+	Emily
+	Esmeralda
+	Elisabeth
+	Flávia
+	Fátima
+	Fabiana
+	Fernanda
+	Geovanna
+	Gláucia
+	Gilda
+	Grace
+	Helena
+	Iraci
+	Iná
+	Irene
+	Janete
+	Juliana
+	Jurema
+	Josefina
+	Joelma
+	Jocilaine
+	Maria
+	Maria Antônia
+	Maria Teresa
+	Martha
+	Mirian
+	Marcela
+	Manoela
+	Michele
+	Mel
+	Melissa
+	Nair
+	Karla
+	Keli
+	Kimberly
+	Keila
+	Lara
+	Laura
+	Lair
+	Lourdes
+	Linda
+	Lívia
+	Lauren
+	Leonora
+	Margareth
+	Mabel
+	Mabinty
+	Mable
+	Macey
+	Maceyn
+	Machele
+	Machelle
+	Maci
+	Macy
+	Madaline
+	Madalyn
+	Madalynn
+	Maddy
+	Mahriana
+	Madeleine
+	Madelene
+	Madeline
+	Madelyn
+	Nádia
+	Núbia
+	Natasha
+	Norma
+	Nina
+	Nataly
+	Noelma
+	Otaviana
+	Paula
+	Patrícia
+	Paloma
+	Paris
+	Regina
+	Roberta
+	Rogéria
+	Raquel
+	Rebeca
+	Raimunda
+	Romana
+	Rose
+	Rosely
+	Ra
+	Raby
+	Raca
+	Rachael
+	Rachaell
+	Racheal
+	Rachelis
+	Rachelle
+	Radella
+	RaDonna
+	Rae
+	Raechel
+	Raegan
+	Raina
+	Solange
+	Sandra
+	Simone
+	Sylvia
+	Sara
+	Telma
+	Tara
+	Uma
+	Vada
+	Val
+	Valarie
+	Valéria
+	Vanity
+	Vanna
+	Vaughnita
+	Velada
+	Velda
+	Velena
+	Velia
+	Velma
+	Quilma
+	Qbilah
+	Qiana
+	Quanda
+	Quaneisha
+	Quaneta
+	Quanishia
+	Queen
+	Queena
+	Queenie
+	Quenisha
+	Quenishia
+	Quentina
+	Quiana
+	Quinn
+	Karen
+	Kelly
+]
+
+; *******************************************************************************
+; * Sobrenomes usados para compor o nome dos pacientes 
+; *******************************************************************************
+lastNames = [
+	Antunes
+	Abbott
+	Adamczyk
+	Agnaudo	
+	Araujo
+	Apple
+	da Silva
+	Debrieux
+	Batista
+	Bolivar
+	Brasil
+	Bottino
+	Blue
+	Bachman
+	Bailey
+	Brick
+	Dianno
+	DAvona
+	Dmarco
+	Da neen
+	Da wan
+	Daava
+	Dafne
+	Dagian
+	Dahlia
+	Daija
+	Dantas
+	Dickinson
+	da Costa
+	Copala
+	Cortez
+	Costeau
+	da Costa Saldanha
+	Caliva
+	Callaghan
+	Dutra
+	Boon
+	Bernardes
+	Busht
+	Dabrowski
+	Daecher
+	Edwards
+	Eisenhower
+	Ford
+	Farias
+	Fernandes
+	Fernandez
+	Forest
+	Fancher
+	Fantauzzo
+	Gallet
+	Gomes
+	Gump
+	Greenhill
+	Greece
+	Green
+	Gray
+	Garcia
+	Gusmão
+	Gabriell
+	Gao
+	Gardenia
+	Galena
+	Gallo
+	Garcia
+	Hahn
+	Haley
+	Himan
+	Hill
+	Hutson
+	Highway
+	Julia
+	Jordan
+	Jackson
+	Johnson
+	Xavier
+	Silveira
+	Silva e Souza
+	de Souza
+	Harris
+	Keravec
+	Bastos
+	Lima
+	Lighthouse
+	Lopes
+	Lopez
+	Madilyn
+	Madison
+	Madra
+	Madisyn
+	Maggy
+	Magdalene
+	Maegan
+	Medeiros
+	Marques
+	Moraes
+	Montana	
+	Mc Brain
+	Murray
+	Moore
+	Neves
+	Nunes
+	Noodle
+	Noir
+	Maciejewski
+	Mackay
+	Nagy
+	Nelson
+	Paradise
+	de Oliveira
+	Olson
+	Olszewski
+	Pagano
+	Parker
+	Peterson
+	Patterson
+	Pawlak
+	Pawlowski
+	Pena
+	Penn
+	Pennell
+	Perez
+	Perrin
+	Perry
+	Peters
+	Petit
+	Phillps
+	Pierce
+	Pilch
+	Piotrowski
+	Polk
+	Poole
+	Powell
+	Price
+	Quentin
+	Ramirez
+	Ramos
+	Roque
+	Runderberg
+	Rosario
+	Ribeiro
+	Salazar
+	Sanchez
+	Souza da Silva
+	Soares Brito
+	Soares
+	System
+	Smith
+	Snow
+	Speed
+	Taylor
+	Talimbard
+	Tavares
+	Taft
+	Timberland
+	Timoteo
+	Ribeiro da Silva
+	Romeo
+	Usher
+	Visser
+	Valdez
+	Vanburen
+	Wagner
+	Walczak
+	Xylander
+	Yaeger
+	Young
+	Zajac
+	Zakwzewski
+]
+

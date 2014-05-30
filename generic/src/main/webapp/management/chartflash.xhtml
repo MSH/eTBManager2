@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:p="http://jboss.com/products/seam/pdf"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+
+<s:fragment rendered="#{indicatorController.executing}">
+<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty series.items}" styleClass="warn"/>
+<s:fragment rendered="#{not empty series.items}">
+<table width="100%">
+<tr><td valign="top" align="left" >
+	<table width="380px" class="table1">
+		<tr><th>
+			#{title}
+		</th>
+		<th align="right">
+			<!-- <h:outputText value="#{messages['manag.ind.numc']}" />-->
+				 <h:outputText value="#{empty title2? messages['manag.ind.numc']: title2}" />
+		</th>
+		<th align="right">
+			#{messages['global.perc']}
+		</th>
+		</tr>
+	<a:repeat value="#{series.items}" var="it">
+		<tr>
+			<td class="colb">
+				#{it.key}
+			</td>
+			<td class="colrb">
+				<h:outputText value="#{it.value}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			<td class="colrb">
+				<h:outputText value="#{it.perc}" >
+					<f:convertNumber pattern="#,###,##0.0"/>
+				</h:outputText>%
+			</td>
+		</tr>
+	</a:repeat>
+	<s:fragment rendered="#{indicator.hasTotal}">
+		<tr>
+			<td>
+				<b>#{messages['global.total']}</b>
+			</td>
+			<td>
+				<h:outputText value="#{series.total}" styleClass="colrh" style="font-weight:bold;">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			<td>
+				<h:outputText value="100%" styleClass="colrh" style="font-weight:bold;" />
+			</td>
+		</tr>
+	</s:fragment>
+	</table>
+
+</td><td valign="top"  align="right">
+
+	<div style="border:1px solid #a0a8a8;width:400px;z-index:4000" >
+	<div id="my_chart" style="z-index:2000">
+	</div>
+	</div>
+</td></tr></table>
+
+</s:fragment>
+</s:fragment>
+
+<ui:include src="/layout/tablerow.xhtml" />
+
+
+<script type="text/javascript">
+function ofc_ready() {}
+
+function open_flash_chart_data()
+{
+	var data2 = 
+		<h:outputText value="#{series}" converter="chartDataConverter" escape="false">
+			<f:param name="title" value="#{title}" />
+		</h:outputText>
+	return JSON2.stringify(data2);
+}
+
+function showChart() {
+	swfobject.embedSWF("#{request.contextPath}/js/open-flash-chart.swf", "my_chart", "400", "#{indicatorFilters.chartType==1?(series.chartHeight):'400'}", "9.0.0");
+	jQuery("#charttypediv").show(500);
+}
+</script>
+
+</ui:composition>

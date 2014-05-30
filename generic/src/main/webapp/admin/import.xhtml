@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      template="admintemplate.xhtml">
+
+<ui:param name="title" value="#{messages['admin.import']}" />
+<ui:param name="submenu" value="0" />
+
+
+<ui:define name="content">
+<h1><i class="icon-upload-alt" />#{title}</h1>
+
+<h:form id="main" enctype="multipart/form-data" styleClass="form1">
+
+	<div class="form-content">
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['admin.import.desttable']}:</ui:define>
+    	<h:selectOneMenu value="#{importDataHome.table}" required="true">
+    		<s:selectItems value="#{importDataHome.tables}" var="it" label="#{messages[it.messageKey]}" noSelectionLabel="-"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['admin.import.file']}:</ui:define>
+		<s:fileUpload data="#{importDataHome.file}" required="true">
+		</s:fileUpload>
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['admin.import.delimiter']}:</ui:define>
+    	<h:selectOneMenu value="#{importDataHome.delimiter}" required="true">
+    		<f:selectItems value="#{importDataHome.delimiters}" />
+    	</h:selectOneMenu>
+    </s:decorate>
+	
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['admin.import.charset']}:</ui:define>
+    	<h:selectOneMenu value="#{importDataHome.charset}" required="true">
+    		<f:selectItems value="#{importDataHome.charsets}" />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+	</div>
+	
+	<div class="form-footer">
+	<h:commandLink action="#{importDataHome.execute}" styleClass="button" 
+		onclick="if (!disableButton(this)) return false;" >
+		<span>#{messages['form.import']}</span>
+	</h:commandLink>
+	</div>
+</h:form>
+
+
+</ui:define>
+</ui:composition>

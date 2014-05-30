@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="transferHome" value="#{transferUAHome}" />
+<ui:param name="transfer" value="#{transferUA}" />
+
+<ui:param name="title" value="#{transferHome.id==null? messages['meds.transfer.new'] :messages['meds.transfer.edit']}"/>
+
+<ui:param name="topmenu" value="1" />
+<ui:param name="left" value="0" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:define name="content">
+<s:decorate template="/layout/unitsel.xhtml">
+<h:form id="main" styleClass="form1">
+
+	<div class="form-content">
+	<h2>#{messages['meds.movs.destunit']}</h2>
+	<s:decorate template="/layout/tbselection.xhtml" rendered="#{id == null}">
+		<ui:param name="tbunitselection" value="#{transferHome.tbunitSelection}" />
+		<ui:param name="required" value="true" />
+	</s:decorate>
+	
+	<s:decorate template="/layout/tbselection.xhtml" rendered="#{id != null}">
+		<ui:param name="tbunitselection" value="#{transferHome.unitToSelection}" />
+		<ui:param name="required" value="true" />
+	</s:decorate>
+
+
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Transfer.consignmentNumber']}:</ui:define>
+    	<h:inputText value="#{transfer.consignmentNumber}" required="true"/>
+	</s:decorate>
+
+    <s:decorate template="/custom/ua/layout/dateedit.xhtml" style="margin-top:20px">
+    	<ui:define name="label">#{messages['Transfer.consignmentDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="false" /> 
+    	<ui:param name="datefield" value="#{transfer.shippingDate}" /> 
+    	<ui:param name="immediateSetter" value="true" /> 
+	</s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Transfer.orderNumber']}:</ui:define>
+    	<h:inputText value="#{transferUA.orderNumber}" required="true"/>
+	</s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" style="margin-top:20px">
+    	<ui:define name="label">#{messages['Transfer.orderDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="false" /> 
+    	<ui:param name="datefield" value="#{transferUA.orderDate}" />
+	</s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" style="clear:left;height:70px;">
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputTextarea value="#{transfer.commentsFrom}" style="width:430px;height:60px;"/>
+    </s:decorate>
+
+	</div>
+
+	<a:commandLink ajaxSingle="true" styleClass="button-alt" reRender="medstkpnl" 
+		action="#{transferHome.filterMedicines}" oncomplete="showMedicinesStockDlg()" style="float:right">
+		<span>#{messages['form.selmeds']}</span>
+	</a:commandLink>
+	<h2>#{messages['meds.movs.itensmov']}</h2><br/>
+
+	<h:panelGroup id="pnlitems">
+	<table width="100%" class="table1" style="clear:right;">
+	<a:repeat value="#{transferHome.sources}" var="s">
+		<tr style="background-color:#EDF7EF;"><td colspan="12" style="border:1px solid #B4E8BB;padding:5px;">
+			<b>#{s.source.name}</b>
+		</td></tr>
+		
+		<tr><th align="left">#{messages['Medicine']}
+		</th><th align="left">#{messages['Batch.brandName']}
+		</th><th align="left">#{messages['Batch.manufacturer']}
+		</th><th align="left">#{messages['Batch.registCard']}
+		</th><th align="left">#{messages['Batch.batchNumber']}
+		</th><th align="center">#{messages['Batch.expiryDate']}
+		</th><th align="left">#{messages['Medicine.strengthUnit']}
+		</th><th align="right">#{messages['Batch.numContainers']}
+		</th><th align="right">#{messages['Batch.containerPrice']}
+		</th><th align="right">#{messages['global.totalPrice']}
+		</th><th>
+		</th></tr>
+		<a:repeat value="#{s.items}" var="it">
+		<s:fragment rendered="#{!transferUAHome.tiToRemove.contains(it)}">
+		<tr bgcolor="#f3f3f0"><td colspan="9">
+			<div class="medicine-icon" />
+			#{it.medicine}
+		</td>
+		
+		<td align="right">
+			<b><h:outputText value="#{medCalcCont.calculateTotalPrice(it.batches)}">
+				<f:convertNumber pattern="#,###,##0.00"/>
+			</h:outputText>
+			</b>
+		</td>
+		<td align="center">
+			<a:commandLink value="#{messages['meds.selbatches']}" ajaxSingle="true" 
+				action="#{transferHome.initBatchSelection(it)}"
+				reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" 
+				style="width:120px;display:block;"/>
+			<a:commandLink value="#{messages['form.remove']}" ajaxSingle="true" action="#{transferUAHome.removeItem(it)}" reRender="pnlitems" />
+		</td></tr>
+		<s:fragment rendered="#{not empty it.data}">
+		<tr><td colspan="7">
+ 			<h:outputText value="#{it.data}" styleClass="error"/>
+ 		</td></tr> 
+		</s:fragment>
+		
+		
+		<a:repeat value="#{it.batches}" var="b">
+			<tr>
+				<td>
+				</td>
+				<td class="colb" >
+					#{b.batch.brandName}
+				</td>
+				<td align="center" class="colb">
+					#{b.batch.manufacturer}
+				</td>
+				<td align="center" class="colb">
+					<h:outputText value="#{b.batch.registCardNumber}"/>
+					<h:outputText value=" #{messages['from']} " rendered="#{b.batch.registCardBeginDate!=null}"/>
+					<h:outputText value="#{b.batch.registCardBeginDate}" converter="localeDateConverter" />
+				</td>
+				<td align="center" class="colb">
+					<div class="batch-icon" />
+					#{b.batch.batchNumber}
+				</td>
+				<td align="center" class="colb">
+					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+				</td>
+				<td align="center" class="colb">
+					#{messages['Batch.container']}
+				</td>
+				<td class="colb" align="right">
+					<h:outputText value="#{medCalcCont.calculateNumContainers(b.batch.quantityContainer,b.quantity)}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</td>
+				<td align="right" class="colb">
+					<h:outputText value="#{medCalcCont.calculateContPrice(b.batch.quantityContainer,b.batch.unitPrice)}">
+						<f:convertNumber pattern="#,###,##0.00000"/>
+					</h:outputText>
+				</td>
+				<td align="right" class="colb">
+					<h:outputText value="#{medCalcCont.calculateTotalPrice(b.quantity,b.batch.quantityContainer,b.batch.unitPrice)}">
+						<f:convertNumber pattern="#,###,###,##0.00"/>
+					</h:outputText>
+				</td>
+				<td class="colb"></td>
+			</tr>
+		</a:repeat>
+		</s:fragment>
+		</a:repeat>
+	</a:repeat>
+	<s:fragment rendered="#{transferUAHome.globalTotal>0}">
+		<tr>
+			<th colspan="8">
+			</th>
+			<th align="right">
+				#{messages['AtAll']}
+			</th>
+			<th>
+				<h:outputText value="#{transferUAHome.globalTotal}">
+					<f:convertNumber pattern="#,###,###,##0.00"/>
+				</h:outputText>	
+			</th>
+			<th>
+			</th>
+		</tr>
+	</s:fragment>
+	</table>
+	</h:panelGroup>		
+
+	<div class="form-footer">
+        <a:commandLink action="#{transferUAHome.saveNewTransfer}" styleClass="button" reRender="main,messages"
+        	onclick="if (!disableButton(this)) return false;" rendered="#{id==null}">
+        	<span>#{messages['form.ok']}</span>
+        </a:commandLink>
+        <a:commandLink action="#{transferUAHome.saveEditTransfer}" styleClass="button" reRender="main,messages"
+        	onclick="if (!disableButton(this)) return false;"  rendered="#{id!=null}">
+        	<span>#{messages['form.ok']}</span>
+        </a:commandLink>
+		<s:link view="/medicines/transfer.xhtml" styleClass="button-alt" propagation="end" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+</h:form>
+</s:decorate>
+
+<div style="margin-top:10px;margin-left:10px;">
+<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+</div>   
+
+<s:decorate template="/layout/medicinestockselection.xhtml" >
+	<a:commandLink action="#{transferHome.selectMedicines}"
+		onclick="if (!disableButton(this)) return false;" 
+		oncomplete="enableButton();hideMedicinesStockDlg();" reRender="pnlitems" styleClass="button">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
+</s:decorate>
+
+<s:decorate template="/custom/ua/layout/batchselection.xhtml" >
+	<ui:param name="quantitytitle" value="#{messages['Batch.quantity']}" />
+	<ui:param name="dateRelativeTo" value="#{transfer.shippingDate}" />
+
+	<a:commandLink action="#{transferHome.selectBatches}" rendered="#{id==null}"
+		onclick="if (!disableButton(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
+		oncomplete="enableButton();hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
+	<a:commandLink action="#{transferUAHome.selectExistBatches}" rendered="#{id!=null}"
+		onclick="if (!disableButton(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
+		oncomplete="enableButton();hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
+</s:decorate>
+
+</ui:define>
+
+
+</ui:composition>  

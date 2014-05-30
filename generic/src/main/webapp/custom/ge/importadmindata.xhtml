@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+      			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="topmenu" value="0" />
+
+<ui:param name="title" value="Import Data" />
+
+<ui:define name="content">
+
+	<h:form id="main">
+	<s:decorate template="/layout/roundrect.xhtml" style="width:300px;">
+		<ui:define name="header"><b>Import Data</b></ui:define>
+		<ui:param name="showfooter" value="0" />
+		
+		<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">#{messages['Workspace']}:</ui:define>
+			#{defaultWorkspace.name}
+		</s:decorate>
+		
+		<a:commandLink action="#{importGETBHome.execute}" reRender="messages,main" styleClass="button" rendered="#{not importGETBHome.taskRunning}">
+			<span>execute</span>
+		</a:commandLink>
+	</s:decorate>
+
+	<h:panelGroup id="pnltask">
+		<s:fragment rendered="#{importGETBHome.taskRunning}">
+			<a:poll reRender="pnltask" interval="5000" ajaxSingle="true"/>
+
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['form.name']}</ui:define>
+				#{importTBMRHome.task.displayName}
+			</s:decorate>
+
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['Status']}</ui:define>
+				#{importTBMRHome.task.status}
+			</s:decorate>
+
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['Progress']}</ui:define>
+				<div style="width:100px;display:block;height:20px;">
+					<div class="progress-icon" style="width:#{importGETBHome.task.progress}px"/>
+					#{importGETBHome.task.progress}%
+				</div>
+			</s:decorate>
+		</s:fragment>
+	</h:panelGroup>
+
+	</h:form>
+</ui:define>
+
+</ui:composition>            

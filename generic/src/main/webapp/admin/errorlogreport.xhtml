@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="admintemplate.xhtml">
+
+<ui:param name="title" value="#{messages['userrole.ERRORLOGREP']}" />
+<ui:param name="submenu" value="1" />
+
+<ui:define name="content">
+<h1><i class="icon-table" />#{title}</h1>
+<h:form id="main" styleClass="form1">
+
+<div class="form-content">
+<s:decorate template="/layout/dateedit.xhtml">
+	<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
+	<ui:param name="datefield" value="#{errorLogReport.iniDate}" />
+	<ui:param name="required" value="false" />
+</s:decorate>
+
+<s:decorate template="/layout/dateedit.xhtml">
+	<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
+	<ui:param name="datefield" value="#{errorLogReport.endDate}" />
+	<ui:param name="required" value="false" />
+</s:decorate>
+
+<s:decorate template="/layout/edit.xhtml" >
+	<ui:define name="label">#{messages['global.searchkey']}:</ui:define>
+	<h:inputText value="#{errorLogReport.searchkey}" />
+</s:decorate>
+
+	<a:commandLink reRender="pnlunits" styleClass="button-alt" onclick="if (!disableButton(this)) return false;" oncomplete="enableButton()">
+		<span>#{messages['form.refresh']}</span>
+	</a:commandLink>
+          
+</div>
+
+
+<h:panelGroup id="pnlunits">
+
+<s:decorate template="/layout/naveg.xhtml">
+	<ui:param name="list" value="#{errorLogReport}" />
+
+<b><h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty errorLogReport.resultList}" /></b>
+<h:dataTable id="tbl" value="#{errorLogReport.resultList}" var="it" columnClasses="colb,colb,colb,colcb"
+  styleClass="table2" rowClasses="lin1,lin2" width="100%" rendered="#{not empty errorLogReport.resultList}">
+  <h:column>
+  	<f:facet name="header">
+  		<h:outputText value="#{messages['global.date']}" styleClass="collh" />
+  	</f:facet>
+  	<h:outputText value="#{it.errorDate}" converter="localeDateConverter" style="width:120px;display:block;">
+  		<f:param id="type" value="date-time"/>
+  	</h:outputText>
+	<h:outputText value="#{it.errorDate}" converter="periodConverter" styleClass="text-small hint">
+		<f:param name="type" value="elapsed-time" />
+	</h:outputText>
+  </h:column>
+  
+	<h:column>
+  		<f:facet name="header">
+  			<h:outputText value="#{messages['admin.errorlogreport.title']}" styleClass="collh"/>
+  		</f:facet>
+  		<a href="#{it.url}" >#{it.url}</a>
+  		<br/>
+  		<b>#{it.exceptionClass}</b>
+  		<br/>
+  		#{it.exceptionMessage} 
+  		<a:commandLink value="#{messages['form.details']}" 
+  			style="padding-left:10px;" 
+  			onclick="displayErrorDetails(#{it.id}); return false"/>
+  		<div id="div#{it.id}" style="display:none;clear:both" class="hint"/>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['User']}" styleClass="collh" />
+		</f:facet>
+		#{it.user}
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Workspace']}" styleClass="collh" />
+		</f:facet>
+		#{it.workspace}
+	</h:column>
+</h:dataTable>
+
+</s:decorate>
+
+<a:jsFunction name="updateErrorDetails" reRender="errordetails" ajaxSingle="true" oncomplete="moveErrorDetail()">
+	<a:actionparam name="param1" assignTo="#{errorLogReport.errorLogId}" converter="javax.faces.Integer" />
+</a:jsFunction>
+<script type="text/javascript">
+function displayErrorDetails(id) {
+	window.errorDetailId = id;
+	updateErrorDetails(id);
+}
+function moveErrorDetail() {
+	var e=jQuery('#diverrodetail');
+	var content=e.html();
+	var s="#div"+window.errorDetailId;
+	jQuery(s).html(content).slideDown(500);
+	e.text('');
+}
+
+</script>
+
+</h:panelGroup>
+
+<h:panelGroup id="errordetails">
+	<div id="diverrodetail" style="display:none">
+		<h:outputText value="#{errorLogReport.errorLog.request}" 
+      			    converter="rmemoria.TextConverter" escape="false" style="font-family:Courier new"/>
+ 		<p/>
+		<h:outputText value="#{errorLogReport.errorLog.stackTrace}" 
+      			    converter="rmemoria.TextConverter" escape="false" style="font-family:Courier new"/>
+	</div>
+</h:panelGroup>
+
+</h:form>
+
+<ui:include src="/layout/tablerow.xhtml" />
+
+</ui:define>
+
+</ui:composition>  

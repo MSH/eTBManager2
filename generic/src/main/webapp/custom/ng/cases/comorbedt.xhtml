@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.comorbidities']} - #{messages[tbcase.classification.key]}" />
+
+<ui:param name="topmenu" value="0" />
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+<s:decorate template="/layout/casebody.xhtml" >
+	<div class="form-content">
+	<table width="100%">
+	<tr><td colspan="2" style="padding:6px;">
+		<h2>#{messages['cases.comorbidities']}</h2>
+		<div id="tbldata">
+		<h:dataTable value="#{comorbidityHome.comorbidities}" var="it" styleClass="table1" rowClasses="lin1,lin2" width="100%">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['form.name']}" styleClass="collh"/>
+				</f:facet>
+				<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows();"/>
+				#{it.item.comorbidity.name}
+			</h:column>
+			
+			<h:column >
+				<f:facet name="header" >
+					<h:outputText value="#{messages['Regimen.years']}"  styleClass="collh" />
+				</f:facet>
+				<h:selectOneMenu value="#{it.item.duration}">
+					<f:selectItem itemLabel="-" itemValue="#{null}"/>
+					 <f:selectItems value="#{globalLists_ng.years}" />
+					<!-- <f:selectItems value="#{globalLists_ng.comorb_years}" /> -->
+				</h:selectOneMenu>
+			</h:column>
+			
+			<h:column >
+				<f:facet name="header" >
+					<h:outputText value="#{messages['global.comments']}"  styleClass="collh" />
+				</f:facet>
+				<h:inputText value="#{it.item.comment}" style="width:400px;display:none; "/>
+			</h:column>
+		</h:dataTable>
+		</div>		
+
+	</td></tr>
+	<tr><td>
+    	<s:decorate template="/layout/display.xhtml">
+    		<ui:param name="labelstyle" value="width:250px"/>
+    		<ui:define name="label">#{messages['TbCase.tbContact']}:</ui:define>
+    		<h:selectBooleanCheckbox id="chkcont" value="#{tbcase.tbContact}" />
+    	</s:decorate>
+    </td><td>
+    	<div id="divpatname">
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['TbCase.personContactName']}:</ui:define>
+    		<h:inputText value="#{tbcase.patientContactName}" style="width:400px" maxlength="200"/>
+    	</s:decorate>
+    	</div>
+    </td></tr>
+    </table>
+	<rich:jQuery selector="#chkcont" query="click(function(){toggleDivPanel(this, '#divpatname');})" />
+	<rich:jQuery selector="#chkcont:not(:checked)" query="each(function(){jQuery('#divpatname').hide();})" />
+
+    </div>
+    
+    <div class="form-footer">
+	<a:commandLink action="#{comorbidityHome.save}" styleClass="button" reRender="main"
+		onclick="if (!disableButton(this)) return false;" >
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
+	<s:link view="/custom/ng/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="if (!disableButton(this)) return false;">
+		<f:param name="id" value="#{caseHome.id}" />
+		<span>#{messages['form.cancel']}</span>
+	</s:link>
+	</div>
+</s:decorate>
+	
+
+</h:form>
+<rich:jQuery selector="document" query="ready(function() {updateRows();})" />
+<script type="text/javascript">
+function updateRows() {
+	jQuery("#tbldata tr").removeClass("activerow");
+	jQuery("#tbldata tr input[type='text'],select").hide();
+	jQuery("#tbldata tr:has(:checked) input[type='text']").show();
+	jQuery("#tbldata tr:has(:checked) select").show();
+	jQuery("#tbldata tr:has(:checked)").addClass("activerow");
+}
+function toggleDivPanel(chk, divname) {
+	if (chk.checked)
+		jQuery(divname).show();
+	else jQuery(divname).hide();
+}
+</script>
+
+</ui:define>
+
+</ui:composition>  

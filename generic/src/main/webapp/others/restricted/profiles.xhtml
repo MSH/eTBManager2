@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="topmenu" value="0" />
+
+<ui:param name="title" value="Update Admin Profiles" />
+<ui:param name="activeroundcorners" value="1" />
+
+<ui:define name="content">
+
+	<h:form>
+	<s:decorate template="/layout/roundrect.xhtml" style="width:300px;">
+		<ui:define name="header"><b>Update Administrator profiles</b></ui:define>
+		<ui:param name="showfooter" value="0" />
+		<h:commandLink action="#{workspaceInit.updateAdministratorProfile}" value="Update" />
+	</s:decorate>
+	</h:form>
+</ui:define>
+
+</ui:composition>            

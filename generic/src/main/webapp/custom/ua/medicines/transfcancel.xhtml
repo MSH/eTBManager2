@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['meds.transfer.detail']}" />
+<ui:param name="topmenu" value="1" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['meds.inventory']}" view="/medicines/index.html" propagation="none" />
+	<s:link view="/medicines/transfer.xhtml" value="#{messages['meds.transfer']}" propagation="none"/>
+</ui:define>
+
+
+<ui:define name="left">
+</ui:define>
+
+<ui:define name="content">
+<h:form id="main">
+    <table width="750px" class="tabela3" style="margin-bottom:10px" cellpadding="8">
+    <tr><td class="header">
+    	<b style="float:left;margin-right:4px;">#{messages['Transfer.unitFrom']}: </b>
+    	<div class="#{transfer.unitFrom.treatmentHealthUnit?'hu.gif':'ds.gif'}">
+    	#{transfer.unitFrom.name}
+    	</div>
+    </td>
+    <td class="header">
+    	<b style="float:left;margin-right:4px;">#{messages['Transfer.unitTo']}: </b>
+    	<div class="#{transfer.unitTo.treatmentHealthUnit?'hu.gif':'ds.gif'}">
+    	#{transfer.unitTo.name}
+    	</div>
+    </td></tr>
+
+    <tr><td style="font-size:11px;padding-top:5px" class="header">
+    #{messages['Transfer.shippingDate']}:
+	<span style="color:black;font-weight:bold;"> 
+	<h:outputText value="#{transfer.shippingDate}" converter="localeDateConverter" />
+	</span> 
+    <br/>
+    #{messages['form.by']} 
+    <span style="color:black;font-weight:bold;">
+    	#{transfer.userFrom.name}
+    </span>
+    </td>
+    <td class="header" style="font-size:11px;">
+    	<s:fragment rendered="#{transfer.status=='DONE'}">
+      		#{messages['Transfer.receivingDate']}:
+	  		<span style="color:black;font-weight:bold;"> 
+	  		<h:outputText value="#{transfer.shippingDate}" converter="localeDateConverter" />
+			</span> 
+      		<br/>
+      		#{messages['form.by']} 
+      		<span style="color:black;font-weight:bold;">
+     			#{transfer.userFrom.name}
+     		</span>
+     	</s:fragment>
+    </td>
+    </tr>
+    <tr><td colspan="2">
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Order.cancelReason']}:</ui:define>
+    	<h:inputText value="#{transfer.cancelReason}" style="width:350px;" required="true"/>
+    </s:decorate>
+
+	</td></tr>
+	<tr><td align="right" colspan="2">
+        <a:commandLink action="#{transferHome.cancel}" styleClass="button" reRender="main,messages"
+        	onclick="if (!disableButton(this)) return false;"
+        	oncomplete="enableButton()">
+        	<span>#{messages['form.ok']}</span>
+        </a:commandLink>
+        <s:link view="/custom/ua/medicines/transfdata.xhtml" styleClass="button-alt">
+        	<f:param name="id" value="#{transfer.id}"/>
+        	<span>#{messages['form.cancel']}</span>
+        </s:link>
+    </td></tr>
+    </table>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

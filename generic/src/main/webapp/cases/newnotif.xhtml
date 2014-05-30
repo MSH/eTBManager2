@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['form.new']} - #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect]: messages[tbcase.classification.key]}" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:140px" />
+<ui:param name="left" value="0" />
+
+<ui:param name="waitdlg" value="1" />
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+<rich:jQuery name="showbutton" selector="#newpacbutton" query="show()" />
+<h:form id="main" styleClass="form1">
+<div class="form-content">
+
+	<!-- <h2>#{messages['cases.searchpatient']}</h2> -->
+	<h2>#{messages['cases.searchfor']} #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect]: messages[tbcase.classification.key]} #{messages['cases.toBeNotified']}</h2>
+
+     <s:decorate id="nameSuspect" template="/layout/editname.xhtml" rendered = "#{tbcase.diagnosisType=='SUSPECT'}">
+    	<ui:define name="label">#{messages['Suspect.name']}:</ui:define>
+   		<ui:param name="patientdata" value="#{patient}" />
+   		<ui:param name="redasterisk" value="true" />
+    </s:decorate>
+    
+     <s:decorate id="namePatient" template="/layout/editname.xhtml" rendered = "#{tbcase.diagnosisType=='CONFIRMED'}">
+    	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
+   		<ui:param name="patientdata" value="#{patient}" />
+   		<ui:param name="redasterisk" value="true" />
+    </s:decorate>
+		
+	<h:panelGroup id="bd">
+    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="datefield" value="#{patient.birthDate}" /> 
+    	<ui:param name="future" value="false" />
+    </s:decorate>
+    </h:panelGroup>
+
+	<h:inputHidden value="#{tbcase.classification}" />
+
+		<a:commandLink id="btnsearch" styleClass="button"
+			focus="name" onclick="if (!disableButton(this)) return false;initPatientSearch(); return false" >
+			<span>#{messages['form.search']}</span>
+		</a:commandLink>
+		<s:link view="/cases/index.xhtml" styleClass="button-alt" onclick="disableButton(this)">
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+		
+		<div style="float:right;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+</div>
+
+	<rich:jQuery timming="onload" selector="#main input[type='text']:first" query="focus()" />
+	<rich:hotKey selector="#main input" key="return" handler="initPatientSearch()" />
+	<a:jsFunction name="newPatientForm" action="#{caseEditingHome.selectPatientData}" />
+
+<div class="spacer"></div>
+<h:panelGroup id="pnlpatients">
+<div id="newpacbutton" style="display:none;" >
+<h1>#{messages['cases.new.selpatient']}</h1>
+
+<s:decorate template="/layout/naveg.xhtml" >
+	<ui:param name="list" value="#{patients}" />
+
+	<table id="tblpats" width="680px" class="table1" >
+		<tr id="pacnew" class="selectable">
+			<td colspan="4">
+				<div style="float:left"><input type="radio" name="sel1" onclick="radioClick(this);"/></div>
+				<b>#{messages['cases.newpatient']}</b>
+				<s:div styleClass="hint" rendered="#{not empty patients.patientList}">#{messages['cases.new.msg']}</s:div>
+				<div id="btn" style="display:none;font-size:11px;">
+					<a onclick="if (!disableButton(this)) return false; else newPatientForm();"
+				    	class="button" >
+				   		<span>#{messages['cases.new.gonotif']}</span>
+					</a>
+				</div>
+			</td>
+		</tr>
+		<s:fragment rendered="#{not empty patients.patientList}">
+		<tr>
+			<th rowspan="2" width="250px">#{messages['Patient']}</th>
+			<th rowspan="2">#{messages['Patient.birthDate']}</th>
+			<th colspan="2">#{messages['cases.sit.current']}</th>
+		</tr>
+		<tr>
+			<th>Case status</th>
+			<th>#{messages['TbCase.notificationUnit']}
+				<br/>
+				#{levelInfo.nameLevel1}, #{levelInfo.nameLevel2} (#{messages['Address']})
+			</th>
+		</tr>
+		<a:repeat value="#{patients.patientList}" var="it">
+		<tr id="pac#{it.patient.id}" class="selectable">
+			<td>
+				<div style="float:left"><input type="radio" name="sel1" onclick="radioClick(this);"/></div>
+				<div>
+				<div class="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" />
+				</div>
+				#{it.patient.fullName}
+				<br/>
+				#{it.tbcase.displayCaseNumber}
+				<div id="btn" style="display:none;clear:both">
+					<s:link view="/cases/casenew.xhtml" onclick="if (!disableButton(this)) return false;" styleClass="button">
+						<f:param name="pacid" value="#{it.patient.id}" />
+						<f:param name="cla" value="#{tbcase.classification}"/>
+						<span>#{messages['cases.new.gonotif']}</span>
+					</s:link>
+				</div>
+			</td>
+			
+			<td>
+				<h:outputText value="#{it.patient.birthDate}"  converter="localeDateConverter"/>
+			</td>
+			
+			<td>
+				<h:outputText value="#{it.caseStatus}" escape="false" />
+			</td>
+			
+			<td>
+				#{it.tbcase.notificationUnit.name}
+				<br/>
+				#{it.tbcase.notifAddress.adminUnit.fullDisplayName2}
+			</td>
+		</tr>
+		</a:repeat>
+		</s:fragment>
+	</table>
+
+	<p/>
+</s:decorate>
+</div>
+</h:panelGroup>
+
+<script type="text/javascript">
+function initPatientSearch() {
+	if (!checkfields()){
+		enableButton();
+		return false;
+	}
+	searchPatient();
+}
+function checkfields() {
+	if (jQuery("#pacname input[value!='']").size() == 0) {
+		alert("#{messages['cases.new.namereq']}");
+		return false;
+	}
+	return true;
+}
+function initPatientTable() {
+	jQuery('#tblpats tr.selectable')
+		.mouseover(function(){ 
+			jQuery(this).addClass('highlight').css('cursor','pointer');
+		})
+		.mouseout(function(){
+			if (jQuery('input:checked', this).length == 0) 
+				jQuery(this).removeClass('highlight').css('cursor','default');
+		})
+		.click(function(){ selectRow(this)});
+}
+function radioClick(radio) {
+	jQuery(radio).attr('checked',false);
+	selectRow(jQuery(radio).parent('tr'));
+}
+
+function selectRow(row) {
+	if (jQuery('input:checked',row).length>0)
+		return;
+	jQuery('#tblpats tr #btn').slideUp(250);
+	jQuery('#btn', row).slideDown(250);
+	jQuery('input[type="radio"]', row).attr('checked', true);
+
+	jQuery('#tblpats tr').removeClass('highlight');
+	jQuery(row).addClass('highlight');
+}
+</script>
+<a:jsFunction name="searchPatient" reRender="pnlpatients,dt" 
+	oncomplete="if (data) {showbutton();enableButton();initPatientTable();}"
+	action="#{patients.search}"  
+	data="#{patients.searching}" />
+
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

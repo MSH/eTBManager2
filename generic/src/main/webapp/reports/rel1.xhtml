@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/report.xhtml">
+
+<ui:param name="title" value="#{messages['manag.rel1']}" />
+
+<ui:param name="waitdlg" value="1" />
+<ui:param name="topmenu" value="2" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:define name="naveg" >
+	<s:link value="#{messages['management']}" view="/management/index.html" propagation="none" />
+</ui:define>
+
+
+<ui:define name="content">
+
+<s:decorate template="/layout/display.xhtml" rendered="#{reportSelection.source != null}">
+	<ui:define name="label">#{messages['Source']}:</ui:define>
+	<h:outputText value="#{reportSelection.source.abbrevName} - #{reportSelection.source.name}" />
+</s:decorate>
+
+<s:decorate template="/layout/audisplay.xhtml">
+	<ui:param name="adminunit" value="#{reportSelection.auselection.selectedUnit}" />
+</s:decorate>
+
+<table class="table1" style="margin-top:20px;" width="100%">
+	<tr>
+	<th width="200px">
+		#{levelInfo.nameLevel1} / #{messages['Tbunit']}
+	</th>
+	<a:repeat value="#{stockPosReport.medicines}" var="it">
+	<th width="120px" title="#{it}">
+		#{it.abbrevName}<br/>#{it.strength} #{it.strengthUnit}
+	</th>
+	</a:repeat>
+	</tr>
+	
+	<a:repeat value="#{stockPosReport.root.children}" var="p">
+	<tr>
+		<td class="highlight colb" >#{p.item.name}
+		</td>
+		<c:forEach begin="0" end="#{stockPosReport.medicines.size-1}" var="val">
+		<td align="right" class="highlight colb">
+			<h:outputText value="#{p.quantities[val]}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+		</c:forEach>
+	</tr>
+		<a:repeat value="#{p.children}" var="it">
+		<tr>
+			<td class="colb">#{it.item.name}</td>
+			<c:forEach begin="0" end="#{stockPosReport.medicines.size-1}" var="i">
+			<td align="right" class="colb">
+				<h:outputText value="#{it.quantities[i]}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			</c:forEach>
+		</tr>
+		</a:repeat>
+	</a:repeat>
+
+	<tr>
+		<th>
+			#{messages['global.total']}
+		</th>
+		<c:forEach begin="0" end="#{stockPosReport.medicines.size-1}" var="i">
+			<th align="right">
+				<h:outputText value="#{stockPosReport.root.quantities[i]}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</th>
+		</c:forEach>
+
+	</tr>
+</table>
+
+
+</ui:define>
+
+</ui:composition>  

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      template="/layout/templatemed.xhtml">
+
+<ui:param name="title" value="#{messages['manag.rel2']}" />
+
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="pagestyle" value="width:90%" />
+
+<ui:define name="naveg" >
+	<div class="item">
+		<s:link value="#{messages['meds.inventory']}" view="/medicines/index.html" propagation="none" />
+	</div>
+	<div class="item selected">
+		<s:link value="#{title}" propagation="none" />
+	</div>
+</ui:define>
+
+
+<ui:define name="content_unit">
+<h:form id="main">
+<table width="100%">
+<tr><td>
+	<s:decorate id="source" template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['Source']}:</ui:define>
+		<h:selectOneMenu id="source" value="#{reportSelection.source}">
+            <s:selectItems value="#{sources.resultList}" noSelectionLabel="#{messages['form.noselection']}" var="s" label="#{s}"/>
+            <s:convertEntity />
+		</h:selectOneMenu>
+	</s:decorate>
+	<p/>
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+
+</td></tr>
+<tr><td align="right">
+	<a:commandLink styleClass="button-alt" reRender="main" action="#{estimatedStockReport.execute}">
+		<span>#{messages['form.update']}</span>
+	</a:commandLink>
+</td></tr>
+</table>
+
+<s:fragment rendered="#{not empty estimatedStockReport.itens}">
+<table class="table1">
+<tr>
+	<th align="left" class="coll">
+	#{messages['Medicine']}
+	</th>
+	<th align="right" class="colr">
+		#{messages['meds.movs.stockqtty']}
+	</th>
+	<th align="right" class="colc">
+		#{messages['StoragePosReport.lastMovement']}
+	</th>
+	<th align="right" class="colc">
+		#{messages['reports.numDays']}
+	</th>
+	<th align="right" class="colr">
+		#{messages['reports.numpatients']}
+	</th>
+	<th align="right" class="colrbb">
+		#{messages['reports.estimatedcons']}
+	</th>
+	<th align="right" class="colrbb">
+		#{messages['reports.estimatedqtdnow']}
+	</th>
+</tr>
+
+<ui:repeat value="#{estimatedStockReport.itens}" var="it">
+<tr>
+	<td class="colb">#{it.medicine}
+	</td>
+	<td class="colrb">
+		<h:outputText value="#{it.quantity}" >
+			<f:convertNumber pattern="#,###,###,##0"/>
+		</h:outputText>
+	</td>
+	<td class="colcb">
+		<h:outputText value="#{it.lastUpdate}"  converter="localeDateConverter" />
+	</td>
+	<td class="colcb">#{it.numDays}
+	</td>
+	<td class="colrb">
+		<h:outputText value="#{it.numPatients}" rendered="#{it.numPatients>0}">
+			<f:convertNumber pattern="#,###,###,##0"/>
+		</h:outputText>
+		<h:outputText value="-" rendered="#{it.numPatients==0}" />
+	</td>
+	<td class="colrb">
+		<h:outputText value="#{it.consumption}" >
+			<f:convertNumber pattern="#,###,###,##0"/>
+		</h:outputText>
+	</td>
+	<td class="colrb">
+		<h:outputText value="#{it.estimatedQuantity}" >
+			<f:convertNumber pattern="#,###,###,##0"/>
+		</h:outputText>
+	</td>
+</tr>
+</ui:repeat>
+</table>
+
+<ui:include src="/layout/tablerow.xhtml" />
+</s:fragment>
+
+</h:form>
+
+
+</ui:define>
+
+</ui:composition>  

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+  	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:h="http://java.sun.com/jsf/html" >
+<head>
+<title>#{messages['mdrtb_system']}</title>
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<meta http-equiv="keywords" content="e-TB Manager,TB,Tuberculosis,DRTB,MSH" />
+<meta http-equiv="description" content="eTB Manager" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<a:loadStyle src="/public/bootstrap3/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+<a:loadStyle src="/public/font-awesome/css/font-awesome.min.css" />
+<a:loadScript src="/public/js/commons.js" />
+<link rel="shortcut icon" href="#{request.contextPath}/public/images/favicon.ico" />
+
+<style type="text/css">
+body {
+	padding-top:15px;
+	padding-bottom:20px;
+	background-color:#ffff;
+}
+.login-container h2{
+	margin-top:2px;
+	font-weight:bold;
+}
+.copyright {
+max-width:430px;
+text-align:center;
+font-size:0.8em;
+color:#a0a0a0;
+}
+.waitpnl {
+	background-color:#ffffff;
+	position:absolute;
+	left:4px;top:4px;
+	display:none;
+	font-size:0.9em;
+	font-weight: normal;
+	color:#3C7B1F;
+	padding:4px;
+	border:1px solid black;
+}
+
+.wait-icon {
+	background:transparent url('public/themes/green3/images/loading.gif') no-repeat;
+	width:15px;
+	height:15px;
+	margin-right:2px;
+	display:inline-block;
+}
+@media screen and (min-width:550px) {
+	body {
+		padding-top:15px;
+		padding-bottom:20px;
+		background-color:#f0f0f0;
+	}
+	.login-container {
+		max-width:500px;
+        padding: 19px 29px 29px;
+        margin: 0 auto 20px;
+        background-color: #fff;
+        border: 1px solid #e5e5e5;
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	}
+	
+}
+
+</style>
+</head>
+    
+<body>
+
+<f:view>
+<s:decorate template="/layout/wrong_browser.xhtml" rendered="#{not browserInfo.validBrowser}" />
+<s:fragment rendered="#{browserInfo.validBrowser}">
+<h:panelGroup id="loginpanel" >
+<div class="container login-container">
+	<h:graphicImage value="/public/images/logo_64x64.png" style="float:left;padding-right:10px;"/>
+	<h2 style="margin-bottom:2px;">#{messages['mdrtb_system']}</h2>
+	<small>#{messages['mdrtbsys']}</small>
+
+	<hr/>
+	<h4>#{messages['login.msg1']}</h4>
+	<h:form id="main" role="form" class="form-horizontal">
+	<h:panelGroup id="msg">
+	<s:div rendered="#{not empty facesMessages.currentMessages}" styleClass="alert alert-danger">
+	<h:messages layout="list" />
+	</s:div>
+	</h:panelGroup>
+	<div class="form-group">
+	    <label for="inputEmail" class="col-sm-4 control-label">#{messages['login.user_login']}:</label>
+    	<div class="input-group col-sm-5">
+       		<span class="input-group-addon"><i class="icon-user" /></span>
+		    <h:inputText id="user" value="#{credentials.username}" styleClass="form-control" />
+   		</div>
+  	</div>
+	<div class="form-group">
+    	<label class="col-sm-4 control-label" for="inputPassword">#{messages['User.password']}:</label>
+    		<div class="col-sm-5">
+    	<div class="input-group">
+       		<span class="input-group-addon"><i class="icon-key" /></span>
+      		<h:inputSecret id="pwd" value="#{credentials.password}" styleClass="form-control"/>
+      		</div>
+  		</div>
+	</div>	
+	<div class="form-group">	
+		<div class="col-sm-offset-4">
+    	<div class="input-group col-sm-7">
+       		<label class="checkbox">
+       			<h:selectBooleanCheckbox id="rememberMe" value="#{rememberMe.enabled}"/>#{messages['login.rememberme']}
+       		</label>
+  		</div>
+  		</div>
+  	</div>
+	<div class="form-group">
+		<div class="col-sm-offset-4">
+    	<div class="input-group col-sm-5">
+	       	<a:commandButton id="btnOk" styleClass="btn btn-primary" onclick="callLogin(); return false;" value="#{messages['login.enter']}" />
+			<rich:jQuery timming="onload" selector="#nome" query="focus()" />
+			<rich:hotKey selector="input" key="return" handler="callLogin();" />
+			<a:jsFunction id="login" name="callLogin" ajaxSingle="false" action="#{identity.login}" reRender="main:msg" /> 
+  		</div>
+  		</div>
+  	</div>
+	</h:form>
+	<hr/>
+		<h4>#{messages['login.msg2']}</h4>
+		<s:link view="/sendpassword.xhtml" value="#{messages['login.click_here']}" />
+		<s:fragment rendered="#{etbmanagerApp.configuration.allowRegPage}">
+			<h4>#{messages['login.newuser']}</h4>
+			<s:link view="/newuser.xhtml" value="#{messages['login.click_here']}" />
+		</s:fragment>
+	<hr/>
+	<h:graphicImage value="/public/images/usaid_siaps_440x67.png" styleClass="img-responsive"/>
+	<div class="copyright">
+    e-TB Manager version <s:link value=" #{etbmanagerApp.implementationVersion}" view="/about.xhtml" style="color:#909090;font-weight:normal;"/>
+    <br/>
+    #{messages['login.copyright']}
+    </div>
+
+	<hr/>
+	
+	<h:form styleClass="form-horizontal">
+	<div class="control-group">
+    	<label class="control-label" for="inputPassword">Language:</label>
+    	<div class="controls">
+       		<div class="input-prepend">
+            <h:selectOneMenu value="#{localeSelector.localeString}" styleClass="form-control"> 
+          		<f:selectItems value="#{localeSelector.supportedLocales}" />
+          		<a:support event="onchange" action="#{localeSelector.select}" oncomplete="document.location.reload(true);"/>
+          	</h:selectOneMenu>
+   			</div>
+  		</div>
+	</div>	
+	</h:form>
+</div>
+
+
+
+
+<ui:include src="/layout/waitdlg.xhtml" />
+<a:status onstart="openWaitDlg();" onstop="closeWaitDlg();"></a:status>
+
+<script type="text/javascript">
+<!--
+-->
+</script>
+ 
+</h:panelGroup>
+</s:fragment>
+</f:view>
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="admintemplate.xhtml">
+
+<ui:param name="title" value="#{messages['admin.users']}" />
+<ui:param name="submenu" value="0" />
+
+
+<ui:define name="content">
+<h1><i class="icon-user" />#{title}</h1>
+<h:form id="main">
+
+<s:decorate template="/layout/tbselection_noconv.xhtml" >
+ 	<ui:define name="label">#{messages['Tbunit']}:</ui:define>
+   	<ui:param name="tbunitselection" value="#{standardFilters.tbunitSelection}" />
+   	<ui:param name="required" value="false" />
+   	<ui:param name="auRerender" value="tablepanel" />
+	<ui:define name="events">
+		<a:support event="onchange" reRender="tablepanel" ajaxSingle="true" />
+	</ui:define>
+</s:decorate>
+
+<br/><br/>
+
+<s:link view="/admin/edtuser.xhtml"
+	styleClass="button" 
+	rendered="#{s:hasRole('USERS_EDT')}"
+	propagation="none" >
+	<f:param name="id" value="#{null}" />
+	<span>#{messages['form.newf']}</span>
+</s:link>
+
+<div style="float:right">
+	<s:decorate template="/layout/searchkey.xhtml">
+		<ui:param name="list" value="#{users}" />
+		<ui:param name="tablepanel" value="tablepanel" />
+	</s:decorate>
+</div>
+
+<a:jsFunction name="deleteRecord" action="#{userHome.remove}" reRender="tablepanel,messages">
+	<a:actionparam name="param1" assignTo="#{userHome.id}" converter="javax.faces.Integer" />
+</a:jsFunction>
+
+
+<s:div id="tablepanel">
+<s:decorate template="/layout/naveg.xhtml">
+	<ui:param name="list" value="#{users}" />
+
+<h:dataTable id="tbl" value="#{users.resultList}" var="it" 
+  styleClass="table1" rowClasses="lin1,lin2" width="100%"  columnClasses="coll,coll,coll,colc,coll,coll,coll,colc"
+  rendered="#{not empty users.resultList}">
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['User.name']}" styleClass="collh">
+  			<f:param name="order" value="#{users.order=='uw.user.name'?'uw.user.name desc':'uw.user.name'}" />
+  		</s:link>
+  	</f:facet>
+  	<h:outputText value="#{it.user.name}" rendered="#{not s:hasRole('LABS_EDT')}" />
+	<s:link view="/admin/edtuser.xhtml" value="#{it.user.name}" rendered="#{s:hasRole('LABS_EDT')}" > 
+		<f:param name="id" value="#{it.user.id}" />
+	</s:link>
+    <h:outputText value="#{it.user.comments}" rendered="#{not empty it.user.comments}" style="display:block;clear:both;"/>
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['User.login']}" style="padding-left:10px;" styleClass="collh">
+  			<f:param name="order" value="#{users.order=='uw.user.login'?'uw.user.login desc':'uw.user.login'}" />
+  		</s:link>
+  	</f:facet>
+    #{it.user.login}
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['User.email']}" styleClass="collh">
+  			<f:param name="order" value="#{users.order=='uw.user.email'?'uw.user.email desc':'uw.user.email'}" />
+  		</s:link>
+  	</f:facet>
+        #{it.user.email}
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['User.state']}" >
+  			<f:param name="order" value="#{users.order=='uw.user.state'?'uw.user.state desc':'uw.user.state'}" />
+  		</s:link>
+  	</f:facet>
+  	<h:outputText value="#{messages[it.user.state.key]}" style="#{it.user.state=='ACTIVE'?'': 'color:red;font-weight:bold;'}" />
+  </h:column>
+  
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['Tbunit']}" styleClass="collh">
+  			<f:param name="order" value="#{users.order=='uw.tbunit.name'?'uw.tbunit.name desc':'uw.tbunit.name'}" />
+  		</s:link>
+  	</f:facet>
+	<h:outputText value="#{it.tbunit.name}"  />
+	<h:outputText value="(#{it.tbunit.adminUnit.parentLevel1.legacyId})"  />
+  </h:column>
+  
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['UserView']}" styleClass="collh">
+  			<f:param name="order" value="uw.view#{users.order=='uw.view'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+	<h:outputText value="#{it.displayView}"  />
+  </h:column>
+  
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['UserProfile']}" styleClass="collh">
+  			<f:param name="order" value="uw.profile.name#{users.order=='uw.profile.name'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+	<h:outputText value="#{it.profile.name}"  />
+  </h:column>
+  
+  <h:column rendered="#{s:hasRole('USERS_EDT')}">
+  	<f:facet name="header">#{messages['form.action']}</f:facet>
+	<a:commandLink value="#{messages['form.remove']}" 
+		onclick="if (confirm('#{messages['form.confirm_remove']}')) { deleteRecord(#{it.user.id}) } return false;" 
+		reRender="main,messages">
+	</a:commandLink>
+  </h:column>
+</h:dataTable>
+
+</s:decorate>
+
+</s:div>
+
+</h:form>
+
+<ui:include src="/layout/tablerow.xhtml" />
+
+</ui:define>
+
+</ui:composition>  

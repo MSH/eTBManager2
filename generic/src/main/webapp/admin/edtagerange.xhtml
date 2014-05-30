@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+        
+<ui:param name="title" value="#{ageRangeHome.managed? messages['admin.ageranges.edt']: messages['admin.ageranges.new']}" />
+<ui:param name="topmenu" value="3" />
+
+<ui:param name="waitdlg" value="1" />
+<ui:param name="labelstyle" value="width:160px;" />
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+    
+    <div class="form-content">
+    <s:decorate template="/layout/display.xhtml" rendered="#{ageRange.id != null}">
+    	<ui:define name="label">#{messages['form.id']}:</ui:define>
+    	<h:outputText value="#{ageRange.id}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['AgeRange.iniAge']}:</ui:define>
+        <h:inputText id="iniage" value="#{ageRange.iniAge}" maxlength="100" style="width : 100px;" required="true" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['AgeRange.endAge']}:</ui:define>
+        <h:inputText id="endage" value="#{ageRange.endAge}" maxlength="100" style="width : 100px;" required="true" />
+    </s:decorate>
+    </div>
+    
+    <div class="form-footer">
+            <a:commandLink action="#{ageRangeHome.persist}" styleClass="button" reRender="main,messages" 
+            	onclick="if (!disableButton(this)) return false;">
+             	<span>#{messages['form.save']}</span> 
+            </a:commandLink>  
+            <s:link  styleClass="button-alt" view="/admin/ageranges.xhtml">
+             <span>#{messages['form.cancel']}</span> 
+            </s:link>  
+ </div>
+
+	
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+</h:form>
+
+
+</ui:define>
+        
+</ui:composition> 

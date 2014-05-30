@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+  	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:h="http://java.sun.com/jsf/html" >
+<head>
+<title>#{messages['mdrtb_system']}</title>
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<meta http-equiv="keywords" content="e-TB Manager,TB,Tuberculosis,DR-TB,MSH" />
+<meta http-equiv="description" content="e-TB Manager" />
+<a:loadStyle src="/public/themes/green3/skin.css" />  
+</head>
+    
+<body>
+
+<s:decorate template="/layout/wrong_browser.xhtml" rendered="#{not browserInfo.validBrowser}"/>
+<h:panelGroup id="loginpanel" rendered="#{browserInfo.validBrowser}">
+<table width="700" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-top:20px;">
+  <tr style="background-image:url('public/images/toplogin.jpg')">
+    <td height="102" colspan="3" style="vertical-align:middle;"><div style="text-align:center;font-size:16px;"><font color="#FFFFFF"><strong>#{messages['login.enter_system']}</strong></font></div>
+    </td>
+  </tr>
+  <tr>
+    <td width="229px" height="186" style="background:transparent url('public/images/toploginme.jpg') top left no-repeat"></td>
+    <td width="471px" height="186" valign="top" style="background-image:url('public/images/toploginmd.jpg')">
+	<h:form id="main">
+	<table width="471" border="0">
+      <tr>
+        <td colspan="2"><div align="left"><font color="#FFFFFF"><strong>#{messages['login.msg1']}</strong></font></div></td>
+        </tr>
+      <tr>
+        <td width="80"><div align="left">#{messages['login.user_login']}:</div>          </td>
+        <td width="262"><h:inputText id="nome" value="#{credentials.username}"></h:inputText></td>
+      </tr>
+      <tr>
+        <td width="80"><div align="left">#{messages['User.password']}:</div>          </td>
+        <td><h:inputSecret value="#{credentials.password}"></h:inputSecret></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+        	<a:commandLink id="btnOk" styleClass="button" 
+        		onclick="if (!disableButton(this)) return false;execLogin(); return false;">
+        		<span>#{messages['login.enter']}</span>
+        	</a:commandLink> 
+        	<h:selectBooleanCheckbox id="rememberMe" value="#{rememberMe.enabled}"/>#{messages['login.rememberme']}
+        </td>
+			<rich:jQuery timming="onload" selector="#nome" query="focus()" />
+			<a:jsFunction name="execLogin" action="#{identity.login}" reRender="messages" oncomplete="enableButton()"/>
+			<rich:hotKey selector="#main input" key="return" handler="execLogin();" /> 
+        </tr>
+      <tr>
+        <td colspan="2">
+        	<h:panelGroup id="messages">
+        		<h:messages styleClass="warn" layout="table" style="background-color:#fff;margin-top:10px;"/>
+        	</h:panelGroup>
+        </td>
+      </tr>
+    </table>
+	</h:form>
+	</td>
+  </tr>
+  <tr>
+    <td height="66" colspan="3" >
+    	<img src="public/images/toploginb3.jpg" style="margin-top:4px;" />
+    </td>
+  </tr>
+  <tr>
+    <td width="229px" height="98" valign="top"> 
+    </td>
+    <td colspan="2" valign="top"><table width="100%" border="0" cellpadding="3">
+        <tr>
+          <td><div align="right">
+          	<span style="font-size:12px"> #{messages['login.msg2']}</span>
+          	<br/>
+			<s:link view="/sendpassword.xhtml" value="#{messages['login.click_here']}" />
+          	</div>
+          </td>
+        </tr>
+        <tr>
+          <td align="right"></td>
+        </tr>
+        <tr>
+          <td align="right">
+          	<s:fragment rendered="#{etbmanagerApp.configuration.allowRegPage}">
+          	<span style="font-size:12px"> <img src="public/themes/default/images/user.gif"/> #{messages['login.newuser']}
+          	</span>
+          	<br/>
+          	<s:link view="/newuser.xhtml" value="#{messages['login.click_here']}" />
+          	</s:fragment>
+		  </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td height="20" colspan="3" valign="top" style="border-top:8px solid #e0e0e0">
+    <div align="center" style="color:#909090">
+    e-TB Manager version <s:link value=" #{etbmanagerApp.implementationVersion}" view="/about.xhtml" style="color:#909090;font-weight:normal;"/>
+    <br/>
+    #{messages['login.copyright']}</div>
+    </td>
+  </tr>
+</table>
+<div id="corpo" style="text-align:center;padding-top:80px"><f:view>
+  <div style="text-align:center;margin:0 auto;width:750px;">
+   <div style="margin-top:40px;"></div>
+  </div>
+
+<ui:include src="/layout/waitdlg.xhtml" />
+<a:status onstart="openWaitDlg();" onstop="closeWaitDlg();"></a:status>
+
+<script type="text/javascript">
+<!--
+function disableButton(button) {
+	if (jQuery(button).is(".button-disabled"))	return false;
+	var el=jQuery('span', button);
+	var s=el.text();
+	el.html('<div class="wait-icon2"/>' + s);
+	jQuery(button).addClass("button-disabled");
+	return true;
+}
+function enableButton() { 
+	jQuery('.button-disabled').each(function() {
+	var s=jQuery(this).removeClass("button-disabled").text();
+	jQuery('span',this).html(s);
+	});
+}
+-->
+</script>
+ 
+</f:view></div>
+</h:panelGroup> 
+</body>
+</html>

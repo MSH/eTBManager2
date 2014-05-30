@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/templatemed.xhtml">
+
+<ui:param name="title" value="#{messages['meds.dispensing']}" />
+
+<ui:param name="topmenu" value="1" />
+<ui:param name="pagestyle" value="width:750px;" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:define name="naveg">
+	<div class="item">
+		<s:link value="#{messages['meds.inventory']}" view="/medicines/index.xhtml" propagation="none"/>
+	</div>
+	<div class="item selected">
+		<s:link value="#{title}" view="/medicines/dispensing.html" propagation="none"/>
+	</div>
+</ui:define>
+
+<ui:define name="content_unit">
+<h:form>
+	
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
+		<h:selectOneMenu value="#{dispensingSelection.month}">
+			<f:selectItems value="#{monthsAll}"/>
+			<a:support event="onchange" reRender="pnldisp" />
+		</h:selectOneMenu>
+		<h:selectOneMenu value="#{dispensingSelection.year}" style="margin-left:5px;">
+			<f:selectItems value="#{yearsAll}"/>
+			<a:support event="onchange" reRender="pnldisp" />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate template="/layout/case.xhtml">
+		<ui:param name="case" value="#{caseHome.instance}" />
+	</s:decorate>
+
+	<h:panelGroup id="pnldisp"> 
+	<s:fragment rendered="#{facesContext.renderResponse}">
+	<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty caseDispensingView.dispensingDays}" styleClass="warn" />
+		<a:repeat value="#{caseDispensingView.dispensingDays}" var="it">
+
+		<table width="100%"><tr><td>
+			<h2><h:outputText value="#{it.date}" converter="localeDateConverter" /></h2>
+		</td><td valign="bottom">
+			<s:fragment rendered="#{userSession.tbunit.patientDispensing}">
+			<a:commandLink reRender="pnldisp" style="float:right" 
+				onclick="if (!confirm('#{messages['form.confirm_remove']}')) {return false;} deleteDispensing(#{it.id},#{caseHome.id})" >
+				<span class="delete-icon" />#{messages['form.remove']}
+			</a:commandLink>
+			<s:link view="/medicines/disppacedt.xhtml" style="float:right;padding-right:30px;">
+				<f:param name="dispid" value="#{it.id}" />
+				<span class="edit-icon" />#{messages['form.edit']}
+			</s:link>
+			</s:fragment>
+		</td></tr></table>
+
+		<s:decorate template="dispensingtable.xhtml">
+			<ui:param name="table" value="#{it.table}" /> 
+		</s:decorate>
+		</a:repeat>
+	</s:fragment>
+	</h:panelGroup>
+	
+	<a:jsFunction name="deleteDispensing" action="#{caseDispensingView.deleteDispensing}">
+		<a:actionparam name="param1" assignTo="#{caseDispensingView.dispensingId}" converter="javax.faces.Integer"/>
+		<a:actionparam name="param2" assignTo="#{caseDispensingView.caseId}" converter="javax.faces.Integer"/>
+	</a:jsFunction>
+</h:form>
+
+<h:panelGroup id="pnlunit">
+</h:panelGroup>
+
+</ui:define>
+
+</ui:composition>  

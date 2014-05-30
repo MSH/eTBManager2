@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.validate']} - #{tbcase.diagnosisType=='SUSPECT'? messages[it.tbcase.classification.keySuspect] : messages[tbcase.classification.key]}" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" rendered="#{caseHome.canValidate}" styleClass="form1">
+
+<s:decorate template="/layout/casebody.xhtml">
+<div class="form-content">
+    <table width="100%">
+    <tr><td height="30">
+    	<h2>
+    	<div class="warn-icon" />
+    	#{messages['cases.validate.msg']}
+    	</h2>
+
+    </td></tr>
+	<tr><td>
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" />
+    	<ui:param name="checkDeathDate" value="true" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
+    	<h:selectOneMenu value="#{tbcase.diagnosisType}" required="true">
+    		<s:selectItems var="it" value="#{diagnosisTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+		<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['PatientType']}:</ui:define>
+    		<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="true">
+    			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+    			<s:convertEnum />
+    		</h:selectOneMenu>
+		</s:decorate>
+		
+		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
+    		<ui:define name="label">#{messages['DrugResistanceTypes']}:</ui:define>
+    		<h:selectOneMenu id="patType" value="#{tbcase.drugResistanceType}" required="true">
+    			<s:selectItems var="it" value="#{drugResistanceTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+    			<s:convertEnum />
+    		</h:selectOneMenu>
+		</s:decorate>
+
+	<rich:jQuery selector="#patType" query="change(function(){ showPatientTypeOther(this); })" />
+
+		<div id="patientTypeOther">
+		<s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages['TbCase.patientTypeOther']}</ui:define>
+    		<h:inputText value="#{tbcase.patientTypeOther}" style="width:200px;" maxlength="100" />
+		</s:decorate>
+		</div>
+
+		<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
+    		<h:selectOneMenu id="infectsite" value="#{tbcase.infectionSite}" required="true">
+    			<s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="-" label="#{messages[it.key]}" />
+    			<s:convertEnum />
+    		</h:selectOneMenu>
+		</s:decorate>
+
+<rich:jQuery selector="#infectsite" query="change(function(){showExtrapulmonary(this); })" />
+<script type="text/javascript">
+<!--
+function isPatientTypeOther(cb) {
+   return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'OTHER'));
+}
+function showPatientTypeOther(cb) {
+  if (isPatientTypeOther(cb))
+  	jQuery('#patientTypeOther').show(500);
+  else jQuery('#patientTypeOther').hide(500);
+}
+function showExtrapulmonary(cb) {
+  if (isExtrapulmonary(cb))
+  	jQuery('#extrapul').show(500);
+  else jQuery('#extrapul').hide(500);
+  if (isPulmonary(cb)) 
+	jQuery('#pulmonary').show(500);
+  else jQuery('#pulmonary').hide(500);
+}
+function isExtrapulmonary(cb) {
+  return ((cb.selectedIndex >=0) && (cb.options[cb.selectedIndex].value == 'EXTRAPULMONARY'));
+}
+function isPulmonary(cb) {
+  return ((cb.selectedIndex >=0) && (cb.options[cb.selectedIndex].value == 'PULMONARY'));
+}
+-->
+</script>
+
+	<div id="extrapul" style="clear:both;">
+		<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
+    		<h:selectOneMenu value="#{tbcase.extrapulmonaryType}" style="margin-right:4px;">
+    			<s:selectItems var="it" value="#{fieldsQuery.extrapulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
+    			<s:convertEntity />
+    		</h:selectOneMenu>
+
+    		<h:selectOneMenu value="#{tbcase.extrapulmonaryType2}">
+    			<s:selectItems var="it" value="#{fieldsQuery.extrapulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
+    			<s:convertEntity />
+    		</h:selectOneMenu>
+		</s:decorate>
+	</div>
+
+	<div id="pulmonary" style="clear:both;">
+		<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
+    		<h:selectOneMenu value="#{tbcase.pulmonaryType}" style="margin-right:4px;">
+    			<s:selectItems var="it" value="#{fieldsQuery.pulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
+    			<s:convertEntity />
+    		</h:selectOneMenu>
+		</s:decorate>
+
+	</div>
+<rich:jQuery selector="#infectsite" query="each(function(){ if (!isExtrapulmonary(this)) {jQuery('#extrapul').hide(); }})" />
+<rich:jQuery selector="#infectsite" query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary').hide(); }})" />
+<rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
+		
+	<div style="clear:both;">
+	<span style="color:red;">*</span> #{messages['form.required']}<p/>
+    </div>
+    
+    </td></tr>
+    </table>
+	</div>
+
+	<div class="form-footer">
+    	<a:commandLink action="#{caseValidationHome.validate}" styleClass="button" reRender="main,messages" onclick="if (!disableButton(this)) return false;" >
+    		<span>#{messages['cases.validate']}</span>
+    	</a:commandLink>
+    	<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+    		<f:param name="id" value="#{caseHome.id}" />
+    		<span>#{messages['form.cancel']}</span>
+    	</s:link>
+    </div>
+</s:decorate>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

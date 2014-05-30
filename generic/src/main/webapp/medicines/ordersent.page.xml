@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
+
+		<restrict>#{s:hasRole('SEND_ORDER')}</restrict>
+		<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
+		<begin-conversation join="true"/>
+		<action execute="#{orderShippingHome.initialize}"/>
+
+		<navigation>
+			<rule if-outcome="persisted">
+				<end-conversation/>
+				<redirect view-id="/medicines/orderdata.xhtml">
+					<message>#{messages['meds.orders.shipped']}</message>
+					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
+				</redirect>
+			</rule>
+			<rule if-outcome="selbatches">
+				<redirect view-id="/medicines/selbatch.xhtml">
+					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
+				</redirect>
+			</rule>
+			<rule if-outcome="cancel">
+				<end-conversation before-redirect="true"/>
+				<redirect view-id="/medicines/orderdata.xhtml">
+					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer"/>
+				</redirect>
+			</rule>
+		</navigation>
+</page>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.examskintest']}" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="examHome" value="#{examSkinHome}" />
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+<s:decorate template="/layout/casebody.xhtml">
+	<a:form id="formexam" styleClass="form1">
+
+	<div class="form-content">
+	<s:decorate template="/layout/edtsample.xhtml">
+	</s:decorate>
+
+	<div class="paragraph">#{messages['cases.exams.results']}</div>
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+    	<ui:param name="edtid" value="dtrelease" />
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="future" value="true" /> 
+    	<ui:param name="datefield" value="#{examSkin.dateRelease}" /> 
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
+    	<h:selectOneMenu id="cbres" value="#{examSkin.result}" required="true">
+    		<s:selectItems value="#{skinTestResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+	<rich:jQuery selector="#cbres" query="change( function(){ examResultChanged(this); })" />
+	<rich:jQuery selector="#cbres" timing="onload" query="each( function(){ examResultChanged(this, true); })" />
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputText value="#{examSkin.comments}" maxlength="200" style="width:350px;"/>
+    </s:decorate>
+
+	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
+
+	</div>
+	
+	<div class="form-footer">
+		<div style="float:right;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+            <a:commandLink action="#{examSkinHome.persist}" styleClass="button" 
+            	reRender="formexam,messages" 
+            	oncomplete="this.disabled=false;"
+            	onclick="if (!disableButton(this)) return false;"  >
+            	<span>#{messages['form.ok']}</span>
+            </a:commandLink>
+            <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true" onclick="disableButton(this)">
+            	<span>#{messages['form.cancel']}</span>
+            </a:commandLink>
+    </div>
+    
+	</a:form>
+</s:decorate>
+
+</ui:define>
+
+</ui:composition>  

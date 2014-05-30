@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+      			xmlns:s="http://jboss.com/products/seam/taglib"
+                template="usertemplate.xhtml">
+      
+      <ui:param name="subject" value="#{messages['meds.orders.new']}" />
+      
+      <ui:define name="content">
+          
+        <h2>#{subject}</h2><p/>
+
+        <h:outputFormat value="#{messages['mail.hi']}">
+        	<f:param value="#{user.name}" />
+        </h:outputFormat>,<p/>
+        <br/>
+        #{messages['meds.orders.mail.new.msg1']}:<p/>
+        <br/>
+        <div style="font-size:16px;font-weight:bold;">#{order.unitFrom.name}</div>
+    	<s:fragment rendered="#{not empty order.shipAddress}">
+    		#{order.shipAddress}
+    		<br/>
+    	</s:fragment>
+    	<s:fragment rendered="#{not empty order.shipAddressCont}">
+    		#{order.shipAddressCont}<br/>
+    	</s:fragment>
+    	<s:fragment rendered="#{not empty order.shipZipCode}">
+    		#{order.shipZipCode}<br/>
+    	</s:fragment>
+        #{order.unitFrom.adminUnit.fullDisplayName}
+        
+        <br/><br/>
+       	<b>#{messages['global.id']}: </b>#{order.id}
+       	<p/>
+       	<b>#{messages['meds.orders.createdin']}: </b><h:outputText value="#{order.orderDate}" converter="localeDateConverter" />
+       	<br/>
+       	<b>#{messages['form.by']} </b>#{order.userCreator.name}
+       	<br/>
+       	<b>#{messages['Order.shipContactName']}: </b>#{order.shipContactName}
+       	<br/>
+       	<b>#{messages['Order.shipContactPhone']}: </b>#{order.shipContactPhone}
+        <br/><br/>
+       	
+<table width="100%" style="font-family:Tahoma,Arial,Sans Serif;font-size:12px;margin-top:20px;border:1px solid black;">
+	<ui:repeat value="#{orderHome.sources}" var="s">
+	<tr><td style="background-color:#194631;color:white;padding:4px;" colspan="5">
+		<b>#{s.source.abbrevName}</b> <span style="font-size:10px">(#{s.source.name})</span>
+	</td></tr>
+	<tr style="background-color:#307b57">
+		<th align="left" style="color:white;padding:4px;">#{messages['Medicine']}</th>
+		<th align="right" style="color:white;padding:4px;">#{messages['meds.stockpos']}</th>
+		<th align="right" style="color:white;padding:4px;">#{messages['OrderItem.numPatients']}</th>
+		<th align="right" style="color:white;padding:4px;">#{messages['OrderItem.estimatedQuantity']}</th>
+		<th align="right" style="color:white;padding:4px;">#{messages['OrderItem.requestedQuantity']}</th>
+	</tr>
+	<ui:repeat value="#{s.items}" var="it" width="500px">
+	<tr>
+		<td align="left" style="border-bottom:1px solid #a4c1b3">
+			#{it.item.medicine}
+		</td>
+		<td align="right" style="border-bottom:1px solid #a4c1b3">
+			<h:outputText value="#{it.item.stockQuantity}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+		</td>
+		<td align="right" style="border-bottom:1px solid #a4c1b3">
+			<h:outputText value="#{it.item.numPatients}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+		</td>
+		<td align="right" style="border-bottom:1px solid #a4c1b3">
+			<h:outputText value="#{it.item.estimatedQuantity}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+		</td>
+		<td align="right" style="border-bottom:1px solid #a4c1b3">
+			<h:outputText value="#{it.item.requestedQuantity}">
+ 				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+		</td>
+	</tr>
+	</ui:repeat>
+	</ui:repeat>
+</table>
+
+	<p/>
+	#{messages['mail.detaillink']}
+	<p/>
+    <a href="#{etbmanagerApp.configuration.pageRootURL}/medicines/orderdata.seam?id=#{order.id}">#{etbmanagerApp.configuration.pageRootURL}/medicines/orderdata.seam?id=#{order.id}</a>
+    <p/>
+   </ui:define>
+      
+</ui:composition>

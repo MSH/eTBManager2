@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:p="http://jboss.com/products/seam/pdf"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+      
+	<div class="form-content" align = "left">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.classification}">
+		    	<ui:define name="label">#{messages['CaseClassification']}:</ui:define>
+		    	<h:outputText value="#{messages[indicatorFilters.classification.key]}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.indicatorSite}">
+		    	<ui:define name="label">#{messages['manag.forecast.context']}:</ui:define>
+		    	<h:outputText value="#{messages[indicatorFilters.indicatorSite.key]}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{indicatorFilters.indicatorSite=='PATIENTADDRESS' and not empty indicatorFilters.tbunitselection.auselection.unitLevel1}">
+		    	<ui:define name="label">#{indicatorFilters.tbunitselection.auselection.labelLevel1}:</ui:define>
+		    	<h:outputText value="#{indicatorFilters.tbunitselection.auselection.unitLevel1}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{indicatorFilters.indicatorSite=='PATIENTADDRESS' and not empty indicatorFilters.tbunitselection.auselection.unitLevel2}">
+		    	<ui:define name="label">#{indicatorFilters.tbunitselection.auselection.labelLevel2}:</ui:define>
+		    	<h:outputText value="#{indicatorFilters.tbunitselection.auselection.unitLevel2}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{indicatorFilters.indicatorSite=='TREATMENTSITE' and not empty indicatorFilters.tbunitselection.adminUnit}">
+		    	<ui:define name="label">#{indicatorFilters.tbunitselection.labelAdminUnit}:</ui:define>
+		    	<h:outputText value="#{indicatorFilters.tbunitselection.adminUnit}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{indicatorFilters.indicatorSite=='TREATMENTSITE' and not empty indicatorFilters.tbunitselection.tbunit}">
+		    	<ui:define name="label">#{messages['form.name']}:</ui:define>
+		    	<h:outputText value="#{indicatorFilters.tbunitselection.tbunit}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{indicatorFilters.useRegistrationDate or indicatorFilters.useDiagnosisDate or indicatorFilters.useIniTreatmentDate }">
+		    	<ui:define name="label">#{messages['manag.ind.periodfilter']}:</ui:define>
+		    	<h:outputText value="#{indicatorFilters.useRegistrationDate?messages['TbCase.registrationDate']:''} #{indicatorFilters.useDiagnosisDate?messages['TbCase.diagnosisDate']:''} #{indicatorFilters.useIniTreatmentDate?messages['TbCase.iniTreatmentDate']:''}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.iniMonth or not empty indicatorFilters.iniYear }">
+		    	<ui:define name="label">#{messages['global.inimonthyear']}:</ui:define>
+		    	<h:outputText value="#{not empty indicatorFilters.iniMonth?indicatorFilters.iniMonth+1:''} #{indicatorFilters.iniYear}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.endMonth or not empty indicatorFilters.endYear }">
+		    	<ui:define name="label">#{messages['global.endmonthyear']}:</ui:define>
+		    	<h:outputText value="#{not empty indicatorFilters.endMonth?indicatorFilters.endMonth+1:''} #{indicatorFilters.endYear}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.patientType}">
+		    	<ui:define name="label">#{messages['PatientType']}:</ui:define>
+		    	<h:outputText value="#{messages[indicatorFilters.patientType.key]}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.gender}">
+		    	<ui:define name="label">#{messages['Gender']}:</ui:define>
+		    	<h:outputText value="#{messages[indicatorFilters.gender.key]}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.regimen}">
+		    	<ui:define name="label">#{messages['Regimen']}:</ui:define>
+		    	<h:outputText value="#{indicatorFilters.regimen.name}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.source}">
+		    	<ui:define name="label">#{messages['Source']}:</ui:define>
+		    	<h:outputText value="#{indicatorFilters.source.abbrevName}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.infectionSite}">
+		    	<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
+		    	<h:outputText value="#{messages[indicatorFilters.infectionSite.key]}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.ageRange}">
+		    	<ui:define name="label">#{messages['AgeRange']}:</ui:define>
+		    	<h:outputText value="#{indicatorFilters.ageRange}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.microscopyResult}">
+		    	<ui:define name="label">#{messages['MicroscopyResult']}:</ui:define>
+		    	<h:outputText value="#{messages[indicatorFilters.microscopyResult.key]}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.cultureResult}">
+		    	<ui:define name="label">#{messages['CultureResult']}:</ui:define>
+		    	<h:outputText value="#{messages[indicatorFilters.cultureResult.key]}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.diagnosisType}">
+		    	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
+		    	<h:outputText value="#{messages[indicatorFilters.diagnosisType.key]}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.drugResistanceType}">
+		    	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
+		    	<h:outputText value="#{messages[indicatorFilters.drugResistanceType.key]}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty indicatorFilters.hivResult}">
+		    	<ui:define name="label">#{messages['HIVResult']}:</ui:define>
+		    	<h:outputText value="#{messages[indicatorFilters.hivResult.key]}" />
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml">
+		    	<ui:define name="label">#{messages['OutputSelection']} - #{messages['global.table.rows']}:</ui:define>
+		    	<h:outputText value="#{indicator.displayOutputSelection}" />
+		</s:decorate> 
+	</div>
+
+</ui:composition>

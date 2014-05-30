@@ -1,0 +1,26 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="usertemplate.xhtml">
+      
+      <ui:param name="subject" value="#{messages['mail.newuser']}" />
+      
+      <ui:define name="content">
+          
+        <h3>#{messages['mail.newuser']}</h3><p/>
+        <h:outputFormat value="#{messages['mail.hi']}">
+        	<f:param value="#{user.name}" />
+        </h:outputFormat>,<p/>
+        #{messages['mail.introduction']}<br/>
+        #{messages['mail.newuser.msg']}:<p/>
+        <table border="0" cellpadding="4" style="font-size:14px;font-name:Courier New;">
+            <tr><td>#{messages['User.login']}:</td><td>#{user.login}</td></tr>
+            <tr><td>#{messages['User.password']}:</td><td>#{password}</td></tr>
+        </table>
+
+      </ui:define>
+      
+</ui:composition>

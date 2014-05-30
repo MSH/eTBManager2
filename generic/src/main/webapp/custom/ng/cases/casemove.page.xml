@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
+
+	<begin-conversation join="true"/>
+	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" required="true" />
+	<navigation>
+		<rule if="#{not caseHome.canTransferOut}">
+			<end-conversation />
+			<redirect view-id="/custom/ng/cases/casedata.xhtml">
+				<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
+			</redirect>
+		</rule>
+
+		<rule if-outcome="transferred-out">
+			<end-conversation />
+			<redirect view-id="/custom/ng/cases/casedata.xhtml">
+				<message>#{messages['cases.move.success']}</message>
+				<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
+			</redirect>
+		</rule>
+	</navigation>
+
+</page>

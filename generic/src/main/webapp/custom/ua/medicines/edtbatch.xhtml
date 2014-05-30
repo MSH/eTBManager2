@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+                 
+
+<h:form>
+<a:jsFunction name="initNewBatch" action="#{medicineReceivingHome.startNewBatch(null)}" 
+	reRender="formbatch" ajaxSingle="true" oncomplete="finishShowBatchDlg();"/>
+</h:form>
+
+<s:decorate template="/custom/ua/layout/batchselectionsingle.xhtml" id="batchsellayout">
+	<ui:param name="homeClass" value="#{medicineReceivingHome}" />
+	<ui:param name="medicine" value="#{medicineReceivingHome.batch.medicine}" />
+	<ui:param name="batch" value="#{medicineReceivingHome.batch}" />
+	<ui:param name="quantityRec" value="#{medicineReceivingHome.batch.quantityReceived}" />
+	<ui:param name="srcAnnexFunc" value="#{medicineReceivingUAHome}" />
+	<ui:param name="canEditing" value="#{medicineReceivingHome.editingBatch}" />
+	<ui:param name="canSelectMed" value="false" />
+	<ui:param name="regNumbOnlyAdding" value="false" />
+	
+	<a:jsFunction name="cleanB" ajaxSingle="true" action="#{medicineReceivingUAHome.cleanAll()}"/>
+	<a:commandLink action="#{medicineReceivingHome.finishBatchEditing}" styleClass="button" 
+           	reRender="batchdlgcontent"
+           	rendered="#{medicineReceivingHome.editingBatch}"
+           	onclick="if (!disableButton(this)) return false;"
+               data="#{medicineReceivingHome.editingBatch}" 
+           	oncomplete="enableButton();if (!data) {hideBatchDlg();refreshMedicines();}" >
+           	<span>#{messages['form.ok']}</span>
+	</a:commandLink>
+</s:decorate>
+
+
+</ui:composition>

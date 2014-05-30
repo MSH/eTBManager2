@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+      			xmlns:s="http://jboss.com/products/seam/taglib"
+                template="usertemplate.xhtml">
+      
+      <ui:param name="subject" value="#{tbcase.diagnosisType=='SUSPECT' ? messages[tbcase.classification.keySuspect] : messages[tbcase.classification.key]} - #{messages['meds.transfer.new']}" />
+      
+      <ui:define name="content">
+          
+        <h2>#{subject}</h2><p/>
+        
+        
+        <h:outputFormat value="#{messages['mail.hi']}">
+        	<f:param value="#{user.name}" />
+        </h:outputFormat>,<p/>
+        
+        <br/>
+        
+        <h:outputFormat value="#{messages['cases.transferin.mail']}:"/><br/>
+        <div style="font-size:16px;font-weight:bold;">#{unitFrom.name}</div>
+        #{unitFrom.adminUnit.fullDisplayName}
+
+		<br/><br/>
+		
+		<h:outputFormat value="#{messages['Transfer.unitTo']}:"/><br/>
+		<div style="font-size:16px;font-weight:bold;">#{tbcase.ownerUnit.name}</div>
+        #{tbcase.ownerUnit.adminUnit.fullDisplayName}
+        
+        <br/><br/>
+        
+        <h:outputFormat value="#{messages['Patient']}: #{tbcase.displayCaseNumber} - #{tbcase.patient.fullName}"/><br/>
+        
+        <br/>
+        
+        <h:outputFormat value="#{messages['cases.transferin.mail2']}:"/><br/>
+		<a href="#{etbmanagerApp.configuration.pageRootURL}/cases/casedata.seam?id=#{tbcase.id}">
+			#{etbmanagerApp.configuration.pageRootURL}/cases/casedata.seam?id=#{tbcase.id}
+		</a>
+		
+
+   </ui:define>
+      
+</ui:composition>

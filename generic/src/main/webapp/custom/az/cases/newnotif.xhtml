@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.newnotif']} - #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect]: messages[tbcase.classification.key]}" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:140px" />
+<ui:param name="left" value="0" />
+<ui:param name="indicator" value="#{caseEditingAZHome}" />
+<ui:param name="waitdlg" value="1" />
+<ui:define name="content">
+
+<style type="text/css">
+.colcw10pc {	
+	text-align: center; 
+	width:4%;
+	}
+.collw30pc { 
+	text-align:left; 
+	width:32%;
+	}
+</style>
+
+<h1>#{title}</h1>
+
+<rich:jQuery name="showbutton" selector="#newpacbutton" query="slideDown(500)" />
+<h:form id="main" styleClass="form1">
+<div class="form-content">
+
+	<h2>#{messages['cases.searchpatient']}</h2>
+
+    <ui:include src="#{wspage['/cases/eidssfilters.xhtml']}" />
+</div>
+
+	<div class="form-footer">
+		<a:commandLink id="btnsearch" styleClass="button"
+			focus="name" onclick="if (!disableButton(this)) return false;initPatientSearch(); return false" >
+			<span>#{messages['form.search']}</span>
+		</a:commandLink>
+		<s:link view="/cases/index.xhtml" styleClass="button-alt" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+
+	<rich:jQuery timming="onload" selector="#main input[type='text']:first" query="focus()" />
+	<rich:hotKey selector="#main input" key="return" handler="initPatientSearch()" />
+	
+		<h:panelGroup id="delbutton">
+			<a:commandLink 
+					onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;} "
+					rendered="#{deleteCasesHome.deleteList.size()!=0}"
+					reRender="pnlpatients,delbutton" 
+					action="#{deleteCasesHome.removeCasesFromDeleteList()}" 
+					oncomplete="initPatientSearch();" 
+					styleClass="button" >
+			<span>#{messages['form.remove']}</span>
+			</a:commandLink>
+		</h:panelGroup>
+	</div>
+	
+	
+<h:panelGroup id="pnlpatients">
+
+<s:decorate template="/layout/naveg.xhtml" rendered="#{patientsAZ.searching}">
+	<ui:param name="list" value="#{patientsAZ}" />
+	<h:dataTable value="#{patientsAZ.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
+		rendered="#{patientsAZ.searching and (not empty patientsAZ.resultList)}" width="680px" columnClasses="colcw10pc,collw30pc,collw30pc,collw30pc" style="float:center;">
+		<h:column>
+			<f:facet name="header">
+				<a onclick="changeOrder(0); return false;" style="cursor:pointer;">#{messages['Gender']}</a>
+				<br /> <br />
+				<a onclick="changeOrder(1); return false;" style="cursor:pointer;">#</a>
+				<br/>
+				<ui:remove>
+				<input onclick="checkClick(this);"  style="#{(deleteCasesHome.canDeleteEIDSS and deleteCasesHome.countEIDSSPatients>0)?'display:block':'display:none'}" type="checkbox"/>
+			</ui:remove>
+			</f:facet>
+			<s:fragment rendered = '#{it.tbcase.notificationUnit != null}'>
+				<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
+					<s:fragment rendered="#{caseAZHome.canCreateNewCases}">
+						<s:link view="/cases/casenew.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:none;">
+							<f:param name="pacid" value="#{it.patient.id}" />
+							<f:param name="cla" value="#{tbcase.classification}"/>
+						</s:link>
+						<br/>
+						<s:link view="/cases/casenew.xhtml" value="#{caseAZHome.reGetTbCase(it.tbcase).displayCaseNumber}"  style="float:center;">
+							<f:param name="pacid" value="#{it.patient.id}" />
+							<f:param name="cla" value="#{tbcase.classification}"/>
+						</s:link>
+					</s:fragment>
+					<s:fragment rendered="#{!caseAZHome.canCreateNewCases}">
+						<a onclick="alert('#{messages['TbCase.cannotCreateNewCase']}')" style="float:none;cursor:pointer;">
+							<h:outputText styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" />	
+							<br/>
+							#{caseAZHome.reGetTbCase(it.tbcase).displayCaseNumber}
+						</a>
+					</s:fragment>
+				</s:fragment>
+				<s:fragment rendered = '#{it.tbcase.outcomeDate == null}'>
+					<s:link view="/cases/casedata.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:none;" propagation="none">
+						<f:param name="id" value="#{it.tbcase.id}" />
+					</s:link>
+					<br/>
+					<s:link view="/cases/casedata.xhtml" propagation="none" value="#{it.tbcase.displayCaseNumber}" style="float:center;">
+						<f:param name="id" value="#{it.tbcase.id}" />
+					</s:link>
+				</s:fragment>
+			</s:fragment>
+			<s:fragment rendered = '#{it.tbcase.notificationUnit == null}'>
+				<s:link view="/custom/az/cases/caseedt.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:none;" propagation="none">
+					<f:param name="id" value="#{it.tbcase.id}" />
+				</s:link>
+				<br/>
+				<s:link view="/custom/az/cases/caseedt.xhtml" propagation="none" value="#{it.tbcase.displayCaseNumber}" style="float:center;">
+					<f:param name="id" value="#{it.tbcase.id}" />
+				</s:link>
+			</s:fragment>
+			<br/>
+			<h:selectBooleanCheckbox onchange="toDeleteList(#{it.tbcase.id}); return false;" rendered="#{deleteCasesHome.canDeleteEIDSS and it.tbcase.legacyId!=null}"/>
+			
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				#{messages['cases.patientdata']}
+				<br/>
+				<div style="padding: 4px; font-size:10px;">
+					<a onclick="changeOrder(2); return false;" style="cursor:pointer;">#{messages['Patient.name']}</a>
+					<br/>
+					#{messages['az_EIDSS_Year_Of_Birth']}<br/>
+					<a onclick="changeOrder(3); return false;" style="cursor:pointer;">#{messages['TbCase.patientAge']}</a>
+					<br/>
+					<a onclick="changeOrder(4); return false;" style="cursor:pointer;">#{levelInfo.nameLevel1}</a>	- 
+					<a onclick="changeOrder(4); return false;" style="cursor:pointer;">#{levelInfo.nameLevel2}</a>
+						(#{messages['Address']}) 
+				</div>
+			</f:facet>
+		<div style="float:left;color:#069;">
+			<b>
+			
+			<s:fragment rendered="#{it.tbcase.notificationUnit != null}">
+				<s:fragment rendered = '#{it.tbcase.outcomeDate != null}'>
+					<s:fragment rendered="#{caseAZHome.canCreateNewCases}">
+						<s:link value="#{it.patient.fullName}" view="/cases/casenew.xhtml">
+							<f:param name="pacid" value="#{it.patient.id}" />
+							<f:param name="cla" value="#{tbcase.classification}"/>
+						</s:link>
+					</s:fragment>
+					<s:fragment rendered="#{!caseAZHome.canCreateNewCases}">
+						<a onclick="alert('#{messages['TbCase.cannotCreateNewCase']}')" style="cursor:pointer;">
+							#{it.patient.fullName}
+						</a>
+					</s:fragment>
+				</s:fragment>
+				<s:fragment rendered = '#{it.tbcase.outcomeDate == null}'>
+					<s:link value="#{it.patient.fullName}" view="/cases/casedata.xhtml" propagation="none">
+						<f:param name="id" value="#{it.tbcase.id}" />
+					</s:link>
+				</s:fragment>
+			</s:fragment>
+			<s:fragment rendered="#{it.tbcase.notificationUnit == null}">
+				<s:link value="#{it.patient.fullName}" view="/custom/az/cases/caseedt.xhtml" propagation="none">
+					<f:param name="id" value="#{it.tbcase.id}" />
+				</s:link>
+			</s:fragment>
+			
+			</b><br/>
+			#{caseAZHome.getYearOfBirth(it.tbcase)} #{messages['az_EIDSS_Year_Of_Birth.short']} (<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).patient.birthDate}" converter="localeDateConverter"/>), #{caseAZHome.reGetTbCase(it.tbcase).age} #{messages['az_EIDSS_years']}<br/>
+			
+			<div style="padding-top: 6px;padding-bottom: 6px;">
+			<sub>#{messages['Address.regist']}:</sub><br/>
+			<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).notifAddress.address} #{caseAZHome.reGetTbCase(it.tbcase).notifAddress.complement}" style="padding-left: 10px;" /> <br/>
+			<sub>#{messages['Address.live']}:</sub><br/>
+			<h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).currentAddress.address} #{caseAZHome.reGetTbCase(it.tbcase).currentAddress.complement}" style="padding-left: 10px;" />
+			</div>	
+			#{messages['az_AZ.case.unicalID']}:
+			<b>#{caseAZHome.reGetTbCase(it.tbcase).unicalID!=null ? caseAZHome.reGetTbCase(it.tbcase).unicalID : 'XXXXXXXX'}</b>
+		</div>
+		</h:column>
+	
+		<h:column>
+			<f:facet name="header">
+				#{messages['ExportContent.CASEDATA']}
+				<div style="padding: 4px; font-size:10px;">
+					<a onclick="changeOrder(5); return false;" style="cursor:pointer;">#{messages['CaseClassification']}</a>
+					<br /> 
+					<a onclick="changeOrder(6); return false;" style="cursor:pointer;">#{messages['cases.casesearching.treatlen']}</a>
+					<br />
+					<a onclick="changeOrder(7); return false;" style="cursor:pointer;">#{messages['az_AZ.TbCase.notificationUnit']}</a>
+					<br /> 
+					<a onclick="changeOrder(8); return false;" style="cursor:pointer;">#{messages['CaseState']}</a>
+				</div>
+			</f:facet>
+			
+			<b>#{messages[caseAZHome.reGetTbCase(it.tbcase).classification.key]} -  <h:outputText value=" #{messages[caseAZHome.reGetTbCase(it.tbcase).state.key]}"
+					style="color:SaddleBrown;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).state != 'ONTREATMENT' and caseAZHome.reGetTbCase(it.tbcase).notificationUnit != NULL}"/>
+				<s:fragment rendered="#{caseAZHome.reGetTbCase(it.tbcase).state == 'ONTREATMENT'}">
+				<h:outputText value=" #{messages['CaseState.ONTREATMENT']} #{messages['from']} " style="color:SaddleBrown;"/>
+				
+				<h:outputText value="#{caseAZHome.verifyDateIniTreat(it.tbcase)}"
+					style="color:SaddleBrown;" escape="false"/>	
+				</s:fragment>
+				<h:outputText value=" #{messages['cases.detailseidsstitle']}" style="color:SaddleBrown;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit == NULL}"/>
+			 </b>
+		     <br/>
+		     #{messages['PatientType']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).patientType.key]} <br/>
+		     <h:outputText value="#{messages['TbCase.diagnosisDate']}: "/><h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).diagnosisDate}" converter="localeDateConverter"/> <br/>
+		     #{messages['User.state']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).diagnosisType.key]}<br/>
+		     #{messages['DiagnosisType']}: #{messages[caseAZHome.reGetTbCase(it.tbcase).infectionSite.key]}<br/>
+		     <b>
+		     <h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).ownerUnit.name}" rendered="#{caseAZHome.reGetTbCase(it.tbcase).ownerUnit!=NULL}"/> 
+		     <h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).notificationUnit.name}" rendered="#{caseAZHome.reGetTbCase(it.tbcase).ownerUnit==NULL and caseAZHome.reGetTbCase(it.tbcase).notificationUnit!=NULL}"/>
+		     </b><br /> 
+			 <h:outputText
+				value="#{caseAZHome.reGetTbCase(it.tbcase).notifAddress.adminUnit.name.name1}" style="font-size:10px;"  rendered="#{caseAZHome.reGetTbCase(it.tbcase).notifAddress!=NULL}"/>
+			<br/>
+			
+			 <h:outputText value="#{messages['az_EIDSS_accept']}: " style="color:Firebrick;" />
+			 <h:outputText value="#{caseAZHome.reGetTbCase(it.tbcase).systemDate}"  style="color:Firebrick;" converter="localeDateConverterAZ" rendered="#{caseAZHome.reGetTbCase(it.tbcase).systemDate!=null}"/>
+			 <h:outputText value="XX.XX.XXXX"  style="color:Firebrick;" rendered="#{caseAZHome.reGetTbCase(it.tbcase).systemDate == null}"/>
+			 
+			 <br/>
+			
+			  <h:outputText style="color:gray;" 
+				value="#{messages['TbCase.referToOtherTBUnit']}  #{messages[caseAZHome.reGetTbCase(it.tbcase).referToOtherTBUnit?'global.no':'global.yes']}"/>
+			
+		</h:column>
+	
+		<h:column>
+			<f:facet name="header">
+				#{messages['TbCase.eidsscomment']}
+				<br/>
+				<div style="padding: 4px; font-size:10px;">
+					<a onclick="changeOrder(101); return false;" style="cursor:pointer;">#{messages['Patient.name']}</a>
+					<br /> 
+					<a onclick="changeOrder(102); return false;" style="cursor:pointer;">#{messages['az_EIDSS_Year_Of_Birth']}</a>
+					<br />
+					<a onclick="changeOrder(103); return false;" style="cursor:pointer;">#{messages['Address']}</a>
+					<br /> 
+					<a onclick="changeOrder(104); return false;" style="cursor:pointer;">#{messages['excel.dateNotifEIDSS']}</a>
+					/
+					<a onclick="changeOrder(105); return false;" style="cursor:pointer;">#{messages['az_EIDSS_InDate']}</a>
+					<br/>
+					<a onclick="changeOrder(106); return false;" style="cursor:pointer;">#{messages['az_EIDSS_Notify_LPU']}</a>
+					<br/>
+					<a onclick="changeOrder(107); return false;" style="cursor:pointer;">#{messages['TbCase.eidssid']}</a>
+				</div>
+			</f:facet>
+			<h:outputText value="#{caseAZHome.getEIDSSBlock(it.tbcase)}" escape="false" style="border-left: 1px solid #E0E0E0;color:#45793D;"/>							
+		</h:column>
+	</h:dataTable>
+
+</s:decorate>
+
+<s:fragment rendered="#{caseAZHome.canCreateNewPatients}">
+	<div id="newpacbutton" class="button-bar" style="display:none;" >
+		<a:commandLink onclick="if (!disableButton(this)) return false;"
+	    	action="#{indicator.selectPatientData}" styleClass="button" >
+		    <span>#{messages['cases.newpatient']}</span>
+		</a:commandLink>
+	</div>
+</s:fragment>
+
+</h:panelGroup>
+
+<script type="text/javascript">
+function initPatientSearch() {
+	searchPatient();
+}
+function checkClick(obj) {
+	  if (obj.checked)
+		  selectall()
+	  else unselectall();
+	  allToDeleteList()
+	}
+</script>
+
+<a:jsFunction name="searchPatient" reRender="pnlpatients" 
+	oncomplete="if (data) showbutton();enableButton();"
+	action="#{patientsAZ.search}"  
+	data="#{patientsAZ.searching}" />
+
+<a:jsFunction name="changeOrder" action="#{patientsAZ.refresh()}" reRender="pnlpatients,messages" ajaxSingle="true" >
+	<a:actionparam name="param1" assignTo="#{patientsAZ.newOrder}" converter="javax.faces.Integer"/>
+</a:jsFunction>
+
+<rich:jQuery name="selectall" timing="onJScall" selector="#pnlpatients :checkbox" query="attr('checked', true)" />
+<rich:jQuery name="unselectall" timing="onJScall" selector="#pnlpatients :checkbox" query="attr('checked', false)" />
+
+<a:jsFunction name="toDeleteList" ajaxSingle="true" reRender="delbutton">
+	<a:actionparam name="param1" assignTo="#{deleteCasesHome.markToDel}"	converter="javax.faces.Integer" />
+</a:jsFunction>
+<a:jsFunction name="allToDeleteList" ajaxSingle="true" action="#{deleteCasesHome.fillDeleteListFromPatients}" reRender="delbutton"/>
+						
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

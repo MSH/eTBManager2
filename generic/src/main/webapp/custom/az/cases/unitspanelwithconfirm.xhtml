@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+<h:panelGroup id="unitPanel">
+	<s:decorate template="/custom/az/layout/tbselection.xhtml" style="margin-bottom:10px;" 
+				rendered="#{askconfirm}">
+		<ui:param name="tbunitselection" value="#{tbunitselection}" />
+		<ui:param name="required" value="true" />
+		<ui:param name="selectOnComplete" value="persistRightUnit(#{controller.notOwnTBUnit()});" />
+	</s:decorate>
+	<s:decorate template="/custom/az/layout/tbselection.xhtml" style="margin-bottom:10px;" 
+				rendered="#{!askconfirm}">
+		<ui:param name="tbunitselection" value="#{tbunitselection}" />
+		<ui:param name="required" value="true" />
+	</s:decorate>
+</h:panelGroup>
+
+<a:jsFunction name="setOwnTbU" ajaxSingle="true" action="#{controller.setUserTBUnitDefault()}" reRender="unitPanel"/>
+	<script type="text/javascript">
+	<!--
+	function persistRightUnit(b){
+		if (b==true){
+			//if (!confirm('#{messages['cases.new.notusertbunit']}'))
+				//setOwnTbU();
+				//Richfaces.showModalPanel('mp');
+			//jQuery("#mp").show();
+			Richfaces.showModalPanel('confirmUnitDlg');   
+		}
+		}
+	-->
+	</script>
+
+
+<rich:modalPanel id="confirmUnitDlg" autosized="true" zindex="2000" trimOverlayedElements="false" width="400" top="#{msgtop}">
+	<f:facet name="header">
+		#{msgtitle}
+	</f:facet>
+	<h:form style="padding:10px;">
+
+	<div class="form-content">
+		#{messages['cases.new.notusertbunit']}
+	</div>
+	
+	<div class="button-bar">
+	<a:commandLink
+		styleClass="button-alt" reRender="main,messages"
+		onclick="Richfaces.hideModalPanel('confirmUnitDlg'); return false;">
+		<span>#{messages['global.yes']}</span>
+	</a:commandLink>
+
+	<a:commandLink 
+		styleClass="button"  
+		onclick="setOwnTbU(); Richfaces.hideModalPanel('confirmUnitDlg'); return false;">
+		<span>#{messages['global.no']}</span>
+	</a:commandLink>
+	</div>
+	</h:form>
+</rich:modalPanel>
+
+</ui:composition>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['manag']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="left" value="0" />
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+	<h2>#{messages['manag.case.reports']}</h2>
+
+	<div class="vertical-menu">
+	
+	<s:link view="/management/incidence.xhtml" rendered="#{s:hasRole('INDICATORS')}" action="#{globalFunctions.initializeDefaultAdminUnit()}">
+		<div class="icon-report" />#{messages['manag.ind.incidence']}
+	</s:link>
+	<s:link view="/management/prevalence.xhtml" rendered="#{s:hasRole('INDICATORS')}" action="#{globalFunctions.initializeDefaultAdminUnit()}">
+		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.prevalence']}
+	</s:link>
+  	<s:link view="/management/treatoutcome.xhtml" rendered="#{s:hasRole('INDICATORS')}" action="#{globalFunctions.initializeDefaultAdminUnit()}">
+		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.treatoutcome']}
+  	</s:link>
+	<s:link view="/management/detrate.xhtml" rendered="false">
+		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.detrate']}
+	</s:link>
+	<s:link value="#{messages['manag.ind.perctb']}" view="/management/perctb.xhtml" styleClass="icon-report" rendered="false"/>
+	<s:link view="/management/resist.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
+		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.resist']}
+	</s:link>
+	<s:link view="/management/dstprofile.xhtml" rendered="false" >
+		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.dstprofile']}
+	</s:link>
+
+	<s:link view="/management/sideeffects.xhtml" rendered="#{s:hasRole('INDICATORS')}"  action="#{globalFunctions.initializeDefaultAdminUnit()}">
+		<div class="icon-report" style="float:left;"/>#{messages['cases.sideeffects']}
+	</s:link>
+	<s:link view="/management/hivresults.xhtml" rendered="false" >
+		<div class="icon-report" style="float:left;"/>#{messages['manag.hivreport']}
+	</s:link>
+
+<!-- 	<s:link value="#{messages['manag.ind.treatres']}" view="/management/treatres.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}" >
+			<f:param name="cla" value="DRTB"/>
+		</s:link>
+-->		
+		<s:link view="/management/starttreat.xhtml" rendered="#{s:hasRole('INDICATORS')}"  action="#{globalFunctions.initializeDefaultAdminUnit()}">
+			<div class="icon-report" style="float:left;"/>#{messages['manag.ind.starttreat']}
+		</s:link>
+		<s:link view="/management/interim.xhtml" rendered="#{s:hasRole('INDICATORS')}"  action="#{globalFunctions.initializeDefaultAdminUnit()}">
+			<div class="icon-report" style="float:left;"/>#{messages['manag.ind.interim']}
+		</s:link>
+		<s:link view="/management/confmdrrep.xhtml" rendered="#{s:hasRole('INDICATORS')}" >
+			<div class="icon-report" style="float:left;"/>#{messages['manag.confmdrrep']}
+		</s:link>
+		<hr/>
+		<s:link view="/management/customind.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}"  action="#{globalFunctions.initializeDefaultAdminUnit()}">
+			<div class="icon-report" />#{messages['manag.ind.customind']}
+		</s:link>
+	
+		<hr/>
+
+		<s:link view="/custom/ua/management/tb07.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin" action="#{globalFunctions.initializeDefaultAdminUnit()}">
+			<div class="icon-report" />#{messages['uk_UA.reports.tb07']}
+		</s:link>
+		<s:link view="/custom/ua/management/tb07mrtb.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin" action="#{globalFunctions.initializeDefaultAdminUnit()}">
+			<div class="icon-report" />#{messages['uk_UA.reports.tb07.mrtb']}
+		</s:link>
+		<s:link view="/custom/ua/management/tb08.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin" action="#{globalFunctions.initializeDefaultAdminUnit()}">
+			<div class="icon-report" />#{messages['uk_UA.reports.tb08']}
+		</s:link>
+		<s:link view="/custom/ua/management/tb10.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin" action="#{globalFunctions.initializeDefaultAdminUnit()}">
+			<div class="icon-report" />#{messages['uk_UA.reports.tb10']}
+		</s:link>
+		<s:link view="/custom/ua/management/tb11.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" propagation="begin" action="#{globalFunctions.initializeDefaultAdminUnit()}">
+			<div class="icon-report" />#{messages['uk_UA.reports.tb11']}
+		</s:link>
+	
+	<div class="spacer" />
+	<h2>#{messages['manag.drug.reports']}</h2>
+	
+	<s:link view="/management/rel1.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}">
+			<div class="icon-report" />#{messages['manag.rel1']}
+	</s:link>
+	<s:link view="/management/rel4.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP4')}">
+			<div class="icon-report" />#{messages['manag.rel4']}
+	</s:link>
+
+	<div class="spacer" />
+	<h2>#{messages['manag.forecast']}</h2>
+	<s:link value="#{messages['manag.export']}" view="/management/export.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('EXPORT')}" propagation="none" action="#{globalFunctions.initializeDefaultAdminUnit()}"/>
+
+	<s:link value="#{messages['manag.forecast.med']}" view="/management/forecasting.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('FORECAST')}" propagation="none">
+		<f:param name="id" value="#{null}"/>
+	</s:link>
+	
+	<ui:remove>
+		<s:link value="#{messages['manag.forecast.med']} - UA" view="/management/forecastingUA.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('FORECAST')}" propagation="none">
+			<f:param name="id" value="#{null}"/>
+		</s:link>
+	</ui:remove>
+	
+	</div>
+
+</ui:define>
+
+</ui:composition>  

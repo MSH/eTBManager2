@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<changeSet id="15.1" author="rmemoria" context="KH">
+	    <dropForeignKeyConstraint baseTableName="casesideeffect" constraintName="FK9D7338D8F333759C"/>
+	    <dropColumn tableName="casesideeffect" columnName="CASE_DATA_ID_KH"/>
+	</changeSet>
+
+	<!-- Add new roles to be used in the transaction log for unit operations -->
+	<changeSet id="15.2" author="rmemoria">
+	    <insert tableName="userrole">
+	        <column name="id" valueNumeric="215" />
+	        <column name="changeable" valueBoolean="false" />
+	        <column name="code" value="040501" />
+	        <column name="Role_Name" value="UNIT_USERSTRANS" />
+	        <column name="internalUse" valueBoolean="true" />
+	        <column name="byCaseClassification" valueBoolean="false" />
+	        <column name="messageKey" value="admin.tbunits.userstrans" />
+	    </insert>
+	    <insert tableName="userrole">
+	        <column name="id" valueNumeric="216" />
+	        <column name="changeable" valueBoolean="false" />
+	        <column name="code" value="040502" />
+	        <column name="Role_Name" value="UNIT_CASESTRANS" />
+	        <column name="internalUse" valueBoolean="true" />
+	        <column name="byCaseClassification" valueBoolean="false" />
+	        <column name="messageKey" value="admin.tbunits.casestrans" />
+   	    </insert>
+	</changeSet>
+	
+</databaseChangeLog>

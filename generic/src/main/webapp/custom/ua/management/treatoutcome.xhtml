@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:p="http://jboss.com/products/seam/pdf"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['manag.ind.outcome']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="left" value="0" />
+
+<ui:param name="indicator" value="#{outcomeIndicator}" />
+<ui:param name="resultIndicator" value="#{treatResultIndicator}" />
+<ui:param name="table" value="#{resultIndicator.table}" />
+<ui:param name="useclassification" value="0" />
+
+<ui:param name="print" value="/custom/ua/management/treatoutcomeprint.xhtml"/>
+
+<ui:define name="head">
+	<script type="text/javascript" src="#{request.contextPath}/js/json2.js"></script>
+	<script type="text/javascript" src="#{request.contextPath}/js/swfobject.js"></script>
+</ui:define>
+
+<ui:define name="naveg">
+	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
+</ui:define>
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form styleClass="form1">
+<table width="100%" >
+<tr><td>
+	<ui:param name="hideinterimmonth" value="true" />
+	<ui:include src="filters.xhtml" />
+
+</td></tr>
+
+<!--  treatment result part -->
+<tr><td align="left">
+
+<h:panelGroup id="indicator">
+	<s:fragment rendered="#{indicatorController.executing}">
+	<div class="paragraph">#{messages['manag.ind.starttreat.title2']}</div>
+	<br/>
+	<table class="table1" width="100%">
+		<tr>
+			<th>
+				#{messages['PatientType']}
+			</th>
+		<ui:repeat value="#{table.columns}" var="col">
+			<th>
+				#{col.title}
+			</th>
+		</ui:repeat>
+			<th>
+				#{messages['global.total']}
+			</th>
+		</tr>
+		<ui:repeat value="#{table.rows}" var="row">
+		<tr>
+			<td class="colb">
+				#{row.title}
+			</td>
+			<ui:repeat value="#{row.cells}" var="val">
+			<td class="colcb" bgcolor="#{val.column.highlight?'#DBFADC':'transparent'}">
+				<h:outputText value="#{val.value}" >
+					<f:convertNumber pattern="##,###,##0.##"/>
+				</h:outputText>
+				<h:outputText value="%" rendered="#{val.column.highlight}" />
+			</td>
+			</ui:repeat>
+			<td class="colcb" bgcolor="#DBFADC">
+				<b>
+				<h:outputText value="#{row.total}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+				</b>
+			</td>
+		</tr>
+		</ui:repeat>
+
+		<tr>
+			<td class="colb" bgcolor="#DBFADC">
+				<b>#{messages['global.total']}</b>
+			</td>
+		<ui:repeat value="#{table.columns}" var="col">
+			<td class="colcb" bgcolor="#DBFADC">
+				<b>
+				<h:outputText value="#{col.total}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+				</b>
+			</td>
+		</ui:repeat>
+			<td class="colcb"  bgcolor="#DBFADC">
+				<b>
+				<h:outputText value="#{table.total}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+				</b>
+			</td>
+		</tr>
+	</table>
+	</s:fragment>
+
+	<br/>
+	<div class="paragraph">#{messages['manag.ind.starttreat.title2']}</div>
+	<br/>
+	<s:decorate template="chartflash.xhtml">
+		<ui:param name="title" value="#{messages['manag.ind.outcome']}" />
+		<ui:param name="title2" value="#{messages['manag.ind.numc']}" />
+		<ui:param name="series" value="#{indicator.series}" />
+		<ui:param name="seriestitle" value="#{messages['cases.outcome']}" />
+	</s:decorate>
+
+	<s:fragment rendered="#{(indicatorController.executing)}">
+	<div style="float:left;font-size:14px;margin:10px;">
+	<b>
+	<span style="margin-right:10px;" class="status-label">#{messages['manag.ind.successrate']}:</span> 
+	<h:outputText value="#{indicator.successRate}">
+		<f:convertNumber pattern="#,###,##0.00" />
+	</h:outputText>%
+	</b>
+	</div>
+	</s:fragment>
+
+</h:panelGroup>
+
+</td></tr>
+
+<tr><td align="right">
+	<div id="charttypediv">
+	<b>#{messages['charts']}:</b>	
+	<h:selectOneMenu value="#{indicatorFilters.chartType}">
+		<f:selectItems value="#{chartTypes}"/>
+		<a:support event="onchange" reRender="indicator" action="#{indicator.execute}" ajaxSingle="true"/>
+	</h:selectOneMenu>
+	</div>
+</td></tr>
+</table>
+<rich:jQuery selector="#charttypediv" query="hide()" />
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

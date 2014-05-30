@@ -1,0 +1,193 @@
+package org.msh.tb.indicators;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Name;
+import org.msh.tb.entities.ResistancePattern;
+import org.msh.tb.entities.Substance;
+import org.msh.tb.entities.enums.DstResult;
+import org.msh.tb.entities.enums.PatientType;
+import org.msh.tb.indicators.core.Indicator2D;
+import org.msh.tb.indicators.core.IndicatorTable;
+import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
+
+/**
+ * Generates indicator about DST resistances
+ * @author Utkarsh Srivastava
+ *
+ */
+@Name("mdrResistanceIndicator")
+public class DSTMdrResistIndicator extends Indicator2D {
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1765747337852603312L;
+	
+	@In(create=true) List<Substance> substanceList;
+	private String newp;
+	private String newPer;
+	private String oldp;
+	private String oldPer;
+	private String total;
+	private String medicine;
+	private int totalDST;
+
+	
+	
+	@Override
+	protected void createIndicators() {
+		setGroupFields(null);
+		
+		String[] message = new String[5];
+		newp 		= getMessage("manag.ind.dstprofile.nevertreated");
+		newPer 		= getMessage("manag.ind.dstprofile.nevertreatedpercent");
+		oldp 		= getMessage("manag.ind.dstprofile.prevtreated");
+		oldPer 		= getMessage("manag.ind.dstprofile.prevtreatedpercent");
+		total 		= getMessage("global.total");
+		medicine 	= "";
+		
+		message[0] = newp;
+		message[1] = oldp;
+		message[2] = newPer;
+		message[3] = oldPer;
+		message[4] = total;
+		
+		List<ResistancePattern> resistancePatterns = new ArrayList<ResistancePattern>();
+		Substance E = substanceList.get(0);
+		Substance H = substanceList.get(1);
+		Substance R = substanceList.get(2);
+		Substance S = substanceList.get(3);
+				
+		ResistancePattern rp1 = new ResistancePattern();
+		rp1.setName("H+R");
+		List<Substance> substances1 = new ArrayList<Substance>();
+		substances1.add(H);
+		substances1.add(R);
+		rp1.setSubstances(substances1);
+		resistancePatterns.add(rp1);
+		
+		
+		ResistancePattern rp2 = new ResistancePattern();
+		rp2.setName("H+R+E");
+		List<Substance> substances2 = new ArrayList<Substance>();
+		substances2.add(H);
+		substances2.add(R);
+		substances2.add(E);
+		rp2.setSubstances(substances2);
+		resistancePatterns.add(rp2);
+		
+		ResistancePattern rp3 = new ResistancePattern();
+		rp3.setName("H+R+S");
+		List<Substance> substances3 = new ArrayList<Substance>();
+		substances3.add(H);
+		substances3.add(R);
+		substances3.add(S);
+		rp3.setSubstances(substances3);
+		resistancePatterns.add(rp3);
+		
+		ResistancePattern rp4 = new ResistancePattern();
+		rp4.setName("H+R+E+S");
+		List<Substance> substances4 = new ArrayList<Substance>();
+		substances4.add(H);
+		substances4.add(R);
+		substances4.add(E);
+		substances4.add(S);
+		rp4.setSubstances(substances4);			
+		resistancePatterns.add(rp4);
+		
+		IndicatorTable table = getTable();
+		table.addColumn(newp, null);
+		//table.addColumn(oldp, null);
+
+		TableColumn newPercent = table.addColumn(newPer, null);
+		newPercent.setHighlight(true);
+		
+		table.addColumn(oldp, null);
+		TableColumn oldPercent = table.addColumn(oldPer, null);
+		oldPercent.setHighlight(true);
+		
+		TableColumn totalCell = table.addColumn(total, null);
+		totalCell.setRowTotal(false);
+		
+		
+		Float newCalc = null;
+		Float oldCalc = null;
+		for (int i = 0; i < resistancePatterns.size(); i++) {
+			ResistancePattern pattern = resistancePatterns.get(i);
+			Long newValue = addResistancePattern(pattern, false);
+			Long oldValue = addResistancePattern(pattern, true);
+			Long total = newValue + oldValue;
+			calcTotal();
+			//if(total != 0){ //VR: total is taken of entire case count with any DST result
+			if(totalDST != 0){
+				newCalc = (newValue.floatValue()/totalDST * 100);
+				oldCalc = (oldValue.floatValue()/totalDST * 100);
+			}else{
+				newCalc = new Float(0);
+				oldCalc = new Float(0);
+			}
+
+			addValue(message[0], pattern.getName(), newValue.floatValue());
+			addValue(message[1], pattern.getName(), oldValue.floatValue());
+			addValue(message[2], pattern.getName(), newCalc);
+			addValue(message[3], pattern.getName(), oldCalc);
+			addValue(message[4], pattern.getName(), total.floatValue());
+		}
+		
+	}
+	
+	/**
+	 * Mounts resistance pattern of a set of medicines
+	 * @param substances
+	 */
+	protected Long addResistancePattern(ResistancePattern pattern, boolean other) {
+		if (pattern.getSubstances().size() == 0)
+			return new Long(0);
+		String s = "";
+		for (Substance sub: pattern.getSubstances()) {
+			if (!s.isEmpty()) {
+				s = s + ",";
+			}
+			s = s + sub.getId().toString();
+		}
+		
+		String cond;
+		if(!other)
+		// rule: check if the first DST exam of the case and check if it's according to the resistance pattern 
+			cond = "(select count(*) from ExamDSTResult res " +
+				"join res.exam exam " +
+				"where exam.tbcase.id = c.id and res.substance.id in (" + s +
+				") and res.result = " + DstResult.RESISTANT.ordinal() + 
+				" and exam.numResistant = " + pattern.getSubstances().size() + 
+				" and c.patientType = " + PatientType.NEW.ordinal() +
+				" and exam.dateCollected = (select min(aux.dateCollected) from ExamDST aux " +
+				"where aux.tbcase.id = c.id)) = " + pattern.getSubstances().size();
+		else
+		// rule: check if the first DST exam of the case and check if it's according to the resistance pattern 
+			cond = "(select count(*) from ExamDSTResult res " +
+				"join res.exam exam " +
+				"where exam.tbcase.id = c.id and res.substance.id in (" + s +
+				") and res.result = " + DstResult.RESISTANT.ordinal() + 
+				" and exam.numResistant = " + pattern.getSubstances().size() + 
+				" and c.patientType != " + PatientType.NEW.ordinal() +
+				"and c.patientType != " + PatientType.TRANSFER_IN.ordinal() +
+				" and exam.dateCollected = (select min(aux.dateCollected) from ExamDST aux " +
+				"where aux.tbcase.id = c.id)) = " + pattern.getSubstances().size();		
+		setCondition(cond);
+		Long val = (Long)createQuery().getSingleResult();
+//		addValue(pattern.getName(), val.intValue());
+		return val;
+	}
+	/**
+	 * Calculates total quantity of cases with DST exam
+	 */
+	protected void calcTotal() {
+		String cond = "exists(select exam.id from ExamDST exam where exam.tbcase.id = c.id)";
+		setCondition(cond);
+		totalDST = ((Long) createQuery().getSingleResult()).intValue();
+	}
+}

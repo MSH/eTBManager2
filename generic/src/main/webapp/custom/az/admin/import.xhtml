@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+	xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+	template="/admin/admintemplate.xhtml">
+
+	<ui:param name="title" value="#{messages['admin.import']}" />
+	<ui:param name="submenu" value="0" />
+	<ui:param name="labelstyle" value="text-align:left;width:300px;" />
+
+
+	<ui:define name="content">
+		<h1>#{title}</h1>
+		
+		<rich:tabPanel switchType="client" id="importPane">
+			<rich:tab label="#{messages['admin.import.table']}">
+				<h:form id="main" enctype="multipart/form-data" styleClass="form1">
+
+					<div class="form-content">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.desttable']}:</ui:define>
+							<h:selectOneMenu value="#{importDataHome.table}" required="true">
+								<s:selectItems value="#{importDataHome.tables}" var="it"
+									label="#{messages[it.messageKey]}" noSelectionLabel="-" />
+								<s:convertEnum />
+							</h:selectOneMenu>
+						</s:decorate>
+
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.file']}:</ui:define>
+							<s:fileUpload data="#{importDataHome.file}" required="true">
+							</s:fileUpload>
+						</s:decorate>
+
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.delimiter']}:</ui:define>
+							<h:selectOneMenu value="#{importDataHome.delimiter}"
+								required="true">
+								<f:selectItems value="#{importDataHome.delimiters}" />
+							</h:selectOneMenu>
+						</s:decorate>
+
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.charset']}:</ui:define>
+							<h:selectOneMenu value="#{importDataHome.charset}"
+								required="true">
+								<f:selectItems value="#{importDataHome.charsets}" />
+							</h:selectOneMenu>
+						</s:decorate>
+
+					</div>
+
+					<div class="form-footer">
+						<a:commandLink action="#{importDataHome.execute}"
+							styleClass="button"
+							onclick="if (!disableButton(this)) return false;"
+							reRender="main,messages">
+							<span>#{messages['form.import']}</span>
+						</a:commandLink>
+					</div>
+				</h:form>
+			</rich:tab>
+			
+			<h:form>
+			<a:jsFunction name="displayState" action="#{eidssIntHome.check()}" ajaxSingle="true" reRender="main,messages" />
+			</h:form>
+			
+			<rich:tab label="#{messages['admin.import.eidss']}" ontabenter="displayState();">
+				<h:form id="eidss" styleClass="form1">
+					<div class="form-content">
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.url']}:</ui:define>
+							<h:inputText value="#{eidssIntHome.config.url}"
+								style="width:400px;" maxlength="100" required="true"></h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.org']}:</ui:define>
+							<h:inputText value="#{eidssIntHome.config.orgName}"
+								style="width:400px;" maxlength="100" required="true"></h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.login']}:</ui:define>
+							<h:inputText value="#{eidssIntHome.config.login}"
+								style="width:400px;" maxlength="100" required="true"></h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.password']}:</ui:define>
+							<h:inputSecret value="#{eidssIntHome.config.password}"
+								style="width:400px;" maxlength="100" required="true" redisplay="true"></h:inputSecret>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.language']}:</ui:define>
+							<h:inputText value="#{eidssIntHome.config.language}"
+								style="width:400px;" maxlength="20" required="true"></h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.timeout']}:</ui:define>
+							<h:inputText value="#{eidssIntHome.config.timeout}"
+								style="width:400px;" maxlength="20" required="true"></h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.diags']}:</ui:define>
+							<h:inputText value="#{eidssIntHome.config.diagnosis}"
+								style="width:400px;" maxlength="100" required="true"></h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.states']}:</ui:define>
+							<h:inputText value="#{eidssIntHome.config.caseStates}"
+								style="width:400px;" maxlength="100" required="true"></h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.emails']}:</ui:define>
+							<h:inputText value="#{eidssIntHome.config.emails}"
+								style="width:400px;" maxlength="255"></h:inputText>
+						</s:decorate>
+						<s:decorate template="/layout/dateedit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.from']}:</ui:define>
+							<ui:param name="datefield" value="#{eidssIntHome.config.from}" />
+							<ui:param name="required" value="true" />
+						</s:decorate>
+						<s:decorate template="/layout/dateedit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.toDate']}:</ui:define>
+							<ui:param name="datefield" value="#{eidssIntHome.config.toDate}" />
+							<ui:param name="required" value="true" />
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.default_user']}:</ui:define>
+							<ui:param name="required" value="true" />
+							<h:selectOneMenu value="#{eidssIntHome.config.defaultUser}" required="true">
+								<s:selectItems value="#{usersLog}" var="it" label="#{it.name}" noSelectionLabel="-" itemValue="#{it.id}"/>
+							</h:selectOneMenu>	
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.interval_deepdays']}:</ui:define>
+							<ui:param name="required" value="true" />
+							<h:selectOneMenu value="#{eidssIntHome.config.deepdays}">
+								<f:selectItems value="#{eidssIntHome.intervals}"/>
+							</h:selectOneMenu>	
+						</s:decorate>
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.interval_timer']}:</ui:define>
+							<ui:param name="required" value="true" />
+							<h:selectOneMenu value="#{eidssIntHome.config.interval}">
+								<f:selectItems value="#{eidssIntHome.intervals}"/>
+							</h:selectOneMenu>	
+						</s:decorate>
+						<s:decorate template="/custom/az/layout/datetimeedit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.srart_date']}:</ui:define>
+							<ui:param name="datefield" value="#{eidssIntHome.config.dateStart}" />
+							<ui:param name="required" value="true" />
+						</s:decorate>
+						
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">#{messages['admin.import.eidss.auto']}:</ui:define>
+							<h:selectBooleanCheckbox value="#{eidssIntHome.config.auto}" />
+						</s:decorate>
+					</div>
+					<div class="form-footer">
+						<a:commandLink action="#{eidssIntHome.saveAndExecute()}"
+							styleClass="button"
+							onclick="if (!disableButton(this)) return false;"
+							reRender="messages,eidss">
+							<span>#{messages['form.save']}</span>
+						</a:commandLink>
+						
+						<a:commandLink action="#{eidssIntHome.execute1()}"
+							styleClass="button"
+							onclick="if (!disableButton(this)) return false;"
+							reRender="eidss,messages">
+							<span>#{messages['form.import']}</span>
+						</a:commandLink>
+						<a:commandLink action="#{eidssIntHome.check()}"
+							styleClass="button"
+							onclick="if (!disableButton(this)) return false;"
+							reRender="eidss,messages">
+							<span>#{messages['admin.import.eidss.check']}</span>
+						</a:commandLink>
+						<a:commandLink action="#{eidssIntHome.stop()}"
+							styleClass="button"
+							onclick="if (!disableButton(this)) return false;"
+							reRender="eidss,messages">
+							<span>#{messages['admin.import.eidss.stop']}</span>
+						</a:commandLink>
+					</div>
+				</h:form>
+			</rich:tab>
+			
+			<rich:tab label="importIMM" >
+				<h:form>
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label">#{messages['admin.import.file.xls']}:</ui:define>
+						<h:inputText value="#{importIMM.file}" 	style="width:400px;" maxlength="100" required="true"></h:inputText>
+					</s:decorate>
+					
+					<div class="form-footer">
+						<a:commandLink action="#{importIMM.execute}"
+							styleClass="button"
+							onclick="if (!disableButton(this)) return false;"
+							reRender="main,messages">
+							<span>#{messages['form.import']}</span>
+						</a:commandLink>
+					</div>
+				</h:form>
+			</rich:tab>
+
+
+		</rich:tabPanel>
+
+	</ui:define>
+	
+</ui:composition>

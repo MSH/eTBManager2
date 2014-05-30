@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
+
+	<action execute="#{medicineManStartHome.initialize}"/>
+	<begin-conversation join="true"/>
+	
+	<navigation>
+		<rule if="#{userSession.tbunit.medicineManagementStarted}">
+			<end-conversation/>
+			<redirect view-id="/medicines/index.xhtml" />
+		</rule>
+		<rule if-outcome="medman-started">
+			<end-conversation/>
+			<redirect view-id="/medicines/index.xhtml" />
+		</rule>
+	</navigation>
+</page>

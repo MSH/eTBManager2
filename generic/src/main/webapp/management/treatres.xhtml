@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:p="http://jboss.com/products/seam/pdf"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['manag.ind.treatres']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:param name="indicator" value="#{treatResultIndicator}" />
+<ui:param name="table" value="#{indicator.table}" />
+<ui:param name="left" value="0" />
+
+
+<ui:define name="naveg">
+	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
+</ui:define>
+
+
+<ui:define name="content">
+<h:form>
+<table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
+<tr><td bgcolor="#f8f8f8">
+	<ui:include src="#{workspaceUriRewrite.getWorkspacePage('/management/filters.xhtml')}" />
+
+</td></tr>
+<tr><td align="center">
+
+<h:panelGroup id="indicator">
+
+	<s:fragment rendered="#{indicatorController.executing}">
+	<table class="table1" width="100%">
+		<tr>
+			<th>
+				#{messages['PatientType']}
+			</th>
+		<ui:repeat value="#{table.columns}" var="col">
+			<th>
+				#{col.title}
+			</th>
+		</ui:repeat>
+			<th>
+				#{messages['global.total']}
+			</th>
+		</tr>
+		<ui:repeat value="#{table.rows}" var="row">
+		<tr>
+			<td class="colb">
+				#{row.title}
+			</td>
+			<ui:repeat value="#{row.cells}" var="val">
+			<td class="colcb" bgcolor="#{val.column.highlight?'#DBFADC':'transparent'}">
+				<h:outputText value="#{val.value}" >
+					<f:convertNumber pattern="##,###,##0.##"/>
+				</h:outputText>
+				<h:outputText value="%" rendered="#{val.column.highlight}" />
+			</td>
+			</ui:repeat>
+			<td class="colcb" bgcolor="#DBFADC">
+				<b>
+				<h:outputText value="#{row.total}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+				</b>
+			</td>
+		</tr>
+		</ui:repeat>
+
+		<tr>
+			<td class="colb" bgcolor="#DBFADC">
+				<b>#{messages['global.total']}</b>
+			</td>
+		<ui:repeat value="#{table.columns}" var="col">
+			<td class="colcb" bgcolor="#DBFADC">
+				<b>
+				<h:outputText value="#{col.total}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+				</b>
+			</td>
+		</ui:repeat>
+			<td class="colcb"  bgcolor="#DBFADC">
+				<b>
+				<h:outputText value="#{table.total}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+				</b>
+			</td>
+		</tr>
+	</table>
+	</s:fragment>
+
+</h:panelGroup>
+
+</td></tr>
+</table>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

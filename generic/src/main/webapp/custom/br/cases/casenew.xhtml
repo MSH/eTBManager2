@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.newnotif']} - #{messages[tbcase.classification.key]}" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="left" value="0" />
+<ui:param name="labelstyle" value="width:140px" />
+
+
+<ui:define name="exams">
+	<div class="form-content">
+		<h2>#{messages['cases.details.exams']}</h2>
+		
+		<table width="100%" style="border-collapse: collapse;">
+		<tr><td>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['cases.exammicroscopy']}:
+				</ui:define>
+				<div class="sample-sputum-label">
+					#{messages['SampleType.SPUTUM']}
+				</div>
+				<div class="sample-other-label">
+					#{messages['SampleType.OTHER']}
+				</div>
+				<div class="sample-sel">
+					<h:selectOneMenu value="#{examMicroscopy.sampleType}">
+						<s:selectItems var="v" value="#{globalLists.sampleTypes}" label="#{messages[v.key]}" />
+						<s:convertEnum />
+					</h:selectOneMenu>
+				</div>
+			</s:decorate>
+		
+		</td><td>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['cases.details.result']}:
+				</ui:define>
+				<div id="cbressputum">
+    			<h:selectOneMenu value="#{examMicroscopy.result}" required="true">
+    				<s:selectItems value="#{globalLists.microscopyNotifOptions}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+    				<s:convertEnum />
+    			</h:selectOneMenu>
+    			</div>
+				<rich:jQuery selector="#cbressputum select" query="change( function(){ examMicroscopyResultChanged(); })" />
+				<rich:jQuery selector="#cbressputum select" timing="onload" query="each( function(){ examMicroscopyResultChanged(true); })" />
+			</s:decorate>
+			
+		</td></tr>
+		<tr>
+			<td>
+				<div id="exam_mic_row1">
+    			<s:decorate template="/layout/dateedit.xhtml" >
+    				<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
+					<ui:param name="redasterisk" value="true" />
+    				<ui:param name="required" value="false" /> 
+    				<ui:param name="future" value="false" /> 
+    				<ui:param name="datefield" value="#{examMicroscopyHome.instance.dateCollected}" />
+    				<ui:param name="edtid" value="edtdatemicroscopy" /> 
+    			</s:decorate>
+    			</div>
+			</td>
+			<td>
+				<div id="exam_mic_row2">
+		    	<s:decorate template="/layout/dateedit.xhtml" >
+		    		<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+		    		<ui:param name="required" value="false" /> 
+		    		<ui:param name="future" value="false" /> 
+		    		<ui:param name="datefield" value="#{examMicroscopyHome.instance.dateRelease}" />
+			    </s:decorate>
+			    </div>
+			</td>
+		</tr>
+		<tr><td>
+			<s:decorate template="/layout/display.xhtml">
+				<ui:define name="label">#{messages['cases.examculture']}:
+				</ui:define>
+				<div class="sample-sputum-label">
+					#{messages['SampleType.SPUTUM']}
+				</div>
+				<div class="sample-other-label">
+					#{messages['SampleType.OTHER']}
+				</div>
+				<div class="sample-sel">
+					<h:selectOneMenu value="#{examCulture.sampleType}">
+						<s:selectItems var="v" value="#{globalLists.sampleTypes}" label="#{messages[v.key]}" />
+						<s:convertEnum />
+					</h:selectOneMenu>
+				</div>
+			</s:decorate>
+		
+		</td><td>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['cases.details.result']}:
+				</ui:define>
+				<div id="cbresculture">
+		    	<h:selectOneMenu value="#{examCulture.result}" required="true">
+    				<s:selectItems value="#{globalLists.cultureNotifOptions}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+		    		<s:convertEnum />
+    			</h:selectOneMenu>
+    			</div>
+				<rich:jQuery selector="#cbresculture select" query="change( function(){ examResultChanged(); })" />
+				<rich:jQuery selector="#cbresculture select" timing="onload" query="each( function(){ examResultChanged(true); })" />
+			</s:decorate>
+			
+		</td></tr>
+		<tr><td>
+
+		<div id="exam_row1">
+    	<s:decorate template="/layout/dateedit.xhtml" >
+    		<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
+			<ui:param name="redasterisk" value="true" />
+    		<ui:param name="required" value="false" /> 
+    		<ui:param name="future" value="true" /> 
+    		<ui:param name="datefield" value="#{examCultureHome.instance.dateCollected}" /> 
+    		<ui:param name="edtid" value="edtdatecollected" /> 
+    	</s:decorate>
+    	</div>
+    	
+    	</td><td>
+
+		<div id="exam_row3" >
+    	<s:decorate template="/layout/dateedit.xhtml" >
+    		<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+    		<ui:param name="required" value="false" /> 
+    		<ui:param name="future" value="true" /> 
+    		<ui:param name="datefield" value="#{examCulture.dateRelease}" /> 
+	    </s:decorate>
+	    </div>
+    	
+    	</td></tr>
+    	<tr><td colspan="2">
+
+		<div id="exam_row2" >
+	    <s:decorate template="/layout/edit.xhtml" >
+    		<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
+    		<h:selectOneMenu value="#{examCulture.method}" required="false">
+    			<s:selectItems value="#{fieldsQuery.cultureMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
+    			<s:convertEntity />
+    		</h:selectOneMenu>
+    	</s:decorate>
+    
+		<s:decorate template="/layout/labselection.xhtml">
+			<ui:param name="labselection" value="#{examCultureHome.labselection}" />
+			<ui:param name="required" value="false" />
+			<ui:param name="redasterisk" value="true" />
+			<h:inputHidden id="cblabculture" />
+			<h:message for="cblabculture" styleClass="error"/>
+		</s:decorate>
+    	</div>
+		<rich:jQuery selector="#cbresculture select" query="change( function(){ examResultChanged(); })" />
+    	
+		</td></tr>
+		<tr><td colspan="2">
+			<div class="paragraph">#{messages['pt_BR.MolecularBiology']}</div>
+			<div id="divcbmolbio">
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['pt_BR.MolecularBiology.result']}:
+				</ui:define>
+		    	<h:selectOneMenu id="cbmolbio" value="#{molecularBiology.result}" required="true">
+    				<s:selectItems value="#{molecularBiologyHome.notifResultOptions}" var="it" noSelectionLabel="-" label="#{messages[it.messageKey]}" />
+		    		<s:convertEnum />
+    			</h:selectOneMenu>
+			</s:decorate>
+			</div>
+			<rich:jQuery selector="#cbmolbio" query="change( function(){ molbioResultChange(this); })" />
+			<rich:jQuery selector="#cbmolbio" timing="onload" query="each( function(){ molbioResultChange(this,true); })" />
+
+			<div id="divmolbio">
+    		<s:decorate template="/layout/dateedit.xhtml" >
+    			<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
+		    	<ui:param name="redasterisk" value="true" /> 
+		    	<ui:param name="future" value="false" /> 
+		    	<ui:param name="datefield" value="#{molecularBiology.date}" />
+		    </s:decorate>
+
+    		<s:decorate template="/layout/dateedit.xhtml" >
+    			<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+		    	<ui:param name="redasterisk" value="true" /> 
+		    	<ui:param name="future" value="false" /> 
+    			<ui:param name="edtid" value="edtMBreleasedate" /> 
+    			<ui:param name="datefield" value="#{molecularBiology.dateRelease}" /> 
+		    </s:decorate>
+
+		    <s:decorate template="/layout/edit.xhtml" >
+		    	<ui:param name="redasterisk" value="true" /> 
+    			<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
+    			<h:selectOneMenu id="cbMBMethod" value="#{molecularBiology.method}" required="false">
+    				<s:selectItems value="#{fieldsQuery.molecularBiologyMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
+    				<s:convertEntity />
+    			</h:selectOneMenu>
+    		</s:decorate>
+    
+			<s:decorate template="/layout/labselection.xhtml">
+				<ui:param name="labselection" value="#{molecularBiologyHome.labselection}" />
+				<ui:param name="required" value="false" />
+				<ui:param name="redasterisk" value="true" />
+				<h:message for="cblabmethod" styleClass="error"/>
+			</s:decorate>
+			</div>
+
+			<div id="divdst" style="display:block;width:100%;">		
+			<div class="paragraph">#{messages['cases.examdst']}
+			</div>
+			<h:panelGroup id="pnlDSTResults">
+			<div id="divdstresults">
+			<rich:dataGrid value="#{examDSTHome.items}" var="it" columns="4" style="width:100%">
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:param name="labelstyle" value="width:40px" />
+					<ui:define name="label">#{it.substance.abbrevName}</ui:define>
+					<h:selectOneMenu id="res" value="#{it.result}"  required="#{caseDataBRHome.dstRequired==1}" onchange="updateDSTResultsView(false);">
+    					<s:selectItems value="#{dstResults}" var="ss" label="#{messages[ss.key]}" />
+    					<s:convertEnum />
+					</h:selectOneMenu>
+				</s:decorate>
+			</rich:dataGrid>
+			<input id="dstReq" type="hidden" value="#{caseDataBRHome.dstRequired}"/>
+			</div>
+			</h:panelGroup>
+			
+			<table id="tblres" cellpadding="0" cellspacing="0" width="100%">
+			<tr><td>
+    			<s:decorate template="/layout/dateedit.xhtml" >
+    				<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+    				<ui:param name="required" value="false" /> 
+    				<ui:param name="future" value="false" /> 
+    				<ui:param name="datefield" value="#{examDST.dateRelease}" /> 
+    			</s:decorate>
+    		</td><td>
+    			<s:decorate template="/layout/edit.xhtml" >
+    				<ui:param name="labelstyle" value="width:80px;" />
+    				<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
+    				<h:selectOneMenu value="#{examDST.method}" required="false">
+    					<s:selectItems value="#{fieldsQuery.DSTMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
+    					<s:convertEntity />
+    				</h:selectOneMenu>
+    			</s:decorate>
+			</td></tr>
+			<tr><td colspan="2">
+				<s:decorate template="/layout/labselection.xhtml">
+					<ui:param name="required" value="false" />
+					<ui:param name="redasterisk" value="true" />
+					<ui:param name="labselection" value="#{examDSTHome.labselection}" />
+				</s:decorate>
+			</td></tr>
+			</table>
+			</div>
+			<rich:jQuery selector="#cbressputum select" timing="onload" query="each( function(){ updateDSTView(true); })" />
+			
+		</td></tr>
+		
+		<tr><td colspan="2">
+			<div class="paragraph">#{messages['cases.examhiv']}
+			</div>
+		</td></tr>
+		<tr><td>
+    		<s:decorate template="/layout/edit.xhtml" >
+    			<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
+    			<h:selectOneMenu value="#{examHIV.result}" required="true" onchange="hivResultChangeListener(this);">
+    				<s:selectItems value="#{hivResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+    				<s:convertEnum />
+    			</h:selectOneMenu>
+    		</s:decorate>
+    	</td><td>
+    		<div id="divDateHIV" style="#{(examHIV.result=='NEGATIVE') or (examHIV.result=='POSITIVE')?'display:block': 'display:none;'}">
+    		<s:decorate template="/layout/dateedit.xhtml" >
+    			<ui:define name="label">#{messages['cases.exams.dateRelease']}:<span style="color:red">*</span></ui:define>
+    			<ui:param name="required" value="false" /> 
+    			<ui:param name="future" value="false" /> 
+    			<ui:param name="datefield" value="#{examHIV.date}" /> 
+    			<ui:param name="edtid" value="edthivdate" /> 
+    		</s:decorate>
+    		</div>
+		</td></tr>
+		
+		</table>
+	</div>
+
+</ui:define>
+
+
+<ui:define name="treatment">
+
+	<div class="form-content">
+		<h2> #{messages['pt_BR.treatment']}</h2>
+
+    	<s:decorate template="/layout/dateedit.xhtml" >
+    		<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
+    		<ui:param name="datefield" value="#{startTreatmentHome.iniTreatmentDate}" /> 
+    		<ui:param name="required" value="true" /> 
+    		<ui:param name="future" value="false" /> 
+    	</s:decorate>
+
+    	<s:decorate template="/layout/edit.xhtml" >
+    		<ui:define name="label">#{messages['Regimen']}:</ui:define>
+
+			<h:selectOneMenu id="cbregtype" value="#{caseEditingHome.regimenType}" required="true">
+				<f:selectItem itemLabel="-" itemValue="0"/>
+				<f:selectItem itemLabel="#{messages['regimens.standard']}" itemValue="1"/>
+				<f:selectItem itemLabel="#{messages['regimens.individualized']}" itemValue="2"/>
+			</h:selectOneMenu>
+			<rich:jQuery selector="#cbregtype" query="change(function(){showRegimens(this); })" />
+			<rich:jQuery selector="#cbregtype" timing="onload" query="each(function(){ showRegimens(this,true); })" />
+
+			<div id="divregtype">
+			<h:selectOneMenu id="cbregimen" value="#{startTreatmentHome.regimen}" >
+				<s:selectItems var="r" value="#{regimens.resultList}" label="#{r}" noSelectionLabel="-"/>
+				<s:convertEntity />
+			</h:selectOneMenu>
+			<h:message for="cbregimen" styleClass="error"/>
+			</div>
+		</s:decorate>		
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['pt_BR.supervisedTreatment']}:</ui:define>
+		<h:selectOneMenu id="cbsuptreatment" value="#{medicalExamination.supervisedTreatment}" required="true">
+			<s:selectItems var="s" value="#{globalLists.yesNoTypeList}" label="#{messages[s.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+	<div id="div_supunit">
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['pt_BR.supervisionUnit']}:<span style="color:red">*</span></ui:define>
+		<h:inputText id="supUnitName" value="#{medicalExamination.supervisionUnitName}" style="width:300px;text-transform:uppercase;" maxlength="100"/>
+	</s:decorate>
+	</div>
+<rich:jQuery selector="#cbsuptreatment" query="change(function(){showSupUnit(this); })" />
+<rich:jQuery selector="#cbsuptreatment" timing="onload" query="each(function(){ showSupUnit(this,true); })" />
+
+	</div>
+	
+</ui:define>
+
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<a:form id="main" styleClass="form1">
+<table style="width:100%"><tr><td>
+
+	<ui:include src="casedataedt.xhtml" />	
+	
+	<div class="form-content">
+		<h2>#{messages['MedicalExamination']}</h2>
+
+		<div><table width="99%" style="border-collapse:collapse;"><tr><td>
+    		<s:decorate template="/layout/dateedit.xhtml" >
+    			<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
+    			<ui:param name="required" value="true" /> 
+    			<ui:param name="future" value="false" /> 
+    			<ui:param name="datefield" value="#{medicalExamination.date}" /> 
+    		</s:decorate>
+
+		    <s:decorate template="/layout/dateedit.xhtml" >
+    			<ui:define name="label">#{messages['MedicalExaminationBR.nextAppointment']}:</ui:define>
+    			<ui:param name="datefield" value="#{medicalExamination.nextAppointment}" /> 
+    		</s:decorate>
+		
+		    <s:decorate template="/layout/edit.xhtml" >
+		    	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
+		    	<h:inputText id="edtmedresp" value="#{medicalExamination.responsible}" required="true" style=" width:340px; text-transform:uppercase;" maxlength="100"/>
+	    	</s:decorate>
+		
+		    <s:decorate template="/layout/edit.xhtml" >
+		    	<ui:define name="label">#{messages['MedicalExamination.positionResponsible']}:</ui:define>
+		    	<h:inputText value="#{medicalExamination.positionResponsible}" required="true" style=" width:340px; text-transform:uppercase;" maxlength="100"/>
+	    	</s:decorate>
+    
+
+		    <s:decorate template="/layout/textarea.xhtml" >
+		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+		    	<ui:param name="maxlength" value="250" />
+		    	<ui:param name="field" value="#{medicalExamination.comments}" />
+		    	<ui:param name="style" value="width : 500px; height:100px;" />
+		    </s:decorate>
+		</td></tr></table>
+		</div>
+	</div>
+	
+
+	<div class="form-footer">
+		<a:commandLink action="#{caseDataBRHome.saveNew}" styleClass="button" reRender="main,messages"
+			onclick="if (!disableButton(this)) return false;" >
+			<span>#{messages['form.save']}</span>
+		</a:commandLink>
+		<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end"  onclick="disableButton(this)">
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+</td></tr></table>
+<p/>
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+
+<rich:jQuery selector="#infectsite" query="change(function(){updateExamType(this); })" />
+<rich:jQuery selector="#infectsite" timing="onload" query="each(function(){updateExamType(this); })" />
+<a:jsFunction name="updateDSTRequired" ajaxSingle="true" reRender="pnlDSTResults" >
+	<a:actionparam name="param1" assignTo="#{caseDataBRHome.dstRequired}" />
+</a:jsFunction>
+<script type="text/javascript">
+<!--
+function updateExamType(cb) {
+	var val = cb.options[cb.selectedIndex].value;
+	var bSputum = (val == 'PULMONARY');
+	var bOther = (val == 'EXTRAPULMONARY');
+	var bSelect = (val == 'BOTH');
+
+	if (bSputum)
+		 jQuery('.sample-sputum-label').show();
+	else jQuery('.sample-sputum-label').hide();
+
+	if (bOther)
+		 jQuery('.sample-other-label').show();
+	else jQuery('.sample-other-label').hide();
+
+	if (bSelect)
+		 jQuery('.sample-sel').show();
+	else jQuery('.sample-sel').hide();
+}
+
+function hasMicroscopyResult() {
+	var cb2;
+	jQuery('#cbressputum select').each(function(){cb2=this;});
+
+	var s2 = cb2.options[cb2.selectedIndex].value;
+	return (cb2.selectedIndex>0) && (s2!='NOTDONE');
+}
+function hasExamResult() {
+	var cb1;
+//	var cb2;
+	jQuery('#cbresculture select').each(function(){cb1=this;});
+//	jQuery('#cbressputum select').each(function(){cb2=this;});
+
+	var s1 = cb1.options[cb1.selectedIndex].value;
+//	var s2 = cb2.options[cb2.selectedIndex].value;
+	return ((cb1.selectedIndex>0) && (s1!='NOTDONE')); 
+//	 ||	(cb2.selectedIndex>0) && (s2!='NOTDONE'));
+}
+
+function hasMolecularBiologyResult() {
+	var cb1;
+	jQuery('#divcbmolbio select').each(function(){cb1=this;});
+	var s1 = cb1.options[cb1.selectedIndex].value;
+	return ((cb1.selectedIndex>0) && (s1!='NOTDONE'));
+}
+
+function examResultChanged(immediate) {
+	if (hasExamResult()) {
+		jQuery('#exam_row1').slideDown(immediate?0:500);
+		jQuery('#exam_row2').slideDown(immediate?0:500);
+		jQuery('#exam_row3').slideDown(immediate?0:500);
+	}
+	else {
+		jQuery('#exam_row1').slideUp(immediate?0:500);
+		jQuery('#exam_row2').slideUp(immediate?0:500);
+		jQuery('#exam_row3').slideUp(immediate?0:500);
+	}
+    updateDSTView(false);
+}
+function examMicroscopyResultChanged(immediate) {
+	if (hasMicroscopyResult()) {
+		jQuery('#exam_mic_row1').slideDown(immediate?0:500);
+		jQuery('#exam_mic_row2').slideDown(immediate?0:500);
+	}
+	else {
+		jQuery('#exam_mic_row1').slideUp(immediate?0:500);
+		jQuery('#exam_mic_row2').slideUp(immediate?0:500);
+	}
+}
+
+function showSupUnit(cb, immediate) {
+	  if (cb.selectedIndex == 1)
+		   jQuery('#div_supunit').slideDown(immediate?0:500)
+	  else jQuery('#div_supunit').slideUp(immediate?0:500);
+}
+
+function showRegimens(cb, immediate) {
+	  if (cb.selectedIndex == 1)
+		   jQuery('#divregtype').slideDown(immediate?0:500)
+	  else jQuery('#divregtype').slideUp(immediate?0:500);
+}
+
+function molbioResultChange(cb, immediate) {
+	if (cb.selectedIndex > 1)
+	     jQuery('#divmolbio').slideDown(immediate?0:500)
+    else jQuery('#divmolbio').slideUp(immediate?0:500);
+    updateDSTView(false);
+}
+
+function updateDSTView(immediate) {
+	var showDST = ((hasExamResult()) || (hasMolecularBiologyResult()));
+
+	var s = jQuery('#dstReq').val();
+	var val = (s == '1');
+	if (showDST != val) {
+		val = showDST?1:0;
+		updateDSTRequired(val);
+	}
+
+	if (showDST)
+		 jQuery('#divdst').show(immediate?0:500)
+	else jQuery('#divdst').hide(immediate?0:500);
+	updateDSTResultsView(immediate);
+}
+
+function dstDoneCount() {
+	var count=0;
+	jQuery("#divdstresults select").each(function() { if (this.selectedIndex>1) count++; });
+	return count;
+}
+
+function updateDSTResultsView(immediate) {
+	var b = dstDoneCount() > 0;
+
+	if (b)
+		 jQuery('#tblres').show(immediate?0:500)
+	else jQuery('#tblres').hide(immediate?0:500);
+}
+
+function hivResultChangeListener(cb) {
+	var index = cb.selectedIndex;
+	if (index <= 2)
+		 jQuery('#divDateHIV').slideUp();
+	else jQuery('#divDateHIV').slideDown();
+}
+-->
+</script>
+
+</a:form>
+
+</ui:define>
+
+</ui:composition>  

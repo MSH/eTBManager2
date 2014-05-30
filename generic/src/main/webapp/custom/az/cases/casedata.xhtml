@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+
+<ui:param name="title" value="#{caseAZHome.rightCaseDetailsTitle} - #{messages[tbcase.classification.key]}"/>
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:160px" />
+<ui:param name="pagewidth" value="850px" />
+
+<ui:define name="naveg">
+	<div class="item">
+		<s:link value="#{messages['cases']}" view="/cases/index.html" propagation="none"/>
+	</div>
+	<div class="item">
+		<s:link value="#{messages['cases.searchresult']}" view="/cases/searchresult.xhtml" />
+	</div>
+	<div class="item selected">
+		<s:link value="#{messages[tbcase.classification.key]}" view="/cases/searchresult.xhtml" />
+	</div>
+</ui:define>
+
+
+
+<ui:define name="left">
+
+	<h:panelGroup id="leftmenu" styleClass="vertical-menu">
+	<h:form class="vertical-menu">
+
+	<s:link view="/cases/suspectfollowup.xhtml" rendered="#{caseHome.suspectFollowupAvailable}">
+		<i class="icon-double-angle-right"/>#{messages['cases.suspect.followup']}
+	</s:link>
+
+	<h:commandLink action="#{caseHome.remove}" 
+		onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" 
+		rendered="#{caseHome.canRemoveCaseData}">
+		<i class="icon-trash"/><span>#{messages['form.remove']}</span>
+	</h:commandLink>
+
+	<s:link view="/custom/az/cases/closecase.xhtml" rendered="#{caseHome.canClose and tbcase.diagnosisType != 'SUSPECT'}">
+		<f:param name="id" value="#{caseHome.id}" />
+		<i class="icon-folder-close" />#{messages['cases.close']}
+	</s:link>
+
+	<h:commandLink action="#{caseCloseHome.reopenCase}"
+		rendered="#{caseHome.canReopen}" 
+		onclick="if (!confirm('#{messages['cases.reopen.confirm']}')) return false;">
+		<i class="icon-folder-open" />#{messages['cases.reopen']}
+	</h:commandLink>
+	
+	<s:link view="/cases/casehistory.xhtml" >
+		<f:param name="id" value="#{caseHome.id}" />
+		<i class="icon-table" /><span>#{messages['form.logreport']}</span>
+	</s:link>
+	
+	<a:commandLink onclick="if (confirm('#{messages['az_AZ.changeNumber.confirm']}')) Richfaces.showModalPanel('changenumdlg');return false;" 
+					rendered="#{userLogin.user.login=='VLAD'}" >
+	<span>#{messages['cases.changeNumber']}</span>
+	</a:commandLink>
+	
+	<s:link view="/custom/az/reports/casedata.xhtml" target="_new">
+		<i class="icon-print" />#{messages['global.print']}
+		<f:param name="id" value="#{caseHome.id}" />
+	</s:link>
+	
+	<s:link view="/cases/casetagsedt.xhtml" rendered="#{caseHome.canTagCase and empty tbcase.tags}">
+		<f:param name="id" value="#{caseHome.id}" />
+		<i class="icon-tag" />#{messages['admin.tags']}
+	</s:link>
+
+	</h:form>
+	</h:panelGroup>
+
+	<s:fragment rendered="#{not empty tbcase.tags}">
+	<table class="table2">
+	<tr>
+		<th>#{messages['admin.tags']}</th>
+	</tr>
+	<tr>
+		<td>
+		<a:repeat value="#{tbcase.tags}" var="it">
+			<div class="tag-#{it.type}-icon"/>#{it.name}<br/>
+		</a:repeat>
+		</td>
+	</tr>
+	<s:fragment>
+	<tr>
+		<th>
+		<s:link value="#{messages['form.edit']}" 
+			view="/cases/casetagsedt.xhtml">
+			<f:param name="id" value="#{caseHome.id}"/>
+		</s:link>
+		</th>
+	</tr>
+	</s:fragment>
+	</table>
+	</s:fragment>
+
+	<div class="spacer" />
+
+		<h:form id="trans">
+				<s:div styleClass="region1"  rendered="#{tbcase.state=='TRANSFERRING'}" style="width:168px;">
+					<div class="icon-hu-big"/>
+					<div style="margin-top:6px;font-size:11px;max-width:167px;" >
+						<b style="padding-right:4px;">#{messages['meds.movs.destunit']}:</b> 
+						<br/>
+						<h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
+						<br/>
+						<span class="right-icon" />
+						<s:link view="/cases/casetransferin.xhtml" 
+							propagation="none" rendered="#{caseHome.canTransferIn}">
+							<f:param name="id" value="#{caseHome.id}" />
+							<i class="icon-mail-forward" />#{messages['cases.move.regtransferin']}
+						</s:link>
+						<br/>
+						
+						<a:commandLink 
+							onclick="if (!confirm('#{caseMoveHome.confirmMsgRollbackTransfer}')) return false"
+							action="#{caseMoveHome.rollbackTransferOut}"
+							reRender="trans,main,leftmenu,messages,systemFields" 
+							styleClass="right-icon"  
+							rendered="#{caseAZHome.canTransferReturn}">
+							<f:param name="name" value="#{caseHome.transferInHealthUnit.tbunit.name}"/>
+							<i class="icon-mail-reply" />#{messages['cases.move.cancel']}
+						</a:commandLink>
+					</div>
+				</s:div>
+			<div class="spacer" />
+		</h:form>
+	
+
+	<s:div styleClass="region1" rendered="#{not empty caseHome.otherCases}">
+		<div class="header">#{messages['cases.details.others']} #{tbcase.patient.name}</div>
+		<div class="content">
+		<h:dataTable id="taboc" value="#{caseHome.otherCases}" var="it" style="font-size:10px;" 
+			columnClasses="coll" width="100%">
+			<h:column>
+				<div onclick="openWaitDlg();location.href='#{request.contextPath}/cases/casedata.seam?id=#{it.id}';" style="cursor:pointer;">
+				<b style="color:green;font-size:12px;width:100%;text-decoration: underline;">#{messages[it.classification.key]}
+				</b>
+				<br/>
+				#{it.notificationUnit.name}
+				<p/>
+				<b>#{messages['TbCase.registrationDate']}:</b><br/> <h:outputText value="#{it.registrationDate}" converter="localeDateConverter" />
+				<p/>
+				<b>#{messages['CaseState']}:</b><br/> #{messages[it.state.key]}
+				<hr style="margin-bottom:16px;" />
+				</div>
+			</h:column>
+		</h:dataTable>
+		<rich:jQuery selector="#taboc tr" 
+                query="mouseover(function(){jQuery(this).addClass('sel-row')})"/>
+		<rich:jQuery selector="#taboc tr" 
+                query="mouseout(function(){jQuery(this).removeClass('sel-row')})"/>
+		</div>
+	</s:div>
+</ui:define>
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:panelGroup id="systemFields">
+	<h:outputText value="#{messages['cases.system.create']}: " style="font-weight:bold;"/>
+	<h:outputText value="#{tbcase.systemDate}" converter="localeDateConverter" rendered="#{tbcase.systemDate != null}"/>
+	<h:outputText value="#{messages['cases.date_unknown']}" rendered="#{tbcase.systemDate == null}"/>
+	<h:outputText value=", #{tbcase.createUser!=null ? tbcase.createUser.name : messages['cases.user_unknown']}"/>
+	<br/>
+	<h:outputText value="#{messages['cases.system.edit']}: " style="font-weight:bold;"/>
+	<h:outputText value="#{tbcase.editingDate}" converter="localeDateConverter" rendered="#{tbcase.editingDate != null}"/>
+	<h:outputText value="#{messages['cases.date_unknown']}" rendered="#{tbcase.editingDate == null}"/>
+	<h:outputText value=", #{tbcase.editingUser!=null ? tbcase.editingUser.name : messages['cases.user_unknown']}"/>
+	<br/>
+	<h:outputText value="#{messages['cases.system.lastaction']}: " style="font-weight:bold;"/>
+	<h:outputText value="#{caseAZHome.lastTransaction!=null ? caseAZHome.lastTransaction.title : messages['admin.import.eidss.nextFT.undef']}"/>
+</h:panelGroup>
+	
+<s:decorate id="bodydiv" template="/layout/casebody.xhtml">
+	<ui:define name="state-content">
+		<h:outputText value="#{tbcase.ownerUnit.name.defaultName}" rendered="#{tbcase.ownerUnit != null}" style="color:#960000;font-size:16px;"/>
+		<h:outputText value="#{tbcase.notificationUnit.name.defaultName}" rendered="#{tbcase.ownerUnit == null and tbcase.notificationUnit != null}" style="color:#960000;font-size:16px;"/>	
+	</ui:define>
+
+<h:form id="main">
+	<ui:include src="#{wspage['/cases/issues.xhtml']}" />
+</h:form>
+
+<div class="spacer" />
+
+<rich:tabPanel switchType="client" id="tabCase">
+	<rich:tab label="#{messages['cases.details.case']}" id="tab1" ontabenter="updateTab(1)">
+		<h:panelGroup id="pnltab1">
+			<s:decorate template="#{wspage['/cases/data.xhtml']}" rendered="#{caseFilters.caseTab==1}"/>
+		</h:panelGroup>
+	</rich:tab>
+	
+	<rich:tab label="#{messages['cases.details.exams']}" id="tab2" ontabenter="updateTab(2)">
+		<h:panelGroup id="pnltab2">
+			<s:decorate template="#{wspage['/cases/exams.xhtml']}" rendered="#{caseFilters.caseTab==2}"/>
+		</h:panelGroup>
+	</rich:tab>
+	
+	<rich:tab label="#{messages['cases.details.treatment']}" id="tab3" ontabenter="updateTab(3)">
+		<h:panelGroup id="pnltab3">
+			<s:decorate template="#{wspage['/cases/treatment.xhtml']}" rendered="#{caseFilters.caseTab==3}"/>
+		</h:panelGroup>
+	</rich:tab>
+	
+	<rich:tab label="#{messages['cases.details.medexam']}" id="tab4" ontabenter="updateTab(4)">
+		<h:panelGroup id="pnltab4">
+			<s:decorate template="#{wspage['/cases/medexamination.xhtml']}" rendered="#{caseFilters.caseTab==4}"/>
+		</h:panelGroup>
+	</rich:tab>
+	
+	<rich:tab label="#{messages['cases.details.otherinfo']}" id="tab5" ontabenter="updateTab(5)">
+		<h:panelGroup id="pnltab5">
+			<s:decorate template="#{wspage['/cases/otherinfo.xhtml']}" rendered="#{caseFilters.caseTab==5}"/>
+		</h:panelGroup>
+	</rich:tab>
+	
+	<rich:tab label="#{messages['cases.details.report1']}" id="tab6" ontabenter="updateTab(6)">
+		<h:panelGroup id="pnltab6">
+			<s:decorate template="#{wspage['/cases/drugogram.xhtml']}" rendered="#{caseFilters.caseTab==6}"/>
+		</h:panelGroup>
+	</rich:tab>
+	
+	<rich:tab label="#{messages['cases.issues']}" id="tab7" ontabenter="updateTab(7)" rendered="#{s:hasRole('ISSUES')}">
+		<h:panelGroup id="pnltab7">
+			<s:decorate template="#{wspage['/cases/casedata_issues.xhtml']}" rendered="#{caseFilters.caseTab==7}"/>
+		</h:panelGroup>
+	</rich:tab>
+</rich:tabPanel>
+
+<h:form>
+	<a:jsFunction name="updateTabContent" reRender="pnltab#{caseFilters.caseTab}">
+		<a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
+	</a:jsFunction>
+	<a:jsFunction name="updateTabSelection">
+		<a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
+	</a:jsFunction>
+	<script type="text/javascript">
+	<!--
+	window.tabLoaded = new Array();
+	window.inicasetab = #{caseFilters.caseTab};
+	jQuery().ready(function() {
+		initTab();
+	});
+	function initTab() {
+		var updt=window.inicasetab==0;
+		if (updt)
+			window.inicasetab=1;
+		var tabid = 'tab' + window.inicasetab;
+		var dest = 'bodydiv:tab' + window.inicasetab;
+		RichFaces.switchTab('bodydiv:tabCase', dest, tabid);
+		if (updt)
+			updateTab(window.inicasetab);
+	}
+	
+	function updateTab(tabIndex) {
+		if (window.tabLoaded[tabIndex]==undefined) {
+			window.updateTabContent(tabIndex);
+			window.tabLoaded[tabIndex]=1;
+		}
+		else updateTabSelection(tabIndex);
+	
+	}
+	-->
+	</script>
+</h:form>
+
+</s:decorate>	
+
+</ui:define>
+
+<ui:define name="dialogs">
+	<rich:modalPanel id="changenumdlg" width="500" autosized="true" zindex="2000" trimOverlayedElements="false">
+		<f:facet name="header">#{messages['cases.changeNumber']}</f:facet>
+		<ui:param name="labelstyle" value="width:150px" />
+		<h:form id="formchangenum" style="padding:10px;">
+	
+		<script type="text/javascript"><!--
+		function notFirstNull(elem,e){
+			var key = e.which;
+			var keychar = String.fromCharCode(key);
+			// control keys
+			if ((key==null) || (key==0) || (key==8) || 
+				    (key==9) || (key==13) || (key==27) )
+				   return true;
+			 //not first null
+			if (elem.value=='' && key == 48)
+				return false;
+			//only numbers
+			if ((("0123456789").indexOf(keychar) == -1))
+				   return false;	
+			return true;
+		}
+		--></script>
+	
+		<div class="form-content">
+			<h:panelGroup id="changenumpnl" >
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">#{messages['Patient.recordNumber']}:</ui:define>
+			    	<ui:param name="required" value="true" /> 
+			    	<h:inputText value="#{patientRecordNumberChangeHome.numDefault}" onkeypress="return notFirstNull(this,event);"/>
+				</s:decorate>
+			</h:panelGroup>
+		</div>
+		
+		<div class="button-bar">
+		<a:commandLink action="#{patientRecordNumberChangeHome.changeNumber()}"
+			styleClass="button" reRender="main,messages,formchangenum"
+			oncomplete="this.disabled=false;Richfaces.hideModalPanel('changenumdlg');">
+			<span>Ok</span>
+		</a:commandLink>
+	
+		<a:commandLink styleClass="button-alt"  
+			onclick="Richfaces.hideModalPanel('changenumdlg'); return false;">
+			<span>#{messages['Cancel']}</span>
+		</a:commandLink>
+		</div>
+		</h:form>
+	</rich:modalPanel>
+
+	<rich:modalPanel id="validrevertdlg" width="500" autosized="true" zindex="2000" trimOverlayedElements="false">
+		<f:facet name="header">#{messages['az_AZ.ValidationState.revert']}</f:facet>
+		<h:form id="formvalidrevert" style="padding:10px;">
+		<div class="form-content">
+			<h:panelGroup id="validrevertpnl" >
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:param name="labelstyle" value="width:60px" />
+					<ui:define name="label">#{messages['az_AZ.ValidationState.revert.adj']}:</ui:define>
+			    	<h:inputTextarea value="#{caseIssueHome.instance.description}" style="width:360px; height:80px; margin-left:15px;" required="true"/>
+				</s:decorate>
+			</h:panelGroup>
+		</div>
+		
+		<div class="button-bar">
+		<a:commandLink action="#{casesControlAZ.revertValidation()}"
+			styleClass="button" reRender="main,messages,formvalidrevert,formissues"
+			oncomplete="this.disabled=false;Richfaces.hideModalPanel('validrevertdlg');">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink>
+	
+		<a:commandLink styleClass="button-alt"  
+			onclick="Richfaces.hideModalPanel('validrevertdlg'); return false;">
+			<span>#{messages['form.cancel']}</span>
+		</a:commandLink>
+		</div>
+		</h:form>
+	</rich:modalPanel>
+	
+	<ui:include src="/layout/waitdlg.xhtml" />
+</ui:define>
+</ui:composition>  

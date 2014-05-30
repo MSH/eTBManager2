@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+
+
+	<div class="paragraph">#{messages['PatientSample.identification']}
+	</div>
+	
+    <div id="divdtcollected">
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="true" /> 
+    	<ui:param name="datefield" value="#{examHome.instance.dateCollected}" /> 
+    	<ui:param name="checkDeathDate" value="true" />
+    </s:decorate>
+    </div>
+
+	<div id="divsample">
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['PatientSample.sampleType']}:</ui:define>
+    	<h:selectOneMenu value="#{examType.sampleType}" required="true">
+    		<s:selectItems value="#{sampletypes_ng}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>	
+	
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['PatientSample.sampleNumber']}:</ui:define>
+    	<h:inputText value="#{examHome.instance.sampleNumber}" maxlength="50" style="width:200px;"/>
+    </s:decorate>
+    </div>
+
+    <s:decorate template="/layout/labselection.xhtml" >
+    	<ui:param name="required" value="true" />
+    	<ui:param name="labselection" value="#{examHome.labselection}" />
+    </s:decorate>
+
+
+</ui:composition>

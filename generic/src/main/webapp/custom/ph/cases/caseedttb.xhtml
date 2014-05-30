@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.edit']} - #{messages[tbcase.classification.key]}" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:param name="labelstyle" value="width:150px" />
+
+<ui:define name="left">
+</ui:define>
+
+<ui:define name="content">
+<h:form id="main">
+<p/>
+<table width="780px"><tr><td>
+
+	<ui:include src="casedataedt.xhtml" />
+
+	<table width="100%"><tr><td align="right">
+	<div style="float:left;">
+		<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+	</div>
+	<a:commandLink value="#{messages['form.ok']}" action="#{caseDataPHHome.saveEditing}" styleClass="button" reRender="main"/>
+	<s:link value="#{messages['form.cancel']}" view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+		<f:param name="id" value="#{caseHome.id}" />
+	</s:link>
+	</td></tr></table>
+</td></tr></table>
+<p/>
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

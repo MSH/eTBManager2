@@ -1,0 +1,28 @@
+package org.msh.tb.client.reports.filters;
+
+import java.util.ArrayList;
+
+import org.msh.tb.client.commons.StandardCallback;
+import org.msh.tb.client.shared.model.CFilter;
+import org.msh.tb.client.shared.model.CItem;
+
+
+public class RemoteOptionsFilter extends OptionsFilter{
+
+	/* (non-Javadoc)
+	 * @see org.msh.tb.client.reports.filters.FilterWidget#initialize(org.msh.tb.client.shared.model.CFilter)
+	 */
+	@Override
+	public void initialize(CFilter filter) {
+		super.initialize(filter);
+
+		loadServerOptions(null, new StandardCallback<ArrayList<CItem>>() {
+			@Override
+			public void onSuccess(ArrayList<CItem> result) {
+				if (result != null)
+					fillOptions(result);
+			}
+		});
+	}	
+
+}

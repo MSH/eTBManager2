@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.details.newconsult']}" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+<s:decorate id="caseBody" template="/layout/casebody.xhtml">
+	<a:form id="formexam" styleClass="form1">
+
+	<div class="form-content">
+    <table width="100%" cellspacing="0" cellpadding="0">
+    <tr><td colspan="2">
+
+    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
+    	<ui:param name="labelstyle" value="width:200px;" />
+    	<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="true" /> 
+    	<ui:param name="datefield" value="#{medicalExamination.date}" /> 
+    	<ui:param name="edtid" value="medexamdate" />
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:param name="labelstyle" value="width:200px;" />
+    	<ui:define name="label">#{messages['MedicalExaminationBR.nextAppointment']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{medicalExamination.nextAppointment}" /> 
+    	<ui:param name="edtid" value="nextexam" />
+    </s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml" rendered="#{!medicalExaminationBRHome.isFirstExam(medicalExaminationHome.id)}">
+		<ui:param name="labelstyle" value="width:200px;" />
+		<ui:define name="label">#{messages['pt_BR.ClinicalEvolution']}:</ui:define>
+		<h:selectOneMenu value="#{medicalExamination.clinicalEvolution}" required="true">
+			<s:selectItems var="s" value="#{globalLists_br.clinicalEvolutions}" label="#{messages[s.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate id="templatecbsuptreatment" template="/layout/edit.xhtml">
+		<ui:param name="labelstyle" value="width:200px;" />
+		<ui:define name="label">#{messages['pt_BR.supervisedTreatment']}:</ui:define>
+		<h:selectOneMenu id="cbsuptreatment" forceId="true" value="#{medicalExamination.supervisedTreatment}" required="true">
+			
+			<s:selectItems var="s" value="#{globalLists.yesNoTypeList}" label="#{messages[s.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+	<div id="div_supunit">
+	<s:decorate id="templatesupervisionunit" template="/layout/edit.xhtml">
+		<ui:param name="labelstyle" value="width:200px;" />
+		<ui:define name="label">#{messages['pt_BR.supervisionUnit']}:</ui:define>
+		<h:inputText id="supervisionunit" value="#{medicalExamination.supervisionUnitName}" style="width:300px;text-transform:uppercase;" maxlength="100" />
+	</s:decorate>
+	</div>
+<script type="text/javascript">
+	document.getElementById("caseBody:formexam:templatesupervisionunit:supervisionunit").value='#{tbcase.supervisionUnitName}';
+	if('#{tbcase.getSupervisionUnitName()}' != '')
+		document.getElementById("caseBody:formexam:templatecbsuptreatment:cbsuptreatment")[1].selected = true;
+</script>
+<rich:jQuery selector="#cbsuptreatment" query="change(function(){showSupUnit(this); })" />
+<rich:jQuery selector="#cbsuptreatment" timing="onload" query="each(function(){ showSupUnit(this,true); })" />
+
+	</td></tr>
+	<tr><td>
+    	<s:decorate template="/layout/edit.xhtml" >
+    		<ui:param name="labelstyle" value="width:200px;" />
+    		<ui:define name="label">#{messages['MedicalExamination.weight']}: <s:span style="color:red;">*</s:span></ui:define>
+    		<div id="edtweight">
+    		<h:inputText value="#{medicalExamination.weight}" converter="localeDoubleConverter" 
+    			onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');" 
+    			onkeyup="updateBMI(this, event);"
+    			style="width:80px;" >
+    			<f:validateDoubleRange maximum="500" minimum="1"/>
+    		</h:inputText>#{messages['MedicalExamination.weight.unit']}
+    		</div>
+    	</s:decorate>
+
+		</td><td>
+    
+    	<s:decorate template="/layout/edit.xhtml" >
+    		<ui:param name="labelstyle" value="width:200px;" />
+    		<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
+    		<span id="edtheight">
+    		<h:inputText value="#{medicalExamination.height}" style="width:80px;"
+    			onkeypress="return numbersOnly(this,event);" onkeyup="updateBMI(this, event);"/>
+    		#{messages['MedicalExamination.height.unit']}
+    		</span>
+    	</s:decorate>
+
+
+	</td></tr>
+	<tr><td colspan="2">
+		<s:decorate template="/layout/display.xhtml">
+				<ui:param name="labelstyle" value="width:200px;" />
+				<ui:define name="label">#{messages['MedicalExamination.BMI']}:</ui:define>
+				<div id="divBMI">-</div>
+		</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:param name="labelstyle" value="width:200px;" />
+		<ui:define name="label">#{messages['MedicalExamination.surgicalProcedure']}:</ui:define>
+		<h:selectOneMenu id="cbsurgproc" value="#{medicalExamination.surgicalProcedure}">
+			<s:selectItems var="s" value="#{globalLists.yesNoTypeList}" label="#{messages[s.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+	<div id="div_surgproc">
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:param name="labelstyle" value="width:200px;" />
+		<ui:define name="label">#{messages['MedicalExamination.surgicalProcedureDesc']}:</ui:define>
+		<h:inputText value="#{medicalExamination.surgicalProcedureDesc}" style="width:300px;text-transform:uppercase;" maxlength="100"/>
+	</s:decorate>
+	</div>
+<rich:jQuery selector="#cbsurgproc" query="change(function(){showSurgProc(this); })" />
+<rich:jQuery selector="#cbsurgproc" timing="onload" query="each(function(){ showSurgProc(this,true); })" />
+
+   	<s:fragment rendered="#{caseHome.managed}">
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:param name="labelstyle" value="width:400px;" />
+    		<ui:define name="label">#{messages['TbCase.notifAddressChanged']}:</ui:define>
+    		<h:selectOneMenu id="addrChanged" value="#{tbcase.notifAddressChanged}" >
+    			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
+    			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
+    		</h:selectOneMenu>
+    	</s:decorate>
+<rich:jQuery selector="#addrChanged" query="change(function(){ showCurrAddress(this); })" />
+<rich:jQuery selector="#addrChanged" timing="onload" query="each(function(){ if (this.selectedIndex==0) jQuery('#curraddr').hide(); })" />
+
+    	<div id="curraddr" style="clear:both;">
+    	<div class="paragraph">#{messages['cases.details.addresscurr']}</div>
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['Address.address']}:</ui:define>
+    		<h:inputText value="#{tbcase.currentAddress.address}" style="width:300px;margin-bottom:2px;" maxlength="100"/>
+    		#{messages['pt_BR.addressNumber']}: <h:inputText value="#{tbcase.currAddressNumber}" style="width:80px;text-transform:uppercase;" maxlength="20"  />
+    	</s:decorate>
+   
+	   	<s:decorate template="/layout/edit.xhtml"> 	
+    		<ui:define name="label">#{messages['Address.complement']}</ui:define>
+    		<h:inputText value="#{tbcase.currentAddress.complement}" style="width:300px" maxlength="100"/>
+    	</s:decorate>
+
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['Address.district']}</ui:define>
+    		<h:inputText value="#{tbcase.currDistrict}" style="width:150px;text-transform:uppercase;" maxlength="100"/>
+    	</s:decorate>
+
+    	<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['Address.zipCode']}</ui:define>
+    		<h:inputText value="#{tbcase.currentAddress.zipCode}" maxlength="20" />
+    	</s:decorate>
+    	
+    	<table width="100%" style="border-collapse: collapse;">
+		<tr><td>
+			<s:decorate template="/layout/auselection.xhtml">
+				<ui:param name="auselection" value="#{caseDataBRHome.auselection}" />
+			</s:decorate>
+    	</td></tr>
+    	</table>
+    	<hr/>
+    	</div>
+    </s:fragment>
+    
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:param name="labelstyle" value="width:200px;" />
+    	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
+    	<h:inputText value="#{medicalExamination.responsible}"
+    		required="true" 
+    		style=" width : 340px;text-transform:uppercase;" 
+    		maxlength="100"/>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:param name="labelstyle" value="width:200px;" />
+    	<ui:define name="label">#{messages['MedicalExamination.positionResponsible']}:</ui:define>
+    	<h:inputText value="#{medicalExamination.positionResponsible}"
+    		required="true" 
+    		style=" width : 340px;text-transform:uppercase;" 
+    		maxlength="100"/>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:param name="labelstyle" value="width:200px;" />
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputTextarea value="#{medicalExamination.comments}" style=" width : 500px;height:100px;" />
+    </s:decorate>
+	
+	</td></tr>
+	</table>
+	
+	</div>
+	<div class="form-footer">
+		<div style="float:right;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+            <a:commandLink action="#{medicalExaminationBRHome.persist}" styleClass="button" reRender="formexam" 
+            	onclick="if (!disableButton(this)) return false;" >
+            	<span>#{messages['form.save']}</span>
+            </a:commandLink>
+            <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+            	<f:param name="id" value="#{caseHome.id}"/>
+            	<span>#{messages['form.cancel']}</span>
+            </s:link>
+	</div>
+    
+	</a:form>
+</s:decorate>
+
+<p/>
+
+<rich:jQuery selector="#chkaddr" query="click(function(){checkClick(this.checked, '#pacaddress');})" />
+<rich:jQuery selector="#chkaddr:not(:checked)" query="each(function(){jQuery('#pacaddress').hide();})" />
+
+<rich:jQuery selector="#cbpresc" query="change(function(){checkClick(this.selectedIndex==2, '#edtreason');})" />
+<rich:jQuery selector="#cbpresc[selectedIndex!=2]" query="each(function(){jQuery('#edtreason').hide();})" />
+
+<rich:jQuery selector="#edtheight input" timing="onload" query="each(function() {updateBMI(this);})" />
+
+<script type="text/javascript">
+<!--
+window.decSeparator = '#{timezones.decimalSeparator}';
+function showSupUnit(cb, immediate) {
+	  if (cb.selectedIndex == 1)
+		   jQuery('#div_supunit').show(immediate?0:500)
+	  else jQuery('#div_supunit').hide(immediate?0:500);
+}
+
+function checkClick(ashow, divname) {
+if (ashow)
+	 jQuery(divname).show(500);
+else jQuery(divname).hide(500);
+}
+
+function showSurgProc(cb, immediate) {
+	  if (cb.selectedIndex == 1)
+		   jQuery('#div_surgproc').show(immediate?0:500)
+	  else jQuery('#div_surgproc').hide(immediate?0:500);
+}
+function showCurrAddress(cb) {
+	  if (cb.selectedIndex == 0)
+	  	   jQuery('#curraddr').hide(500);
+	  else jQuery('#curraddr').show(500);
+	}
+-->
+</script>
+
+</ui:define>
+
+</ui:composition>

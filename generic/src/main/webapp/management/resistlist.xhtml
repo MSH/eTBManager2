@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:p="http://jboss.com/products/seam/pdf"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['manag.ind.resist']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="left" value="0" />
+
+<ui:param name="indicatorHome" value="#{resistancePatternIndicator}" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
+	<s:link value="#{messages['manag.ind.resist']}" view="/management/resist.html" propagation="none" />
+</ui:define>
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:panelGroup id="pnlresistance">
+
+<h:form>
+<a:commandLink 
+	reRender="resistpnl"
+	action="#{conversation.begin}" 
+	onclick="if (!disableButton(this)) return false;"
+	oncomplete="enableButton();showMedSelectionDlg();return false;" styleClass="button">
+	<span>#{messages['form.new']}</span>
+</a:commandLink>
+	<h:outputText value="#{messages['form.norecordfound']}" styleClass="warn" rendered="#{empty resistancePatterns.resultList}"/>
+	<h:dataTable value="#{resistancePatterns.resultList}" var="p" width="500px" styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty resistancePatterns.resultList}">
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.ind.resist']}
+			</f:facet>
+			#{p.name}
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				#{messages['form.action']}
+			</f:facet>
+			<a:commandLink value="#{messages['form.edit']}" oncomplete="showMedSelectionDlg();" reRender="resistpnl" action="#{conversation.begin}">
+				<a:actionparam name="id" assignTo="#{resistancePatternHome.id}" value="#{p.id}" converter="javax.faces.Integer" />
+			</a:commandLink>
+			<br/>
+			<a:commandLink action="#{resistancePatternHome.remove}" value="#{messages['form.remove']}" reRender="pnlresistance">
+				<a:actionparam name="id" assignTo="#{resistancePatternHome.id}" value="#{p.id}" converter="javax.faces.Integer" />
+			</a:commandLink>
+		</h:column>
+	</h:dataTable>
+	<a:jsFunction name="refreshResistTable" reRender="pnlresistance" ajaxSingle="true" />
+</h:form>
+</h:panelGroup>
+
+
+<script type="text/javascript">
+function showMedSelectionDlg() {
+	updateRows();
+	Richfaces.showModalPanel('resistdlg');
+}
+
+function hideMedSelectionDlg() {
+	Richfaces.hideModalPanel('resistdlg');
+}
+function updateRows() {
+jQuery("#resistdiv tr").removeClass("activerow");
+jQuery("#resistdiv tr input[type='text']").hide();
+jQuery("#resistdiv tr:has(:checked) input[type='text']").show();
+jQuery("#resistdiv tr:has(:checked)").addClass("activerow");
+}
+</script>
+
+<rich:modalPanel id="resistdlg"  
+            height="400" width="450" zindex="2000">
+	<f:facet name="header">
+		<h:outputText value="#{messages['form.selmeds']}" />
+	</f:facet>
+	<h:panelGroup id="resistpnl">
+	<a:region renderRegionOnly="false">
+	<a:form id="dlg" >
+
+	#{messages['manag.ind.resist.medsel']}:
+	<div id="resistdiv" style="overflow: auto; width: 425px; height: 270px;border: 1px gray solid; padding:0px; margin: 0px">	
+	<h:dataTable value="#{resistancePatternHome.selectableSubstances}" var="it" width="100%" styleClass="table1" columnClasses="colc,coll,coll">
+		<h:column>
+			<f:facet name="header">
+				<h:selectBooleanCheckbox id="todos" onclick="checkClick(this);"/>				
+			</f:facet>
+			<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Medicine.abbrevName']}" styleClass="collh"/>
+			</f:facet>
+			#{it.item.abbrevName}
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Medicine']}" styleClass="collh"/>
+			</f:facet>
+			#{it.item.name}
+		</h:column>
+	</h:dataTable>
+
+	</div>
+	<table width="100%">
+	<tr>
+		<td>
+			<ui:include src="/layout/waitstatus.xhtml" />
+		</td>
+		<td align="right">
+			<a:commandLink 
+				action="#{resistancePatternHome.saveAndEnd}"
+				styleClass="button" 
+				reRender="pnlresistance"
+				onclick="if (!disableButton(this)) return false;"
+				oncomplete="enableButton();hideMedSelectionDlg();refreshResistTable();">
+				<span>#{messages['form.ok']}</span>
+			</a:commandLink>
+			<a:commandLink 
+				action="#{conversation.end}"
+				oncomplete="hideMedSelectionDlg();return false;" 
+				styleClass="button-alt" >
+				<span>#{messages['form.cancel']}</span>
+				</a:commandLink>
+		</td>
+	</tr></table>
+	<rich:jQuery selector="#resistdlgs" query="click(function(){this.disabled=true;})" />
+	</a:form>
+	</a:region>
+	</h:panelGroup>
+</rich:modalPanel>
+
+</ui:define>
+
+</ui:composition>  

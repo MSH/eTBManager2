@@ -1,0 +1,24 @@
+<!DOCTYPE server>
+<server>
+  <mbean code="org.jboss.mail.MailService"
+      name="jboss:service=mail/etbMail">
+      <attribute name="JNDIName">java:/mail/etbMail</attribute>
+    <!--
+    Use these if your outgoing server requires authentication
+-->
+    <attribute name="User">ricardo@rmemoria.com.br</attribute>
+    <attribute name="Password">rm01$pj</attribute>
+   
+    <attribute name="Configuration">
+        <configuration>
+            <property name="mail.transport.protocol" value="smtp"/>
+            <property name="mail.smtp.host" value="mail.rmemoria.com.br"/>
+            <property name="mail.from" value="suporte@rmemoria.com.br"/>
+            <property name="mail.debug" value="false"/>
+            <property name="mail.smtp.auth" value="true"/>
+            <property name="mail.smtp.user" value="ricardo@rmemoria.com.br"/>
+            <property name="mail.smtp.password" value="senha"/>
+        </configuration>
+    </attribute>
+  </mbean>
+</server>

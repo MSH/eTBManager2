@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.examdst']}" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="examHome" value="#{examDSTHome}" />
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<s:decorate template="/layout/casebody.xhtml">
+	<ui:param name="pagewidth" value="650px" />
+	<a:form id="formexam" styleClass="form1">
+    
+    <div class="form-content">
+	<s:decorate template="/custom/ph/cases/edtsample.xhtml">
+	</s:decorate>
+
+	<div class="paragraph">#{messages['cases.exams.results']}</div>
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="future" value="true" /> 
+    	<ui:param name="datefield" value="#{examDST.dateRelease}" /> 
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
+    	<h:selectOneMenu value="#{examDST.method}" required="false">
+    		<s:selectItems value="#{fieldsQuery.DSTMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
+    		<s:convertEntity />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputTextarea value="#{examDST.comments}" style="width:450px;height:100px;"/>
+    </s:decorate>
+
+	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
+
+	<h:dataTable value="#{examDSTHome.items}" var="it" style="clear:left;" styleClass="table1" width="100%" columnClasses="coll,coll" rowClasses="lin1,lin2">
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Medicine']}" styleClass="collh"/>
+			</f:facet>
+			#{it.substance.name} (#{it.substance.abbrevName})
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['cases.details.result']}" />
+			</f:facet>
+			<span id="divicon" style="float:right">
+			<h:selectOneMenu id="res" value="#{it.result}" required="true" onchange="dstResultChange(this);">
+    			<s:selectItems value="#{dstResults}" var="ss" noSelectionLabel="-" label="#{messages[ss.key]}" />
+    			<s:convertEnum />
+			</h:selectOneMenu>
+			</span>
+			<h:message for="res" styleClass="error" />
+		</h:column>
+	</h:dataTable>
+
+<script type="text/javascript">
+<!--
+function dstResultChange(cb) {
+	var val=cb.options[cb.selectedIndex].value;
+	var elem = jQuery(cb).parent('#divicon');
+	var s = '';
+	if (val == 'RESISTANT')
+		s = 'dst-resistant';
+	else
+	if (val == 'SUSCEPTIBLE')
+		s = 'dst-susceptible';
+	else
+	if (val == 'CONTAMINATED')
+		s = 'dst-contaminated';
+	elem.removeClass('dst-resistant dst-resistant dst-contaminated').addClass(s);	
+}
+-->
+</script>
+<rich:jQuery selector="#divicon select" query="each(function(){dstResultChange(this);})" />
+
+	</div>
+	
+	<div class="form-footer">
+ 		<div style="float:right;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+        <a:commandLink action="#{examDSTHome.persist}" styleClass="button" reRender="formexam" 
+            	oncomplete="this.disabled=false;"
+            	onclick="this.disabled=true;" >
+            	<span>#{messages['form.save']}</span>
+        </a:commandLink>
+        <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true">
+        	<span>#{messages['form.cancel']}</span>
+        </a:commandLink>
+    </div>
+    
+	</a:form>
+</s:decorate>
+
+<p/>
+
+</ui:define>
+
+</ui:composition>  

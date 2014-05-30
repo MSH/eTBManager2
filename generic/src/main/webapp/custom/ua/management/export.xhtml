@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['manag.export']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="indicator" value="#{caseExportUAHome}" />
+<ui:param name="useclassification" value="0" />
+<ui:param name="waitdlg" value="0" />
+<ui:param name="left" value="0" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
+</ui:define>
+
+
+<ui:define name="content">
+<p/>
+<h:form id="main" >
+<table width="100%"><tr><td>
+<s:decorate template="/layout/roundrect.xhtml" >
+	<ui:define name="header">
+		<b>#{messages['global.filters']}</b>
+	</ui:define>
+	<ui:param name="showfooter" value="0" />
+	<s:decorate template="/management/filters.xhtml">
+		<ui:param name="hideupdtbar" value="true" />
+	</s:decorate>
+</s:decorate>
+<p/>
+<s:decorate template="/layout/roundrect.xhtml" >
+	<ui:define name="header">
+		<b>#{messages['manag.export.format']}</b>
+	</ui:define>
+	<ui:param name="showfooter" value="0" />
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['DestinationFormat']}:</ui:define>
+		#{messages['DestinationFormat.EXCEL']}
+	</s:decorate>
+	
+	<s:decorate template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['ExportContent']}:</ui:define>
+		<h:selectOneRadio value="#{indicator.exportContent}" layout="pageDirection" >
+			<s:selectItems value="#{indicator.contents}" var="it" label="#{messages[it.key]}" />
+		</h:selectOneRadio>
+	</s:decorate>
+	
+	<div class="button-bar">
+	<h:commandLink styleClass="button" action="#{indicator.download}">
+	<span>#{messages['global.export']}</span>
+	</h:commandLink>
+	</div>
+	
+</s:decorate>
+
+</td></tr></table>
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

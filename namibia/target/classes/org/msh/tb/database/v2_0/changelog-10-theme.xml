@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<!-- Update the new theme location -->
+	<changeSet id="10.1" author="rmemoria">
+	    <update tableName="uitheme">
+	        <column name="path" value="green3" />
+	        <where>id=1</where>
+	    </update>
+	    <update tableName="uitheme">
+	        <column name="path" value="blue2" />
+	        <where>id=2</where>
+	    </update>
+	    	    <update tableName="uitheme">
+	        <column name="path" value="gray2" />
+	        <where>id=3</where>
+	    </update>
+	 </changeSet>
+	 
+	 <!-- Update the new theme location -->
+	<changeSet id="10.2" author="msantos">
+	    <update tableName="uitheme">
+	        <column name="path" value="green4" />
+	        <where>id=1</where>
+	    </update>
+	    <update tableName="uitheme">
+	        <column name="path" value="blue3" />
+	        <where>id=2</where>
+	    </update>
+	    	    <update tableName="uitheme">
+	        <column name="path" value="gray3" />
+	        <where>id=3</where>
+	    </update>
+	 </changeSet>
+	
+</databaseChangeLog>
+
+

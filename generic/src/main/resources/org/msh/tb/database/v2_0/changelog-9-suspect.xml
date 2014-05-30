@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<!-- Add configuration fields in workspace table about how validation will be handled by case classification -->
+	<changeSet id="9.1" author="rmemoria">
+	    <addColumn tableName="tbcase">
+	        <column name="suspectRegistrationCode" type="varchar(50)" />
+	        <column name="suspectClassification" type="int" />
+	    </addColumn>
+
+	    <sql>update tbcase set suspectClassification=classification where registrationDate &lt;= diagnosisDate</sql>
+	    
+	</changeSet>
+
+	<!-- Create the new tables to register case issues -->
+	<changeSet id="9.2" author="rmemoria">
+	    <createTable tableName="issue">
+	        <column name="id" autoIncrement="true" type="int" >
+	            <constraints primaryKey="true" nullable="false"/>
+	        </column>
+	        <column name="case_id" type="int" />
+	        <column name="closed" type="boolean" />
+	        <column name="user_id" type="int" >
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="creationDate" type="datetime" >
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="answerDate" type="datetime" />
+	        <column name="title" type="varchar(200)" />
+	        <column name="description" type="longtext" />
+		</createTable>
+
+		<createTable tableName="issuefollowup">
+	        <column name="id" autoIncrement="true" type="int" >
+	            <constraints primaryKey="true" nullable="false"/>
+	        </column>
+		    <column name="issue_id" type="int">
+		        <constraints nullable="false"/>
+		    </column>
+		    <column name="text" type="longtext"/>
+		    <column name="user_id" type="int">
+		        <constraints nullable="false"/>
+		    </column>
+		    <column name="followupDate" type="datetime">
+		        <constraints nullable="false"/>
+		    </column>
+		</createTable>
+
+		<addForeignKeyConstraint constraintName="fkissuefollowup_issue" 
+		    referencedTableName="issue" referencedColumnNames="id"
+		    baseTableName="issuefollowup" baseColumnNames="issue_id" />
+
+		<addForeignKeyConstraint constraintName="fkissue_case" 
+		    referencedTableName="tbcase" referencedColumnNames="id" 
+		    baseTableName="issue" baseColumnNames="case_id" />
+		<addForeignKeyConstraint constraintName="fkissue_user" 
+		    referencedTableName="sys_user" referencedColumnNames="id" 
+		    baseTableName="issue" baseColumnNames="user_id" />
+		<addForeignKeyConstraint constraintName="fkissuefollowup_user" 
+		    referencedTableName="sys_user" referencedColumnNames="id" 
+		    baseTableName="issuefollowup" baseColumnNames="user_id" />
+	</changeSet>
+	
+</databaseChangeLog>
+
+
