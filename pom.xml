@@ -6,13 +6,30 @@
 	<version>1.0.0</version>
 	<packaging>pom</packaging>
 	<name>eTB Manager</name>
-	<description>eTB Manager Project Suite</description>
+	<description>eTB Manager Web Suite</description>
 
 	<modules>
 		<module>generic</module>
 		<module>namibia</module>
 	</modules>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<developers>
+		<developer>
+			<id>rmemoria</id>
+			<name>Ricardo Memória</name>
+			<email>rmemoria@msh.org</email>
+			<roles>
+				<role>Architect</role>
+				<role>Developer</role>
+			</roles>
+			<organization>MSH</organization>
+			<timezone>-3</timezone>
+		</developer>
+	</developers>
 
 	<profiles>
 		<profile>
@@ -272,6 +289,7 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
 
@@ -305,4 +323,21 @@
 		</plugins>
 
 	</build>
+	<url>https://www.etbmanager.org</url>
+	<organization>
+		<name>MSH</name>
+		<url>www.msh.org</url>
+	</organization>
+	<scm>
+		<developerConnection>Ricardo Memoria</developerConnection>
+		<url>https://www.etbmanager.org/svn/etbmanager</url>
+	</scm>
+	<issueManagement>
+		<system>Redmine</system>
+		<url>http://dev.msh.org/redmine</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>http://dev.etbmanager.org/jenkins</url>
+	</ciManagement>
 </project>
