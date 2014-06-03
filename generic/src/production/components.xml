@@ -15,22 +15,23 @@
             xmlns:web="http://jboss.com/products/seam/web"
             xmlns:document="http://jboss.com/products/seam/document"
             xsi:schemaLocation=
-                "http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.1.xsd 
-                 http://jboss.com/products/seam/async http://jboss.com/products/seam/async-2.1.xsd
-                 http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.1.xsd 
-                 http://jboss.com/products/seam/bpm http://jboss.com/products/seam/bpm-2.1.xsd
-                 http://jboss.com/products/seam/security http://jboss.com/products/seam/security-2.1.xsd
-                 http://jboss.com/products/seam/drools http://jboss.com/products/seam/drools-2.1.xsd
-                 http://jboss.com/products/seam/mail http://jboss.com/products/seam/mail-2.1.xsd
-                 http://jboss.com/products/seam/framework http://jboss.com/products/seam/framework-2.1.xsd
-                 http://jboss.com/products/seam/pdf http://jboss.com/products/seam/pdf-2.1.xsd   
-                 http://jboss.com/products/seam/pdf http://jboss.com/products/seam/document-2.1.xsd
-                 http://jboss.com/products/seam/international http://jboss.com/products/seam/international-2.1.xsd
-                 http://jboss.com/products/seam/excel http://jboss.com/products/seam/excel-2.1.xsd
-                 http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.1.xsd
-                 http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.1.xsd">
+                "http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.2.xsd 
+                 http://jboss.com/products/seam/async http://jboss.com/products/seam/async-2.2.xsd
+                 http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.2.xsd 
+                 http://jboss.com/products/seam/bpm http://jboss.com/products/seam/bpm-2.2.xsd
+                 http://jboss.com/products/seam/security http://jboss.com/products/seam/security-2.2.xsd
+                 http://jboss.com/products/seam/drools http://jboss.com/products/seam/drools-2.2.xsd
+                 http://jboss.com/products/seam/mail http://jboss.com/products/seam/mail-2.2.xsd
+                 http://jboss.com/products/seam/framework http://jboss.com/products/seam/framework-2.2.xsd
+                 http://jboss.com/products/seam/pdf http://jboss.com/products/seam/pdf-2.2.xsd
+                 http://jboss.com/products/seam/pdf http://jboss.com/products/seam/document-2.2.xsd
+                 http://jboss.com/products/seam/international http://jboss.com/products/seam/international-2.2.xsd
+                 http://jboss.com/products/seam/excel http://jboss.com/products/seam/excel-2.2.xsd
+                 http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.2.xsd
+                 http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.2.xsd">
 
    <core:init debug="false" jndi-pattern="@jndiPattern@"/>
+
    <web:rewrite-filter view-mapping="*.seam"/>
      
    <core:manager concurrent-request-timeout="500" 
@@ -72,15 +73,8 @@
    <event type="org.jboss.seam.security.loginSuccessful">
        <action execute="#{redirect.returnToCapturedView}"/>
    </event>
-  <!-- 
-	<event type="org.jboss.seam.beginConversation">
-		<action	execute="#{beginConversationEvent.switchFlushModeManual}" />
-	</event>
- -->
 
 	<mail:mail-session session-jndi-name="java:/mail/etbMail" />
-
-
 
 	<framework:entity-query name="allusers" ejbql="from User u" order="u.name"/>
 
@@ -91,14 +85,6 @@
 
 	<international:locale-selector cookie-enabled="true"/>
 
-   <!-- For use with jBPM pageflow or process management -->
-   <!--  
-   <bpm:jbpm>
-      <bpm:process-definitions></bpm:process-definitions>
-      <bpm:pageflow-definitions></bpm:pageflow-definitions>
-   </bpm:jbpm>
-   -->
-   
    <async:quartz-dispatcher/>
    
 </components>
