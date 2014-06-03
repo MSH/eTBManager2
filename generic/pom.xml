@@ -104,7 +104,24 @@
 		       		<doctitle>eTB Manager version ${project.version}</doctitle>
 		        </configuration>
       		</plugin>
-			
+
+			<!-- JBOSS automatic deploy -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jboss-maven-plugin</artifactId>
+				<version>1.5.0</version>
+				<configuration>
+				    <hostName>localhost</hostName>
+				    <port>8080</port>
+				    <fileNames>
+				        <fileName>${basedir}/target/etbmanager.war</fileName>
+				    </fileNames>
+					<jbossHome>${env.JBOSS_HOME}</jbossHome>
+					<serverName>default</serverName>
+					<fileName>target/etbmanager.war</fileName>
+				</configuration>
+			</plugin>
+						
 		</plugins>
 	</build>
 	
