@@ -94,6 +94,95 @@
 					<packagingExcludes>WEB-INF/deploy/**</packagingExcludes>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-javadoc-plugin</artifactId>
+        		<version>2.9</version>
+		        <configuration>
+		        	<show>private</show>
+		       		<doctitle>eTB Manager version ${project.version}</doctitle>
+		        </configuration>
+      		</plugin>
+			
 		</plugins>
 	</build>
+	
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-project-info-reports-plugin</artifactId>
+		        <version>2.6</version>
+			</plugin>
+
+			<!-- Generate reports about testing results -->
+ 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+	 	       	<artifactId>maven-surefire-plugin</artifactId>
+	 	    	<version>2.13</version>
+      		</plugin>
+
+			<!-- Generate javadoc for the project -->
+			<plugin>
+		        <artifactId>maven-javadoc-plugin</artifactId>
+        		<version>2.9</version>
+		        <configuration>
+		        	<show>private</show>
+		       		<doctitle>eTB Manager version ${project.version}</doctitle>
+		        </configuration>
+		    </plugin>
+
+			<!-- Required by PMD and CPD -->
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.3</version>
+            </plugin>
+
+			<!-- Generate "PMD" and "CPD" reports -->
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>2.7.1</version>
+                <configuration>
+                	<linkXref>true</linkXref>
+                	<sourceEncoding>utf-8</sourceEncoding>
+                	<minimumTokens>100</minimumTokens>
+                	<targetJdk>1.5</targetJdk>
+                </configuration>
+            </plugin>
+
+			<!-- Check localization standards compliance -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+		        <artifactId>l10n-maven-plugin</artifactId>
+		        <version>1.0-alpha-2</version>
+		        <configuration>
+		    	    <locales>
+		   	         	<locale>en</locale>
+		   	         	<locale>pt_BR</locale>
+	    	       	 	<locale>ru</locale>
+		            	<locale>in</locale>
+		        	    <locale>vi</locale>
+          			</locales>
+        		</configuration>
+			</plugin>
+
+			<!-- Check for minimum documentation standards -->
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-docck-plugin</artifactId>
+        		<version>1.0</version>
+      		</plugin>
+
+			<!-- JDEpendent plugin - generate dependencies report -->
+			<plugin>
+        		<groupId>org.codehaus.mojo</groupId>
+        		<artifactId>jdepend-maven-plugin</artifactId>
+      		</plugin>
+		</plugins>
+ 
+	</reporting>
+	
 </project>
