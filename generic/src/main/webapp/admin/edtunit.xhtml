@@ -187,7 +187,10 @@
             	onclick="if (!disableButton(this)) return false;" >
             	<span>#{messages['form.save']}</span>
             </a:commandLink>  
-            <s:link view="/admin/unitdata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+            <s:link view="/admin/unitdata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)" rendered="#{tbunitHome.managed}">
+            	  <span>#{messages['form.cancel']}</span>
+            </s:link>
+            <s:link view="/admin/units.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)" rendered="#{not tbunitHome.managed}">
             	  <span>#{messages['form.cancel']}</span>
             </s:link>
     </div>

@@ -10,5 +10,8 @@
 		<rule if-outcome="persisted">
 			<redirect view-id="/admin/units.xhtml" />
 		</rule>
+		<rule if-outcome="removed">
+		    <redirect view-id="/admin/units.xhtml" />
+		</rule>
 	</navigation>
 </page>

@@ -38,7 +38,7 @@
     		<i class="icon-arrow-right" /> #{messages['admin.tbunits.userstrans']}
     	</a:commandLink>
 		<a:commandLink  
-			onclick="if (confirm('#{messages['form.confirm_remove']}')) { deleteRecord(#{r.id}) } return false;"  rendered="#{s:hasRole('TBUNITS_EDT')}">
+			onclick="if (confirm('#{messages['form.confirm_remove']}')) { deleteRecord(#{tbunitHome.id}) } return false;"  rendered="#{s:hasRole('TBUNITS_EDT')}">
     		<i class="icon-remove" />#{messages['form.remove']}
 		</a:commandLink>
 
