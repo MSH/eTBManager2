@@ -31,5 +31,34 @@
 	        <column name="messageKey" value="admin.tbunits.casestrans" />
    	    </insert>
 	</changeSet>
-	
+
+	<!-- Add the extra fields to store the shipping address of the TB unit -->	
+	<changeSet id="15.3" author="rmemoria">
+	    <addColumn tableName="tbunit">
+	        <column name="shipZipCode" type="varchar(100)" />
+	        <column name="ship_adminunit_id" type="int" />
+	    </addColumn>
+	    
+	    <addForeignKeyConstraint constraintName="FK_unit_shipau" 
+	        referencedTableName="administrativeunit" referencedColumnNames="id"
+	        baseColumnNames="ship_adminunit_id" baseTableName="tbunit"
+	        onDelete="SET NULL" onUpdate="CASCADE" />
+	</changeSet>
+
+	<changeSet id="15.4" author="rmemoria">
+	    <sql>update tbunit
+  set shipaddress = (select shipaddress from medicineorder where unit_from_id=tbunit.id and
+     orderDate = (select max(orderdate) from medicineorder where unit_from_id=tbunit.id) limit 1),
+  shipaddresscont = (select shipaddresscont from medicineorder where unit_from_id=tbunit.id and
+     orderDate = (select max(orderdate) from medicineorder where unit_from_id=tbunit.id) limit 1),
+  shipzipcode = (select shipzipcode from medicineorder where unit_from_id=tbunit.id and
+     orderDate = (select max(orderdate) from medicineorder where unit_from_id=tbunit.id) limit 1),
+  ship_adminunit_id = (select ship_adminunit_id from medicineorder where unit_from_id=tbunit.id and
+     orderDate = (select max(orderdate) from medicineorder where unit_from_id=tbunit.id) limit 1),
+  shipcontactname = (select shipcontactname from medicineorder where unit_from_id=tbunit.id and
+     orderDate = (select max(orderdate) from medicineorder where unit_from_id=tbunit.id) limit 1),
+  shipcontactphone = (select shipcontactphone from medicineorder where unit_from_id=tbunit.id and
+     orderDate = (select max(orderdate) from medicineorder where unit_from_id=tbunit.id) limit 1)
+where firstline_supplier_id is not null or secondline_supplier_id is not null</sql>
+	</changeSet>
 </databaseChangeLog>

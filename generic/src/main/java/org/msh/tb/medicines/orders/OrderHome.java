@@ -15,6 +15,7 @@ import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Movement;
 import org.msh.tb.entities.Order;
@@ -121,6 +122,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 		if (!ret.equals("persisted"))
 			return ret;
 
+		updateTbunitAddress();
 		saveComment();
 		
 		facesMessages.clear();
@@ -132,6 +134,23 @@ public class OrderHome extends EntityHomeEx<Order>{
 		return ret;
 	}
 
+
+	
+	/**
+	 * Update the ship address of the TB unit
+	 */
+	protected void updateTbunitAddress() {
+		Order order = getInstance();
+		Tbunit unit = order.getUnitFrom();
+		
+		unit.setShipAddress(order.getShipAddress());
+		unit.setShipAddressCont(order.getShipAddressCont());
+		unit.setShipAdminUnit(order.getShipAdminUnit());
+		unit.setShipZipCode(order.getShipZipCode());
+		unit.setShipContactName(order.getShipContactName());
+		unit.setShipContactPhone(order.getShipContactPhone());
+		App.getEntityManager().persist(unit);
+	}
 
 	/**
 	 * Update list of medicines selected
@@ -179,7 +198,7 @@ public class OrderHome extends EntityHomeEx<Order>{
 	
 
 	/**
-	 * Cancela o pedido de medicamentos. Estorna o estoque após o cancelamento
+	 * Cancela o pedido de medicamentos. Estorna o estoque apï¿½s o cancelamento
 	 * @return
 	 */
 	@Transactional

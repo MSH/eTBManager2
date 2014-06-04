@@ -136,6 +136,14 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
      */
     @Column(length=200)
     private String shipContactPhone;
+
+    @Column(length=100)
+    private String shipZipCode;
+    
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="SHIP_ADMINUNIT_ID")
+    private AdministrativeUnit shipAdminUnit;
+    
     
     /**
      * Check if medicine management was already started for this TB Unit
@@ -522,6 +530,38 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 	 */
 	public void setLimitDateMedicineMovement(Date limitDateMedicineMovement) {
 		this.limitDateMedicineMovement = limitDateMedicineMovement;
+	}
+
+
+	/**
+	 * @return the shipZipCode
+	 */
+	public String getShipZipCode() {
+		return shipZipCode;
+	}
+
+
+	/**
+	 * @param shipZipCode the shipZipCode to set
+	 */
+	public void setShipZipCode(String shipZipCode) {
+		this.shipZipCode = shipZipCode;
+	}
+
+
+	/**
+	 * @return the shipAdminUnit
+	 */
+	public AdministrativeUnit getShipAdminUnit() {
+		return shipAdminUnit;
+	}
+
+
+	/**
+	 * @param shipAdminUnit the shipAdminUnit to set
+	 */
+	public void setShipAdminUnit(AdministrativeUnit shipAdminUnit) {
+		this.shipAdminUnit = shipAdminUnit;
 	}
 	
 }
