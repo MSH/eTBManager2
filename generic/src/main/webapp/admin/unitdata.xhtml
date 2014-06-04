@@ -42,12 +42,12 @@
     		<i class="icon-remove" />#{messages['form.remove']}
 		</a:commandLink>
 
-		</h:form>
-    </div>
-
 	<a:jsFunction name="deleteRecord" action="#{tbunitHome.remove}" reRender="pnlunits,messages">
 		<a:actionparam name="param1" assignTo="#{tbunitHome.id}" converter="javax.faces.Integer" />
 	</a:jsFunction>
+
+		</h:form>
+    </div>
 </ui:define>
 
 
