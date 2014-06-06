@@ -16,6 +16,12 @@ public interface ReportConstants extends Constants {
 	@Key("form.filters")
 	String filters();
 	
+	@Key("form.options")
+	String options();
+	
+	@Key("manag.reportgen.newreport")
+	String newReport();
+	
 	@Key("cases.details.noresultfound")
 	String noResultFound();
 	

@@ -8,6 +8,25 @@ public class CVariable implements IsSerializable {
 	private String name;
 	
 	/**
+	 * Constructor passing the variable fields
+	 * @param id
+	 * @param name
+	 */
+	public CVariable(String id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+	
+	/**
+	 * Default constructor
+	 */
+	public CVariable() {
+		super();
+	}
+	
+	
+	/**
 	 * @return the id
 	 */
 	public String getId() {

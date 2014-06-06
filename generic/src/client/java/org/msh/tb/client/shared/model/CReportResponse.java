@@ -11,7 +11,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author Ricardo Memoria
  *
  */
-public class CTable implements IsSerializable {
+public class CReportResponse implements IsSerializable {
 
 	/**
 	 * List of the top level columns

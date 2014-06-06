@@ -6,9 +6,10 @@ import java.util.HashMap;
 
 import org.msh.tb.client.shared.model.CItem;
 import org.msh.tb.client.shared.model.CPatientList;
-import org.msh.tb.client.shared.model.CReportData;
-import org.msh.tb.client.shared.model.CReportUI;
-import org.msh.tb.client.shared.model.CTable;
+import org.msh.tb.client.shared.model.CReport;
+import org.msh.tb.client.shared.model.CReportRequest;
+import org.msh.tb.client.shared.model.CInitializationData;
+import org.msh.tb.client.shared.model.CReportResponse;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -21,28 +22,40 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("../seam/resource/gwtRpc")
 public interface ReportService extends RemoteService {
-
-	/**
-	 * Initialize a report. If no report identifier is given,
-	 * a new report data will be sent.
-	 *  
-	 * @param repid
-	 * @return instance of {@link CReportData} containing data about the report
-	 */
-	CReportData initReport(Integer repid);
 	
 	/**
 	 * Initialize the report UI, return data to be displayed in the selection boxes
 	 * @return
 	 */
-	CReportUI initialize();
+	CInitializationData initialize();
 
+	/**
+	 * Load report detailed data, like filters and variables in use
+	 * @param id is the ID of the report
+	 * @return instance of {@link CReport} class containing all data
+	 */
+	CReport loadReport(Integer id);
+	
+	/**
+	 * Save a report. If the report ID is not specified, so a new report
+	 * is saved
+	 * @param report
+	 * @return the report ID
+	 */
+	Integer saveReport(CReport report);
+	
+	/**
+	 * Delete a report. Just the owner of a report can delete it
+	 * @param reportId is the report ID
+	 */
+	void deleteReport(Integer reportId);
+	
 	/**
 	 * Execute the report
 	 * @param reportData
 	 * @return
 	 */
-	CTable executeReport(CReportData reportData);
+	CReportResponse executeReport(CReportRequest reportData);
 
 
 	/**

@@ -9,15 +9,56 @@
 	
 	<ui:style>
 		.panel {
+			background-color:#f8f8f8;
+			border: 1px solid #f0f0f0;
+			border-radius: 4px;
+			padding:0 8px 8px 8px;
+			margin-bottom:8px;
 		}
 		.tableRegion {
 			max-width:990px;
 			overflow: auto;	
 		}
+		.reportTitle {
+			font-size:20px;
+			font-weight: normal;
+			display: inline;
+		}
+		.openReport {
+			padding: 4px 4px 4px 8px;
+			margin-right:8px;
+		}
+		.iconButton {
+			color: #909090;
+			border-radius:2px;
+			padding:4px 2px 2px 4px;
+		}
+		.iconButton:hover {
+			color: #5a5a5a;
+			background-color:#e0e0e0;
+		}
 	</ui:style>
 
-	<g:HTMLPanel ui:field="pnlContent" styleName="{style.panel}">
+	<g:HTMLPanel ui:field="pnlContent" >
 		<h1><ui:text from="{msg.title}" /></h1>
+	    <div class="{style.panel}">
+	    <table width="100%">
+	        <tr>
+	            <td>
+	    			<h2>
+	    			    <g:Anchor ui:field="lnkOpen" styleName="gwt-Button {style.openReport}"><i class="icon-chevron-down"></i></g:Anchor>
+	    			    <g:Label  styleName="{style.reportTitle}" ui:field="txtTitle" />
+	    			</h2>
+	            </td>
+	            <td align="right">
+			        <g:Anchor ui:field="lnkSave" styleName="{style.iconButton}" title="Save report"><i class="icon-save"></i></g:Anchor>
+			        <g:Anchor ui:field="lnkMenu" styleName="{style.iconButton}" title="{msg.options}"><i class="icon-gear"></i></g:Anchor>
+	            </td>
+	        </tr>
+	    </table>
+
+	    <hr/>
+	        
 		<div style="float:right">
 			<g:Button ui:field="btnAddFilter" text="{msg.addFilters}"/>
 		</div>
@@ -41,16 +82,17 @@
 			</td>
 		</tr>
 		</table>
+		</div>
 		<div style="clear:both;height:46px">
-			<hr/>
 			<div style="float:right">
-				<g:Anchor ui:field="lnkChartType"></g:Anchor>
+				<g:Button ui:field="btnGenerate" text="{msg.generate}"/>
 			</div>
-			<g:Button ui:field="btnGenerate" text="{msg.generate}"/>
+			<g:Anchor ui:field="lnkChartType"></g:Anchor>
 		</div>
 		<div id="divchart" style="width:100%; height:400px;margin-bottom:20px;"></div>
 		<div class="{style.tableRegion}">
 		<rep:TableView ui:field="tblResult"></rep:TableView>
 		</div>
 	</g:HTMLPanel>
+	
 </ui:UiBinder>

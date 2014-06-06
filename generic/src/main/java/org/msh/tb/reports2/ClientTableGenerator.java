@@ -10,7 +10,7 @@ import org.msh.reports.indicator.HeaderRow;
 import org.msh.reports.indicator.IndicatorColumn;
 import org.msh.reports.indicator.IndicatorRow;
 import org.msh.reports.variables.Variable;
-import org.msh.tb.client.shared.model.CTable;
+import org.msh.tb.client.shared.model.CReportResponse;
 import org.msh.tb.client.shared.model.CTableColumn;
 import org.msh.tb.client.shared.model.CTableRow;
 
@@ -28,15 +28,15 @@ public class ClientTableGenerator {
 	private DataTableIndicator tbl;
 	
 	/**
-	 * Generate an instance of the {@link CTable} class containing information about an 
+	 * Generate an instance of the {@link CReportResponse} class containing information about an 
 	 * indicator report to be sent back to the client side
 	 *  
 	 * @param tbl instance of the {@link DataTableImpl} containing the data of the report
-	 * @return instance of the {@link CTable} containing the indicator table to be sent to the client
+	 * @return instance of the {@link CReportResponse} containing the indicator table to be sent to the client
 	 */
-	public CTable execute(IndicatorReport rep) {
+	public CReportResponse execute(IndicatorReport rep) {
 		// create the client table to be returned to the client
-		CTable ctable = new CTable();
+		CReportResponse ctable = new CReportResponse();
 
 		// execute the report
 		tbl = rep.getResult();

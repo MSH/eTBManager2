@@ -11,7 +11,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author Ricardo Memoria
  *
  */
-public class CReportData implements IsSerializable {
+public class CReportRequest implements IsSerializable {
 
 	/**
 	 * List of variables selected for the column
@@ -28,7 +28,7 @@ public class CReportData implements IsSerializable {
 	 */
 	private HashMap<String, String> filters;
 
-	
+
 	/**
 	 * @return the colVariables
 	 */

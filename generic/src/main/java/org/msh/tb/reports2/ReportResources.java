@@ -3,10 +3,12 @@ package org.msh.tb.reports2;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.reports.filters.Filter;
 import org.msh.reports.variables.Variable;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.CultureResult;
@@ -363,5 +365,22 @@ public class ReportResources {
 		if (groups == null)
 			initialize();
 		return groups;
+	}
+	
+	
+	/**
+	 * Return the instance of the {@link ReportResources} component. The class may be reimplemented
+	 * in a workspace by declaring a component with name <code>"reportResource.wsext"</code>, where
+	 * <code>wsext</code> is the workspace extension 
+	 * @return instance of {@link ReportResources} class
+	 */
+	public static ReportResources instance() {
+		Workspace ws = (Workspace)Component.getInstance("defaultWorkspace");
+		if (ws.getExtension() != null) {
+			ReportResources res = (ReportResources)Component.getInstance("reportResources." + ws.getExtension());
+			if (res != null)
+				return res;
+		}
+		return (ReportResources)Component.getInstance("reportResources");
 	}
 }

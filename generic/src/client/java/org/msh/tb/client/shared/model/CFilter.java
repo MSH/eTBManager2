@@ -12,6 +12,29 @@ public class CFilter implements IsSerializable {
 	private ArrayList<CItem> options;
 
 	/**
+	 * Constructor passing all filter data
+	 * @param id
+	 * @param name
+	 * @param type
+	 * @param options
+	 */
+	public CFilter(String id, String name, String type, ArrayList<CItem> options) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.type = type;
+		this.options = options;
+	}
+
+	
+	/**
+	 * Default constructor
+	 */
+	public CFilter() {
+		super();
+	}
+	
+	/**
 	 * @return the id
 	 */
 	public String getId() {

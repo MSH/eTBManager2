@@ -3,7 +3,7 @@ package org.msh.tb.client.reports;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.msh.tb.client.shared.model.CTable;
+import org.msh.tb.client.shared.model.CReportResponse;
 import org.msh.tb.client.shared.model.CTableColumn;
 import org.msh.tb.client.shared.model.CTableRow;
 import org.msh.tb.client.shared.model.CVariable;
@@ -22,7 +22,7 @@ public class TableData {
 	/**
 	 * Table sent from the server
 	 */
-	private CTable table;
+	private CReportResponse table;
 	/**
 	 * Variables that compound the column of the table
 	 */
@@ -134,11 +134,11 @@ public class TableData {
 	
 	
 	/**
-	 * Update the data with an instance of the {@link CTable} containing
+	 * Update the data with an instance of the {@link CReportResponse} containing
 	 * data for a new report
 	 * @param table contains data of a report
 	 */
-	public void update(CTable table) {
+	public void update(CReportResponse table) {
 		// initialize list of columns per row
 		List<List<CTableColumn>> columnRows = new ArrayList<List<CTableColumn>>();
 		rowsHeader = columnRows;
@@ -326,7 +326,7 @@ public class TableData {
 	/**
 	 * @return the table
 	 */
-	public CTable getTable() {
+	public CReportResponse getTable() {
 		return table;
 	}
 	/**

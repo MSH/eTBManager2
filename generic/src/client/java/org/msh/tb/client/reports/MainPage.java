@@ -16,9 +16,10 @@ import org.msh.tb.client.shared.ReportService;
 import org.msh.tb.client.shared.ReportServiceAsync;
 import org.msh.tb.client.shared.model.CFilter;
 import org.msh.tb.client.shared.model.CGroup;
-import org.msh.tb.client.shared.model.CReportData;
-import org.msh.tb.client.shared.model.CReportUI;
-import org.msh.tb.client.shared.model.CTable;
+import org.msh.tb.client.shared.model.CInitializationData;
+import org.msh.tb.client.shared.model.CReport;
+import org.msh.tb.client.shared.model.CReportRequest;
+import org.msh.tb.client.shared.model.CReportResponse;
 import org.msh.tb.client.shared.model.CTableColumn;
 import org.msh.tb.client.shared.model.CTableRow;
 import org.msh.tb.client.shared.model.CVariable;
@@ -35,6 +36,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -61,16 +63,21 @@ public class MainPage extends Composite implements StandardEventHandler {
 	@UiField TableView tblResult;
 	@UiField Anchor lnkChartType;
 	@UiField MessagePanel pnlMessage;
+	@UiField Label txtTitle;
 	
 	private GroupFiltersPopup filtersPopup;
 	private GroupVariablesPopup varsPopup;
-	private CReportUI reportUI;
+	private CInitializationData reportUI;
 	private ChartPopup chartPopup;
+	private OptionsPopup optionsPopup;
 	private CaseListPopup patientListPopup;
 	// selected column and row to draw the chart
 	private int selectedCell = TableData.CELL_TITLE;
 	private boolean rowSelected = true;
 
+	// as default, start with a new report
+	private CReport report = new CReport();
+	
 	/**
 	 * Contains the data of the table to be rendered
 	 */
@@ -107,6 +114,10 @@ public class MainPage extends Composite implements StandardEventHandler {
 
 		// select the first chart as default
 		selectChart(ChartType.CHART_COLUMN);
+		
+		btnGenerate.addStyleName("btn-alt");
+		
+		txtTitle.setText("New report");
 	}
 
 
@@ -124,7 +135,42 @@ public class MainPage extends Composite implements StandardEventHandler {
 		chartPopup.showRelativeTo(source);
 	}
 
+	
+	/**
+	 * Called when user clicks on the options button
+	 * @param event
+	 */
+	@UiHandler("lnkMenu")
+	public void lnkMenuClick(ClickEvent event) {
+		if (optionsPopup == null) {
+			optionsPopup = new OptionsPopup();
+			pnlContent.add(optionsPopup);
+		}
+		
+		Widget source = (Widget)event.getSource();
+		optionsPopup.showRelativeTo(source);
+	}
 
+	
+	@UiHandler("lnkOpen")
+	public void lnkOpen(ClickEvent event) {
+		OpenReportDlg.openDialog();
+	}
+
+	/**
+	 * Save report
+	 * @param event
+	 */
+	@UiHandler("lnkSave")
+	public void lnkSaveClick(ClickEvent event) {
+		if (isNewReport()) {
+			SaveDlg.openDialog(false);
+		}
+		else {
+			ReportCRUDServices.saveReport(null);
+		}
+	}
+	
 	/**
 	 * Show a pop-up window displaying the filters to be selected
 	 * @param clickEvent
@@ -153,7 +199,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 	 */
 	@UiHandler("btnGenerate")
 	public void btnGenerateClick(ClickEvent clickEvent) {
-		CReportData data = prepareReportData();
+		CReportRequest data = prepareReportData();
 		if (data == null)
 			return;
 		
@@ -161,9 +207,9 @@ public class MainPage extends Composite implements StandardEventHandler {
 		chart.clear();
 
 		btnGenerate.setEnabled(false);
-		service.executeReport(data, new StandardCallback<CTable>() {
+		service.executeReport(data, new StandardCallback<CReportResponse>() {
 			@Override
-			public void onSuccess(CTable res) {
+			public void onSuccess(CReportResponse res) {
 				btnGenerate.setEnabled(true);
 				// did the server sent any data ?
 				if (res == null) {
@@ -176,7 +222,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 				}
 				else {
 					tableData.update(res);
-					updateReport();
+					updateReportResponse();
 				}
 			}
 
@@ -187,7 +233,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 			}
 		});
 	}
-
+	
 
 	public void showErrorMessage(String msg) {
 		pnlMessage.setVisible(true);
@@ -196,9 +242,9 @@ public class MainPage extends Composite implements StandardEventHandler {
 	
 	/**
 	 * Prepare the data of the report (variables and filters) to be sent to the server
-	 * @return instance of {@link CReportData} or null if there are validation errors
+	 * @return instance of {@link CReportRequest} or null if there are validation errors
 	 */
-	private CReportData prepareReportData() {
+	public CReportRequest prepareReportData() {
 		tableData.setColVariables( getVariables(pnlColVariables) );
 		tableData.setRowVariables( getVariables(pnlRowVariables) );
 
@@ -212,7 +258,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 		}
 		else pnlMessage.setVisible(false);
 		
-		CReportData data = new CReportData();
+		CReportRequest data = new CReportRequest();
 		data.setRowVariables(rows);
 		data.setColVariables(cols);
 
@@ -280,7 +326,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 	 * Update report data with table sent from the server
 	 * @param table
 	 */
-	protected void updateReport() {
+	protected void updateReportResponse() {
 		tblResult.update(tableData);
 		updateChart();
 	}
@@ -435,11 +481,15 @@ public class MainPage extends Composite implements StandardEventHandler {
 	 * Initialize the report page loading the content from the server	 
 	 */
 	public void initialize() {
-		service.initialize(new StandardCallback<CReportUI>() {
+		service.initialize(new StandardCallback<CInitializationData>() {
 			@Override
-			public void onSuccess(CReportUI rep) {
+			public void onSuccess(CInitializationData rep) {
 				reportUI = rep;
 				updateReportData();
+				
+				if ((reportUI.getReports() != null) && (reportUI.getReports().size() > 0)) {
+					OpenReportDlg.openDialog();
+				}
 			}
 		});
 	}
@@ -635,9 +685,35 @@ public class MainPage extends Composite implements StandardEventHandler {
 	
 	/**
 	 * Return information about the report sent from the server
-	 * @return instance of {@link CReportUI} class
+	 * @return instance of {@link CInitializationData} class
 	 */
-	public CReportUI getReportUI() {
+	public CInitializationData getReportUI() {
 		return reportUI;
+	}
+
+
+	/**
+	 * @return the report
+	 */
+	public CReport getReport() {
+		return report;
+	}
+	
+	
+	/**
+	 * Update the current report being displayed by the system
+	 * @param report instance of {@link CReport} class
+	 */
+	public void updateReport() {
+		txtTitle.setText(report.getTitle());
+	}
+	
+	
+	/**
+	 * Check if the report being displayed is a new one
+	 * @return true if it's a new report, or false if it's an existing report
+	 */
+	public boolean isNewReport() {
+		return report.getId() == null;
 	}
 }

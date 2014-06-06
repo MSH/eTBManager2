@@ -61,4 +61,41 @@
      orderDate = (select max(orderdate) from medicineorder where unit_from_id=tbunit.id) limit 1)
 where firstline_supplier_id is not null or secondline_supplier_id is not null</sql>
 	</changeSet>
+	
+	<!-- Create the table to store information about reports in the data analysis tool -->
+	<changeSet id="15.5" author="rmemoria">
+	    <createTable tableName="report">
+	        <column name="id" autoIncrement="true" type="int">
+	            <constraints primaryKey="true" nullable="false"/>
+	        </column>
+	        <column name="title" type="varchar(200)">
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="published" type="boolean">
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="registrationDate" type="datetime">
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="owner_id" type="int">
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="dashboard" type="boolean">
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="data" type="longtext" />
+	        <column name="lastTransaction_id" type="int" />
+	        <column name="workspace_id" type="int" />
+	    </createTable>
+	    <addForeignKeyConstraint constraintName="FK_report_user" 
+	        baseColumnNames="owner_id" baseTableName="report" referencedTableName="sys_user" referencedColumnNames="id"
+	        onDelete="CASCADE" onUpdate="CASCADE"/>
+	    <addForeignKeyConstraint constraintName="FK_report_tx" 
+	        baseColumnNames="lastTransaction_id" baseTableName="report" referencedTableName="transactionlog" referencedColumnNames="id"
+	        onDelete="CASCADE" onUpdate="CASCADE"/>
+	    <addForeignKeyConstraint constraintName="FK_report_ws" 
+	        baseColumnNames="workspace_id" baseTableName="report" referencedTableName="workspace" referencedColumnNames="id"
+	        onDelete="CASCADE" onUpdate="CASCADE"/>
+	</changeSet>
+
 </databaseChangeLog>

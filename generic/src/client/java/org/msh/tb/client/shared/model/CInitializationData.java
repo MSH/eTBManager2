@@ -5,10 +5,31 @@ import java.util.Date;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class CReportUI implements IsSerializable {
+/**
+ * Data sent from the server in order to initialize the report in the client
+ * side with dynamic data, like variables, filters, etc.
+ * 
+ * @author Ricardo Memoria
+ *
+ */
+public class CInitializationData implements IsSerializable {
 
+	/**
+	 * List of variables and filters
+	 */
 	private ArrayList<CGroup> groups;
+	
+	/**
+	 * The server current date
+	 */
 	private Date currentDate;
+	
+	/**
+	 * List of available reports
+	 */
+	private ArrayList<CReport> reports;
+
+
 
 	/**
 	 * @return the groups
@@ -36,6 +57,20 @@ public class CReportUI implements IsSerializable {
 	 */
 	public void setCurrentDate(Date currentDate) {
 		this.currentDate = currentDate;
+	}
+
+	/**
+	 * @return the reports
+	 */
+	public ArrayList<CReport> getReports() {
+		return reports;
+	}
+
+	/**
+	 * @param reports the reports to set
+	 */
+	public void setReports(ArrayList<CReport> reports) {
+		this.reports = reports;
 	}
 
 
