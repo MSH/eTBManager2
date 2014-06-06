@@ -12,8 +12,9 @@
 			background-color:#f8f8f8;
 			border: 1px solid #f0f0f0;
 			border-radius: 4px;
-			padding:0 8px 8px 8px;
+			padding:4px 8px;
 			margin-bottom:8px;
+			margin-top:4px;
 		}
 		.tableRegion {
 			max-width:990px;
@@ -26,12 +27,18 @@
 		}
 		.openReport {
 			padding: 4px 4px 4px 8px;
-			margin-right:8px;
+			margin-right:4px;
+			border-radius:16px;
+		}
+		.openReport i {
+			font-size:12px;
 		}
 		.iconButton {
 			color: #909090;
 			border-radius:2px;
 			padding:4px 2px 2px 4px;
+			top: 8px;
+			position: relative;
 		}
 		.iconButton:hover {
 			color: #5a5a5a;
@@ -41,7 +48,6 @@
 
 	<g:HTMLPanel ui:field="pnlContent" >
 		<h1><ui:text from="{msg.title}" /></h1>
-	    <div class="{style.panel}">
 	    <table width="100%">
 	        <tr>
 	            <td>
@@ -57,7 +63,7 @@
 	        </tr>
 	    </table>
 
-	    <hr/>
+	    <div class="{style.panel}">
 	        
 		<div style="float:right">
 			<g:Button ui:field="btnAddFilter" text="{msg.addFilters}"/>
