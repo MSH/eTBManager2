@@ -53,7 +53,9 @@ public class ResourceLoader extends org.jboss.seam.core.ResourceLoader {
 	public List<String> getExtraBundleFiles() {
 		List<String> lst = new ArrayList<String>();
 		try {
-			URL url = getClass().getClassLoader().getResource("\\WEB-INF\\classes");
+			String dir = "WEB-INF/classes";
+			URL url = ResourceLoader.class.getClassLoader().getResource(dir);
+			// url = ResourceLoader.class.getClassLoader().getResource("WEB-INF/classes/messages_en.properties");
 			File folder = new File(url.toURI());
 			for (File file: folder.listFiles()) {
 				String fname = file.getName();
