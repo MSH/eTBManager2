@@ -48,6 +48,10 @@
 
 	<g:HTMLPanel ui:field="pnlContent" >
 		<h1><ui:text from="{msg.title}" /></h1>
+		<rep:ReportListPanel ui:field="pnlReportList">
+		    
+		</rep:ReportListPanel>
+		<g:HTMLPanel ui:field="pnlReport">
 	    <table width="100%">
 	        <tr>
 	            <td>
@@ -99,6 +103,7 @@
 		<div class="{style.tableRegion}">
 		<rep:TableView ui:field="tblResult"></rep:TableView>
 		</div>
+		</g:HTMLPanel>
 	</g:HTMLPanel>
 	
 </ui:UiBinder>

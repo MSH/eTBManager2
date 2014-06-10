@@ -25,6 +25,7 @@ import org.msh.tb.client.shared.model.CTableRow;
 import org.msh.tb.client.shared.model.CVariable;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -64,6 +65,8 @@ public class MainPage extends Composite implements StandardEventHandler {
 	@UiField Anchor lnkChartType;
 	@UiField MessagePanel pnlMessage;
 	@UiField Label txtTitle;
+	@UiField HTMLPanel pnlReport;
+	@UiField ReportListPanel pnlReportList;
 	
 	private GroupFiltersPopup filtersPopup;
 	private GroupVariablesPopup varsPopup;
@@ -117,7 +120,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 		
 		btnGenerate.addStyleName("btn-alt");
 		
-		txtTitle.setText("New report");
+		pnlReport.setVisible(false);
 	}
 
 
@@ -152,9 +155,13 @@ public class MainPage extends Composite implements StandardEventHandler {
 	}
 
 	
+	/**
+	 * Called when clicking on the open button beside the report title
+	 * @param event
+	 */
 	@UiHandler("lnkOpen")
 	public void lnkOpen(ClickEvent event) {
-		OpenReportDlg.openDialog();
+		openReportList();
 	}
 
 	/**
@@ -488,7 +495,10 @@ public class MainPage extends Composite implements StandardEventHandler {
 				updateReportData();
 				
 				if ((reportUI.getReports() != null) && (reportUI.getReports().size() > 0)) {
-					OpenReportDlg.openDialog();
+					openReportList();
+				}
+				else {
+					closeReportList();
 				}
 			}
 		});
@@ -638,9 +648,10 @@ public class MainPage extends Composite implements StandardEventHandler {
 	 */
 	public void selectChart(ChartType chartType) {
 		Image img = new Image(chartImgs[chartType.ordinal()]);
-		if (DOM.getChildCount(lnkChartType.getElement()) > 0)
-			DOM.removeChild(lnkChartType.getElement(), DOM.getFirstChild(lnkChartType.getElement()));
-		DOM.insertChild(lnkChartType.getElement(), img.getElement(), 0);
+		Element el = (Element)lnkChartType.getElement();
+		if (DOM.getChildCount(el) > 0)
+			el.removeChild(DOM.getFirstChild(el));
+		DOM.insertChild(el, img.getElement(), 0);
 
 		chart.setSelectedChart(chartType);
 		updateChart();
@@ -715,5 +726,32 @@ public class MainPage extends Composite implements StandardEventHandler {
 	 */
 	public boolean isNewReport() {
 		return report.getId() == null;
+	}
+	
+	/**
+	 * Close the report list, if open
+	 */
+	public void closeReportList() {
+		pnlReportList.hide();
+		pnlReport.setVisible(true);
+	}
+	
+	
+	/**
+	 * Show the report list
+	 */
+	public void openReportList() {
+		pnlReportList.show();
+		pnlReport.setVisible(false);
+	}
+	
+	
+	/**
+	 * Create a new report
+	 */
+	public void newReport() {
+		report = new CReport();
+		updateReport();
+		closeReportList();
 	}
 }

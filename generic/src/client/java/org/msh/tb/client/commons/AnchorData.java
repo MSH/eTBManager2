@@ -1,5 +1,6 @@
 package org.msh.tb.client.commons;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.Anchor;
 
 /**
@@ -12,6 +13,12 @@ public class AnchorData extends Anchor{
 
 	public AnchorData() {
 		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public AnchorData(SafeHtml html) {
+		super(html);
 		// TODO Auto-generated constructor stub
 	}
 

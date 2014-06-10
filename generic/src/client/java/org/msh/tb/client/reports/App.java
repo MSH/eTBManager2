@@ -30,6 +30,7 @@ public class App implements EntryPoint {
 	    GWT.<GlobalResources>create(GlobalResources.class).css().ensureInjected();
 
 	    MainPage main = MainPage.instance();
+	    rootPanel.getElement().removeAllChildren();
 	    rootPanel.add(main);
 	    main.initialize();
 	}
