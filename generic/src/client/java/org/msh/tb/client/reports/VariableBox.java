@@ -1,6 +1,5 @@
 package org.msh.tb.client.reports;
 
-import org.msh.tb.client.commons.StandardEventHandler;
 import org.msh.tb.client.shared.model.CVariable;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -12,7 +11,12 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class VariablePanel extends HoverPanel implements StandardEventHandler {
+/**
+ * Display a variable in a rectangle border
+ * @author Ricardo Memoria
+ *
+ */
+public class VariableBox extends HoverPanel { //implements StandardEventHandler {
 
 	public static final Integer VARIABLE_CHANGE = 1;
 	public static final Integer VARIABLE_DELETE = 2;
@@ -20,14 +24,17 @@ public class VariablePanel extends HoverPanel implements StandardEventHandler {
 	private FlowPanel option;
 	private Label lblVariable;
 	private CVariable variable;
+	private VariablesPanel variablesPanel;
 	
 	/**
 	 * Constructor
 	 * @param changeHandler
 	 */
-	public VariablePanel(boolean removeEnabled) {
+	public VariableBox(VariablesPanel variablesPanel, boolean removeEnabled) {
 		super();
 
+		this.variablesPanel = variablesPanel;
+		
 		// check if remove button is visible
 		setRemoveEnabled(removeEnabled);
 		
@@ -63,8 +70,9 @@ public class VariablePanel extends HoverPanel implements StandardEventHandler {
 	 * @param event
 	 */
 	protected void optionClickHandler(ClickEvent event) {
-		GroupVariablesPopup popup = MainPage.instance().getVariablePopup();
-		popup.setEventHandler(this);
+		GroupVariablesPopup popup = GroupVariablesPopup.instance();
+		popup.setEventHandler(variablesPanel);
+		variablesPanel.setSelected(this);
 		popup.showPopup(((Widget)event.getSource()).getParent());
 	}
 
@@ -74,7 +82,7 @@ public class VariablePanel extends HoverPanel implements StandardEventHandler {
 	 */
 	@Override
 	protected void removePanel() {
-		MainPage.instance().removeVariablePanel(this);
+		variablesPanel.removeVariableBox(this);
 	}
 
 	/**
@@ -94,13 +102,24 @@ public class VariablePanel extends HoverPanel implements StandardEventHandler {
 		return variable;
 	}
 
-	@Override
+	/**
+	 * @param variable the variable to set
+	 */
+	public void setVariable(CVariable variable) {
+		this.variable = variable;
+		lblVariable.setText(variable != null? variable.getName(): "");
+	}
+
+
+	/** {@inheritDoc}
+	 */
+/*	@Override
 	public void eventHandler(Object eventType, Object data) {
 		if (GroupPopup.ITEM_SELECTED.equals(eventType)) {
 			selectVariable((CVariable)data);
-			MainPage.instance().getVariablePopup().hide();
+			GroupVariablesPopup.instance().hide();
 			MainPage.instance().variableChanged(this);
 		}
-		
 	}
+*/	
 }

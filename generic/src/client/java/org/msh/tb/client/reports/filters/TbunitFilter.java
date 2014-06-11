@@ -56,14 +56,16 @@ public class TbunitFilter extends FilterWidget {
 	 * @see org.msh.tb.client.reports.filters.FilterWidget#initialize(org.msh.tb.client.shared.model.CFilter)
 	 */
 	@Override
-	public void initialize(CFilter filter) {
-		super.initialize(filter);
+	public void initialize(CFilter filter, String value) {
+		super.initialize(filter, value);
 
+		final String fval = value;
+		
 		loadServerOptions(null, new StandardCallback<ArrayList<CItem>>() {
 			@Override
 			public void onSuccess(ArrayList<CItem> result) {
 				if (result != null) {
-					fillListOptions(lbAdminUnits, result);
+					fillListOptions(lbAdminUnits, result, fval);
 					lbAdminUnits.addChangeHandler(adminUnitSelHandler);
 				}
 			}
@@ -116,7 +118,7 @@ public class TbunitFilter extends FilterWidget {
 				@Override
 				public void onSuccess(ArrayList<CItem> result) {
 					if (result != null) {
-						fillListOptions(lbUnits, result);
+						fillListOptions(lbUnits, result, null);
 					}
 				}
 			});

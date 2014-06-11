@@ -13,15 +13,18 @@ import com.google.gwt.user.client.ui.Label;
  * @author Ricardo Memoria
  *
  */
-public class FilterPanel extends HoverPanel {
+public class FilterBox extends HoverPanel {
 
 	private Label label;
 	private CFilter filter;
 	private FilterWidget filterWidget;
-
-	public FilterPanel(CFilter filter) {
+	private FiltersPanel filtersPanel;
+	
+	
+	public FilterBox(FiltersPanel filtersPanel, CFilter filter, String value) {
 		super();
 		this.filter = filter;
+		this.filtersPanel = filtersPanel;
 
 		setWidth("800px");
 		addStyleName("prop");
@@ -33,7 +36,7 @@ public class FilterPanel extends HoverPanel {
 		filterWidget = FilterFactory.createFilter(filter.getType());
 		
 		if (filterWidget != null) {
-			filterWidget.initialize(filter);
+			filterWidget.initialize(filter, value);
 			FlowPanel pnl = new FlowPanel();
 			pnl.setStyleName("filter_value");
 			pnl.add(filterWidget);
@@ -48,9 +51,11 @@ public class FilterPanel extends HoverPanel {
 		return filter;
 	}
 
+	/** {@inheritDoc}
+	 */
 	@Override
 	protected void removePanel() {
-		MainPage.instance().removeFilter(this);
+		filtersPanel.removeFilterBox(this);
 	}
 
 	/**
@@ -66,5 +71,28 @@ public class FilterPanel extends HoverPanel {
 	 */
 	public String getFilterValue() {
 		return filterWidget != null? filterWidget.getValue(): null;
+	}
+
+	
+	/**
+	 * Set the filter's content being displayed
+	 * @param value is the string representation of the filter value
+	 */
+	public void setFilterValue(String value) {
+		filterWidget.setValue(value);
+	}
+	
+	/**
+	 * @return the filtersPanel
+	 */
+	public FiltersPanel getFiltersPanel() {
+		return filtersPanel;
+	}
+
+	/**
+	 * @param filtersPanel the filtersPanel to set
+	 */
+	public void setFiltersPanel(FiltersPanel filtersPanel) {
+		this.filtersPanel = filtersPanel;
 	}
 }

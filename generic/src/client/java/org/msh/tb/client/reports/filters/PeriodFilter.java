@@ -70,12 +70,23 @@ public class PeriodFilter extends FilterWidget {
 
 	/** {@inheritDoc}
 	 */
-	public void initialize(CFilter filter) {
-		super.initialize(filter);
-		updatePeriodType();
+	@Override
+	public void initialize(CFilter filter, String value) {
+		super.initialize(filter, value);
+		
+		if (value != null) {
+			setValue(value);
+		}
+		else {
+			type = PeriodFilterType.MONTHYEAR;
+			updatePeriodType();
+		}
 	}
 
 
+	/**
+	 * Update the display according to the period type selected
+	 */
 	protected void updatePeriodType() {
 		if (type == PeriodFilterType.FIXED) {
 			displayFixedFilter();
@@ -182,7 +193,10 @@ public class PeriodFilter extends FilterWidget {
 		
 		return lb;
 	}
-	
+
+
+	/** {@inheritDoc}
+	 */
 	@Override
 	public String getValue() {
 		if (type == PeriodFilterType.MONTHYEAR) {
@@ -194,14 +208,56 @@ public class PeriodFilter extends FilterWidget {
 		}
 	}
 	
+	/**
+	 * Return the selected value of a given list box
+	 * @param lb
+	 * @return
+	 */
 	protected String getSelectedValue(ListBox lb) {
 		return (lb.getSelectedIndex() > 0?  lb.getValue(lb.getSelectedIndex()) : "");
 	}
 
+	
+	/**
+	 * Set the select item of a list box by its value
+	 * @param lb
+	 * @param value
+	 */
+	protected void setSelectedValue(ListBox lb, String value) {
+		if (value == null) {
+			lb.setSelectedIndex(0);
+			return;
+		}
+
+		for (int i = 0; i < lb.getItemCount() - 1; i++) {
+			if (value.equals(lb.getValue(i))) {
+				lb.setSelectedIndex(i);
+				return;
+			}
+		}
+		
+		lb.setSelectedIndex(0);
+	}
+	
+	/** {@inheritDoc}
+	 */
 	@Override
 	public void setValue(String value) {
-		// TODO Auto-generated method stub
+		if (value == null) {
+			return;
+		}
+		String[] s = value.split(",");
+		type = "M".equals(s) ? PeriodFilterType.MONTHYEAR: PeriodFilterType.FIXED;
 		
+		if (type == PeriodFilterType.FIXED) {
+			setSelectedValue(cbFixedOption, s[1]);
+		}
+		else {
+			setSelectedValue(iniMonth, s[1]);
+			setSelectedValue(iniYear, s[2]);
+			setSelectedValue(endMonth, s[3]);
+			setSelectedValue(endYear, s[4]);
+		}
 	}
 
 }

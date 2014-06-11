@@ -38,7 +38,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -48,18 +47,18 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Ricardo Memoria
  *
  */
-public class MainPage extends Composite implements StandardEventHandler {
+public class MainPage extends Composite {
 
 	private static final Binder binder = GWT.create(Binder.class);
 	private static MainPage singletonInstance;
 
 	interface Binder extends UiBinder<Widget, MainPage> { }
 
-	@UiField VerticalPanel pnlRowVariables;
-	@UiField VerticalPanel pnlColVariables;
+	@UiField VariablesPanel pnlRowVariables;
+	@UiField VariablesPanel pnlColVariables;
 	@UiField HTMLPanel pnlContent;
 	@UiField Button btnAddFilter;
-	@UiField VerticalPanel pnlFilters;
+	@UiField FiltersPanel pnlFilters;
 	@UiField Button btnGenerate;
 	@UiField TableView tblResult;
 	@UiField Anchor lnkChartType;
@@ -69,7 +68,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 	@UiField ReportListPanel pnlReportList;
 	
 	private GroupFiltersPopup filtersPopup;
-	private GroupVariablesPopup varsPopup;
+//	private GroupVariablesPopup varsPopup;
 	private CInitializationData reportUI;
 	private ChartPopup chartPopup;
 	private OptionsPopup optionsPopup;
@@ -79,7 +78,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 	private boolean rowSelected = true;
 
 	// as default, start with a new report
-	private CReport report = new CReport();
+	private CReport report;
 	
 	/**
 	 * Contains the data of the table to be rendered
@@ -188,7 +187,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 			StandardEventHandler listener = new StandardEventHandler() {
 				@Override
 				public void eventHandler(Object eventType, Object data) {
-					includeNewFilter((CFilter)data);
+					pnlFilters.addFilter((CFilter)data, null);
 				}
 			};
 			filtersPopup = new GroupFiltersPopup(listener);
@@ -252,12 +251,12 @@ public class MainPage extends Composite implements StandardEventHandler {
 	 * @return instance of {@link CReportRequest} or null if there are validation errors
 	 */
 	public CReportRequest prepareReportData() {
-		tableData.setColVariables( getVariables(pnlColVariables) );
-		tableData.setRowVariables( getVariables(pnlRowVariables) );
+		tableData.setColVariables( pnlColVariables.getVariables() );
+		tableData.setRowVariables( pnlRowVariables.getVariables() );
 
 		// mount list of variables
-		ArrayList<String> rows = getSelectedVariables(tableData.getRowVariables());
-		ArrayList<String> cols = getSelectedVariables(tableData.getColVariables());
+		ArrayList<String> rows = pnlRowVariables.getDeclaredVariables();
+		ArrayList<String> cols = pnlColVariables.getDeclaredVariables();
 		
 		if ((rows.size() == 0) || (cols.size() == 0)) {
 			showErrorMessage(messages.noVariableDefined());
@@ -270,8 +269,8 @@ public class MainPage extends Composite implements StandardEventHandler {
 		data.setColVariables(cols);
 
 		// mount list of filters
-		HashMap<String, String> filters = new HashMap<String, String>();
-		mountFilterValues(filters);
+		HashMap<String, String> filters = pnlFilters.getDeclaredFilters();
+//		mountFilterValues(filters);
 
 		// just send something if any filter was set
 		if (filters.size() > 0)
@@ -287,22 +286,22 @@ public class MainPage extends Composite implements StandardEventHandler {
 	 * @param filters the instance of the {@link HashMap} class that will receive 
 	 * the filter values
 	 */
-	protected void mountFilterValues(HashMap<String, String> filters) {
+/*	protected void mountFilterValues(HashMap<String, String> filters) {
 		for (int i = 0; i < pnlFilters.getWidgetCount(); i++) {
-			FilterPanel pnl = (FilterPanel)pnlFilters.getWidget(i);
+			FilterBox pnl = (FilterBox)pnlFilters.getWidget(i);
 			String val = pnl.getFilterValue();
 			if (val != null) {
 				filters.put(pnl.getFilter().getId(), val);
 			}
 		}
 	}
-	
+*/	
 	/**
 	 * Return the list of variables declared in the panel
 	 * @param pnl
 	 * @return
 	 */
-	private ArrayList<String> getSelectedVariables(List<CVariable> vars) {
+/*	private ArrayList<String> getSelectedVariables(List<CVariable> vars) {
 		ArrayList<String> varNames = new ArrayList<String>();
 
 		for (CVariable var: vars) {
@@ -310,24 +309,24 @@ public class MainPage extends Composite implements StandardEventHandler {
 		}
 		return varNames;
 	}
-
+*/
 	
 	/**
 	 * Return the list of variables in a panel
 	 * @param pnl
 	 * @return
 	 */
-	protected List<CVariable> getVariables(VerticalPanel pnl) {
+/*	protected List<CVariable> getVariables(VerticalPanel pnl) {
 		ArrayList<CVariable> vars = new ArrayList<CVariable>();
 		for (int i = 0; i < pnl.getWidgetCount(); i++) {
-			CVariable var = ((VariablePanel)pnl.getWidget(i)).getVariable();
+			CVariable var = ((VariableBox)pnl.getWidget(i)).getVariable();
 			if (var != null) {
 				vars.add(var);
 			}
 		}
 		return vars;
 	}
-
+*/
 
 	/**
 	 * Update report data with table sent from the server
@@ -479,10 +478,10 @@ public class MainPage extends Composite implements StandardEventHandler {
 	 * Include a new filter in the list of filters
 	 * @param item
 	 */
-	protected void includeNewFilter(CFilter item) {
-		pnlFilters.add(new FilterPanel(item));
+/*	protected void includeNewFilter(CFilter item) {
+		pnlFilters.add(new FilterBox(item));
 	}
-
+*/
 
 	/**
 	 * Initialize the report page loading the content from the server	 
@@ -492,13 +491,13 @@ public class MainPage extends Composite implements StandardEventHandler {
 			@Override
 			public void onSuccess(CInitializationData rep) {
 				reportUI = rep;
-				updateReportData();
 				
 				if ((reportUI.getReports() != null) && (reportUI.getReports().size() > 0)) {
 					openReportList(false);
 				}
 				else {
 					closeReportList();
+					newReport();
 				}
 			}
 		});
@@ -511,9 +510,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 	 * @param r
 	 */
 	public void showPatientList(int c, int r) {
-		HashMap<String, String> filters = new HashMap<String, String>();
-		
-		mountFilterValues(filters);
+		HashMap<String, String> filters = pnlFilters.getDeclaredFilters();
 
 		// get variables from the row
 		int index = r;
@@ -555,62 +552,62 @@ public class MainPage extends Composite implements StandardEventHandler {
 	/**
 	 * Add initial variables to the report
 	 */
-	protected void updateReportData() {
+/*	protected void updateReportData() {
 		// add initial variables
-		pnlRowVariables.add( new VariablePanel(false) );
-		pnlColVariables.add( new VariablePanel(false) );
+		pnlRowVariables.add( new VariableBox(false) );
+		pnlColVariables.add( new VariableBox(false) );
 	}
-	
+*/	
 	
 	/**
 	 * Remove a variable panel
 	 * @param pnl
 	 */
-	protected void removeVariablePanel(VariablePanel pnl) {
+/*	protected void removeVariablePanel(VariableBox pnl) {
 		VerticalPanel pnlvars = (VerticalPanel)pnl.getParent();
 		pnlvars.remove(pnl);
 	}
-
+*/
 	/**
 	 * Remove a filter from the panel
 	 * @param pnl
 	 */
-	protected void removeFilter(FilterPanel pnl) {
+/*	protected void removeFilter(FilterBox pnl) {
 		VerticalPanel pnlfilters = (VerticalPanel)pnl.getParent();
 		pnlfilters.remove(pnl);
 		// there is only one variable left ?
 		if (pnlfilters.getWidgetCount() == 1)
-			((VariablePanel)pnlFilters.getWidget(0)).setRemoveEnabled(false);
+			((VariableBox)pnlFilters.getWidget(0)).setRemoveEnabled(false);
 	}
-
+*/
 	/**
 	 * Called when the variable is changed
 	 * @param pnl
 	 */
-	public void variableChanged(VariablePanel pnl) {
+/*	public void variableChanged(VariableBox pnl) {
 		VerticalPanel vertpnl = (VerticalPanel)pnl.getParent();
 		int index = vertpnl.getWidgetIndex(pnl);
 		// is the last variable ?
 		if (index == vertpnl.getWidgetCount() - 1) {
 			// add a new vertical panel
-			vertpnl.add( new VariablePanel(false) );
+			vertpnl.add( new VariableBox(false) );
 			pnl.setRemoveEnabled(true);
 		}
 	}
-
+*/
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.client.commons.StandardEventHandler#eventHandler(java.lang.Object, java.lang.Object)
 	 */
-	@Override
+/*	@Override
 	public void eventHandler(Object eventType, Object data) {
-		if (VariablePanel.VARIABLE_DELETE.equals(eventType)) {
-			VariablePanel pnl = (VariablePanel)data;
+		if (VariableBox.VARIABLE_DELETE.equals(eventType)) {
+			VariableBox pnl = (VariableBox)data;
 			VerticalPanel pnlvars = (VerticalPanel)pnl.getParent();
 			pnlvars.remove(pnl);
 		}
 	}
-	
+*/	
 	
 	/**
 	 * Return the list of groups of information
@@ -633,14 +630,14 @@ public class MainPage extends Composite implements StandardEventHandler {
 	/**
 	 * @return
 	 */
-	public GroupVariablesPopup getVariablePopup() {
+/*	public GroupVariablesPopup getVariablePopup() {
 		if (varsPopup == null) {
 			varsPopup = new GroupVariablesPopup(this);
 			varsPopup.setGroups(reportUI.getGroups());
 		}
 		return varsPopup;
 	}
-	
+*/	
 	
 	/**
 	 * Select the chart from a number of 0 to the max number of charttypes array 
@@ -717,6 +714,9 @@ public class MainPage extends Composite implements StandardEventHandler {
 	 */
 	public void updateReport() {
 		txtTitle.setText(report.getTitle());
+		pnlColVariables.update(report.getColumnVariables());
+		pnlRowVariables.update(report.getRowVariables());
+		pnlFilters.update(report.getFilters());
 	}
 	
 	
@@ -751,6 +751,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 	 */
 	public void newReport() {
 		report = new CReport();
+		report.setTitle("New report");
 		updateReport();
 		closeReportList();
 	}
@@ -767,6 +768,8 @@ public class MainPage extends Composite implements StandardEventHandler {
 			public void onSuccess(CReport result) {
 				report = result;
 				updateReport();
+				// run the report
+				btnGenerate.click();
 			}
 		});
 	}
@@ -776,5 +779,38 @@ public class MainPage extends Composite implements StandardEventHandler {
 	 */
 	public void deleteReport() {
 		
+	}
+	
+	
+	/**
+	 * Search for a variable by its ID
+	 * @param id the variable's ID
+	 * @return instance of {@link CVariable}, or null if variable is not found
+	 */
+	public CVariable findVariableById(String id) {
+		for (CGroup grp: reportUI.getGroups()) {
+			for (CVariable var: grp.getVariables()) {
+				if (var.getId().equals(id)) {
+					return var;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Search for a filter by its ID
+	 * @param id is the filter's ID
+	 * @return instance of {@link CVariable}, or null if variable is not found
+	 */
+	public CFilter findFilterById(String id) {
+		for (CGroup grp: reportUI.getGroups()) {
+			for (CFilter filter: grp.getFilters()) {
+				if (filter.getId().equals(id)) {
+					return filter;
+				}
+			}
+		}
+		return null;
 	}
 }

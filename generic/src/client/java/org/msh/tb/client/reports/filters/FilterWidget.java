@@ -18,9 +18,10 @@ public abstract class FilterWidget extends Composite {
 
 	/**
 	 * Initialize the filter
-	 * @param filterData
+	 * @param filterData is the instance of {@link CFilter} class
+	 * @param iniValue is the value of the filter. Enter null if no filter is selected
 	 */
-	public void initialize(CFilter filterData) {
+	public void initialize(CFilter filterData, String iniValue) {
 		this.filter = filterData;
 	}
 	
@@ -49,11 +50,14 @@ public abstract class FilterWidget extends Composite {
 	 * @param lb instance of {@link ListBox} to be filled
 	 * @param options list of {@link CItem} options
 	 */
-	protected void fillListOptions(ListBox lb, List<CItem> options) {
+	protected void fillListOptions(ListBox lb, List<CItem> options, String value) {
 		lb.clear();
 		lb.addItem("-");
 		for (CItem opt: options) {
 			lb.addItem(opt.getLabel(), opt.getValue());
+			if ((value != null) && (value.equals(opt.getValue()))) {
+				lb.setSelectedIndex(lb.getItemCount() - 1);
+			}
 		}
 	}
 	

@@ -27,11 +27,12 @@ public class OptionsFilter extends FilterWidget {
 	 * @see org.msh.tb.client.reports.filters.FilterWidget#initialize(org.msh.tb.client.shared.model.CFilter)
 	 */
 	@Override
-	public void initialize(CFilter filter) {
-		super.initialize(filter);
+	public void initialize(CFilter filter, String value) {
+		super.initialize(filter, value);
+		
 		if (filter.getOptions() == null)
 			return;
-		fillOptions(filter.getOptions());
+		fillOptions(filter.getOptions(), value);
 	}
 
 	
@@ -39,8 +40,8 @@ public class OptionsFilter extends FilterWidget {
 	 * Fill the options of the selection box from a list of options
 	 * @param options
 	 */
-	protected void fillOptions(List<CItem> options) {
-		fillListOptions(lbOptions, options);
+	protected void fillOptions(List<CItem> options, String value) {
+		fillListOptions(lbOptions, options, value);
 	}
 	
 	
