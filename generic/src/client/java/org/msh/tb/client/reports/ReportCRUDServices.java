@@ -4,6 +4,7 @@
 package org.msh.tb.client.reports;
 
 import org.msh.tb.client.commons.StandardCallback;
+import org.msh.tb.client.reports.chart.ChartType;
 import org.msh.tb.client.shared.model.CReport;
 import org.msh.tb.client.shared.model.CReportRequest;
 
@@ -38,10 +39,12 @@ public class ReportCRUDServices {
 	 */
 	protected static CReport updateReportData() {
 		CReport report = MainPage.instance().getReport();
-		CReportRequest req = MainPage.instance().prepareReportData();
+		CReportRequest req = MainPage.instance().prepareReportRequest();
 		report.setColumnVariables(req.getColVariables());
 		report.setRowVariables(req.getRowVariables());
 		report.setFilters(req.getFilters());
+		ChartType chartType = MainPage.instance().getChartType();
+		report.setChartType(chartType != null? chartType.ordinal(): null);
 		return report;
 	}
 	

@@ -229,7 +229,7 @@ public class PeriodFilter extends FilterWidget {
 			return;
 		}
 
-		for (int i = 0; i < lb.getItemCount() - 1; i++) {
+		for (int i = 0; i < lb.getItemCount(); i++) {
 			if (value.equals(lb.getValue(i))) {
 				lb.setSelectedIndex(i);
 				return;
@@ -248,7 +248,8 @@ public class PeriodFilter extends FilterWidget {
 		}
 		String[] s = value.split(",");
 		type = "M".equals(s) ? PeriodFilterType.MONTHYEAR: PeriodFilterType.FIXED;
-		
+
+		updatePeriodType();
 		if (type == PeriodFilterType.FIXED) {
 			setSelectedValue(cbFixedOption, s[1]);
 		}

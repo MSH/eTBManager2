@@ -29,6 +29,9 @@ public class ReportJson {
 		data.put("colVariables", report.getColumnVariables());
 		data.put("rowVariables", report.getRowVariables());
 		data.put("filters", report.getFilters());
+		if (report.getChartType() != null) {
+			data.put("chart", report.getChartType());
+		}
 		
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -66,6 +69,12 @@ public class ReportJson {
 			ObjectMapper mapper = new ObjectMapper();
 			try {
 				JsonNode root = mapper.readTree(report.getData());
+
+				// set the chart type
+				if (root.has("chart")) {
+					rep.setChartType( root.get("chart").asInt() );
+				}
+				
 				ArrayList<String> colVars = new ArrayList<String>();
 				for (JsonNode node: root.get("colVariables")) {
 					colVars.add(node.textValue());

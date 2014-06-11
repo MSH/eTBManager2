@@ -25,6 +25,7 @@ public class CReport implements IsSerializable {
 	private HashMap<String, String> filters;
 	private boolean published;
 	private boolean dashboard;
+	private Integer chartType;
 
 	/**
 	 * @return the id
@@ -136,5 +137,19 @@ public class CReport implements IsSerializable {
 	 */
 	public void setDashboard(boolean dashboard) {
 		this.dashboard = dashboard;
+	}
+
+	/**
+	 * @return the chartType
+	 */
+	public Integer getChartType() {
+		return chartType;
+	}
+
+	/**
+	 * @param chartType the chartType to set
+	 */
+	public void setChartType(Integer chartType) {
+		this.chartType = chartType;
 	}
 }

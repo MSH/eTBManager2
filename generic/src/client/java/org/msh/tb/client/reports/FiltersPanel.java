@@ -55,7 +55,7 @@ public class FiltersPanel extends Composite {
 			for (String filterid: filters.keySet()) {
 				CFilter filter = MainPage.instance().findFilterById(filterid);
 				if (filter != null) {
-					addFilter(filter, null);
+					addFilter(filter, filters.get(filterid));
 				}
 			}
 		}

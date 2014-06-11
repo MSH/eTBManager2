@@ -131,6 +131,8 @@ public class VariablesPanel extends Composite implements StandardEventHandler {
 		
 		selected.setVariable(variable);
 		selected.setRemoveEnabled(true);
+		int index = pnlVariables.getWidgetIndex(selected);
+		variables.set(index, variable);
 		
 		// clean up
 		selected = null;
