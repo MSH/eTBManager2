@@ -13,7 +13,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/reports/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/custom/md"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/custom/ng"/>
-        <wb-resource deploy-path="/reportsgwt" source-path="/target/generic-1.0.0/reportsgwt"/>
+        <wb-resource deploy-path="/" source-path="/target/gwt/reportsgwt"/>
         <property name="java-output-path" value="/generic/target/classes"/>
         <property name="context-root" value="etbmanager"/>
         <property name="component.exclusion.patterns" value="WEB-INF/deploy/**"/>

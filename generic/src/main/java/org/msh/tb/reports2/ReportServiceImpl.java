@@ -97,4 +97,13 @@ public class ReportServiceImpl implements ReportService {
 	public void deleteReport(Integer reportId) {
 		ReportGenerator.deleteReport(reportId);
 	}
+
+
+	/** {@inheritDoc}
+	 */
+	@Override
+	@WebRemote
+	public ArrayList<CReport> getReportList() {
+		return ReportGenerator.getReportList();
+	}
 }

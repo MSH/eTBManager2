@@ -40,7 +40,7 @@ public class ReportCRUDServices {
 		CReport report = MainPage.instance().getReport();
 		CReportRequest req = MainPage.instance().prepareReportData();
 		report.setColumnVariables(req.getColVariables());
-		report.setRowVariables(req.getColVariables());
+		report.setRowVariables(req.getRowVariables());
 		report.setFilters(req.getFilters());
 		return report;
 	}

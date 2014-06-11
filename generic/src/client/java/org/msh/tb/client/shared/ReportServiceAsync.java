@@ -36,4 +36,6 @@ public interface ReportServiceAsync {
 
 	void saveReport(CReport report, AsyncCallback<Integer> callback);
 
+	void getReportList(AsyncCallback<ArrayList<CReport>> callback);
+
 }

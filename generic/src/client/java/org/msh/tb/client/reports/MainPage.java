@@ -161,7 +161,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 	 */
 	@UiHandler("lnkOpen")
 	public void lnkOpen(ClickEvent event) {
-		openReportList();
+		openReportList(false);
 	}
 
 	/**
@@ -495,7 +495,7 @@ public class MainPage extends Composite implements StandardEventHandler {
 				updateReportData();
 				
 				if ((reportUI.getReports() != null) && (reportUI.getReports().size() > 0)) {
-					openReportList();
+					openReportList(false);
 				}
 				else {
 					closeReportList();
@@ -740,8 +740,8 @@ public class MainPage extends Composite implements StandardEventHandler {
 	/**
 	 * Show the report list
 	 */
-	public void openReportList() {
-		pnlReportList.show();
+	public void openReportList(boolean reload) {
+		pnlReportList.show(reload);
 		pnlReport.setVisible(false);
 	}
 	
@@ -753,5 +753,28 @@ public class MainPage extends Composite implements StandardEventHandler {
 		report = new CReport();
 		updateReport();
 		closeReportList();
+	}
+	
+	
+	/**
+	 * Open an existing report
+	 * @param id
+	 */
+	public void openReport(Integer id) {
+		closeReportList();
+		getService().loadReport(id, new StandardCallback<CReport>() {
+			@Override
+			public void onSuccess(CReport result) {
+				report = result;
+				updateReport();
+			}
+		});
+	}
+	
+	/**
+	 * Delete the current report
+	 */
+	public void deleteReport() {
+		
 	}
 }

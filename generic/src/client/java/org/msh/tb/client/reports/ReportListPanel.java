@@ -6,6 +6,7 @@ package org.msh.tb.client.reports;
 import java.util.ArrayList;
 
 import org.msh.tb.client.commons.AnchorData;
+import org.msh.tb.client.commons.StandardCallback;
 import org.msh.tb.client.shared.model.CReport;
 
 import com.google.gwt.core.client.GWT;
@@ -55,18 +56,39 @@ public class ReportListPanel extends Composite {
 	
 	/**
 	 * Display the panel and show the list of reports
+	 * @param reload informs the panel to reload the list of reports from the server
 	 */
-	public void show() {
+	public void show(boolean reload) {
 		tblReports.removeAllRows();
-		index = 0;
-		if (index == 0) {
+		if (reload) {
 			ArrayList<CReport> lst = MainPage.instance().getReportUI().getReports();
-			addReport("New report", true, false);
-			for (CReport rep: lst) {
-				addReport(rep.getTitle(), false, rep.isMyReport());
-			}
+			updateList(lst);
+		}
+		else {
+			// call server for the list of reports
+			MainPage.instance().getService().getReportList(new StandardCallback<ArrayList<CReport>>() {
+				@Override
+				public void onSuccess(ArrayList<CReport> result) {
+					updateList(result);
+				}
+			});
 		}
 		content.setVisible(true);
+	}
+	
+	
+	/**
+	 * Update the list of reports displayed in the table
+	 * @param lst
+	 */
+	protected void updateList(ArrayList<CReport> lst) {
+		tblReports.removeAllRows();
+		index = 0;
+		
+		addReport("New report", true, false);
+		for (CReport rep: lst) {
+			addReport(rep.getTitle(), false, rep.isMyReport());
+		}
 	}
 	
 	
@@ -118,9 +140,12 @@ public class ReportListPanel extends Composite {
 	
 	public void reportClickHandler(ClickEvent event) {
 		AnchorData lnk = (AnchorData)event.getSource();
-		Integer value = (Integer)lnk.getData();
-		if (value == 0) {
+		Integer repId = (Integer)lnk.getData();
+		if (repId == 0) {
 			MainPage.instance().newReport();
+		}
+		else {
+			MainPage.instance().openReport(repId);
 		}
 	}
 }

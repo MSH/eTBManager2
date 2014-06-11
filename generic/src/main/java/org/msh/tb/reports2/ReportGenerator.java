@@ -352,11 +352,8 @@ public class ReportGenerator {
 		else {
 			report = new Report();
 		}
-		
-		report.setId(crep.getId());
-		report.setTitle(crep.getTitle());
-		report.setPublished(crep.isPublished());
-		report.setDashboard(crep.isDashboard());
+
+		ReportJson.convertFromClient(crep, report);
 		
 		report = dao.saveReport(report);
 		
@@ -377,12 +374,9 @@ public class ReportGenerator {
 		// load current user
 		User user = UserSession.getUser();
 		
-		CReport report = new CReport();
-		report.setId( rep.getId() );
-		report.setTitle( rep.getTitle() );
-		report.setDashboard( rep.isDashboard() );
+		CReport report = ReportJson.convertToClient(rep);
+		
 		report.setMyReport( user.getId().equals(rep.getOwner().getId()) );
-		report.setPublished( rep.isPublished() );
 		
 		return report;
 	}

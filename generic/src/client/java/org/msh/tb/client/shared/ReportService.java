@@ -49,6 +49,13 @@ public interface ReportService extends RemoteService {
 	 * @param reportId is the report ID
 	 */
 	void deleteReport(Integer reportId);
+
+	
+	/**
+	 * Return the list of available reports for the user
+	 * @return list of {@link CReport} objects
+	 */
+	ArrayList<CReport> getReportList();
 	
 	/**
 	 * Execute the report
