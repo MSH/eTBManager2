@@ -24,6 +24,11 @@
 			font-size:20px;
 			font-weight: normal;
 			display: inline;
+			border:2px solid white;
+		}
+		.reportTitle:hover {
+			border:2px solid #069;
+			cursor:pointer;
 		}
 		.openReport {
 			padding: 4px 4px 4px 8px;
@@ -44,6 +49,10 @@
 			color: #5a5a5a;
 			background-color:#e0e0e0;
 		}
+		.edtTitle {
+			font-size:16px;
+			width:700px;
+		}
 	</ui:style>
 
 	<g:HTMLPanel ui:field="pnlContent" >
@@ -57,7 +66,8 @@
 	            <td>
 	    			<h2>
 	    			    <g:Anchor ui:field="lnkOpen" styleName="gwt-Button {style.openReport}"><i class="icon-chevron-down"></i></g:Anchor>
-	    			    <g:Label  styleName="{style.reportTitle}" ui:field="txtTitle" />
+	    			    <g:Label styleName="{style.reportTitle}" ui:field="txtTitle" />
+	    			    <g:TextBox ui:field="edtTitle" styleName="{style.edtTitle}" maxLength="200" />
 	    			</h2>
 	            </td>
 	            <td align="right">

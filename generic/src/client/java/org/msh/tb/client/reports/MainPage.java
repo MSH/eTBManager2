@@ -26,7 +26,13 @@ import org.msh.tb.client.shared.model.CVariable;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -38,6 +44,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -66,6 +73,7 @@ public class MainPage extends Composite {
 	@UiField Label txtTitle;
 	@UiField HTMLPanel pnlReport;
 	@UiField ReportListPanel pnlReportList;
+	@UiField TextBox edtTitle;
 	
 	private GroupFiltersPopup filtersPopup;
 //	private GroupVariablesPopup varsPopup;
@@ -120,6 +128,74 @@ public class MainPage extends Composite {
 		btnGenerate.addStyleName("btn-alt");
 		
 		pnlReport.setVisible(false);
+		// map the title editing events
+		edtTitle.setVisible(false);
+		txtTitle.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				titleClick(event);
+			}
+		});
+		edtTitle.addBlurHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent event) {
+				changeEditTitle();
+			}
+		});
+		edtTitle.addKeyDownHandler(new KeyDownHandler() {
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				editTitleKeyDown(event);
+			}
+		});
+	}
+
+
+	/**
+	 * Called when the user press a key when editing the title
+	 * @param event
+	 */
+	protected void editTitleKeyDown(KeyDownEvent event) {
+		// user pressed the enter key ?
+		if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+			changeEditTitle();
+		}
+		
+		// user pressed the esc key ?
+		if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE) {
+			edtTitle.setVisible(false);
+			txtTitle.setVisible(true);
+		}
+	}
+
+
+	/**
+	 * @param event
+	 */
+	protected void changeEditTitle() {
+		String s = edtTitle.getText().trim();
+		if (s.isEmpty()) {
+			edtTitle.setFocus(true);
+			return;
+		}
+		
+		report.setTitle(s);
+		txtTitle.setText(s);
+		edtTitle.setVisible(false);
+		txtTitle.setVisible(true);
+	}
+
+
+	/**
+	 * Called when user clicks on the title of the report, in order to
+	 * change its name
+	 * @param event instance of {@link ClickEvent}
+	 */
+	protected void titleClick(ClickEvent event) {
+		txtTitle.setVisible(false);
+		edtTitle.setText(txtTitle.getText());
+		edtTitle.setVisible(true);
+		edtTitle.setFocus(true);
 	}
 
 

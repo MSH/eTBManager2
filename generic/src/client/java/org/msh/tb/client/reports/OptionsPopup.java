@@ -35,6 +35,15 @@ public class OptionsPopup extends PopupPanel {
 	}
 
 	
+	/**
+	 * Called when user clicks on the New report option
+	 * @param event
+	 */
+	@UiHandler("lnkNew")
+	protected void cmdNewReport(ClickEvent event) {
+		hide();
+		MainPage.instance().newReport();
+	}
 	
 	/**
 	 * Called when user clicks on the save as item
