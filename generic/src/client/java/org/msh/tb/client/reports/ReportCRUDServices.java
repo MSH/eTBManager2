@@ -7,6 +7,7 @@ import org.msh.tb.client.commons.StandardCallback;
 import org.msh.tb.client.reports.chart.ChartType;
 import org.msh.tb.client.shared.model.CReport;
 import org.msh.tb.client.shared.model.CReportRequest;
+import org.msh.tb.client.tableview.TableData;
 
 /**
  * @author Ricardo Memoria
@@ -43,6 +44,14 @@ public class ReportCRUDServices {
 		report.setColumnVariables(req.getColVariables());
 		report.setRowVariables(req.getRowVariables());
 		report.setFilters(req.getFilters());
+
+		// get information about selected column/row
+		TableData data = ReportMain.instance().getTableData();
+		if (data.getSelection() != null) {
+			report.setTblSelection( data.getSelection().ordinal() );
+		}
+		report.setTblSelectedCell( data.getSelectedCell() );
+		
 		ChartType chartType = ReportMain.instance().getChartType();
 		report.setChartType(chartType != null? chartType.ordinal(): null);
 		return report;

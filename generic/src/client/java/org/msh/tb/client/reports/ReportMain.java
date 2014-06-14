@@ -315,6 +315,10 @@ public class ReportMain extends Composite implements AppModule {
 	}
 	
 
+	/**
+	 * Display an error message in the main report page
+	 * @param msg is the message to be displayed
+	 */
 	public void showErrorMessage(String msg) {
 		pnlMessage.setVisible(true);
 		pnlMessage.setText(msg);
@@ -717,7 +721,7 @@ public class ReportMain extends Composite implements AppModule {
 	
 	/**
 	 * Open an existing report
-	 * @param id
+	 * @param id is the report identification
 	 */
 	public void openReport(Integer id) {
 		closeReportList();
@@ -729,6 +733,13 @@ public class ReportMain extends Composite implements AppModule {
 			@Override
 			public void onSuccess(CReport result) {
 				report = result;
+				// set default selection of table series
+				if (report.getTblSelectedCell() != null) {
+					tableData.setSelectedCell(report.getTblSelectedCell());
+				}
+				if (report.getTblSelection() != null) {
+					tableData.setSelection( TableSelection.values()[ report.getTblSelection() ]);
+				}
 				updateReport();
 				// run the report
 				btnGenerate.click();
@@ -778,5 +789,13 @@ public class ReportMain extends Composite implements AppModule {
 			}
 		}
 		return null;
+	}
+
+
+	/**
+	 * @return the tableData
+	 */
+	public TableData getTableData() {
+		return tableData;
 	}
 }

@@ -311,7 +311,7 @@
 				<executions>
 					<execution>
 						<configuration>
-							<module>org.msh.tb.client.reports</module>
+							<module>org.msh.tb.etbmanager</module>
 						</configuration>
 						<goals>
 							<goal>compile</goal>

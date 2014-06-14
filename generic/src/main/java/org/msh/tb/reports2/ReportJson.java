@@ -23,14 +23,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class ReportJson {
 
+	/**
+	 * Convert a report data from a client representation to its server entity data
+	 * @param report
+	 * @param res
+	 * @return
+	 */
 	public static Report convertFromClient(CReport report, Report res) {
 		// convert data to json
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("colVariables", report.getColumnVariables());
 		data.put("rowVariables", report.getRowVariables());
 		data.put("filters", report.getFilters());
+		
 		if (report.getChartType() != null) {
 			data.put("chart", report.getChartType());
+		}
+
+		if (report.getTblSelectedCell() != null) {
+			data.put("tblSelectedCell", report.getTblSelectedCell());
+		}
+		
+		if (report.getTblSelection() != null) {
+			data.put("tblSelection", report.getTblSelection());
 		}
 		
 		ObjectMapper mapper = new ObjectMapper();
@@ -73,6 +88,14 @@ public class ReportJson {
 				// set the chart type
 				if (root.has("chart")) {
 					rep.setChartType( root.get("chart").asInt() );
+				}
+				
+				if (root.has("tblSelectedCell")) {
+					rep.setTblSelectedCell( root.get("tblSelectedCell").asInt() );
+				}
+				
+				if (root.has("tblSelection")) {
+					rep.setTblSelectedCell( root.get("tblSelection").asInt() );
 				}
 				
 				ArrayList<String> colVars = new ArrayList<String>();

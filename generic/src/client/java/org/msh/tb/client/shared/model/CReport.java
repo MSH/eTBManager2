@@ -26,6 +26,10 @@ public class CReport implements IsSerializable {
 	private boolean published;
 	private boolean dashboard;
 	private Integer chartType;
+	// indicate if it's selected row or column
+	private Integer tblSelection;
+	// indicate which cell of the column or row is selected
+	private Integer tblSelectedCell;
 
 	/**
 	 * @return the id
@@ -151,5 +155,33 @@ public class CReport implements IsSerializable {
 	 */
 	public void setChartType(Integer chartType) {
 		this.chartType = chartType;
+	}
+
+	/**
+	 * @return the tblSelection
+	 */
+	public Integer getTblSelection() {
+		return tblSelection;
+	}
+
+	/**
+	 * @param tblSelection the tblSelection to set
+	 */
+	public void setTblSelection(Integer tblSelection) {
+		this.tblSelection = tblSelection;
+	}
+
+	/**
+	 * @return the tblSelectedCell
+	 */
+	public Integer getTblSelectedCell() {
+		return tblSelectedCell;
+	}
+
+	/**
+	 * @param tblSelectedCell the tblSelectedCell to set
+	 */
+	public void setTblSelectedCell(Integer tblSelectedCell) {
+		this.tblSelectedCell = tblSelectedCell;
 	}
 }
