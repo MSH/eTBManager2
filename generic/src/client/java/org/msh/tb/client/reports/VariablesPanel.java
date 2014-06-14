@@ -44,7 +44,7 @@ public class VariablesPanel extends Composite implements StandardEventHandler {
 
 		if (varsId != null) {
 			for (String varid: varsId) {
-				CVariable var = MainPage.instance().findVariableById(varid);
+				CVariable var = ReportMain.instance().findVariableById(varid);
 				if (var != null) {
 					VariableBox box = new VariableBox(this, true);
 					box.setVariable(var);

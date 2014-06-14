@@ -38,12 +38,12 @@ public class ReportCRUDServices {
 	 * Update variables and filters used in the current report being displayed
 	 */
 	protected static CReport updateReportData() {
-		CReport report = MainPage.instance().getReport();
-		CReportRequest req = MainPage.instance().prepareReportRequest();
+		CReport report = ReportMain.instance().getReport();
+		CReportRequest req = ReportMain.instance().prepareReportRequest();
 		report.setColumnVariables(req.getColVariables());
 		report.setRowVariables(req.getRowVariables());
 		report.setFilters(req.getFilters());
-		ChartType chartType = MainPage.instance().getChartType();
+		ChartType chartType = ReportMain.instance().getChartType();
 		report.setChartType(chartType != null? chartType.ordinal(): null);
 		return report;
 	}
@@ -67,11 +67,11 @@ public class ReportCRUDServices {
 	 * @param callback
 	 */
 	protected static void saveReportData(final CReport report, final StandardCallback<CReport> callback) {
-		MainPage.instance().getService().saveReport(report, new StandardCallback<Integer>() {
+		ReportMain.instance().getService().saveReport(report, new StandardCallback<Integer>() {
 			@Override
 			public void onSuccess(Integer result) {
-				MainPage.instance().getReport().setId(result);
-				MainPage.instance().updateReport();
+				ReportMain.instance().getReport().setId(result);
+				ReportMain.instance().updateReport();
 				if (callback != null) {
 					callback.onSuccess(report);
 				}

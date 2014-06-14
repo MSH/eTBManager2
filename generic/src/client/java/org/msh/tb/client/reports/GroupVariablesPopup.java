@@ -21,7 +21,7 @@ public class GroupVariablesPopup extends GroupPopup {
 	 */
 	protected GroupVariablesPopup() {
 		super(null);
-		setGroups(MainPage.instance().getGroups());
+		setGroups(ReportMain.instance().getGroups());
 	}
 
 	

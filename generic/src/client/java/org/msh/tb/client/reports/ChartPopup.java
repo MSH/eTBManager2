@@ -22,7 +22,7 @@ public class ChartPopup extends PopupPanel {
 	public ChartPopup() {
 		VerticalPanel pnl = new VerticalPanel();
 
-		for (int i = 0; i < MainPage.chartImgs.length; i++) {
+		for (int i = 0; i < ReportMain.chartImgs.length; i++) {
 			Anchor lnk = new Anchor();
 			lnk.addStyleName("chart-button");
 			lnk.addClickHandler(new ClickHandler() {
@@ -32,12 +32,12 @@ public class ChartPopup extends PopupPanel {
 					chartLinkClick(lnk);
 				}
 			});
-			Image img = new Image(MainPage.chartImgs[i]);
+			Image img = new Image(ReportMain.chartImgs[i]);
 			DOM.insertBefore(lnk.getElement(), img.getElement(), DOM.getFirstChild(lnk.getElement()));
 			pnl.add(lnk);
 		}
 		pnl.setWidth("40px");
-		pnl.setHeight(Integer.toString(MainPage.chartImgs.length * 36) + "px");
+		pnl.setHeight(Integer.toString(ReportMain.chartImgs.length * 36) + "px");
 		add(pnl);
 		setAutoHideEnabled(true);
 		addStyleName("chart-popup");
@@ -50,7 +50,7 @@ public class ChartPopup extends PopupPanel {
 	protected void chartLinkClick(Anchor lnk) {
 		VerticalPanel pnl = (VerticalPanel)lnk.getParent();
 		int chartIndex = pnl.getWidgetIndex(lnk);
-		MainPage.instance().selectChart(ChartType.values()[chartIndex]);
+		ReportMain.instance().selectChart(ChartType.values()[chartIndex]);
 		hide();
 	}
 }

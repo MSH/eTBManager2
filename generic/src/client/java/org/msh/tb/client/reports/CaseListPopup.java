@@ -2,6 +2,7 @@ package org.msh.tb.client.reports;
 
 import java.util.HashMap;
 
+import org.msh.tb.client.App;
 import org.msh.tb.client.commons.StandardCallback;
 import org.msh.tb.client.shared.model.CPatient;
 import org.msh.tb.client.shared.model.CPatientList;
@@ -80,7 +81,7 @@ public class CaseListPopup extends PopupPanel {
 	private void updatePageContent() {
 		table.removeAllRows();
 		pnlWait.setVisible(true);
-		MainPage.instance().getService().getPatients(filters, page, new StandardCallback<CPatientList>() {
+		ReportMain.instance().getService().getPatients(filters, page, new StandardCallback<CPatientList>() {
 			@Override
 			public void onSuccess(CPatientList lst) {
 				updatePatientList(lst);
@@ -127,7 +128,7 @@ public class CaseListPopup extends PopupPanel {
 		if (lastResult > recordCount)
 			lastResult = recordCount;
 		String s = nf.format(iniResult) + " - " + nf.format(lastResult) + 
-				" " + MainPage.getMessages().of() + " <b>" + nf.format(recordCount) + "</b>";
+				" " + App.messages.of() + " <b>" + nf.format(recordCount) + "</b>";
 		
 		txtResult.setHTML(s);
 	}
@@ -164,7 +165,7 @@ public class CaseListPopup extends PopupPanel {
 	 */
 	private final String patientNumber(CPatient pat) {
 		if (pat.getNumber() == null)
-			 return MainPage.getMessages().unnumbered();
+			 return App.messages.unnumbered();
 		else return pat.getNumber();
 	}
 

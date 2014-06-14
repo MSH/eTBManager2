@@ -53,7 +53,7 @@ public class FiltersPanel extends Composite {
 		pnlFilters.clear();
 		if (filters != null) {
 			for (String filterid: filters.keySet()) {
-				CFilter filter = MainPage.instance().findFilterById(filterid);
+				CFilter filter = ReportMain.instance().findFilterById(filterid);
 				if (filter != null) {
 					addFilter(filter, filters.get(filterid));
 				}

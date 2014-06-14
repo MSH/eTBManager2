@@ -1,7 +1,9 @@
-package org.msh.tb.client.reports;
+package org.msh.tb.client.tableview;
 
 import java.util.List;
 
+import org.msh.tb.client.App;
+import org.msh.tb.client.reports.ReportMain;
 import org.msh.tb.client.shared.model.CTableColumn;
 import org.msh.tb.client.shared.model.CTableRow;
 import org.msh.tb.client.shared.model.CVariable;
@@ -95,7 +97,7 @@ public class TableView extends Composite {
 		// include the total column, if necessary
 		if (totCol) {
 			// set the label of the total column
-			setHoverText(0, 2, MainPage.getMessages().total());
+			setHoverText(0, 2, App.messages.total());
 			setCellStyle(0, 2, STYLE_HEADER_TITLE, colheadersize + 1, 1);
 		}
 		
@@ -149,7 +151,7 @@ public class TableView extends Composite {
 		
 		// include the total row, if available
 		if (totRow) {
-			setHoverText(r, 0, MainPage.getMessages().total());
+			setHoverText(r, 0, App.messages.total());
 			setCellStyle(r, 0, STYLE_HEADER_TITLE, 1, 1);
 			int c = 1;
 			double sum = 0;
@@ -209,13 +211,13 @@ public class TableView extends Composite {
 		
 		// is total column cell ?
 		if ((row == 0) && (col == 2)) {
-			MainPage.instance().setSelectedCol(TableData.CELL_TOTAL);
+			ReportMain.instance().setSelectedCol(TableData.CELL_TOTAL);
 			return;
 		}
 
 		// is total column row ?
 		if ((col == 0) && (row == rowcount + colheadersize + 1)) {
-			MainPage.instance().setSelectedRow(TableData.CELL_TOTAL);
+			ReportMain.instance().setSelectedRow(TableData.CELL_TOTAL);
 			return;
 		}
 
@@ -225,30 +227,30 @@ public class TableView extends Composite {
 
 		// is cell containing value
 		if ((row > colheadersize) && (col > 0)) {
-			MainPage.instance().showPatientList(col - 1, row - colheadersize - 1);
+			ReportMain.instance().showPatientList(col - 1, row - colheadersize - 1);
 		}
 		
 		// row title selection is just available if data is not grouped
 		if ((!data.isRowGrouped()) && (!data.isColumnGrouped())) {
 			// clicked on the row variable title ?
 			if ((col == 0) && (row == 0)) {
-				MainPage.instance().setSelectedRow(-1);
+				ReportMain.instance().setSelectedRow(-1);
 				return;
 			}
 			
 			// clicked on the column variable title ?
 			if ((col == 1) && (row == 0)) {
-				MainPage.instance().setSelectedCol(-1);
+				ReportMain.instance().setSelectedCol(-1);
 				return;
 			}
 		}
 
 		// row selected ?
 		if (row == colheadersize)
-			MainPage.instance().setSelectedCol(col);
+			ReportMain.instance().setSelectedCol(col);
 		else
 			if ((col == 0) && (row > colheadersize))
-					MainPage.instance().setSelectedRow(row - colheadersize - 1);
+					ReportMain.instance().setSelectedRow(row - colheadersize - 1);
 	}
 
 }

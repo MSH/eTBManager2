@@ -2,7 +2,8 @@ package org.msh.tb.client.reports.filters;
 
 import java.util.Date;
 
-import org.msh.tb.client.reports.MainPage;
+import org.msh.tb.client.App;
+import org.msh.tb.client.reports.ReportMain;
 import org.msh.tb.client.shared.model.CFilter;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -109,7 +110,7 @@ public class PeriodFilter extends FilterWidget {
 			iniYear = createYearListbox();
 			pnlMonthYear.add(iniYear);
 
-			pnlMonthYear.add(new Label(MainPage.getMessages().until()));
+			pnlMonthYear.add(new Label(App.messages.until()));
 			
 			endMonth = createMonthListbox();
 			pnlMonthYear.add(endMonth);
@@ -147,11 +148,11 @@ public class PeriodFilter extends FilterWidget {
 			cbFixedOption.setVisibleItemCount(1);
 			pnlFixedPeriod.add(cbFixedOption);
 			cbFixedOption.addItem("-");
-			cbFixedOption.addItem(MainPage.getMessages().fixedPeriodLAST_3MONTHS(), "0");
-			cbFixedOption.addItem(MainPage.getMessages().fixedPeriodLAST_6MONTHS(), "1");
-			cbFixedOption.addItem(MainPage.getMessages().fixedPeriodLAST_12MONTHS(), "2");
-			cbFixedOption.addItem(MainPage.getMessages().fixedPeriodPREVIOUS_QUARTER(), "3");
-			cbFixedOption.addItem(MainPage.getMessages().fixedPeriodPREVIOUS_YEAR(), "4");
+			cbFixedOption.addItem(App.messages.fixedPeriodLAST_3MONTHS(), "0");
+			cbFixedOption.addItem(App.messages.fixedPeriodLAST_6MONTHS(), "1");
+			cbFixedOption.addItem(App.messages.fixedPeriodLAST_12MONTHS(), "2");
+			cbFixedOption.addItem(App.messages.fixedPeriodPREVIOUS_QUARTER(), "3");
+			cbFixedOption.addItem(App.messages.fixedPeriodPREVIOUS_YEAR(), "4");
 		}
 		setPeriodPanel(pnlFixedPeriod);
 	}
@@ -182,7 +183,7 @@ public class PeriodFilter extends FilterWidget {
 		ListBox lb = new ListBox();
 		lb.setVisibleItemCount(1);
 
-		Date dt = MainPage.instance().getReportUI().getCurrentDate();
+		Date dt = ReportMain.instance().getReportUI().getCurrentDate();
 		String syear = DateTimeFormat.getFormat("yyyy").format(dt);
 		int year = Integer.parseInt(syear);
 		lb.addItem("-", "0");

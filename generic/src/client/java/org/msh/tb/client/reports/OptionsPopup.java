@@ -42,7 +42,7 @@ public class OptionsPopup extends PopupPanel {
 	@UiHandler("lnkNew")
 	protected void cmdNewReport(ClickEvent event) {
 		hide();
-		MainPage.instance().newReport();
+		ReportMain.instance().newReport();
 	}
 	
 	/**

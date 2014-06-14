@@ -55,7 +55,7 @@ public class NegativationMonthVariable extends VariableImpl {
 	@Override
 	public String getDisplayText(Object key) {
 		if ((key == null) || (KEY_NULL.equals(key)))
-			return Messages.instance().get("manag.reportgen.beforetreat");
+			return Messages.instance().get("global.atdiag");
 
 		if (key.equals(37L))
 			return formatMessage("manag.reportgen.over", 36);

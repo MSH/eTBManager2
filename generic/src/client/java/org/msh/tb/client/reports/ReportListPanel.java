@@ -61,12 +61,12 @@ public class ReportListPanel extends Composite {
 	public void show(boolean reload) {
 		tblReports.removeAllRows();
 		if (reload) {
-			ArrayList<CReport> lst = MainPage.instance().getReportUI().getReports();
+			ArrayList<CReport> lst = ReportMain.instance().getReportUI().getReports();
 			updateList(lst);
 		}
 		else {
 			// call server for the list of reports
-			MainPage.instance().getService().getReportList(new StandardCallback<ArrayList<CReport>>() {
+			ReportMain.instance().getService().getReportList(new StandardCallback<ArrayList<CReport>>() {
 				@Override
 				public void onSuccess(ArrayList<CReport> result) {
 					updateList(result);
@@ -85,9 +85,9 @@ public class ReportListPanel extends Composite {
 		tblReports.removeAllRows();
 		index = 0;
 		
-		addReport("New report", true, false);
+		addReport(null);
 		for (CReport rep: lst) {
-			addReport(rep.getTitle(), false, rep.isMyReport());
+			addReport(rep);
 		}
 	}
 	
@@ -105,21 +105,24 @@ public class ReportListPanel extends Composite {
 	 * @param newRep
 	 * @param myReport
 	 */
-	protected void addReport(String title, boolean newRep, boolean myReport) {
+	protected void addReport(CReport rep) {
 		String sicon = "<i class='";
-		if (newRep) {
+		if (rep == null) {
 			sicon += "icon-file-alt";
 		}
 		else {
 			sicon += "icon-table";
 		}
 		sicon += " repsymbol'></i>";
-		
+
+		String title = rep != null? rep.getTitle(): "New report";
 		SafeHtml html = SafeHtmlUtils.fromTrustedString(sicon + title);
 		AnchorData lnk = new AnchorData(html);
 		
 		lnk.addClickHandler(reportClickHandler);
-		lnk.setData(index);
+		if (rep != null) {
+			lnk.setData(rep.getId());
+		}
 		
 		int row = index / 2;
 		int col = index % 2;
@@ -134,18 +137,22 @@ public class ReportListPanel extends Composite {
 	 */
 	@UiHandler("btnClose")
 	public void btnCancelClick(ClickEvent event) {
-		MainPage.instance().closeReportList();
+		ReportMain.instance().closeReportList();
 	}
 	
 	
+	/**
+	 * Called when the user clicks on a report link
+	 * @param event instance of {@link ClickEvent}
+	 */
 	public void reportClickHandler(ClickEvent event) {
 		AnchorData lnk = (AnchorData)event.getSource();
 		Integer repId = (Integer)lnk.getData();
-		if (repId == 0) {
-			MainPage.instance().newReport();
+		if (repId == null) {
+			ReportMain.instance().newReport();
 		}
 		else {
-			MainPage.instance().openReport(repId);
+			ReportMain.instance().openReport(repId);
 		}
 	}
 }

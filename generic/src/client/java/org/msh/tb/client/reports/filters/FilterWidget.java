@@ -3,7 +3,7 @@ package org.msh.tb.client.reports.filters;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.msh.tb.client.reports.MainPage;
+import org.msh.tb.client.reports.ReportMain;
 import org.msh.tb.client.shared.ReportServiceAsync;
 import org.msh.tb.client.shared.model.CFilter;
 import org.msh.tb.client.shared.model.CItem;
@@ -68,7 +68,7 @@ public abstract class FilterWidget extends Composite {
 	 * @param callback {@link AsyncCallback} function that will be called when the server responds
 	 */
 	protected void loadServerOptions(String param, AsyncCallback<ArrayList<CItem>> callback) {
-		ReportServiceAsync srv = MainPage.instance().getService();
+		ReportServiceAsync srv = ReportMain.instance().getService();
 		srv.getFilterOptions(filter.getId(), param, callback);
 	}
 }

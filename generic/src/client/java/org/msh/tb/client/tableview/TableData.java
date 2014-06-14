@@ -1,4 +1,4 @@
-package org.msh.tb.client.reports;
+package org.msh.tb.client.tableview;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +15,15 @@ import org.msh.tb.client.shared.model.CVariable;
  *
  */
 public class TableData {
+
+	public enum TableSelection { ROW, COLUMN };
 	
 	public static int CELL_TOTAL = -2;
 	public static int CELL_TITLE = -1;
+
+	// selected column and row to draw the chart
+	private int selectedCell = TableData.CELL_TITLE;
+	private TableSelection selection = TableSelection.ROW;
 
 	/**
 	 * Table sent from the server
@@ -435,6 +441,34 @@ public class TableData {
 	 */
 	public double[] getTotalColumn() {
 		return totalColumn;
+	}
+
+	/**
+	 * @return the selectedCell
+	 */
+	public int getSelectedCell() {
+		return selectedCell;
+	}
+
+	/**
+	 * @param selectedCell the selectedCell to set
+	 */
+	public void setSelectedCell(int selectedCell) {
+		this.selectedCell = selectedCell;
+	}
+
+	/**
+	 * @return the selection
+	 */
+	public TableSelection getSelection() {
+		return selection;
+	}
+
+	/**
+	 * @param selection the selection to set
+	 */
+	public void setSelection(TableSelection selection) {
+		this.selection = selection;
 	}
 
 }

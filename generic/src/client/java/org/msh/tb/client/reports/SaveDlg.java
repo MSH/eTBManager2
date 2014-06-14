@@ -49,7 +49,7 @@ public class SaveDlg extends Composite {
 	 */
 	protected void open(boolean saveAs) {
 		this.saveAs = saveAs;
-		edtTitle.setText( MainPage.instance().getReport().getTitle() );
+		edtTitle.setText( ReportMain.instance().getReport().getTitle() );
 		dialogBox.center();
 		dialogBox.show();
 		edtTitle.setFocus(true);

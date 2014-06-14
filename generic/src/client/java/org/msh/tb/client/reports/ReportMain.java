@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.msh.tb.client.App;
+import org.msh.tb.client.AppModule;
 import org.msh.tb.client.commons.MessagePanel;
 import org.msh.tb.client.commons.StandardCallback;
 import org.msh.tb.client.commons.StandardEventHandler;
-import org.msh.tb.client.reports.TableData.HeaderLabel;
-import org.msh.tb.client.reports.chart.ChartSeries;
+import org.msh.tb.client.reports.chart.ChartReport;
 import org.msh.tb.client.reports.chart.ChartType;
 import org.msh.tb.client.reports.chart.ChartView;
-import org.msh.tb.client.reports.resources.ReportConstants;
 import org.msh.tb.client.shared.ReportService;
 import org.msh.tb.client.shared.ReportServiceAsync;
 import org.msh.tb.client.shared.model.CFilter;
@@ -23,6 +23,9 @@ import org.msh.tb.client.shared.model.CReportResponse;
 import org.msh.tb.client.shared.model.CTableColumn;
 import org.msh.tb.client.shared.model.CTableRow;
 import org.msh.tb.client.shared.model.CVariable;
+import org.msh.tb.client.tableview.TableData;
+import org.msh.tb.client.tableview.TableData.TableSelection;
+import org.msh.tb.client.tableview.TableView;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -54,12 +57,12 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Ricardo Memoria
  *
  */
-public class MainPage extends Composite {
+public class ReportMain extends Composite implements AppModule {
 
 	private static final Binder binder = GWT.create(Binder.class);
-	private static MainPage singletonInstance;
+	private static ReportMain singletonInstance;
 
-	interface Binder extends UiBinder<Widget, MainPage> { }
+	interface Binder extends UiBinder<Widget, ReportMain> { }
 
 	@UiField VariablesPanel pnlRowVariables;
 	@UiField VariablesPanel pnlColVariables;
@@ -81,9 +84,6 @@ public class MainPage extends Composite {
 	private ChartPopup chartPopup;
 	private OptionsPopup optionsPopup;
 	private CaseListPopup patientListPopup;
-	// selected column and row to draw the chart
-	private int selectedCell = TableData.CELL_TITLE;
-	private boolean rowSelected = true;
 
 	// as default, start with a new report
 	private CReport report;
@@ -99,8 +99,6 @@ public class MainPage extends Composite {
 	private ReportServiceAsync service = GWT.create(ReportService.class);
 
 	public static final Resources resources = GWT.create(Resources.class);
-	
-	public static final ReportConstants messages = GWT.create(ReportConstants.class);
 
 	/**
 	 * List of chart images to be displayed for chart selection
@@ -115,7 +113,7 @@ public class MainPage extends Composite {
 	/**
 	 * Default constructor
 	 */
-	private MainPage() {
+	private ReportMain() {
 		super();
 		singletonInstance = this;
 		initWidget(binder.createAndBindUi(this));
@@ -295,7 +293,7 @@ public class MainPage extends Composite {
 				btnGenerate.setEnabled(true);
 				// did the server sent any data ?
 				if (res == null) {
-					showErrorMessage(messages.noResultFound());
+					showErrorMessage(App.messages.noResultFound());
 					return;
 				}
 				// there was an error message?
@@ -335,7 +333,7 @@ public class MainPage extends Composite {
 		ArrayList<String> cols = pnlColVariables.getDeclaredVariables();
 		
 		if ((rows.size() == 0) || (cols.size() == 0)) {
-			showErrorMessage(messages.noVariableDefined());
+			showErrorMessage(App.messages.noVariableDefined());
 			return null;
 		}
 		else pnlMessage.setVisible(false);
@@ -371,14 +369,15 @@ public class MainPage extends Composite {
 	 * Update the chart applying the selected type and values
 	 */
 	protected void updateChart() {
-		if (tableData.getTable() == null)
+		ChartReport.update(chart, tableData);
+/*		if (tableData.getTable() == null)
 			return;
 
 		chart.clear();
 
 		String title = tableData.getTable().getUnitTypeLabel();
 		if (title == null)
-			title = messages.numberOfCases();
+			title = App.messages.numberOfCases();
 		chart.setyAxisTitle(title);
 
 		// is row selected ?
@@ -398,8 +397,8 @@ public class MainPage extends Composite {
 			}
 			else if (selectedCell == TableData.CELL_TOTAL) {
 				chart.setTitle(tableData.getColVariables().get(0).getName());
-				chart.setSubTitle(messages.total());
-				ChartSeries series = chart.addSeries(messages.total());
+				chart.setSubTitle(App.messages.total());
+				ChartSeries series = chart.addSeries(App.messages.total());
 				int index = 0;
 				for (double val: tableData.getTotalRow()) {
 					series.addValue(tableData.getColumn(index++).getTitle(), val);
@@ -409,7 +408,7 @@ public class MainPage extends Composite {
 				// create title of the report
 				CTableRow row = tableData.getTable().getRows().get(selectedCell);
 				String colTitle = tableData.getColVariables().get(0).getName();
-				chart.setTitle(messages.numberOfCasesBy() + " " + colTitle);
+				chart.setTitle(App.messages.numberOfCasesBy() + " " + colTitle);
 				chart.setSubTitle( tableData.getRowVariables().get(row.getVarIndex()).getName() + ": " + row.getTitle());
 
 				// is grouped ?
@@ -458,8 +457,8 @@ public class MainPage extends Composite {
 			else 
 			if (selectedCell == TableData.CELL_TOTAL) {
 				chart.setTitle(tableData.getRowVariables().get(0).getName());
-				chart.setSubTitle(messages.total());
-				ChartSeries series = chart.addSeries(messages.total());
+				chart.setSubTitle(App.messages.total());
+				ChartSeries series = chart.addSeries(App.messages.total());
 				int index = 0;
 				for (double val: tableData.getTotalColumn()) {
 					series.addValue(tableData.getTable().getRows().get(index++).getTitle(), val);
@@ -471,7 +470,7 @@ public class MainPage extends Composite {
 				String s = col.getTitle();
 				
 				String colTitle = tableData.getRowVariables().get(0).getName();
-				chart.setTitle(messages.numberOfCasesBy() + " " + colTitle);
+				chart.setTitle(App.messages.numberOfCasesBy() + " " + colTitle);
 				chart.setSubTitle(tableData.getColumnDisplaySelection(selectedCell));
 
 				// the rows are grouped ?
@@ -499,13 +498,13 @@ public class MainPage extends Composite {
 		}
 
 		chart.update();
-	}
+*/	}
 
 
 	/**
 	 * Initialize the report page loading the content from the server	 
 	 */
-	public void initialize() {
+	public void run() {
 		service.initialize(new StandardCallback<CInitializationData>() {
 			@Override
 			public void onSuccess(CInitializationData rep) {
@@ -580,9 +579,9 @@ public class MainPage extends Composite {
 	/**
 	 * @return
 	 */
-	public static MainPage instance() {
+	public static ReportMain instance() {
 		if (singletonInstance == null)
-			new MainPage();
+			new ReportMain();
 		return singletonInstance;
 	}
 	
@@ -615,8 +614,8 @@ public class MainPage extends Composite {
 	 * @param selectedCol the selectedCol to set
 	 */
 	public void setSelectedCol(int selectedCol) {
-		this.selectedCell = selectedCol;
-		rowSelected = false;
+		tableData.setSelection(TableSelection.COLUMN);
+		tableData.setSelectedCell(selectedCol);
 		updateChart();
 	}
 
@@ -625,8 +624,8 @@ public class MainPage extends Composite {
 	 * @param selectedRow the selectedRow to set
 	 */
 	public void setSelectedRow(int selectedRow) {
-		this.selectedCell = selectedRow;
-		rowSelected = true;
+		tableData.setSelection(TableSelection.ROW);
+		tableData.setSelectedCell(selectedRow);
 		updateChart();
 	}
 
@@ -638,14 +637,6 @@ public class MainPage extends Composite {
 		return service;
 	}
 
-
-	/**
-	 * @return the messages
-	 */
-	public static ReportConstants getMessages() {
-		return messages;
-	}
-	
 	
 	/**
 	 * Return information about the report sent from the server

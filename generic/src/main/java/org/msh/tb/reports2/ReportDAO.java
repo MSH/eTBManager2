@@ -43,7 +43,9 @@ public class ReportDAO {
 	 */
 	public List<Report> getReportList() {
 		return entityManager
-			.createQuery("from Report where (published = true or owner.id = #{userLogin.user.id}) and (workspace.id = #{defaultWorkspace.id})")
+			.createQuery("from Report where (published = true or owner.id = #{userLogin.user.id}) "
+					+ "and (workspace.id = #{defaultWorkspace.id}) "
+					+ "order by title")
 			.getResultList();
 	}
 	
@@ -53,7 +55,7 @@ public class ReportDAO {
 	 */
 	public List<Report> getDashboardIndicators() {
 		return entityManager
-			.createQuery("from Report where dashboard = true and workspace.id = #{defaultWorkspace.id}")
+			.createQuery("from Report where dashboard = true and workspace.id = #{defaultWorkspace.id} order by title")
 			.getResultList();
 	}
 	
