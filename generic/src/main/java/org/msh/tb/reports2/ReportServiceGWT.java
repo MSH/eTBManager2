@@ -25,7 +25,7 @@ import org.msh.tb.client.shared.model.CReportResponse;
  */
 @Name("org.msh.tb.client.shared.ReportService")
 @Restrict("#{s:hasRole('DATA_ANALYSIS')}")
-public class ReportServiceImpl implements ReportService {
+public class ReportServiceGWT implements ReportService {
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.client.shared.ReportService#initialize()

@@ -1,4 +1,6 @@
-package org.msh.tb.client.reports;
+package org.msh.tb.client;
+
+import org.msh.tb.client.reports.MainPage;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;

@@ -43,10 +43,19 @@ public class ReportDAO {
 	 */
 	public List<Report> getReportList() {
 		return entityManager
-			.createQuery("from Report where published = true or owner.id = #{userLogin.user.id}")
+			.createQuery("from Report where (published = true or owner.id = #{userLogin.user.id}) and (workspace.id = #{defaultWorkspace.id})")
 			.getResultList();
 	}
 	
+	/**
+	 * Return the list of dashboard indicators available for the current user
+	 * @return list of {@link Report} objects
+	 */
+	public List<Report> getDashboardIndicators() {
+		return entityManager
+			.createQuery("from Report where dashboard = true and workspace.id = #{defaultWorkspace.id}")
+			.getResultList();
+	}
 	
 	@Transactional
 	public Report saveReport(Report report) {
