@@ -10,6 +10,11 @@
 	<ui:with field='msg' type='org.msh.tb.client.reports.resources.ReportConstants'/>
 	
 <ui:style>
+.title {
+	font-size:20px;
+	color:#069;
+	margin:20px 0 10px 0;
+}
 .tableRegion {
 	width:380px;
 	float:left;
@@ -23,7 +28,7 @@
 </ui:style>
 
 	<g:HTMLPanel>
-	    <h2><g:Label ui:field="txtTitle" /></h2>
+	    <g:Label ui:field="txtTitle" styleName="{style.title}"/>
 		<div class="{style.tableRegion}">
 			<tbl:TableView ui:field="tblResult" />
 		</div>

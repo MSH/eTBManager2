@@ -57,6 +57,7 @@ public class IndicatorPanel extends Composite {
 		}
 		
 		ChartType type = ChartType.values()[chartIndex];
+		chart.setShowTitle(false);
 		chart.setSelectedChart(type);
 		
 		ChartReport.update(chart, data);

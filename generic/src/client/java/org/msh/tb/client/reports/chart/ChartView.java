@@ -63,6 +63,12 @@ public class ChartView extends Widget {
 	 */
 	private List<String> labels = new ArrayList<String>();
 
+	
+	/**
+	 * Show or hide the chart main title
+	 */
+	private boolean showTitle = true;
+	
 	private Element divElement;
 
 	/**
@@ -129,8 +135,12 @@ public class ChartView extends Widget {
 		chart.put("chart", chartNode);
 
 		// add the title, if available
-		if (title != null)
+		if ((title != null) && (showTitle)) {
 			chart.put("title", createTitle(title));
+		}
+		else {
+			chart.put("title", new JSONString(""));
+		}
 
 		// add the subtitle, if available
 		if (subTitle != null) {
@@ -460,5 +470,19 @@ public class ChartView extends Widget {
 	 */
 	public void setyAxisTitle(String yAxisTitle) {
 		this.yAxisTitle = yAxisTitle;
+	}
+
+	/**
+	 * @return the showTitle
+	 */
+	public boolean isShowTitle() {
+		return showTitle;
+	}
+
+	/**
+	 * @param showTitle the showTitle to set
+	 */
+	public void setShowTitle(boolean showTitle) {
+		this.showTitle = showTitle;
 	}
 }
