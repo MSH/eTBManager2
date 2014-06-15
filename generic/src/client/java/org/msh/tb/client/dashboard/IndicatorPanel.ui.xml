@@ -4,21 +4,30 @@
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:c='urn:import:org.msh.tb.client.commons'
 	xmlns:tbl='urn:import:org.msh.tb.client.tableview'
+	xmlns:ch='urn:import:org.msh.tb.client.reports.chart'
 	xmlns:x='urn:import:org.msh.tb.client.dashboard'>
 	
 	<ui:with field='msg' type='org.msh.tb.client.reports.resources.ReportConstants'/>
 	
 <ui:style>
 .tableRegion {
+	width:380px;
+	float:left;
+	overflow-x:auto;
+}
+.chart {
 	width:400px;
+	height:400px;
+	float:left;
 }
 </ui:style>
 
 	<g:HTMLPanel>
-		<div id="divchart" style="width:100%; height:400px;margin-bottom:20px;"></div>
+	    <h2><g:Label ui:field="txtTitle" /></h2>
 		<div class="{style.tableRegion}">
-		<tbl:TableView ui:field="tblResult"></tbl:TableView>
+			<tbl:TableView ui:field="tblResult" />
 		</div>
+	    <ch:ChartView ui:field="chart" styleName="{style.chart}"/>
 	</g:HTMLPanel>
 		
 </ui:UiBinder>

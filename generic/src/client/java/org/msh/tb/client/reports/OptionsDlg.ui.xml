@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder' 
+	xmlns:g='urn:import:com.google.gwt.user.client.ui'
+	xmlns:c='urn:import:org.msh.tb.client.commons'
+	xmlns:rep='urn:import:org.msh.tb.client.reports'>
+	
+	<ui:with field='msg' type='org.msh.tb.client.reports.resources.ReportConstants'/>
+	
+	<g:DialogBox modal="true" autoHide="true" glassEnabled="true">
+	    <g:caption><b>Report options</b></g:caption>
+	    <g:VerticalPanel>
+	        <g:HTMLPanel styleName="modal-content">
+	            <table style="width:400px">
+	                <tr><td>
+			            <g:CheckBox ui:field="chkPublished" />Available to all users
+	                </td></tr>
+	                <tr><td>
+			            <g:CheckBox ui:field="chkDashboard" />Display in the dashboard
+	                </td></tr>
+	            </table>
+	        </g:HTMLPanel>
+	        <g:HTMLPanel styleName="modal-footer">
+	            <g:Button ui:field="btnSave">Save</g:Button>
+	            <g:Button ui:field="btnCancel">Cancel</g:Button>
+	        </g:HTMLPanel>
+	    </g:VerticalPanel>
+	</g:DialogBox>
+		
+</ui:UiBinder>

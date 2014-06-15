@@ -5,21 +5,24 @@ import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Display the chart
  * @author Ricardo Memoria
  *
  */
-public class ChartView {
+public class ChartView extends Widget {
 
+	private static int idCounter = 0;
+	
 	/**
 	 * The selected chart
 	 */
@@ -60,7 +63,16 @@ public class ChartView {
 	 */
 	private List<String> labels = new ArrayList<String>();
 
-	
+	private Element divElement;
+
+	/**
+	 * Default constructor
+	 */
+	public ChartView() {
+		super();
+		divElement = Document.get().createDivElement();
+		setElement(divElement);
+	}
 	
 	/**
 	 * Clear the values of the chart 
@@ -107,7 +119,12 @@ public class ChartView {
 		JSONObject chart = new JSONObject();
 		JSONObject chartNode = new JSONObject();
 
-		chartNode.put("renderTo", new JSONString("divchart"));
+//		chartNode.put("renderTo", new JSONString("divchart"));
+		if (divElement.getId().isEmpty()) {
+			idCounter++;
+			divElement.setId("divchart" + Integer.toString(idCounter));
+		}
+		chartNode.put("renderTo", new JSONString(divElement.getId()));
 		chartNode.put("type", new JSONString(selectedChart.getName()));
 		chart.put("chart", chartNode);
 
@@ -221,7 +238,7 @@ public class ChartView {
 		}
 		else height = 400;
 		
-		Element elem = DOM.getElementById("divchart");
+		Element elem = divElement;// DOM.getElementById("divchart");
 		elem.getStyle().setHeight(height, Unit.PX); 
 		
 		// add legend

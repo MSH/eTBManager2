@@ -88,7 +88,7 @@ public class DashboardMain extends Composite implements AppModule {
 	 */
 	protected void addIndicator(CIndicator indicator) {
 		IndicatorPanel pnl = new IndicatorPanel();
-		pnl.update(indicator);
 		pnlContent.add(pnl);
+		pnl.update(indicator);
 	}
 }

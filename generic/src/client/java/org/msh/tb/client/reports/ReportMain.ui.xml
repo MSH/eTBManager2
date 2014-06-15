@@ -4,6 +4,7 @@
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:c='urn:import:org.msh.tb.client.commons'
 	xmlns:tbl='urn:import:org.msh.tb.client.tableview'
+	xmlns:ch='urn:import:org.msh.tb.client.reports.chart'
 	xmlns:rep='urn:import:org.msh.tb.client.reports'>
 	
 	<ui:with field='msg' type='org.msh.tb.client.reports.resources.ReportConstants'/>
@@ -53,6 +54,9 @@
 		.edtTitle {
 			font-size:16px;
 			width:700px;
+		}
+		.chart {
+			width:100%; height:400px;margin-bottom:20px;
 		}
 	</ui:style>
 
@@ -110,7 +114,7 @@
 			</div>
 			<g:Anchor ui:field="lnkChartType"></g:Anchor>
 		</div>
-		<div id="divchart" style="width:100%; height:400px;margin-bottom:20px;"></div>
+		<ch:ChartView ui:field="chart" styleName="{style.chart}" />
 		<div class="{style.tableRegion}">
 		<tbl:TableView ui:field="tblResult"></tbl:TableView>
 		</div>

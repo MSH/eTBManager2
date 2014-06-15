@@ -77,6 +77,7 @@ public class ReportMain extends Composite implements AppModule {
 	@UiField HTMLPanel pnlReport;
 	@UiField ReportListPanel pnlReportList;
 	@UiField TextBox edtTitle;
+	@UiField ChartView chart;
 	
 	private GroupFiltersPopup filtersPopup;
 //	private GroupVariablesPopup varsPopup;
@@ -107,7 +108,7 @@ public class ReportMain extends Composite implements AppModule {
 		resources.imgChartArea(), resources.imgChartAreaSpline(), resources.imgChartColumn(),
 		resources.imgChartBar(), resources.imgChartPie() };
 
-	private ChartView chart = new ChartView();
+//	private ChartView chart = new ChartView();
 	
 	
 	/**

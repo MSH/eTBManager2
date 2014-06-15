@@ -55,6 +55,16 @@ public class OptionsPopup extends PopupPanel {
 	}
 	
 	/**
+	 * Called when user clicks on the settings item
+	 * @param event instance of {@link ClickEvent}
+	 */
+	@UiHandler("lnkSettings")
+	protected void cmdSettings(ClickEvent event) {
+		hide();
+		OptionsDlg.open(ReportMain.instance().getReport());
+	}
+	
+	/**
 	 * Open the save dialog to save the current report
 	 * @param saveAs indicate if it's going to save the report or save it as
 	 */
