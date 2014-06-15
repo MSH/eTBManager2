@@ -3,6 +3,8 @@
  */
 package org.msh.tb.client.shared.model;
 
+import java.util.ArrayList;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
@@ -16,6 +18,8 @@ public class CIndicator implements IsSerializable {
 	private String title;
 	private Integer chartType;
 	private CReportResponse reportResponse;
+	private ArrayList<CVariable> colVariables;
+	private ArrayList<CVariable> rowVariables;
 
 	/**
 	 * @return the reportResponse
@@ -52,5 +56,29 @@ public class CIndicator implements IsSerializable {
 	 */
 	public void setChartType(Integer chartType) {
 		this.chartType = chartType;
+	}
+	/**
+	 * @return the colVariables
+	 */
+	public ArrayList<CVariable> getColVariables() {
+		return colVariables;
+	}
+	/**
+	 * @param colVariables the colVariables to set
+	 */
+	public void setColVariables(ArrayList<CVariable> colVariables) {
+		this.colVariables = colVariables;
+	}
+	/**
+	 * @return the rowVariables
+	 */
+	public ArrayList<CVariable> getRowVariables() {
+		return rowVariables;
+	}
+	/**
+	 * @param rowVariables the rowVariables to set
+	 */
+	public void setRowVariables(ArrayList<CVariable> rowVariables) {
+		this.rowVariables = rowVariables;
 	}
 }

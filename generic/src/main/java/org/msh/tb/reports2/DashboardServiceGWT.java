@@ -9,11 +9,13 @@ import java.util.List;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.remoting.WebRemote;
+import org.msh.reports.variables.Variable;
 import org.msh.tb.client.shared.DashboardService;
 import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.shared.model.CReport;
 import org.msh.tb.client.shared.model.CReportRequest;
 import org.msh.tb.client.shared.model.CReportResponse;
+import org.msh.tb.client.shared.model.CVariable;
 import org.msh.tb.entities.Report;
 
 /**
@@ -61,6 +63,22 @@ public class DashboardServiceGWT implements DashboardService {
 		indicator.setTitle(rep.getTitle());
 		indicator.setChartType(rep.getChartType());
 		indicator.setReportResponse(res);
+		
+		// mount variable list
+		ReportResources resources = ReportResources.instance();
+		ArrayList<CVariable> colvars = new ArrayList<CVariable>();
+		for (String colvar: rep.getColumnVariables()) {
+			Variable var = resources.findVariableById(colvar);
+			colvars.add(new CVariable(var.getId(), var.getLabel()));
+		}
+		indicator.setColVariables(colvars);
+		
+		ArrayList<CVariable> rowvars = new ArrayList<CVariable>();
+		for (String rowvar: rep.getRowVariables()) {
+			Variable var = resources.findVariableById(rowvar);
+			rowvars.add(new CVariable(var.getId(), var.getLabel()));
+		}
+		indicator.setRowVariables(rowvars);
 		
 		return indicator;
 	}
