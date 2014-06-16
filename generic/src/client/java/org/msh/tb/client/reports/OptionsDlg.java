@@ -71,6 +71,7 @@ public class OptionsDlg extends Composite {
 		report.setPublished(chkPublished.getValue());
 		report.setDashboard(chkDashboard.getValue());
 		dialogBox.hide();
+		ReportMain.instance().lnkSaveClick(null);
 	}
 	
 	@UiHandler("btnCancel")

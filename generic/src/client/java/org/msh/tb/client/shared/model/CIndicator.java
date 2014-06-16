@@ -17,6 +17,8 @@ public class CIndicator implements IsSerializable {
 
 	private String title;
 	private Integer chartType;
+	private Integer tblSelection;
+	private Integer tblSelectedCell;
 	private CReportResponse reportResponse;
 	private ArrayList<CVariable> colVariables;
 	private ArrayList<CVariable> rowVariables;
@@ -80,5 +82,29 @@ public class CIndicator implements IsSerializable {
 	 */
 	public void setRowVariables(ArrayList<CVariable> rowVariables) {
 		this.rowVariables = rowVariables;
+	}
+	/**
+	 * @return the tblSelection
+	 */
+	public Integer getTblSelection() {
+		return tblSelection;
+	}
+	/**
+	 * @param tblSelection the tblSelection to set
+	 */
+	public void setTblSelection(Integer tblSelection) {
+		this.tblSelection = tblSelection;
+	}
+	/**
+	 * @return the tblSelectedCell
+	 */
+	public Integer getTblSelectedCell() {
+		return tblSelectedCell;
+	}
+	/**
+	 * @param tblSelectedCell the tblSelectedCell to set
+	 */
+	public void setTblSelectedCell(Integer tblSelectedCell) {
+		this.tblSelectedCell = tblSelectedCell;
 	}
 }

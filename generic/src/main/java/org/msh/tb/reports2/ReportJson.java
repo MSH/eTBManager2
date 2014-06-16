@@ -95,7 +95,7 @@ public class ReportJson {
 				}
 				
 				if (root.has("tblSelection")) {
-					rep.setTblSelectedCell( root.get("tblSelection").asInt() );
+					rep.setTblSelection( root.get("tblSelection").asInt() );
 				}
 				
 				ArrayList<String> colVars = new ArrayList<String>();

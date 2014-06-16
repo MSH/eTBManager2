@@ -9,6 +9,7 @@ import org.msh.tb.client.reports.chart.ChartView;
 import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.tableview.TableData;
 import org.msh.tb.client.tableview.TableView;
+import org.msh.tb.client.tableview.TableData.TableSelection;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -48,6 +49,15 @@ public class IndicatorPanel extends Composite {
 		data.setColVariables(indicator.getColVariables());
 		data.setRowVariables(indicator.getRowVariables());
 		data.update(indicator.getReportResponse());
+		
+		if (indicator.getTblSelectedCell() != null) {
+			data.setSelectedCell(indicator.getTblSelectedCell());
+		}
+		
+		if (indicator.getTblSelection() != null) {
+			TableSelection sel = TableSelection.values()[indicator.getTblSelection()];
+			data.setSelection(sel);
+		}
 		
 		tblResult.update(data);
 		

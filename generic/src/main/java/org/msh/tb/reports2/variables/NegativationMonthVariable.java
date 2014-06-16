@@ -54,7 +54,7 @@ public class NegativationMonthVariable extends VariableImpl {
 	 */
 	@Override
 	public String getDisplayText(Object key) {
-		if ((key == null) || (KEY_NULL.equals(key)))
+		if ((key == null) || ((new Integer(-1)).equals(key)))
 			return Messages.instance().get("global.atdiag");
 
 		if (key.equals(37L))
@@ -72,7 +72,7 @@ public class NegativationMonthVariable extends VariableImpl {
 		Long month = ((Long)values) + 1;
 
 		if (month < 1)
-			return null;
+			return -1;
 		
 		if (month > 36)
 			month = 37L;

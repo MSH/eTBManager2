@@ -63,6 +63,8 @@ public class DashboardServiceGWT implements DashboardService {
 		indicator.setTitle(rep.getTitle());
 		indicator.setChartType(rep.getChartType());
 		indicator.setReportResponse(res);
+		indicator.setTblSelectedCell(rep.getTblSelectedCell());
+		indicator.setTblSelection(rep.getTblSelection());
 		
 		// mount variable list
 		ReportResources resources = ReportResources.instance();
