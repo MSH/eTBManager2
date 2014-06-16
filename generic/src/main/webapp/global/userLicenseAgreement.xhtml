@@ -47,11 +47,11 @@
         <a:commandLink action="#{userSession.acceptULA()}" styleClass="button" 
           reRender="main" 
           onclick="if (!disableButton(this)) return false;" >
-            <span>#{messages['form.acceptula']}</span>
+            <span>#{messages['form.accept']}</span>
         </a:commandLink>
         <a:commandLink action="#{authenticator.logout()}" styleClass="button-alt" 
            onclick="if (!disableButton(this)) return false;" >
-           <span>#{messages['form.declineula']}</span>
+           <span>#{messages['form.decline']}</span>
         </a:commandLink>
  	</div>
 </h:form>

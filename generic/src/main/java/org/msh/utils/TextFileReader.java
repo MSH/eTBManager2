@@ -12,7 +12,7 @@ import org.jboss.seam.annotations.Name;
 public class TextFileReader {
 	  
 	public String readFile() throws IOException {
-    	FileInputStream fileStream = (FileInputStream) getClass().getClassLoader().getResourceAsStream("\\WEB-INF\\classes\\org\\msh\\utils\\ula_en.txt");
+    	FileInputStream fileStream = (FileInputStream) getClass().getClassLoader().getResourceAsStream("\\META-INF\\ula_en.txt");
     	  try {
     	    FileChannel fc = fileStream.getChannel();
     	    MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
