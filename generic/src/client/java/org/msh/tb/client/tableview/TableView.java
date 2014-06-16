@@ -33,7 +33,6 @@ public class TableView extends Composite {
 	
 	public TableView() {
 		table = new FlexTable();
-		table.setStyleName("table2");
 
 		table.addClickHandler(new ClickHandler() {
 			@Override
@@ -56,6 +55,10 @@ public class TableView extends Composite {
 	public void update(TableData tableData) {
 		if (tableData == null)
 			return;
+		
+		if (table.getStyleName().isEmpty()) {
+			table.setStyleName("table2");
+		}
 
 		boolean totCol = tableData.getTable().isColTotalAvailable();
 		boolean totRow = tableData.getTable().isRowTotalAvailable();

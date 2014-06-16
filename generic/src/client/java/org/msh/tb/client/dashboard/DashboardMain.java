@@ -15,7 +15,7 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -32,7 +32,7 @@ public class DashboardMain extends Composite implements AppModule {
 	// service to display the dashboard
 	public static final DashboardServiceAsync service = GWT.create(DashboardService.class);
 	
-	@UiField VerticalPanel pnlContent;
+	@UiField FlowPanel pnlContent;
 	
 	/**
 	 * Default constructor
@@ -74,7 +74,7 @@ public class DashboardMain extends Composite implements AppModule {
 			service.generateIndicator(indicators.get(index), new StandardCallback<CIndicator>() {
 				@Override
 				public void onSuccess(CIndicator result) {
-					addIndicator(result);
+					addIndicator(result, i);
 					updateIndicator(lst, i);
 				}
 			});
@@ -86,9 +86,12 @@ public class DashboardMain extends Composite implements AppModule {
 	 * Add a new indicator
 	 * @param indicator
 	 */
-	protected void addIndicator(CIndicator indicator) {
+	protected void addIndicator(CIndicator indicator, int index) {
 		IndicatorPanel pnl = new IndicatorPanel();
 		pnlContent.add(pnl);
+		if (index % 2 == 1) {
+			pnl.getElement().setAttribute("style", "clear:left");
+		}
 		pnl.update(indicator);
 	}
 }

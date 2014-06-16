@@ -279,3 +279,25 @@ html {
 	position: relative;
 	top: -2px;
 }
+
+.table-indicator {
+	border-collapse: collapse;
+	font-size:12px;
+	width:100%;
+}
+.table-indicator .tt-row-tot, .table-indicator .tt-row, .table-indicator .vl-tot-v {
+	background-color: #f0f0f0;
+	color:#808080;
+	border:1px solid#fff;
+}
+.table-indicator .tt-row-tot, .table-indicator .vl-tot-v {
+	font-weight:bold;
+}
+.table-indicator .vl {
+	background-color: #fff;
+	color:#909090;
+}
+.table-indicator .vl:hoder {
+	background-color: #fff;
+}
+

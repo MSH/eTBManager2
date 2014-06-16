@@ -10,29 +10,43 @@
 	<ui:with field='msg' type='org.msh.tb.client.reports.resources.ReportConstants'/>
 	
 <ui:style>
+.indicator {
+	background-color: #fff;
+	border: 1px solid #e0e0e0;
+	-webkit-box-shadow: 0 3px 9px #d0d0d0;
+	box-shadow: 0 3px 9px #d0d0d0;
+	background-clip: padding-box;
+	outline: 0;
+	margin:10px 10px 20px 0;
+	width:410px;
+	float:left;
+}
 .title {
-	font-size:20px;
-	color:#069;
-	margin:20px 0 10px 0;
+	font-size: 18px;
+	color: #808080;
+	padding: 8px;
+	background-color: #f8f8f8;
+	border-bottom: 1px solid #f0f0f0;
 }
 .tableRegion {
-	width:380px;
-	float:left;
+	max-width:410px;
 	overflow-x:auto;
 }
 .chart {
-	width:400px;
-	height:400px;
-	float:left;
+	max-width:410px;
+	overflow-x:auto;
+	overflow-y:hidden;
 }
 </ui:style>
 
-	<g:HTMLPanel>
-	    <g:Label ui:field="txtTitle" styleName="{style.title}"/>
-		<div class="{style.tableRegion}">
-			<tbl:TableView ui:field="tblResult" />
-		</div>
+	<g:HTMLPanel styleName="{style.indicator}">
+	    <div class="{style.title}">
+	    	<g:Label ui:field="txtTitle"/>
+	    </div>
 	    <ch:ChartView ui:field="chart" styleName="{style.chart}"/>
+		<div class="{style.tableRegion}">
+			<tbl:TableView ui:field="tblResult" styleName="table-indicator" />
+		</div>
 	</g:HTMLPanel>
 		
 </ui:UiBinder>

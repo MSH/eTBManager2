@@ -7,11 +7,13 @@
 	
 	<ui:with field='msg' type='org.msh.tb.client.reports.resources.ReportConstants'/>
 	
-	<ui:style>
+<ui:style>
+.dashboard {
+	width:850px;
+}
+</ui:style>
 
-	</ui:style>
-
-	<g:VerticalPanel ui:field="pnlContent">
-	</g:VerticalPanel>
+	<g:FlowPanel ui:field="pnlContent" styleName="{style.dashboard}">
+	</g:FlowPanel>
 		
 </ui:UiBinder>
