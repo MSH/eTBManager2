@@ -81,11 +81,10 @@
 		<div class="icon-report" style="float:left;"/>#{messages['manag.confmdrrep']}
 		</s:link>
 	
-
-	
 		<hr/>
-		<s:link view="/management/customind.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('INDICATORS')}" >
-		<div class="icon-report" style="float:left;"/>#{messages['manag.ind.customind']}
+
+		<s:link view="/management/reportgen.xhtml" rendered="#{s:hasRole('DATA_ANALYSIS')}">
+			<div class="icon-report" style="float:left;"/>#{messages['manag.reportgen']}
 		</s:link>
 	
 	</div>
@@ -93,33 +92,26 @@
 
 
 
-<s:decorate template="/layout/roundrect.xhtml">
-	<ui:define name="header"><b>#{messages['manag.drug.reports']}</b></ui:define>
-	<ui:param name="showfooter" value="0" />
-	
+	<h2>#{messages['manag.drug.reports']}</h2>
+	<div class="vertical-menu">
 	<s:link view="/management/rel1.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP1')}">
 	<div class="icon-report" style="float:left;"/>#{messages['manag.rel1']}
 	</s:link>
-	<p/>
 	<s:link  view="/management/rel4.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('REP4')}">
 	<div class="icon-report" style="float:left;"/>#{messages['manag.rel4']}
 	</s:link>
-</s:decorate>
-<p/>
+	</div>
 
-<s:decorate template="/layout/roundrect.xhtml">
+	<h2>#{messages['manag.forecast']}</h2>
+	<div class="vertical-menu">
 	<s:link view="/management/export.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('EXPORT')}" propagation="none">
 	<div class="icon-report" style="float:left;"/>#{messages['manag.export']}
 	</s:link>
-<p/>
-	<ui:define name="header"><b>#{messages['manag.forecast']}</b></ui:define>
-	<ui:param name="showfooter" value="0" />
 	<s:link view="/management/forecasting.xhtml" styleClass="optionmenu" rendered="#{s:hasRole('FORECAST')}" propagation="none">
 		<f:param name="id" value="#{null}"/>
 		<div class="icon-report" style="float:left;"/>#{messages['manag.forecast.med']}
 	</s:link>
-	<p/>
-</s:decorate>
+	</div>
 <p/>
 
 
