@@ -11,19 +11,19 @@
 	</parent>
 
 	<groupId>org.msh</groupId>
-	<artifactId>namibia</artifactId>
-	<version>1.0.0</version>
+	<artifactId>bangladesh</artifactId>
+	<version>2.0.0</version>
 	<packaging>war</packaging>
 
-	<name>eTB Manager Namibia version</name>
+	<name>eTB Manager Bangladesh version</name>
 	<url>https://www.etbmanager.org</url>
 
 	<properties>
-		<workspace-context>NA</workspace-context>
+		<workspace-context>BD</workspace-context>
 	</properties>
 
 	<build>
-		<finalName>etbmanager-na</finalName>
+		<finalName>etbmanager-bd</finalName>
 
 		<resources>
 			<!-- will filter just the persistence.xml -->
@@ -61,7 +61,7 @@
 								<source>../generic/src/main/java</source>
 								<source>../generic/src/reports/java</source>
 								<source>../generic/src/client/java</source>
-								<source>../generic/src/custom/na</source>
+								<source>../generic/src/custom/bd</source>
 							</sources>
 						</configuration>
 					</execution>
