@@ -52,24 +52,27 @@ public class ResourceLoader extends org.jboss.seam.core.ResourceLoader {
 	 */
 	public List<String> getExtraBundleFiles() {
 		List<String> lst = new ArrayList<String>();
+        String dir = "WEB-INF/classes";
+        URL url = ResourceLoader.class.getClassLoader().getResource(dir);
+        // url = ResourceLoader.class.getClassLoader().getResource("WEB-INF/classes/messages_en.properties");
+        String dirname = url.getFile();
+        File folder = new File(dirname);
+        for (File file: folder.listFiles()) {
+            String fname = file.getName();
+            if (fname.startsWith("messages-")) {
+                int pos = fname.indexOf("_");
+                if (pos > 0)
+                    fname = fname.substring(0, pos);
+                if (!lst.contains(fname))
+                    lst.add(fname);
+            }
+        }
+/*
 		try {
-			String dir = "WEB-INF/classes";
-			URL url = ResourceLoader.class.getClassLoader().getResource(dir);
-			// url = ResourceLoader.class.getClassLoader().getResource("WEB-INF/classes/messages_en.properties");
-			File folder = new File(url.toURI());
-			for (File file: folder.listFiles()) {
-				String fname = file.getName();
-				if (fname.startsWith("messages-")) {
-					int pos = fname.indexOf("_");
-					if (pos > 0)
-						fname = fname.substring(0, pos);
-					if (!lst.contains(fname))
-						lst.add(fname);
-				}
-			}
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
+*/
 		return lst;
 	}
 }

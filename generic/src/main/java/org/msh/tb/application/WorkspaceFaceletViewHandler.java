@@ -35,7 +35,7 @@ public class WorkspaceFaceletViewHandler extends FaceletViewHandler {
 
 	protected String viewToUri(FacesContext facesContext, String viewid) {
 		String rootviewid = (facesContext.getViewRoot().getViewId());
-		// check if uri is the page being rendered 
+		// check if uri is the page being rendered
 		if (!viewid.equals(rootviewid))
 			return viewid;
 
