@@ -16,7 +16,7 @@
 	</context-param>
 
     <context-param>
-        <param-name>liquibase.context</param-name>
+        <param-name>liquibase.contexts</param-name>
         <param-value>${workspace-context}</param-value>
     </context-param>
 

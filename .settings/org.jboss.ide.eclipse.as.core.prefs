@@ -1,2 +1,2 @@
 eclipse.preferences.version=1
-org.jboss.ide.eclipse.as.core.singledeployable.deployableList=src/resources/etbmanager-ds.xml\nsrc/resources/etbmanager-ds.xml\n
+org.jboss.ide.eclipse.as.core.singledeployable.deployableList=nigeria/target/etbmanager-ng.war\nsrc/resources/etbmanager-ds.xml\n
