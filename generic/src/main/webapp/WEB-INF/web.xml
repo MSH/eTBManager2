@@ -14,7 +14,12 @@
 	    <param-name>liquibase.datasource</param-name>
 	    <param-value>java:/mdrtbDatasource</param-value>
 	</context-param>
- 
+
+    <context-param>
+        <param-name>liquibase.context</param-name>
+        <param-value>${workspace-context}</param-value>
+    </context-param>
+
 	<context-param>
 	    <param-name>liquibase.onerror.fail</param-name>
 	    <param-value>true</param-value>

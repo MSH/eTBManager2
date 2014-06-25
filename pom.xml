@@ -11,6 +11,7 @@
 	<modules>
 		<module>generic</module>
 		<module>namibia</module>
+        <module>nigeria</module>
 	</modules>
 
 	<properties>
