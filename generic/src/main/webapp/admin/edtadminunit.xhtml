@@ -6,7 +6,8 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      template="/layout/template_new.xhtml">
+      template="/layout/template_new.xhtml"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
         
 <ui:param name="title" value="#{adminUnitHome.managed? messages['admin.adminunits.edt']: messages['admin.adminunits.new']}" />
 <ui:param name="topmenu" value="3" />
@@ -16,7 +17,6 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 <h:form id="main" styleClass="form1">
-
 	<div class="form-content">
     <s:decorate template="/layout/edit.xhtml" rendered="#{adminUnit.id != null}">
     	<ui:define name="label">#{messages['form.id']}:</ui:define>
@@ -61,9 +61,28 @@
 
     </s:fragment>
 
-    <s:decorate template="/layout/edit.xhtml">
+	<div id="parentreadonly">
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['admin.adminunits.parentunit']}:</ui:define>
+		<h:outputText value="#{adminUnit.parent.name} (#{adminUnit.parent.countryStructure.name})" rendered="#{adminUnit.parent != null}"/>
+		<h:outputText value="#{messages['admin.adminunits.noparentunit']}" rendered="#{adminUnit.parent == null}"/>
+		<a href="#" onclick="jQuery('#edtparent').show(); jQuery('#parentreadonly').hide();"> #{messages['admin.adminunits.editparent']}</a>
+	</s:decorate>
+	</div>
+	
+	<div id="edtparent"> 
+	<s:decorate template="/layout/auselection.xhtml">
+		<ui:param name="auselection" value="#{adminUnitHome.auselectionparent}" />
+		<ui:param name="rerender" value="main:structureseldec" />
+	</s:decorate>
+	</div>
+	
+	<rich:jQuery selector="#edtparent" timing="onload" query="hide()" rendered="#{(adminUnit.parent == null and adminUnitHome.auselectionparent.selectedUnit == null) or (adminUnit.parent.id == adminUnitHome.auselectionparent.selectedUnit.id)}"/>
+	<rich:jQuery selector="#parentreadonly" timing="onload" query="hide()" rendered="#{(not(adminUnit.parent == null and adminUnitHome.auselectionparent.selectedUnit == null)) or (adminUnit.parent.id != adminUnitHome.auselectionparent.selectedUnit.id)}"/>
+	
+    <s:decorate template="/layout/edit.xhtml" id="structureseldec">
     	<ui:define name="label">#{messages['admin.adminunits.countrystructure']}:</ui:define>
-    	<h:selectOneMenu value="#{adminUnit.countryStructure}" required="true">
+    	<h:selectOneMenu value="#{adminUnit.countryStructure}" required="true" id="structuresel">
     		<s:selectItems var="it" value="#{adminUnitHome.structures}" label="#{it.name}" noSelectionLabel="-" />
     		<s:convertEntity />
     	</h:selectOneMenu>
@@ -79,10 +98,10 @@
     </div>
     
     <div class="form-footer">
-		<a:commandLink action="#{adminUnitHome.persist}" styleClass="button" reRender="main" onclick="if (!disableButton(this)) return false;">
+		<a:commandLink action="#{adminUnitHome.persist}" styleClass="button" reRender="main,messages" onclick="if (!disableButton(this)) return false;">
 			<span>#{messages['form.save']}</span>
-		</a:commandLink>  
-		<s:link view="/admin/adminunits.xhtml" styleClass="button-alt" >
+		</a:commandLink>		
+		<s:link view="/admin/adminunits.xhtml" styleClass="button-alt" propagation="end">
 			<f:param name="id" value="#{null}" />
 			<f:param name="parentid" value="#{adminUnitHome.parentId}" />
 			<span>#{messages['form.cancel']}</span>
@@ -93,5 +112,4 @@
 	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 </h:form>
 </ui:define>
-        
 </ui:composition> 

@@ -2,9 +2,11 @@ package org.msh.tb.adminunits;
 
 import java.util.List;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.AdministrativeUnit;
@@ -18,21 +20,23 @@ import org.msh.tb.transactionlog.LogInfo;
 
 @Name("adminUnitHome")
 @LogInfo(roleName="ADMINUNITS", entityClass=AdministrativeUnit.class)
+@Scope(ScopeType.CONVERSATION)
 public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 	private static final long serialVersionUID = -2648934215804041377L;
 
 	private AdminUnitSelection auselection;
+	private AdminUnitSelection auselectionparent;
 	private List<CountryStructure> structures;
 	
+	@In(create=true) InfoCountryLevels levelInfo;
 	@In(required=false) AdminUnitsQuery adminUnits;
 	@In(create=true) UserSession userSession;
-	@In(create=true) FacesMessages facesMessages;
+	@In(required=true) FacesMessages facesMessages;
 	
 	@Factory("adminUnit")
 	public AdministrativeUnit getAdminUnit() {
 		return getInstance();
 	}
-
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.EntityHomeEx#persist()
@@ -40,10 +44,12 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 	@Override
 	public String persist() {
 		AdministrativeUnit adminUnit = getInstance();
-		AdministrativeUnit parent = adminUnit.getParent();
-
+		//AdministrativeUnit parent = adminUnit.getParent();
+		AdministrativeUnit parent = getAuselectionparent().getSelectedUnit();
+		String ret = null;
+		
 		if ((parent != null) && (parent.getLevel() == 5)) {
-			facesMessages.add("Máximum level reached");
+			facesMessages.add("Mï¿½ximum level reached");
 			return "error";
 		}
 		
@@ -59,7 +65,55 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 			adminUnit.setCode(code);
 		}
 		
-		return super.persist();
+		//If parent is changed
+		if(isManaged() && ((parent == null && adminUnit.getParent() != null) 
+				|| (parent != null && adminUnit.getParent() == null) ||  (parent != null && adminUnit != null && !parent.getId().equals(adminUnit.getParent().getId())))){
+			
+			if(parent != null && adminUnit.getId().equals(parent.getId())){
+				facesMessages.addFromResourceBundle("Same parent");//CRIAR MENSAGEM
+				return "error";				
+			}
+			
+			//Validates Levels
+			Integer maxSonLevel = (Integer)getEntityManager().createQuery("SELECT max(au.countryStructure.level) FROM AdministrativeUnit au where au.code like :code and au.id <> :auId and au.workspace.id = :workspaceId")
+											.setParameter("code", adminUnit.getCode()+"%")
+											.setParameter("auId", adminUnit.getId())
+											.setParameter("workspaceId", adminUnit.getWorkspace().getId())
+											.getSingleResult();
+			
+			maxSonLevel = (maxSonLevel == null ? new Integer(0) : maxSonLevel);
+			int parentLevel = (parent == null ? 0 : parent.getLevel());
+			
+			if((maxSonLevel.intValue() - adminUnit.getLevel() + 1 + parentLevel) > levelInfo.getMaxLevel()){
+				facesMessages.add("Maximmum level reached");//CRIAR MENSAGEM
+				return "error";
+			}
+			
+			//Update parent and code and persists
+			String oldCode = adminUnit.getCode();
+			adminUnit.setParent(parent);
+			adminUnit.setCode(generateNewCode(parent));
+			ret = super.persist();
+			
+			//Update code of possible sons
+			List<AdministrativeUnit> sons = getEntityManager().createQuery("from AdministrativeUnit where code like :oldCode and workspace.id = :workspaceId")
+											.setParameter("oldCode", oldCode+"%")
+											.setParameter("workspaceId", adminUnit.getWorkspace().getId())
+											.getResultList();
+			
+			for(AdministrativeUnit au : sons){
+				au.setCode(generateNewCode(au.getParent()));
+				getEntityManager().merge(au);
+				getEntityManager().flush();
+			}
+			
+			
+
+		}else{
+			ret = super.persist();
+		}
+		
+		return ret;
 	}
 
 
@@ -69,6 +123,8 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 	 */
 	@Override
 	public void setId(Object id) {
+		if(super.getId() == null || !super.getId().equals(id))
+			getAuselectionparent().setSelectedUnit(getInstance().getParent());
 		super.setId(id);
 		structures = null;
 		auselection = null;
@@ -82,7 +138,8 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 	public List<CountryStructure> getStructures() {
 		if (structures == null) {
 			int level;
-			AdministrativeUnit parent = getInstance().getParent();
+			//AdministrativeUnit parent = getInstance().getParent();
+			AdministrativeUnit parent = getAuselectionparent().getSelectedUnit();
 			if (parent == null)
 				 level = 1;
 			else level = parent.getLevel() + 1;
@@ -206,6 +263,7 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 		if (id != null) {
 			AdministrativeUnit parent = getEntityManager().find(AdministrativeUnit.class, id);
 			getInstance().setParent(parent);
+			getAuselectionparent().setSelectedUnit(parent);
 		}
 		else {
 			getInstance().setParent(null);
@@ -287,4 +345,13 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 			counter++;
 		}
 	}
+
+	public AdminUnitSelection getAuselectionparent() {
+		if (auselectionparent == null) {
+			auselectionparent = new AdminUnitSelection();
+			auselectionparent.setSelectedUnit(getInstance().getParent());
+		}
+		return auselectionparent;
+	}
+	
 }
