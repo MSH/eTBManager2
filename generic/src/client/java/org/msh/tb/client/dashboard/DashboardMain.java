@@ -31,6 +31,8 @@ public class DashboardMain extends Composite implements AppModule {
 
 	// service to display the dashboard
 	public static final DashboardServiceAsync service = GWT.create(DashboardService.class);
+
+    private int colindex;
 	
 	@UiField FlowPanel pnlContent;
 	
@@ -55,17 +57,19 @@ public class DashboardMain extends Composite implements AppModule {
 
 	/**
 	 * Update the list of indicators displayed
-	 * @param result
+	 * @param indicators list of indicators ID to be rendered
 	 */
 	protected void updateIndicators(ArrayList<Integer> indicators) {
 		pnlContent.clear();
+        colindex = 0;
 		updateIndicator(indicators, 0);
 	}
 
 	
 	/**
 	 * Update an indicator and call recursively the next indicator 
-	 * @param id
+	 * @param indicators list of indicators ID to be displayed
+     * @param index the indicator index to be rendered, in the list of indicators
 	 */
 	private void updateIndicator(ArrayList<Integer> indicators, int index) {
 		if (index < indicators.size()) {
@@ -74,8 +78,10 @@ public class DashboardMain extends Composite implements AppModule {
 			service.generateIndicator(indicators.get(index), new StandardCallback<CIndicator>() {
 				@Override
 				public void onSuccess(CIndicator result) {
-					addIndicator(result, i);
-					updateIndicator(lst, i);
+                    if (result.getReportResponse() != null) {
+                        addIndicator(result);
+                    }
+                    updateIndicator(lst, i);
 				}
 			});
 		}
@@ -84,14 +90,15 @@ public class DashboardMain extends Composite implements AppModule {
 	
 	/**
 	 * Add a new indicator
-	 * @param indicator
+	 * @param indicator the instance of CIndicator report to display
 	 */
-	protected void addIndicator(CIndicator indicator, int index) {
+	protected void addIndicator(CIndicator indicator) {
 		IndicatorPanel pnl = new IndicatorPanel();
 		pnlContent.add(pnl);
-		if (index % 2 == 1) {
+		if (colindex % 2 == 0) {
 			pnl.getElement().setAttribute("style", "clear:left");
 		}
 		pnl.update(indicator);
+        colindex++;
 	}
 }
