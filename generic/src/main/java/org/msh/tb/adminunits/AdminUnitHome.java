@@ -70,7 +70,7 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 				|| (parent != null && adminUnit.getParent() == null) ||  (parent != null && adminUnit != null && !parent.getId().equals(adminUnit.getParent().getId())))){
 			
 			if(parent != null && adminUnit.getId().equals(parent.getId())){
-				facesMessages.addFromResourceBundle("Same parent");//CRIAR MENSAGEM
+				facesMessages.addFromResourceBundle("admin.adminunits.sameasparent");
 				return "error";				
 			}
 			
@@ -85,7 +85,7 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 			int parentLevel = (parent == null ? 0 : parent.getLevel());
 			
 			if((maxSonLevel.intValue() - adminUnit.getLevel() + 1 + parentLevel) > levelInfo.getMaxLevel()){
-				facesMessages.add("Maximmum level reached");//CRIAR MENSAGEM
+				facesMessages.addFromResourceBundle("admin.adminunits.maxlevel");
 				return "error";
 			}
 			

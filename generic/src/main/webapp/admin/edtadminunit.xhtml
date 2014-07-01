@@ -70,15 +70,17 @@
 	</s:decorate>
 	</div>
 	
+	
 	<div id="edtparent"> 
+	<h2>#{messages['admin.adminunits.parentunit']}</h2>
 	<s:decorate template="/layout/auselection.xhtml">
 		<ui:param name="auselection" value="#{adminUnitHome.auselectionparent}" />
 		<ui:param name="rerender" value="main:structureseldec" />
 	</s:decorate>
 	</div>
 	
-	<rich:jQuery selector="#edtparent" timing="onload" query="hide()" rendered="#{(adminUnit.parent == null and adminUnitHome.auselectionparent.selectedUnit == null) or (adminUnit.parent.id == adminUnitHome.auselectionparent.selectedUnit.id)}"/>
-	<rich:jQuery selector="#parentreadonly" timing="onload" query="hide()" rendered="#{(not(adminUnit.parent == null and adminUnitHome.auselectionparent.selectedUnit == null)) or (adminUnit.parent.id != adminUnitHome.auselectionparent.selectedUnit.id)}"/>
+	<rich:jQuery selector="#edtparent" timing="onload" query="hide()" rendered="#{(adminUnit.parent eq adminUnitHome.auselectionparent.selectedUnit)}"/>
+	<rich:jQuery selector="#parentreadonly" timing="onload" query="hide()" rendered="#{not(adminUnit.parent eq adminUnitHome.auselectionparent.selectedUnit)}"/>
 	
     <s:decorate template="/layout/edit.xhtml" id="structureseldec">
     	<ui:define name="label">#{messages['admin.adminunits.countrystructure']}:</ui:define>
