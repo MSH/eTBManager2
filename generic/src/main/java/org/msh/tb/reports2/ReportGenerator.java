@@ -49,7 +49,7 @@ public class ReportGenerator {
 	
 	/**
 	 * Return initialized data to be sent back to the client, containing all
-	 * variables, filters and reports available for the current user and current workspace
+	 * variables, filters and org.msh.reports available for the current user and current workspace
 	 * @return instance of {@link CInitializationData} 
 	 */
 	public static CInitializationData createInitializationData() {
@@ -106,11 +106,11 @@ public class ReportGenerator {
 	
 
 	/**
-	 * Return the list of available reports, ready to be sent back to the client
+	 * Return the list of available org.msh.reports, ready to be sent back to the client
 	 * @return instance of {@link ArrayList} containing {@link CReport} data
 	 */
 	public static ArrayList<CReport> getReportList() {
-		// get the list of available reports
+		// get the list of available org.msh.reports
 		ReportDAO dao = (ReportDAO)App.getComponent("reportDAO");
 		List<Report> lst = dao.getReportList();
 		

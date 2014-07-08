@@ -25,7 +25,7 @@ public class CInitializationData implements IsSerializable {
 	private Date currentDate;
 	
 	/**
-	 * List of available reports
+	 * List of available org.msh.reports
 	 */
 	private ArrayList<CReport> reports;
 
@@ -60,14 +60,14 @@ public class CInitializationData implements IsSerializable {
 	}
 
 	/**
-	 * @return the reports
+	 * @return the org.msh.reports
 	 */
 	public ArrayList<CReport> getReports() {
 		return reports;
 	}
 
 	/**
-	 * @param reports the reports to set
+	 * @param reports the org.msh.reports to set
 	 */
 	public void setReports(ArrayList<CReport> reports) {
 		this.reports = reports;

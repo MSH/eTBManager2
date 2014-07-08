@@ -32,7 +32,7 @@ public class GroupFiltersPopup extends GroupPopup {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.msh.tb.client.reports.GroupPopup#hasItems(org.msh.tb.client.shared.model.CGroup)
+	 * @see org.msh.tb.client.org.msh.reports.GroupPopup#hasItems(org.msh.tb.client.shared.model.CGroup)
 	 */
 	@Override
 	protected boolean hasItems(CGroup group) {

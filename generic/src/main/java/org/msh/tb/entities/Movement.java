@@ -76,10 +76,37 @@ public class Movement implements Serializable {
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ADJUSTMENT_ID")
-	FieldValue adjustmentType;
+	private FieldValue adjustmentType;
 
-	
-	/**
+
+    /**
+     * The available quantity in the inventory
+     */
+    private int availableQuantity;
+
+    /**
+     * The total price of the inventory
+     */
+    private float totalPriceInventory;
+
+
+    public float getTotalPriceInventory() {
+        return totalPriceInventory;
+    }
+
+    public void setTotalPriceInventory(float totalPriceInventory) {
+        this.totalPriceInventory = totalPriceInventory;
+    }
+
+    public int getAvailableQuantity() {
+        return availableQuantity;
+    }
+
+    public void setAvailableQuantity(int availableQuantity) {
+        this.availableQuantity = availableQuantity;
+    }
+
+    /**
 	 * Returns adjustment type of the transaction
 	 * @return a FieldValue representing the adjustment type
 	 */

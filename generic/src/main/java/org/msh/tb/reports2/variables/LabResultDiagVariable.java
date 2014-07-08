@@ -3,7 +3,7 @@ package org.msh.tb.reports2.variables;
 import org.msh.reports.query.SQLDefs;
 
 /**
- * A variable for indicator reports about the result
+ * A variable for indicator org.msh.reports about the result
  * of laboratory exams posted before or in the same day of 
  * the diagnosis date
  * 

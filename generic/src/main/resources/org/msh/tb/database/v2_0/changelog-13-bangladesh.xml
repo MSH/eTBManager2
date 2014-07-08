@@ -162,11 +162,11 @@
 		update userrole set messagekey='manag' where id=10;
 		update userrole set messagekey='manag.rel1' where id=30;
 		update userrole set messagekey='manag.rel4' where id=34;
-		update userrole set messagekey='manag.case.reports' where id=151;
+		update userrole set messagekey='manag.case.org.msh.reports' where id=151;
 		update userrole set messagekey='manag.export' where id=59;
 		update userrole set messagekey='manag.forecast.med' where id=60;
 		
-		update userrole set messagekey='admin.reports' where id=62;
+		update userrole set messagekey='admin.org.msh.reports' where id=62;
 		update userrole set messagekey='admin.auorg' where id=120;
 
 		</sql>

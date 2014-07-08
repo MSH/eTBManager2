@@ -14,4 +14,41 @@
 	<changeSet id="20.2" author="rmemoria">
 	    <sql>update tbcase set diagnosisType = 1 where diagnosisType is null</sql>
 	</changeSet>
+
+    <!-- Refactoring of the movement tables -->
+    <changeSet id="20.3" author="rmemoria">
+        <addColumn tableName="movement">
+            <column name="availableQuantity" type="int"/>
+            <column name="totalPriceInventory" type="float" />
+        </addColumn>
+
+        <addColumn tableName="batchmovement">
+            <column name="availableQuantity" type="int"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20.4" author="rmemoria">
+        <sql>drop table if exists tmpbatchmovement</sql>
+        <sql>create table tmpbatchmovement (id int not null primary key, availablequantity int)</sql>
+        <sql>delete from tmpbatchmovement</sql>
+        <sql>insert into tmpbatchmovement (id, availableQuantity)
+            select bm.id,
+            (select sum(bm2.quantity * m2.oper) from movement m2
+            inner join batchmovement bm2 on bm2.movement_id=m2.id
+            where m2.unit_id=m.unit_id and m2.SOURCE_ID=m.source_id and m2.MEDICINE_ID=m.medicine_id
+            and (m2.mov_date &lt; m.mov_date or (m2.mov_date = m.mov_date and m2.recordDate &lt;= m.recordDate))) as availableQuantity
+            from movement m
+            inner join batchmovement bm on bm.MOVEMENT_ID=m.id</sql>
+        <sql>update batchmovement
+            set availableQuantity = (select availableQuantity from tmpbatchmovement where tmpbatchmovement.id = batchmovement.id)</sql>
+        <sql>drop table tmpbatchmovement</sql>
+        <sql>update movement
+            set availableQuantity = (select sum(b.availableQuantity) from batchmovement b
+            where b.movement_id = movement.id),
+            totalPriceInventory = (select sum(b.availableQuantity * batch.unitPrice)
+            from batchmovement b inner join batch on batch.id = b.BATCH_ID
+            where b.movement_id=movement.id)</sql>
+        <!-- delete phantom records -->
+        <sql>delete from movement where not exists(select * from batchmovement where movement_id=movement.id)</sql>
+    </changeSet>
 </databaseChangeLog>

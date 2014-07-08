@@ -9,7 +9,10 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.FieldValueComponent;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.Source;
 import org.msh.tb.entities.enums.MovementType;
 
 /**
@@ -18,7 +21,7 @@ import org.msh.tb.entities.enums.MovementType;
  *
  */
 @Name("movementFilters")
-@Scope(ScopeType.CONVERSATION)
+@Scope(ScopeType.SESSION)
 public class MovementFilters {
 
 	@In(create=true) MovementsQuery movements;
@@ -32,10 +35,13 @@ public class MovementFilters {
 	private MovementType type;
 	private String batchNumber;
 	private Integer selectedMovement;
+    private Integer selectedBatchMovement;
 	private FieldValueComponent adjustmentInfo = new FieldValueComponent();
+    private Medicine medicine;
+    private Batch batch;
+    private Source source;
 
-	
-	/**
+    /**
 	 * Return if the executing report is by movements of medicines
 	 * @return true if it's medicine output report
 	 */
@@ -212,5 +218,61 @@ public class MovementFilters {
 	public void setShowAllUnits(boolean showAllUnits) {
 		this.showAllUnits = showAllUnits;
 	}
-	
+
+
+    /**
+     * @return the selectedBatchMovement
+     */
+    public Integer getSelectedBatchMovement() {
+        return selectedBatchMovement;
+    }
+
+
+    /**
+     * @param selectedBatchMovement the selectedBatchMovement to set
+     */
+    public void setSelectedBatchMovement(Integer selectedBatchMovement) {
+        this.selectedBatchMovement = selectedBatchMovement;
+    }
+
+
+    /**
+     * @return the medicine
+     */
+    public Medicine getMedicine() {
+        return medicine;
+    }
+
+
+    /**
+     * @param medicine the medicine to set
+     */
+    public void setMedicine(Medicine medicine) {
+        this.medicine = medicine;
+        batch = null;
+    }
+
+
+    /**
+     * @return the batch
+     */
+    public Batch getBatch() {
+        return batch;
+    }
+
+
+    /**
+     * @param batch the batch to set
+     */
+    public void setBatch(Batch batch) {
+        this.batch = batch;
+    }
+
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
+    }
 }

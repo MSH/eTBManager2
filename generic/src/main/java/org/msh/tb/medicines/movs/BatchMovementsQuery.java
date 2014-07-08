@@ -23,8 +23,8 @@ public class BatchMovementsQuery extends EntityQuery<MovementItem> implements Ro
 			"m.date <= #{movementFilters.dateEnd}",
 			"bm.batch.batchNumber = #{movementFilters.batchNumber}",
 			"m.tbunit.id = #{userSession.tbunit.id}",
-			"m.medicine.id = #{medicineHome.id}",
-			"m.source.id = #{sourceHome.id}",
+			"m.medicine.id = #{movementFilters.medicine.id}",
+			"m.source.id = #{movementFilters.source.id}",
 			"m.type = #{movementFilters.type}"};
 
 	private List<RowGroupingItem> rows;
@@ -60,10 +60,7 @@ public class BatchMovementsQuery extends EntityQuery<MovementItem> implements Ro
 	
 	@Override
 	public String getEjbql() {
-		return "select bm, " +
-			"(select sum(a.quantity * a.oper) from Movement a where a.tbunit.id=m.tbunit.id " +
-			"and a.source.id=m.source.id and a.medicine.id=m.medicine.id " +
-			"and ((a.date < m.date) or (a.date = m.date and a.recordDate <= m.recordDate))) " +
+        return "select bm, bm.movement.availableQuantity, bm.availableQuantity " +
 			"from BatchMovement bm join fetch bm.movement m " + 
 			"join fetch bm.batch b " +
 			"join fetch m.medicine join fetch m.source where m.medicine.id is not null";
@@ -101,16 +98,18 @@ public class BatchMovementsQuery extends EntityQuery<MovementItem> implements Ro
 
 
 	private void fillResultList(List<Object[]> lst) {
-		resultList = new ArrayList<MovementItem>();
+        resultList = new ArrayList<MovementItem>();
 
-		for (Object[] vals: lst) {
-			BatchMovement bm = (BatchMovement)vals[0];
-			Long val = (Long)vals[1];
-			MovementItem it = new MovementItem();
+        for (Object[] vals: lst) {
+            BatchMovement bm = (BatchMovement)vals[0];
+            int val = ((Number)vals[1]).intValue();
+            int val2 = ((Number)vals[2]).intValue();
+            MovementItem it = new MovementItem();
 
-			it.setBatchMovement(bm);
-			it.setStockQuantity(val.intValue());
-			resultList.add(it);
+            it.setBatchMovement(bm);
+            it.setStockQuantity(val);
+            it.setBatchQuantity(val2);
+            resultList.add(it);
 		}
 	}
 }

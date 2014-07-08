@@ -55,8 +55,8 @@ public class ReportListPanel extends Composite {
 	
 	
 	/**
-	 * Display the panel and show the list of reports
-	 * @param reload informs the panel to reload the list of reports from the server
+	 * Display the panel and show the list of org.msh.reports
+	 * @param reload informs the panel to reload the list of org.msh.reports from the server
 	 */
 	public void show(boolean reload) {
 		tblReports.removeAllRows();
@@ -65,7 +65,7 @@ public class ReportListPanel extends Composite {
 			updateList(lst);
 		}
 		else {
-			// call server for the list of reports
+			// call server for the list of org.msh.reports
 			ReportMain.instance().getService().getReportList(new StandardCallback<ArrayList<CReport>>() {
 				@Override
 				public void onSuccess(ArrayList<CReport> result) {
@@ -78,7 +78,7 @@ public class ReportListPanel extends Composite {
 	
 	
 	/**
-	 * Update the list of reports displayed in the table
+	 * Update the list of org.msh.reports displayed in the table
 	 * @param lst
 	 */
 	protected void updateList(ArrayList<CReport> lst) {
@@ -100,7 +100,7 @@ public class ReportListPanel extends Composite {
 	}
 	
 	/**
-	 * Add a new report to the list of reports
+	 * Add a new report to the list of org.msh.reports
 	 * @param title
 	 * @param newRep
 	 * @param myReport

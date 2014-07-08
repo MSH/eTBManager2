@@ -37,8 +37,8 @@ public class ReportDAO {
 	
 	
 	/**
-	 * Return a list of reports available for the current user (their reports and
-	 * the public reports)
+	 * Return a list of org.msh.reports available for the current user (their org.msh.reports and
+	 * the public org.msh.reports)
 	 * @return {@link List} of {@link Report} objects
 	 */
 	public List<Report> getReportList() {

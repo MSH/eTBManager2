@@ -60,7 +60,6 @@
 						<configuration>
 							<sources>
 								<source>src/main/java</source>
-								<source>src/reports/java</source>
 								<source>src/client/java</source>
 								<source>src/custom/na</source>
 								<source>src/custom/uz</source>
@@ -133,7 +132,7 @@
 		        <version>2.6</version>
 			</plugin>
 
-			<!-- Generate reports about testing results -->
+			<!-- Generate org.msh.reports about testing results -->
  			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 	 	       	<artifactId>maven-surefire-plugin</artifactId>
@@ -157,7 +156,7 @@
                 <version>2.3</version>
             </plugin>
 
-			<!-- Generate "PMD" and "CPD" reports -->
+			<!-- Generate "PMD" and "CPD" org.msh.reports -->
 			<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>

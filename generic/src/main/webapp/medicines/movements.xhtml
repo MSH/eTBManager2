@@ -9,7 +9,8 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="../layout/templatemed.xhtml">
 
-<ui:param name="title" value="#{messages['meds.movs']}" />
+<ui:param name="title" value="#{messages['meds.movs']}" />
+
 <ui:param name="topmenu" value="1" />
 
 <ui:param name="labelstyle" value="width:210px;" />
@@ -26,7 +27,7 @@
 
 
 <ui:define name="print">
-	<s:link view="/reports/movements.xhtml" target="_blank">
+	<s:link view="/org.msh.reports/movements.xhtml" target="_blank">
 		<ui:include src="/layout/print_icon.xhtml" />
 		<f:param name="batch" value="#{stockPosHome.showBatch}"/>
 		<f:param name="firstResult" value="#{movements.firstResult}" />
@@ -38,7 +39,7 @@
 </ui:define>
 
 
-<ui:define name="content_unit" id="content">
+<ui:define name="content_unit">
 <h:form id="main">
 	<a:jsFunction name="loadMovDetails" action="#{movements.loadDispMovDetail()}" ajaxSingle="true" oncomplete="showModalDetail()" reRender="dispMovDetail">
 		<a:actionparam name="param1" assignTo="#{movementFilters.selectedMovement}" converter="javax.faces.Integer" />
@@ -46,7 +47,7 @@
 
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Medicine']}:</ui:define>
-		<h:selectOneMenu value="#{medicineHome.medicine}">
+		<h:selectOneMenu value="#{movementFilters.medicine}">
   		<s:selectItems value="#{medicines.resultList}" var="r" label="#{r}" noSelectionLabel="#{messages['form.noselection']}" />
   		<s:convertEntity />
 		</h:selectOneMenu>
@@ -54,7 +55,7 @@
 
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Source']}:</ui:define>
-		<h:selectOneMenu value="#{sourceHome.source}">
+		<h:selectOneMenu value="#{movementFilters.source}">
   		<s:selectItems value="#{sources.resultList}" var="r" label="#{r.abbrevName}" noSelectionLabel="#{messages['form.noselection']}" />
   		<s:convertEntity />
 		</h:selectOneMenu>
@@ -115,67 +116,74 @@
 <s:decorate template="/layout/naveg.xhtml">
 	<ui:param name="list" value="#{movements}" />
 <h:dataTable value="#{movements.resultList}" var="m" rendered="#{movements.resultCount > 0}" styleClass="table1" width="100%" rowClasses="lin1,lin2" 
-	columnClasses="colc,#{medicine.id!=null?'':'coll,'}#{source.id!=null?'':'coll,'}coll,colr,colr,colr,colr">
+	columnClasses="colc,#{movementFilters.medicine.id!=null?'':'coll,'}#{movementFilters.source.id!=null?'':'coll,'}coll,colr,colr,colr,colr col-highlight,colr col-highlight">
 	
 	<h:column>
 		<f:facet name="header">#{messages['form.date']}</f:facet>
-		<h:outputText value="#{m.movement.date}" style="width:80px" converter="localeDateConverter" />
+		<h:outputText value="#{m.date}" style="width:80px" converter="localeDateConverter" />
 	</h:column>
 
-	<h:column rendered="#{medicine.id == null}">
+	<h:column rendered="#{movementFilters.medicine == null}">
 		<f:facet name="header"><h:outputText value="#{messages['Medicine']}" styleClass="collh" /></f:facet>
-		#{m.movement.medicine}
+		#{m.medicine}
 	</h:column>
 
-	<h:column rendered="#{source.id == null}">
+	<h:column rendered="#{movementFilters.source == null}">
 		<f:facet name="header"><h:outputText value="#{messages['Source']}" styleClass="collh" /></f:facet>
-		#{m.movement.source.abbrevName} #{m.movement.tbunit.name.name1}
+		#{m.source.abbrevName}
 	</h:column>
 
 	<h:column>
 		<f:facet name="header"><h:outputText value="#{messages['MovementType']}" styleClass="collh" /></f:facet>
-		#{messages[m.movement.type.key]}<br/>
-		<s:fragment rendered="#{not empty m.movement.comment}">
-			<h:outputText value="#{m.movement.comment}" rendered="#{m.movement.adjustmentType == null or (not m.movement.isAdjustment())}" />
+		#{messages[m.type.key]}<br/>
+		<s:fragment rendered="#{not empty m.comment}">
+			<h:outputText value="#{m.comment}" rendered="#{m.adjustmentType == null or (not m.isAdjustment())}" />
 		</s:fragment>
-		<s:fragment rendered="#{m.movement.adjustmentType != null and (m.movement.isAdjustment())}">
-			<h:outputText value="#{m.movement.adjustmentType}" style="font-size:11px"/><br/>
-			<h:outputText value="#{m.movement.comment}" style="font-size:11px" rendered="#{(not empty m.movement.comment)}" />
+		<s:fragment rendered="#{m.adjustmentType != null and (m.isAdjustment())}">
+			<h:outputText value="#{m.adjustmentType}" style="font-size:11px"/><br/>
+			<h:outputText value="#{m.comment}" style="font-size:11px" rendered="#{(not empty m.comment)}" />
 		</s:fragment>
 	</h:column>
 
 	<h:column>
 		<f:facet name="header"><h:outputText value="#{messages['meds.movs.movqtd']}" styleClass="colrh" /></f:facet>
-		<h:outputText value="#{m.movement.qtdOperation}" class="#{m.movement.qtdOperation > 0? '':'error'}" >
+		<h:outputText value="#{m.qtdOperation}" styleClass="#{m.qtdOperation > 0? '':'error'}" >
 			<f:convertNumber pattern="#,###,###"/>
 		</h:outputText>
 		<br/>
-		<a:commandLink style="font-size:11px" onclick="loadMovDetails(#{m.movement.id}); return false;" rendered="#{m.movement.isDispensing() and userSession.tbunit.patientDispensing}">
+		<a:commandLink style="font-size:11px" onclick="loadMovDetails(#{m.id}); return false;" rendered="#{m.isDispensing() and userSession.tbunit.patientDispensing}">
 			<span>#{messages['form.details']}</span>
 		</a:commandLink>
 	</h:column>
 
 	<h:column rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<f:facet name="header"><h:outputText value="#{messages['global.unitPrice']}" styleClass="colrh" /></f:facet>
-		<h:outputText value="#{m.movement.unitPrice}">
+		<h:outputText value="#{m.unitPrice}">
 			<f:convertNumber pattern="#,###,##0.00"/>
 		</h:outputText>
 	</h:column>
 
 	<h:column rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
 		<f:facet name="header"><h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh" /></f:facet>
-		<h:outputText value="#{m.movement.totalPrice}">
+		<h:outputText value="#{m.totalPrice}">
 			<f:convertNumber pattern="#,###,##0.00"/>
 		</h:outputText>
 	</h:column>
 
 	<h:column>
 		<f:facet name="header"><h:outputText value="#{messages['meds.movs.stockqtty']}" styleClass="colrh" /></f:facet>
-		<b><h:outputText value="#{m.stockQuantity}">
+		<b><h:outputText value="#{m.availableQuantity}">
 			<f:convertNumber pattern="#,###,###"/>
 		</h:outputText>
 		</b>
 	</h:column>
+
+    <h:column rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
+        <f:facet name="header"><h:outputText value="#{messages['global.totalPrice']}" styleClass="colrh" /></f:facet>
+        <h:outputText value="#{m.totalPriceInventory}">
+            <f:convertNumber pattern="#,###,##0.00"/>
+        </h:outputText>
+    </h:column>
 
 </h:dataTable>
 </s:decorate>
@@ -192,11 +200,11 @@
 <table class="table1" width="100%">
 	<tr><th>#{messages['form.date']}
 		</th>
-		<s:fragment rendered="#{!medicineHome.managed}">
+		<s:fragment rendered="#{empty movementFilters.medicine}">
 		<th class="coll">#{messages['Medicine']}
 		</th>
 		</s:fragment>
-		<s:fragment rendered="#{!sourceHome.managed}">
+		<s:fragment rendered="#{empty movementFilters.source}">
 		<th class="coll">#{messages['Source']}
 		</th>
 		</s:fragment>
@@ -218,6 +226,8 @@
 		</s:fragment>
 		<th class="colr">#{messages['meds.movs.stockqtty']}
 		</th>
+        <th class="colr">#{messages['global.totalPrice']}
+        </th>
 	</tr>
 <a:repeat value="#{batchMovements.rows}" var="m">
 	<tr><s:fragment rendered="#{m.spaned}">
@@ -225,11 +235,11 @@
 		</td>
 		</s:fragment>
 		<s:fragment rendered="#{m.spaned}">
-		<s:fragment rendered="#{!medicineHome.managed}">
+		<s:fragment rendered="#{empty movementFilters.medicine}">
 		<td class="colb" rowspan="#{m.rowSpan}">#{m.item.movement.medicine}
 		</td>
 		</s:fragment>
-		<s:fragment rendered="#{!sourceHome.managed}">
+		<s:fragment rendered="#{empty movementFilters.source}">
 		<td class="colb" rowspan="#{m.rowSpan}">#{m.item.movement.source.name}
 		</td>
 		</s:fragment>
@@ -261,11 +271,17 @@
 		</td>
 		</s:fragment>
 		<s:fragment rendered="#{m.spaned}">
-		<td class="colrb" rowspan="#{m.rowSpan}"><b><h:outputText value="#{m.item.stockQuantity}">
-			<f:convertNumber pattern="#,###,###"/>
-		</h:outputText>
-		</b>
-		</td>
+            <td class="colrb col-highlight" rowspan="#{m.rowSpan}"><b><h:outputText value="#{m.item.stockQuantity}">
+                <f:convertNumber pattern="#,###,###"/>
+            </h:outputText>
+            </b>
+            </td>
+
+            <td class="colrb col-highlight" rowspan="#{m.rowSpan}"><b><h:outputText value="#{m.item.movement.totalPriceInventory}">
+                <f:convertNumber pattern="#,###,##0.00"/>
+            </h:outputText>
+            </b>
+            </td>
 		</s:fragment>
 	</tr>
 </a:repeat>

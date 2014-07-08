@@ -62,7 +62,7 @@
 where firstline_supplier_id is not null or secondline_supplier_id is not null</sql>
 	</changeSet>
 	
-	<!-- Create the table to store information about reports in the data analysis tool -->
+	<!-- Create the table to store information about org.msh.reports in the data analysis tool -->
 	<changeSet id="15.5" author="rmemoria">
 	    <createTable tableName="report">
 	        <column name="id" autoIncrement="true" type="int">

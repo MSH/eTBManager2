@@ -10,7 +10,7 @@ import org.msh.reports.filters.Filter;
 import org.msh.reports.variables.Variable;
 
 /**
- * Create a SQL declaration to be used in indicator reports
+ * Create a SQL declaration to be used in indicator org.msh.reports
  * @author Ricardo Memoria
  *
  */

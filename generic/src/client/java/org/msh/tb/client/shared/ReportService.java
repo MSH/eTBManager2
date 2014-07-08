@@ -52,7 +52,7 @@ public interface ReportService extends RemoteService {
 
 	
 	/**
-	 * Return the list of available reports for the user
+	 * Return the list of available org.msh.reports for the user
 	 * @return list of {@link CReport} objects
 	 */
 	ArrayList<CReport> getReportList();

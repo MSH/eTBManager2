@@ -42,7 +42,7 @@ public abstract class IndicatorVerify<E> extends Indicator2D {
 	@In(create=true) IndicatorController indicatorController;
 	
 	/**
-	 * List of errors and warnings in TbCase data, allowing in reports 
+	 * List of errors and warnings in TbCase data, allowing in org.msh.reports
 	 * Parameters of Map means category and list of types of errors
 	 * */
 	private Map<String,List<ErrItem>> verifyList;

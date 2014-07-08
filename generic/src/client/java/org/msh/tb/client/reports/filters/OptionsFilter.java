@@ -24,7 +24,7 @@ public class OptionsFilter extends FilterWidget {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.msh.tb.client.reports.filters.FilterWidget#initialize(org.msh.tb.client.shared.model.CFilter)
+	 * @see org.msh.tb.client.org.msh.reports.filters.FilterWidget#initialize(org.msh.tb.client.shared.model.CFilter)
 	 */
 	@Override
 	public void initialize(CFilter filter, String value) {
@@ -46,7 +46,7 @@ public class OptionsFilter extends FilterWidget {
 	
 	
 	/* (non-Javadoc)
-	 * @see org.msh.tb.client.reports.filters.FilterWidget#getValue()
+	 * @see org.msh.tb.client.org.msh.reports.filters.FilterWidget#getValue()
 	 */
 	@Override
 	public String getValue() {
@@ -57,7 +57,7 @@ public class OptionsFilter extends FilterWidget {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.msh.tb.client.reports.filters.FilterWidget#setValue(java.lang.String)
+	 * @see org.msh.tb.client.org.msh.reports.filters.FilterWidget#setValue(java.lang.String)
 	 */
 	@Override
 	public void setValue(String value) {

@@ -83,7 +83,13 @@ public class DashboardMain extends Composite implements AppModule {
                     }
                     updateIndicator(lst, i);
 				}
-			});
+
+                @Override
+                public void onFailure(Throwable except) {
+                    // there is no error handling because it may be caused by a page redirect
+                    System.out.println("Error");
+                }
+            });
 		}
 	}
 

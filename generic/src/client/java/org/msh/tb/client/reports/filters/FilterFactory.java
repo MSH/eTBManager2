@@ -98,7 +98,7 @@ public class FilterFactory implements FilterConstructor{
 
 
 	/* (non-Javadoc)
-	 * @see org.msh.tb.client.reports.filters.FilterConstructor#create(java.lang.String)
+	 * @see org.msh.tb.client.org.msh.reports.filters.FilterConstructor#create(java.lang.String)
 	 */
 	@Override
 	public FilterWidget create(String ftype) {

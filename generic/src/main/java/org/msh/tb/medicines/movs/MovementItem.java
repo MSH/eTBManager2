@@ -7,8 +7,18 @@ public class MovementItem {
 	private Movement movement;
 	private BatchMovement batchMovement;
 	private int stockQuantity;
-	
-	/**
+    private int batchQuantity;
+
+
+    public int getBatchQuantity() {
+        return batchQuantity;
+    }
+
+    public void setBatchQuantity(int batchQuantity) {
+        this.batchQuantity = batchQuantity;
+    }
+
+    /**
 	 * @return the movement
 	 */
 	public Movement getMovement() {

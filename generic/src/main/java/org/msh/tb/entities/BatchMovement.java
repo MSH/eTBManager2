@@ -27,11 +27,22 @@ public class BatchMovement implements Serializable {
 	private Batch batch;
 	
 	private int quantity;
-	
-	@ManyToOne
-	@JoinColumn(name="MOVEMENT_ID")
-	@NotNull
-	private Movement movement;
+
+    private int availableQuantity;
+
+    @ManyToOne
+    @JoinColumn(name="MOVEMENT_ID")
+    @NotNull
+    private Movement movement;
+
+
+    public int getAvailableQuantity() {
+        return availableQuantity;
+    }
+
+    public void setAvailableQuantity(int availableQuantity) {
+        this.availableQuantity = availableQuantity;
+    }
 
 	public int getQtdOperation() {
 		return getQuantity() * movement.getType().getOper();

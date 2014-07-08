@@ -38,7 +38,7 @@
             <div style="float:right">
             	<g:Button ui:field="btnClose">Close</g:Button>
             </div>
-            <h2>Available reports</h2>
+            <h2>Available org.msh.reports</h2>
         </g:HTMLPanel>
 	    <g:HTMLPanel>
            	<g:FlexTable ui:field="tblReports" width="100%" styleName="{style.reportList}"/>

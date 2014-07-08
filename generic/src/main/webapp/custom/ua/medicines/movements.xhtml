@@ -9,7 +9,8 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/templatemed.xhtml">
 
-<ui:param name="title" value="#{messages['meds.movs']}" />
+<ui:param name="title" value="#{messages['meds.movs']}" />
+
 <ui:param name="topmenu" value="1" />
 
 <ui:param name="labelstyle" value="width:210px;" />
@@ -26,7 +27,7 @@
 
 
 <ui:define name="print">
-	<s:link view="/reports/movements.xhtml" target="_blank">
+	<s:link view="/org.msh.reports/movements.xhtml" target="_blank">
 		<ui:include src="/layout/print_icon.xhtml" />
 		<f:param name="batch" value="#{stockPosHome.showBatch}"/>
 		<f:param name="firstResult" value="#{movements.firstResult}" />

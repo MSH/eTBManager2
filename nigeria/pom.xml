@@ -59,7 +59,7 @@
 						<configuration>
 							<sources>
 								<source>../generic/src/main/java</source>
-								<source>../generic/src/reports/java</source>
+								<source>../generic/src/org.msh.reports/java</source>
 								<source>../generic/src/client/java</source>
 								<source>../generic/src/custom/ng</source>
 							</sources>

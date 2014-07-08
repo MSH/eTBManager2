@@ -12,7 +12,8 @@
 <ui:param name="transferHome" value="#{transferUAHome}" />
 <ui:param name="transfer" value="#{transferUA}" />
 
-<ui:param name="title" value="#{messages['meds.transfer.detail']}" />
+<ui:param name="title" value="#{messages['meds.transfer.detail']}" />
+
 <ui:param name="topmenu" value="1" />
 <ui:param name="waitdlg" value="1" />
 <ui:param name="labelstyle" value="width:180px;" />
@@ -49,7 +50,7 @@
 
 
 <ui:define name="print-link">
-	<s:link view="/reports/transfdata.xhtml" value="#{messages['global.print']}" target="_blank" />
+	<s:link view="/org.msh.reports/transfdata.xhtml" value="#{messages['global.print']}" target="_blank" />
 </ui:define>
 
 <ui:define name="content">
