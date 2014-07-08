@@ -63,7 +63,7 @@
 		<f:param name="id" value="#{order.id}" />
 	</s:link>
 
-	<s:link view="/org.msh.reports/orderdata.xhtml" target="_blank" >
+	<s:link view="/reports/orderdata.xhtml" target="_blank" >
 		<f:param name="id" value="#{order.id}" />
 		<span class="print-icon"/><span>#{messages['meds.orders.print']}</span>
 	</s:link>
@@ -204,7 +204,7 @@
 		<h2>#{s.source.abbrevName} <span class="text-small">(#{s.source.name})</span></h2>
 	</td></tr>
 	<tr><td>
-		<h:dataTable value="#{s.items}" var="it" class="table1" width="100%" columnClasses="coll,colr,colc,colr,colr,colr,colr,colr,colr" rowClasses="lin1,lin2">
+		<h:dataTable value="#{s.items}" var="it" styleClass="table1" width="100%" columnClasses="coll,colr,colc,colr,colr,colr,colr,colr,colr" rowClasses="lin1,lin2">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['Medicine']}" styleClass="collh"/>

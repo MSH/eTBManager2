@@ -29,7 +29,7 @@
 
 
 <ui:define name="left">
-	<h:form class="vertical-menu">
+	<h:form styleClass="vertical-menu">
 
 	<s:link view="/custom/ua/medicines/transfedt.xhtml" rendered="#{transferHome.canCancel and transfer.status!='DONE'}" >
 		<f:param name="id" value="#{transfer.id}" />
@@ -50,7 +50,7 @@
 
 
 <ui:define name="print-link">
-	<s:link view="/org.msh.reports/transfdata.xhtml" value="#{messages['global.print']}" target="_blank" />
+	<s:link view="/reports/transfdata.xhtml" value="#{messages['global.print']}" target="_blank" />
 </ui:define>
 
 <ui:define name="content">

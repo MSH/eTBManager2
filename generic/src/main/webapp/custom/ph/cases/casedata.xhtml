@@ -48,9 +48,9 @@
 
 <ui:define name="left">
 	<h:panelGroup id="leftmenu" styleClass="vertical-menu">
-	<h:form class="vertical-menu">
+	<h:form styleClass="vertical-menu">
 
-	<s:link view="/org.msh.reports/casedata.xhtml" target="_new">
+	<s:link view="/reports/casedata.xhtml" target="_new">
 		<div class="print-icon"/>#{messages['global.print']}
 		<f:param name="id" value="#{caseHome.id}" />
 	</s:link>

@@ -27,7 +27,7 @@
 
 
 <ui:define name="print">
-	<s:link view="/org.msh.reports/movements.xhtml" target="_blank">
+	<s:link view="/reports/movements.xhtml" target="_blank">
 		<ui:include src="/layout/print_icon.xhtml" />
 		<f:param name="batch" value="#{stockPosHome.showBatch}"/>
 		<f:param name="firstResult" value="#{movements.firstResult}" />
@@ -39,7 +39,7 @@
 </ui:define>
 
 
-<ui:define name="content_unit" id="content">
+<ui:define name="content_unit">
 <h:form id="main">
 	<a:jsFunction name="loadMovDetails" action="#{movements.loadDispMovDetail()}" ajaxSingle="true" oncomplete="showModalDetail()" reRender="dispMovDetail">
 		<a:actionparam name="param1" assignTo="#{movementFilters.selectedMovement}" converter="javax.faces.Integer" />
