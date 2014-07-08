@@ -6,7 +6,7 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
 	<!-- Add new type field to the resistance pattern (there are two types of patterns:
-	Those created by the user to the workspace, and those that are part of WHO standard org.msh.reports -->
+	Those created by the user to the workspace, and those that are part of WHO standard reports -->
 	<changeSet id="3.1" author="rmemoria">
 		<addColumn tableName="resistancepattern">
 			<column name="criteria" type="int" >
