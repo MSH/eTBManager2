@@ -51,4 +51,10 @@
         <!-- delete phantom records -->
         <sql>delete from movement where not exists(select * from batchmovement where movement_id=movement.id)</sql>
     </changeSet>
+
+    <changeSet id="20.5" author="rmemoria">
+        <addColumn tableName="userworkspace">
+            <column name="laboratory_id" type="int" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

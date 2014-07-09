@@ -34,9 +34,13 @@ public class UserWorkspace extends WSObject implements Serializable{
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="TBUNIT_ID")
-	@NotNull
 	@PropertyLog(operations={Operation.NEW})
 	private Tbunit tbunit;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="LABORATORY_ID")
+    @PropertyLog(operations={Operation.NEW})
+    private Laboratory laboratory;
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="USER_ID")
@@ -168,4 +172,12 @@ public class UserWorkspace extends WSObject implements Serializable{
 	public void setHealthSystem(HealthSystem healthSystem) {
 		this.healthSystem = healthSystem;
 	}
+
+    public Laboratory getLaboratory() {
+        return laboratory;
+    }
+
+    public void setLaboratory(Laboratory laboratory) {
+        this.laboratory = laboratory;
+    }
 }
