@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder' 
-	xmlns:g='urn:import:com.google.gwt.user.client.ui'
-	xmlns:c='urn:import:org.msh.tb.client.commons'
-	xmlns:rep='urn:import:org.msh.tb.client.reports'>
+	xmlns:g='urn:import:com.google.gwt.user.client.ui'>
 	
 	<ui:with field='msg' type='org.msh.tb.client.reports.resources.ReportConstants'/>
 
@@ -38,7 +36,7 @@
             <div style="float:right">
             	<g:Button ui:field="btnClose">Close</g:Button>
             </div>
-            <h2>Available org.msh.reports</h2>
+            <h2>Available reports</h2>
         </g:HTMLPanel>
 	    <g:HTMLPanel>
            	<g:FlexTable ui:field="tblReports" width="100%" styleName="{style.reportList}"/>

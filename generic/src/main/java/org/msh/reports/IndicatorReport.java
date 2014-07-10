@@ -107,7 +107,6 @@ public class IndicatorReport {
 	
 	/**
 	 * Load data from the data base
-	 * @return
 	 */
 	protected DataTableImpl loadData() {
 		// create SQL instruction
@@ -133,9 +132,9 @@ public class IndicatorReport {
 	
 	/**
 	 * Run recursively the sequence of iteration over the variables that have more than 1 iteration
-	 * @param target
-	 * @param sqlBuilder
-	 * @param varindex
+	 * @param target to do
+	 * @param sqlBuilder to do
+	 * @param varindex to do
 	 */
 	protected void runVariableIteration(DataTable target, SqlBuilder sqlBuilder, int varindex) {
 		Variable var = sqlBuilder.getVariables().get(varindex);
@@ -196,7 +195,6 @@ public class IndicatorReport {
 	/**
 	 * Add another variable to the group of columns variables
 	 * @param var
-	 * @return
 	 */
 	public IndicatorReport addColumnVariable(Variable var) {
 		columnVariables.add(var);
@@ -334,9 +332,8 @@ public class IndicatorReport {
 	
 	/**
 	 * Add a table join to the main table
-	 * @param tableName
-	 * @param fieldName
-	 * @param foreignKey
+	 * @param tableField the field name
+	 * @param foreignKey the foreign key representation
 	 * @return
 	 */
 	public TableJoin addTableJoin(String tableField, String foreignKey) {
@@ -405,7 +402,7 @@ public class IndicatorReport {
 
 
 	/**
-	 * @param sqlCondition the sqlCondition to set
+	 * @param sqlRestriction the sqlCondition to set
 	 */
 	public void addRestriction(String sqlRestriction) {
 		getSqlBuilder().addRestriction(sqlRestriction);

@@ -35,6 +35,7 @@ import org.msh.tb.entities.User;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.reports2.variables.DateFieldVariable;
+import org.msh.tb.reports2.variables.EmptyVariable;
 import org.msh.utils.date.DateUtils;
 
 /**
@@ -139,12 +140,30 @@ public class ReportGenerator {
 	 */
 	public static CReportResponse generateReport(CReportRequest reportData) {
 		// check validation rules
-		if ((reportData == null) || (reportData.getColVariables() == null) || (reportData.getRowVariables() == null) ||
-			(reportData.getColVariables().size() == 0) || (reportData.getRowVariables().size() == 0))
-			return null;
+        if (reportData == null) {
+            return null;
+        }
 
-		// create indicator report
-		ReportResources res = ReportResources.instance();
+        // get report variables and filters
+        ReportResources res = ReportResources.instance();
+
+        // check column variables
+        if ((reportData.getColVariables() == null) || (reportData.getColVariables().size() == 0)) {
+            reportData.setColVariables(new ArrayList<String>());
+            reportData.getColVariables().add("emptyCol");
+            // add an empty variable for the column
+            res.addVariable(res.getGroups().get(0), new EmptyVariable("emptyCol"));
+        }
+
+        // check row variables
+		if ((reportData.getRowVariables() == null) || (reportData.getRowVariables().size() == 0)) {
+            reportData.setRowVariables(new ArrayList<String>());
+            reportData.getRowVariables().add("emptyRow");
+            // add an empty variable for the row
+            res.addVariable(res.getGroups().get(0), new EmptyVariable("emptyRow"));
+        }
+
+        // create indicator report
 		IndicatorReport rep = IndicatorReportFactory.instance().createCaseIndicator();
 
 		List<Variable> variables = new ArrayList<Variable>();

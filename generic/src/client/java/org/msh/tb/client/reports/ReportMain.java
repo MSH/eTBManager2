@@ -169,7 +169,6 @@ public class ReportMain extends Composite implements AppModule {
 
 
 	/**
-	 * @param event
 	 */
 	protected void changeEditTitle() {
 		String s = edtTitle.getText().trim();
@@ -231,7 +230,7 @@ public class ReportMain extends Composite implements AppModule {
 	
 	/**
 	 * Called when clicking on the open button beside the report title
-	 * @param event
+	 * @param event object containing information about the click event
 	 */
 	@UiHandler("lnkOpen")
 	public void lnkOpen(ClickEvent event) {
@@ -240,7 +239,7 @@ public class ReportMain extends Composite implements AppModule {
 
 	/**
 	 * Save report
-	 * @param event
+	 * @param event contain information about the click event
 	 */
 	@UiHandler("lnkSave")
 	public void lnkSaveClick(ClickEvent event) {
@@ -288,7 +287,7 @@ public class ReportMain extends Composite implements AppModule {
 		chart.clear();
 
 		btnGenerate.setEnabled(false);
-		service.executeReport(data, new StandardCallback<CReportResponse>() {
+        service.executeReport(data, new StandardCallback<CReportResponse>() {
 			@Override
 			public void onSuccess(CReportResponse res) {
 				btnGenerate.setEnabled(true);
@@ -337,11 +336,14 @@ public class ReportMain extends Composite implements AppModule {
 		ArrayList<String> rows = pnlRowVariables.getDeclaredVariables();
 		ArrayList<String> cols = pnlColVariables.getDeclaredVariables();
 		
+/*
 		if ((rows.size() == 0) || (cols.size() == 0)) {
 			showErrorMessage(App.messages.noVariableDefined());
 			return null;
 		}
 		else pnlMessage.setVisible(false);
+		 */
+        pnlMessage.setVisible(false);
 		
 		CReportRequest data = new CReportRequest();
 		data.setRowVariables(rows);
@@ -361,7 +363,6 @@ public class ReportMain extends Composite implements AppModule {
 
 	/**
 	 * Update report data with table sent from the server
-	 * @param table
 	 */
 	protected void updateReportResponse() {
 		tblResult.update(tableData);
@@ -465,7 +466,7 @@ public class ReportMain extends Composite implements AppModule {
 	
 	/**
 	 * Select the chart from a number of 0 to the max number of charttypes array 
-	 * @param chartindex
+	 * @param chartType identify the type of chart to display
 	 */
 	public void selectChart(ChartType chartType) {
 		Image img = new Image(chartImgs[chartType.ordinal()]);
@@ -534,7 +535,6 @@ public class ReportMain extends Composite implements AppModule {
 	
 	/**
 	 * Update the current report being displayed by the system
-	 * @param report instance of {@link CReport} class
 	 */
 	public void updateReport() {
 		txtTitle.setText(report.getTitle());
