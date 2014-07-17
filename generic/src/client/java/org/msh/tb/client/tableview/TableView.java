@@ -82,11 +82,13 @@ public class TableView extends Composite {
 
 		// set column header titles
 		String headerHtml = "";
-		for (CVariable var: tableData.getColVariables()) {
-			if (!headerHtml.isEmpty())
-				headerHtml += " / ";
-			headerHtml += var.getName();
-		}
+        if (tableData.getColVariables() != null) {
+            for (CVariable var: tableData.getColVariables()) {
+                if (!headerHtml.isEmpty())
+                    headerHtml += " / ";
+                headerHtml += var.getName();
+            }
+        }
 
 		setHoverText(0,1, headerHtml);
 		setCellStyle(0, 1, STYLE_HEADER_TITLE, 1, numCols);

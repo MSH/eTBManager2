@@ -339,6 +339,14 @@ html {
 .ind-res {
     width:100%;
 }
+
+.tbl50 {
+    width: 50% !important;
+}
+.tbl25 {
+    width: 25% !important;
+}
+
 /* Indicator containing a single value with a caption at the bottom */
 .ind-res-single {
     background-color: #204C74;

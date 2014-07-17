@@ -23,6 +23,7 @@ public class CIndicator implements IsSerializable {
 	private ArrayList<String> colVariables;
 	private ArrayList<String> rowVariables;
     private HashMap<String, String> filters;
+    private Integer size;
 
     public HashMap<String, String> getFilters() {
         return filters;
@@ -120,4 +121,12 @@ public class CIndicator implements IsSerializable {
 	public void setTblSelectedCell(Integer tblSelectedCell) {
 		this.tblSelectedCell = tblSelectedCell;
 	}
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
 }

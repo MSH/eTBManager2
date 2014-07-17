@@ -2,6 +2,8 @@ package org.msh.tb.client.indicators;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -55,6 +57,12 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
         lbSize.addItem("50%");
         lbSize.addItem("25%");
         lbSize.setSelectedIndex(0);
+        lbSize.addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                sizeChangeHandler();
+            }
+        });
 
         pnlVariables.setEventHandler(this);
         txtTitle.setEventHandler(this);
@@ -125,6 +133,21 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
         controller.getIndicator().setChartType(type);
         updateChartButton();
         resIndicator.notifyChartChange();
+    }
+
+    /**
+     * Called when the user changes the view size
+     */
+    protected void sizeChangeHandler() {
+        int size = 100;
+        switch (lbSize.getSelectedIndex()) {
+            case 1: size = 50;
+                break;
+            case 2: size = 25;
+                break;
+        }
+        controller.getIndicator().setSize(size);
+        resIndicator.notifySizeChange();
     }
 
 

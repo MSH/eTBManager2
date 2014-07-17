@@ -28,6 +28,7 @@ public class ResultView extends Composite {
     private boolean showChart = true;
     private boolean showTable = true;
     private boolean showTitle = true;
+    private boolean singleValue;
 
     /**
      * Default constructor
@@ -56,7 +57,8 @@ public class ResultView extends Composite {
 
         // check how to update it
         CIndicator indicator = controller.getIndicator();
-        if ((indicator.getColVariablesCount() == 0) && (indicator.getRowVariablesCount() == 0)) {
+        singleValue = (indicator.getColVariablesCount() == 0) && (indicator.getRowVariablesCount() == 0);
+        if (singleValue) {
             updateSingleValue();
         }
         else {
@@ -67,6 +69,30 @@ public class ResultView extends Composite {
 
     public void notifyTitleChange() {
         updateSingleValue();
+    }
+
+    /**
+     * Notify the view that the size was changed
+     */
+    public void notifySizeChange() {
+        updateSize();
+        update(controller);
+    }
+
+    /**
+     * Update the size of the view according to the value set in the indicator
+     */
+    private void updateSize() {
+        if (singleValue) {
+            return;
+        }
+
+        String s = "ind-res";
+        Integer size = controller.getIndicator().getSize();
+        if ((size != null) && (size < 100)) {
+            s += " tbl" + Integer.toString(size);
+        }
+        tblLayout.setStyleName(s);
     }
 
 
@@ -104,7 +130,8 @@ public class ResultView extends Composite {
      * Update the indicator when the value to update is a table with chart
      */
     protected void updateCompositeValue() {
-        tblLayout.setStyleName("ind-res");
+        updateSize();
+//        tblLayout.setStyleName("ind-res");
         tblLayout.removeAllRows();
 
         int row = 0;
