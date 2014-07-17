@@ -61,7 +61,7 @@ public class IndicatorPanel extends Composite {
 			chartIndex = 0;
 		}
 		
-		ChartType type = ChartType.values()[chartIndex];
+		CChartType type = CChartType.values()[chartIndex];
 		chart.setShowTitle(false);
 		chart.setSelectedChart(type);
 		chart.setWidth("400px");

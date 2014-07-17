@@ -6,8 +6,10 @@ import com.google.gwt.user.client.ui.FlexTable;
 import org.msh.tb.client.chart.ChartReport;
 import org.msh.tb.client.chart.ChartView;
 import org.msh.tb.client.commons.StandardCallback;
+import org.msh.tb.client.shared.model.CChartType;
 import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.tableview.TableView;
+import org.msh.utils.reportgen.highchart.ChartType;
 
 
 /**
@@ -54,7 +56,7 @@ public class ResultView extends Composite {
 
         // check how to update it
         CIndicator indicator = controller.getIndicator();
-        if ((indicator.getColVariables().size() == 0) || (indicator.getRowVariables().size() == 0)) {
+        if ((indicator.getColVariablesCount() == 0) && (indicator.getRowVariablesCount() == 0)) {
             updateSingleValue();
         }
         else {
@@ -62,6 +64,23 @@ public class ResultView extends Composite {
         }
     }
 
+
+    public void notifyTitleChange() {
+        updateSingleValue();
+    }
+
+
+    /**
+     * Notify about chart type change
+     */
+    public void notifyChartChange() {
+        if (chart == null) {
+            return;
+        }
+        CChartType type = controller.getIndicator().getChartType();
+        chart.setSelectedChart(type);
+        ChartReport.update(chart, controller.getData());
+    }
 
     /**
      * Update the indicator when the value to update is a single value
@@ -73,11 +92,11 @@ public class ResultView extends Composite {
         String sval = (val == null || val == 0)? "-": NumberFormat.getFormat("#,###,###").format(val);
         String title = controller.getIndicator().getTitle();
 
-        tblLayout.getCellFormatter().setStyleName(0,0, "value");
+        tblLayout.getCellFormatter().setStyleName(0, 0, "ind-value");
         tblLayout.setText(0, 0, sval);
 
-        tblLayout.getCellFormatter().setStyleName(0, 1, "title");
-        tblLayout.setText(0, 1, title);
+        tblLayout.getCellFormatter().setStyleName(1, 0, "ind-title");
+        tblLayout.setText(1, 0, title);
     }
 
 
@@ -98,7 +117,7 @@ public class ResultView extends Composite {
         if (showChart && showTable) {
             addChart(0, row);
             if (layout == Layout.VERTICAL) {
-                addTable(0, row);
+                addTable(0, row + 1);
             }
             else {
                 addTable(1, row);
@@ -134,7 +153,8 @@ public class ResultView extends Composite {
      * @param row row of the layout table
      */
     protected void addChart(int col, int row) {
-        ChartView chart = new ChartView();
+        chart = new ChartView();
+        chart.setSelectedChart(controller.getIndicator().getChartType());
         tblLayout.setWidget(row, col, chart);
         ChartReport.update(chart, controller.getData());
     }

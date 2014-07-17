@@ -17,7 +17,7 @@ import java.util.HashMap;
 public class CIndicator implements IsSerializable {
 
 	private String title;
-	private Integer chartType;
+	private CChartType chartType;
 	private Integer tblSelection;
 	private Integer tblSelectedCell;
 	private ArrayList<String> colVariables;
@@ -30,6 +30,22 @@ public class CIndicator implements IsSerializable {
 
     public void setFilters(HashMap<String, String> filters) {
         this.filters = filters;
+    }
+
+    /**
+     * Return the number of variables selected for the column
+     * @return int value
+     */
+    public int getColVariablesCount() {
+        return colVariables != null? colVariables.size(): 0;
+    }
+
+    /**
+     * Return the number of variables selected for the row
+     * @return int value
+     */
+    public int getRowVariablesCount() {
+        return rowVariables != null? rowVariables.size(): 0;
     }
 
 	/**
@@ -47,13 +63,13 @@ public class CIndicator implements IsSerializable {
 	/**
 	 * @return the chartType
 	 */
-	public Integer getChartType() {
+	public CChartType getChartType() {
 		return chartType;
 	}
 	/**
 	 * @param chartType the chartType to set
 	 */
-	public void setChartType(Integer chartType) {
+	public void setChartType(CChartType chartType) {
 		this.chartType = chartType;
 	}
 	/**

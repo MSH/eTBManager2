@@ -9,7 +9,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import org.msh.tb.client.AppModule;
 import org.msh.tb.client.AppResources;
-import org.msh.tb.client.chart.ChartType;
+import org.msh.tb.client.shared.model.CChartType;
 import org.msh.tb.client.commons.StandardCallback;
 import org.msh.tb.client.commons.StandardEventHandler;
 import org.msh.tb.client.indicators.IndicatorController;
@@ -61,7 +61,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 		initWidget(binder.createAndBindUi(this));
 
 		// select the first chart as default
-//		selectChart(ChartType.CHART_COLUMN);
+//		selectChart(CChartType.CHART_COLUMN);
 
 		btnGenerate.addStyleName("btn-alt");
 		
@@ -370,7 +370,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 	 * @param chartType identify the type of chart to display
 	 */
 /*
-	public void selectChart(ChartType chartType) {
+	public void selectChart(CChartType chartType) {
 		Image img = new Image(chartImgs[chartType.ordinal()]);
 		Element el = (Element)lnkChartType.getElement();
 		if (DOM.getChildCount(el) > 0)
@@ -388,7 +388,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 	 * @return
 	 */
 /*
-	public ChartType getChartType() {
+	public CChartType getChartType() {
 		return chart.getSelectedChart();
 	}
 */
@@ -466,8 +466,8 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 
 		// update chart type
 		Integer val = report.getChartType();
-		if ((val != null) && (val >= 0) && (val < ChartType.values().length)) {
-			selectChart(ChartType.values()[val]);
+		if ((val != null) && (val >= 0) && (val < CChartType.values().length)) {
+			selectChart(CChartType.values()[val]);
 		}
 
 		// hide the current report being displayed
@@ -524,7 +524,6 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
      */
     public void newIndicator() {
         CIndicator indicator = new CIndicator();
-        report.getIndicators().add(indicator);
 
         // create a new name to the indicator
         int index = 1;
@@ -532,7 +531,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
             String s = "Indicator " + Integer.toString(index);
             boolean newName = true;
             for (CIndicator ind: report.getIndicators()) {
-                if (ind.getTitle().equals(s)) {
+                if (s.equals(ind.getTitle())) {
                     newName = false;
                     break;
                 }
@@ -544,7 +543,8 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
             index++;
         }
 
-        indicator.setChartType(ChartType.CHART_BAR.ordinal());
+        indicator.setChartType(CChartType.CHART_BAR);
+        report.getIndicators().add(indicator);
 
         // display the indicator
         addIndicatorPanel(indicator, true);

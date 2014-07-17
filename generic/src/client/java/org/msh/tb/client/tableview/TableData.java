@@ -1,5 +1,6 @@
 package org.msh.tb.client.tableview;
 
+import org.msh.tb.client.reports.ReportUtils;
 import org.msh.tb.client.shared.model.*;
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class TableData {
 		int index = col.getLevel();
 		return colVariables.get(table.getColVarIndex()[index]);
 	}
-	
+
 	/**
 	 * Return the column of the last header row in the column position indicated by 
 	 * the index argument
@@ -139,7 +140,8 @@ public class TableData {
 	 * data for a new report
 	 * @param table contains data of a report
 	 */
-	public void update(CIndicatorResponse table) {
+	public void update(CIndicator indicator, CIndicatorResponse table) {
+        updateVariables(indicator);
 		// initialize list of columns per row
 		List<List<CTableColumn>> columnRows = new ArrayList<List<CTableColumn>>();
 		rowsHeader = columnRows;
@@ -162,9 +164,39 @@ public class TableData {
 		// update total
 		updateTotal();
 	}
-	
-	
-	/**
+
+    /**
+     * Update the variables by replacing its IDs by the CVariable instance
+     * @param indicator instance of CIndicator
+     */
+    private void updateVariables(CIndicator indicator) {
+        if (indicator.getColVariablesCount() > 0) {
+            colVariables = new ArrayList<CVariable>();
+            convertVarIds(indicator.getColVariables(), colVariables);
+        }
+
+        if (indicator.getRowVariablesCount() > 0) {
+            rowVariables = new ArrayList<CVariable>();
+            convertVarIds(indicator.getRowVariables(), rowVariables);
+        }
+    }
+
+    /**
+     * Convert variables IDs to CVariable instances
+     * @param ids list of string ids
+     * @param vars list of CVariable instance
+     */
+    private void convertVarIds(List<String> ids, List<CVariable> vars) {
+        for (String id: ids) {
+            CVariable var = ReportUtils.findVariableById(id);
+            if (var != null) {
+                vars.add(var);
+            }
+        }
+    }
+
+
+    /**
 	 * Update the total values displayed in the table
 	 */
 	protected void updateTotal() {

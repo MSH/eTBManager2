@@ -231,6 +231,7 @@ html {
 	border: #4cae4c;
 	color: #fff;
 	padding: 5px 8px;
+    cursor: pointer;
 }
 
 .btn-alt:hover {
@@ -322,7 +323,6 @@ html {
     width:auto;
 }
 
-
 .report-panel {
 
 }
@@ -337,26 +337,38 @@ html {
 
 /* Indicator result style, i.e, component containing chart and table */
 .ind-res {
+    width:100%;
 }
 /* Indicator containing a single value with a caption at the bottom */
 .ind-res-single {
-    background-color: #008422;
+    background-color: #204C74;
     color: #fff;
-    width: 25%;
     border-collapse: collapse;
+    text-align: center;
+    margin-right: 10px;
+    border-radius: 5px;
+    min-width: 150px;
+}
+.ind-res-single td {
+    padding:10px;
 }
 /* Value of the indicator */
-.ind-res-single .value {
-    font-size: 16px;
+.ind-res-single .ind-value {
+    font-size: 32px;
 }
 /* title at the bottom of the indicator */
-.ind-res-single .title {
-    font-size: 9px;
+.ind-res-single .ind-title {
+    font-size: 12px;
+    max-width: 150px;
+    line-height: 1.2;
+    vertical-align: bottom;
+    height:40px;
 }
 
 /* Layout of the widget that displays the indicator (including title and other widgets) */
 .indicator-view {
-
+    border:1px solid #f0f0f0;
+    padding:10px;
 }
 
 .indicator-editor {
@@ -373,7 +385,7 @@ html {
     padding-bottom: 8px;
 }
 .report-panel .label-editor .gwt-TextBox {
-    width:600px;
+    width:900px;
 }
 
 .panel {
@@ -409,4 +421,8 @@ html {
 
 .block {
     clear:both;
+}
+
+.editor {
+    margin-bottom: 10px;
 }

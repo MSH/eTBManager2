@@ -25,7 +25,6 @@ import java.util.List;
  */
 public class VariablesPanel extends Composite implements StandardEventHandler {
     interface IndicatorEditorUiBinder extends UiBinder<HTMLPanel, VariablesPanel> {   }
-
     private static IndicatorEditorUiBinder binder = GWT.create(IndicatorEditorUiBinder.class);
 
 	@UiField VerticalPanel pnlColVariables;
@@ -36,6 +35,8 @@ public class VariablesPanel extends Composite implements StandardEventHandler {
 
 	//  used internally to know which box called the popup
 	private VariableBox selected;
+
+    private StandardEventHandler eventHandler;
 
 
 	/**
@@ -63,6 +64,29 @@ public class VariablesPanel extends Composite implements StandardEventHandler {
     public void setRowVariables(ArrayList<String> rowVars) {
         varsRow.clear();
         updateVariables(rowVars, varsRow, pnlRowVariables);
+    }
+
+
+    /**
+     * Return the list of variables of the table row
+     * @return list of variables ID
+     */
+    public ArrayList<String> getRowVariables() {
+        if (varsRow.size() == 0) {
+            return null;
+        }
+        return varsRow;
+    }
+
+    /**
+     * Return the list of variables for the table column
+     * @return list of variables ID
+     */
+    public ArrayList<String> getColumnVariables() {
+        if (varsColumn.size() == 0) {
+            return null;
+        }
+        return varsColumn;
     }
 
 	
@@ -118,6 +142,7 @@ public class VariablesPanel extends Composite implements StandardEventHandler {
         VerticalPanel pnlVariables = (VerticalPanel)selected.getParent();
         ArrayList<String> variables = pnlVariables == pnlColVariables? varsColumn: varsRow;
 
+        // new variable included ?
 		if (selected.getVariable() == null) {
 			pnlVariables.add(new VariableBox(this, false));
 			variables.add(variable.getId());
@@ -131,6 +156,8 @@ public class VariablesPanel extends Composite implements StandardEventHandler {
 		// clean up
 		selected = null;
 		GroupVariablesPopup.instance().hide();
+
+        fireChangeEvent();
 	}
 
 
@@ -147,7 +174,17 @@ public class VariablesPanel extends Composite implements StandardEventHandler {
 			variables.remove(index);
 		}
 		pnl.remove(index);
+        fireChangeEvent();
 	}
+
+    /**
+     * Fire event about changes in the variable panel
+     */
+    protected void fireChangeEvent() {
+        if (eventHandler != null) {
+            eventHandler.handleEvent(getClass(), null);
+        }
+    }
 
 
 	/**
@@ -164,4 +201,12 @@ public class VariablesPanel extends Composite implements StandardEventHandler {
 	public void setSelected(VariableBox selected) {
 		this.selected = selected;
 	}
+
+    public StandardEventHandler getEventHandler() {
+        return eventHandler;
+    }
+
+    public void setEventHandler(StandardEventHandler eventHandler) {
+        this.eventHandler = eventHandler;
+    }
 }

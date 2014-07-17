@@ -52,7 +52,7 @@ public class ReportCRUDServices {
 		}
 		report.setTblSelectedCell( data.getSelectedCell() );
 		
-		ChartType chartType = ReportMain.instance().getChartType();
+		CChartType chartType = ReportMain.instance().getChartType();
 		report.setChartType(chartType != null? chartType.ordinal(): null);
 		return report;
 */

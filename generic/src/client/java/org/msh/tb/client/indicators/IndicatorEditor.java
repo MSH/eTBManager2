@@ -9,17 +9,18 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.*;
-import org.msh.tb.client.chart.ChartType;
+import org.msh.tb.client.shared.model.CChartType;
 import org.msh.tb.client.commons.StandardEventHandler;
 import org.msh.tb.client.reports.ChartPopup;
 import org.msh.tb.client.reports.variables.VariablesPanel;
+import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.ui.LabelEditor;
 
 /**
  * Display an editor panel to change indicator parameters (filters, variables, layout, chart, etc)
  * Created by ricardo on 10/07/14.
  */
-public class IndicatorEditor extends Composite {
+public class IndicatorEditor extends Composite implements StandardEventHandler {
     interface IndicatorEditorUiBinder extends UiBinder<HTMLPanel, IndicatorEditor> {
     }
 
@@ -54,6 +55,9 @@ public class IndicatorEditor extends Composite {
         lbSize.addItem("50%");
         lbSize.addItem("25%");
         lbSize.setSelectedIndex(0);
+
+        pnlVariables.setEventHandler(this);
+        txtTitle.setEventHandler(this);
     }
 
 
@@ -85,7 +89,7 @@ public class IndicatorEditor extends Composite {
             chartPopup.setEventHandler(new StandardEventHandler() {
                 @Override
                 public void handleEvent(Object eventType, Object data) {
-                    chartChangeListener((ChartType)data);
+                    chartChangeListener((CChartType)data);
                 }
             });
         }
@@ -95,15 +99,32 @@ public class IndicatorEditor extends Composite {
     }
 
     /**
+     * Called when user clicks on the update link
+     * @param event
+     */
+    @UiHandler("lnkUpdate")
+    public void lnkUpdateClick(ClickEvent event) {
+        controller.setData(null);
+        resIndicator.update(controller);
+    }
+
+    /**
+     * Update the indicator with the values selected in the user interface
+     */
+    protected void uiToIndicator() {
+        CIndicator ind = controller.getIndicator();
+        ind.setColVariables( pnlVariables.getColumnVariables() );
+        ind.setRowVariables(pnlVariables.getRowVariables());
+    }
+
+    /**
      * Notify when the chart is changed
      * @param type
      */
-    protected void chartChangeListener(ChartType type) {
-        controller.getIndicator().setChartType(type.ordinal());
-
+    protected void chartChangeListener(CChartType type) {
+        controller.getIndicator().setChartType(type);
         updateChartButton();
-
-        updateChart();
+        resIndicator.notifyChartChange();
     }
 
 
@@ -116,15 +137,33 @@ public class IndicatorEditor extends Composite {
             el.removeChild(DOM.getFirstChild(el));
         }
 
-        Integer type = controller.getIndicator().getChartType();
+        CChartType type = controller.getIndicator().getChartType();
         if (type == null) {
             return;
         }
 
-        ChartType ct = ChartType.values()[type];
-        ImageResource res = ChartPopup.getChartImage(ct);
+        ImageResource res = ChartPopup.getChartImage(type);
         Image img = new Image(res);
         DOM.insertChild(el, img.getElement(), 0);
+    }
+
+
+    /**
+     * Called when an event happens
+     * @param eventType
+     * @param data
+     */
+    @Override
+    public void handleEvent(Object eventType, Object data) {
+        if (eventType == VariablesPanel.class) {
+            uiToIndicator();
+            return;
+        }
+
+        if (eventType == txtTitle) {
+            controller.getIndicator().setTitle((String)data);
+            resIndicator.notifyTitleChange();
+        }
     }
 
 

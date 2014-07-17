@@ -70,7 +70,7 @@ public class IndicatorController {
 
         this.response = resp;
         data = new TableData();
-        data.update(resp);
+        data.update(indicator, resp);
     }
 
 

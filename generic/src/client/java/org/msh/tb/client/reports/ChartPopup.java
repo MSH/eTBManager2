@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import org.msh.tb.client.AppResources;
-import org.msh.tb.client.chart.ChartType;
+import org.msh.tb.client.shared.model.CChartType;
 import org.msh.tb.client.commons.StandardEventHandler;
 
 /**
@@ -66,7 +66,7 @@ public class ChartPopup extends PopupPanel {
      * Return the image of the selected chart
      * @return instance of {@link com.google.gwt.resources.client.ImageResource}
      */
-    public static ImageResource getChartImage(ChartType type) {
+    public static ImageResource getChartImage(CChartType type) {
         return type != null? chartImgs[type.ordinal()]: null;
     }
 
@@ -77,11 +77,11 @@ public class ChartPopup extends PopupPanel {
 	protected void chartLinkClick(Anchor lnk) {
 		VerticalPanel pnl = (VerticalPanel)lnk.getParent();
 		int chartIndex = pnl.getWidgetIndex(lnk);
-        ChartType type = ChartType.values()[chartIndex];
+        CChartType type = CChartType.values()[chartIndex];
         if (eventHandler != null) {
             eventHandler.handleEvent(this, type);
         }
-//		ReportMain.instance().selectChart(ChartType.values()[chartIndex]);
+//		ReportMain.instance().selectChart(CChartType.values()[chartIndex]);
 		hide();
 	}
 

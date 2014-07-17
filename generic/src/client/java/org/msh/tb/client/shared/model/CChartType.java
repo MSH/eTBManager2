@@ -1,4 +1,6 @@
-package org.msh.tb.client.chart;
+package org.msh.tb.client.shared.model;
+
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * Specify the chart types and its corresponding 
@@ -7,7 +9,7 @@ package org.msh.tb.client.chart;
  * @author Ricardo Memoria
  *
  */
-public enum ChartType {
+public enum CChartType implements IsSerializable {
 	CHART_LINE ("line"), 
 	CHART_SPLINE ("spline"), 
 	CHART_AREA ("area"), 
@@ -18,7 +20,7 @@ public enum ChartType {
 	
 	private String name;
 
-	private ChartType(String name) {
+	private CChartType(String name) {
 		this.name = name;
 	}
 	

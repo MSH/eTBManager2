@@ -10,6 +10,7 @@ import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.ui.Widget;
+import org.msh.tb.client.shared.model.CChartType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class ChartView extends Widget {
 	/**
 	 * The selected chart
 	 */
-	private ChartType selectedChart;
+	private CChartType selectedChart;
 
 	/**
 	 * List of values that compose the chart
@@ -153,7 +154,7 @@ public class ChartView extends Widget {
 		JSONArray series = new JSONArray();
 		chart.put("series", series);
 		
-		if (selectedChart == ChartType.CHART_PIE)
+		if (selectedChart == CChartType.CHART_PIE)
 			 createPieChart(chart);
 		else createChart(chart);
 		
@@ -236,12 +237,12 @@ public class ChartView extends Widget {
 			numLegends = index;
 		}
 
-		if ((numItems > 10) && (selectedChart != ChartType.CHART_BAR)) {
+		if ((numItems > 10) && (selectedChart != CChartType.CHART_BAR)) {
 			xAxis.put("labels", jsonData("{rotation:-45,align:'right'}"));
 		}
 
 		int height;
-		if (selectedChart == ChartType.CHART_BAR) {
+		if (selectedChart == CChartType.CHART_BAR) {
 			height = (numLegends * numItems * 3) + (numItems * 20) + 100;
 			if (height < 400)
 				height = 400;
@@ -277,7 +278,7 @@ public class ChartView extends Widget {
 		JSONArray data = new JSONArray();
 		int index = 0;
 		for (SerieValue val: values) {
-			if ((val.getValue() > 0) || ((selectedChart != ChartType.CHART_PIE) && (val.getValue() == 0))) {
+			if ((val.getValue() > 0) || ((selectedChart != CChartType.CHART_PIE) && (val.getValue() == 0))) {
 				if (includeNames) {
 					JSONArray jval = new JSONArray();
 					jval.set(0, new JSONString(val.getLabel()));
@@ -396,7 +397,7 @@ public class ChartView extends Widget {
 	/**
 	 * @return the selectedChart
 	 */
-	public ChartType getSelectedChart() {
+	public CChartType getSelectedChart() {
 		return selectedChart;
 	}
 
@@ -404,7 +405,7 @@ public class ChartView extends Widget {
 	/**
 	 * @param selectedChart the selectedChart to set
 	 */
-	public void setSelectedChart(ChartType selectedChart) {
+	public void setSelectedChart(CChartType selectedChart) {
 		this.selectedChart = selectedChart;
 	}
 

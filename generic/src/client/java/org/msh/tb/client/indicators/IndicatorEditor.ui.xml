@@ -8,9 +8,16 @@
 
     <ui:with field='msg' type='org.msh.tb.client.resources.ReportConstants'/>
 
+    <ui:style>
+        .title {
+            max-width: 920px;
+            margin-bottom: 4px;
+        }
+    </ui:style>
+
     <g:HTMLPanel styleName="indicator-editor">
         <div class="title">
-            <div class="pull-left">
+            <div class="pull-left {style.title}">
                 <c:LabelEditor ui:field="txtTitle" />
             </div>
             <div class="pull-right">
